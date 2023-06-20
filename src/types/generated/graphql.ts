@@ -235,6 +235,11 @@ export type DonationFundingInput = {
   donationAmount: Scalars['donationAmount_Int_NotNull_min_1']
 }
 
+export type EmailVerifyInput = {
+  otp: Scalars['Int']
+  otpVerificationToken: Scalars['String']
+}
+
 export type Entry = {
   __typename?: 'Entry'
   /** Total amount of satoshis funded from the Entry page. */
@@ -779,6 +784,12 @@ export type Location = {
   region?: Maybe<Scalars['String']>
 }
 
+export enum MfaAction {
+  ProjectWalletUpdate = 'PROJECT_WALLET_UPDATE',
+  UserEmailUpdate = 'USER_EMAIL_UPDATE',
+  UserEmailVerification = 'USER_EMAIL_VERIFICATION',
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
   _?: Maybe<Scalars['Boolean']>
@@ -807,6 +818,11 @@ export type Mutation = {
   projectUnfollow: Scalars['Boolean']
   /** Makes the Entry public. */
   publishEntry: Entry
+  /**
+   * Sends an OTP to the user's email address and responds with a token that can be used, together with the OTP, to two-factor authenticate
+   * a request made by the client.
+   */
+  sendOTPByEmail: OtpResponse
   tagCreate: Tag
   unlinkExternalAccount: User
   updateEntry: Entry
@@ -819,6 +835,8 @@ export type Mutation = {
   updateWalletState: Wallet
   userBadgeAward: UserBadge
   userDelete: DeleteUserResponse
+  userEmailUpdate: User
+  userEmailVerify: Scalars['Boolean']
   walletDelete: Scalars['Boolean']
 }
 
@@ -918,6 +936,10 @@ export type MutationPublishEntryArgs = {
   id: Scalars['BigInt']
 }
 
+export type MutationSendOtpByEmailArgs = {
+  action: MfaAction
+}
+
 export type MutationTagCreateArgs = {
   input: TagCreateInput
 }
@@ -958,6 +980,14 @@ export type MutationUserBadgeAwardArgs = {
   userBadgeId: Scalars['BigInt']
 }
 
+export type MutationUserEmailUpdateArgs = {
+  input: UserEmailUpdateInput
+}
+
+export type MutationUserEmailVerifyArgs = {
+  input: EmailVerifyInput
+}
+
 export type MutationWalletDeleteArgs = {
   id: Scalars['BigInt']
 }
@@ -965,6 +995,19 @@ export type MutationWalletDeleteArgs = {
 export type MutationResponse = {
   message?: Maybe<Scalars['String']>
   success: Scalars['Boolean']
+}
+
+export type OtpInput = {
+  otp: Scalars['Int']
+  otpVerificationToken: Scalars['String']
+}
+
+export type OtpResponse = {
+  __typename?: 'OTPResponse'
+  /** Expiration time of the OTP. Can be used to display a countdown to the user. */
+  expiresAt: Scalars['Date']
+  /** Encrypted token containing the OTP 2FA details, such as the action to be authorised and the factor used (eg: email). */
+  otpVerificationToken: Scalars['String']
 }
 
 export type OffsetBasedPaginationInput = {
@@ -1395,6 +1438,10 @@ export type SubscriptionActivityCreatedArgs = {
   input?: InputMaybe<ActivityCreatedSubscriptionInput>
 }
 
+export type TotpInput = {
+  totp: Scalars['Int']
+}
+
 export type Tag = {
   __typename?: 'Tag'
   id: Scalars['Int']
@@ -1410,6 +1457,12 @@ export type TagsGetResult = {
   count: Scalars['Int']
   id: Scalars['Int']
   label: Scalars['String']
+}
+
+export type TwoFaInput = {
+  OTP?: InputMaybe<OtpInput>
+  /** TOTP is not supported yet. */
+  TOTP?: InputMaybe<TotpInput>
 }
 
 export type UniqueProjectQueryInput = {
@@ -1480,7 +1533,6 @@ export type UpdateProjectRewardInput = {
 
 export type UpdateUserInput = {
   bio?: InputMaybe<Scalars['String']>
-  email?: InputMaybe<Scalars['email_String_format_email']>
   id: Scalars['BigInt']
   imageUrl?: InputMaybe<Scalars['String']>
   username?: InputMaybe<Scalars['String']>
@@ -1491,6 +1543,7 @@ export type UpdateWalletInput = {
   lightningAddressConnectionDetailsInput?: InputMaybe<LightningAddressConnectionDetailsUpdateInput>
   lndConnectionDetailsInput?: InputMaybe<LndConnectionDetailsUpdateInput>
   name?: InputMaybe<Scalars['name_String_minLength_5_maxLength_60']>
+  twoFAInput?: InputMaybe<TwoFaInput>
 }
 
 export type UpdateWalletStateInput = {
@@ -1506,6 +1559,7 @@ export type User = {
   /** Details on the participation of a User in a project. */
   contributions: Array<UserProjectContribution>
   email?: Maybe<Scalars['String']>
+  emailVerifiedAt?: Maybe<Scalars['Date']>
   /**
    * By default, returns all the entries of a user, both published and unpublished but not deleted.
    * To filter the result set, an explicit input can be passed that specifies a value of true or false for the published field.
@@ -1521,6 +1575,7 @@ export type User = {
   fundingTxs: Array<FundingTx>
   id: Scalars['BigInt']
   imageUrl?: Maybe<Scalars['String']>
+  isEmailVerified: Scalars['Boolean']
   ownerOf: Array<OwnerOf>
   projectFollows: Array<Project>
   /**
@@ -1555,6 +1610,11 @@ export type UserBadge = {
 export enum UserBadgeStatus {
   Accepted = 'ACCEPTED',
   Pending = 'PENDING',
+}
+
+export type UserEmailUpdateInput = {
+  email: Scalars['String']
+  twoFAInput: TwoFaInput
 }
 
 export type UserEntriesGetInput = {
@@ -1816,6 +1876,7 @@ export type ResolversTypes = {
   DeleteProjectInput: DeleteProjectInput
   DeleteUserResponse: ResolverTypeWrapper<DeleteUserResponse>
   DonationFundingInput: DonationFundingInput
+  EmailVerifyInput: EmailVerifyInput
   Entry: ResolverTypeWrapper<Entry>
   EntryPublishedSubscriptionResponse: ResolverTypeWrapper<EntryPublishedSubscriptionResponse>
   EntryStatus: EntryStatus
@@ -1896,10 +1957,13 @@ export type ResolversTypes = {
   LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput
   LndNodeType: LndNodeType
   Location: ResolverTypeWrapper<Location>
+  MFAAction: MfaAction
   Mutation: ResolverTypeWrapper<{}>
   MutationResponse:
     | ResolversTypes['DeleteUserResponse']
     | ResolversTypes['ProjectDeleteResponse']
+  OTPInput: OtpInput
+  OTPResponse: ResolverTypeWrapper<OtpResponse>
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
   OrderByOptions: OrderByOptions
   Owner: ResolverTypeWrapper<Owner>
@@ -1939,9 +2003,11 @@ export type ResolversTypes = {
   SponsorStatus: SponsorStatus
   String: ResolverTypeWrapper<Scalars['String']>
   Subscription: ResolverTypeWrapper<{}>
+  TOTPInput: TotpInput
   Tag: ResolverTypeWrapper<Tag>
   TagCreateInput: TagCreateInput
   TagsGetResult: ResolverTypeWrapper<TagsGetResult>
+  TwoFAInput: TwoFaInput
   UniqueProjectQueryInput: UniqueProjectQueryInput
   UpdateEntryInput: UpdateEntryInput
   UpdateProjectInput: UpdateProjectInput
@@ -1953,6 +2019,7 @@ export type ResolversTypes = {
   User: ResolverTypeWrapper<User>
   UserBadge: ResolverTypeWrapper<UserBadge>
   UserBadgeStatus: UserBadgeStatus
+  UserEmailUpdateInput: UserEmailUpdateInput
   UserEntriesGetInput: UserEntriesGetInput
   UserEntriesGetWhereInput: UserEntriesGetWhereInput
   UserGetInput: UserGetInput
@@ -2090,6 +2157,7 @@ export type ResolversParentTypes = {
   DeleteProjectInput: DeleteProjectInput
   DeleteUserResponse: DeleteUserResponse
   DonationFundingInput: DonationFundingInput
+  EmailVerifyInput: EmailVerifyInput
   Entry: Entry
   EntryPublishedSubscriptionResponse: EntryPublishedSubscriptionResponse
   ExternalAccount: ExternalAccount
@@ -2163,6 +2231,8 @@ export type ResolversParentTypes = {
   MutationResponse:
     | ResolversParentTypes['DeleteUserResponse']
     | ResolversParentTypes['ProjectDeleteResponse']
+  OTPInput: OtpInput
+  OTPResponse: OtpResponse
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
   Owner: Owner
   OwnerOf: OwnerOf
@@ -2196,9 +2266,11 @@ export type ResolversParentTypes = {
   Sponsor: Sponsor
   String: Scalars['String']
   Subscription: {}
+  TOTPInput: TotpInput
   Tag: Tag
   TagCreateInput: TagCreateInput
   TagsGetResult: TagsGetResult
+  TwoFAInput: TwoFaInput
   UniqueProjectQueryInput: UniqueProjectQueryInput
   UpdateEntryInput: UpdateEntryInput
   UpdateProjectInput: UpdateProjectInput
@@ -2209,6 +2281,7 @@ export type ResolversParentTypes = {
   UpdateWalletStateInput: UpdateWalletStateInput
   User: User
   UserBadge: UserBadge
+  UserEmailUpdateInput: UserEmailUpdateInput
   UserEntriesGetInput: UserEntriesGetInput
   UserEntriesGetWhereInput: UserEntriesGetWhereInput
   UserGetInput: UserGetInput
@@ -2929,6 +3002,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationPublishEntryArgs, 'id'>
   >
+  sendOTPByEmail?: Resolver<
+    ResolversTypes['OTPResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationSendOtpByEmailArgs, 'action'>
+  >
   tagCreate?: Resolver<
     ResolversTypes['Tag'],
     ParentType,
@@ -2994,6 +3073,18 @@ export type MutationResolvers<
     ParentType,
     ContextType
   >
+  userEmailUpdate?: Resolver<
+    ResolversTypes['User'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUserEmailUpdateArgs, 'input'>
+  >
+  userEmailVerify?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUserEmailVerifyArgs, 'input'>
+  >
   walletDelete?: Resolver<
     ResolversTypes['Boolean'],
     ParentType,
@@ -3013,6 +3104,19 @@ export type MutationResponseResolvers<
   >
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+}
+
+export type OtpResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['OTPResponse'] = ResolversParentTypes['OTPResponse'],
+> = {
+  expiresAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  otpVerificationToken?: Resolver<
+    ResolversTypes['String'],
+    ParentType,
+    ContextType
+  >
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
 export type OwnerResolvers<
@@ -3511,6 +3615,11 @@ export type UserResolvers<
     ContextType
   >
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  emailVerifiedAt?: Resolver<
+    Maybe<ResolversTypes['Date']>,
+    ParentType,
+    ContextType
+  >
   entries?: Resolver<
     Array<ResolversTypes['Entry']>,
     ParentType,
@@ -3529,6 +3638,7 @@ export type UserResolvers<
   >
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  isEmailVerified?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   ownerOf?: Resolver<Array<ResolversTypes['OwnerOf']>, ParentType, ContextType>
   projectFollows?: Resolver<
     Array<ResolversTypes['Project']>,
@@ -3917,6 +4027,7 @@ export type Resolvers<ContextType = any> = {
   Location?: LocationResolvers<ContextType>
   Mutation?: MutationResolvers<ContextType>
   MutationResponse?: MutationResponseResolvers<ContextType>
+  OTPResponse?: OtpResponseResolvers<ContextType>
   Owner?: OwnerResolvers<ContextType>
   OwnerOf?: OwnerOfResolvers<ContextType>
   Project?: ProjectResolvers<ContextType>

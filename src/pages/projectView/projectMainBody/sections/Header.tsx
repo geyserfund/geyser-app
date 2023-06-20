@@ -87,14 +87,8 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           alignItems="start"
           maxWidth="calc(100% - 76px - 24px)"
         >
-          <Text
-            variant="h1"
-            noOfLines={2}
-            overflow="ellipsis"
-            overflowY="hidden"
-            width="100%"
-          >
-            {project.title} {project.title}
+          <Text variant={{ base: 'h2', xl: 'h1' }} noOfLines={2} width="100%">
+            {project.title}
           </Text>
           {isMobile ? (
             statusContent
@@ -121,7 +115,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
         </HStack>
       ) : null}
 
-      <Text variant="h2">{project.shortDescription}</Text>
+      <Text variant={{ base: 'h3', xl: 'h2' }}>{project.shortDescription}</Text>
 
       {project.tags?.length > 0 && (
         <SummaryInfoLine
