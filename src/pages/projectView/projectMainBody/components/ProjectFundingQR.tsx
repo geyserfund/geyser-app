@@ -16,9 +16,13 @@ export const ProjectFundingQR = ({ project }: ProjectFundingQRProps) => {
       <Tooltip label="View Project QR Code" placement="top">
         <IconButton
           size="sm"
-          variant="secondary"
+          border="1px solid"
+          borderColor="transparent"
+          _hover={{ backgroundColor: 'none', borderColor: 'primary.400' }}
+          _active={{ backgroundColor: 'primary.400' }}
+          bg="none"
           icon={<QrIcon />}
-          aria-label="project qr code"
+          aria-label="qr"
           onClick={onOpen}
         />
       </Tooltip>

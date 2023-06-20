@@ -1,25 +1,19 @@
 import { useMutation } from '@apollo/client'
-import { Button, HStack, Switch, Text, VStack } from '@chakra-ui/react'
+import { Button, Switch, Text, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 
+import { Body2 } from '../../../components/typography'
+import { TextInputBox } from '../../../components/ui'
 import { useAuthContext, useProjectContext } from '../../../context'
-import { FieldContainer } from '../../../forms/components/FieldContainer'
-import { TextField } from '../../../forms/components/TextField'
 import { MUTATION_UPDATE_PROJECT } from '../../../graphql/mutations'
-import { useModal } from '../../../hooks/useModal'
-import {
-  Project,
-  ProjectStatus,
-  useProjectDeleteMutation,
-} from '../../../types'
+import { Project, ProjectStatus } from '../../../types'
 import { isActive, useNotification } from '../../../utils'
+import { ProjectFundraisingDeadline } from '../../projectCreate/components/ProjectFundraisingDeadline'
 import {
   ProjectUnsavedModal,
   useProjectUnsavedModal,
 } from '../../projectCreate/components/ProjectUnsavedModal'
-import { DeleteProjectModal } from '../components/DeleteProjectModal'
 
 export type ProjectSettingsVariables = {
   expiresAt?: string
@@ -31,28 +25,26 @@ export type ProjectSettingsVariables = {
 export const ProjectSettings = () => {
   const { user } = useAuthContext()
   const { toast } = useNotification()
-  const navigate = useNavigate()
 
   const { project, updateProject } = useProjectContext()
 
   const form = useForm<ProjectSettingsVariables>({
     values: useMemo(
       () => ({
+        expiresAt: project?.expiresAt || '',
         email: user.email || '',
         status: project?.status || '',
         deactivate: !isActive(project?.status),
       }),
-      [project?.status, user.email],
+      [project?.expiresAt, project?.status, user.email],
     ),
   })
 
-  const { formState, handleSubmit, setValue, watch, control } = form
+  const { formState, handleSubmit, setValue, watch } = form
 
   const unsavedModal = useProjectUnsavedModal({
     hasUnsaved: formState.isDirty,
   })
-
-  const deleteProjectModal = useModal()
 
   const [updateProjectMutation, { loading: updateLoading }] = useMutation<{
     updateProject: Project
@@ -76,30 +68,8 @@ export const ProjectSettings = () => {
     },
   })
 
-  const [deleteProject, { loading: deleteLoading }] = useProjectDeleteMutation()
-
-  const handleDeleteProject = () => {
-    if (project && project.id && project.balance <= 0) {
-      deleteProject({
-        variables: {
-          input: {
-            projectId: project.id,
-          },
-        },
-      })
-        .then(() => {
-          toast({
-            title: 'project deleted successfully!',
-            status: 'success',
-            description: 'you will be redirected shortly...',
-          })
-          deleteProjectModal.onClose()
-          setTimeout(() => navigate('/'), 2500)
-        })
-        .catch(() =>
-          toast({ title: 'project delete failed!', status: 'error' }),
-        )
-    }
+  const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue('email', event.target.value, { shouldDirty: true })
   }
 
   const handleDeactivate = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,12 +83,13 @@ export const ProjectSettings = () => {
     }
   }
 
-  const onSubmit = ({ status }: ProjectSettingsVariables) => {
+  const onSubmit = ({ expiresAt, status }: ProjectSettingsVariables) => {
     if (project) {
       updateProjectMutation({
         variables: {
           input: {
             projectId: Number(project.id),
+            expiresAt: expiresAt || null,
             status,
           },
         },
@@ -136,52 +107,35 @@ export const ProjectSettings = () => {
       style={{ flexGrow: 1, display: 'flex' }}
     >
       <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1}>
-        <TextField
-          isDisabled={Boolean(user.email)}
-          control={control}
-          name="email"
-          label="Email"
-          caption={`Project notifications and updates are sent to the project creator's email. This email can be edited from the creator's profile Settings.`}
-        />
+        <ProjectFundraisingDeadline setValue={setValue} watch={watch} />
+        <VStack width="100%" alignItems="flex-start" spacing="5px">
+          <Body2>Project E-mail</Body2>
+          <TextInputBox
+            name="email"
+            value={watch('email')}
+            onChange={handleEmail}
+            error={formState.errors.email?.message}
+            isDisabled={Boolean(user.email)}
+          />
+        </VStack>
         {project.status !== ProjectStatus.Deleted && (
-          <VStack>
-            <FieldContainer title="Project status">
-              <HStack w="100%" justifyContent="stretch">
-                <Text variant="body2" flexGrow={1}>
-                  Deactivate
-                </Text>
-                <Switch
-                  defaultChecked={watch('deactivate')}
-                  onChange={handleDeactivate}
-                  colorScheme="red"
-                />
-              </HStack>
-            </FieldContainer>
-            <Text color="neutral.600">
+          <VStack width="100%" alignItems="flex-start" spacing="5px">
+            <Body2>Deactivate</Body2>
+            <Switch
+              defaultChecked={watch('deactivate')}
+              onChange={handleDeactivate}
+              colorScheme="red"
+            >
+              {' '}
+              Deactivate Project
+            </Switch>
+            <Text fontSize="12px">
               Deactivating your project would not allow others to fund your
               project, but your project will still be visible to everyone else.
               You will be able to re-activate your project at any time.
             </Text>
           </VStack>
         )}
-
-        <VStack w="100%" alignItems="start">
-          <Text variant="body1">Delete Project</Text>
-          <Text color="neutral.600">
-            Deleting a project will make the project unaccessible to you and
-            others. You can delete a project only if it has received no
-            contributions. This is to ensure transparency for those who have
-            contributed towards the project.
-          </Text>
-          <Button
-            w="100%"
-            variant="danger"
-            isDisabled={project.balance > 0}
-            onClick={() => deleteProjectModal.onOpen()}
-          >
-            Delete
-          </Button>
-        </VStack>
 
         <VStack w="100%" flexGrow={1} justifyContent="end">
           <Button
@@ -195,11 +149,6 @@ export const ProjectSettings = () => {
         </VStack>
       </VStack>
       <ProjectUnsavedModal {...unsavedModal} />
-      <DeleteProjectModal
-        {...deleteProjectModal}
-        isLoading={deleteLoading}
-        onConfirm={() => handleDeleteProject()}
-      />
     </form>
   )
 }

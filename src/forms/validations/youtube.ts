@@ -1,4 +1,4 @@
-export function validateYouTubeUrl(url?: string | null) {
+export function validateYouTubeUrl(url: string) {
   if (url) {
     const regExp =
       /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w-]+\?v=|embed\/|live\/|v\/)?)([\w-]+)(\S+)?$/
@@ -7,6 +7,4 @@ export function validateYouTubeUrl(url?: string | null) {
 
     return Boolean(match?.length)
   }
-
-  return false
 }

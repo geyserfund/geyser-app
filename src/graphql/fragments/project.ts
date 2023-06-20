@@ -1,7 +1,6 @@
 import { gql } from '@apollo/client'
 
 import { FRAGMENT_ENTRY_FOR_PROJECT } from './entries'
-import { FRAGMENT_USER_FOR_AVATAR, FRAGMENT_USER_ME } from './user'
 
 export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
   fragment ProjectForLandingPage on Project {
@@ -72,8 +71,6 @@ export const FRAGMENT_PROJECT_REWARD_FOR_CREATE_UPDATE = gql`
 export const FRAGMENT_PROJECT = gql`
   ${FRAGMENT_PROJECT_REWARD_FOR_CREATE_UPDATE}
   ${FRAGMENT_ENTRY_FOR_PROJECT}
-  ${FRAGMENT_USER_ME}
-  ${FRAGMENT_USER_FOR_AVATAR}
   fragment Project on Project {
     id
     title
@@ -107,7 +104,9 @@ export const FRAGMENT_PROJECT = gql`
     owners {
       id
       user {
-        ...UserMe
+        id
+        username
+        imageUrl
       }
     }
     rewards {
@@ -117,7 +116,9 @@ export const FRAGMENT_PROJECT = gql`
       id
       confirmed
       user {
-        ...UserForAvatar
+        id
+        username
+        imageUrl
       }
     }
     sponsors {
@@ -125,13 +126,18 @@ export const FRAGMENT_PROJECT = gql`
       url
       image
       user {
-        ...UserForAvatar
+        id
+        username
+        imageUrl
       }
     }
     funders {
       id
       user {
-        ...UserForAvatar
+        id
+        username
+        imageUrl
+        email
       }
       amountFunded
       confirmed

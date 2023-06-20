@@ -2,9 +2,9 @@ import { Button, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 
 import { ProjectLinkInput } from '../../../components/inputs'
-import { FieldContainer } from '../../../forms/components/FieldContainer'
 import { getIconForLink } from '../../../helpers/getIconForLinks'
 import { Maybe } from '../../../types'
+import { FormInputContainer } from './FormInputContainer'
 
 interface ProjectLinksProps {
   links: string[]
@@ -49,7 +49,7 @@ export const ProjectLinks = ({
   }
 
   return (
-    <FieldContainer
+    <FormInputContainer
       title="Project links"
       subtitle="Connect your sites so viewers can see more proof of your work"
     >
@@ -77,6 +77,6 @@ export const ProjectLinks = ({
           Add Project Link
         </Button>
       </VStack>
-    </FieldContainer>
+    </FormInputContainer>
   )
 }
