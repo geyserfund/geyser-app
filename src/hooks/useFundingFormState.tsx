@@ -82,6 +82,15 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
     }
   }, [setState, user])
 
+  const resetRewards = useCallback(() => {
+    _setState((current) => ({
+      ...current,
+      rewardsByIDAndCount: {},
+      rewardsCost: 0,
+      totalAmount: current.donationAmount,
+    }))
+  }, [])
+
   const updateReward = useCallback(
     ({ id, count }: IRewardCount) => {
       _setState((current) => {
@@ -135,5 +144,12 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
     _setState(initialState)
   }, [initialState])
 
-  return { state, setTarget, setState, updateReward, resetForm }
+  return {
+    state,
+    setTarget,
+    setState,
+    updateReward,
+    resetForm,
+    resetRewards,
+  }
 }

@@ -9,14 +9,7 @@ import { ProjectMobileNavigation } from '../projectNavigation/components/Project
 import { ProjectNavigation } from '../projectNavigation/components/ProjectNavigation'
 import { useProjectAnchors } from '../projectNavigation/hooks/useProjectAnchors'
 import { LaunchProjectNotice } from './components'
-import {
-  Entries,
-  Header,
-  Milestones,
-  Rewards,
-  SectionNav,
-  Story,
-} from './sections'
+import { Entries, Header, Milestones, Rewards, Story } from './sections'
 import { CreatorSocial } from './sections/CreatorSocial'
 
 type Rules = string
@@ -95,9 +88,9 @@ export const ProjectMainBody = () => {
         <Box className={classes.detailsContainer} id="project-scroll-container">
           <VStack alignItems="center" width="100%" flex="1">
             <VStack
-              spacing="30px"
+              spacing={3}
               alignItems="left"
-              marginTop={isMobile ? '0px' : '20px'}
+              mt={isMobile ? 0 : 5}
               maxWidth="1000px"
               w="100%"
               padding={isMobile ? '10px 10px 50px 10px' : '0px 40px 70px 40px'}
@@ -111,8 +104,6 @@ export const ProjectMainBody = () => {
               <CreatorSocial />
 
               <Story />
-
-              <SectionNav {...projectAnchors} />
 
               <Entries ref={entriesRef} />
 

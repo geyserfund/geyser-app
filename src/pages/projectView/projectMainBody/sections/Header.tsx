@@ -46,7 +46,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       return (
         <ImageWithReload
           width="100%"
-          maxHeight="471px"
+          maxHeight="350px"
           objectFit="cover"
           borderRadius="8px"
           src={project.image || undefined}
@@ -61,7 +61,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
     return (
       <DefaultImage
         width="100%"
-        maxHeight="471px"
+        maxHeight="350px"
         objectFit="cover"
         borderRadius="8px"
       />
@@ -75,10 +75,11 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       <HStack flexGrow={1} width="100%" spacing={3} alignItems="start">
         <ImageWithReload
           borderRadius="8px"
+          objectFit="cover"
           src={project.thumbnailImage || undefined}
-          width="76px"
-          height="100%"
-          maxHeight="91px"
+          width="80px"
+          height="80px"
+          maxHeight="80px"
           boxShadow="lg"
         />
         <VStack
