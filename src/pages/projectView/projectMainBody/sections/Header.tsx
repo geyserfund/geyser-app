@@ -87,7 +87,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           alignItems="start"
           maxWidth="calc(100% - 76px - 24px)"
         >
-          <Text variant="h1" noOfLines={2} width="100%">
+          <Text variant="h2" noOfLines={2} width="100%">
             {project.title}
           </Text>
           {isMobile ? (
@@ -115,7 +115,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
         </HStack>
       ) : null}
 
-      <Text variant="h2">{project.shortDescription}</Text>
+      <Text variant="h3">{project.shortDescription}</Text>
 
       {project.tags?.length > 0 && (
         <SummaryInfoLine
