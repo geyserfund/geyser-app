@@ -115,9 +115,7 @@ export const ProjectStatusLabel = ({
   if (!status) {
     return (
       <Stack direction={direction} alignItems="center">
-        <Text {...commonStyles}>
-          <SkeletonText width="80px" skeletonHeight={4} noOfLines={1} />
-        </Text>
+        <SkeletonText width="80px" skeletonHeight={4} noOfLines={1} />
       </Stack>
     )
   }
