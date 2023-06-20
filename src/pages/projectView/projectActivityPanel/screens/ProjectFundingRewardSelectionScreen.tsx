@@ -1,8 +1,19 @@
 import { VStack } from '@chakra-ui/react'
 
+import { MobileViews, useProjectContext } from '../../../../context'
+import { ProjectRewardForCreateUpdateFragment } from '../../../../types'
 import { FundingFormRewards } from '../components/FundingFormRewards'
 
 export const ProjectFundingRewardSelectionScreen = () => {
+  const {
+    setMobileView,
+    fundForm: { updateReward },
+  } = useProjectContext()
+  const onRewardClick = (reward: ProjectRewardForCreateUpdateFragment) => {
+    updateReward({ id: reward.id, count: 1 })
+    setMobileView(MobileViews.funding)
+  }
+
   return (
     <VStack
       py={4}
@@ -13,7 +24,7 @@ export const ProjectFundingRewardSelectionScreen = () => {
       alignItems="flex-start"
       backgroundColor="neutral.0"
     >
-      <FundingFormRewards />
+      <FundingFormRewards readOnly onRewardClick={onRewardClick} />
     </VStack>
   )
 }

@@ -89,7 +89,7 @@ export const ProjectFundingFormCommentField = ({
           <CloseIcon position="absolute" top="31px" right="29px" />
         )}
 
-        <Box zIndex="10" position="absolute" left={0.8} top={2}>
+        <Box zIndex="10" position="absolute" left={2} top={2}>
           {isAnonymous || !user ? (
             <Tooltip
               shouldWrapChildren
