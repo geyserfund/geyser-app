@@ -1,7 +1,7 @@
 import { StackProps, Text, VStack } from '@chakra-ui/react'
 import { PropsWithChildren, ReactNode } from 'react'
 
-export const FormInputContainer = ({
+export const FieldContainer = ({
   title,
   subtitle,
   children,
@@ -9,10 +9,10 @@ export const FormInputContainer = ({
   ...props
 }: PropsWithChildren<
   {
-    title?: string
+    title?: ReactNode
     subtitle?: ReactNode
     error?: ReactNode
-  } & StackProps
+  } & Omit<StackProps, 'title'>
 >) => {
   return (
     <VStack spacing={1} alignItems="start" w="100%" {...props}>
@@ -21,11 +21,7 @@ export const FormInputContainer = ({
           {title}
         </Text>
       )}
-      {subtitle && (
-        <Text variant="body2" color="neutral.600">
-          {subtitle}
-        </Text>
-      )}
+      {subtitle && <Text color="neutral.600">{subtitle}</Text>}
       {children}
       {error && (
         <Text color="secondary.red" fontSize="12px">
