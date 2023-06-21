@@ -1,6 +1,7 @@
 export const validateImageUrl = (url?: string | null) => {
   if (url) {
-    const regExp = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png|WEBP)/gi
+    const regExp =
+      /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+(?:png|jpg|jpeg|gif|webp)+$/gi
 
     const match = url.match(regExp)
 
