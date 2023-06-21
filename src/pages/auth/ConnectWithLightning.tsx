@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { QRCode } from 'react-qrcode-logo'
+import { RejectionError, WebLNProvider } from 'webln'
 
 import { LogoDarkGreenImage } from '../../assets'
 import { BoltSvgIcon } from '../../components/icons'
@@ -31,6 +32,45 @@ import {
   useMobileMode,
   useNotification,
 } from '../../utils'
+
+type LNURLResponse =
+  | {
+      status: 'OK'
+      data?: unknown
+    }
+  | { status: 'ERROR'; reason: string }
+interface WebLNAuthProvider extends WebLNProvider {
+  lnurl: (lnurl: string) => Promise<LNURLResponse>
+}
+
+const { webln }: { webln: WebLNAuthProvider } = window as any
+
+const WEBLN_ENABLE_ERROR = 'Failed to enable webln'
+
+const requestWebLNUrlAuth = async (paymentRequest: string) => {
+  if (!webln) {
+    throw new Error('no provider')
+  }
+
+  try {
+    await webln.enable()
+  } catch (e) {
+    throw new Error(WEBLN_ENABLE_ERROR)
+  }
+
+  if (!paymentRequest) {
+    throw new Error('payment request not found')
+  }
+
+  try {
+    const res = await webln.lnurl(paymentRequest)
+    if (res.status !== 'OK') {
+      throw new Error(WEBLN_ENABLE_ERROR)
+    }
+  } catch (e) {
+    throw new Error(WEBLN_ENABLE_ERROR)
+  }
+}
 
 interface ConnectWithLightningModalProps {
   isOpen: boolean
@@ -86,7 +126,7 @@ export const ConnectWithLightningModal = ({
 }: ConnectWithLightningModalProps) => {
   const isMobile = useMobileMode()
   const { toast } = useNotification()
-  const { setUser } = useAuthContext()
+  const { login } = useAuthContext()
 
   const [qrContent, setQrContent] = useState('')
   const [copy, setcopy] = useState(false)
@@ -99,6 +139,43 @@ export const ConnectWithLightningModal = ({
     }, 2000)
   }
 
+  const startWebLNFlow = async ({
+    paymentRequest,
+  }: {
+    paymentRequest: string
+  }) => {
+    try {
+      await requestWebLNUrlAuth(paymentRequest)
+    } catch (error: any) {
+      if (error.message === 'no provider') {
+        throw error
+      }
+
+      if (
+        error.constructor === RejectionError ||
+        error.message === 'User rejected'
+      ) {
+        toast({
+          title: 'Requested operation declined',
+          description: 'Please use the invoice instead.',
+          status: 'info',
+        })
+        return false
+      }
+
+      if (error.message === WEBLN_ENABLE_ERROR) {
+        return false
+      }
+
+      toast({
+        title: 'Oops! Something went wrong with WebLN.',
+        description: 'Please copy the invoice manually instead.',
+        status: 'error',
+      })
+      return false
+    }
+  }
+
   const handleLnurlLogin = async () => {
     fetch(`${AUTH_SERVICE_ENDPOINT}/lnurl`, {
       credentials: 'include',
@@ -107,6 +184,7 @@ export const ConnectWithLightningModal = ({
       .then((response) => response.json())
       .then(({ lnurl }) => {
         setQrContent(lnurl)
+        startWebLNFlow({ paymentRequest: lnurl })
       })
       .catch((err) => {
         toast({
@@ -147,10 +225,10 @@ export const ConnectWithLightningModal = ({
             throw new Error(response.reason)
           }
 
-          const { user: userData }: { user: User } = response
+          const { user: userData }: { user: { user: User } } = response
 
           if (userData) {
-            setUser({ ...defaultUser, ...userData })
+            login({ ...defaultUser, ...userData.user })
             onClose()
           }
         })

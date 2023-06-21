@@ -1,17 +1,11 @@
 import { ChevronRightIcon } from '@chakra-ui/icons'
-import {
-  Container,
-  Divider,
-  HStack,
-  IconButton,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Container, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { Outlet, useMatch } from 'react-router-dom'
 
 import { CardLayout } from '../../components/layouts'
 import Loader from '../../components/ui/Loader'
+import { TitleDivider } from '../../components/ui/TitleDivider'
 import { dimensions, getPath, PathsMap } from '../../constants'
 import { useProjectContext } from '../../context'
 import { useMobileMode } from '../../utils'
@@ -89,18 +83,12 @@ export const ProjectDashboard = () => {
   const content = (
     <>
       {isMobile ? (
-        <VStack
-          bg="neutral.0"
-          spacing={0}
-          mb={4}
+        <TitleDivider
           zIndex={10}
+          mb={4}
           position="sticky"
           top={dimensions.topNavBar.desktop.height + 'px'}
-        >
-          <HStack justifyContent="start" w="100%">
-            <Text variant="h3" flexGrow={1} textAlign="left">
-              {activeSection?.label}
-            </Text>
+          rightAction={
             <IconButton
               aria-label="open dashboard menu"
               onClick={() => setDrawerOpen(true)}
@@ -109,9 +97,10 @@ export const ProjectDashboard = () => {
             >
               <ChevronRightIcon fontSize="1.7em" />
             </IconButton>
-          </HStack>
-          <Divider />
-        </VStack>
+          }
+        >
+          {activeSection?.label}
+        </TitleDivider>
       ) : (
         <Text variant="h3">{activeSection?.label}</Text>
       )}
