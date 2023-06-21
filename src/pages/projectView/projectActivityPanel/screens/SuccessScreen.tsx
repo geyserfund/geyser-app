@@ -10,18 +10,19 @@ import { getPath } from '../../../../constants'
 import { QUERY_USER_BADGES } from '../../../../graphql/queries/badges'
 import { useFundCalc } from '../../../../helpers'
 import { IFundForm } from '../../../../hooks'
+import { lightModeColors } from '../../../../styles'
 import { Satoshis } from '../../../../types'
 import {
   FundingTxFragment,
   Project,
   ProjectFragment,
   UserBadge,
-} from '../../../../types/generated/graphql'
+} from '../../../../types'
 import { copyTextToClipboard } from '../../../../utils'
 import {
   ContributionInfoBox,
   ContributionInfoBoxVersion,
-} from '../../projectMainBody/components/ContributionInfoBox'
+} from '../../projectMainBody/components'
 import { SuccessImageComponent } from '../components'
 
 type Props = {
@@ -74,7 +75,8 @@ export const SuccessScreen = ({
       spacing={4}
       width="100%"
       height={{ base: 'calc(100vh - 115px)', lg: '100%' }}
-      overflow="hidden"
+      overflowX="hidden"
+      overflowY={{ base: 'auto', lg: 'hidden' }}
       position="relative"
       backgroundColor="primary.400"
       alignItems="center"
@@ -85,12 +87,13 @@ export const SuccessScreen = ({
       <CloseButton
         borderRadius="50%"
         position="absolute"
+        color={lightModeColors.neutral[900]}
         right="10px"
-        top="-20px"
+        top="-10px"
         onClick={handleCloseButton}
       />
 
-      <VStack w="full" spacing="20px">
+      <VStack w="full" spacing="20px" pt={2}>
         <SuccessImageComponent
           currentBadge={currentBadge}
           fundingTx={fundingTx}

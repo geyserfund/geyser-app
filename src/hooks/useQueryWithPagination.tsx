@@ -12,6 +12,7 @@ export type useQueryWithPaginationProps<TEntity, TTransformed = TEntity> = {
   orderBy?: any
   resultMap?: (_: TEntity[]) => TTransformed[]
   options?: QueryHookOptions
+  skipPagination?: boolean
 }
 
 export const useQueryWithPagination = <TEntity, TTransformed = TEntity>({
@@ -22,6 +23,7 @@ export const useQueryWithPagination = <TEntity, TTransformed = TEntity>({
   resultMap,
   orderBy,
   options,
+  skipPagination,
 }: useQueryWithPaginationProps<TEntity, TTransformed>) => {
   if (!isDocumentNode(query)) {
     throw Error('Invalid query')
@@ -47,21 +49,31 @@ export const useQueryWithPagination = <TEntity, TTransformed = TEntity>({
         queryName,
       )
       handleDataUpdate(resultItems)
+      if (skipPagination) {
+        setNoMoreItems(true)
+      }
+
       if (options && options.onCompleted) {
         options.onCompleted(data)
       }
     },
   })
 
-  const { data, isLoadingMore, fetchNext, noMoreItems, handleDataUpdate } =
-    usePaginationHook<TEntity, TTransformed>({
-      fetchMore,
-      resultMap,
-      queryName,
-      itemLimit,
-      where,
-      orderBy,
-    })
+  const {
+    data,
+    isLoadingMore,
+    fetchNext,
+    noMoreItems,
+    handleDataUpdate,
+    setNoMoreItems,
+  } = usePaginationHook<TEntity, TTransformed>({
+    fetchMore,
+    resultMap,
+    queryName,
+    itemLimit,
+    where,
+    orderBy,
+  })
 
   return {
     isLoading: loading,

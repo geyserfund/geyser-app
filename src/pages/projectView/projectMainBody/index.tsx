@@ -3,24 +3,14 @@ import classNames from 'classnames'
 import { useRef } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import { IFundingStages } from '../../../constants'
-import {
-  MobileViews,
-  useAuthContext,
-  useNavContext,
-  useProjectContext,
-} from '../../../context'
-import { UpdateReward } from '../../../hooks'
-import { ProjectFragment } from '../../../types/generated/graphql'
+import { MobileViews, useProjectContext } from '../../../context'
 import { useMobileMode } from '../../../utils'
 import { ProjectMobileNavigation } from '../projectNavigation/components/ProjectMobileNavigation'
 import { ProjectNavigation } from '../projectNavigation/components/ProjectNavigation'
 import { useProjectAnchors } from '../projectNavigation/hooks/useProjectAnchors'
 import { LaunchProjectNotice } from './components'
-import { Creator, Entries, Summary } from './sections'
-import { Milestones } from './sections/Milestones'
-import { Rewards } from './sections/Rewards'
-import { SectionNav } from './sections/SectionNav'
+import { Entries, Header, Milestones, Rewards, Story } from './sections'
+import { CreatorSocial } from './sections/CreatorSocial'
 
 type Rules = string
 
@@ -56,18 +46,10 @@ const useStyles = createUseStyles<Rules, Styles>({
   },
 })
 
-type Props = {
-  project?: ProjectFragment | null
-  fundState: IFundingStages
-  updateReward: UpdateReward
-}
-
-export const ProjectMainBody = ({
-  project,
-  fundState,
-  updateReward,
-}: Props) => {
+export const ProjectMainBody = () => {
   const isMobile = useMobileMode()
+
+  const { project, isProjectOwner } = useProjectContext()
 
   const { mobileView } = useProjectContext()
 
@@ -83,18 +65,9 @@ export const ProjectMainBody = ({
     milestones: milestonesRef,
   })
 
-  const { entriesLength, rewardsLength, milestonesLength } = projectAnchors
-
   const inView = mobileView === MobileViews.description
 
   const classes = useStyles({ isMobile, inView })
-
-  const { user } = useAuthContext()
-  const { navData } = useNavContext()
-
-  const isViewerTheProjectOwner = navData.projectOwnerIDs.includes(
-    Number(user.id),
-  )
 
   return (
     <>
@@ -115,36 +88,28 @@ export const ProjectMainBody = ({
         <Box className={classes.detailsContainer} id="project-scroll-container">
           <VStack alignItems="center" width="100%" flex="1">
             <VStack
-              spacing="30px"
+              spacing={3}
               alignItems="left"
-              marginTop={isMobile ? '0px' : '20px'}
+              mt={isMobile ? 0 : 5}
               maxWidth="1000px"
               w="100%"
               padding={isMobile ? '10px 10px 50px 10px' : '0px 40px 70px 40px'}
             >
-              <Summary ref={headerRef} />
+              <Header ref={headerRef} />
 
-              {project && isViewerTheProjectOwner && (
+              {project && isProjectOwner && (
                 <LaunchProjectNotice project={project} />
               )}
 
-              {isViewerTheProjectOwner && <Creator />}
+              <CreatorSocial />
 
-              <SectionNav {...projectAnchors} />
+              <Story />
 
-              <Entries ref={entriesRef} entriesLength={entriesLength} />
+              <Entries ref={entriesRef} />
 
-              <Rewards
-                ref={rewardsRef}
-                rewardsLength={rewardsLength}
-                fundState={fundState}
-                updateReward={updateReward}
-              />
+              <Rewards ref={rewardsRef} />
 
-              <Milestones
-                ref={milestonesRef}
-                milestonesLength={milestonesLength}
-              />
+              <Milestones ref={milestonesRef} />
             </VStack>
           </VStack>
         </Box>

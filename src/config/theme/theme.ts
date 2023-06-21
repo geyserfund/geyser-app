@@ -1,6 +1,7 @@
 import { StyleFunctionProps } from '@chakra-ui/react'
 
 import { fonts, lightModeColors } from '../../styles'
+import { alertTheme } from './alertTheme'
 import { drawerTheme } from './drawerTheme'
 import { menuTheme } from './menuTheme'
 import { modalTheme } from './modalTheme'
@@ -40,6 +41,11 @@ export const theme = {
         sm: {
           padding: '6px',
           fontSize: '14px',
+          fontWeight: 500,
+        },
+        md: {
+          padding: 2,
+          fontSize: '16px',
           fontWeight: 500,
         },
       },
@@ -107,8 +113,20 @@ export const theme = {
           },
         }),
         danger: ({ theme }: StyleFunctionProps) => ({
-          backgroundColor: theme.colors.secondary.red,
-          color: theme.colors.neutral[0],
+          boxShadow: 'none',
+          outline: 'none',
+          border: `2px solid`,
+          borderColor: theme.colors.neutral[200],
+          color: theme.colors.secondary.red,
+          backgroundColor: theme.colors.neutral[50],
+          _hover: {
+            borderColor: theme.colors.secondary.red,
+          },
+          _active: {
+            borderColor: theme.colors.secondary.red,
+            backgroundColor: theme.colors.secondary.red,
+            color: theme.colors.neutral[50],
+          },
         }),
       },
     },
@@ -116,6 +134,7 @@ export const theme = {
       baseStyle: {
         fontSize: '14px',
         lineHeight: 1.6,
+        fontWeight: 400,
       },
       variants: {
         caption: () => ({
@@ -132,10 +151,22 @@ export const theme = {
           fontSize: '24px',
           lineHeight: 1.4,
         }),
+        h1: () => ({
+          fontSize: '35px',
+          lineHeight: 1.4,
+          fontWeight: 700,
+        }),
         body1: () => ({
-          fontWeight: 500,
+          fontWeight: 400,
           lineHeight: 1.6,
           fontSize: '16px',
+        }),
+        satoshi: () => ({
+          fontFamily: fonts.mono,
+          fontWeight: 500,
+          fontSize: '32px',
+          lineHeight: '1.4em',
+          letterSpacing: '0.01125em',
         }),
       },
     },
@@ -180,6 +211,7 @@ export const theme = {
         colorScheme: 'primary',
       },
     },
+    Alert: alertTheme,
     Menu: menuTheme,
     Modal: modalTheme,
     Drawer: drawerTheme,
