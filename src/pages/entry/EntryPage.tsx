@@ -1,23 +1,20 @@
 import { ApolloError } from '@apollo/client'
 import { Box } from '@chakra-ui/layout'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
-import { ProjectNav } from '../../components/nav'
+import { ProjectMobileBottomNavigation } from '../../components/nav'
 import Loader from '../../components/ui/Loader'
 import { Head } from '../../config/Head'
 import { getPath, ProjectEntryThumbnailPlaceholderUrl } from '../../constants'
 import { useProjectContext } from '../../context'
 import { ProjectProvider } from '../../context'
-import { useFundingFlow, useFundingFormState } from '../../hooks'
 import {
   EntryFragment,
   FundingResourceType,
-  ProjectRewardForCreateUpdateFragment,
   useEntryLazyQuery,
 } from '../../types/generated/graphql'
 import { toInt, useMobileMode } from '../../utils'
-import { compactMap } from '../../utils/formatData/compactMap'
 import { NotFoundPage } from '../notFound'
 import { ProjectActivityPanel } from '../projectView/projectActivityPanel'
 import { EntryContainer } from './EntryContainer'
@@ -74,19 +71,6 @@ const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
     loading: projectLoading,
   } = useProjectContext()
 
-  const [detailOpen, setDetailOpen] = useState(true)
-
-  const fundingFlow = useFundingFlow()
-
-  const { setFundState } = fundingFlow
-
-  const rewards =
-    (project?.rewards &&
-      compactMap<ProjectRewardForCreateUpdateFragment>(project.rewards)) ||
-    []
-
-  const fundForm = useFundingFormState({ rewards })
-
   if (loading || projectLoading || !project) {
     return <Loader paddingTop="65px" />
   }
@@ -120,16 +104,12 @@ const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
             ProjectEntryThumbnailPlaceholderUrl
           }
         />
-        <EntryContainer
-          entry={entry}
-          {...{ detailOpen, setDetailOpen, setFundState }}
-        />
+        <EntryContainer entry={entry} />
         <ProjectActivityPanel
-          {...{ detailOpen, setDetailOpen, project, fundingFlow, fundForm }}
           resourceType={FundingResourceType.Entry}
           resourceId={entry.id}
         />
-        {isMobile && <ProjectNav />}
+        {isMobile && <ProjectMobileBottomNavigation />}
       </Box>
     </Box>
   )

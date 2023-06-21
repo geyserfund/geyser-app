@@ -3,8 +3,8 @@ import classNames from 'classnames'
 import { createUseStyles } from 'react-jss'
 
 import { MobileViews, useProjectContext } from '../../context'
-import { fadeOut, slideInLeft } from '../../styles/animations'
-import { EntryFragment } from '../../types/generated/graphql'
+import { fadeOut, slideInLeft } from '../../styles'
+import { EntryFragment } from '../../types'
 import { useMobileMode } from '../../utils'
 import { EntryDetails } from './EntryDetails'
 
@@ -33,7 +33,7 @@ const useStyles = createUseStyles<Rules, IStyles>({
     width: '100%',
     fontSize: '14px',
   },
-  detailsContainer: ({ isMobile }: IStyles) => ({
+  detailsContainer: () => ({
     height: '100%',
     overflowY: 'scroll',
     WebkitOverflowScrolling: 'touch',
@@ -46,7 +46,6 @@ const useStyles = createUseStyles<Rules, IStyles>({
 
 interface IActivityProps {
   entry: EntryFragment
-  detailOpen: boolean
 }
 
 export const EntryContainer = ({ entry }: IActivityProps) => {

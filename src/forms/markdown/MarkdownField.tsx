@@ -151,6 +151,9 @@ export const MarkdownField = ({
                 position: 'sticky',
                 top: stickyToolbar || 0,
                 backgroundColor: 'neutral.50',
+                borderBottom: { base: '1px solid', lg: 'none' },
+                borderTop: { base: '1px solid', lg: 'none' },
+                borderColor: 'neutral.200',
                 zIndex: 11,
               }
             : {}

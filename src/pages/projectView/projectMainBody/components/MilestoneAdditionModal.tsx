@@ -1,18 +1,9 @@
 import { useMutation } from '@apollo/client'
 import { CloseIcon } from '@chakra-ui/icons'
-import {
-  HStack,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { HStack, Text, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
+import { Modal } from '../../../../components/layouts/Modal'
 import { AmountInputWithSatoshiToggle } from '../../../../components/molecules'
 import { Body2 } from '../../../../components/typography'
 import {
@@ -222,6 +213,8 @@ export const MilestoneAdditionModal = ({
           status: 'error',
         })
       }
+    } else {
+      setMilestones(newMilestones)
     }
   }
 
@@ -283,93 +276,92 @@ export const MilestoneAdditionModal = ({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={handleModalClose} size="sm" isCentered>
-      <ModalOverlay />
-      <ModalContent display="flex" alignItems="flex-start" padding="20px 0px">
-        <ModalHeader paddingX="20px">
+    <Modal
+      isOpen={isOpen}
+      onClose={handleModalClose}
+      title={
+        <>
           <Text fontSize="18px" fontWeight={600}>
             Select Milestones
           </Text>
           <Body2 color="neutral.900">
             Milestones help you clarify your next steps, aims and objectives
           </Body2>
-        </ModalHeader>
-        <ModalCloseButton />
-        <ModalBody width="100%">
+        </>
+      }
+    >
+      <VStack
+        width="100%"
+        paddingBottom="20px"
+        marginBottom="20px"
+        borderBottom="1px solid"
+        borderBottomColor="neutral.400"
+        maxHeight="600px"
+        overflowY="auto"
+        spacing="15px"
+      >
+        {milestones.map((milestone, index) => (
           <VStack
+            key={index}
             width="100%"
-            paddingBottom="20px"
-            marginBottom="20px"
-            borderBottom="1px solid"
-            borderBottomColor="neutral.400"
-            maxHeight="600px"
-            overflowY="auto"
-            spacing="15px"
+            alignItems="flex-start"
+            paddingX="2px"
           >
-            {milestones.map((milestone, index) => (
-              <VStack
-                key={index}
-                width="100%"
-                alignItems="flex-start"
-                paddingX="2px"
-              >
-                <HStack justifyContent="space-between" width="100%">
-                  <Text marginTop="10px" marginBottom="5px">
-                    {`Milestone ${index + 1}`}
-                  </Text>
-                  <IconButtonComponent
-                    noBorder
-                    aria-label="remove-milestone-button"
-                    size="xs"
-                    padding="7px"
-                    rounded="full"
-                    onClick={() => handleRemoveMilestone(index)}
-                    icon={<CloseIcon fontSize="10px" />}
-                  />
-                </HStack>
-                <TextInputBox
-                  placeholder={'Enter a Milestone Title'}
-                  value={milestone.name}
-                  onChange={(event: any) => handleTextChange(event, index)}
-                  error={formError[index] && formError[index].name}
-                />
+            <HStack justifyContent="space-between" width="100%">
+              <Text marginTop="10px" marginBottom="5px">
+                {`Milestone ${index + 1}`}
+              </Text>
+              <IconButtonComponent
+                noBorder
+                aria-label="remove-milestone-button"
+                size="xs"
+                padding="7px"
+                rounded="full"
+                onClick={() => handleRemoveMilestone(index)}
+                icon={<CloseIcon fontSize="10px" />}
+              />
+            </HStack>
+            <TextInputBox
+              placeholder={'Enter a Milestone Title'}
+              value={milestone.name}
+              onChange={(event: any) => handleTextChange(event, index)}
+              error={formError[index] && formError[index].name}
+            />
 
-                <AmountInputWithSatoshiToggle
-                  isUsingSatoshis={isFormInputUsingSatoshis}
-                  onUnitTypeChanged={setIsFormInputUsingSatoshis}
-                  value={getFormConvertedMilestoneAmount(
-                    milestone.amount as Satoshis,
-                  )}
-                  onValueChanged={(newAmount: Satoshis | USDollars) =>
-                    handleAmountChange(
-                      getMutationConvertedMilestoneAmount(newAmount),
-                      index,
-                    )
-                  }
-                  error={formError[index] && formError[index].amount}
-                />
-              </VStack>
-            ))}
-          </VStack>
-          <VStack spacing="10px">
-            <ButtonComponent w="full" onClick={handleAddMilestone}>
-              Add a Milestone
-            </ButtonComponent>
-            <ButtonComponent
-              w="full"
-              primary
-              isLoading={
-                createMilestoneLoading ||
-                updateMilestoneLoading ||
-                removeMilestoneLoading
+            <AmountInputWithSatoshiToggle
+              isUsingSatoshis={isFormInputUsingSatoshis}
+              onUnitTypeChanged={setIsFormInputUsingSatoshis}
+              value={getFormConvertedMilestoneAmount(
+                milestone.amount as Satoshis,
+              )}
+              onValueChanged={(newAmount: Satoshis | USDollars) =>
+                handleAmountChange(
+                  getMutationConvertedMilestoneAmount(newAmount),
+                  index,
+                )
               }
-              onClick={handleConfirmMilestone}
-            >
-              Confirm
-            </ButtonComponent>
+              error={formError[index] && formError[index].amount}
+            />
           </VStack>
-        </ModalBody>
-      </ModalContent>
+        ))}
+      </VStack>
+      <VStack spacing="10px">
+        <ButtonComponent w="full" onClick={handleAddMilestone}>
+          Add a Milestone
+        </ButtonComponent>
+        <ButtonComponent
+          w="full"
+          primary
+          isLoading={
+            createMilestoneLoading ||
+            updateMilestoneLoading ||
+            removeMilestoneLoading
+          }
+          onClick={handleConfirmMilestone}
+        >
+          Confirm
+        </ButtonComponent>
+      </VStack>
     </Modal>
   )
 }
