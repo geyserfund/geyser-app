@@ -1,12 +1,5 @@
 import { CloseIcon } from '@chakra-ui/icons'
-import {
-  Box,
-  HStack,
-  IconButton,
-  StackProps,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, HStack, IconButton, Text } from '@chakra-ui/react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
@@ -18,7 +11,6 @@ type URL = string
 interface IFileUpload {
   showcase?: boolean
   caption?: string
-  containerProps?: StackProps
   src?: string | null
   showcaseW?: string
   showcaseH?: string
@@ -34,7 +26,6 @@ const noop = () => {}
 export const FileUpload = ({
   children,
   caption,
-  containerProps = {},
   childrenOnLoading,
   showcase = false,
   src = null,
@@ -89,7 +80,7 @@ export const FileUpload = ({
   })
 
   return (
-    <VStack {...containerProps}>
+    <>
       <HStack w="100%">
         {showcase && uploadedImage ? (
           <HStack>
@@ -123,6 +114,6 @@ export const FileUpload = ({
           {caption}
         </Text>
       )}
-    </VStack>
+    </>
   )
 }

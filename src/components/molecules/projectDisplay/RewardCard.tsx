@@ -5,16 +5,23 @@ import { BiPencil } from 'react-icons/bi'
 import { TRewards } from '../../../pages/projectCreate/types'
 import { ProjectRewardForCreateUpdateFragment } from '../../../types/generated/graphql'
 import { CardLayout } from '../../layouts'
-import { ICard, IconButtonComponent, ImageWithReload } from '../../ui'
+import {
+  ICard,
+  IconButtonComponent,
+  ImageWithReload,
+  SatoshiAmount,
+} from '../../ui'
 
 type Props = ICard & {
   reward: TRewards | ProjectRewardForCreateUpdateFragment
+  isSatoshi: boolean
   handleEdit?: any
   handleRemove?: any
 }
 
 export const RewardCard = ({
   reward,
+  isSatoshi,
   handleEdit,
   handleRemove,
   ...rest
@@ -39,12 +46,16 @@ export const RewardCard = ({
         <HStack width="100%" justifyContent={'space-between'} paddingX="4px">
           <HStack>
             <VStack spacing="0px">
-              <Text color={'neutral.1000'} fontWeight="bold">
-                {/*
+              {isSatoshi ? (
+                <SatoshiAmount color="primary.400">{reward.cost}</SatoshiAmount>
+              ) : (
+                <Text color={'neutral.1000'} fontWeight="bold">
+                  {/*
                     Divided by 100 as cost is in cents
                   */}
-                {`$ ${reward.cost / 100}`}
-              </Text>
+                  {`$ ${reward.cost / 100}`}
+                </Text>
+              )}
               <Text
                 whiteSpace="nowrap"
                 fontSize="12px"

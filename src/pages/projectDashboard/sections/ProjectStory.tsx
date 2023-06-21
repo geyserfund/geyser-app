@@ -63,6 +63,7 @@ export const ProjectStory = () => {
         width="100%"
         flexGrow={1}
         display="flex"
+        px={2}
         flexDirection="column"
         justifyContent="start"
         alignItems="start"
@@ -71,7 +72,7 @@ export const ProjectStory = () => {
           <ProjectStoryForm
             form={form}
             isLoading={loading}
-            toolbarTop="5.9em"
+            toolbarTop="5.5em"
           />
           <Button
             isLoading={updateLoading}

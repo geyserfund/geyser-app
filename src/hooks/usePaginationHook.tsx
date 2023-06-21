@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { PaginationInput } from '../types'
+import { PaginationInput } from '../types/generated/graphql'
 import { validNumber } from '../utils'
 import { useListenerState } from './useListenerState'
 import { getNestedValue } from './useQueryWithPagination'
@@ -146,7 +146,6 @@ export const usePaginationHook = <TEntity, TTransformed = TEntity>({
     isLoadingMore,
     fetchNext,
     noMoreItems,
-    setNoMoreItems,
     data: list,
   }
 }

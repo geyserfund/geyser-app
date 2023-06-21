@@ -1,17 +1,10 @@
-import {
-  Icon,
-  SkeletonText,
-  Stack,
-  StackDirection,
-  Text,
-  Tooltip,
-} from '@chakra-ui/react'
+import { Icon, Stack, StackDirection, Text, Tooltip } from '@chakra-ui/react'
 import { HTMLChakraProps } from '@chakra-ui/system'
 import { useEffect, useState } from 'react'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 
 import { ProjectFragment, WalletStatus } from '../../types/generated/graphql'
-import { isActive, isDraft, isInactive } from '../../utils'
+import { isActive, isDraft } from '../../utils'
 
 interface IProjectStatusLabel extends HTMLChakraProps<'div'> {
   project: ProjectFragment
@@ -71,7 +64,9 @@ export const ProjectStatusLabel = ({
     fontSize: fontSize || '12px',
   }
 
-  const [status, setStatus] = useState<ProjectStatusLabels | null>(null)
+  const [status, setStatus] = useState<ProjectStatusLabels>(
+    ProjectStatusLabels.DRAFT,
+  )
 
   useEffect(() => {
     if (!project) {
@@ -101,29 +96,16 @@ export const ProjectStatusLabel = ({
         return ProjectStatusLabels.DRAFT
       }
 
-      if (isInactive(project.status)) {
-        return ProjectStatusLabels.INACTIVE
-      }
-
-      return null
+      return ProjectStatusLabels.INACTIVE
     }
 
     const currentStatus = getStatus()
     setStatus(currentStatus)
   }, [project])
 
-  if (!status) {
-    return (
-      <Stack direction={direction} alignItems="center">
-        <SkeletonText width="80px" skeletonHeight={4} noOfLines={1} />
-      </Stack>
-    )
-  }
-
   const CurrentIcon = ProjectStatusIcons[status]
   const color = ProjectStatusColors[status]
   const tooltip = ProjectStatusTooltip[status]
-
   return (
     <Tooltip label={tooltip} placement="top" size="sm">
       <Stack direction={direction} alignItems="center">

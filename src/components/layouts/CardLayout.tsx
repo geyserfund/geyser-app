@@ -15,8 +15,6 @@ export const CardLayout = forwardRef<HTMLDivElement, CardLayoutProps>(
     return (
       <Stack
         ref={ref}
-        p={5}
-        spacing={3}
         as={rest.to ? Link : undefined}
         tabIndex={-1}
         overflow={'hidden'}
@@ -25,6 +23,8 @@ export const CardLayout = forwardRef<HTMLDivElement, CardLayoutProps>(
         borderColor={noborder ? 'transparent' : 'neutral.200'}
         borderRadius="8px"
         boxShadow="none"
+        padding="24px"
+        spacing="10px"
         _hover={hover ? { cursor: 'pointer', borderColor: 'neutral.400' } : {}}
         _active={click ? { borderColor: 'primary.400' } : {}}
         _focus={click ? { borderColor: 'primary.400' } : {}}

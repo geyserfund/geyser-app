@@ -1,25 +1,10 @@
-import { Box, styled } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import { ThemeProvider } from '@remirror/react-components'
 import { AllStyledComponent } from '@remirror/styles/emotion'
 import { PropsWithChildren, useMemo } from 'react'
 import { RemirrorThemeType } from 'remirror'
 
 import { useCustomTheme } from '../../../utils'
-
-const Container = styled(Box, {
-  baseStyle: {
-    '& p, & iframe, & h1, & h2, & h3, & h4, & h5': {
-      mt: 4,
-    },
-    '& iframe': {
-      minHeight: '28em',
-    },
-    '& a': {
-      textDecoration: 'underline',
-    },
-    width: '100%',
-  },
-})
 
 export const StyleProvider = ({
   children,
@@ -48,23 +33,25 @@ export const StyleProvider = ({
     [colors],
   )
 
+  const sx = {
+    '& p, & iframe': {
+      mt: 4,
+    },
+    '& a': {
+      textDecoration: 'underline',
+    },
+    width: '100%',
+  }
+
   return (
-    <Container
+    <Box
       sx={
         flex
           ? {
+              ...sx,
               display: 'flex',
               flexDirection: 'column',
               flexGrow: 1,
-              '& div.remirror-editor-wrapper': {
-                px: 1,
-                pt: '2px',
-                m: 0,
-              },
-              '& div.remirror-theme': {
-                pt: 0,
-                m: 0,
-              },
               '& div.remirror-editor-wrapper, & div.remirror-editor, & div.remirror-theme':
                 {
                   display: 'flex',
@@ -72,7 +59,7 @@ export const StyleProvider = ({
                   flexGrow: 1,
                 },
             }
-          : {}
+          : sx
       }
     >
       <AllStyledComponent
@@ -85,6 +72,6 @@ export const StyleProvider = ({
       >
         <ThemeProvider theme={remirrorTheme}>{children}</ThemeProvider>
       </AllStyledComponent>
-    </Container>
+    </Box>
   )
 }
