@@ -8,8 +8,8 @@ import { Satoshis } from '../../types/types'
 export type ProjectCreationVariables = {
   title: string
   name: string
-  image?: string
-  thumbnailImage?: string
+  image?: string | null
+  thumbnailImage?: string | null
   shortDescription: string
   description: string
   email: string

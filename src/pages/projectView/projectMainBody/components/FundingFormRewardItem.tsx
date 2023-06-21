@@ -8,13 +8,15 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import classNames from 'classnames'
-import { MouseEvent } from 'react'
+import { useState } from 'react'
 import { createUseStyles } from 'react-jss'
 
 import { ItemCard } from '../../../../components/layouts/ItemCard'
 import { ImageWithReload } from '../../../../components/ui'
 import { AppTheme } from '../../../../context'
+import { IRewardCount } from '../../../../interfaces'
 import { ProjectRewardForCreateUpdateFragment } from '../../../../types/generated/graphql'
+import { toInt } from '../../../../utils'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   focused: {
@@ -36,30 +38,51 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
     fontSize: '12px',
     height: '40px',
   },
+  plusIcon: {
+    backgroundColor: colors.neutral[100],
+    border: `2px solid ${colors.neutral[200]}`,
+  },
 }))
 
 interface IRewardItemProps {
   item: ProjectRewardForCreateUpdateFragment
+  updateCount?: (_: IRewardCount) => void
   count?: number
   readOnly?: boolean
-  onClick?: (e: MouseEvent<HTMLDivElement>) => void
-  onRemoveClick?: (e: MouseEvent<HTMLButtonElement>) => void
-  onAddClick?: (e: MouseEvent<HTMLButtonElement>) => void
+  onClick?: any
 }
 
 export const FundingFormRewardItem = ({
   item,
-  count,
+  updateCount,
+  count: initialCount,
   readOnly,
   onClick,
-  onRemoveClick,
-  onAddClick,
 }: IRewardItemProps) => {
   const classes = useStyles()
 
   const { cost, name, sold, description } = item
 
+  const [count, setCount] = useState(initialCount || 0)
   const { isOpen: focus, onOpen: setFocus, onClose: setBlur } = useDisclosure()
+
+  const handleAdd = () => {
+    const newCount = count + 1
+    setCount(newCount)
+    if (updateCount) {
+      updateCount({ id: toInt(item.id), count: newCount })
+    }
+  }
+
+  const handleRemove = () => {
+    if (count > 0) {
+      const newCount = count - 1
+      setCount(newCount)
+      if (updateCount) {
+        updateCount({ id: toInt(item.id), count: newCount })
+      }
+    }
+  }
 
   const renderIcon = count ? <Text fontSize="20px">{count}</Text> : <AddIcon />
 
@@ -97,7 +120,7 @@ export const FundingFormRewardItem = ({
                   className={classes.extraIcons}
                   aria-label="remove-reward"
                   icon={<MinusIcon />}
-                  onClick={onRemoveClick}
+                  onClick={handleRemove}
                 />
                 <IconButton
                   onFocus={setFocus}
@@ -106,18 +129,18 @@ export const FundingFormRewardItem = ({
                   className={classes.extraIcons}
                   aria-label="add-reward"
                   icon={<AddIcon />}
-                  onClick={onAddClick}
+                  onClick={handleAdd}
                 />
               </HStack>
             )}
             <IconButton
               onFocus={setFocus}
               onBlur={setBlur}
-              variant="secondary"
-              isActive={Boolean(count)}
+              className={classes.plusIcon}
+              backgroundColor={count ? 'primary.400' : undefined}
               aria-label="select-reward"
               icon={renderIcon}
-              onClick={onAddClick}
+              onClick={handleAdd}
             />
           </HStack>
         )}

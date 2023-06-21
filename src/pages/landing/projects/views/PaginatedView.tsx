@@ -9,7 +9,7 @@ import {
   ProjectStatus,
 } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
-import { FilteredProjectList } from '../components'
+import { FilteredProjectList } from '../components/FilteredProjectList'
 
 const TOTAL_PROJECTS_TO_FETCH = 20
 
@@ -37,7 +37,6 @@ export const PaginatedView = () => {
       ...restFilters,
     },
     orderBy: sort ? [{ [sort]: OrderByOptions.Desc }] : undefined,
-    skipPagination: Boolean(restFilters.search),
   })
 
   return (

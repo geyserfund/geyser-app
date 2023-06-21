@@ -14,7 +14,7 @@ import { HiOutlineCheck } from 'react-icons/hi'
 
 import { Body2, H3 } from '../../../../components/typography'
 import { useProjectContext } from '../../../../context'
-import { fonts, lightModeColors } from '../../../../styles'
+import { fonts } from '../../../../styles'
 import { Badge, FundingTxFragment } from '../../../../types/generated/graphql'
 import { useNotification } from '../../../../utils'
 import { AvatarElement } from '../../projectMainBody/components'
@@ -96,46 +96,31 @@ export const SuccessImageComponent = ({
         spacing="20px"
         borderStyle="dashed"
         borderWidth="2px"
-        borderColor={lightModeColors.neutral[900]}
+        borderColor="neutral.200"
         borderRadius="8px"
         padding="10px 20px"
         w="full"
       >
         <VStack spacing="0px">
-          <H3
-            color={lightModeColors.neutral[900]}
-            fontSize="22px"
-            fontWeight={500}
-            fontFamily={fonts.livvic}
-          >
+          <H3 fontSize="22px" fontWeight={500} fontFamily={fonts.livvic}>
             Successful contribution to
           </H3>
-          <H3
-            color={lightModeColors.neutral[900]}
-            fontSize="22px"
-            fontWeight={700}
-            fontFamily={fonts.livvic}
-          >
+          <H3 fontSize="22px" fontWeight={700} fontFamily={fonts.livvic}>
             {project.title}
           </H3>
         </VStack>
         {currentBadge ? (
           <VStack w="full" spacing="0px">
             <Image src={currentBadge.image} width="125px" />
-            <Body2 color={lightModeColors.neutral[900]}>
-              You won a Nostr badge!
-            </Body2>
+            <Body2 color="neutral.900">You won a Nostr badge!</Body2>
           </VStack>
         ) : (
           <Center
             boxSize={'70px'}
             borderRadius="full"
-            backgroundColor={lightModeColors.neutral[50]}
+            backgroundColor={'neutral.50'}
           >
-            <HiOutlineCheck
-              color={lightModeColors.neutral[1000]}
-              fontSize="50px"
-            />
+            <HiOutlineCheck color={'neutral.1000'} fontSize="50px" />
           </Center>
         )}
 
@@ -145,12 +130,10 @@ export const SuccessImageComponent = ({
               borderRadius="50%"
               user={user}
               noLink
-              textProps={{ color: lightModeColors.neutral[900] }}
+              textProps={{ color: 'neutral.900' }}
             />
           </HStack>
-          <Body2 color={lightModeColors.neutral[900]} fontStyle="italic">
-            {comment}
-          </Body2>
+          <Body2 fontStyle="italic">{comment}</Body2>
         </VStack>
       </VStack>
       <HStack w="full" justifyContent="end">

@@ -9,17 +9,16 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { ChangeEventHandler } from 'react'
-import { Controller, UseFormReturn } from 'react-hook-form'
+import { UseFormReturn } from 'react-hook-form'
 
 import { FileUpload } from '../../../components/molecules'
 import { TextArea, TextInputBox, UploadBox } from '../../../components/ui'
 import { ProjectValidations } from '../../../constants'
 import { useAuthContext } from '../../../context'
-import { FieldContainer } from '../../../forms/components/FieldContainer'
-import { validateImageUrl } from '../../../forms/validations/image'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
 import { toMediumImageUrl, validLightningAddress } from '../../../utils'
 import { ProjectCreationVariables } from '../types'
+import { FormInputContainer } from './FormInputContainer'
 import { ProjectFundraisingDeadline } from './ProjectFundraisingDeadline'
 
 const MIN_LENGTH_TO_QUERY_PROJECT = 3
@@ -32,7 +31,7 @@ type ProjectFormProps = {
 export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
   const { user } = useAuthContext()
 
-  const { formState, setValue, watch, setError, control } = form
+  const { formState, setValue, watch, setError } = form
 
   const [getProject] = useLazyQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
     variables: {
@@ -106,7 +105,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
   return (
     <VStack spacing={6}>
-      <FieldContainer
+      <FormInputContainer
         title="Title"
         subtitle="A few words that make your project stand out"
       >
@@ -117,9 +116,9 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           error={formState.errors.title?.message}
           onBlur={handleProjectFetch}
         />
-      </FieldContainer>
+      </FormInputContainer>
 
-      <FieldContainer
+      <FormInputContainer
         title="Lightning Address Preview"
         subtitle="This is the lightning address for your project. Funds sent to this lightning address will show in your project activity"
         error={FormErrorIcon.name}
@@ -136,27 +135,19 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           />
           <InputRightAddon>@geyser.fund</InputRightAddon>
         </InputGroup>
-      </FieldContainer>
+      </FormInputContainer>
 
-      <FieldContainer
+      <FormInputContainer
         title="Objective"
         subtitle="Add 'one liner' a simple descriptions of what your project is about"
       >
         <TextArea
           name="shortDescription"
+          noOfLines={2}
           height="fit-content"
           overflowY="auto"
           value={watch('shortDescription')}
-          onChange={({ target, ...event }) => {
-            handleChange({
-              target: {
-                ...target,
-                name: target.name,
-                value: target.value.replace(/\n/gm, ''),
-              },
-              ...event,
-            })
-          }}
+          onChange={handleChange}
           error={formState.errors.shortDescription?.message}
         />
         {!formState.errors.shortDescription && (
@@ -167,74 +158,56 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
             }/${ProjectValidations.shortDescription.maxLength}`}</Text>
           </HStack>
         )}
-      </FieldContainer>
+      </FormInputContainer>
 
-      <FieldContainer
+      <FormInputContainer
         title="Image"
         subtitle="Add the main project image that will be displayed in all thumbnails"
       >
         <FileUpload
           showcase
-          containerProps={{ w: '100%' }}
           caption="For best fit, pick a square image. Image size limit: 10MB."
           src={watch('thumbnailImage')}
           onUploadComplete={handleImageUpload}
           onDeleteClick={handleDeleteThumbnail}
-          childrenOnLoading={<UploadBox loading h={10} />}
+          childrenOnLoading={<UploadBox loading />}
         >
           <UploadBox
             h={10}
-            title={watch('thumbnailImage') ? 'Change image' : undefined}
+            title={watch('image') ? 'Change image' : undefined}
           />
         </FileUpload>
-      </FieldContainer>
+      </FormInputContainer>
 
-      <FieldContainer
+      <FormInputContainer
         title="Header"
         subtitle="Add a header with a video link or by uploading an image to help bring your project to life"
       >
-        <Controller
-          name="image"
-          control={control}
-          render={({ field }) => {
-            const isImage = validateImageUrl(field.value)
-            return (
-              <HStack alignItems="start">
-                <Input
-                  width="initial"
-                  type="text"
-                  placeholder="www.youtube.com/2ms0j2n93c"
-                  {...field}
-                />
-                <FileUpload
-                  containerProps={{ flexGrow: 1 }}
-                  showcase={isImage}
-                  showcaseW="80px"
-                  caption="For best fit, select horizontal 1:3 image. Image size limit: 10MB"
-                  src={isImage ? field.value : undefined}
-                  onUploadComplete={handleHeaderImageUpload}
-                  onDeleteClick={handleDeleteImage}
-                  childrenOnLoading={<UploadBox loading h={10} />}
-                >
-                  <UploadBox
-                    h={10}
-                    title={field.value ? 'Change header' : undefined}
-                  />
-                </FileUpload>
-              </HStack>
-            )
-          }}
-        />
-      </FieldContainer>
+        <FileUpload
+          showcase
+          showcaseW="80px"
+          caption="For best fit, pick an image around 800px x 200px. Image size limit:
+        10MB."
+          src={watch('image')}
+          onUploadComplete={handleHeaderImageUpload}
+          onDeleteClick={handleDeleteImage}
+          childrenOnLoading={<UploadBox loading />}
+        >
+          <UploadBox
+            h={10}
+            title={watch('image') ? 'Change header' : undefined}
+          />
+        </FileUpload>
+      </FormInputContainer>
 
-      <FieldContainer
+      <FormInputContainer
         title="Fundraising deadline"
         subtitle="Add a deadline to your project if you have one, or just keep it as ongoing."
       >
         <ProjectFundraisingDeadline setValue={setValue} watch={watch} />
-      </FieldContainer>
+      </FormInputContainer>
 
-      <FieldContainer
+      <FormInputContainer
         title="Email"
         subtitle="Project notifications will be sent to your profile email, which you can edit in Profile Settings. Make sure to verify your email to keep your wallet secure."
       >
@@ -245,7 +218,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           error={formState.errors.email?.message}
           isDisabled={Boolean(user.email)}
         />
-      </FieldContainer>
+      </FormInputContainer>
     </VStack>
   )
 }
