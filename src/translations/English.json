@@ -33,5 +33,8 @@
   "Sort By": "Sort By",
   "Project leaderboard": "Project leaderboard",
   "This week": "This week",
-  "All time": "All time"
+  "All time": "All time",
+  "Failed to fetch data": "Failed to fetch data",
+  "You're not logged in": "You're not logged in",
+  "Login now to see activity from projects you funded or follow": "Login now to see activity from projects you funded or follow"
 }
