@@ -3,6 +3,12 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   Text,
   VStack,
 } from '@chakra-ui/react'
@@ -10,7 +16,6 @@ import { useEffect, useState } from 'react'
 import { BiDollar } from 'react-icons/bi'
 
 import { SatoshiIconTilted } from '../../../../components/icons'
-import { Modal } from '../../../../components/layouts/Modal'
 import { FileUpload } from '../../../../components/molecules'
 import { Body2 } from '../../../../components/typography'
 import {
@@ -233,9 +238,10 @@ export const RewardAdditionModal = ({
   }
 
   return (
-    <Modal
-      title={
-        <>
+    <Modal isOpen={isOpen} onClose={onClose} size="sm" isCentered>
+      <ModalOverlay />
+      <ModalContent display="flex" alignItems="flex-start" padding="20px 0px">
+        <ModalHeader paddingX="20px">
           <Text fontSize="18px" fontWeight={600}>
             Reward
           </Text>
@@ -243,102 +249,102 @@ export const RewardAdditionModal = ({
             Adding rewards and items that can be purchased makes it more
             worthwhile for contributors to fund your project
           </Body2>
-        </>
-      }
-      isOpen={isOpen}
-      onClose={onClose}
-    >
-      <VStack
-        width="100%"
-        paddingBottom="20px"
-        marginBottom="20px"
-        maxHeight="600px"
-        overflowY="auto"
-        alignItems="flex-start"
-        spacing="10px"
-        paddingX="2px"
-      >
-        <VStack width="100%" alignItems="flex-start">
-          <Text>Name</Text>
-          <TextInputBox
-            placeholder={'T - Shirt ...'}
-            value={reward.name}
-            name="name"
-            onChange={handleTextChange}
-            error={formError.name}
-          />
-        </VStack>
-
-        <VStack width="100%" alignItems="flex-start">
-          <Text>Description</Text>
-          <TextArea
-            placeholder="..."
-            value={reward.description || ''}
-            name="description"
-            onChange={handleTextChange}
-            error={formError.description}
-          />
-        </VStack>
-
-        <VStack width="100%" alignItems="flex-start">
-          <FileUpload
-            onUploadComplete={handleUpload}
-            childrenOnLoading={<UploadBox loading />}
+        </ModalHeader>
+        <ModalCloseButton />
+        <ModalBody width="100%">
+          <VStack
+            width="100%"
+            paddingBottom="20px"
+            marginBottom="20px"
+            maxHeight="600px"
+            overflowY="auto"
+            alignItems="flex-start"
+            spacing="10px"
+            paddingX="2px"
           >
-            {reward.image ? (
-              <HStack justifyContent="center">
-                <ImageWithReload
-                  borderRadius="4px"
-                  src={reward.image}
-                  maxHeight="200px"
+            <VStack width="100%" alignItems="flex-start">
+              <Text>Name</Text>
+              <TextInputBox
+                placeholder={'T - Shirt ...'}
+                value={reward.name}
+                name="name"
+                onChange={handleTextChange}
+                error={formError.name}
+              />
+            </VStack>
+
+            <VStack width="100%" alignItems="flex-start">
+              <Text>Description</Text>
+              <TextArea
+                placeholder="..."
+                value={reward.description || ''}
+                name="description"
+                onChange={handleTextChange}
+                error={formError.description}
+              />
+            </VStack>
+
+            <VStack width="100%" alignItems="flex-start">
+              <FileUpload
+                onUploadComplete={handleUpload}
+                childrenOnLoading={<UploadBox loading />}
+              >
+                {reward.image ? (
+                  <HStack justifyContent="center">
+                    <ImageWithReload
+                      borderRadius="4px"
+                      src={reward.image}
+                      maxHeight="200px"
+                    />
+                  </HStack>
+                ) : (
+                  <UploadBox title="Add image" />
+                )}
+              </FileUpload>
+            </VStack>
+
+            <VStack width="100%" alignItems="flex-start">
+              <Text textTransform={'capitalize'}>Cost of Reward</Text>
+
+              <InputGroup>
+                <InputLeftAddon>
+                  {isSatoshi ? <SatoshiIconTilted /> : <BiDollar />}
+                </InputLeftAddon>
+
+                {/*
+                   @TODO: Use a different `value` here if when we support currency
+                   types beyond USD cents (e.g: satoshis)
+                 */}
+                <Input
+                  focusBorderColor="primary.400"
+                  name="Dollar Amount Cost"
+                  type="number"
+                  onChange={handleCostAmountChange}
+                  value={formCostDollarValue}
+                  isInvalid={formError.cost}
                 />
-              </HStack>
-            ) : (
-              <UploadBox title="Add image" />
-            )}
-          </FileUpload>
-        </VStack>
+              </InputGroup>
 
-        <VStack width="100%" alignItems="flex-start">
-          <Text textTransform={'capitalize'}>Cost of Reward</Text>
+              {formError.cost ? (
+                <Text fontSize="12px" color="red.500">
+                  {formError.cost}
+                </Text>
+              ) : null}
+            </VStack>
+          </VStack>
 
-          <InputGroup>
-            <InputLeftAddon>
-              {isSatoshi ? <SatoshiIconTilted /> : <BiDollar />}
-            </InputLeftAddon>
-
-            {/*
-              @TODO: Use a different `value` here if when we support currency
-              types beyond USD cents (e.g: satoshis)
-            */}
-            <Input
-              focusBorderColor="primary.400"
-              name="Dollar Amount Cost"
-              type="number"
-              onChange={handleCostAmountChange}
-              value={formCostDollarValue}
-              isInvalid={formError.cost}
-            />
-          </InputGroup>
-
-          {formError.cost ? (
-            <Text fontSize="12px" color="red.500">
-              {formError.cost}
-            </Text>
-          ) : null}
-        </VStack>
-      </VStack>
-
-      <VStack spacing="10px">
-        <ButtonComponent
-          isLoading={createRewardLoading || updateRewardLoading}
-          w="full"
-          primary
-          onClick={handleConfirmReward}
-        >
-          Confirm
-        </ButtonComponent>
-      </VStack>
+          <VStack spacing="10px">
+            <ButtonComponent
+              isLoading={createRewardLoading || updateRewardLoading}
+              w="full"
+              primary
+              onClick={handleConfirmReward}
+            >
+              Confirm
+            </ButtonComponent>
+          </VStack>
+        </ModalBody>
+      </ModalContent>
     </Modal>
   )
 }

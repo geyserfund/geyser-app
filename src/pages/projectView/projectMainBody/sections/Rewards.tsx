@@ -5,12 +5,13 @@ import { forwardRef, useState } from 'react'
 import { CardLayout } from '../../../../components/layouts'
 import {
   DeleteConfirmModal,
+  ProjectSectionBar,
   RewardCard,
 } from '../../../../components/molecules'
-import { TitleDivider } from '../../../../components/ui/TitleDivider'
-import { fundingStages } from '../../../../constants'
+import { fundingStages, IFundingStages } from '../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
 import { MUTATION_UPDATE_PROJECT_REWARD } from '../../../../graphql/mutations'
+import { UpdateReward } from '../../../../hooks'
 import { useModal } from '../../../../hooks/useModal'
 import {
   Project,
@@ -25,163 +26,174 @@ import {
 } from '../../../../utils'
 import { truthyFilter } from '../../../../utils/array'
 
-export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
-  const isMobile = useMobileMode()
-  const { toast } = useNotification()
+type Props = {
+  rewardsLength: number
+  updateReward: UpdateReward
+  fundState: IFundingStages
+}
 
-  const {
-    project,
-    setMobileView,
-    updateProject,
-    isProjectOwner,
-    onRewardsModalOpen,
-    fundingFlow: { fundState },
-    fundForm: { updateReward },
-  } = useProjectContext()
+export const Rewards = forwardRef<HTMLDivElement, Props>(
+  ({ fundState, updateReward, rewardsLength }, ref) => {
+    const isMobile = useMobileMode()
+    const { toast } = useNotification()
 
-  const [selectedReward, setSelectedReward] =
-    useState<ProjectRewardForCreateUpdateFragment>()
+    const {
+      project,
+      setMobileView,
+      updateProject,
+      isProjectOwner,
+      onRewardsModalOpen,
+    } = useProjectContext()
+    const [selectedReward, setSelectedReward] =
+      useState<ProjectRewardForCreateUpdateFragment>()
 
-  const {
-    isOpen: isRewardDeleteOpen,
-    onClose: onRewardDeleteClose,
-    onOpen: openRewardDelete,
-  } = useModal()
+    const {
+      isOpen: isRewardDeleteOpen,
+      onClose: onRewardDeleteClose,
+      onOpen: openRewardDelete,
+    } = useModal()
 
-  const [updateRewardMutation] = useMutation(MUTATION_UPDATE_PROJECT_REWARD)
+    const [updateRewardMutation] = useMutation(MUTATION_UPDATE_PROJECT_REWARD)
 
-  if (!project) {
-    return null
-  }
-
-  const triggerRewardRemoval = (id?: number) => {
-    const currentReward = project.rewards?.find((reward) => reward?.id === id)
-    if (!currentReward) {
-      return
+    if (!project) {
+      return null
     }
 
-    setSelectedReward(currentReward)
-    openRewardDelete()
-  }
-
-  const handleRemoveReward = async (id?: number) => {
-    if (!id) {
-      return
-    }
-
-    try {
+    const triggerRewardRemoval = (id?: number) => {
       const currentReward = project.rewards?.find((reward) => reward?.id === id)
+      if (!currentReward) {
+        return
+      }
 
-      await updateRewardMutation({
-        variables: {
-          input: {
-            projectRewardId: toInt(id),
-            deleted: true,
-            name: currentReward?.name,
-            cost: currentReward?.cost,
-            costCurrency: RewardCurrency.Usdcent,
-          },
-        },
-      })
-      const newRewards = project.rewards?.filter((reward) => reward?.id !== id)
-      updateProject({ rewards: newRewards || [] } as Project)
-
-      onRewardDeleteClose()
-
-      toast({
-        title: 'Successfully removed!',
-        description: `Reward ${currentReward?.name} was successfully removed`,
-        status: 'success',
-      })
-    } catch (error) {
-      toast({
-        title: 'Failed to remove reward',
-        description: `${error}`,
-        status: 'error',
-      })
+      setSelectedReward(currentReward)
+      openRewardDelete()
     }
-  }
 
-  const renderRewards = () => {
-    if (project.rewards && project.rewards.length > 0) {
-      return project.rewards.filter(truthyFilter).map((reward) => {
-        return (
-          <HStack
-            key={reward.id}
-            pb={6}
-            px={2}
-            alignSelf="stretch"
-            alignItems="stretch"
-            justifySelf="stretch"
-            justifyContent="stretch"
-            maxWidth="350px"
-            flexWrap="wrap"
-          >
-            <RewardCard
-              key={reward.id}
-              width="100%"
-              reward={reward}
-              handleEdit={
-                isProjectOwner
-                  ? () => {
-                      setSelectedReward(reward)
-                      onRewardsModalOpen({ reward })
-                    }
-                  : undefined
-              }
-              handleRemove={
-                isProjectOwner
-                  ? () => triggerRewardRemoval(reward.id)
-                  : undefined
-              }
-              onClick={() => {
-                if (
-                  fundState === fundingStages.initial &&
-                  isActive(project.status)
-                ) {
-                  updateReward({ id: toInt(reward.id), count: 1 })
-                  setMobileView(MobileViews.funding)
-                }
-              }}
-            />
-          </HStack>
+    const handleRemoveReward = async (id?: number) => {
+      if (!id) {
+        return
+      }
+
+      try {
+        const currentReward = project.rewards?.find(
+          (reward) => reward?.id === id,
         )
-      })
+
+        await updateRewardMutation({
+          variables: {
+            input: {
+              projectRewardId: toInt(id),
+              deleted: true,
+              name: currentReward?.name,
+              cost: currentReward?.cost,
+              costCurrency: RewardCurrency.Usdcent,
+            },
+          },
+        })
+        const newRewards = project.rewards?.filter(
+          (reward) => reward?.id !== id,
+        )
+        updateProject({ rewards: newRewards || [] } as Project)
+
+        onRewardDeleteClose()
+
+        toast({
+          title: 'Successfully removed!',
+          description: `Reward ${currentReward?.name} was successfully removed`,
+          status: 'success',
+        })
+      } catch (error) {
+        toast({
+          title: 'Failed to remove reward',
+          description: `${error}`,
+          status: 'error',
+        })
+      }
+    }
+
+    const renderRewards = () => {
+      if (project.rewards && project.rewards.length > 0) {
+        return project.rewards.filter(truthyFilter).map((reward) => {
+          return (
+            <HStack
+              key={reward.id}
+              pb={6}
+              px={2}
+              alignSelf="stretch"
+              alignItems="stretch"
+              justifySelf="stretch"
+              justifyContent="stretch"
+              maxWidth="350px"
+              flexWrap="wrap"
+            >
+              <RewardCard
+                key={reward.id}
+                width="100%"
+                reward={reward}
+                isSatoshi={false}
+                handleEdit={
+                  isProjectOwner
+                    ? () => {
+                        setSelectedReward(reward)
+                        onRewardsModalOpen({ reward })
+                      }
+                    : undefined
+                }
+                handleRemove={
+                  isProjectOwner
+                    ? () => triggerRewardRemoval(reward.id)
+                    : undefined
+                }
+                onClick={() => {
+                  if (
+                    fundState === fundingStages.initial &&
+                    isActive(project.status)
+                  ) {
+                    updateReward({ id: toInt(reward.id), count: 1 })
+                    setMobileView(MobileViews.funding)
+                  }
+                }}
+              />
+            </HStack>
+          )
+        })
+      }
+
+      return (
+        <GridItem colSpan={isMobile ? 2 : 1}>
+          <Text>There are no rewards available.</Text>
+        </GridItem>
+      )
+    }
+
+    if (!rewardsLength) {
+      return null
     }
 
     return (
-      <GridItem colSpan={isMobile ? 2 : 1}>
-        <Text>There are no rewards available.</Text>
-      </GridItem>
+      <>
+        <CardLayout
+          ref={ref}
+          width="100%"
+          flexDirection="column"
+          alignItems="flex-start"
+          spacing="25px"
+          padding="24px"
+        >
+          <ProjectSectionBar name={'Rewards'} number={rewardsLength} />
+
+          <HStack width="100%" flexWrap="wrap" justifyContent="center">
+            {renderRewards()}
+          </HStack>
+        </CardLayout>
+        <DeleteConfirmModal
+          isOpen={isRewardDeleteOpen}
+          onClose={onRewardDeleteClose}
+          title={`Delete reward ${selectedReward?.name}`}
+          description={'Are you sure you want to remove the reward'}
+          confirm={() => handleRemoveReward(selectedReward?.id)}
+        />
+      </>
     )
-  }
-
-  if (!project.rewards.length) {
-    return null
-  }
-
-  return (
-    <>
-      <CardLayout
-        ref={ref}
-        width="100%"
-        flexDirection="column"
-        alignItems="flex-start"
-        spacing="25px"
-        padding="24px"
-      >
-        <TitleDivider badge={project.rewards.length}>Rewards</TitleDivider>
-        <HStack width="100%" flexWrap="wrap" justifyContent="center">
-          {renderRewards()}
-        </HStack>
-      </CardLayout>
-      <DeleteConfirmModal
-        isOpen={isRewardDeleteOpen}
-        onClose={onRewardDeleteClose}
-        title={`Delete reward ${selectedReward?.name}`}
-        description={'Are you sure you want to remove the reward'}
-        confirm={() => handleRemoveReward(selectedReward?.id)}
-      />
-    </>
-  )
-})
+  },
+)

@@ -2,9 +2,9 @@ import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { FormProvider, UseFormReturn } from 'react-hook-form'
 
 import { ProjectValidations } from '../../../constants'
-import { FieldContainer } from '../../../forms/components/FieldContainer'
 import { MarkdownField } from '../../../forms/markdown/MarkdownField'
 import { useMobileMode } from '../../../utils'
+import { FormInputContainer } from './FormInputContainer'
 
 interface Props {
   form: UseFormReturn<{ description: string }>
@@ -17,7 +17,7 @@ export const ProjectStoryForm = ({ form, isLoading, toolbarTop }: Props) => {
   return (
     <FormProvider {...form}>
       <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1}>
-        <FieldContainer
+        <FormInputContainer
           width="100%"
           flexGrow={1}
           subtitle="Write a more in-depth description of the project. You can also add images and videos."
@@ -53,7 +53,7 @@ export const ProjectStoryForm = ({ form, isLoading, toolbarTop }: Props) => {
               </Text>
             </HStack>
           </Box>
-        </FieldContainer>
+        </FormInputContainer>
       </VStack>
     </FormProvider>
   )
