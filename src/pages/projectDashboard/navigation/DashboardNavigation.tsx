@@ -93,14 +93,13 @@ export const DashboardNavigation = ({
           leftIcon={<ArrowBackIcon />}
           variant="secondary"
           w="100%"
-          size="sm"
           mb={4}
         >
           Back to project
         </Button>
       </NavLink>
       <CardLayout p={4}>
-        <Text px={2} variant="body1" whiteSpace="nowrap">
+        <Text px={4} variant="body1" whiteSpace="nowrap">
           Creator dashboard
         </Text>
         {Object.entries(creatorSections).map(([key, section]) => (
@@ -111,7 +110,7 @@ export const DashboardNavigation = ({
             section={section}
           />
         ))}
-        <Text px={2} variant="body1">
+        <Text px={4} variant="body1">
           Edit project
         </Text>
         {Object.entries(projectSections).map(([key, section]) => (

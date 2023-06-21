@@ -6,42 +6,48 @@ import { AuthModal } from '../../../components/molecules'
 import { fundingStages } from '../../../constants'
 import { AuthContext, MobileViews, useProjectContext } from '../../../context'
 import { useBtcContext } from '../../../context/btc'
-import { IFundForm } from '../../../hooks'
+import { IFundForm, IFundFormState, UseFundingFlowReturn } from '../../../hooks'
 import {
   FundingInput,
   FundingResourceType,
   ProjectFragment,
   ProjectReward,
   RewardFundingInput,
-} from '../../../types'
+} from '../../../types/generated/graphql'
 import { toInt, useMobileMode } from '../../../utils'
 import { truthyFilter } from '../../../utils/array'
-import { InfoPageSkeleton, ProjectFundingInitialInfoScreen } from './screens'
 import {
-  ProjectFundingQRScreen,
-  ProjectFundingRewardSelectionScreen,
-  ProjectFundingSelectionFormScreen,
-  SuccessScreen,
-} from './screens'
+  InfoPageSkeleton,
+  ProjectFundingInitialInfoScreen,
+} from './screens/ProjectFundingInitialInfoScreen'
+import { ProjectFundingQRScreen } from './screens/ProjectFundingQRScreen'
+import { ProjectFundingSelectionFormScreen } from './screens/ProjectFundingSelectionFormScreen'
+import { SuccessScreen } from './screens/SuccessScreen'
 import { useStyles } from './styles'
 
 type Props = {
   project?: ProjectFragment | null
+  fundingFlow: UseFundingFlowReturn
   resourceType: FundingResourceType
   resourceId: number
+  fundForm: IFundFormState
 }
 
 type FilteredReward = { id: number; quantity: number }
 
-export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
+export const ProjectActivityPanel = ({
+  fundingFlow,
+  fundForm,
+  resourceType,
+  resourceId,
+}: Props) => {
   const { user } = useContext(AuthContext)
 
   const { btcRate } = useBtcContext()
   const isMobile = useMobileMode()
+  const { project } = useProjectContext()
 
-  const { mobileView, setMobileView, project, fundingFlow, fundForm } =
-    useProjectContext()
-
+  const { mobileView, setMobileView } = useProjectContext()
   // required for knowing the rewards and the funds
   const {
     state: formState,
@@ -54,6 +60,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   const {
     fundState,
     setFundState,
+    fundingRequestLoading,
     fundingTx,
     resetFundingFlow,
     requestFunding,
@@ -69,7 +76,6 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
     MobileViews.contribution,
     MobileViews.leaderboard,
     MobileViews.funding,
-    MobileViews.rewards,
   ].includes(mobileView)
 
   const classes = useStyles({ isMobile, inView })
@@ -167,10 +173,6 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
       return <InfoPageSkeleton />
     }
 
-    if (mobileView === MobileViews.rewards) {
-      return <ProjectFundingRewardSelectionScreen />
-    }
-
     switch (fundState) {
       case fundingStages.initial:
         return (
@@ -185,6 +187,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
       case fundingStages.form:
         return (
           <ProjectFundingSelectionFormScreen
+            fundingRequestLoading={fundingRequestLoading}
             isMobile={isMobile}
             handleCloseButton={handleCloseButton}
             formState={formState}

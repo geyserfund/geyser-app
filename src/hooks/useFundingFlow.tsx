@@ -1,25 +1,28 @@
 import { ApolloError } from '@apollo/client'
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { RejectionError, WebLNProvider } from 'webln'
 
-import {
-  ApolloErrors,
-  fundingStages,
-  IFundingStages,
-  stageList,
-} from '../../constants'
-import { AuthContext } from '../../context'
+import { ApolloErrors, fundingStages, stageList } from '../constants'
+import { IFundingStages } from '../constants'
+import { AuthContext } from '../context'
 import {
   FundingInput,
   FundingMutationResponse,
   FundingStatus,
   FundingTxFragment,
   InvoiceStatus,
+  useFundingTxWithInvoiceStatusLazyQuery,
   useFundMutation,
   useRefreshFundingInvoiceMutation,
-} from '../../types'
-import { sha256, toInt, useNotification } from '../../utils'
-import { useFundSubscription } from './useFundSubscription'
+} from '../types'
+import { sha256, toInt, useNotification } from '../utils'
 
 export type UseFundingFlowReturn = ReturnType<typeof useFundingFlow>
 
@@ -87,10 +90,18 @@ const requestWebLNPayment = async (fundingTx: FundingTxFragment) => {
     throw new Error(WEBLN_ENABLE_ERROR)
   }
 
-  return sha256(preimage)
+  const paymentHash = await sha256(preimage)
+  return paymentHash
 }
 
 export const useFundingFlow = (options?: IFundingFlowOptions) => {
+  const fundIntervalRef = useRef<NodeJS.Timeout>()
+
+  useEffect(() => {
+    // Cleanup interval on unmount
+    return () => clearInterval(fundIntervalRef.current)
+  }, [])
+
   const { hasBolt11 = true, hasWebLN = true } = options || {
     hasBolt11: true,
     hasWebLN: true,
@@ -116,16 +127,16 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     funder: { ...initialFunding.funder, user },
   })
 
-  const { startListening, stopListening, fundingActivity } =
-    useFundSubscription({
-      projectId: fundingTx.projectId,
-    })
   const [amounts, setAmounts] =
     useState<FundingMutationResponse['amountSummary']>(initialAmounts)
 
-  useEffect(() => {
-    return () => stopListening()
-  }, [stopListening])
+  const [getFundingStatus, { data: fundingStatus }] =
+    useFundingTxWithInvoiceStatusLazyQuery({
+      variables: {
+        fundingTxID: toInt(fundingTx.id),
+      },
+      fetchPolicy: 'network-only',
+    })
 
   const gotoNextStage = useCallback(() => {
     setFundState((currentState) => {
@@ -202,6 +213,11 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const [fundProject, { loading: fundingRequestLoading }] = useFundMutation({
     onCompleted(data) {
       try {
+        const intervalFactory = () => {
+          clearInterval(fundIntervalRef.current)
+          return setInterval(getFundingStatus, 1500)
+        }
+
         setError('')
         setFundingRequestErrored(false)
 
@@ -216,20 +232,20 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
           startWebLNFlow(data.fund.fundingTx)
             .then((success) => {
               if (!success) {
-                startListening()
+                fundIntervalRef.current = intervalFactory()
                 setWebLNErrored(true)
               }
             })
             .catch(() => {
-              startListening()
+              fundIntervalRef.current = intervalFactory()
               setFundingRequestErrored(true)
             })
         } else {
-          startListening()
+          fundIntervalRef.current = intervalFactory()
         }
       } catch (e) {
         setFundingRequestErrored(true)
-        stopListening()
+        clearInterval(fundIntervalRef.current)
         toast({
           title: 'Something went wrong',
           description: 'Please refresh the page and try again',
@@ -247,7 +263,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       }
 
       setFundingRequestErrored(true)
-      stopListening()
+      clearInterval(fundIntervalRef.current)
       toast({
         title: 'Something went wrong',
         description: 'Please refresh the page and try again',
@@ -257,37 +273,36 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   })
 
   useEffect(() => {
-    if (fundingActivity) {
+    if (fundingStatus && fundingStatus.fundingTx) {
       /*
         We also check the invoiceIds are the same so that the useEffect does not try to update the funding status of an
         older invoice. This can happen due to sync delays between the funding status polling and the funding invoice update.
       */
       setFundingTx((current) => {
         if (
-          (fundingActivity.invoiceStatus !== current.invoiceStatus ||
-            fundingActivity.status !== current.status) &&
-          fundingActivity.invoiceId === current.invoiceId
+          (fundingStatus.fundingTx.invoiceStatus !== current.invoiceStatus ||
+            fundingStatus.fundingTx.status !== current.status) &&
+          fundingStatus.fundingTx.invoiceId === current.invoiceId
         ) {
-          if (
-            fundingActivity.status === FundingStatus.Paid ||
-            (fundingActivity.onChain &&
-              fundingActivity.status === FundingStatus.Pending)
-          ) {
-            stopListening()
-            gotoNextStage()
-          }
-
           return {
             ...current,
-            ...fundingActivity,
-            uuid: fundingActivity.uuid || current.uuid,
+            ...fundingStatus.fundingTx,
           }
         }
 
         return current
       })
+
+      if (
+        fundingStatus.fundingTx.status === FundingStatus.Paid ||
+        (fundingStatus.fundingTx.status === FundingStatus.Pending &&
+          fundingStatus.fundingTx.onChain)
+      ) {
+        clearInterval(fundIntervalRef.current)
+        gotoNextStage()
+      }
     }
-  }, [fundingActivity, stopListening, gotoNextStage])
+  }, [fundingStatus, gotoNextStage])
 
   useEffect(() => {
     if (
@@ -295,7 +310,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       fundState === fundingStages.canceled ||
       fundState
     ) {
-      stopListening()
+      clearInterval(fundIntervalRef.current)
     }
   }, [fundState])
 
@@ -314,7 +329,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
       gotoNextStage()
       setFundingInput(input)
-
       await fundProject({ variables: { input } })
     },
     [fundProject, gotoNextStage, toast],
@@ -326,7 +340,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     },
     onError(_) {
       setInvoiceRefreshErrored(true)
-      stopListening()
+      clearInterval(fundIntervalRef.current)
     },
   })
 
@@ -399,15 +413,12 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 }
 
 export const validateFundingInput = (input: FundingInput) => {
-  let isValid = false
-  let error = 'cannot initiate funding without amount'
+  let isValid = true
+  let error = ''
 
-  if (
-    (input.donationInput && toInt(input.donationInput.donationAmount) > 0) ||
-    (input.rewardInput && toInt(input.rewardInput.rewardsCost) > 0)
-  ) {
-    isValid = true
-    error = ''
+  if (!input.donationInput?.donationAmount && !input.rewardInput?.rewardsCost) {
+    isValid = false
+    error = 'cannot initiate funding without amount'
   }
 
   return { isValid, error }

@@ -1,42 +1,107 @@
 import { Icon, IconProps } from '@chakra-ui/react'
 
-export const SatoshiIconTilted = (props: IconProps) => {
+export const SatoshiIconTilted = ({
+  dash,
+  scale = 1,
+  ...rest
+}: IconProps & { dash?: boolean; scale?: number }) => {
+  const height = scale * 25
+
+  if (dash) {
+    return (
+      <Icon
+        width="auto"
+        height={`${height}px`}
+        viewBox="0 0 10 11"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        paddingBottom="2px"
+        {...rest}
+      >
+        <g clipPath="url(#clip0_593_123592)">
+          <path
+            d="M5.00054 10.6241C7.74663 10.6241 9.97277 8.39799 9.97277 5.65191C9.97277 2.90583 7.74663 0.679688 5.00054 0.679688C2.25446 0.679688 0.0283203 2.90583 0.0283203 5.65191C0.0283203 8.39799 2.25446 10.6241 5.00054 10.6241Z"
+            fill="none"
+          />
+          <path
+            d="M6.38162 1.78854L5.75098 1.62109L5.46484 2.69875L6.09549 2.8662L6.38162 1.78854Z"
+            fill="currentColor"
+          />
+          <path
+            d="M4.53397 8.74069L3.90332 8.57324L3.61718 9.6509L4.24783 9.81835L4.53397 8.74069Z"
+            fill="currentColor"
+          />
+          <path
+            d="M7.60794 4.95487L7.77539 4.32422L3.2787 3.13026L3.11125 3.76091L7.60794 4.95487Z"
+            fill="currentColor"
+          />
+          <path
+            d="M7.16849 6.61893L7.33594 5.98828L2.83925 4.79433L2.6718 5.42497L7.16849 6.61893Z"
+            fill="currentColor"
+          />
+          <path
+            d="M6.73782 8.23905L6.90527 7.6084L2.40858 6.41444L2.24113 7.04509L6.73782 8.23905Z"
+            fill="currentColor"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_593_123592">
+            <rect
+              width="10"
+              height="10"
+              fill="currentColor"
+              transform="translate(0 0.652344)"
+            />
+          </clipPath>
+        </defs>
+      </Icon>
+    )
+  }
+
   return (
     <Icon
-      viewBox="0 0 18 18"
+      width="auto"
+      height={`${height}px`}
+      viewBox="0 0 10 11"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      paddingBottom="3px"
+      {...rest}
     >
-      <g clipPath="url(#clip0_899_62912)">
+      <g clipPath="url(#clip0_593_123592)">
         <path
-          d="M9.00176 17.9469C13.9447 17.9469 17.9518 13.9398 17.9518 8.99688C17.9518 4.05393 13.9447 0.046875 9.00176 0.046875C4.05881 0.046875 0.0517578 4.05393 0.0517578 8.99688C0.0517578 13.9398 4.05881 17.9469 9.00176 17.9469Z"
+          d="M5.00054 10.6241C7.74663 10.6241 9.97277 8.39799 9.97277 5.65191C9.97277 2.90583 7.74663 0.679688 5.00054 0.679688C2.25446 0.679688 0.0283203 2.90583 0.0283203 5.65191C0.0283203 8.39799 2.25446 10.6241 5.00054 10.6241Z"
           fill="none"
         />
         <path
-          d="M11.4877 2.04457L10.3525 1.74316L9.83749 3.68295L10.9727 3.98436L11.4877 2.04457Z"
+          d="M6.38162 1.78854L5.75098 1.62109L5.46484 2.69875L6.09549 2.8662L6.38162 1.78854Z"
           fill="currentColor"
         />
         <path
-          d="M8.16105 14.5587L7.02588 14.2573L6.51083 16.1971L7.646 16.4985L8.16105 14.5587Z"
+          d="M4.53397 8.74069L3.90332 8.57324L3.61718 9.6509L4.24783 9.81835L4.53397 8.74069Z"
           fill="currentColor"
         />
         <path
-          d="M13.6942 7.74454L13.9956 6.60938L5.90156 4.46025L5.60016 5.59542L13.6942 7.74454Z"
+          d="M7.60794 4.95487L7.77539 4.32422L3.2787 3.13026L3.11125 3.76091L7.60794 4.95487Z"
           fill="currentColor"
         />
         <path
-          d="M12.9032 10.7401L13.2046 9.60498L5.11055 7.45586L4.80914 8.59103L12.9032 10.7401Z"
+          d="M7.16849 6.61893L7.33594 5.98828L2.83925 4.79433L2.6718 5.42497L7.16849 6.61893Z"
           fill="currentColor"
         />
         <path
-          d="M12.1283 13.6552L12.4297 12.52L4.33564 10.3709L4.03424 11.5061L12.1283 13.6552Z"
+          d="M6.73782 8.23905L6.90527 7.6084L2.40858 6.41444L2.24113 7.04509L6.73782 8.23905Z"
           fill="currentColor"
         />
       </g>
       <defs>
-        <clipPath id="clip0_899_62912">
-          <rect width="18" height="18" fill="none" />
+        <clipPath id="clip0_593_123592">
+          <rect
+            width="10"
+            height="10"
+            fill="currentColor"
+            transform="translate(0 0.652344)"
+          />
         </clipPath>
       </defs>
     </Icon>

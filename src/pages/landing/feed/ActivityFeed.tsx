@@ -11,10 +11,7 @@ import {
 import { QUERY_ACTIVITIES_FOR_LANDING_PAGE } from '../../../graphql/queries/activities'
 import { ScrollInvoke } from '../../../helpers'
 import { useQueryWithPagination } from '../../../hooks'
-import {
-  ActivityForLandingPageFragment,
-  Project,
-} from '../../../types/generated/graphql'
+import { ActivityForLandingPageFragment } from '../../../types/generated/graphql'
 import { useMobileMode } from '../../../utils'
 import { NoSearchResults } from '../components'
 import { FilterTopBar } from '../projects/components'
@@ -37,16 +34,6 @@ export const ActivityFeed = () => {
     ActivityForLandingPageFragment[]
   >([])
 
-  const [initialFollowedProjects, setInitialFollowedProject] = useState<
-    Pick<Project, 'id' | 'title' | 'name'>[]
-  >([])
-
-  useEffect(() => {
-    if (followedProjects && initialFollowedProjects.length === 0) {
-      setInitialFollowedProject(followedProjects)
-    }
-  }, [followedProjects, initialFollowedProjects])
-
   const {
     isLoading,
     isLoadingMore,
@@ -63,10 +50,9 @@ export const ActivityFeed = () => {
       region,
       resourceType: activity,
       tagIds,
-      projectIds: initialFollowedProjects.map((project) => project.id),
+      projectIds: followedProjects.map((project) => project.id),
     },
     options: {
-      skip: initialFollowedProjects.length === 0,
       onCompleted() {
         clearActivity()
       },
@@ -93,12 +79,12 @@ export const ActivityFeed = () => {
     )
   }
 
-  if (followedProjects.length === 0) {
-    return <NoFollowedProjects />
+  if (isLoading) {
+    return <ContributionsSkeleton />
   }
 
-  if (isLoading || initialFollowedProjects.length === 0) {
-    return <ContributionsSkeleton />
+  if (followedProjects.length === 0) {
+    return <NoFollowedProjects />
   }
 
   if (activities.length === 0) {

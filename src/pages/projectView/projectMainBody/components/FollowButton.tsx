@@ -15,17 +15,49 @@ export const FollowButton = ({ projectId }: { projectId: number }) => {
     unfollowLoading,
   } = useFollowProject(projectId)
 
+  if (isFollowed) {
+    return (
+      <Button
+        variant="ghost"
+        {...buttonStyle}
+        _hover={{
+          backgroundColor: 'none',
+          borderColor: 'secondary.red',
+          color: 'secondary.red',
+        }}
+        _active={{ backgroundColor: 'secondary.red' }}
+        borderColor="primary.500"
+        color="primary.500"
+        leftIcon={<BsFillHeartFill fontSize="14px" />}
+        onClick={handleUnFollow}
+        isLoading={unfollowLoading}
+      >
+        Following
+      </Button>
+    )
+  }
+
   return (
     <Button
-      variant="secondary"
-      size="sm"
-      isActive={isFollowed}
-      leftIcon={isFollowed ? <BsFillHeartFill fontSize="14px" /> : <AddIcon />}
-      onClick={isFollowed ? handleUnFollow : handleFollow}
-      isLoading={followLoading || unfollowLoading}
+      variant="ghost"
+      {...buttonStyle}
+      _hover={{
+        backgroundColor: 'none',
+        borderColor: 'primary.400',
+      }}
+      borderColor="neutral.200"
+      leftIcon={<AddIcon />}
+      onClick={handleFollow}
+      isLoading={followLoading}
       isDisabled={!isLoggedIn}
     >
-      {isFollowed ? 'Following' : 'Follow'}
+      Follow
     </Button>
   )
+}
+
+const buttonStyle = {
+  size: 'sm',
+  bg: 'none',
+  border: '1px solid',
 }
