@@ -36,6 +36,11 @@
     "All time": "Todo el tiempo",
     "Failed to fetch data": "Error al obtener datos",
     "You're not logged in": "no has iniciado sesión",
-    "Login now to see activity from projects you funded or follow": "Inicie sesión ahora para ver la actividad de los proyectos que financió o sigue",
-    "Login": "Acceso"
+    "Login now to see activity": "Inicie sesión ahora para ver la actividad de los proyectos que financió o sigue",
+    "Login": "Acceso",
+    "Projects": "Proyectos",
+    "Contributions":"Contribuciones",
+    "Entry": "Entrada",
+    "Rewards":"Recompensas",
+    "All activity": "Toda la actividad"
 }

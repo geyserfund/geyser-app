@@ -36,5 +36,18 @@
   "All time": "All time",
   "Failed to fetch data": "Failed to fetch data",
   "You're not logged in": "You're not logged in",
-  "Login now to see activity from projects you funded or follow": "Login now to see activity from projects you funded or follow"
+  "Login now to see activity": "Login now to see activity from projects you funded or follow",
+  "Login": "Login",
+  "Projects": "Projects",
+  "Contributions":"Contributions",
+  "Entry": "Entry",
+  "Rewards":"Rewards",
+  "All activity": "All activity",
+  "Connect": "Connect",
+  "Connect to launch": "Connect to launch your idea and to appear as a contributor when you fund an initiative.",
+  "Go back": "Go back",
+  "Go home": "Go home",
+  "Connect message": "Connecting with Twitter or Lightning allows you to keep track of your favorite projects and to launch your own projects.",
+  "trouble connecting message": "If you're having trouble connecting with Twitter on Mobile, first try logging in on Twitter.com on your browser, then try again."
+
 }

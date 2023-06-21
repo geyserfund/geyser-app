@@ -59,7 +59,7 @@ export const DesktopActivityFilter = ({
         >
           <HStack width="100%" spacing="10px">
             <button.icon color={button.color} height="20px" />
-            <Body1 color={'neutral.900'}>{button.text}</Body1>
+            <Body1 color={'neutral.900'}>{t(button.text)}</Body1>
           </HStack>
           {!isSelected && (
             <ChevronRightIcon
