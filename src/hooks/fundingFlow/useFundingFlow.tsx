@@ -91,11 +91,6 @@ const requestWebLNPayment = async (fundingTx: FundingTxFragment) => {
 }
 
 export const useFundingFlow = (options?: IFundingFlowOptions) => {
-  useEffect(() => {
-    // Cleanup interval on unmount
-    return () => stopListening()
-  }, [])
-
   const { hasBolt11 = true, hasWebLN = true } = options || {
     hasBolt11: true,
     hasWebLN: true,
@@ -127,6 +122,10 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     })
   const [amounts, setAmounts] =
     useState<FundingMutationResponse['amountSummary']>(initialAmounts)
+
+  useEffect(() => {
+    return () => stopListening()
+  }, [stopListening])
 
   const gotoNextStage = useCallback(() => {
     setFundState((currentState) => {
@@ -269,6 +268,15 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
             fundingActivity.status !== current.status) &&
           fundingActivity.invoiceId === current.invoiceId
         ) {
+          if (
+            fundingActivity.status === FundingStatus.Paid ||
+            (fundingActivity.onChain &&
+              fundingActivity.status === FundingStatus.Pending)
+          ) {
+            stopListening()
+            gotoNextStage()
+          }
+
           return {
             ...current,
             ...fundingActivity,
@@ -278,15 +286,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
         return current
       })
-
-      if (
-        fundingActivity.status === FundingStatus.Paid ||
-        (fundingActivity.status === FundingStatus.Pending &&
-          fundingActivity.onChain)
-      ) {
-        stopListening()
-        gotoNextStage()
-      }
     }
   }, [fundingActivity, stopListening, gotoNextStage])
 
