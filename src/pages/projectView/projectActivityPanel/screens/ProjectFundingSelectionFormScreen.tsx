@@ -26,7 +26,6 @@ import { FundingFormSection } from '../components/FundingFormSection'
 
 type Props = {
   isMobile?: boolean
-  fundingRequestLoading: boolean
   handleCloseButton: () => void
   formState: IFundForm
   setTarget: (_: any) => void
@@ -40,7 +39,6 @@ type Props = {
 
 export const ProjectFundingSelectionFormScreen = ({
   isMobile,
-  fundingRequestLoading,
   handleCloseButton,
   handleFund,
   formState,
@@ -129,12 +127,7 @@ export const ProjectFundingSelectionFormScreen = ({
       )}
 
       <Box width="100%" overflowY="auto" flex={1}>
-        <FundingFormSection
-          rewards={rewards}
-          setFormState={setFormState}
-          updateReward={updateReward}
-          formState={formState}
-        />
+        <FundingFormSection />
       </Box>
       <VStack
         backgroundColor="neutral.0"

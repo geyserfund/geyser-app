@@ -12,13 +12,13 @@ import {
 } from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
 import { getPath } from '../../../constants'
-import { ProjectEntryValidations } from '../../../constants/validations'
+import { ProjectEntryValidations } from '../../../constants'
 import { useNavContext } from '../../../context'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
 import {
   MUTATION_PUBLISH_ENTRY,
   MUTATION_UPDATE_ENTRY,
-} from '../../../graphql/mutations/entries'
+} from '../../../graphql/mutations'
 import { IEntryUpdateInput } from '../../../interfaces/entry'
 import {
   EntryFragment,
@@ -26,7 +26,7 @@ import {
   Owner,
   Project,
   useEntryLazyQuery,
-} from '../../../types/generated/graphql'
+} from '../../../types'
 import {
   copyTextToClipboard,
   isDraft,
@@ -170,7 +170,10 @@ export const EntryPreview = () => {
         await handleUpdateEntry()
       }
 
-      await publishPost({ variables: { id: toInt(entry.id) } })
+      const entryId = toInt(entry.id)
+      if (entryId) {
+        await publishPost({ variables: { id: entryId } })
+      }
     } catch (error) {
       toast({
         title: 'Entry publish failed',

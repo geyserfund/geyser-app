@@ -16,7 +16,7 @@ import { MUTATION_TAG_CREATE } from '../../../graphql/mutations'
 import { QUERY_TAGS } from '../../../graphql/queries/tags'
 import { Tag, TagCreateInput, TagsGetResult } from '../../../types'
 import { useNotification } from '../../../utils'
-import { FormInputContainer } from './FormInputContainer'
+import { FieldContainer } from '../../../forms/components/FieldContainer'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   tagContainer: {
@@ -165,7 +165,7 @@ export const ProjectTagsCreateEdit = ({
   const disableShowAddTag = inputValue.length < 3 || createLoading
 
   return (
-    <FormInputContainer
+    <FieldContainer
       title="Tags"
       subtitle={
         <span>
@@ -217,6 +217,6 @@ export const ProjectTagsCreateEdit = ({
           })}
         </HStack>
       </VStack>
-    </FormInputContainer>
+    </FieldContainer>
   )
 }
