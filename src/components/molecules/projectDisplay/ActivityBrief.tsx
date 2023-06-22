@@ -1,5 +1,6 @@
 import { CircularProgress, HStack, Text, VStack } from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Countdown } from '../../../pages/projectView/projectActivityPanel/components/Countdown'
 import {
@@ -16,6 +17,7 @@ interface IActivityBrief {
 }
 
 export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
+  const { t } = useTranslation()
   const [currentMilestone, setCurrentMilestone] = useState<ProjectMilestone>()
   const [milestoneIndex, setMilestoneIndex] = useState<number>(0)
   const [prevMilestone, setPrevMilestone] = useState(0)
@@ -109,7 +111,7 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
       return (
         <Text pl={2} color="neutral.600" w="100%">
           <Text w="100%" fontWeight={500} display="inline">
-            {percentage}% of Milestone {milestoneIndex}:
+            {`${percentage} % ${t('of Milestone')} ${milestoneIndex}:`}
           </Text>{' '}
           {currentMilestone.name}
         </Text>
