@@ -69,7 +69,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   }
 
   return (
-    <CardLayout ref={ref}>
+    <CardLayout ref={ref} mobileDense>
       <Box>{renderImageOrVideo()}</Box>
 
       <HStack flexGrow={1} width="100%" spacing={3} alignItems="start">

@@ -1,15 +1,22 @@
-import { Box, VStack } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { useRef } from 'react'
 import { createUseStyles } from 'react-jss'
 
+import { CardsStackLayout } from '../../../components/layouts'
 import { MobileViews, useProjectContext } from '../../../context'
 import { useMobileMode } from '../../../utils'
 import { ProjectMobileNavigation } from '../projectNavigation/components/ProjectMobileNavigation'
 import { ProjectNavigation } from '../projectNavigation/components/ProjectNavigation'
 import { useProjectAnchors } from '../projectNavigation/hooks/useProjectAnchors'
-import { LaunchProjectNotice } from './components'
-import { Entries, Header, Milestones, Rewards, Story } from './sections'
+import {
+  Entries,
+  Header,
+  LaunchProjectNotice,
+  Milestones,
+  Rewards,
+  Story,
+} from './sections'
 import { CreatorSocial } from './sections/CreatorSocial'
 
 type Rules = string
@@ -86,32 +93,23 @@ export const ProjectMainBody = () => {
         overflow="hidden"
       >
         <Box className={classes.detailsContainer} id="project-scroll-container">
-          <VStack alignItems="center" width="100%" flex="1">
-            <VStack
-              spacing={3}
-              alignItems="left"
-              mt={isMobile ? 0 : 5}
-              maxWidth="1000px"
-              w="100%"
-              padding={isMobile ? '10px 10px 50px 10px' : '0px 40px 70px 40px'}
-            >
-              <Header ref={headerRef} />
+          <CardsStackLayout>
+            <Header ref={headerRef} />
 
-              {project && isProjectOwner && (
-                <LaunchProjectNotice project={project} />
-              )}
+            {project && isProjectOwner && (
+              <LaunchProjectNotice project={project} />
+            )}
 
-              <CreatorSocial />
+            <CreatorSocial />
 
-              <Story />
+            <Story />
 
-              <Entries ref={entriesRef} />
-
-              <Rewards ref={rewardsRef} />
-
+            {projectAnchors.entriesLength && <Entries ref={entriesRef} />}
+            {projectAnchors.rewardsLength && <Rewards ref={rewardsRef} />}
+            {projectAnchors.milestonesLength && (
               <Milestones ref={milestonesRef} />
-            </VStack>
-          </VStack>
+            )}
+          </CardsStackLayout>
         </Box>
       </Box>
     </>
