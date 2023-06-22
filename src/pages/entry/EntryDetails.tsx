@@ -9,13 +9,12 @@ import {
 } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { BiLeftArrowAlt } from 'react-icons/bi'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import { ProjectFundersCountIndicator } from '../../components/molecules'
-import { ButtonComponent } from '../../components/ui'
-import { EntryStatusLabel } from '../../components/ui/EntryStatusLabel'
+import { ButtonComponent, EntryStatusLabel } from '../../components/ui'
 import { getPath } from '../../constants'
-import { EntryFragment, EntryStatus } from '../../types/generated/graphql'
+import { EntryFragment, EntryStatus } from '../../types'
 import { ProjectEntryEditor } from './creation/editor'
 
 type Props = {
@@ -24,14 +23,23 @@ type Props = {
 
 export const EntryDetails = ({ entry }: Props) => {
   const headerImageSrc = entry.image || entry.project?.image
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const handleViewProject = () => {
+    if (!location.key || location.key === 'default') {
+      navigate(getPath('project', entry.project?.name))
+    } else {
+      navigate(-1)
+    }
+  }
 
   return (
     <VStack width="100%" alignItems="flex-start" height={'100%'}>
       {/* At the moment entries are always tied to a project so we can force unwrap this term */}
       <ButtonComponent
         size="sm"
-        as={Link}
-        to={getPath('project', entry.project?.name)}
+        onClick={handleViewProject}
         leftIcon={<BiLeftArrowAlt fontSize="15px" />}
       >
         View project

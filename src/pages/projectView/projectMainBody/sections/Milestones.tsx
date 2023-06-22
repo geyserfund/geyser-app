@@ -3,15 +3,12 @@ import { forwardRef } from 'react'
 import { BiPencil } from 'react-icons/bi'
 
 import { CardLayout } from '../../../../components/layouts'
-import { ProjectSectionBar } from '../../../../components/molecules'
 import { IconButtonComponent } from '../../../../components/ui'
+import { TitleDivider } from '../../../../components/ui/TitleDivider'
 import { useProjectContext } from '../../../../context'
 import { MilestoneComponent } from '../components/MilestoneComponent'
 
-export const Milestones = forwardRef<
-  HTMLDivElement,
-  { milestonesLength: number }
->(({ milestonesLength }, ref) => {
+export const Milestones = forwardRef<HTMLDivElement>((_, ref) => {
   const { project, isProjectOwner, onMilestonesModalOpen } = useProjectContext()
 
   if (!project) {
@@ -38,7 +35,7 @@ export const Milestones = forwardRef<
     return <Text>There are no milestones available.</Text>
   }
 
-  if (!milestonesLength) {
+  if (!project.milestones.length) {
     return null
   }
 
@@ -51,10 +48,9 @@ export const Milestones = forwardRef<
         alignItems="flex-start"
         spacing="25px"
       >
-        <ProjectSectionBar
-          name={'Milestones'}
-          number={milestonesLength}
-          rightSection={
+        <TitleDivider
+          badge={project.milestones.length}
+          rightAction={
             isProjectOwner && (
               <IconButtonComponent
                 aria-label="edit-milestone"
@@ -65,7 +61,9 @@ export const Milestones = forwardRef<
               />
             )
           }
-        />
+        >
+          Milestones
+        </TitleDivider>
         <VStack alignItems="flex-start" spacing="12px">
           {renderMilestones()}
         </VStack>

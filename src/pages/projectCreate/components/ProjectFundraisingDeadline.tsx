@@ -29,7 +29,7 @@ export const ProjectFundraisingDeadline = ({
 
   const handleOngoingSelect = () => {
     setSelectedDate(null)
-    setValue('expiresAt', '', { shouldDirty: true })
+    setValue('expiresAt', null, { shouldDirty: true })
   }
 
   return (
