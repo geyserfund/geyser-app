@@ -41,7 +41,9 @@ const ConnectAccounts = ({
   return (
     <VStack justifyContent="center" alignItems="center">
       <Text color="neutral.6002" fontSize="12px" marginBottom={5}>
-        {t('Connect message')}
+        {t(
+          'Connecting with Twitter or Lightning allows you to keep track of your favorite projects and to launch your own projects.',
+        )}
       </Text>
       <Stack width="100%">
         {!hasTwitterAccount(user) && showTwitter && (
@@ -52,7 +54,11 @@ const ConnectAccounts = ({
         )}
         {showLightning && <ConnectWithLightning onClose={onClose} />}
       </Stack>
-      <Caption paddingTop="5px">{t('trouble connecting message')}</Caption>
+      <Caption paddingTop="5px">
+        {t(
+          "If you're having trouble connecting with Twitter on Mobile, first try logging in on Twitter.com on your browser, then try again.",
+        )}
+      </Caption>
     </VStack>
   )
 }

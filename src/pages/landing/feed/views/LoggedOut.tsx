@@ -18,7 +18,9 @@ export const LoggedOut = () => {
         <Body1 bold color="neutral.1000">
           {t("You're not logged in")}
         </Body1>
-        <Body1 color="neutral.1000">{t('Login now to see activity')}</Body1>
+        <Body1 color="neutral.1000">
+          {t('Login now to see activity from projects you funded or follow')}
+        </Body1>
       </VStack>
       <ButtonComponent
         primary

@@ -36,7 +36,7 @@
   "All time": "All time",
   "Failed to fetch data": "Failed to fetch data",
   "You're not logged in": "You're not logged in",
-  "Login now to see activity": "Login now to see activity from projects you funded or follow",
+  "Login now to see activity from projects you funded or follow": "Login now to see activity from projects you funded or follow",
   "Login": "Login",
   "Projects": "Projects",
   "Contributions":"Contributions",
@@ -47,7 +47,21 @@
   "Connect to launch": "Connect to launch your idea and to appear as a contributor when you fund an initiative.",
   "Go back": "Go back",
   "Go home": "Go home",
-  "Connect message": "Connecting with Twitter or Lightning allows you to keep track of your favorite projects and to launch your own projects.",
-  "trouble connecting message": "If you're having trouble connecting with Twitter on Mobile, first try logging in on Twitter.com on your browser, then try again."
-
+  "Connecting with Twitter or Lightning allows you to keep track of your favorite projects and to launch your own projects.": "Connecting with Twitter or Lightning allows you to keep track of your favorite projects and to launch your own projects.",
+  "If you're having trouble connecting with Twitter on Mobile, first try logging in on Twitter.com on your browser, then try again.": "If you're having trouble connecting with Twitter on Mobile, first try logging in on Twitter.com on your browser, then try again.",
+  "Edit project": "Edit project",
+  "View my projects": "View my projects",
+  "View my project": "View my project",
+  "Project": "Project",
+  "Launch Your Project": "Launch Your Project",
+  "You have been logged out": "You have been logged out",
+  "Please log back in with your profile, or press continue if you want to stay anonymous.": "Please log back in with your profile, or press continue if you want to stay anonymous.",
+  "Continue": "Continue",
+  "Grants": "Grants",
+  "About": "About",
+  "Recent Activity": "Recent Activity",
+  "Discover Projects": "Discover Projects",
+  "FAQ": "FAQ",
+  "Feedback": "Feedback",
+  "Sign Out": "Sign Out"
 }
