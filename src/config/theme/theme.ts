@@ -78,7 +78,7 @@ export const theme = {
           border: `2px solid`,
           borderColor: theme.colors.neutral[200],
           color: theme.colors.neutral[900],
-          backgroundColor: theme.colors.neutral[50],
+          backgroundColor: theme.colors.neutral[0],
           _hover: {
             borderColor: theme.colors.primary[400],
           },
