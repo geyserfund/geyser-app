@@ -1,4 +1,5 @@
 import { Button, HStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { BsLightningChargeFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 
@@ -16,6 +17,7 @@ export const ProjectMobileNavigation = () => {
     onCreatorModalOpen,
   } = useProjectContext()
 
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
 
   if (
@@ -39,7 +41,7 @@ export const ProjectMobileNavigation = () => {
             size="sm"
             variant="secondary"
           >
-            Dashboard
+            {t('Dashboard')}
           </Button>
           <Button
             flexGrow={1}
@@ -47,7 +49,7 @@ export const ProjectMobileNavigation = () => {
             variant="primary"
             onClick={() => onCreatorModalOpen()}
           >
-            Create
+            {t('Create')}
           </Button>
         </>
       ) : (
@@ -59,7 +61,7 @@ export const ProjectMobileNavigation = () => {
           leftIcon={<BsLightningChargeFill />}
           onClick={() => setMobileView(MobileViews.funding)}
         >
-          Contribute
+          {t('Contribute')}
         </Button>
       )}
     </HStack>

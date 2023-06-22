@@ -1,5 +1,6 @@
 import { CloseIcon } from '@chakra-ui/icons'
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { BiPencil } from 'react-icons/bi'
 
 import { TRewards } from '../../../pages/projectCreate/types'
@@ -19,6 +20,7 @@ export const RewardCard = ({
   handleRemove,
   ...rest
 }: Props) => {
+  const { t } = useTranslation()
   const onEdit = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
     if (handleEdit) {
@@ -51,7 +53,7 @@ export const RewardCard = ({
                 color={'neutral.1000'}
                 fontWeight="bold"
               >
-                per item
+                {t('per item')}
               </Text>
             </VStack>
             <VStack spacing="0px" alignItems="flex-start">
@@ -64,7 +66,7 @@ export const RewardCard = ({
                 padding="2px 5px"
                 borderRadius="4px"
               >
-                <b>{reward.sold || 0}</b> collected
+                <b>{reward.sold || 0}</b> {t('collected')}
               </Text>
             </VStack>
           </HStack>

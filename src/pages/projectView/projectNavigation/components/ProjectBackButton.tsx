@@ -1,10 +1,12 @@
 import { Button, ButtonProps } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { BsArrowLeft } from 'react-icons/bs'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../../constants'
 
 export const ProjectBackButton = (props: ButtonProps) => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -24,7 +26,7 @@ export const ProjectBackButton = (props: ButtonProps) => {
       onClick={() => handleGoBack()}
       {...props}
     >
-      Back
+      {t('Back')}
     </Button>
   )
 }

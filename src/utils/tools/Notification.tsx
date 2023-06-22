@@ -1,8 +1,11 @@
 import { useToast, UseToastOptions } from '@chakra-ui/react'
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 // "subtle" | "solid" | "left-accent" | "top-accent"
 
 export const useNotification = (options?: UseToastOptions | undefined) => {
+  const { t } = useTranslation()
+
   const toast = useToast({
     duration: 3000,
     isClosable: true,
@@ -16,12 +19,22 @@ export const useNotification = (options?: UseToastOptions | undefined) => {
   })
 
   const unexpected = useCallback(() => {
-    toast({
+    invokeToast({
       status: 'error',
       title: 'Something went wrong.',
       description: 'Please try again',
     })
   }, [toast])
 
-  return { toast, unexpected }
+  const invokeToast = (
+    input: UseToastOptions & { description?: string; title: string },
+  ) => {
+    toast({
+      ...input,
+      description: t(input.description || ''),
+      title: t(input.title),
+    })
+  }
+
+  return { toast: invokeToast, unexpected }
 }

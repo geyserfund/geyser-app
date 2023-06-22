@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client'
 import { Center, Text, useDisclosure } from '@chakra-ui/react'
 import { forwardRef, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
@@ -20,6 +21,7 @@ import { isActive, isDraft, toInt, useNotification } from '../../../../utils'
 import { truthyFilter } from '../../../../utils/array'
 
 export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   const { project, isProjectOwner, updateProject } = useProjectContext()
@@ -132,7 +134,7 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
       })
     }
 
-    return <Text>There are no any entries available </Text>
+    return <Text>{t('There are no any entries available')} </Text>
   }
 
   if (!project.entries.length) {
@@ -149,16 +151,18 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
         flexDirection="column"
         padding="24px"
       >
-        <TitleDivider badge={project.entries.length}>Entries</TitleDivider>
+        <TitleDivider badge={project.entries.length}>
+          {t('Entries')}
+        </TitleDivider>
 
         {renderEntries()}
 
         {isProjectOwner && Boolean(canCreateEntries) === false && (
           <Center>
             <Text textColor={'neutral.600'} textAlign="center" paddingX={2}>
-              You cannot publish an entry in an inactive project. Finish the
-              project configuration or re-activate the project to publish this
-              entry.
+              {t(
+                'You cannot publish an entry in an inactive project. Finish the project configuration or re-activate the project to publish this entry.',
+              )}
             </Text>
           </Center>
         )}
@@ -166,8 +170,8 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
       <DeleteConfirmModal
         isOpen={isDeleteEntryOpen}
         onClose={closeDeleteEntry}
-        title={`Delete reward ${selectedEntry?.title}`}
-        description={'Are you sure you want to remove the entry'}
+        title={`${t('Delete reward')} ${selectedEntry?.title}`}
+        description={t('Are you sure you want to remove the entry')}
         confirm={handleRemoveEntry}
       />
     </>

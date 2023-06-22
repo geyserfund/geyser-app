@@ -177,7 +177,6 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
           <ProjectFundingInitialInfoScreen
             {...{
               project,
-              fundingTx,
               btcRate,
             }}
           />

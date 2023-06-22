@@ -1,11 +1,13 @@
 import { AddIcon } from '@chakra-ui/icons'
 import { Button } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { BsFillHeartFill } from 'react-icons/bs'
 
 import { useAuthContext } from '../../../../context'
 import { useFollowProject } from '../../../../hooks/graphqlState'
 
 export const FollowButton = ({ projectId }: { projectId: number }) => {
+  const { t } = useTranslation()
   const { isLoggedIn } = useAuthContext()
   const {
     isFollowed,
@@ -25,7 +27,7 @@ export const FollowButton = ({ projectId }: { projectId: number }) => {
       isLoading={followLoading || unfollowLoading}
       isDisabled={!isLoggedIn}
     >
-      {isFollowed ? 'Following' : 'Follow'}
+      {isFollowed ? t('Following') : t('Follow')}
     </Button>
   )
 }

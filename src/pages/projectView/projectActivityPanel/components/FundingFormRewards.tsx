@@ -1,5 +1,6 @@
 import { CheckIcon } from '@chakra-ui/icons'
 import { Box, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { ItemCard } from '../../../../components/layouts/ItemCard'
 import { SectionTitle } from '../../../../components/ui'
@@ -13,6 +14,7 @@ type Props = {
 }
 
 export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
+  const { t } = useTranslation()
   const {
     project,
     fundForm: { state, updateReward, resetRewards },
@@ -55,7 +57,7 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
 
   return (
     <Box width="100%">
-      <SectionTitle>Donate to receive a reward</SectionTitle>
+      <SectionTitle>{t('Donate to receive a reward')}</SectionTitle>
 
       {rewards.length > 0 ? (
         <VStack mt={1} padding="2px">
@@ -63,7 +65,7 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
             <ItemCard cursor="initial" onClick={resetRewards}>
               <HStack>
                 <Text flexGrow={1} fontWeight={500}>
-                  No reward
+                  {t('No reward')}
                 </Text>
                 <IconButton
                   variant="secondary"

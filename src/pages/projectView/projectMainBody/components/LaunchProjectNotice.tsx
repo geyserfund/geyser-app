@@ -1,4 +1,5 @@
 import { Button, Text } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
@@ -10,6 +11,7 @@ export const LaunchProjectNotice = ({
 }: {
   project: ProjectFragment
 }) => {
+  const { t } = useTranslation()
   const hasWallet = project.wallets.length > 0
   const navigate = useNavigate()
 
@@ -22,15 +24,16 @@ export const LaunchProjectNotice = ({
 
   return (
     <CardLayout>
-      <Text variant="h3">Finalize project</Text>
+      <Text variant="h3">{t('Finalize project')}</Text>
 
       <Text variant="body1">
-        Your project is not live yet. Head back to the creation flow to finalize
-        your project information and launch it!
+        {t(
+          'Your project is not live yet. Head back to the creation flow to finalize your project information and launch it!',
+        )}
       </Text>
 
       <Button variant="primary" w="full" onClick={handleConnectNodeClick}>
-        Finalize project
+        {t('Finalize project')}
       </Button>
     </CardLayout>
   )
