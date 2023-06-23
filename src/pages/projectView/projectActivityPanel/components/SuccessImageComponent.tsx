@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react'
 import * as htmlToImage from 'html-to-image'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BiCopy, BiDownload } from 'react-icons/bi'
 import { HiOutlineCheck } from 'react-icons/hi'
 
@@ -26,6 +27,7 @@ export const SuccessImageComponent = ({
   currentBadge?: Badge
   fundingTx: FundingTxFragment
 }) => {
+  const { t } = useTranslation()
   const { toast } = useNotification()
   const [copied, setCopied] = useState(false)
 
@@ -45,8 +47,8 @@ export const SuccessImageComponent = ({
     } catch (error) {
       toast({
         status: 'error',
-        title: 'failed to download image',
-        description: 'please try again',
+        title: 'Failed to download image',
+        description: 'Please try again',
       })
     }
   }
@@ -66,8 +68,8 @@ export const SuccessImageComponent = ({
     } catch {
       toast({
         status: 'error',
-        title: 'failed to download image',
-        description: 'please try again',
+        title: 'Failed to download image',
+        description: 'Please try again',
       })
     }
   }
@@ -108,7 +110,7 @@ export const SuccessImageComponent = ({
             fontWeight={500}
             fontFamily={fonts.livvic}
           >
-            Successful contribution to
+            {t('Successful contribution to')}
           </H3>
           <H3
             color={lightModeColors.neutral[900]}
@@ -123,7 +125,7 @@ export const SuccessImageComponent = ({
           <VStack w="full" spacing="0px">
             <Image src={currentBadge.image} width="125px" />
             <Body2 color={lightModeColors.neutral[900]}>
-              You won a Nostr badge!
+              {t('You won a Nostr badge!')}
             </Body2>
           </VStack>
         ) : (
@@ -154,7 +156,7 @@ export const SuccessImageComponent = ({
         </VStack>
       </VStack>
       <HStack w="full" justifyContent="end">
-        <Tooltip placement="top" label={copied ? 'copied' : 'copy'}>
+        <Tooltip placement="top" label={copied ? t('copied') : t('copy')}>
           <Button
             size="sm"
             isActive={copied}
@@ -163,8 +165,12 @@ export const SuccessImageComponent = ({
             leftIcon={<BiCopy />}
             onClick={handleCopy}
           >
-            <Text variant="caption" fontWeight="bold">
-              Copy
+            <Text
+              variant="caption"
+              fontWeight="bold"
+              textTransform="capitalize"
+            >
+              {t('copy')}
             </Text>
           </Button>
         </Tooltip>
@@ -177,7 +183,7 @@ export const SuccessImageComponent = ({
             onClick={handleDownload}
           >
             <Text variant="caption" fontWeight="bold">
-              Download
+              {t('Download')}
             </Text>
           </Button>
         </Tooltip>

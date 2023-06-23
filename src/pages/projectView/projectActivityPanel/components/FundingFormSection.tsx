@@ -1,4 +1,5 @@
 import { Box, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { DonationInput } from '../../../../components/molecules'
 import { SectionTitle } from '../../../../components/ui'
@@ -6,6 +7,7 @@ import { useProjectContext } from '../../../../context'
 import { FundingFormRewards } from './FundingFormRewards'
 
 export const FundingFormSection = () => {
+  const { t } = useTranslation()
   const {
     fundForm: { setState },
   } = useProjectContext()
@@ -18,7 +20,7 @@ export const FundingFormSection = () => {
       overflowX="visible"
     >
       <Box width="100%">
-        <SectionTitle>Donate to this idea</SectionTitle>
+        <SectionTitle>{t('Donate to this idea')}</SectionTitle>
 
         <DonationInput
           inputGroup={{ padding: '2px' }}

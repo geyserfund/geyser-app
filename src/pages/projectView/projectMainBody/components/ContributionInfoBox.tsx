@@ -11,6 +11,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BsInfoCircle } from 'react-icons/bs'
 
 import {
@@ -19,14 +20,10 @@ import {
   SectionTitle,
 } from '../../../../components/ui'
 import { GEYSER_FEE_DISCLAIMER, noFeeProjects } from '../../../../constants'
-import { useFundCalc } from '../../../../helpers/fundingCalculation'
+import { useFundCalc } from '../../../../helpers'
 import { IFundForm } from '../../../../hooks'
 import { IBadge } from '../../../../interfaces'
-import {
-  ProjectFragment,
-  ProjectReward,
-} from '../../../../types/generated/graphql'
-import { Satoshis } from '../../../../types/types'
+import { ProjectFragment, ProjectReward, Satoshis } from '../../../../types'
 import { hasOwnNode } from '../../../../utils/helpers'
 
 export enum ContributionInfoBoxVersion {
@@ -80,6 +77,7 @@ export const ContributionInfoBox = ({
   version,
   ...rest
 }: Props) => {
+  const { t } = useTranslation()
   const rewards = project.rewards?.filter(
     (reward) => reward !== null,
   ) as ProjectReward[]
@@ -122,7 +120,7 @@ export const ContributionInfoBox = ({
       {referenceCode && (
         <Stack direction="column" spacing="2">
           <Text textTransform={'uppercase'} color="neutral.600">
-            Reference Code
+            {t('Reference Code')}
           </Text>
 
           <Text>{referenceCode}</Text>
@@ -144,7 +142,7 @@ export const ContributionInfoBox = ({
               fontWeight={'normal'}
               textColor={'neutral.700'}
             >
-              Email
+              {t('Email')}
             </Text>
             <Text fontSize={'14px'} fontWeight={'medium'} color="neutral.700">
               {funderEmail}
@@ -157,13 +155,13 @@ export const ContributionInfoBox = ({
             fontWeight={'normal'}
             textColor={'neutral.700'}
           >
-            Funding as
+            {t('Funding as')}
           </Text>
           {isFunderAnonymous ? (
             <HStack>
               <AnonymousAvatar seed={0} imageSize={'20px'} />
               <Text fontSize={'14px'} fontWeight={'medium'} color="neutral.700">
-                anonymous
+                {t('anonymous')}
               </Text>
             </HStack>
           ) : (
@@ -221,12 +219,12 @@ export const ContributionInfoBox = ({
                 textColor={'neutral.700'}
                 fontWeight={'normal'}
               >
-                Geyser fee
+                {t('Geyser fee')}
               </Text>
               <Box as="span" ref={tooltipContainerRef}>
                 <Tooltip
                   borderRadius="4px"
-                  label={GEYSER_FEE_DISCLAIMER}
+                  label={t(GEYSER_FEE_DISCLAIMER)}
                   isOpen={isFeeTooltipOpen}
                   placement="top"
                 >
@@ -264,7 +262,7 @@ export const ContributionInfoBox = ({
 
       <ContributionInfoBoxDivider version={version} />
       <HStack justifyContent={'space-between'} width={'full'} fontSize={'10px'}>
-        <SectionTitle>Total</SectionTitle>
+        <SectionTitle>{t('Total')}</SectionTitle>
 
         <HStack>
           <SatoshiAmount

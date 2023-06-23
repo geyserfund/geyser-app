@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client'
 import { Button, CloseButton, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import ReactConfetti from 'react-confetti'
+import { useTranslation } from 'react-i18next'
 import { BiCopyAlt } from 'react-icons/bi'
 import { HiOutlineSpeakerphone } from 'react-icons/hi'
 import { Link } from 'react-router-dom'
@@ -38,6 +39,7 @@ export const SuccessScreen = ({
   project,
   handleCloseButton,
 }: Props) => {
+  const { t } = useTranslation()
   const [hasCopiedProjectLink, setCopy] = useState(false)
 
   const { getTotalAmount } = useFundCalc(fundingState)
@@ -107,7 +109,7 @@ export const SuccessScreen = ({
               to={getPath('userProfile', fundingTx.funder.user?.id)}
               width="100%"
             >
-              See badge in Profile
+              {t('See badge in Profile')}
             </Button>
           )}
           <Button
@@ -121,8 +123,8 @@ export const SuccessScreen = ({
             onClick={shareProjectWithFriends}
           >
             {hasCopiedProjectLink
-              ? 'Project link copied!'
-              : 'Copy project link'}
+              ? t('Project link copied!')
+              : t('Copy project link')}
           </Button>
         </VStack>
 

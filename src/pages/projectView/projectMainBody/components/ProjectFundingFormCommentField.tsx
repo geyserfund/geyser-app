@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { IGif } from '@giphy/js-types'
 import { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { GifIcon } from '../../../../components/icons'
 import { TextArea } from '../../../../components/ui'
@@ -33,6 +34,7 @@ export const ProjectFundingFormCommentField = ({
   setFormState,
   ...rest
 }: Props) => {
+  const { t } = useTranslation()
   const { isAnonymous, loginOnOpen, user } = useAuthContext()
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -67,7 +69,7 @@ export const ProjectFundingFormCommentField = ({
           <TextArea
             ref={textAreaRef}
             pr={16}
-            placeholder="Leave a public message here."
+            placeholder={t('Leave a public message here.')}
             fontSize="14px"
             resize="none"
             value={comment}
@@ -82,7 +84,8 @@ export const ProjectFundingFormCommentField = ({
             onChange={setTarget}
           />
           <Text pt={1} px={1} fontSize="10px" color="neutral.600">
-            Funding as <i>{isAnonymous ? 'anonymous' : user.username}</i>
+            {t('Funding as')}{' '}
+            <i>{isAnonymous ? t('anonymous') : user.username}</i>
           </Text>
         </Box>
         {isHoveringOverGIFButton && selectedGIF && (
@@ -93,7 +96,7 @@ export const ProjectFundingFormCommentField = ({
           {isAnonymous || !user ? (
             <Tooltip
               shouldWrapChildren
-              label="Funding annonymously. Click to login"
+              label={t('Funding anonymously. Click to login')}
             >
               <AvatarElement
                 borderRadius="50%"
@@ -105,7 +108,9 @@ export const ProjectFundingFormCommentField = ({
           ) : (
             <Tooltip
               shouldWrapChildren
-              label={`Funding as ${user.username}. Click to logout`}
+              label={`${t('Funding as')} ${user.username}. ${t(
+                'Click to logout',
+              )}`}
             >
               <AvatarElement
                 onClick={logoutConfirmationModal.onOpen}
