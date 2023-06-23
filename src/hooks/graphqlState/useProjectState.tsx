@@ -29,13 +29,15 @@ export const useProjectState = (
   const idType =
     type === 'name' && typeof projectId === 'string' ? 'name' : 'id'
 
+  const invalidId = idType === 'name' && String(projectId).length < 3
+
   const { loading, error } = useProjectByNameOrIdQuery({
     variables: {
       where: {
         [idType]: type === 'name' ? projectId : toInt(projectId),
       },
     },
-    skip: !projectId,
+    skip: !projectId || invalidId,
     ...options,
     onCompleted(data) {
       const { project } = data
