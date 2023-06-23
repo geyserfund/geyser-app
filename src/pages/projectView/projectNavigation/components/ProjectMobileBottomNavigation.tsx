@@ -9,6 +9,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BiNews } from 'react-icons/bi'
 
 import { MilestoneIcon, RewardGiftIcon } from '../../../../components/icons'
@@ -80,6 +81,7 @@ export const ProjectMobileBottomNavigation = ({
 }
 
 export const ProjectNavUI = () => {
+  const { t } = useTranslation()
   const {
     mobileView,
     setMobileView,
@@ -178,7 +180,7 @@ export const ProjectNavUI = () => {
             isDisabled={showGreyButton}
             onClick={() => onCreatorModalOpen()}
           >
-            Create
+            {t('Create')}
           </Button>
         ) : (
           <Button
@@ -189,7 +191,7 @@ export const ProjectNavUI = () => {
             isDisabled={showGreyButton}
             onClick={() => handleClick(MobileViews.funding)}
           >
-            Contribute
+            {t('Contribute')}
           </Button>
         )}
       </HStack>

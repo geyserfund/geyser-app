@@ -42,5 +42,9 @@
     "Contributions":"Contribuciones",
     "Entry": "Entrada",
     "Rewards":"Recompensas",
-    "All activity": "Toda la actividad"
+    "All activity": "Toda la actividad",
+    "Now that your project is live you can add <1>Rewards</1> and <1>Milestones</1> and write <1>Entries</1>": "Ahora que su proyecto está activo, puede agregar <1>Recompensas</1> e <1>Hitos</1> y escribir <1>Entradas</1>",
+    "In the <1>Dashboard</1> you’ll be able to view the list of contributors and see some analytics.": "En el <1>Panel</1> podrá ver la lista de colaboradores y ver algunos análisis.",
+    "You can always amend your project details by clicking <1>Edit Project</1>.": "Siempre puede modificar los detalles de su proyecto haciendo clic en <1>Editar proyecto</1>."
+
 }

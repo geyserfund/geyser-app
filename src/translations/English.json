@@ -175,5 +175,15 @@
   "Successful contribution to": "Successful contribution to",
   "You won a Nostr badge!": "You won a Nostr badge!",
   "copied": "copied",
-  "copy": "copy"
+  "copy": "copy",
+  "Your project is live!": "Your project is live!",
+  "Success": "Success",
+  "Now that your project is live you can add <1>Rewards</1> and <1>Milestones</1> and write <1>Entries</1>": "Now that your project is live you can add <1>Rewards</1> and <1>Milestones</1> and write <1>Entries</1>",
+  "In the <1>Dashboard</1> you’ll be able to view the list of contributors and see some analytics.": "In the <1>Dashboard</1> you’ll be able to view the list of contributors and see some analytics.",
+  "You can always amend your project details by clicking <1>Edit Project</1>.": "You can always amend your project details by clicking <1>Edit Project</1>.",
+  "Good luck!": "Good luck!",
+  "Go to project": "Go to project",
+  "Your project is in draft": "Your project is in draft",
+  "Saved in draft": "Saved in draft",
+  "Your project data has been saved, except for your wallet information (lightning address or node). Come back to the creation flow in order to add your wallet information or edit your project.": "Your project data has been saved, except for your wallet information (lightning address or node). Come back to the creation flow in order to add your wallet information or edit your project."
 }
