@@ -6,12 +6,15 @@ import { ProjectFundingLeaderboardFeedItem } from '../../../../components/molecu
 import { ID } from '../../../../constants/components'
 import { ScrollInvoke } from '../../../../helpers'
 import { PaginationHookReturn } from '../../../../hooks/types'
-import { Funder, ProjectFragment } from '../../../../types/generated/graphql'
+import {
+  FunderWithUserFragment,
+  ProjectFragment,
+} from '../../../../types/generated/graphql'
 import { useMobileMode } from '../../../../utils'
 
 interface ProjectLeaderboardListProps {
   project: ProjectFragment
-  funders: PaginationHookReturn<Funder>
+  funders: PaginationHookReturn<FunderWithUserFragment>
 }
 
 export const ProjectLeaderboardList = ({

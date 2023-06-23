@@ -14,10 +14,11 @@ import {
   QUERY_GET_FUNDING_TXS_LANDING,
   QUERY_PROJECT_FUNDERS,
 } from '../../../../graphql'
+import { ScrollInvoke } from '../../../../helpers'
 import { useQueryWithPagination } from '../../../../hooks'
 import { useFundSubscription } from '../../../../hooks/fundingFlow/useFundSubscription'
 import {
-  Funder,
+  FunderWithUserFragment,
   FundingTxFragment,
   ProjectFragment,
 } from '../../../../types/generated/graphql'
@@ -77,7 +78,7 @@ export const ProjectFundingInitialInfoScreen = ({
     },
   })
 
-  const funders = useQueryWithPagination<Funder>({
+  const funders = useQueryWithPagination<FunderWithUserFragment>({
     queryName: 'getFunders',
     itemLimit,
     query: QUERY_PROJECT_FUNDERS,
@@ -202,13 +203,19 @@ export const ProjectFundingInitialInfoScreen = ({
   return (
     <VStack
       padding={{ base: '0px 10px 0px 10px', lg: '10px 20px' }}
-      spacing="0px"
+      spacing={4}
       width="100%"
       height="100%"
       overflowY="hidden"
       position="relative"
     >
-      <ActivityBrief project={project} />
+      <ActivityBrief
+        onFetchMoreFunders={() => {
+          funders.fetchNext()
+        }}
+        funders={funders.data}
+        project={project}
+      />
 
       {!isMobile ? (
         <Button
@@ -229,7 +236,6 @@ export const ProjectFundingInitialInfoScreen = ({
         alignItems="center"
         overflow="hidden"
         flex="1"
-        paddingTop="10px"
       >
         <Box display="flex" w="100%">
           {renderTabsList()}
