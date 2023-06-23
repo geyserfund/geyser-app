@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../components/ui'
-import { DefaultImage } from '../../../../components/ui/DefaultImage'
 import { VideoPlayer } from '../../../../components/ui/VideoPlayer'
 import { getPath } from '../../../../constants'
 import { SortType, useProjectContext } from '../../../../context'
@@ -58,20 +57,12 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       return <VideoPlayer url={project.image} />
     }
 
-    return (
-      <DefaultImage
-        width="100%"
-        maxHeight="350px"
-        objectFit="cover"
-        borderRadius="8px"
-      />
-    )
+    return null
   }
 
   return (
     <CardLayout ref={ref} mobileDense>
       <Box>{renderImageOrVideo()}</Box>
-
       <HStack flexGrow={1} width="100%" spacing={3} alignItems="start">
         <ImageWithReload
           borderRadius="8px"
