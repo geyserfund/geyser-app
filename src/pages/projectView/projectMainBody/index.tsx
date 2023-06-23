@@ -49,6 +49,7 @@ const useStyles = createUseStyles<Rules, Styles>({
     overflowY: 'auto',
     WebkitOverflowScrolling: 'touch',
     display: 'flex',
+    alignItems: 'center',
     flexDirection: 'column',
   },
 })
@@ -92,7 +93,11 @@ export const ProjectMainBody = () => {
         flexDirection="column"
         overflow="hidden"
       >
-        <Box className={classes.detailsContainer} id="project-scroll-container">
+        <Box
+          w="100%"
+          className={classes.detailsContainer}
+          id="project-scroll-container"
+        >
           <CardsStackLayout>
             <Header ref={headerRef} />
 

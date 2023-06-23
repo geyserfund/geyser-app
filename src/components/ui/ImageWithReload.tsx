@@ -109,7 +109,7 @@ export const ImageWithReload = ({
       {hasValidSource ? (
         loading && renderSkeletonImage()
       ) : (
-        <DefaultImage grey={grey} {...rest} />
+        <DefaultImage grey {...rest} />
       )}
       {hasValidSource && renderSourceImage()}
     </>
