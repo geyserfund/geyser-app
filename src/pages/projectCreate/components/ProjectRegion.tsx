@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client'
 import { CloseIcon } from '@chakra-ui/icons'
 import { HStack, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 import { SingleValue } from 'react-select'
 
@@ -56,6 +57,7 @@ export const ProjectRegion = ({
   updateProject,
   ...rest
 }: ProjectRegionProps) => {
+  const { t } = useTranslation()
   const classes = useStyles()
 
   const [inputValue, setInputValue] = useState('')
@@ -126,8 +128,9 @@ export const ProjectRegion = ({
       title="Region"
       subtitle={
         <span>
-          Get found more easily by putting your project on the map. Select a
-          country or region
+          {t(
+            'Get found more easily by putting your project on the map. Select a country or region',
+          )}
         </span>
       }
       {...rest}

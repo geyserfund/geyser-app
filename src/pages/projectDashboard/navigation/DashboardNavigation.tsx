@@ -9,6 +9,7 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { Dispatch, SetStateAction } from 'react'
+import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 
 import { CardLayout } from '../../../components/layouts'
@@ -31,6 +32,7 @@ export const DashboardNavigation = ({
   project: ProjectFragment
   activeSectionKey: string
 } & BoxProps) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
   if (isMobile) {
     return (
@@ -47,14 +49,14 @@ export const DashboardNavigation = ({
               </Box>
             }
           >
-            Menu
+            {t('Menu')}
           </MobileNavButton>
           <MobileNavButton
             bg="neutral.200"
             color="neutral.1000"
             fontWeight={700}
           >
-            Creator dashboard
+            {t('Creator dashboard')}
           </MobileNavButton>
           {Object.entries(creatorSections).map(([key, section]) => (
             <MobileNavItem
@@ -70,7 +72,7 @@ export const DashboardNavigation = ({
             color="neutral.1000"
             fontWeight={700}
           >
-            Edit project
+            {t('Edit project')}
           </MobileNavButton>
           {Object.entries(projectSections).map(([key, section]) => (
             <MobileNavItem
@@ -96,12 +98,12 @@ export const DashboardNavigation = ({
           size="sm"
           mb={4}
         >
-          Back to project
+          {t('Back to project')}
         </Button>
       </NavLink>
       <CardLayout p={4}>
         <Text px={2} variant="body1" whiteSpace="nowrap">
-          Creator dashboard
+          {t('Creator dashboard')}
         </Text>
         {Object.entries(creatorSections).map(([key, section]) => (
           <NavItem
@@ -112,7 +114,7 @@ export const DashboardNavigation = ({
           />
         ))}
         <Text px={2} variant="body1">
-          Edit project
+          {t('Edit project')}
         </Text>
         {Object.entries(projectSections).map(([key, section]) => (
           <NavItem

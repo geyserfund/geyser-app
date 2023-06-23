@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/client'
 import { Button, HStack, Switch, Text, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { useAuthContext, useProjectContext } from '../../../context'
@@ -29,6 +30,7 @@ export type ProjectSettingsVariables = {
 }
 
 export const ProjectSettings = () => {
+  const { t } = useTranslation()
   const { user } = useAuthContext()
   const { toast } = useNotification()
   const navigate = useNavigate()
@@ -69,7 +71,7 @@ export const ProjectSettings = () => {
     },
     onError(error) {
       toast({
-        title: 'project update failed!',
+        title: 'failed to update project',
         description: `${error}`,
         status: 'error',
       })
@@ -89,7 +91,7 @@ export const ProjectSettings = () => {
       })
         .then(() => {
           toast({
-            title: 'project deleted successfully!',
+            title: 'Project updated successfully!',
             status: 'success',
             description: 'you will be redirected shortly...',
           })
@@ -97,7 +99,7 @@ export const ProjectSettings = () => {
           setTimeout(() => navigate('/'), 2500)
         })
         .catch(() =>
-          toast({ title: 'project delete failed!', status: 'error' }),
+          toast({ title: 'failed to delete project', status: 'error' }),
         )
     }
   }
@@ -140,15 +142,17 @@ export const ProjectSettings = () => {
           isDisabled={Boolean(user.email)}
           control={control}
           name="email"
-          label="Email"
-          caption={`Project notifications and updates are sent to the project creator's email. This email can be edited from the creator's profile Settings.`}
+          label={t('Email')}
+          caption={t(
+            `Project notifications and updates are sent to the project creator's email. This email can be edited from the creator's profile Settings.`,
+          )}
         />
         {project.status !== ProjectStatus.Deleted && (
           <VStack>
             <FieldContainer title="Project status">
               <HStack w="100%" justifyContent="stretch">
                 <Text variant="body2" flexGrow={1}>
-                  Deactivate
+                  {t('Deactivate')}
                 </Text>
                 <Switch
                   defaultChecked={watch('deactivate')}
@@ -158,9 +162,9 @@ export const ProjectSettings = () => {
               </HStack>
             </FieldContainer>
             <Text color="neutral.600">
-              Deactivating your project would not allow others to fund your
-              project, but your project will still be visible to everyone else.
-              You will be able to re-activate your project at any time.
+              {t(
+                'Deactivating your project would not allow others to fund your project, but your project will still be visible to everyone else. You will be able to re-activate your project at any time.',
+              )}
             </Text>
           </VStack>
         )}
@@ -168,10 +172,9 @@ export const ProjectSettings = () => {
         <VStack w="100%" alignItems="start">
           <Text variant="body1">Delete Project</Text>
           <Text color="neutral.600">
-            Deleting a project will make the project unaccessible to you and
-            others. You can delete a project only if it has received no
-            contributions. This is to ensure transparency for those who have
-            contributed towards the project.
+            {t(
+              'Deleting a project will make the project unaccessible to you and others. You can delete a project only if it has received no contributions. This is to ensure transparency for those who have contributed towards the project.',
+            )}
           </Text>
           <Button
             w="100%"
@@ -179,7 +182,7 @@ export const ProjectSettings = () => {
             isDisabled={project.balance > 0}
             onClick={() => deleteProjectModal.onOpen()}
           >
-            Delete
+            {t('Delete')}
           </Button>
         </VStack>
 
@@ -190,7 +193,7 @@ export const ProjectSettings = () => {
             w="full"
             type="submit"
           >
-            Save
+            {t('Save')}
           </Button>
         </VStack>
       </VStack>

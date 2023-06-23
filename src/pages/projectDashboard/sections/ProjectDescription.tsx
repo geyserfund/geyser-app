@@ -1,4 +1,5 @@
 import { Button, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { useProjectContext } from '../../../context'
 import { useUpdateProjectMutation } from '../../../types'
@@ -12,6 +13,7 @@ import { useProjectForm } from '../../projectCreate/hooks/useProjectForm'
 import { ProjectCreationVariables } from '../../projectCreate/types'
 
 export const ProjectDescription = () => {
+  const { t } = useTranslation()
   const { toast } = useNotification()
 
   const { project, updateProject } = useProjectContext()
@@ -36,7 +38,7 @@ export const ProjectDescription = () => {
       },
       onError(error) {
         toast({
-          title: 'project update failed!',
+          title: 'Project update failed!',
           description: `${error}`,
           status: 'error',
         })
@@ -66,7 +68,7 @@ export const ProjectDescription = () => {
           w="full"
           type="submit"
         >
-          Save
+          {t('Save')}
         </Button>
       </VStack>
       <ProjectUnsavedModal {...unsavedModal} />

@@ -17,6 +17,7 @@ import {
 import { DateTime } from 'luxon'
 import { useEffect, useMemo, useState } from 'react'
 import { CSVLink } from 'react-csv'
+import { useTranslation } from 'react-i18next'
 import { BiCheck, BiCopy, BiDownload } from 'react-icons/bi'
 
 import { renderFunderBadges } from '../../../components/molecules/projectActivity/renderFunderBadges'
@@ -30,7 +31,7 @@ import { useProjectContext } from '../../../context'
 import { QUERY_PROJECT_DASHBOARD_FUNDERS } from '../../../graphql'
 import { computeFunderBadges } from '../../../helpers'
 import { useQueryWithPagination } from '../../../hooks'
-import { Funder } from '../../../types/generated/graphql'
+import { Funder } from '../../../types'
 import { copyTextToClipboard, toInt } from '../../../utils'
 
 type TableData = {
@@ -41,6 +42,7 @@ type TableData = {
 }
 
 export const ProjectContributors = () => {
+  const { t } = useTranslation()
   const { project } = useProjectContext()
 
   const [selectedFunders, setSelectedFunders] = useState<Funder[]>([])
@@ -75,14 +77,14 @@ export const ProjectContributors = () => {
   const tableData: TableData[] = useMemo(
     () => [
       {
-        header: 'Name',
+        header: t('Name'),
         key: 'name',
         render(val: Funder) {
           const funderBadges = computeFunderBadges({
             creationDateStringOfFundedContent: project?.createdAt || '',
             funder: val,
           })
-          const isFunderAnonymous = Boolean(val?.user) === false
+          const isFunderAnonymous = !val?.user
           if (isFunderAnonymous) {
             return (
               <AnonymousAvatar
@@ -105,14 +107,14 @@ export const ProjectContributors = () => {
         },
       },
       {
-        header: 'Contribution',
+        header: t('Contribution'),
         key: 'amount',
         render: (val: Funder) => (
           <SatoshiAmount fontSize="14px">{val.amountFunded}</SatoshiAmount>
         ),
       },
       {
-        header: 'Reward',
+        header: t('Reward'),
         key: 'reward',
         value(val: Funder) {
           let value = ''
@@ -125,19 +127,20 @@ export const ProjectContributors = () => {
         },
       },
       {
-        header: 'Date',
+        header: t('Date'),
         key: 'date',
         value(val: Funder) {
-          const dateString = val.confirmedAt
-            ? DateTime.fromMillis(toInt(val.confirmedAt)).toFormat(
-                'yyyy / MM / dd',
-              )
-            : '-'
-          return dateString
+          if (val.confirmedAt) {
+            return DateTime.fromMillis(toInt(val.confirmedAt)).toFormat(
+              'yyyy / MM / dd',
+            )
+          }
+
+          return '-'
         },
       },
       {
-        header: 'Email',
+        header: t('Email'),
         key: 'email',
         value(val: Funder) {
           return val.rewards.length > 0
@@ -146,7 +149,7 @@ export const ProjectContributors = () => {
         },
       },
       {
-        header: 'Reference codes',
+        header: t('Reference codes'),
         key: 'reference',
         render({ fundingTxs }: Funder) {
           return (
@@ -274,8 +277,8 @@ export const ProjectContributors = () => {
             </Text>
             <Text fontSize={'14px'}>
               {selectedFunders.length > 0
-                ? `(${selectedFunders.length} selected)`
-                : '(none selected)'}
+                ? `(${selectedFunders.length} ${t('selected')})`
+                : `(${t('none selected')})`}
             </Text>
           </HStack>
 
@@ -294,7 +297,7 @@ export const ProjectContributors = () => {
               }
               isDisabled={!selectedFunders.length}
             >
-              {copied ? 'Copied' : 'Copy'}
+              {copied ? t('Copied!') : t('Copy')}
             </Button>
             <CSVLink
               aria-disabled={!selectedFunders.length}
@@ -307,7 +310,7 @@ export const ProjectContributors = () => {
                 isDisabled={!selectedFunders.length}
                 leftIcon={<BiDownload style={{ fontSize: '20px' }} />}
               >
-                Download CSV
+                {t('Download CSV')}
               </Button>
             </CSVLink>
           </HStack>
