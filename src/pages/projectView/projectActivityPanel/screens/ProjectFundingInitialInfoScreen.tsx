@@ -14,7 +14,6 @@ import {
   QUERY_GET_FUNDING_TXS_LANDING,
   QUERY_PROJECT_FUNDERS,
 } from '../../../../graphql'
-import { ScrollInvoke } from '../../../../helpers'
 import { useQueryWithPagination } from '../../../../hooks'
 import { useFundSubscription } from '../../../../hooks/fundingFlow/useFundSubscription'
 import {
@@ -209,13 +208,7 @@ export const ProjectFundingInitialInfoScreen = ({
       overflowY="hidden"
       position="relative"
     >
-      <ActivityBrief
-        onFetchMoreFunders={() => {
-          funders.fetchNext()
-        }}
-        funders={funders.data}
-        project={project}
-      />
+      <ActivityBrief funders={funders.data} project={project} />
 
       {!isMobile ? (
         <Button

@@ -63,7 +63,6 @@ export const LandingCardBase = ({
         height={getResponsiveValue({ base: '125px', xl: '200px' })}
       >
         <ImageWithReload
-          grey
           width="100%"
           height="100%"
           objectFit="cover"

@@ -26,7 +26,6 @@ export const LeaderboardCardListItem = ({
         <ImageWithReload
           h="full"
           w="full"
-          grey
           alt={`${project.name}-thumbnail-image`}
           src={toSmallImageUrl(`${project.thumbnailImage}`)}
         />

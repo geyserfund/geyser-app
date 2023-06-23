@@ -69,7 +69,7 @@ const RewardItem = ({
     >
       {reward.image && (
         <Box w="full" h="full" maxHeight="210px" overflow="hidden">
-          <ImageWithReload w="full" h="full" grey src={`${reward.image}`} />
+          <ImageWithReload w="full" h="full" src={`${reward.image}`} />
         </Box>
       )}
       <VStack w="full" padding="10px" alignItems="start">
