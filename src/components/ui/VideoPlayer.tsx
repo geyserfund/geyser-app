@@ -10,6 +10,7 @@ export const VideoPlayer = (props: ReactPlayerProps) => {
     >
       {/* 56.25% makes an aspect ratio of 16:9 */}
       <ReactPlayer
+        controls
         width="100%"
         height="100%"
         style={{ position: 'absolute', top: 0, left: 0 }}
