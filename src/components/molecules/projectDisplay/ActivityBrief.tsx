@@ -29,14 +29,12 @@ interface IActivityBrief {
   loading?: boolean
   project: ProjectFragment
   funders: FunderWithUserFragment[]
-  onFetchMoreFunders: () => void
 }
 
 export const ActivityBrief = ({
   loading,
   project,
   funders,
-  onFetchMoreFunders: fetchMoreFunders,
 }: IActivityBrief) => {
   const [currentMilestone, setCurrentMilestone] = useState<ProjectMilestone>()
   const [milestoneIndex, setMilestoneIndex] = useState<number>(0)
@@ -195,7 +193,6 @@ export const ActivityBrief = ({
           onClick={() =>
             fundersModal.onOpen({
               funders: socialFunders,
-              onFetchMore: () => fetchMoreFunders(),
             })
           }
         >

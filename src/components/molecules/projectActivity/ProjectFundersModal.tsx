@@ -10,14 +10,13 @@ import { UserAvatarButton } from '../../ui/UserAvatar'
 export const useProjectFundersModal = () => {
   return useModal<{
     funders: ProjectFragment['funders']
-    onFetchMore: () => void
   }>()
 }
 
 type Props = ReturnType<typeof useProjectFundersModal>
 
 export const ProjectFundersModal = ({
-  props: { funders, onFetchMore },
+  props: { funders },
   ...props
 }: Props) => {
   const navigate = useNavigate()
@@ -29,7 +28,6 @@ export const ProjectFundersModal = ({
   return (
     <Modal title="Supporters" {...props}>
       <SimpleGrid
-        id="project-supporters-modal"
         overflowY="scroll"
         overflowX="hidden"
         maxHeight="50vh"

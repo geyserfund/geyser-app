@@ -217,13 +217,6 @@ export const ProjectFundingInitialInfoScreen = ({
         project={project}
       />
 
-      <ScrollInvoke
-        elementId={'project-supporters-modal'}
-        onScrollEnd={funders.fetchNext}
-        isLoading={funders.isLoadingMore}
-        noMoreItems={funders.noMoreItems}
-      />
-
       {!isMobile ? (
         <Button
           variant="primary"
