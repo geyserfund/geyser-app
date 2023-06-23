@@ -1,9 +1,14 @@
-import { Avatar, AvatarProps, Button } from '@chakra-ui/react'
+import {
+  Avatar,
+  AvatarProps,
+  Button,
+  ButtonProps,
+  Text,
+} from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../constants'
 import { User } from '../../types'
-import { getRandomOrb } from '../../utils'
 
 type Props = {
   seed?: number
@@ -11,7 +16,7 @@ type Props = {
 } & AvatarProps
 
 export const UserAvatar = ({ user, seed, ...props }: Props) => {
-  const image = user?.imageUrl || getRandomOrb(seed || 1)
+  const image = user?.imageUrl || undefined
   return (
     <Avatar
       p={0}
@@ -27,6 +32,7 @@ export const UserAvatarWithLink = ({ ...props }: Props) => {
   return (
     <UserAvatar
       as={props.user ? Button : undefined}
+      minWidth="initial"
       p={0}
       onClick={
         props.user
@@ -35,5 +41,39 @@ export const UserAvatarWithLink = ({ ...props }: Props) => {
       }
       {...props}
     />
+  )
+}
+
+export const UserAvatarButton = ({
+  seed,
+  avatarProps,
+  user,
+  ...props
+}: Pick<Props, 'seed' | 'user'> & {
+  avatarProps?: AvatarProps
+} & ButtonProps) => {
+  const avatar = (
+    <UserAvatar size="2xs" seed={seed} user={user} {...avatarProps} />
+  )
+
+  if (user) {
+    return (
+      <Button
+        justifyContent="start"
+        variant="ghost"
+        leftIcon={avatar}
+        {...props}
+      >
+        <Text overflow="ellipsis" isTruncated>
+          {user.username}
+        </Text>
+      </Button>
+    )
+  }
+
+  return (
+    <Button variant="ghost" {...props}>
+      {avatar}
+    </Button>
   )
 }

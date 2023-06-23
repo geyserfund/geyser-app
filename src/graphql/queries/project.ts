@@ -5,6 +5,7 @@ import {
   FRAGMENT_PROJECT,
   FRAGMENT_PROJECT_FOR_LANDING_PAGE,
 } from '../fragments/project'
+import { FRAGMENT_FUNDER_WITH_USER } from '../fragments/user'
 
 export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
   ${FRAGMENT_PROJECT}
@@ -141,24 +142,10 @@ export const QUERY_PROJECT_DASHBOARD_DATA = gql`
 `
 
 export const QUERY_PROJECT_FUNDERS = gql`
+  ${FRAGMENT_FUNDER_WITH_USER}
   query ProjectFunders($input: GetFundersInput!) {
     getFunders(input: $input) {
-      amountFunded
-      confirmed
-      id
-      confirmedAt
-      timesFunded
-      user {
-        id
-        username
-        externalAccounts {
-          externalId
-          externalUsername
-          id
-          accountType
-        }
-        imageUrl
-      }
+      ...FunderWithUser
     }
   }
 `

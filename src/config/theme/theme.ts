@@ -211,6 +211,11 @@ export const theme = {
         colorScheme: 'primary',
       },
     },
+    Avatar: {
+      baseStyle: {
+        borderColor: 'neutral.0',
+      },
+    },
     Alert: alertTheme,
     Menu: menuTheme,
     Modal: modalTheme,

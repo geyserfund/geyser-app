@@ -1,26 +1,52 @@
-import { CircularProgress, HStack, Text, VStack } from '@chakra-ui/react'
+import {
+  Avatar,
+  CircularProgress,
+  HStack,
+  Text,
+  useTheme,
+  VStack,
+} from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
+import { AiOutlineEllipsis } from 'react-icons/ai'
 
+import { ExternalAccountType } from '../../../pages/auth'
 import { Countdown } from '../../../pages/projectView/projectActivityPanel/components/Countdown'
 import {
+  FunderWithUserFragment,
   ProjectFragment,
   ProjectMilestone,
 } from '../../../types/generated/graphql'
 import { isActive } from '../../../utils'
 import { getProjectBalance } from '../../../utils/helpers'
 import { SatoshiAmount } from '../../ui'
+import { UserAvatar } from '../../ui/UserAvatar'
+import {
+  ProjectFundersModal,
+  useProjectFundersModal,
+} from '../projectActivity/ProjectFundersModal'
 
 interface IActivityBrief {
   loading?: boolean
   project: ProjectFragment
+  funders: FunderWithUserFragment[]
+  onFetchMoreFunders: () => void
 }
 
-export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
+export const ActivityBrief = ({
+  loading,
+  project,
+  funders,
+  onFetchMoreFunders: fetchMoreFunders,
+}: IActivityBrief) => {
   const [currentMilestone, setCurrentMilestone] = useState<ProjectMilestone>()
   const [milestoneIndex, setMilestoneIndex] = useState<number>(0)
   const [prevMilestone, setPrevMilestone] = useState(0)
 
+  const { colors } = useTheme()
+
   const balance = useMemo(() => getProjectBalance(project), [project])
+
+  const fundersModal = useProjectFundersModal()
 
   useEffect(() => {
     if (project.milestones && project.milestones.length > 0) {
@@ -121,25 +147,85 @@ export const ActivityBrief = ({ loading, project }: IActivityBrief) => {
 
   const showCountdown = isActive(project.status) && Boolean(project.expiresAt)
 
+  const socialFunders = useMemo(
+    () =>
+      funders.filter(
+        (funder) =>
+          funder &&
+          funder.confirmedAt &&
+          funder.user &&
+          funder.user.externalAccounts.find(
+            (account) =>
+              account.accountType === ExternalAccountType.nostr ||
+              account.accountType === ExternalAccountType.twitter,
+          ),
+      ),
+    [funders],
+  )
+
+  const latestFunders = socialFunders.slice(0, 12)
+
   return (
-    <HStack width="100%" padding={3} justifyContent="start">
-      {renderCircularProgress()}
-      <VStack
-        flex="1"
-        spacing={0}
-        width="100%"
-        px={2}
-        alignItems={circularPercentage === undefined ? 'center' : 'start'}
-      >
-        <SatoshiAmount variant="satoshi" color="primary.600">
-          {balance}
-        </SatoshiAmount>
-        {getMilestoneValue()}
-        {/* We can force unwrap project.expiresAt because the showCountdown expression check for a null or undefined value */}
-        {showCountdown && project.expiresAt && (
-          <Countdown endDate={project.expiresAt} />
-        )}
+    <VStack w="100%">
+      <HStack w="100%" padding={3} justifyContent="start">
+        {renderCircularProgress()}
+        <VStack
+          flex="1"
+          spacing={0}
+          width="100%"
+          px={2}
+          alignItems={circularPercentage === undefined ? 'center' : 'start'}
+        >
+          <SatoshiAmount variant="satoshi" color="primary.600">
+            {balance}
+          </SatoshiAmount>
+          {getMilestoneValue()}
+          {/* We can force unwrap project.expiresAt because the showCountdown expression check for a null or undefined value */}
+          {showCountdown && project.expiresAt && (
+            <Countdown endDate={project.expiresAt} />
+          )}
+        </VStack>
+      </HStack>
+      <VStack textAlign="left" alignItems="start" w="100%" spacing={1}>
+        <Text fontWeight={500}>Supporters</Text>
+        <HStack
+          spacing={0}
+          cursor="pointer"
+          alignItems="start"
+          onClick={() =>
+            fundersModal.onOpen({
+              funders: socialFunders,
+              onFetchMore: () => fetchMoreFunders(),
+            })
+          }
+        >
+          {latestFunders.map((funder) => {
+            return (
+              <UserAvatar
+                size="sm"
+                border={`2px solid ${colors.neutral[0]}`}
+                display="inline-block"
+                marginLeft="-5px"
+                key={funder.id}
+                user={funder.user}
+              />
+            )
+          })}
+
+          {latestFunders.length >= 12 ? (
+            <Avatar
+              border={`2px solid ${colors.neutral[0]}`}
+              display="inline-block"
+              marginLeft="-5px"
+              bg="neutral.100"
+              color="neutral.900"
+              size="sm"
+              icon={<AiOutlineEllipsis size="sm" />}
+            />
+          ) : null}
+        </HStack>
       </VStack>
-    </HStack>
+      <ProjectFundersModal {...fundersModal} />
+    </VStack>
   )
 }
