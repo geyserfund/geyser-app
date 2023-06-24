@@ -178,7 +178,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
         </SummaryInfoLine>
       )}
 
-      <HStack>
+      <HStack spacing={5} w="100%" flexWrap="wrap">
         <ProjectLinks links={project.links as string[]} />
         <SummaryInfoLine
           label="Launched"

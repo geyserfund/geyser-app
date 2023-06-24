@@ -101,9 +101,9 @@ export const ProjectMainBody = () => {
           <CardsStackLayout>
             <Header ref={headerRef} />
 
-            {project && isProjectOwner && (
+            {project && isProjectOwner ? (
               <LaunchProjectNotice project={project} />
-            )}
+            ) : null}
 
             <CreatorSocial />
 

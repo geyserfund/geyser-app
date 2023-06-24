@@ -33,7 +33,6 @@ export const ProjectPreviewComponent = ({
         <Box position="relative" marginBottom="10px">
           <Box height="100px" overflow="hidden" backgroundColor="neutral.0">
             <ImageWithReload
-              grey
               src={data.image || ''}
               height="100px"
               width="100%"
@@ -54,7 +53,6 @@ export const ProjectPreviewComponent = ({
             backgroundColor="neutral.0"
           >
             <ImageWithReload
-              grey
               src={toSmallImageUrl(data.thumbnailImage || '')}
               height="100%"
               width="100%"
