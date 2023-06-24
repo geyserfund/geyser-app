@@ -12,7 +12,7 @@ import { Link as ReactRouterLink } from 'react-router-dom'
 import { FountainIcon } from '../../../components/icons'
 import { GeyserHomepageUrl } from '../../../constants'
 import { AppTheme } from '../../../context'
-import { ExternalAccount } from '../../../types/generated/graphql'
+import { ExternalAccount } from '../../../types'
 
 type Props = {
   account: ExternalAccount

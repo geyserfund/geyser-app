@@ -1,10 +1,14 @@
 import { Divider, Text } from '@chakra-ui/react'
 import { Fragment } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ActivityForLandingPageFragment } from '../../../../types'
-import { ContributionActivityItem, EntryActivityItem } from '../components'
-import { ProjectActivityItem } from '../components/ProjectActivityItem'
-import { RewardActivityItem } from '../components/RewardActivityItem'
+import {
+  ContributionActivityItem,
+  EntryActivityItem,
+  ProjectActivityItem,
+  RewardActivityItem,
+} from '../components'
 import { ActivityResource } from '../types'
 
 const renderActivity = (activity: ActivityForLandingPageFragment) => {
@@ -53,8 +57,9 @@ export const ActivityList = ({
 }: {
   activities: ActivityForLandingPageFragment[]
 }) => {
+  const { t } = useTranslation()
   if (activities.length === 0) {
-    return <Text>This user has no activity yet.</Text>
+    return <Text>{t('This user has no activity yet.')}</Text>
   }
 
   return (

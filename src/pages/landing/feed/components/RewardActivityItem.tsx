@@ -1,4 +1,5 @@
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
@@ -22,6 +23,7 @@ export const RewardActivityItem = ({
   reward: ProjectRewardForLandingPageFragment
   dateTime?: string
 }) => {
+  const { t } = useTranslation()
   const owner = reward.rewardProject.owners[0]?.user
 
   return (
@@ -36,7 +38,7 @@ export const RewardActivityItem = ({
             textColor="neutral.600"
           />
         ) : null}
-        <Body2>created a new reward for</Body2>
+        <Body2>{t('created a new reward for')}</Body2>
         <Body2
           as={Link}
           to={getPath('project', reward.rewardProject.name)}
@@ -59,6 +61,8 @@ const RewardItem = ({
 }: {
   reward: ProjectRewardForLandingPageFragment
 }) => {
+  const { t } = useTranslation()
+
   return (
     <CardLayout
       padding="0px"
@@ -86,7 +90,7 @@ const RewardItem = ({
             )}
 
             <Text fontSize="12px" color="neutral.1000" fontWeight="bold">
-              per item
+              {t('per item')}
             </Text>
           </VStack>
           <VStack spacing="0px" alignItems="flex-start">
@@ -99,7 +103,7 @@ const RewardItem = ({
               padding="2px 5px"
               borderRadius="4px"
             >
-              <b>{reward.sold || 0}</b> collected
+              <b>{reward.sold || 0}</b> {t('collected')}
             </Text>
           </VStack>
         </HStack>

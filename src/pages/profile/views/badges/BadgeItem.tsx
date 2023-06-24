@@ -1,5 +1,6 @@
 import { Image, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonComponent } from '../../../../components/ui'
 import { ClaimABadgeProps } from '../../../../hooks/useNostrBadges'
@@ -16,6 +17,7 @@ export const BadgeItem = ({
   isClaimed,
   claimABadge,
 }: BadgeItemProps) => {
+  const { t } = useTranslation()
   const { badge } = userBadge
 
   const [claiming, setClaiming] = useState(false)
@@ -38,7 +40,7 @@ export const BadgeItem = ({
           onClick={handleClick}
           isLoading={claiming}
         >
-          Claim
+          {t('Claim')}
         </ButtonComponent>
       )}
     </VStack>

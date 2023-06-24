@@ -13,6 +13,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { FormEventHandler, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 
 import { TextArea, TextInputBox } from '../../../components/ui'
@@ -24,7 +25,7 @@ import {
   useUserLightningAddress,
 } from '../../../hooks/useUserLightningAddress'
 import { useNotification } from '../../../utils'
-import { getUserLightningAddress } from '../../../utils/validations/wallet'
+import { getUserLightningAddress } from '../../../utils'
 import { EditProfileModalProps } from '../hooks/useEditProfileModal'
 import { EditableAvatar } from './EditableAvatar'
 
@@ -33,6 +34,8 @@ export const EditProfileModal = ({
   onClose,
   props,
 }: EditProfileModalProps) => {
+  const { t } = useTranslation()
+
   const { unexpected } = useNotification()
 
   const [name, setName] = useState(() => props.user?.username || '')
@@ -102,7 +105,7 @@ export const EditProfileModal = ({
       <ModalOverlay />
       <ModalContent bg="transparent" boxShadow={0}>
         <Box borderRadius="4px" bg="neutral.0" pb={3}>
-          <ModalHeader pb={2}>Edit Profile</ModalHeader>
+          <ModalHeader pb={2}>{t('Edit Profile')}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form onSubmit={onSubmit}>
@@ -116,7 +119,7 @@ export const EditProfileModal = ({
                     />
 
                     <VStack align="start" gap={1} w="100%">
-                      <Text>Name</Text>
+                      <Text>{t('Name')}</Text>
                       <Input
                         name="name"
                         value={name}
@@ -125,7 +128,7 @@ export const EditProfileModal = ({
                     </VStack>
 
                     <VStack align="start" gap={1} w="100%">
-                      <Text>Lightning Address</Text>
+                      <Text>{t('Lightning Address')}</Text>
                       <TextInputBox
                         name="lightningAddress"
                         type="email"
@@ -145,7 +148,7 @@ export const EditProfileModal = ({
                     </VStack>
 
                     <VStack align="start" gap={1} w="100%">
-                      <Text>Bio</Text>
+                      <Text>{t('Bio')}</Text>
                       <TextArea
                         value={bio}
                         onChange={(e) => setBio(e.currentTarget.value)}
@@ -159,7 +162,7 @@ export const EditProfileModal = ({
                       width="100%"
                       type="submit"
                     >
-                      Save
+                      {t('Save')}
                     </Button>
                   </VStack>
                 </Box>

@@ -7,13 +7,14 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
 
 import { AlertBox } from '../../components/ui'
 import { useAuthContext } from '../../context'
 import { defaultUser } from '../../defaults'
 import { QUERY_USER_PROFILE } from '../../graphql'
-import { User, UserGetInput } from '../../types/generated/graphql'
+import { User, UserGetInput } from '../../types'
 import { toInt } from '../../utils'
 import { AccountInfo, Badges } from './views'
 import { ProfileTabs } from './views/profileTabs'
@@ -27,6 +28,8 @@ type QueryVariables = {
 }
 
 export const Profile = () => {
+  const { t } = useTranslation()
+
   const { user: currentAppUser } = useAuthContext()
   const params = useParams<{ userId: string }>()
 
@@ -77,8 +80,12 @@ export const Profile = () => {
           <AlertBox
             height="200px"
             status="error"
-            title="An error occurred while attempting to load the profile page."
-            message="Please try refreshing the page. You may also want to contact support if the problem persists."
+            title={t(
+              'An error occurred while attempting to load the profile page.',
+            )}
+            message={t(
+              'Please try refreshing the page. You may also want to contact support if the problem persists.',
+            )}
           />
         </Center>
       </Container>
