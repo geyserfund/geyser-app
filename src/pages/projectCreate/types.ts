@@ -1,9 +1,4 @@
-import {
-  Project,
-  ProjectType,
-  RewardCurrency,
-} from '../../types/generated/graphql'
-import { Satoshis } from '../../types/types'
+import { Project, ProjectType, RewardCurrency, Satoshis } from '../../types'
 
 export type ProjectCreationVariables = {
   title: string

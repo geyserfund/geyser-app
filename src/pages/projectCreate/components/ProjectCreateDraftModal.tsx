@@ -2,7 +2,7 @@ import { CheckCircleIcon } from '@chakra-ui/icons'
 import { Button, ModalProps, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { Modal } from '../../../components/layouts/Modal'
+import { Modal } from '../../../components/layouts'
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar'
 
 export const ProjectCreateDraftModal = (

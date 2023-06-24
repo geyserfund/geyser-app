@@ -11,6 +11,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { BsArrowLeft } from 'react-icons/bs'
 
 import { Body1 } from '../../../components/typography'
@@ -25,22 +26,26 @@ interface FailedToConnectAccountProps extends ReturnType<typeof useModal> {
 
 const DEFAULT_TITLE = 'Account connection error'
 
-const DEFAULT_DESCRIPTION = (
-  <Body1 semiBold color="neutral.1000">
-    This account is connected to another Geyser profile. Make sure you use a
-    unique account. For any questions reach out to the Geyser team via
-    <ChakraLink href={GeyserTelegramUrl} isExternal>
-      {' telegram.'}
-    </ChakraLink>
-  </Body1>
-)
+export const FailedToConnectAccount = (props: FailedToConnectAccountProps) => {
+  const { t } = useTranslation()
 
-export const FailedToConnectAccount = ({
-  isOpen,
-  onClose,
-  title = DEFAULT_TITLE,
-  children = DEFAULT_DESCRIPTION,
-}: FailedToConnectAccountProps) => {
+  const DefaultDescription = (
+    <Body1 semiBold color="neutral.1000">
+      {t(
+        'This account is connected to another Geyser profile. Make sure you use a unique account. For any questions reach out to the Geyser team via',
+      )}
+      <ChakraLink href={GeyserTelegramUrl} isExternal>
+        {' telegram.'}
+      </ChakraLink>
+    </Body1>
+  )
+
+  const {
+    isOpen,
+    onClose,
+    title = DEFAULT_TITLE,
+    children = DefaultDescription,
+  } = props
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -65,7 +70,7 @@ export const FailedToConnectAccount = ({
               leftIcon={<BsArrowLeft fontSize="25px" />}
               onClick={onClose}
             >
-              Back
+              {t('Back')}
             </ButtonComponent>
           </VStack>
         </ModalBody>

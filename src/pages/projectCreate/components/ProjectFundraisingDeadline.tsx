@@ -2,6 +2,7 @@ import { Button, HStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useState } from 'react'
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import { CalendarButton } from '../../../components/molecules'
 
@@ -14,6 +15,7 @@ export const ProjectFundraisingDeadline = ({
   setValue,
   watch,
 }: ProjectFundraisingDeadlineProps) => {
+  const { t } = useTranslation()
   const value = watch('expiresAt')
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(
@@ -40,7 +42,7 @@ export const ProjectFundraisingDeadline = ({
         isActive={selectedButton === 'ongoing'}
         onClick={handleOngoingSelect}
       >
-        Ongoing
+        {t('Ongoing')}
       </Button>
       <CalendarButton
         containerProps={{ w: '50%' }}
@@ -48,7 +50,7 @@ export const ProjectFundraisingDeadline = ({
         value={selectedDate}
         onChange={handleDateChange}
       >
-        With Deadline
+        {t('With Deadline')}
       </CalendarButton>
     </HStack>
   )

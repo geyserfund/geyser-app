@@ -1,5 +1,6 @@
 import { Box, Button, Image, ImageProps, Text, VStack } from '@chakra-ui/react'
 import { PropsWithChildren, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import {
@@ -20,6 +21,7 @@ import { FormContinueButton } from './components/FormContinueButton'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 
 export const ProjectCreateStart = () => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
   const { loading, user } = useAuthContext()
   const navigate = useNavigate()
@@ -37,14 +39,16 @@ export const ProjectCreateStart = () => {
 
   return (
     <ProjectCreateLayout
-      title={<Text variant="h2">Create a new project</Text>}
+      title={<Text variant="h2">{t('Create a new project')}</Text>}
       onBackClick={handleBack}
     >
       <VStack spacing={8} w="100%">
         <Image src={LaunchProjectRocketUrl} alt="create project rocket" />
 
         <Text variant="h3">
-          Transform your ideas into real world projects backed by your community
+          {t(
+            'Transform your ideas into real world projects backed by your community',
+          )}
         </Text>
 
         <Box
@@ -57,50 +61,51 @@ export const ProjectCreateStart = () => {
             src={LaunchProjectWorldUrl}
             alt="create project world"
           >
-            Raise funds from anywhere in the world
+            {t('Raise funds from anywhere in the world')}
           </ProjectInfoButton>
           <ProjectInfoButton
             src={LaunchProjectLightningUrl}
             alt="create project lightning"
           >
-            Receive funds from on-chain & lightning
+            {t('Receive funds from on-chain & lightning')}
           </ProjectInfoButton>
           <ProjectInfoButton
             src={LaunchProjectGiftUrl}
             alt="create project gift"
           >
-            Sell rewards and perks for your project
+            {t('Sell rewards and perks for your project')}
           </ProjectInfoButton>
           <ProjectInfoButton
             src={LaunchProjectEntryUrl}
             alt="create project entry"
           >
-            Update your community by writing Entries
+            {t('Update your community by writing Entries')}
           </ProjectInfoButton>
           <ProjectInfoButton
             src={LaunchProjectFeesUrl}
             alt="create project fees"
           >
-            Low 2% fees and no fees for node-runners
+            {t('Low 2% fees and no fees for node-runners')}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectKeyUrl} alt="create project key">
-            Remain in control of your funds
+            {t('Remain in control of your funds')}
           </ProjectInfoButton>
         </Box>
 
         {!loading && !hasTwitterAccount(user) && !hasNostrAccount(user) ? (
           <VStack w="100%">
             <Text color="neutral.700" pb={3}>
-              You need to login with Twitter or Nostr, which connects your
-              social profile to your project.
+              {t(
+                'You need to login with Twitter or Nostr, which connects your social profile to your project.',
+              )}
             </Text>
             <ConnectWithTwitter />
             <ConnectWithNostr />
             {!isMobile ? (
               <Text color="neutral.600" variant="caption">
-                {`If twitter button isn't opening a Twitter authentication
-                        page, make sure pop-ups are enabled in your browser's
-                        preferences.`}
+                {t(
+                  "If twitter button isn't opening a Twitter authentication page, make sure pop-ups are enabled in your browser's preferences.",
+                )}
               </Text>
             ) : null}
 
