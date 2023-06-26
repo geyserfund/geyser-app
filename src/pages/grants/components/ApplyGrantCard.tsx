@@ -1,4 +1,5 @@
 import { Box, HStack, Text } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { SatoshiIconTilted } from '../../../components/icons'
 import { ApplyGrantModal } from './ApplyGrantModal'
@@ -23,6 +24,7 @@ export const ApplyGrantCard = ({
   distributed,
   contributed,
 }: GrantsProp) => {
+  const { t } = useTranslation()
   return (
     <Box
       rounded="md"
@@ -61,8 +63,9 @@ export const ApplyGrantCard = ({
                 fontSize="11px"
                 color={'neutral.700'}
                 mt={1}
+                textTransform="uppercase"
               >
-                APPLICANTS
+                {t('applicants')}
               </Text>
             </>
           ) : (
@@ -79,8 +82,13 @@ export const ApplyGrantCard = ({
                     {contributed}
                   </Text>
                 </HStack>
-                <Text fontSize="xs" color="neutral600" fontWeight="bold">
-                  CONTRIBUTED
+                <Text
+                  fontSize="xs"
+                  color="neutral600"
+                  fontWeight="bold"
+                  textTransform="uppercase"
+                >
+                  {t('contributed')}
                 </Text>
               </Box>
 
@@ -91,8 +99,13 @@ export const ApplyGrantCard = ({
                     {distributed}
                   </Text>
                 </HStack>
-                <Text fontSize="xs" color="neutral600" fontWeight="bold">
-                  DISTRIBUTED
+                <Text
+                  fontSize="xs"
+                  color="neutral600"
+                  fontWeight="bold"
+                  textTransform="uppercase"
+                >
+                  {'distributed'}
                 </Text>
               </Box>
             </HStack>

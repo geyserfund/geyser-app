@@ -1,4 +1,5 @@
 import { Box, Image, Text } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { Grant, GrantApplicantStatus, GrantStatusEnum } from '../../../types'
@@ -30,6 +31,7 @@ export const GrantValues: {
 }
 
 export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
 
   const navigate = useNavigate()
@@ -98,7 +100,7 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
                 fontWeight="500"
                 borderRadius="4px"
               >
-                {isActive ? 'ACTIVE' : 'CLOSED'}
+                {isActive ? t('ACTIVE') : t('CLOSED')}
               </Text>
             </Box>
             <Text color={'neutral.600'}>
@@ -117,7 +119,7 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
                 justifyContent="space-around"
               >
                 {renderApplicants(GrantValues[grant.name]?.applicants)}
-                <ListText mx={4} subtitle="GRANT" isSatLogo={true}>
+                <ListText mx={4} subtitle={t('GRANT')} isSatLogo={true}>
                   {getShortAmountLabel(
                     GrantValues[grant.name]?.applicants || grant.balance || 0,
                   )}
@@ -132,7 +134,7 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
               >
                 {renderApplicants(GrantValues[grant.name]?.applicants)}
                 {
-                  <ListText mx={4} subtitle="GRANT" isSatLogo={true}>
+                  <ListText mx={4} subtitle={t('GRANT')} isSatLogo={true}>
                     {getShortAmountLabel(
                       GrantValues[grant.name]?.amount ||
                         grant.applicants?.reduce(

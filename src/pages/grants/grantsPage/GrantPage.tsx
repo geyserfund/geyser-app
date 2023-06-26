@@ -1,5 +1,6 @@
 import { Button, Container, VStack } from '@chakra-ui/react'
 import { PropsWithChildren, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { FaArrowLeft } from 'react-icons/fa'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -23,10 +24,12 @@ import { useGrant } from '../hooks/useGrant'
 import { GrantsRoundOne } from './GrantsRoundOne'
 import { GrantsRoundTwo } from './GrantsRoundTwo'
 import { GrantContribute, GrantSummary } from './sections'
-import { CommunityVoting } from './sections/CommunityVoting'
-import { DistributionChart } from './sections/DistributionChart'
-import { GrantApply } from './sections/GrantApply'
-import { MoreInfo } from './sections/MoreInfo'
+import {
+  CommunityVoting,
+  DistributionChart,
+  GrantApply,
+  MoreInfo,
+} from './sections'
 
 const PageContainer = ({
   children,
@@ -46,6 +49,7 @@ const PageContainer = ({
 }
 
 export const GrantPage = () => {
+  const { t } = useTranslation()
   const { toast } = useNotification()
   const { grantId } = useParams<{ grantId: string }>()
   const navigate = useNavigate()
@@ -56,7 +60,7 @@ export const GrantPage = () => {
     if (error) {
       toast({
         status: 'error',
-        title: 'Something went wrongg.',
+        title: 'Something went wrong.',
         description: 'Please refresh the page and try again.',
       })
     }
@@ -125,7 +129,7 @@ export const GrantPage = () => {
   const showGrantApply = grant.status !== GrantStatusEnum.Closed
 
   return (
-    <PageContainer title={grant.title} image={grant.image}>
+    <PageContainer title={t(grant.title)} image={grant.image}>
       <VStack w="full" spacing="30px" alignItems="start">
         <Button
           size="sm"
@@ -135,7 +139,7 @@ export const GrantPage = () => {
           onClick={() => navigate(getPath('grants'))}
           fontSize="sm"
         >
-          <FaArrowLeft /> See all Grants
+          <FaArrowLeft /> {t('See all Grants')}
         </Button>
         <GrantSummary grant={grant} />
 
@@ -145,7 +149,7 @@ export const GrantPage = () => {
         )}
         {showCommunityVoting && (
           <CommunityVoting
-            title={getTitle()}
+            title={t(getTitle())}
             applicants={applicants}
             canVote={canVote}
             fundingOpenEndDate={fundingOpenStatus?.endAt}

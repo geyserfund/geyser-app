@@ -1,4 +1,5 @@
 import { Text, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { AppFooter } from '../../../components/molecules'
 import { H2, H3 } from '../../../components/typography'
@@ -6,11 +7,12 @@ import { getPath } from '../../../constants'
 import { fonts } from '../../../styles'
 import { useMobileMode } from '../../../utils'
 import { CustomGrantCard } from '../components/CustomGrantCard'
-import { MoreInfo } from '../grantsPage/sections/MoreInfo'
+import { MoreInfo } from '../grantsPage/sections'
 import { useGrants } from '../hooks/useGrants'
 import { GrantsContributeCard } from './GrantsContributeCard'
 
 export const GrantsLandingPage = () => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
 
   const { grants, activeGrant, inactiveGrants } = useGrants()
@@ -48,8 +50,9 @@ export const GrantsLandingPage = () => {
             fontFamily={fonts.header}
             textShadow={' 0px 0px 25.7663px rgba(22, 232, 194, 0.11)'}
             color={'primary.500'}
+            textTransform="uppercase"
           >
-            GEYSER GRANTS
+            {t('Geyser Grants')}
           </Text>
           <H2
             textAlign="center"
@@ -57,12 +60,13 @@ export const GrantsLandingPage = () => {
             fontSize="44px"
             fontWeight="700"
           >
-            Empowering bitcoin creators
+            {t('Empowering bitcoin creators')}
           </H2>
           <H3 textAlign="center" color={'neutral.600'}>
-            Funding educators, creatives and builders doing Bitcoin-only
-            projects on Geyser. <br /> Funded by bitcoiners who want to change
-            the world.
+            {t(
+              'Funding educators, creatives and builders doing Bitcoin-only projects on Geyser.',
+            )}{' '}
+            <br /> {t('Funded by bitcoiners who want to change the world.')}
           </H3>
         </VStack>
 
@@ -76,7 +80,7 @@ export const GrantsLandingPage = () => {
               mb={1}
               fontFamily={fonts.interBlack}
             >
-              Latest Grant
+              {t('Latest Grant')}
             </Text>
             <CustomGrantCard
               grant={activeGrant}
@@ -91,7 +95,7 @@ export const GrantsLandingPage = () => {
             fontSize="19px"
             fontFamily={fonts.interBlack}
           >
-            Previous Grants
+            {t('Previous Grants')}
           </Text>
           {inactiveGrants
             .sort((a, b) => {
