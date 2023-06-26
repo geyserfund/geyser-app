@@ -305,7 +305,8 @@
   "gRPC port is a required field": "gRPC port is a required field",
   "Add a Node": "Add a Node",
   "We currently support LND and clearnet nodes. So Tor nodes will not work at this time.": "We currently support LND and clearnet nodes. So Tor nodes will not work at this time.",
-  "Keep in mind that you are responsible for managing the liquidity of your node. Find out more.": "Keep in mind that you are responsible for managing the liquidity of your node. Find out more.",
+  "Keep in mind that you are responsible for managing the liquidity of your node.": "Keep in mind that you are responsible for managing the liquidity of your node.",
+  "Find out more.": "Find out more.",
   "Node Name": "Node Name",
   "This is a Voltage Node": "This is a Voltage Node",
   "Find our demo here on how to load a Voltage node.": "Find our demo here on how to load a Voltage node.",
@@ -493,5 +494,6 @@
   "Connect with Lightning": "Connect with Lightning",
   "Scan the QR code to connect to your Lightning wallet.": "Scan the QR code to connect to your Lightning wallet.",
   "Check if your wallet supports LNURL-auth here.": "Check if your wallet supports LNURL-auth here.",
-  "Waiting to connect...": "Waiting to connect..."
+  "Waiting to connect...": "Waiting to connect...",
+  "Supporters": "Supporters"
 }
