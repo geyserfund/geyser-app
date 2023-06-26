@@ -9,6 +9,7 @@ export enum lng {
   fr = 'fr',
   cz = 'cz',
   zh = 'zh',
+  'ar' = 'ar',
 }
 
 export const languages = {
@@ -22,4 +23,5 @@ export const languages = {
   [lng.pl]: 'Polish',
   [lng.cz]: 'Czech',
   [lng.zh]: 'Chinese',
+  [lng.ar]: 'Arabic',
 } as { [key: string]: string }

@@ -4,6 +4,7 @@ import { initReactI18next } from 'react-i18next'
 
 import { lng } from '../constants'
 import {
+  ArabicTranslations,
   ChineseTranslations,
   CzechTranslations,
   EnglishTranslations,
@@ -60,6 +61,9 @@ i18next
       },
       [lng.zh]: {
         translation: ChineseTranslations,
+      },
+      [lng.ar]: {
+        translation: ArabicTranslations,
       },
     },
   })
