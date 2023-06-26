@@ -59,7 +59,7 @@ export const LandingCardBase = ({
       {...rest}
     >
       <Box
-        width={getResponsiveValue({ base: 'full' })}
+        width={getResponsiveValue({ base: '125px', xl: 'full' })}
         height={getResponsiveValue({ base: '125px', xl: '200px' })}
       >
         <ImageWithReload
