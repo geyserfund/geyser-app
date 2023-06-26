@@ -1,6 +1,7 @@
 import {
   Avatar,
   Checkbox,
+  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -17,15 +18,14 @@ import { BsExclamation, BsQuestion } from 'react-icons/bs'
 import { DescriptionLinkWithIconComponent } from '../../../components/molecules'
 import { ButtonComponent, TextArea, TextInputBox } from '../../../components/ui'
 import {
-  ProjectNodeValidations,
   VoltageNodeConnectionDemoURL,
+  WalletCreationFindOutMoreUrl,
 } from '../../../constants'
-import {
-  checkMacaroonPermissions,
-  isSecp256k1Compressed,
-  isTorV3Address,
-  useMobileMode,
-} from '../../../utils'
+import { ProjectNodeValidations } from '../../../constants/validations'
+import { useMobileMode } from '../../../utils'
+import { checkMacaroonPermissions } from '../../../utils/validations/checkMacaroonPermissions'
+import { isSecp256k1Compressed } from '../../../utils/validations/isSecp256k1Compressed'
+import { isTorV3Address } from '../../../utils/validations/isTorV3Address'
 import { TNodeInput } from '../types'
 
 type Props = {
@@ -199,9 +199,15 @@ export const NodeAdditionModal = ({
               )}
             </Text>
             <DescriptionLinkWithIconComponent
-              title={t(
-                'Keep in mind that you are responsible for managing the liquidity of your node. Find out more.',
-              )}
+              title={
+                <>
+                  {t('Keep in mind that you are responsible for managing the liquidity of your node.')}{' '}
+                  <Link href={WalletCreationFindOutMoreUrl} target="_blank">
+                    {t('Find out more')}
+                  </Link>
+                  .
+                </>
+              }
               icon={
                 <Avatar
                   bgColor="neutral.300"

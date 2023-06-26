@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../components/ui'
-import { DefaultImage } from '../../../../components/ui/DefaultImage'
 import { VideoPlayer } from '../../../../components/ui/VideoPlayer'
 import { getPath } from '../../../../constants'
 import { SortType, useProjectContext } from '../../../../context'
@@ -60,20 +59,12 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       return <VideoPlayer url={project.image} />
     }
 
-    return (
-      <DefaultImage
-        width="100%"
-        maxHeight="350px"
-        objectFit="cover"
-        borderRadius="8px"
-      />
-    )
+    return null
   }
 
   return (
-    <CardLayout ref={ref}>
+    <CardLayout ref={ref} mobileDense>
       <Box>{renderImageOrVideo()}</Box>
-
       <HStack flexGrow={1} width="100%" spacing={3} alignItems="start">
         <ImageWithReload
           borderRadius="8px"
@@ -89,14 +80,8 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           alignItems="start"
           maxWidth="calc(100% - 76px - 24px)"
         >
-          <Text
-            variant="h1"
-            noOfLines={2}
-            overflow="ellipsis"
-            overflowY="hidden"
-            width="100%"
-          >
-            {project.title} {project.title}
+          <Text variant={{ base: 'h2', xl: 'h1' }} noOfLines={2} width="100%">
+            {project.title}
           </Text>
           {isMobile ? (
             statusContent
@@ -123,7 +108,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
         </HStack>
       ) : null}
 
-      <Text variant="h2">{project.shortDescription}</Text>
+      <Text variant={{ base: 'h3', xl: 'h2' }}>{project.shortDescription}</Text>
 
       {project.tags?.length > 0 && (
         <SummaryInfoLine
@@ -195,7 +180,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
         </SummaryInfoLine>
       )}
 
-      <HStack>
+      <HStack spacing={5} w="100%" flexWrap="wrap">
         <ProjectLinks links={project.links as string[]} />
         <SummaryInfoLine
           label={t('Launched')}

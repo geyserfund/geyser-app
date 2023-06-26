@@ -1,9 +1,8 @@
 import { SearchIcon } from '@chakra-ui/icons'
 import { HStack } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CloseIconButton } from '../../../components/buttons'
 import { TextInputBox } from '../../../components/ui'
 import { useFilterContext } from '../../../context'
 import { useDebounce } from '../../../hooks'
@@ -14,6 +13,8 @@ export const FilterBySearch = () => {
 
   const [search, setSearch] = useState('')
 
+  const inputRef = useRef<HTMLInputElement>(null)
+
   const debouncedSearch = useDebounce(search, 1000)
 
   useEffect(() => {
@@ -22,32 +23,31 @@ export const FilterBySearch = () => {
     } else {
       updateFilter({ search: undefined })
     }
-  }, [debouncedSearch])
+  }, [debouncedSearch, updateFilter])
 
   const handleSearchUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value)
   }
 
-  const handleClear = () => {
-    setSearch('')
-    updateFilter({ search: undefined })
-  }
-
   return (
     <HStack width="100%" position="relative" alignItems="center">
-      <TextInputBox
-        leftIcon={<SearchIcon color={'neutral.700'} />}
-        placeholder={t('Search')}
-        onChange={handleSearchUpdate}
-        value={search}
-      />
-      {search && (
-        <CloseIconButton
-          position="absolute"
-          right="10px"
-          onClick={handleClear}
+      <form
+        style={{ width: '100%' }}
+        onSubmit={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          inputRef.current?.blur()
+        }}
+      >
+        <TextInputBox
+          ref={inputRef}
+          leftIcon={<SearchIcon color={'neutral.700'} />}
+          placeholder={t('Search')}
+          type="search"
+          onChange={handleSearchUpdate}
+          value={search}
         />
-      )}
+      </form>
     </HStack>
   )
 }

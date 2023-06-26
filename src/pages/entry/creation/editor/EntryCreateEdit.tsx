@@ -259,7 +259,6 @@ export const EntryCreateEdit = () => {
                       overflow="hidden"
                     >
                       <ImageWithReload
-                        grey
                         width="100%"
                         objectFit="cover"
                         src={entry.image}

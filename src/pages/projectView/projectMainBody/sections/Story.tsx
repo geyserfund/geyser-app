@@ -19,7 +19,7 @@ export const Story = () => {
   }
 
   return (
-    <CardLayout>
+    <CardLayout mobileDense>
       <article>
         <TitleDivider
           rightAction={

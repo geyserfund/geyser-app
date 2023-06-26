@@ -49,6 +49,7 @@ export const Milestones = forwardRef<HTMLDivElement>((_, ref) => {
         width="100%"
         alignItems="flex-start"
         spacing="25px"
+        mobileDense
       >
         <TitleDivider
           badge={project.milestones.length}

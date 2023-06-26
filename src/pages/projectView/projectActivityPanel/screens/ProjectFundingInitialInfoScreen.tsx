@@ -17,7 +17,11 @@ import {
 } from '../../../../graphql'
 import { useQueryWithPagination } from '../../../../hooks'
 import { useFundSubscription } from '../../../../hooks/fundingFlow/useFundSubscription'
-import { Funder, FundingTxFragment, ProjectFragment } from '../../../../types'
+import {
+  FunderWithUserFragment,
+  FundingTxFragment,
+  ProjectFragment,
+} from '../../../../types'
 import {
   aggregateTransactions,
   FundingTxWithCount,
@@ -70,7 +74,7 @@ export const ProjectFundingInitialInfoScreen = ({ project }: Props) => {
     },
   })
 
-  const funders = useQueryWithPagination<Funder>({
+  const funders = useQueryWithPagination<FunderWithUserFragment>({
     queryName: 'getFunders',
     itemLimit,
     query: QUERY_PROJECT_FUNDERS,
@@ -195,13 +199,13 @@ export const ProjectFundingInitialInfoScreen = ({ project }: Props) => {
   return (
     <VStack
       padding={{ base: '0px 10px 0px 10px', lg: '10px 20px' }}
-      spacing="0px"
+      spacing={4}
       width="100%"
       height="100%"
       overflowY="hidden"
       position="relative"
     >
-      <ActivityBrief project={project} />
+      <ActivityBrief funders={funders.data} project={project} />
 
       {!isMobile ? (
         <Button
@@ -222,7 +226,6 @@ export const ProjectFundingInitialInfoScreen = ({ project }: Props) => {
         alignItems="center"
         overflow="hidden"
         flex="1"
-        paddingTop="10px"
       >
         <Box display="flex" w="100%">
           {renderTabsList()}

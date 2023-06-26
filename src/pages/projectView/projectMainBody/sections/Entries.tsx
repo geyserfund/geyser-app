@@ -142,31 +142,28 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
   }
 
   return (
-    <>
-      <CardLayout
-        ref={ref}
-        width="100%"
-        alignItems="flex-start"
-        spacing="20px"
-        flexDirection="column"
-        padding="24px"
-      >
-        <TitleDivider badge={project.entries.length}>
-          {t('Entries')}
-        </TitleDivider>
+    <CardLayout
+      ref={ref}
+      mobileDense
+      width="100%"
+      alignItems="flex-start"
+      spacing="20px"
+      flexDirection="column"
+    >
+      <TitleDivider badge={project.entries.length}>{t('Entries')}</TitleDivider>
 
-        {renderEntries()}
+      {renderEntries()}
 
-        {isProjectOwner && Boolean(canCreateEntries) === false && (
-          <Center>
-            <Text textColor={'neutral.600'} textAlign="center" paddingX={2}>
-              {t(
-                'You cannot publish an entry in an inactive project. Finish the project configuration or re-activate the project to publish this entry.',
-              )}
-            </Text>
-          </Center>
-        )}
-      </CardLayout>
+      {isProjectOwner && Boolean(canCreateEntries) === false && (
+        <Center>
+          <Text textColor={'neutral.600'} textAlign="center" paddingX={2}>
+            {t(
+              'You cannot publish an entry in an inactive project. Finish the project configuration or re-activate the project to publish this entry.',
+            )}
+          </Text>
+        </Center>
+      )}
+
       <DeleteConfirmModal
         isOpen={isDeleteEntryOpen}
         onClose={closeDeleteEntry}
@@ -174,6 +171,6 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
         description={t('Are you sure you want to remove the entry')}
         confirm={handleRemoveEntry}
       />
-    </>
+    </CardLayout>
   )
 })

@@ -172,7 +172,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
         flexDirection="column"
         alignItems="flex-start"
         spacing="25px"
-        padding="24px"
+        mobileDense
       >
         <TitleDivider badge={project.rewards.length}>
           {t('Rewards')}

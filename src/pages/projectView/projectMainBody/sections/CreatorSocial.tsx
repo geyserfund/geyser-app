@@ -22,7 +22,7 @@ export const CreatorSocial = () => {
   }
 
   return (
-    <CardLayout>
+    <CardLayout mobileDense>
       <HStack spacing={4}>
         <Box>
           <UserAvatarWithLink
@@ -61,7 +61,9 @@ export const CreatorSocial = () => {
                 fontWeight={500}
                 bg="neutral.100"
               >
-                <Box as="span">{icon}</Box>
+                <Box as="span" lineHeight="1">
+                  {icon}
+                </Box>
                 {isMd ? (
                   <Text ml={2} variant="body" maxW="12em" isTruncated>
                     {username}

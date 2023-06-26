@@ -34,3 +34,24 @@ export const FRAGMENT_USER_FOR_AVATAR = gql`
     username
   }
 `
+
+export const FRAGMENT_FUNDER_WITH_USER = gql`
+  fragment FunderWithUser on Funder {
+    amountFunded
+    confirmed
+    id
+    confirmedAt
+    timesFunded
+    user {
+      id
+      username
+      externalAccounts {
+        externalId
+        externalUsername
+        id
+        accountType
+      }
+      imageUrl
+    }
+  }
+`
