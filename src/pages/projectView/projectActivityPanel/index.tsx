@@ -173,12 +173,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
 
     switch (fundState) {
       case fundingStages.initial:
-        return (
-          <ProjectFundingInitialInfoScreen
-            project={project}
-            btcRate={btcRate}
-          />
-        )
+        return <ProjectFundingInitialInfoScreen project={project} />
       case fundingStages.form:
         return (
           <ProjectFundingSelectionFormScreen
