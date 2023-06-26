@@ -133,6 +133,7 @@ type Props = {
   isReadOnly?: boolean
   focusFlag?: string
   noPadding?: boolean
+  placeholder?: string
 }
 
 const editorDOMID = 'editor'
@@ -144,6 +145,7 @@ export const ProjectEntryEditor = ({
   value,
   handleChange,
   isReadOnly,
+  placeholder,
   focusFlag,
   noPadding,
 }: Props) => {
@@ -213,7 +215,7 @@ export const ProjectEntryEditor = ({
       modules: editorModules,
       readOnly: isReadOnly,
       theme: 'snow',
-      placeholder: 'The description of the entry .....',
+      placeholder,
       scrollingContainer: `#${ID.entry.editEntryScrollContainer}`,
     })
 

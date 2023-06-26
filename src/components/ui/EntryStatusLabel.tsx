@@ -1,5 +1,6 @@
 import { Stack, StackDirection, Text } from '@chakra-ui/react'
 import { HTMLChakraProps } from '@chakra-ui/system'
+import { useTranslation } from 'react-i18next'
 import { BsFillXCircleFill } from 'react-icons/bs'
 
 import { EntryForProjectFragment, EntryStatus } from '../../types'
@@ -19,6 +20,7 @@ export const EntryStatusLabel = ({
   iconSize = '16px',
   direction = 'row',
 }: IProjectStatusLabel) => {
+  const { t } = useTranslation()
   const commonStyles = {
     fontWeight: 'semibold',
     fontFamily,
@@ -32,7 +34,7 @@ export const EntryStatusLabel = ({
     <Stack direction={direction} alignItems="center">
       <BsFillXCircleFill fontSize={iconSize} color={'secondary.yellow'} />
       <Text color={'secondary.yellow'} {...commonStyles}>
-        DRAFT
+        {t('DRAFT')}
       </Text>
     </Stack>
   )

@@ -1,5 +1,6 @@
 import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BsImage } from 'react-icons/bs'
 import { createUseStyles } from 'react-jss'
 import { useNavigate, useParams } from 'react-router'
@@ -8,16 +9,11 @@ import { FileUpload } from '../../../../components/molecules'
 import { ImageWithReload } from '../../../../components/ui'
 import Loader from '../../../../components/ui/Loader'
 import { getPath, ID } from '../../../../constants'
-import { ProjectEntryValidations } from '../../../../constants/validations'
+import { ProjectEntryValidations } from '../../../../constants'
 import { AppTheme, useAuthContext, useNavContext } from '../../../../context'
 import { useDebounce } from '../../../../hooks'
 import { useEntryState } from '../../../../hooks/graphqlState'
-import {
-  EntryStatus,
-  EntryType,
-  Owner,
-  Project,
-} from '../../../../types/generated/graphql'
+import { EntryStatus, EntryType, Owner, Project } from '../../../../types'
 import { toInt, useMobileMode, useNotification } from '../../../../utils'
 import { CreateNav } from './CreateNav'
 import { ProjectEntryEditor } from './ProjectEntryEditor'
@@ -56,6 +52,7 @@ export const defaultEntry = {
 }
 
 export const EntryCreateEdit = () => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
   const { toast } = useNotification()
   const navigate = useNavigate()
@@ -218,7 +215,7 @@ export const EntryCreateEdit = () => {
     <>
       <CreateNav
         isSaving={saving}
-        saveText={getSaveButtonText()}
+        saveText={t(getSaveButtonText())}
         onSave={saveEntry}
         onPreview={!isPublished ? onPreview : undefined}
         onBack={onBack}
@@ -271,7 +268,7 @@ export const EntryCreateEdit = () => {
                   ) : (
                     <HStack className={classes.uploadContainer}>
                       <BsImage />
-                      <Text> Select a header image</Text>
+                      <Text> {t('Select a header image')}</Text>
                     </HStack>
                   )}
                 </>
@@ -284,7 +281,7 @@ export const EntryCreateEdit = () => {
                 border="none"
                 _focus={{ border: 'none' }}
                 _focusVisible={{}}
-                placeholder="The Entry Title"
+                placeholder={t('The Entry Title')}
                 color="neutral.700"
                 fontSize={isMobile ? '35px' : '40px'}
                 fontWeight={700}
@@ -301,7 +298,7 @@ export const EntryCreateEdit = () => {
                 border="none"
                 _focus={{ border: 'none' }}
                 _focusVisible={{}}
-                placeholder="The summary of this entry"
+                placeholder={t('The summary of this entry')}
                 color="neutral.700"
                 fontSize={isMobile ? '20px' : '26px'}
                 paddingX="15px"
