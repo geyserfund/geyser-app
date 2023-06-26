@@ -202,7 +202,7 @@ export const ActivityBrief = ({
         variant="transparent"
       >
         <Text fontWeight={500}>Supporters</Text>
-        <HStack ml={1} spacing={0} cursor="pointer" alignItems="start">
+        <HStack ml={1} spacing={0} alignItems="start">
           {latestFunders.length > 0
             ? latestFunders.map((funder) => {
                 return (
