@@ -17,6 +17,9 @@ export const ModeChange = () => {
   const { i18n } = useTranslation()
 
   const { isOpen, onClose, onOpen } = useDisclosure()
+  const currentLanguageKey = Object.keys(languages).find(
+    (lang) => lang === i18n.resolvedLanguage,
+  ) as keyof typeof languages
 
   return (
     <>
@@ -40,7 +43,7 @@ export const ModeChange = () => {
             // onClick={() => i18n.changeLanguage(lng)}
             onClick={onOpen}
           >
-            English
+            {languages[currentLanguageKey]}
           </Button>
         </Tooltip>
       </HStack>
