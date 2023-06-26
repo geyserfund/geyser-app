@@ -35,15 +35,11 @@ import { ProjectLeaderboardList } from '../components/ProjectLeaderboardList'
 type Props = {
   project: ProjectFragment
   btcRate: number
-  fundingTx: FundingTxFragment
 }
 
 const itemLimit = 50
 
-export const ProjectFundingInitialInfoScreen = ({
-  project,
-  fundingTx,
-}: Props) => {
+export const ProjectFundingInitialInfoScreen = ({ project }: Props) => {
   const isMobile = useMobileMode()
   const { toast } = useNotification()
 

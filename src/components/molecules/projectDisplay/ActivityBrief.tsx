@@ -1,7 +1,9 @@
 import {
   Avatar,
+  Button,
   CircularProgress,
   HStack,
+  SkeletonCircle,
   Text,
   useTheme,
   VStack,
@@ -184,30 +186,47 @@ export const ActivityBrief = ({
           )}
         </VStack>
       </HStack>
-      <VStack textAlign="left" alignItems="start" w="100%" spacing={1}>
+      <VStack
+        textAlign="left"
+        alignItems="start"
+        w="100%"
+        py={10}
+        spacing={1}
+        as={Button}
+        onClick={() =>
+          fundersModal.onOpen({
+            funders: socialFunders,
+          })
+        }
+        size="lg"
+        variant="transparent"
+      >
         <Text fontWeight={500}>Supporters</Text>
-        <HStack
-          spacing={0}
-          cursor="pointer"
-          alignItems="start"
-          onClick={() =>
-            fundersModal.onOpen({
-              funders: socialFunders,
-            })
-          }
-        >
-          {latestFunders.map((funder) => {
-            return (
-              <UserAvatar
-                size="sm"
-                border={`2px solid ${colors.neutral[0]}`}
-                display="inline-block"
-                marginLeft="-5px"
-                key={funder.id}
-                user={funder.user}
-              />
-            )
-          })}
+        <HStack ml={1} spacing={0} cursor="pointer" alignItems="start">
+          {latestFunders.length > 0
+            ? latestFunders.map((funder) => {
+                return (
+                  <UserAvatar
+                    size="sm"
+                    border={`2px solid ${colors.neutral[0]}`}
+                    display="inline-block"
+                    marginLeft="-5px"
+                    key={funder.id}
+                    user={funder.user}
+                  />
+                )
+              })
+            : [1, 2, 3].map((s) => (
+                <SkeletonCircle
+                  key={s}
+                  border={`2px solid ${colors.neutral[0]}`}
+                  display="inline-block"
+                  marginLeft="-5px"
+                  bg="neutral.100"
+                  color="neutral.900"
+                  size="8"
+                />
+              ))}
 
           {latestFunders.length >= 12 ? (
             <Avatar
