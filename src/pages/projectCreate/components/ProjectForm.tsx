@@ -223,7 +223,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
                   showcase={isImage}
                   showcaseW="80px"
                   caption={t(
-                    'For best fit, select horizontal 1:3 image. Image size limit: 10MB',
+                    'For best fit, select horizontal 1:3 image. Image size limit: 10MB.',
                   )}
                   src={isImage ? field.value : undefined}
                   onUploadComplete={handleHeaderImageUpload}
