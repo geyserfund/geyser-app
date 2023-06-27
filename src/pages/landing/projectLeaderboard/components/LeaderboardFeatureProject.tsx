@@ -31,7 +31,6 @@ export const LeaderboardFeatureProject = ({
     >
       <Box height="200px" borderRadius="8px" overflow="hidden">
         <ImageWithReload
-          grey
           h="full"
           w="full"
           src={`${project.thumbnailImage}`}

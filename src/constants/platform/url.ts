@@ -186,6 +186,9 @@ export const GeyserProhibitedItemsUrl =
 export const GrantApplicationDetailsUrl =
   'https://geyser.notion.site/Bitcoin-Gaming-Grant-c03cde06930d46f9a082fabb096d967c'
 
+export const WalletCreationFindOutMoreUrl =
+  'https://geyser.notion.site/About-Geyser-Grants-925d6b2adc1a4043b70d2835ecfebdde?pvs=4'
+
 // External website Links
 
 export const commonMarkdownUrl = 'https://commonmark.org/help/'

@@ -41,6 +41,10 @@ export const useFollowProject = (projectId: number) => {
       event.nativeEvent.stopImmediatePropagation()
     }
 
+    if (isFollowed) {
+      return
+    }
+
     followProject()
   }
 
@@ -49,6 +53,10 @@ export const useFollowProject = (projectId: number) => {
       event.preventDefault()
       event.stopPropagation()
       event.nativeEvent.stopImmediatePropagation()
+    }
+
+    if (!isFollowed) {
+      return
     }
 
     unFollowProject()

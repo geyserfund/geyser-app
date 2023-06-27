@@ -28,7 +28,12 @@ export const ProjectMobileNavigation = () => {
   const isFundingDisabled = !isActive(project.status)
 
   return (
-    <HStack padding="10px 10px 2px 10px">
+    <HStack
+      padding={3}
+      bg="neutral.0"
+      borderBottom="2px solid"
+      borderColor="neutral.200"
+    >
       <ProjectBackButton flexGrow={isProjectOwner ? 1 : 0} />
       {isProjectOwner ? (
         <>

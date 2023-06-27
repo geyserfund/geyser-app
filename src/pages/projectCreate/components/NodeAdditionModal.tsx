@@ -1,6 +1,7 @@
 import {
   Avatar,
   Checkbox,
+  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -15,7 +16,10 @@ import { BsExclamation, BsQuestion } from 'react-icons/bs'
 
 import { DescriptionLinkWithIconComponent } from '../../../components/molecules'
 import { ButtonComponent, TextArea, TextInputBox } from '../../../components/ui'
-import { VoltageNodeConnectionDemoURL } from '../../../constants'
+import {
+  VoltageNodeConnectionDemoURL,
+  WalletCreationFindOutMoreUrl,
+} from '../../../constants'
 import { ProjectNodeValidations } from '../../../constants/validations'
 import { useMobileMode } from '../../../utils'
 import { checkMacaroonPermissions } from '../../../utils/validations/checkMacaroonPermissions'
@@ -184,7 +188,16 @@ export const NodeAdditionModal = ({
               work at this time.
             </Text>
             <DescriptionLinkWithIconComponent
-              title="Keep in mind that you are responsible for managing the liquidity of your node. Find out more."
+              title={
+                <>
+                  Keep in mind that you are responsible for managing the
+                  liquidity of your node.{' '}
+                  <Link href={WalletCreationFindOutMoreUrl} target="_blank">
+                    Find out more
+                  </Link>
+                  .
+                </>
+              }
               icon={
                 <Avatar
                   bgColor="neutral.300"

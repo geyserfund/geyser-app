@@ -1,3 +1,35 @@
+## [0.2.1](https://github.com/geyserfund/geyser-app/compare/v0.2.0...v0.2.1) (2023-06-27)
+
+
+### Features
+
+* add controls to video player ([#1003](https://github.com/geyserfund/geyser-app/issues/1003)) ([79882f2](https://github.com/geyserfund/geyser-app/commit/79882f29c449d76253a4e280950a4e0bff93e461))
+* hide keyboard on search + improve filters dependencies ([#978](https://github.com/geyserfund/geyser-app/issues/978)) ([12b93c7](https://github.com/geyserfund/geyser-app/commit/12b93c7e8c3ee6f470db3e73e41f222850c4416a))
+* improve back button style and secondary buttons bg ([#1004](https://github.com/geyserfund/geyser-app/issues/1004)) ([b275164](https://github.com/geyserfund/geyser-app/commit/b275164ca263188dced642310b9268deb5978255))
+* remove canvas from project page ([#1001](https://github.com/geyserfund/geyser-app/issues/1001)) ([1bef81f](https://github.com/geyserfund/geyser-app/commit/1bef81fece1133bb99e773ecb58f5a0992ffd961))
+* remove default image from project header ([6042f22](https://github.com/geyserfund/geyser-app/commit/6042f229c0ecc6bee0318a7fca7f40638c7bc113))
+* remove default image from project header ([#1007](https://github.com/geyserfund/geyser-app/issues/1007)) ([06e874f](https://github.com/geyserfund/geyser-app/commit/06e874f8d99c0e503d3115f30d3dfb3bd76c5f99))
+* supporters list and modal ([#1006](https://github.com/geyserfund/geyser-app/issues/1006)) ([91f6724](https://github.com/geyserfund/geyser-app/commit/91f672493a5d6240f9183ddcc46c90a58e0c0024))
+
+
+### Bug Fixes
+
+* add link to find out more on connect node modal ([#982](https://github.com/geyserfund/geyser-app/issues/982)) ([ff05787](https://github.com/geyserfund/geyser-app/commit/ff05787ed16618dbe80b809fed045ced7bdde1cf))
+* have nextStage call inside invoiceID match condition ([5a49f8f](https://github.com/geyserfund/geyser-app/commit/5a49f8fb792208c2d8874cfedda17802fb9eb1fa))
+* header title fix ([92af1df](https://github.com/geyserfund/geyser-app/commit/92af1df6ceb0cfe05b52ff6f54441d1033c9f069))
+* image url validation ([#1000](https://github.com/geyserfund/geyser-app/issues/1000)) ([36079c9](https://github.com/geyserfund/geyser-app/commit/36079c949e1943eb58de9412c91f2603ba4cc915))
+* lint ([59ed6c4](https://github.com/geyserfund/geyser-app/commit/59ed6c42a676131a54d4aa929ddb26df7171acda))
+* prevent follow and unfollow when state already the same ([#983](https://github.com/geyserfund/geyser-app/issues/983)) ([4527bb6](https://github.com/geyserfund/geyser-app/commit/4527bb6f294290573e810d55d13fcb607a9f8f9c))
+* prevent query by name when name is less than 3 characters ([#981](https://github.com/geyserfund/geyser-app/issues/981)) ([043ab7f](https://github.com/geyserfund/geyser-app/commit/043ab7f58bfdbab8621cdef10f52f272cd6b88d3))
+* project card fixes ([#1012](https://github.com/geyserfund/geyser-app/issues/1012)) ([a8e548b](https://github.com/geyserfund/geyser-app/commit/a8e548b1ed28c8e5c5239d84e638b3c2d7f96434))
+* project cards ([#1011](https://github.com/geyserfund/geyser-app/issues/1011)) ([4793176](https://github.com/geyserfund/geyser-app/commit/4793176e631a0c36d39fa5471e9acb275b7536a7))
+* remove launched label ([#980](https://github.com/geyserfund/geyser-app/issues/980)) ([6ff9d15](https://github.com/geyserfund/geyser-app/commit/6ff9d15be5f481b03af2993d64538a3ebf876632))
+* responsive project headers ([043bc4e](https://github.com/geyserfund/geyser-app/commit/043bc4e6aa73f115917c7f2e5aaf6e518429b4d3))
+* staging fixes ([2b0066e](https://github.com/geyserfund/geyser-app/commit/2b0066edc717acd622118fd6c54834dafb29693b))
+* supporters widget fixes ([#1010](https://github.com/geyserfund/geyser-app/issues/1010)) ([bc9e2cb](https://github.com/geyserfund/geyser-app/commit/bc9e2cbaef548af681eafc4b5fa99646ae49f0e7))
+* update project header text variants ([5be9706](https://github.com/geyserfund/geyser-app/commit/5be9706126454002cf87c7a8f89e6ef7d9fa05f2))
+* wait for 500ms and make another request incase of expired refresh token error ([3636bc8](https://github.com/geyserfund/geyser-app/commit/3636bc850a50b66473b06dc6446f3b35f91a566f))
+
 ## [0.2.0](https://github.com/geyserfund/geyser-app/compare/v0.1.4...v0.2.0) (2023-06-20)
 
 

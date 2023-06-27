@@ -7,7 +7,6 @@ import { DefaultImage } from './DefaultImage'
 interface IImageWithReload extends ImageProps {
   noCacheId?: string
   defaultImage?: string
-  grey?: boolean
   empty?: boolean
   showDefault?: boolean
   showError?: boolean
@@ -21,7 +20,6 @@ export const ImageWithReload = ({
   src,
   showError,
   defaultImage,
-  grey,
   empty,
   noCacheId, // noCacheId allows us to prevent not retrying an image upload due to caching
   ...rest
@@ -109,7 +107,7 @@ export const ImageWithReload = ({
       {hasValidSource ? (
         loading && renderSkeletonImage()
       ) : (
-        <DefaultImage grey={grey} {...rest} />
+        <DefaultImage grey {...rest} />
       )}
       {hasValidSource && renderSourceImage()}
     </>

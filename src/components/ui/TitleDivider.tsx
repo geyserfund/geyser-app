@@ -21,7 +21,7 @@ export const TitleDivider = ({
   ...props
 }: Props) => {
   return (
-    <VStack spacing={0} w="100%" {...props}>
+    <VStack pt={{ base: 2, lg: 0 }} spacing={0} w="100%" {...props}>
       <HStack justifyContent="start" w="100%" pb={1}>
         <Text variant="h3" textAlign="left">
           {children}

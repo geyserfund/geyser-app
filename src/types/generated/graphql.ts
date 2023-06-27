@@ -4433,6 +4433,28 @@ export type UserForAvatarFragment = {
   username: string
 }
 
+export type FunderWithUserFragment = {
+  __typename?: 'Funder'
+  amountFunded?: number | null
+  confirmed: boolean
+  id: any
+  confirmedAt?: any | null
+  timesFunded?: number | null
+  user?: {
+    __typename?: 'User'
+    id: any
+    username: string
+    imageUrl?: string | null
+    externalAccounts: Array<{
+      __typename?: 'ExternalAccount'
+      externalId: string
+      externalUsername: string
+      id: any
+      accountType: string
+    }>
+  } | null
+}
+
 export type UserBadgeAwardMutationVariables = Exact<{
   userBadgeId: Scalars['BigInt']
 }>
@@ -5369,27 +5391,7 @@ export type ProjectFundersQueryVariables = Exact<{
 
 export type ProjectFundersQuery = {
   __typename?: 'Query'
-  getFunders: Array<{
-    __typename?: 'Funder'
-    amountFunded?: number | null
-    confirmed: boolean
-    id: any
-    confirmedAt?: any | null
-    timesFunded?: number | null
-    user?: {
-      __typename?: 'User'
-      id: any
-      username: string
-      imageUrl?: string | null
-      externalAccounts: Array<{
-        __typename?: 'ExternalAccount'
-        externalId: string
-        externalUsername: string
-        id: any
-        accountType: string
-      }>
-    } | null
-  }>
+  getFunders: Array<{ __typename?: 'Funder' } & FunderWithUserFragment>
 }
 
 export type ProjectDashboardFundersQueryVariables = Exact<{
@@ -5881,6 +5883,26 @@ export const ProjectFragmentDoc = gql`
   ${ProjectRewardForCreateUpdateFragmentDoc}
   ${UserForAvatarFragmentDoc}
   ${EntryForProjectFragmentDoc}
+`
+export const FunderWithUserFragmentDoc = gql`
+  fragment FunderWithUser on Funder {
+    amountFunded
+    confirmed
+    id
+    confirmedAt
+    timesFunded
+    user {
+      id
+      username
+      externalAccounts {
+        externalId
+        externalUsername
+        id
+        accountType
+      }
+      imageUrl
+    }
+  }
 `
 export const EntryForLandingPageFragmentDoc = gql`
   fragment EntryForLandingPage on Entry {
@@ -9019,24 +9041,10 @@ export type ProjectDashboardDataQueryResult = Apollo.QueryResult<
 export const ProjectFundersDocument = gql`
   query ProjectFunders($input: GetFundersInput!) {
     getFunders(input: $input) {
-      amountFunded
-      confirmed
-      id
-      confirmedAt
-      timesFunded
-      user {
-        id
-        username
-        externalAccounts {
-          externalId
-          externalUsername
-          id
-          accountType
-        }
-        imageUrl
-      }
+      ...FunderWithUser
     }
   }
+  ${FunderWithUserFragmentDoc}
 `
 
 /**
