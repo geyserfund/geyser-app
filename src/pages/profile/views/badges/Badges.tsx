@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { Button, HStack, Link as ChakraLink } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { BsBoxArrowUpRight } from 'react-icons/bs'
 
 import { CardLayout } from '../../../../components/layouts'
@@ -19,6 +20,7 @@ export const Badges = ({
   isEdit: boolean
   isLoading: boolean
 }) => {
+  const { t } = useTranslation()
   const { data: userBadgesData, loading: userBadgeLoading } = useQuery<{
     userBadges: UserBadge[]
   }>(QUERY_USER_BADGES, {
@@ -44,7 +46,7 @@ export const Badges = ({
   return (
     <CardLayout padding="0px" paddingY="20px" spacing="20px" maxHeight="100%">
       <HStack paddingX="20px" w="full" justifyContent="space-between">
-        <H2>Badges</H2>
+        <H2>{t('Badges')}</H2>
         <Button
           as={ChakraLink}
           href={getPath('badges')}
@@ -52,12 +54,13 @@ export const Badges = ({
           size="sm"
           leftIcon={<BsBoxArrowUpRight />}
         >
-          See badges
+          {t('See badges')}
         </Button>
       </HStack>
       <Body2 paddingX="20px" color="neutral.700">
-        Geyser badges are earned for launching successful projects, contributing
-        to them and being an active community member.{' '}
+        {t(
+          'Geyser badges are earned for launching successful projects, contributing  to them and being an active community member.',
+        )}
       </Body2>
 
       {renderBadgesBody()}

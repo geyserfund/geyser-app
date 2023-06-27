@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 import { AlertBox } from '../../../../components/ui'
 import { ID } from '../../../../constants'
 import { QUERY_ACTIVITIES_FOR_LANDING_PAGE } from '../../../../graphql/queries/activities'
@@ -12,6 +14,7 @@ import { ProfileTabLayout } from '../../components'
 const MaxProfileActivityLimit = 12
 
 export const ProfileActivity = ({ userProfile }: { userProfile: User }) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
 
   const {
@@ -38,14 +41,16 @@ export const ProfileActivity = ({ userProfile }: { userProfile: User }) => {
       <AlertBox
         height="200px"
         status="error"
-        title="An error occurred while attempting to fetch user activity."
-        message="Please try refreshing the page. You may also want to contact support if the problem persists."
+        title={t('An error occurred while attempting to fetch user activity.')}
+        message={t(
+          'Please try refreshing the page. You may also want to contact support if the problem persists.',
+        )}
       />
     )
   }
 
   return (
-    <ProfileTabLayout title="Activity">
+    <ProfileTabLayout title={t('Activity')}>
       {isLoading ? (
         <ContributionsSkeleton />
       ) : (

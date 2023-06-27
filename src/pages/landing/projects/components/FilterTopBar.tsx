@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { SearchIcon } from '@chakra-ui/icons'
 import { HStack, StackProps, Wrap } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { HiOutlineTag } from 'react-icons/hi'
 import { SlLocationPin } from 'react-icons/sl'
 
@@ -10,7 +11,7 @@ import { QUERY_COUNTRIES, QUERY_TAGS } from '../../../../graphql/queries'
 import { ProjectCountriesGetResult, TagsGetResult } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { getActivityButtonContent } from '../../filters/activity'
-import { SortMenu } from '../../filters/sort/SortMenu'
+import { SortMenu } from '../../filters/sort'
 import { getStatusTypeButtonContent } from '../../filters/status'
 import { TagComponent } from '../elements'
 
@@ -19,6 +20,8 @@ interface FilterTopBarProps extends StackProps {
 }
 
 export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
+  const { t } = useTranslation()
+
   const { filters, updateFilter } = useFilterContext()
   const isMobile = useMobileMode()
 
@@ -149,7 +152,7 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
       return null
     }
 
-    let value = ''
+    let value: string
 
     switch (filters.sort) {
       case SortType.balance:
@@ -165,7 +168,7 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
         value = 'Most funded all time'
     }
 
-    return <H3 color="primary.600">{value}</H3>
+    return <H3 color="primary.600">{t(value)}</H3>
   }
 
   const viewFilterSearch = renderFilterSearch()

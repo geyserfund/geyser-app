@@ -1,11 +1,12 @@
 import { HStack, Link, Text, VStack } from '@chakra-ui/layout'
 import { Button, CloseButton } from '@chakra-ui/react'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { FaTelegramPlane } from 'react-icons/fa'
 
 import { SectionTitle } from '../../../../components/ui'
 import { fundingStages, GeyserTelegramUrl } from '../../../../constants'
-import { useFundCalc } from '../../../../helpers/fundingCalculation'
+import { useFundCalc } from '../../../../helpers'
 import { IFundForm, UseFundingFlowReturn } from '../../../../hooks'
 import {
   ProjectFragment,
@@ -16,8 +17,8 @@ import { useMobileMode } from '../../../../utils'
 import {
   ContributionInfoBox,
   ContributionInfoBoxVersion,
-} from '../../projectMainBody/components/ContributionInfoBox'
-import { ProjectFundingQRScreenQRCodeSection } from '../components/ProjectFundingQRScreenQRCodeSection'
+} from '../../projectMainBody/components'
+import { ProjectFundingQRScreenQRCodeSection } from '../components'
 
 type Props = {
   handleCloseButton: () => void
@@ -32,6 +33,7 @@ export const ProjectFundingQRScreen = ({
   project,
   handleCloseButton,
 }: Props) => {
+  const { t } = useTranslation()
   const { getTotalAmount } = useFundCalc(state)
   const isMobile = useMobileMode()
 
@@ -70,7 +72,7 @@ export const ProjectFundingQRScreen = ({
       marginTop={2}
     >
       <HStack justifyContent="space-between" width="100%">
-        <SectionTitle>Confirm & Contribute</SectionTitle>
+        <SectionTitle>{t('Confirm & Contribute')}</SectionTitle>
         <CloseButton onClick={handleCloseButton} />
       </HStack>
       <ProjectFundingQRScreenQRCodeSection fundingFlow={fundingFlow} />
@@ -95,15 +97,12 @@ export const ProjectFundingQRScreen = ({
         width="100%"
         leftIcon={<FaTelegramPlane aria-label="telegram" fontSize="20px" />}
       >
-        Reach out for help
+        {t('Reach out for help')}
       </Button>
       <Text fontSize="8px" fontWeight={400} color={'neutral.700'}>
-        Geyser is not a store. It’s a way to bring creative projects to life
-        using Bitcoin. Your donation will support a creative project that has
-        yet to be developed. There’s a risk that, despite a creator’s best
-        efforts, your reward will not be fulfilled, and we urge you to consider
-        this risk prior to backing it. Geyser is not responsible for project
-        claims or reward fulfillment.
+        {t(
+          'Geyser is not a store. It’s a way to bring creative projects to life using Bitcoin. Your donation will support a creative project that has yet to be developed. There’s a risk that, despite a creator’s best efforts, your reward will not be fulfilled, and we urge you to consider this risk prior to backing it. Geyser is not responsible for project claims or reward fulfillment.',
+        )}
       </Text>
     </VStack>
   )

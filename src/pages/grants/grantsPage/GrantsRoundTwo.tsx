@@ -7,6 +7,7 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { FaArrowLeft } from 'react-icons/fa'
 import { useNavigate } from 'react-router'
 
@@ -25,8 +26,7 @@ import { useMobileMode } from '../../../utils'
 import { GrantWinnerAnnouncement } from '../components'
 import { BoardMembers } from '../components/BoardMembers'
 import { GrantDevelopers } from '../components/GrantDevs'
-import { CommunityVoting } from './sections/CommunityVoting'
-import { MoreInfo } from './sections/MoreInfo'
+import { CommunityVoting, MoreInfo } from './sections'
 
 export type GrantSponsor = {
   name: string
@@ -43,6 +43,7 @@ export const GrantsRoundTwo = ({
   fundingOpenEndDate: number
   applicants?: GrantApplicant[]
 }) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
   const navigate = useNavigate()
 
@@ -72,7 +73,7 @@ export const GrantsRoundTwo = ({
             fontSize="sm"
             position={isMobile ? 'relative' : 'absolute'}
           >
-            <FaArrowLeft /> See all Grants
+            <FaArrowLeft /> {t('See all Grants')}
           </Button>
           <Box display="flex" justifyContent={'center'}>
             <Image height={'220px'} src={GrantsRound2Url} />
@@ -91,7 +92,7 @@ export const GrantsRoundTwo = ({
               py={'5px'}
               fontWeight="500"
             >
-              ACTIVE
+              {t('ACTIVE')}
             </Text>
           </Box>
           <Text
@@ -101,9 +102,11 @@ export const GrantsRoundTwo = ({
             textAlign="center"
             justifyContent="center"
           >
-            Funding educators, creatives and builders doing Bitcoin-only
-            projects on Geyser.{isMobile ? '' : <br />} Funded by bitcoin
-            sponsors who want to change the world for the better.
+            {t(
+              'Funding educators, creatives and builders doing Bitcoin-only projects on Geyser.',
+            )}
+            {isMobile ? '' : <br />}{' '}
+            {t('Funded by bitcoiners who want to change the world.')}
           </Text>
           <Box display="flex" flexDirection={'column'} alignItems="center">
             <Box color={'primary.500'} my={8}>
@@ -134,7 +137,7 @@ export const GrantsRoundTwo = ({
                 </Text>
               </Box>
               <Text fontWeight={'400'} fontFamily={fonts.inter} fontSize="17px">
-                GRANT TO DISTRIBUTE
+                {t('GRANT TO DISTRIBUTE')}
               </Text>
             </Box>
 
@@ -174,7 +177,7 @@ export const GrantsRoundTwo = ({
 
           <Box display={'flex'} justifyContent="center" my={6}>
             <Text fontWeight={'400'} fontSize="14px" color={'neutral.600'}>
-              Designs by
+              {t('Designs by')}
               <Link
                 href="https://twitter.com/tachirahomestd"
                 color={'primary.500'}
@@ -189,11 +192,12 @@ export const GrantsRoundTwo = ({
               fontSize="24px"
               fontWeight={'bold'}
             >
-              Principled Bitcoiners Board
+              {t('Principled Bitcoiners Board')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">
-              The board will be responsible for reviewing and evaluating the
-              applications.
+              {t(
+                'The board will be responsible for reviewing and evaluating the applications.',
+              )}
             </Text>
           </Box>
           <BoardMembers />
@@ -205,11 +209,12 @@ export const GrantsRoundTwo = ({
               fontSize="24px"
               fontWeight={'bold'}
             >
-              Made possible by sponsors
+              {t('Made possible by sponsors')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">
-              Bitcoin companies and anon individuals that want to bring hope to
-              the world.
+              {t(
+                'Bitcoin companies and anon individuals that want to bring hope to the world.',
+              )}
             </Text>
           </Box>
           <Box
@@ -241,8 +246,9 @@ export const GrantsRoundTwo = ({
           </Box>
           <Box my={6}>
             <Text color={'neutral.600'} fontWeight="600" mb={4}>
-              Thanks to the developers and designers that built and designed
-              Geyser Grants.
+              {t(
+                'Thanks to the developers and designers that built and designed Geyser Grants.',
+              )}
             </Text>
             <GrantDevelopers />
           </Box>

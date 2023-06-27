@@ -7,6 +7,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BiLeftArrowAlt } from 'react-icons/bi'
 
 import { CardLayout } from '../../../components/layouts'
@@ -34,6 +35,7 @@ export const ProjectCreateLayout = ({
   continueButton = null,
   ...props
 }: ProjectCreateLayoutProps) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
 
   const content = (
@@ -68,7 +70,7 @@ export const ProjectCreateLayout = ({
           onClick={onBackClick}
           leftIcon={<BiLeftArrowAlt fontSize="25px" />}
         >
-          Back
+          {t('Back')}
         </Button>
         {continueButton}
       </HStack>

@@ -15,6 +15,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BsCheckLg } from 'react-icons/bs'
 
 import { CardLayout } from '../../../../components/layouts'
@@ -41,15 +42,16 @@ interface GrantProps {
 }
 
 export const GrantApply = ({ grant }: GrantProps) => {
+  const { t } = useTranslation()
   return (
     <CardLayout w="full" p="20px" alignItems="center">
-      <H3 alignSelf="start">Apply</H3>
+      <H3 alignSelf="start">{t('Apply')}</H3>
       <Body1 alignSelf="start">
-        {
-          'Apply to be part of the Bitcoin Gaming Grant community-voting grant. Find out more about how projects will be selected and how voting works '
-        }
+        {t(
+          'Apply to be part of the Bitcoin Gaming Grant community-voting grant. Find out more about how projects will be selected and how voting works',
+        )}
         <Link href={GrantApplicationDetailsUrl} isExternal>
-          here.
+          {t('here.')}
         </Link>
       </Body1>
       <ApplyGrant grant={grant} />
@@ -58,11 +60,12 @@ export const GrantApply = ({ grant }: GrantProps) => {
 }
 
 export const ApplyGrant = ({ grant }: GrantProps) => {
+  const { t } = useTranslation()
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
-      <Button variant="primary" onClick={onOpen}>
-        APPLY
+      <Button variant="primary" onClick={onOpen} textTransform="uppercase">
+        {t('Apply')}
       </Button>
       <ApplyGrantModal {...{ isOpen, onOpen, onClose, grant }} />
     </>
@@ -80,6 +83,7 @@ export const ApplyGrantModal = ({
   isOpen,
   onClose,
 }: ApplyGrantModalProps) => {
+  const { t } = useTranslation()
   const { isLoggedIn, user } = useAuthContext()
 
   const [isSuccessful, setIsSuccessfull] = useState(false)
@@ -135,7 +139,7 @@ export const ApplyGrantModal = ({
         marginX="10px"
       >
         <ModalHeader alignSelf="start">
-          <H3>{getModalTitle()}</H3>
+          <H3>{t(getModalTitle())}</H3>
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody w="full" as={VStack} spacing="20px" alignItems="center">
@@ -147,10 +151,13 @@ export const ApplyGrantModal = ({
 }
 
 export const LoginForGrant = () => {
+  const { t } = useTranslation()
   return (
     <>
       <Image src={LockedConnectAccountUrl} maxWidth="200px" />
-      <Body1>To apply to a grant you need to first login into Geyser.</Body1>
+      <Body1>
+        {t('To apply to a grant you need to first login into Geyser.')}
+      </Body1>
       <VStack w="full">
         <ConnectWithTwitter />
         <ConnectWithNostr />
@@ -160,9 +167,12 @@ export const LoginForGrant = () => {
 }
 
 export const CreateAProject = () => {
+  const { t } = useTranslation()
   return (
     <>
-      <Body2 alignSelf="start">Select your Geyser project from the list</Body2>
+      <Body2 alignSelf="start">
+        {t('Select your Geyser project from the list')}
+      </Body2>
       <Box
         w="full"
         paddingY="10px"
@@ -170,10 +180,10 @@ export const CreateAProject = () => {
         borderRadius="8px"
         textAlign="center"
       >
-        You have not created any projects
+        {t('You have not created any projects')}
       </Box>
       <Body1>
-        To apply for a grant you need to create a project on Geyser.
+        {t('To apply for a grant you need to create a project on Geyser.')}
       </Body1>
       <CreateAProjectButton />
     </>
@@ -216,6 +226,7 @@ export const SelectAProject = ({
   projects,
   onSuccess,
 }: SelectAProjectProps) => {
+  const { t } = useTranslation()
   const { toast } = useNotification()
 
   const [selectedProjectId, setSelectedProjectId] = useState<number>(0)
@@ -259,7 +270,9 @@ export const SelectAProject = ({
 
   return (
     <>
-      <Body2 alignSelf="start">Select your Geyser project from the list</Body2>
+      <Body2 alignSelf="start">
+        {t('Select your Geyser project from the list')}
+      </Body2>
       <VStack w="full">
         {projects.map((project) => {
           const isSelected = selectedProjectId === project.id
@@ -298,7 +311,7 @@ export const SelectAProject = ({
         onClick={handleApply}
         isLoading={loading}
       >
-        Apply
+        {t('Apply')}
       </Button>
     </>
   )

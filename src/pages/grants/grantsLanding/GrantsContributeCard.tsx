@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { Box, Link, Stack, Text, Tooltip } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import {
   CardLayout,
@@ -15,6 +16,7 @@ import { ListText } from '../components/ListText'
 import { CONTRIBUTION_ADDRESS } from '../constants'
 
 export const GrantsContributeCard = (props: CardLayoutProps) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
 
   const [handleCopyAddress, hasCopied] =
@@ -45,7 +47,7 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
       >
         <ListText
           titleProps={{ fontSize: '24px' }}
-          subtitle="GRANT CONTRIBUTIONS"
+          subtitle={t('GRANT CONTRIBUTIONS')}
           subtitleProps={{ fontSize: '10px' }}
           isSatLogo={true}
         >
@@ -57,7 +59,7 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
         </ListText>
         <ListText
           titleProps={{ fontSize: '24px' }}
-          subtitle="GRANTS DISTRIBUTED"
+          subtitle={t('GRANT CONTRIBUTIONS')}
           subtitleProps={{ fontSize: '10px' }}
           isSatLogo={true}
         >
@@ -77,9 +79,9 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
         <GrantsContributeModal />
         {isMobile ? (
           <Text fontSize={'14px'} fontWeight="500" mt={3} color="neutral.600">
-            Contribute to the Bitcoin ecosystem by becoming a Geyser Grants
-            sponsor. You can also easily contribute by sending or streaming
-            recurring payments to{' '}
+            {t(
+              'Contribute to the Bitcoin ecosystem by becoming a Geyser Grants sponsor. You can also easily contribute by sending or streaming recurring payments to',
+            )}{' '}
             <Link
               textColor={hasCopied ? undefined : 'primary.500'}
               href="#"
@@ -91,8 +93,8 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
         ) : (
           <Box display="flex" alignItems={'center'}>
             <Text fontWeight="500" mr={1} color="neutral.600">
-              Or sending SATs to our lightning address:{' '}
-              <Tooltip label="Copied to clipboard!" isOpen={hasCopied}>
+              {t('Or sending SATs to our lightning address:')}{' '}
+              <Tooltip label={t('Copied to clipboard!')} isOpen={hasCopied}>
                 <Link
                   textColor={hasCopied ? undefined : 'primary.500'}
                   href="#"

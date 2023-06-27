@@ -8,6 +8,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
+import { useTranslation } from 'react-i18next'
 import { BiLeftArrowAlt } from 'react-icons/bi'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
@@ -22,6 +23,7 @@ type Props = {
 }
 
 export const EntryDetails = ({ entry }: Props) => {
+  const { t } = useTranslation()
   const headerImageSrc = entry.image || entry.project?.image
   const location = useLocation()
   const navigate = useNavigate()
@@ -42,7 +44,7 @@ export const EntryDetails = ({ entry }: Props) => {
         onClick={handleViewProject}
         leftIcon={<BiLeftArrowAlt fontSize="15px" />}
       >
-        View project
+        {t('View project')}
       </ButtonComponent>
 
       <Stack
@@ -97,6 +99,7 @@ export const EntryDetails = ({ entry }: Props) => {
             value={entry.content}
             isReadOnly
             noPadding
+            placeholder={t('The description of the entry .....')}
           />
         )}
       </Box>

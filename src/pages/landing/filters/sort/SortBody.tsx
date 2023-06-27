@@ -1,4 +1,5 @@
 import { MenuItem } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { SortType, useFilterContext } from '../../../../context'
 import { disableSortByTrending, getCurrentSelection } from './sortSelection'
@@ -10,6 +11,7 @@ export enum SortOptions {
 }
 
 export const SortBody = ({ isMobile }: { isMobile?: boolean }) => {
+  const { t } = useTranslation()
   const { filters, updateFilter } = useFilterContext()
 
   const onSortSelect = (value: SortOptions) => {
@@ -79,7 +81,7 @@ export const SortBody = ({ isMobile }: { isMobile?: boolean }) => {
             }
             onClick={() => onSortSelect(value)}
           >
-            {value}
+            {t(value)}
           </MenuItem>
         )
       })}

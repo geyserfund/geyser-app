@@ -1,5 +1,6 @@
 import { Text, VStack } from '@chakra-ui/react'
 import { forwardRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BiPencil } from 'react-icons/bi'
 
 import { CardLayout } from '../../../../components/layouts'
@@ -9,6 +10,7 @@ import { useProjectContext } from '../../../../context'
 import { MilestoneComponent } from '../components/MilestoneComponent'
 
 export const Milestones = forwardRef<HTMLDivElement>((_, ref) => {
+  const { t } = useTranslation()
   const { project, isProjectOwner, onMilestonesModalOpen } = useProjectContext()
 
   if (!project) {
@@ -63,7 +65,7 @@ export const Milestones = forwardRef<HTMLDivElement>((_, ref) => {
             )
           }
         >
-          Milestones
+          {t('Milestones')}
         </TitleDivider>
         <VStack alignItems="flex-start" spacing="12px">
           {renderMilestones()}

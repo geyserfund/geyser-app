@@ -9,12 +9,13 @@ import {
 } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { MouseEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 
 import { ItemCard } from '../../../../components/layouts/ItemCard'
 import { ImageWithReload } from '../../../../components/ui'
 import { AppTheme } from '../../../../context'
-import { ProjectRewardForCreateUpdateFragment } from '../../../../types/generated/graphql'
+import { ProjectRewardForCreateUpdateFragment } from '../../../../types'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   focused: {
@@ -55,6 +56,7 @@ export const FundingFormRewardItem = ({
   onRemoveClick,
   onAddClick,
 }: IRewardItemProps) => {
+  const { t } = useTranslation()
   const classes = useStyles()
 
   const { cost, name, sold, description } = item
@@ -77,13 +79,13 @@ export const FundingFormRewardItem = ({
             cost / 100
           }`}</Text>
           <Text fontSize="10px" color={'neutral.1000'} fontWeight="bold">
-            per item
+            {t('per item')}
           </Text>
         </VStack>
         <VStack alignItems="flex-start" flex={1} spacing="0px">
           <Text fontSize="14px">{name}</Text>
           <Box className={classes.backer}>
-            {sold === 1 ? `${sold} backer` : `${sold} backers`}
+            {sold === 1 ? `${sold} ${t('backer')}` : `${sold} ${t('backers')}`}
           </Box>
         </VStack>
         {!readOnly && (

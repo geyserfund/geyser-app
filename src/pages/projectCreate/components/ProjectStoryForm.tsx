@@ -1,5 +1,6 @@
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { FormProvider, UseFormReturn } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import { ProjectValidations } from '../../../constants'
 import { FieldContainer } from '../../../forms/components/FieldContainer'
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export const ProjectStoryForm = ({ form, isLoading, toolbarTop }: Props) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
   return (
     <FormProvider {...form}>
@@ -20,7 +22,9 @@ export const ProjectStoryForm = ({ form, isLoading, toolbarTop }: Props) => {
         <FieldContainer
           width="100%"
           flexGrow={1}
-          subtitle="Write a more in-depth description of the project. You can also add images and videos."
+          subtitle={t(
+            'Write a more in-depth description of the project. You can also add images and videos.',
+          )}
         >
           <Box
             width="100%"

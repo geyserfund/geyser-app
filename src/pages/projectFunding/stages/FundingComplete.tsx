@@ -1,4 +1,5 @@
 import { Box, Link as ChakraLink, Text, VStack } from '@chakra-ui/react'
+import { Trans, useTranslation } from 'react-i18next'
 import { FaCheck } from 'react-icons/fa'
 
 import { UseFundingFlowReturn } from '../../../hooks'
@@ -13,6 +14,7 @@ export const FundingComplete = ({
   fundingFlow: { fundingTx },
   formState,
 }: Props) => {
+  const { t } = useTranslation()
   return (
     <VStack justify={'center'} spacing={5}>
       <Box display="flex" justifyContent={'center'} my={4}>
@@ -30,24 +32,27 @@ export const FundingComplete = ({
       </Box>
       {formState && (
         <Text fontSize={'14px'}>
-          Your{' '}
-          <span style={{ fontWeight: 'bold' }}>
-            {' '}
-            {formState.donationAmount} sats{' '}
-          </span>{' '}
-          contribution to Geyser Grants Round 2 was successful!
+          <Trans
+            i18nKey="Your <1>{{amount}}</1>> contribution to Geyser Grants Round 2 was successful!"
+            values={{ amount: `${formState.donationAmount} sats` }}
+          >
+            Your
+            <span style={{ fontWeight: 'bold' }}>{'{{amount}}'}</span>{' '}
+            contribution to Geyser Grants Round 2 was successful!
+          </Trans>
         </Text>
       )}
       <Text fontSize={'14px'}>
-        Your donation will help accelerate bitcoin adoption by recognizing and
-        pushing forward bitcoin projects.
+        {t(
+          'Your donation will help accelerate bitcoin adoption by recognizing and pushing forward bitcoin projects.',
+        )}
       </Text>
       <Text fontSize={'14px'}>
-        Donations are non-refundable and not tax deductible.
+        {t('Donations are non-refundable and not tax deductible.')}
       </Text>
       {fundingTx.onChain && (
         <Text mt={4} fontSize={'14px'}>
-          Check out the{' '}
+          {t('Check out')}{' '}
           <ChakraLink
             href={`https://mempool.space/address/${fundingTx.address}`}
           >
@@ -57,7 +62,7 @@ export const FundingComplete = ({
               borderBottom="1px solid"
               borderColor="neutral.1000"
             >
-              block explorer
+              {t('the block explorer')}
             </Box>
           </ChakraLink>
         </Text>

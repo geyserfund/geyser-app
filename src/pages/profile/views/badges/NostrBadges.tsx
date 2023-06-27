@@ -1,5 +1,6 @@
 import { VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Body2 } from '../../../../components/typography'
 import { useNostrBadges } from '../../../../hooks/useNostrBadges'
@@ -16,6 +17,7 @@ export const NostrBadges = ({
   userBadges: UserBadge[]
   isEdit: boolean
 }) => {
+  const { t } = useTranslation()
   const [claimedBadges, setClaimedBadges] = useState<UserBadge[]>([])
   const [unClaimedBadges, setUnClaimedBadges] = useState<UserBadge[]>([])
 
@@ -51,8 +53,8 @@ export const NostrBadges = ({
 
   const getTitleToDisplay = () => {
     return numberOfBadges
-      ? `${numberOfBadges} Geyser badges`
-      : 'No Geyser badges'
+      ? `${numberOfBadges} ${t('Geyser badges')}`
+      : t('No Geyser badges')
   }
 
   if (nostrBadgesLoading) {

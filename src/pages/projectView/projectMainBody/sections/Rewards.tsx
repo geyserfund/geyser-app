@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client'
 import { GridItem, HStack, Text } from '@chakra-ui/react'
 import { forwardRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { CardLayout } from '../../../../components/layouts'
 import {
@@ -26,6 +27,7 @@ import {
 import { truthyFilter } from '../../../../utils/array'
 
 export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
   const { toast } = useNotification()
 
@@ -90,7 +92,9 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
 
       toast({
         title: 'Successfully removed!',
-        description: `Reward ${currentReward?.name} was successfully removed`,
+        description: `${t('Reward')} ${currentReward?.name} ${t(
+          'was successfully removed',
+        )}`,
         status: 'success',
       })
     } catch (error) {
@@ -151,7 +155,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
 
     return (
       <GridItem colSpan={isMobile ? 2 : 1}>
-        <Text>There are no rewards available.</Text>
+        <Text>{t('There are no rewards available.')}</Text>
       </GridItem>
     )
   }
@@ -170,7 +174,9 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
         spacing="25px"
         mobileDense
       >
-        <TitleDivider badge={project.rewards.length}>Rewards</TitleDivider>
+        <TitleDivider badge={project.rewards.length}>
+          {t('Rewards')}
+        </TitleDivider>
         <HStack width="100%" flexWrap="wrap" justifyContent="center">
           {renderRewards()}
         </HStack>
@@ -178,8 +184,8 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
       <DeleteConfirmModal
         isOpen={isRewardDeleteOpen}
         onClose={onRewardDeleteClose}
-        title={`Delete reward ${selectedReward?.name}`}
-        description={'Are you sure you want to remove the reward'}
+        title={`${t('Delete reward')} ${selectedReward?.name}`}
+        description={t('Are you sure you want to remove the reward')}
         confirm={() => handleRemoveReward(selectedReward?.id)}
       />
     </>

@@ -8,6 +8,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { BoltIcon } from '../../../../components/icons'
 import {
@@ -16,13 +17,13 @@ import {
   TextInputBox,
 } from '../../../../components/ui'
 import { MAX_FUNDING_AMOUNT_USD } from '../../../../constants'
-import { useFundCalc } from '../../../../helpers/fundingCalculation'
+import { useFundCalc } from '../../../../helpers'
 import { IFundForm } from '../../../../hooks'
 import { IProjectType } from '../../../../interfaces'
-import { ProjectRewardForCreateUpdateFragment } from '../../../../types/generated/graphql'
+import { ProjectRewardForCreateUpdateFragment } from '../../../../types'
 import { useNotification } from '../../../../utils'
-import { ProjectFundingFormCommentField } from '../../projectMainBody/components/ProjectFundingFormCommentField'
-import { FundingFormSection } from '../components/FundingFormSection'
+import { ProjectFundingFormCommentField } from '../../projectMainBody/components'
+import { FundingFormSection } from '../components'
 
 type Props = {
   isMobile?: boolean
@@ -48,6 +49,7 @@ export const ProjectFundingSelectionFormScreen = ({
   rewards,
   name,
 }: Props) => {
+  const { t } = useTranslation()
   const { getTotalAmount } = useFundCalc(formState)
 
   const { toast } = useNotification()
@@ -68,7 +70,9 @@ export const ProjectFundingSelectionFormScreen = ({
   const validateFundingAmount = () => {
     if (getTotalAmount('dollar', name) >= MAX_FUNDING_AMOUNT_USD) {
       toast({
-        title: `Payment above ${MAX_FUNDING_AMOUNT_USD} is not allowed at the moment.`,
+        title: `${t('Payment above')} ${MAX_FUNDING_AMOUNT_USD} ${t(
+          'is not allowed at the moment.',
+        )}`,
         description:
           'Please update the amount, or contact us for donating a higher amount.',
         status: 'error',
@@ -149,7 +153,7 @@ export const ProjectFundingSelectionFormScreen = ({
           spacing={2}
         >
           <VStack spacing={1.5} alignItems="flex-start" width={'full'}>
-            <SectionTitle>Comment</SectionTitle>
+            <SectionTitle>{t('Comment')}</SectionTitle>
 
             <ProjectFundingFormCommentField
               comment={formState.comment}
@@ -194,7 +198,7 @@ export const ProjectFundingSelectionFormScreen = ({
                   textColor={'neutral.700'}
                   fontWeight={'normal'}
                 >
-                  Rewards
+                  {t('Rewards')}
                 </Text>
                 <VStack flex={1} flexWrap={'wrap'} alignItems="flex-end">
                   {formState.rewardsByIDAndCount &&
@@ -219,7 +223,7 @@ export const ProjectFundingSelectionFormScreen = ({
               width={'full'}
               fontSize={'10px'}
             >
-              <SectionTitle>Total</SectionTitle>
+              <SectionTitle>{t('Total')}</SectionTitle>
 
               <HStack>
                 <SatoshiAmount
@@ -245,7 +249,7 @@ export const ProjectFundingSelectionFormScreen = ({
             leftIcon={<BoltIcon />}
             onClick={submit}
           >
-            Fund Project
+            {t('Fund Project')}
           </Button>
         </VStack>
       </VStack>

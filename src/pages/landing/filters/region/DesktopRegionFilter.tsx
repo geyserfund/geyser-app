@@ -10,6 +10,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { SlLocationPin } from 'react-icons/sl'
 
 import { CloseIconButton } from '../../../../components/buttons'
@@ -38,6 +39,7 @@ export const DesktopRegionFilter = ({
   options,
   ...rest
 }: DesktopRegionFilterProps) => {
+  const { t } = useTranslation()
   const { filters, updateFilter } = useFilterContext()
 
   const { region, countryCode } = filters
@@ -100,7 +102,7 @@ export const DesktopRegionFilter = ({
                 color={'neutral.600'}
                 fontSize="20px"
               />
-              <Body1 color={'neutral.600'}>Filter by location</Body1>
+              <Body1 color={'neutral.600'}>{t('Filter by location')}</Body1>
             </HStack>
           </ModalHeader>
           <ModalCloseButton />

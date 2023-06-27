@@ -10,14 +10,15 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
 import { AiOutlineEllipsis } from 'react-icons/ai'
+import { useTranslation } from 'react-i18next'
 
 import { ExternalAccountType } from '../../../pages/auth'
-import { Countdown } from '../../../pages/projectView/projectActivityPanel/components/Countdown'
+import { Countdown } from "../../../pages/projectView/projectActivityPanel/components"
 import {
   FunderWithUserFragment,
   ProjectFragment,
   ProjectMilestone,
-} from '../../../types/generated/graphql'
+} from "../../../types"
 import { isActive } from '../../../utils'
 import { getProjectBalance } from '../../../utils/helpers'
 import { SatoshiAmount } from '../../ui'
@@ -38,6 +39,7 @@ export const ActivityBrief = ({
   project,
   funders,
 }: IActivityBrief) => {
+  const { t } = useTranslation()
   const [currentMilestone, setCurrentMilestone] = useState<ProjectMilestone>()
   const [milestoneIndex, setMilestoneIndex] = useState<number>(0)
   const [prevMilestone, setPrevMilestone] = useState(0)
@@ -135,7 +137,7 @@ export const ActivityBrief = ({
       return (
         <Text pl={2} color="neutral.600" w="100%">
           <Text w="100%" fontWeight={500} display="inline">
-            {percentage}% of Milestone {milestoneIndex}:
+            {`${percentage} % ${t('of Milestone')} ${milestoneIndex}:`}
           </Text>{' '}
           {currentMilestone.name}
         </Text>
@@ -201,7 +203,7 @@ export const ActivityBrief = ({
         size="lg"
         variant="transparent"
       >
-        <Text fontWeight={500}>Supporters</Text>
+        <Text fontWeight={500}>{t('Supporters')}</Text>
         <HStack ml={1} spacing={0} alignItems="start">
           {latestFunders.length > 0
             ? latestFunders.map((funder) => {

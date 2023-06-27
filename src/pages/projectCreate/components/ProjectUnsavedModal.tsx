@@ -1,4 +1,5 @@
 import { Button, Text, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { Modal } from '../../../components/layouts/Modal'
 import { useUnsavedAlert } from '../../../hooks'
@@ -23,6 +24,7 @@ export const useProjectUnsavedModal = ({
 }
 
 export const ProjectUnsavedModal = ({ hasUnsaved, ...modalProps }: Props) => {
+  const { t } = useTranslation()
   useUnsavedAlert(hasUnsaved)
 
   return (
@@ -39,7 +41,7 @@ export const ProjectUnsavedModal = ({ hasUnsaved, ...modalProps }: Props) => {
           color="secondary.red"
           onClick={modalProps.props.onLeave || undefined}
         >
-          Leave without saving
+          {t('Leave without saving')}
         </Button>
       </VStack>
     </Modal>

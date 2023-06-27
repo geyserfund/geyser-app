@@ -1,12 +1,14 @@
 import { SearchIcon } from '@chakra-ui/icons'
 import { HStack } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { TextInputBox } from '../../../components/ui'
 import { useFilterContext } from '../../../context'
 import { useDebounce } from '../../../hooks'
 
 export const FilterBySearch = () => {
+  const { t } = useTranslation()
   const { updateFilter } = useFilterContext()
 
   const [search, setSearch] = useState('')
@@ -40,7 +42,7 @@ export const FilterBySearch = () => {
         <TextInputBox
           ref={inputRef}
           leftIcon={<SearchIcon color={'neutral.700'} />}
-          placeholder="Search"
+          placeholder={t('Search')}
           type="search"
           onChange={handleSearchUpdate}
           value={search}

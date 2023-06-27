@@ -9,6 +9,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { EntryEditIcon, RewardGiftIcon } from '../../../../components/icons'
 import { MilestoneIcon } from '../../../../components/icons/svg'
@@ -27,6 +28,7 @@ export const ProjectNavigation = ({
   onRewardsClick,
   onMilestonesClick,
 }: UseProjectAnchors) => {
+  const { t } = useTranslation()
   const { isProjectOwner, onCreatorModalOpen } = useProjectContext()
   const hasItems = Boolean(entriesLength || rewardsLength || milestonesLength)
   return (
@@ -41,7 +43,7 @@ export const ProjectNavigation = ({
               aria-label="header"
               leftIcon={<ProjectIcon fontSize="1.5em" width="1.3em" />}
             >
-              Project
+              {t('Project')}
             </ProjectNavigationButton>
             {Boolean(entriesLength) && (
               <ProjectNavigationButton
@@ -50,7 +52,7 @@ export const ProjectNavigation = ({
                 aria-label="entries"
                 leftIcon={<EntryEditIcon fontSize="1.5em" width="1.3em" />}
               >
-                Entries
+                {t('Entries')}
               </ProjectNavigationButton>
             )}
             {Boolean(rewardsLength) && (
@@ -60,7 +62,7 @@ export const ProjectNavigation = ({
                 aria-label="rewards"
                 leftIcon={<RewardGiftIcon fontSize="1.5em" width="1.3em" />}
               >
-                Rewards
+                {t('Rewards')}
               </ProjectNavigationButton>
             )}
             {Boolean(milestonesLength) && (
@@ -70,7 +72,7 @@ export const ProjectNavigation = ({
                 aria-label="milestones"
                 leftIcon={<MilestoneIcon fontSize="1.5em" width="1.3em" />}
               >
-                Milestones
+                {t('Milestones')}
               </ProjectNavigationButton>
             )}
           </VStack>
@@ -83,7 +85,7 @@ export const ProjectNavigation = ({
             variant="primary"
             onClick={() => onCreatorModalOpen()}
           >
-            Create
+            {t('Create')}
           </Button>
         </>
       ) : null}

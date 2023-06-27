@@ -8,6 +8,7 @@ import {
   ModalOverlay,
 } from '@chakra-ui/modal'
 import { VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router'
 
 import { useAuthContext } from '../../context'
@@ -35,12 +36,14 @@ const ConnectAccounts = ({
   showNostr,
   showLightning,
 }: any) => {
+  const { t } = useTranslation()
   const { user } = useAuthContext()
   return (
     <VStack justifyContent="center" alignItems="center">
       <Text color="neutral.6002" fontSize="12px" marginBottom={5}>
-        Connecting with Twitter or Lightning allows you to keep track of your
-        favorite projects and to launch your own projects.
+        {t(
+          'Connecting with Twitter or Lightning allows you to keep track of your favorite projects and to launch your own projects.',
+        )}
       </Text>
       <Stack width="100%">
         {!hasTwitterAccount(user) && showTwitter && (
@@ -52,15 +55,16 @@ const ConnectAccounts = ({
         {showLightning && <ConnectWithLightning onClose={onClose} />}
       </Stack>
       <Caption paddingTop="5px">
-        {
-          "If you're having trouble connecting with Twitter on Mobile, first try logging in on Twitter.com on your browser, then try again."
-        }
+        {t(
+          "If you're having trouble connecting with Twitter on Mobile, first try logging in on Twitter.com on your browser, then try again.",
+        )}
       </Caption>
     </VStack>
   )
 }
 
 export const AuthModal = (authModalProps: IAuthModal) => {
+  const { t } = useTranslation()
   const {
     isOpen,
     onClose,
@@ -85,10 +89,8 @@ export const AuthModal = (authModalProps: IAuthModal) => {
     }
   }
 
-  const modalTitle = title || 'Connect'
-  const modalDescription =
-    description ||
-    'Connect to launch your idea and to appear as a contributor when you fund an initiative.'
+  const modalTitle = title || t('Connect')
+  const modalDescription = description || t('Connect to launch')
 
   return (
     <Modal
@@ -133,7 +135,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
           >
             {privateRoute && (
               <ButtonComponent onClick={handlePrivateRouteModalClose}>
-                {location.key ? 'Go back' : 'Go home'}
+                {t(location.key ? 'Go back' : 'Go home')}
               </ButtonComponent>
             )}
           </Box>

@@ -1,6 +1,7 @@
 import { Box, HStack, Text, VStack, Wrap } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { forwardRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { AiOutlineCalendar } from 'react-icons/ai'
 import { FiTag } from 'react-icons/fi'
 import { SlLocationPin } from 'react-icons/sl'
@@ -24,6 +25,7 @@ import {
 } from '../components'
 
 export const Header = forwardRef<HTMLDivElement>((_, ref) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
   const { project, isProjectOwner } = useProjectContext()
 
@@ -110,7 +112,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
 
       {project.tags?.length > 0 && (
         <SummaryInfoLine
-          label="Tags"
+          label={t('Tags')}
           icon={
             <span>
               <FiTag color="neutral.600" />
@@ -137,7 +139,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
 
       {(project.location?.country?.name || project.location?.region) && (
         <SummaryInfoLine
-          label="Region"
+          label={t('Region')}
           icon={
             <span>
               <SlLocationPin color="neutral.600" />
@@ -181,16 +183,18 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       <HStack spacing={5} w="100%" flexWrap="wrap">
         <ProjectLinks links={project.links as string[]} />
         <SummaryInfoLine
-          label="Launched"
+          label={t('Launched')}
           icon={
             <span>
               <AiOutlineCalendar color="neutral.600" />
             </span>
           }
         >
-          <Text variant="body2" color="neutral.600">{`${DateTime.fromMillis(
-            Number(project.createdAt),
-          ).toFormat('dd LLL yyyy')}`}</Text>
+          <Text variant="body2" color="neutral.600">{`${t(
+            'Launched',
+          )} ${DateTime.fromMillis(Number(project.createdAt)).toFormat(
+            'dd LLL yyyy',
+          )}`}</Text>
         </SummaryInfoLine>
       </HStack>
     </CardLayout>

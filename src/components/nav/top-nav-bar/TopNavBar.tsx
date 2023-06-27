@@ -12,6 +12,7 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { useEffect, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Link,
   matchPath,
@@ -133,6 +134,8 @@ const routesForTransparentBackground = [
  * the top navigation bar.
  */
 export const TopNavBar = () => {
+  const { t } = useTranslation()
+
   const isMobile = useMobileMode()
   const navigate = useNavigate()
   const location = useLocation()
@@ -558,7 +561,7 @@ export const TopNavBar = () => {
                           fontSize="16px"
                           color={'neutral.700'}
                         >
-                          {item.name}
+                          {t(item.name)}
                         </Text>
                       </a>
                     )
@@ -577,7 +580,7 @@ export const TopNavBar = () => {
                           fontSize="16px"
                           color={'neutral.700'}
                         >
-                          {item.name}
+                          {t(item.name)}
                         </Text>
                         {item.new && (
                           <Box
@@ -603,7 +606,7 @@ export const TopNavBar = () => {
                 variant={'primary'}
                 onClick={handleProjectDashboardButtonPress}
               >
-                Edit project
+                {t('Edit project')}
               </Button>
             ) : null}
 
@@ -613,7 +616,7 @@ export const TopNavBar = () => {
                 size="sm"
                 onClick={handleMyProjectsButtonPress}
               >
-                View my projects
+                {t('View my projects')}
               </Button>
             ) : null}
 
@@ -623,7 +626,7 @@ export const TopNavBar = () => {
                 size="sm"
                 onClick={handleMyProjectButtonPress}
               >
-                View my project
+                {t('View my project')}
               </Button>
             ) : null}
 
@@ -633,7 +636,7 @@ export const TopNavBar = () => {
                 size="sm"
                 onClick={handleProjectButtonPress}
               >
-                Project
+                {t('Project')}
               </Button>
             )}
 
@@ -643,7 +646,7 @@ export const TopNavBar = () => {
                 size="sm"
                 onClick={handleProjectLaunchButtonPress}
               >
-                Launch Your Project
+                {t('Launch Your Project')}
               </Button>
             ) : null}
 
@@ -654,7 +657,7 @@ export const TopNavBar = () => {
                 borderWidth={1}
                 onClick={loginOnOpen}
               >
-                Connect
+                {t('Connect')}
               </Button>
             ) : null}
 
@@ -684,14 +687,15 @@ export const TopNavBar = () => {
         <ModalContent display="flex" alignItems="center" padding="20px 15px">
           <ModalHeader>
             <Text fontSize="16px" fontWeight="normal">
-              You have been logged out
+              {t('You have been logged out')}
             </Text>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Text>
-              Please log back in with your profile, or press continue if you
-              want to stay anonymous.
+              {t(
+                'Please log back in with your profile, or press continue if want to stay anonymous.',
+              )}
             </Text>
             <Box
               display="flex"
@@ -704,7 +708,7 @@ export const TopNavBar = () => {
                 mx={1}
                 onClick={loginOnOpen}
               >
-                Log In
+                {t('Login')}
               </Button>
               <Button
                 variant="primaryNeutral"
@@ -712,7 +716,7 @@ export const TopNavBar = () => {
                 mx={1}
                 onClick={onLoginAlertModalClose}
               >
-                Continue
+                {t('Continue')}
               </Button>
             </Box>
           </ModalBody>

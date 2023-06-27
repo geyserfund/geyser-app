@@ -1,5 +1,6 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ProjectLinkInput } from '../../../components/inputs'
 import { FieldContainer } from '../../../forms/components/FieldContainer'
@@ -17,6 +18,7 @@ export const ProjectLinks = ({
   setLinks,
   linkError = [],
 }: ProjectLinksProps) => {
+  const { t } = useTranslation()
   const handleClose = (val: Maybe<string>) => {
     const newLinks = links.filter((link) => link !== val)
     setLinks(newLinks)
@@ -50,8 +52,10 @@ export const ProjectLinks = ({
 
   return (
     <FieldContainer
-      title="Project links"
-      subtitle="Connect your sites so viewers can see more proof of your work"
+      title={t('Project links')}
+      subtitle={t(
+        'Connect your sites so viewers can see more proof of your work',
+      )}
     >
       <VStack w="full" spacing={3}>
         {links &&
@@ -74,7 +78,7 @@ export const ProjectLinks = ({
           onClick={addNewLink}
           isDisabled={links.length >= 7}
         >
-          Add Project Link
+          {t('Add Project Link')}
         </Button>
       </VStack>
     </FieldContainer>

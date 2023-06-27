@@ -15,6 +15,7 @@ import { GiphyFetch } from '@giphy/js-fetch-api'
 import { IGif } from '@giphy/js-types'
 import { Grid } from '@giphy/react-components'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { VITE_APP_GIPHY_API_KEY } from '../../../../constants'
 import { useDebounce } from '../../../../hooks'
@@ -29,6 +30,7 @@ interface GifModalProps {
 }
 
 export const GifModal = ({ isOpen, onClose, onSelect }: GifModalProps) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
 
   const [gifSearch, setGifSearch] = useState('bitcoin')
@@ -56,7 +58,7 @@ export const GifModal = ({ isOpen, onClose, onSelect }: GifModalProps) => {
               <SearchIcon />
             </InputLeftElement>
             <Input
-              placeholder="Search"
+              placeholder={t('Search')}
               variant="filled"
               focusBorderColor="primary.400"
               bg="neutral.400"

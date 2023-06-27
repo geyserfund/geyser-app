@@ -17,6 +17,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import { FaCheck } from 'react-icons/fa'
 
 import { createGrantContributionRecord } from '../../../api'
@@ -64,6 +65,7 @@ export const GrantsContributeModal = ({
   onSuccess,
   grantProjectName,
 }: Props) => {
+  const { t } = useTranslation()
   const { toast } = useNotification()
   const { user } = useAuthContext()
   const { getSatoshisFromUSDCents } = useBTCConverter()
@@ -138,7 +140,7 @@ export const GrantsContributeModal = ({
         toast({
           status: 'error',
           title: 'failed to record contribution',
-          description: 'please contact us if this happended despite payment ',
+          description: 'please contact us if this happened despite payment',
         })
       }
     }
@@ -199,7 +201,7 @@ export const GrantsContributeModal = ({
 
     if (state.amount > MAX_FUNDING_AMOUNT_USD) {
       setFormError({
-        amount: `amount cannot be greater than $${MAX_FUNDING_AMOUNT_USD} in value`,
+        amount: `amount cannot be greater than \${{MAX_FUNDING_AMOUNT_USD}} in value`,
       })
       return false
     }
@@ -212,12 +214,13 @@ export const GrantsContributeModal = ({
   const contributionForm = () => (
     <VStack w="full" spacing="20px">
       <Text fontWeight={'500'} mb={2} fontSize="16px">
-        Contribute to Geyser Grants to support the Bitcoin ecosystem. Donations
-        are non-refundable and not tax deductible.
+        {t(
+          'Contribute to Geyser Grants to support the Bitcoin ecosystem. Donations are non-refundable and not tax deductible.',
+        )}
       </Text>
       <VStack mb={3} spacing="10px" w="full" alignItems="start">
         <Text fontWeight={'700'} fontSize="14px">
-          Amount
+          {t('Amount')}
         </Text>
         <Box display="flex" alignItems={'flex-start'} gap={3}>
           <AmountButtonComponent
@@ -268,18 +271,19 @@ export const GrantsContributeModal = ({
           </Text>
         )}
         <Caption>
-          Funding over $1000 can get you featured as a sponsor. Reach out to us
-          at hello@geyser.fund to let us know.
+          {t(
+            'Funding over $1000 can get you featured as a sponsor. Reach out to us at hello@geyser.fund to let us know.',
+          )}
         </Caption>
       </VStack>
 
       <VStack w="full" spacing="10px" alignItems="start">
         <Body2 bold fontSize="14px">
-          Leave us a comment (optional)
+          {t('Leave us a comment (optional)')}
         </Body2>
         <Input
           _focus={{ borderColor: 'primary.400' }}
-          placeholder="Love what you guys are doing."
+          placeholder={t('Love what you guys are doing.')}
           name="comment"
           value={state.comment}
           onChange={setTarget}
@@ -287,7 +291,7 @@ export const GrantsContributeModal = ({
       </VStack>
 
       <Button bg="primary.400" onClick={handleFormConfirmClick} w="full">
-        Confirm
+        {t('Confirm')}
       </Button>
     </VStack>
   )
@@ -309,25 +313,31 @@ export const GrantsContributeModal = ({
           </Box>
         </Box>
         <Text fontSize={'14px'}>
-          Your{' '}
-          <span style={{ fontWeight: 'bold' }}>
-            {' '}
-            {getSatoshisFromUSDCents(
-              (state.amount * 100) as USDCents,
-            )} sats{' '}
-          </span>{' '}
-          contribution to Geyser Grants Round 2 was successful!
+          <Trans
+            i18nKey={
+              'Your <1>{{amount}}</1> contribution to Geyser Grants Round 2 was successful!'
+            }
+            values={{
+              amount: `${getSatoshisFromUSDCents(
+                (state.amount * 100) as USDCents,
+              )} sats`,
+            }}
+          >
+            Your <span style={{ fontWeight: 'bold' }}>{'{{amount}}'}</span>{' '}
+            contribution to Geyser Grants Round 2 was successful!
+          </Trans>
         </Text>
         <Text fontSize={'14px'}>
-          Your donation will help accelerate bitcoin adoption by recognizing and
-          pushing forward bitcoin projects.
+          {t(
+            'Your donation will help accelerate bitcoin adoption by recognizing and pushing forward bitcoin projects.',
+          )}
         </Text>
         <Text fontSize={'14px'}>
-          Donations are non-refundable and not tax deductible.
+          {t('Donations are non-refundable and not tax deductible.')}
         </Text>
         {fundingTx.onChain && (
           <Text mt={4} fontSize={'14px'}>
-            Check out the{' '}
+            {t('Check out')}{' '}
             <ChakraLink
               href={`https://mempool.space/address/${fundingTx.address}`}
             >
@@ -335,9 +345,9 @@ export const GrantsContributeModal = ({
                 as="span"
                 fontWeight="bold"
                 borderBottom="1px solid"
-                borderBottomColor="neutral.1000"
+                borderColor="neutral.1000"
               >
-                block explorer
+                {t('the block explorer')}
               </Box>
             </ChakraLink>
           </Text>

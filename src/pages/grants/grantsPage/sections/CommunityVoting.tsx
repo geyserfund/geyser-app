@@ -1,5 +1,6 @@
 import { Box, Button, Image, Text } from '@chakra-ui/react'
 import classNames from 'classnames'
+import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
 
@@ -49,6 +50,7 @@ export const CommunityVoting = ({
   title,
   isClosed,
 }: Props) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
   const classes = useStyles()
   const modalProps = useProjectFundingModal()
@@ -58,11 +60,11 @@ export const CommunityVoting = ({
   }
 
   const sectionTitle =
-    title || 'Let the Sats flow to your favorite projects. 1 Sat = 1 vote.'
+    title || t('Let the Sats flow to your favorite projects. 1 Sat = 1 vote.')
 
   const renderWidgetItem = (funding: GrantApplicantFunding) => {
     return (
-      <WidgetItem subtitle={!isClosed ? 'worth of votes' : 'distributed'}>
+      <WidgetItem subtitle={!isClosed ? t('worth of votes') : t('distributed')}>
         {getShortAmountLabel(
           !isClosed
             ? funding.communityFunding
@@ -83,14 +85,14 @@ export const CommunityVoting = ({
         fontFamily={fonts.livvic}
         variant="primary"
       >
-        Vote
+        {t('Vote')}
       </Button>
     )
   }
 
   return (
     <CardLayout p="20px" spacing="20px" w="full">
-      <H3 fontSize="18px">{sectionTitle}</H3>
+      <H3 fontSize="18px">{t(sectionTitle)}</H3>
       {applicants.map(({ project, funding }) => {
         const projectLink = getPath('project', project.name)
         return (

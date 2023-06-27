@@ -1,6 +1,7 @@
 import { CheckCircleIcon } from '@chakra-ui/icons'
 import { GridItem, HStack, Text, VStack } from '@chakra-ui/react'
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BiPencil } from 'react-icons/bi'
 import { useNavigate } from 'react-router'
 
@@ -11,13 +12,14 @@ import {
   LightningAddressConnectionDetails,
   LndConnectionDetailsPrivate,
   Wallet,
-} from '../../../types/generated/graphql'
+} from '../../../types'
 import { useNotification } from '../../../utils'
 import { ProjectCreationWalletConnectionForm } from '../../projectCreate'
 import { TNodeInput } from '../../projectCreate/types'
 import { ProjectFundingSettingsLightningAddressView } from '../components/ProjectFundingSettingsLightningAddressView'
 
 export const ProjectWallet = () => {
+  const { t } = useTranslation()
   const { toast } = useNotification()
   const navigate = useNavigate()
 
@@ -83,13 +85,13 @@ export const ProjectWallet = () => {
           <HStack width="100%">
             <CheckCircleIcon color="primary.800" fontSize="12px" />
             <Text color="primary.800" fontSize="12px">
-              RUNNING
+              {t('RUNNING')}
             </Text>
           </HStack>
 
           <VStack width="100%" spacing="4px" alignItems="flex-start">
             <Text color="neutral.700" fontSize="10px">
-              Hostname or IP address
+              {t('Hostname or IP address')}
             </Text>
             <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
               {lndConnectionDetails.hostname}
@@ -98,7 +100,7 @@ export const ProjectWallet = () => {
 
           <VStack width="100%" spacing="4px" alignItems="flex-start">
             <Text color="neutral.700" fontSize="10px">
-              Public key
+              {t('Public key')}
             </Text>
             <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
               {lndConnectionDetails.pubkey}
@@ -111,7 +113,7 @@ export const ProjectWallet = () => {
             flexWrap="wrap"
           >
             <Text color="neutral.700" fontSize="10px">
-              Invoice Macaroon
+              {t('Invoice Macaroon')}
             </Text>
             <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
               {lndConnectionDetails.macaroon}
@@ -120,7 +122,7 @@ export const ProjectWallet = () => {
           {lndConnectionDetails.tlsCertificate && (
             <VStack width="100%" spacing="4px" alignItems="flex-start">
               <Text color="neutral.700" fontSize="10px">
-                TLS certificate
+                {t('TLS certificate')}
               </Text>
               <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
                 {lndConnectionDetails.tlsCertificate}
@@ -129,7 +131,7 @@ export const ProjectWallet = () => {
           )}
           <VStack width="100%" spacing="4px" alignItems="flex-start">
             <Text color="neutral.700" fontSize="10px">
-              gRPC port
+              {t('gRPC port')}
             </Text>
             <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
               {lndConnectionDetails.grpcPort}
@@ -137,9 +139,9 @@ export const ProjectWallet = () => {
           </VStack>
         </VStack>
         <Text color="neutral.700" fontSize="10px">
-          If you want to change how you receive your funds reach out to
-          hello@geyser.fund. We are not currently enabling editing of this
-          information for security reasons.
+          {t(
+            'If you want to change how you receive your funds reach out to hello@geyser.fund. We are not currently enabling editing of this information for security reasons.',
+          )}
         </Text>
       </>
     )
@@ -185,7 +187,7 @@ export const ProjectWallet = () => {
               </HStack>
 
               <VStack width="100%" alignItems="flex-start">
-                <Text color="neutral.900">Hostname or IP address</Text>
+                <Text color="neutral.900">{t('Hostname or IP address')}</Text>
                 <Text>{nodeData?.hostname}</Text>
               </VStack>
             </VStack>

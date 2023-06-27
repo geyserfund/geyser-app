@@ -1,4 +1,5 @@
 import { Box, Text, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { H2, H3 } from '../../../components/typography'
 import { Card, ImageWithReload } from '../../../components/ui'
@@ -18,6 +19,7 @@ interface ProjectPreviewComponentProps {
 export const ProjectPreviewComponent = ({
   data,
 }: ProjectPreviewComponentProps) => {
+  const { t } = useTranslation()
   return (
     <VStack
       zIndex={90}
@@ -62,12 +64,12 @@ export const ProjectPreviewComponent = ({
         </Box>
         <VStack padding="10px" width="100%" alignItems="flex-start">
           <H2 width="100%" isTruncated>
-            {data.title || 'Project Title'}
+            {data.title || t('Project Title')}
           </H2>
           <H3 wordBreak="break-all">
-            {data.shortDescription || 'Project Objective'}
+            {data.shortDescription || t('Project Objective')}
           </H3>
-          <MarkdownField preview content={data.description || 'Story'} />
+          <MarkdownField preview content={data.description || t('Story')} />
         </VStack>
       </Card>
     </VStack>

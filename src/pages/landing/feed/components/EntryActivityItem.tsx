@@ -1,4 +1,5 @@
 import { HStack, Link, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { Body2 } from '../../../../components/typography'
 import { LinkableAvatar } from '../../../../components/ui'
@@ -13,6 +14,7 @@ export const EntryActivityItem = ({
   entry: EntryForLandingPageFragment
   dateTime?: string
 }) => {
+  const { t } = useTranslation()
   const { creator } = entry
   return (
     <VStack w="full" alignItems="start">
@@ -24,7 +26,7 @@ export const EntryActivityItem = ({
           imageSize={'24px'}
           textColor="neutral.600"
         />
-        <Body2>published a new entry for</Body2>
+        <Body2>{t('published a new entry for')}</Body2>
         <Body2
           as={Link}
           to={getPath('project', entry.project?.name)}

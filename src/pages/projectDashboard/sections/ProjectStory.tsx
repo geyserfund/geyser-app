@@ -1,4 +1,5 @@
 import { Button, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { useProjectContext } from '../../../context'
 import { useUpdateProjectMutation } from '../../../types'
@@ -11,6 +12,7 @@ import {
 import { useProjectStoryForm } from '../../projectCreate/hooks/useProjectStoryForm'
 
 export const ProjectStory = () => {
+  const { t } = useTranslation()
   const { toast } = useNotification()
 
   const { project, updateProject, loading } = useProjectContext()
@@ -80,7 +82,7 @@ export const ProjectStory = () => {
             w="full"
             type="submit"
           >
-            Save
+            {t('Save')}
           </Button>
         </VStack>
       </VStack>

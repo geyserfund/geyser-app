@@ -1,4 +1,5 @@
 import { VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router'
 
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
@@ -17,6 +18,7 @@ import {
 import { useProjectDetailsForm } from './hooks/useProjectDetailsForm'
 
 export const ProjectDetails = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const params = useParams<{ projectId: string }>()
 
@@ -99,8 +101,8 @@ export const ProjectDetails = () => {
         onBackClick={onBackClick}
         title={
           <TitleWithProgressBar
-            title="Links & tags"
-            subtitle="Create a project"
+            title={t('Links & tags')}
+            subtitle={t('Create a project')}
             index={2}
             length={4}
           />

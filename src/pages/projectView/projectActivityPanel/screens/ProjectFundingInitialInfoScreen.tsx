@@ -6,6 +6,7 @@ import {
   SkeletonText,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { SatoshiIconTilted } from '../../../../components/icons'
 import { ActivityBrief } from '../../../../components/molecules'
@@ -20,7 +21,7 @@ import {
   FunderWithUserFragment,
   FundingTxFragment,
   ProjectFragment,
-} from '../../../../types/generated/graphql'
+} from '../../../../types'
 import {
   aggregateTransactions,
   FundingTxWithCount,
@@ -29,8 +30,7 @@ import {
   useMobileMode,
   useNotification,
 } from '../../../../utils'
-import { ProjectContributionList } from '../components/ProjectContributionList'
-import { ProjectLeaderboardList } from '../components/ProjectLeaderboardList'
+import { ProjectContributionList, ProjectLeaderboardList } from '../components'
 
 type Props = {
   project: ProjectFragment
@@ -39,6 +39,7 @@ type Props = {
 const itemLimit = 50
 
 export const ProjectFundingInitialInfoScreen = ({ project }: Props) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
   const { toast } = useNotification()
 
@@ -143,7 +144,7 @@ export const ProjectFundingInitialInfoScreen = ({ project }: Props) => {
           fontSize="16px"
           onClick={() => setTab('activity')}
         >
-          Contributions{' '}
+          {t('Contributions')}{' '}
           <Text ml={1} bg="neutral.100" rounded="lg" px={1} py={1}>
             {project.fundingTxsCount}
           </Text>
@@ -170,7 +171,7 @@ export const ProjectFundingInitialInfoScreen = ({ project }: Props) => {
           fontSize="16px"
           onClick={() => setTab('leaderboard')}
         >
-          Leaderboard{' '}
+          {t('Leaderboard')}{' '}
           <Text ml={1} bg="neutral.100" rounded="lg" px={1} py={1}>
             {project.fundersCount}
           </Text>
@@ -213,7 +214,7 @@ export const ProjectFundingInitialInfoScreen = ({ project }: Props) => {
           onClick={() => setMobileView(MobileViews.funding)}
           isDisabled={!isActive(project.status)}
         >
-          Contribute
+          {t('Contribute')}
         </Button>
       ) : null}
 

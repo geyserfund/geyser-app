@@ -1,4 +1,5 @@
 import { Button, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { useProjectContext } from '../../../context'
 import { useNotification } from '../../../utils'
@@ -12,6 +13,7 @@ import {
 import { useProjectDetailsForm } from '../../projectCreate/hooks/useProjectDetailsForm'
 
 export const ProjectDetails = () => {
+  const { t } = useTranslation()
   const { toast } = useNotification()
 
   const { project: contextProject } = useProjectContext()
@@ -49,7 +51,7 @@ export const ProjectDetails = () => {
       await saveTags()
       toast({
         status: 'success',
-        title: 'succesfully updated project',
+        title: 'Project updated successfully!',
       })
     } catch (error) {
       toast({
@@ -88,7 +90,7 @@ export const ProjectDetails = () => {
             w="full"
             type="submit"
           >
-            Save
+            {t('Save')}
           </Button>
         </VStack>
       </VStack>

@@ -1,5 +1,6 @@
 import { Box, BoxProps, Image, Link, Text } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Maybe, Sponsor } from '../../../types'
 
@@ -14,6 +15,7 @@ export const SponsorList = ({
   children,
   ...props
 }: PropsWithChildren<Props & BoxProps>) => {
+  const { t } = useTranslation()
   return sponsors.length ? (
     <Box
       display="flex"
@@ -26,7 +28,7 @@ export const SponsorList = ({
       {children || (
         <Box {...titleProps}>
           <Text color="neutral.600" fontSize="11px" fontWeight="700">
-            SPONSORS
+            {t('SPONSORS')}
           </Text>
         </Box>
       )}

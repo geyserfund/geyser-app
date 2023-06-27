@@ -1,10 +1,11 @@
 import { Button, ButtonProps } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BsTwitter } from 'react-icons/bs'
 
 import { AUTH_SERVICE_ENDPOINT } from '../../constants'
 import { useAuthContext } from '../../context'
-import { useMeLazyQuery } from '../../types/generated/graphql'
+import { useMeLazyQuery } from '../../types'
 import { hasTwitterAccount, useNotification } from '../../utils'
 
 interface ConnectWithTwitterProps extends ButtonProps {
@@ -15,6 +16,7 @@ export const ConnectWithTwitter = ({
   onClose,
   ...rest
 }: ConnectWithTwitterProps) => {
+  const { t } = useTranslation()
   const { login } = useAuthContext()
   const { toast } = useNotification()
 
@@ -98,8 +100,8 @@ export const ConnectWithTwitter = ({
 
   const handleToastError = (reason?: string) => {
     toast({
-      title: 'Something went wrong',
-      description: `The authentication request failed. ${reason}.`,
+      title: 'Something went wrong.',
+      description: `${t('The authentication request failed.')} ${reason}.`,
       status: 'error',
     })
   }

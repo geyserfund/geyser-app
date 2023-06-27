@@ -1,5 +1,6 @@
 import { Box, Text, Textarea, TextareaProps } from '@chakra-ui/react'
 import { forwardRef, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 
 import { AppTheme } from '../../context'
@@ -33,6 +34,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, ITextBoxProps>(
     { children, error, minHeight, maxHeight, supportMarkup, value, ...rest },
     forwardedRef,
   ) => {
+    const { t } = useTranslation()
     const classes = useStyles()
 
     const [dynamicHeight, setDynamicHeight] = useListenerState(minHeight)
@@ -86,7 +88,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, ITextBoxProps>(
             error
           ) : (
             <Text color="secondary.red" fontSize="12px" width="100%">
-              {error}
+              {t(`${error}`)}
             </Text>
           )
         ) : null}

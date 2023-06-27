@@ -1,4 +1,5 @@
 import { IconButton, Tooltip, useDisclosure } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { QrIcon } from '../../../../components/icons'
 import { ProjectFragment } from '../../../../types/generated/graphql'
@@ -9,11 +10,12 @@ interface ProjectFundingQRProps {
 }
 
 export const ProjectFundingQR = ({ project }: ProjectFundingQRProps) => {
+  const { t } = useTranslation()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <>
-      <Tooltip label="View Project QR Code" placement="top">
+      <Tooltip label={t('View Project QR Code')} placement="top">
         <IconButton
           size="sm"
           variant="secondary"

@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react'
 import * as htmlToImage from 'html-to-image'
 import { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonComponent } from '../../../../components/ui'
 import { API_SERVICE_ENDPOINT } from '../../../../constants'
@@ -34,6 +35,7 @@ export const ProjectFundingQRModal = ({
   projectId,
   title,
 }: IQRModal) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
   const [imageDownload, setImageDownload] = useState<string | undefined>()
 
@@ -72,14 +74,14 @@ export const ProjectFundingQRModal = ({
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          <Text fontSize="3xl">Share project on social media</Text>
+          <Text fontSize="3xl">{t('Share project on social media')}</Text>
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Text mb={5} fontWeight="medium">
-            Lightning addresses and QR codes make it possible for anyone to fund
-            projects from anywhere. Share one of the image and let the sats
-            flow!
+            {t(
+              'Lightning addresses and QR codes make it possible for anyone to fund projects from anywhere. Share one of the image and let the sats flow!',
+            )}
           </Text>
           <ProjectFundingBanner
             banner={imageDownload}
@@ -97,7 +99,7 @@ export const ProjectFundingQRModal = ({
                 w="100%"
                 primary
               >
-                <DownloadIcon mr={2} /> Download
+                <DownloadIcon mr={2} /> {t('Download')}
               </ButtonComponent>
             ) : (
               <Link
@@ -109,7 +111,7 @@ export const ProjectFundingQRModal = ({
                 isExternal
               >
                 <ButtonComponent w="100%" primary>
-                  <DownloadIcon mr={2} /> Download
+                  <DownloadIcon mr={2} /> {t('Download')}
                 </ButtonComponent>
               </Link>
             )}

@@ -9,8 +9,7 @@ import {
   useAuthContext,
 } from '../../context'
 import { useMobileMode } from '../../utils'
-import { GradientBanner } from './components'
-import { TabBar } from './components/TabBar'
+import { GradientBanner, TabBar } from './components'
 import { Filters } from './filters'
 import { ProjectLeaderboard } from './projectLeaderboard'
 

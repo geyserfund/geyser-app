@@ -3,12 +3,8 @@ import { HTMLChakraProps } from '@chakra-ui/system'
 
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers'
 import { fonts } from '../../../styles'
-import {
-  FundingTxForUserContributionFragment,
-  Project,
-} from '../../../types/generated/graphql'
-import { getDaysAgo } from '../../../utils'
-import { commaFormatted } from '../../../utils/formatData/helperFunctions'
+import { FundingTxForUserContributionFragment, Project } from '../../../types'
+import { commaFormatted, GetDaysAgo } from '../../../utils'
 import { LightningIcon, SatoshiIconTilted } from '../../icons'
 import { AnonymousAvatar, LinkableAvatar, ProjectAvatarLink } from '../../ui'
 import { ExternalAccountLinkIcon } from './ExternalAccountLinkIcon'
@@ -30,7 +26,7 @@ export const ProjectFundingContributionsFeedItem = ({
   const { funder } = fundingTx
 
   const isFunderAnonymous = Boolean(funder?.user) === false
-  const timeAgo = getDaysAgo(fundingTx?.paidAt || '')
+  const timeAgo = GetDaysAgo(fundingTx?.paidAt || '')
   const wasMadeOnChain = fundingTx.onChain
 
   const avatarMetadata = getAvatarMetadata({
