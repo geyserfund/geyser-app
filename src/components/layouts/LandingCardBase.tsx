@@ -59,7 +59,7 @@ export const LandingCardBase = ({
       {...rest}
     >
       <Box
-        width={getResponsiveValue({ base: 'full' })}
+        width={getResponsiveValue({ base: '125px', xl: 'full' })}
         height={getResponsiveValue({ base: '125px', xl: '200px' })}
       >
         <ImageWithReload
@@ -82,7 +82,7 @@ export const LandingCardBase = ({
         <H3 isTruncated width="100%">
           {title}
         </H3>
-        <Box width="100%" overflow="hidden">
+        <Box width="100%">
           <AvatarElement borderRadius="50%" user={user} noLink />
         </Box>
         <FundingStatWithFollow

@@ -28,10 +28,11 @@ export const ProjectFundersModal = ({
   return (
     <Modal title="Supporters" {...props}>
       <SimpleGrid
-        overflowY="scroll"
+        overflowY="auto"
         overflowX="hidden"
         maxHeight="50vh"
         width="100%"
+        pr={3}
         columns={2}
         spacing={2}
       >

@@ -34,7 +34,6 @@ import { ProjectContributionList, ProjectLeaderboardList } from '../components'
 
 type Props = {
   project: ProjectFragment
-  btcRate: number
 }
 
 const itemLimit = 50

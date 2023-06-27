@@ -1,4 +1,4 @@
-import { Stack, StackProps, styled } from '@chakra-ui/react'
+import { Stack, StackProps } from '@chakra-ui/react'
 import { forwardRef } from 'react'
 import { Link, LinkProps } from 'react-router-dom'
 
@@ -13,23 +13,18 @@ export interface CardLayoutProps
   click?: boolean
 }
 
-const CardComponent = styled(Stack, {
-  baseStyle: () => ({
-    spacing: 3,
-    tabIndex: -1,
-    overflow: 'hidden',
-    backgroundColor: 'neutral.0',
-    border: '2px solid',
-    transition: 'border-color 0.5s',
-    boxShadow: 'none',
-  }),
-})
-
 export const CardLayout = forwardRef<HTMLDivElement, CardLayoutProps>(
   ({ mobileDense, children, noborder, click, hover, ...rest }, ref) => {
     const isMobile = useMobileMode()
     const props = {
       ref,
+      spacing: 3,
+      tabIndex: -1,
+      overflow: 'hidden',
+      backgroundColor: 'neutral.0',
+      border: '2px solid',
+      transition: 'border-color 0.5s',
+      boxShadow: 'none',
       as: rest.to ? Link : undefined,
       borderColor: noborder ? 'transparent' : 'neutral.200',
       _hover: hover ? { cursor: 'pointer', borderColor: 'neutral.400' } : {},
@@ -40,16 +35,16 @@ export const CardLayout = forwardRef<HTMLDivElement, CardLayoutProps>(
 
     if (mobileDense && isMobile) {
       return (
-        <CardComponent p={4} width="100%" border="none" {...props}>
+        <Stack p={4} width="100%" {...props} border="none">
           {children}
-        </CardComponent>
+        </Stack>
       )
     }
 
     return (
-      <CardComponent p={5} borderRadius="8px" {...props}>
+      <Stack p={5} borderRadius="8px" {...props}>
         {children}
-      </CardComponent>
+      </Stack>
     )
   },
 )
