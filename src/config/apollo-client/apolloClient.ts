@@ -2,8 +2,10 @@ import {
   ApolloClient,
   ApolloClientOptions,
   createHttpLink,
+  FetchResult,
   from,
   NormalizedCacheObject,
+  Observable,
   split,
 } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
@@ -26,6 +28,10 @@ const wsLink = new GraphQLWsLink(
     url: `${prefix}://${API_SERVICE_ENDPOINT.split('//')[1]}/graphql`,
   }),
 )
+function timeout(ms: number) {
+  // eslint-disable-next-line no-promise-executor-return
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
 
 const errorLink = onError(({ graphQLErrors, forward, operation }) => {
   if (graphQLErrors) {
@@ -35,8 +41,33 @@ const errorLink = onError(({ graphQLErrors, forward, operation }) => {
           case 'UNAUTHENTICATED':
             window.location.href = `${window.location.pathname}?loggedOut=true`
             break
-          case 'EXPIRED_REFRESH_TOKEN':
-            return forward(operation)
+          case 'EXPIRED_REFRESH_TOKEN': {
+            console.log('check if it is going here')
+            const observable = new Observable<FetchResult<Record<string, any>>>(
+              (observer) => {
+                // used an annonymous function for using an async function
+                ;(async () => {
+                  try {
+                    await timeout(500)
+
+                    // Retry the failed request
+                    const subscriber = {
+                      next: observer.next.bind(observer),
+                      error: observer.error.bind(observer),
+                      complete: observer.complete.bind(observer),
+                    }
+
+                    forward(operation).subscribe(subscriber)
+                  } catch (err) {
+                    observer.error(err)
+                  }
+                })()
+              },
+            )
+
+            return observable
+          }
+
           default:
             break
         }
