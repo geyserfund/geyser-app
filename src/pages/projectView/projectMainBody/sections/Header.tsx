@@ -70,8 +70,8 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           borderRadius="8px"
           objectFit="cover"
           src={project.thumbnailImage || undefined}
-          width="80px"
-          height="80px"
+          width={{ base: '50px', lg: '80px' }}
+          height={{ base: '50px', lg: '80px' }}
           maxHeight="80px"
           boxShadow="lg"
         />
@@ -80,12 +80,10 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           alignItems="start"
           maxWidth="calc(100% - 76px - 24px)"
         >
-          <Text variant={{ base: 'h2', xl: 'h1' }} noOfLines={2} width="100%">
+          <Text variant={{ base: 'h2', xl: 'h1' }} width="100%">
             {project.title}
           </Text>
-          {isMobile ? (
-            statusContent
-          ) : (
+          {!isMobile && (
             <HStack width="100%" flexWrap="wrap">
               <HStack flexGrow={1} flexWrap="wrap">
                 <FollowButton projectId={project.id} />
@@ -99,13 +97,14 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       </HStack>
 
       {isMobile ? (
-        <HStack flexGrow={1}>
-          <Box flexGrow={1}>
+        <>
+          {statusContent}
+          <HStack flexGrow={1}>
             <FollowButton projectId={project.id} />
-          </Box>
-          <LightningAddress name={`${project.name}@geyser.fund`} />
-          <ProjectFundingQR project={project} />
-        </HStack>
+            <LightningAddress name={`${project.name}@geyser.fund`} />
+            <ProjectFundingQR project={project} />
+          </HStack>
+        </>
       ) : null}
 
       <Text variant={{ base: 'h3', xl: 'h2' }}>{project.shortDescription}</Text>
