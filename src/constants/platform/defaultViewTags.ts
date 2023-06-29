@@ -41,7 +41,6 @@ const productionTagsList = [
   { label: 'orange-pilling', id: 10 },
   { label: 'economics', id: 77 },
   { label: 'games', id: 19 },
-  { label: 'shop', id: 52 },
   { label: 'podcasts', id: 7 },
   { label: 'translation', id: 37 },
   { label: 'humanitarian', id: 15 },
