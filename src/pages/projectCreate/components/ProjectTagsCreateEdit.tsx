@@ -189,7 +189,7 @@ export const ProjectTagsCreateEdit = ({
           onChange={handleChange}
           isLoading={loading}
           name="tags"
-          placeholder="Add tags"
+          placeholder={t('Add tags')}
           value={[]}
           options={tagOptions}
           getOptionLabel={(option: TagsGetResult) => option.label}

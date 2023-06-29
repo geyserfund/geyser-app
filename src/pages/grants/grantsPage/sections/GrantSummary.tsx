@@ -51,13 +51,13 @@ export const GrantSummary = ({ grant }: { grant: Grant }) => {
           justifyContent="space-between"
         >
           <Box pt={2}>
-            <H1>{grant.title}</H1>
+            <H1>{t(grant.title)}</H1>
           </Box>
         </Box>
         <Box pt={4}>
-          <H3 fontSize="18px">{grant.shortDescription}</H3>
+          <H3 fontSize="18px">{t(grant.shortDescription)}</H3>
           <Body1 fontSize="16px" pt={4}>
-            {grant.description}
+            {t(grant.description || '')}
           </Body1>
           <ContributionsWidget
             sponsors={grant.sponsors}

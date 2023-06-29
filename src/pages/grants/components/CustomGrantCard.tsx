@@ -40,7 +40,12 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
 
   const renderApplicants = (value?: number) =>
     value || grant.applicants ? (
-      <ListText mx={4} subtitle="APPLICANTS" isSatLogo={false}>
+      <ListText
+        mx={4}
+        subtitle={t('applicants')}
+        subtitleProps={{ textTransform: 'uppercase' }}
+        isSatLogo={false}
+      >
         {value ||
           grant.applicants.filter(
             (applicant) =>
@@ -90,7 +95,7 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
           <Box py={2}>
             <Box display="flex" alignItems="start">
               <Text mr={4} fontWeight="bold" fontSize="18px">
-                {grant.title}
+                {t(grant.title)}
               </Text>
               <Text
                 bg={isActive ? 'primary.100' : 'neutral.200'}
