@@ -143,7 +143,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
       </FieldContainer>
 
       <FieldContainer
-        title={'Objective'}
+        title={t('Objective')}
         subtitle={t(
           "Add 'one liner' a simple descriptions of what your project is about",
         )}

@@ -1,4 +1,5 @@
 import { HStack, StackProps, Text } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { AiOutlineUpload } from 'react-icons/ai'
 
 import Loader from './Loader'
@@ -9,6 +10,7 @@ interface UploadBoxProps extends StackProps {
 }
 
 export const UploadBox = ({ loading, title, ...rest }: UploadBoxProps) => {
+  const { t } = useTranslation()
   return (
     <HStack
       borderRadius="8px"
@@ -25,7 +27,7 @@ export const UploadBox = ({ loading, title, ...rest }: UploadBoxProps) => {
       ) : (
         <>
           <AiOutlineUpload />
-          <Text>{title || 'Select an image'}</Text>
+          <Text>{title || t('Select an image')}</Text>
         </>
       )}
     </HStack>

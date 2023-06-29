@@ -535,5 +535,15 @@
   "The Geyser team": "The Geyser team",
   "We are a team of mission-driven bitcoiners that want to empower the online creator ecosystem through bitcoin.": "We are a team of mission-driven bitcoiners that want to empower the online creator ecosystem through bitcoin.",
   "Subscribe to our newsletter": "Subscribe to our newsletter",
-  "Receive updates about exciting new projects, product updates and Geyser news.": "Receive updates about exciting new projects, product updates and Geyser news."
+  "Receive updates about exciting new projects, product updates and Geyser news.": "Receive updates about exciting new projects, product updates and Geyser news.",
+  "Grant": "grant",
+  "Please log back in with your profile, or press continue if want to stay anonymous.": "Please log back in with your profile, or press continue if want to stay anonymous.",
+  "Select an Image": "Select an image",
+  "Add tags": "Add tags",
+  "Select region": "Select region",
+  "You must write a project story.": "You must write a project story.",
+  "Project story should be shorter than": "Project story should be shorter than",
+  "Project story should be shorter than 4000 characters.":"Project story should be shorter than 4000 characters.",
+  "Geyser is sponsoring 10M Sats to support bitcoin films, but it’s the community who decides who wins the grant. Vote with your Sats! 1 Sat = 1 vote. Grant funds will be distributed proportionally to the number of votes received while the grant is active.":"Geyser is sponsoring 10M Sats to support bitcoin films, but it’s the community who decides who wins the grant. Vote with your Sats! 1 Sat = 1 vote. Grant funds will be distributed proportionally to the number of votes received while the grant is active.",
+  "This grant support video-game developers that have integrated or want to integrate bitcoin and lightning in their platforms. The aim is to celebrate and showcase the power of lightning micropayments to the use case of gaming. Yes, Bitcoin makes gaming fun and rewarding! This is a community-voting grant where the community grant fund distribution by voting. Vote with your Sats! 1 Sat = 1 vote. Grant funds will be distributed proportionally to the number of votes received while the grant is active.":"This grant support video-game developers that have integrated or want to integrate bitcoin and lightning in their platforms. The aim is to celebrate and showcase the power of lightning micropayments to the use case of gaming. Yes, Bitcoin makes gaming fun and rewarding! This is a community-voting grant where the community grant fund distribution by voting. Vote with your Sats! 1 Sat = 1 vote. Grant funds will be distributed proportionally to the number of votes received while the grant is active."
 }

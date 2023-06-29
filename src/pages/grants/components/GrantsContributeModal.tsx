@@ -381,7 +381,7 @@ export const GrantsContributeModal = ({
           onOpen()
         }}
       >
-        Contribute
+        {t('Contribute')}
       </Button>
       {isOpen && (
         <Modal isCentered isOpen={isOpen} onClose={handleClose} size="sm">
