@@ -42,7 +42,11 @@ const errorLink = onError(({ graphQLErrors, forward, operation }) => {
             window.location.href = `${window.location.pathname}?loggedOut=true`
             break
           case 'EXPIRED_REFRESH_TOKEN': {
-            console.log('check if it is going here')
+            window.location.href = `${window.location.pathname}?loggedOut=true`
+            break
+          }
+
+          case 'STALE_REFRESH_TOKEN': {
             const observable = new Observable<FetchResult<Record<string, any>>>(
               (observer) => {
                 // used an annonymous function for using an async function
