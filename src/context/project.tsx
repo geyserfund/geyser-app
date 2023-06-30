@@ -19,7 +19,6 @@ import {
   ProjectFragment,
   ProjectMilestone,
   ProjectRewardForCreateUpdateFragment,
-  useMeProjectFollowsLazyQuery,
 } from '../types'
 import { useAuthContext } from './auth'
 import { useNavContext } from './nav'
@@ -96,20 +95,6 @@ export const ProjectProvider = ({
   const rewardsModal = useModal<{
     reward?: ProjectRewardForCreateUpdateFragment
   }>()
-  // TEMP REMOVE
-  const [queryFollowedProjects] = useMeProjectFollowsLazyQuery({
-    fetchPolicy: 'network-only',
-  })
-
-  useEffect(() => {
-    try {
-      queryFollowedProjects()
-    } catch (error) {
-      console.log('checking error insid eproject.tsx', error)
-    }
-  }, [])
-
-  // TEMP REMOVE
 
   const {
     error,
