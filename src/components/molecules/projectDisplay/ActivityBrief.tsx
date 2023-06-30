@@ -9,16 +9,16 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
-import { AiOutlineEllipsis } from 'react-icons/ai'
 import { useTranslation } from 'react-i18next'
+import { AiOutlineEllipsis } from 'react-icons/ai'
 
 import { ExternalAccountType } from '../../../pages/auth'
-import { Countdown } from "../../../pages/projectView/projectActivityPanel/components"
+import { Countdown } from '../../../pages/projectView/projectActivityPanel/components'
 import {
   FunderWithUserFragment,
   ProjectFragment,
   ProjectMilestone,
-} from "../../../types"
+} from '../../../types'
 import { isActive } from '../../../utils'
 import { getProjectBalance } from '../../../utils/helpers'
 import { SatoshiAmount } from '../../ui'
@@ -203,9 +203,11 @@ export const ActivityBrief = ({
         size="lg"
         variant="transparent"
       >
-        <Text fontWeight={500}>{t('Supporters')}</Text>
+        {loading || latestFunders.length ? (
+          <Text fontWeight={500}>{t('Supporters')}</Text>
+        ) : null}
         <HStack ml={1} spacing={0} alignItems="start">
-          {latestFunders.length > 0
+          {!loading
             ? latestFunders.map((funder) => {
                 return (
                   <UserAvatar

@@ -45,6 +45,8 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
   const { user, isAnonymous } = useContext(AuthContext)
   const { getUSDCentsAmount } = useBTCConverter()
 
+  const [needsShipping, setNeedsShipping] = useState(false)
+
   const initialState: IFundForm = useMemo(
     () => ({
       donationAmount: 0,
@@ -89,6 +91,7 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
       rewardsCost: 0,
       totalAmount: current.donationAmount,
     }))
+    setNeedsShipping(false)
   }, [])
 
   const updateReward = useCallback(
@@ -113,6 +116,10 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
             )
 
             if (reward && reward.id) {
+              if (reward.hasShipping) {
+                setNeedsShipping((current) => current || reward.hasShipping)
+              }
+
               const rewardMultiplier = newRewardsCountInfo[rewardID.toString()]
               if (!rewardMultiplier) {
                 return 0
@@ -142,7 +149,17 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
 
   const resetForm = useCallback(() => {
     _setState(initialState)
+    setNeedsShipping(false)
   }, [initialState])
+
+  const hasSelectedRewards = useMemo(
+    () =>
+      Boolean(
+        state.rewardsByIDAndCount &&
+          Object.keys(state.rewardsByIDAndCount).length > 0,
+      ),
+    [state.rewardsByIDAndCount],
+  )
 
   return {
     state,
@@ -151,5 +168,7 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
     updateReward,
     resetForm,
     resetRewards,
+    needsShipping,
+    hasSelectedRewards,
   }
 }

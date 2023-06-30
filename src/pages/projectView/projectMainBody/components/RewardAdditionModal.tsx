@@ -1,5 +1,6 @@
 import {
-  HStack,
+  Button,
+  Checkbox,
   Input,
   InputGroup,
   InputLeftAddon,
@@ -7,31 +8,28 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BiDollar } from 'react-icons/bi'
 
 import { SatoshiIconTilted } from '../../../../components/icons'
 import { Modal } from '../../../../components/layouts/Modal'
 import { FileUpload } from '../../../../components/molecules'
 import { Body2 } from '../../../../components/typography'
-import {
-  ButtonComponent,
-  ImageWithReload,
-  TextArea,
-  TextInputBox,
-  UploadBox,
-} from '../../../../components/ui'
+import { TextArea, TextInputBox, UploadBox } from '../../../../components/ui'
 import { ProjectRewardValidations } from '../../../../constants/validations'
 import { defaultProjectReward } from '../../../../defaults'
+import { FieldContainer } from '../../../../forms/components/FieldContainer'
 import {
   CreateProjectRewardInput,
   ProjectFragment,
   ProjectRewardForCreateUpdateFragment,
   RewardCurrency,
   UpdateProjectRewardInput,
-  useCreateProjectRewardMutation,
-  useUpdateProjectRewardMutation,
+  useProjectRewardCreateMutation,
+  useProjectRewardUpdateMutation,
 } from '../../../../types/generated/graphql'
 import { commaFormatted, toInt, useNotification } from '../../../../utils'
+import { CreatorEmailButton } from '../../projectActivityPanel/components/CreatorEmailButton'
 
 type Props = {
   isOpen: boolean
@@ -55,7 +53,10 @@ export const RewardAdditionModal = ({
   project,
   props,
 }: Props) => {
+  const { t } = useTranslation()
   const { toast } = useNotification()
+
+  const ownerEmail = project.owners[0]?.user.email || ''
 
   const [formCostDollarValue, setFormCostDollarValue] = useState(
     defaultProjectReward.cost / 100,
@@ -67,9 +68,9 @@ export const RewardAdditionModal = ({
   const [formError, setFormError] = useState<any>({})
 
   const [createReward, { loading: createRewardLoading }] =
-    useCreateProjectRewardMutation({
+    useProjectRewardCreateMutation({
       onCompleted(data) {
-        onSubmit(data.createProjectReward, false)
+        onSubmit(data.projectRewardCreate, false)
         onClose()
       },
       onError(error) {
@@ -82,14 +83,14 @@ export const RewardAdditionModal = ({
     })
 
   const [updateReward, { loading: updateRewardLoading }] =
-    useUpdateProjectRewardMutation({
-      onCompleted({ updateProjectReward }) {
+    useProjectRewardUpdateMutation({
+      onCompleted(data) {
         toast({
           title: 'Successfully updated!',
-          description: `Reward ${updateProjectReward.name} was successfully updated`,
+          description: `Reward ${data.projectRewardUpdate.name} was successfully updated`,
           status: 'success',
         })
-        onSubmit(updateProjectReward, true)
+        onSubmit(data.projectRewardUpdate, true)
         onClose()
       },
       onError(error) {
@@ -110,6 +111,7 @@ export const RewardAdditionModal = ({
       image: reward.image || undefined,
       name: reward.name,
       stock: reward.stock || undefined,
+      hasShipping: reward.hasShipping,
     }
   }
 
@@ -122,6 +124,7 @@ export const RewardAdditionModal = ({
       image: reward.image || undefined,
       name: reward.name,
       stock: reward.stock || undefined,
+      hasShipping: reward.hasShipping,
     }
   }
 
@@ -186,6 +189,14 @@ export const RewardAdditionModal = ({
     setReward((current) => ({ ...current, image: url }))
   }
 
+  const handleDeleteThumbnail = () => {
+    setReward((current) => ({ ...current, image: null }))
+  }
+
+  const handleShipping = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setReward((current) => ({ ...current, hasShipping: event.target.checked }))
+  }
+
   const validateReward = () => {
     const errors: any = {}
     let isValid = true
@@ -234,6 +245,9 @@ export const RewardAdditionModal = ({
 
   return (
     <Modal
+      size="xl"
+      isOpen={isOpen}
+      onClose={onClose}
       title={
         <>
           <Text fontSize="18px" fontWeight={600}>
@@ -245,21 +259,9 @@ export const RewardAdditionModal = ({
           </Body2>
         </>
       }
-      isOpen={isOpen}
-      onClose={onClose}
     >
-      <VStack
-        width="100%"
-        paddingBottom="20px"
-        marginBottom="20px"
-        maxHeight="600px"
-        overflowY="auto"
-        alignItems="flex-start"
-        spacing="10px"
-        paddingX="2px"
-      >
-        <VStack width="100%" alignItems="flex-start">
-          <Text>Name</Text>
+      <VStack width="100%" overflowY="auto" spacing={4}>
+        <FieldContainer title="Name">
           <TextInputBox
             placeholder={'T - Shirt ...'}
             value={reward.name}
@@ -267,10 +269,9 @@ export const RewardAdditionModal = ({
             onChange={handleTextChange}
             error={formError.name}
           />
-        </VStack>
+        </FieldContainer>
 
-        <VStack width="100%" alignItems="flex-start">
-          <Text>Description</Text>
+        <FieldContainer title="Description">
           <TextArea
             placeholder="..."
             value={reward.description || ''}
@@ -278,30 +279,22 @@ export const RewardAdditionModal = ({
             onChange={handleTextChange}
             error={formError.description}
           />
-        </VStack>
+        </FieldContainer>
 
-        <VStack width="100%" alignItems="flex-start">
+        <FieldContainer title="Image">
           <FileUpload
+            showcase
+            containerProps={{ w: '100%' }}
+            src={reward.image}
             onUploadComplete={handleUpload}
-            childrenOnLoading={<UploadBox loading />}
+            onDeleteClick={handleDeleteThumbnail}
+            childrenOnLoading={<UploadBox loading h={10} />}
           >
-            {reward.image ? (
-              <HStack justifyContent="center">
-                <ImageWithReload
-                  borderRadius="4px"
-                  src={reward.image}
-                  maxHeight="200px"
-                />
-              </HStack>
-            ) : (
-              <UploadBox title="Add image" />
-            )}
+            <UploadBox h={10} title="Select an Image" />
           </FileUpload>
-        </VStack>
+        </FieldContainer>
 
-        <VStack width="100%" alignItems="flex-start">
-          <Text textTransform={'capitalize'}>Cost of Reward</Text>
-
+        <FieldContainer title="Price">
           <InputGroup>
             <InputLeftAddon>
               {isSatoshi ? <SatoshiIconTilted /> : <BiDollar />}
@@ -326,18 +319,49 @@ export const RewardAdditionModal = ({
               {formError.cost}
             </Text>
           ) : null}
-        </VStack>
-      </VStack>
+        </FieldContainer>
 
-      <VStack spacing="10px">
-        <ButtonComponent
+        <FieldContainer>
+          <VStack spacing={4}>
+            <Checkbox
+              w="100%"
+              isChecked={reward.hasShipping}
+              onChange={handleShipping}
+            >
+              <Text>{t('Includes Shipping')}</Text>
+            </Checkbox>
+            {reward.hasShipping ? (
+              <VStack
+                pl={2}
+                spacing={2}
+                borderLeft="2px solid"
+                borderColor="primary.400"
+              >
+                <Text variant="body1" fontWeight={500}>
+                  {t(
+                    'Funders will see the following message in the shipping section. Make sure your email is up to date.',
+                  )}
+                </Text>
+                <Text fontWeight={500}>
+                  {t(
+                    "To receive the selected items, you will need to send your shipping details to the creator's email. Which will be revealed in the success screen.",
+                  )}
+                </Text>
+
+                <CreatorEmailButton email={ownerEmail} />
+              </VStack>
+            ) : null}
+          </VStack>
+        </FieldContainer>
+
+        <Button
           isLoading={createRewardLoading || updateRewardLoading}
           w="full"
-          primary
+          variant="primary"
           onClick={handleConfirmReward}
         >
           Confirm
-        </ButtonComponent>
+        </Button>
       </VStack>
     </Modal>
   )
