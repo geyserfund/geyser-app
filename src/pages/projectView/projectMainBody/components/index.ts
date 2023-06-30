@@ -1,5 +1,5 @@
+export * from '../../projectActivityPanel/components/ContributionInfoBox'
 export * from './AvatarElement'
-export * from './ContributionInfoBox'
 export * from './FollowButton'
 export * from './FundingFormRewardItem'
 export * from './LightningAddress'

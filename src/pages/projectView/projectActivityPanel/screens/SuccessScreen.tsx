@@ -25,6 +25,7 @@ import {
   ContributionInfoBoxVersion,
 } from '../../projectMainBody/components'
 import { SuccessImageComponent } from '../components'
+import { ContributionShippingBox } from '../components/ContributionShippingBox'
 
 type Props = {
   fundingState: IFundForm
@@ -78,7 +79,6 @@ export const SuccessScreen = ({
       width="100%"
       height={{ base: 'calc(100vh - 115px)', lg: '100%' }}
       overflowX="hidden"
-      overflowY={{ base: 'auto', lg: 'hidden' }}
       position="relative"
       backgroundColor="primary.400"
       alignItems="center"
@@ -140,6 +140,8 @@ export const SuccessScreen = ({
           referenceCode={fundingTx.uuid}
           showGeyserFee={false}
         />
+
+        <ContributionShippingBox />
       </VStack>
     </VStack>
   )

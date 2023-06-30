@@ -37,6 +37,7 @@ export type Scalars = {
   comment_String_maxLength_280: any
   cost_Int_NotNull_min_0: any
   cost_Int_NotNull_min_1_max_1000000: any
+  cost_Int_min_1_max_1000000: any
   description_String_NotNull_maxLength_250: any
   description_String_NotNull_maxLength_2200: any
   description_String_NotNull_maxLength_4000: any
@@ -195,6 +196,7 @@ export type CreateProjectRewardInput = {
   /** Currency used for the cost */
   costCurrency: RewardCurrency
   description: Scalars['description_String_NotNull_maxLength_250']
+  hasShipping: Scalars['Boolean']
   image?: InputMaybe<Scalars['String']>
   name: Scalars['name_String_NotNull_maxLength_100']
   projectId: Scalars['BigInt']
@@ -593,6 +595,7 @@ export type Grant = {
   __typename?: 'Grant'
   applicants: Array<GrantApplicant>
   balance: Scalars['Int']
+  boardMembers: Array<GrantBoardMember>
   description?: Maybe<Scalars['String']>
   id: Scalars['BigInt']
   image?: Maybe<Scalars['String']>
@@ -636,6 +639,11 @@ export enum GrantApplicantStatus {
 export type GrantApplyInput = {
   grantId: Scalars['BigInt']
   projectId: Scalars['BigInt']
+}
+
+export type GrantBoardMember = {
+  __typename?: 'GrantBoardMember'
+  user: User
 }
 
 export type GrantGetInput = {
@@ -785,6 +793,7 @@ export type Location = {
 }
 
 export enum MfaAction {
+  Login = 'LOGIN',
   ProjectWalletUpdate = 'PROJECT_WALLET_UPDATE',
   UserEmailUpdate = 'USER_EMAIL_UPDATE',
   UserEmailVerification = 'USER_EMAIL_VERIFICATION',
@@ -797,7 +806,6 @@ export type Mutation = {
   createEntry: Entry
   createProject: Project
   createProjectMilestone: ProjectMilestone
-  createProjectReward: ProjectReward
   createWallet: Wallet
   deleteEntry: Entry
   deleteProjectMilestone: Scalars['Boolean']
@@ -812,6 +820,8 @@ export type Mutation = {
   grantApply: GrantApplicant
   projectDelete: ProjectDeleteResponse
   projectFollow: Scalars['Boolean']
+  projectRewardCreate: ProjectReward
+  projectRewardUpdate: ProjectReward
   projectStatusUpdate: Project
   projectTagAdd: Array<Tag>
   projectTagRemove: Array<Tag>
@@ -828,7 +838,6 @@ export type Mutation = {
   updateEntry: Entry
   updateProject: Project
   updateProjectMilestone: ProjectMilestone
-  updateProjectReward: ProjectReward
   updateUser: User
   /** This operation is currently not supported. */
   updateWallet: Wallet
@@ -854,10 +863,6 @@ export type MutationCreateProjectArgs = {
 
 export type MutationCreateProjectMilestoneArgs = {
   input?: InputMaybe<CreateProjectMilestoneInput>
-}
-
-export type MutationCreateProjectRewardArgs = {
-  input: CreateProjectRewardInput
 }
 
 export type MutationCreateWalletArgs = {
@@ -916,6 +921,14 @@ export type MutationProjectFollowArgs = {
   input: ProjectFollowMutationInput
 }
 
+export type MutationProjectRewardCreateArgs = {
+  input: CreateProjectRewardInput
+}
+
+export type MutationProjectRewardUpdateArgs = {
+  input: UpdateProjectRewardInput
+}
+
 export type MutationProjectStatusUpdateArgs = {
   input: ProjectStatusUpdate
 }
@@ -937,7 +950,7 @@ export type MutationPublishEntryArgs = {
 }
 
 export type MutationSendOtpByEmailArgs = {
-  action: MfaAction
+  input: SendOtpByEmailInput
 }
 
 export type MutationTagCreateArgs = {
@@ -958,10 +971,6 @@ export type MutationUpdateProjectArgs = {
 
 export type MutationUpdateProjectMilestoneArgs = {
   input?: InputMaybe<UpdateProjectMilestoneInput>
-}
-
-export type MutationUpdateProjectRewardArgs = {
-  input: UpdateProjectRewardInput
 }
 
 export type MutationUpdateUserArgs = {
@@ -998,6 +1007,11 @@ export type MutationResponse = {
 }
 
 export type OtpInput = {
+  otp: Scalars['Int']
+  otpVerificationToken: Scalars['String']
+}
+
+export type OtpLoginInput = {
   otp: Scalars['Int']
   otpVerificationToken: Scalars['String']
 }
@@ -1151,13 +1165,17 @@ export type ProjectReward = {
   __typename?: 'ProjectReward'
   /** Cost of the reward, priced in USD cents. */
   cost: Scalars['Int']
+  createdAt: Scalars['Date']
   /**
    * Whether the reward is deleted or not. Deleted rewards should not appear in the funding flow. Moreover, deleted
    * rewards should only be visible by the project owner and the users that purchased it.
    */
   deleted: Scalars['Boolean']
+  deletedAt?: Maybe<Scalars['Date']>
   /** Short description of the reward. */
   description?: Maybe<Scalars['description_String_maxLength_250']>
+  /** Boolean value to indicate whether this reward requires shipping */
+  hasShipping: Scalars['Boolean']
   id: Scalars['BigInt']
   /** Image of the reward. */
   image?: Maybe<Scalars['String']>
@@ -1166,6 +1184,7 @@ export type ProjectReward = {
   project: Project
   sold: Scalars['Int']
   stock?: Maybe<Scalars['Int']>
+  updatedAt: Scalars['Date']
 }
 
 export type ProjectStatistics = {
@@ -1385,6 +1404,11 @@ export type RewardInput = {
   quantity: Scalars['quantity_Int_NotNull_min_1']
 }
 
+export type SendOtpByEmailInput = {
+  action: MfaAction
+  email?: InputMaybe<Scalars['String']>
+}
+
 export enum ShippingDestination {
   International = 'international',
   National = 'national',
@@ -1519,14 +1543,15 @@ export type UpdateProjectMilestoneInput = {
 
 export type UpdateProjectRewardInput = {
   /** Cost of the reward, priced in USD cents */
-  cost: Scalars['cost_Int_NotNull_min_1_max_1000000']
+  cost?: InputMaybe<Scalars['cost_Int_min_1_max_1000000']>
   /** Currency used for the cost */
-  costCurrency: RewardCurrency
+  costCurrency?: InputMaybe<RewardCurrency>
   /** Soft deletes the reward. */
   deleted?: InputMaybe<Scalars['Boolean']>
   description?: InputMaybe<Scalars['description_String_maxLength_250']>
+  hasShipping?: InputMaybe<Scalars['Boolean']>
   image?: InputMaybe<Scalars['String']>
-  name: Scalars['name_String_NotNull_maxLength_100']
+  name?: InputMaybe<Scalars['name_String_maxLength_100']>
   projectRewardId: Scalars['BigInt']
   stock?: InputMaybe<Scalars['stock_Int_min_0']>
 }
@@ -1937,6 +1962,7 @@ export type ResolversTypes = {
   GrantApplicantFunding: ResolverTypeWrapper<GrantApplicantFunding>
   GrantApplicantStatus: GrantApplicantStatus
   GrantApplyInput: GrantApplyInput
+  GrantBoardMember: ResolverTypeWrapper<GrantBoardMember>
   GrantGetInput: GrantGetInput
   GrantGetWhereInput: GrantGetWhereInput
   GrantStatistics: ResolverTypeWrapper<GrantStatistics>
@@ -1963,6 +1989,7 @@ export type ResolversTypes = {
     | ResolversTypes['DeleteUserResponse']
     | ResolversTypes['ProjectDeleteResponse']
   OTPInput: OtpInput
+  OTPLoginInput: OtpLoginInput
   OTPResponse: ResolverTypeWrapper<OtpResponse>
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
   OrderByOptions: OrderByOptions
@@ -1995,6 +2022,7 @@ export type ResolversTypes = {
   RewardCurrency: RewardCurrency
   RewardFundingInput: RewardFundingInput
   RewardInput: RewardInput
+  SendOtpByEmailInput: SendOtpByEmailInput
   ShippingDestination: ShippingDestination
   ShippingInput: ShippingInput
   SignedUploadUrl: ResolverTypeWrapper<SignedUploadUrl>
@@ -2046,6 +2074,9 @@ export type ResolversTypes = {
   cost_Int_NotNull_min_0: ResolverTypeWrapper<Scalars['cost_Int_NotNull_min_0']>
   cost_Int_NotNull_min_1_max_1000000: ResolverTypeWrapper<
     Scalars['cost_Int_NotNull_min_1_max_1000000']
+  >
+  cost_Int_min_1_max_1000000: ResolverTypeWrapper<
+    Scalars['cost_Int_min_1_max_1000000']
   >
   description_String_NotNull_maxLength_250: ResolverTypeWrapper<
     Scalars['description_String_NotNull_maxLength_250']
@@ -2210,6 +2241,7 @@ export type ResolversParentTypes = {
   GrantApplicant: GrantApplicant
   GrantApplicantFunding: GrantApplicantFunding
   GrantApplyInput: GrantApplyInput
+  GrantBoardMember: GrantBoardMember
   GrantGetInput: GrantGetInput
   GrantGetWhereInput: GrantGetWhereInput
   GrantStatistics: GrantStatistics
@@ -2232,6 +2264,7 @@ export type ResolversParentTypes = {
     | ResolversParentTypes['DeleteUserResponse']
     | ResolversParentTypes['ProjectDeleteResponse']
   OTPInput: OtpInput
+  OTPLoginInput: OtpLoginInput
   OTPResponse: OtpResponse
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
   Owner: Owner
@@ -2260,6 +2293,7 @@ export type ResolversParentTypes = {
   ResourceInput: ResourceInput
   RewardFundingInput: RewardFundingInput
   RewardInput: RewardInput
+  SendOtpByEmailInput: SendOtpByEmailInput
   ShippingInput: ShippingInput
   SignedUploadUrl: SignedUploadUrl
   SourceResource: ResolversUnionTypes['SourceResource']
@@ -2298,6 +2332,7 @@ export type ResolversParentTypes = {
   comment_String_maxLength_280: Scalars['comment_String_maxLength_280']
   cost_Int_NotNull_min_0: Scalars['cost_Int_NotNull_min_0']
   cost_Int_NotNull_min_1_max_1000000: Scalars['cost_Int_NotNull_min_1_max_1000000']
+  cost_Int_min_1_max_1000000: Scalars['cost_Int_min_1_max_1000000']
   description_String_NotNull_maxLength_250: Scalars['description_String_NotNull_maxLength_250']
   description_String_NotNull_maxLength_2200: Scalars['description_String_NotNull_maxLength_2200']
   description_String_NotNull_maxLength_4000: Scalars['description_String_NotNull_maxLength_4000']
@@ -2680,6 +2715,11 @@ export type GrantResolvers<
     ContextType
   >
   balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  boardMembers?: Resolver<
+    Array<ResolversTypes['GrantBoardMember']>,
+    ParentType,
+    ContextType
+  >
   description?: Resolver<
     Maybe<ResolversTypes['String']>,
     ParentType,
@@ -2730,6 +2770,14 @@ export type GrantApplicantFundingResolvers<
     ParentType,
     ContextType
   >
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type GrantBoardMemberResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['GrantBoardMember'] = ResolversParentTypes['GrantBoardMember'],
+> = {
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -2882,12 +2930,6 @@ export type MutationResolvers<
     ContextType,
     Partial<MutationCreateProjectMilestoneArgs>
   >
-  createProjectReward?: Resolver<
-    ResolversTypes['ProjectReward'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateProjectRewardArgs, 'input'>
-  >
   createWallet?: Resolver<
     ResolversTypes['Wallet'],
     ParentType,
@@ -2972,6 +3014,18 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationProjectFollowArgs, 'input'>
   >
+  projectRewardCreate?: Resolver<
+    ResolversTypes['ProjectReward'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationProjectRewardCreateArgs, 'input'>
+  >
+  projectRewardUpdate?: Resolver<
+    ResolversTypes['ProjectReward'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationProjectRewardUpdateArgs, 'input'>
+  >
   projectStatusUpdate?: Resolver<
     ResolversTypes['Project'],
     ParentType,
@@ -3006,7 +3060,7 @@ export type MutationResolvers<
     ResolversTypes['OTPResponse'],
     ParentType,
     ContextType,
-    RequireFields<MutationSendOtpByEmailArgs, 'action'>
+    RequireFields<MutationSendOtpByEmailArgs, 'input'>
   >
   tagCreate?: Resolver<
     ResolversTypes['Tag'],
@@ -3037,12 +3091,6 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     Partial<MutationUpdateProjectMilestoneArgs>
-  >
-  updateProjectReward?: Resolver<
-    ResolversTypes['ProjectReward'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateProjectRewardArgs, 'input'>
   >
   updateUser?: Resolver<
     ResolversTypes['User'],
@@ -3306,12 +3354,15 @@ export type ProjectRewardResolvers<
   ParentType extends ResolversParentTypes['ProjectReward'] = ResolversParentTypes['ProjectReward'],
 > = {
   cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
   deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  deletedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
   description?: Resolver<
     Maybe<ResolversTypes['description_String_maxLength_250']>,
     ParentType,
     ContextType
   >
+  hasShipping?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   name?: Resolver<
@@ -3322,6 +3373,7 @@ export type ProjectRewardResolvers<
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>
   sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   stock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -3764,6 +3816,14 @@ export interface Cost_Int_NotNull_Min_1_Max_1000000ScalarConfig
   name: 'cost_Int_NotNull_min_1_max_1000000'
 }
 
+export interface Cost_Int_Min_1_Max_1000000ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['cost_Int_min_1_max_1000000'],
+    any
+  > {
+  name: 'cost_Int_min_1_max_1000000'
+}
+
 export interface Description_String_NotNull_MaxLength_250ScalarConfig
   extends GraphQLScalarTypeConfig<
     ResolversTypes['description_String_NotNull_maxLength_250'],
@@ -4015,6 +4075,7 @@ export type Resolvers<ContextType = any> = {
   Grant?: GrantResolvers<ContextType>
   GrantApplicant?: GrantApplicantResolvers<ContextType>
   GrantApplicantFunding?: GrantApplicantFundingResolvers<ContextType>
+  GrantBoardMember?: GrantBoardMemberResolvers<ContextType>
   GrantStatistics?: GrantStatisticsResolvers<ContextType>
   GrantStatisticsApplicant?: GrantStatisticsApplicantResolvers<ContextType>
   GrantStatisticsGrant?: GrantStatisticsGrantResolvers<ContextType>
@@ -4057,6 +4118,7 @@ export type Resolvers<ContextType = any> = {
   comment_String_maxLength_280?: GraphQLScalarType
   cost_Int_NotNull_min_0?: GraphQLScalarType
   cost_Int_NotNull_min_1_max_1000000?: GraphQLScalarType
+  cost_Int_min_1_max_1000000?: GraphQLScalarType
   description_String_NotNull_maxLength_250?: GraphQLScalarType
   description_String_NotNull_maxLength_2200?: GraphQLScalarType
   description_String_NotNull_maxLength_4000?: GraphQLScalarType
@@ -4303,6 +4365,7 @@ export type ProjectRewardForCreateUpdateFragment = {
   deleted: boolean
   stock?: number | null
   sold: number
+  hasShipping: boolean
 }
 
 export type ProjectFragment = {
@@ -4660,24 +4723,24 @@ export type UpdateProjectMutation = {
   }
 }
 
-export type CreateProjectRewardMutationVariables = Exact<{
+export type ProjectRewardCreateMutationVariables = Exact<{
   input: CreateProjectRewardInput
 }>
 
-export type CreateProjectRewardMutation = {
+export type ProjectRewardCreateMutation = {
   __typename?: 'Mutation'
-  createProjectReward: {
+  projectRewardCreate: {
     __typename?: 'ProjectReward'
   } & ProjectRewardForCreateUpdateFragment
 }
 
-export type UpdateProjectRewardMutationVariables = Exact<{
+export type ProjectRewardUpdateMutationVariables = Exact<{
   input: UpdateProjectRewardInput
 }>
 
-export type UpdateProjectRewardMutation = {
+export type ProjectRewardUpdateMutation = {
   __typename?: 'Mutation'
-  updateProjectReward: {
+  projectRewardUpdate: {
     __typename?: 'ProjectReward'
   } & ProjectRewardForCreateUpdateFragment
 }
@@ -5758,6 +5821,7 @@ export const ProjectRewardForCreateUpdateFragmentDoc = gql`
     deleted
     stock
     sold
+    hasShipping
   }
 `
 export const EntryForProjectFragmentDoc = gql`
@@ -6765,107 +6829,107 @@ export type UpdateProjectMutationOptions = Apollo.BaseMutationOptions<
   UpdateProjectMutation,
   UpdateProjectMutationVariables
 >
-export const CreateProjectRewardDocument = gql`
-  mutation CreateProjectReward($input: CreateProjectRewardInput!) {
-    createProjectReward(input: $input) {
+export const ProjectRewardCreateDocument = gql`
+  mutation ProjectRewardCreate($input: CreateProjectRewardInput!) {
+    projectRewardCreate(input: $input) {
       ...ProjectRewardForCreateUpdate
     }
   }
   ${ProjectRewardForCreateUpdateFragmentDoc}
 `
-export type CreateProjectRewardMutationFn = Apollo.MutationFunction<
-  CreateProjectRewardMutation,
-  CreateProjectRewardMutationVariables
+export type ProjectRewardCreateMutationFn = Apollo.MutationFunction<
+  ProjectRewardCreateMutation,
+  ProjectRewardCreateMutationVariables
 >
 
 /**
- * __useCreateProjectRewardMutation__
+ * __useProjectRewardCreateMutation__
  *
- * To run a mutation, you first call `useCreateProjectRewardMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateProjectRewardMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useProjectRewardCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectRewardCreateMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createProjectRewardMutation, { data, loading, error }] = useCreateProjectRewardMutation({
+ * const [projectRewardCreateMutation, { data, loading, error }] = useProjectRewardCreateMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useCreateProjectRewardMutation(
+export function useProjectRewardCreateMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    CreateProjectRewardMutation,
-    CreateProjectRewardMutationVariables
+    ProjectRewardCreateMutation,
+    ProjectRewardCreateMutationVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<
-    CreateProjectRewardMutation,
-    CreateProjectRewardMutationVariables
-  >(CreateProjectRewardDocument, options)
+    ProjectRewardCreateMutation,
+    ProjectRewardCreateMutationVariables
+  >(ProjectRewardCreateDocument, options)
 }
-export type CreateProjectRewardMutationHookResult = ReturnType<
-  typeof useCreateProjectRewardMutation
+export type ProjectRewardCreateMutationHookResult = ReturnType<
+  typeof useProjectRewardCreateMutation
 >
-export type CreateProjectRewardMutationResult =
-  Apollo.MutationResult<CreateProjectRewardMutation>
-export type CreateProjectRewardMutationOptions = Apollo.BaseMutationOptions<
-  CreateProjectRewardMutation,
-  CreateProjectRewardMutationVariables
+export type ProjectRewardCreateMutationResult =
+  Apollo.MutationResult<ProjectRewardCreateMutation>
+export type ProjectRewardCreateMutationOptions = Apollo.BaseMutationOptions<
+  ProjectRewardCreateMutation,
+  ProjectRewardCreateMutationVariables
 >
-export const UpdateProjectRewardDocument = gql`
-  mutation UpdateProjectReward($input: UpdateProjectRewardInput!) {
-    updateProjectReward(input: $input) {
+export const ProjectRewardUpdateDocument = gql`
+  mutation ProjectRewardUpdate($input: UpdateProjectRewardInput!) {
+    projectRewardUpdate(input: $input) {
       ...ProjectRewardForCreateUpdate
     }
   }
   ${ProjectRewardForCreateUpdateFragmentDoc}
 `
-export type UpdateProjectRewardMutationFn = Apollo.MutationFunction<
-  UpdateProjectRewardMutation,
-  UpdateProjectRewardMutationVariables
+export type ProjectRewardUpdateMutationFn = Apollo.MutationFunction<
+  ProjectRewardUpdateMutation,
+  ProjectRewardUpdateMutationVariables
 >
 
 /**
- * __useUpdateProjectRewardMutation__
+ * __useProjectRewardUpdateMutation__
  *
- * To run a mutation, you first call `useUpdateProjectRewardMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateProjectRewardMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useProjectRewardUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectRewardUpdateMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateProjectRewardMutation, { data, loading, error }] = useUpdateProjectRewardMutation({
+ * const [projectRewardUpdateMutation, { data, loading, error }] = useProjectRewardUpdateMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useUpdateProjectRewardMutation(
+export function useProjectRewardUpdateMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    UpdateProjectRewardMutation,
-    UpdateProjectRewardMutationVariables
+    ProjectRewardUpdateMutation,
+    ProjectRewardUpdateMutationVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<
-    UpdateProjectRewardMutation,
-    UpdateProjectRewardMutationVariables
-  >(UpdateProjectRewardDocument, options)
+    ProjectRewardUpdateMutation,
+    ProjectRewardUpdateMutationVariables
+  >(ProjectRewardUpdateDocument, options)
 }
-export type UpdateProjectRewardMutationHookResult = ReturnType<
-  typeof useUpdateProjectRewardMutation
+export type ProjectRewardUpdateMutationHookResult = ReturnType<
+  typeof useProjectRewardUpdateMutation
 >
-export type UpdateProjectRewardMutationResult =
-  Apollo.MutationResult<UpdateProjectRewardMutation>
-export type UpdateProjectRewardMutationOptions = Apollo.BaseMutationOptions<
-  UpdateProjectRewardMutation,
-  UpdateProjectRewardMutationVariables
+export type ProjectRewardUpdateMutationResult =
+  Apollo.MutationResult<ProjectRewardUpdateMutation>
+export type ProjectRewardUpdateMutationOptions = Apollo.BaseMutationOptions<
+  ProjectRewardUpdateMutation,
+  ProjectRewardUpdateMutationVariables
 >
 export const CreateProjectMilestoneDocument = gql`
   mutation CreateProjectMilestone($input: CreateProjectMilestoneInput) {
