@@ -10,7 +10,7 @@ import {
 import * as htmlToImage from 'html-to-image'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BiCopy, BiDownload } from 'react-icons/bi'
+import { BiCopy } from 'react-icons/bi'
 import { HiOutlineCheck } from 'react-icons/hi'
 
 import { Body2, H3 } from '../../../../components/typography'
@@ -35,22 +35,6 @@ export const SuccessImageComponent = ({
 
   if (!project) {
     return null
-  }
-
-  const handleDownload = async () => {
-    try {
-      const dataUrl = await getDataUrl()
-      const link = document.createElement('a')
-      link.download = `share-contribution-to-${project.name}.png`
-      link.href = dataUrl
-      link.click()
-    } catch (error) {
-      toast({
-        status: 'error',
-        title: 'Failed to download image',
-        description: 'Please try again',
-      })
-    }
   }
 
   const handleCopy = async () => {
@@ -156,9 +140,14 @@ export const SuccessImageComponent = ({
         </VStack>
       </VStack>
       <HStack w="full" justifyContent="end">
-        <Tooltip placement="top" label={copied ? t('copied') : t('copy')}>
+        <Tooltip
+          w="100%"
+          placement="top"
+          label={copied ? t('copied') : t('copy')}
+        >
           <Button
             size="sm"
+            w="100%"
             isActive={copied}
             variant="secondary"
             aria-label="copy-success-image"
@@ -170,20 +159,7 @@ export const SuccessImageComponent = ({
               fontWeight="bold"
               textTransform="capitalize"
             >
-              {t('copy')}
-            </Text>
-          </Button>
-        </Tooltip>
-        <Tooltip placement="top" label="download">
-          <Button
-            size="sm"
-            variant="secondary"
-            aria-label="download-success-image"
-            leftIcon={<BiDownload />}
-            onClick={handleDownload}
-          >
-            <Text variant="caption" fontWeight="bold">
-              {t('Download')}
+              {t('Copy success image')}
             </Text>
           </Button>
         </Tooltip>

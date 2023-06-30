@@ -2,8 +2,8 @@ import { Box, CloseButton, Divider, VStack } from '@chakra-ui/react'
 import { useRef, useState } from 'react'
 
 import { MAX_FUNDING_AMOUNT_USD } from '../../../../constants'
+import { useProjectContext } from '../../../../context'
 import { useFundCalc } from '../../../../helpers/fundingCalculation'
-import { IFundForm } from '../../../../hooks'
 import { ProjectRewardForCreateUpdateFragment } from '../../../../types/generated/graphql'
 import { useMobileMode, useNotification } from '../../../../utils'
 import { FundingFormSection } from '../components/FundingFormSection'
@@ -12,7 +12,6 @@ import { ProjectFundingSummaryCard } from '../components/ProjectFundingSummaryCa
 
 type Props = {
   handleCloseButton: () => void
-  formState: IFundForm
   handleFund: () => void
   rewards?: ProjectRewardForCreateUpdateFragment[]
   name: string
@@ -21,7 +20,6 @@ type Props = {
 export const ProjectFundingSelectionFormScreen = ({
   handleCloseButton,
   handleFund,
-  formState,
   rewards,
   name,
 }: Props) => {
@@ -29,6 +27,10 @@ export const ProjectFundingSelectionFormScreen = ({
   const summaryCardRef = useRef<any>(null)
 
   const [step, setStep] = useState<'contribution' | 'info'>('contribution')
+
+  const {
+    fundForm: { state: formState, needsShipping },
+  } = useProjectContext()
 
   const { getTotalAmount } = useFundCalc(formState)
   const { toast } = useNotification()
@@ -51,7 +53,7 @@ export const ProjectFundingSelectionFormScreen = ({
   }
 
   const validateFundingUserInfo = () => {
-    if (formState.rewardsCost && !formState.email) {
+    if (needsShipping && !formState.email) {
       toast({
         title: 'Email is a required field when donating for a reward.',
         description: 'Please enter an email.',

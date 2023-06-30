@@ -325,10 +325,10 @@ export const RewardAdditionModal = ({
           <VStack spacing={4}>
             <Checkbox
               w="100%"
-              checked={reward.hasShipping}
+              isChecked={reward.hasShipping}
               onChange={handleShipping}
             >
-              <Text variant="body2">{t('Includes Shipping')}</Text>
+              <Text>{t('Includes Shipping')}</Text>
             </Checkbox>
             {reward.hasShipping ? (
               <VStack
@@ -337,12 +337,12 @@ export const RewardAdditionModal = ({
                 borderLeft="2px solid"
                 borderColor="primary.400"
               >
-                <Text variant="body2" fontWeight={500}>
+                <Text variant="body1" fontWeight={500}>
                   {t(
                     'Funders will see the following message in the shipping section. Make sure your email is up to date.',
                   )}
                 </Text>
-                <Text variant="body2" fontWeight={500}>
+                <Text fontWeight={500}>
                   {t(
                     "To receive the selected items, you will need to send your shipping details to the creator's email. Which will be revealed in the success screen.",
                   )}

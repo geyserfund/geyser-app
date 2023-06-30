@@ -171,7 +171,6 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
         return (
           <ProjectFundingSelectionFormScreen
             handleCloseButton={handleCloseButton}
-            formState={formState}
             handleFund={handleFund}
             rewards={project.rewards}
             name={project.name}

@@ -149,6 +149,7 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
 
   const resetForm = useCallback(() => {
     _setState(initialState)
+    setNeedsShipping(false)
   }, [initialState])
 
   const hasSelectedRewards = useMemo(
