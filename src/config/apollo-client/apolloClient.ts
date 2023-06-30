@@ -9,12 +9,23 @@ import {
   split,
 } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
+import { RetryLink } from '@apollo/client/link/retry'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { createClient } from 'graphql-ws'
 
 import { __development__, API_SERVICE_ENDPOINT } from '../../constants'
 import { cache } from './apollo-client-cache'
+
+const link = new RetryLink({
+  attempts(count, operation, error) {
+    console.log('checking error in retry link', error, error.status)
+    return false
+  },
+  delay(count, operation, error) {
+    return 500
+  },
+})
 
 const httpLink = createHttpLink({
   uri: `${API_SERVICE_ENDPOINT}/graphql`,
@@ -33,22 +44,33 @@ function timeout(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-const errorLink = onError(({ graphQLErrors, forward, operation }) => {
-  if (graphQLErrors) {
-    for (const err of graphQLErrors) {
-      if (err && err.extensions && err.extensions.code) {
-        switch (err.extensions.code) {
-          case 'UNAUTHENTICATED':
-            window.location.href = `${window.location.pathname}?loggedOut=true`
-            break
-          case 'EXPIRED_REFRESH_TOKEN': {
-            window.location.href = `${window.location.pathname}?loggedOut=true`
-            break
-          }
+const errorLink = onError(
+  ({ networkError, graphQLErrors, forward, operation, response }) => {
+    console.log(
+      'network error in error link',
+      networkError,
+      // @ts-ignore
+      networkError?.response,
+      // @ts-ignore
+      networkError?.result,
+    )
+    console.log('network resoibse in error link', response)
+    if (graphQLErrors) {
+      for (const err of graphQLErrors) {
+        if (err && err.extensions && err.extensions.code) {
+          switch (err.extensions.code) {
+            case 'UNAUTHENTICATED':
+              window.location.href = `${window.location.pathname}?loggedOut=true`
+              break
+            case 'EXPIRED_REFRESH_TOKEN': {
+              window.location.href = `${window.location.pathname}?loggedOut=true`
+              break
+            }
 
-          case 'STALE_REFRESH_TOKEN': {
-            const observable = new Observable<FetchResult<Record<string, any>>>(
-              (observer) => {
+            case 'STALE_REFRESH_TOKEN': {
+              const observable = new Observable<
+                FetchResult<Record<string, any>>
+              >((observer) => {
                 // used an annonymous function for using an async function
                 ;(async () => {
                   try {
@@ -66,19 +88,19 @@ const errorLink = onError(({ graphQLErrors, forward, operation }) => {
                     observer.error(err)
                   }
                 })()
-              },
-            )
+              })
 
-            return observable
+              return observable
+            }
+
+            default:
+              break
           }
-
-          default:
-            break
         }
       }
     }
-  }
-})
+  },
+)
 
 const splitLink = split(
   ({ query }) => {
@@ -93,7 +115,7 @@ const splitLink = split(
 )
 
 const clientConfig: ApolloClientOptions<NormalizedCacheObject> = {
-  link: from([errorLink, splitLink]),
+  link: from([link, errorLink, splitLink]),
   cache,
 }
 
