@@ -20,7 +20,7 @@ const retryLink = new RetryLink({
     return (
       err &&
       Boolean(
-        err.code === 2 && err.message.includes('refresh token') && count === 1,
+        err.code === 2 && err.message.includes('refresh token') && count <= 2,
       )
     )
   },
