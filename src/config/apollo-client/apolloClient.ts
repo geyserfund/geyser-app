@@ -15,14 +15,9 @@ import { __development__, API_SERVICE_ENDPOINT } from '../../constants'
 import { cache } from './apollo-client-cache'
 
 const retryLink = new RetryLink({
-  attempts(count, operation, error) {
+  attempts(count, _, error) {
     const err = error.result.error
-    return (
-      err &&
-      Boolean(
-        err.code === 2 && err.message.includes('refresh token') && count <= 2,
-      )
-    )
+    return err && Boolean(err.code === 'STALE_REFRESH_TOKEN' && count <= 2)
   },
   delay: {
     initial: 300,
