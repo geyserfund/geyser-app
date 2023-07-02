@@ -7,6 +7,7 @@ import {
   HStack,
   VStack,
 } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { HiOutlineTag } from 'react-icons/hi'
 
 import { Body1 } from '../../../../components/typography'
@@ -23,13 +24,14 @@ export const MobileTagsFilter = ({
   handleTagsClick,
   ...rest
 }: MobileTagsFilterProps) => {
+  const { t } = useTranslation()
   return (
-    <AccordionItem height="100%">
+    <AccordionItem height="100%" {...rest}>
       <AccordionButton paddingY="15px">
         <HStack width="100%">
           <HiOutlineTag fontSize="20px" color={'neutral.600'} />
           <Body1 fontSize="16px" color={'neutral.800'}>
-            Project tags
+            {t('Project tags')}
           </Body1>
         </HStack>
         <AccordionIcon />

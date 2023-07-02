@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { StickToTop } from '../../../components/layouts'
 import { SortType, useFilterContext } from '../../../context'
@@ -9,6 +10,7 @@ import { MobileTopBar } from '../filters/mobile/MobileTopBar'
 import { DefaultView, PaginatedView, TrendingView } from './views'
 
 export const LandingPageProjects = () => {
+  const { t } = useTranslation()
   const isMobileMode = useMobileMode()
 
   const { filters } = useFilterContext()
@@ -37,7 +39,7 @@ export const LandingPageProjects = () => {
             bias={10}
             buffer={10}
           >
-            <MobileTopBar title="Projects" />
+            <MobileTopBar title={t('Projects')} />
           </StickToTop>
           <FilterBySearch />
         </>

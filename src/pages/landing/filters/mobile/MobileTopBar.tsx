@@ -6,6 +6,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BsSliders } from 'react-icons/bs'
 
 import { Body1 } from '../../../../components/typography'
@@ -22,6 +23,7 @@ export const MobileTopBar = ({
   subTitle,
   ...rest
 }: MobileTopBarProps) => {
+  const { t } = useTranslation()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const btnRef = useRef(null)
@@ -47,7 +49,7 @@ export const MobileTopBar = ({
             rightIcon={<BsSliders fontSize="16px" />}
             onClick={onOpen}
           >
-            {subTitle || 'Sort & filter'}
+            {subTitle || t('Sort & filter')}
           </Button>
         </HStack>
         <FilterTopBar paddingBottom="10px" />

@@ -558,5 +558,13 @@
   "Copy success image": "Copy success image",
   "To receive the selected items, you need to send your shipping details to the creator's email.": "To receive the selected items, you need to send your shipping details to the creator's email.",
   "To receive the selected items, you will need to send your shipping details to the creator's email. Which will be revealed in the success screen.": "To receive the selected items, you will need to send your shipping details to the creator's email. Which will be revealed in the success screen.",
-  "Funders will see the following message in the shipping section. Make sure your email is up to date.": "Funders will see the following message in the shipping section. Make sure your email is up to date."
+  "Funders will see the following message in the shipping section. Make sure your email is up to date.": "Funders will see the following message in the shipping section. Make sure your email is up to date.",
+  "Sort & filter": "Sort & filter",
+  "Filter": "Filter",
+  "Sort": "Sort",
+  "cannot select more than 3 tags": "cannot select more than 3 tags",
+  "Project tags": "Project tags",
+  "Leaderboard": "Leaderboard",
+  "Could not load summary data": "Could not load summary data",
+  "Please refresh the page": "Please refresh the page"
 }

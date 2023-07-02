@@ -8,6 +8,7 @@ import {
   Menu,
   VStack,
 } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { BsSliders } from 'react-icons/bs'
 
 import { Body1 } from '../../../../components/typography'
@@ -18,6 +19,7 @@ import { getCurrentSelection } from './sortSelection'
 type MobileSortProps = AccordionItemProps
 
 export const MobileSort = ({ ...rest }: MobileSortProps) => {
+  const { t } = useTranslation()
   const { filters } = useFilterContext()
   return (
     <AccordionItem {...rest}>
@@ -25,7 +27,7 @@ export const MobileSort = ({ ...rest }: MobileSortProps) => {
         <HStack width="100%">
           <BsSliders fontSize="16px" color={'neutral.600'} />
           <Body1 fontSize="16px" color={'neutral.800'}>
-            {getCurrentSelection(filters.sort)}
+            {t(getCurrentSelection(filters.sort))}
           </Body1>
         </HStack>
         <AccordionIcon />

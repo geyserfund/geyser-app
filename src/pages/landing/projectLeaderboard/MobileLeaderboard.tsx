@@ -1,5 +1,6 @@
 import { HStack, useTheme, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { CardLayout, StickToTop } from '../../../components/layouts'
@@ -74,6 +75,7 @@ export const LeaderboardTopbar = ({
   tab: LeaderboardTabs
   setTab: React.Dispatch<React.SetStateAction<LeaderboardTabs>>
 }) => {
+  const { t } = useTranslation()
   return (
     <VStack w="full" spacing="0px">
       <HStack
@@ -83,7 +85,7 @@ export const LeaderboardTopbar = ({
         paddingY="6px"
       >
         <Body1 semiBold color="neutral.1000">
-          Activity
+          {t('Activity')}
         </Body1>
       </HStack>
       <HStack
@@ -103,7 +105,7 @@ export const LeaderboardTopbar = ({
           }
           onClick={() => setTab(LeaderboardTabs.thisWeek)}
         >
-          This week
+          {t('This week')}
         </ButtonComponent>
         <ButtonComponent
           noBorder
@@ -116,7 +118,7 @@ export const LeaderboardTopbar = ({
           }
           onClick={() => setTab(LeaderboardTabs.allTime)}
         >
-          All time
+          {t('All time')}
         </ButtonComponent>
       </HStack>
     </VStack>
