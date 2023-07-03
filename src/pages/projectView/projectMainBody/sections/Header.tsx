@@ -73,7 +73,6 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           width={{ base: '50px', lg: '80px' }}
           height={{ base: '50px', lg: '80px' }}
           maxHeight="80px"
-          boxShadow="lg"
         />
         <VStack
           flexGrow={1}
