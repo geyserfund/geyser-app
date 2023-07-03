@@ -27,6 +27,7 @@ export enum PathName {
   dashboardStory = 'story',
   dashboardShop = 'shop',
   badges = 'badges',
+  about = 'about',
   projectId = ':projectId',
   userId = ':userId',
   entryId = ':entryId',
@@ -88,6 +89,7 @@ const pathsMap = {
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardShop}`,
   entry: (entryID: string) => `/${PathName.entry}/${entryID}`,
   badges: () => `/${PathName.badges}`,
+  about: () => `/${PathName.about}`,
 }
 
 export type PathsMap = typeof pathsMap
