@@ -17,7 +17,15 @@ import { cache } from './apollo-client-cache'
 const retryLink = new RetryLink({
   attempts(count, _, error) {
     const err = error.result.error
-    return err && Boolean(err.code === 'STALE_REFRESH_TOKEN' && count <= 2)
+    return (
+      err &&
+      Boolean(
+        (err.code === 'STALE_REFRESH_TOKEN' ||
+          err.code === 'EXPIRED_REFRESH_TOKEN' ||
+          err.code === 'INVALIDE_REFRESH_TOKEN') &&
+        count <= 2,
+      )
+    )
   },
   delay: {
     initial: 300,
