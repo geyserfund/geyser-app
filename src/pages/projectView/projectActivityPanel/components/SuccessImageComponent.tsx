@@ -9,13 +9,14 @@ import {
 } from '@chakra-ui/react'
 import * as htmlToImage from 'html-to-image'
 import { useState } from 'react'
-import { BiCopy, BiDownload } from 'react-icons/bi'
+import { useTranslation } from 'react-i18next'
+import { BiCopy } from 'react-icons/bi'
 import { HiOutlineCheck } from 'react-icons/hi'
 
 import { Body2, H3 } from '../../../../components/typography'
 import { useProjectContext } from '../../../../context'
 import { fonts, lightModeColors } from '../../../../styles'
-import { Badge, FundingTxFragment } from '../../../../types/generated/graphql'
+import { Badge, FundingTxFragment } from '../../../../types'
 import { useNotification } from '../../../../utils'
 import { AvatarElement } from '../../projectMainBody/components'
 
@@ -26,6 +27,7 @@ export const SuccessImageComponent = ({
   currentBadge?: Badge
   fundingTx: FundingTxFragment
 }) => {
+  const { t } = useTranslation()
   const { toast } = useNotification()
   const [copied, setCopied] = useState(false)
 
@@ -33,22 +35,6 @@ export const SuccessImageComponent = ({
 
   if (!project) {
     return null
-  }
-
-  const handleDownload = async () => {
-    try {
-      const dataUrl = await getDataUrl()
-      const link = document.createElement('a')
-      link.download = `share-contribution-to-${project.name}.png`
-      link.href = dataUrl
-      link.click()
-    } catch (error) {
-      toast({
-        status: 'error',
-        title: 'failed to download image',
-        description: 'please try again',
-      })
-    }
   }
 
   const handleCopy = async () => {
@@ -66,8 +52,8 @@ export const SuccessImageComponent = ({
     } catch {
       toast({
         status: 'error',
-        title: 'failed to download image',
-        description: 'please try again',
+        title: 'Failed to download image',
+        description: 'Please try again',
       })
     }
   }
@@ -97,6 +83,7 @@ export const SuccessImageComponent = ({
         borderStyle="dashed"
         borderWidth="2px"
         borderColor={lightModeColors.neutral[900]}
+        backgroundColor={lightModeColors.primary[400]}
         borderRadius="8px"
         padding="10px 20px"
         w="full"
@@ -108,7 +95,7 @@ export const SuccessImageComponent = ({
             fontWeight={500}
             fontFamily={fonts.livvic}
           >
-            Successful contribution to
+            {t('Successful contribution to')}
           </H3>
           <H3
             color={lightModeColors.neutral[900]}
@@ -123,7 +110,7 @@ export const SuccessImageComponent = ({
           <VStack w="full" spacing="0px">
             <Image src={currentBadge.image} width="125px" />
             <Body2 color={lightModeColors.neutral[900]}>
-              You won a Nostr badge!
+              {t('You won a Nostr badge!')}
             </Body2>
           </VStack>
         ) : (
@@ -154,30 +141,26 @@ export const SuccessImageComponent = ({
         </VStack>
       </VStack>
       <HStack w="full" justifyContent="end">
-        <Tooltip placement="top" label={copied ? 'copied' : 'copy'}>
+        <Tooltip
+          w="100%"
+          placement="top"
+          label={copied ? t('copied') : t('copy')}
+        >
           <Button
             size="sm"
+            w="100%"
             isActive={copied}
             variant="secondary"
             aria-label="copy-success-image"
             leftIcon={<BiCopy />}
             onClick={handleCopy}
           >
-            <Text variant="caption" fontWeight="bold">
-              Copy
-            </Text>
-          </Button>
-        </Tooltip>
-        <Tooltip placement="top" label="download">
-          <Button
-            size="sm"
-            variant="secondary"
-            aria-label="download-success-image"
-            leftIcon={<BiDownload />}
-            onClick={handleDownload}
-          >
-            <Text variant="caption" fontWeight="bold">
-              Download
+            <Text
+              variant="caption"
+              fontWeight="bold"
+              textTransform="capitalize"
+            >
+              {t('Copy success image')}
             </Text>
           </Button>
         </Tooltip>

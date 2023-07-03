@@ -1,12 +1,13 @@
 import { useQuery } from '@apollo/client'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Navigate, useNavigate, useParams } from 'react-router'
 
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
 import Loader from '../../components/ui/Loader'
 import { getPath } from '../../constants'
 import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
-import { Project, UniqueProjectQueryInput } from '../../types/generated/graphql'
+import { Project, UniqueProjectQueryInput } from '../../types'
 import { toInt, useNotification } from '../../utils'
 import { ProjectCreationWalletConnectionForm } from '.'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
@@ -20,6 +21,8 @@ type QueryVariablesForGetProject = {
 }
 
 export const ProjectCreationWalletConnectionPage = () => {
+  const { t } = useTranslation()
+
   const navigate = useNavigate()
 
   const params = useParams<{ projectId: string }>()
@@ -72,9 +75,11 @@ export const ProjectCreationWalletConnectionPage = () => {
       title={
         <TitleWithProgressBar
           hideSteps={isReadyForLaunch}
-          title={isReadyForLaunch ? 'Launch project' : 'Connect wallet'}
+          title={isReadyForLaunch ? t('Launch project') : t('Connect wallet')}
           subtitle={
-            isReadyForLaunch ? 'You’re ready to launch!' : 'Create a project'
+            isReadyForLaunch
+              ? t('You’re ready to launch!')
+              : t('Create a project')
           }
           index={4}
           length={4}

@@ -1,4 +1,5 @@
 import { Box, Image, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { Body1 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
@@ -6,6 +7,7 @@ import { FeedLoggedOutUrl } from '../../../../constants'
 import { useAuthContext } from '../../../../context'
 
 export const LoggedOut = () => {
+  const { t } = useTranslation()
   const { loginOnOpen } = useAuthContext()
   return (
     <VStack w="full" padding="12px" spacing="20px">
@@ -14,10 +16,10 @@ export const LoggedOut = () => {
       </Box>
       <VStack w="full">
         <Body1 bold color="neutral.1000">
-          {"You're not logged in."}
+          {t("You're not logged in")}
         </Body1>
         <Body1 color="neutral.1000">
-          Login now to see activity from projects you funded or follow
+          {t('Login now to see activity from projects you funded or follow')}
         </Body1>
       </VStack>
       <ButtonComponent
@@ -26,7 +28,7 @@ export const LoggedOut = () => {
         maxWidth="200px"
         onClick={loginOnOpen}
       >
-        Login
+        {t('Login')}
       </ButtonComponent>
     </VStack>
   )

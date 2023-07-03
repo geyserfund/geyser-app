@@ -1,4 +1,5 @@
 import { HStack, Skeleton, Stack, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { LandingCardBaseSkeleton } from '../../../../components/layouts'
 import { SortType, useFilterContext } from '../../../../context'
@@ -19,6 +20,7 @@ interface ProjectDisplayProps {
 const NO_OF_PROJECT_TO_LOAD = 3
 
 export const ProjectsDisplay = ({ tag, seeAllText }: ProjectDisplayProps) => {
+  const { t } = useTranslation()
   const { updateFilter } = useFilterContext()
 
   const { data, loading } = useProjectsForLandingPageQuery({
@@ -54,8 +56,8 @@ export const ProjectsDisplay = ({ tag, seeAllText }: ProjectDisplayProps) => {
 
   return (
     <ProjectDisplayBody
-      title={tag?.label || 'Recent Projects'}
-      subtitle={tag?.label ? 'Trending in' : ''}
+      title={tag?.label || t('Recent Projects')}
+      subtitle={tag?.label ? t('Trending in') : ''}
       projects={projectList}
       onSeeAllClick={onSeeAllClick}
       seeAllText={seeAllText}

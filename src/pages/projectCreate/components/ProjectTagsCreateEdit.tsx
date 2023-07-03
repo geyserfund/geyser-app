@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@apollo/client'
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
 import { HStack, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
 import { Dispatch, SetStateAction, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 import { components, MenuProps, MultiValue } from 'react-select'
 
@@ -12,11 +13,11 @@ import {
   SelectComponent,
 } from '../../../components/ui'
 import { AppTheme } from '../../../context'
+import { FieldContainer } from '../../../forms/components/FieldContainer'
 import { MUTATION_TAG_CREATE } from '../../../graphql/mutations'
 import { QUERY_TAGS } from '../../../graphql/queries/tags'
 import { Tag, TagCreateInput, TagsGetResult } from '../../../types'
 import { useNotification } from '../../../utils'
-import { FieldContainer } from '../../../forms/components/FieldContainer'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   tagContainer: {
@@ -52,6 +53,7 @@ export const ProjectTagsCreateEdit = ({
   ...rest
 }: ProjectTagsCreateEditProps) => {
   const classes = useStyles()
+  const { t } = useTranslation()
   const { toast } = useNotification()
 
   const [tagOptions, setTagOptions] = useState<TagsGetResult[]>([])
@@ -118,7 +120,9 @@ export const ProjectTagsCreateEdit = ({
       toast({
         status: 'error',
         title: 'failed to create tag',
-        description: `tag length must be between ${TAG_MIN_LENGTH} and ${TAG_MAX_LENGTH}`,
+        description: `${t('tag length must be between')} ${TAG_MIN_LENGTH} ${t(
+          'and',
+        )} ${TAG_MAX_LENGTH}`,
       })
       return
     }
@@ -150,7 +154,7 @@ export const ProjectTagsCreateEdit = ({
               leftIcon={<AddIcon />}
               onClick={handleCreateTag}
             >
-              add tag
+              {t('add tag')}
             </ButtonComponent>
           </HStack>
         )}
@@ -169,8 +173,9 @@ export const ProjectTagsCreateEdit = ({
       title="Tags"
       subtitle={
         <span>
-          Get discovered more easily by users through Tags. You can select up to
-          3 project tags.
+          {t(
+            'Get discovered more easily by users through Tags. You can select up to 3 project tags.',
+          )}
         </span>
       }
       {...rest}
@@ -184,7 +189,7 @@ export const ProjectTagsCreateEdit = ({
           onChange={handleChange}
           isLoading={loading}
           name="tags"
-          placeholder="Add tags"
+          placeholder={t('Add tags')}
           value={[]}
           options={tagOptions}
           getOptionLabel={(option: TagsGetResult) => option.label}

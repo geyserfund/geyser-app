@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
@@ -17,6 +18,7 @@ import {
 import { useProjectStoryForm } from './hooks/useProjectStoryForm'
 
 export const ProjectCreateStory = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { toast } = useNotification()
   const params = useParams<{ projectId: string }>()
@@ -83,8 +85,8 @@ export const ProjectCreateStory = () => {
       onBackClick={onBackCLick}
       title={
         <TitleWithProgressBar
-          title="Project description"
-          subtitle="Create a project"
+          title={t('Project description')}
+          subtitle={t('Create a project')}
           index={3}
           length={4}
         />

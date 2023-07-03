@@ -1,30 +1,26 @@
 import { SearchIcon } from '@chakra-ui/icons'
 import { HStack } from '@chakra-ui/react'
-import { useEffect, useRef, useState } from 'react'
+import { useDebouncedCallback } from '@react-hookz/web'
+import { useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { TextInputBox } from '../../../components/ui'
 import { useFilterContext } from '../../../context'
-import { useDebounce } from '../../../hooks'
 
 export const FilterBySearch = () => {
+  const { t } = useTranslation()
   const { updateFilter } = useFilterContext()
-
-  const [search, setSearch] = useState('')
 
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const debouncedSearch = useDebounce(search, 1000)
-
-  useEffect(() => {
-    if (debouncedSearch) {
-      updateFilter({ search: debouncedSearch })
-    } else {
-      updateFilter({ search: undefined })
-    }
-  }, [debouncedSearch, updateFilter])
+  const updateSearchFilterDebounced = useDebouncedCallback(
+    (value) => updateFilter({ search: value }),
+    [updateFilter],
+    500,
+  )
 
   const handleSearchUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value)
+    updateSearchFilterDebounced(event.target.value)
   }
 
   return (
@@ -40,10 +36,9 @@ export const FilterBySearch = () => {
         <TextInputBox
           ref={inputRef}
           leftIcon={<SearchIcon color={'neutral.700'} />}
-          placeholder="Search"
+          placeholder={t('Search')}
           type="search"
           onChange={handleSearchUpdate}
-          value={search}
         />
       </form>
     </HStack>

@@ -2,8 +2,7 @@ import { useQuery } from '@apollo/client'
 import { Button, CloseButton, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import ReactConfetti from 'react-confetti'
-import { BiCopyAlt } from 'react-icons/bi'
-import { HiOutlineSpeakerphone } from 'react-icons/hi'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { getPath } from '../../../../constants'
@@ -18,12 +17,12 @@ import {
   ProjectFragment,
   UserBadge,
 } from '../../../../types'
-import { copyTextToClipboard } from '../../../../utils'
 import {
   ContributionInfoBox,
   ContributionInfoBoxVersion,
 } from '../../projectMainBody/components'
 import { SuccessImageComponent } from '../components'
+import { ContributionShippingBox } from '../components/ContributionShippingBox'
 
 type Props = {
   fundingState: IFundForm
@@ -38,14 +37,10 @@ export const SuccessScreen = ({
   project,
   handleCloseButton,
 }: Props) => {
+  const { t } = useTranslation()
   const [hasCopiedProjectLink, setCopy] = useState(false)
 
   const { getTotalAmount } = useFundCalc(fundingState)
-
-  const shareProjectWithFriends = () => {
-    copyTextToClipboard(window.location.href)
-    setCopy(true)
-  }
 
   const { data } = useQuery<{ userBadges: UserBadge[] }>(QUERY_USER_BADGES, {
     variables: { input: { where: { fundingTxId: fundingTx.id } } },
@@ -76,7 +71,6 @@ export const SuccessScreen = ({
       width="100%"
       height={{ base: 'calc(100vh - 115px)', lg: '100%' }}
       overflowX="hidden"
-      overflowY={{ base: 'auto', lg: 'hidden' }}
       position="relative"
       backgroundColor="primary.400"
       alignItems="center"
@@ -98,33 +92,17 @@ export const SuccessScreen = ({
           currentBadge={currentBadge}
           fundingTx={fundingTx}
         />
-        <VStack w="full" spacing="10px">
-          {fundingTx.funder.user?.id && currentBadge && (
-            <Button
-              variant="secondary"
-              as={Link}
-              size="sm"
-              to={getPath('userProfile', fundingTx.funder.user?.id)}
-              width="100%"
-            >
-              See badge in Profile
-            </Button>
-          )}
+        {fundingTx.funder.user?.id && currentBadge && (
           <Button
             variant="secondary"
-            isActive={hasCopiedProjectLink}
+            as={Link}
             size="sm"
-            leftIcon={
-              hasCopiedProjectLink ? <BiCopyAlt /> : <HiOutlineSpeakerphone />
-            }
+            to={getPath('userProfile', fundingTx.funder.user?.id)}
             width="100%"
-            onClick={shareProjectWithFriends}
           >
-            {hasCopiedProjectLink
-              ? 'Project link copied!'
-              : 'Copy project link'}
+            {t('See badge in Profile')}
           </Button>
-        </VStack>
+        )}
 
         <ContributionInfoBox
           project={project as Project}
@@ -138,6 +116,8 @@ export const SuccessScreen = ({
           referenceCode={fundingTx.uuid || ''}
           showGeyserFee={false}
         />
+
+        <ContributionShippingBox />
       </VStack>
     </VStack>
   )

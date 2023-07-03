@@ -1,6 +1,8 @@
 import { DateTime, Duration, Interval } from 'luxon'
+import { useTranslation } from 'react-i18next'
 
-export const getDaysAgo = (date: string) => {
+export const GetDaysAgo = (date: string) => {
+  const { t } = useTranslation()
   const dateTime = DateTime.fromMillis(parseInt(date, 10))
   const currentDateTime = DateTime.now()
 
@@ -8,7 +10,7 @@ export const getDaysAgo = (date: string) => {
   const days = Math.floor(i.length('days'))
 
   if (days === 1) {
-    return 'a day'
+    return t('a day')
   }
 
   if (days > 1) {
@@ -18,23 +20,23 @@ export const getDaysAgo = (date: string) => {
   if (days < 1) {
     const hours = Math.floor(i.length('hours'))
     if (hours === 1) {
-      return 'an hour'
+      return t('an hour')
     }
 
     if (hours < 1) {
       const minutes = Math.floor(i.length('minutes'))
       if (hours === 1) {
-        return 'a minute'
+        return t('a minute')
       }
 
       if (minutes < 1) {
-        return 'a few seconds'
+        return t('a few seconds')
       }
 
-      return `${minutes} minutes`
+      return `${minutes} ${t('minutes')}`
     }
 
-    return `${hours} hours`
+    return `${hours} ${t('hours')}`
   }
 }
 

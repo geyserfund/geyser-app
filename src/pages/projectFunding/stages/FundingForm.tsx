@@ -7,6 +7,7 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { DonationInput } from '../../../components/molecules'
 import { MAX_FUNDING_AMOUNT_USD } from '../../../constants'
@@ -44,6 +45,7 @@ export const FundingForm = ({
   fundingFlow,
   onFundingRequested = () => {},
 }: Props) => {
+  const { t } = useTranslation()
   const { btcRate } = useBtcContext()
   const { requestFunding } = fundingFlow
 
@@ -64,7 +66,7 @@ export const FundingForm = ({
 
     if (amountInDollars > MAX_FUNDING_AMOUNT_USD) {
       setFormError({
-        donationAmount: `amount cannot be greater than $${MAX_FUNDING_AMOUNT_USD} in value`,
+        donationAmount: `amount cannot be greater than \${{MAX_FUNDING_AMOUNT_USD}} in value`,
       })
       return false
     }
@@ -110,8 +112,9 @@ export const FundingForm = ({
   return (
     <Box>
       <Text fontWeight={'500'} mb={2} fontSize="16px">
-        Vote for this project by funding towards it below! 1 Sat = 1 Vote. To
-        receive a project reward contribute from the project page.
+        {t(
+          'Vote for this project by funding towards it below! 1 Sat = 1 Vote. To receive a project reward contribute from the project page.',
+        )}
       </Text>
       <Box mb={3}>
         <DonationInput
@@ -121,17 +124,22 @@ export const FundingForm = ({
         />
         {formError?.donationAmount && (
           <Text color="secondary.red" fontSize="12px">
-            {formError?.donationAmount}
+            <Trans
+              i18nKey={formError?.donationAmount}
+              values={{ MAX_FUNDING_AMOUNT_USD }}
+            >
+              {formError?.donationAmount}
+            </Trans>
           </Text>
         )}
       </Box>
       <FormControl mb={3}>
         <FormLabel fontWeight={'700'} fontSize="14px">
-          Leave us a comment (optional)
+          {t('Leave us a comment (optional)')}
         </FormLabel>
         <Input
           _focus={{ borderColor: 'primary.400' }}
-          placeholder="Love what you guys are doing. Let the Sats flow!"
+          placeholder={t('Love what you guys are doing. Let the Sats flow!')}
           name="comment"
           value={state.comment}
           onChange={setTarget}
@@ -139,7 +147,7 @@ export const FundingForm = ({
       </FormControl>
       <Box mt={4}>
         <Button bg="primary.400" onClick={onSubmit} w="full">
-          Confirm
+          {t('Confirm')}
         </Button>
       </Box>
     </Box>

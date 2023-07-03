@@ -1,4 +1,5 @@
 import { VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router'
 
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
@@ -23,6 +24,7 @@ import { useProjectForm } from './hooks/useProjectForm'
 import { ProjectCreationVariables } from './types'
 
 export const ProjectCreate = () => {
+  const { t } = useTranslation()
   const params = useParams<{ projectId: string }>()
   const navigate = useNavigate()
 
@@ -67,7 +69,7 @@ export const ProjectCreate = () => {
     },
     onError(error) {
       toast({
-        title: 'project creation failed!',
+        title: 'failed to create project',
         description: `${error}`,
         status: 'error',
       })
@@ -80,7 +82,7 @@ export const ProjectCreate = () => {
     },
     onError(error) {
       toast({
-        title: 'project update failed!',
+        title: 'failed to update project',
         description: `${error}`,
         status: 'error',
       })
@@ -144,8 +146,8 @@ export const ProjectCreate = () => {
         onBackClick={onBackClick}
         title={
           <TitleWithProgressBar
-            title="Story"
-            subtitle="Create a project"
+            title={t('Story')}
+            subtitle={t('Create a project')}
             index={1}
             length={4}
           />

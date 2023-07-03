@@ -1,24 +1,16 @@
 import { HamburgerIcon } from '@chakra-ui/icons'
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu'
-import {
-  Avatar,
-  Button,
-  HStack,
-  IconButton,
-  MenuDivider,
-  Stack,
-  Tooltip,
-} from '@chakra-ui/react'
+import { Avatar, Button, HStack, MenuDivider, Stack } from '@chakra-ui/react'
 import { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { AboutUsUrl, FAQUrl, FeedbackUrl, getPath } from '../../../constants'
 import { AuthContext } from '../../../context'
-import { buttonCommon } from '../../../styles/common'
+import { buttonCommon } from '../../../styles'
 import { ProjectStatus } from '../../../types'
-import { ColorModeSwitcher } from '../../../utils'
-import { SatSymbolIcon } from '../../icons'
 import { MenuItemLink } from './MenuItemLink'
+import { ModeChange } from './ModeChange'
 import { NavBarUserProfileMenuItem } from './NavBarUserProfileMenuItem'
 import { NavBarUserProjectMenuItem } from './NavBarUserProjectMenuItem'
 
@@ -41,6 +33,7 @@ export const TopNavBarMenu = ({
   onMyProjectsSelected,
   onSignOutSelected,
 }: Props) => {
+  const { t } = useTranslation()
   const { user, isLoggedIn, isUserAProjectCreator } = useContext(AuthContext)
 
   const toDisplayProject =
@@ -83,7 +76,7 @@ export const TopNavBarMenu = ({
                 width="100%"
                 onClick={onSignInSelected}
               >
-                Connect
+                {t('Login')}
               </Button>
             </MenuItem>
 
@@ -99,7 +92,7 @@ export const TopNavBarMenu = ({
                 width="100%"
                 onClick={onDashboardSelected}
               >
-                Edit project
+                (t{'Edit project'})
               </Button>
             </MenuItem>
 
@@ -115,7 +108,7 @@ export const TopNavBarMenu = ({
                 width="100%"
                 onClick={onMyProjectsSelected}
               >
-                View my projects
+                {t('View my projects')}
               </Button>
             </MenuItem>
 
@@ -153,7 +146,7 @@ export const TopNavBarMenu = ({
         ) : null}
 
         <MenuItem as={Link} to={getPath('index')} fontWeight={'bold'}>
-          Recent Activity
+          {t('Recent Activity')}
         </MenuItem>
 
         <MenuItem
@@ -161,30 +154,30 @@ export const TopNavBarMenu = ({
           as={Link}
           to={getPath('projectDiscovery')}
         >
-          Discover Projects
+          {t('Discover Projects')}
         </MenuItem>
 
         <MenuItem fontWeight={'bold'} as={Link} to={getPath('grants')}>
-          Grants
+          {t('Grants')}
         </MenuItem>
 
         <MenuDivider />
 
         <MenuItem color={'neutral.700'}>
           <MenuItemLink destinationPath={AboutUsUrl} isExternal>
-            About
+            {t('About')}
           </MenuItemLink>
         </MenuItem>
 
         <MenuItem color={'neutral.700'}>
           <MenuItemLink destinationPath={FAQUrl} isExternal>
-            FAQ
+            {t('FAQ')}
           </MenuItemLink>
         </MenuItem>
 
         <MenuItem color={'neutral.700'}>
           <MenuItemLink destinationPath={FeedbackUrl} isExternal>
-            Feedback
+            {t('Feedback')}
           </MenuItemLink>
         </MenuItem>
 
@@ -198,7 +191,7 @@ export const TopNavBarMenu = ({
               px={4}
               py={2}
             >
-              Sign Out
+              {t('Sign Out')}
             </MenuItem>
           </>
         ) : null}
@@ -206,32 +199,5 @@ export const TopNavBarMenu = ({
         <ModeChange />
       </MenuList>
     </Menu>
-  )
-}
-
-export const ModeChange = () => {
-  return (
-    <HStack bgColor="neutral.200" borderRadius={8} mx={3} p={2} spacing={3}>
-      <ColorModeSwitcher />
-      <Tooltip label="currency">
-        <IconButton
-          bgColor="neutral.50"
-          variant="primaryNeutral"
-          aria-label="currency-convert"
-          icon={<SatSymbolIcon color="neutral.600" />}
-          isDisabled
-        />
-      </Tooltip>
-      <Tooltip label="language">
-        <Button
-          bgColor="neutral.50"
-          color="neutral.600"
-          variant="primaryNeutral"
-          isDisabled
-        >
-          English
-        </Button>
-      </Tooltip>
-    </HStack>
   )
 }

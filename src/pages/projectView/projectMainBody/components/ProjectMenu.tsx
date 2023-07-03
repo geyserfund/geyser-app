@@ -5,12 +5,14 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { BsThreeDots } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 
 import { getPath } from '../../../../constants'
 
 export const ProjectMenu = ({ projectName }: { projectName: string }) => {
+  const { t } = useTranslation()
   return (
     <Menu>
       <MenuButton
@@ -25,10 +27,10 @@ export const ProjectMenu = ({ projectName }: { projectName: string }) => {
       />
       <MenuList>
         <MenuItem as={Link} to={getPath('dashboardContributors', projectName)}>
-          Dashboard
+          {t('Dashboard')}
         </MenuItem>
         <MenuItem as={Link} to={getPath('projectDashboard', projectName)}>
-          Edit project
+          {t('Edit project')}
         </MenuItem>
       </MenuList>
     </Menu>

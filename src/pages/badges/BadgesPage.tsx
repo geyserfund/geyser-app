@@ -1,4 +1,5 @@
 import { Box, Button, Container, Text, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { FaArrowLeft } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
@@ -28,6 +29,7 @@ export const BADGE_SUBTYPE_MAP: Record<string, string> = {
 }
 
 export const BadgesPage = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { badges } = useBadges()
 
@@ -42,16 +44,17 @@ export const BadgesPage = () => {
         onClick={() => navigate(-1)}
         fontSize="sm"
       >
-        <FaArrowLeft /> Back
+        <FaArrowLeft /> {t('Back')}
       </Button>
       <VStack spacing={4} justify="center" textAlign="center" mb={12}>
         <Container maxWidth="xl">
           <Text mb={4} variant="h2">
-            Geyser badges
+            {t('Geyser badges')}
           </Text>
           <Text variant="body1">
-            To recognize active users, Geyser issues and awards users with Nostr
-            badges, which can more fully recognize their actions.
+            {t(
+              'To recognize active users, Geyser issues and awards users with Nostr badges, which can more fully recognize their actions.',
+            )}
           </Text>
         </Container>
         {badges &&
@@ -69,14 +72,16 @@ export const BadgesPage = () => {
                       pb={1}
                       variant="h2"
                     >
-                      {BADGE_TYPE_MAP[type]}
+                      {t(BADGE_TYPE_MAP[type] || '')}
                     </Text>
                     {subtypes &&
                       Object.keys(subtypes).map((subtype) => {
                         const subtypeBadges = subtypes[subtype]
                         return (
                           <Box key={subtype}>
-                            <BadgeList title={BADGE_SUBTYPE_MAP[subtype]}>
+                            <BadgeList
+                              title={t(BADGE_SUBTYPE_MAP[subtype] || '')}
+                            >
                               {subtypeBadges &&
                                 subtypeBadges.map(
                                   (badge) =>

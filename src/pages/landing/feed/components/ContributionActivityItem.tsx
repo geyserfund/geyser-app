@@ -1,5 +1,6 @@
 import { Box, HStack, Image, Stack, Text, VStack } from '@chakra-ui/react'
 import { HTMLChakraProps } from '@chakra-ui/system'
+import { useTranslation } from 'react-i18next'
 
 import { LightningIcon, SatoshiIconTilted } from '../../../../components/icons'
 import { SkeletonLayout } from '../../../../components/layouts'
@@ -18,8 +19,12 @@ import {
   FundingTxForLandingPageFragment,
   FundingTxFragment,
 } from '../../../../types'
-import { getDaysAgo, getRandomOrb, toSmallImageUrl } from '../../../../utils'
-import { commaFormatted } from '../../../../utils/formatData/helperFunctions'
+import {
+  commaFormatted,
+  GetDaysAgo,
+  getRandomOrb,
+  toSmallImageUrl,
+} from '../../../../utils'
 
 type Props = HTMLChakraProps<'div'> & {
   fundingTx: FundingTxFragment | FundingTxForLandingPageFragment
@@ -34,10 +39,11 @@ export const ContributionActivityItem = ({
   showsProjectLink,
   ...rest
 }: Props) => {
+  const { t } = useTranslation()
   const { funder } = fundingTx
 
-  const isFunderAnonymous = Boolean(funder?.user) === false
-  const timeAgo = getDaysAgo(dateTime || fundingTx.paidAt)
+  const isFunderAnonymous = !funder?.user
+  const timeAgo = GetDaysAgo(dateTime || fundingTx.paidAt)
   const wasMadeOnChain = fundingTx.onChain
 
   const avatarMetadata = getAvatarMetadata({
@@ -123,7 +129,7 @@ export const ContributionActivityItem = ({
                 >{`${count}x`}</Text>
                 <LightningIcon height="15px" width="10px" />
                 <Text fontFamily={fonts.inter} fontSize="12px" fontWeight={500}>
-                  STREAMS
+                  {t('STREAMS')}
                 </Text>
               </HStack>
             )}
@@ -163,7 +169,7 @@ export const ContributionActivityItem = ({
           <HStack w="full" color="neutral.700" spacing={2}>
             <Caption whiteSpace="nowrap">
               {`${wasMadeOnChain ? '⛓' : '⚡️'}`}
-              {timeAgo ? `${timeAgo} ago` : 'Some time ago'}
+              {timeAgo ? `${timeAgo} ${t('ago')}` : t('Some time ago')}
             </Caption>
 
             <ExternalAccountLinkIcon fundingTx={fundingTx} />

@@ -1,4 +1,5 @@
 import { IconButton } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { BiPencil } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 
@@ -9,6 +10,7 @@ import { useProjectContext } from '../../../../context'
 import { MarkdownField } from '../../../../forms/markdown/MarkdownField'
 
 export const Story = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { project, isProjectOwner } = useProjectContext()
 
@@ -34,7 +36,7 @@ export const Story = () => {
             ) : undefined
           }
         >
-          Story
+          {t('Story')}
         </TitleDivider>
         <MarkdownField preview content={project?.description} />
       </article>

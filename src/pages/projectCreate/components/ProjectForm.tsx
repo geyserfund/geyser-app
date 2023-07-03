@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react'
 import { ChangeEventHandler } from 'react'
 import { Controller, UseFormReturn } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import { FileUpload } from '../../../components/molecules'
 import { TextArea, TextInputBox, UploadBox } from '../../../components/ui'
@@ -30,6 +31,7 @@ type ProjectFormProps = {
 }
 
 export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
+  const { t } = useTranslation()
   const { user } = useAuthContext()
 
   const { formState, setValue, watch, setError, control } = form
@@ -107,8 +109,8 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
   return (
     <VStack spacing={6}>
       <FieldContainer
-        title="Title"
-        subtitle="A few words that make your project stand out"
+        title={t('Title')}
+        subtitle={t('A few words that make your project stand out')}
       >
         <TextInputBox
           name="title"
@@ -120,8 +122,10 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
       </FieldContainer>
 
       <FieldContainer
-        title="Lightning Address Preview"
-        subtitle="This is the lightning address for your project. Funds sent to this lightning address will show in your project activity"
+        title={t('Lightning Address Preview')}
+        subtitle={t(
+          'This is the lightning address for your project. Funds sent to this lightning address will show in your project activity',
+        )}
         error={FormErrorIcon.name}
       >
         <InputGroup size="md" borderRadius="8px">
@@ -139,8 +143,10 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
       </FieldContainer>
 
       <FieldContainer
-        title="Objective"
-        subtitle="Add 'one liner' a simple descriptions of what your project is about"
+        title={t('Objective')}
+        subtitle={t(
+          "Add 'one liner' a simple descriptions of what your project is about",
+        )}
       >
         <TextArea
           name="shortDescription"
@@ -170,13 +176,17 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
       </FieldContainer>
 
       <FieldContainer
-        title="Image"
-        subtitle="Add the main project image that will be displayed in all thumbnails"
+        title={t('Image')}
+        subtitle={t(
+          'Add the main project image that will be displayed in all thumbnails',
+        )}
       >
         <FileUpload
           showcase
           containerProps={{ w: '100%' }}
-          caption="For best fit, pick a square image. Image size limit: 10MB."
+          caption={t(
+            'For best fit, pick a square image. Image size limit: 10MB.',
+          )}
           src={watch('thumbnailImage')}
           onUploadComplete={handleImageUpload}
           onDeleteClick={handleDeleteThumbnail}
@@ -184,14 +194,16 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
         >
           <UploadBox
             h={10}
-            title={watch('thumbnailImage') ? 'Change image' : undefined}
+            title={watch('thumbnailImage') ? t('Change image') : undefined}
           />
         </FileUpload>
       </FieldContainer>
 
       <FieldContainer
-        title="Header"
-        subtitle="Add a header with a video link or by uploading an image to help bring your project to life"
+        title={t('Header')}
+        subtitle={t(
+          'Add a header with a video link or by uploading an image to help bring your project to life',
+        )}
       >
         <Controller
           name="image"
@@ -210,7 +222,9 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
                   containerProps={{ flexGrow: 1 }}
                   showcase={isImage}
                   showcaseW="80px"
-                  caption="For best fit, select horizontal 1:3 image. Image size limit: 10MB"
+                  caption={t(
+                    'For best fit, select horizontal 1:3 image. Image size limit: 10MB.',
+                  )}
                   src={isImage ? field.value : undefined}
                   onUploadComplete={handleHeaderImageUpload}
                   onDeleteClick={handleDeleteImage}
@@ -218,7 +232,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
                 >
                   <UploadBox
                     h={10}
-                    title={field.value ? 'Change header' : undefined}
+                    title={field.value ? t('Change header') : undefined}
                   />
                 </FileUpload>
               </HStack>
@@ -228,15 +242,19 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
       </FieldContainer>
 
       <FieldContainer
-        title="Fundraising deadline"
-        subtitle="Add a deadline to your project if you have one, or just keep it as ongoing."
+        title={t('Fundraising deadline')}
+        subtitle={t(
+          'Add a deadline to your project if you have one, or just keep it as ongoing.',
+        )}
       >
         <ProjectFundraisingDeadline setValue={setValue} watch={watch} />
       </FieldContainer>
 
       <FieldContainer
-        title="Email"
-        subtitle="Project notifications will be sent to your profile email, which you can edit in Profile Settings. Make sure to verify your email to keep your wallet secure."
+        title={t('Email')}
+        subtitle={t(
+          'Project notifications will be sent to your profile email, which you can edit in Profile Settings. Make sure to verify your email to keep your wallet secure.',
+        )}
       >
         <TextInputBox
           name="email"

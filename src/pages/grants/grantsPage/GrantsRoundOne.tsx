@@ -9,6 +9,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { FaArrowLeft } from 'react-icons/fa'
 import { useNavigate } from 'react-router'
 
@@ -26,7 +27,7 @@ import { GrantApplicant } from '../../../types'
 import { useMediumScreen, useMobileMode } from '../../../utils'
 import { ApplyGrantCard } from '../components/ApplyGrantCard'
 import { Board } from '../components/Board'
-import { CommunityVoting } from './sections/CommunityVoting'
+import { CommunityVoting } from './sections'
 
 const grants = [
   {
@@ -70,6 +71,7 @@ export const GrantsRoundOne = ({
   fundingOpenStartDate: number
   fundingOpenEndDate: number
 }) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
   const navigate = useNavigate()
   const isMedium = useMediumScreen()
@@ -97,7 +99,7 @@ export const GrantsRoundOne = ({
             onClick={() => navigate(-1)}
             fontSize="sm"
           >
-            <FaArrowLeft /> See all Grants
+            <FaArrowLeft /> {t('See all Grants')}
           </Button>
           <Text
             fontSize={isMobile ? '4xl' : '47px'}
@@ -114,7 +116,7 @@ export const GrantsRoundOne = ({
             textShadow={' 0px 0px 25.7663px rgba(22, 232, 194, 0.11)'}
             color={'primary.500'}
           >
-            Geyser Grants
+            {t('Geyser Grants')}
           </Text>
           <Box
             display="flex"
@@ -129,7 +131,7 @@ export const GrantsRoundOne = ({
               textAlign="center"
               justifyContent="center"
             >
-              Round 1
+              {t('Round 1')}
             </Text>
           </Box>
           <Box display="flex" justifyContent={'center'} my="2" rounded={'sm'}>
@@ -140,7 +142,7 @@ export const GrantsRoundOne = ({
               fontWeight={'500'}
               fontSize="14px"
             >
-              CLOSED
+              {t('CLOSED')}
             </Text>
           </Box>
           <Text
@@ -150,9 +152,11 @@ export const GrantsRoundOne = ({
             textAlign="center"
             justifyContent="center"
           >
-            Funding educators, creatives and builders doing Bitcoin-only
-            projects on Geyser.{isMobile ? '' : <br />} Funded by bitcoin
-            sponsors who want to change the world for the better.
+            {t(
+              'Funding educators, creatives and builders doing Bitcoin-only projects on Geyser.',
+            )}
+            {isMobile ? '' : <br />}{' '}
+            {t('Funded by bitcoiners who want to change the world.')}
           </Text>
           <Box display="flex" flexDirection={'column'} alignItems="center">
             <Box color={'primary.500'} my={8}>
@@ -170,11 +174,11 @@ export const GrantsRoundOne = ({
               {grants.map((item, idx) => (
                 <GridItem w={'100%'} key={idx}>
                   <ApplyGrantCard
-                    title={item.title}
+                    title={t(item.title)}
                     contributed={item.contributed}
                     distributed={item.distributed}
                     subtitle={item.subtitle}
-                    about={item.about}
+                    about={t(item.about)}
                     image={item.image}
                     applicant={item.applicants}
                     isClose={false}
@@ -198,16 +202,16 @@ export const GrantsRoundOne = ({
                 textAlign="center"
                 mt={8}
               >
-                Round 1 Announcement
+                {t('Round 1 Announcement')}
               </Text>
               <Text textAlign="justify" fontSize="sm">
-                The Geyser Grant Round 1 winners have been released.{' '}
+                {t('The Geyser Grant Round 1 winners have been released.')}{' '}
                 <Link
                   _hover={{ textDecoration: 'none' }}
                   isExternal
                   href="https://twitter.com/geyserfund/status/1567537222005530625?s=20&t=ubMlkMfNudkbogo-IKhkHw"
                 >
-                  Check out our Twitter announcement.
+                  {t('Check out our Twitter announcement.')}
                 </Link>
               </Text>
               <Image
@@ -226,7 +230,7 @@ export const GrantsRoundOne = ({
                 alignItems="center"
               >
                 <ButtonComponent fontSize="lg">
-                  Announcement
+                  {t('Announcement')}
                   <ExternalLinkIcon w={4} h={4} ml={1} mt={0.5} />
                 </ButtonComponent>
               </Link>
@@ -252,11 +256,12 @@ export const GrantsRoundOne = ({
               fontSize="24px"
               fontWeight={'bold'}
             >
-              Principled Bitcoiners Board
+              {t('Principled Bitcoiners Board')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">
-              The board will be responsible for reviewing and evaluating the
-              applications.
+              {t(
+                'The board will be responsible for reviewing and evaluating the applications.',
+              )}
             </Text>
           </Box>
           <Box minWidth={'100%'} p="2" bg="neutral.200">
@@ -268,11 +273,12 @@ export const GrantsRoundOne = ({
               fontSize="24px"
               fontWeight={'bold'}
             >
-              Made possible by sponsors
+              {t('Made possible by sponsors')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">
-              Bitcoin companies and anon individuals that want to bring hope to
-              the world.
+              {t(
+                'Bitcoin companies and anon individuals that want to bring hope to the world.',
+              )}
             </Text>
           </Box>
           <Box

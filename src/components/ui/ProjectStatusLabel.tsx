@@ -8,6 +8,7 @@ import {
 } from '@chakra-ui/react'
 import { HTMLChakraProps } from '@chakra-ui/system'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 
 import { ProjectFragment, WalletStatus } from '../../types/generated/graphql'
@@ -47,13 +48,13 @@ export const ProjectStatusIcons = {
 
 export const ProjectStatusTooltip = {
   [ProjectStatusLabels.UNSTABLE_WALLET]:
-    'The last time someone tried to send funds to this wallet, there was a liquidity issue. ',
+    'The last time someone tried to send funds to this wallet, there was a liquidity issue.',
   [ProjectStatusLabels.INACTIVE_WALLET]:
-    'The last time someone tried to make a transaction to this project, the invoice generation failed. ',
+    'The last time someone tried to make a transaction to this project, the invoice generation failed.',
   [ProjectStatusLabels.RUNNING]:
-    'This project is live and wallet running smoothly. ',
+    'This project is live and wallet running smoothly.',
   [ProjectStatusLabels.DRAFT]:
-    'This project has not been launched yet and is only visible to the project creator ',
+    'This project has not been launched yet and is only visible to the project creator.',
   [ProjectStatusLabels.INACTIVE]:
     'This project has been deactivated by the project creator.',
 }
@@ -65,6 +66,8 @@ export const ProjectStatusLabel = ({
   iconSize = '16px',
   direction = 'row',
 }: IProjectStatusLabel) => {
+  const { t } = useTranslation()
+
   const commonStyles = {
     fontWeight: 'semibold',
     fontFamily,
@@ -125,11 +128,11 @@ export const ProjectStatusLabel = ({
   const tooltip = ProjectStatusTooltip[status]
 
   return (
-    <Tooltip label={tooltip} placement="top" size="sm">
+    <Tooltip label={t(tooltip)} placement="top" size="sm">
       <Stack direction={direction} alignItems="center">
         <Icon as={CurrentIcon} fontSize={iconSize} color={color} />
         <Text color={color} {...commonStyles}>
-          {status}
+          {t(status)}
         </Text>
       </Stack>
     </Tooltip>

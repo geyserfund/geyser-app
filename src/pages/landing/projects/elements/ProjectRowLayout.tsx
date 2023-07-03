@@ -1,5 +1,6 @@
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { Box, HStack, StackProps, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { H3 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
@@ -20,6 +21,7 @@ export const ProjectRowLayout = ({
   seeAllText,
   ...rest
 }: ProjectRowLayoutProps) => {
+  const { t } = useTranslation()
   return (
     <VStack alignItems="start" spacing="10px" {...rest}>
       <HStack width="100%" justifyContent="space-between">
@@ -38,7 +40,7 @@ export const ProjectRowLayout = ({
             rightIcon={<ChevronRightIcon fontSize="25px" />}
             onClick={onSeeAllClick}
           >
-            {seeAllText || 'See all'}
+            {seeAllText || t('See all')}
           </ButtonComponent>
         )}
       </HStack>

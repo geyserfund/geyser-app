@@ -2,6 +2,7 @@ import { CloseIcon } from '@chakra-ui/icons'
 import { Box, Text, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { CookiesProvider, useCookies } from 'react-cookie'
+import { useTranslation } from 'react-i18next'
 import { BsArrowLeft } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 
@@ -19,6 +20,7 @@ export const FailedAuth = () => {
 }
 
 export const FailedAuthComponent = () => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
 
   const [cookie, _, removeCookie] = useCookies()
@@ -47,7 +49,7 @@ export const FailedAuthComponent = () => {
         fontSize={isMobile ? '2xl' : '3xl'}
         textAlign="center"
       >
-        Error
+        {t('Error')}
       </Text>
       <Box
         bg="secondary.red"
@@ -60,9 +62,9 @@ export const FailedAuthComponent = () => {
       >
         <CloseIcon w={7} h={7} />
       </Box>
-      <Body1>Authentication failed.</Body1>
+      <Body1>{t('Authentication failed.')}</Body1>
       <Body1>
-        {"Please clear your browser's cache & cookies and try again."}
+        {t("Please clear your browser's cache & cookies and try again.")}
       </Body1>
 
       <ButtonComponent
@@ -72,7 +74,7 @@ export const FailedAuthComponent = () => {
         maxWidth="200px"
         leftIcon={<BsArrowLeft fontSize="25px" />}
       >
-        Go back
+        {t('Go back')}
       </ButtonComponent>
     </VStack>
   )

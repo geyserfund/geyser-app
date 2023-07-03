@@ -28,7 +28,7 @@ export const ImageWithReload = ({
   const componentRef = useRef<number>(0)
 
   const [hasValidSource, setHasValidSource] = useState(Boolean(src))
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
     componentRef.current = 0
@@ -75,7 +75,7 @@ export const ImageWithReload = ({
     return (
       <>
         <Skeleton
-          height={'300px'}
+          height={'350px'}
           width={'500px'}
           maxHeight={'500px'}
           {...rest}

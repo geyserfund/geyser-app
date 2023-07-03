@@ -12,6 +12,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import { AiOutlineSetting } from 'react-icons/ai'
 import { BiRocket } from 'react-icons/bi'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
@@ -39,12 +40,11 @@ import {
   useLightningAddressVerifyLazyQuery,
   useProjectStatusUpdateMutation,
   WalletResourceType,
-} from '../../types/generated/graphql'
+} from '../../types'
 import { toInt, useNotification, validateEmail } from '../../utils'
+import { NodeAdditionModal, WalletConnectionOptionInfoBox } from './components'
 import { FormContinueButton } from './components/FormContinueButton'
-import { NodeAdditionModal } from './components/NodeAdditionModal'
 import { ProjectCreateCompleted } from './components/ProjectCreateCompleted'
-import { WalletConnectionOptionInfoBox } from './components/WalletConnectionOptionInfoBox'
 import { TNodeInput } from './types'
 
 type Props =
@@ -91,6 +91,7 @@ export const ProjectCreationWalletConnectionForm = ({
   onNextClick,
   setNodeInput: setParentNode = noop,
 }: Props) => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { toast } = useNotification()
 
@@ -310,12 +311,12 @@ export const ProjectCreationWalletConnectionForm = ({
               onClick={onLaunchClick}
               isLoading={isLoading}
               disabled={
-                isSubmitEnabled === false ||
+                !isSubmitEnabled ||
                 isLoading ||
                 Boolean(lightningAddressFormError)
               }
             >
-              Launch Project
+              {t('Launch Project')}
             </Button>
           )}
           <Button
@@ -324,7 +325,7 @@ export const ProjectCreationWalletConnectionForm = ({
             onClick={onSaveDraftClick}
             disabled={isLoading}
           >
-            Save As Draft
+            {t('Save As Draft')}
           </Button>
         </VStack>
       </ProjectCreateCompleted>
@@ -356,7 +357,7 @@ export const ProjectCreationWalletConnectionForm = ({
         <VStack spacing={10}>
           <VStack width="100%" alignItems="flex-start" spacing={3}>
             <Radio size="lg" value={ConnectionOption.LIGHTNING_ADDRESS}>
-              Lightning Address
+              {t('Lightning Address')}
             </Radio>
 
             {connectionOption === ConnectionOption.LIGHTNING_ADDRESS ? (
@@ -385,10 +386,14 @@ export const ProjectCreationWalletConnectionForm = ({
             ) : null}
 
             <WalletConnectionOptionInfoBox
-              primaryText="Connect your lightning address"
-              promoText="2% Geyser fee per transaction"
+              primaryText={t('Connect your lightning address')}
+              promoText={t('2% Geyser fee per transaction')}
               secondaryText={
-                <>
+                <Trans
+                  i18nKey={
+                    '<1>Lightning Addresses</1> are like an email address, but for your Bitcoin. You’ll receive all on-chain and lightning transactions directly to your lightning wallet. Get your own lightning access using these recommended apps.'
+                  }
+                >
                   <Link
                     textDecoration="underline"
                     href="https://lightningaddress.com/"
@@ -400,7 +405,7 @@ export const ProjectCreationWalletConnectionForm = ({
                   receive all on-chain and lightning transactions directly to
                   your lightning wallet. Get your own lightning access using
                   these recommended apps.
-                </>
+                </Trans>
               }
             >
               <HStack width={'full'} justifyContent={'flex-start'} spacing={4}>
@@ -426,7 +431,7 @@ export const ProjectCreationWalletConnectionForm = ({
 
           <VStack width="100%" alignItems="flex-start" spacing={3}>
             <Radio size="lg" value={ConnectionOption.PERSONAL_NODE}>
-              Connect Your Node
+              {t('Connect Your Node')}
             </Radio>
 
             {connectionOption === ConnectionOption.PERSONAL_NODE ? (
@@ -436,21 +441,27 @@ export const ProjectCreationWalletConnectionForm = ({
                 variant="secondary"
                 onClick={openWallet}
               >
-                Connect Your Node
+                {t('Connect Your Node')}
               </Button>
             ) : null}
 
             <WalletConnectionOptionInfoBox
-              primaryText="Connect your node"
-              promoText="No fee per transaction"
+              primaryText={t('Connect your node')}
+              promoText={t('No fee per transaction')}
               secondaryText={
                 <span>
-                  Connect your lightning node to receive incoming transactions
-                  directly. Don&apos;t have a node? You can{' '}
-                  <Link href={VoltageExplainerPageForGeyserURL}>
-                    create a cloud node
-                  </Link>{' '}
-                  with the recommended app.
+                  <Trans
+                    i18nKey={
+                      'Connect your lightning node to receive incoming transactions directly. Don&apos;t have a node? You can <1>create a cloud node</1> with the recommended app.'
+                    }
+                  >
+                    Connect your lightning node to receive incoming transactions
+                    directly. Don&apos;t have a node? You can{' '}
+                    <Link href={VoltageExplainerPageForGeyserURL}>
+                      create a cloud node
+                    </Link>{' '}
+                    with the recommended app.
+                  </Trans>
                 </span>
               }
             >

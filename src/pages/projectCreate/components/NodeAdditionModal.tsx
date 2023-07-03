@@ -12,6 +12,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BsExclamation, BsQuestion } from 'react-icons/bs'
 
 import { DescriptionLinkWithIconComponent } from '../../../components/molecules'
@@ -50,6 +51,7 @@ export const NodeAdditionModal = ({
   nodeInput,
   onSubmit,
 }: Props) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
 
   const [isVoltage, setIsVoltage] = useState(false)
@@ -94,7 +96,9 @@ export const NodeAdditionModal = ({
       errors.name = 'Node name' + additionalText
       isValid = false
     } else if (form.name.length > ProjectNodeValidations.nodeName.maxLength) {
-      errors.name = `Node name cannot be longer than ${ProjectNodeValidations.nodeName.maxLength} characters.`
+      errors.name = `${t('Node name cannot be longer than')} ${
+        ProjectNodeValidations.nodeName.maxLength
+      } ${t('characters')}.`
       isValid = false
     }
 
@@ -115,7 +119,9 @@ export const NodeAdditionModal = ({
     } else if (
       form.publicKey.length !== ProjectNodeValidations.publicKey.length
     ) {
-      errors.publicKey = `Public Key must be ${ProjectNodeValidations.publicKey.length} characters long.`
+      errors.publicKey = `${t('Public Key must be')} ${
+        ProjectNodeValidations.publicKey.length
+      } ${t('characters long')}.`
       isValid = false
     } else {
       const val = isSecp256k1Compressed(form.publicKey)
@@ -132,7 +138,11 @@ export const NodeAdditionModal = ({
       form.invoiceMacaroon.length >
       ProjectNodeValidations.invoiceMacaroon.maxLength
     ) {
-      errors.invoiceMacaroon = `Invoice Macaroon cannot be longer than ${ProjectNodeValidations.invoiceMacaroon.maxLength} characters.`
+      errors.invoiceMacaroon = `${t(
+        'Invoice Macaroon cannot be longer than',
+      )} ${ProjectNodeValidations.invoiceMacaroon.maxLength} ${t(
+        'characters',
+      )}.`
       isValid = false
     } else {
       const val = checkMacaroonPermissions(form.invoiceMacaroon)
@@ -180,20 +190,20 @@ export const NodeAdditionModal = ({
         <ModalHeader paddingX="20px">
           <VStack spacing={2} alignItems="flex-start">
             <Text fontSize="18px" fontWeight={600}>
-              Add a Node
+              {t('Add a Node')}
             </Text>
 
             <Text fontSize={'14px'} fontWeight="medium" color="neutral.600">
-              We currently support LND and clearnet nodes. So Tor nodes will not
-              work at this time.
+              {t(
+                'We currently support LND and clearnet nodes. So Tor nodes will not work at this time.',
+              )}
             </Text>
             <DescriptionLinkWithIconComponent
               title={
                 <>
-                  Keep in mind that you are responsible for managing the
-                  liquidity of your node.{' '}
+                  {t('Keep in mind that you are responsible for managing the liquidity of your node.')}{' '}
                   <Link href={WalletCreationFindOutMoreUrl} target="_blank">
-                    Find out more
+                    {t('Find out more')}
                   </Link>
                   .
                 </>
@@ -222,7 +232,7 @@ export const NodeAdditionModal = ({
             paddingX="20px"
           >
             <VStack width="100%" alignItems="flex-start">
-              <Text>Node Name</Text>
+              <Text>{t('Node Name')}</Text>
               <TextInputBox
                 name="name"
                 onChange={handleTextChange}
@@ -238,12 +248,12 @@ export const NodeAdditionModal = ({
                 isChecked={isVoltage}
                 onChange={handleVoltageNodeToggled}
               >
-                <Text>This is a Voltage Node</Text>
+                <Text>{t('This is a Voltage Node')}</Text>
               </Checkbox>
 
               {isVoltage ? (
                 <DescriptionLinkWithIconComponent
-                  title="Find our demo here on how to load a Voltage node."
+                  title={t('Find our demo here on how to load a Voltage node.')}
                   link={VoltageNodeConnectionDemoURL}
                   icon={
                     <Avatar
@@ -257,7 +267,9 @@ export const NodeAdditionModal = ({
             </VStack>
 
             <VStack width="100%" alignItems="flex-start">
-              <Text>Hostname or IP Address (API endpoint)</Text>
+              <Text>{`${t('Hostname or IP address')} (${t(
+                'API endpoint',
+              )})`}</Text>
 
               <TextInputBox
                 name="hostname"
@@ -269,7 +281,7 @@ export const NodeAdditionModal = ({
             </VStack>
 
             <VStack width="100%" alignItems="flex-start">
-              <Text>Public Key (Identity Pubkey)</Text>
+              <Text>{`${t('Public key')} (${t('Identity Pubkey')})`}</Text>
               <TextArea
                 minHeight={'6em'}
                 name="publicKey"
@@ -281,7 +293,7 @@ export const NodeAdditionModal = ({
             </VStack>
 
             <VStack width="100%" alignItems="flex-start">
-              <Text>Invoice Macaroon (base64)</Text>
+              <Text>{`${t('Invoice Macaroon')} (base64)`}</Text>
               <TextArea
                 minHeight={'10em'}
                 name="invoiceMacaroon"
@@ -295,7 +307,7 @@ export const NodeAdditionModal = ({
             {isVoltage === false ? (
               <>
                 <VStack width="100%" alignItems="flex-start">
-                  <Text>TLS Certificate (base64)</Text>
+                  <Text>{`${t('TLS certificate')} (base64)`}</Text>
                   <TextArea
                     minHeight={'6em'}
                     name="tlsCert"
@@ -306,7 +318,7 @@ export const NodeAdditionModal = ({
                   />
                 </VStack>
                 <VStack width="100%" alignItems="flex-start">
-                  <Text>gRPC port</Text>
+                  <Text>{t('gRPC port')}</Text>
                   <TextInputBox
                     name="grpc"
                     type="number"
@@ -322,7 +334,7 @@ export const NodeAdditionModal = ({
 
           <VStack spacing="10px" paddingX="20px">
             <ButtonComponent w="full" primary onClick={handleSubmit}>
-              Confirm
+              {t('Confirm')}
             </ButtonComponent>
           </VStack>
         </ModalBody>

@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client'
+import { useTranslation } from 'react-i18next'
 
 import { LandingCardBaseSkeleton } from '../../../../components/layouts'
 import { QUERY_USER_PROFILE_PROJECTS } from '../../../../graphql'
@@ -14,6 +15,7 @@ export const ProfileProjects = ({
   userProfile: User
   isViewingOwnProfile?: boolean
 }) => {
+  const { t } = useTranslation()
   const { data, loading: projectsLoading } = useQuery<
     { user: User },
     { where: UserGetInput }
@@ -35,7 +37,7 @@ export const ProfileProjects = ({
 
   return (
     <ProfileTabLayout
-      title="Projects"
+      title={t('Projects')}
       headerContent={
         isViewingOwnProfile ? <CreateAProjectButton size="sm" /> : undefined
       }

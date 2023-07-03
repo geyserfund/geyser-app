@@ -9,5 +9,8 @@ export const defaultProjectReward: ProjectReward = {
   deleted: false,
   stock: 0,
   sold: 0,
+  hasShipping: false,
+  createdAt: new Date(),
+  updatedAt: new Date(),
   project: {} as Project,
 }

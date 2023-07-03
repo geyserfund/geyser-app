@@ -15,6 +15,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { QRCode } from 'react-qrcode-logo'
 import { RejectionError, WebLNProvider } from 'webln'
 
@@ -124,6 +125,7 @@ export const ConnectWithLightningModal = ({
   isOpen,
   onClose,
 }: ConnectWithLightningModalProps) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
   const { toast } = useNotification()
   const { login } = useAuthContext()
@@ -251,7 +253,7 @@ export const ConnectWithLightningModal = ({
       <ModalContent display="flex" alignItems="center" padding="20px 15px">
         <ModalHeader>
           <Text fontSize="lg" fontWeight="bold">
-            Connect with Lightning
+            {t('Connect with Lightning')}
           </Text>
         </ModalHeader>
         <ModalCloseButton />
@@ -264,7 +266,7 @@ export const ConnectWithLightningModal = ({
             marginRight={2}
           >
             <Text marginBottom={5}>
-              Scan the QR code to connect to your Lightning wallet.
+              {t('Scan the QR code to connect to your Lightning wallet.')}
             </Text>
 
             <Link
@@ -273,7 +275,7 @@ export const ConnectWithLightningModal = ({
               fontSize="sm"
               textDecoration="underline"
             >
-              Check if your wallet supports LNURL-auth here.
+              {t('Check if your wallet supports LNURL-auth here.')}
             </Link>
             <VStack marginTop={3} marginBottom={3}>
               <Box
@@ -304,7 +306,7 @@ export const ConnectWithLightningModal = ({
               </Box>
               <HStack justifyContent="center" alignItems="center" marginTop={3}>
                 <Loader size="lg" />
-                <Text>Waiting to connect...</Text>
+                <Text>{'Waiting to connect...'}</Text>
               </HStack>
             </VStack>
             <Box
@@ -326,7 +328,7 @@ export const ConnectWithLightningModal = ({
                 fontWeight="bold"
                 fontSize="md"
               >
-                {!copy ? 'Copy' : 'Copied!'}
+                {!copy ? t('Copy') : t('Copied!')}
               </ButtonComponent>
             </Box>
           </Box>

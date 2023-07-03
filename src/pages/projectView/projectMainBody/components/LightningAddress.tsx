@@ -1,5 +1,6 @@
 import { Button, ButtonProps, Text, Tooltip } from '@chakra-ui/react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { BoltIcon } from '../../../../components/icons'
 import { copyTextToClipboard } from '../../../../utils'
@@ -9,6 +10,7 @@ interface ILightningQR extends ButtonProps {
 }
 
 export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
+  const { t } = useTranslation()
   const [copy, setCopy] = useState(false)
 
   const handleAddressCopy = () => {
@@ -19,7 +21,7 @@ export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
   return (
     <>
       <Tooltip
-        label={copy ? 'Copied!' : 'Copy Lightning Address'}
+        label={copy ? t('Copied!') : t('Copy Lightning Address')}
         placement="top"
         closeOnClick={false}
       >

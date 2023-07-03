@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { CardLayout } from '../../../../components/layouts'
 import { getFeaturedProject, getListOfTags } from '../../../../constants'
@@ -14,6 +15,8 @@ import {
 } from '../elements'
 
 export const DefaultView = () => {
+  const { t } = useTranslation()
+
   // const { activeGrant, loading } = useGrants()
 
   const allTags = useMemo(() => getListOfTags(), [])
@@ -28,7 +31,7 @@ export const DefaultView = () => {
       {firstThreeTags.map((tag) => {
         return <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} />
       })}
-      <ProjectsDisplay seeAllText="See recent" />
+      <ProjectsDisplay seeAllText={t('See recent')} />
       {restOfTheTags.map((tag) => {
         return <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} />
       })}

@@ -1,4 +1,5 @@
 import { Box, BoxProps, Text } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { H3 } from '../../../../components/typography'
 import { GrantApplicant } from '../../../../types'
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export const DistributionChart = ({ applicants }: Props) => {
+  const { t } = useTranslation()
   const total = applicants.reduce((prev, curr) => {
     return prev + (curr?.funding.communityFunding || 0)
   }, 0)
@@ -33,7 +35,7 @@ export const DistributionChart = ({ applicants }: Props) => {
 
   return (
     <SectionCard p={5}>
-      <H3>Grant distribution status</H3>
+      <H3>{t('Grant distribution status')}</H3>
       {percentages.length > 0 && (
         <Box py={2}>
           {percentages

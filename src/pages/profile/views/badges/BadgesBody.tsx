@@ -6,6 +6,7 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { SkeletonLayout } from '../../../../components/layouts'
 import { Body2 } from '../../../../components/typography'
@@ -25,6 +26,7 @@ export const BadgesBody = ({
   userProfile,
   isEdit,
 }: BadgesBodyProps) => {
+  const { t } = useTranslation()
   const nostrId =
     userProfile.externalAccounts.find(
       (account) => account?.accountType === ExternalAccountType.nostr,
@@ -33,8 +35,8 @@ export const BadgesBody = ({
 
   const getTitleToDisplay = () => {
     return userBadges.length
-      ? `${userBadges.length} Geyser badges`
-      : 'No Geyser badges'
+      ? `${userBadges.length} ${t('Geyser badges')}`
+      : t('No Geyser badges')
   }
 
   return (
@@ -53,7 +55,7 @@ export const BadgesBody = ({
 
           {hasBadgeNoNostrForOwn && (
             <Body2 color="neutral.700">
-              Login with Nostr to claim the badges you earned!
+              {t('Login with Nostr to claim the badges you earned!')}
             </Body2>
           )}
         </VStack>

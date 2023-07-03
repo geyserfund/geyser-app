@@ -1,11 +1,14 @@
 import { HStack, Text, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { useProjectContext } from '../../../context'
-import { useProjectDashboardDataQuery } from '../../../types/generated/graphql'
+import { useProjectDashboardDataQuery } from '../../../types'
 import { numberWithCommas, toInt } from '../../../utils'
 import { StatCard } from '../components/StatCard'
 
 export const ProjectStats = () => {
+  const { t } = useTranslation()
+
   const { project } = useProjectContext()
 
   const { loading, data } = useProjectDashboardDataQuery({
@@ -37,7 +40,7 @@ export const ProjectStats = () => {
       spacing={4}
     >
       <Text w="100%" variant="h3" color="neutral.900">
-        All Time Statistics
+        {t('All Time Statistics')}
       </Text>
       <HStack
         spacing={{ base: 0, lg: 6 }}
@@ -46,14 +49,11 @@ export const ProjectStats = () => {
         w="100%"
         flexWrap="wrap"
       >
-        <StatCard title="VISITS">
+        <StatCard title={t('VISITS')}>
           {loading ? 0 : numberWithCommas(visitorsCount)}
         </StatCard>
-        <StatCard title="FUNDED">{loading ? 0 : project.balance}</StatCard>
-        <StatCard
-          title="
-            FUNDERS/VISITORS"
-        >
+        <StatCard title={t('FUNDED')}>{loading ? 0 : project.balance}</StatCard>
+        <StatCard title={t('FUNDERS/VISITORS')}>
           {`${loading ? 0 : getFundersToVisitorsPercentage().toFixed(0)} %`}
         </StatCard>
       </HStack>

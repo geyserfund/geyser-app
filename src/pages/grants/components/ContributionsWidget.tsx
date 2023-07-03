@@ -1,4 +1,5 @@
 import { Box, Text } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { BadgeIcon } from '../../../components/icons/svg/BadgeIcon'
 import { ContributionsIcon } from '../../../components/icons/svg/ContributionsIcon'
@@ -24,6 +25,7 @@ export const ContributionsWidget = ({
   endDateTimestamp,
   endDateSubtitle,
 }: Props) => {
+  const { t } = useTranslation()
   return (
     <Box borderRadius="8px" backgroundColor="neutral.100" pb={4} pt={2} mt={4}>
       <Box
@@ -73,7 +75,7 @@ export const ContributionsWidget = ({
             height="100%"
             color="primary.500"
           />
-          <WidgetItem subtitle="Geyser grant">{balance}</WidgetItem>
+          <WidgetItem subtitle={t('Geyser grant')}>{balance}</WidgetItem>
         </Box>
         <Box px={2} display="flex" alignItems="start" my={2}>
           <ContributionsIcon
@@ -83,7 +85,9 @@ export const ContributionsWidget = ({
             height="100%"
             color="primary.500"
           />
-          <WidgetItem subtitle="Worth of votes">{contributions}</WidgetItem>
+          <WidgetItem subtitle={t('Worth of votes')}>
+            {contributions}
+          </WidgetItem>
         </Box>
       </Box>
       <Box
@@ -93,7 +97,7 @@ export const ContributionsWidget = ({
         justifyContent="center"
       >
         <SponsorList sponsors={sponsors}>
-          <Text fontSize="18px">Sponsored by</Text>
+          <Text fontSize="18px">{t('Sponsored by')}</Text>
         </SponsorList>
       </Box>
     </Box>

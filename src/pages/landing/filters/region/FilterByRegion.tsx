@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { Skeleton } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { useFilterContext } from '../../../../context'
 import { QUERY_COUNTRIES, QUERY_REGION } from '../../../../graphql/queries'
@@ -17,6 +18,7 @@ interface FilterByRegionProps {
 }
 
 export const FilterByRegion = ({ mobile }: FilterByRegionProps) => {
+  const { t } = useTranslation()
   const { filters } = useFilterContext()
   const { countryCode, region } = filters
 
@@ -77,7 +79,7 @@ export const FilterByRegion = ({ mobile }: FilterByRegionProps) => {
       )
     }
 
-    return 'Everywhere'
+    return t('Everywhere')
   }
 
   if (countriesLoading || regionsLoading) {

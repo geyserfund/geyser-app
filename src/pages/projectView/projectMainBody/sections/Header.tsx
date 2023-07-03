@@ -1,6 +1,7 @@
 import { Box, HStack, Text, VStack, Wrap } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { forwardRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { AiOutlineCalendar } from 'react-icons/ai'
 import { FiTag } from 'react-icons/fi'
 import { SlLocationPin } from 'react-icons/sl'
@@ -24,6 +25,7 @@ import {
 } from '../components'
 
 export const Header = forwardRef<HTMLDivElement>((_, ref) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
   const { project, isProjectOwner } = useProjectContext()
 
@@ -68,22 +70,19 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           borderRadius="8px"
           objectFit="cover"
           src={project.thumbnailImage || undefined}
-          width="80px"
-          height="80px"
+          width={{ base: '50px', lg: '80px' }}
+          height={{ base: '50px', lg: '80px' }}
           maxHeight="80px"
-          boxShadow="lg"
         />
         <VStack
           flexGrow={1}
           alignItems="start"
           maxWidth="calc(100% - 76px - 24px)"
         >
-          <Text variant={{ base: 'h2', xl: 'h1' }} noOfLines={2} width="100%">
+          <Text variant={{ base: 'h2', xl: 'h1' }} width="100%">
             {project.title}
           </Text>
-          {isMobile ? (
-            statusContent
-          ) : (
+          {!isMobile && (
             <HStack width="100%" flexWrap="wrap">
               <HStack flexGrow={1} flexWrap="wrap">
                 <FollowButton projectId={project.id} />
@@ -97,20 +96,21 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       </HStack>
 
       {isMobile ? (
-        <HStack flexGrow={1}>
-          <Box flexGrow={1}>
+        <>
+          {statusContent}
+          <HStack flexGrow={1}>
             <FollowButton projectId={project.id} />
-          </Box>
-          <LightningAddress name={`${project.name}@geyser.fund`} />
-          <ProjectFundingQR project={project} />
-        </HStack>
+            <LightningAddress name={`${project.name}@geyser.fund`} />
+            <ProjectFundingQR project={project} />
+          </HStack>
+        </>
       ) : null}
 
       <Text variant={{ base: 'h3', xl: 'h2' }}>{project.shortDescription}</Text>
 
       {project.tags?.length > 0 && (
         <SummaryInfoLine
-          label="Tags"
+          label={t('Tags')}
           icon={
             <span>
               <FiTag color="neutral.600" />
@@ -137,7 +137,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
 
       {(project.location?.country?.name || project.location?.region) && (
         <SummaryInfoLine
-          label="Region"
+          label={t('Region')}
           icon={
             <span>
               <SlLocationPin color="neutral.600" />
@@ -181,16 +181,18 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       <HStack spacing={5} w="100%" flexWrap="wrap">
         <ProjectLinks links={project.links as string[]} />
         <SummaryInfoLine
-          label="Launched"
+          label={t('Launched')}
           icon={
             <span>
               <AiOutlineCalendar color="neutral.600" />
             </span>
           }
         >
-          <Text variant="body2" color="neutral.600">{`${DateTime.fromMillis(
-            Number(project.createdAt),
-          ).toFormat('dd LLL yyyy')}`}</Text>
+          <Text variant="body2" color="neutral.600">{`${t(
+            'Launched',
+          )} ${DateTime.fromMillis(Number(project.createdAt)).toFormat(
+            'dd LLL yyyy',
+          )}`}</Text>
         </SummaryInfoLine>
       </HStack>
     </CardLayout>

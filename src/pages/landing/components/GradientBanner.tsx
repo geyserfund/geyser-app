@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { Box, Container, HStack, Stack, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { LetTheSatsFlowIcon } from '../../../components/icons'
 import { SkeletonLayout } from '../../../components/layouts'
@@ -18,6 +19,7 @@ import {
 import { BannerBackground } from './BannerBackground'
 
 export const GradientBanner = () => {
+  const { t } = useTranslation()
   const { toast } = useNotification()
   const isMobile = useMobileMode()
 
@@ -40,9 +42,9 @@ export const GradientBanner = () => {
   }, [summaryError])
 
   const satsDataArray = [
-    [projectsSummaryData.projectsCount, 'Projects'],
-    [projectsSummaryData.fundedTotal, 'Bitcoin Raised'],
-    [projectsSummaryData.fundersCount, 'Contributors'],
+    [projectsSummaryData.projectsCount, 'projects'],
+    [projectsSummaryData.fundedTotal, 'bitcoin raised'],
+    [projectsSummaryData.fundersCount, 'contributors'],
   ]
 
   return (
@@ -85,7 +87,9 @@ export const GradientBanner = () => {
             spacing="10px"
             color={'neutral.900'}
           >
-            <H3 fontFamily="inherit">Play a part in world-changing ideas</H3>
+            <H3 fontFamily="inherit">
+              {t('Play a part in world-changing ideas')}
+            </H3>
             <HStack fontSize={'sm'} spacing={4}>
               {isSummaryLoading ? (
                 <SummarySkeleton />
@@ -106,7 +110,7 @@ export const GradientBanner = () => {
                       </MonoBody1>
 
                       <Body2 textTransform={'uppercase'} color="neutral.700">
-                        {statsData[1]}
+                        {t(statsData[1])}
                       </Body2>
                     </Stack>
                   )

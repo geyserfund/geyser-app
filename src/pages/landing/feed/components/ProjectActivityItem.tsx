@@ -1,4 +1,5 @@
 import { HStack, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { Body2 } from '../../../../components/typography'
 import { LinkableAvatar } from '../../../../components/ui'
@@ -12,6 +13,7 @@ export const ProjectActivityItem = ({
   project: ProjectForLandingPageFragment
   dateTime?: string
 }) => {
+  const { t } = useTranslation()
   const owner = project.owners[0]?.user
 
   return (
@@ -26,7 +28,7 @@ export const ProjectActivityItem = ({
             textColor="neutral.600"
           />
         ) : null}
-        <Body2>launched a new Project</Body2>
+        <Body2>{t('launched a new Project')}</Body2>
       </HStack>
       <LandingProjectCard project={project} isMobile />
       <TimeAgo date={dateTime || ''} />

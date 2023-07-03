@@ -1,4 +1,5 @@
 import { Avatar, Button, SkeletonCircle, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { CardLayout, SkeletonLayout } from '../../../components/layouts'
 import { Body1, H1 } from '../../../components/typography'
@@ -20,6 +21,7 @@ export const AccountInfo = ({
   isEdit,
   isLoading,
 }: AccountInfoProps) => {
+  const { t } = useTranslation()
   const modalProps = useEditProfileModal()
 
   if (isLoading) {
@@ -80,7 +82,7 @@ export const AccountInfo = ({
 
         <VStack w="full" alignItems="start">
           <Body1 bold color="neutral.900">
-            Connected accounts
+            {t('Connected accounts')}
           </Body1>
           {userProfile.externalAccounts.map((externalAccount) => {
             if (externalAccount) {
@@ -108,7 +110,7 @@ export const AccountInfo = ({
             variant="secondary"
             marginTop="20px"
           >
-            Edit
+            {t('Edit')}
           </Button>
           {modalProps.isOpen && <EditProfileModal {...modalProps} />}
         </>

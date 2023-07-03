@@ -20,6 +20,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import { FaTelegramPlane, FaTwitter } from 'react-icons/fa'
 
 import { createCreatorRecord } from '../../api'
@@ -44,6 +45,7 @@ export const Subscribe = ({
   parentState,
   titleSize,
 }: ISubscribe) => {
+  const { t } = useTranslation()
   const { toast } = useNotification()
   const isMobile = useMobileMode()
   const [submitting, setSubmitting] = useState(false)
@@ -105,7 +107,7 @@ export const Subscribe = ({
       })
     } catch (error) {
       toast({
-        title: 'Something went wrong',
+        title: 'Something went wrong.',
         description: 'Please try again',
         status: 'error',
       })
@@ -128,7 +130,7 @@ export const Subscribe = ({
           <ModalContent display="flex" alignItems="center" padding="20px 15px">
             <ModalHeader>
               <Text fontSize="16px" fontWeight={600}>
-                {success ? 'Success!' : 'Subscribe'}
+                {success ? t('Success!') : t('Subscribe')}
               </Text>
             </ModalHeader>
             <ModalCloseButton />
@@ -136,17 +138,21 @@ export const Subscribe = ({
               <VStack spacing="15px" width="100%">
                 <Text>
                   {success
-                    ? 'Thanks for signing up. We’ll be sharing more info about Geyser projects and product soon. To join our community find us on Telegram and Twitter.'
-                    : 'To get information on the latest Geyser projects and product subscribe by dropping your email below.'}
+                    ? t(
+                        'Thanks for signing up. We’ll be sharing more info about Geyser projects and product soon. To join our community find us on Telegram and Twitter.',
+                      )
+                    : t(
+                        'To get information on the latest Geyser projects and product subscribe by dropping your email below.',
+                      )}
                 </Text>
                 {!success && (
                   <TextInputBox
                     value={email}
-                    placeholder="Contact Email"
+                    placeholder={t('Contact Email')}
                     onChange={handleEmail}
                   />
                 )}
-                {error && <Text fontSize={'12px'}>{error}</Text>}
+                {error && <Text fontSize={'12px'}>{t(error)}</Text>}
                 {success && (
                   <HStack>
                     <Link href={GeyserTwitterUrl} isExternal>
@@ -239,7 +245,7 @@ export const Subscribe = ({
                   </InputGroup>
                   {error && (
                     <Text my={isMobile ? 2 : 1} ml={1} fontSize={'12px'}>
-                      {error}
+                      {t(error)}
                     </Text>
                   )}
                 </Box>
@@ -265,7 +271,7 @@ export const Subscribe = ({
                 as={FaTelegramPlane}
                 mr={2}
               />
-              Join us on Telegram
+              {t('Join us on Telegram')}
             </Link>
           </Box>
         </VStack>
@@ -288,13 +294,15 @@ export const Subscribe = ({
                 onClick={handleConfirm}
                 isLoading={submitting}
               >
-                Subscribe
+                {t('Subscribe')}
               </ButtonComponent>
-              {error && <Text fontSize={'12px'}>{error}</Text>}
+              {error && <Text fontSize={'12px'}>{t(error)}</Text>}
             </VStack>
           ) : (
             <Text>
-              You successfully subscribed to <strong>Geyser Grants</strong>!
+              <Trans i18nKey="You successfully subscribed to <1>Geyser Grants</1>!">
+                You successfully subscribed to <strong>Geyser Grants</strong>!
+              </Trans>
             </Text>
           )}
         </>

@@ -15,7 +15,6 @@ import {
   RewardFundingInput,
 } from '../../../types'
 import { toInt, useMobileMode } from '../../../utils'
-import { truthyFilter } from '../../../utils/array'
 import { InfoPageSkeleton, ProjectFundingInitialInfoScreen } from './screens'
 import {
   ProjectFundingQRScreen,
@@ -42,13 +41,11 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   const { mobileView, setMobileView, project, fundingFlow, fundForm } =
     useProjectContext()
 
-  // required for knowing the rewards and the funds
   const {
     state: formState,
-    setTarget,
     setState: setFormState,
-    updateReward,
     resetForm,
+    hasSelectedRewards,
   } = fundForm
 
   const {
@@ -133,11 +130,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
       },
     }
 
-    if (
-      state.rewardsByIDAndCount &&
-      Object.entries(state.rewardsByIDAndCount).length > 0 &&
-      rewardsByIDAndCount
-    ) {
+    if (hasSelectedRewards && rewardsByIDAndCount) {
       const rewardsArray = Object.keys(rewardsByIDAndCount).map((key) => ({
         id: toInt(key),
         quantity: rewardsByIDAndCount[key as keyof ProjectReward],
@@ -177,15 +170,9 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
       case fundingStages.form:
         return (
           <ProjectFundingSelectionFormScreen
-            isMobile={isMobile}
             handleCloseButton={handleCloseButton}
-            formState={formState}
-            setFormState={setFormState}
-            setTarget={setTarget}
-            updateReward={updateReward}
             handleFund={handleFund}
-            rewards={project.rewards?.filter(truthyFilter)}
-            type={project.type}
+            rewards={project.rewards}
             name={project.name}
           />
         )
@@ -227,7 +214,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
         marginTop={isMobile ? '0px' : '20px'}
         height="calc(100% - 20px)"
         borderTopLeftRadius={isMobile ? 'initial' : '8px'}
-        overflow="hidden"
+        overflowX="hidden"
         borderTop={isMobile ? 'none' : '2px solid'}
         borderLeft="2px solid"
         borderColor="neutral.200"

@@ -7,6 +7,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { BiRefresh } from 'react-icons/bi'
 import { BsExclamationCircle } from 'react-icons/bs'
 import { FaBitcoin, FaCopy } from 'react-icons/fa'
@@ -46,6 +47,7 @@ enum QRDisplayState {
 }
 
 const FundingErrorView = ({ error }: { error?: string }) => {
+  const { t } = useTranslation()
   return (
     <VStack
       height={248}
@@ -57,7 +59,7 @@ const FundingErrorView = ({ error }: { error?: string }) => {
       borderRadius={'md'}
     >
       <BsExclamationCircle fontSize={'2em'} />
-      <Body2 bold>Funding failed</Body2>
+      <Body2 bold>{t('Funding failed')}</Body2>
       {error && <Body2 fontSize="12px">{`Error: ${error}`}</Body2>}
     </VStack>
   )
@@ -68,6 +70,7 @@ const InvoiceErrorView = ({
 }: {
   onRefreshSelected: () => void
 }) => {
+  const { t } = useTranslation()
   return (
     <VStack
       height={248}
@@ -80,8 +83,8 @@ const InvoiceErrorView = ({
     >
       <BsExclamationCircle fontSize={'2em'} />
 
-      <Body2 bold>Invoice was cancelled or expired.</Body2>
-      <Body2>Click refresh to try again</Body2>
+      <Body2 bold>{t('Invoice was cancelled or expired.')}</Body2>
+      <Body2>{t('Click refresh to try again')}</Body2>
 
       <Button
         leftIcon={<BiRefresh fontSize={'2em'} />}
@@ -92,13 +95,14 @@ const InvoiceErrorView = ({
         borderRadius={'full'}
         fontSize={'10px'}
       >
-        Refresh
+        {t('Refresh')}
       </Button>
     </VStack>
   )
 }
 
 export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
+  const { t } = useTranslation()
   const [hasCopiedLightning, setHasCopiedLightning] = useState(false)
   const [hasCopiedOnchain, setHasCopiedOnchain] = useState(false)
 
@@ -207,7 +211,9 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
             onClick={onCopyLightning}
             variant="primary"
           >
-            <Text>{hasCopiedLightning ? 'Copied!' : 'Lightning invoice'}</Text>
+            <Text>
+              {hasCopiedLightning ? t('Copied!') : t('Lightning invoice')}
+            </Text>
           </Button>
         </Box>
         <Box py={1}>
@@ -216,7 +222,9 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
             onClick={onCopyOnchain}
             variant="primary"
           >
-            <Text>{hasCopiedOnchain ? 'Copied!' : 'Onchain invoice'}</Text>
+            <Text>
+              {hasCopiedOnchain ? t('Copied!') : t('Onchain invoice')}
+            </Text>
           </Button>
         </Box>
       </HStack>
@@ -276,7 +284,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
               <HStack spacing={5}>
                 <Loader size="md" />
                 <Text color={'neutral.900'} fontWeight={400}>
-                  Waiting for payment...
+                  {t('Waiting for payment')}...
                 </Text>
               </HStack>
             </Box>
@@ -288,7 +296,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
           <VStack width={'350px'} height={'335px'} justifyContent={'center'}>
             <VStack>
               <Loader />
-              <Text>Awaiting Payment</Text>
+              <Text>{t('Awaiting Payment')}</Text>
             </VStack>
           </VStack>
         )
@@ -326,12 +334,12 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
           </Box>
           <Box>
             <Text fontSize={'10px'} fontWeight={700}>
-              Fund with any on-chain or lightning wallet.
+              {t('Fund with any on-chain or lightning wallet.')}
             </Text>
             <Text fontSize={'10px'} fontWeight={400}>
-              If you are paying on-chain, make sure to send the exact amount,
-              otherwise it will not be displayed. The transaction will be
-              confirmed after 1 confirmation.
+              {t(
+                'If you are paying on-chain, make sure to send the exact amount, otherwise it will not be displayed. The transaction will be confirmed after 1 confirmation.',
+              )}
             </Text>
           </Box>
         </HStack>
@@ -347,6 +355,7 @@ const GeneratingInvoice = ({
 }: {
   refreshInvoice: () => void
 }) => {
+  const { t } = useTranslation()
   const { onOpen, onClose, isOpen } = useDisclosure()
   const timeout = useRef<NodeJS.Timeout | undefined>()
 
@@ -366,9 +375,9 @@ const GeneratingInvoice = ({
       {isOpen ? (
         <VStack w="full" alignItems="center">
           <Body2 bold textAlign="center">
-            Generating an invoice is taking longer than expected
+            {t('Generating an invoice is taking longer than expected')}
           </Body2>
-          <Body2>Click refresh to try again</Body2>
+          <Body2>{t('Click refresh to try again')}</Body2>
           <Button
             textTransform="uppercase"
             variant="secondary"
@@ -377,13 +386,13 @@ const GeneratingInvoice = ({
             leftIcon={<IoMdRefresh />}
             onClick={handleRefresh}
           >
-            Refresh
+            {t('Refresh')}
           </Button>
         </VStack>
       ) : (
         <VStack>
           <Loader />
-          <Text>Generating Invoice</Text>
+          <Text>{t('Generating Invoice')}</Text>
         </VStack>
       )}
     </VStack>

@@ -1,4 +1,5 @@
 import { Avatar, Box, HStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { MdOutlineArrowBackIos } from 'react-icons/md'
 
 import { NavBarLogo } from '../../../../components/nav/NavBarLogo'
@@ -21,6 +22,7 @@ export const CreateNav = ({
   onPreview,
   onBack,
 }: ICreateNavProps) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
 
   const { user } = useAuthContext()
@@ -66,11 +68,11 @@ export const CreateNav = ({
               </ButtonComponent>
             )}
             <ButtonComponent isDisabled={isSaving} onClick={onSave}>
-              {saveText || 'Save draft'}
+              {saveText || t('Save draft')}
             </ButtonComponent>
             {onPreview && (
               <ButtonComponent primary onClick={onPreview}>
-                Preview
+                {t('Preview')}
               </ButtonComponent>
             )}
           </HStack>

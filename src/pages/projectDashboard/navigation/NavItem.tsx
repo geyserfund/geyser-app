@@ -1,5 +1,6 @@
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { Box, Divider } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
@@ -15,9 +16,10 @@ export const NavItem = ({
   section: DashboardSection
   projectName: string
 }) => {
+  const { t } = useTranslation()
   return (
     <NavLink to={getPath(section.path, projectName)}>
-      <NavButton isActive={isActive}>{section.label}</NavButton>
+      <NavButton isActive={isActive}>{t(section.label)}</NavButton>
     </NavLink>
   )
 }
@@ -33,6 +35,7 @@ export const MobileNavItem = ({
   projectName: string
   onClick(): void
 }) => {
+  const { t } = useTranslation()
   return (
     <NavLink to={getPath(section.path, projectName)} onClick={onClick}>
       <MobileNavButton
@@ -44,7 +47,7 @@ export const MobileNavItem = ({
           </Box>
         }
       >
-        {section.label}
+        {t(section.label)}
       </MobileNavButton>
       <Divider />
     </NavLink>

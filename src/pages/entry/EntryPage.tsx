@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router'
 
 import { ProjectMobileBottomNavigation } from '../../components/nav'
 import Loader from '../../components/ui/Loader'
-import { Head } from '../../config/Head'
+import { Head } from '../../config'
 import { getPath, ProjectEntryThumbnailPlaceholderUrl } from '../../constants'
 import { useProjectContext } from '../../context'
 import { ProjectProvider } from '../../context'
@@ -13,7 +13,7 @@ import {
   EntryFragment,
   FundingResourceType,
   useEntryLazyQuery,
-} from '../../types/generated/graphql'
+} from '../../types'
 import { toInt, useMobileMode } from '../../utils'
 import { NotFoundPage } from '../notFound'
 import { ProjectActivityPanel } from '../projectView/projectActivityPanel'

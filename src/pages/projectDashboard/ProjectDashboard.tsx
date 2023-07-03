@@ -1,6 +1,7 @@
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { Container, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Outlet, useMatch } from 'react-router-dom'
 
 import { CardLayout } from '../../components/layouts'
@@ -60,6 +61,7 @@ export const projectSections: Record<string, DashboardSection> = {
 const sections = { ...creatorSections, ...projectSections }
 
 export const ProjectDashboard = () => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
   const [isDrawerOpen, setDrawerOpen] = useState(false)
 
@@ -99,10 +101,10 @@ export const ProjectDashboard = () => {
             </IconButton>
           }
         >
-          {activeSection?.label}
+          {t(activeSection?.label || '')}
         </TitleDivider>
       ) : (
-        <Text variant="h3">{activeSection?.label}</Text>
+        <Text variant="h3">{t(activeSection?.label || '')}</Text>
       )}
       <Outlet />
     </>

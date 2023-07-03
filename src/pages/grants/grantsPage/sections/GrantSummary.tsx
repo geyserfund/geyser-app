@@ -1,4 +1,5 @@
 import { Box, Image } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { Body1, H1, H3 } from '../../../../components/typography'
 import { StatusLabel } from '../../../../components/ui/StatusLabel'
@@ -12,6 +13,7 @@ import {
 } from '../../constants'
 
 export const GrantSummary = ({ grant }: { grant: Grant }) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
 
   const votingEndDate = grant.statuses.find(
@@ -37,7 +39,7 @@ export const GrantSummary = ({ grant }: { grant: Grant }) => {
         {isMobile ? null : (
           <Box pb={2}>
             <StatusLabel textTransform="uppercase">
-              {GRANT_STATUS_MAP[grant.status]}
+              {t(GRANT_STATUS_MAP[grant.status])}
             </StatusLabel>
           </Box>
         )}
@@ -49,17 +51,17 @@ export const GrantSummary = ({ grant }: { grant: Grant }) => {
           justifyContent="space-between"
         >
           <Box pt={2}>
-            <H1>{grant.title}</H1>
+            <H1>{t(grant.title)}</H1>
           </Box>
         </Box>
         <Box pt={4}>
-          <H3 fontSize="18px">{grant.shortDescription}</H3>
+          <H3 fontSize="18px">{t(grant.shortDescription)}</H3>
           <Body1 fontSize="16px" pt={4}>
-            {grant.description}
+            {t(grant.description || '')}
           </Body1>
           <ContributionsWidget
             sponsors={grant.sponsors}
-            endDateSubtitle={GRANT_STATUS_COUNTDOWN_TITLES[grant.status]}
+            endDateSubtitle={t(GRANT_STATUS_COUNTDOWN_TITLES[grant.status])}
             endDateTimestamp={votingEndDate}
             balance={getShortAmountLabel(grant.balance || 0, true)}
             contributions={getShortAmountLabel(

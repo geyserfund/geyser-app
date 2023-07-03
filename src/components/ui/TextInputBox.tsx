@@ -8,6 +8,7 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { forwardRef } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface TextInputBoxProps extends InputProps {
   error?: React.ReactNode
@@ -17,6 +18,7 @@ interface TextInputBoxProps extends InputProps {
 
 export const TextInputBox = forwardRef<HTMLInputElement, TextInputBoxProps>(
   ({ children, error, leftIcon, rightIcon, ...rest }, ref) => {
+    const { t } = useTranslation()
     return (
       <Box width="100%">
         <InputGroup>
@@ -52,7 +54,7 @@ export const TextInputBox = forwardRef<HTMLInputElement, TextInputBoxProps>(
             error
           ) : (
             <Text color="secondary.red" fontSize="12px">
-              {error}
+              {t(`${error}`)}
             </Text>
           )
         ) : null}

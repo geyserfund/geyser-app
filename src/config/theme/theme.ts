@@ -183,6 +183,22 @@ export const theme = {
         },
       },
     },
+    Checkbox: {
+      variants: {
+        primary: ({ colorScheme = 'primary' }: StyleFunctionProps) => ({
+          color: `${colorScheme}.400`,
+          control: {
+            _checked: {
+              color: `${colorScheme}.400`,
+            },
+          },
+        }),
+      },
+      defaultProps: {
+        variant: 'primary',
+        colorScheme: 'primary',
+      },
+    },
     Radio: {
       variants: {
         primary: ({ colorScheme = 'primary' }: StyleFunctionProps) => ({
@@ -215,6 +231,16 @@ export const theme = {
     Menu: menuTheme,
     Modal: modalTheme,
     Drawer: drawerTheme,
+    Input: {
+      defaultProps: {
+        focusBorderColor: 'primary.400',
+      },
+    },
+    Textarea: {
+      defaultProps: {
+        focusBorderColor: 'primary.400',
+      },
+    },
   },
   styles: {
     global: ({ theme }: StyleFunctionProps) => ({

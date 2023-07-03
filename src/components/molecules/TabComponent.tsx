@@ -7,6 +7,7 @@ import {
   TabProps,
   Tabs,
 } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { dimensions, ID } from '../../constants'
 import { useMobileMode } from '../../utils'
@@ -23,6 +24,7 @@ export type RenderTab = {
 }
 
 export const TabComponent = ({ tabs }: TabComponentProps) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
   return (
     <Tabs
@@ -46,7 +48,7 @@ export const TabComponent = ({ tabs }: TabComponentProps) => {
           {tabs.map(({ title, sub }) => {
             return (
               <Tab key={title} {...tabButtonStyles}>
-                {title}
+                {t(title)}
                 {sub && (
                   <Box
                     as="span"

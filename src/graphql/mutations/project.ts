@@ -65,8 +65,8 @@ export const MUTATION_UPDATE_PROJECT = gql`
 
 export const MUTATION_CREATE_PROJECT_REWARD = gql`
   ${FRAGMENT_PROJECT_REWARD_FOR_CREATE_UPDATE}
-  mutation CreateProjectReward($input: CreateProjectRewardInput!) {
-    createProjectReward(input: $input) {
+  mutation ProjectRewardCreate($input: CreateProjectRewardInput!) {
+    projectRewardCreate(input: $input) {
       ...ProjectRewardForCreateUpdate
     }
   }
@@ -74,8 +74,8 @@ export const MUTATION_CREATE_PROJECT_REWARD = gql`
 
 export const MUTATION_UPDATE_PROJECT_REWARD = gql`
   ${FRAGMENT_PROJECT_REWARD_FOR_CREATE_UPDATE}
-  mutation UpdateProjectReward($input: UpdateProjectRewardInput!) {
-    updateProjectReward(input: $input) {
+  mutation ProjectRewardUpdate($input: UpdateProjectRewardInput!) {
+    projectRewardUpdate(input: $input) {
       ...ProjectRewardForCreateUpdate
     }
   }

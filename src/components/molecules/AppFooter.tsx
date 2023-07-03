@@ -8,6 +8,7 @@ import {
   VStack,
   Wrap,
 } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { FaPodcast, FaTelegramPlane, FaTwitter } from 'react-icons/fa'
 
 import {
@@ -28,6 +29,7 @@ interface IFooter {
 }
 
 export const AppFooter = ({ wrapperClassName }: IFooter) => {
+  const { t } = useTranslation()
   const isMobile = useMobileMode()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -90,7 +92,7 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
           </Link>
 
           <ButtonComponent size="sm" minWidth="150px" onClick={onOpen}>
-            Subscribe
+            {t('Subscribe')}
           </ButtonComponent>
         </Wrap>
 
@@ -111,7 +113,7 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
           </Link>
 
           <Link href={GeyserPrivacyUrl} isExternal>
-            <Text>Privacy</Text>
+            <Text>{t('Privacy')}</Text>
           </Link>
 
           <Link href={GeyserTermsAndConditionsURL} isExternal>
@@ -119,7 +121,7 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
           </Link>
 
           <Link href={AnalyticsUrl} isExternal>
-            <Text>Analytics</Text>
+            <Text>{t('Analytics')}</Text>
           </Link>
         </HStack>
       </Stack>
