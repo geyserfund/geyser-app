@@ -231,6 +231,16 @@ export const theme = {
     Menu: menuTheme,
     Modal: modalTheme,
     Drawer: drawerTheme,
+    Input: {
+      defaultProps: {
+        focusBorderColor: 'primary.400',
+      },
+    },
+    Textarea: {
+      defaultProps: {
+        focusBorderColor: 'primary.400',
+      },
+    },
   },
   styles: {
     global: ({ theme }: StyleFunctionProps) => ({
