@@ -1,4 +1,4 @@
-import { Box, CloseButton, Divider, VStack } from '@chakra-ui/react'
+import { Box, Divider, VStack } from '@chakra-ui/react'
 import { useRef, useState } from 'react'
 
 import { MAX_FUNDING_AMOUNT_USD } from '../../../../constants'
@@ -102,20 +102,9 @@ export const ProjectFundingSelectionFormScreen = ({
           : undefined
       }
     >
-      {!isMobile && (
-        <CloseButton
-          position="absolute"
-          right={0}
-          top={0}
-          _hover={{ bg: 'none' }}
-          _active={{ bg: 'none' }}
-          onClick={handleCloseButton}
-        />
-      )}
-
       <Box width="100%" overflowY="auto" flex={1}>
         {step === 'contribution' ? (
-          <FundingFormSection />
+          <FundingFormSection onBackClick={handleCloseButton} />
         ) : (
           <FundingFormUserInfoSection
             onBackClick={() => setStep('contribution')}
