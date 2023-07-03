@@ -64,6 +64,7 @@ export const ProjectFundingInitialInfoScreen = ({ project }: Props) => {
     resultMap: aggregateTransactions,
     where: { projectId: toInt(project.id) },
     options: {
+      skip: !project.id,
       onError() {
         toast({
           status: 'error',
@@ -82,6 +83,7 @@ export const ProjectFundingInitialInfoScreen = ({ project }: Props) => {
       amountFunded: 'desc',
     },
     options: {
+      skip: !project.id,
       onError() {
         toast({
           status: 'error',

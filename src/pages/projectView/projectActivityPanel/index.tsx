@@ -178,11 +178,11 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
         )
       case fundingStages.started:
         return (
-          <ProjectFundingQRScreen
-            state={formState}
+          <SuccessScreen
+            fundingState={formState}
             project={project}
-            fundingFlow={fundingFlow}
-            handleCloseButton={handleQRCloseButton}
+            fundingTx={fundingTx}
+            handleCloseButton={handleCloseButton}
           />
         )
       case fundingStages.completed:

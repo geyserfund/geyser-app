@@ -37,19 +37,18 @@ export const ProjectFundingSelectionFormScreen = ({
 
   const hasRewards = rewards && rewards.length > 0
 
-  const handleSubmit = {
-    contribution() {
-      const valid = validateFundingAmount()
-      if (valid) {
-        setStep('info')
-      }
-    },
-    info() {
-      const valid = validateFundingUserInfo()
-      if (valid) {
-        handleFund()
-      }
-    },
+  const handleContribution = () => {
+    const valid = validateFundingAmount()
+    if (valid) {
+      setStep('info')
+    }
+  }
+
+  const handleInfo = () => {
+    const valid = validateFundingUserInfo()
+    if (valid) {
+      handleFund()
+    }
   }
 
   const validateFundingUserInfo = () => {
@@ -126,7 +125,12 @@ export const ProjectFundingSelectionFormScreen = ({
             marginTop="0px !important"
           />
         )}
-        <ProjectFundingSummaryCard onSubmit={handleSubmit[step]} />
+
+        {step === 'contribution' ? (
+          <ProjectFundingSummaryCard onSubmit={handleContribution} />
+        ) : (
+          <ProjectFundingSummaryCard onSubmit={handleInfo} />
+        )}
       </VStack>
     </VStack>
   )
