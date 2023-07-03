@@ -17,7 +17,7 @@ export const BadgesFAQ = () => {
           <AccordionPanel>
             <Trans
               i18nKey={
-                'Nostr stands for &quot;Notes and Other Stuff Transmitted by Relays&quot;. Like HTTP or TCP-IP, Nostr is a protocol; an open standard upon which anyone can build. Nostr itself is not an app or service that you sign up for. Check out <1>nostr.how<1/> for more info'
+                'Nostr stands for &quot;Notes and Other Stuff Transmitted by Relays&quot;. Like HTTP or TCP-IP, Nostr is a protocol; an open standard upon which anyone can build. Nostr itself is not an app or service that you sign up for. Check out <1>nostr.how</1> for more info'
               }
             >
               {
@@ -55,7 +55,7 @@ export const BadgesFAQ = () => {
         </AccordionItem>
         <AccordionItem>
           <AccordionButton>
-            {'Who can edit and update Nostr Badges?'}
+            {t('Who can edit and update Nostr Badges?')}
           </AccordionButton>
           <AccordionPanel>
             {t(
@@ -64,7 +64,7 @@ export const BadgesFAQ = () => {
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem>
-          <AccordionButton>{'Will there be more badges?'}</AccordionButton>
+          <AccordionButton>{t('Will there be more badges?')}</AccordionButton>
           <AccordionPanel>
             {t(
               'Yes! We intend to create more badges when we feel like there is a particular reason to recognize hard work or important achievements. But don&apos;t worry, we will not &apos;flood the system with badges&apos;.',
