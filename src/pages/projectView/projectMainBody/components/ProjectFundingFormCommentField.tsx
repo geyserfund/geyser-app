@@ -76,10 +76,6 @@ export const ProjectFundingFormCommentField = ({
             maxLength={280}
             name="comment"
             pl={10}
-            borderWidth="2px"
-            _active={{
-              borderColor: 'primary.500',
-            }}
             backgroundColor={'neutral.0'}
             onChange={setTarget}
           />

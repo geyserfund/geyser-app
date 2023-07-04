@@ -72,14 +72,16 @@ export const BadgesPage = () => {
                       pb={1}
                       variant="h2"
                     >
-                      {BADGE_TYPE_MAP[type]}
+                      {t(BADGE_TYPE_MAP[type] || '')}
                     </Text>
                     {subtypes &&
                       Object.keys(subtypes).map((subtype) => {
                         const subtypeBadges = subtypes[subtype]
                         return (
                           <Box key={subtype}>
-                            <BadgeList title={BADGE_SUBTYPE_MAP[subtype]}>
+                            <BadgeList
+                              title={t(BADGE_SUBTYPE_MAP[subtype] || '')}
+                            >
                               {subtypeBadges &&
                                 subtypeBadges.map(
                                   (badge) =>

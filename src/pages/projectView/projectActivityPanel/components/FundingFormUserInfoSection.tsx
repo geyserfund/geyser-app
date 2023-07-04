@@ -23,7 +23,7 @@ export const FundingFormUserInfoSection = ({ onBackClick }: Props) => {
     },
   } = useProjectContext()
   return (
-    <VStack alignItems="start" width="100%" spacing={5}>
+    <VStack alignItems="start" width="100%" flexGrow={1} px={1} spacing={5}>
       <HStack>
         <Button onClick={onBackClick} variant="transparent">
           <ArrowBackIcon />

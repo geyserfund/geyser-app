@@ -1,4 +1,5 @@
 import { HStack, Image, Text, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
 import { User } from '../../types'
 import {
@@ -14,6 +15,7 @@ interface BadgeItemProps {
 }
 
 const BadgeItem = ({ image, name, description, winners }: BadgeItemProps) => {
+  const { t } = useTranslation()
   const topWinners = winners ? winners.slice(0, 7) : []
 
   const hasLeftoverWinners = winners ? winners.length > topWinners.length : 0
@@ -26,7 +28,7 @@ const BadgeItem = ({ image, name, description, winners }: BadgeItemProps) => {
     <VStack justify="center" maxWidth="272px">
       <Image alt="badge" objectFit="contain" src={image} width="190px" />
       <Text variant="h3">{name}</Text>
-      <Text>{description}</Text>
+      <Text>{t(description)}</Text>
       <HStack>
         {topWinners.map((user) => (
           <AvatarElement

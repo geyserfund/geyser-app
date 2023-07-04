@@ -5,14 +5,13 @@ import { QRCode } from 'react-qrcode-logo'
 
 import LogoDark from '../../../../assets/logo-dark.svg'
 import { BoltSvgIcon, CurvedArrow } from '../../../../components/icons'
-import { AppTheme } from '../../../../context'
 import { lightModeColors } from '../../../../styles'
 
-const useStyles = createUseStyles(({ colors }: AppTheme) => ({
+const useStyles = createUseStyles({
   gradientContainer: {
-    background: `linear-gradient(270deg, ${colors.primary[400]} -0.16%, ${colors.primary[400]} 35.26%, ${colors.primary[800]} 99.84%)`,
+    background: `linear-gradient(270deg, ${lightModeColors.primary[400]} -0.16%, ${lightModeColors.primary[400]} 35.26%, ${lightModeColors.primary[100]} 99.84%)`,
   },
-}))
+})
 
 interface Props {
   banner?: string
@@ -31,6 +30,7 @@ export const ProjectFundingBanner = forwardRef<HTMLDivElement, Props>(
           style={{ display: 'none' }}
           src={LogoDark}
           loading="eager"
+          alt={'project-lnurl-pay-sharable-image'}
           onLoad={() => setLogoReady(true)}
         />
         <Box w="100%">

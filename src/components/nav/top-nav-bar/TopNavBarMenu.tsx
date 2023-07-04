@@ -76,7 +76,7 @@ export const TopNavBarMenu = ({
                 width="100%"
                 onClick={onSignInSelected}
               >
-                {t('Connect')}
+                {t('Login')}
               </Button>
             </MenuItem>
 

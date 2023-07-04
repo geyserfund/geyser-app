@@ -90,13 +90,19 @@ export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(
                 <SatoshiAmount
                   color="neutral.700"
                   fontWeight="bold"
-                  marginLeft={'auto'}
-                  fontSize={'21px'}
+                  marginLeft="auto"
+                  fontSize="21px"
                 >
                   {getTotalAmount('sats', name)}
                 </SatoshiAmount>
 
-                <Text color="neutral.700" fontWeight="bold" fontSize={'21px'}>
+                <Text
+                  variant="satoshi"
+                  color="neutral.700"
+                  fontWeight="bold"
+                  marginLeft="auto"
+                  fontSize="21px"
+                >
                   {`($${getTotalAmount('dollar', name)})`}
                 </Text>
               </HStack>
@@ -105,7 +111,6 @@ export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(
 
           <Button
             w="full"
-            mt={2}
             variant="primary"
             type="submit"
             leftIcon={<BoltIcon />}

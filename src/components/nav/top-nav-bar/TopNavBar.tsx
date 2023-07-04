@@ -657,7 +657,7 @@ export const TopNavBar = () => {
                 borderWidth={1}
                 onClick={loginOnOpen}
               >
-                {t('Connect')}
+                {t('Login')}
               </Button>
             ) : null}
 
