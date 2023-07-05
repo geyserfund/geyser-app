@@ -1,4 +1,4 @@
-import { Avatar, GridItem, SimpleGrid, VStack } from '@chakra-ui/react'
+import { Avatar, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { CardLayout } from '../../../components/layouts'
@@ -51,22 +51,18 @@ export const GeyserTeam = () => {
           )}
         </H3>
       </VStack>
-      <SimpleGrid
-        columns={3}
+      <Wrap
+        // columns={3}
         spacingX="20px"
         spacingY="20px"
-        justifyContent="center"
+        justify="center"
       >
         {CardContents.map((card) => (
-          <GridItem
-            key={card.title}
-            colSpan={{ base: 3, lg: 1 }}
-            overflow="hidden"
-          >
+          <WrapItem key={card.title} overflow="hidden">
             <TeamCard key={card.title} {...card} />
-          </GridItem>
+          </WrapItem>
         ))}
-      </SimpleGrid>
+      </Wrap>
     </VStack>
   )
 }
@@ -84,8 +80,7 @@ const TeamCard = ({ name, title, imageUrl }: TeamCardProps) => {
       alignItems={'center'}
       padding={5}
       direction={'column'}
-      maxWidth={345}
-      width={'100%'}
+      width={230}
     >
       <Avatar size={'xl'} src={imageUrl}></Avatar>
       <H2>{t(name)}</H2>
