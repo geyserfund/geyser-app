@@ -40,18 +40,16 @@ export const ModeChange = () => {
             isDisabled
           />
         </Tooltip>
-        <Tooltip label="language">
-          <Button
-            bgColor="neutral.50"
-            color="neutral.600"
-            variant="primaryNeutral"
-            // isDisabled
-            // onClick={() => i18n.changeLanguage(lng)}
-            onClick={onOpen}
-          >
-            {languages[currentLanguageKey]}
-          </Button>
-        </Tooltip>
+        <Button
+          bgColor="neutral.50"
+          color="neutral.600"
+          variant="primaryNeutral"
+          // isDisabled
+          // onClick={() => i18n.changeLanguage(lng)}
+          onClick={onOpen}
+        >
+          {languages[currentLanguageKey]}
+        </Button>
       </HStack>
       <Modal
         isOpen={isOpen}
