@@ -39,7 +39,7 @@ export const ModeChange = () => {
             bgColor="neutral.50"
             color="neutral.600"
             variant="primaryNeutral"
-            isDisabled
+            // isDisabled
             // onClick={() => i18n.changeLanguage(lng)}
             onClick={onOpen}
           >
