@@ -6,17 +6,12 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { getPath } from '../../../../constants'
+import { useProjectContext } from '../../../../context'
 import { QUERY_USER_BADGES } from '../../../../graphql/queries/badges'
 import { useFundCalc } from '../../../../helpers'
-import { IFundForm } from '../../../../hooks'
 import { lightModeColors } from '../../../../styles'
 import { Satoshis } from '../../../../types'
-import {
-  FundingTxFragment,
-  Project,
-  ProjectFragment,
-  UserBadge,
-} from '../../../../types'
+import { Project, UserBadge } from '../../../../types'
 import {
   ContributionInfoBox,
   ContributionInfoBoxVersion,
@@ -25,20 +20,18 @@ import { SuccessImageComponent } from '../components'
 import { ContributionShippingBox } from '../components/ContributionShippingBox'
 
 type Props = {
-  fundingState: IFundForm
-  project: ProjectFragment
-  fundingTx: FundingTxFragment
-  handleCloseButton: () => void
+  onCloseClick: () => void
 }
 
-export const SuccessScreen = ({
-  fundingState,
-  fundingTx,
-  project,
-  handleCloseButton,
-}: Props) => {
+export const SuccessScreen = ({ onCloseClick }: Props) => {
   const { t } = useTranslation()
   const [hasCopiedProjectLink, setCopy] = useState(false)
+
+  const {
+    project,
+    fundingFlow: { fundingTx },
+    fundForm: { needsShipping, state: fundingState },
+  } = useProjectContext()
 
   const { getTotalAmount } = useFundCalc(fundingState)
 
@@ -84,7 +77,7 @@ export const SuccessScreen = ({
         color={lightModeColors.neutral[900]}
         right="10px"
         top="-10px"
-        onClick={handleCloseButton}
+        onClick={onCloseClick}
       />
 
       <VStack w="full" spacing="20px" pt={2}>
@@ -107,7 +100,7 @@ export const SuccessScreen = ({
         <ContributionInfoBox
           project={project as Project}
           formState={fundingState}
-          contributionAmount={getTotalAmount('sats', project.name) as Satoshis}
+          contributionAmount={getTotalAmount('sats', project?.name) as Satoshis}
           isFunderAnonymous={fundingState.anonymous}
           funderUsername={fundingState.funderUsername}
           funderEmail={fundingState.email}
@@ -117,7 +110,7 @@ export const SuccessScreen = ({
           showGeyserFee={false}
         />
 
-        <ContributionShippingBox />
+        {needsShipping ? <ContributionShippingBox /> : null}
       </VStack>
     </VStack>
   )
