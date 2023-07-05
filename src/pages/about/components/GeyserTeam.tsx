@@ -51,12 +51,7 @@ export const GeyserTeam = () => {
           )}
         </H3>
       </VStack>
-      <Wrap
-        // columns={3}
-        spacingX="20px"
-        spacingY="20px"
-        justify="center"
-      >
+      <Wrap spacingX="20px" spacingY="20px" justify="center">
         {CardContents.map((card) => (
           <WrapItem key={card.title} overflow="hidden">
             <TeamCard key={card.title} {...card} />
