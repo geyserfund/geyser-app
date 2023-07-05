@@ -1,26 +1,51 @@
-import { VStack } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
+import { Box, HStack, VStack } from '@chakra-ui/react'
 
+import { AppFooter } from '../../components/molecules'
 import {
   BuildByCreators,
+  CurrentlyOnGeyser,
   GeyserTeam,
   GreenBackgroundAboutHeader,
   NewWayOfCrowdFunding,
+  SubscribeAbout,
   WhatPeopleAreSaying,
   WhereGreatIdeas,
 } from './components'
 
 const About = () => {
-  const { t } = useTranslation()
-  console.log('this is about page')
   return (
-    <VStack backgroundColor="neutral.0" spacing={100} paddingBottom={50}>
+    <VStack backgroundColor="neutral.0" spacing={{ base: 50, lg: 100 }}>
       <GreenBackgroundAboutHeader />
       <WhereGreatIdeas />
-      <NewWayOfCrowdFunding />
+      <HStack w={'full'} justifyContent={'center'} position={'relative'}>
+        <NewWayOfCrowdFunding />
+        <Box
+          w={'full'}
+          position={'absolute'}
+          top={-20}
+          left={0}
+          height={'1848px'}
+          backgroundColor={'primary.50'}
+          clipPath={'polygon(0 0, 100% 12%, 100% 100%, 0% 100%)'}
+        />
+        <Box
+          w={475}
+          h={475}
+          scale={0.5}
+          position={'absolute'}
+          top={50}
+          left={0}
+          borderRadius={'100%'}
+          backgroundColor="secondary.green"
+          filter="blur(280px)"
+        />
+      </HStack>
       <BuildByCreators />
+      <CurrentlyOnGeyser />
       <WhatPeopleAreSaying />
       <GeyserTeam />
+      <SubscribeAbout />
+      <AppFooter />
     </VStack>
   )
 }

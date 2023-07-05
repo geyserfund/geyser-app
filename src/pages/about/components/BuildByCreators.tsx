@@ -1,4 +1,4 @@
-import { Button, GridItem, Image, SimpleGrid, VStack } from '@chakra-ui/react'
+import { Box, GridItem, Image, SimpleGrid, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { CardLayout } from '../../../components/layouts'
@@ -14,6 +14,7 @@ import {
   Search3DImageUrl,
   TextMessage3DImageUrl,
 } from '../../../constants'
+import { LaunchYourProjectButton } from './LaunchYourProjectButton'
 
 const CardContents = [
   {
@@ -73,10 +74,10 @@ const CardContents = [
 export const BuildByCreators = () => {
   const { t } = useTranslation()
   return (
-    <VStack width={'auto'} spacing={50} paddingX={3}>
+    <VStack width={'auto'} spacing={50} paddingX={3} zIndex={9}>
       <VStack>
         <H1>{t('Built by creators, for creators')}</H1>
-        <H3>
+        <H3 color={'neutral.600'}>
           {t(
             'Supercharge your fundraising efforts with our tools, features and support',
           )}
@@ -94,9 +95,7 @@ export const BuildByCreators = () => {
         ))}
       </SimpleGrid>
 
-      <Button variant={'primaryGradient'} w={300}>
-        {t('Launch your project')}
-      </Button>
+      <LaunchYourProjectButton variant={'primaryGradient'} w={300} />
     </VStack>
   )
 }
@@ -121,10 +120,12 @@ const AboutPageSquares = ({
       height={310}
       maxWidth={350}
     >
-      <Image width={'auto'} height={'120px'} src={imageUrl} />
-      <VStack>
+      <Box maxHeight={'120px'}>
+        <Image width={'auto'} height={'100%'} src={imageUrl} />
+      </Box>
+      <VStack flex={1}>
         <H2>{t(title)}</H2>
-        <Body1>{t(description)}</Body1>
+        <Body1 color={'neutral.600'}>{t(description)}</Body1>
       </VStack>
     </CardLayout>
   )

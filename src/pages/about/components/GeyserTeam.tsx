@@ -1,4 +1,4 @@
-import { Avatar, Button, GridItem, SimpleGrid, VStack } from '@chakra-ui/react'
+import { Avatar, GridItem, SimpleGrid, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { CardLayout } from '../../../components/layouts'
@@ -45,7 +45,7 @@ export const GeyserTeam = () => {
     <VStack maxWidth={'764px'} width={'100%'} spacing={50} padding={3}>
       <VStack>
         <H1>{t('The Geyser team')}</H1>
-        <H3>
+        <H3 color={'neutral.600'}>
           {t(
             'We are a team of mission-driven bitcoiners that want to empower the online creator ecosystem through bitcoin.',
           )}

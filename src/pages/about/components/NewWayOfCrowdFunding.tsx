@@ -1,4 +1,4 @@
-import { Button, Image, VStack } from '@chakra-ui/react'
+import { Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { CardLayout } from '../../../components/layouts'
@@ -8,6 +8,7 @@ import {
   CoinLightning3DImageUrl,
   NewbieBag3DImageUrl,
 } from '../../../constants'
+import { LaunchYourProjectButton } from './LaunchYourProjectButton'
 
 const CardContents = [
   {
@@ -33,12 +34,17 @@ const CardContents = [
 
 export const NewWayOfCrowdFunding = () => {
   const { t } = useTranslation()
-  console.log('this is about page')
   return (
-    <VStack maxWidth={'764px'} width={'100%'} spacing={50} padding={3}>
+    <VStack
+      maxWidth={'764px'}
+      width={'100%'}
+      spacing={50}
+      padding={3}
+      zIndex={9}
+    >
       <VStack>
         <H1>{t('Welcome to the new way of crowdfunding')}</H1>
-        <H3>
+        <H3 color={'neutral.600'}>
           {t(
             "The crowdfunding game is changing and we're here for it. Learn how we power up creators and reward their funders.",
           )}
@@ -49,9 +55,7 @@ export const NewWayOfCrowdFunding = () => {
           <AboutPageCard key={card.title} {...card} />
         ))}
       </VStack>
-      <Button variant={'primaryGradient'} w={'full'}>
-        {t('Launch your project')}
-      </Button>
+      <LaunchYourProjectButton variant={'primaryGradient'} w={'full'} />
     </VStack>
   )
 }
@@ -81,7 +85,10 @@ const AboutPageCard = ({
         <H2 textAlign={{ base: 'left', lg: isLeft ? 'right' : 'left' }}>
           {t(title)}
         </H2>
-        <H3 textAlign={{ base: 'left', lg: isLeft ? 'right' : 'left' }}>
+        <H3
+          textAlign={{ base: 'left', lg: isLeft ? 'right' : 'left' }}
+          color={'neutral.600'}
+        >
           {t(description)}
         </H3>
       </VStack>

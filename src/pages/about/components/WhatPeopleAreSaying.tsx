@@ -1,9 +1,10 @@
-import { Avatar, Button, Stack, VStack } from '@chakra-ui/react'
+import { Avatar, Stack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { CardLayout } from '../../../components/layouts'
 import { Body1, H1, H3 } from '../../../components/typography'
 import { bradUrl, joeNakamotoUrl, paulIIIUrl } from '../../../constants'
+import { LaunchYourProjectButton } from './LaunchYourProjectButton'
 
 const CardContent = [
   {
@@ -39,9 +40,7 @@ export const WhatPeopleAreSaying = () => {
           <PeopleSayingCard key={card.userName} {...card} />
         ))}
       </Stack>
-      <Button variant={'primaryGradient'} w={'full'}>
-        {t('Launch your project')}
-      </Button>
+      <LaunchYourProjectButton variant={'primaryGradient'} w={300} />
     </VStack>
   )
 }
