@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   HStack,
   IconButton,
@@ -8,13 +9,13 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { languages } from '../../../constants'
+import { languageFalgs, languages } from '../../../constants'
 import { ColorModeSwitcher } from '../../../utils'
 import { SatSymbolIcon } from '../../icons'
 import { Modal } from '../../layouts'
 
 export const ModeChange = () => {
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
 
   const { isOpen, onClose, onOpen } = useDisclosure()
   const currentLanguageKey = Object.keys(languages).find(
@@ -39,7 +40,7 @@ export const ModeChange = () => {
             bgColor="neutral.50"
             color="neutral.600"
             variant="primaryNeutral"
-            isDisabled
+            // isDisabled
             // onClick={() => i18n.changeLanguage(lng)}
             onClick={onOpen}
           >
@@ -50,8 +51,9 @@ export const ModeChange = () => {
       <Modal
         isOpen={isOpen}
         onClose={onClose}
-        size="md"
-        title={'Choose your language'}
+        size="xs"
+        contentProps={{ maxWidth: '250px' }}
+        title={t('Select language')}
       >
         <VStack>
           {Object.keys(languages).map((lng) => (
@@ -65,8 +67,15 @@ export const ModeChange = () => {
                 i18n.changeLanguage(lng)
                 onClose()
               }}
+              w={200}
+              textAlign={'start'}
             >
-              {languages[lng]}
+              <Box w="100%">
+                <Box as={'span'} w="100%" paddingRight={2}>
+                  {languageFalgs[lng]}
+                </Box>
+                {languages[lng]}
+              </Box>
             </Button>
           ))}
         </VStack>

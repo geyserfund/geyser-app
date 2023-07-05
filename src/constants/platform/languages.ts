@@ -30,3 +30,17 @@ export const languages = {
   [lng.zh]: 'Chinese',
   [lng.ar]: 'Arabic',
 } as { [key: string]: string }
+
+export const languageFalgs = {
+  [lng.en]: '🇬🇧',
+  [lng.es]: '🇪🇸',
+  [lng.pt]: '🇵🇹',
+  [lng.fr]: '🇫🇷',
+  [lng.de]: '🇩🇪',
+  [lng.it]: '🇮🇹',
+  [lng.el]: '🇬🇷',
+  [lng.pl]: '🇵🇱',
+  [lng.cz]: '🇨🇿',
+  [lng.zh]: '🇨🇳',
+  [lng.ar]: '🇦🇪',
+} as { [key: string]: string }
