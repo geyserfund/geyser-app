@@ -3,13 +3,18 @@ import {
   Button,
   HStack,
   IconButton,
+  Link,
   Tooltip,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { languageFalgs, languages } from '../../../constants'
+import {
+  languageFalgs,
+  LanguageRequestUrl,
+  languages,
+} from '../../../constants'
 import { ColorModeSwitcher } from '../../../utils'
 import { SatSymbolIcon } from '../../icons'
 import { Modal } from '../../layouts'
@@ -55,7 +60,7 @@ export const ModeChange = () => {
         contentProps={{ maxWidth: '250px' }}
         title={t('Select language')}
       >
-        <VStack>
+        <VStack pb={5}>
           {Object.keys(languages).map((lng) => (
             <Button
               key={lng}
@@ -79,6 +84,9 @@ export const ModeChange = () => {
             </Button>
           ))}
         </VStack>
+        <Link href={LanguageRequestUrl} isExternal>
+          {t('Request a language')}
+        </Link>
       </Modal>
     </>
   )
