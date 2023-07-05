@@ -19,6 +19,7 @@ export const FundingFormUserInfoSection = ({ onBackClick }: Props) => {
       setState,
       setTarget,
       needsShipping,
+      hasSelectedRewards,
       state: { comment, email },
     },
   } = useProjectContext()
@@ -40,7 +41,7 @@ export const FundingFormUserInfoSection = ({ onBackClick }: Props) => {
         />
       </FieldContainer>
 
-      {needsShipping ? (
+      {hasSelectedRewards ? (
         <>
           <FieldContainer
             title="Your email"
@@ -54,12 +55,14 @@ export const FundingFormUserInfoSection = ({ onBackClick }: Props) => {
               onChange={setTarget}
             />
           </FieldContainer>
-          <FieldContainer
-            title={t('Shipping')}
-            subtitle={t(
-              "To receive the selected items, you will need to send your shipping details to the creator's email. Which will be revealed in the success screen.",
-            )}
-          />
+          {needsShipping ? (
+            <FieldContainer
+              title={t('Shipping')}
+              subtitle={t(
+                "To receive the selected items, you will need to send your shipping details to the creator's email. Which will be revealed in the success screen.",
+              )}
+            />
+          ) : null}
         </>
       ) : null}
     </VStack>
