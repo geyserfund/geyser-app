@@ -252,30 +252,30 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
                 <Box borderColor={'primary.400'}>
                   <QRCode
                     value={fallbackAddress}
-                    size={208}
+                    size={240}
                     bgColor={lightModeColors.neutral[0]}
                     fgColor={lightModeColors.primary[400]}
-                    qrStyle="dots"
                     logoImage={LogoPrimary}
+                    qrStyle="squares"
+                    ecLevel="L"
                     logoHeight={40}
                     logoWidth={40}
-                    eyeRadius={2}
-                    removeQrCodeBehindLogo={true}
+                    removeQrCodeBehindLogo
                   />
                 </Box>
               ) : (
                 <Box borderColor={'neutral.1000'}>
                   <QRCode
                     value={fallbackAddress}
-                    size={208}
+                    size={240}
                     bgColor={lightModeColors.neutral[0]}
                     fgColor={lightModeColors.neutral[1000]}
-                    qrStyle="dots"
                     logoImage={LogoDark}
+                    qrStyle="squares"
+                    ecLevel="L"
                     logoHeight={40}
                     logoWidth={40}
-                    eyeRadius={2}
-                    removeQrCodeBehindLogo={true}
+                    removeQrCodeBehindLogo
                   />
                 </Box>
               )}
