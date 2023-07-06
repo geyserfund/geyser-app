@@ -1,20 +1,26 @@
 import {
+  Box,
   Button,
   HStack,
   IconButton,
+  Link,
   Tooltip,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { languages } from '../../../constants'
+import {
+  languageFalgs,
+  LanguageRequestUrl,
+  languages,
+} from '../../../constants'
 import { ColorModeSwitcher } from '../../../utils'
 import { SatSymbolIcon } from '../../icons'
 import { Modal } from '../../layouts'
 
 export const ModeChange = () => {
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
 
   const { isOpen, onClose, onOpen } = useDisclosure()
   const currentLanguageKey = Object.keys(languages).find(
@@ -34,26 +40,25 @@ export const ModeChange = () => {
             isDisabled
           />
         </Tooltip>
-        <Tooltip label="language">
-          <Button
-            bgColor="neutral.50"
-            color="neutral.600"
-            variant="primaryNeutral"
-            // isDisabled
-            // onClick={() => i18n.changeLanguage(lng)}
-            onClick={onOpen}
-          >
-            {languages[currentLanguageKey]}
-          </Button>
-        </Tooltip>
+        <Button
+          bgColor="neutral.50"
+          color="neutral.600"
+          variant="primaryNeutral"
+          // isDisabled
+          // onClick={() => i18n.changeLanguage(lng)}
+          onClick={onOpen}
+        >
+          {languages[currentLanguageKey]}
+        </Button>
       </HStack>
       <Modal
         isOpen={isOpen}
         onClose={onClose}
-        size="md"
-        title={'Choose your language'}
+        size="xs"
+        contentProps={{ maxWidth: '250px' }}
+        title={t('Select language')}
       >
-        <VStack>
+        <VStack pb={5}>
           {Object.keys(languages).map((lng) => (
             <Button
               key={lng}
@@ -65,11 +70,21 @@ export const ModeChange = () => {
                 i18n.changeLanguage(lng)
                 onClose()
               }}
+              w={200}
+              textAlign={'start'}
             >
-              {languages[lng]}
+              <Box w="100%">
+                <Box as={'span'} w="100%" paddingRight={2}>
+                  {languageFalgs[lng]}
+                </Box>
+                {languages[lng]}
+              </Box>
             </Button>
           ))}
         </VStack>
+        <Link href={LanguageRequestUrl} isExternal>
+          {t('Request a language')}
+        </Link>
       </Modal>
     </>
   )

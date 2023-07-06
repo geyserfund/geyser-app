@@ -256,6 +256,9 @@ export const TrophyUrl =
 export const LightningUrl =
   'https://storage.googleapis.com/geyser-projects-media/icons/lightning.png'
 
+// AIRTABLE LINKS
+export const LanguageRequestUrl = 'https://airtable.com/shrEs5AsmkC07tWcX'
+
 // ABOUT PAGE
 
 export const GeyserAboutProjectsBannerImage =

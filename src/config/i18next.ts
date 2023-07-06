@@ -67,8 +67,5 @@ i18next
       },
     },
   })
-  .then((value) => {
-    console.log(value)
-  })
 
 export default i18next
