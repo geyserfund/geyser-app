@@ -29,5 +29,5 @@ export const aliasMutation = (
 }
 
 export const interceptGraphql = (handler: RouteHandler) => {
-  return cy.intercept('POST', '*/graphql', handler)
+  return cy.intercept('POST', '/graphql', handler)
 }
