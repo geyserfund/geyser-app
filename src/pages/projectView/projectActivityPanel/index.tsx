@@ -48,13 +48,8 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
     hasSelectedRewards,
   } = fundForm
 
-  const {
-    fundState,
-    setFundState,
-    fundingTx,
-    resetFundingFlow,
-    requestFunding,
-  } = fundingFlow
+  const { fundState, setFundState, resetFundingFlow, requestFunding } =
+    fundingFlow
 
   const {
     isOpen: loginIsOpen,
@@ -186,14 +181,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
           />
         )
       case fundingStages.completed:
-        return (
-          <SuccessScreen
-            fundingState={formState}
-            project={project}
-            fundingTx={fundingTx}
-            handleCloseButton={handleCloseButton}
-          />
-        )
+        return <SuccessScreen onCloseClick={handleCloseButton} />
 
       default:
         return null

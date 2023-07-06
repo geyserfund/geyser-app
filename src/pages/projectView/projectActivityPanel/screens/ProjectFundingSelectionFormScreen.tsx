@@ -29,7 +29,7 @@ export const ProjectFundingSelectionFormScreen = ({
   const [step, setStep] = useState<'contribution' | 'info'>('contribution')
 
   const {
-    fundForm: { state: formState, needsShipping },
+    fundForm: { state: formState, hasSelectedRewards },
   } = useProjectContext()
 
   const { getTotalAmount } = useFundCalc(formState)
@@ -53,7 +53,7 @@ export const ProjectFundingSelectionFormScreen = ({
   }
 
   const validateFundingUserInfo = () => {
-    if (needsShipping && !formState.email) {
+    if (hasSelectedRewards && !formState.email) {
       toast({
         title: 'Email is a required field when donating for a reward.',
         description: 'Please enter an email.',
