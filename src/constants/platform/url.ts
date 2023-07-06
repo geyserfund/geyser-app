@@ -126,6 +126,8 @@ export const zuccoUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/board/zucco.jpg'
 export const conorUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/board/conor.jpg'
+export const paulIIIUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/paulIII.png'
 
 export const tachiraUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/board/tachira.svg'
@@ -256,3 +258,40 @@ export const LightningUrl =
 
 // AIRTABLE LINKS
 export const LanguageRequestUrl = 'https://airtable.com/shrEs5AsmkC07tWcX'
+
+// ABOUT PAGE
+
+export const GeyserAboutProjectsBannerImage =
+  'https://storage.googleapis.com/geyser-projects-media/images/geyser-about-projects-banner-image.png'
+export const BitcoinPouch3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/bitcoin-pouch-3d.png'
+export const CoinGlobe3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/coin-globe-3d.png'
+export const CoinLightning3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/coin-lightning-3d.png'
+export const CoinPercentage3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/coin-percentage-3d.png'
+export const Gift3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/gift-3d.png'
+export const Key3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/key-3d.png'
+export const Lightning3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/lightning-3d.png'
+export const NewbieBag3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/newbie-badge.png'
+export const Search3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/search-3d.png'
+export const TextMessage3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/text-message-3d.png'
+
+// GEYSER TEAM
+export const AuwalProfileUrl =
+  'https://storage.googleapis.com/geyser-projects-media/team/auwal.png'
+export const FranProfileUrl =
+  'https://storage.googleapis.com/geyser-projects-media/team/fran.png'
+export const MickProfileUrl =
+  'https://storage.googleapis.com/geyser-projects-media/team/mick.png'
+export const SajalProfileUrl =
+  'https://storage.googleapis.com/geyser-projects-media/team/sajal.png'
+export const SteliosProfileUrl =
+  'https://storage.googleapis.com/geyser-projects-media/team/stelios.png'
