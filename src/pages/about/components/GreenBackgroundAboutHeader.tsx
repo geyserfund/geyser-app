@@ -9,7 +9,6 @@ import { LaunchYourProjectButton } from './LaunchYourProjectButton'
 
 export const GreenBackgroundAboutHeader = () => {
   const { t } = useTranslation()
-  console.log('this is about page')
   return (
     <VStack
       width={'100%'}

@@ -31,7 +31,6 @@ const CardContent = [
 
 export const WhatPeopleAreSaying = () => {
   const { t } = useTranslation()
-  console.log('this is about page')
   return (
     <VStack paddingX={3} spacing={7}>
       <H1>{t('What people are saying')}</H1>
