@@ -39,7 +39,6 @@ const productionTagsList = [
   { label: 'films', id: 57 },
   { label: 'collectibles', id: 97 },
   { label: 'orange-pilling', id: 10 },
-  { label: 'economics', id: 77 },
   { label: 'games', id: 19 },
   { label: 'podcasts', id: 7 },
   { label: 'translation', id: 37 },
