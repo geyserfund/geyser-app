@@ -29,13 +29,9 @@ import { useBTCConverter } from '../../../helpers'
 import { useFormState, useFundingFlow } from '../../../hooks'
 import { FormStateError } from '../../../interfaces'
 import { USDCents } from '../../../types'
-import {
-  FundingInput,
-  FundingResourceType,
-  Project,
-} from '../../../types/generated/graphql'
+import { FundingInput, FundingResourceType, Project } from '../../../types'
 import { toInt, useNotification } from '../../../utils'
-import { ProjectFundingQRScreenQRCodeSection } from '../../projectView/projectActivityPanel/components/ProjectFundingQRScreenQRCodeSection'
+import { ProjectFundingQRScreenQRCodeSection } from '../../projectView/projectActivityPanel/components'
 import { GRANTS_PROJECT_NAME } from '../constants'
 
 const defaultModalHeader = 'Contribute'
@@ -290,7 +286,7 @@ export const GrantsContributeModal = ({
         />
       </VStack>
 
-      <Button bg="primary.400" onClick={handleFormConfirmClick} w="full">
+      <Button variant={'primary'} onClick={handleFormConfirmClick} w="full">
         {t('Confirm')}
       </Button>
     </VStack>
@@ -388,7 +384,7 @@ export const GrantsContributeModal = ({
           {OverlayOne}
           <ModalContent bg="transparent" boxShadow={0}>
             <Box borderRadius="4px" bg="neutral.0" pb={3}>
-              <ModalHeader pb={2}>{modalHeader}</ModalHeader>
+              <ModalHeader pb={2}>{t(modalHeader)}</ModalHeader>
               <ModalCloseButton />
               <ModalBody>{renderModalBody()}</ModalBody>
             </Box>

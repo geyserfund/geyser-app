@@ -109,9 +109,6 @@ export const GrantPage = () => {
     )
   }
 
-  const canVote =
-    GrantHasVoting[grant.name] && grant.status === GrantStatusEnum.FundingOpen
-
   const winnerAnnouncement = GrantAnnouncements[grant.name]
 
   const getTitle = () => {
@@ -122,10 +119,10 @@ export const GrantPage = () => {
     return ''
   }
 
+  const grantHasVoting = GrantHasVoting[grant.name]
   const showCommunityVoting = grant.status !== GrantStatusEnum.ApplicationsOpen
   const showDistributionChart =
-    grant.status !== GrantStatusEnum.ApplicationsOpen
-
+    grant.status !== GrantStatusEnum.ApplicationsOpen && grantHasVoting
   const showGrantApply = grant.status !== GrantStatusEnum.Closed
 
   return (
@@ -151,7 +148,8 @@ export const GrantPage = () => {
           <CommunityVoting
             title={t(getTitle())}
             applicants={applicants}
-            canVote={canVote}
+            grantHasVoting={grantHasVoting}
+            grantStatus={grant.status}
             fundingOpenEndDate={fundingOpenStatus?.endAt}
             fundingOpenStartDate={fundingOpenStatus?.startAt}
             isClosed={grant.status === GrantStatusEnum.Closed}

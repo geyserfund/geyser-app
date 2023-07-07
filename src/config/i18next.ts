@@ -67,5 +67,6 @@ i18next
       },
     },
   })
+  .catch((error) => console.log('translation error', error))
 
 export default i18next
