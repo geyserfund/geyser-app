@@ -196,7 +196,7 @@
   "Love what you guys are doing. Let the Sats flow!": "Love what you guys are doing. Let the Sats flow!",
   "amount is required": "amount is required",
   "amount cannot be greater than ${{MAX_FUNDING_AMOUNT_USD}} in value": "amount cannot be greater than ${{MAX_FUNDING_AMOUNT_USD}} in value",
-  "Your <1>{{amount}}</1>> contribution to Geyser Grants Round 2 was successful!": "Your <1>{{amount}}</1>> contribution to Geyser Grants Round 2 was successful!",
+  "Your <1>{{amount}}</1> contribution to Geyser Grants was successful!": "Your <1>{{amount}}</1> contribution to Geyser Grants was successful!",
   "Description": "Description",
   "Links & tags": "Links & tags",
   "Wallet": "Wallet",
