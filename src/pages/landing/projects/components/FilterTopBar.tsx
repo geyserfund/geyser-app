@@ -184,7 +184,7 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
     viewFilterTags ||
     viewFilterRegion ||
     viewFilterActivity ||
-    (!isMobile && filters.recent)
+    filters.recent
   ) {
     return (
       <HStack

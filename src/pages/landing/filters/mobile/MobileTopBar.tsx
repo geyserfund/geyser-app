@@ -39,7 +39,7 @@ export const MobileTopBar = ({
       >
         <HStack width="100%" justifyContent="space-between" paddingY="6px">
           <Body1 semiBold color="neutral.1000">
-            {title}
+            {t(title)}
           </Body1>
           <Button
             ref={btnRef}
