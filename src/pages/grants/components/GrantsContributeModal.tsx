@@ -311,7 +311,7 @@ export const GrantsContributeModal = ({
         <Text fontSize={'14px'}>
           <Trans
             i18nKey={
-              'Your <1>{{amount}}</1> contribution to Geyser Grants Round 2 was successful!'
+              'Your <1>{{amount}}</1> contribution to Geyser Grants was successful!'
             }
             values={{
               amount: `${getSatoshisFromUSDCents(
