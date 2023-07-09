@@ -82,6 +82,7 @@ export const WalletOfSatoshiLightningAddressURL =
   'https://www.walletofsatoshi.com/'
 export const BitNobURL = 'https://bitnob.com/'
 export const AmbossUrl = 'https://amboss.space/node/'
+export const BlinkUrl = 'https://www.blink.sv/'
 
 // External Platform Image Urls
 export const BoostCLILogoUrl =
@@ -231,7 +232,9 @@ export const AlbyUrl =
 export const BitnobUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/bitnob.png'
 export const WalletOfSatoshiUrl =
-  'https://storage.googleapis.com/geyser-projects-media/platform/wallet-of-satoshi.png'
+  'https://storage.googleapis.com/geyser-projects-media/platform/wallet-logo.svg'
+export const BlinkLogoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/platform/blink.png'
 
 // ICONS
 

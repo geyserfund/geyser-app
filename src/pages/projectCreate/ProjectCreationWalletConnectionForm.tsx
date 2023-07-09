@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   HStack,
   Image,
@@ -25,12 +26,15 @@ import {
   AlbyUrl,
   BitNobURL,
   BitnobUrl,
+  BlinkLogoUrl,
+  BlinkUrl,
   getPath,
   VoltageExplainerPageForGeyserURL,
   VoltageUrl,
   WalletOfSatoshiLightningAddressURL,
   WalletOfSatoshiUrl,
 } from '../../constants'
+import { lightModeColors } from '../../styles'
 import {
   CreateWalletInput,
   LndNodeType,
@@ -417,14 +421,12 @@ export const ProjectCreationWalletConnectionForm = ({
                     </Text>
                   </HStack>
                 </UndecoratedLink>
-
-                <Link isExternal href={WalletOfSatoshiLightningAddressURL}>
-                  <Image src={WalletOfSatoshiUrl} height="24px" />
-                </Link>
-
-                <Link isExternal href={BitNobURL}>
-                  <Image src={BitnobUrl} height="24px" />
-                </Link>
+                <RenderSponsorImage
+                  url={WalletOfSatoshiLightningAddressURL}
+                  imageUrl={WalletOfSatoshiUrl}
+                />
+                <RenderSponsorImage url={BitNobURL} imageUrl={BitnobUrl} />
+                <RenderSponsorImage url={BlinkUrl} imageUrl={BlinkLogoUrl} />
               </HStack>
             </WalletConnectionOptionInfoBox>
           </VStack>
@@ -465,11 +467,10 @@ export const ProjectCreationWalletConnectionForm = ({
                 </span>
               }
             >
-              <HStack>
-                <Link isExternal href={VoltageExplainerPageForGeyserURL}>
-                  <Image maxWidth="8em" src={VoltageUrl} />
-                </Link>
-              </HStack>
+              <RenderSponsorImage
+                url={VoltageExplainerPageForGeyserURL}
+                imageUrl={VoltageUrl}
+              />
             </WalletConnectionOptionInfoBox>
           </VStack>
         </VStack>
@@ -484,5 +485,26 @@ export const ProjectCreationWalletConnectionForm = ({
         onSubmit={onSubmit}
       />
     </VStack>
+  )
+}
+
+const RenderSponsorImage = ({
+  url,
+  imageUrl,
+}: {
+  url: string
+  imageUrl: string
+}) => {
+  return (
+    <Box
+      backgroundColor={lightModeColors.neutral[100]}
+      borderRadius={'10px'}
+      px={3}
+      py={1}
+    >
+      <Link isExternal href={url}>
+        <Image src={imageUrl} height="24px" />
+      </Link>
+    </Box>
   )
 }
