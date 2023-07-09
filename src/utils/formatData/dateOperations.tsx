@@ -14,7 +14,7 @@ export const GetDaysAgo = (date: string) => {
   }
 
   if (days > 1) {
-    return `${days} days`
+    return `${days} ${t('days')}`
   }
 
   if (days < 1) {

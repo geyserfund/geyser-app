@@ -1,4 +1,5 @@
 import { Box, Button, Image, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { BiRightArrow } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 
@@ -7,6 +8,7 @@ import { FollowAProjectUrl } from '../../../../constants'
 import { useCustomTheme } from '../../../../utils'
 
 export const NoFollowedProjects = () => {
+  const { t } = useTranslation()
   const { colors } = useCustomTheme()
   return (
     <VStack w="full" padding="12px" spacing="20px">
@@ -20,11 +22,12 @@ export const NoFollowedProjects = () => {
       </Box>
       <VStack w="full">
         <Body1 bold color="neutral.1000">
-          {"You don't follow any projects"}
+          {t("You don't follow any project")}
         </Body1>
         <Body1 color="neutral.1000">
-          Check out some trending projects this week that you can follow in the
-          discovery view!
+          {t(
+            'Check out some trending projects this week that you can follow in the discovery view!',
+          )}
         </Body1>
       </VStack>
       <Button
@@ -36,7 +39,7 @@ export const NoFollowedProjects = () => {
         rightIcon={<BiRightArrow />}
         background={`linear-gradient(270deg, ${colors.primary[400]} -0.16%, ${colors.primary[400]} 35.26%, ${colors.secondary.green} 99.84%)`}
       >
-        Discover Projects
+        {t('Discover Projects')}
       </Button>
     </VStack>
   )
