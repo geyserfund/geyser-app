@@ -258,8 +258,8 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
                     logoImage={LogoPrimary}
                     qrStyle="squares"
                     ecLevel="L"
-                    logoHeight={40}
-                    logoWidth={40}
+                    logoHeight={32}
+                    logoWidth={32}
                     removeQrCodeBehindLogo
                   />
                 </Box>
@@ -273,8 +273,8 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
                     logoImage={LogoDark}
                     qrStyle="squares"
                     ecLevel="L"
-                    logoHeight={40}
-                    logoWidth={40}
+                    logoHeight={32}
+                    logoWidth={32}
                     removeQrCodeBehindLogo
                   />
                 </Box>
