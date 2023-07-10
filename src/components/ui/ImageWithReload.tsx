@@ -12,7 +12,7 @@ interface IImageWithReload extends ImageProps {
   showError?: boolean
 }
 
-const MAX_RETRIES = 10
+const MAX_RETRIES = 5
 const BACKOFF = 1.2
 const MILLISECONDS = 1_000
 
