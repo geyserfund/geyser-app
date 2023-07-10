@@ -4,7 +4,6 @@ import { initReactI18next } from 'react-i18next'
 
 import { lng } from '../constants'
 import {
-  ArabicTranslations,
   ChineseTranslations,
   CzechTranslations,
   EnglishTranslations,
@@ -13,8 +12,9 @@ import {
   GreekTranslations,
   ItalianTranslations,
   PolishTranslations,
-  PortugueseTranslation,
-  SpanishTranslations,
+  // ArabicTranslations,
+  // PortugueseTranslation,
+  // SpanishTranslations,
 } from '../translations'
 
 i18next
@@ -28,19 +28,11 @@ i18next
   .init({
     debug: true,
     fallbackLng: 'en',
-    interpolation: {
-      escapeValue: false, // not needed for react as it escapes by default
-    },
     resources: {
       [lng.en]: {
         translation: EnglishTranslations,
       },
-      [lng.es]: {
-        translation: SpanishTranslations,
-      },
-      [lng.pt]: {
-        translation: PortugueseTranslation,
-      },
+
       [lng.fr]: {
         translation: FrenchTranslations,
       },
@@ -62,9 +54,15 @@ i18next
       [lng.zh]: {
         translation: ChineseTranslations,
       },
-      [lng.ar]: {
-        translation: ArabicTranslations,
-      },
+      // [lng.es]: {
+      //   translation: SpanishTranslations,
+      // },
+      // [lng.pt]: {
+      //   translation: PortugueseTranslation,
+      // },
+      // [lng.ar]: {
+      //   translation: ArabicTranslations,
+      // },
     },
   })
 

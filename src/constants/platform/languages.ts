@@ -9,7 +9,7 @@ export enum lng {
   fr = 'fr',
   cz = 'cz',
   zh = 'zh',
-  'ar' = 'ar',
+  ar = 'ar',
 }
 
 /**
