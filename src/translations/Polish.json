@@ -498,7 +498,7 @@
     "Find out more.": "Dowiedz się więcej.",
     "Supporters": "Wspierający ",
     "Transform ideas into real-life projects": "Przekształć pomysły w rzeczywiste projekty",
-    "Geyser is a bitcoin-native crowdfunding platform where you can fund or create your own projects to monetize your ideas with support from global communities.": "Geyser to rodzima platforma finansowania społecznościowego bitcoin, na której możesz finansować lub tworzyć własne projekty, aby zarabiać na swoich pomysłach przy wsparciu globalnych społeczności.",
+    "Geyser is a bitcoin-native crowdfunding platform where you can fund project ideas with the support from global communities.": "Geyser to rodzima platforma finansowania społecznościowego bitcoin, na której możesz finansować lub tworzyć własne projekty, aby zarabiać na swoich pomysłach przy wsparciu globalnych społeczności.",
     "Launch your project": "Uruchom swój projekt",
     "Explore projects to fund": "Wyszukaj projekty do sfinansowania",
     "Where great ideas find great communities": "Gdzie wielkie pomysły znajdują wielką społeczność",
@@ -577,7 +577,7 @@
     "Projects funded": "Projekty ufundowane",
     "Open source": "Open source",
     "Podcast": "Podcast",
-    "Epic": "",
+    "Epic": "Świetnie!",
     "Winner": "Zwycięzca",
     "Board": "Zarząd",
     "Creator": "Twórca",
@@ -593,5 +593,12 @@
     "The owner of this badge won the Geyser Grant Round 1 for doing great work for the Bitcoin ecosystem.": "Właściciel tej odznaki wygrał pierwszą Ryndę Geyser Grant za wykonanie wspaniałej pracy dla ekosystemu Bitcoin.",
     "The owner of this badge won the Geyser Grant Round 2 for doing great work for the Bitcoin ecosystem.": "Właściciel tej odznaki wygrał Geyser Grant Rundę 2 za wykonanie wspaniałej pracy dla ekosystemu Bitcoin.",
     "The owner of this badge is a Geyser Grant Round 1 Board Member.": "Właściciel tej odznaki jest członkiem zarządu Geyser Grant Runda 1.",
-    "The owner of this badge is a Geyser Grant Round 2 Board Member.": "Właściciel tej odznaki jest członkiem zarządu Geyser Grant Rundy 2."
+    "The owner of this badge is a Geyser Grant Round 2 Board Member.": "Właściciel tej odznaki jest członkiem zarządu Geyser Grant Rundy 2.",
+    "Your <1>{{amount}}</1>> contribution to Geyser Grants Round 2 was successful!": "Twój <1>{{amount}}</1>> wkład dla Geyser Dotacji Runda 2 zakończyła się powodzeniem!",
+    "Your <1>{{amount}}</1> contribution to Geyser Grants Round 2 was successful!": "Twój <1>{{amount}}</1>> wkład dla Geyser Dotacji Runda 2 zakończyła się powodzeniem!",
+    "This grant support video-game developers that have integrated or want to integrate bitcoin and lightning in their platforms. The aim is to celebrate and showcase the power of lightning micropayments to the use case of gaming. Yes, Bitcoin makes gaming fun and rewarding! This is a community-voting grant where the community grant fund distribution by voting. Vote with your Sats! 1 Sat = 1 vote. Grant funds will be distributed proportionally to the number of votes received while the grant is active.": "Ten grant wspiera twórców gier wideo, którzy zintegrowali lub chcą zintegrować bitcoin i lightning na swoich platformach. Celem jest świętowanie i zaprezentowanie mocy mikropłatności Lightning w przypadku gier. Tak, Bitcoin sprawia, że granie jest przyjemne i satysfakcjonujące! Jest to grant społecznościowy, w którym społeczność przyznaje fundusze poprzez głosowanie. Głosuj swoimi Satoshi! 1 Sat = 1 głos. Środki z grantu zostaną rozdzielone proporcjonalnie do liczby otrzymanych głosów dopóki jest on aktywny.",
+    "Select language": "Wybierz język",
+    "Request a language": "Poproś o język",
+    "You don't follow any project": "Nie śledzisz żadnego projektu",
+    "Check out some trending projects this week that you can follow in the discovery view!": "Sprawdź kilka popularnych projektów w tym tygodniu, które możesz śledzić w widoku odkrywania!"
 }
