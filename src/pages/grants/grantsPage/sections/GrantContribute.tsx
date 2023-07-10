@@ -13,7 +13,7 @@ export const GrantContribute = ({
   const { t } = useTranslation()
   return (
     <CardLayout w="full" p="20px" alignItems="center">
-      <H3 alignSelf="start">Contribute</H3>
+      <H3 alignSelf="start">{t('Contribute')}</H3>
       <Body1>
         {t(
           'Contribute directly to Bitcoin Gaming Grant via QR code (lightning and onchain) or by sending SATs to our lightning address:',

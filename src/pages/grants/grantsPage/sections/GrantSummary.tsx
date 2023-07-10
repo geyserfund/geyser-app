@@ -10,6 +10,7 @@ import { SectionCard } from '../../components/SectionCard'
 import {
   GRANT_STATUS_COUNTDOWN_TITLES,
   GRANT_STATUS_MAP,
+  GrantHasVoting,
 } from '../../constants'
 
 export const GrantSummary = ({ grant }: { grant: Grant }) => {
@@ -19,11 +20,10 @@ export const GrantSummary = ({ grant }: { grant: Grant }) => {
   const votingEndDate = grant.statuses.find(
     (s) => s.status === grant.status,
   )?.endAt
-
   return (
     <SectionCard>
       {grant.image ? (
-        <Box width="100%" height={{ base: '127px', lg: '291px' }}>
+        <Box width="100%">
           <Image
             width="100%"
             height="100%"
@@ -64,6 +64,7 @@ export const GrantSummary = ({ grant }: { grant: Grant }) => {
             endDateSubtitle={t(GRANT_STATUS_COUNTDOWN_TITLES[grant.status])}
             endDateTimestamp={votingEndDate}
             balance={getShortAmountLabel(grant.balance || 0, true)}
+            hasVoting={GrantHasVoting[grant.name]}
             contributions={getShortAmountLabel(
               grant.applicants.reduce(
                 (prev, curr) => prev + (curr?.funding.communityFunding || 0),
