@@ -1,9 +1,9 @@
-import { HStack } from '@chakra-ui/react'
+import { HStack, StackProps } from '@chakra-ui/react'
 import { useCallback, useEffect } from 'react'
 
 import { useCustomTheme } from '../../../utils'
 
-export const BannerBackground = () => {
+export const BannerBackground = (props: StackProps) => {
   const { colors } = useCustomTheme()
 
   const handleMouseMove = useCallback(
@@ -51,6 +51,7 @@ export const BannerBackground = () => {
       transition="background 0.5s ease"
       borderBottom="4px solid"
       borderColor="neutral.50"
+      {...props}
     />
   )
 }

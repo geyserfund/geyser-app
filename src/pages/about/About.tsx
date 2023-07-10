@@ -10,6 +10,7 @@ import {
   SubscribeAbout,
   WhatPeopleAreSaying,
   WhereGreatIdeas,
+  WhyGeyser,
 } from './components'
 
 const About = () => {
@@ -43,6 +44,7 @@ const About = () => {
       <BuildByCreators />
       <CurrentlyOnGeyser />
       <WhatPeopleAreSaying />
+      <WhyGeyser />
       <GeyserTeam />
       <SubscribeAbout />
       <AppFooter />
