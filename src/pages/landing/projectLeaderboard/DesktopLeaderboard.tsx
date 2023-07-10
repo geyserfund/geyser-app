@@ -23,9 +23,7 @@ export const ProjectLeaderboard = (props: ProjectLeaderboardProps) => {
       </H3>
       <Tabs variant="unstyled" size="sm">
         <TabList>
-          <Tab {...tabButtonStyles} whiteSpace="nowrap">
-            {t('This week')}
-          </Tab>
+          <Tab {...tabButtonStyles}>{t('This week')}</Tab>
           <Tab {...tabButtonStyles}>{t('All time')}</Tab>
         </TabList>
         <TabPanels>
