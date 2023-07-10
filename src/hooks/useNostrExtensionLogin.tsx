@@ -34,8 +34,6 @@ export const useNostrExtensonLogin = () => {
 
       const { event } = await getAuthEvent.json()
 
-      console.log({ event })
-
       event.pubkey = pubkey
       event.id = getEventHash(event)
 
@@ -57,7 +55,6 @@ export const useNostrExtensonLogin = () => {
 
       if (response.status >= 200 && response.status < 400) {
         const { data } = await queryCurrentUser()
-        console.log({ data })
         if (data && data.me) {
           login(data.me)
         }
@@ -67,7 +64,6 @@ export const useNostrExtensonLogin = () => {
         throwErrorToast(errorResponse?.reason)
       }
     } catch (e) {
-      console.error(e)
       setError(e)
       throwErrorToast()
     }
