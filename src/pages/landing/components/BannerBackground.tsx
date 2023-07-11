@@ -1,17 +1,20 @@
 import { HStack, StackProps } from '@chakra-ui/react'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 import { useCustomTheme } from '../../../utils'
 
 export const BannerBackground = (props: StackProps) => {
   const { colors } = useCustomTheme()
+  const componentRef = useRef<HTMLDivElement>()
 
   const handleMouseMove = useCallback(
     (event: MouseEvent) => {
       const element = document.getElementById('radial-gradient')
-
       if (element) {
-        if (event.pageY <= 186) {
+        if (
+          componentRef?.current?.clientHeight &&
+          event.pageY <= componentRef.current.clientHeight
+        ) {
           const windowWidth = element.clientWidth
           const windowHeight = element.clientHeight
           const mouseXpercentage = Math.round((event.pageX / windowWidth) * 100)
@@ -43,6 +46,7 @@ export const BannerBackground = (props: StackProps) => {
 
   return (
     <HStack
+      ref={componentRef}
       id="radial-gradient"
       top="0px"
       left="0px"
