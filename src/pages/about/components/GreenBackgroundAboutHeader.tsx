@@ -5,16 +5,16 @@ import { Link } from 'react-router-dom'
 import { H1, H3 } from '../../../components/typography'
 import { getPath } from '../../../constants'
 import { lightModeColors } from '../../../styles'
+import { BannerBackground } from '../../landing/components/BannerBackground'
 import { LaunchYourProjectButton } from './LaunchYourProjectButton'
 
 export const GreenBackgroundAboutHeader = () => {
   const { t } = useTranslation()
   return (
-    <VStack
+    <BannerBackground
       width={'100%'}
-      backgroundColor="primary.400"
-      justifyContent="space-between"
       position={'relative'}
+      justifyContent={'center'}
     >
       <VStack
         spacing={30}
@@ -25,9 +25,9 @@ export const GreenBackgroundAboutHeader = () => {
         <H1 color={lightModeColors.neutral[900]}>
           {t('Transform ideas into real-life projects')}
         </H1>
-        <H3 color={lightModeColors.neutral[900]}>
+        <H3 color={lightModeColors.neutral[900]} textAlign={'center'}>
           {t(
-            'Geyser is a bitcoin-native crowdfunding platform where you can fund or create your own projects to monetize your ideas with support from global communities.',
+            'Geyser is a bitcoin-native crowdfunding platform where you can fund project ideas with the support from global communities.',
           )}
         </H3>
         <HStack justifyContent="center" spacing={30}>
@@ -55,6 +55,6 @@ export const GreenBackgroundAboutHeader = () => {
         bottom={-8}
         zIndex={9}
       ></Box>
-    </VStack>
+    </BannerBackground>
   )
 }

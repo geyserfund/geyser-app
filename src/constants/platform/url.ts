@@ -290,8 +290,6 @@ export const TextMessage3DImageUrl =
 // GEYSER TEAM
 export const AuwalProfileUrl =
   'https://storage.googleapis.com/geyser-projects-media/team/auwal.png'
-export const FranProfileUrl =
-  'https://storage.googleapis.com/geyser-projects-media/team/fran.png'
 export const MickProfileUrl =
   'https://storage.googleapis.com/geyser-projects-media/team/mick.png'
 export const SajalProfileUrl =

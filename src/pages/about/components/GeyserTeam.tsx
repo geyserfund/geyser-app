@@ -5,7 +5,6 @@ import { CardLayout } from '../../../components/layouts'
 import { Body1, H1, H2, H3 } from '../../../components/typography'
 import {
   AuwalProfileUrl,
-  FranProfileUrl,
   MickProfileUrl,
   SajalProfileUrl,
   SteliosProfileUrl,
@@ -26,11 +25,6 @@ const CardContents = [
     name: 'Sajal',
     title: 'Frontend Developer',
     imageUrl: SajalProfileUrl,
-  },
-  {
-    name: 'Fran',
-    title: 'Frontend Developer',
-    imageUrl: FranProfileUrl,
   },
   {
     name: 'Auwal',
