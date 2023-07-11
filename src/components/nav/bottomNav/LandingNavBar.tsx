@@ -1,5 +1,6 @@
 import { Box, Button, HStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, matchPath, matchRoutes, useLocation } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
@@ -45,6 +46,7 @@ const LandingNavItems = [
 ]
 
 export const LandingNavBar = () => {
+  const { t } = useTranslation()
   const location = useLocation()
 
   const routeMatchesForShowingLandingMenu = matchRoutes(
@@ -109,7 +111,7 @@ export const LandingNavBar = () => {
                   semiBold
                   color={isActive ? 'neutral.1000' : 'neutral.500'}
                 >
-                  {name}
+                  {t(name)}
                 </Caption>
               </Button>
             )

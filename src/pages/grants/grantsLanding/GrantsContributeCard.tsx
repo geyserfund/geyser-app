@@ -59,7 +59,7 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
         </ListText>
         <ListText
           titleProps={{ fontSize: '24px' }}
-          subtitle={t('GRANT CONTRIBUTIONS')}
+          subtitle={t('GRANT DISTRIBUTIONS')}
           subtitleProps={{ fontSize: '10px' }}
           isSatLogo={true}
         >

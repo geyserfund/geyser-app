@@ -1,5 +1,6 @@
 import { Button, Image, Link, Text } from '@chakra-ui/react'
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   BoostCLILogoUrl,
@@ -13,7 +14,7 @@ import {
   FundingTxForLandingPageFragment,
   FundingTxForUserContributionFragment,
   FundingTxFragment,
-} from '../../../types/generated/graphql'
+} from '../../../types'
 
 type ExternalAccountLinkIconProps = {
   fundingTx:
@@ -34,6 +35,7 @@ const sourceUrlMap: any = {
 export const ExternalAccountLinkIcon = ({
   fundingTx,
 }: ExternalAccountLinkIconProps) => {
+  const { t } = useTranslation()
   const { source, funder } = fundingTx
 
   const getExternalAccount = (type: string) => {
@@ -61,7 +63,7 @@ export const ExternalAccountLinkIcon = ({
 
   return (
     <>
-      <Text fontSize="xs">from</Text>
+      <Text fontSize="xs">{t('from')}</Text>
       <Link href={linkDestination} isExternal>
         <Button size="xs" rounded="full" padding="0px" overflow="hidden">
           <Image

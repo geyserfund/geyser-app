@@ -455,6 +455,7 @@
   "ACTIVE": "ACTIVE",
   "GRANT": "GRANT",
   "GRANT CONTRIBUTIONS": "GRANT CONTRIBUTIONS",
+  "GRANT DISTRIBUTIONS": "GRANT DISTRIBUTIONS",
   "Contribute to the Bitcoin ecosystem by becoming a Geyser Grants sponsor. You can also easily contribute by sending or streaming recurring payments to": "Contribute to the Bitcoin ecosystem by becoming a Geyser Grants sponsor. You can also easily contribute by sending or streaming recurring payments to",
   "Or sending SATs to our lightning address:": "Or sending SATs to our lightning address:",
   "Copied to clipboard!": "Copied to clipboard!",
@@ -596,5 +597,14 @@
   "You don't follow any project": "You don't follow any project",
   "Check out some trending projects this week that you can follow in the discovery view!": "Check out some trending projects this week that you can follow in the discovery view!",
   "Why Geyser?": "Why Geyser?",
-  "Our name 'Geyser' was inspired by naturally occurring geysers, which are astounding spectacles. Given enough pressure water can be ejected with force up into the sky defying gravity. In a similar way, given enough community support, important project ideas can take off and bring about change in the world.": "Our name 'Geyser' was inspired by naturally occurring geysers, which are astounding spectacles. Given enough pressure water can be ejected with force up into the sky defying gravity. In a similar way, given enough community support, important project ideas can take off and bring about change in the world."
+  "Our name 'Geyser' was inspired by naturally occurring geysers, which are astounding spectacles. Given enough pressure water can be ejected with force up into the sky defying gravity. In a similar way, given enough community support, important project ideas can take off and bring about change in the world.": "Our name 'Geyser' was inspired by naturally occurring geysers, which are astounding spectacles. Given enough pressure water can be ejected with force up into the sky defying gravity. In a similar way, given enough community support, important project ideas can take off and bring about change in the world.",
+  "Home": "Home",
+  "Write an entry": "Write an entry",
+  "Engage your community with articles about your project updates": "Engage your community with articles about your project updates",
+  "Sell anything": "Sell anything",
+  "Sell your work, merch, art, sponsorships, badges, or services": "Sell your work, merch, art, sponsorships, badges, or services",
+  "Add goal": "Add goal",
+  "Setting milestones helps you reach your overall project goal": "Setting milestones helps you reach your overall project goal",
+  "Learn more about crowdfunding": "Learn more about crowdfunding",
+  "from": "from"
 }

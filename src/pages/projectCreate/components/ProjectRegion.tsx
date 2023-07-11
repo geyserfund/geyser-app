@@ -10,7 +10,7 @@ import { Body1 } from '../../../components/typography'
 import { IconButtonComponent, SelectComponent } from '../../../components/ui'
 import { AppTheme } from '../../../context'
 import { FieldContainer } from '../../../forms/components/FieldContainer'
-import { QUERY_COUNTRIES, QUERY_REGION } from '../../../graphql/queries/tags'
+import { QUERY_COUNTRIES, QUERY_REGION } from '../../../graphql/queries'
 import {
   Country,
   Location,
@@ -125,7 +125,7 @@ export const ProjectRegion = ({
 
   return (
     <FieldContainer
-      title="Region"
+      title={t('Region')}
       subtitle={
         <span>
           {t(
