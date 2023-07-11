@@ -82,6 +82,7 @@ export const WalletOfSatoshiLightningAddressURL =
   'https://www.walletofsatoshi.com/'
 export const BitNobURL = 'https://bitnob.com/'
 export const AmbossUrl = 'https://amboss.space/node/'
+export const BlinkUrl = 'https://www.blink.sv/'
 
 // External Platform Image Urls
 export const BoostCLILogoUrl =
@@ -126,6 +127,8 @@ export const zuccoUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/board/zucco.jpg'
 export const conorUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/board/conor.jpg'
+export const paulIIIUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/board/paulIII.png'
 
 export const tachiraUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/board/tachira.svg'
@@ -229,7 +232,9 @@ export const AlbyUrl =
 export const BitnobUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/bitnob.png'
 export const WalletOfSatoshiUrl =
-  'https://storage.googleapis.com/geyser-projects-media/platform/wallet-of-satoshi.png'
+  'https://storage.googleapis.com/geyser-projects-media/platform/wallet-logo.svg'
+export const BlinkLogoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/platform/blink.png'
 
 // ICONS
 
@@ -253,3 +258,41 @@ export const TrophyUrl =
   'https://storage.googleapis.com/geyser-projects-media/icons/trophy.png'
 export const LightningUrl =
   'https://storage.googleapis.com/geyser-projects-media/icons/lightning.png'
+
+// AIRTABLE LINKS
+export const LanguageRequestUrl = 'https://airtable.com/shrEs5AsmkC07tWcX'
+
+// ABOUT PAGE
+
+export const GeyserAboutProjectsBannerImage =
+  'https://storage.googleapis.com/geyser-projects-media/images/geyser-about-projects-banner-image.png'
+export const BitcoinPouch3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/bitcoin-pouch-3d.png'
+export const CoinGlobe3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/coin-globe-3d.png'
+export const CoinLightning3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/coin-lightning-3d.png'
+export const CoinPercentage3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/coin-percentage-3d.png'
+export const Gift3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/gift-3d.png'
+export const Key3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/key-3d.png'
+export const Lightning3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/lightning-3d.png'
+export const NewbieBag3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/newbie-badge.png'
+export const Search3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/search-3d.png'
+export const TextMessage3DImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/text-message-3d.png'
+
+// GEYSER TEAM
+export const AuwalProfileUrl =
+  'https://storage.googleapis.com/geyser-projects-media/team/auwal.png'
+export const MickProfileUrl =
+  'https://storage.googleapis.com/geyser-projects-media/team/mick.png'
+export const SajalProfileUrl =
+  'https://storage.googleapis.com/geyser-projects-media/team/sajal.png'
+export const SteliosProfileUrl =
+  'https://storage.googleapis.com/geyser-projects-media/team/stelios.png'

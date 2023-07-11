@@ -11,6 +11,7 @@ import { fonts } from '../../../../styles'
 import {
   GrantApplicant,
   GrantApplicantFunding,
+  GrantStatusEnum,
   Project,
 } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
@@ -22,7 +23,8 @@ import { WidgetItem } from '../../components/WidgetItem'
 
 interface Props {
   applicants: Array<GrantApplicant>
-  canVote?: boolean
+  grantHasVoting?: boolean
+  grantStatus: string
   title?: string
   isClosed?: boolean
   fundingOpenStartDate: number
@@ -46,7 +48,8 @@ export const CommunityVoting = ({
   fundingOpenStartDate,
   fundingOpenEndDate,
   applicants,
-  canVote,
+  grantHasVoting,
+  grantStatus,
   title,
   isClosed,
 }: Props) => {
@@ -58,6 +61,8 @@ export const CommunityVoting = ({
   if (!applicants) {
     return null
   }
+
+  const canVote = grantHasVoting && grantStatus === GrantStatusEnum.FundingOpen
 
   const sectionTitle =
     title || t('Let the Sats flow to your favorite projects. 1 Sat = 1 vote.')
@@ -74,20 +79,35 @@ export const CommunityVoting = ({
     )
   }
 
-  const renderVoteButton = (project: Project) => {
-    return (
-      <Button
-        onClick={() => modalProps.onOpen({ project })}
-        height="51px"
-        width="100%"
-        size="xl"
-        textTransform="uppercase"
-        fontFamily={fonts.livvic}
-        variant="primary"
-      >
-        {t('Vote')}
-      </Button>
-    )
+  const renderButton = (project: Project) => {
+    if (canVote) {
+      return (
+        <Button
+          onClick={() => modalProps.onOpen({ project })}
+          height="51px"
+          width="100%"
+          size="xl"
+          textTransform="uppercase"
+          fontFamily={fonts.livvic}
+          variant="primary"
+        >
+          {t('Vote')}
+        </Button>
+      )
+    }
+
+    if (grantStatus !== GrantStatusEnum.Closed) {
+      return (
+        <Button
+          as={Link}
+          to={getPath('project', project.id)}
+          size={'sm'}
+          variant={'primary'}
+        >
+          {t('View project')}
+        </Button>
+      )
+    }
   }
 
   return (
@@ -137,8 +157,8 @@ export const CommunityVoting = ({
                   justifyContent="center"
                   alignItems="center"
                 >
-                  {canVote && renderVoteButton(project)}
-                  {renderWidgetItem(funding)}
+                  {renderButton(project)}
+                  {(grantHasVoting || isClosed) && renderWidgetItem(funding)}
                 </Box>
               )}
             </Box>
@@ -177,7 +197,7 @@ export const CommunityVoting = ({
                 <Box pt={2}>{renderWidgetItem(funding)}</Box>
                 {canVote && (
                   <Box ml={8} flexGrow={1}>
-                    {renderVoteButton(project)}
+                    {renderButton(project)}
                   </Box>
                 )}
               </Box>

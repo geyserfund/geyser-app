@@ -165,7 +165,7 @@ export const useEntryState = (
       const input: UpdateEntryInput = {
         content: entry.content,
         description: entry.description,
-        entryId: toInt(baseEntry.id),
+        entryId: entryId || toInt(baseEntry.id),
         image: entry.image,
         title: entry.title,
       }

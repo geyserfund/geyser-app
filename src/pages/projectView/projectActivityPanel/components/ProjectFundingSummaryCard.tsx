@@ -1,5 +1,6 @@
 import { Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { FormEventHandler, forwardRef } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { BoltIcon } from '../../../../components/icons'
 import { SatoshiAmount, SectionTitle } from '../../../../components/ui'
@@ -12,6 +13,7 @@ type Props = {
 
 export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(
   ({ onSubmit }, ref) => {
+    const { t } = useTranslation()
     const { fundForm, project } = useProjectContext()
 
     const { state: formState, hasSelectedRewards } = fundForm
@@ -59,7 +61,7 @@ export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(
                   textColor={'neutral.700'}
                   fontWeight={'normal'}
                 >
-                  Rewards
+                  {t('Rewards')}
                 </Text>
                 <VStack flex={1} flexWrap={'wrap'} alignItems="flex-end">
                   {formState.rewardsByIDAndCount &&
@@ -84,7 +86,7 @@ export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(
               width={'full'}
               fontSize={'10px'}
             >
-              <SectionTitle>Total</SectionTitle>
+              <SectionTitle>{t('Total')}</SectionTitle>
 
               <HStack>
                 <SatoshiAmount
@@ -115,7 +117,7 @@ export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(
             type="submit"
             leftIcon={<BoltIcon />}
           >
-            Continue
+            {t('Continue')}
           </Button>
         </VStack>
       </form>

@@ -2,6 +2,7 @@ import { MenuItem } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { SortType, useFilterContext } from '../../../../context'
+import { checkIfRenderFilter } from '../../../../utils/helpers'
 import { disableSortByTrending, getCurrentSelection } from './sortSelection'
 
 export enum SortOptions {
@@ -68,17 +69,23 @@ export const SortBody = ({ isMobile }: { isMobile?: boolean }) => {
     ? sortList.slice(1)
     : sortList
 
+  const getBackgroundColor = (value: SortOptions) => {
+    const filterTruth = getCurrentSelection(filters.sort) === value
+
+    if ((checkIfRenderFilter(filters) || filters.recent) && filterTruth) {
+      return 'neutral.100'
+    }
+
+    return undefined
+  }
+
   return (
     <>
       {renderButtons.map((value) => {
         return (
           <MenuItem
             key={value}
-            backgroundColor={
-              getCurrentSelection(filters.sort) === value
-                ? 'neutral.100'
-                : undefined
-            }
+            backgroundColor={getBackgroundColor(value)}
             onClick={() => onSortSelect(value)}
           >
             {t(value)}

@@ -9,7 +9,7 @@ export enum lng {
   fr = 'fr',
   cz = 'cz',
   zh = 'zh',
-  'ar' = 'ar',
+  ar = 'ar',
 }
 
 /**
@@ -20,7 +20,7 @@ export enum lng {
 export const languages = {
   [lng.en]: 'English',
   [lng.es]: 'Spanish',
-  [lng.pt]: 'Portuguese',
+  [lng.pt]: 'Portuguese-BR',
   [lng.fr]: 'French',
   [lng.de]: 'German',
   [lng.it]: 'Italian',
@@ -29,4 +29,18 @@ export const languages = {
   [lng.cz]: 'Czech',
   [lng.zh]: 'Chinese',
   [lng.ar]: 'Arabic',
+} as { [key: string]: string }
+
+export const languageFalgs = {
+  [lng.en]: '🇬🇧',
+  [lng.es]: '🇪🇸',
+  [lng.pt]: '🇧🇷',
+  [lng.fr]: '🇫🇷',
+  [lng.de]: '🇩🇪',
+  [lng.it]: '🇮🇹',
+  [lng.el]: '🇬🇷',
+  [lng.pl]: '🇵🇱',
+  [lng.cz]: '🇨🇿',
+  [lng.zh]: '🇨🇳',
+  [lng.ar]: '🇵🇸',
 } as { [key: string]: string }

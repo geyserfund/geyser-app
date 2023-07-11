@@ -1,25 +1,49 @@
 import {
+  Box,
   Button,
   HStack,
   IconButton,
+  Link,
   Tooltip,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { languages } from '../../../constants'
+import {
+  languageFalgs,
+  LanguageRequestUrl,
+  languages,
+} from '../../../constants'
+import { allTranslations, EnglishTranslations } from '../../../translations'
 import { ColorModeSwitcher } from '../../../utils'
 import { SatSymbolIcon } from '../../icons'
 import { Modal } from '../../layouts'
 
 export const ModeChange = () => {
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
 
   const { isOpen, onClose, onOpen } = useDisclosure()
-  const currentLanguageKey = Object.keys(languages).find(
-    (lang) => lang === i18n.resolvedLanguage,
-  ) as keyof typeof languages
+
+  const renderLanguages = Object.keys(allTranslations).map((key) => {
+    const EnglishLength = Object.keys(EnglishTranslations).length
+    const translation = allTranslations[key as keyof typeof allTranslations]
+    const LanguageLength = Object.keys(translation).length
+    const languageCoveragePercentage = (LanguageLength / EnglishLength) * 100
+
+    const language = {
+      key,
+      translation,
+      disabled: true,
+    }
+
+    if (languageCoveragePercentage >= 70) {
+      language.disabled = false
+      return language
+    }
+
+    return language
+  })
 
   return (
     <>
@@ -34,42 +58,54 @@ export const ModeChange = () => {
             isDisabled
           />
         </Tooltip>
-        <Tooltip label="language">
-          <Button
-            bgColor="neutral.50"
-            color="neutral.600"
-            variant="primaryNeutral"
-            isDisabled
-            // onClick={() => i18n.changeLanguage(lng)}
-            onClick={onOpen}
-          >
-            {languages[currentLanguageKey]}
-          </Button>
-        </Tooltip>
+        <Button
+          bgColor="neutral.50"
+          color="neutral.600"
+          variant="primaryNeutral"
+          // isDisabled
+          // onClick={() => i18n.changeLanguage(lng)}
+          onClick={onOpen}
+        >
+          {languages[i18n.resolvedLanguage as keyof typeof languages]}
+        </Button>
       </HStack>
       <Modal
         isOpen={isOpen}
         onClose={onClose}
-        size="md"
-        title={'Choose your language'}
+        size="xs"
+        contentProps={{ maxWidth: '250px' }}
+        title={t('Select language')}
       >
-        <VStack>
-          {Object.keys(languages).map((lng) => (
-            <Button
-              key={lng}
-              style={{
-                fontWeight: i18n.resolvedLanguage === lng ? 'bold' : 'normal',
-              }}
-              type="submit"
-              onClick={() => {
-                i18n.changeLanguage(lng)
-                onClose()
-              }}
-            >
-              {languages[lng]}
-            </Button>
+        <VStack pb={5}>
+          {renderLanguages.map((lng) => (
+            <Tooltip key={lng.key} label={lng.disabled ? t('Coming soon') : ''}>
+              <Button
+                style={{
+                  fontWeight:
+                    i18n.resolvedLanguage === lng.key ? 'bold' : 'normal',
+                }}
+                type="submit"
+                onClick={() => {
+                  i18n.changeLanguage(lng.key)
+                  onClose()
+                }}
+                w={200}
+                textAlign={'start'}
+                isDisabled={lng.disabled}
+              >
+                <Box w="100%">
+                  <Box as={'span'} w="100%" paddingRight={2}>
+                    {languageFalgs[lng.key]}
+                  </Box>
+                  {languages[lng.key]}
+                </Box>
+              </Button>
+            </Tooltip>
           ))}
         </VStack>
+        <Link href={LanguageRequestUrl} isExternal>
+          {t('Request a language')}
+        </Link>
       </Modal>
     </>
   )

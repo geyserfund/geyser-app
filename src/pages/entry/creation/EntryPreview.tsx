@@ -107,7 +107,7 @@ export const EntryPreview = () => {
   }, [entryData])
 
   const handleUpdateEntry = async () => {
-    if (entry) {
+    if (entry && entry.id) {
       const { image, title, description, content, id } = entry
       try {
         const input: IEntryUpdateInput = {

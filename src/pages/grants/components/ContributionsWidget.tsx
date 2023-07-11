@@ -1,9 +1,11 @@
 import { Box, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { BadgeIcon } from '../../../components/icons/svg/BadgeIcon'
-import { ContributionsIcon } from '../../../components/icons/svg/ContributionsIcon'
-import { TimerIcon } from '../../../components/icons/svg/TimerIcon'
+import {
+  BadgeIcon,
+  ContributionsIcon,
+  TimerIcon,
+} from '../../../components/icons'
 import { Countdown } from '../../../components/ui/Countdown'
 import { fonts } from '../../../styles'
 import { Maybe, Sponsor } from '../../../types'
@@ -16,6 +18,7 @@ interface Props {
   contributions?: string
   endDateSubtitle: string
   endDateTimestamp: number
+  hasVoting?: boolean
 }
 
 export const ContributionsWidget = ({
@@ -24,6 +27,7 @@ export const ContributionsWidget = ({
   contributions,
   endDateTimestamp,
   endDateSubtitle,
+  hasVoting,
 }: Props) => {
   const { t } = useTranslation()
   return (
@@ -77,18 +81,20 @@ export const ContributionsWidget = ({
           />
           <WidgetItem subtitle={t('Geyser grant')}>{balance}</WidgetItem>
         </Box>
-        <Box px={2} display="flex" alignItems="start" my={2}>
-          <ContributionsIcon
-            mt={1}
-            mr={2}
-            width="36px"
-            height="100%"
-            color="primary.500"
-          />
-          <WidgetItem subtitle={t('Worth of votes')}>
-            {contributions}
-          </WidgetItem>
-        </Box>
+        {hasVoting && (
+          <Box px={2} display="flex" alignItems="start" my={2}>
+            <ContributionsIcon
+              mt={1}
+              mr={2}
+              width="36px"
+              height="100%"
+              color="primary.500"
+            />
+            <WidgetItem subtitle={t('Worth of votes')}>
+              {contributions}
+            </WidgetItem>
+          </Box>
+        )}
       </Box>
       <Box
         mt={{ base: 1, lg: 4 }}

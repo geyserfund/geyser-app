@@ -1,4 +1,5 @@
 import { Button, HStack, Text, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { BsBoxArrowUpRight } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 
@@ -8,13 +9,14 @@ import {
   RewardGiftIcon,
 } from '../../../../components/icons'
 import { CardLayout, CardLayoutProps } from '../../../../components/layouts'
-import { Modal } from '../../../../components/layouts/Modal'
+import { Modal } from '../../../../components/layouts'
 import { Body2, H3 } from '../../../../components/typography'
 import { getPath, LearnAboutCrowdfundingUrl } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { UseModalReturn } from '../../../../hooks/useModal'
 
 export const ProjectCreatorModal = (props: UseModalReturn) => {
+  const { t } = useTranslation()
   const { project, onRewardsModalOpen, onMilestonesModalOpen } =
     useProjectContext()
   return (
@@ -24,13 +26,17 @@ export const ProjectCreatorModal = (props: UseModalReturn) => {
           as={Link}
           to={getPath('projectEntryCreation', project?.name)}
           icon={<EntryEditIcon />}
-          title="Write an entry"
-          description="Engage your community with articles about your project updates"
+          title={t('Write an entry')}
+          description={t(
+            'Engage your community with articles about your project updates',
+          )}
         />
         <CreationMenuItem
           icon={<RewardGiftIcon />}
-          title="Sell anything"
-          description="Sell your work, merch, art, sponsorships, badges, or services"
+          title={t('Sell anything')}
+          description={t(
+            'Sell your work, merch, art, sponsorships, badges, or services',
+          )}
           onClick={() => {
             props.onClose()
             onRewardsModalOpen()
@@ -38,8 +44,10 @@ export const ProjectCreatorModal = (props: UseModalReturn) => {
         />
         <CreationMenuItem
           icon={<MilestoneIcon fontSize="25px" />}
-          title="Add goal"
-          description="Setting milestones helps you reach your overall project goal"
+          title={t('Add goal')}
+          description={t(
+            'Setting milestones helps you reach your overall project goal',
+          )}
           onClick={() => {
             props.onClose()
             onMilestonesModalOpen()
@@ -51,7 +59,7 @@ export const ProjectCreatorModal = (props: UseModalReturn) => {
           variant="ghost"
           leftIcon={<BsBoxArrowUpRight />}
         >
-          <Text variant="body1">Learn more about crowdfunding</Text>
+          <Text variant="body1">{t('Learn more about crowdfunding')}</Text>
         </Button>
       </VStack>
     </Modal>

@@ -5,7 +5,7 @@ import { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { AboutUsUrl, FAQUrl, FeedbackUrl, getPath } from '../../../constants'
+import { FAQUrl, FeedbackUrl, getPath } from '../../../constants'
 import { AuthContext } from '../../../context'
 import { buttonCommon } from '../../../styles'
 import { ProjectStatus } from '../../../types'
@@ -164,7 +164,7 @@ export const TopNavBarMenu = ({
         <MenuDivider />
 
         <MenuItem color={'neutral.700'}>
-          <MenuItemLink destinationPath={AboutUsUrl} isExternal>
+          <MenuItemLink destinationPath={getPath('about')}>
             {t('About')}
           </MenuItemLink>
         </MenuItem>

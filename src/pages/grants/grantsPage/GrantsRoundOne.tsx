@@ -23,7 +23,7 @@ import {
   WalletOfSatoshiUrl,
 } from '../../../constants'
 import { fonts } from '../../../styles'
-import { GrantApplicant } from '../../../types'
+import { GrantApplicant, GrantStatusEnum } from '../../../types'
 import { useMediumScreen, useMobileMode } from '../../../utils'
 import { ApplyGrantCard } from '../components/ApplyGrantCard'
 import { Board } from '../components/Board'
@@ -242,7 +242,8 @@ export const GrantsRoundOne = ({
               <CommunityVoting
                 title="Grant Winners"
                 applicants={applicants}
-                canVote={false}
+                grantHasVoting={false}
+                grantStatus={GrantStatusEnum.Closed}
                 isClosed={true}
                 fundingOpenEndDate={fundingOpenEndDate}
                 fundingOpenStartDate={fundingOpenStartDate}

@@ -1,5 +1,6 @@
 import {
   Box,
+  BoxProps,
   Input,
   InputGroup,
   InputLeftElement,
@@ -14,13 +15,14 @@ interface TextInputBoxProps extends InputProps {
   error?: React.ReactNode
   leftIcon?: React.ReactNode
   rightIcon?: React.ReactNode
+  wrapperProps?: BoxProps
 }
 
 export const TextInputBox = forwardRef<HTMLInputElement, TextInputBoxProps>(
-  ({ children, error, leftIcon, rightIcon, ...rest }, ref) => {
+  ({ children, error, leftIcon, rightIcon, wrapperProps, ...rest }, ref) => {
     const { t } = useTranslation()
     return (
-      <Box width="100%">
+      <Box width="100%" {...wrapperProps}>
         <InputGroup>
           {leftIcon && (
             <InputLeftElement pointerEvents="none">{leftIcon}</InputLeftElement>

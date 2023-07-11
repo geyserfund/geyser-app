@@ -43,7 +43,7 @@ const navItems = [
   },
   {
     name: 'About',
-    to: 'https://geyser.notion.site/Geyser-2dd9468a27e84531bcbcbe89c24d7f09',
+    to: getPath('about'),
   },
 ]
 

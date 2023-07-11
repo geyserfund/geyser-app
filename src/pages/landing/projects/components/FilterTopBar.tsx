@@ -125,7 +125,7 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
     const { icon: Icon, text } = getStatusTypeButtonContent({ type, status })
     return (
       <TagComponent
-        label={text}
+        label={t(text)}
         icon={<Icon height="18px" color={'neutral.500'} />}
         onClick={() => updateFilter({ type: undefined, status: undefined })}
       />
@@ -140,7 +140,7 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
     const { icon: Icon, text, color } = getActivityButtonContent(activity)
     return (
       <TagComponent
-        label={text}
+        label={t(text)}
         icon={<Icon height="20px" color={color} />}
         onClick={() => updateFilter({ activity: undefined })}
       />
@@ -184,7 +184,7 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
     viewFilterTags ||
     viewFilterRegion ||
     viewFilterActivity ||
-    (!isMobile && filters.recent)
+    filters.recent
   ) {
     return (
       <HStack

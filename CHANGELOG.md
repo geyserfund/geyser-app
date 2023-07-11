@@ -1,3 +1,39 @@
+## [0.3.0](https://github.com/geyserfund/geyser-app/compare/v0.2.2...v0.3.0) (2023-07-11)
+
+
+### Features
+
+* add finishing touches and glow to about page ([94c9aa0](https://github.com/geyserfund/geyser-app/commit/94c9aa06bcc7ce61190adf18794fde925c8c5845))
+* create about page, WIP ([9491bfc](https://github.com/geyserfund/geyser-app/commit/9491bfc152c64071fc9677aca6212ce1e909f9e6))
+
+
+### Bug Fixes
+
+* add blink and fix sponsor image for darkmode ([1eb24a8](https://github.com/geyserfund/geyser-app/commit/1eb24a8bee03b1258c435457733559f40fcf2546))
+* add changelog and version update ([3f6aba1](https://github.com/geyserfund/geyser-app/commit/3f6aba1bf3c5131cc90a0d54100a10f0cc5c3712))
+* add checks for entry to not be 0 ([f9448cd](https://github.com/geyserfund/geyser-app/commit/f9448cd998d124451e867a19cbe20c31411ee02c))
+* add missing translations ([55a226f](https://github.com/geyserfund/geyser-app/commit/55a226f32a8d1410be08115dda29e6841d15dc43))
+* add missing translations ([f57d13c](https://github.com/geyserfund/geyser-app/commit/f57d13c10ce85f465cf96632cfb2e132d9991695))
+* add request a language link ([d229c49](https://github.com/geyserfund/geyser-app/commit/d229c49c8891131b1e555446640cca44a12d2fbf))
+* ask email for every reward ([#1035](https://github.com/geyserfund/geyser-app/issues/1035)) ([62e3ba9](https://github.com/geyserfund/geyser-app/commit/62e3ba940063610babad229c2840dd2b79e99e55))
+* correct copy, resolves GEY-2654 ([91ff415](https://github.com/geyserfund/geyser-app/commit/91ff4151ccf524f44795994d6294d5a91a393023))
+* finishing touches ([ca2905b](https://github.com/geyserfund/geyser-app/commit/ca2905bdadee0502c1c6efaf193b68deae468040))
+* fix missing change ([05984a7](https://github.com/geyserfund/geyser-app/commit/05984a70015005f2095ad6d8cbae4238fa2e9d5d))
+* fix mobile sort logic ([00325c9](https://github.com/geyserfund/geyser-app/commit/00325c98cf43c84ddd784d40163ede73649c5a3f))
+* image upload lasting too long when image upload has failed GEY-2823 ([6841675](https://github.com/geyserfund/geyser-app/commit/6841675d53fbd82c35ffb4131e3038fa62872acf))
+* made fixes based on linear comment ([a53ffe8](https://github.com/geyserfund/geyser-app/commit/a53ffe855055c3301f0aca6c476a3691be0db08b))
+* make changes for grant -5, resolves GEY-2560 ([4c02281](https://github.com/geyserfund/geyser-app/commit/4c0228195c1b49455b1c3ee88ea22930ec683b31))
+* make qr code bigger and square ([b6a4232](https://github.com/geyserfund/geyser-app/commit/b6a42326ccb47ba38dc9da06f90962c59f7d7820))
+* make qr logo smaller ([#1045](https://github.com/geyserfund/geyser-app/issues/1045)) ([d6bbdfd](https://github.com/geyserfund/geyser-app/commit/d6bbdfd75facc6b48187ba37df5793d6147cf300))
+* missing change ([7086437](https://github.com/geyserfund/geyser-app/commit/7086437697dcac1f53da957c327d9a9bfab170b9))
+* only add languages with above 70% translation ([93f29f2](https://github.com/geyserfund/geyser-app/commit/93f29f200da4b503dd4e73843e183524fdf461db))
+* re-enable languages for staging ([979c68f](https://github.com/geyserfund/geyser-app/commit/979c68fb69a5ae3ebd96175af8867e0f50857b18))
+* remove tooltip in language button ([6899cb6](https://github.com/geyserfund/geyser-app/commit/6899cb64e9e7ed06fb1e6f86bcb0bef5182f435c))
+* update -BR to Portuguese, update flag for it and arabic ([a9a11ff](https://github.com/geyserfund/geyser-app/commit/a9a11ffee6a867daaabc6f45401a4b1575a1049f))
+* update language modal ([b2edf38](https://github.com/geyserfund/geyser-app/commit/b2edf3816a208629247fe36262a4156cc87b30a6))
+* update sponsors logos to be compatible with dark mode ([e7c4ae2](https://github.com/geyserfund/geyser-app/commit/e7c4ae288624d54767f4b3c0b3d19c291f9f9866))
+* use translation where text is for mobile top bar ([9059974](https://github.com/geyserfund/geyser-app/commit/905997460d81f7e7248abf9847bf441b9265a3ae))
+
 ## [0.2.2](https://github.com/geyserfund/geyser-app/compare/v0.2.1...v0.2.2) (2023-07-03)
 
 

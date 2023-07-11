@@ -273,7 +273,7 @@ export const ProjectContributors = () => {
         <VStack width="100%" alignItems="start">
           <HStack flexWrap="wrap">
             <Text fontSize={'16px'} fontWeight={600} whiteSpace="nowrap">
-              {project?.fundersCount} Contributors
+              {project?.fundersCount} {t('Contributors')}
             </Text>
             <Text fontSize={'14px'}>
               {selectedFunders.length > 0

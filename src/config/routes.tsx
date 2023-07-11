@@ -93,6 +93,10 @@ const LandingPageProjects = loadable(() =>
 )
 const LandingFeed = loadable(() => Landing.then((m) => m.LandingFeed))
 
+// ABOUT PAGE
+
+const AboutPage = loadable(() => import('../pages/about/About'))
+
 type PlatformRoutes = {
   path: string
   element: () => JSX.Element
@@ -262,6 +266,10 @@ export const Router = () => {
               element: LandingFeed,
             },
           ],
+        },
+        {
+          path: getPath('about'),
+          element: AboutPage,
         },
         {
           path: '/auth/twitter',
