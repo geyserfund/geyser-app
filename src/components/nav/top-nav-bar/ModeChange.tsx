@@ -78,28 +78,29 @@ export const ModeChange = () => {
       >
         <VStack pb={5}>
           {renderLanguages.map((lng) => (
-            <Button
-              key={lng.key}
-              style={{
-                fontWeight:
-                  i18n.resolvedLanguage === lng.key ? 'bold' : 'normal',
-              }}
-              type="submit"
-              onClick={() => {
-                i18n.changeLanguage(lng.key)
-                onClose()
-              }}
-              w={200}
-              textAlign={'start'}
-              isDisabled={lng.disabled}
-            >
-              <Box w="100%">
-                <Box as={'span'} w="100%" paddingRight={2}>
-                  {languageFalgs[lng.key]}
+            <Tooltip key={lng.key} label={lng.disabled ? t('Coming soon') : ''}>
+              <Button
+                style={{
+                  fontWeight:
+                    i18n.resolvedLanguage === lng.key ? 'bold' : 'normal',
+                }}
+                type="submit"
+                onClick={() => {
+                  i18n.changeLanguage(lng.key)
+                  onClose()
+                }}
+                w={200}
+                textAlign={'start'}
+                isDisabled={lng.disabled}
+              >
+                <Box w="100%">
+                  <Box as={'span'} w="100%" paddingRight={2}>
+                    {languageFalgs[lng.key]}
+                  </Box>
+                  {languages[lng.key]}
                 </Box>
-                {languages[lng.key]}
-              </Box>
-            </Button>
+              </Button>
+            </Tooltip>
           ))}
         </VStack>
         <Link href={LanguageRequestUrl} isExternal>

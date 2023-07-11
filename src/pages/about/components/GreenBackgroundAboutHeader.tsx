@@ -49,7 +49,7 @@ export const GreenBackgroundAboutHeader = () => {
       <Box
         backgroundColor="neutral.0"
         borderRadius={'50%'}
-        width={'105%'}
+        width={'100%'}
         height={16}
         position={'absolute'}
         bottom={-8}
