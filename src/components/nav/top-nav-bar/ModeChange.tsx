@@ -15,6 +15,7 @@ import {
   LanguageRequestUrl,
   languages,
 } from '../../../constants'
+import { allTranslations, EnglishTranslations } from '../../../translations'
 import { ColorModeSwitcher } from '../../../utils'
 import { SatSymbolIcon } from '../../icons'
 import { Modal } from '../../layouts'
@@ -23,9 +24,26 @@ export const ModeChange = () => {
   const { i18n, t } = useTranslation()
 
   const { isOpen, onClose, onOpen } = useDisclosure()
-  const currentLanguageKey = Object.keys(languages).find(
-    (lang) => lang === i18n.resolvedLanguage,
-  ) as keyof typeof languages
+
+  const renderLanguages = Object.keys(allTranslations).map((key) => {
+    const EnglishLength = Object.keys(EnglishTranslations).length
+    const translation = allTranslations[key as keyof typeof allTranslations]
+    const LanguageLength = Object.keys(translation).length
+    const languageCoveragePercentage = (LanguageLength / EnglishLength) * 100
+
+    const language = {
+      key,
+      translation,
+      disabled: true,
+    }
+
+    if (languageCoveragePercentage >= 70) {
+      language.disabled = false
+      return language
+    }
+
+    return language
+  })
 
   return (
     <>
@@ -48,7 +66,7 @@ export const ModeChange = () => {
           // onClick={() => i18n.changeLanguage(lng)}
           onClick={onOpen}
         >
-          {languages[currentLanguageKey]}
+          {languages[i18n.resolvedLanguage as keyof typeof languages]}
         </Button>
       </HStack>
       <Modal
@@ -59,25 +77,27 @@ export const ModeChange = () => {
         title={t('Select language')}
       >
         <VStack pb={5}>
-          {Object.keys(languages).map((lng) => (
+          {renderLanguages.map((lng) => (
             <Button
-              key={lng}
+              key={lng.key}
               style={{
-                fontWeight: i18n.resolvedLanguage === lng ? 'bold' : 'normal',
+                fontWeight:
+                  i18n.resolvedLanguage === lng.key ? 'bold' : 'normal',
               }}
               type="submit"
               onClick={() => {
-                i18n.changeLanguage(lng)
+                i18n.changeLanguage(lng.key)
                 onClose()
               }}
               w={200}
               textAlign={'start'}
+              isDisabled={lng.disabled}
             >
               <Box w="100%">
                 <Box as={'span'} w="100%" paddingRight={2}>
-                  {languageFalgs[lng]}
+                  {languageFalgs[lng.key]}
                 </Box>
-                {languages[lng]}
+                {languages[lng.key]}
               </Box>
             </Button>
           ))}
