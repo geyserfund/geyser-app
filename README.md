@@ -142,4 +142,4 @@ Run `yarn test:e2e` to run the headless test suit
 
 ## Contributing
 
-[Check out the contribution document](/CONTRIBUTING.md)
+[Check out the contribution guidelines](/CONTRIBUTING.md)
