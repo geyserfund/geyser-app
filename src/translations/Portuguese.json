@@ -288,7 +288,7 @@
     "<1>Lightning Addresses</1> are like an email address, but for your Bitcoin. You’ll receive all on-chain and lightning transactions directly to your lightning wallet. Get your own lightning access using these recommended apps.": "<1>Endereços Lightning</1> são como um endereço de e-mail, mas para o seu Bitcoin. Você receberá todas as transações on-chain e Lightning diretamente em sua carteira lightning. Obtenha seu próprio acesso lightning usando esses aplicativos recomendados.",
     "Connect Your Node": "Conecte Seu Node",
     "No fee per transaction": "Sem taxa por transação",
-    "Connect your lightning node to receive incoming transactions directly. Don&apos;t have a node? You can <1>create a cloud node</1> with the recommended app.": "Conecte seu lightning node para receber transações diretamente. Não tem um node? Você pode <1>criar um cloud node</1> com o aplicativo recomendado.",
+    "Connect your lightning node to receive incoming transactions directly. Don't have a node? You can <1>create a cloud node</1> with the recommended app.": "Conecte seu lightning node para receber transações diretamente. Não tem um node? Você pode <1>criar um cloud node</1> com o aplicativo recomendado.",
     "Your project is almost live. You can now either launch the project and make it public or save it as draft. And you can always edit project at any time.": "Seu projeto está quase no ar. Agora você pode lançar o projeto e torná-lo visível para o público, ou salvá-lo como rascunho. Você pode editar o projeto a qualquer momento.",
     "By continuing, I agree with Geyser&apos;s <1>Terms & Conditions</1>": "Ao continuar, concordo com os <1>Termos e Condições</1> da Geyser",
     "Node name is a required field": "O nome do Node é um campo obrigatório",
