@@ -5,7 +5,7 @@ import { BsTwitter } from 'react-icons/bs'
 
 import { AUTH_SERVICE_ENDPOINT } from '../../constants'
 import { useAuthContext } from '../../context'
-import { useMeLazyQuery } from '../../types'
+import { useMeQuery } from '../../types'
 import { hasTwitterAccount, useNotification } from '../../utils'
 
 interface ConnectWithTwitterProps extends ButtonProps {
@@ -22,7 +22,7 @@ export const ConnectWithTwitter = ({
 
   const [canLogin, setCanLogin] = useState(true)
 
-  const [queryCurrentUser, { stopPolling }] = useMeLazyQuery({
+  const { stopPolling } = useMeQuery({
     onCompleted(data) {
       if (data && data.me) {
         const hasTwitter = hasTwitterAccount(data.me)
@@ -77,12 +77,6 @@ export const ConnectWithTwitter = ({
     }
   }, [pollAuthStatus])
 
-  const handleClick = async () => {
-    if (canLogin) {
-      setPollAuthStatus(true)
-    }
-  }
-
   useEffect(() => {
     const initalizeLogin = async () => {
       try {
@@ -93,7 +87,6 @@ export const ConnectWithTwitter = ({
 
         if (response.status >= 200 && response.status < 400) {
           setCanLogin(true)
-          queryCurrentUser()
         } else {
           setCanLogin(false)
         }
@@ -104,6 +97,12 @@ export const ConnectWithTwitter = ({
 
     initalizeLogin()
   }, [])
+
+  const handleClick = async () => {
+    if (canLogin) {
+      setPollAuthStatus(true)
+    }
+  }
 
   const handleToastError = (reason?: string) => {
     toast({
