@@ -30,6 +30,7 @@ import {
   GrantApply,
   MoreInfo,
 } from './sections'
+import { CommonBoardMembers } from './sections/CommonBoardMembers'
 
 const PageContainer = ({
   children,
@@ -125,6 +126,9 @@ export const GrantPage = () => {
     grant.status !== GrantStatusEnum.ApplicationsOpen && grantHasVoting
   const showGrantApply = grant.status !== GrantStatusEnum.Closed
 
+  const showBoardMembers =
+    !GrantHasVoting[grant.name] && grant.boardMembers.length > 0
+
   return (
     <PageContainer title={t(grant.title)} image={grant.image}>
       <VStack w="full" spacing="30px" alignItems="start">
@@ -157,6 +161,9 @@ export const GrantPage = () => {
         )}
         {showGrantApply && <GrantApply grant={grant} />}
         <GrantContribute grantProjectName={GrantProjectNameMap[grant.name]} />
+        {showBoardMembers && (
+          <CommonBoardMembers members={grant.boardMembers} />
+        )}
         <MoreInfo />
       </VStack>
     </PageContainer>
