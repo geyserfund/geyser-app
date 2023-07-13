@@ -288,7 +288,7 @@
     "<1>Lightning Addresses</1> are like an email address, but for your Bitcoin. You’ll receive all on-chain and lightning transactions directly to your lightning wallet. Get your own lightning access using these recommended apps.": "<1>عناوين البرق</1> مثل عناوين البريد الإلكتروني، لكن للبيتكوين. ستتسلم كل حوالاتك على السلسلة وعلى البرق في محفظتك. اتصل بشبكة البرق باستعمال هذه التطبيقات الموصى بها.",
     "Connect Your Node": "اربط عقدتك",
     "No fee per transaction": "لا عمولة للمعاملة",
-    "Connect your lightning node to receive incoming transactions directly. Don&apos;t have a node? You can <1>create a cloud node</1> with the recommended app.": "اربط عقدتك في شبكة البرقة لتتلقى المعاملات الواردة مباشرة. ألا تملك عقدة؟ يمكنك <1>تشغيل عقدة سحابية</1> بهذا التطبيق المستحسن.",
+    "Connect your lightning node to receive incoming transactions directly. Don't have a node? You can <1>create a cloud node</1> with the recommended app.": "اربط عقدتك في شبكة البرقة لتتلقى المعاملات الواردة مباشرة. ألا تملك عقدة؟ يمكنك <1>تشغيل عقدة سحابية</1> بهذا التطبيق المستحسن.",
     "Your project is almost live. You can now either launch the project and make it public or save it as draft. And you can always edit project at any time.": "أوشك مشروعك على الانطلاق. يمكنك الآن إطلاقه والإعلان عنه أو حفظه كمسودة. ويمكنك تعديل المشروع متى شئت.",
     "By continuing, I agree with Geyser&apos;s <1>Terms & Conditions</1>": "بالاستمرار، أوافق على <1>البنود والشروط</1>",
     "Node name is a required field": "اسم العقدة حقل مطلوب",
