@@ -160,7 +160,11 @@ export const GrantPage = () => {
           />
         )}
         {showGrantApply && <GrantApply grant={grant} />}
-        <GrantContribute grantProjectName={GrantProjectNameMap[grant.name]} />
+        <GrantContribute
+          grantProjectName={GrantProjectNameMap[grant.name]}
+          grantTitle={grant.title}
+          grantHasVoting={grantHasVoting}
+        />
         {showBoardMembers && (
           <CommonBoardMembers members={grant.boardMembers} />
         )}

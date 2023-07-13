@@ -15,7 +15,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { BsCheckLg } from 'react-icons/bs'
 
 import { CardLayout } from '../../../../components/layouts'
@@ -47,12 +47,19 @@ export const GrantApply = ({ grant }: GrantProps) => {
     <CardLayout w="full" p="20px" alignItems="center">
       <H3 alignSelf="start">{t('Apply')}</H3>
       <Body1 alignSelf="start">
-        {t(
-          'Apply to be part of the Bitcoin Gaming Grant community-voting grant. Find out more about how projects will be selected and how voting works',
-        )}
-        <Link href={GrantApplicationDetailsUrl} isExternal>
-          {t('here.')}
-        </Link>
+        <Trans
+          values={{ title: grant.title }}
+          i18nKey={
+            'Apply to be part of the {{title}} grant. Find out more about how projects will be selected and how voting works <1>here.</1>'
+          }
+        >
+          {
+            'Apply to be part of the {{title}} grant. Find out more about how projects will be selected and how voting works '
+          }
+          <Link href={GrantApplicationDetailsUrl} isExternal>
+            here.
+          </Link>
+        </Trans>
       </Body1>
       <ApplyGrant grant={grant} />
     </CardLayout>
