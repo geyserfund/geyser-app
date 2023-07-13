@@ -52,6 +52,20 @@ export const QUERY_GRANT = gql`
         endAt
         startAt
       }
+      boardMembers {
+        user {
+          username
+          imageUrl
+          id
+          externalAccounts {
+            accountType
+            externalId
+            externalUsername
+            id
+            public
+          }
+        }
+      }
       applicants {
         project {
           id
