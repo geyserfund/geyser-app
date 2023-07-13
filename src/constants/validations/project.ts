@@ -7,7 +7,7 @@ export const ProjectValidations = {
     maxLength: 60,
   },
   description: {
-    maxLength: 4000,
+    maxLength: 8000,
   },
   shortDescription: {
     maxLength: 160,
