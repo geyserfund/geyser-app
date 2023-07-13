@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@chakra-ui/react'
+import { Button, ButtonProps, Link, Tooltip } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsTwitter } from 'react-icons/bs'
@@ -19,6 +19,8 @@ export const ConnectWithTwitter = ({
   const { t } = useTranslation()
   const { login } = useAuthContext()
   const { toast } = useNotification()
+
+  const [canLogin, setCanLogin] = useState(true)
 
   const [queryCurrentUser, { stopPolling }] = useMeLazyQuery({
     onCompleted(data) {
@@ -76,27 +78,32 @@ export const ConnectWithTwitter = ({
   }, [pollAuthStatus])
 
   const handleClick = async () => {
-    try {
-      const response = await fetch(`${AUTH_SERVICE_ENDPOINT}/auth-token`, {
-        credentials: 'include',
-        redirect: 'follow',
-      })
-
-      if (response.status >= 200 && response.status < 400) {
-        setPollAuthStatus(true)
-        queryCurrentUser()
-        window.open(
-          `${AUTH_SERVICE_ENDPOINT}/twitter?nextPath=/auth/twitter`,
-          '_blank',
-          'noopener,noreferrer',
-        )
-      } else {
-        handleToastError('could not get authentication token.')
-      }
-    } catch (err) {
-      handleToastError()
+    if (canLogin) {
+      setPollAuthStatus(true)
     }
   }
+
+  useEffect(() => {
+    const initalizeLogin = async () => {
+      try {
+        const response = await fetch(`${AUTH_SERVICE_ENDPOINT}/auth-token`, {
+          credentials: 'include',
+          redirect: 'follow',
+        })
+
+        if (response.status >= 200 && response.status < 400) {
+          setCanLogin(true)
+          queryCurrentUser()
+        } else {
+          setCanLogin(false)
+        }
+      } catch (err) {
+        setCanLogin(false)
+      }
+    }
+
+    initalizeLogin()
+  }, [])
 
   const handleToastError = (reason?: string) => {
     toast({
@@ -107,16 +114,26 @@ export const ConnectWithTwitter = ({
   }
 
   return (
-    <Button
-      w="100%"
-      backgroundColor="social.twitter"
-      leftIcon={<BsTwitter />}
-      color="white"
-      _hover={{ backgroundColor: 'social.twitterDark' }}
-      onClick={handleClick}
-      {...rest}
-    >
-      Twitter
-    </Button>
+    <Tooltip label={!canLogin && t('Please refresh the page and try again.')}>
+      <Button
+        as={Link}
+        href={`${AUTH_SERVICE_ENDPOINT}/twitter?nextPath=/auth/twitter`}
+        isExternal
+        w="100%"
+        backgroundColor="social.twitter"
+        leftIcon={<BsTwitter />}
+        color="white"
+        _hover={{
+          backgroundColor: 'social.twitterDark',
+          textDecoration: 'none',
+        }}
+        onClick={handleClick}
+        isDisabled={!canLogin}
+        textDecoration={'none'}
+        {...rest}
+      >
+        Twitter
+      </Button>
+    </Tooltip>
   )
 }
