@@ -454,11 +454,12 @@ export const ProjectCreationWalletConnectionForm = ({
                 <span>
                   <Trans
                     i18nKey={
-                      'Connect your lightning node to receive incoming transactions directly. Don&apos;t have a node? You can <1>create a cloud node</1> with the recommended app.'
+                      "Connect your lightning node to receive incoming transactions directly. Don't have a node? You can <1>create a cloud node</1> with the recommended app."
                     }
                   >
-                    Connect your lightning node to receive incoming transactions
-                    directly. Don&apos;t have a node? You can{' '}
+                    {
+                      'Connect your lightning node to receive incoming transactions directly. Dont have a node? You can '
+                    }
                     <Link href={VoltageExplainerPageForGeyserURL}>
                       create a cloud node
                     </Link>{' '}

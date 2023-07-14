@@ -95,7 +95,7 @@
     "Your project is not live yet. Head back to the creation flow to finalize your project information and launch it!": "你的项目尚未发布。返回创建流程来确定你的项目信息并将它发布！",
     "Story": "故事",
     "There are no any entries available": "没有可用的日记条目",
-    "You cannot publish an entry in an inactive project. Finish the project configuration or re-activate the project to publish this entry.": "你不能在非活动项目中发布条目。 完成项目配置或重新激活项目以发布此条目。",
+    "You cannot publish an entry in an inactive project. Finish the project configuration or re-activate the project to publish this entry.": "你不能在不活跃项目中发布条目。 完成项目配置或重新激活项目以发布此条目。",
     "Delete reward": "删除奖励",
     "Are you sure you want to remove the entry": "是否确认要移除日记条目",
     "Cancel": "取消",
@@ -142,7 +142,7 @@
     "Fund Project": "资助项目",
     "Donate to this idea": "向这个主意捐款",
     "Leave a public message here.": "公开留言。",
-    "Funding as": "作为x捐助",
+    "Funding as": "捐助人",
     "anonymous": "匿名",
     "Funding anonymously. Click to login": "匿名资助。点击登录",
     "Click to logout": "点击以登出",
@@ -288,7 +288,7 @@
     "<1>Lightning Addresses</1> are like an email address, but for your Bitcoin. You’ll receive all on-chain and lightning transactions directly to your lightning wallet. Get your own lightning access using these recommended apps.": "<1>闪电地址</1>就像一个电子邮箱地址，但用于比特币。 你可以通过它直接接收链上或闪电交易。 使用这些推荐的应用程序获取自己的闪电访问。",
     "Connect Your Node": "连接你的节点",
     "No fee per transaction": "免费交易",
-    "Connect your lightning node to receive incoming transactions directly. Don&apos;t have a node? You can <1>create a cloud node</1> with the recommended app.": "通过连接你的闪电节点来直接接收交易。没有节点？你可以使用推荐的应用程序来<1>创建一个云节点</1>。",
+    "Connect your lightning node to receive incoming transactions directly. Don't have a node? You can <1>create a cloud node</1> with the recommended app.": "通过连接你的闪电节点来直接接收交易。没有节点？你可以使用推荐的应用程序来<1>创建一个云节点</1>。",
     "Your project is almost live. You can now either launch the project and make it public or save it as draft. And you can always edit project at any time.": "你的项目即将上线了。你可以立即开启项目并把它公布或将其保存为草稿。你可以随时编辑项目。",
     "By continuing, I agree with Geyser&apos;s <1>Terms & Conditions</1>": "通过继续，我同意接受 Geyser 的<1>条款和条件</1>",
     "Node name is a required field": "节点名称是必填的字段",
@@ -392,7 +392,6 @@
     "worth of votes": "投票价值",
     "distributed": "已分配",
     "Vote": "投票",
-    "Apply to be part of the Bitcoin Gaming Grant community-voting grant. Find out more about how projects will be selected and how voting works": "申请参与比特币游戏社区投票拨款。了解更多有关选择项目过程以及投票方式的更多信息",
     "Apply": "申请",
     "here.": "在这里。",
     "Login to apply": "登录以申请",
@@ -403,7 +402,6 @@
     "You have not created any projects": "你尚未创建任何项目",
     "To apply for a grant you need to create a project on Geyser.": "要申请拨款，你先需要在 Geyser 上创建一个项目。",
     "Grant application failed.": "拨款申请失败了。",
-    "Contribute directly to Bitcoin Gaming Grant via QR code (lightning and onchain) or by sending SATs to our lightning address:": "通过二维码（闪电和链上）直接为比特币游戏拨款捐款，或将聪发送到我们的闪电地址：",
     "Grant funds will be distributed based on community votes.": "拨款资金将根据社区投票分配。",
     "Failed to fetch grants project.": "未能获取拨款项目。",
     "failed to record contribution": "未能记录捐助",
@@ -600,5 +598,12 @@
     "Select language": "选择语言",
     "Request a language": "要求语言",
     "You don't follow any project": "你还没有关注任何项目",
-    "Check out some trending projects this week that you can follow in the discovery view!": "前往发现页面查看并关注这个礼拜热门的项目！"
+    "Check out some trending projects this week that you can follow in the discovery view!": "前往发现页面查看并关注这个礼拜热门的项目！",
+    "Geyser is a bitcoin-native crowdfunding platform where you can fund or create your own projects to monetize your ideas with support from global communities.": "Geyser 是一个比特币原生的众筹平台。 你可以在此资助或创建你自己的项目，将你的主意依靠全球社区变成事实。",
+    "This grant support video-game developers that have integrated or want to integrate bitcoin and lightning in their platforms. The aim is to celebrate and showcase the power of lightning micropayments to the use case of gaming. Yes, Bitcoin makes gaming fun and rewarding!\n\nThis is a community-voting grant where the community grant fund distribution by voting. Vote with your Sats! 1 Sat = 1 vote. Grant funds will be distributed proportionally to the number of votes received while the grant is active.": "这笔拨款支持想将或已经将比特币结合到他们的平台的电子游戏开发人员。目的是以游戏为例庆祝和展示闪电微付款的力量。没错，比特币让打游戏变得有意义！\n\n这是一笔社区投票拨款，通过投票，社区将决定资金分配。用你的聪投票！1聪=1票。拨款资金将以拨款活跃时收到的票数成比例分配。",
+    "Supporting communities that are providing bitcoin education on the ground.": "支持在当地提供比特币教育的社区。",
+    "Billions of people live under a financial system that does not serve them. They are plagued by high inflation, bank failures, state seizures, and the threat of Central Bank Digital Currencies.\\n\\nThese are the people that would most benefit from bitcoin, which can act as a shield. These are also those that are least aware of bitcoin.\\n\\nBitcoin communities are forming on ‘the edges’ of the world, bringing a message of hope to their people. What started in 2019 with Bitcoin Beach is now becoming a global movement of communities providing knowledge, education and tools to get started in this movement.\n\nThis Grant aims to support the growing Bitcoin communities that are being setup all over the world to increase the signal of Bitcoin.": "数十亿人生活在不为他们服务的金融体系下。他们频繁地受到高通胀、银行倒闭、国家没收以及央行数字货币威胁的困扰。\\n\\n这些人是最能从比特币中受益的人，但同时也是对比特币了解最少的人。\\n\\n许多比特币社区正在世界的‘边沿’上成型，为他们的人民带来希望的福音。于2019发起的 Bitcoin Beach （比特币海滩）已成为各国社区互相分享知识、教育以及工具的全球运动。\n\n这笔拨款旨在支持世界各地不断发展的比特币社区，以增强比特币的信号。",
+    "This is the tweet we will be posting in several different languages": {
+        "\"🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English. This means the tool of community crowdfunding through bitcoin is drastically limited.\n\nBy adding 10 more languages to geyser.fund, we are making crowdfunding accessible to 40% of the world, and roughly 100 countries! \n\nLet’s celebrate them! 👇\"": "\"🤯 打破！比特币众筹现已面向 32 亿人开放！\n\n世界上只有 20% 的人说英语。这意味着通过比特币进行社区众筹的工具受到极大限制。\n\n通过在 geyser.fund 中添加 10 种语言，我们正在为全球 40% 的地区和大约 100 个国家/地区提供众筹！\n\n让我们为他们庆祝吧！👇\""
+    }
 }
