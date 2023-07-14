@@ -392,7 +392,6 @@
     "worth of votes": "hodnota hlasů",
     "distributed": "distribuováno",
     "Vote": "Hlasování",
-    "Apply to be part of the Bitcoin Gaming Grant community-voting grant. Find out more about how projects will be selected and how voting works": "Přihlaste se, abyste se stali součástí grantu pro hlasování komunity Bitcoin Gaming Grant. Zjistěte více o tom, jak budou projekty vybírány a jak funguje hlasování",
     "Apply": "Aplikovat",
     "here.": "tady.",
     "Login to apply": "Přihlášení k aplikaci",
@@ -403,7 +402,6 @@
     "You have not created any projects": "Nevytvořili jste žádné projekty",
     "To apply for a grant you need to create a project on Geyser.": "Chcete-li požádat o grant, musíte vytvořit projekt na platformě Geyser.",
     "Grant application failed.": "Žádost o grant se nezdařila.",
-    "Contribute directly to Bitcoin Gaming Grant via QR code (lightning and onchain) or by sending SATs to our lightning address:": "Přispějte přímo do Bitcoin Gaming Grant prostřednictvím QR kódu (lightning a onchain) nebo zasláním satů na naši lightning adresu:",
     "Grant funds will be distributed based on community votes.": "Grantové prostředky budou rozdělovány na základě hlasování komunity.",
     "Failed to fetch grants project.": "Nepodařilo se načíst grantový projekt.",
     "failed to record contribution": "příspěvek se nepodařilo zaznamenat",
@@ -438,7 +436,7 @@
     "Link needs to be a valid URL": "Odkaz musí být platná URL adresa",
     "GRANT TO DISTRIBUTE": "GRANT K DISTRIBUCI",
     "Designs by": "Návrhy od",
-    "Principled Bitcoiners Board": "Principal Bitcoiners Board",
+    "Principled Bitcoiners Board": "Členové rady představenstva",
     "Thanks to the developers and designers that built and designed Geyser Grants.": "Díky vývojářům a designérům, kteří postavili a navrhli Geyser Granty.",
     "Please enter a valid email address.": "Prosím zadejte platnou emailovou adresu.",
     "Succesfully subscribed to Geyser": "Úspěšné přihlášení k platformě Geyser",
@@ -620,5 +618,7 @@
     "Coming soon": "Již brzy",
     "This is the tweet we will be posting in several different languages": {
         "\"🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English. This means the tool of community crowdfunding through bitcoin is drastically limited.\n\nBy adding 10 more languages to geyser.fund, we are making crowdfunding accessible to 40% of the world, and roughly 100 countries! \n\nLet’s celebrate them! 👇\"": "\"🤯 ROZLOHA! Bitcoin crowdfunding je nyní dostupný pro 3,2 miliardy lidí!\n\nPouze 20 % lidí na světě mluví anglicky. To znamená, že nástroj komunitního crowdfundingu prostřednictvím bitcoinů je drasticky omezen.\n\nPřidáním dalších 10 jazyků do geyser.fund zpřístupňujeme crowdfunding 40 % světa a zhruba 100 zemím!\n\nPojďme je oslavit! 👇\""
-    }
+    },
+    "Grant funds will be distributed by principled bitcoin board members.": "Grantové prostředky budou rozdělovány členy rady představenstva.",
+    "Apply to be part of the {{title}} grant. Find out more about how projects will be selected and how voting works <1>here.</1>": "Požádejte o účast na grantu {{titul}}. Více informací, jak budou projekty vybírány a jak funguje hlasování zde <1>zde.</1>"
 }
