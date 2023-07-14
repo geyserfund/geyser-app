@@ -392,7 +392,6 @@
     "worth of votes": "αξία ψήφων",
     "distributed": "διανεμημένα",
     "Vote": "Ψηφίστε",
-    "Apply to be part of the Bitcoin Gaming Grant community-voting grant. Find out more about how projects will be selected and how voting works": "Υποβάλετε αίτηση για να συμμετάσχετε στην επιχορήγηση της κοινότητας Παιχνιδιών του Bitcoin. Μάθετε περισσότερα σχετικά με τον τρόπο επιλογής των έργων και τον τρόπο λειτουργίας της ψηφοφορίας",
     "Apply": "Κάντε Αίτηση",
     "here.": "εδώ.",
     "Login to apply": "Συνδεθείτε για να κάνετε αίτηση",
@@ -403,7 +402,6 @@
     "You have not created any projects": "Δεν έχετε δημιουργήσει κάποιο έργο",
     "To apply for a grant you need to create a project on Geyser.": "Για να αιτηθείτε επιχορήγηση πρέπει να δημιουργήσετε ένα έργο στην Geyser.",
     "Grant application failed.": "Η αίτηση επιχορήγησης απέτυχε.",
-    "Contribute directly to Bitcoin Gaming Grant via QR code (lightning and onchain) or by sending SATs to our lightning address:": "Συνεισφέρετε απευθείας στην Επιχορήγηση Παιχνιδιών του Bitcoin μέσω κωδικού QR (lightning και on-chain) ή στέλνοντας SATs στη lightning διεύθυνση:",
     "Grant funds will be distributed based on community votes.": "Τα χρήματα της επιχορήγησης θα διανεμηθούν με βάση τις ψήφους της κοινότητας.",
     "Failed to fetch grants project.": "Αποτυχία ανάκτησης επιχορηγήσεων του έργου.",
     "failed to record contribution": "αποτυχία καταγραφής της συνεισφοράς",
@@ -619,6 +617,8 @@
     "from": "από",
     "Coming soon": "Έρχονται σύντομα",
     "This is the tweet we will be posting in several different languages": {
-        "\"🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English. This means the tool of community crowdfunding through bitcoin is drastically limited.\n\nBy adding 10 more languages to geyser.fund, we are making crowdfunding accessible to 40% of the world, and roughly 100 countries! \n\nLet’s celebrate them! 👇\"": "\"🤯 ΕΚΤΑΚΤΑ NEA! Η συλλογική χρηματοδότηση με το Bitcoin είναι πλέον προσβάσιμη σε 3,2 δισεκατομμύρια ανθρώπους!\n\nΜόνο το 20% του κόσμου μιλάει αγγλικά. Αυτό σημαίνει ότι το εργαλείο της κοινοτικής συλλογικής χρηματοδότησης μέσω bitcoin είναι δραστικά περιορισμένο.\n\nΠροσθέτοντας 10 ακόμη γλώσσες στην geyser.fund, κάνουμε την συλλογική χρηματοδότηση προσβάσιμη στο 40% του κόσμου και σε περίπου 100 χώρες!\n\nΑς τους γιορτάσουμε! 👇\""
-    }
+        "\"🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English. This means the tool of community crowdfunding through bitcoin is drastically limited.\n\nBy adding 10 more languages to geyser.fund, we are making crowdfunding accessible to 40% of the world, and roughly 100 countries! \n\nLet’s celebrate them! 👇\"": "\"🤯 ΕΚΤΑΚΤΑ NEA! Η συλλογική χρηματοδότηση με το Bitcoin είναι πλέον προσβάσιμη σε 3,2 δισεκατομμύρια ανθρώπους!\n\nΜόνο το 20% του κόσμου μιλάει Αγγλικά. Αυτό σημαίνει ότι το εργαλείο της κοινοτικής συλλογικής χρηματοδότησης μέσω bitcoin είναι δραστικά περιορισμένο.\n\nΠροσθέτοντας 10 ακόμη γλώσσες στην geyser.fund, κάνουμε την συλλογική χρηματοδότηση προσβάσιμη στο 40% του κόσμου και σε περίπου 100 χώρες!\n\nΑς τους γιορτάσουμε! 👇\""
+    },
+    "Grant funds will be distributed by principled bitcoin board members.": "Τα ποσά της Επιχορήγησης θα διανεμηθούν σύμφωνα με τις αρχές του Bitcoin από μέλη της επιτροπής.",
+    "Apply to be part of the {{title}} grant. Find out more about how projects will be selected and how voting works <1>here.</1>": "Υποβάλετε αίτηση για να συμμετάσχετε στην επιχορήγηση με {{τίτλο}}. Μάθετε περισσότερα σχετικά με τον τρόπο επιλογής των έργων και τον τρόπο ψηφοφορίας <1>εδώ.</1>"
 }
