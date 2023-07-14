@@ -6,15 +6,17 @@ import {
   carlaUrl,
   danialUrl,
   desUrl,
+  getPath,
   joeNakamotoUrl,
   lucasUrl,
   pacoUrl,
   zuccoUrl,
 } from '../../../constants'
+import { GrantBoardMember } from '../../../types'
 import { useMobileMode } from '../../../utils'
 import { BitcoinerCard } from './BitcoinerCard'
 
-const members = [
+const defaultMembers = [
   {
     name: 'Brad Mills',
     handle: 'bradmillscan',
@@ -65,22 +67,32 @@ const members = [
   },
 ]
 
-export const BoardMembers = () => {
+export const BoardMembers = ({ members }: { members?: GrantBoardMember[] }) => {
   const isMobile = useMobileMode()
 
   return (
-    <Box display={'flex'} justifyContent="center">
+    <Box w={'full'} display={'flex'} justifyContent="center">
       <Box width={isMobile ? '100%' : '600px'}>
         <Wrap spacing="20px" justify="center">
-          {members.map((item, idx) => (
-            <WrapItem key={idx}>
-              <BitcoinerCard
-                name={item.name}
-                image={item.image}
-                link={item.link}
-              />
-            </WrapItem>
-          ))}
+          {members?.length
+            ? members.map((item, idx) => (
+                <WrapItem key={idx}>
+                  <BitcoinerCard
+                    name={item.user.username}
+                    image={item.user.imageUrl || ''}
+                    to={getPath('userProfile', item.user.id)}
+                  />
+                </WrapItem>
+              ))
+            : defaultMembers.map((item, idx) => (
+                <WrapItem key={idx}>
+                  <BitcoinerCard
+                    name={item.name}
+                    image={item.image}
+                    link={item.link}
+                  />
+                </WrapItem>
+              ))}
         </Wrap>
       </Box>
     </Box>

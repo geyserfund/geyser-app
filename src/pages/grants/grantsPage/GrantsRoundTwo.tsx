@@ -86,13 +86,13 @@ export const GrantsRoundTwo = ({
             gap={4}
           >
             <Text
-              bg="primary.100"
+              bg="neutral.100"
               fontSize={'10px'}
               px="14px"
               py={'5px'}
               fontWeight="500"
             >
-              {t('ACTIVE')}
+              {t('CLOSED')}
             </Text>
           </Box>
           <Text

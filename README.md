@@ -122,3 +122,24 @@ With Docker running, navigate to the URL that's appropriate for the development-
 #### Useful Links for Safari
 
 - <https://www.browserstack.com/guide/how-to-debug-on-iphone>
+
+## Tests
+
+Tests use Cypress as the testing framework.
+
+### E2E
+
+Run `yarn test:watch` to see the tests run in real time in the browser
+
+Run `yarn test:e2e` to run the headless test suit
+
+### TODO
+
+- Mock some calls to external services/APis which slow down tests rights now, eg: HotJar, SA
+- Project Creation
+- Funding Flow (Contribute to a project)
+- Grants Flow (apply, contribute, finalize)
+
+## Contributing
+
+[Check out the contribution guidelines](/CONTRIBUTING.md)

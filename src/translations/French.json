@@ -288,7 +288,7 @@
     "<1>Lightning Addresses</1> are like an email address, but for your Bitcoin. You’ll receive all on-chain and lightning transactions directly to your lightning wallet. Get your own lightning access using these recommended apps.": "<1>Lightning Addresses</1> are like an email address, but for your Bitcoin. You’ll receive all on-chain and lightning transactions directly to your lightning wallet. Get your own lightning access using these recommended apps.",
     "Connect Your Node": "Connectez votre nœud",
     "No fee per transaction": "Aucun frais par transaction",
-    "Connect your lightning node to receive incoming transactions directly. Don&apos;t have a node? You can <1>create a cloud node</1> with the recommended app.": "Connectez votre lightning node pour recevoir directement les transactions entrantes. Vous n'avez pas de nœud ? Vous pouvez <1>créer un nœud cloud</1> avec l'application recommandée.",
+    "Connect your lightning node to receive incoming transactions directly. Don't have a node? You can <1>create a cloud node</1> with the recommended app.": "Connectez votre lightning node pour recevoir directement les transactions entrantes. Vous n'avez pas de nœud ? Vous pouvez <1>créer un nœud cloud</1> avec l'application recommandée.",
     "Your project is almost live. You can now either launch the project and make it public or save it as draft. And you can always edit project at any time.": "Votre projet est presque en ligne. Vous pouvez maintenant soit lancer le projet et le rendre public, soit l'enregistrer en tant que brouillon. Et vous pouvez toujours modifier le projet à tout moment.",
     "By continuing, I agree with Geyser&apos;s <1>Terms & Conditions</1>": "En continuant, j'accepte les <1>Conditions d'utilisation</1> de Geyser",
     "Node name is a required field": "Le nom du nœud est un champ obligatoire",
@@ -392,7 +392,6 @@
     "worth of votes": "la valeur des votes",
     "distributed": "distribué",
     "Vote": "Vote",
-    "Apply to be part of the Bitcoin Gaming Grant community-voting grant. Find out more about how projects will be selected and how voting works": "Postulez pour faire partie de la subvention de vote communautaire Bitcoin Gaming Grant. En savoir plus sur la sélection des projets et le fonctionnement du vote",
     "Apply": "Postuler",
     "here.": "ici.",
     "Login to apply": "Connectez-vous pour postuler",
@@ -403,7 +402,6 @@
     "You have not created any projects": "Vous n'avez créé aucun projet",
     "To apply for a grant you need to create a project on Geyser.": "Pour postuler à une subvention, vous devez créer un projet sur Geyser.",
     "Grant application failed.": "La demande de subvention a échoué.",
-    "Contribute directly to Bitcoin Gaming Grant via QR code (lightning and onchain) or by sending SATs to our lightning address:": "Contribuez directement à Bitcoin Gaming Grant via un code QR (lightning et onchain) ou en envoyant des SAT à notre adresse Lightning :",
     "Grant funds will be distributed based on community votes.": "Les fonds de la subvention seront distribués en fonction des votes de la communauté.",
     "Failed to fetch grants project.": "Échec de la récupération du projet de subventions.",
     "failed to record contribution": "n'a pas enregistré la contribution",
@@ -600,5 +598,8 @@
     "Select language": "Choisir la langue",
     "Request a language": "Demander une langue",
     "You don't follow any project": "Vous ne suivez aucun projet",
-    "Check out some trending projects this week that you can follow in the discovery view!": "Découvrez quelques projets tendance cette semaine que vous pouvez suivre dans la vue découverte !"
+    "Check out some trending projects this week that you can follow in the discovery view!": "Découvrez quelques projets tendance cette semaine que vous pouvez suivre dans la vue découverte !",
+    "This is the tweet we will be posting in several different languages": {
+        "\"🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English. This means the tool of community crowdfunding through bitcoin is drastically limited.\n\nBy adding 10 more languages to geyser.fund, we are making crowdfunding accessible to 40% of the world, and roughly 100 countries! \n\nLet’s celebrate them! 👇\"": "\"🤯 RUPTURE! Le crowdfunding Bitcoin est désormais accessible à 3,2 milliards de personnes !\n\nSeulement 20% du monde parle anglais. Cela signifie que l'outil de financement participatif communautaire via Bitcoin est considérablement limité.\n\nEn ajoutant 10 langues supplémentaires à geyser.fund, nous rendons le financement participatif accessible à 40 % du monde et à environ 100 pays !\n\nCélébrons-les ! 👇\""
+    }
 }
