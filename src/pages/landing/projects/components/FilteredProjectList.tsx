@@ -46,7 +46,12 @@ export const FilteredProjectList = ({
   }
 
   return (
-    <CardLayout w="full" spacing="30px" padding="20px">
+    <CardLayout
+      noborder={isMobile}
+      w="full"
+      spacing="30px"
+      padding={{ base: 0, lg: '20px' }}
+    >
       {!isMobile && <FilterTopBar />}
       {error ? (
         <NoDataError />

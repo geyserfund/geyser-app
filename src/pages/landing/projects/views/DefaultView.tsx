@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { CardLayout } from '../../../../components/layouts'
 import { getFeaturedProject, getListOfTags } from '../../../../constants'
+import { useMobileMode } from '../../../../utils'
 // import { useGrants } from '../../../grants/hooks/useGrants'
 import {
   ProjectsDisplay,
@@ -16,6 +17,7 @@ import {
 
 export const DefaultView = () => {
   const { t } = useTranslation()
+  const isMobile = useMobileMode()
 
   // const { activeGrant, loading } = useGrants()
 
@@ -25,7 +27,12 @@ export const DefaultView = () => {
   const restOfTheTags = allTags.slice(3)
 
   return (
-    <CardLayout w="full" spacing="50px" padding="20px">
+    <CardLayout
+      noborder={isMobile}
+      w="full"
+      spacing="50px"
+      padding={{ base: 0, lg: '20px' }}
+    >
       <FeaturedProjectCard projectName={getFeaturedProject()} />
       {/* <FeaturedGrantCard grant={activeGrant} loading={loading} /> */}
       {firstThreeTags.map((tag) => {
