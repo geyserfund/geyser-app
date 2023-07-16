@@ -18,7 +18,6 @@ import { getShortAmountLabel, useMobileMode } from '../../../../utils'
 import { useProjectFundingModal } from '../../../projectFunding/hooks/useProjectFundingModal'
 import { ProjectFundingModal } from '../../../projectFunding/ProjectFundingModal'
 import { AvatarElement } from '../../../projectView/projectMainBody/components'
-import { SectionCard } from '../../components/SectionCard'
 import { WidgetItem } from '../../components/WidgetItem'
 
 interface Props {
@@ -111,12 +110,17 @@ export const CommunityVoting = ({
   }
 
   return (
-    <CardLayout p="20px" spacing="20px" w="full">
+    <CardLayout
+      noMobileBorder
+      p={{ base: '10px', lg: '20px' }}
+      spacing={{ base: '10px', lg: '20px' }}
+      w="full"
+    >
       <H3 fontSize="18px">{t(sectionTitle)}</H3>
       {applicants.map(({ project, funding }) => {
         const projectLink = getPath('project', project.name)
         return (
-          <SectionCard my={3} p={2} key={project.id}>
+          <CardLayout p={2} key={project.id}>
             <Box display="flex">
               {project.thumbnailImage && (
                 <Box mr={3} height={'101px'}>
@@ -202,7 +206,7 @@ export const CommunityVoting = ({
                 )}
               </Box>
             )}
-          </SectionCard>
+          </CardLayout>
         )
       })}
       <ProjectFundingModal {...modalProps} />

@@ -15,7 +15,12 @@ export const GrantContribute = ({
 }) => {
   const { t } = useTranslation()
   return (
-    <CardLayout w="full" p="20px" alignItems="center">
+    <CardLayout
+      noMobileBorder
+      w="full"
+      p={{ base: '0px 10px', lg: '20px' }}
+      alignItems="center"
+    >
       <H3 alignSelf="start">{t('Contribute')}</H3>
       <Body1>
         <Trans

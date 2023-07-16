@@ -12,7 +12,7 @@ interface MoreInfoProps {
 export const MoreInfo = ({ titleProps }: MoreInfoProps) => {
   const { t } = useTranslation()
   return (
-    <Box>
+    <Box paddingX={'10px'}>
       <Text
         fontWeight={'bold'}
         fontSize="19px"

@@ -1,12 +1,12 @@
 import { Box, Image } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { CardLayout } from '../../../../components/layouts'
 import { Body1, H1, H3 } from '../../../../components/typography'
 import { StatusLabel } from '../../../../components/ui/StatusLabel'
 import { Grant } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
 import { ContributionsWidget } from '../../components/ContributionsWidget'
-import { SectionCard } from '../../components/SectionCard'
 import {
   GRANT_STATUS_COUNTDOWN_TITLES,
   GRANT_STATUS_MAP,
@@ -21,7 +21,7 @@ export const GrantSummary = ({ grant }: { grant: Grant }) => {
     (s) => s.status === grant.status,
   )?.endAt
   return (
-    <SectionCard>
+    <CardLayout noborder={isMobile} padding={{ base: '10px', lg: 0 }}>
       {grant.image ? (
         <Box width="100%">
           <Image
@@ -35,14 +35,13 @@ export const GrantSummary = ({ grant }: { grant: Grant }) => {
           />
         </Box>
       ) : null}
-      <Box p={5}>
-        {isMobile ? null : (
-          <Box pb={2}>
-            <StatusLabel textTransform="uppercase">
-              {t(GRANT_STATUS_MAP[grant.status])}
-            </StatusLabel>
-          </Box>
-        )}
+      <Box px={{ base: 0, lg: 5 }}>
+        <Box pb={2}>
+          <StatusLabel textTransform="uppercase">
+            {t(GRANT_STATUS_MAP[grant.status])}
+          </StatusLabel>
+        </Box>
+
         <Box
           display="flex"
           flexDir={{ base: 'column', lg: 'row' }}
@@ -75,6 +74,6 @@ export const GrantSummary = ({ grant }: { grant: Grant }) => {
           />
         </Box>
       </Box>
-    </SectionCard>
+    </CardLayout>
   )
 }

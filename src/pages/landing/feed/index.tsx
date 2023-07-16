@@ -35,7 +35,7 @@ export const LandingFeed = () => {
         </StickToTop>
       )}
 
-      <CardLayout w="full" paddingX="0px">
+      <CardLayout noborder={isMobileMode} w="full" paddingX="0px">
         <ActivityFeed />
       </CardLayout>
     </>

@@ -1,9 +1,9 @@
 import { Box, BoxProps, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { H3 } from '../../../../components/typography'
+import { CardLayout } from '../../../../components/layouts'
+import { H2 } from '../../../../components/typography'
 import { GrantApplicant } from '../../../../types'
-import { SectionCard } from '../../components/SectionCard'
 
 const CHART_BAR_COLORS = [
   'primary.900',
@@ -34,8 +34,8 @@ export const DistributionChart = ({ applicants }: Props) => {
   const maxPercentage = Math.max(...percentages.map((p) => p.percentage))
 
   return (
-    <SectionCard p={5}>
-      <H3>{t('Grant distribution status')}</H3>
+    <CardLayout noMobileBorder p={{ base: 0, lg: 5 }}>
+      <H2>{t('Grant distribution status')}</H2>
       {percentages.length > 0 && (
         <Box py={2}>
           {percentages
@@ -53,7 +53,7 @@ export const DistributionChart = ({ applicants }: Props) => {
             ))}
         </Box>
       )}
-    </SectionCard>
+    </CardLayout>
   )
 }
 

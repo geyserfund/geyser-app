@@ -8,13 +8,17 @@ export interface CardLayoutProps
   extends StackProps,
     Partial<Pick<LinkProps, 'to'>> {
   noborder?: boolean
+  noMobileBorder?: boolean
   mobileDense?: boolean
   hover?: boolean
   click?: boolean
 }
 
 export const CardLayout = forwardRef<HTMLDivElement, CardLayoutProps>(
-  ({ mobileDense, children, noborder, click, hover, ...rest }, ref) => {
+  (
+    { noMobileBorder, mobileDense, children, noborder, click, hover, ...rest },
+    ref,
+  ) => {
     const isMobile = useMobileMode()
     const props = {
       ref,
@@ -26,7 +30,10 @@ export const CardLayout = forwardRef<HTMLDivElement, CardLayoutProps>(
       transition: 'border-color 0.5s',
       boxShadow: 'none',
       as: rest.to ? Link : undefined,
-      borderColor: noborder ? 'transparent' : 'neutral.200',
+      borderColor:
+        noborder || (isMobile && noMobileBorder)
+          ? 'transparent'
+          : 'neutral.200',
       _hover: hover ? { cursor: 'pointer', borderColor: 'neutral.400' } : {},
       _active: click ? { borderColor: 'primary.400' } : {},
       _focus: click ? { borderColor: 'primary.400' } : {},
