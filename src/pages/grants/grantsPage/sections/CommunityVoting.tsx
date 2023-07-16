@@ -1,4 +1,4 @@
-import { Box, Button, Image, Text } from '@chakra-ui/react'
+import { Box, Button, HStack, Image, Text } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
@@ -197,14 +197,12 @@ export const CommunityVoting = ({
               </Box>
             )}
             {isMobile && (
-              <Box display="flex" pl={6}>
+              <HStack px={'10px'} alignItems={'center'}>
                 <Box pt={2}>{renderWidgetItem(funding)}</Box>
-                {canVote && (
-                  <Box ml={8} flexGrow={1}>
-                    {renderButton(project)}
-                  </Box>
-                )}
-              </Box>
+                <Box ml={8} flexGrow={1}>
+                  {renderButton(project)}
+                </Box>
+              </HStack>
             )}
           </CardLayout>
         )
