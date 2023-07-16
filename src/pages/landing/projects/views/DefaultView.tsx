@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { CardLayout } from '../../../../components/layouts'
 import { getFeaturedProject, getListOfTags } from '../../../../constants'
 import { useMobileMode } from '../../../../utils'
+import { MobileDivider } from '../../../grants/components'
 // import { useGrants } from '../../../grants/hooks/useGrants'
 import {
   ProjectsDisplay,
@@ -30,17 +31,29 @@ export const DefaultView = () => {
     <CardLayout
       noborder={isMobile}
       w="full"
-      spacing="50px"
+      spacing={{ base: '15px', lg: '50px' }}
       padding={{ base: 0, lg: '20px' }}
     >
       <FeaturedProjectCard projectName={getFeaturedProject()} />
+      <MobileDivider />
       {/* <FeaturedGrantCard grant={activeGrant} loading={loading} /> */}
       {firstThreeTags.map((tag) => {
-        return <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} />
+        return (
+          <>
+            <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} />
+            <MobileDivider />
+          </>
+        )
       })}
       <ProjectsDisplay seeAllText={t('See recent')} />
-      {restOfTheTags.map((tag) => {
-        return <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} />
+      <MobileDivider />
+      {restOfTheTags.map((tag, index) => {
+        return (
+          <>
+            <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} />
+            {index < restOfTheTags.length - 1 && <MobileDivider />}
+          </>
+        )
       })}
     </CardLayout>
   )
