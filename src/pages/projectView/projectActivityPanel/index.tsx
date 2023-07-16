@@ -14,7 +14,7 @@ import {
   ProjectReward,
   RewardFundingInput,
 } from '../../../types'
-import { toInt, useMobileMode } from '../../../utils'
+import { toInt, useCustomTheme, useMobileMode } from '../../../utils'
 import { InfoPageSkeleton, ProjectFundingInitialInfoScreen } from './screens'
 import {
   ProjectFundingQRScreen,
@@ -34,7 +34,7 @@ type FilteredReward = { id: number; quantity: number }
 
 export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   const { user } = useContext(AuthContext)
-
+  const { colors } = useCustomTheme()
   const { btcRate } = useBtcContext()
   const isMobile = useMobileMode()
 
@@ -203,9 +203,8 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
         height="calc(100% - 20px)"
         borderTopLeftRadius={isMobile ? 'initial' : '8px'}
         overflowX="hidden"
-        borderTop={isMobile ? 'none' : '2px solid'}
-        borderLeft="2px solid"
-        borderColor="neutral.200"
+        borderTop={{ base: 'none', lg: `2px solid ${colors.neutral[200]}` }}
+        borderLeft={{ base: 'none', lg: `2px solid ${colors.neutral[200]}` }}
       >
         {renderPanelContent()}
       </Box>
