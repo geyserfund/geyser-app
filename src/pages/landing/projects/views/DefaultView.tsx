@@ -35,23 +35,23 @@ export const DefaultView = () => {
       padding={{ base: 0, lg: '20px' }}
     >
       <FeaturedProjectCard projectName={getFeaturedProject()} />
-      <MobileDivider />
+      <MobileDivider mt={2} />
       {/* <FeaturedGrantCard grant={activeGrant} loading={loading} /> */}
       {firstThreeTags.map((tag) => {
         return (
           <>
             <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} />
-            <MobileDivider />
+            <MobileDivider mt={2} />
           </>
         )
       })}
       <ProjectsDisplay seeAllText={t('See recent')} />
-      <MobileDivider />
+      <MobileDivider mt={2} />
       {restOfTheTags.map((tag, index) => {
         return (
           <>
             <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} />
-            {index < restOfTheTags.length - 1 && <MobileDivider />}
+            {index < restOfTheTags.length - 1 && <MobileDivider mt={2} />}
           </>
         )
       })}

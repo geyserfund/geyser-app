@@ -18,7 +18,7 @@ export const GrantContribute = ({
     <CardLayout
       noMobileBorder
       w="full"
-      p={{ base: '0px 10px', lg: '20px' }}
+      p={{ base: '10px', lg: '20px' }}
       alignItems="center"
     >
       <H3 alignSelf="start">{t('Contribute')}</H3>

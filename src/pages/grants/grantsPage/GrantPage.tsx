@@ -136,7 +136,7 @@ export const GrantPage = () => {
           size="sm"
           bg="neutral.0"
           variant="outline"
-          gap={2}
+          gap={3}
           onClick={() => navigate(getPath('grants'))}
           fontSize="sm"
           mx={'10px'}
@@ -187,7 +187,7 @@ export const GrantPage = () => {
         {showBoardMembers && (
           <>
             <CommonBoardMembers members={grant.boardMembers} />
-            <MobileDivider />
+            <MobileDivider mt={'2'} />
           </>
         )}
         <MoreInfo />

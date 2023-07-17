@@ -188,6 +188,9 @@ export const theme = {
       },
     },
     Divider: {
+      baseStyle: {
+        boxSizing: 'border-box',
+      },
       variant: {
         lg: {
           borderBottomWidth: '2px',
