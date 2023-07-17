@@ -9,11 +9,18 @@ import { ContributionsWidget } from '../../components/ContributionsWidget'
 import { SectionCard } from '../../components/SectionCard'
 import {
   GRANT_STATUS_COUNTDOWN_TITLES,
+  GRANT_STATUS_COUNTDOWN_TITLES_NON_VOTE,
   GRANT_STATUS_MAP,
   GrantHasVoting,
 } from '../../constants'
 
-export const GrantSummary = ({ grant }: { grant: Grant }) => {
+export const GrantSummary = ({
+  grant,
+  grantHasVoting,
+}: {
+  grant: Grant
+  grantHasVoting?: boolean
+}) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
 
@@ -61,7 +68,11 @@ export const GrantSummary = ({ grant }: { grant: Grant }) => {
           </Body1>
           <ContributionsWidget
             sponsors={grant.sponsors}
-            endDateSubtitle={t(GRANT_STATUS_COUNTDOWN_TITLES[grant.status])}
+            endDateSubtitle={
+              grantHasVoting
+                ? t(GRANT_STATUS_COUNTDOWN_TITLES[grant.status])
+                : t(GRANT_STATUS_COUNTDOWN_TITLES_NON_VOTE[grant.status])
+            }
             endDateTimestamp={votingEndDate}
             balance={getShortAmountLabel(grant.balance || 0, true)}
             hasVoting={GrantHasVoting[grant.name]}
