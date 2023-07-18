@@ -16,10 +16,12 @@ import { ExternalAccountType } from '../../../pages/auth'
 import { Countdown } from '../../../pages/projectView/projectActivityPanel/components'
 import {
   FunderWithUserFragment,
+  OrderByOptions,
   ProjectFragment,
   ProjectMilestone,
+  useProjectFundersQuery,
 } from '../../../types'
-import { isActive } from '../../../utils'
+import { isActive, toInt, useNotification } from '../../../utils'
 import { getProjectBalance } from '../../../utils/helpers'
 import { SatoshiAmount } from '../../ui'
 import { UserAvatar } from '../../ui/UserAvatar'
@@ -29,17 +31,16 @@ import {
 } from '../projectActivity/ProjectFundersModal'
 
 interface IActivityBrief {
-  loading?: boolean
   project: ProjectFragment
-  funders: FunderWithUserFragment[]
 }
 
-export const ActivityBrief = ({
-  loading,
-  project,
-  funders,
-}: IActivityBrief) => {
+export const ActivityBrief = ({ project }: IActivityBrief) => {
   const { t } = useTranslation()
+  const { toast } = useNotification()
+
+  const [socialFunders, setSocialFunders] = useState<FunderWithUserFragment[]>(
+    [],
+  )
   const [currentMilestone, setCurrentMilestone] = useState<ProjectMilestone>()
   const [milestoneIndex, setMilestoneIndex] = useState<number>(0)
   const [prevMilestone, setPrevMilestone] = useState(0)
@@ -49,6 +50,46 @@ export const ActivityBrief = ({
   const balance = useMemo(() => getProjectBalance(project), [project])
 
   const fundersModal = useProjectFundersModal()
+
+  const { loading: funderLoading } = useProjectFundersQuery({
+    variables: {
+      input: {
+        where: {
+          projectId: toInt(project.id),
+          anonymous: false,
+        },
+        orderBy: {
+          confirmedAt: OrderByOptions.Desc,
+        },
+        pagination: {
+          take: 50,
+        },
+      },
+    },
+    skip: !project.id,
+    onError() {
+      toast({
+        status: 'error',
+        title: 'Failed to fetch contributors leaderboard',
+      })
+    },
+    onCompleted(data) {
+      const funders = data?.getFunders || []
+
+      const socialFilteredFunders = funders.filter(
+        (funder) =>
+          funder &&
+          funder.confirmedAt &&
+          funder.user &&
+          funder.user.externalAccounts.find(
+            (account) =>
+              account.accountType === ExternalAccountType.nostr ||
+              account.accountType === ExternalAccountType.twitter,
+          ),
+      )
+      setSocialFunders(socialFilteredFunders)
+    },
+  })
 
   useEffect(() => {
     if (project.milestones && project.milestones.length > 0) {
@@ -114,7 +155,7 @@ export const ActivityBrief = ({
       return (
         <CircularProgress
           capIsRound
-          isIndeterminate={loading}
+          isIndeterminate={funderLoading}
           value={circularPercentage}
           size="116px"
           thickness="16px"
@@ -149,22 +190,6 @@ export const ActivityBrief = ({
 
   const showCountdown = isActive(project.status) && Boolean(project.expiresAt)
 
-  const socialFunders = useMemo(
-    () =>
-      funders.filter(
-        (funder) =>
-          funder &&
-          funder.confirmedAt &&
-          funder.user &&
-          funder.user.externalAccounts.find(
-            (account) =>
-              account.accountType === ExternalAccountType.nostr ||
-              account.accountType === ExternalAccountType.twitter,
-          ),
-      ),
-    [funders],
-  )
-
   const latestFunders = socialFunders.slice(0, 12)
 
   return (
@@ -188,7 +213,7 @@ export const ActivityBrief = ({
           )}
         </VStack>
       </HStack>
-      {(loading || latestFunders.length) && (
+      {(funderLoading || latestFunders.length) && (
         <VStack
           textAlign="left"
           alignItems="start"
@@ -206,7 +231,7 @@ export const ActivityBrief = ({
         >
           <Text fontWeight={500}>{t('Supporters')}</Text>
           <HStack ml={1} spacing={0} alignItems="start">
-            {!loading
+            {!funderLoading
               ? latestFunders.map((funder) => {
                   return (
                     <UserAvatar
