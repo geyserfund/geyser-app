@@ -23,7 +23,7 @@ const retryLink = new RetryLink({
         (err.code === 'STALE_REFRESH_TOKEN' ||
           err.code === 'EXPIRED_REFRESH_TOKEN' ||
           err.code === 'INVALIDE_REFRESH_TOKEN') &&
-        count <= 2,
+          count <= 2,
       )
     )
   },
@@ -37,7 +37,7 @@ const httpLink = createHttpLink({
   credentials: 'include',
 })
 
-const prefix = __development__ ? 'ws' : 'wss'
+const prefix = __development__ ? 'wss' : 'wss'
 
 const wsLink = new GraphQLWsLink(
   createClient({
