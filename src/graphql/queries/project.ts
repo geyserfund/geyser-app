@@ -4,6 +4,7 @@ import { FRAGMENT_ENTRY_FOR_PROJECT } from '../fragments/entries'
 import {
   FRAGMENT_PROJECT,
   FRAGMENT_PROJECT_FOR_LANDING_PAGE,
+  FRAGMENT_PROJECT_FUNDERS,
 } from '../fragments/project'
 import { FRAGMENT_FUNDER_WITH_USER } from '../fragments/user'
 
@@ -20,18 +21,14 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
 `
 
 export const QUERY_PROJECT_FUNDING_DATA = gql`
-  query ProjectFundingData($where: UniqueProjectQueryInput!) {
+  ${FRAGMENT_PROJECT_FUNDERS}
+  query ProjectFundingData(
+    $where: UniqueProjectQueryInput!
+    $input: ProjectEntriesGetInput
+  ) {
     project(where: $where) {
       funders {
-        id
-        user {
-          id
-          username
-          imageUrl
-        }
-        amountFunded
-        timesFunded
-        confirmedAt
+        ...projectFunders
       }
     }
   }
