@@ -210,6 +210,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
             leftIcon={hasCopiedLightning ? <RiLinkUnlink /> : <FaCopy />}
             onClick={onCopyLightning}
             variant="primary"
+            isDisabled={!lightningAddress}
           >
             <Text>
               {hasCopiedLightning ? t('Copied!') : t('Lightning invoice')}
