@@ -6,11 +6,13 @@ import {
 } from '../../types'
 
 type UseFundSubscriptionProps = {
-  projectId: number
+  projectId?: number
+  fundingTxId?: number
 }
 
 export const useFundSubscription = ({
   projectId,
+  fundingTxId,
 }: UseFundSubscriptionProps) => {
   const [skip, setSkip] = useState(true)
   const [fundingActivity, setFundingActivity] = useState<FundingTxFragment>()
@@ -27,12 +29,10 @@ export const useFundSubscription = ({
   const skipSubscription = skip || !projectId
   useFundingTxStatusUpdatedSubscription({
     variables: {
-      // input: {
-      //   where: {
-      //     projectIds: [projectId],
-      //     resourceType: ActivityResourceType.FundingTx,
-      //   },
-      // },
+      input: {
+        projectId: projectId || undefined,
+        fundingTxId: fundingTxId || undefined,
+      },
     },
     skip: skipSubscription,
     onData(options) {

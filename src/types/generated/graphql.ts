@@ -476,6 +476,11 @@ export type FundingTx = {
   uuid?: Maybe<Scalars['String']>
 }
 
+export type FundingTxStatusUpdatedInput = {
+  fundingTxId?: InputMaybe<Scalars['BigInt']>
+  projectId?: InputMaybe<Scalars['BigInt']>
+}
+
 export type FundingTxStatusUpdatedSubscriptionResponse = {
   __typename?: 'FundingTxStatusUpdatedSubscriptionResponse'
   fundingTx: FundingTx
@@ -1463,6 +1468,10 @@ export type SubscriptionActivityCreatedArgs = {
   input?: InputMaybe<ActivityCreatedSubscriptionInput>
 }
 
+export type SubscriptionFundingTxStatusUpdatedArgs = {
+  input?: InputMaybe<FundingTxStatusUpdatedInput>
+}
+
 export type TotpInput = {
   totp: Scalars['Int']
 }
@@ -1937,6 +1946,7 @@ export type ResolversTypes = {
       sourceResource?: Maybe<ResolversTypes['SourceResource']>
     }
   >
+  FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
   FundingTxStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<FundingTxStatusUpdatedSubscriptionResponse>
   FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>
   GetActivitiesInput: GetActivitiesInput
@@ -2217,6 +2227,7 @@ export type ResolversParentTypes = {
   FundingTx: Omit<FundingTx, 'sourceResource'> & {
     sourceResource?: Maybe<ResolversParentTypes['SourceResource']>
   }
+  FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
   FundingTxStatusUpdatedSubscriptionResponse: FundingTxStatusUpdatedSubscriptionResponse
   FundinginvoiceCancel: FundinginvoiceCancel
   GetActivitiesInput: GetActivitiesInput
@@ -3627,7 +3638,8 @@ export type SubscriptionResolvers<
     ResolversTypes['FundingTxStatusUpdatedSubscriptionResponse'],
     'fundingTxStatusUpdated',
     ParentType,
-    ContextType
+    ContextType,
+    Partial<SubscriptionFundingTxStatusUpdatedArgs>
   >
   projectActivated?: SubscriptionResolver<
     ResolversTypes['ProjectActivatedSubscriptionResponse'],
@@ -5716,7 +5728,7 @@ export type ActivityCreatedSubscription = {
 }
 
 export type FundingTxStatusUpdatedSubscriptionVariables = Exact<{
-  [key: string]: never
+  input?: InputMaybe<FundingTxStatusUpdatedInput>
 }>
 
 export type FundingTxStatusUpdatedSubscription = {
@@ -10066,8 +10078,8 @@ export type ActivityCreatedSubscriptionHookResult = ReturnType<
 export type ActivityCreatedSubscriptionResult =
   Apollo.SubscriptionResult<ActivityCreatedSubscription>
 export const FundingTxStatusUpdatedDocument = gql`
-  subscription fundingTxStatusUpdated {
-    fundingTxStatusUpdated {
+  subscription FundingTxStatusUpdated($input: FundingTxStatusUpdatedInput) {
+    fundingTxStatusUpdated(input: $input) {
       fundingTx {
         ...FundingTx
       }
@@ -10088,6 +10100,7 @@ export const FundingTxStatusUpdatedDocument = gql`
  * @example
  * const { data, loading, error } = useFundingTxStatusUpdatedSubscription({
  *   variables: {
+ *      input: // value for 'input'
  *   },
  * });
  */
