@@ -4428,15 +4428,6 @@ export type ProjectFragment = {
     image?: string | null
     user?: ({ __typename?: 'User' } & UserForAvatarFragment) | null
   }>
-  funders: Array<{
-    __typename?: 'Funder'
-    id: any
-    amountFunded?: number | null
-    confirmed: boolean
-    confirmedAt?: any | null
-    timesFunded?: number | null
-    user?: ({ __typename?: 'User' } & UserForAvatarFragment) | null
-  }>
   milestones: Array<{
     __typename?: 'ProjectMilestone'
     id: any
@@ -4470,6 +4461,16 @@ export type ProjectFragment = {
         }
       | { __typename?: 'LndConnectionDetailsPublic'; pubkey?: any | null }
   }>
+}
+
+export type ProjectFundersFragment = {
+  __typename?: 'Funder'
+  id: any
+  amountFunded?: number | null
+  confirmed: boolean
+  confirmedAt?: any | null
+  timesFunded?: number | null
+  user?: ({ __typename?: 'User' } & UserForAvatarFragment) | null
 }
 
 export type UserMeFragment = {
@@ -5329,25 +5330,14 @@ export type ProjectByNameOrIdQuery = {
 
 export type ProjectFundingDataQueryVariables = Exact<{
   where: UniqueProjectQueryInput
+  input?: InputMaybe<ProjectEntriesGetInput>
 }>
 
 export type ProjectFundingDataQuery = {
   __typename?: 'Query'
   project?: {
     __typename?: 'Project'
-    funders: Array<{
-      __typename?: 'Funder'
-      id: any
-      amountFunded?: number | null
-      timesFunded?: number | null
-      confirmedAt?: any | null
-      user?: {
-        __typename?: 'User'
-        id: any
-        username: string
-        imageUrl?: string | null
-      } | null
-    }>
+    funders: Array<{ __typename?: 'Funder' } & ProjectFundersFragment>
   } | null
 }
 
@@ -5926,16 +5916,6 @@ export const ProjectFragmentDoc = gql`
         ...UserForAvatar
       }
     }
-    funders {
-      id
-      user {
-        ...UserForAvatar
-      }
-      amountFunded
-      confirmed
-      confirmedAt
-      timesFunded
-    }
     milestones {
       id
       name
@@ -5974,6 +5954,19 @@ export const ProjectFragmentDoc = gql`
   ${ProjectRewardForCreateUpdateFragmentDoc}
   ${UserForAvatarFragmentDoc}
   ${EntryForProjectFragmentDoc}
+`
+export const ProjectFundersFragmentDoc = gql`
+  fragment projectFunders on Funder {
+    id
+    user {
+      ...UserForAvatar
+    }
+    amountFunded
+    confirmed
+    confirmedAt
+    timesFunded
+  }
+  ${UserForAvatarFragmentDoc}
 `
 export const FunderWithUserFragmentDoc = gql`
   fragment FunderWithUser on Funder {
@@ -8727,21 +8720,17 @@ export type ProjectByNameOrIdQueryResult = Apollo.QueryResult<
   ProjectByNameOrIdQueryVariables
 >
 export const ProjectFundingDataDocument = gql`
-  query ProjectFundingData($where: UniqueProjectQueryInput!) {
+  query ProjectFundingData(
+    $where: UniqueProjectQueryInput!
+    $input: ProjectEntriesGetInput
+  ) {
     project(where: $where) {
       funders {
-        id
-        user {
-          id
-          username
-          imageUrl
-        }
-        amountFunded
-        timesFunded
-        confirmedAt
+        ...projectFunders
       }
     }
   }
+  ${ProjectFundersFragmentDoc}
 `
 
 /**
@@ -8757,6 +8746,7 @@ export const ProjectFundingDataDocument = gql`
  * const { data, loading, error } = useProjectFundingDataQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      input: // value for 'input'
  *   },
  * });
  */
