@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
 import { useModal } from '../../../hooks/useModal'
-import { ProjectFragment } from '../../../types'
-import { Modal } from '../../layouts/Modal'
+import { ProjectFundersFragment } from '../../../types'
+import { Modal } from '../../layouts'
 import { UserAvatarButton } from '../../ui/UserAvatar'
 
 export const useProjectFundersModal = () => {
   return useModal<{
-    funders: ProjectFragment['funders']
+    funders: ProjectFundersFragment[]
   }>()
 }
 

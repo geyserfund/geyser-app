@@ -129,16 +129,6 @@ export const FRAGMENT_PROJECT = gql`
         ...UserForAvatar
       }
     }
-    funders {
-      id
-      user {
-        ...UserForAvatar
-      }
-      amountFunded
-      confirmed
-      confirmedAt
-      timesFunded
-    }
     milestones {
       id
       name
@@ -172,5 +162,19 @@ export const FRAGMENT_PROJECT = gql`
         }
       }
     }
+  }
+`
+
+export const FRAGMENT_PROJECT_FUNDERS = gql`
+  ${FRAGMENT_USER_FOR_AVATAR}
+  fragment projectFunders on Funder {
+    id
+    user {
+      ...UserForAvatar
+    }
+    amountFunded
+    confirmed
+    confirmedAt
+    timesFunded
   }
 `
