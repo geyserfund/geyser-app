@@ -476,6 +476,11 @@ export type FundingTx = {
   uuid?: Maybe<Scalars['String']>
 }
 
+export type FundingTxStatusUpdatedInput = {
+  fundingTxId?: InputMaybe<Scalars['BigInt']>
+  projectId?: InputMaybe<Scalars['BigInt']>
+}
+
 export type FundingTxStatusUpdatedSubscriptionResponse = {
   __typename?: 'FundingTxStatusUpdatedSubscriptionResponse'
   fundingTx: FundingTx
@@ -1463,6 +1468,10 @@ export type SubscriptionActivityCreatedArgs = {
   input?: InputMaybe<ActivityCreatedSubscriptionInput>
 }
 
+export type SubscriptionFundingTxStatusUpdatedArgs = {
+  input?: InputMaybe<FundingTxStatusUpdatedInput>
+}
+
 export type TotpInput = {
   totp: Scalars['Int']
 }
@@ -1937,6 +1946,7 @@ export type ResolversTypes = {
       sourceResource?: Maybe<ResolversTypes['SourceResource']>
     }
   >
+  FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
   FundingTxStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<FundingTxStatusUpdatedSubscriptionResponse>
   FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>
   GetActivitiesInput: GetActivitiesInput
@@ -2217,6 +2227,7 @@ export type ResolversParentTypes = {
   FundingTx: Omit<FundingTx, 'sourceResource'> & {
     sourceResource?: Maybe<ResolversParentTypes['SourceResource']>
   }
+  FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
   FundingTxStatusUpdatedSubscriptionResponse: FundingTxStatusUpdatedSubscriptionResponse
   FundinginvoiceCancel: FundinginvoiceCancel
   GetActivitiesInput: GetActivitiesInput
@@ -3627,7 +3638,8 @@ export type SubscriptionResolvers<
     ResolversTypes['FundingTxStatusUpdatedSubscriptionResponse'],
     'fundingTxStatusUpdated',
     ParentType,
-    ContextType
+    ContextType,
+    Partial<SubscriptionFundingTxStatusUpdatedArgs>
   >
   projectActivated?: SubscriptionResolver<
     ResolversTypes['ProjectActivatedSubscriptionResponse'],
@@ -4416,6 +4428,15 @@ export type ProjectFragment = {
     image?: string | null
     user?: ({ __typename?: 'User' } & UserForAvatarFragment) | null
   }>
+  funders: Array<{
+    __typename?: 'Funder'
+    id: any
+    amountFunded?: number | null
+    confirmed: boolean
+    confirmedAt?: any | null
+    timesFunded?: number | null
+    user?: ({ __typename?: 'User' } & UserForAvatarFragment) | null
+  }>
   milestones: Array<{
     __typename?: 'ProjectMilestone'
     id: any
@@ -4449,16 +4470,6 @@ export type ProjectFragment = {
         }
       | { __typename?: 'LndConnectionDetailsPublic'; pubkey?: any | null }
   }>
-}
-
-export type ProjectFundersFragment = {
-  __typename?: 'Funder'
-  id: any
-  amountFunded?: number | null
-  confirmed: boolean
-  confirmedAt?: any | null
-  timesFunded?: number | null
-  user?: ({ __typename?: 'User' } & UserForAvatarFragment) | null
 }
 
 export type UserMeFragment = {
@@ -5318,14 +5329,25 @@ export type ProjectByNameOrIdQuery = {
 
 export type ProjectFundingDataQueryVariables = Exact<{
   where: UniqueProjectQueryInput
-  input?: InputMaybe<ProjectEntriesGetInput>
 }>
 
 export type ProjectFundingDataQuery = {
   __typename?: 'Query'
   project?: {
     __typename?: 'Project'
-    funders: Array<{ __typename?: 'Funder' } & ProjectFundersFragment>
+    funders: Array<{
+      __typename?: 'Funder'
+      id: any
+      amountFunded?: number | null
+      timesFunded?: number | null
+      confirmedAt?: any | null
+      user?: {
+        __typename?: 'User'
+        id: any
+        username: string
+        imageUrl?: string | null
+      } | null
+    }>
   } | null
 }
 
@@ -5705,17 +5727,16 @@ export type ActivityCreatedSubscription = {
     | ({ __typename?: 'ProjectReward' } & ProjectRewardForLandingPageFragment)
 }
 
-export type FundingActivityCreatedSubscriptionVariables = Exact<{
-  input?: InputMaybe<ActivityCreatedSubscriptionInput>
+export type FundingTxStatusUpdatedSubscriptionVariables = Exact<{
+  input?: InputMaybe<FundingTxStatusUpdatedInput>
 }>
 
-export type FundingActivityCreatedSubscription = {
+export type FundingTxStatusUpdatedSubscription = {
   __typename?: 'Subscription'
-  activityCreated:
-    | { __typename?: 'Entry' }
-    | ({ __typename?: 'FundingTx' } & FundingTxFragment)
-    | { __typename?: 'Project' }
-    | { __typename?: 'ProjectReward' }
+  fundingTxStatusUpdated: {
+    __typename?: 'FundingTxStatusUpdatedSubscriptionResponse'
+    fundingTx: { __typename?: 'FundingTx' } & FundingTxFragment
+  }
 }
 
 export const UserForAvatarFragmentDoc = gql`
@@ -5905,6 +5926,16 @@ export const ProjectFragmentDoc = gql`
         ...UserForAvatar
       }
     }
+    funders {
+      id
+      user {
+        ...UserForAvatar
+      }
+      amountFunded
+      confirmed
+      confirmedAt
+      timesFunded
+    }
     milestones {
       id
       name
@@ -5943,19 +5974,6 @@ export const ProjectFragmentDoc = gql`
   ${ProjectRewardForCreateUpdateFragmentDoc}
   ${UserForAvatarFragmentDoc}
   ${EntryForProjectFragmentDoc}
-`
-export const ProjectFundersFragmentDoc = gql`
-  fragment projectFunders on Funder {
-    id
-    user {
-      ...UserForAvatar
-    }
-    amountFunded
-    confirmed
-    confirmedAt
-    timesFunded
-  }
-  ${UserForAvatarFragmentDoc}
 `
 export const FunderWithUserFragmentDoc = gql`
   fragment FunderWithUser on Funder {
@@ -8709,17 +8727,21 @@ export type ProjectByNameOrIdQueryResult = Apollo.QueryResult<
   ProjectByNameOrIdQueryVariables
 >
 export const ProjectFundingDataDocument = gql`
-  query ProjectFundingData(
-    $where: UniqueProjectQueryInput!
-    $input: ProjectEntriesGetInput
-  ) {
+  query ProjectFundingData($where: UniqueProjectQueryInput!) {
     project(where: $where) {
       funders {
-        ...projectFunders
+        id
+        user {
+          id
+          username
+          imageUrl
+        }
+        amountFunded
+        timesFunded
+        confirmedAt
       }
     }
   }
-  ${ProjectFundersFragmentDoc}
 `
 
 /**
@@ -8735,7 +8757,6 @@ export const ProjectFundingDataDocument = gql`
  * const { data, loading, error } = useProjectFundingDataQuery({
  *   variables: {
  *      where: // value for 'where'
- *      input: // value for 'input'
  *   },
  * });
  */
@@ -10056,12 +10077,10 @@ export type ActivityCreatedSubscriptionHookResult = ReturnType<
 >
 export type ActivityCreatedSubscriptionResult =
   Apollo.SubscriptionResult<ActivityCreatedSubscription>
-export const FundingActivityCreatedDocument = gql`
-  subscription fundingActivityCreated(
-    $input: ActivityCreatedSubscriptionInput
-  ) {
-    activityCreated(input: $input) {
-      ... on FundingTx {
+export const FundingTxStatusUpdatedDocument = gql`
+  subscription FundingTxStatusUpdated($input: FundingTxStatusUpdatedInput) {
+    fundingTxStatusUpdated(input: $input) {
+      fundingTx {
         ...FundingTx
       }
     }
@@ -10070,35 +10089,35 @@ export const FundingActivityCreatedDocument = gql`
 `
 
 /**
- * __useFundingActivityCreatedSubscription__
+ * __useFundingTxStatusUpdatedSubscription__
  *
- * To run a query within a React component, call `useFundingActivityCreatedSubscription` and pass it any options that fit your needs.
- * When your component renders, `useFundingActivityCreatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFundingTxStatusUpdatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useFundingTxStatusUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFundingActivityCreatedSubscription({
+ * const { data, loading, error } = useFundingTxStatusUpdatedSubscription({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useFundingActivityCreatedSubscription(
+export function useFundingTxStatusUpdatedSubscription(
   baseOptions?: Apollo.SubscriptionHookOptions<
-    FundingActivityCreatedSubscription,
-    FundingActivityCreatedSubscriptionVariables
+    FundingTxStatusUpdatedSubscription,
+    FundingTxStatusUpdatedSubscriptionVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSubscription<
-    FundingActivityCreatedSubscription,
-    FundingActivityCreatedSubscriptionVariables
-  >(FundingActivityCreatedDocument, options)
+    FundingTxStatusUpdatedSubscription,
+    FundingTxStatusUpdatedSubscriptionVariables
+  >(FundingTxStatusUpdatedDocument, options)
 }
-export type FundingActivityCreatedSubscriptionHookResult = ReturnType<
-  typeof useFundingActivityCreatedSubscription
+export type FundingTxStatusUpdatedSubscriptionHookResult = ReturnType<
+  typeof useFundingTxStatusUpdatedSubscription
 >
-export type FundingActivityCreatedSubscriptionResult =
-  Apollo.SubscriptionResult<FundingActivityCreatedSubscription>
+export type FundingTxStatusUpdatedSubscriptionResult =
+  Apollo.SubscriptionResult<FundingTxStatusUpdatedSubscription>
