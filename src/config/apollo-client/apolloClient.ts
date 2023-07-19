@@ -37,7 +37,7 @@ const httpLink = createHttpLink({
   credentials: 'include',
 })
 
-const prefix = __development__ ? 'wss' : 'wss'
+const prefix = __development__ ? 'ws' : 'wss'
 
 const wsLink = new GraphQLWsLink(
   createClient({
