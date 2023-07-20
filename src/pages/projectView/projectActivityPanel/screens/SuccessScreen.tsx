@@ -106,7 +106,7 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
           funderEmail={fundingState.email}
           funderAvatarURL={fundingState.funderAvatarURL}
           version={ContributionInfoBoxVersion.PRIMARY}
-          referenceCode={fundingTx.uuid}
+          referenceCode={fundingTx.uuid || ''}
           showGeyserFee={false}
         />
 

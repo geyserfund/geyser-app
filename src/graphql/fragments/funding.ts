@@ -49,6 +49,7 @@ export const FRAGMENT_FUNDING_TX_FOR_LANDING_PAGE = gql`
 export const FRAGMENT_FUNDING_TX_WITH_INVOICE_STATUS = gql`
   fragment FundingTxWithInvoiceStatus on FundingTx {
     id
+    uuid
     invoiceId
     status
     onChain
