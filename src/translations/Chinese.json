@@ -381,7 +381,7 @@
     "Grant distribution status": "拨款分配状况",
     "See the winner announcement": "查看获奖者公告",
     "Announcement": "公告",
-    "Let the Sats flow to your favorite projects. 1 Sat = 1 vote.": "让聪流向你喜欢的项目。1聪=1票。",
+    "Let the Sats flow to your favorite projects.": "让聪流向你喜欢的项目",
     "Bitcoin Gaming Grant": "比特币游戏拨款",
     "Grants Round 1": "拨款第一轮",
     "Grants Round 2": "拨款第二轮",
@@ -604,6 +604,7 @@
     "Supporting communities that are providing bitcoin education on the ground.": "支持在当地提供比特币教育的社区。",
     "Billions of people live under a financial system that does not serve them. They are plagued by high inflation, bank failures, state seizures, and the threat of Central Bank Digital Currencies.\\n\\nThese are the people that would most benefit from bitcoin, which can act as a shield. These are also those that are least aware of bitcoin.\\n\\nBitcoin communities are forming on ‘the edges’ of the world, bringing a message of hope to their people. What started in 2019 with Bitcoin Beach is now becoming a global movement of communities providing knowledge, education and tools to get started in this movement.\n\nThis Grant aims to support the growing Bitcoin communities that are being setup all over the world to increase the signal of Bitcoin.": "数十亿人生活在不为他们服务的金融体系下。他们频繁地受到高通胀、银行倒闭、国家没收以及央行数字货币威胁的困扰。\\n\\n这些人是最能从比特币中受益的人，但同时也是对比特币了解最少的人。\\n\\n许多比特币社区正在世界的‘边沿’上成型，为他们的人民带来希望的福音。于2019发起的 Bitcoin Beach （比特币海滩）已成为各国社区互相分享知识、教育以及工具的全球运动。\n\n这笔拨款旨在支持世界各地不断发展的比特币社区，以增强比特币的信号。",
     "This is the tweet we will be posting in several different languages": {
-        "\"🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English. This means the tool of community crowdfunding through bitcoin is drastically limited.\n\nBy adding 10 more languages to geyser.fund, we are making crowdfunding accessible to 40% of the world, and roughly 100 countries! \n\nLet’s celebrate them! 👇\"": "\"🤯 打破！比特币众筹现已面向 32 亿人开放！\n\n世界上只有 20% 的人说英语。这意味着通过比特币进行社区众筹的工具受到极大限制。\n\n通过在 geyser.fund 中添加 10 种语言，我们正在为全球 40% 的地区和大约 100 个国家/地区提供众筹！\n\n让我们为他们庆祝吧！👇\""
-    }
+        "🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English.\n\nWith @EuropeanBTC21 & other plebs, we’re making crowdfunding accessible to 40% of the world in 10+ languages!\n\nLet’s celebrate them! 👇": "🤯 打破！比特币众筹现已面向 32 亿人开放！\n世界上只有 20% 的人说英语。这意味着通过比特币进行社区众筹的工具受到极大限制。\n通过与欧洲比特币爱好者和其他民众协调，在 geyser.fund 中添加了 10 多种语言，我们正在让世界 40% 的地区和大约 100 个国家/地区可以进行众筹！\n让我们为他们庆祝吧！ 👇"
+    },
+    "1 Sat = 1 vote.": "1聪=1票。"
 }
