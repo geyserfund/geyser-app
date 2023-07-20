@@ -2,12 +2,10 @@ import { Box } from '@chakra-ui/layout'
 import { useParams } from 'react-router'
 
 import { ProjectProvider } from '../../context'
-import { useMobileMode } from '../../utils'
 import { ProjectContainer } from './ProjectContainer'
 
 export const ProjectView = () => {
   const { projectId } = useParams<{ projectId: string }>()
-  const isMobile = useMobileMode()
 
   return (
     <ProjectProvider projectId={projectId || ''}>
@@ -23,8 +21,8 @@ export const ProjectView = () => {
           display="flex"
           overflow="hidden"
           position="relative"
-          bg="neutral.50"
-          flexDirection={isMobile ? 'column' : 'row'}
+          bg={{ base: 'neutral.0', lg: 'neutral.50' }}
+          flexDirection={{ base: 'column', lg: 'row' }}
         >
           <ProjectContainer />
         </Box>

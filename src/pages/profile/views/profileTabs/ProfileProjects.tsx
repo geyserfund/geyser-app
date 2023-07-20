@@ -39,7 +39,9 @@ export const ProfileProjects = ({
     <ProfileTabLayout
       title={t('Projects')}
       headerContent={
-        isViewingOwnProfile ? <CreateAProjectButton size="sm" /> : undefined
+        isViewingOwnProfile ? (
+          <CreateAProjectButton size="sm" marginTop={'0px'} />
+        ) : undefined
       }
     >
       {projectsLoading

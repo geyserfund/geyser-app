@@ -12,8 +12,8 @@ export const CommonBoardMembers = ({
 }) => {
   const { t } = useTranslation()
   return (
-    <VStack w={'full'} alignItems={'start'}>
-      <Box my={8}>
+    <VStack w={'full'} alignItems={'start'} paddingX={'10px'}>
+      <Box my={4}>
         <Text fontFamily={fonts.interBlack} fontSize="24px" fontWeight={'bold'}>
           {t('Principled Bitcoiners Board')}
         </Text>

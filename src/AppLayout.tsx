@@ -3,8 +3,7 @@ import { Fade } from '@chakra-ui/react'
 
 import { LandingNavBar, TopNavBar } from './components/nav'
 import { Router } from './config'
-import { dimensions } from './constants'
-import { ID } from './constants/components'
+import { dimensions, ID } from './constants'
 import { useAuthContext } from './context'
 import { LoadingPage } from './pages/loading'
 import { useMobileMode } from './utils'
@@ -27,7 +26,7 @@ export const AppLayout = () => {
           maxHeight="100%"
           flex="1"
           paddingTop={`${dimensions.topNavBar.desktop.height}px`}
-          backgroundColor="neutral.50"
+          backgroundColor={{ base: 'neutral.0', lg: 'neutral.50' }}
           overflowY={isMobile ? 'initial' : 'auto'}
         >
           <Router />

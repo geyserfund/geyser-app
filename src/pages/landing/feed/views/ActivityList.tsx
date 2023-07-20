@@ -70,9 +70,10 @@ export const ActivityList = ({
             {renderActivity(activity)}
             {index < activities.length - 1 && (
               <Divider
-                borderBottomWidth="2px"
+                alignSelf={'center'}
+                borderWidth="1px"
                 maxWidth="500px"
-                color="neutral.200"
+                borderColor="neutral.200"
               />
             )}
           </Fragment>

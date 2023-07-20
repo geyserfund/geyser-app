@@ -44,8 +44,18 @@ export const Badges = ({
   }
 
   return (
-    <CardLayout padding="0px" paddingY="20px" spacing="20px" maxHeight="100%">
-      <HStack paddingX="20px" w="full" justifyContent="space-between">
+    <CardLayout
+      noMobileBorder
+      padding="0"
+      paddingY={{ base: '10px', lg: '20px' }}
+      spacing="20px"
+      maxHeight="100%"
+    >
+      <HStack
+        paddingX={{ base: '10px', lg: '20px' }}
+        w="full"
+        justifyContent="space-between"
+      >
         <H2>{t('Badges')}</H2>
         <Button
           as={ChakraLink}
@@ -57,7 +67,7 @@ export const Badges = ({
           {t('See badges')}
         </Button>
       </HStack>
-      <Body2 paddingX="20px" color="neutral.700">
+      <Body2 paddingX={{ base: '10px', lg: '20px' }} color="neutral.700">
         {t(
           'Geyser badges are earned for launching successful projects, contributing  to them and being an active community member.',
         )}

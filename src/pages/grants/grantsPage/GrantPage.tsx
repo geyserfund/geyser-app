@@ -14,7 +14,7 @@ import {
   Maybe,
 } from '../../../types'
 import { useNotification } from '../../../utils'
-import { GrantWinnerAnnouncement } from '../components'
+import { GrantWinnerAnnouncement, MobileDivider } from '../components'
 import {
   GrantAnnouncements,
   GrantHasVoting,
@@ -39,9 +39,9 @@ const PageContainer = ({
 }: PropsWithChildren<{ image?: Maybe<string>; title?: string }>) => {
   return (
     <Container
-      marginTop={{ base: '20px', lg: '40px' }}
+      marginTop={{ base: 0, lg: '40px' }}
       maxWidth="879px"
-      px={{ base: '10px', lg: '20px' }}
+      px={{ base: '0px', lg: '20px' }}
     >
       <Head title={title} image={image || ''} />
       {children}
@@ -137,42 +137,64 @@ export const GrantPage = () => {
 
   return (
     <PageContainer title={t(grant.title)} image={grant.image}>
-      <VStack w="full" spacing="30px" alignItems="start">
+      <VStack w="full" spacing="15px" alignItems="start">
         <Button
           size="sm"
           bg="neutral.0"
           variant="outline"
-          gap={2}
+          gap={3}
           onClick={() => navigate(getPath('grants'))}
           fontSize="sm"
+          mx={'10px'}
+          mt={'10px'}
         >
           <FaArrowLeft /> {t('See all Grants')}
         </Button>
         <GrantSummary grant={grant} grantHasVoting={grantHasVoting} />
-
-        {showDistributionChart && <DistributionChart applicants={applicants} />}
+        <MobileDivider />
+        {showDistributionChart && (
+          <>
+            <DistributionChart applicants={applicants} />
+            <MobileDivider />
+          </>
+        )}
         {winnerAnnouncement && (
-          <GrantWinnerAnnouncement {...winnerAnnouncement} />
+          <>
+            <GrantWinnerAnnouncement {...winnerAnnouncement} />
+            <MobileDivider />
+          </>
         )}
         {showCommunityVoting && (
-          <CommunityVoting
-            title={getTitle()}
-            applicants={applicants}
-            grantHasVoting={grantHasVoting}
-            grantStatus={grant.status}
-            fundingOpenEndDate={fundingOpenStatus?.endAt}
-            fundingOpenStartDate={fundingOpenStatus?.startAt}
-            isClosed={grant.status === GrantStatusEnum.Closed}
-          />
+          <>
+            <CommunityVoting
+              title={getTitle()}
+              applicants={applicants}
+              grantHasVoting={grantHasVoting}
+              grantStatus={grant.status}
+              fundingOpenEndDate={fundingOpenStatus?.endAt}
+              fundingOpenStartDate={fundingOpenStatus?.startAt}
+              isClosed={grant.status === GrantStatusEnum.Closed}
+            />
+            <MobileDivider />
+          </>
         )}
-        {showGrantApply && <GrantApply grant={grant} />}
+        {showGrantApply && (
+          <>
+            <GrantApply grant={grant} />
+            <MobileDivider />
+          </>
+        )}
         <GrantContribute
           grantProjectName={GrantProjectNameMap[grant.name]}
           grantTitle={grant.title}
           grantHasVoting={grantHasVoting}
         />
+        <MobileDivider />
         {showBoardMembers && (
-          <CommonBoardMembers members={grant.boardMembers} />
+          <>
+            <CommonBoardMembers members={grant.boardMembers} />
+            <MobileDivider mt={'2'} />
+          </>
         )}
         <MoreInfo />
       </VStack>

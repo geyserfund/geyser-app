@@ -2,7 +2,7 @@ import { Button, Divider, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
 import { AlertBox } from '../../../components/ui'
-import { ID } from '../../../constants/components'
+import { ID } from '../../../constants'
 import {
   useActivitySubsciptionContext,
   useAuthContext,
@@ -11,10 +11,7 @@ import {
 import { QUERY_ACTIVITIES_FOR_LANDING_PAGE } from '../../../graphql/queries/activities'
 import { ScrollInvoke } from '../../../helpers'
 import { useQueryWithPagination } from '../../../hooks'
-import {
-  ActivityForLandingPageFragment,
-  Project,
-} from '../../../types/generated/graphql'
+import { ActivityForLandingPageFragment, Project } from '../../../types'
 import { useMobileMode } from '../../../utils'
 import { NoSearchResults } from '../components'
 import { FilterTopBar } from '../projects/components'
@@ -112,7 +109,7 @@ export const ActivityFeed = () => {
         width="full"
         spacing={'20px'}
         maxWidth="500px"
-        paddingX="10px"
+        paddingX={{ base: 0, lg: '10px' }}
       >
         {!isMobile && <FilterTopBar noSort paddingBottom="20px" />}
 
