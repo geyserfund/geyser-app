@@ -112,7 +112,7 @@
     "Are you sure you want to remove the reward": "Sei sicuro di voler rimuovere la ricompensa",
     "per item": "per articolo",
     "collected": "riscosso",
-    "needed!": "obbligatorio!",
+    "needed!": "mancanti!",
     "Donate to receive a reward": "Dona per ricevere una ricompensa",
     "No reward": "Nessuna ricompensa",
     "backer": "sostenitore",
@@ -288,7 +288,7 @@
     "<1>Lightning Addresses</1> are like an email address, but for your Bitcoin. You’ll receive all on-chain and lightning transactions directly to your lightning wallet. Get your own lightning access using these recommended apps.": "<1>Lightning Addresses</1> sono come delle email, ma per Bitcoin. Riceverai tutte le transazioni on-chain e lightning, direttamente sul tuo wallet. Ottieni l'accesso lightning usando queste app raccomandate.",
     "Connect Your Node": "Connetti il tuo Nodo",
     "No fee per transaction": "Nessuna commissione di transazione",
-    "Connect your lightning node to receive incoming transactions directly. Don't have a node? You can <1>create a cloud node</1> with the recommended app.": "Connetti il tuo nodo lightning per ricevere direttamente le donazioni. Non hai un nodo? Puoi <1>creare un nodo in cloud</1> con l'app raccomandata.",
+    "Connect your lightning node to receive incoming transactions directly. Don't have a node? You can <1>create a cloud node</1> with the recommended app.": "Connetti il tuo nodo lightning per ricevere direttamente le donazioni. Non hai un nodo? Puoi <1>creare un nodo in cloud</1> con l'app consigliata.",
     "Your project is almost live. You can now either launch the project and make it public or save it as draft. And you can always edit project at any time.": "Il tuo progetto è quasi pronto. Puoi lanciarlo per renderlo pubblico, o salvarlo in bozze. Puoi modificare il progetto in qualsiasi momento.",
     "By continuing, I agree with Geyser&apos;s <1>Terms & Conditions</1>": "Continuando, accetti <1>Terms & Conditions</1> di Geyser",
     "Node name is a required field": "Il nome del nodo è obbligatorio",
@@ -381,7 +381,7 @@
     "Grant distribution status": "Status del premio",
     "See the winner announcement": "Guarda l'annuncio del vincitore",
     "Announcement": "Annuncio",
-    "Let the Sats flow to your favorite projects. 1 Sat = 1 vote.": "Lascia scorrere i Sats verso i tuoi progetti preferiti. 1 Sat = 1 voto.",
+    "Let the Sats flow to your favorite projects.": "Lascia scorrere i Sats verso i tuoi progetti preferiti.",
     "Bitcoin Gaming Grant": "Premio per il Gaming Bitcoin",
     "Grants Round 1": "Round Premi 1",
     "Grants Round 2": "Round Premi 2",
@@ -617,6 +617,10 @@
     "from": "da",
     "Coming soon": "Prossimamente",
     "This is the tweet we will be posting in several different languages": {
-        "\"🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English. This means the tool of community crowdfunding through bitcoin is drastically limited.\n\nBy adding 10 more languages to geyser.fund, we are making crowdfunding accessible to 40% of the world, and roughly 100 countries! \n\nLet’s celebrate them! 👇\"": "BREAKING\"🤯 Il crowdfunding di Bitcoin è ora accessibile a 3,2 miliardi di persone!\n\nSolo il 20% del mondo parla inglese. Ciò significa che lo strumento del community crowdfunding tramite bitcoin è drasticamente limitato.\n\nAggiungendo altre 10 lingue a geyser.fund, stiamo rendendo il crowdfunding accessibile al 40% del mondo e a circa 100 paesi!\n\nFesteggiamoli! 👇\""
-    }
+        "🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English.\n\nWith @EuropeanBTC21 & other plebs, we’re making crowdfunding accessible to 40% of the world in 10+ languages!\n\nLet’s celebrate them! 👇": "🤯 BREAKING! Il crowdfunding di Bitcoin è ora accessibile a 3,2 miliardi di persone!\nSolo il 20% del mondo parla inglese. Ciò significa che lo strumento del community crowdfunding tramite bitcoin è drasticamente limitato.\nAggiungendo altre 10 lingue a geyser.fund in coordinamento con Bitcoiners europei e altri plebei, stiamo rendendo il crowdfunding accessibile al 40% del mondo e a circa 100 paesi!\nFesteggiamoli! 👇"
+    },
+    "Grant funds will be distributed by principled bitcoin board members.": "I fondi dei Premi saranno distribuiti dai membri della Commissione di bitcoin.",
+    "Apply to be part of the {{title}} grant. Find out more about how projects will be selected and how voting works <1>here.</1>": "Candidati per partecipare alla raccolta {{titolo}}. Per saperne di più su come verranno selezionati i progetti e su come funziona la votazione <1>clicca qui.</1>.",
+    "Contribute directly to {{title}} Grant via QR code (lightning and onchain)": "Contribusci direttamente al Premio {{titolo}} usando il QR Code (lightning e onchain)",
+    "1 Sat = 1 vote.": "1 Sat = 1 voto."
 }
