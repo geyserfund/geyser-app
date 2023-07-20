@@ -11,6 +11,7 @@ import {
 } from '../../projectCreate/components/ProjectUnsavedModal'
 import { useProjectForm } from '../../projectCreate/hooks/useProjectForm'
 import { ProjectCreationVariables } from '../../projectCreate/types'
+import { BackToProjectMobile } from '../navigation/BackToProjectMobile'
 
 export const ProjectDescription = () => {
   const { t } = useTranslation()
@@ -70,6 +71,7 @@ export const ProjectDescription = () => {
         >
           {t('Save')}
         </Button>
+        <BackToProjectMobile project={project} />
       </VStack>
       <ProjectUnsavedModal {...unsavedModal} />
     </form>

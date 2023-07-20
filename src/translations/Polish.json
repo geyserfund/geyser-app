@@ -381,7 +381,7 @@
     "Grant distribution status": "Status dystrybucji grantu",
     "See the winner announcement": "Zobacz ogłoszenie zwycięzcy.",
     "Announcement": "Ogłoszenie",
-    "Let the Sats flow to your favorite projects. 1 Sat = 1 vote.": "Niech Sats płyną do twoich ulubionych projektów. 1 Sat = 1 głos.",
+    "Let the Sats flow to your favorite projects.": "Niech Sats płyną do twoich ulubionych projektów.",
     "Bitcoin Gaming Grant": "Grant na Bitcoin Gaming",
     "Grants Round 1": "Granty Runda 1",
     "Grants Round 2": "Granty Runda 2",
@@ -617,6 +617,7 @@
     "from": "Od",
     "Coming soon": "Wkrótce",
     "This is the tweet we will be posting in several different languages": {
-        "\"🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English. This means the tool of community crowdfunding through bitcoin is drastically limited.\n\nBy adding 10 more languages to geyser.fund, we are making crowdfunding accessible to 40% of the world, and roughly 100 countries! \n\nLet’s celebrate them! 👇\"": "\"🤯 Z OSTATNIEJ CHWILII! Finansowanie społecznościowe Bitcoin jest teraz dostępne dla 3,2 miliarda ludzi!\n\nTylko 20% świata mówi po angielsku. Oznacza to, że narzędzie społecznościowego finansowania społecznościowego za pośrednictwem bitcoinów jest drastycznie ograniczone.\n\nDodając 10 kolejnych języków do geyser.fund, udostępniamy crowdfunding 40% świata i około 100 krajów!\n\nŚwiętujmy je! 👇\""
-    }
+        "🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English.\n\nWith @EuropeanBTC21 & other plebs, we’re making crowdfunding accessible to 40% of the world in 10+ languages!\n\nLet’s celebrate them! 👇": "🤯 Z OSTATNIEJ CHWILII! Finansowanie społecznościowe Bitcoin jest teraz dostępne dla 3,2 miliarda ludzi!\nTylko 20% świata mówi po angielsku. Oznacza to, że narzędzie społecznościowego finansowania społecznościowego za pośrednictwem bitcoinów jest drastycznie ograniczone.\nDodając 10 kolejnych języków do geyser.fund we współpracy z europejskimi bitcoinerami i innymi plebsami, udostępniamy finansowanie społecznościowe 40% świata i około 100 krajów!\nŚwiętujmy je! 👇"
+    },
+    "1 Sat = 1 vote.": "1 Sat = 1 głos."
 }

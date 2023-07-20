@@ -206,7 +206,7 @@ export const ProjectFundingInitialInfoScreen = ({ project }: Props) => {
       overflowY="hidden"
       position="relative"
     >
-      <ActivityBrief funders={funders.data} project={project} />
+      <ActivityBrief project={project} />
 
       {!isMobile ? (
         <Button

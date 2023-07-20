@@ -119,6 +119,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const { startListening, stopListening, fundingActivity } =
     useFundSubscription({
       projectId: fundingTx.projectId,
+      fundingTxId: fundingTx.id,
     })
   const [amounts, setAmounts] =
     useState<FundingMutationResponse['amountSummary']>(initialAmounts)
@@ -222,7 +223,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
             })
             .catch(() => {
               startListening()
-              setFundingRequestErrored(true)
+              // setFundingRequestErrored(true)
             })
         } else {
           startListening()

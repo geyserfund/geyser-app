@@ -21,6 +21,7 @@ import {
   useProjectUnsavedModal,
 } from '../../projectCreate/components/ProjectUnsavedModal'
 import { DeleteProjectModal } from '../components/DeleteProjectModal'
+import { BackToProjectMobile } from '../navigation/BackToProjectMobile'
 
 export type ProjectSettingsVariables = {
   expiresAt?: string
@@ -195,6 +196,7 @@ export const ProjectSettings = () => {
           >
             {t('Save')}
           </Button>
+          <BackToProjectMobile project={project} />
         </VStack>
       </VStack>
       <ProjectUnsavedModal {...unsavedModal} />

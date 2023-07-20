@@ -381,7 +381,7 @@
     "Grant distribution status": "Posição atual de distribuição do subsídio",
     "See the winner announcement": "Veja o anúncio do vencedor",
     "Announcement": "Anúncio",
-    "Let the Sats flow to your favorite projects. 1 Sat = 1 vote.": "Deixe os Sats fluirem para o seu projeto favorito. 1 Sat = 1 voto.",
+    "Let the Sats flow to your favorite projects.": "Deixe os Sats fluirem para o seu projeto favorito.",
     "Bitcoin Gaming Grant": "Subsídio para jogos de Bitcoin",
     "Grants Round 1": "Rodada de Subsídios 1",
     "Grants Round 2": "Rodada de Subsídios 2",
@@ -617,6 +617,7 @@
     "from": "de",
     "Coming soon": "Em breve",
     "This is the tweet we will be posting in several different languages": {
-        "\"🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English. This means the tool of community crowdfunding through bitcoin is drastically limited.\n\nBy adding 10 more languages to geyser.fund, we are making crowdfunding accessible to 40% of the world, and roughly 100 countries! \n\nLet’s celebrate them! 👇\"": "\"🤯 ATENÇÃO! O financiamento coletivo com Bitcoin agora está acessível a 3,2 bilhões de pessoas!\n\nApenas 20% do mundo fala inglês. Isso limita drasticamente a ferramenta de crowdfunding da comunidade por meio do bitcoin.\n\nAo adicionar mais 10 idiomas ao geyser.fund, estamos tornando o crowdfunding acessível a 40% do mundo e aproximadamente 100 países!\n\nVamos celebrá-los!👇\""
-    }
+        "🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English.\n\nWith @EuropeanBTC21 & other plebs, we’re making crowdfunding accessible to 40% of the world in 10+ languages!\n\nLet’s celebrate them! 👇": "🤯 ATENÇÃO! O financiamento coletivo com Bitcoin agora está acessível a 3,2 bilhões de pessoas!\nApenas 20% do mundo fala inglês. Isso significa que a ferramenta de crowdfunding da comunidade por meio do bitcoin é drasticamente limitada.\nAo adicionar mais 10 idiomas ao geyser.fund em coordenação com Bitcoiners europeus e outros plebeus, estamos tornando o crowdfunding acessível a 40% do mundo e aproximadamente 100 países!\nVamos celebrá-los! 👇"
+    },
+    "1 Sat = 1 vote.": "1 Sat = 1 voto."
 }

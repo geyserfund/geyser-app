@@ -40,10 +40,10 @@ export type Scalars = {
   cost_Int_min_1_max_1000000: any
   description_String_NotNull_maxLength_250: any
   description_String_NotNull_maxLength_2200: any
-  description_String_NotNull_maxLength_4000: any
+  description_String_NotNull_maxLength_8000: any
   description_String_maxLength_250: any
   description_String_maxLength_2200: any
-  description_String_maxLength_4000: any
+  description_String_maxLength_8000: any
   donationAmount_Int_NotNull_min_1: any
   email_String_NotNull_format_email: any
   email_String_format_email: any
@@ -162,7 +162,7 @@ export type CreateProjectInput = {
   /** Project ISO3166 country code */
   countryCode?: InputMaybe<Scalars['String']>
   /** A short description of the project. */
-  description: Scalars['description_String_NotNull_maxLength_4000']
+  description: Scalars['description_String_NotNull_maxLength_8000']
   email: Scalars['email_String_NotNull_format_email']
   expiresAt?: InputMaybe<Scalars['Date']>
   fundingGoal?: InputMaybe<Scalars['fundingGoal_Int_min_1']>
@@ -461,7 +461,7 @@ export type FundingTx = {
   email?: Maybe<Scalars['String']>
   funder: Funder
   id: Scalars['BigInt']
-  invoiceId: Scalars['String']
+  invoiceId?: Maybe<Scalars['String']>
   invoiceStatus: InvoiceStatus
   media?: Maybe<Scalars['String']>
   method?: Maybe<FundingMethod>
@@ -476,8 +476,13 @@ export type FundingTx = {
   uuid?: Maybe<Scalars['String']>
 }
 
-export type FundingTxConfirmedSubscriptionResponse = {
-  __typename?: 'FundingTxConfirmedSubscriptionResponse'
+export type FundingTxStatusUpdatedInput = {
+  fundingTxId?: InputMaybe<Scalars['BigInt']>
+  projectId?: InputMaybe<Scalars['BigInt']>
+}
+
+export type FundingTxStatusUpdatedSubscriptionResponse = {
+  __typename?: 'FundingTxStatusUpdatedSubscriptionResponse'
   fundingTx: FundingTx
 }
 
@@ -540,6 +545,7 @@ export type GetFunderFundingTxsWhereInput = {
 }
 
 export type GetFunderWhereInput = {
+  anonymous?: InputMaybe<Scalars['Boolean']>
   confirmed?: InputMaybe<Scalars['Boolean']>
   projectId?: InputMaybe<Scalars['BigInt']>
   sourceResourceInput?: InputMaybe<ResourceInput>
@@ -1062,7 +1068,7 @@ export type Project = {
   canDelete: Scalars['Boolean']
   createdAt: Scalars['String']
   /** Description of the project. */
-  description?: Maybe<Scalars['description_String_maxLength_4000']>
+  description?: Maybe<Scalars['description_String_maxLength_8000']>
   /**
    * By default, returns all the entries of a project, both published and unpublished but not deleted.
    * To filter the result set, an explicit input can be passed that specifies a value of true or false for the published field.
@@ -1454,12 +1460,16 @@ export type Subscription = {
   _?: Maybe<Scalars['Boolean']>
   activityCreated: ActivityResource
   entryPublished: EntryPublishedSubscriptionResponse
-  fundingTxConfirmed: FundingTxConfirmedSubscriptionResponse
+  fundingTxStatusUpdated: FundingTxStatusUpdatedSubscriptionResponse
   projectActivated: ProjectActivatedSubscriptionResponse
 }
 
 export type SubscriptionActivityCreatedArgs = {
   input?: InputMaybe<ActivityCreatedSubscriptionInput>
+}
+
+export type SubscriptionFundingTxStatusUpdatedArgs = {
+  input?: InputMaybe<FundingTxStatusUpdatedInput>
 }
 
 export type TotpInput = {
@@ -1508,7 +1518,7 @@ export type UpdateProjectInput = {
   /** Project ISO3166 country code */
   countryCode?: InputMaybe<Scalars['String']>
   /** Description of the project. */
-  description?: InputMaybe<Scalars['description_String_maxLength_4000']>
+  description?: InputMaybe<Scalars['description_String_maxLength_8000']>
   expiresAt?: InputMaybe<Scalars['Date']>
   fundingGoal?: InputMaybe<Scalars['fundingGoal_Int_min_1']>
   /** Main project image. */
@@ -1936,7 +1946,8 @@ export type ResolversTypes = {
       sourceResource?: Maybe<ResolversTypes['SourceResource']>
     }
   >
-  FundingTxConfirmedSubscriptionResponse: ResolverTypeWrapper<FundingTxConfirmedSubscriptionResponse>
+  FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
+  FundingTxStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<FundingTxStatusUpdatedSubscriptionResponse>
   FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>
   GetActivitiesInput: GetActivitiesInput
   GetActivityOrderByInput: GetActivityOrderByInput
@@ -2084,8 +2095,8 @@ export type ResolversTypes = {
   description_String_NotNull_maxLength_2200: ResolverTypeWrapper<
     Scalars['description_String_NotNull_maxLength_2200']
   >
-  description_String_NotNull_maxLength_4000: ResolverTypeWrapper<
-    Scalars['description_String_NotNull_maxLength_4000']
+  description_String_NotNull_maxLength_8000: ResolverTypeWrapper<
+    Scalars['description_String_NotNull_maxLength_8000']
   >
   description_String_maxLength_250: ResolverTypeWrapper<
     Scalars['description_String_maxLength_250']
@@ -2093,8 +2104,8 @@ export type ResolversTypes = {
   description_String_maxLength_2200: ResolverTypeWrapper<
     Scalars['description_String_maxLength_2200']
   >
-  description_String_maxLength_4000: ResolverTypeWrapper<
-    Scalars['description_String_maxLength_4000']
+  description_String_maxLength_8000: ResolverTypeWrapper<
+    Scalars['description_String_maxLength_8000']
   >
   donationAmount_Int_NotNull_min_1: ResolverTypeWrapper<
     Scalars['donationAmount_Int_NotNull_min_1']
@@ -2216,7 +2227,8 @@ export type ResolversParentTypes = {
   FundingTx: Omit<FundingTx, 'sourceResource'> & {
     sourceResource?: Maybe<ResolversParentTypes['SourceResource']>
   }
-  FundingTxConfirmedSubscriptionResponse: FundingTxConfirmedSubscriptionResponse
+  FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
+  FundingTxStatusUpdatedSubscriptionResponse: FundingTxStatusUpdatedSubscriptionResponse
   FundinginvoiceCancel: FundinginvoiceCancel
   GetActivitiesInput: GetActivitiesInput
   GetActivityOrderByInput: GetActivityOrderByInput
@@ -2335,10 +2347,10 @@ export type ResolversParentTypes = {
   cost_Int_min_1_max_1000000: Scalars['cost_Int_min_1_max_1000000']
   description_String_NotNull_maxLength_250: Scalars['description_String_NotNull_maxLength_250']
   description_String_NotNull_maxLength_2200: Scalars['description_String_NotNull_maxLength_2200']
-  description_String_NotNull_maxLength_4000: Scalars['description_String_NotNull_maxLength_4000']
+  description_String_NotNull_maxLength_8000: Scalars['description_String_NotNull_maxLength_8000']
   description_String_maxLength_250: Scalars['description_String_maxLength_250']
   description_String_maxLength_2200: Scalars['description_String_maxLength_2200']
-  description_String_maxLength_4000: Scalars['description_String_maxLength_4000']
+  description_String_maxLength_8000: Scalars['description_String_maxLength_8000']
   donationAmount_Int_NotNull_min_1: Scalars['donationAmount_Int_NotNull_min_1']
   email_String_NotNull_format_email: Scalars['email_String_NotNull_format_email']
   email_String_format_email: Scalars['email_String_format_email']
@@ -2657,7 +2669,7 @@ export type FundingTxResolvers<
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   funder?: Resolver<ResolversTypes['Funder'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
-  invoiceId?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  invoiceId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   invoiceStatus?: Resolver<
     ResolversTypes['InvoiceStatus'],
     ParentType,
@@ -2688,9 +2700,9 @@ export type FundingTxResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
-export type FundingTxConfirmedSubscriptionResponseResolvers<
+export type FundingTxStatusUpdatedSubscriptionResponseResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes['FundingTxConfirmedSubscriptionResponse'] = ResolversParentTypes['FundingTxConfirmedSubscriptionResponse'],
+  ParentType extends ResolversParentTypes['FundingTxStatusUpdatedSubscriptionResponse'] = ResolversParentTypes['FundingTxStatusUpdatedSubscriptionResponse'],
 > = {
   fundingTx?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
@@ -3198,7 +3210,7 @@ export type ProjectResolvers<
   canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   description?: Resolver<
-    Maybe<ResolversTypes['description_String_maxLength_4000']>,
+    Maybe<ResolversTypes['description_String_maxLength_8000']>,
     ParentType,
     ContextType
   >
@@ -3622,11 +3634,12 @@ export type SubscriptionResolvers<
     ParentType,
     ContextType
   >
-  fundingTxConfirmed?: SubscriptionResolver<
-    ResolversTypes['FundingTxConfirmedSubscriptionResponse'],
-    'fundingTxConfirmed',
+  fundingTxStatusUpdated?: SubscriptionResolver<
+    ResolversTypes['FundingTxStatusUpdatedSubscriptionResponse'],
+    'fundingTxStatusUpdated',
     ParentType,
-    ContextType
+    ContextType,
+    Partial<SubscriptionFundingTxStatusUpdatedArgs>
   >
   projectActivated?: SubscriptionResolver<
     ResolversTypes['ProjectActivatedSubscriptionResponse'],
@@ -3840,12 +3853,12 @@ export interface Description_String_NotNull_MaxLength_2200ScalarConfig
   name: 'description_String_NotNull_maxLength_2200'
 }
 
-export interface Description_String_NotNull_MaxLength_4000ScalarConfig
+export interface Description_String_NotNull_MaxLength_8000ScalarConfig
   extends GraphQLScalarTypeConfig<
-    ResolversTypes['description_String_NotNull_maxLength_4000'],
+    ResolversTypes['description_String_NotNull_maxLength_8000'],
     any
   > {
-  name: 'description_String_NotNull_maxLength_4000'
+  name: 'description_String_NotNull_maxLength_8000'
 }
 
 export interface Description_String_MaxLength_250ScalarConfig
@@ -3864,12 +3877,12 @@ export interface Description_String_MaxLength_2200ScalarConfig
   name: 'description_String_maxLength_2200'
 }
 
-export interface Description_String_MaxLength_4000ScalarConfig
+export interface Description_String_MaxLength_8000ScalarConfig
   extends GraphQLScalarTypeConfig<
-    ResolversTypes['description_String_maxLength_4000'],
+    ResolversTypes['description_String_maxLength_8000'],
     any
   > {
-  name: 'description_String_maxLength_4000'
+  name: 'description_String_maxLength_8000'
 }
 
 export interface DonationAmount_Int_NotNull_Min_1ScalarConfig
@@ -4070,7 +4083,7 @@ export type Resolvers<ContextType = any> = {
   FundingPendingResponse?: FundingPendingResponseResolvers<ContextType>
   FundingQueryResponse?: FundingQueryResponseResolvers<ContextType>
   FundingTx?: FundingTxResolvers<ContextType>
-  FundingTxConfirmedSubscriptionResponse?: FundingTxConfirmedSubscriptionResponseResolvers<ContextType>
+  FundingTxStatusUpdatedSubscriptionResponse?: FundingTxStatusUpdatedSubscriptionResponseResolvers<ContextType>
   FundinginvoiceCancel?: FundinginvoiceCancelResolvers<ContextType>
   Grant?: GrantResolvers<ContextType>
   GrantApplicant?: GrantApplicantResolvers<ContextType>
@@ -4121,10 +4134,10 @@ export type Resolvers<ContextType = any> = {
   cost_Int_min_1_max_1000000?: GraphQLScalarType
   description_String_NotNull_maxLength_250?: GraphQLScalarType
   description_String_NotNull_maxLength_2200?: GraphQLScalarType
-  description_String_NotNull_maxLength_4000?: GraphQLScalarType
+  description_String_NotNull_maxLength_8000?: GraphQLScalarType
   description_String_maxLength_250?: GraphQLScalarType
   description_String_maxLength_2200?: GraphQLScalarType
-  description_String_maxLength_4000?: GraphQLScalarType
+  description_String_maxLength_8000?: GraphQLScalarType
   donationAmount_Int_NotNull_min_1?: GraphQLScalarType
   email_String_NotNull_format_email?: GraphQLScalarType
   email_String_format_email?: GraphQLScalarType
@@ -4263,8 +4276,7 @@ export type FundingTxForLandingPageFragment = {
 export type FundingTxWithInvoiceStatusFragment = {
   __typename?: 'FundingTx'
   id: any
-  uuid?: string | null
-  invoiceId: string
+  invoiceId?: string | null
   status: FundingStatus
   onChain: boolean
   invoiceStatus: InvoiceStatus
@@ -4275,7 +4287,7 @@ export type FundingTxFragment = {
   __typename?: 'FundingTx'
   id: any
   uuid?: string | null
-  invoiceId: string
+  invoiceId?: string | null
   paymentRequest?: string | null
   amount: number
   status: FundingStatus
@@ -4416,15 +4428,6 @@ export type ProjectFragment = {
     image?: string | null
     user?: ({ __typename?: 'User' } & UserForAvatarFragment) | null
   }>
-  funders: Array<{
-    __typename?: 'Funder'
-    id: any
-    amountFunded?: number | null
-    confirmed: boolean
-    confirmedAt?: any | null
-    timesFunded?: number | null
-    user?: ({ __typename?: 'User' } & UserForAvatarFragment) | null
-  }>
   milestones: Array<{
     __typename?: 'ProjectMilestone'
     id: any
@@ -4458,6 +4461,16 @@ export type ProjectFragment = {
         }
       | { __typename?: 'LndConnectionDetailsPublic'; pubkey?: any | null }
   }>
+}
+
+export type ProjectFundersFragment = {
+  __typename?: 'Funder'
+  id: any
+  amountFunded?: number | null
+  confirmed: boolean
+  confirmedAt?: any | null
+  timesFunded?: number | null
+  user?: ({ __typename?: 'User' } & UserForAvatarFragment) | null
 }
 
 export type UserMeFragment = {
@@ -5227,6 +5240,23 @@ export type GrantQuery = {
       endAt?: any | null
       startAt: any
     }>
+    boardMembers: Array<{
+      __typename?: 'GrantBoardMember'
+      user: {
+        __typename?: 'User'
+        username: string
+        imageUrl?: string | null
+        id: any
+        externalAccounts: Array<{
+          __typename?: 'ExternalAccount'
+          accountType: string
+          externalId: string
+          externalUsername: string
+          id: any
+          public: boolean
+        }>
+      }
+    }>
     applicants: Array<{
       __typename?: 'GrantApplicant'
       status: GrantApplicantStatus
@@ -5300,25 +5330,14 @@ export type ProjectByNameOrIdQuery = {
 
 export type ProjectFundingDataQueryVariables = Exact<{
   where: UniqueProjectQueryInput
+  input?: InputMaybe<ProjectEntriesGetInput>
 }>
 
 export type ProjectFundingDataQuery = {
   __typename?: 'Query'
   project?: {
     __typename?: 'Project'
-    funders: Array<{
-      __typename?: 'Funder'
-      id: any
-      amountFunded?: number | null
-      timesFunded?: number | null
-      confirmedAt?: any | null
-      user?: {
-        __typename?: 'User'
-        id: any
-        username: string
-        imageUrl?: string | null
-      } | null
-    }>
+    funders: Array<{ __typename?: 'Funder' } & ProjectFundersFragment>
   } | null
 }
 
@@ -5698,17 +5717,16 @@ export type ActivityCreatedSubscription = {
     | ({ __typename?: 'ProjectReward' } & ProjectRewardForLandingPageFragment)
 }
 
-export type FundingActivityCreatedSubscriptionVariables = Exact<{
-  input?: InputMaybe<ActivityCreatedSubscriptionInput>
+export type FundingTxStatusUpdatedSubscriptionVariables = Exact<{
+  input?: InputMaybe<FundingTxStatusUpdatedInput>
 }>
 
-export type FundingActivityCreatedSubscription = {
+export type FundingTxStatusUpdatedSubscription = {
   __typename?: 'Subscription'
-  activityCreated:
-    | { __typename?: 'Entry' }
-    | ({ __typename?: 'FundingTx' } & FundingTxFragment)
-    | { __typename?: 'Project' }
-    | { __typename?: 'ProjectReward' }
+  fundingTxStatusUpdated: {
+    __typename?: 'FundingTxStatusUpdatedSubscriptionResponse'
+    fundingTx: { __typename?: 'FundingTx' } & FundingTxFragment
+  }
 }
 
 export const UserForAvatarFragmentDoc = gql`
@@ -5749,7 +5767,6 @@ export const EntryFragmentDoc = gql`
 export const FundingTxWithInvoiceStatusFragmentDoc = gql`
   fragment FundingTxWithInvoiceStatus on FundingTx {
     id
-    uuid
     invoiceId
     status
     onChain
@@ -5899,16 +5916,6 @@ export const ProjectFragmentDoc = gql`
         ...UserForAvatar
       }
     }
-    funders {
-      id
-      user {
-        ...UserForAvatar
-      }
-      amountFunded
-      confirmed
-      confirmedAt
-      timesFunded
-    }
     milestones {
       id
       name
@@ -5947,6 +5954,19 @@ export const ProjectFragmentDoc = gql`
   ${ProjectRewardForCreateUpdateFragmentDoc}
   ${UserForAvatarFragmentDoc}
   ${EntryForProjectFragmentDoc}
+`
+export const ProjectFundersFragmentDoc = gql`
+  fragment projectFunders on Funder {
+    id
+    user {
+      ...UserForAvatar
+    }
+    amountFunded
+    confirmed
+    confirmedAt
+    timesFunded
+  }
+  ${UserForAvatarFragmentDoc}
 `
 export const FunderWithUserFragmentDoc = gql`
   fragment FunderWithUser on Funder {
@@ -8481,6 +8501,20 @@ export const GrantDocument = gql`
         endAt
         startAt
       }
+      boardMembers {
+        user {
+          username
+          imageUrl
+          id
+          externalAccounts {
+            accountType
+            externalId
+            externalUsername
+            id
+            public
+          }
+        }
+      }
       applicants {
         project {
           id
@@ -8686,21 +8720,17 @@ export type ProjectByNameOrIdQueryResult = Apollo.QueryResult<
   ProjectByNameOrIdQueryVariables
 >
 export const ProjectFundingDataDocument = gql`
-  query ProjectFundingData($where: UniqueProjectQueryInput!) {
+  query ProjectFundingData(
+    $where: UniqueProjectQueryInput!
+    $input: ProjectEntriesGetInput
+  ) {
     project(where: $where) {
       funders {
-        id
-        user {
-          id
-          username
-          imageUrl
-        }
-        amountFunded
-        timesFunded
-        confirmedAt
+        ...projectFunders
       }
     }
   }
+  ${ProjectFundersFragmentDoc}
 `
 
 /**
@@ -8716,6 +8746,7 @@ export const ProjectFundingDataDocument = gql`
  * const { data, loading, error } = useProjectFundingDataQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -10036,12 +10067,10 @@ export type ActivityCreatedSubscriptionHookResult = ReturnType<
 >
 export type ActivityCreatedSubscriptionResult =
   Apollo.SubscriptionResult<ActivityCreatedSubscription>
-export const FundingActivityCreatedDocument = gql`
-  subscription fundingActivityCreated(
-    $input: ActivityCreatedSubscriptionInput
-  ) {
-    activityCreated(input: $input) {
-      ... on FundingTx {
+export const FundingTxStatusUpdatedDocument = gql`
+  subscription FundingTxStatusUpdated($input: FundingTxStatusUpdatedInput) {
+    fundingTxStatusUpdated(input: $input) {
+      fundingTx {
         ...FundingTx
       }
     }
@@ -10050,35 +10079,35 @@ export const FundingActivityCreatedDocument = gql`
 `
 
 /**
- * __useFundingActivityCreatedSubscription__
+ * __useFundingTxStatusUpdatedSubscription__
  *
- * To run a query within a React component, call `useFundingActivityCreatedSubscription` and pass it any options that fit your needs.
- * When your component renders, `useFundingActivityCreatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFundingTxStatusUpdatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useFundingTxStatusUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFundingActivityCreatedSubscription({
+ * const { data, loading, error } = useFundingTxStatusUpdatedSubscription({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useFundingActivityCreatedSubscription(
+export function useFundingTxStatusUpdatedSubscription(
   baseOptions?: Apollo.SubscriptionHookOptions<
-    FundingActivityCreatedSubscription,
-    FundingActivityCreatedSubscriptionVariables
+    FundingTxStatusUpdatedSubscription,
+    FundingTxStatusUpdatedSubscriptionVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSubscription<
-    FundingActivityCreatedSubscription,
-    FundingActivityCreatedSubscriptionVariables
-  >(FundingActivityCreatedDocument, options)
+    FundingTxStatusUpdatedSubscription,
+    FundingTxStatusUpdatedSubscriptionVariables
+  >(FundingTxStatusUpdatedDocument, options)
 }
-export type FundingActivityCreatedSubscriptionHookResult = ReturnType<
-  typeof useFundingActivityCreatedSubscription
+export type FundingTxStatusUpdatedSubscriptionHookResult = ReturnType<
+  typeof useFundingTxStatusUpdatedSubscription
 >
-export type FundingActivityCreatedSubscriptionResult =
-  Apollo.SubscriptionResult<FundingActivityCreatedSubscription>
+export type FundingTxStatusUpdatedSubscriptionResult =
+  Apollo.SubscriptionResult<FundingTxStatusUpdatedSubscription>

@@ -381,7 +381,7 @@
     "Grant distribution status": "Stav distribuce grantu",
     "See the winner announcement": "Podívejte se na vyhlášení vítěze",
     "Announcement": "Oznámení",
-    "Let the Sats flow to your favorite projects. 1 Sat = 1 vote.": "Nechte saty proudit do vašich oblíbených projektů. 1 sat = 1 hlas.",
+    "Let the Sats flow to your favorite projects.": "Nechte saty proudit do vašich oblíbených projektů.",
     "Bitcoin Gaming Grant": "Bitcoin Gaming Grant",
     "Grants Round 1": "Grantové kolo 1",
     "Grants Round 2": "Grantové kolo 2",
@@ -617,8 +617,10 @@
     "from": "z",
     "Coming soon": "Již brzy",
     "This is the tweet we will be posting in several different languages": {
-        "\"🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English. This means the tool of community crowdfunding through bitcoin is drastically limited.\n\nBy adding 10 more languages to geyser.fund, we are making crowdfunding accessible to 40% of the world, and roughly 100 countries! \n\nLet’s celebrate them! 👇\"": "\"🤯 ROZLOHA! Bitcoin crowdfunding je nyní dostupný pro 3,2 miliardy lidí!\n\nPouze 20 % lidí na světě mluví anglicky. To znamená, že nástroj komunitního crowdfundingu prostřednictvím bitcoinů je drasticky omezen.\n\nPřidáním dalších 10 jazyků do geyser.fund zpřístupňujeme crowdfunding 40 % světa a zhruba 100 zemím!\n\nPojďme je oslavit! 👇\""
+        "🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English.\n\nWith @EuropeanBTC21 & other plebs, we’re making crowdfunding accessible to 40% of the world in 10+ languages!\n\nLet’s celebrate them! 👇": "🇨🇿 Bitcoinový crowdfunding je nyní dostupný pro 3,2 miliardy lidí!\n\nPouze 20% světa mluví anglicky.\n\nS @EuropeanBTC21 a dalšími plebejci zpřístupňujeme crowdfunding 40% světa ve více než 10 jazycích!\n\nDíky @milanotron!"
     },
     "Grant funds will be distributed by principled bitcoin board members.": "Grantové prostředky budou rozdělovány členy rady představenstva.",
-    "Apply to be part of the {{title}} grant. Find out more about how projects will be selected and how voting works <1>here.</1>": "Požádejte o účast na grantu {{titul}}. Více informací, jak budou projekty vybírány a jak funguje hlasování zde <1>zde.</1>"
+    "Apply to be part of the {{title}} grant. Find out more about how projects will be selected and how voting works <1>here.</1>": "Požádejte o účast na grantu {{titul}}. Více informací, jak budou projekty vybírány a jak funguje hlasování zde <1>zde.</1>",
+    "Contribute directly to {{title}} Grant via QR code (lightning and onchain)": "Příspěvek přímo do {{titul}} Grantu prostřednictvím QR kódu (lightning a on-chain)",
+    "1 Sat = 1 vote.": "1 sat = 1 hlas."
 }

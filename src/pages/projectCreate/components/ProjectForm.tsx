@@ -107,7 +107,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
   }
 
   return (
-    <VStack spacing={6}>
+    <VStack spacing={6} w="100%">
       <FieldContainer
         title={t('Title')}
         subtitle={t('A few words that make your project stand out')}

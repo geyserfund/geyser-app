@@ -187,7 +187,7 @@ export const GeyserProhibitedItemsUrl =
   'https://geyser.notion.site/Prohibited-items-a67b8e1e050d433ca747a3522833a7f3'
 
 export const GrantApplicationDetailsUrl =
-  'https://geyser.notion.site/Bitcoin-Gaming-Grant-c03cde06930d46f9a082fabb096d967c'
+  'https://geyser.notion.site/About-Geyser-Grants-925d6b2adc1a4043b70d2835ecfebdde'
 
 export const WalletCreationFindOutMoreUrl =
   'https://geyser.notion.site/About-Geyser-Grants-925d6b2adc1a4043b70d2835ecfebdde?pvs=4'

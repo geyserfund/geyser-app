@@ -381,7 +381,7 @@
     "Grant distribution status": "Κατάσταση διανομής επιχορηγήσεων",
     "See the winner announcement": "Δείτε την ανακοίνωση του νικητή",
     "Announcement": "Ανακοίνωση",
-    "Let the Sats flow to your favorite projects. 1 Sat = 1 vote.": "Αφήστε τα Sats να ρέουν στα αγαπημένα σας έργα. 1 Sat = 1 ψήφος.",
+    "Let the Sats flow to your favorite projects.": "Αφήστε τα Sats να ρέουν στα αγαπημένα σας έργα.",
     "Bitcoin Gaming Grant": "Επιχορήγηση παιχνιδιών Bitcoin",
     "Grants Round 1": "Επιχορηγήσεις 1ος Κύκλος",
     "Grants Round 2": "Επιχορηγήσεις 2ος Κύκλος",
@@ -617,8 +617,10 @@
     "from": "από",
     "Coming soon": "Έρχονται σύντομα",
     "This is the tweet we will be posting in several different languages": {
-        "\"🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English. This means the tool of community crowdfunding through bitcoin is drastically limited.\n\nBy adding 10 more languages to geyser.fund, we are making crowdfunding accessible to 40% of the world, and roughly 100 countries! \n\nLet’s celebrate them! 👇\"": "\"🤯 ΕΚΤΑΚΤΑ NEA! Η συλλογική χρηματοδότηση με το Bitcoin είναι πλέον προσβάσιμη σε 3,2 δισεκατομμύρια ανθρώπους!\n\nΜόνο το 20% του κόσμου μιλάει Αγγλικά. Αυτό σημαίνει ότι το εργαλείο της κοινοτικής συλλογικής χρηματοδότησης μέσω bitcoin είναι δραστικά περιορισμένο.\n\nΠροσθέτοντας 10 ακόμη γλώσσες στην geyser.fund, κάνουμε την συλλογική χρηματοδότηση προσβάσιμη στο 40% του κόσμου και σε περίπου 100 χώρες!\n\nΑς τους γιορτάσουμε! 👇\""
+        "🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English.\n\nWith @EuropeanBTC21 & other plebs, we’re making crowdfunding accessible to 40% of the world in 10+ languages!\n\nLet’s celebrate them! 👇": "🤯 ΕΚΤΑΚΤΟ! Bitcoin crowdfunding είναι πλέον δυνατό για 3,2 δισ. ανθρώπους!\n\nΜόνο το 20% του κόσμου μιλάει αγγλικά. \n\nMε τους @EuropeanBTC21 και άλλους απλούς ανθρώπους, κάνουμε το crowdfunding προσβάσιμο στο 40% του κόσμου και σε 10+ γλώσσες! \n\nΑς τους γιορτάσουμε! 👇"
     },
     "Grant funds will be distributed by principled bitcoin board members.": "Τα ποσά της Επιχορήγησης θα διανεμηθούν σύμφωνα με τις αρχές του Bitcoin από μέλη της επιτροπής.",
-    "Apply to be part of the {{title}} grant. Find out more about how projects will be selected and how voting works <1>here.</1>": "Υποβάλετε αίτηση για να συμμετάσχετε στην επιχορήγηση με {{τίτλο}}. Μάθετε περισσότερα σχετικά με τον τρόπο επιλογής των έργων και τον τρόπο ψηφοφορίας <1>εδώ.</1>"
+    "Apply to be part of the {{title}} grant. Find out more about how projects will be selected and how voting works <1>here.</1>": "Υποβάλετε αίτηση για να συμμετάσχετε στην επιχορήγηση με {{τίτλο}}. Μάθετε περισσότερα σχετικά με τον τρόπο επιλογής των έργων και τον τρόπο ψηφοφορίας <1>εδώ.</1>",
+    "Contribute directly to {{title}} Grant via QR code (lightning and onchain)": "Συνεισφέρετε απευθείας στο {{έργο}} μέσω του QR κωδικού (lightning and on-chain)",
+    "1 Sat = 1 vote.": "1 Sat = 1 ψήφος."
 }

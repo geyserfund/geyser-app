@@ -381,7 +381,7 @@
     "Grant distribution status": "حالة توزيع المنحة",
     "See the winner announcement": "انظر إعلان الفائز",
     "Announcement": "إعلان",
-    "Let the Sats flow to your favorite projects. 1 Sat = 1 vote.": "فلتتدفق الساتوشيات إلى مشاريعك المفضلة. كل ساتوشي يكافئ صوتًا.",
+    "Let the Sats flow to your favorite projects.": "فلتتدفق الساتوشيات إلى مشاريعك المفضلة. كل ساتوشي يكافئ صوتًا.",
     "Bitcoin Gaming Grant": "منحة ألعاب البيتكوين",
     "Grants Round 1": "جولة المنح 1",
     "Grants Round 2": "جولة المنح 2",
@@ -617,6 +617,6 @@
     "from": "من",
     "Coming soon": "قريبًا",
     "This is the tweet we will be posting in several different languages": {
-        "\"🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English. This means the tool of community crowdfunding through bitcoin is drastically limited.\n\nBy adding 10 more languages to geyser.fund, we are making crowdfunding accessible to 40% of the world, and roughly 100 countries! \n\nLet’s celebrate them! 👇\"": "«عاجل! التمويل الجماعي بالبيتكوين متاح اليوم لأكثر من 3.2 مليار نسمة!\n\nلا يتكلم الإنكليزية إلا 20% من سكان العالم. هذا يعني أن أداة التمويل الجماعي بالبيتكوين محدودة جدًّا.\n\nبإضافة 10 لغات أخرى إلى geyser.fund، نجعل التمويل الجماعي متاحًا لـ40% من العالم، تقريبًا 100 بلد!\n\nفلنحتفل بهذه اللغات الجديدة! 👇»"
+        "🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English.\n\nWith @EuropeanBTC21 & other plebs, we’re making crowdfunding accessible to 40% of the world in 10+ languages!\n\nLet’s celebrate them! 👇": "🤯 كسر! التمويل الجماعي بيتكوين متاح الآن لـ 3.2 مليار شخص!\n20٪ فقط من سكان العالم يتحدثون الإنجليزية. هذا يعني أن أداة التمويل الجماعي المجتمعي من خلال البيتكوين محدودة للغاية.\nمن خلال إضافة 10 لغات أخرى إلى geyser.fund بالتنسيق مع Bitcoiners الأوروبية وعامة الشعب الأخرى ، فإننا نجعل التمويل الجماعي متاحًا لـ 40٪ من العالم ، وما يقرب من 100 دولة!\nدعونا نحتفل بهم! 👇"
     }
 }

@@ -51,6 +51,7 @@ export const TopNavBarMenu = ({
         transition="all 0.2s"
         maxHeight="32px"
         borderRadius="md"
+        data-testid="topnavbar-dropdown-menu"
         color="neutral.1000"
         backgroundColor="neutral.0"
         _hover={{ backgroundColor: 'neutral.100' }}
