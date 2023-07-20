@@ -3,7 +3,7 @@ export const signMessage = async (secret: string) => {
     try {
       const sig = await window.nostr.signSchnorr(secret)
       return sig
-    } catch (error) { }
+    } catch (error) {}
   }
 
   throw new Error('No nostr extension available')
@@ -27,7 +27,7 @@ export const signEventToBeDeprecated = async (event: {
     try {
       const { sig } = await window.nostr.signEvent(event)
       return sig
-    } catch (error) { }
+    } catch (error) {}
   }
 
   throw new Error('No nostr extension available')
@@ -41,7 +41,7 @@ export const signEvent = async (event: {
     try {
       const signedEvent = await window.nostr.signEvent(event)
       return signedEvent
-    } catch (error) { }
+    } catch (error) {}
   }
 
   throw new Error('No nostr extension available')

@@ -114,10 +114,16 @@ export const GrantPage = () => {
 
   const getTitle = () => {
     if (grant.status === GrantStatusEnum.Closed) {
-      return 'Grant Winners!'
+      return t('Grant Winners!')
     }
 
-    return ''
+    const defaultTitle = 'Let the Sats flow to your favorite projects.'
+
+    if (grantHasVoting) {
+      return `${defaultTitle} ${t('1 Sat = 1 vote.')}`
+    }
+
+    return defaultTitle
   }
 
   const grantHasVoting = GrantHasVoting[grant.name]
@@ -144,7 +150,7 @@ export const GrantPage = () => {
         >
           <FaArrowLeft /> {t('See all Grants')}
         </Button>
-        <GrantSummary grant={grant} />
+        <GrantSummary grant={grant} grantHasVoting={grantHasVoting} />
         <MobileDivider />
         {showDistributionChart && (
           <>
@@ -161,7 +167,7 @@ export const GrantPage = () => {
         {showCommunityVoting && (
           <>
             <CommunityVoting
-              title={t(getTitle())}
+              title={getTitle()}
               applicants={applicants}
               grantHasVoting={grantHasVoting}
               grantStatus={grant.status}

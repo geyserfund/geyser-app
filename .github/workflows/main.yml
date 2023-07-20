@@ -1,0 +1,16 @@
+name: Chrome
+on: push
+jobs:
+  chrome:
+    runs-on: ubuntu-22.04
+    name: E2E on Chrome
+    steps:
+      - uses: actions/checkout@v3
+      - uses: cypress-io/github-action@v5
+        with:
+          browser: chrome
+      - uses: actions/upload-artifact@v1
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos

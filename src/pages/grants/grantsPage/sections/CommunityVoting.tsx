@@ -24,7 +24,7 @@ interface Props {
   applicants: Array<GrantApplicant>
   grantHasVoting?: boolean
   grantStatus: string
-  title?: string
+  title: string
   isClosed?: boolean
   fundingOpenStartDate: number
   fundingOpenEndDate: number
@@ -62,9 +62,6 @@ export const CommunityVoting = ({
   }
 
   const canVote = grantHasVoting && grantStatus === GrantStatusEnum.FundingOpen
-
-  const sectionTitle =
-    title || t('Let the Sats flow to your favorite projects. 1 Sat = 1 vote.')
 
   const renderWidgetItem = (funding: GrantApplicantFunding) => {
     return (
@@ -116,7 +113,7 @@ export const CommunityVoting = ({
       spacing={{ base: '10px', lg: '20px' }}
       w="full"
     >
-      <H3 fontSize="18px">{t(sectionTitle)}</H3>
+      <H3 fontSize="18px">{t(title)}</H3>
       {applicants.map(({ project, funding }) => {
         const projectLink = getPath('project', project.name)
         return (

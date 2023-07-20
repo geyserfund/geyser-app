@@ -109,7 +109,6 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
       comment,
       media,
     } = state
-
     const input: FundingInput = {
       projectId: toInt(project?.id),
       anonymous,
@@ -134,12 +133,11 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
         (reward): reward is FilteredReward =>
           reward.quantity !== 0 && reward.quantity !== undefined,
       )
-      const rewardInput: RewardFundingInput = {
+      input.rewardInput = {
         shipping: { cost, destination },
         rewards: filteredRewards,
-        rewardsCost: Math.round(rewardsCost / btcRate),
-      }
-      input.rewardInput = rewardInput
+        rewardsCost: Math.round(rewardsCost / (100 * btcRate)), // reward cost is in USDcent only for now.
+      } as RewardFundingInput
     }
 
     return input

@@ -88,12 +88,13 @@ export const ProjectDashboard = () => {
         <TitleDivider
           zIndex={10}
           mb={4}
+          bg="neutral.0"
           position="sticky"
+          onClick={() => setDrawerOpen(true)}
           top={dimensions.topNavBar.desktop.height + 'px'}
           rightAction={
             <IconButton
               aria-label="open dashboard menu"
-              onClick={() => setDrawerOpen(true)}
               variant="transparent"
               justifyContent="end"
             >

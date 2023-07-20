@@ -1,17 +1,18 @@
 import { useCallback, useState } from 'react'
 
 import {
-  ActivityResourceType,
   FundingTxFragment,
-  useFundingActivityCreatedSubscription,
+  useFundingTxStatusUpdatedSubscription,
 } from '../../types'
 
 type UseFundSubscriptionProps = {
-  projectId: number
+  projectId?: number
+  fundingTxId?: number
 }
 
 export const useFundSubscription = ({
   projectId,
+  fundingTxId,
 }: UseFundSubscriptionProps) => {
   const [skip, setSkip] = useState(true)
   const [fundingActivity, setFundingActivity] = useState<FundingTxFragment>()
@@ -26,21 +27,17 @@ export const useFundSubscription = ({
   }, [])
 
   const skipSubscription = skip || !projectId
-
-  useFundingActivityCreatedSubscription({
+  useFundingTxStatusUpdatedSubscription({
     variables: {
       input: {
-        where: {
-          projectIds: [projectId],
-          resourceType: ActivityResourceType.FundingTx,
-        },
+        projectId: projectId || undefined,
+        fundingTxId: fundingTxId || undefined,
       },
     },
     skip: skipSubscription,
     onData(options) {
-      const activityCreated = options.data.data
-        ?.activityCreated as FundingTxFragment
-      setFundingActivity(activityCreated)
+      const fundingTx = options.data.data?.fundingTxStatusUpdated.fundingTx
+      setFundingActivity(fundingTx)
     },
   })
 

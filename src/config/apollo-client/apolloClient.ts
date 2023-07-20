@@ -23,7 +23,7 @@ const retryLink = new RetryLink({
         (err.code === 'STALE_REFRESH_TOKEN' ||
           err.code === 'EXPIRED_REFRESH_TOKEN' ||
           err.code === 'INVALIDE_REFRESH_TOKEN') &&
-        count <= 2,
+          count <= 2,
       )
     )
   },

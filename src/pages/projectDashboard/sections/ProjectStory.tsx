@@ -10,6 +10,7 @@ import {
   useProjectUnsavedModal,
 } from '../../projectCreate/components/ProjectUnsavedModal'
 import { useProjectStoryForm } from '../../projectCreate/hooks/useProjectStoryForm'
+import { BackToProjectMobile } from '../navigation/BackToProjectMobile'
 
 export const ProjectStory = () => {
   const { t } = useTranslation()
@@ -84,6 +85,7 @@ export const ProjectStory = () => {
           >
             {t('Save')}
           </Button>
+          <BackToProjectMobile project={project} />
         </VStack>
       </VStack>
       <ProjectUnsavedModal {...unsavedModal} />

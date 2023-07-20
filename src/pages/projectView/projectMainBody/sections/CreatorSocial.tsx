@@ -61,9 +61,7 @@ export const CreatorSocial = () => {
                 fontWeight={500}
                 bg="neutral.100"
               >
-                <Box as="span" lineHeight="1">
-                  {icon}
-                </Box>
+                {icon}
                 {isMd ? (
                   <Text ml={2} variant="body" maxW="12em" isTruncated>
                     {username}

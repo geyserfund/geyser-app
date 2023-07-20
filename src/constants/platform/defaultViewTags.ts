@@ -26,7 +26,7 @@ export const getFeaturedProject = () => {
   }
 
   if (__production__) {
-    return 'caseforbitcoin'
+    return 'miprimerbitcoin'
   }
 
   return ''
@@ -39,11 +39,7 @@ const productionTagsList = [
   { label: 'films', id: 57 },
   { label: 'collectibles', id: 97 },
   { label: 'orange-pilling', id: 10 },
-  { label: 'economics', id: 77 },
-  { label: 'bitcoin-films', id: 134 },
-  { label: 'maker', id: 49 },
   { label: 'games', id: 19 },
-  { label: 'shop', id: 52 },
   { label: 'podcasts', id: 7 },
   { label: 'translation', id: 37 },
   { label: 'humanitarian', id: 15 },
@@ -52,6 +48,8 @@ const productionTagsList = [
   { label: 'events', id: 1 },
   { label: 'media', id: 8 },
   { label: 'sports', id: 43 },
+  { label: 'bitcoin-films', id: 134 },
+  { label: 'maker', id: 49 },
   { label: 'earn', id: 42 },
   { label: 'creative', id: 75 },
 ]

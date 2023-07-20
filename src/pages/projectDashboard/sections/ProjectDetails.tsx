@@ -69,7 +69,7 @@ export const ProjectDetails = () => {
       }}
       style={{ flexGrow: 1, display: 'flex' }}
     >
-      <VStack spacing={6} flexGrow={1}>
+      <VStack w="100%" spacing={6} flexGrow={1}>
         <ProjectRegion
           location={project?.location}
           updateProject={updateProject}
