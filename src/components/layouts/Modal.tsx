@@ -11,19 +11,26 @@ import {
 } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 
-interface Props extends ModalProps {
+export interface CustomModalProps extends ModalProps {
   title?: ReactNode
   contentProps?: ModalContentProps
+  noClose?: boolean
 }
 
-export const Modal = ({ children, title, contentProps, ...props }: Props) => {
+export const Modal = ({
+  children,
+  title,
+  contentProps,
+  noClose,
+  ...props
+}: CustomModalProps) => {
   return (
     <ChakraModal isCentered size="sm" {...props}>
       <ModalOverlay />
       <ModalContent bg="transparent" boxShadow={0} {...contentProps}>
         <Box borderRadius="8px" bg="neutral.0" pb={3}>
           {title && <ModalHeader pb={2}>{title}</ModalHeader>}
-          <ModalCloseButton />
+          {!noClose && <ModalCloseButton />}
           <ModalBody>{children}</ModalBody>
         </Box>
       </ModalContent>

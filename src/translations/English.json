@@ -611,5 +611,16 @@
   "Coming soon": "Coming soon",
   "Grant funds will be distributed by principled bitcoin board members.": "Grant funds will be distributed by principled bitcoin board members.",
   "Apply to be part of the {{title}} grant. Find out more about how projects will be selected and how voting works <1>here.</1>": "Apply to be part of the {{title}} grant. Find out more about how projects will be selected and how voting works <1>here.</1>",
-  "Contribute directly to {{title}} Grant via QR code (lightning and onchain)": "Contribute directly to {{title}} Grant via QR code (lightning and onchain)"
+  "Contribute directly to {{title}} Grant via QR code (lightning and onchain)": "Contribute directly to {{title}} Grant via QR code (lightning and onchain)",
+  "Verify your email": "Verify your email",
+  "Backup your Geyser account and project with your email. This will ensure that you can always access Geyser, as well as securely update your project information.": "Backup your Geyser account and project with your email. This will ensure that you can always access Geyser, as well as securely update your project information.",
+  "Input your email": "Input your email",
+  "Input the One Time Password that was sent to your email.": "Input the One Time Password that was sent to your email.",
+  "Send code again": "Send code again",
+  "Failed to generate otp.": "Failed to generate otp.",
+  "Email is a required field": "Email is a required field",
+  "Please enter a valid Email address": "Please enter a valid Email address",
+  "Failed to update email.": "Failed to update email.",
+  "Failed to verify email.": "Failed to verify email.",
+  "Your email": "Your email"
 }

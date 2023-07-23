@@ -6,6 +6,7 @@ export const FRAGMENT_USER_ME = gql`
     username
     imageUrl
     email
+    isEmailVerified
     externalAccounts {
       id
       accountType

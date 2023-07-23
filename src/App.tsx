@@ -7,6 +7,7 @@ import { client } from './config'
 import { Head } from './config/Head'
 import { AuthProvider, ChakraThemeProvider, NavProvider } from './context'
 import { BtcProvider } from './context/btc'
+import { DefaultEmailVerify } from './pages/otp'
 
 export const App = () => (
   <ChakraProvider>
@@ -18,6 +19,7 @@ export const App = () => (
               <BtcProvider>
                 <Head />
                 <AppLayout />
+                <DefaultEmailVerify />
               </BtcProvider>
             </NavProvider>
           </AuthProvider>

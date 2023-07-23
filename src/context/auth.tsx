@@ -16,7 +16,7 @@ import {
   useMeLazyQuery,
   useMeProjectFollowsLazyQuery,
   UserMeFragment,
-} from '../types/generated/graphql'
+} from '../types'
 
 const defaultContext: AuthContextProps = {
   isLoggedIn: false,
