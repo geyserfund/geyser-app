@@ -6,7 +6,7 @@ import * as yup from 'yup'
 
 import { useAuthContext } from '../../../context'
 import { TextField } from '../../../forms/components/TextField'
-import { useUserEmailUpdateMutation } from '../../../types'
+import { MfaAction, useUserEmailUpdateMutation } from '../../../types'
 import { useNotification } from '../../../utils'
 
 const schema = yup.object({
@@ -18,10 +18,12 @@ const schema = yup.object({
 
 interface ReceiveOneTimePasswordProps {
   handleSendOtpByEmail(email: string): void
+  action: MfaAction
 }
 
 export const ReceiveOneTimePassword = ({
   handleSendOtpByEmail,
+  action,
 }: ReceiveOneTimePasswordProps) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
@@ -51,8 +53,8 @@ export const ReceiveOneTimePassword = ({
   })
 
   const handleReceiveOneTimePassword = async ({ email }: { email: string }) => {
-    if (user.email) {
-      handleSendOtpByEmail(user.email)
+    if (user.email || action === MfaAction.Login) {
+      handleSendOtpByEmail(user.email || email)
     } else {
       updateUserEmail({
         variables: {

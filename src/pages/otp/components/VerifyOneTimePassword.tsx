@@ -52,7 +52,7 @@ export const VerifyOneTimePassword = ({
         description: 'Please try again',
       })
     },
-    onCompleted(data) {
+    onCompleted() {
       queryCurrentUser()
     },
   })

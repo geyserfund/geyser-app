@@ -73,7 +73,10 @@ export const VerifyYourEmailContent = ({
           handleSendOtpByEmail={handleSendOtpByEmail}
         />
       ) : (
-        <ReceiveOneTimePassword handleSendOtpByEmail={handleSendOtpByEmail} />
+        <ReceiveOneTimePassword
+          action={action}
+          handleSendOtpByEmail={handleSendOtpByEmail}
+        />
       )}
     </>
   )
