@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router'
 
 import { useAuthContext } from '../../context'
+import { ConnectWithEmail } from '../../pages/auth/ConnectWithEmail'
 import { ConnectWithLightning } from '../../pages/auth/ConnectWithLightning'
 import { ConnectWithNostr } from '../../pages/auth/ConnectWithNostr'
 import { ConnectWithTwitter } from '../../pages/auth/ConnectWithTwitter'
@@ -53,6 +54,7 @@ const ConnectAccounts = ({
           <ConnectWithNostr onClose={onClose} />
         )}
         {showLightning && <ConnectWithLightning onClose={onClose} />}
+        <ConnectWithEmail onClose={onClose} />
       </Stack>
       <Caption paddingTop="5px">
         {t(

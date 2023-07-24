@@ -1,5 +1,6 @@
 export * from './ColorModeSwitcher'
 export * from './copyToClipboard'
 export * from './imageSizes'
+export * from './isWalletConnectionDetails'
 export * from './Notification'
 export * from './serviceWorker'
