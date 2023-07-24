@@ -31,7 +31,7 @@ export const useProjectState = (
 
   const invalidId = idType === 'name' && String(projectId).length < 3
 
-  const { loading, error } = useProjectByNameOrIdQuery({
+  const { loading, error, refetch } = useProjectByNameOrIdQuery({
     variables: {
       where: {
         [idType]: type === 'name' ? projectId : toInt(projectId),
@@ -131,6 +131,7 @@ export const useProjectState = (
     project,
     updateProject,
     saveProject,
+    refetch,
     isDirty: isDiff,
   }
 }

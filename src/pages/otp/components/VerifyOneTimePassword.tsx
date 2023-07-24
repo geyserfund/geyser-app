@@ -13,11 +13,13 @@ const DEFAULT_WAIT_SECONDS_FOR_RESEND = 60
 interface VerifyOneTimePasswordProps {
   otp: OtpResponseFragment
   handleSendOtpByEmail(email: string): void
+  handleVerify?: (otpCode: number, optData: OtpResponseFragment) => void
 }
 
 export const VerifyOneTimePassword = ({
   otp,
   handleSendOtpByEmail,
+  handleVerify,
 }: VerifyOneTimePasswordProps) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
@@ -64,14 +66,18 @@ export const VerifyOneTimePassword = ({
   }
 
   const handleConfirm = () => {
-    verifyUserEmail({
-      variables: {
-        input: {
-          otp: toInt(otpCode),
-          otpVerificationToken: otp.otpVerificationToken,
+    if (handleVerify) {
+      handleVerify(toInt(otpCode), otp)
+    } else {
+      verifyUserEmail({
+        variables: {
+          input: {
+            otp: toInt(otpCode),
+            otpVerificationToken: otp.otpVerificationToken,
+          },
         },
-      },
-    })
+      })
+    }
   }
 
   const handleSendCodeAgain = () => {

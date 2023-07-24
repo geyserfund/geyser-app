@@ -53,6 +53,7 @@ type ProjectContextProps = {
   }): void
   onMilestonesModalOpen(): void
   onCreatorModalOpen(): void
+  refetch: any
 }
 
 export const ProjectContext = createContext<ProjectContextProps | null>(null)
@@ -104,6 +105,7 @@ export const ProjectProvider = ({
     saveProject,
     isDirty,
     saving,
+    refetch,
   } = useProjectState(projectId, {
     fetchPolicy: 'network-only',
     onError() {
@@ -194,6 +196,7 @@ export const ProjectProvider = ({
         loading,
         fundForm,
         fundingFlow,
+        refetch,
         onCreatorModalOpen: creatorModal.onOpen,
         onRewardsModalOpen: rewardsModal.onOpen,
         onMilestonesModalOpen: milestonesModal.onOpen,

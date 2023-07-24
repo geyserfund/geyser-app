@@ -622,5 +622,9 @@
   "Please enter a valid Email address": "Please enter a valid Email address",
   "Failed to update email.": "Failed to update email.",
   "Failed to verify email.": "Failed to verify email.",
-  "Your email": "Your email"
+  "Your email": "Your email",
+  "The project wallet can only be changed by the project creator with a verified email, for security reasons. You can verify your email in the Profile page’s Settings.":"The project wallet can only be changed by the project creator with a verified email, for security reasons. You can verify your email in the Profile page’s Settings.",
+  "Wallet updated successfully!":"Wallet updated successfully!",
+  "Failed to update wallet.":"Failed to update wallet."
+
 }
