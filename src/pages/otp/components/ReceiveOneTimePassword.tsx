@@ -1,5 +1,6 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import * as yup from 'yup'
@@ -19,11 +20,13 @@ const schema = yup.object({
 interface ReceiveOneTimePasswordProps {
   handleSendOtpByEmail(email: string): void
   action: MfaAction
+  setInputEmail: Dispatch<SetStateAction<string>>
 }
 
 export const ReceiveOneTimePassword = ({
   handleSendOtpByEmail,
   action,
+  setInputEmail,
 }: ReceiveOneTimePasswordProps) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
@@ -53,6 +56,7 @@ export const ReceiveOneTimePassword = ({
   })
 
   const handleReceiveOneTimePassword = async ({ email }: { email: string }) => {
+    setInputEmail(email)
     if (user.email || action === MfaAction.Login) {
       handleSendOtpByEmail(user.email || email)
     } else {

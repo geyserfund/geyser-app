@@ -7,7 +7,11 @@ import { VerifyYourEmailContent } from './VerifyYourEmailContent'
 
 interface VerifyYourEmailProps extends Omit<CustomModalProps, 'children'> {
   action?: MfaAction
-  handleVerify?: (otpCode: number, optData: OtpResponseFragment) => void
+  handleVerify?: (
+    otpCode: number,
+    optData: OtpResponseFragment,
+    email?: string,
+  ) => void
 }
 
 export const VerifyYourEmail = ({

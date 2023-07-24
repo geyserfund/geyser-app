@@ -14,7 +14,11 @@ import { ReceiveOneTimePassword, VerifyOneTimePassword } from './components'
 
 interface VerifyYourEmailContentProps {
   action: MfaAction
-  handleVerify?: (otpCode: number, optData: OtpResponseFragment) => void
+  handleVerify?: (
+    otpCode: number,
+    optData: OtpResponseFragment,
+    email?: string,
+  ) => void
 }
 
 export const VerifyYourEmailContent = ({
@@ -26,6 +30,7 @@ export const VerifyYourEmailContent = ({
 
   const [sentOtp, setSentOtp] = useState(false)
   const [otpData, setOtpData] = useState<OtpResponseFragment>()
+  const [inputEmail, setInputEmail] = useState('')
 
   const [sendOtpByEmail] = useSendOtpByEmailMutation({
     onError() {
@@ -73,11 +78,13 @@ export const VerifyYourEmailContent = ({
         <VerifyOneTimePassword
           otp={otpData}
           handleSendOtpByEmail={handleSendOtpByEmail}
+          inputEmail={inputEmail}
           handleVerify={handleVerify}
         />
       ) : (
         <ReceiveOneTimePassword
           action={action}
+          setInputEmail={setInputEmail}
           handleSendOtpByEmail={handleSendOtpByEmail}
         />
       )}
