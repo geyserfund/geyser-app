@@ -5,6 +5,7 @@ import {
   Input,
   InputGroup,
   InputRightAddon,
+  Stack,
   Text,
   VStack,
 } from '@chakra-ui/react'
@@ -211,15 +212,19 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           render={({ field }) => {
             const isImage = validateImageUrl(field.value)
             return (
-              <HStack alignItems="start">
+              <Stack
+                alignItems="start"
+                direction={{ base: 'column', lg: 'row' }}
+                w={'full'}
+              >
                 <Input
-                  width="initial"
+                  width={{ base: 'full', lg: 'initial' }}
                   type="text"
                   placeholder="www.youtube.com/2ms0j2n93c"
                   {...field}
                 />
                 <FileUpload
-                  containerProps={{ flexGrow: 1 }}
+                  containerProps={{ flexGrow: 1, w: 'full' }}
                   showcase={isImage}
                   showcaseW="80px"
                   caption={t(
@@ -232,10 +237,11 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
                 >
                   <UploadBox
                     h={10}
+                    flex={1}
                     title={field.value ? t('Change header') : undefined}
                   />
                 </FileUpload>
-              </HStack>
+              </Stack>
             )
           }}
         />
