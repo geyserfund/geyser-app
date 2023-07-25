@@ -96,7 +96,7 @@ export const CommunityVoting = ({
       return (
         <Button
           as={Link}
-          to={getPath('project', project.id)}
+          to={getPath('project', project.name)}
           size={'sm'}
           variant={'primary'}
         >
