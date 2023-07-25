@@ -8,7 +8,6 @@ import {
   hasNostrAccount,
   hasTwitterAccount,
 } from '../../utils'
-import { ConnectWithEmail } from './ConnectWithEmail'
 import { ConnectWithLightning } from './ConnectWithLightning'
 import { ConnectWithNostr } from './ConnectWithNostr'
 import { ConnectWithTwitter } from './ConnectWithTwitter'
@@ -34,7 +33,6 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
         {displayTwitterButton && <ConnectWithTwitter />}
         {displayNostrButton && <ConnectWithNostr />}
         {displayLightningButton && <ConnectWithLightning />}
-        <ConnectWithEmail />
       </VStack>
     </>
   )
