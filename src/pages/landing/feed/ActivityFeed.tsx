@@ -135,8 +135,8 @@ export const ActivityFeed = () => {
 
 export const ContributionsSkeleton = () => {
   return (
-    <VStack flexDirection={'column'} spacing={6} width="full" paddingX="20px">
-      <VStack alignItems={'center'} width="full" spacing={'12px'}>
+    <VStack flexDirection={'column'} spacing={6} width="full" paddingX="0px">
+      <VStack alignItems={'center'} width="full" spacing={'12px'} px={0}>
         {[1, 2, 3, 4, 5, 6].map((value) => {
           return (
             <VStack key={value} width="full">
