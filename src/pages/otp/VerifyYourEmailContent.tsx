@@ -71,7 +71,7 @@ export const VerifyYourEmailContent = ({
       />
       <Body1 semiBold>
         {t(
-          'Backup your Geyser account and project with your email. This will ensure that you can always access Geyser, as well as securely update your project information.',
+          'Backup your Geyser account and project with your email. This will ensure that you can always access Geyser (in case of social media censorship) and can securely update your project information.',
         )}
       </Body1>
       {sentOtp && otpData ? (
