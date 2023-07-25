@@ -1,6 +1,7 @@
-import { Image } from '@chakra-ui/react'
+import { Button, Image } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { BsArrowLeft } from 'react-icons/bs'
 
 import { Body1 } from '../../components/typography'
 import { VerifyEmailImageUrl } from '../../constants'
@@ -60,8 +61,31 @@ export const VerifyYourEmailContent = ({
     })
   }
 
+  const getDescription = () => {
+    if (action === MfaAction.ProjectWalletUpdate) {
+      return t(
+        'You can update your wallet securely by using the One Time Password sent to your verified email.',
+      )
+    }
+
+    return t(
+      'Backup your Geyser account and project with your email. This will ensure that you can always access Geyser (in case of social media censorship) and can securely update your project information.',
+    )
+  }
+
   return (
     <>
+      {sentOtp && (
+        <Button
+          variant="secondary"
+          size={{ base: 'sm', lg: 'md' }}
+          leftIcon={<BsArrowLeft fontSize="20px" />}
+          onClick={() => setSentOtp(false)}
+          alignSelf="start"
+        >
+          {'Back'}
+        </Button>
+      )}
       <Image
         src={VerifyEmailImageUrl}
         alt="verify-email-image"
@@ -69,13 +93,11 @@ export const VerifyYourEmailContent = ({
         h={200}
         alignSelf="center"
       />
-      <Body1 semiBold>
-        {t(
-          'Backup your Geyser account and project with your email. This will ensure that you can always access Geyser (in case of social media censorship) and can securely update your project information.',
-        )}
-      </Body1>
+
+      <Body1 semiBold>{getDescription()}</Body1>
       {sentOtp && otpData ? (
         <VerifyOneTimePassword
+          action={action}
           otp={otpData}
           handleSendOtpByEmail={handleSendOtpByEmail}
           inputEmail={inputEmail}

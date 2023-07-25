@@ -88,7 +88,7 @@ export const ReceiveOneTimePassword = ({
           required
           control={form.control}
           name="email"
-          label={canEditEmail ? t('Email input') : t('Your email33')}
+          label={canEditEmail ? t('Email input') : t('Your email')}
           isDisabled={!canEditEmail}
         />
         <Button w="full" variant="primary" type="submit">

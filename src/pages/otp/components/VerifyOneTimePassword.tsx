@@ -5,12 +5,17 @@ import { useTranslation } from 'react-i18next'
 import { Body1 } from '../../../components/typography'
 import { TextInputBox } from '../../../components/ui'
 import { useAuthContext } from '../../../context'
-import { OtpResponseFragment, useUserEmailVerifyMutation } from '../../../types'
+import {
+  MfaAction,
+  OtpResponseFragment,
+  useUserEmailVerifyMutation,
+} from '../../../types'
 import { toInt, useNotification } from '../../../utils'
 
 const DEFAULT_WAIT_SECONDS_FOR_RESEND = 60
 
 interface VerifyOneTimePasswordProps {
+  action: MfaAction
   otp: OtpResponseFragment
   handleSendOtpByEmail(email: string): void
   handleVerify?: (
@@ -22,6 +27,7 @@ interface VerifyOneTimePasswordProps {
 }
 
 export const VerifyOneTimePassword = ({
+  action,
   otp,
   handleSendOtpByEmail,
   handleVerify,
@@ -93,6 +99,14 @@ export const VerifyOneTimePassword = ({
     }
   }
 
+  const getButtonText = () => {
+    if (action === MfaAction.ProjectWalletUpdate) {
+      return t('Save')
+    }
+
+    return t('Confirm')
+  }
+
   return (
     <>
       <VStack spacing="10px">
@@ -125,8 +139,9 @@ export const VerifyOneTimePassword = ({
             variant="primary"
             onClick={handleConfirm}
             isLoading={loading}
+            isDisabled={!otpCode || otpCode.length !== 6}
           >
-            {t('Confirm')}
+            {getButtonText()}
           </Button>
         </VStack>
       </VStack>
