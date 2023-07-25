@@ -31,10 +31,16 @@ export const ReceiveOneTimePassword = ({
   const { t } = useTranslation()
   const { toast } = useNotification()
   const { user, setUser, isUserAProjectCreator } = useAuthContext()
-  const canEditEmail = !user.email || !isUserAProjectCreator
+  const canEditEmail =
+    !user.email || !isUserAProjectCreator || !user.isEmailVerified
 
   const form = useForm<{ email: string }>({
     resolver: canEditEmail ? yupResolver(schema) : undefined,
+    values: user.email
+      ? {
+          email: user.email,
+        }
+      : undefined,
   })
 
   const [updateUserEmail] = useUserEmailUpdateMutation({
@@ -46,7 +52,6 @@ export const ReceiveOneTimePassword = ({
       })
     },
     onCompleted(data) {
-      console.log('data', data)
       const emailUpdateUser = data.userEmailUpdate
       if (emailUpdateUser && emailUpdateUser.email) {
         setUser((current) => ({ ...current, ...emailUpdateUser }))
@@ -83,9 +88,8 @@ export const ReceiveOneTimePassword = ({
           required
           control={form.control}
           name="email"
-          label={canEditEmail ? t('Email input') : t('Your email')}
+          label={canEditEmail ? t('Email input') : t('Your email33')}
           isDisabled={!canEditEmail}
-          defaultValue={user.email || undefined}
         />
         <Button w="full" variant="primary" type="submit">
           {t('Receive One Time Password')}

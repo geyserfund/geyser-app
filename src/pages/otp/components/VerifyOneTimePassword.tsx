@@ -96,7 +96,7 @@ export const VerifyOneTimePassword = ({
   return (
     <>
       <VStack spacing="10px">
-        <VStack spacing="10px">
+        <VStack spacing="10px" w="full">
           <Body1 semiBold>{t('OTP input')}</Body1>
           <TextInputBox
             size="lg"
