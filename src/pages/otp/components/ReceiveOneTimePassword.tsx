@@ -30,11 +30,11 @@ export const ReceiveOneTimePassword = ({
 }: ReceiveOneTimePasswordProps) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
-  const { user, setUser } = useAuthContext()
-  const hasEmail = Boolean(user.email)
+  const { user, setUser, isUserAProjectCreator } = useAuthContext()
+  const canEditEmail = !user.email || !isUserAProjectCreator
 
   const form = useForm<{ email: string }>({
-    resolver: !hasEmail ? yupResolver(schema) : undefined,
+    resolver: canEditEmail ? yupResolver(schema) : undefined,
   })
 
   const [updateUserEmail] = useUserEmailUpdateMutation({
@@ -57,7 +57,7 @@ export const ReceiveOneTimePassword = ({
 
   const handleReceiveOneTimePassword = async ({ email }: { email: string }) => {
     setInputEmail(email)
-    if (user.email || action === MfaAction.Login) {
+    if (!canEditEmail || action === MfaAction.Login) {
       handleSendOtpByEmail(user.email || email)
     } else {
       updateUserEmail({
@@ -83,8 +83,8 @@ export const ReceiveOneTimePassword = ({
           required
           control={form.control}
           name="email"
-          label={hasEmail ? t('Your email') : t('Input your email')}
-          isDisabled={hasEmail}
+          label={canEditEmail ? t('Email input') : t('Your email')}
+          isDisabled={!canEditEmail}
           defaultValue={user.email || undefined}
         />
         <Button w="full" variant="primary" type="submit">

@@ -212,7 +212,7 @@ export const LockedConnectAccountUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/connect-account-locked.png'
 
 export const VerifyEmailImageUrl =
-  'https://storage.googleapis.com/geyser-projects-media/utils/verify-email.png'
+  'https://storage.googleapis.com/geyser-projects-media/utils/enter-otp.svg'
 
 // GRANTS
 

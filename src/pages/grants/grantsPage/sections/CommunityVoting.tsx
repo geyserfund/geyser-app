@@ -96,7 +96,7 @@ export const CommunityVoting = ({
       return (
         <Button
           as={Link}
-          to={getPath('project', project.id)}
+          to={getPath('project', project.name)}
           size={'sm'}
           variant={'primary'}
         >
@@ -193,14 +193,7 @@ export const CommunityVoting = ({
                   )}
               </Box>
             )}
-            {isMobile && (
-              <HStack px={'10px'} alignItems={'center'}>
-                <Box pt={2}>{renderWidgetItem(funding)}</Box>
-                <Box ml={8} flexGrow={1}>
-                  {renderButton(project)}
-                </Box>
-              </HStack>
-            )}
+            {isMobile && renderButton(project)}
           </CardLayout>
         )
       })}
