@@ -18,7 +18,6 @@ import { getShortAmountLabel, useMobileMode } from '../../../../utils'
 import { useProjectFundingModal } from '../../../projectFunding/hooks/useProjectFundingModal'
 import { ProjectFundingModal } from '../../../projectFunding/ProjectFundingModal'
 import { AvatarElement } from '../../../projectView/projectMainBody/components'
-import { SectionCard } from '../../components/SectionCard'
 import { WidgetItem } from '../../components/WidgetItem'
 
 interface Props {
@@ -97,7 +96,7 @@ export const CommunityVoting = ({
       return (
         <Button
           as={Link}
-          to={getPath('project', project.id)}
+          to={getPath('project', project.name)}
           size={'sm'}
           variant={'primary'}
         >
@@ -108,12 +107,17 @@ export const CommunityVoting = ({
   }
 
   return (
-    <CardLayout p="20px" spacing="20px" w="full">
+    <CardLayout
+      noMobileBorder
+      p={{ base: '10px', lg: '20px' }}
+      spacing={{ base: '10px', lg: '20px' }}
+      w="full"
+    >
       <H3 fontSize="18px">{t(title)}</H3>
       {applicants.map(({ project, funding }) => {
         const projectLink = getPath('project', project.name)
         return (
-          <SectionCard my={3} p={2} key={project.id}>
+          <CardLayout p={2} key={project.id}>
             <Box display="flex">
               {project.thumbnailImage && (
                 <Box mr={3} height={'101px'}>
@@ -189,17 +193,8 @@ export const CommunityVoting = ({
                   )}
               </Box>
             )}
-            {isMobile && (
-              <Box display="flex" pl={6}>
-                <Box pt={2}>{renderWidgetItem(funding)}</Box>
-                {canVote && (
-                  <Box ml={8} flexGrow={1}>
-                    {renderButton(project)}
-                  </Box>
-                )}
-              </Box>
-            )}
-          </SectionCard>
+            {isMobile && renderButton(project)}
+          </CardLayout>
         )
       })}
       <ProjectFundingModal {...modalProps} />

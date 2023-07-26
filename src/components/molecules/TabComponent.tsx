@@ -10,6 +10,7 @@ import {
 import { useTranslation } from 'react-i18next'
 
 import { dimensions, ID } from '../../constants'
+import { MobileDivider } from '../../pages/grants/components'
 import { useMobileMode } from '../../utils'
 import { StickToTop } from '../layouts'
 
@@ -38,13 +39,14 @@ export const TabComponent = ({ tabs }: TabComponentProps) => {
     >
       <StickToTop
         id={ID.profile.tabList}
+        wrapperId={ID.profile.tabs}
         width="100%"
         offset={dimensions.topNavBar.desktop.height}
-        backgroundColor="neutral.50"
+        backgroundColor={isMobile ? 'neutral.0' : 'neutral.50'}
         disable={!isMobile}
-        _onStick={{ width: `calc(100% - 20px)` }}
       >
-        <TabList w="100%" paddingY="10px">
+        <MobileDivider mb={2} />
+        <TabList w="100%" paddingY="10px" px={'10px'}>
           {tabs.map(({ title, sub }) => {
             return (
               <Tab key={title} {...tabButtonStyles}>
@@ -64,6 +66,7 @@ export const TabComponent = ({ tabs }: TabComponentProps) => {
             )
           })}
         </TabList>
+        <MobileDivider mt={2} />
       </StickToTop>
 
       <TabPanels

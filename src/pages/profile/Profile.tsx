@@ -16,6 +16,7 @@ import { defaultUser } from '../../defaults'
 import { QUERY_USER_PROFILE } from '../../graphql'
 import { User, UserGetInput } from '../../types'
 import { toInt } from '../../utils'
+import { MobileDivider } from '../grants/components'
 import { AccountInfo, Badges } from './views'
 import { ProfileTabs } from './views/profileTabs'
 
@@ -97,9 +98,9 @@ export const Profile = () => {
       position="relative"
       width="100%"
       height="100%"
-      backgroundColor={'neutral.50'}
+      backgroundColor={{ base: 'neutral.0', lg: 'neutral.50' }}
       paddingY={{ base: '20px', lg: '40px' }}
-      paddingX={{ base: '10px', lg: '40px' }}
+      paddingX={{ base: '0px', lg: '40px' }}
     >
       <SimpleGrid
         columns={{ base: 1, lg: 7 }}
@@ -116,6 +117,7 @@ export const Profile = () => {
             isEdit={isViewingOwnProfile}
             isLoading={profileLoading}
           />
+          <MobileDivider mt={4} />
         </GridItem>
         <GridItem
           h="100%"

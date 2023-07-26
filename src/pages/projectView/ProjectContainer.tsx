@@ -50,7 +50,12 @@ export const ProjectContainer = () => {
 
   if (loading) {
     return (
-      <Box width="100%" display="flex" justifyContent="center">
+      <Box
+        width="100%"
+        display="flex"
+        justifyContent="center"
+        background={'transparent'}
+      >
         <Loader paddingTop="65px" />
       </Box>
     )

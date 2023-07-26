@@ -45,7 +45,7 @@ export const projectSections: Record<string, DashboardSection> = {
     path: 'dashboardStory',
   },
   wallet: {
-    label: 'Wallet',
+    label: 'Connect wallet',
     path: 'dashboardWallet',
   },
   settings: {

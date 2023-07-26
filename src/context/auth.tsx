@@ -16,7 +16,7 @@ import {
   useMeLazyQuery,
   useMeProjectFollowsLazyQuery,
   UserMeFragment,
-} from '../types/generated/graphql'
+} from '../types'
 
 const defaultContext: AuthContextProps = {
   isLoggedIn: false,
@@ -190,4 +190,4 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
-export const useAuthContext = () => useContext(AuthContext)
+export const useAuthContext = (): AuthContextProps => useContext(AuthContext)

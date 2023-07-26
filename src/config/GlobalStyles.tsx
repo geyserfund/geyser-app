@@ -42,14 +42,26 @@ export const GlobalStyles = () => (
         body {
             overflow: overlay;
         }
-
+        
         .chakra-ui-dark {
-          background: ${darkModeColors.neutral[50]}
+            background: ${darkModeColors.neutral[0]}
+          }
+  
+          .chakra-ui-light {
+            background: ${lightModeColors.neutral[0]}
+          }
+        
+        @media (min-width: 57em) {
+          .chakra-ui-dark {
+            background: ${darkModeColors.neutral[50]}
+          }
+  
+          .chakra-ui-light {
+            background: ${lightModeColors.neutral[50]}
+          }
         }
 
-        .chakra-ui-light {
-          background: ${lightModeColors.neutral[50]}
-        }
+        
 
         #project-scroll-container::-webkit-scrollbar {
             display: none

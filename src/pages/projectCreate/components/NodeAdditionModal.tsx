@@ -11,7 +11,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsExclamation, BsQuestion } from 'react-icons/bs'
 
@@ -57,6 +57,17 @@ export const NodeAdditionModal = ({
   const [isVoltage, setIsVoltage] = useState(false)
   const [form, setForm] = useState<TNodeInput>(nodeInput || defaultNode)
   const [formError, setFormError] = useState<any>({})
+
+  useEffect(() => {
+    if (nodeInput) {
+      setForm(nodeInput)
+      if (nodeInput.isVoltage) {
+        setIsVoltage(true)
+      }
+    } else {
+      setForm(defaultNode)
+    }
+  }, [nodeInput])
 
   const handleTextChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -201,7 +212,9 @@ export const NodeAdditionModal = ({
             <DescriptionLinkWithIconComponent
               title={
                 <>
-                  {t('Keep in mind that you are responsible for managing the liquidity of your node.')}{' '}
+                  {t(
+                    'Keep in mind that you are responsible for managing the liquidity of your node.',
+                  )}{' '}
                   <Link href={WalletCreationFindOutMoreUrl} target="_blank">
                     {t('Find out more')}
                   </Link>

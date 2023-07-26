@@ -39,7 +39,7 @@ export const loginWithNostr = () => {
               projects: [],
               projectFollows: [],
               badges: [],
-              isEmailVerified: false,
+              isEmailVerified: true,
             },
           },
         },

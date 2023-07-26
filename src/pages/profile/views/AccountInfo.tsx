@@ -1,4 +1,4 @@
-import { Avatar, Button, SkeletonCircle, VStack } from '@chakra-ui/react'
+import { Avatar, Box, Button, SkeletonCircle, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { CardLayout, SkeletonLayout } from '../../../components/layouts'
@@ -49,7 +49,8 @@ export const AccountInfo = ({
   return (
     <>
       <CardLayout
-        padding="20px"
+        noMobileBorder
+        padding={{ base: '10px', lg: '20px' }}
         direction="column"
         alignItems="start"
         spacing="20px"
@@ -104,14 +105,17 @@ export const AccountInfo = ({
       </CardLayout>
       {isEdit && userProfile && (
         <>
-          <Button
-            onClick={() => modalProps.onOpen({ user: userProfile })}
-            width="100%"
-            variant="secondary"
-            marginTop="20px"
-          >
-            {t('Edit')}
-          </Button>
+          <Box w={'full'} px="10px">
+            <Button
+              onClick={() => modalProps.onOpen({ user: userProfile })}
+              width="100%"
+              variant="secondary"
+              marginTop="20px"
+            >
+              {t('Edit')}
+            </Button>
+          </Box>
+
           {modalProps.isOpen && <EditProfileModal {...modalProps} />}
         </>
       )}

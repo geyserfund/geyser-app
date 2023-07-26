@@ -128,6 +128,7 @@ export const ConnectWithTwitter = ({
         }}
         onClick={handleClick}
         isDisabled={!canLogin}
+        pointerEvents={!canLogin ? 'none' : undefined}
         textDecoration={'none'}
         {...rest}
       >

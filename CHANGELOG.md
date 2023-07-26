@@ -1,3 +1,34 @@
+## [0.4.0](https://github.com/geyserfund/geyser-app/compare/v0.3.1...v0.4.0) (2023-07-25)
+
+
+### Features
+
+* add OTP after login and before project creation ([8854cea](https://github.com/geyserfund/geyser-app/commit/8854ceabb676708f422cdebe267c04d74c8c0bab))
+* login with email ([2b540c9](https://github.com/geyserfund/geyser-app/commit/2b540c9269d6ca4a216e910b9997ba287a149e7e))
+* login with email with OTP ([f9251ca](https://github.com/geyserfund/geyser-app/commit/f9251ca84a5b1b20ad2be034543479a31121b402))
+* use OTP to update wallet ([80d5f6c](https://github.com/geyserfund/geyser-app/commit/80d5f6cea05dc7f942954d15dd2304611f88b994))
+
+
+### Bug Fixes
+
+* add dividers to landing page default view ([d0415ba](https://github.com/geyserfund/geyser-app/commit/d0415baa0e6351a20af7a1304d3397d4074fb09c))
+* allow users to edit email if unverified ([115a1cd](https://github.com/geyserfund/geyser-app/commit/115a1cd2e60ebfb43840dcd0baad0418d960ca35))
+* chore cleanup ([01e92d9](https://github.com/geyserfund/geyser-app/commit/01e92d919175dedef44c576c674591febdc0e2fb))
+* layout so that the top sticks ([2373216](https://github.com/geyserfund/geyser-app/commit/2373216cf6e76dd53dfc38dc937849b3e7050d7a))
+* make fixes to OTP popup, resolves GEY-2991 ([41e503f](https://github.com/geyserfund/geyser-app/commit/41e503ff35e85edbdf18b8ab63aa34a5c299aa7e))
+* make sure the button is not clickable when authToken get failed ([92715bd](https://github.com/geyserfund/geyser-app/commit/92715bd4bafe13f7108f4876565c471e6ca898d4))
+* minor update in grant page project lists ([9bff44f](https://github.com/geyserfund/geyser-app/commit/9bff44f0c3a018a8f5a806a4bea4bdabb8a02c95))
+* remove Email button from connectedAccounts in profile, resolves GEY-2676 ([cf76cd0](https://github.com/geyserfund/geyser-app/commit/cf76cd05c6cf8f76eabf6ab7e15eaaaed73ce573))
+* remove login with email for now ([02eb57f](https://github.com/geyserfund/geyser-app/commit/02eb57f664ffcb19ff8cf9f3a259ed6affe7a59b))
+* remove worth of votes in mobile, resolves GEY-3016 ([d8af2ff](https://github.com/geyserfund/geyser-app/commit/d8af2ffca1f2805a3e9b27cac75c24266f346416))
+* skelton width, resolves GEY-2878 ([5c21fe5](https://github.com/geyserfund/geyser-app/commit/5c21fe5aff3864ad3e2c95cabc0b12cf1fc3cdb6))
+* update contribution view to not have lines in between ([60c1edc](https://github.com/geyserfund/geyser-app/commit/60c1edc79f5e92f9f2f40132948f03bf918d2811))
+* update grants page and project view ([a8ea147](https://github.com/geyserfund/geyser-app/commit/a8ea147f84665ea87c0427a75bc090334c70ec22))
+* update image to be more crispy ([ed33ed9](https://github.com/geyserfund/geyser-app/commit/ed33ed9b43d759d34432613150478f61b95af8cb))
+* update landing project pages ([cde8ea1](https://github.com/geyserfund/geyser-app/commit/cde8ea1f6ebc51a160bb8318069f8b6f4bcbb0cf))
+* update layout for profile pages ([d90c933](https://github.com/geyserfund/geyser-app/commit/d90c933e2639960b76d012b3f25a6a9a56344279))
+* view project button, resolves GEY-3015 ([71bf04f](https://github.com/geyserfund/geyser-app/commit/71bf04f8b08305ec18b425b82bf7537ae4fea7b9))
+
 ## [0.3.1](https://github.com/geyserfund/geyser-app/compare/v0.3.0...v0.3.1) (2023-07-20)
 
 
