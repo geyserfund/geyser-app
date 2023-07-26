@@ -490,9 +490,16 @@ export const ProjectCreationWalletConnectionForm = ({
       case LNAddressEvaluationState.LOADING:
         return <Loader size="md"></Loader>
       case LNAddressEvaluationState.FAILED:
-        return <BsFillXCircleFill fill={'secondary.red'} size="24px" />
+        return (
+          <BsFillXCircleFill fill={lightModeColors.secondary.red} size="24px" />
+        )
       case LNAddressEvaluationState.SUCCEEDED:
-        return <BsFillCheckCircleFill fill={'primary.500'} size="24px" />
+        return (
+          <BsFillCheckCircleFill
+            fill={lightModeColors.primary[500]}
+            size="24px"
+          />
+        )
       default:
         return null
     }
