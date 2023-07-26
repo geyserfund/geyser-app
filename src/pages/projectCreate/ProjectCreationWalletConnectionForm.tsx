@@ -382,6 +382,47 @@ export const ProjectCreationWalletConnectionForm = ({
     })
   }
 
+  const isFormDirty = () => {
+    if (isEdit && projectWallet) {
+      if (connectionOption === ConnectionOption.LIGHTNING_ADDRESS) {
+        if (
+          projectWallet.connectionDetails.__typename ===
+          WalletConnectDetails.LightningAddressConnectionDetails
+        ) {
+          return (
+            projectWallet?.connectionDetails?.lightningAddress ===
+            lightningAddressFormValue
+          )
+        }
+
+        return true
+      }
+
+      if (
+        projectWallet.connectionDetails.__typename ===
+        WalletConnectDetails.LndConnectionDetailsPrivate
+      ) {
+        if (
+          `${projectWallet.connectionDetails.grpcPort}` !== nodeInput?.grpc ||
+          projectWallet.connectionDetails.hostname !== nodeInput?.hostname ||
+          (projectWallet.connectionDetails.lndNodeType !==
+            LndNodeType.Voltage) !==
+            nodeInput?.isVoltage ||
+          projectWallet.connectionDetails.macaroon !==
+            nodeInput?.invoiceMacaroon ||
+          projectWallet.connectionDetails.pubkey !== nodeInput?.publicKey ||
+          projectWallet.connectionDetails.tlsCertificate !== nodeInput?.tlsCert
+        ) {
+          return false
+        }
+
+        return true
+      }
+
+      return false
+    }
+  }
+
   const validateLightningAddressFormat = async (lightningAddress: string) => {
     if (!lightningAddress) {
       return setLightningAddressFormError(null)
@@ -449,9 +490,16 @@ export const ProjectCreationWalletConnectionForm = ({
       case LNAddressEvaluationState.LOADING:
         return <Loader size="md"></Loader>
       case LNAddressEvaluationState.FAILED:
-        return <BsFillXCircleFill fill={'secondary.red'} size="24px" />
+        return (
+          <BsFillXCircleFill fill={lightModeColors.secondary.red} size="24px" />
+        )
       case LNAddressEvaluationState.SUCCEEDED:
-        return <BsFillCheckCircleFill fill={'primary.500'} size="24px" />
+        return (
+          <BsFillCheckCircleFill
+            fill={lightModeColors.primary[500]}
+            size="24px"
+          />
+        )
       default:
         return null
     }
@@ -617,7 +665,9 @@ export const ProjectCreationWalletConnectionForm = ({
       <FormContinueButton
         width="100%"
         onClick={handleNext}
+        isEdit={isEdit}
         isLoading={updateWalletLoading}
+        isDisabled={isFormDirty()}
       />
 
       <NodeAdditionModal
