@@ -382,6 +382,47 @@ export const ProjectCreationWalletConnectionForm = ({
     })
   }
 
+  const isFormDirty = () => {
+    if (isEdit && projectWallet) {
+      if (connectionOption === ConnectionOption.LIGHTNING_ADDRESS) {
+        if (
+          projectWallet.connectionDetails.__typename ===
+          WalletConnectDetails.LightningAddressConnectionDetails
+        ) {
+          return (
+            projectWallet?.connectionDetails?.lightningAddress ===
+            lightningAddressFormValue
+          )
+        }
+
+        return true
+      }
+
+      if (
+        projectWallet.connectionDetails.__typename ===
+        WalletConnectDetails.LndConnectionDetailsPrivate
+      ) {
+        if (
+          `${projectWallet.connectionDetails.grpcPort}` !== nodeInput?.grpc ||
+          projectWallet.connectionDetails.hostname !== nodeInput?.hostname ||
+          (projectWallet.connectionDetails.lndNodeType !==
+            LndNodeType.Voltage) !==
+            nodeInput?.isVoltage ||
+          projectWallet.connectionDetails.macaroon !==
+            nodeInput?.invoiceMacaroon ||
+          projectWallet.connectionDetails.pubkey !== nodeInput?.publicKey ||
+          projectWallet.connectionDetails.tlsCertificate !== nodeInput?.tlsCert
+        ) {
+          return false
+        }
+
+        return true
+      }
+
+      return false
+    }
+  }
+
   const validateLightningAddressFormat = async (lightningAddress: string) => {
     if (!lightningAddress) {
       return setLightningAddressFormError(null)
@@ -617,7 +658,9 @@ export const ProjectCreationWalletConnectionForm = ({
       <FormContinueButton
         width="100%"
         onClick={handleNext}
+        isEdit={isEdit}
         isLoading={updateWalletLoading}
+        isDisabled={isFormDirty()}
       />
 
       <NodeAdditionModal
