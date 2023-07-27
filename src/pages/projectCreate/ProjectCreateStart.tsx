@@ -1,13 +1,5 @@
-import {
-  Box,
-  Button,
-  Image,
-  ImageProps,
-  Text,
-  useDisclosure,
-  VStack,
-} from '@chakra-ui/react'
-import { PropsWithChildren, useEffect, useState } from 'react'
+import { Box, Button, Image, ImageProps, Text, VStack } from '@chakra-ui/react'
+import { PropsWithChildren, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -22,21 +14,17 @@ import {
   LaunchProjectWorldUrl,
 } from '../../constants'
 import { useAuthContext } from '../../context'
-import { MfaAction } from '../../types'
 import { hasNostrAccount, hasTwitterAccount, useMobileMode } from '../../utils'
 import { ConnectWithNostr } from '../auth/ConnectWithNostr'
 import { ConnectWithTwitter } from '../auth/ConnectWithTwitter'
-import { VerifyYourEmail } from '../otp'
 import { FormContinueButton } from './components/FormContinueButton'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 
 export const ProjectCreateStart = () => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
-  const { loading, user, isLoggedIn } = useAuthContext()
+  const { loading, user } = useAuthContext()
   const navigate = useNavigate()
-
-  const { isOpen, onClose, onOpen } = useDisclosure()
 
   const params = useParams<{ projectId: string }>()
 
@@ -48,16 +36,6 @@ export const ProjectCreateStart = () => {
         ? `${getPath('privateProjectLaunch')}/${params.projectId}`
         : getPath('privateProjectLaunch'),
     )
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      if (!user.email || !user.isEmailVerified) {
-        onOpen()
-      } else {
-        onClose()
-      }
-    }
-  }, [user, isLoggedIn, onOpen, onClose])
 
   return (
     <ProjectCreateLayout
@@ -148,12 +126,6 @@ export const ProjectCreateStart = () => {
           </Box>
         )}
       </VStack>
-      <VerifyYourEmail
-        isOpen={isOpen}
-        onClose={() => {}}
-        noClose={true}
-        action={MfaAction.UserEmailVerification}
-      />
     </ProjectCreateLayout>
   )
 }

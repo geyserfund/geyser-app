@@ -22,9 +22,8 @@ export const ReceiveOneTimePassword = ({
 }: ReceiveOneTimePasswordProps) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
-  const { user, setUser, isUserAProjectCreator } = useAuthContext()
-  const canEditEmail =
-    (!user.email || !isUserAProjectCreator) && !user.isEmailVerified
+  const { user, setUser } = useAuthContext()
+  const canEditEmail = !user.email || !user.isEmailVerified
 
   const form = useForm<{ email: string }>({
     resolver: canEditEmail ? yupResolver(emailValidationSchema) : undefined,

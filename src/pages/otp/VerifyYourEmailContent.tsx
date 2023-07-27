@@ -72,6 +72,12 @@ export const VerifyYourEmailContent = ({
       )
     }
 
+    if (action === MfaAction.UserEmailUpdate) {
+      return t(
+        'You can update your email securely by using One Time Password sent to your last verfied email.',
+      )
+    }
+
     return t(
       'Backup your Geyser account and project with your email. This will ensure that you can always access Geyser (in case of social media censorship) and can securely update your project information.',
     )

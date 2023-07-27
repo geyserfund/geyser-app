@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   InputGroup,
-  InputRightAddon,
   InputRightElement,
   Modal,
   ModalBody,
@@ -23,7 +22,6 @@ import { useTranslation } from 'react-i18next'
 import { Body1, Body2 } from '../../../components/typography'
 import { useAuthContext } from '../../../context'
 import { TextField } from '../../../forms/components/TextField'
-import { lightModeColors } from '../../../styles'
 import {
   MfaAction,
   OtpResponseFragment,
