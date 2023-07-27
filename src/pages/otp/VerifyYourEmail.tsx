@@ -3,20 +3,20 @@ import { useTranslation } from 'react-i18next'
 
 import { CustomModalProps, Modal } from '../../components/layouts'
 import { MfaAction, OtpResponseFragment } from '../../types'
-import { VerifyYourEmailContent } from './VerifyYourEmailContent'
+import {
+  VerifyYourEmailContent,
+  VerifyYourEmailContentProps,
+} from './VerifyYourEmailContent'
 
-interface VerifyYourEmailProps extends Omit<CustomModalProps, 'children'> {
-  action?: MfaAction
-  handleVerify?: (
-    otpCode: number,
-    optData: OtpResponseFragment,
-    email?: string,
-  ) => void
-}
+interface VerifyYourEmailProps
+  extends VerifyYourEmailContentProps,
+    Omit<CustomModalProps, 'children'> {}
 
 export const VerifyYourEmail = ({
   action,
   handleVerify,
+  otpSent,
+  otpData,
   ...rest
 }: VerifyYourEmailProps) => {
   const { t } = useTranslation()
@@ -40,6 +40,8 @@ export const VerifyYourEmail = ({
           <VerifyYourEmailContent
             action={getAction()}
             handleVerify={handleVerify}
+            otpSent={otpSent}
+            otpData={otpData}
           />
         </Stack>
       </Modal>

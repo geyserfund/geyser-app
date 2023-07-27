@@ -29,10 +29,12 @@ export const TextField = ({
         <FormControl>
           <FieldContainer
             title={
-              <>
-                {label || name}
-                {required ? '*' : ''}
-              </>
+              label && (
+                <>
+                  {label}
+                  {required ? '*' : ''}
+                </>
+              )
             }
             subtitle={caption}
             error={

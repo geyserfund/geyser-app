@@ -1,4 +1,6 @@
 export * from './CreateAProjectButton'
+export * from './EditProfileModal'
 export * from './ExternalAccountDisplay'
 export * from './ExternalAccountLinkItem'
+export * from './ProfileSettingsModal'
 export * from './ProfileTabLayout'

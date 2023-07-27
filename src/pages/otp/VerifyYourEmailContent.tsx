@@ -13,11 +13,13 @@ import {
 import { useNotification } from '../../utils'
 import { ReceiveOneTimePassword, VerifyOneTimePassword } from './components'
 
-interface VerifyYourEmailContentProps {
+export interface VerifyYourEmailContentProps {
   action: MfaAction
+  otpSent?: boolean
+  otpData?: OtpResponseFragment
   handleVerify?: (
     otpCode: number,
-    optData: OtpResponseFragment,
+    otpData: OtpResponseFragment,
     email?: string,
   ) => void
 }
@@ -25,12 +27,14 @@ interface VerifyYourEmailContentProps {
 export const VerifyYourEmailContent = ({
   action,
   handleVerify,
+  otpSent,
+  otpData: otp,
 }: VerifyYourEmailContentProps) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
 
-  const [sentOtp, setSentOtp] = useState(false)
-  const [otpData, setOtpData] = useState<OtpResponseFragment>()
+  const [sentOtp, setSentOtp] = useState(otpSent || false)
+  const [otpData, setOtpData] = useState<OtpResponseFragment | undefined>(otp)
   const [inputEmail, setInputEmail] = useState('')
 
   const [sendOtpByEmail] = useSendOtpByEmailMutation({

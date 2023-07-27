@@ -627,6 +627,12 @@
   "Wallet updated successfully!":"Wallet updated successfully!",
   "Failed to update wallet.":"Failed to update wallet.",
   "Failed to login with email":"Failed to login with email",
-  "You can update your wallet securely by using the One Time Password sent to your verified email.":"You can update your wallet securely by using the One Time Password sent to your verified email."
+  "You can update your wallet securely by using the One Time Password sent to your verified email.":"You can update your wallet securely by using the One Time Password sent to your verified email.",
+  "This email is where you will receive important project notifications":"This email is where you will receive important project notifications",
+  "Verify email":"Verify email",
+  "This email has not been verified":"This email has not been verified",
+  
+
+
 
 }

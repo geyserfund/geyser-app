@@ -3,19 +3,11 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import * as yup from 'yup'
 
 import { useAuthContext } from '../../../context'
 import { TextField } from '../../../forms/components/TextField'
 import { MfaAction, useUserEmailUpdateMutation } from '../../../types'
-import { useNotification } from '../../../utils'
-
-const schema = yup.object({
-  email: yup
-    .string()
-    .required('Email is a required field')
-    .email('Please enter a valid Email address'),
-})
+import { emailValidationSchema, useNotification } from '../../../utils'
 
 interface ReceiveOneTimePasswordProps {
   handleSendOtpByEmail(email: string): void
@@ -32,10 +24,10 @@ export const ReceiveOneTimePassword = ({
   const { toast } = useNotification()
   const { user, setUser, isUserAProjectCreator } = useAuthContext()
   const canEditEmail =
-    !user.email || !isUserAProjectCreator || !user.isEmailVerified
+    (!user.email || !isUserAProjectCreator) && !user.isEmailVerified
 
   const form = useForm<{ email: string }>({
-    resolver: canEditEmail ? yupResolver(schema) : undefined,
+    resolver: canEditEmail ? yupResolver(emailValidationSchema) : undefined,
     values: user.email
       ? {
           email: user.email,
