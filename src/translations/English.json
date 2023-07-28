@@ -641,5 +641,6 @@
   "Your profile has been deleted.":"Your profile has been deleted.",
   "Profile has been deleted":"Profile has been deleted",
   "Type '{{textToConfirm}}' and confirm":"Type '{{textToConfirm}}' and confirm",
-  "Close":"Close"
+  "Close":"Close",
+  "Check your SPAM folder for the email.":"Check your SPAM folder for the email."
 }
