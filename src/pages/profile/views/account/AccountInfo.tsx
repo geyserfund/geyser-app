@@ -1,14 +1,18 @@
-import { Avatar, Box, Button, SkeletonCircle, VStack } from '@chakra-ui/react'
+import { Avatar, Button, SkeletonCircle, Stack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { BsGearFill } from 'react-icons/bs'
+import { MdEdit } from 'react-icons/md'
 
-import { CardLayout, SkeletonLayout } from '../../../components/layouts'
-import { Body1, H1 } from '../../../components/typography'
-import { ConnectAccounts, ExternalAccountType } from '../../auth'
-import { LightningAddress } from '../../projectView/projectMainBody/components'
-import { ExternalAccountDisplay } from '../components'
-import { EditProfileModal } from '../components/EditProfileModal'
-import { useEditProfileModal } from '../hooks/useEditProfileModal'
-import { UserProfileState } from '../type'
+import { CardLayout, SkeletonLayout } from '../../../../components/layouts'
+import { Body1, H1 } from '../../../../components/typography'
+import { useModal } from '../../../../hooks/useModal'
+import { ConnectAccounts, ExternalAccountType } from '../../../auth'
+import { LightningAddress } from '../../../projectView/projectMainBody/components'
+import { ExternalAccountDisplay } from '../../components'
+import { useEditProfileModal } from '../../hooks/useEditProfileModal'
+import { UserProfileState } from '../../type'
+import { EditProfileModal } from './EditProfileModal'
+import { ProfileSettingsModal } from './ProfileSettingsModal'
 
 interface AccountInfoProps extends UserProfileState {
   isEdit: boolean
@@ -23,6 +27,7 @@ export const AccountInfo = ({
 }: AccountInfoProps) => {
   const { t } = useTranslation()
   const modalProps = useEditProfileModal()
+  const settingModalProps = useModal()
 
   if (isLoading) {
     return <AccountInfoSkeleton />
@@ -105,18 +110,31 @@ export const AccountInfo = ({
       </CardLayout>
       {isEdit && userProfile && (
         <>
-          <Box w={'full'} px="10px">
+          <Stack direction={{ base: 'column', lg: 'row' }} w={'full'} px="10px">
             <Button
               onClick={() => modalProps.onOpen({ user: userProfile })}
               width="100%"
               variant="secondary"
               marginTop="20px"
+              leftIcon={<MdEdit />}
             >
               {t('Edit')}
             </Button>
-          </Box>
+            <Button
+              onClick={() => settingModalProps.onOpen()}
+              width="100%"
+              variant="secondary"
+              marginTop="20px"
+              leftIcon={<BsGearFill />}
+            >
+              {t('Settings')}
+            </Button>
+          </Stack>
 
           {modalProps.isOpen && <EditProfileModal {...modalProps} />}
+          {settingModalProps.isOpen && (
+            <ProfileSettingsModal {...settingModalProps} />
+          )}
         </>
       )}
     </>

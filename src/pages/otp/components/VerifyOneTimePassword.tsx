@@ -20,7 +20,7 @@ interface VerifyOneTimePasswordProps {
   handleSendOtpByEmail(email: string): void
   handleVerify?: (
     otpCode: number,
-    optData: OtpResponseFragment,
+    otpData: OtpResponseFragment,
     email?: string,
   ) => void
   inputEmail: string

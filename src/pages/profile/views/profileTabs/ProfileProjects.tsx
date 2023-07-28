@@ -6,7 +6,7 @@ import { QUERY_USER_PROFILE_PROJECTS } from '../../../../graphql'
 import { Project, User, UserGetInput } from '../../../../types'
 import { LandingProjectCard } from '../../../landing/components'
 import { CreateAProjectButton, ProfileTabLayout } from '../../components'
-import { CreateProject } from '../CreateProject'
+import { CreateProject } from './CreateProject'
 
 export const ProfileProjects = ({
   userProfile,
