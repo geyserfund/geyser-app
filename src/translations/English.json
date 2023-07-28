@@ -617,7 +617,7 @@
   "Email input": "Email input",
   "OTP input": "OTP input",
   "Send code again": "Send code again",
-  "Failed to generate otp.": "Failed to generate otp.",
+  "Failed to generate OTP.": "Failed to generate OTP.",
   "Email is a required field": "Email is a required field",
   "Please enter a valid Email address": "Please enter a valid Email address",
   "Failed to update email.": "Failed to update email.",

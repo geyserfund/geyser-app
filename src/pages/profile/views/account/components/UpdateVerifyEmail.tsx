@@ -51,7 +51,7 @@ export const UpdateVerifyEmail = () => {
     onError() {
       toast({
         status: 'error',
-        title: 'Failed to generate otp.',
+        title: 'Failed to generate OTP.',
         description: 'Please try again',
       })
     },
