@@ -1,3 +1,3 @@
-export * from './AccountInfo'
+export * from './account'
 export * from './badges'
-export * from './CreateProject'
+export * from './profileTabs'

@@ -16,18 +16,18 @@ import { FormEventHandler, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 
-import { TextArea, TextInputBox } from '../../../components/ui'
-import Loader from '../../../components/ui/Loader'
-import { MUTATION_UPDATE_USER } from '../../../graphql'
-import { useDebounce } from '../../../hooks'
+import { TextArea, TextInputBox } from '../../../../components/ui'
+import Loader from '../../../../components/ui/Loader'
+import { MUTATION_UPDATE_USER } from '../../../../graphql'
+import { useDebounce } from '../../../../hooks'
 import {
   LNAddressEvaluationState,
   useUserLightningAddress,
-} from '../../../hooks/useUserLightningAddress'
-import { useNotification } from '../../../utils'
-import { getUserLightningAddress } from '../../../utils'
-import { EditProfileModalProps } from '../hooks/useEditProfileModal'
-import { EditableAvatar } from './EditableAvatar'
+} from '../../../../hooks/useUserLightningAddress'
+import { useNotification } from '../../../../utils'
+import { getUserLightningAddress } from '../../../../utils'
+import { EditableAvatar } from '../../components'
+import { EditProfileModalProps } from '../../hooks/useEditProfileModal'
 
 export const EditProfileModal = ({
   isOpen,
