@@ -35,7 +35,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     return <ProjectsDisplaySkeleton />
   }
 
-  if (projects.length === 0) {
+  if (projects.length <= 3) {
     return null
   }
 
