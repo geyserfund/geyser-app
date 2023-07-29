@@ -69,7 +69,7 @@ export const DeleteUserProfile = () => {
         <Tooltip
           label={
             isUserAProjectCreator
-              ? t('cannot delete profile for project owners')
+              ? t('project creators cannot delete their profile')
               : ''
           }
         >

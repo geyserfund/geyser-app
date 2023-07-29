@@ -642,5 +642,6 @@
   "Profile has been deleted":"Profile has been deleted",
   "Type '{{textToConfirm}}' and confirm":"Type '{{textToConfirm}}' and confirm",
   "Close":"Close",
-  "Check your SPAM folder for the email.":"Check your SPAM folder for the email."
+  "Check your SPAM folder for the email.":"Check your SPAM folder for the email.",
+  "project creators cannot delete their profile":"project creators cannot delete their profile"
 }
