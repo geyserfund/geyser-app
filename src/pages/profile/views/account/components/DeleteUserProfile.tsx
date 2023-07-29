@@ -1,5 +1,5 @@
 import { ApolloError } from '@apollo/client'
-import { Button, VStack } from '@chakra-ui/react'
+import { Button, Tooltip, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -66,15 +66,23 @@ export const DeleteUserProfile = () => {
             'You can delete your profile permanently from Geyser. This will allow you to retain your anonymity and connect this account with another profile',
           )}
         </Body2>
-        <Button
-          variant="secondary"
-          color="secondary.red"
-          w="full"
-          onClick={deleteProfile.onOpen}
-          isDisabled={isUserAProjectCreator}
+        <Tooltip
+          label={
+            isUserAProjectCreator
+              ? t('cannot delete profile for project owners')
+              : ''
+          }
         >
-          {t('Delete')}
-        </Button>
+          <Button
+            variant="secondary"
+            color="secondary.red"
+            w="full"
+            onClick={deleteProfile.onOpen}
+            isDisabled={isUserAProjectCreator}
+          >
+            {t('Delete')}
+          </Button>
+        </Tooltip>
       </VStack>
 
       <DeleteTextConfirm
