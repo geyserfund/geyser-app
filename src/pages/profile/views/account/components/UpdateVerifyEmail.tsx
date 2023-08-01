@@ -80,10 +80,11 @@ export const UpdateVerifyEmail = () => {
       const emailUpdateUser = data.userEmailUpdate
       if (emailUpdateUser && emailUpdateUser.email) {
         setUser((current) => ({ ...current, ...emailUpdateUser }))
+        verifyEmailModal.onClose()
         sendOtpByEmail({
           variables: {
             input: {
-              email: user.email,
+              email: emailUpdateUser.email,
               action: MfaAction.UserEmailVerification,
             },
           },
@@ -215,19 +216,20 @@ export const UpdateVerifyEmail = () => {
           )}
         </VStack>
       </form>
-
-      <VerifyYourEmail
-        onClose={handleModalClosed}
-        isOpen={verifyEmailModal.isOpen}
-        handleVerify={
-          currentMfaAction === MfaAction.UserEmailUpdate
-            ? handleEmailUpdate
-            : undefined
-        }
-        action={currentMfaAction}
-        otpSent={otpSent}
-        otpData={otpData}
-      />
+      {verifyEmailModal.isOpen && (
+        <VerifyYourEmail
+          onClose={handleModalClosed}
+          isOpen={verifyEmailModal.isOpen}
+          handleVerify={
+            currentMfaAction === MfaAction.UserEmailUpdate
+              ? handleEmailUpdate
+              : undefined
+          }
+          action={currentMfaAction}
+          otpSent={otpSent}
+          otpData={otpData}
+        />
+      )}
     </>
   )
 }
