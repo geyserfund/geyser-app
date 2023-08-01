@@ -68,6 +68,7 @@ export const VerifyOneTimePassword = ({
     },
     onCompleted() {
       queryCurrentUser()
+      toast({ status: 'success', title: 'Email verification successfull!' })
     },
   })
 
@@ -90,6 +91,8 @@ export const VerifyOneTimePassword = ({
         },
       })
     }
+
+    setOptCode('')
   }
 
   const handleSendCodeAgain = () => {

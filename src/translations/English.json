@@ -635,13 +635,15 @@
   "Delete profile":"Delete profile",
   "Failed to delete profile":"Failed to delete profile",
   "Settings":"Settings",
-  "You can delete your profile permanently from Geyser. This will allow you to retain your anonymity and connect this account with another profile":"You can delete your profile permanently from Geyser. This will allow you to retain your anonymity and connect this account with another profile",
-  "This is your account recovery email. Verify this email to edit your project wallet information. You will also receive important project notifications to this email.":"This is your account recovery email. Verify this email to edit your project wallet information. You will also receive important project notifications to this email.",
+  "Delete your profile permanently from Geyser.":"Delete your profile permanently from Geyser.",
+  "Verify your email to secure your account and be able to edit project wallet information. This email will be used to notify you on important project and wallet updates.":"Verify your email to secure your account and be able to edit project wallet information. This email will be used to notify you on important project and wallet updates.",
   "To delete your profile permanently from Geyser.":"To delete your profile permanently from Geyser.",
   "Your profile has been deleted.":"Your profile has been deleted.",
   "Profile has been deleted":"Profile has been deleted",
   "Type '{{textToConfirm}}' and confirm":"Type '{{textToConfirm}}' and confirm",
   "Close":"Close",
   "Check your SPAM folder for the email.":"Check your SPAM folder for the email.",
-  "project creators cannot delete their profile":"project creators cannot delete their profile"
+  "As a project creator, you cannot delete your profile":"As a project creator, you cannot delete your profile",
+  "Successfully updated user email":"Successfully updated user email",
+  "Email verification successfull!":"Email verification successfull!"
 }
