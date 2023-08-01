@@ -105,8 +105,7 @@ export const VerifyYourEmailContent = ({
       />
 
       <Body1 semiBold>
-        {getDescription()} <br />
-        {t('Check your SPAM folder for the email.')}
+        {getDescription()} {t('Check your SPAM folder for the email.')}
       </Body1>
 
       <Body1 semiBold></Body1>

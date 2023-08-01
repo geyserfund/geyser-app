@@ -38,7 +38,9 @@ export const UpdateVerifyEmail = () => {
     MfaAction.UserEmailUpdate,
   )
 
-  const { formState, control, handleSubmit } = useForm<{ email: string }>({
+  const { formState, control, handleSubmit, getValues } = useForm<{
+    email: string
+  }>({
     resolver: yupResolver(emailValidationSchema),
     values: user.email
       ? {
@@ -86,6 +88,14 @@ export const UpdateVerifyEmail = () => {
             },
           },
         })
+        toast({
+          status: 'success',
+          title: 'Successfully updated user email',
+        })
+        toast({
+          status: 'info',
+          title: 'OTP Sent to the updated email',
+        })
       }
     },
   })
@@ -124,8 +134,29 @@ export const UpdateVerifyEmail = () => {
     }
   }
 
+  const handleEmailUpdate = (otpCode: number, otpData: OtpResponseFragment) => {
+    const formValues = getValues()
+    if (formValues.email) {
+      updateUserEmail({
+        variables: {
+          input: {
+            email: formValues.email,
+            twoFAInput: {
+              OTP: {
+                otp: otpCode,
+                otpVerificationToken: otpData.otpVerificationToken,
+              },
+            },
+          },
+        },
+      })
+    }
+  }
+
   const isSavedEmailUnverified =
     !formState.isDirty && user.email && !user.isEmailVerified
+
+  const isSavedEmailVerfied = !formState.isDirty && user.isEmailVerified
 
   return (
     <>
@@ -140,14 +171,14 @@ export const UpdateVerifyEmail = () => {
           <Body1 semiBold>{t('Email')}</Body1>
           <Body2>
             {t(
-              'This is your account recovery email. Verify this email to edit your project wallet information. You will also receive important project notifications to this email.',
+              'Verify your email to secure your account and be able to edit project wallet information. This email will be used to notify you on important project and wallet updates.',
             )}
           </Body2>
           <VStack w="full" spacing="0px">
             <InputGroup>
               <TextField required control={control} name="email" />
               <InputRightElement>
-                {!formState.isDirty && user.isEmailVerified && (
+                {isSavedEmailVerfied && (
                   <CheckCircleIcon color={'primary.400'} />
                 )}
                 {isSavedEmailUnverified && (
@@ -155,6 +186,12 @@ export const UpdateVerifyEmail = () => {
                 )}
               </InputRightElement>
             </InputGroup>
+            {isSavedEmailVerfied && (
+              <Text color="primary.400" w="full" textAlign="right">
+                {t('This email has been verified')}
+              </Text>
+            )}
+
             {isSavedEmailUnverified && (
               <Text color="neutral.600" w="full" textAlign="right">
                 {t('This email has not been verified')}
@@ -162,30 +199,31 @@ export const UpdateVerifyEmail = () => {
             )}
           </VStack>
 
-          {!user.isEmailVerified && (
-            <Button
-              w="full"
-              variant="secondary"
-              isDisabled={formState.isDirty || !user.email}
-              onClick={handleVerifyEmailClick}
-            >
+          {!user.isEmailVerified && !formState.isDirty && user.email ? (
+            <Button w="full" variant="primary" onClick={handleVerifyEmailClick}>
               {t('Verify email')}
             </Button>
+          ) : (
+            <Button
+              variant="primary"
+              w="full"
+              type="submit"
+              isDisabled={!formState.isDirty}
+            >
+              {t('Update email')}
+            </Button>
           )}
-          <Button
-            variant="primary"
-            w="full"
-            type="submit"
-            isDisabled={!formState.isDirty}
-          >
-            {t('Save')}
-          </Button>
         </VStack>
       </form>
 
       <VerifyYourEmail
         onClose={handleModalClosed}
         isOpen={verifyEmailModal.isOpen}
+        handleVerify={
+          currentMfaAction === MfaAction.UserEmailUpdate
+            ? handleEmailUpdate
+            : undefined
+        }
         action={currentMfaAction}
         otpSent={otpSent}
         otpData={otpData}

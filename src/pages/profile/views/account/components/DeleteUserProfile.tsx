@@ -59,17 +59,13 @@ export const DeleteUserProfile = () => {
 
   return (
     <>
-      <VStack spacing="10px" alignItems="start">
+      <VStack w="full" spacing="10px" alignItems="start">
         <Body1 semiBold>{t('Delete profile')}</Body1>
-        <Body2>
-          {t(
-            'You can delete your profile permanently from Geyser. This will allow you to retain your anonymity and connect this account with another profile',
-          )}
-        </Body2>
+        <Body2>{t('Delete your profile permanently from Geyser.')}</Body2>
         <Tooltip
           label={
             isUserAProjectCreator
-              ? t('project creators cannot delete their profile')
+              ? t('As a project creator, you cannot delete your profile')
               : ''
           }
         >
