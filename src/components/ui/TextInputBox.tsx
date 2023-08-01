@@ -54,7 +54,7 @@ export const TextInputBox = forwardRef<HTMLInputElement, TextInputBoxProps>(
         {error ? (
           typeof error === 'object' ? (
             error
-          ) : (
+          ) : typeof error === 'boolean' ? null : (
             <Text color="secondary.red" fontSize="12px">
               {t(`${error}`)}
             </Text>

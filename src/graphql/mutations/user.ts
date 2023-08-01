@@ -36,3 +36,12 @@ export const MUTATION_UPDATE_USER = gql`
     }
   }
 `
+
+export const MUTATION_DELETE_USER = gql`
+  mutation UserDelete {
+    userDelete {
+      message
+      success
+    }
+  }
+`

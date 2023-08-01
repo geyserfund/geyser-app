@@ -93,7 +93,7 @@ export const TopNavBarMenu = ({
                 width="100%"
                 onClick={onDashboardSelected}
               >
-                (t{'Edit project'})
+                {t('Edit project')}
               </Button>
             </MenuItem>
 

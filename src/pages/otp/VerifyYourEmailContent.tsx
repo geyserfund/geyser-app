@@ -13,11 +13,13 @@ import {
 import { useNotification } from '../../utils'
 import { ReceiveOneTimePassword, VerifyOneTimePassword } from './components'
 
-interface VerifyYourEmailContentProps {
+export interface VerifyYourEmailContentProps {
   action: MfaAction
+  otpSent?: boolean
+  otpData?: OtpResponseFragment
   handleVerify?: (
     otpCode: number,
-    optData: OtpResponseFragment,
+    otpData: OtpResponseFragment,
     email?: string,
   ) => void
 }
@@ -25,19 +27,21 @@ interface VerifyYourEmailContentProps {
 export const VerifyYourEmailContent = ({
   action,
   handleVerify,
+  otpSent,
+  otpData: otp,
 }: VerifyYourEmailContentProps) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
 
-  const [sentOtp, setSentOtp] = useState(false)
-  const [otpData, setOtpData] = useState<OtpResponseFragment>()
+  const [sentOtp, setSentOtp] = useState(otpSent || false)
+  const [otpData, setOtpData] = useState<OtpResponseFragment | undefined>(otp)
   const [inputEmail, setInputEmail] = useState('')
 
   const [sendOtpByEmail] = useSendOtpByEmailMutation({
     onError() {
       toast({
         status: 'error',
-        title: 'Failed to generate otp.',
+        title: 'Failed to generate OTP.',
         description: 'Please try again',
       })
     },
@@ -68,6 +72,12 @@ export const VerifyYourEmailContent = ({
       )
     }
 
+    if (action === MfaAction.UserEmailUpdate) {
+      return t(
+        'You can update your email securely by using One Time Password sent to your last verfied email.',
+      )
+    }
+
     return t(
       'Backup your Geyser account and project with your email. This will ensure that you can always access Geyser (in case of social media censorship) and can securely update your project information.',
     )
@@ -94,7 +104,11 @@ export const VerifyYourEmailContent = ({
         alignSelf="center"
       />
 
-      <Body1 semiBold>{getDescription()}</Body1>
+      <Body1 semiBold>
+        {getDescription()} {t('Check your SPAM folder for the email.')}
+      </Body1>
+
+      <Body1 semiBold></Body1>
       {sentOtp && otpData ? (
         <VerifyOneTimePassword
           action={action}

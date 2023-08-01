@@ -1,3 +1,30 @@
+## [0.4.1](https://github.com/geyserfund/geyser-app/compare/v0.4.0...v0.4.1) (2023-08-01)
+
+
+### Features
+
+* add delete user profile ([0f2de29](https://github.com/geyserfund/geyser-app/commit/0f2de29156d38006ef74250f12b9b1adef2328fb))
+
+
+### Bug Fixes
+
+* add tooltip when delete profile button is disabled ([40dbfae](https://github.com/geyserfund/geyser-app/commit/40dbfae900f7e2cefad204dd89fbf75ddbbc8d05))
+* add update email feature ([02cf41f](https://github.com/geyserfund/geyser-app/commit/02cf41f28538d63175d25725f5a5c7eee7cbf593))
+* allow save only on form dirty ([3e0da2c](https://github.com/geyserfund/geyser-app/commit/3e0da2c730b71fa7a28338abeecd1acbd5b839ce))
+* check mark color, resolves GEY-3041 ([9aafbad](https://github.com/geyserfund/geyser-app/commit/9aafbad4b24bc9b3870bb12239cc11ee57c17ae2))
+* dont show tag that has less than 3 projects ([2a0a99e](https://github.com/geyserfund/geyser-app/commit/2a0a99e2bee1e635f39ef5e81de7ca7efc9bad54))
+* e2e test ([8d80a41](https://github.com/geyserfund/geyser-app/commit/8d80a4167e5e11c5a418084f8f316f35f94c04a0))
+* final chnage to delete user profile tooltip ([631ac9c](https://github.com/geyserfund/geyser-app/commit/631ac9c88814797c52518a9ec2654e92b6a30c8c))
+* final OTP fixes ([cc75bcf](https://github.com/geyserfund/geyser-app/commit/cc75bcf98cfd26fbf3bb89e3efb03bc462677aec))
+* fix otp copy when wallet update and add back button ([c33f6fc](https://github.com/geyserfund/geyser-app/commit/c33f6fc94f2d0d677bcae646502aaa12e13370ba))
+* fixes based on linear issues ([84e9704](https://github.com/geyserfund/geyser-app/commit/84e970481a41c7b957e05988b4291774ae430e2c))
+* only show projects with length 3 ([f1dde51](https://github.com/geyserfund/geyser-app/commit/f1dde5199906bb06ef87a8eee02c0964f4007731))
+* remove verify email prompt ([a0c423e](https://github.com/geyserfund/geyser-app/commit/a0c423e487b965a085d60e228699604a35f293fd))
+* typo ([7ded5fc](https://github.com/geyserfund/geyser-app/commit/7ded5fcdee4c7aabac6107d04dbd168be59ecc3b))
+* update changelog and package version ([9478d01](https://github.com/geyserfund/geyser-app/commit/9478d01ce748f7fbfc0e4b8fbfbe6c031494bf39))
+* update copy to mention look in spam folder ([6fb1c68](https://github.com/geyserfund/geyser-app/commit/6fb1c68c804cce1102cbaafcca1ce58d84ecc668))
+* update tooltip copy ([b4d3c10](https://github.com/geyserfund/geyser-app/commit/b4d3c10a6b6bf12637a2d445331895bfb9c5739a))
+
 ## [0.4.0](https://github.com/geyserfund/geyser-app/compare/v0.3.1...v0.4.0) (2023-07-25)
 
 

@@ -400,6 +400,7 @@ export enum FundingMethod {
   GeyserQr = 'geyser_qr',
   LnAddress = 'ln_address',
   LnurlPay = 'lnurl_pay',
+  Nip57Zap = 'nip57_zap',
   PodcastKeysend = 'podcast_keysend',
 }
 
@@ -1259,7 +1260,7 @@ export type ProjectsResponse = {
 export type ProjectsSummary = {
   __typename?: 'ProjectsSummary'
   /** Total of satoshis raised by projects on the platform. */
-  fundedTotal?: Maybe<Scalars['Int']>
+  fundedTotal?: Maybe<Scalars['BigInt']>
   /** Total number of funders on the platform. */
   fundersCount?: Maybe<Scalars['Int']>
   /** Total number of projects ever created on the platform. */
@@ -3416,7 +3417,11 @@ export type ProjectsSummaryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ProjectsSummary'] = ResolversParentTypes['ProjectsSummary'],
 > = {
-  fundedTotal?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  fundedTotal?: Resolver<
+    Maybe<ResolversTypes['BigInt']>,
+    ParentType,
+    ContextType
+  >
   fundersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   projectsCount?: Resolver<
     Maybe<ResolversTypes['Int']>,
@@ -4947,6 +4952,17 @@ export type UpdateUserMutation = {
   }
 }
 
+export type UserDeleteMutationVariables = Exact<{ [key: string]: never }>
+
+export type UserDeleteMutation = {
+  __typename?: 'Mutation'
+  userDelete: {
+    __typename?: 'DeleteUserResponse'
+    message?: string | null
+    success: boolean
+  }
+}
+
 export type CreateWalletMutationVariables = Exact<{
   input: CreateWalletInput
 }>
@@ -5473,7 +5489,7 @@ export type ProjectsSummaryQuery = {
   __typename?: 'Query'
   projectsSummary: {
     __typename?: 'ProjectsSummary'
-    fundedTotal?: number | null
+    fundedTotal?: any | null
     fundersCount?: number | null
     projectsCount?: number | null
   }
@@ -7734,6 +7750,55 @@ export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<
   UpdateUserMutation,
   UpdateUserMutationVariables
+>
+export const UserDeleteDocument = gql`
+  mutation UserDelete {
+    userDelete {
+      message
+      success
+    }
+  }
+`
+export type UserDeleteMutationFn = Apollo.MutationFunction<
+  UserDeleteMutation,
+  UserDeleteMutationVariables
+>
+
+/**
+ * __useUserDeleteMutation__
+ *
+ * To run a mutation, you first call `useUserDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUserDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [userDeleteMutation, { data, loading, error }] = useUserDeleteMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserDeleteMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UserDeleteMutation,
+    UserDeleteMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<UserDeleteMutation, UserDeleteMutationVariables>(
+    UserDeleteDocument,
+    options,
+  )
+}
+export type UserDeleteMutationHookResult = ReturnType<
+  typeof useUserDeleteMutation
+>
+export type UserDeleteMutationResult = Apollo.MutationResult<UserDeleteMutation>
+export type UserDeleteMutationOptions = Apollo.BaseMutationOptions<
+  UserDeleteMutation,
+  UserDeleteMutationVariables
 >
 export const CreateWalletDocument = gql`
   mutation CreateWallet($input: CreateWalletInput!) {
