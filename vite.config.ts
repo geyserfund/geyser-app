@@ -1,6 +1,8 @@
+/* eslint-disable camelcase */
 import react from '@vitejs/plugin-react-swc'
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig, loadEnv, PluginOption } from 'vite'
 import mkcert from 'vite-plugin-mkcert'
+import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig(({ command, mode }) => {
   // Load env file based on `mode` in the current working directory.
@@ -26,8 +28,41 @@ export default defineConfig(({ command, mode }) => {
       `)
   }
 
+  const plugins: PluginOption[] = [
+    VitePWA({
+      registerType: 'autoUpdate',
+      devOptions: {
+        enabled: true,
+      },
+      includeAssets: ['logo-brand.svg'],
+      manifest: {
+        name: 'Geyser Fund - Crowdfunding with Bitcoin',
+        short_name: 'Geyser',
+        description:
+          'Geyser is a bitcoin crowdfunding platform that enables campaign creators to launch their projects with rewards and engage their communities with posts and content.',
+        theme_color: '#20ECC7',
+        icons: [
+          {
+            src: 'logo-brand.svg',
+            sizes: '192x192',
+            type: 'image/svg+xml',
+          },
+          {
+            src: 'logo-brand.svg',
+            sizes: '512x512',
+            type: 'image/svg+xml',
+          },
+        ],
+      },
+    }),
+    react(),
+  ]
+  if (mode === 'development') {
+    plugins.push(mkcert())
+  }
+
   return {
-    plugins: mode === 'development' ? [react(), mkcert()] : [react()],
+    plugins,
     server,
     define: {
       'process.env': env,
