@@ -36,6 +36,9 @@ export default defineConfig(({ command, mode }) => {
       },
       includeAssets: ['logo-brand.svg'],
       manifest: {
+        start_url: '.',
+        display: 'standalone',
+        background_color: '#ffffff',
         name: 'Geyser Fund - Crowdfunding with Bitcoin',
         short_name: 'Geyser',
         description:
@@ -44,12 +47,8 @@ export default defineConfig(({ command, mode }) => {
         icons: [
           {
             src: 'logo-brand.svg',
-            sizes: '192x192',
-            type: 'image/svg+xml',
-          },
-          {
-            src: 'logo-brand.svg',
-            sizes: '512x512',
+            sizes:
+              '36x36 48x48 57x57 60x60 72x72 76x76 96x96 114x114 120x120 128x128 144x144 152x152 180x180 192x192 256x256 384x384 512x512',
             type: 'image/svg+xml',
           },
         ],
