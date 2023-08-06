@@ -80,7 +80,7 @@ export default defineConfig(({ command, mode }) => {
       `)
   }
 
-  const plugins: PluginOption[] = [VitePWA({}), react()]
+  const plugins: PluginOption[] = [VitePWA(pwaOptions), react()]
   if (mode === 'development') {
     plugins.push(mkcert())
   }
