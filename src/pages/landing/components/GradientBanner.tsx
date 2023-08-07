@@ -88,7 +88,7 @@ export const GradientBanner = () => {
             color={'neutral.900'}
           >
             <H3 fontFamily="inherit">
-              {t('Play a part in world-changing ideas')}
+              {t('Play a part in world-changing ideas')} {'!!!!!!'}
             </H3>
             <HStack fontSize={'sm'} spacing={4}>
               {isSummaryLoading ? (
