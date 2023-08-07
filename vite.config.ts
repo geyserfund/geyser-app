@@ -8,9 +8,6 @@ const pwaOptions: Partial<VitePWAOptions> = {
   mode: 'development',
   base: '/',
   registerType: 'autoUpdate',
-  workbox: {
-    globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-  },
   includeAssets: ['logo-brand.svg'],
   manifest: {
     start_url: '.',
@@ -51,6 +48,21 @@ const pwaOptions: Partial<VitePWAOptions> = {
         sizes: '512x512',
         type: 'image/png',
         purpose: 'any maskable',
+      },
+    ],
+  },
+  workbox: {
+    globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+    runtimeCaching: [
+      {
+        urlPattern: ({ url }) => url.href.includes('/graphql'),
+        handler: 'StaleWhileRevalidate' as const,
+        options: {
+          cacheName: 'graphql-cache',
+          cacheableResponse: {
+            statuses: [0, 200],
+          },
+        },
       },
     ],
   },
