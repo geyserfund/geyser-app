@@ -68,17 +68,6 @@ const pwaOptions: Partial<VitePWAOptions> = {
           },
         },
       },
-      {
-        urlPattern: ({ url }) => url.href.includes('/graphql'),
-        handler: 'StaleWhileRevalidate' as const,
-        method: 'POST',
-        options: {
-          cacheName: 'graphql-cache',
-          cacheableResponse: {
-            statuses: [0, 200],
-          },
-        },
-      },
     ],
   },
 }
