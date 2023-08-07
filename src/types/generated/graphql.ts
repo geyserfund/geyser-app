@@ -5419,7 +5419,6 @@ export type ProjectsQuery = {
       createdAt: string
       expiresAt?: string | null
       status?: ProjectStatus | null
-      media: Array<string>
       image?: string | null
     }>
   }
@@ -5449,7 +5448,6 @@ export type ProjectsFullQuery = {
       thumbnailImage?: string | null
       image?: string | null
       status?: ProjectStatus | null
-      media: Array<string>
       owners: Array<{
         __typename?: 'Owner'
         id: any
@@ -5706,7 +5704,6 @@ export type UserProfileQuery = {
         title: any
         name: any
         description?: any | null
-        media: Array<string>
         createdAt: string
         status?: ProjectStatus | null
       }
@@ -9070,7 +9067,6 @@ export const ProjectsDocument = gql`
         createdAt
         expiresAt
         status
-        media
         image
       }
     }
@@ -9140,7 +9136,6 @@ export const ProjectsFullDocument = gql`
         thumbnailImage
         image
         status
-        media
         owners {
           id
           user {
@@ -10036,7 +10031,6 @@ export const UserProfileDocument = gql`
           title
           name
           description
-          media
           createdAt
           status
         }
