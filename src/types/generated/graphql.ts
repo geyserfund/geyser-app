@@ -4340,12 +4340,10 @@ export type ProjectForLandingPageFragment = {
   id: any
   name: any
   balance: number
-  createdAt: string
   fundersCount?: number | null
   thumbnailImage?: string | null
   shortDescription?: any | null
   title: any
-  status?: ProjectStatus | null
   owners: Array<{
     __typename?: 'Owner'
     id: any
@@ -6082,12 +6080,10 @@ export const ProjectForLandingPageFragmentDoc = gql`
     id
     name
     balance
-    createdAt
     fundersCount
     thumbnailImage
     shortDescription
     title
-    status
     owners {
       id
       user {
