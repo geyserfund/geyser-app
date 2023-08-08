@@ -10,13 +10,8 @@ export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
     balance
     createdAt
     fundersCount
-    fundingTxsCount
     thumbnailImage
     shortDescription
-    tags {
-      id
-      label
-    }
     title
     status
     owners {
