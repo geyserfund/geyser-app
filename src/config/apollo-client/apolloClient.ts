@@ -16,7 +16,7 @@ import { cache } from './apollo-client-cache'
 
 const retryLink = new RetryLink({
   attempts(count, _, error) {
-    const err = error.result.error
+    const err = error?.result?.error
     return (
       err &&
       Boolean(
