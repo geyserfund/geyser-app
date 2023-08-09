@@ -62,7 +62,6 @@ export const QUERY_USER_PROFILE = gql`
           title
           name
           description
-          media
           createdAt
           status
         }

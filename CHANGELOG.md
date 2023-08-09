@@ -1,3 +1,14 @@
+## [0.4.2](https://github.com/geyserfund/geyser-app/compare/v0.4.1...v0.4.2) (2023-08-09)
+
+
+### Bug Fixes
+
+* deprecate media field from project ([4fabe6e](https://github.com/geyserfund/geyser-app/commit/4fabe6e993e7c9358f4b4f1ba47400a2b4b19b88))
+* remove disabled logic for translations and add spanish back ([e1172c0](https://github.com/geyserfund/geyser-app/commit/e1172c095545794d64d0187e1ead99dc159f3d62))
+* remove tags and funding tx count ([eaf97a6](https://github.com/geyserfund/geyser-app/commit/eaf97a6006bd483ae91bf858f709759aa2532e66))
+* remove unused fields ([280da9a](https://github.com/geyserfund/geyser-app/commit/280da9a3ebb107012298aaa0b22568a2c8412eb6))
+* update featured project to maxisclub ([c46c438](https://github.com/geyserfund/geyser-app/commit/c46c438839018211e16e126015ff737771a1cf02))
+
 ## [0.4.1](https://github.com/geyserfund/geyser-app/compare/v0.4.0...v0.4.1) (2023-08-01)
 
 

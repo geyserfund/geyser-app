@@ -47,7 +47,6 @@ export const QUERY_PROJECTS = gql`
         createdAt
         expiresAt
         status
-        media
         image
       }
     }
@@ -72,7 +71,6 @@ export const QUERY_PROJECTS_FULL = gql`
         thumbnailImage
         image
         status
-        media
         owners {
           id
           user {
