@@ -20,18 +20,24 @@ const defaultContext: ServiceWorkerUpdateProps = {
     new Promise((resolve) => {
       resolve()
     }),
+  canInstall: false,
+  handlePrompt() {},
 }
 
 export type ServiceWorkerUpdateProps = {
   needRefresh: boolean
   setNeedRefresh: Dispatch<SetStateAction<boolean>>
   updateServiceWorker: (reloadPage?: boolean | undefined) => Promise<void>
+  canInstall: boolean
+  handlePrompt: () => void
 }
 
 export const ServiceWorkerUpdate =
   createContext<ServiceWorkerUpdateProps>(defaultContext)
 
 const InternalMS = 60 * 15 * 1000
+
+let defferedPrompt: any
 
 export const ServiceWorkerProvider = ({
   children,
@@ -40,6 +46,7 @@ export const ServiceWorkerProvider = ({
 }) => {
   const { t } = useTranslation()
   const [refresh, setRefresh] = useState(false)
+  const [canInstall, setCanInstall] = useState(false)
   const {
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
@@ -73,10 +80,22 @@ export const ServiceWorkerProvider = ({
     setRefresh(needRefresh)
   }, [needRefresh])
 
+  useEffect(() => {
+    window.addEventListener('beforeinstallprompt', (e: Event) => {
+      defferedPrompt = e
+      setCanInstall(true)
+    })
+  }, [])
+
   const handleConfirm = () => {
     updateServiceWorker(true)
     window?.location?.reload()
     setNeedRefresh(false)
+  }
+
+  const handlePrompt = () => {
+    defferedPrompt?.prompt()
+    defferedPrompt = null
   }
 
   return (
@@ -85,6 +104,8 @@ export const ServiceWorkerProvider = ({
         needRefresh,
         setNeedRefresh,
         updateServiceWorker,
+        canInstall,
+        handlePrompt,
       }}
     >
       {children}
