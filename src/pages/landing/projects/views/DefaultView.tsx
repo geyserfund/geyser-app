@@ -1,4 +1,4 @@
-import { Fragment, useMemo } from 'react'
+import { useMemo } from 'react'
 
 import { CardLayout } from '../../../../components/layouts'
 import { getFeaturedProject, getListOfTags } from '../../../../constants'
