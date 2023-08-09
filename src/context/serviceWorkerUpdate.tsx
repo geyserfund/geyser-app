@@ -36,7 +36,7 @@ export type ServiceWorkerUpdateProps = {
 export const ServiceWorkerUpdate =
   createContext<ServiceWorkerUpdateProps>(defaultContext)
 
-const InternalMS = __production__ ? 60 * 15 * 1000 : 20 * 1000
+const REFETCH_SW_INTERVAL_MS = __production__ ? 60 * 15 * 1000 : 20 * 1000
 
 let defferedPrompt: any
 
@@ -66,10 +66,8 @@ export const ServiceWorkerProvider = ({
               'cache-control': 'no-cache',
             },
           }).catch((error) => console.log('error', error))
-          console.log('SW registration', resp)
-
           if (resp?.status === 200) await r.update()
-        }, InternalMS)
+        }, REFETCH_SW_INTERVAL_MS)
       }
     },
     onRegisterError(error: any) {

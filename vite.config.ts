@@ -5,7 +5,6 @@ import mkcert from 'vite-plugin-mkcert'
 import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
 
 const pwaOptions: Partial<VitePWAOptions> = {
-  mode: 'development',
   base: '/',
   includeAssets: ['logo-brand.svg'],
   manifest: {
@@ -96,6 +95,7 @@ export default defineConfig(({ command, mode }) => {
       `)
   }
 
+  pwaOptions.mode = env.APP_ENV === 'development' ? 'development' : 'production'
   const plugins: PluginOption[] = [VitePWA(pwaOptions), react()]
   if (mode === 'development') {
     plugins.push(mkcert())
