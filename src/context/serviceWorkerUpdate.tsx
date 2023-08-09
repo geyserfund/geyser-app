@@ -12,6 +12,7 @@ import { useRegisterSW } from 'virtual:pwa-register/react'
 
 import { Modal } from '../components/layouts'
 import { Body1 } from '../components/typography'
+import { __production__ } from '../constants'
 
 const defaultContext: ServiceWorkerUpdateProps = {
   needRefresh: false,
@@ -35,7 +36,7 @@ export type ServiceWorkerUpdateProps = {
 export const ServiceWorkerUpdate =
   createContext<ServiceWorkerUpdateProps>(defaultContext)
 
-const InternalMS = 60 * 15 * 1000
+const InternalMS = __production__ ? 60 * 15 * 1000 : 20 * 1000
 
 let defferedPrompt: any
 
