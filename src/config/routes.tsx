@@ -10,9 +10,14 @@ import NotAuthorized from '../pages/notAuthorized'
 import NotFoundPage from '../pages/notFound'
 import { PrivateRoute } from './PrivateRoute'
 
+const handleCatch = () => {
+  window.location.reload()
+  return {} as any
+}
+
 // GRANTS
 
-const Grants = import('../pages/grants')
+const Grants = import('../pages/grants').catch(handleCatch)
 
 const GrantsLandingPage = loadable(() =>
   Grants.then((m) => m.GrantsLandingPage),
@@ -23,7 +28,7 @@ const GrantPage = loadable(() => Grants.then((m) => m.GrantPage))
 
 // PROJECT LAUNCH
 
-const ProjectLaunch = import('../pages/projectCreate')
+const ProjectLaunch = import('../pages/projectCreate').catch(handleCatch)
 
 const ProjectCreateStart = loadable(() =>
   ProjectLaunch.then((m) => m.ProjectCreateStart),
@@ -41,7 +46,7 @@ const ProjectCreate = loadable(() => ProjectLaunch.then((m) => m.ProjectCreate))
 
 // ENTRY VIEW & EDIT
 
-const Entry = import('../pages/entry')
+const Entry = import('../pages/entry').catch(handleCatch)
 
 const EntryCreateEdit = loadable(() => Entry.then((m) => m.EntryCreateEdit))
 const EntryPreview = loadable(() => Entry.then((m) => m.EntryPreview))
@@ -49,7 +54,7 @@ const EntryPage = loadable(() => Entry.then((m) => m.EntryPage))
 
 // PROJECT DASHBOARD
 
-const CreatorDashboard = import('../pages/projectDashboard')
+const CreatorDashboard = import('../pages/projectDashboard').catch(handleCatch)
 
 const ProjectDashboardPage = loadable(() =>
   CreatorDashboard.then((m) => m.ProjectDashboardPage),
@@ -76,13 +81,17 @@ const ProjectSettings = loadable(() =>
   CreatorDashboard.then((m) => m.ProjectSettings),
 )
 
-const ProjectView = loadable(() => import('../pages/projectView'))
+const ProjectView = loadable(() =>
+  import('../pages/projectView').catch(handleCatch),
+)
 
-const Profile = loadable(() => import('../pages/profile/Profile'))
+const Profile = loadable(() =>
+  import('../pages/profile/Profile').catch(handleCatch),
+)
 
 // LANDING PAGE
 
-const Landing = import('../pages/landing')
+const Landing = import('../pages/landing').catch(handleCatch)
 
 const MobileLeaderboard = loadable(() =>
   Landing.then((m) => m.MobileLeaderboard),
@@ -95,7 +104,9 @@ const LandingFeed = loadable(() => Landing.then((m) => m.LandingFeed))
 
 // ABOUT PAGE
 
-const AboutPage = loadable(() => import('../pages/about/About'))
+const AboutPage = loadable(() =>
+  import('../pages/about/About').catch(handleCatch),
+)
 
 type PlatformRoutes = {
   path: string
