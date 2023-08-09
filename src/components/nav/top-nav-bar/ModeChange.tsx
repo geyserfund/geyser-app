@@ -15,7 +15,7 @@ import {
   LanguageRequestUrl,
   languages,
 } from '../../../constants'
-import { allTranslations, EnglishTranslations } from '../../../translations'
+import { allTranslations } from '../../../translations'
 import { ColorModeSwitcher } from '../../../utils'
 import { SatSymbolIcon } from '../../icons'
 import { Modal } from '../../layouts'
@@ -26,20 +26,12 @@ export const ModeChange = () => {
   const { isOpen, onClose, onOpen } = useDisclosure()
 
   const renderLanguages = Object.keys(allTranslations).map((key) => {
-    const EnglishLength = Object.keys(EnglishTranslations).length
     const translation = allTranslations[key as keyof typeof allTranslations]
-    const LanguageLength = Object.keys(translation).length
-    const languageCoveragePercentage = (LanguageLength / EnglishLength) * 100
 
     const language = {
       key,
       translation,
-      disabled: true,
-    }
-
-    if (languageCoveragePercentage >= 70) {
-      language.disabled = false
-      return language
+      disabled: false,
     }
 
     return language

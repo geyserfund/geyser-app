@@ -1,15 +1,11 @@
-import { useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Fragment, useMemo } from 'react'
 
 import { CardLayout } from '../../../../components/layouts'
 import { getFeaturedProject, getListOfTags } from '../../../../constants'
 import { useMobileMode } from '../../../../utils'
 import { MobileDivider } from '../../../grants/components'
 // import { useGrants } from '../../../grants/hooks/useGrants'
-import {
-  ProjectsDisplay,
-  ProjectsDisplayMostFundedThisWeek,
-} from '../components'
+import { ProjectsDisplayMostFundedThisWeek } from '../components'
 // import { FeaturedProjectCard } from '../elements'
 import {
   //  FeaturedGrantCard,
@@ -17,7 +13,6 @@ import {
 } from '../elements'
 
 export const DefaultView = () => {
-  const { t } = useTranslation()
   const isMobile = useMobileMode()
 
   // const { activeGrant, loading } = useGrants()
@@ -39,20 +34,19 @@ export const DefaultView = () => {
       {/* <FeaturedGrantCard grant={activeGrant} loading={loading} /> */}
       {firstThreeTags.map((tag) => {
         return (
-          <>
+          <Fragment key={tag.id}>
             <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} />
             <MobileDivider mt={2} />
-          </>
+          </Fragment>
         )
       })}
-      <ProjectsDisplay seeAllText={t('See recent')} />
       <MobileDivider mt={2} />
       {restOfTheTags.map((tag, index) => {
         return (
-          <>
+          <Fragment key={tag.id}>
             <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} />
             {index < restOfTheTags.length - 1 && <MobileDivider mt={2} />}
-          </>
+          </Fragment>
         )
       })}
     </CardLayout>

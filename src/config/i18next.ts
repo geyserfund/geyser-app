@@ -14,7 +14,7 @@ import {
   ItalianTranslations,
   PolishTranslations,
   PortugueseTranslation,
-  // SpanishTranslations,
+  SpanishTranslations,
 } from '../translations'
 
 i18next
@@ -54,9 +54,9 @@ i18next
       [lng.zh]: {
         translation: ChineseTranslations,
       },
-      // [lng.es]: {
-      //   translation: SpanishTranslations,
-      // },
+      [lng.es]: {
+        translation: SpanishTranslations,
+      },
       [lng.pt]: {
         translation: PortugueseTranslation,
       },

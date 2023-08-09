@@ -1,8 +1,8 @@
 {
     "Featured Project": "Ausgewähltes Projekt",
-    "Play a part in world-changing ideas": "Beteilige dich an weltverändernden Ideen",
+    "Play a part in world-changing ideas": "Beteilige dich an umwälzenden Ideen",
     "projects": "Projekte",
-    "bitcoin raised": "Bitcoin aufgebracht",
+    "bitcoin raised": "Bitcoin eingesammelt",
     "contributors": "Mitwirkende",
     "Filter by project tags": "Filter nach Projekt-Kategorien",
     "Search": "Suche",
@@ -617,7 +617,10 @@
     "from": "von",
     "Coming soon": "Demnächst verfügbar",
     "This is the tweet we will be posting in several different languages": {
-        "🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English.\n\nWith @EuropeanBTC21 & other plebs, we’re making crowdfunding accessible to 40% of the world in 10+ languages!\n\nLet’s celebrate them! 👇": "🤯 BREAKING! Bitcoin-Crowdfunding ist jetzt für 3,2 Milliarden Menschen zugänglich!\nNur 20 % der Welt sprechen Englisch. Dies bedeutet, dass das Tool des Community-Crowdfundings über Bitcoin drastisch eingeschränkt ist.\nIndem wir in Abstimmung mit europäischen Bitcoinern und anderen Bürgern 10 weitere Sprachen zu geyser.fund hinzufügen, machen wir Crowdfunding für 40 % der Welt und etwa 100 Länder zugänglich!\nLasst uns sie feiern! 👇"
+        "🤯 BREAKING! Bitcoin crowdfunding is now accessible to 3.2 billion people!\n\nOnly 20% of the world speaks English.\n\nWith @EuropeanBTC21 & other plebs, we’re making crowdfunding accessible to 40% of the world in 10+ languages!\n\nLet’s celebrate them! 👇": "🤯 BREAKING! Bitcoin-Crowdfunding ist jetzt für 3,2 Milliarden Menschen zugänglich!\n\nNur 20 % der Welt sprechen Englisch. Dies bedeutet, dass das Tool des Community-Crowdfundings über Bitcoin drastisch eingeschränkt ist.\n\nIndem wir in Abstimmung mit europäischen Bitcoinern und anderen Bürgern 10 weitere Sprachen zu geyser.fund hinzufügen, machen wir Crowdfunding für 40 % der Welt und etwa 100 Länder zugänglich!\n\nLasst uns sie feiern! 👇"
     },
+    "Grant funds will be distributed by principled bitcoin board members.": "Die Fördermittel werden von Bitcoin-ONLY-Vorstandsmitgliedern verteilt.",
+    "Apply to be part of the {{title}} grant. Find out more about how projects will be selected and how voting works <1>here.</1>": "Bewerbe dich für die Teilnahme am Förderprogramm {{Titel}}. Weitere Informationen darüber, wie die Projekte ausgewählt werden und wie die Abstimmung funktioniert, findest du <1>hier.</1>",
+    "Contribute directly to {{title}} Grant via QR code (lightning and onchain)": "Spende direkt an die {{Titel}} Förderung über QR-Code (Lightning und Onchain)",
     "1 Sat = 1 vote.": "1 Sat = 1 Stimme."
 }
