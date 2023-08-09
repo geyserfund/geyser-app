@@ -7,7 +7,6 @@ import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
 const pwaOptions: Partial<VitePWAOptions> = {
   mode: 'development',
   base: '/',
-  registerType: 'autoUpdate',
   includeAssets: ['logo-brand.svg'],
   manifest: {
     start_url: '.',
