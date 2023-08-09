@@ -8,17 +8,10 @@ export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
     id
     name
     balance
-    createdAt
     fundersCount
-    fundingTxsCount
     thumbnailImage
     shortDescription
-    tags {
-      id
-      label
-    }
     title
-    status
     owners {
       id
       user {
