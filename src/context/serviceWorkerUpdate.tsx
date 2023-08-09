@@ -24,7 +24,7 @@ export type ServiceWorkerUpdateProps = {
 export const ServiceWorkerUpdate =
   createContext<ServiceWorkerUpdateProps>(defaultContext)
 
-const InternalMS = 20 * 1000
+const InternalMS = 60 * 15 * 1000
 
 export const ServiceWorkerProvider = ({
   children,
@@ -50,7 +50,6 @@ export const ServiceWorkerProvider = ({
               'cache-control': 'no-cache',
             },
           }).catch((error) => console.log('error', error))
-          console.log('is it getting here?', resp)
 
           if (resp?.status === 200) await r.update()
         }, InternalMS)
