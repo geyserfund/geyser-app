@@ -1,5 +1,12 @@
 import { Button, HStack } from '@chakra-ui/react'
-import { createContext, Dispatch, SetStateAction, useContext } from 'react'
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 
@@ -32,6 +39,7 @@ export const ServiceWorkerProvider = ({
   children: React.ReactNode
 }) => {
   const { t } = useTranslation()
+  const [refresh, setRefresh] = useState(false)
   const {
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
@@ -50,6 +58,7 @@ export const ServiceWorkerProvider = ({
               'cache-control': 'no-cache',
             },
           }).catch((error) => console.log('error', error))
+          console.log('SW registration', resp)
 
           if (resp?.status === 200) await r.update()
         }, InternalMS)
@@ -60,8 +69,13 @@ export const ServiceWorkerProvider = ({
     },
   })
 
+  useEffect(() => {
+    setRefresh(needRefresh)
+  }, [needRefresh])
+
   const handleConfirm = () => {
     updateServiceWorker(true)
+    window?.location?.reload()
     setNeedRefresh(false)
   }
 
@@ -76,7 +90,7 @@ export const ServiceWorkerProvider = ({
       {children}
 
       <Modal
-        isOpen={needRefresh}
+        isOpen={refresh}
         onClose={() => setNeedRefresh(false)}
         title={t('Update available')}
       >
