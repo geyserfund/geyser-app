@@ -32,23 +32,20 @@ export const DefaultView = () => {
       <FeaturedProjectCard projectName={getFeaturedProject()} />
       <MobileDivider mt={2} />
       {/* <FeaturedGrantCard grant={activeGrant} loading={loading} /> */}
-      {firstThreeTags.map((tag) => {
-        return (
-          <Fragment key={tag.id}>
-            <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} />
-            <MobileDivider mt={2} />
-          </Fragment>
-        )
-      })}
-      <MobileDivider mt={2} />
-      {restOfTheTags.map((tag, index) => {
-        return (
-          <Fragment key={tag.id}>
-            <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} />
-            {index < restOfTheTags.length - 1 && <MobileDivider mt={2} />}
-          </Fragment>
-        )
-      })}
+      {firstThreeTags.map((tag) => (
+        <ProjectsDisplayMostFundedThisWeek
+          key={tag.id}
+          tag={tag}
+          hasMobileDivider
+        />
+      ))}
+      {restOfTheTags.map((tag, index) => (
+        <ProjectsDisplayMostFundedThisWeek
+          key={tag.id}
+          tag={tag}
+          hasMobileDivider={index < restOfTheTags.length - 1}
+        />
+      ))}
     </CardLayout>
   )
 }
