@@ -5,7 +5,6 @@ import {
   Text,
   useBreakpointValue,
   useDisclosure,
-  useMediaQuery,
   VStack,
 } from '@chakra-ui/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
