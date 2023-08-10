@@ -645,5 +645,7 @@
   "Check your SPAM folder for the email.":"Check your SPAM folder for the email.",
   "As a project creator, you cannot delete your profile":"As a project creator, you cannot delete your profile",
   "Successfully updated user email":"Successfully updated user email",
-  "Email verification successfull!":"Email verification successfull!"
+  "Email verification successfull!":"Email verification successfull!",
+  "Copy lightning invoice":"Copy lightning invoice",
+  "Copy Onchain address":"Copy Onchain address"
 }

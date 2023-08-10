@@ -3,14 +3,16 @@ import {
   Button,
   HStack,
   Text,
+  useBreakpointValue,
   useDisclosure,
+  useMediaQuery,
   VStack,
 } from '@chakra-ui/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BiRefresh } from 'react-icons/bi'
 import { BsExclamationCircle } from 'react-icons/bs'
-import { FaBitcoin, FaCopy } from 'react-icons/fa'
+import { FaCopy } from 'react-icons/fa'
 import { IoMdRefresh } from 'react-icons/io'
 import { RiLinkUnlink } from 'react-icons/ri'
 import { QRCode } from 'react-qrcode-logo'
@@ -32,6 +34,11 @@ const FUNDING_REQUEST_TIMEOUT = 45_000
 
 type Props = {
   fundingFlow: UseFundingFlowReturn
+}
+
+enum PaymentMethods {
+  LIGHTNING = 'LIGHTNING',
+  ONCHAIN = 'ONCHAIN',
 }
 
 enum QRDisplayState {
@@ -103,12 +110,19 @@ const InvoiceErrorView = ({
 
 export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
   const { t } = useTranslation()
+
+  const qrSize =
+    useBreakpointValue({ base: 240, sm: 340, lg: 280, xl: 340 }) || 240
   const [hasCopiedLightning, setHasCopiedLightning] = useState(false)
   const [hasCopiedOnchain, setHasCopiedOnchain] = useState(false)
 
   const [lightningAddress, setLightningAddress] = useState<string>('')
   const [onchainAddress, setOnchainAddress] = useState<string>('')
-  const [fallbackAddress, setFallbackAddress] = useState<string>('')
+  // const [fallbackAddress, setFallbackAddress] = useState<string>('')
+
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethods>(
+    PaymentMethods.LIGHTNING,
+  )
 
   const {
     fundingTx,
@@ -161,11 +175,11 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
     if (id === 0) {
       setOnchainAddress('')
       setLightningAddress('')
-      setFallbackAddress('')
+      // setFallbackAddress('')
       return
     }
 
-    setFallbackAddress(getBip21Invoice(amount, address, paymentRequest))
+    // setFallbackAddress(getBip21Invoice(amount, address, paymentRequest))
     setOnchainAddress(getBip21Invoice(amount, address))
     setLightningAddress(paymentRequest || '')
   }, [
@@ -184,12 +198,40 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
   }, [lightningAddress])
 
   const onCopyOnchain = useCallback(() => {
-    copyTextToClipboard(onchainAddress)
-    setHasCopiedOnchain(true)
-    setTimeout(() => {
-      setHasCopiedOnchain(false)
-    }, 500)
-  }, [onchainAddress])
+    if (fundingTx.address) {
+      copyTextToClipboard(fundingTx.address)
+      setHasCopiedOnchain(true)
+      setTimeout(() => {
+        setHasCopiedOnchain(false)
+      }, 500)
+    }
+  }, [fundingTx.address])
+  const isLightning = paymentMethod === PaymentMethods.LIGHTNING
+
+  const PaymentMethodSelection = useCallback(() => {
+    return (
+      <HStack w="full">
+        <Button
+          flex={1}
+          variant={'secondary'}
+          borderColor={isLightning ? 'primary.400' : undefined}
+          color={isLightning ? 'primary.400' : undefined}
+          onClick={() => setPaymentMethod(PaymentMethods.LIGHTNING)}
+        >
+          {t('Lightning')}
+        </Button>
+        <Button
+          flex={1}
+          variant={'secondary'}
+          borderColor={!isLightning ? 'primary.400' : undefined}
+          color={!isLightning ? 'primary.400' : undefined}
+          onClick={() => setPaymentMethod(PaymentMethods.ONCHAIN)}
+        >
+          {t('Onchain')}
+        </Button>
+      </HStack>
+    )
+  }, [isLightning, setPaymentMethod, t])
 
   const PaymentRequestCopyButton = useCallback(() => {
     return (
@@ -206,36 +248,42 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
         }
       >
         <Box py={1}>
-          <Button
-            leftIcon={hasCopiedLightning ? <RiLinkUnlink /> : <FaCopy />}
-            onClick={onCopyLightning}
-            variant="primary"
-            isDisabled={!lightningAddress}
-          >
-            <Text>
-              {hasCopiedLightning ? t('Copied!') : t('Lightning invoice')}
-            </Text>
-          </Button>
-        </Box>
-        <Box py={1}>
-          <Button
-            leftIcon={hasCopiedOnchain ? <RiLinkUnlink /> : <FaCopy />}
-            onClick={onCopyOnchain}
-            variant="primary"
-          >
-            <Text>
-              {hasCopiedOnchain ? t('Copied!') : t('Onchain invoice')}
-            </Text>
-          </Button>
+          {isLightning ? (
+            <Button
+              leftIcon={hasCopiedLightning ? <RiLinkUnlink /> : <FaCopy />}
+              onClick={onCopyLightning}
+              variant="primary"
+              isDisabled={!lightningAddress}
+            >
+              <Text>
+                {hasCopiedLightning
+                  ? t('Copied!')
+                  : t('Copy lightning invoice')}
+              </Text>
+            </Button>
+          ) : (
+            <Button
+              leftIcon={hasCopiedOnchain ? <RiLinkUnlink /> : <FaCopy />}
+              onClick={onCopyOnchain}
+              variant="primary"
+            >
+              <Text>
+                {hasCopiedOnchain ? t('Copied!') : t('Copy Onchain address')}
+              </Text>
+            </Button>
+          )}
         </Box>
       </HStack>
     )
   }, [
+    isLightning,
     hasCopiedLightning,
     hasCopiedOnchain,
     onCopyLightning,
     onCopyOnchain,
     qrDisplayState,
+    lightningAddress,
+    t,
   ])
 
   const renderQrBox = useCallback(() => {
@@ -248,34 +296,43 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
             This way the component is already rendered, and the visual effect is smoother.
           */
           <VStack flexWrap="wrap" maxWidth="100%">
+            <PaymentMethodSelection />
             <Box borderRadius={'4px'} borderWidth={'2px'} padding={'2px'}>
               {hasCopiedLightning || hasCopiedOnchain ? (
-                <Box borderColor={'primary.400'}>
+                <Box borderColor={'primary.400'} w="full">
                   <QRCode
-                    value={fallbackAddress}
-                    size={240}
+                    value={
+                      paymentMethod === PaymentMethods.LIGHTNING
+                        ? lightningAddress
+                        : onchainAddress
+                    }
+                    size={qrSize}
                     bgColor={lightModeColors.neutral[0]}
                     fgColor={lightModeColors.primary[400]}
                     logoImage={LogoPrimary}
                     qrStyle="squares"
                     ecLevel="L"
-                    logoHeight={32}
-                    logoWidth={32}
+                    logoHeight={80}
+                    logoWidth={80}
                     removeQrCodeBehindLogo
                   />
                 </Box>
               ) : (
-                <Box borderColor={'neutral.1000'}>
+                <Box borderColor={'neutral.1000'} w="full">
                   <QRCode
-                    value={fallbackAddress}
-                    size={240}
+                    value={
+                      paymentMethod === PaymentMethods.LIGHTNING
+                        ? lightningAddress
+                        : onchainAddress
+                    }
+                    size={qrSize}
                     bgColor={lightModeColors.neutral[0]}
                     fgColor={lightModeColors.neutral[1000]}
                     logoImage={LogoDark}
                     qrStyle="squares"
                     ecLevel="L"
-                    logoHeight={32}
-                    logoWidth={32}
+                    logoHeight={80}
+                    logoWidth={80}
                     removeQrCodeBehindLogo
                   />
                 </Box>
@@ -285,7 +342,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
               <HStack spacing={5}>
                 <Loader size="md" />
                 <Text color={'neutral.900'} fontWeight={400}>
-                  {t('Waiting for payment')}...
+                  {t('Waiting for payment')}
                 </Text>
               </HStack>
             </Box>
@@ -312,40 +369,22 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
     }
   }, [
     error,
-    fallbackAddress,
     hasCopiedLightning,
     hasCopiedOnchain,
     qrDisplayState,
     refreshFundingInvoice,
     retryFundingFlow,
+    t,
+    PaymentMethodSelection,
+    lightningAddress,
+    onchainAddress,
+    paymentMethod,
+    qrSize,
   ])
 
   return (
     <VStack spacing={4} width="100%">
-      <VStack spacing={4}>
-        <HStack
-          mb={4}
-          spacing={4}
-          display={
-            qrDisplayState === QRDisplayState.AWAITING_PAYMENT ? 'flex' : 'none'
-          }
-        >
-          <Box>
-            <FaBitcoin fontSize={'50px'} />
-          </Box>
-          <Box>
-            <Text fontSize={'10px'} fontWeight={700}>
-              {t('Fund with any on-chain or lightning wallet.')}
-            </Text>
-            <Text fontSize={'10px'} fontWeight={400}>
-              {t(
-                'If you are paying on-chain, make sure to send the exact amount, otherwise it will not be displayed. The transaction will be confirmed after 1 confirmation.',
-              )}
-            </Text>
-          </Box>
-        </HStack>
-        {renderQrBox()}
-      </VStack>
+      <VStack spacing={4}>{renderQrBox()}</VStack>
       <PaymentRequestCopyButton />
     </VStack>
   )
