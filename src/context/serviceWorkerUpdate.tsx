@@ -88,8 +88,8 @@ export const ServiceWorkerProvider = ({
 
   const handleConfirm = () => {
     updateServiceWorker(true)
-    window?.location?.reload()
     setNeedRefresh(false)
+    window?.location?.reload()
   }
 
   const handlePrompt = () => {

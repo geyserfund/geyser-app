@@ -10,7 +10,7 @@ const pwaOptions: Partial<VitePWAOptions> = {
   manifest: {
     start_url: '.',
     display: 'standalone',
-    background_color: '#ffffff',
+    background_color: '#141A19',
     name: 'Geyser Fund - Crowdfunding with Bitcoin',
     short_name: 'Geyser',
     description:
