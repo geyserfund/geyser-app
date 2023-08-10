@@ -197,14 +197,12 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
   }, [lightningAddress])
 
   const onCopyOnchain = useCallback(() => {
-    if (fundingTx.address) {
-      copyTextToClipboard(fundingTx.address)
-      setHasCopiedOnchain(true)
-      setTimeout(() => {
-        setHasCopiedOnchain(false)
-      }, 500)
-    }
-  }, [fundingTx.address])
+    copyTextToClipboard(onchainAddress)
+    setHasCopiedOnchain(true)
+    setTimeout(() => {
+      setHasCopiedOnchain(false)
+    }, 500)
+  }, [onchainAddress])
   const isLightning = paymentMethod === PaymentMethods.LIGHTNING
 
   const PaymentMethodSelection = useCallback(() => {
