@@ -1089,8 +1089,6 @@ export type Project = {
   image?: Maybe<Scalars['String']>
   links: Array<Scalars['String']>
   location?: Maybe<Location>
-  /** @deprecated Field no longer supported */
-  media: Array<Scalars['String']>
   milestones: Array<ProjectMilestone>
   /** Unique name for the project. Used for the project URL and lightning address. */
   name: Scalars['name_String_NotNull_minLength_3_maxLength_280']
@@ -3254,7 +3252,6 @@ export type ProjectResolvers<
     ParentType,
     ContextType
   >
-  media?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>
   milestones?: Resolver<
     Array<ResolversTypes['ProjectMilestone']>,
     ParentType,
@@ -4344,6 +4341,27 @@ export type ProjectForLandingPageFragment = {
   thumbnailImage?: string | null
   shortDescription?: any | null
   title: any
+  owners: Array<{
+    __typename?: 'Owner'
+    id: any
+    user: {
+      __typename?: 'User'
+      id: any
+      username: string
+      imageUrl?: string | null
+    }
+  }>
+}
+
+export type ProjectForProfilePageFragment = {
+  __typename?: 'Project'
+  id: any
+  name: any
+  balance: number
+  fundersCount?: number | null
+  thumbnailImage?: string | null
+  title: any
+  createdAt: string
   owners: Array<{
     __typename?: 'Owner'
     id: any
@@ -5723,7 +5741,7 @@ export type UserProfileProjectsQuery = {
     ownerOf: Array<{
       __typename?: 'OwnerOf'
       project?:
-        | ({ __typename?: 'Project' } & ProjectForLandingPageFragment)
+        | ({ __typename?: 'Project' } & ProjectForProfilePageFragment)
         | null
     }>
   }
@@ -5863,6 +5881,25 @@ export const FundingTxFragmentDoc = gql`
       amountFunded
       timesFunded
       confirmedAt
+      user {
+        id
+        username
+        imageUrl
+      }
+    }
+  }
+`
+export const ProjectForProfilePageFragmentDoc = gql`
+  fragment ProjectForProfilePage on Project {
+    id
+    name
+    balance
+    fundersCount
+    thumbnailImage
+    title
+    createdAt
+    owners {
+      id
       user {
         id
         username
@@ -10089,12 +10126,12 @@ export const UserProfileProjectsDocument = gql`
     user(where: $where) {
       ownerOf {
         project {
-          ...ProjectForLandingPage
+          ...ProjectForProfilePage
         }
       }
     }
   }
-  ${ProjectForLandingPageFragmentDoc}
+  ${ProjectForProfilePageFragmentDoc}
 `
 
 /**

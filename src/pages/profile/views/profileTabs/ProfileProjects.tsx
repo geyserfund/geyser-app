@@ -1,9 +1,11 @@
-import { useQuery } from '@apollo/client'
 import { useTranslation } from 'react-i18next'
 
 import { LandingCardBaseSkeleton } from '../../../../components/layouts'
-import { QUERY_USER_PROFILE_PROJECTS } from '../../../../graphql'
-import { Project, User, UserGetInput } from '../../../../types'
+import {
+  ProjectForProfilePageFragment,
+  User,
+  useUserProfileProjectsQuery,
+} from '../../../../types'
 import { LandingProjectCard } from '../../../landing/components'
 import { CreateAProjectButton, ProfileTabLayout } from '../../components'
 import { CreateProject } from './CreateProject'
@@ -16,10 +18,7 @@ export const ProfileProjects = ({
   isViewingOwnProfile?: boolean
 }) => {
   const { t } = useTranslation()
-  const { data, loading: projectsLoading } = useQuery<
-    { user: User },
-    { where: UserGetInput }
-  >(QUERY_USER_PROFILE_PROJECTS, {
+  const { data, loading: projectsLoading } = useUserProfileProjectsQuery({
     variables: {
       where: {
         id: userProfile.id,
@@ -29,11 +28,17 @@ export const ProfileProjects = ({
   })
 
   const projects =
-    (data?.user.ownerOf?.map((val) => val?.project) as Project[]) || []
+    (data?.user.ownerOf?.map(
+      (val) => val?.project,
+    ) as ProjectForProfilePageFragment[]) || []
 
   if (projects.length === 0 && isViewingOwnProfile) {
     return <CreateProject marginTop="20px" />
   }
+
+  const projectsToRender = projects.sort(
+    (a, b) => Number(b.createdAt) - Number(a.createdAt),
+  )
 
   return (
     <ProfileTabLayout
@@ -46,7 +51,7 @@ export const ProfileProjects = ({
     >
       {projectsLoading
         ? [1, 2].map((val) => <LandingCardBaseSkeleton key={val} isMobile />)
-        : projects.map((project) => {
+        : projectsToRender.map((project) => {
             return (
               <LandingProjectCard key={project.id} project={project} isMobile />
             )
