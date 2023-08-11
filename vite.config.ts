@@ -18,6 +18,11 @@ const pwaOptions: Partial<VitePWAOptions> = {
     theme_color: '#20ECC7',
     icons: [
       {
+        src: 'logo-brand.svg',
+        sizes: 'any',
+        type: 'image/svg+xml',
+      },
+      {
         src: '/icons/16.png',
         sizes: '16x16',
         type: 'image/png',
@@ -25,6 +30,11 @@ const pwaOptions: Partial<VitePWAOptions> = {
       {
         src: '/icons/32.png',
         sizes: '32x32',
+        type: 'image/png',
+      },
+      {
+        src: '/icons/128-padded.png',
+        sizes: '128x128',
         type: 'image/png',
       },
       {
@@ -38,19 +48,19 @@ const pwaOptions: Partial<VitePWAOptions> = {
         type: 'image/png',
       },
       {
-        src: '/icons/512.png',
+        src: '/icons/512-padded.png',
         sizes: '512x512',
         type: 'image/png',
-        puspose: 'any',
+        purpose: 'any',
       },
       {
-        src: '/icons/192_maskable.png',
+        src: '/icons/192-maskable.png',
         sizes: '192x192',
         type: 'image/png',
         purpose: 'maskable',
       },
       {
-        src: '/icons/512_maskable.png',
+        src: '/icons/512-maskable.png',
         sizes: '512x512',
         type: 'image/png',
         purpose: 'maskable',
