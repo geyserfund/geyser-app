@@ -57,7 +57,7 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
 
   return (
     <Box width="100%">
-      <SectionTitle>{t('Donate to receive a reward')}</SectionTitle>
+      <SectionTitle>{t('Buy reward item')}</SectionTitle>
 
       {rewards.length > 0 ? (
         <VStack mt={1} padding="2px">

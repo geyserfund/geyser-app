@@ -13,7 +13,6 @@ import {
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
 import { BiDollar } from 'react-icons/bi'
-import { BsArrowRepeat } from 'react-icons/bs'
 import { createUseStyles } from 'react-jss'
 
 import { AppTheme } from '../../context'
@@ -27,14 +26,15 @@ import {
   TrophyIcon,
 } from '../icons'
 import { SatSymbolIcon } from '../icons/svg'
+import { MonoBody1 } from '../typography'
 import { ButtonComponent } from '../ui'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   inputElement: {
     borderWidth: '2px',
     '&:focus': {
-      borderColor: colors.neutral[500],
-      boxShadow: `0 0 0 1px ${colors.neutral[500]}`,
+      borderColor: colors.primary[400],
+      boxShadow: `0 0 0 1px ${colors.primary[500]}`,
     },
     fontFamily: fonts.inter,
     fontWeight: 700,
@@ -50,11 +50,11 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
     color: colors.neutral[600],
     position: 'relative',
     '&:hover': {
-      background: 'none',
+      background: colors.neutral[100],
     },
-  },
-  insideIcon: {
-    position: 'absolute',
+    '&:active': {
+      background: colors.primary[400],
+    },
   },
   switchIcon: {
     fontSize: '35px',
@@ -85,7 +85,7 @@ export const DonationInput = ({
 
   const classes = useStyles()
 
-  const { isOpen: isSatoshi, onToggle } = useDisclosure()
+  const { isOpen: isSatoshi, onToggle } = useDisclosure({ defaultIsOpen: true })
   const isDollar = !isSatoshi
 
   const [satoshi, setSatoshi] = useState(0)
@@ -151,13 +151,14 @@ export const DonationInput = ({
       <InputGroup {...inputGroup}>
         <InputLeftElement pt={1} pl={4} height={14}>
           {isSatoshi ? (
-            <SatSymbolIcon fontSize="16px" />
+            <SatSymbolIcon fontSize="24px" />
           ) : (
-            <BiDollar fontSize="18px" />
+            <BiDollar fontSize="24px" />
           )}
         </InputLeftElement>
         <Input
           height={14}
+          borderRadius="8px"
           value={satoshi > 0 ? (isSatoshi ? satoshi : dollar) : ''}
           type="number"
           className={classNames(classes.inputElement, className)}
@@ -170,17 +171,22 @@ export const DonationInput = ({
           color="neutral.1000"
           placeholder="0"
         />
-        <InputRightElement pt={1} pr={6} height={14}>
+        <InputRightElement pt={1} pr={'10px'} height={14} w="100px">
           <Button
             className={classes.switchButtton}
             onClick={onToggle}
             variant="ghost"
           >
-            <BsArrowRepeat className={classes.switchIcon} />
             {isSatoshi ? (
-              <BiDollar className={classes.insideIcon} />
+              <>
+                <BiDollar />
+                <MonoBody1 isTruncated>{dollar || 0}</MonoBody1>
+              </>
             ) : (
-              <SatoshiIconTilted position="absolute" scale={0.7} />
+              <>
+                <SatoshiIconTilted scale={0.7} />
+                <MonoBody1 isTruncated>{satoshi || 0}</MonoBody1>
+              </>
             )}
           </Button>
         </InputRightElement>
