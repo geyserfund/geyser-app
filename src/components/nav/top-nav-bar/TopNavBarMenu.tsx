@@ -1,4 +1,4 @@
-import { HamburgerIcon } from '@chakra-ui/icons'
+import { DownloadIcon, HamburgerIcon } from '@chakra-ui/icons'
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu'
 import { Avatar, Button, HStack, MenuDivider, Stack } from '@chakra-ui/react'
 import { useContext } from 'react'
@@ -200,16 +200,19 @@ export const TopNavBarMenu = ({
         <MenuDivider />
         <ModeChange />
 
-        {canInstall && (
+        {canInstall && isLoggedIn && (
           <>
             <MenuDivider />
             <MenuItem as={Stack} px={4} py={2}>
-              <Button variant="primary" width="100%" onClick={handlePrompt}>
+              <Button
+                variant="secondary"
+                leftIcon={<DownloadIcon />}
+                width="100%"
+                onClick={handlePrompt}
+              >
                 {t('Install Geyser')}
               </Button>
             </MenuItem>
-
-            <MenuDivider />
           </>
         )}
       </MenuList>

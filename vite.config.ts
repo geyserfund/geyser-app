@@ -11,7 +11,7 @@ const pwaOptions: Partial<VitePWAOptions> = {
     start_url: '.',
     display: 'standalone',
     background_color: '#141A19',
-    name: 'Geyser Fund - Crowdfunding with Bitcoin',
+    name: 'Geyser',
     short_name: 'Geyser',
     description:
       'Geyser is a bitcoin crowdfunding platform that enables campaign creators to launch their projects with rewards and engage their communities with posts and content.',
