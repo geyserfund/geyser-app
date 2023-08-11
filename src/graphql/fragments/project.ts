@@ -23,6 +23,26 @@ export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
   }
 `
 
+export const FRAGMENT_PROJECT_FOR_PROFILE_PAGE = gql`
+  fragment ProjectForProfilePage on Project {
+    id
+    name
+    balance
+    fundersCount
+    thumbnailImage
+    title
+    createdAt
+    owners {
+      id
+      user {
+        id
+        username
+        imageUrl
+      }
+    }
+  }
+`
+
 export const FRAGMENT_PROJECT_REWARD_FOR_LANDING_PAGE = gql`
   fragment ProjectRewardForLandingPage on ProjectReward {
     cost
