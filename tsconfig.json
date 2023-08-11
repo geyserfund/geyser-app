@@ -17,6 +17,9 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "noUncheckedIndexedAccess": true,
+    "types": [
+      "vite-plugin-pwa/client"
+    ]
   },
   "include": ["src"],
   "exclude":["src/types/generated/graphql.ts"],

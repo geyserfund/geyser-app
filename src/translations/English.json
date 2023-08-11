@@ -645,5 +645,9 @@
   "Check your SPAM folder for the email.":"Check your SPAM folder for the email.",
   "As a project creator, you cannot delete your profile":"As a project creator, you cannot delete your profile",
   "Successfully updated user email":"Successfully updated user email",
-  "Email verification successfull!":"Email verification successfull!"
+  "Email verification successfull!":"Email verification successfull!",
+  "Update available":"Update available",
+  "There is a newer version of the app available":"There is a newer version of the app available",
+  "Would you like to reload the page to get the latest update?":"Would you like to reload the page to get the latest update?",
+  "Supporters":"Supporters"
 }
