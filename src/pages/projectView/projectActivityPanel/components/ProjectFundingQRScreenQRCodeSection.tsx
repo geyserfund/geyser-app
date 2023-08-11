@@ -394,7 +394,7 @@ const GeneratingInvoice = ({
 }) => {
   const { t } = useTranslation()
   const { onOpen, onClose, isOpen } = useDisclosure()
-  const timeout = useRef<NodeJS.Timeout | undefined>()
+  const timeout = useRef<number | undefined>()
 
   useEffect(() => {
     timeout.current = setTimeout(onOpen, FUNDING_REQUEST_TIMEOUT)
