@@ -115,7 +115,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
   const [hasCopiedLightning, setHasCopiedLightning] = useState(false)
   const [hasCopiedOnchain, setHasCopiedOnchain] = useState(false)
 
-  const [lightningAddress, setLightningAddress] = useState<string>('')
+  const [lightningInvoice, setLightningInvoice] = useState<string>('')
   const [onchainAddress, setOnchainAddress] = useState<string>('')
   // const [fallbackAddress, setFallbackAddress] = useState<string>('')
 
@@ -173,14 +173,14 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
 
     if (id === 0) {
       setOnchainAddress('')
-      setLightningAddress('')
+      setLightningInvoice('')
       // setFallbackAddress('')
       return
     }
 
     // setFallbackAddress(getBip21Invoice(amount, address, paymentRequest))
     setOnchainAddress(getBip21Invoice(amount, address))
-    setLightningAddress(paymentRequest || '')
+    setLightningInvoice(paymentRequest || '')
   }, [
     fundingTx,
     fundingTx.paymentRequest,
@@ -189,12 +189,12 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
   ])
 
   const onCopyLightning = useCallback(() => {
-    copyTextToClipboard(lightningAddress)
+    copyTextToClipboard(lightningInvoice)
     setHasCopiedLightning(true)
     setTimeout(() => {
       setHasCopiedLightning(false)
     }, 500)
-  }, [lightningAddress])
+  }, [lightningInvoice])
 
   const onCopyOnchain = useCallback(() => {
     copyTextToClipboard(onchainAddress)
@@ -250,7 +250,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
               leftIcon={hasCopiedLightning ? <RiLinkUnlink /> : <FaCopy />}
               onClick={onCopyLightning}
               variant="primary"
-              isDisabled={!lightningAddress}
+              isDisabled={!lightningInvoice}
             >
               <Text>
                 {hasCopiedLightning
@@ -279,7 +279,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
     onCopyLightning,
     onCopyOnchain,
     qrDisplayState,
-    lightningAddress,
+    lightningInvoice,
     t,
   ])
 
@@ -300,7 +300,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
                   <QRCode
                     value={
                       paymentMethod === PaymentMethods.LIGHTNING
-                        ? lightningAddress
+                        ? lightningInvoice
                         : onchainAddress
                     }
                     size={qrSize}
@@ -319,7 +319,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
                   <QRCode
                     value={
                       paymentMethod === PaymentMethods.LIGHTNING
-                        ? lightningAddress
+                        ? lightningInvoice
                         : onchainAddress
                     }
                     size={qrSize}
@@ -373,7 +373,7 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
     retryFundingFlow,
     t,
     PaymentMethodSelection,
-    lightningAddress,
+    lightningInvoice,
     onchainAddress,
     paymentMethod,
     qrSize,
