@@ -7,6 +7,7 @@ import {
   InputLeftElement,
   InputProps,
   InputRightElement,
+  Text,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
@@ -27,7 +28,6 @@ import {
 } from '../icons'
 import { SatSymbolIcon } from '../icons/svg'
 import { MonoBody1 } from '../typography'
-import { ButtonComponent } from '../ui'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   inputElement: {
@@ -60,8 +60,12 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
     fontSize: '35px',
   },
   defaultAmountButtons: {
+    flex: 1,
+    padding: '5px',
     borderWidth: '2px',
+    backgroundColor: 'transparent',
     boxShadow: 'none',
+    overflow: 'hidden',
     '&:focus': {
       borderColor: colors.neutral[500],
     },
@@ -115,37 +119,47 @@ export const DonationInput = ({
     setSatoshi(Math.round(val / btcRate))
   }
 
+  const fontSize = { base: 'sm', md: 'md', lg: 'sm', xl: 'md' }
+
   return (
     <VStack>
       <HStack width="100%" justifyContent="space-around" mt="5px">
-        <ButtonComponent
+        <Button
           className={classes.defaultAmountButtons}
           onClick={() => handleDefaultAmountButtonClick(10)}
           leftIcon={<MedalIcon />}
         >
-          $ 10
-        </ButtonComponent>
-        <ButtonComponent
+          <Text fontSize={fontSize} isTruncated>
+            $10
+          </Text>
+        </Button>
+        <Button
           className={classes.defaultAmountButtons}
           onClick={() => handleDefaultAmountButtonClick(50)}
           leftIcon={<TrophyIcon />}
         >
-          $ 50
-        </ButtonComponent>
-        <ButtonComponent
+          <Text fontSize={fontSize} isTruncated>
+            $50
+          </Text>
+        </Button>
+        <Button
           className={classes.defaultAmountButtons}
           onClick={() => handleDefaultAmountButtonClick(100)}
           leftIcon={<CrownIcon />}
         >
-          $ 100
-        </ButtonComponent>
-        <ButtonComponent
+          <Text fontSize={fontSize} isTruncated>
+            $100
+          </Text>
+        </Button>
+        <Button
           className={classes.defaultAmountButtons}
           onClick={() => handleDefaultAmountButtonClick(1000)}
           leftIcon={<StarIcon />}
         >
-          $ 1000
-        </ButtonComponent>
+          <Text fontSize={fontSize} isTruncated>
+            $1000
+          </Text>
+        </Button>
       </HStack>
 
       <InputGroup {...inputGroup}>
@@ -179,12 +193,15 @@ export const DonationInput = ({
           >
             {isSatoshi ? (
               <>
-                <BiDollar />
+                <BiDollar style={{ paddingBottom: '3px' }} />
                 <MonoBody1 isTruncated>{dollar || 0}</MonoBody1>
               </>
             ) : (
               <>
-                <SatoshiIconTilted scale={0.7} />
+                <SatoshiIconTilted
+                  scale={0.7}
+                  style={{ paddingBottom: '3px' }}
+                />
                 <MonoBody1 isTruncated>{satoshi || 0}</MonoBody1>
               </>
             )}

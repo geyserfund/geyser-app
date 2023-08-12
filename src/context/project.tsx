@@ -36,7 +36,7 @@ type ProjectState = {
 }
 
 type ProjectContextProps = {
-  project: ProjectFragment | null
+  project: ProjectFragment
   updateProject: (updateProject: Partial<ProjectFragment>) => void
   saveProject: () => Promise<void>
   mobileView: MobileViews

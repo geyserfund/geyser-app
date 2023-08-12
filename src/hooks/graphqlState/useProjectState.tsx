@@ -21,7 +21,7 @@ export const useProjectState = (
 ) => {
   const { toast } = useNotification()
 
-  const [project, setProject] = useState<ProjectFragment | null>(null)
+  const [project, setProject] = useState<ProjectFragment>({} as ProjectFragment)
   const [baseProject, setBaseProject] = useState<ProjectFragment>(
     {} as ProjectFragment,
   )
@@ -80,7 +80,7 @@ export const useProjectState = (
 
   const [isDiff, diffKeys] = useMemo(
     () =>
-      project
+      project.id
         ? getDiff(project, baseProject, [
             'location',
             'description',
@@ -99,7 +99,7 @@ export const useProjectState = (
   )
 
   const saveProject = async () => {
-    if (!isDiff || !diffKeys || !project) {
+    if (!isDiff || !diffKeys || !project.id) {
       return
     }
 

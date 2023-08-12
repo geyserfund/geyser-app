@@ -646,6 +646,8 @@
   "As a project creator, you cannot delete your profile":"As a project creator, you cannot delete your profile",
   "Successfully updated user email":"Successfully updated user email",
   "Email verification successfull!":"Email verification successfull!",
+  "Copy lightning invoice":"Copy lightning invoice",
+  "Copy Onchain address":"Copy Onchain address",
   "Update available":"Update available",
   "There is a newer version of the app available":"There is a newer version of the app available",
   "Would you like to reload the page to get the latest update?":"Would you like to reload the page to get the latest update?",
