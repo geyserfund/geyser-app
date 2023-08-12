@@ -12,11 +12,10 @@ import { FaCopy } from 'react-icons/fa'
 import { RiLinkUnlink } from 'react-icons/ri'
 import { QRCode } from 'react-qrcode-logo'
 
+import { LogoDark, LogoPrimary } from '../../../../../../assets'
 import Loader from '../../../../../../components/ui/Loader'
 import { lightModeColors } from '../../../../../../styles'
 import { copyTextToClipboard } from '../../../../../../utils'
-import LogoPrimary from '../../../../../assets/logo-brand.svg'
-import LogoDark from '../../../../../assets/logo-dark.svg'
 import { PaymentMethods } from '../QRCodeSection'
 
 interface QRCodeImageProps {

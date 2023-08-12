@@ -28,7 +28,6 @@ import {
 } from '../icons'
 import { SatSymbolIcon } from '../icons/svg'
 import { MonoBody1 } from '../typography'
-import { ButtonComponent } from '../ui'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   inputElement: {

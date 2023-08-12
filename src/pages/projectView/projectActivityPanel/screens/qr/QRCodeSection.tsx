@@ -1,28 +1,14 @@
-import {
-  Box,
-  Button,
-  HStack,
-  Text,
-  useBreakpointValue,
-  VStack,
-} from '@chakra-ui/react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Text, VStack } from '@chakra-ui/react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { FaCopy } from 'react-icons/fa'
-import { RiLinkUnlink } from 'react-icons/ri'
-import { QRCode } from 'react-qrcode-logo'
 
 import Loader from '../../../../../components/ui/Loader'
 import { UseFundingFlowReturn } from '../../../../../hooks'
-import { lightModeColors } from '../../../../../styles'
 import {
   FundingStatus,
   InvoiceStatus,
 } from '../../../../../types/generated/graphql'
-import { copyTextToClipboard } from '../../../../../utils'
 import { getBip21Invoice } from '../../../../../utils/lightning/bip21'
-import LogoPrimary from '../../../../assets/logo-brand.svg'
-import LogoDark from '../../../../assets/logo-dark.svg'
 import {
   FundingErrorView,
   GeneratingInvoice,
