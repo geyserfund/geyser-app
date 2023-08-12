@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { DonationInput } from '../../../../components/molecules'
 import { SectionTitle } from '../../../../components/ui'
 import { useProjectContext } from '../../../../context'
-import { FundingFormRewards } from './FundingFormRewards'
+import { FundingFormRewards } from '../screens/rewardSelection/FundingFormRewards'
 
 type Props = {
   onBackClick: MouseEventHandler<HTMLButtonElement>

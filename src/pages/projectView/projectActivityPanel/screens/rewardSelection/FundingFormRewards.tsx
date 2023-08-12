@@ -2,11 +2,11 @@ import { CheckIcon } from '@chakra-ui/icons'
 import { Box, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { ItemCard } from '../../../../components/layouts/ItemCard'
-import { SectionTitle } from '../../../../components/ui'
-import { useProjectContext } from '../../../../context'
-import { ProjectRewardForCreateUpdateFragment } from '../../../../types'
-import { FundingFormRewardItem } from '../../projectMainBody/components'
+import { ItemCard } from '../../../../../components/layouts/ItemCard'
+import { SectionTitle } from '../../../../../components/ui'
+import { useProjectContext } from '../../../../../context'
+import { ProjectRewardForCreateUpdateFragment } from '../../../../../types'
+import { FundingFormRewardItem } from '../../../projectMainBody/components'
 
 type Props = {
   readOnly?: boolean

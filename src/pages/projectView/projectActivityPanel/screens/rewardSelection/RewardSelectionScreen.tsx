@@ -1,10 +1,10 @@
 import { VStack } from '@chakra-ui/react'
 
-import { MobileViews, useProjectContext } from '../../../../context'
-import { ProjectRewardForCreateUpdateFragment } from '../../../../types'
-import { FundingFormRewards } from '../components/FundingFormRewards'
+import { MobileViews, useProjectContext } from '../../../../../context'
+import { ProjectRewardForCreateUpdateFragment } from '../../../../../types'
+import { FundingFormRewards } from './FundingFormRewards'
 
-export const ProjectFundingRewardSelectionScreen = () => {
+export const RewardSelectionScreen = () => {
   const {
     setMobileView,
     fundForm: { updateReward },

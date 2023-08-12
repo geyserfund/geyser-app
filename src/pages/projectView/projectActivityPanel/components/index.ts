@@ -1,6 +1,3 @@
 export * from './Countdown'
 export * from './FundingFormSection'
-export * from './ProjectContributionList'
-export * from './ProjectFundingQRScreenQRCodeSection'
-export * from './ProjectLeaderboardList'
 export * from './SuccessImageComponent'

@@ -1,5 +1,4 @@
-export * from './ProjectFundingInitialInfoScreen'
-export * from './ProjectFundingQRScreen'
-export * from './ProjectFundingRewardSelectionScreen'
+export * from './info'
 export * from './ProjectFundingSelectionFormScreen'
+export * from './rewardSelection'
 export * from './SuccessScreen'

@@ -94,7 +94,7 @@ export const ProjectFundingSelectionFormScreen = ({
 
   return (
     <VStack
-      padding={isMobile ? '20px 10px' : '20px'}
+      paddingY={isMobile ? '10px' : '20px'}
       width="100%"
       height="100%"
       position="relative"
@@ -102,11 +102,16 @@ export const ProjectFundingSelectionFormScreen = ({
       backgroundColor="neutral.0"
       marginBottom={
         isMobile && summaryCardRef.current
-          ? `${summaryCardRef.current.offsetHeight}px`
+          ? `${summaryCardRef.current.offsetHeight + 80}px`
           : undefined
       }
     >
-      <Box width="100%" overflowY="auto" flex={1}>
+      <Box
+        width="100%"
+        overflowY="auto"
+        flex={1}
+        px={{ base: '10px', lg: '20px' }}
+      >
         {step === 'contribution' ? (
           <FundingFormSection onBackClick={handleCloseButton} />
         ) : (
@@ -119,8 +124,9 @@ export const ProjectFundingSelectionFormScreen = ({
         backgroundColor="neutral.0"
         position={isMobile ? 'fixed' : 'relative'}
         bottom={isMobile ? '60px' : '0px'}
+        px={{ base: '10px', lg: '20px' }}
         paddingBottom="5px"
-        width={isMobile ? 'calc(100% - 20px)' : '100%'}
+        width={'100%'}
       >
         {hasRewards && (
           <Divider
@@ -130,7 +136,10 @@ export const ProjectFundingSelectionFormScreen = ({
             marginTop="0px !important"
           />
         )}
-        <ProjectFundingSummaryCard onSubmit={handleSubmit[step]} />
+        <ProjectFundingSummaryCard
+          ref={summaryCardRef}
+          onSubmit={handleSubmit[step]}
+        />
       </VStack>
     </VStack>
   )

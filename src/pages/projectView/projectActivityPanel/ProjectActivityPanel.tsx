@@ -15,13 +15,12 @@ import {
   RewardFundingInput,
 } from '../../../types'
 import { toInt, useCustomTheme, useMobileMode } from '../../../utils'
-import { InfoPageSkeleton, ProjectFundingInitialInfoScreen } from './screens'
 import {
-  ProjectFundingQRScreen,
-  ProjectFundingRewardSelectionScreen,
   ProjectFundingSelectionFormScreen,
+  RewardSelectionScreen,
   SuccessScreen,
 } from './screens'
+import { InfoScreen, InfoScreenSkeleton } from './screens/info'
 import { useStyles } from './styles'
 
 type Props = {
@@ -150,16 +149,16 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
 
   const renderPanelContent = () => {
     if (!project) {
-      return <InfoPageSkeleton />
+      return <InfoScreenSkeleton />
     }
 
     if (mobileView === MobileViews.rewards) {
-      return <ProjectFundingRewardSelectionScreen />
+      return <RewardSelectionScreen />
     }
 
     switch (fundState) {
       case fundingStages.initial:
-        return <ProjectFundingInitialInfoScreen project={project} />
+        return <InfoScreen />
       case fundingStages.form:
         return (
           <ProjectFundingSelectionFormScreen

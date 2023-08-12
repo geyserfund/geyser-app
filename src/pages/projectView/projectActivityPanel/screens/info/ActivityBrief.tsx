@@ -4,39 +4,45 @@ import {
   CircularProgress,
   HStack,
   SkeletonCircle,
+  StackProps,
   Text,
   useTheme,
   VStack,
 } from '@chakra-ui/react'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEllipsis } from 'react-icons/ai'
 
-import { ExternalAccountType } from '../../../pages/auth'
-import { Countdown } from '../../../pages/projectView/projectActivityPanel/components'
-import {
-  FunderWithUserFragment,
-  OrderByOptions,
-  ProjectFragment,
-  ProjectMilestone,
-  useProjectFundersQuery,
-} from '../../../types'
-import { isActive, toInt, useNotification } from '../../../utils'
-import { getProjectBalance } from '../../../utils/helpers'
-import { SatoshiAmount } from '../../ui'
-import { UserAvatar } from '../../ui/UserAvatar'
+import { SatoshiIconTilted } from '../../../../../components/icons'
 import {
   ProjectFundersModal,
   useProjectFundersModal,
-} from '../projectActivity/ProjectFundersModal'
+} from '../../../../../components/molecules/projectActivity/ProjectFundersModal'
+import { SatoshiAmount } from '../../../../../components/ui'
+import { UserAvatar } from '../../../../../components/ui/UserAvatar'
+import { MobileViews, useProjectContext } from '../../../../../context'
+import {
+  FunderWithUserFragment,
+  OrderByOptions,
+  ProjectMilestone,
+  useProjectFundersQuery,
+} from '../../../../../types'
+import {
+  isActive,
+  toInt,
+  useMobileMode,
+  useNotification,
+} from '../../../../../utils'
+import { getProjectBalance } from '../../../../../utils/helpers'
+import { ExternalAccountType } from '../../../../auth'
+import { Countdown } from '../../components'
 
-interface IActivityBrief {
-  project: ProjectFragment
-}
-
-export const ActivityBrief = ({ project }: IActivityBrief) => {
+export const ActivityBrief = (props: StackProps) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
+  const isMobile = useMobileMode()
+
+  const { project, setMobileView } = useProjectContext()
 
   const [socialFunders, setSocialFunders] = useState<FunderWithUserFragment[]>(
     [],
@@ -113,7 +119,7 @@ export const ActivityBrief = ({ project }: IActivityBrief) => {
     }
   }, [balance, project])
 
-  const getTrackColor = () => {
+  const getTrackColor = useCallback(() => {
     switch (milestoneIndex % 3) {
       case 1:
         if (milestoneIndex === 1) return 'neutral.200'
@@ -125,9 +131,9 @@ export const ActivityBrief = ({ project }: IActivityBrief) => {
       default:
         return 'neutral.200'
     }
-  }
+  }, [milestoneIndex])
 
-  const getColor = () => {
+  const getColor = useCallback(() => {
     switch (milestoneIndex % 3) {
       case 1:
         return 'primary.400'
@@ -138,7 +144,7 @@ export const ActivityBrief = ({ project }: IActivityBrief) => {
       default:
         return 'primary.300'
     }
-  }
+  }, [milestoneIndex])
 
   const circularPercentage = useMemo(() => {
     if (currentMilestone) {
@@ -150,7 +156,7 @@ export const ActivityBrief = ({ project }: IActivityBrief) => {
     }
   }, [balance, currentMilestone, prevMilestone])
 
-  const renderCircularProgress = () => {
+  const renderCircularProgress = useCallback(() => {
     if (currentMilestone) {
       return (
         <CircularProgress
@@ -166,9 +172,15 @@ export const ActivityBrief = ({ project }: IActivityBrief) => {
     }
 
     return null
-  }
+  }, [
+    circularPercentage,
+    currentMilestone,
+    funderLoading,
+    getColor,
+    getTrackColor,
+  ])
 
-  const getMilestoneValue = () => {
+  const getMilestoneValue = useCallback(() => {
     if (currentMilestone) {
       const percentage = Math.ceil(
         ((balance - prevMilestone) /
@@ -186,14 +198,14 @@ export const ActivityBrief = ({ project }: IActivityBrief) => {
     }
 
     return null
-  }
+  }, [balance, currentMilestone, milestoneIndex, prevMilestone, t])
 
   const showCountdown = isActive(project.status) && Boolean(project.expiresAt)
 
   const latestFunders = socialFunders.slice(0, 12)
 
   return (
-    <VStack w="100%">
+    <VStack w="100%" {...props}>
       <HStack w="100%" padding={3} justifyContent="start">
         {renderCircularProgress()}
         <VStack
@@ -270,6 +282,20 @@ export const ActivityBrief = ({ project }: IActivityBrief) => {
           </HStack>
         </VStack>
       )}
+
+      {!isMobile ? (
+        <HStack w="full">
+          <Button
+            variant="primary"
+            leftIcon={<SatoshiIconTilted />}
+            width="100%"
+            onClick={() => setMobileView(MobileViews.funding)}
+            isDisabled={!isActive(project.status)}
+          >
+            {t('Contribute')}
+          </Button>
+        </HStack>
+      ) : null}
       <ProjectFundersModal {...fundersModal} />
     </VStack>
   )

@@ -15,18 +15,18 @@ import { IoMdRefresh } from 'react-icons/io'
 import { RiLinkUnlink } from 'react-icons/ri'
 import { QRCode } from 'react-qrcode-logo'
 
-import LogoPrimary from '../../../../assets/logo-brand.svg'
-import LogoDark from '../../../../assets/logo-dark.svg'
-import { Body2 } from '../../../../components/typography'
-import Loader from '../../../../components/ui/Loader'
-import { UseFundingFlowReturn } from '../../../../hooks'
-import { lightModeColors } from '../../../../styles'
+import { Body2 } from '../../../../../components/typography'
+import Loader from '../../../../../components/ui/Loader'
+import { UseFundingFlowReturn } from '../../../../../hooks'
+import { lightModeColors } from '../../../../../styles'
 import {
   FundingStatus,
   InvoiceStatus,
-} from '../../../../types/generated/graphql'
-import { copyTextToClipboard } from '../../../../utils'
-import { getBip21Invoice } from '../../../../utils/lightning/bip21'
+} from '../../../../../types/generated/graphql'
+import { copyTextToClipboard } from '../../../../../utils'
+import { getBip21Invoice } from '../../../../../utils/lightning/bip21'
+import LogoPrimary from '../../../../assets/logo-brand.svg'
+import LogoDark from '../../../../assets/logo-dark.svg'
 
 const FUNDING_REQUEST_TIMEOUT = 45_000
 
@@ -101,7 +101,7 @@ const InvoiceErrorView = ({
   )
 }
 
-export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
+export const QRCodeSection = ({ fundingFlow }: Props) => {
   const { t } = useTranslation()
   const [hasCopiedLightning, setHasCopiedLightning] = useState(false)
   const [hasCopiedOnchain, setHasCopiedOnchain] = useState(false)
@@ -236,6 +236,8 @@ export const ProjectFundingQRScreenQRCodeSection = ({ fundingFlow }: Props) => {
     onCopyLightning,
     onCopyOnchain,
     qrDisplayState,
+    lightningAddress,
+    t,
   ])
 
   const renderQrBox = useCallback(() => {
