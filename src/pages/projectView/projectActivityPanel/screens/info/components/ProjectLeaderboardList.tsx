@@ -4,6 +4,7 @@ import { Fragment } from 'react'
 import {
   CardLayout,
   CardLayoutProps,
+  SkeletonLayout,
 } from '../../../../../../components/layouts'
 import { ProjectFundingLeaderboardFeedItem } from '../../../../../../components/molecules'
 import { ID } from '../../../../../../constants/components'
@@ -60,25 +61,29 @@ export const ProjectLeaderboardList = ({ ...props }: CardLayoutProps) => {
         alignItems="start"
         paddingRight="10px"
       >
-        {funders.data.map((funder, index) => {
-          return (
-            <Fragment key={funder.id}>
-              <ProjectFundingLeaderboardFeedItem
-                w="100%"
-                funder={funder}
-                leaderboardPosition={index + 1}
-                project={project}
-              />
-              {index < funders.data.length - 1 && (
-                <Divider
-                  borderBottomWidth="2px"
-                  maxWidth="500px"
-                  borderColor="neutral.200"
+        {funders.isLoading ? (
+          <LeaderboardListSkeleton />
+        ) : (
+          funders.data.map((funder, index) => {
+            return (
+              <Fragment key={funder.id}>
+                <ProjectFundingLeaderboardFeedItem
+                  w="100%"
+                  funder={funder}
+                  leaderboardPosition={index + 1}
+                  project={project}
                 />
-              )}
-            </Fragment>
-          )
-        })}
+                {index < funders.data.length - 1 && (
+                  <Divider
+                    borderBottomWidth="2px"
+                    maxWidth="500px"
+                    borderColor="neutral.200"
+                  />
+                )}
+              </Fragment>
+            )
+          })
+        )}
         <ScrollInvoke
           elementId={!isMobile ? id : undefined}
           onScrollEnd={funders.fetchNext}
@@ -87,5 +92,26 @@ export const ProjectLeaderboardList = ({ ...props }: CardLayoutProps) => {
         />
       </VStack>
     </CardLayout>
+  )
+}
+
+export const LeaderboardListSkeleton = () => {
+  return (
+    <>
+      {[1, 2, 3, 4, 5].map((value, index) => {
+        return (
+          <Fragment key={value}>
+            <SkeletonLayout width="100%" height="40px" />
+            {index < 4 && (
+              <Divider
+                borderBottomWidth="2px"
+                maxWidth="500px"
+                borderColor="neutral.200"
+              />
+            )}
+          </Fragment>
+        )
+      })}
+    </>
   )
 }

@@ -4,6 +4,7 @@ import { Fragment, useEffect, useState } from 'react'
 import {
   CardLayout,
   CardLayoutProps,
+  SkeletonLayout,
 } from '../../../../../../components/layouts'
 import { ID } from '../../../../../../constants/components'
 import { useProjectContext } from '../../../../../../context'
@@ -89,23 +90,27 @@ export const ProjectContributionList = ({ ...props }: CardLayoutProps) => {
       {...props}
     >
       <VStack spacing={'15px'} marginTop="20px" paddingRight="10px">
-        {fundingTxs.data.map((fundingTx, index) => {
-          return (
-            <Fragment key={fundingTx.id}>
-              <ContributionActivityItem
-                fundingTx={fundingTx}
-                count={fundingTx.count}
-              />
-              {index < fundingTxs.data.length - 1 && (
-                <Divider
-                  borderBottomWidth="2px"
-                  maxWidth="500px"
-                  borderColor="neutral.200"
+        {fundingTxs.isLoading ? (
+          <ContributionListSkeleton />
+        ) : (
+          fundingTxs.data.map((fundingTx, index) => {
+            return (
+              <Fragment key={fundingTx.id}>
+                <ContributionActivityItem
+                  fundingTx={fundingTx}
+                  count={fundingTx.count}
                 />
-              )}
-            </Fragment>
-          )
-        })}
+                {index < fundingTxs.data.length - 1 && (
+                  <Divider
+                    borderBottomWidth="2px"
+                    maxWidth="500px"
+                    borderColor="neutral.200"
+                  />
+                )}
+              </Fragment>
+            )
+          })
+        )}
 
         <ScrollInvoke
           elementId={!isMobile ? id : undefined}
@@ -115,5 +120,26 @@ export const ProjectContributionList = ({ ...props }: CardLayoutProps) => {
         />
       </VStack>
     </CardLayout>
+  )
+}
+
+export const ContributionListSkeleton = () => {
+  return (
+    <>
+      {[1, 2, 3, 4, 5].map((value, index) => {
+        return (
+          <Fragment key={value}>
+            <SkeletonLayout width="100%" height="80px" />
+            {index < 4 && (
+              <Divider
+                borderBottomWidth="2px"
+                maxWidth="500px"
+                borderColor="neutral.200"
+              />
+            )}
+          </Fragment>
+        )
+      })}
+    </>
   )
 }

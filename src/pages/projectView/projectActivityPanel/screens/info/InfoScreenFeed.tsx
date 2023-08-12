@@ -5,6 +5,9 @@ import { MobileViews, useProjectContext } from '../../../../../context'
 import { InfoScreenFeedTabs, ProjectContributionList } from './components'
 import { ProjectLeaderboardList } from './components/ProjectLeaderboardList'
 
+let visitedContribution = false
+let visitedLeaderboard = false
+
 export const InfoScreenFeed = () => {
   const { mobileView, project } = useProjectContext()
 
@@ -16,14 +19,35 @@ export const InfoScreenFeed = () => {
     } else if (mobileView === MobileViews.leaderboard) {
       setTab('leaderBoard')
     }
-  }, [mobileView])
 
+    return () => {
+      visitedContribution = false
+      visitedLeaderboard = false
+    }
+  }, [mobileView])
   const renderActivityList = useCallback(() => {
-    if (tab === 'activity') {
-      return <ProjectContributionList />
+    const isActivity = tab === 'activity'
+
+    if (isActivity) {
+      visitedContribution = true
+    } else {
+      visitedLeaderboard = true
     }
 
-    return <ProjectLeaderboardList />
+    return (
+      <>
+        {(isActivity || visitedContribution) && (
+          <ProjectContributionList
+            display={!isActivity && visitedContribution ? 'none' : undefined}
+          />
+        )}
+        {(!isActivity || visitedLeaderboard) && (
+          <ProjectLeaderboardList
+            display={isActivity && visitedLeaderboard ? 'none' : undefined}
+          />
+        )}
+      </>
+    )
   }, [tab])
 
   return (
