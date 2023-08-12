@@ -5,19 +5,20 @@ import ReactConfetti from 'react-confetti'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { getPath } from '../../../../constants'
-import { useProjectContext } from '../../../../context'
-import { QUERY_USER_BADGES } from '../../../../graphql/queries/badges'
-import { useFundCalc } from '../../../../helpers'
-import { lightModeColors } from '../../../../styles'
-import { Satoshis } from '../../../../types'
-import { Project, UserBadge } from '../../../../types'
+import { getPath } from '../../../../../constants'
+import { useProjectContext } from '../../../../../context'
+import { QUERY_USER_BADGES } from '../../../../../graphql/queries/badges'
+import { useFundCalc } from '../../../../../helpers'
+import { lightModeColors } from '../../../../../styles'
+import { Satoshis } from '../../../../../types'
+import { Project, UserBadge } from '../../../../../types'
+import {} from '../../../projectMainBody/components'
 import {
   ContributionInfoBox,
   ContributionInfoBoxVersion,
-} from '../../projectMainBody/components'
-import { SuccessImageComponent } from '../components'
-import { ContributionShippingBox } from '../components/ContributionShippingBox'
+  ContributionShippingBox,
+  SuccessImageComponent,
+} from './components'
 
 type Props = {
   onCloseClick: () => void

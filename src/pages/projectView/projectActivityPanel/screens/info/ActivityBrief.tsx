@@ -35,7 +35,7 @@ import {
 } from '../../../../../utils'
 import { getProjectBalance } from '../../../../../utils/helpers'
 import { ExternalAccountType } from '../../../../auth'
-import { Countdown } from '../../components'
+import { Countdown } from './components'
 
 export const ActivityBrief = (props: StackProps) => {
   const { t } = useTranslation()

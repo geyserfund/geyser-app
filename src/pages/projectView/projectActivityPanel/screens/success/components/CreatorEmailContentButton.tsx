@@ -3,8 +3,8 @@ import { HStack, StackProps, Text, VStack } from '@chakra-ui/react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useProjectContext } from '../../../../context'
-import { copyTextToClipboard } from '../../../../utils'
+import { useProjectContext } from '../../../../../../context'
+import { copyTextToClipboard } from '../../../../../../utils'
 
 export const CreatorEmailContentButton = ({ ...props }: StackProps) => {
   const { t } = useTranslation()

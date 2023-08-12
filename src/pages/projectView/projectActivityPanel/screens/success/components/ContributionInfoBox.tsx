@@ -18,13 +18,20 @@ import {
   AnonymousAvatar,
   SatoshiAmount,
   SectionTitle,
-} from '../../../../components/ui'
-import { GEYSER_FEE_DISCLAIMER, noFeeProjects } from '../../../../constants'
-import { useFundCalc } from '../../../../helpers'
-import { IFundForm } from '../../../../hooks'
-import { IBadge } from '../../../../interfaces'
-import { ProjectFragment, ProjectReward, Satoshis } from '../../../../types'
-import { hasOwnNode } from '../../../../utils/helpers'
+} from '../../../../../../components/ui'
+import {
+  GEYSER_FEE_DISCLAIMER,
+  noFeeProjects,
+} from '../../../../../../constants'
+import { useFundCalc } from '../../../../../../helpers'
+import { IFundForm } from '../../../../../../hooks'
+import { IBadge } from '../../../../../../interfaces'
+import {
+  ProjectFragment,
+  ProjectReward,
+  Satoshis,
+} from '../../../../../../types'
+import { hasOwnNode } from '../../../../../../utils/helpers'
 
 export enum ContributionInfoBoxVersion {
   NEUTRAL = 'neutral',

@@ -1,4 +1,4 @@
-export * from '../../projectActivityPanel/components/ContributionInfoBox'
+export * from '../../projectActivityPanel/screens/success/components/ContributionInfoBox'
 export * from './AvatarElement'
 export * from './FollowButton'
 export * from './FundingFormRewardItem'

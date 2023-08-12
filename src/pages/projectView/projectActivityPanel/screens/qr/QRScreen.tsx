@@ -18,6 +18,7 @@ import {
   ContributionInfoBox,
   ContributionInfoBoxVersion,
 } from '../../../projectMainBody/components'
+import { QRCodeSection } from './QRCodeSection'
 
 type Props = {
   handleCloseButton: () => void
@@ -26,7 +27,7 @@ type Props = {
   project: ProjectFragment
 }
 
-export const ProjectFundingQRScreen = ({
+export const QRScreen = ({
   fundingFlow,
   state,
   project,
@@ -74,7 +75,7 @@ export const ProjectFundingQRScreen = ({
         <SectionTitle>{t('Confirm & Contribute')}</SectionTitle>
         <CloseButton onClick={handleCloseButton} />
       </HStack>
-      <ProjectFundingQRScreenQRCodeSection fundingFlow={fundingFlow} />
+      <QRCodeSection fundingFlow={fundingFlow} />
       <ContributionInfoBox
         formState={state}
         version={ContributionInfoBoxVersion.NEUTRAL}

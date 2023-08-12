@@ -3,10 +3,10 @@ import { Box, Button, HStack, VStack } from '@chakra-ui/react'
 import { MouseEventHandler } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { DonationInput } from '../../../../components/molecules'
-import { SectionTitle } from '../../../../components/ui'
-import { useProjectContext } from '../../../../context'
-import { FundingFormRewards } from '../screens/rewardSelection/FundingFormRewards'
+import { DonationInput } from '../../../../../../components/molecules'
+import { SectionTitle } from '../../../../../../components/ui'
+import { useProjectContext } from '../../../../../../context'
+import { FundingFormRewards } from '../../rewardSelection/FundingFormRewards'
 
 type Props = {
   onBackClick: MouseEventHandler<HTMLButtonElement>

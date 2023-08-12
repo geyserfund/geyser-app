@@ -13,12 +13,12 @@ import { useTranslation } from 'react-i18next'
 import { BiCopy } from 'react-icons/bi'
 import { HiOutlineCheck } from 'react-icons/hi'
 
-import { Body2, H3 } from '../../../../components/typography'
-import { useProjectContext } from '../../../../context'
-import { fonts, lightModeColors } from '../../../../styles'
-import { Badge, FundingTxFragment } from '../../../../types'
-import { useNotification } from '../../../../utils'
-import { AvatarElement } from '../../projectMainBody/components'
+import { Body2, H3 } from '../../../../../../components/typography'
+import { useProjectContext } from '../../../../../../context'
+import { fonts, lightModeColors } from '../../../../../../styles'
+import { Badge, FundingTxFragment } from '../../../../../../types'
+import { useNotification } from '../../../../../../utils'
+import { AvatarElement } from '../../../../projectMainBody/components'
 
 export const SuccessImageComponent = ({
   currentBadge,

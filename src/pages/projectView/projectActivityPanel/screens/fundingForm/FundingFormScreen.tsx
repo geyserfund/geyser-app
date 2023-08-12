@@ -1,14 +1,14 @@
 import { Box, Divider, VStack } from '@chakra-ui/react'
 import { useRef, useState } from 'react'
 
-import { MAX_FUNDING_AMOUNT_USD } from '../../../../constants'
-import { useProjectContext } from '../../../../context'
-import { useFundCalc } from '../../../../helpers/fundingCalculation'
-import { ProjectRewardForCreateUpdateFragment } from '../../../../types/generated/graphql'
-import { useMobileMode, useNotification } from '../../../../utils'
-import { FundingFormSection } from '../components/FundingFormSection'
-import { FundingFormUserInfoSection } from '../components/FundingFormUserInfoSection'
-import { ProjectFundingSummaryCard } from '../components/ProjectFundingSummaryCard'
+import { MAX_FUNDING_AMOUNT_USD } from '../../../../../constants'
+import { useProjectContext } from '../../../../../context'
+import { useFundCalc } from '../../../../../helpers/fundingCalculation'
+import { ProjectRewardForCreateUpdateFragment } from '../../../../../types/generated/graphql'
+import { useMobileMode, useNotification } from '../../../../../utils'
+import { FundingFormSection } from './components/FundingFormSection'
+import { FundingFormUserInfoSection } from './components/FundingFormUserInfoSection'
+import { ProjectFundingSummaryCard } from './components/ProjectFundingSummaryCard'
 
 type Props = {
   handleCloseButton: () => void
@@ -17,7 +17,7 @@ type Props = {
   name: string
 }
 
-export const ProjectFundingSelectionFormScreen = ({
+export const FundingFormScreen = ({
   handleCloseButton,
   handleFund,
   rewards,

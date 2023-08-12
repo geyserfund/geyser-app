@@ -2,10 +2,10 @@ import { Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { FormEventHandler, forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { BoltIcon } from '../../../../components/icons'
-import { SatoshiAmount, SectionTitle } from '../../../../components/ui'
-import { useProjectContext } from '../../../../context'
-import { useFundCalc } from '../../../../helpers'
+import { BoltIcon } from '../../../../../../components/icons'
+import { SatoshiAmount, SectionTitle } from '../../../../../../components/ui'
+import { useProjectContext } from '../../../../../../context'
+import { useFundCalc } from '../../../../../../helpers'
 
 type Props = {
   onSubmit: () => void

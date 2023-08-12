@@ -1,8 +1,8 @@
 import { Box, HStack, Text } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
-import { fonts } from '../../../../styles'
-import { getCountDown } from '../../../../utils'
+import { fonts } from '../../../../../../styles'
+import { getCountDown } from '../../../../../../utils'
 
 export const Countdown = ({ endDate }: { endDate: string }) => {
   const [countDown, setCountDown] = useState('')

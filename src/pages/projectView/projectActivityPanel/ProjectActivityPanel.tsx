@@ -16,11 +16,13 @@ import {
 } from '../../../types'
 import { toInt, useCustomTheme, useMobileMode } from '../../../utils'
 import {
-  ProjectFundingSelectionFormScreen,
+  FundingFormScreen,
+  InfoScreen,
+  InfoScreenSkeleton,
+  QRScreen,
   RewardSelectionScreen,
   SuccessScreen,
 } from './screens'
-import { InfoScreen, InfoScreenSkeleton } from './screens/info'
 import { useStyles } from './styles'
 
 type Props = {
@@ -161,7 +163,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
         return <InfoScreen />
       case fundingStages.form:
         return (
-          <ProjectFundingSelectionFormScreen
+          <FundingFormScreen
             handleCloseButton={handleCloseButton}
             handleFund={handleFund}
             rewards={project.rewards}
@@ -170,7 +172,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
         )
       case fundingStages.started:
         return (
-          <ProjectFundingQRScreen
+          <QRScreen
             state={formState}
             project={project}
             fundingFlow={fundingFlow}

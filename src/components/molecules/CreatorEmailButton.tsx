@@ -2,7 +2,7 @@ import { CopyIcon } from '@chakra-ui/icons'
 import { Box, Button, ButtonProps } from '@chakra-ui/react'
 import { useState } from 'react'
 
-import { copyTextToClipboard } from '../../../../utils'
+import { copyTextToClipboard } from '../../utils'
 
 export const CreatorEmailButton = ({
   email,

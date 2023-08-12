@@ -1,8 +1,8 @@
 import { Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { useProjectContext } from '../../../../context'
-import { CreatorEmailButton } from './CreatorEmailButton'
+import { CreatorEmailButton } from '../../../../../../components/molecules'
+import { useProjectContext } from '../../../../../../context'
 import { CreatorEmailContentButton } from './CreatorEmailContentButton'
 
 export const ContributionShippingBox = () => {
