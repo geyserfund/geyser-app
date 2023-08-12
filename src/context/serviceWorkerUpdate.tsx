@@ -1,4 +1,10 @@
-import { Button, HStack } from '@chakra-ui/react'
+import {
+  Button,
+  HStack,
+  Popover,
+  PopoverContent,
+  VStack,
+} from '@chakra-ui/react'
 import {
   createContext,
   Dispatch,
@@ -10,7 +16,6 @@ import {
 import { useTranslation } from 'react-i18next'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 
-import { Modal } from '../components/layouts'
 import { Body1 } from '../components/typography'
 import { __production__ } from '../constants'
 
@@ -108,25 +113,36 @@ export const ServiceWorkerProvider = ({
       }}
     >
       {children}
-
-      <Modal
-        isOpen={refresh}
-        onClose={() => setNeedRefresh(false)}
-        title={t('Update available')}
-      >
-        <Body1>
-          {t('There is a newer version of the app available')}{' '}
-          {t('Would you like to reload the page to get the latest update?')}
-        </Body1>
-        <HStack w="full" justifyContent="flex-end" marginTop="20px">
-          <Button variant="secondary" onClick={() => setNeedRefresh(false)}>
-            {t('No')}
-          </Button>
-          <Button variant="primary" onClick={handleConfirm}>
-            {t('Yes')}
-          </Button>
+      {needRefresh && (
+        <HStack
+          position="fixed"
+          bottom="20px"
+          right="20px"
+          zIndex={9}
+          p="10px"
+          borderRadius="8px"
+          shadow="lg"
+          border="1px solid"
+          borderColor="neutral.400"
+        >
+          <VStack alignItems="start" justifyContent="center" spacing={0}>
+            <Body1 bold>{t("There's a new version of Geyser!")}</Body1>
+            <Body1>{t('Restart the app to load the new version')}</Body1>
+          </VStack>
+          <HStack>
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => setNeedRefresh(false)}
+            >
+              {t('Not now')}
+            </Button>
+            <Button size="sm" variant="primary" onClick={handleConfirm}>
+              {t('Restart app')}
+            </Button>
+          </HStack>
         </HStack>
-      </Modal>
+      )}
     </ServiceWorkerUpdate.Provider>
   )
 }
