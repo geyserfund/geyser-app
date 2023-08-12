@@ -1,10 +1,4 @@
-import {
-  Button,
-  HStack,
-  Popover,
-  PopoverContent,
-  VStack,
-} from '@chakra-ui/react'
+import { Button, HStack, VStack } from '@chakra-ui/react'
 import {
   createContext,
   Dispatch,
@@ -105,7 +99,7 @@ export const ServiceWorkerProvider = ({
   return (
     <ServiceWorkerUpdate.Provider
       value={{
-        needRefresh,
+        needRefresh: refresh,
         setNeedRefresh,
         updateServiceWorker,
         canInstall,
@@ -113,7 +107,7 @@ export const ServiceWorkerProvider = ({
       }}
     >
       {children}
-      {needRefresh && (
+      {refresh && (
         <HStack
           position="fixed"
           bottom="20px"
