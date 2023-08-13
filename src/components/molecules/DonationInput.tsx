@@ -12,7 +12,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import classNames from 'classnames'
-import { useEffect, useState } from 'react'
+import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { BiDollar } from 'react-icons/bi'
 import { createUseStyles } from 'react-jss'
 
@@ -89,6 +89,8 @@ export const DonationInput = ({
 
   const classes = useStyles()
 
+  const inputRef = useRef<HTMLInputElement>(null)
+
   const { isOpen: isSatoshi, onToggle } = useDisclosure({ defaultIsOpen: true })
   const isDollar = !isSatoshi
 
@@ -117,6 +119,12 @@ export const DonationInput = ({
   const handleDefaultAmountButtonClick = (val: number) => {
     setDollar(val)
     setSatoshi(Math.round(val / btcRate))
+  }
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      inputRef.current?.blur()
+    }
   }
 
   const fontSize = { base: 'sm', md: 'md', lg: 'sm', xl: 'md' }
@@ -171,12 +179,14 @@ export const DonationInput = ({
           )}
         </InputLeftElement>
         <Input
+          ref={inputRef}
           height={14}
           borderRadius="8px"
           value={satoshi > 0 ? (isSatoshi ? satoshi : dollar) : ''}
           type="number"
           className={classNames(classes.inputElement, className)}
           onChange={handleInput}
+          onKeyDown={handleKeyDown}
           pl={10}
           {...rest}
           _placeholder={{
