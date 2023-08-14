@@ -8,7 +8,7 @@ import {
 } from '../modals/InsertLinkModal'
 import { ToolbarCommandButton } from './ToolbarCommandButton'
 
-export const LinkCommand = () => {
+export const LinkCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
   const commands = useCommands()
 
   const modal = useInsertLinkModal(({ url, label }: MarkdownLink) => {
@@ -22,6 +22,7 @@ export const LinkCommand = () => {
         name="link"
         label="Insert link"
         onClick={() => modal.onOpen()}
+        isDisabled={isDisabled}
       >
         <BiLink />
       </ToolbarCommandButton>

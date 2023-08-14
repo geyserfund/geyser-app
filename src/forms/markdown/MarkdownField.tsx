@@ -1,7 +1,9 @@
-import { Box } from '@chakra-ui/react'
+import { Box, Button, Text } from '@chakra-ui/react'
 import { EditorComponent, Remirror, useRemirror } from '@remirror/react'
 import { ForwardedRef, useCallback } from 'react'
 import { Control } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { BsGear } from 'react-icons/bs'
 import { InvalidContentHandler } from 'remirror'
 import {
   BlockquoteExtension,
@@ -25,6 +27,8 @@ import {
 import TurndownService from 'turndown'
 
 import { useSignedUpload } from '../../hooks'
+import { useMobileMode } from '../../utils'
+import { ReactHookTextArea } from '../components/ReactHookTextArea'
 import { PreviewRenderer } from './helpers/PreviewRenderer'
 import { SaveModule } from './helpers/SaveModule'
 import { StyleProvider } from './helpers/StyleProvider'
@@ -35,6 +39,7 @@ const turndownService = new TurndownService()
 turndownService.keep(['iframe'])
 
 interface Props {
+  autoFocus?: boolean
   preview?: boolean
   content?: string
   placeholder?: string
@@ -44,9 +49,12 @@ interface Props {
   control?: Control<any, any>
   flex?: boolean
   stickyToolbar?: string | number | boolean // top value if string or number (Ex: "48px")
+  isEditorMode?: boolean
+  toggleEditorMode?: () => void
 }
 
 export const MarkdownField = ({
+  autoFocus,
   preview,
   content,
   placeholder,
@@ -56,7 +64,12 @@ export const MarkdownField = ({
   control,
   flex,
   stickyToolbar,
+  isEditorMode,
+  toggleEditorMode,
 }: Props) => {
+  const { t } = useTranslation()
+  const isMobile = useMobileMode()
+
   const onError: InvalidContentHandler = useCallback(
     ({ json, invalidContent, transformers }) => {
       // Automatically remove all invalid nodes and marks.
@@ -143,8 +156,15 @@ export const MarkdownField = ({
   }
 
   return (
-    <Remirror autoFocus manager={manager} initialContent={initialContent?.()}>
+    <Remirror
+      autoFocus={autoFocus}
+      manager={manager}
+      initialContent={initialContent?.()}
+    >
       <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="start"
         sx={
           stickyToolbar !== undefined && stickyToolbar !== false
             ? {
@@ -159,9 +179,27 @@ export const MarkdownField = ({
             : {}
         }
       >
-        <MarkdownToolbar />
+        <MarkdownToolbar isDisabled={isEditorMode} />
+        <Button
+          size={{ base: 'xs', md: 'md' }}
+          mt={2}
+          variant={isEditorMode ? 'primary' : 'secondary'}
+          onClick={toggleEditorMode}
+        >
+          {<BsGear />} {!isMobile && <Text paddingLeft="5px">{t('Edit')}</Text>}
+        </Button>
       </Box>
-      <StyleProvider flex={flex}>
+      {isEditorMode && control && (
+        <ReactHookTextArea
+          name="description"
+          control={control}
+          value={content}
+          height="100%"
+          formControlProps={{ height: '100%' }}
+          fieldContainerProps={{ height: '100%' }}
+        />
+      )}
+      <StyleProvider flex={flex} display={isEditorMode ? 'none' : undefined}>
         <EditorComponent />
       </StyleProvider>
       <SaveModule name={name} control={control} />
