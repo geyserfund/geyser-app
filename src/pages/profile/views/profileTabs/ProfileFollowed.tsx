@@ -22,12 +22,15 @@ export const ProfileFollowed = ({ userProfile }: { userProfile: User }) => {
   })
 
   const projects = (data?.user.projectFollows as Project[]) || []
+  const projectsToRender = projects.sort(
+    (a, b) => Number(b.createdAt) - Number(a.createdAt),
+  )
 
   return (
     <ProfileTabLayout title={t('Followed projects')}>
       {projectsLoading
         ? [1, 2].map((val) => <LandingCardBaseSkeleton key={val} isMobile />)
-        : projects.map((project) => {
+        : projectsToRender.map((project) => {
             return (
               <LandingProjectCard key={project.id} project={project} isMobile />
             )
