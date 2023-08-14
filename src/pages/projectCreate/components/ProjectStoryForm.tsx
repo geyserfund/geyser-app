@@ -1,4 +1,5 @@
-import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, Text, useDisclosure, VStack } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 import { FormProvider, UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
@@ -8,14 +9,35 @@ import { MarkdownField } from '../../../forms/markdown/MarkdownField'
 import { useMobileMode } from '../../../utils'
 
 interface Props {
+  autoFocus?: boolean
   form: UseFormReturn<{ description: string }>
   isLoading?: boolean
   toolbarTop?: string
 }
 
-export const ProjectStoryForm = ({ form, isLoading, toolbarTop }: Props) => {
+export const ProjectStoryForm = ({
+  autoFocus,
+  form,
+  isLoading,
+  toolbarTop,
+}: Props) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
+
+  const { isOpen: isEditorMode, onToggle: toggleEditorMode } = useDisclosure()
+  const [isStoryLoading, setIsStoryLoading] = useState(false)
+  const handleToggleEditorMode = () => {
+    toggleEditorMode()
+    setIsStoryLoading(true)
+    setTimeout(() => {
+      setIsStoryLoading(false)
+    }, 1)
+  }
+
+  useEffect(() => {
+    setIsStoryLoading(isLoading || false)
+  }, [isLoading])
+
   return (
     <FormProvider {...form}>
       <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1}>
@@ -33,13 +55,19 @@ export const ProjectStoryForm = ({ form, isLoading, toolbarTop }: Props) => {
             display="flex"
             flexDirection="column"
           >
-            <MarkdownField
-              initialContentReady={!isLoading}
-              initialContent={() => form.watch('description') || ''}
-              name="description"
-              flex
-              stickyToolbar={isMobile ? toolbarTop : undefined}
-            />
+            {!isStoryLoading && (
+              <MarkdownField
+                autoFocus={autoFocus}
+                initialContentReady={!isLoading}
+                initialContent={() => form.watch('description') || ''}
+                name="description"
+                flex
+                control={form.control}
+                stickyToolbar={isMobile ? toolbarTop : undefined}
+                isEditorMode={isEditorMode}
+                toggleEditorMode={handleToggleEditorMode}
+              />
+            )}
             <HStack pt={1} width="100%">
               {form.formState.isValid ? null : (
                 <Text pt={1} color="secondary.red">

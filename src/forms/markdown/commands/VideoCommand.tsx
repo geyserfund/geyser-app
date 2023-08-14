@@ -8,7 +8,7 @@ import {
 } from '../modals/InsertVideoModal'
 import { ToolbarCommandButton } from './ToolbarCommandButton'
 
-export const VideoCommand = () => {
+export const VideoCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
   const commands = useCommands()
 
   const modal = useInsertVideoModal(({ url }: MarkdownVideo) => {
@@ -22,6 +22,7 @@ export const VideoCommand = () => {
         name="video"
         label="Insert video"
         onClick={() => modal.onOpen()}
+        isDisabled={isDisabled}
       >
         <BsYoutube />
       </ToolbarCommandButton>

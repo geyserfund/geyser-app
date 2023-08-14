@@ -93,6 +93,7 @@ export const ProjectCreateStory = () => {
       }
     >
       <ProjectStoryForm
+        autoFocus
         form={form}
         isLoading={loading || !project}
         toolbarTop={dimensions.topNavBar.mobile.height + 'px'}

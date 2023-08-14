@@ -10,17 +10,18 @@ const headingsArray = [
   { level: 3, Icon: RiH3, name: 'H3' },
 ]
 
-export const ToolbarHeading = () => {
-  const { runCommand, isDisabled, isActive } = useToolbarCommand(
-    'heading',
-    'toggleHeading',
-  )
+export const ToolbarHeading = ({ isDisabled }: { isDisabled?: boolean }) => {
+  const {
+    runCommand,
+    isDisabled: hasBeenDisabled,
+    isActive,
+  } = useToolbarCommand('heading', 'toggleHeading')
 
   return (
     <ButtonGroup isAttached py={1}>
       {headingsArray.map(({ level, name, Icon }) => (
         <ToolbarCommandButton
-          isDisabled={isDisabled()}
+          isDisabled={isDisabled || hasBeenDisabled()}
           isActive={isActive({ level })}
           name={name}
           label={name}
