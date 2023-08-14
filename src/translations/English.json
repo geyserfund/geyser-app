@@ -650,5 +650,10 @@
   "Copy Onchain address":"Copy Onchain address",
   "Update available":"Update available",
   "There is a newer version of the app available":"There is a newer version of the app available",
-  "Would you like to reload the page to get the latest update?":"Would you like to reload the page to get the latest update?"
+  "Would you like to reload the page to get the latest update?":"Would you like to reload the page to get the latest update?",
+  "Supporters":"Supporters",
+  "There's a new version of Geyser!":"There's a new version of Geyser!",
+  "Restart the app to load the new version":"Restart the app to load the new version",
+  "Not now":"Not now",
+  "Restart app":"Restart app"
 }
