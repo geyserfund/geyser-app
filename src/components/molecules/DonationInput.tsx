@@ -46,7 +46,7 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 0,
-    background: 'none',
+    background: colors.neutral[0],
     color: colors.neutral[600],
     position: 'relative',
     '&:hover': {
