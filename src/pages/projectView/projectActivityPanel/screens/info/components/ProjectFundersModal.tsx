@@ -1,4 +1,5 @@
 import { SimpleGrid } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { Modal } from '../../../../../../components/layouts'
@@ -25,6 +26,7 @@ export const ProjectFundersModal = ({
   props: { projectId },
   ...props
 }: Props) => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { toast } = useNotification()
 
@@ -53,7 +55,7 @@ export const ProjectFundersModal = ({
 
   const id = ID.project.activity.supporterModal
   return (
-    <Modal title="Supporters" {...props}>
+    <Modal title={t('Contributors')} {...props}>
       <SimpleGrid
         id={id}
         overflowY="auto"

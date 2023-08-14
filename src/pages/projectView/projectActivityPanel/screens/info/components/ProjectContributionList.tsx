@@ -89,7 +89,12 @@ export const ProjectContributionList = ({ ...props }: CardLayoutProps) => {
       px={{ base: '10px', lg: '20px' }}
       {...props}
     >
-      <VStack spacing={'15px'} marginTop="20px" paddingRight="10px">
+      <VStack
+        spacing={'15px'}
+        marginTop="20px"
+        paddingRight="10px"
+        paddingBottom={{ base: '80px', lg: '20px' }}
+      >
         {fundingTxs.isLoading ? (
           <ContributionListSkeleton />
         ) : (

@@ -60,6 +60,7 @@ export const ProjectLeaderboardList = ({ ...props }: CardLayoutProps) => {
         width="100%"
         alignItems="start"
         paddingRight="10px"
+        paddingBottom={{ base: '80px', lg: '20px' }}
       >
         {funders.isLoading ? (
           <LeaderboardListSkeleton />
