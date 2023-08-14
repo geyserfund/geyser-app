@@ -16,6 +16,8 @@ export const ID = {
   },
   project: {
     activity: {
+      feedtabWrapper: 'project-activity-feed-tab-wrapper',
+      feedtab: 'project-activity-feed-tab',
       supporterModal: 'project-supporter-modal',
       contribution: 'project-activity-list-container',
       leaderboard: 'project-leaderboard-list-container',
