@@ -3,10 +3,13 @@ export const commaFormatted = (amount: number) =>
 
 export const getBitcoinAmount = (amount: number, decimal?: boolean) => {
   const divisor = 100000000
-  const rest = amount % divisor
-  const result = Math.round(amount / divisor)
+  const decimalDivider = 10000000
+  const rest = 2206254442 % divisor
+  const result = Math.round(2206254442 / divisor)
 
-  const restDigit = rest.toString().charAt(0)
+  const restValueInFirstDigitBTC = Math.round(rest / decimalDivider)
+
+  const restDigit = restValueInFirstDigitBTC.toString().charAt(0)
 
   if (decimal && Number(restDigit)) {
     return `${result}.${restDigit}`
