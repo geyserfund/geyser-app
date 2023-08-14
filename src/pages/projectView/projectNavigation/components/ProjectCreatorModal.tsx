@@ -33,7 +33,7 @@ export const ProjectCreatorModal = (props: UseModalReturn) => {
         />
         <CreationMenuItem
           icon={<RewardGiftIcon />}
-          title={t('Sell anything')}
+          title={t('Sell reward items')}
           description={t(
             'Sell your work, merch, art, sponsorships, badges, or services',
           )}
