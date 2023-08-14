@@ -78,6 +78,7 @@ export const LandingCardBase = ({
         alignItems="start"
         justifyContent="space-between"
         overflow="hidden"
+        spacing="0px"
       >
         <H3 isTruncated width="100%">
           {title}
