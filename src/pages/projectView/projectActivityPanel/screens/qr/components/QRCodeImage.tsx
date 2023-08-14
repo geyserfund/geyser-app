@@ -6,7 +6,7 @@ import {
   useBreakpointValue,
   VStack,
 } from '@chakra-ui/react'
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FaCopy } from 'react-icons/fa'
 import { RiLinkUnlink } from 'react-icons/ri'
@@ -111,25 +111,29 @@ export const QRCodeImage = ({
     [debouncedQRSize, lightningInvoice, onchainAddress, paymentMethod],
   )
 
+  const isColored = hasCopiedLightning || hasCopiedOnchain
+
   return (
     <VStack flexWrap="wrap" maxWidth="100%">
       <PaymentMethodSelection />
-      <Box borderRadius={'4px'} borderWidth={'2px'} padding={'2px'}>
-        {hasCopiedLightning || hasCopiedOnchain ? (
-          <Box borderColor={'primary.400'} w="full">
-            {renderQrCode({
-              bgColor: lightModeColors.neutral[0],
-              fgColor: lightModeColors.primary[400],
-            })}
-          </Box>
-        ) : (
-          <Box borderColor={'neutral.1000'} w="full">
-            {renderQrCode({
-              bgColor: lightModeColors.neutral[0],
-              fgColor: lightModeColors.neutral[1000],
-            })}
-          </Box>
-        )}
+      <Box borderRadius={'12px'} borderWidth={'2px'} padding={'2px'}>
+        <Box
+          borderColor={isColored ? 'primary.400' : 'neutral.1000'}
+          w="full"
+          borderRadius="8px"
+          overflow={'hidden'}
+          onClick={isLightning ? onCopyLightning : onCopyOnchain}
+          _hover={{ cursor: 'pointer' }}
+        >
+          {renderQrCode({
+            bgColor: isColored
+              ? lightModeColors.neutral[0]
+              : lightModeColors.neutral[0],
+            fgColor: isColored
+              ? lightModeColors.primary[400]
+              : lightModeColors.neutral[1000],
+          })}
+        </Box>
       </Box>
       <Box marginBottom={4} fontSize={'10px'}>
         <HStack spacing={5}>
@@ -139,40 +143,29 @@ export const QRCodeImage = ({
           </Text>
         </HStack>
       </Box>
-      <HStack
-        width="100%"
-        flexWrap="wrap"
-        align="center"
-        spacing={1}
-        pt={4}
-        justify="center"
-      >
-        <Box py={1}>
-          {isLightning ? (
-            <Button
-              leftIcon={hasCopiedLightning ? <RiLinkUnlink /> : <FaCopy />}
-              onClick={onCopyLightning}
-              variant="primary"
-              isDisabled={!lightningInvoice}
-            >
-              <Text>
-                {hasCopiedLightning
-                  ? t('Copied!')
-                  : t('Copy lightning invoice')}
-              </Text>
-            </Button>
-          ) : (
-            <Button
-              leftIcon={hasCopiedOnchain ? <RiLinkUnlink /> : <FaCopy />}
-              onClick={onCopyOnchain}
-              variant="primary"
-            >
-              <Text>
-                {hasCopiedOnchain ? t('Copied!') : t('Copy Onchain address')}
-              </Text>
-            </Button>
-          )}
-        </Box>
+      <HStack width="100%" flexWrap="wrap" align="center" justify="center">
+        {isLightning ? (
+          <Button
+            leftIcon={hasCopiedLightning ? <RiLinkUnlink /> : <FaCopy />}
+            onClick={onCopyLightning}
+            variant="primary"
+            isDisabled={!lightningInvoice}
+          >
+            <Text>
+              {hasCopiedLightning ? t('Copied!') : t('Copy lightning invoice')}
+            </Text>
+          </Button>
+        ) : (
+          <Button
+            leftIcon={hasCopiedOnchain ? <RiLinkUnlink /> : <FaCopy />}
+            onClick={onCopyOnchain}
+            variant="primary"
+          >
+            <Text>
+              {hasCopiedOnchain ? t('Copied!') : t('Copy onchain address')}
+            </Text>
+          </Button>
+        )}
       </HStack>
     </VStack>
   )
