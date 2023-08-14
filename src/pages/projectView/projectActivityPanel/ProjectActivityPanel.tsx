@@ -150,7 +150,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   }
 
   const renderPanelContent = () => {
-    if (!project.id) {
+    if (!project) {
       return <InfoScreenSkeleton />
     }
 

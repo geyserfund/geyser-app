@@ -29,7 +29,12 @@ export const InfoScreenFeed = () => {
       visitedLeaderboard = false
     }
   }, [mobileView])
+
   const renderActivityList = useCallback(() => {
+    if (!project) {
+      return null
+    }
+
     const isActivity = tab === 'activity'
 
     if (isActivity) {
@@ -43,16 +48,22 @@ export const InfoScreenFeed = () => {
         {(isActivity || visitedContribution) && (
           <ProjectContributionList
             display={!isActivity && visitedContribution ? 'none' : undefined}
+            project={project}
           />
         )}
         {(!isActivity || visitedLeaderboard) && (
           <ProjectLeaderboardList
             display={isActivity && visitedLeaderboard ? 'none' : undefined}
+            project={project}
           />
         )}
       </>
     )
-  }, [tab])
+  }, [tab, project])
+
+  if (!project) {
+    return null
+  }
 
   return (
     <Box

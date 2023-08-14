@@ -7,12 +7,11 @@ import {
   SkeletonLayout,
 } from '../../../../../../components/layouts'
 import { ID } from '../../../../../../constants/components'
-import { useProjectContext } from '../../../../../../context'
 import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../../../../graphql'
 import { ScrollInvoke } from '../../../../../../helpers'
 import { useQueryWithPagination } from '../../../../../../hooks'
 import { useFundSubscription } from '../../../../../../hooks/fundingFlow/useFundSubscription'
-import { FundingTxFragment } from '../../../../../../types'
+import { FundingTxFragment, ProjectFragment } from '../../../../../../types'
 import {
   aggregateTransactions,
   FundingTxWithCount,
@@ -23,10 +22,16 @@ import { ContributionActivityItem } from '../../../../../landing/feed/components
 
 const CONTRIBUTION_ITEM_LIMIT = 50
 
-export const ProjectContributionList = ({ ...props }: CardLayoutProps) => {
+interface ProjectContributionListProps extends CardLayoutProps {
+  project: ProjectFragment
+}
+
+export const ProjectContributionList = ({
+  project,
+  ...props
+}: ProjectContributionListProps) => {
   const isMobile = useMobileMode()
   const { toast } = useNotification()
-  const { project } = useProjectContext()
 
   const { startListening, stopListening, fundingActivity } =
     useFundSubscription({ projectId: project.id })

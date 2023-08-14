@@ -53,7 +53,10 @@ export const ActivityBrief = (props: StackProps) => {
 
   const { colors } = useTheme()
 
-  const balance = useMemo(() => getProjectBalance(project), [project])
+  const balance = useMemo(
+    () => (project ? getProjectBalance(project) : 0),
+    [project],
+  )
 
   const fundersModal = useProjectFundersModal()
 
@@ -61,7 +64,7 @@ export const ActivityBrief = (props: StackProps) => {
     variables: {
       input: {
         where: {
-          projectId: toInt(project.id),
+          projectId: toInt(project?.id),
           anonymous: false,
           confirmed: true,
         },
@@ -73,7 +76,7 @@ export const ActivityBrief = (props: StackProps) => {
         },
       },
     },
-    skip: !project.id,
+    skip: !project,
     onError() {
       toast({
         status: 'error',
@@ -105,6 +108,10 @@ export const ActivityBrief = (props: StackProps) => {
   })
 
   useEffect(() => {
+    if (!project) {
+      return
+    }
+
     if (project.milestones && project.milestones.length > 0) {
       let selectedMilestone: ProjectMilestone | undefined
       let prevTotal = 0
@@ -207,7 +214,7 @@ export const ActivityBrief = (props: StackProps) => {
     return null
   }, [balance, currentMilestone, milestoneIndex, prevMilestone, t])
 
-  const showCountdown = isActive(project.status) && Boolean(project.expiresAt)
+  const showCountdown = isActive(project?.status) && Boolean(project?.expiresAt)
 
   const latestFunders = socialFunders.slice(0, 12)
 
@@ -227,7 +234,7 @@ export const ActivityBrief = (props: StackProps) => {
           </SatoshiAmount>
           {getMilestoneValue()}
           {/* We can force unwrap project.expiresAt because the showCountdown expression check for a null or undefined value */}
-          {showCountdown && project.expiresAt && (
+          {showCountdown && project?.expiresAt && (
             <Countdown endDate={project.expiresAt} />
           )}
         </VStack>
@@ -244,7 +251,7 @@ export const ActivityBrief = (props: StackProps) => {
           as={Button}
           onClick={() =>
             fundersModal.onOpen({
-              projectId: Number(project.id),
+              projectId: Number(project?.id),
             })
           }
           size="lg"
@@ -299,7 +306,7 @@ export const ActivityBrief = (props: StackProps) => {
             leftIcon={<SatoshiIconTilted />}
             width="100%"
             onClick={() => setMobileView(MobileViews.funding)}
-            isDisabled={!isActive(project.status)}
+            isDisabled={!isActive(project?.status)}
           >
             {t('Contribute')}
           </Button>

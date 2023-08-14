@@ -8,19 +8,27 @@ import {
 } from '../../../../../../components/layouts'
 import { ProjectFundingLeaderboardFeedItem } from '../../../../../../components/molecules'
 import { ID } from '../../../../../../constants/components'
-import { useProjectContext } from '../../../../../../context'
 import { QUERY_PROJECT_FUNDERS } from '../../../../../../graphql'
 import { ScrollInvoke } from '../../../../../../helpers'
 import { useQueryWithPagination } from '../../../../../../hooks'
-import { FunderWithUserFragment } from '../../../../../../types/generated/graphql'
+import {
+  FunderWithUserFragment,
+  ProjectFragment,
+} from '../../../../../../types/generated/graphql'
 import { useMobileMode, useNotification } from '../../../../../../utils'
 
 const LEADERBOARD_ITEM_LIMIT = 50
 
-export const ProjectLeaderboardList = ({ ...props }: CardLayoutProps) => {
+interface ProjectLeaderboardListProps extends CardLayoutProps {
+  project: ProjectFragment
+}
+
+export const ProjectLeaderboardList = ({
+  project,
+  ...props
+}: ProjectLeaderboardListProps) => {
   const isMobile = useMobileMode()
   const { toast } = useNotification()
-  const { project } = useProjectContext()
 
   const id = ID.project.activity.leaderboard
 
