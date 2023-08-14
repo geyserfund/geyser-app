@@ -26,7 +26,7 @@ export const getFeaturedProject = () => {
   }
 
   if (__production__) {
-    return 'maxisclub'
+    return 'nostrpartyriga23'
   }
 
   return ''
@@ -39,6 +39,7 @@ const productionTagsList = [
   { label: 'films', id: 57 },
   { label: 'collectibles', id: 97 },
   { label: 'orange-pilling', id: 10 },
+  { label: 'nostr', id: 2 },
   { label: 'games', id: 19 },
   { label: 'podcasts', id: 7 },
   { label: 'translation', id: 37 },

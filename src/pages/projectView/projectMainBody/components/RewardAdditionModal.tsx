@@ -67,13 +67,19 @@ export const RewardAdditionModal = ({
   const [reward, setReward] =
     useState<ProjectRewardForCreateUpdateFragment>(defaultProjectReward)
 
+  const handleClose = () => {
+    setReward(defaultProjectReward)
+    setFormCostDollarValue(defaultProjectReward.cost / 100)
+    onClose()
+  }
+
   const [formError, setFormError] = useState<any>({})
 
   const [createReward, { loading: createRewardLoading }] =
     useProjectRewardCreateMutation({
       onCompleted(data) {
         onSubmit(data.projectRewardCreate, false)
-        onClose()
+        handleClose()
       },
       onError(error) {
         toast({
@@ -93,7 +99,7 @@ export const RewardAdditionModal = ({
           status: 'success',
         })
         onSubmit(data.projectRewardUpdate, true)
-        onClose()
+        handleClose()
       },
       onError(error) {
         toast({
@@ -249,7 +255,7 @@ export const RewardAdditionModal = ({
     <Modal
       size="xl"
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       title={
         <>
           <Text fontSize="18px" fontWeight={600}>
