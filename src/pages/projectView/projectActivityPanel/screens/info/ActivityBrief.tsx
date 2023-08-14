@@ -65,7 +65,7 @@ export const ActivityBrief = (props: StackProps) => {
           anonymous: false,
         },
         orderBy: {
-          confirmedAt: OrderByOptions.Desc,
+          amountFunded: OrderByOptions.Desc,
         },
         pagination: {
           take: 50,
@@ -81,9 +81,10 @@ export const ActivityBrief = (props: StackProps) => {
     },
     onCompleted(data) {
       const funders = data?.getFunders || []
-
-      const socialFilteredFunders = funders.filter(
-        (funder) =>
+      const socialFilteredFunders = [] as FunderWithUserFragment[]
+      for (let i = 0; i < funders.length; i++) {
+        const funder = funders[i]
+        if (
           funder &&
           funder.confirmedAt &&
           funder.user &&
@@ -91,8 +92,13 @@ export const ActivityBrief = (props: StackProps) => {
             (account) =>
               account.accountType === ExternalAccountType.nostr ||
               account.accountType === ExternalAccountType.twitter,
-          ),
-      )
+          )
+        ) {
+          socialFilteredFunders.push(funder)
+        }
+      }
+
+      funders.map((funder) => {})
       setSocialFunders(socialFilteredFunders)
     },
   })
@@ -231,6 +237,8 @@ export const ActivityBrief = (props: StackProps) => {
           alignItems="start"
           w="100%"
           py={10}
+          px={0}
+          overflow="hidden"
           spacing={1}
           as={Button}
           onClick={() =>
@@ -241,7 +249,7 @@ export const ActivityBrief = (props: StackProps) => {
           size="lg"
           variant="transparent"
         >
-          <Text fontWeight={500}>{t('Supporters')}</Text>
+          <Text fontWeight={500}>{t('Contributors')}</Text>
           <HStack ml={1} spacing={0} alignItems="start">
             {!funderLoading
               ? latestFunders.map((funder) => {
