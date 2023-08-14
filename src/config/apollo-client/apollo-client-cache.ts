@@ -53,10 +53,10 @@ export const cache: InMemoryCache = new InMemoryCache({
         //   keyArgs: ['input', ['where']],
         //   merge,
         // },
-        // getFunders: {
-        //   keyArgs: ['input', ['where', 'orderby']],
-        //   merge,
-        // },
+        getFunders: {
+          keyArgs: ['input', ['where', 'orderby', 'pagination']],
+          merge: false,
+        },
         // getDashboardFunders: {
         //   keyArgs: ['input', ['where', 'orderby']],
         //   merge,
@@ -65,7 +65,7 @@ export const cache: InMemoryCache = new InMemoryCache({
           // Don't cache separate results based on
           // any of this field's arguments.
           // See: https://www.apollographql.com/docs/react/caching/cache-field-behavior/#specifying-key-arguments
-          keyArgs: ['input', ['where', 'orderBy']],
+          keyArgs: ['input', ['where', 'orderBy', 'pagination']],
           merge: false,
         },
       },

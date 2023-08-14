@@ -16,6 +16,7 @@ export const ID = {
   },
   project: {
     activity: {
+      supporterModal: 'project-supporter-modal',
       contribution: 'project-activity-list-container',
       leaderboard: 'project-leaderboard-list-container',
     },

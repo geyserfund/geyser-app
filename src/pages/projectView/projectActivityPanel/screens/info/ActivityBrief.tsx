@@ -14,10 +14,6 @@ import { useTranslation } from 'react-i18next'
 import { AiOutlineEllipsis } from 'react-icons/ai'
 
 import { SatoshiIconTilted } from '../../../../../components/icons'
-import {
-  ProjectFundersModal,
-  useProjectFundersModal,
-} from '../../../../../components/molecules/projectActivity/ProjectFundersModal'
 import { SatoshiAmount } from '../../../../../components/ui'
 import { UserAvatar } from '../../../../../components/ui/UserAvatar'
 import { MobileViews, useProjectContext } from '../../../../../context'
@@ -36,6 +32,10 @@ import {
 import { getProjectBalance } from '../../../../../utils/helpers'
 import { ExternalAccountType } from '../../../../auth'
 import { Countdown } from './components'
+import {
+  ProjectFundersModal,
+  useProjectFundersModal,
+} from './components/ProjectFundersModal'
 
 export const ActivityBrief = (props: StackProps) => {
   const { t } = useTranslation()
@@ -63,6 +63,7 @@ export const ActivityBrief = (props: StackProps) => {
         where: {
           projectId: toInt(project.id),
           anonymous: false,
+          confirmed: true,
         },
         orderBy: {
           amountFunded: OrderByOptions.Desc,
@@ -243,7 +244,7 @@ export const ActivityBrief = (props: StackProps) => {
           as={Button}
           onClick={() =>
             fundersModal.onOpen({
-              funders: socialFunders,
+              projectId: Number(project.id),
             })
           }
           size="lg"
