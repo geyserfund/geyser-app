@@ -100,9 +100,10 @@ export const QRCodeImage = ({
           logoImage={LogoIcon}
           qrStyle="squares"
           ecLevel="L"
-          logoHeight={60}
-          logoWidth={60}
-          logoPadding={7}
+          logoHeight={50}
+          logoWidth={50}
+          logoPadding={5}
+          logoPaddingStyle="square"
           removeQrCodeBehindLogo
         />
       )
