@@ -12,8 +12,9 @@ import { FaCopy } from 'react-icons/fa'
 import { RiLinkUnlink } from 'react-icons/ri'
 import { QRCode } from 'react-qrcode-logo'
 
-import { LogoDark, LogoPrimary } from '../../../../../../assets'
+import { LogoIcon } from '../../../../../../assets'
 import Loader from '../../../../../../components/ui/Loader'
+import { useDebounce } from '../../../../../../hooks'
 import { lightModeColors } from '../../../../../../styles'
 import { copyTextToClipboard } from '../../../../../../utils'
 import { PaymentMethods } from '../QRCodeSection'
@@ -36,8 +37,9 @@ export const QRCodeImage = ({
   const [hasCopiedLightning, setHasCopiedLightning] = useState(false)
   const [hasCopiedOnchain, setHasCopiedOnchain] = useState(false)
 
-  const qrSize =
-    useBreakpointValue({ base: 240, sm: 340, lg: 280, xl: 340 }) || 240
+  const qrSize = useBreakpointValue({ base: 240, sm: 340, lg: 280, xl: 340 })
+
+  const debouncedQRSize = useDebounce(qrSize, 100)
 
   const isLightning = paymentMethod === PaymentMethods.LIGHTNING
 
@@ -82,47 +84,49 @@ export const QRCodeImage = ({
     )
   }, [isLightning, setPaymentMethod, t])
 
+  const renderQrCode = useCallback(
+    ({ bgColor, fgColor }: { bgColor: string; fgColor: string }) => {
+      if (!debouncedQRSize) return null
+      return (
+        <QRCode
+          value={
+            paymentMethod === PaymentMethods.LIGHTNING
+              ? lightningInvoice
+              : onchainAddress
+          }
+          size={debouncedQRSize}
+          bgColor={bgColor}
+          fgColor={fgColor}
+          logoImage={LogoIcon}
+          qrStyle="squares"
+          ecLevel="L"
+          logoHeight={60}
+          logoWidth={60}
+          logoPadding={7}
+          removeQrCodeBehindLogo
+        />
+      )
+    },
+    [debouncedQRSize, lightningInvoice, onchainAddress, paymentMethod],
+  )
+
   return (
     <VStack flexWrap="wrap" maxWidth="100%">
       <PaymentMethodSelection />
       <Box borderRadius={'4px'} borderWidth={'2px'} padding={'2px'}>
         {hasCopiedLightning || hasCopiedOnchain ? (
           <Box borderColor={'primary.400'} w="full">
-            <QRCode
-              value={
-                paymentMethod === PaymentMethods.LIGHTNING
-                  ? lightningInvoice
-                  : onchainAddress
-              }
-              size={qrSize}
-              bgColor={lightModeColors.neutral[0]}
-              fgColor={lightModeColors.primary[400]}
-              logoImage={LogoPrimary}
-              qrStyle="squares"
-              ecLevel="L"
-              logoHeight={80}
-              logoWidth={80}
-              removeQrCodeBehindLogo
-            />
+            {renderQrCode({
+              bgColor: lightModeColors.neutral[0],
+              fgColor: lightModeColors.primary[400],
+            })}
           </Box>
         ) : (
           <Box borderColor={'neutral.1000'} w="full">
-            <QRCode
-              value={
-                paymentMethod === PaymentMethods.LIGHTNING
-                  ? lightningInvoice
-                  : onchainAddress
-              }
-              size={qrSize}
-              bgColor={lightModeColors.neutral[0]}
-              fgColor={lightModeColors.neutral[1000]}
-              logoImage={LogoDark}
-              qrStyle="squares"
-              ecLevel="L"
-              logoHeight={80}
-              logoWidth={80}
-              removeQrCodeBehindLogo
-            />
+            {renderQrCode({
+              bgColor: lightModeColors.neutral[0],
+              fgColor: lightModeColors.neutral[1000],
+            })}
           </Box>
         )}
       </Box>
