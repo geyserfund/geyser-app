@@ -18,64 +18,49 @@ export const InfoScreenFeedTabs = ({
 }: InfoScreenTabsProps) => {
   const { t } = useTranslation()
 
-  const contributionButton = () => {
-    return (
-      <>
-        <Button
-          _hover={{ backgroundColor: 'none' }}
-          w="100%"
-          rounded="none"
-          bg="none"
-          fontWeight={tab === 'activity' ? 'bold' : 'normal'}
-          fontSize="16px"
-          onClick={() => setTab('activity')}
-        >
-          {t('Contributions')}{' '}
+  const createTabButton = (type: string, labelKey: string, count?: number) => (
+    <>
+      <Button
+        _hover={{ backgroundColor: 'none' }}
+        w="100%"
+        rounded="none"
+        bg="none"
+        fontWeight={tab === type ? 'bold' : 'normal'}
+        fontSize="16px"
+        onClick={() => setTab(type)}
+      >
+        {t(labelKey)}{' '}
+        {count && (
           <Text ml={1} bg="neutral.100" rounded="lg" px={1} py={1}>
-            {project.fundingTxsCount}
+            {count}
           </Text>
-        </Button>
-        <Box
-          bg={tab === 'activity' ? 'primary.800' : 'primary.50'}
-          w="100%"
-          h="4px"
-          rounded="lg"
-        ></Box>
-      </>
-    )
-  }
-
-  const leaderBoardButton = () => {
-    return (
-      <>
-        <Button
-          _hover={{ backgroundColor: 'none' }}
-          w="100%"
-          rounded="none"
-          bg="none"
-          fontWeight={tab === 'activity' ? 'normal' : 'bold'}
-          fontSize="16px"
-          onClick={() => setTab('leaderboard')}
-        >
-          {t('Leaderboard')}{' '}
-          <Text ml={1} bg="neutral.100" rounded="lg" px={1} py={1}>
-            {project.fundersCount}
-          </Text>
-        </Button>
-        <Box
-          bg={tab === 'activity' ? 'primary.50' : 'primary.800'}
-          w="100%"
-          h="4px"
-          rounded="lg"
-        ></Box>
-      </>
-    )
-  }
+        )}
+      </Button>
+      <Box
+        bg={tab === type ? 'primary.800' : 'primary.50'}
+        w="100%"
+        h="4px"
+        rounded="lg"
+      />
+    </>
+  )
 
   return (
     <HStack width="100%" spacing="0px" px={{ base: '10px', lg: '20px' }}>
-      <Box w="50%">{contributionButton()}</Box>;
-      <Box w="50%">{leaderBoardButton()}</Box>;
+      <Box w="50%">
+        {createTabButton(
+          'activity',
+          'Contributions',
+          project.fundingTxsCount || 0,
+        )}
+      </Box>
+      <Box w="50%">
+        {createTabButton(
+          'leaderboard',
+          'Leaderboard',
+          project.fundersCount || 0,
+        )}
+      </Box>
     </HStack>
   )
 }

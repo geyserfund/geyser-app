@@ -53,10 +53,10 @@ export const cache: InMemoryCache = new InMemoryCache({
         //   keyArgs: ['input', ['where']],
         //   merge,
         // },
-        getFunders: {
-          keyArgs: ['input', ['where', 'orderby', 'pagination']],
-          merge: false,
-        },
+        // getFunders: {
+        //   keyArgs: ['input', ['where', 'orderby']],
+        //   merge: false,
+        // },
         // getDashboardFunders: {
         //   keyArgs: ['input', ['where', 'orderby']],
         //   merge,

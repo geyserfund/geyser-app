@@ -72,9 +72,11 @@ export const ProjectFundersModal = ({
               <UserAvatarButton
                 key={funder.id}
                 user={funder.user}
-                onClick={(e) =>
-                  navigate(getPath('userProfile', funder.user?.id))
-                }
+                onClick={() => {
+                  if (funder.user?.id) {
+                    navigate(getPath('userProfile', funder.user?.id))
+                  }
+                }}
               />
             )
           })}
