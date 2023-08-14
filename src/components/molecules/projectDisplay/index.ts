@@ -1,4 +1,3 @@
-export * from './ActivityBrief'
 export * from './ProjectBalance'
 export * from './ProjectBalanceCircularProgress'
 export * from './ProjectContributionCard'

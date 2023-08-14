@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { fundingStages } from '../../constants'
 import { useFundingFlow } from '../../hooks'
 import { Project, UserMeFragment } from '../../types'
-import { ProjectFundingQRScreenQRCodeSection } from '../projectView/projectActivityPanel/components'
+import { QRCodeSection } from '../projectView/projectActivityPanel/screens'
 import { FundingComplete } from './stages/FundingComplete'
 import { FundingForm, ProjectFundingFormState } from './stages/FundingForm'
 
@@ -54,7 +54,7 @@ export const ProjectFunding = ({
 
   switch (fundState) {
     case fundingStages.started:
-      return <ProjectFundingQRScreenQRCodeSection fundingFlow={fundingFlow} />
+      return <QRCodeSection fundingFlow={fundingFlow} />
     case fundingStages.completed:
       return <FundingComplete formState={formState} fundingFlow={fundingFlow} />
     default:

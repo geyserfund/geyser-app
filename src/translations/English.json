@@ -113,7 +113,7 @@
   "per item": "per item",
   "collected": "collected",
   "needed!": "needed!",
-  "Donate to receive a reward": "Donate to receive a reward",
+  "Buy reward item": "Buy reward item",
   "No reward": "No reward",
   "backer": "backer",
   "backers": "backers",
@@ -650,6 +650,5 @@
   "Copy Onchain address":"Copy Onchain address",
   "Update available":"Update available",
   "There is a newer version of the app available":"There is a newer version of the app available",
-  "Would you like to reload the page to get the latest update?":"Would you like to reload the page to get the latest update?",
-  "Supporters":"Supporters"
+  "Would you like to reload the page to get the latest update?":"Would you like to reload the page to get the latest update?"
 }
