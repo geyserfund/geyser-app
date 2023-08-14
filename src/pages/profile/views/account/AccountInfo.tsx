@@ -85,27 +85,28 @@ export const AccountInfo = ({
             </Body1>
           )}
         </VStack>
-
-        <VStack w="full" alignItems="start">
-          <Body1 bold color="neutral.900">
-            {t('Connected accounts')}
-          </Body1>
-          {userProfile.externalAccounts.map((externalAccount) => {
-            if (externalAccount) {
-              return (
-                <ExternalAccountDisplay
-                  key={externalAccount?.id}
-                  account={externalAccount}
-                  userProfile={userProfile}
-                  setUserProfile={setUserProfile}
-                  isEdit={getIsEdit(
-                    externalAccount.accountType as ExternalAccountType,
-                  )}
-                />
-              )
-            }
-          })}
-        </VStack>
+        {userProfile.externalAccounts.length > 0 && (
+          <VStack w="full" alignItems="start">
+            <Body1 bold color="neutral.900">
+              {t('Connected accounts')}
+            </Body1>
+            {userProfile.externalAccounts.map((externalAccount) => {
+              if (externalAccount) {
+                return (
+                  <ExternalAccountDisplay
+                    key={externalAccount?.id}
+                    account={externalAccount}
+                    userProfile={userProfile}
+                    setUserProfile={setUserProfile}
+                    isEdit={getIsEdit(
+                      externalAccount.accountType as ExternalAccountType,
+                    )}
+                  />
+                )
+              }
+            })}
+          </VStack>
+        )}
         {isEdit && <ConnectAccounts user={userProfile} />}
       </CardLayout>
       {isEdit && userProfile && (
