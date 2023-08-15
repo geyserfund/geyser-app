@@ -1,3 +1,4 @@
+import { AddIcon } from '@chakra-ui/icons'
 import {
   Button,
   ButtonProps,
@@ -84,6 +85,7 @@ export const ProjectNavigation = ({
             w="100%"
             variant="primary"
             onClick={() => onCreatorModalOpen()}
+            leftIcon={<AddIcon fontSize="12px" />}
           >
             {t('Create')}
           </Button>

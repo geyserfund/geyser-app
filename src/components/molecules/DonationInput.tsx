@@ -19,6 +19,7 @@ import { createUseStyles } from 'react-jss'
 import { AppTheme } from '../../context'
 import { useBtcContext } from '../../context/btc'
 import { fonts } from '../../styles'
+import { commaFormatted } from '../../utils'
 import {
   CrownIcon,
   MedalIcon,
@@ -98,7 +99,13 @@ export const DonationInput = ({
   const [dollar, setDollar] = useState(0.0)
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseInt(event.target.value, 10)
+    const value = event.target.value.replaceAll(',', '')
+    const val = Number(value)
+
+    if (!val) {
+      return
+    }
+
     if (isDollar) {
       setDollar(val)
       setSatoshi(Math.round(val / btcRate))
@@ -182,8 +189,14 @@ export const DonationInput = ({
           ref={inputRef}
           height={14}
           borderRadius="8px"
-          value={satoshi > 0 ? (isSatoshi ? satoshi : dollar) : ''}
-          type="number"
+          value={
+            satoshi > 0
+              ? isSatoshi
+                ? commaFormatted(satoshi)
+                : commaFormatted(dollar)
+              : ''
+          }
+          type="text"
           className={classNames(classes.inputElement, className)}
           onChange={handleInput}
           onKeyDown={handleKeyDown}
@@ -204,7 +217,7 @@ export const DonationInput = ({
             {isSatoshi ? (
               <>
                 <BiDollar style={{ paddingBottom: '3px' }} />
-                <MonoBody1 isTruncated>{dollar || 0}</MonoBody1>
+                <MonoBody1 isTruncated>{commaFormatted(dollar) || 0}</MonoBody1>
               </>
             ) : (
               <>
@@ -212,7 +225,9 @@ export const DonationInput = ({
                   scale={0.7}
                   style={{ paddingBottom: '3px' }}
                 />
-                <MonoBody1 isTruncated>{satoshi || 0}</MonoBody1>
+                <MonoBody1 isTruncated>
+                  {commaFormatted(satoshi) || 0}
+                </MonoBody1>
               </>
             )}
           </Button>

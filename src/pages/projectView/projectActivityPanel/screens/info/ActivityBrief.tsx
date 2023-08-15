@@ -245,7 +245,7 @@ export const ActivityBrief = (props: StackProps) => {
           alignItems="start"
           w="100%"
           py={10}
-          px={0}
+          px="10px"
           overflow="hidden"
           spacing={1}
           as={Button}
