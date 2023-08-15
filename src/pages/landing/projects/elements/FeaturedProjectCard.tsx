@@ -74,7 +74,7 @@ export const FeaturedProjectCard = ({
           <AvatarElement
             wrapperProps={{ minHeight: '20px' }}
             noLink
-            rounded="full"
+            borderRadius="50%"
             user={project.owners[0]?.user}
           />
           <H3 color="neutral.800" noOfLines={3} isTruncated whiteSpace="normal">
