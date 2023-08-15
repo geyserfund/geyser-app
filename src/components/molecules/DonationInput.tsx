@@ -208,16 +208,8 @@ export const DonationInput = ({
           color="neutral.1000"
           placeholder="0"
         />
-        <InputRightElement
-          pt={1}
-          pr={'10px'}
-          height={14}
-          w="fit-content"
-          minWidth="100px"
-          maxWidth="150px"
-        >
+        <InputRightElement pt={1} pr={'10px'} height={14} w="100px">
           <Button
-            w="100%"
             className={classes.switchButtton}
             onClick={onToggle}
             variant="ghost"
