@@ -1,5 +1,5 @@
 import { AddIcon } from '@chakra-ui/icons'
-import { Button } from '@chakra-ui/react'
+import { Button, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { BsFillHeartFill } from 'react-icons/bs'
 
@@ -27,7 +27,7 @@ export const FollowButton = ({ projectId }: { projectId: number }) => {
       isLoading={followLoading || unfollowLoading}
       isDisabled={!isLoggedIn}
     >
-      {isFollowed ? t('Following') : t('Follow')}
+      <Text isTruncated> {isFollowed ? t('Following') : t('Follow')}</Text>
     </Button>
   )
 }
