@@ -5,7 +5,7 @@ export interface FieldContainerProps extends Omit<StackProps, 'title'> {
   title?: ReactNode
   subtitle?: ReactNode
   error?: ReactNode
-  children: ReactNode
+  children?: ReactNode
 }
 
 export const FieldContainer = ({

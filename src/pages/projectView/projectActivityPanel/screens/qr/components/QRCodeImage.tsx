@@ -6,7 +6,7 @@ import {
   useBreakpointValue,
   VStack,
 } from '@chakra-ui/react'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FaCopy } from 'react-icons/fa'
 import { RiLinkUnlink } from 'react-icons/ri'
