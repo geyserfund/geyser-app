@@ -4,6 +4,7 @@ import {
   HStack,
   IconButton,
   Link,
+  Text,
   Tooltip,
   useDisclosure,
   VStack,
@@ -54,11 +55,11 @@ export const ModeChange = () => {
           bgColor="neutral.50"
           color="neutral.600"
           variant="primaryNeutral"
-          // isDisabled
-          // onClick={() => i18n.changeLanguage(lng)}
           onClick={onOpen}
         >
-          {languages[i18n.resolvedLanguage as keyof typeof languages]}
+          <Text isTruncated>
+            {languages[i18n.resolvedLanguage as keyof typeof languages]}
+          </Text>
         </Button>
       </HStack>
       <Modal
