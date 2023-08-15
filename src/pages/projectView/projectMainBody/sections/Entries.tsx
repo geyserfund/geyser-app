@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client'
-import { Center, Text, useDisclosure } from '@chakra-ui/react'
+import { Button, Center, Text, useDisclosure } from '@chakra-ui/react'
 import { forwardRef, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -22,22 +22,9 @@ import { truthyFilter } from '../../../../utils/array'
 
 export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
 
   const { project, isProjectOwner, updateProject } = useProjectContext()
-  const { toast } = useNotification()
 
-  const [selectedEntry, setSelectedEntry] = useState<EntryForProjectFragment>()
-
-  const [deleteEntry] = useMutation(MUTATION_DELETE_ENTRY, {
-    onCompleted() {
-      const newEntries = project?.entries.filter(
-        (entry) => entry?.id !== selectedEntry?.id,
-      )
-      updateProject({ entries: newEntries })
-      setSelectedEntry(undefined)
-    },
-  })
   const [fetchUnpublishedEntries] = useProjectUnplublishedEntriesLazyQuery({
     variables: {
       where: { name: project?.name },
@@ -60,12 +47,6 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
     }
   }, [fetchUnpublishedEntries, isProjectOwner])
 
-  const {
-    isOpen: isDeleteEntryOpen,
-    onClose: closeDeleteEntry,
-    onOpen: openDeleteEntry,
-  } = useDisclosure()
-
   if (!project) {
     return null
   }
@@ -74,8 +55,68 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
     Boolean(isProjectOwner) &&
     (isActive(project.status) || isDraft(project.status))
 
+  if (!project.entries.length) {
+    return null
+  }
+
+  return (
+    <CardLayout
+      ref={ref}
+      mobileDense
+      width="100%"
+      alignItems="flex-start"
+      spacing="20px"
+      flexDirection="column"
+    >
+      <TitleDivider badge={project.entries.length}>{t('Entries')}</TitleDivider>
+
+      <RenderEntries entries={project.entries} />
+
+      {isProjectOwner && Boolean(canCreateEntries) === false && (
+        <Center>
+          <Text textColor={'neutral.600'} textAlign="center" paddingX={2}>
+            {t(
+              'You cannot publish an entry in an inactive project. Finish the project configuration or re-activate the project to publish this entry.',
+            )}
+          </Text>
+        </Center>
+      )}
+    </CardLayout>
+  )
+})
+
+export const RenderEntries = ({
+  entries,
+}: {
+  entries: EntryForProjectFragment[]
+}) => {
+  const navigate = useNavigate()
+  const { t } = useTranslation()
+
+  const { project, isProjectOwner, updateProject } = useProjectContext()
+  const { toast } = useNotification()
+
+  const [selectedEntry, setSelectedEntry] = useState<EntryForProjectFragment>()
+  const { isOpen: isShowAll, onOpen: onShowAll } = useDisclosure()
+
+  const {
+    isOpen: isDeleteEntryOpen,
+    onClose: closeDeleteEntry,
+    onOpen: openDeleteEntry,
+  } = useDisclosure()
+
+  const [deleteEntry] = useMutation(MUTATION_DELETE_ENTRY, {
+    onCompleted() {
+      const newEntries = project?.entries.filter(
+        (entry) => entry?.id !== selectedEntry?.id,
+      )
+      updateProject({ entries: newEntries })
+      setSelectedEntry(undefined)
+    },
+  })
+
   const handleEntryEditButtonTapped = (entry: EntryForProjectFragment) => {
-    navigate(getPath('projectEntryDetails', project.name, entry.id))
+    navigate(getPath('projectEntryDetails', project?.name, entry.id))
   }
 
   const triggerDeleteEntry = (entry: EntryForProjectFragment) => {
@@ -108,16 +149,21 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
     closeDeleteEntry()
   }
 
-  const renderEntries = () => {
-    if (project.entries && project.entries.length > 0) {
-      const sortedEntries =
-        project.entries &&
-        project.entries
-          .filter(truthyFilter)
-          .sort((a, b) => Number(b.createdAt || '') - Number(a.createdAt || ''))
-      return sortedEntries.map((entry) => {
+  const sortedEntries =
+    entries &&
+    entries
+      .filter(truthyFilter)
+      .sort((a, b) => Number(b.createdAt || '') - Number(a.createdAt || ''))
+  return (
+    <>
+      {sortedEntries.map((entry, index) => {
         if (entry) {
           const entryWithProject = { ...entry, project }
+
+          if (!isShowAll && index >= 3) {
+            return null
+          }
+
           if (isProjectOwner) {
             return (
               <ProjectEntryCard
@@ -131,39 +177,12 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
 
           return <ProjectEntryCard entry={entryWithProject} key={entry.id} />
         }
-      })
-    }
-
-    return <Text>{t('There are no any entries available')} </Text>
-  }
-
-  if (!project.entries.length) {
-    return null
-  }
-
-  return (
-    <CardLayout
-      ref={ref}
-      mobileDense
-      width="100%"
-      alignItems="flex-start"
-      spacing="20px"
-      flexDirection="column"
-    >
-      <TitleDivider badge={project.entries.length}>{t('Entries')}</TitleDivider>
-
-      {renderEntries()}
-
-      {isProjectOwner && Boolean(canCreateEntries) === false && (
-        <Center>
-          <Text textColor={'neutral.600'} textAlign="center" paddingX={2}>
-            {t(
-              'You cannot publish an entry in an inactive project. Finish the project configuration or re-activate the project to publish this entry.',
-            )}
-          </Text>
-        </Center>
+      })}
+      {!isShowAll && sortedEntries.length > 3 && (
+        <Button w="full" variant="secondary" onClick={onShowAll}>
+          {t('See all')}
+        </Button>
       )}
-
       <DeleteConfirmModal
         isOpen={isDeleteEntryOpen}
         onClose={closeDeleteEntry}
@@ -171,6 +190,6 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
         description={t('Are you sure you want to remove the entry')}
         confirm={handleRemoveEntry}
       />
-    </CardLayout>
+    </>
   )
-})
+}
