@@ -11,12 +11,11 @@ import {
 import { TitleDivider } from '../../../../components/ui/TitleDivider'
 import { fundingStages } from '../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
-import { MUTATION_UPDATE_PROJECT_REWARD } from '../../../../graphql/mutations'
+import { MUTATION_DELETE_PROJECT_REWARD } from '../../../../graphql/mutations'
 import { useModal } from '../../../../hooks/useModal'
 import {
   Project,
   ProjectRewardForCreateUpdateFragment,
-  RewardCurrency,
 } from '../../../../types'
 import {
   isActive,
@@ -50,7 +49,40 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
     onOpen: openRewardDelete,
   } = useModal()
 
-  const [updateRewardMutation] = useMutation(MUTATION_UPDATE_PROJECT_REWARD)
+  const handleClose = () => {
+    setSelectedReward(undefined)
+    onRewardDeleteClose()
+  }
+
+  const [deleteRewardMutation] = useMutation<
+    any,
+    { input: { projectRewardId: Number } }
+  >(MUTATION_DELETE_PROJECT_REWARD, {
+    onCompleted() {
+      const newRewards = project?.rewards?.filter(
+        (reward) => reward?.id !== selectedReward?.id,
+      )
+      updateProject({ rewards: newRewards || [] } as Project)
+
+      handleClose()
+
+      toast({
+        title: 'Successfully removed!',
+        description: `${t('Reward')} ${selectedReward?.name} ${t(
+          'was successfully removed',
+        )}`,
+        status: 'success',
+      })
+    },
+    onError(error) {
+      handleClose()
+      toast({
+        title: 'Failed to remove reward',
+        description: `${error}`,
+        status: 'error',
+      })
+    },
+  })
 
   if (!project) {
     return null
@@ -66,44 +98,18 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
     openRewardDelete()
   }
 
-  const handleRemoveReward = async (id?: number) => {
-    if (!id) {
+  const handleRemoveReward = async () => {
+    if (!selectedReward?.id) {
       return
     }
 
-    try {
-      const currentReward = project.rewards?.find((reward) => reward?.id === id)
-
-      await updateRewardMutation({
-        variables: {
-          input: {
-            projectRewardId: toInt(id),
-            deleted: true,
-            name: currentReward?.name,
-            cost: currentReward?.cost,
-            costCurrency: RewardCurrency.Usdcent,
-          },
+    deleteRewardMutation({
+      variables: {
+        input: {
+          projectRewardId: selectedReward.id,
         },
-      })
-      const newRewards = project.rewards?.filter((reward) => reward?.id !== id)
-      updateProject({ rewards: newRewards || [] } as Project)
-
-      onRewardDeleteClose()
-
-      toast({
-        title: 'Successfully removed!',
-        description: `${t('Reward')} ${currentReward?.name} ${t(
-          'was successfully removed',
-        )}`,
-        status: 'success',
-      })
-    } catch (error) {
-      toast({
-        title: 'Failed to remove reward',
-        description: `${error}`,
-        status: 'error',
-      })
-    }
+      },
+    })
   }
 
   const renderRewards = () => {
@@ -183,10 +189,10 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
       </CardLayout>
       <DeleteConfirmModal
         isOpen={isRewardDeleteOpen}
-        onClose={onRewardDeleteClose}
+        onClose={handleClose}
         title={`${t('Delete reward')} ${selectedReward?.name}`}
         description={t('Are you sure you want to remove the reward')}
-        confirm={() => handleRemoveReward(selectedReward?.id)}
+        confirm={handleRemoveReward}
       />
     </>
   )
