@@ -37,7 +37,13 @@ export const QRCodeImage = ({
   const [hasCopiedLightning, setHasCopiedLightning] = useState(false)
   const [hasCopiedOnchain, setHasCopiedOnchain] = useState(false)
 
-  const qrSize = useBreakpointValue({ base: 240, sm: 340, lg: 280, xl: 340 })
+  const qrSize = useBreakpointValue({
+    base: 240,
+    xs: 300,
+    sm: 380,
+    lg: 280,
+    xl: 340,
+  })
 
   const debouncedQRSize = useDebounce(qrSize, 100)
 
