@@ -1,4 +1,4 @@
-import { Box, Button, Text } from '@chakra-ui/react'
+import { Box, Button, HStack, Text } from '@chakra-ui/react'
 import { EditorComponent, Remirror, useRemirror } from '@remirror/react'
 import { ForwardedRef, useCallback } from 'react'
 import { Control } from 'react-hook-form'
@@ -180,14 +180,18 @@ export const MarkdownField = ({
         }
       >
         <MarkdownToolbar isDisabled={isEditorMode} />
-        <Button
-          size={{ base: 'xs', md: 'md' }}
-          mt={2}
-          variant={isEditorMode ? 'primary' : 'secondary'}
-          onClick={toggleEditorMode}
-        >
-          {<BsGear />} {!isMobile && <Text paddingLeft="5px">{t('Edit')}</Text>}
-        </Button>
+        <HStack mt={1} justifyContent={'center'}>
+          <Button
+            my={1}
+            size={{ base: 'xs', md: 'md' }}
+            variant={'secondary'}
+            isActive={isEditorMode}
+            onClick={toggleEditorMode}
+          >
+            {<BsGear />}{' '}
+            {!isMobile && <Text paddingLeft="5px">{t('Edit')}</Text>}
+          </Button>
+        </HStack>
       </Box>
       {isEditorMode && control && (
         <ReactHookTextArea
