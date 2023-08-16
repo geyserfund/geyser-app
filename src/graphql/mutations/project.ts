@@ -81,6 +81,12 @@ export const MUTATION_UPDATE_PROJECT_REWARD = gql`
   }
 `
 
+export const MUTATION_DELETE_PROJECT_REWARD = gql`
+  mutation ProjectRewardDelete($input: DeleteProjectRewardInput!) {
+    projectRewardDelete(input: $input)
+  }
+`
+
 export const MUTATION_CREATE_PROJECT_MILESTONE = gql`
   mutation CreateProjectMilestone($input: CreateProjectMilestoneInput) {
     createProjectMilestone(input: $input) {
