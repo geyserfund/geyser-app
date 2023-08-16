@@ -322,7 +322,7 @@
   "Update your community by writing Entries": "Update your community by writing Entries",
   "Low 2% fees and no fees for node-runners": "Low 2% fees and no fees for node-runners",
   "Remain in control of your funds": "Remain in control of your funds",
-  "'You need to login with Twitter or Nostr, which connects your social profile to your project.": "'You need to login with Twitter or Nostr, which connects your social profile to your project.",
+  "You need to login with Twitter or Nostr, which connects your social profile to your project.": "You need to login with Twitter or Nostr, which connects your social profile to your project.",
   "If twitter button isn't opening a Twitter authentication page, make sure pop-ups are enabled in your browser's preferences.": "If twitter button isn't opening a Twitter authentication page, make sure pop-ups are enabled in your browser's preferences.",
   "The authentication request failed.": "The authentication request failed.",
   "We could not detect a Nostr extension like Alby or Flamingo.": "We could not detect a Nostr extension like Alby or Flamingo.",
