@@ -17,11 +17,11 @@ export const BadgesFAQ = () => {
           <AccordionPanel>
             <Trans
               i18nKey={
-                'Nostr stands for &quot;Notes and Other Stuff Transmitted by Relays&quot;. Like HTTP or TCP-IP, Nostr is a protocol; an open standard upon which anyone can build. Nostr itself is not an app or service that you sign up for. Check out <1>nostr.how</1> for more info'
+                "Nostr stands for 'Notes and Other Stuff Transmitted by Relays'. Like HTTP or TCP-IP, Nostr is a protocol; an open standard upon which anyone can build. Nostr itself is not an app or service that you sign up for. Check out <1>nostr.how</1> for more info"
               }
             >
               {
-                'Nostr stands for &quot;Notes and Other Stuff Transmitted by Relays&quot;. Like HTTP or TCP-IP, Nostr is a protocol; an open standard upon which anyone can build. Nostr itself is not an app or service that you sign up for. Check out '
+                "Nostr stands for 'Notes and Other Stuff Transmitted by Relays'. Like HTTP or TCP-IP, Nostr is a protocol; an open standard upon which anyone can build. Nostr itself is not an app or service that you sign up for. Check out "
               }
               <Link href="https://nostr.how">nostr.how</Link> for more info.
             </Trans>
