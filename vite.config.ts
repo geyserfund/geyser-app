@@ -32,16 +32,16 @@ const pwaOptions: Partial<VitePWAOptions> = {
         sizes: '32x32',
         type: 'image/png',
       },
-      {
-        src: '/icons/120.png',
-        sizes: '120x120',
-        type: 'image/png',
-      },
-      {
-        src: '/icons/128-padded.png',
-        sizes: '128x128',
-        type: 'image/png',
-      },
+      // {
+      //   src: '/icons/120.png',
+      //   sizes: '120x120',
+      //   type: 'image/png',
+      // },
+      // {
+      //   src: '/icons/128-padded.png',
+      //   sizes: '128x128',
+      //   type: 'image/png',
+      // },
       {
         src: '/icons/180.png',
         sizes: '180x180',
