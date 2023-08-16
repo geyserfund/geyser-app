@@ -1,5 +1,12 @@
 import { StackProps, Text, VStack } from '@chakra-ui/react'
-import { PropsWithChildren, ReactNode } from 'react'
+import { ReactNode } from 'react'
+
+export interface FieldContainerProps extends Omit<StackProps, 'title'> {
+  title?: ReactNode
+  subtitle?: ReactNode
+  error?: ReactNode
+  children?: ReactNode
+}
 
 export const FieldContainer = ({
   title,
@@ -7,13 +14,7 @@ export const FieldContainer = ({
   children,
   error = null,
   ...props
-}: PropsWithChildren<
-  {
-    title?: ReactNode
-    subtitle?: ReactNode
-    error?: ReactNode
-  } & Omit<StackProps, 'title'>
->) => {
+}: FieldContainerProps) => {
   return (
     <VStack spacing={1} alignItems="start" w="100%" {...props}>
       {title && (

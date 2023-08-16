@@ -13,7 +13,10 @@ import { BiDollar } from 'react-icons/bi'
 
 import { SatoshiIconTilted } from '../../../../components/icons'
 import { Modal } from '../../../../components/layouts/Modal'
-import { FileUpload } from '../../../../components/molecules'
+import {
+  CreatorEmailButton,
+  FileUpload,
+} from '../../../../components/molecules'
 import { Body2 } from '../../../../components/typography'
 import { TextArea, TextInputBox, UploadBox } from '../../../../components/ui'
 import { ProjectRewardValidations } from '../../../../constants/validations'
@@ -29,7 +32,6 @@ import {
   useProjectRewardUpdateMutation,
 } from '../../../../types/generated/graphql'
 import { commaFormatted, toInt, useNotification } from '../../../../utils'
-import { CreatorEmailButton } from '../../projectActivityPanel/components/CreatorEmailButton'
 
 type Props = {
   isOpen: boolean

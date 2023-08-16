@@ -31,7 +31,7 @@ import { FormStateError } from '../../../interfaces'
 import { USDCents } from '../../../types'
 import { FundingInput, FundingResourceType, Project } from '../../../types'
 import { toInt, useNotification } from '../../../utils'
-import { ProjectFundingQRScreenQRCodeSection } from '../../projectView/projectActivityPanel/components'
+import { QRCodeSection } from '../../projectView/projectActivityPanel/screens'
 import { GRANTS_PROJECT_NAME } from '../constants'
 
 const defaultModalHeader = 'Contribute'
@@ -352,9 +352,7 @@ export const GrantsContributeModal = ({
     )
   }
 
-  const qrSection = () => (
-    <ProjectFundingQRScreenQRCodeSection fundingFlow={fundingFlow} />
-  )
+  const qrSection = () => <QRCodeSection fundingFlow={fundingFlow} />
 
   const renderModalBody = () => {
     switch (fundState) {

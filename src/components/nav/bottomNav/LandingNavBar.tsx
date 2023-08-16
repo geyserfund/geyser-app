@@ -90,7 +90,7 @@ export const LandingNavBar = () => {
           spacing="20%"
           position="fixed"
           bottom="0px"
-          paddingBottom="2px"
+          paddingBottom="8px"
         >
           {LandingNavItems.map(({ name, path, Icon }) => {
             const isActive = Boolean(matchPath(path, location.pathname))

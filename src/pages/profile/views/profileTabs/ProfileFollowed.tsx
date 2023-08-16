@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { LandingCardBaseSkeleton } from '../../../../components/layouts'
 import { QUERY_USER_FOLLOWED_PROJECTS } from '../../../../graphql'
-import { Project, User, UserGetInput } from '../../../../types'
+import { User, UserGetInput } from '../../../../types'
 import { LandingProjectCard } from '../../../landing/components'
 import { ProfileTabLayout } from '../../components'
 
@@ -21,7 +21,7 @@ export const ProfileFollowed = ({ userProfile }: { userProfile: User }) => {
     skip: !userProfile?.id,
   })
 
-  const projects = (data?.user.projectFollows as Project[]) || []
+  const projects = data?.user.projectFollows || []
 
   return (
     <ProfileTabLayout title={t('Followed projects')}>

@@ -10,6 +10,7 @@ export interface ToolbarCommandProps {
   cmd: string
   label: string
   Icon: FC<IconProps> | FC<IconBaseProps>
+  isDisabled?: boolean
 }
 
 export const ToolbarCommand = ({
@@ -17,13 +18,18 @@ export const ToolbarCommand = ({
   cmd,
   label,
   Icon,
+  isDisabled,
 }: ToolbarCommandProps) => {
-  const { runCommand, isActive, isDisabled } = useToolbarCommand(name, cmd)
+  const {
+    runCommand,
+    isActive,
+    isDisabled: hasBeenDisabled,
+  } = useToolbarCommand(name, cmd)
 
   return (
     <ToolbarCommandButton
       isActive={isActive()}
-      isDisabled={isDisabled()}
+      isDisabled={isDisabled || hasBeenDisabled()}
       name={name}
       label={label}
       onClick={() => runCommand()}

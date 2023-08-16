@@ -9,7 +9,6 @@ export function SaveModule(props: { control?: Control; name?: string }) {
     control: props.control,
     name: props.name ?? 'content',
   })
-
   const { trigger } = useFormContext()
 
   const { getMarkdown } = useHelpers()

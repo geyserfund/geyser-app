@@ -5,7 +5,7 @@ import { InsertImageModal, MarkdownImage } from '../modals/InsertImageModal'
 import { useInsertLinkModal } from '../modals/InsertLinkModal'
 import { ToolbarCommandButton } from './ToolbarCommandButton'
 
-export const ImageCommand = () => {
+export const ImageCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
   const commands = useCommands()
 
   const modal = useInsertLinkModal(({ url, label }: MarkdownImage) => {
@@ -22,6 +22,7 @@ export const ImageCommand = () => {
         name="image"
         label="Insert image"
         onClick={() => modal.onOpen()}
+        isDisabled={isDisabled}
       >
         <BiImageAdd />
       </ToolbarCommandButton>

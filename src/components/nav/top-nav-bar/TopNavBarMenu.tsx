@@ -1,4 +1,4 @@
-import { HamburgerIcon } from '@chakra-ui/icons'
+import { DownloadIcon, HamburgerIcon } from '@chakra-ui/icons'
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu'
 import { Avatar, Button, HStack, MenuDivider, Stack } from '@chakra-ui/react'
 import { useContext } from 'react'
@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { FAQUrl, FeedbackUrl, getPath } from '../../../constants'
-import { AuthContext } from '../../../context'
+import { AuthContext, useServiceWorkerUpdate } from '../../../context'
 import { buttonCommon } from '../../../styles'
 import { ProjectStatus } from '../../../types'
 import { MenuItemLink } from './MenuItemLink'
@@ -35,6 +35,7 @@ export const TopNavBarMenu = ({
 }: Props) => {
   const { t } = useTranslation()
   const { user, isLoggedIn, isUserAProjectCreator } = useContext(AuthContext)
+  const { canInstall, handlePrompt } = useServiceWorkerUpdate()
 
   const toDisplayProject =
     user.ownerOf?.length > 0
@@ -198,6 +199,22 @@ export const TopNavBarMenu = ({
         ) : null}
         <MenuDivider />
         <ModeChange />
+
+        {canInstall && isLoggedIn && (
+          <>
+            <MenuDivider />
+            <MenuItem as={Stack} px={4} py={2}>
+              <Button
+                variant="secondary"
+                leftIcon={<DownloadIcon />}
+                width="100%"
+                onClick={handlePrompt}
+              >
+                {t('Install Geyser')}
+              </Button>
+            </MenuItem>
+          </>
+        )}
       </MenuList>
     </Menu>
   )

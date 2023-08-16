@@ -1,7 +1,7 @@
-import { Box, styled } from '@chakra-ui/react'
+import { Box, BoxProps, styled } from '@chakra-ui/react'
 import { ThemeProvider } from '@remirror/react-components'
 import { AllStyledComponent } from '@remirror/styles/emotion'
-import { PropsWithChildren, useMemo } from 'react'
+import { useMemo } from 'react'
 import { RemirrorThemeType } from 'remirror'
 
 import { useCustomTheme } from '../../../utils'
@@ -24,7 +24,9 @@ const Container = styled(Box, {
 export const StyleProvider = ({
   children,
   flex,
-}: PropsWithChildren<{ flex?: boolean }>) => {
+  display,
+  ...rest
+}: { flex?: boolean } & Omit<BoxProps, 'flex'>) => {
   const { colors } = useCustomTheme()
 
   const remirrorTheme: RemirrorThemeType = useMemo(
@@ -53,7 +55,7 @@ export const StyleProvider = ({
       sx={
         flex
           ? {
-              display: 'flex',
+              display: display || 'flex',
               flexDirection: 'column',
               flexGrow: 1,
               '& div.remirror-editor-wrapper': {
@@ -74,6 +76,7 @@ export const StyleProvider = ({
             }
           : {}
       }
+      {...rest}
     >
       <AllStyledComponent
         theme={remirrorTheme}

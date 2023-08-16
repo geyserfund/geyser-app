@@ -10,6 +10,7 @@ export const theme = {
   initialColorMode: 'system',
   useSystemColorMode: true,
   breakpoints: {
+    xs: '20em', // 320px
     sm: '30em', // 480px
     md: '48em', // 768px
     lg: '57em', // Desktop ~900px
