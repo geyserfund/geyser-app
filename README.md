@@ -51,6 +51,13 @@ APOLLO_KEY=<your Apollo Studio API key>
 
 [Contact us](email:admin@geyser.fund) if you don't have an `APOLLO_KEY` yet.
 
+#### Option C: use both local server and staging API interchangably
+
+Many at times we prefer using staging API while sometimes we prefer the local server. In such cases we can setup to use them interchangably.
+
+1. Create the normal `.env` file, which contains the values for local server. This would be used when we command `yarn dev`.
+2. Create a new file `.env.staging` this would have the values to use the staging API, and use the command `yarn dev:stage` to use the staging server env values.
+
 ### Hosts Configuration
 
 In order for the requests to go through to the staging backend API, you will need to add the following line to your `/etc/hosts` file:

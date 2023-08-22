@@ -8,7 +8,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import * as htmlToImage from 'html-to-image'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BiCopy } from 'react-icons/bi'
 import { HiOutlineCheck } from 'react-icons/hi'
@@ -32,6 +32,8 @@ export const SuccessImageComponent = ({
   const [copied, setCopied] = useState(false)
 
   const { project } = useProjectContext()
+
+  const successComponent = useRef<HTMLDivElement>(null)
 
   if (!project) {
     return null
@@ -59,7 +61,7 @@ export const SuccessImageComponent = ({
   }
 
   const getDataUrl = async () => {
-    const element = document.getElementById('successful-contribution-banner')
+    const element = successComponent.current
     if (element) {
       const dataUrl = await htmlToImage.toPng(element, {
         style: { backgroundColor: 'primary.400', borderStyle: 'double' },
@@ -79,6 +81,7 @@ export const SuccessImageComponent = ({
     <VStack w="full" spacing="10px">
       <VStack
         id="successful-contribution-banner"
+        ref={successComponent}
         spacing="20px"
         borderStyle="dashed"
         borderWidth="2px"
@@ -154,6 +157,7 @@ export const SuccessImageComponent = ({
             aria-label="copy-success-image"
             leftIcon={<BiCopy />}
             onClick={handleCopy}
+            isLoading={successComponent.current === null}
           >
             <Text
               variant="caption"

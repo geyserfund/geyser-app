@@ -116,7 +116,7 @@ export default defineConfig(({ command, mode }) => {
 
   pwaOptions.mode = env.APP_ENV === 'development' ? 'development' : 'production'
   const plugins: PluginOption[] = [VitePWA(pwaOptions), react()]
-  if (mode === 'development') {
+  if (mode !== 'production') {
     plugins.push(mkcert())
   }
 

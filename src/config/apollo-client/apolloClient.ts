@@ -39,9 +39,60 @@ const httpLink = createHttpLink({
 
 const prefix = __development__ ? 'ws' : 'wss'
 
+let restartRequestedBeforeConnected = false
+let gracefullyRestart = () => {
+  restartRequestedBeforeConnected = true
+}
+
+let activeSocket: WebSocket | null = null
+let timedOut = 0
+
+const closeSocket = (socket: WebSocket | null) => {
+  if (socket?.readyState === WebSocket?.OPEN) {
+    socket?.close(4408, 'Request Timeout')
+  }
+}
+
 const wsLink = new GraphQLWsLink(
   createClient({
     url: `${prefix}://${API_SERVICE_ENDPOINT.split('//')[1]}/graphql`,
+    retryAttempts: Infinity,
+    shouldRetry: () => true,
+    keepAlive: 10000,
+    on: {
+      error() {
+        if (activeSocket) {
+          closeSocket(activeSocket)
+        }
+      },
+      connected(socket: any) {
+        activeSocket = socket // save the active socket for later use
+        // restart by closing the socket which will trigger a silent reconnect
+        gracefullyRestart = () => {
+          closeSocket(socket)
+        }
+
+        // if any restarts were missed during the connection
+        // phase, restart and reset the request
+        if (restartRequestedBeforeConnected) {
+          restartRequestedBeforeConnected = false
+          gracefullyRestart()
+        }
+      },
+      ping(received) {
+        if (!received) {
+          // sent
+          timedOut = setTimeout(() => {
+            closeSocket(activeSocket)
+          }, 5000)
+        } // wait 5 seconds for the pong and then close the connection
+      },
+      pong(received) {
+        if (received) {
+          clearTimeout(timedOut)
+        } // pong is received, clear connection close timeout
+      },
+    },
   }),
 )
 
