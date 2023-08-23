@@ -17,9 +17,6 @@ const Container = styled(Box, {
     '& a': {
       textDecoration: 'underline',
     },
-    '& tr, & th, & td': {
-      height: '10px',
-    },
     width: '100%',
   },
 })
@@ -76,6 +73,13 @@ export const StyleProvider = ({
                   flexDirection: 'column',
                   flexGrow: 1,
                 },
+              '& div.tableWrapper': {
+                padding: '10px',
+                paddingBottom: '20px',
+                '& th, & td': {
+                  paddingX: '5px',
+                },
+              },
             }
           : {}
       }

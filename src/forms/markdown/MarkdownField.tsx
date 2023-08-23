@@ -1,6 +1,11 @@
 import { Box, Button, HStack, Text } from '@chakra-ui/react'
 // import { ReactComponentExtension } from '@remirror/extension-react-component'
-import { EditorComponent, Remirror, useRemirror } from '@remirror/react'
+import {
+  EditorComponent,
+  Remirror,
+  TableComponents,
+  useRemirror,
+} from '@remirror/react'
 import { ForwardedRef, useCallback } from 'react'
 import { Control } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -94,11 +99,6 @@ export const MarkdownField = ({
       }),
       new MarkdownExtension({
         copyAsMarkdown: true,
-        htmlToMarkdown(html) {
-          console.log('checking html', html)
-          return `${html}`
-        },
-        // htmlToMarkdown: (html) => turndownService.turndown(html),
       }),
       new BoldExtension(),
       new UnderlineExtension(),
@@ -142,9 +142,9 @@ export const MarkdownField = ({
     react: {
       nodeViewComponents: {
         image: imageHandler,
-        paragraph: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
-          <Box mb={4} ref={forwardRef} />
-        ),
+        // paragraph: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
+        //   <Box mb={4} ref={forwardRef} />
+        // ),
         bulletList: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
           <Box pl={5} ref={forwardRef} />
         ),
@@ -152,7 +152,7 @@ export const MarkdownField = ({
           <Box pl={5} ref={forwardRef} />
         ),
         table: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
-          <Box mb={4} ref={forwardRef} />
+          <Box mb={0} ref={forwardRef} />
         ),
       },
     },
@@ -221,6 +221,7 @@ export const MarkdownField = ({
       )}
       <StyleProvider flex={flex} display={isEditorMode ? 'none' : undefined}>
         <EditorComponent />
+        <TableComponents enableTableCellMenu={false} />
       </StyleProvider>
       <SaveModule name={name} control={control} />
     </Remirror>
