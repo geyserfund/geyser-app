@@ -17,6 +17,9 @@ const Container = styled(Box, {
     '& a': {
       textDecoration: 'underline',
     },
+    '& tr, & th, & td': {
+      height: '10px',
+    },
     width: '100%',
   },
 })

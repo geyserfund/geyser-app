@@ -5,6 +5,7 @@ import { alertTheme } from './alertTheme'
 import { drawerTheme } from './drawerTheme'
 import { menuTheme } from './menuTheme'
 import { modalTheme } from './modalTheme'
+import { popOverTheme } from './popOverTheme'
 
 export const theme = {
   initialColorMode: 'system',
@@ -247,6 +248,7 @@ export const theme = {
     Menu: menuTheme,
     Modal: modalTheme,
     Drawer: drawerTheme,
+    Popover: popOverTheme,
     Input: {
       defaultProps: {
         focusBorderColor: 'primary.400',

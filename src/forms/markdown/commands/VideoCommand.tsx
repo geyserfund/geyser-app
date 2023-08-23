@@ -12,6 +12,7 @@ export const VideoCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
   const commands = useCommands()
 
   const modal = useInsertVideoModal(({ url }: MarkdownVideo) => {
+    if (!commands.addYouTubeVideo) return
     commands.addYouTubeVideo({ video: url })
     modal.onClose()
   })

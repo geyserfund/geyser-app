@@ -4,6 +4,12 @@ import {
   ListItem,
   ListProps,
   OrderedList,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
   UnorderedList,
 } from '@chakra-ui/react'
 import {
@@ -49,6 +55,12 @@ export const typeMap = {
   paragraph: 'p',
   orderedList: OrderedList,
   text: TextHandler,
+  table: Table,
+  tableHeader: Thead,
+  tableHeaderCell: Th,
+  tbody: Tbody,
+  tableRow: Tr,
+  tableCell: Td,
 } satisfies MarkMap
 
 export const markMap = {
@@ -57,4 +69,10 @@ export const markMap = {
   code: 'code',
   link: createLinkHandler({ target: '_blank' }),
   underline: 'u',
+  table: 'table',
+  tableHeader: 'thead',
+  tableHeaderCell: 'th',
+  tbody: 'tbody',
+  tableRow: 'tr',
+  tableCell: 'td',
 } satisfies MarkMap

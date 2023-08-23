@@ -16,6 +16,7 @@ export type DashboardSection = {
   label: string
   path: keyof PathsMap
   fullWidth?: boolean
+  semiFullWidth?: boolean
 }
 
 export const creatorSections: Record<string, DashboardSection> = {
@@ -43,6 +44,7 @@ export const projectSections: Record<string, DashboardSection> = {
   story: {
     label: 'Story',
     path: 'dashboardStory',
+    semiFullWidth: true,
   },
   wallet: {
     label: 'Connect wallet',
@@ -139,7 +141,11 @@ export const ProjectDashboard = () => {
           }}
           maxWidth={{
             base: '100%',
-            lg: activeSection?.fullWidth ? '100%' : '2xl',
+            lg: activeSection?.fullWidth
+              ? '100%'
+              : activeSection?.semiFullWidth
+              ? '4xl'
+              : '2xl',
           }}
           justifyItems="center"
         >

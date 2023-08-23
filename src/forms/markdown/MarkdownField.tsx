@@ -1,10 +1,11 @@
 import { Box, Button, HStack, Text } from '@chakra-ui/react'
+// import { ReactComponentExtension } from '@remirror/extension-react-component'
 import { EditorComponent, Remirror, useRemirror } from '@remirror/react'
 import { ForwardedRef, useCallback } from 'react'
 import { Control } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { BsGear } from 'react-icons/bs'
-import { InvalidContentHandler } from 'remirror'
+import { AnyExtension, InvalidContentHandler } from 'remirror'
 import {
   BlockquoteExtension,
   BoldExtension,
@@ -17,6 +18,7 @@ import {
   ItalicExtension,
   LinkExtension,
   MarkdownExtension,
+  NodeFormattingExtension,
   OrderedListExtension,
   PlaceholderExtension,
   TableExtension,
@@ -80,8 +82,8 @@ export const MarkdownField = ({
 
   const { uploadFile } = useSignedUpload()
 
-  const extensions = useCallback(
-    () => [
+  const extensions = useCallback<() => AnyExtension[]>(() => {
+    const exts = [
       new PlaceholderExtension({ placeholder }),
       new LinkExtension({
         autoLink: true,
@@ -92,7 +94,11 @@ export const MarkdownField = ({
       }),
       new MarkdownExtension({
         copyAsMarkdown: true,
-        htmlToMarkdown: (html) => turndownService.turndown(html),
+        htmlToMarkdown(html) {
+          console.log('checking html', html)
+          return `${html}`
+        },
+        // htmlToMarkdown: (html) => turndownService.turndown(html),
       }),
       new BoldExtension(),
       new UnderlineExtension(),
@@ -107,6 +113,7 @@ export const MarkdownField = ({
       new TrailingNodeExtension(),
       new BulletListExtension(),
       new TextExtension(),
+
       new ImageExtension({
         uploadHandler(files) {
           return files.map(
@@ -119,9 +126,14 @@ export const MarkdownField = ({
         },
         enableResizing: false,
       }),
-    ],
-    [placeholder, uploadFile],
-  )
+    ] as AnyExtension[]
+
+    if (!preview) {
+      exts.push(new NodeFormattingExtension())
+    }
+
+    return exts
+  }, [placeholder, uploadFile])
 
   const { manager } = useRemirror({
     extensions,
@@ -138,6 +150,9 @@ export const MarkdownField = ({
         ),
         orderedList: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
           <Box pl={5} ref={forwardRef} />
+        ),
+        table: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
+          <Box mb={4} ref={forwardRef} />
         ),
       },
     },
@@ -165,6 +180,7 @@ export const MarkdownField = ({
         display="flex"
         justifyContent="space-between"
         alignItems="start"
+        mb={2}
         sx={
           stickyToolbar !== undefined && stickyToolbar !== false
             ? {
