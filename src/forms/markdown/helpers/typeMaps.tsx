@@ -40,6 +40,44 @@ export const listItemHandler = ({ children }: ListProps) => {
   return <ListItem>{children}</ListItem>
 }
 
+export const tableCellStyles = {
+  '& th, & td': {
+    padding: '3px 8px',
+    border: '1px solid',
+    borderColor: 'neutral.200',
+  },
+}
+
+export const tableHandler = (props: any) => {
+  const hasHeader =
+    props?.children[0]?.props?.json?.content[0]?.type === 'tableHeaderCell'
+
+  return (
+    <Table
+      w="full"
+      variant="simple"
+      borderColor="neutral.200"
+      sx={{
+        ...tableCellStyles,
+      }}
+    >
+      {hasHeader && <Thead>{props.children[0]}</Thead>}
+
+      {
+        <Tbody>
+          {props.children.map((child: any, index: number) => {
+            if (hasHeader && index === 0) {
+              return null
+            }
+
+            return child
+          })}
+        </Tbody>
+      }
+    </Table>
+  )
+}
+
 export const typeMap = {
   blockquote: 'blockquote',
   bulletList: unorderedListHandler,
@@ -55,7 +93,7 @@ export const typeMap = {
   paragraph: 'p',
   orderedList: OrderedList,
   text: TextHandler,
-  table: Table,
+  table: tableHandler,
   tableHeader: Thead,
   tableHeaderCell: Th,
   tbody: Tbody,

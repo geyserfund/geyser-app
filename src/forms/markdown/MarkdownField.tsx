@@ -1,5 +1,4 @@
 import { Box, Button, HStack, Text } from '@chakra-ui/react'
-// import { ReactComponentExtension } from '@remirror/extension-react-component'
 import {
   EditorComponent,
   Remirror,
@@ -36,6 +35,7 @@ import TurndownService from 'turndown'
 import { useSignedUpload } from '../../hooks'
 import { useMobileMode } from '../../utils'
 import { ReactHookTextArea } from '../components/ReactHookTextArea'
+import { TableCellMenuComponent } from '../components/TableCellMenuComponent'
 import { PreviewRenderer } from './helpers/PreviewRenderer'
 import { SaveModule } from './helpers/SaveModule'
 import { StyleProvider } from './helpers/StyleProvider'
@@ -113,7 +113,6 @@ export const MarkdownField = ({
       new TrailingNodeExtension(),
       new BulletListExtension(),
       new TextExtension(),
-
       new ImageExtension({
         uploadHandler(files) {
           return files.map(
@@ -142,17 +141,11 @@ export const MarkdownField = ({
     react: {
       nodeViewComponents: {
         image: imageHandler,
-        // paragraph: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
-        //   <Box mb={4} ref={forwardRef} />
-        // ),
         bulletList: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
           <Box pl={5} ref={forwardRef} />
         ),
         orderedList: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
           <Box pl={5} ref={forwardRef} />
-        ),
-        table: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
-          <Box mb={0} ref={forwardRef} />
         ),
       },
     },
@@ -221,7 +214,9 @@ export const MarkdownField = ({
       )}
       <StyleProvider flex={flex} display={isEditorMode ? 'none' : undefined}>
         <EditorComponent />
-        <TableComponents enableTableCellMenu={false} />
+        <TableComponents
+          tableCellMenuProps={{ Component: TableCellMenuComponent }}
+        />
       </StyleProvider>
       <SaveModule name={name} control={control} />
     </Remirror>

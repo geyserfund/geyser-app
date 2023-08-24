@@ -655,5 +655,11 @@
   "There's a new version of Geyser!":"There's a new version of Geyser!",
   "Restart the app to load the new version":"Restart the app to load the new version",
   "Not now":"Not now",
-  "Restart app":"Restart app"
+  "Restart app":"Restart app",
+  "Add row above":"Add row above",
+  "Add row below":"Add row below",
+  "Add column left":"Add column left",
+  "Add column right":"Add column right",
+  "Remove column":"Remove column",
+  "Remove row":"Remove row"
 }
