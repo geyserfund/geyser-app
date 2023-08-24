@@ -14,7 +14,7 @@ export const useBitcoinRates = (): IuseBitcoinRates => {
   useEffect(() => {
     const getBitcoinRates = async () => {
       setLoading(true)
-      const usdRate = await fetchBitcoinRates()
+      const usdRate = await fetchBitcoinRates({ currency: 'usd' })
       const satoshirate = usdRate * 0.00000001
       setBtcRate(satoshirate)
       setLoading(false)
