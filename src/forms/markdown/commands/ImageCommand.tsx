@@ -15,6 +15,8 @@ export const ImageCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
       alt: label || 'image',
     })
 
+    commands.insertHardBreak()
+
     modal.onClose()
   })
 
