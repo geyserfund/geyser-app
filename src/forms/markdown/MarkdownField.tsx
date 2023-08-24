@@ -36,10 +36,12 @@ import { useSignedUpload } from '../../hooks'
 import { useMobileMode } from '../../utils'
 import { ReactHookTextArea } from '../components/ReactHookTextArea'
 import { TableCellMenuComponent } from '../components/TableCellMenuComponent'
-import { PreviewRenderer } from './helpers/PreviewRenderer'
-import { SaveModule } from './helpers/SaveModule'
-import { StyleProvider } from './helpers/StyleProvider'
-import { imageHandler } from './helpers/typeMaps'
+import {
+  imageHandler,
+  PreviewRenderer,
+  SaveModule,
+  StyleProvider,
+} from './helpers'
 import { MarkdownToolbar } from './MarkdownToolbar'
 
 const turndownService = new TurndownService()
@@ -76,7 +78,6 @@ export const MarkdownField = ({
 }: Props) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
-
   const onError: InvalidContentHandler = useCallback(
     ({ json, invalidContent, transformers }) => {
       // Automatically remove all invalid nodes and marks.
