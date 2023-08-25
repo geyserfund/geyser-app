@@ -152,6 +152,7 @@ const turndownService = new TurndownService({
   codeBlockStyle: 'fenced',
   headingStyle: 'atx',
 })
+  .keep(['iframe'])
   .addRule('taskListItems', {
     filter: (node) =>
       node.nodeName === 'LI' && node.hasAttribute('data-task-list-item'),

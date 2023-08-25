@@ -10,6 +10,7 @@ export const ImageCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
 
   const modal = useInsertLinkModal(({ url, label }: MarkdownImage) => {
     if (!commands.insertImage) return
+    commands.insertHardBreak()
     commands.insertImage({
       src: url,
       alt: label || 'image',

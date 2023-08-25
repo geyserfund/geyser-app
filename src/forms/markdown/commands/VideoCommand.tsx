@@ -13,6 +13,7 @@ export const VideoCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
 
   const modal = useInsertVideoModal(({ url }: MarkdownVideo) => {
     if (!commands.addYouTubeVideo) return
+    commands.insertHardBreak()
     commands.addYouTubeVideo({ video: url })
     commands.insertHardBreak()
     modal.onClose()
