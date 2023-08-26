@@ -1,6 +1,7 @@
 import { Box, BoxProps, styled } from '@chakra-ui/react'
 import { ThemeProvider } from '@remirror/react-components'
 import { AllStyledComponent } from '@remirror/styles/emotion'
+import { captureException } from '@sentry/react'
 import { useEffect, useMemo } from 'react'
 import { RemirrorThemeType } from 'remirror'
 
@@ -64,9 +65,13 @@ export const StyleProvider = ({
   )
 
   useEffect(() => {
-    twttr.widgets.load(
-      document.getElementById(ID.project.story.markdown.container),
-    )
+    twttr.widgets
+      .load(document.getElementById(ID.project.story.markdown.container))
+      .catch((e: any) =>
+        captureException(e, {
+          tags: { area: 'twitter-widgets' },
+        }),
+      )
   }, [])
 
   return (

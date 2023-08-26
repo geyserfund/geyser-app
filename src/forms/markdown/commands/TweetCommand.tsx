@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react'
 import { useCommands } from '@remirror/react'
 import { BsTwitter } from 'react-icons/bs'
 
-import { useDarkMode } from '../../../utils'
+import { useDarkMode, useNotification } from '../../../utils'
 import {
   InsertTwitterModal,
   MarkdownTwitter,
@@ -13,9 +13,9 @@ import { ToolbarCommandButton } from './ToolbarCommandButton'
 export const TweetCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
   const commands = useCommands()
   const isDarkMode = useDarkMode()
+  const { toast } = useNotification()
 
   const modal = useInsertTwitterModal(async ({ url }: MarkdownTwitter) => {
-    if (!commands.addYouTubeVideo) return
     commands.insertHardBreak()
 
     const UrlSplit = url.split('/').filter((val) => val && val !== '/')
@@ -24,21 +24,29 @@ export const TweetCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
 
     if (!tweetId) return
 
-    const value = await twttr.widgets.createTweet(
-      tweetId,
-      document.getElementById('tweet-container'),
-      {
-        width: '350px',
-        theme: isDarkMode ? 'dark' : 'light',
-      },
-    )
+    try {
+      const value = await twttr.widgets.createTweet(
+        tweetId,
+        document.getElementById('tweet-container'),
+        {
+          width: '350px',
+          theme: isDarkMode ? 'dark' : 'light',
+        },
+      )
 
-    commands.insertHtml(value.innerHTML, {})
-    commands.insertHardBreak()
+      commands.insertHtml(value.innerHTML, {})
+      commands.insertHardBreak()
 
-    const element = document.getElementById('tweet-container')
-    if (element) {
-      element.innerHTML = ''
+      const element = document.getElementById('tweet-container')
+      if (element) {
+        element.innerHTML = ''
+      }
+    } catch {
+      toast({
+        status: 'error',
+        title: 'Failed to insert tweet',
+        description: 'Please try again',
+      })
     }
 
     modal.onClose()

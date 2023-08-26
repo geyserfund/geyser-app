@@ -666,5 +666,6 @@
   "Insert":"Insert",
   "Must be a valid twitter URL":"Must be a valid twitter URL",
   "URL is required":"URL is required",
-  "Insert tweet":"Insert tweet"
+  "Insert tweet":"Insert tweet",
+  "Failed to insert tweet":"Failed to insert tweet"
 }
