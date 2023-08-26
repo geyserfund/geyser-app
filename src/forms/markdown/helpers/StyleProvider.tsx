@@ -1,9 +1,10 @@
 import { Box, BoxProps, styled } from '@chakra-ui/react'
 import { ThemeProvider } from '@remirror/react-components'
 import { AllStyledComponent } from '@remirror/styles/emotion'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { RemirrorThemeType } from 'remirror'
 
+import { ID } from '../../../constants'
 import { useCustomTheme } from '../../../utils'
 import { tableCellStyles } from './typeMaps'
 
@@ -20,6 +21,11 @@ const Container = styled(Box, {
     },
     '& iframe': {
       minHeight: '28em',
+    },
+    '& div.remirror-iframe-custom': {
+      width: '100% !important',
+      height: 'auto !important',
+      marginBottom: '20px',
     },
     '& a': {
       textDecoration: 'underline',
@@ -57,8 +63,15 @@ export const StyleProvider = ({
     [colors],
   )
 
+  useEffect(() => {
+    twttr.widgets.load(
+      document.getElementById(ID.project.story.markdown.container),
+    )
+  }, [])
+
   return (
     <Container
+      id={ID.project.story.markdown.container}
       sx={
         flex
           ? {

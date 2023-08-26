@@ -2,6 +2,7 @@ import { ButtonGroup } from '@chakra-ui/react'
 
 import { ImageCommand } from '../commands/ImageCommand'
 import { LinkCommand } from '../commands/LinkCommand'
+import { TweetCommand } from '../commands/TweetCommand'
 import { VideoCommand } from '../commands/VideoCommand'
 
 export const ToolbarMedia = ({ isDisabled }: { isDisabled?: boolean }) => {
@@ -10,6 +11,7 @@ export const ToolbarMedia = ({ isDisabled }: { isDisabled?: boolean }) => {
       <LinkCommand isDisabled={isDisabled} />
       <ImageCommand isDisabled={isDisabled} />
       <VideoCommand isDisabled={isDisabled} />
+      <TweetCommand isDisabled={isDisabled} />
     </ButtonGroup>
   )
 }

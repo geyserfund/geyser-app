@@ -1,5 +1,7 @@
 import {
+  Box,
   Divider,
+  HStack,
   Image,
   ListItem,
   ListProps,
@@ -15,7 +17,6 @@ import {
 import {
   Callout,
   CodeBlock,
-  createIFrameHandler,
   createLinkHandler,
   Doc,
   Heading,
@@ -78,6 +79,61 @@ export const tableHandler = (props: any) => {
   )
 }
 
+export const FrameHandler = (props: any) => {
+  const colorMode = localStorage.getItem('chakra-ui-color-mode')
+
+  const newSrc = `${props.node.attrs.src}`.replace(
+    /theme=dark|theme=light/,
+    `theme=${colorMode || 'light'}`,
+  )
+
+  const splitValues =
+    `${props.node.attrs.style}`
+      .replaceAll(/"|\{|\}/g, '')
+      .replaceAll(',', ';')
+      .split(';') || []
+
+  const newStyle = {} as { [key: string]: string | number }
+
+  splitValues.map((acc: any) => {
+    const [key, value] = acc.split(':')
+    if (key && value) {
+      newStyle[key.trim()] = value.trim()
+    }
+  })
+
+  const isTwitter = newSrc.toLowerCase().includes('twitter')
+
+  return (
+    <HStack w="full" justifyContent="center">
+      <Box
+        w="full"
+        h="full"
+        minHeight={'450px'}
+        maxWidth={isTwitter ? '540px' : '100%'}
+        display="flex"
+        borderRadius="12px"
+        overflowY="auto"
+        position="relative"
+      >
+        <iframe
+          id={newSrc}
+          src={newSrc}
+          height={props.node.attrs.height}
+          width={props.node.attrs.width}
+          style={{
+            ...newStyle,
+            height: '100%',
+            margin: '0px',
+            overflow: 'hidden',
+          }}
+          allowFullScreen
+        />
+      </Box>
+    </HStack>
+  )
+}
+
 export const typeMap = {
   blockquote: 'blockquote',
   bulletList: unorderedListHandler,
@@ -87,7 +143,7 @@ export const typeMap = {
   hardBreak: 'br',
   heading: Heading,
   horizontalRule: Divider,
-  iframe: createIFrameHandler({ style: { width: '100%' } }),
+  iframe: FrameHandler,
   image: imageHandler,
   listItem: listItemHandler,
   paragraph: 'p',

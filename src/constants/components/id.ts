@@ -22,6 +22,11 @@ export const ID = {
       contribution: 'project-activity-list-container',
       leaderboard: 'project-leaderboard-list-container',
     },
+    story: {
+      markdown: {
+        container: 'project-story-markdown-container',
+      },
+    },
   },
   profile: {
     tabs: 'user-profile-tab-container',

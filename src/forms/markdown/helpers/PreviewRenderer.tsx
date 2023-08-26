@@ -30,11 +30,11 @@ export const PreviewRenderer = ({
 }
 
 export const matchMarkDownSpecialKeysAtLineEnd =
-  /(?<!.*(\|\n|\||>))\n(?!.*(\n\||\||#|\[|>))/g
+  /(?<!.*(\|\n|\||>))\n(?!.*(\*|_|#|-|\[|>|\n\||\||`|[0-9]+(\.|\))))/g
 
 export const FormatWhiteSpaceForMarkDownString = (value: string): string => {
   const adjustForLineChange = value
-    ? value.replaceAll(matchMarkDownSpecialKeysAtLineEnd, '<br>')
+    ? value.replaceAll(matchMarkDownSpecialKeysAtLineEnd, '<br />')
     : ''
 
   return DOMPurify.sanitize(adjustForLineChange, { ADD_TAGS: ['iframe'] })

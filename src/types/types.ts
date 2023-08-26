@@ -17,3 +17,5 @@ export type FormError<T> = {
 export type MutationInput<T> = {
   input: T
 }
+
+declare let twttr: any

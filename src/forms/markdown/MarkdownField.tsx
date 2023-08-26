@@ -37,6 +37,7 @@ import { useMobileMode } from '../../utils'
 import { ReactHookTextArea } from '../components/ReactHookTextArea'
 import { TableCellMenuComponent } from '../components/TableCellMenuComponent'
 import {
+  FrameHandler,
   imageHandler,
   PreviewRenderer,
   SaveModule,
@@ -108,7 +109,18 @@ export const MarkdownField = ({
       new BlockquoteExtension(),
       new OrderedListExtension(),
       new CodeExtension(),
-      new IframeExtension(),
+      new IframeExtension({
+        enableResizing: false,
+        extraAttributes: {
+          width: '100%',
+          scolling: 'no',
+          style: {
+            default: JSON.stringify({ width: '100%', height: '400px' }),
+            parseDOM: (domNode) => domNode.getAttribute('style'),
+            toDOM: (attrs) => ['style', (attrs.style as string) || ''],
+          },
+        },
+      }),
       new HardBreakExtension(),
       new TableExtension(),
       new TrailingNodeExtension(),
@@ -148,6 +160,7 @@ export const MarkdownField = ({
         orderedList: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
           <Box pl={5} ref={forwardRef} />
         ),
+        iframe: (props: any) => FrameHandler(props),
       },
     },
   })
