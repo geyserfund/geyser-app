@@ -33,8 +33,6 @@ export const TweetCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
       },
     )
 
-    console.log('inner html', value.innerHTML)
-
     commands.insertHtml(value.innerHTML, {})
     commands.insertHardBreak()
 

@@ -21,17 +21,15 @@ interface TableCommandProps {
   isDisabled?: boolean
 }
 
-const tableBoxes = [
-  [1, 2, 3, 4, 5],
-  [1, 2, 3, 4, 5],
-  [1, 2, 3, 4, 5],
-  [1, 2, 3, 4, 5],
-  [1, 2, 3, 4, 5],
-]
+const TABLE_ROW_COUNT = 5
+const TABLE_COLUMN_COUNT = 5
+
+const tableBoxes = Array.from({ length: TABLE_ROW_COUNT }, (_, i) =>
+  Array.from({ length: TABLE_COLUMN_COUNT }, (_, j) => `${i + 1}${j + 1}`),
+)
 
 export const TableCommand = ({ isDisabled }: TableCommandProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-
   const commands = useCommands()
 
   const debouncedIsOpen = useDebounce(isOpen, 200)
@@ -77,7 +75,7 @@ export const TableCommand = ({ isDisabled }: TableCommandProps) => {
               <VStack spacing="0px" _hover={{ cursor: 'pointer' }}>
                 {tableBoxes.map((row, i) => (
                   <HStack key={i} spacing="0px">
-                    {row.map((col, j) => (
+                    {row.map((_, j) => (
                       <Box
                         key={j}
                         padding="5px"
