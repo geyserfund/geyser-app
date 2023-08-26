@@ -15,17 +15,6 @@ export const TableCellMenuComponent = () => {
   const { t } = useTranslation()
   const commands = useCommands()
 
-  const ModifiedMenuItem = (props: MenuItemProps) => {
-    return (
-      <MenuItem
-        paddingX="10px"
-        paddingY="5px"
-        _hover={{ bg: 'neutral.200' }}
-        {...props}
-      />
-    )
-  }
-
   return (
     <Menu>
       <MenuButton
@@ -65,5 +54,16 @@ export const TableCellMenuComponent = () => {
         </ModifiedMenuItem>
       </MenuList>
     </Menu>
+  )
+}
+
+const ModifiedMenuItem = (props: MenuItemProps) => {
+  return (
+    <MenuItem
+      paddingX="10px"
+      paddingY="5px"
+      _hover={{ bg: 'neutral.200' }}
+      {...props}
+    />
   )
 }
