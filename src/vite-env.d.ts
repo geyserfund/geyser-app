@@ -11,3 +11,5 @@ type ImportMetaEnv = {
 type ImportMeta = {
   readonly env: ImportMetaEnv
 }
+
+declare const twttr: any
