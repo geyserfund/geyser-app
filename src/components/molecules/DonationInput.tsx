@@ -103,6 +103,8 @@ export const DonationInput = ({
     const val = Number(value)
 
     if (!val) {
+      setDollar(0)
+      setSatoshi(0)
       return
     }
 
