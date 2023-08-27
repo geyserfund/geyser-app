@@ -23,22 +23,17 @@ const pwaOptions: Partial<VitePWAOptions> = {
         type: 'image/svg+xml',
       },
       {
-        src: '/icons/16.png',
-        sizes: '16x16',
+        src: '/icons/60.png',
+        sizes: '60x60',
         type: 'image/png',
       },
       {
-        src: '/icons/32.png',
-        sizes: '32x32',
+        src: '/icons/120.png',
+        sizes: '120x120',
         type: 'image/png',
       },
       {
-        src: '/icons/128-padded.png',
-        sizes: '128x128',
-        type: 'image/png',
-      },
-      {
-        src: '/icons/180.png',
+        src: '/icons/180-padded.png',
         sizes: '180x180',
         type: 'image/png',
       },
