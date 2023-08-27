@@ -11,7 +11,7 @@ export const useToolbarCommand = (name: string, cmd: string) => {
     (attrs?: any) => {
       if (command) {
         command(attrs)
-        commands.focus()
+        commands.focus?.()
       }
     },
     [command, commands],

@@ -7,35 +7,39 @@ import * as yup from 'yup'
 import { Modal } from '../../../components/layouts/Modal'
 import { useModal, UseModalReturn } from '../../../hooks/useModal'
 import { TextField } from '../../components/TextField'
-import { validateYouTubeUrl } from '../../validations/youtube'
+import { validateTwitterUrl } from '../../validations/twitter'
 
 const schema = yup.object({
   url: yup
     .string()
     .required('URL is required')
-    .test('youtube', 'Must be a valid youtube URL', validateYouTubeUrl),
+    .test('twitter', 'Must be a valid twitter URL', validateTwitterUrl),
 })
 
-export interface MarkdownVideo {
+export interface MarkdownTwitter {
   url: string
 }
 
-export const useInsertVideoModal = (onSubmit: SubmitHandler<MarkdownVideo>) => {
-  return useModal<{ onSubmit: SubmitHandler<MarkdownVideo> }>({}, { onSubmit })
+export const useInsertTwitterModal = (
+  onSubmit: SubmitHandler<MarkdownTwitter>,
+) => {
+  return useModal<{ onSubmit: SubmitHandler<MarkdownTwitter> }>(
+    {},
+    { onSubmit },
+  )
 }
 
-export const InsertVideoModal = ({
+export const InsertTwitterModal = ({
   props: { onSubmit },
   ...modal
-}: UseModalReturn<{ onSubmit: SubmitHandler<MarkdownVideo> }>) => {
+}: UseModalReturn<{ onSubmit: SubmitHandler<MarkdownTwitter> }>) => {
   const { t } = useTranslation()
-
-  const form = useForm<MarkdownVideo>({
+  const form = useForm<MarkdownTwitter>({
     resolver: yupResolver(schema),
   })
 
   return (
-    <Modal title={t('Insert video')} {...modal}>
+    <Modal title={t('Insert tweet')} {...modal}>
       <form
         onSubmit={(e) => {
           e.stopPropagation()
@@ -47,7 +51,7 @@ export const InsertVideoModal = ({
           <TextField
             control={form.control}
             name="url"
-            label="Youtube URL"
+            label="Tweet URL"
             required
           />
           <Button w="100%" variant="primary" type="submit">

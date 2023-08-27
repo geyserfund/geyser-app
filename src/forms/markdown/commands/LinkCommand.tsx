@@ -12,6 +12,7 @@ export const LinkCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
   const commands = useCommands()
 
   const modal = useInsertLinkModal(({ url, label }: MarkdownLink) => {
+    if (!commands.insertMarkdown) return
     commands.insertMarkdown(`[${label || url}](${url})`)
     modal.onClose()
   })
