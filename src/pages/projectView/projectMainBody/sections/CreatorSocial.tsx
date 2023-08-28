@@ -40,13 +40,14 @@ export const CreatorSocial = () => {
           <Text variant="h3">{user.username}</Text>
         </Link>
         <HStack ml={2}>
-          {accountButtonProps.map(({ key, username, icon, color, props }) => {
+          {accountButtonProps.map(({ username, icon, color, props }, index) => {
             if (!icon || !props) {
               return
             }
 
             return (
               <Text
+                key={index}
                 {...props}
                 color={color}
                 whiteSpace="nowrap"
@@ -56,7 +57,6 @@ export const CreatorSocial = () => {
                 borderRadius="8px"
                 px={3}
                 py={1}
-                key={key}
                 variant="body"
                 fontWeight={500}
                 bg="neutral.100"
