@@ -13,7 +13,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEllipsis } from 'react-icons/ai'
 
-import { SatoshiIconTilted } from '../../../../../components/icons'
+import { BoltIcon } from '../../../../../components/icons'
 import { SatoshiAmount } from '../../../../../components/ui'
 import { UserAvatar } from '../../../../../components/ui/UserAvatar'
 import { MobileViews, useProjectContext } from '../../../../../context'
@@ -303,7 +303,7 @@ export const ActivityBrief = (props: StackProps) => {
         <HStack w="full">
           <Button
             variant="primary"
-            leftIcon={<SatoshiIconTilted />}
+            leftIcon={<BoltIcon />}
             width="100%"
             onClick={() => setMobileView(MobileViews.funding)}
             isDisabled={!isActive(project?.status)}
