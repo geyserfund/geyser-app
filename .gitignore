@@ -30,3 +30,5 @@ yarn-error.log*
 
 faker/custom-extended-schemas/
 src/config/apollo-client/customClientTypeDefs.ts
+
+caddy/certificate/root.crt
