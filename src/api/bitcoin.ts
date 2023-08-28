@@ -9,7 +9,7 @@ const quoteSources = [
   {
     name: 'bitstamp',
     url: 'https://www.bitstamp.net/api/v2/ticker/btcusd/',
-    lastPrice: (response: any) => Number(response.data.last),
+    lastPrice: (response: any) => Number(response.last),
   },
 ]
 
