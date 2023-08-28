@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Box,
   Button,
   CircularProgress,
   HStack,
@@ -202,12 +203,12 @@ export const ActivityBrief = (props: StackProps) => {
           100,
       )
       return (
-        <Text pl={2} color="neutral.600" w="100%">
-          <Text w="100%" fontWeight={500} display="inline">
+        <Box pl={2} color="neutral.600" w="100%">
+          <Text fontWeight={500} display="inline">
             {`${percentage} % ${t('of Milestone')} ${milestoneIndex}:`}
           </Text>{' '}
-          {currentMilestone.name}
-        </Text>
+          <Text display="inline">{currentMilestone.name}</Text>
+        </Box>
       )
     }
 
