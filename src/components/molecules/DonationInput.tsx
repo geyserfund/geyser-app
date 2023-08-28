@@ -137,7 +137,6 @@ export const DonationInput = ({
   }
 
   const fontSize = { base: 'sm', md: 'md', lg: 'sm', xl: 'md' }
-
   return (
     <VStack>
       <HStack width="100%" justifyContent="space-around" mt="5px">
@@ -226,8 +225,13 @@ export const DonationInput = ({
           >
             {isSatoshi ? (
               <>
-                <BiDollar style={{ paddingBottom: '3px' }} />
-                <MonoBody1 isTruncated>{commaFormatted(dollar) || 0}</MonoBody1>
+                <MonoBody1 isTruncated>
+                  {dollar > 0
+                    ? `$${commaFormatted(dollar)}`
+                    : satoshi > 0
+                    ? '< $1'
+                    : '$0'}
+                </MonoBody1>
               </>
             ) : (
               <>
