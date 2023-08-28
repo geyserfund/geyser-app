@@ -100,7 +100,7 @@ export const ProjectCreateStart = () => {
               )}
             </Text>
             <ConnectWithTwitter />
-            <ConnectWithNostr />
+            {!isMobile && <ConnectWithNostr />}
             {!isMobile ? (
               <Text color="neutral.600" variant="caption">
                 {t(

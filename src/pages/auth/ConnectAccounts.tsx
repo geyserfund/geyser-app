@@ -7,6 +7,7 @@ import {
   hasLightningAccount,
   hasNostrAccount,
   hasTwitterAccount,
+  useMobileMode,
 } from '../../utils'
 import { ConnectWithLightning } from './ConnectWithLightning'
 import { ConnectWithNostr } from './ConnectWithNostr'
@@ -14,7 +15,9 @@ import { ConnectWithTwitter } from './ConnectWithTwitter'
 
 export const ConnectAccounts = ({ user }: { user: User }) => {
   const { t } = useTranslation()
-  const displayNostrButton = !hasNostrAccount(user)
+  const isMobile = useMobileMode()
+
+  const displayNostrButton = !hasNostrAccount(user) && !isMobile
 
   const displayTwitterButton = !hasTwitterAccount(user)
 
