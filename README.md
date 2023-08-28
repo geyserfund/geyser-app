@@ -150,3 +150,7 @@ Run `yarn test:e2e` to run the headless test suit
 ## Contributing
 
 [Check out the contribution guidelines](/CONTRIBUTING.md)
+
+## Sample Change
+
+This is a sample change.
