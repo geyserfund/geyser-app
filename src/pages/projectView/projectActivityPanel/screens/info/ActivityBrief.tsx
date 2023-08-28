@@ -14,7 +14,6 @@ import { useTranslation } from 'react-i18next'
 import { AiOutlineEllipsis } from 'react-icons/ai'
 
 import { SatoshiIconTilted } from '../../../../../components/icons'
-import { SatoshiAmount } from '../../../../../components/ui'
 import { UserAvatar } from '../../../../../components/ui/UserAvatar'
 import { MobileViews, useProjectContext } from '../../../../../context'
 import {
@@ -31,7 +30,7 @@ import {
 } from '../../../../../utils'
 import { getProjectBalance } from '../../../../../utils/helpers'
 import { ExternalAccountType } from '../../../../auth'
-import { Countdown } from './components'
+import { BalanceDisplayButton, Countdown } from './components'
 import {
   ProjectFundersModal,
   useProjectFundersModal,
@@ -233,9 +232,8 @@ export const ActivityBrief = (props: StackProps) => {
           px={2}
           alignItems={circularPercentage === undefined ? 'center' : 'start'}
         >
-          <SatoshiAmount variant="satoshi" color="primary.600">
-            {balance}
-          </SatoshiAmount>
+          <BalanceDisplayButton balance={balance} />
+
           {getMilestoneValue()}
           {/* We can force unwrap project.expiresAt because the showCountdown expression check for a null or undefined value */}
           {showCountdown && project?.expiresAt && (
