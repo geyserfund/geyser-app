@@ -15,6 +15,7 @@ import { BsGear } from 'react-icons/bs'
 import {
   AnyExtension,
   ExtensionPriority,
+  findParentNodeOfType,
   getCursor,
   InvalidContentHandler,
   KeyBindingProps,
@@ -183,6 +184,15 @@ export const MarkdownField = ({
       useKeymap(
         'Tab',
         (params: KeyBindingProps) => {
+          const nodeMatch = findParentNodeOfType({
+            types: ['tableCell', 'tableHeaderCell'],
+            selection: params.tr.selection,
+          })
+
+          if (!nodeMatch) {
+            return false
+          }
+
           const position = getCursor(params.state.selection)
 
           const newPosition = position?.after()
