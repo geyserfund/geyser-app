@@ -1,5 +1,4 @@
 export * from './getRandom'
-export * from './useBitcoinRates'
 export * from './useDarkMode'
 export * from './useMediumScreen'
 export * from './useMobileMode'

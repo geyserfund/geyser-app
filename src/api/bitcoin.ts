@@ -1,5 +1,5 @@
-const USD_QUOTE_KEY = 'usdQuote'
-const BACKUP_QUOTE = 26088
+import { captureException } from '@sentry/react'
+
 const quoteSources = [
   {
     name: 'blockchain.info',
@@ -9,7 +9,7 @@ const quoteSources = [
   {
     name: 'bitstamp',
     url: 'https://www.bitstamp.net/api/v2/ticker/btcusd/',
-    lastPrice: (response: any) => Number(response.data.last),
+    lastPrice: (response: any) => Number(response.last),
   },
 ]
 
@@ -24,18 +24,10 @@ const getUsdQuote = async (): Promise<number> => {
       }),
   )
 
-  let usdQuote = Number(await Promise.any(requests))
-
-  if (!usdQuote) {
-    usdQuote = Number(localStorage.getItem(USD_QUOTE_KEY)) || 0
-  }
-
-  if (!usdQuote) {
-    alert('Failed to fetch bitcoin rates')
-    usdQuote = BACKUP_QUOTE
-  }
-
-  localStorage.setItem(USD_QUOTE_KEY, String(usdQuote))
+  const usdQuote =
+    Number(
+      await Promise.any(requests).catch((error) => captureException(error)),
+    ) || 0
 
   return usdQuote
 }

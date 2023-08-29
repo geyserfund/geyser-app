@@ -29,13 +29,13 @@ export const NavBarLogo = ({
         {useFullOne ? (
           <GeyserLogoNameIcon
             height="32px"
-            width="100%"
+            width="auto"
             color={color || 'primary.400'}
           />
         ) : (
           <GeyserLogoIcon
             height="32px"
-            width="100%"
+            width="auto"
             color={color || 'primary.400'}
           />
         )}
