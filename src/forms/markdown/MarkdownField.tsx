@@ -5,7 +5,6 @@ import {
   Remirror,
   TableComponents,
   useCommands,
-  useHelpers,
   useKeymap,
   useRemirror,
 } from '@remirror/react'
@@ -16,6 +15,7 @@ import { BsGear } from 'react-icons/bs'
 import {
   AnyExtension,
   ExtensionPriority,
+  getCursor,
   InvalidContentHandler,
   KeyBindingProps,
 } from 'remirror'
@@ -23,9 +23,7 @@ import {
   BlockquoteExtension,
   BoldExtension,
   BulletListExtension,
-  cellSelectionPositioner,
   CodeExtension,
-  EventsExtension,
   HardBreakExtension,
   HeadingExtension,
   IframeExtension,
@@ -132,7 +130,6 @@ export const MarkdownField = ({
           },
         },
       }),
-      new EventsExtension(),
       new HardBreakExtension(),
       new TableExtension({
         resizable: false,
@@ -186,9 +183,15 @@ export const MarkdownField = ({
       useKeymap(
         'Tab',
         (params: KeyBindingProps) => {
-          console.log('checking event', params)
+          const position = getCursor(params.state.selection)
 
-          // selectText({})
+          const newPosition = position?.after()
+
+          if (newPosition) {
+            selectText(newPosition)
+            return true
+          }
+
           return false
         },
         ExtensionPriority.Highest,
