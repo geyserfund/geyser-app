@@ -1,20 +1,31 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { Box, Button, HStack, Text } from '@chakra-ui/react'
 import {
   EditorComponent,
   Remirror,
   TableComponents,
+  useCommands,
+  useHelpers,
+  useKeymap,
   useRemirror,
 } from '@remirror/react'
 import { ForwardedRef, useCallback } from 'react'
 import { Control } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { BsGear } from 'react-icons/bs'
-import { AnyExtension, InvalidContentHandler } from 'remirror'
+import {
+  AnyExtension,
+  ExtensionPriority,
+  InvalidContentHandler,
+  KeyBindingProps,
+} from 'remirror'
 import {
   BlockquoteExtension,
   BoldExtension,
   BulletListExtension,
+  cellSelectionPositioner,
   CodeExtension,
+  EventsExtension,
   HardBreakExtension,
   HeadingExtension,
   IframeExtension,
@@ -121,8 +132,11 @@ export const MarkdownField = ({
           },
         },
       }),
+      new EventsExtension(),
       new HardBreakExtension(),
-      new TableExtension(),
+      new TableExtension({
+        resizable: false,
+      }),
       new TrailingNodeExtension(),
       new BulletListExtension(),
       new TextExtension(),
@@ -165,6 +179,23 @@ export const MarkdownField = ({
     },
   })
 
+  const hooks = [
+    () => {
+      const { selectText } = useCommands()
+
+      useKeymap(
+        'Tab',
+        (params: KeyBindingProps) => {
+          console.log('checking event', params)
+
+          // selectText({})
+          return false
+        },
+        ExtensionPriority.Highest,
+      )
+    },
+  ]
+
   if (preview) {
     return (
       <StyleProvider flex={flex}>
@@ -182,6 +213,7 @@ export const MarkdownField = ({
       autoFocus={autoFocus}
       manager={manager}
       initialContent={initialContent?.()}
+      hooks={hooks}
     >
       <Box
         display="flex"
