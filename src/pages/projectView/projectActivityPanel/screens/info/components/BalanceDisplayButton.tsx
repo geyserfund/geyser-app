@@ -1,4 +1,4 @@
-import { Button, HStack, Text, Tooltip, useDisclosure } from '@chakra-ui/react'
+import { Button, HStack, Text, Tooltip } from '@chakra-ui/react'
 import { FaBitcoin } from 'react-icons/fa'
 import { HiCurrencyDollar } from 'react-icons/hi'
 
@@ -7,8 +7,15 @@ import { useBTCConverter } from '../../../../../../helpers'
 import { Satoshis } from '../../../../../../types'
 import { commaFormatted, useCustomTheme } from '../../../../../../utils'
 
-export const BalanceDisplayButton = ({ balance }: { balance: number }) => {
-  const { isOpen: isUsd, onToggle: toggleUsd } = useDisclosure()
+export const BalanceDisplayButton = ({
+  balance,
+  isToolTipOpen,
+  isUsd,
+}: {
+  balance: number
+  isToolTipOpen: boolean
+  isUsd: boolean
+}) => {
   const { colors } = useCustomTheme()
   const { getUSDAmount } = useBTCConverter()
 
@@ -20,6 +27,7 @@ export const BalanceDisplayButton = ({ balance }: { balance: number }) => {
 
   return (
     <Tooltip
+      isOpen={isToolTipOpen}
       gutter={4}
       borderRadius="8px"
       backgroundColor="neutral.100"
@@ -40,13 +48,16 @@ export const BalanceDisplayButton = ({ balance }: { balance: number }) => {
       <Button
         variant="ghost"
         padding="10px 5px 5px 5px"
-        _hover={{
-          backgroundColor: 'neutral.100',
-          '& div.icon-container': {
-            opacity: '1',
-          },
-        }}
-        onClick={toggleUsd}
+        sx={
+          isToolTipOpen
+            ? {
+                backgroundColor: 'neutral.100',
+                '& div.icon-container': {
+                  opacity: '1',
+                },
+              }
+            : {}
+        }
       >
         {!isUsd ? (
           <SatoshiAmount

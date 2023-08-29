@@ -7,6 +7,7 @@ import {
   SkeletonCircle,
   StackProps,
   Text,
+  useDisclosure,
   useTheme,
   VStack,
 } from '@chakra-ui/react'
@@ -43,6 +44,13 @@ export const ActivityBrief = (props: StackProps) => {
   const isMobile = useMobileMode()
 
   const { project, setMobileView } = useProjectContext()
+
+  const {
+    isOpen: isToolTipOpen,
+    onOpen: onToolTipOpen,
+    onClose: onToolTipClose,
+  } = useDisclosure()
+  const { isOpen: isUsd, onToggle: toggleUsd } = useDisclosure()
 
   const [socialFunders, setSocialFunders] = useState<FunderWithUserFragment[]>(
     [],
@@ -224,7 +232,15 @@ export const ActivityBrief = (props: StackProps) => {
 
   return (
     <VStack w="100%" {...props}>
-      <HStack w="100%" padding={3} justifyContent="start">
+      <HStack
+        w="100%"
+        padding={3}
+        justifyContent="start"
+        onMouseEnter={onToolTipOpen}
+        onMouseLeave={onToolTipClose}
+        _hover={{ cursor: 'pointer' }}
+        onClick={toggleUsd}
+      >
         {renderCircularProgress()}
         <VStack
           flex="1"
@@ -233,7 +249,11 @@ export const ActivityBrief = (props: StackProps) => {
           px={2}
           alignItems={circularPercentage === undefined ? 'center' : 'start'}
         >
-          <BalanceDisplayButton balance={balance} />
+          <BalanceDisplayButton
+            balance={balance}
+            isToolTipOpen={isToolTipOpen}
+            isUsd={isUsd}
+          />
 
           {getMilestoneValue()}
           {/* We can force unwrap project.expiresAt because the showCountdown expression check for a null or undefined value */}
