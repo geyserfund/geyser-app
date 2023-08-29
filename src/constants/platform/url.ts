@@ -45,23 +45,35 @@ export const ProjectMediaUrl =
 
 export const BotTwitterUrl = 'https://twitter.com/geyserfunders'
 
+// LAUNCH PROJECT URLS
+
 export const LaunchImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/launch.png'
 export const LaunchProjectRocketUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/create-project-rocket.png'
 
+export const LaunchProjectCoinsUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-coins.webp'
 export const LaunchProjectEntryUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/create-project-entry.png'
+  'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-entry.webp'
 export const LaunchProjectFeesUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/create-project-fees.png'
+  'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-fees.webp'
 export const LaunchProjectGiftUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/create-project-gift.png'
+  'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-gift.webp'
 export const LaunchProjectKeyUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/create-project-key.png'
+  'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-key.webp'
 export const LaunchProjectLightningUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/create-project-lightning.png'
+  'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-lightning.webp'
+export const LaunchProjectPounchUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-pouch.webp'
+export const LaunchProjectSearchUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-search.webp'
+export const LaunchProjectWalletUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-wallet.webp'
 export const LaunchProjectWorldUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/create-project-world.png'
+  'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-world.webp'
+
+// ===============================
 
 export const GeyserLignteningNodeUrl =
   'https://amboss.space/node/0272e8731c6feda7fb7e2b8dbe0fbf1322f9e3b60cc2727f4ee4ca0f820b9cd169'
