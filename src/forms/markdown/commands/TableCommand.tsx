@@ -58,6 +58,7 @@ export const TableCommand = ({ isDisabled }: TableCommandProps) => {
             isDisabled={isDisabled}
             name="table"
             label="Table"
+            onClick={onOpen}
             onMouseOver={onOpen}
             onMouseLeave={onClose}
           >
