@@ -7,6 +7,7 @@ import {
   SkeletonCircle,
   StackProps,
   Text,
+  useDisclosure,
   useTheme,
   VStack,
 } from '@chakra-ui/react'
@@ -15,7 +16,6 @@ import { useTranslation } from 'react-i18next'
 import { AiOutlineEllipsis } from 'react-icons/ai'
 
 import { BoltIcon } from '../../../../../components/icons'
-import { SatoshiAmount } from '../../../../../components/ui'
 import { UserAvatar } from '../../../../../components/ui/UserAvatar'
 import { MobileViews, useProjectContext } from '../../../../../context'
 import {
@@ -32,7 +32,7 @@ import {
 } from '../../../../../utils'
 import { getProjectBalance } from '../../../../../utils/helpers'
 import { ExternalAccountType } from '../../../../auth'
-import { Countdown } from './components'
+import { BalanceDisplayButton, Countdown } from './components'
 import {
   ProjectFundersModal,
   useProjectFundersModal,
@@ -44,6 +44,13 @@ export const ActivityBrief = (props: StackProps) => {
   const isMobile = useMobileMode()
 
   const { project, setMobileView } = useProjectContext()
+
+  const {
+    isOpen: isToolTipOpen,
+    onOpen: onToolTipOpen,
+    onClose: onToolTipClose,
+  } = useDisclosure()
+  const { isOpen: isUsd, onToggle: toggleUsd } = useDisclosure()
 
   const [socialFunders, setSocialFunders] = useState<FunderWithUserFragment[]>(
     [],
@@ -135,12 +142,14 @@ export const ActivityBrief = (props: StackProps) => {
   }, [balance, project])
 
   const getTrackColor = useCallback(() => {
-    switch (milestoneIndex % 3) {
+    switch (milestoneIndex % 4) {
       case 1:
         if (milestoneIndex === 1) return 'neutral.200'
-        return 'primary.800'
+        return 'primary.100'
       case 2:
         return 'primary.400'
+      case 3:
+        return 'primary.200'
       case 0:
         return 'primary.600'
       default:
@@ -149,15 +158,17 @@ export const ActivityBrief = (props: StackProps) => {
   }, [milestoneIndex])
 
   const getColor = useCallback(() => {
-    switch (milestoneIndex % 3) {
+    switch (milestoneIndex % 4) {
       case 1:
         return 'primary.400'
       case 2:
+        return 'primary.200'
+      case 3:
         return 'primary.600'
       case 0:
-        return 'primary.800'
+        return 'primary.100'
       default:
-        return 'primary.300'
+        return 'primary.200'
     }
   }, [milestoneIndex])
 
@@ -221,7 +232,15 @@ export const ActivityBrief = (props: StackProps) => {
 
   return (
     <VStack w="100%" {...props}>
-      <HStack w="100%" padding={3} justifyContent="start">
+      <HStack
+        w="100%"
+        padding={3}
+        justifyContent="start"
+        onMouseEnter={onToolTipOpen}
+        onMouseLeave={onToolTipClose}
+        _hover={{ cursor: 'pointer' }}
+        onClick={toggleUsd}
+      >
         {renderCircularProgress()}
         <VStack
           flex="1"
@@ -230,9 +249,12 @@ export const ActivityBrief = (props: StackProps) => {
           px={2}
           alignItems={circularPercentage === undefined ? 'center' : 'start'}
         >
-          <SatoshiAmount variant="satoshi" color="primary.600">
-            {balance}
-          </SatoshiAmount>
+          <BalanceDisplayButton
+            balance={balance}
+            isToolTipOpen={isToolTipOpen}
+            isUsd={isUsd}
+          />
+
           {getMilestoneValue()}
           {/* We can force unwrap project.expiresAt because the showCountdown expression check for a null or undefined value */}
           {showCountdown && project?.expiresAt && (
