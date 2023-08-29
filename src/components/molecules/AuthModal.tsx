@@ -16,7 +16,7 @@ import { useAuthContext } from '../../context'
 import { ConnectWithLightning } from '../../pages/auth/ConnectWithLightning'
 import { ConnectWithNostr } from '../../pages/auth/ConnectWithNostr'
 import { ConnectWithTwitter } from '../../pages/auth/ConnectWithTwitter'
-import { hasNostrAccount, hasTwitterAccount } from '../../utils'
+import { hasNostrAccount, hasTwitterAccount, useMobileMode } from '../../utils'
 import { Caption } from '../typography'
 import { ButtonComponent } from '../ui'
 
@@ -67,6 +67,7 @@ const ConnectAccounts = ({
 
 export const AuthModal = (authModalProps: IAuthModal) => {
   const { t } = useTranslation()
+  const isMobile = useMobileMode()
   const {
     isOpen,
     onClose,
@@ -124,7 +125,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
             )}
             <ConnectAccounts
               onClose={onClose}
-              showNostr={showNostr}
+              showNostr={showNostr && !isMobile}
               showTwitter={showTwitter}
               showLightning={showLightning}
             />
