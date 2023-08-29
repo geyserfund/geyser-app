@@ -26,7 +26,7 @@ export const FeaturedProjectCard = ({
     },
   })
 
-  const project = data?.project
+  const project = data?.projectGet
 
   if (loading || !project) {
     return <FeaturedCardSkeleton title="Featured Project" />

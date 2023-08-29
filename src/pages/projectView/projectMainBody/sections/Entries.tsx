@@ -30,12 +30,12 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
       where: { name: project?.name },
     },
     onCompleted(data) {
-      if (data.project && updateProject) {
+      if (data.projectGet && updateProject) {
         updateProject({
-          ...data.project,
+          ...data.projectGet,
           entries: project
-            ? [...project.entries, ...data.project.entries]
-            : data.project.entries,
+            ? [...project.entries, ...data.projectGet.entries]
+            : data.projectGet.entries,
         })
       }
     },

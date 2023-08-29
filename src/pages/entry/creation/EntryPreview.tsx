@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { Box, Input, Text, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { BsCheckLg } from 'react-icons/bs'
@@ -14,7 +14,6 @@ import Loader from '../../../components/ui/Loader'
 import { getPath } from '../../../constants'
 import { ProjectEntryValidations } from '../../../constants'
 import { useNavContext } from '../../../context'
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
 import {
   MUTATION_PUBLISH_ENTRY,
   MUTATION_UPDATE_ENTRY,
@@ -23,9 +22,8 @@ import { IEntryUpdateInput } from '../../../interfaces/entry'
 import {
   EntryFragment,
   EntryStatus,
-  Owner,
-  Project,
   useEntryLazyQuery,
+  useProjectByNameOrIdQuery,
 } from '../../../types'
 import {
   copyTextToClipboard,
@@ -73,26 +71,23 @@ export const EntryPreview = () => {
     },
   })
 
-  const { loading, data: projectData } = useQuery<{ project: Project }>(
-    QUERY_PROJECT_BY_NAME_OR_ID,
-    {
-      variables: { where: { name: params.projectId } },
-      onCompleted(data) {
-        setNavData({
-          projectName: data.project.name,
-          projectTitle: data.project.title,
-          projectPath: getPath('project', data.project.name),
-          projectOwnerIDs:
-            data.project.owners.map((ownerInfo: Owner) => {
-              return Number(ownerInfo.user.id || -1)
-            }) || [],
-        })
-      },
-      onError() {
-        navigate(getPath('notFound'))
-      },
+  const { loading, data: projectData } = useProjectByNameOrIdQuery({
+    variables: { where: { name: params.projectId } },
+    onCompleted(data) {
+      setNavData({
+        projectName: data.projectGet?.name,
+        projectTitle: data.projectGet?.title,
+        projectPath: getPath('project', data.projectGet?.name),
+        projectOwnerIDs:
+          data.projectGet?.owners.map((ownerInfo) =>
+            Number(ownerInfo.user.id || -1),
+          ) || [],
+      })
     },
-  )
+    onError() {
+      navigate(getPath('notFound'))
+    },
+  })
 
   useEffect(() => {
     if (params && params.entryId) {
@@ -268,7 +263,7 @@ export const EntryPreview = () => {
             </Box>
             <VStack width="100%" padding="5px">
               <Text fontSize="11px" color="neutral.700">
-                {`geyser.fund/${projectData?.project?.name}`}
+                {`geyser.fund/${projectData?.projectGet?.name}`}
               </Text>
 
               <Input
@@ -311,7 +306,7 @@ export const EntryPreview = () => {
               <Text>Where should Satoshi donations go to?</Text>
               <TextInputBox
                 isDisabled
-                value={`${projectData?.project.name}@geyser.fund`}
+                value={`${projectData?.projectGet?.name}@geyser.fund`}
               />
             </VStack>
           )}
@@ -329,7 +324,7 @@ export const EntryPreview = () => {
                 Go to entry
               </ButtonComponent>
             </VStack>
-          ) : isDraft(projectData?.project.status) ? (
+          ) : isDraft(projectData?.projectGet?.status) ? (
             <>
               <Text>
                 You cannot publish a entry in an inactive project. Finish the
@@ -341,7 +336,7 @@ export const EntryPreview = () => {
                 w="full"
                 onClick={() =>
                   navigate(
-                    getPath('projectDashboard', projectData?.project.name),
+                    getPath('projectDashboard', projectData?.projectGet?.name),
                   )
                 }
               >

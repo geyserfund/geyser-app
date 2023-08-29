@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client'
 import {
   Box,
   Button,
@@ -24,12 +23,11 @@ import { createGrantContributionRecord } from '../../../api'
 import { Body2, Caption } from '../../../components/typography'
 import { fundingStages, MAX_FUNDING_AMOUNT_USD } from '../../../constants'
 import { useAuthContext } from '../../../context'
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
 import { useBTCConverter } from '../../../helpers'
 import { useFormState, useFundingFlow } from '../../../hooks'
 import { FormStateError } from '../../../interfaces'
-import { USDCents } from '../../../types'
-import { FundingInput, FundingResourceType, Project } from '../../../types'
+import { USDCents, useProjectByNameOrIdQuery } from '../../../types'
+import { FundingInput, FundingResourceType } from '../../../types'
 import { toInt, useNotification } from '../../../utils'
 import { QRCodeSection } from '../../projectView/projectActivityPanel/screens'
 import { GRANTS_PROJECT_NAME } from '../constants'
@@ -53,14 +51,10 @@ export const defaultGrantContribution = {
 }
 
 interface Props {
-  onSuccess?: (input: GrantContributeInput, project?: Project) => unknown
   grantProjectName?: string
 }
 
-export const GrantsContributeModal = ({
-  onSuccess,
-  grantProjectName,
-}: Props) => {
+export const GrantsContributeModal = ({ grantProjectName }: Props) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
   const { user } = useAuthContext()
@@ -76,10 +70,10 @@ export const GrantsContributeModal = ({
   const [formError, setFormError] =
     useState<FormStateError<GrantContributeInput>>()
 
-  const { data: grantsData } = useQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
+  const { data: grantsData } = useProjectByNameOrIdQuery({
     variables: { where: { name: grantProjectName || GRANTS_PROJECT_NAME } },
     onCompleted(data) {
-      if (!data?.project?.id) {
+      if (!data?.projectGet?.id) {
         toast({
           status: 'error',
           title: 'Failed to fetch grants project.',
@@ -107,12 +101,6 @@ export const GrantsContributeModal = ({
   useEffect(() => {
     setFormError({})
   }, [state])
-
-  useEffect(() => {
-    if (fundState === fundingStages.completed && onSuccess) {
-      onSuccess(state, grantsData?.project)
-    }
-  }, [fundState])
 
   useEffect(() => {
     if (fundState === fundingStages.completed) {
@@ -152,7 +140,7 @@ export const GrantsContributeModal = ({
   const handleFormConfirmClick = () => {
     const isValid = validateForm()
 
-    if (!grantsData?.project?.id) {
+    if (!grantsData?.projectGet?.id) {
       toast({
         status: 'error',
         title: 'Something went wrong.',
@@ -163,7 +151,7 @@ export const GrantsContributeModal = ({
 
     if (isValid) {
       const input: FundingInput = {
-        projectId: toInt(grantsData?.project?.id),
+        projectId: toInt(grantsData?.projectGet?.id),
         anonymous: Boolean(user),
         ...(state.amount !== 0 && {
           donationInput: {
@@ -176,7 +164,7 @@ export const GrantsContributeModal = ({
           ...(state.comment && { comment: state.comment }),
         },
         sourceResourceInput: {
-          resourceId: toInt(grantsData?.project.id),
+          resourceId: toInt(grantsData?.projectGet.id),
           resourceType: FundingResourceType.Project,
         },
       }
