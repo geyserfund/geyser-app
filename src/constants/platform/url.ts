@@ -192,7 +192,7 @@ export const LogoNameDark =
 // Geyser Notion Links
 
 export const GrantsFAQUrl =
-  'https://geyser.notion.site/About-Geyser-Grants-fad8a130545d4597a3750a17a7ce301f'
+  'https://geyser.notion.site/About-Geyser-Grants-925d6b2adc1a4043b70d2835ecfebdde?pvs=4'
 export const LearnAboutCrowdfundingUrl =
   'https://geyser.notion.site/Crowdfunding-Resources-134d19c1214741a7bae5d0bf9b8c8463'
 export const GeyserProhibitedItemsUrl =
