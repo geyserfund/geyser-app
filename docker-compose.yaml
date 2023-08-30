@@ -6,6 +6,8 @@ services:
       context: .
       target: base
     command: sh -c "RUN_DOCKER=true && yarn install && yarn dev"
+    depends_on:
+      - caddy
     working_dir: /usr/app
     image: geyser-app
     env_file: .env
