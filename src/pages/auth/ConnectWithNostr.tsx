@@ -7,10 +7,13 @@ import { useNostrExtensonLogin } from '../../hooks/useNostrExtensionLogin'
 import { isAccountDuplicateError } from '../../utils'
 import { FailedToConnectAccount } from './components/FailedToConnectAccount'
 import { NostrHelpModal } from './components/NostrHelpModal'
+
 type Props = {
+  variant?: 'secondary'
   onClose?: () => void
 }
-export const ConnectWithNostr = ({ onClose }: Props) => {
+
+export const ConnectWithNostr = ({ onClose, variant }: Props) => {
   const { connect, error, clearError } = useNostrExtensonLogin()
 
   const failedModal = useModal()
@@ -42,10 +45,14 @@ export const ConnectWithNostr = ({ onClose }: Props) => {
     <>
       <Button
         w="100%"
-        backgroundColor="social.nostr"
+        size="sm"
+        variant={variant}
+        backgroundColor={
+          variant === 'secondary' ? 'transparent' : 'social.nostr'
+        }
         leftIcon={<NostrSvgIcon height="20px" width="20px" />}
-        color="white"
-        _hover={{ backgroundColor: 'social.nostrDark' }}
+        color={variant === 'secondary' ? 'social.nostr' : 'white'}
+        _hover={{ backgroundColor: 'social.nostrDark', color: 'white' }}
         onClick={handleClick}
       >
         Nostr

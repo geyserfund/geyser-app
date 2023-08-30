@@ -33,9 +33,9 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
         <Body2 color="neutral.900">
           {t('Connect more social profiles to your Geyser account.')}
         </Body2>
-        {displayTwitterButton && <ConnectWithTwitter />}
-        {displayNostrButton && <ConnectWithNostr />}
-        {displayLightningButton && <ConnectWithLightning />}
+        {displayTwitterButton && <ConnectWithTwitter variant="secondary" />}
+        {displayNostrButton && <ConnectWithNostr variant="secondary" />}
+        {displayLightningButton && <ConnectWithLightning variant="secondary" />}
       </VStack>
     </>
   )

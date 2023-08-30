@@ -9,11 +9,13 @@ import { useMeQuery } from '../../types'
 import { hasTwitterAccount, useNotification } from '../../utils'
 
 interface ConnectWithTwitterProps extends ButtonProps {
+  variant?: 'secondary'
   onClose?: () => void
 }
 
 export const ConnectWithTwitter = ({
   onClose,
+  variant,
   ...rest
 }: ConnectWithTwitterProps) => {
   const { t } = useTranslation()
@@ -116,14 +118,19 @@ export const ConnectWithTwitter = ({
     <Tooltip label={!canLogin && t('Please refresh the page and try again.')}>
       <Button
         as={Link}
+        variant={variant}
         href={`${AUTH_SERVICE_ENDPOINT}/twitter?nextPath=/auth/twitter`}
         isExternal
         w="100%"
-        backgroundColor="social.twitter"
+        size="sm"
+        color={variant === 'secondary' ? 'social.twitter' : 'black'}
+        backgroundColor={
+          variant === 'secondary' ? 'transparent' : 'social.twitter'
+        }
         leftIcon={<BsTwitter />}
-        color="white"
         _hover={{
           backgroundColor: 'social.twitterDark',
+          color: 'white',
           textDecoration: 'none',
         }}
         onClick={handleClick}
