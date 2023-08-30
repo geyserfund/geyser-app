@@ -38,6 +38,8 @@ import {
   useProjectFundersModal,
 } from './components/ProjectFundersModal'
 
+const TIME_AFTER_WHICH_TOOLTIP_SHOULD_CLOSE_MILLIS = 1500
+
 export const ActivityBrief = (props: StackProps) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
@@ -51,6 +53,14 @@ export const ActivityBrief = (props: StackProps) => {
     onClose: onToolTipClose,
   } = useDisclosure()
   const { isOpen: isUsd, onToggle: toggleUsd } = useDisclosure()
+
+  useEffect(() => {
+    if (isToolTipOpen) {
+      setTimeout(() => {
+        onToolTipClose()
+      }, TIME_AFTER_WHICH_TOOLTIP_SHOULD_CLOSE_MILLIS)
+    }
+  }, [isToolTipOpen, onToolTipClose])
 
   const [socialFunders, setSocialFunders] = useState<FunderWithUserFragment[]>(
     [],

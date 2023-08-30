@@ -32,7 +32,7 @@ export const PaginatedView = () => {
     queryName: ['projects', 'projects'],
     query: QUERY_PROJECTS_FOR_LANDING_PAGE,
     where: {
-      status: ProjectStatus.Active,
+      status: !restFilters.search ? ProjectStatus.Active : undefined,
       tagIds: tagIds?.length ? tagIds : undefined,
       ...restFilters,
     },

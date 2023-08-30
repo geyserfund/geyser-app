@@ -10,7 +10,7 @@ import {
   LaunchProjectFeesUrl,
   LaunchProjectGiftUrl,
   LaunchProjectKeyUrl,
-  LaunchProjectRocketUrl,
+  LaunchProjectRocketAIUrl,
   LaunchProjectWorldUrl,
 } from '../../constants'
 import { useAuthContext } from '../../context'
@@ -43,7 +43,7 @@ export const ProjectCreateStart = () => {
       onBackClick={handleBack}
     >
       <VStack spacing={8} w="100%">
-        <Image src={LaunchProjectRocketUrl} alt="create project rocket" />
+        <Image src={LaunchProjectRocketAIUrl} alt="create project rocket" />
 
         <Text variant="h3">
           {t(
