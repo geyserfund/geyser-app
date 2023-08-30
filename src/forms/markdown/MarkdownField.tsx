@@ -1,15 +1,25 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { Box, Button, HStack, Text } from '@chakra-ui/react'
 import {
   EditorComponent,
   Remirror,
   TableComponents,
+  useCommands,
+  useKeymap,
   useRemirror,
 } from '@remirror/react'
 import { ForwardedRef, useCallback } from 'react'
 import { Control } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { BsGear } from 'react-icons/bs'
-import { AnyExtension, InvalidContentHandler } from 'remirror'
+import {
+  AnyExtension,
+  ExtensionPriority,
+  findParentNodeOfType,
+  getCursor,
+  InvalidContentHandler,
+  KeyBindingProps,
+} from 'remirror'
 import {
   BlockquoteExtension,
   BoldExtension,
@@ -122,7 +132,9 @@ export const MarkdownField = ({
         },
       }),
       new HardBreakExtension(),
-      new TableExtension(),
+      new TableExtension({
+        resizable: false,
+      }),
       new TrailingNodeExtension(),
       new BulletListExtension(),
       new TextExtension(),
@@ -165,6 +177,38 @@ export const MarkdownField = ({
     },
   })
 
+  const hooks = [
+    () => {
+      const { selectText } = useCommands()
+
+      useKeymap(
+        'Tab',
+        (params: KeyBindingProps) => {
+          const nodeMatch = findParentNodeOfType({
+            types: ['tableCell', 'tableHeaderCell'],
+            selection: params.tr.selection,
+          })
+
+          if (!nodeMatch) {
+            return false
+          }
+
+          const position = getCursor(params.state.selection)
+
+          const newPosition = position?.after()
+
+          if (newPosition) {
+            selectText(newPosition)
+            return true
+          }
+
+          return false
+        },
+        ExtensionPriority.Highest,
+      )
+    },
+  ]
+
   if (preview) {
     return (
       <StyleProvider flex={flex}>
@@ -182,6 +226,7 @@ export const MarkdownField = ({
       autoFocus={autoFocus}
       manager={manager}
       initialContent={initialContent?.()}
+      hooks={hooks}
     >
       <Box
         display="flex"

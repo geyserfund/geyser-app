@@ -46,6 +46,7 @@ export const tableCellStyles = {
     padding: '3px 8px',
     border: '1px solid',
     borderColor: 'neutral.200',
+    height: '30px',
   },
 }
 
