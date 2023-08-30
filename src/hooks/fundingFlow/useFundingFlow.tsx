@@ -281,6 +281,8 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
           return {
             ...current,
             ...fundingActivity,
+            paymentRequest:
+              fundingActivity.paymentRequest || current.paymentRequest,
             uuid: fundingActivity.uuid || current.uuid,
           }
         }

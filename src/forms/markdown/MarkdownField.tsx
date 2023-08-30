@@ -1,10 +1,25 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { Box, Button, HStack, Text } from '@chakra-ui/react'
-import { EditorComponent, Remirror, useRemirror } from '@remirror/react'
+import {
+  EditorComponent,
+  Remirror,
+  TableComponents,
+  useCommands,
+  useKeymap,
+  useRemirror,
+} from '@remirror/react'
 import { ForwardedRef, useCallback } from 'react'
 import { Control } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { BsGear } from 'react-icons/bs'
-import { InvalidContentHandler } from 'remirror'
+import {
+  AnyExtension,
+  ExtensionPriority,
+  findParentNodeOfType,
+  getCursor,
+  InvalidContentHandler,
+  KeyBindingProps,
+} from 'remirror'
 import {
   BlockquoteExtension,
   BoldExtension,
@@ -17,6 +32,7 @@ import {
   ItalicExtension,
   LinkExtension,
   MarkdownExtension,
+  NodeFormattingExtension,
   OrderedListExtension,
   PlaceholderExtension,
   TableExtension,
@@ -29,10 +45,14 @@ import TurndownService from 'turndown'
 import { useSignedUpload } from '../../hooks'
 import { useMobileMode } from '../../utils'
 import { ReactHookTextArea } from '../components/ReactHookTextArea'
-import { PreviewRenderer } from './helpers/PreviewRenderer'
-import { SaveModule } from './helpers/SaveModule'
-import { StyleProvider } from './helpers/StyleProvider'
-import { imageHandler } from './helpers/typeMaps'
+import { TableCellMenuComponent } from '../components/TableCellMenuComponent'
+import {
+  FrameHandler,
+  imageHandler,
+  PreviewRenderer,
+  SaveModule,
+  StyleProvider,
+} from './helpers'
 import { MarkdownToolbar } from './MarkdownToolbar'
 
 const turndownService = new TurndownService()
@@ -69,7 +89,6 @@ export const MarkdownField = ({
 }: Props) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
-
   const onError: InvalidContentHandler = useCallback(
     ({ json, invalidContent, transformers }) => {
       // Automatically remove all invalid nodes and marks.
@@ -80,8 +99,8 @@ export const MarkdownField = ({
 
   const { uploadFile } = useSignedUpload()
 
-  const extensions = useCallback(
-    () => [
+  const extensions = useCallback<() => AnyExtension[]>(() => {
+    const exts = [
       new PlaceholderExtension({ placeholder }),
       new LinkExtension({
         autoLink: true,
@@ -92,7 +111,6 @@ export const MarkdownField = ({
       }),
       new MarkdownExtension({
         copyAsMarkdown: true,
-        htmlToMarkdown: (html) => turndownService.turndown(html),
       }),
       new BoldExtension(),
       new UnderlineExtension(),
@@ -101,9 +119,22 @@ export const MarkdownField = ({
       new BlockquoteExtension(),
       new OrderedListExtension(),
       new CodeExtension(),
-      new IframeExtension(),
+      new IframeExtension({
+        enableResizing: false,
+        extraAttributes: {
+          width: '100%',
+          scolling: 'no',
+          style: {
+            default: JSON.stringify({ width: '100%', height: '400px' }),
+            parseDOM: (domNode) => domNode.getAttribute('style'),
+            toDOM: (attrs) => ['style', (attrs.style as string) || ''],
+          },
+        },
+      }),
       new HardBreakExtension(),
-      new TableExtension(),
+      new TableExtension({
+        resizable: false,
+      }),
       new TrailingNodeExtension(),
       new BulletListExtension(),
       new TextExtension(),
@@ -119,9 +150,14 @@ export const MarkdownField = ({
         },
         enableResizing: false,
       }),
-    ],
-    [placeholder, uploadFile],
-  )
+    ] as AnyExtension[]
+
+    if (!preview) {
+      exts.push(new NodeFormattingExtension())
+    }
+
+    return exts
+  }, [placeholder, uploadFile])
 
   const { manager } = useRemirror({
     extensions,
@@ -130,18 +166,48 @@ export const MarkdownField = ({
     react: {
       nodeViewComponents: {
         image: imageHandler,
-        paragraph: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
-          <Box mb={4} ref={forwardRef} />
-        ),
         bulletList: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
           <Box pl={5} ref={forwardRef} />
         ),
         orderedList: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
           <Box pl={5} ref={forwardRef} />
         ),
+        iframe: (props: any) => FrameHandler(props),
       },
     },
   })
+
+  const hooks = [
+    () => {
+      const { selectText } = useCommands()
+
+      useKeymap(
+        'Tab',
+        (params: KeyBindingProps) => {
+          const nodeMatch = findParentNodeOfType({
+            types: ['tableCell', 'tableHeaderCell'],
+            selection: params.tr.selection,
+          })
+
+          if (!nodeMatch) {
+            return false
+          }
+
+          const position = getCursor(params.state.selection)
+
+          const newPosition = position?.after()
+
+          if (newPosition) {
+            selectText(newPosition)
+            return true
+          }
+
+          return false
+        },
+        ExtensionPriority.Highest,
+      )
+    },
+  ]
 
   if (preview) {
     return (
@@ -160,11 +226,13 @@ export const MarkdownField = ({
       autoFocus={autoFocus}
       manager={manager}
       initialContent={initialContent?.()}
+      hooks={hooks}
     >
       <Box
         display="flex"
         justifyContent="space-between"
         alignItems="start"
+        mb={2}
         sx={
           stickyToolbar !== undefined && stickyToolbar !== false
             ? {
@@ -205,6 +273,9 @@ export const MarkdownField = ({
       )}
       <StyleProvider flex={flex} display={isEditorMode ? 'none' : undefined}>
         <EditorComponent />
+        <TableComponents
+          tableCellMenuProps={{ Component: TableCellMenuComponent }}
+        />
       </StyleProvider>
       <SaveModule name={name} control={control} />
     </Remirror>

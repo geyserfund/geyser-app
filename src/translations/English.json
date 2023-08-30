@@ -655,5 +655,18 @@
   "There's a new version of Geyser!":"There's a new version of Geyser!",
   "Restart the app to load the new version":"Restart the app to load the new version",
   "Not now":"Not now",
-  "Restart app":"Restart app"
+  "Restart app":"Restart app",
+  "Add row above":"Add row above",
+  "Add row below":"Add row below",
+  "Add column left":"Add column left",
+  "Add column right":"Add column right",
+  "Remove column":"Remove column",
+  "Remove row":"Remove row",
+  "Insert video":"Insert video",
+  "Insert":"Insert",
+  "Must be a valid twitter URL":"Must be a valid twitter URL",
+  "URL is required":"URL is required",
+  "Insert tweet":"Insert tweet",
+  "Failed to insert tweet":"Failed to insert tweet",
+  "Funding as anonymous. <1>Click here</1> to connect profile to contribution":"Funding as anonymous. <1>Click here</1> to connect profile to contribution"
 }

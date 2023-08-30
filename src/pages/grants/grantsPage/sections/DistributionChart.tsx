@@ -34,7 +34,7 @@ export const DistributionChart = ({ applicants }: Props) => {
   const maxPercentage = Math.max(...percentages.map((p) => p.percentage))
 
   return (
-    <CardLayout noMobileBorder p={{ base: 0, lg: 5 }}>
+    <CardLayout noMobileBorder p={{ base: 0, lg: 5 }} w="full">
       <H2>{t('Grant distribution status')}</H2>
       {percentages.length > 0 && (
         <Box py={2}>

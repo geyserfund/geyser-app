@@ -5,12 +5,12 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import {
   getPath,
+  LaunchProjectCoinsUrl,
   LaunchProjectEntryUrl,
   LaunchProjectFeesUrl,
   LaunchProjectGiftUrl,
   LaunchProjectKeyUrl,
-  LaunchProjectLightningUrl,
-  LaunchProjectRocketUrl,
+  LaunchProjectRocketAIUrl,
   LaunchProjectWorldUrl,
 } from '../../constants'
 import { useAuthContext } from '../../context'
@@ -43,7 +43,7 @@ export const ProjectCreateStart = () => {
       onBackClick={handleBack}
     >
       <VStack spacing={8} w="100%">
-        <Image src={LaunchProjectRocketUrl} alt="create project rocket" />
+        <Image src={LaunchProjectRocketAIUrl} alt="create project rocket" />
 
         <Text variant="h3">
           {t(
@@ -64,7 +64,7 @@ export const ProjectCreateStart = () => {
             {t('Raise funds from anywhere in the world')}
           </ProjectInfoButton>
           <ProjectInfoButton
-            src={LaunchProjectLightningUrl}
+            src={LaunchProjectCoinsUrl}
             alt="create project lightning"
           >
             {t('Receive funds from on-chain & lightning')}
@@ -100,7 +100,7 @@ export const ProjectCreateStart = () => {
               )}
             </Text>
             <ConnectWithTwitter />
-            <ConnectWithNostr />
+            {!isMobile && <ConnectWithNostr />}
             {!isMobile ? (
               <Text color="neutral.600" variant="caption">
                 {t(
@@ -157,6 +157,7 @@ const ProjectInfoButton = ({
         sx={isHover ? { transform: 'scale(1.2)' } : undefined}
         src={src}
         alt={alt}
+        maxHeight="80px"
       />
       <Text whiteSpace="break-spaces" color="neutral.700">
         {children}

@@ -1,11 +1,13 @@
 import {
   Avatar,
+  Box,
   Button,
   CircularProgress,
   HStack,
   SkeletonCircle,
   StackProps,
   Text,
+  useDisclosure,
   useTheme,
   VStack,
 } from '@chakra-ui/react'
@@ -13,8 +15,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEllipsis } from 'react-icons/ai'
 
-import { SatoshiIconTilted } from '../../../../../components/icons'
-import { SatoshiAmount } from '../../../../../components/ui'
+import { BoltIcon } from '../../../../../components/icons'
 import { UserAvatar } from '../../../../../components/ui/UserAvatar'
 import { MobileViews, useProjectContext } from '../../../../../context'
 import {
@@ -31,11 +32,13 @@ import {
 } from '../../../../../utils'
 import { getProjectBalance } from '../../../../../utils/helpers'
 import { ExternalAccountType } from '../../../../auth'
-import { Countdown } from './components'
+import { BalanceDisplayButton, Countdown } from './components'
 import {
   ProjectFundersModal,
   useProjectFundersModal,
 } from './components/ProjectFundersModal'
+
+const TIME_AFTER_WHICH_TOOLTIP_SHOULD_CLOSE_MILLIS = 1500
 
 export const ActivityBrief = (props: StackProps) => {
   const { t } = useTranslation()
@@ -43,6 +46,21 @@ export const ActivityBrief = (props: StackProps) => {
   const isMobile = useMobileMode()
 
   const { project, setMobileView } = useProjectContext()
+
+  const {
+    isOpen: isToolTipOpen,
+    onOpen: onToolTipOpen,
+    onClose: onToolTipClose,
+  } = useDisclosure()
+  const { isOpen: isUsd, onToggle: toggleUsd } = useDisclosure()
+
+  useEffect(() => {
+    if (isToolTipOpen) {
+      setTimeout(() => {
+        onToolTipClose()
+      }, TIME_AFTER_WHICH_TOOLTIP_SHOULD_CLOSE_MILLIS)
+    }
+  }, [isToolTipOpen, onToolTipClose])
 
   const [socialFunders, setSocialFunders] = useState<FunderWithUserFragment[]>(
     [],
@@ -134,12 +152,14 @@ export const ActivityBrief = (props: StackProps) => {
   }, [balance, project])
 
   const getTrackColor = useCallback(() => {
-    switch (milestoneIndex % 3) {
+    switch (milestoneIndex % 4) {
       case 1:
         if (milestoneIndex === 1) return 'neutral.200'
-        return 'primary.800'
+        return 'primary.100'
       case 2:
         return 'primary.400'
+      case 3:
+        return 'primary.200'
       case 0:
         return 'primary.600'
       default:
@@ -148,15 +168,17 @@ export const ActivityBrief = (props: StackProps) => {
   }, [milestoneIndex])
 
   const getColor = useCallback(() => {
-    switch (milestoneIndex % 3) {
+    switch (milestoneIndex % 4) {
       case 1:
         return 'primary.400'
       case 2:
+        return 'primary.200'
+      case 3:
         return 'primary.600'
       case 0:
-        return 'primary.800'
+        return 'primary.100'
       default:
-        return 'primary.300'
+        return 'primary.200'
     }
   }, [milestoneIndex])
 
@@ -202,12 +224,12 @@ export const ActivityBrief = (props: StackProps) => {
           100,
       )
       return (
-        <Text pl={2} color="neutral.600" w="100%">
-          <Text w="100%" fontWeight={500} display="inline">
+        <Box pl={2} color="neutral.600" w="100%">
+          <Text fontWeight={500} display="inline">
             {`${percentage} % ${t('of Milestone')} ${milestoneIndex}:`}
           </Text>{' '}
-          {currentMilestone.name}
-        </Text>
+          <Text display="inline">{currentMilestone.name}</Text>
+        </Box>
       )
     }
 
@@ -220,7 +242,15 @@ export const ActivityBrief = (props: StackProps) => {
 
   return (
     <VStack w="100%" {...props}>
-      <HStack w="100%" padding={3} justifyContent="start">
+      <HStack
+        w="100%"
+        padding={3}
+        justifyContent="start"
+        onMouseEnter={onToolTipOpen}
+        onMouseLeave={onToolTipClose}
+        _hover={{ cursor: 'pointer' }}
+        onClick={toggleUsd}
+      >
         {renderCircularProgress()}
         <VStack
           flex="1"
@@ -229,9 +259,12 @@ export const ActivityBrief = (props: StackProps) => {
           px={2}
           alignItems={circularPercentage === undefined ? 'center' : 'start'}
         >
-          <SatoshiAmount variant="satoshi" color="primary.600">
-            {balance}
-          </SatoshiAmount>
+          <BalanceDisplayButton
+            balance={balance}
+            isToolTipOpen={isToolTipOpen}
+            isUsd={isUsd}
+          />
+
           {getMilestoneValue()}
           {/* We can force unwrap project.expiresAt because the showCountdown expression check for a null or undefined value */}
           {showCountdown && project?.expiresAt && (
@@ -303,7 +336,7 @@ export const ActivityBrief = (props: StackProps) => {
         <HStack w="full">
           <Button
             variant="primary"
-            leftIcon={<SatoshiIconTilted />}
+            leftIcon={<BoltIcon />}
             width="100%"
             onClick={() => setMobileView(MobileViews.funding)}
             isDisabled={!isActive(project?.status)}

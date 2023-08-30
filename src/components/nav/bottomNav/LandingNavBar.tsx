@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Link, matchPath, matchRoutes, useLocation } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
+import { BottomNavContainerCommonStyles } from '../../../constants/styles'
 import {
   FeedNavIcon,
   GrantsNavIcon,
@@ -79,18 +80,10 @@ export const LandingNavBar = () => {
       <>
         <Box height="60px" width="100%"></Box>
         <HStack
-          backgroundColor="neutral.50"
-          width="100%"
-          height="60px"
-          borderTop="2px solid"
-          borderTopColor="neutral.200"
           paddingX="15%"
-          justifyContent="center"
-          alignItems="center"
           spacing="20%"
           position="fixed"
-          bottom="0px"
-          paddingBottom="8px"
+          {...BottomNavContainerCommonStyles}
         >
           {LandingNavItems.map(({ name, path, Icon }) => {
             const isActive = Boolean(matchPath(path, location.pathname))

@@ -24,7 +24,7 @@ The app requires some environment variables to be set. We provide an `example.en
 cp .env.example .env
 ```
 
-From there, populate the new file with the correct values. You have two development environment options:
+From there, populate the new file with the correct values. You have three development environment options, detailed below. It is recommended to use the staging API for most development tasks.
 
 #### Option A: use the staging API
 
@@ -49,15 +49,28 @@ REACT_APP_API_ENDPOINT=https://api.dev.geyser.fund
 APOLLO_KEY=<your Apollo Studio API key>
 ```
 
-[Contact us](email:admin@geyser.fund) if you don't have an `APOLLO_KEY` yet.
+[Contact us](email:stelios@geyser.fund) if you don't have an `APOLLO_KEY` yet.
+
+#### Option C: use both local server and staging API interchangably
+
+Many at times we prefer using staging API while sometimes we prefer the local server. In such cases we can setup to use them interchangably.
+
+1. Create the normal `.env` file, which contains the values for local server. This would be used when we command `yarn dev`.
+2. Create a new file `.env.staging` this would have the values to use the staging API, and use the command `yarn dev:stage` to use the staging server env values.
 
 ### Hosts Configuration
+
+#### Staging API
 
 In order for the requests to go through to the staging backend API, you will need to add the following line to your `/etc/hosts` file:
 
 ```shell
 127.0.0.1 staging.geyser.fund
 ```
+
+This makes sure that you are able to make requests to the staging API from your local development environment with encountering CORS errors.
+
+#### GraphQL Faker
 
 If running against the GraphQL Faker server, you'll also need these in the same `/etc/hosts` file:
 
@@ -93,6 +106,18 @@ or
 ```shell
 docker-compose logs -f geyser-app
 ```
+
+### Trusting Caddy Local CA Certificate
+
+We are using Caddy as a reverse proxy to serve the local development app over HTTPS. This means that you will need to trust the Caddy Local CA Certificate in order to avoid any `ERR_CERT_AUTHORITY_INVALID` errors in your browser.
+
+To do so, you can run the following command from the project root directory **after starting the app and caddy server**:
+
+```shell
+sudo yarn caddy:trust-ca
+```
+
+This command will add the Caddy Local CA Certificate to your system's list of trusted certificates (only works on MacOS for now). It needs sudo rights for that.
 
 ### Opening in the Browser
 

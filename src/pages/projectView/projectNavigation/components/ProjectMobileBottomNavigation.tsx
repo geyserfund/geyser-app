@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { BiNews } from 'react-icons/bi'
 
 import { MilestoneIcon, RewardGiftIcon } from '../../../../components/icons'
+import { BottomNavContainerCommonStyles } from '../../../../constants/styles'
 import { MobileViews, useProjectContext } from '../../../../context'
 import { useScrollDirection } from '../../../../hooks'
 import { fonts } from '../../../../styles'
@@ -117,19 +118,7 @@ export const ProjectNavUI = () => {
   const showGreyButton = mobileView === MobileViews.funding || isFundingDisabled
 
   return (
-    <HStack
-      backgroundColor="neutral.50"
-      width="100%"
-      bottom="0px"
-      height="60px"
-      borderTop="2px solid"
-      borderTopColor="neutral.200"
-      paddingX="10px"
-      justifyContent="center"
-      alignItems="center"
-      spacing={8}
-      paddingBottom="2px"
-    >
+    <HStack paddingX="10px" spacing={8} {...BottomNavContainerCommonStyles}>
       <HStack flexGrow={1} justifyContent="space-between">
         <Button
           variant="ghost"

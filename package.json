@@ -1,9 +1,10 @@
 {
   "name": "geyser-app",
   "private": true,
-  "version": "0.5.0",
+  "version": "0.5.1",
   "scripts": {
     "dev": "vite",
+    "dev:stage": "vite --mode staging",
     "build": "tsc && vite build",
     "preview": "vite preview --port 3000",
     "test:e2e": "yarn cypress run --e2e",
@@ -17,6 +18,7 @@
     "graph:fetch": "run(){ rover graph fetch geyser-graph@$1 > ./schema.graphql; }; run",
     "graph:generate": "run(){ yarn graph:fetch $1 && graphql-codegen --config codegen.ts && rm schema.graphql && yarn graph:format; }; run",
     "graph:generate:staging": "yarn graph:generate staging",
+    "caddy:trust-ca": "bash ./scripts/trust-caddy-cert.sh",
     "changelog": "yarn conventional-changelog -p conventionalcommits -i CHANGELOG.md -s"
   },
   "dependencies": {
@@ -31,6 +33,7 @@
     "@hookform/resolvers": "^3.1.0",
     "@loadable/component": "^5.15.3",
     "@react-hookz/web": "^23.0.0",
+    "@remirror/extension-node-formatting": "^2.0.13",
     "@remirror/pm": "^2.0.5",
     "@remirror/react": "^2.0.28",
     "@remirror/react-components": "^2.1.12",
@@ -40,6 +43,7 @@
     "bech32": "^2.0.0",
     "buffer": "^6.0.3",
     "classnames": "^2.3.2",
+    "dompurify": "^3.0.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "framer-motion": "^8.5.2",
@@ -96,6 +100,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/react-hooks": "^8.0.1",
     "@testing-library/user-event": "^14.4.3",
+    "@types/dompurify": "^3.0.2",
     "@types/loadable__component": "^5.13.4",
     "@types/luxon": "^3.2.0",
     "@types/node": "^18.11.18",

@@ -4,6 +4,7 @@ import { ToolbarBlocks } from './toolbar/ToolbarBlocks'
 import { ToolbarCommon } from './toolbar/ToolbarCommon'
 import { ToolbarHeading } from './toolbar/ToolbarHeading'
 import { ToolbarMedia } from './toolbar/ToolbarMedia'
+import { ToolbarTable } from './toolbar/ToolbarTable'
 
 export const MarkdownToolbar = ({ isDisabled }: { isDisabled?: boolean }) => {
   return (
@@ -12,6 +13,7 @@ export const MarkdownToolbar = ({ isDisabled }: { isDisabled?: boolean }) => {
       <ToolbarBlocks isDisabled={isDisabled} />
       <ToolbarHeading isDisabled={isDisabled} />
       <ToolbarMedia isDisabled={isDisabled} />
+      <ToolbarTable isDisabled={isDisabled} />
     </HStack>
   )
 }
