@@ -12,7 +12,8 @@ import {
 } from '@chakra-ui/react'
 import { IGif } from '@giphy/js-types'
 import { useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
+import { createUseStyles } from 'react-jss'
 
 import { GifIcon } from '../../../../components/icons'
 import { TextArea } from '../../../../components/ui'
@@ -27,6 +28,12 @@ type Props = HTMLChakraProps<'div'> & {
   setTarget: (_: any) => void
   setFormState: any
 }
+const useStyles = createUseStyles({
+  clickSpan: {
+    fontWeight: 'bold',
+    '&:hover': { cursor: 'pointer' },
+  },
+})
 
 export const ProjectFundingFormCommentField = ({
   comment,
@@ -36,6 +43,7 @@ export const ProjectFundingFormCommentField = ({
 }: Props) => {
   const { t } = useTranslation()
   const { isAnonymous, loginOnOpen, user } = useAuthContext()
+  const classes = useStyles()
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   const logoutConfirmationModal = useModal()
@@ -79,9 +87,21 @@ export const ProjectFundingFormCommentField = ({
             backgroundColor={'neutral.0'}
             onChange={setTarget}
           />
+
           <Text pt={1} px={1} fontSize="10px" color="neutral.600">
-            {t('Funding as')}{' '}
-            <i>{isAnonymous ? t('anonymous') : user.username}</i>
+            {isAnonymous ? (
+              <Trans i18nKey="Funding as anonymous. <1>Click here</1> to connect profile to contribution">
+                {'Funding as anonymous. '}
+                <span onClick={loginOnOpen} className={classes.clickSpan}>
+                  Click here
+                </span>
+                {' to connect profile to contribution'}
+              </Trans>
+            ) : (
+              <>
+                {t('Funding as')} <i>{user.username}</i>
+              </>
+            )}
           </Text>
         </Box>
         {isHoveringOverGIFButton && selectedGIF && (
