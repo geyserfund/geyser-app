@@ -52,6 +52,9 @@ export const LaunchImageUrl =
 export const LaunchProjectRocketUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/create-project-rocket.png'
 
+export const LaunchProjectRocketAIUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/launch/launch-rocket-ai.png'
+
 export const LaunchProjectCoinsUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-coins.webp'
 export const LaunchProjectEntryUrl =
