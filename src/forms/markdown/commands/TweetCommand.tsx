@@ -1,8 +1,10 @@
 import { Box } from '@chakra-ui/react'
 import { useCommands } from '@remirror/react'
+import { useTranslation } from 'react-i18next'
 import { BsTwitter } from 'react-icons/bs'
 
 import { useDarkMode, useNotification } from '../../../utils'
+import { TwitterRegex } from '../../validations/twitter'
 import {
   InsertTwitterModal,
   MarkdownTwitter,
@@ -11,6 +13,7 @@ import {
 import { ToolbarCommandButton } from './ToolbarCommandButton'
 
 export const TweetCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
+  const { t } = useTranslation()
   const commands = useCommands()
   const isDarkMode = useDarkMode()
   const { toast } = useNotification()
@@ -18,11 +21,16 @@ export const TweetCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
   const modal = useInsertTwitterModal(async ({ url }: MarkdownTwitter) => {
     commands.insertHardBreak()
 
-    const UrlSplit = url.split('/').filter((val) => val && val !== '/')
+    const tweetId = getTweetIdFromUrl(url)
 
-    const tweetId = UrlSplit[UrlSplit.length - 1]
-
-    if (!tweetId) return
+    if (!tweetId) {
+      toast({
+        status: 'error',
+        title: 'Invalid tweet URL',
+        description: 'Please try again',
+      })
+      return
+    }
 
     try {
       const value = await twttr.widgets.createTweet(
@@ -56,7 +64,7 @@ export const TweetCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
     <>
       <ToolbarCommandButton
         name="video"
-        label="Insert video"
+        label={t('Insert tweet')}
         onClick={() => modal.onOpen()}
         isDisabled={isDisabled}
       >
@@ -77,4 +85,15 @@ export const TweetCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
       ></Box>
     </>
   )
+}
+
+const getTweetIdFromUrl = (url: string) => {
+  const match = url.match(TwitterRegex)
+
+  if (match && match.length >= 3) {
+    const tweetId = match[2]
+    return tweetId
+  }
+
+  return ''
 }

@@ -1,11 +1,16 @@
+export const TwitterRegex =
+  /^(?:https?:\/\/)?(?:www\.)?twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)/
+
 export function validateTwitterUrl(url?: string | null) {
   if (url) {
-    const regExp =
-      /https?:\/\/(?:www\.)?twitter\.com\/[A-Za-z0-9_]+\/status\/\d+/
+    const match = url.match(TwitterRegex)
 
-    const match = url.match(regExp)
+    if (match && match.length >= 3) {
+      const tweetId = match[2]
+      return Boolean(tweetId)
+    }
 
-    return Boolean(match?.length)
+    return false
   }
 
   return false
