@@ -16,7 +16,7 @@ export const ProjectStats = () => {
     variables: { where: { id: toInt(project?.id) } },
   })
 
-  const visitorsCount = data?.project?.statistics?.totalVisitors || 0
+  const visitorsCount = data?.projectGet?.statistics?.totalVisitors || 0
 
   if (!project) {
     return null

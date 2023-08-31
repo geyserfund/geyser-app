@@ -40,7 +40,7 @@ export const ProjectCreate = () => {
 
   const form = useProjectForm({
     isEdit,
-    project: data?.project,
+    project: data?.projectGet,
   })
 
   const [createProject, { loading: createLoading }] = useCreateProjectMutation({
@@ -111,11 +111,11 @@ export const ProjectCreate = () => {
   }
 
   const onSubmit = ({ email, name, ...values }: ProjectCreationVariables) => {
-    if (isEdit && data?.project) {
+    if (isEdit && data?.projectGet) {
       updateProject({
         variables: {
           input: {
-            projectId: Number(data.project.id),
+            projectId: Number(data.projectGet?.id),
             ...values,
           },
         },

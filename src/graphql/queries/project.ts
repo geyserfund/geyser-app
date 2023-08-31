@@ -4,7 +4,6 @@ import { FRAGMENT_ENTRY_FOR_PROJECT } from '../fragments/entries'
 import {
   FRAGMENT_PROJECT,
   FRAGMENT_PROJECT_FOR_LANDING_PAGE,
-  FRAGMENT_PROJECT_FUNDERS,
 } from '../fragments/project'
 import { FRAGMENT_FUNDER_WITH_USER } from '../fragments/user'
 
@@ -14,22 +13,8 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
     $where: UniqueProjectQueryInput!
     $input: ProjectEntriesGetInput
   ) {
-    project(where: $where) {
+    projectGet(where: $where) {
       ...Project
-    }
-  }
-`
-
-export const QUERY_PROJECT_FUNDING_DATA = gql`
-  ${FRAGMENT_PROJECT_FUNDERS}
-  query ProjectFundingData(
-    $where: UniqueProjectQueryInput!
-    $input: ProjectEntriesGetInput
-  ) {
-    project(where: $where) {
-      funders {
-        ...projectFunders
-      }
     }
   }
 `
@@ -111,7 +96,7 @@ export const QUERY_PROJECTS_SUMMARY = gql`
 export const QUERY_PROJECT_UNPUBLISHED_ENTRIES = gql`
   ${FRAGMENT_ENTRY_FOR_PROJECT}
   query ProjectUnplublishedEntries($where: UniqueProjectQueryInput!) {
-    project(where: $where) {
+    projectGet(where: $where) {
       entries: entries(input: { where: { published: false } }) {
         ...EntryForProject
       }
@@ -122,7 +107,7 @@ export const QUERY_PROJECT_UNPUBLISHED_ENTRIES = gql`
 export const QUERY_PROJECT_DASHBOARD_DATA = gql`
   ${FRAGMENT_ENTRY_FOR_PROJECT}
   query ProjectDashboardData($where: UniqueProjectQueryInput!) {
-    project(where: $where) {
+    projectGet(where: $where) {
       unpublishedEntries: entries(input: { where: { published: false } }) {
         ...EntryForProject
       }
@@ -200,7 +185,7 @@ export const QUERY_PROJECTS_FOR_LANDING_PAGE = gql`
 export const QUERY_FEATURED_PROJECT_FOR_LANDING_PAGE = gql`
   ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
   query FeaturedProjectForLandingPage($where: UniqueProjectQueryInput!) {
-    project(where: $where) {
+    projectGet(where: $where) {
       ...ProjectForLandingPage
     }
   }

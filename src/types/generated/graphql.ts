@@ -226,6 +226,10 @@ export type DeleteProjectInput = {
   projectId: Scalars['BigInt']
 }
 
+export type DeleteProjectRewardInput = {
+  projectRewardId: Scalars['BigInt']
+}
+
 export type DeleteUserResponse = MutationResponse & {
   __typename?: 'DeleteUserResponse'
   message?: Maybe<Scalars['String']>
@@ -828,6 +832,8 @@ export type Mutation = {
   projectDelete: ProjectDeleteResponse
   projectFollow: Scalars['Boolean']
   projectRewardCreate: ProjectReward
+  /** Soft deletes the reward. */
+  projectRewardDelete: Scalars['Boolean']
   projectRewardUpdate: ProjectReward
   projectStatusUpdate: Project
   projectTagAdd: Array<Tag>
@@ -932,6 +938,10 @@ export type MutationProjectRewardCreateArgs = {
   input: CreateProjectRewardInput
 }
 
+export type MutationProjectRewardDeleteArgs = {
+  input: DeleteProjectRewardInput
+}
+
 export type MutationProjectRewardUpdateArgs = {
   input: UpdateProjectRewardInput
 }
@@ -1013,6 +1023,17 @@ export type MutationResponse = {
   success: Scalars['Boolean']
 }
 
+export type NostrKeys = {
+  __typename?: 'NostrKeys'
+  publicKey: NostrPublicKey
+}
+
+export type NostrPublicKey = {
+  __typename?: 'NostrPublicKey'
+  hex: Scalars['String']
+  npub: Scalars['String']
+}
+
 export type OtpInput = {
   otp: Scalars['Int']
   otpVerificationToken: Scalars['String']
@@ -1087,6 +1108,7 @@ export type Project = {
   grants: Array<GrantApplicant>
   id: Scalars['BigInt']
   image?: Maybe<Scalars['String']>
+  keys: ProjectKeys
   links: Array<Scalars['String']>
   location?: Maybe<Location>
   milestones: Array<ProjectMilestone>
@@ -1144,6 +1166,11 @@ export type ProjectEntriesGetWhereInput = {
 
 export type ProjectFollowMutationInput = {
   projectId: Scalars['BigInt']
+}
+
+export type ProjectKeys = {
+  __typename?: 'ProjectKeys'
+  nostrKeys: NostrKeys
 }
 
 export type ProjectLinkMutationInput = {
@@ -1241,7 +1268,7 @@ export type ProjectsGetQueryInput = {
    */
   orderBy?: InputMaybe<Array<InputMaybe<ProjectsOrderByInput>>>
   pagination?: InputMaybe<PaginationInput>
-  where?: InputMaybe<ProjectWhereInput>
+  where: ProjectWhereInput
 }
 
 export type ProjectsOrderByInput = {
@@ -1289,8 +1316,8 @@ export type Query = {
   grants: Array<Grant>
   lightningAddressVerify: LightningAddressVerifyResponse
   me?: Maybe<User>
-  project?: Maybe<Project>
   projectCountriesGet: Array<ProjectCountriesGetResult>
+  projectGet?: Maybe<Project>
   projectRegionsGet: Array<ProjectRegionsGetResult>
   /** By default, returns a list of all active projects. */
   projects: ProjectsResponse
@@ -1360,7 +1387,7 @@ export type QueryLightningAddressVerifyArgs = {
   lightningAddress?: InputMaybe<Scalars['String']>
 }
 
-export type QueryProjectArgs = {
+export type QueryProjectGetArgs = {
   where: UniqueProjectQueryInput
 }
 
@@ -1502,6 +1529,8 @@ export type UniqueProjectQueryInput = {
   id?: InputMaybe<Scalars['BigInt']>
   /** Unique name for the project. Used for the project URL and lightning address. */
   name?: InputMaybe<Scalars['name_String_minLength_3_maxLength_280']>
+  /** Project's Nostr Public Key in HEX format */
+  nostrPublicKey?: InputMaybe<Scalars['String']>
 }
 
 export type UpdateEntryInput = {
@@ -1555,8 +1584,6 @@ export type UpdateProjectRewardInput = {
   cost?: InputMaybe<Scalars['cost_Int_min_1_max_1000000']>
   /** Currency used for the cost */
   costCurrency?: InputMaybe<RewardCurrency>
-  /** Soft deletes the reward. */
-  deleted?: InputMaybe<Scalars['Boolean']>
   description?: InputMaybe<Scalars['description_String_maxLength_250']>
   hasShipping?: InputMaybe<Scalars['Boolean']>
   image?: InputMaybe<Scalars['String']>
@@ -1909,6 +1936,7 @@ export type ResolversTypes = {
   CursorInputString: CursorInputString
   Date: ResolverTypeWrapper<Scalars['Date']>
   DeleteProjectInput: DeleteProjectInput
+  DeleteProjectRewardInput: DeleteProjectRewardInput
   DeleteUserResponse: ResolverTypeWrapper<DeleteUserResponse>
   DonationFundingInput: DonationFundingInput
   EmailVerifyInput: EmailVerifyInput
@@ -1999,6 +2027,8 @@ export type ResolversTypes = {
   MutationResponse:
     | ResolversTypes['DeleteUserResponse']
     | ResolversTypes['ProjectDeleteResponse']
+  NostrKeys: ResolverTypeWrapper<NostrKeys>
+  NostrPublicKey: ResolverTypeWrapper<NostrPublicKey>
   OTPInput: OtpInput
   OTPLoginInput: OtpLoginInput
   OTPResponse: ResolverTypeWrapper<OtpResponse>
@@ -2014,6 +2044,7 @@ export type ResolversTypes = {
   ProjectEntriesGetInput: ProjectEntriesGetInput
   ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput
   ProjectFollowMutationInput: ProjectFollowMutationInput
+  ProjectKeys: ResolverTypeWrapper<ProjectKeys>
   ProjectLinkMutationInput: ProjectLinkMutationInput
   ProjectMilestone: ResolverTypeWrapper<ProjectMilestone>
   ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>
@@ -2197,6 +2228,7 @@ export type ResolversParentTypes = {
   CursorInputString: CursorInputString
   Date: Scalars['Date']
   DeleteProjectInput: DeleteProjectInput
+  DeleteProjectRewardInput: DeleteProjectRewardInput
   DeleteUserResponse: DeleteUserResponse
   DonationFundingInput: DonationFundingInput
   EmailVerifyInput: EmailVerifyInput
@@ -2275,6 +2307,8 @@ export type ResolversParentTypes = {
   MutationResponse:
     | ResolversParentTypes['DeleteUserResponse']
     | ResolversParentTypes['ProjectDeleteResponse']
+  NostrKeys: NostrKeys
+  NostrPublicKey: NostrPublicKey
   OTPInput: OtpInput
   OTPLoginInput: OtpLoginInput
   OTPResponse: OtpResponse
@@ -2289,6 +2323,7 @@ export type ResolversParentTypes = {
   ProjectEntriesGetInput: ProjectEntriesGetInput
   ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput
   ProjectFollowMutationInput: ProjectFollowMutationInput
+  ProjectKeys: ProjectKeys
   ProjectLinkMutationInput: ProjectLinkMutationInput
   ProjectMilestone: ProjectMilestone
   ProjectRegionsGetResult: ProjectRegionsGetResult
@@ -3032,6 +3067,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationProjectRewardCreateArgs, 'input'>
   >
+  projectRewardDelete?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationProjectRewardDeleteArgs, 'input'>
+  >
   projectRewardUpdate?: Resolver<
     ResolversTypes['ProjectReward'],
     ParentType,
@@ -3166,6 +3207,27 @@ export type MutationResponseResolvers<
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
 }
 
+export type NostrKeysResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['NostrKeys'] = ResolversParentTypes['NostrKeys'],
+> = {
+  publicKey?: Resolver<
+    ResolversTypes['NostrPublicKey'],
+    ParentType,
+    ContextType
+  >
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type NostrPublicKeyResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['NostrPublicKey'] = ResolversParentTypes['NostrPublicKey'],
+> = {
+  hex?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  npub?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type OtpResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['OTPResponse'] = ResolversParentTypes['OTPResponse'],
@@ -3246,6 +3308,7 @@ export type ProjectResolvers<
   >
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  keys?: Resolver<ResolversTypes['ProjectKeys'], ParentType, ContextType>
   links?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>
   location?: Resolver<
     Maybe<ResolversTypes['Location']>,
@@ -3329,6 +3392,14 @@ export type ProjectDeleteResponseResolvers<
 > = {
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type ProjectKeysResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectKeys'] = ResolversParentTypes['ProjectKeys'],
+> = {
+  nostrKeys?: Resolver<ResolversTypes['NostrKeys'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -3525,16 +3596,16 @@ export type QueryResolvers<
     Partial<QueryLightningAddressVerifyArgs>
   >
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
-  project?: Resolver<
-    Maybe<ResolversTypes['Project']>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryProjectArgs, 'where'>
-  >
   projectCountriesGet?: Resolver<
     Array<ResolversTypes['ProjectCountriesGetResult']>,
     ParentType,
     ContextType
+  >
+  projectGet?: Resolver<
+    Maybe<ResolversTypes['Project']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryProjectGetArgs, 'where'>
   >
   projectRegionsGet?: Resolver<
     Array<ResolversTypes['ProjectRegionsGetResult']>,
@@ -4104,6 +4175,8 @@ export type Resolvers<ContextType = any> = {
   Location?: LocationResolvers<ContextType>
   Mutation?: MutationResolvers<ContextType>
   MutationResponse?: MutationResponseResolvers<ContextType>
+  NostrKeys?: NostrKeysResolvers<ContextType>
+  NostrPublicKey?: NostrPublicKeyResolvers<ContextType>
   OTPResponse?: OtpResponseResolvers<ContextType>
   Owner?: OwnerResolvers<ContextType>
   OwnerOf?: OwnerOfResolvers<ContextType>
@@ -4111,6 +4184,7 @@ export type Resolvers<ContextType = any> = {
   ProjectActivatedSubscriptionResponse?: ProjectActivatedSubscriptionResponseResolvers<ContextType>
   ProjectCountriesGetResult?: ProjectCountriesGetResultResolvers<ContextType>
   ProjectDeleteResponse?: ProjectDeleteResponseResolvers<ContextType>
+  ProjectKeys?: ProjectKeysResolvers<ContextType>
   ProjectMilestone?: ProjectMilestoneResolvers<ContextType>
   ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>
   ProjectReward?: ProjectRewardResolvers<ContextType>
@@ -4821,6 +4895,15 @@ export type ProjectRewardUpdateMutation = {
   } & ProjectRewardForCreateUpdateFragment
 }
 
+export type ProjectRewardDeleteMutationVariables = Exact<{
+  input: DeleteProjectRewardInput
+}>
+
+export type ProjectRewardDeleteMutation = {
+  __typename?: 'Mutation'
+  projectRewardDelete: boolean
+}
+
 export type CreateProjectMilestoneMutationVariables = Exact<{
   input?: InputMaybe<CreateProjectMilestoneInput>
 }>
@@ -5398,7 +5481,7 @@ export type ProjectByNameOrIdQueryVariables = Exact<{
 
 export type ProjectByNameOrIdQuery = {
   __typename?: 'Query'
-  project?: ({ __typename?: 'Project' } & ProjectFragment) | null
+  projectGet?: ({ __typename?: 'Project' } & ProjectFragment) | null
 }
 
 export type ProjectFundingDataQueryVariables = Exact<{
@@ -5408,7 +5491,7 @@ export type ProjectFundingDataQueryVariables = Exact<{
 
 export type ProjectFundingDataQuery = {
   __typename?: 'Query'
-  project?: {
+  projectGet?: {
     __typename?: 'Project'
     funders: Array<{ __typename?: 'Funder' } & ProjectFundersFragment>
   } | null
@@ -5513,7 +5596,7 @@ export type ProjectUnplublishedEntriesQueryVariables = Exact<{
 
 export type ProjectUnplublishedEntriesQuery = {
   __typename?: 'Query'
-  project?: {
+  projectGet?: {
     __typename?: 'Project'
     entries: Array<{ __typename?: 'Entry' } & EntryForProjectFragment>
   } | null
@@ -5525,7 +5608,7 @@ export type ProjectDashboardDataQueryVariables = Exact<{
 
 export type ProjectDashboardDataQuery = {
   __typename?: 'Query'
-  project?: {
+  projectGet?: {
     __typename?: 'Project'
     unpublishedEntries: Array<
       { __typename?: 'Entry' } & EntryForProjectFragment
@@ -5610,7 +5693,9 @@ export type FeaturedProjectForLandingPageQueryVariables = Exact<{
 
 export type FeaturedProjectForLandingPageQuery = {
   __typename?: 'Query'
-  project?: ({ __typename?: 'Project' } & ProjectForLandingPageFragment) | null
+  projectGet?:
+    | ({ __typename?: 'Project' } & ProjectForLandingPageFragment)
+    | null
 }
 
 export type TagsGetQueryVariables = Exact<{ [key: string]: never }>
@@ -7199,6 +7284,54 @@ export type ProjectRewardUpdateMutationResult =
 export type ProjectRewardUpdateMutationOptions = Apollo.BaseMutationOptions<
   ProjectRewardUpdateMutation,
   ProjectRewardUpdateMutationVariables
+>
+export const ProjectRewardDeleteDocument = gql`
+  mutation ProjectRewardDelete($input: DeleteProjectRewardInput!) {
+    projectRewardDelete(input: $input)
+  }
+`
+export type ProjectRewardDeleteMutationFn = Apollo.MutationFunction<
+  ProjectRewardDeleteMutation,
+  ProjectRewardDeleteMutationVariables
+>
+
+/**
+ * __useProjectRewardDeleteMutation__
+ *
+ * To run a mutation, you first call `useProjectRewardDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectRewardDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectRewardDeleteMutation, { data, loading, error }] = useProjectRewardDeleteMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectRewardDeleteMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ProjectRewardDeleteMutation,
+    ProjectRewardDeleteMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    ProjectRewardDeleteMutation,
+    ProjectRewardDeleteMutationVariables
+  >(ProjectRewardDeleteDocument, options)
+}
+export type ProjectRewardDeleteMutationHookResult = ReturnType<
+  typeof useProjectRewardDeleteMutation
+>
+export type ProjectRewardDeleteMutationResult =
+  Apollo.MutationResult<ProjectRewardDeleteMutation>
+export type ProjectRewardDeleteMutationOptions = Apollo.BaseMutationOptions<
+  ProjectRewardDeleteMutation,
+  ProjectRewardDeleteMutationVariables
 >
 export const CreateProjectMilestoneDocument = gql`
   mutation CreateProjectMilestone($input: CreateProjectMilestoneInput) {
@@ -8957,7 +9090,7 @@ export const ProjectByNameOrIdDocument = gql`
     $where: UniqueProjectQueryInput!
     $input: ProjectEntriesGetInput
   ) {
-    project(where: $where) {
+    projectGet(where: $where) {
       ...Project
     }
   }
@@ -9020,7 +9153,7 @@ export const ProjectFundingDataDocument = gql`
     $where: UniqueProjectQueryInput!
     $input: ProjectEntriesGetInput
   ) {
-    project(where: $where) {
+    projectGet(where: $where) {
       funders {
         ...projectFunders
       }
@@ -9301,7 +9434,7 @@ export type ProjectsSummaryQueryResult = Apollo.QueryResult<
 >
 export const ProjectUnplublishedEntriesDocument = gql`
   query ProjectUnplublishedEntries($where: UniqueProjectQueryInput!) {
-    project(where: $where) {
+    projectGet(where: $where) {
       entries: entries(input: { where: { published: false } }) {
         ...EntryForProject
       }
@@ -9362,7 +9495,7 @@ export type ProjectUnplublishedEntriesQueryResult = Apollo.QueryResult<
 >
 export const ProjectDashboardDataDocument = gql`
   query ProjectDashboardData($where: UniqueProjectQueryInput!) {
-    project(where: $where) {
+    projectGet(where: $where) {
       unpublishedEntries: entries(input: { where: { published: false } }) {
         ...EntryForProject
       }
@@ -9691,7 +9824,7 @@ export type ProjectsForLandingPageQueryResult = Apollo.QueryResult<
 >
 export const FeaturedProjectForLandingPageDocument = gql`
   query FeaturedProjectForLandingPage($where: UniqueProjectQueryInput!) {
-    project(where: $where) {
+    projectGet(where: $where) {
       ...ProjectForLandingPage
     }
   }
