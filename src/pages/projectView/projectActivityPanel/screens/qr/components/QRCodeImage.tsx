@@ -90,33 +90,6 @@ export const QRCodeImage = ({
     )
   }, [isLightning, setPaymentMethod, t])
 
-  const renderQrCode = useCallback(
-    ({ bgColor, fgColor }: { bgColor: string; fgColor: string }) => {
-      if (!debouncedQRSize) return null
-      return (
-        <QRCode
-          value={
-            paymentMethod === PaymentMethods.LIGHTNING
-              ? lightningInvoice
-              : onchainAddress
-          }
-          size={debouncedQRSize}
-          bgColor={bgColor}
-          fgColor={fgColor}
-          logoImage={LogoIcon}
-          qrStyle="squares"
-          ecLevel="L"
-          logoHeight={50}
-          logoWidth={50}
-          logoPadding={5}
-          logoPaddingStyle="square"
-          removeQrCodeBehindLogo
-        />
-      )
-    },
-    [debouncedQRSize, lightningInvoice, onchainAddress, paymentMethod],
-  )
-
   const isColored = hasCopiedLightning || hasCopiedOnchain
   const fgColor = isColored
     ? lightModeColors.primary[400]
