@@ -42,7 +42,7 @@ export const BtcProvider = ({ children }: { children: React.ReactNode }) => {
 
     const now = DateTime.local().toMillis()
 
-    if (now - timeLineMilis > A_MINUTE_IN_MILIS) {
+    if (now - timeLineMilis < A_MINUTE_IN_MILIS) {
       isOld = false
     }
 
