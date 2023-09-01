@@ -1,3 +1,4 @@
+/* eslint-disable prefer-regex-literals */
 import { RemirrorRenderer } from '@remirror/react'
 import DOMPurify from 'dompurify'
 import { getRemirrorJSON, RemirrorContentType, RemirrorManager } from 'remirror'
@@ -29,13 +30,35 @@ export const PreviewRenderer = ({
   )
 }
 
-export const matchMarkDownSpecialKeysAtLineEnd =
-  /(?<!.*(\|\n|\||>))\n(?!.*(\*|_|#|-|\[|>|\n\||\||`|[0-9]+(\.|\))))/g
-
 export const FormatWhiteSpaceForMarkDownString = (value: string): string => {
-  const adjustForLineChange = value
-    ? value.replaceAll(matchMarkDownSpecialKeysAtLineEnd, '<br />')
-    : ''
+  let adjustForLineChange: string
+
+  // This replaves \n with <br /> except when the \n is followed by a link, table, header, list, blockquote, code block, or horizontal rule
+
+  try {
+    const requiredRegex = new RegExp(
+      /(?<!.*(\|\n|\||>))\n(?!.*(\*|_|#|-|\[|>|\n\||\||`|[0-9]+(\.|\))))/g,
+    )
+    adjustForLineChange = value ? value.replaceAll(requiredRegex, '<br />') : ''
+  } catch (e) {
+    adjustForLineChange = replaceMatchingRegex(value)
+  }
 
   return DOMPurify.sanitize(adjustForLineChange, { ADD_TAGS: ['iframe'] })
+}
+
+const replaceMatchingRegex = (str: string) => {
+  const lineBreaks = str.split('\n')
+  const replacedLines = lineBreaks.map((line) => {
+    if (!line.match(/.*(\|\n|\||>)/)) {
+      return line.replace(
+        /(.*)(\n)(.*(\*|_|#|-|\[|>|\n\||\||`|[0-9]+(\.|\))))/g,
+        '$1\n#1#',
+      )
+    }
+
+    return line
+  })
+
+  return replacedLines.join('\n')
 }
