@@ -24,6 +24,7 @@ import {
   NodeViewComponentProps,
   TextHandler,
 } from '@remirror/react'
+import { useRef, useState } from 'react'
 
 export const imageHandler = ({
   node: {
@@ -83,11 +84,16 @@ export const tableHandler = (props: any) => {
 export const FrameHandler = (props: any) => {
   const colorMode = localStorage.getItem('chakra-ui-color-mode')
 
+  const ref = useRef<HTMLIFrameElement>(null)
+  const [height, setHeight] = useState('0px')
+  const onLoad = () => {
+    setHeight(`${ref?.current?.contentWindow?.document?.body?.scrollHeight}px`)
+  }
+
   const newSrc = `${props.node.attrs.src}`.replace(
     /theme=dark|theme=light/,
     `theme=${colorMode || 'light'}`,
   )
-
   const splitValues =
     `${props.node.attrs.style}`
       .replaceAll(/"|\{|\}/g, '')
@@ -110,7 +116,6 @@ export const FrameHandler = (props: any) => {
       <Box
         w="full"
         h="full"
-        minHeight={'450px'}
         maxWidth={isTwitter ? '540px' : '100%'}
         display="flex"
         borderRadius="12px"
@@ -118,13 +123,15 @@ export const FrameHandler = (props: any) => {
         position="relative"
       >
         <iframe
+          scrolling="no"
           id={newSrc}
           src={newSrc}
-          height={props.node.attrs.height}
+          ref={ref}
+          onLoad={onLoad}
+          height={height}
           width={props.node.attrs.width}
           style={{
             ...newStyle,
-            height: '100%',
             margin: '0px',
             overflow: 'hidden',
           }}
