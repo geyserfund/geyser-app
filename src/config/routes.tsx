@@ -10,8 +10,13 @@ import NotAuthorized from '../pages/notAuthorized'
 import NotFoundPage from '../pages/notFound'
 import { PrivateRoute } from './PrivateRoute'
 
-const handleCatch = () => {
-  window.location.reload()
+const CHUNK_LOAD_ERROR = 'ChunkLoadError'
+
+const handleCatch = (e: any) => {
+  if (e?.name && e.name === CHUNK_LOAD_ERROR) {
+    window.location.reload()
+  }
+
   return {} as any
 }
 
