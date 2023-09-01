@@ -4,25 +4,16 @@ import React, { useMemo } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { __production__, getPath, PathName } from '../constants'
+import { handleAssetLoadError } from '../helpers'
 import { FailedAuth, TwitterSuccess } from '../pages/auth'
 import BadgesPage from '../pages/badges/BadgesPage'
 import NotAuthorized from '../pages/notAuthorized'
 import NotFoundPage from '../pages/notFound'
 import { PrivateRoute } from './PrivateRoute'
 
-const CHUNK_LOAD_ERROR = 'ChunkLoadError'
-
-const handleCatch = (e: any) => {
-  if (e?.name && e.name === CHUNK_LOAD_ERROR) {
-    window.location.reload()
-  }
-
-  return {} as any
-}
-
 // GRANTS
 
-const Grants = import('../pages/grants').catch(handleCatch)
+const Grants = import('../pages/grants').catch(handleAssetLoadError)
 
 const GrantsLandingPage = loadable(() =>
   Grants.then((m) => m.GrantsLandingPage),
@@ -33,7 +24,9 @@ const GrantPage = loadable(() => Grants.then((m) => m.GrantPage))
 
 // PROJECT LAUNCH
 
-const ProjectLaunch = import('../pages/projectCreate').catch(handleCatch)
+const ProjectLaunch = import('../pages/projectCreate').catch(
+  handleAssetLoadError,
+)
 
 const ProjectCreateStart = loadable(() =>
   ProjectLaunch.then((m) => m.ProjectCreateStart),
@@ -51,7 +44,7 @@ const ProjectCreate = loadable(() => ProjectLaunch.then((m) => m.ProjectCreate))
 
 // ENTRY VIEW & EDIT
 
-const Entry = import('../pages/entry').catch(handleCatch)
+const Entry = import('../pages/entry').catch(handleAssetLoadError)
 
 const EntryCreateEdit = loadable(() => Entry.then((m) => m.EntryCreateEdit))
 const EntryPreview = loadable(() => Entry.then((m) => m.EntryPreview))
@@ -59,7 +52,9 @@ const EntryPage = loadable(() => Entry.then((m) => m.EntryPage))
 
 // PROJECT DASHBOARD
 
-const CreatorDashboard = import('../pages/projectDashboard').catch(handleCatch)
+const CreatorDashboard = import('../pages/projectDashboard').catch(
+  handleAssetLoadError,
+)
 
 const ProjectDashboardPage = loadable(() =>
   CreatorDashboard.then((m) => m.ProjectDashboardPage),
@@ -87,16 +82,16 @@ const ProjectSettings = loadable(() =>
 )
 
 const ProjectView = loadable(() =>
-  import('../pages/projectView').catch(handleCatch),
+  import('../pages/projectView').catch(handleAssetLoadError),
 )
 
 const Profile = loadable(() =>
-  import('../pages/profile/Profile').catch(handleCatch),
+  import('../pages/profile/Profile').catch(handleAssetLoadError),
 )
 
 // LANDING PAGE
 
-const Landing = import('../pages/landing').catch(handleCatch)
+const Landing = import('../pages/landing').catch(handleAssetLoadError)
 
 const MobileLeaderboard = loadable(() =>
   Landing.then((m) => m.MobileLeaderboard),
@@ -110,7 +105,7 @@ const LandingFeed = loadable(() => Landing.then((m) => m.LandingFeed))
 // ABOUT PAGE
 
 const AboutPage = loadable(() =>
-  import('../pages/about/About').catch(handleCatch),
+  import('../pages/about/About').catch(handleAssetLoadError),
 )
 
 type PlatformRoutes = {
