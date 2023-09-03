@@ -53,7 +53,7 @@ const replaceMatchingRegex = (str: string) => {
     if (!line.match(/.*(\|\n|\||>)/)) {
       return line.replace(
         /(.*)(\n)(.*(\*|_|#|-|\[|>|\n\||\||`|[0-9]+(\.|\))))/g,
-        '$1\n#1#',
+        '<br />',
       )
     }
 
