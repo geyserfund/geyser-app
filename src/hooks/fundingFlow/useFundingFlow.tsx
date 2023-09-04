@@ -1,5 +1,12 @@
 import { ApolloError } from '@apollo/client'
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { RejectionError, WebLNProvider } from 'webln'
 
 import {
@@ -14,7 +21,9 @@ import {
   FundingMutationResponse,
   FundingStatus,
   FundingTxFragment,
+  FundingTxWithInvoiceStatusFragment,
   InvoiceStatus,
+  useFundingTxWithInvoiceStatusLazyQuery,
   useFundMutation,
   useRefreshFundingInvoiceMutation,
 } from '../../types'
@@ -55,6 +64,8 @@ const initialFunding: FundingTxFragment = {
 }
 
 const WEBLN_ENABLE_ERROR = 'Failed to enable webln'
+
+const POLLING_INTERVAL = 5 * 1000 // 5 seconds
 
 interface IFundingFlowOptions {
   hasBolt11?: boolean
@@ -116,17 +127,35 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     funder: { ...initialFunding.funder, user },
   })
 
-  const { startListening, stopListening, fundingActivity } =
-    useFundSubscription({
-      projectId: fundingTx.projectId,
-      fundingTxId: fundingTx.id,
-    })
+  const { startListening, stopListening } = useFundSubscription({
+    projectId: fundingTx.projectId,
+    fundingTxId: fundingTx.id,
+    onComplete(fundingTx) {
+      handleFundingStatusCheck(fundingTx)
+    },
+  })
   const [amounts, setAmounts] =
     useState<FundingMutationResponse['amountSummary']>(initialAmounts)
-
+  const fundIntervalRef = useRef<number>(0)
   useEffect(() => {
-    return () => stopListening()
+    const interval = fundIntervalRef.current
+    return () => {
+      stopListening()
+      clearInterval(interval)
+    }
   }, [stopListening])
+
+  const [getFundingStatus] = useFundingTxWithInvoiceStatusLazyQuery({
+    variables: {
+      fundingTxID: toInt(fundingTx.id),
+    },
+    onCompleted(data) {
+      if (data && data.fundingTx) {
+        handleFundingStatusCheck(data.fundingTx)
+      }
+    },
+    fetchPolicy: 'network-only',
+  })
 
   const gotoNextStage = useCallback(() => {
     setFundState((currentState) => {
@@ -140,6 +169,41 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       return currentState
     })
   }, [])
+
+  const handleFundingStatusCheck = useCallback(
+    (fundingTx: FundingTxWithInvoiceStatusFragment) => {
+      /*
+        We also check the invoiceIds are the same so that the useEffect does not try to update the funding status of an
+        older invoice. This can happen due to sync delays between the funding status polling and the funding invoice update.
+      */
+      setFundingTx((current) => {
+        if (
+          (fundingTx.invoiceStatus !== current.invoiceStatus ||
+            fundingTx.status !== current.status) &&
+          fundingTx.invoiceId === current.invoiceId
+        ) {
+          if (
+            fundingTx.status === FundingStatus.Paid ||
+            (fundingTx.onChain && fundingTx.status === FundingStatus.Pending)
+          ) {
+            stopListening()
+            clearInterval(fundIntervalRef.current)
+            gotoNextStage()
+          }
+
+          return {
+            ...current,
+            ...fundingTx,
+            paymentRequest: fundingTx.paymentRequest || current.paymentRequest,
+            uuid: fundingTx.uuid || current.uuid,
+          }
+        }
+
+        return current
+      })
+    },
+    [stopListening, gotoNextStage],
+  )
 
   const startWebLNFlow = useCallback(
     async (fundingTx: FundingTxFragment) => {
@@ -203,6 +267,11 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const [fundProject, { loading: fundingRequestLoading }] = useFundMutation({
     onCompleted(data) {
       try {
+        const intervalFactory = () => {
+          clearInterval(fundIntervalRef.current)
+          return setInterval(getFundingStatus, POLLING_INTERVAL)
+        }
+
         setError('')
         setFundingRequestErrored(false)
 
@@ -218,19 +287,23 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
             .then((success) => {
               if (!success) {
                 startListening()
+                fundIntervalRef.current = intervalFactory()
                 setWebLNErrored(true)
               }
             })
             .catch(() => {
+              fundIntervalRef.current = intervalFactory()
               startListening()
               // setFundingRequestErrored(true)
             })
         } else {
+          fundIntervalRef.current = intervalFactory()
           startListening()
         }
       } catch (e) {
         setFundingRequestErrored(true)
         stopListening()
+        clearInterval(fundIntervalRef.current)
         toast({
           title: 'Something went wrong',
           description: 'Please refresh the page and try again',
@@ -249,6 +322,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
       setFundingRequestErrored(true)
       stopListening()
+      clearInterval(fundIntervalRef.current)
       toast({
         title: 'Something went wrong',
         description: 'Please refresh the page and try again',
@@ -258,49 +332,15 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   })
 
   useEffect(() => {
-    if (fundingActivity) {
-      /*
-        We also check the invoiceIds are the same so that the useEffect does not try to update the funding status of an
-        older invoice. This can happen due to sync delays between the funding status polling and the funding invoice update.
-      */
-      setFundingTx((current) => {
-        if (
-          (fundingActivity.invoiceStatus !== current.invoiceStatus ||
-            fundingActivity.status !== current.status) &&
-          fundingActivity.invoiceId === current.invoiceId
-        ) {
-          if (
-            fundingActivity.status === FundingStatus.Paid ||
-            (fundingActivity.onChain &&
-              fundingActivity.status === FundingStatus.Pending)
-          ) {
-            stopListening()
-            gotoNextStage()
-          }
-
-          return {
-            ...current,
-            ...fundingActivity,
-            paymentRequest:
-              fundingActivity.paymentRequest || current.paymentRequest,
-            uuid: fundingActivity.uuid || current.uuid,
-          }
-        }
-
-        return current
-      })
-    }
-  }, [fundingActivity, stopListening, gotoNextStage])
-
-  useEffect(() => {
     if (
       fundState === fundingStages.completed ||
       fundState === fundingStages.canceled ||
       fundState
     ) {
       stopListening()
+      clearInterval(fundIntervalRef.current)
     }
-  }, [fundState])
+  }, [fundState, stopListening])
 
   const requestFunding = useCallback(
     async (input: FundingInput) => {
@@ -330,6 +370,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     onError(_) {
       setInvoiceRefreshErrored(true)
       stopListening()
+      clearInterval(fundIntervalRef.current)
     },
   })
 
