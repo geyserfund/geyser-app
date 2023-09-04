@@ -1,13 +1,13 @@
+import { CheckIcon, CloseIcon, CopyIcon } from '@chakra-ui/icons'
+import { HStack, StackProps } from '@chakra-ui/react'
 import { useState } from 'react'
-import { HStack, StackProps, Icon, Tooltip, Box } from '@chakra-ui/react'
-import { CheckIcon, CopyIcon, CloseIcon } from '@chakra-ui/icons'
 import { BsTwitter } from 'react-icons/bs'
 
 import { BoltSvgIcon, NostrSvgIcon } from '../../../components/icons'
 import { Body2 } from '../../../components/typography'
 import { socialColors } from '../../../styles'
-import { ExternalAccountType } from '../../auth'
 import { useNotification } from '../../../utils'
+import { ExternalAccountType } from '../../auth'
 
 const externalAccountColorMap = {
   [ExternalAccountType.twitter]: socialColors.twitter,
