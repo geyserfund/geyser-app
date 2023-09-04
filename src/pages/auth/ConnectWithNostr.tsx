@@ -9,7 +9,6 @@ import { FailedToConnectAccount } from './components/FailedToConnectAccount'
 import { NostrHelpModal } from './components/NostrHelpModal'
 
 type Props = {
-  variant?: 'secondary'
   onClose?: () => void
 }
 
@@ -47,11 +46,9 @@ export const ConnectWithNostr = ({ onClose, variant }: Props) => {
         w="100%"
         size="sm"
         variant={variant}
-        backgroundColor={
-          variant === 'secondary' ? 'transparent' : 'social.nostr'
-        }
+        backgroundColor={variant ? 'transparent' : 'social.nostr'}
         leftIcon={<NostrSvgIcon height="20px" width="20px" />}
-        color={variant === 'secondary' ? 'social.nostr' : 'white'}
+        color={variant ? 'social.nostr' : 'white'}
         _hover={{ backgroundColor: 'social.nostrDark', color: 'white' }}
         onClick={handleClick}
       >

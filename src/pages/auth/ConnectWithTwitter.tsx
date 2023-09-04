@@ -9,7 +9,6 @@ import { useMeQuery } from '../../types'
 import { hasTwitterAccount, useNotification } from '../../utils'
 
 interface ConnectWithTwitterProps extends ButtonProps {
-  variant?: 'secondary'
   onClose?: () => void
 }
 
@@ -123,10 +122,8 @@ export const ConnectWithTwitter = ({
         isExternal
         w="100%"
         size="sm"
-        color={variant === 'secondary' ? 'social.twitter' : 'black'}
-        backgroundColor={
-          variant === 'secondary' ? 'transparent' : 'social.twitter'
-        }
+        color={variant ? 'social.twitter' : 'black'}
+        backgroundColor={variant ? 'transparent' : 'social.twitter'}
         leftIcon={<BsTwitter />}
         _hover={{
           backgroundColor: 'social.twitterDark',

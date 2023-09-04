@@ -79,7 +79,6 @@ interface ConnectWithLightningModalProps {
 }
 
 interface ConnectWithLightningProps extends ButtonProps {
-  variant?: 'secondary'
   onClose?: () => void
 }
 
@@ -108,10 +107,8 @@ export const ConnectWithLightning = ({
         w="100%"
         variant={variant}
         size="sm"
-        color={variant === 'secondary' ? 'primary' : 'black'}
-        backgroundColor={
-          variant === 'secondary' ? 'transparent' : 'social.lightning'
-        }
+        color={variant ? 'primary' : 'black'}
+        backgroundColor={variant ? 'transparent' : 'social.lightning'}
         leftIcon={<BoltSvgIcon height="20px" width="20px" />}
         _hover={{ backgroundColor: 'social.lightningDark', color: 'white' }}
         onClick={onModalOpen}
