@@ -1,4 +1,4 @@
-name: Chrome
+name: Test
 on: push
 jobs:
   chrome:
