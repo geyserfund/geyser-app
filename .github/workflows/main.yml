@@ -18,8 +18,7 @@ name: Build check
 on:
   pull_request:
     branches:
-      - main
-      - staging
+      - '*'
 jobs:
   build:
     runs-on: ubuntu-latest
