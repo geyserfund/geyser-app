@@ -8,11 +8,13 @@ import {
 type UseFundSubscriptionProps = {
   projectId?: number
   fundingTxId?: number
+  onComplete?: (fundingTx: FundingTxFragment) => void
 }
 
 export const useFundSubscription = ({
   projectId,
   fundingTxId,
+  onComplete,
 }: UseFundSubscriptionProps) => {
   const [skip, setSkip] = useState(true)
   const [fundingActivity, setFundingActivity] = useState<FundingTxFragment>()
@@ -38,6 +40,9 @@ export const useFundSubscription = ({
     onData(options) {
       const fundingTx = options.data.data?.fundingTxStatusUpdated.fundingTx
       setFundingActivity(fundingTx)
+      if (fundingTx && onComplete) {
+        onComplete(fundingTx)
+      }
     },
   })
 
