@@ -1,4 +1,5 @@
 import { ApolloError } from '@apollo/client'
+import { captureMessage } from '@sentry/react'
 import {
   useCallback,
   useContext,
@@ -29,6 +30,11 @@ import {
 } from '../../types'
 import { sha256, toInt, useNotification } from '../../utils'
 import { useFundSubscription } from './useFundSubscription'
+
+export enum ConfirmationMethod {
+  Subscription = 'subscription',
+  Polling = 'polling',
+}
 
 export type UseFundingFlowReturn = ReturnType<typeof useFundingFlow>
 
@@ -131,7 +137,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     projectId: fundingTx.projectId,
     fundingTxId: fundingTx.id,
     onComplete(fundingTx) {
-      handleFundingStatusCheck(fundingTx)
+      handleFundingStatusCheck(fundingTx, ConfirmationMethod.Subscription)
     },
   })
   const [amounts, setAmounts] =
@@ -151,7 +157,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     },
     onCompleted(data) {
       if (data && data.fundingTx) {
-        handleFundingStatusCheck(data.fundingTx)
+        handleFundingStatusCheck(data.fundingTx, ConfirmationMethod.Polling)
       }
     },
     fetchPolicy: 'network-only',
@@ -171,7 +177,10 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   }, [])
 
   const handleFundingStatusCheck = useCallback(
-    (fundingTx: FundingTxWithInvoiceStatusFragment) => {
+    (
+      fundingTx: FundingTxWithInvoiceStatusFragment,
+      method: ConfirmationMethod,
+    ) => {
       /*
         We also check the invoiceIds are the same so that the useEffect does not try to update the funding status of an
         older invoice. This can happen due to sync delays between the funding status polling and the funding invoice update.
@@ -186,6 +195,15 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
             fundingTx.status === FundingStatus.Paid ||
             (fundingTx.onChain && fundingTx.status === FundingStatus.Pending)
           ) {
+            if (method === ConfirmationMethod.Polling) {
+              captureMessage(
+                `Polling method was used for fundingTx: ${JSON.stringify(
+                  fundingTx,
+                )}`,
+                'debug',
+              )
+            }
+
             stopListening()
             clearInterval(fundIntervalRef.current)
             gotoNextStage()
