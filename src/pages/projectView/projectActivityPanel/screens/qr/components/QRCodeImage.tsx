@@ -90,56 +90,55 @@ export const QRCodeImage = ({
     )
   }, [isLightning, setPaymentMethod, t])
 
-  const renderQrCode = useCallback(
-    ({ bgColor, fgColor }: { bgColor: string; fgColor: string }) => {
-      if (!debouncedQRSize) return null
-      return (
-        <QRCode
-          value={
-            paymentMethod === PaymentMethods.LIGHTNING
-              ? lightningInvoice
-              : onchainAddress
-          }
-          size={debouncedQRSize}
-          bgColor={bgColor}
-          fgColor={fgColor}
-          logoImage={LogoIcon}
-          qrStyle="squares"
-          ecLevel="L"
-          logoHeight={50}
-          logoWidth={50}
-          logoPadding={5}
-          logoPaddingStyle="square"
-          removeQrCodeBehindLogo
-        />
-      )
-    },
-    [debouncedQRSize, lightningInvoice, onchainAddress, paymentMethod],
-  )
-
   const isColored = hasCopiedLightning || hasCopiedOnchain
+  const fgColor = isColored
+    ? lightModeColors.primary[400]
+    : lightModeColors.neutral[1000]
 
   return (
     <VStack flexWrap="wrap" maxWidth="100%">
       <PaymentMethodSelection />
       <Box borderRadius={'12px'} borderWidth={'2px'} padding={'2px'}>
-        <Box
-          borderColor={isColored ? 'primary.400' : 'neutral.1000'}
-          w="full"
-          borderRadius="8px"
-          overflow={'hidden'}
-          onClick={isLightning ? onCopyLightning : onCopyOnchain}
-          _hover={{ cursor: 'pointer' }}
-        >
-          {renderQrCode({
-            bgColor: isColored
-              ? lightModeColors.neutral[0]
-              : lightModeColors.neutral[0],
-            fgColor: isColored
-              ? lightModeColors.primary[400]
-              : lightModeColors.neutral[1000],
-          })}
-        </Box>
+        {debouncedQRSize ? (
+          <Box
+            borderColor={isColored ? 'primary.400' : 'neutral.1000'}
+            w="full"
+            borderRadius="8px"
+            overflow={'hidden'}
+            onClick={isLightning ? onCopyLightning : onCopyOnchain}
+            _hover={{ cursor: 'pointer' }}
+            position="relative"
+          >
+            <img
+              alt="Geyser logo"
+              style={{
+                position: 'absolute',
+                top: (debouncedQRSize - 25) / 2,
+                left: (debouncedQRSize - 25) / 2,
+                width: 50,
+                height: 50,
+                padding: '5px',
+                background: 'white',
+                borderRadius: '8px',
+              }}
+              src={LogoIcon}
+            />
+            <QRCode
+              value={
+                paymentMethod === PaymentMethods.LIGHTNING
+                  ? lightningInvoice
+                  : onchainAddress
+              }
+              id={fgColor}
+              size={debouncedQRSize}
+              bgColor={lightModeColors.neutral[0]}
+              fgColor={fgColor}
+              qrStyle="squares"
+              ecLevel="L"
+              removeQrCodeBehindLogo
+            />
+          </Box>
+        ) : null}
       </Box>
       <Box marginBottom={4} fontSize={'10px'}>
         <HStack spacing={5}>
