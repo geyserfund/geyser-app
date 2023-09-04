@@ -1,4 +1,4 @@
-import { Button } from '@chakra-ui/react'
+import { Button, ButtonProps } from '@chakra-ui/react'
 import { useEffect } from 'react'
 
 import { NostrSvgIcon } from '../../components/icons'
@@ -8,7 +8,7 @@ import { isAccountDuplicateError } from '../../utils'
 import { FailedToConnectAccount } from './components/FailedToConnectAccount'
 import { NostrHelpModal } from './components/NostrHelpModal'
 
-type Props = {
+interface Props extends ButtonProps {
   onClose?: () => void
 }
 
