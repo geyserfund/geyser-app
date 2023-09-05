@@ -6,7 +6,7 @@ import { TweetCommand } from '../commands/TweetCommand'
 import { VideoCommand } from '../commands/VideoCommand'
 
 export const ToolbarMedia = ({ isDisabled }: { isDisabled?: boolean }) => {
-  const isTweetEnabled = twttr && twttr.widgets
+  const isTweetEnabled = Boolean(twttr?.widgets)
   return (
     <ButtonGroup isAttached py={1}>
       <LinkCommand isDisabled={isDisabled} />
