@@ -1,5 +1,5 @@
 import { CheckIcon, CloseIcon, CopyIcon } from '@chakra-ui/icons'
-import { HStack, StackProps } from '@chakra-ui/react'
+import { Icon, HStack, StackProps } from '@chakra-ui/react'
 import { useState } from 'react'
 import { BsTwitter } from 'react-icons/bs'
 
@@ -40,11 +40,11 @@ export const ExternalAccountBody = ({
   ...rest
 }: ExternalAccountBodyProps) => {
   const [copy, setCopy] = useState(false)
-  const Icon = externalAccountIconMap[type]
+  const ExternalIcon = externalAccountIconMap[type]
   const { toast } = useNotification()
 
   const handleOnCloseClick = handleDelete
-    ? (event: React.MouseEvent<HTMLButtonElement>) => {
+    ? (event: React.MouseEvent<SVGElement>) => {
         event.preventDefault()
         handleDelete()
       }
@@ -79,7 +79,7 @@ export const ExternalAccountBody = ({
         {...rest}
       >
         <HStack overflow="hidden">
-          <Icon boxSize={5} />
+          <ExternalIcon boxSize={5} />
           <Body2 isTruncated fontWeight="bold">
             {text}
           </Body2>

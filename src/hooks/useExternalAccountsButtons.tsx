@@ -50,7 +50,7 @@ export const useExternalAccountsButtons = ({
           const npub = nip19.npubEncode(account.externalId)
           return {
             key: 'nostr',
-            icon: <NostrSvgIcon />,
+            icon: <NostrSvgIcon height="20px" width="20px" />,
             username: npub,
             color: copy ? theme.colors.primary[500] : theme.colors.social.nostr,
             props: {
