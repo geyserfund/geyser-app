@@ -67,6 +67,7 @@ export const QUERY_USER_PROFILE = gql`
           description
           createdAt
           status
+          thumbnailImage
         }
       }
       ownerOf {
