@@ -81,7 +81,7 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
         onClick={onCloseClick}
       />
 
-      <VStack w="full" spacing="20px" pt={2}>
+      <VStack w="full" spacing="20px" pt={4}>
         <SuccessImageComponent
           currentBadge={currentBadge}
           fundingTx={fundingTx}
