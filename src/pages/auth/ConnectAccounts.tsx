@@ -40,6 +40,7 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
           onClick={onOpen}
           width="100%"
           variant="secondary"
+          size="sm"
           leftIcon={<AddIcon />}
         >
           {t('Connect your accounts')}
