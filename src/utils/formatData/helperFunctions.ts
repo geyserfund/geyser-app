@@ -14,6 +14,8 @@ export const getBitcoinAmount = (amount: number, decimal?: boolean) => {
   if (decimal && Number(restDigit)) {
     return `${result}.${restDigit}`
   }
+
+  return `${result}`
 }
 
 export const getShortAmountLabel = (amount: number, decimal?: boolean) => {

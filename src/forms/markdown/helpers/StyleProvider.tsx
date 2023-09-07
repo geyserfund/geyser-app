@@ -65,13 +65,15 @@ export const StyleProvider = ({
   )
 
   useEffect(() => {
-    twttr.widgets
-      .load(document.getElementById(ID.project.story.markdown.container))
-      .catch((e: any) =>
-        captureException(e, {
-          tags: { area: 'twitter-widgets' },
-        }),
+    try {
+      twttr.widgets.load(
+        document.getElementById(ID.project.story.markdown.container),
       )
+    } catch (e) {
+      captureException(e, {
+        tags: { area: 'twitter-widgets' },
+      })
+    }
   }, [])
 
   return (
