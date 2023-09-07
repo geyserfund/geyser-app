@@ -1,4 +1,5 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
+import { captureException } from '@sentry/react'
 import {
   createContext,
   Dispatch,
@@ -70,7 +71,9 @@ export const ServiceWorkerProvider = ({
       }
     },
     onRegisterError(error: any) {
-      console.log('SW registration error', error)
+      captureException(error, {
+        tags: { 'Service Worker Registration Error': 'true' },
+      })
     },
   })
 
