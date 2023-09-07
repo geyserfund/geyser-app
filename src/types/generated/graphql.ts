@@ -4571,16 +4571,6 @@ export type ProjectFragment = {
   }>
 }
 
-export type ProjectFundersFragment = {
-  __typename?: 'Funder'
-  id: any
-  amountFunded?: number | null
-  confirmed: boolean
-  confirmedAt?: any | null
-  timesFunded?: number | null
-  user?: ({ __typename?: 'User' } & UserForAvatarFragment) | null
-}
-
 export type UserMeFragment = {
   __typename?: 'User'
   id: any
@@ -5484,19 +5474,6 @@ export type ProjectByNameOrIdQuery = {
   projectGet?: ({ __typename?: 'Project' } & ProjectFragment) | null
 }
 
-export type ProjectFundingDataQueryVariables = Exact<{
-  where: UniqueProjectQueryInput
-  input?: InputMaybe<ProjectEntriesGetInput>
-}>
-
-export type ProjectFundingDataQuery = {
-  __typename?: 'Query'
-  projectGet?: {
-    __typename?: 'Project'
-    funders: Array<{ __typename?: 'Funder' } & ProjectFundersFragment>
-  } | null
-}
-
 export type ProjectsQueryVariables = Exact<{
   input?: InputMaybe<ProjectsGetQueryInput>
 }>
@@ -5805,6 +5782,7 @@ export type UserProfileQuery = {
         description?: any | null
         createdAt: string
         status?: ProjectStatus | null
+        thumbnailImage?: string | null
       }
     }>
     ownerOf: Array<{
@@ -6143,19 +6121,6 @@ export const ProjectFragmentDoc = gql`
   ${ProjectRewardForCreateUpdateFragmentDoc}
   ${UserForAvatarFragmentDoc}
   ${EntryForProjectFragmentDoc}
-`
-export const ProjectFundersFragmentDoc = gql`
-  fragment projectFunders on Funder {
-    id
-    user {
-      ...UserForAvatar
-    }
-    amountFunded
-    confirmed
-    confirmedAt
-    timesFunded
-  }
-  ${UserForAvatarFragmentDoc}
 `
 export const FunderWithUserFragmentDoc = gql`
   fragment FunderWithUser on Funder {
@@ -9148,71 +9113,6 @@ export type ProjectByNameOrIdQueryResult = Apollo.QueryResult<
   ProjectByNameOrIdQuery,
   ProjectByNameOrIdQueryVariables
 >
-export const ProjectFundingDataDocument = gql`
-  query ProjectFundingData(
-    $where: UniqueProjectQueryInput!
-    $input: ProjectEntriesGetInput
-  ) {
-    projectGet(where: $where) {
-      funders {
-        ...projectFunders
-      }
-    }
-  }
-  ${ProjectFundersFragmentDoc}
-`
-
-/**
- * __useProjectFundingDataQuery__
- *
- * To run a query within a React component, call `useProjectFundingDataQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectFundingDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProjectFundingDataQuery({
- *   variables: {
- *      where: // value for 'where'
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectFundingDataQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    ProjectFundingDataQuery,
-    ProjectFundingDataQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    ProjectFundingDataQuery,
-    ProjectFundingDataQueryVariables
-  >(ProjectFundingDataDocument, options)
-}
-export function useProjectFundingDataLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ProjectFundingDataQuery,
-    ProjectFundingDataQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    ProjectFundingDataQuery,
-    ProjectFundingDataQueryVariables
-  >(ProjectFundingDataDocument, options)
-}
-export type ProjectFundingDataQueryHookResult = ReturnType<
-  typeof useProjectFundingDataQuery
->
-export type ProjectFundingDataLazyQueryHookResult = ReturnType<
-  typeof useProjectFundingDataLazyQuery
->
-export type ProjectFundingDataQueryResult = Apollo.QueryResult<
-  ProjectFundingDataQuery,
-  ProjectFundingDataQueryVariables
->
 export const ProjectsDocument = gql`
   query Projects($input: ProjectsGetQueryInput) {
     projects(input: $input) {
@@ -10192,6 +10092,7 @@ export const UserProfileDocument = gql`
           description
           createdAt
           status
+          thumbnailImage
         }
       }
       ownerOf {

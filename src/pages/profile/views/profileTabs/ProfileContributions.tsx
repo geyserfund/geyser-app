@@ -73,7 +73,7 @@ export const ProfileContributions = ({
         <ContributionSummary
           key={c.project.id}
           title={c.project.name}
-          imageSrc={c.project.thumbnailImage}
+          imageSrc={c.project.thumbnailImage || ''}
           url={getPath('project', c.project.name)}
           amount={contributionAmount(c)}
         />
