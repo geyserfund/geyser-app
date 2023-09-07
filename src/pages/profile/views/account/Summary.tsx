@@ -86,7 +86,6 @@ export const SummaryBody = ({
 
 export const Summary = ({ userProfile }: { userProfile: User }) => {
   // todo: ranking query
-  const ranking = 1234
   const totalFunded = useMemo(() => {
     return userProfile.contributions.reduce(
       (acc: number, c: UserProjectContribution) => {
@@ -101,10 +100,6 @@ export const Summary = ({ userProfile }: { userProfile: User }) => {
   }, [userProfile.contributions])
 
   return (
-    <SummaryBody
-      totalFunded={totalFunded}
-      projectsFunded={projectsFunded}
-      ranking={ranking}
-    />
+    <SummaryBody totalFunded={totalFunded} projectsFunded={projectsFunded} />
   )
 }
