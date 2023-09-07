@@ -79,8 +79,8 @@ export const ExternalAccountBody = ({
         {...rest}
       >
         <HStack overflow="hidden">
-          <ExternalIcon boxSize={5} />
-          <Body2 isTruncated fontWeight="bold">
+          <ExternalIcon boxSize={5} onClick={handleOnCopy} />
+          <Body2 isTruncated fontWeight="bold" onClick={handleOnCopy}>
             {text}
           </Body2>
           {handleOnCopy && (
