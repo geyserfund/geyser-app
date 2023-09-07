@@ -17,7 +17,7 @@ import { QUERY_USER_PROFILE } from '../../graphql'
 import { User, UserGetInput } from '../../types'
 import { toInt } from '../../utils'
 import { MobileDivider } from '../grants/components'
-import { AccountInfo, Badges } from './views'
+import { AccountInfo, Badges, Summary } from './views'
 import { ProfileTabs } from './views/profileTabs'
 
 type ResponseData = {
@@ -137,11 +137,14 @@ export const Profile = () => {
           colSpan={{ base: 1, lg: 2 }}
           order={{ base: 2, lg: 3 }}
         >
-          <Badges
-            userProfile={userProfile}
-            isEdit={isViewingOwnProfile}
-            isLoading={profileLoading}
-          />
+          <VStack spacing="10px">
+            {isViewingOwnProfile && <Summary userProfile={userProfile} />}
+            <Badges
+              userProfile={userProfile}
+              isEdit={isViewingOwnProfile}
+              isLoading={profileLoading}
+            />
+          </VStack>
         </GridItem>
       </SimpleGrid>
     </VStack>
