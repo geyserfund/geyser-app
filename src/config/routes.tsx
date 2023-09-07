@@ -4,109 +4,129 @@ import React, { useMemo } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { __production__, getPath, PathName } from '../constants'
-import { handleAssetLoadError } from '../helpers'
+import { doesAssetNeedFallback } from '../helpers'
 import { FailedAuth, TwitterSuccess } from '../pages/auth'
 import BadgesPage from '../pages/badges/BadgesPage'
-import NotAuthorized from '../pages/notAuthorized'
-import NotFoundPage from '../pages/notFound'
+import { NotAuthorized, NotFoundPage } from '../pages/fallback'
 import { PrivateRoute } from './PrivateRoute'
+
+export const loadableWithFailSafe = (importer: any) => {
+  const retryOrNotFound = async () => {
+    try {
+      return await importer()
+    } catch (error: any) {
+      if (doesAssetNeedFallback(error)) {
+        return NotFoundPage
+      }
+
+      return null
+    }
+  }
+
+  return loadable(retryOrNotFound)
+}
 
 // GRANTS
 
-const Grants = import('../pages/grants').catch(handleAssetLoadError)
+const Grants = () => import('../pages/grants')
 
-const GrantsLandingPage = loadable(() =>
-  Grants.then((m) => m.GrantsLandingPage),
+const GrantsLandingPage = loadableWithFailSafe(() =>
+  Grants().then((m) => m.GrantsLandingPage),
 )
-const GrantsRoundOne = loadable(() => Grants.then((m) => m.GrantsRoundOne))
-const GrantsRoundTwo = loadable(() => Grants.then((m) => m.GrantsRoundTwo))
-const GrantPage = loadable(() => Grants.then((m) => m.GrantPage))
+
+const GrantsRoundOne = loadableWithFailSafe(() =>
+  Grants().then((m) => m.GrantsRoundOne),
+)
+const GrantsRoundTwo = loadableWithFailSafe(() =>
+  Grants().then((m) => m.GrantsRoundTwo),
+)
+const GrantPage = loadableWithFailSafe(() => Grants().then((m) => m.GrantPage))
 
 // PROJECT LAUNCH
 
-const ProjectLaunch = import('../pages/projectCreate').catch(
-  handleAssetLoadError,
-)
+const ProjectLaunch = () => import('../pages/projectCreate')
 
-const ProjectCreateStart = loadable(() =>
-  ProjectLaunch.then((m) => m.ProjectCreateStart),
+const ProjectCreateStart = loadableWithFailSafe(() =>
+  ProjectLaunch().then((m) => m.ProjectCreateStart),
 )
-const ProjectCreateStory = loadable(() =>
-  ProjectLaunch.then((m) => m.ProjectCreateStory),
+const ProjectCreateStory = loadableWithFailSafe(() =>
+  ProjectLaunch().then((m) => m.ProjectCreateStory),
 )
-const ProjectCreationWalletConnectionPage = loadable(() =>
-  ProjectLaunch.then((m) => m.ProjectCreationWalletConnectionPage),
+const ProjectCreationWalletConnectionPage = loadableWithFailSafe(() =>
+  ProjectLaunch().then((m) => m.ProjectCreationWalletConnectionPage),
 )
-const ProjectAdditionalDetails = loadable(() =>
-  ProjectLaunch.then((m) => m.ProjectAdditionalDetails),
+const ProjectAdditionalDetails = loadableWithFailSafe(() =>
+  ProjectLaunch().then((m) => m.ProjectAdditionalDetails),
 )
-const ProjectCreate = loadable(() => ProjectLaunch.then((m) => m.ProjectCreate))
+const ProjectCreate = loadableWithFailSafe(() =>
+  ProjectLaunch().then((m) => m.ProjectCreate),
+)
 
 // ENTRY VIEW & EDIT
 
-const Entry = import('../pages/entry').catch(handleAssetLoadError)
+const Entry = () => import('../pages/entry')
 
-const EntryCreateEdit = loadable(() => Entry.then((m) => m.EntryCreateEdit))
-const EntryPreview = loadable(() => Entry.then((m) => m.EntryPreview))
-const EntryPage = loadable(() => Entry.then((m) => m.EntryPage))
+const EntryCreateEdit = loadableWithFailSafe(() =>
+  Entry().then((m) => m.EntryCreateEdit),
+)
+const EntryPreview = loadableWithFailSafe(() =>
+  Entry().then((m) => m.EntryPreview),
+)
+const EntryPage = loadableWithFailSafe(() => Entry().then((m) => m.EntryPage))
 
 // PROJECT DASHBOARD
 
-const CreatorDashboard = import('../pages/projectDashboard').catch(
-  handleAssetLoadError,
+const CreatorDashboard = () => import('../pages/projectDashboard')
+
+const ProjectDashboardPage = loadableWithFailSafe(() =>
+  CreatorDashboard().then((m) => m.ProjectDashboardPage),
+)
+const ProjectDescription = loadableWithFailSafe(() =>
+  CreatorDashboard().then((m) => m.ProjectDescription),
+)
+const ProjectContributors = loadableWithFailSafe(() =>
+  CreatorDashboard().then((m) => m.ProjectContributors),
+)
+const ProjectDetails = loadableWithFailSafe(() =>
+  CreatorDashboard().then((m) => m.ProjectDetails),
+)
+const ProjectFundingSettings = loadableWithFailSafe(() =>
+  CreatorDashboard().then((m) => m.ProjectWallet),
+)
+const ProjectStory = loadableWithFailSafe(() =>
+  CreatorDashboard().then((m) => m.ProjectStory),
+)
+const ProjectStats = loadableWithFailSafe(() =>
+  CreatorDashboard().then((m) => m.ProjectStats),
+)
+const ProjectSettings = loadableWithFailSafe(() =>
+  CreatorDashboard().then((m) => m.ProjectSettings),
 )
 
-const ProjectDashboardPage = loadable(() =>
-  CreatorDashboard.then((m) => m.ProjectDashboardPage),
-)
-const ProjectDescription = loadable(() =>
-  CreatorDashboard.then((m) => m.ProjectDescription),
-)
-const ProjectContributors = loadable(() =>
-  CreatorDashboard.then((m) => m.ProjectContributors),
-)
-const ProjectDetails = loadable(() =>
-  CreatorDashboard.then((m) => m.ProjectDetails),
-)
-const ProjectFundingSettings = loadable(() =>
-  CreatorDashboard.then((m) => m.ProjectWallet),
-)
-const ProjectStory = loadable(() =>
-  CreatorDashboard.then((m) => m.ProjectStory),
-)
-const ProjectStats = loadable(() =>
-  CreatorDashboard.then((m) => m.ProjectStats),
-)
-const ProjectSettings = loadable(() =>
-  CreatorDashboard.then((m) => m.ProjectSettings),
-)
+const ProjectView = loadableWithFailSafe(() => import('../pages/projectView'))
 
-const ProjectView = loadable(() =>
-  import('../pages/projectView').catch(handleAssetLoadError),
-)
-
-const Profile = loadable(() =>
-  import('../pages/profile/Profile').catch(handleAssetLoadError),
-)
+const Profile = loadableWithFailSafe(() => import('../pages/profile/Profile'))
 
 // LANDING PAGE
 
-const Landing = import('../pages/landing').catch(handleAssetLoadError)
+const Landing = () => import('../pages/landing')
 
-const MobileLeaderboard = loadable(() =>
-  Landing.then((m) => m.MobileLeaderboard),
+const MobileLeaderboard = loadableWithFailSafe(() =>
+  Landing().then((m) => m.MobileLeaderboard),
 )
-const LandingPage = loadable(() => Landing.then((m) => m.LandingPage))
-const LandingPageProjects = loadable(() =>
-  Landing.then((m) => m.LandingPageProjects),
+const LandingPage = loadableWithFailSafe(() =>
+  Landing().then((m) => m.LandingPage),
 )
-const LandingFeed = loadable(() => Landing.then((m) => m.LandingFeed))
+const LandingPageProjects = loadableWithFailSafe(() =>
+  Landing().then((m) => m.LandingPageProjects),
+)
+const LandingFeed = loadableWithFailSafe(() =>
+  Landing().then((m) => m.LandingFeed),
+)
 
 // ABOUT PAGE
 
-const AboutPage = loadable(() =>
-  import('../pages/about/About').catch(handleAssetLoadError),
-)
+const AboutPage = loadableWithFailSafe(() => import('../pages/about/About'))
 
 type PlatformRoutes = {
   path: string

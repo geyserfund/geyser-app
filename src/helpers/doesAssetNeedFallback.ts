@@ -1,19 +1,24 @@
 import { DateTime } from 'luxon'
 
+const FAILED_FETCH_ERROR = 'Failed to fetch dynamically imported module'
 const CHUNK_LOAD_ERROR = 'ChunkLoadError'
 const LOCAL_STORAGE_LAST_REFRESH_KEY = 'ChunkLoadError'
 const ONE_MINUTE_IN_MILIS = 60 * 1000
 
-export const handleAssetLoadError = (e: any) => {
-  if (e?.name && e.name === CHUNK_LOAD_ERROR) {
+export const doesAssetNeedFallback = (e: any): boolean => {
+  if (
+    (e?.name && e.name === CHUNK_LOAD_ERROR) ||
+    (e?.message && e.message.includes(FAILED_FETCH_ERROR))
+  ) {
     const refreshed = getRefreshStateFromLocalStorage()
     if (!refreshed) {
       storeRateToLocalStorage()
       window.location.reload()
+      return false
     }
   }
 
-  return {} as any
+  return true
 }
 
 const getRefreshStateFromLocalStorage = () => {
