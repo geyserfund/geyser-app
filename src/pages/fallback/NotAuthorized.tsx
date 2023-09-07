@@ -28,11 +28,11 @@ export const NotAuthorized = () => {
             'If the problem persists let us know via. <1>telegram</1> or this <2>feedback form.</2>'
           }
         >
-          If the problem persists let us know via.{' '}
+          {'If the problem persists let us know via. '}
           <Link href="https://t.me/+EZ5otIPhVcxhMmFk" target="_blank">
             telegram
-          </Link>{' '}
-          or this{' '}
+          </Link>
+          {' or this '}
           <Link href={GeyserFeedbackFromUrl} isExternal>
             feedback form.
           </Link>

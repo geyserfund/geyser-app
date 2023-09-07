@@ -15,7 +15,7 @@ import {
   useEntryLazyQuery,
 } from '../../types'
 import { toInt, useMobileMode } from '../../utils'
-import { NotFoundPage } from '../notFound'
+import { NotFoundPage } from '../fallback/NotFoundPage'
 import { ProjectActivityPanel } from '../projectView/projectActivityPanel'
 import { EntryContainer } from './EntryContainer'
 

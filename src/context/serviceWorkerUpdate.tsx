@@ -1,4 +1,5 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
+import { captureException } from '@sentry/react'
 import {
   createContext,
   Dispatch,
@@ -12,6 +13,7 @@ import { useRegisterSW } from 'virtual:pwa-register/react'
 
 import { Body1 } from '../components/typography'
 import { __production__ } from '../constants'
+import { lightModeColors } from '../styles'
 
 const defaultContext: ServiceWorkerUpdateProps = {
   needRefresh: false,
@@ -35,7 +37,7 @@ export type ServiceWorkerUpdateProps = {
 export const ServiceWorkerUpdate =
   createContext<ServiceWorkerUpdateProps>(defaultContext)
 
-const REFETCH_SW_INTERVAL_MS = __production__ ? 60 * 15 * 1000 : 20 * 1000
+const REFETCH_SW_INTERVAL_MS = __production__ ? 5 * 60 * 1000 : 10 * 1000
 
 let defferedPrompt: any
 
@@ -70,7 +72,9 @@ export const ServiceWorkerProvider = ({
       }
     },
     onRegisterError(error: any) {
-      console.log('SW registration error', error)
+      captureException(error, {
+        tags: { 'Service Worker Registration Error': 'true' },
+      })
     },
   })
 
@@ -110,29 +114,41 @@ export const ServiceWorkerProvider = ({
       {children}
       {refresh && (
         <HStack
-          position="fixed"
-          bottom="20px"
-          right="20px"
-          zIndex={9}
-          p="10px"
-          borderRadius="8px"
-          shadow="lg"
-          border="1px solid"
-          borderColor="neutral.400"
+          style={{
+            position: 'fixed',
+            bottom: '20px',
+            right: '20px',
+            zIndex: 10,
+            padding: '10px',
+            borderRadius: '8px',
+            border: '2px solid',
+            backgroundColor: 'white',
+            borderColor: lightModeColors.neutral[400],
+          }}
         >
           <VStack alignItems="start" justifyContent="center" spacing={0}>
-            <Body1 bold>{t("There's a new version of Geyser!")}</Body1>
-            <Body1>{t('Restart the app to load the new version')}</Body1>
+            <Body1 color={lightModeColors.neutral[700]} bold>
+              {t("There's a new version of Geyser!")}
+            </Body1>
+            <Body1 color={lightModeColors.neutral[700]}>
+              {t('Restart the app to load the new version')}
+            </Body1>
           </VStack>
           <HStack>
             <Button
               size="sm"
-              variant="secondary"
+              variant="ghost"
               onClick={() => setNeedRefresh(false)}
+              color={lightModeColors.neutral[700]}
             >
               {t('Not now')}
             </Button>
-            <Button size="sm" variant="primary" onClick={handleConfirm}>
+            <Button
+              size="sm"
+              variant="primary"
+              onClick={handleConfirm}
+              color={lightModeColors.neutral[700]}
+            >
               {t('Restart app')}
             </Button>
           </HStack>
