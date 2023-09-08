@@ -37,6 +37,7 @@ export const AppLayout = () => {
       onRefresh={handleFunction}
       className={classes.pullToRefresh}
       pullingContent={<PullingDownContent />}
+      pullDownThreshold={dimensions.pullDownThreshold}
     >
       <Fade in={true}>
         <Box
