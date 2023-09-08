@@ -1,12 +1,13 @@
-import { CheckIcon, CloseIcon, CopyIcon } from '@chakra-ui/icons'
-import { Icon, HStack, StackProps } from '@chakra-ui/react'
 import { useState } from 'react'
 import { BsTwitter } from 'react-icons/bs'
+import { useTranslation } from 'react-i18next'
+
+import { CheckIcon, CloseIcon, CopyIcon } from '@chakra-ui/icons'
+import { Icon, HStack, StackProps, Tooltip } from '@chakra-ui/react'
 
 import { BoltSvgIcon, NostrSvgIcon } from '../../../components/icons'
 import { Body2 } from '../../../components/typography'
 import { socialColors } from '../../../styles'
-import { useNotification } from '../../../utils'
 import { ExternalAccountType } from '../../auth'
 
 const externalAccountColorMap = {
@@ -39,9 +40,9 @@ export const ExternalAccountBody = ({
   isLoading,
   ...rest
 }: ExternalAccountBodyProps) => {
+  const { t } = useTranslation()
   const [copy, setCopy] = useState(false)
   const ExternalIcon = externalAccountIconMap[type]
-  const { toast } = useNotification()
 
   const handleOnCloseClick = handleDelete
     ? (event: React.MouseEvent<SVGElement>) => {
@@ -54,9 +55,6 @@ export const ExternalAccountBody = ({
     ? () => {
         handleCopy()
         setCopy(true)
-        toast({
-          title: 'Copied!',
-        })
         setTimeout(() => {
           setCopy(false)
         }, 1000)
@@ -69,7 +67,11 @@ export const ExternalAccountBody = ({
       : username
 
   return (
-    <>
+    <Tooltip
+      label={copy ? t('Copied!') : t('Copy')}
+      placement="top-start"
+      closeOnClick={false}
+    >
       <HStack
         w="100%"
         color={externalAccountColorMap[type]}
@@ -95,6 +97,6 @@ export const ExternalAccountBody = ({
           )}
         </HStack>
       </HStack>
-    </>
+    </Tooltip>
   )
 }
