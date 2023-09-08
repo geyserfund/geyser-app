@@ -56,13 +56,9 @@ export const ProfileTabs = ({
   )
 
   const getTabs = useCallback(() => {
-    let tabs: RenderTab[] = [activityTab]
+    let tabs: RenderTab[] = [contributionsTab, activityTab]
     if (isLoading) {
       return [activityTab]
-    }
-
-    if (isViewingOwnProfile) {
-      tabs.push(contributionsTab)
     }
 
     if (userProfile.ownerOf?.length > 0 || isViewingOwnProfile) {
