@@ -5,6 +5,7 @@ import { User } from '../../../../types'
 import { ProfileActivity } from './ProfileActivity'
 import { ProfileFollowed } from './ProfileFollowed'
 import { ProfileProjects } from './ProfileProjects'
+import { ProfileContributions } from './ProfileContributions'
 
 export const ProfileTabs = ({
   userProfile,
@@ -19,6 +20,14 @@ export const ProfileTabs = ({
     () => ({
       title: 'Activity',
       Component: () => <ProfileActivity userProfile={userProfile} />,
+    }),
+    [userProfile],
+  )
+
+  const contributionsTab = useMemo(
+    () => ({
+      title: 'My contributions',
+      Component: () => <ProfileContributions userProfile={userProfile} />,
     }),
     [userProfile],
   )
@@ -52,8 +61,12 @@ export const ProfileTabs = ({
       return [activityTab]
     }
 
+    if (isViewingOwnProfile) {
+      tabs.push(contributionsTab)
+    }
+
     if (userProfile.ownerOf?.length > 0 || isViewingOwnProfile) {
-      tabs = [projectsTab, ...tabs]
+      tabs.unshift(projectsTab)
     }
 
     if (userProfile.projectFollows?.length) {
