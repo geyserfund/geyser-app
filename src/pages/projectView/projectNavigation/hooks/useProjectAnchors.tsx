@@ -1,5 +1,6 @@
 import { RefObject, useCallback, useMemo } from 'react'
 
+import { useOnScreen } from '../../../../hooks/useOnScreen'
 // import { useOnScreen } from '../../../../hooks/useOnScreen'
 import { ProjectFragment } from '../../../../types'
 
@@ -11,7 +12,7 @@ export type ProjectAnchorRefs = {
 }
 
 export type UseProjectAnchors = {
-  // inView: keyof ProjectAnchorRefs
+  inView: keyof ProjectAnchorRefs
   // refInView: RefObject<HTMLDivElement>
   entriesLength: number
   rewardsLength: number
@@ -29,10 +30,10 @@ export const useProjectAnchors = (
   > | null = null,
   refs: ProjectAnchorRefs,
 ): UseProjectAnchors => {
-  // const isHeaderView = useOnScreen(refs.header)
-  // const isEntriesView = useOnScreen(refs.entries)
-  // const isRewardsView = useOnScreen(refs.rewards)
-  // const isMilestonesView = useOnScreen(refs.milestones)
+  const isHeaderView = useOnScreen(refs.header)
+  const isEntriesView = useOnScreen(refs.entries)
+  const isRewardsView = useOnScreen(refs.rewards)
+  const isMilestonesView = useOnScreen(refs.milestones)
 
   const entriesLength = useMemo(
     () => (project && project.entries ? project.entries.length : 0),
@@ -63,35 +64,35 @@ export const useProjectAnchors = (
     refs.milestones.current?.scrollIntoView({ behavior: 'smooth' })
   }, [refs.milestones])
 
-  // const [inView, refInView] = useMemo((): [
-  //   keyof ProjectAnchorRefs,
-  //   RefObject<HTMLDivElement>,
-  // ] => {
-  //   if (isHeaderView) {
-  //     return ['header', refs.header]
-  //   }
+  const [inView, refInView] = useMemo((): [
+    keyof ProjectAnchorRefs,
+    RefObject<HTMLDivElement>,
+  ] => {
+    if (isHeaderView) {
+      return ['header', refs.header]
+    }
 
-  //   if (isEntriesView) {
-  //     return ['entries', refs.entries]
-  //   }
+    if (isEntriesView) {
+      return ['entries', refs.entries]
+    }
 
-  //   if (isRewardsView) {
-  //     return ['rewards', refs.rewards]
-  //   }
+    if (isRewardsView) {
+      return ['rewards', refs.rewards]
+    }
 
-  //   return ['milestones', refs.milestones]
-  // }, [
-  //   isEntriesView,
-  //   isHeaderView,
-  //   isRewardsView,
-  //   refs.entries,
-  //   refs.header,
-  //   refs.milestones,
-  //   refs.rewards,
-  // ])
+    return ['milestones', refs.milestones]
+  }, [
+    isEntriesView,
+    isHeaderView,
+    isRewardsView,
+    refs.entries,
+    refs.header,
+    refs.milestones,
+    refs.rewards,
+  ])
 
   return {
-    // inView,
+    inView,
     // refInView,
     entriesLength,
     rewardsLength,

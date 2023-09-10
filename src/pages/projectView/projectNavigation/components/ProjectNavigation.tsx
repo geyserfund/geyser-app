@@ -2,9 +2,10 @@ import { AddIcon } from '@chakra-ui/icons'
 import {
   Button,
   ButtonProps,
+  HStack,
   IconButton,
   IconButtonProps,
-  Text,
+  IconProps,
   Tooltip,
   useBreakpointValue,
   VStack,
@@ -13,9 +14,14 @@ import { PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { EntryEditIcon, RewardGiftIcon } from '../../../../components/icons'
-import { MilestoneIcon } from '../../../../components/icons/svg'
+import {
+  ContributorsIcon,
+  InsightsIcon,
+  MilestoneIcon,
+  OverviewIcon,
+} from '../../../../components/icons/svg'
 import { ProjectIcon } from '../../../../components/icons/svg/ProjectIcon'
-import { CardLayout } from '../../../../components/layouts'
+import { Body1, Caption } from '../../../../components/typography'
 import { useProjectContext } from '../../../../context'
 import { UseProjectAnchors } from '../hooks/useProjectAnchors'
 import { ProjectBackButton } from './ProjectBackButton'
@@ -36,48 +42,80 @@ export const ProjectNavigation = ({
     <VStack ml={4} pt={5} pb={2}>
       <ProjectBackButton width="100%" />
       {hasItems ? (
-        <CardLayout p={2} width="100%">
+        <VStack spacing="15px">
           <VStack width="100%">
+            <HStack w="full" justifyContent="start">
+              <Caption fontWeight={700} color="neutral.500">
+                {t('Creator view')}
+              </Caption>
+            </HStack>
+
             <ProjectNavigationButton
-              // isActive={inView === 'header'}
               onClick={onProjectClick}
               aria-label="header"
-              leftIcon={<ProjectIcon fontSize="1.5em" width="1.3em" />}
+              NavigationIcon={OverviewIcon}
+            >
+              {t('Overview')}
+            </ProjectNavigationButton>
+            <ProjectNavigationButton
+              onClick={onProjectClick}
+              aria-label="header"
+              NavigationIcon={InsightsIcon}
+            >
+              {t('Insights')}
+            </ProjectNavigationButton>
+            <ProjectNavigationButton
+              onClick={onProjectClick}
+              aria-label="header"
+              NavigationIcon={ContributorsIcon}
+            >
+              {t('Contributors')}
+            </ProjectNavigationButton>
+          </VStack>
+
+          <VStack width="100%">
+            <HStack w="full" justifyContent="start">
+              <Caption fontWeight={700} color="neutral.500">
+                {t('Project')}
+              </Caption>
+            </HStack>
+            <ProjectNavigationButton
+              onClick={onProjectClick}
+              aria-label="header"
+              NavigationIcon={ProjectIcon}
             >
               {t('Project')}
             </ProjectNavigationButton>
             {Boolean(entriesLength) && (
               <ProjectNavigationButton
-                // isActive={inView === 'entries'}
                 onClick={onEntriesClick}
                 aria-label="entries"
-                leftIcon={<EntryEditIcon fontSize="1.5em" width="1.3em" />}
+                NavigationIcon={EntryEditIcon}
               >
                 {t('Entries')}
               </ProjectNavigationButton>
             )}
             {Boolean(rewardsLength) && (
               <ProjectNavigationButton
-                // isActive={inView === 'rewards'}
+                isActive={true}
                 onClick={onRewardsClick}
                 aria-label="rewards"
-                leftIcon={<RewardGiftIcon fontSize="1.5em" width="1.3em" />}
+                NavigationIcon={RewardGiftIcon}
               >
                 {t('Rewards')}
               </ProjectNavigationButton>
             )}
             {Boolean(milestonesLength) && (
               <ProjectNavigationButton
-                // isActive={inView === 'milestones'}
                 onClick={onMilestonesClick}
                 aria-label="milestones"
-                leftIcon={<MilestoneIcon fontSize="1.5em" width="1.3em" />}
+                NavigationIcon={MilestoneIcon}
               >
                 {t('Milestones')}
               </ProjectNavigationButton>
             )}
           </VStack>
-        </CardLayout>
+        </VStack>
       ) : null}
       {isProjectOwner ? (
         <>
@@ -97,22 +135,26 @@ export const ProjectNavigation = ({
 
 export const ProjectNavigationButton = ({
   children,
-  leftIcon,
+  NavigationIcon,
   ...props
 }: PropsWithChildren<
   Pick<ButtonProps, 'leftIcon' | 'onClick' | 'isActive'> &
-    Pick<IconButtonProps, 'aria-label' | 'variant'>
+    Pick<IconButtonProps, 'aria-label' | 'variant'> & {
+      NavigationIcon: (props: IconProps) => JSX.Element
+    }
 >) => {
   const hideLabel = useBreakpointValue(
     { base: true, xl: false },
     { ssr: false },
   )
 
+  const color = props.isActive ? 'neutral.900' : 'neutral.700'
+
   if (hideLabel) {
     return (
       <Tooltip label={children} placement="right">
         <IconButton variant="transparent" {...props}>
-          {leftIcon}
+          <NavigationIcon color={color} fontSize="1.5em" width="1.3em" />
         </IconButton>
       </Tooltip>
     )
@@ -123,12 +165,13 @@ export const ProjectNavigationButton = ({
       variant="transparent"
       justifyContent="start"
       width="100%"
-      leftIcon={leftIcon}
+      leftIcon={<NavigationIcon color={color} fontSize="1.5em" width="1.3em" />}
+      _active={{ backgroundColor: 'neutral.100' }}
       {...props}
     >
-      <Text variant="h3" width="100%" textAlign="left" pl={1}>
+      <Body1 semiBold color={color} width="100%" textAlign="left" pl={1}>
         {children}
-      </Text>
+      </Body1>
     </Button>
   )
 }
