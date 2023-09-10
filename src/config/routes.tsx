@@ -8,17 +8,6 @@ import { doesAssetNeedFallback } from '../helpers'
 import { FailedAuth, TwitterSuccess } from '../pages/auth'
 import BadgesPage from '../pages/badges/BadgesPage'
 import { NotAuthorized, NotFoundPage } from '../pages/fallback'
-import {
-  ProjectCreatorContributors,
-  ProjectCreatorInsights,
-  ProjectCreatorOverview,
-} from '../pages/projectView/projectCreatorViews'
-import { ProjectMainBody } from '../pages/projectView/projectMainBody'
-import {
-  Entries,
-  Milestones,
-  Rewards,
-} from '../pages/projectView/projectMainBody/sections'
 import { PrivateRoute } from './PrivateRoute'
 
 export const loadableWithFailSafe = (importer: any) => {
@@ -114,7 +103,45 @@ const ProjectSettings = loadableWithFailSafe(() =>
   CreatorDashboard().then((m) => m.ProjectSettings),
 )
 
-const ProjectView = loadableWithFailSafe(() => import('../pages/projectView'))
+// PROJECT VIEW
+
+const ProjectView = () => import('../pages/projectView')
+
+const ProjectViewPage = loadableWithFailSafe(() =>
+  ProjectView().then((m) => m.ProjectView),
+)
+
+const ProjectBodyLayout = loadableWithFailSafe(() =>
+  ProjectView().then((m) => m.ProjectBodyLayout),
+)
+
+const ProjectMainBody = loadableWithFailSafe(() =>
+  ProjectView().then((m) => m.ProjectMainBody),
+)
+
+const ProjectRewardsPage = loadableWithFailSafe(() =>
+  ProjectView().then((m) => m.MainBodyRewards),
+)
+
+const ProjectEntriesPage = loadableWithFailSafe(() =>
+  ProjectView().then((m) => m.MainBodyEntries),
+)
+
+const ProjectMilestonesPage = loadableWithFailSafe(() =>
+  ProjectView().then((m) => m.MainBodyMilestones),
+)
+
+const ProjectCreatorOverviewPage = loadableWithFailSafe(() =>
+  ProjectView().then((m) => m.ProjectCreatorOverview),
+)
+
+const ProjectCreatorInsightsPage = loadableWithFailSafe(() =>
+  ProjectView().then((m) => m.ProjectCreatorInsights),
+)
+
+const ProjectCreatorContributorsPage = loadableWithFailSafe(() =>
+  ProjectView().then((m) => m.ProjectCreatorContributors),
+)
 
 const Profile = loadableWithFailSafe(() => import('../pages/profile/Profile'))
 
@@ -272,36 +299,44 @@ export const Router = () => {
         },
         {
           path: getPath('project', PathName.projectId),
-          element: ProjectView,
+          element: ProjectViewPage,
           nested: [
             {
               path: getPath('project', PathName.projectId),
-              element: ProjectMainBody,
-              isIndex: true,
+              element: ProjectBodyLayout,
+              nested: [
+                {
+                  path: getPath('project', PathName.projectId),
+                  element: ProjectMainBody,
+                  isIndex: true,
+                },
+                {
+                  path: getPath('projectRewards', PathName.projectId),
+                  element: ProjectRewardsPage,
+                },
+                {
+                  path: getPath('projectEntries', PathName.projectId),
+                  element: ProjectEntriesPage,
+                },
+
+                {
+                  path: getPath('projectMilestones', PathName.projectId),
+                  element: ProjectMilestonesPage,
+                },
+              ],
             },
+
             {
               path: getPath('projectOverview', PathName.projectId),
-              element: ProjectCreatorOverview,
+              element: ProjectCreatorOverviewPage,
             },
             {
               path: getPath('projectInsights', PathName.projectId),
-              element: ProjectCreatorInsights,
+              element: ProjectCreatorInsightsPage,
             },
             {
               path: getPath('projectContributors', PathName.projectId),
-              element: ProjectCreatorContributors,
-            },
-            {
-              path: getPath('projectEntries', PathName.projectId),
-              element: Entries,
-            },
-            {
-              path: getPath('projectRewards', PathName.projectId),
-              element: Rewards,
-            },
-            {
-              path: getPath('projectMilestones', PathName.projectId),
-              element: Milestones,
+              element: ProjectCreatorContributorsPage,
             },
           ],
         },

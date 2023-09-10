@@ -3,11 +3,11 @@ import classNames from 'classnames'
 import { createUseStyles } from 'react-jss'
 import { Outlet } from 'react-router-dom'
 
-import { CardsStackLayout } from '../../components/layouts'
-import { MobileViews, useProjectContext } from '../../context'
-import { useMobileMode } from '../../utils'
-import { ProjectMobileNavigation } from './projectNavigation/components/ProjectMobileNavigation'
-import { ProjectNavigation } from './projectNavigation/components/ProjectNavigation'
+import { CardsStackLayout } from '../../../components/layouts'
+import { MobileViews, useProjectContext } from '../../../context'
+import { FundingResourceType } from '../../../types'
+import { useMobileMode } from '../../../utils'
+import { ProjectActivityPanel } from '../projectActivityPanel'
 
 type Rules = string
 
@@ -47,10 +47,10 @@ const useStyles = createUseStyles<Rules, Styles>({
   },
 })
 
-export const ProjectPageContent = () => {
+export const ProjectBodyLayout = () => {
   const isMobile = useMobileMode()
 
-  const { mobileView } = useProjectContext()
+  const { mobileView, project } = useProjectContext()
 
   const inView = mobileView === MobileViews.description
 
@@ -58,7 +58,6 @@ export const ProjectPageContent = () => {
 
   return (
     <>
-      {isMobile ? <ProjectMobileNavigation /> : <ProjectNavigation />}
       <Box
         className={classNames(classes.container)}
         backgroundColor="neutral.50"
@@ -74,6 +73,10 @@ export const ProjectPageContent = () => {
           </CardsStackLayout>
         </Box>
       </Box>
+      <ProjectActivityPanel
+        resourceType={FundingResourceType.Project}
+        resourceId={project?.id}
+      />
     </>
   )
 }

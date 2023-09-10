@@ -1,19 +1,17 @@
 import { Box } from '@chakra-ui/react'
 import { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 import Loader from '../../components/ui/Loader'
 import { Head } from '../../config'
 import { useProjectContext } from '../../context'
 import { useModal } from '../../hooks/useModal'
-import { FundingResourceType } from '../../types'
 import { useMobileMode } from '../../utils'
 import { ProjectCreateDraftModal } from '../projectCreate/components/ProjectCreateDraftModal'
 import { ProjectCreateLaunchedModal } from '../projectCreate/components/ProjectCreateLaunchedModal'
-import { ProjectActivityPanel } from './projectActivityPanel'
-import { ProjectMainBody } from './projectMainBody'
 import { ProjectMobileBottomNavigation } from './projectNavigation/components/ProjectMobileBottomNavigation'
-import { ProjectPageContent } from './ProjectPageContent'
+import { ProjectMobileNavigation } from './projectNavigation/components/ProjectMobileNavigation'
+import { ProjectNavigation } from './projectNavigation/components/ProjectNavigation'
 
 export const ProjectContainer = () => {
   const navigate = useNavigate()
@@ -70,13 +68,9 @@ export const ProjectContainer = () => {
         image={project?.thumbnailImage || ''}
         type="article"
       />
+      {isMobile ? <ProjectMobileNavigation /> : <ProjectNavigation />}
 
-      <ProjectPageContent />
-
-      <ProjectActivityPanel
-        resourceType={FundingResourceType.Project}
-        resourceId={project?.id}
-      />
+      <Outlet />
 
       <ProjectCreateLaunchedModal {...launchModal} />
       <ProjectCreateDraftModal {...draftModal} />
