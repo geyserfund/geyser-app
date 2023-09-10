@@ -13,6 +13,7 @@ import { ProjectCreateLaunchedModal } from '../projectCreate/components/ProjectC
 import { ProjectActivityPanel } from './projectActivityPanel'
 import { ProjectMainBody } from './projectMainBody'
 import { ProjectMobileBottomNavigation } from './projectNavigation/components/ProjectMobileBottomNavigation'
+import { ProjectPageContent } from './ProjectPageContent'
 
 export const ProjectContainer = () => {
   const navigate = useNavigate()
@@ -70,7 +71,7 @@ export const ProjectContainer = () => {
         type="article"
       />
 
-      <ProjectMainBody />
+      <ProjectPageContent />
 
       <ProjectActivityPanel
         resourceType={FundingResourceType.Project}

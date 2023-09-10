@@ -8,6 +8,17 @@ import { doesAssetNeedFallback } from '../helpers'
 import { FailedAuth, TwitterSuccess } from '../pages/auth'
 import BadgesPage from '../pages/badges/BadgesPage'
 import { NotAuthorized, NotFoundPage } from '../pages/fallback'
+import {
+  ProjectCreatorContributors,
+  ProjectCreatorInsights,
+  ProjectCreatorOverview,
+} from '../pages/projectView/projectCreatorViews'
+import { ProjectMainBody } from '../pages/projectView/projectMainBody'
+import {
+  Entries,
+  Milestones,
+  Rewards,
+} from '../pages/projectView/projectMainBody/sections'
 import { PrivateRoute } from './PrivateRoute'
 
 export const loadableWithFailSafe = (importer: any) => {
@@ -262,6 +273,37 @@ export const Router = () => {
         {
           path: getPath('project', PathName.projectId),
           element: ProjectView,
+          nested: [
+            {
+              path: getPath('project', PathName.projectId),
+              element: ProjectMainBody,
+              isIndex: true,
+            },
+            {
+              path: getPath('projectOverview', PathName.projectId),
+              element: ProjectCreatorOverview,
+            },
+            {
+              path: getPath('projectInsights', PathName.projectId),
+              element: ProjectCreatorInsights,
+            },
+            {
+              path: getPath('projectContributors', PathName.projectId),
+              element: ProjectCreatorContributors,
+            },
+            {
+              path: getPath('projectEntries', PathName.projectId),
+              element: Entries,
+            },
+            {
+              path: getPath('projectRewards', PathName.projectId),
+              element: Rewards,
+            },
+            {
+              path: getPath('projectMilestones', PathName.projectId),
+              element: Milestones,
+            },
+          ],
         },
         {
           path: getPath('entry', PathName.entryId),

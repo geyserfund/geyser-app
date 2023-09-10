@@ -10,8 +10,9 @@ import {
   useBreakpointValue,
   VStack,
 } from '@chakra-ui/react'
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { EntryEditIcon, RewardGiftIcon } from '../../../../components/icons'
 import {
@@ -22,56 +23,124 @@ import {
 } from '../../../../components/icons/svg'
 import { ProjectIcon } from '../../../../components/icons/svg/ProjectIcon'
 import { Body1, Caption } from '../../../../components/typography'
+import { PathName } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
-import { UseProjectAnchors } from '../hooks/useProjectAnchors'
+import { useProjectDetails } from '../hooks/useProjectDetails'
 import { ProjectBackButton } from './ProjectBackButton'
 
-export const ProjectNavigation = ({
-  entriesLength,
-  rewardsLength,
-  milestonesLength,
-  onProjectClick,
-  onEntriesClick,
-  onRewardsClick,
-  onMilestonesClick,
-}: UseProjectAnchors) => {
+export const ProjectNavigation = () => {
   const { t } = useTranslation()
-  const { isProjectOwner, onCreatorModalOpen } = useProjectContext()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { isProjectOwner, onCreatorModalOpen, project } = useProjectContext()
+
+  const { entriesLength, rewardsLength, milestonesLength } =
+    useProjectDetails(project)
+
   const hasItems = Boolean(entriesLength || rewardsLength || milestonesLength)
+
+  const ProjectNavigationButtons = useMemo(
+    () => [
+      {
+        name: 'Project',
+        path: '',
+        icon: ProjectIcon,
+        render: true,
+      },
+      {
+        name: 'Entries',
+        path: PathName.projectEntries,
+        icon: EntryEditIcon,
+        render: Boolean(entriesLength),
+      },
+      {
+        name: 'Rewards',
+        path: PathName.projectRewards,
+        icon: RewardGiftIcon,
+        render: Boolean(rewardsLength),
+      },
+      {
+        name: 'Milestones',
+        path: PathName.projectMilestones,
+        icon: MilestoneIcon,
+        render: Boolean(milestonesLength),
+      },
+    ],
+    [entriesLength, rewardsLength, milestonesLength],
+  )
+
+  const ProjectCreatorNavigationButtons = useMemo(
+    () => [
+      {
+        name: 'Overview',
+        path: PathName.projectOverview,
+        icon: OverviewIcon,
+      },
+      {
+        name: 'Insights',
+        path: PathName.projectInsights,
+        icon: InsightsIcon,
+      },
+      {
+        name: 'Contributors',
+        path: PathName.projectContributors,
+        icon: ContributorsIcon,
+      },
+    ],
+    [],
+  )
+
+  const currentActiveButton = useMemo(() => {
+    const currentPath = location.pathname.split('/').pop()
+    console.log('checking current path', currentPath)
+
+    const allButtons = [
+      ...ProjectNavigationButtons,
+      ...ProjectCreatorNavigationButtons,
+    ]
+
+    return (
+      allButtons.find((button) => button.path === currentPath)?.name ||
+      'Project'
+    )
+  }, [
+    ProjectNavigationButtons,
+    ProjectCreatorNavigationButtons,
+    location.pathname,
+  ])
+
   return (
     <VStack ml={4} pt={5} pb={2}>
       <ProjectBackButton width="100%" />
       {hasItems ? (
         <VStack spacing="15px">
-          <VStack width="100%">
-            <HStack w="full" justifyContent="start">
-              <Caption fontWeight={700} color="neutral.500">
-                {t('Creator view')}
-              </Caption>
-            </HStack>
+          {isProjectOwner && (
+            <VStack width="100%">
+              <HStack w="full" justifyContent="start">
+                <Caption fontWeight={700} color="neutral.500">
+                  {t('Creator view')}
+                </Caption>
+              </HStack>
 
-            <ProjectNavigationButton
-              onClick={onProjectClick}
-              aria-label="header"
-              NavigationIcon={OverviewIcon}
-            >
-              {t('Overview')}
-            </ProjectNavigationButton>
-            <ProjectNavigationButton
-              onClick={onProjectClick}
-              aria-label="header"
-              NavigationIcon={InsightsIcon}
-            >
-              {t('Insights')}
-            </ProjectNavigationButton>
-            <ProjectNavigationButton
-              onClick={onProjectClick}
-              aria-label="header"
-              NavigationIcon={ContributorsIcon}
-            >
-              {t('Contributors')}
-            </ProjectNavigationButton>
-          </VStack>
+              {ProjectCreatorNavigationButtons.map(
+                (creatorNavigationButtons) => {
+                  return (
+                    <ProjectNavigationButton
+                      key={creatorNavigationButtons.name}
+                      onClick={() => navigate(creatorNavigationButtons.path)}
+                      aria-label={creatorNavigationButtons.name}
+                      NavigationIcon={creatorNavigationButtons.icon}
+                      isActive={
+                        currentActiveButton === creatorNavigationButtons.name
+                      }
+                    >
+                      {t(creatorNavigationButtons.name)}
+                    </ProjectNavigationButton>
+                  )
+                },
+              )}
+            </VStack>
+          )}
 
           <VStack width="100%">
             <HStack w="full" justifyContent="start">
@@ -79,41 +148,21 @@ export const ProjectNavigation = ({
                 {t('Project')}
               </Caption>
             </HStack>
-            <ProjectNavigationButton
-              onClick={onProjectClick}
-              aria-label="header"
-              NavigationIcon={ProjectIcon}
-            >
-              {t('Project')}
-            </ProjectNavigationButton>
-            {Boolean(entriesLength) && (
-              <ProjectNavigationButton
-                onClick={onEntriesClick}
-                aria-label="entries"
-                NavigationIcon={EntryEditIcon}
-              >
-                {t('Entries')}
-              </ProjectNavigationButton>
-            )}
-            {Boolean(rewardsLength) && (
-              <ProjectNavigationButton
-                isActive={true}
-                onClick={onRewardsClick}
-                aria-label="rewards"
-                NavigationIcon={RewardGiftIcon}
-              >
-                {t('Rewards')}
-              </ProjectNavigationButton>
-            )}
-            {Boolean(milestonesLength) && (
-              <ProjectNavigationButton
-                onClick={onMilestonesClick}
-                aria-label="milestones"
-                NavigationIcon={MilestoneIcon}
-              >
-                {t('Milestones')}
-              </ProjectNavigationButton>
-            )}
+            {ProjectNavigationButtons.map((navigationButton) => {
+              return (
+                navigationButton.render && (
+                  <ProjectNavigationButton
+                    key={navigationButton.name}
+                    onClick={() => navigate(navigationButton.path)}
+                    aria-label={navigationButton.name}
+                    NavigationIcon={navigationButton.icon}
+                    isActive={currentActiveButton === navigationButton.name}
+                  >
+                    {t(navigationButton.name)}
+                  </ProjectNavigationButton>
+                )
+              )
+            })}
           </VStack>
         </VStack>
       ) : null}
