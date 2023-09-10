@@ -12487,6 +12487,11 @@ react-side-effect@^2.1.0:
   resolved "https://registry.npmjs.org/react-side-effect/-/react-side-effect-2.1.2.tgz"
   integrity sha512-PVjOcvVOyIILrYoyGEpDN3vmYNLdy1CajSFNt4TDsVQC5KpTijDvWVoR+/7Rz2xT978D8/ZtFceXxzsPwZEDvw==
 
+react-simple-pull-to-refresh@^1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/react-simple-pull-to-refresh/-/react-simple-pull-to-refresh-1.3.3.tgz#118afe0d8ba6cade87094786b3889fb2ffd5b9bc"
+  integrity sha512-6qXsa5RtNVmKJhLWvDLIX8UK51HFtCEGjdqQGf+M1Qjrcc4qH4fki97sgVpGEFBRwbY7DiVDA5N5p97kF16DTw==
+
 react-style-singleton@^2.2.1:
   version "2.2.1"
   resolved "https://registry.npmjs.org/react-style-singleton/-/react-style-singleton-2.2.1.tgz"

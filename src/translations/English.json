@@ -672,5 +672,6 @@
   "Insert tweet": "Insert tweet",
   "Failed to insert tweet": "Failed to insert tweet",
   "Funding as anonymous. <1>Click here</1> to connect profile to contribution": "Funding as anonymous. <1>Click here</1> to connect profile to contribution",
-  "My contributions": "My contributions"
+  "My contributions": "My contributions",
+  "Pulldown to refresh":"Pulldown to refresh"
 }
