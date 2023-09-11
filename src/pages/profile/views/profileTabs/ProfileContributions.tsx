@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Box, HStack, VStack, Link } from '@chakra-ui/react'
+import { Box, HStack, VStack, Link, Text } from '@chakra-ui/react'
 
 import type { User, UserProjectContribution } from '../../../../types'
 import { getPath } from '../../../../constants'
@@ -78,6 +78,9 @@ export const ProfileContributions = ({
           amount={contributionAmount(c)}
         />
       ))}
+      {contributions.length === 0 && (
+        <Text>{t('This user has no contributions yet.')}</Text>
+      )}
     </ProfileTabLayout>
   )
 }
