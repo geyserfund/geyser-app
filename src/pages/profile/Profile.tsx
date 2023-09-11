@@ -138,7 +138,7 @@ export const Profile = () => {
           order={{ base: 2, lg: 3 }}
         >
           <VStack spacing="10px">
-            {isViewingOwnProfile && <Summary userProfile={userProfile} />}
+            <Summary userProfile={userProfile} />
             <Badges
               userProfile={userProfile}
               isEdit={isViewingOwnProfile}

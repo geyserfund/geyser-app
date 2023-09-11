@@ -25,7 +25,7 @@ export const SummaryBody = ({
   const { t } = useTranslation()
   const { isShown, toggle } = useContributionSummary()
   return isShown ? (
-    <CardLayout wrap="wrap">
+    <CardLayout width="100%" wrap="wrap" noMobileBorder>
       <HStack justifyContent="space-between">
         <H2 whiteSpace="nowrap">{t('Contributions summary')}</H2>
         <IconButton
