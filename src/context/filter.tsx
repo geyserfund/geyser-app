@@ -33,7 +33,6 @@ export type FilterType = {
 export enum SortType {
   recent = 'recent',
   balance = 'balance',
-  createdAt = 'createdAt',
 }
 
 export interface FilterState {
@@ -113,7 +112,7 @@ export const FilterProvider = ({
             newFilters[key as keyof FilterType] === SortType.recent &&
             disableSortByTrending(newFilters)
           ) {
-            newParameters.push([key, SortType.createdAt])
+            newParameters.push([key, SortType.balance])
           } else {
             newParameters.push([key, `${newFilters[key as keyof FilterType]}`])
           }
