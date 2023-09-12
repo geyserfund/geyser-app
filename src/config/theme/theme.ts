@@ -63,6 +63,17 @@ export const theme = {
             backgroundColor: lightModeColors.neutral[300],
           },
         },
+        primaryLink: ({ theme }: StyleFunctionProps) => ({
+          backgroundColor: 'transparent',
+          border: 'none',
+          color: theme.colors.primary[600],
+          _hover: {
+            backgroundColor: theme.colors.neutral[200],
+          },
+          _active: {
+            backgroundColor: theme.colors.neutral[300],
+          },
+        }),
         primaryNeutral: ({ theme }: StyleFunctionProps) => ({
           backgroundColor: theme.colors.neutral[100],
           border: 'none',

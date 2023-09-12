@@ -110,35 +110,32 @@ const ProjectView = () => import('../pages/projectView')
 const ProjectViewPage = loadableWithFailSafe(() =>
   ProjectView().then((m) => m.ProjectView),
 )
-
 const ProjectBodyLayout = loadableWithFailSafe(() =>
   ProjectView().then((m) => m.ProjectBodyLayout),
 )
-
 const ProjectMainBody = loadableWithFailSafe(() =>
   ProjectView().then((m) => m.ProjectMainBody),
 )
-
 const ProjectRewardsPage = loadableWithFailSafe(() =>
   ProjectView().then((m) => m.MainBodyRewards),
 )
-
 const ProjectEntriesPage = loadableWithFailSafe(() =>
   ProjectView().then((m) => m.MainBodyEntries),
 )
-
 const ProjectMilestonesPage = loadableWithFailSafe(() =>
   ProjectView().then((m) => m.MainBodyMilestones),
+)
+
+const ProjectCreatorViewPage = loadableWithFailSafe(() =>
+  ProjectView().then((m) => m.ProjectCreatorViews),
 )
 
 const ProjectCreatorOverviewPage = loadableWithFailSafe(() =>
   ProjectView().then((m) => m.ProjectCreatorOverview),
 )
-
 const ProjectCreatorInsightsPage = loadableWithFailSafe(() =>
   ProjectView().then((m) => m.ProjectCreatorInsights),
 )
-
 const ProjectCreatorContributorsPage = loadableWithFailSafe(() =>
   ProjectView().then((m) => m.ProjectCreatorContributors),
 )
@@ -325,18 +322,23 @@ export const Router = () => {
                 },
               ],
             },
-
             {
-              path: getPath('projectOverview', PathName.projectId),
-              element: ProjectCreatorOverviewPage,
-            },
-            {
-              path: getPath('projectInsights', PathName.projectId),
-              element: ProjectCreatorInsightsPage,
-            },
-            {
-              path: getPath('projectContributors', PathName.projectId),
-              element: ProjectCreatorContributorsPage,
+              path: getPath('project', PathName.projectId),
+              element: ProjectCreatorViewPage,
+              nested: [
+                {
+                  path: getPath('projectOverview', PathName.projectId),
+                  element: ProjectCreatorOverviewPage,
+                },
+                {
+                  path: getPath('projectInsights', PathName.projectId),
+                  element: ProjectCreatorInsightsPage,
+                },
+                {
+                  path: getPath('projectContributors', PathName.projectId),
+                  element: ProjectCreatorContributorsPage,
+                },
+              ],
             },
           ],
         },

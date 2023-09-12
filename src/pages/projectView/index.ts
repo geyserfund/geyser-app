@@ -2,6 +2,7 @@ import {
   ProjectCreatorContributors,
   ProjectCreatorInsights,
   ProjectCreatorOverview,
+  ProjectCreatorViews,
 } from './projectCreatorViews'
 import {
   Entries as MainBodyEntries,
@@ -20,6 +21,7 @@ export {
   ProjectCreatorContributors,
   ProjectCreatorInsights,
   ProjectCreatorOverview,
+  ProjectCreatorViews,
   ProjectMainBody,
   ProjectView,
 }

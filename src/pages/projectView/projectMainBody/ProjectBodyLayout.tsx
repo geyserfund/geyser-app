@@ -17,7 +17,7 @@ type Styles = {
   fadeStarted?: boolean
 }
 
-const useStyles = createUseStyles<Rules, Styles>({
+export const useProjectLayoutStyles = createUseStyles<Rules, Styles>({
   container: ({ isMobile, inView, fadeStarted }: Styles) => ({
     display: !isMobile || inView || fadeStarted ? 'flex' : 'none',
     position: fadeStarted ? 'absolute' : 'relative',
@@ -54,7 +54,7 @@ export const ProjectBodyLayout = () => {
 
   const inView = mobileView === MobileViews.description
 
-  const classes = useStyles({ isMobile, inView })
+  const classes = useProjectLayoutStyles({ isMobile, inView })
 
   return (
     <>
