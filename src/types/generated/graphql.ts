@@ -1266,14 +1266,17 @@ export type ProjectsGetQueryInput = {
    * be passed in a separate object in the array. This ensures consistent ordering of the orderBy options in the
    * result set.
    */
-  orderBy?: InputMaybe<Array<InputMaybe<ProjectsOrderByInput>>>
+  orderBy?: InputMaybe<{field: string, direction: OrderByOptions}>
   pagination?: InputMaybe<PaginationInput>
   where: ProjectWhereInput
 }
 
 export type ProjectsOrderByInput = {
-  balance?: InputMaybe<OrderByOptions>
-  createdAt?: InputMaybe<OrderByOptions>
+  field: ProjectsOrderField, direction: OrderByOptions
+}
+
+export enum ProjectsOrderField {
+  balance
 }
 
 export type ProjectsResponse = {

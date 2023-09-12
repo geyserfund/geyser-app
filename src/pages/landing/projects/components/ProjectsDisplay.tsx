@@ -31,7 +31,10 @@ export const ProjectsDisplay = ({ tag, seeAllText }: ProjectDisplayProps) => {
           status: ProjectStatus.Active,
         },
         pagination: { take: NO_OF_PROJECT_TO_LOAD },
-        orderBy: [{ createdAt: OrderByOptions.Desc }],
+        orderBy: {
+          direction: OrderByOptions.Desc,
+          field: SortType.balance,
+        },
       },
     },
   })
@@ -40,7 +43,7 @@ export const ProjectsDisplay = ({ tag, seeAllText }: ProjectDisplayProps) => {
     if (tag) {
       updateFilter({ tagIds: [tag.id] })
     } else {
-      updateFilter({ recent: true, sort: SortType.createdAt })
+      updateFilter({ recent: true, sort: SortType.balance })
     }
   }
 
