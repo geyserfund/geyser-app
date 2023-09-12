@@ -84,8 +84,6 @@ export const useProjectState = (
         ? getDiff(project, baseProject, [
             'location',
             'description',
-            'expiresAt',
-            'fundingGoal',
             'image',
             'rewardCurrency',
             'shortDescription',

@@ -4509,10 +4509,8 @@ export type ProjectFragment = {
   shortDescription?: any | null
   description?: any | null
   balance: number
-  fundingGoal?: any | null
   createdAt: string
   updatedAt: string
-  expiresAt?: string | null
   image?: string | null
   thumbnailImage?: string | null
   links: Array<string>
@@ -4865,7 +4863,6 @@ export type UpdateProjectMutation = {
     thumbnailImage?: string | null
     status?: ProjectStatus | null
     links: Array<string>
-    expiresAt?: string | null
     location?: {
       __typename?: 'Location'
       region?: string | null
@@ -5500,9 +5497,7 @@ export type ProjectsQuery = {
       name: any
       description?: any | null
       balance: number
-      fundingGoal?: any | null
       createdAt: string
-      expiresAt?: string | null
       status?: ProjectStatus | null
       image?: string | null
     }>
@@ -5526,10 +5521,8 @@ export type ProjectsFullQuery = {
       shortDescription?: any | null
       description?: any | null
       balance: number
-      fundingGoal?: any | null
       createdAt: string
       updatedAt: string
-      expiresAt?: string | null
       thumbnailImage?: string | null
       image?: string | null
       status?: ProjectStatus | null
@@ -6048,10 +6041,8 @@ export const ProjectFragmentDoc = gql`
     shortDescription
     description
     balance
-    fundingGoal
     createdAt
     updatedAt
-    expiresAt
     image
     thumbnailImage
     links
@@ -7112,7 +7103,6 @@ export const UpdateProjectDocument = gql`
       }
       status
       links
-      expiresAt
     }
   }
 `
@@ -9133,9 +9123,7 @@ export const ProjectsDocument = gql`
         name
         description
         balance
-        fundingGoal
         createdAt
-        expiresAt
         status
         image
       }
@@ -9199,10 +9187,8 @@ export const ProjectsFullDocument = gql`
         shortDescription
         description
         balance
-        fundingGoal
         createdAt
         updatedAt
-        expiresAt
         thumbnailImage
         image
         status

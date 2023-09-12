@@ -58,7 +58,6 @@ export const MUTATION_UPDATE_PROJECT = gql`
       }
       status
       links
-      expiresAt
     }
   }
 `

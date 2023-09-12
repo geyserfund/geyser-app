@@ -28,9 +28,7 @@ export const QUERY_PROJECTS = gql`
         name
         description
         balance
-        fundingGoal
         createdAt
-        expiresAt
         status
         image
       }
@@ -49,10 +47,8 @@ export const QUERY_PROJECTS_FULL = gql`
         shortDescription
         description
         balance
-        fundingGoal
         createdAt
         updatedAt
-        expiresAt
         thumbnailImage
         image
         status

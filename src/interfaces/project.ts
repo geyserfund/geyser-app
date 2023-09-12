@@ -14,10 +14,8 @@ export interface IProject {
   description: string
   type: IProjectType
   balance: number
-  fundingGoal: number
   createdAt: string
   updatedAt: string
-  expiresAt: string
   image?: string
   status?: ProjectStatus
   ownerConfirmed: string
