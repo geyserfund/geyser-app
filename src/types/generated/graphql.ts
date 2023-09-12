@@ -4500,7 +4500,6 @@ export type ProjectFragment = {
   balance: number
   createdAt: string
   updatedAt: string
-  expiresAt?: string | null
   image?: string | null
   thumbnailImage?: string | null
   links: Array<string>
@@ -4853,7 +4852,6 @@ export type UpdateProjectMutation = {
     thumbnailImage?: string | null
     status?: ProjectStatus | null
     links: Array<string>
-    expiresAt?: string | null
     location?: {
       __typename?: 'Location'
       region?: string | null
@@ -5489,7 +5487,6 @@ export type ProjectsQuery = {
       description?: any | null
       balance: number
       createdAt: string
-      expiresAt?: string | null
       status?: ProjectStatus | null
       image?: string | null
     }>
@@ -5515,7 +5512,6 @@ export type ProjectsFullQuery = {
       balance: number
       createdAt: string
       updatedAt: string
-      expiresAt?: string | null
       thumbnailImage?: string | null
       image?: string | null
       status?: ProjectStatus | null
@@ -6036,7 +6032,6 @@ export const ProjectFragmentDoc = gql`
     balance
     createdAt
     updatedAt
-    expiresAt
     image
     thumbnailImage
     links
@@ -7097,7 +7092,6 @@ export const UpdateProjectDocument = gql`
       }
       status
       links
-      expiresAt
     }
   }
 `
@@ -9119,7 +9113,6 @@ export const ProjectsDocument = gql`
         description
         balance
         createdAt
-        expiresAt
         status
         image
       }
@@ -9185,7 +9178,6 @@ export const ProjectsFullDocument = gql`
         balance
         createdAt
         updatedAt
-        expiresAt
         thumbnailImage
         image
         status

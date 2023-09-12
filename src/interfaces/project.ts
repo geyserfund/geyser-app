@@ -16,7 +16,6 @@ export interface IProject {
   balance: number
   createdAt: string
   updatedAt: string
-  expiresAt: string
   image?: string
   status?: ProjectStatus
   ownerConfirmed: string
