@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { LandingCardBaseSkeleton } from '../../../../components/layouts'
 import { SortType, useFilterContext } from '../../../../context'
 import {
-  OrderByOptions,
+  OrderByDirection,
   Project,
+  ProjectsOrderByField,
   ProjectStatus,
   Tag,
   useProjectsForLandingPageQuery,
@@ -31,7 +32,12 @@ export const ProjectsDisplay = ({ tag, seeAllText }: ProjectDisplayProps) => {
           status: ProjectStatus.Active,
         },
         pagination: { take: NO_OF_PROJECT_TO_LOAD },
-        orderBy: [{ createdAt: OrderByOptions.Desc }],
+        orderBy: [
+          {
+            direction: OrderByDirection.Desc,
+            field: ProjectsOrderByField.Balance,
+          },
+        ],
       },
     },
   })
@@ -40,11 +46,12 @@ export const ProjectsDisplay = ({ tag, seeAllText }: ProjectDisplayProps) => {
     if (tag) {
       updateFilter({ tagIds: [tag.id] })
     } else {
-      updateFilter({ recent: true, sort: SortType.createdAt })
+      updateFilter({ recent: true, sort: SortType.balance })
     }
   }
 
-  const projectList = (data?.projects.projects.slice(0, 3) as Project[]) || []
+  const projectList =
+    (data?.projectsGet.projects.slice(0, 3) as Project[]) || []
 
   if (loading) {
     return <ProjectsDisplaySkeleton />

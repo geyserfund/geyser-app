@@ -1057,6 +1057,11 @@ export type OffsetBasedPaginationInput = {
   take?: InputMaybe<Scalars['Int']>
 }
 
+export enum OrderByDirection {
+  Asc = 'asc',
+  Desc = 'desc',
+}
+
 export enum OrderByOptions {
   Asc = 'asc',
   Desc = 'desc',
@@ -1266,14 +1271,18 @@ export type ProjectsGetQueryInput = {
    * be passed in a separate object in the array. This ensures consistent ordering of the orderBy options in the
    * result set.
    */
-  orderBy?: InputMaybe<Array<InputMaybe<ProjectsOrderByInput>>>
+  orderBy?: InputMaybe<Array<ProjectsOrderByInput>>
   pagination?: InputMaybe<PaginationInput>
   where: ProjectWhereInput
 }
 
+export enum ProjectsOrderByField {
+  Balance = 'balance',
+}
+
 export type ProjectsOrderByInput = {
-  balance?: InputMaybe<OrderByOptions>
-  createdAt?: InputMaybe<OrderByOptions>
+  direction: OrderByDirection
+  field: ProjectsOrderByField
 }
 
 export type ProjectsResponse = {
@@ -1320,7 +1329,7 @@ export type Query = {
   projectGet?: Maybe<Project>
   projectRegionsGet: Array<ProjectRegionsGetResult>
   /** By default, returns a list of all active projects. */
-  projects: ProjectsResponse
+  projectsGet: ProjectsResponse
   projectsMostFundedOfTheWeekGet: Array<ProjectsMostFundedOfTheWeekGet>
   /** Returns summary statistics of all projects, both current and past. */
   projectsSummary: ProjectsSummary
@@ -1391,7 +1400,7 @@ export type QueryProjectGetArgs = {
   where: UniqueProjectQueryInput
 }
 
-export type QueryProjectsArgs = {
+export type QueryProjectsGetArgs = {
   input?: InputMaybe<ProjectsGetQueryInput>
 }
 
@@ -2033,6 +2042,7 @@ export type ResolversTypes = {
   OTPLoginInput: OtpLoginInput
   OTPResponse: ResolverTypeWrapper<OtpResponse>
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
+  OrderByDirection: OrderByDirection
   OrderByOptions: OrderByOptions
   Owner: ResolverTypeWrapper<Owner>
   OwnerOf: ResolverTypeWrapper<OwnerOf>
@@ -2056,6 +2066,7 @@ export type ResolversTypes = {
   ProjectType: ProjectType
   ProjectWhereInput: ProjectWhereInput
   ProjectsGetQueryInput: ProjectsGetQueryInput
+  ProjectsOrderByField: ProjectsOrderByField
   ProjectsOrderByInput: ProjectsOrderByInput
   ProjectsResponse: ResolverTypeWrapper<ProjectsResponse>
   ProjectsSummary: ResolverTypeWrapper<ProjectsSummary>
@@ -3612,11 +3623,11 @@ export type QueryResolvers<
     ParentType,
     ContextType
   >
-  projects?: Resolver<
+  projectsGet?: Resolver<
     ResolversTypes['ProjectsResponse'],
     ParentType,
     ContextType,
-    Partial<QueryProjectsArgs>
+    Partial<QueryProjectsGetArgs>
   >
   projectsMostFundedOfTheWeekGet?: Resolver<
     Array<ResolversTypes['projectsMostFundedOfTheWeekGet']>,
@@ -5480,7 +5491,7 @@ export type ProjectsQueryVariables = Exact<{
 
 export type ProjectsQuery = {
   __typename?: 'Query'
-  projects: {
+  projectsGet: {
     __typename?: 'ProjectsResponse'
     projects: Array<{
       __typename?: 'Project'
@@ -5504,7 +5515,7 @@ export type ProjectsFullQueryVariables = Exact<{
 
 export type ProjectsFullQuery = {
   __typename?: 'Query'
-  projects: {
+  projectsGet: {
     __typename?: 'ProjectsResponse'
     projects: Array<{
       __typename?: 'Project'
@@ -5658,7 +5669,7 @@ export type ProjectsForLandingPageQueryVariables = Exact<{
 
 export type ProjectsForLandingPageQuery = {
   __typename?: 'Query'
-  projects: {
+  projectsGet: {
     __typename?: 'ProjectsResponse'
     projects: Array<{ __typename?: 'Project' } & ProjectForLandingPageFragment>
   }
@@ -9115,7 +9126,7 @@ export type ProjectByNameOrIdQueryResult = Apollo.QueryResult<
 >
 export const ProjectsDocument = gql`
   query Projects($input: ProjectsGetQueryInput) {
-    projects(input: $input) {
+    projectsGet(input: $input) {
       projects {
         id
         title
@@ -9179,7 +9190,7 @@ export type ProjectsQueryResult = Apollo.QueryResult<
 >
 export const ProjectsFullDocument = gql`
   query ProjectsFull($input: ProjectsGetQueryInput) {
-    projects(input: $input) {
+    projectsGet(input: $input) {
       projects {
         id
         title
@@ -9663,7 +9674,7 @@ export type ProjectsMostFundedOfTheWeekGetQueryResult = Apollo.QueryResult<
 >
 export const ProjectsForLandingPageDocument = gql`
   query ProjectsForLandingPage($input: ProjectsGetQueryInput) {
-    projects(input: $input) {
+    projectsGet(input: $input) {
       projects {
         ...ProjectForLandingPage
       }

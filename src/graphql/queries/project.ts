@@ -21,7 +21,7 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
 
 export const QUERY_PROJECTS = gql`
   query Projects($input: ProjectsGetQueryInput) {
-    projects(input: $input) {
+    projectsGet(input: $input) {
       projects {
         id
         title
@@ -40,7 +40,7 @@ export const QUERY_PROJECTS = gql`
 
 export const QUERY_PROJECTS_FULL = gql`
   query ProjectsFull($input: ProjectsGetQueryInput) {
-    projects(input: $input) {
+    projectsGet(input: $input) {
       projects {
         id
         title
@@ -175,7 +175,7 @@ export const QUERY_PROJECTS_MOST_FUNDED_OF_THE_WEEK = gql`
 export const QUERY_PROJECTS_FOR_LANDING_PAGE = gql`
   ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
   query ProjectsForLandingPage($input: ProjectsGetQueryInput) {
-    projects(input: $input) {
+    projectsGet(input: $input) {
       projects {
         ...ProjectForLandingPage
       }

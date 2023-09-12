@@ -158,9 +158,6 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
       case SortType.balance:
         value = 'Most funded all time'
         break
-      case SortType.createdAt:
-        value = 'Most recent projects'
-        break
       case SortType.recent:
         value = 'Most funded this week'
         break

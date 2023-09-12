@@ -29,14 +29,19 @@ export const PaginatedView = () => {
     fetchNext,
   } = useQueryWithPagination<ProjectForLandingPageFragment>({
     itemLimit: TOTAL_PROJECTS_TO_FETCH,
-    queryName: ['projects', 'projects'],
+    queryName: ['projectsGet', 'projects'],
     query: QUERY_PROJECTS_FOR_LANDING_PAGE,
     where: {
       status: !restFilters.search ? ProjectStatus.Active : undefined,
       tagIds: tagIds?.length ? tagIds : undefined,
       ...restFilters,
     },
-    orderBy: sort ? [{ [sort]: OrderByOptions.Desc }] : undefined,
+    orderBy: sort
+      ? {
+          direction: OrderByOptions.Desc,
+          field: sort,
+        }
+      : undefined,
     skipPagination: Boolean(restFilters.search),
   })
 
