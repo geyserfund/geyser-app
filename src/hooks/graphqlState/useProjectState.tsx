@@ -85,7 +85,6 @@ export const useProjectState = (
             'location',
             'description',
             'expiresAt',
-            'fundingGoal',
             'image',
             'rewardCurrency',
             'shortDescription',

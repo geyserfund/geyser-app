@@ -9,7 +9,6 @@ export type ProjectCreationVariables = {
   description: string
   email: string
   expiresAt?: string | null
-  fundingGoal?: number
   rewardCurrency?: RewardCurrency | null
   type?: ProjectType
 }
@@ -26,7 +25,6 @@ export type ProjectUpdateVariables = Partial<
     | 'expiresAt'
     | 'type'
     | 'rewardCurrency'
-    | 'fundingGoal'
     | 'status'
   >
 >

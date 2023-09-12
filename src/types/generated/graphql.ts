@@ -4498,7 +4498,6 @@ export type ProjectFragment = {
   shortDescription?: any | null
   description?: any | null
   balance: number
-  fundingGoal?: any | null
   createdAt: string
   updatedAt: string
   expiresAt?: string | null
@@ -5489,7 +5488,6 @@ export type ProjectsQuery = {
       name: any
       description?: any | null
       balance: number
-      fundingGoal?: any | null
       createdAt: string
       expiresAt?: string | null
       status?: ProjectStatus | null
@@ -5515,7 +5513,6 @@ export type ProjectsFullQuery = {
       shortDescription?: any | null
       description?: any | null
       balance: number
-      fundingGoal?: any | null
       createdAt: string
       updatedAt: string
       expiresAt?: string | null
@@ -6037,7 +6034,6 @@ export const ProjectFragmentDoc = gql`
     shortDescription
     description
     balance
-    fundingGoal
     createdAt
     updatedAt
     expiresAt
@@ -9122,7 +9118,6 @@ export const ProjectsDocument = gql`
         name
         description
         balance
-        fundingGoal
         createdAt
         expiresAt
         status
@@ -9188,7 +9183,6 @@ export const ProjectsFullDocument = gql`
         shortDescription
         description
         balance
-        fundingGoal
         createdAt
         updatedAt
         expiresAt
