@@ -77,6 +77,7 @@ export const InfoScreenFeed = () => {
     >
       <StickToTop
         id={ID.project.activity.feedtab}
+        scrollContainerId={ID.root}
         wrapperId={ID.project.activity.feedtabWrapper}
         width="100%"
         offset={dimensions.topNavBar.desktop.height}
