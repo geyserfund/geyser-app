@@ -75,7 +75,7 @@ export const SummaryBody = ({
               {t('Ranking')}
             </H3>
             <Text variant="satoshi" fontWeight="bold" fontSize="2xl">
-              {numberWithCommas(ranking)}
+              #{numberWithCommas(ranking)}
             </Text>
           </VStack>
         )}
