@@ -32,11 +32,11 @@ const ContributionSummary = ({
   return (
     <Link href={url} textDecoration="none" _hover={{ textDecoration: 'none' }}>
       <HStack spacing={2}>
-        <Box width="75px" height="66px">
+        <Box width="75px" height="75px">
           <ImageWithReload
             width="100%"
             height="100%"
-            objectFit="fill"
+            objectFit="cover"
             src={imageSrc}
             alt={`${title}-header-image`}
             borderRadius="8px"
