@@ -39,6 +39,7 @@
   "Login": "Login",
   "Projects": "Projects",
   "Contributions": "Contributions",
+  "Contributions summary": "Contributions summary",
   "Entry": "Entry",
   "Rewards": "Rewards",
   "All activity": "All activity",
@@ -138,6 +139,7 @@
   "Please enter an email.": "Please enter an email.",
   "Comment": "Comment",
   "Total": "Total",
+  "Total funded": "Total funded",
   "Fund Project": "Fund Project",
   "Donate to this idea": "Donate to this idea",
   "Leave a public message here.": "Leave a public message here.",
@@ -673,5 +675,6 @@
   "Failed to insert tweet": "Failed to insert tweet",
   "Funding as anonymous. <1>Click here</1> to connect profile to contribution": "Funding as anonymous. <1>Click here</1> to connect profile to contribution",
   "My contributions": "My contributions",
-  "Pulldown to refresh":"Pulldown to refresh"
+  "Pulldown to refresh": "Pulldown to refresh",
+  "Hide": "Hide"
 }
