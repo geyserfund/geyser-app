@@ -150,7 +150,7 @@ export const SuccessImageComponent = ({
           label={copied ? t('copied') : t('copy')}
         >
           <Button
-            size="sm"
+            size="md"
             w="100%"
             isActive={copied}
             variant="secondary"
