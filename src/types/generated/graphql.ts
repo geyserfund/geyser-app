@@ -1646,6 +1646,7 @@ export type User = {
    * To filter the result set, an explicit input can be passed that specifies a value of the status field.
    */
   projects: Array<Project>
+  ranking?: Maybe<Scalars['BigInt']>
   username: Scalars['String']
   wallet?: Maybe<Wallet>
 }
@@ -3786,6 +3787,7 @@ export type UserResolvers<
     ContextType,
     Partial<UserProjectsArgs>
   >
+  ranking?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   wallet?: Resolver<Maybe<ResolversTypes['Wallet']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
@@ -4562,6 +4564,7 @@ export type UserMeFragment = {
   username: string
   imageUrl?: string | null
   email?: string | null
+  ranking?: any | null
   isEmailVerified: boolean
   externalAccounts: Array<{
     __typename?: 'ExternalAccount'
@@ -5723,6 +5726,7 @@ export type UserProfileQuery = {
     username: string
     bio?: string | null
     imageUrl?: string | null
+    ranking?: any | null
     wallet?: {
       __typename?: 'Wallet'
       id: any
@@ -5957,6 +5961,7 @@ export const UserMeFragmentDoc = gql`
     username
     imageUrl
     email
+    ranking
     isEmailVerified
     externalAccounts {
       id
@@ -10033,6 +10038,7 @@ export const UserProfileDocument = gql`
       username
       bio
       imageUrl
+      ranking
       wallet {
         id
         connectionDetails {
