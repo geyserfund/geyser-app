@@ -32,7 +32,7 @@ import {
 } from '../../../../../utils'
 import { getProjectBalance } from '../../../../../utils/helpers'
 import { ExternalAccountType } from '../../../../auth'
-import { BalanceDisplayButton, Countdown } from './components'
+import { BalanceDisplayButton } from './components'
 import {
   ProjectFundersModal,
   useProjectFundersModal,
@@ -236,8 +236,6 @@ export const ActivityBrief = (props: StackProps) => {
     return null
   }, [balance, currentMilestone, milestoneIndex, prevMilestone, t])
 
-  const showCountdown = isActive(project?.status) && Boolean(project?.expiresAt)
-
   const latestFunders = socialFunders.slice(0, 12)
 
   return (
@@ -266,10 +264,6 @@ export const ActivityBrief = (props: StackProps) => {
           />
 
           {getMilestoneValue()}
-          {/* We can force unwrap project.expiresAt because the showCountdown expression check for a null or undefined value */}
-          {showCountdown && project?.expiresAt && (
-            <Countdown endDate={project.expiresAt} />
-          )}
         </VStack>
       </HStack>
       {(funderLoading || latestFunders.length) && (
