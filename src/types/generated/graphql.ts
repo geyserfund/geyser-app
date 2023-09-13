@@ -47,7 +47,6 @@ export type Scalars = {
   donationAmount_Int_NotNull_min_1: any
   email_String_NotNull_format_email: any
   email_String_format_email: any
-  fundingGoal_Int_min_1: any
   link_String_NotNull_format_uri: any
   links_List_String_NotNull_format_uri: any
   name_String_NotNull_maxLength_100: any
@@ -164,8 +163,6 @@ export type CreateProjectInput = {
   /** A short description of the project. */
   description: Scalars['description_String_NotNull_maxLength_8000']
   email: Scalars['email_String_NotNull_format_email']
-  expiresAt?: InputMaybe<Scalars['Date']>
-  fundingGoal?: InputMaybe<Scalars['fundingGoal_Int_min_1']>
   /** Main project image. */
   image?: InputMaybe<Scalars['String']>
   name: Scalars['name_String_NotNull_minLength_3_maxLength_60']
@@ -1102,11 +1099,9 @@ export type Project = {
    * An unpublished entry is only returned if the requesting user is the creator of the entry.
    */
   entries: Array<Entry>
-  expiresAt?: Maybe<Scalars['String']>
   followers: Array<User>
   funders: Array<Funder>
   fundersCount?: Maybe<Scalars['Int']>
-  fundingGoal?: Maybe<Scalars['fundingGoal_Int_min_1']>
   fundingTxs: Array<FundingTx>
   fundingTxsCount?: Maybe<Scalars['Int']>
   /** Returns the project's grant applications. */
@@ -1556,8 +1551,6 @@ export type UpdateProjectInput = {
   countryCode?: InputMaybe<Scalars['String']>
   /** Description of the project. */
   description?: InputMaybe<Scalars['description_String_maxLength_8000']>
-  expiresAt?: InputMaybe<Scalars['Date']>
-  fundingGoal?: InputMaybe<Scalars['fundingGoal_Int_min_1']>
   /** Main project image. */
   image?: InputMaybe<Scalars['String']>
   /** Project links */
@@ -2158,7 +2151,6 @@ export type ResolversTypes = {
   email_String_format_email: ResolverTypeWrapper<
     Scalars['email_String_format_email']
   >
-  fundingGoal_Int_min_1: ResolverTypeWrapper<Scalars['fundingGoal_Int_min_1']>
   getDashboardFundersInput: GetDashboardFundersInput
   link_String_NotNull_format_uri: ResolverTypeWrapper<
     Scalars['link_String_NotNull_format_uri']
@@ -2400,7 +2392,6 @@ export type ResolversParentTypes = {
   donationAmount_Int_NotNull_min_1: Scalars['donationAmount_Int_NotNull_min_1']
   email_String_NotNull_format_email: Scalars['email_String_NotNull_format_email']
   email_String_format_email: Scalars['email_String_format_email']
-  fundingGoal_Int_min_1: Scalars['fundingGoal_Int_min_1']
   getDashboardFundersInput: GetDashboardFundersInput
   link_String_NotNull_format_uri: Scalars['link_String_NotNull_format_uri']
   links_List_String_NotNull_format_uri: Scalars['links_List_String_NotNull_format_uri']
@@ -3293,15 +3284,9 @@ export type ProjectResolvers<
     ContextType,
     Partial<ProjectEntriesArgs>
   >
-  expiresAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   followers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>
   funders?: Resolver<Array<ResolversTypes['Funder']>, ParentType, ContextType>
   fundersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
-  fundingGoal?: Resolver<
-    Maybe<ResolversTypes['fundingGoal_Int_min_1']>,
-    ParentType,
-    ContextType
-  >
   fundingTxs?: Resolver<
     Array<ResolversTypes['FundingTx']>,
     ParentType,
@@ -3994,14 +3979,6 @@ export interface Email_String_Format_EmailScalarConfig
   name: 'email_String_format_email'
 }
 
-export interface FundingGoal_Int_Min_1ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['fundingGoal_Int_min_1'],
-    any
-  > {
-  name: 'fundingGoal_Int_min_1'
-}
-
 export interface Link_String_NotNull_Format_UriScalarConfig
   extends GraphQLScalarTypeConfig<
     ResolversTypes['link_String_NotNull_format_uri'],
@@ -4229,7 +4206,6 @@ export type Resolvers<ContextType = any> = {
   donationAmount_Int_NotNull_min_1?: GraphQLScalarType
   email_String_NotNull_format_email?: GraphQLScalarType
   email_String_format_email?: GraphQLScalarType
-  fundingGoal_Int_min_1?: GraphQLScalarType
   link_String_NotNull_format_uri?: GraphQLScalarType
   links_List_String_NotNull_format_uri?: GraphQLScalarType
   name_String_NotNull_maxLength_100?: GraphQLScalarType
