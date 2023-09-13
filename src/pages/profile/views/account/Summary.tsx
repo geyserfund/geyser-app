@@ -27,7 +27,7 @@ export const SummaryBody = ({
   return isShown ? (
     <CardLayout width="100%" wrap="wrap" noMobileBorder>
       <HStack justifyContent="space-between">
-        <H2 whiteSpace="nowrap">{t('Contributions summary')}</H2>
+        <H2>{t('Contributions summary')}</H2>
         <IconButton
           aria-label={t('Hide')}
           bg="transparent"
@@ -44,6 +44,7 @@ export const SummaryBody = ({
         justifyContent="space-between"
         mt={4}
         flexWrap="wrap"
+        spacing="10px"
       >
         <VStack
           bg="neutral.50"
