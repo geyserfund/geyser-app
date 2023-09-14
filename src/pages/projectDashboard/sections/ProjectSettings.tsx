@@ -24,7 +24,6 @@ import { DeleteProjectModal } from '../components/DeleteProjectModal'
 import { BackToProjectMobile } from '../navigation/BackToProjectMobile'
 
 export type ProjectSettingsVariables = {
-  expiresAt?: string
   email: string
   status: ProjectStatus | ''
   deactivate: boolean

@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, useNavigate, useParams } from 'react-router'
@@ -6,19 +5,10 @@ import { Navigate, useNavigate, useParams } from 'react-router'
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
 import Loader from '../../components/ui/Loader'
 import { getPath } from '../../constants'
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../graphql'
-import { Project, UniqueProjectQueryInput } from '../../types'
+import { useProjectByNameOrIdQuery } from '../../types'
 import { toInt, useNotification } from '../../utils'
 import { ProjectCreationWalletConnectionForm } from '.'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
-
-type ResponseDataForGetProject = {
-  project: Project
-}
-
-type QueryVariablesForGetProject = {
-  where: UniqueProjectQueryInput
-}
 
 export const ProjectCreationWalletConnectionPage = () => {
   const { t } = useTranslation()
@@ -34,18 +24,15 @@ export const ProjectCreationWalletConnectionPage = () => {
     loading: isGetProjectLoading,
     error: projectLoadingError,
     data: responseData,
-  } = useQuery<ResponseDataForGetProject, QueryVariablesForGetProject>(
-    QUERY_PROJECT_BY_NAME_OR_ID,
-    {
-      variables: { where: { id: toInt(params.projectId) } },
-      onError() {
-        toast({
-          title: 'Error fetching project',
-          status: 'error',
-        })
-      },
+  } = useProjectByNameOrIdQuery({
+    variables: { where: { id: toInt(params.projectId) } },
+    onError() {
+      toast({
+        title: 'Error fetching project',
+        status: 'error',
+      })
     },
-  )
+  })
 
   const handleBackClick = () => {
     if (isReadyForLaunch) {
@@ -65,7 +52,7 @@ export const ProjectCreationWalletConnectionPage = () => {
     return <Loader />
   }
 
-  if (projectLoadingError || !responseData || !responseData.project) {
+  if (projectLoadingError || !responseData || !responseData.projectGet) {
     return <Navigate to={getPath('notFound')} />
   }
 
@@ -89,7 +76,7 @@ export const ProjectCreationWalletConnectionPage = () => {
       <ProjectCreationWalletConnectionForm
         isReadyForLaunch={isReadyForLaunch}
         setReadyForLaunch={setReadyForLaunch}
-        project={responseData.project}
+        project={responseData.projectGet}
       />
     </ProjectCreateLayout>
   )

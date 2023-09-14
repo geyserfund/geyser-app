@@ -7,8 +7,6 @@ export const getCurrentSelection = (sort?: SortType) => {
   switch (sort) {
     case SortType.recent:
       return SortOptions.mostFundedThisWeek
-    case SortType.createdAt:
-      return SortOptions.mostRecentProjects
     default:
       return SortOptions.mostFundedAllTime
   }

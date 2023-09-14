@@ -40,7 +40,7 @@ export const ProjectCreateStory = () => {
     },
   })
 
-  const project = data?.project
+  const project = data?.projectGet
   const form = useProjectStoryForm({ project })
 
   const onLeave = () => {

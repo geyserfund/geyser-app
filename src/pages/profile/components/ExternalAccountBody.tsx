@@ -1,7 +1,10 @@
-import { HStack, StackProps } from '@chakra-ui/react'
+import { useState } from 'react'
 import { BsTwitter } from 'react-icons/bs'
+import { useTranslation } from 'react-i18next'
 
-import { CloseIconButton } from '../../../components/buttons'
+import { CheckIcon, CloseIcon, CopyIcon } from '@chakra-ui/icons'
+import { Icon, HStack, StackProps, Tooltip } from '@chakra-ui/react'
+
 import { BoltSvgIcon, NostrSvgIcon } from '../../../components/icons'
 import { Body2 } from '../../../components/typography'
 import { socialColors } from '../../../styles'
@@ -9,8 +12,6 @@ import { ExternalAccountType } from '../../auth'
 
 const externalAccountColorMap = {
   [ExternalAccountType.twitter]: socialColors.twitter,
-  [ExternalAccountType.lightning]: socialColors.lightning,
-  [ExternalAccountType.nostr]: socialColors.nostr,
 } as { [key: string]: string }
 
 const externalAccountIconMap = {
@@ -23,6 +24,7 @@ interface ExternalAccountBodyProps extends StackProps {
   type: ExternalAccountType
   username: string
   handleDelete?: () => void
+  handleCopy?: () => void
   isLoading?: boolean
   as?: any
   to?: string
@@ -34,36 +36,75 @@ export const ExternalAccountBody = ({
   type,
   username,
   handleDelete,
+  handleCopy,
   isLoading,
   ...rest
 }: ExternalAccountBodyProps) => {
-  const Icon = externalAccountIconMap[type]
+  const { t } = useTranslation()
+  const [copy, setCopy] = useState(false)
+  const ExternalIcon = externalAccountIconMap[type]
 
   const handleOnCloseClick = handleDelete
-    ? (event: React.MouseEvent<HTMLButtonElement>) => {
+    ? (event: React.MouseEvent<SVGElement>) => {
         event.preventDefault()
         handleDelete()
       }
     : undefined
 
-  return (
-    <>
-      <HStack
-        w="100%"
-        backgroundColor="neutral.100"
-        borderRadius="8px"
-        color={externalAccountColorMap[type]}
-        padding="5px 10px"
-        justifyContent="space-between"
-        _hover={{ cursor: 'pointer' }}
-        {...rest}
-      >
-        <HStack overflow="hidden">
-          <Icon height="20px" width="20px" />
-          <Body2 isTruncated>{username}</Body2>
-        </HStack>
-        {handleOnCloseClick && <CloseIconButton onClick={handleOnCloseClick} />}
+  const handleOnCopy = handleCopy
+    ? () => {
+        handleCopy()
+        setCopy(true)
+        setTimeout(() => {
+          setCopy(false)
+        }, 1000)
+      }
+    : undefined
+
+  const text =
+    type === ExternalAccountType.nostr
+      ? `${username.slice(0, 10)}...${username.slice(-4)}`
+      : username
+
+  const hasTooltip = handleCopy && type === ExternalAccountType.nostr
+
+  const body = (
+    <HStack
+      w="100%"
+      color={externalAccountColorMap[type]}
+      padding="5px 10px"
+      justifyContent="space-between"
+      _hover={{ cursor: 'pointer' }}
+      {...rest}
+    >
+      <HStack overflow="hidden">
+        <ExternalIcon boxSize={5} onClick={handleOnCopy} />
+        <Body2 isTruncated fontWeight="bold" onClick={handleOnCopy}>
+          {text}
+        </Body2>
+        {handleOnCopy && (
+          <Icon
+            as={copy ? CheckIcon : CopyIcon}
+            boxSize={3}
+            onClick={handleOnCopy}
+          />
+        )}
+        {handleOnCloseClick && (
+          <Icon as={CloseIcon} boxSize={2} onClick={handleOnCloseClick} />
+        )}
       </HStack>
-    </>
+    </HStack>
+  )
+
+  return hasTooltip ? (
+    <Tooltip
+      label={copy ? t('Copied!') : t('Copy')}
+      placement="top-start"
+      closeOnClick={false}
+    >
+      {body}
+    </Tooltip>
+  ) : (
+    body
   )
 }

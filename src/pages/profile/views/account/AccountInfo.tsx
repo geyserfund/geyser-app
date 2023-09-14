@@ -105,13 +105,13 @@ export const AccountInfo = ({
                 )
               }
             })}
+            <ConnectAccounts user={userProfile} />
           </VStack>
         )}
-        {isEdit && <ConnectAccounts user={userProfile} />}
       </CardLayout>
       {isEdit && userProfile && (
         <>
-          <Stack direction={{ base: 'column', lg: 'row' }} w={'full'} px="10px">
+          <Stack direction="column" w="full" pt="10px" spacing="5px">
             <Button
               onClick={() => modalProps.onOpen({ user: userProfile })}
               width="100%"

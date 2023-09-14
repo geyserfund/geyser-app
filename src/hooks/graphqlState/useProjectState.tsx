@@ -40,9 +40,9 @@ export const useProjectState = (
     skip: !projectId || invalidId,
     ...options,
     onCompleted(data) {
-      const { project } = data
-      if (project) {
-        syncProject(project)
+      const { projectGet } = data
+      if (projectGet) {
+        syncProject(projectGet)
       }
 
       if (options?.onCompleted) {
@@ -84,8 +84,6 @@ export const useProjectState = (
         ? getDiff(project, baseProject, [
             'location',
             'description',
-            'expiresAt',
-            'fundingGoal',
             'image',
             'rewardCurrency',
             'shortDescription',

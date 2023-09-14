@@ -1,7 +1,6 @@
 import { useMutation } from '@apollo/client'
-import { Box, Link, Tooltip, useDisclosure } from '@chakra-ui/react'
+import { Link, useDisclosure } from '@chakra-ui/react'
 import { nip19 } from 'nostr-tools'
-import { useState } from 'react'
 
 import { MUTATION_UNLINK_ACCOUNT } from '../../../graphql'
 import { ExternalAccount } from '../../../types'
@@ -25,14 +24,8 @@ export const ExternalAccountDisplay = ({
   const { toast } = useNotification()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const [copy, setCopy] = useState(false)
-
   const handleCopyPubkey = (npub: string) => {
     copyTextToClipboard(npub)
-    setCopy(true)
-    setTimeout(() => {
-      setCopy(false)
-    }, 1000)
   }
 
   const [unlinkAccount, { loading: unlinkAccountLoading }] = useMutation(
@@ -76,18 +69,13 @@ export const ExternalAccountDisplay = ({
     if (isNostr) {
       const npub = nip19.npubEncode(account.externalId)
       return (
-        <Tooltip label={copy ? 'copied!' : 'copy'} placement="top-start">
-          <Box w="full">
-            <ExternalAccountBody
-              type={account.accountType as ExternalAccountType}
-              username={npub}
-              handleDelete={isEdit ? onOpen : undefined}
-              onClick={() => handleCopyPubkey(npub)}
-              backgroundColor={copy ? 'primary.400' : 'neutral.100'}
-              isLoading={unlinkAccountLoading}
-            />
-          </Box>
-        </Tooltip>
+        <ExternalAccountBody
+          type={account.accountType as ExternalAccountType}
+          username={npub}
+          handleDelete={isEdit ? onOpen : undefined}
+          handleCopy={() => handleCopyPubkey(npub)}
+          isLoading={unlinkAccountLoading}
+        />
       )
     }
 

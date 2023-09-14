@@ -77,11 +77,11 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
         position="absolute"
         color={lightModeColors.neutral[900]}
         right="10px"
-        top="-10px"
+        top="0"
         onClick={onCloseClick}
       />
 
-      <VStack w="full" spacing="20px" pt={2}>
+      <VStack w="full" spacing="20px" pt={4}>
         <SuccessImageComponent
           currentBadge={currentBadge}
           fundingTx={fundingTx}

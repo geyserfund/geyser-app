@@ -112,12 +112,12 @@ export const ProjectProvider = ({
       navigate(getPath('notFound'))
     },
     onCompleted(data) {
-      if (!data?.project) {
+      if (!data?.projectGet) {
         navigate(getPath('notFound'))
         return
       }
 
-      const { project } = data
+      const { projectGet: project } = data
 
       setNavData({
         projectName: project.name,

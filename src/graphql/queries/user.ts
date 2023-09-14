@@ -35,6 +35,7 @@ export const QUERY_USER_PROFILE = gql`
       username
       bio
       imageUrl
+      ranking
       wallet {
         id
         connectionDetails {
@@ -67,6 +68,7 @@ export const QUERY_USER_PROFILE = gql`
           description
           createdAt
           status
+          thumbnailImage
         }
       }
       ownerOf {

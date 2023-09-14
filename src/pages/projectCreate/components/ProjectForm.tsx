@@ -1,4 +1,3 @@
-import { useLazyQuery } from '@apollo/client'
 import {
   FormErrorIcon,
   HStack,
@@ -19,10 +18,9 @@ import { ProjectValidations } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { FieldContainer } from '../../../forms/components/FieldContainer'
 import { validateImageUrl } from '../../../forms/validations/image'
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../graphql'
+import { useProjectByNameOrIdLazyQuery } from '../../../types'
 import { toMediumImageUrl, validLightningAddress } from '../../../utils'
 import { ProjectCreationVariables } from '../types'
-import { ProjectFundraisingDeadline } from './ProjectFundraisingDeadline'
 
 const MIN_LENGTH_TO_QUERY_PROJECT = 3
 
@@ -37,14 +35,14 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
   const { formState, setValue, watch, setError, control } = form
 
-  const [getProject] = useLazyQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
+  const [getProject] = useProjectByNameOrIdLazyQuery({
     variables: {
       where: {
         name: watch('name'),
       },
     },
     onCompleted(data) {
-      if (data && data.project && data.project.id) {
+      if (data && data.projectGet && data.projectGet.id) {
         setError('name', new Error('This lightning address is already taken.'))
       }
     },
@@ -245,15 +243,6 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
             )
           }}
         />
-      </FieldContainer>
-
-      <FieldContainer
-        title={t('Fundraising deadline')}
-        subtitle={t(
-          'Add a deadline to your project if you have one, or just keep it as ongoing.',
-        )}
-      >
-        <ProjectFundraisingDeadline setValue={setValue} watch={watch} />
       </FieldContainer>
 
       <FieldContainer
