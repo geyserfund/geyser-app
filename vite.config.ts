@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react-swc'
 import { defineConfig, loadEnv, PluginOption } from 'vite'
 import mkcert from 'vite-plugin-mkcert'
 import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
+import loadVersion from 'vite-plugin-package-version'
 
 const pwaOptions: Partial<VitePWAOptions> = {
   base: '/',
@@ -110,7 +111,7 @@ export default defineConfig(({ command, mode }) => {
   }
 
   pwaOptions.mode = env.APP_ENV === 'development' ? 'development' : 'production'
-  const plugins: PluginOption[] = [VitePWA(pwaOptions), react()]
+  const plugins: PluginOption[] = [VitePWA(pwaOptions), react(), loadVersion()]
   if (mode !== 'production') {
     plugins.push(mkcert())
   }

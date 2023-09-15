@@ -20,6 +20,7 @@ const SENTRY_DSN =
 
 if (__production__) {
   Sentry.init({
+    release: `geyser-app@${import.meta.env.PACKAGE_VERSION}`,
     dsn: SENTRY_DSN,
     integrations: [
       new Sentry.BrowserTracing({
