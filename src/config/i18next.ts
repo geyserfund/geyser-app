@@ -15,6 +15,8 @@ import {
   PolishTranslations,
   PortugueseTranslation,
   SpanishTranslations,
+  SwahiliTranslations,
+  TurkishTranslations,
 } from '../translations'
 
 i18next
@@ -62,6 +64,12 @@ i18next
       },
       [lng.ar]: {
         translation: ArabicTranslations,
+      },
+      [lng.sw]: {
+        translation: SwahiliTranslations,
+      },
+      [lng.tr]: {
+        translation: TurkishTranslations,
       },
     },
   })
