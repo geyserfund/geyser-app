@@ -1,9 +1,9 @@
 import {
   ProjectCreatorContributors,
-  ProjectCreatorInsights,
   ProjectCreatorOverview,
   ProjectCreatorViews,
 } from './projectCreatorViews'
+import { ProjectCreatorInsights } from './projectCreatorViews/sections/insights'
 import {
   Entries as MainBodyEntries,
   Milestones as MainBodyMilestones,

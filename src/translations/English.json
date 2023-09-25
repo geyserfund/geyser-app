@@ -689,7 +689,11 @@
   "Total received (sats)":"Total received (sats)",
   "Rewards purchased":"Rewards purchased",
   "View all":"View all",
-  "Error fetching badges":"Error fetching badges"
+  "Error fetching badges":"Error fetching badges",
+  "beta":"beta",
+  "Historical":"Historical",
+  "Weekly overview":"Weekly overview",
+  "Contrib/Views":"Contrib/Views"
 
 
 }

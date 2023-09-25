@@ -607,8 +607,6 @@ export type GetFundingTxsInput = {
 
 export type GetFundingTxsOrderByInput = {
   createdAt: OrderByOptions
-  /** @deprecated Use createdAt instead. */
-  paidAt?: InputMaybe<OrderByOptions>
 }
 
 export type GetFundingTxsWhereInput = {
@@ -1149,7 +1147,7 @@ export type PaginationInput = {
 
 export type Project = {
   __typename?: 'Project'
-  /** @deprecated Field no longer supported */
+  /** @deprecated No longer supported */
   ambassadors: Array<Ambassador>
   /** Total amount raised by the project, in satoshis. */
   balance: Scalars['Int']
@@ -1184,7 +1182,7 @@ export type Project = {
   rewards: Array<ProjectReward>
   /** Short description of the project. */
   shortDescription?: Maybe<Scalars['shortDescription_String_maxLength_500']>
-  /** @deprecated Field no longer supported */
+  /** @deprecated No longer supported */
   sponsors: Array<Sponsor>
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>
@@ -1823,14 +1821,14 @@ export type UserProjectContribution = {
   funder?: Maybe<Funder>
   /**
    * Boolean value indicating if the User was an ambassador of the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isAmbassador: Scalars['Boolean']
   /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean']
   /**
    * Boolean value indicating if the User was a sponsor for the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isSponsor: Scalars['Boolean']
   /** Project linked to the contributions. */
@@ -4969,6 +4967,97 @@ export type ProjectStatsForOverviewPageFragment = {
   } | null
 }
 
+export type ProjectStatsForInsightsPageFragment = {
+  __typename?: 'ProjectStats'
+  current?: {
+    __typename?: 'ProjectStatsBase'
+    projectViews?: {
+      __typename?: 'ProjectViewStats'
+      viewCount: number
+      visitorCount: number
+      referrers: Array<{
+        __typename?: 'ProjectViewBaseStats'
+        value: string
+        viewCount: number
+        visitorCount: number
+      }>
+      countries: Array<{
+        __typename?: 'ProjectViewBaseStats'
+        value: string
+        viewCount: number
+        visitorCount: number
+      }>
+    } | null
+    projectFunderRewards?: {
+      __typename?: 'ProjectFunderRewardStats'
+      quantitySum: number
+    } | null
+    projectFunders?: { __typename?: 'ProjectFunderStats'; count: number } | null
+    projectFundingTxs?: {
+      __typename?: 'ProjectFundingTxStats'
+      amountSum?: number | null
+    } | null
+  } | null
+  prevTimeRange?: {
+    __typename?: 'ProjectStatsBase'
+    projectViews?: {
+      __typename?: 'ProjectViewStats'
+      viewCount: number
+      visitorCount: number
+    } | null
+    projectFunderRewards?: {
+      __typename?: 'ProjectFunderRewardStats'
+      quantitySum: number
+    } | null
+    projectFunders?: { __typename?: 'ProjectFunderStats'; count: number } | null
+    projectFundingTxs?: {
+      __typename?: 'ProjectFundingTxStats'
+      amountSum?: number | null
+    } | null
+  } | null
+}
+
+export type ProjectHistoryStatsFragment = {
+  __typename?: 'ProjectStats'
+  current?: {
+    __typename?: 'ProjectStatsBase'
+    projectFundingTxs?: {
+      __typename?: 'ProjectFundingTxStats'
+      amountGraph?: Array<{
+        __typename?: 'FundingTxAmountGraph'
+        dateTime: any
+        sum: number
+      } | null> | null
+    } | null
+    projectViews?: {
+      __typename?: 'ProjectViewStats'
+      visitorGraph: Array<{
+        __typename?: 'PageViewCountGraph'
+        viewCount: number
+        visitorCount: number
+        dateTime: any
+      } | null>
+    } | null
+  } | null
+}
+
+export type ProjectRewardSoldGraphStatsFragment = {
+  __typename?: 'ProjectStats'
+  current?: {
+    __typename?: 'ProjectStatsBase'
+    projectFunderRewards?: {
+      __typename?: 'ProjectFunderRewardStats'
+      quantityGraph?: Array<{
+        __typename?: 'FunderRewardGraphSum'
+        dateTime: any
+        rewardId: any
+        rewardName: string
+        sum: number
+      } | null> | null
+    } | null
+  } | null
+}
+
 export type UserMeFragment = {
   __typename?: 'User'
   id: any
@@ -6080,15 +6169,46 @@ export type FeaturedProjectForLandingPageQuery = {
     | null
 }
 
-export type ProjectStatsGetQueryVariables = Exact<{
+export type ProjectStatsGetOverViewQueryVariables = Exact<{
   input: GetProjectStatsInput
 }>
 
-export type ProjectStatsGetQuery = {
+export type ProjectStatsGetOverViewQuery = {
   __typename?: 'Query'
   projectStatsGet: {
     __typename?: 'ProjectStats'
   } & ProjectStatsForOverviewPageFragment
+}
+
+export type ProjectStatsGetInsightQueryVariables = Exact<{
+  input: GetProjectStatsInput
+}>
+
+export type ProjectStatsGetInsightQuery = {
+  __typename?: 'Query'
+  projectStatsGet: {
+    __typename?: 'ProjectStats'
+  } & ProjectStatsForInsightsPageFragment
+}
+
+export type ProjectHistoryStatsGetQueryVariables = Exact<{
+  input: GetProjectStatsInput
+}>
+
+export type ProjectHistoryStatsGetQuery = {
+  __typename?: 'Query'
+  projectStatsGet: { __typename?: 'ProjectStats' } & ProjectHistoryStatsFragment
+}
+
+export type ProjectRewardSoldGraphStatsGetQueryVariables = Exact<{
+  input: GetProjectStatsInput
+}>
+
+export type ProjectRewardSoldGraphStatsGetQuery = {
+  __typename?: 'Query'
+  projectStatsGet: {
+    __typename?: 'ProjectStats'
+  } & ProjectRewardSoldGraphStatsFragment
 }
 
 export type TagsGetQueryVariables = Exact<{ [key: string]: never }>
@@ -6580,6 +6700,83 @@ export const ProjectStatsForOverviewPageFragmentDoc = gql`
       }
       projectFunderRewards {
         quantitySum
+      }
+    }
+  }
+`
+export const ProjectStatsForInsightsPageFragmentDoc = gql`
+  fragment ProjectStatsForInsightsPage on ProjectStats {
+    current {
+      projectViews {
+        viewCount
+        visitorCount
+        referrers {
+          value
+          viewCount
+          visitorCount
+        }
+        countries {
+          value
+          viewCount
+          visitorCount
+        }
+      }
+      projectFunderRewards {
+        quantitySum
+      }
+      projectFunders {
+        count
+      }
+      projectFundingTxs {
+        amountSum
+      }
+    }
+    prevTimeRange {
+      projectViews {
+        viewCount
+        visitorCount
+      }
+      projectFunderRewards {
+        quantitySum
+      }
+      projectFunders {
+        count
+      }
+      projectFundingTxs {
+        amountSum
+      }
+    }
+  }
+`
+export const ProjectHistoryStatsFragmentDoc = gql`
+  fragment ProjectHistoryStats on ProjectStats {
+    current {
+      projectFundingTxs {
+        amountGraph {
+          dateTime
+          sum
+        }
+      }
+      projectViews {
+        visitorGraph {
+          viewCount
+          visitorCount
+          dateTime
+        }
+      }
+    }
+  }
+`
+export const ProjectRewardSoldGraphStatsFragmentDoc = gql`
+  fragment ProjectRewardSoldGraphStats on ProjectStats {
+    current {
+      projectFunderRewards {
+        quantityGraph {
+          dateTime
+          rewardId
+          rewardName
+          sum
+        }
       }
     }
   }
@@ -10297,8 +10494,8 @@ export type FeaturedProjectForLandingPageQueryResult = Apollo.QueryResult<
   FeaturedProjectForLandingPageQuery,
   FeaturedProjectForLandingPageQueryVariables
 >
-export const ProjectStatsGetDocument = gql`
-  query ProjectStatsGet($input: GetProjectStatsInput!) {
+export const ProjectStatsGetOverViewDocument = gql`
+  query ProjectStatsGetOverView($input: GetProjectStatsInput!) {
     projectStatsGet(input: $input) {
       ...ProjectStatsForOverviewPage
     }
@@ -10307,54 +10504,231 @@ export const ProjectStatsGetDocument = gql`
 `
 
 /**
- * __useProjectStatsGetQuery__
+ * __useProjectStatsGetOverViewQuery__
  *
- * To run a query within a React component, call `useProjectStatsGetQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectStatsGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useProjectStatsGetOverViewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectStatsGetOverViewQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useProjectStatsGetQuery({
+ * const { data, loading, error } = useProjectStatsGetOverViewQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useProjectStatsGetQuery(
+export function useProjectStatsGetOverViewQuery(
   baseOptions: Apollo.QueryHookOptions<
-    ProjectStatsGetQuery,
-    ProjectStatsGetQueryVariables
+    ProjectStatsGetOverViewQuery,
+    ProjectStatsGetOverViewQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<ProjectStatsGetQuery, ProjectStatsGetQueryVariables>(
-    ProjectStatsGetDocument,
-    options,
-  )
+  return Apollo.useQuery<
+    ProjectStatsGetOverViewQuery,
+    ProjectStatsGetOverViewQueryVariables
+  >(ProjectStatsGetOverViewDocument, options)
 }
-export function useProjectStatsGetLazyQuery(
+export function useProjectStatsGetOverViewLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    ProjectStatsGetQuery,
-    ProjectStatsGetQueryVariables
+    ProjectStatsGetOverViewQuery,
+    ProjectStatsGetOverViewQueryVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<
-    ProjectStatsGetQuery,
-    ProjectStatsGetQueryVariables
-  >(ProjectStatsGetDocument, options)
+    ProjectStatsGetOverViewQuery,
+    ProjectStatsGetOverViewQueryVariables
+  >(ProjectStatsGetOverViewDocument, options)
 }
-export type ProjectStatsGetQueryHookResult = ReturnType<
-  typeof useProjectStatsGetQuery
+export type ProjectStatsGetOverViewQueryHookResult = ReturnType<
+  typeof useProjectStatsGetOverViewQuery
 >
-export type ProjectStatsGetLazyQueryHookResult = ReturnType<
-  typeof useProjectStatsGetLazyQuery
+export type ProjectStatsGetOverViewLazyQueryHookResult = ReturnType<
+  typeof useProjectStatsGetOverViewLazyQuery
 >
-export type ProjectStatsGetQueryResult = Apollo.QueryResult<
-  ProjectStatsGetQuery,
-  ProjectStatsGetQueryVariables
+export type ProjectStatsGetOverViewQueryResult = Apollo.QueryResult<
+  ProjectStatsGetOverViewQuery,
+  ProjectStatsGetOverViewQueryVariables
+>
+export const ProjectStatsGetInsightDocument = gql`
+  query ProjectStatsGetInsight($input: GetProjectStatsInput!) {
+    projectStatsGet(input: $input) {
+      ...ProjectStatsForInsightsPage
+    }
+  }
+  ${ProjectStatsForInsightsPageFragmentDoc}
+`
+
+/**
+ * __useProjectStatsGetInsightQuery__
+ *
+ * To run a query within a React component, call `useProjectStatsGetInsightQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectStatsGetInsightQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectStatsGetInsightQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectStatsGetInsightQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ProjectStatsGetInsightQuery,
+    ProjectStatsGetInsightQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    ProjectStatsGetInsightQuery,
+    ProjectStatsGetInsightQueryVariables
+  >(ProjectStatsGetInsightDocument, options)
+}
+export function useProjectStatsGetInsightLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ProjectStatsGetInsightQuery,
+    ProjectStatsGetInsightQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    ProjectStatsGetInsightQuery,
+    ProjectStatsGetInsightQueryVariables
+  >(ProjectStatsGetInsightDocument, options)
+}
+export type ProjectStatsGetInsightQueryHookResult = ReturnType<
+  typeof useProjectStatsGetInsightQuery
+>
+export type ProjectStatsGetInsightLazyQueryHookResult = ReturnType<
+  typeof useProjectStatsGetInsightLazyQuery
+>
+export type ProjectStatsGetInsightQueryResult = Apollo.QueryResult<
+  ProjectStatsGetInsightQuery,
+  ProjectStatsGetInsightQueryVariables
+>
+export const ProjectHistoryStatsGetDocument = gql`
+  query ProjectHistoryStatsGet($input: GetProjectStatsInput!) {
+    projectStatsGet(input: $input) {
+      ...ProjectHistoryStats
+    }
+  }
+  ${ProjectHistoryStatsFragmentDoc}
+`
+
+/**
+ * __useProjectHistoryStatsGetQuery__
+ *
+ * To run a query within a React component, call `useProjectHistoryStatsGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectHistoryStatsGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectHistoryStatsGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectHistoryStatsGetQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ProjectHistoryStatsGetQuery,
+    ProjectHistoryStatsGetQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    ProjectHistoryStatsGetQuery,
+    ProjectHistoryStatsGetQueryVariables
+  >(ProjectHistoryStatsGetDocument, options)
+}
+export function useProjectHistoryStatsGetLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ProjectHistoryStatsGetQuery,
+    ProjectHistoryStatsGetQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    ProjectHistoryStatsGetQuery,
+    ProjectHistoryStatsGetQueryVariables
+  >(ProjectHistoryStatsGetDocument, options)
+}
+export type ProjectHistoryStatsGetQueryHookResult = ReturnType<
+  typeof useProjectHistoryStatsGetQuery
+>
+export type ProjectHistoryStatsGetLazyQueryHookResult = ReturnType<
+  typeof useProjectHistoryStatsGetLazyQuery
+>
+export type ProjectHistoryStatsGetQueryResult = Apollo.QueryResult<
+  ProjectHistoryStatsGetQuery,
+  ProjectHistoryStatsGetQueryVariables
+>
+export const ProjectRewardSoldGraphStatsGetDocument = gql`
+  query ProjectRewardSoldGraphStatsGet($input: GetProjectStatsInput!) {
+    projectStatsGet(input: $input) {
+      ...ProjectRewardSoldGraphStats
+    }
+  }
+  ${ProjectRewardSoldGraphStatsFragmentDoc}
+`
+
+/**
+ * __useProjectRewardSoldGraphStatsGetQuery__
+ *
+ * To run a query within a React component, call `useProjectRewardSoldGraphStatsGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectRewardSoldGraphStatsGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectRewardSoldGraphStatsGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectRewardSoldGraphStatsGetQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ProjectRewardSoldGraphStatsGetQuery,
+    ProjectRewardSoldGraphStatsGetQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    ProjectRewardSoldGraphStatsGetQuery,
+    ProjectRewardSoldGraphStatsGetQueryVariables
+  >(ProjectRewardSoldGraphStatsGetDocument, options)
+}
+export function useProjectRewardSoldGraphStatsGetLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ProjectRewardSoldGraphStatsGetQuery,
+    ProjectRewardSoldGraphStatsGetQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    ProjectRewardSoldGraphStatsGetQuery,
+    ProjectRewardSoldGraphStatsGetQueryVariables
+  >(ProjectRewardSoldGraphStatsGetDocument, options)
+}
+export type ProjectRewardSoldGraphStatsGetQueryHookResult = ReturnType<
+  typeof useProjectRewardSoldGraphStatsGetQuery
+>
+export type ProjectRewardSoldGraphStatsGetLazyQueryHookResult = ReturnType<
+  typeof useProjectRewardSoldGraphStatsGetLazyQuery
+>
+export type ProjectRewardSoldGraphStatsGetQueryResult = Apollo.QueryResult<
+  ProjectRewardSoldGraphStatsGetQuery,
+  ProjectRewardSoldGraphStatsGetQueryVariables
 >
 export const TagsGetDocument = gql`
   query TagsGet {

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { H3 } from '../../../../../../components/typography'
 import { getPath } from '../../../../../../constants'
 import { useProjectContext } from '../../../../../../context'
-import { useProjectStatsGetLazyQuery } from '../../../../../../types'
+import { useProjectStatsGetOverViewLazyQuery } from '../../../../../../types'
 import { useNotification } from '../../../../../../utils'
 import { StatsBlock } from '../elements'
 
@@ -36,7 +36,7 @@ export const StatsComponent = () => {
   const [projectStats, setProjectStats] =
     useState<ProjectStatsOverviewType>(defaultProjectStats)
 
-  const [projectStatsGet] = useProjectStatsGetLazyQuery({
+  const [projectStatsGetOverview] = useProjectStatsGetOverViewLazyQuery({
     onCompleted(data) {
       const projectStats = data.projectStatsGet
 
@@ -74,7 +74,7 @@ export const StatsComponent = () => {
 
   useEffect(() => {
     if (project?.id) {
-      projectStatsGet({
+      projectStatsGetOverview({
         variables: {
           input: {
             where: {
@@ -88,7 +88,7 @@ export const StatsComponent = () => {
         },
       })
     }
-  }, [project?.id, projectStatsGet])
+  }, [project?.id, projectStatsGetOverview])
 
   console.log('checking path', getPath('projectContributors', project?.name))
   return (
@@ -111,7 +111,7 @@ export const StatsComponent = () => {
           <StatsBlock
             title={t('Rewards purchased')}
             prevValue={projectStats.prevRewardsPurchased}
-            value={}
+            value={projectStats.rewardsPurchased}
             flex={1}
           />
         </HStack>

@@ -33,7 +33,7 @@ export const StatsBlock = ({
       : 0
 
   return (
-    <CardLayout padding="10px 20px" {...rest}>
+    <CardLayout padding="10px 20px" minWidth="200px" {...rest}>
       <Body2 color="neutral.600" xBold>
         {title}
       </Body2>
