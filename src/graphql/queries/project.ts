@@ -120,7 +120,7 @@ export const QUERY_PROJECT_DASHBOARD_DATA = gql`
 export const QUERY_PROJECT_FUNDERS = gql`
   ${FRAGMENT_FUNDER_WITH_USER}
   query ProjectFunders($input: GetFundersInput!) {
-    getFunders(input: $input) {
+    fundersGet(input: $input) {
       ...FunderWithUser
     }
   }

@@ -679,5 +679,17 @@
   "Overview":"Overview",
   "Insights":"Insights",
   "Creator view":"Creator view",
-  "Hide": "Hide"
+  "Hide": "Hide",
+  "Error fetching project stats":"Error fetching project stats",
+  "Learn":"Learn",
+  "How do I sell merch":"How do I sell merch",
+  "Sell merch, perks, and rewards related to your project":"Sell merch, perks, and rewards related to your project",
+  "Engage my community":"Engage my community",
+  "Keep your supporters up-to-date with Entries on Geyser":"Keep your supporters up-to-date with Entries on Geyser",
+  "Total received (sats)":"Total received (sats)",
+  "Rewards purchased":"Rewards purchased",
+  "View all":"View all",
+  "Error fetching badges":"Error fetching badges"
+
+
 }

@@ -23,10 +23,14 @@ export const StatsBlock = ({
   const { colors } = useCustomTheme()
 
   const isHigher =
-    value > prevValue ? Math.round(((value - prevValue) / prevValue) * 100) : 0
+    prevValue && value > prevValue
+      ? Math.round(((value - prevValue) / prevValue) * 100)
+      : 0
 
   const isLower =
-    value < prevValue ? Math.round(((prevValue - value) / prevValue) * 100) : 0
+    prevValue && value < prevValue
+      ? Math.round(((prevValue - value) / prevValue) * 100)
+      : 0
 
   return (
     <CardLayout padding="10px 20px" {...rest}>
@@ -47,7 +51,7 @@ export const StatsBlock = ({
           {isLower > 0 && (
             <>
               <BsArrowDown color={colors.secondary.red} fontSize="14px" />
-              <Body2 color="secondary.red" xBold>
+              <Body2 color="secondary.red" xBold isTruncated>
                 {isLower.toFixed(2)}%
               </Body2>
             </>

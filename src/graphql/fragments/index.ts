@@ -1,6 +1,5 @@
-export * from './entries'
+export * from './email'
 export * from './funding'
 export * from './project'
 export * from './projectStats'
-export * from './tags'
 export * from './user'

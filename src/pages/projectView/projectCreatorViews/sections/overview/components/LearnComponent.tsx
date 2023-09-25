@@ -11,7 +11,7 @@ import { LearnDisplayCards } from '../elements'
 export const LearnComponent = () => {
   const { t } = useTranslation()
   return (
-    <VStack spacing="10px">
+    <VStack spacing="10px" w="full">
       <H3>{t('Learn')}</H3>
       <LearnDisplayCards
         image={Gift3DImageUrl}

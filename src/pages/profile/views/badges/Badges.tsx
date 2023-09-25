@@ -1,14 +1,13 @@
-import { useQuery } from '@apollo/client'
 import { Button, HStack, Link as ChakraLink } from '@chakra-ui/react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsBoxArrowUpRight } from 'react-icons/bs'
 
 import { CardLayout } from '../../../../components/layouts'
 import { Body2, H2 } from '../../../../components/typography'
 import { getPath } from '../../../../constants'
-import { QUERY_USER_BADGES } from '../../../../graphql/queries/badges'
-import { User, UserBadge } from '../../../../types'
-import { toInt } from '../../../../utils'
+import { User, useUserBadgesLazyQuery } from '../../../../types'
+import { toInt, useNotification } from '../../../../utils'
 import { BadgesBody, BadgesBodySkeleton } from './BadgesBody'
 
 export const Badges = ({
@@ -21,11 +20,26 @@ export const Badges = ({
   isLoading: boolean
 }) => {
   const { t } = useTranslation()
-  const { data: userBadgesData, loading: userBadgeLoading } = useQuery<{
-    userBadges: UserBadge[]
-  }>(QUERY_USER_BADGES, {
-    variables: { input: { where: { userId: toInt(userProfile.id) } } },
-  })
+  const { toast } = useNotification()
+
+  const [getUserBadges, { data: userBadgesData, loading: userBadgeLoading }] =
+    useUserBadgesLazyQuery({
+      onError() {
+        toast({
+          title: 'Error fetching badges',
+          description: 'Please refresh the page and try again.',
+          status: 'error',
+        })
+      },
+    })
+
+  useEffect(() => {
+    if (userProfile.id) {
+      getUserBadges({
+        variables: { input: { where: { userId: toInt(userProfile.id) } } },
+      })
+    }
+  }, [userProfile.id, getUserBadges])
 
   const renderBadgesBody = () => {
     if (userBadgeLoading || isLoading) {

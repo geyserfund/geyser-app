@@ -1,9 +1,8 @@
-import { useState } from 'react'
-import { BsTwitter } from 'react-icons/bs'
-import { useTranslation } from 'react-i18next'
-
 import { CheckIcon, CloseIcon, CopyIcon } from '@chakra-ui/icons'
-import { Icon, HStack, StackProps, Tooltip } from '@chakra-ui/react'
+import { HStack, Icon, StackProps, Tooltip } from '@chakra-ui/react'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { BsTwitter } from 'react-icons/bs'
 
 import { BoltSvgIcon, NostrSvgIcon } from '../../../components/icons'
 import { Body2 } from '../../../components/typography'
