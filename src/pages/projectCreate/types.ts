@@ -8,8 +8,6 @@ export type ProjectCreationVariables = {
   shortDescription: string
   description: string
   email: string
-  expiresAt?: string | null
-  fundingGoal?: number
   rewardCurrency?: RewardCurrency | null
   type?: ProjectType
 }
@@ -23,10 +21,8 @@ export type ProjectUpdateVariables = Partial<
     | 'thumbnailImage'
     | 'shortDescription'
     | 'description'
-    | 'expiresAt'
     | 'type'
     | 'rewardCurrency'
-    | 'fundingGoal'
     | 'status'
   >
 >

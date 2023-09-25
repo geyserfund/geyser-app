@@ -8,7 +8,6 @@ import { disableSortByTrending, getCurrentSelection } from './sortSelection'
 export enum SortOptions {
   mostFundedThisWeek = 'Most funded this week',
   mostFundedAllTime = 'Most funded all time',
-  mostRecentProjects = 'Most recent projects',
 }
 
 export const SortBody = ({ isMobile }: { isMobile?: boolean }) => {
@@ -17,15 +16,6 @@ export const SortBody = ({ isMobile }: { isMobile?: boolean }) => {
 
   const onSortSelect = (value: SortOptions) => {
     switch (value) {
-      case SortOptions.mostRecentProjects:
-        if (isMobile) {
-          updateFilter({ recent: true, sort: SortType.createdAt })
-        } else {
-          updateFilter({ sort: SortType.createdAt })
-        }
-
-        break
-
       case SortOptions.mostFundedAllTime:
         if (isMobile) {
           updateFilter({ recent: true, sort: SortType.balance })
@@ -62,7 +52,6 @@ export const SortBody = ({ isMobile }: { isMobile?: boolean }) => {
   const sortList = [
     SortOptions.mostFundedThisWeek,
     SortOptions.mostFundedAllTime,
-    SortOptions.mostRecentProjects,
   ]
 
   const renderButtons = disableSortByTrending(filters)

@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Box, HStack, VStack, Link } from '@chakra-ui/react'
+import { Box, HStack, VStack, Link, Text } from '@chakra-ui/react'
 
 import type { User, UserProjectContribution } from '../../../../types'
 import { getPath } from '../../../../constants'
@@ -30,26 +30,26 @@ const ContributionSummary = ({
   imageSrc,
 }: ContributionSummaryProps) => {
   return (
-    <HStack spacing={2}>
-      <Box width="75px" height="66px">
-        <ImageWithReload
-          width="100%"
-          height="100%"
-          objectFit="cover"
-          src={imageSrc}
-          alt={`${title}-header-image`}
-          borderRadius="8px"
-        />
-      </Box>
-      <VStack align="flex-start">
-        <Link href={url} textDecoration="none">
+    <Link href={url} textDecoration="none" _hover={{ textDecoration: 'none' }}>
+      <HStack spacing={2}>
+        <Box width="75px" height="75px">
+          <ImageWithReload
+            width="100%"
+            height="100%"
+            objectFit="cover"
+            src={imageSrc}
+            alt={`${title}-header-image`}
+            borderRadius="8px"
+          />
+        </Box>
+        <VStack align="flex-start">
           <H3>{title}</H3>
-        </Link>
-        <SatoshiAmount color="primary.800" fontSize="2xl" fontWeight="bold">
-          {amount}
-        </SatoshiAmount>
-      </VStack>
-    </HStack>
+          <SatoshiAmount color="primary.800" fontSize="2xl" fontWeight="bold">
+            {amount}
+          </SatoshiAmount>
+        </VStack>
+      </HStack>
+    </Link>
   )
 }
 
@@ -72,12 +72,15 @@ export const ProfileContributions = ({
       {contributions.map((c: UserProjectContribution) => (
         <ContributionSummary
           key={c.project.id}
-          title={c.project.name}
+          title={c.project.title}
           imageSrc={c.project.thumbnailImage || ''}
           url={getPath('project', c.project.name)}
           amount={contributionAmount(c)}
         />
       ))}
+      {contributions.length === 0 && (
+        <Text>{t('This user has no contributions yet.')}</Text>
+      )}
     </ProfileTabLayout>
   )
 }

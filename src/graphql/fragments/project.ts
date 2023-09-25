@@ -96,10 +96,8 @@ export const FRAGMENT_PROJECT = gql`
     shortDescription
     description
     balance
-    fundingGoal
     createdAt
     updatedAt
-    expiresAt
     image
     thumbnailImage
     links

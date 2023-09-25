@@ -150,7 +150,7 @@ export const SuccessImageComponent = ({
           label={copied ? t('copied') : t('copy')}
         >
           <Button
-            size="sm"
+            size="md"
             w="100%"
             isActive={copied}
             variant="secondary"
@@ -159,11 +159,7 @@ export const SuccessImageComponent = ({
             onClick={handleCopy}
             isLoading={successComponent.current === null}
           >
-            <Text
-              variant="caption"
-              fontWeight="bold"
-              textTransform="capitalize"
-            >
+            <Text variant="body1" fontWeight="bold" textTransform="capitalize">
               {t('Copy success image')}
             </Text>
           </Button>

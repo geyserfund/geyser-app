@@ -20,9 +20,12 @@ export const LeaderboardAllTime = ({
     error,
   } = useQueryWithPagination<Project>({
     itemLimit: items,
-    queryName: ['projects', 'projects'],
+    queryName: ['projectsGet', 'projects'],
     query: QUERY_PROJECTS_FOR_LANDING_PAGE,
-    orderBy: { balance: OrderByOptions.Desc },
+    orderBy: {
+      direction: OrderByOptions.Desc,
+      field: 'balance',
+    },
     where: {
       status: ProjectStatus.Active,
     },
