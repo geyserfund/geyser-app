@@ -94,7 +94,7 @@ export const StatsComponent = () => {
   return (
     <VStack w="full" alignItems="start" spacing="10px">
       <H3>{t('Stats')}</H3>
-      <HStack w="full" spacing="20px" wrap="wrap">
+      <HStack w="full" spacing="20px" wrap="wrap" alignItems="start">
         <StatsBlock
           title={t('Total received (sats)')}
           prevValue={projectStats.prevContributionCount}

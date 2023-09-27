@@ -4,17 +4,19 @@ import { createMultiStyleConfigHelpers } from '@chakra-ui/react'
 const { definePartsStyle, defineMultiStyleConfig } =
   createMultiStyleConfigHelpers(selectAnatomy.keys)
 
+const commonActiveStyle = {
+  borderColor: 'primary.400',
+  boxShadow: 'none',
+  outline: 'none',
+}
+
 const baseStyle = definePartsStyle({
   field: {
-    _hover: {
-      borderColor: 'primary.400',
-    },
-    _active: {
-      borderColor: 'primary.400',
-    },
-    _focus: {
-      borderColor: 'primary.400',
-    },
+    _hover: commonActiveStyle,
+    _active: commonActiveStyle,
+    _focus: commonActiveStyle,
+    _focusVisible: commonActiveStyle,
+    _focusWithin: commonActiveStyle,
   },
 })
 

@@ -1,6 +1,6 @@
 import loadable from '@loadable/component'
 import { withSentryReactRouterV6Routing } from '@sentry/react'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { __production__, getPath, PathName } from '../constants'
@@ -329,14 +329,17 @@ export const Router = () => {
                 {
                   path: getPath('projectOverview', PathName.projectId),
                   element: ProjectCreatorOverviewPage,
+                  authenticated: true,
                 },
                 {
                   path: getPath('projectInsights', PathName.projectId),
                   element: ProjectCreatorInsightsPage,
+                  authenticated: true,
                 },
                 {
                   path: getPath('projectContributors', PathName.projectId),
                   element: ProjectCreatorContributorsPage,
+                  authenticated: true,
                 },
               ],
             },
@@ -406,27 +409,11 @@ export const Router = () => {
           )
           // index routes cannot have children routes
           if (isIndex) {
-            return (
-              <Route
-                index
-                key={path}
-                element={
-                  <React.Suspense fallback={null}>
-                    {renderElement}
-                  </React.Suspense>
-                }
-              />
-            )
+            return <Route index key={path} element={renderElement} />
           }
 
           return (
-            <Route
-              key={path}
-              path={path}
-              element={
-                <React.Suspense fallback={null}>{renderElement}</React.Suspense>
-              }
-            >
+            <Route key={path} path={path} element={renderElement}>
               {nested?.length && renderRoutes(nested)}
             </Route>
           )

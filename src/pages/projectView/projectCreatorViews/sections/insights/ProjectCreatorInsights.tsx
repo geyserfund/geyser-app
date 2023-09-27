@@ -16,7 +16,7 @@ export const ProjectCreatorInsights = () => {
       direction={{ base: 'column', lg: 'row' }}
       w="full"
       pt="20px"
-      bg="neutral.0"
+      backgroundColor={{ base: 'neutral.0', lg: 'inherit' }}
       pb={{ base: '80px', lg: '20px' }}
       px={{ base: '10px', lg: '80px' }}
       spacing="40px"

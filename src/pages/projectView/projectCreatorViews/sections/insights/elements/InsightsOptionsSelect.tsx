@@ -16,6 +16,9 @@ export const InsightsOptionsSelect = () => {
       defaultValue={selectedOption}
       onChange={handleSelect}
       maxWidth="150px"
+      borderRadius="8px"
+      backgroundColor="neutral.100"
+      size="sm"
     >
       <option value={InsightsOptions.lastWeek}>
         {InsightsOptions.lastWeek}

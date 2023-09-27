@@ -12,7 +12,7 @@ export const LearnComponent = () => {
   const { t } = useTranslation()
   return (
     <VStack spacing="10px" w="full">
-      <H3>{t('Learn')}</H3>
+      <H3 alignSelf="start">{t('Learn')}</H3>
       <LearnDisplayCards
         image={Gift3DImageUrl}
         title={t('How do I sell merch')}

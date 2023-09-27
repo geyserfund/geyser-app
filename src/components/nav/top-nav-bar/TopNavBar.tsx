@@ -57,6 +57,16 @@ const dashboardRoutes = [
   getPath('dashboardStory', PathName.projectId),
 ]
 
+export const projectRoutes = [
+  getPath('project', PathName.projectId),
+  getPath('projectContributors', PathName.projectId),
+  getPath('projectInsights', PathName.projectId),
+  getPath('projectOverview', PathName.projectId),
+  getPath('projectEntries', PathName.projectId),
+  getPath('projectMilestones', PathName.projectId),
+  getPath('projectRewards', PathName.projectId),
+]
+
 const routesForHidingTopNav = [
   `/${PathName.project}/:projectId/${PathName.entry}`,
   `/${PathName.project}/:projectId/${PathName.entry}/:entryId`,
@@ -66,7 +76,7 @@ const routesForHidingTopNav = [
 const routesForShowingProjectButton = dashboardRoutes
 
 const customTitleRoutes = [
-  `/${PathName.project}/:projectId/`,
+  ...projectRoutes,
   ...dashboardRoutes,
   `/${PathName.project}/:projectId/${PathName.entry}`,
   `/${PathName.entry}/:entryId`,
@@ -97,6 +107,7 @@ const routesForHidingMyProjectsButton = [
 ]
 
 const routesForEnablingSignInButton = [
+  ...projectRoutes,
   getPath('index'),
   getPath('landingPage'),
   getPath('landingFeed'),
@@ -109,7 +120,6 @@ const routesForEnablingSignInButton = [
   `/${PathName.grants}/:grantId`,
   `/${PathName.userProfile}/:userId`,
   `/${PathName.entry}/:entryId`,
-  `/${PathName.project}/:projectId/`,
   `/${PathName.project}/:projectId/${PathName.entry}`,
   `/${PathName.project}/:projectId/${PathName.entry}/:entryId`,
   `/${PathName.project}/:projectId/${PathName.entry}/:entryId/${PathName.preview}`,

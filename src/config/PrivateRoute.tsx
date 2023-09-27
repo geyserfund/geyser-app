@@ -19,6 +19,13 @@ const projectEntryCreationRoutes = [
   `/${PathName.project}/:projectId/${PathName.entry}/:entryId/${PathName.preview}`,
 ]
 
+const projectCreatorRoutes = [
+  ...privateProjectLaunchRoutes,
+  getPath('projectContributors', PathName.projectId),
+  getPath('projectInsights', PathName.projectId),
+  getPath('projectOverview', PathName.projectId),
+]
+
 export const PrivateRoute = ({ children }: IPrivateRoute) => {
   const {
     loading,
@@ -41,6 +48,7 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
   const routeMatchForTopLevelProjectCreation = useMatch(
     getPath('privateProjectLaunch'),
   )
+  const routeMatchForProjectCreatorPages = projectCreatorRoutes.map(useMatch)
 
   const isPrivateProjectCreationPath: boolean = useMemo(
     () =>
@@ -61,6 +69,14 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
   const isTopLevelProjectCreationRoute: boolean = useMemo(
     () => Boolean(routeMatchForTopLevelProjectCreation),
     [routeMatchForTopLevelProjectCreation],
+  )
+
+  const isProjectCreatorPagesRoute: boolean = useMemo(
+    () =>
+      routeMatchForProjectCreatorPages.some((routeMatch) =>
+        Boolean(routeMatch as PathMatch),
+      ),
+    [routeMatchForProjectCreatorPages],
   )
 
   const isUserViewingTheirOwnProject: boolean = useMemo(
@@ -130,7 +146,7 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
 
     return (
       user &&
-      isPrivateProjectCreationPath &&
+      isProjectCreatorPagesRoute &&
       Boolean(isUserViewingTheirOwnProject) === false
     )
   }

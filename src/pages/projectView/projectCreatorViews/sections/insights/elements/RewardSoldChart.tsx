@@ -1,15 +1,7 @@
 import { HStack, VStack } from '@chakra-ui/react'
 import { useRef } from 'react'
 import { FaGift } from 'react-icons/fa'
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Legend,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts'
+import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from 'recharts'
 
 import { SkeletonLayout } from '../../../../../../components/layouts'
 import { Body2 } from '../../../../../../components/typography'
@@ -34,107 +26,6 @@ export type RewardListType = {
   rewardName: string
 }
 
-const ssdata = [
-  {
-    name: 'Fri (22/09)',
-    rewards: {
-      '93': {
-        dateTime: 1695427200000,
-        sum: 1,
-        rewardId: '93',
-        rewardName: 'Insane Keychain',
-      },
-      '94': {
-        dateTime: 1695527200000,
-        sum: 2,
-        rewardId: '94',
-        rewardName: 'Insane Keychain2',
-      },
-      '95': {
-        dateTime: 1695627200000,
-        sum: 3,
-        rewardId: '95',
-        rewardName: 'Insane Keychain3',
-      },
-    },
-  },
-  {
-    name: 'Sat (23/09)',
-    rewards: {
-      '93': {
-        dateTime: 1695427200000,
-        sum: 5,
-        rewardId: '93',
-        rewardName: 'Insane Keychain',
-      },
-      '94': {
-        dateTime: 1695527200000,
-        sum: 25,
-        rewardId: '94',
-        rewardName: 'Insane Keychain2',
-      },
-      '95': {
-        dateTime: 1695627200000,
-        sum: 78,
-        rewardId: '95',
-        rewardName: 'Insane Keychain3',
-      },
-      '96': {
-        dateTime: 1695727200000,
-        sum: 45,
-        rewardId: '96',
-        rewardName: 'Insane Keychain4',
-      },
-      '97': {
-        dateTime: 1695827200000,
-        sum: 78,
-        rewardId: '97',
-        rewardName: 'Insane Keychain5',
-      },
-    },
-  },
-  {
-    name: 'Sun (24/09)',
-    rewards: {
-      '96': {
-        dateTime: 1695627200000,
-        sum: 89,
-        rewardId: '96',
-        rewardName: 'Insane Keychain4',
-      },
-      '97': {
-        dateTime: 1695727200000,
-        sum: 45,
-        rewardId: '97',
-        rewardName: 'Insane Keychain5',
-      },
-    },
-  },
-]
-
-const ssrewardList = [
-  {
-    rewardId: 93,
-    rewardName: 'Insane Keychain',
-  },
-  {
-    rewardId: 94,
-    rewardName: 'Insane Keychain2',
-  },
-  {
-    rewardId: 95,
-    rewardName: 'Insane Keychain3',
-  },
-  {
-    rewardId: 96,
-    rewardName: 'Insane Keychain4',
-  },
-  {
-    rewardId: 97,
-    rewardName: 'Insane Keychain5',
-  },
-]
-
 export const RewardSoldChart = ({
   data,
   loading,
@@ -155,7 +46,7 @@ export const RewardSoldChart = ({
       ) : (
         <>
           <HStack w="full" flexWrap="wrap">
-            {ssrewardList.map((reward, index) => {
+            {rewardList.map((reward, index) => {
               const color = getColorByIndex(index)
               return (
                 <HStack key={reward.rewardId}>
@@ -168,7 +59,7 @@ export const RewardSoldChart = ({
           <BarChart
             width={ref.current?.clientWidth || 730}
             height={250}
-            data={ssdata}
+            data={data}
             margin={
               isMobile
                 ? { top: 0, right: 0, left: 0, bottom: 0 }
@@ -178,16 +69,7 @@ export const RewardSoldChart = ({
             barSize={10}
           >
             <CartesianGrid strokeDasharray="4" vertical={false} />
-            <XAxis
-              dataKey="name"
-              style={{
-                borderTop: '1px solid',
-                borderTopColor: colors.neutral[300],
-              }}
-              stroke={colors.neutral[300]}
-              strokeDasharray="none"
-              tick={<TickComponent dy={10} fill={colors.neutral[300]} />}
-            />
+            <XAxis dataKey="name" tick={<TickComponent dy={10} />} />
             <YAxis width={isMobile ? 40 : 60} tick={<TickComponent />} />
             <Tooltip
               cursor={{ fill: 'transparent' }}
@@ -199,7 +81,7 @@ export const RewardSoldChart = ({
               formatter={(value, name, props) => {
                 const rewardId = name.toString().split('.')[1]
                 if (!rewardId) return [value, name]
-                const rewardName = ssrewardList.find(
+                const rewardName = rewardList.find(
                   (reward) => reward.rewardId === Number(rewardId),
                 )?.rewardName
                 if (!rewardName) return [value, name]
@@ -207,7 +89,7 @@ export const RewardSoldChart = ({
                 return [value, rewardName]
               }}
             />
-            {ssrewardList.map((reward, index) => (
+            {rewardList.map((reward, index) => (
               <Bar
                 radius={[4, 4, 0, 0]}
                 key={reward.rewardId}

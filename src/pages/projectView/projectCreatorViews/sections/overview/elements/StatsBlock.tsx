@@ -58,7 +58,7 @@ export const StatsBlock = ({
             <>
               <BsArrowDown color={colors.secondary.red} fontSize="14px" />
               <Body2 color="secondary.red" xBold isTruncated>
-                {isLower.toFixed(2)}%
+                {isLower}%
               </Body2>
             </>
           )}

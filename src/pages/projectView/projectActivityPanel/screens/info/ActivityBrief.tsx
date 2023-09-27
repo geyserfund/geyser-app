@@ -102,7 +102,7 @@ export const ActivityBrief = (props: StackProps) => {
       })
     },
     onCompleted(data) {
-      const funders = data?.getFunders || []
+      const funders = data?.fundersGet || []
       const socialFilteredFunders = [] as FunderWithUserFragment[]
       for (let i = 0; i < funders.length; i++) {
         const funder = funders[i]

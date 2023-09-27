@@ -16,11 +16,16 @@ export const LearnDisplayCards = ({
 }: LearnDisplayCardsProps) => {
   return (
     <CardLayout as={Stack} padding="20px" direction="row" w="full">
-      <Box padding="10px" maxHeight="82px" backgroundColor="primary.50">
+      <Box
+        padding="10px"
+        height="82px"
+        width={'105px'}
+        backgroundColor="primary.50"
+      >
         <Image src={image} alt={title} h="full" />
       </Box>
 
-      <VStack h="100%" flex="1" alignItems="start">
+      <VStack h="100%" alignItems="start">
         <H3 color="neutral.900">{title}</H3>
         <Body2 color="neutral.600">{description}</Body2>
       </VStack>
