@@ -110,6 +110,13 @@ export type AmountSummary = {
   total: Scalars['Int']
 }
 
+export enum AnalyticsGroupByInterval {
+  Day = 'day',
+  Month = 'month',
+  Week = 'week',
+  Year = 'year',
+}
+
 export type Badge = {
   __typename?: 'Badge'
   createdAt: Scalars['Date']
@@ -217,6 +224,19 @@ export type CursorInput = {
 
 export type CursorInputString = {
   id: Scalars['String']
+}
+
+export type DateRangeInput = {
+  endDateTime?: InputMaybe<Scalars['Date']>
+  startDateTime?: InputMaybe<Scalars['Date']>
+}
+
+export type DatetimeRange = {
+  __typename?: 'DatetimeRange'
+  /** The end datetime for filtering the data, default is now. */
+  endDateTime?: Maybe<Scalars['Date']>
+  /** The start datetime for filtering the data. */
+  startDateTime: Scalars['Date']
 }
 
 export type DeleteProjectInput = {
@@ -329,6 +349,14 @@ export type FunderReward = {
   __typename?: 'FunderReward'
   projectReward: ProjectReward
   quantity: Scalars['Int']
+}
+
+export type FunderRewardGraphSum = GraphSumData & {
+  __typename?: 'FunderRewardGraphSum'
+  dateTime: Scalars['Date']
+  rewardId: Scalars['BigInt']
+  rewardName: Scalars['String']
+  sum: Scalars['Int']
 }
 
 export type FundingCancelInput = {
@@ -451,6 +479,7 @@ export enum FundingResourceType {
 export enum FundingStatus {
   Canceled = 'canceled',
   Paid = 'paid',
+  PartiallyPaid = 'partially_paid',
   Pending = 'pending',
   Unpaid = 'unpaid',
 }
@@ -476,6 +505,18 @@ export type FundingTx = {
   status: FundingStatus
   /** Private reference code viewable only by the Funder and the ProjectOwner related to this FundingTx */
   uuid?: Maybe<Scalars['String']>
+}
+
+export type FundingTxAmountGraph = GraphSumData & {
+  __typename?: 'FundingTxAmountGraph'
+  dateTime: Scalars['Date']
+  sum: Scalars['Int']
+}
+
+export type FundingTxMethodCount = {
+  __typename?: 'FundingTxMethodCount'
+  count: Scalars['Int']
+  method?: Maybe<Scalars['String']>
 }
 
 export type FundingTxStatusUpdatedInput = {
@@ -549,6 +590,7 @@ export type GetFunderFundingTxsWhereInput = {
 export type GetFunderWhereInput = {
   anonymous?: InputMaybe<Scalars['Boolean']>
   confirmed?: InputMaybe<Scalars['Boolean']>
+  dateRange?: InputMaybe<DateRangeInput>
   projectId?: InputMaybe<Scalars['BigInt']>
   sourceResourceInput?: InputMaybe<ResourceInput>
 }
@@ -580,6 +622,7 @@ export type GetFundingTxsOrderByInput = {
 export type GetFundingTxsWhereInput = {
   NOT?: InputMaybe<GetFundingTxsWhereInput>
   OR?: InputMaybe<Array<InputMaybe<GetFundingTxsWhereInput>>>
+  dateRange?: InputMaybe<DateRangeInput>
   method?: InputMaybe<Scalars['String']>
   projectId?: InputMaybe<Scalars['BigInt']>
   sourceResourceInput?: InputMaybe<ResourceInput>
@@ -590,7 +633,18 @@ export type GetProjectRewardInput = {
 }
 
 export type GetProjectRewardWhereInput = {
+  dateRange?: InputMaybe<DateRangeInput>
   deleted?: InputMaybe<Scalars['Boolean']>
+  projectId: Scalars['BigInt']
+}
+
+export type GetProjectStatsInput = {
+  where: GetProjectStatsWhereInput
+}
+
+export type GetProjectStatsWhereInput = {
+  dateRange?: InputMaybe<DateRangeInput>
+  groupBy?: InputMaybe<AnalyticsGroupByInterval>
   projectId: Scalars['BigInt']
 }
 
@@ -697,6 +751,11 @@ export enum GrantStatusEnum {
   ApplicationsOpen = 'APPLICATIONS_OPEN',
   Closed = 'CLOSED',
   FundingOpen = 'FUNDING_OPEN',
+}
+
+export type GraphSumData = {
+  dateTime: Scalars['Date']
+  sum: Scalars['Int']
 }
 
 export enum InvoiceStatus {
@@ -1076,6 +1135,13 @@ export type OwnerOf = {
   project?: Maybe<Project>
 }
 
+export type PageViewCountGraph = {
+  __typename?: 'PageViewCountGraph'
+  dateTime: Scalars['Date']
+  viewCount: Scalars['Int']
+  visitorCount: Scalars['Int']
+}
+
 /** Cursor pagination input. */
 export type PaginationInput = {
   cursor?: InputMaybe<CursorInput>
@@ -1168,6 +1234,30 @@ export type ProjectFollowMutationInput = {
   projectId: Scalars['BigInt']
 }
 
+export type ProjectFunderRewardStats = {
+  __typename?: 'ProjectFunderRewardStats'
+  /** Project rewards sold count over the given datetime range grouped by day, or month. */
+  quantityGraph?: Maybe<Array<Maybe<FunderRewardGraphSum>>>
+  /** Project rewards sold count in the given datetime range. */
+  quantitySum: Scalars['Int']
+}
+
+export type ProjectFunderStats = {
+  __typename?: 'ProjectFunderStats'
+  /** Project contributors count in the given datetime range. */
+  count: Scalars['Int']
+}
+
+export type ProjectFundingTxStats = {
+  __typename?: 'ProjectFundingTxStats'
+  /** Project contribution over the given datetime range grouped by day, or month. */
+  amountGraph?: Maybe<Array<Maybe<FundingTxAmountGraph>>>
+  /** Project contribution amount in the given datetime range. */
+  amountSum?: Maybe<Scalars['Int']>
+  /** Project contribution count of each Funding Method in the given datetime range. */
+  methodCount?: Maybe<Array<Maybe<FundingTxMethodCount>>>
+}
+
 export type ProjectKeys = {
   __typename?: 'ProjectKeys'
   nostrKeys: NostrKeys
@@ -1225,6 +1315,21 @@ export type ProjectStatistics = {
   totalVisitors: Scalars['Int']
 }
 
+export type ProjectStats = {
+  __typename?: 'ProjectStats'
+  current?: Maybe<ProjectStatsBase>
+  datetimeRange: DatetimeRange
+  prevTimeRange?: Maybe<ProjectStatsBase>
+}
+
+export type ProjectStatsBase = {
+  __typename?: 'ProjectStatsBase'
+  projectFunderRewards?: Maybe<ProjectFunderRewardStats>
+  projectFunders?: Maybe<ProjectFunderStats>
+  projectFundingTxs?: Maybe<ProjectFundingTxStats>
+  projectViews?: Maybe<ProjectViewStats>
+}
+
 export enum ProjectStatus {
   Active = 'active',
   Deleted = 'deleted',
@@ -1246,6 +1351,29 @@ export enum ProjectType {
   Donation = 'donation',
   Grant = 'grant',
   Reward = 'reward',
+}
+
+export type ProjectViewBaseStats = {
+  __typename?: 'ProjectViewBaseStats'
+  value: Scalars['String']
+  viewCount: Scalars['Int']
+  visitorCount: Scalars['Int']
+}
+
+export type ProjectViewStats = {
+  __typename?: 'ProjectViewStats'
+  /** Project view/visitor count of each viewing country in the given datetime range. */
+  countries: Array<ProjectViewBaseStats>
+  /** Project view/visitor count of each refferal platform in the given datetime range. */
+  referrers: Array<ProjectViewBaseStats>
+  /** Project view/visitor count of each viewing region in the given datetime range. */
+  regions: Array<ProjectViewBaseStats>
+  /** Project view count in the given datetime range. */
+  viewCount: Scalars['Int']
+  /** Project visitor count in the given datetime range. */
+  visitorCount: Scalars['Int']
+  /** Project views/visitors count over the given datetime range grouped by day, or month. */
+  visitorGraph: Array<Maybe<PageViewCountGraph>>
 }
 
 export type ProjectWhereInput = {
@@ -1301,18 +1429,17 @@ export type Query = {
   _?: Maybe<Scalars['Boolean']>
   badges: Array<Badge>
   entry?: Maybe<Entry>
+  fundersGet: Array<Funder>
   fundingTx: FundingTx
+  fundingTxsGet: Array<FundingTx>
   /** Returns all activities. */
   getActivities: Array<Activity>
   getDashboardFunders: Array<Funder>
   /** Returns all published entries. */
   getEntries: Array<Entry>
-  getFunders: Array<Funder>
-  getFundingTxs: Array<FundingTx>
   /** Returns the public key of the Lightning node linked to a project, if there is one. */
   getProjectPubkey?: Maybe<Scalars['String']>
   getProjectReward: ProjectReward
-  getProjectRewards: Array<ProjectReward>
   getSignedUploadUrl: SignedUploadUrl
   getWallet: Wallet
   grant: Grant
@@ -1323,6 +1450,8 @@ export type Query = {
   projectCountriesGet: Array<ProjectCountriesGetResult>
   projectGet?: Maybe<Project>
   projectRegionsGet: Array<ProjectRegionsGetResult>
+  projectRewardsGet: Array<ProjectReward>
+  projectStatsGet: ProjectStats
   /** By default, returns a list of all active projects. */
   projectsGet: ProjectsResponse
   projectsMostFundedOfTheWeekGet: Array<ProjectsMostFundedOfTheWeekGet>
@@ -1339,8 +1468,16 @@ export type QueryEntryArgs = {
   id: Scalars['BigInt']
 }
 
+export type QueryFundersGetArgs = {
+  input: GetFundersInput
+}
+
 export type QueryFundingTxArgs = {
   id: Scalars['BigInt']
+}
+
+export type QueryFundingTxsGetArgs = {
+  input?: InputMaybe<GetFundingTxsInput>
 }
 
 export type QueryGetActivitiesArgs = {
@@ -1355,24 +1492,12 @@ export type QueryGetEntriesArgs = {
   input?: InputMaybe<GetEntriesInput>
 }
 
-export type QueryGetFundersArgs = {
-  input: GetFundersInput
-}
-
-export type QueryGetFundingTxsArgs = {
-  input?: InputMaybe<GetFundingTxsInput>
-}
-
 export type QueryGetProjectPubkeyArgs = {
   projectId: Scalars['BigInt']
 }
 
 export type QueryGetProjectRewardArgs = {
   id: Scalars['BigInt']
-}
-
-export type QueryGetProjectRewardsArgs = {
-  input: GetProjectRewardInput
 }
 
 export type QueryGetSignedUploadUrlArgs = {
@@ -1393,6 +1518,14 @@ export type QueryLightningAddressVerifyArgs = {
 
 export type QueryProjectGetArgs = {
   where: UniqueProjectQueryInput
+}
+
+export type QueryProjectRewardsGetArgs = {
+  input: GetProjectRewardInput
+}
+
+export type QueryProjectStatsGetArgs = {
+  input: GetProjectStatsInput
 }
 
 export type QueryProjectsGetArgs = {
@@ -1771,7 +1904,7 @@ export enum WalletStatusCode {
   WalletLocked = 'WALLET_LOCKED',
 }
 
-export type GetDashboardFundersInput = {
+export type DashboardFundersGetInput = {
   orderBy?: InputMaybe<GetFundersOrderByInput>
   pagination?: InputMaybe<PaginationInput>
   where?: InputMaybe<GetDashboardFundersWhereInput>
@@ -1919,6 +2052,7 @@ export type ResolversTypes = {
   ActivityResourceType: ActivityResourceType
   Ambassador: ResolverTypeWrapper<Ambassador>
   AmountSummary: ResolverTypeWrapper<AmountSummary>
+  AnalyticsGroupByInterval: AnalyticsGroupByInterval
   Badge: ResolverTypeWrapper<Badge>
   BadgeClaimInput: BadgeClaimInput
   BadgesGetInput: BadgesGetInput
@@ -1938,6 +2072,8 @@ export type ResolversTypes = {
   CursorInput: CursorInput
   CursorInputString: CursorInputString
   Date: ResolverTypeWrapper<Scalars['Date']>
+  DateRangeInput: DateRangeInput
+  DatetimeRange: ResolverTypeWrapper<DatetimeRange>
   DeleteProjectInput: DeleteProjectInput
   DeleteProjectRewardInput: DeleteProjectRewardInput
   DeleteUserResponse: ResolverTypeWrapper<DeleteUserResponse>
@@ -1952,6 +2088,7 @@ export type ResolversTypes = {
   Float: ResolverTypeWrapper<Scalars['Float']>
   Funder: ResolverTypeWrapper<Funder>
   FunderReward: ResolverTypeWrapper<FunderReward>
+  FunderRewardGraphSum: ResolverTypeWrapper<FunderRewardGraphSum>
   FundingCancelInput: FundingCancelInput
   FundingCancelResponse: ResolverTypeWrapper<FundingCancelResponse>
   FundingConfirmInput: FundingConfirmInput
@@ -1977,6 +2114,8 @@ export type ResolversTypes = {
       sourceResource?: Maybe<ResolversTypes['SourceResource']>
     }
   >
+  FundingTxAmountGraph: ResolverTypeWrapper<FundingTxAmountGraph>
+  FundingTxMethodCount: ResolverTypeWrapper<FundingTxMethodCount>
   FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
   FundingTxStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<FundingTxStatusUpdatedSubscriptionResponse>
   FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>
@@ -1998,6 +2137,8 @@ export type ResolversTypes = {
   GetFundingTxsWhereInput: GetFundingTxsWhereInput
   GetProjectRewardInput: GetProjectRewardInput
   GetProjectRewardWhereInput: GetProjectRewardWhereInput
+  GetProjectStatsInput: GetProjectStatsInput
+  GetProjectStatsWhereInput: GetProjectStatsWhereInput
   GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput
   Grant: ResolverTypeWrapper<Grant>
   GrantApplicant: ResolverTypeWrapper<GrantApplicant>
@@ -2012,6 +2153,9 @@ export type ResolversTypes = {
   GrantStatisticsGrant: ResolverTypeWrapper<GrantStatisticsGrant>
   GrantStatus: ResolverTypeWrapper<GrantStatus>
   GrantStatusEnum: GrantStatusEnum
+  GraphSumData:
+    | ResolversTypes['FunderRewardGraphSum']
+    | ResolversTypes['FundingTxAmountGraph']
   Int: ResolverTypeWrapper<Scalars['Int']>
   InvoiceStatus: InvoiceStatus
   LightningAddressConnectionDetails: ResolverTypeWrapper<LightningAddressConnectionDetails>
@@ -2040,6 +2184,7 @@ export type ResolversTypes = {
   OrderByOptions: OrderByOptions
   Owner: ResolverTypeWrapper<Owner>
   OwnerOf: ResolverTypeWrapper<OwnerOf>
+  PageViewCountGraph: ResolverTypeWrapper<PageViewCountGraph>
   PaginationInput: PaginationInput
   Project: ResolverTypeWrapper<Project>
   ProjectActivatedSubscriptionResponse: ResolverTypeWrapper<ProjectActivatedSubscriptionResponse>
@@ -2048,16 +2193,23 @@ export type ResolversTypes = {
   ProjectEntriesGetInput: ProjectEntriesGetInput
   ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput
   ProjectFollowMutationInput: ProjectFollowMutationInput
+  ProjectFunderRewardStats: ResolverTypeWrapper<ProjectFunderRewardStats>
+  ProjectFunderStats: ResolverTypeWrapper<ProjectFunderStats>
+  ProjectFundingTxStats: ResolverTypeWrapper<ProjectFundingTxStats>
   ProjectKeys: ResolverTypeWrapper<ProjectKeys>
   ProjectLinkMutationInput: ProjectLinkMutationInput
   ProjectMilestone: ResolverTypeWrapper<ProjectMilestone>
   ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>
   ProjectReward: ResolverTypeWrapper<ProjectReward>
   ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>
+  ProjectStats: ResolverTypeWrapper<ProjectStats>
+  ProjectStatsBase: ResolverTypeWrapper<ProjectStatsBase>
   ProjectStatus: ProjectStatus
   ProjectStatusUpdate: ProjectStatusUpdate
   ProjectTagMutationInput: ProjectTagMutationInput
   ProjectType: ProjectType
+  ProjectViewBaseStats: ResolverTypeWrapper<ProjectViewBaseStats>
+  ProjectViewStats: ResolverTypeWrapper<ProjectViewStats>
   ProjectWhereInput: ProjectWhereInput
   ProjectsGetQueryInput: ProjectsGetQueryInput
   ProjectsOrderByField: ProjectsOrderByField
@@ -2125,6 +2277,7 @@ export type ResolversTypes = {
   cost_Int_min_1_max_1000000: ResolverTypeWrapper<
     Scalars['cost_Int_min_1_max_1000000']
   >
+  dashboardFundersGetInput: DashboardFundersGetInput
   description_String_NotNull_maxLength_250: ResolverTypeWrapper<
     Scalars['description_String_NotNull_maxLength_250']
   >
@@ -2152,7 +2305,6 @@ export type ResolversTypes = {
   email_String_format_email: ResolverTypeWrapper<
     Scalars['email_String_format_email']
   >
-  getDashboardFundersInput: GetDashboardFundersInput
   link_String_NotNull_format_uri: ResolverTypeWrapper<
     Scalars['link_String_NotNull_format_uri']
   >
@@ -2231,6 +2383,8 @@ export type ResolversParentTypes = {
   CursorInput: CursorInput
   CursorInputString: CursorInputString
   Date: Scalars['Date']
+  DateRangeInput: DateRangeInput
+  DatetimeRange: DatetimeRange
   DeleteProjectInput: DeleteProjectInput
   DeleteProjectRewardInput: DeleteProjectRewardInput
   DeleteUserResponse: DeleteUserResponse
@@ -2243,6 +2397,7 @@ export type ResolversParentTypes = {
   Float: Scalars['Float']
   Funder: Funder
   FunderReward: FunderReward
+  FunderRewardGraphSum: FunderRewardGraphSum
   FundingCancelInput: FundingCancelInput
   FundingCancelResponse: FundingCancelResponse
   FundingConfirmInput: FundingConfirmInput
@@ -2263,6 +2418,8 @@ export type ResolversParentTypes = {
   FundingTx: Omit<FundingTx, 'sourceResource'> & {
     sourceResource?: Maybe<ResolversParentTypes['SourceResource']>
   }
+  FundingTxAmountGraph: FundingTxAmountGraph
+  FundingTxMethodCount: FundingTxMethodCount
   FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
   FundingTxStatusUpdatedSubscriptionResponse: FundingTxStatusUpdatedSubscriptionResponse
   FundinginvoiceCancel: FundinginvoiceCancel
@@ -2284,6 +2441,8 @@ export type ResolversParentTypes = {
   GetFundingTxsWhereInput: GetFundingTxsWhereInput
   GetProjectRewardInput: GetProjectRewardInput
   GetProjectRewardWhereInput: GetProjectRewardWhereInput
+  GetProjectStatsInput: GetProjectStatsInput
+  GetProjectStatsWhereInput: GetProjectStatsWhereInput
   GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput
   Grant: Grant
   GrantApplicant: GrantApplicant
@@ -2296,6 +2455,9 @@ export type ResolversParentTypes = {
   GrantStatisticsApplicant: GrantStatisticsApplicant
   GrantStatisticsGrant: GrantStatisticsGrant
   GrantStatus: GrantStatus
+  GraphSumData:
+    | ResolversParentTypes['FunderRewardGraphSum']
+    | ResolversParentTypes['FundingTxAmountGraph']
   Int: Scalars['Int']
   LightningAddressConnectionDetails: LightningAddressConnectionDetails
   LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput
@@ -2319,6 +2481,7 @@ export type ResolversParentTypes = {
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
   Owner: Owner
   OwnerOf: OwnerOf
+  PageViewCountGraph: PageViewCountGraph
   PaginationInput: PaginationInput
   Project: Project
   ProjectActivatedSubscriptionResponse: ProjectActivatedSubscriptionResponse
@@ -2327,14 +2490,21 @@ export type ResolversParentTypes = {
   ProjectEntriesGetInput: ProjectEntriesGetInput
   ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput
   ProjectFollowMutationInput: ProjectFollowMutationInput
+  ProjectFunderRewardStats: ProjectFunderRewardStats
+  ProjectFunderStats: ProjectFunderStats
+  ProjectFundingTxStats: ProjectFundingTxStats
   ProjectKeys: ProjectKeys
   ProjectLinkMutationInput: ProjectLinkMutationInput
   ProjectMilestone: ProjectMilestone
   ProjectRegionsGetResult: ProjectRegionsGetResult
   ProjectReward: ProjectReward
   ProjectStatistics: ProjectStatistics
+  ProjectStats: ProjectStats
+  ProjectStatsBase: ProjectStatsBase
   ProjectStatusUpdate: ProjectStatusUpdate
   ProjectTagMutationInput: ProjectTagMutationInput
+  ProjectViewBaseStats: ProjectViewBaseStats
+  ProjectViewStats: ProjectViewStats
   ProjectWhereInput: ProjectWhereInput
   ProjectsGetQueryInput: ProjectsGetQueryInput
   ProjectsOrderByInput: ProjectsOrderByInput
@@ -2384,6 +2554,7 @@ export type ResolversParentTypes = {
   cost_Int_NotNull_min_0: Scalars['cost_Int_NotNull_min_0']
   cost_Int_NotNull_min_1_max_1000000: Scalars['cost_Int_NotNull_min_1_max_1000000']
   cost_Int_min_1_max_1000000: Scalars['cost_Int_min_1_max_1000000']
+  dashboardFundersGetInput: DashboardFundersGetInput
   description_String_NotNull_maxLength_250: Scalars['description_String_NotNull_maxLength_250']
   description_String_NotNull_maxLength_2200: Scalars['description_String_NotNull_maxLength_2200']
   description_String_NotNull_maxLength_8000: Scalars['description_String_NotNull_maxLength_8000']
@@ -2393,7 +2564,6 @@ export type ResolversParentTypes = {
   donationAmount_Int_NotNull_min_1: Scalars['donationAmount_Int_NotNull_min_1']
   email_String_NotNull_format_email: Scalars['email_String_NotNull_format_email']
   email_String_format_email: Scalars['email_String_format_email']
-  getDashboardFundersInput: GetDashboardFundersInput
   link_String_NotNull_format_uri: Scalars['link_String_NotNull_format_uri']
   links_List_String_NotNull_format_uri: Scalars['links_List_String_NotNull_format_uri']
   name_String_NotNull_maxLength_100: Scalars['name_String_NotNull_maxLength_100']
@@ -2530,6 +2700,15 @@ export interface DateScalarConfig
   name: 'Date'
 }
 
+export type DatetimeRangeResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['DatetimeRange'] = ResolversParentTypes['DatetimeRange'],
+> = {
+  endDateTime?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
+  startDateTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type DeleteUserResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['DeleteUserResponse'] = ResolversParentTypes['DeleteUserResponse'],
@@ -2634,6 +2813,17 @@ export type FunderRewardResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
+export type FunderRewardGraphSumResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['FunderRewardGraphSum'] = ResolversParentTypes['FunderRewardGraphSum'],
+> = {
+  dateTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  rewardId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  rewardName?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  sum?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type FundingCancelResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['FundingCancelResponse'] = ResolversParentTypes['FundingCancelResponse'],
@@ -2735,6 +2925,24 @@ export type FundingTxResolvers<
   >
   status?: Resolver<ResolversTypes['FundingStatus'], ParentType, ContextType>
   uuid?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type FundingTxAmountGraphResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['FundingTxAmountGraph'] = ResolversParentTypes['FundingTxAmountGraph'],
+> = {
+  dateTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  sum?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type FundingTxMethodCountResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['FundingTxMethodCount'] = ResolversParentTypes['FundingTxMethodCount'],
+> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  method?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -2874,6 +3082,19 @@ export type GrantStatusResolvers<
   startAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
   status?: Resolver<ResolversTypes['GrantStatusEnum'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type GraphSumDataResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['GraphSumData'] = ResolversParentTypes['GraphSumData'],
+> = {
+  __resolveType: TypeResolveFn<
+    'FunderRewardGraphSum' | 'FundingTxAmountGraph',
+    ParentType,
+    ContextType
+  >
+  dateTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  sum?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
 }
 
 export type LightningAddressConnectionDetailsResolvers<
@@ -3262,6 +3483,16 @@ export type OwnerOfResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
+export type PageViewCountGraphResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['PageViewCountGraph'] = ResolversParentTypes['PageViewCountGraph'],
+> = {
+  dateTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  viewCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  visitorCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type ProjectResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project'],
@@ -3392,6 +3623,45 @@ export type ProjectDeleteResponseResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
+export type ProjectFunderRewardStatsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectFunderRewardStats'] = ResolversParentTypes['ProjectFunderRewardStats'],
+> = {
+  quantityGraph?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['FunderRewardGraphSum']>>>,
+    ParentType,
+    ContextType
+  >
+  quantitySum?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type ProjectFunderStatsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectFunderStats'] = ResolversParentTypes['ProjectFunderStats'],
+> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type ProjectFundingTxStatsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectFundingTxStats'] = ResolversParentTypes['ProjectFundingTxStats'],
+> = {
+  amountGraph?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['FundingTxAmountGraph']>>>,
+    ParentType,
+    ContextType
+  >
+  amountSum?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  methodCount?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['FundingTxMethodCount']>>>,
+    ParentType,
+    ContextType
+  >
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type ProjectKeysResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ProjectKeys'] = ResolversParentTypes['ProjectKeys'],
@@ -3465,6 +3735,94 @@ export type ProjectStatisticsResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
+export type ProjectStatsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectStats'] = ResolversParentTypes['ProjectStats'],
+> = {
+  current?: Resolver<
+    Maybe<ResolversTypes['ProjectStatsBase']>,
+    ParentType,
+    ContextType
+  >
+  datetimeRange?: Resolver<
+    ResolversTypes['DatetimeRange'],
+    ParentType,
+    ContextType
+  >
+  prevTimeRange?: Resolver<
+    Maybe<ResolversTypes['ProjectStatsBase']>,
+    ParentType,
+    ContextType
+  >
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type ProjectStatsBaseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectStatsBase'] = ResolversParentTypes['ProjectStatsBase'],
+> = {
+  projectFunderRewards?: Resolver<
+    Maybe<ResolversTypes['ProjectFunderRewardStats']>,
+    ParentType,
+    ContextType
+  >
+  projectFunders?: Resolver<
+    Maybe<ResolversTypes['ProjectFunderStats']>,
+    ParentType,
+    ContextType
+  >
+  projectFundingTxs?: Resolver<
+    Maybe<ResolversTypes['ProjectFundingTxStats']>,
+    ParentType,
+    ContextType
+  >
+  projectViews?: Resolver<
+    Maybe<ResolversTypes['ProjectViewStats']>,
+    ParentType,
+    ContextType
+  >
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type ProjectViewBaseStatsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectViewBaseStats'] = ResolversParentTypes['ProjectViewBaseStats'],
+> = {
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  viewCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  visitorCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type ProjectViewStatsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectViewStats'] = ResolversParentTypes['ProjectViewStats'],
+> = {
+  countries?: Resolver<
+    Array<ResolversTypes['ProjectViewBaseStats']>,
+    ParentType,
+    ContextType
+  >
+  referrers?: Resolver<
+    Array<ResolversTypes['ProjectViewBaseStats']>,
+    ParentType,
+    ContextType
+  >
+  regions?: Resolver<
+    Array<ResolversTypes['ProjectViewBaseStats']>,
+    ParentType,
+    ContextType
+  >
+  viewCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  visitorCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  visitorGraph?: Resolver<
+    Array<Maybe<ResolversTypes['PageViewCountGraph']>>,
+    ParentType,
+    ContextType
+  >
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type ProjectsResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ProjectsResponse'] = ResolversParentTypes['ProjectsResponse'],
@@ -3508,11 +3866,23 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryEntryArgs, 'id'>
   >
+  fundersGet?: Resolver<
+    Array<ResolversTypes['Funder']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryFundersGetArgs, 'input'>
+  >
   fundingTx?: Resolver<
     ResolversTypes['FundingTx'],
     ParentType,
     ContextType,
     RequireFields<QueryFundingTxArgs, 'id'>
+  >
+  fundingTxsGet?: Resolver<
+    Array<ResolversTypes['FundingTx']>,
+    ParentType,
+    ContextType,
+    Partial<QueryFundingTxsGetArgs>
   >
   getActivities?: Resolver<
     Array<ResolversTypes['Activity']>,
@@ -3532,18 +3902,6 @@ export type QueryResolvers<
     ContextType,
     Partial<QueryGetEntriesArgs>
   >
-  getFunders?: Resolver<
-    Array<ResolversTypes['Funder']>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetFundersArgs, 'input'>
-  >
-  getFundingTxs?: Resolver<
-    Array<ResolversTypes['FundingTx']>,
-    ParentType,
-    ContextType,
-    Partial<QueryGetFundingTxsArgs>
-  >
   getProjectPubkey?: Resolver<
     Maybe<ResolversTypes['String']>,
     ParentType,
@@ -3555,12 +3913,6 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryGetProjectRewardArgs, 'id'>
-  >
-  getProjectRewards?: Resolver<
-    Array<ResolversTypes['ProjectReward']>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryGetProjectRewardsArgs, 'input'>
   >
   getSignedUploadUrl?: Resolver<
     ResolversTypes['SignedUploadUrl'],
@@ -3608,6 +3960,18 @@ export type QueryResolvers<
     Array<ResolversTypes['ProjectRegionsGetResult']>,
     ParentType,
     ContextType
+  >
+  projectRewardsGet?: Resolver<
+    Array<ResolversTypes['ProjectReward']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryProjectRewardsGetArgs, 'input'>
+  >
+  projectStatsGet?: Resolver<
+    ResolversTypes['ProjectStats'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryProjectStatsGetArgs, 'input'>
   >
   projectsGet?: Resolver<
     ResolversTypes['ProjectsResponse'],
@@ -4135,18 +4499,22 @@ export type Resolvers<ContextType = any> = {
   ConnectionDetails?: ConnectionDetailsResolvers<ContextType>
   Country?: CountryResolvers<ContextType>
   Date?: GraphQLScalarType
+  DatetimeRange?: DatetimeRangeResolvers<ContextType>
   DeleteUserResponse?: DeleteUserResponseResolvers<ContextType>
   Entry?: EntryResolvers<ContextType>
   EntryPublishedSubscriptionResponse?: EntryPublishedSubscriptionResponseResolvers<ContextType>
   ExternalAccount?: ExternalAccountResolvers<ContextType>
   Funder?: FunderResolvers<ContextType>
   FunderReward?: FunderRewardResolvers<ContextType>
+  FunderRewardGraphSum?: FunderRewardGraphSumResolvers<ContextType>
   FundingCancelResponse?: FundingCancelResponseResolvers<ContextType>
   FundingConfirmResponse?: FundingConfirmResponseResolvers<ContextType>
   FundingMutationResponse?: FundingMutationResponseResolvers<ContextType>
   FundingPendingResponse?: FundingPendingResponseResolvers<ContextType>
   FundingQueryResponse?: FundingQueryResponseResolvers<ContextType>
   FundingTx?: FundingTxResolvers<ContextType>
+  FundingTxAmountGraph?: FundingTxAmountGraphResolvers<ContextType>
+  FundingTxMethodCount?: FundingTxMethodCountResolvers<ContextType>
   FundingTxStatusUpdatedSubscriptionResponse?: FundingTxStatusUpdatedSubscriptionResponseResolvers<ContextType>
   FundinginvoiceCancel?: FundinginvoiceCancelResolvers<ContextType>
   Grant?: GrantResolvers<ContextType>
@@ -4157,6 +4525,7 @@ export type Resolvers<ContextType = any> = {
   GrantStatisticsApplicant?: GrantStatisticsApplicantResolvers<ContextType>
   GrantStatisticsGrant?: GrantStatisticsGrantResolvers<ContextType>
   GrantStatus?: GrantStatusResolvers<ContextType>
+  GraphSumData?: GraphSumDataResolvers<ContextType>
   LightningAddressConnectionDetails?: LightningAddressConnectionDetailsResolvers<ContextType>
   LightningAddressVerifyResponse?: LightningAddressVerifyResponseResolvers<ContextType>
   LndConnectionDetails?: LndConnectionDetailsResolvers<ContextType>
@@ -4170,15 +4539,23 @@ export type Resolvers<ContextType = any> = {
   OTPResponse?: OtpResponseResolvers<ContextType>
   Owner?: OwnerResolvers<ContextType>
   OwnerOf?: OwnerOfResolvers<ContextType>
+  PageViewCountGraph?: PageViewCountGraphResolvers<ContextType>
   Project?: ProjectResolvers<ContextType>
   ProjectActivatedSubscriptionResponse?: ProjectActivatedSubscriptionResponseResolvers<ContextType>
   ProjectCountriesGetResult?: ProjectCountriesGetResultResolvers<ContextType>
   ProjectDeleteResponse?: ProjectDeleteResponseResolvers<ContextType>
+  ProjectFunderRewardStats?: ProjectFunderRewardStatsResolvers<ContextType>
+  ProjectFunderStats?: ProjectFunderStatsResolvers<ContextType>
+  ProjectFundingTxStats?: ProjectFundingTxStatsResolvers<ContextType>
   ProjectKeys?: ProjectKeysResolvers<ContextType>
   ProjectMilestone?: ProjectMilestoneResolvers<ContextType>
   ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>
   ProjectReward?: ProjectRewardResolvers<ContextType>
   ProjectStatistics?: ProjectStatisticsResolvers<ContextType>
+  ProjectStats?: ProjectStatsResolvers<ContextType>
+  ProjectStatsBase?: ProjectStatsBaseResolvers<ContextType>
+  ProjectViewBaseStats?: ProjectViewBaseStatsResolvers<ContextType>
+  ProjectViewStats?: ProjectViewStatsResolvers<ContextType>
   ProjectsResponse?: ProjectsResponseResolvers<ContextType>
   ProjectsSummary?: ProjectsSummaryResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
@@ -5295,7 +5672,7 @@ export type FundingTxsForLandingPageQueryVariables = Exact<{
 
 export type FundingTxsForLandingPageQuery = {
   __typename?: 'Query'
-  getFundingTxs: Array<
+  fundingTxsGet: Array<
     { __typename?: 'FundingTx' } & FundingTxForLandingPageFragment
   >
 }
@@ -5587,7 +5964,7 @@ export type ProjectFundersQueryVariables = Exact<{
 
 export type ProjectFundersQuery = {
   __typename?: 'Query'
-  getFunders: Array<{ __typename?: 'Funder' } & FunderWithUserFragment>
+  fundersGet: Array<{ __typename?: 'Funder' } & FunderWithUserFragment>
 }
 
 export type ProjectDashboardFundersQueryVariables = Exact<{
@@ -8670,7 +9047,7 @@ export type FundingTxWithInvoiceStatusQueryResult = Apollo.QueryResult<
 >
 export const FundingTxsForLandingPageDocument = gql`
   query FundingTxsForLandingPage($input: GetFundingTxsInput) {
-    getFundingTxs(input: $input) {
+    fundingTxsGet(input: $input) {
       ...FundingTxForLandingPage
     }
   }
@@ -9440,7 +9817,7 @@ export type ProjectDashboardDataQueryResult = Apollo.QueryResult<
 >
 export const ProjectFundersDocument = gql`
   query ProjectFunders($input: GetFundersInput!) {
-    getFunders(input: $input) {
+    fundersGet(input: $input) {
       ...FunderWithUser
     }
   }

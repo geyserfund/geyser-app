@@ -26,7 +26,7 @@ export const getFeaturedProject = () => {
   }
 
   if (__production__) {
-    return 'bitcointheartofrevolution'
+    return 'base58sworldfamousbitcoinlarp'
   }
 
   return ''
