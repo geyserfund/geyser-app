@@ -690,10 +690,11 @@
   "Rewards purchased":"Rewards purchased",
   "View all":"View all",
   "Error fetching badges":"Error fetching badges",
-  "beta":"beta",
+  "BETA":"BETA",
   "Historical":"Historical",
   "Weekly overview":"Weekly overview",
-  "Contrib/Views":"Contrib/Views"
+  "Contrib/Views":"Contrib/Views",
+  "Funding transactions":"Funding transactions"
 
 
 }

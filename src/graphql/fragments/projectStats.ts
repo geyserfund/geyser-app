@@ -38,7 +38,7 @@ export const FRAGMENT_PROJECT_STATS_INSIGHTS_PAGE = gql`
           viewCount
           visitorCount
         }
-        countries {
+        regions {
           value
           viewCount
           visitorCount
@@ -101,6 +101,19 @@ export const FRAGMENT_REWARDS_SOLD_GRAPH_STATS = gql`
           rewardId
           rewardName
           sum
+        }
+      }
+    }
+  }
+`
+
+export const FRAGMENT_FUNDING_METHOD_STATS = gql`
+  fragment ProjectFundingMethodStats on ProjectStats {
+    current {
+      projectFundingTxs {
+        methodCount {
+          count
+          method
         }
       }
     }

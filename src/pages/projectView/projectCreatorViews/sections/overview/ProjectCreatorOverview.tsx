@@ -21,7 +21,6 @@ export const ProjectCreatorOverview = () => {
         <OverviewHeader />
         <StatsComponent />
         <ContributorsComponent />
-        {/* <ActivityComponent /> */}
       </VStack>
       <VStack
         maxWidth={{ base: '100%', lg: '350px' }}

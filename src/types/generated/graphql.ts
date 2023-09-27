@@ -110,6 +110,13 @@ export type AmountSummary = {
   total: Scalars['Int']
 }
 
+export enum AnalyticsGroupByInterval {
+  Day = 'day',
+  Month = 'month',
+  Week = 'week',
+  Year = 'year',
+}
+
 export type Badge = {
   __typename?: 'Badge'
   createdAt: Scalars['Date']
@@ -634,7 +641,7 @@ export type GetProjectStatsInput = {
 
 export type GetProjectStatsWhereInput = {
   dateRange?: InputMaybe<DateRangeInput>
-  groupBy?: InputMaybe<GroupBy>
+  groupBy?: InputMaybe<AnalyticsGroupByInterval>
   projectId: Scalars['BigInt']
 }
 
@@ -746,13 +753,6 @@ export enum GrantStatusEnum {
 export type GraphSumData = {
   dateTime: Scalars['Date']
   sum: Scalars['Int']
-}
-
-export enum GroupBy {
-  Day = 'day',
-  Month = 'month',
-  Week = 'week',
-  Year = 'year',
 }
 
 export enum InvoiceStatus {
@@ -1233,19 +1233,25 @@ export type ProjectFollowMutationInput = {
 
 export type ProjectFunderRewardStats = {
   __typename?: 'ProjectFunderRewardStats'
+  /** Project rewards sold count over the given datetime range grouped by day, or month. */
   quantityGraph?: Maybe<Array<Maybe<FunderRewardGraphSum>>>
+  /** Project rewards sold count in the given datetime range. */
   quantitySum: Scalars['Int']
 }
 
 export type ProjectFunderStats = {
   __typename?: 'ProjectFunderStats'
+  /** Project contributors count in the given datetime range. */
   count: Scalars['Int']
 }
 
 export type ProjectFundingTxStats = {
   __typename?: 'ProjectFundingTxStats'
+  /** Project contribution over the given datetime range grouped by day, or month. */
   amountGraph?: Maybe<Array<Maybe<FundingTxAmountGraph>>>
+  /** Project contribution amount in the given datetime range. */
   amountSum?: Maybe<Scalars['Int']>
+  /** Project contribution count of each Funding Method in the given datetime range. */
   methodCount?: Maybe<Array<Maybe<FundingTxMethodCount>>>
 }
 
@@ -1315,13 +1321,9 @@ export type ProjectStats = {
 
 export type ProjectStatsBase = {
   __typename?: 'ProjectStatsBase'
-  /** Total project rewards sold count in the given datetime range. */
   projectFunderRewards?: Maybe<ProjectFunderRewardStats>
-  /** Total Project contributors count in the given datetime range. */
   projectFunders?: Maybe<ProjectFunderStats>
-  /** Total Project contribution amount in the given datetime range. */
   projectFundingTxs?: Maybe<ProjectFundingTxStats>
-  /** Total project view count in the given datetime range. */
   projectViews?: Maybe<ProjectViewStats>
 }
 
@@ -1357,10 +1359,17 @@ export type ProjectViewBaseStats = {
 
 export type ProjectViewStats = {
   __typename?: 'ProjectViewStats'
+  /** Project view/visitor count of each viewing country in the given datetime range. */
   countries: Array<ProjectViewBaseStats>
+  /** Project view/visitor count of each refferal platform in the given datetime range. */
   referrers: Array<ProjectViewBaseStats>
+  /** Project view/visitor count of each viewing region in the given datetime range. */
+  regions: Array<ProjectViewBaseStats>
+  /** Project view count in the given datetime range. */
   viewCount: Scalars['Int']
+  /** Project visitor count in the given datetime range. */
   visitorCount: Scalars['Int']
+  /** Project views/visitors count over the given datetime range grouped by day, or month. */
   visitorGraph: Array<Maybe<PageViewCountGraph>>
 }
 
@@ -2040,6 +2049,7 @@ export type ResolversTypes = {
   ActivityResourceType: ActivityResourceType
   Ambassador: ResolverTypeWrapper<Ambassador>
   AmountSummary: ResolverTypeWrapper<AmountSummary>
+  AnalyticsGroupByInterval: AnalyticsGroupByInterval
   Badge: ResolverTypeWrapper<Badge>
   BadgeClaimInput: BadgeClaimInput
   BadgesGetInput: BadgesGetInput
@@ -2143,7 +2153,6 @@ export type ResolversTypes = {
   GraphSumData:
     | ResolversTypes['FunderRewardGraphSum']
     | ResolversTypes['FundingTxAmountGraph']
-  GroupBy: GroupBy
   Int: ResolverTypeWrapper<Scalars['Int']>
   InvoiceStatus: InvoiceStatus
   LightningAddressConnectionDetails: ResolverTypeWrapper<LightningAddressConnectionDetails>
@@ -3796,6 +3805,11 @@ export type ProjectViewStatsResolvers<
     ParentType,
     ContextType
   >
+  regions?: Resolver<
+    Array<ResolversTypes['ProjectViewBaseStats']>,
+    ParentType,
+    ContextType
+  >
   viewCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   visitorCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   visitorGraph?: Resolver<
@@ -4981,7 +4995,7 @@ export type ProjectStatsForInsightsPageFragment = {
         viewCount: number
         visitorCount: number
       }>
-      countries: Array<{
+      regions: Array<{
         __typename?: 'ProjectViewBaseStats'
         value: string
         viewCount: number
@@ -5053,6 +5067,21 @@ export type ProjectRewardSoldGraphStatsFragment = {
         rewardId: any
         rewardName: string
         sum: number
+      } | null> | null
+    } | null
+  } | null
+}
+
+export type ProjectFundingMethodStatsFragment = {
+  __typename?: 'ProjectStats'
+  current?: {
+    __typename?: 'ProjectStatsBase'
+    projectFundingTxs?: {
+      __typename?: 'ProjectFundingTxStats'
+      methodCount?: Array<{
+        __typename?: 'FundingTxMethodCount'
+        count: number
+        method?: string | null
       } | null> | null
     } | null
   } | null
@@ -6211,6 +6240,17 @@ export type ProjectRewardSoldGraphStatsGetQuery = {
   } & ProjectRewardSoldGraphStatsFragment
 }
 
+export type ProjectFundingMethodStatsGetQueryVariables = Exact<{
+  input: GetProjectStatsInput
+}>
+
+export type ProjectFundingMethodStatsGetQuery = {
+  __typename?: 'Query'
+  projectStatsGet: {
+    __typename?: 'ProjectStats'
+  } & ProjectFundingMethodStatsFragment
+}
+
 export type TagsGetQueryVariables = Exact<{ [key: string]: never }>
 
 export type TagsGetQuery = {
@@ -6715,7 +6755,7 @@ export const ProjectStatsForInsightsPageFragmentDoc = gql`
           viewCount
           visitorCount
         }
-        countries {
+        regions {
           value
           viewCount
           visitorCount
@@ -6776,6 +6816,18 @@ export const ProjectRewardSoldGraphStatsFragmentDoc = gql`
           rewardId
           rewardName
           sum
+        }
+      }
+    }
+  }
+`
+export const ProjectFundingMethodStatsFragmentDoc = gql`
+  fragment ProjectFundingMethodStats on ProjectStats {
+    current {
+      projectFundingTxs {
+        methodCount {
+          count
+          method
         }
       }
     }
@@ -10729,6 +10781,65 @@ export type ProjectRewardSoldGraphStatsGetLazyQueryHookResult = ReturnType<
 export type ProjectRewardSoldGraphStatsGetQueryResult = Apollo.QueryResult<
   ProjectRewardSoldGraphStatsGetQuery,
   ProjectRewardSoldGraphStatsGetQueryVariables
+>
+export const ProjectFundingMethodStatsGetDocument = gql`
+  query ProjectFundingMethodStatsGet($input: GetProjectStatsInput!) {
+    projectStatsGet(input: $input) {
+      ...ProjectFundingMethodStats
+    }
+  }
+  ${ProjectFundingMethodStatsFragmentDoc}
+`
+
+/**
+ * __useProjectFundingMethodStatsGetQuery__
+ *
+ * To run a query within a React component, call `useProjectFundingMethodStatsGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectFundingMethodStatsGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectFundingMethodStatsGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectFundingMethodStatsGetQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ProjectFundingMethodStatsGetQuery,
+    ProjectFundingMethodStatsGetQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    ProjectFundingMethodStatsGetQuery,
+    ProjectFundingMethodStatsGetQueryVariables
+  >(ProjectFundingMethodStatsGetDocument, options)
+}
+export function useProjectFundingMethodStatsGetLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ProjectFundingMethodStatsGetQuery,
+    ProjectFundingMethodStatsGetQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    ProjectFundingMethodStatsGetQuery,
+    ProjectFundingMethodStatsGetQueryVariables
+  >(ProjectFundingMethodStatsGetDocument, options)
+}
+export type ProjectFundingMethodStatsGetQueryHookResult = ReturnType<
+  typeof useProjectFundingMethodStatsGetQuery
+>
+export type ProjectFundingMethodStatsGetLazyQueryHookResult = ReturnType<
+  typeof useProjectFundingMethodStatsGetLazyQuery
+>
+export type ProjectFundingMethodStatsGetQueryResult = Apollo.QueryResult<
+  ProjectFundingMethodStatsGetQuery,
+  ProjectFundingMethodStatsGetQueryVariables
 >
 export const TagsGetDocument = gql`
   query TagsGet {

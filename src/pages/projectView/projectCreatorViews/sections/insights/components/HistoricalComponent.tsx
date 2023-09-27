@@ -6,11 +6,12 @@ import { CardLayout } from '../../../../../../components/layouts'
 import { H3 } from '../../../../../../components/typography'
 import { useProjectContext } from '../../../../../../context'
 import {
-  GroupBy,
+  AnalyticsGroupByInterval,
   useProjectHistoryStatsGetLazyQuery,
 } from '../../../../../../types'
 import { useNotification } from '../../../../../../utils'
 import { HistoricalChart, HistoryDataType } from '../elements'
+import { getNameForDate } from '../helpers'
 import { useSelectionAtom } from '../insightsAtom'
 import { InsightsOptions } from './InsightsHeader'
 
@@ -88,19 +89,19 @@ export const HistoricalComponent = () => {
       switch (selectionOption) {
         case InsightsOptions.lastWeek:
           startDateTime = currentDate.minus({ week: 1 }).toMillis()
-          groupBy = GroupBy.Day
+          groupBy = AnalyticsGroupByInterval.Day
           break
         case InsightsOptions.lastMonth:
           startDateTime = currentDate.minus({ month: 1 }).toMillis()
-          groupBy = GroupBy.Day
+          groupBy = AnalyticsGroupByInterval.Day
           break
         case InsightsOptions.lastYear:
           startDateTime = currentDate.minus({ year: 1 }).toMillis()
-          groupBy = GroupBy.Month
+          groupBy = AnalyticsGroupByInterval.Month
           break
         default:
           startDateTime = currentDate.minus({ week: 1 }).toMillis()
-          groupBy = GroupBy.Day
+          groupBy = AnalyticsGroupByInterval.Day
       }
 
       getProjectHistoryStats({
@@ -123,31 +124,15 @@ export const HistoricalComponent = () => {
   return (
     <CardLayout
       direction="column"
-      padding="20px"
+      padding={{ base: 0, lg: '20px' }}
       w="full"
       alignItems="start"
       spacing="10px"
+      mobileDense
     >
       <H3>{t('Historical')}</H3>
 
       <HistoricalChart data={historyData} loading={loading} />
     </CardLayout>
   )
-}
-
-export const getNameForDate = (
-  date: number,
-  selectionOption: InsightsOptions,
-) => {
-  let name
-
-  if (selectionOption === InsightsOptions.lastYear) {
-    name = DateTime.fromMillis(date).toFormat('MMM')
-  } else if (selectionOption === InsightsOptions.lastMonth) {
-    name = DateTime.fromMillis(date).toFormat('MMM dd')
-  } else {
-    name = DateTime.fromMillis(date).toFormat('EEE (dd/MM)')
-  }
-
-  return name
 }

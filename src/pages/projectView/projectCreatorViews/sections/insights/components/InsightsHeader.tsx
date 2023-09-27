@@ -1,9 +1,9 @@
-import { Button, HStack, Select, Stack } from '@chakra-ui/react'
-import { ChangeEvent } from 'react'
+import { Button, HStack, Stack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { H2 } from '../../../../../../components/typography'
-import { useSelectionAtom } from '../insightsAtom'
+import { useMobileMode } from '../../../../../../utils'
+import { InsightsOptionsSelect } from '../elements'
 
 export enum InsightsOptions {
   lastWeek = 'Last week',
@@ -13,6 +13,7 @@ export enum InsightsOptions {
 
 export const InsightsHeader = () => {
   const { t } = useTranslation()
+  const isMobile = useMobileMode()
 
   return (
     <Stack
@@ -24,33 +25,7 @@ export const InsightsHeader = () => {
         <H2>{t('Weekly overview')}</H2>
         <InsightsOptionsSelect />
       </HStack>
-      <Button variant="primary">{t('beta')}</Button>
+      {!isMobile && <Button variant="primary">{t('BETA')}</Button>}
     </Stack>
-  )
-}
-
-export const InsightsOptionsSelect = () => {
-  const [selectedOption, setSelectedOption] = useSelectionAtom()
-
-  const handleSelect = (event: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(event.currentTarget.value as InsightsOptions)
-  }
-
-  return (
-    <Select
-      defaultValue={selectedOption}
-      onChange={handleSelect}
-      maxWidth="150px"
-    >
-      <option value={InsightsOptions.lastWeek}>
-        {InsightsOptions.lastWeek}
-      </option>
-      <option value={InsightsOptions.lastMonth}>
-        {InsightsOptions.lastMonth}
-      </option>
-      <option value={InsightsOptions.lastYear}>
-        {InsightsOptions.lastYear}
-      </option>
-    </Select>
   )
 }

@@ -1,22 +1,19 @@
-import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CardLayout } from '../../../../../../components/layouts'
 import { H3 } from '../../../../../../components/typography'
 import { useProjectContext } from '../../../../../../context'
-import {
-  GroupBy,
-  useProjectRewardSoldGraphStatsGetLazyQuery,
-} from '../../../../../../types'
+import { useProjectRewardSoldGraphStatsGetLazyQuery } from '../../../../../../types'
 import { useNotification } from '../../../../../../utils'
 import {
+  RewardListType,
   RewardSoldChart,
   RewardSoldDataType,
   RewardSoldGraphType,
 } from '../elements/RewardSoldChart'
+import { getDateParams, getNameForDate } from '../helpers'
 import { useSelectionAtom } from '../insightsAtom'
-import { InsightsOptions } from './InsightsHeader'
 
 export const RewardSoldComponent = () => {
   const { t } = useTranslation()
@@ -28,23 +25,27 @@ export const RewardSoldComponent = () => {
   const [rewardSoldData, setRewardSoldData] = useState<RewardSoldGraphType[]>(
     [],
   )
+  const [rewardList, setRewardList] = useState<RewardListType[]>([])
 
   const [getProjectRewardSoldGraphStats, { loading }] =
     useProjectRewardSoldGraphStatsGetLazyQuery({
       onCompleted(data) {
-        console.log('checking data', data)
         const stats = data.projectStatsGet
 
-        const dateParam = {} as { [key: string]: RewardSoldDataType[] }
+        const rewardList = [] as RewardListType[]
+
+        const dateParam = {} as {
+          [key: string]: { [key: string]: RewardSoldDataType }
+        }
 
         stats.current?.projectFunderRewards?.quantityGraph?.map((data) => {
-          let name
-          if (selectionOption === InsightsOptions.lastYear) {
-            name = DateTime.fromMillis(data?.dateTime).toFormat('MMM')
-          } else if (selectionOption === InsightsOptions.lastMonth) {
-            name = DateTime.fromMillis(data?.dateTime).toFormat('MMM dd')
-          } else {
-            name = DateTime.fromMillis(data?.dateTime).toFormat('EEE')
+          const name = getNameForDate(data?.dateTime || 0, selectionOption)
+
+          if (data?.rewardId && !rewardList.includes(data?.rewardId)) {
+            rewardList.push({
+              rewardId: Number(data?.rewardId),
+              rewardName: data?.rewardName,
+            })
           }
 
           const param: RewardSoldDataType = {
@@ -54,10 +55,9 @@ export const RewardSoldComponent = () => {
             rewardName: data?.rewardName || '',
           }
 
-          if (dateParam[name]) {
-            dateParam[name]?.push(param)
-          } else {
-            dateParam[name] = [param]
+          dateParam[name] = {
+            ...dateParam[name],
+            [param.rewardId]: param,
           }
         })
 
@@ -66,11 +66,12 @@ export const RewardSoldComponent = () => {
         ).map((key) => {
           return {
             name: key,
-            rewards: dateParam[key] || [],
+            rewards: dateParam[key] || {},
           }
         })
 
         setRewardSoldData(rewardSoldGraphData)
+        setRewardList(rewardList)
       },
       onError(error) {
         toast({
@@ -83,27 +84,8 @@ export const RewardSoldComponent = () => {
 
   useEffect(() => {
     if (project?.id) {
-      const currentDate = DateTime.now()
-      let startDateTime
-      let groupBy
-
-      switch (selectionOption) {
-        case InsightsOptions.lastWeek:
-          startDateTime = currentDate.minus({ week: 1 }).toMillis()
-          groupBy = GroupBy.Day
-          break
-        case InsightsOptions.lastMonth:
-          startDateTime = currentDate.minus({ month: 1 }).toMillis()
-          groupBy = GroupBy.Day
-          break
-        case InsightsOptions.lastYear:
-          startDateTime = currentDate.minus({ year: 1 }).toMillis()
-          groupBy = GroupBy.Month
-          break
-        default:
-          startDateTime = currentDate.minus({ week: 1 }).toMillis()
-          groupBy = GroupBy.Day
-      }
+      const { startDateTime, endDateTime, groupBy } =
+        getDateParams(selectionOption)
 
       getProjectRewardSoldGraphStats({
         variables: {
@@ -112,7 +94,7 @@ export const RewardSoldComponent = () => {
               projectId: project?.id,
               dateRange: {
                 startDateTime,
-                endDateTime: currentDate.toMillis(),
+                endDateTime,
               },
               groupBy,
             },
@@ -125,14 +107,19 @@ export const RewardSoldComponent = () => {
   return (
     <CardLayout
       direction="column"
-      padding="20px"
+      padding={{ base: 0, lg: '20px' }}
       w="full"
       alignItems="start"
       spacing="10px"
+      mobileDense
     >
-      <H3>{t('Reward Sold')}</H3>
+      <H3>{t('Reward sold')}</H3>
 
-      <RewardSoldChart data={rewardSoldData} loading={loading} />
+      <RewardSoldChart
+        data={rewardSoldData}
+        rewardList={rewardList}
+        loading={loading}
+      />
     </CardLayout>
   )
 }

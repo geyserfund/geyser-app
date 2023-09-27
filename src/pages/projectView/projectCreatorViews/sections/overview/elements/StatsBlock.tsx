@@ -33,11 +33,17 @@ export const StatsBlock = ({
       : 0
 
   return (
-    <CardLayout padding="10px 20px" minWidth="200px" {...rest}>
+    <CardLayout h="auto" padding="10px 20px" minWidth="150px" {...rest}>
       <Body2 color="neutral.600" xBold>
         {title}
       </Body2>
-      <HStack w="full" justifyContent="start" spacing="0" alignItems="end">
+      <HStack
+        w="full"
+        justifyContent="start"
+        spacing="0"
+        alignItems="end"
+        flexWrap="wrap"
+      >
         <H2>{commaFormatted(value)}</H2>
         <HStack spacing="0">
           {isHigher > 0 && (

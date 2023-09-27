@@ -1,5 +1,4 @@
 import { HStack, VStack } from '@chakra-ui/react'
-import { DateTime } from 'luxon'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -8,8 +7,8 @@ import { useProjectContext } from '../../../../../../context'
 import { useProjectStatsGetInsightLazyQuery } from '../../../../../../types'
 import { useNotification } from '../../../../../../utils'
 import { StatsBlock } from '../../overview/elements'
+import { getDateParams } from '../helpers'
 import { useSelectionAtom, useStatsInsightsAtom } from '../insightsAtom'
-import { InsightsOptions } from './InsightsHeader'
 
 export const InsightsStatsComponent = () => {
   const { t } = useTranslation()
@@ -18,8 +17,6 @@ export const InsightsStatsComponent = () => {
 
   const [selectionOption] = useSelectionAtom()
   const [projectStats, setProjectStats] = useStatsInsightsAtom()
-
-  console.log('checking selectionOption', selectionOption)
 
   const [getProjectStatsInsight, { loading }] =
     useProjectStatsGetInsightLazyQuery({
@@ -43,7 +40,7 @@ export const InsightsStatsComponent = () => {
         const prevVisitorCount =
           stats.prevTimeRange?.projectViews?.visitorCount || 0
 
-        const countries = stats.current?.projectViews?.countries || []
+        const regions = stats.current?.projectViews?.regions || []
         const referrers = stats.current?.projectViews?.referrers || []
 
         setProjectStats({
@@ -57,7 +54,7 @@ export const InsightsStatsComponent = () => {
           prevViewCount,
           visitorCount,
           prevVisitorCount,
-          countries,
+          regions,
           referrers,
         })
       },
@@ -72,22 +69,7 @@ export const InsightsStatsComponent = () => {
 
   useEffect(() => {
     if (project?.id) {
-      const currentDate = DateTime.now()
-      let startDateTime
-
-      switch (selectionOption) {
-        case InsightsOptions.lastWeek:
-          startDateTime = currentDate.minus({ week: 1 }).toMillis()
-          break
-        case InsightsOptions.lastMonth:
-          startDateTime = currentDate.minus({ month: 1 }).toMillis()
-          break
-        case InsightsOptions.lastYear:
-          startDateTime = currentDate.minus({ year: 1 }).toMillis()
-          break
-        default:
-          startDateTime = currentDate.minus({ week: 1 }).toMillis()
-      }
+      const { startDateTime, endDateTime } = getDateParams(selectionOption)
 
       getProjectStatsInsight({
         variables: {
@@ -96,7 +78,7 @@ export const InsightsStatsComponent = () => {
               projectId: project?.id,
               dateRange: {
                 startDateTime,
-                endDateTime: currentDate.toMillis(),
+                endDateTime,
               },
             },
           },

@@ -14,7 +14,7 @@ type StatsInsightsAtom = {
   prevViewCount: number
   visitorCount: number
   prevVisitorCount: number
-  countries: ProjectViewBaseStats[]
+  regions: ProjectViewBaseStats[]
   referrers: ProjectViewBaseStats[]
 }
 
@@ -31,7 +31,7 @@ export const statsInsightsAtom = atom<StatsInsightsAtom>({
   prevViewCount: 0,
   visitorCount: 0,
   prevVisitorCount: 0,
-  countries: [],
+  regions: [],
   referrers: [],
 })
 

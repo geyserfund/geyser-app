@@ -11,7 +11,12 @@ import {
 } from 'recharts'
 
 import { SkeletonLayout } from '../../../../../../components/layouts'
-import { getShortAmountLabel, useCustomTheme } from '../../../../../../utils'
+import {
+  getShortAmountLabel,
+  useCustomTheme,
+  useMobileMode,
+} from '../../../../../../utils'
+import { SatsTickComponent, TickComponent } from './ChartElements'
 
 export type HistoryDataType = {
   name: string
@@ -28,8 +33,8 @@ export const HistoricalChart = ({
   loading?: boolean
 }) => {
   const { colors } = useCustomTheme()
+  const isMobile = useMobileMode()
   const ref = useRef<HTMLDivElement>(null)
-  console.log('checking history data', data)
   return (
     <HStack ref={ref} w="full" spacing="20px" wrap="wrap">
       {loading ? (
@@ -39,7 +44,11 @@ export const HistoricalChart = ({
           width={ref.current?.clientWidth || 730}
           height={250}
           data={data}
-          margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
+          margin={
+            isMobile
+              ? { top: 0, right: 0, left: 0, bottom: 0 }
+              : { top: 10, right: 10, left: 10, bottom: 10 }
+          }
         >
           <defs>
             <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
@@ -67,26 +76,31 @@ export const HistoricalChart = ({
               />
             </linearGradient>
           </defs>
-          <XAxis dataKey="name" tickMargin={10} />
+          <XAxis dataKey="name" tickMargin={10} tick={<TickComponent />} />
           <YAxis
+            width={isMobile ? 50 : 60}
             yAxisId="visitorCount"
             orientation="right"
             axisLine={false}
             tickMargin={10}
+            tick={<TickComponent />}
           />
           <YAxis
-            width={100}
+            width={isMobile ? 50 : 60}
             yAxisId="amount"
             tickFormatter={(value) => `${getShortAmountLabel(value, true)} `}
             allowDecimals={true}
             axisLine={false}
             tickMargin={10}
             unit={'sats'}
+            tick={<SatsTickComponent />}
           />
           <CartesianGrid strokeDasharray="6" vertical={false} />
           <Tooltip
+            cursor={{ fill: 'transparent' }}
             contentStyle={{
-              backgroundColor: colors.neutral[100],
+              backgroundColor: colors.neutral[0],
+              borderColor: colors.neutral[200],
               borderRadius: '8px',
             }}
           />

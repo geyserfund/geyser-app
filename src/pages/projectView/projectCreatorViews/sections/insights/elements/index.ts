@@ -1,2 +1,6 @@
+export * from './ChartElements'
+export * from './FundingMethodsPieChart'
+export * from './FundingRegionsPieChart'
 export * from './HistoricalChart'
+export * from './InsightsOptionsSelect'
 export * from './RewardSoldChart'
