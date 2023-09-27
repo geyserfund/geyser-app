@@ -1,6 +1,5 @@
 import { ProjectDashboard } from './ProjectDashboard'
 import { ProjectDashboardPage } from './ProjectDashboardPage'
-import { ProjectContributors } from './sections/ProjectContributors'
 import { ProjectDescription } from './sections/ProjectDescription'
 import { ProjectDetails } from './sections/ProjectDetails'
 import { ProjectSettings } from './sections/ProjectSettings'
@@ -11,7 +10,6 @@ import { ProjectWallet } from './sections/ProjectWallet'
 // This is exported as part of the CreatorDashboard chunk for code-splitting
 
 export {
-  ProjectContributors,
   ProjectDashboard,
   ProjectDashboardPage,
   ProjectDescription,

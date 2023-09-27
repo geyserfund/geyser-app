@@ -12,29 +12,27 @@ import { TransactionRegionComponent } from './components/TransactionRegionCompon
 
 export const ProjectCreatorInsights = () => {
   return (
-    <Stack
+    <VStack
       direction={{ base: 'column', lg: 'row' }}
       w="full"
       pt="20px"
       backgroundColor={{ base: 'neutral.0', lg: 'inherit' }}
       pb={{ base: '80px', lg: '20px' }}
       px={{ base: '10px', lg: '80px' }}
-      spacing="40px"
+      spacing={{ base: '10px', lg: '20px' }}
     >
-      <VStack w="full" spacing={{ base: '10px', lg: '20px' }}>
-        <InsightsHeader />
-        <InsightsStatsComponent />
+      <InsightsHeader />
+      <InsightsStatsComponent />
+      <MobileDivider />
+      <HistoricalComponent />
+      <MobileDivider />
+      <RewardSoldComponent />
+      <MobileDivider />
+      <Stack w="full" direction={{ base: 'column', lg: 'row' }}>
+        <TransactionMethodComponent flex={1} />
         <MobileDivider />
-        <HistoricalComponent />
-        <MobileDivider />
-        <RewardSoldComponent />
-        <MobileDivider />
-        <Stack w="full" direction={{ base: 'column', lg: 'row' }}>
-          <TransactionMethodComponent flex={1} />
-          <MobileDivider />
-          <TransactionRegionComponent flex={1} />
-        </Stack>
-      </VStack>
-    </Stack>
+        <TransactionRegionComponent flex={1} />
+      </Stack>
+    </VStack>
   )
 }

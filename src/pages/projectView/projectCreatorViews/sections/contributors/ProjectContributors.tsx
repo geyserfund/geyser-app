@@ -20,19 +20,19 @@ import { CSVLink } from 'react-csv'
 import { useTranslation } from 'react-i18next'
 import { BiCheck, BiCopy, BiDownload } from 'react-icons/bi'
 
-import { renderFunderBadges } from '../../../components/molecules/projectActivity/renderFunderBadges'
+import { renderFunderBadges } from '../../../../../components/molecules/projectActivity/renderFunderBadges'
 import {
   AnonymousAvatar,
   LinkableAvatar,
   SatoshiAmount,
-} from '../../../components/ui'
-import Loader from '../../../components/ui/Loader'
-import { useProjectContext } from '../../../context'
-import { QUERY_PROJECT_DASHBOARD_FUNDERS } from '../../../graphql'
-import { computeFunderBadges } from '../../../helpers'
-import { useQueryWithPagination } from '../../../hooks'
-import { Funder } from '../../../types'
-import { copyTextToClipboard, toInt } from '../../../utils'
+} from '../../../../../components/ui'
+import Loader from '../../../../../components/ui/Loader'
+import { useProjectContext } from '../../../../../context'
+import { QUERY_PROJECT_DASHBOARD_FUNDERS } from '../../../../../graphql'
+import { computeFunderBadges } from '../../../../../helpers'
+import { useQueryWithPagination } from '../../../../../hooks'
+import { Funder } from '../../../../../types'
+import { copyTextToClipboard, toInt } from '../../../../../utils'
 
 type TableData = {
   header: string

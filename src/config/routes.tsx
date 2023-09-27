@@ -84,9 +84,7 @@ const ProjectDashboardPage = loadableWithFailSafe(() =>
 const ProjectDescription = loadableWithFailSafe(() =>
   CreatorDashboard().then((m) => m.ProjectDescription),
 )
-const ProjectContributors = loadableWithFailSafe(() =>
-  CreatorDashboard().then((m) => m.ProjectContributors),
-)
+
 const ProjectDetails = loadableWithFailSafe(() =>
   CreatorDashboard().then((m) => m.ProjectDetails),
 )
@@ -95,9 +93,6 @@ const ProjectFundingSettings = loadableWithFailSafe(() =>
 )
 const ProjectStory = loadableWithFailSafe(() =>
   CreatorDashboard().then((m) => m.ProjectStory),
-)
-const ProjectStats = loadableWithFailSafe(() =>
-  CreatorDashboard().then((m) => m.ProjectStats),
 )
 const ProjectSettings = loadableWithFailSafe(() =>
   CreatorDashboard().then((m) => m.ProjectSettings),
@@ -265,10 +260,6 @@ export const Router = () => {
               isIndex: true,
             },
             {
-              path: getPath('dashboardContributors', PathName.projectId),
-              element: ProjectContributors,
-            },
-            {
               path: getPath('dashboardDetails', PathName.projectId),
               element: ProjectDetails,
             },
@@ -279,10 +270,6 @@ export const Router = () => {
             {
               path: getPath('dashboardWallet', PathName.projectId),
               element: ProjectFundingSettings,
-            },
-            {
-              path: getPath('dashboardStats', PathName.projectId),
-              element: ProjectStats,
             },
             {
               path: getPath('dashboardSettings', PathName.projectId),
