@@ -79,10 +79,12 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
     [routeMatchForProjectCreatorPages],
   )
 
-  const isUserViewingTheirOwnProject: boolean = useMemo(
-    () => user.ownerOf.some(({ project }) => project?.id === params.projectId),
-    [params.projectId, user.ownerOf],
-  )
+  const isUserViewingTheirOwnProject: boolean = useMemo(() => {
+    return user.ownerOf.some(
+      ({ project }) =>
+        project?.id === params.projectId || project?.name === params.projectId,
+    )
+  }, [params.projectId, user.ownerOf])
 
   useEffect(() => {
     if (!loading) {

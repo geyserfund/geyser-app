@@ -97,18 +97,6 @@ export const ProjectProvider = ({
     reward?: ProjectRewardForCreateUpdateFragment
   }>()
 
-  useEffect(() => {
-    let redirected = false
-    if (isProjectOwner && !redirected) {
-      redirected = true
-      navigate(getPath('projectOverview', `${projectId}`))
-    }
-
-    return () => {
-      redirected = false
-    }
-  }, [isProjectOwner, projectId])
-
   const {
     error,
     loading,

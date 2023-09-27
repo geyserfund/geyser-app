@@ -1,9 +1,10 @@
 import { Box } from '@chakra-ui/react'
 import { useEffect } from 'react'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import Loader from '../../components/ui/Loader'
 import { Head } from '../../config'
+import { getPath } from '../../constants'
 import { useProjectContext } from '../../context'
 import { useModal } from '../../hooks/useModal'
 import { useMobileMode } from '../../utils'
@@ -16,13 +17,26 @@ import { ProjectNavigation } from './projectNavigation/components/ProjectNavigat
 export const ProjectContainer = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const params = useParams<{ projectId: string }>()
 
   const onModalClose = () => navigate(location.pathname, { replace: true })
 
   const launchModal = useModal({ onClose: onModalClose })
   const draftModal = useModal({ onClose: onModalClose })
 
-  const { project, loading } = useProjectContext()
+  const { project, loading, isProjectOwner } = useProjectContext()
+
+  useEffect(() => {
+    let redirected = false
+    if (isProjectOwner && !redirected) {
+      redirected = true
+      navigate(getPath('projectOverview', `${params.projectId}`))
+    }
+
+    return () => {
+      redirected = false
+    }
+  }, [isProjectOwner, params.projectId])
 
   useEffect(() => {
     const launchModalShouldOpen = location.search.split('launch').length > 1
