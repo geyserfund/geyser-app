@@ -33,7 +33,7 @@ export const ProjectLeaderboardList = ({
   const id = ID.project.activity.leaderboard
 
   const funders = useQueryWithPagination<FunderWithUserFragment>({
-    queryName: 'getFunders',
+    queryName: 'fundersGet',
     itemLimit: LEADERBOARD_ITEM_LIMIT,
     query: QUERY_PROJECT_FUNDERS,
     where: { projectId: Number(project.id) },

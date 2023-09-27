@@ -70,7 +70,7 @@ export const QUERY_FUNDING_TX_STATUS_AND_INVOICE_STATUS = gql`
 export const QUERY_GET_FUNDING_TXS_LANDING = gql`
   ${FRAGMENT_FUNDING_TX_FOR_LANDING_PAGE}
   query FundingTxsForLandingPage($input: GetFundingTxsInput) {
-    getFundingTxs(input: $input) {
+    fundingTxsGet(input: $input) {
       ...FundingTxForLandingPage
     }
   }
