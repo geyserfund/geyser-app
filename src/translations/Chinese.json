@@ -661,5 +661,18 @@
     "There's a new version of Geyser!": "Geyser 有新版本！",
     "Restart the app to load the new version": "重启应用来加载新版本",
     "Not now": "现在不要",
-    "Restart app": "重启应用"
+    "Restart app": "重启应用",
+    "Add row above": "在上面添加行",
+    "Add row below": "在下面添加行",
+    "Add column left": "添加左列",
+    "Add column right": "添加右列",
+    "Remove column": "删除列",
+    "Remove row": "删除行",
+    "Insert video": "插入视频",
+    "Insert": "插入",
+    "Must be a valid twitter URL": "必须是有效的推特链接",
+    "URL is required": "链接是必填的",
+    "Insert tweet": "插入推文",
+    "Failed to insert tweet": "插入推文失败",
+    "Funding as anonymous. <1>Click here</1> to connect profile to contribution": "作为匿名捐助。<1>点击此处</1>来将个人档案连接到捐助"
 }
