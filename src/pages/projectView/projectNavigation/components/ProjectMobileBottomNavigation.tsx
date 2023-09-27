@@ -169,7 +169,7 @@ export const ProjectNavUI = () => {
             isDisabled={showGreyButton}
             onClick={() => onCreatorModalOpen()}
           >
-            {t('Create')}
+            {t('Add')}
           </Button>
         ) : (
           <Button

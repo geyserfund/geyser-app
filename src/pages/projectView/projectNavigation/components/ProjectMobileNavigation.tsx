@@ -54,7 +54,7 @@ export const ProjectMobileNavigation = () => {
             variant="primary"
             onClick={() => onCreatorModalOpen()}
           >
-            {t('Create')}
+            {t('Add')}
           </Button>
         </>
       ) : (
