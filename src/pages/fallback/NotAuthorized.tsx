@@ -25,7 +25,7 @@ export const NotAuthorized = () => {
       <Text fontSize="20px">
         <Trans
           i18nKey={
-            'If the problem persists let us know via. <1>telegram</1> or this <2>feedback form.</2>'
+            'If the problem persists let us know via. <1>telegram</1> or this <1>feedback form.</1>'
           }
         >
           {'If the problem persists let us know via. '}
