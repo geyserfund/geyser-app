@@ -31,7 +31,7 @@ export const ProjectFundersModal = ({
   const { toast } = useNotification()
 
   const funders = useQueryWithPagination<FunderWithUserFragment>({
-    queryName: 'getFunders',
+    queryName: 'fundersGet',
     itemLimit: SUPPORTERS_ITEM_LIMIT,
     query: QUERY_PROJECT_FUNDERS,
     where: { projectId: Number(projectId), anonymous: false, confirmed: true },
