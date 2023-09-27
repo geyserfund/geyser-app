@@ -25,13 +25,15 @@ import { ProjectIcon } from '../../../../components/icons/svg/ProjectIcon'
 import { Body1, Caption } from '../../../../components/typography'
 import { PathName } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
+import { useMobileMode } from '../../../../utils'
 import { useProjectDetails } from '../hooks/useProjectDetails'
 import { ProjectBackButton } from './ProjectBackButton'
 
-export const ProjectNavigation = () => {
+export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
+  const isMobile = useMobileMode()
   const { isProjectOwner, onCreatorModalOpen, project } = useProjectContext()
 
   const { entriesLength, rewardsLength, milestonesLength } =
@@ -110,8 +112,15 @@ export const ProjectNavigation = () => {
   ])
 
   return (
-    <VStack ml={4} pt={5} pb={2}>
-      <ProjectBackButton width="100%" />
+    <VStack
+      ml={4}
+      mr={4}
+      pt={5}
+      pb={2}
+      minWidth={{ base: '200px', lg: undefined }}
+      alignItems="start"
+    >
+      {!isMobile && <ProjectBackButton width="100%" />}
       {hasItems ? (
         <VStack spacing="15px">
           {isProjectOwner && (
@@ -126,6 +135,7 @@ export const ProjectNavigation = () => {
                 (creatorNavigationButtons) => {
                   return (
                     <ProjectNavigationButton
+                      showLabel={showLabel}
                       key={creatorNavigationButtons.name}
                       onClick={() => navigate(creatorNavigationButtons.path)}
                       aria-label={creatorNavigationButtons.name}
@@ -153,6 +163,7 @@ export const ProjectNavigation = () => {
                 navigationButton.render && (
                   <ProjectNavigationButton
                     key={navigationButton.name}
+                    showLabel={showLabel}
                     onClick={() => navigate(navigationButton.path)}
                     aria-label={navigationButton.name}
                     NavigationIcon={navigationButton.icon}
@@ -185,11 +196,13 @@ export const ProjectNavigation = () => {
 export const ProjectNavigationButton = ({
   children,
   NavigationIcon,
+  showLabel,
   ...props
 }: PropsWithChildren<
   Pick<ButtonProps, 'leftIcon' | 'onClick' | 'isActive'> &
     Pick<IconButtonProps, 'aria-label' | 'variant'> & {
       NavigationIcon: (props: IconProps) => JSX.Element
+      showLabel?: boolean
     }
 >) => {
   const hideLabel = useBreakpointValue(
@@ -199,7 +212,7 @@ export const ProjectNavigationButton = ({
 
   const color = props.isActive ? 'neutral.900' : 'neutral.700'
 
-  if (hideLabel) {
+  if (hideLabel && !showLabel) {
     return (
       <Tooltip label={children} placement="right">
         <IconButton variant="transparent" {...props}>

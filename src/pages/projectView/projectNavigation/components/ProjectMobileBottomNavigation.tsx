@@ -1,23 +1,23 @@
 import {
-  Badge,
   Box,
   Button,
   HStack,
-  IconButton,
   Slide,
-  Text,
   useDisclosure,
+  VStack,
 } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BiNews } from 'react-icons/bi'
+import { useNavigate } from 'react-router-dom'
 
-import { MilestoneIcon, RewardGiftIcon } from '../../../../components/icons'
+import { BoltIcon } from '../../../../components/icons'
+import { Body2 } from '../../../../components/typography'
+import { getPath } from '../../../../constants'
 import { BottomNavContainerCommonStyles } from '../../../../constants/styles'
 import { MobileViews, useProjectContext } from '../../../../context'
 import { useScrollDirection } from '../../../../hooks'
-import { fonts } from '../../../../styles'
 import { isActive } from '../../../../utils'
+import { navigationItems } from './BottomNavList'
 
 export const ProjectMobileBottomNavigation = ({
   fixed,
@@ -83,13 +83,9 @@ export const ProjectMobileBottomNavigation = ({
 
 export const ProjectNavUI = () => {
   const { t } = useTranslation()
-  const {
-    mobileView,
-    setMobileView,
-    project,
-    isProjectOwner,
-    onCreatorModalOpen,
-  } = useProjectContext()
+  const navigate = useNavigate()
+  const { mobileView, setMobileView, project, isProjectOwner } =
+    useProjectContext()
 
   const getTextColor = (value: string) => {
     if (value === mobileView) {
@@ -103,9 +99,8 @@ export const ProjectNavUI = () => {
     return null
   }
 
-  const { fundingTxsCount } = project
-
-  const handleClick = (value: MobileViews) => {
+  const handleMobileViewClick = (value: MobileViews) => {
+    navigate(getPath('project', project.name))
     if (mobileView === value) {
       document.scrollingElement?.scrollTo({ top: 0, behavior: 'smooth' })
     } else {
@@ -115,75 +110,58 @@ export const ProjectNavUI = () => {
   }
 
   const isFundingDisabled = !isActive(project.status)
-  const showGreyButton = mobileView === MobileViews.funding || isFundingDisabled
+  const showGreyButton = isFundingDisabled
 
   return (
-    <HStack paddingX="10px" spacing={8} {...BottomNavContainerCommonStyles}>
-      <HStack flexGrow={1} justifyContent="space-between">
+    <HStack
+      paddingX="20px"
+      pt={2}
+      {...BottomNavContainerCommonStyles}
+      justifyContent="space-between"
+    >
+      {navigationItems.map((item, index) => {
+        if (isProjectOwner && !item.isCreator) return null
+        if (!isProjectOwner && !item.isContributor) return null
+
+        const handleClick = () => {
+          if (item.pathName) {
+            navigate(item.pathName)
+          } else if (item.mobileView) {
+            handleMobileViewClick(item.mobileView)
+          }
+        }
+
+        return (
+          <Button
+            key={item.name}
+            variant="ghost"
+            onClick={handleClick}
+            color={getTextColor(MobileViews.description)}
+            _hover={{}}
+            padding="5px"
+          >
+            <VStack spacing="0px">
+              <item.icon fontSize="30px" />
+              <Body2 semiBold color="neutral.700">
+                {t(item.name)}
+              </Body2>
+            </VStack>
+          </Button>
+        )
+      })}
+      {!isProjectOwner && (
         <Button
-          variant="ghost"
-          onClick={() => handleClick(MobileViews.description)}
-          color={getTextColor(MobileViews.description)}
-          _hover={{}}
-          paddingX="5px"
+          size="sm"
+          variant="primary"
+          padding="5px"
+          px="10px"
+          isDisabled={showGreyButton}
+          onClick={() => handleMobileViewClick(MobileViews.funding)}
+          leftIcon={<BoltIcon />}
         >
-          <BiNews fontSize="30px" />
+          {t('Contribute')}
         </Button>
-        <IconButton
-          variant="ghost"
-          aria-label="milestones"
-          _hover={{}}
-          _active={{}}
-          onClick={() => handleClick(MobileViews.contribution)}
-          color={getTextColor(MobileViews.contribution)}
-        >
-          <>
-            <MilestoneIcon fontSize="1.5em" />
-            {fundingTxsCount ? (
-              <Badge ml={1}>
-                <Text fontFamily={fonts.mono}>{fundingTxsCount}</Text>
-              </Badge>
-            ) : null}
-          </>
-        </IconButton>
-        <IconButton
-          variant="ghost"
-          onClick={() => handleClick(MobileViews.rewards)}
-          color={getTextColor(MobileViews.rewards)}
-          aria-label="rewards"
-          _hover={{}}
-          _active={{}}
-          isDisabled={!project.rewards.length}
-          paddingX="5px"
-        >
-          <RewardGiftIcon fontSize="1.5em" />
-        </IconButton>
-      </HStack>
-      <HStack flexGrow={1}>
-        {isProjectOwner ? (
-          <Button
-            size="sm"
-            variant="primary"
-            width="100%"
-            padding="5px"
-            isDisabled={showGreyButton}
-            onClick={() => onCreatorModalOpen()}
-          >
-            {t('Create')}
-          </Button>
-        ) : (
-          <Button
-            size="sm"
-            variant="primary"
-            width="100%"
-            padding="5px"
-            isDisabled={showGreyButton}
-            onClick={() => handleClick(MobileViews.funding)}
-          >
-            {t('Contribute')}
-          </Button>
-        )}
-      </HStack>
+      )}
     </HStack>
   )
 }

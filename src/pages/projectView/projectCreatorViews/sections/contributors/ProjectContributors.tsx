@@ -169,7 +169,7 @@ export const ProjectContributors = () => {
         },
       },
     ],
-    [project],
+    [project, t],
   )
 
   const checkIfAllIsSelected = () => {
