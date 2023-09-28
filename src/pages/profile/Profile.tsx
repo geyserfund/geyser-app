@@ -33,6 +33,9 @@ export const Profile = () => {
 
   const { user: currentAppUser } = useAuthContext()
   const params = useParams<{ userId: string }>()
+  const id = useMemo(() => {
+    return toInt(params.userId)
+  }, [params])
 
   const [userProfile, setUserProfile] = useState<User>({ ...defaultUser })
 
@@ -43,10 +46,10 @@ export const Profile = () => {
   } = useQuery<ResponseData, QueryVariables>(QUERY_USER_PROFILE, {
     variables: {
       where: {
-        id: toInt(params.userId),
+        id,
       },
     },
-    skip: !params.userId,
+    skip: !id,
   })
 
   const isViewingOwnProfile = useMemo(

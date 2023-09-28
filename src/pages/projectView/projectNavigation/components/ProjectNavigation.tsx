@@ -185,7 +185,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
             onClick={() => onCreatorModalOpen()}
             leftIcon={<AddIcon fontSize="12px" />}
           >
-            {t('Create')}
+            {t('Add')}
           </Button>
         </>
       ) : null}

@@ -479,6 +479,7 @@ export enum FundingResourceType {
 export enum FundingStatus {
   Canceled = 'canceled',
   Paid = 'paid',
+  PartiallyPaid = 'partially_paid',
   Pending = 'pending',
   Unpaid = 'unpaid',
 }

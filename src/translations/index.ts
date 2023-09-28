@@ -11,6 +11,8 @@ import ItalianTranslations from './Italian.json'
 import PolishTranslations from './Polish.json'
 import PortugueseTranslation from './Portuguese.json'
 import SpanishTranslations from './Spanish.json'
+import SwahiliTranslations from './Swahili.json'
+import TurkishTranslations from './Turkish.json'
 
 export const allTranslations = {
   [lng.ar]: ArabicTranslations,
@@ -24,6 +26,8 @@ export const allTranslations = {
   [lng.pl]: PolishTranslations,
   [lng.pt]: PortugueseTranslation,
   [lng.es]: SpanishTranslations,
+  [lng.sw]: SwahiliTranslations,
+  [lng.tr]: TurkishTranslations,
 }
 
 export {
@@ -39,4 +43,6 @@ export {
   PolishTranslations,
   PortugueseTranslation,
   SpanishTranslations,
+  SwahiliTranslations,
+  TurkishTranslations,
 }
