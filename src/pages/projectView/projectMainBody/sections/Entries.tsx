@@ -47,17 +47,13 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
     }
   }, [fetchUnpublishedEntries, isProjectOwner])
 
-  if (!project) {
+  if (!project || !project.entries.length) {
     return null
   }
 
   const canCreateEntries: boolean =
     Boolean(isProjectOwner) &&
     (isActive(project.status) || isDraft(project.status))
-
-  if (!project.entries.length) {
-    return null
-  }
 
   return (
     <CardLayout

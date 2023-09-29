@@ -1,5 +1,6 @@
 import { ApolloProvider } from '@apollo/client'
 import { ChakraProvider } from '@chakra-ui/react'
+import { Provider } from 'jotai'
 import { BrowserRouter } from 'react-router-dom'
 
 import { AppLayout } from './AppLayout'
@@ -20,14 +21,16 @@ export const App = () => {
         <ServiceWorkerProvider>
           <BrowserRouter>
             <ApolloProvider client={client}>
-              <AuthProvider>
-                <NavProvider>
-                  <BtcProvider>
-                    <Head />
-                    <AppLayout />
-                  </BtcProvider>
-                </NavProvider>
-              </AuthProvider>
+              <Provider>
+                <AuthProvider>
+                  <NavProvider>
+                    <BtcProvider>
+                      <Head />
+                      <AppLayout />
+                    </BtcProvider>
+                  </NavProvider>
+                </AuthProvider>
+              </Provider>
             </ApolloProvider>
           </BrowserRouter>
         </ServiceWorkerProvider>

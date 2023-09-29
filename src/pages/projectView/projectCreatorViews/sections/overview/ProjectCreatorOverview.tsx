@@ -13,7 +13,7 @@ export const ProjectCreatorOverview = () => {
       direction={{ base: 'column', lg: 'row' }}
       w="full"
       pt="20px"
-      pb={{ base: '80px', lg: '20px' }}
+      pb="20px"
       px={{ base: '10px', lg: '80px' }}
       spacing="40px"
     >

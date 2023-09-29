@@ -73,7 +73,7 @@ export const TransactionMethodComponent = (props: CardLayoutProps) => {
   return (
     <CardLayout
       direction="column"
-      padding={{ base: '20px', lg: '20px' }}
+      padding={{ base: '0px', lg: '20px' }}
       w="full"
       alignItems="start"
       spacing="10px"

@@ -67,7 +67,7 @@ export const ProjectMobileBottomNavigation = ({
 
   return (
     <>
-      {<Box width="100%" height="60px"></Box>}
+      {/* {<Box width="100%" height="60px"></Box>} */}
       <Slide
         direction="bottom"
         in={isOpen}
@@ -142,7 +142,7 @@ export const ProjectNavUI = () => {
           >
             <VStack spacing="0px">
               <item.icon fontSize="30px" />
-              <Body2 semiBold color="neutral.700">
+              <Body2 fontSize="10px" semiBold color="neutral.700">
                 {t(item.name)}
               </Body2>
             </VStack>

@@ -102,7 +102,7 @@ export const FundingFormScreen = ({
       backgroundColor="neutral.0"
       marginBottom={
         isMobile && summaryCardRef.current
-          ? `${summaryCardRef.current.offsetHeight + 80}px`
+          ? `${summaryCardRef.current.offsetHeight}px`
           : undefined
       }
     >

@@ -1,8 +1,10 @@
+/* eslint-disable complexity */
 import { useDisclosure } from '@chakra-ui/hooks'
 import { Box } from '@chakra-ui/layout'
 import {
   Button,
   HStack,
+  IconButton,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -13,6 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { BsLayoutSidebar } from 'react-icons/bs'
 import {
   Link,
   matchPath,
@@ -24,7 +27,9 @@ import {
 import { getPath, ID, PathName } from '../../../constants'
 import { useAuthContext, useNavContext } from '../../../context'
 import { useScrollDirection } from '../../../hooks'
+import { useProjectSideNavAtom } from '../../../pages/projectView/projectNavigation/sideNav'
 import { useMobileMode } from '../../../utils'
+import { SideNavIcon } from '../../icons'
 import { AuthModal } from '../../molecules'
 import { NavBarLogo } from '../NavBarLogo'
 import { TopNavBarMenu } from './TopNavBarMenu'
@@ -139,6 +144,8 @@ const routesForTransparentBackground = [
   getPath('landingFeed'),
 ]
 
+const routesForLeftSideMenuButton = [...projectRoutes]
+
 /**
  * "Container" component for elements and appearance of
  * the top navigation bar.
@@ -149,6 +156,8 @@ export const TopNavBar = () => {
   const isMobile = useMobileMode()
   const navigate = useNavigate()
   const location = useLocation()
+
+  const [_, changeProjectSideNavOpen] = useProjectSideNavAtom()
 
   const currentPathName = location.pathname
 
@@ -210,6 +219,9 @@ export const TopNavBar = () => {
 
   const routeMatchesForTransaparentBackground =
     routesForTransparentBackground.map(useMatch)
+
+  const routeMatchesForLeftSideMenuButton =
+    routesForLeftSideMenuButton.map(useMatch)
 
   useEffect(() => {
     if (state && state.loggedOut) {
@@ -508,6 +520,12 @@ export const TopNavBar = () => {
     )
   }, [routeMatchesForTransaparentBackground, scrollTop])
 
+  const shouldShowLeftSideMenuButton: boolean = useMemo(() => {
+    return routeMatchesForLeftSideMenuButton.some((routeMatch) => {
+      return Boolean(routeMatch)
+    })
+  }, [routeMatchesForLeftSideMenuButton])
+
   if (shouldTopNavBeHidden) {
     return null
   }
@@ -516,7 +534,7 @@ export const TopNavBar = () => {
     <>
       <Box
         bg={showHaveTransparentBackground ? 'transparent' : 'neutral.0'}
-        px={4}
+        px={{ base: '10px', lg: '20px' }}
         position="fixed"
         top={0}
         left={0}
@@ -534,15 +552,32 @@ export const TopNavBar = () => {
           justifyContent="start"
           overflow="hidden"
         >
-          <NavBarLogo
-            small={isMobile && shouldShowCustomTitle}
-            marginRight={isMobile ? 0 : 5}
-            color={showHaveTransparentBackground ? 'primary.900' : undefined}
-            flexGrow={0}
-            textAlign="left"
-          />
-
-          {shouldShowCustomTitle ? (
+          {shouldShowLeftSideMenuButton ? (
+            <IconButton
+              aria-label="left-side-menu-button"
+              icon={<SideNavIcon />}
+              onClick={changeProjectSideNavOpen}
+              size="sm"
+              variant="ghost"
+            />
+          ) : (
+            <NavBarLogo
+              small={isMobile && shouldShowCustomTitle}
+              marginRight={isMobile ? 0 : 5}
+              color={showHaveTransparentBackground ? 'primary.900' : undefined}
+              flexGrow={0}
+              textAlign="left"
+            />
+          )}
+          {shouldShowLeftSideMenuButton ? (
+            <NavBarLogo
+              small={isMobile && shouldShowCustomTitle}
+              marginRight={isMobile ? 0 : 5}
+              color={showHaveTransparentBackground ? 'primary.900' : undefined}
+              flexGrow={1}
+              textAlign="center"
+            />
+          ) : shouldShowCustomTitle ? (
             <Text
               variant="h3"
               noOfLines={1}

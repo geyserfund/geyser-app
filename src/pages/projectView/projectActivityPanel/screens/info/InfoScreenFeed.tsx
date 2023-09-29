@@ -77,11 +77,10 @@ export const InfoScreenFeed = () => {
     >
       <StickToTop
         id={ID.project.activity.feedtab}
-        scrollContainerId={ID.root}
         wrapperId={ID.project.activity.feedtabWrapper}
         width="100%"
         offset={dimensions.topNavBar.desktop.height}
-        bias={20}
+        bias={10}
         buffer={10}
         disable={!isMobile}
       >

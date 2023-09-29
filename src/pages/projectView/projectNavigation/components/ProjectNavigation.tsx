@@ -113,16 +113,15 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
 
   return (
     <VStack
-      ml={4}
-      mr={4}
+      mx={{ base: '10px', lg: 4 }}
       pt={5}
       pb={2}
-      minWidth={{ base: '200px', lg: undefined }}
+      minWidth={{ base: '180px', lg: undefined }}
       alignItems="start"
     >
       {!isMobile && <ProjectBackButton width="100%" />}
       {hasItems ? (
-        <VStack spacing="15px">
+        <VStack spacing="15px" w="full">
           {isProjectOwner && (
             <VStack width="100%">
               <HStack w="full" justifyContent="start">

@@ -27,9 +27,9 @@ export const ProjectMainBody = () => {
 
       <Story />
 
-      {projectDetails.entriesLength && <Entries />}
-      {projectDetails.rewardsLength && <Rewards />}
-      {projectDetails.milestonesLength && <Milestones />}
+      {projectDetails.entriesLength ? <Entries /> : null}
+      {projectDetails.rewardsLength ? <Rewards /> : null}
+      {projectDetails.milestonesLength ? <Milestones /> : null}
     </>
   )
 }

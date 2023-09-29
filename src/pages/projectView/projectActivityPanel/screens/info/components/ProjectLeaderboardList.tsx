@@ -68,7 +68,7 @@ export const ProjectLeaderboardList = ({
         width="100%"
         alignItems="start"
         paddingRight="10px"
-        paddingBottom={{ base: '80px', lg: '20px' }}
+        paddingBottom={'20px'}
       >
         {funders.isLoading ? (
           <LeaderboardListSkeleton />

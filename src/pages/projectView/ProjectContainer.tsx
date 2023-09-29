@@ -27,16 +27,20 @@ export const ProjectContainer = () => {
   const { project, loading, isProjectOwner } = useProjectContext()
 
   useEffect(() => {
-    let redirected = false
-    if (isProjectOwner && !redirected) {
-      redirected = true
+    let redirected = ''
+    if (
+      isProjectOwner &&
+      params.projectId &&
+      !(redirected !== params.projectId)
+    ) {
+      redirected = params.projectId
       navigate(getPath('projectOverview', `${params.projectId}`))
     }
 
     return () => {
-      redirected = false
+      redirected = ''
     }
-  }, [isProjectOwner, params.projectId])
+  }, [isProjectOwner, params.projectId, navigate])
 
   useEffect(() => {
     const launchModalShouldOpen = location.search.split('launch').length > 1
@@ -89,7 +93,7 @@ export const ProjectContainer = () => {
       <ProjectCreateLaunchedModal {...launchModal} />
       <ProjectCreateDraftModal {...draftModal} />
 
-      {isMobile && <ProjectMobileBottomNavigation fixed />}
+      {isMobile && <ProjectMobileBottomNavigation />}
     </>
   )
 }
