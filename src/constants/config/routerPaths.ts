@@ -39,6 +39,7 @@ export enum PathName {
   projectId = ':projectId',
   userId = ':userId',
   entryId = ':entryId',
+  grantId = ':grantId',
 }
 
 // @TODO: These definitions are currently a WIP.

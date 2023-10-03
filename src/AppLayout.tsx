@@ -1,10 +1,10 @@
 import { Box } from '@chakra-ui/layout'
 import { Fade } from '@chakra-ui/react'
+import { Outlet } from 'react-router-dom'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 
 import { LandingNavBar, TopNavBar } from './components/nav'
 import { PullingDownContent } from './components/ui'
-import { Router } from './config'
 import { dimensions, ID } from './constants'
 import { useAuthContext } from './context'
 import { LoadingPage } from './pages/loading'
@@ -45,7 +45,7 @@ export const AppLayout = () => {
             backgroundColor={{ base: 'neutral.0', lg: 'neutral.50' }}
             overflowY={isMobile ? 'initial' : 'auto'}
           >
-            <Router />
+            <Outlet />
           </Box>
           {isMobile && <LandingNavBar />}
         </Box>

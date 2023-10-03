@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client'
 import { Box, Input, Text, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { BsCheckLg } from 'react-icons/bs'
-import { useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { CardLayout } from '../../../components/layouts'
 import {

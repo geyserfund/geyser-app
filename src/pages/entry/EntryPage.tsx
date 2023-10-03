@@ -1,7 +1,7 @@
 import { ApolloError } from '@apollo/client'
 import { Box } from '@chakra-ui/layout'
 import { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { ProjectMobileBottomNavigation } from '../../components/nav'
 import Loader from '../../components/ui/Loader'

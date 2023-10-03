@@ -1,13 +1,13 @@
 import { Box } from '@chakra-ui/layout'
-import { useParams } from 'react-router'
+import { useParams } from 'react-router-dom'
 
 import { ProjectProvider } from '../../context'
 import { ProjectContainer } from './ProjectContainer'
 import { ProjectSideNavigation } from './projectNavigation/sideNav'
 
 export const ProjectView = () => {
-  const { projectId } = useParams<{ projectId: string }>()
-
+  const params = useParams<{ projectId: string }>()
+  const { projectId } = params
   return (
     <ProjectProvider projectId={projectId || ''}>
       <ProjectSideNavigation>

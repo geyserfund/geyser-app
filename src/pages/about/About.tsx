@@ -13,7 +13,7 @@ import {
   WhyGeyser,
 } from './components'
 
-const About = () => {
+export const About = () => {
   return (
     <VStack backgroundColor="neutral.0" spacing={{ base: 50, lg: 100 }}>
       <GreenBackgroundAboutHeader />

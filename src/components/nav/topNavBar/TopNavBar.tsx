@@ -1,7 +1,9 @@
 /* eslint-disable complexity */
 import { useDisclosure } from '@chakra-ui/hooks'
+import { HamburgerIcon } from '@chakra-ui/icons'
 import { Box } from '@chakra-ui/layout'
 import {
+  Avatar,
   Button,
   HStack,
   IconButton,
@@ -15,15 +17,17 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BsLayoutSidebar } from 'react-icons/bs'
 import {
   Link,
+  Location,
   matchPath,
+  matchRoutes,
   useLocation,
-  useMatch,
   useNavigate,
 } from 'react-router-dom'
 
+import { platformRoutes } from '../../../config'
+import { useSetMatchRoutes } from '../../../config/routes/routesAtom'
 import { getPath, ID, PathName } from '../../../constants'
 import { useAuthContext, useNavContext } from '../../../context'
 import { useScrollDirection } from '../../../hooks'
@@ -32,6 +36,7 @@ import { useMobileMode } from '../../../utils'
 import { SideNavIcon } from '../../icons'
 import { AuthModal } from '../../molecules'
 import { NavBarLogo } from '../NavBarLogo'
+import { useRouteMatchesForTopNavBar } from './topNavBarAtom'
 import { TopNavBarMenu } from './TopNavBarMenu'
 
 const navItems = [
@@ -52,100 +57,6 @@ const navItems = [
   },
 ]
 
-const dashboardRoutes = [
-  getPath('projectDashboard', PathName.projectId),
-  getPath('dashboardContributors', PathName.projectId),
-  getPath('dashboardDetails', PathName.projectId),
-  getPath('dashboardWallet', PathName.projectId),
-  getPath('dashboardSettings', PathName.projectId),
-  getPath('dashboardStats', PathName.projectId),
-  getPath('dashboardStory', PathName.projectId),
-]
-
-export const projectRoutes = [
-  getPath('project', PathName.projectId),
-  getPath('projectContributors', PathName.projectId),
-  getPath('projectInsights', PathName.projectId),
-  getPath('projectOverview', PathName.projectId),
-  getPath('projectEntries', PathName.projectId),
-  getPath('projectMilestones', PathName.projectId),
-  getPath('projectRewards', PathName.projectId),
-]
-
-const routesForHidingTopNav = [
-  `/${PathName.project}/:projectId/${PathName.entry}`,
-  `/${PathName.project}/:projectId/${PathName.entry}/:entryId`,
-  `/${PathName.project}/:projectId/${PathName.entry}/:entryId/${PathName.preview}`,
-]
-
-const routesForShowingProjectButton = dashboardRoutes
-
-const customTitleRoutes = [
-  ...projectRoutes,
-  ...dashboardRoutes,
-  `/${PathName.project}/:projectId/${PathName.entry}`,
-  `/${PathName.entry}/:entryId`,
-]
-const navItemsRoutes = [
-  `/`,
-  getPath('landingFeed'),
-  `/${PathName.grants}`,
-  `/${PathName.grants}/:grantId`,
-]
-
-const routesForHidingDashboardButton = [...dashboardRoutes]
-
-const routesForHidingDropdownMenu = [
-  `/${PathName.project}/:projectId/${PathName.entry}`,
-  `/${PathName.project}/:projectId/${PathName.entry}/:entryId`,
-  `/${PathName.project}/:projectId/${PathName.entry}/:entryId/${PathName.preview}`,
-]
-
-const routesForHidingMyProjectsButton = [
-  `/${PathName._deprecatedPathNameForProject}/:projectId`,
-  `/${PathName.entry}/:entryId`,
-  `/${PathName.project}/:projectId/${PathName.entry}`,
-  `/${PathName.project}/:projectId/${PathName.entry}/:entryId`,
-  `/${PathName.project}/:projectId/${PathName.entry}/:entryId/${PathName.preview}`,
-  ...dashboardRoutes,
-  `/${PathName.userProfile}/:userId`,
-]
-
-const routesForEnablingSignInButton = [
-  ...projectRoutes,
-  getPath('index'),
-  getPath('landingPage'),
-  getPath('landingFeed'),
-  getPath('projectDiscovery'),
-  getPath('grantsRoundOne'),
-  getPath('grantsRoundTwo'),
-  getPath('notFound'),
-  getPath('notAuthorized'),
-  `/${PathName.grants}`,
-  `/${PathName.grants}/:grantId`,
-  `/${PathName.userProfile}/:userId`,
-  `/${PathName.entry}/:entryId`,
-  `/${PathName.project}/:projectId/${PathName.entry}`,
-  `/${PathName.project}/:projectId/${PathName.entry}/:entryId`,
-  `/${PathName.project}/:projectId/${PathName.entry}/:entryId/${PathName.preview}`,
-]
-
-const routesForEnablingProjectLaunchButton = [
-  getPath('index'),
-  getPath('landingPage'),
-  getPath('landingFeed'),
-  getPath('projectDiscovery'),
-  `/${PathName.grants}`,
-  `/${PathName.grants}/:grantId`,
-]
-
-const routesForTransparentBackground = [
-  getPath('index'),
-  getPath('landingFeed'),
-]
-
-const routesForLeftSideMenuButton = [...projectRoutes]
-
 /**
  * "Container" component for elements and appearance of
  * the top navigation bar.
@@ -155,7 +66,27 @@ export const TopNavBar = () => {
 
   const isMobile = useMobileMode()
   const navigate = useNavigate()
-  const location = useLocation()
+
+  const location: Location & {
+    state: {
+      loggedOut?: boolean
+      refresh?: boolean
+    }
+  } = useLocation()
+
+  const { state } = location
+
+  const matchRoutesData = matchRoutes(platformRoutes, location)
+
+  console.log('checking resolvedPath', matchRoutesData)
+
+  const setMatchRoutes = useSetMatchRoutes()
+
+  useEffect(() => {
+    if (matchRoutesData) {
+      setMatchRoutes(matchRoutesData)
+    }
+  }, [matchRoutesData, setMatchRoutes])
 
   const [_, changeProjectSideNavOpen] = useProjectSideNavAtom()
 
@@ -183,45 +114,21 @@ export const TopNavBar = () => {
     loginOnClose,
   } = useAuthContext()
 
-  const { navData } = useNavContext()
-
   const {
-    state,
-  }: {
-    state: {
-      loggedOut?: boolean
-      refresh?: boolean
-    }
-  } = useLocation()
+    hideTopNavBar,
+    showProjectButton,
+    hideMyProjectsButton,
+    showLeftSideMenuButton,
+    showTransparentBackground,
+    showNavItems,
+    showCustomTitle,
+    showProjectLaunchButton,
+    hideDashboardButton,
+    hideDropdownMenu,
+    showSignInButton,
+  } = useRouteMatchesForTopNavBar()
 
-  const routeMatchesForHidingTopNav = routesForHidingTopNav.map(useMatch)
-
-  const routeMatchesForProjectButton =
-    routesForShowingProjectButton.map(useMatch)
-
-  const routeMatchesForEnablingSignInButton =
-    routesForEnablingSignInButton.map(useMatch)
-
-  const routeMatchesForHidingDashboardButton =
-    routesForHidingDashboardButton.map(useMatch)
-
-  const routeMatchesForHidingDropdownMenu =
-    routesForHidingDropdownMenu.map(useMatch)
-
-  const routeMatchesForHidingMyProjectsButton =
-    routesForHidingMyProjectsButton.map(useMatch)
-
-  const routesMatchesForEnablingProjectLaunchButton =
-    routesForEnablingProjectLaunchButton.map(useMatch)
-
-  const routesMatchesForShowingCustomTitle = customTitleRoutes.map(useMatch)
-  const routesMatchesForShowingNavItems = navItemsRoutes.map(useMatch)
-
-  const routeMatchesForTransaparentBackground =
-    routesForTransparentBackground.map(useMatch)
-
-  const routeMatchesForLeftSideMenuButton =
-    routesForLeftSideMenuButton.map(useMatch)
+  const { navData } = useNavContext()
 
   useEffect(() => {
     if (state && state.loggedOut) {
@@ -288,19 +195,9 @@ export const TopNavBar = () => {
     [user],
   )
 
-  const shouldTopNavBeHidden: boolean = useMemo(() => {
-    return routeMatchesForHidingTopNav.some((routeMatch) => Boolean(routeMatch))
-  }, [routeMatchesForHidingTopNav])
-
   const shouldShowProjectButton: boolean = useMemo(() => {
-    return (
-      !isMobile &&
-      routeMatchesForProjectButton.some((routeMatch) => {
-        return Boolean(routeMatch)
-      }) &&
-      Boolean(navData)
-    )
-  }, [routeMatchesForProjectButton, isMobile, navData])
+    return !isMobile && showProjectButton && Boolean(navData)
+  }, [showProjectButton, isMobile, navData])
   /**
    * Logic:
    *  - Available to all not logged-in users.
@@ -312,24 +209,12 @@ export const TopNavBar = () => {
    *  - Hidden on Mobile -- it will be in the menu dropdown instead.
    */
   const shouldShowSignInButton: boolean = useMemo(() => {
-    return (
-      isLoggedIn === false &&
-      isMobile === false &&
-      routeMatchesForEnablingSignInButton.some((routeMatch) => {
-        return Boolean(routeMatch)
-      })
-    )
-  }, [routeMatchesForEnablingSignInButton, isLoggedIn, isMobile])
+    return isLoggedIn === false && isMobile === false && showSignInButton
+  }, [showSignInButton, isLoggedIn, isMobile])
 
   const shouldShowSignInButtonInsideDropdownMenu: boolean = useMemo(() => {
-    return (
-      isLoggedIn === false &&
-      isMobile === true &&
-      routeMatchesForEnablingSignInButton.some((routeMatch) => {
-        return Boolean(routeMatch)
-      })
-    )
-  }, [routeMatchesForEnablingSignInButton, isLoggedIn, isMobile])
+    return isLoggedIn === false && isMobile === true && showSignInButton
+  }, [showSignInButton, isLoggedIn, isMobile])
 
   /**
    * Logic:
@@ -337,11 +222,7 @@ export const TopNavBar = () => {
    *  - Available to all logged-in users with profile inside
    *  - Viewable to all users at all times except when: Creating a Project + Entry
    */
-  const shouldShowDropdownMenuButton: boolean = useMemo(() => {
-    return routeMatchesForHidingDropdownMenu.every((routeMatch) => {
-      return Boolean(routeMatch) === false
-    })
-  }, [routeMatchesForHidingDropdownMenu])
+  const shouldShowDropdownMenuButton = !hideDropdownMenu
 
   /**
    * Logic:
@@ -359,16 +240,14 @@ export const TopNavBar = () => {
       isLoggedIn &&
       isUserAProjectCreator &&
       isViewingOwnProject &&
-      !routeMatchesForHidingDashboardButton.some((routeMatch) => {
-        return Boolean(routeMatch)
-      })
+      hideDashboardButton === false
     )
   }, [
     isMobile,
     isLoggedIn,
     isUserAProjectCreator,
     isViewingOwnProject,
-    routeMatchesForHidingDashboardButton,
+    hideDashboardButton,
   ])
 
   const shouldShowDashboardButtonInsideDropdownMenu: boolean = useMemo(() => {
@@ -377,9 +256,7 @@ export const TopNavBar = () => {
       isLoggedIn &&
       isUserAProjectCreator &&
       (isViewingOwnProject || userHasOnlyOneProject) &&
-      !routeMatchesForHidingDashboardButton.some((routeMatch) => {
-        return Boolean(routeMatch)
-      })
+      hideDashboardButton === false
     )
   }, [
     isMobile,
@@ -387,7 +264,7 @@ export const TopNavBar = () => {
     isUserAProjectCreator,
     isViewingOwnProject,
     userHasOnlyOneProject,
-    routeMatchesForHidingDashboardButton,
+    hideDashboardButton,
   ])
 
   /**
@@ -409,13 +286,11 @@ export const TopNavBar = () => {
       isLoggedIn &&
       isUserAProjectCreator &&
       isViewingOwnProject === false &&
-      routeMatchesForHidingMyProjectsButton.every((routeMatch) => {
-        return Boolean(routeMatch) === false
-      }) &&
+      hideMyProjectsButton === false &&
       !userHasOnlyOneProject
     )
   }, [
-    routeMatchesForHidingMyProjectsButton,
+    hideMyProjectsButton,
     isMobile,
     isLoggedIn,
     isUserAProjectCreator,
@@ -429,13 +304,11 @@ export const TopNavBar = () => {
       isLoggedIn &&
       isUserAProjectCreator &&
       isViewingOwnProject === false &&
-      routeMatchesForHidingMyProjectsButton.every((routeMatch) => {
-        return Boolean(routeMatch) === false
-      }) &&
+      hideMyProjectsButton === false &&
       userHasOnlyOneProject
     )
   }, [
-    routeMatchesForHidingMyProjectsButton,
+    hideMyProjectsButton,
     isMobile,
     isLoggedIn,
     isUserAProjectCreator,
@@ -449,13 +322,11 @@ export const TopNavBar = () => {
       isLoggedIn &&
       isUserAProjectCreator &&
       isViewingOwnProject === false &&
-      routeMatchesForHidingMyProjectsButton.every((routeMatch) => {
-        return Boolean(routeMatch) === false
-      }) &&
+      hideMyProjectsButton === false &&
       !userHasOnlyOneProject
     )
   }, [
-    routeMatchesForHidingMyProjectsButton,
+    hideMyProjectsButton,
     isMobile,
     isLoggedIn,
     isUserAProjectCreator,
@@ -475,58 +346,35 @@ export const TopNavBar = () => {
     return (
       (isLoggedIn === false ||
         (isLoggedIn && isUserAProjectCreator === false)) &&
-      routesMatchesForEnablingProjectLaunchButton.some((routeMatch) => {
-        return Boolean(routeMatch)
-      })
+      showProjectLaunchButton
     )
-  }, [
-    routesMatchesForEnablingProjectLaunchButton,
-    isLoggedIn,
-    isUserAProjectCreator,
-  ])
+  }, [showProjectLaunchButton, isLoggedIn, isUserAProjectCreator])
 
   /**
    * Logic:
    *  - Shown for creators on the project creation flow pages.
    */
   const shouldShowCustomTitle: boolean = useMemo(() => {
-    return (
-      routesMatchesForShowingCustomTitle.some((routeMatch) => {
-        return Boolean(routeMatch)
-      }) && Boolean(navData)
-    )
-  }, [routesMatchesForShowingCustomTitle, navData])
+    return showCustomTitle && Boolean(navData)
+  }, [showCustomTitle, navData])
 
   const shouldShowNavItems: boolean = useMemo(() => {
-    if (isMobile) {
-      return false
-    }
-
-    return routesMatchesForShowingNavItems.some((routeMatch) => {
-      return Boolean(routeMatch)
-    })
-  }, [routesMatchesForShowingNavItems, isMobile])
+    return showNavItems && isMobile === false
+  }, [showNavItems, isMobile])
 
   const { scrollTop } = useScrollDirection({
     elementId: isMobile ? '' : ID.root,
     initialValue: true,
   })
   const showHaveTransparentBackground: boolean = useMemo(() => {
-    return (
-      scrollTop <= 50 &&
-      routeMatchesForTransaparentBackground.some((routeMatch) => {
-        return Boolean(routeMatch)
-      })
-    )
-  }, [routeMatchesForTransaparentBackground, scrollTop])
+    return scrollTop <= 50 && showTransparentBackground
+  }, [showTransparentBackground, scrollTop])
 
   const shouldShowLeftSideMenuButton: boolean = useMemo(() => {
-    return routeMatchesForLeftSideMenuButton.some((routeMatch) => {
-      return Boolean(routeMatch)
-    })
-  }, [routeMatchesForLeftSideMenuButton])
+    return showLeftSideMenuButton && isMobile === true
+  }, [showLeftSideMenuButton, isMobile])
 
-  if (shouldTopNavBeHidden) {
+  if (hideTopNavBar) {
     return null
   }
 
@@ -707,21 +555,45 @@ export const TopNavBar = () => {
             ) : null}
 
             {shouldShowDropdownMenuButton ? (
-              <TopNavBarMenu
-                shouldShowDashboardMenuItem={
-                  shouldShowDashboardButtonInsideDropdownMenu
-                }
-                shouldShowMyProjectsMenuItem={
-                  shouldShowMyProjectsButtonInsideDropdownMenu
-                }
-                shouldShowSignInMenuItem={
-                  shouldShowSignInButtonInsideDropdownMenu
-                }
-                onDashboardSelected={handleProjectDashboardButtonPress}
-                onMyProjectsSelected={handleMyProjectsButtonPress}
-                onSignInSelected={loginOnOpen}
-                onSignOutSelected={logout}
-              />
+              !isMobile ? (
+                <TopNavBarMenu
+                  shouldShowDashboardMenuItem={
+                    shouldShowDashboardButtonInsideDropdownMenu
+                  }
+                  shouldShowMyProjectsMenuItem={
+                    shouldShowMyProjectsButtonInsideDropdownMenu
+                  }
+                  shouldShowSignInMenuItem={
+                    shouldShowSignInButtonInsideDropdownMenu
+                  }
+                  onDashboardSelected={handleProjectDashboardButtonPress}
+                  onMyProjectsSelected={handleMyProjectsButtonPress}
+                />
+              ) : (
+                <Button
+                  padding="5px 8px"
+                  aria-label="options"
+                  transition="all 0.2s"
+                  maxHeight="32px"
+                  borderRadius="md"
+                  data-testid="topnavbar-dropdown-menu"
+                  color="neutral.1000"
+                  backgroundColor="neutral.0"
+                  _hover={{ backgroundColor: 'neutral.100' }}
+                  border={'1px'}
+                  borderColor="neutral.200"
+                >
+                  {isLoggedIn ? (
+                    <Avatar
+                      height="22px"
+                      width="22px"
+                      src={user.imageUrl || ''}
+                    />
+                  ) : (
+                    <HamburgerIcon color="neutral.500" fontSize="22px" />
+                  )}
+                </Button>
+              )
             ) : null}
           </HStack>
         </HStack>

@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { FaArrowLeft } from 'react-icons/fa'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 
 import { AppFooter } from '../../../components/molecules'
 import { ButtonComponent } from '../../../components/ui'

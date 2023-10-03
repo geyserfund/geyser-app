@@ -94,7 +94,6 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
 
   const currentActiveButton = useMemo(() => {
     const currentPath = location.pathname.split('/').pop()
-    console.log('checking current path', currentPath)
 
     const allButtons = [
       ...ProjectNavigationButtons,

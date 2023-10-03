@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Navigate, useNavigate, useParams } from 'react-router'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
 
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
 import Loader from '../../components/ui/Loader'

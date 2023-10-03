@@ -1,11 +1,11 @@
-import { useEffect, useMemo } from 'react'
-import { PathMatch, useMatch, useNavigate, useParams } from 'react-router'
+import { ComponentType, useEffect, useMemo } from 'react'
+import { PathMatch, useMatch, useNavigate, useParams } from 'react-router-dom'
 
-import { AuthModal } from '../components/molecules'
-import { getPath, PathName } from '../constants'
-import { useAuthContext } from '../context'
-import { LoadingPage } from '../pages/loading'
-import { hasNostrAccount, hasTwitterAccount } from '../utils'
+import { AuthModal } from '../../components/molecules'
+import { getPath, PathName } from '../../constants'
+import { useAuthContext } from '../../context'
+import { LoadingPage } from '../../pages/loading'
+import { hasNostrAccount, hasTwitterAccount } from '../../utils'
 
 interface IPrivateRoute {
   children: React.ReactNode
@@ -20,7 +20,6 @@ const projectEntryCreationRoutes = [
 ]
 
 const projectCreatorRoutes = [
-  ...privateProjectLaunchRoutes,
   getPath('projectContributors', PathName.projectId),
   getPath('projectInsights', PathName.projectId),
   getPath('projectOverview', PathName.projectId),
@@ -148,7 +147,7 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
 
     return (
       user &&
-      isProjectCreatorPagesRoute &&
+      (isPrivateProjectCreationPath || isProjectCreatorPagesRoute) &&
       Boolean(isUserViewingTheirOwnProject) === false
     )
   }
@@ -164,5 +163,13 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
       {children}
       {isForbidden() ? renderForbidden() : renderUnauthorized()}
     </>
+  )
+}
+
+export const renderPrivateRoute = (Component: ComponentType<{}>) => {
+  return (
+    <PrivateRoute>
+      <Component />
+    </PrivateRoute>
   )
 }

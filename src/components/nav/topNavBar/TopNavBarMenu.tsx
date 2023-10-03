@@ -20,21 +20,20 @@ type Props = {
   shouldShowMyProjectsMenuItem: boolean
   onDashboardSelected: () => void
   onMyProjectsSelected: () => void
-  onSignInSelected: () => void
-  onSignOutSelected: () => void
+  isOpen?: boolean
 }
 
 export const TopNavBarMenu = ({
   shouldShowSignInMenuItem,
   shouldShowDashboardMenuItem,
   shouldShowMyProjectsMenuItem,
-  onSignInSelected,
   onDashboardSelected,
   onMyProjectsSelected,
-  onSignOutSelected,
+  isOpen,
 }: Props) => {
   const { t } = useTranslation()
-  const { user, isLoggedIn, isUserAProjectCreator } = useContext(AuthContext)
+  const { user, isLoggedIn, isUserAProjectCreator, loginOnOpen, logout } =
+    useContext(AuthContext)
   const { canInstall, handlePrompt } = useServiceWorkerUpdate()
 
   const toDisplayProject =
@@ -45,39 +44,37 @@ export const TopNavBarMenu = ({
       : undefined
 
   return (
-    <Menu placement="bottom-end">
-      <MenuButton
-        padding="5px 8px"
-        aria-label="options"
-        transition="all 0.2s"
-        maxHeight="32px"
-        borderRadius="md"
-        data-testid="topnavbar-dropdown-menu"
-        color="neutral.1000"
-        backgroundColor="neutral.0"
-        _hover={{ backgroundColor: 'neutral.100' }}
-        border={'1px'}
-        borderColor="neutral.200"
-        sx={buttonCommon}
-      >
-        <HStack color="neutral.700" spacing="4px">
-          <HamburgerIcon color="neutral.500" fontSize="22px" />
+    <Menu placement="bottom-end" isOpen={isOpen}>
+      {!isOpen && (
+        <MenuButton
+          padding="5px 8px"
+          aria-label="options"
+          transition="all 0.2s"
+          maxHeight="32px"
+          borderRadius="md"
+          data-testid="topnavbar-dropdown-menu"
+          color="neutral.1000"
+          backgroundColor="neutral.0"
+          _hover={{ backgroundColor: 'neutral.100' }}
+          border={'1px'}
+          borderColor="neutral.200"
+          sx={buttonCommon}
+        >
+          <HStack color="neutral.700" spacing="4px">
+            <HamburgerIcon color="neutral.500" fontSize="22px" />
 
-          {isLoggedIn ? (
-            <Avatar height="22px" width="22px" src={user.imageUrl || ''} />
-          ) : null}
-        </HStack>
-      </MenuButton>
+            {isLoggedIn ? (
+              <Avatar height="22px" width="22px" src={user.imageUrl || ''} />
+            ) : null}
+          </HStack>
+        </MenuButton>
+      )}
 
       <MenuList width="150px">
         {shouldShowSignInMenuItem ? (
           <>
             <MenuItem as={Stack} px={4} py={2}>
-              <Button
-                variant="secondary"
-                width="100%"
-                onClick={onSignInSelected}
-              >
+              <Button variant="secondary" width="100%" onClick={loginOnOpen}>
                 {t('Login')}
               </Button>
             </MenuItem>
@@ -187,12 +184,7 @@ export const TopNavBarMenu = ({
           <>
             <MenuDivider />
 
-            <MenuItem
-              onClick={onSignOutSelected}
-              color={'neutral.700'}
-              px={4}
-              py={2}
-            >
+            <MenuItem onClick={logout} color={'neutral.700'} px={4} py={2}>
               {t('Sign Out')}
             </MenuItem>
           </>
