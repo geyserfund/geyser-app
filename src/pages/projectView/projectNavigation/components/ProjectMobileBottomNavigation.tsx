@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  HStack,
-  Slide,
-  useDisclosure,
-  VStack,
-} from '@chakra-ui/react'
+import { Button, HStack, Slide, useDisclosure, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'

@@ -1,4 +1,3 @@
-import { HamburgerIcon } from '@chakra-ui/icons'
 import { Menu, MenuList } from '@chakra-ui/menu'
 
 import { TopNavBarMenuList } from '../topNavBarMenu/TopNavBarMenuList'
