@@ -2,11 +2,10 @@ import { gql } from '@apollo/client'
 
 import { FRAGMENT_PROJECT_REWARD_FOR_CREATE_UPDATE } from '../fragments/project'
 
-export const MUTATION_PROJECT_STATUS_UPDATE = gql`
-  mutation ProjectStatusUpdate($input: ProjectStatusUpdate!) {
-    projectStatusUpdate(input: $input) {
+export const MUTATION_PROJECT_PUBLISH = gql`
+  mutation ProjectPublish($input: ProjectPublishMutationInput!) {
+    projectPublish(input: $input) {
       id
-      status
     }
   }
 `
