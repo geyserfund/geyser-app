@@ -1,5 +1,3 @@
-export * from '../../pages/projectView/projectNavigation/components/ProjectMobileBottomNavigation'
-export * from './bottomNav/LandingNavBar'
 export * from './LogoBlack'
-export * from './topNavBar/TopNavBar'
-export * from './topNavBarMenu/TopNavBarMenu'
+export * from './NavBarLogo'
+export * from './Subscribe'

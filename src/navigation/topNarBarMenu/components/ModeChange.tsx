@@ -11,15 +11,15 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { SatSymbolIcon } from '../../../components/icons'
+import { Modal } from '../../../components/layouts'
 import {
   languageFalgs,
   LanguageRequestUrl,
   languages,
-} from '../../../../constants'
-import { allTranslations } from '../../../../translations'
-import { ColorModeSwitcher } from '../../../../utils'
-import { SatSymbolIcon } from '../../../icons'
-import { Modal } from '../../../layouts'
+} from '../../../constants'
+import { allTranslations } from '../../../translations'
+import { ColorModeSwitcher } from '../../../utils'
 
 export const ModeChange = () => {
   const { i18n, t } = useTranslation()

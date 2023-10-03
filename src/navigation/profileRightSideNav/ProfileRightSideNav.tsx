@@ -1,6 +1,6 @@
 import { Menu, MenuList } from '@chakra-ui/menu'
 
-import { TopNavBarMenuList } from '../topNavBarMenu/TopNavBarMenuList'
+import { TopNavBarMenuList } from '../topNarBarMenu/TopNavBarMenuList'
 
 export const ProfileRightSideNav = () => {
   return (

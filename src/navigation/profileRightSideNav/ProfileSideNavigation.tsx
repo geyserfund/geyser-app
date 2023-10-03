@@ -1,6 +1,9 @@
 import { PropsWithChildren } from 'react'
 
-import { NavigationBase, NavigationDirection } from '../sideNav/NavigationBase'
+import {
+  NavigationBase,
+  NavigationDirection,
+} from '../sideNavBase/NavigationBase'
 import { ProfileRightSideNav } from './ProfileRightSideNav'
 import { useProfileSideNavAtom } from './profileSideNavAtom'
 

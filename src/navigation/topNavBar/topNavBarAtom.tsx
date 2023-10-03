@@ -8,8 +8,8 @@ import {
   projectDashboardRoutes,
   projectRoutes,
   routeMatchForAtom,
-} from '../../../config/routes/routesAtom'
-import { getPath, PathName } from '../../../constants'
+} from '../../config/routes/routesAtom'
+import { getPath, PathName } from '../../constants'
 
 const routesForHidingTopNav = entryCreationRoutes
 const routesForHidingTopNavAtom = atom(routeMatchForAtom(routesForHidingTopNav))

@@ -1,7 +1,7 @@
 import { Avatar, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 import { useContext } from 'react'
 
-import { AuthContext } from '../../../../context'
+import { AuthContext } from '../../../context'
 
 export const NavBarUserProfileMenuItem = () => {
   const { user } = useContext(AuthContext)

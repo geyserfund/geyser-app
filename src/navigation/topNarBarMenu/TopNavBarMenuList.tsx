@@ -5,21 +5,21 @@ import { useCallback, useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, matchPath, useLocation, useNavigate } from 'react-router-dom'
 
-import { FAQUrl, FeedbackUrl, getPath, PathName } from '../../../constants'
+import { FAQUrl, FeedbackUrl, getPath, PathName } from '../../constants'
 import {
   AuthContext,
   useNavContext,
   useServiceWorkerUpdate,
-} from '../../../context'
-import { ProjectStatus } from '../../../types'
-import { useMobileMode } from '../../../utils'
+} from '../../context'
+import { ProjectStatus } from '../../types'
+import { useMobileMode } from '../../utils'
 import { useRouteMatchesForTopNavBar } from '../topNavBar/topNavBarAtom'
 import {
   MenuItemLink,
   ModeChange,
   NavBarUserProfileMenuItem,
   NavBarUserProjectMenuItem,
-} from './elements'
+} from './components'
 
 export const TopNavBarMenuList = () => {
   const { t } = useTranslation()

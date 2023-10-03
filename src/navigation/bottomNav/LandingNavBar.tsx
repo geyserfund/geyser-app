@@ -3,15 +3,15 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, matchPath, matchRoutes, useLocation } from 'react-router-dom'
 
-import { getPath } from '../../../constants'
-import { BottomNavContainerCommonStyles } from '../../../constants/styles'
 import {
   FeedNavIcon,
   GrantsNavIcon,
   HomeNavIcon2,
   LeaderboardNavIcon,
-} from '../../icons'
-import { Caption } from '../../typography'
+} from '../../components/icons'
+import { Caption } from '../../components/typography'
+import { getPath } from '../../constants'
+import { BottomNavContainerCommonStyles } from '../../constants/styles'
 
 const routesForShowingLandingMenu = [
   getPath('landingPage'),

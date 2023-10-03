@@ -3,8 +3,8 @@ import { HStack, Modal, ModalContent, ModalOverlay } from '@chakra-ui/react'
 import { PropsWithChildren, useEffect, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import { dimensions } from '../../../constants'
-import { useMobileMode } from '../../../utils'
+import { dimensions } from '../../constants'
+import { useMobileMode } from '../../utils'
 import {
   slideInLeft,
   slideInRight,

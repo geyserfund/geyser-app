@@ -115,7 +115,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
       mx={{ base: '10px', lg: 4 }}
       pt={5}
       pb={2}
-      minWidth={{ base: '180px', lg: undefined }}
+      minWidth={{ base: '180px', lg: '40px' }}
       alignItems="start"
     >
       {!isMobile && <ProjectBackButton width="100%" />}

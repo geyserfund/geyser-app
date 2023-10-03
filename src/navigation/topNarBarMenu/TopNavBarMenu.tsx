@@ -3,8 +3,8 @@ import { Menu, MenuButton, MenuList } from '@chakra-ui/menu'
 import { Avatar, HStack } from '@chakra-ui/react'
 import { useContext } from 'react'
 
-import { AuthContext } from '../../../context'
-import { buttonCommon } from '../../../styles'
+import { AuthContext } from '../../context'
+import { buttonCommon } from '../../styles'
 import { TopNavBarMenuList } from './TopNavBarMenuList'
 
 type Props = {
