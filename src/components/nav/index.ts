@@ -2,4 +2,4 @@ export * from '../../pages/projectView/projectNavigation/components/ProjectMobil
 export * from './bottomNav/LandingNavBar'
 export * from './LogoBlack'
 export * from './topNavBar/TopNavBar'
-export * from './topNavBar/TopNavBarMenu'
+export * from './topNavBarMenu/TopNavBarMenu'

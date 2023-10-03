@@ -15,11 +15,11 @@ import {
   languageFalgs,
   LanguageRequestUrl,
   languages,
-} from '../../../constants'
-import { allTranslations } from '../../../translations'
-import { ColorModeSwitcher } from '../../../utils'
-import { SatSymbolIcon } from '../../icons'
-import { Modal } from '../../layouts'
+} from '../../../../constants'
+import { allTranslations } from '../../../../translations'
+import { ColorModeSwitcher } from '../../../../utils'
+import { SatSymbolIcon } from '../../../icons'
+import { Modal } from '../../../layouts'
 
 export const ModeChange = () => {
   const { i18n, t } = useTranslation()
@@ -40,10 +40,18 @@ export const ModeChange = () => {
 
   return (
     <>
-      <HStack bgColor="neutral.200" borderRadius={8} mx={3} p={2} spacing={3}>
+      <HStack
+        bgColor="neutral.200"
+        borderRadius={8}
+        mx={3}
+        p={2}
+        spacing={3}
+        justifyContent={{ base: 'space-between', lg: 'flex-start' }}
+      >
         <ColorModeSwitcher />
         <Tooltip label="currency">
           <IconButton
+            size={{ base: 'sm', lg: 'md' }}
             bgColor="neutral.50"
             variant="primaryNeutral"
             aria-label="currency-convert"
@@ -52,6 +60,7 @@ export const ModeChange = () => {
           />
         </Tooltip>
         <Button
+          size={{ base: 'sm', lg: 'md' }}
           bgColor="neutral.50"
           color="neutral.600"
           variant="primaryNeutral"

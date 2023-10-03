@@ -1,7 +1,7 @@
 import { Container, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 
-import { Project } from '../../../types/generated/graphql'
-import { ProjectListItemImage } from '../../molecules'
+import { Project } from '../../../../types/generated/graphql'
+import { ProjectListItemImage } from '../../../molecules'
 
 type Props = {
   project: Pick<Project, 'title' | 'name' | 'thumbnailImage'>

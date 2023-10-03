@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 
 import { LandingNavBar, TopNavBar } from './components/nav'
+import { ProfileSideNavigation } from './components/nav/profileRightSideNav'
 import { PullingDownContent } from './components/ui'
 import { dimensions, ID } from './constants'
 import { useAuthContext } from './context'
@@ -37,17 +38,19 @@ export const AppLayout = () => {
         >
           <TopNavBar />
 
-          <Box
-            id={ID.root}
-            maxHeight="100%"
-            flex="1"
-            paddingTop={`${dimensions.topNavBar.desktop.height}px`}
-            backgroundColor={{ base: 'neutral.0', lg: 'neutral.50' }}
-            overflowY={isMobile ? 'initial' : 'auto'}
-          >
-            <Outlet />
-          </Box>
-          {isMobile && <LandingNavBar />}
+          <ProfileSideNavigation>
+            <Box
+              id={ID.root}
+              maxHeight="100%"
+              flex="1"
+              paddingTop={`${dimensions.topNavBar.desktop.height}px`}
+              backgroundColor={{ base: 'neutral.0', lg: 'neutral.50' }}
+              overflowY={isMobile ? 'initial' : 'auto'}
+            >
+              <Outlet />
+            </Box>
+            {isMobile && <LandingNavBar />}
+          </ProfileSideNavigation>
         </Box>
       </Fade>
     </PullToRefresh>

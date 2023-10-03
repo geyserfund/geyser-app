@@ -113,32 +113,3 @@ export const slideOutLeft = {
       '$slide-out-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
   },
 }
-
-export const slideInFarRight = {
-  '@-webkit-keyframes slide-in-right-far-right': {
-    from: {
-      webkitTransform: 'translateX(calc( 100vw - 210px))',
-      transform: 'translateX(calc( 100vw - 210px))',
-    },
-    to: {
-      webkitTransform: 'translateX(0)',
-      transform: 'translateX(0)',
-    },
-  },
-  '@keyframes slide-in-right-far-right': {
-    from: {
-      webkitTransform: 'translateX(calc( 100vw - 210px))',
-      transform: 'translateX(calc( 100vw - 210px))',
-    },
-    to: {
-      webkitTransform: 'translateX(0)',
-      transform: 'translateX(0)',
-    },
-  },
-  slideInRight: {
-    webkitAnimation:
-      '$slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;',
-    animation:
-      '$slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
-  },
-}

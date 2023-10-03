@@ -36,8 +36,9 @@ import { useMobileMode } from '../../../utils'
 import { SideNavIcon } from '../../icons'
 import { AuthModal } from '../../molecules'
 import { NavBarLogo } from '../NavBarLogo'
+import { useProfileSideNavAtom } from '../profileRightSideNav'
+import { TopNavBarMenu } from '../topNavBarMenu/TopNavBarMenu'
 import { useRouteMatchesForTopNavBar } from './topNavBarAtom'
-import { TopNavBarMenu } from './TopNavBarMenu'
 
 const navItems = [
   {
@@ -77,10 +78,8 @@ export const TopNavBar = () => {
   const { state } = location
 
   const matchRoutesData = matchRoutes(platformRoutes, location)
-
-  console.log('checking resolvedPath', matchRoutesData)
-
   const setMatchRoutes = useSetMatchRoutes()
+  const changeProfileSideNavAtom = useProfileSideNavAtom()[1]
 
   useEffect(() => {
     if (matchRoutesData) {
@@ -212,10 +211,6 @@ export const TopNavBar = () => {
     return isLoggedIn === false && isMobile === false && showSignInButton
   }, [showSignInButton, isLoggedIn, isMobile])
 
-  const shouldShowSignInButtonInsideDropdownMenu: boolean = useMemo(() => {
-    return isLoggedIn === false && isMobile === true && showSignInButton
-  }, [showSignInButton, isLoggedIn, isMobile])
-
   /**
    * Logic:
    *  - Available to all not logged-in users without a profile inside
@@ -247,23 +242,6 @@ export const TopNavBar = () => {
     isLoggedIn,
     isUserAProjectCreator,
     isViewingOwnProject,
-    hideDashboardButton,
-  ])
-
-  const shouldShowDashboardButtonInsideDropdownMenu: boolean = useMemo(() => {
-    return (
-      isMobile === true &&
-      isLoggedIn &&
-      isUserAProjectCreator &&
-      (isViewingOwnProject || userHasOnlyOneProject) &&
-      hideDashboardButton === false
-    )
-  }, [
-    isMobile,
-    isLoggedIn,
-    isUserAProjectCreator,
-    isViewingOwnProject,
-    userHasOnlyOneProject,
     hideDashboardButton,
   ])
 
@@ -306,24 +284,6 @@ export const TopNavBar = () => {
       isViewingOwnProject === false &&
       hideMyProjectsButton === false &&
       userHasOnlyOneProject
-    )
-  }, [
-    hideMyProjectsButton,
-    isMobile,
-    isLoggedIn,
-    isUserAProjectCreator,
-    isViewingOwnProject,
-    userHasOnlyOneProject,
-  ])
-
-  const shouldShowMyProjectsButtonInsideDropdownMenu: boolean = useMemo(() => {
-    return (
-      isMobile === true &&
-      isLoggedIn &&
-      isUserAProjectCreator &&
-      isViewingOwnProject === false &&
-      hideMyProjectsButton === false &&
-      !userHasOnlyOneProject
     )
   }, [
     hideMyProjectsButton,
@@ -556,19 +516,7 @@ export const TopNavBar = () => {
 
             {shouldShowDropdownMenuButton ? (
               !isMobile ? (
-                <TopNavBarMenu
-                  shouldShowDashboardMenuItem={
-                    shouldShowDashboardButtonInsideDropdownMenu
-                  }
-                  shouldShowMyProjectsMenuItem={
-                    shouldShowMyProjectsButtonInsideDropdownMenu
-                  }
-                  shouldShowSignInMenuItem={
-                    shouldShowSignInButtonInsideDropdownMenu
-                  }
-                  onDashboardSelected={handleProjectDashboardButtonPress}
-                  onMyProjectsSelected={handleMyProjectsButtonPress}
-                />
+                <TopNavBarMenu />
               ) : (
                 <Button
                   padding="5px 8px"
@@ -582,6 +530,7 @@ export const TopNavBar = () => {
                   _hover={{ backgroundColor: 'neutral.100' }}
                   border={'1px'}
                   borderColor="neutral.200"
+                  onClick={changeProfileSideNavAtom}
                 >
                   {isLoggedIn ? (
                     <Avatar
