@@ -149,31 +149,29 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
               )}
             </VStack>
           )}
-          {hasItems && (
-            <VStack width="100%">
-              <HStack w="full" justifyContent="start">
-                <Caption fontWeight={700} color="neutral.500">
-                  {t('Project')}
-                </Caption>
-              </HStack>
-              {ProjectNavigationButtons.map((navigationButton) => {
-                return (
-                  navigationButton.render && (
-                    <ProjectNavigationButton
-                      key={navigationButton.name}
-                      showLabel={showLabel}
-                      onClick={() => navigate(navigationButton.path)}
-                      aria-label={navigationButton.name}
-                      NavigationIcon={navigationButton.icon}
-                      isActive={currentActiveButton === navigationButton.name}
-                    >
-                      {t(navigationButton.name)}
-                    </ProjectNavigationButton>
-                  )
+          <VStack width="100%">
+            <HStack w="full" justifyContent="start">
+              <Caption fontWeight={700} color="neutral.500">
+                {t('Project')}
+              </Caption>
+            </HStack>
+            {ProjectNavigationButtons.map((navigationButton) => {
+              return (
+                navigationButton.render && (
+                  <ProjectNavigationButton
+                    key={navigationButton.name}
+                    showLabel={showLabel}
+                    onClick={() => navigate(navigationButton.path)}
+                    aria-label={navigationButton.name}
+                    NavigationIcon={navigationButton.icon}
+                    isActive={currentActiveButton === navigationButton.name}
+                  >
+                    {t(navigationButton.name)}
+                  </ProjectNavigationButton>
                 )
-              })}
-            </VStack>
-          )}
+              )
+            })}
+          </VStack>
         </VStack>
       ) : null}
       {isProjectOwner ? (
