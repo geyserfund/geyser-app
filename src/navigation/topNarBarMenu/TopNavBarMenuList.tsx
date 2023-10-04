@@ -3,7 +3,7 @@ import { MenuItem } from '@chakra-ui/menu'
 import { Button, MenuDivider, Stack } from '@chakra-ui/react'
 import { useCallback, useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, matchPath, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import { FAQUrl, FeedbackUrl, getPath, PathName } from '../../constants'
 import {
@@ -29,43 +29,17 @@ export const TopNavBarMenuList = () => {
     useContext(AuthContext)
   const { canInstall, handlePrompt } = useServiceWorkerUpdate()
 
-  const { hideDashboardButton, hideMyProjectsButton, showSignInButton } =
+  const { hideMyProjectsButton, showSignInButton } =
     useRouteMatchesForTopNavBar()
 
   const navigate = useNavigate()
   const { navData } = useNavContext()
   const location = useLocation()
   const currentPathName = location.pathname
-  const currentProjectRouteMatch = matchPath(
-    getPath('project', PathName.projectId),
-    currentPathName,
-  )
 
   const userHasOnlyOneProject: boolean = useMemo(() => {
     return user.ownerOf?.length === 1
   }, [user.ownerOf])
-
-  const onDashboardSelected = useCallback(() => {
-    if (userHasOnlyOneProject) {
-      navigate(getPath('projectDashboard', user.ownerOf[0]?.project?.name))
-      return
-    }
-
-    const projectName =
-      currentProjectRouteMatch?.params?.projectId || navData.projectName
-
-    if (projectName) {
-      navigate(getPath('projectDashboard', projectName))
-    } else {
-      navigate(getPath('landingPage'))
-    }
-  }, [
-    navigate,
-    userHasOnlyOneProject,
-    currentProjectRouteMatch,
-    navData.projectName,
-    user.ownerOf,
-  ])
 
   const onMyProjectsSelected = useCallback(() => {
     navigate(getPath('userProfile', user.id))
@@ -81,23 +55,6 @@ export const TopNavBarMenuList = () => {
       navData.projectOwnerIDs.includes(Number(user.id))
     )
   }, [user.id, navData.projectOwnerIDs, currentPathName])
-
-  const shouldShowDashboardMenuItem: boolean = useMemo(() => {
-    return (
-      isMobile === true &&
-      isLoggedIn &&
-      isUserAProjectCreator &&
-      (isViewingOwnProject || userHasOnlyOneProject) &&
-      hideDashboardButton === false
-    )
-  }, [
-    isMobile,
-    isLoggedIn,
-    isUserAProjectCreator,
-    isViewingOwnProject,
-    userHasOnlyOneProject,
-    hideDashboardButton,
-  ])
 
   const shouldShowMyProjectsMenuItem: boolean = useMemo(() => {
     return (
@@ -135,22 +92,6 @@ export const TopNavBarMenuList = () => {
           <MenuItem as={Stack} px={4} py={2}>
             <Button variant="secondary" width="100%" onClick={loginOnOpen}>
               {t('Login')}
-            </Button>
-          </MenuItem>
-
-          <MenuDivider />
-        </>
-      ) : null}
-
-      {shouldShowDashboardMenuItem ? (
-        <>
-          <MenuItem as={Stack} px={4} py={2}>
-            <Button
-              variant="primary"
-              width="100%"
-              onClick={onDashboardSelected}
-            >
-              {t('Edit project')}
             </Button>
           </MenuItem>
 

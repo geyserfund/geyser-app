@@ -60,11 +60,6 @@ const routesToShowProjectLaunchButtonAtom = atom(
   routeMatchForAtom(routesToShowProjectLaunchButton),
 )
 
-const routesForHidingDashboardButton = [...projectDashboardRoutes]
-const routesForHidingDashboardButtonAtom = atom(
-  routeMatchForAtom(routesForHidingDashboardButton),
-)
-
 const routesForHidingDropdownMenu = entryCreationRoutes
 const routesForHidingDropdownMenuAtom = atom(
   routeMatchForAtom(routesForHidingDropdownMenu),
@@ -96,7 +91,6 @@ export const useRouteMatchesForTopNavBar = () => {
   const showTransparentBackground = useAtomValue(
     routesForTransparentBackgroundAtom,
   )
-  const hideDashboardButton = useAtomValue(routesForHidingDashboardButtonAtom)
   const hideDropdownMenu = useAtomValue(routesForHidingDropdownMenuAtom)
   const showSignInButton = useAtomValue(routesToShowSignInButtonAtom)
 
@@ -109,7 +103,6 @@ export const useRouteMatchesForTopNavBar = () => {
     showNavItems,
     showCustomTitle,
     showProjectLaunchButton,
-    hideDashboardButton,
     hideDropdownMenu,
     showSignInButton,
   }

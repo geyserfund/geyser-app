@@ -122,7 +122,6 @@ export const TopNavBar = () => {
     showNavItems,
     showCustomTitle,
     showProjectLaunchButton,
-    hideDashboardButton,
     hideDropdownMenu,
     showSignInButton,
   } = useRouteMatchesForTopNavBar()
@@ -160,22 +159,6 @@ export const TopNavBar = () => {
     const projectName =
       currentProjectRouteMatch?.params?.projectId || navData.projectName
     navigate(getPath('project', projectName))
-  }
-
-  const handleProjectDashboardButtonPress = () => {
-    if (userHasOnlyOneProject) {
-      navigate(getPath('projectDashboard', user.ownerOf[0]?.project?.name))
-      return
-    }
-
-    const projectName =
-      currentProjectRouteMatch?.params?.projectId || navData.projectName
-
-    if (projectName) {
-      navigate(getPath('projectDashboard', projectName))
-    } else {
-      navigate(getPath('landingPage'))
-    }
   }
 
   const isViewingOwnProject: boolean = useMemo(() => {
@@ -218,32 +201,6 @@ export const TopNavBar = () => {
    *  - Viewable to all users at all times except when: Creating a Project + Entry
    */
   const shouldShowDropdownMenuButton = !hideDropdownMenu
-
-  /**
-   * Logic:
-   *  - Available to:
-   *    - a logged-in creator of a live or draft project.
-   *  - Viewable:
-   *    - Almost everywhere.
-   *    - It does not appear when:
-   *      - A creator is looking at another user's Project Page or Entry Page.
-   *    - Hidden on Mobile -- it will be in the menu dropdown instead.
-   */
-  const shouldShowDashboardButton: boolean = useMemo(() => {
-    return (
-      isMobile === false &&
-      isLoggedIn &&
-      isUserAProjectCreator &&
-      isViewingOwnProject &&
-      hideDashboardButton === false
-    )
-  }, [
-    isMobile,
-    isLoggedIn,
-    isUserAProjectCreator,
-    isViewingOwnProject,
-    hideDashboardButton,
-  ])
 
   /**
    * Logic:
@@ -452,15 +409,6 @@ export const TopNavBar = () => {
                   )
                 })}
               </Box>
-            ) : null}
-            {shouldShowDashboardButton ? (
-              <Button
-                size="sm"
-                variant={'primary'}
-                onClick={handleProjectDashboardButtonPress}
-              >
-                {t('Edit project')}
-              </Button>
             ) : null}
 
             {shouldShowMyProjectsButton ? (

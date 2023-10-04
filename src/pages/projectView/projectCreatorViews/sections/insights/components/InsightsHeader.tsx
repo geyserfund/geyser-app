@@ -22,7 +22,7 @@ export const InsightsHeader = () => {
       justifyContent="space-between"
     >
       <HStack w="full" justifyContent={'start'}>
-        <H2>{t('Weekly overview')}</H2>
+        <H2>{t('Insights')}</H2>
         <InsightsOptionsSelect />
       </HStack>
       {!isMobile && <Button variant="primary">{t('BETA')}</Button>}

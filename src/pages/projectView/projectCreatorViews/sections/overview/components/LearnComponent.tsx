@@ -11,7 +11,7 @@ import { LearnDisplayCards } from '../elements'
 export const LearnComponent = () => {
   const { t } = useTranslation()
   return (
-    <VStack spacing="10px" w="full">
+    <VStack spacing="10px" w="full" alignItems="start">
       <H3 alignSelf="start">{t('Learn')}</H3>
       <LearnDisplayCards
         image={Gift3DImageUrl}
@@ -19,8 +19,10 @@ export const LearnComponent = () => {
         description={t(
           'Sell merch, perks, and rewards related to your project',
         )}
+        maxWidth="350px"
       />
       <LearnDisplayCards
+        maxWidth="350px"
         image={TextMessage3DImageUrl}
         title={t('Engage my community')}
         description={t(
