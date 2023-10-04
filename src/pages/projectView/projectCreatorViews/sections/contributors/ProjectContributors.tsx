@@ -219,7 +219,7 @@ export const ProjectContributors = () => {
         })
         const dateString = funder.confirmedAt
           ? DateTime.fromMillis(parseInt(funder.confirmedAt, 10)).toFormat(
-              'yyyy / mm / dd',
+              'yyyy / MM / dd',
             )
           : '-'
 
