@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon'
 
-import { lightModeColors } from '../../../../../styles'
 import { AnalyticsGroupByInterval } from '../../../../../types'
 import { InsightsOptions } from './components'
 
