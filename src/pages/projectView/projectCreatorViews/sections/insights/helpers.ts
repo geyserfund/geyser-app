@@ -49,14 +49,7 @@ export const getDateParams = (selectionOption: InsightsOptions) => {
 }
 
 export const getColorByIndex = (index: number) => {
-  const colorsToRender = [
-    lightModeColors.primary[400],
-    lightModeColors.secondary.yellow,
-    lightModeColors.secondary.red,
-    lightModeColors.secondary.blue,
-    lightModeColors.secondary.green,
-    lightModeColors.secondary.purple,
-  ]
+  const colorsToRender = ['#03A88A', '#6FC4C2', '#6C757D', '#6EF9F5', '#77B0FB']
   const colorIndex = index % colorsToRender.length
   return colorsToRender[colorIndex]
 }
