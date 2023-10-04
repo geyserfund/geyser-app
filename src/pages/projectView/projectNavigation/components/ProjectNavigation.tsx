@@ -119,7 +119,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
       alignItems="start"
     >
       {!isMobile && <ProjectBackButton width="100%" />}
-      {hasItems ? (
+      {hasItems || isProjectOwner ? (
         <VStack spacing="15px" w="full">
           {isProjectOwner && (
             <VStack width="100%">
@@ -149,30 +149,31 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
               )}
             </VStack>
           )}
-
-          <VStack width="100%">
-            <HStack w="full" justifyContent="start">
-              <Caption fontWeight={700} color="neutral.500">
-                {t('Project')}
-              </Caption>
-            </HStack>
-            {ProjectNavigationButtons.map((navigationButton) => {
-              return (
-                navigationButton.render && (
-                  <ProjectNavigationButton
-                    key={navigationButton.name}
-                    showLabel={showLabel}
-                    onClick={() => navigate(navigationButton.path)}
-                    aria-label={navigationButton.name}
-                    NavigationIcon={navigationButton.icon}
-                    isActive={currentActiveButton === navigationButton.name}
-                  >
-                    {t(navigationButton.name)}
-                  </ProjectNavigationButton>
+          {hasItems && (
+            <VStack width="100%">
+              <HStack w="full" justifyContent="start">
+                <Caption fontWeight={700} color="neutral.500">
+                  {t('Project')}
+                </Caption>
+              </HStack>
+              {ProjectNavigationButtons.map((navigationButton) => {
+                return (
+                  navigationButton.render && (
+                    <ProjectNavigationButton
+                      key={navigationButton.name}
+                      showLabel={showLabel}
+                      onClick={() => navigate(navigationButton.path)}
+                      aria-label={navigationButton.name}
+                      NavigationIcon={navigationButton.icon}
+                      isActive={currentActiveButton === navigationButton.name}
+                    >
+                      {t(navigationButton.name)}
+                    </ProjectNavigationButton>
+                  )
                 )
-              )
-            })}
-          </VStack>
+              })}
+            </VStack>
+          )}
         </VStack>
       ) : null}
       {isProjectOwner ? (
