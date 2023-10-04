@@ -19,7 +19,6 @@ export const ProjectView = () => {
           pb={{ base: '80px', lg: '0px' }}
         >
           <Box
-            id="blahblah"
             width="100%"
             height="100%"
             display="flex"

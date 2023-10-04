@@ -1,8 +1,10 @@
 import { HStack } from '@chakra-ui/react'
 import { useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Cell, Pie, PieChart, Tooltip } from 'recharts'
 
 import { SkeletonLayout } from '../../../../../../components/layouts'
+import { Body1 } from '../../../../../../components/typography'
 import { FundingTxMethodCount } from '../../../../../../types'
 import { useCustomTheme } from '../../../../../../utils'
 import { getColorByIndex } from '../helpers'
@@ -15,6 +17,7 @@ export const FundingMethodsPieChart = ({
   loading?: boolean
 }) => {
   const { colors } = useCustomTheme()
+  const { t } = useTranslation()
   const ref = useRef<HTMLDivElement>(null)
 
   const renderLabel = ({ index, method, count, ...rest }: any) => {
@@ -29,6 +32,8 @@ export const FundingMethodsPieChart = ({
     <HStack ref={ref} w="full" spacing="20px" wrap="wrap">
       {loading ? (
         <SkeletonLayout width="full" height="250px" />
+      ) : data.length === 0 ? (
+        <Body1>{t('No data available')}</Body1>
       ) : (
         <PieChart width={ref.current?.clientWidth || 350} height={250}>
           <Pie

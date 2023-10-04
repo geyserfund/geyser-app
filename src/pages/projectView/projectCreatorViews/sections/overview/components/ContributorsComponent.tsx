@@ -1,11 +1,23 @@
-import { Button, HStack, Table, Tbody, Td, Tr, VStack } from '@chakra-ui/react'
+import {
+  Button,
+  HStack,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Tr,
+  VStack,
+} from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { CardLayout } from '../../../../../../components/layouts'
-import { H3 } from '../../../../../../components/typography'
+import {
+  CardLayout,
+  SkeletonLayout,
+} from '../../../../../../components/layouts'
+import { Body1, H3 } from '../../../../../../components/typography'
 import { getPath } from '../../../../../../constants'
 import { useProjectContext } from '../../../../../../context'
 import {
@@ -34,40 +46,41 @@ export const ContributorsComponent = () => {
 
   const [contributors, setContributors] = useState<ContributorDisplayType[]>([])
 
-  const [getFundingTxForOverview] = useFundingTxForOverviewPageLazyQuery({
-    onError() {
-      toast({
-        title: 'Error fetching project stats',
-        description: 'Please refresh the page and try again.',
-        status: 'error',
-      })
-    },
-    onCompleted(data) {
-      const contributors = data.fundingTxsGet.map((fundingTx) => {
-        let noOfRewards = 0
-        const rewards = fundingTx.funder.rewards.filter((reward) =>
-          project?.rewards.some(
-            (projectRewards) => projectRewards.id === reward.projectReward.id,
-          ),
-        )
-        if (rewards.length > 0) {
-          rewards.map((reward) => {
-            noOfRewards += reward.quantity
-          })
-        }
+  const [getFundingTxForOverview, { loading }] =
+    useFundingTxForOverviewPageLazyQuery({
+      onError() {
+        toast({
+          title: 'Error fetching project stats',
+          description: 'Please refresh the page and try again.',
+          status: 'error',
+        })
+      },
+      onCompleted(data) {
+        const contributors = data.fundingTxsGet.map((fundingTx) => {
+          let noOfRewards = 0
+          const rewards = fundingTx.funder.rewards.filter((reward) =>
+            project?.rewards.some(
+              (projectRewards) => projectRewards.id === reward.projectReward.id,
+            ),
+          )
+          if (rewards.length > 0) {
+            rewards.map((reward) => {
+              noOfRewards += reward.quantity
+            })
+          }
 
-        const contributor: ContributorDisplayType = {
-          user: fundingTx.funder.user,
-          amount: fundingTx.amount,
-          comment: fundingTx.comment || '',
-          imageUrl: fundingTx.funder.user?.imageUrl || '',
-          noOfRewards,
-        }
-        return contributor
-      })
-      setContributors(contributors)
-    },
-  })
+          const contributor: ContributorDisplayType = {
+            user: fundingTx.funder.user,
+            amount: fundingTx.amount,
+            comment: fundingTx.comment || '',
+            imageUrl: fundingTx.funder.user?.imageUrl || '',
+            noOfRewards,
+          }
+          return contributor
+        })
+        setContributors(contributors)
+      },
+    })
 
   useEffect(() => {
     if (project?.id) {
@@ -108,34 +121,50 @@ export const ContributorsComponent = () => {
           {t('View all')}
         </Button>
       </HStack>
-      <CardLayout padding="20px" w="full">
-        <Table
-          variant="unstyled"
-          __css={{
-            '& td': {
-              paddingY: '5px',
-            },
-          }}
-        >
-          <Tbody>
-            {contributors.map((contributor, index) => {
-              return (
-                <Tr key={index}>
-                  <Td>
-                    <AvatarElement
-                      noLink={!contributor?.user?.id}
-                      user={contributor.user}
-                    />
-                  </Td>
-                  <Td>{contributor.amount} sats</Td>
-                  <Td>{contributor.comment}</Td>
-                  <Td>{contributor.noOfRewards} reward</Td>
+      {loading ? (
+        <SkeletonLayout height="250px" width="full" />
+      ) : contributors.length === 0 ? (
+        <Body1>{t('No data available')}</Body1>
+      ) : (
+        <CardLayout padding="20px" w="full">
+          <Table
+            variant="unstyled"
+            __css={{
+              '& td': {
+                paddingY: '5px',
+              },
+            }}
+          >
+            <Tbody>
+              <Th>
+                <Tr>
+                  <Td>{t('Contributor')}</Td>
+                  <Td>{t('Amount')}</Td>
+                  <Td>{t('Comment')}</Td>
+                  <Td>{t('Rewards')}</Td>
                 </Tr>
-              )
-            })}
-          </Tbody>
-        </Table>
-      </CardLayout>
+              </Th>
+              {contributors.map((contributor, index) => {
+                return (
+                  <Tr key={index}>
+                    <Td>
+                      <AvatarElement
+                        noLink={!contributor?.user?.id}
+                        user={contributor.user}
+                      />
+                    </Td>
+                    <Td>{contributor.amount} sats</Td>
+                    <Td>{contributor.comment}</Td>
+                    <Td>
+                      {contributor.noOfRewards} {t('reward')}
+                    </Td>
+                  </Tr>
+                )
+              })}
+            </Tbody>
+          </Table>
+        </CardLayout>
+      )}
     </VStack>
   )
 }

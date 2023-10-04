@@ -27,18 +27,17 @@ export const ProjectContainer = () => {
   const { project, loading, isProjectOwner } = useProjectContext()
 
   useEffect(() => {
-    let redirected = ''
+    const visited = localStorage.getItem('creatorVisited')
     if (
-      isProjectOwner &&
-      params.projectId &&
-      !(redirected !== params.projectId)
+      (isProjectOwner && params.projectId && !visited) ||
+      visited !== params.projectId
     ) {
-      redirected = params.projectId
       navigate(getPath('projectOverview', `${params.projectId}`))
+      localStorage.setItem('creatorVisited', `${params.projectId}`)
     }
 
     return () => {
-      redirected = ''
+      localStorage.removeItem('creatorVisited')
     }
   }, [isProjectOwner, params.projectId, navigate])
 

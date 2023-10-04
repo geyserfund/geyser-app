@@ -116,9 +116,9 @@ export const NavigationBase = ({
 
   const barHasClass = Boolean(classsForSideMenu[direction].bar)
 
-  return (
-    <HStack>
-      {isMobile && (
+  if (isMobile) {
+    return (
+      <HStack>
         <Modal
           variant="transparentBackdrop"
           isOpen={isSideNavOpen || barHasClass}
@@ -152,10 +152,12 @@ export const NavigationBase = ({
             </HStack>
           </ModalContent>
         </Modal>
-      )}
-      <Box w="full" h={'100%'} className={classsForSideMenu[direction].body}>
-        {children}
-      </Box>
-    </HStack>
-  )
+        <Box w="full" h={'100%'} className={classsForSideMenu[direction].body}>
+          {children}
+        </Box>
+      </HStack>
+    )
+  }
+
+  return children
 }

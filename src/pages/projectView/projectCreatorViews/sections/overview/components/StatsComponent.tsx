@@ -90,7 +90,6 @@ export const StatsComponent = () => {
     }
   }, [project?.id, projectStatsGetOverview])
 
-  console.log('checking path', getPath('projectContributors', project?.name))
   return (
     <VStack w="full" alignItems="start" spacing="10px">
       <H3>{t('Stats')}</H3>
@@ -101,7 +100,12 @@ export const StatsComponent = () => {
           value={projectStats.contributionCount}
           width={{ base: '100%', lg: '33%' }}
         />
-        <HStack flex={2} width={{ base: '100%', lg: 'auto' }} spacing="20px">
+        <HStack
+          flex={2}
+          width={{ base: '100%', lg: 'auto' }}
+          spacing="20px"
+          alignItems="start"
+        >
           <StatsBlock
             title={t('Contributors')}
             prevValue={projectStats.prevContributorsCount}

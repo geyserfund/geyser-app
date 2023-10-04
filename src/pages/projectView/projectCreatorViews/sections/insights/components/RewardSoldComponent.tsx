@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CardLayout } from '../../../../../../components/layouts'
-import { H3 } from '../../../../../../components/typography'
+import { Body1, H3 } from '../../../../../../components/typography'
 import { useProjectContext } from '../../../../../../context'
 import { useProjectRewardSoldGraphStatsGetLazyQuery } from '../../../../../../types'
 import { useNotification } from '../../../../../../utils'
@@ -115,11 +115,15 @@ export const RewardSoldComponent = () => {
     >
       <H3>{t('Reward sold')}</H3>
 
-      <RewardSoldChart
-        data={rewardSoldData}
-        rewardList={rewardList}
-        loading={loading}
-      />
+      {rewardSoldData.length > 0 ? (
+        <RewardSoldChart
+          data={rewardSoldData}
+          rewardList={rewardList}
+          loading={loading}
+        />
+      ) : (
+        <Body1>{t('No data available')}</Body1>
+      )}
     </CardLayout>
   )
 }
