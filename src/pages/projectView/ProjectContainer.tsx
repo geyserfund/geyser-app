@@ -29,8 +29,9 @@ export const ProjectContainer = () => {
   useEffect(() => {
     const visited = localStorage.getItem('creatorVisited')
     if (
-      (isProjectOwner && params.projectId && !visited) ||
-      visited !== params.projectId
+      isProjectOwner &&
+      params.projectId &&
+      (!visited || visited !== params.projectId)
     ) {
       navigate(getPath('projectOverview', `${params.projectId}`))
       localStorage.setItem('creatorVisited', `${params.projectId}`)
