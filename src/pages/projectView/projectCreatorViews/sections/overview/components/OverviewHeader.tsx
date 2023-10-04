@@ -1,5 +1,5 @@
-import { AddIcon, LinkIcon } from '@chakra-ui/icons'
-import { Button, HStack, IconButton, Stack } from '@chakra-ui/react'
+import { AddIcon } from '@chakra-ui/icons'
+import { Button, HStack, Stack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -7,6 +7,7 @@ import { H2 } from '../../../../../../components/typography'
 import { getPath } from '../../../../../../constants'
 import { useProjectContext } from '../../../../../../context'
 import { useMobileMode } from '../../../../../../utils'
+import { ShareProjectButton } from '../elements'
 
 export const OverviewHeader = () => {
   const { t } = useTranslation()
@@ -14,17 +15,6 @@ export const OverviewHeader = () => {
 
   const { project, onRewardsModalOpen, onMilestonesModalOpen } =
     useProjectContext()
-
-  const renderLinkIcon = () => {
-    return (
-      <IconButton
-        size="sm"
-        aria-label="share-icon"
-        variant="secondary"
-        icon={<LinkIcon />}
-      />
-    )
-  }
 
   return (
     <Stack
@@ -34,10 +24,10 @@ export const OverviewHeader = () => {
     >
       <HStack w="full" justifyContent={'space-between'}>
         <H2>{t('Weekly overview')}</H2>
-        {isMobile && renderLinkIcon()}
+        {isMobile && <ShareProjectButton />}
       </HStack>
       <HStack spacing="10px" justifyContent={'end'}>
-        {!isMobile && renderLinkIcon()}
+        {!isMobile && <ShareProjectButton />}
         <Button
           as={Link}
           to={getPath('projectEntryCreation', project?.name)}
