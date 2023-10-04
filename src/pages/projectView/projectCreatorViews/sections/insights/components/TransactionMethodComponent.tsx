@@ -30,7 +30,6 @@ export const TransactionMethodComponent = (props: CardLayoutProps) => {
   const [getProjectFundingMethodStats, { loading }] =
     useProjectFundingMethodStatsGetLazyQuery({
       onCompleted(data) {
-        console.log('checking data', data)
         const stats = data.projectStatsGet
         const value: MethodCountType[] =
           stats.current?.projectFundingTxs?.methodCount?.map((count) => {

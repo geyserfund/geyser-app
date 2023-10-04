@@ -159,5 +159,5 @@ export const NavigationBase = ({
     )
   }
 
-  return children
+  return <>{children}</>
 }

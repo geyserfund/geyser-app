@@ -106,7 +106,6 @@ export const ContributorsComponent = () => {
     }
   }, [project?.id, getFundingTxForOverview])
 
-  console.log('checking path', contributors)
   return (
     <VStack w="full" alignItems="start" spacing="10px">
       <HStack w="full" justifyContent="space-between">

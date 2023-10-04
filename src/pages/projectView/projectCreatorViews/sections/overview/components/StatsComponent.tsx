@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { H3 } from '../../../../../../components/typography'
-import { getPath } from '../../../../../../constants'
 import { useProjectContext } from '../../../../../../context'
 import { useProjectStatsGetOverViewLazyQuery } from '../../../../../../types'
 import { useNotification } from '../../../../../../utils'
@@ -70,7 +69,6 @@ export const StatsComponent = () => {
       })
     },
   })
-  console.log('checking project', projectStats)
 
   useEffect(() => {
     if (project?.id) {
