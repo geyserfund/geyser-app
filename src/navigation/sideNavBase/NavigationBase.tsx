@@ -17,6 +17,12 @@ const useStyles = createUseStyles({
   ...slideInRight,
   ...slideOutLeft,
   ...slideOutRight,
+  barHidden: {
+    display: 'none',
+  },
+  barShow: {
+    display: 'block',
+  },
 })
 
 export enum NavigationDirection {
@@ -56,11 +62,11 @@ export const NavigationBase = ({
 
   const [classsForSideMenu, setClassForSideMenu] = useState<classForSideMenu>({
     left: {
-      bar: '',
+      bar: classes.barHidden,
       body: '',
     },
     right: {
-      bar: '',
+      bar: classes.barHidden,
       body: '',
     },
   })
@@ -74,11 +80,11 @@ export const NavigationBase = ({
       setClassForSideMenu((current) => {
         return {
           left: {
-            bar: classes.slideInLeft,
+            bar: classes.barShow,
             body: classes.slideOutRight,
           },
           right: {
-            bar: classes.slideInRight,
+            bar: classes.barShow,
             body: classes.slideOutLeft,
           },
         }
@@ -87,11 +93,17 @@ export const NavigationBase = ({
       setClassForSideMenu((current) => {
         return {
           left: {
-            bar: current.right.bar ? classes.slideOutLeft : '',
+            bar:
+              current.left.bar === classes.barShow
+                ? classes.slideOutLeft
+                : classes.barHidden,
             body: current.left.body ? classes.slideInRight : '',
           },
           right: {
-            bar: current.right.bar ? classes.slideOutRight : '',
+            bar:
+              current.right.bar === classes.barShow
+                ? classes.slideOutRight
+                : classes.barHidden,
             body: current.right.body ? classes.slideInLeft : '',
           },
         }
@@ -101,27 +113,29 @@ export const NavigationBase = ({
         setClassForSideMenu((current) => {
           return {
             left: {
-              bar: '',
+              bar: classes.barHidden,
               body: '',
             },
             right: {
-              bar: '',
+              bar: classes.barHidden,
               body: '',
             },
           }
         })
-      }, 500)
+      }, 200)
     }
   }, [isSideNavOpen, classes, isMobile])
 
-  const barHasClass = Boolean(classsForSideMenu[direction].bar)
+  const barIsNotHidden = Boolean(
+    classsForSideMenu[direction].bar !== classes.barHidden,
+  )
 
   if (isMobile) {
     return (
       <HStack>
         <Modal
           variant="transparentBackdrop"
-          isOpen={isSideNavOpen || barHasClass}
+          isOpen={isSideNavOpen || barIsNotHidden}
           onClose={() => changeSideNavOpen(false)}
         >
           <ModalOverlay />
@@ -134,10 +148,11 @@ export const NavigationBase = ({
             borderRadius="0"
             className={classsForSideMenu[direction].bar}
             zIndex={11}
-            width={barHasClass ? '210px' : 0}
-            backgroundColor={'neutral.100'}
-            paddingRight={isleft ? '10px' : 0}
-            paddingLeft={!isleft ? '10px' : 0}
+            width="210px"
+            borderLeft={!isleft ? '2px solid' : 'none'}
+            borderRight={isleft ? '2px solid' : 'none'}
+            borderLeftColor="neutral.200"
+            borderRightColor="neutral.200"
             height={`100%`}
             shadow="none"
           >
@@ -152,7 +167,12 @@ export const NavigationBase = ({
             </HStack>
           </ModalContent>
         </Modal>
-        <Box w="full" h={'100%'} className={classsForSideMenu[direction].body}>
+        <Box
+          zIndex={20}
+          w="full"
+          h={'100%'}
+          className={classsForSideMenu[direction].body}
+        >
           {children}
         </Box>
       </HStack>
