@@ -1,4 +1,4 @@
-import { Button, HStack, Stack } from '@chakra-ui/react'
+import { Box, HStack, Stack, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { H2 } from '../../../../../../components/typography'
@@ -25,7 +25,11 @@ export const InsightsHeader = () => {
         <H2>{t('Insights')}</H2>
         <InsightsOptionsSelect />
       </HStack>
-      {!isMobile && <Button variant="primary">{t('BETA')}</Button>}
+      {!isMobile && (
+        <Box px={2} py={1} borderRadius="8px" backgroundColor="primary.400">
+          <Text>{t('BETA')}</Text>
+        </Box>
+      )}
     </Stack>
   )
 }

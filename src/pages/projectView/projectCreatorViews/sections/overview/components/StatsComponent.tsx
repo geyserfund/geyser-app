@@ -1,9 +1,11 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { Button, HStack, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 import { H3 } from '../../../../../../components/typography'
+import { getPath } from '../../../../../../constants'
 import { useProjectContext } from '../../../../../../context'
 import { useProjectStatsGetOverViewLazyQuery } from '../../../../../../types'
 import { useNotification } from '../../../../../../utils'
@@ -90,7 +92,18 @@ export const StatsComponent = () => {
 
   return (
     <VStack w="full" alignItems="start" spacing="10px">
-      <H3>{t('Stats')}</H3>
+      <HStack w="full" justifyContent="space-between">
+        <H3>{t('Stats')}</H3>
+
+        <Button
+          as={Link}
+          to={getPath('projectContributors', project?.name)}
+          variant="primaryLink"
+          size="sm"
+        >
+          {t('View all')}
+        </Button>
+      </HStack>
       <HStack w="full" spacing="20px" wrap="wrap" alignItems="start">
         <StatsBlock
           title={t('Total received (sats)')}

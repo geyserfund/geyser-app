@@ -17,7 +17,12 @@ export const ProjectCreatorOverview = () => {
       px={{ base: '10px', lg: '0px' }}
     >
       <HStack w="full" flex="1" justifyContent="center" alignItems="start">
-        <VStack w="full" maxWidth="1000px" spacing="20px" px="40px">
+        <VStack
+          w="full"
+          maxWidth="1000px"
+          spacing="20px"
+          px={{ base: '0px', lg: '40px' }}
+        >
           <OverviewHeader />
           <StatsComponent />
           <ContributorsComponent />
