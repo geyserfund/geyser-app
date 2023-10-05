@@ -615,8 +615,6 @@ export type GetFundingTxsInput = {
 
 export type GetFundingTxsOrderByInput = {
   createdAt: OrderByOptions
-  /** @deprecated Use createdAt instead. */
-  paidAt?: InputMaybe<OrderByOptions>
 }
 
 export type GetFundingTxsWhereInput = {
@@ -887,6 +885,7 @@ export type Mutation = {
   grantApply: GrantApplicant
   projectDelete: ProjectDeleteResponse
   projectFollow: Scalars['Boolean']
+  projectPublish: Project
   projectRewardCreate: ProjectReward
   /** Soft deletes the reward. */
   projectRewardDelete: Scalars['Boolean']
@@ -988,6 +987,10 @@ export type MutationProjectDeleteArgs = {
 
 export type MutationProjectFollowArgs = {
   input: ProjectFollowMutationInput
+}
+
+export type MutationProjectPublishArgs = {
+  input: ProjectPublishMutationInput
 }
 
 export type MutationProjectRewardCreateArgs = {
@@ -1150,7 +1153,7 @@ export type PaginationInput = {
 
 export type Project = {
   __typename?: 'Project'
-  /** @deprecated Field no longer supported */
+  /** @deprecated No longer supported */
   ambassadors: Array<Ambassador>
   /** Total amount raised by the project, in satoshis. */
   balance: Scalars['Int']
@@ -1185,7 +1188,7 @@ export type Project = {
   rewards: Array<ProjectReward>
   /** Short description of the project. */
   shortDescription?: Maybe<Scalars['shortDescription_String_maxLength_500']>
-  /** @deprecated Field no longer supported */
+  /** @deprecated No longer supported */
   sponsors: Array<Sponsor>
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>
@@ -1275,6 +1278,10 @@ export type ProjectMilestone = {
   description?: Maybe<Scalars['description_String_maxLength_250']>
   id: Scalars['BigInt']
   name: Scalars['name_String_NotNull_maxLength_100']
+}
+
+export type ProjectPublishMutationInput = {
+  projectId: Scalars['BigInt']
 }
 
 export type ProjectRegionsGetResult = {
@@ -1833,14 +1840,14 @@ export type UserProjectContribution = {
   funder?: Maybe<Funder>
   /**
    * Boolean value indicating if the User was an ambassador of the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isAmbassador: Scalars['Boolean']
   /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean']
   /**
    * Boolean value indicating if the User was a sponsor for the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isSponsor: Scalars['Boolean']
   /** Project linked to the contributions. */
@@ -2199,6 +2206,7 @@ export type ResolversTypes = {
   ProjectKeys: ResolverTypeWrapper<ProjectKeys>
   ProjectLinkMutationInput: ProjectLinkMutationInput
   ProjectMilestone: ResolverTypeWrapper<ProjectMilestone>
+  ProjectPublishMutationInput: ProjectPublishMutationInput
   ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>
   ProjectReward: ResolverTypeWrapper<ProjectReward>
   ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>
@@ -2496,6 +2504,7 @@ export type ResolversParentTypes = {
   ProjectKeys: ProjectKeys
   ProjectLinkMutationInput: ProjectLinkMutationInput
   ProjectMilestone: ProjectMilestone
+  ProjectPublishMutationInput: ProjectPublishMutationInput
   ProjectRegionsGetResult: ProjectRegionsGetResult
   ProjectReward: ProjectReward
   ProjectStatistics: ProjectStatistics
@@ -3284,6 +3293,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationProjectFollowArgs, 'input'>
+  >
+  projectPublish?: Resolver<
+    ResolversTypes['Project'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationProjectPublishArgs, 'input'>
   >
   projectRewardCreate?: Resolver<
     ResolversTypes['ProjectReward'],
@@ -5158,17 +5173,13 @@ export type GrantApplyMutation = {
   grantApply: { __typename?: 'GrantApplicant'; status: GrantApplicantStatus }
 }
 
-export type ProjectStatusUpdateMutationVariables = Exact<{
-  input: ProjectStatusUpdate
+export type ProjectPublishMutationVariables = Exact<{
+  input: ProjectPublishMutationInput
 }>
 
-export type ProjectStatusUpdateMutation = {
+export type ProjectPublishMutation = {
   __typename?: 'Mutation'
-  projectStatusUpdate: {
-    __typename?: 'Project'
-    id: any
-    status?: ProjectStatus | null
-  }
+  projectPublish: { __typename?: 'Project'; id: any }
 }
 
 export type CreateProjectMutationVariables = Exact<{
@@ -7321,56 +7332,55 @@ export type GrantApplyMutationOptions = Apollo.BaseMutationOptions<
   GrantApplyMutation,
   GrantApplyMutationVariables
 >
-export const ProjectStatusUpdateDocument = gql`
-  mutation ProjectStatusUpdate($input: ProjectStatusUpdate!) {
-    projectStatusUpdate(input: $input) {
+export const ProjectPublishDocument = gql`
+  mutation ProjectPublish($input: ProjectPublishMutationInput!) {
+    projectPublish(input: $input) {
       id
-      status
     }
   }
 `
-export type ProjectStatusUpdateMutationFn = Apollo.MutationFunction<
-  ProjectStatusUpdateMutation,
-  ProjectStatusUpdateMutationVariables
+export type ProjectPublishMutationFn = Apollo.MutationFunction<
+  ProjectPublishMutation,
+  ProjectPublishMutationVariables
 >
 
 /**
- * __useProjectStatusUpdateMutation__
+ * __useProjectPublishMutation__
  *
- * To run a mutation, you first call `useProjectStatusUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useProjectStatusUpdateMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useProjectPublishMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectPublishMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [projectStatusUpdateMutation, { data, loading, error }] = useProjectStatusUpdateMutation({
+ * const [projectPublishMutation, { data, loading, error }] = useProjectPublishMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useProjectStatusUpdateMutation(
+export function useProjectPublishMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    ProjectStatusUpdateMutation,
-    ProjectStatusUpdateMutationVariables
+    ProjectPublishMutation,
+    ProjectPublishMutationVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<
-    ProjectStatusUpdateMutation,
-    ProjectStatusUpdateMutationVariables
-  >(ProjectStatusUpdateDocument, options)
+    ProjectPublishMutation,
+    ProjectPublishMutationVariables
+  >(ProjectPublishDocument, options)
 }
-export type ProjectStatusUpdateMutationHookResult = ReturnType<
-  typeof useProjectStatusUpdateMutation
+export type ProjectPublishMutationHookResult = ReturnType<
+  typeof useProjectPublishMutation
 >
-export type ProjectStatusUpdateMutationResult =
-  Apollo.MutationResult<ProjectStatusUpdateMutation>
-export type ProjectStatusUpdateMutationOptions = Apollo.BaseMutationOptions<
-  ProjectStatusUpdateMutation,
-  ProjectStatusUpdateMutationVariables
+export type ProjectPublishMutationResult =
+  Apollo.MutationResult<ProjectPublishMutation>
+export type ProjectPublishMutationOptions = Apollo.BaseMutationOptions<
+  ProjectPublishMutation,
+  ProjectPublishMutationVariables
 >
 export const CreateProjectDocument = gql`
   mutation CreateProject($input: CreateProjectInput!) {
