@@ -1,29 +1,8 @@
-import { Box } from '@chakra-ui/layout'
 import { HStack, Modal, ModalContent, ModalOverlay } from '@chakra-ui/react'
-import { PropsWithChildren, useEffect, useState } from 'react'
-import { createUseStyles } from 'react-jss'
+import { useEffect, useState } from 'react'
 
-import { dimensions } from '../../constants'
 import { useMobileMode } from '../../utils'
-import {
-  slideInLeft,
-  slideInRight,
-  slideOutLeft,
-  slideOutRight,
-} from './styles'
-
-const useStyles = createUseStyles({
-  ...slideInLeft,
-  ...slideInRight,
-  ...slideOutLeft,
-  ...slideOutRight,
-  barHidden: {
-    display: 'none',
-  },
-  barShow: {
-    display: 'block',
-  },
-})
+import { useNavAnimationStyles } from './styles'
 
 export enum NavigationDirection {
   left = 'left',
@@ -51,11 +30,10 @@ type classForSideMenu = {
 export const NavigationBase = ({
   isSideNavOpen,
   changeSideNavOpen,
-  children,
   navigation,
   direction,
-}: PropsWithChildren<NavigationBaseProps>) => {
-  const classes = useStyles()
+}: NavigationBaseProps) => {
+  const classes = useNavAnimationStyles()
   const isMobile = useMobileMode()
 
   const isleft = direction === NavigationDirection.left
@@ -132,52 +110,49 @@ export const NavigationBase = ({
 
   if (isMobile) {
     return (
-      <HStack>
-        <Modal
-          variant="transparentBackdrop"
-          isOpen={isSideNavOpen || barIsNotHidden}
-          onClose={() => changeSideNavOpen(false)}
+      <Modal
+        variant="blurryBackdrop"
+        isOpen={isSideNavOpen || barIsNotHidden}
+        onClose={() => changeSideNavOpen(false)}
+      >
+        <ModalOverlay />
+        <ModalContent
+          containerProps={{
+            justifyContent: isleft ? 'start' : 'end',
+          }}
+          my="0"
+          borderRadius="0"
+          className={classsForSideMenu[direction].bar}
+          zIndex={11}
+          width="210px"
+          borderLeft={!isleft ? '2px solid' : 'none'}
+          borderRight={isleft ? '2px solid' : 'none'}
+          borderLeftColor="neutral.200"
+          borderRightColor="neutral.200"
+          height={`100%`}
+          shadow="none"
         >
-          <ModalOverlay />
-          <ModalContent
-            containerProps={{
-              justifyContent: isleft ? 'start' : 'end',
-              pt: dimensions.topNavBar.desktop.height,
-            }}
-            my="0"
-            borderRadius="0"
-            className={classsForSideMenu[direction].bar}
-            zIndex={11}
-            width="210px"
-            borderLeft={!isleft ? '2px solid' : 'none'}
-            borderRight={isleft ? '2px solid' : 'none'}
-            borderLeftColor="neutral.200"
-            borderRightColor="neutral.200"
-            height={`100%`}
-            shadow="none"
+          <HStack
+            backgroundColor={'neutral.0'}
+            alignItems="start"
+            overflow="hidden"
+            height="100%"
+            w="full"
           >
-            <HStack
-              backgroundColor={'neutral.0'}
-              alignItems="start"
-              overflow="hidden"
-              height="100%"
-              w="full"
-            >
-              {navigation}
-            </HStack>
-          </ModalContent>
-        </Modal>
-        <Box
-          zIndex={20}
-          w="full"
-          h={'100%'}
-          className={classsForSideMenu[direction].body}
-        >
-          {children}
-        </Box>
-      </HStack>
+            {navigation}
+          </HStack>
+        </ModalContent>
+      </Modal>
+      // <Box
+      //   zIndex={20}
+      //   w="full"
+      //   h={'100%'}
+      //   className={classsForSideMenu[direction].body}
+      // >
+      //   {children}
+      // </Box>
     )
   }
 
-  return <>{children}</>
+  return null
 }

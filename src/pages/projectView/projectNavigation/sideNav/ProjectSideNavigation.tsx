@@ -16,8 +16,6 @@ export const ProjectSideNavigation = ({ children }: PropsWithChildren) => {
       changeSideNavOpen={changeProjectSideNavOpen}
       navigation={<ProjectNavigation showLabel />}
       direction={NavigationDirection.left}
-    >
-      {children}
-    </NavigationBase>
+    />
   )
 }

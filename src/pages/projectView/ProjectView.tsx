@@ -10,27 +10,26 @@ export const ProjectView = () => {
   const { projectId } = params
   return (
     <ProjectProvider projectId={projectId || ''}>
-      <ProjectSideNavigation>
+      <ProjectSideNavigation />
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100%"
+        pb={{ base: '80px', lg: '0px' }}
+      >
         <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
+          width="100%"
           height="100%"
-          pb={{ base: '80px', lg: '0px' }}
+          display="flex"
+          overflow="hidden"
+          position="relative"
+          bg={{ base: 'neutral.0', lg: 'neutral.50' }}
+          flexDirection={{ base: 'column', lg: 'row' }}
         >
-          <Box
-            width="100%"
-            height="100%"
-            display="flex"
-            overflow="hidden"
-            position="relative"
-            bg={{ base: 'neutral.0', lg: 'neutral.50' }}
-            flexDirection={{ base: 'column', lg: 'row' }}
-          >
-            <ProjectContainer />
-          </Box>
+          <ProjectContainer />
         </Box>
-      </ProjectSideNavigation>
+      </Box>
     </ProjectProvider>
   )
 }

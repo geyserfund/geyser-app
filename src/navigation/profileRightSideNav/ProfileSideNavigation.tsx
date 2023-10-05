@@ -1,5 +1,3 @@
-import { PropsWithChildren } from 'react'
-
 import {
   NavigationBase,
   NavigationDirection,
@@ -7,7 +5,7 @@ import {
 import { ProfileRightSideNav } from './ProfileRightSideNav'
 import { useProfileSideNavAtom } from './profileSideNavAtom'
 
-export const ProfileSideNavigation = ({ children }: PropsWithChildren) => {
+export const ProfileSideNavigation = () => {
   const [isProjectSideNavOpen, changeProjectSideNavOpen] =
     useProfileSideNavAtom()
   return (
@@ -16,8 +14,6 @@ export const ProfileSideNavigation = ({ children }: PropsWithChildren) => {
       changeSideNavOpen={changeProjectSideNavOpen}
       navigation={<ProfileRightSideNav />}
       direction={NavigationDirection.right}
-    >
-      {children}
-    </NavigationBase>
+    />
   )
 }

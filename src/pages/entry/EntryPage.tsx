@@ -109,7 +109,7 @@ const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
           resourceType={FundingResourceType.Entry}
           resourceId={entry.id}
         />
-        {isMobile && <ProjectMobileBottomNavigation />}
+        {isMobile && <ProjectMobileBottomNavigation fixed />}
       </Box>
     </Box>
   )

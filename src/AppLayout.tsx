@@ -6,6 +6,7 @@ import PullToRefresh from 'react-simple-pull-to-refresh'
 import { PullingDownContent } from './components/ui'
 import { dimensions, ID } from './constants'
 import { useAuthContext } from './context'
+import { useLayoutAnimation } from './hooks'
 import { LandingNavBar } from './navigation/bottomNav/LandingNavBar'
 import { ProfileSideNavigation } from './navigation/profileRightSideNav'
 import { TopNavBar } from './navigation/topNavBar/TopNavBar'
@@ -15,6 +16,8 @@ import { useMobileMode } from './utils'
 export const AppLayout = () => {
   const { loading } = useAuthContext()
   const isMobile = useMobileMode()
+
+  const layoutAnimationClassName = useLayoutAnimation()
 
   if (loading) {
     return <LoadingPage />
@@ -32,14 +35,20 @@ export const AppLayout = () => {
     >
       <Fade in={true}>
         <Box
-          minHeight="100vh"
-          height={isMobile ? '100%' : '100vh'}
-          display="flex"
-          flexDir="column"
+          // zIndex={20}
+          w="full"
+          h={'100%'}
+          position="relative"
+          className={layoutAnimationClassName}
         >
-          <TopNavBar />
-
-          <ProfileSideNavigation>
+          <Box
+            minHeight="100vh"
+            height={isMobile ? '100%' : '100vh'}
+            display="flex"
+            flexDir="column"
+          >
+            <TopNavBar />
+            <ProfileSideNavigation />
             <Box
               id={ID.root}
               maxHeight="100%"
@@ -51,7 +60,7 @@ export const AppLayout = () => {
               <Outlet />
             </Box>
             {isMobile && <LandingNavBar />}
-          </ProfileSideNavigation>
+          </Box>
         </Box>
       </Fade>
     </PullToRefresh>

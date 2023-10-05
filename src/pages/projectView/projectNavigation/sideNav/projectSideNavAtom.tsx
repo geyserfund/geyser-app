@@ -1,6 +1,6 @@
 import { atom, useAtom } from 'jotai'
 
-const projectSideNavAtom = atom({
+export const projectSideNavAtom = atom({
   open: false,
 })
 

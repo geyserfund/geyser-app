@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { createUseStyles } from 'react-jss'
 import {
   Link,
   Location,
@@ -33,7 +34,7 @@ import { platformRoutes } from '../../config'
 import { useSetMatchRoutes } from '../../config/routes/routesAtom'
 import { getPath, ID, PathName } from '../../constants'
 import { useAuthContext, useNavContext } from '../../context'
-import { useScrollDirection } from '../../hooks'
+import { useLayoutAnimation, useScrollDirection } from '../../hooks'
 import { useProjectSideNavAtom } from '../../pages/projectView/projectNavigation/sideNav'
 import { useMobileMode } from '../../utils'
 import { useProfileSideNavAtom } from '../profileRightSideNav'
@@ -58,6 +59,12 @@ const navItems = [
   },
 ]
 
+const useStyles = createUseStyles({
+  topNavBar: {
+    left: 0,
+    top: 0,
+  },
+})
 /**
  * "Container" component for elements and appearance of
  * the top navigation bar.
@@ -67,6 +74,7 @@ export const TopNavBar = () => {
 
   const isMobile = useMobileMode()
   const navigate = useNavigate()
+  const classes = useStyles()
 
   const location: Location & {
     state: {
@@ -102,6 +110,8 @@ export const TopNavBar = () => {
     onClose: onLoginAlertModalClose,
   } = useDisclosure()
 
+  const { navData } = useNavContext()
+
   const {
     user,
     isLoggedIn,
@@ -125,8 +135,6 @@ export const TopNavBar = () => {
     hideDropdownMenu,
     showSignInButton,
   } = useRouteMatchesForTopNavBar()
-
-  const { navData } = useNavContext()
 
   useEffect(() => {
     if (state && state.loggedOut) {
@@ -291,6 +299,8 @@ export const TopNavBar = () => {
     return showLeftSideMenuButton && isMobile === true
   }, [showLeftSideMenuButton, isMobile])
 
+  const className = useLayoutAnimation()
+
   if (hideTopNavBar) {
     return null
   }
@@ -298,12 +308,13 @@ export const TopNavBar = () => {
   return (
     <>
       <Box
+        className={className || classes.topNavBar}
         bg={showHaveTransparentBackground ? 'transparent' : 'neutral.0'}
         px={{ base: '10px', lg: '20px' }}
         position="fixed"
-        top={0}
-        left={0}
         width="full"
+        left={0}
+        top={0}
         zIndex={1000}
         borderBottom="2px solid"
         borderBottomColor={
@@ -334,15 +345,7 @@ export const TopNavBar = () => {
               textAlign="left"
             />
           )}
-          {shouldShowLeftSideMenuButton ? (
-            <NavBarLogo
-              small={isMobile && shouldShowCustomTitle}
-              marginRight={isMobile ? 0 : 5}
-              color={showHaveTransparentBackground ? 'primary.900' : undefined}
-              flexGrow={1}
-              textAlign="center"
-            />
-          ) : shouldShowCustomTitle ? (
+          {shouldShowCustomTitle ? (
             <Text
               variant="h3"
               noOfLines={1}

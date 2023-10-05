@@ -93,7 +93,7 @@ export const ProjectContainer = () => {
       <ProjectCreateLaunchedModal {...launchModal} />
       <ProjectCreateDraftModal {...draftModal} />
 
-      {isMobile && <ProjectMobileBottomNavigation />}
+      {isMobile && <ProjectMobileBottomNavigation fixed />}
     </>
   )
 }
