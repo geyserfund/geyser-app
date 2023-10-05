@@ -29,7 +29,7 @@ export const modalTheme = defineMultiStyleConfig({
     blurryBackdrop: {
       overlay: {
         bg: 'blackAlpha.50',
-        backdropFilter: 'blur(2px)',
+        backdropFilter: 'blur(1px)',
         _dark: {
           bg: 'whiteAlpha.50',
         },

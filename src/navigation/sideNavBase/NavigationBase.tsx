@@ -55,64 +55,58 @@ export const NavigationBase = ({
     }
 
     if (isSideNavOpen) {
-      setClassForSideMenu((current) => {
-        return {
-          left: {
-            bar: classes.barShow,
-            body: classes.slideOutRight,
-          },
-          right: {
-            bar: classes.barShow,
-            body: classes.slideOutLeft,
-          },
-        }
+      setClassForSideMenu({
+        left: {
+          bar: `${classes.barShow} ${classes.slideInLeft}`,
+          body: classes.slideOutRight,
+        },
+        right: {
+          bar: `${classes.barShow} ${classes.slideInRight}`,
+          body: classes.slideOutLeft,
+        },
       })
     } else {
       setClassForSideMenu((current) => {
         return {
           left: {
-            bar:
-              current.left.bar === classes.barShow
-                ? classes.slideOutLeft
-                : classes.barHidden,
+            bar: current.left.bar.includes(classes.barShow)
+              ? classes.slideOutLeft
+              : classes.barHidden,
             body: current.left.body ? classes.slideInRight : '',
           },
           right: {
-            bar:
-              current.right.bar === classes.barShow
-                ? classes.slideOutRight
-                : classes.barHidden,
+            bar: current.right.bar.includes(classes.barShow)
+              ? classes.slideOutRight
+              : classes.barHidden,
             body: current.right.body ? classes.slideInLeft : '',
           },
         }
       })
 
       setTimeout(() => {
-        setClassForSideMenu((current) => {
-          return {
-            left: {
-              bar: classes.barHidden,
-              body: '',
-            },
-            right: {
-              bar: classes.barHidden,
-              body: '',
-            },
-          }
+        setClassForSideMenu({
+          left: {
+            bar: classes.barHidden,
+            body: '',
+          },
+          right: {
+            bar: classes.barHidden,
+            body: '',
+          },
         })
       }, 200)
     }
   }, [isSideNavOpen, classes, isMobile])
 
-  const barIsNotHidden = Boolean(
-    classsForSideMenu[direction].bar !== classes.barHidden,
-  )
+  const barIsNotHidden =
+    isSideNavOpen ||
+    Boolean(classsForSideMenu[direction].bar !== classes.barHidden)
 
   if (isMobile) {
     return (
       <Modal
         variant="blurryBackdrop"
-        isOpen={isSideNavOpen || barIsNotHidden}
+        isOpen={barIsNotHidden}
         onClose={() => changeSideNavOpen(false)}
       >
         <ModalOverlay />
@@ -143,14 +137,6 @@ export const NavigationBase = ({
           </HStack>
         </ModalContent>
       </Modal>
-      // <Box
-      //   zIndex={20}
-      //   w="full"
-      //   h={'100%'}
-      //   className={classsForSideMenu[direction].body}
-      // >
-      //   {children}
-      // </Box>
     )
   }
 

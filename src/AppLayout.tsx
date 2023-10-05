@@ -35,7 +35,6 @@ export const AppLayout = () => {
     >
       <Fade in={true}>
         <Box
-          // zIndex={20}
           w="full"
           h={'100%'}
           position="relative"

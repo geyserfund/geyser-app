@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import { useDisclosure } from '@chakra-ui/hooks'
 import { HamburgerIcon } from '@chakra-ui/icons'
 import { Box } from '@chakra-ui/layout'
@@ -59,12 +58,6 @@ const navItems = [
   },
 ]
 
-const useStyles = createUseStyles({
-  topNavBar: {
-    left: 0,
-    top: 0,
-  },
-})
 /**
  * "Container" component for elements and appearance of
  * the top navigation bar.
@@ -74,7 +67,6 @@ export const TopNavBar = () => {
 
   const isMobile = useMobileMode()
   const navigate = useNavigate()
-  const classes = useStyles()
 
   const location: Location & {
     state: {
@@ -308,13 +300,12 @@ export const TopNavBar = () => {
   return (
     <>
       <Box
-        className={className || classes.topNavBar}
         bg={showHaveTransparentBackground ? 'transparent' : 'neutral.0'}
         px={{ base: '10px', lg: '20px' }}
         position="fixed"
         width="full"
-        left={0}
         top={0}
+        left={0}
         zIndex={1000}
         borderBottom="2px solid"
         borderBottomColor={
@@ -323,10 +314,12 @@ export const TopNavBar = () => {
         transition="background 0.5s ease-out"
       >
         <HStack
+          className={className}
           paddingY="10px"
           alignItems="center"
           justifyContent="start"
           overflow="hidden"
+          position="relative"
         >
           {shouldShowLeftSideMenuButton ? (
             <IconButton

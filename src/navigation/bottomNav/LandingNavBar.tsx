@@ -12,6 +12,8 @@ import {
 import { Caption } from '../../components/typography'
 import { getPath } from '../../constants'
 import { BottomNavContainerCommonStyles } from '../../constants/styles'
+import { useLayoutAnimation } from '../../hooks'
+import { useTopNavBarAnimate } from '../topNavBar/topNavBarAtom'
 
 const routesForShowingLandingMenu = [
   getPath('landingPage'),
@@ -49,6 +51,7 @@ const LandingNavItems = [
 export const LandingNavBar = () => {
   const { t } = useTranslation()
   const location = useLocation()
+  const animate = useTopNavBarAnimate()
 
   const routeMatchesForShowingLandingMenu = matchRoutes(
     routesForShowingLandingMenu.map((val) => ({ path: val })),
@@ -75,11 +78,14 @@ export const LandingNavBar = () => {
     }
   }
 
+  const className = useLayoutAnimation()
+
   if (shouldShowLandingNav) {
     return (
       <>
         <Box height="60px" width="100%"></Box>
         <HStack
+          className={className}
           paddingX="15%"
           spacing="20%"
           position="fixed"

@@ -1,4 +1,5 @@
 import { Button, HStack, Slide, useDisclosure, VStack } from '@chakra-ui/react'
+import { use } from 'i18next'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -8,7 +9,7 @@ import { Body2 } from '../../../../components/typography'
 import { getPath } from '../../../../constants'
 import { BottomNavContainerCommonStyles } from '../../../../constants/styles'
 import { MobileViews, useProjectContext } from '../../../../context'
-import { useScrollDirection } from '../../../../hooks'
+import { useLayoutAnimation, useScrollDirection } from '../../../../hooks'
 import { isActive } from '../../../../utils'
 import { navigationItems } from './BottomNavList'
 
@@ -80,6 +81,8 @@ export const ProjectNavUI = () => {
   const { mobileView, setMobileView, project, isProjectOwner } =
     useProjectContext()
 
+  const className = useLayoutAnimation()
+
   const getTextColor = (value: string) => {
     if (value === mobileView) {
       return 'neutral.1000'
@@ -107,6 +110,8 @@ export const ProjectNavUI = () => {
 
   return (
     <HStack
+      className={className}
+      position="relative"
       paddingX="20px"
       pt={2}
       {...BottomNavContainerCommonStyles}
