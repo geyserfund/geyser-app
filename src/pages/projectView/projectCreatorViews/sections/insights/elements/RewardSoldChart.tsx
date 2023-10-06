@@ -39,6 +39,8 @@ export const RewardSoldChart = ({
   const isMobile = useMobileMode()
   const ref = useRef<HTMLDivElement>(null)
 
+  console.log('checking max and min rewards', data, rewardList)
+
   return (
     <VStack ref={ref} w="full" spacing="20px" wrap="wrap">
       {loading ? (
@@ -70,7 +72,11 @@ export const RewardSoldChart = ({
           >
             <CartesianGrid strokeDasharray="4" vertical={false} />
             <XAxis dataKey="name" tick={<TickComponent dy={10} />} />
-            <YAxis width={isMobile ? 40 : 60} tick={<TickComponent />} />
+            <YAxis
+              width={isMobile ? 40 : 60}
+              tick={<TickComponent />}
+              domain={[0, 'dataMax']}
+            />
             <Tooltip
               cursor={{ fill: 'transparent' }}
               contentStyle={{

@@ -1,5 +1,6 @@
 import { HStack } from '@chakra-ui/react'
 import { useRef } from 'react'
+import { createUseStyles } from 'react-jss'
 import {
   Area,
   CartesianGrid,
@@ -18,6 +19,14 @@ import {
 } from '../../../../../../utils'
 import { SatsTickComponent, TickComponent } from './ChartElements'
 
+const useStyles = createUseStyles({
+  legend: {
+    '& .recharts-legend-item-text': {
+      textTransform: 'capitalize',
+    },
+  },
+})
+
 export type HistoryDataType = {
   name: string
   dateTime: number
@@ -34,6 +43,7 @@ export const HistoricalChart = ({
 }) => {
   const { colors } = useCustomTheme()
   const isMobile = useMobileMode()
+  const classes = useStyles()
   const ref = useRef<HTMLDivElement>(null)
   return (
     <HStack ref={ref} w="full" spacing="20px" wrap="wrap">
@@ -104,18 +114,23 @@ export const HistoricalChart = ({
               borderRadius: '8px',
             }}
           />
-          <Legend verticalAlign="top" height={50} align="left" />
+          <Legend
+            className={classes.legend}
+            verticalAlign="top"
+            height={50}
+            align="left"
+          />
           <Area
-            name="contributions"
+            name="Contributions"
             type="monotone"
             dataKey="amount"
-            stroke={colors.social.nostr}
+            stroke={colors.secondary.lightPurple}
             yAxisId={'amount'}
             fillOpacity={1}
             fill="url(#colorAmount)"
           />
           <Area
-            name="visitors"
+            name="Visitors"
             type="monotone"
             dataKey="visitorCount"
             stroke={colors.primary[400]}

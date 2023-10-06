@@ -37,11 +37,15 @@ export const RewardSoldComponent = () => {
         const dateParam = {} as {
           [key: string]: { [key: string]: RewardSoldDataType }
         }
-
         stats.current?.projectFunderRewards?.quantityGraph?.map((data) => {
           const name = getNameForDate(data?.dateTime || 0, selectionOption)
 
-          if (data?.rewardId && !rewardList.includes(data?.rewardId)) {
+          if (
+            data?.rewardId &&
+            !rewardList.some(
+              (reward) => reward.rewardId === Number(data?.rewardId),
+            )
+          ) {
             rewardList.push({
               rewardId: Number(data?.rewardId),
               rewardName: data?.rewardName,

@@ -139,11 +139,11 @@ export const InsightsStatsComponent = () => {
 export const InsightsStatsComponentSkeleton = () => {
   return (
     <VStack w="full" alignItems="start" spacing="10px">
-      <HStack w="full" spacing="20px" wrap="wrap">
-        <SkeletonLayout height="90px" minWidth="200px" flex={1} />
-        <SkeletonLayout height="90px" minWidth="200px" flex={1} />
-        <SkeletonLayout height="90px" minWidth="200px" flex={1} />
-        <SkeletonLayout height="90px" minWidth="200px" flex={1} />
+      <HStack w="full" spacing="20px" wrap="wrap" alignItems="start">
+        <SkeletonLayout height="80px" minWidth="150px" flex={1} />
+        <SkeletonLayout height="80px" minWidth="150px" flex={1} />
+        <SkeletonLayout height="80px" minWidth="150px" flex={1} />
+        <SkeletonLayout height="80px" minWidth="150px" flex={1} />
       </HStack>
     </VStack>
   )

@@ -26,13 +26,13 @@ export const ProjectCreatorInsights = () => {
       <MobileDivider />
       <HistoricalComponent />
       <MobileDivider />
-      <RewardSoldComponent />
-      <MobileDivider />
       <Stack w="full" direction={{ base: 'column', lg: 'row' }}>
         <TransactionMethodComponent flex={1} />
         <MobileDivider />
         <TransactionRegionComponent flex={1} />
       </Stack>
+      <MobileDivider />
+      <RewardSoldComponent />
     </VStack>
   )
 }

@@ -27,7 +27,7 @@ export const InsightsHeader = () => {
       </HStack>
       {!isMobile && (
         <Box px={2} py={1} borderRadius="8px" backgroundColor="primary.400">
-          <Text>{t('BETA')}</Text>
+          <Text color="black">{t('BETA')}</Text>
         </Box>
       )}
     </Stack>

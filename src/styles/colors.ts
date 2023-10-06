@@ -71,6 +71,7 @@ export const secondaryColors = {
   pink: '#FC257A',
   blue: '#438FF2',
   purple: '#670C8B',
+  lightPurple: '#9912CE',
 }
 
 export const socialColors = {
