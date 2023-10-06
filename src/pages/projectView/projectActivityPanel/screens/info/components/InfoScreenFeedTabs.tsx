@@ -49,16 +49,16 @@ export const InfoScreenFeedTabs = ({
     <HStack width="100%" spacing="0px" px={{ base: '10px', lg: '20px' }}>
       <Box w="50%">
         {createTabButton(
-          'activity',
-          'Contributions',
-          project.fundingTxsCount || 0,
+          'leaderboard',
+          'Leaderboard',
+          project.fundersCount || 0,
         )}
       </Box>
       <Box w="50%">
         {createTabButton(
-          'leaderboard',
-          'Leaderboard',
-          project.fundersCount || 0,
+          'activity',
+          'Contributions',
+          project.fundingTxsCount || 0,
         )}
       </Box>
     </HStack>

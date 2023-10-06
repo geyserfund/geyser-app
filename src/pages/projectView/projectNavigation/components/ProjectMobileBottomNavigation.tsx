@@ -148,7 +148,6 @@ export const ProjectNavUI = () => {
       })}
       {!isProjectOwner && (
         <Button
-          size="sm"
           variant="primary"
           padding="5px"
           px="10px"
