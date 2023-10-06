@@ -1,6 +1,6 @@
 import { DownloadIcon } from '@chakra-ui/icons'
 import { MenuItem } from '@chakra-ui/menu'
-import { Button, MenuDivider, Stack } from '@chakra-ui/react'
+import { Button, MenuDivider, MenuGroup, Stack, VStack } from '@chakra-ui/react'
 import { useCallback, useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -11,6 +11,7 @@ import {
   useNavContext,
   useServiceWorkerUpdate,
 } from '../../context'
+import { MobileDivider } from '../../pages/grants/components'
 import { ProjectStatus } from '../../types'
 import { useMobileMode } from '../../utils'
 import { useRouteMatchesForTopNavBar } from '../topNavBar/topNavBarAtom'
@@ -21,7 +22,7 @@ import {
   NavBarUserProjectMenuItem,
 } from './components'
 
-export const TopNavBarMenuList = () => {
+export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
   const { t } = useTranslation()
 
   const isMobile = useMobileMode()
@@ -87,122 +88,129 @@ export const TopNavBarMenuList = () => {
 
   return (
     <>
-      {shouldShowSignInMenuItem ? (
-        <>
-          <MenuItem as={Stack} px={4} py={2}>
-            <Button variant="secondary" width="100%" onClick={loginOnOpen}>
-              {t('Login')}
-            </Button>
-          </MenuItem>
+      <MenuGroup as={VStack} w="full" spacing="0">
+        {shouldShowSignInMenuItem ? (
+          <>
+            <MenuItem as={Stack} px={4} py={2}>
+              <Button variant="secondary" width="100%" onClick={loginOnOpen}>
+                {t('Login')}
+              </Button>
+            </MenuItem>
 
-          <MenuDivider />
-        </>
-      ) : null}
+            <MenuDivider />
+          </>
+        ) : null}
 
-      {shouldShowMyProjectsMenuItem ? (
-        <>
-          <MenuItem as={Stack} px={4} py={2}>
-            <Button
-              variant="primary"
-              width="100%"
-              onClick={onMyProjectsSelected}
-            >
-              {t('View my projects')}
-            </Button>
-          </MenuItem>
+        {shouldShowMyProjectsMenuItem ? (
+          <>
+            <MenuItem as={Stack} px={4} py={2}>
+              <Button
+                variant="primary"
+                width="100%"
+                onClick={onMyProjectsSelected}
+              >
+                {t('View my projects')}
+              </Button>
+            </MenuItem>
 
-          <MenuDivider />
-        </>
-      ) : null}
+            <MenuDivider />
+          </>
+        ) : null}
 
-      {isLoggedIn ? (
-        <>
-          <MenuItem
-            padding={0}
-            as={Link}
-            to={getPath('userProfile', user.id)}
-            _focus={{ boxShadow: 'none' }}
-            _hover={{ backgroundColor: 'neutral.200' }}
-            width="100%"
-            overflow="hidden"
-          >
-            <NavBarUserProfileMenuItem />
-          </MenuItem>
-
-          {isUserAProjectCreator && toDisplayProject && (
+        {isLoggedIn ? (
+          <>
             <MenuItem
               padding={0}
               as={Link}
-              to={getPath('project', toDisplayProject.name)}
+              to={getPath('userProfile', user.id)}
               _focus={{ boxShadow: 'none' }}
-            >
-              <NavBarUserProjectMenuItem project={toDisplayProject} />
-            </MenuItem>
-          )}
-
-          <MenuDivider />
-        </>
-      ) : null}
-
-      <MenuItem as={Link} to={getPath('index')} fontWeight={'bold'}>
-        {t('Recent Activity')}
-      </MenuItem>
-
-      <MenuItem fontWeight={'bold'} as={Link} to={getPath('projectDiscovery')}>
-        {t('Discover Projects')}
-      </MenuItem>
-
-      <MenuItem fontWeight={'bold'} as={Link} to={getPath('grants')}>
-        {t('Grants')}
-      </MenuItem>
-
-      <MenuDivider />
-
-      <MenuItem color={'neutral.700'}>
-        <MenuItemLink destinationPath={getPath('about')}>
-          {t('About')}
-        </MenuItemLink>
-      </MenuItem>
-
-      <MenuItem color={'neutral.700'}>
-        <MenuItemLink destinationPath={FAQUrl} isExternal>
-          {t('FAQ')}
-        </MenuItemLink>
-      </MenuItem>
-
-      <MenuItem color={'neutral.700'}>
-        <MenuItemLink destinationPath={FeedbackUrl} isExternal>
-          {t('Feedback')}
-        </MenuItemLink>
-      </MenuItem>
-
-      {isLoggedIn ? (
-        <>
-          <MenuDivider />
-
-          <MenuItem onClick={logout} color={'neutral.700'} px={4} py={2}>
-            {t('Sign Out')}
-          </MenuItem>
-        </>
-      ) : null}
-      <MenuDivider />
-      <ModeChange />
-
-      {canInstall && isLoggedIn && (
-        <>
-          <MenuDivider />
-          <MenuItem as={Stack} px={4} py={2}>
-            <Button
-              variant="secondary"
-              leftIcon={<DownloadIcon />}
+              _hover={{ backgroundColor: 'neutral.200' }}
               width="100%"
-              onClick={handlePrompt}
+              overflow="hidden"
             >
-              {t('Install Geyser')}
-            </Button>
-          </MenuItem>
-        </>
-      )}
+              <NavBarUserProfileMenuItem />
+            </MenuItem>
+
+            {isUserAProjectCreator && toDisplayProject && (
+              <MenuItem
+                padding={0}
+                as={Link}
+                to={getPath('project', toDisplayProject.name)}
+                _focus={{ boxShadow: 'none' }}
+              >
+                <NavBarUserProjectMenuItem project={toDisplayProject} />
+              </MenuItem>
+            )}
+
+            <MenuDivider />
+          </>
+        ) : null}
+
+        <MenuItem as={Link} to={getPath('index')} fontWeight={'bold'}>
+          {t('Recent Activity')}
+        </MenuItem>
+
+        <MenuItem
+          fontWeight={'bold'}
+          as={Link}
+          to={getPath('projectDiscovery')}
+        >
+          {t('Discover Projects')}
+        </MenuItem>
+
+        <MenuItem fontWeight={'bold'} as={Link} to={getPath('grants')}>
+          {t('Grants')}
+        </MenuItem>
+        <MenuDivider />
+      </MenuGroup>
+      <MenuGroup as={VStack} spacing="0" style={{ width: '100%' }}>
+        <MobileDivider />
+        <MenuItem color={'neutral.700'}>
+          <MenuItemLink destinationPath={getPath('about')}>
+            {t('About')}
+          </MenuItemLink>
+        </MenuItem>
+
+        <MenuItem color={'neutral.700'}>
+          <MenuItemLink destinationPath={FAQUrl} isExternal>
+            {t('FAQ')}
+          </MenuItemLink>
+        </MenuItem>
+
+        <MenuItem color={'neutral.700'}>
+          <MenuItemLink destinationPath={FeedbackUrl} isExternal>
+            {t('Feedback')}
+          </MenuItemLink>
+        </MenuItem>
+
+        {isLoggedIn ? (
+          <>
+            <MenuDivider />
+
+            <MenuItem onClick={logout} color={'neutral.700'} px={4} py={2}>
+              {t('Sign Out')}
+            </MenuItem>
+          </>
+        ) : null}
+        <MenuDivider />
+        <ModeChange />
+
+        {canInstall && isLoggedIn && (
+          <>
+            <MenuDivider />
+            <MenuItem as={Stack} px={4} py={2}>
+              <Button
+                variant="secondary"
+                leftIcon={<DownloadIcon />}
+                width="100%"
+                onClick={handlePrompt}
+              >
+                {t('Install Geyser')}
+              </Button>
+            </MenuItem>
+          </>
+        )}
+      </MenuGroup>
     </>
   )
 }

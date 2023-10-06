@@ -1,8 +1,9 @@
-import { Button, ButtonProps, Text, Tooltip } from '@chakra-ui/react'
+import { Button, ButtonProps, Tooltip } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { BsFillPatchCheckFill } from 'react-icons/bs'
 
-import { BoltIcon } from '../../../../components/icons'
+import { Body2 } from '../../../../components/typography'
 import { copyTextToClipboard } from '../../../../utils'
 
 interface ILightningQR extends ButtonProps {
@@ -27,13 +28,16 @@ export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
       >
         <Button
           size="sm"
-          leftIcon={<BoltIcon />}
+          leftIcon={<BsFillPatchCheckFill />}
           variant="secondary"
           onClick={handleAddressCopy}
           id="lightning-address"
+          border="none"
           {...rest}
         >
-          <Text isTruncated>{name}</Text>
+          <Body2 xBold isTruncated>
+            {name}
+          </Body2>
         </Button>
       </Tooltip>
     </>

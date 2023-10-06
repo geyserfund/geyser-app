@@ -21,6 +21,7 @@ export const ProjectFundingQR = ({ project }: ProjectFundingQRProps) => {
           variant="secondary"
           icon={<QrIcon />}
           aria-label="project qr code"
+          border="none"
           onClick={onOpen}
         />
       </Tooltip>

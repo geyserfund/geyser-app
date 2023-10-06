@@ -8,7 +8,7 @@ import {
   Rewards,
   Story,
 } from './sections'
-import { CreatorSocial } from './sections/CreatorSocial'
+import { Details } from './sections/Details'
 
 export const ProjectMainBody = () => {
   const { project, isProjectOwner } = useProjectContext()
@@ -23,10 +23,8 @@ export const ProjectMainBody = () => {
         <LaunchProjectNotice project={project} />
       ) : null}
 
-      <CreatorSocial />
-
       <Story />
-
+      <Details />
       {projectDetails.entriesLength ? <Entries /> : null}
       {projectDetails.rewardsLength ? <Rewards /> : null}
       {projectDetails.milestonesLength ? <Milestones /> : null}

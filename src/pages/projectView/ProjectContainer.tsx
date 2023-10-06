@@ -11,7 +11,6 @@ import { useMobileMode } from '../../utils'
 import { ProjectCreateDraftModal } from '../projectCreate/components/ProjectCreateDraftModal'
 import { ProjectCreateLaunchedModal } from '../projectCreate/components/ProjectCreateLaunchedModal'
 import { ProjectMobileBottomNavigation } from './projectNavigation/components/ProjectMobileBottomNavigation'
-import { ProjectMobileNavigation } from './projectNavigation/components/ProjectMobileNavigation'
 import { ProjectNavigation } from './projectNavigation/components/ProjectNavigation'
 
 export const ProjectContainer = () => {
@@ -86,7 +85,7 @@ export const ProjectContainer = () => {
         image={project?.thumbnailImage || ''}
         type="article"
       />
-      {isMobile ? <ProjectMobileNavigation /> : <ProjectNavigation />}
+      {!isMobile ? <ProjectNavigation /> : null}
 
       <Outlet />
 

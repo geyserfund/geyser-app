@@ -16,7 +16,6 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { createUseStyles } from 'react-jss'
 import {
   Link,
   Location,
@@ -318,7 +317,6 @@ export const TopNavBar = () => {
           paddingY="10px"
           alignItems="center"
           justifyContent="start"
-          overflow="hidden"
           position="relative"
         >
           {shouldShowLeftSideMenuButton ? (
