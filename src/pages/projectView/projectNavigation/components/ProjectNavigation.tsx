@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { PropsWithChildren, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import { EntryEditIcon, RewardGiftIcon } from '../../../../components/icons'
 import {
@@ -21,12 +21,14 @@ import {
   MilestoneIcon,
   OverviewIcon,
 } from '../../../../components/icons/svg'
+import { GeyserLogoIcon } from '../../../../components/icons/svg/GeyserLogoIcon'
 import { ProjectIcon } from '../../../../components/icons/svg/ProjectIcon'
 import { Body1, Caption } from '../../../../components/typography'
 import { getPath, PathName } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { useMobileMode } from '../../../../utils'
 import { useProjectDetails } from '../hooks/useProjectDetails'
+import { useProjectSideNavAtom } from '../sideNav'
 import { ProjectBackButton } from './ProjectBackButton'
 
 export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
@@ -34,6 +36,8 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
   const navigate = useNavigate()
   const location = useLocation()
   const isMobile = useMobileMode()
+  const [_, changeProjectSideNavOpen] = useProjectSideNavAtom()
+
   const { isProjectOwner, onCreatorModalOpen, project } = useProjectContext()
 
   const { entriesLength, rewardsLength, milestonesLength } =
@@ -123,10 +127,15 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
       pb={2}
       maxWidth={{ base: 'auto', lg: '100px', xl: '250px' }}
       width="100%"
+      height="100%"
       alignItems="end"
       spacing="20px"
     >
-      <VStack width={{ base: '180px', lg: '100px', xl: '200px' }}>
+      <VStack
+        height="100%"
+        width={{ base: '180px', lg: '100px', xl: '200px' }}
+        spacing="20%"
+      >
         {!isMobile && <ProjectBackButton width="100%" />}
         {hasItems || isProjectOwner ? (
           <VStack spacing="15px" w="full">
@@ -223,6 +232,18 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
             />
           </VStack>
         ) : null}
+        <VStack w="full">
+          <Button
+            as={Link}
+            w="full"
+            to={getPath('index')}
+            variant="secondary"
+            onClick={changeProjectSideNavOpen}
+            leftIcon={<GeyserLogoIcon />}
+          >
+            {t('Geyser home')}
+          </Button>
+        </VStack>
       </VStack>
     </VStack>
   )
