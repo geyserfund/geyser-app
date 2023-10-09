@@ -1,15 +1,13 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { HStack, VStack, Text, IconButton } from '@chakra-ui/react'
-import { ViewIcon } from '@chakra-ui/icons'
+import { HStack, VStack, Text } from '@chakra-ui/react'
 
 import { numberWithCommas, getShortAmountLabel } from '../../../../utils'
 import type { User, UserProjectContribution } from '../../../../types'
 import { CardLayout } from '../../../../components/layouts'
 import { SatoshiAmount } from '../../../../components/ui'
 import { H2, H3 } from '../../../../components/typography'
-import { useContributionSummary } from '../../hooks/useContributionSummary'
 
 interface SummaryBodyProps {
   totalFunded: number
@@ -23,21 +21,9 @@ export const SummaryBody = ({
   ranking,
 }: SummaryBodyProps) => {
   const { t } = useTranslation()
-  const { isShown, toggle } = useContributionSummary()
-  return isShown ? (
+  return (
     <CardLayout width="100%" wrap="wrap" noMobileBorder>
-      <HStack justifyContent="space-between">
-        <H2>{t('Contributions summary')}</H2>
-        <IconButton
-          aria-label={t('Hide')}
-          bg="transparent"
-          cursor="pointer"
-          onClick={toggle}
-          _hover={{ bg: 'transparent' }}
-          as={ViewIcon}
-          boxSize={4}
-        />
-      </HStack>
+      <H2>{t('Contributions summary')}</H2>
       <HStack
         w="full"
         h="full"
@@ -82,7 +68,7 @@ export const SummaryBody = ({
         )}
       </HStack>
     </CardLayout>
-  ) : null
+  )
 }
 
 export const Summary = ({ userProfile }: { userProfile: User }) => {
