@@ -25,6 +25,9 @@ const useStyles = createUseStyles({
       textTransform: 'capitalize',
     },
   },
+  xaxis: {
+    zIndex: 11,
+  },
 })
 
 export type HistoryDataType = {
@@ -86,7 +89,12 @@ export const HistoricalChart = ({
               />
             </linearGradient>
           </defs>
-          <XAxis dataKey="name" tickMargin={10} tick={<TickComponent />} />
+          <XAxis
+            className={classes.xaxis}
+            dataKey="name"
+            tickMargin={10}
+            tick={<TickComponent />}
+          />
           <YAxis
             width={isMobile ? 50 : 60}
             yAxisId="visitorCount"
