@@ -42,8 +42,9 @@ export const ModeChange = () => {
     <>
       <HStack
         bgColor="neutral.200"
-        borderRadius={8}
-        mx={3}
+        borderRadius={{ base: '8px', lg: '0px' }}
+        mx={{ base: 2, lg: 0 }}
+        mt={2}
         p={2}
         spacing={3}
         justifyContent={{ base: 'space-between', lg: 'flex-start' }}

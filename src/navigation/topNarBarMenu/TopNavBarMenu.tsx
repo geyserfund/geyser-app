@@ -41,7 +41,7 @@ export const TopNavBarMenu = ({ isOpen }: Props) => {
         </MenuButton>
       )}
 
-      <MenuList width="150px">
+      <MenuList width="150px" paddingBottom="0">
         <TopNavBarMenuList />
       </MenuList>
     </Menu>

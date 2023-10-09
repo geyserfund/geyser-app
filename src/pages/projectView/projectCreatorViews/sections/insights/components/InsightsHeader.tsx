@@ -26,7 +26,12 @@ export const InsightsHeader = () => {
         <InsightsOptionsSelect />
       </HStack>
       {!isMobile && (
-        <Box px={2} py={1} borderRadius="8px" backgroundColor="primary.400">
+        <Box
+          px={'20px'}
+          py={'5px'}
+          borderRadius="8px"
+          backgroundColor="primary.400"
+        >
           <Text color="black">{t('BETA')}</Text>
         </Box>
       )}

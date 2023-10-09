@@ -1,41 +1,50 @@
-import { Container, Heading, HStack, Text, VStack } from '@chakra-ui/react'
+import { Heading, HStack, MenuItem } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 
 import { ProjectListItemImage } from '../../../components/molecules'
-import { Project } from '../../../types/generated/graphql'
+import { Body2 } from '../../../components/typography'
+import { getPath } from '../../../constants'
+import { useAuthContext } from '../../../context'
+import { ProjectStatus } from '../../../types/generated/graphql'
 
-type Props = {
-  project: Pick<Project, 'title' | 'name' | 'thumbnailImage'>
-}
+export const NavBarUserProjectMenuItem = () => {
+  const { user } = useAuthContext()
 
-export const NavBarUserProjectMenuItem = ({ project }: Props) => {
+  const toDisplayProject =
+    user.ownerOf?.length > 0
+      ? user.ownerOf.find(
+          (data) => data?.project?.status === ProjectStatus.Active,
+        )?.project || user.ownerOf[0]?.project
+      : undefined
+
+  if (!toDisplayProject) return null
+
   return (
-    <Container padding={4}>
-      <VStack
-        spacing={1}
-        paddingX={2}
-        paddingY={1.5}
-        alignItems="flex-start"
-        backgroundColor={'neutral.200'}
-        borderRadius="sm"
-        overflow={'hidden'}
+    <>
+      <Body2
+        fontSize={'10px'}
+        xBold
+        fontWeight={700}
+        color={'neutral.500'}
+        px={3}
       >
-        <Text
-          textTransform={'uppercase'}
-          fontSize="xs"
-          fontWeight={'bold'}
-          color={'neutral.500'}
-        >
-          Project
-        </Text>
+        Project
+      </Body2>
 
+      <MenuItem
+        as={Link}
+        display="block"
+        to={getPath('project', toDisplayProject.name)}
+        _focus={{ boxShadow: 'none' }}
+      >
         <HStack spacing={1} overflow="hidden" width="full">
-          <ProjectListItemImage project={project} flexShrink={0} />
+          <ProjectListItemImage project={toDisplayProject} flexShrink={0} />
 
           <Heading fontWeight={600} fontSize="16px" as={'h6'} isTruncated>
-            {project.title}
+            {toDisplayProject.title}
           </Heading>
         </HStack>
-      </VStack>
-    </Container>
+      </MenuItem>
+    </>
   )
 }

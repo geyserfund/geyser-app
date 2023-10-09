@@ -1,6 +1,6 @@
 import { DownloadIcon } from '@chakra-ui/icons'
 import { MenuItem } from '@chakra-ui/menu'
-import { Button, MenuDivider, MenuGroup, Stack, VStack } from '@chakra-ui/react'
+import { Button, MenuDivider, MenuGroup, Stack } from '@chakra-ui/react'
 import { useCallback, useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -12,7 +12,6 @@ import {
   useServiceWorkerUpdate,
 } from '../../context'
 import { MobileDivider } from '../../pages/grants/components'
-import { ProjectStatus } from '../../types'
 import { useMobileMode } from '../../utils'
 import { useRouteMatchesForTopNavBar } from '../topNavBar/topNavBarAtom'
 import {
@@ -79,16 +78,9 @@ export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
     return isLoggedIn === false && isMobile === true && showSignInButton
   }, [showSignInButton, isLoggedIn, isMobile])
 
-  const toDisplayProject =
-    user.ownerOf?.length > 0
-      ? user.ownerOf.find(
-          (data) => data?.project?.status === ProjectStatus.Active,
-        )?.project || user.ownerOf[0]?.project
-      : undefined
-
   return (
     <>
-      <MenuGroup as={VStack} w="full" spacing="0">
+      <MenuGroup style={{ width: '100%' }}>
         {shouldShowSignInMenuItem ? (
           <>
             <MenuItem as={Stack} px={4} py={2}>
@@ -119,27 +111,12 @@ export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
 
         {isLoggedIn ? (
           <>
-            <MenuItem
-              padding={0}
-              as={Link}
-              to={getPath('userProfile', user.id)}
-              _focus={{ boxShadow: 'none' }}
-              _hover={{ backgroundColor: 'neutral.200' }}
-              width="100%"
-              overflow="hidden"
-            >
-              <NavBarUserProfileMenuItem />
-            </MenuItem>
-
-            {isUserAProjectCreator && toDisplayProject && (
-              <MenuItem
-                padding={0}
-                as={Link}
-                to={getPath('project', toDisplayProject.name)}
-                _focus={{ boxShadow: 'none' }}
-              >
-                <NavBarUserProjectMenuItem project={toDisplayProject} />
-              </MenuItem>
+            <NavBarUserProfileMenuItem />
+            {isUserAProjectCreator && (
+              <>
+                <MenuDivider />
+                <NavBarUserProjectMenuItem />
+              </>
             )}
 
             <MenuDivider />
@@ -163,7 +140,7 @@ export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
         </MenuItem>
         <MenuDivider />
       </MenuGroup>
-      <MenuGroup as={VStack} spacing="0" style={{ width: '100%' }}>
+      <MenuGroup style={{ width: '100%' }}>
         <MobileDivider />
         <MenuItem color={'neutral.700'}>
           <MenuItemLink destinationPath={getPath('about')}>
@@ -192,7 +169,6 @@ export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
             </MenuItem>
           </>
         ) : null}
-        <MenuDivider />
         <ModeChange />
 
         {canInstall && isLoggedIn && (

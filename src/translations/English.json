@@ -695,6 +695,12 @@
   "Weekly overview":"Weekly overview",
   "Contrib/Views":"Contrib/Views",
   "Funding transactions":"Funding transactions",
-  "No data available":"No data available"
-
+  "No data available":"No data available",
+  "Rewards sold":"Rewards sold",
+  "Geyser home":"Geyser home",
+  "Details":"Details",
+  "Add":"Add",
+  "Write entry":"Write entry",
+  "Add reward":"Add reward",
+  "Funding regions":"Funding regions"
 }

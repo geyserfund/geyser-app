@@ -1,8 +1,10 @@
 import { HStack } from '@chakra-ui/react'
 import { useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Cell, Pie, PieChart, Tooltip } from 'recharts'
 
 import { SkeletonLayout } from '../../../../../../components/layouts'
+import { Body1 } from '../../../../../../components/typography'
 import { ProjectViewBaseStats } from '../../../../../../types'
 import { useCustomTheme } from '../../../../../../utils'
 import { getColorByIndex } from '../helpers'
@@ -16,6 +18,7 @@ export const FundingRegionsPieChart = ({
 }) => {
   const { colors } = useCustomTheme()
   const ref = useRef<HTMLDivElement>(null)
+  const { t } = useTranslation()
 
   const renderLabel = ({ index, name, value, ...rest }: any) => {
     return (
@@ -29,6 +32,8 @@ export const FundingRegionsPieChart = ({
     <HStack ref={ref} w="full" spacing="20px" wrap="wrap">
       {loading ? (
         <SkeletonLayout width="full" height="250px" />
+      ) : data.length === 0 ? (
+        <Body1>{t('No data available')}</Body1>
       ) : (
         <PieChart width={ref.current?.clientWidth || 350} height={250}>
           <Pie
@@ -41,7 +46,7 @@ export const FundingRegionsPieChart = ({
             outerRadius={80}
             label={renderLabel}
           >
-            {data.map((entry, index) => (
+            {data.map((_, index) => (
               <Cell key={`cell-${index}`} fill={getColorByIndex(index)} />
             ))}
           </Pie>

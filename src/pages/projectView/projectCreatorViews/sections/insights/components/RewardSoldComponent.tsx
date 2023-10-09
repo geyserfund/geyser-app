@@ -117,7 +117,7 @@ export const RewardSoldComponent = () => {
       spacing="10px"
       mobileDense
     >
-      <H3>{t('Reward sold')}</H3>
+      <H3>{t('Rewards sold')}</H3>
 
       {rewardSoldData.length > 0 ? (
         <RewardSoldChart

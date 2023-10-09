@@ -1,5 +1,4 @@
 import { Menu, MenuList } from '@chakra-ui/menu'
-import { VStack } from '@chakra-ui/react'
 
 import { TopNavBarMenuList } from '../topNarBarMenu/TopNavBarMenuList'
 import { useProfileSideNavAtom } from './profileSideNavAtom'
@@ -18,10 +17,11 @@ export const ProfileRightSideNav = () => {
         width="full"
         height="100%"
         borderWidth="0px"
-        rootProps={{ width: '100%', height: '100%', maxWidth: '200px' }}
+        rootProps={{ width: '100%', height: '100%', maxWidth: '210px' }}
         backgroundColor="neutral.0"
         shadow="none"
-        as={VStack}
+        display="flex"
+        flexDirection="column"
         justifyContent="space-between"
       >
         <TopNavBarMenuList />
