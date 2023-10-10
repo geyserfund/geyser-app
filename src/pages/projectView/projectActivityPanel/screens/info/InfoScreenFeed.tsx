@@ -15,13 +15,13 @@ export const InfoScreenFeed = () => {
   const isMobile = useMobileMode()
   const { mobileView, project } = useProjectContext()
 
-  const [tab, setTab] = useState('activity')
+  const [tab, setTab] = useState<MobileViews>(MobileViews.leaderboard)
 
   useEffect(() => {
     if (mobileView === MobileViews.contribution) {
-      setTab('activity')
+      setTab(MobileViews.contribution)
     } else if (mobileView === MobileViews.leaderboard) {
-      setTab('leaderBoard')
+      setTab(MobileViews.leaderboard)
     }
 
     return () => {
@@ -35,7 +35,7 @@ export const InfoScreenFeed = () => {
       return null
     }
 
-    const isActivity = tab === 'activity'
+    const isActivity = tab === MobileViews.contribution
 
     if (isActivity) {
       visitedContribution = true

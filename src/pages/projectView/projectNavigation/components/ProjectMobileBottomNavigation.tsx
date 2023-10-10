@@ -99,8 +99,8 @@ export const ProjectNavUI = () => {
     if (mobileView === value) {
       document.scrollingElement?.scrollTo({ top: 0, behavior: 'smooth' })
     } else {
-      setMobileView(value)
       document.scrollingElement?.scrollTo({ top: 0 })
+      setMobileView(value)
     }
   }
 
