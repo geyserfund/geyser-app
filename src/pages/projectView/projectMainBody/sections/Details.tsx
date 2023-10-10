@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import { TitleDivider } from '../../../../components/ui/TitleDivider'
-import { getPath } from '../../../../constants'
+import { getPath, ID } from '../../../../constants'
 import { SortType, useProjectContext } from '../../../../context'
 import { ProjectLinks, SummaryInfoLine, TagBox } from '../components'
 
@@ -19,7 +19,7 @@ export const Details = () => {
   }
 
   return (
-    <CardLayout mobileDense>
+    <CardLayout mobileDense id={ID.project.details.container}>
       <TitleDivider>{t('Details')}</TitleDivider>
       {project.tags?.length > 0 && (
         <SummaryInfoLine

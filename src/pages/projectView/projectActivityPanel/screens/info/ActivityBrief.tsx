@@ -32,6 +32,10 @@ import {
 } from '../../../../../utils'
 import { getProjectBalance } from '../../../../../utils/helpers'
 import { ExternalAccountType } from '../../../../auth'
+import {
+  ContributeButton,
+  ShareButton,
+} from '../../../projectMainBody/components'
 import { BalanceDisplayButton } from './components'
 import {
   ProjectFundersModal,
@@ -305,17 +309,10 @@ export const ActivityBrief = (props: StackProps) => {
       )}
 
       {!isMobile ? (
-        <HStack w="full">
-          <Button
-            variant="primary"
-            leftIcon={<BoltIcon />}
-            width="100%"
-            onClick={() => setMobileView(MobileViews.funding)}
-            isDisabled={!isActive(project?.status)}
-          >
-            {t('Contribute')}
-          </Button>
-        </HStack>
+        <VStack w="full" spacing="10px">
+          <ContributeButton w="full" />
+          <ShareButton w="full" />
+        </VStack>
       ) : null}
       <ProjectFundersModal {...fundersModal} />
     </VStack>

@@ -1,10 +1,9 @@
-import { Button, HStack, Slide, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, HStack, Slide, useDisclosure } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { BoltIcon } from '../../../../components/icons'
-import { Body2 } from '../../../../components/typography'
 import { getPath } from '../../../../constants'
 import { BottomNavContainerCommonStyles } from '../../../../constants/styles'
 import { MobileViews, useProjectContext } from '../../../../context'
@@ -77,14 +76,20 @@ export const ProjectMobileBottomNavigation = ({
 export const ProjectNavUI = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { mobileView, setMobileView, project, isProjectOwner } =
-    useProjectContext()
+  const {
+    mobileView,
+    setMobileView,
+    project,
+    isProjectOwner,
+    onCreatorModalOpen,
+  } = useProjectContext()
 
   const className = useLayoutAnimation()
 
-  const getTextColor = (value: string) => {
-    if (value === mobileView) {
-      return 'neutral.1000'
+  const getTextColor = (value?: MobileViews) => {
+    if (!value) return 'neutral.600'
+    if (mobileView === value) {
+      return 'primary.500'
     }
 
     return 'neutral.600'
@@ -95,7 +100,6 @@ export const ProjectNavUI = () => {
   }
 
   const handleMobileViewClick = (value: MobileViews) => {
-    navigate(getPath('project', project.name))
     if (mobileView === value) {
       document.scrollingElement?.scrollTo({ top: 0, behavior: 'smooth' })
     } else {
@@ -121,11 +125,27 @@ export const ProjectNavUI = () => {
         if (!isProjectOwner && !item.isContributor) return null
 
         const handleClick = () => {
+          handleMobileViewClick(item.mobileView)
           if (item.pathName) {
             navigate(item.pathName)
-          } else if (item.mobileView) {
-            handleMobileViewClick(item.mobileView)
+          } else {
+            navigate(getPath('project', project.name))
           }
+        }
+
+        if (item.name === 'Create') {
+          return (
+            <Button
+              key={item.name}
+              variant="primary"
+              onClick={onCreatorModalOpen}
+              _hover={{}}
+              height="30px"
+              width="50px"
+            >
+              <item.icon fontSize="16px" />
+            </Button>
+          )
         }
 
         return (
@@ -133,16 +153,11 @@ export const ProjectNavUI = () => {
             key={item.name}
             variant="ghost"
             onClick={handleClick}
-            color={getTextColor(MobileViews.description)}
             _hover={{}}
+            color={getTextColor(item.mobileView)}
             padding="5px"
           >
-            <VStack spacing="0px">
-              <item.icon fontSize="30px" />
-              <Body2 fontSize="10px" semiBold color="neutral.700">
-                {t(item.name)}
-              </Body2>
-            </VStack>
+            <item.icon {...item.iconProps} />
           </Button>
         )
       })}

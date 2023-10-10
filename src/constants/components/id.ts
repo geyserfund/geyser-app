@@ -27,6 +27,9 @@ export const ID = {
         container: 'project-story-markdown-container',
       },
     },
+    details: {
+      container: 'project-details-container',
+    },
   },
   profile: {
     tabs: 'user-profile-tab-container',

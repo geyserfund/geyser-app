@@ -1,6 +1,7 @@
 import { useProjectContext } from '../../../context'
 import { useProjectDetails } from '../projectNavigation/hooks/useProjectDetails'
 import {
+  ContributeShare,
   Entries,
   Header,
   LaunchProjectNotice,
@@ -24,6 +25,7 @@ export const ProjectMainBody = () => {
       ) : null}
 
       <Story />
+      <ContributeShare />
       <Details />
       {projectDetails.entriesLength ? <Entries /> : null}
       {projectDetails.rewardsLength ? <Rewards /> : null}

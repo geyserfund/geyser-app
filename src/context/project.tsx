@@ -29,6 +29,11 @@ export enum MobileViews {
   contribution = 'contribution',
   leaderboard = 'leaderBoard',
   funding = 'funding',
+  overview = 'overview',
+  entries = 'entries',
+  milestones = 'milestones',
+  insights = 'insights',
+  contributors = 'contributors',
 }
 
 type ProjectState = {

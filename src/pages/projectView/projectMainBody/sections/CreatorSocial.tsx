@@ -1,6 +1,7 @@
 import { Box, HStack, Link, Text, useBreakpointValue } from '@chakra-ui/react'
 import { NavLink } from 'react-router-dom'
 
+import { Body1 } from '../../../../components/typography'
 import { UserAvatarWithLink } from '../../../../components/ui/UserAvatar'
 import { getPath } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
@@ -21,7 +22,13 @@ export const CreatorSocial = () => {
   }
 
   return (
-    <HStack spacing={4}>
+    <HStack
+      spacing={2}
+      px={1}
+      py={1}
+      borderRadius="8px"
+      background="neutral.100"
+    >
       <Box>
         <UserAvatarWithLink
           height="30px"
@@ -35,9 +42,11 @@ export const CreatorSocial = () => {
         as={NavLink}
         to={getPath('userProfile', user.id)}
       >
-        <Text variant="h3">{user.username}</Text>
+        <Body1 semiBold color="neutral.600">
+          {user.username}
+        </Body1>
       </Link>
-      <HStack ml={2}>
+      <HStack>
         {accountButtonProps.map(({ username, icon, color, props }, index) => {
           if (!icon || !props) {
             return

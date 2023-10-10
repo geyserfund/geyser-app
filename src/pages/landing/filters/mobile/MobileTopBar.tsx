@@ -9,7 +9,7 @@ import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsSliders } from 'react-icons/bs'
 
-import { Body1 } from '../../../../components/typography'
+import { H2 } from '../../../../components/typography'
 import { FilterTopBar } from '../../projects/components'
 import { FilterDrawer } from './FilterDrawer'
 
@@ -38,9 +38,7 @@ export const MobileTopBar = ({
         {...rest}
       >
         <HStack width="100%" justifyContent="space-between" paddingY="6px">
-          <Body1 semiBold color="neutral.1000">
-            {title}
-          </Body1>
+          <H2 color="neutral.1000">{title}</H2>
           <Button
             ref={btnRef}
             size="sm"

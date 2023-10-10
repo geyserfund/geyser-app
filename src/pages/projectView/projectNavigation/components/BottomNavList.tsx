@@ -1,61 +1,89 @@
+import { AddIcon } from '@chakra-ui/icons'
 import { IconProps } from '@chakra-ui/react'
+import { IconType } from 'react-icons'
+import { AiFillHome, AiFillShop } from 'react-icons/ai'
+import { BsBarChartFill, BsFillTrophyFill } from 'react-icons/bs'
+import { FaListUl } from 'react-icons/fa'
 
-import {
-  ContributorsIcon,
-  InsightsIcon,
-  LeaderboardNavIcon,
-  OverviewIcon,
-  RewardGiftIcon,
-} from '../../../../components/icons'
-import { ProjectIcon } from '../../../../components/icons/svg/ProjectIcon'
+import { OverviewIcon } from '../../../../components/icons'
 import { PathName } from '../../../../constants'
 import { MobileViews } from '../../../../context'
 
 export type ProjectNavigationItem = {
-  icon: (props: IconProps) => JSX.Element
+  icon: IconType | React.FC<IconProps>
   name: string
   isCreator?: boolean
   isContributor?: boolean
+  iconProps?: any
   pathName?: PathName
-  mobileView?: MobileViews
+  onClick?: string
+  mobileView: MobileViews
 }
 
 export const navigationItems: ProjectNavigationItem[] = [
   {
-    icon: OverviewIcon,
-    pathName: PathName.projectOverview,
-    name: 'Overview',
-    isCreator: true,
-  },
-  {
-    icon: InsightsIcon,
-    pathName: PathName.projectInsights,
-    name: 'Insights',
-    isCreator: true,
-  },
-  {
-    icon: ContributorsIcon,
-    pathName: PathName.projectContributors,
-    name: 'Contributors',
-    isCreator: true,
-  },
-  {
-    icon: ProjectIcon,
+    icon: AiFillHome,
+    iconProps: {
+      fontSize: '24px',
+    },
     mobileView: MobileViews.description,
     name: 'Project',
     isCreator: true,
     isContributor: true,
   },
-
   {
-    icon: RewardGiftIcon,
+    icon: OverviewIcon,
+    pathName: PathName.projectOverview,
+    mobileView: MobileViews.overview,
+    iconProps: {
+      width: '40px',
+      height: '40px',
+    },
+    name: 'Overview',
+    isCreator: true,
+  },
+  {
+    icon: AddIcon,
+    name: 'Create',
+    mobileView: MobileViews.description,
+    isCreator: true,
+    onClick: 'create',
+  },
+  {
+    icon: BsBarChartFill,
+    iconProps: {
+      fontSize: '24px',
+    },
+    pathName: PathName.projectInsights,
+    mobileView: MobileViews.insights,
+    name: 'Insights',
+    isCreator: true,
+  },
+  {
+    icon: FaListUl,
+    iconProps: {
+      fontSize: '28px',
+    },
+    pathName: PathName.projectContributors,
+    mobileView: MobileViews.contributors,
+    name: 'Contributors',
+    isCreator: true,
+  },
+  {
+    icon: AiFillShop,
+    iconProps: {
+      fontSize: '25px',
+    },
+    pathName: PathName.projectRewards,
     mobileView: MobileViews.rewards,
     name: 'Rewards',
     isContributor: true,
   },
-
   {
-    icon: LeaderboardNavIcon,
+    icon: BsFillTrophyFill,
+    iconProps: {
+      fontSize: '23px',
+    },
     mobileView: MobileViews.leaderboard,
     name: 'Leaderboard',
     isContributor: true,

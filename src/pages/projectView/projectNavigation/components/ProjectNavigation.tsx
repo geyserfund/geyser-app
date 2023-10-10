@@ -25,7 +25,7 @@ import { GeyserLogoIcon } from '../../../../components/icons/svg/GeyserLogoIcon'
 import { ProjectIcon } from '../../../../components/icons/svg/ProjectIcon'
 import { Body1, Caption } from '../../../../components/typography'
 import { getPath, PathName } from '../../../../constants'
-import { useProjectContext } from '../../../../context'
+import { MobileViews, useProjectContext } from '../../../../context'
 import { useMobileMode } from '../../../../utils'
 import { useProjectDetails } from '../hooks/useProjectDetails'
 import { useProjectSideNavAtom } from '../sideNav'
@@ -38,7 +38,8 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
   const isMobile = useMobileMode()
   const [_, changeProjectSideNavOpen] = useProjectSideNavAtom()
 
-  const { isProjectOwner, onCreatorModalOpen, project } = useProjectContext()
+  const { isProjectOwner, onCreatorModalOpen, project, setMobileView } =
+    useProjectContext()
 
   const { entriesLength, rewardsLength, milestonesLength } =
     useProjectDetails(project)
@@ -50,24 +51,28 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
       {
         name: 'Project',
         path: '',
+        mobileView: MobileViews.description,
         icon: ProjectIcon,
         render: true,
       },
       {
         name: 'Entries',
         path: PathName.projectEntries,
+        mobileView: MobileViews.entries,
         icon: EntryEditIcon,
         render: Boolean(entriesLength),
       },
       {
         name: 'Rewards',
         path: PathName.projectRewards,
+        mobileView: MobileViews.rewards,
         icon: RewardGiftIcon,
         render: Boolean(rewardsLength),
       },
       {
         name: 'Milestones',
         path: PathName.projectMilestones,
+        mobileView: MobileViews.milestones,
         icon: MilestoneIcon,
         render: Boolean(milestonesLength),
       },
@@ -80,16 +85,19 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
       {
         name: 'Overview',
         path: PathName.projectOverview,
+        mobileView: MobileViews.overview,
         icon: OverviewIcon,
       },
       {
         name: 'Insights',
         path: PathName.projectInsights,
+        mobileView: MobileViews.insights,
         icon: InsightsIcon,
       },
       {
         name: 'Contributors',
         path: PathName.projectContributors,
+        mobileView: MobileViews.contributors,
         icon: ContributorsIcon,
       },
     ],
@@ -155,13 +163,16 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
 
                   {ProjectCreatorNavigationButtons.map(
                     (creatorNavigationButtons) => {
+                      const handleProjectNavigationButtonClick = () => {
+                        setMobileView(creatorNavigationButtons.mobileView)
+                        navigate(creatorNavigationButtons.path)
+                      }
+
                       return (
                         <ProjectNavigationButton
                           showLabel={showLabel}
                           key={creatorNavigationButtons.name}
-                          onClick={() =>
-                            navigate(creatorNavigationButtons.path)
-                          }
+                          onClick={handleProjectNavigationButtonClick}
                           aria-label={creatorNavigationButtons.name}
                           NavigationIcon={creatorNavigationButtons.icon}
                           isActive={
@@ -183,12 +194,17 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
                   </Caption>
                 </HStack>
                 {ProjectNavigationButtons.map((navigationButton) => {
+                  const handleProjectNavigationButtonClick = () => {
+                    setMobileView(navigationButton.mobileView)
+                    navigate(navigationButton.path)
+                  }
+
                   return (
                     navigationButton.render && (
                       <ProjectNavigationButton
                         key={navigationButton.name}
                         showLabel={showLabel}
-                        onClick={() => navigate(navigationButton.path)}
+                        onClick={handleProjectNavigationButtonClick}
                         aria-label={navigationButton.name}
                         NavigationIcon={navigationButton.icon}
                         isActive={currentActiveButton === navigationButton.name}

@@ -15,7 +15,7 @@ export const ProjectCreatorInsights = () => {
     <VStack
       direction={{ base: 'column', lg: 'row' }}
       w="full"
-      pt="20px"
+      pt={{ base: '10px', lg: '20px' }}
       backgroundColor={{ base: 'neutral.0', lg: 'inherit' }}
       pb={{ base: '80px', lg: '20px' }}
       px={{ base: '10px', lg: '80px' }}

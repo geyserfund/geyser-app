@@ -12,7 +12,7 @@ export const ProjectCreatorOverview = () => {
     <Stack
       direction={{ base: 'column', lg: 'row' }}
       w="full"
-      pt="20px"
+      pt={{ base: '10px', lg: '20px' }}
       pb="20px"
       px={{ base: '10px', lg: '0px' }}
     >

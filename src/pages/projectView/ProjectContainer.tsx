@@ -5,7 +5,7 @@ import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 import Loader from '../../components/ui/Loader'
 import { Head } from '../../config'
 import { getPath } from '../../constants'
-import { useProjectContext } from '../../context'
+import { MobileViews, useProjectContext } from '../../context'
 import { useModal } from '../../hooks/useModal'
 import { useMobileMode } from '../../utils'
 import { ProjectCreateDraftModal } from '../projectCreate/components/ProjectCreateDraftModal'
@@ -17,6 +17,7 @@ export const ProjectContainer = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const params = useParams<{ projectId: string }>()
+  const { setMobileView } = useProjectContext()
 
   const onModalClose = () => navigate(location.pathname, { replace: true })
 
@@ -33,13 +34,14 @@ export const ProjectContainer = () => {
       (!visited || visited !== params.projectId)
     ) {
       navigate(getPath('projectOverview', `${params.projectId}`))
+      setMobileView(MobileViews.overview)
       localStorage.setItem('creatorVisited', `${params.projectId}`)
     }
 
     return () => {
       localStorage.removeItem('creatorVisited')
     }
-  }, [isProjectOwner, params.projectId, navigate])
+  }, [isProjectOwner, params.projectId, navigate, setMobileView])
 
   useEffect(() => {
     const launchModalShouldOpen = location.search.split('launch').length > 1

@@ -39,8 +39,6 @@ export const RewardSoldChart = ({
   const isMobile = useMobileMode()
   const ref = useRef<HTMLDivElement>(null)
 
-  console.log('checking max and min rewards', data, rewardList)
-
   return (
     <VStack ref={ref} w="full" spacing="20px" wrap="wrap">
       {loading ? (

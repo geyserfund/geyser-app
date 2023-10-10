@@ -1,8 +1,8 @@
 import { Button, ButtonProps, Tooltip } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BsFillPatchCheckFill } from 'react-icons/bs'
 
+import { BoltIcon } from '../../../../components/icons'
 import { Body2 } from '../../../../components/typography'
 import { copyTextToClipboard } from '../../../../utils'
 
@@ -28,14 +28,15 @@ export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
       >
         <Button
           size="sm"
-          leftIcon={<BsFillPatchCheckFill />}
+          color="neutral.600"
+          leftIcon={<BoltIcon />}
           variant="secondary"
           onClick={handleAddressCopy}
           id="lightning-address"
           border="none"
           {...rest}
         >
-          <Body2 xBold isTruncated>
+          <Body2 semiBold isTruncated>
             {name}
           </Body2>
         </Button>

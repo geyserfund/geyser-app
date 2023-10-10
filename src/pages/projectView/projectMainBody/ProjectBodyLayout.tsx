@@ -52,7 +52,12 @@ export const ProjectBodyLayout = () => {
 
   const { mobileView, project } = useProjectContext()
 
-  const inView = mobileView === MobileViews.description
+  const inView = [
+    MobileViews.description,
+    MobileViews.rewards,
+    MobileViews.entries,
+    MobileViews.milestones,
+  ].includes(mobileView)
 
   const classes = useProjectLayoutStyles({ isMobile, inView })
 

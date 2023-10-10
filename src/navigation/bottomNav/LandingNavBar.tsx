@@ -9,7 +9,6 @@ import {
   HomeNavIcon2,
   LeaderboardNavIcon,
 } from '../../components/icons'
-import { Caption } from '../../components/typography'
 import { getPath } from '../../constants'
 import { BottomNavContainerCommonStyles } from '../../constants/styles'
 import { useLayoutAnimation } from '../../hooks'
@@ -103,13 +102,7 @@ export const LandingNavBar = () => {
                 display="flex"
                 flexDirection="column"
               >
-                <Icon color={isActive ? 'neutral.1000' : 'neutral.500'} />
-                <Caption
-                  semiBold
-                  color={isActive ? 'neutral.1000' : 'neutral.500'}
-                >
-                  {t(name)}
-                </Caption>
+                <Icon color={isActive ? 'primary.500' : 'neutral.500'} />
               </Button>
             )
           })}

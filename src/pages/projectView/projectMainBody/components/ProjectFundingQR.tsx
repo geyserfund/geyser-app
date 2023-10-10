@@ -19,6 +19,7 @@ export const ProjectFundingQR = ({ project }: ProjectFundingQRProps) => {
         <IconButton
           size="sm"
           variant="secondary"
+          color="neutral.600"
           icon={<QrIcon />}
           aria-label="project qr code"
           border="none"
