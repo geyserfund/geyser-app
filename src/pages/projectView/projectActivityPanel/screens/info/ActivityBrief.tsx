@@ -15,21 +15,15 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEllipsis } from 'react-icons/ai'
 
-import { BoltIcon } from '../../../../../components/icons'
 import { UserAvatar } from '../../../../../components/ui/UserAvatar'
-import { MobileViews, useProjectContext } from '../../../../../context'
+import { useProjectContext } from '../../../../../context'
 import {
   FunderWithUserFragment,
   OrderByOptions,
   ProjectMilestone,
   useProjectFundersQuery,
 } from '../../../../../types'
-import {
-  isActive,
-  toInt,
-  useMobileMode,
-  useNotification,
-} from '../../../../../utils'
+import { toInt, useMobileMode, useNotification } from '../../../../../utils'
 import { getProjectBalance } from '../../../../../utils/helpers'
 import { ExternalAccountType } from '../../../../auth'
 import {
@@ -49,7 +43,7 @@ export const ActivityBrief = (props: StackProps) => {
   const { toast } = useNotification()
   const isMobile = useMobileMode()
 
-  const { project, setMobileView } = useProjectContext()
+  const { project } = useProjectContext()
 
   const {
     isOpen: isToolTipOpen,
