@@ -151,22 +151,6 @@ export const ActivityBrief = (props: StackProps) => {
     }
   }, [balance, project])
 
-  const getTrackColor = useCallback(() => {
-    switch (milestoneIndex % 4) {
-      case 1:
-        if (milestoneIndex === 1) return 'neutral.200'
-        return 'primary.100'
-      case 2:
-        return 'primary.400'
-      case 3:
-        return 'primary.200'
-      case 0:
-        return 'primary.600'
-      default:
-        return 'neutral.200'
-    }
-  }, [milestoneIndex])
-
   const getColor = useCallback(() => {
     switch (milestoneIndex % 4) {
       case 1:
@@ -202,19 +186,13 @@ export const ActivityBrief = (props: StackProps) => {
           size="116px"
           thickness="16px"
           color={getColor()}
-          trackColor={getTrackColor()}
+          trackColor="neutral.200"
         />
       )
     }
 
     return null
-  }, [
-    circularPercentage,
-    currentMilestone,
-    funderLoading,
-    getColor,
-    getTrackColor,
-  ])
+  }, [circularPercentage, currentMilestone, funderLoading, getColor])
 
   const getMilestoneValue = useCallback(() => {
     if (currentMilestone) {
