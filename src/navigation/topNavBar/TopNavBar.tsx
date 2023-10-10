@@ -37,6 +37,7 @@ import { useProjectSideNavAtom } from '../../pages/projectView/projectNavigation
 import { useMobileMode } from '../../utils'
 import { useProfileSideNavAtom } from '../profileRightSideNav'
 import { TopNavBarMenu } from '../topNarBarMenu/TopNavBarMenu'
+import { ProjectTitle } from './components/ProjectTitle'
 import { useRouteMatchesForTopNavBar } from './topNavBarAtom'
 
 const navItems = [
@@ -336,21 +337,7 @@ export const TopNavBar = () => {
               textAlign="left"
             />
           )}
-          {shouldShowCustomTitle ? (
-            <Text
-              variant="h3"
-              noOfLines={1}
-              size="sm"
-              textAlign="center"
-              as={Link}
-              to={navData.projectPath}
-              flexGrow={1}
-            >
-              {navData.projectTitle}
-            </Text>
-          ) : (
-            <Box flexGrow={1} />
-          )}
+          {shouldShowCustomTitle ? <ProjectTitle /> : <Box flexGrow={1} />}
 
           <HStack alignItems={'center'} spacing={2} flexGrow={0}>
             {shouldShowNavItems ? (

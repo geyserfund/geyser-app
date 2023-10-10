@@ -131,116 +131,148 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
       alignItems="end"
       spacing="20px"
     >
-      <VStack height="100%" width={{ base: '190px', lg: '100px', xl: '200px' }}>
-        {isMobile && (
-          <ProjectBackButton width="100%" onClick={changeProjectSideNavOpen} />
-        )}
-        {hasItems || isProjectOwner ? (
-          <VStack spacing="15px" w="full">
-            {isProjectOwner && (
+      <VStack
+        height="100%"
+        width={{ base: '190px', lg: '100px', xl: '200px' }}
+        justifyContent={{ base: 'space-between', lg: 'flex-start' }}
+      >
+        <VStack width="100%">
+          {isMobile && (
+            <ProjectBackButton
+              width="100%"
+              onClick={changeProjectSideNavOpen}
+            />
+          )}
+          {hasItems || isProjectOwner ? (
+            <VStack spacing="15px" w="full">
+              {isProjectOwner && (
+                <VStack width="100%">
+                  <HStack w="full" justifyContent="start">
+                    <Caption fontWeight={700} color="neutral.500">
+                      {t('Creator view')}
+                    </Caption>
+                  </HStack>
+
+                  {ProjectCreatorNavigationButtons.map(
+                    (creatorNavigationButtons) => {
+                      return (
+                        <ProjectNavigationButton
+                          showLabel={showLabel}
+                          key={creatorNavigationButtons.name}
+                          onClick={() =>
+                            navigate(creatorNavigationButtons.path)
+                          }
+                          aria-label={creatorNavigationButtons.name}
+                          NavigationIcon={creatorNavigationButtons.icon}
+                          isActive={
+                            currentActiveButton ===
+                            creatorNavigationButtons.name
+                          }
+                        >
+                          {t(creatorNavigationButtons.name)}
+                        </ProjectNavigationButton>
+                      )
+                    },
+                  )}
+                </VStack>
+              )}
               <VStack width="100%">
                 <HStack w="full" justifyContent="start">
                   <Caption fontWeight={700} color="neutral.500">
-                    {t('Creator view')}
+                    {t('Project')}
                   </Caption>
                 </HStack>
-
-                {ProjectCreatorNavigationButtons.map(
-                  (creatorNavigationButtons) => {
-                    return (
+                {ProjectNavigationButtons.map((navigationButton) => {
+                  return (
+                    navigationButton.render && (
                       <ProjectNavigationButton
+                        key={navigationButton.name}
                         showLabel={showLabel}
-                        key={creatorNavigationButtons.name}
-                        onClick={() => navigate(creatorNavigationButtons.path)}
-                        aria-label={creatorNavigationButtons.name}
-                        NavigationIcon={creatorNavigationButtons.icon}
-                        isActive={
-                          currentActiveButton === creatorNavigationButtons.name
-                        }
+                        onClick={() => navigate(navigationButton.path)}
+                        aria-label={navigationButton.name}
+                        NavigationIcon={navigationButton.icon}
+                        isActive={currentActiveButton === navigationButton.name}
                       >
-                        {t(creatorNavigationButtons.name)}
+                        {t(navigationButton.name)}
                       </ProjectNavigationButton>
                     )
-                  },
-                )}
-              </VStack>
-            )}
-            <VStack width="100%">
-              <HStack w="full" justifyContent="start">
-                <Caption fontWeight={700} color="neutral.500">
-                  {t('Project')}
-                </Caption>
-              </HStack>
-              {ProjectNavigationButtons.map((navigationButton) => {
-                return (
-                  navigationButton.render && (
-                    <ProjectNavigationButton
-                      key={navigationButton.name}
-                      showLabel={showLabel}
-                      onClick={() => navigate(navigationButton.path)}
-                      aria-label={navigationButton.name}
-                      NavigationIcon={navigationButton.icon}
-                      isActive={currentActiveButton === navigationButton.name}
-                    >
-                      {t(navigationButton.name)}
-                    </ProjectNavigationButton>
                   )
-                )
-              })}
+                })}
+              </VStack>
             </VStack>
-          </VStack>
-        ) : null}
-        {isProjectOwner ? (
-          <VStack w="full" spacing="10px">
-            <Button
-              w="100%"
-              display={{ base: 'block', lg: 'none', xl: 'block' }}
-              variant="primary"
-              onClick={() => onCreatorModalOpen()}
-              leftIcon={<AddIcon fontSize="12px" />}
-            >
-              {t('Add')}
-            </Button>
-            <IconButton
-              w="100%"
-              display={{ base: 'none', lg: 'block', xl: 'none' }}
-              aria-label="Add"
-              variant="primary"
-              onClick={() => onCreatorModalOpen()}
-              icon={<AddIcon fontSize="12px" />}
-            />
+          ) : null}
+          {isProjectOwner ? (
+            <VStack w="full" spacing="10px">
+              <Button
+                w="100%"
+                display={{ base: 'block', lg: 'none', xl: 'block' }}
+                variant="primary"
+                onClick={() => onCreatorModalOpen()}
+                leftIcon={<AddIcon fontSize="12px" />}
+              >
+                {t('Add')}
+              </Button>
+              <IconButton
+                w="100%"
+                display={{ base: 'none', lg: 'block', xl: 'none' }}
+                aria-label="Add"
+                variant="primary"
+                onClick={() => onCreatorModalOpen()}
+                icon={<AddIcon fontSize="12px" />}
+              />
 
+              <Button
+                w="100%"
+                display={{ base: 'block', lg: 'none', xl: 'block' }}
+                variant={'secondary'}
+                onClick={handleProjectDashboardButtonPress}
+                leftIcon={<EditIcon fontSize="12px" />}
+                isTruncated
+              >
+                {t('Edit project')}
+              </Button>
+              <IconButton
+                w="100%"
+                display={{ base: 'none', lg: 'block', xl: 'none' }}
+                aria-label="edit"
+                variant={'secondary'}
+                onClick={handleProjectDashboardButtonPress}
+                icon={<EditIcon fontSize="12px" />}
+              />
+            </VStack>
+          ) : null}
+        </VStack>
+        <VStack
+          width="100%"
+          paddingTop={{ base: 0, lg: '80px' }}
+          paddingBottom={'15px'}
+        >
+          <VStack w="full">
             <Button
-              w="100%"
-              display={{ base: 'block', lg: 'none', xl: 'block' }}
-              variant={'secondary'}
-              onClick={handleProjectDashboardButtonPress}
-              leftIcon={<EditIcon fontSize="12px" />}
-              isTruncated
+              as={Link}
+              display={{ base: 'flex', lg: 'none', xl: 'flex' }}
+              w="full"
+              alignItems="center"
+              to={getPath('index')}
+              variant="secondary"
+              onClick={changeProjectSideNavOpen}
+              leftIcon={<GeyserLogoIcon />}
             >
-              {t('Edit project')}
+              {t('Geyser home')}
             </Button>
             <IconButton
               w="100%"
-              display={{ base: 'none', lg: 'block', xl: 'none' }}
+              as={Link}
+              to={getPath('index')}
+              display={{ base: 'none', lg: 'flex', xl: 'none' }}
               aria-label="edit"
+              justifyContent={'center'}
+              alignItems="center"
               variant={'secondary'}
-              onClick={handleProjectDashboardButtonPress}
-              icon={<EditIcon fontSize="12px" />}
+              onClick={changeProjectSideNavOpen}
+              icon={<GeyserLogoIcon />}
             />
           </VStack>
-        ) : null}
-        <VStack w="full">
-          <Button
-            as={Link}
-            w="full"
-            to={getPath('index')}
-            variant="secondary"
-            onClick={changeProjectSideNavOpen}
-            leftIcon={<GeyserLogoIcon />}
-          >
-            {t('Geyser home')}
-          </Button>
         </VStack>
       </VStack>
     </VStack>
