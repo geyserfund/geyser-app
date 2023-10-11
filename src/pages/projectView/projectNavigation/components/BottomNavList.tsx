@@ -1,11 +1,15 @@
 import { AddIcon } from '@chakra-ui/icons'
 import { IconProps } from '@chakra-ui/react'
 import { IconType } from 'react-icons'
-import { AiFillHome, AiFillShop } from 'react-icons/ai'
-import { BsBarChartFill, BsFillTrophyFill } from 'react-icons/bs'
-import { FaListUl } from 'react-icons/fa'
 
-import { OverviewIcon } from '../../../../components/icons'
+import {
+  ContributorsNavIcon,
+  HomeNavIcon2,
+  InsightsNavIcon,
+  LeaderboardNavIcon,
+  OverviewNavIcon,
+  RewardGiftIcon,
+} from '../../../../components/icons'
 import { PathName } from '../../../../constants'
 import { MobileViews } from '../../../../context'
 
@@ -22,23 +26,16 @@ export type ProjectNavigationItem = {
 
 export const navigationItems: ProjectNavigationItem[] = [
   {
-    icon: AiFillHome,
-    iconProps: {
-      fontSize: '24px',
-    },
+    icon: HomeNavIcon2,
     mobileView: MobileViews.description,
     name: 'Project',
     isCreator: true,
     isContributor: true,
   },
   {
-    icon: OverviewIcon,
+    icon: OverviewNavIcon,
     pathName: PathName.projectOverview,
     mobileView: MobileViews.overview,
-    iconProps: {
-      width: '40px',
-      height: '40px',
-    },
     name: 'Overview',
     isCreator: true,
   },
@@ -50,40 +47,28 @@ export const navigationItems: ProjectNavigationItem[] = [
     onClick: 'create',
   },
   {
-    icon: BsBarChartFill,
-    iconProps: {
-      fontSize: '24px',
-    },
+    icon: InsightsNavIcon,
     pathName: PathName.projectInsights,
     mobileView: MobileViews.insights,
     name: 'Insights',
     isCreator: true,
   },
   {
-    icon: FaListUl,
-    iconProps: {
-      fontSize: '28px',
-    },
+    icon: ContributorsNavIcon,
     pathName: PathName.projectContributors,
     mobileView: MobileViews.contributors,
     name: 'Contributors',
     isCreator: true,
   },
   {
-    icon: AiFillShop,
-    iconProps: {
-      fontSize: '25px',
-    },
+    icon: RewardGiftIcon,
     pathName: PathName.projectRewards,
     mobileView: MobileViews.rewards,
     name: 'Rewards',
     isContributor: true,
   },
   {
-    icon: BsFillTrophyFill,
-    iconProps: {
-      fontSize: '23px',
-    },
+    icon: LeaderboardNavIcon,
     mobileView: MobileViews.leaderboard,
     name: 'Leaderboard',
     isContributor: true,

@@ -16,7 +16,7 @@ export const ProjectView = () => {
         justifyContent="center"
         alignItems="center"
         height="100%"
-        pb={{ base: '80px', lg: '0px' }}
+        pb={{ base: '70px', lg: '0px' }}
       >
         <Box
           width="100%"

@@ -26,16 +26,13 @@ import { ProjectIcon } from '../../../../components/icons/svg/ProjectIcon'
 import { Body1, Caption } from '../../../../components/typography'
 import { getPath, PathName } from '../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
-import { useMobileMode } from '../../../../utils'
 import { useProjectDetails } from '../hooks/useProjectDetails'
 import { useProjectSideNavAtom } from '../sideNav'
-import { ProjectBackButton } from './ProjectBackButton'
 
 export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
-  const isMobile = useMobileMode()
   const [_, changeProjectSideNavOpen] = useProjectSideNavAtom()
 
   const { isProjectOwner, onCreatorModalOpen, project, setMobileView } =
@@ -145,12 +142,33 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         justifyContent={{ base: 'space-between', lg: 'flex-start' }}
       >
         <VStack width="100%">
-          {isMobile && (
-            <ProjectBackButton
-              width="100%"
+          <VStack w="full">
+            <Button
+              as={Link}
+              display={{ base: 'flex', lg: 'none', xl: 'flex' }}
+              w="full"
+              justifyContent="start"
+              alignItems="center"
+              to={getPath('index')}
+              variant="ghost"
               onClick={changeProjectSideNavOpen}
+              leftIcon={<GeyserLogoIcon />}
+            >
+              {t('Geyser home')}
+            </Button>
+            <IconButton
+              w="100%"
+              as={Link}
+              to={getPath('index')}
+              display={{ base: 'none', lg: 'flex', xl: 'none' }}
+              aria-label="edit"
+              justifyContent={'center'}
+              alignItems="center"
+              variant={'ghost'}
+              onClick={changeProjectSideNavOpen}
+              icon={<GeyserLogoIcon />}
             />
-          )}
+          </VStack>
           {hasItems || isProjectOwner ? (
             <VStack spacing="15px" w="full">
               {isProjectOwner && (
@@ -257,38 +275,6 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
               />
             </VStack>
           ) : null}
-        </VStack>
-        <VStack
-          width="100%"
-          paddingTop={{ base: 0, lg: '80px' }}
-          paddingBottom={'15px'}
-        >
-          <VStack w="full">
-            <Button
-              as={Link}
-              display={{ base: 'flex', lg: 'none', xl: 'flex' }}
-              w="full"
-              alignItems="center"
-              to={getPath('index')}
-              variant="secondary"
-              onClick={changeProjectSideNavOpen}
-              leftIcon={<GeyserLogoIcon />}
-            >
-              {t('Geyser home')}
-            </Button>
-            <IconButton
-              w="100%"
-              as={Link}
-              to={getPath('index')}
-              display={{ base: 'none', lg: 'flex', xl: 'none' }}
-              aria-label="edit"
-              justifyContent={'center'}
-              alignItems="center"
-              variant={'secondary'}
-              onClick={changeProjectSideNavOpen}
-              icon={<GeyserLogoIcon />}
-            />
-          </VStack>
         </VStack>
       </VStack>
     </VStack>

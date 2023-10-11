@@ -28,7 +28,7 @@ const Container = styled(Box, {
       height: 'auto !important',
       marginBottom: '20px',
     },
-    '& .ql-container.ql-snow': {
+    '& div.ql-container': {
       border: 'none !important',
     },
     '& a': {

@@ -28,7 +28,7 @@ import { getProjectBalance } from '../../../../../utils/helpers'
 import { ExternalAccountType } from '../../../../auth'
 import {
   ContributeButton,
-  ShareButton,
+  FollowButton,
 } from '../../../projectMainBody/components'
 import { BalanceDisplayButton } from './components'
 import {
@@ -305,7 +305,7 @@ export const ActivityBrief = (props: StackProps) => {
       {!isMobile ? (
         <VStack w="full" spacing="10px">
           <ContributeButton w="full" />
-          <ShareButton w="full" />
+          <FollowButton size="md" w="full" projectId={project?.id} />
         </VStack>
       ) : null}
       <ProjectFundersModal {...fundersModal} />

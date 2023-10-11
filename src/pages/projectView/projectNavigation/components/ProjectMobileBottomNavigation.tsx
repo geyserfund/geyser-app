@@ -41,7 +41,7 @@ export const ProjectMobileBottomNavigation = ({
         direction="bottom"
         in
         style={{
-          zIndex: 10,
+          zIndex: 30,
         }}
         transition={{
           exit: {
@@ -59,12 +59,11 @@ export const ProjectMobileBottomNavigation = ({
 
   return (
     <>
-      {/* {<Box width="100%" height="60px"></Box>} */}
       <Slide
         direction="bottom"
         in={isOpen}
         style={{
-          zIndex: 10,
+          zIndex: 30,
         }}
       >
         <ProjectNavUI />

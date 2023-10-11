@@ -1,8 +1,6 @@
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
-import { DateTime } from 'luxon'
 import { forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AiOutlineCalendar } from 'react-icons/ai'
 
 import { CardLayout } from '../../../../components/layouts'
 import { Body1 } from '../../../../components/typography'
@@ -12,17 +10,20 @@ import { ID } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { validateImageUrl } from '../../../../forms/validations/image'
 import { ProjectStatus } from '../../../../types'
+import { useMobileMode } from '../../../../utils'
 import {
+  ContributeButton,
+  FollowButton,
   LightningAddress,
   ProjectFundingQR,
   ProjectMenu,
-  SummaryInfoLine,
 } from '../components'
 import { CreatorSocial } from './CreatorSocial'
 
 export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()
   const { project, isProjectOwner } = useProjectContext()
+  const isMobile = useMobileMode()
 
   if (!project) {
     return null
@@ -80,7 +81,12 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       >
         {statusContent()}
         <Box>{renderImageOrVideo()}</Box>
-        <VStack w="full" spacing="10px" paddingX={{ base: '10px', lg: 0 }}>
+        <VStack
+          w="full"
+          spacing="10px"
+          paddingX={{ base: '10px', lg: 0 }}
+          alignItems="start"
+        >
           <HStack flexGrow={1} width="100%" spacing={3} alignItems="center">
             <ImageWithReload
               borderRadius="8px"
@@ -114,23 +120,13 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
               {t('Details >')}
             </Body1>
           </HStack>
-          <HStack spacing={5} w="100%" flexWrap="wrap">
-            <CreatorSocial />
-            <SummaryInfoLine
-              label={t('Launched')}
-              icon={
-                <span>
-                  <AiOutlineCalendar color="neutral.600" />
-                </span>
-              }
-            >
-              <Text variant="body2" color="neutral.600">{`${t(
-                'Launched',
-              )} ${DateTime.fromMillis(Number(project.createdAt)).toFormat(
-                'dd LLL yyyy',
-              )}`}</Text>
-            </SummaryInfoLine>
-          </HStack>
+          <CreatorSocial />
+          {isMobile && (
+            <VStack w="full">
+              <ContributeButton w="full" />
+              <FollowButton size="md" w="full" projectId={project?.id} />
+            </VStack>
+          )}
         </VStack>
       </CardLayout>
     </>

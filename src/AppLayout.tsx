@@ -32,6 +32,7 @@ export const AppLayout = () => {
       onRefresh={handleFunction}
       pullingContent={<PullingDownContent />}
       pullDownThreshold={dimensions.pullDownThreshold}
+      isPullable={isMobile}
     >
       <Fade in={true}>
         <Box
