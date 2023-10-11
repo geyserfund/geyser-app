@@ -96,12 +96,9 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
               height="42px"
               maxHeight="80px"
             />
-            <HStack w="full" justifyContent="space-between">
-              <Text flex={1} variant="h2" width="100%" color="neutral.900">
-                {project.title}
-              </Text>
-              {isProjectOwner && <ProjectMenu projectName={project.name} />}
-            </HStack>
+            <Text flex={1} variant="h2" width="100%" color="neutral.900">
+              {project.title}
+            </Text>
           </HStack>
           <Text variant="h3" color="neutral.900">
             {project.shortDescription}
