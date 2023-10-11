@@ -1,12 +1,12 @@
 import { LinkIcon } from '@chakra-ui/icons'
-import { IconButton, Tooltip } from '@chakra-ui/react'
+import { ButtonProps, IconButton, Tooltip } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useProjectContext } from '../../../../../../context'
 import { useNotification } from '../../../../../../utils'
 
-export const ShareProjectButton = () => {
+export const ShareProjectButton = (props: ButtonProps) => {
   const [copied, setCopied] = useState(false)
   const { t } = useTranslation()
   const { project } = useProjectContext()
@@ -39,6 +39,7 @@ export const ShareProjectButton = () => {
         variant={copied ? 'primary' : 'secondary'}
         icon={<LinkIcon />}
         onClick={handleCopyLink}
+        {...props}
       />
     </Tooltip>
   )

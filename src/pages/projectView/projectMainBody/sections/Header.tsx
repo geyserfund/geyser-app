@@ -11,6 +11,7 @@ import { useProjectContext } from '../../../../context'
 import { validateImageUrl } from '../../../../forms/validations/image'
 import { ProjectStatus } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
+import { ShareProjectButton } from '../../projectCreatorViews/sections/overview/elements'
 import {
   ContributeButton,
   FollowButton,
@@ -98,7 +99,11 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             />
 
             <Text flex={1} variant="h2" width="100%" color="neutral.900">
-              {project.title}
+              {project.title}{' '}
+              <span>
+                {' '}
+                <ShareProjectButton border="none" />
+              </span>
             </Text>
           </HStack>
           <Text variant="h3" color="neutral.900">
