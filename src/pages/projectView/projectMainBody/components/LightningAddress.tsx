@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { BoltIcon } from '../../../../components/icons'
-import { Body2 } from '../../../../components/typography'
+import { Body1 } from '../../../../components/typography'
 import { copyTextToClipboard } from '../../../../utils'
 
 interface ILightningQR extends ButtonProps {
@@ -36,9 +36,9 @@ export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
           border="none"
           {...rest}
         >
-          <Body2 semiBold isTruncated>
+          <Body1 semiBold isTruncated>
             {name}
-          </Body2>
+          </Body1>
         </Button>
       </Tooltip>
     </>

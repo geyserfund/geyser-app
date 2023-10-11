@@ -123,6 +123,12 @@ export const ProjectNavUI = () => {
         if (isProjectOwner && !item.isCreator) return null
         if (!isProjectOwner && !item.isContributor) return null
 
+        if (
+          item.name === 'Rewards' &&
+          (!project.rewards || project.rewards.length === 0)
+        )
+          return null
+
         const handleClick = () => {
           handleMobileViewClick(item.mobileView)
           if (item.pathName) {

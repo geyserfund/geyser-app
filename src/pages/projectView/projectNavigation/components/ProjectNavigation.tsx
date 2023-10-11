@@ -41,8 +41,6 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
   const { entriesLength, rewardsLength, milestonesLength } =
     useProjectDetails(project)
 
-  const hasItems = Boolean(entriesLength || rewardsLength || milestonesLength)
-
   const ProjectNavigationButtons = useMemo(
     () => [
       {
@@ -169,72 +167,70 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
               icon={<GeyserLogoIcon />}
             />
           </VStack>
-          {hasItems || isProjectOwner ? (
-            <VStack spacing="15px" w="full">
-              {isProjectOwner && (
-                <VStack width="100%">
-                  <HStack w="full" justifyContent="start">
-                    <Caption fontWeight={700} color="neutral.500">
-                      {t('Creator view')}
-                    </Caption>
-                  </HStack>
-
-                  {ProjectCreatorNavigationButtons.map(
-                    (creatorNavigationButtons) => {
-                      const handleProjectNavigationButtonClick = () => {
-                        setMobileView(creatorNavigationButtons.mobileView)
-                        navigate(creatorNavigationButtons.path)
-                      }
-
-                      return (
-                        <ProjectNavigationButton
-                          showLabel={showLabel}
-                          key={creatorNavigationButtons.name}
-                          onClick={handleProjectNavigationButtonClick}
-                          aria-label={creatorNavigationButtons.name}
-                          NavigationIcon={creatorNavigationButtons.icon}
-                          isActive={
-                            currentActiveButton ===
-                            creatorNavigationButtons.name
-                          }
-                        >
-                          {t(creatorNavigationButtons.name)}
-                        </ProjectNavigationButton>
-                      )
-                    },
-                  )}
-                </VStack>
-              )}
+          <VStack spacing="15px" w="full">
+            {isProjectOwner && (
               <VStack width="100%">
                 <HStack w="full" justifyContent="start">
                   <Caption fontWeight={700} color="neutral.500">
-                    {t('Project')}
+                    {t('Creator view')}
                   </Caption>
                 </HStack>
-                {ProjectNavigationButtons.map((navigationButton) => {
-                  const handleProjectNavigationButtonClick = () => {
-                    setMobileView(navigationButton.mobileView)
-                    navigate(navigationButton.path)
-                  }
 
-                  return (
-                    navigationButton.render && (
+                {ProjectCreatorNavigationButtons.map(
+                  (creatorNavigationButtons) => {
+                    const handleProjectNavigationButtonClick = () => {
+                      setMobileView(creatorNavigationButtons.mobileView)
+                      navigate(creatorNavigationButtons.path)
+                    }
+
+                    return (
                       <ProjectNavigationButton
-                        key={navigationButton.name}
                         showLabel={showLabel}
+                        key={creatorNavigationButtons.name}
                         onClick={handleProjectNavigationButtonClick}
-                        aria-label={navigationButton.name}
-                        NavigationIcon={navigationButton.icon}
-                        isActive={currentActiveButton === navigationButton.name}
+                        aria-label={creatorNavigationButtons.name}
+                        NavigationIcon={creatorNavigationButtons.icon}
+                        isActive={
+                          currentActiveButton === creatorNavigationButtons.name
+                        }
                       >
-                        {t(navigationButton.name)}
+                        {t(creatorNavigationButtons.name)}
                       </ProjectNavigationButton>
                     )
-                  )
-                })}
+                  },
+                )}
               </VStack>
+            )}
+            <VStack width="100%">
+              <HStack w="full" justifyContent="start">
+                <Caption fontWeight={700} color="neutral.500">
+                  {t('Project')}
+                </Caption>
+              </HStack>
+              {ProjectNavigationButtons.map((navigationButton) => {
+                const handleProjectNavigationButtonClick = () => {
+                  setMobileView(navigationButton.mobileView)
+                  navigate(navigationButton.path)
+                }
+
+                return (
+                  navigationButton.render && (
+                    <ProjectNavigationButton
+                      key={navigationButton.name}
+                      showLabel={showLabel}
+                      onClick={handleProjectNavigationButtonClick}
+                      aria-label={navigationButton.name}
+                      NavigationIcon={navigationButton.icon}
+                      isActive={currentActiveButton === navigationButton.name}
+                    >
+                      {t(navigationButton.name)}
+                    </ProjectNavigationButton>
+                  )
+                )
+              })}
             </VStack>
-          ) : null}
+          </VStack>
+
           {isProjectOwner ? (
             <VStack w="full" spacing="10px">
               <Button

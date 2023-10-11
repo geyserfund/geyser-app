@@ -16,13 +16,12 @@ import {
   FollowButton,
   LightningAddress,
   ProjectFundingQR,
-  ProjectMenu,
 } from '../components'
 import { CreatorSocial } from './CreatorSocial'
 
 export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()
-  const { project, isProjectOwner } = useProjectContext()
+  const { project } = useProjectContext()
   const isMobile = useMobileMode()
 
   if (!project) {
@@ -95,7 +94,9 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
               width="42px"
               height="42px"
               maxHeight="80px"
+              alignSelf={'start'}
             />
+
             <Text flex={1} variant="h2" width="100%" color="neutral.900">
               {project.title}
             </Text>
@@ -109,6 +110,9 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           </HStack>
           <HStack w="full" color="neutral.600">
             <Body1 semiBold>{`${project.fundersCount} contributors`}</Body1>
+            <Text paddingBottom="22px" lineHeight={0} fontSize="40px">
+              .
+            </Text>
             <Body1
               semiBold
               _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
@@ -119,7 +123,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           </HStack>
           <CreatorSocial />
           {isMobile && (
-            <VStack w="full">
+            <VStack w="full" paddingTop="5px">
               <ContributeButton w="full" />
               <FollowButton size="md" w="full" projectId={project?.id} />
             </VStack>
