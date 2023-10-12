@@ -13,7 +13,6 @@ import { useTranslation } from 'react-i18next'
 import { EditProfileModalProps } from '../../hooks/useEditProfileModal'
 import { UpdateVerifyEmail } from './components'
 import { DeleteUserProfile } from './components/DeleteUserProfile'
-import { ShowContributionSummary } from './components/ShowContributionSummary'
 
 export const ProfileSettingsModal = ({
   isOpen,
@@ -34,7 +33,6 @@ export const ProfileSettingsModal = ({
               <VStack spacing="20px">
                 <UpdateVerifyEmail />
                 <DeleteUserProfile />
-                <ShowContributionSummary />
               </VStack>
             </ModalBody>
           </Box>

@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useParams } from 'react-router'
+import { useParams } from 'react-router-dom'
 
 import { AlertBox } from '../../components/ui'
 import { useAuthContext } from '../../context'
@@ -33,6 +33,9 @@ export const Profile = () => {
 
   const { user: currentAppUser } = useAuthContext()
   const params = useParams<{ userId: string }>()
+  const id = useMemo(() => {
+    return toInt(params.userId)
+  }, [params])
 
   const [userProfile, setUserProfile] = useState<User>({ ...defaultUser })
 
@@ -43,10 +46,10 @@ export const Profile = () => {
   } = useQuery<ResponseData, QueryVariables>(QUERY_USER_PROFILE, {
     variables: {
       where: {
-        id: toInt(params.userId),
+        id,
       },
     },
-    skip: !params.userId,
+    skip: !id,
   })
 
   const isViewingOwnProfile = useMemo(
@@ -98,7 +101,7 @@ export const Profile = () => {
       position="relative"
       width="100%"
       height="100%"
-      backgroundColor={{ base: 'neutral.0', lg: 'neutral.50' }}
+      backgroundColor="neutral.0"
       paddingY={{ base: '20px', lg: '40px' }}
       paddingX={{ base: '0px', lg: '40px' }}
     >

@@ -1,44 +1,54 @@
-import { Box, HStack, Text, VStack, Wrap } from '@chakra-ui/react'
-import { DateTime } from 'luxon'
+import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AiOutlineCalendar } from 'react-icons/ai'
-import { FiTag } from 'react-icons/fi'
-import { SlLocationPin } from 'react-icons/sl'
-import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
+import { Body1 } from '../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../components/ui'
 import { VideoPlayer } from '../../../../components/ui/VideoPlayer'
-import { getPath } from '../../../../constants'
-import { SortType, useProjectContext } from '../../../../context'
+import { ID } from '../../../../constants'
+import { useAuthContext, useProjectContext } from '../../../../context'
 import { validateImageUrl } from '../../../../forms/validations/image'
+import { ProjectStatus } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
+import { ShareProjectButton } from '../../projectCreatorViews/sections/overview/elements'
 import {
+  ContributeButton,
   FollowButton,
   LightningAddress,
   ProjectFundingQR,
-  ProjectLinks,
-  ProjectMenu,
-  SummaryInfoLine,
-  TagBox,
+  ShareButton,
 } from '../components'
+import { CreatorSocial } from './CreatorSocial'
 
 export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()
+  const { project } = useProjectContext()
+  const { followedProjects } = useAuthContext()
   const isMobile = useMobileMode()
-  const { project, isProjectOwner } = useProjectContext()
 
   if (!project) {
     return null
   }
 
-  const statusContent = (
-    <HStack>
-      <ProjectStatusLabel project={project} />
-      {isProjectOwner && <ProjectMenu projectName={project.name} />}
-    </HStack>
-  )
+  const statusContent = () => {
+    if (project.status === ProjectStatus.Active) {
+      return null
+    }
+
+    return (
+      <HStack w="full" justifyContent="center" pt={{ base: '10px', lg: '0px' }}>
+        <ProjectStatusLabel project={project} />
+      </HStack>
+    )
+  }
+
+  const handleClickDetails = () => {
+    const element = document.getElementById(ID.project.details.container)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   const renderImageOrVideo = () => {
     const isImage = validateImageUrl(project.image)
@@ -49,7 +59,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           width="100%"
           maxHeight="350px"
           objectFit="cover"
-          borderRadius="8px"
+          borderRadius={{ base: 0, lg: '8px' }}
           src={project.image || undefined}
         />
       )
@@ -63,138 +73,77 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   }
 
   return (
-    <CardLayout ref={ref} mobileDense>
-      <Box>{renderImageOrVideo()}</Box>
-      <HStack flexGrow={1} width="100%" spacing={3} alignItems="start">
-        <ImageWithReload
-          borderRadius="8px"
-          objectFit="cover"
-          src={project.thumbnailImage || undefined}
-          width={{ base: '50px', lg: '80px' }}
-          height={{ base: '50px', lg: '80px' }}
-          maxHeight="80px"
-        />
+    <>
+      <CardLayout
+        ref={ref}
+        mobileDense
+        paddingX={{ base: 0, lg: '20px' }}
+        paddingTop={{ base: '0', lg: '20px' }}
+        spacing="10px"
+      >
+        {statusContent()}
+        <Box>{renderImageOrVideo()}</Box>
         <VStack
-          flexGrow={1}
+          w="full"
+          spacing="10px"
+          paddingX={{ base: '10px', lg: 0 }}
           alignItems="start"
-          maxWidth="calc(100% - 76px - 24px)"
         >
-          <Text variant={{ base: 'h2', xl: 'h1' }} width="100%">
-            {project.title}
-          </Text>
-          {!isMobile && (
-            <HStack width="100%" flexWrap="wrap">
-              <HStack flexGrow={1} flexWrap="wrap">
-                <FollowButton projectId={project.id} />
-                <LightningAddress name={`${project.name}@geyser.fund`} />
-                <ProjectFundingQR project={project} />
-              </HStack>
-              {statusContent}
-            </HStack>
-          )}
-        </VStack>
-      </HStack>
+          <HStack flexGrow={1} width="100%" spacing={3} alignItems="center">
+            <ImageWithReload
+              borderRadius="8px"
+              objectFit="cover"
+              src={project.thumbnailImage || undefined}
+              width="42px"
+              height="42px"
+              maxHeight="80px"
+              alignSelf={'start'}
+            />
 
-      {isMobile ? (
-        <>
-          {statusContent}
-          <HStack flexGrow={1}>
-            <FollowButton projectId={project.id} />
+            <Text flex={1} variant="h2" width="100%" color="neutral.900">
+              {project.title}{' '}
+              <span>
+                {' '}
+                <ShareProjectButton border="none" />
+              </span>
+            </Text>
+          </HStack>
+          <Text variant="h3" color="neutral.900">
+            {project.shortDescription}
+          </Text>
+          <HStack w="full">
             <LightningAddress name={`${project.name}@geyser.fund`} />
             <ProjectFundingQR project={project} />
           </HStack>
-        </>
-      ) : null}
+          <HStack w="full" color="neutral.600">
+            <Body1 semiBold>{`${project.fundersCount} contributors`}</Body1>
+            <Text paddingBottom="22px" lineHeight={0} fontSize="40px">
+              .
+            </Text>
+            <Body1
+              semiBold
+              _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
+              onClick={handleClickDetails}
+            >
+              {t('Details >')}
+            </Body1>
+          </HStack>
+          <CreatorSocial />
+          {isMobile && (
+            <VStack w="full" paddingTop="5px">
+              <ContributeButton w="full" />
 
-      <Text variant={{ base: 'h3', xl: 'h2' }}>{project.shortDescription}</Text>
-
-      {project.tags?.length > 0 && (
-        <SummaryInfoLine
-          label={t('Tags')}
-          icon={
-            <span>
-              <FiTag color="neutral.600" />
-            </span>
-          }
-        >
-          <Wrap>
-            {project.tags.map((tag) => {
-              return (
-                <Link
-                  key={tag.id}
-                  to={getPath('landingPage')}
-                  state={{
-                    filter: { tagIds: [tag.id], sort: SortType.balance },
-                  }}
-                >
-                  <TagBox>{tag.label}</TagBox>
-                </Link>
-              )
-            })}
-          </Wrap>
-        </SummaryInfoLine>
-      )}
-
-      {(project.location?.country?.name || project.location?.region) && (
-        <SummaryInfoLine
-          label={t('Region')}
-          icon={
-            <span>
-              <SlLocationPin color="neutral.600" />
-            </span>
-          }
-        >
-          <Wrap spacing="5px">
-            {project?.location?.country?.name &&
-              project.location.country.name !== 'Online' && (
-                <Link
-                  key={project?.location?.country?.name}
-                  to={getPath('landingPage')}
-                  state={{
-                    filter: {
-                      countryCode: project?.location?.country?.code,
-                      sort: SortType.balance,
-                    },
-                  }}
-                >
-                  <TagBox>{project?.location?.country?.name}</TagBox>
-                </Link>
+              {followedProjects.some(
+                (followedProject) => followedProject?.id === project?.id,
+              ) ? (
+                <ShareButton w="full" />
+              ) : (
+                <FollowButton size="md" w="full" projectId={project?.id} />
               )}
-            {project?.location?.region && (
-              <Link
-                key={project?.location?.region}
-                to={getPath('landingPage')}
-                state={{
-                  filter: {
-                    region: project?.location?.region,
-                    sort: SortType.balance,
-                  },
-                }}
-              >
-                <TagBox>{project?.location?.region}</TagBox>
-              </Link>
-            )}
-          </Wrap>
-        </SummaryInfoLine>
-      )}
-
-      <HStack spacing={5} w="100%" flexWrap="wrap">
-        <ProjectLinks links={project.links as string[]} />
-        <SummaryInfoLine
-          label={t('Launched')}
-          icon={
-            <span>
-              <AiOutlineCalendar color="neutral.600" />
-            </span>
-          }
-        >
-          <Text variant="body2" color="neutral.600">{`${t(
-            'Launched',
-          )} ${DateTime.fromMillis(Number(project.createdAt)).toFormat(
-            'dd LLL yyyy',
-          )}`}</Text>
-        </SummaryInfoLine>
-      </HStack>
-    </CardLayout>
+            </VStack>
+          )}
+        </VStack>
+      </CardLayout>
+    </>
   )
 })

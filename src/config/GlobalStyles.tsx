@@ -60,12 +60,6 @@ export const GlobalStyles = () => (
             background: ${lightModeColors.neutral[50]}
           }
         }
-
-        
-
-        #project-scroll-container::-webkit-scrollbar {
-            display: none
-        }
       `}
   />
 )

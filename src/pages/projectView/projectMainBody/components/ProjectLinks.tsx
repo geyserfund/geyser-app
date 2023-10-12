@@ -17,7 +17,7 @@ export const ProjectLinks = ({ links }: { links: string[] }) => {
       label="Links"
       icon={
         <span>
-          <BsLink45Deg color={'neutral.600'} fontSize="22px" />
+          <BsLink45Deg color={'neutral.600'} fontSize="18px" />
         </span>
       }
     >

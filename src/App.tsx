@@ -1,6 +1,6 @@
 import { ApolloProvider } from '@apollo/client'
 import { ChakraProvider } from '@chakra-ui/react'
-import { BrowserRouter } from 'react-router-dom'
+import { Provider } from 'jotai'
 
 import { AppLayout } from './AppLayout'
 import { client } from './config'
@@ -18,8 +18,8 @@ export const App = () => {
     <ChakraProvider>
       <ChakraThemeProvider>
         <ServiceWorkerProvider>
-          <BrowserRouter>
-            <ApolloProvider client={client}>
+          <ApolloProvider client={client}>
+            <Provider>
               <AuthProvider>
                 <NavProvider>
                   <BtcProvider>
@@ -28,8 +28,8 @@ export const App = () => {
                   </BtcProvider>
                 </NavProvider>
               </AuthProvider>
-            </ApolloProvider>
-          </BrowserRouter>
+            </Provider>
+          </ApolloProvider>
         </ServiceWorkerProvider>
       </ChakraThemeProvider>
     </ChakraProvider>

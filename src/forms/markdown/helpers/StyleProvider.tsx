@@ -28,6 +28,9 @@ const Container = styled(Box, {
       height: 'auto !important',
       marginBottom: '20px',
     },
+    '& div.ql-container': {
+      border: 'none !important',
+    },
     '& a': {
       textDecoration: 'underline',
     },

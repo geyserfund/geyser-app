@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { FaArrowLeft } from 'react-icons/fa'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 
 import { SatoshiIconTilted } from '../../../components/icons'
 import { AppFooter } from '../../../components/molecules'
@@ -51,7 +51,7 @@ export const GrantsRoundTwo = ({
     <>
       <Box
         paddingTop={isMobile ? '10px' : '20px'}
-        bg={'neutral.50'}
+        bg={'neutral.0'}
         minHeight="100vh"
         display="flex"
         alignItems={'center'}

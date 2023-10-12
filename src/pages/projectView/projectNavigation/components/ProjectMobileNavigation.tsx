@@ -37,6 +37,7 @@ export const ProjectMobileNavigation = () => {
       borderColor="neutral.200"
     >
       <ProjectBackButton flexGrow={isProjectOwner ? 1 : 0} />
+
       {isProjectOwner ? (
         <>
           <Button

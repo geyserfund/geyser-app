@@ -1,7 +1,7 @@
 import { VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 
 import { Body2 } from '../../../components/typography'
 import { getPath, WalletConnectDetails } from '../../../constants'

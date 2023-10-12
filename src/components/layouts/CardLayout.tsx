@@ -42,7 +42,7 @@ export const CardLayout = forwardRef<HTMLDivElement, CardLayoutProps>(
 
     if (mobileDense && isMobile) {
       return (
-        <Stack p={4} width="100%" {...props} border="none">
+        <Stack p={'10px'} width="100%" {...props} border="none">
           {children}
         </Stack>
       )

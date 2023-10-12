@@ -100,23 +100,6 @@ export const QUERY_PROJECT_UNPUBLISHED_ENTRIES = gql`
   }
 `
 
-export const QUERY_PROJECT_DASHBOARD_DATA = gql`
-  ${FRAGMENT_ENTRY_FOR_PROJECT}
-  query ProjectDashboardData($where: UniqueProjectQueryInput!) {
-    projectGet(where: $where) {
-      unpublishedEntries: entries(input: { where: { published: false } }) {
-        ...EntryForProject
-      }
-      publishedEntries: entries(input: { where: { published: true } }) {
-        ...EntryForProject
-      }
-      statistics {
-        totalVisitors
-      }
-    }
-  }
-`
-
 export const QUERY_PROJECT_FUNDERS = gql`
   ${FRAGMENT_FUNDER_WITH_USER}
   query ProjectFunders($input: GetFundersInput!) {

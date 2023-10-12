@@ -7,12 +7,12 @@ import ReactDOM from 'react-dom/client'
 import {
   createRoutesFromChildren,
   matchRoutes,
+  RouterProvider,
   useLocation,
   useNavigationType,
 } from 'react-router-dom'
 
-import { App } from './App'
-import { GlobalStyles } from './config'
+import { GlobalStyles, router } from './config'
 import { __production__ } from './constants'
 
 const SENTRY_DSN =
@@ -20,6 +20,7 @@ const SENTRY_DSN =
 
 if (__production__) {
   Sentry.init({
+    release: `geyser-app@${import.meta.env.PACKAGE_VERSION}`,
     dsn: SENTRY_DSN,
     integrations: [
       new Sentry.BrowserTracing({
@@ -46,6 +47,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <ColorModeScript initialColorMode="system" type="localStorage" />
     <GlobalStyles />
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>,
 )

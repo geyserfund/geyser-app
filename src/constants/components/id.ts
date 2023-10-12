@@ -27,6 +27,13 @@ export const ID = {
         container: 'project-story-markdown-container',
       },
     },
+    details: {
+      container: 'project-details-container',
+    },
+    rewards: {
+      container: 'project-rewards-container',
+      title: 'project-rewards-title',
+    },
   },
   profile: {
     tabs: 'user-profile-tab-container',

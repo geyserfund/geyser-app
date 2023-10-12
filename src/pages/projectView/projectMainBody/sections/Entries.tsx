@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client'
 import { Button, Center, Text, useDisclosure } from '@chakra-ui/react'
 import { forwardRef, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import {
@@ -17,11 +17,19 @@ import {
   EntryForProjectFragment,
   useProjectUnplublishedEntriesLazyQuery,
 } from '../../../../types'
-import { isActive, isDraft, toInt, useNotification } from '../../../../utils'
+import {
+  isActive,
+  isDraft,
+  toInt,
+  useMobileMode,
+  useNotification,
+} from '../../../../utils'
 import { truthyFilter } from '../../../../utils/array'
 
 export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()
+  const location = useLocation()
+  const isMobile = useMobileMode()
 
   const { project, isProjectOwner, updateProject } = useProjectContext()
 
@@ -47,17 +55,14 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
     }
   }, [fetchUnpublishedEntries, isProjectOwner])
 
-  if (!project) {
+  if (!project || !project.entries.length) {
     return null
   }
 
   const canCreateEntries: boolean =
     Boolean(isProjectOwner) &&
     (isActive(project.status) || isDraft(project.status))
-
-  if (!project.entries.length) {
-    return null
-  }
+  const isEntriesTitleFixed = location.pathname.includes('entries') && isMobile
 
   return (
     <CardLayout
@@ -68,7 +73,12 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
       spacing="20px"
       flexDirection="column"
     >
-      <TitleDivider badge={project.entries.length}>{t('Entries')}</TitleDivider>
+      <TitleDivider
+        badge={project.entries.length}
+        isFixed={isEntriesTitleFixed}
+      >
+        {t('Entries')}
+      </TitleDivider>
 
       <RenderEntries entries={project.entries} />
 

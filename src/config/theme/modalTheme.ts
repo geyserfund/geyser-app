@@ -17,4 +17,23 @@ const baseStyle = definePartsStyle({
   },
 })
 
-export const modalTheme = defineMultiStyleConfig({ baseStyle })
+export const modalTheme = defineMultiStyleConfig({
+  baseStyle,
+  variants: {
+    transparentBackdrop: {
+      overlay: {
+        bg: 'transparent !important',
+        backdropFilter: 'none',
+      },
+    },
+    blurryBackdrop: {
+      overlay: {
+        bg: 'blackAlpha.800',
+        backdropFilter: 'blur(0px)',
+        _dark: {
+          bg: 'blackAlpha.600',
+        },
+      },
+    },
+  },
+})

@@ -105,7 +105,7 @@ export const AccountInfo = ({
                 )
               }
             })}
-            <ConnectAccounts user={userProfile} />
+            {isEdit && userProfile && <ConnectAccounts user={userProfile} />}
           </VStack>
         )}
       </CardLayout>

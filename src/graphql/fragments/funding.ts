@@ -89,3 +89,24 @@ export const FRAGMENT_FUNDING_TX = gql`
     }
   }
 `
+
+export const FRAGMENT_FUNDING_TX_OVERVIEW_PAGE = gql`
+  fragment FundingTxForOverviewPage on FundingTx {
+    funder {
+      user {
+        imageUrl
+        id
+        username
+      }
+      rewards {
+        quantity
+        projectReward {
+          id
+        }
+      }
+    }
+    id
+    amount
+    comment
+  }
+`

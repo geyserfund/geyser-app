@@ -1,6 +1,6 @@
 import { HStack, Text, TextProps } from '@chakra-ui/react'
 
-import { numberWithCommas, getShortAmountLabel } from '../../utils'
+import { getShortAmountLabel, numberWithCommas } from '../../utils'
 import { SatoshiIconTilted } from '../icons'
 
 type Props = TextProps & {
@@ -8,12 +8,14 @@ type Props = TextProps & {
   isLoading?: boolean
   wrapperClassName?: string
   isShortened?: boolean
+  isDecimal?: boolean
 }
 
 export const SatoshiAmount = ({
   label,
   isLoading = false,
   isShortened = false,
+  isDecimal = false,
   wrapperClassName,
   children,
   ...rest
@@ -30,7 +32,7 @@ export const SatoshiAmount = ({
 
       <Text variant="satoshi" {...rest}>
         {isShortened
-          ? getShortAmountLabel(Number(children))
+          ? getShortAmountLabel(Number(children), isDecimal)
           : numberWithCommas(`${children}`)}
       </Text>
     </HStack>

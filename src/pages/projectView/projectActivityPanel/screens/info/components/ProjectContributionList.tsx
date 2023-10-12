@@ -98,7 +98,7 @@ export const ProjectContributionList = ({
         spacing={'15px'}
         marginTop="20px"
         paddingRight="10px"
-        paddingBottom={{ base: '80px', lg: '20px' }}
+        paddingBottom={{ base: '0px', lg: '20px' }}
       >
         {fundingTxs.isLoading ? (
           <ContributionListSkeleton />

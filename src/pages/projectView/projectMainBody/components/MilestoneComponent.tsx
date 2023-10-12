@@ -29,12 +29,15 @@ export const MilestoneComponent = ({
 
       {!isReached && (
         <HStack spacing="5px">
-          <Body1 color="primary.800"> - </Body1>
-          <SatoshiAmount color="primary.800" fontWeight={500}>
+          <Body1 color="primary.800">-</Body1>
+          <SatoshiAmount
+            fontSize={{ base: '24px', lg: '32px' }}
+            color="primary.800"
+            fontWeight={500}
+          >
             {amountRemaining}
           </SatoshiAmount>
           <Body1 semiBold color="neutral.800">
-            {' '}
             {t('needed!')}
           </Body1>
         </HStack>

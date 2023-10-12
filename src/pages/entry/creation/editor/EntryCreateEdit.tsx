@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsImage } from 'react-icons/bs'
 import { createUseStyles } from 'react-jss'
-import { useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { FileUpload } from '../../../../components/molecules'
 import { ImageWithReload } from '../../../../components/ui'
@@ -221,7 +221,7 @@ export const EntryCreateEdit = () => {
         onBack={onBack}
       />
       <VStack
-        background={'neutral.50'}
+        background={'neutral.0'}
         position="relative"
         paddingTop={isMobile ? '0px' : '15px'}
         height="100%"
