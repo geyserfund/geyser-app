@@ -4,7 +4,11 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsTwitter } from 'react-icons/bs'
 
-import { BoltSvgIcon, NostrSvgIcon } from '../../../components/icons'
+import {
+  BoltSvgIcon,
+  FountainIcon,
+  NostrSvgIcon,
+} from '../../../components/icons'
 import { Body2 } from '../../../components/typography'
 import { socialColors } from '../../../styles'
 import { ExternalAccountType } from '../../auth'
@@ -17,6 +21,7 @@ const externalAccountIconMap = {
   [ExternalAccountType.twitter]: BsTwitter,
   [ExternalAccountType.lightning]: BoltSvgIcon,
   [ExternalAccountType.nostr]: NostrSvgIcon,
+  [ExternalAccountType.fountain]: FountainIcon,
 } as { [key: string]: any }
 
 interface ExternalAccountBodyProps extends StackProps {
@@ -41,7 +46,7 @@ export const ExternalAccountBody = ({
 }: ExternalAccountBodyProps) => {
   const { t } = useTranslation()
   const [copy, setCopy] = useState(false)
-  const ExternalIcon = externalAccountIconMap[type]
+  const ExternalIcon = externalAccountIconMap[type] || null
 
   const handleOnCloseClick = handleDelete
     ? (event: React.MouseEvent<SVGElement>) => {
@@ -67,7 +72,7 @@ export const ExternalAccountBody = ({
 
   const hasTooltip = handleCopy && type === ExternalAccountType.nostr
 
-  const body = (
+  const renderBody = () => (
     <HStack
       w="100%"
       color={externalAccountColorMap[type]}
@@ -77,9 +82,9 @@ export const ExternalAccountBody = ({
       {...rest}
     >
       <HStack overflow="hidden">
-        <ExternalIcon boxSize={5} onClick={handleOnCopy} />
+        {ExternalIcon && <ExternalIcon boxSize={5} onClick={handleOnCopy} />}
         <Body2 isTruncated fontWeight="bold" onClick={handleOnCopy}>
-          {text}
+          {`${text}`}
         </Body2>
         {handleOnCopy && (
           <Icon
@@ -95,15 +100,17 @@ export const ExternalAccountBody = ({
     </HStack>
   )
 
-  return hasTooltip ? (
-    <Tooltip
-      label={copy ? t('Copied!') : t('Copy')}
-      placement="top-start"
-      closeOnClick={false}
-    >
-      {body}
-    </Tooltip>
-  ) : (
-    body
-  )
+  if (hasTooltip) {
+    return (
+      <Tooltip
+        label={copy ? t('Copied!') : t('Copy')}
+        placement="top-start"
+        closeOnClick={false}
+      >
+        {renderBody()}
+      </Tooltip>
+    )
+  }
+
+  return <>{renderBody()}</>
 }
