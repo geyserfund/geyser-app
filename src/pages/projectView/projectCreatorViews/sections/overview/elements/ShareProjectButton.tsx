@@ -32,6 +32,7 @@ export const ShareProjectButton = (props: ButtonProps) => {
   return (
     <Tooltip
       label={copied ? t('Copied to clipboard!') : t('Copy project link')}
+      closeOnClick={false}
     >
       <IconButton
         size="sm"

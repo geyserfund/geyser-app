@@ -1,4 +1,5 @@
-import { Box, Button, HStack, Text, Tooltip } from '@chakra-ui/react'
+import { LinkIcon } from '@chakra-ui/icons'
+import { Box, HStack, Text, Tooltip } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -15,38 +16,33 @@ export const ProjectTitle = () => {
       `${window.location.origin}${navData.projectPath}`,
     )
     setCopied(true)
-    setTimeout(() => {
-      setCopied(false)
-    }, 2000)
   }
 
   if (!navData.projectTitle) return <Box flexGrow={1} />
 
   return (
     <Tooltip
-      isOpen={copied}
-      label={t('Project link copied!')}
+      label={copied ? t('Project link copied!') : t('Copy project link')}
       closeOnClick={false}
     >
-      <HStack flexGrow={1} overflow={'hidden'} w="full" justifyContent="center">
-        <Button
-          variant="ghost"
-          backgroundColor="neutral.100"
-          px={2}
+      <HStack
+        flexGrow={1}
+        overflow={'hidden'}
+        w="full"
+        justifyContent="center"
+        borderRadius="8px"
+      >
+        <Text
+          variant="h3"
+          noOfLines={1}
           size="sm"
-          overflow={'hidden'}
+          textAlign="center"
+          onClick={handleTitleClick}
+          _hover={{ cursor: 'pointer' }}
         >
-          <Text
-            variant="h3"
-            noOfLines={1}
-            size="sm"
-            textAlign="center"
-            onClick={handleTitleClick}
-            _hover={{ cursor: 'pointer' }}
-          >
-            {navData.projectTitle}
-          </Text>
-        </Button>
+          {navData.projectTitle}
+        </Text>
+        <LinkIcon fontSize="12px" />
       </HStack>
     </Tooltip>
   )

@@ -88,14 +88,12 @@ export const InsightsStatsComponent = () => {
   }, [project?.id, getProjectStatsInsight, selectionOption])
 
   const contribVirewRatio = projectStats.viewCount
-    ? Math.round(
-        (projectStats.contributionCount / projectStats.viewCount) * 100,
-      )
+    ? Math.round(projectStats.contributionCount / projectStats.viewCount)
     : 0
 
   const prevContribVirewRatio = projectStats.prevViewCount
     ? Math.round(
-        (projectStats.prevContributionCount / projectStats.prevViewCount) * 100,
+        projectStats.prevContributionCount / projectStats.prevViewCount,
       )
     : 0
 
