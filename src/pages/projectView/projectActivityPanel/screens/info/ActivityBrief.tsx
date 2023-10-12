@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { AiOutlineEllipsis } from 'react-icons/ai'
 
 import { UserAvatar } from '../../../../../components/ui/UserAvatar'
-import { useProjectContext } from '../../../../../context'
+import { useAuthContext, useProjectContext } from '../../../../../context'
 import {
   FunderWithUserFragment,
   OrderByOptions,
@@ -29,6 +29,7 @@ import { ExternalAccountType } from '../../../../auth'
 import {
   ContributeButton,
   FollowButton,
+  ShareButton,
 } from '../../../projectMainBody/components'
 import { BalanceDisplayButton } from './components'
 import {
@@ -44,6 +45,7 @@ export const ActivityBrief = (props: StackProps) => {
   const isMobile = useMobileMode()
 
   const { project } = useProjectContext()
+  const { followedProjects } = useAuthContext()
 
   const {
     isOpen: isToolTipOpen,
@@ -305,7 +307,13 @@ export const ActivityBrief = (props: StackProps) => {
       {!isMobile ? (
         <VStack w="full" spacing="10px">
           <ContributeButton w="full" />
-          <FollowButton size="md" w="full" projectId={project?.id} />
+          {followedProjects.some(
+            (followedProject) => followedProject?.id === project?.id,
+          ) ? (
+            <ShareButton w="full" />
+          ) : (
+            <FollowButton size="md" w="full" projectId={project?.id} />
+          )}
         </VStack>
       ) : null}
       <ProjectFundersModal {...fundersModal} />

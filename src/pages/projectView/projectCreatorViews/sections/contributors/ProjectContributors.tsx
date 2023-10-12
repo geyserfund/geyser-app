@@ -1,7 +1,6 @@
 import {
   Button,
   Checkbox,
-  Fade,
   HStack,
   Table,
   TableContainer,
@@ -268,112 +267,104 @@ export const ProjectContributors = () => {
   }
 
   return (
-    <Fade in>
-      <VStack width="100%">
-        <VStack width="100%" alignItems="start">
-          <HStack flexWrap="wrap">
-            <Text fontSize={'16px'} fontWeight={600} whiteSpace="nowrap">
-              {project?.fundersCount} {t('Contributors')}
-            </Text>
-            <Text fontSize={'14px'}>
-              {selectedFunders.length > 0
-                ? `(${selectedFunders.length} ${t('selected')})`
-                : `(${t('none selected')})`}
-            </Text>
-          </HStack>
+    <VStack width="100%">
+      <VStack width="100%" alignItems="start">
+        <HStack flexWrap="wrap">
+          <Text fontSize={'16px'} fontWeight={600} whiteSpace="nowrap">
+            {project?.fundersCount} {t('Contributors')}
+          </Text>
+          <Text fontSize={'14px'}>
+            {selectedFunders.length > 0
+              ? `(${selectedFunders.length} ${t('selected')})`
+              : `(${t('none selected')})`}
+          </Text>
+        </HStack>
 
-          <HStack flexWrap="wrap">
+        <HStack flexWrap="wrap">
+          <Button
+            size="sm"
+            variant="secondary"
+            isActive={copied}
+            onClick={handleCopy}
+            leftIcon={
+              copied ? <BiCheck fontSize="20px" /> : <BiCopy fontSize="20px" />
+            }
+            isDisabled={!selectedFunders.length}
+          >
+            {copied ? t('Copied!') : t('Copy')}
+          </Button>
+          <CSVLink
+            aria-disabled={!selectedFunders.length}
+            data={csvData}
+            asyncOnClick
+            onClick={handleDownloadCSV}
+          >
             <Button
               size="sm"
-              variant="secondary"
-              isActive={copied}
-              onClick={handleCopy}
-              leftIcon={
-                copied ? (
-                  <BiCheck fontSize="20px" />
-                ) : (
-                  <BiCopy fontSize="20px" />
-                )
-              }
               isDisabled={!selectedFunders.length}
+              leftIcon={<BiDownload style={{ fontSize: '20px' }} />}
             >
-              {copied ? t('Copied!') : t('Copy')}
+              {t('Download CSV')}
             </Button>
-            <CSVLink
-              aria-disabled={!selectedFunders.length}
-              data={csvData}
-              asyncOnClick
-              onClick={handleDownloadCSV}
-            >
-              <Button
-                size="sm"
-                isDisabled={!selectedFunders.length}
-                leftIcon={<BiDownload style={{ fontSize: '20px' }} />}
-              >
-                {t('Download CSV')}
-              </Button>
-            </CSVLink>
-          </HStack>
-        </VStack>
-        <TableContainer width="100%">
-          <Table size="sm">
-            <Thead backgroundColor={'primary.100'}>
-              <Tr>
-                <Th maxWidth="30px">
-                  <Checkbox
-                    size="lg"
-                    colorScheme="teal"
-                    isChecked={checkIfAllIsSelected()}
-                    onChange={handleAllCheckClicked}
-                  />
-                </Th>
-                {tableData.map((row) => {
-                  return (
-                    <Th key={row.key} paddingY="10px">
-                      <Text textTransform="capitalize">{row.header}</Text>
-                    </Th>
-                  )
-                })}
-              </Tr>
-            </Thead>
-            <Tbody>
-              {funders.data.map((funder) => {
-                if (funder)
-                  return (
-                    <Tr key={funder.id}>
-                      <Td maxWidth="30px">
-                        <Checkbox
-                          size="lg"
-                          colorScheme="teal"
-                          isChecked={checkIfSelected(funder.id)}
-                          onChange={(event) =>
-                            handleCheckClicked(event, funder)
-                          }
-                        />
-                      </Td>
-                      {tableData.map((row) => {
-                        let value: any = ''
-                        if (row.value) {
-                          value = row.value(funder)
-                        } else if (row.render) {
-                          value = row.render(funder)
-                        } else {
-                          value = funder && funder[row.key as keyof Funder]
-                        }
-
-                        return (
-                          <Td key={row.key} fontSize="14px">
-                            {value}
-                          </Td>
-                        )
-                      })}
-                    </Tr>
-                  )
-              })}
-            </Tbody>
-          </Table>
-        </TableContainer>
+          </CSVLink>
+        </HStack>
       </VStack>
-    </Fade>
+      <TableContainer width="100%">
+        <Table size="sm">
+          <Thead backgroundColor={'primary.100'}>
+            <Tr>
+              <Th maxWidth="30px">
+                <Checkbox
+                  size="lg"
+                  colorScheme="teal"
+                  isChecked={checkIfAllIsSelected()}
+                  onChange={handleAllCheckClicked}
+                />
+              </Th>
+              {tableData.map((row) => {
+                return (
+                  <Th key={row.key} paddingY="10px">
+                    <Text textTransform="capitalize">{row.header}</Text>
+                  </Th>
+                )
+              })}
+            </Tr>
+          </Thead>
+          <Tbody>
+            {funders.data.map((funder) => {
+              if (funder)
+                return (
+                  <Tr key={funder.id}>
+                    <Td maxWidth="30px">
+                      <Checkbox
+                        size="lg"
+                        colorScheme="teal"
+                        isChecked={checkIfSelected(funder.id)}
+                        onChange={(event) => handleCheckClicked(event, funder)}
+                      />
+                    </Td>
+                    {tableData.map((row) => {
+                      let value: any = ''
+                      if (row.value) {
+                        value = row.value(funder)
+                      } else if (row.render) {
+                        value = row.render(funder)
+                      } else {
+                        value = funder && funder[row.key as keyof Funder]
+                      }
+
+                      return (
+                        <Td key={row.key} fontSize="14px">
+                          {value}
+                        </Td>
+                      )
+                    })}
+                  </Tr>
+                )
+            })}
+          </Tbody>
+        </Table>
+      </TableContainer>
+    </VStack>
   )
 }

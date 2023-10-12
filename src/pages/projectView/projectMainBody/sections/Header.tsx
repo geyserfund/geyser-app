@@ -7,7 +7,7 @@ import { Body1 } from '../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../components/ui'
 import { VideoPlayer } from '../../../../components/ui/VideoPlayer'
 import { ID } from '../../../../constants'
-import { useProjectContext } from '../../../../context'
+import { useAuthContext, useProjectContext } from '../../../../context'
 import { validateImageUrl } from '../../../../forms/validations/image'
 import { ProjectStatus } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
@@ -17,12 +17,14 @@ import {
   FollowButton,
   LightningAddress,
   ProjectFundingQR,
+  ShareButton,
 } from '../components'
 import { CreatorSocial } from './CreatorSocial'
 
 export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()
   const { project } = useProjectContext()
+  const { followedProjects } = useAuthContext()
   const isMobile = useMobileMode()
 
   if (!project) {
@@ -130,7 +132,14 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           {isMobile && (
             <VStack w="full" paddingTop="5px">
               <ContributeButton w="full" />
-              <FollowButton size="md" w="full" projectId={project?.id} />
+
+              {followedProjects.some(
+                (followedProject) => followedProject?.id === project?.id,
+              ) ? (
+                <ShareButton w="full" />
+              ) : (
+                <FollowButton size="md" w="full" projectId={project?.id} />
+              )}
             </VStack>
           )}
         </VStack>
