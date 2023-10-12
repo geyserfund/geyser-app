@@ -16,9 +16,9 @@
     "lint:fix": "eslint src/**/*.{ts,tsx} --fix",
     "graph:format": "prettier --write \"src/types/generated/graphql.ts\"",
     "graph:fetch": "run(){ rover graph fetch geyser-graph@$1 > ./schema.graphql; }; run",
+    "graph:fetch:development": "run(){ rover graph introspect http://localhost:4000/graphql > ./schema.graphql; }; run",
     "graph:generate": "run(){ yarn graph:fetch $1 && graphql-codegen --config codegen.ts && rm schema.graphql && yarn graph:format; }; run",
     "graph:generate:staging": "yarn graph:generate staging",
-    "graph:fetch:development": "run(){ rover graph introspect http://localhost:4000/graphql > ./schema.graphql; }; run",
     "graph:generate:development": "run(){ yarn graph:fetch:development && graphql-codegen --config codegen.ts && rm schema.graphql && yarn graph:format; }; run",
     "caddy:trust-ca": "bash ./scripts/trust-caddy-cert.sh",
     "changelog": "yarn conventional-changelog -p conventionalcommits -i CHANGELOG.md -s"

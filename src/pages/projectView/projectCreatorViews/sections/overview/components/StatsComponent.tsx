@@ -42,17 +42,17 @@ export const StatsComponent = () => {
       const projectStats = data.projectStatsGet
 
       const contributionCount =
-        projectStats.current?.projectFundingTxs?.amountSum || 0
-      const contributorsCount = projectStats.current?.projectFunders?.count || 0
+        projectStats.current?.projectFundingTxs?.amountSum ?? 0
+      const contributorsCount = projectStats.current?.projectFunders?.count ?? 0
       const rewardsPurchased =
-        projectStats.current?.projectFunderRewards?.quantitySum || 0
+        projectStats.current?.projectFunderRewards?.quantitySum ?? 0
 
       const prevContributionCount =
-        projectStats.prevTimeRange?.projectFundingTxs?.amountSum || 0
+        projectStats.prevTimeRange?.projectFundingTxs?.amountSum ?? 0
       const prevContributorsCount =
-        projectStats.prevTimeRange?.projectFunders?.count || 0
+        projectStats.prevTimeRange?.projectFunders?.count ?? 0
       const prevRewardsPurchased =
-        projectStats.prevTimeRange?.projectFunderRewards?.quantitySum || 0
+        projectStats.prevTimeRange?.projectFunderRewards?.quantitySum ?? 0
 
       setProjectStats({
         contributionCount,

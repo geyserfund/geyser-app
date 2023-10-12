@@ -414,7 +414,6 @@ export const router = createBrowserRouter([
   {
     path: '/',
     Component: App,
-    // loader: rootLoader,
     children: platformRoutes,
   },
 ])

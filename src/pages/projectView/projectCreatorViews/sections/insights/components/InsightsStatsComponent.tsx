@@ -23,25 +23,25 @@ export const InsightsStatsComponent = () => {
       onCompleted(data) {
         const stats = data.projectStatsGet
         const contributionCount =
-          stats.current?.projectFundingTxs?.amountSum || 0
-        const contributorsCount = stats.current?.projectFunders?.count || 0
+          stats.current?.projectFundingTxs?.amountSum ?? 0
+        const contributorsCount = stats.current?.projectFunders?.count ?? 0
         const rewardsPurchased =
-          stats.current?.projectFunderRewards?.quantitySum || 0
-        const viewCount = stats.current?.projectViews?.viewCount || 0
-        const visitorCount = stats.current?.projectViews?.visitorCount || 0
+          stats.current?.projectFunderRewards?.quantitySum ?? 0
+        const viewCount = stats.current?.projectViews?.viewCount ?? 0
+        const visitorCount = stats.current?.projectViews?.visitorCount ?? 0
 
         const prevContributionCount =
-          stats.prevTimeRange?.projectFundingTxs?.amountSum || 0
+          stats.prevTimeRange?.projectFundingTxs?.amountSum ?? 0
         const prevContributorsCount =
-          stats.prevTimeRange?.projectFunders?.count || 0
+          stats.prevTimeRange?.projectFunders?.count ?? 0
         const prevRewardsPurchased =
-          stats.prevTimeRange?.projectFunderRewards?.quantitySum || 0
-        const prevViewCount = stats.prevTimeRange?.projectViews?.viewCount || 0
+          stats.prevTimeRange?.projectFunderRewards?.quantitySum ?? 0
+        const prevViewCount = stats.prevTimeRange?.projectViews?.viewCount ?? 0
         const prevVisitorCount =
-          stats.prevTimeRange?.projectViews?.visitorCount || 0
+          stats.prevTimeRange?.projectViews?.visitorCount ?? 0
 
-        const regions = stats.current?.projectViews?.regions || []
-        const referrers = stats.current?.projectViews?.referrers || []
+        const regions = stats.current?.projectViews?.regions ?? []
+        const referrers = stats.current?.projectViews?.referrers ?? []
 
         setProjectStats({
           contributionCount,

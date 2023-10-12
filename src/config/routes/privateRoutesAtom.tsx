@@ -2,8 +2,8 @@ import { atom, useAtomValue } from 'jotai'
 
 import { getPath } from '../../constants'
 import {
-  entryCreationRoutes,
-  projectCreatorRoutes,
+  entryCreationRoutes as routesForEntryCreation,
+  projectCreatorRoutes as routesForProjectCreator,
   routeMatchForAtom,
 } from './routesAtom'
 
@@ -12,12 +12,10 @@ const routesForPrivateProjectLaunchAtom = atom(
   routeMatchForAtom(routesForPrivateProjectLaunch),
 )
 
-const routesForProjectCreator = projectCreatorRoutes
 const routesForProjectCreatorAtom = atom(
   routeMatchForAtom(routesForProjectCreator),
 )
 
-const routesForEntryCreation = entryCreationRoutes
 const routesForEntryCreationAtom = atom(
   routeMatchForAtom(routesForEntryCreation),
 )

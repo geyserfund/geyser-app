@@ -31,10 +31,7 @@ const routesForHidingMyProjectsButtonAtom = atom(
   routeMatchForAtom(routesForHidingMyProjectsButton),
 )
 
-const routesForLeftSideMenuButton = projectRoutes
-const routesForLeftSideMenuButtonAtom = atom(
-  routeMatchForAtom(routesForLeftSideMenuButton),
-)
+const routesForLeftSideMenuButtonAtom = atom(routeMatchForAtom(projectRoutes))
 
 const routesForTransparentBackground = [
   getPath('index'),
