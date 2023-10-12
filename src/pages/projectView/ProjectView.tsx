@@ -24,7 +24,7 @@ export const ProjectView = () => {
           display="flex"
           overflow="hidden"
           position="relative"
-          bg={{ base: 'neutral.0', lg: 'neutral.50' }}
+          bg="neutral.0"
           flexDirection={{ base: 'column', lg: 'row' }}
         >
           <ProjectContainer />

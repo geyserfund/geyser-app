@@ -24,7 +24,7 @@ export const GrantsLandingPage = () => {
   return (
     <VStack
       paddingTop={{ base: '10px', lg: '20px' }}
-      bg="neutral.50"
+      bg="neutral.0"
       minHeight="100%"
       width="100%"
       alignItems="center"

@@ -93,7 +93,7 @@ const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
         flexDirection={isMobile ? 'column' : 'row'}
         overflow="hidden"
         position="relative"
-        bg="neutral.50"
+        bg="neutral.0"
       >
         <Head
           title={`${entry.title} - ${project.title}`}

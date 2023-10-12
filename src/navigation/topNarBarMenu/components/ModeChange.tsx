@@ -53,7 +53,7 @@ export const ModeChange = () => {
         <Tooltip label="currency">
           <IconButton
             size={{ base: 'sm', lg: 'md' }}
-            bgColor="neutral.50"
+            bgColor="neutral.0"
             variant="primaryNeutral"
             aria-label="currency-convert"
             icon={<SatSymbolIcon color="neutral.600" />}
@@ -62,7 +62,7 @@ export const ModeChange = () => {
         </Tooltip>
         <Button
           size={{ base: 'sm', lg: 'md' }}
-          bgColor="neutral.50"
+          bgColor="neutral.0"
           color="neutral.600"
           variant="primaryNeutral"
           onClick={onOpen}

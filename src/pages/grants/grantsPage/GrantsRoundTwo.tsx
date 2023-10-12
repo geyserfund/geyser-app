@@ -51,7 +51,7 @@ export const GrantsRoundTwo = ({
     <>
       <Box
         paddingTop={isMobile ? '10px' : '20px'}
-        bg={'neutral.50'}
+        bg={'neutral.0'}
         minHeight="100vh"
         display="flex"
         alignItems={'center'}

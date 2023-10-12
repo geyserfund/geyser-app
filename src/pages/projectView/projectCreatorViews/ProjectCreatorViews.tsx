@@ -22,7 +22,6 @@ export const ProjectCreatorViews = () => {
   return (
     <Box
       className={classNames(classes.container)}
-      backgroundColor="neutral.50"
       height="100%"
       w="100%"
       flexDirection="column"

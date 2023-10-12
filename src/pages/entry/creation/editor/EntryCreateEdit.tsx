@@ -221,7 +221,7 @@ export const EntryCreateEdit = () => {
         onBack={onBack}
       />
       <VStack
-        background={'neutral.50'}
+        background={'neutral.0'}
         position="relative"
         paddingTop={isMobile ? '0px' : '15px'}
         height="100%"

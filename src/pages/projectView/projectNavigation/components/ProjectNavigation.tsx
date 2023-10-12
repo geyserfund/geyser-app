@@ -14,15 +14,16 @@ import { PropsWithChildren, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
-import { EntryEditIcon, RewardGiftIcon } from '../../../../components/icons'
 import {
-  ContributorsIcon,
-  InsightsIcon,
-  MilestoneIcon,
-  OverviewIcon,
-} from '../../../../components/icons/svg'
+  ContributorsNavIcon,
+  EntryEditIcon,
+  HomeNavIcon2,
+  InsightsNavIcon,
+  OverviewNavIcon,
+  RewardGiftIcon,
+} from '../../../../components/icons'
+import { MilestoneIcon } from '../../../../components/icons/svg'
 import { GeyserLogoIcon } from '../../../../components/icons/svg/GeyserLogoIcon'
-import { ProjectIcon } from '../../../../components/icons/svg/ProjectIcon'
 import { Body1, Caption } from '../../../../components/typography'
 import { getPath, PathName } from '../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
@@ -47,7 +48,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         name: 'Project',
         path: '',
         mobileView: MobileViews.description,
-        icon: ProjectIcon,
+        icon: HomeNavIcon2,
         render: true,
       },
       {
@@ -81,19 +82,19 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         name: 'Overview',
         path: PathName.projectOverview,
         mobileView: MobileViews.overview,
-        icon: OverviewIcon,
+        icon: OverviewNavIcon,
       },
       {
         name: 'Insights',
         path: PathName.projectInsights,
         mobileView: MobileViews.insights,
-        icon: InsightsIcon,
+        icon: InsightsNavIcon,
       },
       {
         name: 'Contributors',
         path: PathName.projectContributors,
         mobileView: MobileViews.contributors,
-        icon: ContributorsIcon,
+        icon: ContributorsNavIcon,
       },
     ],
     [],

@@ -207,7 +207,7 @@ export const EntryPreview = () => {
         onBack={onBack}
       />
       <CardLayout
-        background={'neutral.50'}
+        background={'neutral.0'}
         position="relative"
         paddingTop={'70px'}
         height="100%"

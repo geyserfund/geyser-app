@@ -54,7 +54,7 @@ export const AppLayout = () => {
               maxHeight="100%"
               flex="1"
               paddingTop={`${dimensions.topNavBar.desktop.height}px`}
-              backgroundColor={{ base: 'neutral.0', lg: 'neutral.50' }}
+              backgroundColor="neutral.0"
               overflowY={isMobile ? 'initial' : 'auto'}
             >
               <Outlet />

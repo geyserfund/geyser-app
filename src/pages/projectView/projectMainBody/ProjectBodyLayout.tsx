@@ -65,7 +65,6 @@ export const ProjectBodyLayout = () => {
     <>
       <Box
         className={classNames(classes.container)}
-        backgroundColor="neutral.50"
         flex={!isMobile ? 3 : undefined}
         height="100%"
         w="100%"
