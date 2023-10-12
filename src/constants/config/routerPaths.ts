@@ -9,7 +9,15 @@ export enum PathName {
   notFound = 'not-found',
   notAuthorized = 'not-authorized',
   _deprecatedPathNameForProject = 'project',
+
   project = 'project',
+  projectOverview = 'overview',
+  projectInsights = 'insights',
+  projectContributors = 'contributors',
+  projectEntries = 'entries',
+  projectRewards = 'rewards',
+  projectMilestones = 'milestones',
+
   launchProject = 'launch',
   userProfile = 'profile',
   projectDashboard = 'dashboard',
@@ -31,6 +39,7 @@ export enum PathName {
   projectId = ':projectId',
   userId = ':userId',
   entryId = ':entryId',
+  grantId = ':grantId',
 }
 
 // @TODO: These definitions are currently a WIP.
@@ -43,32 +52,52 @@ const pathsMap = {
   landingFeed: () => `/${PathName.landingFeed}`,
   leaderboard: () => `/${PathName.leaderboard}`,
   projectDiscovery: () => `/${PathName.projectDiscovery}`,
+
   grants: (grantId?: string) =>
     grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`,
   grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,
   grantsRoundTwo: () => `/${PathName.grants}/${PathName.grantsRoundTwo}`,
+
   notFound: () => `/${PathName.notFound}`,
   notAuthorized: () => `/${PathName.notAuthorized}`,
   _deprecatedPathForProject: (projectName: string) =>
     `/${PathName._deprecatedPathNameForProject}/${projectName}`,
+
   project: (projectName: string) => `/${PathName.project}/${projectName}`,
-  projectLaunch: (projectName: string, state: 'draft' | 'launch' = 'launch') =>
-    `/${PathName.project}/${projectName}/?${state}`,
+  projectOverview: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectOverview}`,
+  projectInsights: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectInsights}`,
+  projectContributors: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectContributors}`,
+  projectEntries: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectEntries}`,
+  projectRewards: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectRewards}`,
+  projectMilestones: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectMilestones}`,
+
+  entry: (entryID: string) => `/${PathName.entry}/${entryID}`,
   projectEntryCreation: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.entry}`,
   projectEntryDetails: (projectName: string, entryID: string) =>
     `/${PathName.project}/${projectName}/${PathName.entry}/${entryID}`,
   projectEntryPreview: (projectName: string, entryID: string) =>
     `/${PathName.project}/${projectName}/${PathName.entry}/${entryID}/preview`,
+
   publicProjectLaunch: () => `/${PathName.launchProject}/start`,
   privateProjectLaunch: () => `/${PathName.launchProject}`,
+  projectLaunch: (projectName: string, state: 'draft' | 'launch' = 'launch') =>
+    `/${PathName.project}/${projectName}/?${state}`,
   launchProjectWithNode: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.node}`,
   launchProjectDetails: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectDetails}`,
   launchProjectStory: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectStory}`,
+
   userProfile: (userID: string) => `/${PathName.userProfile}/${userID}`,
+
   projectDashboard: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}`,
   dashboardDescription: (projectID: string) =>
@@ -87,8 +116,9 @@ const pathsMap = {
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardStory}`,
   dashboardShop: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardShop}`,
-  entry: (entryID: string) => `/${PathName.entry}/${entryID}`,
+
   badges: () => `/${PathName.badges}`,
+
   about: () => `/${PathName.about}`,
 }
 

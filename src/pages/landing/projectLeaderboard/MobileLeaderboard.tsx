@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { CardLayout, StickToTop } from '../../../components/layouts'
-import { Body1 } from '../../../components/typography'
+import { H2 } from '../../../components/typography'
 import { ButtonComponent } from '../../../components/ui'
 import { getPath, ID } from '../../../constants'
 import { LeaderboardAllTime, LeaderboardThisWeek } from './views'
@@ -84,9 +84,7 @@ export const LeaderboardTopbar = ({
         borderColor="neutral.200"
         paddingY="6px"
       >
-        <Body1 semiBold color="neutral.1000">
-          {t('Activity')}
-        </Body1>
+        <H2 color="neutral.1000">{t('Leaderboard')}</H2>
       </HStack>
       <HStack
         width="100%"

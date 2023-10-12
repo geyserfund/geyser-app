@@ -1,9 +1,8 @@
 import { ApolloError } from '@apollo/client'
 import { Box } from '@chakra-ui/layout'
 import { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router-dom'
 
-import { ProjectMobileBottomNavigation } from '../../components/nav'
 import Loader from '../../components/ui/Loader'
 import { Head } from '../../config'
 import { getPath, ProjectEntryThumbnailPlaceholderUrl } from '../../constants'
@@ -17,6 +16,7 @@ import {
 import { toInt, useMobileMode } from '../../utils'
 import { NotFoundPage } from '../fallback/NotFoundPage'
 import { ProjectActivityPanel } from '../projectView/projectActivityPanel'
+import { ProjectMobileBottomNavigation } from '../projectView/projectNavigation/components/ProjectMobileBottomNavigation'
 import { EntryContainer } from './EntryContainer'
 
 export const EntryPage = () => {
@@ -93,7 +93,7 @@ const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
         flexDirection={isMobile ? 'column' : 'row'}
         overflow="hidden"
         position="relative"
-        bg="neutral.50"
+        bg="neutral.0"
       >
         <Head
           title={`${entry.title} - ${project.title}`}
@@ -109,7 +109,7 @@ const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
           resourceType={FundingResourceType.Entry}
           resourceId={entry.id}
         />
-        {isMobile && <ProjectMobileBottomNavigation />}
+        {isMobile && <ProjectMobileBottomNavigation fixed />}
       </Box>
     </Box>
   )

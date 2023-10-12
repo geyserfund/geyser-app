@@ -31,29 +31,29 @@ export const getShortAmountLabel = (amount: number, decimal?: boolean) => {
   if (amount >= 1000 && amount < 1000000) {
     divisor = 1000
     symbol = 'K'
-    rest = amount % divisor
-    result = Math.round(amount / divisor)
+    rest = ((amount % divisor) / divisor) * 100
+    result = Math.floor(amount / divisor)
   }
 
   if (amount >= 1000000 && amount < 1000000000) {
     divisor = 1000000
     symbol = 'M'
-    rest = amount % divisor
-    result = Math.round(amount / divisor)
+    rest = ((amount % divisor) / divisor) * 100
+    result = Math.floor(amount / divisor)
   }
 
   if (amount >= 1000000000 && amount < 1000000000000) {
     divisor = 1000000000
     symbol = 'B'
     rest = amount % divisor
-    result = Math.round(amount / divisor)
+    result = Math.floor(amount / divisor)
   }
 
   if (amount >= 1000000000000) {
     divisor = 1000000000000
     symbol = 'T'
-    rest = amount % divisor
-    result = Math.round(amount / divisor)
+    rest = ((amount % divisor) / divisor) * 100
+    result = Math.floor(amount / divisor)
   }
 
   const restDigit = rest.toString().charAt(0)

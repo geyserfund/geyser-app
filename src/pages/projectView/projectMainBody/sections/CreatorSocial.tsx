@@ -1,7 +1,7 @@
 import { Box, HStack, Link, Text, useBreakpointValue } from '@chakra-ui/react'
 import { NavLink } from 'react-router-dom'
 
-import { CardLayout } from '../../../../components/layouts'
+import { Body1 } from '../../../../components/typography'
 import { UserAvatarWithLink } from '../../../../components/ui/UserAvatar'
 import { getPath } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
@@ -22,56 +22,62 @@ export const CreatorSocial = () => {
   }
 
   return (
-    <CardLayout mobileDense>
-      <HStack spacing={4}>
-        <Box>
-          <UserAvatarWithLink
-            height="40px"
-            width="40px"
-            user={user}
-            seed={project.id}
-          />
-        </Box>
-        <Link
-          textDecoration="none"
-          as={NavLink}
-          to={getPath('userProfile', user.id)}
-        >
-          <Text variant="h3">{user.username}</Text>
-        </Link>
-        <HStack ml={2}>
-          {accountButtonProps.map(({ username, icon, color, props }, index) => {
-            if (!icon || !props) {
-              return
-            }
+    <HStack
+      spacing={2}
+      px={1}
+      py={1}
+      borderRadius="8px"
+      background="neutral.100"
+    >
+      <Box>
+        <UserAvatarWithLink
+          height="30px"
+          width="30px"
+          user={user}
+          seed={project.id}
+        />
+      </Box>
+      <Link
+        textDecoration="none"
+        as={NavLink}
+        to={getPath('userProfile', user.id)}
+      >
+        <Body1 semiBold color="neutral.600">
+          {user.username}
+        </Body1>
+      </Link>
+      <HStack>
+        {accountButtonProps.map(({ username, icon, color, props }, index) => {
+          if (!icon || !props) {
+            return
+          }
 
-            return (
-              <Text
-                key={index}
-                {...props}
-                color={color}
-                whiteSpace="nowrap"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                borderRadius="8px"
-                px={3}
-                py={1}
-                variant="body"
-                fontWeight={500}
-                bg="neutral.100"
-              >
-                {icon}
-                {isMd ? (
-                  <Text ml={2} variant="body" maxW="12em" isTruncated>
-                    {username}
-                  </Text>
-                ) : null}
-              </Text>
-            )
-          })}
-        </HStack>
+          return (
+            <Text
+              key={index}
+              {...props}
+              color={color}
+              whiteSpace="nowrap"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              borderRadius="8px"
+              px={3}
+              py={1}
+              variant="body"
+              fontWeight={500}
+              bg="neutral.100"
+            >
+              {icon}
+              {isMd ? (
+                <Text ml={2} variant="body" maxW="12em" isTruncated>
+                  {username}
+                </Text>
+              ) : null}
+            </Text>
+          )
+        })}
       </HStack>
-    </CardLayout>
+    </HStack>
   )
 }

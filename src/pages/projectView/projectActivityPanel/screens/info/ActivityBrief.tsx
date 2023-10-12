@@ -15,23 +15,21 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEllipsis } from 'react-icons/ai'
 
-import { BoltIcon } from '../../../../../components/icons'
 import { UserAvatar } from '../../../../../components/ui/UserAvatar'
-import { MobileViews, useProjectContext } from '../../../../../context'
+import { useProjectContext } from '../../../../../context'
 import {
   FunderWithUserFragment,
   OrderByOptions,
   ProjectMilestone,
   useProjectFundersQuery,
 } from '../../../../../types'
-import {
-  isActive,
-  toInt,
-  useMobileMode,
-  useNotification,
-} from '../../../../../utils'
+import { toInt, useMobileMode, useNotification } from '../../../../../utils'
 import { getProjectBalance } from '../../../../../utils/helpers'
 import { ExternalAccountType } from '../../../../auth'
+import {
+  ContributeButton,
+  FollowButton,
+} from '../../../projectMainBody/components'
 import { BalanceDisplayButton } from './components'
 import {
   ProjectFundersModal,
@@ -45,7 +43,7 @@ export const ActivityBrief = (props: StackProps) => {
   const { toast } = useNotification()
   const isMobile = useMobileMode()
 
-  const { project, setMobileView } = useProjectContext()
+  const { project } = useProjectContext()
 
   const {
     isOpen: isToolTipOpen,
@@ -151,22 +149,6 @@ export const ActivityBrief = (props: StackProps) => {
     }
   }, [balance, project])
 
-  const getTrackColor = useCallback(() => {
-    switch (milestoneIndex % 4) {
-      case 1:
-        if (milestoneIndex === 1) return 'neutral.200'
-        return 'primary.100'
-      case 2:
-        return 'primary.400'
-      case 3:
-        return 'primary.200'
-      case 0:
-        return 'primary.600'
-      default:
-        return 'neutral.200'
-    }
-  }, [milestoneIndex])
-
   const getColor = useCallback(() => {
     switch (milestoneIndex % 4) {
       case 1:
@@ -202,19 +184,13 @@ export const ActivityBrief = (props: StackProps) => {
           size="116px"
           thickness="16px"
           color={getColor()}
-          trackColor={getTrackColor()}
+          trackColor="neutral.200"
         />
       )
     }
 
     return null
-  }, [
-    circularPercentage,
-    currentMilestone,
-    funderLoading,
-    getColor,
-    getTrackColor,
-  ])
+  }, [circularPercentage, currentMilestone, funderLoading, getColor])
 
   const getMilestoneValue = useCallback(() => {
     if (currentMilestone) {
@@ -327,17 +303,10 @@ export const ActivityBrief = (props: StackProps) => {
       )}
 
       {!isMobile ? (
-        <HStack w="full">
-          <Button
-            variant="primary"
-            leftIcon={<BoltIcon />}
-            width="100%"
-            onClick={() => setMobileView(MobileViews.funding)}
-            isDisabled={!isActive(project?.status)}
-          >
-            {t('Contribute')}
-          </Button>
-        </HStack>
+        <VStack w="full" spacing="10px">
+          <ContributeButton w="full" />
+          <FollowButton size="md" w="full" projectId={project?.id} />
+        </VStack>
       ) : null}
       <ProjectFundersModal {...fundersModal} />
     </VStack>

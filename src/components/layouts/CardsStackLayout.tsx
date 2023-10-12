@@ -13,7 +13,7 @@ export const CardsStackLayout = ({ children, ...props }: Props) => {
           <StackDivider borderWidth="1px" color="neutral.200" />
         ) : undefined
       }
-      p={{ base: '0 0 60px 0', lg: '0 40px 70px 40px' }}
+      p={{ base: '0px', lg: '0 40px 70px 40px' }}
       spacing={{ base: 0, lg: 3 }}
       mt={{ base: 0, lg: 5 }}
       maxWidth="1000px"

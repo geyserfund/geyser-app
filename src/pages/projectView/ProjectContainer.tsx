@@ -1,29 +1,47 @@
 import { Box } from '@chakra-ui/react'
 import { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import Loader from '../../components/ui/Loader'
 import { Head } from '../../config'
-import { useProjectContext } from '../../context'
+import { getPath } from '../../constants'
+import { MobileViews, useProjectContext } from '../../context'
 import { useModal } from '../../hooks/useModal'
-import { FundingResourceType } from '../../types'
 import { useMobileMode } from '../../utils'
 import { ProjectCreateDraftModal } from '../projectCreate/components/ProjectCreateDraftModal'
 import { ProjectCreateLaunchedModal } from '../projectCreate/components/ProjectCreateLaunchedModal'
-import { ProjectActivityPanel } from './projectActivityPanel'
-import { ProjectMainBody } from './projectMainBody'
 import { ProjectMobileBottomNavigation } from './projectNavigation/components/ProjectMobileBottomNavigation'
+import { ProjectNavigation } from './projectNavigation/components/ProjectNavigation'
 
 export const ProjectContainer = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const params = useParams<{ projectId: string }>()
+  const { setMobileView } = useProjectContext()
 
   const onModalClose = () => navigate(location.pathname, { replace: true })
 
   const launchModal = useModal({ onClose: onModalClose })
   const draftModal = useModal({ onClose: onModalClose })
 
-  const { project, loading } = useProjectContext()
+  const { project, loading, isProjectOwner } = useProjectContext()
+
+  useEffect(() => {
+    const visited = localStorage.getItem('creatorVisited')
+    if (
+      isProjectOwner &&
+      params.projectId &&
+      (!visited || visited !== params.projectId)
+    ) {
+      navigate(getPath('projectOverview', `${params.projectId}`))
+      setMobileView(MobileViews.overview)
+      localStorage.setItem('creatorVisited', `${params.projectId}`)
+    }
+
+    return () => {
+      localStorage.removeItem('creatorVisited')
+    }
+  }, [isProjectOwner, params.projectId, navigate, setMobileView])
 
   useEffect(() => {
     const launchModalShouldOpen = location.search.split('launch').length > 1
@@ -69,13 +87,9 @@ export const ProjectContainer = () => {
         image={project?.thumbnailImage || ''}
         type="article"
       />
+      {!isMobile ? <ProjectNavigation /> : null}
 
-      <ProjectMainBody />
-
-      <ProjectActivityPanel
-        resourceType={FundingResourceType.Project}
-        resourceId={project?.id}
-      />
+      <Outlet />
 
       <ProjectCreateLaunchedModal {...launchModal} />
       <ProjectCreateDraftModal {...draftModal} />

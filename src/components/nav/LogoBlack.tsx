@@ -1,7 +1,7 @@
 import { Image } from '@chakra-ui/image'
 import { Box } from '@chakra-ui/layout'
 import { HTMLChakraProps } from '@chakra-ui/system'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 
 import geyserBlack from '../../assets/logo-dark.svg'
 

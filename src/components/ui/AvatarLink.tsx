@@ -9,6 +9,7 @@ type Props = {
   title: string
   path: string
   imageSrc: string
+  rounded?: boolean
 }
 
 export const AvatarLink = ({
@@ -16,6 +17,7 @@ export const AvatarLink = ({
   path,
   imageSrc,
   textColor = 'neutral.700',
+  rounded,
 }: Props) => {
   const avatarSrc = toSmallImageUrl(imageSrc)
 
@@ -28,7 +30,11 @@ export const AvatarLink = ({
       w="full"
       overflow="hidden"
     >
-      <Avatar borderRadius="4px" src={avatarSrc} boxSize={'1em'} />
+      <Avatar
+        borderRadius={rounded ? '50%' : '4px'}
+        src={avatarSrc}
+        boxSize={'1em'}
+      />
       <Body2 semiBold isTruncated _hover={{ textDecoration: 'underline' }}>
         {title}
       </Body2>

@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/modal'
 import { VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useAuthContext } from '../../context'
 // import { ConnectWithEmail } from '../../pages/auth/ConnectWithEmail'

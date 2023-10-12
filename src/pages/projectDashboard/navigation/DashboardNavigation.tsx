@@ -6,7 +6,6 @@ import {
   Drawer,
   DrawerContent,
   DrawerOverlay,
-  Text,
 } from '@chakra-ui/react'
 import { Dispatch, SetStateAction } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -16,7 +15,7 @@ import { CardLayout } from '../../../components/layouts'
 import { getPath } from '../../../constants'
 import { ProjectFragment } from '../../../types'
 import { useMobileMode } from '../../../utils'
-import { creatorSections, projectSections } from '../ProjectDashboard'
+import { projectSections } from '../ProjectDashboard'
 import { MobileNavButton } from './NavButton'
 import { MobileNavItem, NavItem } from './NavItem'
 
@@ -51,29 +50,6 @@ export const DashboardNavigation = ({
           >
             {t('Menu')}
           </MobileNavButton>
-          <MobileNavButton
-            bg="neutral.200"
-            color="neutral.1000"
-            fontWeight={700}
-          >
-            {t('Creator dashboard')}
-          </MobileNavButton>
-          {Object.entries(creatorSections).map(([key, section]) => (
-            <MobileNavItem
-              onClick={() => setDrawerOpen(false)}
-              key={key}
-              isActive={activeSectionKey === key}
-              projectName={project.name}
-              section={section}
-            />
-          ))}
-          <MobileNavButton
-            bg="neutral.200"
-            color="neutral.1000"
-            fontWeight={700}
-          >
-            {t('Edit project')}
-          </MobileNavButton>
           {Object.entries(projectSections).map(([key, section]) => (
             <MobileNavItem
               onClick={() => setDrawerOpen(false)}
@@ -102,20 +78,6 @@ export const DashboardNavigation = ({
         </Button>
       </NavLink>
       <CardLayout p={4}>
-        <Text px={2} variant="body1" whiteSpace="nowrap">
-          {t('Creator dashboard')}
-        </Text>
-        {Object.entries(creatorSections).map(([key, section]) => (
-          <NavItem
-            key={key}
-            isActive={activeSectionKey === key}
-            projectName={project.name}
-            section={section}
-          />
-        ))}
-        <Text px={2} variant="body1">
-          {t('Edit project')}
-        </Text>
         {Object.entries(projectSections).map(([key, section]) => (
           <NavItem
             key={key}

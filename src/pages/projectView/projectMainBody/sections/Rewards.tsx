@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/client'
 import { GridItem, HStack, Text } from '@chakra-ui/react'
 import { forwardRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import {
@@ -9,7 +10,7 @@ import {
   RewardCard,
 } from '../../../../components/molecules'
 import { TitleDivider } from '../../../../components/ui/TitleDivider'
-import { fundingStages } from '../../../../constants'
+import { fundingStages, ID } from '../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
 import { MUTATION_DELETE_PROJECT_REWARD } from '../../../../graphql/mutations'
 import { useModal } from '../../../../hooks/useModal'
@@ -29,6 +30,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
   const { toast } = useNotification()
+  const location = useLocation()
 
   const {
     project,
@@ -166,6 +168,8 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
     )
   }
 
+  const isRewardTitleFixed = location.pathname.includes('rewards') && isMobile
+
   if (!project.rewards.length) {
     return null
   }
@@ -174,15 +178,20 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
     <>
       <CardLayout
         ref={ref}
+        id={ID.project.rewards.container}
         width="100%"
         flexDirection="column"
         alignItems="flex-start"
         spacing="25px"
         mobileDense
       >
-        <TitleDivider badge={project.rewards.length}>
+        <TitleDivider
+          badge={project.rewards.length}
+          isFixed={isRewardTitleFixed}
+        >
           {t('Rewards')}
         </TitleDivider>
+
         <HStack width="100%" flexWrap="wrap" justifyContent="center">
           {renderRewards()}
         </HStack>

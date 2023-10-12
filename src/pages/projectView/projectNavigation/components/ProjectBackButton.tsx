@@ -23,8 +23,11 @@ export const ProjectBackButton = (props: ButtonProps) => {
       variant="secondary"
       size={{ base: 'sm', lg: 'md' }}
       leftIcon={<BsArrowLeft fontSize="20px" />}
-      onClick={() => handleGoBack()}
       {...props}
+      onClick={(event) => {
+        if (props.onClick) props.onClick(event)
+        handleGoBack()
+      }}
     >
       {t('Back')}
     </Button>

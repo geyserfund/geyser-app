@@ -20,7 +20,6 @@ import {
   InfoScreen,
   InfoScreenSkeleton,
   QRScreen,
-  RewardSelectionScreen,
   SuccessScreen,
 } from './screens'
 import { useStyles } from './styles'
@@ -62,7 +61,6 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
     MobileViews.contribution,
     MobileViews.leaderboard,
     MobileViews.funding,
-    MobileViews.rewards,
   ].includes(mobileView)
 
   const classes = useStyles({ isMobile, inView })
@@ -152,10 +150,6 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   const renderPanelContent = () => {
     if (!project) {
       return <InfoScreenSkeleton />
-    }
-
-    if (mobileView === MobileViews.rewards) {
-      return <RewardSelectionScreen />
     }
 
     switch (fundState) {

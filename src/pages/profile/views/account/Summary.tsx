@@ -1,13 +1,12 @@
+import { HStack, Text, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { HStack, VStack, Text } from '@chakra-ui/react'
-
-import { numberWithCommas, getShortAmountLabel } from '../../../../utils'
-import type { User, UserProjectContribution } from '../../../../types'
 import { CardLayout } from '../../../../components/layouts'
-import { SatoshiAmount } from '../../../../components/ui'
 import { H2, H3 } from '../../../../components/typography'
+import { SatoshiAmount } from '../../../../components/ui'
+import type { User, UserProjectContribution } from '../../../../types'
+import { getShortAmountLabel, numberWithCommas } from '../../../../utils'
 
 interface SummaryBodyProps {
   totalFunded: number
