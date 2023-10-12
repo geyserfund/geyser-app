@@ -107,7 +107,14 @@ export const ContributorsComponent = () => {
   }, [project?.id, getFundingTxForOverview])
 
   return (
-    <VStack w="full" alignItems="start" spacing="10px">
+    <CardLayout
+      as={VStack}
+      w="full"
+      alignItems="start"
+      spacing="10px"
+      mobileDense
+      padding={{ base: '0px', lg: '20px' }}
+    >
       <HStack w="full" justifyContent="space-between">
         <H3>{t('Contributors')}</H3>
 
@@ -164,6 +171,6 @@ export const ContributorsComponent = () => {
           </Table>
         </CardLayout>
       )}
-    </VStack>
+    </CardLayout>
   )
 }
