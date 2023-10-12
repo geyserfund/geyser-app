@@ -171,7 +171,14 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
           <VStack spacing="15px" w="full">
             {isProjectOwner && (
               <VStack width="100%">
-                <HStack w="full" justifyContent="start">
+                <HStack
+                  w="full"
+                  justifyContent={{
+                    base: 'start',
+                    lg: 'center',
+                    xl: 'start',
+                  }}
+                >
                   <Caption fontWeight={700} color="neutral.500">
                     {t('Creator view')}
                   </Caption>
@@ -203,7 +210,14 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
               </VStack>
             )}
             <VStack width="100%">
-              <HStack w="full" justifyContent="start">
+              <HStack
+                w="full"
+                justifyContent={{
+                  base: 'start',
+                  lg: 'center',
+                  xl: 'start',
+                }}
+              >
                 <Caption fontWeight={700} color="neutral.500">
                   {t('Project')}
                 </Caption>
@@ -244,7 +258,6 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
                 {t('Add')}
               </Button>
               <IconButton
-                w="100%"
                 display={{ base: 'none', lg: 'block', xl: 'none' }}
                 aria-label="Add"
                 variant="primary"
@@ -263,7 +276,6 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
                 {t('Edit project')}
               </Button>
               <IconButton
-                w="100%"
                 display={{ base: 'none', lg: 'block', xl: 'none' }}
                 aria-label="edit"
                 variant={'secondary'}

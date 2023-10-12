@@ -21,12 +21,13 @@ export const OverviewHeader = () => {
       direction={{ base: 'column', lg: 'row' }}
       w="full"
       justifyContent="space-between"
+      flexWrap="wrap"
     >
-      <HStack w="full" justifyContent={'space-between'}>
-        <H2>{t('Weekly overview')}</H2>
+      <HStack justifyContent={'space-between'} alignItems="start">
+        <H2 whiteSpace="nowrap">{t('Weekly overview')}</H2>
         {isMobile && <ShareProjectButton />}
       </HStack>
-      <HStack spacing="10px" justifyContent={'end'}>
+      <HStack flex={1} spacing="10px" justifyContent={'end'}>
         {!isMobile && <ShareProjectButton />}
         <Button
           as={Link}
