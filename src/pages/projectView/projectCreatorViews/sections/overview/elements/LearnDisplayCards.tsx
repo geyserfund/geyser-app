@@ -23,14 +23,14 @@ export const LearnDisplayCards = ({
       <Box
         padding="10px"
         height="82px"
-        width={'105px'}
+        width={'80px'}
         backgroundColor="primary.50"
         borderRadius={'8px'}
       >
         <Image src={image} alt={title} h="full" />
       </Box>
 
-      <VStack h="100%" alignItems="start">
+      <VStack flex={1} h="100%" alignItems="start">
         <H3 color="neutral.900">{title}</H3>
         <Body2 color="neutral.600">{description}</Body2>
       </VStack>
