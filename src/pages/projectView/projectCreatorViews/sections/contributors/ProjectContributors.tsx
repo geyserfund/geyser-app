@@ -354,7 +354,12 @@ export const ProjectContributors = () => {
                       }
 
                       return (
-                        <Td key={row.key} fontSize="14px">
+                        <Td
+                          key={row.key}
+                          fontSize="14px"
+                          maxWidth="200px"
+                          whiteSpace="pre-wrap"
+                        >
                           {value}
                         </Td>
                       )
