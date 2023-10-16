@@ -6,9 +6,9 @@ import { useMobileMode } from '../../../../../../utils'
 import { InsightsOptionsSelect } from '../elements'
 
 export enum InsightsOptions {
-  lastWeek = 'Last 24 hours',
-  lastMonth = 'Last 7 days',
-  lastYear = 'Last 30 days',
+  lastWeek = 'Last 7 days',
+  lastMonth = 'Last 30 days',
+  lastYear = 'Last 12 months',
 }
 
 export const InsightsHeader = () => {
