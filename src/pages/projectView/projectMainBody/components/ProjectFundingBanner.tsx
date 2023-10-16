@@ -3,6 +3,7 @@ import { forwardRef, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 import { QRCode } from 'react-qrcode-logo'
 
+import { LogoIcon } from '../../../../assets'
 import LogoDark from '../../../../assets/logo-dark.svg'
 import { BoltSvgIcon, CurvedArrow } from '../../../../components/icons'
 import { lightModeColors } from '../../../../styles'
@@ -18,6 +19,8 @@ interface Props {
   title: string
   lnurlPayUrl: string
 }
+
+const QR_SIZE = 350
 
 export const ProjectFundingBanner = forwardRef<HTMLDivElement, Props>(
   ({ title, banner, lnurlPayUrl }, ref) => {
@@ -98,22 +101,36 @@ export const ProjectFundingBanner = forwardRef<HTMLDivElement, Props>(
                 <Box
                   display="flex"
                   justifyContent="center"
-                  bgColor="white"
-                  borderRadius="3xl"
+                  borderColor={'neutral.1000'}
+                  borderRadius="12px"
+                  overflow={'hidden'}
+                  _hover={{ cursor: 'pointer' }}
+                  position="relative"
                   filter="drop-shadow(0px 0px 6px rgba(0, 0, 0, 0.1))"
                 >
+                  <img
+                    alt="Geyser logo"
+                    style={{
+                      position: 'absolute',
+                      top: (QR_SIZE - 30) / 2,
+                      left: (QR_SIZE - 30) / 2,
+                      width: 60,
+                      height: 60,
+                      padding: '5px',
+                      background: 'white',
+                      borderRadius: '12px',
+                    }}
+                    src={LogoIcon}
+                  />
                   <QRCode
-                    qrStyle="dots"
-                    logoImage={LogoDark}
-                    eyeRadius={2}
-                    logoHeight={60}
-                    logoWidth={60}
-                    logoOpacity={1}
-                    fgColor={lightModeColors.neutral[900]}
-                    bgColor="transparent"
-                    removeQrCodeBehindLogo={true}
-                    size={360}
                     value={lnurlPayUrl}
+                    id={lightModeColors.neutral[1000]}
+                    size={QR_SIZE}
+                    bgColor={lightModeColors.neutral[0]}
+                    fgColor={lightModeColors.neutral[1000]}
+                    qrStyle="squares"
+                    ecLevel="L"
+                    removeQrCodeBehindLogo
                   />
                 </Box>
               </Box>
