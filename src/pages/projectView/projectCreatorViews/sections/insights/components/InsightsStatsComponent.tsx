@@ -124,7 +124,7 @@ export const InsightsStatsComponent = () => {
           flex={1}
         />
         <StatsBlock
-          title={t('Contrib/Views')}
+          title={t('Contributions/Views')}
           prevValue={prevContribVirewRatio}
           value={contribVirewRatio}
           flex={1}
