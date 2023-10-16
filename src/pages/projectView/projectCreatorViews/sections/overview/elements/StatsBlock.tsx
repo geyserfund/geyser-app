@@ -5,7 +5,7 @@ import {
   CardLayout,
   CardLayoutProps,
 } from '../../../../../../components/layouts'
-import { Body2, H2 } from '../../../../../../components/typography'
+import { Body1, Body2, H2 } from '../../../../../../components/typography'
 import { commaFormatted, useCustomTheme } from '../../../../../../utils'
 
 interface StatsBlockProps extends CardLayoutProps {
@@ -34,9 +34,9 @@ export const StatsBlock = ({
 
   return (
     <CardLayout h="auto" padding="10px 20px" minWidth="150px" {...rest}>
-      <Body2 color="neutral.600" xBold>
+      <Body1 color="neutral.900" xBold>
         {title}
-      </Body2>
+      </Body1>
       <HStack
         w="full"
         justifyContent="start"
