@@ -2,9 +2,11 @@ import {
   Button,
   HStack,
   Table,
+  TableContainer,
   Tbody,
   Td,
   Th,
+  Thead,
   Tr,
   VStack,
 } from '@chakra-ui/react'
@@ -132,43 +134,48 @@ export const ContributorsComponent = () => {
       ) : contributors.length === 0 ? (
         <Body1>{t('No data available')}</Body1>
       ) : (
-        <CardLayout padding="20px" w="full">
-          <Table
-            variant="unstyled"
-            __css={{
-              '& td': {
-                paddingY: '5px',
-              },
-            }}
-          >
-            <Tbody>
-              <Th>
+        <CardLayout padding="10px" w="full">
+          <TableContainer>
+            <Table
+              variant="unstyled"
+              __css={{
+                '& td,th': {
+                  paddingY: '5px',
+                  paddingX: '5px',
+                },
+              }}
+            >
+              <Thead>
                 <Tr>
-                  <Td>{t('Contributor')}</Td>
-                  <Td>{t('Amount')}</Td>
-                  <Td>{t('Comment')}</Td>
-                  <Td>{t('Rewards')}</Td>
+                  <Th>{t('Contributor')}</Th>
+                  <Th>{t('Amount')}</Th>
+                  <Th>{t('Comment')}</Th>
+                  <Th>{t('Rewards')}</Th>
                 </Tr>
-              </Th>
-              {contributors.map((contributor, index) => {
-                return (
-                  <Tr key={index}>
-                    <Td>
-                      <AvatarElement
-                        noLink={!contributor?.user?.id}
-                        user={contributor.user}
-                      />
-                    </Td>
-                    <Td>{contributor.amount} sats</Td>
-                    <Td>{contributor.comment}</Td>
-                    <Td>
-                      {contributor.noOfRewards} {t('reward')}
-                    </Td>
-                  </Tr>
-                )
-              })}
-            </Tbody>
-          </Table>
+              </Thead>
+              <Tbody>
+                {contributors.map((contributor, index) => {
+                  return (
+                    <Tr key={index}>
+                      <Td>
+                        <AvatarElement
+                          noLink={!contributor?.user?.id}
+                          user={contributor.user}
+                        />
+                      </Td>
+                      <Td>{contributor.amount} sats</Td>
+                      <Td isTruncated maxWidth="250px">
+                        {contributor.comment}
+                      </Td>
+                      <Td>
+                        {contributor.noOfRewards} {t('reward')}
+                      </Td>
+                    </Tr>
+                  )
+                })}
+              </Tbody>
+            </Table>
+          </TableContainer>
         </CardLayout>
       )}
     </CardLayout>
