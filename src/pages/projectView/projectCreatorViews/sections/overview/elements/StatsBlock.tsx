@@ -12,12 +12,14 @@ interface StatsBlockProps extends CardLayoutProps {
   title: string
   value: number
   prevValue: number
+  isPercent?: boolean
 }
 
 export const StatsBlock = ({
   title,
   value,
   prevValue,
+  isPercent,
   ...rest
 }: StatsBlockProps) => {
   const { colors } = useCustomTheme()
@@ -44,7 +46,9 @@ export const StatsBlock = ({
         alignItems="end"
         flexWrap="wrap"
       >
-        <H2>{commaFormatted(value)}</H2>
+        <H2>
+          {isPercent ? `${commaFormatted(value)}%` : commaFormatted(value)}
+        </H2>
         <HStack spacing="0">
           {isHigher > 0 && (
             <>

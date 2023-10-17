@@ -22,16 +22,18 @@ export const InsightsStatsComponent = () => {
     useProjectStatsGetInsightLazyQuery({
       onCompleted(data) {
         const stats = data.projectStatsGet
-        const contributionCount =
-          stats.current?.projectFundingTxs?.amountSum ?? 0
+        const contributionSum = stats.current?.projectFundingTxs?.amountSum ?? 0
         const contributorsCount = stats.current?.projectFunders?.count ?? 0
+        const contributionCount = stats.current?.projectFundingTxs?.count ?? 0
         const rewardsPurchased =
           stats.current?.projectFunderRewards?.quantitySum ?? 0
         const viewCount = stats.current?.projectViews?.viewCount ?? 0
         const visitorCount = stats.current?.projectViews?.visitorCount ?? 0
 
-        const prevContributionCount =
+        const prevContributionSum =
           stats.prevTimeRange?.projectFundingTxs?.amountSum ?? 0
+        const prevContributionCount =
+          stats.prevTimeRange?.projectFundingTxs?.count ?? 0
         const prevContributorsCount =
           stats.prevTimeRange?.projectFunders?.count ?? 0
         const prevRewardsPurchased =
@@ -44,6 +46,8 @@ export const InsightsStatsComponent = () => {
         const referrers = stats.current?.projectViews?.referrers ?? []
 
         setProjectStats({
+          contributionSum,
+          prevContributionSum,
           contributionCount,
           prevContributionCount,
           contributorsCount,
@@ -87,15 +91,18 @@ export const InsightsStatsComponent = () => {
     }
   }, [project?.id, getProjectStatsInsight, selectionOption])
 
-  const contribVirewRatio = projectStats.viewCount
-    ? Math.round(projectStats.contributionCount / projectStats.viewCount)
-    : 0
+  const contribViewRatio =
+    projectStats.viewCount && projectStats.contributionCount
+      ? Math.round(projectStats.contributionCount / projectStats.viewCount) *
+        100
+      : 0
 
-  const prevContribVirewRatio = projectStats.prevViewCount
-    ? Math.round(
-        projectStats.prevContributionCount / projectStats.prevViewCount,
-      )
-    : 0
+  const prevContribViewRatio =
+    projectStats.prevViewCount && projectStats.prevContributionCount
+      ? Math.round(
+          projectStats.prevContributionCount / projectStats.prevViewCount,
+        ) * 100
+      : 0
 
   if (loading) {
     return <InsightsStatsComponentSkeleton />
@@ -106,8 +113,8 @@ export const InsightsStatsComponent = () => {
       <HStack w="full" spacing="20px" wrap="wrap" alignItems="start">
         <StatsBlock
           title={t('Total received (sats)')}
-          prevValue={projectStats.prevContributionCount}
-          value={projectStats.contributionCount}
+          prevValue={projectStats.prevContributionSum}
+          value={projectStats.contributionSum}
           width={{ base: '100%', lg: '33%' }}
           flex={1}
         />
@@ -125,8 +132,9 @@ export const InsightsStatsComponent = () => {
         />
         <StatsBlock
           title={t('Contributions/Views')}
-          prevValue={prevContribVirewRatio}
-          value={contribVirewRatio}
+          prevValue={prevContribViewRatio}
+          value={contribViewRatio}
+          isPercent
           flex={1}
         />
       </HStack>
