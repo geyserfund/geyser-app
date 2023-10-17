@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { useGetHistoryRoute } from '../config'
@@ -97,6 +97,8 @@ export const ProjectProvider = ({
   const routeMatchForProjectPage = useAtomValue(routeMatchForProjectPageAtom)
   const historyRoutes = useGetHistoryRoute()
 
+  const lastRoute = historyRoutes[historyRoutes.length - 2] || ''
+
   const { setNavData } = useNavContext()
 
   const [mobileView, setMobileView] = useState<MobileViews>(
@@ -162,26 +164,20 @@ export const ProjectProvider = ({
     }
   }, [project, user])
 
-  useEffect(() => {
-    const lastRoute = historyRoutes[historyRoutes.length - 2] || ''
-    if (
+  const shouldGoToOverviewPage = useMemo(
+    () =>
       isProjectOwner &&
       params.projectId &&
       routeMatchForProjectPage &&
-      !(lastRoute.includes('project') && lastRoute.includes(params.projectId))
-    ) {
+      !(lastRoute.includes('project') && lastRoute.includes(params.projectId)),
+    [params.projectId, isProjectOwner, routeMatchForProjectPage, lastRoute],
+  )
+
+  useEffect(() => {
+    if (shouldGoToOverviewPage) {
       navigate(getPath('projectOverview', `${params.projectId}`))
-      localStorage.setItem('creatorVisited', `${params.projectId}`)
     }
-  }, [
-    isProjectOwner,
-    location.pathname,
-    params.projectId,
-    navigate,
-    setMobileView,
-    routeMatchForProjectPage,
-    historyRoutes,
-  ])
+  }, [params.projectId, navigate, shouldGoToOverviewPage])
 
   useEffect(() => {
     const view = getViewFromPath(location.pathname)
