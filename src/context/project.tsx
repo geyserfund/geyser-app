@@ -4,7 +4,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { useGetHistoryRoute } from '../config'
 import { routeMatchForProjectPageAtom } from '../config/routes/privateRoutesAtom'
-import { getPath } from '../constants'
+import { getPath, PathName } from '../constants'
 import {
   useFundingFlow,
   UseFundingFlowReturn,
@@ -171,7 +171,6 @@ export const ProjectProvider = ({
       !(lastRoute.includes('project') && lastRoute.includes(params.projectId))
     ) {
       navigate(getPath('projectOverview', `${params.projectId}`))
-      setMobileView(MobileViews.overview)
       localStorage.setItem('creatorVisited', `${params.projectId}`)
     }
   }, [
@@ -183,6 +182,14 @@ export const ProjectProvider = ({
     routeMatchForProjectPage,
     historyRoutes,
   ])
+
+  useEffect(() => {
+    const view = getViewFromPath(location.pathname)
+    if (view) {
+      setMobileView(view)
+    }
+  }, [location.pathname])
+
   const onRewardSubmit = (
     reward: ProjectRewardForCreateUpdateFragment,
     isEdit: boolean,
@@ -255,4 +262,32 @@ export const ProjectProvider = ({
       )}
     </ProjectContext.Provider>
   )
+}
+
+const getViewFromPath = (path: string) => {
+  if (path.includes(PathName.projectRewards)) {
+    return MobileViews.rewards
+  }
+
+  if (path.includes(PathName.projectMilestones)) {
+    return MobileViews.milestones
+  }
+
+  if (path.includes(PathName.projectEntries)) {
+    return MobileViews.entries
+  }
+
+  if (path.includes(PathName.projectInsights)) {
+    return MobileViews.insights
+  }
+
+  if (path.includes(PathName.projectContributors)) {
+    return MobileViews.contributors
+  }
+
+  if (path.includes(PathName.projectOverview)) {
+    return MobileViews.overview
+  }
+
+  return ''
 }

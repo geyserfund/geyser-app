@@ -1,6 +1,5 @@
-import { Button, HStack, Text, VStack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { BsBoxArrowUpRight } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 
 import {
@@ -11,7 +10,7 @@ import {
 import { CardLayout, CardLayoutProps } from '../../../../components/layouts'
 import { Modal } from '../../../../components/layouts'
 import { Body2, H3 } from '../../../../components/typography'
-import { getPath, LearnAboutCrowdfundingUrl } from '../../../../constants'
+import { getPath } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { UseModalReturn } from '../../../../hooks/useModal'
 
@@ -53,14 +52,6 @@ export const ProjectCreatorModal = (props: UseModalReturn) => {
             onMilestonesModalOpen()
           }}
         />
-        <Button
-          as={Link}
-          to={LearnAboutCrowdfundingUrl}
-          variant="ghost"
-          leftIcon={<BsBoxArrowUpRight />}
-        >
-          <Text variant="body1">{t('Learn more about crowdfunding')}</Text>
-        </Button>
       </VStack>
     </Modal>
   )
