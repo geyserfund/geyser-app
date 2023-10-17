@@ -110,7 +110,6 @@ export const ProjectProvider = ({
   const rewardsModal = useModal<{
     reward?: ProjectRewardForCreateUpdateFragment
   }>()
-  console.log('checking location', location)
   const {
     error,
     loading,

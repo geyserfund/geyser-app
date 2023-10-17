@@ -4980,6 +4980,7 @@ export type ProjectFragment = {
         }
       | { __typename?: 'LndConnectionDetailsPublic'; pubkey?: any | null }
   }>
+  followers: Array<{ __typename?: 'User'; id: any; username: string }>
 }
 
 export type ProjectStatsForOverviewPageFragment = {
@@ -6723,6 +6724,10 @@ export const ProjectFragmentDoc = gql`
           pubkey
         }
       }
+    }
+    followers {
+      id
+      username
     }
   }
   ${UserMeFragmentDoc}
