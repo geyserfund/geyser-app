@@ -5109,9 +5109,9 @@ export type ProjectFundingMethodStatsFragment = {
     __typename?: 'ProjectStatsBase'
     projectFundingTxs?: {
       __typename?: 'ProjectFundingTxStats'
-      methodCount?: Array<{
-        __typename?: 'FundingTxMethodCount'
-        count: number
+      methodSum?: Array<{
+        __typename?: 'FundingTxMethodSum'
+        sum: number
         method?: string | null
       } | null> | null
     } | null
@@ -6839,8 +6839,8 @@ export const ProjectFundingMethodStatsFragmentDoc = gql`
   fragment ProjectFundingMethodStats on ProjectStats {
     current {
       projectFundingTxs {
-        methodCount {
-          count
+        methodSum {
+          sum
           method
         }
       }

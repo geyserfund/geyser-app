@@ -1,11 +1,10 @@
 import { Box } from '@chakra-ui/react'
 import { useEffect } from 'react'
-import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 import Loader from '../../components/ui/Loader'
 import { Head } from '../../config'
-import { getPath } from '../../constants'
-import { MobileViews, useProjectContext } from '../../context'
+import { useProjectContext } from '../../context'
 import { useModal } from '../../hooks/useModal'
 import { useMobileMode } from '../../utils'
 import { ProjectCreateDraftModal } from '../projectCreate/components/ProjectCreateDraftModal'
@@ -16,32 +15,13 @@ import { ProjectNavigation } from './projectNavigation/components/ProjectNavigat
 export const ProjectContainer = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const params = useParams<{ projectId: string }>()
-  const { setMobileView } = useProjectContext()
 
   const onModalClose = () => navigate(location.pathname, { replace: true })
 
   const launchModal = useModal({ onClose: onModalClose })
   const draftModal = useModal({ onClose: onModalClose })
 
-  const { project, loading, isProjectOwner } = useProjectContext()
-
-  useEffect(() => {
-    const visited = localStorage.getItem('creatorVisited')
-    if (
-      isProjectOwner &&
-      params.projectId &&
-      (!visited || visited !== params.projectId)
-    ) {
-      navigate(getPath('projectOverview', `${params.projectId}`))
-      setMobileView(MobileViews.overview)
-      localStorage.setItem('creatorVisited', `${params.projectId}`)
-    }
-
-    return () => {
-      localStorage.removeItem('creatorVisited')
-    }
-  }, [isProjectOwner, params.projectId, navigate, setMobileView])
+  const { project, loading } = useProjectContext()
 
   useEffect(() => {
     const launchModalShouldOpen = location.search.split('launch').length > 1

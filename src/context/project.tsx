@@ -1,6 +1,9 @@
+import { useAtomValue } from 'jotai'
 import { createContext, useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
+import { useGetHistoryRoute } from '../config'
+import { routeMatchForProjectPageAtom } from '../config/routes/privateRoutesAtom'
 import { getPath } from '../constants'
 import {
   useFundingFlow,
@@ -89,7 +92,13 @@ export const ProjectProvider = ({
   children,
 }: { children: React.ReactNode } & ProjectState) => {
   const navigate = useNavigate()
+  const params = useParams<{ projectId: string }>()
+  const location = useLocation()
+  const routeMatchForProjectPage = useAtomValue(routeMatchForProjectPageAtom)
+  const historyRoutes = useGetHistoryRoute()
+
   const { setNavData } = useNavContext()
+
   const [mobileView, setMobileView] = useState<MobileViews>(
     MobileViews.description,
   )
@@ -101,7 +110,7 @@ export const ProjectProvider = ({
   const rewardsModal = useModal<{
     reward?: ProjectRewardForCreateUpdateFragment
   }>()
-
+  console.log('checking location', location)
   const {
     error,
     loading,
@@ -154,6 +163,27 @@ export const ProjectProvider = ({
     }
   }, [project, user])
 
+  useEffect(() => {
+    const lastRoute = historyRoutes[historyRoutes.length - 2] || ''
+    if (
+      isProjectOwner &&
+      params.projectId &&
+      routeMatchForProjectPage &&
+      !(lastRoute.includes('project') && lastRoute.includes(params.projectId))
+    ) {
+      navigate(getPath('projectOverview', `${params.projectId}`))
+      setMobileView(MobileViews.overview)
+      localStorage.setItem('creatorVisited', `${params.projectId}`)
+    }
+  }, [
+    isProjectOwner,
+    location.pathname,
+    params.projectId,
+    navigate,
+    setMobileView,
+    routeMatchForProjectPage,
+    historyRoutes,
+  ])
   const onRewardSubmit = (
     reward: ProjectRewardForCreateUpdateFragment,
     isEdit: boolean,

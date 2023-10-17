@@ -113,8 +113,8 @@ export const FRAGMENT_FUNDING_METHOD_STATS = gql`
   fragment ProjectFundingMethodStats on ProjectStats {
     current {
       projectFundingTxs {
-        methodCount {
-          count
+        methodSum {
+          sum
           method
         }
       }
