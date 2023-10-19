@@ -103,7 +103,7 @@ export const ProjectContributionList = ({
         {fundingTxs.isLoading ? (
           <ContributionListSkeleton />
         ) : (
-          fundingTxs.data.map((fundingTx, index) => {
+          aggregatedFundingTxs.map((fundingTx, index) => {
             return (
               <Fragment key={fundingTx.id}>
                 <ContributionActivityItem
