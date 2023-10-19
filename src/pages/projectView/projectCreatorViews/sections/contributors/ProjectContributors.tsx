@@ -26,12 +26,14 @@ import {
   SatoshiAmount,
 } from '../../../../../components/ui'
 import Loader from '../../../../../components/ui/Loader'
+import { dimensions } from '../../../../../constants'
 import { useProjectContext } from '../../../../../context'
 import { QUERY_PROJECT_DASHBOARD_FUNDERS } from '../../../../../graphql'
 import { computeFunderBadges } from '../../../../../helpers'
 import { useQueryWithPagination } from '../../../../../hooks'
 import { Funder } from '../../../../../types'
 import { copyTextToClipboard, toInt } from '../../../../../utils'
+import { MobileDivider } from '../../../../grants/components'
 
 type TableData = {
   header: string
@@ -267,8 +269,21 @@ export const ProjectContributors = () => {
   }
 
   return (
-    <VStack width="100%">
-      <VStack width="100%" alignItems="start">
+    <VStack
+      width="100%"
+      flexGrow={1}
+      overflowY="auto"
+      pt={{ base: dimensions.topNavBar.desktop.height + 40, lg: '10px' }}
+    >
+      <VStack
+        width="100%"
+        alignItems="start"
+        position={{ base: 'fixed', lg: 'relative' }}
+        top={{ base: dimensions.topNavBar.desktop.height + 40, lg: 0 }}
+        px={{ base: '10px', lg: '0px' }}
+        backgroundColor="neutral.0"
+        zIndex={10}
+      >
         <HStack flexWrap="wrap">
           <Text fontSize={'16px'} fontWeight={600} whiteSpace="nowrap">
             {project?.fundersCount} {t('Contributors')}
@@ -308,8 +323,9 @@ export const ProjectContributors = () => {
             </Button>
           </CSVLink>
         </HStack>
+        <MobileDivider />
       </VStack>
-      <TableContainer width="100%">
+      <TableContainer width="100%" overflowY="auto">
         <Table size="sm">
           <Thead backgroundColor={'primary.100'}>
             <Tr>
@@ -354,7 +370,12 @@ export const ProjectContributors = () => {
                       }
 
                       return (
-                        <Td key={row.key} fontSize="14px">
+                        <Td
+                          key={row.key}
+                          fontSize="14px"
+                          maxWidth="200px"
+                          whiteSpace="pre-wrap"
+                        >
                           {value}
                         </Td>
                       )

@@ -693,7 +693,7 @@
   "BETA":"BETA",
   "Historical":"Historical",
   "Weekly overview":"Weekly overview",
-  "Contrib/Views":"Contrib/Views",
+  "Contributions/Views":"Contributions/Views",
   "Funding transactions":"Funding transactions",
   "No data available":"No data available",
   "Rewards sold":"Rewards sold",
@@ -702,5 +702,9 @@
   "Add":"Add",
   "Write entry":"Write entry",
   "Add reward":"Add reward",
-  "Funding regions":"Funding regions"
+  "Funding regions":"Funding regions",
+  "Last 30 days":"Last 30 days",
+  "Last 7 days":"Last 7 days",
+  "Last 12 months":"Last 12 months",
+  "Tips":"Tips"
 }

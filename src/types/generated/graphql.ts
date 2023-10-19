@@ -519,6 +519,12 @@ export type FundingTxMethodCount = {
   method?: Maybe<Scalars['String']>
 }
 
+export type FundingTxMethodSum = {
+  __typename?: 'FundingTxMethodSum'
+  method?: Maybe<Scalars['String']>
+  sum: Scalars['Int']
+}
+
 export type FundingTxStatusUpdatedInput = {
   fundingTxId?: InputMaybe<Scalars['BigInt']>
   projectId?: InputMaybe<Scalars['BigInt']>
@@ -1252,8 +1258,12 @@ export type ProjectFundingTxStats = {
   amountGraph?: Maybe<Array<Maybe<FundingTxAmountGraph>>>
   /** Project contribution amount in the given datetime range. */
   amountSum?: Maybe<Scalars['Int']>
+  /** Project contribution amount in the given datetime range. */
+  count: Scalars['Int']
   /** Project contribution count of each Funding Method in the given datetime range. */
   methodCount?: Maybe<Array<Maybe<FundingTxMethodCount>>>
+  /** Project contribution amount of each Funding Method in the given datetime range. */
+  methodSum?: Maybe<Array<Maybe<FundingTxMethodSum>>>
 }
 
 export type ProjectKeys = {
@@ -2114,6 +2124,7 @@ export type ResolversTypes = {
   >
   FundingTxAmountGraph: ResolverTypeWrapper<FundingTxAmountGraph>
   FundingTxMethodCount: ResolverTypeWrapper<FundingTxMethodCount>
+  FundingTxMethodSum: ResolverTypeWrapper<FundingTxMethodSum>
   FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
   FundingTxStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<FundingTxStatusUpdatedSubscriptionResponse>
   FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>
@@ -2418,6 +2429,7 @@ export type ResolversParentTypes = {
   }
   FundingTxAmountGraph: FundingTxAmountGraph
   FundingTxMethodCount: FundingTxMethodCount
+  FundingTxMethodSum: FundingTxMethodSum
   FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
   FundingTxStatusUpdatedSubscriptionResponse: FundingTxStatusUpdatedSubscriptionResponse
   FundinginvoiceCancel: FundinginvoiceCancel
@@ -2941,6 +2953,15 @@ export type FundingTxMethodCountResolvers<
 > = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   method?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type FundingTxMethodSumResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['FundingTxMethodSum'] = ResolversParentTypes['FundingTxMethodSum'],
+> = {
+  method?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  sum?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -3652,8 +3673,14 @@ export type ProjectFundingTxStatsResolvers<
     ContextType
   >
   amountSum?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   methodCount?: Resolver<
     Maybe<Array<Maybe<ResolversTypes['FundingTxMethodCount']>>>,
+    ParentType,
+    ContextType
+  >
+  methodSum?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['FundingTxMethodSum']>>>,
     ParentType,
     ContextType
   >
@@ -4513,6 +4540,7 @@ export type Resolvers<ContextType = any> = {
   FundingTx?: FundingTxResolvers<ContextType>
   FundingTxAmountGraph?: FundingTxAmountGraphResolvers<ContextType>
   FundingTxMethodCount?: FundingTxMethodCountResolvers<ContextType>
+  FundingTxMethodSum?: FundingTxMethodSumResolvers<ContextType>
   FundingTxStatusUpdatedSubscriptionResponse?: FundingTxStatusUpdatedSubscriptionResponseResolvers<ContextType>
   FundinginvoiceCancel?: FundinginvoiceCancelResolvers<ContextType>
   Grant?: GrantResolvers<ContextType>
@@ -4952,6 +4980,7 @@ export type ProjectFragment = {
         }
       | { __typename?: 'LndConnectionDetailsPublic'; pubkey?: any | null }
   }>
+  followers: Array<{ __typename?: 'User'; id: any; username: string }>
 }
 
 export type ProjectStatsForOverviewPageFragment = {
@@ -5011,6 +5040,7 @@ export type ProjectStatsForInsightsPageFragment = {
     projectFundingTxs?: {
       __typename?: 'ProjectFundingTxStats'
       amountSum?: number | null
+      count: number
     } | null
   } | null
   prevTimeRange?: {
@@ -5028,6 +5058,7 @@ export type ProjectStatsForInsightsPageFragment = {
     projectFundingTxs?: {
       __typename?: 'ProjectFundingTxStats'
       amountSum?: number | null
+      count: number
     } | null
   } | null
 }
@@ -5079,9 +5110,9 @@ export type ProjectFundingMethodStatsFragment = {
     __typename?: 'ProjectStatsBase'
     projectFundingTxs?: {
       __typename?: 'ProjectFundingTxStats'
-      methodCount?: Array<{
-        __typename?: 'FundingTxMethodCount'
-        count: number
+      methodSum?: Array<{
+        __typename?: 'FundingTxMethodSum'
+        sum: number
         method?: string | null
       } | null> | null
     } | null
@@ -6103,25 +6134,6 @@ export type ProjectUnplublishedEntriesQuery = {
   } | null
 }
 
-export type ProjectDashboardDataQueryVariables = Exact<{
-  where: UniqueProjectQueryInput
-}>
-
-export type ProjectDashboardDataQuery = {
-  __typename?: 'Query'
-  projectGet?: {
-    __typename?: 'Project'
-    unpublishedEntries: Array<
-      { __typename?: 'Entry' } & EntryForProjectFragment
-    >
-    publishedEntries: Array<{ __typename?: 'Entry' } & EntryForProjectFragment>
-    statistics?: {
-      __typename?: 'ProjectStatistics'
-      totalVisitors: number
-    } | null
-  } | null
-}
-
 export type ProjectFundersQueryVariables = Exact<{
   input: GetFundersInput
 }>
@@ -6713,6 +6725,10 @@ export const ProjectFragmentDoc = gql`
         }
       }
     }
+    followers {
+      id
+      username
+    }
   }
   ${UserMeFragmentDoc}
   ${ProjectRewardForCreateUpdateFragmentDoc}
@@ -6770,6 +6786,7 @@ export const ProjectStatsForInsightsPageFragmentDoc = gql`
       }
       projectFundingTxs {
         amountSum
+        count
       }
     }
     prevTimeRange {
@@ -6785,6 +6802,7 @@ export const ProjectStatsForInsightsPageFragmentDoc = gql`
       }
       projectFundingTxs {
         amountSum
+        count
       }
     }
   }
@@ -6826,8 +6844,8 @@ export const ProjectFundingMethodStatsFragmentDoc = gql`
   fragment ProjectFundingMethodStats on ProjectStats {
     current {
       projectFundingTxs {
-        methodCount {
-          count
+        methodSum {
+          sum
           method
         }
       }
@@ -10158,73 +10176,6 @@ export type ProjectUnplublishedEntriesLazyQueryHookResult = ReturnType<
 export type ProjectUnplublishedEntriesQueryResult = Apollo.QueryResult<
   ProjectUnplublishedEntriesQuery,
   ProjectUnplublishedEntriesQueryVariables
->
-export const ProjectDashboardDataDocument = gql`
-  query ProjectDashboardData($where: UniqueProjectQueryInput!) {
-    projectGet(where: $where) {
-      unpublishedEntries: entries(input: { where: { published: false } }) {
-        ...EntryForProject
-      }
-      publishedEntries: entries(input: { where: { published: true } }) {
-        ...EntryForProject
-      }
-      statistics {
-        totalVisitors
-      }
-    }
-  }
-  ${EntryForProjectFragmentDoc}
-`
-
-/**
- * __useProjectDashboardDataQuery__
- *
- * To run a query within a React component, call `useProjectDashboardDataQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectDashboardDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProjectDashboardDataQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
-export function useProjectDashboardDataQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    ProjectDashboardDataQuery,
-    ProjectDashboardDataQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    ProjectDashboardDataQuery,
-    ProjectDashboardDataQueryVariables
-  >(ProjectDashboardDataDocument, options)
-}
-export function useProjectDashboardDataLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ProjectDashboardDataQuery,
-    ProjectDashboardDataQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    ProjectDashboardDataQuery,
-    ProjectDashboardDataQueryVariables
-  >(ProjectDashboardDataDocument, options)
-}
-export type ProjectDashboardDataQueryHookResult = ReturnType<
-  typeof useProjectDashboardDataQuery
->
-export type ProjectDashboardDataLazyQueryHookResult = ReturnType<
-  typeof useProjectDashboardDataLazyQuery
->
-export type ProjectDashboardDataQueryResult = Apollo.QueryResult<
-  ProjectDashboardDataQuery,
-  ProjectDashboardDataQueryVariables
 >
 export const ProjectFundersDocument = gql`
   query ProjectFunders($input: GetFundersInput!) {

@@ -173,5 +173,9 @@ export const FRAGMENT_PROJECT = gql`
         }
       }
     }
+    followers {
+      id
+      username
+    }
   }
 `

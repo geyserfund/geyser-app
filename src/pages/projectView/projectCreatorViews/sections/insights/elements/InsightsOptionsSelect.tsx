@@ -1,10 +1,12 @@
 import { Select } from '@chakra-ui/react'
 import { ChangeEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { InsightsOptions } from '../components'
 import { useSelectionAtom } from '../insightsAtom'
 
 export const InsightsOptionsSelect = () => {
+  const { t } = useTranslation()
   const [selectedOption, setSelectedOption] = useSelectionAtom()
 
   const handleSelect = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -21,13 +23,13 @@ export const InsightsOptionsSelect = () => {
       size="sm"
     >
       <option value={InsightsOptions.lastWeek}>
-        {InsightsOptions.lastWeek}
+        {t(InsightsOptions.lastWeek)}
       </option>
       <option value={InsightsOptions.lastMonth}>
-        {InsightsOptions.lastMonth}
+        {t(InsightsOptions.lastMonth)}
       </option>
       <option value={InsightsOptions.lastYear}>
-        {InsightsOptions.lastYear}
+        {t(InsightsOptions.lastYear)}
       </option>
     </Select>
   )

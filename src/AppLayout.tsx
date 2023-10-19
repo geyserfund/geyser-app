@@ -1,9 +1,11 @@
 import { Box } from '@chakra-ui/layout'
 import { Fade } from '@chakra-ui/react'
-import { Outlet } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 
 import { PullingDownContent } from './components/ui'
+import { useSetHistoryRoute } from './config'
 import { dimensions, ID } from './constants'
 import { useAuthContext } from './context'
 import { useLayoutAnimation } from './hooks'
@@ -16,6 +18,12 @@ import { useMobileMode } from './utils'
 export const AppLayout = () => {
   const { loading } = useAuthContext()
   const isMobile = useMobileMode()
+
+  const location = useLocation()
+  const setHistoryRoute = useSetHistoryRoute()
+  useEffect(() => {
+    setHistoryRoute(location.pathname)
+  }, [location.pathname, setHistoryRoute])
 
   const layoutAnimationClassName = useLayoutAnimation()
 

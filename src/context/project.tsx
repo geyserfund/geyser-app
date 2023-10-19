@@ -1,7 +1,10 @@
-import { createContext, useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useAtomValue } from 'jotai'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
-import { getPath } from '../constants'
+import { useGetHistoryRoute } from '../config'
+import { routeMatchForProjectPageAtom } from '../config/routes/privateRoutesAtom'
+import { getPath, PathName } from '../constants'
 import {
   useFundingFlow,
   UseFundingFlowReturn,
@@ -89,7 +92,15 @@ export const ProjectProvider = ({
   children,
 }: { children: React.ReactNode } & ProjectState) => {
   const navigate = useNavigate()
+  const params = useParams<{ projectId: string }>()
+  const location = useLocation()
+  const routeMatchForProjectPage = useAtomValue(routeMatchForProjectPageAtom)
+  const historyRoutes = useGetHistoryRoute()
+
+  const lastRoute = historyRoutes[historyRoutes.length - 2] || ''
+
   const { setNavData } = useNavContext()
+
   const [mobileView, setMobileView] = useState<MobileViews>(
     MobileViews.description,
   )
@@ -101,7 +112,6 @@ export const ProjectProvider = ({
   const rewardsModal = useModal<{
     reward?: ProjectRewardForCreateUpdateFragment
   }>()
-
   const {
     error,
     loading,
@@ -153,6 +163,28 @@ export const ProjectProvider = ({
       setIsProjectOwner(false)
     }
   }, [project, user])
+
+  const shouldGoToOverviewPage = useMemo(
+    () =>
+      isProjectOwner &&
+      params.projectId &&
+      routeMatchForProjectPage &&
+      !(lastRoute.includes('project') && lastRoute.includes(params.projectId)),
+    [params.projectId, isProjectOwner, routeMatchForProjectPage, lastRoute],
+  )
+
+  useEffect(() => {
+    if (shouldGoToOverviewPage) {
+      navigate(getPath('projectOverview', `${params.projectId}`))
+    }
+  }, [params.projectId, navigate, shouldGoToOverviewPage])
+
+  useEffect(() => {
+    const view = getViewFromPath(location.pathname)
+    if (view) {
+      setMobileView(view)
+    }
+  }, [location.pathname])
 
   const onRewardSubmit = (
     reward: ProjectRewardForCreateUpdateFragment,
@@ -226,4 +258,32 @@ export const ProjectProvider = ({
       )}
     </ProjectContext.Provider>
   )
+}
+
+const getViewFromPath = (path: string) => {
+  if (path.includes(PathName.projectRewards)) {
+    return MobileViews.rewards
+  }
+
+  if (path.includes(PathName.projectMilestones)) {
+    return MobileViews.milestones
+  }
+
+  if (path.includes(PathName.projectEntries)) {
+    return MobileViews.entries
+  }
+
+  if (path.includes(PathName.projectInsights)) {
+    return MobileViews.insights
+  }
+
+  if (path.includes(PathName.projectContributors)) {
+    return MobileViews.contributors
+  }
+
+  if (path.includes(PathName.projectOverview)) {
+    return MobileViews.overview
+  }
+
+  return ''
 }

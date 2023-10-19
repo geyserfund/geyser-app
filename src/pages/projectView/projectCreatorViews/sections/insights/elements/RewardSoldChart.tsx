@@ -77,6 +77,7 @@ export const RewardSoldChart = ({
             />
             <Tooltip
               cursor={{ fill: 'transparent' }}
+              shared={false}
               contentStyle={{
                 backgroundColor: colors.neutral[0],
                 borderColor: colors.neutral[200],

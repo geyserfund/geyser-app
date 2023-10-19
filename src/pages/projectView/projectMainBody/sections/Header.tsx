@@ -1,6 +1,7 @@
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { BsArrowRight } from 'react-icons/bs'
 
 import { CardLayout } from '../../../../components/layouts'
 import { Body1 } from '../../../../components/typography'
@@ -9,9 +10,8 @@ import { VideoPlayer } from '../../../../components/ui/VideoPlayer'
 import { ID } from '../../../../constants'
 import { useAuthContext, useProjectContext } from '../../../../context'
 import { validateImageUrl } from '../../../../forms/validations/image'
-import { ProjectStatus } from '../../../../types'
+import { ProjectStatus, WalletStatus } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
-import { ShareProjectButton } from '../../projectCreatorViews/sections/overview/elements'
 import {
   ContributeButton,
   FollowButton,
@@ -32,7 +32,10 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   }
 
   const statusContent = () => {
-    if (project.status === ProjectStatus.Active) {
+    if (
+      project.status === ProjectStatus.Active &&
+      project?.wallets[0]?.state.status === WalletStatus.Ok
+    ) {
       return null
     }
 
@@ -94,18 +97,13 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
               borderRadius="8px"
               objectFit="cover"
               src={project.thumbnailImage || undefined}
-              width="42px"
-              height="42px"
+              width={{ base: '42px', lg: '80px' }}
+              height={{ base: '42px', lg: '80px' }}
               maxHeight="80px"
               alignSelf={'start'}
             />
-
             <Text flex={1} variant="h2" width="100%" color="neutral.900">
-              {project.title}{' '}
-              <span>
-                {' '}
-                <ShareProjectButton border="none" />
-              </span>
+              {project.title}
             </Text>
           </HStack>
           <Text variant="h3" color="neutral.900">
@@ -116,17 +114,27 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             <ProjectFundingQR project={project} />
           </HStack>
           <HStack w="full" color="neutral.600">
-            <Body1 semiBold>{`${project.fundersCount} contributors`}</Body1>
+            <Body1 semiBold>{`${project.fundersCount} ${t(
+              'contributors',
+            )}`}</Body1>
             <Text paddingBottom="22px" lineHeight={0} fontSize="40px">
               .
             </Text>
-            <Body1
-              semiBold
+            <Body1 semiBold>{`${project.followers?.length || 0} ${t(
+              'followers',
+            )}`}</Body1>
+
+            <Text paddingBottom="22px" lineHeight={0} fontSize="40px">
+              .
+            </Text>
+            <HStack
               _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
               onClick={handleClickDetails}
+              spacing="5px"
             >
-              {t('Details >')}
-            </Body1>
+              <Body1 semiBold>{t('Details')}</Body1>
+              <BsArrowRight fontWeight={500} display="inline-block" />
+            </HStack>
           </HStack>
           <CreatorSocial />
           {isMobile && (
