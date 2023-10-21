@@ -11,7 +11,8 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { createClient } from 'graphql-ws'
 
-import { __development__, API_SERVICE_ENDPOINT } from '../../constants'
+import { __development__ } from '../../constants'
+import { getAppEndPoint } from '../domain'
 import { cache } from './apollo-client-cache'
 
 const retryLink = new RetryLink({
@@ -32,8 +33,10 @@ const retryLink = new RetryLink({
   },
 })
 
+const apiServiceEndPoint = getAppEndPoint()
+
 const httpLink = createHttpLink({
-  uri: `${API_SERVICE_ENDPOINT}/graphql`,
+  uri: `${apiServiceEndPoint}/graphql`,
   credentials: 'include',
 })
 
@@ -55,7 +58,7 @@ const closeSocket = (socket: WebSocket | null) => {
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: `${prefix}://${API_SERVICE_ENDPOINT.split('//')[1]}/graphql`,
+    url: `${prefix}://${apiServiceEndPoint.split('//')[1]}/graphql`,
     retryAttempts: Infinity,
     shouldRetry: () => true,
     keepAlive: 10000,
