@@ -2,7 +2,7 @@ import { Buffer } from 'buffer'
 import { getEventHash } from 'nostr-tools'
 import { useState } from 'react'
 
-import { AUTH_SERVICE_ENDPOINT } from '../constants'
+import { getAuthEndPoint } from '../config/domain'
 import { useAuthContext } from '../context'
 import { useMeLazyQuery } from '../types'
 import { useNotification } from '../utils'
@@ -17,6 +17,8 @@ export const useNostrExtensonLogin = () => {
     fetchPolicy: 'network-only',
   })
 
+  const authServiceEndpoint = getAuthEndPoint()
+
   const connect = async () => {
     try {
       const token = await getAuthToken()
@@ -27,7 +29,7 @@ export const useNostrExtensonLogin = () => {
 
       const pubkey = await getPubkey()
 
-      const getAuthEvent = await fetch(`${AUTH_SERVICE_ENDPOINT}/nostr`, {
+      const getAuthEvent = await fetch(`${authServiceEndpoint}/nostr`, {
         credentials: 'include',
         redirect: 'follow',
       })
@@ -46,7 +48,7 @@ export const useNostrExtensonLogin = () => {
       ).replace(/[!'()*]/g, (c) => '%' + c.charCodeAt(0).toString(16))
 
       const response = await fetch(
-        `${AUTH_SERVICE_ENDPOINT}/nostr?token=${nostrAuthToken}`,
+        `${authServiceEndpoint}/nostr?token=${nostrAuthToken}`,
         {
           credentials: 'include',
           redirect: 'follow',

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsTwitter } from 'react-icons/bs'
 
-import { AUTH_SERVICE_ENDPOINT } from '../../constants'
+import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { useMeQuery } from '../../types'
 import { hasTwitterAccount, useNotification } from '../../utils'
@@ -20,6 +20,8 @@ export const ConnectWithTwitter = ({
   const { t } = useTranslation()
   const { login } = useAuthContext()
   const { toast } = useNotification()
+
+  const authServiceEndpoint = getAuthEndPoint()
 
   const [canLogin, setCanLogin] = useState(true)
 
@@ -49,7 +51,7 @@ export const ConnectWithTwitter = ({
       const id = setInterval(async () => {
         let statusRes
         try {
-          statusRes = await fetch(`${AUTH_SERVICE_ENDPOINT}/status`, {
+          statusRes = await fetch(`${authServiceEndpoint}/status`, {
             credentials: 'include',
             redirect: 'follow',
           })
@@ -81,7 +83,7 @@ export const ConnectWithTwitter = ({
   useEffect(() => {
     const initalizeLogin = async () => {
       try {
-        const response = await fetch(`${AUTH_SERVICE_ENDPOINT}/auth-token`, {
+        const response = await fetch(`${authServiceEndpoint}/auth-token`, {
           credentials: 'include',
           redirect: 'follow',
         })
@@ -118,7 +120,7 @@ export const ConnectWithTwitter = ({
       <Button
         as={Link}
         variant={variant}
-        href={`${AUTH_SERVICE_ENDPOINT}/twitter?nextPath=/auth/twitter`}
+        href={`${authServiceEndpoint}/twitter?nextPath=/auth/twitter`}
         isExternal
         w="100%"
         size="sm"

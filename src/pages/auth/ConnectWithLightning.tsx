@@ -23,7 +23,7 @@ import { LogoDarkGreenImage } from '../../assets'
 import { BoltSvgIcon } from '../../components/icons'
 import { ButtonComponent } from '../../components/ui'
 import Loader from '../../components/ui/Loader'
-import { AUTH_SERVICE_ENDPOINT } from '../../constants'
+import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { defaultUser } from '../../defaults'
 import { lightModeColors } from '../../styles'
@@ -133,6 +133,8 @@ export const ConnectWithLightningModal = ({
   const { toast } = useNotification()
   const { login } = useAuthContext()
 
+  const authServiceEndPoint = getAuthEndPoint()
+
   const [qrContent, setQrContent] = useState('')
   const [copy, setcopy] = useState(false)
 
@@ -182,7 +184,7 @@ export const ConnectWithLightningModal = ({
   }
 
   const handleLnurlLogin = async () => {
-    fetch(`${AUTH_SERVICE_ENDPOINT}/lnurl`, {
+    fetch(`${authServiceEndPoint}/lnurl`, {
       credentials: 'include',
       redirect: 'follow',
     })
@@ -214,7 +216,7 @@ export const ConnectWithLightningModal = ({
     const id = setInterval(() => {
       let hasError = false
 
-      fetch(`${AUTH_SERVICE_ENDPOINT}/access-token`, {
+      fetch(`${authServiceEndPoint}/access-token`, {
         credentials: 'include',
         redirect: 'follow',
       })
