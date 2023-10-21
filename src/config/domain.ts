@@ -1,8 +1,11 @@
 import { __production__, API_SERVICE_ENDPOINT } from '../constants'
-import { GEYSER_TOR_ONION_ADDRESS } from '../constants/config/domain'
+import {
+  GEYSER_TOR_ONION_ADDRESS,
+  GEYSER_TOR_ONION_DOMAIN,
+} from '../constants/config/domain'
 
 export const getAppEndPoint = () => {
-  if (window.location.hostname === GEYSER_TOR_ONION_ADDRESS.split('/')[-1]) {
+  if (window.location.hostname === GEYSER_TOR_ONION_DOMAIN) {
     return GEYSER_TOR_ONION_ADDRESS
   }
 
@@ -11,7 +14,7 @@ export const getAppEndPoint = () => {
 
 export const getAuthEndPoint = () => {
   if (__production__) {
-    if (window.location.hostname === GEYSER_TOR_ONION_ADDRESS.split('/')[-1]) {
+    if (window.location.hostname === GEYSER_TOR_ONION_DOMAIN) {
       return `${GEYSER_TOR_ONION_ADDRESS}/auth`
     }
 
