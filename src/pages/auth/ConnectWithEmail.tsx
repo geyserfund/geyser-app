@@ -2,7 +2,7 @@ import { Button, ButtonProps, useDisclosure } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { MdEmail } from 'react-icons/md'
 
-import { AUTH_SERVICE_ENDPOINT } from '../../constants'
+import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { MfaAction, OtpResponseFragment } from '../../types'
 import { useNotification } from '../../utils'
@@ -20,6 +20,8 @@ export const ConnectWithEmail = ({
   const { isLoggedIn, queryCurrentUser } = useAuthContext()
   const { toast } = useNotification()
 
+  const authServiceEndPoint = getAuthEndPoint()
+
   const handleClick = async () => {
     onOpen()
   }
@@ -36,7 +38,7 @@ export const ConnectWithEmail = ({
     email?: string,
   ) => {
     if (email) {
-      fetch(`${AUTH_SERVICE_ENDPOINT}/email`, {
+      fetch(`${authServiceEndPoint}/email`, {
         method: 'POST',
         body: JSON.stringify({
           otp: otpCode,
