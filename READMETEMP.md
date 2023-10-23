@@ -25,13 +25,6 @@
 [![Issues][issues-shield]][issues-url]
 [![GPLv3 License][license-shield]][license-url]
 
-<br>
-
-[![LinkedIn][linkedin-shield]][linkedin-url]
-[![Discord][discord-shield]][discord-url]
-[![Telegram][telegram-shield]][telegram-url]
-[![X][x-shield]][x-url]
-
 </div>
 
 <!-- PROJECT LOGO -->
@@ -42,6 +35,15 @@
   </a>
 
   <h3 align="center">Transform ideas into real-life projects</h3>
+
+  <div align='center'>
+
+  [![LinkedIn][linkedin-shield]][linkedin-url]
+  [![Discord][discord-shield]][discord-url]
+  [![Telegram][telegram-shield]][telegram-url]
+  [![X][x-shield]][x-url]
+
+  </div>
 
   <p align="center">
     Geyser is a bitcoin-native crowdfunding platform where you can fund project ideas with the support from global communities.
@@ -92,8 +94,8 @@
 
 <br />
 <div align="center">
-    <h2>Where great ideas find great communities</h2>
-    <h3>Some of the most successful projects and brands have launched on Geyser</h3>
+    <h3>Where great ideas find great communities</h2>
+    <h4>Some of the most successful projects and brands have launched on Geyser</h3>
     <img src="https://storage.googleapis.com/geyser-projects-media/images/geyser-about-projects-banner-image.png" alt="geyser Screenshot">
 </div>
 
@@ -330,8 +332,8 @@ Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Stelios Rammos - [@steliosats](https: https://twitter.com/steliosats) - stelios@geyser.fund
-Sajal Dulal - [@sajald77](https://twitter.com/sajald77) - sajal@geyser.fund
+* Stelios Rammos - [@steliosats](https://twitter.com/steliosats) - stelios@geyser.fund
+* Sajal Dulal - [@sajald77](https://twitter.com/sajald77) - sajal@geyser.fund
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -358,26 +360,26 @@ Use this space to list resources you find helpful and would like to give credit 
 [stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
 [issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
 [issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/badge/license-GPLv3-blue?style=flat-square
+[license-shield]: https://img.shields.io/badge/license-GPLv3-blue?style=for-the-badge
 [license-url]: https://github.com/geyserfund/geyser-app/LICENSE.md
 [product-screenshot]: images/screenshot.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=000&style=flat-square
-[Chakra.ui]: https://img.shields.io/badge/Chakra%20UI-319795?logo=chakraui&logoColor=fff&style=flat-square
+[React.js]: https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=000&style=for-the-badge
+[Chakra.ui]: https://img.shields.io/badge/Chakra%20UI-319795?logo=chakraui&logoColor=fff&style=for-the-badge
 [React-url]: https://reactjs.org/
 [Chakra-url]: https://chakra-ui.com/
-[Graph.ql]: https://img.shields.io/badge/GraphQL-E10098?logo=graphql&logoColor=fff&style=flat-square
+[Graph.ql]: https://img.shields.io/badge/GraphQL-E10098?logo=graphql&logoColor=fff&style=for-the-badge
 [GraphQL-url]: https://graphql.org/
-[Typescript.ts]: https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff&style=flat-square
+[Typescript.ts]: https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff&style=for-the-badge
 [Typescript-url]: https://www.typescriptlang.org/
-[React.router]: https://img.shields.io/badge/React%20Router-CA4245?logo=reactrouter&logoColor=fff&style=flat-square
+[React.router]: https://img.shields.io/badge/React%20Router-CA4245?logo=reactrouter&logoColor=fff&style=for-the-badge
 [ReactRouter-url]: https://reactrouter.com/en/main
-[linkedin-shield]: https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=fff&style=flat-square
+[linkedin-shield]: https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=fff&style=for-the-badge
 [linkedin-url]: https://www.linkedin.com/company/geyserfund/
-[discord-shield]: https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=fff&style=flat-square
+[discord-shield]: https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=fff&style=for-the-badge
 [discord-url]: https://discord.gg/R6qukEFgh
-[telegram-shield]: https://img.shields.io/badge/Telegram-26A5E4?logo=telegram&logoColor=fff&style=flat-square
+[telegram-shield]: https://img.shields.io/badge/Telegram-26A5E4?logo=telegram&logoColor=fff&style=for-the-badge
 [telegram-url]: https://t.me/geyserfund
-[x-shield]: https://img.shields.io/badge/X-000?logo=x&logoColor=fff&style=flat-square
+[x-shield]: https://img.shields.io/badge/X-000?logo=x&logoColor=fff&style=for-the-badge
 [x-url]: https://twitter.com/geyserfund
