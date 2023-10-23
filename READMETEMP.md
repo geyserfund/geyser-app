@@ -30,23 +30,23 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  <a href="https://geyser.fund">
+    <img src="https://storage.googleapis.com/geyser-projects-media/app/logo-name-brand.svg" alt="Logo" width="400">
   </a>
 
-  <h3 align="center">Best-README-Template</h3>
+  <h3 align="center">Transform ideas into real-life projects</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    Geyser is a bitcoin-native crowdfunding platform where you can fund project ideas with the support from global communities.
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
+    <a href="https://geyser.fund/launch"><strong>Launch your project »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
+    <a href="https://geyser.fund/">Explore projects in bitcoin space</a>
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
+    <a href="https://github.com/geyserfund/geyser-app/issues">Report Bug</a>
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
+    <a href="https://github.com/geyserfund/geyser-app/issues">Request Feature</a>
   </p>
 </div>
 
