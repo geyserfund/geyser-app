@@ -1,197 +1,170 @@
-## Styles
+# Geyser App Frontend 🌊
 
-### Framework
+The Geyser Front-End
 
-Chakra is the project's UI framework
+## Project Setup
 
-### Responsive
+### Installing Dependencies
 
-Breakpoints are set in chakra's theme at `src/config/theme/theme.ts`
-
-```
-sm: '30em', // 480px
-md: '48em', // 768px
-lg: '57em', // Desktop ~900px
-xl: '80em', // 1280px
-2xl: '96em', // 1536px
+```shell
+yarn
 ```
 
-We mainly use `lg` as the starter for desktop, less than `lg` is considered mobile view, and those are the two main breakpoints used everywhere, except some specific places where it needed a special fit.
+### Prerequisites
 
-#### At component style level
+We use `docker` and `docker compose` for local development of the `geyser-app`.
 
-Main way to use responsive css is at chakra component level, when passing a style prop like say for example `marginTop` you can instead of passing a value pass chakra's responsive object: `{ base: 0, lg: 5 }` so that only desktop would show margin-top.
+Make sure to have them installed on your local development machine, see [here](https://docs.docker.com/get-docker/).
 
-#### At component logic
+### Environment Variables
 
-If you need responsiveness in logic or to hide and show elements, then you can use the hook
-`useMobileMode` to get the boolean for isMobile.
+The app requires some environment variables to be set. We provide an `example.env` file that you can copy to the a local `.env` file:
 
-If you need another specific breakpoint you can use chakra's hook:
-
-`useBreakpointValue` like this:
-
-```ts
-const isMd = useBreakpointValue({ base: false, md: true }, { ssr: false })
+```shell
+cp .env.example .env
 ```
 
-! Note: set `ssr` option to `false` to avoid flicker on first load.
+From there, populate the new file with the correct values. You have three development environment options, detailed below. It is recommended to use the staging API for most development tasks.
 
-## Graphql
+#### Option A: use the staging API
 
-This project uses Apollo Graphql
+Currently, the staging API is the only way to get a functional authentication flow in standalone `geyser-app` development environment.
 
-### Apollo Studio
+To use the staging API, fill in the following value in the `.env` file:
 
-Visit the [Apollo Studio Dashboard](https://studio.apollographql.com/graph/geyser-graph/variant/staging/explorer) to see the entire schema
-
-### Codegen
-
-Run `yarn graph:generate [env]` where env is usually the `staging` environment
-
-`yarn graph:generate staging`
-
-This will generate not only the types but also react hooks for every document, including the lazy counterparts for the queries.
-
-! All documents located at `src/graphql` will get their types and hooks generated into `src/types/generated`
-
-### Fragments
-
-Codegen will also generate types for fragments, so it's really useful and important to use fragments in documents whenever possible.
-
-This allows developers to use the specific fragments that are being queried or returned from mutations and subscriptions in React component props, so that it is ensured that the fields are there.
-
-Take this example fragment
-
-```ts
-export const FRAGMENT_USER_ME = gql`
-  fragment UserMe on User {
-    id
-    username
-    email
-  }
-`
+```shell
+[OPTION A: STAGING]
+REACT_APP_API_ENDPOINT=https://api.staging.geyser.fund
 ```
 
-It will generate the following type:
+Then, complete the instructions described in [Hosts Configuration](#hosts-configuration).
 
-```ts
-export type UserMeFragment = {
-  __typename?: 'User'
-  id: any
-  username: string
-  email?: string | null
-}
+#### Option B: use the GraphQL-Faker config
+
+If you do not require a functional authentication flow for this task, you may use this option.
+
+```shell
+[OPTION B: GRAPHQL_FAKER]
+REACT_APP_API_ENDPOINT=https://api.dev.geyser.fund
+APOLLO_KEY=<your Apollo Studio API key>
 ```
 
-### Queries
+[Contact us](email:stelios@geyser.fund) if you don't have an `APOLLO_KEY` yet.
 
-A query called `Me` using the previous fragment like this:
+#### Option C: use both local server and staging API interchangably
 
-```ts
-export const QUERY_ME = gql`
-  ${FRAGMENT_USER_ME}
-  query Me {
-    me {
-      ...UserMe
-    }
-  }
-`
+Many at times we prefer using staging API while sometimes we prefer the local server. In such cases we can setup to use them interchangably.
+
+1. Create the normal `.env` file, which contains the values for local server. This would be used when we command `yarn dev`.
+2. Create a new file `.env.staging` this would have the values to use the staging API, and use the command `yarn dev:stage` to use the staging server env values.
+
+### Hosts Configuration
+
+#### Staging API
+
+In order for the requests to go through to the staging backend API, you will need to add the following line to your `/etc/hosts` file:
+
+```shell
+127.0.0.1 staging.geyser.fund
 ```
 
-Will generate a hook named `useMeQuery` and another `useMeLazyQuery` which will return the response typed with `UserMeFragment` and can be used in components that consume this information
+This makes sure that you are able to make requests to the staging API from your local development environment with encountering CORS errors.
 
-### Mutations
+#### GraphQL Faker
 
-A mutation called `UpdateUser` like this:
+If running against the GraphQL Faker server, you'll also need these in the same `/etc/hosts` file:
 
-```ts
-export const MUTATION_UPDATE_USER = gql`
-  ${FRAGMENT_USER_ME}
-  mutation UpdateUser($input: UpdateUserInput!) {
-    updateUser(input: $input) {
-      ...UserMe
-    }
-  }
-`
+```shell
+127.0.0.1 dev.geyser.fund
+127.0.0.1 api.dev.geyser.fund
 ```
 
-Will generate a hook named `useUpdateUserMutation` which will know what the input type is for developer autocomplete and will return the typed fragment as well in the response.
+## Running the App Locally
 
-## Forms
+### Starting Docker
 
-This project has `react-hook-form` installed, and it's transitioning to use on all the forms that require validation and other logic.
+After completing the above steps, you can run the app by running the following command in the project directory:
 
-Some forms still have custom react state and validation, and it's okay for some features like search where it's only one or two fields.
-
-Other forms that still use react state should be migrated to react-hook-form, given the nature that it handles validation out of the box using yup, and it has the form error and touched and dirty states available so we don't have to re-invent the wheel on this.
-
-### Setup
-
-To setup a form you first need to use the form state from `react-hook-form`:
-
-```ts
-const form = useForm({})
+```shell
+docker compose up -d
 ```
 
-Values can be passed like
+Or, if you are running an older version of docker and have docker-compose installed separately, run:
 
-```ts
-const form = useForm({ values: isEdit ? myCurrentData : DEFAULT_VALUES })
+```shell
+docker-compose up -d
 ```
 
-or default values like
+To see the react app logs use the following command:
 
-```ts
-const form = useForm({
-  values: isEdit ? myCurrentData : undefined,
-  defaultValues: DEFAULT_VALUES,
-})
+```shell
+docker compose logs -f geyser-app
 ```
 
-### Validation
+or
 
-Import necessary things:
-
-```tsx
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useForm } from 'react-hook-form'
+```shell
+docker-compose logs -f geyser-app
 ```
 
-Create a schema
+### Trusting Caddy Local CA Certificate
 
-```tsx
-const schema = yup.object({
-  myField: yup.string().required('This is required, pleb!'),
-})
+We are using Caddy as a reverse proxy to serve the local development app over HTTPS. This means that you will need to trust the Caddy Local CA Certificate in order to avoid any `ERR_CERT_AUTHORITY_INVALID` errors in your browser.
+
+To do so, you can run the following command from the project root directory **after starting the app and caddy server**:
+
+```shell
+sudo yarn caddy:trust-ca
 ```
 
-Create a component and use the schema inside yupResolver
+This command will add the Caddy Local CA Certificate to your system's list of trusted certificates (only works on MacOS for now). It needs sudo rights for that.
 
-```tsx
-const Component = () => {
-  const { handleSubmit } = useForm({ resolver: yupResolver(schema) })
-  const onSubmit = (values) => doSomething(values)
-  const onError = () => hadErrors()
-  return <form onSubmit={handleSubmit(onSubmit, onError)} />
-}
-```
+### Opening in the Browser
 
-### Form Practices
+With Docker running, navigate to the URL that's appropriate for the development-environment configuration in your `.env` file:
 
-You can then use the submit like this:
+#### Staging
 
-```tsx
-return (
-  <form onSubmit={form.handleSubmit((values) => doSomething(values))}>
-    <button type="submit" />
-  </form>
-)
-```
+<https://staging.geyser.fund/>
 
-This button with type submit inside a form will make it submit on ENTER key pressed as well as clicking it and it's better for SEO as well.
+#### GraphQL Faker
 
-### Form Components
+<https://dev.geyser.fund/>
 
-Form components located at `src/forms` are already setup to use with `react-hook-form` together with `chakra` by passing only the form's `control`
+> Make sure to also browse to <https://api.dev.geyser.fund/> and accept the certificate there.
+>
+> This will allow you to get around any `ERR_CERT_AUTHORITY_INVALID` errors that may be thrown in your browser.
+
+> See [the docs on `GraphQL Faker Tips & Tricks`](./docs/faker/TipsAndTricks.md) for more useful tidbits of information on running/developing the app against Faker.
+
+### Debugging on a Mobile Device
+
+#### Useful Links for Chrome
+
+- <https://developer.chrome.com/docs/devtools/remote-debugging/>
+- <https://developer.chrome.com/docs/devtools/remote-debugging/local-server/>
+
+#### Useful Links for Safari
+
+- <https://www.browserstack.com/guide/how-to-debug-on-iphone>
+
+## Tests
+
+Tests use Cypress as the testing framework.
+
+### E2E
+
+Run `yarn test:watch` to see the tests run in real time in the browser
+
+Run `yarn test:e2e` to run the headless test suit
+
+### TODO
+
+- Mock some calls to external services/APis which slow down tests rights now, eg: HotJar, SA
+- Project Creation
+- Funding Flow (Contribute to a project)
+- Grants Flow (apply, contribute, finalize)
+
+## Contributing
+
+[Check out the contribution guidelines](/CONTRIBUTING.md)
