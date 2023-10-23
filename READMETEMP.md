@@ -42,7 +42,7 @@
     <a href="https://geyser.fund/launch"><strong>Launch your project »</strong></a>
     <br />
     <br />
-    <a href="https://geyser.fund/">Explore projects in bitcoin space</a>
+    <a href="https://geyser.fund/">Explore live projects</a>
     ·
     <a href="https://github.com/geyserfund/geyser-app/issues">Report Bug</a>
     ·
@@ -83,18 +83,22 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<br />
+<div align="center">
+    <h2>Where great ideas find great communities</h2>
+    <h3>Some of the most successful projects and brands have launched on Geyser</h3>
+</div>
 
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
+[![Geyser Screen Shot][geyser-screenshot]](https://storage.googleapis.com/geyser-projects-media/images/geyser-about-projects-banner-image.png)
 
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
+#### Crowdfunding without borders
+Traditional crowdfunding platforms operate in only 30 or so countries. Thanks to Bitcoin, Geyser makes crowdfunding accessible to people all around the world.
 
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
+#### Let the Sats and rewards flow
+Most project creators on Geyser reach their goals by selling merch related to their ideas, or giving perks and Nostr badges as a reward for supporters. Funders are bullish!
 
-Use the `BLANK_README.md` to get started.
+#### Bitcoin made super easy
+Getting your project up and running only takes a few minutes. And we make it easy for funders too, so they can fund on-chain, lightning, WebLN and LNURL. All funds go straight to your single wallet.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
