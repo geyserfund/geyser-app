@@ -22,7 +22,7 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![GPLv3 License][license-shield]][license-url]
+[![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 
@@ -108,8 +108,11 @@ Getting your project up and running only takes a few minutes. And we make it eas
 This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
 * [![React][React.js]][React-url]
+* [![Typescript][Typescript.ts]][Typescript-url]
 * [![ChakraUI][Chakra.ui]][Chakra-url]
-* [[!GraphQL][Graph.ql]][GraphQL-url]
+* [![GraphQL][Graph.ql]][GraphQL-url]
+* [![React Router][React.router]][ReactRouter-url]
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -245,16 +248,20 @@ Use this space to list resources you find helpful and would like to give credit 
 [stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
 [issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
 [issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/badge/License-GPLv3-blue.svg
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
+[license-shield]: https://img.shields.io/badge/License-GPLv3-blue.svg&style=flat-square
+[license-url]: https://github.com/geyserfund/geyser-app/LICENSE.md
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/othneildrew
 [product-screenshot]: images/screenshot.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[Chakra.ui]: https://storage.googleapis.com/geyser-projects-media/platform/charaui.png
+[Chakra.ui]: https://img.shields.io/badge/Chakra%20UI-319795?logo=chakraui&logoColor=fff&style=flat-square
 [React-url]: https://reactjs.org/
 [Chakra-url]: https://chakra-ui.com/
-[Graph.ql]: https://graphql.org/img/logo.svg
+[Graph.ql]: https://img.shields.io/badge/GraphQL-E10098?logo=graphql&logoColor=fff&style=flat-square
 [GraphQL-url]: https://graphql.org/
+[Typescript.ts]: https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white
+[Typescript-url]: https://www.typescriptlang.org/
+[React.router]: https://img.shields.io/badge/React%20Router-CA4245?logo=reactrouter&logoColor=fff&style=flat-square
+[ReactRouter-url]: https://reactrouter.com/en/main
