@@ -18,14 +18,21 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
+<div align='center'>
+
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
+[![GPLv3 License][license-shield]][license-url]
+
+<br>
+
 [![LinkedIn][linkedin-shield]][linkedin-url]
+[![Discord][discord-shield]][discord-url]
+[![Telegram][telegram-shield]][telegram-url]
+[![X][x-shield]][x-url]
 
-
+</div>
 
 <!-- PROJECT LOGO -->
 <br />
@@ -351,10 +358,8 @@ Use this space to list resources you find helpful and would like to give credit 
 [stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
 [issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
 [issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/badge/License-GPLv3-blue.svg&style=flat-square
+[license-shield]: https://img.shields.io/badge/license-GPLv3-blue?style=flat-square
 [license-url]: https://github.com/geyserfund/geyser-app/LICENSE.md
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
 [product-screenshot]: images/screenshot.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
@@ -368,3 +373,11 @@ Use this space to list resources you find helpful and would like to give credit 
 [Typescript-url]: https://www.typescriptlang.org/
 [React.router]: https://img.shields.io/badge/React%20Router-CA4245?logo=reactrouter&logoColor=fff&style=flat-square
 [ReactRouter-url]: https://reactrouter.com/en/main
+[linkedin-shield]: https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=fff&style=flat-square
+[linkedin-url]: https://www.linkedin.com/company/geyserfund/
+[discord-shield]: https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=fff&style=flat-square
+[discord-url]: https://discord.gg/R6qukEFgh
+[telegram-shield]: https://img.shields.io/badge/Telegram-26A5E4?logo=telegram&logoColor=fff&style=flat-square
+[telegram-url]: https://t.me/geyserfund
+[x-shield]: https://img.shields.io/badge/X-000?logo=x&logoColor=fff&style=flat-square
+[x-url]: https://twitter.com/geyserfund
