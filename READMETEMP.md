@@ -109,7 +109,7 @@ This section should list any major frameworks/libraries used to bootstrap your p
 
 * [![React][React.js]][React-url]
 * [![ChakraUI][Chakra.ui]][Chakra-url]
-* [!GraphQL][graph.ql][GraphQL-url]
+* [!GraphQL][Graph.ql][GraphQL-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -256,5 +256,5 @@ Use this space to list resources you find helpful and would like to give credit 
 [Chakra.ui]: https://storage.googleapis.com/geyser-projects-media/platform/chakraui.svg
 [React-url]: https://reactjs.org/
 [Chakra-url]: https://chakra-ui.com/
-[graph.ql]: https://graphql.org/img/logo.svg
+[Graph.ql]: https://graphql.org/img/logo.svg
 [GraphQL-url]: https://graphql.org/
