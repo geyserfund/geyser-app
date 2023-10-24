@@ -91,21 +91,19 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
+Where great ideas find great communities
 <br />
 <div align="center">
-    <h3>Where great ideas find great communities</h2>
-    <h4>Some of the most successful projects and brands have launched on Geyser</h3>
-    <img src="https://storage.googleapis.com/geyser-projects-media/images/geyser-about-projects-banner-image.png" alt="geyser Screenshot">
+    <img src="https://storage.googleapis.com/geyser-projects-media/images/about-project-read-me.png" alt="geyser Screenshot">
 </div>
 
-#### Crowdfunding without borders
+### Crowdfunding without borders
 Traditional crowdfunding platforms operate in only 30 or so countries. Thanks to Bitcoin, Geyser makes crowdfunding accessible to people all around the world.
 
-#### Let the Sats and rewards flow
+### Let the Sats and rewards flow
 Most project creators on Geyser reach their goals by selling merch related to their ideas, or giving perks and Nostr badges as a reward for supporters. Funders are bullish!
 
-#### Bitcoin made super easy
+### Bitcoin made super easy
 Getting your project up and running only takes a few minutes. And we make it easy for funders too, so they can fund on-chain, lightning, WebLN and LNURL. All funds go straight to your single wallet.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
