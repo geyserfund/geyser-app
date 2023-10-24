@@ -1,29 +1,28 @@
 
 ## Graphql
 
-This project uses Apollo Graphql
+This project uses Apollo GraphQL, a comprehensive GraphQL platform that provides a unified, graph-based layer to interact with your services.
 
 ### Apollo Studio
 
-Visit the [Apollo Studio Dashboard](https://studio.apollographql.com/graph/geyser-graph/variant/staging/explorer) to see the entire schema
+[Access Apollo Studio Dashboard](https://studio.apollographql.com/graph/geyser-graph/variant/staging/explorer) to get full insight into the project's schema.
 
-### Codegen
+### Using Codegen
 
-Run `yarn graph:generate [env]` where env is usually the `staging` environment
+Following command helps you in creating types and react hooks for every document, including its lazy counterpart for queries:
 
-`yarn graph:generate staging`
+```bash
+  yarn graph:generate [env]
+``` 
 
-This will generate not only the types but also react hooks for every document, including the lazy counterparts for the queries.
+For example, running the command as `yarn graph:generate staging` indicates `staging` as environment.
+This would use `https://api.staging.geyser.fund/graphql` to validate and generate types for fragments, and functions for query, mutations and subscriptions.
 
-! All documents located at `src/graphql` will get their types and hooks generated into `src/types/generated`
+Note: This process generates types and hooks for all documents located at src/graphql into `src/types/generated`
 
-### Fragments
+### Leveraging Fragments
 
-Codegen will also generate types for fragments, so it's really useful and important to use fragments in documents whenever possible.
-
-This allows developers to use the specific fragments that are being queried or returned from mutations and subscriptions in React component props, so that it is ensured that the fields are there.
-
-Take this example fragment
+Using fragments during Codegen helps in generating types for fragments as well. This enhances development and ensures the availability of queried fields in React component props. Here is a sample fragment:
 
 ```ts
 export const FRAGMENT_USER_ME = gql`
@@ -35,7 +34,7 @@ export const FRAGMENT_USER_ME = gql`
 `
 ```
 
-It will generate the following type:
+The fragment above would generate a counterpart type like:
 
 ```ts
 export type UserMeFragment = {
@@ -46,7 +45,7 @@ export type UserMeFragment = {
 }
 ```
 
-### Queries
+### Creating Queries
 
 A query called `Me` using the previous fragment like this:
 
@@ -142,7 +141,7 @@ const Component = () => {
 
 ### Form Practices
 
-You can then use the submit like this:
+We can then use the submit like this:
 
 ```tsx
 return (
@@ -157,3 +156,12 @@ This button with type submit inside a form will make it submit on ENTER key pres
 ### Form Components
 
 Form components located at `src/forms` are already setup to use with `react-hook-form` together with `chakra` by passing only the form's `control`
+
+
+### State Management ( Jotai )
+
+We've recently included [Jotai](https://jotai.org/docs/core/atom) as one of the modular tools for handling state managment. Jotai creates modular atoms and derived atoms that are accessible throughout the app through the atom. 
+
+Our strategy is to migrate a large part of context overheads to Jotai for more effective state management. This move aims to boost the speed of state updates and renders.
+
+In any situation where a new state is needed across multiple scopes, we recommend using Jotai `Atoms`. Jotai’s primitive and declarative API makes handling complex state needs more manageable. It facilitates splitting the global state into a collection of distributed but well synchronized atoms, bringing more efficient and maintainable state management to the project.
