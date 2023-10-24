@@ -8,16 +8,6 @@
 *** Thanks again! Now go create something AMAZING! :D
 -->
 
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
 <div align='center'>
 
 [![Contributors][contributors-shield]][contributors-url]
@@ -363,6 +353,23 @@ Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
 * Sajal Dulal - [@sajald77](https://twitter.com/sajald77) - sajal@geyser.fund
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- License -->
+## License
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  [GNU General Public License](/LICENSE.md) for more details.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 
 
 
