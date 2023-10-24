@@ -130,6 +130,8 @@ This section should list any major frameworks/libraries used to bootstrap your p
 <!-- GETTING STARTED -->
 ## Getting Started
 
+<br />
+
 ### Prerequisites
 
 **Yarn**
@@ -140,12 +142,16 @@ We use yarn as a dependency manager, install yarn if not already installed
 We can use `docker` and `docker compose` for local development of the `geyser-app`.
 If you prefer using docker for devlopment, make sure to have them installed on your local development machine, see [here](https://docs.docker.com/get-docker/).
 
+<br />
+
 ### Installing Dependencies
 
 Clone the repo, get into the repo directory and run:
 ```shell
 yarn
 ```
+
+<br />
 
 ### Environment Variables
 
@@ -159,7 +165,11 @@ From there, populate the new file with the correct values. You have three develo
 
 Optionally create `.env.staging` file, that could be tried out for staging development
 
+<br />
+
 ### Running the App Locally
+
+<br />
 
 #### Option 1 (DOCKER): use the staging API
 
@@ -179,6 +189,8 @@ Start the server:
 make dev-staging
 ```
 
+<br />
+
 #### Option 2 (DOCKER): use the GraphQL-Faker config
 
 If you do not require a functional authentication flow for this task, you may use this option.
@@ -195,6 +207,8 @@ Start the server:
 ```shell
 make dev-faker
 ```
+
+<br />
 
 #### Option 3: use both local server and staging API interchangably
 
@@ -213,6 +227,8 @@ Start the server:
 ```shell
 yarn dev:stage
 ```
+
+<br />
 
 #### Docker
 
@@ -240,7 +256,11 @@ or
 docker-compose logs -f geyser-app
 ```
 
+<br />
+
 ### Hosts Configuration
+
+<br />
 
 #### Staging API
 
@@ -252,6 +272,8 @@ In order for the requests to go through to the staging backend API, you will nee
 
 This makes sure that you are able to make requests to the staging API from your local development environment with encountering CORS errors.
 
+<br />
+
 #### GraphQL Faker
 
 If running against the GraphQL Faker server, you'll also need these in the same `/etc/hosts` file:
@@ -260,6 +282,8 @@ If running against the GraphQL Faker server, you'll also need these in the same 
 127.0.0.1 dev.geyser.fund
 127.0.0.1 api.dev.geyser.fund
 ```
+
+<br />
 
 ### Trusting Caddy Local CA Certificate
 
@@ -273,13 +297,19 @@ sudo yarn caddy:trust-ca
 
 This command will add the Caddy Local CA Certificate to your system's list of trusted certificates (only works on MacOS for now). It needs sudo rights for that.
 
+<br />
+
 ### Opening in the Browser
 
 With Docker running, navigate to the URL that's appropriate for the development-environment configuration in your `.env` file:
 
+<br />
+
 #### Staging
 
 <https://staging.geyser.fund/>
+
+<br />
 
 #### GraphQL Faker
 
@@ -291,21 +321,16 @@ With Docker running, navigate to the URL that's appropriate for the development-
 
 > See [the docs on `GraphQL Faker Tips & Tricks`](./docs/faker/TipsAndTricks.md) for more useful tidbits of information on running/developing the app against Faker.
 
+<br />
+
 <!-- ROADMAP -->
 ## Roadmap
 
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/geyserfund/geyser-app/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<br />
 
 
 <!-- CONTRIBUTING -->
@@ -317,6 +342,8 @@ Contributions to Geyser are always welcome!
 - Read our [contributing guide](/CONTRIBUTING.md) to get started,
   or find us on [Discord](https://discord.gg/geyseryfund), we will take the time to guide you.
 
+<br />
+
 <!-- LICENSE -->
 ## License
 
@@ -324,6 +351,7 @@ Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<br />
 
 
 <!-- CONTACT -->
