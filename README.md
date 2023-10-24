@@ -132,13 +132,11 @@ This section should list any major frameworks/libraries used to bootstrap your p
 
 ### Prerequisites
 
-#### Yarn
-
+**Yarn**
 We use yarn as a dependency manager, install yarn if not already installed
 - `npm install --global yarn`
 
-#### Docker ( optional )
-
+**Docker** ( optional )
 We can use `docker` and `docker compose` for local development of the `geyser-app`.
 If you prefer using docker for devlopment, make sure to have them installed on your local development machine, see [here](https://docs.docker.com/get-docker/).
 
@@ -313,12 +311,11 @@ See the [open issues](https://github.com/othneildrew/Best-README-Template/issues
 <!-- CONTRIBUTING -->
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions to Geyser are always welcome!
 
-[Check out the contribution guidelines](/CONTRIBUTING.md)
-
-
-
+- 📥 Pull requests and 🌟 Stars are always welcome.
+- Read our [contributing guide](/CONTRIBUTING.md) to get started,
+  or find us on [Discord](https://discord.gg/geyseryfund), we will take the time to guide you.
 
 <!-- LICENSE -->
 ## License
@@ -352,17 +349,19 @@ Use this space to list resources you find helpful and would like to give credit 
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
+[contributors-shield]: https://img.shields.io/github/contributors/geyserfund/geyser-app.svg?style=for-the-badge
+[contributors-url]: https://github.com/geyserfund/geyser-app/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/geyserfund/geyser-app.svg?style=for-the-badge
+[forks-url]: https://github.com/geyserfund/geyser-app/network/members
+[stars-shield]: https://img.shields.io/github/stars/geyserfund/geyser-app.svg?style=for-the-badge
+[stars-url]: https://github.com/geyserfund/geyser-app/stargazers
+[issues-shield]: https://img.shields.io/github/issues/geyserfund/geyser-app.svg?style=for-the-badge
+[issues-url]: https://github.com/geyserfund/geyser-app/issues
 [license-shield]: https://img.shields.io/badge/license-GPLv3-blue?style=for-the-badge
 [license-url]: https://github.com/geyserfund/geyser-app/LICENSE.md
+
 [product-screenshot]: images/screenshot.png
+
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
 [React.js]: https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=000&style=for-the-badge
