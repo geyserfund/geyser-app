@@ -26,7 +26,7 @@ export const getFeaturedProject = () => {
   }
 
   if (__production__) {
-    return 'nostrville2023party'
+    return 'satoshisdontexist21'
   }
 
   return ''
