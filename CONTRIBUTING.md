@@ -21,6 +21,10 @@ Use one of the issue template to create either a bug or feature request.
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+### Recommended links
+
+[#### Study Style Guide](/STYLE_GUIDE.md) 
+[#### Study Architecture](/ARCHITECTURE.md)
 
 
 

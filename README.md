@@ -339,7 +339,11 @@ See the [open issues](https://github.com/geyserfund/geyser-app/issues) for a ful
 Contributions to Geyser are always welcome!
 
 - 📥 Pull requests and 🌟 Stars are always welcome.
+
 - Read our [contributing guide](/CONTRIBUTING.md) to get started,
+- Read our [style guide](/STYLE_GUIDE.md) to know more about style considerations.
+- Read our [Architecture guide](/ARCHITECTURE.md) to learn more about the project.
+
   or find us on [Discord](https://discord.gg/geyseryfund), we will take the time to guide you.
 
 <br />
