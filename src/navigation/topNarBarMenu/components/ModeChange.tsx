@@ -10,6 +10,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { MdColorLens } from 'react-icons/md'
 
 import { SatSymbolIcon } from '../../../components/icons'
 import { Modal } from '../../../components/layouts'
@@ -18,6 +19,8 @@ import {
   LanguageRequestUrl,
   languages,
 } from '../../../constants'
+import { useNostrColor } from '../../../context'
+import { nostrColorsLight, primaryColorsLight } from '../../../styles'
 import { allTranslations } from '../../../translations'
 import { ColorModeSwitcher } from '../../../utils'
 
@@ -25,6 +28,7 @@ export const ModeChange = () => {
   const { i18n, t } = useTranslation()
 
   const { isOpen, onClose, onOpen } = useDisclosure()
+  const [isNostrColor, setNostrColor] = useNostrColor()
 
   const renderLanguages = Object.keys(allTranslations).map((key) => {
     const translation = allTranslations[key as keyof typeof allTranslations]
@@ -38,6 +42,10 @@ export const ModeChange = () => {
     return language
   })
 
+  const handleTogglePrimaryColor = () => {
+    setNostrColor(!isNostrColor)
+  }
+
   return (
     <>
       <HStack
@@ -49,6 +57,14 @@ export const ModeChange = () => {
         spacing={3}
         justifyContent={{ base: 'space-between', lg: 'flex-start' }}
       >
+        <IconButton
+          size={{ base: 'sm', lg: 'md' }}
+          bg={isNostrColor ? primaryColorsLight[400] : nostrColorsLight[400]}
+          color="white"
+          onClick={handleTogglePrimaryColor}
+          icon={<MdColorLens />}
+          aria-label={`Switch primary color`}
+        />
         <ColorModeSwitcher />
         <Tooltip label="currency">
           <IconButton

@@ -53,7 +53,7 @@ export const theme = {
         },
       },
       variants: {
-        primary: {
+        primary: ({ theme }: StyleFunctionProps) => ({
           backgroundColor: lightModeColors.primary[400],
           border: 'none',
           color: lightModeColors.neutral[900],
@@ -63,7 +63,7 @@ export const theme = {
           _active: {
             backgroundColor: lightModeColors.neutral[300],
           },
-        },
+        }),
         primaryLink: ({ theme }: StyleFunctionProps) => ({
           backgroundColor: 'transparent',
           border: 'none',
