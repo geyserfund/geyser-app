@@ -19,19 +19,6 @@ export type DashboardSection = {
   semiFullWidth?: boolean
 }
 
-export const creatorSections: Record<string, DashboardSection> = {
-  contributors: {
-    label: 'Contributors',
-    path: 'dashboardContributors',
-    fullWidth: true,
-  },
-  stats: {
-    label: 'Stats',
-    path: 'dashboardStats',
-    fullWidth: true,
-  },
-}
-
 export const projectSections: Record<string, DashboardSection> = {
   description: {
     label: 'Description',
@@ -54,13 +41,13 @@ export const projectSections: Record<string, DashboardSection> = {
     label: 'Project settings',
     path: 'dashboardSettings',
   },
-  // shop: {
-  //   label: 'Shop items',
-  //   path: 'dashboardShop',
-  // },
+  nostr: {
+    label: 'Nostr settings',
+    path: 'dashboardNostr',
+  },
 }
 
-const sections = { ...creatorSections, ...projectSections }
+const sections = { ...projectSections }
 
 export const ProjectDashboard = () => {
   const { t } = useTranslation()
@@ -145,7 +132,7 @@ export const ProjectDashboard = () => {
               ? '100%'
               : activeSection?.semiFullWidth
               ? '4xl'
-              : '2xl',
+              : '3xl',
           }}
           justifyItems="center"
         >
