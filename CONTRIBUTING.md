@@ -9,7 +9,7 @@ Please note we have a [code of conduct](/CODE_OF_CONDUCT.md), please follow it i
 
 ### Reporting
 Use one of the issue template to create either a bug or feature request.
-1. [Create bug issue](https://github.com/geyserfund/geyser-app/issues/new?assignees=&labels=&projects=&bug_report.yml&title=)
+1. [Create bug issue](https://github.com/geyserfund/geyser-app/issues/new?assignees=&labels=bug&projects=&bug_report.yml&title=)
 1. [Create feature request issue](https://github.com/geyserfund/geyser-app/issues/new?assignees=&labels=feature&projects=&template=feature-request.yml&title=)
 
 ### Development 
