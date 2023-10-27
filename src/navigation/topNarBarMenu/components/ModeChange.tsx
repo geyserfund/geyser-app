@@ -48,35 +48,37 @@ export const ModeChange = () => {
 
   return (
     <>
-      <HStack
+      <VStack
         bgColor="neutral.200"
         borderRadius={{ base: '8px', lg: '0px' }}
-        mx={{ base: 2, lg: 0 }}
+        mx={{ base: '10px', lg: 0 }}
         mt={2}
         p={2}
-        spacing={3}
-        justifyContent={{ base: 'space-between', lg: 'flex-start' }}
       >
-        <IconButton
-          size={{ base: 'sm', lg: 'md' }}
-          bg={isNostrColor ? primaryColorsLight[400] : nostrColorsLight[400]}
-          color="white"
-          onClick={handleTogglePrimaryColor}
-          icon={<MdColorLens />}
-          aria-label={`Switch primary color`}
-        />
-        <ColorModeSwitcher />
-        <Tooltip label="currency">
+        <HStack spacing={3} justifyContent="space-between">
           <IconButton
             size={{ base: 'sm', lg: 'md' }}
-            bgColor="neutral.0"
-            variant="primaryNeutral"
-            aria-label="currency-convert"
-            icon={<SatSymbolIcon color="neutral.600" />}
-            isDisabled
+            bg={isNostrColor ? primaryColorsLight[400] : nostrColorsLight[400]}
+            color="white"
+            onClick={handleTogglePrimaryColor}
+            icon={<MdColorLens />}
+            aria-label={`Switch primary color`}
           />
-        </Tooltip>
+          <ColorModeSwitcher />
+          <Tooltip label="currency">
+            <IconButton
+              size={{ base: 'sm', lg: 'md' }}
+              bgColor="neutral.0"
+              variant="primaryNeutral"
+              aria-label="currency-convert"
+              icon={<SatSymbolIcon color="neutral.600" />}
+              isDisabled
+            />
+          </Tooltip>
+        </HStack>
+
         <Button
+          w="full"
           size={{ base: 'sm', lg: 'md' }}
           bgColor="neutral.0"
           color="neutral.600"
@@ -87,7 +89,7 @@ export const ModeChange = () => {
             {languages[i18n.resolvedLanguage as keyof typeof languages]}
           </Text>
         </Button>
-      </HStack>
+      </VStack>
       <Modal
         isOpen={isOpen}
         onClose={onClose}
