@@ -54,14 +54,16 @@ export const theme = {
       },
       variants: {
         primary: ({ theme }: StyleFunctionProps) => ({
-          backgroundColor: lightModeColors.primary[400],
+          backgroundColor: theme.colors.primary[400],
           border: 'none',
-          color: lightModeColors.neutral[900],
+          color: theme.isNostrColor
+            ? lightModeColors.neutral[0]
+            : lightModeColors.neutral[900],
           _hover: {
-            backgroundColor: lightModeColors.neutral[200],
+            backgroundColor: theme.colors.neutral[200],
           },
           _active: {
-            backgroundColor: lightModeColors.neutral[300],
+            backgroundColor: theme.colors.neutral[300],
           },
         }),
         primaryLink: ({ theme }: StyleFunctionProps) => ({
