@@ -36,7 +36,7 @@
   </div>
 
   <p align="center">
-    Geyser is a bitcoin-native crowdfunding platform where you can fund project ideas with the support from global communities.
+    Geyser is a bitcoin & nostr native crowdfunding platform where you can fund project ideas with the support from global communities.
     <br />
     <a href="https://geyser.fund/launch"><strong>Launch your project »</strong></a>
     <br />
@@ -84,7 +84,7 @@
 Where great ideas find great communities
 <br />
 <div align="center">
-    <img src="https://storage.googleapis.com/geyser-projects-media/images/about-project-read-me.png" alt="geyser Screenshot">
+    <img src="https://storage.googleapis.com/geyser-projects-media/images/readme-image.png" alt="geyser Screenshot">
 </div>
 
 ### Crowdfunding without borders
@@ -336,25 +336,6 @@ Contributions to Geyser are always welcome!
 
 <br />
 
-<!-- LICENSE -->
-## License
-
-Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<br />
-
-
-<!-- CONTACT -->
-## Contact
-
-* Stelios Rammos - [@steliosats](https://twitter.com/steliosats) - stelios@geyser.fund
-* Sajal Dulal - [@sajald77](https://twitter.com/sajald77) - sajal@geyser.fund
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 <!-- License -->
 ## License
 
@@ -371,7 +352,13 @@ Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+<!-- CONTACT -->
+## Contact
 
+* Stelios Rammos - [@steliosats](https://twitter.com/steliosats) - stelios@geyser.fund
+* Sajal Dulal - [@sajald77](https://twitter.com/sajald77) - sajal@geyser.fund
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
