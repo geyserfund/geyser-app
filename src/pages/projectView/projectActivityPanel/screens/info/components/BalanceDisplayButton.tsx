@@ -64,11 +64,17 @@ export const BalanceDisplayButton = ({
             variant="satoshi"
             color="primary.600"
             whiteSpace="pre-wrap"
+            fontWeight={600}
           >
             {balance}
           </SatoshiAmount>
         ) : (
-          <Text variant="satoshi" color="primary.400" textAlign="start">
+          <Text
+            variant="satoshi"
+            color="primary.600"
+            textAlign="start"
+            fontWeight={600}
+          >
             $ {formattedUsdAmount()}
           </Text>
         )}
