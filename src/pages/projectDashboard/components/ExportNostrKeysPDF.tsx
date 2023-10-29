@@ -115,7 +115,7 @@ export const ExportNostrKeysPDF = ({
               'https://storage.googleapis.com/geyser-projects-media/app/geyser-padded-logo.png'
             }
           />
-          <Text style={styles.title}>{t('Project private key (nsec)')}</Text>
+          <Text style={styles.title}>{t('Project private kit (NSEC)')}</Text>
         </View>
         <View style={styles.exportDateContainer}>
           <Text style={styles.exportDate}>{`${t('Exported on')} ${date}`}</Text>
