@@ -1,9 +1,9 @@
-import { VStack, Button } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
 import { AddIcon } from '@chakra-ui/icons'
+import { Button, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
-import { Body2 } from '../../components/typography'
 import { Modal } from '../../components/layouts/Modal'
+import { Body2 } from '../../components/typography'
 import { useModal } from '../../hooks/useModal'
 import { User } from '../../types'
 import {
@@ -30,6 +30,7 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
   if (!displayNostrButton && !displayTwitterButton && !displayLightningButton) {
     return null
   }
+
   const canConnectAccount =
     displayTwitterButton || displayNostrButton || displayLightningButton
 
