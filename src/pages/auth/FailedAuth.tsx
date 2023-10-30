@@ -33,7 +33,7 @@ export const FailedAuthComponent = () => {
     if (cookie.refreshToken) {
       removeCookie('refreshToken')
     }
-  }, [cookie])
+  }, [cookie, removeCookie])
   return (
     <VStack
       height="100vh"

@@ -389,8 +389,9 @@ export const ProjectCreationWalletConnectionForm = ({
           WalletConnectDetails.LightningAddressConnectionDetails
         ) {
           return (
+            Boolean(projectWallet?.connectionDetails?.lightningAddress) &&
             projectWallet?.connectionDetails?.lightningAddress ===
-            lightningAddressFormValue
+              lightningAddressFormValue
           )
         }
 
@@ -420,6 +421,8 @@ export const ProjectCreationWalletConnectionForm = ({
 
       return false
     }
+
+    return false
   }
 
   const validateLightningAddressFormat = async (lightningAddress: string) => {
