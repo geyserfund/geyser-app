@@ -32,12 +32,21 @@ export const FRAGMENT_PROJECT_FOR_PROFILE_PAGE = gql`
     thumbnailImage
     title
     createdAt
+    status
     owners {
       id
       user {
         id
         username
         imageUrl
+      }
+    }
+    wallets {
+      id
+      name
+      state {
+        status
+        statusCode
       }
     }
   }

@@ -275,7 +275,7 @@ export type Entry = {
   description: Scalars['description_String_NotNull_maxLength_2200']
   /** Number of funders that were created from the Entry's page. */
   fundersCount: Scalars['Int']
-  /** Funding received by method that were created from the Entry's page. */
+  /** Funding transactions that were created from the Entry's page. */
   fundingTxs: Array<FundingTx>
   id: Scalars['BigInt']
   /** Header image of the Entry. */
@@ -1090,7 +1090,14 @@ export type MutationResponse = {
 
 export type NostrKeys = {
   __typename?: 'NostrKeys'
+  privateKey?: Maybe<NostrPrivateKey>
   publicKey: NostrPublicKey
+}
+
+export type NostrPrivateKey = {
+  __typename?: 'NostrPrivateKey'
+  hex: Scalars['String']
+  nsec: Scalars['String']
 }
 
 export type NostrPublicKey = {
@@ -1263,7 +1270,7 @@ export type ProjectFundingTxStats = {
   amountGraph?: Maybe<Array<Maybe<FundingTxAmountGraph>>>
   /** Project contribution amount in the given datetime range. */
   amountSum?: Maybe<Scalars['Int']>
-  /** Project contribution amount in the given datetime range. */
+  /** Project contribution count in the given datetime range. */
   count: Scalars['Int']
   /** Project contribution count of each Funding Method in the given datetime range. */
   methodCount?: Maybe<Array<Maybe<FundingTxMethodCount>>>
@@ -2193,6 +2200,7 @@ export type ResolversTypes = {
     | ResolversTypes['DeleteUserResponse']
     | ResolversTypes['ProjectDeleteResponse']
   NostrKeys: ResolverTypeWrapper<NostrKeys>
+  NostrPrivateKey: ResolverTypeWrapper<NostrPrivateKey>
   NostrPublicKey: ResolverTypeWrapper<NostrPublicKey>
   OTPInput: OtpInput
   OTPLoginInput: OtpLoginInput
@@ -2494,6 +2502,7 @@ export type ResolversParentTypes = {
     | ResolversParentTypes['DeleteUserResponse']
     | ResolversParentTypes['ProjectDeleteResponse']
   NostrKeys: NostrKeys
+  NostrPrivateKey: NostrPrivateKey
   NostrPublicKey: NostrPublicKey
   OTPInput: OtpInput
   OTPLoginInput: OtpLoginInput
@@ -3471,11 +3480,25 @@ export type NostrKeysResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['NostrKeys'] = ResolversParentTypes['NostrKeys'],
 > = {
+  privateKey?: Resolver<
+    Maybe<ResolversTypes['NostrPrivateKey']>,
+    ParentType,
+    ContextType
+  >
   publicKey?: Resolver<
     ResolversTypes['NostrPublicKey'],
     ParentType,
     ContextType
   >
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type NostrPrivateKeyResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['NostrPrivateKey'] = ResolversParentTypes['NostrPrivateKey'],
+> = {
+  hex?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  nsec?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -4578,6 +4601,7 @@ export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>
   MutationResponse?: MutationResponseResolvers<ContextType>
   NostrKeys?: NostrKeysResolvers<ContextType>
+  NostrPrivateKey?: NostrPrivateKeyResolvers<ContextType>
   NostrPublicKey?: NostrPublicKeyResolvers<ContextType>
   OTPResponse?: OtpResponseResolvers<ContextType>
   Owner?: OwnerResolvers<ContextType>
@@ -4866,6 +4890,7 @@ export type ProjectForProfilePageFragment = {
   thumbnailImage?: string | null
   title: any
   createdAt: string
+  status?: ProjectStatus | null
   owners: Array<{
     __typename?: 'Owner'
     id: any
@@ -4874,6 +4899,16 @@ export type ProjectForProfilePageFragment = {
       id: any
       username: string
       imageUrl?: string | null
+    }
+  }>
+  wallets: Array<{
+    __typename?: 'Wallet'
+    id: any
+    name?: any | null
+    state: {
+      __typename?: 'WalletState'
+      status: WalletStatus
+      statusCode: WalletStatusCode
     }
   }>
 }
@@ -6584,12 +6619,21 @@ export const ProjectForProfilePageFragmentDoc = gql`
     thumbnailImage
     title
     createdAt
+    status
     owners {
       id
       user {
         id
         username
         imageUrl
+      }
+    }
+    wallets {
+      id
+      name
+      state {
+        status
+        statusCode
       }
     }
   }
