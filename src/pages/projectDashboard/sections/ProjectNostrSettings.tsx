@@ -106,7 +106,7 @@ export const ProjectNostrSettings = () => {
               <ul>
                 <li>
                   {t(
-                    'Handle the key with a lot of care. Anyone holding the private key can post on the project's behalf. If you leak your private key, the project risks being compromised, and there is nothing Geyser can do to prevent it.',
+                    "Handle the key with a lot of care. Anyone holding the private key can post on the project's behalf. If you leak your private key, the project risks being compromised, and there is nothing Geyser can do to prevent it.",
                   )}
                 </li>
                 <li>
