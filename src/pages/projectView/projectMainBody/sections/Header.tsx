@@ -19,6 +19,7 @@ import {
   ProjectFundingQR,
   ShareButton,
 } from '../components'
+import { NpubDisplay } from '../components/NpubDisplay'
 import { CreatorSocial } from './CreatorSocial'
 
 export const Header = forwardRef<HTMLDivElement>((_, ref) => {
@@ -110,6 +111,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             {project.shortDescription}
           </Text>
           <HStack w="full">
+            <NpubDisplay npub={project?.keys.nostrKeys.publicKey.npub} />
             <LightningAddress name={`${project.name}@geyser.fund`} />
             <ProjectFundingQR project={project} />
           </HStack>

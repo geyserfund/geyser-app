@@ -71,7 +71,7 @@ export const BalanceDisplayButton = ({
         ) : (
           <Text
             variant="satoshi"
-            color="primary.400"
+            color="primary.600"
             textAlign="start"
             fontWeight={600}
           >

@@ -1090,7 +1090,14 @@ export type MutationResponse = {
 
 export type NostrKeys = {
   __typename?: 'NostrKeys'
+  privateKey?: Maybe<NostrPrivateKey>
   publicKey: NostrPublicKey
+}
+
+export type NostrPrivateKey = {
+  __typename?: 'NostrPrivateKey'
+  hex: Scalars['String']
+  nsec: Scalars['String']
 }
 
 export type NostrPublicKey = {
@@ -1263,7 +1270,7 @@ export type ProjectFundingTxStats = {
   amountGraph?: Maybe<Array<Maybe<FundingTxAmountGraph>>>
   /** Project contribution amount in the given datetime range. */
   amountSum?: Maybe<Scalars['Int']>
-  /** Project contribution amount in the given datetime range. */
+  /** Project contribution count in the given datetime range. */
   count: Scalars['Int']
   /** Project contribution count of each Funding Method in the given datetime range. */
   methodCount?: Maybe<Array<Maybe<FundingTxMethodCount>>>
@@ -2193,6 +2200,7 @@ export type ResolversTypes = {
     | ResolversTypes['DeleteUserResponse']
     | ResolversTypes['ProjectDeleteResponse']
   NostrKeys: ResolverTypeWrapper<NostrKeys>
+  NostrPrivateKey: ResolverTypeWrapper<NostrPrivateKey>
   NostrPublicKey: ResolverTypeWrapper<NostrPublicKey>
   OTPInput: OtpInput
   OTPLoginInput: OtpLoginInput
@@ -2494,6 +2502,7 @@ export type ResolversParentTypes = {
     | ResolversParentTypes['DeleteUserResponse']
     | ResolversParentTypes['ProjectDeleteResponse']
   NostrKeys: NostrKeys
+  NostrPrivateKey: NostrPrivateKey
   NostrPublicKey: NostrPublicKey
   OTPInput: OtpInput
   OTPLoginInput: OtpLoginInput
@@ -3471,11 +3480,25 @@ export type NostrKeysResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['NostrKeys'] = ResolversParentTypes['NostrKeys'],
 > = {
+  privateKey?: Resolver<
+    Maybe<ResolversTypes['NostrPrivateKey']>,
+    ParentType,
+    ContextType
+  >
   publicKey?: Resolver<
     ResolversTypes['NostrPublicKey'],
     ParentType,
     ContextType
   >
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type NostrPrivateKeyResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['NostrPrivateKey'] = ResolversParentTypes['NostrPrivateKey'],
+> = {
+  hex?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  nsec?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -4578,6 +4601,7 @@ export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>
   MutationResponse?: MutationResponseResolvers<ContextType>
   NostrKeys?: NostrKeysResolvers<ContextType>
+  NostrPrivateKey?: NostrPrivateKeyResolvers<ContextType>
   NostrPublicKey?: NostrPublicKeyResolvers<ContextType>
   OTPResponse?: OtpResponseResolvers<ContextType>
   Owner?: OwnerResolvers<ContextType>
@@ -4836,6 +4860,20 @@ export type FundingTxForOverviewPageFragment = {
   }
 }
 
+export type ProjectNostrKeysFragment = {
+  __typename?: 'Project'
+  id: any
+  name: any
+  keys: {
+    __typename?: 'ProjectKeys'
+    nostrKeys: {
+      __typename?: 'NostrKeys'
+      privateKey?: { __typename?: 'NostrPrivateKey'; nsec: string } | null
+      publicKey: { __typename?: 'NostrPublicKey'; npub: string }
+    }
+  }
+}
+
 export type ProjectForLandingPageFragment = {
   __typename?: 'Project'
   id: any
@@ -4998,6 +5036,13 @@ export type ProjectFragment = {
       | { __typename?: 'LndConnectionDetailsPublic'; pubkey?: any | null }
   }>
   followers: Array<{ __typename?: 'User'; id: any; username: string }>
+  keys: {
+    __typename?: 'ProjectKeys'
+    nostrKeys: {
+      __typename?: 'NostrKeys'
+      publicKey: { __typename?: 'NostrPublicKey'; npub: string }
+    }
+  }
 }
 
 export type ProjectStatsForOverviewPageFragment = {
@@ -6224,6 +6269,15 @@ export type FeaturedProjectForLandingPageQuery = {
     | null
 }
 
+export type ProjectNostrKeysQueryVariables = Exact<{
+  where: UniqueProjectQueryInput
+}>
+
+export type ProjectNostrKeysQuery = {
+  __typename?: 'Query'
+  projectGet?: ({ __typename?: 'Project' } & ProjectNostrKeysFragment) | null
+}
+
 export type ProjectStatsGetOverViewQueryVariables = Exact<{
   input: GetProjectStatsInput
 }>
@@ -6575,6 +6629,22 @@ export const FundingTxForOverviewPageFragmentDoc = gql`
     comment
   }
 `
+export const ProjectNostrKeysFragmentDoc = gql`
+  fragment ProjectNostrKeys on Project {
+    id
+    name
+    keys {
+      nostrKeys {
+        privateKey {
+          nsec
+        }
+        publicKey {
+          npub
+        }
+      }
+    }
+  }
+`
 export const ProjectForProfilePageFragmentDoc = gql`
   fragment ProjectForProfilePage on Project {
     id
@@ -6741,6 +6811,13 @@ export const ProjectFragmentDoc = gql`
     followers {
       id
       username
+    }
+    keys {
+      nostrKeys {
+        publicKey {
+          npub
+        }
+      }
     }
   }
   ${UserMeFragmentDoc}
@@ -10509,6 +10586,65 @@ export type FeaturedProjectForLandingPageLazyQueryHookResult = ReturnType<
 export type FeaturedProjectForLandingPageQueryResult = Apollo.QueryResult<
   FeaturedProjectForLandingPageQuery,
   FeaturedProjectForLandingPageQueryVariables
+>
+export const ProjectNostrKeysDocument = gql`
+  query ProjectNostrKeys($where: UniqueProjectQueryInput!) {
+    projectGet(where: $where) {
+      ...ProjectNostrKeys
+    }
+  }
+  ${ProjectNostrKeysFragmentDoc}
+`
+
+/**
+ * __useProjectNostrKeysQuery__
+ *
+ * To run a query within a React component, call `useProjectNostrKeysQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectNostrKeysQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectNostrKeysQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectNostrKeysQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ProjectNostrKeysQuery,
+    ProjectNostrKeysQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ProjectNostrKeysQuery, ProjectNostrKeysQueryVariables>(
+    ProjectNostrKeysDocument,
+    options,
+  )
+}
+export function useProjectNostrKeysLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ProjectNostrKeysQuery,
+    ProjectNostrKeysQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    ProjectNostrKeysQuery,
+    ProjectNostrKeysQueryVariables
+  >(ProjectNostrKeysDocument, options)
+}
+export type ProjectNostrKeysQueryHookResult = ReturnType<
+  typeof useProjectNostrKeysQuery
+>
+export type ProjectNostrKeysLazyQueryHookResult = ReturnType<
+  typeof useProjectNostrKeysLazyQuery
+>
+export type ProjectNostrKeysQueryResult = Apollo.QueryResult<
+  ProjectNostrKeysQuery,
+  ProjectNostrKeysQueryVariables
 >
 export const ProjectStatsGetOverViewDocument = gql`
   query ProjectStatsGetOverView($input: GetProjectStatsInput!) {
