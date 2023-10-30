@@ -15,11 +15,11 @@ import { BtcProvider } from './context/btc'
 
 export const App = () => {
   return (
-    <ChakraProvider>
-      <ChakraThemeProvider>
-        <ServiceWorkerProvider>
-          <ApolloProvider client={client}>
-            <Provider>
+    <Provider>
+      <ChakraProvider>
+        <ChakraThemeProvider>
+          <ServiceWorkerProvider>
+            <ApolloProvider client={client}>
               <AuthProvider>
                 <NavProvider>
                   <BtcProvider>
@@ -28,10 +28,10 @@ export const App = () => {
                   </BtcProvider>
                 </NavProvider>
               </AuthProvider>
-            </Provider>
-          </ApolloProvider>
-        </ServiceWorkerProvider>
-      </ChakraThemeProvider>
-    </ChakraProvider>
+            </ApolloProvider>
+          </ServiceWorkerProvider>
+        </ChakraThemeProvider>
+      </ChakraProvider>
+    </Provider>
   )
 }

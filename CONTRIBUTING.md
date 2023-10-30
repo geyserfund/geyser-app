@@ -1,197 +1,31 @@
-## Styles
+# Contributing 
 
-### Framework
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-Chakra is the project's UI framework
+## Getting Started
+When contributing to this repository, please first discuss the change you wish to make via issue, email, Nostr dm or any other method with the owners of this repository before making a change.
 
-### Responsive
+Please note we have a [code of conduct](/CODE_OF_CONDUCT.md), please follow it in all your interactions with the project.
 
-Breakpoints are set in chakra's theme at `src/config/theme/theme.ts`
+### Reporting
+Use one of the issue template to create either a bug or feature request.
+1. [Create bug issue](https://github.com/geyserfund/geyser-app/issues/new?assignees=&labels=bug&projects=&bug_report.yml&title=)
+1. [Create feature request issue](https://github.com/geyserfund/geyser-app/issues/new?assignees=&labels=feature&projects=&template=feature-request.yml&title=)
 
-```
-sm: '30em', // 480px
-md: '48em', // 768px
-lg: '57em', // Desktop ~900px
-xl: '80em', // 1280px
-2xl: '96em', // 1536px
-```
+### Development 
 
-We mainly use `lg` as the starter for desktop, less than `lg` is considered mobile view, and those are the two main breakpoints used everywhere, except some specific places where it needed a special fit.
+1. Please fork the repo and use the [Readme](/README.md) to setup your local environment
+2. Create your Branch (`git checkout -b feature/AmazingFeature`)
+      use keywords to 
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-#### At component style level
+### Recommended links to review before contributing to development
 
-Main way to use responsive css is at chakra component level, when passing a style prop like say for example `marginTop` you can instead of passing a value pass chakra's responsive object: `{ base: 0, lg: 5 }` so that only desktop would show margin-top.
+- [Style Guide](/STYLE_GUIDE.md) 
+- [Architecture](/ARCHITECTURE.md)
 
-#### At component logic
 
-If you need responsiveness in logic or to hide and show elements, then you can use the hook
-`useMobileMode` to get the boolean for isMobile.
 
-If you need another specific breakpoint you can use chakra's hook:
-
-`useBreakpointValue` like this:
-
-```ts
-const isMd = useBreakpointValue({ base: false, md: true }, { ssr: false })
-```
-
-! Note: set `ssr` option to `false` to avoid flicker on first load.
-
-## Graphql
-
-This project uses Apollo Graphql
-
-### Apollo Studio
-
-Visit the [Apollo Studio Dashboard](https://studio.apollographql.com/graph/geyser-graph/variant/staging/explorer) to see the entire schema
-
-### Codegen
-
-Run `yarn graph:generate [env]` where env is usually the `staging` environment
-
-`yarn graph:generate staging`
-
-This will generate not only the types but also react hooks for every document, including the lazy counterparts for the queries.
-
-! All documents located at `src/graphql` will get their types and hooks generated into `src/types/generated`
-
-### Fragments
-
-Codegen will also generate types for fragments, so it's really useful and important to use fragments in documents whenever possible.
-
-This allows developers to use the specific fragments that are being queried or returned from mutations and subscriptions in React component props, so that it is ensured that the fields are there.
-
-Take this example fragment
-
-```ts
-export const FRAGMENT_USER_ME = gql`
-  fragment UserMe on User {
-    id
-    username
-    email
-  }
-`
-```
-
-It will generate the following type:
-
-```ts
-export type UserMeFragment = {
-  __typename?: 'User'
-  id: any
-  username: string
-  email?: string | null
-}
-```
-
-### Queries
-
-A query called `Me` using the previous fragment like this:
-
-```ts
-export const QUERY_ME = gql`
-  ${FRAGMENT_USER_ME}
-  query Me {
-    me {
-      ...UserMe
-    }
-  }
-`
-```
-
-Will generate a hook named `useMeQuery` and another `useMeLazyQuery` which will return the response typed with `UserMeFragment` and can be used in components that consume this information
-
-### Mutations
-
-A mutation called `UpdateUser` like this:
-
-```ts
-export const MUTATION_UPDATE_USER = gql`
-  ${FRAGMENT_USER_ME}
-  mutation UpdateUser($input: UpdateUserInput!) {
-    updateUser(input: $input) {
-      ...UserMe
-    }
-  }
-`
-```
-
-Will generate a hook named `useUpdateUserMutation` which will know what the input type is for developer autocomplete and will return the typed fragment as well in the response.
-
-## Forms
-
-This project has `react-hook-form` installed, and it's transitioning to use on all the forms that require validation and other logic.
-
-Some forms still have custom react state and validation, and it's okay for some features like search where it's only one or two fields.
-
-Other forms that still use react state should be migrated to react-hook-form, given the nature that it handles validation out of the box using yup, and it has the form error and touched and dirty states available so we don't have to re-invent the wheel on this.
-
-### Setup
-
-To setup a form you first need to use the form state from `react-hook-form`:
-
-```ts
-const form = useForm({})
-```
-
-Values can be passed like
-
-```ts
-const form = useForm({ values: isEdit ? myCurrentData : DEFAULT_VALUES })
-```
-
-or default values like
-
-```ts
-const form = useForm({
-  values: isEdit ? myCurrentData : undefined,
-  defaultValues: DEFAULT_VALUES,
-})
-```
-
-### Validation
-
-Import necessary things:
-
-```tsx
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useForm } from 'react-hook-form'
-```
-
-Create a schema
-
-```tsx
-const schema = yup.object({
-  myField: yup.string().required('This is required, pleb!'),
-})
-```
-
-Create a component and use the schema inside yupResolver
-
-```tsx
-const Component = () => {
-  const { handleSubmit } = useForm({ resolver: yupResolver(schema) })
-  const onSubmit = (values) => doSomething(values)
-  const onError = () => hadErrors()
-  return <form onSubmit={handleSubmit(onSubmit, onError)} />
-}
-```
-
-### Form Practices
-
-You can then use the submit like this:
-
-```tsx
-return (
-  <form onSubmit={form.handleSubmit((values) => doSomething(values))}>
-    <button type="submit" />
-  </form>
-)
-```
-
-This button with type submit inside a form will make it submit on ENTER key pressed as well as clicking it and it's better for SEO as well.
-
-### Form Components
-
-Form components located at `src/forms` are already setup to use with `react-hook-form` together with `chakra` by passing only the form's `control`
+<p align="right">(<a href="#readme-top">back to top</a>)</p>

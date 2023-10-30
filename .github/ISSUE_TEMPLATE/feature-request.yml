@@ -1,0 +1,52 @@
+name: "💡 Feature Request"
+description: Create a new ticket for a new feature request
+title: "💡 [REQUEST] - <title>"
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: "Summary"
+      description: A brief explanation of the feature
+      placeholder: eg:- Addition of a side bar in the project page would...
+    validations:
+      required: true
+  - type: textarea
+    id: basicExample
+    attributes:
+      label: "Basic Example"
+      description: Explain example use cases for this feature.
+      placeholder: eg:- Side bar would enable easy naviga...
+    validations:
+      required: true
+  - type: textarea
+    id: drawbacks
+    attributes:
+      label: "Drawbacks"
+      description: Any drawbacks or impact by this feature ?
+      placeholder: Identify the drawbacks and impacts while being neutral on your feature request
+    validations:
+      required: false
+  - type: textarea
+    id: implementation
+    attributes:
+      label: "Implementation"
+      description: Pull Request ID or Github Fork repo link or deployed link
+      placeholder: "https://sajald77/geyser-app-sidebar"
+    validations:
+      required: false
+  - type: textarea
+    id: referenceIssues
+    attributes:
+      label: "Reference Issues"
+      description: Issues that are related to this feature request
+      placeholder: "#Issues IDs"
+    validations:
+      required: false
+  - type: textarea
+    id: concerns
+    attributes:
+      label: "Other Concerns"
+      description: Any concerns or unresolved questions?
+      placeholder: Not sure how this would impact the ....
+    validations:
+      required: false
