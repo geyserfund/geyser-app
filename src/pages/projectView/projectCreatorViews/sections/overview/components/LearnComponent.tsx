@@ -5,18 +5,18 @@ import { Link } from 'react-router-dom'
 
 import { Body1, H3 } from '../../../../../../components/typography'
 import {
-  Gift3DImageUrl,
+  // Gift3DImageUrl,
   LearnAboutCrowdfundingUrl,
-  TextMessage3DImageUrl,
+  // TextMessage3DImageUrl,
 } from '../../../../../../constants'
-import { LearnDisplayCards } from '../elements'
+// import { LearnDisplayCards } from '../elements'
 
 export const LearnComponent = () => {
   const { t } = useTranslation()
   return (
     <VStack spacing="10px" w="full" alignItems="start">
       <H3 alignSelf="start">{t('Tips')}</H3>
-      <LearnDisplayCards
+      {/* <LearnDisplayCards
         image={Gift3DImageUrl}
         title={t('How do I sell merch')}
         description={t(
@@ -31,7 +31,7 @@ export const LearnComponent = () => {
         description={t(
           'Keep your supporters up-to-date with Entries on Geyser',
         )}
-      />
+      /> */}
       <Button
         as={Link}
         to={LearnAboutCrowdfundingUrl}

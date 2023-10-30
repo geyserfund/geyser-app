@@ -275,7 +275,7 @@ export type Entry = {
   description: Scalars['description_String_NotNull_maxLength_2200']
   /** Number of funders that were created from the Entry's page. */
   fundersCount: Scalars['Int']
-  /** Funding transactions that were created from the Entry's page. */
+  /** Funding received by method that were created from the Entry's page. */
   fundingTxs: Array<FundingTx>
   id: Scalars['BigInt']
   /** Header image of the Entry. */
