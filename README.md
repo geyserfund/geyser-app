@@ -84,17 +84,15 @@
 Where great ideas find great communities
 <br />
 <div align="center">
-    <img src="https://storage.googleapis.com/geyser-projects-media/images/readme-image.png" alt="geyser Screenshot">
+    <img src="https://storage.googleapis.com/geyser-projects-media/images/readme-image2.png" alt="geyser Screenshot">
 </div>
 
 ### Crowdfunding without borders
-Traditional crowdfunding platforms operate in only 30 or so countries. Thanks to Bitcoin, Geyser makes crowdfunding accessible to people all around the world.
+Traditional Crowdfunding and Creator Platforms are built on closed monetary and social networks, which limits the use of crowdfunding (a powerful financial primitive) to around 30 Western countries and restricts project reach and social interaction to the platform. 
 
-### Let the Sats and rewards flow
-Most project creators on Geyser reach their goals by selling merch related to their ideas, or giving perks and Nostr badges as a reward for supporters. Funders are bullish!
+Geyser is enabling the Open Creator Economy, by building fundraising on top of open Bitcoin/Lightning, open monetary networks, and Nostr, an open social network. With these tools we can empower creators globally to reach their communities and raise funds from them.
 
-### Bitcoin made super easy
-Getting your project up and running only takes a few minutes. And we make it easy for funders too, so they can fund on-chain, lightning, WebLN and LNURL. All funds go straight to your single wallet.
+As an open company, we also build Open Source software and rely on the support of contributors to change the world for the better.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
