@@ -9,7 +9,8 @@ import {
   Wrap,
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { FaGithub, FaPodcast, FaTelegramPlane, FaTwitter } from 'react-icons/fa'
+import { FaGithub, FaPodcast, FaTelegramPlane } from 'react-icons/fa'
+import { RiTwitterXLine } from 'react-icons/ri'
 
 import {
   AnalyticsUrl,
@@ -68,7 +69,7 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
               size="sm"
               background={'none'}
               aria-label="Geyser on Twitter"
-              icon={<FaTwitter fontSize="20px" />}
+              icon={<RiTwitterXLine fontSize="20px" />}
             />
           </Link>
 

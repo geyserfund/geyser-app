@@ -7,7 +7,8 @@ import {
   Wrap,
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { FaGithub, FaPodcast, FaTelegramPlane, FaTwitter } from 'react-icons/fa'
+import { FaGithub, FaPodcast, FaTelegramPlane } from 'react-icons/fa'
+import { RiTwitterXLine } from 'react-icons/ri'
 
 import { NostrSvgIcon } from '../../../components/icons'
 import { Subscribe } from '../../../components/nav/Subscribe'
@@ -62,7 +63,7 @@ export const FilterFooter = () => {
             size="sm"
             background={'none'}
             aria-label="Geyser on Twitter"
-            icon={<FaTwitter fontSize="20px" />}
+            icon={<RiTwitterXLine fontSize="20px" />}
           />
         </Link>
 

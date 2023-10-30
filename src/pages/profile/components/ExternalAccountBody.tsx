@@ -2,7 +2,7 @@ import { CheckIcon, CloseIcon, CopyIcon } from '@chakra-ui/icons'
 import { HStack, Icon, StackProps, Tooltip } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BsTwitter } from 'react-icons/bs'
+import { RiTwitterXLine } from 'react-icons/ri'
 
 import {
   BoltSvgIcon,
@@ -10,15 +10,10 @@ import {
   NostrSvgIcon,
 } from '../../../components/icons'
 import { Body2 } from '../../../components/typography'
-import { socialColors } from '../../../styles'
 import { ExternalAccountType } from '../../auth'
 
-const externalAccountColorMap = {
-  [ExternalAccountType.twitter]: socialColors.twitter,
-} as { [key: string]: string }
-
 const externalAccountIconMap = {
-  [ExternalAccountType.twitter]: BsTwitter,
+  [ExternalAccountType.twitter]: RiTwitterXLine,
   [ExternalAccountType.lightning]: BoltSvgIcon,
   [ExternalAccountType.nostr]: NostrSvgIcon,
   [ExternalAccountType.fountain]: FountainIcon,
@@ -75,7 +70,6 @@ export const ExternalAccountBody = ({
   const renderBody = () => (
     <HStack
       w="100%"
-      color={externalAccountColorMap[type]}
       padding="5px 10px"
       justifyContent="space-between"
       _hover={{ cursor: 'pointer' }}
