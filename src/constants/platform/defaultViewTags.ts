@@ -26,7 +26,7 @@ export const getFeaturedProject = () => {
   }
 
   if (__production__) {
-    return 'satoshisdontexist21'
+    return 'nabitechnology'
   }
 
   return ''
