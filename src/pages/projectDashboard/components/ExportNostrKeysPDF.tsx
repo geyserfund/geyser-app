@@ -115,7 +115,7 @@ export const ExportNostrKeysPDF = ({
               'https://storage.googleapis.com/geyser-projects-media/app/geyser-padded-logo.png'
             }
           />
-          <Text style={styles.title}>{t('Project private kit (NSEC)')}</Text>
+          <Text style={styles.title}>{t('Project private kit (nsec)')}</Text>
         </View>
         <View style={styles.exportDateContainer}>
           <Text style={styles.exportDate}>{`${t('Exported on')} ${date}`}</Text>
@@ -123,7 +123,7 @@ export const ExportNostrKeysPDF = ({
         <View style={styles.noteContainer}>
           <Text style={styles.normalText}>
             {t(
-              'If you get locked out of your project from Geyser you can access your project from any other Nostr client by using your Private key, which Geyser has recovered for you.',
+              'If you get locked out of your project from Geyser you can access your project from any other Nostr client by using your Private Key, which has been backed up by Geyser for you.',
             )}
           </Text>
           <Text style={styles.normalText}>
