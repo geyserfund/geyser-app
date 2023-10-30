@@ -4860,6 +4860,20 @@ export type FundingTxForOverviewPageFragment = {
   }
 }
 
+export type ProjectNostrKeysFragment = {
+  __typename?: 'Project'
+  id: any
+  name: any
+  keys: {
+    __typename?: 'ProjectKeys'
+    nostrKeys: {
+      __typename?: 'NostrKeys'
+      privateKey?: { __typename?: 'NostrPrivateKey'; nsec: string } | null
+      publicKey: { __typename?: 'NostrPublicKey'; npub: string }
+    }
+  }
+}
+
 export type ProjectForLandingPageFragment = {
   __typename?: 'Project'
   id: any
@@ -5033,6 +5047,13 @@ export type ProjectFragment = {
       | { __typename?: 'LndConnectionDetailsPublic'; pubkey?: any | null }
   }>
   followers: Array<{ __typename?: 'User'; id: any; username: string }>
+  keys: {
+    __typename?: 'ProjectKeys'
+    nostrKeys: {
+      __typename?: 'NostrKeys'
+      publicKey: { __typename?: 'NostrPublicKey'; npub: string }
+    }
+  }
 }
 
 export type ProjectStatsForOverviewPageFragment = {
@@ -6259,6 +6280,15 @@ export type FeaturedProjectForLandingPageQuery = {
     | null
 }
 
+export type ProjectNostrKeysQueryVariables = Exact<{
+  where: UniqueProjectQueryInput
+}>
+
+export type ProjectNostrKeysQuery = {
+  __typename?: 'Query'
+  projectGet?: ({ __typename?: 'Project' } & ProjectNostrKeysFragment) | null
+}
+
 export type ProjectStatsGetOverViewQueryVariables = Exact<{
   input: GetProjectStatsInput
 }>
@@ -6610,6 +6640,22 @@ export const FundingTxForOverviewPageFragmentDoc = gql`
     comment
   }
 `
+export const ProjectNostrKeysFragmentDoc = gql`
+  fragment ProjectNostrKeys on Project {
+    id
+    name
+    keys {
+      nostrKeys {
+        privateKey {
+          nsec
+        }
+        publicKey {
+          npub
+        }
+      }
+    }
+  }
+`
 export const ProjectForProfilePageFragmentDoc = gql`
   fragment ProjectForProfilePage on Project {
     id
@@ -6785,6 +6831,13 @@ export const ProjectFragmentDoc = gql`
     followers {
       id
       username
+    }
+    keys {
+      nostrKeys {
+        publicKey {
+          npub
+        }
+      }
     }
   }
   ${UserMeFragmentDoc}
@@ -10553,6 +10606,65 @@ export type FeaturedProjectForLandingPageLazyQueryHookResult = ReturnType<
 export type FeaturedProjectForLandingPageQueryResult = Apollo.QueryResult<
   FeaturedProjectForLandingPageQuery,
   FeaturedProjectForLandingPageQueryVariables
+>
+export const ProjectNostrKeysDocument = gql`
+  query ProjectNostrKeys($where: UniqueProjectQueryInput!) {
+    projectGet(where: $where) {
+      ...ProjectNostrKeys
+    }
+  }
+  ${ProjectNostrKeysFragmentDoc}
+`
+
+/**
+ * __useProjectNostrKeysQuery__
+ *
+ * To run a query within a React component, call `useProjectNostrKeysQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectNostrKeysQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectNostrKeysQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectNostrKeysQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ProjectNostrKeysQuery,
+    ProjectNostrKeysQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ProjectNostrKeysQuery, ProjectNostrKeysQueryVariables>(
+    ProjectNostrKeysDocument,
+    options,
+  )
+}
+export function useProjectNostrKeysLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ProjectNostrKeysQuery,
+    ProjectNostrKeysQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    ProjectNostrKeysQuery,
+    ProjectNostrKeysQueryVariables
+  >(ProjectNostrKeysDocument, options)
+}
+export type ProjectNostrKeysQueryHookResult = ReturnType<
+  typeof useProjectNostrKeysQuery
+>
+export type ProjectNostrKeysLazyQueryHookResult = ReturnType<
+  typeof useProjectNostrKeysLazyQuery
+>
+export type ProjectNostrKeysQueryResult = Apollo.QueryResult<
+  ProjectNostrKeysQuery,
+  ProjectNostrKeysQueryVariables
 >
 export const ProjectStatsGetOverViewDocument = gql`
   query ProjectStatsGetOverView($input: GetProjectStatsInput!) {

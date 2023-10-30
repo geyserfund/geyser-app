@@ -23,7 +23,11 @@ export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
   return (
     <>
       <Tooltip
-        label={copy ? t('Copied!') : t('Copy Lightning Address')}
+        label={
+          copy
+            ? t('Copied!')
+            : t('Copy Lightning Address / Nostr identifier (NIP-05)')
+        }
         placement="top"
         closeOnClick={false}
       >

@@ -35,6 +35,7 @@
     "@hookform/resolvers": "^3.1.0",
     "@loadable/component": "^5.15.3",
     "@react-hookz/web": "^23.0.0",
+    "@react-pdf/renderer": "^3.1.14",
     "@remirror/extension-node-formatting": "^2.0.13",
     "@remirror/pm": "^2.0.5",
     "@remirror/react": "^2.0.28",
