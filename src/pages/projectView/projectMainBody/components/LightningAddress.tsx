@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { BoltIcon } from '../../../../components/icons'
 import { Body1 } from '../../../../components/typography'
+import { nostrColorsLight, primaryColorsLight } from '../../../../styles'
 import { copyTextToClipboard } from '../../../../utils'
 
 interface ILightningQR extends ButtonProps {
@@ -29,14 +30,19 @@ export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
         <Button
           size="sm"
           color="neutral.600"
-          leftIcon={<BoltIcon />}
+          leftIcon={<BoltIcon color={nostrColorsLight[400]} />}
           variant="secondary"
           onClick={handleAddressCopy}
           id="lightning-address"
           border="none"
           {...rest}
         >
-          <Body1 semiBold isTruncated>
+          <Body1
+            semiBold
+            isTruncated
+            background={`linear-gradient(270deg, ${primaryColorsLight[500]} -0.1%, ${nostrColorsLight[400]} 99.9%)`}
+            backgroundClip="text"
+          >
             {name}
           </Body1>
         </Button>
