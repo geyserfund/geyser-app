@@ -64,6 +64,32 @@ export const primaryColorsDark = {
   900: '#E9FFFB',
 }
 
+export const nostrColorsLight = {
+  50: '#F7E7FF',
+  100: '#E3B5FF',
+  200: '#EBC1FF',
+  300: '#DE98FF',
+  400: '#C54BFF',
+  500: '#BA29FF',
+  600: '#B010FD',
+  700: '#9104D3',
+  800: '#6F02A3',
+  900: '#3A0255',
+}
+
+export const nostrColorsDark = {
+  50: '#3A0255',
+  100: '#6F02A3',
+  200: '#9104D3',
+  300: '#B010FD',
+  400: '#BA29FF',
+  500: '#C54BFF',
+  600: '#CF69FF',
+  700: '#DE98FF',
+  800: '#EBC1FF',
+  900: '#F7E7FF',
+}
+
 export const secondaryColors = {
   green: '#00E34D',
   red: '#DF3634',
