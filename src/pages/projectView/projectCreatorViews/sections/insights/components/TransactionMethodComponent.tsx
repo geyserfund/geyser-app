@@ -13,9 +13,9 @@ import { FundingMethodsPieChart } from '../elements'
 import { getDateParams } from '../helpers'
 import { useSelectionAtom } from '../insightsAtom'
 
-type MethodCountType = {
+type MethodSumType = {
   method: string
-  count: number
+  sum: number
 }
 
 export const TransactionMethodComponent = (props: CardLayoutProps) => {
@@ -25,20 +25,20 @@ export const TransactionMethodComponent = (props: CardLayoutProps) => {
 
   const [selectionOption] = useSelectionAtom()
 
-  const [methodCount, setMethodCount] = useState<MethodCountType[]>([])
+  const [methodSum, setMethodSum] = useState<MethodSumType[]>([])
 
   const [getProjectFundingMethodStats, { loading }] =
     useProjectFundingMethodStatsGetLazyQuery({
       onCompleted(data) {
         const stats = data.projectStatsGet
-        const value: MethodCountType[] =
-          stats.current?.projectFundingTxs?.methodCount?.map((count) => {
+        const value: MethodSumType[] =
+          stats.current?.projectFundingTxs?.methodSum?.map((sum) => {
             return {
-              method: count?.method || '',
-              count: count?.count || 0,
+              method: sum?.method || '',
+              sum: sum?.sum || 0,
             }
           }) || []
-        setMethodCount(value)
+        setMethodSum(value)
       },
       onError(error) {
         toast({
@@ -79,8 +79,8 @@ export const TransactionMethodComponent = (props: CardLayoutProps) => {
       mobileDense
       {...props}
     >
-      <H3>{t('Funding transactions')}</H3>
-      <FundingMethodsPieChart data={methodCount} loading={loading} />
+      <H3>{t('Funding received by method')}</H3>
+      <FundingMethodsPieChart data={methodSum} loading={loading} />
     </CardLayout>
   )
 }

@@ -1,4 +1,5 @@
 export * from './DeleteProjectModal'
+export * from './ExportNostrKeysPDF'
 export * from './ProjectFundingSettingsLightningAddressView'
 export * from './StatCard'
 export * from './WalletConnectionDetails'

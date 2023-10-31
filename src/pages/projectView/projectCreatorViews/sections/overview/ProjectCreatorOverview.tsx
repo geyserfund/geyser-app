@@ -1,5 +1,7 @@
 import { HStack, Stack, VStack } from '@chakra-ui/react'
 
+import { useProjectContext } from '../../../../../context'
+import { LaunchProjectNotice } from '../../../projectMainBody'
 import {
   ContributorsComponent,
   LearnComponent,
@@ -8,6 +10,7 @@ import {
 } from './components'
 
 export const ProjectCreatorOverview = () => {
+  const { project } = useProjectContext()
   return (
     <Stack
       direction={{ base: 'column', lg: 'row' }}
@@ -26,6 +29,7 @@ export const ProjectCreatorOverview = () => {
           <OverviewHeader />
           <StatsComponent />
           <ContributorsComponent />
+          {project && <LaunchProjectNotice project={project} />}
         </VStack>
       </HStack>
 

@@ -152,7 +152,12 @@ export const ContributionActivityItem = ({
           {/* Funding Media Attachment */}
 
           {fundingTx.media ? (
-            <Box h={'178px'} bg={'gray.100'} pos={'relative'}>
+            <Box
+              h={'178px'}
+              bg={'gray.100'}
+              pos={'relative'}
+              borderRadius="8px"
+            >
               <Image
                 src={fundingTx.media}
                 alt="Contribution media attachment"

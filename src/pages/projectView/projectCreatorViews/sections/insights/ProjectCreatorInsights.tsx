@@ -1,6 +1,8 @@
 import { Stack, VStack } from '@chakra-ui/react'
 
+import { useProjectContext } from '../../../../../context'
 import { MobileDivider } from '../../../../grants/components'
+import { LaunchProjectNotice } from '../../../projectMainBody'
 import {
   HistoricalComponent,
   InsightsHeader,
@@ -11,6 +13,7 @@ import { RewardSoldComponent } from './components/RewardSoldComponent'
 import { TransactionRegionComponent } from './components/TransactionRegionComponent'
 
 export const ProjectCreatorInsights = () => {
+  const { project } = useProjectContext()
   return (
     <VStack
       direction={{ base: 'column', lg: 'row' }}
@@ -33,6 +36,7 @@ export const ProjectCreatorInsights = () => {
       </Stack>
       <MobileDivider />
       <RewardSoldComponent />
+      {project && <LaunchProjectNotice project={project} />}
     </VStack>
   )
 }

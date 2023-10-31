@@ -12,6 +12,7 @@ import {
   GermanTranslations,
   GreekTranslations,
   ItalianTranslations,
+  JapaneseTranslations,
   PolishTranslations,
   PortugueseTranslation,
   SpanishTranslations,
@@ -70,6 +71,9 @@ i18next
       },
       [lng.tr]: {
         translation: TurkishTranslations,
+      },
+      [lng.ja]: {
+        translation: JapaneseTranslations,
       },
     },
   })

@@ -1,7 +1,7 @@
 import { Button, ButtonProps, Link, Tooltip } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BsTwitter } from 'react-icons/bs'
+import { RiTwitterXLine } from 'react-icons/ri'
 
 import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
@@ -126,7 +126,7 @@ export const ConnectWithTwitter = ({
         size="sm"
         color={variant ? 'social.twitter' : 'black'}
         backgroundColor={variant ? 'transparent' : 'social.twitter'}
-        leftIcon={<BsTwitter />}
+        leftIcon={<RiTwitterXLine />}
         _hover={{
           backgroundColor: 'social.twitterDark',
           color: 'white',

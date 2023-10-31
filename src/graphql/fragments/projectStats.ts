@@ -52,6 +52,7 @@ export const FRAGMENT_PROJECT_STATS_INSIGHTS_PAGE = gql`
       }
       projectFundingTxs {
         amountSum
+        count
       }
     }
     prevTimeRange {
@@ -67,6 +68,7 @@ export const FRAGMENT_PROJECT_STATS_INSIGHTS_PAGE = gql`
       }
       projectFundingTxs {
         amountSum
+        count
       }
     }
   }
@@ -111,8 +113,8 @@ export const FRAGMENT_FUNDING_METHOD_STATS = gql`
   fragment ProjectFundingMethodStats on ProjectStats {
     current {
       projectFundingTxs {
-        methodCount {
-          count
+        methodSum {
+          sum
           method
         }
       }

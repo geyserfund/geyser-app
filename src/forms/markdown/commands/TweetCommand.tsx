@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react'
 import { useCommands } from '@remirror/react'
 import { useTranslation } from 'react-i18next'
-import { BsTwitter } from 'react-icons/bs'
+import { RiTwitterXLine } from 'react-icons/ri'
 
 import { useDarkMode, useNotification } from '../../../utils'
 import { TwitterRegex } from '../../validations/twitter'
@@ -68,7 +68,7 @@ export const TweetCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
         onClick={() => modal.onOpen()}
         isDisabled={isDisabled}
       >
-        <BsTwitter />
+        <RiTwitterXLine />
       </ToolbarCommandButton>
       {modal.isOpen ? <InsertTwitterModal {...modal} /> : null}
       <Box

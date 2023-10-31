@@ -8,6 +8,7 @@ import FrenchTranslations from './French.json'
 import GermanTranslations from './German.json'
 import GreekTranslations from './Greek.json'
 import ItalianTranslations from './Italian.json'
+import JapaneseTranslations from './Japanese.json'
 import PolishTranslations from './Polish.json'
 import PortugueseTranslation from './Portuguese.json'
 import SpanishTranslations from './Spanish.json'
@@ -28,6 +29,7 @@ export const allTranslations = {
   [lng.es]: SpanishTranslations,
   [lng.sw]: SwahiliTranslations,
   [lng.tr]: TurkishTranslations,
+  [lng.ja]: JapaneseTranslations,
 }
 
 export {
@@ -39,6 +41,7 @@ export {
   GermanTranslations,
   GreekTranslations,
   ItalianTranslations,
+  JapaneseTranslations,
   NigerianTranslations,
   PolishTranslations,
   PortugueseTranslation,

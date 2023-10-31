@@ -6,8 +6,8 @@ import {
   User,
   useUserProfileProjectsQuery,
 } from '../../../../types'
-import { LandingProjectCard } from '../../../landing/components'
 import { CreateAProjectButton, ProfileTabLayout } from '../../components'
+import { ProfileProjectCard } from './components/ProfileProjectCard'
 import { CreateProject } from './CreateProject'
 
 export const ProfileProjects = ({
@@ -53,7 +53,12 @@ export const ProfileProjects = ({
         ? [1, 2].map((val) => <LandingCardBaseSkeleton key={val} isMobile />)
         : projectsToRender.map((project) => {
             return (
-              <LandingProjectCard key={project.id} project={project} isMobile />
+              <ProfileProjectCard
+                key={project.id}
+                project={project}
+                isMobile
+                showStatus
+              />
             )
           })}
     </ProfileTabLayout>

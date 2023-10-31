@@ -18,10 +18,10 @@ import {
   BsSnapchat,
   BsTelegram,
   BsTwitch,
-  BsTwitter,
   BsYoutube,
 } from 'react-icons/bs'
 import { FaTiktok } from 'react-icons/fa'
+import { RiTwitterXLine } from 'react-icons/ri'
 
 import { AmbossIcon } from '../components/icons'
 import { WavlakeIcon } from '../components/icons/svg'
@@ -33,7 +33,7 @@ export const getIconForLink = (value: Maybe<string>) => {
   }
 
   if (value?.toLowerCase().includes('twitter')) {
-    return BsTwitter
+    return RiTwitterXLine
   }
 
   if (value?.toLowerCase().includes('linkedin')) {

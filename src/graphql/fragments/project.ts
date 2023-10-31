@@ -3,6 +3,23 @@ import { gql } from '@apollo/client'
 import { FRAGMENT_ENTRY_FOR_PROJECT } from './entries'
 import { FRAGMENT_USER_FOR_AVATAR, FRAGMENT_USER_ME } from './user'
 
+export const FRAGMENT_PROJECT_NOSTR_KEYS = gql`
+  fragment ProjectNostrKeys on Project {
+    id
+    name
+    keys {
+      nostrKeys {
+        privateKey {
+          nsec
+        }
+        publicKey {
+          npub
+        }
+      }
+    }
+  }
+`
+
 export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
   fragment ProjectForLandingPage on Project {
     id
@@ -32,12 +49,21 @@ export const FRAGMENT_PROJECT_FOR_PROFILE_PAGE = gql`
     thumbnailImage
     title
     createdAt
+    status
     owners {
       id
       user {
         id
         username
         imageUrl
+      }
+    }
+    wallets {
+      id
+      name
+      state {
+        status
+        statusCode
       }
     }
   }
@@ -170,6 +196,17 @@ export const FRAGMENT_PROJECT = gql`
         }
         ... on LndConnectionDetailsPublic {
           pubkey
+        }
+      }
+    }
+    followers {
+      id
+      username
+    }
+    keys {
+      nostrKeys {
+        publicKey {
+          npub
         }
       }
     }

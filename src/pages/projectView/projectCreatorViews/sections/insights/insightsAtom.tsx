@@ -4,6 +4,8 @@ import { ProjectViewBaseStats } from '../../../../../types'
 import { InsightsOptions } from './components'
 
 type StatsInsightsAtom = {
+  contributionSum: number
+  prevContributionSum: number
   contributionCount: number
   prevContributionCount: number
   contributorsCount: number
@@ -21,6 +23,8 @@ type StatsInsightsAtom = {
 export const selectionAtom = atom<InsightsOptions>(InsightsOptions.lastWeek)
 
 export const statsInsightsAtom = atom<StatsInsightsAtom>({
+  contributionSum: 0,
+  prevContributionSum: 0,
   contributionCount: 0,
   prevContributionCount: 0,
   contributorsCount: 0,

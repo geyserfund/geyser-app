@@ -1,11 +1,6 @@
-import {
-  Button,
-  Link,
-  ThemeComponentProps,
-  ThemeTypings,
-} from '@chakra-ui/react'
+import { Button, Link } from '@chakra-ui/react'
 import { ReactElement, useMemo } from 'react'
-import { BsTwitter } from 'react-icons/bs'
+import { RiTwitterXLine } from 'react-icons/ri'
 import { createUseStyles } from 'react-jss'
 import { Link as ReactRouterLink } from 'react-router-dom'
 
@@ -38,7 +33,7 @@ export const ExternalAccountLinkItem = ({ account }: Props) => {
       case 'twitter':
         return `https://twitter.com/${externalUsername}`
       case 'Fountain':
-        return `https://www.fountain.fm/${account.externalUsername}`
+        return `https://www.fountain.fm/${externalUsername}`
       default:
         return `${GeyserHomepageUrl}`
     }
@@ -58,7 +53,7 @@ export const ExternalAccountLinkItem = ({ account }: Props) => {
   const buttonIcon: ReactElement = useMemo(() => {
     switch (type) {
       case 'twitter':
-        return <BsTwitter />
+        return <RiTwitterXLine />
       case 'Fountain':
         return <FountainIcon />
       default:
@@ -66,34 +61,11 @@ export const ExternalAccountLinkItem = ({ account }: Props) => {
     }
   }, [type])
 
-  const buttonVariant: ThemeComponentProps['variant'] = useMemo(() => {
-    switch (type) {
-      case 'twitter':
-        return 'solid'
-      case 'Fountain':
-        return 'ghost'
-      default:
-        return 'ghost'
-    }
-  }, [type])
-
-  const buttonColorScheme: ThemeTypings['colorSchemes'] | '' = useMemo(() => {
-    switch (type) {
-      case 'twitter':
-        return 'twitter'
-      case 'Fountain':
-        return ''
-      default:
-        return ''
-    }
-  }, [type])
-
   return isLinkExternal ? (
     <Link href={linkDestination} isExternal className={styles.linkContainer}>
       <Button
         leftIcon={buttonIcon}
-        colorScheme={buttonColorScheme}
-        variant={buttonVariant}
+        variant={'ghost'}
         className={styles.linkButton}
       >
         {account.externalUsername}
@@ -107,8 +79,7 @@ export const ExternalAccountLinkItem = ({ account }: Props) => {
     >
       <Button
         leftIcon={buttonIcon}
-        colorScheme={buttonColorScheme}
-        variant={buttonVariant}
+        variant={'ghost'}
         className={styles.linkButton}
       >
         {account.externalUsername}

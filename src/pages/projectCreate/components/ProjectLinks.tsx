@@ -56,6 +56,7 @@ export const ProjectLinks = ({
       subtitle={t(
         'Connect your sites so viewers can see more proof of your work',
       )}
+      info={t('Please provide secure links, starting with https://')}
     >
       <VStack w="full" spacing={3}>
         {links &&
