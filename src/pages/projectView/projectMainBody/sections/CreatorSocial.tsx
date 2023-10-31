@@ -6,6 +6,7 @@ import { UserAvatarWithLink } from '../../../../components/ui/UserAvatar'
 import { getPath } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { useExternalAccountsButtons } from '../../../../hooks/useExternalAccountsButtons'
+import { NpubDisplay } from '../components/NpubDisplay'
 
 export const CreatorSocial = () => {
   const isMd = useBreakpointValue({ base: false, md: true }, { ssr: false })
@@ -47,36 +48,40 @@ export const CreatorSocial = () => {
         </Body1>
       </Link>
       <HStack>
-        {accountButtonProps.map(({ username, icon, color, props }, index) => {
-          if (!icon || !props) {
-            return
-          }
+        {accountButtonProps.map(
+          ({ username, icon, color, props, key }, index) => {
+            if (!icon || !props) {
+              return
+            }
 
-          return (
-            <Text
-              key={index}
-              {...props}
-              color={color}
-              whiteSpace="nowrap"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              borderRadius="8px"
-              px={3}
-              py={1}
-              variant="body"
-              fontWeight={500}
-              bg="neutral.100"
-            >
-              {icon}
-              {isMd ? (
-                <Text ml={2} variant="body" maxW="12em" isTruncated>
-                  {username}
-                </Text>
-              ) : null}
-            </Text>
-          )
-        })}
+            if (key === 'nostr') {
+              return <NpubDisplay key={index} npub={username} />
+            }
+
+            return (
+              <Text
+                key={index}
+                {...props}
+                whiteSpace="nowrap"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                borderRadius="8px"
+                color="neutral.600"
+                textDecoration={'none'}
+                px={3}
+                py={1}
+              >
+                {icon}
+                {isMd ? (
+                  <Body1 semiBold ml={2} maxW="12em" isTruncated>
+                    {username}
+                  </Body1>
+                ) : null}
+              </Text>
+            )
+          },
+        )}
       </HStack>
     </HStack>
   )

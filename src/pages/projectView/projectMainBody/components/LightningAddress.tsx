@@ -18,6 +18,9 @@ export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
   const handleAddressCopy = () => {
     copyTextToClipboard(name)
     setCopy(true)
+    setTimeout(() => {
+      setCopy(false)
+    }, 2000)
   }
 
   return (
@@ -34,7 +37,7 @@ export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
         <Button
           size="sm"
           color="neutral.600"
-          leftIcon={<BoltIcon color={nostrColorsLight[400]} />}
+          leftIcon={<BoltIcon height="16px" color={nostrColorsLight[400]} />}
           variant="secondary"
           onClick={handleAddressCopy}
           id="lightning-address"
