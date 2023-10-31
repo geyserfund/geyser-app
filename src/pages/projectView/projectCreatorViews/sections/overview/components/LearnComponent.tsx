@@ -18,7 +18,7 @@ export const LearnComponent = () => {
       <H3 alignSelf="start">{t('Tips')}</H3>
       <LearnDisplayCards
         image={Gift3DImageUrl}
-        title={t('How do I sell merch')}
+        title={t('Sell merch')}
         description={t(
           'Sell merch, perks, and rewards related to your project',
         )}
@@ -27,7 +27,7 @@ export const LearnComponent = () => {
       <LearnDisplayCards
         maxWidth="350px"
         image={TextMessage3DImageUrl}
-        title={t('Engage my community')}
+        title={t('Engage your community')}
         description={t(
           'Keep your supporters up-to-date with Entries on Geyser',
         )}

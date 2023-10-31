@@ -19,6 +19,7 @@ export const FeedbackUrl = 'https://airtable.com/shrGiEJKsPoDsysPf'
 export const GeyserTwitterUrl = 'https://twitter.com/geyserfund'
 export const GeyserTelegramUrl = 'https://t.me/geyserfund'
 export const GeyserPodcastUrl = 'https://fountain.fm/show/P5kWpoVIT7YGmPRenVN4'
+export const GeyserGithubUrl = 'https://github.com/geyserfund/geyser-app'
 export const GeyserHomepageUrl = 'https://geyser.fund/'
 export const GeyserPrivacyUrl =
   'https://geyser.notion.site/Geyser-Privacy-Policy-7d008651271249b18d6886edbb2edaba'

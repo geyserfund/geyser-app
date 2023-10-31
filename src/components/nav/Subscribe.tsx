@@ -21,7 +21,8 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { FaTelegramPlane, FaTwitter } from 'react-icons/fa'
+import { FaTelegramPlane } from 'react-icons/fa'
+import { RiTwitterXLine } from 'react-icons/ri'
 
 import { createCreatorRecord } from '../../api'
 import { GeyserTelegramUrl, GeyserTwitterUrl } from '../../constants'
@@ -160,7 +161,7 @@ export const Subscribe = ({
                         size="sm"
                         background={'none'}
                         aria-label="twitter"
-                        icon={<FaTwitter fontSize="20px" />}
+                        icon={<RiTwitterXLine fontSize="20px" />}
                         color={'neutral.700'}
                       />
                     </Link>

@@ -4904,6 +4904,7 @@ export type ProjectForProfilePageFragment = {
   thumbnailImage?: string | null
   title: any
   createdAt: string
+  status?: ProjectStatus | null
   owners: Array<{
     __typename?: 'Owner'
     id: any
@@ -4912,6 +4913,16 @@ export type ProjectForProfilePageFragment = {
       id: any
       username: string
       imageUrl?: string | null
+    }
+  }>
+  wallets: Array<{
+    __typename?: 'Wallet'
+    id: any
+    name?: any | null
+    state: {
+      __typename?: 'WalletState'
+      status: WalletStatus
+      statusCode: WalletStatusCode
     }
   }>
 }
@@ -6654,12 +6665,21 @@ export const ProjectForProfilePageFragmentDoc = gql`
     thumbnailImage
     title
     createdAt
+    status
     owners {
       id
       user {
         id
         username
         imageUrl
+      }
+    }
+    wallets {
+      id
+      name
+      state {
+        status
+        statusCode
       }
     }
   }

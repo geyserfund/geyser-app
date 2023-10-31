@@ -9,10 +9,12 @@ import {
   Wrap,
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { FaPodcast, FaTelegramPlane, FaTwitter } from 'react-icons/fa'
+import { FaGithub, FaPodcast, FaTelegramPlane } from 'react-icons/fa'
+import { RiTwitterXLine } from 'react-icons/ri'
 
 import {
   AnalyticsUrl,
+  GeyserGithubUrl,
   GeyserHomepageUrl,
   GeyserPodcastUrl,
   GeyserPrivacyUrl,
@@ -67,7 +69,7 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
               size="sm"
               background={'none'}
               aria-label="Geyser on Twitter"
-              icon={<FaTwitter fontSize="20px" />}
+              icon={<RiTwitterXLine fontSize="20px" />}
             />
           </Link>
 
@@ -87,6 +89,16 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
               background={'none'}
               aria-label="Geyser Podcasts"
               icon={<FaPodcast fontSize="20px" />}
+              marginLeft="5px"
+            />
+          </Link>
+
+          <Link href={GeyserGithubUrl} isExternal>
+            <IconButton
+              size="sm"
+              background={'none'}
+              aria-label="Geyser github"
+              icon={<FaGithub fontSize="20px" />}
               marginLeft="5px"
             />
           </Link>

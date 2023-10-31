@@ -55,24 +55,26 @@ export const ModeChange = () => {
         mt={2}
         p={2}
       >
-        <HStack spacing={3} justifyContent="space-between">
+        <HStack width="full" spacing={3}>
+          <ColorModeSwitcher flex={1} />
           <IconButton
             size={{ base: 'sm', lg: 'md' }}
             bg={isNostrColor ? primaryColorsLight[400] : nostrColorsLight[400]}
             color="white"
             onClick={handleTogglePrimaryColor}
-            icon={<MdColorLens />}
+            icon={<MdColorLens fontSize={'20px'} />}
             aria-label={`Switch primary color`}
+            flex={1}
           />
-          <ColorModeSwitcher />
           <Tooltip label="currency">
             <IconButton
               size={{ base: 'sm', lg: 'md' }}
               bgColor="neutral.0"
               variant="primaryNeutral"
               aria-label="currency-convert"
-              icon={<SatSymbolIcon color="neutral.600" />}
+              icon={<SatSymbolIcon fontSize={'20px'} color="neutral.600" />}
               isDisabled
+              flex={1}
             />
           </Tooltip>
         </HStack>

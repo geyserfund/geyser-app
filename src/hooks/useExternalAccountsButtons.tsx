@@ -1,7 +1,7 @@
 import { Link, useTheme } from '@chakra-ui/react'
 import { nip19 } from 'nostr-tools'
 import { useMemo, useState } from 'react'
-import { BsTwitter } from 'react-icons/bs'
+import { RiTwitterXLine } from 'react-icons/ri'
 
 import { NostrSvgIcon } from '../components/icons'
 import { ExternalAccountType } from '../pages/auth'
@@ -35,9 +35,8 @@ export const useExternalAccountsButtons = ({
         if (isTwitter) {
           return {
             key: 'twitter',
-            icon: <BsTwitter />,
+            icon: <RiTwitterXLine />,
             username: account.externalUsername,
-            color: theme.colors.social.twitter,
             props: {
               as: Link,
               target: '_blank',

@@ -37,13 +37,13 @@ export const projectSections: Record<string, DashboardSection> = {
     label: 'Connect wallet',
     path: 'dashboardWallet',
   },
-  settings: {
-    label: 'Project settings',
-    path: 'dashboardSettings',
-  },
   nostr: {
     label: 'Nostr settings',
     path: 'dashboardNostr',
+  },
+  settings: {
+    label: 'Project settings',
+    path: 'dashboardSettings',
   },
 }
 

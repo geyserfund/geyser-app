@@ -126,7 +126,9 @@ export const ProjectCreationWalletConnectionForm = ({
   const [lightningAddressFormError, setLightningAddressFormError] = useState<
     string | null
   >(null)
-
+  const [lightningAddressFormWarn, setLightningAddressFormWarn] = useState<
+    string | null
+  >(null)
   const [lnAddressEvaluationState, setLnAddressEvaluationState] =
     useState<LNAddressEvaluationState>(LNAddressEvaluationState.IDLE)
 
@@ -200,7 +202,7 @@ export const ProjectCreationWalletConnectionForm = ({
       onCompleted({ lightningAddressVerify: { valid } }) {
         if (Boolean(valid) === false) {
           setLnAddressEvaluationState(LNAddressEvaluationState.FAILED)
-          setLightningAddressFormError(
+          setLightningAddressFormWarn(
             'We could not validate this as a working Lightning Address.',
           )
         } else {
@@ -389,8 +391,9 @@ export const ProjectCreationWalletConnectionForm = ({
           WalletConnectDetails.LightningAddressConnectionDetails
         ) {
           return (
+            Boolean(projectWallet?.connectionDetails?.lightningAddress) &&
             projectWallet?.connectionDetails?.lightningAddress ===
-            lightningAddressFormValue
+              lightningAddressFormValue
           )
         }
 
@@ -420,6 +423,8 @@ export const ProjectCreationWalletConnectionForm = ({
 
       return false
     }
+
+    return false
   }
 
   const validateLightningAddressFormat = async (lightningAddress: string) => {
@@ -490,7 +495,10 @@ export const ProjectCreationWalletConnectionForm = ({
         return <Loader size="md"></Loader>
       case LNAddressEvaluationState.FAILED:
         return (
-          <BsFillXCircleFill fill={lightModeColors.secondary.red} size="24px" />
+          <BsFillXCircleFill
+            fill={lightModeColors.secondary.yellow}
+            size="24px"
+          />
         )
       case LNAddressEvaluationState.SUCCEEDED:
         return (
@@ -538,6 +546,7 @@ export const ProjectCreationWalletConnectionForm = ({
                     focusBorderColor: 'primary.500',
                   }}
                   error={lightningAddressFormError}
+                  warn={lightningAddressFormWarn}
                   isDisabled={readOnly}
                 />
                 <InputRightElement>

@@ -5,7 +5,13 @@ import { useCallback, useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
-import { FAQUrl, FeedbackUrl, getPath, PathName } from '../../constants'
+import {
+  FAQUrl,
+  FeedbackUrl,
+  getPath,
+  GeyserGithubUrl,
+  PathName,
+} from '../../constants'
 import {
   AuthContext,
   useNavContext,
@@ -142,6 +148,11 @@ export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
       </MenuGroup>
       <MenuGroup style={{ width: '100%' }}>
         <MobileDivider />
+        <MenuItem color={'neutral.700'}>
+          <MenuItemLink destinationPath={GeyserGithubUrl}>
+            {t('GitHub')}
+          </MenuItemLink>
+        </MenuItem>
         <MenuItem color={'neutral.700'}>
           <MenuItemLink destinationPath={getPath('about')}>
             {t('About')}

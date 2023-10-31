@@ -1,16 +1,17 @@
-import { HStack, StackProps, Tooltip } from '@chakra-ui/react'
+import { Button, ButtonProps, HStack, Tooltip } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { NostrSvgIcon } from '../../../../components/icons'
-import { Body2 } from '../../../../components/typography'
+import { Body1 } from '../../../../components/typography'
 import { copyTextToClipboard } from '../../../../utils'
 
-interface NpubDisplayProps extends StackProps {
+interface NpubDisplayProps extends ButtonProps {
   npub: string
+  iconOnly?: boolean
 }
 
-export const NpubDisplay = ({ npub, ...rest }: NpubDisplayProps) => {
+export const NpubDisplay = ({ npub, iconOnly, ...rest }: NpubDisplayProps) => {
   const { t } = useTranslation()
   const [copy, setCopy] = useState(false)
 
@@ -34,10 +35,15 @@ export const NpubDisplay = ({ npub, ...rest }: NpubDisplayProps) => {
       placement="top-start"
       closeOnClick={false}
     >
-      <HStack
+      <Button
+        size="sm"
+        color="neutral.600"
+        variant="secondary"
+        bgColor={'transparent'}
+        display="flex"
         padding="5px 10px"
         justifyContent="space-between"
-        _hover={{ cursor: 'pointer' }}
+        border="none"
         {...rest}
       >
         <HStack overflow="hidden">
@@ -48,11 +54,18 @@ export const NpubDisplay = ({ npub, ...rest }: NpubDisplayProps) => {
               color={'neutral.600'}
             />
           }
-          <Body2 isTruncated onClick={handleOnCopy} color={'neutral.600'}>
-            {`${text}`}
-          </Body2>
+          {!iconOnly && (
+            <Body1
+              semiBold
+              isTruncated
+              onClick={handleOnCopy}
+              color={'neutral.600'}
+            >
+              {`${text}`}
+            </Body1>
+          )}
         </HStack>
-      </HStack>
+      </Button>
     </Tooltip>
   )
 }
