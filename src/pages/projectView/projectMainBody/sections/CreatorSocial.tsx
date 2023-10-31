@@ -9,7 +9,10 @@ import { useExternalAccountsButtons } from '../../../../hooks/useExternalAccount
 import { NpubDisplay } from '../components/NpubDisplay'
 
 export const CreatorSocial = () => {
-  const isMd = useBreakpointValue({ base: false, md: true }, { ssr: false })
+  const isMd = useBreakpointValue(
+    { base: true, sm: false, md: false, lg: true, xl: false },
+    { ssr: false },
+  )
   const { project } = useProjectContext()
 
   const user = project?.owners[0]?.user
@@ -55,7 +58,7 @@ export const CreatorSocial = () => {
             }
 
             if (key === 'nostr') {
-              return <NpubDisplay key={index} npub={username} />
+              return <NpubDisplay key={index} npub={username} iconOnly={isMd} />
             }
 
             return (
@@ -73,7 +76,7 @@ export const CreatorSocial = () => {
                 py={1}
               >
                 {icon}
-                {isMd ? (
+                {!isMd ? (
                   <Body1 semiBold ml={2} maxW="12em" isTruncated>
                     {username}
                   </Body1>

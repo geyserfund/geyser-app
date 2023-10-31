@@ -89,10 +89,6 @@ export const ProjectNostrSettings = () => {
             borderRadius={'8px'}
             alignItems="flex-start"
           >
-            <Input
-              width="full"
-              value={`nsec***********************************************`}
-            />
             <Body2 color="secondary.red">
               {t(
                 'Warning: Before exporting your private keys, make sure to read the following message.',

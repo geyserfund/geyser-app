@@ -31,7 +31,7 @@ export const ExportNostrKeysModal = ({
 
   const { loading, data } = useProjectNostrKeysQuery({
     variables: { where: { id: projectId } },
-    skip: !projectId,
+    skip: !projectId || !isOpen,
   })
 
   const projectNostrKeys = data?.projectGet?.keys.nostrKeys

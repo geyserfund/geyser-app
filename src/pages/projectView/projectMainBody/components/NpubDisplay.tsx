@@ -8,9 +8,10 @@ import { copyTextToClipboard } from '../../../../utils'
 
 interface NpubDisplayProps extends ButtonProps {
   npub: string
+  iconOnly?: boolean
 }
 
-export const NpubDisplay = ({ npub, ...rest }: NpubDisplayProps) => {
+export const NpubDisplay = ({ npub, iconOnly, ...rest }: NpubDisplayProps) => {
   const { t } = useTranslation()
   const [copy, setCopy] = useState(false)
 
@@ -53,14 +54,16 @@ export const NpubDisplay = ({ npub, ...rest }: NpubDisplayProps) => {
               color={'neutral.600'}
             />
           }
-          <Body1
-            semiBold
-            isTruncated
-            onClick={handleOnCopy}
-            color={'neutral.600'}
-          >
-            {`${text}`}
-          </Body1>
+          {!iconOnly && (
+            <Body1
+              semiBold
+              isTruncated
+              onClick={handleOnCopy}
+              color={'neutral.600'}
+            >
+              {`${text}`}
+            </Body1>
+          )}
         </HStack>
       </Button>
     </Tooltip>
