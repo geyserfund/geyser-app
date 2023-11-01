@@ -87,7 +87,7 @@ Where great ideas find great communities
     <img src="https://storage.googleapis.com/geyser-projects-media/images/readme-image2.png" alt="geyser Screenshot">
 </div>
 
-### Crowdfunding without borders
+### Enabling the Open Creator Economy
 Traditional Crowdfunding and Creator Platforms are built on closed monetary and social networks, which limits the use of crowdfunding (a powerful financial primitive) to around 30 Western countries and restricts project reach and social interaction to the platform. 
 
 Geyser is enabling the Open Creator Economy, by building fundraising on top of open Bitcoin/Lightning, open monetary networks, and Nostr, an open social network. With these tools we can empower creators globally to reach their communities and raise funds from them.
