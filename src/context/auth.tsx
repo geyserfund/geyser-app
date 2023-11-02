@@ -9,7 +9,7 @@ import {
   useState,
 } from 'react'
 
-import { AUTH_SERVICE_ENDPOINT } from '../constants'
+import { getAuthEndPoint } from '../config/domain'
 import { defaultUser } from '../defaults'
 import {
   Project,
@@ -94,9 +94,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsUserAProjectCreator(me.ownerOf?.length > 0)
   }
 
+  const authServiceEndPoint = getAuthEndPoint()
+
   const getAuthToken = async () => {
     try {
-      const response = await fetch(`${AUTH_SERVICE_ENDPOINT}/auth-token`, {
+      const response = await fetch(`${authServiceEndPoint}/auth-token`, {
         credentials: 'include',
         redirect: 'follow',
       })
@@ -130,7 +132,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser({ ...defaultUser })
     setFollowedProjects([])
     try {
-      fetch(`${AUTH_SERVICE_ENDPOINT}/logout`, {
+      fetch(`${authServiceEndPoint}/logout`, {
         credentials: 'include',
       })
     } catch {
