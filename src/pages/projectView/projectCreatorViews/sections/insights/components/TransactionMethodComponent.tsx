@@ -79,7 +79,7 @@ export const TransactionMethodComponent = (props: CardLayoutProps) => {
       mobileDense
       {...props}
     >
-      <H3>{t('Funding transactions')}</H3>
+      <H3>{t('Funding received by method')}</H3>
       <FundingMethodsPieChart data={methodSum} loading={loading} />
     </CardLayout>
   )

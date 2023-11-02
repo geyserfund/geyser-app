@@ -25,7 +25,7 @@ import { createApplicantRecord } from '../../../api'
 import { Subscribe } from '../../../components/nav/Subscribe'
 import { ButtonComponent, UndecoratedLink } from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
-import { AUTH_SERVICE_ENDPOINT } from '../../../constants'
+import { getAuthEndPoint } from '../../../config/domain'
 import { AuthContext } from '../../../context'
 import { ExternalAccount, Maybe } from '../../../types/generated/graphql'
 import { useMobileMode, useNotification } from '../../../utils'
@@ -57,6 +57,8 @@ export const RecipientButton = ({
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [subscribed, setSubscribed] = useState(false)
   const { user } = useContext(AuthContext)
+
+  const authServiceEndPoint = getAuthEndPoint()
 
   const [copy, setCopy] = useState(false)
   useEffect(() => {
@@ -237,7 +239,7 @@ export const RecipientButton = ({
                 <Text textAlign="center" mb={4}>
                   You need to link your Twitter account to apply for a Grant.
                 </Text>
-                <UndecoratedLink href={`${AUTH_SERVICE_ENDPOINT}/twitter`}>
+                <UndecoratedLink href={`${authServiceEndPoint}/twitter`}>
                   <ButtonComponent
                     w="full"
                     primary

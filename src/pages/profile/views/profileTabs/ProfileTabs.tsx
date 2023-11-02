@@ -3,9 +3,9 @@ import { useCallback, useMemo } from 'react'
 import { RenderTab, TabComponent } from '../../../../components/molecules'
 import { User } from '../../../../types'
 import { ProfileActivity } from './ProfileActivity'
+import { ProfileContributions } from './ProfileContributions'
 import { ProfileFollowed } from './ProfileFollowed'
 import { ProfileProjects } from './ProfileProjects'
-import { ProfileContributions } from './ProfileContributions'
 
 export const ProfileTabs = ({
   userProfile,
@@ -56,7 +56,7 @@ export const ProfileTabs = ({
   )
 
   const getTabs = useCallback(() => {
-    let tabs: RenderTab[] = [contributionsTab, activityTab]
+    const tabs: RenderTab[] = [contributionsTab, activityTab]
     if (isLoading) {
       return [activityTab]
     }
@@ -75,6 +75,7 @@ export const ProfileTabs = ({
     isLoading,
     activityTab,
     followedTab,
+    contributionsTab,
     isViewingOwnProfile,
     projectsTab,
   ])

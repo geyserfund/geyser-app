@@ -199,6 +199,15 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
+        path: getPath('dashboardNostr', PathName.projectId),
+        async lazy() {
+          const ProjectNostrSettings = await ProjectDashboard()
+            .then((m) => m.ProjectNostrSettings)
+            .catch(handleError)
+          return { Component: ProjectNostrSettings }
+        },
+      },
+      {
         path: getPath('dashboardShop', PathName.projectId),
         async lazy() {
           const ProjectSettings = await ProjectDashboard().then(

@@ -6,7 +6,7 @@ import { Cell, Legend, Pie, PieChart, Tooltip } from 'recharts'
 import { SkeletonLayout } from '../../../../../../components/layouts'
 import { Body1 } from '../../../../../../components/typography'
 import { ProjectViewBaseStats } from '../../../../../../types'
-import { useCustomTheme } from '../../../../../../utils'
+import { commaFormatted, useCustomTheme } from '../../../../../../utils'
 import { getColorByIndex } from '../helpers'
 import { ActiveShapeComponent } from './ActiveShapeComponent'
 
@@ -65,6 +65,7 @@ export const FundingRegionsPieChart = ({
               borderRadius: '8px',
             }}
             itemStyle={{ color: colors.neutral[900] }}
+            formatter={(value: number) => `${commaFormatted(value)} sats`}
           />
         </PieChart>
       )}

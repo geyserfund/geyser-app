@@ -23,7 +23,7 @@ export const TransactionRegionComponent = (props: CardLayoutProps) => {
       mobileDense
       {...props}
     >
-      <H3>{t('Funding regions')}</H3>
+      <H3>{t('Funding received by region')}</H3>
       <FundingRegionsPieChart data={regions} />
     </CardLayout>
   )

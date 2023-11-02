@@ -1,9 +1,11 @@
 import {
   Box,
   HStack,
+  Icon,
   Skeleton,
   SkeletonCircle,
   SkeletonText,
+  Tooltip,
   VStack,
 } from '@chakra-ui/react'
 
@@ -17,13 +19,20 @@ import {
   ProjectForLandingPageFragment,
 } from '../../types'
 import { H3 } from '../typography'
-import { ImageWithReload } from '../ui'
+import {
+  ImageWithReload,
+  ProjectStatusColors,
+  ProjectStatusIcons,
+  ProjectStatusLabels,
+  ProjectStatusTooltip,
+} from '../ui'
 import { CardLayout, CardLayoutProps } from '.'
 
 export interface LandingCardBaseProps
   extends FundingStatWithFollowProps,
     CardLayoutProps {
   isMobile?: boolean
+  projectStatus?: ProjectStatusLabels
   imageSrc: string
   title: string
   user:
@@ -33,6 +42,7 @@ export interface LandingCardBaseProps
 
 export const LandingCardBase = ({
   isMobile,
+  projectStatus,
   imageSrc,
   title,
   fundersCount,
@@ -48,6 +58,10 @@ export const LandingCardBase = ({
 
     return value
   }
+
+  const StatusIcon = projectStatus && ProjectStatusIcons[projectStatus]
+  const StatusTooltip = projectStatus && ProjectStatusTooltip[projectStatus]
+  const StatusColor = projectStatus && ProjectStatusColors[projectStatus]
 
   return (
     <CardLayout
@@ -80,9 +94,19 @@ export const LandingCardBase = ({
         overflow="hidden"
         spacing="0px"
       >
-        <H3 isTruncated width="100%">
-          {title}
-        </H3>
+        <HStack w="full">
+          <H3 flex={1} isTruncated width="100%">
+            {title}
+          </H3>
+          {StatusIcon && (
+            <Tooltip label={StatusTooltip}>
+              <span>
+                <Icon as={StatusIcon} color={StatusColor} />
+              </span>
+            </Tooltip>
+          )}
+        </HStack>
+
         <Box width="100%">
           <AvatarElement borderRadius="50%" user={user} noLink />
         </Box>

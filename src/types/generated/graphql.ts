@@ -891,6 +891,7 @@ export type Mutation = {
   grantApply: GrantApplicant
   projectDelete: ProjectDeleteResponse
   projectFollow: Scalars['Boolean']
+  projectPublish: Project
   projectRewardCreate: ProjectReward
   /** Soft deletes the reward. */
   projectRewardDelete: Scalars['Boolean']
@@ -994,6 +995,10 @@ export type MutationProjectFollowArgs = {
   input: ProjectFollowMutationInput
 }
 
+export type MutationProjectPublishArgs = {
+  input: ProjectPublishMutationInput
+}
+
 export type MutationProjectRewardCreateArgs = {
   input: CreateProjectRewardInput
 }
@@ -1085,7 +1090,14 @@ export type MutationResponse = {
 
 export type NostrKeys = {
   __typename?: 'NostrKeys'
+  privateKey?: Maybe<NostrPrivateKey>
   publicKey: NostrPublicKey
+}
+
+export type NostrPrivateKey = {
+  __typename?: 'NostrPrivateKey'
+  hex: Scalars['String']
+  nsec: Scalars['String']
 }
 
 export type NostrPublicKey = {
@@ -1258,7 +1270,7 @@ export type ProjectFundingTxStats = {
   amountGraph?: Maybe<Array<Maybe<FundingTxAmountGraph>>>
   /** Project contribution amount in the given datetime range. */
   amountSum?: Maybe<Scalars['Int']>
-  /** Project contribution amount in the given datetime range. */
+  /** Project contribution count in the given datetime range. */
   count: Scalars['Int']
   /** Project contribution count of each Funding Method in the given datetime range. */
   methodCount?: Maybe<Array<Maybe<FundingTxMethodCount>>>
@@ -1283,6 +1295,10 @@ export type ProjectMilestone = {
   description?: Maybe<Scalars['description_String_maxLength_250']>
   id: Scalars['BigInt']
   name: Scalars['name_String_NotNull_maxLength_100']
+}
+
+export type ProjectPublishMutationInput = {
+  projectId: Scalars['BigInt']
 }
 
 export type ProjectRegionsGetResult = {
@@ -2184,6 +2200,7 @@ export type ResolversTypes = {
     | ResolversTypes['DeleteUserResponse']
     | ResolversTypes['ProjectDeleteResponse']
   NostrKeys: ResolverTypeWrapper<NostrKeys>
+  NostrPrivateKey: ResolverTypeWrapper<NostrPrivateKey>
   NostrPublicKey: ResolverTypeWrapper<NostrPublicKey>
   OTPInput: OtpInput
   OTPLoginInput: OtpLoginInput
@@ -2208,6 +2225,7 @@ export type ResolversTypes = {
   ProjectKeys: ResolverTypeWrapper<ProjectKeys>
   ProjectLinkMutationInput: ProjectLinkMutationInput
   ProjectMilestone: ResolverTypeWrapper<ProjectMilestone>
+  ProjectPublishMutationInput: ProjectPublishMutationInput
   ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>
   ProjectReward: ResolverTypeWrapper<ProjectReward>
   ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>
@@ -2484,6 +2502,7 @@ export type ResolversParentTypes = {
     | ResolversParentTypes['DeleteUserResponse']
     | ResolversParentTypes['ProjectDeleteResponse']
   NostrKeys: NostrKeys
+  NostrPrivateKey: NostrPrivateKey
   NostrPublicKey: NostrPublicKey
   OTPInput: OtpInput
   OTPLoginInput: OtpLoginInput
@@ -2506,6 +2525,7 @@ export type ResolversParentTypes = {
   ProjectKeys: ProjectKeys
   ProjectLinkMutationInput: ProjectLinkMutationInput
   ProjectMilestone: ProjectMilestone
+  ProjectPublishMutationInput: ProjectPublishMutationInput
   ProjectRegionsGetResult: ProjectRegionsGetResult
   ProjectReward: ProjectReward
   ProjectStatistics: ProjectStatistics
@@ -3304,6 +3324,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationProjectFollowArgs, 'input'>
   >
+  projectPublish?: Resolver<
+    ResolversTypes['Project'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationProjectPublishArgs, 'input'>
+  >
   projectRewardCreate?: Resolver<
     ResolversTypes['ProjectReward'],
     ParentType,
@@ -3454,11 +3480,25 @@ export type NostrKeysResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['NostrKeys'] = ResolversParentTypes['NostrKeys'],
 > = {
+  privateKey?: Resolver<
+    Maybe<ResolversTypes['NostrPrivateKey']>,
+    ParentType,
+    ContextType
+  >
   publicKey?: Resolver<
     ResolversTypes['NostrPublicKey'],
     ParentType,
     ContextType
   >
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type NostrPrivateKeyResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['NostrPrivateKey'] = ResolversParentTypes['NostrPrivateKey'],
+> = {
+  hex?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  nsec?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -4561,6 +4601,7 @@ export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>
   MutationResponse?: MutationResponseResolvers<ContextType>
   NostrKeys?: NostrKeysResolvers<ContextType>
+  NostrPrivateKey?: NostrPrivateKeyResolvers<ContextType>
   NostrPublicKey?: NostrPublicKeyResolvers<ContextType>
   OTPResponse?: OtpResponseResolvers<ContextType>
   Owner?: OwnerResolvers<ContextType>
@@ -4819,6 +4860,20 @@ export type FundingTxForOverviewPageFragment = {
   }
 }
 
+export type ProjectNostrKeysFragment = {
+  __typename?: 'Project'
+  id: any
+  name: any
+  keys: {
+    __typename?: 'ProjectKeys'
+    nostrKeys: {
+      __typename?: 'NostrKeys'
+      privateKey?: { __typename?: 'NostrPrivateKey'; nsec: string } | null
+      publicKey: { __typename?: 'NostrPublicKey'; npub: string }
+    }
+  }
+}
+
 export type ProjectForLandingPageFragment = {
   __typename?: 'Project'
   id: any
@@ -4849,6 +4904,7 @@ export type ProjectForProfilePageFragment = {
   thumbnailImage?: string | null
   title: any
   createdAt: string
+  status?: ProjectStatus | null
   owners: Array<{
     __typename?: 'Owner'
     id: any
@@ -4857,6 +4913,16 @@ export type ProjectForProfilePageFragment = {
       id: any
       username: string
       imageUrl?: string | null
+    }
+  }>
+  wallets: Array<{
+    __typename?: 'Wallet'
+    id: any
+    name?: any | null
+    state: {
+      __typename?: 'WalletState'
+      status: WalletStatus
+      statusCode: WalletStatusCode
     }
   }>
 }
@@ -4981,6 +5047,13 @@ export type ProjectFragment = {
       | { __typename?: 'LndConnectionDetailsPublic'; pubkey?: any | null }
   }>
   followers: Array<{ __typename?: 'User'; id: any; username: string }>
+  keys: {
+    __typename?: 'ProjectKeys'
+    nostrKeys: {
+      __typename?: 'NostrKeys'
+      publicKey: { __typename?: 'NostrPublicKey'; npub: string }
+    }
+  }
 }
 
 export type ProjectStatsForOverviewPageFragment = {
@@ -5342,17 +5415,13 @@ export type GrantApplyMutation = {
   grantApply: { __typename?: 'GrantApplicant'; status: GrantApplicantStatus }
 }
 
-export type ProjectStatusUpdateMutationVariables = Exact<{
-  input: ProjectStatusUpdate
+export type ProjectPublishMutationVariables = Exact<{
+  input: ProjectPublishMutationInput
 }>
 
-export type ProjectStatusUpdateMutation = {
+export type ProjectPublishMutation = {
   __typename?: 'Mutation'
-  projectStatusUpdate: {
-    __typename?: 'Project'
-    id: any
-    status?: ProjectStatus | null
-  }
+  projectPublish: { __typename?: 'Project'; id: any }
 }
 
 export type CreateProjectMutationVariables = Exact<{
@@ -6211,6 +6280,15 @@ export type FeaturedProjectForLandingPageQuery = {
     | null
 }
 
+export type ProjectNostrKeysQueryVariables = Exact<{
+  where: UniqueProjectQueryInput
+}>
+
+export type ProjectNostrKeysQuery = {
+  __typename?: 'Query'
+  projectGet?: ({ __typename?: 'Project' } & ProjectNostrKeysFragment) | null
+}
+
 export type ProjectStatsGetOverViewQueryVariables = Exact<{
   input: GetProjectStatsInput
 }>
@@ -6562,6 +6640,22 @@ export const FundingTxForOverviewPageFragmentDoc = gql`
     comment
   }
 `
+export const ProjectNostrKeysFragmentDoc = gql`
+  fragment ProjectNostrKeys on Project {
+    id
+    name
+    keys {
+      nostrKeys {
+        privateKey {
+          nsec
+        }
+        publicKey {
+          npub
+        }
+      }
+    }
+  }
+`
 export const ProjectForProfilePageFragmentDoc = gql`
   fragment ProjectForProfilePage on Project {
     id
@@ -6571,12 +6665,21 @@ export const ProjectForProfilePageFragmentDoc = gql`
     thumbnailImage
     title
     createdAt
+    status
     owners {
       id
       user {
         id
         username
         imageUrl
+      }
+    }
+    wallets {
+      id
+      name
+      state {
+        status
+        statusCode
       }
     }
   }
@@ -6728,6 +6831,13 @@ export const ProjectFragmentDoc = gql`
     followers {
       id
       username
+    }
+    keys {
+      nostrKeys {
+        publicKey {
+          npub
+        }
+      }
     }
   }
   ${UserMeFragmentDoc}
@@ -7691,56 +7801,55 @@ export type GrantApplyMutationOptions = Apollo.BaseMutationOptions<
   GrantApplyMutation,
   GrantApplyMutationVariables
 >
-export const ProjectStatusUpdateDocument = gql`
-  mutation ProjectStatusUpdate($input: ProjectStatusUpdate!) {
-    projectStatusUpdate(input: $input) {
+export const ProjectPublishDocument = gql`
+  mutation ProjectPublish($input: ProjectPublishMutationInput!) {
+    projectPublish(input: $input) {
       id
-      status
     }
   }
 `
-export type ProjectStatusUpdateMutationFn = Apollo.MutationFunction<
-  ProjectStatusUpdateMutation,
-  ProjectStatusUpdateMutationVariables
+export type ProjectPublishMutationFn = Apollo.MutationFunction<
+  ProjectPublishMutation,
+  ProjectPublishMutationVariables
 >
 
 /**
- * __useProjectStatusUpdateMutation__
+ * __useProjectPublishMutation__
  *
- * To run a mutation, you first call `useProjectStatusUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useProjectStatusUpdateMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useProjectPublishMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectPublishMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [projectStatusUpdateMutation, { data, loading, error }] = useProjectStatusUpdateMutation({
+ * const [projectPublishMutation, { data, loading, error }] = useProjectPublishMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useProjectStatusUpdateMutation(
+export function useProjectPublishMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    ProjectStatusUpdateMutation,
-    ProjectStatusUpdateMutationVariables
+    ProjectPublishMutation,
+    ProjectPublishMutationVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<
-    ProjectStatusUpdateMutation,
-    ProjectStatusUpdateMutationVariables
-  >(ProjectStatusUpdateDocument, options)
+    ProjectPublishMutation,
+    ProjectPublishMutationVariables
+  >(ProjectPublishDocument, options)
 }
-export type ProjectStatusUpdateMutationHookResult = ReturnType<
-  typeof useProjectStatusUpdateMutation
+export type ProjectPublishMutationHookResult = ReturnType<
+  typeof useProjectPublishMutation
 >
-export type ProjectStatusUpdateMutationResult =
-  Apollo.MutationResult<ProjectStatusUpdateMutation>
-export type ProjectStatusUpdateMutationOptions = Apollo.BaseMutationOptions<
-  ProjectStatusUpdateMutation,
-  ProjectStatusUpdateMutationVariables
+export type ProjectPublishMutationResult =
+  Apollo.MutationResult<ProjectPublishMutation>
+export type ProjectPublishMutationOptions = Apollo.BaseMutationOptions<
+  ProjectPublishMutation,
+  ProjectPublishMutationVariables
 >
 export const CreateProjectDocument = gql`
   mutation CreateProject($input: CreateProjectInput!) {
@@ -10497,6 +10606,65 @@ export type FeaturedProjectForLandingPageLazyQueryHookResult = ReturnType<
 export type FeaturedProjectForLandingPageQueryResult = Apollo.QueryResult<
   FeaturedProjectForLandingPageQuery,
   FeaturedProjectForLandingPageQueryVariables
+>
+export const ProjectNostrKeysDocument = gql`
+  query ProjectNostrKeys($where: UniqueProjectQueryInput!) {
+    projectGet(where: $where) {
+      ...ProjectNostrKeys
+    }
+  }
+  ${ProjectNostrKeysFragmentDoc}
+`
+
+/**
+ * __useProjectNostrKeysQuery__
+ *
+ * To run a query within a React component, call `useProjectNostrKeysQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectNostrKeysQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectNostrKeysQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectNostrKeysQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ProjectNostrKeysQuery,
+    ProjectNostrKeysQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ProjectNostrKeysQuery, ProjectNostrKeysQueryVariables>(
+    ProjectNostrKeysDocument,
+    options,
+  )
+}
+export function useProjectNostrKeysLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ProjectNostrKeysQuery,
+    ProjectNostrKeysQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    ProjectNostrKeysQuery,
+    ProjectNostrKeysQueryVariables
+  >(ProjectNostrKeysDocument, options)
+}
+export type ProjectNostrKeysQueryHookResult = ReturnType<
+  typeof useProjectNostrKeysQuery
+>
+export type ProjectNostrKeysLazyQueryHookResult = ReturnType<
+  typeof useProjectNostrKeysLazyQuery
+>
+export type ProjectNostrKeysQueryResult = Apollo.QueryResult<
+  ProjectNostrKeysQuery,
+  ProjectNostrKeysQueryVariables
 >
 export const ProjectStatsGetOverViewDocument = gql`
   query ProjectStatsGetOverView($input: GetProjectStatsInput!) {

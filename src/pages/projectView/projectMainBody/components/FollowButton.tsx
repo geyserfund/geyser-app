@@ -12,7 +12,7 @@ interface FollowButtonProps extends ButtonProps {
 
 export const FollowButton = ({ projectId, ...rest }: FollowButtonProps) => {
   const { t } = useTranslation()
-  const { isLoggedIn } = useAuthContext()
+  const { isLoggedIn, loginOnOpen } = useAuthContext()
   const {
     isFollowed,
     handleFollow,
@@ -21,15 +21,27 @@ export const FollowButton = ({ projectId, ...rest }: FollowButtonProps) => {
     unfollowLoading,
   } = useFollowProject(projectId)
 
+  const handleClick = () => {
+    if (!isLoggedIn) {
+      loginOnOpen()
+      return
+    }
+
+    if (isFollowed) {
+      handleUnFollow()
+    } else {
+      handleFollow()
+    }
+  }
+
   return (
     <Button
       variant="secondary"
       size="sm"
       isActive={isFollowed}
       leftIcon={isFollowed ? <BsFillHeartFill fontSize="14px" /> : <AddIcon />}
-      onClick={isFollowed ? handleUnFollow : handleFollow}
+      onClick={handleClick}
       isLoading={followLoading || unfollowLoading}
-      isDisabled={!isLoggedIn}
       {...rest}
     >
       <Text isTruncated> {isFollowed ? t('Following') : t('Follow')}</Text>

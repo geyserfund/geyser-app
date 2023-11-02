@@ -16,7 +16,7 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ButtonComponent } from '../../../../components/ui'
-import { API_SERVICE_ENDPOINT } from '../../../../constants'
+import { getAppEndPoint } from '../../../../config/domain'
 import { encodeLNURL, useMobileMode, useNotification } from '../../../../utils'
 import { ProjectFundingBanner } from './ProjectFundingBanner'
 
@@ -40,6 +40,7 @@ export const ProjectFundingQRModal = ({
   const [imageDownload, setImageDownload] = useState<string | undefined>()
 
   const { toast } = useNotification()
+  const endPoint = getAppEndPoint()
 
   const bannerRef = useCallback((node: HTMLDivElement) => {
     if (!node) {
@@ -61,7 +62,7 @@ export const ProjectFundingQRModal = ({
   }, [])
 
   const lnurlPayUrl = encodeLNURL(
-    `${API_SERVICE_ENDPOINT}/lnurl/pay?projectId=${projectId}`,
+    `${endPoint}/lnurl/pay?projectId=${projectId}`,
   )
 
   return (

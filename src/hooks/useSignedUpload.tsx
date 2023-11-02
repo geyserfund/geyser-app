@@ -1,7 +1,8 @@
 import { useLazyQuery } from '@apollo/client'
 import { useCallback, useState } from 'react'
 
-import { API_SERVICE_ENDPOINT, GeyserAssetDomainUrl } from '../constants'
+import { getAppEndPoint } from '../config/domain'
+import { GeyserAssetDomainUrl } from '../constants'
 import { QUERY_SIGNED_UPLOAD_URL } from '../graphql/queries/entries'
 import { testImage, useNotification } from '../utils'
 
@@ -75,7 +76,9 @@ export const useSignedUpload = ({
 }
 
 export const getSignedUploadAPI = async (file: any): Promise<string> => {
-  const URL = `${API_SERVICE_ENDPOINT}/upload_url?name=${file.name}&type=${file.type}`
+  const endPoint = getAppEndPoint()
+
+  const URL = `${endPoint}/upload_url?name=${file.name}&type=${file.type}`
   const response = await fetch(URL).then((response) => response.json())
 
   await fetch(response.uploadUrl, {
