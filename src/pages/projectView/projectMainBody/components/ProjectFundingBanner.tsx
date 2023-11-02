@@ -1,5 +1,5 @@
 import { Box, HStack, Image, Text } from '@chakra-ui/react'
-import { forwardRef, useState } from 'react'
+import { forwardRef, useRef } from 'react'
 import { createUseStyles } from 'react-jss'
 import { QRCode } from 'react-qrcode-logo'
 
@@ -20,12 +20,13 @@ interface Props {
   lnurlPayUrl: string
 }
 
-const QR_SIZE = 350
+const QR_SIZE = 360
 
 export const ProjectFundingBanner = forwardRef<HTMLDivElement, Props>(
   ({ title, banner, lnurlPayUrl }, ref) => {
     const classes = useStyles()
-    const [isLogoReady, setLogoReady] = useState(false)
+
+    const qrRef = useRef<QRCode>(null)
 
     return (
       <>
@@ -34,13 +35,12 @@ export const ProjectFundingBanner = forwardRef<HTMLDivElement, Props>(
           src={LogoDark}
           loading="eager"
           alt={'project-lnurl-pay-sharable-image'}
-          onLoad={() => setLogoReady(true)}
         />
         <Box w="100%">
           <Image objectFit="contain" src={banner} />
         </Box>
         <Box
-          ref={isLogoReady ? ref : undefined}
+          ref={qrRef ? ref : undefined}
           w="1500px"
           h="500px"
           position="absolute"
@@ -123,14 +123,15 @@ export const ProjectFundingBanner = forwardRef<HTMLDivElement, Props>(
                     src={LogoIcon}
                   />
                   <QRCode
-                    value={lnurlPayUrl}
+                    ref={qrRef}
+                    qrStyle="squares"
                     id={lightModeColors.neutral[1000]}
                     size={QR_SIZE}
                     bgColor={lightModeColors.neutral[0]}
                     fgColor={lightModeColors.neutral[1000]}
-                    qrStyle="squares"
                     ecLevel="L"
                     removeQrCodeBehindLogo
+                    value={lnurlPayUrl}
                   />
                 </Box>
               </Box>
