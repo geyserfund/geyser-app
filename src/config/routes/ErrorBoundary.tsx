@@ -53,7 +53,6 @@ const storeRateToLocalStorage = () => {
 export const ErrorBoundary = () => {
   const e: any = useRouteError()
   const { updateServiceWorker } = useServiceWorkerUpdate()
-
   useEffect(() => {
     if (
       (e?.name && e.name === CHUNK_LOAD_ERROR) ||

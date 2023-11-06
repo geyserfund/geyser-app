@@ -37,7 +37,6 @@ export const Story = () => {
           }
         >
           {t('Story')}
-          {'&&&&&&&&&&'}
         </TitleDivider>
         <MarkdownField preview content={project?.description} />
       </article>

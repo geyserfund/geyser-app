@@ -2,25 +2,11 @@ import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
 
 import { App } from '../../App'
 import { AppLayout } from '../../AppLayout'
-// import Loader from '../../components/ui/Loader'
 import { __production__, getPath, PathName } from '../../constants'
-// import { doesAssetNeedRefresh } from '../../helpers'
 import { FailedAuth, TwitterSuccess } from '../../pages/auth'
-// import BadgesPage from '../pages/badges/BadgesPage'
 import { NotAuthorized, NotFoundPage } from '../../pages/fallback'
 import { ErrorBoundary } from './ErrorBoundary'
 import { renderPrivateRoute } from './PrivateRoute'
-
-// const handleError = (error: any) => {
-//   console.log('Checking error', error)
-
-//   if (doesAssetNeedRefresh(error)) {
-//     window.location.reload()
-//     return Loader
-//   }
-
-//   return NotFoundPage
-// }
 
 const Grants = () => import('../../pages/grants')
 const ProjectLaunch = () => import('../../pages/projectCreate')
@@ -67,7 +53,6 @@ export const platformRoutes: RouteObject[] = [
   },
   {
     path: getPath('launchProjectWithNode', PathName.projectId),
-    // authenticated: true,
     async lazy() {
       const ProjectCreationWalletConnectionPage = await ProjectLaunch().then(
         (m) => m.ProjectCreationWalletConnectionPage,
@@ -92,7 +77,6 @@ export const platformRoutes: RouteObject[] = [
       const ProjectCreate = await ProjectLaunch().then((m) => m.ProjectCreate)
       return { element: renderPrivateRoute(ProjectCreate) }
     },
-    // authenticated: true,
   },
   {
     path: getPath('launchProjectStory', PathName.projectId),
@@ -102,7 +86,6 @@ export const platformRoutes: RouteObject[] = [
       )
       return { element: renderPrivateRoute(ProjectCreateStory) }
     },
-    // authenticated: true,
   },
   {
     path: getPath('privateProjectLaunch'),
@@ -110,7 +93,6 @@ export const platformRoutes: RouteObject[] = [
       const ProjectCreate = await ProjectLaunch().then((m) => m.ProjectCreate)
       return { element: renderPrivateRoute(ProjectCreate) }
     },
-    // authenticated: true,
   },
   {
     path: getPath('userProfile', PathName.userId),
@@ -125,7 +107,6 @@ export const platformRoutes: RouteObject[] = [
       const EntryPreview = await Entry().then((m) => m.EntryPreview)
       return { element: renderPrivateRoute(EntryPreview) }
     },
-    // authenticated: true,
   },
   {
     path: getPath('projectEntryDetails', PathName.projectId, PathName.entryId),
@@ -133,7 +114,6 @@ export const platformRoutes: RouteObject[] = [
       const EntryCreateEdit = await Entry().then((m) => m.EntryCreateEdit)
       return { element: renderPrivateRoute(EntryCreateEdit) }
     },
-    // authenticated: true,
   },
   {
     path: getPath('projectEntryCreation', PathName.projectId),
@@ -141,7 +121,6 @@ export const platformRoutes: RouteObject[] = [
       const EntryCreateEdit = await Entry().then((m) => m.EntryCreateEdit)
       return { element: renderPrivateRoute(EntryCreateEdit) }
     },
-    // authenticated: true,
   },
   {
     path: getPath('projectDashboard', PathName.projectId),
@@ -151,7 +130,6 @@ export const platformRoutes: RouteObject[] = [
       )
       return { element: renderPrivateRoute(ProjectDashboardPage) }
     },
-    // authenticated: true,
     children: [
       {
         index: true,
@@ -201,9 +179,9 @@ export const platformRoutes: RouteObject[] = [
       {
         path: getPath('dashboardNostr', PathName.projectId),
         async lazy() {
-          const ProjectNostrSettings = await ProjectDashboard()
-            .then((m) => m.ProjectNostrSettings)
-            .catch(handleError)
+          const ProjectNostrSettings = await ProjectDashboard().then(
+            (m) => m.ProjectNostrSettings,
+          )
           return { Component: ProjectNostrSettings }
         },
       },
