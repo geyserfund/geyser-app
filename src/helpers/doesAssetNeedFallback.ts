@@ -11,7 +11,6 @@ const LOCAL_STORAGE_LAST_REFRESH_KEY = 'ChunkLoadError'
 const ONE_MINUTE_IN_MILIS = 60 * 1000
 
 export const doesAssetNeedRefresh = (e: any): boolean => {
-  console.log('is it getting here', e)
   if (
     (e?.name && e.name === CHUNK_LOAD_ERROR) ||
     (e?.message && FAILED_FETCH_ERROR.some((val) => e.message.includes(val)))
