@@ -3,6 +3,7 @@ import { Button } from '@chakra-ui/react'
 import { Dispatch, SetStateAction, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Body1 } from '../../../../../../components/typography'
 import { MobileViews } from '../../../../../../context'
 import { ProjectFragment } from '../../../../../../types'
 
@@ -27,11 +28,15 @@ export const InfoScreenFeedTabs = ({
           w="100%"
           rounded="none"
           bg="none"
-          fontWeight={tab === type ? 'bold' : 'normal'}
-          fontSize="16px"
           onClick={() => setTab(type)}
         >
-          {t(labelKey)}{' '}
+          <Text
+            isTruncated
+            fontWeight={tab === type ? 'bold' : 'normal'}
+            fontSize="16px"
+          >
+            {t(labelKey)}
+          </Text>
           {count && (
             <Text ml={1} bg="neutral.100" rounded="lg" px={1} py={1}>
               {count}
