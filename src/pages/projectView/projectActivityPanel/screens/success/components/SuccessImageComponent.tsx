@@ -17,7 +17,7 @@ import { Body2, H3 } from '../../../../../../components/typography'
 import { useProjectContext } from '../../../../../../context'
 import { fonts, lightModeColors } from '../../../../../../styles'
 import { Badge, FundingTxFragment } from '../../../../../../types'
-import { useNotification } from '../../../../../../utils'
+import { useCustomTheme, useNotification } from '../../../../../../utils'
 import { AvatarElement } from '../../../../projectMainBody/components'
 
 export const SuccessImageComponent = ({
@@ -32,6 +32,8 @@ export const SuccessImageComponent = ({
   const [copied, setCopied] = useState(false)
 
   const { project } = useProjectContext()
+
+  const { colors } = useCustomTheme()
 
   const successComponent = useRef<HTMLDivElement>(null)
 
@@ -86,7 +88,7 @@ export const SuccessImageComponent = ({
         borderStyle="dashed"
         borderWidth="2px"
         borderColor={lightModeColors.neutral[900]}
-        backgroundColor={lightModeColors.primary[400]}
+        backgroundColor={colors.primary[400]}
         borderRadius="8px"
         padding="10px 20px"
         w="full"
