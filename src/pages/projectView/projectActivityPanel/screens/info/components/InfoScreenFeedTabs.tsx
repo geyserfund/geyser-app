@@ -3,7 +3,6 @@ import { Button } from '@chakra-ui/react'
 import { Dispatch, SetStateAction, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Body1 } from '../../../../../../components/typography'
 import { MobileViews } from '../../../../../../context'
 import { ProjectFragment } from '../../../../../../types'
 
