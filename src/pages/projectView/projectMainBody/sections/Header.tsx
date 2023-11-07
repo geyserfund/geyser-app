@@ -112,7 +112,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           </Text>
           <HStack w="full">
             <NpubDisplay npub={project?.keys.nostrKeys.publicKey.npub} />
-            <LightningAddress name={`${project.name}@geyser.fund`} />
+            <LightningAddress name={`${project.name}`} isGeyser />
             <ProjectFundingQR project={project} />
           </HStack>
           <HStack w="full" color="neutral.600">

@@ -4,14 +4,19 @@ import { useTranslation } from 'react-i18next'
 
 import { BoltIcon } from '../../../../components/icons'
 import { Body1 } from '../../../../components/typography'
-import { nostrColorsLight, primaryColorsLight } from '../../../../styles'
+import {
+  nostrColorsLight,
+  primaryColorsLight,
+  secondaryColors,
+} from '../../../../styles'
 import { copyTextToClipboard } from '../../../../utils'
 
 interface ILightningQR extends ButtonProps {
   name: string
+  isGeyser?: boolean
 }
 
-export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
+export const LightningAddress = ({ name, isGeyser, ...rest }: ILightningQR) => {
   const { t } = useTranslation()
   const [copy, setCopy] = useState(false)
 
@@ -47,11 +52,23 @@ export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
           <Body1
             semiBold
             isTruncated
-            background={`linear-gradient(270deg, ${primaryColorsLight[500]} -0.1%, ${nostrColorsLight[400]} 99.9%)`}
+            background={`linear-gradient(270deg, ${
+              isGeyser ? secondaryColors.blue : primaryColorsLight[500]
+            } -0.1%, ${nostrColorsLight[400]} 99.9%)`}
             backgroundClip="text"
+            flex={1}
           >
             {name}
           </Body1>
+          {isGeyser && (
+            <Body1
+              semiBold
+              background={`linear-gradient(270deg, ${primaryColorsLight[500]} -0.1%, ${secondaryColors.blue} 99.9%)`}
+              backgroundClip="text"
+            >
+              @geyser.fund
+            </Body1>
+          )}
         </Button>
       </Tooltip>
     </>

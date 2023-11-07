@@ -27,8 +27,6 @@ export const NpubDisplay = ({ npub, iconOnly, ...rest }: NpubDisplayProps) => {
     }, 1000)
   }
 
-  const text = `${npub.slice(0, 10)}...${npub.slice(-4)}`
-
   return (
     <Tooltip
       label={copy ? t('Copied!') : t('Copy')}
@@ -60,8 +58,9 @@ export const NpubDisplay = ({ npub, iconOnly, ...rest }: NpubDisplayProps) => {
               isTruncated
               onClick={handleOnCopy}
               color={'neutral.600'}
+              maxWidth={'120px'}
             >
-              {`${text}`}
+              {`${npub}`}
             </Body1>
           )}
         </HStack>
