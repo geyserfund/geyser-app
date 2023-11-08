@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/react'
 import { DateTime } from 'luxon'
 import { useEffect } from 'react'
 import { useRouteError } from 'react-router-dom'
@@ -63,7 +64,15 @@ export const ErrorBoundary = () => {
         storeRateToLocalStorage()
         updateServiceWorker()
         window.location.reload()
+      } else {
+        captureException(e, {
+          tags: { 'Not Found Error - Repeated Asset': 'true' },
+        })
       }
+    } else {
+      captureException(e, {
+        tags: { 'Router Boundary Error': 'true' },
+      })
     }
   }, [e, updateServiceWorker])
 
