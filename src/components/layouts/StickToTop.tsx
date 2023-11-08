@@ -36,6 +36,7 @@ export const StickToTop = ({
 
   useEffect(() => {
     if (disable) {
+      setStick(false)
       return
     }
 
@@ -87,7 +88,7 @@ export const StickToTop = ({
         currentElement.scrollTop +
         currentElement.clientTop -
         scrollTop
-      if (scrollValue <= offset + bias) {
+      if (scrollValue > 0 && scrollValue <= offset + bias) {
         setStick(true)
       } else if (scrollValue > offset + bias + buffer) {
         setStick(false)
