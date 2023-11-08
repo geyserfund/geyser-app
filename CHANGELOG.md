@@ -1,3 +1,25 @@
+## [0.6.2](https://github.com/geyserfund/geyser-app/compare/v0.6.1...v0.6.2) (2023-11-08)
+
+
+### Bug Fixes
+
+* add not found error exceptions to sentry ([a0c6ca7](https://github.com/geyserfund/geyser-app/commit/a0c6ca7e19ca127aea0a3a51891f2bb1aa8864d8))
+* change the success screen in purple, resolves GEY-4952 ([cc9ac60](https://github.com/geyserfund/geyser-app/commit/cc9ac60f8e8497e8a3b5e86a5aa56b6162eba477))
+* increase retry to 20 and wait before retry to 1.5s ([0e7b6e3](https://github.com/geyserfund/geyser-app/commit/0e7b6e346c486af767a06cba4447ab1943f35036))
+* leaderboard bar overflow, resolves GEY-4653 ([2b14f49](https://github.com/geyserfund/geyser-app/commit/2b14f495b3f50db11571288ceeeb43889a850d87))
+* leaderboard sticking to top ([afda725](https://github.com/geyserfund/geyser-app/commit/afda7256641b6774de892bdd8917d386f8ede1af))
+* minor tweaking ([a84f520](https://github.com/geyserfund/geyser-app/commit/a84f52030e348af592d91a3a0208e5c755e89d31))
+* npub+Ln address on project, resolves GEY-4955 ([564820c](https://github.com/geyserfund/geyser-app/commit/564820cf515f556c3c5c8736b67adb903f724c0f))
+* only allow conversion after the QR image is loaded ([8ebf210](https://github.com/geyserfund/geyser-app/commit/8ebf2107b19e74a65cb22b6090d60dd7b162e24e))
+* project Private Key Kit (nsec), resolves GEY-4971 ([e114544](https://github.com/geyserfund/geyser-app/commit/e114544505b7a64eb8a8fcf19684b6f42c39cba3))
+* purple mode the Geyser logo loads in green, resolves GEY-4964 ([740b7b8](https://github.com/geyserfund/geyser-app/commit/740b7b8d63378b8fb05ff0b84ce251aa6fd38d50))
+* update FP to nostrville2023party ([4d971f5](https://github.com/geyserfund/geyser-app/commit/4d971f58edc6b96999945cbd5c96e98be88668cf))
+* update graidnet buttons to nostr color, comments resolves GEY-4711 ([47360bd](https://github.com/geyserfund/geyser-app/commit/47360bd96113f82752699640c27c27981e6873ff))
+* use aggregated transactions instead of default fundingTxs ([f88a436](https://github.com/geyserfund/geyser-app/commit/f88a4368e7cc06643b64aee1aa326dd6c9db3e63))
+* use differnent endpoints for tor hosts ([2b77245](https://github.com/geyserfund/geyser-app/commit/2b77245a510f7289cb8a6da013b0faa98ce7e265))
+* validation ([327631e](https://github.com/geyserfund/geyser-app/commit/327631ebfc786e014854cb3abc1fa9a0066e237d))
+* wip ([ee58bdf](https://github.com/geyserfund/geyser-app/commit/ee58bdf622801e55dc92a868360f8afe647c0afc))
+
 ## [0.6.1](https://github.com/geyserfund/geyser-app/compare/v0.5.3...v0.6.1) (2023-10-31)
 
 
