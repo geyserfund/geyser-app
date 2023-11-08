@@ -192,6 +192,8 @@ export const LogoNameBrand =
   'https://storage.googleapis.com/geyser-projects-media/app/logo-name-brand.svg'
 export const LogoNameDark =
   'https://storage.googleapis.com/geyser-projects-media/app/logo-name-dark.svg'
+export const LogoNameNostr =
+  'https://storage.googleapis.com/geyser-projects-media/app/logo-name-nostr.svg'
 
 // Geyser Notion Links
 

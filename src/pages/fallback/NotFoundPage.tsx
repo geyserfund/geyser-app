@@ -1,4 +1,4 @@
-import { Link, Text, VStack } from '@chakra-ui/react'
+import { Button, Link, Text, VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 import { BiErrorAlt } from 'react-icons/bi'
 
@@ -25,6 +25,7 @@ export const NotFoundPage = () => {
         <Text fontSize="20px">
           {t('This page was not found, please try again.')}
         </Text>
+        <Button onClick={() => window.location.reload()}>{t('Refresh')}</Button>
         <Text fontSize="20px">
           <Trans
             i18nKey={

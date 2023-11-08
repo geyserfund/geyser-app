@@ -30,6 +30,11 @@ export const InfoScreenFeed = () => {
     }
   }, [mobileView])
 
+  const stickToTopEnable =
+    (mobileView === MobileViews.contribution ||
+      mobileView === MobileViews.leaderboard) &&
+    isMobile
+
   const renderActivityList = useCallback(() => {
     if (!project) {
       return null
@@ -82,7 +87,7 @@ export const InfoScreenFeed = () => {
         offset={dimensions.topNavBar.desktop.height}
         bias={10}
         buffer={10}
-        disable={!isMobile}
+        disable={!stickToTopEnable}
       >
         <InfoScreenFeedTabs {...{ project, tab, setTab }} />
       </StickToTop>

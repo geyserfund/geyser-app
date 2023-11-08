@@ -88,9 +88,10 @@ export const theme = {
             backgroundColor: theme.colors.neutral[300],
           },
         }),
-        primaryGradient: {
-          background:
-            'linear-gradient(270deg, #6BE7CE 0%, #20ECC7 35.42%, #00F388 100%)',
+        primaryGradient: ({ theme }: StyleFunctionProps) => ({
+          background: theme.isNostrColor
+            ? `linear-gradient(270deg, #B486FA 0%, #C54BFF 35.42%, #D162FF 100%)`
+            : `linear-gradient(270deg, #6BE7CE 0%, #20ECC7 35.42%, #00F388 100%)`,
           border: 'none',
           color: lightModeColors.neutral[900],
           _hover: {
@@ -99,7 +100,7 @@ export const theme = {
           _active: {
             background: lightModeColors.neutral[300],
           },
-        },
+        }),
         secondary: ({ theme }: StyleFunctionProps) => ({
           boxShadow: 'none',
           outline: 'none',
