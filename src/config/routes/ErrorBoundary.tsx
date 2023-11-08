@@ -13,7 +13,7 @@ const FAILED_FETCH_ERROR = [
 ]
 const CHUNK_LOAD_ERROR = 'ChunkLoadError'
 const LOCAL_STORAGE_LAST_REFRESH_KEY = 'ChunkLoadError'
-const ONE_MINUTE_IN_MILIS = 60 * 1000
+const ONE_MINUTE_IN_MS = 60 * 1000
 
 export const doesAssetNeedRefresh = (e: any): boolean => {
   if (
@@ -37,7 +37,7 @@ const getRefreshStateFromLocalStorage = () => {
 
   let refreshed = false
 
-  if (timeLineMilis && now - timeLineMilis < ONE_MINUTE_IN_MILIS) {
+  if (timeLineMilis && now - timeLineMilis < ONE_MINUTE_IN_MS) {
     refreshed = true
   }
 
