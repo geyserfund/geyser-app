@@ -709,7 +709,7 @@
   "reward":"reward",
   "Install Geyser":"Install Geyser",
   "Please provide secure links, starting with https://":"Please provide secure links, starting with https://",
-  "Project Private Kit (nsec)": "Project Private Kit (nsec)",
+  "Project Private Key Kit (nsec)": "Project Private Key Kit (nsec)",
   "Exported on": "Exported on",
   "If you get locked out of your project from Geyser you can access your project from any other Nostr client by using your Private Key, which has been backed up by Geyser for you.": "If you get locked out of your project from Geyser you can access your project from any other Nostr client by using your Private Key, which has been backed up by Geyser for you.",
   "Get your Private Key Kit off your computer and print out a copy": "Get your Private Key Kit off your computer and print out a copy",
