@@ -1,12 +1,26 @@
 import { Button, Link, Text, VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 import { BiErrorAlt } from 'react-icons/bi'
+import { useMatch } from 'react-router-dom'
 
 import { Head } from '../../config'
-import { GeyserFeedbackFromUrl } from '../../constants'
+import { getPath, GeyserFeedbackFromUrl } from '../../constants'
+import { useServiceWorkerUpdate } from '../../context'
 
 export const NotFoundPage = () => {
   const { t } = useTranslation()
+  const isNotFoundRoute = useMatch(getPath('notFound'))
+  const { updateServiceWorker } = useServiceWorkerUpdate()
+
+  const handleActionButton = () => {
+    updateServiceWorker()
+    if (isNotFoundRoute) {
+      window.history.back()
+    } else {
+      window.location.reload()
+    }
+  }
+
   return (
     <>
       <Head title="Not Found" />
@@ -25,7 +39,7 @@ export const NotFoundPage = () => {
         <Text fontSize="20px">
           {t('This page was not found, please try again.')}
         </Text>
-        <Button onClick={() => window.location.reload()}>{t('Refresh')}</Button>
+        <Button onClick={handleActionButton}>{t('Refresh')}</Button>
         <Text fontSize="20px">
           <Trans
             i18nKey={
