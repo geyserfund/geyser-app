@@ -126,7 +126,7 @@ We use yarn as a dependency manager, install yarn if not already installed
 
 **Docker** ( optional )
 We can use `docker` and `docker compose` for local development of the `geyser-app`.
-If you prefer using docker for devlopment, make sure to have them installed on your local development machine, see [here](https://docs.docker.com/get-docker/).
+If you prefer using docker for development, make sure to have them installed on your local development machine, see [here](https://docs.docker.com/get-docker/).
 
 <br />
 
@@ -159,7 +159,7 @@ Optionally create `.env.staging` file, that could be tried out for staging devel
 
 #### Option 1 (DOCKER): use the staging API
 
-Make sure to complete the instructions described in [Hosts Configuration](#hosts-configuration), before proceesing using this method.
+Make sure to complete the instructions described in [Hosts Configuration](#hosts-configuration), before proceeding using this method.
 
 Currently, the staging API is the only way to get a functional authentication flow in standalone `geyser-app` development environment.
 
