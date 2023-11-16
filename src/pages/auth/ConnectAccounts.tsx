@@ -31,12 +31,15 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
 
   const displayFacebookButton = !hasFacebookAccount(user)
 
-  if (!displayNostrButton && !displayTwitterButton && !displayLightningButton) {
+  const canConnectAccount =
+    displayTwitterButton ||
+    displayNostrButton ||
+    displayLightningButton ||
+    displayFacebookButton
+
+  if (!canConnectAccount) {
     return null
   }
-
-  const canConnectAccount =
-    displayTwitterButton || displayNostrButton || displayLightningButton
 
   return (
     <>
