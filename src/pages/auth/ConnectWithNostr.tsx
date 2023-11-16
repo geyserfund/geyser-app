@@ -12,7 +12,7 @@ interface Props extends ButtonProps {
   onClose?: () => void
 }
 
-export const ConnectWithNostr = ({ onClose, variant }: Props) => {
+export const ConnectWithNostr = ({ onClose, ...rest }: Props) => {
   const { connect, error, clearError } = useNostrExtensonLogin()
 
   const failedModal = useModal()
@@ -45,12 +45,13 @@ export const ConnectWithNostr = ({ onClose, variant }: Props) => {
       <Button
         w="100%"
         size="sm"
-        variant={variant}
-        backgroundColor={variant ? 'transparent' : 'social.nostr'}
+        backgroundColor={'social.nostr'}
         leftIcon={<NostrSvgIcon height="20px" width="20px" />}
-        color={variant ? 'social.nostr' : 'white'}
+        color={'white'}
+        fontWeight={600}
         _hover={{ backgroundColor: 'social.nostrDark', color: 'white' }}
         onClick={handleClick}
+        {...rest}
       >
         Nostr
       </Button>

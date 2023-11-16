@@ -12,11 +12,17 @@ import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useAuthContext } from '../../context'
+import { ConnectWithFacebook } from '../../pages/auth/ConnectWithFacebook'
 // import { ConnectWithEmail } from '../../pages/auth/ConnectWithEmail'
 import { ConnectWithLightning } from '../../pages/auth/ConnectWithLightning'
 import { ConnectWithNostr } from '../../pages/auth/ConnectWithNostr'
 import { ConnectWithTwitter } from '../../pages/auth/ConnectWithTwitter'
-import { hasNostrAccount, hasTwitterAccount, useMobileMode } from '../../utils'
+import {
+  hasFacebookAccount,
+  hasNostrAccount,
+  hasTwitterAccount,
+  useMobileMode,
+} from '../../utils'
 import { Caption } from '../typography'
 import { ButtonComponent } from '../ui'
 
@@ -28,12 +34,14 @@ interface IAuthModal {
   showTwitter?: boolean
   showNostr?: boolean
   showLightning?: boolean
+  showFacebook?: boolean
   privateRoute?: boolean
 }
 
 const ConnectAccounts = ({
   onClose,
   showTwitter,
+  showFacebook,
   showNostr,
   showLightning,
 }: any) => {
@@ -47,6 +55,9 @@ const ConnectAccounts = ({
         )}
       </Text>
       <Stack width="100%">
+        {!hasFacebookAccount(user) && showFacebook && (
+          <ConnectWithFacebook onClose={onClose} />
+        )}
         {!hasTwitterAccount(user) && showTwitter && (
           <ConnectWithTwitter onClose={onClose} />
         )}
@@ -76,6 +87,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
     showTwitter = true,
     showNostr = true,
     showLightning = true,
+    showFacebook = true,
     privateRoute = false,
   } = authModalProps
 
@@ -128,6 +140,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
               showNostr={showNostr && !isMobile}
               showTwitter={showTwitter}
               showLightning={showLightning}
+              showFacebook={showFacebook}
             />
           </Box>
           <Box

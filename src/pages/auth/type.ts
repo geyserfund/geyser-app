@@ -3,4 +3,7 @@ export enum ExternalAccountType {
   twitter = 'twitter',
   lightning = 'lnurl',
   fountain = 'Fountain',
+  facebook = 'facebook',
+  google = 'google',
+  apple = 'apple',
 }

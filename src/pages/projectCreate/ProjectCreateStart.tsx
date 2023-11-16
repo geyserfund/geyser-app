@@ -15,6 +15,7 @@ import {
 } from '../../constants'
 import { useAuthContext } from '../../context'
 import { hasNostrAccount, hasTwitterAccount, useMobileMode } from '../../utils'
+import { ConnectWithFacebook } from '../auth/ConnectWithFacebook'
 import { ConnectWithNostr } from '../auth/ConnectWithNostr'
 import { ConnectWithTwitter } from '../auth/ConnectWithTwitter'
 import { FormContinueButton } from './components/FormContinueButton'
@@ -99,6 +100,7 @@ export const ProjectCreateStart = () => {
                 'You need to login with Twitter or Nostr, which connects your social profile to your project.',
               )}
             </Text>
+            <ConnectWithFacebook />
             <ConnectWithTwitter />
             {!isMobile && <ConnectWithNostr />}
             {!isMobile ? (

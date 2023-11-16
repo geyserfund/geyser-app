@@ -1,22 +1,21 @@
 import { Button, ButtonProps, Link, Tooltip } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { RiTwitterXLine } from 'react-icons/ri'
+import { BsFacebook } from 'react-icons/bs'
 
 import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { useMeQuery } from '../../types'
-import { hasTwitterAccount, useNotification } from '../../utils'
+import { hasFacebookAccount, useNotification } from '../../utils'
 
-interface ConnectWithTwitterProps extends ButtonProps {
+interface ConnectWithFacebookProps extends ButtonProps {
   onClose?: () => void
 }
 
-export const ConnectWithTwitter = ({
+export const ConnectWithFacebook = ({
   onClose,
-  variant,
   ...rest
-}: ConnectWithTwitterProps) => {
+}: ConnectWithFacebookProps) => {
   const { t } = useTranslation()
   const { login } = useAuthContext()
   const { toast } = useNotification()
@@ -28,9 +27,9 @@ export const ConnectWithTwitter = ({
   const { stopPolling } = useMeQuery({
     onCompleted(data) {
       if (data && data.me) {
-        const hasTwitter = hasTwitterAccount(data.me)
+        const hasFacebook = hasFacebookAccount(data.me)
 
-        if (hasTwitter) {
+        if (hasFacebook) {
           if (onClose !== undefined) {
             onClose()
           }
@@ -119,17 +118,16 @@ export const ConnectWithTwitter = ({
     <Tooltip label={!canLogin && t('Please refresh the page and try again.')}>
       <Button
         as={Link}
-        variant={variant}
-        href={`${authServiceEndpoint}/twitter?nextPath=/auth/twitter`}
+        href={`${authServiceEndpoint}/facebook?nextPath=/auth/facebook`}
         isExternal
         w="100%"
         size="sm"
         color={'white'}
         fontWeight={600}
-        backgroundColor={'social.twitter'}
-        leftIcon={<RiTwitterXLine />}
+        backgroundColor={'social.facebook'}
+        leftIcon={<BsFacebook />}
         _hover={{
-          backgroundColor: 'social.twitterDark',
+          backgroundColor: 'social.facebookDark',
           color: 'white',
           textDecoration: 'none',
         }}
@@ -139,7 +137,7 @@ export const ConnectWithTwitter = ({
         textDecoration={'none'}
         {...rest}
       >
-        Twitter
+        Facebook
       </Button>
     </Tooltip>
   )

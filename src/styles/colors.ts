@@ -104,6 +104,9 @@ export const socialColors = {
   twitter: '#2AA9E0',
   twitterDark: '#0d5a82',
 
+  facebook: '#3B5998',
+  facebookDark: '#2d4373',
+
   nostr: '#670C8B',
   nostrDark: '#52095c',
 

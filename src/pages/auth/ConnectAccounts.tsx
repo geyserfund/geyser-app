@@ -7,11 +7,13 @@ import { Body2 } from '../../components/typography'
 import { useModal } from '../../hooks/useModal'
 import { User } from '../../types'
 import {
+  hasFacebookAccount,
   hasLightningAccount,
   hasNostrAccount,
   hasTwitterAccount,
   useMobileMode,
 } from '../../utils'
+import { ConnectWithFacebook } from './ConnectWithFacebook'
 import { ConnectWithLightning } from './ConnectWithLightning'
 import { ConnectWithNostr } from './ConnectWithNostr'
 import { ConnectWithTwitter } from './ConnectWithTwitter'
@@ -26,6 +28,8 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
   const displayTwitterButton = !hasTwitterAccount(user)
 
   const displayLightningButton = !hasLightningAccount(user)
+
+  const displayFacebookButton = !hasFacebookAccount(user)
 
   if (!displayNostrButton && !displayTwitterButton && !displayLightningButton) {
     return null
@@ -56,6 +60,8 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
           <Body2 color="neutral.600" mb={4}>
             {t('Connect more social profiles to your Geyser account.')}
           </Body2>
+          {}
+          {displayFacebookButton && <ConnectWithFacebook />}
           {displayTwitterButton && <ConnectWithTwitter />}
           {displayNostrButton && <ConnectWithNostr />}
           {displayLightningButton && <ConnectWithLightning />}

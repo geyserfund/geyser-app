@@ -33,6 +33,7 @@ import {
   Project,
 } from '../../../../types'
 import { toInt, useCustomTheme, useNotification } from '../../../../utils'
+import { ConnectWithFacebook } from '../../../auth/ConnectWithFacebook'
 import { ConnectWithNostr } from '../../../auth/ConnectWithNostr'
 import { ConnectWithTwitter } from '../../../auth/ConnectWithTwitter'
 import { CreateAProjectButton } from '../../../profile/components'
@@ -171,6 +172,7 @@ export const LoginForGrant = () => {
         {t('To apply to a grant you need to first login into Geyser.')}
       </Body1>
       <VStack w="full">
+        <ConnectWithFacebook />
         <ConnectWithTwitter />
         <ConnectWithNostr />
       </VStack>
