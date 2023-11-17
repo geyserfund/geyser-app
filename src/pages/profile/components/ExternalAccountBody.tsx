@@ -2,7 +2,7 @@ import { CheckIcon, CloseIcon, CopyIcon } from '@chakra-ui/icons'
 import { HStack, Icon, StackProps, Tooltip } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BsFacebook } from 'react-icons/bs'
+import { BsFacebook, BsGithub, BsGoogle } from 'react-icons/bs'
 import { RiTwitterXLine } from 'react-icons/ri'
 
 import {
@@ -14,6 +14,8 @@ import { Body2 } from '../../../components/typography'
 import { ExternalAccountType } from '../../auth'
 
 const externalAccountIconMap = {
+  [ExternalAccountType.github]: BsGithub,
+  [ExternalAccountType.google]: BsGoogle,
   [ExternalAccountType.facebook]: BsFacebook,
   [ExternalAccountType.twitter]: RiTwitterXLine,
   [ExternalAccountType.lightning]: BoltSvgIcon,

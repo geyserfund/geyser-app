@@ -13,12 +13,16 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useAuthContext } from '../../context'
 import { ConnectWithFacebook } from '../../pages/auth/ConnectWithFacebook'
+import { ConnectWithGithub } from '../../pages/auth/ConnectWithGithub'
+import { ConnectWithGoogle } from '../../pages/auth/ConnectWithGoogle'
 // import { ConnectWithEmail } from '../../pages/auth/ConnectWithEmail'
 import { ConnectWithLightning } from '../../pages/auth/ConnectWithLightning'
 import { ConnectWithNostr } from '../../pages/auth/ConnectWithNostr'
 import { ConnectWithTwitter } from '../../pages/auth/ConnectWithTwitter'
 import {
   hasFacebookAccount,
+  hasGithubAccount,
+  hasGoogleAccount,
   hasNostrAccount,
   hasTwitterAccount,
   useMobileMode,
@@ -35,6 +39,8 @@ interface IAuthModal {
   showNostr?: boolean
   showLightning?: boolean
   showFacebook?: boolean
+  showGoogle?: boolean
+  showGithub?: boolean
   privateRoute?: boolean
 }
 
@@ -44,6 +50,8 @@ const ConnectAccounts = ({
   showFacebook,
   showNostr,
   showLightning,
+  showGoogle,
+  showGithub,
 }: any) => {
   const { t } = useTranslation()
   const { user } = useAuthContext()
@@ -55,6 +63,12 @@ const ConnectAccounts = ({
         )}
       </Text>
       <Stack width="100%">
+        {!hasGithubAccount(user) && showGithub && (
+          <ConnectWithGithub onClose={onClose} />
+        )}
+        {!hasGoogleAccount(user) && showGoogle && (
+          <ConnectWithGoogle onClose={onClose} />
+        )}
         {!hasFacebookAccount(user) && showFacebook && (
           <ConnectWithFacebook onClose={onClose} />
         )}
@@ -88,6 +102,8 @@ export const AuthModal = (authModalProps: IAuthModal) => {
     showNostr = true,
     showLightning = true,
     showFacebook = true,
+    showGoogle = true,
+    showGithub = true,
     privateRoute = false,
   } = authModalProps
 
@@ -141,6 +157,8 @@ export const AuthModal = (authModalProps: IAuthModal) => {
               showTwitter={showTwitter}
               showLightning={showLightning}
               showFacebook={showFacebook}
+              showGoogle={showGoogle}
+              showGithub={showGithub}
             />
           </Box>
           <Box

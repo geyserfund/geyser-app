@@ -5,5 +5,6 @@ export enum ExternalAccountType {
   fountain = 'Fountain',
   facebook = 'facebook',
   google = 'google',
+  github = 'github',
   apple = 'apple',
 }

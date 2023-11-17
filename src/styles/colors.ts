@@ -107,6 +107,12 @@ export const socialColors = {
   facebook: '#3B5998',
   facebookDark: '#2d4373',
 
+  google: '#4285F4',
+  googleDark: '#2B7DE9',
+
+  github: '#333333',
+  githubDark: '#4b4b4b',
+
   nostr: '#670C8B',
   nostrDark: '#52095c',
 

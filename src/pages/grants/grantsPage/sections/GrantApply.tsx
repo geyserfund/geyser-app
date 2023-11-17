@@ -34,6 +34,8 @@ import {
 } from '../../../../types'
 import { toInt, useCustomTheme, useNotification } from '../../../../utils'
 import { ConnectWithFacebook } from '../../../auth/ConnectWithFacebook'
+import { ConnectWithGithub } from '../../../auth/ConnectWithGithub'
+import { ConnectWithGoogle } from '../../../auth/ConnectWithGoogle'
 import { ConnectWithNostr } from '../../../auth/ConnectWithNostr'
 import { ConnectWithTwitter } from '../../../auth/ConnectWithTwitter'
 import { CreateAProjectButton } from '../../../profile/components'
@@ -173,6 +175,8 @@ export const LoginForGrant = () => {
       </Body1>
       <VStack w="full">
         <ConnectWithFacebook />
+        <ConnectWithGithub />
+        <ConnectWithGoogle />
         <ConnectWithTwitter />
         <ConnectWithNostr />
       </VStack>

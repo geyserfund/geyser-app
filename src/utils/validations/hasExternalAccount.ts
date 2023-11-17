@@ -31,6 +31,26 @@ export const hasFacebookAccount = (user: UserMeFragment) => {
   })
 }
 
+export const hasGoogleAccount = (user: UserMeFragment) => {
+  if (!user || !user.id) {
+    return false
+  }
+
+  return (user.externalAccounts || []).some((account) => {
+    return account?.accountType === ExternalAccountType.google
+  })
+}
+
+export const hasGithubAccount = (user: UserMeFragment) => {
+  if (!user || !user.id) {
+    return false
+  }
+
+  return (user.externalAccounts || []).some((account) => {
+    return account?.accountType === ExternalAccountType.github
+  })
+}
+
 export const hasLightningAccount = (user: UserMeFragment) => {
   if (!user || !user.id) {
     return false

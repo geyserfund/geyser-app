@@ -8,12 +8,16 @@ import { useModal } from '../../hooks/useModal'
 import { User } from '../../types'
 import {
   hasFacebookAccount,
+  hasGithubAccount,
+  hasGoogleAccount,
   hasLightningAccount,
   hasNostrAccount,
   hasTwitterAccount,
   useMobileMode,
 } from '../../utils'
 import { ConnectWithFacebook } from './ConnectWithFacebook'
+import { ConnectWithGithub } from './ConnectWithGithub'
+import { ConnectWithGoogle } from './ConnectWithGoogle'
 import { ConnectWithLightning } from './ConnectWithLightning'
 import { ConnectWithNostr } from './ConnectWithNostr'
 import { ConnectWithTwitter } from './ConnectWithTwitter'
@@ -31,11 +35,17 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
 
   const displayFacebookButton = !hasFacebookAccount(user)
 
+  const displayGoogleButton = !hasGoogleAccount(user)
+
+  const displayGithubButton = !hasGithubAccount(user)
+
   const canConnectAccount =
     displayTwitterButton ||
     displayNostrButton ||
     displayLightningButton ||
-    displayFacebookButton
+    displayFacebookButton ||
+    displayGoogleButton ||
+    displayGithubButton
 
   if (!canConnectAccount) {
     return null
@@ -64,6 +74,8 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
             {t('Connect more social profiles to your Geyser account.')}
           </Body2>
           {}
+          {displayGoogleButton && <ConnectWithGoogle />}
+          {displayGithubButton && <ConnectWithGithub />}
           {displayFacebookButton && <ConnectWithFacebook />}
           {displayTwitterButton && <ConnectWithTwitter />}
           {displayNostrButton && <ConnectWithNostr />}

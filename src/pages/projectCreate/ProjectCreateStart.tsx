@@ -16,6 +16,8 @@ import {
 import { useAuthContext } from '../../context'
 import { hasNostrAccount, hasTwitterAccount, useMobileMode } from '../../utils'
 import { ConnectWithFacebook } from '../auth/ConnectWithFacebook'
+import { ConnectWithGithub } from '../auth/ConnectWithGithub'
+import { ConnectWithGoogle } from '../auth/ConnectWithGoogle'
 import { ConnectWithNostr } from '../auth/ConnectWithNostr'
 import { ConnectWithTwitter } from '../auth/ConnectWithTwitter'
 import { FormContinueButton } from './components/FormContinueButton'
@@ -101,6 +103,8 @@ export const ProjectCreateStart = () => {
               )}
             </Text>
             <ConnectWithFacebook />
+            <ConnectWithGithub />
+            <ConnectWithGoogle />
             <ConnectWithTwitter />
             {!isMobile && <ConnectWithNostr />}
             {!isMobile ? (
