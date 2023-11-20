@@ -102,22 +102,22 @@ export const secondaryColors = {
 
 export const socialColors = {
   twitter: '#2AA9E0',
-  twitterDark: '#0d5a82',
-
-  facebook: '#3B5998',
-  facebookDark: '#2d4373',
-
+  twitterX: '#000000',
+  facebook: '#0866ff',
   google: '#4285F4',
-  googleDark: '#2B7DE9',
-
   github: '#333333',
-  githubDark: '#4b4b4b',
-
   nostr: '#670C8B',
-  nostrDark: '#52095c',
+  lightning: '#f89314',
+}
 
-  lightning: '#FFE600',
-  lightningDark: '#CCA300',
+export const socialColorsDark = {
+  twitter: '#84CBF1',
+  twitterX: '#FFFFFF',
+  facebook: '#0866ff',
+  google: '#719DFD',
+  github: '#DFDFDF',
+  nostr: '#C54BFF',
+  lightning: '#FDB848',
 }
 
 export const lightModeColors = {
@@ -132,6 +132,6 @@ export const darkModeColors = {
   primary: primaryColorsDark,
   neutral: neutralColorsDark,
   secondary: secondaryColors,
-  social: socialColors,
+  social: socialColorsDark,
   app: ColorsAppDark,
 }
