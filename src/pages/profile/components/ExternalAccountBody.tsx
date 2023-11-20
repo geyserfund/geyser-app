@@ -23,7 +23,7 @@ const externalAccountIconMap = {
   [ExternalAccountType.fountain]: FountainIcon,
 } as { [key: string]: any }
 
-interface ExternalAccountBodyProps extends StackProps {
+export interface ExternalAccountBodyProps extends StackProps {
   type: ExternalAccountType
   username: string
   handleDelete?: () => void

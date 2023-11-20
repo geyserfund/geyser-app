@@ -1,21 +1,19 @@
-import { Button, ButtonProps, Link, Tooltip } from '@chakra-ui/react'
+import { Button, IconButton, Link, Tooltip } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BsGoogle } from 'react-icons/bs'
 
+import { GoogleGLogoIcon } from '../../components/icons/svg/GoogleGLogoIcon'
 import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { useMeQuery } from '../../types'
 import { hasGoogleAccount, useNotification } from '../../utils'
-
-interface ConnectWithGoogleProps extends ButtonProps {
-  onClose?: () => void
-}
+import { ConnectWithButtonProps } from './type'
 
 export const ConnectWithGoogle = ({
   onClose,
+  isIconOnly,
   ...rest
-}: ConnectWithGoogleProps) => {
+}: ConnectWithButtonProps) => {
   const { t } = useTranslation()
   const { login } = useAuthContext()
   const { toast } = useNotification()
@@ -114,31 +112,36 @@ export const ConnectWithGoogle = ({
     })
   }
 
+  const ButtonComponent = isIconOnly ? IconButton : Button
+
+  const buttonProps = isIconOnly
+    ? {
+        icon: <GoogleGLogoIcon boxSize={'20px'} />,
+      }
+    : {
+        leftIcon: <GoogleGLogoIcon boxSize={'20px'} />,
+      }
+
   return (
     <Tooltip label={!canLogin && t('Please refresh the page and try again.')}>
-      <Button
+      <ButtonComponent
+        aria-label="Connect with Google"
         as={Link}
         href={`${authServiceEndpoint}/google?nextPath=/auth/google`}
         isExternal
         w="100%"
         size="sm"
-        color={'white'}
+        variant={'secondaryNeutral'}
         fontWeight={600}
-        backgroundColor={'social.google'}
-        leftIcon={<BsGoogle />}
-        _hover={{
-          backgroundColor: 'social.googleDark',
-          color: 'white',
-          textDecoration: 'none',
-        }}
+        color={'social.google'}
         onClick={handleClick}
         isDisabled={!canLogin}
         pointerEvents={!canLogin ? 'none' : undefined}
-        textDecoration={'none'}
+        {...buttonProps}
         {...rest}
       >
-        Google
-      </Button>
+        {!isIconOnly && `Google`}
+      </ButtonComponent>
     </Tooltip>
   )
 }

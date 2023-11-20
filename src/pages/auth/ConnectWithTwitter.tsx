@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Link, Tooltip } from '@chakra-ui/react'
+import { Button, IconButton, Link, Tooltip } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { RiTwitterXLine } from 'react-icons/ri'
@@ -7,16 +7,13 @@ import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { useMeQuery } from '../../types'
 import { hasTwitterAccount, useNotification } from '../../utils'
-
-interface ConnectWithTwitterProps extends ButtonProps {
-  onClose?: () => void
-}
+import { ConnectWithButtonProps } from './type'
 
 export const ConnectWithTwitter = ({
   onClose,
-  variant,
+  isIconOnly,
   ...rest
-}: ConnectWithTwitterProps) => {
+}: ConnectWithButtonProps) => {
   const { t } = useTranslation()
   const { login } = useAuthContext()
   const { toast } = useNotification()
@@ -115,32 +112,37 @@ export const ConnectWithTwitter = ({
     })
   }
 
+  const ButtonComponent = isIconOnly ? IconButton : Button
+
+  const buttonProps = isIconOnly
+    ? {
+        icon: <RiTwitterXLine fontSize={'20px'} />,
+      }
+    : {
+        leftIcon: <RiTwitterXLine fontSize={'20px'} />,
+      }
+
   return (
     <Tooltip label={!canLogin && t('Please refresh the page and try again.')}>
-      <Button
+      <ButtonComponent
+        aria-label="Connect with Twitter"
         as={Link}
-        variant={variant}
+        variant="secondaryNeutral"
         href={`${authServiceEndpoint}/twitter?nextPath=/auth/twitter`}
         isExternal
         w="100%"
         size="sm"
-        color={'white'}
+        color={'social.twitterX'}
         fontWeight={600}
-        backgroundColor={'social.twitter'}
-        leftIcon={<RiTwitterXLine />}
-        _hover={{
-          backgroundColor: 'social.twitterDark',
-          color: 'white',
-          textDecoration: 'none',
-        }}
+        backgroundColor={'neutral.0'}
         onClick={handleClick}
         isDisabled={!canLogin}
         pointerEvents={!canLogin ? 'none' : undefined}
-        textDecoration={'none'}
+        {...buttonProps}
         {...rest}
       >
-        Twitter
-      </Button>
+        {!isIconOnly && `Twitter (X)`}
+      </ButtonComponent>
     </Tooltip>
   )
 }

@@ -1,3 +1,5 @@
+import { ButtonProps } from '@chakra-ui/react'
+
 export enum ExternalAccountType {
   nostr = 'nostr',
   twitter = 'twitter',
@@ -7,4 +9,9 @@ export enum ExternalAccountType {
   google = 'google',
   github = 'github',
   apple = 'apple',
+}
+
+export interface ConnectWithButtonProps extends ButtonProps {
+  onClose?: () => void
+  isIconOnly?: boolean
 }

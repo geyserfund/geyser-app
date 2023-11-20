@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Link, Tooltip } from '@chakra-ui/react'
+import { Button, IconButton, Link, Tooltip } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsFacebook } from 'react-icons/bs'
@@ -7,15 +7,13 @@ import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { useMeQuery } from '../../types'
 import { hasFacebookAccount, useNotification } from '../../utils'
-
-interface ConnectWithFacebookProps extends ButtonProps {
-  onClose?: () => void
-}
+import { ConnectWithButtonProps } from './type'
 
 export const ConnectWithFacebook = ({
   onClose,
+  isIconOnly,
   ...rest
-}: ConnectWithFacebookProps) => {
+}: ConnectWithButtonProps) => {
   const { t } = useTranslation()
   const { login } = useAuthContext()
   const { toast } = useNotification()
@@ -114,31 +112,36 @@ export const ConnectWithFacebook = ({
     })
   }
 
+  const ButtonComponent = isIconOnly ? IconButton : Button
+
+  const buttonProps = isIconOnly
+    ? {
+        icon: <BsFacebook fontSize={'20px'} />,
+      }
+    : {
+        leftIcon: <BsFacebook fontSize={'20px'} />,
+      }
+
   return (
     <Tooltip label={!canLogin && t('Please refresh the page and try again.')}>
-      <Button
+      <ButtonComponent
+        aria-label="Connect with Facebook"
         as={Link}
         href={`${authServiceEndpoint}/facebook?nextPath=/auth/facebook`}
         isExternal
         w="100%"
         size="sm"
-        color={'white'}
+        variant={'secondaryNeutral'}
         fontWeight={600}
-        backgroundColor={'social.facebook'}
-        leftIcon={<BsFacebook />}
-        _hover={{
-          backgroundColor: 'social.facebookDark',
-          color: 'white',
-          textDecoration: 'none',
-        }}
+        color={'social.facebook'}
         onClick={handleClick}
         isDisabled={!canLogin}
         pointerEvents={!canLogin ? 'none' : undefined}
-        textDecoration={'none'}
+        {...buttonProps}
         {...rest}
       >
         Facebook
-      </Button>
+      </ButtonComponent>
     </Tooltip>
   )
 }

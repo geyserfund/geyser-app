@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Link, Tooltip } from '@chakra-ui/react'
+import { Button, IconButton, Link, Tooltip } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsGithub } from 'react-icons/bs'
@@ -7,15 +7,13 @@ import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { useMeQuery } from '../../types'
 import { hasGithubAccount, useNotification } from '../../utils'
-
-interface ConnectWithGithubProps extends ButtonProps {
-  onClose?: () => void
-}
+import { ConnectWithButtonProps } from './type'
 
 export const ConnectWithGithub = ({
   onClose,
+  isIconOnly,
   ...rest
-}: ConnectWithGithubProps) => {
+}: ConnectWithButtonProps) => {
   const { t } = useTranslation()
   const { login } = useAuthContext()
   const { toast } = useNotification()
@@ -114,31 +112,36 @@ export const ConnectWithGithub = ({
     })
   }
 
+  const ButtonComponent = isIconOnly ? IconButton : Button
+
+  const buttonProps = isIconOnly
+    ? {
+        icon: <BsGithub fontSize={'20px'} />,
+      }
+    : {
+        leftIcon: <BsGithub fontSize={'20px'} />,
+      }
+
   return (
     <Tooltip label={!canLogin && t('Please refresh the page and try again.')}>
-      <Button
+      <ButtonComponent
+        aria-label="Connect with Github"
         as={Link}
         href={`${authServiceEndpoint}/github?nextPath=/auth/github`}
         isExternal
         w="100%"
         size="sm"
-        color={'white'}
+        variant={'secondaryNeutral'}
         fontWeight={600}
-        backgroundColor={'social.github'}
-        leftIcon={<BsGithub />}
-        _hover={{
-          backgroundColor: 'social.githubDark',
-          color: 'white',
-          textDecoration: 'none',
-        }}
+        color={'social.github'}
         onClick={handleClick}
         isDisabled={!canLogin}
         pointerEvents={!canLogin ? 'none' : undefined}
-        textDecoration={'none'}
+        {...buttonProps}
         {...rest}
       >
-        Github
-      </Button>
+        {!isIconOnly && `Github`}
+      </ButtonComponent>
     </Tooltip>
   )
 }

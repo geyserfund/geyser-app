@@ -7,7 +7,10 @@ import { ExternalAccount } from '../../../types'
 import { copyTextToClipboard, toInt, useNotification } from '../../../utils'
 import { ExternalAccountType } from '../../auth'
 import { UserProfileState } from '../type'
-import { ExternalAccountBody } from './ExternalAccountBody'
+import {
+  ExternalAccountBody,
+  ExternalAccountBodyProps,
+} from './ExternalAccountBody'
 import { RemoveExternalAccountModal } from './RemoveExternalAccountModal'
 
 interface ExternalAccountDisplayProps extends UserProfileState {
@@ -49,44 +52,39 @@ export const ExternalAccountDisplay = ({
   }
 
   const isNostr = account.accountType === ExternalAccountType.nostr
-  const isTwitter = account.accountType === ExternalAccountType.twitter
 
   const renderExternalAccountBody = () => {
-    if (isTwitter) {
-      return (
-        <ExternalAccountBody
-          type={account.accountType as ExternalAccountType}
-          username={account.externalUsername}
-          handleDelete={isEdit ? onOpen : undefined}
-          as={Link}
-          href={`https://twitter.com/${account.externalUsername}`}
-          isLoading={unlinkAccountLoading}
-          isExternal
-        />
-      )
+    let props: ExternalAccountBodyProps = {
+      type: account.accountType as ExternalAccountType,
+      username: account.externalUsername,
+      handleDelete: isEdit ? onOpen : undefined,
+      isLoading: unlinkAccountLoading,
     }
 
-    if (isNostr) {
-      const npub = nip19.npubEncode(account.externalId)
-      return (
-        <ExternalAccountBody
-          type={account.accountType as ExternalAccountType}
-          username={npub}
-          handleDelete={isEdit ? onOpen : undefined}
-          handleCopy={() => handleCopyPubkey(npub)}
-          isLoading={unlinkAccountLoading}
-        />
-      )
+    switch (account.accountType) {
+      case ExternalAccountType.nostr:
+        props = {
+          ...props,
+          username: nip19.npubEncode(account.externalId),
+          handleCopy: () =>
+            handleCopyPubkey(nip19.npubEncode(account.externalId)),
+        }
+        break
+      case ExternalAccountType.twitter:
+        props = {
+          ...props,
+          as: Link,
+          href: `https://twitter.com/${account.externalUsername}`,
+          isExternal: true,
+        }
+        break
+      case ExternalAccountType.google:
+        return null
+      default:
+        break
     }
 
-    return (
-      <ExternalAccountBody
-        type={account.accountType as ExternalAccountType}
-        username={account.externalUsername}
-        handleDelete={isEdit ? onOpen : undefined}
-        isLoading={unlinkAccountLoading}
-      />
-    )
+    return <ExternalAccountBody {...props} />
   }
 
   return (

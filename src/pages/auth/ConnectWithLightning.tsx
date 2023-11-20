@@ -3,6 +3,7 @@ import {
   Button,
   ButtonProps,
   HStack,
+  IconButton,
   Link,
   Modal,
   ModalBody,
@@ -33,6 +34,7 @@ import {
   useMobileMode,
   useNotification,
 } from '../../utils'
+import { ConnectWithButtonProps } from './type'
 
 type LNURLResponse =
   | {
@@ -78,14 +80,11 @@ interface ConnectWithLightningModalProps {
   onClose: () => void
 }
 
-interface ConnectWithLightningProps extends ButtonProps {
-  onClose?: () => void
-}
-
 export const ConnectWithLightning = ({
   onClose,
+  isIconOnly,
   ...rest
-}: ConnectWithLightningProps) => {
+}: ConnectWithButtonProps) => {
   const {
     isOpen: isModalOpen,
     onClose: onModalClose,
@@ -100,21 +99,31 @@ export const ConnectWithLightning = ({
     onModalClose()
   }
 
+  const ButtonComponent = isIconOnly ? IconButton : Button
+
+  const buttonProps = isIconOnly
+    ? {
+        icon: <BoltSvgIcon boxSize={'16px'} />,
+      }
+    : {
+        leftIcon: <BoltSvgIcon boxSize={'16px'} />,
+      }
+
   return (
     <>
-      <Button
+      <ButtonComponent
+        aria-label="Connect with Lightning"
         w="100%"
         size="sm"
-        color={'black'}
+        variant="secondaryNeutral"
         fontWeight={600}
-        backgroundColor={'social.lightning'}
-        leftIcon={<BoltSvgIcon height="20px" width="20px" />}
-        _hover={{ backgroundColor: 'social.lightningDark', color: 'white' }}
+        color={'social.lightning'}
         onClick={onModalOpen}
+        {...buttonProps}
         {...rest}
       >
-        Lightning
-      </Button>
+        {!isIconOnly && 'Lightning'}
+      </ButtonComponent>
       {/* To make sure the polling gets stopped, the component is demounted. */}
       {isModalOpen && (
         <ConnectWithLightningModal isOpen={isModalOpen} onClose={handleClose} />

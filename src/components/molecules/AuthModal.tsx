@@ -7,7 +7,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/modal'
-import { VStack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -27,7 +27,7 @@ import {
   hasTwitterAccount,
   useMobileMode,
 } from '../../utils'
-import { Caption } from '../typography'
+import { Body2, Caption } from '../typography'
 import { ButtonComponent } from '../ui'
 
 interface IAuthModal {
@@ -63,15 +63,6 @@ const ConnectAccounts = ({
         )}
       </Text>
       <Stack width="100%">
-        {!hasGithubAccount(user) && showGithub && (
-          <ConnectWithGithub onClose={onClose} />
-        )}
-        {!hasGoogleAccount(user) && showGoogle && (
-          <ConnectWithGoogle onClose={onClose} />
-        )}
-        {!hasFacebookAccount(user) && showFacebook && (
-          <ConnectWithFacebook onClose={onClose} />
-        )}
         {!hasTwitterAccount(user) && showTwitter && (
           <ConnectWithTwitter onClose={onClose} />
         )}
@@ -80,6 +71,19 @@ const ConnectAccounts = ({
         )}
         {showLightning && <ConnectWithLightning onClose={onClose} />}
         {/* <ConnectWithEmail onClose={onClose} /> */}
+
+        <Body2 color="neutral.600">{t('More logins')}</Body2>
+        <HStack w="full">
+          {!hasGoogleAccount(user) && showGoogle && (
+            <ConnectWithGoogle onClose={onClose} isIconOnly />
+          )}
+          {!hasFacebookAccount(user) && showFacebook && (
+            <ConnectWithFacebook onClose={onClose} isIconOnly />
+          )}
+          {!hasGithubAccount(user) && showGithub && (
+            <ConnectWithGithub onClose={onClose} isIconOnly />
+          )}
+        </HStack>
       </Stack>
       <Caption paddingTop="5px">
         {t(
@@ -140,7 +144,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
           </Text>
         </ModalHeader>
         {privateRoute || <ModalCloseButton />}
-        <ModalBody width="100%">
+        <ModalBody width="100%" padding={{ base: 0, lg: '8px 24px' }}>
           <Box
             justifyContent="center"
             alignItems="center"
