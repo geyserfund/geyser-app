@@ -3,7 +3,7 @@ import { MenuItem } from '@chakra-ui/menu'
 import { Button, MenuDivider, MenuGroup, Stack } from '@chakra-ui/react'
 import { useCallback, useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import {
   FAQUrl,
