@@ -59,7 +59,9 @@ const useStyles = createUseStyles<Rules, StyleProps, AppTheme>(
         border: 'none',
         fontFamily: fonts.inter,
       },
-
+      '& .ql-container.ql-snow': {
+        border: 'none',
+      },
       '& .ql-editor': {
         paddingBottom: '70px !important',
         paddingLeft: noPadding ? '0px !important' : undefined,
