@@ -8,10 +8,17 @@ export enum ExternalAccountType {
   facebook = 'facebook',
   google = 'google',
   github = 'github',
-  apple = 'apple',
+}
+
+export enum SocialAccountType {
+  facebook = 'facebook',
+  google = 'google',
+  github = 'github',
+  twitter = 'twitter',
 }
 
 export interface ConnectWithButtonProps extends ButtonProps {
   onClose?: () => void
   isIconOnly?: boolean
+  accountType: SocialAccountType
 }

@@ -13,7 +13,7 @@ export const ConnectWithNostr = ({
   onClose,
   isIconOnly,
   ...rest
-}: ConnectWithButtonProps) => {
+}: Omit<ConnectWithButtonProps, 'accountType'>) => {
   const { connect, error, clearError } = useNostrExtensonLogin()
 
   const failedModal = useModal()

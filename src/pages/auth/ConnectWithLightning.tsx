@@ -83,7 +83,7 @@ export const ConnectWithLightning = ({
   onClose,
   isIconOnly,
   ...rest
-}: ConnectWithButtonProps) => {
+}: Omit<ConnectWithButtonProps, 'accountType'>) => {
   const {
     isOpen: isModalOpen,
     onClose: onModalClose,

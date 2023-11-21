@@ -15,12 +15,10 @@ import {
   hasTwitterAccount,
   useMobileMode,
 } from '../../utils'
-import { ConnectWithFacebook } from './ConnectWithFacebook'
-import { ConnectWithGithub } from './ConnectWithGithub'
-import { ConnectWithGoogle } from './ConnectWithGoogle'
 import { ConnectWithLightning } from './ConnectWithLightning'
 import { ConnectWithNostr } from './ConnectWithNostr'
-import { ConnectWithTwitter } from './ConnectWithTwitter'
+import { ConnectWithSocial } from './ConnectWithSocial'
+import { SocialAccountType } from './type'
 
 export const ConnectAccounts = ({ user }: { user: User }) => {
   const { t } = useTranslation()
@@ -74,10 +72,18 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
             {t('Connect more social profiles to your Geyser account.')}
           </Body2>
           {}
-          {displayGoogleButton && <ConnectWithGoogle />}
-          {displayGithubButton && <ConnectWithGithub />}
-          {displayFacebookButton && <ConnectWithFacebook />}
-          {displayTwitterButton && <ConnectWithTwitter />}
+          {displayGoogleButton && (
+            <ConnectWithSocial accountType={SocialAccountType.google} />
+          )}
+          {displayGithubButton && (
+            <ConnectWithSocial accountType={SocialAccountType.github} />
+          )}
+          {displayFacebookButton && (
+            <ConnectWithSocial accountType={SocialAccountType.facebook} />
+          )}
+          {displayTwitterButton && (
+            <ConnectWithSocial accountType={SocialAccountType.twitter} />
+          )}
           {displayNostrButton && <ConnectWithNostr />}
           {displayLightningButton && <ConnectWithLightning />}
         </VStack>

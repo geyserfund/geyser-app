@@ -33,11 +33,9 @@ import {
   Project,
 } from '../../../../types'
 import { toInt, useCustomTheme, useNotification } from '../../../../utils'
-import { ConnectWithFacebook } from '../../../auth/ConnectWithFacebook'
-import { ConnectWithGithub } from '../../../auth/ConnectWithGithub'
-import { ConnectWithGoogle } from '../../../auth/ConnectWithGoogle'
+import { SocialAccountType } from '../../../auth'
 import { ConnectWithNostr } from '../../../auth/ConnectWithNostr'
-import { ConnectWithTwitter } from '../../../auth/ConnectWithTwitter'
+import { ConnectWithSocial } from '../../../auth/ConnectWithSocial'
 import { CreateAProjectButton } from '../../../profile/components'
 
 interface GrantProps {
@@ -174,10 +172,10 @@ export const LoginForGrant = () => {
         {t('To apply to a grant you need to first login into Geyser.')}
       </Body1>
       <VStack w="full">
-        <ConnectWithFacebook />
-        <ConnectWithGithub />
-        <ConnectWithGoogle />
-        <ConnectWithTwitter />
+        <ConnectWithSocial accountType={SocialAccountType.facebook} />
+        <ConnectWithSocial accountType={SocialAccountType.github} />
+        <ConnectWithSocial accountType={SocialAccountType.google} />
+        <ConnectWithSocial accountType={SocialAccountType.twitter} />
         <ConnectWithNostr />
       </VStack>
     </>

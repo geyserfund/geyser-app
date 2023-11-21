@@ -1,33 +1,38 @@
 import { Button, IconButton, Link, Tooltip } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BsFacebook } from 'react-icons/bs'
 
 import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { useMeQuery } from '../../types'
-import { hasFacebookAccount, useNotification } from '../../utils'
+import { useNotification } from '../../utils'
+import { SocialConfig } from './SocialConfig'
 import { ConnectWithButtonProps } from './type'
+import { useAuthToken, useCanLogin } from './useAuthToken'
 
-export const ConnectWithFacebook = ({
+export const ConnectWithSocial = ({
   onClose,
   isIconOnly,
+  accountType,
   ...rest
 }: ConnectWithButtonProps) => {
   const { t } = useTranslation()
   const { login } = useAuthContext()
   const { toast } = useNotification()
 
+  useAuthToken()
+
+  const canLogin = useCanLogin()
   const authServiceEndpoint = getAuthEndPoint()
 
-  const [canLogin, setCanLogin] = useState(true)
+  const { hasSocialAccount, icon, label } = SocialConfig[accountType]
 
   const { stopPolling } = useMeQuery({
     onCompleted(data) {
       if (data && data.me) {
-        const hasFacebook = hasFacebookAccount(data.me)
+        const hasAccount = hasSocialAccount(data.me)
 
-        if (hasFacebook) {
+        if (hasAccount) {
           if (onClose !== undefined) {
             onClose()
           }
@@ -77,27 +82,6 @@ export const ConnectWithFacebook = ({
     }
   }, [pollAuthStatus])
 
-  useEffect(() => {
-    const initalizeLogin = async () => {
-      try {
-        const response = await fetch(`${authServiceEndpoint}/auth-token`, {
-          credentials: 'include',
-          redirect: 'follow',
-        })
-
-        if (response.status >= 200 && response.status < 400) {
-          setCanLogin(true)
-        } else {
-          setCanLogin(false)
-        }
-      } catch (err) {
-        setCanLogin(false)
-      }
-    }
-
-    initalizeLogin()
-  }, [])
-
   const handleClick = async () => {
     if (canLogin) {
       setPollAuthStatus(true)
@@ -116,31 +100,32 @@ export const ConnectWithFacebook = ({
 
   const buttonProps = isIconOnly
     ? {
-        icon: <BsFacebook fontSize={'20px'} />,
+        icon,
       }
     : {
-        leftIcon: <BsFacebook fontSize={'20px'} />,
+        leftIcon: icon,
       }
 
   return (
     <Tooltip label={!canLogin && t('Please refresh the page and try again.')}>
       <ButtonComponent
-        aria-label="Connect with Facebook"
+        aria-label={`Connect with ${accountType}`}
         as={Link}
-        href={`${authServiceEndpoint}/facebook?nextPath=/auth/facebook`}
+        variant="secondaryNeutral"
+        href={`${authServiceEndpoint}/${accountType}?nextPath=/auth/${accountType}`}
         isExternal
         w="100%"
         size="sm"
-        variant={'secondaryNeutral'}
+        color={`social.${accountType}`}
         fontWeight={600}
-        color={'social.facebook'}
+        backgroundColor={'neutral.0'}
         onClick={handleClick}
         isDisabled={!canLogin}
         pointerEvents={!canLogin ? 'none' : undefined}
         {...buttonProps}
         {...rest}
       >
-        Facebook
+        {!isIconOnly && label}
       </ButtonComponent>
     </Tooltip>
   )

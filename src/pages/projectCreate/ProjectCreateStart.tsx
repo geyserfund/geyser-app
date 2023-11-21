@@ -15,12 +15,10 @@ import {
 } from '../../constants'
 import { useAuthContext } from '../../context'
 import { useMobileMode } from '../../utils'
-import { ConnectWithFacebook } from '../auth/ConnectWithFacebook'
-import { ConnectWithGithub } from '../auth/ConnectWithGithub'
-import { ConnectWithGoogle } from '../auth/ConnectWithGoogle'
+import { SocialAccountType } from '../auth'
 import { ConnectWithLightning } from '../auth/ConnectWithLightning'
 import { ConnectWithNostr } from '../auth/ConnectWithNostr'
-import { ConnectWithTwitter } from '../auth/ConnectWithTwitter'
+import { ConnectWithSocial } from '../auth/ConnectWithSocial'
 import { FormContinueButton } from './components/FormContinueButton'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 
@@ -101,10 +99,10 @@ export const ProjectCreateStart = () => {
             <Text color="neutral.700" pb={3}>
               {t('You need to login before creating your project.')}
             </Text>
-            <ConnectWithFacebook />
-            <ConnectWithGithub />
-            <ConnectWithGoogle />
-            <ConnectWithTwitter />
+            <ConnectWithSocial accountType={SocialAccountType.facebook} />
+            <ConnectWithSocial accountType={SocialAccountType.github} />
+            <ConnectWithSocial accountType={SocialAccountType.google} />
+            <ConnectWithSocial accountType={SocialAccountType.twitter} />
             {!isMobile && <ConnectWithNostr />}
             <ConnectWithLightning />
             {!isMobile ? (
