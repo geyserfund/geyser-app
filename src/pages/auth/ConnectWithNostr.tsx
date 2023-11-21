@@ -1,4 +1,4 @@
-import { Button, ButtonProps, IconButton } from '@chakra-ui/react'
+import { Button, IconButton } from '@chakra-ui/react'
 import { useEffect } from 'react'
 
 import { NostrSvgIcon } from '../../components/icons'

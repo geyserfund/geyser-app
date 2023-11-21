@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  ButtonProps,
   HStack,
   IconButton,
   Link,
