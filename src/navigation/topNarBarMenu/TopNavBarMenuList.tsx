@@ -129,53 +129,51 @@ export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
           </>
         ) : null}
 
-        <MenuItem as={Link} to={getPath('index')} fontWeight={'bold'}>
+        <MenuItemLink fontWeight={'bold'} destinationPath={getPath('index')}>
           {t('Recent Activity')}
-        </MenuItem>
+        </MenuItemLink>
 
-        <MenuItem
+        <MenuItemLink
           fontWeight={'bold'}
-          as={Link}
-          to={getPath('projectDiscovery')}
+          destinationPath={getPath('projectDiscovery')}
         >
           {t('Discover Projects')}
-        </MenuItem>
+        </MenuItemLink>
 
-        <MenuItem fontWeight={'bold'} as={Link} to={getPath('grants')}>
+        <MenuItemLink fontWeight={'bold'} destinationPath={getPath('grants')}>
           {t('Grants')}
-        </MenuItem>
+        </MenuItemLink>
         <MenuDivider />
       </MenuGroup>
+
       <MenuGroup style={{ width: '100%' }}>
         <MobileDivider />
-        <MenuItem color={'neutral.700'}>
-          <MenuItemLink destinationPath={GeyserGithubUrl}>
-            {t('GitHub')}
-          </MenuItemLink>
-        </MenuItem>
-        <MenuItem color={'neutral.700'}>
-          <MenuItemLink destinationPath={getPath('about')}>
-            {t('About')}
-          </MenuItemLink>
-        </MenuItem>
 
-        <MenuItem color={'neutral.700'}>
-          <MenuItemLink destinationPath={FAQUrl} isExternal>
-            {t('FAQ')}
-          </MenuItemLink>
-        </MenuItem>
+        <MenuItemLink color={'neutral.700'} destinationPath={GeyserGithubUrl}>
+          {t('GitHub')}
+        </MenuItemLink>
 
-        <MenuItem color={'neutral.700'}>
-          <MenuItemLink destinationPath={FeedbackUrl} isExternal>
-            {t('Feedback')}
-          </MenuItemLink>
-        </MenuItem>
+        <MenuItemLink color={'neutral.700'} destinationPath={getPath('about')}>
+          {t('About')}
+        </MenuItemLink>
+
+        <MenuItemLink color={'neutral.700'} destinationPath={FAQUrl} isExternal>
+          {t('FAQ')}
+        </MenuItemLink>
+
+        <MenuItemLink
+          color={'neutral.700'}
+          destinationPath={FeedbackUrl}
+          isExternal
+        >
+          {t('Feedback')}
+        </MenuItemLink>
 
         {isLoggedIn ? (
           <>
             <MenuDivider />
 
-            <MenuItem onClick={logout} color={'neutral.700'} px={4} py={2}>
+            <MenuItem onClick={logout} color={'neutral.700'}>
               {t('Sign Out')}
             </MenuItem>
           </>
@@ -184,8 +182,7 @@ export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
 
         {canInstall && isLoggedIn && (
           <>
-            <MenuDivider />
-            <MenuItem as={Stack} px={4} py={2}>
+            <MenuItem as={Stack}>
               <Button
                 variant="secondary"
                 leftIcon={<DownloadIcon />}
