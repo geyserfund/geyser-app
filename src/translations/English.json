@@ -737,5 +737,7 @@
   "These are the relays that we publish to.": "These are the relays that we publish to.",
   "Copy Lightning Address / Nostr identifier (NIP-05)":"Copy Lightning Address / Nostr identifier (NIP-05)",
   "Share":"Share",
-  "followers":"followers"
+  "followers":"followers",
+  "Login to create a project. We require creators to login to start their Geyser projects.":"Login to create a project. We require creators to login to start their Geyser projects.",
+  "The page you are trying to access required authorization.":"The page you are trying to access required authorization."
 }
