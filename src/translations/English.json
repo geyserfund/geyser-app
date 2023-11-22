@@ -737,5 +737,6 @@
   "These are the relays that we publish to.": "These are the relays that we publish to.",
   "Copy Lightning Address / Nostr identifier (NIP-05)":"Copy Lightning Address / Nostr identifier (NIP-05)",
   "Share":"Share",
-  "followers":"followers"
+  "followers":"followers",
+  "Load more":"Load more"
 }
