@@ -1,36 +1,38 @@
-import { Button, ButtonProps, Link, Tooltip } from '@chakra-ui/react'
+import { Button, IconButton, Link, Tooltip } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { RiTwitterXLine } from 'react-icons/ri'
 
 import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { useMeQuery } from '../../types'
-import { hasTwitterAccount, useNotification } from '../../utils'
+import { useNotification } from '../../utils'
+import { SocialConfig } from './SocialConfig'
+import { ConnectWithButtonProps } from './type'
+import { useAuthToken, useCanLogin } from './useAuthToken'
 
-interface ConnectWithTwitterProps extends ButtonProps {
-  onClose?: () => void
-}
-
-export const ConnectWithTwitter = ({
+export const ConnectWithSocial = ({
   onClose,
-  variant,
+  isIconOnly,
+  accountType,
   ...rest
-}: ConnectWithTwitterProps) => {
+}: ConnectWithButtonProps) => {
   const { t } = useTranslation()
   const { login } = useAuthContext()
   const { toast } = useNotification()
 
+  useAuthToken()
+
+  const canLogin = useCanLogin()
   const authServiceEndpoint = getAuthEndPoint()
 
-  const [canLogin, setCanLogin] = useState(true)
+  const { hasSocialAccount, icon, label } = SocialConfig[accountType]
 
   const { stopPolling } = useMeQuery({
     onCompleted(data) {
       if (data && data.me) {
-        const hasTwitter = hasTwitterAccount(data.me)
+        const hasAccount = hasSocialAccount(data.me)
 
-        if (hasTwitter) {
+        if (hasAccount) {
           if (onClose !== undefined) {
             onClose()
           }
@@ -80,27 +82,6 @@ export const ConnectWithTwitter = ({
     }
   }, [pollAuthStatus])
 
-  useEffect(() => {
-    const initalizeLogin = async () => {
-      try {
-        const response = await fetch(`${authServiceEndpoint}/auth-token`, {
-          credentials: 'include',
-          redirect: 'follow',
-        })
-
-        if (response.status >= 200 && response.status < 400) {
-          setCanLogin(true)
-        } else {
-          setCanLogin(false)
-        }
-      } catch (err) {
-        setCanLogin(false)
-      }
-    }
-
-    initalizeLogin()
-  }, [])
-
   const handleClick = async () => {
     if (canLogin) {
       setPollAuthStatus(true)
@@ -115,31 +96,37 @@ export const ConnectWithTwitter = ({
     })
   }
 
+  const ButtonComponent = isIconOnly ? IconButton : Button
+
+  const buttonProps = isIconOnly
+    ? {
+        icon,
+      }
+    : {
+        leftIcon: icon,
+      }
+
   return (
     <Tooltip label={!canLogin && t('Please refresh the page and try again.')}>
-      <Button
+      <ButtonComponent
+        aria-label={`Connect with ${accountType}`}
         as={Link}
-        variant={variant}
-        href={`${authServiceEndpoint}/twitter?nextPath=/auth/twitter`}
+        variant="secondaryNeutral"
+        href={`${authServiceEndpoint}/${accountType}?nextPath=/auth/${accountType}`}
         isExternal
         w="100%"
         size="sm"
-        color={variant ? 'social.twitter' : 'black'}
-        backgroundColor={variant ? 'transparent' : 'social.twitter'}
-        leftIcon={<RiTwitterXLine />}
-        _hover={{
-          backgroundColor: 'social.twitterDark',
-          color: 'white',
-          textDecoration: 'none',
-        }}
+        color={`social.${accountType}`}
+        fontWeight={600}
+        backgroundColor={'neutral.0'}
         onClick={handleClick}
         isDisabled={!canLogin}
         pointerEvents={!canLogin ? 'none' : undefined}
-        textDecoration={'none'}
+        {...buttonProps}
         {...rest}
       >
-        Twitter
-      </Button>
+        {!isIconOnly && label}
+      </ButtonComponent>
     </Tooltip>
   )
 }

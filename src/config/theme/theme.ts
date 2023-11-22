@@ -120,13 +120,16 @@ export const theme = {
           border: `2px solid`,
           borderColor: theme.colors.neutral[200],
           color: theme.colors.neutral[900],
-          backgroundColor: theme.colors.neutral[100],
+          backgroundColor: theme.colors.neutral[0],
+          textDecoration: 'none',
           _hover: {
             borderColor: theme.colors.primary[400],
+            textDecoration: 'none',
           },
           _active: {
             borderColor: theme.colors.primary[400],
             backgroundColor: theme.colors.primary[100],
+            textDecoration: 'none',
           },
         }),
         transparent: ({ theme }: StyleFunctionProps) => ({
@@ -134,7 +137,7 @@ export const theme = {
           backgroundColor: 'transparent',
           _hover: {
             borderColor: theme.colors.primary[400],
-            backgroundColor: theme.colors.neutral[100],
+            backgroundColor: theme.colors.neutral[400],
           },
           _active: {
             borderColor: theme.colors.primary[400],

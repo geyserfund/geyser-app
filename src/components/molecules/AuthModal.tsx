@@ -7,17 +7,25 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/modal'
-import { VStack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useAuthContext } from '../../context'
+import { SocialAccountType } from '../../pages/auth'
 // import { ConnectWithEmail } from '../../pages/auth/ConnectWithEmail'
 import { ConnectWithLightning } from '../../pages/auth/ConnectWithLightning'
 import { ConnectWithNostr } from '../../pages/auth/ConnectWithNostr'
-import { ConnectWithTwitter } from '../../pages/auth/ConnectWithTwitter'
-import { hasNostrAccount, hasTwitterAccount, useMobileMode } from '../../utils'
-import { Caption } from '../typography'
+import { ConnectWithSocial } from '../../pages/auth/ConnectWithSocial'
+import {
+  hasFacebookAccount,
+  hasGithubAccount,
+  hasGoogleAccount,
+  hasNostrAccount,
+  hasTwitterAccount,
+  useMobileMode,
+} from '../../utils'
+import { Body2, Caption } from '../typography'
 import { ButtonComponent } from '../ui'
 
 interface IAuthModal {
@@ -28,14 +36,20 @@ interface IAuthModal {
   showTwitter?: boolean
   showNostr?: boolean
   showLightning?: boolean
+  showFacebook?: boolean
+  showGoogle?: boolean
+  showGithub?: boolean
   privateRoute?: boolean
 }
 
 const ConnectAccounts = ({
   onClose,
   showTwitter,
+  showFacebook,
   showNostr,
   showLightning,
+  showGoogle,
+  showGithub,
 }: any) => {
   const { t } = useTranslation()
   const { user } = useAuthContext()
@@ -48,13 +62,41 @@ const ConnectAccounts = ({
       </Text>
       <Stack width="100%">
         {!hasTwitterAccount(user) && showTwitter && (
-          <ConnectWithTwitter onClose={onClose} />
+          <ConnectWithSocial
+            accountType={SocialAccountType.twitter}
+            onClose={onClose}
+          />
         )}
         {!hasNostrAccount(user) && showNostr && (
           <ConnectWithNostr onClose={onClose} />
         )}
         {showLightning && <ConnectWithLightning onClose={onClose} />}
         {/* <ConnectWithEmail onClose={onClose} /> */}
+
+        <Body2 color="neutral.600">{t('More logins')}</Body2>
+        <HStack w="full">
+          {!hasGoogleAccount(user) && showGoogle && (
+            <ConnectWithSocial
+              accountType={SocialAccountType.google}
+              onClose={onClose}
+              isIconOnly
+            />
+          )}
+          {!hasFacebookAccount(user) && showFacebook && (
+            <ConnectWithSocial
+              accountType={SocialAccountType.facebook}
+              onClose={onClose}
+              isIconOnly
+            />
+          )}
+          {!hasGithubAccount(user) && showGithub && (
+            <ConnectWithSocial
+              accountType={SocialAccountType.github}
+              onClose={onClose}
+              isIconOnly
+            />
+          )}
+        </HStack>
       </Stack>
       <Caption paddingTop="5px">
         {t(
@@ -76,6 +118,9 @@ export const AuthModal = (authModalProps: IAuthModal) => {
     showTwitter = true,
     showNostr = true,
     showLightning = true,
+    showFacebook = true,
+    showGoogle = true,
+    showGithub = true,
     privateRoute = false,
   } = authModalProps
 
@@ -112,7 +157,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
           </Text>
         </ModalHeader>
         {privateRoute || <ModalCloseButton />}
-        <ModalBody width="100%">
+        <ModalBody width="100%" padding={{ base: 0, lg: '8px 24px' }}>
           <Box
             justifyContent="center"
             alignItems="center"
@@ -128,6 +173,9 @@ export const AuthModal = (authModalProps: IAuthModal) => {
               showNostr={showNostr && !isMobile}
               showTwitter={showTwitter}
               showLightning={showLightning}
+              showFacebook={showFacebook}
+              showGoogle={showGoogle}
+              showGithub={showGithub}
             />
           </Box>
           <Box
