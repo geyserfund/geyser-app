@@ -336,7 +336,7 @@ export const RewardAdditionModal = ({
               isChecked={reward.hasShipping}
               onChange={handleShipping}
             >
-              <Text>{t('Includes Shipping')}</Text>
+              <Text>{t('This reward requires shipping')}</Text>
             </Checkbox>
             {reward.hasShipping ? (
               <VStack

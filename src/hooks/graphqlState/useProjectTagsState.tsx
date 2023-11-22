@@ -16,14 +16,15 @@ export const useProjectTagsState = ({
   updateProject: (_: Partial<ProjectFragment>) => void
 }) => {
   const [tags, setTags] = useState<Tag[]>([])
-
+  const [settingTags, setSettingTags] = useState(false)
   const { toast } = useNotification()
 
   useEffect(() => {
-    if (project && project.tags) {
+    if (project && project.tags && !settingTags) {
       setTags(project.tags)
+      setSettingTags(true)
     }
-  }, [project])
+  }, [project, settingTags])
 
   const [addTag, { loading: addTagLoading }] = useProjectTagAddMutation({
     onError() {

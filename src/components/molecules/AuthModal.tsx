@@ -57,7 +57,7 @@ const ConnectAccounts = ({
     <VStack justifyContent="center" alignItems="center">
       <Text color="neutral.6002" fontSize="12px" marginBottom={5}>
         {t(
-          'Connecting with Twitter or Lightning allows you to keep track of your favorite projects and to launch your own projects.',
+          'Login with your social account to keep track of your favorite projects and launch your own.',
         )}
       </Text>
       <Stack width="100%">
@@ -137,7 +137,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
     }
   }
 
-  const modalTitle = title || t('Connect')
+  const modalTitle = title || t('Login')
   const modalDescription = description || t('Connect to launch')
 
   return (

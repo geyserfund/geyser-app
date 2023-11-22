@@ -53,7 +53,7 @@ export const ModeChange = () => {
         borderRadius={{ base: '8px', lg: '0px' }}
         mx={{ base: '10px', lg: 0 }}
         mt={2}
-        p={2}
+        p={3}
       >
         <HStack width="full" spacing={3}>
           <ColorModeSwitcher flex={1} />
