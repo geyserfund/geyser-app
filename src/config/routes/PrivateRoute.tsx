@@ -5,7 +5,6 @@ import { AuthModal } from '../../components/molecules'
 import { getPath } from '../../constants'
 import { useAuthContext } from '../../context'
 import { LoadingPage } from '../../pages/loading'
-import { hasNostrAccount, hasTwitterAccount } from '../../utils'
 import { useRouteMatchesForPrivateRoute } from './privateRoutesAtom'
 
 interface IPrivateRoute {
@@ -39,41 +38,15 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
 
   useEffect(() => {
     if (!loading) {
-      if (
-        isAnonymous ||
-        (isPrivateProjectLaunchRoute &&
-          user &&
-          !hasTwitterAccount(user) &&
-          !hasNostrAccount(user))
-      ) {
+      if (isAnonymous) {
         loginOnOpen()
       }
     }
-  }, [user, loading, isPrivateProjectLaunchRoute, loginOnOpen, isAnonymous])
+  }, [loading, loginOnOpen, isAnonymous])
 
-  const modalTitle = () => {
-    if (
-      isPrivateProjectLaunchRoute &&
-      user &&
-      !hasTwitterAccount(user) &&
-      !hasNostrAccount(user)
-    ) {
-      return 'Connect'
-    }
-
-    return 'The page you are trying to access required authorization.'
-  }
+  const modalTitle = 'The page you are trying to access required authorization.'
 
   const modalDescription = () => {
-    if (
-      isPrivateProjectLaunchRoute &&
-      user &&
-      !hasTwitterAccount(user) &&
-      !hasNostrAccount(user)
-    ) {
-      return 'Connect your Twitter social profile to create a project. We require creators to login with twitter to start their Geyser projects.'
-    }
-
     if (isEntryCreationRoute) {
       return 'You must be logged in to create an entry.'
     }
@@ -83,7 +56,7 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
 
   const renderUnauthorized = () => (
     <AuthModal
-      title={modalTitle()}
+      title={modalTitle}
       description={modalDescription()}
       showLightning={!isPrivateProjectLaunchRoute}
       isOpen={loginIsOpen}

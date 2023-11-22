@@ -32,7 +32,7 @@ export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
         <Button
           size="sm"
           color="neutral.600"
-          leftIcon={<BoltIcon height="16px" color={'neutral.0'} />}
+          leftIcon={<BoltIcon height="16px" color={'neutral.600'} />}
           variant="secondary"
           onClick={handleAddressCopy}
           id="lightning-address"

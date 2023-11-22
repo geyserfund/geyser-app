@@ -57,7 +57,7 @@ export const NpubDisplay = ({ npub, iconOnly, ...rest }: NpubDisplayProps) => {
               semiBold
               onClick={handleOnCopy}
               color={'neutral.600'}
-              maxWidth={'120px'}
+              width={'50px'}
             >
               {`npub`}
             </Body1>

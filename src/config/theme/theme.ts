@@ -1,6 +1,6 @@
 import { StyleFunctionProps } from '@chakra-ui/react'
 
-import { fonts, lightModeColors } from '../../styles'
+import { darkModeColors, fonts, lightModeColors } from '../../styles'
 import { alertTheme } from './alertTheme'
 import { drawerTheme } from './drawerTheme'
 import { menuTheme } from './menuTheme'
@@ -60,10 +60,14 @@ export const theme = {
             ? lightModeColors.neutral[0]
             : lightModeColors.neutral[900],
           _hover: {
-            backgroundColor: theme.colors.neutral[200],
+            backgroundColor: theme.isNostrColor
+              ? darkModeColors.neutral[200]
+              : lightModeColors.neutral[200],
           },
           _active: {
-            backgroundColor: theme.colors.neutral[300],
+            backgroundColor: theme.isNostrColor
+              ? darkModeColors.neutral[300]
+              : lightModeColors.neutral[300],
           },
         }),
         primaryLink: ({ theme }: StyleFunctionProps) => ({
