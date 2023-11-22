@@ -55,12 +55,11 @@ export const NpubDisplay = ({ npub, iconOnly, ...rest }: NpubDisplayProps) => {
           {!iconOnly && (
             <Body1
               semiBold
-              isTruncated
               onClick={handleOnCopy}
               color={'neutral.600'}
               maxWidth={'120px'}
             >
-              {`${npub}`}
+              {`npub`}
             </Body1>
           )}
         </HStack>
