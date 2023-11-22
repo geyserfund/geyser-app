@@ -18,22 +18,22 @@ type SocialConfigType = {
 
 export const SocialConfig: { [key in SocialAccountType]: SocialConfigType } = {
   github: {
-    hasSocialAccount: hasGithubAccount,
+    hasSocialAccount: (profile) => hasGithubAccount(profile),
     icon: <BsGithub fontSize={'20px'} />,
     label: 'Github',
   },
   google: {
-    hasSocialAccount: hasGoogleAccount,
+    hasSocialAccount: (profile) => hasGoogleAccount(profile),
     icon: <GoogleGLogoIcon boxSize={'20px'} />,
     label: 'Google',
   },
   twitter: {
-    hasSocialAccount: hasTwitterAccount,
+    hasSocialAccount: (profile) => hasTwitterAccount(profile),
     icon: <RiTwitterXLine fontSize={'20px'} />,
     label: 'Twitter (X)',
   },
   facebook: {
-    hasSocialAccount: hasFacebookAccount,
+    hasSocialAccount: (profile) => hasFacebookAccount(profile),
     icon: <BsFacebook fontSize={'20px'} />,
     label: 'Facebook',
   },
