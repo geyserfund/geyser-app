@@ -137,7 +137,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
     }
   }
 
-  const modalTitle = title || t('Connect')
+  const modalTitle = title || t('Login')
   const modalDescription = description || t('Connect to launch')
 
   return (
