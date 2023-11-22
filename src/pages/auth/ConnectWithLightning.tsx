@@ -113,7 +113,6 @@ export const ConnectWithLightning = ({
       <ButtonComponent
         aria-label="Connect with Lightning"
         w="100%"
-        size="sm"
         variant="secondaryNeutral"
         fontWeight={600}
         color={'social.lightning'}

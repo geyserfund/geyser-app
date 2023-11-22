@@ -119,7 +119,6 @@ export const ConnectWithSocial = ({
         href={`${authServiceEndpoint}/${accountType}?nextPath=/auth/${accountType}`}
         isExternal
         w="100%"
-        size="sm"
         color={`social.${accountType}`}
         fontWeight={600}
         backgroundColor={'neutral.0'}

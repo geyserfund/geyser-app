@@ -56,7 +56,6 @@ export const ConnectWithNostr = ({
       <ButtonComponent
         aria-label="Connect with Nostr"
         w="100%"
-        size="sm"
         variant="secondaryNeutral"
         color={'social.nostr'}
         fontWeight={600}
