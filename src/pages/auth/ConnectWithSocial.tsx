@@ -7,7 +7,7 @@ import { useAuthContext } from '../../context'
 import { useMeQuery } from '../../types'
 import { useNotification } from '../../utils'
 import { SocialConfig } from './SocialConfig'
-import { ConnectWithButtonProps } from './type'
+import { ConnectWithButtonProps, SocialAccountType } from './type'
 import { useAuthToken, useCanLogin } from './useAuthToken'
 
 export const ConnectWithSocial = ({
@@ -106,6 +106,10 @@ export const ConnectWithSocial = ({
         leftIcon: icon,
       }
 
+  const isDisabled =
+    !canLogin ||
+    [SocialAccountType.facebook, SocialAccountType.google].includes(accountType)
+
   return (
     <Tooltip label={!canLogin && t('Please refresh the page and try again.')}>
       <ButtonComponent
@@ -120,8 +124,8 @@ export const ConnectWithSocial = ({
         fontWeight={600}
         backgroundColor={'neutral.0'}
         onClick={handleClick}
-        isDisabled={!canLogin}
-        pointerEvents={!canLogin ? 'none' : undefined}
+        isDisabled={isDisabled}
+        pointerEvents={isDisabled ? 'none' : undefined}
         {...buttonProps}
         {...rest}
       >
