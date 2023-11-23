@@ -1,3 +1,38 @@
+## [0.6.3](https://github.com/geyserfund/geyser-app/compare/v0.6.2...v0.6.3) (2023-11-23)
+
+
+### Features
+
+* add connect with facebook across the platform ([c8bcd98](https://github.com/geyserfund/geyser-app/commit/c8bcd983075c030a009356814a923b4747d6d6f9))
+* add login with github and google ([14d5501](https://github.com/geyserfund/geyser-app/commit/14d55019abc427b8671a9ceaf7a045ea45cc2ff7))
+* remove google from connected accounts and have others as same ([027da88](https://github.com/geyserfund/geyser-app/commit/027da884cc31fed746e79ef495aba9be2e6d0e84))
+
+
+### Bug Fixes
+
+* add facebook account add from profile page ([27e149d](https://github.com/geyserfund/geyser-app/commit/27e149d35290e8cdb998dccd1f4b0aa5510c8c49))
+* add paginated contributions for the week data in contribution ([d31d1c0](https://github.com/geyserfund/geyser-app/commit/d31d1c03f085854a20135842d0ae477c3ad7209b))
+* allow any loggedin user to create a project ([8f494a8](https://github.com/geyserfund/geyser-app/commit/8f494a89b62f6b9d85cc879ad7b8f0f68a8b7944))
+* bolt icon color in lightning address ([c0bc3f2](https://github.com/geyserfund/geyser-app/commit/c0bc3f25a8b055da8fc1a58909691e11cd839a70))
+* close tab after login ([de8f51e](https://github.com/geyserfund/geyser-app/commit/de8f51e14479a10e38a8470fb7a32fa373299f8c))
+* disable google and facebook login ([1cabb64](https://github.com/geyserfund/geyser-app/commit/1cabb640c236d525927fb6d425ab5802c0ae7c77))
+* finalize project length ([574aac8](https://github.com/geyserfund/geyser-app/commit/574aac85a18a10189a7ed8d780d40570b156f59d))
+* height of contributors if length is null ([ea0df14](https://github.com/geyserfund/geyser-app/commit/ea0df14f1c6d1c2b4caf4efe6d41c3b4c4fa3cd8))
+* hot-fix staging render issue ([e5dfa58](https://github.com/geyserfund/geyser-app/commit/e5dfa58e0f91f8ab765e5304c661939b3e6aeb3f))
+* increase button size ([6f4a22c](https://github.com/geyserfund/geyser-app/commit/6f4a22cdaec77613f2b7c15d2229a6ab184a252b))
+* lightning login and style issues ([75cb4b4](https://github.com/geyserfund/geyser-app/commit/75cb4b428ea625973cbc14eba67e13ef8b8dbe3f))
+* minor theme color fix ([d0294a3](https://github.com/geyserfund/geyser-app/commit/d0294a389800042c52a8fcda10ab65e9e98108cc))
+* overview contributor table height ([4a444ee](https://github.com/geyserfund/geyser-app/commit/4a444ee339b30decc0d10ab259f386cc970bde44))
+* profile ln address, resolves GEY-5200 ([b5c30cc](https://github.com/geyserfund/geyser-app/commit/b5c30cc321bb82bdd8ea11c547f0fdbe3e8cd295))
+* redirection when just launched project and un authorized issue ([89f2cf6](https://github.com/geyserfund/geyser-app/commit/89f2cf68731dddaf363c5aeb05727efd6744739e))
+* remove lightning contraint from private route ([d8f7a3d](https://github.com/geyserfund/geyser-app/commit/d8f7a3dc09dafe2ae358e3275e7461c69ed303bc))
+* remove the gray line in the Entries, resolves GEY-5284 ([e702be7](https://github.com/geyserfund/geyser-app/commit/e702be7b86a42e3c8e98b04092f7a7e42713a9d0))
+* set fixed width for npub ([9d6e957](https://github.com/geyserfund/geyser-app/commit/9d6e9574ace93a9e55bd1fe2d9750e8769cbcade))
+* show only npub instead of the long text for buttons ([f17d9ab](https://github.com/geyserfund/geyser-app/commit/f17d9ab185d86abbdebdae313ce93649f87d113f))
+* style fixes for top menu resolves GEY-5280 ([476e936](https://github.com/geyserfund/geyser-app/commit/476e936558b5c4bdd186c69c26ae764942146611))
+* tag were removed on region edit ([2959add](https://github.com/geyserfund/geyser-app/commit/2959add0cdbb01833efb3c3ce220ec68105a163c))
+* update exported PDF title ([a2583f2](https://github.com/geyserfund/geyser-app/commit/a2583f25b7f3607cc75613455950956248b0c6c9))
+
 ## [0.6.2](https://github.com/geyserfund/geyser-app/compare/v0.6.1...v0.6.2) (2023-11-08)
 
 
