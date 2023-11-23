@@ -290,7 +290,7 @@
   "No fee per transaction": "No fee per transaction",
   "Connect your lightning node to receive incoming transactions directly. Don't have a node? You can <1>create a cloud node</1> with the recommended app.": "Connect your lightning node to receive incoming transactions directly. Don't have a node? You can <1>create a cloud node</1> with the recommended app.",
   "Your project is almost live. You can now either launch the project and make it public or save it as draft. And you can always edit project at any time.": "Your project is almost live. You can now either launch the project and make it public or save it as draft. And you can always edit project at any time.",
-  "By continuing, I agree with Geyser&apos;s <1>Terms & Conditions</1>": "By continuing, I agree with Geyser&apos;s <1>Terms & Conditions</1>",
+  "By continuing, I agree with Geyser's <1>Terms & Conditions</1>": "By continuing, I agree with Geyser's <1>Terms & Conditions</1>",
   "Node name is a required field": "Node name is a required field",
   "Node name cannot be longer than": "Node name cannot be longer than",
   "characters": "characters",

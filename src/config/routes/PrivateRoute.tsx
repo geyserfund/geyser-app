@@ -58,7 +58,6 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
     <AuthModal
       title={modalTitle}
       description={modalDescription()}
-      showLightning={!isPrivateProjectLaunchRoute}
       isOpen={loginIsOpen}
       privateRoute={true}
       onClose={loginOnClose}

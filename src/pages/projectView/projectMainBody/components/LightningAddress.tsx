@@ -49,21 +49,13 @@ export const LightningAddress = ({ name, isGeyser, ...rest }: ILightningQR) => {
           border="none"
           {...rest}
         >
-          <Body1
-            semiBold
-            isTruncated
-            background={`linear-gradient(270deg, ${
-              isGeyser ? secondaryColors.blue : primaryColorsLight[500]
-            } -0.1%, ${nostrColorsLight[400]} 99.9%)`}
-            backgroundClip="text"
-            flex={1}
-          >
+          <Body1 semiBold isTruncated color={nostrColorsLight[400]} flex={1}>
             {name}
           </Body1>
           {isGeyser && (
             <Body1
               semiBold
-              background={`linear-gradient(270deg, ${primaryColorsLight[500]} -0.1%, ${secondaryColors.blue} 99.9%)`}
+              background={`linear-gradient(270deg, ${primaryColorsLight[500]} -0.1%, ${secondaryColors.blue} 40.0%, ${nostrColorsLight[400]} 99.9%)`}
               backgroundClip="text"
             >
               @geyser.fund

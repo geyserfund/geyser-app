@@ -18,10 +18,10 @@ export const ProjectCreateCompleted = ({ children }: PropsWithChildren) => {
         <Text textAlign="left" color="neutral.600">
           <Trans
             i18nKey={
-              'By continuing, I agree with Geyser&apos;s <1>Terms & Conditions</1>'
+              "By continuing, I agree with Geyser's <1>Terms & Conditions</1>"
             }
           >
-            By continuing, I agree with Geyser&apos;s{' '}
+            {"By continuing, I agree with Geyser's "}
             <Link
               href={GeyserTermsAndConditionsURL}
               isExternal
