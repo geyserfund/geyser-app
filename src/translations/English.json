@@ -740,5 +740,10 @@
   "followers":"followers",
   "Login to create a project. We require creators to login to start their Geyser projects.":"Login to create a project. We require creators to login to start their Geyser projects.",
   "The page you are trying to access required authorization.":"The page you are trying to access required authorization.",
-  "Load more":"Load more"
+  "Load more":"Load more",
+  "Select an image":"Select an image",
+  "Title is a required field.":"Title is a required field.",
+  "Connect your node":"Connect your node",
+  "Find out more":"Find out more",
+  "Login to continue":"Login to continue"
 }

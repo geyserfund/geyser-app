@@ -35,6 +35,7 @@ import {
   WalletOfSatoshiLightningAddressURL,
   WalletOfSatoshiUrl,
 } from '../../constants'
+import { useAuthContext } from '../../context'
 import { lightModeColors } from '../../styles'
 import {
   CreateWalletInput,
@@ -112,6 +113,7 @@ export const ProjectCreationWalletConnectionForm = ({
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { toast } = useNotification()
+  const { queryCurrentUser } = useAuthContext()
 
   const {
     isOpen: emailVerifyOpen,
@@ -333,7 +335,11 @@ export const ProjectCreationWalletConnectionForm = ({
   }
 
   const [publishProject, { loading: isUpdateStatusLoading }] =
-    useProjectPublishMutation()
+    useProjectPublishMutation({
+      onCompleted() {
+        queryCurrentUser()
+      },
+    })
 
   const handleLaunch = async () => {
     await validateLightningAddress()

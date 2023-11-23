@@ -169,6 +169,7 @@ export const ProjectProvider = ({
       isProjectOwner &&
       params.projectId &&
       routeMatchForProjectPage &&
+      !lastRoute.includes('launch') &&
       !(lastRoute.includes('project') && lastRoute.includes(params.projectId)),
     [params.projectId, isProjectOwner, routeMatchForProjectPage, lastRoute],
   )
