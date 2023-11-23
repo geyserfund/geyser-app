@@ -142,7 +142,6 @@ export const ContributorsComponent = () => {
       spacing="10px"
       mobileDense
       padding={{ base: '0px', lg: '20px' }}
-      flex={contributors?.length > 10 ? 1 : undefined}
     >
       <HStack w="full" justifyContent="space-between">
         <H3>{t('Contributors')}</H3>

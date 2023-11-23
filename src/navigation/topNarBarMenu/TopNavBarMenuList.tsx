@@ -150,7 +150,7 @@ export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
         <MobileDivider />
 
         <MenuItemLink color={'neutral.700'} destinationPath={GeyserGithubUrl}>
-          {t('GitHub')}
+          GitHub
         </MenuItemLink>
 
         <MenuItemLink color={'neutral.700'} destinationPath={getPath('about')}>
