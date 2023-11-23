@@ -288,7 +288,7 @@
     "No fee per transaction": "Καμία χρέωση ανά συναλλαγή",
     "Connect your lightning node to receive incoming transactions directly. Don't have a node? You can <1>create a cloud node</1> with the recommended app.": "Συνδέστε τον lightning κόμβο για να λαμβάνετε απευθείας τις εισερχόμενες συναλλαγές. Δεν έχετε κόμβο; Μπορείτε να <1>δημιουργήσετε έναν κόμβο νέφους</1> με τη συνιστώμενη εφαρμογή.",
     "Your project is almost live. You can now either launch the project and make it public or save it as draft. And you can always edit project at any time.": "Το project σας είναι σχεδόν έτοιμο. Τώρα μπορείτε είτε να ξεκινήσετε το project και να το δημοσιοποιήσετε, είτε να το αποθηκεύσετε ως προσχέδιο. Και μπορείτε πάντα να επεξεργάστείτε το project ανά πάσα στιγμή.",
-    "By continuing, I agree with Geyser&apos;s <1>Terms & Conditions</1>": "Συνεχίζοντας, συμφωνώ με τους <1>Όρους και Προϋποθέσεις</1> της Geyser",
+    "By continuing, I agree with Geyser's <1>Terms & Conditions</1>": "Συνεχίζοντας, συμφωνώ με τους <1>Όρους και Προϋποθέσεις</1> της Geyser",
     "Node name is a required field": "Το όνομα του κόμβου είναι υποχρεωτικό πεδίο",
     "Node name cannot be longer than": "Το όνομα του κόμβου δεν μπορεί να είναι μεγαλύτερο από",
     "characters": "χαρακτήρες",
