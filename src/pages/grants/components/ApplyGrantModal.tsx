@@ -25,7 +25,8 @@ import { AuthContext } from '../../../context'
 import { useFormState } from '../../../hooks'
 import { FormStateError } from '../../../interfaces'
 import { hasTwitterAccount, useNotification, validUrl } from '../../../utils'
-import { ConnectWithTwitter } from '../../auth/ConnectWithTwitter'
+import { SocialAccountType } from '../../auth'
+import { ConnectWithSocial } from '../../auth/ConnectWithSocial'
 
 interface Grant {
   applicant: number
@@ -374,7 +375,8 @@ export const ApplyGrantModal = ({
             </Text>
 
             <Box mt={6}>
-              <ConnectWithTwitter
+              <ConnectWithSocial
+                accountType={SocialAccountType.twitter}
                 onClose={() => {
                   loginOnClose()
                   onLoginAlertModalClose()

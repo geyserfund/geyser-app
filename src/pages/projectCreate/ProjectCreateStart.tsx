@@ -14,16 +14,18 @@ import {
   LaunchProjectWorldUrl,
 } from '../../constants'
 import { useAuthContext } from '../../context'
-import { hasNostrAccount, hasTwitterAccount, useMobileMode } from '../../utils'
+import { useMobileMode } from '../../utils'
+import { SocialAccountType } from '../auth'
+import { ConnectWithLightning } from '../auth/ConnectWithLightning'
 import { ConnectWithNostr } from '../auth/ConnectWithNostr'
-import { ConnectWithTwitter } from '../auth/ConnectWithTwitter'
+import { ConnectWithSocial } from '../auth/ConnectWithSocial'
 import { FormContinueButton } from './components/FormContinueButton'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 
 export const ProjectCreateStart = () => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
-  const { loading, user } = useAuthContext()
+  const { loading, isLoggedIn } = useAuthContext()
   const navigate = useNavigate()
 
   const params = useParams<{ projectId: string }>()
@@ -92,15 +94,17 @@ export const ProjectCreateStart = () => {
           </ProjectInfoButton>
         </Box>
 
-        {!loading && !hasTwitterAccount(user) && !hasNostrAccount(user) ? (
+        {!loading && !isLoggedIn ? (
           <VStack w="100%">
             <Text color="neutral.700" pb={3}>
-              {t(
-                'You need to login with Twitter or Nostr, which connects your social profile to your project.',
-              )}
+              {t('You need to login before creating your project.')}
             </Text>
-            <ConnectWithTwitter />
+            <ConnectWithSocial accountType={SocialAccountType.facebook} />
+            <ConnectWithSocial accountType={SocialAccountType.github} />
+            <ConnectWithSocial accountType={SocialAccountType.google} />
+            <ConnectWithSocial accountType={SocialAccountType.twitter} />
             {!isMobile && <ConnectWithNostr />}
+            <ConnectWithLightning />
             {!isMobile ? (
               <Text color="neutral.600" variant="caption">
                 {t(

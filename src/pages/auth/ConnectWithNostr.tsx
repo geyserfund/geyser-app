@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@chakra-ui/react'
+import { Button, IconButton } from '@chakra-ui/react'
 import { useEffect } from 'react'
 
 import { NostrSvgIcon } from '../../components/icons'
@@ -7,12 +7,13 @@ import { useNostrExtensonLogin } from '../../hooks/useNostrExtensionLogin'
 import { isAccountDuplicateError } from '../../utils'
 import { FailedToConnectAccount } from './components/FailedToConnectAccount'
 import { NostrHelpModal } from './components/NostrHelpModal'
+import { ConnectWithButtonProps } from './type'
 
-interface Props extends ButtonProps {
-  onClose?: () => void
-}
-
-export const ConnectWithNostr = ({ onClose, variant }: Props) => {
+export const ConnectWithNostr = ({
+  onClose,
+  isIconOnly,
+  ...rest
+}: Omit<ConnectWithButtonProps, 'accountType'>) => {
   const { connect, error, clearError } = useNostrExtensonLogin()
 
   const failedModal = useModal()
@@ -40,20 +41,30 @@ export const ConnectWithNostr = ({ onClose, variant }: Props) => {
     }
   }, [error])
 
+  const ButtonComponent = isIconOnly ? IconButton : Button
+
+  const buttonProps = isIconOnly
+    ? {
+        icon: <NostrSvgIcon boxSize={'16px'} />,
+      }
+    : {
+        leftIcon: <NostrSvgIcon boxSize={'16px'} />,
+      }
+
   return (
     <>
-      <Button
+      <ButtonComponent
+        aria-label="Connect with Nostr"
         w="100%"
-        size="sm"
-        variant={variant}
-        backgroundColor={variant ? 'transparent' : 'social.nostr'}
-        leftIcon={<NostrSvgIcon height="20px" width="20px" />}
-        color={variant ? 'social.nostr' : 'white'}
-        _hover={{ backgroundColor: 'social.nostrDark', color: 'white' }}
+        variant="secondaryNeutral"
+        color={'social.nostr'}
+        fontWeight={600}
         onClick={handleClick}
+        {...buttonProps}
+        {...rest}
       >
-        Nostr
-      </Button>
+        {!isIconOnly && 'Nostr'}
+      </ButtonComponent>
       <NostrHelpModal {...nostrHelpModal} />
       <FailedToConnectAccount {...failedModal} />
     </>

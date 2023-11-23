@@ -44,7 +44,7 @@ export const NpubDisplay = ({ npub, iconOnly, ...rest }: NpubDisplayProps) => {
         border="none"
         {...rest}
       >
-        <HStack overflow="hidden">
+        <HStack spacing="10px">
           {
             <NostrSvgIcon
               boxSize={5}
@@ -55,12 +55,11 @@ export const NpubDisplay = ({ npub, iconOnly, ...rest }: NpubDisplayProps) => {
           {!iconOnly && (
             <Body1
               semiBold
-              isTruncated
               onClick={handleOnCopy}
               color={'neutral.600'}
-              maxWidth={'120px'}
+              width="auto"
             >
-              {`${npub}`}
+              {`npub`}
             </Body1>
           )}
         </HStack>

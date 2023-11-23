@@ -34,6 +34,11 @@ export const ID = {
       container: 'project-rewards-container',
       title: 'project-rewards-title',
     },
+    creator: {
+      contributor: {
+        tableContainer: 'project-contributor-table-container',
+      },
+    },
   },
   profile: {
     tabs: 'user-profile-tab-container',

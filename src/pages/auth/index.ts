@@ -1,4 +1,4 @@
 export * from './ConnectAccounts'
+export * from './ExternalAuthSuccess'
 export * from './FailedAuth'
-export * from './TwitterSuccess'
 export * from './type'

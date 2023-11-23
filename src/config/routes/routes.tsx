@@ -3,7 +3,7 @@ import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
 import { App } from '../../App'
 import { AppLayout } from '../../AppLayout'
 import { __production__, getPath, PathName } from '../../constants'
-import { FailedAuth, TwitterSuccess } from '../../pages/auth'
+import { ExternalAuthSuccess, FailedAuth } from '../../pages/auth'
 import { NotAuthorized, NotFoundPage } from '../../pages/fallback'
 import { ErrorBoundary } from './ErrorBoundary'
 import { renderPrivateRoute } from './PrivateRoute'
@@ -361,7 +361,19 @@ export const platformRoutes: RouteObject[] = [
   },
   {
     path: '/auth/twitter',
-    Component: TwitterSuccess,
+    Component: ExternalAuthSuccess,
+  },
+  {
+    path: '/auth/github',
+    Component: ExternalAuthSuccess,
+  },
+  {
+    path: '/auth/facebook',
+    Component: ExternalAuthSuccess,
+  },
+  {
+    path: '/auth/google',
+    Component: ExternalAuthSuccess,
   },
   {
     path: '/failed-authentication',

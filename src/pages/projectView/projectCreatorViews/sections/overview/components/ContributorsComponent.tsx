@@ -11,7 +11,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -20,14 +20,15 @@ import {
   SkeletonLayout,
 } from '../../../../../../components/layouts'
 import { Body1, H3 } from '../../../../../../components/typography'
-import { getPath } from '../../../../../../constants'
+import { getPath, ID } from '../../../../../../constants'
 import { useProjectContext } from '../../../../../../context'
+import { usePaginationHook } from '../../../../../../hooks/usePaginationHook'
 import {
   FundingTxForOverviewPageFragment,
   OrderByOptions,
   useFundingTxForOverviewPageLazyQuery,
 } from '../../../../../../types'
-import { useNotification } from '../../../../../../utils'
+import { toInt, useNotification } from '../../../../../../utils'
 import { AvatarElement } from '../../../../projectMainBody/components'
 
 type ContributorDisplayType = {
@@ -38,7 +39,7 @@ type ContributorDisplayType = {
   imageUrl: string
 }
 
-const CONTRIBUTORS_TO_DISPLAY = 5
+const CONTRIBUTORS_TO_DISPLAY = 20
 
 export const ContributorsComponent = () => {
   const { t } = useTranslation()
@@ -46,9 +47,34 @@ export const ContributorsComponent = () => {
 
   const { project } = useProjectContext()
 
-  const [contributors, setContributors] = useState<ContributorDisplayType[]>([])
+  const aggregateMap = useCallback(
+    (fundingTxs: FundingTxForOverviewPageFragment[]) =>
+      fundingTxs.map((fundingTx) => {
+        let noOfRewards = 0
+        const rewards = fundingTx.funder.rewards.filter((reward) =>
+          project?.rewards.some(
+            (projectRewards) => projectRewards.id === reward.projectReward.id,
+          ),
+        )
+        if (rewards.length > 0) {
+          rewards.map((reward) => {
+            noOfRewards += reward.quantity
+          })
+        }
 
-  const [getFundingTxForOverview, { loading }] =
+        const contributor: ContributorDisplayType = {
+          user: fundingTx.funder.user,
+          amount: fundingTx.amount,
+          comment: fundingTx.comment || '',
+          imageUrl: fundingTx.funder.user?.imageUrl || '',
+          noOfRewards,
+        }
+        return contributor
+      }),
+    [project?.rewards],
+  )
+
+  const [getFundingTxForOverview, { fetchMore, loading }] =
     useFundingTxForOverviewPageLazyQuery({
       onError() {
         toast({
@@ -58,31 +84,37 @@ export const ContributorsComponent = () => {
         })
       },
       onCompleted(data) {
-        const contributors = data.fundingTxsGet.map((fundingTx) => {
-          let noOfRewards = 0
-          const rewards = fundingTx.funder.rewards.filter((reward) =>
-            project?.rewards.some(
-              (projectRewards) => projectRewards.id === reward.projectReward.id,
-            ),
-          )
-          if (rewards.length > 0) {
-            rewards.map((reward) => {
-              noOfRewards += reward.quantity
-            })
-          }
-
-          const contributor: ContributorDisplayType = {
-            user: fundingTx.funder.user,
-            amount: fundingTx.amount,
-            comment: fundingTx.comment || '',
-            imageUrl: fundingTx.funder.user?.imageUrl || '',
-            noOfRewards,
-          }
-          return contributor
-        })
-        setContributors(contributors)
+        handleDataUpdate(data.fundingTxsGet)
       },
     })
+
+  const where = useMemo(
+    () => ({
+      projectId: toInt(project?.id),
+      dateRange: {
+        startDateTime: DateTime.now().minus({ days: 7 }).toMillis(),
+        endDateTime: DateTime.now().toMillis(),
+      },
+    }),
+    [project?.id],
+  )
+
+  const {
+    handleDataUpdate,
+    data: contributors,
+    isLoadingMore,
+    noMoreItems,
+    fetchNext,
+  } = usePaginationHook<
+    FundingTxForOverviewPageFragment,
+    ContributorDisplayType
+  >({
+    queryName: 'fundingTxsGet',
+    fetchMore,
+    itemLimit: CONTRIBUTORS_TO_DISPLAY,
+    resultMap: aggregateMap,
+    where,
+  })
 
   useEffect(() => {
     if (project?.id) {
@@ -95,18 +127,12 @@ export const ContributorsComponent = () => {
             pagination: {
               take: CONTRIBUTORS_TO_DISPLAY,
             },
-            where: {
-              projectId: project.id,
-              dateRange: {
-                startDateTime: DateTime.now().minus({ days: 7 }).toMillis(),
-                endDateTime: DateTime.now().toMillis(),
-              },
-            },
+            where,
           },
         },
       })
     }
-  }, [project?.id, getFundingTxForOverview])
+  }, [project?.id, getFundingTxForOverview, where])
 
   return (
     <CardLayout
@@ -134,8 +160,12 @@ export const ContributorsComponent = () => {
       ) : contributors.length === 0 ? (
         <Body1>{t('No data available')}</Body1>
       ) : (
-        <CardLayout padding="10px" w="full">
-          <TableContainer>
+        <CardLayout padding="10px" w="full" flex={1} overflow={'hidden'}>
+          <TableContainer
+            id={ID.project.creator.contributor.tableContainer}
+            overflowY="auto"
+            overflowX={{ base: 'auto', lg: 'hidden' }}
+          >
             <Table
               variant="unstyled"
               __css={{
@@ -177,6 +207,15 @@ export const ContributorsComponent = () => {
             </Table>
           </TableContainer>
         </CardLayout>
+      )}
+      {!loading && !noMoreItems.current && (
+        <Button
+          w="full"
+          onClick={() => fetchNext()}
+          isLoading={isLoadingMore.current}
+        >
+          {t('Load more')}
+        </Button>
       )}
     </CardLayout>
   )

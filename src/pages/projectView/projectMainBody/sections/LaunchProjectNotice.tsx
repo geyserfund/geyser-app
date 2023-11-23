@@ -23,7 +23,7 @@ export const LaunchProjectNotice = ({
   if (hasWallet) return null
 
   return (
-    <CardLayout mobileDense>
+    <CardLayout mobileDense w="full">
       <Text variant="h3">{t('Finalize project')}</Text>
 
       <Text variant="body1">

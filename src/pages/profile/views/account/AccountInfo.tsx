@@ -7,10 +7,10 @@ import { CardLayout, SkeletonLayout } from '../../../../components/layouts'
 import { Body1, H1 } from '../../../../components/typography'
 import { useModal } from '../../../../hooks/useModal'
 import { ConnectAccounts, ExternalAccountType } from '../../../auth'
-import { LightningAddress } from '../../../projectView/projectMainBody/components'
 import { ExternalAccountDisplay } from '../../components'
 import { useEditProfileModal } from '../../hooks/useEditProfileModal'
 import { UserProfileState } from '../../type'
+import { LightningAddress } from './components/LightningAddress'
 import { EditProfileModal } from './EditProfileModal'
 import { ProfileSettingsModal } from './ProfileSettingsModal'
 
@@ -51,6 +51,10 @@ export const AccountInfo = ({
     return userProfile.externalAccounts.length > 1 ? isEdit : false
   }
 
+  const userAccountToDisplay = userProfile.externalAccounts.filter(
+    (account) => account.accountType !== ExternalAccountType.google,
+  )
+
   return (
     <>
       <CardLayout
@@ -85,12 +89,12 @@ export const AccountInfo = ({
             </Body1>
           )}
         </VStack>
-        {userProfile.externalAccounts.length > 0 && (
+        {userAccountToDisplay.length > 0 && (
           <VStack w="full" alignItems="start">
             <Body1 bold color="neutral.900">
               {t('Connected accounts')}
             </Body1>
-            {userProfile.externalAccounts.map((externalAccount) => {
+            {userAccountToDisplay.map((externalAccount) => {
               if (externalAccount) {
                 return (
                   <ExternalAccountDisplay
@@ -105,9 +109,9 @@ export const AccountInfo = ({
                 )
               }
             })}
-            {isEdit && userProfile && <ConnectAccounts user={userProfile} />}
           </VStack>
         )}
+        {isEdit && userProfile && <ConnectAccounts user={userProfile} />}
       </CardLayout>
       {isEdit && userProfile && (
         <>

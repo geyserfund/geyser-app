@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react'
 import { useEffect } from 'react'
 
-export const TwitterSuccess = () => {
+export const ExternalAuthSuccess = () => {
   useEffect(() => {
     window.close()
   })

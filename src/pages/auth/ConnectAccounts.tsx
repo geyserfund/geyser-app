@@ -7,6 +7,9 @@ import { Body2 } from '../../components/typography'
 import { useModal } from '../../hooks/useModal'
 import { User } from '../../types'
 import {
+  hasFacebookAccount,
+  hasGithubAccount,
+  hasGoogleAccount,
   hasLightningAccount,
   hasNostrAccount,
   hasTwitterAccount,
@@ -14,7 +17,8 @@ import {
 } from '../../utils'
 import { ConnectWithLightning } from './ConnectWithLightning'
 import { ConnectWithNostr } from './ConnectWithNostr'
-import { ConnectWithTwitter } from './ConnectWithTwitter'
+import { ConnectWithSocial } from './ConnectWithSocial'
+import { SocialAccountType } from './type'
 
 export const ConnectAccounts = ({ user }: { user: User }) => {
   const { t } = useTranslation()
@@ -27,12 +31,23 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
 
   const displayLightningButton = !hasLightningAccount(user)
 
-  if (!displayNostrButton && !displayTwitterButton && !displayLightningButton) {
-    return null
-  }
+  const displayFacebookButton = !hasFacebookAccount(user)
+
+  const displayGoogleButton = !hasGoogleAccount(user)
+
+  const displayGithubButton = !hasGithubAccount(user)
 
   const canConnectAccount =
-    displayTwitterButton || displayNostrButton || displayLightningButton
+    displayTwitterButton ||
+    displayNostrButton ||
+    displayLightningButton ||
+    displayFacebookButton ||
+    displayGoogleButton ||
+    displayGithubButton
+
+  if (!canConnectAccount) {
+    return null
+  }
 
   return (
     <>
@@ -56,7 +71,19 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
           <Body2 color="neutral.600" mb={4}>
             {t('Connect more social profiles to your Geyser account.')}
           </Body2>
-          {displayTwitterButton && <ConnectWithTwitter />}
+          {}
+          {displayGoogleButton && (
+            <ConnectWithSocial accountType={SocialAccountType.google} />
+          )}
+          {displayGithubButton && (
+            <ConnectWithSocial accountType={SocialAccountType.github} />
+          )}
+          {displayFacebookButton && (
+            <ConnectWithSocial accountType={SocialAccountType.facebook} />
+          )}
+          {displayTwitterButton && (
+            <ConnectWithSocial accountType={SocialAccountType.twitter} />
+          )}
           {displayNostrButton && <ConnectWithNostr />}
           {displayLightningButton && <ConnectWithLightning />}
         </VStack>

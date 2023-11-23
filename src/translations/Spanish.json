@@ -288,7 +288,7 @@
     "No fee per transaction": "Sin comisiones por transacción",
     "Connect your lightning node to receive incoming transactions directly. Don't have a node? You can <1>create a cloud node</1> with the recommended app.": "Conecta tu nodo lightning para recibir directamente las transacciones que te lleguen. ¿No tienes un nodo? Puedes <1>crear un nodo en la nube</1> con la app recomendada.",
     "Your project is almost live. You can now either launch the project and make it public or save it as draft. And you can always edit project at any time.": "Tu proyecto está casi activo. Ahora puedes lanzar el proyecto y hacerlo público o guardarlo como borrador. Además, siempre puedes editar el proyecto en otro momento.",
-    "By continuing, I agree with Geyser&apos;s <1>Terms & Conditions</1>": "Al continuar, acepto los <1>Términos y Condiciones</1> de Geyser.",
+    "By continuing, I agree with Geyser's <1>Terms & Conditions</1>": "Al continuar, acepto los <1>Términos y Condiciones</1> de Geyser.",
     "Node name is a required field": "El nombre del nodo es un campo obligatorio",
     "Node name cannot be longer than": "El nombre del nodo no puede ser más largo que",
     "characters": "caracteres",
