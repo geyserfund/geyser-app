@@ -288,7 +288,7 @@
     "No fee per transaction": "Žádný poplatek za transakci",
     "Connect your lightning node to receive incoming transactions directly. Don't have a node? You can <1>create a cloud node</1> with the recommended app.": "Připojte svůj lightningový uzel, abyste mohli přijímat příchozí transakce přímo. Nemáte uzel? Pomocí doporučené aplikace můžete <1>vytvořit cloudový uzel</1>.",
     "Your project is almost live. You can now either launch the project and make it public or save it as draft. And you can always edit project at any time.": "Váš projekt je téměř aktivní. Nyní můžete projekt buď spustit a zveřejnit, nebo jej uložit jako koncept. Projekt můžete kdykoli upravit.",
-    "By continuing, I agree with Geyser&apos;s <1>Terms & Conditions</1>": "Pokračováním souhlasím se <1>smluvními podmínkami</1> Geyser",
+    "By continuing, I agree with Geyser's <1>Terms & Conditions</1>": "Pokračováním souhlasím se <1>smluvními podmínkami</1> Geyser",
     "Node name is a required field": "Název uzlu je povinné pole",
     "Node name cannot be longer than": "Název uzlu nemůže být delší než",
     "characters": "Znaky",
