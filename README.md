@@ -28,8 +28,8 @@
 
   <div align='center'>
 
-  [![LinkedIn][linkedin-shield]][linkedin-url]
   [![Discord][discord-shield]][discord-url]
+
   [![Telegram][telegram-shield]][telegram-url]
   [![X][x-shield]][x-url]
 
