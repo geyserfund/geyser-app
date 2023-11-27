@@ -106,9 +106,7 @@ export const ConnectWithSocial = ({
         leftIcon: icon,
       }
 
-  const isDisabled =
-    !canLogin ||
-    [SocialAccountType.facebook, SocialAccountType.google].includes(accountType)
+  const isDisabled = !canLogin || SocialAccountType.google === accountType
 
   return (
     <Tooltip label={!canLogin && t('Please refresh the page and try again.')}>
