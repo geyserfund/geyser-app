@@ -149,10 +149,10 @@ export const ProjectSettings = () => {
         />
         {project.status !== ProjectStatus.Deleted && (
           <VStack>
-            <FieldContainer title="Project status">
+            <FieldContainer title={`${project.title}: Project status`}>
               <HStack w="100%" justifyContent="stretch">
                 <Text variant="body2" flexGrow={1}>
-                  {t('Deactivate')}
+                  {formState?.dirtyFields?.deactivate == true ? t('Deactivated') : t('Activated')}
                 </Text>
                 <Switch
                   defaultChecked={watch('deactivate')}
