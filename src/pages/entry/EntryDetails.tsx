@@ -25,15 +25,10 @@ type Props = {
 export const EntryDetails = ({ entry }: Props) => {
   const { t } = useTranslation()
   const headerImageSrc = entry.image || entry.project?.image
-  const location = useLocation()
   const navigate = useNavigate()
 
   const handleViewProject = () => {
-    if (!location.key || location.key === 'default') {
-      navigate(getPath('project', entry.project?.name))
-    } else {
-      navigate(-1)
-    }
+    navigate(getPath('project', entry.project?.name))
   }
 
   return (
