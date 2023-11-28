@@ -45,7 +45,7 @@ export const FilterFooter = () => {
           <Caption bold>Geyser, Inc.</Caption>
         </Link>
 
-        <Link href={GeyserTermsAndConditionsURL} isExternal>
+        <Link href={GeyserTermsAndConditionsURL}>
           <Caption bold>T&amp;C</Caption>
         </Link>
 

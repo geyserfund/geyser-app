@@ -4,6 +4,7 @@ import { App } from '../../App'
 import { AppLayout } from '../../AppLayout'
 import { __production__, getPath, PathName } from '../../constants'
 import { ExternalAuthSuccess, FailedAuth } from '../../pages/auth'
+import TermsAndConditions from '../../pages/legal/TermsAndConditions';
 import { NotAuthorized, NotFoundPage } from '../../pages/fallback'
 import { ErrorBoundary } from './ErrorBoundary'
 import { renderPrivateRoute } from './PrivateRoute'
@@ -378,6 +379,10 @@ export const platformRoutes: RouteObject[] = [
   {
     path: '/failed-authentication',
     Component: FailedAuth,
+  },
+  {
+    path: '/terms-and-conditions',
+    Component: TermsAndConditions,
   },
   {
     path: '*', // The default route if a random route is used
