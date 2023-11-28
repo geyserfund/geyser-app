@@ -124,7 +124,7 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
             <Text>₿ = ❤</Text>
           </Link>
 
-          <Link href={GeyserPrivacyUrl} isExternal>
+          <Link href={GeyserPrivacyUrl}>
             <Text>{t('Privacy')}</Text>
           </Link>
 
