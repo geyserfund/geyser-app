@@ -46,19 +46,20 @@ export const ProjectFundingQRModal = ({
     if (!node) {
       return
     }
-
-    htmlToImage
-      .toPng(node, { style: { opacity: '1', position: 'static' } })
-      .then((image) => {
-        setImageDownload(image)
-      })
-      .catch((error) => {
-        toast({
-          status: 'error',
-          title: 'something went wrong rendering the html to image',
-          description: `${error}`,
+    setTimeout(function(){
+      htmlToImage
+        .toPng(node, { style: { opacity: '1', position: 'static' } })
+        .then((image) => {
+          setImageDownload(image)
         })
-      })
+        .catch((error) => {
+          toast({
+            status: 'error',
+            title: 'something went wrong rendering the html to image',
+            description: `${error}`,
+          })
+        })
+    }, 500);
   }, [])
 
   const lnurlPayUrl = encodeLNURL(
