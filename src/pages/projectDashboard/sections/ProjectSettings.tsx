@@ -25,8 +25,6 @@ import { BackToProjectMobile } from '../navigation/BackToProjectMobile'
 
 export type ProjectSettingsVariables = {
   email: string
-  status: ProjectStatus | ''
-  deactivate: boolean
 }
 
 export const ProjectSettings = () => {
@@ -40,43 +38,19 @@ export const ProjectSettings = () => {
   const form = useForm<ProjectSettingsVariables>({
     values: useMemo(
       () => ({
-        email: user.email || '',
-        status: project?.status || '',
-        deactivate: !isActive(project?.status),
+        email: user.email || ''
       }),
-      [project?.status, user.email],
+      [user.email],
     ),
   })
 
-  const { formState, handleSubmit, setValue, watch, control } = form
+  const { formState, control } = form
 
   const unsavedModal = useProjectUnsavedModal({
     hasUnsaved: formState.isDirty,
   })
 
   const deleteProjectModal = useModal()
-
-  const [updateProjectMutation, { loading: updateLoading }] = useMutation<{
-    updateProject: Project
-  }>(MUTATION_UPDATE_PROJECT, {
-    onCompleted(data) {
-      if (data?.updateProject && updateProject) {
-        updateProject(data.updateProject)
-      }
-
-      toast({
-        title: 'Project updated successfully!',
-        status: 'success',
-      })
-    },
-    onError(error) {
-      toast({
-        title: 'failed to update project',
-        description: `${error}`,
-        status: 'error',
-      })
-    },
-  })
 
   const [deleteProject, { loading: deleteLoading }] = useProjectDeleteMutation()
 
@@ -104,37 +78,12 @@ export const ProjectSettings = () => {
     }
   }
 
-  const handleDeactivate = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event) {
-      const shouldDeactivate = event.target.checked
-      setValue('deactivate', shouldDeactivate, { shouldDirty: true })
-      setValue(
-        'status',
-        shouldDeactivate ? ProjectStatus.Inactive : ProjectStatus.Active,
-      )
-    }
-  }
-
-  const onSubmit = ({ status }: ProjectSettingsVariables) => {
-    if (project) {
-      updateProjectMutation({
-        variables: {
-          input: {
-            projectId: Number(project.id),
-            status,
-          },
-        },
-      })
-    }
-  }
-
   if (!project) {
     return null
   }
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
       style={{ flexGrow: 1, display: 'flex' }}
     >
       <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1}>
@@ -147,27 +96,6 @@ export const ProjectSettings = () => {
             `Project notifications and updates are sent to the project creator's email. This email can be edited from the creator's profile Settings.`,
           )}
         />
-        {project.status !== ProjectStatus.Deleted && (
-          <VStack>
-            <FieldContainer title="Project status">
-              <HStack w="100%" justifyContent="stretch">
-                <Text variant="body2" flexGrow={1}>
-                  {t('Deactivate')}
-                </Text>
-                <Switch
-                  defaultChecked={watch('deactivate')}
-                  onChange={handleDeactivate}
-                  colorScheme="red"
-                />
-              </HStack>
-            </FieldContainer>
-            <Text color="neutral.600">
-              {t(
-                'Deactivating your project would not allow others to fund your project, but your project will still be visible to everyone else. You will be able to re-activate your project at any time.',
-              )}
-            </Text>
-          </VStack>
-        )}
 
         <VStack w="100%" alignItems="start">
           <Text variant="body1">Delete Project</Text>
@@ -187,14 +115,6 @@ export const ProjectSettings = () => {
         </VStack>
 
         <VStack w="100%" flexGrow={1} justifyContent="end">
-          <Button
-            isLoading={updateLoading}
-            variant="primary"
-            w="full"
-            type="submit"
-          >
-            {t('Save')}
-          </Button>
           <BackToProjectMobile project={project} />
         </VStack>
       </VStack>
