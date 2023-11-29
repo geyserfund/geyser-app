@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/react'
 import { useAtomValue } from 'jotai'
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
@@ -123,12 +124,24 @@ export const ProjectProvider = ({
     refetch,
   } = useProjectState(projectId, {
     fetchPolicy: 'network-only',
-    onError() {
+    onError(error) {
+      captureException(error, {
+        tags: {
+          'not-found': 'projectGet',
+          'error.on': 'query error',
+        },
+      })
       navigate(getPath('notFound'))
     },
     onCompleted(data) {
       if (!data?.projectGet) {
         navigate(getPath('notFound'))
+        captureException(data, {
+          tags: {
+            'not-found': 'projectGet',
+            'error.on': 'invalid data',
+          },
+        })
         return
       }
 
