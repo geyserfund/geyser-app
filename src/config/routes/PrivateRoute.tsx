@@ -5,7 +5,7 @@ import { AuthModal } from '../../components/molecules'
 import { getPath } from '../../constants'
 import { useAuthContext } from '../../context'
 import { LoadingPage } from '../../pages/loading'
-import { useRouteMatchesForPrivateRoute } from './privateRoutesAtom'
+import { useRouteMatchesForPrivateRoute } from './atoms/privateRoutesAtom'
 
 interface IPrivateRoute {
   children: React.ReactNode

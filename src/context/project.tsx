@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { useGetHistoryRoute } from '../config'
-import { routeMatchForProjectPageAtom } from '../config/routes/privateRoutesAtom'
+import { routeMatchForProjectPageAtom } from '../config/routes/atoms/privateRoutesAtom'
 import { getPath, PathName } from '../constants'
 import {
   useFundingFlow,
@@ -123,7 +123,7 @@ export const ProjectProvider = ({
     refetch,
   } = useProjectState(projectId, {
     fetchPolicy: 'network-only',
-    onError() {
+    onError(error) {
       navigate(getPath('notFound'))
     },
     onCompleted(data) {

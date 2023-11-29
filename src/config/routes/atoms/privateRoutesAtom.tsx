@@ -1,6 +1,6 @@
 import { atom, useAtomValue } from 'jotai'
 
-import { getPath, PathName } from '../../constants'
+import { getPath, PathName } from '../../../constants'
 import {
   entryCreationRoutes as routesForEntryCreation,
   projectCreatorRoutes as routesForProjectCreator,

@@ -8,7 +8,7 @@ import {
   projectDashboardRoutes,
   projectRoutes,
   routeMatchForAtom,
-} from '../../config/routes/routesAtom'
+} from '../../config/routes/atoms/routesAtom'
 import { getPath, PathName } from '../../constants'
 import { projectSideNavAtom } from '../../pages/projectView/projectNavigation/sideNav'
 import { profileSideNavAtom } from '../profileRightSideNav'

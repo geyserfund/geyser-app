@@ -2,7 +2,7 @@ import { AgnosticRouteMatch } from '@sentry/react/types/types'
 import { atom, Getter, useSetAtom } from 'jotai'
 import { RouteObject } from 'react-router-dom'
 
-import { getPath, PathName } from '../../constants'
+import { getPath, PathName } from '../../../constants'
 
 const matchRoutesAtom = atom<AgnosticRouteMatch<string, RouteObject>[] | null>(
   [],
