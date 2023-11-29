@@ -135,13 +135,13 @@ export const ProjectProvider = ({
     },
     onCompleted(data) {
       if (!data?.projectGet) {
-        navigate(getPath('notFound'))
         captureException(data, {
           tags: {
             'not-found': 'projectGet',
             'error.on': 'invalid data',
           },
         })
+        navigate(getPath('notFound'))
         return
       }
 
