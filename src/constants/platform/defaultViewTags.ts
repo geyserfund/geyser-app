@@ -33,10 +33,10 @@ export const getFeaturedProject = () => {
 }
 
 const productionTagsList = [
-  { label: 'education', id: 299 },
-  { label: 'culture', id: 119 },
-  { label: 'community', id: 191 },
-  { label: 'films', id: 38 },
+  { label: 'education', id: 53 },
+  { label: 'culture', id: 133 },
+  { label: 'community', id: 555 },
+  { label: 'films', id: 57 },
   { label: 'collectibles', id: 97 },
   { label: 'orange-pilling', id: 10 },
   { label: 'nostr', id: 2 },
