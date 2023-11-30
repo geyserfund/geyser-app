@@ -33,10 +33,10 @@ export const getFeaturedProject = () => {
 }
 
 const productionTagsList = [
-  { label: 'bitcoin-education', id: 9 },
-  { label: 'bitcoin-culture', id: 6 },
-  { label: 'bitcoin-community', id: 13 },
-  { label: 'films', id: 57 },
+  { label: 'education', id: 299 },
+  { label: 'culture', id: 119 },
+  { label: 'community', id: 191 },
+  { label: 'films', id: 38 },
   { label: 'collectibles', id: 97 },
   { label: 'orange-pilling', id: 10 },
   { label: 'nostr', id: 2 },
@@ -49,7 +49,6 @@ const productionTagsList = [
   { label: 'events', id: 1 },
   { label: 'media', id: 8 },
   { label: 'sports', id: 43 },
-  { label: 'bitcoin-films', id: 134 },
   { label: 'maker', id: 49 },
   { label: 'earn', id: 42 },
   { label: 'creative', id: 75 },
