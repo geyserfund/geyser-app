@@ -3,7 +3,7 @@
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 ## Getting Started
-When contributing to this repository, please first discuss the change you wish to make via issue, email, Nostr dm or any other method with the owners of this repository before making a change.
+When contributing to this repository, please first discuss the change you wish to make via issue, Discord, email, Nostr dm or any other method with the owners of this repository before making a change.
 
 Please note we have a [code of conduct](/CODE_OF_CONDUCT.md), please follow it in all your interactions with the project.
 
