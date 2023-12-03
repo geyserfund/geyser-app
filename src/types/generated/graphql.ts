@@ -489,6 +489,9 @@ export type FundingTx = {
   address?: Maybe<Scalars['String']>
   amount: Scalars['Int']
   comment?: Maybe<Scalars['String']>
+  /** Creator's email address. Only visible to the contributor. */
+  creatorEmail?: Maybe<Scalars['String']>
+  /** Contributor's email address. Only visible to the project owner. */
   email?: Maybe<Scalars['String']>
   funder: Funder
   id: Scalars['BigInt']
@@ -1295,6 +1298,7 @@ export type ProjectMilestone = {
   description?: Maybe<Scalars['description_String_maxLength_250']>
   id: Scalars['BigInt']
   name: Scalars['name_String_NotNull_maxLength_100']
+  reached: Scalars['Boolean']
 }
 
 export type ProjectPublishMutationInput = {
@@ -2924,6 +2928,11 @@ export type FundingTxResolvers<
   address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   comment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  creatorEmail?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   funder?: Resolver<ResolversTypes['Funder'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
@@ -3751,6 +3760,7 @@ export type ProjectMilestoneResolvers<
     ParentType,
     ContextType
   >
+  reached?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -4805,6 +4815,7 @@ export type FundingTxWithInvoiceStatusFragment = {
   onChain: boolean
   invoiceStatus: InvoiceStatus
   paymentRequest?: string | null
+  creatorEmail?: string | null
 }
 
 export type FundingTxFragment = {
@@ -4824,6 +4835,7 @@ export type FundingTxFragment = {
   source: string
   method?: FundingMethod | null
   projectId: any
+  creatorEmail?: string | null
   funder: {
     __typename?: 'Funder'
     id: any
@@ -6588,6 +6600,7 @@ export const FundingTxWithInvoiceStatusFragmentDoc = gql`
     invoiceStatus
     invoiceStatus
     paymentRequest
+    creatorEmail
   }
 `
 export const FundingTxFragmentDoc = gql`
@@ -6607,6 +6620,7 @@ export const FundingTxFragmentDoc = gql`
     source
     method
     projectId
+    creatorEmail
     funder {
       id
       amountFunded
