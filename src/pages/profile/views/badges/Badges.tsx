@@ -61,9 +61,9 @@ export const Badges = ({
     <CardLayout
       noMobileBorder
       padding="0"
-      paddingY={{ base: '10px', lg: '20px' }}
+      paddingY={{ base: '10px', lg: '2px' }}
       spacing="20px"
-      maxHeight="100%"
+      maxHeight="326px"
     >
       <HStack
         paddingX={{ base: '10px', lg: '20px' }}
