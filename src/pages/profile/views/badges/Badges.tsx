@@ -58,13 +58,14 @@ export const Badges = ({
   }
 
   return (
+        <div style={{ maxHeight: '323px', overflowY: 'auto' }}>
     <CardLayout
       noMobileBorder
       padding="0"
-      paddingY={{ base: '10px', lg: '2px' }}
+      paddingY={{ base: '10px', lg: '20px' }}
       spacing="20px"
-      maxHeight="323px"
     >
+      <div style={{ position: 'sticky', top: 0, backgroundColor: '#FFFFFF', zIndex: 1 }}>
       <HStack
         paddingX={{ base: '10px', lg: '20px' }}
         w="full"
@@ -81,13 +82,16 @@ export const Badges = ({
           {t('See badges')}
         </Button>
       </HStack>
+        </div>
       <Body2 paddingX={{ base: '10px', lg: '20px' }} color="neutral.700">
         {t(
           'Geyser badges are earned for launching successful projects, contributing  to them and being an active community member.',
         )}
       </Body2>
-
+        <div style={{ maxHeight: 'calc(100% - 52px)', overflowY: 'auto', padding: '0 20px' }}>
       {renderBadgesBody()}
+          </div>
     </CardLayout>
+          </div>
   )
 }
