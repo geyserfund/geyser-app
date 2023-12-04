@@ -198,9 +198,6 @@ export const ProjectCreationWalletConnectionForm = ({
 
   const [evaluateLightningAddress, { loading: isEvaluatingLightningAddress }] =
     useLightningAddressVerifyLazyQuery({
-      variables: {
-        lightningAddress: lightningAddressFormValue,
-      },
       onCompleted({ lightningAddressVerify: { valid } }) {
         if (Boolean(valid) === false) {
           setLnAddressEvaluationState(LNAddressEvaluationState.FAILED)
@@ -298,8 +295,16 @@ export const ProjectCreationWalletConnectionForm = ({
   }, [connectionOption, lightningAddressFormValue, createWalletInput])
 
   const validateLightningAddress = async () => {
-    if (lightningAddressFormError === null && lightningAddressFormValue) {
-      await evaluateLightningAddress()
+    if (!lightningAddressFormValue) {
+      setLightningAddressFormWarn(null)
+      setLnAddressEvaluationState(LNAddressEvaluationState.IDLE)
+      return
+    }
+
+    if (lightningAddressFormError === null) {
+      await evaluateLightningAddress({
+        variables: { lightningAddress: lightningAddressFormValue },
+      })
     }
   }
 
@@ -309,7 +314,9 @@ export const ProjectCreationWalletConnectionForm = ({
       lightningAddressFormValue &&
       lnAddressEvaluationState !== LNAddressEvaluationState.SUCCEEDED
     ) {
-      const response = await evaluateLightningAddress()
+      const response = await evaluateLightningAddress({
+        variables: { lightningAddress: lightningAddressFormValue },
+      })
       if (!response?.data?.lightningAddressVerify?.valid) {
         return
       }
@@ -447,8 +454,8 @@ export const ProjectCreationWalletConnectionForm = ({
 
   const validateLightningAddressFormat = async (lightningAddress: string) => {
     if (!lightningAddress) {
-      setLightningAddressFormWarn(null)
       setLightningAddressFormError(null)
+      setLightningAddressFormWarn(null)
       setLnAddressEvaluationState(LNAddressEvaluationState.IDLE)
       return
     }
