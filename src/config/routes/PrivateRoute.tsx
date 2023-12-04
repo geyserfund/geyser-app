@@ -1,3 +1,4 @@
+import { useDisclosure } from '@chakra-ui/react'
 import { ComponentType, useEffect, useMemo } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 
@@ -12,25 +13,17 @@ interface IPrivateRoute {
 }
 
 export const PrivateRoute = ({ children }: IPrivateRoute) => {
-  const {
-    loading,
-    user,
-    isAnonymous,
-    loginOnClose,
-    isAuthModalOpen: loginIsOpen,
-    loginOnOpen,
-  } = useAuthContext()
+  const { loading, user, isAnonymous } = useAuthContext()
 
   const params = useParams<{ projectId: string }>()
 
-  const {
-    isProjectCreatorRoute,
-    isEntryCreationRoute,
-    isPrivateProjectLaunchRoute,
-  } = useRouteMatchesForPrivateRoute()
+  const { onOpen, onClose, isOpen } = useDisclosure()
+
+  const { isProjectCreatorRoute, isEntryCreationRoute } =
+    useRouteMatchesForPrivateRoute()
 
   const isUserViewingTheirOwnProject: boolean = useMemo(() => {
-    return user.ownerOf.some(
+    return user?.ownerOf?.some(
       ({ project }) =>
         project?.id === params.projectId || project?.name === params.projectId,
     )
@@ -39,10 +32,10 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
   useEffect(() => {
     if (!loading) {
       if (isAnonymous) {
-        loginOnOpen()
+        onOpen()
       }
     }
-  }, [loading, loginOnOpen, isAnonymous])
+  }, [loading, onOpen, isAnonymous])
 
   const modalTitle = 'The page you are trying to access required authorization.'
 
@@ -54,40 +47,31 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
     return 'Login to continue'
   }
 
-  const renderUnauthorized = () => (
-    <AuthModal
-      title={modalTitle}
-      description={modalDescription()}
-      isOpen={loginIsOpen}
-      privateRoute={true}
-      onClose={loginOnClose}
-    />
-  )
-
-  const isForbidden = () => {
-    if (user && isPrivateProjectLaunchRoute) {
-      return false
-    }
-
-    return (
-      user &&
-      (isPrivateProjectLaunchRoute || isProjectCreatorRoute) &&
-      Boolean(isUserViewingTheirOwnProject) === false
-    )
-  }
-
-  const renderForbidden = () => <Navigate to={getPath('notAuthorized')} />
-
   if (loading) {
     return <LoadingPage />
   }
 
-  return (
-    <>
-      {children}
-      {isForbidden() ? renderForbidden() : renderUnauthorized()}
-    </>
-  )
+  if (isAnonymous) {
+    return (
+      <AuthModal
+        title={modalTitle}
+        description={modalDescription()}
+        isOpen={isOpen}
+        privateRoute={true}
+        onClose={onClose}
+      />
+    )
+  }
+
+  if (
+    isProjectCreatorRoute &&
+    Boolean(isUserViewingTheirOwnProject) === false &&
+    params?.projectId
+  ) {
+    return <Navigate to={getPath('project', params?.projectId)} />
+  }
+
+  return <>{children}</>
 }
 
 export const renderPrivateRoute = (Component: ComponentType<{}>) => {
