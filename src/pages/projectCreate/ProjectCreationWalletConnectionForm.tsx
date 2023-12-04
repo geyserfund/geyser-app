@@ -208,6 +208,7 @@ export const ProjectCreationWalletConnectionForm = ({
             'We could not validate this as a working Lightning Address.',
           )
         } else {
+          setLightningAddressFormWarn('')
           setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED)
         }
       },
@@ -303,6 +304,17 @@ export const ProjectCreationWalletConnectionForm = ({
   }
 
   const handleNext = async () => {
+    if (
+      connectionOption === ConnectionOption.LIGHTNING_ADDRESS &&
+      lightningAddressFormValue &&
+      lnAddressEvaluationState !== LNAddressEvaluationState.SUCCEEDED
+    ) {
+      const response = await evaluateLightningAddress()
+      if (!response?.data?.lightningAddressVerify?.valid) {
+        return
+      }
+    }
+
     if (onNextClick) {
       try {
         await handleLaunch()
@@ -435,7 +447,10 @@ export const ProjectCreationWalletConnectionForm = ({
 
   const validateLightningAddressFormat = async (lightningAddress: string) => {
     if (!lightningAddress) {
-      return setLightningAddressFormError(null)
+      setLightningAddressFormWarn(null)
+      setLightningAddressFormError(null)
+      setLnAddressEvaluationState(LNAddressEvaluationState.IDLE)
+      return
     }
 
     if (lightningAddress.endsWith('@geyser.fund')) {
@@ -456,6 +471,19 @@ export const ProjectCreationWalletConnectionForm = ({
     isUpdateStatusLoading ||
     isEvaluatingLightningAddress
 
+  const isLightningAddressInValid = useMemo(() => {
+    if (
+      connectionOption === ConnectionOption.LIGHTNING_ADDRESS &&
+      ((lnAddressEvaluationState !== LNAddressEvaluationState.SUCCEEDED &&
+        lnAddressEvaluationState !== LNAddressEvaluationState.IDLE) ||
+        Boolean(lightningAddressFormError))
+    ) {
+      return true
+    }
+
+    return false
+  }, [connectionOption, lnAddressEvaluationState, lightningAddressFormError])
+
   if (isReadyForLaunch) {
     return (
       <ProjectCreateCompleted>
@@ -470,7 +498,8 @@ export const ProjectCreationWalletConnectionForm = ({
               disabled={
                 !isSubmitEnabled ||
                 isLoading ||
-                Boolean(lightningAddressFormError)
+                Boolean(lightningAddressFormError) ||
+                Boolean(lightningAddressFormWarn)
               }
             >
               {t('Launch Project')}
@@ -546,7 +575,10 @@ export const ProjectCreationWalletConnectionForm = ({
                     validateLightningAddressFormat(event.target.value)
                   }}
                   onBlur={validateLightningAddress}
-                  isInvalid={Boolean(lightningAddressFormError)}
+                  isInvalid={
+                    Boolean(lightningAddressFormError) ||
+                    Boolean(lightningAddressFormWarn)
+                  }
                   focusBorderColor={'neutral.200'}
                   _valid={{
                     focusBorderColor: 'primary.500',
@@ -681,7 +713,7 @@ export const ProjectCreationWalletConnectionForm = ({
         onClick={handleNext}
         isEdit={isEdit}
         isLoading={updateWalletLoading}
-        isDisabled={isFormDirty()}
+        isDisabled={isFormDirty() || isLightningAddressInValid}
       />
 
       <NodeAdditionModal
