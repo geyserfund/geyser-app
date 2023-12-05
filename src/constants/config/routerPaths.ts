@@ -42,6 +42,9 @@ export enum PathName {
   userId = ':userId',
   entryId = ':entryId',
   grantId = ':grantId',
+
+  legalTerms = 'terms-and-conditions',
+  legalPrivacy = 'privacy-policy'
 }
 
 // @TODO: These definitions are currently a WIP.
@@ -124,6 +127,8 @@ const pathsMap = {
   badges: () => `/${PathName.badges}`,
 
   about: () => `/${PathName.about}`,
+  legalTerms: () => `/${PathName.legalTerms}`,
+  legalPrivacy: () => `/${PathName.legalPrivacy}`
 }
 
 export type PathsMap = typeof pathsMap
