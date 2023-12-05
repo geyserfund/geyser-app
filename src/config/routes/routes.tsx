@@ -381,11 +381,11 @@ export const platformRoutes: RouteObject[] = [
     Component: FailedAuth,
   },
   {
-    path: '/terms-and-conditions',
+    path: getPath('legalTerms'),
     Component: TermsAndConditions,
   },
   {
-    path: '/privacy-policy',
+    path: getPath('legalPrivacy'),
     Component: PrivacyPolicy,
   },
   {
