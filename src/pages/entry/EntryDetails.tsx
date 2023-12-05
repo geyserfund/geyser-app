@@ -10,7 +10,7 @@ import {
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
 import { BiLeftArrowAlt } from 'react-icons/bi'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { ProjectFundersCountIndicator } from '../../components/molecules'
 import { ButtonComponent, EntryStatusLabel } from '../../components/ui'
