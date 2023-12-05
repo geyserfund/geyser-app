@@ -21,10 +21,6 @@ export const GeyserTelegramUrl = 'https://t.me/geyserfund'
 export const GeyserPodcastUrl = 'https://fountain.fm/show/P5kWpoVIT7YGmPRenVN4'
 export const GeyserGithubUrl = 'https://github.com/geyserfund/geyser-app'
 export const GeyserHomepageUrl = 'https://geyser.fund/'
-export const GeyserPrivacyUrl =
-  'https://geyser.notion.site/Geyser-Privacy-Policy-7d008651271249b18d6886edbb2edaba'
-export const GeyserTermsAndConditionsURL =
-  'https://geyser.notion.site/Terms-Conditions-815ff42c97af4cdf8861011a8a4c1fe0'
 
 export const GeyserNostrUrl =
   'https://snort.social/p/npub1kmwdmhuxvafg05dyap3qmy42jpwztrv9p0uvey3a8803ahlwtmnsnhxqk9'
