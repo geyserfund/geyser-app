@@ -198,11 +198,11 @@ export const ProjectCreationWalletConnectionForm = ({
 
   const [evaluateLightningAddress, { loading: isEvaluatingLightningAddress }] =
     useLightningAddressVerifyLazyQuery({
-      onCompleted({ lightningAddressVerify: { valid } }) {
+      onCompleted({ lightningAddressVerify: { valid, reason } }) {
         if (Boolean(valid) === false) {
           setLnAddressEvaluationState(LNAddressEvaluationState.FAILED)
           setLightningAddressFormWarn(
-            'We could not validate this as a working Lightning Address.',
+            `We could not validate this as a working Lightning Address: ${reason}`,
           )
         } else {
           setLightningAddressFormWarn('')
