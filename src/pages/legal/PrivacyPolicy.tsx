@@ -1,4 +1,4 @@
-import { OrderedList, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
+import { ListItem, UnorderedList, VStack } from '@chakra-ui/react'
 
 import { AppFooter } from '../../components/molecules'
 
