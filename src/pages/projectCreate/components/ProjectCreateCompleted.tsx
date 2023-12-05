@@ -1,4 +1,4 @@
-import { HStack, Link, Text, VStack } from '@chakra-ui/react'
+import { HStack, Text, VStack } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Link as ReactLink } from "react-router-dom";
