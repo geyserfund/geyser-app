@@ -5031,6 +5031,7 @@ export type ProjectFragment = {
     name: any
     description?: any | null
     amount: number
+    reached: boolean
   }>
   entries: Array<{ __typename?: 'Entry' } & EntryForProjectFragment>
   wallets: Array<{
@@ -6814,6 +6815,7 @@ export const ProjectFragmentDoc = gql`
       name
       description
       amount
+      reached
     }
     entries(input: $input) {
       ...EntryForProject
