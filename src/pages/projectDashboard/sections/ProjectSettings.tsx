@@ -1,21 +1,16 @@
-import { useMutation } from '@apollo/client'
-import { Button, HStack, Switch, Text, VStack } from '@chakra-ui/react'
+import { Button, Text, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { useAuthContext, useProjectContext } from '../../../context'
-import { FieldContainer } from '../../../forms/components/FieldContainer'
 import { TextField } from '../../../forms/components/TextField'
-import { MUTATION_UPDATE_PROJECT } from '../../../graphql/mutations'
 import { useModal } from '../../../hooks/useModal'
 import {
-  Project,
-  ProjectStatus,
   useProjectDeleteMutation,
 } from '../../../types'
-import { isActive, useNotification } from '../../../utils'
+import { useNotification } from '../../../utils'
 import {
   ProjectUnsavedModal,
   useProjectUnsavedModal,
@@ -33,7 +28,7 @@ export const ProjectSettings = () => {
   const { toast } = useNotification()
   const navigate = useNavigate()
 
-  const { project, updateProject } = useProjectContext()
+  const { project } = useProjectContext()
 
   const form = useForm<ProjectSettingsVariables>({
     values: useMemo(

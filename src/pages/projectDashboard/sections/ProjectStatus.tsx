@@ -3,11 +3,9 @@ import { Button, HStack, Switch, Text, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 import { useProjectContext } from '../../../context'
 import { MUTATION_UPDATE_PROJECT } from '../../../graphql/mutations'
-import { useModal } from '../../../hooks/useModal'
 import {
   Project,
   ProjectStatus
@@ -40,7 +38,7 @@ export const ProjectStatusSection = () => {
     ),
   })
 
-  const { formState, handleSubmit, setValue, watch, control } = form
+  const { formState, handleSubmit, setValue, watch } = form
 
   const unsavedModal = useProjectUnsavedModal({
     hasUnsaved: formState.isDirty,
