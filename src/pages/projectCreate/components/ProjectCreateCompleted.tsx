@@ -1,8 +1,8 @@
 import { HStack, Link, Text, VStack } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-
-import { GeyserTermsAndConditionsURL } from '../../../constants'
+import { Link as ReactLink } from "react-router-dom";
+import { getPath } from '../../../constants'
 
 export const ProjectCreateCompleted = ({ children }: PropsWithChildren) => {
   const { t } = useTranslation()
@@ -22,13 +22,12 @@ export const ProjectCreateCompleted = ({ children }: PropsWithChildren) => {
             }
           >
             {"By continuing, I agree with Geyser's "}
-            <Link
-              href={GeyserTermsAndConditionsURL}
-              isExternal
-              textDecoration="underline"
+            <ReactLink
+              to={getPath('legalTerms')}
+              target="_blank"
             >
               Terms & Conditions
-            </Link>
+            </ReactLink>
           </Trans>
         </Text>
       </HStack>
