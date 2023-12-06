@@ -258,6 +258,15 @@ export const platformRoutes: RouteObject[] = [
             },
           },
           {
+            path: getPath('projectProducts', PathName.projectId),
+            async lazy() {
+              const MainBodyProducts = await Project()
+                .then((m) => m.MainBodyProducts)
+                .catch(handleError)
+              return { Component: MainBodyProducts }
+            },
+          },
+          {
             path: getPath('projectEntries', PathName.projectId),
             async lazy() {
               const MainBodyEntries = await Project()
@@ -306,6 +315,61 @@ export const platformRoutes: RouteObject[] = [
                 .catch(handleError)
               return {
                 element: renderPrivateRoute(ProjectCreatorInsights),
+              }
+            },
+          },
+          {
+            path: getPath('projectProductsAndBundles', PathName.projectId),
+            async lazy() {
+              const ProjectProductsAndBundles = await Project()
+                .then((m) => m.ProjectProductsAndBundles)
+                .catch(handleError)
+              return {
+                element: renderPrivateRoute(ProjectProductsAndBundles),
+              }
+            },
+          },
+          {
+            path: getPath('projectCreateItem', PathName.projectId),
+            async lazy() {
+              const ProjectCreateItem = await Project()
+                .then((m) => m.ProjectCreateItem)
+                .catch(handleError)
+              return {
+                element: renderPrivateRoute(ProjectCreateItem),
+              }
+            },
+          },
+          {
+            path: getPath('projectCreateReward', PathName.projectId),
+            async lazy() {
+              const ProjectCreateReward = await Project()
+                .then((m) => m.ProjectCreateReward)
+                .catch(handleError)
+              return {
+                element: renderPrivateRoute(ProjectCreateReward),
+              }
+            },
+          },
+          {
+            path: getPath('projectEditItem', PathName.projectId),
+            async lazy() {
+              const ProjectEditItem = await Project()
+                .then((m) => m.ProjectEditItem)
+                .catch(handleError)
+              return {
+                element: renderPrivateRoute(ProjectEditItem),
+              }
+            },
+          },
+          {
+            path: getPath('projectEditReward', PathName.projectId),
+            async lazy() {
+              const ProjectEditReward = await Project()
+                .then((m) => m.ProjectEditReward)
+                .catch(handleError)
+              return {
+                element: renderPrivateRoute(ProjectEditReward),
               }
             },
           },

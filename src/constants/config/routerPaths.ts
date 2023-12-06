@@ -16,7 +16,13 @@ export enum PathName {
   projectContributors = 'contributors',
   projectEntries = 'entries',
   projectRewards = 'rewards',
+  projectProducts = 'products',
   projectMilestones = 'milestones',
+  projectProductsAndBundles = 'productsAndBundles',
+  projectCreateReward = 'createReward',
+  projectEditReward = 'editReward',
+  projectCreateItem = 'createItem',
+  projectEditItem = 'editItem',
 
   launchProject = 'launch',
   userProfile = 'profile',
@@ -72,8 +78,20 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectContributors}`,
   projectEntries: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectEntries}`,
+  projectProducts: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectProducts}`,
   projectRewards: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectRewards}`,
+  projectProductsAndBundles: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectProductsAndBundles}`,
+  projectCreateReward: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectProductsAndBundles}/${PathName.projectCreateReward}`,
+  projectCreateItem: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectProductsAndBundles}/${PathName.projectCreateItem}`,
+  projectEditItem: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectProductsAndBundles}/${PathName.projectEditItem}`,
+  projectEditReward: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectProductsAndBundles}/${PathName.projectEditReward}`,
   projectMilestones: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectMilestones}`,
 

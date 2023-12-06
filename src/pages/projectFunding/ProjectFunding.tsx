@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { fundingStages } from '../../constants'
 import { useFundingFlow } from '../../hooks'
 import { Project, UserMeFragment } from '../../types'
-import { QRCodeSection } from '../projectView/projectActivityPanel/screens'
+import { QRCodeSection } from '../projectView/projectRightSidebar/screens'
 import { FundingComplete } from './stages/FundingComplete'
 import { FundingForm, ProjectFundingFormState } from './stages/FundingForm'
 

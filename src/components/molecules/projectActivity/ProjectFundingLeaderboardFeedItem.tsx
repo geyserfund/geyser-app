@@ -32,9 +32,9 @@ export const ProjectFundingLeaderboardFeedItem = ({
 
   return (
     <Box borderRadius="12px" {...rest}>
-      <Box display="flex" justifyContent="space-between">
+      <Box display="flex" justifyContent="space-between" style={{height: 20}}>
         <HStack>
-          <Text fontWeight="bold" mr={2}>
+          <Text fontWeight="bold">
             {leaderboardPosition}
           </Text>
 

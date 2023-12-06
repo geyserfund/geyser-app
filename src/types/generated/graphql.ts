@@ -1303,8 +1303,44 @@ export type ProjectReward = {
   name: Scalars['name_String_NotNull_maxLength_100']
   project: Project
   sold: Scalars['Int']
+  stock?: Maybe<Scalars['Int']> // @TODO: This will be calculated on the backend based on item availability
+  updatedAt: Scalars['Date']
+  products?: Array<ProjectProduct>
+  funders?: Array<FunderWithUserFragment>
+  maxClaimable: Scalars['Int']
+  estimatedDeliveryDate: Scalars['Date']
+  published: Scalars['Boolean']
+}
+
+export type ProjectProduct = {
+  __typename?: 'ProjectProduct'
+  /** Cost of the reward, priced in USD cents. */
+  cost: Scalars['Int']
+  createdAt: Scalars['Date']
+  /**
+   * Whether the reward is deleted or not. Deleted rewards should not appear in the funding flow. Moreover, deleted
+   * rewards should only be visible by the project owner and the users that purchased it.
+   */
+  deleted: Scalars['Boolean']
+  deletedAt?: Maybe<Scalars['Date']>
+  /** Short description of the reward. */
+  description?: Maybe<Scalars['description_String_maxLength_250']>
+  /** Boolean value to indicate whether this reward requires shipping */
+  hasShipping: Scalars['Boolean']
+  id: Scalars['BigInt']
+  /** Image of the reward. */
+  image?: Maybe<Scalars['String']>
+  /** Name of the reward. */
+  name: Scalars['name_String_NotNull_maxLength_100']
+  project: Project
+  sold: Scalars['Int']
   stock?: Maybe<Scalars['Int']>
   updatedAt: Scalars['Date']
+  rewardsEnabled: Scalars['Boolean']
+  funders?: Array<FunderWithUserFragment>
+  isPhysical: Scalars['Boolean']
+  inStock: Scalars['Boolean']
+  availableAsAdditionalItem: Scalars['Boolean']
 }
 
 export type ProjectStatistics = {
@@ -4842,6 +4878,7 @@ export type ProjectRewardForLandingPageFragment = {
   sold: number
   stock?: number | null
   rewardName: any
+  estimatedDeliveryDate?: any | null
   rewardProject: {
     __typename?: 'Project'
     id: any
@@ -4861,8 +4898,8 @@ export type ProjectRewardForLandingPageFragment = {
   }
 }
 
-export type ProjectRewardForCreateUpdateFragment = {
-  __typename?: 'ProjectReward'
+export type ProjectProductForCreateUpdateFragment = {
+  __typename?: 'ProjectProduct'
   id: any
   name: any
   description?: any | null
@@ -4872,6 +4909,33 @@ export type ProjectRewardForCreateUpdateFragment = {
   stock?: number | null
   sold: number
   hasShipping: boolean
+  funders: Array<
+    { __typename?: 'Funder' } & FunderWithUserFragment
+  >
+  isPhysical: boolean
+  inStock: boolean
+  availableAsAdditionalItem: boolean
+}
+
+export type ProjectRewardForCreateUpdateFragment = {
+  __typename?: 'ProjectReward'
+  id: any
+  name: any
+  description?: any | null
+  cost: number
+  image?: string | null
+  deleted: boolean
+  stock?: number | null // @TODO: Remove when ready
+  sold: number
+  hasShipping: boolean
+  products: Array<
+    { __typename?: 'ProjectProduct' } & ProjectProductForCreateUpdateFragment
+  >
+  funders: Array<
+    { __typename?: 'Funder' } & FunderWithUserFragment
+  >
+  maxClaimable: number
+  published: boolean
 }
 
 export type ProjectFragment = {
@@ -4903,9 +4967,6 @@ export type ProjectFragment = {
     id: any
     user: { __typename?: 'User' } & UserMeFragment
   }>
-  rewards: Array<
-    { __typename?: 'ProjectReward' } & ProjectRewardForCreateUpdateFragment
-  >
   ambassadors: Array<{
     __typename?: 'Ambassador'
     id: any
@@ -4952,6 +5013,14 @@ export type ProjectFragment = {
         }
       | { __typename?: 'LndConnectionDetailsPublic'; pubkey?: any | null }
   }>
+  // @ TODO: Update to API call structure when backend complete
+  rewardsEnabled: boolean
+  products: Array<
+    { __typename?: 'ProjectProduct' } & ProjectProductForCreateUpdateFragment
+  >
+  rewards: Array<
+    { __typename?: 'ProjectReward' } & ProjectRewardForCreateUpdateFragment
+  >
 }
 
 export type ProjectStatsForOverviewPageFragment = {

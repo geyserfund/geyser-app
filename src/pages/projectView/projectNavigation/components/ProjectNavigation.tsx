@@ -39,7 +39,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
   const { isProjectOwner, onCreatorModalOpen, project, setMobileView } =
     useProjectContext()
 
-  const { entriesLength, rewardsLength, milestonesLength } =
+  const { entriesLength, rewardsLength, productsLength, milestonesLength, rewardsEnabled } =
     useProjectDetails(project)
 
   const ProjectNavigationButtons = useMemo(
@@ -59,11 +59,18 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         render: Boolean(entriesLength),
       },
       {
-        name: 'Rewards',
+        name: 'Bundles',
         path: PathName.projectRewards,
         mobileView: MobileViews.rewards,
         icon: RewardGiftIcon,
-        render: Boolean(rewardsLength),
+        render: Boolean(rewardsEnabled && rewardsLength),
+      },
+      {
+        name: 'Products',
+        path: PathName.projectProducts,
+        mobileView: MobileViews.products,
+        icon: RewardGiftIcon,
+        render: Boolean(!rewardsEnabled && productsLength),
       },
       {
         name: 'Milestones',
@@ -91,6 +98,18 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         icon: InsightsNavIcon,
       },
       {
+        name: 'Items & Bundles',
+        path: PathName.projectProductsAndBundles,
+        mobileView: MobileViews.productsAndBundles,
+        subViews: [
+          MobileViews.createItem,
+          MobileViews.createReward,
+          MobileViews.editItem,
+          MobileViews.editReward
+        ],
+        icon: RewardGiftIcon,
+      },
+      {
         name: 'Contributors',
         path: PathName.projectContributors,
         mobileView: MobileViews.contributors,
@@ -109,7 +128,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
     ]
 
     return (
-      allButtons.find((button) => button.path === currentPath)?.name ||
+      allButtons.find((button) => button.path === currentPath || (button["subViews"] !== undefined && button["subViews"].find(subview => subview === currentPath)))?.name ||
       'Project'
     )
   }, [

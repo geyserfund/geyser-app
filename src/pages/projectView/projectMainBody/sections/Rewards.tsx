@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
-import { GridItem, HStack, Text } from '@chakra-ui/react'
-import { forwardRef, useState } from 'react'
+import { GridItem, HStack, VStack, Text } from '@chakra-ui/react'
+import { forwardRef, useEffect, useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 
@@ -12,7 +12,6 @@ import {
 import { TitleDivider } from '../../../../components/ui/TitleDivider'
 import { fundingStages, ID } from '../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
-import { MUTATION_DELETE_PROJECT_REWARD } from '../../../../graphql/mutations'
 import { useModal } from '../../../../hooks/useModal'
 import {
   Project,
@@ -27,17 +26,27 @@ import {
 import { truthyFilter } from '../../../../utils/array'
 
 export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
+  const refContainer = useRef(null);
   const { t } = useTranslation()
   const isMobile = useMobileMode()
   const { toast } = useNotification()
   const location = useLocation()
 
+  useEffect(() => {
+    // Check if hash is present in URL
+    if(window.location.hash && window.location.hash.startsWith("#r")) {
+      const rewardId = window.location.hash.substring(2);
+      for (let i = 0; i < refContainer.current.children.length; i++) {
+        if(refContainer.current.children[i].children[0].id == `reward-id-${rewardId}`) {
+          refContainer.current.children[i].children[0].scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    }
+  }, [window.location.hash]);
+
   const {
     project,
     setMobileView,
-    updateProject,
-    isProjectOwner,
-    onRewardsModalOpen,
     fundingFlow: { fundState },
     fundForm: { updateReward },
   } = useProjectContext()
@@ -45,108 +54,29 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   const [selectedReward, setSelectedReward] =
     useState<ProjectRewardForCreateUpdateFragment>()
 
-  const {
-    isOpen: isRewardDeleteOpen,
-    onClose: onRewardDeleteClose,
-    onOpen: openRewardDelete,
-  } = useModal()
-
-  const handleClose = () => {
-    setSelectedReward(undefined)
-    onRewardDeleteClose()
-  }
-
-  const [deleteRewardMutation] = useMutation<
-    any,
-    { input: { projectRewardId: Number } }
-  >(MUTATION_DELETE_PROJECT_REWARD, {
-    onCompleted() {
-      const newRewards = project?.rewards?.filter(
-        (reward) => reward?.id !== selectedReward?.id,
-      )
-      updateProject({ rewards: newRewards || [] } as Project)
-
-      handleClose()
-
-      toast({
-        title: 'Successfully removed!',
-        description: `${t('Reward')} ${selectedReward?.name} ${t(
-          'was successfully removed',
-        )}`,
-        status: 'success',
-      })
-    },
-    onError(error) {
-      handleClose()
-      toast({
-        title: 'Failed to remove reward',
-        description: `${error}`,
-        status: 'error',
-      })
-    },
-  })
-
   if (!project) {
     return null
-  }
-
-  const triggerRewardRemoval = (id?: number) => {
-    const currentReward = project.rewards?.find((reward) => reward?.id === id)
-    if (!currentReward) {
-      return
-    }
-
-    setSelectedReward(currentReward)
-    openRewardDelete()
-  }
-
-  const handleRemoveReward = async () => {
-    if (!selectedReward?.id) {
-      return
-    }
-
-    deleteRewardMutation({
-      variables: {
-        input: {
-          projectRewardId: selectedReward.id,
-        },
-      },
-    })
   }
 
   const renderRewards = () => {
     if (project.rewards && project.rewards.length > 0) {
       return project.rewards.filter(truthyFilter).map((reward) => {
         return (
-          <HStack
+          <VStack
             key={reward.id}
-            pb={6}
+            pb={4}
             px={2}
             alignSelf="stretch"
             alignItems="stretch"
             justifySelf="stretch"
             justifyContent="stretch"
-            maxWidth="350px"
             flexWrap="wrap"
           >
             <RewardCard
               key={reward.id}
               width="100%"
               reward={reward}
-              handleEdit={
-                isProjectOwner
-                  ? () => {
-                      setSelectedReward(reward)
-                      onRewardsModalOpen({ reward })
-                    }
-                  : undefined
-              }
-              handleRemove={
-                isProjectOwner
-                  ? () => triggerRewardRemoval(reward.id)
-                  : undefined
-              }
-              onClick={() => {
+              onSelectReward={() => {
                 if (
                   fundState === fundingStages.initial &&
                   isActive(project.status)
@@ -156,7 +86,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
                 }
               }}
             />
-          </HStack>
+          </VStack>
         )
       })
     }
@@ -192,17 +122,10 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
           {t('Rewards')}
         </TitleDivider>
 
-        <HStack width="100%" flexWrap="wrap" justifyContent="center">
+        <VStack width="100%" flexWrap="wrap" justifyContent="center" ref={refContainer}>
           {renderRewards()}
-        </HStack>
+        </VStack>
       </CardLayout>
-      <DeleteConfirmModal
-        isOpen={isRewardDeleteOpen}
-        onClose={handleClose}
-        title={`${t('Delete reward')} ${selectedReward?.name}`}
-        description={t('Are you sure you want to remove the reward')}
-        confirm={handleRemoveReward}
-      />
     </>
   )
 })

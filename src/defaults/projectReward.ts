@@ -13,4 +13,7 @@ export const defaultProjectReward: ProjectReward = {
   createdAt: new Date(),
   updatedAt: new Date(),
   project: {} as Project,
+  estimatedDeliveryDate: '',
+  maxClaimable: 0,
+  published: false
 }

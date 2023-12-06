@@ -22,6 +22,8 @@ interface IDeleteConfirmModal {
   isLoading?: boolean
 }
 
+// @TODO: TRAVIS - I THINK THIS WILL BE REMOVED
+
 export const DeleteConfirmModal = ({
   isOpen,
   onClose,

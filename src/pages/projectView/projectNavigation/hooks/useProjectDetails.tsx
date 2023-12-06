@@ -12,13 +12,15 @@ export type ProjectAnchorRefs = {
 export type ProjectDetails = {
   entriesLength: number
   rewardsLength: number
+  productsLength: number
   milestonesLength: number
+  rewardsEnabled: boolean
 }
 
 export const useProjectDetails = (
   project: Pick<
     ProjectFragment,
-    'entries' | 'rewards' | 'milestones'
+    'entries' | 'rewards' | 'products' | 'milestones' | 'rewardsEnabled'
   > | null = null,
 ): ProjectDetails => {
   const entriesLength = useMemo(
@@ -29,14 +31,24 @@ export const useProjectDetails = (
     () => (project && project.rewards ? project.rewards.length : 0),
     [project],
   )
+  const productsLength = useMemo(
+    () => (project && project.products ? project.products.length : 0),
+    [project],
+  )
   const milestonesLength = useMemo(
     () => (project && project.milestones ? project.milestones.length : 0),
+    [project],
+  )
+  const rewardsEnabled = useMemo(
+    () => (!!(project && project.rewardsEnabled)),
     [project],
   )
 
   return {
     entriesLength,
     rewardsLength,
+    productsLength,
     milestonesLength,
+    rewardsEnabled
   }
 }

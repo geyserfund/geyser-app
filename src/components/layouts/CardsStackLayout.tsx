@@ -16,7 +16,6 @@ export const CardsStackLayout = ({ children, ...props }: Props) => {
       p={{ base: '0px', lg: '0 40px 70px 40px' }}
       spacing={{ base: 0, lg: 3 }}
       mt={{ base: 0, lg: 5 }}
-      maxWidth="1000px"
       w="100%"
       {...props}
     >

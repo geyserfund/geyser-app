@@ -702,5 +702,16 @@
   "Add":"Add",
   "Write entry":"Write entry",
   "Add reward":"Add reward",
-  "Funding regions":"Funding regions"
+  "Funding regions":"Funding regions",
+  "See all rewards": "See all rewards",
+  "Copy reward link": "Copy reward link",
+  "Select reward": "Select reward",
+  "Top Contributors": "Top Contributors",
+  "Details >": "Details >",
+  "Available Rewards": "Available Rewards",
+  "Products": "Products",
+  "See all products": "See all products",
+  "Physical product": "Physical product",
+  "Digital product": "Digital product",
+  "Select product": "Select product"
 }

@@ -29,7 +29,7 @@ import { FormStateError } from '../../../interfaces'
 import { USDCents, useProjectByNameOrIdQuery } from '../../../types'
 import { FundingInput, FundingResourceType } from '../../../types'
 import { toInt, useNotification } from '../../../utils'
-import { QRCodeSection } from '../../projectView/projectActivityPanel/screens'
+import { QRCodeSection } from '../../projectView/projectRightSidebar/screens'
 import { GRANTS_PROJECT_NAME } from '../constants'
 
 const defaultModalHeader = 'Contribute'

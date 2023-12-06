@@ -26,6 +26,7 @@ import { useNavContext } from './nav'
 export enum MobileViews {
   description = 'description',
   rewards = 'rewards',
+  products = 'products',
   contribution = 'contribution',
   leaderboard = 'leaderBoard',
   funding = 'funding',
@@ -34,6 +35,11 @@ export enum MobileViews {
   milestones = 'milestones',
   insights = 'insights',
   contributors = 'contributors',
+  productsAndBundles = 'productsAndBundles',
+  createItem = 'createItem',
+  createReward = 'createReward',
+  editItem = 'editItem',
+  editReward = 'editReward',
 }
 
 type ProjectState = {
@@ -88,11 +94,16 @@ export const ProjectProvider = ({
   projectId,
   children,
 }: { children: React.ReactNode } & ProjectState) => {
+  const currentPath = location.pathname.split('/').pop() || ''
   const navigate = useNavigate()
   const { setNavData } = useNavContext()
   const [mobileView, setMobileView] = useState<MobileViews>(
-    MobileViews.description,
+    (MobileViews.hasOwnProperty(currentPath) ? currentPath : MobileViews.description) as MobileViews,
   )
+
+  // setMobileView(allButtons.find((button) => button.path === currentPath)?.mobileView ||
+  //   MobileViews.description);
+
   const [isProjectOwner, setIsProjectOwner] = useState<boolean | undefined>()
   const { user } = useAuthContext()
 

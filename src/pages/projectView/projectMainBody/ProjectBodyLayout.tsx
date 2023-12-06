@@ -6,8 +6,8 @@ import { Outlet } from 'react-router-dom'
 import { CardsStackLayout } from '../../../components/layouts'
 import { MobileViews, useProjectContext } from '../../../context'
 import { FundingResourceType } from '../../../types'
-import { useMobileMode } from '../../../utils'
-import { ProjectActivityPanel } from '../projectActivityPanel'
+import { useCustomTheme, useMobileMode } from '../../../utils'
+import { ProjectRightSidebar } from '../ProjectRightSidebar'
 
 type Rules = string
 
@@ -49,7 +49,7 @@ export const useProjectLayoutStyles = createUseStyles<Rules, Styles>({
 
 export const ProjectBodyLayout = () => {
   const isMobile = useMobileMode()
-
+  const { colors } = useCustomTheme()
   const { mobileView, project } = useProjectContext()
 
   const inView = [
@@ -60,6 +60,7 @@ export const ProjectBodyLayout = () => {
   ].includes(mobileView)
 
   const classes = useProjectLayoutStyles({ isMobile, inView })
+  const renderRightSidebar = !(['products'].includes(mobileView));
 
   return (
     <>
@@ -69,7 +70,7 @@ export const ProjectBodyLayout = () => {
         height="100%"
         w="100%"
         flexDirection="column"
-        overflow="hidden"
+        overflow={"hidden"}
       >
         <Box w="100%" className={classes.detailsContainer}>
           <CardsStackLayout>
@@ -77,10 +78,25 @@ export const ProjectBodyLayout = () => {
           </CardsStackLayout>
         </Box>
       </Box>
-      <ProjectActivityPanel
-        resourceType={FundingResourceType.Project}
-        resourceId={project?.id}
-      />
+      {renderRightSidebar && (
+        <Box
+          className={classNames(classes.container)}
+          flex={['rewards'].includes(mobileView) ? 1 : 2}
+          maxWidth={isMobile ? 'auto' : '450px'}
+          width={isMobile ? '100%' : undefined}
+          flexDirection="column"
+          justifyContent="flex-start"
+          alignItems="center"
+          backgroundColor="neutral.0"
+          marginTop={isMobile ? '0px' : '20px'}
+          paddingRight={isMobile ? '0px' : '40px'}
+        >
+          <ProjectRightSidebar
+            resourceType={FundingResourceType.Project}
+            resourceId={project?.id}
+          />
+        </Box>
+      )}
     </>
   )
 }

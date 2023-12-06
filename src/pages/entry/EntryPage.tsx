@@ -15,7 +15,7 @@ import {
 } from '../../types'
 import { toInt, useMobileMode } from '../../utils'
 import { NotFoundPage } from '../fallback/NotFoundPage'
-import { ProjectActivityPanel } from '../projectView/projectActivityPanel'
+import { ProjectRightSidebar } from '../projectView/projectRightSidebar'
 import { ProjectMobileBottomNavigation } from '../projectView/projectNavigation/components/ProjectMobileBottomNavigation'
 import { EntryContainer } from './EntryContainer'
 
@@ -105,7 +105,7 @@ const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
           }
         />
         <EntryContainer entry={entry} />
-        <ProjectActivityPanel
+        <ProjectRightSidebar
           resourceType={FundingResourceType.Entry}
           resourceId={entry.id}
         />

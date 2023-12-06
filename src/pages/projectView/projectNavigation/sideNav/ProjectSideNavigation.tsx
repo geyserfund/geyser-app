@@ -3,7 +3,7 @@ import { PropsWithChildren } from 'react'
 import {
   NavigationBase,
   NavigationDirection,
-} from '../../../../navigation/sideNavBase/NavigationBase'
+} from '../../../../navigation/sideNavBase'
 import { ProjectNavigation } from '../components/ProjectNavigation'
 import { useProjectSideNavAtom } from './projectSideNavAtom'
 
