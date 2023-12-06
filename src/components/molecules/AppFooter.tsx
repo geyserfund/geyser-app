@@ -124,11 +124,11 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
             <Text>₿ = ❤</Text>
           </Link>
 
-          <ReactLink to={getPath('legalPrivacy')}>
+          <ReactLink to={getPath('legalPrivacy')}  style={{textDecoration: 'underline'}}>
             <Text>{t('Privacy')}</Text>
           </ReactLink>
 
-          <ReactLink to={getPath('legalTerms')}>
+          <ReactLink to={getPath('legalTerms')} style={{textDecoration: 'underline'}}>
             <Text>T&amp;C</Text>
           </ReactLink>
 
