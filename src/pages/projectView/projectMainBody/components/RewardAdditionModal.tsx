@@ -292,6 +292,9 @@ export const RewardAdditionModal = ({
         <FieldContainer title="Image">
           <FileUpload
             showcase
+            caption={t(
+              'For best fit, pick a square image. Image size limit: 10MB.',
+            )}
             containerProps={{ w: '100%' }}
             src={reward.image}
             onUploadComplete={handleUpload}
