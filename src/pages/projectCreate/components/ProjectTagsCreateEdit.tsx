@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 import { components, MenuProps, MultiValue } from 'react-select'
 
-import { Body1 } from '../../../components/typography'
+import { Body2 } from '../../../components/typography'
 import {
   ButtonComponent,
   IconButtonComponent,
@@ -162,11 +162,11 @@ export const ProjectTagsCreateEdit = ({
     )
   }
 
-  const isDisabled = tags.length >= 3
+  const isDisabled = tags.length >= 4
   const showAddTag = !tagOptions.some((tag) =>
     tag.label.toLowerCase().includes(inputValue.toLowerCase()),
   )
-  const disableShowAddTag = inputValue.length < 3 || createLoading
+  const disableShowAddTag = inputValue.length < 4 || createLoading
 
   return (
     <FieldContainer
@@ -174,7 +174,7 @@ export const ProjectTagsCreateEdit = ({
       subtitle={
         <span>
           {t(
-            'Get discovered more easily by users through Tags. You can select up to 3 project tags.',
+            'Get discovered more easily by users through Tags. You can select up to 4 project tags.',
           )}
         </span>
       }
@@ -208,7 +208,7 @@ export const ProjectTagsCreateEdit = ({
                 paddingLeft="8px"
                 backgroundColor="neutral.100"
               >
-                <Body1 semiBold>{tag.label}</Body1>
+                <Body2 semiBold>{tag.label}</Body2>
                 <IconButtonComponent
                   noBorder
                   size="xs"
