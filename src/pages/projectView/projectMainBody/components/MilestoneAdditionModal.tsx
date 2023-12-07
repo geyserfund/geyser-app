@@ -35,6 +35,7 @@ export const defaultMilestone = {
   projectId: 0,
   description: '',
   amount: 0 as Satoshis,
+  reached: false,
 } as ProjectMilestone
 
 export const MilestoneAdditionModal = ({
@@ -49,11 +50,13 @@ export const MilestoneAdditionModal = ({
   const [milestones, setMilestones] = useState<ProjectMilestone[]>([])
 
   useEffect(() => {
-    setMilestones(
-      project.milestones && project.milestones.length > 0
-        ? project.milestones
-        : [defaultMilestone],
-    )
+    setMilestones(() => {
+      if (project.milestones && project.milestones.length > 0) {
+        return project.milestones
+      }
+
+      return [defaultMilestone]
+    })
   }, [project])
 
   const [isFormInputUsingSatoshis, setIsFormInputUsingSatoshis] = useState(true)
