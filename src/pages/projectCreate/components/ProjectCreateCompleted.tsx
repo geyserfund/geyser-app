@@ -23,6 +23,7 @@ export const ProjectCreateCompleted = ({ children }: PropsWithChildren) => {
           >
             {"By continuing, I agree with Geyser's "}
             <ReactLink
+              style={{textDecoration: 'underline'}}
               to={getPath('legalTerms')}
               target="_blank"
             >
