@@ -111,7 +111,9 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
           showGeyserFee={false}
         />
 
-        {needsShipping ? <ContributionShippingBox /> : null}
+        {needsShipping ? (
+          <ContributionShippingBox creatorEmail={fundingTx.creatorEmail} />
+        ) : null}
       </VStack>
     </VStack>
   )

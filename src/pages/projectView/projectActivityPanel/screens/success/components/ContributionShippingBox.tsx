@@ -2,13 +2,14 @@ import { Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { CreatorEmailButton } from '../../../../../../components/molecules'
-import { useProjectContext } from '../../../../../../context'
 import { CreatorEmailContentButton } from './CreatorEmailContentButton'
 
-export const ContributionShippingBox = () => {
+export const ContributionShippingBox = ({
+  creatorEmail,
+}: {
+  creatorEmail?: string | null
+}) => {
   const { t } = useTranslation()
-  const { project } = useProjectContext()
-  const ownerEmail = project?.owners[0]?.user.email || ''
   return (
     <VStack
       padding={2}
@@ -26,7 +27,7 @@ export const ContributionShippingBox = () => {
         )}
       </Text>
 
-      <CreatorEmailButton email={ownerEmail} />
+      <CreatorEmailButton email={creatorEmail || ''} />
       <CreatorEmailContentButton />
     </VStack>
   )

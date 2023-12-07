@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/client'
 import { CloseIcon } from '@chakra-ui/icons'
 import { HStack, Text, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Modal } from '../../../../components/layouts/Modal'
 import { AmountInputWithSatoshiToggle } from '../../../../components/molecules'
@@ -35,6 +36,7 @@ export const defaultMilestone = {
   projectId: 0,
   description: '',
   amount: 0 as Satoshis,
+  reached: false,
 } as ProjectMilestone
 
 export const MilestoneAdditionModal = ({
@@ -46,14 +48,18 @@ export const MilestoneAdditionModal = ({
   const { toast } = useNotification()
   const { getUSDCentsAmount, getSatoshisFromUSDCents } = useBTCConverter()
 
+  const { t } = useTranslation()
+
   const [milestones, setMilestones] = useState<ProjectMilestone[]>([])
 
   useEffect(() => {
-    setMilestones(
-      project.milestones && project.milestones.length > 0
-        ? project.milestones
-        : [defaultMilestone],
-    )
+    setMilestones(() => {
+      if (project.milestones && project.milestones.length > 0) {
+        return project.milestones
+      }
+
+      return [defaultMilestone]
+    })
   }, [project])
 
   const [isFormInputUsingSatoshis, setIsFormInputUsingSatoshis] = useState(true)
@@ -282,10 +288,12 @@ export const MilestoneAdditionModal = ({
       title={
         <>
           <Text fontSize="18px" fontWeight={600}>
-            Select Milestones
+            {t('Add Milesones')}
           </Text>
           <Body2 color="neutral.900">
-            Milestones help you clarify your next steps, aims and objectives
+            {t(
+              'Milestones help you clarify what you can achieve with given amounts. Note that each milestone goal includes the amounts from previous milestones',
+            )}
           </Body2>
         </>
       }
@@ -309,7 +317,7 @@ export const MilestoneAdditionModal = ({
           >
             <HStack justifyContent="space-between" width="100%">
               <Text marginTop="10px" marginBottom="5px">
-                {`Milestone ${index + 1}`}
+                {`${t('Milestone')} ${index + 1}`}
               </Text>
               <IconButtonComponent
                 noBorder
@@ -322,7 +330,7 @@ export const MilestoneAdditionModal = ({
               />
             </HStack>
             <TextInputBox
-              placeholder={'Enter a Milestone Title'}
+              placeholder={t('Enter a Milestone Title')}
               value={milestone.name}
               onChange={(event: any) => handleTextChange(event, index)}
               error={formError[index] && formError[index].name}
@@ -347,7 +355,7 @@ export const MilestoneAdditionModal = ({
       </VStack>
       <VStack spacing="10px">
         <ButtonComponent w="full" onClick={handleAddMilestone}>
-          Add a Milestone
+          {t('Add a Milestone')}
         </ButtonComponent>
         <ButtonComponent
           w="full"
@@ -359,7 +367,7 @@ export const MilestoneAdditionModal = ({
           }
           onClick={handleConfirmMilestone}
         >
-          Confirm
+          {t('Confirm')}
         </ButtonComponent>
       </VStack>
     </Modal>
