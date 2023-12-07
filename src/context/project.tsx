@@ -1,5 +1,12 @@
 import { useAtomValue } from 'jotai'
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { useGetHistoryRoute } from '../config'
@@ -101,6 +108,8 @@ export const ProjectProvider = ({
 
   const { setNavData } = useNavContext()
 
+  const [isLoading, setIsLoading] = useState(true)
+
   const [mobileView, setMobileView] = useState<MobileViews>(
     MobileViews.description,
   )
@@ -124,6 +133,7 @@ export const ProjectProvider = ({
   } = useProjectState(projectId, {
     fetchPolicy: 'network-only',
     onError() {
+      setIsLoading(false)
       navigate(getPath('notFound'))
     },
     onCompleted(data) {
@@ -143,6 +153,10 @@ export const ProjectProvider = ({
             return Number(ownerInfo.user.id || -1)
           }) || [],
       })
+
+      updateProjectOwner(project)
+
+      setIsLoading(false)
     },
   })
 
@@ -152,33 +166,32 @@ export const ProjectProvider = ({
     rewards: project ? project.rewards : undefined,
   })
 
-  useEffect(() => {
-    if (!project) {
-      return
-    }
+  const updateProjectOwner = useCallback(
+    (project: ProjectFragment) => {
+      if (!project || !user) {
+        return
+      }
 
-    if (project.id && project.owners[0]?.user.id === user.id) {
-      setIsProjectOwner(true)
-    } else {
-      setIsProjectOwner(false)
-    }
-  }, [project, user])
+      if (project.id && project.owners[0]?.user.id === user.id) {
+        setIsProjectOwner(true)
 
-  const shouldGoToOverviewPage = useMemo(
-    () =>
-      isProjectOwner &&
-      params.projectId &&
-      routeMatchForProjectPage &&
-      !lastRoute.includes('launch') &&
-      !(lastRoute.includes('project') && lastRoute.includes(params.projectId)),
-    [params.projectId, isProjectOwner, routeMatchForProjectPage, lastRoute],
+        if (
+          params.projectId &&
+          routeMatchForProjectPage &&
+          !lastRoute.includes('launch') &&
+          !(
+            lastRoute.includes('project') &&
+            lastRoute.includes(params.projectId)
+          )
+        ) {
+          navigate(getPath('projectOverview', `${params.projectId}`))
+        }
+      } else {
+        setIsProjectOwner(false)
+      }
+    },
+    [user, params.projectId, routeMatchForProjectPage, lastRoute, navigate],
   )
-
-  useEffect(() => {
-    if (shouldGoToOverviewPage) {
-      navigate(getPath('projectOverview', `${params.projectId}`))
-    }
-  }, [params.projectId, navigate, shouldGoToOverviewPage])
 
   useEffect(() => {
     const view = getViewFromPath(location.pathname)
