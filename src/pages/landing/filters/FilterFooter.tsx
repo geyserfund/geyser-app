@@ -45,11 +45,11 @@ export const FilterFooter = () => {
           <Caption bold>Geyser, Inc.</Caption>
         </Link>
 
-        <ReactLink to={getPath('legalTerms')}>
+        <ReactLink to={getPath('legalTerms')} style={{textDecoration: 'underline'}}>
           <Caption bold>T&amp;C</Caption>
         </ReactLink>
 
-        <ReactLink to={getPath('legalPrivacy')}>
+        <ReactLink to={getPath('legalPrivacy')} style={{textDecoration: 'underline'}}>
           <Caption bold>{t('Privacy')}</Caption>
         </ReactLink>
 
