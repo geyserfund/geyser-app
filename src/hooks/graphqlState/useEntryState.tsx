@@ -113,9 +113,6 @@ export const useEntryState = (
     TEntryData,
     TEntryVariables
   >(QUERY_ENTRY_WITH_OWNERS, {
-    variables: {
-      id: toInt(entryId),
-    },
     ...options,
     onCompleted(data) {
       if (data.entry) {
@@ -130,9 +127,13 @@ export const useEntryState = (
 
   useEffect(() => {
     if (entryId && entryId !== 'new') {
-      getEntryQuery()
+      getEntryQuery({
+        variables: {
+          id: toInt(entryId),
+        },
+      })
     }
-  }, [entryId])
+  }, [entryId, getEntryQuery])
 
   useEffect(() => {
     const isDiff = checkDiff(entry, baseEntry, entryEditKeyList)
