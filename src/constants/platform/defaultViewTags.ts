@@ -26,16 +26,16 @@ export const getFeaturedProject = () => {
   }
 
   if (__production__) {
-    return 'nabitechnology'
+    return 'santorinihalvingparty'
   }
 
   return ''
 }
 
 const productionTagsList = [
-  { label: 'bitcoin-education', id: 9 },
-  { label: 'bitcoin-culture', id: 6 },
-  { label: 'bitcoin-community', id: 13 },
+  { label: 'education', id: 53 },
+  { label: 'culture', id: 133 },
+  { label: 'community', id: 555 },
   { label: 'films', id: 57 },
   { label: 'collectibles', id: 97 },
   { label: 'orange-pilling', id: 10 },
@@ -49,7 +49,6 @@ const productionTagsList = [
   { label: 'events', id: 1 },
   { label: 'media', id: 8 },
   { label: 'sports', id: 43 },
-  { label: 'bitcoin-films', id: 134 },
   { label: 'maker', id: 49 },
   { label: 'earn', id: 42 },
   { label: 'creative', id: 75 },

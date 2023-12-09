@@ -8,18 +8,18 @@ import {
   VStack,
   Wrap,
 } from '@chakra-ui/react'
+import { Link as ReactLink } from "react-router-dom";
 import { useTranslation } from 'react-i18next'
 import { FaGithub, FaPodcast, FaTelegramPlane } from 'react-icons/fa'
 import { RiTwitterXLine } from 'react-icons/ri'
 
 import {
+  getPath,
   AnalyticsUrl,
   GeyserGithubUrl,
   GeyserHomepageUrl,
   GeyserPodcastUrl,
-  GeyserPrivacyUrl,
   GeyserTelegramUrl,
-  GeyserTermsAndConditionsURL,
   GeyserTwitterUrl,
 } from '../../constants'
 import { useMobileMode } from '../../utils'
@@ -124,13 +124,13 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
             <Text>₿ = ❤</Text>
           </Link>
 
-          <Link href={GeyserPrivacyUrl} isExternal>
+          <ReactLink to={getPath('legalPrivacy')}  style={{textDecoration: 'underline'}}>
             <Text>{t('Privacy')}</Text>
-          </Link>
+          </ReactLink>
 
-          <Link href={GeyserTermsAndConditionsURL} isExternal>
+          <ReactLink to={getPath('legalTerms')} style={{textDecoration: 'underline'}}>
             <Text>T&amp;C</Text>
-          </Link>
+          </ReactLink>
 
           <Link href={AnalyticsUrl} isExternal>
             <Text>{t('Analytics')}</Text>

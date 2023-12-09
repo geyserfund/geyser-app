@@ -4,6 +4,7 @@ import { ProjectDescription } from './sections/ProjectDescription'
 import { ProjectDetails } from './sections/ProjectDetails'
 import { ProjectNostrSettings } from './sections/ProjectNostrSettings'
 import { ProjectSettings } from './sections/ProjectSettings'
+import { ProjectStatusSection } from './sections/ProjectStatus'
 import { ProjectStory } from './sections/ProjectStory'
 import { ProjectWallet } from './sections/ProjectWallet'
 
@@ -17,5 +18,6 @@ export {
   ProjectNostrSettings,
   ProjectSettings,
   ProjectStory,
+  ProjectStatusSection,
   ProjectWallet,
 }

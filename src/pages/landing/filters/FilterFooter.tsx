@@ -6,6 +6,7 @@ import {
   VStack,
   Wrap,
 } from '@chakra-ui/react'
+import { Link as ReactLink } from "react-router-dom";
 import { useTranslation } from 'react-i18next'
 import { FaGithub, FaPodcast, FaTelegramPlane } from 'react-icons/fa'
 import { RiTwitterXLine } from 'react-icons/ri'
@@ -14,14 +15,13 @@ import { NostrSvgIcon } from '../../../components/icons'
 import { Subscribe } from '../../../components/nav/Subscribe'
 import { Caption } from '../../../components/typography'
 import {
+  getPath,
   AnalyticsUrl,
   GeyserGithubUrl,
   GeyserHomepageUrl,
   GeyserNostrUrl,
   GeyserPodcastUrl,
-  GeyserPrivacyUrl,
   GeyserTelegramUrl,
-  GeyserTermsAndConditionsURL,
   GeyserTwitterUrl,
 } from '../../../constants'
 
@@ -45,13 +45,13 @@ export const FilterFooter = () => {
           <Caption bold>Geyser, Inc.</Caption>
         </Link>
 
-        <Link href={GeyserTermsAndConditionsURL} isExternal>
+        <ReactLink to={getPath('legalTerms')} style={{textDecoration: 'underline'}}>
           <Caption bold>T&amp;C</Caption>
-        </Link>
+        </ReactLink>
 
-        <Link href={GeyserPrivacyUrl} isExternal>
+        <ReactLink to={getPath('legalPrivacy')} style={{textDecoration: 'underline'}}>
           <Caption bold>{t('Privacy')}</Caption>
-        </Link>
+        </ReactLink>
 
         <Link href={AnalyticsUrl} isExternal>
           <Caption bold>{t('Analytics')}</Caption>

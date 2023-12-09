@@ -16,12 +16,19 @@ interface ILightningQR extends ButtonProps {
   isGeyser?: boolean
 }
 
+export const GEYSER_DOMAIN_POSTFIX = '@geyser.fund'
+
 export const LightningAddress = ({ name, isGeyser, ...rest }: ILightningQR) => {
   const { t } = useTranslation()
   const [copy, setCopy] = useState(false)
 
   const handleAddressCopy = () => {
-    copyTextToClipboard(name)
+    let toCopy = name
+    if (isGeyser) {
+      toCopy += GEYSER_DOMAIN_POSTFIX
+    }
+
+    copyTextToClipboard(toCopy)
     setCopy(true)
     setTimeout(() => {
       setCopy(false)
@@ -58,7 +65,7 @@ export const LightningAddress = ({ name, isGeyser, ...rest }: ILightningQR) => {
               background={`linear-gradient(270deg, ${primaryColorsLight[500]} -0.1%, ${secondaryColors.blue} 40.0%, ${nostrColorsLight[400]} 99.9%)`}
               backgroundClip="text"
             >
-              @geyser.fund
+              {GEYSER_DOMAIN_POSTFIX}
             </Body1>
           )}
         </Button>

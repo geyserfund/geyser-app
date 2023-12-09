@@ -746,5 +746,13 @@
   "Connect your node":"Connect your node",
   "Find out more":"Find out more",
   "Login to continue":"Login to continue",
-  "More logins": "More logins"
+  "More logins": "More logins",
+  "Add Milesones":"Add Milesones",
+  "Add a Milestone":"Add a Milestone",
+  "Milestones help you clarify what you can achieve with given amounts. Note that each milestone goal includes the amounts from previous milestones":"Milestones help you clarify what you can achieve with given amounts. Note that each milestone goal includes the amounts from previous milestones", 
+  "Milestone":"Milestone",
+  "Enter a Milestone Title":"Enter a Milestone Title",
+  "Name is a required field.":"Name is a required field.",
+  "Amount needs to be at least 1 satoshi.":"Amount needs to be at least 1 satoshi.",
+  "Amount must to be at greater than previous milestone.":"Amount must to be at greater than previous milestone."
 }

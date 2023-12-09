@@ -33,6 +33,7 @@ export enum PathName {
   dashboardStats = 'stats',
   dashboardSettings = 'settings',
   dashboardStory = 'story',
+  dashboardStatus = 'status',
   dashboardShop = 'shop',
   dashboardNostr = 'nostr',
 
@@ -42,6 +43,9 @@ export enum PathName {
   userId = ':userId',
   entryId = ':entryId',
   grantId = ':grantId',
+
+  legalTerms = 'terms-and-conditions',
+  legalPrivacy = 'privacy-policy'
 }
 
 // @TODO: These definitions are currently a WIP.
@@ -116,6 +120,8 @@ const pathsMap = {
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardSettings}`,
   dashboardStory: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardStory}`,
+  dashboardStatus: (projectID: string) =>
+    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardStatus}`,
   dashboardShop: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardShop}`,
   dashboardNostr: (projectID: string) =>
@@ -124,6 +130,8 @@ const pathsMap = {
   badges: () => `/${PathName.badges}`,
 
   about: () => `/${PathName.about}`,
+  legalTerms: () => `/${PathName.legalTerms}`,
+  legalPrivacy: () => `/${PathName.legalPrivacy}`
 }
 
 export type PathsMap = typeof pathsMap

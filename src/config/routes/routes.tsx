@@ -4,6 +4,7 @@ import { App } from '../../App'
 import { AppLayout } from '../../AppLayout'
 import { __production__, getPath, PathName } from '../../constants'
 import { ExternalAuthSuccess, FailedAuth } from '../../pages/auth'
+import { PrivacyPolicy, TermsAndConditions } from '../../pages/legal';
 import { NotAuthorized, NotFoundPage } from '../../pages/fallback'
 import { ErrorBoundary } from './ErrorBoundary'
 import { renderPrivateRoute } from './PrivateRoute'
@@ -156,6 +157,15 @@ export const platformRoutes: RouteObject[] = [
             (m) => m.ProjectStory,
           )
           return { Component: ProjectStory }
+        },
+      },
+      {
+        path: getPath('dashboardStatus', PathName.projectId),
+        async lazy() {
+          const ProjectStatusSection = await ProjectDashboard().then(
+            (m) => m.ProjectStatusSection,
+          )
+          return { Component: ProjectStatusSection }
         },
       },
       {
@@ -378,6 +388,14 @@ export const platformRoutes: RouteObject[] = [
   {
     path: '/failed-authentication',
     Component: FailedAuth,
+  },
+  {
+    path: getPath('legalTerms'),
+    Component: TermsAndConditions,
+  },
+  {
+    path: getPath('legalPrivacy'),
+    Component: PrivacyPolicy,
   },
   {
     path: '*', // The default route if a random route is used

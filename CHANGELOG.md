@@ -1,3 +1,60 @@
+## [0.6.4](https://github.com/geyserfund/geyser-app/compare/v0.6.2...v0.6.4) (2023-12-07)
+
+
+### Features
+
+* add connect with facebook across the platform ([c8bcd98](https://github.com/geyserfund/geyser-app/commit/c8bcd983075c030a009356814a923b4747d6d6f9))
+* add login with github and google ([14d5501](https://github.com/geyserfund/geyser-app/commit/14d55019abc427b8671a9ceaf7a045ea45cc2ff7))
+* remove google from connected accounts and have others as same ([027da88](https://github.com/geyserfund/geyser-app/commit/027da884cc31fed746e79ef495aba9be2e6d0e84))
+
+
+### Bug Fixes
+
+* add creator email to shipping info ([a90ba4e](https://github.com/geyserfund/geyser-app/commit/a90ba4e13ab7288419d71b4b2561b082b90ed2e9))
+* add facebook account add from profile page ([27e149d](https://github.com/geyserfund/geyser-app/commit/27e149d35290e8cdb998dccd1f4b0aa5510c8c49))
+* add paginated contributions for the week data in contribution ([d31d1c0](https://github.com/geyserfund/geyser-app/commit/d31d1c03f085854a20135842d0ae477c3ad7209b))
+* add sentry capture exception for project not found error ([940428c](https://github.com/geyserfund/geyser-app/commit/940428cdd6bac4a175be5fd19fdc3ac3ee61eb0b))
+* added caption under image upload for rewards ([ba937e0](https://github.com/geyserfund/geyser-app/commit/ba937e0f2052d12b6f2e170f39b43eb8c57f602a))
+* added underlines to react router links ([6bb77bc](https://github.com/geyserfund/geyser-app/commit/6bb77bc8c499bfc18eb76c3eaa78c01c8c7111bb))
+* allow any loggedin user to create a project ([8f494a8](https://github.com/geyserfund/geyser-app/commit/8f494a89b62f6b9d85cc879ad7b8f0f68a8b7944))
+* also add reason to the error display message ([d6705bd](https://github.com/geyserfund/geyser-app/commit/d6705bd2e0e83517bedf1e65c5d1f23e0418e627))
+* always navigate to project when clicking view project ([7ef5057](https://github.com/geyserfund/geyser-app/commit/7ef505734622d44ca64912ec97d5c47d4648a732))
+* bolt icon color in lightning address ([c0bc3f2](https://github.com/geyserfund/geyser-app/commit/c0bc3f25a8b055da8fc1a58909691e11cd839a70))
+* close tab after login ([de8f51e](https://github.com/geyserfund/geyser-app/commit/de8f51e14479a10e38a8470fb7a32fa373299f8c))
+* disable google and facebook login ([1cabb64](https://github.com/geyserfund/geyser-app/commit/1cabb640c236d525927fb6d425ab5802c0ae7c77))
+* finalize project length ([574aac8](https://github.com/geyserfund/geyser-app/commit/574aac85a18a10189a7ed8d780d40570b156f59d))
+* go back with refresh button if on /notfound route ([74febfc](https://github.com/geyserfund/geyser-app/commit/74febfcf73cb7a00322a0e0279d037b1cd3285b3))
+* height of contributors if length is null ([ea0df14](https://github.com/geyserfund/geyser-app/commit/ea0df14f1c6d1c2b4caf4efe6d41c3b4c4fa3cd8))
+* hot-fix staging render issue ([e5dfa58](https://github.com/geyserfund/geyser-app/commit/e5dfa58e0f91f8ab765e5304c661939b3e6aeb3f))
+* increase button size ([6f4a22c](https://github.com/geyserfund/geyser-app/commit/6f4a22cdaec77613f2b7c15d2229a6ab184a252b))
+* landing page tags ([adf876b](https://github.com/geyserfund/geyser-app/commit/adf876b6748d009dbed1395e0cdbf9afe79104c3))
+* lighting address copy with domain ([4ab975c](https://github.com/geyserfund/geyser-app/commit/4ab975c529fc94665c4351efa0452e688bae5bc5))
+* lightning login and style issues ([75cb4b4](https://github.com/geyserfund/geyser-app/commit/75cb4b428ea625973cbc14eba67e13ef8b8dbe3f))
+* milestones copy update and add transaltions ([48ccb7b](https://github.com/geyserfund/geyser-app/commit/48ccb7b0a3684aa78cc0701b5bd735236a732eae))
+* minor issue when clearnig error ([820aab3](https://github.com/geyserfund/geyser-app/commit/820aab3090dfd1bcc9b509e9449be92102dda781))
+* minor theme color fix ([d0294a3](https://github.com/geyserfund/geyser-app/commit/d0294a389800042c52a8fcda10ab65e9e98108cc))
+* overview contributor table height ([4a444ee](https://github.com/geyserfund/geyser-app/commit/4a444ee339b30decc0d10ab259f386cc970bde44))
+* pr updates ([21898d4](https://github.com/geyserfund/geyser-app/commit/21898d4fa1428c67e97c79efcc4c1b8079ce4db8))
+* prevent users from continuing Wallet Creation Flow when the lightning address check fails ([3aa31b3](https://github.com/geyserfund/geyser-app/commit/3aa31b34e3372e61439a3c9edf9e19f8877aa1ef))
+* profile ln address, resolves GEY-5200 ([b5c30cc](https://github.com/geyserfund/geyser-app/commit/b5c30cc321bb82bdd8ea11c547f0fdbe3e8cd295))
+* redirection when just launched project and un authorized issue ([89f2cf6](https://github.com/geyserfund/geyser-app/commit/89f2cf68731dddaf363c5aeb05727efd6744739e))
+* remove lightning contraint from private route ([d8f7a3d](https://github.com/geyserfund/geyser-app/commit/d8f7a3dc09dafe2ae358e3275e7461c69ed303bc))
+* remove the gray line in the Entries, resolves GEY-5284 ([e702be7](https://github.com/geyserfund/geyser-app/commit/e702be7b86a42e3c8e98b04092f7a7e42713a9d0))
+* removed instance referencing old terms and conditions url ([698775b](https://github.com/geyserfund/geyser-app/commit/698775bc8db726782262aaf8624a3838737000b4))
+* removed unused component reference ([bfa44ed](https://github.com/geyserfund/geyser-app/commit/bfa44edbeacecad4bbd12e717cabac0d45256194))
+* removed unused component reference ([fef502e](https://github.com/geyserfund/geyser-app/commit/fef502e379a0f043fe2b4a4c6e3316e145c1bffb))
+* reorganizing project settings/status ([ac0feba](https://github.com/geyserfund/geyser-app/commit/ac0feba3bc591da780d1823ba76334fd1f0b0b15))
+* resolved unused import ([05bfad0](https://github.com/geyserfund/geyser-app/commit/05bfad0c1c5bab94ab6fb8afc324c5e2d94479e1))
+* resolved unused imports ([e929066](https://github.com/geyserfund/geyser-app/commit/e9290666b64c984c6563b1ed49247c29bc8a4dcb))
+* set fixed width for npub ([9d6e957](https://github.com/geyserfund/geyser-app/commit/9d6e9574ace93a9e55bd1fe2d9750e8769cbcade))
+* show only npub instead of the long text for buttons ([f17d9ab](https://github.com/geyserfund/geyser-app/commit/f17d9ab185d86abbdebdae313ce93649f87d113f))
+* style fixes for top menu resolves GEY-5280 ([476e936](https://github.com/geyserfund/geyser-app/commit/476e936558b5c4bdd186c69c26ae764942146611))
+* tag were removed on region edit ([2959add](https://github.com/geyserfund/geyser-app/commit/2959add0cdbb01833efb3c3ce220ec68105a163c))
+* tags ([d3e989d](https://github.com/geyserfund/geyser-app/commit/d3e989d16592c054099fb276a936b2d020f4caa8))
+* update exported PDF title ([a2583f2](https://github.com/geyserfund/geyser-app/commit/a2583f25b7f3607cc75613455950956248b0c6c9))
+* update private route to handle private routes for project creators ([0d907b5](https://github.com/geyserfund/geyser-app/commit/0d907b5566f65622ec7635fbbaaf35b4b5037075))
+* wrap the rendering of the share project image in a timeout to ensure full rendering ([1370a2e](https://github.com/geyserfund/geyser-app/commit/1370a2ea033d17e5f2356ba58d3c08f55fcd3598))
+
 ## [0.6.3](https://github.com/geyserfund/geyser-app/compare/v0.6.2...v0.6.3) (2023-11-23)
 
 
