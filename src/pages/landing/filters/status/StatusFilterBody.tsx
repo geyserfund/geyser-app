@@ -1,5 +1,7 @@
 import { Button, StackProps, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom';
+
 
 import { Body1 } from '../../../../components/typography'
 import { useFilterContext } from '../../../../context'
@@ -38,6 +40,7 @@ export const StatusFilterBody = ({
     { type: ProjectType.Reward },
     { status: ProjectStatus.Active },
     { status: ProjectStatus.Inactive },
+    { linkTo: '/latestprojects', text: 'Latest Projects',},
   ]
 
   return (
@@ -49,6 +52,23 @@ export const StatusFilterBody = ({
       {...rest}
     >
       {options.map((option, index) => {
+        if (option.linkTo) {
+          return (
+            <Link key={index} to={option.linkTo}>
+              <Button
+                background="neutral.0"
+                color="neutral.800"
+                w="100%"
+                display="flex"
+                justifyContent="start"
+              >
+                <Body1 ml="10px" color={'neutral.900'}>
+                  {t(option.text)}
+                </Body1>
+              </Button>
+            </Link>
+          );
+        }
         const isActive =
           filters.type === option.type && filters.status === option.status
 
