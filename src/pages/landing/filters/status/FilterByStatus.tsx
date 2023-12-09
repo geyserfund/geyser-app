@@ -1,4 +1,6 @@
 import { IconProps } from '@chakra-ui/react'
+import { Link } from 'react-router-dom';
+
 
 import { ProjectNavIcon, RewardGiftIcon } from '../../../../components/icons'
 import { projectTypes } from '../../../../constants'
@@ -38,6 +40,7 @@ export type StatusTypeButton = {
   icon: (props: IconProps) => JSX.Element
   text: string
   color: string
+  linkTo?: string
 }
 
 export const getStatusTypeButtonContent = ({
