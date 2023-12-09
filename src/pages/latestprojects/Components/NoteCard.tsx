@@ -11,8 +11,6 @@ export default function NoteCard({ nostrich, content, date }: Props) {
     // Parse the JSON content to an object
     parsedContent = JSON.parse(content);
   } catch (error) {
-    // Handle JSON parsing errors here
-    console.error('Error parsing JSON:', error);
     parsedContent = {};
   }
 
