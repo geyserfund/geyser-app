@@ -1,4 +1,4 @@
-import { Box, Image, Text, Flex } from '@chakra-ui/react';
+import { Box, Image, Text, Flex, Link } from '@chakra-ui/react';
 
 interface Props {
   content: string;
@@ -32,13 +32,16 @@ export default function NoteCard({ nostrich, content, date }: Props) {
         <Image src={image} alt={display_name} w="100%" h="100%" objectFit="cover" />
       </Box>
       <Flex flex="1" flexDirection="column">
-        <Text
-          textAlign="left"
-          fontFamily="Arial, sans-serif"
-          fontSize="20px"
-          fontWeight="bold"
-          marginTop="0"
-        >
+        <Link href={website} textDecoration="none">
+          <Text
+            as="span"
+            textAlign="left"
+            fontFamily="Arial, sans-serif"
+            fontSize="20px"
+            fontWeight="bold"
+            marginTop="0"
+            _hover={{ textDecoration: 'nonene' }}
+          >
           {display_name}
         </Text>
         <Text>{about}</Text>
