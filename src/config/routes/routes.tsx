@@ -9,6 +9,9 @@ import { NotAuthorized, NotFoundPage } from '../../pages/fallback'
 import { ErrorBoundary } from './ErrorBoundary'
 import { renderPrivateRoute } from './PrivateRoute'
 
+import { LatestProjects } from '../../pages/latestprojects/LatestProjects';
+
+
 const Grants = () => import('../../pages/grants')
 const ProjectLaunch = () => import('../../pages/projectCreate')
 const Entry = () => import('../../pages/entry')
@@ -396,6 +399,10 @@ export const platformRoutes: RouteObject[] = [
   {
     path: getPath('legalPrivacy'),
     Component: PrivacyPolicy,
+  },
+  {
+    path: '/latestprojects',
+    Component: LatestProjects,
   },
   {
     path: '*', // The default route if a random route is used
