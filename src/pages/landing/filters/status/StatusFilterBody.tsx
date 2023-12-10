@@ -1,47 +1,52 @@
-import { Button, StackProps, VStack } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
+import { Button, StackProps, VStack } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-
-import { Body1 } from '../../../../components/typography'
-import { useFilterContext } from '../../../../context'
-import { ProjectStatus, ProjectType } from '../../../../types'
-import { getStatusTypeButtonContent, StatusTypeButton } from '.'
+import { ProjectNavIcon, RewardGiftIcon } from '../../../../components/icons';
+import { Body1 } from '../../../../components/typography';
+import { useFilterContext } from '../../../../context';
+import { ProjectStatus, ProjectType } from '../../../../types';
+import { getStatusTypeButtonContent, StatusTypeButton } from '.';
 
 interface StatusFilterBodyProps extends StackProps {
-  onClose: () => void
-  button: StatusTypeButton
+  onClose: () => void;
+  button: StatusTypeButton;
 }
 
 export type StatusAndType = {
-  status?: ProjectStatus
-  type?: ProjectType
-}
+  status?: ProjectStatus;
+  type?: ProjectType;
+};
 
 export const StatusFilterBody = ({
   onClose,
   button,
   ...rest
 }: StatusFilterBodyProps) => {
-  const { t } = useTranslation()
-  const { filters, updateFilter } = useFilterContext()
+  const { t } = useTranslation();
+  const { filters, updateFilter } = useFilterContext();
 
   const handleClick = ({ status, type }: StatusAndType) => {
     if (type) {
-      updateFilter({ status: undefined, type })
+      updateFilter({ status: undefined, type });
     } else {
-      updateFilter({ status, type: undefined })
+      updateFilter({ status, type: undefined });
     }
 
-    onClose()
-  }
+    onClose();
+  };
 
   const options = [
     { type: ProjectType.Reward },
     { status: ProjectStatus.Active },
     { status: ProjectStatus.Inactive },
-    { linkTo: '/latestprojects', text: 'Latest Projects',},
-  ]
+    {
+      linkTo: '/latestprojects',
+      text: 'Latest Projects',
+      icon: ProjectNavIcon, // Using ProjectNavIcon as the icon component
+      color: 'primary.500',
+    },
+  ];
 
   return (
     <VStack
@@ -62,7 +67,8 @@ export const StatusFilterBody = ({
                 display="flex"
                 justifyContent="start"
               >
-                <Body1 ml="10px" color={'neutral.900'}>
+                {option.icon && <option.icon color={option.color} />} {/* Render the icon */}
+                <Body1 ml="10px" color={'neutral.700'}>
                   {t(option.text)}
                 </Body1>
               </Button>
@@ -70,9 +76,9 @@ export const StatusFilterBody = ({
           );
         }
         const isActive =
-          filters.type === option.type && filters.status === option.status
+          filters.type === option.type && filters.status === option.status;
 
-        const { icon: Icon, text, color } = getStatusTypeButtonContent(option)
+        const { icon: Icon, text, color } = getStatusTypeButtonContent(option);
         return (
           <Button
             key={index}
@@ -88,8 +94,8 @@ export const StatusFilterBody = ({
               {t(text)}
             </Body1>
           </Button>
-        )
+        );
       })}
     </VStack>
-  )
-}
+  );
+};
