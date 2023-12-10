@@ -1,8 +1,8 @@
 import { Button, StackProps, VStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { AiOutlineFieldTime } from 'react-icons/ai';
 
-import { ProjectNavIcon, RewardGiftIcon } from '../../../../components/icons';
 import { Body1 } from '../../../../components/typography';
 import { useFilterContext } from '../../../../context';
 import { ProjectStatus, ProjectType } from '../../../../types';
@@ -43,8 +43,9 @@ export const StatusFilterBody = ({
     {
       linkTo: '/latestprojects',
       text: 'Latest Projects',
-      icon: ProjectNavIcon, // Using ProjectNavIcon as the icon component
+      icon: AiOutlineFieldTime,
       color: 'primary.500',
+      size: '1.5em',
     },
   ];
 
@@ -61,14 +62,26 @@ export const StatusFilterBody = ({
           return (
             <Link key={index} to={option.linkTo}>
               <Button
-                background="neutral.0"
+                background={
+                  filters.type === option.type && filters.status === option.status
+                    ? 'neutral.100'
+                    : 'transparent'
+                }
                 color="neutral.800"
                 w="100%"
                 display="flex"
                 justifyContent="start"
+                _hover={{
+                  background:
+                    filters.type !== option.type || filters.status !== option.status
+                      ? 'neutral.100'
+                      : 'transparent',
+                }}
               >
-                {option.icon && <option.icon color={option.color} />} {/* Render the icon */}
-                <Body1 ml="10px" color={'neutral.700'}>
+                {option.icon && (
+                  <option.icon color={option.color} size={option.size} />
+                )}
+                <Body1 ml="10px" color={filters.type === option.type && filters.status === option.status ? 'neutral.900' : 'neutral.700'}>
                   {t(option.text)}
                 </Body1>
               </Button>
@@ -82,15 +95,17 @@ export const StatusFilterBody = ({
         return (
           <Button
             key={index}
-            background={isActive ? 'neutral.100' : 'neutral.0'}
+            background={isActive ? 'neutral.100' : 'transparent'}
             color="neutral.800"
             onClick={() => handleClick(option)}
             w="100%"
             display="flex"
             justifyContent="start"
+            _hover={{ background: 'neutral.100' }}
+            variant={isActive ? 'solid' : 'ghost'}
           >
-            <Icon color={color} />
-            <Body1 ml="10px" color={'neutral.900'}>
+            <Icon color={color} size={option.size} />
+            <Body1 ml="10px" color={isActive ? 'neutral.900' : 'neutral.700'}>
               {t(text)}
             </Body1>
           </Button>
