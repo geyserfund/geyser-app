@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { SimplePool, Event } from 'nostr-tools';
 import Noteslist from './Components/Noteslist';
 
+
 const GEYSERELAY = [
   'wss://relay.geyser.fund',
 ];
@@ -44,7 +45,8 @@ export const LatestProjects = () => {
   }, [pool]);
 
   return (
-    <Box className="App">
+    <Box>
+
         <Container maxW="container.xl">
           <VStack spacing={16}>
             <Noteslist projects={events} />
