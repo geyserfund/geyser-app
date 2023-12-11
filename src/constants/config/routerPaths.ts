@@ -33,6 +33,7 @@ export enum PathName {
   dashboardStats = 'stats',
   dashboardSettings = 'settings',
   dashboardStory = 'story',
+  dashboardStatus = 'status',
   dashboardShop = 'shop',
   dashboardNostr = 'nostr',
 
@@ -119,6 +120,8 @@ const pathsMap = {
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardSettings}`,
   dashboardStory: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardStory}`,
+  dashboardStatus: (projectID: string) =>
+    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardStatus}`,
   dashboardShop: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardShop}`,
   dashboardNostr: (projectID: string) =>

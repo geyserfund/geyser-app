@@ -1,5 +1,4 @@
 import { ApolloError } from '@apollo/client'
-import { captureMessage } from '@sentry/react'
 import {
   useCallback,
   useContext,
@@ -137,7 +136,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     projectId: fundingTx.projectId,
     fundingTxId: fundingTx.id,
     onComplete(fundingTx) {
-      handleFundingStatusCheck(fundingTx, ConfirmationMethod.Subscription)
+      getFundingStatus()
     },
   })
   const [amounts, setAmounts] =
@@ -185,6 +184,13 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         We also check the invoiceIds are the same so that the useEffect does not try to update the funding status of an
         older invoice. This can happen due to sync delays between the funding status polling and the funding invoice update.
       */
+
+      if (
+        ![FundingStatus.Paid, FundingStatus.Pending].includes(fundingTx.status)
+      ) {
+        return
+      }
+
       setFundingTx((current) => {
         if (
           (fundingTx.invoiceStatus !== current.invoiceStatus ||
@@ -195,15 +201,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
             fundingTx.status === FundingStatus.Paid ||
             (fundingTx.onChain && fundingTx.status === FundingStatus.Pending)
           ) {
-            if (method === ConfirmationMethod.Polling) {
-              captureMessage(
-                `Polling method was used for fundingTx: ${JSON.stringify(
-                  fundingTx,
-                )}`,
-                'debug',
-              )
-            }
-
             stopListening()
             clearInterval(fundIntervalRef.current)
             gotoNextStage()

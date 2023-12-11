@@ -44,7 +44,7 @@
   "Rewards": "Rewards",
   "All activity": "All activity",
   "Connect": "Connect",
-  "Connect to launch": "Connect to launch your idea and to appear as a contributor when you fund an initiative.",
+  "Login to launch your idea and to appear as a contributor when you fund an initiative.":"Login to launch your idea and to appear as a contributor when you fund an initiative.",
   "Go back": "Go back",
   "Go home": "Go home",
   "Login with your social account to keep track of your favorite projects and launch your own.": "Login with your social account to keep track of your favorite projects and launch your own.",
@@ -746,5 +746,20 @@
   "Connect your node":"Connect your node",
   "Find out more":"Find out more",
   "Login to continue":"Login to continue",
-  "More logins": "More logins"
+  "More logins": "More logins",
+  "Add Milesones":"Add Milesones",
+  "Add a Milestone":"Add a Milestone",
+  "Milestones help you clarify what you can achieve with given amounts. Note that each milestone goal includes the amounts from previous milestones":"Milestones help you clarify what you can achieve with given amounts. Note that each milestone goal includes the amounts from previous milestones", 
+  "Milestone":"Milestone",
+  "Enter a Milestone Title":"Enter a Milestone Title",
+  "Name is a required field.":"Name is a required field.",
+  "Amount needs to be at least 1 satoshi.":"Amount needs to be at least 1 satoshi.",
+  "Amount must to be at greater than previous milestone.":"Amount must to be at greater than previous milestone.",
+  "Login with Github":"Login with Github",
+  "Login with Google":"Login with Google",
+  "Login with Twitter (X)":"Login with Twitter (X)",
+  "Login with Facebook":"Login with Facebook",
+  "Login with Nostr":"Login with Nostr",
+  "Login with Lightning":"Login with Lightning"
+
 }

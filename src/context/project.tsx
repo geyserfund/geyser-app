@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/react'
 import { useAtomValue } from 'jotai'
 import {
   createContext,
@@ -123,7 +124,6 @@ export const ProjectProvider = ({
   }>()
   const {
     error,
-    loading,
     project,
     updateProject,
     saveProject,
@@ -134,10 +134,22 @@ export const ProjectProvider = ({
     fetchPolicy: 'network-only',
     onError() {
       setIsLoading(false)
+      captureException(error, {
+        tags: {
+          'not-found': 'projectGet',
+          'error.on': 'query error',
+        },
+      })
       navigate(getPath('notFound'))
     },
     onCompleted(data) {
       if (!data?.projectGet) {
+        captureException(data, {
+          tags: {
+            'not-found': 'projectGet',
+            'error.on': 'invalid data',
+          },
+        })
         navigate(getPath('notFound'))
         return
       }
@@ -244,7 +256,7 @@ export const ProjectProvider = ({
         isDirty,
         saving,
         error,
-        loading,
+        loading: isLoading,
         fundForm,
         fundingFlow,
         refetch,

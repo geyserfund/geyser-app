@@ -171,6 +171,7 @@ export const FRAGMENT_PROJECT = gql`
       name
       description
       amount
+      reached
     }
     entries(input: $input) {
       ...EntryForProject
