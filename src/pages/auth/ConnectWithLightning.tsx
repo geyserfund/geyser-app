@@ -90,6 +90,8 @@ export const ConnectWithLightning = ({
     onOpen: onModalOpen,
   } = useDisclosure()
 
+  const { t } = useTranslation()
+
   const handleClose = () => {
     if (onClose) {
       onClose()
@@ -112,15 +114,18 @@ export const ConnectWithLightning = ({
     <>
       <ButtonComponent
         aria-label="Connect with Lightning"
-        w="100%"
-        variant="secondaryNeutral"
+        variant="login"
         fontWeight={600}
         color={'social.lightning'}
         onClick={onModalOpen}
         {...buttonProps}
         {...rest}
       >
-        {!isIconOnly && 'Lightning'}
+        {!isIconOnly && (
+          <Box as="span" color="neutral.900">
+            {t('Login with Lightning')}
+          </Box>
+        )}
       </ButtonComponent>
       {/* To make sure the polling gets stopped, the component is demounted. */}
       {isModalOpen && (

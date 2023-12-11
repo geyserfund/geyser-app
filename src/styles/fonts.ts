@@ -6,4 +6,5 @@ export const fonts = {
   interBlack: "'Inter/Black', sans-serif;",
   mono: "'Courier Prime', monospace;",
   livvic: `'Livvic', sans-serif;`,
+  roboto: "'Roboto', arial, sans-serif;",
 }

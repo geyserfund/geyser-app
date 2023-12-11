@@ -70,11 +70,16 @@ const ConnectAccounts = ({
         {!hasNostrAccount(user) && showNostr && (
           <ConnectWithNostr onClose={onClose} />
         )}
-        {showLightning && <ConnectWithLightning onClose={onClose} />}
+        {!hasFacebookAccount(user) && showFacebook && (
+          <ConnectWithSocial
+            accountType={SocialAccountType.facebook}
+            onClose={onClose}
+          />
+        )}
         {/* <ConnectWithEmail onClose={onClose} /> */}
 
         <Body2 color="neutral.600">{t('More logins')}</Body2>
-        <HStack w="full">
+        <HStack w="full" spacing="20px" justifyContent={'center'}>
           {!hasGoogleAccount(user) && showGoogle && (
             <ConnectWithSocial
               accountType={SocialAccountType.google}
@@ -82,12 +87,9 @@ const ConnectAccounts = ({
               isIconOnly
             />
           )}
-          {!hasFacebookAccount(user) && showFacebook && (
-            <ConnectWithSocial
-              accountType={SocialAccountType.facebook}
-              onClose={onClose}
-              isIconOnly
-            />
+
+          {showLightning && (
+            <ConnectWithLightning onClose={onClose} isIconOnly />
           )}
           {!hasGithubAccount(user) && showGithub && (
             <ConnectWithSocial
@@ -138,7 +140,10 @@ export const AuthModal = (authModalProps: IAuthModal) => {
   }
 
   const modalTitle = t(title || 'Login')
-  const modalDescription = t(description || 'Connect to launch')
+  const modalDescription = t(
+    description ||
+      'Login to launch your idea and to appear as a contributor when you fund an initiative.',
+  )
 
   return (
     <Modal
