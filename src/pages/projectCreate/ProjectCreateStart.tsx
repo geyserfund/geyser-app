@@ -99,12 +99,27 @@ export const ProjectCreateStart = () => {
             <Text color="neutral.700" pb={3}>
               {t('You need to login before creating your project.')}
             </Text>
-            <ConnectWithSocial accountType={SocialAccountType.facebook} />
-            <ConnectWithSocial accountType={SocialAccountType.github} />
-            <ConnectWithSocial accountType={SocialAccountType.google} />
-            <ConnectWithSocial accountType={SocialAccountType.twitter} />
-            {!isMobile && <ConnectWithNostr />}
-            <ConnectWithLightning />
+            <VStack>
+              <ConnectWithSocial
+                accountType={SocialAccountType.twitter}
+                w="full"
+              />
+              {!isMobile && <ConnectWithNostr w="full" />}
+              <ConnectWithSocial
+                accountType={SocialAccountType.facebook}
+                w="full"
+              />
+              <ConnectWithSocial
+                accountType={SocialAccountType.google}
+                w="full"
+              />
+              <ConnectWithLightning w="full" />
+              <ConnectWithSocial
+                accountType={SocialAccountType.github}
+                w="full"
+              />
+            </VStack>
+
             {!isMobile ? (
               <Text color="neutral.600" variant="caption">
                 {t(

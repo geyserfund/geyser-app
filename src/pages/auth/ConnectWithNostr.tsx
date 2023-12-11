@@ -1,5 +1,6 @@
-import { Button, IconButton } from '@chakra-ui/react'
+import { Box, Button, IconButton } from '@chakra-ui/react'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { NostrSvgIcon } from '../../components/icons'
 import { useModal } from '../../hooks/useModal'
@@ -15,6 +16,8 @@ export const ConnectWithNostr = ({
   ...rest
 }: Omit<ConnectWithButtonProps, 'accountType'>) => {
   const { connect, error, clearError } = useNostrExtensonLogin()
+
+  const { t } = useTranslation()
 
   const failedModal = useModal()
   const nostrHelpModal = useModal()
@@ -55,15 +58,18 @@ export const ConnectWithNostr = ({
     <>
       <ButtonComponent
         aria-label="Connect with Nostr"
-        w="100%"
-        variant="secondaryNeutral"
+        variant="login"
         color={'social.nostr'}
         fontWeight={600}
         onClick={handleClick}
         {...buttonProps}
         {...rest}
       >
-        {!isIconOnly && 'Nostr'}
+        {!isIconOnly && (
+          <Box as="span" color="neutral.900">
+            {t('Login with Nostr')}
+          </Box>
+        )}
       </ButtonComponent>
       <NostrHelpModal {...nostrHelpModal} />
       <FailedToConnectAccount {...failedModal} />

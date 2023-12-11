@@ -1,4 +1,4 @@
-import { Button, IconButton, Link, Tooltip } from '@chakra-ui/react'
+import { Box, Button, IconButton, Link, Tooltip } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -7,7 +7,7 @@ import { useAuthContext } from '../../context'
 import { useMeQuery } from '../../types'
 import { useNotification } from '../../utils'
 import { SocialConfig } from './SocialConfig'
-import { ConnectWithButtonProps, SocialAccountType } from './type'
+import { ConnectWithButtonProps } from './type'
 import { useAuthToken, useCanLogin } from './useAuthToken'
 
 export const ConnectWithSocial = ({
@@ -106,27 +106,29 @@ export const ConnectWithSocial = ({
         leftIcon: icon,
       }
 
-  const isDisabled = !canLogin || SocialAccountType.google === accountType
+  const isDisabled = !canLogin
 
   return (
     <Tooltip label={!canLogin && t('Please refresh the page and try again.')}>
       <ButtonComponent
         aria-label={`Connect with ${accountType}`}
         as={Link}
-        variant="secondaryNeutral"
+        variant="login"
         href={`${authServiceEndpoint}/${accountType}?nextPath=/auth/${accountType}`}
         isExternal
-        w="100%"
+        maxWidth={isIconOnly ? '40px' : '100%'}
         color={`social.${accountType}`}
-        fontWeight={600}
-        backgroundColor={'neutral.0'}
         onClick={handleClick}
         isDisabled={isDisabled}
         pointerEvents={isDisabled ? 'none' : undefined}
         {...buttonProps}
         {...rest}
       >
-        {!isIconOnly && label}
+        {!isIconOnly && (
+          <Box as="span" color="neutral.900">
+            {t(label)}
+          </Box>
+        )}
       </ButtonComponent>
     </Tooltip>
   )

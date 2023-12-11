@@ -20,21 +20,21 @@ export const SocialConfig: { [key in SocialAccountType]: SocialConfigType } = {
   github: {
     hasSocialAccount: (profile) => hasGithubAccount(profile),
     icon: <BsGithub fontSize={'20px'} />,
-    label: 'Github',
+    label: 'Login with Github',
   },
   google: {
     hasSocialAccount: (profile) => hasGoogleAccount(profile),
     icon: <GoogleGLogoIcon boxSize={'20px'} />,
-    label: 'Google',
+    label: 'Login with Google',
   },
   twitter: {
     hasSocialAccount: (profile) => hasTwitterAccount(profile),
     icon: <RiTwitterXLine fontSize={'20px'} />,
-    label: 'Twitter (X)',
+    label: 'Login with Twitter (X)',
   },
   facebook: {
     hasSocialAccount: (profile) => hasFacebookAccount(profile),
     icon: <BsFacebook fontSize={'20px'} />,
-    label: 'Facebook',
+    label: 'Login with Facebook',
   },
 }
