@@ -1,17 +1,13 @@
 import { captureException } from '@sentry/react'
-import { useAtomValue } from 'jotai'
 import {
   createContext,
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useState,
 } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-import { useGetHistoryRoute } from '../config'
-import { routeMatchForProjectPageAtom } from '../config/routes/privateRoutesAtom'
 import { getPath, PathName } from '../constants'
 import {
   useFundingFlow,
@@ -100,16 +96,9 @@ export const ProjectProvider = ({
   children,
 }: { children: React.ReactNode } & ProjectState) => {
   const navigate = useNavigate()
-  const params = useParams<{ projectId: string }>()
   const location = useLocation()
-  const routeMatchForProjectPage = useAtomValue(routeMatchForProjectPageAtom)
-  const historyRoutes = useGetHistoryRoute()
-
-  const lastRoute = historyRoutes[historyRoutes.length - 2] || ''
 
   const { setNavData } = useNavContext()
-
-  const [isLoading, setIsLoading] = useState(true)
 
   const [mobileView, setMobileView] = useState<MobileViews>(
     MobileViews.description,
@@ -125,6 +114,7 @@ export const ProjectProvider = ({
   const {
     error,
     project,
+    loading,
     updateProject,
     saveProject,
     isDirty,
@@ -133,7 +123,6 @@ export const ProjectProvider = ({
   } = useProjectState(projectId, {
     fetchPolicy: 'network-only',
     onError() {
-      setIsLoading(false)
       captureException(error, {
         tags: {
           'not-found': 'projectGet',
@@ -167,8 +156,6 @@ export const ProjectProvider = ({
       })
 
       updateProjectOwner(project)
-
-      setIsLoading(false)
     },
   })
 
@@ -180,29 +167,18 @@ export const ProjectProvider = ({
 
   const updateProjectOwner = useCallback(
     (project: ProjectFragment) => {
+      console.log(project, user)
       if (!project || !user) {
         return
       }
 
       if (project.id && project.owners[0]?.user.id === user.id) {
         setIsProjectOwner(true)
-
-        if (
-          params.projectId &&
-          routeMatchForProjectPage &&
-          !lastRoute.includes('launch') &&
-          !(
-            lastRoute.includes('project') &&
-            lastRoute.includes(params.projectId)
-          )
-        ) {
-          navigate(getPath('projectOverview', `${params.projectId}`))
-        }
       } else {
         setIsProjectOwner(false)
       }
     },
-    [user, params.projectId, routeMatchForProjectPage, lastRoute, navigate],
+    [user],
   )
 
   useEffect(() => {
@@ -256,7 +232,7 @@ export const ProjectProvider = ({
         isDirty,
         saving,
         error,
-        loading: isLoading,
+        loading,
         fundForm,
         fundingFlow,
         refetch,
