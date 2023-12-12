@@ -17,6 +17,7 @@ import { Caption } from '../../../components/typography'
 import {
   getPath,
   AnalyticsUrl,
+  DocsUrl,
   GeyserGithubUrl,
   GeyserHomepageUrl,
   GeyserNostrUrl,
@@ -43,6 +44,10 @@ export const FilterFooter = () => {
       <Wrap>
         <Link href={GeyserHomepageUrl} isExternal>
           <Caption bold>Geyser, Inc.</Caption>
+        </Link>
+
+        <Link href={DocsUrl} isExternal>
+          <Caption bold>{t('Docs')}</Caption>
         </Link>
 
         <ReactLink to={getPath('legalTerms')} style={{textDecoration: 'underline'}}>
