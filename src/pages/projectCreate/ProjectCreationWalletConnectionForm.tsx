@@ -217,6 +217,10 @@ export const ProjectCreationWalletConnectionForm = ({
   const [updateWallet, { loading: updateWalletLoading }] =
     useUpdateWalletMutation({
       onCompleted() {
+        if (onNextClick) {
+          onNextClick()
+        }
+
         emailVerifyOnClose()
         toast({
           status: 'success',
@@ -325,7 +329,6 @@ export const ProjectCreationWalletConnectionForm = ({
     if (onNextClick) {
       try {
         await handleLaunch()
-        return onNextClick()
       } catch (error) {
         toast({
           title: 'Something went wrong',
@@ -381,6 +384,9 @@ export const ProjectCreationWalletConnectionForm = ({
           input: { projectId: project.id },
         },
       })
+      if (onNextClick) {
+        onNextClick()
+      }
     }
   }
 
@@ -417,39 +423,40 @@ export const ProjectCreationWalletConnectionForm = ({
         ) {
           return (
             Boolean(projectWallet?.connectionDetails?.lightningAddress) &&
-            projectWallet?.connectionDetails?.lightningAddress ===
+            projectWallet?.connectionDetails?.lightningAddress !==
               lightningAddressFormValue
           )
         }
 
-        return true
+        return lightningAddressFormValue
       }
 
-      if (
-        projectWallet.connectionDetails.__typename ===
-        WalletConnectDetails.LndConnectionDetailsPrivate
-      ) {
+      if (connectionOption === ConnectionOption.PERSONAL_NODE) {
         if (
-          `${projectWallet.connectionDetails.grpcPort}` !== nodeInput?.grpc ||
-          projectWallet.connectionDetails.hostname !== nodeInput?.hostname ||
-          (projectWallet.connectionDetails.lndNodeType !==
-            LndNodeType.Voltage) !==
-            nodeInput?.isVoltage ||
-          projectWallet.connectionDetails.macaroon !==
-            nodeInput?.invoiceMacaroon ||
-          projectWallet.connectionDetails.pubkey !== nodeInput?.publicKey ||
-          projectWallet.connectionDetails.tlsCertificate !== nodeInput?.tlsCert
+          projectWallet.connectionDetails.__typename ===
+          WalletConnectDetails.LndConnectionDetailsPrivate
         ) {
-          return false
+          const value =
+            `${projectWallet.connectionDetails.grpcPort}` !==
+              `${nodeInput?.grpc}` ||
+            projectWallet.connectionDetails.hostname !== nodeInput?.hostname ||
+            (projectWallet.connectionDetails.lndNodeType ===
+              LndNodeType.Voltage) !==
+              nodeInput?.isVoltage ||
+            projectWallet.connectionDetails.macaroon !==
+              nodeInput?.invoiceMacaroon ||
+            projectWallet.connectionDetails.pubkey !== nodeInput?.publicKey ||
+            `${projectWallet.connectionDetails.tlsCertificate || ''}` !==
+              `${nodeInput?.tlsCert}`
+
+          return value
         }
 
-        return true
+        return Boolean(nodeInput)
       }
 
       return false
     }
-
-    return false
   }
 
   const validateLightningAddressFormat = async (lightningAddress: string) => {
@@ -720,7 +727,7 @@ export const ProjectCreationWalletConnectionForm = ({
         onClick={handleNext}
         isEdit={isEdit}
         isLoading={updateWalletLoading}
-        isDisabled={isFormDirty() || isLightningAddressInValid}
+        isDisabled={!isFormDirty() || isLightningAddressInValid}
       />
 
       <NodeAdditionModal
