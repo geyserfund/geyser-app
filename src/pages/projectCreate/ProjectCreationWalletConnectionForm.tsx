@@ -457,6 +457,8 @@ export const ProjectCreationWalletConnectionForm = ({
 
       return false
     }
+
+    return true
   }
 
   const validateLightningAddressFormat = async (lightningAddress: string) => {
