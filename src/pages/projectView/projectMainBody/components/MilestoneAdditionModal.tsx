@@ -14,12 +14,16 @@ import {
 } from '../../../../components/ui'
 import { MilestoneValidations } from '../../../../constants/validations'
 import {
-  MUTATION_CREATE_PROJECT_MILESTONE,
   MUTATION_DELETE_PROJECT_MILESTONE,
   MUTATION_UPDATE_PROJECT_MILESTONE,
 } from '../../../../graphql/mutations'
 import { useBTCConverter } from '../../../../helpers'
-import { ProjectFragment, ProjectMilestone } from '../../../../types'
+import {
+  CreateProjectMilestoneInput,
+  ProjectFragment,
+  ProjectMilestone,
+  useCreateProjectMilestoneMutation,
+} from '../../../../types'
 import { Satoshis, USDCents, USDollars } from '../../../../types/types'
 import { toInt, useNotification } from '../../../../utils'
 
@@ -156,10 +160,11 @@ export const MilestoneAdditionModal = ({
     try {
       const newMilestones = await Promise.all(
         filteredMilestones.map(async (milestone) => {
-          const createMilestoneInput = {
-            ...milestone,
-            id: undefined,
+          const createMilestoneInput: CreateProjectMilestoneInput = {
             projectId: project.id,
+            amount: milestone.amount,
+            description: milestone.description,
+            name: milestone.name,
           }
 
           if (milestone.id) {
@@ -224,9 +229,8 @@ export const MilestoneAdditionModal = ({
     }
   }
 
-  const [createMilestone, { loading: createMilestoneLoading }] = useMutation(
-    MUTATION_CREATE_PROJECT_MILESTONE,
-  )
+  const [createMilestone, { loading: createMilestoneLoading }] =
+    useCreateProjectMilestoneMutation()
 
   const [updateMilestone, { loading: updateMilestoneLoading }] = useMutation(
     MUTATION_UPDATE_PROJECT_MILESTONE,
