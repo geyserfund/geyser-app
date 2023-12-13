@@ -164,6 +164,27 @@ export const theme = {
             color: theme.colors.neutral[50],
           },
         }),
+        login: ({ theme }: StyleFunctionProps) => ({
+          boxShadow: 'none',
+          outline: 'none',
+          border: `1px solid`,
+          borderRadius: '4px',
+          borderColor: theme.colors.neutral[600],
+          color: theme.colors.neutral[900],
+          backgroundColor: theme.colors.neutral[0],
+          textDecoration: 'none',
+          fontFamily: fonts.roboto,
+          fontSize: '14px',
+          padding: '12px',
+          iconSpacing: '10px',
+          _hover: {
+            backgroundColor: theme.colors.neutral[100],
+            textDecoration: 'none',
+          },
+          _active: {
+            backgroundColor: theme.colors.neutral[100],
+          },
+        }),
       },
     },
     Text: {
