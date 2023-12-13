@@ -1,4 +1,3 @@
-import Loader from '../../../components/ui/Loader'
 import { useProjectContext } from '../../../context'
 import { useProjectDetails } from '../projectNavigation/hooks/useProjectDetails'
 import {
@@ -15,10 +14,6 @@ export const ProjectMainBody = () => {
   const { project, isProjectOwner } = useProjectContext()
 
   const projectDetails = useProjectDetails(project)
-
-  if (isProjectOwner === undefined) {
-    return <Loader />
-  }
 
   return (
     <>

@@ -1,5 +1,4 @@
 import { captureException } from '@sentry/react'
-import { useAtomValue } from 'jotai'
 import {
   createContext,
   useCallback,
@@ -7,9 +6,8 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-import { routeMatchForProjectPageAtom, useGetHistoryRoute } from '../config'
 import { getPath, PathName } from '../constants'
 import {
   useFundingFlow,
@@ -108,11 +106,6 @@ export const ProjectProvider = ({
   const [isProjectOwner, setIsProjectOwner] = useState<boolean | undefined>()
   const { user } = useAuthContext()
 
-  const params = useParams<{ projectId: string }>()
-  const routeMatchForProjectPage = useAtomValue(routeMatchForProjectPageAtom)
-  const historyRoutes = useGetHistoryRoute()
-  const lastRoute = historyRoutes[historyRoutes.length - 2] || ''
-
   const creatorModal = useModal()
   const milestonesModal = useModal()
   const rewardsModal = useModal<{
@@ -174,29 +167,17 @@ export const ProjectProvider = ({
 
   const updateProjectOwner = useCallback(
     (project: ProjectFragment) => {
-      console.log(project, user)
       if (!project || !user) {
         return
       }
 
       if (project.id && project.owners[0]?.user.id === user.id) {
-        if (
-          params.projectId &&
-          routeMatchForProjectPage &&
-          !lastRoute.includes('launch') &&
-          !(
-            lastRoute.includes('project') &&
-            lastRoute.includes(params.projectId)
-          )
-        ) {
-          navigate(getPath('projectOverview', `${params.projectId}`))
-          setIsProjectOwner(true)
-        }
+        setIsProjectOwner(true)
       } else {
         setIsProjectOwner(false)
       }
     },
-    [user, params.projectId, routeMatchForProjectPage, lastRoute, navigate],
+    [user],
   )
 
   useEffect(() => {
