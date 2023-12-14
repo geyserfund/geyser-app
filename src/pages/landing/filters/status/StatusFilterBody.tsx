@@ -44,7 +44,6 @@ export const StatusFilterBody = ({
       linkTo: '/latestprojects',
       text: 'Latest Projects',
       icon: AiOutlineFieldTime,
-      color: 'primary.500',
       size: '1.5em',
     },
   ];
@@ -64,8 +63,8 @@ export const StatusFilterBody = ({
               <Button
                 background={
                   filters.type === option.type && filters.status === option.status
-                    ? 'neutral.100'
-                    : 'transparent'
+                    ? 'transparent'
+                    : 'neutral.100'
                 }
                 color="neutral.800"
                 w="100%"
@@ -75,13 +74,13 @@ export const StatusFilterBody = ({
                   background:
                     filters.type !== option.type || filters.status !== option.status
                       ? 'neutral.100'
-                      : 'transparent',
+                      : 'neutral.100',
                 }}
               >
                 {option.icon && (
                   <option.icon color={option.color} size={option.size} />
                 )}
-                <Body1 ml="10px" color={filters.type === option.type && filters.status === option.status ? 'neutral.900' : 'neutral.700'}>
+                <Body1 ml="10px" mr="94px" color={filters.type === option.type && filters.status === option.status ? 'neutral.900' : 'neutral.700'}>
                   {t(option.text)}
                 </Body1>
               </Button>
@@ -101,8 +100,6 @@ export const StatusFilterBody = ({
             w="100%"
             display="flex"
             justifyContent="start"
-            _hover={{ background: 'neutral.100' }}
-            variant={isActive ? 'solid' : 'ghost'}
           >
             <Icon color={color} size={option.size} />
             <Body1 ml="10px" color={isActive ? 'neutral.900' : 'neutral.700'}>
