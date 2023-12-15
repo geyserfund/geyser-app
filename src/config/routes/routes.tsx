@@ -4,8 +4,8 @@ import { App } from '../../App'
 import { AppLayout } from '../../AppLayout'
 import { __production__, getPath, PathName } from '../../constants'
 import { ExternalAuthSuccess, FailedAuth } from '../../pages/auth'
-import { PrivacyPolicy, TermsAndConditions } from '../../pages/legal';
 import { NotAuthorized, NotFoundPage } from '../../pages/fallback'
+import { PrivacyPolicy, TermsAndConditions } from '../../pages/legal'
 import { ErrorBoundary } from './ErrorBoundary'
 import { renderPrivateRoute } from './PrivateRoute'
 
@@ -17,6 +17,7 @@ const Project = () => import('../../pages/projectView')
 const ProfilePage = () => import('../../pages/profile/Profile')
 const Badges = () => import('../../pages/badges/BadgesPage')
 const Landing = () => import('../../pages/landing')
+const Map = () => import('../../pages/map/MapPage')
 const AboutPage = () => import('../../pages/about/About')
 
 export const platformRoutes: RouteObject[] = [
@@ -334,6 +335,13 @@ export const platformRoutes: RouteObject[] = [
     async lazy() {
       const BadgesPage = await Badges().then((m) => m.BadgesPage)
       return { Component: BadgesPage }
+    },
+  },
+  {
+    path: getPath('map'),
+    async lazy() {
+      const MapPage = await Map().then((m) => m.MapPage)
+      return { Component: MapPage }
     },
   },
   {
