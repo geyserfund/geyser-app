@@ -39,12 +39,18 @@ export default function NoteCard({ nostrich, content, date }: Props) {
       <Flex
         className="notecard"
         alignItems="flex-start"
+        overflow="hidden"
         margin="16px 0"
         paddingTop="0px"
-        border="1px solid #ccc"
+        border="2px solid #ccc"
         borderRadius="8px"
-        boxShadow="0 4px 8px rgba(0, 0, 0, 0.1)"
+        backgroundColor="neutral.0"
+        transition="border-color 0.5s"
+        boxShadow="none"
         flexWrap="wrap"
+        _hover={{ cursor: 'pointer', borderColor: 'neutral.400' }}
+        _active={{ borderColor: 'primary.400' }}
+        _focus={{ borderColor: 'primary.400' }}
       >
         <Box
           flex={{ base: '0 0 120px', md: '0 0 auto' }}
@@ -65,7 +71,7 @@ export default function NoteCard({ nostrich, content, date }: Props) {
             <Box
               height="120px"
               width="120px"
-              backgroundColor="gray.200"
+              backgroundColor="neutral.0"
               borderRadius="8px"
               display="flex"
               alignItems="center"
