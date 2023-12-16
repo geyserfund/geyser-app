@@ -22,14 +22,6 @@ export const MapPage = () => {
       >
         <FaArrowLeft /> {t('Back')}
       </Button>
-      <VStack spacing={4} justify="center" textAlign="center" mb={12}>
-        <Container maxWidth="xl">
-          <Text mb={4} variant="h2">
-            {t('Geyser badges')}
-          </Text>
-          <Text variant="body1">{t('Testing')}</Text>
-        </Container>
-      </VStack>
       <MapCanvas />
     </Container>
   )
