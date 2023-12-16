@@ -220,8 +220,8 @@
   "'This lightning address is already taken.'": "'This lightning address is already taken.'",
   "Title": "Title",
   "A few words that make your project stand out": "A few words that make your project stand out",
-  "Lightning Address Preview": "Lightning Address Preview",
-  "This is the lightning address for your project. Funds sent to this lightning address will show in your project activity": "This is the lightning address for your project. Funds sent to this lightning address will show in your project activity",
+  "Project Identifier": "Project Identifier",
+  "Set your unique project identifier to create your personalized URL and get a corresponding Lightning address.": "Set your unique project identifier to create your personalized URL and get a corresponding Lightning address.",
   "Objective": "Objective",
   "Add 'one liner' a simple descriptions of what your project is about": "Add 'one liner' a simple descriptions of what your project is about",
   "Image": "Image",
@@ -760,6 +760,7 @@
   "Login with Twitter (X)":"Login with Twitter (X)",
   "Login with Facebook":"Login with Facebook",
   "Login with Nostr":"Login with Nostr",
-  "Login with Lightning":"Login with Lightning"
+  "Login with Lightning":"Login with Lightning",
+  "Lightning address is a simple way for others to send you funds. When someone sends money to this address, it's instantly routed to your private wallet. This ensures you have full custody and immediate access to your funds.":"Lightning address is a simple way for others to send you funds. When someone sends money to this address, it's instantly routed to your private wallet. This ensures you have full custody and immediate access to your funds."
 
 }

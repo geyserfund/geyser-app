@@ -12,8 +12,8 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
     borderRadius: '8px',
     borderWidth: '2px',
     '&:focus': {
-      borderColor: `${colors.neutral[500]} !important`,
-      boxShadow: `0 0 0 1px ${colors.neutral[500]}`,
+      borderColor: `${colors.primary[500]} !important`,
+      boxShadow: 'none',
     },
     '&:hover': {
       borderColor: colors.neutral[400],

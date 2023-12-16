@@ -155,7 +155,6 @@ export const ProjectCreate = () => {
       >
         <VStack width="100%" alignItems="flex-start" spacing={6}>
           <ProjectForm form={form} isEdit={isEdit} />
-          <FormContinueButton width="100%" {...nextProps} />
         </VStack>
       </ProjectCreateLayout>
       <ProjectUnsavedModal {...unsavedModal} />

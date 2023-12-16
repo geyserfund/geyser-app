@@ -41,9 +41,9 @@ export const TextInputBox = forwardRef<HTMLInputElement, TextInputBoxProps>(
             _hover={{
               borderColor: 'neutral.400',
             }}
-            _focus={{ borderColor: `neutral.500`, boxShadow: 'none' }}
+            _focus={{ borderColor: `primary.500`, boxShadow: 'none' }}
             _placeholder={{
-              color: 'neutral.600',
+              color: 'neutral.400',
             }}
             {...rest}
           >
