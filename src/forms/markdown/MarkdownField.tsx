@@ -271,7 +271,12 @@ export const MarkdownField = ({
           fieldContainerProps={{ height: '100%' }}
         />
       )}
-      <StyleProvider flex={flex} display={isEditorMode ? 'none' : undefined}>
+      <StyleProvider
+        flex={flex}
+        flexGrow={1}
+        display={isEditorMode ? 'none' : undefined}
+        minHeight={'40vh'}
+      >
         <EditorComponent />
         <TableComponents
           tableCellMenuProps={{ Component: TableCellMenuComponent }}

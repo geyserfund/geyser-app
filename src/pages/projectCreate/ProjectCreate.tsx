@@ -146,7 +146,7 @@ export const ProjectCreate = () => {
         onBackClick={onBackClick}
         title={
           <TitleWithProgressBar
-            title={t('Story')}
+            title={t('Project description')}
             subtitle={t('Create a project')}
             index={1}
             length={4}

@@ -4,8 +4,8 @@ import { App } from '../../App'
 import { AppLayout } from '../../AppLayout'
 import { __production__, getPath, PathName } from '../../constants'
 import { ExternalAuthSuccess, FailedAuth } from '../../pages/auth'
-import { PrivacyPolicy, TermsAndConditions } from '../../pages/legal';
 import { NotAuthorized, NotFoundPage } from '../../pages/fallback'
+import { PrivacyPolicy, TermsAndConditions } from '../../pages/legal'
 import { ErrorBoundary } from './ErrorBoundary'
 import { renderPrivateRoute } from './PrivateRoute'
 

@@ -83,9 +83,10 @@ export const ProjectCreateStory = () => {
       maxWidth="3xl"
       continueButton={<FormContinueButton {...nextProps} flexGrow={1} />}
       onBackClick={onBackCLick}
+      height="100%"
       title={
         <TitleWithProgressBar
-          title={t('Project description')}
+          title={t('Story')}
           subtitle={t('Create a project')}
           index={3}
           length={4}
@@ -98,7 +99,6 @@ export const ProjectCreateStory = () => {
         isLoading={loading || !project}
         toolbarTop={dimensions.topNavBar.mobile.height + 'px'}
       />
-      <FormContinueButton width="100%" {...nextProps} />
       <ProjectUnsavedModal {...unsavedModal} />
     </ProjectCreateLayout>
   )

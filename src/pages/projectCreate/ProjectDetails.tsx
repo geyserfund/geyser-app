@@ -120,8 +120,6 @@ export const ProjectDetails = () => {
             location={project?.location}
             updateProject={updateProject}
           />
-
-          <FormContinueButton width="100%" {...nextProps} />
         </VStack>
       </ProjectCreateLayout>
       <ProjectUnsavedModal {...unsavedModal} />
