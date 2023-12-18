@@ -1,4 +1,4 @@
-export * from './ItemsTable'
+export * from './RewardsBundlesTable'
 export * from './RewardsHeader'
 export * from './RewardsTable'
 export * from './RewardsTabs'

@@ -1,2 +1,2 @@
-export * from './ProjectProductsAndBundles'
+export * from './ProjectRewardsAndBundles'
 export * from './subviews'

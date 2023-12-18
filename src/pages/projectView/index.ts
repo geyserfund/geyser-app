@@ -3,10 +3,10 @@ import {
   ProjectCreatorOverview,
   ProjectCreatorViews,
   ProjectCreatorInsights,
-  ProjectProductsAndBundles,
-  ProjectCreateItem,
+  ProjectRewardsAndBundles,
+  ProjectCreateRewardBundle,
   ProjectCreateReward,
-  ProjectEditItem,
+  ProjectEditRewardBundle,
   ProjectEditReward
 } from './projectCreatorViews'
 import {
@@ -28,10 +28,10 @@ export {
   ProjectCreatorContributors,
   ProjectCreatorInsights,
   ProjectCreatorOverview,
-  ProjectProductsAndBundles,
-  ProjectCreateItem,
+  ProjectRewardsAndBundles,
+  ProjectCreateRewardBundle,
   ProjectCreateReward,
-  ProjectEditItem,
+  ProjectEditRewardBundle,
   ProjectEditReward,
   ProjectCreatorViews,
   ProjectMainBody,

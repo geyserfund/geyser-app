@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom'
 import EditIcon from '../../icons/edit.svg'
 import DeleteIcon from '../../icons/delete.svg'
 
-export const ProjectCreateItem = () => {
+export const ProjectCreateRewardBundle = () => {
   const { t } = useTranslation()
   const {project} = useProjectContext();
   const {navigate} = useNavigate();
@@ -77,13 +77,13 @@ export const ProjectCreateItem = () => {
     >
       <CardLayout h="auto" padding="30px 30px" minWidth="100%">
         <Text fontSize="18px" fontWeight={600}>
-          {t('Add Item')}
+          {t('Add Reward')}
         </Text>
         <Body2 color="neutral.900">
           Rewards are bundles of items sold as a package.
         </Body2>
         <Stack direction={'row'}>
-          <FieldContainer title={t('Item Name')}>
+          <FieldContainer title={t('Reward Name')}>
             <TextInputBox
               placeholder={'Silver Tier'}
               value={reward.name}
@@ -92,7 +92,7 @@ export const ProjectCreateItem = () => {
               error={formError.name}
             />
           </FieldContainer>
-          <FieldContainer title={t('Stock (skip if no limit)')}>
+          <FieldContainer title={t('Max Claimable (skip if no limit)')}>
             <TextInputBox
               placeholder={'100'}
               value={reward.maxClaimable}
@@ -124,7 +124,7 @@ export const ProjectCreateItem = () => {
         <Stack direction={'row'}>
           <FieldContainer title={t('Description')}>
             <TextArea
-              placeholder={t('Describe the item you would like to sell')}
+              placeholder={t('Describe the reward you would like to sell')}
               value={reward.description}
               name="description"
               onChange={handleTextChange}
@@ -187,6 +187,87 @@ export const ProjectCreateItem = () => {
             ) : null}
           </FieldContainer>
         </VStack>
+        <CardLayout h="auto" padding="15px 15px" minWidth="100%">
+          <Stack direction='row' justify='space-between' align={'flex-start'} pb={4}>
+            <Stack direction='column'>
+              <Text fontSize="18px" fontWeight={600}>
+                {t('Items')}
+              </Text>
+              <Body2 color="neutral.900">
+                Items can be bundled as rewards or purchased as add-ons
+              </Body2>
+            </Stack>
+            <Button
+              display={{ base: 'block' }}
+              variant="primary"
+              onClick={() => {
+                setMobileView(MobileViews.createItem)
+                navigate(PathName.projectCreateItem)
+              }}
+            >
+              {t('Add new item')}
+            </Button>
+          </Stack>
+          <VStack>
+            <FieldContainer title={t('Select Existing Item')}>
+              <SelectComponent<ProjectProduct, false>
+                placeholder={t('Select an existing item')}
+              />
+            </FieldContainer>
+          </VStack>
+          <Stack>
+            <table style={{width: '100%', textAlign: 'left'}}>
+              <tr>
+                <th style={{width: '60px'}}>QTY</th>
+                <th>Item</th>
+                <th></th>
+              </tr>
+              <tr style={{padding: `5px 0 5px 0`}}>
+                <td><Input w={'40px'} value={'2'} textAlign={'center'} p={0} /></td>
+                <td><Text>Power Adapter</Text></td>
+                <td>
+                  <Stack direction='row' justifyContent={'flex-end'}>
+                    <Image style={{cursor: 'pointer'}} src={EditIcon} onClick={() => {
+                      // @TODO: Hookup dynamic edit route once API is hooked up
+                      alert('edit item');
+                    }}/>
+                    <Image style={{cursor: 'pointer'}} src={DeleteIcon} onClick={() => {
+                      // @TODO: Hookup delete functionality to API
+                      alert('delete item out of the state');
+                    }} />
+                  </Stack>
+                </td>
+              </tr>
+              <tr style={{padding: `5px 0 5px 0`}}>
+                <td><Input w={'40px'} value={'1'} textAlign={'center'} p={0} /></td>
+                <td><Text>Stickers</Text></td>
+                <td>
+                  <Stack direction='row' justifyContent={'flex-end'}>
+                    <Image style={{cursor: 'pointer'}} src={EditIcon} onClick={() => {
+                      // @TODO: Hookup dynamic edit route once API is hooked up
+                      alert('edit item');
+                    }}/>
+                    <Image style={{cursor: 'pointer'}} src={DeleteIcon} onClick={() => {
+                      // @TODO: Hookup delete functionality to API
+                      alert('delete item out of the state');
+                    }} />
+                  </Stack>
+                </td>
+              </tr>
+            </table>
+          </Stack>
+        </CardLayout>
+        <Stack>
+          <Button
+            display={{ base: 'block' }}
+            variant="primary"
+            onClick={() => {
+              // @TODO: Hookup create reward once API is ready
+            }}
+          >
+            {t('Publish reward')}
+          </Button>
+        </Stack>
       </CardLayout>
     </VStack>
   )

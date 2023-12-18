@@ -18,11 +18,11 @@ export enum PathName {
   projectRewards = 'rewards',
   projectProducts = 'products',
   projectMilestones = 'milestones',
-  projectProductsAndBundles = 'productsAndBundles',
+  projectRewardsAndBundles = 'rewardsAndBundles',
   projectCreateReward = 'createReward',
   projectEditReward = 'editReward',
-  projectCreateItem = 'createItem',
-  projectEditItem = 'editItem',
+  projectCreateRewardBundle = 'createRewardBundle',
+  projectEditRewardBundle = 'editRewardBundle',
 
   launchProject = 'launch',
   userProfile = 'profile',
@@ -82,16 +82,16 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectProducts}`,
   projectRewards: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectRewards}`,
-  projectProductsAndBundles: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectProductsAndBundles}`,
+  projectRewardsAndBundles: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectRewardsAndBundles}`,
   projectCreateReward: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectProductsAndBundles}/${PathName.projectCreateReward}`,
-  projectCreateItem: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectProductsAndBundles}/${PathName.projectCreateItem}`,
-  projectEditItem: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectProductsAndBundles}/${PathName.projectEditItem}`,
+    `/${PathName.project}/${projectName}/${PathName.projectRewardsAndBundles}/${PathName.projectCreateReward}`,
+  projectCreateRewardBundle: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectRewardsAndBundles}/${PathName.projectCreateRewardBundle}`,
   projectEditReward: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectProductsAndBundles}/${PathName.projectEditReward}`,
+    `/${PathName.project}/${projectName}/${PathName.projectRewardsAndBundles}/${PathName.projectEditReward}`,
+  projectEditRewardBundle: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectRewardsAndBundles}/${PathName.projectEditRewardBundle}`,
   projectMilestones: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectMilestones}`,
 

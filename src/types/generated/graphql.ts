@@ -55,9 +55,9 @@ export type Scalars = {
   name_String_maxLength_100: any
   name_String_minLength_3_maxLength_280: any
   name_String_minLength_5_maxLength_60: any
+  orderTotal_Int_NotNull_min_0: any
   pubkey_String_minLength_66_maxLength_66: any
   quantity_Int_NotNull_min_1: any
-  rewardsCost_Int_NotNull_min_0: any
   shortDescription_String_maxLength_500: any
   stock_Int_min_0: any
   title_String_NotNull_maxLength_60: any
@@ -115,6 +115,11 @@ export enum AnalyticsGroupByInterval {
   Month = 'month',
   Week = 'week',
   Year = 'year',
+}
+
+export enum ArticleType {
+  ProjectItem = 'PROJECT_ITEM',
+  ProjectReward = 'PROJECT_REWARD',
 }
 
 export type Badge = {
@@ -200,6 +205,7 @@ export type CreateProjectRewardInput = {
   /** Currency used for the cost */
   costCurrency: RewardCurrency
   description: Scalars['description_String_NotNull_maxLength_250']
+  estimatedDeliveryDate?: InputMaybe<Scalars['Date']>
   hasShipping: Scalars['Boolean']
   image?: InputMaybe<Scalars['String']>
   name: Scalars['name_String_NotNull_maxLength_100']
@@ -334,6 +340,8 @@ export type Funder = {
   /** Funder's funding txs. */
   fundingTxs: Array<FundingTx>
   id: Scalars['BigInt']
+  orders: Array<Order>
+  /** @deprecated Use 'orders' instead. */
   rewards: Array<FunderReward>
   /** Number of (confirmed) times a Funder funded a particular project. */
   timesFunded?: Maybe<Scalars['Int']>
@@ -413,8 +421,8 @@ export type FundingInput = {
   anonymous: Scalars['Boolean']
   donationInput?: InputMaybe<DonationFundingInput>
   metadataInput?: InputMaybe<FundingMetadataInput>
+  orderInput?: InputMaybe<OrderFundingInput>
   projectId: Scalars['BigInt']
-  rewardInput?: InputMaybe<RewardFundingInput>
   /** The resource from which the funding transaction is being created. */
   sourceResourceInput: ResourceInput
 }
@@ -517,6 +525,12 @@ export type FundingTxMethodCount = {
   __typename?: 'FundingTxMethodCount'
   count: Scalars['Int']
   method?: Maybe<Scalars['String']>
+}
+
+export type FundingTxMethodSum = {
+  __typename?: 'FundingTxMethodSum'
+  method?: Maybe<Scalars['String']>
+  sum: Scalars['Int']
 }
 
 export type FundingTxStatusUpdatedInput = {
@@ -885,6 +899,7 @@ export type Mutation = {
   grantApply: GrantApplicant
   projectDelete: ProjectDeleteResponse
   projectFollow: Scalars['Boolean']
+  projectPublish: Project
   projectRewardCreate: ProjectReward
   /** Soft deletes the reward. */
   projectRewardDelete: Scalars['Boolean']
@@ -988,6 +1003,10 @@ export type MutationProjectFollowArgs = {
   input: ProjectFollowMutationInput
 }
 
+export type MutationProjectPublishArgs = {
+  input: ProjectPublishMutationInput
+}
+
 export type MutationProjectRewardCreateArgs = {
   input: CreateProjectRewardInput
 }
@@ -1079,7 +1098,14 @@ export type MutationResponse = {
 
 export type NostrKeys = {
   __typename?: 'NostrKeys'
+  privateKey?: Maybe<NostrPrivateKey>
   publicKey: NostrPublicKey
+}
+
+export type NostrPrivateKey = {
+  __typename?: 'NostrPrivateKey'
+  hex: Scalars['String']
+  nsec: Scalars['String']
 }
 
 export type NostrPublicKey = {
@@ -1111,6 +1137,24 @@ export type OffsetBasedPaginationInput = {
   take?: InputMaybe<Scalars['Int']>
 }
 
+export type Order = {
+  __typename?: 'Order'
+  createdAt: Scalars['Date']
+  id: Scalars['BigInt']
+  items: Array<OrderItems>
+  status: Scalars['String']
+  total: Scalars['BigInt']
+  updatedAt: Scalars['Date']
+  user: User
+}
+
+export type OrderArticleInput = {
+  articleId: Scalars['BigInt']
+  articleType: ArticleType
+  /** Number of times a reward was selected. */
+  quantity: Scalars['quantity_Int_NotNull_min_1']
+}
+
 export enum OrderByDirection {
   Asc = 'asc',
   Desc = 'desc',
@@ -1119,6 +1163,22 @@ export enum OrderByDirection {
 export enum OrderByOptions {
   Asc = 'asc',
   Desc = 'desc',
+}
+
+export type OrderFundingInput = {
+  articles: Array<OrderArticleInput>
+  /**
+   * Total cost of rewards, in satoshis. This amount will be used for the invoice  unless there is more than 1%
+   * slippage with the reward cost calculated in the backend.
+   */
+  orderTotal: Scalars['orderTotal_Int_NotNull_min_0']
+}
+
+export type OrderItems = {
+  __typename?: 'OrderItems'
+  item: ProjectReward
+  quantity: Scalars['Int']
+  unitPrice: Scalars['BigInt']
 }
 
 export type Owner = {
@@ -1252,8 +1312,12 @@ export type ProjectFundingTxStats = {
   amountGraph?: Maybe<Array<Maybe<FundingTxAmountGraph>>>
   /** Project contribution amount in the given datetime range. */
   amountSum?: Maybe<Scalars['Int']>
+  /** Project contribution count in the given datetime range. */
+  count: Scalars['Int']
   /** Project contribution count of each Funding Method in the given datetime range. */
   methodCount?: Maybe<Array<Maybe<FundingTxMethodCount>>>
+  /** Project contribution amount of each Funding Method in the given datetime range. */
+  methodSum?: Maybe<Array<Maybe<FundingTxMethodSum>>>
 }
 
 export type ProjectKeys = {
@@ -1273,6 +1337,11 @@ export type ProjectMilestone = {
   description?: Maybe<Scalars['description_String_maxLength_250']>
   id: Scalars['BigInt']
   name: Scalars['name_String_NotNull_maxLength_100']
+  reached: Scalars['Boolean']
+}
+
+export type ProjectPublishMutationInput = {
+  projectId: Scalars['BigInt']
 }
 
 export type ProjectRegionsGetResult = {
@@ -1283,17 +1352,23 @@ export type ProjectRegionsGetResult = {
 
 export type ProjectReward = {
   __typename?: 'ProjectReward'
+  /** Number of people that purchased the Project Reward. */
+  backersCount: Scalars['Int']
   /** Cost of the reward, priced in USD cents. */
   cost: Scalars['Int']
+  /** The date the creator created the reward */
   createdAt: Scalars['Date']
   /**
    * Whether the reward is deleted or not. Deleted rewards should not appear in the funding flow. Moreover, deleted
    * rewards should only be visible by the project owner and the users that purchased it.
    */
   deleted: Scalars['Boolean']
+  /** Internally used to track whether a reward was soft deleted */
   deletedAt?: Maybe<Scalars['Date']>
   /** Short description of the reward. */
   description?: Maybe<Scalars['description_String_maxLength_250']>
+  /** Estimated Date when the Reward will be delivered */
+  estimatedDeliveryDate?: Maybe<Scalars['Date']>
   /** Boolean value to indicate whether this reward requires shipping */
   hasShipping: Scalars['Boolean']
   id: Scalars['BigInt']
@@ -1301,46 +1376,14 @@ export type ProjectReward = {
   image?: Maybe<Scalars['String']>
   /** Name of the reward. */
   name: Scalars['name_String_NotNull_maxLength_100']
-  project: Project
-  sold: Scalars['Int']
-  stock?: Maybe<Scalars['Int']> // @TODO: This will be calculated on the backend based on item availability
-  updatedAt: Scalars['Date']
-  products?: Array<ProjectProduct>
-  funders?: Array<FunderWithUserFragment>
-  maxClaimable: Scalars['Int']
-  estimatedDeliveryDate: Scalars['Date']
-  published: Scalars['Boolean']
-}
-
-export type ProjectProduct = {
-  __typename?: 'ProjectProduct'
-  /** Cost of the reward, priced in USD cents. */
-  cost: Scalars['Int']
-  createdAt: Scalars['Date']
-  /**
-   * Whether the reward is deleted or not. Deleted rewards should not appear in the funding flow. Moreover, deleted
-   * rewards should only be visible by the project owner and the users that purchased it.
-   */
-  deleted: Scalars['Boolean']
-  deletedAt?: Maybe<Scalars['Date']>
-  /** Short description of the reward. */
-  description?: Maybe<Scalars['description_String_maxLength_250']>
   /** Boolean value to indicate whether this reward requires shipping */
-  hasShipping: Scalars['Boolean']
-  id: Scalars['BigInt']
-  /** Image of the reward. */
-  image?: Maybe<Scalars['String']>
-  /** Name of the reward. */
-  name: Scalars['name_String_NotNull_maxLength_100']
   project: Project
+  /** Number of times this Project Reward was sold. */
   sold: Scalars['Int']
+  /** Tracks the stock of the reward */
   stock?: Maybe<Scalars['Int']>
+  /** The last date when the creator has updated the reward */
   updatedAt: Scalars['Date']
-  rewardsEnabled: Scalars['Boolean']
-  funders?: Array<FunderWithUserFragment>
-  isPhysical: Scalars['Boolean']
-  inStock: Scalars['Boolean']
-  availableAsAdditionalItem: Scalars['Boolean']
 }
 
 export type ProjectStatistics = {
@@ -1589,22 +1632,6 @@ export type ResourceInput = {
 
 export enum RewardCurrency {
   Usdcent = 'USDCENT',
-}
-
-export type RewardFundingInput = {
-  rewards: Array<RewardInput>
-  /**
-   * Total cost of rewards, in satoshis. This amount will be used for the invoice  unless there is more than 1%
-   * slippage with the reward cost calculated in the backend.
-   */
-  rewardsCost: Scalars['rewardsCost_Int_NotNull_min_0']
-  shipping?: InputMaybe<ShippingInput>
-}
-
-export type RewardInput = {
-  id: Scalars['BigInt']
-  /** Number of times a reward was selected. */
-  quantity: Scalars['quantity_Int_NotNull_min_1']
 }
 
 export type SendOtpByEmailInput = {
@@ -2087,6 +2114,7 @@ export type ResolversTypes = {
   Ambassador: ResolverTypeWrapper<Ambassador>
   AmountSummary: ResolverTypeWrapper<AmountSummary>
   AnalyticsGroupByInterval: AnalyticsGroupByInterval
+  ArticleType: ArticleType
   Badge: ResolverTypeWrapper<Badge>
   BadgeClaimInput: BadgeClaimInput
   BadgesGetInput: BadgesGetInput
@@ -2150,6 +2178,7 @@ export type ResolversTypes = {
   >
   FundingTxAmountGraph: ResolverTypeWrapper<FundingTxAmountGraph>
   FundingTxMethodCount: ResolverTypeWrapper<FundingTxMethodCount>
+  FundingTxMethodSum: ResolverTypeWrapper<FundingTxMethodSum>
   FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
   FundingTxStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<FundingTxStatusUpdatedSubscriptionResponse>
   FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>
@@ -2209,13 +2238,18 @@ export type ResolversTypes = {
     | ResolversTypes['DeleteUserResponse']
     | ResolversTypes['ProjectDeleteResponse']
   NostrKeys: ResolverTypeWrapper<NostrKeys>
+  NostrPrivateKey: ResolverTypeWrapper<NostrPrivateKey>
   NostrPublicKey: ResolverTypeWrapper<NostrPublicKey>
   OTPInput: OtpInput
   OTPLoginInput: OtpLoginInput
   OTPResponse: ResolverTypeWrapper<OtpResponse>
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
+  Order: ResolverTypeWrapper<Order>
+  OrderArticleInput: OrderArticleInput
   OrderByDirection: OrderByDirection
   OrderByOptions: OrderByOptions
+  OrderFundingInput: OrderFundingInput
+  OrderItems: ResolverTypeWrapper<OrderItems>
   Owner: ResolverTypeWrapper<Owner>
   OwnerOf: ResolverTypeWrapper<OwnerOf>
   PageViewCountGraph: ResolverTypeWrapper<PageViewCountGraph>
@@ -2233,6 +2267,7 @@ export type ResolversTypes = {
   ProjectKeys: ResolverTypeWrapper<ProjectKeys>
   ProjectLinkMutationInput: ProjectLinkMutationInput
   ProjectMilestone: ResolverTypeWrapper<ProjectMilestone>
+  ProjectPublishMutationInput: ProjectPublishMutationInput
   ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>
   ProjectReward: ResolverTypeWrapper<ProjectReward>
   ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>
@@ -2253,8 +2288,6 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>
   ResourceInput: ResourceInput
   RewardCurrency: RewardCurrency
-  RewardFundingInput: RewardFundingInput
-  RewardInput: RewardInput
   SendOtpByEmailInput: SendOtpByEmailInput
   ShippingDestination: ShippingDestination
   ShippingInput: ShippingInput
@@ -2363,15 +2396,15 @@ export type ResolversTypes = {
   name_String_minLength_5_maxLength_60: ResolverTypeWrapper<
     Scalars['name_String_minLength_5_maxLength_60']
   >
+  orderTotal_Int_NotNull_min_0: ResolverTypeWrapper<
+    Scalars['orderTotal_Int_NotNull_min_0']
+  >
   projectsMostFundedOfTheWeekGet: ResolverTypeWrapper<ProjectsMostFundedOfTheWeekGet>
   pubkey_String_minLength_66_maxLength_66: ResolverTypeWrapper<
     Scalars['pubkey_String_minLength_66_maxLength_66']
   >
   quantity_Int_NotNull_min_1: ResolverTypeWrapper<
     Scalars['quantity_Int_NotNull_min_1']
-  >
-  rewardsCost_Int_NotNull_min_0: ResolverTypeWrapper<
-    Scalars['rewardsCost_Int_NotNull_min_0']
   >
   shortDescription_String_maxLength_500: ResolverTypeWrapper<
     Scalars['shortDescription_String_maxLength_500']
@@ -2454,6 +2487,7 @@ export type ResolversParentTypes = {
   }
   FundingTxAmountGraph: FundingTxAmountGraph
   FundingTxMethodCount: FundingTxMethodCount
+  FundingTxMethodSum: FundingTxMethodSum
   FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
   FundingTxStatusUpdatedSubscriptionResponse: FundingTxStatusUpdatedSubscriptionResponse
   FundinginvoiceCancel: FundinginvoiceCancel
@@ -2508,11 +2542,16 @@ export type ResolversParentTypes = {
     | ResolversParentTypes['DeleteUserResponse']
     | ResolversParentTypes['ProjectDeleteResponse']
   NostrKeys: NostrKeys
+  NostrPrivateKey: NostrPrivateKey
   NostrPublicKey: NostrPublicKey
   OTPInput: OtpInput
   OTPLoginInput: OtpLoginInput
   OTPResponse: OtpResponse
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
+  Order: Order
+  OrderArticleInput: OrderArticleInput
+  OrderFundingInput: OrderFundingInput
+  OrderItems: OrderItems
   Owner: Owner
   OwnerOf: OwnerOf
   PageViewCountGraph: PageViewCountGraph
@@ -2530,6 +2569,7 @@ export type ResolversParentTypes = {
   ProjectKeys: ProjectKeys
   ProjectLinkMutationInput: ProjectLinkMutationInput
   ProjectMilestone: ProjectMilestone
+  ProjectPublishMutationInput: ProjectPublishMutationInput
   ProjectRegionsGetResult: ProjectRegionsGetResult
   ProjectReward: ProjectReward
   ProjectStatistics: ProjectStatistics
@@ -2546,8 +2586,6 @@ export type ResolversParentTypes = {
   ProjectsSummary: ProjectsSummary
   Query: {}
   ResourceInput: ResourceInput
-  RewardFundingInput: RewardFundingInput
-  RewardInput: RewardInput
   SendOtpByEmailInput: SendOtpByEmailInput
   ShippingInput: ShippingInput
   SignedUploadUrl: SignedUploadUrl
@@ -2606,10 +2644,10 @@ export type ResolversParentTypes = {
   name_String_maxLength_100: Scalars['name_String_maxLength_100']
   name_String_minLength_3_maxLength_280: Scalars['name_String_minLength_3_maxLength_280']
   name_String_minLength_5_maxLength_60: Scalars['name_String_minLength_5_maxLength_60']
+  orderTotal_Int_NotNull_min_0: Scalars['orderTotal_Int_NotNull_min_0']
   projectsMostFundedOfTheWeekGet: ProjectsMostFundedOfTheWeekGet
   pubkey_String_minLength_66_maxLength_66: Scalars['pubkey_String_minLength_66_maxLength_66']
   quantity_Int_NotNull_min_1: Scalars['quantity_Int_NotNull_min_1']
-  rewardsCost_Int_NotNull_min_0: Scalars['rewardsCost_Int_NotNull_min_0']
   shortDescription_String_maxLength_500: Scalars['shortDescription_String_maxLength_500']
   stock_Int_min_0: Scalars['stock_Int_min_0']
   title_String_NotNull_maxLength_60: Scalars['title_String_NotNull_maxLength_60']
@@ -2824,6 +2862,7 @@ export type FunderResolvers<
     Partial<FunderFundingTxsArgs>
   >
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  orders?: Resolver<Array<ResolversTypes['Order']>, ParentType, ContextType>
   rewards?: Resolver<
     Array<ResolversTypes['FunderReward']>,
     ParentType,
@@ -2977,6 +3016,15 @@ export type FundingTxMethodCountResolvers<
 > = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   method?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type FundingTxMethodSumResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['FundingTxMethodSum'] = ResolversParentTypes['FundingTxMethodSum'],
+> = {
+  method?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  sum?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -3319,6 +3367,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationProjectFollowArgs, 'input'>
   >
+  projectPublish?: Resolver<
+    ResolversTypes['Project'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationProjectPublishArgs, 'input'>
+  >
   projectRewardCreate?: Resolver<
     ResolversTypes['ProjectReward'],
     ParentType,
@@ -3469,11 +3523,25 @@ export type NostrKeysResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['NostrKeys'] = ResolversParentTypes['NostrKeys'],
 > = {
+  privateKey?: Resolver<
+    Maybe<ResolversTypes['NostrPrivateKey']>,
+    ParentType,
+    ContextType
+  >
   publicKey?: Resolver<
     ResolversTypes['NostrPublicKey'],
     ParentType,
     ContextType
   >
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type NostrPrivateKeyResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['NostrPrivateKey'] = ResolversParentTypes['NostrPrivateKey'],
+> = {
+  hex?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  nsec?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -3496,6 +3564,30 @@ export type OtpResponseResolvers<
     ParentType,
     ContextType
   >
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type OrderResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order'],
+> = {
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  items?: Resolver<Array<ResolversTypes['OrderItems']>, ParentType, ContextType>
+  status?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  total?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type OrderItemsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['OrderItems'] = ResolversParentTypes['OrderItems'],
+> = {
+  item?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType>
+  quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  unitPrice?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -3688,8 +3780,14 @@ export type ProjectFundingTxStatsResolvers<
     ContextType
   >
   amountSum?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   methodCount?: Resolver<
     Maybe<Array<Maybe<ResolversTypes['FundingTxMethodCount']>>>,
+    ParentType,
+    ContextType
+  >
+  methodSum?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['FundingTxMethodSum']>>>,
     ParentType,
     ContextType
   >
@@ -3720,6 +3818,7 @@ export type ProjectMilestoneResolvers<
     ParentType,
     ContextType
   >
+  reached?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -3736,12 +3835,18 @@ export type ProjectRewardResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ProjectReward'] = ResolversParentTypes['ProjectReward'],
 > = {
+  backersCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
   deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   deletedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
   description?: Resolver<
     Maybe<ResolversTypes['description_String_maxLength_250']>,
+    ParentType,
+    ContextType
+  >
+  estimatedDeliveryDate?: Resolver<
+    Maybe<ResolversTypes['Date']>,
     ParentType,
     ContextType
   >
@@ -4443,6 +4548,14 @@ export interface Name_String_MinLength_5_MaxLength_60ScalarConfig
   name: 'name_String_minLength_5_maxLength_60'
 }
 
+export interface OrderTotal_Int_NotNull_Min_0ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['orderTotal_Int_NotNull_min_0'],
+    any
+  > {
+  name: 'orderTotal_Int_NotNull_min_0'
+}
+
 export type ProjectsMostFundedOfTheWeekGetResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['projectsMostFundedOfTheWeekGet'] = ResolversParentTypes['projectsMostFundedOfTheWeekGet'],
@@ -4468,14 +4581,6 @@ export interface Quantity_Int_NotNull_Min_1ScalarConfig
     any
   > {
   name: 'quantity_Int_NotNull_min_1'
-}
-
-export interface RewardsCost_Int_NotNull_Min_0ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['rewardsCost_Int_NotNull_min_0'],
-    any
-  > {
-  name: 'rewardsCost_Int_NotNull_min_0'
 }
 
 export interface ShortDescription_String_MaxLength_500ScalarConfig
@@ -4549,6 +4654,7 @@ export type Resolvers<ContextType = any> = {
   FundingTx?: FundingTxResolvers<ContextType>
   FundingTxAmountGraph?: FundingTxAmountGraphResolvers<ContextType>
   FundingTxMethodCount?: FundingTxMethodCountResolvers<ContextType>
+  FundingTxMethodSum?: FundingTxMethodSumResolvers<ContextType>
   FundingTxStatusUpdatedSubscriptionResponse?: FundingTxStatusUpdatedSubscriptionResponseResolvers<ContextType>
   FundinginvoiceCancel?: FundinginvoiceCancelResolvers<ContextType>
   Grant?: GrantResolvers<ContextType>
@@ -4569,8 +4675,11 @@ export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>
   MutationResponse?: MutationResponseResolvers<ContextType>
   NostrKeys?: NostrKeysResolvers<ContextType>
+  NostrPrivateKey?: NostrPrivateKeyResolvers<ContextType>
   NostrPublicKey?: NostrPublicKeyResolvers<ContextType>
   OTPResponse?: OtpResponseResolvers<ContextType>
+  Order?: OrderResolvers<ContextType>
+  OrderItems?: OrderItemsResolvers<ContextType>
   Owner?: OwnerResolvers<ContextType>
   OwnerOf?: OwnerOfResolvers<ContextType>
   PageViewCountGraph?: PageViewCountGraphResolvers<ContextType>
@@ -4627,10 +4736,10 @@ export type Resolvers<ContextType = any> = {
   name_String_maxLength_100?: GraphQLScalarType
   name_String_minLength_3_maxLength_280?: GraphQLScalarType
   name_String_minLength_5_maxLength_60?: GraphQLScalarType
+  orderTotal_Int_NotNull_min_0?: GraphQLScalarType
   projectsMostFundedOfTheWeekGet?: ProjectsMostFundedOfTheWeekGetResolvers<ContextType>
   pubkey_String_minLength_66_maxLength_66?: GraphQLScalarType
   quantity_Int_NotNull_min_1?: GraphQLScalarType
-  rewardsCost_Int_NotNull_min_0?: GraphQLScalarType
   shortDescription_String_maxLength_500?: GraphQLScalarType
   stock_Int_min_0?: GraphQLScalarType
   title_String_NotNull_maxLength_60?: GraphQLScalarType
@@ -4878,7 +4987,6 @@ export type ProjectRewardForLandingPageFragment = {
   sold: number
   stock?: number | null
   rewardName: any
-  estimatedDeliveryDate?: any | null
   rewardProject: {
     __typename?: 'Project'
     id: any
@@ -4898,8 +5006,8 @@ export type ProjectRewardForLandingPageFragment = {
   }
 }
 
-export type ProjectProductForCreateUpdateFragment = {
-  __typename?: 'ProjectProduct'
+export type ProjectRewardForCreateUpdateFragment = {
+  __typename?: 'ProjectReward'
   id: any
   name: any
   description?: any | null
@@ -4909,33 +5017,7 @@ export type ProjectProductForCreateUpdateFragment = {
   stock?: number | null
   sold: number
   hasShipping: boolean
-  funders: Array<
-    { __typename?: 'Funder' } & FunderWithUserFragment
-  >
-  isPhysical: boolean
-  inStock: boolean
-  availableAsAdditionalItem: boolean
-}
-
-export type ProjectRewardForCreateUpdateFragment = {
-  __typename?: 'ProjectReward'
-  id: any
-  name: any
-  description?: any | null
-  cost: number
-  image?: string | null
-  deleted: boolean
-  stock?: number | null // @TODO: Remove when ready
-  sold: number
-  hasShipping: boolean
-  products: Array<
-    { __typename?: 'ProjectProduct' } & ProjectProductForCreateUpdateFragment
-  >
-  funders: Array<
-    { __typename?: 'Funder' } & FunderWithUserFragment
-  >
-  maxClaimable: number
-  published: boolean
+  estimatedDeliveryDate?: any | null
 }
 
 export type ProjectFragment = {
@@ -4967,6 +5049,9 @@ export type ProjectFragment = {
     id: any
     user: { __typename?: 'User' } & UserMeFragment
   }>
+  rewards: Array<
+    { __typename?: 'ProjectReward' } & ProjectRewardForCreateUpdateFragment
+  >
   ambassadors: Array<{
     __typename?: 'Ambassador'
     id: any
@@ -5013,14 +5098,6 @@ export type ProjectFragment = {
         }
       | { __typename?: 'LndConnectionDetailsPublic'; pubkey?: any | null }
   }>
-  // @ TODO: Update to API call structure when backend complete
-  rewardsEnabled: boolean
-  products: Array<
-    { __typename?: 'ProjectProduct' } & ProjectProductForCreateUpdateFragment
-  >
-  rewards: Array<
-    { __typename?: 'ProjectReward' } & ProjectRewardForCreateUpdateFragment
-  >
 }
 
 export type ProjectStatsForOverviewPageFragment = {
@@ -6172,25 +6249,6 @@ export type ProjectUnplublishedEntriesQuery = {
   } | null
 }
 
-export type ProjectDashboardDataQueryVariables = Exact<{
-  where: UniqueProjectQueryInput
-}>
-
-export type ProjectDashboardDataQuery = {
-  __typename?: 'Query'
-  projectGet?: {
-    __typename?: 'Project'
-    unpublishedEntries: Array<
-      { __typename?: 'Entry' } & EntryForProjectFragment
-    >
-    publishedEntries: Array<{ __typename?: 'Entry' } & EntryForProjectFragment>
-    statistics?: {
-      __typename?: 'ProjectStatistics'
-      totalVisitors: number
-    } | null
-  } | null
-}
-
 export type ProjectFundersQueryVariables = Exact<{
   input: GetFundersInput
 }>
@@ -6676,6 +6734,7 @@ export const ProjectRewardForCreateUpdateFragmentDoc = gql`
     stock
     sold
     hasShipping
+    estimatedDeliveryDate
   }
 `
 export const EntryForProjectFragmentDoc = gql`
@@ -10227,73 +10286,6 @@ export type ProjectUnplublishedEntriesLazyQueryHookResult = ReturnType<
 export type ProjectUnplublishedEntriesQueryResult = Apollo.QueryResult<
   ProjectUnplublishedEntriesQuery,
   ProjectUnplublishedEntriesQueryVariables
->
-export const ProjectDashboardDataDocument = gql`
-  query ProjectDashboardData($where: UniqueProjectQueryInput!) {
-    projectGet(where: $where) {
-      unpublishedEntries: entries(input: { where: { published: false } }) {
-        ...EntryForProject
-      }
-      publishedEntries: entries(input: { where: { published: true } }) {
-        ...EntryForProject
-      }
-      statistics {
-        totalVisitors
-      }
-    }
-  }
-  ${EntryForProjectFragmentDoc}
-`
-
-/**
- * __useProjectDashboardDataQuery__
- *
- * To run a query within a React component, call `useProjectDashboardDataQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectDashboardDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProjectDashboardDataQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
-export function useProjectDashboardDataQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    ProjectDashboardDataQuery,
-    ProjectDashboardDataQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    ProjectDashboardDataQuery,
-    ProjectDashboardDataQueryVariables
-  >(ProjectDashboardDataDocument, options)
-}
-export function useProjectDashboardDataLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ProjectDashboardDataQuery,
-    ProjectDashboardDataQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    ProjectDashboardDataQuery,
-    ProjectDashboardDataQueryVariables
-  >(ProjectDashboardDataDocument, options)
-}
-export type ProjectDashboardDataQueryHookResult = ReturnType<
-  typeof useProjectDashboardDataQuery
->
-export type ProjectDashboardDataLazyQueryHookResult = ReturnType<
-  typeof useProjectDashboardDataLazyQuery
->
-export type ProjectDashboardDataQueryResult = Apollo.QueryResult<
-  ProjectDashboardDataQuery,
-  ProjectDashboardDataQueryVariables
 >
 export const ProjectFundersDocument = gql`
   query ProjectFunders($input: GetFundersInput!) {

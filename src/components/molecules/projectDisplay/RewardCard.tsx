@@ -94,7 +94,7 @@ export const RewardCard = ({
                     key={item.id}
                   >
                     <Stack direction='row' onClick={() => {}}>
-                      <Text fontWeight={500} fontSize={16} color='#20ECC7'>> </Text>
+                      <Text fontWeight={500} fontSize={16} color='#20ECC7'>{'>'} </Text>
                       <Text fontWeight={500} fontSize={16} color='neutral.500'>{item.name}</Text>
                     </Stack>
                   </VStack>

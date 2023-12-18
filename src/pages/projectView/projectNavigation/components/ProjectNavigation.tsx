@@ -98,13 +98,13 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         icon: InsightsNavIcon,
       },
       {
-        name: 'Items & Bundles',
-        path: PathName.projectProductsAndBundles,
+        name: 'Rewards & Bundles',
+        path: PathName.projectRewardsAndBundles,
         mobileView: MobileViews.productsAndBundles,
         subViews: [
-          MobileViews.createItem,
+          MobileViews.createRewardBundle,
           MobileViews.createReward,
-          MobileViews.editItem,
+          MobileViews.editRewardBundle,
           MobileViews.editReward
         ],
         icon: RewardGiftIcon,

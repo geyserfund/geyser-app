@@ -1,4 +1,4 @@
-export * from './CreateItem/CreateItem'
+export * from './CreateRewardBundle/CreateRewardBundle'
 export * from './CreateReward/CreateReward'
-export * from './EditItem/EditItem'
+export * from './EditRewardBundle/EditRewardBundle'
 export * from './EditReward/EditReward'

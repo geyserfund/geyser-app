@@ -36,9 +36,9 @@ export enum MobileViews {
   insights = 'insights',
   contributors = 'contributors',
   productsAndBundles = 'productsAndBundles',
-  createItem = 'createItem',
+  createRewardBundle = 'createRewardBundle',
   createReward = 'createReward',
-  editItem = 'editItem',
+  editRewardBundle = 'editRewardBundle',
   editReward = 'editReward',
 }
 

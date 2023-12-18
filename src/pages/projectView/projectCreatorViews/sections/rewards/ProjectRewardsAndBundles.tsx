@@ -1,10 +1,10 @@
 import { Stack, VStack, HStack, useControllableState } from '@chakra-ui/react'
-import { RewardsHeader, RewardsTabs, RewardsTable, ItemsTable } from './components'
+import { RewardsHeader, RewardsTabs, RewardsTable, RewardsBundlesTable } from './components'
 import {
   CardLayout
 } from '../../../../../components/layouts'
 
-export const ProjectProductsAndBundles = () => {
+export const ProjectRewardsAndBundles = () => {
 
   const [tabState, setTabState] = useControllableState({ defaultValue: 'rewards' })
 
@@ -22,7 +22,7 @@ export const ProjectProductsAndBundles = () => {
         <RewardsHeader />
         <RewardsTabs tabState={tabState} setTabState={setTabState} />
         {tabState == 'rewards' && <RewardsTable /> }
-        {tabState != 'rewards' && <ItemsTable /> }
+        {tabState != 'rewards' && <RewardsBundlesTable /> }
       </CardLayout>
     </VStack>
   )

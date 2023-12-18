@@ -1,4 +1,6 @@
 import { Project, ProjectReward } from '../types/generated/graphql'
+let estimatedDeliveryDate = new Date();
+estimatedDeliveryDate.setMonth(estimatedDeliveryDate.getMonth() + 6);
 
 export const defaultProjectReward: ProjectReward = {
   id: 0,

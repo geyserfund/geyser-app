@@ -11,7 +11,7 @@ export const RewardsHeader = () => {
       pb={4}
       w="full"
     >
-      <H2>{t('Manage Items & Bundles')}</H2>
+      <H2>{t('Manage Rewards & Bundles')}</H2>
     </Stack>
   )
 }
