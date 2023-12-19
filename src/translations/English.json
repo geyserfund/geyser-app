@@ -760,6 +760,22 @@
   "Login with Twitter (X)":"Login with Twitter (X)",
   "Login with Facebook":"Login with Facebook",
   "Login with Nostr":"Login with Nostr",
-  "Login with Lightning":"Login with Lightning"
+  "Login with Lightning":"Login with Lightning",
+  "Docs":"Docs",
+  "No rewards currently exist": "No rewards currently exist",
+  "Manage Rewards": "Manage Rewards",
+  "Create new reward": "Create new reward",
+  "Add Reward": "Add Reward",
+  "Reward Name": "Reward Name",
+  "Limited Edition (skip if no limit)": "Limited Edition (skip if no limit)",
+  "Currency": "Currency",
+  "Price (USD)": "Price (USD)",
+  "Describe the item you would like to sell": "Describe the item you would like to sell",
+  "Estimated Delivery Date": "Estimated Delivery Date",
+  "Includes Shipping": "Includes Shipping",
+  "Publish reward": "Publish reward",
+  "Reward Type": "Reward Type",
+  "Physical": "Physical",
+  "Digital": "Digital"
 
 }

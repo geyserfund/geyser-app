@@ -49,15 +49,16 @@ export type Scalars = {
   email_String_format_email: any
   link_String_NotNull_format_uri: any
   links_List_String_NotNull_format_uri: any
+  maxClaimable_Int_min_0: any
   name_String_NotNull_maxLength_100: any
   name_String_NotNull_minLength_3_maxLength_60: any
   name_String_NotNull_minLength_3_maxLength_280: any
   name_String_maxLength_100: any
   name_String_minLength_3_maxLength_280: any
   name_String_minLength_5_maxLength_60: any
+  orderTotal_Int_NotNull_min_0: any
   pubkey_String_minLength_66_maxLength_66: any
   quantity_Int_NotNull_min_1: any
-  rewardsCost_Int_NotNull_min_0: any
   shortDescription_String_maxLength_500: any
   stock_Int_min_0: any
   title_String_NotNull_maxLength_60: any
@@ -199,11 +200,14 @@ export type CreateProjectRewardInput = {
   cost: Scalars['cost_Int_NotNull_min_1_max_1000000']
   /** Currency used for the cost */
   costCurrency: RewardCurrency
-  description: Scalars['description_String_NotNull_maxLength_250']
+  description?: InputMaybe<Scalars['description_String_maxLength_250']>
+  estimatedDeliveryDate?: InputMaybe<Scalars['Date']>
   hasShipping: Scalars['Boolean']
   image?: InputMaybe<Scalars['String']>
+  maxClaimable?: InputMaybe<Scalars['maxClaimable_Int_min_0']>
   name: Scalars['name_String_NotNull_maxLength_100']
   projectId: Scalars['BigInt']
+  rewardType: Scalars['String']
   stock?: InputMaybe<Scalars['stock_Int_min_0']>
 }
 
@@ -334,6 +338,8 @@ export type Funder = {
   /** Funder's funding txs. */
   fundingTxs: Array<FundingTx>
   id: Scalars['BigInt']
+  orders: Array<Order>
+  /** @deprecated Use 'orders' instead. */
   rewards: Array<FunderReward>
   /** Number of (confirmed) times a Funder funded a particular project. */
   timesFunded?: Maybe<Scalars['Int']>
@@ -413,8 +419,8 @@ export type FundingInput = {
   anonymous: Scalars['Boolean']
   donationInput?: InputMaybe<DonationFundingInput>
   metadataInput?: InputMaybe<FundingMetadataInput>
+  orderInput?: InputMaybe<OrderFundingInput>
   projectId: Scalars['BigInt']
-  rewardInput?: InputMaybe<RewardFundingInput>
   /** The resource from which the funding transaction is being created. */
   sourceResourceInput: ResourceInput
 }
@@ -489,9 +495,6 @@ export type FundingTx = {
   address?: Maybe<Scalars['String']>
   amount: Scalars['Int']
   comment?: Maybe<Scalars['String']>
-  /** Creator's email address. Only visible to the contributor. */
-  creatorEmail?: Maybe<Scalars['String']>
-  /** Contributor's email address. Only visible to the project owner. */
   email?: Maybe<Scalars['String']>
   funder: Funder
   id: Scalars['BigInt']
@@ -1132,6 +1135,17 @@ export type OffsetBasedPaginationInput = {
   take?: InputMaybe<Scalars['Int']>
 }
 
+export type Order = {
+  __typename?: 'Order'
+  createdAt: Scalars['Date']
+  id: Scalars['BigInt']
+  items: Array<OrderItems>
+  status: Scalars['String']
+  total: Scalars['BigInt']
+  updatedAt: Scalars['Date']
+  user: User
+}
+
 export enum OrderByDirection {
   Asc = 'asc',
   Desc = 'desc',
@@ -1140,6 +1154,33 @@ export enum OrderByDirection {
 export enum OrderByOptions {
   Asc = 'asc',
   Desc = 'desc',
+}
+
+export type OrderFundingInput = {
+  items: Array<OrderItemInput>
+  /**
+   * Total cost of rewards, in satoshis. This amount will be used for the invoice  unless there is more than 1%
+   * slippage with the reward cost calculated in the backend.
+   */
+  orderTotal: Scalars['orderTotal_Int_NotNull_min_0']
+}
+
+export type OrderItemInput = {
+  itemId: Scalars['BigInt']
+  itemType: OrderItemType
+  /** Number of times a reward was selected. */
+  quantity: Scalars['quantity_Int_NotNull_min_1']
+}
+
+export enum OrderItemType {
+  ProjectReward = 'PROJECT_REWARD',
+}
+
+export type OrderItems = {
+  __typename?: 'OrderItems'
+  item: ProjectReward
+  quantity: Scalars['Int']
+  unitPrice: Scalars['BigInt']
 }
 
 export type Owner = {
@@ -1313,27 +1354,41 @@ export type ProjectRegionsGetResult = {
 
 export type ProjectReward = {
   __typename?: 'ProjectReward'
+  /** Number of people that purchased the Project Reward. */
+  backersCount: Scalars['Int']
   /** Cost of the reward, priced in USD cents. */
   cost: Scalars['Int']
+  /** The date the creator created the reward */
   createdAt: Scalars['Date']
   /**
    * Whether the reward is deleted or not. Deleted rewards should not appear in the funding flow. Moreover, deleted
    * rewards should only be visible by the project owner and the users that purchased it.
    */
   deleted: Scalars['Boolean']
+  /** Internally used to track whether a reward was soft deleted */
   deletedAt?: Maybe<Scalars['Date']>
   /** Short description of the reward. */
   description?: Maybe<Scalars['description_String_maxLength_250']>
+  /** Estimated Date when the Reward will be delivered */
+  estimatedDeliveryDate?: Maybe<Scalars['Date']>
   /** Boolean value to indicate whether this reward requires shipping */
   hasShipping: Scalars['Boolean']
   id: Scalars['BigInt']
   /** Image of the reward. */
   image?: Maybe<Scalars['String']>
+  /** Maximum times the item can be purchased */
+  maxClaimable?: Maybe<Scalars['Int']>
   /** Name of the reward. */
   name: Scalars['name_String_NotNull_maxLength_100']
+  /** Boolean value to indicate whether this reward requires shipping */
   project: Project
+  /** Type of Reward */
+  rewardType: Scalars['String']
+  /** Number of times this Project Reward was sold. */
   sold: Scalars['Int']
+  /** Tracks the stock of the reward */
   stock?: Maybe<Scalars['Int']>
+  /** The last date when the creator has updated the reward */
   updatedAt: Scalars['Date']
 }
 
@@ -1585,22 +1640,6 @@ export enum RewardCurrency {
   Usdcent = 'USDCENT',
 }
 
-export type RewardFundingInput = {
-  rewards: Array<RewardInput>
-  /**
-   * Total cost of rewards, in satoshis. This amount will be used for the invoice  unless there is more than 1%
-   * slippage with the reward cost calculated in the backend.
-   */
-  rewardsCost: Scalars['rewardsCost_Int_NotNull_min_0']
-  shipping?: InputMaybe<ShippingInput>
-}
-
-export type RewardInput = {
-  id: Scalars['BigInt']
-  /** Number of times a reward was selected. */
-  quantity: Scalars['quantity_Int_NotNull_min_1']
-}
-
 export type SendOtpByEmailInput = {
   action: MfaAction
   email?: InputMaybe<Scalars['String']>
@@ -1748,10 +1787,13 @@ export type UpdateProjectRewardInput = {
   /** Currency used for the cost */
   costCurrency?: InputMaybe<RewardCurrency>
   description?: InputMaybe<Scalars['description_String_maxLength_250']>
+  estimatedDeliveryDate?: InputMaybe<Scalars['Date']>
   hasShipping?: InputMaybe<Scalars['Boolean']>
   image?: InputMaybe<Scalars['String']>
+  maxClaimable?: InputMaybe<Scalars['maxClaimable_Int_min_0']>
   name?: InputMaybe<Scalars['name_String_maxLength_100']>
   projectRewardId: Scalars['BigInt']
+  rewardType: Scalars['String']
   stock?: InputMaybe<Scalars['stock_Int_min_0']>
 }
 
@@ -2210,8 +2252,13 @@ export type ResolversTypes = {
   OTPLoginInput: OtpLoginInput
   OTPResponse: ResolverTypeWrapper<OtpResponse>
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
+  Order: ResolverTypeWrapper<Order>
   OrderByDirection: OrderByDirection
   OrderByOptions: OrderByOptions
+  OrderFundingInput: OrderFundingInput
+  OrderItemInput: OrderItemInput
+  OrderItemType: OrderItemType
+  OrderItems: ResolverTypeWrapper<OrderItems>
   Owner: ResolverTypeWrapper<Owner>
   OwnerOf: ResolverTypeWrapper<OwnerOf>
   PageViewCountGraph: ResolverTypeWrapper<PageViewCountGraph>
@@ -2250,8 +2297,6 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>
   ResourceInput: ResourceInput
   RewardCurrency: RewardCurrency
-  RewardFundingInput: RewardFundingInput
-  RewardInput: RewardInput
   SendOtpByEmailInput: SendOtpByEmailInput
   ShippingDestination: ShippingDestination
   ShippingInput: ShippingInput
@@ -2342,6 +2387,7 @@ export type ResolversTypes = {
   links_List_String_NotNull_format_uri: ResolverTypeWrapper<
     Scalars['links_List_String_NotNull_format_uri']
   >
+  maxClaimable_Int_min_0: ResolverTypeWrapper<Scalars['maxClaimable_Int_min_0']>
   name_String_NotNull_maxLength_100: ResolverTypeWrapper<
     Scalars['name_String_NotNull_maxLength_100']
   >
@@ -2360,15 +2406,15 @@ export type ResolversTypes = {
   name_String_minLength_5_maxLength_60: ResolverTypeWrapper<
     Scalars['name_String_minLength_5_maxLength_60']
   >
+  orderTotal_Int_NotNull_min_0: ResolverTypeWrapper<
+    Scalars['orderTotal_Int_NotNull_min_0']
+  >
   projectsMostFundedOfTheWeekGet: ResolverTypeWrapper<ProjectsMostFundedOfTheWeekGet>
   pubkey_String_minLength_66_maxLength_66: ResolverTypeWrapper<
     Scalars['pubkey_String_minLength_66_maxLength_66']
   >
   quantity_Int_NotNull_min_1: ResolverTypeWrapper<
     Scalars['quantity_Int_NotNull_min_1']
-  >
-  rewardsCost_Int_NotNull_min_0: ResolverTypeWrapper<
-    Scalars['rewardsCost_Int_NotNull_min_0']
   >
   shortDescription_String_maxLength_500: ResolverTypeWrapper<
     Scalars['shortDescription_String_maxLength_500']
@@ -2512,6 +2558,10 @@ export type ResolversParentTypes = {
   OTPLoginInput: OtpLoginInput
   OTPResponse: OtpResponse
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
+  Order: Order
+  OrderFundingInput: OrderFundingInput
+  OrderItemInput: OrderItemInput
+  OrderItems: OrderItems
   Owner: Owner
   OwnerOf: OwnerOf
   PageViewCountGraph: PageViewCountGraph
@@ -2546,8 +2596,6 @@ export type ResolversParentTypes = {
   ProjectsSummary: ProjectsSummary
   Query: {}
   ResourceInput: ResourceInput
-  RewardFundingInput: RewardFundingInput
-  RewardInput: RewardInput
   SendOtpByEmailInput: SendOtpByEmailInput
   ShippingInput: ShippingInput
   SignedUploadUrl: SignedUploadUrl
@@ -2600,16 +2648,17 @@ export type ResolversParentTypes = {
   email_String_format_email: Scalars['email_String_format_email']
   link_String_NotNull_format_uri: Scalars['link_String_NotNull_format_uri']
   links_List_String_NotNull_format_uri: Scalars['links_List_String_NotNull_format_uri']
+  maxClaimable_Int_min_0: Scalars['maxClaimable_Int_min_0']
   name_String_NotNull_maxLength_100: Scalars['name_String_NotNull_maxLength_100']
   name_String_NotNull_minLength_3_maxLength_60: Scalars['name_String_NotNull_minLength_3_maxLength_60']
   name_String_NotNull_minLength_3_maxLength_280: Scalars['name_String_NotNull_minLength_3_maxLength_280']
   name_String_maxLength_100: Scalars['name_String_maxLength_100']
   name_String_minLength_3_maxLength_280: Scalars['name_String_minLength_3_maxLength_280']
   name_String_minLength_5_maxLength_60: Scalars['name_String_minLength_5_maxLength_60']
+  orderTotal_Int_NotNull_min_0: Scalars['orderTotal_Int_NotNull_min_0']
   projectsMostFundedOfTheWeekGet: ProjectsMostFundedOfTheWeekGet
   pubkey_String_minLength_66_maxLength_66: Scalars['pubkey_String_minLength_66_maxLength_66']
   quantity_Int_NotNull_min_1: Scalars['quantity_Int_NotNull_min_1']
-  rewardsCost_Int_NotNull_min_0: Scalars['rewardsCost_Int_NotNull_min_0']
   shortDescription_String_maxLength_500: Scalars['shortDescription_String_maxLength_500']
   stock_Int_min_0: Scalars['stock_Int_min_0']
   title_String_NotNull_maxLength_60: Scalars['title_String_NotNull_maxLength_60']
@@ -2824,6 +2873,7 @@ export type FunderResolvers<
     Partial<FunderFundingTxsArgs>
   >
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  orders?: Resolver<Array<ResolversTypes['Order']>, ParentType, ContextType>
   rewards?: Resolver<
     Array<ResolversTypes['FunderReward']>,
     ParentType,
@@ -2928,11 +2978,6 @@ export type FundingTxResolvers<
   address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   comment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  creatorEmail?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   funder?: Resolver<ResolversTypes['Funder'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
@@ -3533,6 +3578,30 @@ export type OtpResponseResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
+export type OrderResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order'],
+> = {
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  items?: Resolver<Array<ResolversTypes['OrderItems']>, ParentType, ContextType>
+  status?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  total?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type OrderItemsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['OrderItems'] = ResolversParentTypes['OrderItems'],
+> = {
+  item?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType>
+  quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  unitPrice?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type OwnerResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Owner'] = ResolversParentTypes['Owner'],
@@ -3777,6 +3846,7 @@ export type ProjectRewardResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ProjectReward'] = ResolversParentTypes['ProjectReward'],
 > = {
+  backersCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
   deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
@@ -3786,15 +3856,22 @@ export type ProjectRewardResolvers<
     ParentType,
     ContextType
   >
+  estimatedDeliveryDate?: Resolver<
+    Maybe<ResolversTypes['Date']>,
+    ParentType,
+    ContextType
+  >
   hasShipping?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  maxClaimable?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   name?: Resolver<
     ResolversTypes['name_String_NotNull_maxLength_100'],
     ParentType,
     ContextType
   >
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>
+  rewardType?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   stock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
@@ -4436,6 +4513,14 @@ export interface Links_List_String_NotNull_Format_UriScalarConfig
   name: 'links_List_String_NotNull_format_uri'
 }
 
+export interface MaxClaimable_Int_Min_0ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['maxClaimable_Int_min_0'],
+    any
+  > {
+  name: 'maxClaimable_Int_min_0'
+}
+
 export interface Name_String_NotNull_MaxLength_100ScalarConfig
   extends GraphQLScalarTypeConfig<
     ResolversTypes['name_String_NotNull_maxLength_100'],
@@ -4484,6 +4569,14 @@ export interface Name_String_MinLength_5_MaxLength_60ScalarConfig
   name: 'name_String_minLength_5_maxLength_60'
 }
 
+export interface OrderTotal_Int_NotNull_Min_0ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['orderTotal_Int_NotNull_min_0'],
+    any
+  > {
+  name: 'orderTotal_Int_NotNull_min_0'
+}
+
 export type ProjectsMostFundedOfTheWeekGetResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['projectsMostFundedOfTheWeekGet'] = ResolversParentTypes['projectsMostFundedOfTheWeekGet'],
@@ -4509,14 +4602,6 @@ export interface Quantity_Int_NotNull_Min_1ScalarConfig
     any
   > {
   name: 'quantity_Int_NotNull_min_1'
-}
-
-export interface RewardsCost_Int_NotNull_Min_0ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['rewardsCost_Int_NotNull_min_0'],
-    any
-  > {
-  name: 'rewardsCost_Int_NotNull_min_0'
 }
 
 export interface ShortDescription_String_MaxLength_500ScalarConfig
@@ -4614,6 +4699,8 @@ export type Resolvers<ContextType = any> = {
   NostrPrivateKey?: NostrPrivateKeyResolvers<ContextType>
   NostrPublicKey?: NostrPublicKeyResolvers<ContextType>
   OTPResponse?: OtpResponseResolvers<ContextType>
+  Order?: OrderResolvers<ContextType>
+  OrderItems?: OrderItemsResolvers<ContextType>
   Owner?: OwnerResolvers<ContextType>
   OwnerOf?: OwnerOfResolvers<ContextType>
   PageViewCountGraph?: PageViewCountGraphResolvers<ContextType>
@@ -4664,16 +4751,17 @@ export type Resolvers<ContextType = any> = {
   email_String_format_email?: GraphQLScalarType
   link_String_NotNull_format_uri?: GraphQLScalarType
   links_List_String_NotNull_format_uri?: GraphQLScalarType
+  maxClaimable_Int_min_0?: GraphQLScalarType
   name_String_NotNull_maxLength_100?: GraphQLScalarType
   name_String_NotNull_minLength_3_maxLength_60?: GraphQLScalarType
   name_String_NotNull_minLength_3_maxLength_280?: GraphQLScalarType
   name_String_maxLength_100?: GraphQLScalarType
   name_String_minLength_3_maxLength_280?: GraphQLScalarType
   name_String_minLength_5_maxLength_60?: GraphQLScalarType
+  orderTotal_Int_NotNull_min_0?: GraphQLScalarType
   projectsMostFundedOfTheWeekGet?: ProjectsMostFundedOfTheWeekGetResolvers<ContextType>
   pubkey_String_minLength_66_maxLength_66?: GraphQLScalarType
   quantity_Int_NotNull_min_1?: GraphQLScalarType
-  rewardsCost_Int_NotNull_min_0?: GraphQLScalarType
   shortDescription_String_maxLength_500?: GraphQLScalarType
   stock_Int_min_0?: GraphQLScalarType
   title_String_NotNull_maxLength_60?: GraphQLScalarType
@@ -4815,7 +4903,6 @@ export type FundingTxWithInvoiceStatusFragment = {
   onChain: boolean
   invoiceStatus: InvoiceStatus
   paymentRequest?: string | null
-  creatorEmail?: string | null
 }
 
 export type FundingTxFragment = {
@@ -4835,7 +4922,6 @@ export type FundingTxFragment = {
   source: string
   method?: FundingMethod | null
   projectId: any
-  creatorEmail?: string | null
   funder: {
     __typename?: 'Funder'
     id: any
@@ -4978,6 +5064,9 @@ export type ProjectRewardForCreateUpdateFragment = {
   stock?: number | null
   sold: number
   hasShipping: boolean
+  maxClaimable?: number | null
+  estimatedDeliveryDate?: any | null
+  rewardType: string
 }
 
 export type ProjectFragment = {
@@ -6601,7 +6690,6 @@ export const FundingTxWithInvoiceStatusFragmentDoc = gql`
     invoiceStatus
     invoiceStatus
     paymentRequest
-    creatorEmail
   }
 `
 export const FundingTxFragmentDoc = gql`
@@ -6621,7 +6709,6 @@ export const FundingTxFragmentDoc = gql`
     source
     method
     projectId
-    creatorEmail
     funder {
       id
       amountFunded
@@ -6737,6 +6824,9 @@ export const ProjectRewardForCreateUpdateFragmentDoc = gql`
     stock
     sold
     hasShipping
+    maxClaimable
+    estimatedDeliveryDate
+    rewardType
   }
 `
 export const EntryForProjectFragmentDoc = gql`

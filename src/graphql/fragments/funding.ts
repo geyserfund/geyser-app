@@ -56,7 +56,6 @@ export const FRAGMENT_FUNDING_TX_WITH_INVOICE_STATUS = gql`
     invoiceStatus
     invoiceStatus
     paymentRequest
-    creatorEmail
   }
 `
 
@@ -77,7 +76,6 @@ export const FRAGMENT_FUNDING_TX = gql`
     source
     method
     projectId
-    creatorEmail
     funder {
       id
       amountFunded

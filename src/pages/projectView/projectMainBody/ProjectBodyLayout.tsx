@@ -56,7 +56,7 @@ export const ProjectBodyLayout = () => {
     MobileViews.description,
     MobileViews.rewards,
     MobileViews.entries,
-    MobileViews.milestones,
+    MobileViews.milestones
   ].includes(mobileView)
 
   const classes = useProjectLayoutStyles({ isMobile, inView })

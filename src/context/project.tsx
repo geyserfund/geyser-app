@@ -38,6 +38,9 @@ export enum MobileViews {
   milestones = 'milestones',
   insights = 'insights',
   contributors = 'contributors',
+  manageRewards = 'manage-rewards',
+  createReward = 'create-reward',
+  editReward = 'edit-reward',
 }
 
 type ProjectState = {
@@ -275,6 +278,19 @@ export const ProjectProvider = ({
 }
 
 const getViewFromPath = (path: string) => {
+  if (path.includes(PathName.projectManageRewards)) {
+
+    if (path.includes(PathName.projectCreateReward)) {
+      return MobileViews.createReward
+    }
+
+    if (path.includes(PathName.projectEditReward)) {
+      return MobileViews.editReward
+    }
+
+    return MobileViews.manageRewards
+  }
+
   if (path.includes(PathName.projectRewards)) {
     return MobileViews.rewards
   }

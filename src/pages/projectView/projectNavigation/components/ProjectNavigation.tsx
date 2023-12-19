@@ -91,6 +91,16 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         icon: InsightsNavIcon,
       },
       {
+        name: 'Rewards',
+        path: PathName.projectManageRewards,
+        mobileView: MobileViews.manageRewards,
+        subViews: [
+          MobileViews.createReward,
+          MobileViews.editReward
+        ],
+        icon: RewardGiftIcon,
+      },
+      {
         name: 'Contributors',
         path: PathName.projectContributors,
         mobileView: MobileViews.contributors,
@@ -109,8 +119,8 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
     ]
 
     return (
-      allButtons.find((button) => button.path === currentPath)?.name ||
-      'Project'
+        allButtons.find((button) => button.path === currentPath || (button["subViews"] !== undefined && button["subViews"].find(subview => subview === currentPath)))?.name ||
+        'Project'
     )
   }, [
     ProjectNavigationButtons,

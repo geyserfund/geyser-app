@@ -303,6 +303,37 @@ export const platformRoutes: RouteObject[] = [
               }
             },
           },
+          {
+            path: getPath('projectManageRewards', PathName.projectId),
+            async lazy() {
+              const ProjectManageRewards = await Project().then(
+                  (m) => m.ProjectManageRewards,
+              )
+              return {
+                element: renderPrivateRoute(ProjectManageRewards),
+              }
+            },
+          },
+          {
+            path: getPath('projectCreateReward', PathName.projectId),
+            async lazy() {
+              const ProjectCreateReward = await Project()
+                  .then((m) => m.ProjectCreateReward)
+              return {
+                element: renderPrivateRoute(ProjectCreateReward),
+              }
+            },
+          },
+          {
+            path: getPath('projectEditReward', PathName.projectId, PathName.rewardId),
+            async lazy() {
+              const ProjectEditReward = await Project()
+                  .then((m) => m.ProjectEditReward)
+              return {
+                element: renderPrivateRoute(ProjectEditReward),
+              }
+            },
+          },
         ],
       },
     ],

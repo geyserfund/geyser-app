@@ -13,4 +13,6 @@ export const defaultProjectReward: ProjectReward = {
   createdAt: new Date(),
   updatedAt: new Date(),
   project: {} as Project,
+  rewardType: 'PHYSICAL',
+  backersCount: 0
 }
