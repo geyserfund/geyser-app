@@ -8,6 +8,7 @@ import { PrivacyPolicy, TermsAndConditions } from '../../pages/legal';
 import { NotAuthorized, NotFoundPage } from '../../pages/fallback'
 import { ErrorBoundary } from './ErrorBoundary'
 import { renderPrivateRoute } from './PrivateRoute'
+import Latest from '../../pages/landing/projects/views/Latest'
 
 const Grants = () => import('../../pages/grants')
 const ProjectLaunch = () => import('../../pages/projectCreate')
@@ -359,6 +360,10 @@ export const platformRoutes: RouteObject[] = [
           const LandingFeed = await Landing().then((m) => m.LandingFeed)
           return { Component: LandingFeed }
         },
+      },
+      {
+      path:'latest',
+      Component: Latest,
       },
     ],
   },
