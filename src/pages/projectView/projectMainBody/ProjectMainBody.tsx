@@ -24,7 +24,7 @@ export const ProjectMainBody = () => {
       ) : null}
       <Story />
       {projectDetails.entriesLength ? <Entries /> : null}
-      {projectDetails.rewardsLength ? <Rewards /> : null}
+      {/* {projectDetails.rewardsLength ? <Rewards /> : null} */}
       {projectDetails.milestonesLength ? <Milestones /> : null}
       <Details />
     </>

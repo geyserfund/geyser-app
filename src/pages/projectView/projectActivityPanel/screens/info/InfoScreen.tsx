@@ -1,20 +1,40 @@
 import { VStack } from '@chakra-ui/layout'
 
 import { ActivityBrief } from './ActivityBrief'
-import { InfoScreenFeed } from './InfoScreenFeed'
+import { Box } from '@chakra-ui/react'
+import { useProjectContext } from '../../../../../context'
+import classNames from 'classnames'
+import { useStyles } from '../../styles'
+import { useMobileMode } from '../../../../../utils'
+import { InfoScreenRewards } from './InfoScreenRewards'
 
 export const InfoScreen = () => {
+
+  const isMobile = useMobileMode()
+  const { project } = useProjectContext()
+  const classes = useStyles({ isMobile })
+
+  if(!project) {
+    return null;
+  }
+
   return (
     <VStack
       py={{ base: '0px', lg: '10px' }}
       spacing={4}
       width="100%"
       height="100%"
-      overflowY="hidden"
       position="relative"
     >
-      <ActivityBrief px={{ base: '10px', lg: '20px' }} />
-      <InfoScreenFeed />
+      <Box
+        className={classNames(classes.mainPanel)}
+        style={{width: '100%'}}
+      >
+        <ActivityBrief px={{ base: '10px', lg: '20px' }} />
+      </Box>
+      <VStack px={3} width="100%">
+        <InfoScreenRewards />
+      </VStack>
     </VStack>
   )
 }

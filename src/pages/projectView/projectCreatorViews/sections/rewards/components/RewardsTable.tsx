@@ -1,4 +1,4 @@
-import { Image, Stack, Text, useColorMode, VStack } from '@chakra-ui/react'
+import { Image, Stack, Text, useColorMode, VStack, Flex, useBreakpoint } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import {TableImageAndTitle, TableText} from '../components'
 import EditIcon from '../icons/edit.svg';
@@ -24,6 +24,8 @@ export const RewardsTable = () => {
   const navigate = useNavigate()
   const [selectedReward, setSelectedReward] =
     useState<ProjectRewardForCreateUpdateFragment>()
+  const breakpoint = useBreakpoint({ ssr: false })
+  const largeView = ['xl','2xl'].includes(breakpoint);
 
   const {
     isOpen: isRewardDeleteOpen,
@@ -108,68 +110,114 @@ export const RewardsTable = () => {
     )
   }
 
-  return (
-    <>
-      <table style={{textAlign: 'left'}}>
-        <tr>
-          <th style={{padding: '10px 0 10px 0'}}>{t('Visibility')}</th>
-          <th style={{padding: '10px 0 10px 0'}}>{t('Reward Name')}</th>
-          <th style={{padding: '10px 0 10px 0'}}>{t('Price')}</th>
-          <th style={{padding: '10px 0 10px 0'}}>{t('In Stock')}</th>
-          <th style={{padding: '10px 0 10px 0'}}>{t('Overview')}</th>
-          <th></th>
-        </tr>
-        {project.rewards.map((row,index) => {
-          return (
-            <tr key={index} style={{borderBottom: `1px solid ${ colorMode === 'light' ? '#E9ECEF' : '#141A19' }`}}>
-              <td style={{paddingTop: '10px', verticalAlign: 'top'}}>
-                <Stack style={{cursor: 'pointer'}} direction='row' align={'center'} onClick={() => {
-                    // @TODO: Toggle Visibility
-                  }}>
-                  <Image style={{cursor: 'pointer'}} src={VisibilityIcon}/>
-                  <TableText content={'Visible'} />
+  if(largeView === true) {
+    return (
+      <>
+        <table style={{textAlign: 'left', width: '100%'}}>
+          <tr>
+            <th style={{padding: '10px 0 10px 0'}}>{t('Visibility')}</th>
+            <th style={{padding: '10px 0 10px 0'}}>{t('Reward Name')}</th>
+            <th style={{padding: '10px 0 10px 0'}}>{t('Price')}</th>
+            <th style={{padding: '10px 0 10px 0'}}>{t('In Stock')}</th>
+            <th style={{padding: '10px 0 10px 0'}}>{t('Overview')}</th>
+            <th></th>
+          </tr>
+          {project.rewards.map((row,index) => {
+            return (
+              <tr key={index} style={{borderBottom: `1px solid ${ colorMode === 'light' ? '#E9ECEF' : '#141A19' }`}}>
+                <td style={{paddingTop: '10px', verticalAlign: 'top'}}>
+                  <Stack style={{cursor: 'pointer'}} direction='row' align={'center'} onClick={() => {
+                      // @TODO: Toggle Visibility
+                    }}>
+                    <Image style={{cursor: 'pointer'}} src={VisibilityIcon}/>
+                    <TableText content={'Visible'} />
+                  </Stack>
+                </td>
+                <td style={{paddingTop: '10px', verticalAlign: 'top'}}>
+                  <TableImageAndTitle image={row.image} title={row.name} />
+                </td>
+                <td style={{paddingTop: '10px', verticalAlign: 'top'}}>
+                  {row.cost && (
+                    <TableText content={`$${(row.cost / 100).toFixed(2)}`} />
+                  )}
+                </td>
+                <td style={{paddingTop: '10px', verticalAlign: 'top'}}>
+                  <TableText content={
+                    (!row.maxClaimable || (row.maxClaimable > 0 && row.maxClaimable - row.sold > 0) ? 'Yes' : 'No')
+                  } />
+                </td>
+                <td style={{paddingTop: '10px', verticalAlign: 'top'}}>
+                  <TableText content={
+                    `${(row.maxClaimable && row.maxClaimable > 0 ? (row.maxClaimable - row.sold) + ' remaining, ' : '')}${row.sold} sold`
+                  } />
+                </td>
+                <td style={{paddingTop: '10px', verticalAlign: 'top'}}>
+                  <Stack direction='row'>
+                    <Image style={{cursor: 'pointer'}} src={EditIcon} onClick={() => {
+                      setMobileView(MobileViews.editReward)
+                      navigate(`${PathName.projectEditReward}/${row.id}`)
+                    }}/>
+                    <Image style={{cursor: 'pointer'}} src={DeleteIcon} onClick={isProjectOwner
+                    ? () => triggerRewardRemoval(row.id)
+                    : undefined} />
+                  </Stack>
+                </td>
+              </tr>
+            )
+          })}
+        </table>
+        <DeleteConfirmModal
+          isOpen={isRewardDeleteOpen}
+          onClose={handleClose}
+          title={`${t('Delete reward')} ${selectedReward?.name}`}
+          description={t('Are you sure you want to remove the reward')}
+          confirm={handleRemoveReward}
+        />
+      </>
+    )
+  } else {
+    return(
+      <>
+        <Stack direction={'column'}>
+          {project.rewards.map((row,index) => {
+              return (
+                <Stack direction={'row'} align={'center'} py={3} borderTop={'2px solid'} borderTopColor={"neutral.200"}>
+                  <Image
+                    borderRadius={8}
+                    boxSize='60px'
+                    objectFit='cover'
+                    src={row.image || ''}
+                    alt={row.name}
+                  />
+                  <Stack direction={'column'} flex={1}>
+                    <Text fontSize="16px" color="neutral.900" fontWeight="700" lineHeight={1.3}>
+                      {row.name}
+                    </Text>
+                    <Text fontSize="16px" color="neutral.900" lineHeight={1}>
+                    {`${t('Price')}: $${(row.cost / 100).toFixed(2)}`}
+                    </Text>
+                  </Stack>
+                  <Stack direction='row'>
+                    <Image style={{cursor: 'pointer'}} src={EditIcon} onClick={() => {
+                      setMobileView(MobileViews.editReward)
+                      navigate(`${PathName.projectEditReward}/${row.id}`)
+                    }}/>
+                    <Image style={{cursor: 'pointer'}} src={DeleteIcon} onClick={isProjectOwner
+                    ? () => triggerRewardRemoval(row.id)
+                    : undefined} />
+                  </Stack>
                 </Stack>
-              </td>
-              <td style={{paddingTop: '10px', verticalAlign: 'top'}}>
-                <TableImageAndTitle image={row.image} title={row.name} />
-              </td>
-              <td style={{paddingTop: '10px', verticalAlign: 'top'}}>
-                {row.cost && (
-                  <TableText content={`$${(row.cost / 100).toFixed(2)}`} />
-                )}
-              </td>
-              <td style={{paddingTop: '10px', verticalAlign: 'top'}}>
-                <TableText content={
-                  (!row.maxClaimable || (row.maxClaimable > 0 && row.maxClaimable - row.sold > 0) ? 'Yes' : 'No')
-                } />
-              </td>
-              <td style={{paddingTop: '10px', verticalAlign: 'top'}}>
-                <TableText content={
-                  `${(row.maxClaimable && row.maxClaimable > 0 ? (row.maxClaimable - row.sold) + ' remaining, ' : '')}${row.sold} sold`
-                } />
-              </td>
-              <td style={{paddingTop: '10px', verticalAlign: 'top'}}>
-                <Stack direction='row'>
-                  <Image style={{cursor: 'pointer'}} src={EditIcon} onClick={() => {
-                    setMobileView(MobileViews.editReward)
-                    navigate(`${PathName.projectEditReward}/${row.id}`)
-                  }}/>
-                  <Image style={{cursor: 'pointer'}} src={DeleteIcon} onClick={isProjectOwner
-                  ? () => triggerRewardRemoval(row.id)
-                  : undefined} />
-                </Stack>
-              </td>
-            </tr>
-          )
-        })}
-      </table>
-      <DeleteConfirmModal
-        isOpen={isRewardDeleteOpen}
-        onClose={handleClose}
-        title={`${t('Delete reward')} ${selectedReward?.name}`}
-        description={t('Are you sure you want to remove the reward')}
-        confirm={handleRemoveReward}
-      />
-    </>
-  )
+              )
+          })}
+        </Stack>
+        <DeleteConfirmModal
+          isOpen={isRewardDeleteOpen}
+          onClose={handleClose}
+          title={`${t('Delete reward')} ${selectedReward?.name}`}
+          description={t('Are you sure you want to remove the reward')}
+          confirm={handleRemoveReward}
+        />
+      </>
+    )
+  }
 }

@@ -1,4 +1,4 @@
-import { Text, Stack, VStack, Checkbox, Button, IconButton, Select } from '@chakra-ui/react'
+import { Text, Stack, VStack, Checkbox, Button, IconButton, Select, useBreakpoint } from '@chakra-ui/react'
 import { CardLayout } from '../../../../../../../components/layouts'
 import { useTranslation } from 'react-i18next'
 import { FieldContainer } from '../../../../../../../forms/components/FieldContainer'
@@ -16,15 +16,20 @@ import { CalendarButton, CreatorEmailButton, FileUpload } from '../../../../../.
 import { RiArrowLeftSLine } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
 
+type CreateOrUpdate {
+  ''
+}
+
 type Props = {
   buttonText: string,
   titleText: string,
   rewardSave: Function,
   rewardSaving: boolean,
-  rewardData: ProjectReward
+  rewardData: ProjectReward,
+  createOrUpdate: 'create' | 'update'
 }
 
-export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSaving, rewardData}: Props) => {
+export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSaving, rewardData, createOrUpdate = 'create'}: Props) => {
   const { t } = useTranslation()
   const {project} = useProjectContext();
   const navigate = useNavigate()
@@ -67,11 +72,6 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
       estimatedDeliveryDate: reward.estimatedDeliveryDate || undefined,
       rewardType: reward.rewardType
     }
-  }
-
-  // @TODO: Temporary Mock until Stelios gets me Google upload access
-  if(!reward.image) {
-    setReward((current) => ({ ...current, ['image']: 'https://storage.googleapis.com/geyser-images-distribution-prod-us/7051bf61-6a7a-4ccc-9d5d-b772c0353e5d_penny-atm-led/image_medium.webp' }))
   }
 
   const handleFormTextChange = (
@@ -218,7 +218,7 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
             {t(titleText)}
           </Text>
         </Stack>
-        <Stack direction={'row'}>
+        <Stack direction={{ base: 'column', lg: 'row' }}>
           <FieldContainer title={t('Reward Name')}>
             <TextInputBox
               placeholder={'T-Shirt'}
@@ -239,7 +239,7 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
             />
           </FieldContainer>
         </Stack>
-        <Stack direction={'row'}>
+        <Stack direction={{ base: 'column', lg: 'row' }}>
           <FieldContainer title={t('Currency')}>
             <TextInputBox
               placeholder={'USD'}
@@ -259,7 +259,7 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
             />
           </FieldContainer>
         </Stack>
-        <Stack direction={'row'}>
+        <Stack direction={{ base: 'column', lg: 'row' }}>
           <FieldContainer title={t('Reward Type')}>
           <Select value={reward.rewardType} onChange={(event) => {
             setReward((current) => ({ ...current, ['rewardType']: event.target.value }))
@@ -269,7 +269,7 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
           </Select>
           </FieldContainer>
         </Stack>
-        <Stack direction={'row'}>
+        <Stack direction={{ base: 'column', lg: 'row' }}>
           <FieldContainer title={t('Description')}>
             <TextArea
               placeholder={t('Describe the item you would like to sell')}
@@ -280,7 +280,7 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
             />
           </FieldContainer>
         </Stack>
-        <Stack direction={'row'}>
+        <Stack direction={{ base: 'column', lg: 'row' }}>
           <FieldContainer title={t('Image')}>
             <FileUpload
               showcase
