@@ -19,6 +19,8 @@ import { QUERY_TAGS } from '../../../graphql/queries/tags'
 import { Tag, TagCreateInput, TagsGetResult } from '../../../types'
 import { useNotification } from '../../../utils'
 
+const MAX_TAGS_ALLOWED = 4;
+
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   tagContainer: {
     width: '100%',
@@ -162,11 +164,11 @@ export const ProjectTagsCreateEdit = ({
     )
   }
 
-  const isDisabled = tags.length >= 4
+  const isDisabled = tags.length >= MAX_TAGS_ALLOWED
   const showAddTag = !tagOptions.some((tag) =>
     tag.label.toLowerCase().includes(inputValue.toLowerCase()),
   )
-  const disableShowAddTag = inputValue.length < 4 || createLoading
+  const disableShowAddTag = inputValue.length < MAX_TAGS_ALLOWED || createLoading
 
   return (
     <FieldContainer
@@ -174,8 +176,8 @@ export const ProjectTagsCreateEdit = ({
       subtitle={
         <span>
           {t(
-            'Get discovered more easily by users through Tags. You can select up to 4 project tags.',
-          )}
+            `Get discovered more easily by users through Tags. You can select up to XX project tags.`,
+          ).replace('XX', MAX_TAGS_ALLOWED.toString())}
         </span>
       }
       {...rest}
