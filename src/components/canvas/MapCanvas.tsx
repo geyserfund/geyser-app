@@ -5,6 +5,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import ThreeGlobe from 'three-globe'
 
 import countries from '../../../src/pages/map/custom.geo.json'
+import map from '../../../src/pages/map/map.json'
+import lines from '../../../src/pages/map/project_funding_lines.json'
 
 let renderer: any
 let scene: {
@@ -87,8 +89,49 @@ function initGlobe() {
   })
 
     .hexPolygonsData(countries.features)
-    .hexPolygonResolution(3)
+    .hexPolygonResolution(4)
     .hexPolygonMargin(0.7)
+    .showAtmosphere(true)
+    .atmosphereColor('#3a228a')
+    .atmosphereAltitude(0.5)
+
+  setTimeout(() => {
+    Globe.arcsData(lines.projects)
+      .arcColor((e) => {
+        return e.status ? '#00866D' : '#20ECC7'
+      })
+      .arcAltitude((e) => {
+        return e.arcAlt
+      })
+      .arcStroke((e) => {
+        return 0.5
+      })
+      .arcDashLength(0.9)
+      .arcDashGap(4)
+      .arcDashAnimateTime(1000)
+      .arcsTransitionDuration(1000)
+      .arcDashInitialGap((e) => Number(e.order))
+
+      .labelsData(map.countries)
+      .labelColor(() => '#20ECC7')
+
+      .labelDotRadius(0.5)
+      .labelSize((e) => {
+        return e.size
+      })
+      .labelText((e) => {
+        return e.city
+      })
+      .labelResolution(6)
+      .labelAltitude(0.01)
+
+      .pointsData(map.countries)
+      .pointAltitude(0.01)
+      .pointColor(() => '#20ECC7')
+      .pointRadius(0.05)
+      .pointsMerge(true)
+  }, 1000)
+
   const globeMaterial = Globe.globeMaterial()
   globeMaterial.color = new THREE.Color(0x3a228a)
   globeMaterial.emissive = new THREE.Color(0x220038)

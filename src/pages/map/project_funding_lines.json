@@ -1,0 +1,16 @@
+{
+  "type": "Map",
+  "projects": [
+    {
+      "type": "project",
+      "order": 1,
+      "from": "KE",
+      "to": "GB",
+      "startLat": "-1.2833",
+      "startLng": "36.8167",
+      "endLat": "51.5",
+      "endLng": "-0.1167",
+      "arcAlt": 0.15
+    }
+  ]
+}
