@@ -144,7 +144,7 @@ export const RewardAdditionModal = ({
 
     setFormCostDollarValue(defaultProjectReward.cost)
     return setReward(defaultProjectReward)
-  }, [props.reward])
+  }, [props.reward, isOpen])
 
   const handleTextChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
