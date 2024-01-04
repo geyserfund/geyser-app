@@ -1,4 +1,3 @@
-import { CheckCircleIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -6,11 +5,9 @@ import {
   Image,
   Link,
   ModalProps,
-  Text,
   VStack,
 } from '@chakra-ui/react'
-import { use } from 'i18next'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { BsTwitter } from 'react-icons/bs'
 import { PiSealCheckBold } from 'react-icons/pi'
 
