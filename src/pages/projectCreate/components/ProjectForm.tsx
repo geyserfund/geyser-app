@@ -106,7 +106,10 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
         const projectName: string = value.split(' ').join('').toLowerCase()
         const sanitizedName = projectName.replaceAll(validLightningAddress, '')
 
-        setValue('name', sanitizedName, { shouldDirty: true })
+        setValue('name', sanitizedName, {
+          shouldDirty: true,
+          shouldValidate: true,
+        })
       }
 
       if (name === 'name') {
@@ -114,11 +117,15 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           .toLocaleLowerCase()
           .replaceAll(validLightningAddress, '')
 
-        return setValue(name, sanitizedName, { shouldDirty: true })
+        return setValue(name, sanitizedName, {
+          shouldDirty: true,
+          shouldValidate: true,
+        })
       }
 
       setValue(name as keyof ProjectCreationVariables, value, {
         shouldDirty: true,
+        shouldValidate: true,
       })
     }
   }
@@ -212,6 +219,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           name="shortDescription"
           height="fit-content"
           overflowY="auto"
+          placeholder={t('Let the sats flow')}
           value={watch('shortDescription')}
           onChange={({ target, ...event }) => {
             handleChange({
@@ -278,6 +286,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
               >
                 <Input
                   width={{ base: 'full', lg: 'initial' }}
+                  minWidth={{ lg: '250px' }}
                   type="text"
                   placeholder="www.youtube.com/2ms0j2n93c"
                   {...field}
