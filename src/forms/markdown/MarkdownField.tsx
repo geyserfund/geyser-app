@@ -227,6 +227,7 @@ export const MarkdownField = ({
       manager={manager}
       initialContent={initialContent?.()}
       hooks={hooks}
+      placeholder={t('The story of the project goes here...')}
     >
       <Box
         display="flex"
