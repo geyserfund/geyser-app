@@ -130,8 +130,6 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
     }
   }
 
-  console.log('checking ', formState)
-
   return (
     <VStack spacing={6} w="100%">
       <FieldContainer
@@ -325,7 +323,9 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           name="email"
           value={watch('email')}
           onChange={handleEmail}
+          placeholder="creator@gmail.com"
           error={formState.errors.email?.message}
+          onBlur={() => form.trigger('email')}
           isDisabled={Boolean(user.email)}
         />
       </FieldContainer>

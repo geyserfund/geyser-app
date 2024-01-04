@@ -135,7 +135,7 @@ export const ProjectCreate = () => {
 
   const nextProps = {
     isLoading: loading || createLoading || updateLoading,
-    isDisabled: createLoading || updateLoading,
+    isDisabled: createLoading || updateLoading || !form.formState.isValid,
     onClick: form.handleSubmit(onSubmit),
   }
 
