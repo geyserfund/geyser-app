@@ -4,10 +4,13 @@ import { useTranslation } from 'react-i18next'
 import { BiRocket } from 'react-icons/bi'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 
+import { Modal } from '../../components/layouts'
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
+import { Body2 } from '../../components/typography'
 import Loader from '../../components/ui/Loader'
 import { getPath } from '../../constants'
 import { useAuthContext } from '../../context'
+import { useModal } from '../../hooks'
 import {
   CreateWalletInput,
   ProjectFragment,
@@ -39,6 +42,8 @@ export const ProjectCreateCompletion = ({
 
   const params = useParams<{ projectId: string }>()
   const { toast } = useNotification()
+
+  const confirmModal = useModal()
 
   const {
     loading: isGetProjectLoading,
@@ -116,37 +121,51 @@ export const ProjectCreateCompletion = ({
   }
 
   return (
-    <ProjectCreateLayout
-      onBackClick={handleBackClick}
-      title={
-        <TitleWithProgressBar
-          hideSteps
-          title={t('Launch project')}
-          subtitle={t('You’re ready to launch!')}
-          index={4}
-          length={4}
-        />
-      }
-    >
-      <ProjectCreateCompleted>
-        <VStack w="100%">
-          {createWalletInput && (
-            <Button
-              variant="primary"
-              w="full"
-              leftIcon={<BiRocket />}
-              onClick={onLaunchClick}
-              disabled={!isSubmitEnabled}
-              isLoading={isCreateWalletLoading || isUpdateStatusLoading}
-            >
-              {t('Launch Project')}
+    <>
+      <ProjectCreateLayout
+        onBackClick={handleBackClick}
+        title={
+          <TitleWithProgressBar
+            hideSteps
+            title={t('Launch project')}
+            subtitle={t('You’re ready to launch!')}
+            index={4}
+            length={4}
+          />
+        }
+      >
+        <ProjectCreateCompleted>
+          <VStack w="100%">
+            {createWalletInput && (
+              <Button
+                variant="primary"
+                w="full"
+                leftIcon={<BiRocket />}
+                onClick={confirmModal.onOpen}
+                disabled={!isSubmitEnabled}
+                isLoading={isCreateWalletLoading || isUpdateStatusLoading}
+              >
+                {t('Launch Project')}
+              </Button>
+            )}
+            <Button variant="secondary" w="full" onClick={onSaveDraftClick}>
+              {t('Save As Draft')}
             </Button>
-          )}
-          <Button variant="secondary" w="full" onClick={onSaveDraftClick}>
-            {t('Save As Draft')}
+          </VStack>
+        </ProjectCreateCompleted>
+      </ProjectCreateLayout>
+      <Modal {...confirmModal} title={t('Confirm project launch')}>
+        <VStack spacing="20px">
+          <Body2 color="neutral.700">
+            {t(
+              'By launching your project the project will be visible to and searchable by the public. You will be able to disactivate your project but not to hide your project after launching it.',
+            )}
+          </Body2>
+          <Button variant="primary" w="full" onClick={onLaunchClick}>
+            {t('Confirm launch')}
           </Button>
         </VStack>
-      </ProjectCreateCompleted>
-    </ProjectCreateLayout>
+      </Modal>
+    </>
   )
 }
