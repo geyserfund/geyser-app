@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { CardLayout } from '../../../../components/layouts';
-import { Text, Box, Flex, Link } from '@chakra-ui/react'; // Assuming you're using Chakra UI
+import { Text, Box, Flex, Link } from '@chakra-ui/react';
 
-const ImageWithReload = ({ src, alt, ...rest }) => {
+
+  const ImageWithReload = ({ src, alt, ...rest }) => {
   const [error, setError] = useState(false);
 
   const handleError = () => {
@@ -87,7 +88,7 @@ export default function CustomCard({ nostrich, content, date }: Props) {
           flexDirection="column"
           overflow="hidden"
           maxHeight="120px"
-          paddingTop={{ base: '5px', md: '0px' }} // Adjusting top padding for responsiveness
+          paddingTop={{ base: '5px', md: '0px' }}
         >
           <Text
             marginLeft="8px"
@@ -98,13 +99,20 @@ export default function CustomCard({ nostrich, content, date }: Props) {
             paddingRight="20px"
             marginBottom="0px"
             lineHeight="1.3"
+            overflow="hidden"
+            textOverflow="ellipsis"
+            whiteSpace="nowrap"
           >
             {display_name}
           </Text>
-          <Box marginLeft="8px" marginTop="5px" overflowY="auto">
+          <Box marginLeft="8px" marginTop="5px">
             <Text
               fontSize="13px"
               overflow="hidden"
+              textOverflow="ellipsis"
+              display="-webkit-box"
+              WebkitLineClamp={3}
+              WebkitBoxOrient="vertical"
             >
               {about}
             </Text>
@@ -113,4 +121,4 @@ export default function CustomCard({ nostrich, content, date }: Props) {
       </Flex>
     </Link>
   );
-  }
+}
