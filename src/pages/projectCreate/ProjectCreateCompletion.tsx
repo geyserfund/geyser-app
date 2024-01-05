@@ -23,7 +23,7 @@ import { ProjectCreateCompleted } from './components/ProjectCreateCompleted'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 
 interface ProjectCreateCompletionProps {
-  project: ProjectFragment
+  project?: ProjectFragment
   createWalletInput: CreateWalletInput | null
   isSubmitEnabled: boolean
   setReadyToLaunch: Dispatch<SetStateAction<boolean>>

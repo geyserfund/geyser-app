@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 import { components, MenuProps, MultiValue } from 'react-select'
 
-import { Modal } from '../../../components/layouts'
+import { Modal, SkeletonLayout } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
 import {
   ButtonComponent,
@@ -200,24 +200,28 @@ export const ProjectTagsCreateEdit = ({
     <>
       <FieldContainer title="Tags" subtitle={SubTitle} {...rest}>
         <VStack className={classes.tagContainer} spacing="10px">
-          <SelectComponent<TagsGetResult, true>
-            isMulti
-            isDisabled={isDisabled}
-            menuIsOpen={isOpen}
-            className={classes.select}
-            onChange={handleChange}
-            isLoading={loading}
-            name="tags"
-            placeholder={t('Add tags')}
-            value={[]}
-            options={tagOptions}
-            getOptionLabel={(option: TagsGetResult) => option.label}
-            getOptionValue={(option: TagsGetResult) => option.label}
-            onInputChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            inputValue={inputValue}
-            components={{ Menu }}
-          />
+          {loading ? (
+            <SkeletonLayout h="40px" />
+          ) : (
+            <SelectComponent<TagsGetResult, true>
+              isMulti
+              isDisabled={isDisabled}
+              menuIsOpen={isOpen}
+              className={classes.select}
+              onChange={handleChange}
+              isLoading={loading}
+              name="tags"
+              placeholder={t('Add tags')}
+              value={[]}
+              options={tagOptions}
+              getOptionLabel={(option: TagsGetResult) => option.label}
+              getOptionValue={(option: TagsGetResult) => option.label}
+              onInputChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              inputValue={inputValue}
+              components={{ Menu }}
+            />
+          )}
           <HStack width="100%" spacing="10px">
             {tags.map((tag) => {
               return (

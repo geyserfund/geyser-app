@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
-import Loader from '../../components/ui/Loader'
 import { getPath } from '../../constants'
 import { useNotification } from '../../utils'
 import { ProjectRegion } from './components'
@@ -84,13 +83,9 @@ export const ProjectDetails = () => {
     onLeave()
   }
 
-  if (projectLoading) {
-    return <Loader />
-  }
-
   const nextProps = {
     onClick: onSubmit,
-    isLoading: tagsLoading,
+    isLoading: tagsLoading || projectLoading,
     isDisabled: tagsLoading,
   }
 

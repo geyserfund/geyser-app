@@ -5,7 +5,6 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom'
 
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
 import { Body1, Body2 } from '../../components/typography'
-import Loader from '../../components/ui/Loader'
 import { getPath } from '../../constants'
 import { useProjectByNameOrIdQuery } from '../../types'
 import { toInt, useNotification } from '../../utils'
@@ -90,11 +89,11 @@ export const ProjectCreationWalletConnectionPage = () => {
     isLightningAddressInValid,
   ])
 
-  if (isGetProjectLoading) {
-    return <Loader />
-  }
+  // if (isGetProjectLoading) {
+  //   return <Loader />
+  // }
 
-  if (projectLoadingError || !responseData || !project) {
+  if (projectLoadingError) {
     return <Navigate to={getPath('notFound')} />
   }
 
@@ -115,7 +114,7 @@ export const ProjectCreationWalletConnectionPage = () => {
       continueButton={
         <FormContinueButton
           onClick={handleConfirm}
-          isLoading={lightningAddress.evaluating}
+          isLoading={lightningAddress.evaluating || isGetProjectLoading}
           isDisabled={!isFormDirty() || isLightningAddressInValid}
           flexGrow={1}
         />
@@ -139,7 +138,7 @@ export const ProjectCreationWalletConnectionPage = () => {
               i18nKey={
                 'Your Geyser lightning address is <1>{{projectAddress}}</1>. All funds sent to this address will be instantly routed to the wallet you specify below.'
               }
-              values={{ projectAddress: `${project.name}@geyser.fund` }}
+              values={{ projectAddress: `${project?.name || ''}@geyser.fund` }}
             >
               {`Your Geyser lightning address is `}
               <Box as="span" color={'primary.600'}>{`{{projectAddress}}`}</Box>
