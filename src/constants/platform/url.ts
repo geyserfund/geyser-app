@@ -252,7 +252,7 @@ export const Grant2AnnouncementTwitterUrl =
 export const VoltageUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/voltage.png'
 export const AlbyUrl =
-  'https://storage.googleapis.com/geyser-projects-media/platform/alby.png'
+  'https://storage.googleapis.com/geyser-projects-media/platform/getalby.png'
 export const BitnobUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/bitnob.png'
 export const WalletOfSatoshiUrl =

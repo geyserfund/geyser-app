@@ -11,7 +11,6 @@ import {
   InputGroup,
   InputRightElement,
   Link,
-  Text,
   VStack,
 } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
@@ -19,7 +18,7 @@ import { AiOutlineSetting } from 'react-icons/ai'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 
 import { BoltIcon, NodeIcon } from '../../components/icons'
-import { TextInputBox, UndecoratedLink } from '../../components/ui'
+import { TextInputBox } from '../../components/ui'
 import Loader from '../../components/ui/Loader'
 import {
   AlbyLightningAddressURL,
@@ -171,15 +170,16 @@ export const ProjectCreationWalletConnectionForm = ({
                 </Trans>
               }
             >
-              <HStack width={'full'} justifyContent={'flex-start'} spacing={4}>
-                <UndecoratedLink isExternal href={AlbyLightningAddressURL}>
-                  <HStack>
-                    <Image src={AlbyUrl} height="24px" />
-                    <Text fontSize={'12px'} fontWeight={'bold'}>
-                      Alby
-                    </Text>
-                  </HStack>
-                </UndecoratedLink>
+              <HStack
+                width={'full'}
+                justifyContent={'flex-start'}
+                spacing={4}
+                flexWrap="wrap"
+              >
+                <RenderSponsorImage
+                  url={AlbyLightningAddressURL}
+                  imageUrl={AlbyUrl}
+                />
                 <RenderSponsorImage
                   url={WalletOfSatoshiLightningAddressURL}
                   imageUrl={WalletOfSatoshiUrl}
