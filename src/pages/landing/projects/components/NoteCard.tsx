@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { CardLayout } from '../../../../components/layouts';
-import { Text, Box, Flex, Link } from '@chakra-ui/react';
+import { Text, Box, Flex, Link, useBreakpointValue } from '@chakra-ui/react';
 
-
-  const ImageWithReload = ({ src, alt, ...rest }) => {
+const ImageWithReload = ({ src, alt, ...rest }) => {
   const [error, setError] = useState(false);
 
   const handleError = () => {
@@ -15,7 +13,11 @@ import { Text, Box, Flex, Link } from '@chakra-ui/react';
       src={error ? '' : src}
       alt={alt}
       onError={handleError}
-      style={{ width: '120px', height: '120px', maxHeight: '120px', objectFit: 'cover' }}
+      style={{
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+      }}
       {...rest}
     />
   );
@@ -24,22 +26,25 @@ import { Text, Box, Flex, Link } from '@chakra-ui/react';
 interface Props {
   content: string;
   nostrich: string;
+  date: string;
 }
 
-export default function CustomCard({ nostrich, content, date }: Props) {
+export default function CustomCard({ content: rawContent, nostrich, date }: Props) {
   let parsedContent;
   try {
-    parsedContent = JSON.parse(content);
+    parsedContent = JSON.parse(rawContent);
   } catch (error) {
     console.error('Error parsing JSON:', error);
     parsedContent = {};
   }
   const { display_name, image, about, website } = parsedContent;
 
+  const imageSize = useBreakpointValue({ base: '100px', md: '120px' });
+
   return (
     <Link href={website} textDecoration="none" _hover={{ textDecoration: 'none' }}>
       <Flex
-        alignItems="flex-start"
+        alignItems="stretch"
         overflow="hidden"
         margin="16px 0"
         paddingTop="0px"
@@ -48,75 +53,61 @@ export default function CustomCard({ nostrich, content, date }: Props) {
         backgroundColor="neutral.0"
         transition="border-color 0.5s"
         boxShadow="none"
-        flexWrap="wrap"
+        maxHeight="120px"
         _hover={{ cursor: 'pointer', borderColor: 'neutral.400' }}
         _active={{ borderColor: 'primary.400' }}
         _focus={{ borderColor: 'primary.400' }}
       >
         <Box
-          flex={{ base: '0 0 120px', md: '0 0 auto' }}
-          minWidth="120px"
+          flex={{ base: `0 0 ${imageSize}`, md: '0 0 auto' }}
           position="relative"
           overflow="hidden"
-          marginLeft="0px"
+          height={imageSize}
+          width={imageSize}
           marginRight={{ base: '0px', md: '20px' }}
-          marginBottom={{ base: '0px', md: '0px' }}
         >
-          {image && (
-            <ImageWithReload
-              src={image}
-              alt={display_name}
-            />
-          )}
-          {!image && (
+          {image ? (
+            <ImageWithReload src={image} alt={display_name} />
+          ) : (
             <Box
-              height="120px"
-              width="120px"
+              height="100%"
+              width="100%"
               backgroundColor="neutral.0"
               borderRadius="8px"
               display="flex"
               alignItems="center"
               justifyContent="center"
-            >
-              <Text></Text>
-            </Box>
+              {...(!image && {
+                children: (
+                  <span></span>
+                ),
+              })}
+            ></Box>
           )}
         </Box>
 
         <Flex
           flex="1"
           flexDirection="column"
-          overflow="hidden"
-          maxHeight="120px"
-          paddingTop={{ base: '5px', md: '0px' }}
+          justifyContent="center"
+          padding="20px"
         >
           <Text
-            marginLeft="8px"
             fontFamily="Arial, sans-serif"
-            fontSize="18px"
+            fontSize={{ base: '18px', md: '20px' }}
             fontWeight="bold"
-            paddingTop="5px"
-            paddingRight="20px"
-            marginBottom="0px"
             lineHeight="1.3"
-            overflow="hidden"
-            textOverflow="ellipsis"
-            whiteSpace="nowrap"
+            marginBottom="10px"
           >
             {display_name}
           </Text>
-          <Box marginLeft="8px" marginTop="5px">
-            <Text
-              fontSize="13px"
-              overflow="hidden"
-              textOverflow="ellipsis"
-              display="-webkit-box"
-              WebkitLineClamp={3}
-              WebkitBoxOrient="vertical"
-            >
-              {about}
-            </Text>
-          </Box>
+          <Text
+            fontSize={{ base: '13px', md: '15px' }}
+            lineHeight="1.4"
+            color="gray.600"
+          >
+            {about}
+          </Text>
         </Flex>
       </Flex>
     </Link>
