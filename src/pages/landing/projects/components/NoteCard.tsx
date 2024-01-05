@@ -44,7 +44,7 @@ export default function CustomCard({ content: rawContent, nostrich, date }: Prop
   return (
     <Link href={website} textDecoration="none" _hover={{ textDecoration: 'none' }}>
       <Flex
-        alignItems="stretch"
+        alignItems="flex-start"
         overflow="hidden"
         margin="16px 0"
         paddingTop="0px"
@@ -59,7 +59,7 @@ export default function CustomCard({ content: rawContent, nostrich, date }: Prop
         _focus={{ borderColor: 'primary.400' }}
       >
         <Box
-          flex={{ base: `0 0 ${imageSize}`, md: '0 0 auto' }}
+          flex="0 0 auto"
           position="relative"
           overflow="hidden"
           height={imageSize}
@@ -77,20 +77,17 @@ export default function CustomCard({ content: rawContent, nostrich, date }: Prop
               display="flex"
               alignItems="center"
               justifyContent="center"
-              {...(!image && {
-                children: (
-                  <span></span>
-                ),
-              })}
-            ></Box>
+            >
+              <span></span>
+            </Box>
           )}
         </Box>
 
         <Flex
           flex="1"
           flexDirection="column"
-          justifyContent="center"
-          padding="20px"
+          justifyContent="flex-start"
+          padding="6px"
         >
           <Text
             fontFamily="Arial, sans-serif"
@@ -98,11 +95,12 @@ export default function CustomCard({ content: rawContent, nostrich, date }: Prop
             fontWeight="bold"
             lineHeight="1.3"
             marginBottom="10px"
+            overflowWrap="break-word"
           >
             {display_name}
           </Text>
           <Text
-            fontSize={{ base: '13px', md: '15px' }}
+            fontSize={{ base: '12px', md: '12px' }}
             lineHeight="1.4"
             color="gray.600"
           >
