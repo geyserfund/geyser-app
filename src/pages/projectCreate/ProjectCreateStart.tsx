@@ -143,9 +143,7 @@ export const ProjectCreateStart = () => {
               Looking for another login method? Let us know <Link>here</Link>.
             </Text> */}
           </VStack>
-        ) : (
-          <Box w="100%"></Box>
-        )}
+        ) : null}
       </VStack>
     </ProjectCreateLayout>
   )
