@@ -36,7 +36,7 @@ export const RewardCard = ({
       <Stack direction='column' gap={1}>
         <Box mt={2} borderRadius={12} overflow={'hidden'}>
           <div style={{display: 'block', position: 'relative', paddingTop: '56.25%', width: '100%'}}>
-            <div style={{display: 'block', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: `transparent url(${reward.image}) no-repeat center center`}}>
+            <div style={{display: 'block', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: `transparent url(${reward.image}) no-repeat center center / cover`}}>
             </div>
           </div>
         </Box>
@@ -51,7 +51,7 @@ export const RewardCard = ({
               variant='primary'
               size='sm'
               onClick={(e) => {
-                rest.onClick !== undefined && rest.onClick();
+                rest.onClick?.(e);
               }}
               style={{ flex: 1 }}
             >

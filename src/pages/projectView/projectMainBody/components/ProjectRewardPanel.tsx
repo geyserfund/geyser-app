@@ -4,31 +4,30 @@ import {
 } from '../../../../types'
 import { useTranslation } from 'react-i18next'
 import { MobileViews, useProjectContext } from '../../../../context'
-import { fundingStages } from '../../../../constants'
 import {
   isActive,
   toInt
 } from '../../../../utils'
+import { useNavigate } from 'react-router-dom'
+import { PathName } from '../../../../constants'
 
 type Props = {
   reward: ProjectReward,
-  showDetails?: boolean,
-  showContributors?: boolean
   key: number
 }
 
-export const ProjectRewardPanel = ({ reward, showDetails = false, showContributors = false }: Props) => {
+export const ProjectRewardPanel = ({ reward }: Props) => {
 
   const { t } = useTranslation()
   const {
     project,
     setMobileView,
-    fundingFlow: { fundState },
     fundForm: { updateReward },
   } = useProjectContext()
+  const navigate = useNavigate()
 
-  if(!project) {
-    return;
+  if(!project || !isActive) {
+    return <></>;
   }
 
   return (
@@ -62,13 +61,9 @@ export const ProjectRewardPanel = ({ reward, showDetails = false, showContributo
                     px={2}
                     style={{ flex: 1 }}
                     onClick={() => {
-                      if (
-                        fundState === fundingStages.initial &&
-                        isActive(project.status)
-                      ) {
                         updateReward({ id: toInt(reward.id), count: 1 })
+                        navigate(PathName.projectRewards)
                         setMobileView(MobileViews.funding)
-                      }
                     }}
                 >
                     <Text isTruncated>{t('Select')}</Text>

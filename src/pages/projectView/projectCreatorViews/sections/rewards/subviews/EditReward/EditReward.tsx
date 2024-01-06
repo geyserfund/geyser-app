@@ -6,8 +6,9 @@ import {
 } from '../../../../../../../types/generated/graphql'
 import {useNotification} from '../../../../../../../utils'
 import { useProjectContext } from '../../../../../../../context'
-import { defaultProjectReward } from '../../../../../../../defaults'
 import { useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { getPath } from '../../../../../../../constants'
 
 export const ProjectEditReward = () => {
 
@@ -15,6 +16,7 @@ export const ProjectEditReward = () => {
   const { toast } = useNotification()
   const {project, updateProject, isProjectOwner} = useProjectContext();
   const params = useParams<{ rewardId: string; projectId: string }>()
+  const navigate = useNavigate()
 
   if(!project || !isProjectOwner) {
     return null;
@@ -41,6 +43,9 @@ export const ProjectEditReward = () => {
           description: `Reward ${data.projectRewardUpdate.name} was successfully updated`,
           status: 'success',
         })
+        setTimeout(() => {
+          navigate(getPath('projectManageRewards', project.name))
+        }, 2000);
       },
       onError(error) {
         toast({

@@ -1,8 +1,14 @@
 import { Stack, Switch, Text } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
+import { ChangeEvent } from 'react'
 
-export const TableToggle = ({isChecked, value, onChange, labelPosition = 'right'}) => {
-  const { t } = useTranslation()
+export interface TableToggleProps {
+  isChecked: boolean,
+  value: string,
+  onChange: ChangeEvent<HTMLInputElement>,
+  labelPosition: 'left' | 'right'
+}
+
+export const TableToggle = ({isChecked, value, onChange, labelPosition = 'right'}: TableToggleProps) => {
 
   const renderLabel = () => (
     <Text

@@ -32,7 +32,33 @@ export const FundingFormUserInfoSection = ({ onBackClick }: Props) => {
         <SectionTitle>{t('Final details')}</SectionTitle>
       </HStack>
 
-      <FieldContainer title={t('Public comment')}>
+      {hasSelectedRewards ? (
+          <>
+            {needsShipping ? (
+                <FieldContainer
+                    title={t('Delivery Address')}
+                    subtitle={t(
+                        "To receive the selected items, you will need to send your shipping details to the creator's email. Which will be revealed in the success screen.",
+                    )}
+                    boldTitle={true}
+                />
+            ) : null}
+            <FieldContainer
+                title="Your email*"
+                subtitle="The seller may want to reach out."
+            >
+              <Input
+                  type="email"
+                  name="email"
+                  placeholder="funderemail@gmail.com"
+                  value={email}
+                  onChange={setTarget}
+              />
+            </FieldContainer>
+          </>
+      ) : null}
+
+      <FieldContainer title={t('Public comment')} boldTitle={true}>
         <ProjectFundingFormCommentField
           comment={comment}
           setTarget={setTarget}
@@ -40,31 +66,6 @@ export const FundingFormUserInfoSection = ({ onBackClick }: Props) => {
           width="full"
         />
       </FieldContainer>
-
-      {hasSelectedRewards ? (
-        <>
-          <FieldContainer
-            title="Your email"
-            subtitle="The seller may want to reach out."
-          >
-            <Input
-              type="email"
-              name="email"
-              placeholder="funderemail@gmail.com"
-              value={email}
-              onChange={setTarget}
-            />
-          </FieldContainer>
-          {needsShipping ? (
-            <FieldContainer
-              title={t('Shipping')}
-              subtitle={t(
-                "To receive the selected items, you will need to send your shipping details to the creator's email. Which will be revealed in the success screen.",
-              )}
-            />
-          ) : null}
-        </>
-      ) : null}
     </VStack>
   )
 }

@@ -776,6 +776,18 @@
   "Publish reward": "Publish reward",
   "Reward Type": "Reward Type",
   "Physical": "Physical",
-  "Digital": "Digital"
-
+  "Digital": "Digital",
+  "See all rewards": "See all rewards",
+  "Visibility": "Visibility",
+  "Price": "Price",
+  "In Stock": "In Stock",
+  "Update Reward": "Update Reward",
+  "Edit Reward": "Edit Reward",
+  "Publish Reward": "Publish Reward",
+  "Create Reward": "Create Reward",
+  "Physical Item": "Physical Item",
+  "Digital Item": "Digital Item",
+  "Add to Basket": "Add to Basket",
+  "Rewards Basket": "Rewards Basket",
+  "Delivery Address": "Delivery Address"
 }

@@ -39,7 +39,7 @@ export const InfoScreenRewards = () => {
         <Text fontWeight={500} onClick={handleAllRewardsButtonClick}><Link>{t('See all rewards')}</Link></Text>
       </Stack>
       {project.rewards.map((reward) => (
-        <ProjectRewardPanel key={reward.id} reward={reward} showDetails={true} />
+        <ProjectRewardPanel key={reward.id} reward={reward} />
       ))}
     </Box>
   )

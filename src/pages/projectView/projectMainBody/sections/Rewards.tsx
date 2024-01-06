@@ -8,7 +8,7 @@ import {
   RewardCard,
 } from '../../../../components/molecules'
 import { TitleDivider } from '../../../../components/ui/TitleDivider'
-import { fundingStages, ID } from '../../../../constants'
+import { ID } from '../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
 import {
   isActive,
@@ -27,11 +27,10 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   const {
     project,
     setMobileView,
-    fundingFlow: { fundState },
-    fundForm: { updateReward },
+    fundForm: { state: fundFormState, setState: setFundingFormState, updateReward },
   } = useProjectContext()
 
-  if (!project) {
+  if (!project || !isActive) {
     return null
   }
 
@@ -44,13 +43,10 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
               width="100%"
               reward={reward}
               onClick={() => {
-                if (
-                  fundState === fundingStages.initial &&
-                  isActive(project.status)
-                ) {
-                  updateReward({ id: toInt(reward.id), count: 1 })
-                  setMobileView(MobileViews.funding)
-                }
+                const count = (fundFormState.rewardsByIDAndCount && fundFormState.rewardsByIDAndCount[`${reward.id}`]) || 0
+                updateReward({ id: toInt(reward.id), count: count + 1 })
+                setMobileView(MobileViews.funding)
+                setFundingFormState('step', 'contribution')
               }}
             />
         )

@@ -1,8 +1,11 @@
 import { Stack, Image } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
 
-export const TableImageAndTitle = ({image, title}) => {
-  const { t } = useTranslation()
+export interface TableImageAndTitleProps {
+    image: string | null | undefined
+    title: string
+}
+
+export const TableImageAndTitle = ({image, title}: TableImageAndTitleProps) => {
 
   return (
     <Stack direction='row' align={'center'} pb={3}>

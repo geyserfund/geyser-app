@@ -26,7 +26,6 @@ import {
   CreateProjectRewardInput,
   ProjectFragment,
   ProjectRewardForCreateUpdateFragment,
-  RewardCurrency,
   UpdateProjectRewardInput,
   useProjectRewardCreateMutation,
   useProjectRewardUpdateMutation,
@@ -114,12 +113,14 @@ export const RewardAdditionModal = ({
     return {
       projectId: project.id,
       cost: reward.cost,
-      costCurrency: RewardCurrency.Usdcent,
       description: reward.description,
       image: reward.image || undefined,
       name: reward.name,
       stock: reward.stock || undefined,
       hasShipping: reward.hasShipping,
+      rewardType: reward.rewardType,
+      isAddon: reward.isAddon,
+      isHidden: reward.isHidden
     }
   }
 
@@ -127,12 +128,14 @@ export const RewardAdditionModal = ({
     return {
       projectRewardId: toInt(reward.id),
       cost: reward.cost,
-      costCurrency: RewardCurrency.Usdcent, // @TODO: when we do have more options for reward currency this will be updated
       description: reward.description,
       image: reward.image || undefined,
       name: reward.name,
       stock: reward.stock || undefined,
       hasShipping: reward.hasShipping,
+      rewardType: reward.rewardType,
+      isAddon: reward.isAddon,
+      isHidden: reward.isHidden
     }
   }
 

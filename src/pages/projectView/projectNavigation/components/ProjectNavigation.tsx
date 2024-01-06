@@ -49,6 +49,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         path: '',
         mobileView: MobileViews.description,
         icon: HomeNavIcon2,
+        subViews: [],
         render: true,
       },
       {
@@ -56,6 +57,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         path: PathName.projectEntries,
         mobileView: MobileViews.entries,
         icon: EntryEditIcon,
+        subViews: [],
         render: Boolean(entriesLength),
       },
       {
@@ -63,6 +65,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         path: PathName.projectRewards,
         mobileView: MobileViews.rewards,
         icon: RewardGiftIcon,
+        subViews: [],
         render: Boolean(rewardsLength),
       },
       {
@@ -70,6 +73,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         path: PathName.projectMilestones,
         mobileView: MobileViews.milestones,
         icon: MilestoneIcon,
+        subViews: [],
         render: Boolean(milestonesLength),
       },
     ],
@@ -82,12 +86,14 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         name: 'Overview',
         path: PathName.projectOverview,
         mobileView: MobileViews.overview,
+        subViews: [],
         icon: OverviewNavIcon,
       },
       {
         name: 'Insights',
         path: PathName.projectInsights,
         mobileView: MobileViews.insights,
+        subViews: [],
         icon: InsightsNavIcon,
       },
       {
@@ -104,6 +110,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         name: 'Contributors',
         path: PathName.projectContributors,
         mobileView: MobileViews.contributors,
+        subViews: [],
         icon: ContributorsNavIcon,
       },
     ],
@@ -119,8 +126,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
     ]
 
     return (
-        allButtons.find((button) => button.path === currentPath || (button["subViews"] !== undefined && button["subViews"].find(subview => subview === currentPath)))?.name ||
-        'Project'
+        allButtons.find((button) => button.path === currentPath || (button.subViews && button.subViews.find((subview: MobileViews) => subview === currentPath)))?.path || ''
     )
   }, [
     ProjectNavigationButtons,
@@ -209,7 +215,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
                         aria-label={creatorNavigationButtons.name}
                         NavigationIcon={creatorNavigationButtons.icon}
                         isActive={
-                          currentActiveButton === creatorNavigationButtons.name
+                          currentActiveButton === creatorNavigationButtons.path
                         }
                       >
                         {t(creatorNavigationButtons.name)}
@@ -246,7 +252,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
                       onClick={handleProjectNavigationButtonClick}
                       aria-label={navigationButton.name}
                       NavigationIcon={navigationButton.icon}
-                      isActive={currentActiveButton === navigationButton.name}
+                      isActive={currentActiveButton === navigationButton.path}
                     >
                       {t(navigationButton.name)}
                     </ProjectNavigationButton>

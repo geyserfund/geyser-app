@@ -20,8 +20,7 @@ export const ProjectContainer = () => {
 
   const launchModal = useModal({ onClose: onModalClose })
   const draftModal = useModal({ onClose: onModalClose })
-
-  const { project, loading } = useProjectContext()
+  const { project, loading, fundingFlow } = useProjectContext()
 
   useEffect(() => {
     const launchModalShouldOpen = location.search.split('launch').length > 1
@@ -74,7 +73,7 @@ export const ProjectContainer = () => {
       <ProjectCreateLaunchedModal {...launchModal} />
       <ProjectCreateDraftModal {...draftModal} />
 
-      {isMobile && <ProjectMobileBottomNavigation fixed />}
+      {isMobile && fundingFlow.fundState !== 'form' && <ProjectMobileBottomNavigation fixed />}
     </>
   )
 }

@@ -68,9 +68,6 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   useEffect(() => {
     if (mobileView === MobileViews.funding) {
       setFundState(fundingStages.form)
-    } else {
-      resetFundingFlow()
-      resetForm()
     }
   }, [mobileView, resetForm, resetFundingFlow, setFundState])
 

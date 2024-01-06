@@ -1,5 +1,5 @@
 import { Box, Divider, VStack } from '@chakra-ui/react'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 
 import { MAX_FUNDING_AMOUNT_USD } from '../../../../../constants'
 import { useProjectContext } from '../../../../../context'
@@ -26,10 +26,8 @@ export const FundingFormScreen = ({
   const isMobile = useMobileMode()
   const summaryCardRef = useRef<any>(null)
 
-  const [step, setStep] = useState<'contribution' | 'info'>('contribution')
-
   const {
-    fundForm: { state: formState, hasSelectedRewards },
+    fundForm: { state: formState, hasSelectedRewards, setState },
   } = useProjectContext()
 
   const { getTotalAmount } = useFundCalc(formState)
@@ -41,7 +39,7 @@ export const FundingFormScreen = ({
     contribution() {
       const valid = validateFundingAmount()
       if (valid) {
-        setStep('info')
+        setState('step', 'info')
       }
     },
     info() {
@@ -112,18 +110,18 @@ export const FundingFormScreen = ({
         flex={1}
         px={{ base: '10px', lg: '20px' }}
       >
-        {step === 'contribution' ? (
+        {formState.step === 'contribution' ? (
           <FundingFormSection onBackClick={handleCloseButton} />
         ) : (
           <FundingFormUserInfoSection
-            onBackClick={() => setStep('contribution')}
+            onBackClick={() => setState('step', 'contribution')}
           />
         )}
       </Box>
       <VStack
         backgroundColor="neutral.0"
         position={isMobile ? 'fixed' : 'relative'}
-        bottom={isMobile ? '60px' : '0px'}
+        bottom={0}
         px={{ base: '10px', lg: '20px' }}
         paddingBottom="5px"
         width={'100%'}
@@ -138,7 +136,7 @@ export const FundingFormScreen = ({
         )}
         <ProjectFundingSummaryCard
           ref={summaryCardRef}
-          onSubmit={handleSubmit[step]}
+          onSubmit={handleSubmit[formState.step]}
         />
       </VStack>
     </VStack>

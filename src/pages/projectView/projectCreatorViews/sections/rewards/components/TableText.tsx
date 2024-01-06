@@ -1,9 +1,8 @@
-import { Stack } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
+export interface TableTextProps {
+  content: string
+}
 
-export const TableText = ({content}) => {
-  const { t } = useTranslation()
-
+export const TableText = ({content}: TableTextProps) => {
   return (
     <p>{content}</p>
   )

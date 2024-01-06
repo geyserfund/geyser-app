@@ -1,4 +1,4 @@
-import { Text, Stack, VStack, Checkbox, Button, IconButton, Select, useBreakpoint } from '@chakra-ui/react'
+import { Text, Stack, VStack, Checkbox, Button, IconButton, Select } from '@chakra-ui/react'
 import { CardLayout } from '../../../../../../../components/layouts'
 import { useTranslation } from 'react-i18next'
 import { FieldContainer } from '../../../../../../../forms/components/FieldContainer'
@@ -7,7 +7,7 @@ import { useState } from 'react'
 import {
   CreateProjectRewardInput,
   ProjectReward,
-  ProjectRewardForCreateUpdateFragment, RewardCurrency, UpdateProjectRewardInput,
+  ProjectRewardForCreateUpdateFragment, RewardType, UpdateProjectRewardInput,
 } from '../../../../../../../types'
 import { commaFormatted, toInt} from '../../../../../../../utils'
 import { ProjectRewardValidations} from '../../../../../../../constants'
@@ -16,17 +16,13 @@ import { CalendarButton, CreatorEmailButton, FileUpload } from '../../../../../.
 import { RiArrowLeftSLine } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
 
-type CreateOrUpdate {
-  ''
-}
-
 type Props = {
   buttonText: string,
   titleText: string,
   rewardSave: Function,
   rewardSaving: boolean,
   rewardData: ProjectReward,
-  createOrUpdate: 'create' | 'update'
+  createOrUpdate?: 'create' | 'update'
 }
 
 export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSaving, rewardData, createOrUpdate = 'create'}: Props) => {
@@ -39,22 +35,23 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
   }
 
   const ownerEmail = project.owners[0]?.user.email || ''
-  const [formCostDollarValue, setFormCostDollarValue] = useState('')
   const [reward, setReward] =
     useState<ProjectRewardForCreateUpdateFragment>(rewardData)
+  const [formCostDollarValue, setFormCostDollarValue] = useState(reward.cost > 0 ? (reward.cost / 100).toFixed(2) : '150')
   const [formError, setFormError] = useState<any>({})
 
   const getRewardCreationInputVariables = (): CreateProjectRewardInput => {
     return {
       projectId: project.id,
       cost: reward.cost,
-      costCurrency: RewardCurrency.Usdcent,
       description: reward.description,
       image: reward.image || undefined,
       name: reward.name,
       maxClaimable: reward.maxClaimable || undefined,
       hasShipping: reward.hasShipping,
       estimatedDeliveryDate: reward.estimatedDeliveryDate || undefined,
+      isAddon: reward.isAddon,
+      isHidden: reward.isHidden,
       rewardType: reward.rewardType
     }
   }
@@ -63,13 +60,14 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
     return {
       projectRewardId: reward.id,
       cost: reward.cost,
-      costCurrency: RewardCurrency.Usdcent,
       description: reward.description,
       image: reward.image || undefined,
       name: reward.name,
       maxClaimable: reward.maxClaimable || undefined,
       hasShipping: reward.hasShipping,
       estimatedDeliveryDate: reward.estimatedDeliveryDate || undefined,
+      isAddon: reward.isAddon,
+      isHidden: reward.isHidden,
       rewardType: reward.rewardType
     }
   }
@@ -262,7 +260,7 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
         <Stack direction={{ base: 'column', lg: 'row' }}>
           <FieldContainer title={t('Reward Type')}>
           <Select value={reward.rewardType} onChange={(event) => {
-            setReward((current) => ({ ...current, ['rewardType']: event.target.value }))
+            setReward((current) => ({ ...current, ['rewardType']: event.target.value as RewardType }))
           }}>
             <option value='PHYSICAL'>{t('Physical')}</option>
             <option value='DIGITAL'>{t('Digital')}</option>

@@ -5,7 +5,6 @@ import {
   Header,
   LaunchProjectNotice,
   Milestones,
-  Rewards,
   Story,
 } from './sections'
 import { Details } from './sections/Details'
@@ -24,7 +23,6 @@ export const ProjectMainBody = () => {
       ) : null}
       <Story />
       {projectDetails.entriesLength ? <Entries /> : null}
-      {/* {projectDetails.rewardsLength ? <Rewards /> : null} */}
       {projectDetails.milestonesLength ? <Milestones /> : null}
       <Details />
     </>

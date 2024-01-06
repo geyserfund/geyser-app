@@ -1,4 +1,4 @@
-import { Image, Stack, Text, useColorMode, VStack, Flex, useBreakpoint } from '@chakra-ui/react'
+import { Image, Stack, Text, useColorMode, VStack, useBreakpoint } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import {TableImageAndTitle, TableText} from '../components'
 import EditIcon from '../icons/edit.svg';
