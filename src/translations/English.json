@@ -770,5 +770,7 @@
   "By launching your project the project will be visible to and searchable by the public. You will be able to disactivate your project but not to hide your project after launching it.":"By launching your project the project will be visible to and searchable by the public. You will be able to disactivate your project but not to hide your project after launching it.",
   "Lightning Node":"Lightning Node",
   "Confirm launch":"Confirm launch",
-  "You’re all set!":"You’re all set!"
+  "You’re all set!":"You’re all set!",
+  "Docs":"Docs"
+
 }
