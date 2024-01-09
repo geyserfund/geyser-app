@@ -146,7 +146,7 @@ export const FileUpload = ({
         <ImageCropperModal
           {...cropModal}
           fileSrc={originalFile}
-          shape={imageCrop}
+          aspectRatio={imageCrop === ImageCrop.Square ? 1 : 3}
           onCompleted={uploadFile}
         />
       )}

@@ -302,6 +302,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
                   onUploadComplete={handleHeaderImageUpload}
                   onDeleteClick={handleDeleteImage}
                   childrenOnLoading={<UploadBox loading h={10} />}
+                  imageCrop={ImageCrop.Rectangle}
                 >
                   <UploadBox
                     h={10}

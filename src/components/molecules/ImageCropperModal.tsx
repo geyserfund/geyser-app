@@ -10,9 +10,17 @@ import {
 } from '@chakra-ui/react'
 import { useCallback, useEffect, useState } from 'react'
 import Cropper, { Area } from 'react-easy-crop'
+import { useTranslation } from 'react-i18next'
 
+import {
+  blobToFile,
+  createImage,
+  fileToBase64,
+  getRadianAngle,
+  rotateSize,
+} from '../../utils'
 import { Modal } from '../layouts'
-import { Body1 } from '../typography'
+import { Body2 } from '../typography'
 
 export enum ImageCrop {
   Square = 'square',
@@ -24,7 +32,7 @@ interface ImageCropperModalProps {
   onClose: () => void
   onCompleted: (_: File) => void
   fileSrc?: File
-  shape?: ImageCrop
+  aspectRatio?: number
 }
 
 export const ImageCropperModal = ({
@@ -32,17 +40,18 @@ export const ImageCropperModal = ({
   onClose,
   onCompleted,
   fileSrc,
-  shape,
+  aspectRatio,
 }: ImageCropperModalProps) => {
+  const { t } = useTranslation()
+
   const [imageSrc, setImageSrc] = useState('')
 
   const [crop, setCrop] = useState({ x: 0, y: 0 })
-  const [rotation, setRotation] = useState(0)
   const [zoom, setZoom] = useState(1)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>()
 
   const startCrop = useCallback(async (file: File) => {
-    const value = await readFile(file)
+    const value = await fileToBase64(file)
     setImageSrc(`${value}`)
   }, [])
 
@@ -63,7 +72,6 @@ export const ImageCropperModal = ({
       const croppedImage = await getCroppedImg({
         imageSrc,
         pixelCrop: croppedAreaPixels,
-        rotation,
         fileName: fileSrc?.name || '',
       })
       if (croppedImage) {
@@ -77,58 +85,57 @@ export const ImageCropperModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={'Upload image'} size="lg">
       <VStack>
-        <Box position={'relative'} width="100%" height="400px">
-          <Cropper
-            image={imageSrc}
-            crop={crop}
-            rotation={rotation}
-            zoom={zoom}
-            aspect={shape === ImageCrop.Square ? 1 : 16 / 9}
-            onCropChange={setCrop}
-            onCropComplete={onCropComplete}
-            onZoomChange={setZoom}
-          />
+        <Box position="relative" width="100%" height="400px">
+          <Box
+            position={'absolute'}
+            width="100%"
+            height="100%"
+            top="0"
+            left="0"
+          >
+            <Cropper
+              image={imageSrc}
+              crop={crop}
+              zoom={zoom}
+              aspect={aspectRatio}
+              onCropChange={setCrop}
+              onCropComplete={onCropComplete}
+              onZoomChange={setZoom}
+            />
+          </Box>
         </Box>
 
-        <HStack></HStack>
-        <Body1>Zoom</Body1>
-        <Slider
-          aria-label="slider-ex-1"
-          defaultValue={1}
-          min={1}
-          max={3}
-          step={0.1}
-          onChange={setZoom}
-        >
-          <SliderTrack>
-            <SliderFilledTrack />
-          </SliderTrack>
-          <SliderThumb />
-        </Slider>
-        <Button variant="primary" onClick={uploadCroppedImage}>
-          Save
-        </Button>
+        <HStack width="100%" spacing="10px">
+          <Body2 bold>{t('Zoom')}</Body2>
+          <Slider
+            aria-label="slider-ex-1"
+            defaultValue={1}
+            min={1}
+            max={3}
+            step={0.1}
+            onChange={setZoom}
+            flex="1"
+          >
+            <SliderTrack>
+              <SliderFilledTrack />
+            </SliderTrack>
+            <SliderThumb />
+          </Slider>
+        </HStack>
+
+        <HStack width="full">
+          <Button flex="1" variant="secondary" onClick={uploadCroppedImage}>
+            {t('Skip crop')}
+          </Button>
+
+          <Button flex="1" variant="primary" onClick={uploadCroppedImage}>
+            {t('Save')}
+          </Button>
+        </HStack>
       </VStack>
     </Modal>
   )
 }
-
-const readFile = (file: File): Promise<string | ArrayBuffer | null> => {
-  return new Promise((resolve) => {
-    const reader = new FileReader()
-    reader.addEventListener('load', () => resolve(reader.result), false)
-    reader.readAsDataURL(file)
-  })
-}
-
-export const createImage = (url: string): Promise<HTMLImageElement> =>
-  new Promise((resolve, reject) => {
-    const image = new Image()
-    image.addEventListener('load', () => resolve(image))
-    image.addEventListener('error', (error) => reject(error))
-    image.setAttribute('crossOrigin', 'anonymous') // needed to avoid cross-origin issues on CodeSandbox
-    image.src = url
-  })
 
 interface getCroppedImgProps {
   imageSrc: string
@@ -213,32 +220,4 @@ export const getCroppedImg = async ({
       }
     }, 'image/jpeg')
   })
-}
-
-export function getRadianAngle(degreeValue: number) {
-  return (degreeValue * Math.PI) / 180
-}
-
-/**
- * Returns the new bounding area of a rotated rectangle.
- */
-export function rotateSize(width: number, height: number, rotation: number) {
-  const rotRad = getRadianAngle(rotation)
-
-  return {
-    width:
-      Math.abs(Math.cos(rotRad) * width) + Math.abs(Math.sin(rotRad) * height),
-    height:
-      Math.abs(Math.sin(rotRad) * width) + Math.abs(Math.cos(rotRad) * height),
-  }
-}
-
-export const blobToFile = (theBlob: Blob, fileName: string): File => {
-  const b: any = theBlob
-  // A Blob() is almost a File() - it's just missing the two properties below which we will add
-  b.lastModifiedDate = new Date()
-  b.name = fileName
-
-  // Cast to a File() type
-  return theBlob as File
 }

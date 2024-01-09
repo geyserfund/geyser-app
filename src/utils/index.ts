@@ -1,6 +1,7 @@
 export * from './formatData/aggregateTransactions'
 export * from './formatData/dateOperations'
 export * from './formatData/helperFunctions'
+export * from './formatData/imageTools'
 export * from './formatData/sha256'
 export * from './formatData/stringOperation'
 export * from './info/getRandom'
