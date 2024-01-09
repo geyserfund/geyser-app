@@ -8,7 +8,7 @@ type Props = ICard & {
   reward: ProjectRewardForCreateUpdateFragment
   handleEdit?: any
   handleRemove?: any
-  onClick?: Function
+  onRewardClick?: Function
 }
 
 export const RewardCard = ({
@@ -51,7 +51,7 @@ export const RewardCard = ({
               variant='primary'
               size='sm'
               onClick={(e) => {
-                rest.onClick?.(e);
+                rest.onRewardClick?.(e);
               }}
               style={{ flex: 1 }}
             >

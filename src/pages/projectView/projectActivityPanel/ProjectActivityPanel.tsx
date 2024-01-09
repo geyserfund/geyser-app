@@ -5,16 +5,11 @@ import { useContext, useEffect } from 'react'
 import { AuthModal } from '../../../components/molecules'
 import { fundingStages } from '../../../constants'
 import { AuthContext, MobileViews, useProjectContext } from '../../../context'
-import { useBtcContext } from '../../../context/btc'
-import { IFundForm } from '../../../hooks'
 import {
-  FundingInput,
   FundingResourceType,
-  ProjectFragment,
-  ProjectReward,
-  RewardFundingInput,
+  ProjectFragment
 } from '../../../types'
-import { toInt, useCustomTheme, useMobileMode } from '../../../utils'
+import { useCustomTheme, useMobileMode } from '../../../utils'
 import {
   FundingFormScreen,
   InfoScreen,
@@ -30,12 +25,9 @@ type Props = {
   resourceId: number
 }
 
-type FilteredReward = { id: number; quantity: number }
-
 export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   const { user } = useContext(AuthContext)
   const { colors } = useCustomTheme()
-  const { btcRate } = useBtcContext()
   const isMobile = useMobileMode()
 
   const { mobileView, setMobileView, project, fundingFlow, fundForm } =
@@ -45,10 +37,9 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
     state: formState,
     setState: setFormState,
     resetForm,
-    hasSelectedRewards,
   } = fundForm
 
-  const { fundState, setFundState, resetFundingFlow, requestFunding } =
+  const { fundState, setFundState, resetFundingFlow } =
     fundingFlow
 
   const {
@@ -93,6 +84,8 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
     setFundState(fundingStages.form)
   }
 
+  // @TODO: Travis
+  /**
   const formatFundingInput = (state: IFundForm) => {
     const {
       donationAmount,
@@ -138,10 +131,11 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
 
     return input
   }
+  **/
 
   const handleFund = async () => {
-    const input = formatFundingInput(formState)
-    requestFunding(input)
+    // const input = formatFundingInput(formState)
+    // requestFunding(input)
   }
 
   const renderPanelContent = () => {

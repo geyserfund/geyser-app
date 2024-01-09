@@ -16,7 +16,6 @@ import {} from '../../../projectMainBody/components'
 import {
   ContributionInfoBox,
   ContributionInfoBoxVersion,
-  ContributionShippingBox,
   SuccessImageComponent,
 } from './components'
 
@@ -111,8 +110,10 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
           showGeyserFee={false}
         />
 
+        {/* @TODO: Travis */}
         {needsShipping ? (
-          <ContributionShippingBox creatorEmail={fundingTx.creatorEmail} />
+          null
+          // <ContributionShippingBox creatorEmail={fundingTx.creatorEmail} />
         ) : null}
       </VStack>
     </VStack>

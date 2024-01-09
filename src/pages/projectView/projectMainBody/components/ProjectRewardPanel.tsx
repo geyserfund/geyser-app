@@ -1,6 +1,6 @@
 import { Box, Text, Stack, Button } from '@chakra-ui/react'
 import {
-  ProjectReward
+  ProjectRewardForCreateUpdateFragment
 } from '../../../../types'
 import { useTranslation } from 'react-i18next'
 import { MobileViews, useProjectContext } from '../../../../context'
@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 import { PathName } from '../../../../constants'
 
 type Props = {
-  reward: ProjectReward,
+  reward: ProjectRewardForCreateUpdateFragment,
   key: number
 }
 

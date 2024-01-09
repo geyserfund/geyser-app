@@ -461,6 +461,8 @@ export const validateFundingInput = (input: FundingInput) => {
   let isValid = false
   let error = 'cannot initiate funding without amount'
 
+  // @TODO: Travis
+  /*
   if (
     (input.donationInput && toInt(input.donationInput.donationAmount) > 0) ||
     (input.rewardInput && toInt(input.rewardInput.rewardsCost) > 0)
@@ -468,6 +470,7 @@ export const validateFundingInput = (input: FundingInput) => {
     isValid = true
     error = ''
   }
+  */
 
   return { isValid, error }
 }

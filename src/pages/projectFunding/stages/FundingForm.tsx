@@ -15,8 +15,6 @@ import { useBtcContext } from '../../../context/btc'
 import { useFormState, UseFundingFlowReturn } from '../../../hooks'
 import { FormStateError } from '../../../interfaces'
 import {
-  FundingInput,
-  FundingResourceType,
   Project,
   UserMeFragment,
 } from '../../../types'
@@ -47,7 +45,6 @@ export const FundingForm = ({
 }: Props) => {
   const { t } = useTranslation()
   const { btcRate } = useBtcContext()
-  const { requestFunding } = fundingFlow
 
   const { toast } = useNotification()
   const { state, setTarget, setValue } =
@@ -89,6 +86,8 @@ export const FundingForm = ({
     }
 
     if (isValid) {
+      // @TODO: Travis
+      /**
       const input: FundingInput = {
         projectId: Number(project.id),
         anonymous: !user,
@@ -106,6 +105,7 @@ export const FundingForm = ({
 
       requestFunding(input)
       onFundingRequested(state)
+      **/
     }
   }
 

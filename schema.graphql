@@ -1,0 +1,1428 @@
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+"Add BigInt functionality"
+scalar BigInt
+"Date custom scalar type"
+scalar Date
+scalar link_String_NotNull_format_uri
+scalar title_String_NotNull_maxLength_60
+scalar name_String_NotNull_minLength_3_maxLength_280
+scalar description_String_maxLength_8000
+scalar shortDescription_String_maxLength_500
+scalar name_String_NotNull_minLength_3_maxLength_60
+scalar description_String_NotNull_maxLength_8000
+scalar title_String_maxLength_60
+scalar links_List_String_NotNull_format_uri
+scalar name_String_minLength_3_maxLength_280
+scalar donationAmount_Int_NotNull_min_0
+scalar email_String_format_email
+scalar comment_String_maxLength_280
+scalar quantity_Int_NotNull_min_1
+scalar name_String_NotNull_maxLength_100
+scalar description_String_maxLength_250
+scalar cost_Int_NotNull_min_1_max_1000000
+scalar stock_Int_min_0
+scalar maxClaimable_Int_min_0
+scalar name_String_maxLength_100
+scalar cost_Int_min_1_max_1000000
+scalar description_String_NotNull_maxLength_250
+scalar amount_Float_NotNull_min_1
+scalar amount_Float_min_1
+scalar description_String_NotNull_maxLength_2200
+scalar title_String_NotNull_maxLength_150
+scalar title_String_maxLength_150
+scalar description_String_maxLength_2200
+scalar name_String_minLength_5_maxLength_60
+scalar pubkey_String_minLength_66_maxLength_66
+type Query {
+  _: Boolean
+  projectGet(where: UniqueProjectQueryInput!): Project
+  "By default, returns a list of all active projects."
+  projectsGet(input: ProjectsGetQueryInput): ProjectsResponse!
+  "Returns summary statistics of all projects, both current and past."
+  projectsSummary: ProjectsSummary!
+  projectRegionsGet: [ProjectRegionsGetResult!]!
+  projectCountriesGet: [ProjectCountriesGetResult!]!
+  projectsMostFundedOfTheWeekGet(input: GetProjectsMostFundedOfTheWeekInput): [projectsMostFundedOfTheWeekGet!]!
+  me: User
+  user(where: UserGetInput!): User!
+  statusCheck: Boolean!
+  fundersGet(input: GetFundersInput!): [Funder!]!
+  getDashboardFunders(input: GetFundersInput): [Funder!]!
+  fundingTxsGet(input: GetFundingTxsInput): [FundingTx!]!
+  fundingTx(id: BigInt!): FundingTx!
+  currencyQuoteGet(input: CurrencyQuoteGetInput!): CurrencyQuoteGetResponse!
+  getSignedUploadUrl(input: FileUploadInput!): SignedUploadUrl!
+  getProjectReward(id: BigInt!): ProjectReward!
+  projectRewardsGet(input: GetProjectRewardInput!): [ProjectReward!]!
+  projectStatsGet(input: GetProjectStatsInput!): ProjectStats!
+  "Returns all published entries."
+  getEntries(input: GetEntriesInput): [Entry!]!
+  entry(id: BigInt!): Entry
+  getWallet(id: BigInt!): Wallet!
+  "Returns the public key of the Lightning node linked to a project, if there is one."
+  getProjectPubkey(projectId: BigInt!): String
+  lightningAddressVerify(lightningAddress: String): LightningAddressVerifyResponse!
+  "Returns all activities."
+  getActivities(input: GetActivitiesInput): [Activity!]!
+  tagsGet: [TagsGetResult!]!
+  grant(input: GrantGetInput!): Grant!
+  grants: [Grant!]!
+  grantStatistics: GrantStatistics!
+  badges: [Badge!]!
+  userBadge(userBadgeId: BigInt!): UserBadge
+  userBadges(input: BadgesGetInput!): [UserBadge!]!
+}
+type Mutation {
+  _: Boolean
+  createProject(input: CreateProjectInput!): Project!
+  updateProject(input: UpdateProjectInput!): Project!
+  projectDelete(input: DeleteProjectInput!): ProjectDeleteResponse!
+  projectTagAdd(input: ProjectTagMutationInput!): [Tag!]!
+  projectTagRemove(input: ProjectTagMutationInput!): [Tag!]!
+  projectFollow(input: ProjectFollowMutationInput!): Boolean!
+  projectUnfollow(input: ProjectFollowMutationInput!): Boolean!
+  projectStatusUpdate(input: ProjectStatusUpdate!): Project!
+  projectPublish(input: ProjectPublishMutationInput!): Project!
+  updateUser(input: UpdateUserInput!): User!
+  unlinkExternalAccount(id: BigInt!): User!
+  userDelete: DeleteUserResponse!
+  userEmailUpdate(input: UserEmailUpdateInput!): User!
+  userEmailVerify(input: EmailVerifyInput!): Boolean!
+  fundingConfirm(input: FundingConfirmInput!): FundingConfirmResponse!
+  fundingPend(input: FundingPendingInput!): FundingPendingResponse!
+  fundingCancel(input: FundingCancelInput!): FundingCancelResponse!
+  fundingInvoiceRefresh(fundingTxId: BigInt!): FundingTx!
+  fundingInvoiceCancel(invoiceId: String!): FundinginvoiceCancel!
+  fund(input: FundingInput!): FundingMutationResponse!
+  fundingCreateFromPodcastKeysend(input: FundingCreateFromPodcastKeysendInput): FundingTx!
+  fundingClaimAnonymous(uuid: String!): FundingMutationResponse!
+  projectRewardCreate(input: CreateProjectRewardInput!): ProjectReward!
+  projectRewardUpdate(input: UpdateProjectRewardInput!): ProjectReward!
+  "Soft deletes the reward."
+  projectRewardDelete(input: DeleteProjectRewardInput!): Boolean!
+  createProjectMilestone(input: CreateProjectMilestoneInput): ProjectMilestone!
+  updateProjectMilestone(input: UpdateProjectMilestoneInput): ProjectMilestone!
+  deleteProjectMilestone(projectMilestoneId: BigInt!): Boolean!
+  createEntry(input: CreateEntryInput!): Entry!
+  updateEntry(input: UpdateEntryInput!): Entry!
+  "Makes the Entry public."
+  publishEntry(id: BigInt!): Entry!
+  deleteEntry(id: BigInt!): Entry!
+  "This operation is currently not supported."
+  updateWallet(input: UpdateWalletInput!): Wallet!
+  updateWalletState(input: UpdateWalletStateInput!): Wallet!
+  createWallet(input: CreateWalletInput!): Wallet!
+  walletDelete(id: BigInt!): Boolean!
+  tagCreate(input: TagCreateInput!): Tag!
+  grantApply(input: GrantApplyInput): GrantApplicant!
+  userBadgeAward(userBadgeId: BigInt!): UserBadge!
+  claimBadge(input: BadgeClaimInput!): UserBadge!
+  """
+  Sends an OTP to the user's email address and responds with a token that can be used, together with the OTP, to two-factor authenticate
+  a request made by the client.
+  """
+  sendOTPByEmail(input: SendOtpByEmailInput!): OTPResponse!
+}
+type Subscription {
+  _: Boolean
+  projectActivated: ProjectActivatedSubscriptionResponse!
+  fundingTxStatusUpdated(input: FundingTxStatusUpdatedInput): FundingTxStatusUpdatedSubscriptionResponse!
+  entryPublished: EntryPublishedSubscriptionResponse!
+  activityCreated(input: ActivityCreatedSubscriptionInput): ActivityResource!
+}
+type ProjectDeleteResponse implements MutationResponse {
+  success: Boolean!
+  message: String
+}
+type projectsMostFundedOfTheWeekGet {
+  project: Project!
+  fundingAmount: BigInt!
+  fundersCount: Int!
+  tagId: Int
+}
+type ProjectRegionsGetResult {
+  region: String!
+  count: Int!
+}
+type ProjectCountriesGetResult {
+  country: Country!
+  count: Int!
+}
+type ProjectActivatedSubscriptionResponse {
+  project: Project!
+}
+type Project {
+  id: BigInt!
+  "Public title of the project."
+  title: title_String_NotNull_maxLength_60!
+  "Unique name for the project. Used for the project URL and lightning address."
+  name: name_String_NotNull_minLength_3_maxLength_280!
+  "Description of the project."
+  description: description_String_maxLength_8000
+  "Short description of the project."
+  shortDescription: shortDescription_String_maxLength_500
+  "Total amount raised by the project, in satoshis."
+  balance: Int!
+  createdAt: String!
+  updatedAt: String!
+  "Main project image."
+  thumbnailImage: String
+  image: String
+  status: ProjectStatus
+  type: ProjectType!
+  rewardCurrency: RewardCurrency
+  links: [String!]!
+  owners: [Owner!]!
+  ambassadors: [Ambassador!]! @deprecated(reason: "No longer supported")
+  funders: [Funder!]!
+  fundersCount: Int
+  sponsors: [Sponsor!]! @deprecated(reason: "No longer supported")
+  followers: [User!]!
+  rewards: [ProjectReward!]!
+  milestones: [ProjectMilestone!]!
+  fundingTxs: [FundingTx!]!
+  fundingTxsCount: Int
+  location: Location
+  keys: ProjectKeys!
+  "Wallets linked to a Project."
+  wallets: [Wallet!]!
+  tags: [Tag!]!
+  "Returns summary statistics on the Project views and visitors."
+  statistics: ProjectStatistics
+  "Returns the project's grant applications."
+  grants: [GrantApplicant!]!
+  "Boolean flag to indicate if the project can be deleted."
+  canDelete: Boolean!
+  """
+  By default, returns all the entries of a project, both published and unpublished but not deleted.
+  To filter the result set, an explicit input can be passed that specifies a value of true or false for the published field.
+  An unpublished entry is only returned if the requesting user is the creator of the entry.
+  """
+  entries(input: ProjectEntriesGetInput): [Entry!]!
+}
+type Country {
+  code: String!
+  name: String!
+}
+type Location {
+  country: Country
+  region: String
+}
+type Owner {
+  id: BigInt!
+  user: User!
+}
+type Ambassador {
+  id: BigInt!
+  user: User!
+  confirmed: Boolean!
+}
+type User {
+  """
+  Returns the projects of a user. By default, this field returns all the projects for that user, both draft and non-draft.
+  To filter the result set, an explicit input can be passed that specifies a value of the status field.
+  """
+  projects(input: UserProjectsGetInput): [Project!]!
+  id: BigInt!
+  username: String!
+  imageUrl: String
+  bio: String
+  email: String
+  isEmailVerified: Boolean!
+  emailVerifiedAt: Date
+  """
+  External accounts linked to the User. It can be a twitter account if the User linked their account. For anonymous
+  users, this field can contain the wallet or app from which they funded, eg: Fountain, Breeze, etc.
+  """
+  externalAccounts: [ExternalAccount!]!
+  "Details on the participation of a User in a project."
+  contributions: [UserProjectContribution!]!
+  ownerOf: [OwnerOf!]!
+  projectFollows: [Project!]!
+  wallet: Wallet
+  badges: [UserBadge!]!
+  ranking: BigInt
+  "Returns a user's funding transactions accross all projects."
+  fundingTxs: [FundingTx!]!
+  """
+  By default, returns all the entries of a user, both published and unpublished but not deleted. 
+  To filter the result set, an explicit input can be passed that specifies a value of true or false for the published field.
+  An unpublished entry is only returned if the requesting user is the creator of the entry.
+  """
+  entries(input: UserEntriesGetInput): [Entry!]!
+}
+type ProjectsSummary {
+  "Total number of projects ever created on the platform."
+  projectsCount: Int
+  "Total number of funders on the platform."
+  fundersCount: Int
+  "Total of satoshis raised by projects on the platform."
+  fundedTotal: BigInt
+}
+type ProjectKeys {
+  nostrKeys: NostrKeys!
+}
+type NostrKeys {
+  publicKey: NostrPublicKey!
+  privateKey: NostrPrivateKey
+}
+type NostrPublicKey {
+  hex: String!
+  npub: String!
+}
+type NostrPrivateKey {
+  hex: String!
+  nsec: String!
+}
+type ProjectsResponse {
+  projects: [Project!]!
+  summary: ProjectsSummary
+}
+type ProjectStatistics {
+  totalVisitors: Int!
+  totalPageviews: Int!
+}
+type DeleteUserResponse implements MutationResponse {
+  success: Boolean!
+  message: String
+}
+type ExternalAccount {
+  id: BigInt!
+  accountType: String!
+  externalId: String!
+  externalUsername: String!
+  public: Boolean!
+}
+type OwnerOf {
+  project: Project
+  owner: Owner
+}
+type UserProjectContribution {
+  "Boolean value indicating if the User was an ambassador of the project."
+  isAmbassador: Boolean! @deprecated(reason: "No longer supported")
+  "Boolean value indicating if the User funded the project."
+  isFunder: Boolean!
+  "Boolean value indicating if the User was a sponsor for the project."
+  isSponsor: Boolean! @deprecated(reason: "No longer supported")
+  "Funder linked to the funding contribution. Only present if the contribution was a funding contribution."
+  funder: Funder
+  "Project linked to the contributions."
+  project: Project!
+}
+"The Funder type contains a User's funding details over a particular project."
+type Funder {
+  id: BigInt!
+  user: User
+  rewards: [FunderReward!]! @deprecated(reason: "Use 'orders' instead.")
+  orders: [Order!]!
+  "Aggregate amount funded by a Funder over all his (confirmed) funding transactions for a particular project, in satoshis."
+  amountFunded: Int
+  "Number of (confirmed) times a Funder funded a particular project."
+  timesFunded: Int
+  "Boolean value indicating whether at least one of the funding transactions of the Funder were confirmed."
+  confirmed: Boolean!
+  "Time at which the first confirmed funding transactions of the Funder was confirmed."
+  confirmedAt: Date
+  "Funder's funding txs."
+  fundingTxs(input: GetFunderFundingTxsInput): [FundingTx!]!
+}
+type FundingTxStatusUpdatedSubscriptionResponse {
+  fundingTx: FundingTx!
+}
+type FundingConfirmResponse {
+  id: BigInt!
+  success: Boolean!
+  missedSettleEvents: Int
+}
+type FundingPendingResponse {
+  id: BigInt!
+  success: Boolean!
+}
+type FundinginvoiceCancel {
+  id: BigInt!
+  success: Boolean!
+}
+type FundingCancelResponse {
+  id: BigInt!
+  success: Boolean!
+}
+type FunderReward {
+  projectReward: ProjectReward!
+  quantity: Int!
+}
+type FundingTx {
+  id: BigInt!
+  "Private reference code viewable only by the Funder and the ProjectOwner related to this FundingTx"
+  uuid: String
+  invoiceId: String
+  address: String
+  paymentRequest: String
+  amount: Int!
+  donationAmount: Int!
+  status: FundingStatus!
+  invoiceStatus: InvoiceStatus!
+  comment: String
+  media: String
+  paidAt: Date
+  funder: Funder!
+  onChain: Boolean!
+  source: String!
+  sourceResource: SourceResource
+  method: FundingMethod
+  projectId: BigInt!
+  "Contributor's email address. Only visible to the project owner."
+  email: String
+  "Creator's email address. Only visible to the contributor."
+  creatorEmail: String
+  order: Order
+}
+type FundingMutationResponse {
+  fundingTx: FundingTx
+  amountSummary: AmountSummary
+}
+type FundingQueryResponse {
+  success: Boolean!
+  message: String!
+  fundingTx: FundingTx
+}
+type AmountSummary {
+  total: Int!
+  donationAmount: Int!
+  shippingCost: Int!
+  rewardsCost: Int!
+}
+type CurrencyQuoteGetResponse {
+  quote: Float!
+  baseCurrency: BaseCurrency!
+  quoteCurrency: QuoteCurrency!
+  timestamp: Date!
+}
+type SignedUploadUrl {
+  "Signed URL used by the client to upload an image"
+  uploadUrl: String!
+  "Distribution URL from which the image will be served"
+  distributionUrl: String!
+}
+type ProjectReward {
+  id: BigInt!
+  "Name of the reward."
+  name: name_String_NotNull_maxLength_100!
+  "Short description of the reward."
+  description: description_String_maxLength_250
+  "Cost of the reward, priced in USD cents."
+  cost: Int!
+  "Image of the reward."
+  image: String
+  """
+  Whether the reward is deleted or not. Deleted rewards should not appear in the funding flow. Moreover, deleted 
+  rewards should only be visible by the project owner and the users that purchased it.
+  """
+  deleted: Boolean!
+  "Tracks the stock of the reward"
+  stock: Int
+  "Number of people that purchased the Project Reward."
+  backersCount: Int!
+  "Number of times this Project Reward was sold."
+  sold: Int!
+  "Boolean value to indicate whether this reward requires shipping"
+  project: Project!
+  "Boolean value to indicate whether this reward requires shipping"
+  hasShipping: Boolean!
+  "Boolean value to indicate whether this reward is an addon"
+  isAddon: Boolean!
+  "Boolean value to indicate whether this reward is hidden"
+  isHidden: Boolean!
+  "The date the creator created the reward"
+  createdAt: Date!
+  "The last date when the creator has updated the reward"
+  updatedAt: Date!
+  "Internally used to track whether a reward was soft deleted"
+  deletedAt: Date
+  "Estimated Date when the Reward will be delivered"
+  estimatedDeliveryDate: Date
+  "Maximum times the item can be purchased"
+  maxClaimable: Int
+  "Type of Reward"
+  rewardType: RewardType!
+}
+type DatetimeRange {
+  "The start datetime for filtering the data."
+  startDateTime: Date!
+  "The end datetime for filtering the data, default is now."
+  endDateTime: Date
+}
+type FundingTxAmountGraph implements GraphSumData {
+  dateTime: Date!
+  sum: Int!
+}
+type FunderRewardGraphSum implements GraphSumData {
+  dateTime: Date!
+  sum: Int!
+  rewardId: BigInt!
+  rewardName: String!
+}
+type FundingTxMethodCount {
+  method: String
+  count: Int!
+}
+type FundingTxMethodSum {
+  method: String
+  sum: Int!
+}
+type ProjectFundingTxStats {
+  "Project contribution count in the given datetime range."
+  count: Int!
+  "Project contribution amount in the given datetime range."
+  amountSum: Int
+  "Project contribution over the given datetime range grouped by day, or month."
+  amountGraph: [FundingTxAmountGraph]
+  "Project contribution count of each Funding Method in the given datetime range."
+  methodCount: [FundingTxMethodCount]
+  "Project contribution amount of each Funding Method in the given datetime range."
+  methodSum: [FundingTxMethodSum]
+}
+type ProjectFunderStats {
+  "Project contributors count in the given datetime range."
+  count: Int!
+}
+type ProjectFunderRewardStats {
+  "Project rewards sold count in the given datetime range."
+  quantitySum: Int!
+  "Project rewards sold count over the given datetime range grouped by day, or month."
+  quantityGraph: [FunderRewardGraphSum]
+}
+type PageViewCountGraph {
+  dateTime: Date!
+  viewCount: Int!
+  visitorCount: Int!
+}
+type ProjectViewBaseStats {
+  viewCount: Int!
+  visitorCount: Int!
+  value: String!
+}
+type ProjectViewStats {
+  "Project view count in the given datetime range."
+  viewCount: Int!
+  "Project visitor count in the given datetime range."
+  visitorCount: Int!
+  "Project view/visitor count of each viewing country in the given datetime range."
+  countries: [ProjectViewBaseStats!]!
+  "Project view/visitor count of each viewing region in the given datetime range."
+  regions: [ProjectViewBaseStats!]!
+  "Project view/visitor count of each refferal platform in the given datetime range."
+  referrers: [ProjectViewBaseStats!]!
+  "Project views/visitors count over the given datetime range grouped by day, or month."
+  visitorGraph: [PageViewCountGraph]!
+}
+type ProjectStatsBase {
+  projectFundingTxs: ProjectFundingTxStats
+  projectFunders: ProjectFunderStats
+  projectFunderRewards: ProjectFunderRewardStats
+  projectViews: ProjectViewStats
+}
+type ProjectStats {
+  current: ProjectStatsBase
+  prevTimeRange: ProjectStatsBase
+  datetimeRange: DatetimeRange!
+}
+type ProjectMilestone {
+  id: BigInt!
+  name: name_String_NotNull_maxLength_100!
+  description: description_String_maxLength_250
+  "Amount the project balance must reach to consider the milestone completed, in satoshis."
+  amount: Float!
+  reached: Boolean!
+}
+type EntryPublishedSubscriptionResponse {
+  entry: Entry!
+}
+type Entry {
+  id: BigInt!
+  "Title of the Entry."
+  title: title_String_NotNull_maxLength_60!
+  "Short description of the Entry."
+  description: description_String_NotNull_maxLength_2200!
+  "Header image of the Entry."
+  image: String
+  content: String
+  createdAt: String!
+  updatedAt: String!
+  publishedAt: String
+  type: EntryType!
+  "User that created the Entry."
+  creator: User!
+  "Project within which the Entry was created."
+  project: Project
+  "Funding transactions that were created from the Entry's page."
+  fundingTxs: [FundingTx!]!
+  "Number of funders that were created from the Entry's page."
+  fundersCount: Int!
+  "Total amount of satoshis funded from the Entry page."
+  amountFunded: Int!
+  status: EntryStatus!
+}
+type LightningAddressConnectionDetails {
+  lightningAddress: String!
+}
+"Public node details visible by anyone."
+type LndConnectionDetailsPublic {
+  pubkey: pubkey_String_minLength_66_maxLength_66
+}
+"Private node details that can only be queried by the wallet owner."
+type LndConnectionDetailsPrivate {
+  "Invoice macaroon for authenticating gRPC calls to the LND node."
+  macaroon: String!
+  "TLS certificate for the LND node (optional for Voltage nodes)."
+  tlsCertificate: String
+  "Hostname where the gRPC calls should be made."
+  hostname: String!
+  "Port where the gRPC calls should be made."
+  grpcPort: Int!
+  "Type of the LND node used."
+  lndNodeType: LndNodeType!
+  "Public key of the LND node."
+  pubkey: pubkey_String_minLength_66_maxLength_66
+}
+type LightningAddressVerifyResponse {
+  valid: Boolean!
+  reason: String
+}
+type Wallet {
+  id: BigInt!
+  "Wallet name"
+  name: name_String_minLength_5_maxLength_60
+  connectionDetails: ConnectionDetails!
+  state: WalletState!
+}
+type WalletState {
+  """
+  The status field is meant to be displayed in the the public view of a project to provide insight to the user
+  that wants to contribute to the project.
+  """
+  status: WalletStatus!
+  """
+  The status code is a more descriptive field about the wallet status. It is meant to be displayed to the 
+  project creator to help them understand what is wrong with their wallet connection. The field can only be queried
+  by the project creator.
+  """
+  statusCode: WalletStatusCode!
+}
+type Activity {
+  id: String!
+  createdAt: Date!
+  resource: ActivityResource!
+}
+type Tag {
+  id: Int!
+  label: String!
+}
+type TagsGetResult {
+  id: Int!
+  label: String!
+  count: Int!
+}
+type Grant {
+  id: BigInt!
+  title: String!
+  name: String!
+  image: String
+  shortDescription: String!
+  description: String
+  balance: Int!
+  status: GrantStatusEnum!
+  statuses: [GrantStatus!]!
+  applicants: [GrantApplicant!]!
+  sponsors: [Sponsor!]!
+  boardMembers: [GrantBoardMember!]!
+}
+type GrantStatistics {
+  "Statistic about the grants"
+  grants: GrantStatisticsGrant
+  "Statistic about the grant applicants"
+  applicants: GrantStatisticsApplicant
+}
+type GrantStatisticsGrant {
+  "Total amount granted to projects (in sats)"
+  amountGranted: Int!
+  "Total amount sent to grants (in sats)"
+  amountFunded: Int!
+  "Total rounds of grants"
+  count: Int!
+}
+type GrantStatisticsApplicant {
+  "Count of applicants that have been funded"
+  countFunded: Int!
+}
+type GrantApplicant {
+  grant: Grant!
+  project: Project!
+  status: GrantApplicantStatus!
+  funding: GrantApplicantFunding!
+}
+type GrantApplicantFunding {
+  "The amount of funding the grant applicant has received from the community."
+  communityFunding: Int!
+  "The amount of grant funding the applicant is elligible for."
+  grantAmount: Int!
+  """
+  The amount of funding that the Grant applicant has been confirmed to receive. Can only be confirmed after the 
+  grant has been closed.
+  """
+  grantAmountDistributed: Int!
+}
+type GrantBoardMember {
+  user: User!
+}
+type GrantStatus {
+  status: GrantStatusEnum!
+  startAt: Date!
+  endAt: Date
+}
+type Sponsor {
+  id: BigInt!
+  name: String!
+  url: String
+  image: String
+  user: User
+  status: SponsorStatus!
+  createdAt: Date!
+}
+type UserBadge {
+  id: BigInt!
+  userId: BigInt!
+  status: UserBadgeStatus
+  badgeAwardEventId: String
+  fundingTxId: BigInt
+  createdAt: Date!
+  updatedAt: Date!
+  badge: Badge!
+}
+type Badge {
+  id: String!
+  uniqueName: String!
+  name: String!
+  description: String!
+  image: String!
+  createdAt: Date!
+  thumb: String!
+}
+type OTPResponse {
+  "Encrypted token containing the OTP 2FA details, such as the action to be authorised and the factor used (eg: email)."
+  otpVerificationToken: String!
+  "Expiration time of the OTP. Can be used to display a countdown to the user."
+  expiresAt: Date!
+}
+type Order {
+  id: BigInt!
+  createdAt: Date!
+  updatedAt: Date!
+  status: String!
+  total: BigInt!
+  items: [OrderItems!]!
+  user: User!
+}
+type OrderItems {
+  quantity: Int!
+  unitPrice: BigInt!
+  item: ProjectReward!
+}
+interface MutationResponse {
+  success: Boolean!
+  message: String
+}
+interface GraphSumData {
+  dateTime: Date!
+  sum: Int!
+}
+interface LndConnectionDetails {
+  "Invoice macaroon for authenticating gRPC calls to the LND node."
+  macaroon: String!
+  "TLS certificate for the LND node (optional for Voltage nodes)."
+  tlsCertificate: String
+  "Hostname where the gRPC calls should be made."
+  hostname: String!
+  "Port where the gRPC calls should be made."
+  grpcPort: Int!
+  lndNodeType: LndNodeType!
+}
+union SourceResource = Project | Entry
+union ConnectionDetails = LndConnectionDetailsPrivate | LndConnectionDetailsPublic | LightningAddressConnectionDetails
+union ActivityResource = Entry | FundingTx | Project | ProjectReward
+enum OrderByOptions {
+  asc
+  desc
+}
+enum OrderByDirection {
+  asc
+  desc
+}
+enum ProjectsOrderByField {
+  balance
+}
+enum Currency {
+  USDCENT
+}
+enum ProjectType {
+  grant
+  donation
+  reward
+}
+enum ProjectStatus {
+  inactive
+  active
+  draft
+  deleted
+}
+enum RewardCurrency {
+  USDCENT
+}
+enum FundingResourceType {
+  project
+  entry
+  user
+}
+enum BaseCurrency {
+  BTC
+}
+enum QuoteCurrency {
+  USD
+}
+enum OrderItemType {
+  PROJECT_REWARD
+}
+enum FundingStatus {
+  unpaid
+  pending
+  paid
+  partially_paid
+  canceled
+}
+enum InvoiceStatus {
+  unpaid
+  paid
+  canceled
+}
+enum ShippingDestination {
+  national
+  international
+}
+enum FundingMethod {
+  podcast_keysend
+  lnurl_pay
+  ln_address
+  geyser_qr
+  nip57_zap
+}
+enum RewardType {
+  DIGITAL
+  PHYSICAL
+}
+enum AnalyticsGroupByInterval {
+  day
+  week
+  month
+  year
+}
+enum EntryType {
+  article
+  podcast
+  video
+}
+enum EntryStatus {
+  published
+  unpublished
+  deleted
+}
+enum LndNodeType {
+  voltage
+  geyser
+  custom
+}
+enum WalletStatus {
+  OK
+  INACTIVE
+  UNSTABLE
+}
+enum WalletStatusCode {
+  OK
+  UNREACHABLE
+  NOT_FOUND
+  WALLET_LOCKED
+  NO_ROUTE
+  UNKNOWN
+}
+enum WalletResourceType {
+  project
+  user
+}
+enum ActivityResourceType {
+  entry
+  funding_tx
+  project
+  project_reward
+}
+enum GrantStatusEnum {
+  APPLICATIONS_OPEN
+  FUNDING_OPEN
+  CLOSED
+}
+enum GrantApplicantStatus {
+  ACCEPTED
+  REJECTED
+  PENDING
+  CANCELED
+  FUNDED
+}
+enum SponsorStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CONFIRMED
+  CANCELED
+}
+enum UserBadgeStatus {
+  PENDING
+  ACCEPTED
+}
+enum MFAAction {
+  USER_EMAIL_VERIFICATION
+  USER_EMAIL_UPDATE
+  PROJECT_WALLET_UPDATE
+  LOGIN
+}
+"Cursor pagination input."
+input PaginationInput {
+  cursor: CursorInput
+  take: Int
+}
+input CursorInput {
+  id: Int!
+}
+input OffsetBasedPaginationInput {
+  skip: Int
+  take: Int
+}
+input TwoFAInput {
+  OTP: OTPInput
+  "TOTP is not supported yet."
+  TOTP: TOTPInput
+}
+input TOTPInput {
+  totp: Int!
+}
+input OTPInput {
+  otpVerificationToken: String!
+  otp: Int!
+}
+input DeleteProjectInput {
+  projectId: BigInt!
+}
+input ProjectStatusUpdate {
+  projectId: BigInt!
+  status: ProjectStatus!
+}
+input GetProjectsMostFundedOfTheWeekInput {
+  tagIds: [Int!]
+  take: Int
+}
+input ProjectLinkMutationInput {
+  projectId: BigInt!
+  link: link_String_NotNull_format_uri!
+}
+input ProjectFollowMutationInput {
+  projectId: BigInt!
+}
+input ProjectPublishMutationInput {
+  projectId: BigInt!
+}
+input ProjectTagMutationInput {
+  projectId: BigInt!
+  tagId: Int!
+}
+input UserProjectsGetInput {
+  where: UserProjectsGetWhereInput
+}
+input UserProjectsGetWhereInput {
+  status: ProjectStatus
+}
+input CreateProjectInput {
+  "Public title of the project."
+  title: title_String_NotNull_maxLength_60!
+  "Main project image."
+  image: String
+  thumbnailImage: String
+  name: name_String_NotNull_minLength_3_maxLength_60!
+  "A short description of the project."
+  description: description_String_NotNull_maxLength_8000!
+  shortDescription: shortDescription_String_maxLength_500
+  type: ProjectType
+  "The currency used to price rewards for the project. Currently only USDCENT supported."
+  rewardCurrency: RewardCurrency
+  email: String!
+  "Project ISO3166 country code"
+  countryCode: String
+  "Project region"
+  region: String
+}
+input UpdateProjectInput {
+  projectId: BigInt!
+  "Public title of the project."
+  title: title_String_maxLength_60
+  "Main project image."
+  image: String
+  "Project header image."
+  thumbnailImage: String
+  "Description of the project."
+  description: description_String_maxLength_8000
+  "A short description of the project."
+  shortDescription: shortDescription_String_maxLength_500
+  type: ProjectType
+  "The currency used to price rewards for the project. Currently only USDCENT supported. Should become an Enum."
+  rewardCurrency: RewardCurrency
+  "Current status of the project"
+  status: ProjectStatus
+  "Project ISO3166 country code"
+  countryCode: String
+  "Project region"
+  region: String
+  "Project links"
+  links: [links_List_String_NotNull_format_uri!]
+  "Project name, used both for the project URL, project lightning address and NIP05."
+  name: String
+}
+input UniqueProjectQueryInput {
+  id: BigInt
+  "Unique name for the project. Used for the project URL and lightning address."
+  name: name_String_minLength_3_maxLength_280
+  "Project's Nostr Public Key in HEX format"
+  nostrPublicKey: String
+}
+input ProjectsGetQueryInput {
+  where: ProjectWhereInput!
+  """
+  Takes an array of Project OrderBy options. When passing multiple ordering options, each option must
+  be passed in a separate object in the array. This ensures consistent ordering of the orderBy options in the 
+  result set.
+  """
+  orderBy: [ProjectsOrderByInput!]
+  pagination: PaginationInput
+}
+input ProjectWhereInput {
+  id: BigInt
+  "Unique name for the project. Used for the project URL and lightning address."
+  name: name_String_minLength_3_maxLength_280
+  status: ProjectStatus
+  type: ProjectType
+  region: String
+  countryCode: String
+  tagIds: [Int!]
+  search: String
+}
+input ProjectsOrderByInput {
+  field: ProjectsOrderByField!
+  direction: OrderByDirection!
+}
+input OTPLoginInput {
+  otpVerificationToken: String!
+  otp: Int!
+}
+input UpdateUserInput {
+  id: BigInt!
+  username: String
+  bio: String
+  imageUrl: String
+}
+input UserEmailUpdateInput {
+  email: String!
+  "The two-factor authentication input is required if the user already has an email set."
+  twoFAInput: TwoFAInput
+}
+input UserGetInput {
+  id: BigInt!
+}
+input EmailVerifyInput {
+  otpVerificationToken: String!
+  otp: Int!
+}
+input ResourceInput {
+  resourceId: BigInt!
+  resourceType: FundingResourceType!
+}
+input GetFunderFundingTxsInput {
+  where: GetFunderFundingTxsWhereInput
+}
+input GetFunderFundingTxsWhereInput {
+  status: FundingStatus
+  method: FundingMethod
+}
+input GetFundersInput {
+  where: GetFunderWhereInput
+  orderBy: GetFundersOrderByInput
+  pagination: PaginationInput
+}
+input dashboardFundersGetInput {
+  where: GetDashboardFundersWhereInput
+  orderBy: GetFundersOrderByInput
+  pagination: PaginationInput
+}
+input GetDashboardFundersWhereInput {
+  confirmed: Boolean
+  sourceResourceInput: ResourceInput
+  projectId: BigInt
+}
+input GetFunderWhereInput {
+  confirmed: Boolean
+  sourceResourceInput: ResourceInput
+  projectId: BigInt
+  anonymous: Boolean
+  dateRange: DateRangeInput
+}
+input DateRangeInput {
+  startDateTime: Date
+  endDateTime: Date
+}
+"only one sort field can be used at one time"
+input GetFundersOrderByInput {
+  amountFunded: OrderByOptions
+  confirmedAt: OrderByOptions
+}
+input FundingInput {
+  "The resource from which the funding transaction is being created."
+  sourceResourceInput: ResourceInput!
+  projectId: BigInt!
+  "Set to true if the funder wishes to remain anonymous. The user will still be associated to the funding transaction."
+  anonymous: Boolean!
+  "The donation amount, in satoshis."
+  donationAmount: donationAmount_Int_NotNull_min_0!
+  orderInput: OrderFundingInput
+  metadataInput: FundingMetadataInput
+}
+input FundingMetadataInput {
+  email: email_String_format_email
+  comment: comment_String_maxLength_280
+  media: String
+}
+input OrderFundingInput {
+  """
+  Quote used client-side to compute the order total. That quote will be used unless the slippage exceeds
+  a pre-defined threshold.
+  """
+  bitcoinQuote: OrderBitcoinQuoteInput
+  items: [OrderItemInput!]!
+}
+input OrderBitcoinQuoteInput {
+  quote: Float!
+  quoteCurrency: QuoteCurrency!
+}
+input CurrencyQuoteGetInput {
+  baseCurrency: BaseCurrency!
+  quoteCurrency: QuoteCurrency!
+}
+input OrderItemInput {
+  itemId: BigInt!
+  itemType: OrderItemType!
+  "Number of times a reward was selected."
+  quantity: quantity_Int_NotNull_min_1!
+}
+input GetFundingTxsInput {
+  where: GetFundingTxsWhereInput
+  orderBy: GetFundingTxsOrderByInput
+  pagination: PaginationInput
+}
+input GetFundingTxsWhereInput {
+  dateRange: DateRangeInput
+  sourceResourceInput: ResourceInput
+  projectId: BigInt
+  method: String
+  NOT: GetFundingTxsWhereInput
+  OR: [GetFundingTxsWhereInput]
+}
+input GetFundingTxsOrderByInput {
+  createdAt: OrderByOptions!
+}
+input FundingConfirmInput {
+  amount: Int!
+  paidAt: Date!
+  onChain: FundingConfirmOnChainInput
+  offChain: FundingConfirmOffChainInput
+}
+input FundingPendingInput {
+  amount: Int!
+  onChain: FundingPendingOnChainInput
+  offChain: FundingPendingOffChainInput
+}
+input FundingCreateFromPodcastKeysendInput {
+  projectId: BigInt!
+  amount: Int!
+  paidAt: Date!
+  appName: String!
+  externalUsername: String
+  externalId: String
+  comment: String
+}
+input FundingConfirmOnChainInput {
+  address: String
+}
+input FundingPendingOnChainInput {
+  address: String
+}
+input FundingPendingOffChainInput {
+  bolt11: FundingPendingOffChainBolt11Input!
+}
+input FundingPendingOffChainBolt11Input {
+  invoiceId: String!
+}
+input FundingConfirmOffChainInput {
+  bolt11: FundingConfirmOffChainBolt11Input!
+}
+input FundingConfirmOffChainBolt11Input {
+  invoiceId: String!
+  settleIndex: Int
+}
+input FundingCancelInput {
+  id: BigInt
+  invoiceId: String
+  address: String
+  failureReason: String
+}
+input FundingTxStatusUpdatedInput {
+  projectId: BigInt
+  fundingTxId: BigInt
+}
+input FileUploadInput {
+  name: String
+  "MIME type of the file. Currently only supports image types."
+  type: String
+}
+input GetProjectRewardInput {
+  where: GetProjectRewardWhereInput!
+}
+input GetProjectRewardWhereInput {
+  projectId: BigInt!
+  deleted: Boolean
+  dateRange: DateRangeInput
+}
+input CreateProjectRewardInput {
+  projectId: BigInt!
+  name: name_String_NotNull_maxLength_100!
+  description: description_String_maxLength_250
+  "Cost of the reward, currently only in USD cents"
+  cost: cost_Int_NotNull_min_1_max_1000000!
+  image: String
+  stock: stock_Int_min_0
+  hasShipping: Boolean!
+  estimatedDeliveryDate: Date
+  maxClaimable: maxClaimable_Int_min_0
+  rewardType: RewardType!
+  isAddon: Boolean
+  isHidden: Boolean
+}
+input UpdateProjectRewardInput {
+  projectRewardId: BigInt!
+  name: name_String_maxLength_100
+  description: description_String_maxLength_250
+  "Cost of the reward, priced in USD cents"
+  cost: cost_Int_min_1_max_1000000
+  image: String
+  stock: stock_Int_min_0
+  hasShipping: Boolean
+  estimatedDeliveryDate: Date
+  maxClaimable: maxClaimable_Int_min_0
+  rewardType: RewardType!
+  isAddon: Boolean
+  isHidden: Boolean
+}
+input DeleteProjectRewardInput {
+  projectRewardId: BigInt!
+}
+input GetProjectStatsInput {
+  where: GetProjectStatsWhereInput!
+}
+input GetProjectStatsWhereInput {
+  projectId: BigInt!
+  dateRange: DateRangeInput
+  groupBy: AnalyticsGroupByInterval
+}
+input CreateProjectMilestoneInput {
+  projectId: BigInt!
+  name: name_String_NotNull_maxLength_100!
+  description: description_String_NotNull_maxLength_250!
+  "Amount the project balance must reach to consider the milestone completed, in satoshis."
+  amount: amount_Float_NotNull_min_1!
+}
+input UpdateProjectMilestoneInput {
+  projectMilestoneId: BigInt!
+  name: name_String_maxLength_100
+  description: description_String_maxLength_250
+  "Amount the project balance must reach to consider the milestone completed, in satoshis."
+  amount: amount_Float_min_1
+}
+input GetEntriesInput {
+  where: GetEntriesWhereInput
+  orderBy: GetEntriesOrderByInput
+  pagination: PaginationInput
+}
+input GetEntriesWhereInput {
+  projectId: BigInt
+}
+input GetEntriesOrderByInput {
+  publishedAt: OrderByOptions
+}
+input CreateEntryInput {
+  "Title of the Entry."
+  title: title_String_NotNull_maxLength_150!
+  "Short description of the Entry."
+  description: description_String_NotNull_maxLength_2200!
+  "Header image of the Entry."
+  image: String
+  content: String
+  type: EntryType!
+  projectId: BigInt!
+}
+input UpdateEntryInput {
+  entryId: BigInt!
+  title: title_String_maxLength_150
+  description: description_String_maxLength_2200
+  "Header image of the Entry."
+  image: String
+  content: String
+}
+input UserEntriesGetInput {
+  where: UserEntriesGetWhereInput
+}
+input UserEntriesGetWhereInput {
+  published: Boolean
+}
+input ProjectEntriesGetInput {
+  where: ProjectEntriesGetWhereInput
+}
+input ProjectEntriesGetWhereInput {
+  published: Boolean
+}
+input CreateWalletInput {
+  name: name_String_minLength_5_maxLength_60
+  resourceInput: WalletResourceInput!
+  lndConnectionDetailsInput: LndConnectionDetailsCreateInput
+  lightningAddressConnectionDetailsInput: LightningAddressConnectionDetailsCreateInput
+}
+input WalletResourceInput {
+  resourceId: BigInt!
+  resourceType: WalletResourceType!
+}
+input UpdateWalletInput {
+  id: BigInt!
+  name: name_String_minLength_5_maxLength_60
+  lndConnectionDetailsInput: LndConnectionDetailsUpdateInput
+  lightningAddressConnectionDetailsInput: LightningAddressConnectionDetailsUpdateInput
+  twoFAInput: TwoFAInput
+}
+input UpdateWalletStateInput {
+  walletId: BigInt!
+  status: WalletStatus!
+  statusCode: WalletStatusCode!
+}
+input LightningAddressConnectionDetailsCreateInput {
+  lightningAddress: String!
+}
+input LightningAddressConnectionDetailsUpdateInput {
+  lightningAddress: String!
+}
+input LndConnectionDetailsUpdateInput {
+  "Invoice macaroon for authenticating gRPC calls to the LND node."
+  macaroon: String
+  "TLS certificate for the LND node (optional for Voltage nodes)."
+  tlsCertificate: String
+  "Hostname where the gRPC calls should be made."
+  hostname: String
+  "Port where the gRPC calls should be made."
+  grpcPort: Int
+  "Public key of the LND node."
+  pubkey: pubkey_String_minLength_66_maxLength_66
+  "Type of the LND node."
+  lndNodeType: LndNodeType
+}
+input LndConnectionDetailsCreateInput {
+  "Invoice macaroon for authenticating gRPC calls to the LND node."
+  macaroon: String!
+  "TLS certificate for the LND node (optional for Voltage nodes)."
+  tlsCertificate: String
+  "Hostname where the gRPC calls should be made."
+  hostname: String!
+  "Port where the gRPC calls should be made."
+  grpcPort: Int!
+  lndNodeType: LndNodeType!
+  "Public key of the LND node."
+  pubkey: pubkey_String_minLength_66_maxLength_66
+}
+input ActivityCreatedSubscriptionInput {
+  where: ActivityCreatedSubscriptionWhereInput
+}
+input ActivityCreatedSubscriptionWhereInput {
+  resourceType: ActivityResourceType
+  projectIds: [BigInt!]
+  tagIds: [Int!]
+  region: String
+  countryCode: String
+  userIds: [BigInt!]
+}
+input GetActivitiesInput {
+  where: GetActivityWhereInput
+  pagination: GetActivityPaginationInput
+}
+input GetActivityWhereInput {
+  projectIds: [BigInt!]
+  tagIds: [Int!]
+  region: String
+  countryCode: String
+  resourceType: ActivityResourceType
+  userIds: [BigInt!]
+}
+input GetActivityOrderByInput {
+  createdAt: Date
+}
+input GetActivityPaginationInput {
+  cursor: CursorInputString
+  take: Int
+}
+input CursorInputString {
+  id: String!
+}
+input TagCreateInput {
+  label: String!
+}
+input GrantApplyInput {
+  grantId: BigInt!
+  projectId: BigInt!
+}
+input GrantGetInput {
+  where: GrantGetWhereInput!
+}
+input GrantGetWhereInput {
+  id: BigInt!
+}
+input BadgesGetInput {
+  where: BadgesGetWhereInput
+}
+input BadgesGetWhereInput {
+  userId: BigInt
+  fundingTxId: BigInt
+}
+input BadgeClaimInput {
+  userBadgeId: BigInt!
+}
+input SendOtpByEmailInput {
+  email: String
+  action: MFAAction!
+}
+directive @constraint(minLength: Int, maxLength: Int, startsWith: String, endsWith: String, contains: String, notContains: String, pattern: String, format: String, min: Float, max: Float, exclusiveMin: Float, exclusiveMax: Float, multipleOf: Float, uniqueTypeName: String) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION | ARGUMENT_DEFINITION
+"Exposes a URL that specifies the behavior of this scalar."
+directive @specifiedBy(
+    "The URL that specifies the behavior of this scalar."
+    url: String!
+  ) on SCALAR
+

@@ -42,7 +42,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
               key={reward.id}
               width="100%"
               reward={reward}
-              onClick={() => {
+              onRewardClick={() => {
                 const count = (fundFormState.rewardsByIDAndCount && fundFormState.rewardsByIDAndCount[`${reward.id}`]) || 0
                 updateReward({ id: toInt(reward.id), count: count + 1 })
                 setMobileView(MobileViews.funding)

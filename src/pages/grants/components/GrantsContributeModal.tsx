@@ -22,13 +22,11 @@ import { FaCheck } from 'react-icons/fa'
 import { createGrantContributionRecord } from '../../../api'
 import { Body2, Caption } from '../../../components/typography'
 import { fundingStages, MAX_FUNDING_AMOUNT_USD } from '../../../constants'
-import { useAuthContext } from '../../../context'
 import { useBTCConverter } from '../../../helpers'
 import { useFormState, useFundingFlow } from '../../../hooks'
 import { FormStateError } from '../../../interfaces'
 import { USDCents, useProjectByNameOrIdQuery } from '../../../types'
-import { FundingInput, FundingResourceType } from '../../../types'
-import { toInt, useNotification } from '../../../utils'
+import { useNotification } from '../../../utils'
 import { QRCodeSection } from '../../projectView/projectActivityPanel/screens'
 import { GRANTS_PROJECT_NAME } from '../constants'
 
@@ -57,7 +55,6 @@ interface Props {
 export const GrantsContributeModal = ({ grantProjectName }: Props) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
-  const { user } = useAuthContext()
   const { getSatoshisFromUSDCents } = useBTCConverter()
   const fundingFlow = useFundingFlow()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -94,8 +91,7 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
     fundState,
     fundingTx,
     gotoNextStage,
-    resetFundingFlow,
-    requestFunding,
+    resetFundingFlow
   } = fundingFlow
 
   useEffect(() => {
@@ -150,6 +146,8 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
     }
 
     if (isValid) {
+      // @TODO: Travis
+      /**
       const input: FundingInput = {
         projectId: toInt(grantsData?.projectGet?.id),
         anonymous: Boolean(user),
@@ -170,6 +168,7 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
       }
 
       requestFunding(input)
+      **/
     }
   }
 

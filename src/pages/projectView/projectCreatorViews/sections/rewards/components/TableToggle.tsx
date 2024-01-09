@@ -1,10 +1,10 @@
 import { Stack, Switch, Text } from '@chakra-ui/react'
-import { ChangeEvent } from 'react'
+import { ChangeEventHandler } from 'react'
 
 export interface TableToggleProps {
   isChecked: boolean,
   value: string,
-  onChange: ChangeEvent<HTMLInputElement>,
+  onChange: ChangeEventHandler<HTMLInputElement>,
   labelPosition: 'left' | 'right'
 }
 
