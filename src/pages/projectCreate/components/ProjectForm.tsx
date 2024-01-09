@@ -40,7 +40,12 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
   const [getProject] = useProjectByNameOrIdLazyQuery({
     onCompleted(data) {
-      if (data && data.projectGet && data.projectGet.id) {
+      if (
+        data &&
+        data.projectGet &&
+        data.projectGet.id &&
+        data.projectGet.name !== formState.defaultValues?.name
+      ) {
         setError('name', {
           message: 'This lightning address is already taken.',
         })
@@ -52,11 +57,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
   const handleProjectFetch = useCallback(() => {
     const projectName = watch('name')
-    if (
-      projectName &&
-      projectName.length >= MIN_LENGTH_TO_QUERY_PROJECT &&
-      Boolean(formState.dirtyFields.name)
-    ) {
+    if (projectName && projectName.length >= MIN_LENGTH_TO_QUERY_PROJECT) {
       getProject({
         variables: {
           where: {
@@ -65,7 +66,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
         },
       })
     }
-  }, [getProject, watch, formState.dirtyFields.name])
+  }, [getProject, watch])
 
   const projectName = watch('name')
   const debouncedProjectName = useDebounce(projectName, 300)
