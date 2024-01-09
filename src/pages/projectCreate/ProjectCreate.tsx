@@ -110,7 +110,7 @@ export const ProjectCreate = () => {
     onLeave()
   }
 
-  const onSubmit = ({ email, name, ...values }: ProjectCreationVariables) => {
+  const onSubmit = async ({ email, ...values }: ProjectCreationVariables) => {
     if (isEdit && data?.projectGet) {
       updateProject({
         variables: {
@@ -125,7 +125,6 @@ export const ProjectCreate = () => {
         variables: {
           input: {
             ...values,
-            name,
             email,
           },
         },
