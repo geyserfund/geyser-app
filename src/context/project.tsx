@@ -1,10 +1,13 @@
 import { captureException } from '@sentry/react'
-import { useAtomValue } from 'jotai'
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-import { useGetHistoryRoute } from '../config'
-import { routeMatchForProjectPageAtom } from '../config/routes/privateRoutesAtom'
 import { getPath, PathName } from '../constants'
 import {
   useFundingFlow,
@@ -93,12 +96,7 @@ export const ProjectProvider = ({
   children,
 }: { children: React.ReactNode } & ProjectState) => {
   const navigate = useNavigate()
-  const params = useParams<{ projectId: string }>()
   const location = useLocation()
-  const routeMatchForProjectPage = useAtomValue(routeMatchForProjectPageAtom)
-  const historyRoutes = useGetHistoryRoute()
-
-  const lastRoute = historyRoutes[historyRoutes.length - 2] || ''
 
   const { setNavData } = useNavContext()
 
@@ -115,8 +113,8 @@ export const ProjectProvider = ({
   }>()
   const {
     error,
-    loading,
     project,
+    loading,
     updateProject,
     saveProject,
     isDirty,
@@ -124,7 +122,7 @@ export const ProjectProvider = ({
     refetch,
   } = useProjectState(projectId, {
     fetchPolicy: 'network-only',
-    onError(error) {
+    onError() {
       captureException(error, {
         tags: {
           'not-found': 'projectGet',
@@ -156,6 +154,8 @@ export const ProjectProvider = ({
             return Number(ownerInfo.user.id || -1)
           }) || [],
       })
+
+      updateProjectOwner(project)
     },
   })
 
@@ -165,33 +165,20 @@ export const ProjectProvider = ({
     rewards: project ? project.rewards : undefined,
   })
 
-  useEffect(() => {
-    if (!project) {
-      return
-    }
+  const updateProjectOwner = useCallback(
+    (project: ProjectFragment) => {
+      if (!project || !user) {
+        return
+      }
 
-    if (project.id && project.owners[0]?.user.id === user.id) {
-      setIsProjectOwner(true)
-    } else {
-      setIsProjectOwner(false)
-    }
-  }, [project, user])
-
-  const shouldGoToOverviewPage = useMemo(
-    () =>
-      isProjectOwner &&
-      params.projectId &&
-      routeMatchForProjectPage &&
-      !lastRoute.includes('launch') &&
-      !(lastRoute.includes('project') && lastRoute.includes(params.projectId)),
-    [params.projectId, isProjectOwner, routeMatchForProjectPage, lastRoute],
+      if (project.id && project.owners[0]?.user.id === user.id) {
+        setIsProjectOwner(true)
+      } else {
+        setIsProjectOwner(false)
+      }
+    },
+    [user],
   )
-
-  useEffect(() => {
-    if (shouldGoToOverviewPage) {
-      navigate(getPath('projectOverview', `${params.projectId}`))
-    }
-  }, [params.projectId, navigate, shouldGoToOverviewPage])
 
   useEffect(() => {
     const view = getViewFromPath(location.pathname)
