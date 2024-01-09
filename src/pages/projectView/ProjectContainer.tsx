@@ -1,9 +1,21 @@
 import { Box } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import {
+  Navigate,
+  Outlet,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom'
 
 import Loader from '../../components/ui/Loader'
-import { Head } from '../../config'
+import {
+  Head,
+  routeMatchForProjectPageAtom,
+  useGetHistoryRoute,
+} from '../../config'
+import { getPath } from '../../constants'
 import { useProjectContext } from '../../context'
 import { useModal } from '../../hooks/useModal'
 import { useMobileMode } from '../../utils'
@@ -20,7 +32,13 @@ export const ProjectContainer = () => {
 
   const launchModal = useModal({ onClose: onModalClose })
   const draftModal = useModal({ onClose: onModalClose })
-  const { project, loading, fundingFlow } = useProjectContext()
+
+  const { project, loading, isProjectOwner, fundingFlow } = useProjectContext()
+
+  const params = useParams<{ projectId: string }>()
+  const routeMatchForProjectPage = useAtomValue(routeMatchForProjectPageAtom)
+  const historyRoutes = useGetHistoryRoute()
+  const lastRoute = historyRoutes[historyRoutes.length - 2] || ''
 
   useEffect(() => {
     const launchModalShouldOpen = location.search.split('launch').length > 1
@@ -45,7 +63,7 @@ export const ProjectContainer = () => {
 
   const isMobile = useMobileMode()
 
-  if (loading) {
+  if (loading || isProjectOwner === undefined) {
     return (
       <Box
         width="100%"
@@ -56,6 +74,17 @@ export const ProjectContainer = () => {
         <Loader paddingTop="65px" />
       </Box>
     )
+  }
+
+  // If the user is project creator and the route is project main page, we redirect to project overview page
+  if (
+    params.projectId &&
+    routeMatchForProjectPage &&
+    isProjectOwner &&
+    !lastRoute.includes('launch') &&
+    !(lastRoute.includes('project') && lastRoute.includes(params.projectId))
+  ) {
+    return <Navigate to={getPath('projectOverview', `${params.projectId}`)} />
   }
 
   return (

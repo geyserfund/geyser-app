@@ -13,6 +13,7 @@ import { Body2, H3 } from '../../../../components/typography'
 import { getPath } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { UseModalReturn } from '../../../../hooks/useModal'
+import { defaultProjectReward } from '../../../../defaults'
 
 export const ProjectCreatorModal = (props: UseModalReturn) => {
   const { t } = useTranslation()
@@ -38,7 +39,7 @@ export const ProjectCreatorModal = (props: UseModalReturn) => {
           )}
           onClick={() => {
             props.onClose()
-            onRewardsModalOpen()
+            onRewardsModalOpen({reward: defaultProjectReward})
           }}
         />
         <CreationMenuItem
