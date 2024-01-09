@@ -46,7 +46,7 @@ export const ProjectDescription = () => {
       },
     })
 
-  const onSubmit = ({ email, name, ...values }: ProjectCreationVariables) => {
+  const onSubmit = ({ email, ...values }: ProjectCreationVariables) => {
     if (project) {
       updateProjectMutation({
         variables: {

@@ -53,9 +53,9 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
   const handleProjectFetch = useCallback(() => {
     const projectName = watch('name')
     if (
-      !isEdit &&
       projectName &&
-      projectName.length >= MIN_LENGTH_TO_QUERY_PROJECT
+      projectName.length >= MIN_LENGTH_TO_QUERY_PROJECT &&
+      Boolean(formState.dirtyFields.name)
     ) {
       getProject({
         variables: {
@@ -65,7 +65,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
         },
       })
     }
-  }, [getProject, isEdit, watch])
+  }, [getProject, watch, formState.dirtyFields.name])
 
   const projectName = watch('name')
   const debouncedProjectName = useDebounce(projectName, 300)
@@ -158,7 +158,6 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
             onChange={handleChange}
             value={watch('name')}
             focusBorderColor={'primary.400'}
-            isDisabled={isEdit}
             error={formState.errors.name?.message}
             borderBottomRightRadius={0}
             borderBottomLeftRadius={0}
