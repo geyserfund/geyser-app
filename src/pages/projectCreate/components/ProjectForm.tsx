@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { MdInfo } from 'react-icons/md'
 
 import { FileUpload } from '../../../components/molecules'
+import { ImageCrop } from '../../../components/molecules/ImageCropperModal'
 import { Body1 } from '../../../components/typography'
 import { TextArea, TextInputBox, UploadBox } from '../../../components/ui'
 import { ProjectValidations } from '../../../constants'
@@ -257,6 +258,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           onUploadComplete={handleImageUpload}
           onDeleteClick={handleDeleteThumbnail}
           childrenOnLoading={<UploadBox loading h={10} />}
+          imageCrop={ImageCrop.Square}
         >
           <UploadBox
             h={10}
