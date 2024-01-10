@@ -84,7 +84,7 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
           })}
         </VStack>
       ) : (
-          <Text>And choose to add additional rewards</Text>
+          <Text>{t('No rewards are selected')}</Text>
       )}
 
       {availableRewards.length > 0 && isMobile && (
