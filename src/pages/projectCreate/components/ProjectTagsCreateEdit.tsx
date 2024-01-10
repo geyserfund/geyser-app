@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 import { components, MenuProps, MultiValue } from 'react-select'
 
-import { Body1 } from '../../../components/typography'
+import { Body2 } from '../../../components/typography'
 import {
   ButtonComponent,
   IconButtonComponent,
@@ -18,6 +18,8 @@ import { MUTATION_TAG_CREATE } from '../../../graphql/mutations'
 import { QUERY_TAGS } from '../../../graphql/queries/tags'
 import { Tag, TagCreateInput, TagsGetResult } from '../../../types'
 import { useNotification } from '../../../utils'
+
+const MAX_TAGS_ALLOWED = 4;
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   tagContainer: {
@@ -162,11 +164,11 @@ export const ProjectTagsCreateEdit = ({
     )
   }
 
-  const isDisabled = tags.length >= 3
+  const isDisabled = tags.length >= MAX_TAGS_ALLOWED
   const showAddTag = !tagOptions.some((tag) =>
     tag.label.toLowerCase().includes(inputValue.toLowerCase()),
   )
-  const disableShowAddTag = inputValue.length < 3 || createLoading
+  const disableShowAddTag = inputValue.length < MAX_TAGS_ALLOWED || createLoading
 
   return (
     <FieldContainer
@@ -174,8 +176,8 @@ export const ProjectTagsCreateEdit = ({
       subtitle={
         <span>
           {t(
-            'Get discovered more easily by users through Tags. You can select up to 3 project tags.',
-          )}
+            `Get discovered more easily by users through Tags. You can select up to XX project tags.`,
+          ).replace('XX', MAX_TAGS_ALLOWED.toString())}
         </span>
       }
       {...rest}
@@ -208,7 +210,7 @@ export const ProjectTagsCreateEdit = ({
                 paddingLeft="8px"
                 backgroundColor="neutral.100"
               >
-                <Body1 semiBold>{tag.label}</Body1>
+                <Body2 semiBold>{tag.label}</Body2>
                 <IconButtonComponent
                   noBorder
                   size="xs"
