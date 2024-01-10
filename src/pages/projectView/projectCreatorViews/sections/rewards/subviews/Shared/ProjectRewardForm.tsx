@@ -259,7 +259,7 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
         </Stack>
         <Stack direction={{ base: 'column', lg: 'row' }}>
           <FieldContainer title={t('Reward Type')}>
-          <Select value={reward.rewardType} onChange={(event) => {
+          <Select value={reward.rewardType || RewardType.Physical} onChange={(event) => {
             setReward((current) => ({ ...current, ['rewardType']: event.target.value as RewardType }))
           }}>
             <option value='PHYSICAL'>{t('Physical')}</option>
