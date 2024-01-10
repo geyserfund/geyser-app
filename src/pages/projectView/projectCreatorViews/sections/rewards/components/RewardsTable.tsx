@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { DeleteConfirmModal } from '../../../../../../components/molecules';
 import { useModal } from '../../../../../../hooks/useModal';
 import { useMutation } from '@apollo/client'
-import { MUTATION_DELETE_PROJECT_REWARD } from '../../../../../../graphql/mutations';
+import { MUTATION_DELETE_PROJECT_REWARD, MUTATION_UPDATE_PROJECT_REWARD } from '../../../../../../graphql/mutations';
 import { useNotification } from '../../../../../../utils';
 
 export const RewardsTable = () => {
@@ -55,6 +55,38 @@ export const RewardsTable = () => {
       handleClose()
       toast({
         title: 'Failed to remove reward',
+        description: `${error}`,
+        status: 'error',
+      })
+    },
+  })
+
+  const [updateRewardVisibilityMutation] = useMutation<
+    any,
+    { input: { projectRewardId: Number, isHidden: Boolean } }
+  >(MUTATION_UPDATE_PROJECT_REWARD, {
+    onCompleted(data) {
+      const updatedRewards = project?.rewards?.map(
+        (reward) => {
+          if(reward?.id == selectedReward?.id) {
+            return {...reward, isHidden: data.projectRewardUpdate.isHidden, id: data.projectRewardUpdate.id}
+          }
+          return reward;
+        }
+      )
+      updateProject({ rewards: updatedRewards || [] } as Project)
+      toast({
+        title: 'Successfully updated!',
+        description: `${t('Reward')} ${selectedReward?.name} ${t(
+          'was successfully updated',
+        )}`,
+        status: 'success',
+      })
+    },
+    onError(error) {
+      handleClose()
+      toast({
+        title: 'Failed to update reward',
         description: `${error}`,
         status: 'error',
       })
@@ -127,7 +159,15 @@ export const RewardsTable = () => {
               <tr key={index} style={{borderBottom: `1px solid ${ colorMode === 'light' ? '#E9ECEF' : '#141A19' }`}}>
                 <td style={{paddingTop: '10px', verticalAlign: 'top'}}>
                   <Stack style={{cursor: 'pointer'}} direction='row' align={'center'} onClick={() => {
-                      // @TODO: Toggle Visibility
+                      setSelectedReward(row);
+                      updateRewardVisibilityMutation({
+                        variables: {
+                          input: {
+                            projectRewardId: row.id,
+                            isHidden: !!!row.isHidden
+                          },
+                        },
+                      })
                     }}>
                     <Image style={{cursor: 'pointer'}} src={VisibilityIcon}/>
                     <TableText content={row.isHidden ? t('Hidden') : t('Visible')} />
