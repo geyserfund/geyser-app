@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 import { SingleValue } from 'react-select'
 
+import { SkeletonLayout } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
 import { IconButtonComponent, SelectComponent } from '../../../components/ui'
 import { AppTheme } from '../../../context'
@@ -136,20 +137,24 @@ export const ProjectRegion = ({
       {...rest}
     >
       <VStack className={classes.tagContainer} spacing="10px">
-        <SelectComponent<Country, false>
-          menuIsOpen={isOpen}
-          className={classes.select}
-          onChange={handleChange}
-          name="tags"
-          placeholder={t('Select region')}
-          value={[]}
-          isLoading={isLoading}
-          options={options}
-          getOptionLabel={(option: Country) => option.name}
-          getOptionValue={(option: Country) => option.code}
-          onInputChange={handleInputChange}
-          inputValue={inputValue}
-        />
+        {isLoading ? (
+          <SkeletonLayout h="40px" />
+        ) : (
+          <SelectComponent<Country, false>
+            menuIsOpen={isOpen}
+            className={classes.select}
+            onChange={handleChange}
+            name="tags"
+            placeholder={t('Select region')}
+            value={[]}
+            isLoading={isLoading}
+            options={options}
+            getOptionLabel={(option: Country) => option.name}
+            getOptionValue={(option: Country) => option.code}
+            onInputChange={handleInputChange}
+            inputValue={inputValue}
+          />
+        )}
         <HStack width="100%" spacing="10px">
           {displayLocation && (
             <HStack

@@ -1,16 +1,17 @@
 import { HTMLChakraProps, Text, VStack } from '@chakra-ui/react'
 
 type Props = HTMLChakraProps<'div'> & {
-  primaryText: string | React.ReactElement
+  primaryNode: React.ReactNode
   promoText?: string
   secondaryText: string | React.ReactElement
 }
 
 export const WalletConnectionOptionInfoBox = ({
-  primaryText,
+  primaryNode,
   promoText,
   secondaryText,
   children,
+  ...rest
 }: Props) => {
   return (
     <VStack
@@ -21,12 +22,13 @@ export const WalletConnectionOptionInfoBox = ({
       alignItems="start"
       fontSize={'10px'}
       borderRadius={'md'}
+      borderTopRightRadius={0}
+      borderTopLeftRadius={0}
+      {...rest}
     >
-      <Text variant="body1" fontWeight="medium">
-        {primaryText}
-      </Text>
+      {primaryNode}
       {promoText && (
-        <Text fontWeight="medium" variant="body2" color="primary.600">
+        <Text pt={1} fontWeight="medium" variant="body2" color="primary.600">
           {promoText}
         </Text>
       )}

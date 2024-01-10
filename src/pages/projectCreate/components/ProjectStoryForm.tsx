@@ -5,7 +5,10 @@ import { useTranslation } from 'react-i18next'
 
 import { ProjectValidations } from '../../../constants'
 import { FieldContainer } from '../../../forms/components/FieldContainer'
-import { MarkdownField } from '../../../forms/markdown/MarkdownField'
+import {
+  MarkdownField,
+  MarkdownFieldSkeleton,
+} from '../../../forms/markdown/MarkdownField'
 import { useMobileMode } from '../../../utils'
 
 interface Props {
@@ -55,7 +58,9 @@ export const ProjectStoryForm = ({
             display="flex"
             flexDirection="column"
           >
-            {!isStoryLoading && (
+            {isStoryLoading ? (
+              <MarkdownFieldSkeleton />
+            ) : (
               <MarkdownField
                 autoFocus={autoFocus}
                 initialContentReady={!isLoading}

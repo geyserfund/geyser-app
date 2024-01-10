@@ -1,65 +1,105 @@
-import { CheckCircleIcon } from '@chakra-ui/icons'
-import { Button, ModalProps, Text, VStack } from '@chakra-ui/react'
-import { Trans, useTranslation } from 'react-i18next'
+import {
+  Box,
+  Button,
+  HStack,
+  Image,
+  Link,
+  ModalProps,
+  VStack,
+} from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
+import { BsTwitter } from 'react-icons/bs'
+import { PiSealCheckBold } from 'react-icons/pi'
 
+import { NostrSvgIcon } from '../../../components/icons'
 import { Modal } from '../../../components/layouts/Modal'
-import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar'
+import { Body1 } from '../../../components/typography'
+import {
+  GeyserPrimalUrl,
+  GeyserTwitterUrl,
+  ProjectLaunchedImageUrl,
+} from '../../../constants'
+import { useAuthContext, useProjectContext } from '../../../context'
+import {
+  hasNostrAccount,
+  hasTwitterAccount,
+  useCustomTheme,
+} from '../../../utils'
 
 export const ProjectCreateLaunchedModal = (
   props: Omit<ModalProps, 'children'>,
 ) => {
   const { t } = useTranslation()
+  const { colors } = useCustomTheme()
+  const { project } = useProjectContext()
+
+  const { user } = useAuthContext()
+
+  const hasTwitter = hasTwitterAccount(user)
+  const hasNostr = hasNostrAccount(user)
+
   return (
-    <Modal
-      title={
-        <TitleWithProgressBar
-          hideSteps
-          index={1}
-          length={1}
-          title={t('Your project is live!')}
-          subtitle={`${t('Success')}!`}
-        />
-      }
-      {...props}
-    >
+    <Modal size="md" title={t('You’re all set!')} {...props}>
       <VStack w="100%" spacing={6} pt={2}>
-        <CheckCircleIcon fontSize="3.4em" color="primary.400" />
-        <Text variant="body1">
-          <Trans
-            i18nKey={
-              'Now that your project is live you can add <1>Rewards</1> and <1>Milestones</1> and write <1>Entries</1>'
-            }
-          >
-            Now that your project is live you can add <b>Rewards</b> and
-            <b>Milestones</b> and write <b>Entries</b>.
-          </Trans>
-        </Text>
-        <Text variant="body1">
-          <Trans
-            i18nKey={
-              'In the <1>Dashboard</1> you’ll be able to view the list of contributors and see some analytics.'
-            }
-          >
-            In the <b>Dashboard</b> you’ll be able to view the list of
-            contributors and see some analytics.
-          </Trans>
-        </Text>
-        <Text variant="body1">
-          <Trans
-            i18nKey={
-              'You can always amend your project details by clicking <1>Edit Project</1>.'
-            }
-          >
-            You can always amend your project details by clicking{' '}
-            <b>Edit Project</b>.
-          </Trans>
-        </Text>
-        <Text w="100%" variant="body1">
-          {t('Good luck!')}
-        </Text>
-        <Button w="100%" variant="secondary" onClick={props.onClose}>
-          {t('Go to project')}
-        </Button>
+        <Image src={ProjectLaunchedImageUrl} />
+
+        <HStack
+          spacing="10px"
+          p="10px 16px"
+          bgColor="neutral.100"
+          borderRadius={8}
+        >
+          <PiSealCheckBold color={colors.primary[600]} />
+          <Body1 color="neutral.800">
+            {' '}
+            {project?.name}
+            <Box as="span" fontWeight="700">
+              @geyser.fund
+            </Box>{' '}
+          </Body1>
+        </HStack>
+
+        <Body1 color="primary.1000" semiBold>
+          {t(
+            'Follow us and tag us on social media at @geyserfund so we can amplify your content.',
+          )}
+        </Body1>
+        <VStack spacing="10px" w="full">
+          {hasTwitter && (
+            <Button
+              as={Link}
+              href={GeyserTwitterUrl}
+              isExternal
+              w="100%"
+              variant="primary"
+              onClick={props.onClose}
+              leftIcon={<BsTwitter />}
+              textDecoration={'none'}
+            >
+              @geyserfund
+            </Button>
+          )}
+
+          {hasNostr && (
+            <Button
+              as={Link}
+              href={GeyserPrimalUrl}
+              isExternal
+              w="100%"
+              onClick={props.onClose}
+              leftIcon={<NostrSvgIcon boxSize={'20px'} />}
+              textDecoration={'none'}
+              color="neutral.1000"
+              bgColor="social.nostr"
+            >
+              bitcoinrocket@geyserfund.fund
+            </Button>
+          )}
+
+          <Button w="100%" variant="secondary" onClick={props.onClose}>
+            {t('Go to project')}
+          </Button>
+        </VStack>
       </VStack>
     </Modal>
   )

@@ -12,8 +12,7 @@ export const AboutUsUrl =
   'https://geyser.notion.site/About-Us-2dd9468a27e84531bcbcbe89c24d7f09'
 export const FAQUrl =
   'https://geyser.notion.site/Geyser-FAQs-310e7900fa904732b9b64043831edec3'
-export const DocsUrl =
-  'https://docs.geyser.fund/'
+export const DocsUrl = 'https://docs.geyser.fund/'
 export const FeedbackUrl = 'https://airtable.com/shrGiEJKsPoDsysPf'
 
 // Geyser footer Links
@@ -214,6 +213,9 @@ export const commonMarkdownUrl = 'https://commonmark.org/help/'
 
 export const GeyserFeedbackFromUrl = 'https://airtable.com/shr2GiORBI2CWSuhk'
 
+export const GeyserPrimalUrl =
+  'https://primal.net/p/npub1kmwdmhuxvafg05dyap3qmy42jpwztrv9p0uvey3a8803ahlwtmnsnhxqk9'
+
 // BADGES
 
 export const BadgesGroupUrl =
@@ -229,6 +231,9 @@ export const LockedConnectAccountUrl =
 
 export const VerifyEmailImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/enter-otp.svg'
+
+export const ProjectLaunchedImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/project-launched.svg'
 
 // GRANTS
 
@@ -247,7 +252,7 @@ export const Grant2AnnouncementTwitterUrl =
 export const VoltageUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/voltage.png'
 export const AlbyUrl =
-  'https://storage.googleapis.com/geyser-projects-media/platform/alby.png'
+  'https://storage.googleapis.com/geyser-projects-media/platform/getalby.png'
 export const BitnobUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/bitnob.png'
 export const WalletOfSatoshiUrl =

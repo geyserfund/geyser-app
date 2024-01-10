@@ -45,7 +45,10 @@ const schema = yup
         ProjectValidations.title.maxLength,
         `Title should be shorter than ${ProjectValidations.title.maxLength} characters.`,
       ),
-    email: yup.string().required('Email address is a required field.'),
+    email: yup
+      .string()
+      .email('Please enter a valid email address')
+      .required('Email address is a required field.'),
   })
   .required()
 
