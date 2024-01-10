@@ -1,4 +1,4 @@
-import { Box, Text, Stack, Container, Button } from '@chakra-ui/react'
+import { Box, Text, Stack, Container, Button, Badge } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { ProjectRewardForCreateUpdateFragment } from '../../../types/generated/graphql'
@@ -34,15 +34,17 @@ export const RewardCard = ({
         </Stack>
       </Stack>
       <Stack direction='column' gap={1}>
-        <Box mt={2} borderRadius={12} overflow={'hidden'}>
+        <Box mt={2} mb={2} borderRadius={12} overflow={'hidden'}>
           <div style={{display: 'block', position: 'relative', paddingTop: '56.25%', width: '100%'}}>
             <div style={{display: 'block', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: `transparent url(${reward.image}) no-repeat center center / cover`}}>
             </div>
           </div>
         </Box>
-        <Stack direction={"row"} justifyContent="space-between" align="center">
+        <Stack direction={"row"} justifyContent="space-between" align="center" alignItems={'center'}>
           <Text fontWeight={400} fontSize='14px' color='neutral.900'>{reward.stock && reward.stock >= 0 ? `${reward.stock} ${t('remaining')}, ` : ''}{reward.sold || 0} {t('sold')}</Text>
-          <Text fontWeight={500} fontSize='12px' color='neutral.900' pt={2}>{reward.rewardType === 'PHYSICAL' ? t('Physical Item') : t('Digital Item')}</Text>
+          <Badge backgroundColor={'neutral.100'} textTransform={'none'} fontWeight={'medium'} p={1}>
+            {reward.rewardType === 'PHYSICAL' ? t('Physical Item') : t('Digital Item')}
+          </Badge>
         </Stack>
         <Text fontWeight={400} fontSize='sm' color='neutral.500'>{reward.description}</Text>
         <Container pos={'absolute'} bottom={3} left={3} right={3} width={'auto'} p={0}>

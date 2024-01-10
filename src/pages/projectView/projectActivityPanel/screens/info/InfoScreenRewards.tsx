@@ -1,4 +1,4 @@
-import { Box, Link, Stack, Text } from '@chakra-ui/react'
+import { Badge, Box, Link, Stack, Text } from '@chakra-ui/react'
 import { ProjectRewardPanel } from '../../../projectMainBody/components'
 import { useTranslation } from 'react-i18next'
 import { MobileViews, useProjectContext } from '../../../../../context'
@@ -24,19 +24,14 @@ export const InfoScreenRewards = () => {
     <Box
       style={{marginTop: '20px', width: '100%'}}
     >
-      <Stack direction='row' justify='space-between'>
-        <Stack direction='row'>
+      <Stack direction='row' justify='space-between' alignItems={'center'}>
+        <Stack direction='row' alignItems={'center'}>
           <Text fontWeight={500} fontSize={18} color='neutral.900' lineHeight={1}>{t('Rewards')}</Text>
-          <Text
-            fontSize='12px'
-            backgroundColor='neutral.100'
-            padding='0 5px'
-            borderRadius='4px'
-          >
-            <b>{project.rewards.length}</b>
-          </Text>
+          <Badge>
+            {project.rewards.length}
+          </Badge>
         </Stack>
-        <Text fontWeight={500} onClick={handleAllRewardsButtonClick}><Link>{t('See all rewards')}</Link></Text>
+        <Text fontWeight={500} onClick={handleAllRewardsButtonClick}><Link fontSize={'16px'} color={'neutral.600'} textDecoration={'none'}>{t('See all rewards')}</Link></Text>
       </Stack>
       {project.rewards.map((reward) => (
         <ProjectRewardPanel key={reward.id} reward={reward} />
