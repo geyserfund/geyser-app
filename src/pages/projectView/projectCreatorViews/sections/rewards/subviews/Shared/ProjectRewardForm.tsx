@@ -15,6 +15,7 @@ import { useProjectContext } from '../../../../../../../context'
 import { CalendarButton, CreatorEmailButton, FileUpload } from '../../../../../../../components/molecules'
 import { RiArrowLeftSLine } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
+import { CloseIcon } from '@chakra-ui/icons'
 
 type Props = {
   buttonText: string,
@@ -37,7 +38,7 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
   const ownerEmail = project.owners[0]?.user.email || ''
   const [reward, setReward] =
     useState<ProjectRewardForCreateUpdateFragment>(rewardData)
-  const [formCostDollarValue, setFormCostDollarValue] = useState(reward.cost > 0 ? (reward.cost / 100).toFixed(2) : '150')
+  const [formCostDollarValue, setFormCostDollarValue] = useState(reward.cost > 0 ? (reward.cost / 100).toFixed(2) : '')
   const [formError, setFormError] = useState<any>({})
 
   const getRewardCreationInputVariables = (): CreateProjectRewardInput => {
@@ -243,6 +244,7 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
               placeholder={'USD'}
               value={'USD'}
               isReadOnly={true}
+              isDisabled={true}
             />
           </FieldContainer>
           <FieldContainer title={t('Price (USD)')}>
@@ -292,16 +294,25 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
             </FileUpload>
           </FieldContainer>
           <FieldContainer title={t('Estimated Delivery Date')}>
-            <CalendarButton 
-              onChange={handleFormCalendarChange}
-              value={reward.estimatedDeliveryDate}
-              containerProps={{w:"100%"}}
-            >
-              <TextInputBox
-                style={{border: 0, background: 'none', width: '100%'}}
+            <div style={{position: 'relative', width: '100%'}}>
+              <CalendarButton 
+                onChange={handleFormCalendarChange}
                 value={reward.estimatedDeliveryDate}
-              />
-            </CalendarButton>
+                containerProps={{w:"100%"}}
+              >
+                <TextInputBox
+                  style={{border: 0, background: 'none', width: '100%'}}
+                  value={reward.estimatedDeliveryDate}
+                />
+              </CalendarButton>
+              {reward.estimatedDeliveryDate && (
+                <div style={{position: 'absolute', top: '5px', right: '10px'}}>
+                  <CloseIcon onClick={() => {
+                      setReward((current) => ({ ...current, ['estimatedDeliveryDate']: undefined }))
+                    }}></CloseIcon>
+                </div>
+              )}
+            </div>
           </FieldContainer>
         </Stack>
         <VStack spacing={4} w="100%" align={'flex-start'}>

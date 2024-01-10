@@ -29,9 +29,7 @@ export const ProjectCreateReward = () => {
           title: 'Successfully created reward!',
           status: 'success',
         })
-        setTimeout(() => {
-          navigate(getPath('projectManageRewards', project.name))
-        }, 2000);
+        navigate(getPath('projectManageRewards', project.name))
       },
       onError(error) {
         toast({

@@ -43,9 +43,7 @@ export const ProjectEditReward = () => {
           description: `Reward ${data.projectRewardUpdate.name} was successfully updated`,
           status: 'success',
         })
-        setTimeout(() => {
-          navigate(getPath('projectManageRewards', project.name))
-        }, 2000);
+        navigate(getPath('projectManageRewards', project.name))
       },
       onError(error) {
         toast({
