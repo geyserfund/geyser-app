@@ -126,7 +126,7 @@ export const ProjectCreationWalletConnectionForm = ({
                     w="full"
                     name="lightning-address"
                     type={'email'}
-                    placeholder={'satoshi@getalby.com'}
+                    placeholder={'runwithbitcoin@getalby.com'}
                     value={lightningAddress.value}
                     onChange={(event) => {
                       lightningAddress.setValue(event.target.value)

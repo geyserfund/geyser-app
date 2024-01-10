@@ -245,7 +245,7 @@
   "tag length must be between": "tag length must be between",
   "and": "and",
   "add tag": "add tag",
-  "Get discovered more easily by users through Tags. You can select up to XX project tags.": "Get discovered more easily by users through Tags. You can select up to XX project tags.",
+  "Get discovered more easily by selecting up to {{MAX_TAGS_ALLOWED}} project tags. Make sure to select some of the tags that appear in the trending view.": "Get discovered more easily by selecting up to {{MAX_TAGS_ALLOWED}} project tags. Make sure to select some of the tags that appear in the trending view.",
   "Connect your sites so viewers can see more proof of your work": "Connect your sites so viewers can see more proof of your work",
   "Project links": "Project links",
   "Add Project Link": "Add Project Link",

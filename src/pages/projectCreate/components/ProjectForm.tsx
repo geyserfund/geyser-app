@@ -142,7 +142,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           name="title"
           onChange={handleChange}
           value={watch('title')}
-          placeholder={'your project name'}
+          placeholder={'Run With Bitcoin'}
           error={formState.errors.title?.message}
         />
       </FieldContainer>
@@ -160,6 +160,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
             onChange={handleChange}
             value={watch('name')}
             focusBorderColor={'primary.400'}
+            placeholder="runwithbitcoin"
             error={formState.errors.name?.message}
             borderBottomRightRadius={0}
             borderBottomLeftRadius={0}
@@ -218,7 +219,9 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           name="shortDescription"
           height="fit-content"
           overflowY="auto"
-          placeholder={t('Let the sats flow')}
+          placeholder={t(
+            'Bitcoin Meetups and Travel Vlogs of Bitcoin Adoption in the Global South!',
+          )}
           value={watch('shortDescription')}
           onChange={({ target, ...event }) => {
             handleChange({
