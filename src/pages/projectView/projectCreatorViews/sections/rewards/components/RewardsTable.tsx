@@ -130,7 +130,7 @@ export const RewardsTable = () => {
                       // @TODO: Toggle Visibility
                     }}>
                     <Image style={{cursor: 'pointer'}} src={VisibilityIcon}/>
-                    <TableText content={'Visible'} />
+                    <TableText content={row.isHidden ? t('Hidden') : t('Visible')} />
                   </Stack>
                 </td>
                 <td style={{paddingTop: '10px', verticalAlign: 'top'}}>

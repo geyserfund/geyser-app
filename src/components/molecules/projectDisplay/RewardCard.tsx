@@ -41,7 +41,7 @@ export const RewardCard = ({
           </div>
         </Box>
         <Stack direction={"row"} justifyContent="space-between" align="center">
-          <Text fontWeight={400} fontSize='14px' color='neutral.900'>{reward.stock && reward.stock >= 0 ? `${reward.stock} ${t('remaining')}, ` : ''}{reward.sold || 0} {t('backers')}</Text>
+          <Text fontWeight={400} fontSize='14px' color='neutral.900'>{reward.stock && reward.stock >= 0 ? `${reward.stock} ${t('remaining')}, ` : ''}{reward.sold || 0} {t('sold')}</Text>
           <Text fontWeight={500} fontSize='12px' color='neutral.900' pt={2}>{reward.rewardType === 'PHYSICAL' ? t('Physical Item') : t('Digital Item')}</Text>
         </Stack>
         <Text fontWeight={400} fontSize='sm' color='neutral.500'>{reward.description}</Text>
