@@ -16,5 +16,5 @@ export const defaultProjectReward: ProjectReward = {
   rewardType: RewardType.Physical,
   backersCount: 0,
   isAddon: false,
-  isHidden: false
+  isHidden: false,
 }

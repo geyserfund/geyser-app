@@ -209,8 +209,8 @@ export const RewardsTable = () => {
         <DeleteConfirmModal
           isOpen={isRewardDeleteOpen}
           onClose={handleClose}
-          title={`${t('Delete reward')} ${selectedReward?.name}`}
-          description={t('Are you sure you want to remove the reward')}
+          title={`${t('Delete reward')}`}
+          description={t('Are you sure you want to remove the reward?')}
           confirm={handleRemoveReward}
         />
       </>

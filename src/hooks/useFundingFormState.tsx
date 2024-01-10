@@ -62,7 +62,7 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
       media: '',
       rewardsByIDAndCount: undefined,
       rewardCurrency: RewardCurrency.Usdcent,
-      step: 'contribution'
+      step: 'contribution',
     }),
     [isAnonymous, user.imageUrl, user.username],
   )

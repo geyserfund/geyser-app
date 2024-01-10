@@ -266,7 +266,6 @@ export const ProjectProvider = ({
 
 const getViewFromPath = (path: string) => {
   if (path.includes(PathName.projectManageRewards)) {
-
     if (path.includes(PathName.projectCreateReward)) {
       return MobileViews.createReward
     }
