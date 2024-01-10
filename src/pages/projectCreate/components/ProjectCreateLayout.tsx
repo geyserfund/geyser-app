@@ -25,9 +25,7 @@ interface ProjectCreateLayoutProps
 const contentSx = {
   display: 'flex',
   flexDirection: 'column',
-  flexGrow: 1,
 }
-
 export const ProjectCreateLayout = ({
   children,
   onBackClick,
@@ -56,14 +54,42 @@ export const ProjectCreateLayout = ({
 
   return (
     <Container
-      py={4}
+      p={0}
       display="flex"
       flexDirection="column"
-      minHeight={`calc(100vh - ${dimensions.topNavBar.mobile.height}px)`}
+      maxHeight={{
+        base: '100%',
+        lg: `calc(100vh - ${dimensions.topNavBar.desktop.height + 80}px)`,
+      }}
       flexGrow={1}
+      position="relative"
       {...props}
     >
-      <HStack>
+      {isMobile ? (
+        <Box sx={contentSx} mt={4} mb="80px" mx="10px" h="full">
+          {content}
+        </Box>
+      ) : (
+        <CardLayout
+          sx={contentSx}
+          mt={'40px'}
+          mb={'20px'}
+          overflowY={'auto'}
+          h="full"
+        >
+          {content}
+        </CardLayout>
+      )}
+      <HStack
+        position={{ base: 'fixed', lg: 'absolute' }}
+        w="full"
+        px={{ base: '10px', lg: '0px' }}
+        py="10px"
+        bg="neutral.0"
+        maxWidth={{ base: 600, lg: 'none' }}
+        bottom={{ base: '0px', lg: '-50px' }}
+        alignSelf="center"
+      >
         <Button
           flexGrow={1}
           variant="secondary"
@@ -74,15 +100,6 @@ export const ProjectCreateLayout = ({
         </Button>
         {continueButton}
       </HStack>
-      {isMobile ? (
-        <Box sx={contentSx} mt={4}>
-          {content}
-        </Box>
-      ) : (
-        <CardLayout sx={contentSx} mt={3}>
-          {content}
-        </CardLayout>
-      )}
     </Container>
   )
 }

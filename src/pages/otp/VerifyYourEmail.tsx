@@ -29,6 +29,10 @@ export const VerifyYourEmail = ({
     return MfaAction.UserEmailVerification
   }
 
+  if (!rest.isOpen) {
+    return null
+  }
+
   return (
     <VStack w="100%" h="100%" justifyContent="center" alignItems="center">
       <Modal

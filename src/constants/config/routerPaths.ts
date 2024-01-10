@@ -50,7 +50,7 @@ export enum PathName {
   grantId = ':grantId',
 
   legalTerms = 'terms-and-conditions',
-  legalPrivacy = 'privacy-policy'
+  legalPrivacy = 'privacy-policy',
 }
 
 // @TODO: These definitions are currently a WIP.
@@ -105,7 +105,8 @@ const pathsMap = {
   publicProjectLaunch: () => `/${PathName.launchProject}/start`,
   privateProjectLaunch: () => `/${PathName.launchProject}`,
   projectLaunch: (projectName: string, state: 'draft' | 'launch' = 'launch') =>
-    `/${PathName.project}/${projectName}/?${state}`,
+    `/${PathName.project}/${projectName}/${PathName.projectOverview}/?${state}`,
+
   launchProjectWithNode: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.node}`,
   launchProjectDetails: (projectID: string) =>
@@ -142,7 +143,7 @@ const pathsMap = {
 
   about: () => `/${PathName.about}`,
   legalTerms: () => `/${PathName.legalTerms}`,
-  legalPrivacy: () => `/${PathName.legalPrivacy}`
+  legalPrivacy: () => `/${PathName.legalPrivacy}`,
 }
 
 export type PathsMap = typeof pathsMap

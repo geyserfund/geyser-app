@@ -10,7 +10,6 @@ import {
   LaunchProjectFeesUrl,
   LaunchProjectGiftUrl,
   LaunchProjectKeyUrl,
-  LaunchProjectRocketAIUrl,
   LaunchProjectWorldUrl,
 } from '../../constants'
 import { useAuthContext } from '../../context'
@@ -42,11 +41,16 @@ export const ProjectCreateStart = () => {
   return (
     <ProjectCreateLayout
       title={<Text variant="h2">{t('Create a new project')}</Text>}
+      continueButton={
+        <FormContinueButton
+          flexGrow={1}
+          onClick={handleNext}
+          isDisabled={!isLoggedIn}
+        />
+      }
       onBackClick={handleBack}
     >
       <VStack spacing={8} w="100%">
-        <Image src={LaunchProjectRocketAIUrl} alt="create project rocket" />
-
         <Text variant="h3">
           {t(
             'Transform your ideas into real world projects backed by your community',
@@ -139,11 +143,7 @@ export const ProjectCreateStart = () => {
               Looking for another login method? Let us know <Link>here</Link>.
             </Text> */}
           </VStack>
-        ) : (
-          <Box w="100%">
-            <FormContinueButton width="100%" onClick={handleNext} />
-          </Box>
-        )}
+        ) : null}
       </VStack>
     </ProjectCreateLayout>
   )
