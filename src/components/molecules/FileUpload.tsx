@@ -10,8 +10,9 @@ import {
 import { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
-import { useSignedUpload } from '../../hooks'
+import { useModal, useSignedUpload } from '../../hooks'
 import { ImageWithReload } from '../ui'
+import { ImageCrop, ImageCropperModal } from './ImageCropperModal'
 
 type URL = string
 
@@ -27,6 +28,7 @@ interface IFileUpload {
   onDeleteClick?: () => void
   onLoading?: (isLoading: boolean) => void
   onUploadComplete: (_: URL) => void
+  imageCrop?: ImageCrop
 }
 
 const noop = () => {}
@@ -43,8 +45,12 @@ export const FileUpload = ({
   onUploadComplete,
   onDeleteClick,
   onLoading = noop,
+  imageCrop,
 }: IFileUpload) => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(src)
+
+  const [originalFile, setOriginalFile] = useState<File>()
+  const cropModal = useModal()
 
   const onUpload = useCallback(
     (url: string) => {
@@ -77,9 +83,15 @@ export const FileUpload = ({
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       const file = acceptedFiles[0]
-      uploadFile(file)
+      if (!file) return
+      setOriginalFile(file)
+      if (!imageCrop) {
+        uploadFile(file)
+      } else {
+        cropModal.onOpen()
+      }
     },
-    [uploadFile],
+    [uploadFile, imageCrop, cropModal],
   )
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -89,40 +101,55 @@ export const FileUpload = ({
   })
 
   return (
-    <VStack {...containerProps}>
-      <HStack w="100%">
-        {showcase && uploadedImage ? (
-          <HStack>
-            <ImageWithReload
-              alt="uploaded image"
-              h={showcaseH}
-              w={showcaseW}
-              objectFit="cover"
-              src={uploadedImage}
-            />
-            {onDeleteClick ? (
-              <IconButton
-                size="sm"
-                variant="ghost"
-                aria-label="remove image"
-                onClick={onDeleteClick}
-              >
-                <CloseIcon fontSize="xs" />
-              </IconButton>
-            ) : null}
-          </HStack>
-        ) : null}
-        <Box flexGrow={1} {...getRootProps()} _hover={{ cursor: 'pointer' }}>
-          <input {...getInputProps()} />
-          {isLoading && childrenOnLoading ? childrenOnLoading : children}
-        </Box>
-      </HStack>
+    <>
+      <VStack {...containerProps}>
+        <HStack w="100%">
+          {showcase && uploadedImage ? (
+            <HStack>
+              <ImageWithReload
+                alt="uploaded image"
+                h={showcaseH}
+                w={showcaseW}
+                objectFit="cover"
+                src={uploadedImage}
+              />
+              {onDeleteClick ? (
+                <IconButton
+                  size="sm"
+                  variant="ghost"
+                  aria-label="remove image"
+                  onClick={onDeleteClick}
+                >
+                  <CloseIcon fontSize="xs" />
+                </IconButton>
+              ) : null}
+            </HStack>
+          ) : null}
+          <Box flexGrow={1} {...getRootProps()} _hover={{ cursor: 'pointer' }}>
+            <input {...getInputProps()} />
+            {isLoading && childrenOnLoading ? childrenOnLoading : children}
+          </Box>
+        </HStack>
 
-      {caption && (
-        <Text w="100%" textAlign="right" variant="caption" color="neutral.600">
-          {caption}
-        </Text>
+        {caption && (
+          <Text
+            w="100%"
+            textAlign="right"
+            variant="caption"
+            color="neutral.600"
+          >
+            {caption}
+          </Text>
+        )}
+      </VStack>
+      {imageCrop && (
+        <ImageCropperModal
+          {...cropModal}
+          fileSrc={originalFile}
+          aspectRatio={imageCrop === ImageCrop.Square ? 1 : 3}
+          onCompleted={uploadFile}
+        />
       )}
-    </VStack>
+    </>
   )
 }
