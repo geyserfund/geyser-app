@@ -149,9 +149,17 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
       <FieldContainer
         title={t('Project Identifier')}
-        subtitle={t(
-          'Set your unique project identifier to create your personalized URL and get a corresponding Lightning address.',
-        )}
+        subtitle={
+          <>
+            {t(
+              'Set your unique project identifier to create your personalized URL and get a corresponding Lightning address.',
+            )}{' '}
+            {isEdit &&
+              t(
+                'Warning! By changing this identifier your old project links will not send you to your project',
+              )}
+          </>
+        }
         error={FormErrorIcon.name}
       >
         <VStack p="0px" w="full" alignItems="start" spacing="0">

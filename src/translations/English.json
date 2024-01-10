@@ -772,6 +772,7 @@
   "Confirm launch":"Confirm launch",
   "You’re all set!":"You’re all set!",
   "Docs":"Docs",
-  "Zoom":"Zoom"
+  "Zoom":"Zoom",
+  "Warning! By changing this identifier your old project links will not send you to your project":"Warning! By changing this identifier your old project links will not send you to your project"
 
 }
