@@ -76,6 +76,7 @@ export const FRAGMENT_FUNDING_TX = gql`
     source
     method
     projectId
+    creatorEmail
     funder {
       id
       amountFunded

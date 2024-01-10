@@ -29,7 +29,7 @@ export const FundingFormUserInfoSection = ({ onBackClick }: Props) => {
         <Button onClick={onBackClick} variant="transparent">
           <ArrowBackIcon />
         </Button>
-        <SectionTitle>{t('Final details')}</SectionTitle>
+        <SectionTitle>{t('Checkout')}</SectionTitle>
       </HStack>
 
       {hasSelectedRewards ? (

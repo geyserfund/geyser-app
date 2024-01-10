@@ -208,7 +208,7 @@ export type CreateProjectRewardInput = {
   maxClaimable?: InputMaybe<Scalars['maxClaimable_Int_min_0']>
   name: Scalars['name_String_NotNull_maxLength_100']
   projectId: Scalars['BigInt']
-  rewardType: RewardType
+  rewardType?: InputMaybe<RewardType>
   stock?: InputMaybe<Scalars['stock_Int_min_0']>
 }
 
@@ -452,7 +452,6 @@ export enum FundingMethod {
 
 export type FundingMutationResponse = {
   __typename?: 'FundingMutationResponse'
-  amountSummary?: Maybe<AmountSummary>
   fundingTx?: Maybe<FundingTx>
 }
 
@@ -1155,11 +1154,11 @@ export type Order = {
   __typename?: 'Order'
   createdAt: Scalars['Date']
   id: Scalars['BigInt']
-  items: Array<OrderItems>
+  items: Array<OrderItem>
   status: Scalars['String']
-  total: Scalars['BigInt']
+  totalInSats: Scalars['BigInt']
   updatedAt: Scalars['Date']
-  user: User
+  user?: Maybe<User>
 }
 
 export type OrderBitcoinQuoteInput = {
@@ -1186,6 +1185,13 @@ export type OrderFundingInput = {
   items: Array<OrderItemInput>
 }
 
+export type OrderItem = {
+  __typename?: 'OrderItem'
+  item: ProjectReward
+  quantity: Scalars['Int']
+  unitPriceInSats: Scalars['BigInt']
+}
+
 export type OrderItemInput = {
   itemId: Scalars['BigInt']
   itemType: OrderItemType
@@ -1195,13 +1201,6 @@ export type OrderItemInput = {
 
 export enum OrderItemType {
   ProjectReward = 'PROJECT_REWARD',
-}
-
-export type OrderItems = {
-  __typename?: 'OrderItems'
-  item: ProjectReward
-  quantity: Scalars['Int']
-  unitPrice: Scalars['BigInt']
 }
 
 export type Owner = {
@@ -1408,7 +1407,7 @@ export type ProjectReward = {
   /** Boolean value to indicate whether this reward requires shipping */
   project: Project
   /** Type of Reward */
-  rewardType: RewardType
+  rewardType?: Maybe<RewardType>
   /** Number of times this Project Reward was sold. */
   sold: Scalars['Int']
   /** Tracks the stock of the reward */
@@ -1828,7 +1827,7 @@ export type UpdateProjectRewardInput = {
   maxClaimable?: InputMaybe<Scalars['maxClaimable_Int_min_0']>
   name?: InputMaybe<Scalars['name_String_maxLength_100']>
   projectRewardId: Scalars['BigInt']
-  rewardType: RewardType
+  rewardType?: InputMaybe<RewardType>
   stock?: InputMaybe<Scalars['stock_Int_min_0']>
 }
 
@@ -2294,9 +2293,9 @@ export type ResolversTypes = {
   OrderByDirection: OrderByDirection
   OrderByOptions: OrderByOptions
   OrderFundingInput: OrderFundingInput
+  OrderItem: ResolverTypeWrapper<OrderItem>
   OrderItemInput: OrderItemInput
   OrderItemType: OrderItemType
-  OrderItems: ResolverTypeWrapper<OrderItems>
   Owner: ResolverTypeWrapper<Owner>
   OwnerOf: ResolverTypeWrapper<OwnerOf>
   PageViewCountGraph: ResolverTypeWrapper<PageViewCountGraph>
@@ -2594,8 +2593,8 @@ export type ResolversParentTypes = {
   Order: Order
   OrderBitcoinQuoteInput: OrderBitcoinQuoteInput
   OrderFundingInput: OrderFundingInput
+  OrderItem: OrderItem
   OrderItemInput: OrderItemInput
-  OrderItems: OrderItems
   Owner: Owner
   OwnerOf: OwnerOf
   PageViewCountGraph: PageViewCountGraph
@@ -2984,11 +2983,6 @@ export type FundingMutationResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['FundingMutationResponse'] = ResolversParentTypes['FundingMutationResponse'],
 > = {
-  amountSummary?: Resolver<
-    Maybe<ResolversTypes['AmountSummary']>,
-    ParentType,
-    ContextType
-  >
   fundingTx?: Resolver<
     Maybe<ResolversTypes['FundingTx']>,
     ParentType,
@@ -3640,21 +3634,21 @@ export type OrderResolvers<
 > = {
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
-  items?: Resolver<Array<ResolversTypes['OrderItems']>, ParentType, ContextType>
+  items?: Resolver<Array<ResolversTypes['OrderItem']>, ParentType, ContextType>
   status?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  total?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  totalInSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
-  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
-export type OrderItemsResolvers<
+export type OrderItemResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes['OrderItems'] = ResolversParentTypes['OrderItems'],
+  ParentType extends ResolversParentTypes['OrderItem'] = ResolversParentTypes['OrderItem'],
 > = {
   item?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType>
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  unitPrice?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  unitPriceInSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -3929,7 +3923,11 @@ export type ProjectRewardResolvers<
     ContextType
   >
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>
-  rewardType?: Resolver<ResolversTypes['RewardType'], ParentType, ContextType>
+  rewardType?: Resolver<
+    Maybe<ResolversTypes['RewardType']>,
+    ParentType,
+    ContextType
+  >
   sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   stock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
@@ -4741,7 +4739,7 @@ export type Resolvers<ContextType = any> = {
   NostrPublicKey?: NostrPublicKeyResolvers<ContextType>
   OTPResponse?: OtpResponseResolvers<ContextType>
   Order?: OrderResolvers<ContextType>
-  OrderItems?: OrderItemsResolvers<ContextType>
+  OrderItem?: OrderItemResolvers<ContextType>
   Owner?: OwnerResolvers<ContextType>
   OwnerOf?: OwnerOfResolvers<ContextType>
   PageViewCountGraph?: PageViewCountGraphResolvers<ContextType>
@@ -4960,6 +4958,7 @@ export type FundingTxFragment = {
   source: string
   method?: FundingMethod | null
   projectId: any
+  creatorEmail?: string | null
   funder: {
     __typename?: 'Funder'
     id: any
@@ -5106,7 +5105,7 @@ export type ProjectRewardForCreateUpdateFragment = {
   estimatedDeliveryDate?: any | null
   isAddon: boolean
   isHidden: boolean
-  rewardType: RewardType
+  rewardType?: RewardType | null
 }
 
 export type ProjectFragment = {
@@ -5514,13 +5513,6 @@ export type FundMutation = {
   fund: {
     __typename?: 'FundingMutationResponse'
     fundingTx?: ({ __typename?: 'FundingTx' } & FundingTxFragment) | null
-    amountSummary?: {
-      __typename?: 'AmountSummary'
-      total: number
-      donationAmount: number
-      shippingCost: number
-      rewardsCost: number
-    } | null
   }
 }
 
@@ -6749,6 +6741,7 @@ export const FundingTxFragmentDoc = gql`
     source
     method
     projectId
+    creatorEmail
     funder {
       id
       amountFunded
@@ -7750,12 +7743,6 @@ export const FundDocument = gql`
     fund(input: $input) {
       fundingTx {
         ...FundingTx
-      }
-      amountSummary {
-        total
-        donationAmount
-        shippingCost
-        rewardsCost
       }
     }
   }

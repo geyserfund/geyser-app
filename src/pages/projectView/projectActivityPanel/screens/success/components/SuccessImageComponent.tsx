@@ -1,23 +1,19 @@
 import {
-  Button,
   Center,
   HStack,
   Image,
   Text,
-  Tooltip,
   VStack,
 } from '@chakra-ui/react'
-import * as htmlToImage from 'html-to-image'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BiCopy } from 'react-icons/bi'
 import { HiOutlineCheck } from 'react-icons/hi'
 
 import { Body2, H3 } from '../../../../../../components/typography'
 import { useProjectContext } from '../../../../../../context'
 import { fonts, lightModeColors } from '../../../../../../styles'
 import { Badge, FundingTxFragment } from '../../../../../../types'
-import { useCustomTheme, useNotification } from '../../../../../../utils'
+import { useCustomTheme } from '../../../../../../utils'
 import { AvatarElement } from '../../../../projectMainBody/components'
 
 export const SuccessImageComponent = ({
@@ -28,8 +24,6 @@ export const SuccessImageComponent = ({
   fundingTx: FundingTxFragment
 }) => {
   const { t } = useTranslation()
-  const { toast } = useNotification()
-  const [copied, setCopied] = useState(false)
 
   const { project } = useProjectContext()
 
@@ -39,39 +33,6 @@ export const SuccessImageComponent = ({
 
   if (!project) {
     return null
-  }
-
-  const handleCopy = async () => {
-    try {
-      const dataUrl = await getDataUrl()
-      const base64Response = await fetch(dataUrl)
-      const blob = await base64Response.blob()
-      const items = { [blob.type]: blob }
-      const clipboardItem = new ClipboardItem(items)
-      await navigator.clipboard.write([clipboardItem])
-      setCopied(true)
-      setTimeout(() => {
-        setCopied(false)
-      }, 1000)
-    } catch {
-      toast({
-        status: 'error',
-        title: 'Failed to download image',
-        description: 'Please try again',
-      })
-    }
-  }
-
-  const getDataUrl = async () => {
-    const element = successComponent.current
-    if (element) {
-      const dataUrl = await htmlToImage.toPng(element, {
-        style: { backgroundColor: 'primary.400', borderStyle: 'double' },
-      })
-      return dataUrl
-    }
-
-    return ''
   }
 
   const {
@@ -85,14 +46,30 @@ export const SuccessImageComponent = ({
         id="successful-contribution-banner"
         ref={successComponent}
         spacing="20px"
-        borderStyle="dashed"
-        borderWidth="2px"
-        borderColor={lightModeColors.neutral[900]}
         backgroundColor={colors.primary[400]}
-        borderRadius="8px"
         padding="10px 20px"
         w="full"
+        mb={6}
       >
+        {currentBadge ? (
+          <VStack w="full" spacing="0px">
+            <Image src={currentBadge.image} width="125px" />
+            <Body2 color={lightModeColors.neutral[900]}>
+              {t('You won a Nostr badge!')}
+            </Body2>
+          </VStack>
+        ) : (
+          <Center
+            boxSize={'50px'}
+            borderRadius="full"
+            backgroundColor={lightModeColors.neutral[50]}
+          >
+            <HiOutlineCheck
+              color={lightModeColors.neutral[1000]}
+              fontSize="40px"
+            />
+          </Center>
+        )}
         <VStack spacing="0px">
           <H3
             color={lightModeColors.neutral[900]}
@@ -111,62 +88,37 @@ export const SuccessImageComponent = ({
             {project.title}
           </H3>
         </VStack>
-        {currentBadge ? (
-          <VStack w="full" spacing="0px">
-            <Image src={currentBadge.image} width="125px" />
-            <Body2 color={lightModeColors.neutral[900]}>
-              {t('You won a Nostr badge!')}
-            </Body2>
-          </VStack>
-        ) : (
-          <Center
-            boxSize={'70px'}
-            borderRadius="full"
-            backgroundColor={lightModeColors.neutral[50]}
-          >
-            <HiOutlineCheck
-              color={lightModeColors.neutral[1000]}
-              fontSize="50px"
-            />
-          </Center>
-        )}
-
-        <VStack w="full" alignItems="start">
-          <HStack>
-            <AvatarElement
-              borderRadius="50%"
-              user={user}
-              noLink
-              textProps={{ color: lightModeColors.neutral[900] }}
-            />
-          </HStack>
-          <Body2 color={lightModeColors.neutral[900]} fontStyle="italic">
-            {comment}
-          </Body2>
-        </VStack>
       </VStack>
-      <HStack w="full" justifyContent="end">
-        <Tooltip
-          w="100%"
-          placement="top"
-          label={copied ? t('copied') : t('copy')}
-        >
-          <Button
-            size="md"
-            w="100%"
-            isActive={copied}
-            variant="secondary"
-            aria-label="copy-success-image"
-            leftIcon={<BiCopy />}
-            onClick={handleCopy}
-            isLoading={successComponent.current === null}
+
+      <VStack
+        padding={2}
+        width={'full'}
+        borderRadius="8px"
+        backgroundColor={colors.primary[50]}
+        spacing={2}
+        justify={'flex-start'}
+        alignItems="flex-start"
+        mb={3}
+      >
+        <HStack>
+          <Text
+            fontSize={'16px'}
+            fontWeight={'normal'}
+            textColor={'neutral.900'}
           >
-            <Text variant="body1" fontWeight="bold" textTransform="capitalize">
-              {t('Copy success image')}
-            </Text>
-          </Button>
-        </Tooltip>
-      </HStack>
+            {t('By')}
+          </Text>
+          <AvatarElement
+            borderRadius="50%"
+            user={user}
+            noLink
+            textProps={{ color: 'neutral.700' }}
+          />
+        </HStack>
+        <Body2 color={'neutral.700'} fontStyle="italic">
+          {comment}
+        </Body2>
+      </VStack>
     </VStack>
   )
 }

@@ -3,9 +3,9 @@ import { FormEventHandler, forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { BoltIcon } from '../../../../../../components/icons'
-import { SatoshiAmount, SectionTitle } from '../../../../../../components/ui'
 import { useProjectContext } from '../../../../../../context'
 import { useFundCalc } from '../../../../../../helpers'
+import { toInt } from '../../../../../../utils'
 
 type Props = {
   onSubmit: () => void
@@ -21,8 +21,10 @@ export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(
     const { getTotalAmount } = useFundCalc(formState)
 
     const name = project ? project.name : ''
-    const rewards = project ? project.rewards : []
-    const hasRewards = rewards.length > 0
+    const numberOfRewardsSelected = hasSelectedRewards && formState.rewardsByIDAndCount ? 
+      Object.entries(formState.rewardsByIDAndCount).reduce((accumulator, currentValue) => {
+        return accumulator + toInt(currentValue[1])
+      }, 0) : 0;
 
     const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
       e.preventDefault()
@@ -37,7 +39,6 @@ export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(
           padding={2}
           width={'100%'}
           borderRadius={'md'}
-          backgroundColor={'neutral.100'}
           spacing={2}
         >
           <VStack
@@ -48,66 +49,63 @@ export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(
             alignItems="flex-start"
             spacing={2}
           >
-            {hasRewards && hasSelectedRewards ? (
-              <HStack
-                justifyContent={'space-between'}
-                width={'full'}
-                alignItems="flex-start"
-                color="neutral.700"
-              >
-                <Text
-                  flex={0}
-                  fontSize="14px"
-                  textColor={'neutral.700'}
-                  fontWeight={'normal'}
-                >
-                  {t('Rewards')}
-                </Text>
-                <VStack flex={1} flexWrap={'wrap'} alignItems="flex-end">
-                  {formState.rewardsByIDAndCount &&
-                    Object.entries(formState.rewardsByIDAndCount).map(
-                      ([key, value]) => {
-                        const reward = rewards.find(({ id }) => id === key)
-                        if (reward) {
-                          return (
-                            <Text key={key}>
-                              {value}x {reward.name}
-                            </Text>
-                          )
-                        }
-                      },
-                    )}
-                </VStack>
-              </HStack>
-            ) : null}
-
-            <HStack
-              justifyContent={'space-between'}
-              width={'full'}
-              fontSize={'10px'}
-            >
-              <SectionTitle>{t('Total')}</SectionTitle>
-
+            {formState.donationAmount && formState.donationAmount > 0 && (
               <HStack>
-                <SatoshiAmount
-                  color="neutral.700"
-                  fontWeight="bold"
-                  marginLeft="auto"
-                  fontSize="21px"
-                >
-                  {getTotalAmount('sats', name)}
-                </SatoshiAmount>
-
                 <Text
-                  variant="satoshi"
-                  color="neutral.700"
-                  fontWeight="bold"
-                  marginLeft="auto"
-                  fontSize="21px"
+                fontSize="16px"
+                textColor={'neutral.700'}
+                fontWeight={'normal'}
                 >
-                  {`($${getTotalAmount('dollar', name)})`}
+                  {`${t('Donation')}: `}
+                </Text>
+                <Text
+                  fontSize="18px"
+                  textColor={'neutral.700'}
+                  fontWeight={'bold'}
+                  >
+                  {`${formState.donationAmount.toLocaleString()} sats`}
                 </Text>
               </HStack>
+            )}
+            <HStack>
+              <Text
+                fontSize="16px"
+                textColor={'neutral.700'}
+                fontWeight={'normal'}
+              >
+                {`${t('Items Selected')}: `}
+              </Text>
+              <Text
+                fontSize="18px"
+                textColor={'neutral.700'}
+                fontWeight={'bold'}
+                >
+                {`${numberOfRewardsSelected.toString()}`}
+              </Text>
+            </HStack>
+
+            <HStack>
+              <Text
+                fontSize="16px"
+                textColor={'neutral.700'}
+                fontWeight={'normal'}
+                >
+                {`${t('Total')}: `}
+              </Text>
+              <Text
+                fontSize="16px"
+                textColor={'neutral.700'}
+                fontWeight={'bold'}
+              >
+                {`$${getTotalAmount('dollar', name)}`}
+              </Text>
+              <Text
+                fontSize="16px"
+                textColor={'neutral.700'}
+                fontWeight={'normal'}
+              >
+                {`(${getTotalAmount('sats', name).toLocaleString()} sats)`}
+              </Text>
             </HStack>
           </VStack>
 
@@ -117,7 +115,7 @@ export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(
             type="submit"
             leftIcon={<BoltIcon />}
           >
-            {t('Continue')}
+            {t('Checkout')}
           </Button>
         </VStack>
       </form>
