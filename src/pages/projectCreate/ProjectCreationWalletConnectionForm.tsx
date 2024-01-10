@@ -153,7 +153,7 @@ export const ProjectCreationWalletConnectionForm = ({
               secondaryText={
                 <Trans
                   i18nKey={
-                    '<1>Lightning Addresses</1> are like an email address, but for your Bitcoin. You’ll receive all on-chain and lightning transactions directly to your lightning wallet. Get your own lightning access using these recommended apps.'
+                    '<0>Lightning Addresses</0> are like an email address, but for your Bitcoin. You’ll receive all on-chain and lightning transactions directly to your lightning wallet. Get your own lightning access using these recommended apps.'
                   }
                 >
                   <Link
@@ -162,11 +162,10 @@ export const ProjectCreationWalletConnectionForm = ({
                     isExternal
                   >
                     Lightning Addresses
-                  </Link>{' '}
-                  are like an email address, but for your Bitcoin. You’ll
-                  receive all on-chain and lightning transactions directly to
-                  your lightning wallet. Get your own lightning access using
-                  these recommended apps.
+                  </Link>
+                  {
+                    ' are like an email address, but for your Bitcoin. You’ll receive all on-chain and lightning transactions directly to your lightning wallet. Get your own lightning access using these recommended apps.'
+                  }
                 </Trans>
               }
             >
