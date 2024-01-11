@@ -22,14 +22,13 @@ import {
   GEYSER_FEE_DISCLAIMER,
   noFeeProjects,
 } from '../../../../../../constants'
-import { useBTCConverter, useFundCalc } from '../../../../../../helpers'
+import { useFundCalc } from '../../../../../../helpers'
 import { IFundForm } from '../../../../../../hooks'
 import { IBadge } from '../../../../../../interfaces'
 import {
   ProjectFragment,
   ProjectReward,
   Satoshis,
-  USDCents,
 } from '../../../../../../types'
 import { hasOwnNode } from '../../../../../../utils/helpers'
 import { CopyIcon, DownloadIcon } from '@chakra-ui/icons'
@@ -98,7 +97,6 @@ export const ContributionInfoBox = ({
   const isNoFees = noFeeProjects.includes(project.name) || hasOwnNode(project)
 
   const { getTotalAmount } = useFundCalc(formState)
-  const { getSatoshisFromUSDCents } = useBTCConverter()
   const [copy, setCopy] = useState(false)
 
   const [isFeeTooltipOpen, setFeeTooltipOpen] = useState(false)
@@ -163,12 +161,12 @@ export const ContributionInfoBox = ({
           <HStack justify={'space-between'} width={'full'}>
             <Text
               fontSize={'14px'}
-              fontWeight={'normal'}
-              textColor={'neutral.700'}
+              fontWeight={'medium'}
+              textColor={'neutral.900'}
             >
               {t('Email')}
             </Text>
-            <Text fontSize={'14px'} fontWeight={'medium'} color="neutral.700">
+            <Text fontSize={'16px'} fontWeight={'medium'} color="neutral.700">
               {funderEmail}
             </Text>
           </HStack>
@@ -177,22 +175,22 @@ export const ContributionInfoBox = ({
           <HStack spacing={2} width={'full'} justify={'space-between'}>
             <Text
               fontSize={'14px'}
-              fontWeight={'normal'}
-              textColor={'neutral.700'}
+              fontWeight={'medium'}
+              textColor={'neutral.900'}
             >
               {t('Funding as')}
             </Text>
             {isFunderAnonymous ? (
               <HStack>
                 <AnonymousAvatar seed={0} imageSize={'20px'} />
-                <Text fontSize={'14px'} fontWeight={'medium'} color="neutral.700">
+                <Text fontSize={'14px'} fontWeight={'normal'} color="neutral.700">
                   {t('anonymous')}
                 </Text>
               </HStack>
             ) : (
               <HStack>
                 <Avatar width={'20px'} height={'20px'} src={funderAvatarURL} />
-                <Text fontSize={'14px'} fontWeight={'medium'} color="neutral.700">
+                <Text fontSize={'14px'} fontWeight={'normal'} color="neutral.700">
                   {funderUsername}
                 </Text>
               </HStack>
@@ -211,7 +209,13 @@ export const ContributionInfoBox = ({
             color="neutral.700"
             fontWeight={'normal'}
           >
-            <Text flex={0}>{t('Items')}:</Text>
+            <Text
+              fontSize={'14px'}
+              fontWeight={'medium'}
+              textColor={'neutral.900'}
+            >
+              {t('Items')}:
+            </Text>
             <VStack flex={1} flexWrap={'wrap'} alignItems="flex-end">
               {formState.rewardsByIDAndCount &&
                 Object.entries(formState.rewardsByIDAndCount).map(
@@ -221,11 +225,11 @@ export const ContributionInfoBox = ({
                       return (
                         <Text
                           key={key}
-                          fontSize={'12px'}
-                          fontWeight={'medium'}
+                          fontSize={'14px'}
+                          fontWeight={'normal'}
                           color="neutral.700"
                         >
-                          {value} x {reward.name} {!referenceCode ? `(${getSatoshisFromUSDCents((reward.cost * value) as USDCents).toLocaleString()} sats)` : ''}
+                          {value} x {reward.name}
                         </Text>
                       )
                     }
@@ -239,12 +243,12 @@ export const ContributionInfoBox = ({
         <HStack justify={'space-between'} width={'full'}>
           <Text
             fontSize={'14px'}
-            fontWeight={'normal'}
-            textColor={'neutral.700'}
+            fontWeight={'medium'}
+            textColor={'neutral.900'}
           >
             {t('Donation')}:
           </Text>
-          <Text fontSize={'12px'} fontWeight={'medium'} color="neutral.700">
+          <Text fontSize={'14px'} fontWeight={'normal'} color="neutral.700">
             {formState.donationAmount.toLocaleString()} sats
           </Text>
         </HStack>
@@ -256,10 +260,10 @@ export const ContributionInfoBox = ({
             <HStack>
               <Text
                 fontSize="14px"
-                textColor={'neutral.700'}
-                fontWeight={'normal'}
+                textColor={'neutral.900'}
+                fontWeight={'medium'}
               >
-                {t('Geyser fee')}
+                {t('Geyser fee')}:
               </Text>
               <Box as="span" ref={tooltipContainerRef}>
                 <Tooltip
@@ -283,7 +287,7 @@ export const ContributionInfoBox = ({
             <HStack>
               <SatoshiAmount
                 fontSize="14px"
-                textColor={'neutral.700'}
+                textColor={'neutral.900'}
                 fontWeight={'medium'}
               >
                 {isNoFees ? 0 : Math.round(contributionAmount * 0.02)}
@@ -302,7 +306,7 @@ export const ContributionInfoBox = ({
 
       <HStack justifyContent={'space-between'} width={'full'} fontSize={'10px'}>
         <Text color="neutral.900" fontWeight="bold" fontSize={'16px'}>
-          {t('Total')}
+          {t('Total')}:
         </Text>
 
         <HStack>
@@ -320,7 +324,7 @@ export const ContributionInfoBox = ({
           <Text color="neutral.900" fontWeight="bold" fontSize={'16px'}>
             {t('Share')}
           </Text>
-          <Text color="neutral.900" fontWeight="normal" fontSize={'14px'}>
+          <Text color="neutral.900" fontWeight="medium" fontSize={'14px'}>
             {t('Consider sharing the project on social media to help the project reach even more people!')}
           </Text>
           <Button
@@ -328,6 +332,8 @@ export const ContributionInfoBox = ({
             color="neutral.900"
             leftIcon={<CopyIcon height="16px" color={'neutral.600'} />}
             variant="secondary"
+            fontWeight={"medium"}
+            fontSize={"16px"}
             width="100%"
             onClick={() => {
               if(copy == false) {

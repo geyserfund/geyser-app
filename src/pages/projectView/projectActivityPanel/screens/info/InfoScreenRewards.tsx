@@ -22,7 +22,7 @@ export const InfoScreenRewards = () => {
 
   return (
     <Box
-      style={{marginTop: '20px', width: '100%'}}
+      style={{width: '100%'}}
     >
       <Stack direction='row' justify='space-between' alignItems={'center'}>
         <Stack direction='row' alignItems={'center'}>
