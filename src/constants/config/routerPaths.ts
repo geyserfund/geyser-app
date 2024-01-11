@@ -39,6 +39,7 @@ export enum PathName {
 
   badges = 'badges',
   about = 'about',
+  map = 'map',
   projectId = ':projectId',
   userId = ':userId',
   entryId = ':entryId',
@@ -129,7 +130,7 @@ const pathsMap = {
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardNostr}`,
 
   badges: () => `/${PathName.badges}`,
-
+  map: () => `/${PathName.map}`,
   about: () => `/${PathName.about}`,
   legalTerms: () => `/${PathName.legalTerms}`,
   legalPrivacy: () => `/${PathName.legalPrivacy}`,

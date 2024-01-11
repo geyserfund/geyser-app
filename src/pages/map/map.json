@@ -1,0 +1,21 @@
+{
+  "type": "Map",
+  "countries": [
+    {
+      "text": "KE",
+      "size": 1.0,
+      "country": "Kenya",
+      "city": "Nairobi",
+      "lat": -1.2833,
+      "lng": 36.8167
+    },
+    {
+      "text": "GB",
+      "size": 1.0,
+      "country": "United Kingdom",
+      "city": "London",
+      "lat": 51.5,
+      "lng": -0.1167
+    }
+  ]
+}
