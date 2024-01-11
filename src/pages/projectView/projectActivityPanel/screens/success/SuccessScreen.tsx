@@ -110,8 +110,10 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
           as={ChakraLink}
           href={projectUrl}
           variant="secondary"
+          textDecoration={"none"}
           size="sm"
           w="full"
+          _hover={{ textDecoration: 'none' }}
         >
           {t('Back to project')}
         </Button>
