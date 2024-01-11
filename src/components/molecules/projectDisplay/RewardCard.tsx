@@ -28,9 +28,9 @@ export const RewardCard = ({
       pos={'relative'}
     >
       <Stack direction='row' justify='space-between'>
-        <Text fontWeight={700} fontSize={14}>{reward.name}</Text>
+        <Text fontWeight={700} fontSize={16} color='neutral.900'>{reward.name}</Text>
         <Stack direction='row'>
-          <Text fontWeight={700} fontSize={14} color='neutral.600'>${reward.cost / 100}</Text>
+          <Text fontWeight={700} fontSize={16} color='neutral.600'>${reward.cost / 100}</Text>
         </Stack>
       </Stack>
       <Stack direction='column' gap={1}>
@@ -42,22 +42,23 @@ export const RewardCard = ({
         </Box>
         <Stack direction={"row"} justifyContent="space-between" align="center" alignItems={'center'}>
           <Text fontWeight={400} fontSize='14px' color='neutral.900'>{reward.stock && reward.stock >= 0 ? `${reward.stock} ${t('remaining')}, ` : ''}{reward.sold || 0} {t('sold')}</Text>
-          <Badge backgroundColor={'neutral.100'} textTransform={'none'} fontWeight={'medium'} p={1}>
+          <Badge fontSize={'10px'} borderRadius={'6px'} height={'20px'} backgroundColor={'neutral.100'} textTransform={'none'} fontWeight={600} lineHeight={"20px"} p={"0 4px"}>
             {reward.rewardType === 'PHYSICAL' ? t('Physical Item') : t('Digital Item')}
           </Badge>
         </Stack>
-        <Text fontWeight={400} fontSize='sm' color='neutral.500'>{reward.description}</Text>
+        <Text fontWeight={400} fontSize='14px' color='neutral.600' lineHeight={"1.4"}>{reward.description}</Text>
         <Container pos={'absolute'} bottom={3} left={3} right={3} width={'auto'} p={0}>
           <Stack direction='row' style={{ marginTop: '10px' }}>
             <Button
               variant='primary'
               size='sm'
+              height={'40px'}
               onClick={(e) => {
                 rest.onRewardClick?.(e);
               }}
               style={{ flex: 1 }}
             >
-              <Text isTruncated>{t('Add to Basket')}</Text>
+              <Text fontSize={16} fontWeight={500} isTruncated>{t('Add to Basket')}</Text>
             </Button>
           </Stack>
         </Container>
