@@ -9,17 +9,25 @@ const ImageWithReload = ({ src, alt, ...rest }) => {
   };
 
   return (
-    <img
-      src={error ? '' : src}
-      alt={alt}
-      onError={handleError}
-      style={{
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover',
-      }}
-      {...rest}
-    />
+    <Box
+      position="relative"
+      overflow="hidden"
+      width="100%"
+      height="100%"
+      backgroundColor="neutral.200"
+    >
+      <img
+        src={error ? '' : src}
+        alt={alt}
+        onError={handleError}
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'contain',
+        }}
+        {...rest}
+      />
+    </Box>
   );
 };
 
@@ -29,7 +37,7 @@ interface Props {
   date: string;
 }
 
-export default function CustomCard({ content: rawContent, nostrich, date }: Props) {
+export default function NoteCard({ content: rawContent, nostrich, date }: Props) {
   let parsedContent;
   try {
     parsedContent = JSON.parse(rawContent);
@@ -39,70 +47,59 @@ export default function CustomCard({ content: rawContent, nostrich, date }: Prop
   }
   const { display_name, image, about, website } = parsedContent;
 
-  const imageSize = useBreakpointValue({ base: '100px', md: '120px' });
+  const imageSize = useBreakpointValue({ base: '120px', md: '120px' });
 
   return (
     <Link href={website} textDecoration="none" _hover={{ textDecoration: 'none' }}>
       <Flex
+      display="flex"
         alignItems="flex-start"
         overflow="hidden"
         margin="16px 0"
         paddingTop="0px"
-        border="2px solid #ccc"
+        border="2px solid"
         borderRadius="8px"
+        borderColor="neutral.200"
         backgroundColor="neutral.0"
         transition="border-color 0.5s"
         boxShadow="none"
-        maxHeight="120px"
-        _hover={{ cursor: 'pointer', borderColor: 'neutral.400' }}
-        _active={{ borderColor: 'primary.400' }}
-        _focus={{ borderColor: 'primary.400' }}
+        _hover={{ cursor: 'pointer', borderColor: 'neutral.200' }}
+        _active={{ borderColor: 'primary.300' }}
+        _focus={{ borderColor: 'primary.230' }}
       >
         <Box
           flex="0 0 auto"
           position="relative"
           overflow="hidden"
-          height={imageSize}
-          width={imageSize}
+          height="120px"
+          width="120px"
           marginRight={{ base: '0px', md: '20px' }}
+          max-height={imageSize}
         >
-          {image ? (
-            <ImageWithReload src={image} alt={display_name} />
-          ) : (
-            <Box
-              height="100%"
-              width="100%"
-              backgroundColor="neutral.0"
-              borderRadius="8px"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <span></span>
-            </Box>
-          )}
+          <ImageWithReload src={image} />
         </Box>
 
         <Flex
           flex="1"
           flexDirection="column"
           justifyContent="flex-start"
-          padding="6px"
+          padding="8px"
         >
           <Text
             fontFamily="Arial, sans-serif"
-            fontSize={{ base: '18px', md: '20px' }}
+            fontSize={{ base: '18px', md: '18px' }}
             fontWeight="bold"
             lineHeight="1.3"
             marginBottom="10px"
-            overflowWrap="break-word"
+            noOfLines={{ base: 1, sm: 1,  md: 1 }}
           >
             {display_name}
           </Text>
           <Text
-            fontSize={{ base: '12px', md: '12px' }}
+            fontSize={{ base: '14px', md: '14px' }}
             lineHeight="1.4"
-            color="gray.600"
+            color="neutral.600"
+            noOfLines={{ base: 1, sm: 2,  md: 3 }}
           >
             {about}
           </Text>
