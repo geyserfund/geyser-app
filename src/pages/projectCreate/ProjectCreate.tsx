@@ -110,7 +110,7 @@ export const ProjectCreate = () => {
     onLeave()
   }
 
-  const onSubmit = ({ email, name, ...values }: ProjectCreationVariables) => {
+  const onSubmit = async ({ email, ...values }: ProjectCreationVariables) => {
     if (isEdit && data?.projectGet) {
       updateProject({
         variables: {
@@ -125,7 +125,6 @@ export const ProjectCreate = () => {
         variables: {
           input: {
             ...values,
-            name,
             email,
           },
         },
@@ -135,7 +134,7 @@ export const ProjectCreate = () => {
 
   const nextProps = {
     isLoading: loading || createLoading || updateLoading,
-    isDisabled: createLoading || updateLoading,
+    isDisabled: createLoading || updateLoading || !form.formState.isValid,
     onClick: form.handleSubmit(onSubmit),
   }
 
@@ -146,7 +145,7 @@ export const ProjectCreate = () => {
         onBackClick={onBackClick}
         title={
           <TitleWithProgressBar
-            title={t('Story')}
+            title={t('Project description')}
             subtitle={t('Create a project')}
             index={1}
             length={4}
@@ -155,7 +154,6 @@ export const ProjectCreate = () => {
       >
         <VStack width="100%" alignItems="flex-start" spacing={6}>
           <ProjectForm form={form} isEdit={isEdit} />
-          <FormContinueButton width="100%" {...nextProps} />
         </VStack>
       </ProjectCreateLayout>
       <ProjectUnsavedModal {...unsavedModal} />

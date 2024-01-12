@@ -51,6 +51,14 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
     return <LoadingPage />
   }
 
+  if (
+    isProjectCreatorRoute &&
+    Boolean(isUserViewingTheirOwnProject) === false &&
+    params?.projectId
+  ) {
+    return <Navigate to={getPath('project', params?.projectId)} />
+  }
+
   if (isAnonymous) {
     return (
       <AuthModal
@@ -61,14 +69,6 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
         onClose={onClose}
       />
     )
-  }
-
-  if (
-    isProjectCreatorRoute &&
-    Boolean(isUserViewingTheirOwnProject) === false &&
-    params?.projectId
-  ) {
-    return <Navigate to={getPath('project', params?.projectId)} />
   }
 
   return <>{children}</>
