@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { Event } from 'nostr-tools';
+import { Button, Flex } from '@chakra-ui/react';
 import NoteCard from './NoteCard.tsx';
 
 interface Props {
   projects: Event[];
 }
 
-export default function Noteslist({ projects }: Props) {
+export default function NotesList({ projects }: Props) {
   const initialDisplayCount = 12;
-  const itemsPerPage = 10; 
+  const itemsPerPage = 10;
   const [displayedProjects, setDisplayedProjects] = useState<Event[]>([]);
   const [displayCount, setDisplayCount] = useState(initialDisplayCount);
 
@@ -23,25 +24,26 @@ export default function Noteslist({ projects }: Props) {
     displayCount > initialDisplayCount ? projects.slice(0, displayCount) : initialProjects;
 
   const buttonStyle = {
-    border: '1px solid #ccc',
+    border: '1px solid',
     padding: '8px 16px',
-    borderRadius: '4px',
+    borderColor: 'neutral.200',
+    borderRadius: '8px',
     margin: '8px 0',
     cursor: 'pointer',
   };
 
   return (
-    <div style={{ margin: '0 20px', padding: '10px' }}>
-      <div className="flex" style={{ display: 'flex', flexDirection: 'column' }}>
+    <Flex direction="column" margin="0 20px" padding="10px">
+      <Flex direction="column">
         {renderProjects.map((nostr, index) => (
           <NoteCard key={index} nostrich={nostr.pubkey} content={nostr.content} />
         ))}
         {projects.length > displayCount && (
-          <button style={buttonStyle} onClick={loadMore}>
+          <Button style={buttonStyle} onClick={loadMore}>
             Load More
-          </button>
+          </Button>
         )}
-      </div>
-    </div>
+      </Flex>
+    </Flex>
   );
 }
