@@ -1,10 +1,10 @@
 import { Image, Stack, Text, useColorMode, VStack, useBreakpoint } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import {TableImageAndTitle, TableText} from '../components'
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import EditIcon from '../icons/edit.svg';
 import DeleteIcon from '../icons/delete.svg';
 import SplashRewardIcon from '../icons/splash-reward.svg';
-import VisibilityIcon from '../icons/visibility.svg';
 import { MobileViews, useProjectContext } from '../../../../../../context'
 import { PathName } from '../../../../../../constants'
 import { useNavigate } from 'react-router-dom'
@@ -169,7 +169,7 @@ export const RewardsTable = () => {
                         },
                       })
                     }}>
-                    <Image style={{cursor: 'pointer'}} src={VisibilityIcon}/>
+                    {row.isHidden ? <ViewOffIcon color={'neutral.900'} /> : <ViewIcon color={'neutral.900'} />}
                     <TableText content={row.isHidden ? t('Hidden') : t('Visible')} />
                   </Stack>
                 </td>
