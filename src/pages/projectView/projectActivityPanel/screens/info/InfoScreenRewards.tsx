@@ -20,6 +20,11 @@ export const InfoScreenRewards = () => {
     return null;
   }
 
+  const activeProjectRewards = project.rewards.filter(reward => reward.isHidden === false);
+  if(activeProjectRewards.length == 0) {
+    return null;
+  }
+
   return (
     <Box
       style={{width: '100%'}}
@@ -28,12 +33,12 @@ export const InfoScreenRewards = () => {
         <Stack direction='row' alignItems={'center'}>
           <Text fontWeight={500} fontSize={18} color='neutral.900' lineHeight={1}>{t('Rewards')}</Text>
           <Badge>
-            {project.rewards.length}
+            {activeProjectRewards.length}
           </Badge>
         </Stack>
         <Text fontWeight={500} onClick={handleAllRewardsButtonClick}><Link fontSize={'16px'} color={'neutral.600'} textDecoration={'none'}>{t('See all rewards')}</Link></Text>
       </Stack>
-      {project.rewards.map((reward) => (
+      {activeProjectRewards.map((reward) => (
         <ProjectRewardPanel key={reward.id} reward={reward} />
       ))}
     </Box>

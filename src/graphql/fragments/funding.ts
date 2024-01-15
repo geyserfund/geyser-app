@@ -56,6 +56,7 @@ export const FRAGMENT_FUNDING_TX_WITH_INVOICE_STATUS = gql`
     invoiceStatus
     invoiceStatus
     paymentRequest
+    creatorEmail
   }
 `
 

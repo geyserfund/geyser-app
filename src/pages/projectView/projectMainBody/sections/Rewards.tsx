@@ -30,13 +30,14 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
     fundForm: { state: fundFormState, setState: setFundingFormState, updateReward },
   } = useProjectContext()
 
-  if (!project || !isActive) {
+  if (!project || !isActive || project.rewards.length == 0) {
     return null
   }
+  const activeProjectRewards = project.rewards.filter(reward => reward.isHidden == false);
 
   const renderRewards = () => {
-    if (project.rewards && project.rewards.length > 0) {
-      return project.rewards.filter(truthyFilter).map((reward) => {
+    if (activeProjectRewards.length > 0) {
+      return activeProjectRewards.filter(truthyFilter).map((reward) => {
         return (
           <RewardCard
               key={reward.id}
@@ -78,7 +79,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
         mobileDense
       >
         <TitleDivider
-          badge={project.rewards.length}
+          badge={activeProjectRewards.length}
           isFixed={isRewardTitleFixed}
         >
           {t('Rewards')}

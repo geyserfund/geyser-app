@@ -4939,6 +4939,7 @@ export type FundingTxWithInvoiceStatusFragment = {
   onChain: boolean
   invoiceStatus: InvoiceStatus
   paymentRequest?: string | null
+  creatorEmail?: string | null
 }
 
 export type FundingTxFragment = {
@@ -6722,6 +6723,7 @@ export const FundingTxWithInvoiceStatusFragmentDoc = gql`
     invoiceStatus
     invoiceStatus
     paymentRequest
+    creatorEmail
   }
 `
 export const FundingTxFragmentDoc = gql`

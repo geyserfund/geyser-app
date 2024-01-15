@@ -54,7 +54,7 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
       }}
       spacing={4}
       width="100%"
-      height={{ base: 'calc(100vh - 115px)', lg: '100%' }}
+      height={{ base: 'calc(100vh - 54px)', lg: '100%' }}
       overflowX="hidden"
       position="relative"
       backgroundColor="primary.400"
