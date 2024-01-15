@@ -1,43 +1,8 @@
-import { useState } from 'react';
-import { Text, Box, Flex, Link, useBreakpointValue } from '@chakra-ui/react';
+import React from 'react';
+import { Text, Box, Flex, Link as ChakraLink, useBreakpointValue } from '@chakra-ui/react';
+import { ImageWithReload } from '../../../../components/ui/ImageWithReload';
 
-const ImageWithReload = ({ src, alt, ...rest }) => {
-  const [error, setError] = useState(false);
-
-  const handleError = () => {
-    setError(true);
-  };
-
-  return (
-    <Box
-      position="relative"
-      overflow="hidden"
-      width="100%"
-      height="100%"
-      backgroundColor="neutral.200"
-    >
-      <img
-        src={error ? '' : src}
-        alt={alt}
-        onError={handleError}
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'contain',
-        }}
-        {...rest}
-      />
-    </Box>
-  );
-};
-
-interface Props {
-  content: string;
-  nostrich: string;
-  date: string;
-}
-
-export default function NoteCard({ content: rawContent, nostrich, date }: Props) {
+const NostrProjectCard = ({ content: rawContent, nostrich, date }) => {
   let parsedContent;
   try {
     parsedContent = JSON.parse(rawContent);
@@ -50,9 +15,9 @@ export default function NoteCard({ content: rawContent, nostrich, date }: Props)
   const imageSize = useBreakpointValue({ base: '120px', md: '120px' });
 
   return (
-    <Link href={website} textDecoration="none" _hover={{ textDecoration: 'none' }}>
+    <ChakraLink href={website} textDecoration="none" _hover={{ textDecoration: 'none' }}>
       <Flex
-      display="flex"
+        display="flex"
         alignItems="flex-start"
         overflow="hidden"
         margin="16px 0"
@@ -91,7 +56,7 @@ export default function NoteCard({ content: rawContent, nostrich, date }: Props)
             fontWeight="bold"
             lineHeight="1.3"
             marginBottom="10px"
-            noOfLines={{ base: 1, sm: 1,  md: 1 }}
+            noOfLines={{ base: 1, sm: 1, md: 1 }}
           >
             {display_name}
           </Text>
@@ -99,12 +64,14 @@ export default function NoteCard({ content: rawContent, nostrich, date }: Props)
             fontSize={{ base: '14px', md: '14px' }}
             lineHeight="1.4"
             color="neutral.600"
-            noOfLines={{ base: 1, sm: 2,  md: 3 }}
+            noOfLines={{ base: 1, sm: 2, md: 3 }}
           >
             {about}
           </Text>
         </Flex>
       </Flex>
-    </Link>
+    </ChakraLink>
   );
-}
+};
+
+export default NostrProjectCard;
