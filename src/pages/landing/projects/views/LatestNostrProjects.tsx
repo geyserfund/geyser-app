@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, VStack, HStack, useBreakpointValue, Button, useDisclosure, Box } from '@chakra-ui/react';
 import { SimplePool, Event } from 'nostr-tools';
-import Noteslist from '../components/Noteslist';
+import NostrProjectList from '../components/NostrProjectList';
 import { CardLayout } from '../../../../components/layouts';
 import { FilterDrawer } from '../../filters/mobile/FilterDrawer';
 import { MobileTopBar } from '../../filters/mobile/MobileTopBar';
@@ -10,7 +10,7 @@ const GEYSERELAY = [
   'wss://relay.geyser.fund',
 ];
 
-export const Latest = () => {
+export const LatestNostrProjects = () => {
   const [pool, setPool] = useState(new SimplePool());
   const initialEvents: Event[] = [];
   const [events, setEvents] = useState(initialEvents);
@@ -35,7 +35,6 @@ export const Latest = () => {
     ]);
 
     sub.on('event', (event: Event) => {
-      console.log(event);
       setEvents((events) => [...events, event]);
     });
 
@@ -55,11 +54,11 @@ export const Latest = () => {
         {isMobile && <FilterDrawer isOpen={isOpen} onClose={onClose} />}
 
         <HStack>
-          <Noteslist projects={events} />
+          <NostrProjectList projects={events} />
         </HStack>
       </VStack>
     </Container>
   );
 };
 
-export default Latest;
+export default LatestNostrProjects;
