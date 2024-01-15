@@ -8,7 +8,7 @@ import { NotAuthorized, NotFoundPage } from '../../pages/fallback'
 import { PrivacyPolicy, TermsAndConditions } from '../../pages/legal'
 import { ErrorBoundary } from './ErrorBoundary'
 import { renderPrivateRoute } from './PrivateRoute'
-import Latest from '../../pages/landing/projects/views/Latest'
+import LatestNostrProjects from '../../pages/landing/projects/views/LatestNostrProjects'
 
 const Grants = () => import('../../pages/grants')
 const ProjectLaunch = () => import('../../pages/projectCreate')
@@ -363,7 +363,7 @@ export const platformRoutes: RouteObject[] = [
       },
       {
       path:'latest',
-      Component: Latest,
+      Component: LatestNostrProjects,
       },
     ],
   },
