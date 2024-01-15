@@ -1,4 +1,3 @@
-import { Box } from '@chakra-ui/layout'
 import { useParams } from 'react-router-dom'
 
 import { ProjectProvider } from '../../context'
