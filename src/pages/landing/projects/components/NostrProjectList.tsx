@@ -7,7 +7,7 @@ interface Props {
   projects: Event[];
 }
 
-export default function NotesList({ projects }: Props) {
+export default function NostrProjectList({ projects }: Props) {
   const initialDisplayCount = 12;
   const itemsPerPage = 10;
   const [displayedProjects, setDisplayedProjects] = useState<Event[]>([]);
