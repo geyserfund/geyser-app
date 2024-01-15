@@ -6,7 +6,7 @@ import { CardLayout } from '../../../../components/layouts';
 import { FilterDrawer } from '../../filters/mobile/FilterDrawer';
 import { MobileTopBar } from '../../filters/mobile/MobileTopBar';
 
-const GEYSERELAY = [
+const GEYSER_RELAY_URL = [
   'wss://relay.geyser.fund',
 ];
 
@@ -20,14 +20,14 @@ export const LatestNostrProjects = () => {
     setPool(_pool);
 
     return () => {
-      _pool.close(GEYSERELAY);
+      _pool.close(GEYSER_RELAY_URL);
     };
   }, []);
 
   useEffect(() => {
     if (!pool) return;
 
-    const sub = pool.sub(GEYSERELAY, [
+    const sub = pool.sub(GEYSER_RELAY_URL, [
       {
         kinds: [0],
         limit: 100,
