@@ -47,8 +47,8 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
                     </div>
                 </div>
             </Box>
-            <Stack direction="column" flex={1} pt={3} pl={2}>
-                <Text fontWeight={700} fontSize={16} color='neutral.900' lineHeight={1}>{reward.name}</Text>
+            <Stack direction="column" flex={1} pl={2} gap={0.25}>
+                <Text fontWeight={700} fontSize={16} color='neutral.900'>{reward.name}</Text>
                 <Text fontSize={12} color='neutral.600'>{
                     `${(reward.maxClaimable && reward.maxClaimable > 0 ? (reward.maxClaimable - reward.sold) + ' remaining, ' : '')}${reward.sold} sold`
                   }</Text>
