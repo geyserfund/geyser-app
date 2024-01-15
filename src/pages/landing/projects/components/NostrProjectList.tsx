@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Event } from 'nostr-tools';
 import { Button, Flex } from '@chakra-ui/react';
-import NoteCard from './NoteCard.tsx';
+import NostrProjectCard from './NostrProjectCard.tsx';
 
 interface Props {
   projects: Event[];
@@ -36,7 +36,7 @@ export default function NotesList({ projects }: Props) {
     <Flex direction="column" margin="0 20px" padding="10px">
       <Flex direction="column">
         {renderProjects.map((nostr, index) => (
-          <NoteCard key={index} nostrich={nostr.pubkey} content={nostr.content} />
+          <NostrProjectCard key={index} nostrich={nostr.pubkey} content={nostr.content} />
         ))}
         {projects.length > displayCount && (
           <Button style={buttonStyle} onClick={loadMore}>
