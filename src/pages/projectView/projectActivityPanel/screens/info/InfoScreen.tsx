@@ -32,7 +32,7 @@ export const InfoScreen = () => {
       >
         <ActivityBrief px={{ base: '10px', lg: '20px' }} />
       </Box>
-      <VStack px={3} width="100%">
+      <VStack px={6} width="100%">
         <InfoScreenRewards />
       </VStack>
     </VStack>

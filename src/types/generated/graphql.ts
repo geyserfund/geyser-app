@@ -511,6 +511,7 @@ export type FundingTx = {
   /** Contributor's email address. Only visible to the project owner. */
   email?: Maybe<Scalars['String']>
   funder: Funder
+  fundingType: FundingType
   id: Scalars['BigInt']
   invoiceId?: Maybe<Scalars['String']>
   invoiceStatus: InvoiceStatus
@@ -554,6 +555,11 @@ export type FundingTxStatusUpdatedInput = {
 export type FundingTxStatusUpdatedSubscriptionResponse = {
   __typename?: 'FundingTxStatusUpdatedSubscriptionResponse'
   fundingTx: FundingTx
+}
+
+export enum FundingType {
+  Donation = 'DONATION',
+  Purchase = 'PURCHASE',
 }
 
 export type FundinginvoiceCancel = {
@@ -2225,6 +2231,7 @@ export type ResolversTypes = {
   FundingTxMethodSum: ResolverTypeWrapper<FundingTxMethodSum>
   FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
   FundingTxStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<FundingTxStatusUpdatedSubscriptionResponse>
+  FundingType: FundingType
   FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>
   GetActivitiesInput: GetActivitiesInput
   GetActivityOrderByInput: GetActivityOrderByInput
@@ -3029,6 +3036,7 @@ export type FundingTxResolvers<
   donationAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   funder?: Resolver<ResolversTypes['Funder'], ParentType, ContextType>
+  fundingType?: Resolver<ResolversTypes['FundingType'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   invoiceId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   invoiceStatus?: Resolver<
