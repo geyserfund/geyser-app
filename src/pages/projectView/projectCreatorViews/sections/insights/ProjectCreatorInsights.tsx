@@ -21,7 +21,7 @@ export const ProjectCreatorInsights = () => {
       pt={{ base: '10px', lg: '20px' }}
       backgroundColor={{ base: 'neutral.0', lg: 'inherit' }}
       pb={{ base: '80px', lg: '20px' }}
-      px={{ base: '10px', lg: '80px' }}
+      px={{ base: '10px', lg: '40px' }}
       spacing={{ base: '10px', lg: '20px' }}
     >
       <InsightsHeader />
