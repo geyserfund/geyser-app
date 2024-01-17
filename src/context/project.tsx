@@ -17,16 +17,9 @@ import {
 } from '../hooks'
 import { useProjectState } from '../hooks/graphqlState'
 import { useModal } from '../hooks/useModal'
-import {
-  MilestoneAdditionModal,
-  RewardAdditionModal,
-} from '../pages/projectView/projectMainBody/components'
+import { MilestoneAdditionModal } from '../pages/projectView/projectMainBody/components'
 import { ProjectCreatorModal } from '../pages/projectView/projectNavigation/components/ProjectCreatorModal'
-import {
-  ProjectFragment,
-  ProjectMilestone,
-  ProjectRewardForCreateUpdateFragment,
-} from '../types'
+import { ProjectFragment, ProjectMilestone } from '../types'
 import { useAuthContext } from './auth'
 import { useNavContext } from './nav'
 
@@ -63,9 +56,6 @@ type ProjectContextProps = {
   fundingFlow: UseFundingFlowReturn
   isDirty?: boolean
   error: any
-  onRewardsModalOpen(props?: {
-    reward?: ProjectRewardForCreateUpdateFragment
-  }): void
   onMilestonesModalOpen(): void
   onCreatorModalOpen(): void
   refetch: any
@@ -111,9 +101,6 @@ export const ProjectProvider = ({
 
   const creatorModal = useModal()
   const milestonesModal = useModal()
-  const rewardsModal = useModal<{
-    reward?: ProjectRewardForCreateUpdateFragment
-  }>()
   const {
     error,
     project,
@@ -190,33 +177,6 @@ export const ProjectProvider = ({
     }
   }, [location.pathname])
 
-  const onRewardSubmit = (
-    reward: ProjectRewardForCreateUpdateFragment,
-    isEdit: boolean,
-  ) => {
-    if (!project) {
-      return
-    }
-
-    if (isEdit) {
-      const newRewards = project.rewards?.map((pr) => {
-        if (pr.id === reward.id) {
-          return reward
-        }
-
-        return pr
-      })
-
-      updateProject({ rewards: newRewards })
-
-      return
-    }
-
-    const newRewards = project.rewards || []
-
-    updateProject({ rewards: [...newRewards, reward] })
-  }
-
   const onMilestonesSubmit = (newMilestones: ProjectMilestone[]) => {
     updateProject({ milestones: newMilestones })
     milestonesModal.onClose()
@@ -239,7 +199,6 @@ export const ProjectProvider = ({
         fundingFlow,
         refetch,
         onCreatorModalOpen: creatorModal.onOpen,
-        onRewardsModalOpen: rewardsModal.onOpen,
         onMilestonesModalOpen: milestonesModal.onOpen,
       }}
     >
@@ -250,12 +209,6 @@ export const ProjectProvider = ({
           <MilestoneAdditionModal
             {...milestonesModal}
             onSubmit={onMilestonesSubmit}
-            project={project}
-          />
-          <RewardAdditionModal
-            {...rewardsModal}
-            isSatoshi={false}
-            onSubmit={onRewardSubmit}
             project={project}
           />
         </>

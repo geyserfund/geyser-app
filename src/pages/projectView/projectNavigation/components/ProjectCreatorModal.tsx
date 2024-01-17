@@ -1,6 +1,6 @@
 import { HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import {
   EntryEditIcon,
@@ -10,15 +10,15 @@ import {
 import { CardLayout, CardLayoutProps } from '../../../../components/layouts'
 import { Modal } from '../../../../components/layouts'
 import { Body2, H3 } from '../../../../components/typography'
-import { getPath } from '../../../../constants'
-import { useProjectContext } from '../../../../context'
+import { PathName, getPath } from '../../../../constants'
+import { MobileViews, useProjectContext } from '../../../../context'
 import { UseModalReturn } from '../../../../hooks/useModal'
-import { defaultProjectReward } from '../../../../defaults'
 
 export const ProjectCreatorModal = (props: UseModalReturn) => {
   const { t } = useTranslation()
-  const { project, onRewardsModalOpen, onMilestonesModalOpen } =
+  const { project, onMilestonesModalOpen, setMobileView } =
     useProjectContext()
+  const navigate = useNavigate()
   return (
     <Modal {...props} title="Create content">
       <VStack spacing={4} alignItems="start">
@@ -38,8 +38,9 @@ export const ProjectCreatorModal = (props: UseModalReturn) => {
             'Sell your work, merch, art, sponsorships, badges, or services',
           )}
           onClick={() => {
+            setMobileView(MobileViews.createReward);
+            navigate(PathName.projectCreateReward);
             props.onClose()
-            onRewardsModalOpen({reward: defaultProjectReward})
           }}
         />
         <CreationMenuItem
