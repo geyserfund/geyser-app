@@ -166,6 +166,7 @@ export const QRCodeImage = ({
                 onClick={onCopyLightning}
                 variant="primary"
                 isDisabled={!lightningInvoice}
+                width={"100%"}
               >
                 <Text>
                   {hasCopiedLightning ? t('Copied!') : t('Copy lightning invoice')}
@@ -176,6 +177,7 @@ export const QRCodeImage = ({
                 leftIcon={hasCopiedOnchain ? <RiLinkUnlink /> : <FaCopy />}
                 onClick={onCopyOnchain}
                 variant="primary"
+                width={"100%"}
               >
                 <Text>
                   {hasCopiedOnchain ? t('Copied!') : t('Copy onchain address')}
