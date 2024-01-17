@@ -81,7 +81,7 @@ export const ProjectNostrSettings = () => {
         </VStack>
 
         <VStack width="full" alignItems="flex-start">
-          <Body1 semiBold>{t('Your Nostr Private Key (nsec)')}</Body1>
+          <Body1 semiBold>{t('Your Nostr Private Key Kit (nsec)')}</Body1>
           <VStack
             padding={{ base: '10px', lg: '20px' }}
             bgColor="neutral.100"

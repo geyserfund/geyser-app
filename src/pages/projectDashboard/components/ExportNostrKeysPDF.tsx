@@ -154,7 +154,7 @@ export const ExportNostrKeysPDF = ({
             <Text style={styles.normalText}>{publicKey}</Text>
           </View>
           <View style={styles.infoBoxLast}>
-            <Text style={styles.headerText}>{t('Title')}</Text>
+            <Text style={styles.headerText}>{t('Private Key')}</Text>
             <Text style={styles.normalText}>{privateKey}</Text>
           </View>
         </View>
