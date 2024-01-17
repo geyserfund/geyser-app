@@ -13,6 +13,7 @@ import {
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsInfoCircle } from 'react-icons/bs'
+import {Badge} from '../../fundingForm/components/Badge'
 
 import {
   AnonymousAvatar,
@@ -31,7 +32,7 @@ import {
   Satoshis,
 } from '../../../../../../types'
 import { hasOwnNode } from '../../../../../../utils/helpers'
-import { CopyIcon, DownloadIcon } from '@chakra-ui/icons'
+import { CopyIcon } from '@chakra-ui/icons'
 import { copyTextToClipboard } from '../../../../../../utils'
 
 export enum ContributionInfoBoxVersion {
@@ -129,18 +130,8 @@ export const ContributionInfoBox = ({
             fontWeight={'bold'}
             textColor={'neutral.900'}
           >
-            {t('Download Invoice')}
+            {t('Summary')}
           </Text>
-          <Button
-            size="sm"
-            color="neutral.600"
-            variant="secondary"
-            onClick={() => {
-              console.log('NOT YET IMPLEMENTED');
-            }}
-          >
-            <DownloadIcon height="16px" color={'neutral.700'} />
-          </Button>
         </HStack>
       ): (
         <>
@@ -235,6 +226,18 @@ export const ContributionInfoBox = ({
                     }
                   },
                 )}
+              {getTotalAmount('dollar', project.name) >= 10 && (
+                <HStack>
+                  <Badge donationAmountInDollars={getTotalAmount('dollar', project.name)} />
+                  <Text
+                    fontSize="14px"
+                    textColor={'neutral.700'}
+                    fontWeight={'normal'}
+                  >
+                    {t('Badge')}
+                  </Text>
+                </HStack>
+              )}
             </VStack>
           </HStack>
         </>

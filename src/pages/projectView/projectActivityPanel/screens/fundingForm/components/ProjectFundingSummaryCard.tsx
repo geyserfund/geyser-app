@@ -6,6 +6,7 @@ import { BoltIcon } from '../../../../../../components/icons'
 import { useProjectContext } from '../../../../../../context'
 import { useFundCalc } from '../../../../../../helpers'
 import { toInt } from '../../../../../../utils'
+import { Badge } from './Badge'
 
 type Props = {
   onSubmit: () => void
@@ -107,6 +108,28 @@ export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(
                 {`(${getTotalAmount('sats', name).toLocaleString()} sats)`}
               </Text>
             </HStack>
+
+            {getTotalAmount('dollar', name) >= 10 && (
+              <HStack>
+                <Text
+                  fontSize="16px"
+                  textColor={'neutral.700'}
+                  fontWeight={'normal'}
+                  >
+                  {`${t('You will Receive')}: `}
+                </Text>
+                <HStack>
+                  <Badge donationAmountInDollars={getTotalAmount('dollar', name)} />
+                  <Text
+                    fontSize="16px"
+                    textColor={'neutral.700'}
+                    fontWeight={'normal'}
+                  >
+                    {t('Badge')}
+                  </Text>
+                </HStack>
+              </HStack>
+            )}
           </VStack>
 
           <Button
