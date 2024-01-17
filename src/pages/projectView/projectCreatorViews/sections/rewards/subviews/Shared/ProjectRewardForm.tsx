@@ -130,8 +130,6 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
     const errors: any = {}
     let isValid = true
 
-    console.log(reward);
-
     if (!reward.name) {
       errors.name = t('Name is a required field')
       isValid = false

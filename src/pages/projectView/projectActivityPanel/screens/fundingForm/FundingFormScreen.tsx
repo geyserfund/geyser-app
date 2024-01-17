@@ -5,7 +5,7 @@ import { MAX_FUNDING_AMOUNT_USD } from '../../../../../constants'
 import { useProjectContext } from '../../../../../context'
 import { useFundCalc } from '../../../../../helpers/fundingCalculation'
 import { ProjectRewardForCreateUpdateFragment } from '../../../../../types/generated/graphql'
-import { useMobileMode, useNotification } from '../../../../../utils'
+import { useMobileMode, useNotification, validateEmail } from '../../../../../utils'
 import { FundingFormSection } from './components/FundingFormSection'
 import { FundingFormUserInfoSection } from './components/FundingFormUserInfoSection'
 import { ProjectFundingSummaryCard } from './components/ProjectFundingSummaryCard'
@@ -55,6 +55,13 @@ export const FundingFormScreen = ({
       toast({
         title: 'Email is a required field when donating for a reward.',
         description: 'Please enter an email.',
+        status: 'error',
+      })
+      return false
+    } else if(!validateEmail(formState.email)) {
+      toast({
+        title: 'A valid email is required.',
+        description: 'Please enter a valid email.',
         status: 'error',
       })
       return false
