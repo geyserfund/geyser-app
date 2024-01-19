@@ -334,6 +334,11 @@ Contributions to Geyser are always welcome!
 
 <br />
 
+<!-- Sitemap -->
+## Sitemap
+
+  You can generate a sitemap by running `node generate-sitemap.js`.  This will create a sitemap.xml file in the public directory.  You can also modify the generate-sitemap file to include additional routes easily.
+
 <!-- License -->
 ## License
 
