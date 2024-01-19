@@ -1,4 +1,4 @@
-import { Box, Button, Divider, HStack, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, VStack } from '@chakra-ui/react'
 import { useAtom } from 'jotai'
 import { Trans, useTranslation } from 'react-i18next'
 import { PiWarningCircleFill } from 'react-icons/pi'
@@ -9,7 +9,7 @@ import { dimensions } from '../../../../../constants'
 import { lightModeColors } from '../../../../../styles'
 import { useCustomTheme } from '../../../../../utils'
 import { ContributionView, contributionViewAtom } from './atoms'
-import { ProjectContributors } from './ProjectContributors'
+import Rewards from './sections/rewards/Rewards'
 
 export const ProjectCreatorContributors = () => {
   const { t } = useTranslation()
@@ -42,9 +42,9 @@ export const ProjectCreatorContributors = () => {
         height="100%"
         alignItems="start"
         spacing="0px"
-        overflow="hidden"
-        pt={{ base: '50px', lg: '20px' }}
+        pt={{ base: '10px', lg: '20px' }}
         px={0}
+        overflowY={'auto'}
       >
         <VStack
           w={'full'}
@@ -53,8 +53,6 @@ export const ProjectCreatorContributors = () => {
           px={{ base: 0, lg: '20px' }}
           alignItems="start"
           backgroundColor="neutral.0"
-          position={{ base: 'fixed', lg: 'relative' }}
-          top={{ base: dimensions.topNavBar.desktop.height, lg: 0 }}
           zIndex={10}
           spacing={{ base: '10px', lg: '20px' }}
         >
@@ -105,9 +103,7 @@ export const ProjectCreatorContributors = () => {
             </Trans>
           </Body1>
         </VStack>
-        <Divider />
-
-        <ProjectContributors />
+        <Rewards />
       </CardLayout>
     </VStack>
   )
