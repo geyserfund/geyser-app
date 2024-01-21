@@ -68,6 +68,7 @@ const RewardItem = ({
       mt={2}
       p={3}
       pos={'relative'}
+      width={"100%"}
     >
       <Stack direction="row">
           <Box borderRadius={12} overflow={'hidden'} width="70px">
