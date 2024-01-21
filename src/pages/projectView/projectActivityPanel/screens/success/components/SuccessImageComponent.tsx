@@ -50,6 +50,11 @@ export const SuccessImageComponent = ({
       setCopied(true)
       setTimeout(() => {
         setCopied(false)
+        toast({
+          status: 'success',
+          title: 'Copied!',
+          description: 'Ready to paste into Social media posts',
+        })
       }, 1000)
     } catch {
       toast({
@@ -171,7 +176,15 @@ export const SuccessImageComponent = ({
             user={user}
             noLink
             textProps={{ color: 'neutral.700' }}
+            avatarOnly={true}
           />
+          <Text
+            fontSize={'16px'}
+            fontWeight={'normal'}
+            textColor={'neutral.900'}
+          >
+            {user ? user.username : 'Anonymous'}
+          </Text>
         </HStack>
         {comment && (
           <Body2 color={'neutral.700'} fontStyle="italic" mt={2}>
