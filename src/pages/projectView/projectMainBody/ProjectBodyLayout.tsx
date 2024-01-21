@@ -67,7 +67,7 @@ export const ProjectBodyLayout = () => {
     if(scrollRef.current ) {
       scrollRef.current.scroll({
         top: 0,
-        behavior: 'instant'
+        behavior: 'instant' as ScrollBehavior
       });
     }
   }, [location.pathname])
