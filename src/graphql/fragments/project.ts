@@ -78,6 +78,7 @@ export const FRAGMENT_PROJECT_REWARD_FOR_LANDING_PAGE = gql`
     rewardName: name
     sold
     stock
+    maxClaimable
     rewardProject: project {
       id
       name

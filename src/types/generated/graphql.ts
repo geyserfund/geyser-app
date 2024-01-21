@@ -5079,6 +5079,7 @@ export type ProjectRewardForLandingPageFragment = {
   image?: string | null
   sold: number
   stock?: number | null
+  maxClaimable?: number | null
   rewardName: any
   rewardProject: {
     __typename?: 'Project'
@@ -7226,6 +7227,7 @@ export const ProjectRewardForLandingPageFragmentDoc = gql`
     rewardName: name
     sold
     stock
+    maxClaimable
     rewardProject: project {
       id
       name

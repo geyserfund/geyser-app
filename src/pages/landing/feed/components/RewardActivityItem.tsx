@@ -1,18 +1,14 @@
-import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, Text, VStack, Stack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { CardLayout } from '../../../../components/layouts'
-import { Body1, Body2 } from '../../../../components/typography'
+import { Body2 } from '../../../../components/typography'
 import {
-  ImageWithReload,
-  LinkableAvatar,
-  SatoshiAmount,
+  LinkableAvatar
 } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import {
-  ProjectRewardForLandingPageFragment,
-  RewardCurrency,
+  ProjectRewardForLandingPageFragment
 } from '../../../../types'
 import { TimeAgo } from '../../components'
 
@@ -64,51 +60,32 @@ const RewardItem = ({
   const { t } = useTranslation()
 
   return (
-    <CardLayout
-      padding="0px"
-      hover
-      w="full"
-      direction="column"
-      overflow="hidden"
+    <Box
+      backgroundColor="neutral.50"
+      border='2px'
+      borderColor='neutral.200'
+      borderRadius={12}
+      mt={2}
+      p={3}
+      pos={'relative'}
     >
-      {reward.image && (
-        <Box w="full" h="full" maxHeight="210px" overflow="hidden">
-          <ImageWithReload w="full" h="full" src={`${reward.image}`} />
-        </Box>
-      )}
-      <VStack w="full" padding="10px" alignItems="start">
-        <HStack w="full">
-          <VStack spacing="0px">
-            {reward.rewardProject.rewardCurrency === RewardCurrency.Usdcent ? (
-              <Text color="neutral.1000" fontWeight="bold">
-                {`$ ${reward.cost / 100}`}
-              </Text>
-            ) : (
-              <SatoshiAmount fontSize="12px" color="neutral.1000">
-                {reward.cost}
-              </SatoshiAmount>
-            )}
-
-            <Text fontSize="12px" color="neutral.1000" fontWeight="bold">
-              {t('per item')}
-            </Text>
-          </VStack>
-          <VStack spacing="0px" alignItems="flex-start">
-            <Text fontWeight={500} color="neutral.900">
-              {reward.rewardName}
-            </Text>
-            <Text
-              fontSize="12px"
-              backgroundColor="neutral.200"
-              padding="2px 5px"
-              borderRadius="4px"
-            >
-              <b>{reward.sold || 0}</b> {t('collected')}
-            </Text>
-          </VStack>
-        </HStack>
-        <Body1>{reward.description}</Body1>
-      </VStack>
-    </CardLayout>
+      <Stack direction="row">
+          <Box borderRadius={12} overflow={'hidden'} width="70px">
+              <div style={{display: 'block', position: 'relative', paddingTop: '100%', width: '100%'}}>
+                  <div style={{display: 'block', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: `transparent url(${reward.image}) no-repeat center center / cover`}}>
+                  </div>
+              </div>
+          </Box>
+          <Stack direction="column" flex={1} pl={2} gap={0.25}>
+              <Text fontWeight={700} fontSize={16} color='neutral.900'>{reward.rewardName}</Text>
+              <Text fontSize={12} color='neutral.600'>{
+                  `${(reward.maxClaimable && reward.maxClaimable > 0 ? (reward.maxClaimable - reward.sold) + ` ${t('remaining')}, ` : '')}${reward.sold} ${t('sold')}`
+                }</Text>
+          </Stack>
+          <Stack direction="column" align={'flex-end'}>
+              <Text fontWeight={700} fontSize={16} color='neutral.600'>${reward.cost / 100}</Text>
+          </Stack>
+      </Stack>
+    </Box>
   )
 }
