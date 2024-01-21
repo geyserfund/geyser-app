@@ -291,7 +291,7 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
               <UploadBox h={10} title="Select an Image" />
             </FileUpload>
           </FieldContainer>
-          <FieldContainer title={t('Estimated Delivery Date')}>
+          <FieldContainer title={t('Estimated Delivery Date')} visibility={"hidden"}>
             <div style={{position: 'relative', width: '100%'}}>
               <CalendarButton 
                 onChange={handleFormCalendarChange}

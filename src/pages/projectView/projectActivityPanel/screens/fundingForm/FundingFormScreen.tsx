@@ -53,7 +53,7 @@ export const FundingFormScreen = ({
   const validateFundingUserInfo = () => {
     if (hasSelectedRewards && !formState.email) {
       toast({
-        title: 'Email is a required field when donating for a reward.',
+        title: 'Email is required when purchasing a reward.',
         description: 'Please enter an email.',
         status: 'error',
       })
