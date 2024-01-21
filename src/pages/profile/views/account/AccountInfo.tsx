@@ -51,9 +51,7 @@ export const AccountInfo = ({
     return userProfile.externalAccounts.length > 1 ? isEdit : false
   }
 
-  const userAccountToDisplay = userProfile.externalAccounts.filter(
-    (account) => account.accountType !== ExternalAccountType.google,
-  )
+  const userAccountToDisplay = userProfile.externalAccounts;
 
   return (
     <>
