@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  HStack,
   IconButton,
   Table,
   TableContainer,
@@ -16,7 +17,13 @@ import {
   Thead,
   Tr,
   useDisclosure,
+  VStack,
 } from '@chakra-ui/react'
+import { useMemo } from 'react'
+
+import { Body2 } from '../../../../../../components/typography'
+import { halfStandardPadding, standardPadding } from '../../../../../../styles'
+import { useMobileMode } from '../../../../../../utils'
 
 export interface TableData<TItem> {
   header: string
@@ -24,6 +31,7 @@ export interface TableData<TItem> {
   render?: (val: TItem) => React.ReactNode
   value?: (val: TItem) => string | number
   colSpan?: number
+  isMobile?: boolean
 }
 
 interface TableProps<TItem> {
@@ -39,12 +47,16 @@ export function TableWithAccordion<TItem>({
   accordionContent,
   footerContent,
 }: TableProps<TItem>) {
+  const isMobile = useMobileMode()
+
   return (
     <TableContainer w="full">
       <Table variant={'unstyled'} layout={'fixed'}>
         <Thead>
           <Tr>
             {schema.map((item) => {
+              if (isMobile && !item.isMobile) return null
+
               return (
                 <Th
                   colSpan={item.colSpan || 1}
@@ -54,6 +66,9 @@ export function TableWithAccordion<TItem>({
                   fontWeight={500}
                   isTruncated
                   textTransform={'capitalize'}
+                  px={halfStandardPadding}
+                  _first={{ pl: standardPadding }}
+                  _last={{ pr: standardPadding }}
                 >
                   {item.header}
                 </Th>
@@ -91,8 +106,20 @@ export function TableItemWithAccordion<TItem>({
   index: number
   accordionContent?: (item: TItem) => React.ReactNode
 }) {
+  const isMobile = useMobileMode()
+
   const { isOpen, onToggle } = useDisclosure()
+
   const backgroundColor = index % 2 === 0 ? 'neutral.100' : 'neutral.0'
+  const accordionColSpan = useMemo(
+    () =>
+      schema.reduce((sum, val) => {
+        if (isMobile && !val.isMobile) return sum
+
+        return sum + (val.colSpan || 1)
+      }, 0),
+    [schema, isMobile],
+  )
 
   return (
     <>
@@ -107,6 +134,8 @@ export function TableItemWithAccordion<TItem>({
             value = item && item[row.key as keyof TItem]
           }
 
+          if (isMobile && !row.isMobile) return null
+
           return (
             <Td
               key={row.key}
@@ -116,6 +145,9 @@ export function TableItemWithAccordion<TItem>({
               paddingY="10px"
               whiteSpace="pre-wrap"
               colSpan={row.colSpan}
+              px={halfStandardPadding}
+              _first={{ pl: standardPadding }}
+              _last={{ pr: standardPadding }}
             >
               {row.key === 'action' ? (
                 <IconButton
@@ -133,20 +165,53 @@ export function TableItemWithAccordion<TItem>({
       </Tr>
       {accordionContent && (
         <Td
-          colSpan={schema.reduce((sum, val) => sum + (val.colSpan || 1), 0)}
+          colSpan={accordionColSpan}
           p={0}
           m={0}
           border="none"
+          px={standardPadding}
+          backgroundColor={backgroundColor}
         >
           <Accordion index={isOpen ? 0 : undefined}>
             <AccordionItem border="none">
               <AccordionButton display="none"></AccordionButton>
               <AccordionPanel
+                padding={0}
                 pb={4}
                 maxWidth="100%"
                 whiteSpace="normal"
-                backgroundColor={backgroundColor}
               >
+                {isMobile && (
+                  <VStack w="full" pb="20px">
+                    {schema.map((row) => {
+                      if (!isMobile || row.isMobile) {
+                        return null
+                      }
+
+                      let value: any = ''
+                      if (row.value) {
+                        value = row.value(item)
+                      } else if (row.render) {
+                        value = row.render(item)
+                      } else {
+                        value = item && item[row.key as keyof TItem]
+                      }
+
+                      return (
+                        <HStack
+                          w="full"
+                          justifyContent={'space-between'}
+                          key={row.header}
+                          spacing="5px"
+                        >
+                          <Body2>{row.header}:</Body2>
+                          <Body2>{value}</Body2>
+                        </HStack>
+                      )
+                    })}
+                  </VStack>
+                )}
+
                 {accordionContent(item)}
               </AccordionPanel>
             </AccordionItem>

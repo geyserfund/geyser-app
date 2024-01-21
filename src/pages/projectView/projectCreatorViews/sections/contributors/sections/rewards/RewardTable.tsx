@@ -1,6 +1,6 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { HStack, Stack, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Body2 } from '../../../../../../../components/typography'
@@ -13,6 +13,7 @@ import {
   nostrColorsLight,
   primaryColorsLight,
 } from '../../../../../../../styles'
+import { useCustomTheme } from '../../../../../../../utils'
 import { ShippingStatusSelect } from '../../components/ShippingStatusSelect'
 import {
   TableData,
@@ -46,33 +47,37 @@ const RewardStatusOptions: RewardStatusOption[] = [
   },
 ]
 
-const getBackgroundColors = (value: RewardStatus) => {
-  switch (value) {
-    case RewardStatus.todo:
-      return {
-        backgroundColor: neutralColorsLight[200],
-        hoverBgColor: neutralColorsLight[400],
-      }
-    case RewardStatus.shipped:
-      return {
-        backgroundColor: nostrColorsLight[100],
-        hoverBgColor: nostrColorsLight[300],
-      }
-    case RewardStatus.delivered:
-      return {
-        backgroundColor: primaryColorsLight[100],
-        hoverBgColor: primaryColorsLight[300],
-      }
-    default:
-      return {
-        backgroundColor: neutralColorsLight[200],
-        hoverBgColor: neutralColorsLight[400],
-      }
-  }
-}
-
 export const RewardTable = ({ data }: { data: Item[] }) => {
   const { t } = useTranslation()
+  const { colors } = useCustomTheme()
+
+  const getBackgroundColors = useCallback(
+    (value: RewardStatus) => {
+      switch (value) {
+        case RewardStatus.todo:
+          return {
+            backgroundColor: colors.neutral[200],
+            hoverBgColor: colors.neutral[400],
+          }
+        case RewardStatus.shipped:
+          return {
+            backgroundColor: colors.nostr[100],
+            hoverBgColor: colors.nostr[300],
+          }
+        case RewardStatus.delivered:
+          return {
+            backgroundColor: colors.brand[100],
+            hoverBgColor: colors.brand[300],
+          }
+        default:
+          return {
+            backgroundColor: colors.neutral[200],
+            hoverBgColor: colors.neutral[400],
+          }
+      }
+    },
+    [colors],
+  )
 
   const tableData: TableData<Item>[] = useMemo(
     () => [
@@ -101,6 +106,7 @@ export const RewardTable = ({ data }: { data: Item[] }) => {
             </>
           )
         },
+        isMobile: true,
         colSpan: 2,
       },
       {
@@ -127,6 +133,7 @@ export const RewardTable = ({ data }: { data: Item[] }) => {
           )
         },
         colSpan: 2,
+        isMobile: true,
       },
       {
         header: t('Email'),
@@ -140,6 +147,7 @@ export const RewardTable = ({ data }: { data: Item[] }) => {
           return DateTime.fromMillis(val.paidAt).toFormat('LLL dd, yyyy')
         },
         colSpan: 2,
+        isMobile: true,
       },
       {
         header: t('Reference codes'),
@@ -150,21 +158,27 @@ export const RewardTable = ({ data }: { data: Item[] }) => {
         header: '',
         key: 'action',
         colSpan: 1,
+        isMobile: true,
       },
     ],
-    [t],
+    [t, getBackgroundColors],
   )
 
   const accordionContent = (item: Item) => {
     return (
-      <HStack
+      <Stack
         w="full"
+        direction={{ base: 'column', lg: 'row' }}
         justifyContent="flex-end"
         alignItems="flex-start"
-        px="24px"
         spacing="20px"
       >
-        <HStack alignItems="flex-start" spacing="10px">
+        <HStack
+          w={{ base: 'full', lg: 'auto' }}
+          alignItems="flex-start"
+          justifyContent="space-between"
+          spacing="10px"
+        >
           <Body2 color="neutral.700">{t('Items')}:</Body2>
           <VStack spacing="5px">
             {item.rewards.map((reward) => {
@@ -181,7 +195,11 @@ export const RewardTable = ({ data }: { data: Item[] }) => {
             })}
           </VStack>
         </HStack>
-        <HStack spacing="10px">
+        <HStack
+          w={{ base: 'full', lg: 'auto' }}
+          justifyContent="space-between"
+          spacing="10px"
+        >
           <VStack alignItems="flex-start" spacing="5px">
             <Body2 color="neutral.700">{t('Total')}:</Body2>
             <Body2 color="neutral.700">{t('Total (Sats')}:</Body2>
@@ -199,7 +217,7 @@ export const RewardTable = ({ data }: { data: Item[] }) => {
             </Body2>
           </VStack>
         </HStack>
-      </HStack>
+      </Stack>
     )
   }
 

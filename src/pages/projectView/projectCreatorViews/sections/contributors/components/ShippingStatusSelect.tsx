@@ -30,7 +30,8 @@ export function ShippingStatusSelect<T, S extends boolean>({
       control(base, props) {
         return {
           ...base,
-          minWidth: '120px',
+          minWidth: '100px',
+          maxWidth: '120px',
           minHeight: '32px',
           height: '32px',
           boxShadow: 'none',
@@ -68,6 +69,12 @@ export function ShippingStatusSelect<T, S extends boolean>({
         margin: '0px',
         padding: '5px 0px',
       }),
+      singleValue(base, props) {
+        return {
+          ...base,
+          color: colors.neutral[900],
+        }
+      },
       menu(base, props) {
         setCurrentPlacement(props.placement)
         return {

@@ -234,12 +234,16 @@ export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
   const currentItems = rewards.filter((item) => item.status === status)
 
   return (
-    <VStack width="100%" flexGrow={1} pt={'10px'}>
+    <VStack width="100%" flexGrow={1} pt={'10px'} spacing="10px">
       <HStack w="full" px={standardPadding}>
         <H2>{t(RewardStatusLabel[status])}</H2>
       </HStack>
       <RewardTable data={currentItems} />
-      <Button variant="secondary">{t('Show more')}...</Button>
+      <HStack w="full" px={standardPadding}>
+        <Button width="100%" variant="secondary">
+          {t('Show more')}...
+        </Button>
+      </HStack>
     </VStack>
   )
 }

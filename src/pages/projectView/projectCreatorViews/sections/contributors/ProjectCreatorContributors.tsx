@@ -31,7 +31,7 @@ export const ProjectCreatorContributors = () => {
       pt={{ base: '0px', lg: '20px' }}
       backgroundColor={{ base: 'neutral.0', lg: 'inherit' }}
       pb={{ base: '80px', lg: '20px' }}
-      px={{ base: '10px', lg: '40px' }}
+      px={{ base: '0px', lg: '40px' }}
       spacing={{ base: '10px', lg: '20px' }}
       overflow="hidden"
     >
@@ -50,7 +50,7 @@ export const ProjectCreatorContributors = () => {
           w={'full'}
           flexShrink={0}
           py="10px"
-          px={{ base: 0, lg: '20px' }}
+          px={{ base: '10px', lg: '20px' }}
           alignItems="start"
           backgroundColor="neutral.0"
           zIndex={10}
