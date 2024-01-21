@@ -95,7 +95,7 @@ export const SuccessImageComponent = ({
         width={'full'}
         borderRadius="8px"
         backgroundColor={colors.primary[50]}
-        spacing={2}
+        spacing={0}
         justify={'flex-start'}
         alignItems="flex-start"
         mb={3}
@@ -115,9 +115,11 @@ export const SuccessImageComponent = ({
             textProps={{ color: 'neutral.700' }}
           />
         </HStack>
-        <Body2 color={'neutral.700'} fontStyle="italic">
-          {comment}
-        </Body2>
+        {comment && (
+          <Body2 color={'neutral.700'} fontStyle="italic" mt={2}>
+            {comment}
+          </Body2>
+        )}
       </VStack>
     </VStack>
   )

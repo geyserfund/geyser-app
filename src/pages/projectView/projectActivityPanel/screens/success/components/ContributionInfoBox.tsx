@@ -155,7 +155,7 @@ export const ContributionInfoBox = ({
               fontWeight={'medium'}
               textColor={'neutral.900'}
             >
-              {t('Email')}
+              {t('Email')}:
             </Text>
             <Text fontSize={'16px'} fontWeight={'medium'} color="neutral.700">
               {funderEmail}
@@ -169,7 +169,7 @@ export const ContributionInfoBox = ({
               fontWeight={'medium'}
               textColor={'neutral.900'}
             >
-              {t('Funding as')}
+              {t('Funding as')}:
             </Text>
             {isFunderAnonymous ? (
               <HStack>

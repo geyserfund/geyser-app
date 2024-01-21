@@ -58,7 +58,7 @@ export const FundingFormScreen = ({
         status: 'error',
       })
       return false
-    } else if(!validateEmail(formState.email)) {
+    } else if(hasSelectedRewards && !validateEmail(formState.email)) {
       toast({
         title: 'A valid email is required.',
         description: 'Please enter a valid email.',

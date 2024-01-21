@@ -48,7 +48,7 @@ export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(
             fontWeight={'medium'}
             width={'full'}
             alignItems="flex-start"
-            spacing={2}
+            spacing={0}
           >
             {formState.donationAmount && formState.donationAmount > 0 && (
               <HStack>
@@ -68,22 +68,24 @@ export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(
                 </Text>
               </HStack>
             )}
-            <HStack>
-              <Text
-                fontSize="16px"
-                textColor={'neutral.700'}
-                fontWeight={'normal'}
-              >
-                {`${t('Items Selected')}: `}
-              </Text>
-              <Text
-                fontSize="18px"
-                textColor={'neutral.700'}
-                fontWeight={'bold'}
+            {numberOfRewardsSelected > 0 && (
+              <HStack>
+                <Text
+                  fontSize="16px"
+                  textColor={'neutral.700'}
+                  fontWeight={'normal'}
                 >
-                {`${numberOfRewardsSelected.toString()}`}
-              </Text>
-            </HStack>
+                  {`${t('Items Selected')}: `}
+                </Text>
+                <Text
+                  fontSize="18px"
+                  textColor={'neutral.700'}
+                  fontWeight={'bold'}
+                  >
+                  {`${numberOfRewardsSelected.toString()}`}
+                </Text>
+              </HStack>
+            )}
 
             <HStack>
               <Text
