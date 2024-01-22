@@ -1,7 +1,8 @@
-import { HStack, Stack, VStack } from '@chakra-ui/react'
+import { Button, HStack, Stack, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useCallback, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
+import { PiWarningCircleFill } from 'react-icons/pi'
 
 import { Body2 } from '../../../../../../../components/typography'
 import {
@@ -14,7 +15,7 @@ import {
   TableData,
   TableWithAccordion,
 } from '../../components/TableWithAccordion'
-import { Item } from './RewardByStatus'
+import { Item } from './PaymentsAndAccoutningList'
 
 export enum RewardStatus {
   todo = 'todo',
@@ -42,68 +43,12 @@ const RewardStatusOptions: RewardStatusOption[] = [
   },
 ]
 
-export const RewardTable = ({ data }: { data: Item[] }) => {
+export const PaymentsAndAccountingTable = ({ data }: { data: Item[] }) => {
   const { t } = useTranslation()
   const { colors } = useCustomTheme()
 
-  const getBackgroundColors = useCallback(
-    (value: RewardStatus) => {
-      switch (value) {
-        case RewardStatus.todo:
-          return {
-            backgroundColor: colors.neutral[200],
-            hoverBgColor: colors.neutral[400],
-          }
-        case RewardStatus.shipped:
-          return {
-            backgroundColor: colors.nostr[100],
-            hoverBgColor: colors.nostr[300],
-          }
-        case RewardStatus.delivered:
-          return {
-            backgroundColor: colors.brand[100],
-            hoverBgColor: colors.brand[300],
-          }
-        default:
-          return {
-            backgroundColor: colors.neutral[200],
-            hoverBgColor: colors.neutral[400],
-          }
-      }
-    },
-    [colors],
-  )
-
   const tableData: TableData<Item>[] = useMemo(
     () => [
-      {
-        header: t('Status'),
-        key: 'status',
-        render(item: Item) {
-          const { backgroundColor, hoverBgColor } = getBackgroundColors(
-            item.status,
-          )
-          return (
-            <>
-              <ShippingStatusSelect
-                isSearchable={false}
-                backgroundColor={backgroundColor}
-                hoverBgColor={hoverBgColor}
-                options={RewardStatusOptions}
-                value={RewardStatusOptions.find(
-                  (val) => val.value === item.status,
-                )}
-                defaultValue={RewardStatusOptions.find(
-                  (val) => val.value === item.status,
-                )}
-                menuPortalTarget={document.body}
-              />
-            </>
-          )
-        },
-        isMobile: true,
-        colSpan: 2,
-      },
       {
         header: t('Contributor'),
         key: 'name',
@@ -150,13 +95,18 @@ export const RewardTable = ({ data }: { data: Item[] }) => {
         colSpan: 2,
       },
       {
+        header: t('Amount'),
+        key: 'amount',
+        colSpan: 1,
+      },
+      {
         header: '',
         key: 'dropdown',
         colSpan: 1,
         isMobile: true,
       },
     ],
-    [t, getBackgroundColors],
+    [t],
   )
 
   const accordionContent = (item: Item) => {
@@ -196,8 +146,44 @@ export const RewardTable = ({ data }: { data: Item[] }) => {
           spacing="10px"
         >
           <VStack alignItems="flex-start" spacing="5px">
+            <Body2 color="neutral.700">{t('Rewards')}:</Body2>
+            <Body2 color="neutral.700">{t('Rewards (Sats)')}:</Body2>
+          </VStack>
+          <VStack spacing="5px">
+            <Body2 semiBold color="neutral.900">
+              {item.rewards.reduce((acc, reward) => acc + reward.price, 0)}
+            </Body2>
+            <Body2 semiBold color="neutral.900">
+              {item.rewards.reduce((acc, reward) => acc + reward.price, 0)}
+            </Body2>
+          </VStack>
+        </HStack>
+        <HStack
+          w={{ base: 'full', lg: 'auto' }}
+          justifyContent="space-between"
+          spacing="10px"
+        >
+          <VStack alignItems="flex-start" spacing="5px">
+            <Body2 color="neutral.700">{t('Donation')}:</Body2>
+            <Body2 color="neutral.700">{t('Donation (Sats)')}:</Body2>
+          </VStack>
+          <VStack spacing="5px">
+            <Body2 semiBold color="neutral.900">
+              {item.amount}
+            </Body2>
+            <Body2 semiBold color="neutral.900">
+              {item.amount}
+            </Body2>
+          </VStack>
+        </HStack>
+        <HStack
+          w={{ base: 'full', lg: 'auto' }}
+          justifyContent="space-between"
+          spacing="10px"
+        >
+          <VStack alignItems="flex-start" spacing="5px">
             <Body2 color="neutral.700">{t('Total')}:</Body2>
-            <Body2 color="neutral.700">{t('Total (Sats')}:</Body2>
+            <Body2 color="neutral.700">{t('Total (Sats)')}:</Body2>
             <Body2 color="neutral.700">{t('Bitcoin Price')}:</Body2>
           </VStack>
           <VStack spacing="5px">

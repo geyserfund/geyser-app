@@ -149,7 +149,7 @@ export function TableItemWithAccordion<TItem>({
               _first={{ pl: standardPadding }}
               _last={{ pr: standardPadding }}
             >
-              {row.key === 'action' ? (
+              {row.key === 'dropdown' ? (
                 <IconButton
                   aria-label="dropdown"
                   variant="ghost"

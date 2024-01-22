@@ -1,5 +1,11 @@
-import React from 'react'
+import { VStack } from '@chakra-ui/react'
 
-export default function PaymentsAndAccounting() {
-  return <div>PaymentsAndAccounting</div>
+import { PaymentsAndAccoutningList } from './PaymentsAndAccoutningList'
+
+export const PaymentsAndAccounting = () => {
+  return (
+    <VStack alignItems="flex-start">
+      <PaymentsAndAccoutningList />
+    </VStack>
+  )
 }

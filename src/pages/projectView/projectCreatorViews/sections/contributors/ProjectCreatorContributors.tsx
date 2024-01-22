@@ -1,5 +1,6 @@
 import { Box, Button, HStack, VStack } from '@chakra-ui/react'
 import { useAtom } from 'jotai'
+import { useMemo } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { PiWarningCircleFill } from 'react-icons/pi'
 
@@ -7,18 +8,34 @@ import { CardLayout } from '../../../../../components/layouts'
 import { Body1, H2 } from '../../../../../components/typography'
 import { dimensions } from '../../../../../constants'
 import { lightModeColors } from '../../../../../styles'
-import { useCustomTheme } from '../../../../../utils'
+import { useCustomTheme, useMobileMode } from '../../../../../utils'
 import { ContributionView, contributionViewAtom } from './atoms'
-import Rewards from './sections/rewards/Rewards'
+import { PaymentsAndAccounting } from './sections/paymentsAndAccounting'
+import { PendingPayments } from './sections/pendingPayments'
+import { Rewards } from './sections/rewards'
 
 export const ProjectCreatorContributors = () => {
   const { t } = useTranslation()
   const { colors } = useCustomTheme()
+  const isMobile = useMobileMode()
 
   const [contributionView, setContributionView] = useAtom(contributionViewAtom)
 
   const isActiveVariant = (view: ContributionView) =>
     contributionView === view ? 'primary' : 'secondary'
+
+  const renderView = useMemo(() => {
+    switch (contributionView) {
+      case ContributionView.rewards:
+        return <Rewards />
+      case ContributionView.pending:
+        return <PendingPayments />
+      case ContributionView.accounts:
+        return <PaymentsAndAccounting />
+      default:
+        return <Rewards />
+    }
+  }, [contributionView])
 
   return (
     <VStack
@@ -81,29 +98,18 @@ export const ProjectCreatorContributors = () => {
                 </Box>
               }
             >
-              {t('Pending Payments')}
+              {isMobile ? t('Partial') : t('Partial Payments')}
             </Button>
             <Button
               size="sm"
               variant={isActiveVariant(ContributionView.accounts)}
               onClick={() => setContributionView(ContributionView.accounts)}
             >
-              {t('Payments and Accounting')}
+              {isMobile ? t('Payments') : t('Payments and Accounting')}
             </Button>
           </HStack>
-
-          <Body1>
-            <Trans i18nKey="This page is for managing your reward sales. Mark your rewards as <0>Shipped</0> or <1>Delivered.</1>">
-              {
-                'This page is for managing your reward sales. Mark your rewards as '
-              }
-              <strong>Shipped</strong>
-              {' or '}
-              <strong>Delivered.</strong>
-            </Trans>
-          </Body1>
         </VStack>
-        <Rewards />
+        {renderView}
       </CardLayout>
     </VStack>
   )
