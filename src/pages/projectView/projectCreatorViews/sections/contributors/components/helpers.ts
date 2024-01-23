@@ -1,3 +1,5 @@
+import { getAppEndPoint } from '../../../../../../config/domain'
+
 export const getUSD = (sats: number, bitcoinQuote?: number) => {
   if (!bitcoinQuote) return 'NAN'
   if (!sats) return '0'
@@ -7,4 +9,26 @@ export const getUSD = (sats: number, bitcoinQuote?: number) => {
   }
 
   return '< $1'
+}
+
+export type GetDownloadUrlProps = {
+  projectId: number
+  from?: number
+  to?: number
+}
+
+export const getDownloadUrl = ({
+  projectId,
+  from,
+  to,
+}: GetDownloadUrlProps) => {
+  const appEndpoint = getAppEndPoint()
+
+  let url = `${appEndpoint}/export/payments/${projectId}`
+
+  if (from && to) {
+    url += `?from=${from}&to=${to}`
+  }
+
+  return url
 }

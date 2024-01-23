@@ -1,3 +1,4 @@
+export * from './ExportComponent'
 export * from './helpers'
 export * from './OrderAmounts'
 export * from './OrderItems'
