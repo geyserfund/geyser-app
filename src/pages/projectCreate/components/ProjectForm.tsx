@@ -142,16 +142,24 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           name="title"
           onChange={handleChange}
           value={watch('title')}
-          placeholder={'your project name'}
+          placeholder={'Run With Bitcoin'}
           error={formState.errors.title?.message}
         />
       </FieldContainer>
 
       <FieldContainer
         title={t('Project Identifier')}
-        subtitle={t(
-          'Set your unique project identifier to create your personalized URL and get a corresponding Lightning address.',
-        )}
+        subtitle={
+          <>
+            {t(
+              'Set your unique project identifier to create your personalized URL and get a corresponding Lightning address.',
+            )}{' '}
+            {isEdit &&
+              t(
+                'Warning! By changing this identifier your old project links will not send you to your project',
+              )}
+          </>
+        }
         error={FormErrorIcon.name}
       >
         <VStack p="0px" w="full" alignItems="start" spacing="0">
@@ -160,6 +168,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
             onChange={handleChange}
             value={watch('name')}
             focusBorderColor={'primary.400'}
+            placeholder="runwithbitcoin"
             error={formState.errors.name?.message}
             borderBottomRightRadius={0}
             borderBottomLeftRadius={0}
@@ -218,7 +227,9 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           name="shortDescription"
           height="fit-content"
           overflowY="auto"
-          placeholder={t('Let the sats flow')}
+          placeholder={t(
+            'Bitcoin Meetups and Travel Vlogs of Bitcoin Adoption in the Global South!',
+          )}
           value={watch('shortDescription')}
           onChange={({ target, ...event }) => {
             handleChange({
@@ -236,7 +247,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           <HStack width="100%" justifyContent="space-between">
             <Text fontSize="12px" color="neutral.700" />
             <Text fontSize="12px" color="neutral.700">{`${
-              watch('shortDescription').length
+              watch('shortDescription') ? watch('shortDescription').length : 0
             }/${ProjectValidations.shortDescription.maxLength}`}</Text>
           </HStack>
         )}

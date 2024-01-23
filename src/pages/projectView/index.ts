@@ -2,6 +2,9 @@ import {
   ProjectCreatorContributors,
   ProjectCreatorOverview,
   ProjectCreatorViews,
+  ProjectManageRewards,
+  ProjectCreateReward,
+  ProjectEditReward
 } from './projectCreatorViews'
 import { ProjectCreatorInsights } from './projectCreatorViews/sections/insights'
 import {
@@ -22,6 +25,9 @@ export {
   ProjectCreatorInsights,
   ProjectCreatorOverview,
   ProjectCreatorViews,
+  ProjectManageRewards,
+  ProjectCreateReward,
+  ProjectEditReward,
   ProjectMainBody,
   ProjectView,
 }

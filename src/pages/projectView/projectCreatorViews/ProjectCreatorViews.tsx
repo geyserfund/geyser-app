@@ -15,6 +15,9 @@ export const ProjectCreatorViews = () => {
     MobileViews.overview,
     MobileViews.insights,
     MobileViews.contributors,
+    MobileViews.manageRewards,
+    MobileViews.createReward,
+    MobileViews.editReward
   ].includes(mobileView)
 
   const classes = useProjectLayoutStyles({ isMobile, inView })

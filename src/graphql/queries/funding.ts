@@ -72,7 +72,9 @@ export const QUERY_GET_FUNDING_TXS_LANDING = gql`
   ${FRAGMENT_FUNDING_TX_FOR_LANDING_PAGE}
   query FundingTxsForLandingPage($input: GetFundingTxsInput) {
     fundingTxsGet(input: $input) {
-      ...FundingTxForLandingPage
+      fundingTxs {
+        ...FundingTxForLandingPage
+      }
     }
   }
 `
@@ -90,7 +92,9 @@ export const QUERYY_FUNDING_TX_FOR_OVERVIEW_PAGE = gql`
   ${FRAGMENT_FUNDING_TX_OVERVIEW_PAGE}
   query FundingTxForOverviewPage($input: GetFundingTxsInput) {
     fundingTxsGet(input: $input) {
-      ...FundingTxForOverviewPage
+      fundingTxs {
+        ...FundingTxForOverviewPage
+      }
     }
   }
 `

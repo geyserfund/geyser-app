@@ -79,7 +79,27 @@ export const ExternalAccountDisplay = ({
         }
         break
       case ExternalAccountType.google:
-        return null
+        props = {
+          ...props,
+          isExternal: true,
+          username: ''
+        }
+        break
+      case ExternalAccountType.lightning:
+        props = {
+          ...props,
+          isExternal: true,
+          username: isEdit ? account.externalId : ''
+        }
+        break
+      case ExternalAccountType.facebook:
+        props = {
+          ...props,
+          as: Link,
+          href: `https://facebook.com/${account.externalUsername}`,
+          isExternal: true,
+        }
+        break
       default:
         break
     }

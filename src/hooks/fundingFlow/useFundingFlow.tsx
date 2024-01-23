@@ -18,7 +18,6 @@ import {
 import { AuthContext } from '../../context'
 import {
   FundingInput,
-  FundingMutationResponse,
   FundingStatus,
   FundingTxFragment,
   FundingTxWithInvoiceStatusFragment,
@@ -36,13 +35,6 @@ export enum ConfirmationMethod {
 }
 
 export type UseFundingFlowReturn = ReturnType<typeof useFundingFlow>
-
-const initialAmounts = {
-  total: 0,
-  donationAmount: 0,
-  shippingCost: 0,
-  rewardsCost: 0,
-}
 
 const initialFunding: FundingTxFragment = {
   id: 0,
@@ -139,8 +131,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       getFundingStatus()
     },
   })
-  const [amounts, setAmounts] =
-    useState<FundingMutationResponse['amountSummary']>(initialAmounts)
   const fundIntervalRef = useRef<number>(0)
   useEffect(() => {
     const interval = fundIntervalRef.current
@@ -295,7 +285,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         }
 
         setFundingTx(data.fund.fundingTx)
-        setAmounts(data.fund.amountSummary)
 
         if (hasBolt11 && hasWebLN && webln) {
           startWebLNFlow(data.fund.fundingTx)
@@ -424,7 +413,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       ...initialFunding,
       funder: { ...initialFunding.funder, user },
     })
-    setAmounts(initialAmounts)
   }, [user])
 
   const retryFundingFlow = useCallback(() => {
@@ -444,7 +432,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     invoiceRefreshLoading,
     weblnErrored,
     fundState,
-    amounts,
     fundingTx,
     retryFundingFlow,
     gotoNextStage,
@@ -458,16 +445,17 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 }
 
 export const validateFundingInput = (input: FundingInput) => {
-  let isValid = false
-  let error = 'cannot initiate funding without amount'
+  const isValid = false
+  const error = 'cannot initiate funding without amount'
 
-  if (
-    (input.donationInput && toInt(input.donationInput.donationAmount) > 0) ||
-    (input.rewardInput && toInt(input.rewardInput.rewardsCost) > 0)
-  ) {
-    isValid = true
-    error = ''
-  }
+  // TODO
+  // if (
+  //   (input.donationInput && toInt(input.donationInput.donationAmount) > 0) ||
+  //   (input.rewardInput && toInt(input.rewardInput.rewardsCost) > 0)
+  // ) {
+  //   isValid = true
+  //   error = ''
+  // }
 
   return { isValid, error }
 }

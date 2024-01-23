@@ -20,6 +20,7 @@ import {
   ProjectLaunchedImageUrl,
 } from '../../../constants'
 import { useAuthContext, useProjectContext } from '../../../context'
+import { lightModeColors, socialColors } from '../../../styles'
 import {
   hasNostrAccount,
   hasTwitterAccount,
@@ -89,8 +90,8 @@ export const ProjectCreateLaunchedModal = (
               onClick={props.onClose}
               leftIcon={<NostrSvgIcon boxSize={'20px'} />}
               textDecoration={'none'}
-              color="neutral.1000"
-              bgColor="social.nostr"
+              color={lightModeColors.neutral[0]}
+              bgColor={socialColors.nostr}
             >
               bitcoinrocket@geyserfund.fund
             </Button>

@@ -84,7 +84,7 @@ export const ContributorsComponent = () => {
         })
       },
       onCompleted(data) {
-        handleDataUpdate(data.fundingTxsGet)
+        handleDataUpdate(data.fundingTxsGet?.fundingTxs || [])
       },
     })
 

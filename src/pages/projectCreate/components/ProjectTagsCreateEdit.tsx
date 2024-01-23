@@ -10,7 +10,7 @@ import {
   WrapItem,
 } from '@chakra-ui/react'
 import { Dispatch, SetStateAction, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 import { components, MenuProps, MultiValue } from 'react-select'
 
@@ -188,14 +188,19 @@ export const ProjectTagsCreateEdit = ({
 
   const SubTitle = (
     <span>
-      {t(
-        'Get discovered more easily by users through Tags. You can select up to 3 project tags.',
-      )}{' '}
-      {
-        <Button variant="ghost" size="sm" onClick={infoOnOpen}>
-          {t('See trending tags')}
-        </Button>
-      }
+      <Trans
+        i18nKey={
+          'Get discovered more easily by selecting up to {{MAX_TAGS_ALLOWED}} project tags. Make sure to select some of the tags that appear in the trending view.'
+        }
+        values={{ MAX_TAGS_ALLOWED }}
+      >
+        {
+          'Get discovered more easily by selecting up to {{MAX_TAGS_ALLOWED}} project tags. Make sure to select some of the tags that appear in the trending view.'
+        }
+      </Trans>{' '}
+      <Button variant="ghost" size="sm" onClick={infoOnOpen}>
+        {t('See trending tags')}
+      </Button>
     </span>
   )
 

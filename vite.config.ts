@@ -7,7 +7,7 @@ import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
 
 const pwaOptions: Partial<VitePWAOptions> = {
   base: '/',
-  includeAssets: ['logo-brand.svg'],
+  includeAssets: ['logo-brand.svg', 'sitemap.xml'],
   manifest: {
     start_url: '.',
     display: 'standalone',
