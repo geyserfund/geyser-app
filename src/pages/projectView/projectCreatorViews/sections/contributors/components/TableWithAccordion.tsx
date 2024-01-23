@@ -144,6 +144,7 @@ export function TableItemWithAccordion<TItem>({
               height="38px"
               paddingY="10px"
               whiteSpace="pre-wrap"
+              border="none"
               colSpan={row.colSpan}
               px={halfStandardPadding}
               _first={{ pl: standardPadding }}

@@ -139,8 +139,9 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       getFundingStatus()
     },
   })
-  const [amounts, setAmounts] =
-    useState<FundingMutationResponse['amountSummary']>(initialAmounts)
+  // TODO: will have to remove this
+  const [amounts, setAmounts] = useState<any>(initialAmounts)
+
   const fundIntervalRef = useRef<number>(0)
   useEffect(() => {
     const interval = fundIntervalRef.current
@@ -295,7 +296,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         }
 
         setFundingTx(data.fund.fundingTx)
-        setAmounts(data.fund.amountSummary)
+        // setAmounts(data.fund.amountSummary)
 
         if (hasBolt11 && hasWebLN && webln) {
           startWebLNFlow(data.fund.fundingTx)
@@ -458,16 +459,17 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 }
 
 export const validateFundingInput = (input: FundingInput) => {
-  let isValid = false
-  let error = 'cannot initiate funding without amount'
+  const isValid = false
+  const error = 'cannot initiate funding without amount'
 
-  if (
-    (input.donationInput && toInt(input.donationInput.donationAmount) > 0) ||
-    (input.rewardInput && toInt(input.rewardInput.rewardsCost) > 0)
-  ) {
-    isValid = true
-    error = ''
-  }
+  // TODO
+  // if (
+  //   (input.donationInput && toInt(input.donationInput.donationAmount) > 0) ||
+  //   (input.rewardInput && toInt(input.rewardInput.rewardsCost) > 0)
+  // ) {
+  //   isValid = true
+  //   error = ''
+  // }
 
   return { isValid, error }
 }

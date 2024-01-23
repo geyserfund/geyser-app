@@ -1,80 +1,44 @@
 import { Button, HStack, Stack, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { DateTime } from 'luxon'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { PiWarningCircleFill } from 'react-icons/pi'
 
-import { Body2 } from '../../../../../../../components/typography'
+import { Modal } from '../../../../../../../components/layouts'
+import { Body1, Body2 } from '../../../../../../../components/typography'
 import {
   AnonymousAvatar,
   LinkableAvatar,
 } from '../../../../../../../components/ui'
+import { useModal } from '../../../../../../../hooks'
+import {
+  BitcoinQuote,
+  FundingConfirmInput,
+  FundingTxOrderFragment,
+} from '../../../../../../../types'
 import { useCustomTheme } from '../../../../../../../utils'
-import { ShippingStatusSelect } from '../../components/ShippingStatusSelect'
 import {
   TableData,
   TableWithAccordion,
 } from '../../components/TableWithAccordion'
-import { Item } from './PendingPaymentsList'
 
-export enum RewardStatus {
-  todo = 'todo',
-  shipped = 'shipped',
-  delivered = 'delivered',
-}
-
-type RewardStatusOption = {
-  label: string
-  value: RewardStatus
-}
-
-const RewardStatusOptions: RewardStatusOption[] = [
-  {
-    label: 'Todo',
-    value: RewardStatus.todo,
-  },
-  {
-    label: 'Shipped',
-    value: RewardStatus.shipped,
-  },
-  {
-    label: 'Delivered',
-    value: RewardStatus.delivered,
-  },
-]
-
-export const PendingPaymentsTable = ({ data }: { data: Item[] }) => {
+export const PendingPaymentsTable = ({
+  data,
+  handleUpdate,
+}: {
+  data: FundingTxOrderFragment[]
+  handleUpdate: (input: FundingConfirmInput) => Promise<void>
+}) => {
   const { t } = useTranslation()
-  const { colors } = useCustomTheme()
 
-  const tableData: TableData<Item>[] = useMemo(
+  const tableData: TableData<FundingTxOrderFragment>[] = useMemo(
     () => [
       {
         header: t('Action'),
         key: 'action',
-        render(item: Item) {
-          return (
-            <>
-              <Button
-                size="sm"
-                variant="ghost"
-                backgroundColor="secondary.yellow"
-                border="1px solid"
-                borderColor="neutral.1000"
-                color="black"
-                rightIcon={
-                  <PiWarningCircleFill fill={'black'} fontSize={'20px'} />
-                }
-                _hover={{
-                  color: 'white',
-                  backgroundColor: 'neutral.200',
-                  ' & svg': { fill: 'white' },
-                }}
-              >
-                {t('Accept')}
-              </Button>
-            </>
-          )
+        render(item: FundingTxOrderFragment) {
+          return <FundingAmount fundingTx={item} handleUpdate={handleUpdate} />
         },
         isMobile: true,
         colSpan: 2,
@@ -82,8 +46,8 @@ export const PendingPaymentsTable = ({ data }: { data: Item[] }) => {
       {
         header: t('Contributor'),
         key: 'name',
-        render(val: Item) {
-          const isFunderAnonymous = !val.funder
+        render(val: FundingTxOrderFragment) {
+          const isFunderAnonymous = !val.funder.user?.id
           if (isFunderAnonymous) {
             return (
               <AnonymousAvatar
@@ -96,9 +60,9 @@ export const PendingPaymentsTable = ({ data }: { data: Item[] }) => {
 
           return (
             <LinkableAvatar
-              avatarUsername={val.funder.name || ''}
-              userProfileID={val.funder.name}
-              imageSrc={val.funder.imageUrl || ''}
+              avatarUsername={val.funder.user?.username || ''}
+              userProfileID={val.funder.user?.id}
+              imageSrc={val.funder.user?.imageUrl || ''}
             />
           )
         },
@@ -113,15 +77,24 @@ export const PendingPaymentsTable = ({ data }: { data: Item[] }) => {
       {
         header: t('Date'),
         key: 'paidAt',
-        value(val: Item) {
+        value(val: FundingTxOrderFragment) {
+          if (!val.paidAt) return 'NAN'
           return DateTime.fromMillis(val.paidAt).toFormat('LLL dd, yyyy')
         },
         colSpan: 2,
         isMobile: true,
       },
       {
-        header: t('Reference codes'),
-        key: 'reference',
+        header: t('Reference'),
+        key: 'uuid',
+        colSpan: 2,
+      },
+      {
+        header: t('Missing'),
+        key: 'missing',
+        value(val: FundingTxOrderFragment) {
+          return `${val.amount - val.amountPaid} Sats`
+        },
         colSpan: 2,
       },
       {
@@ -134,7 +107,7 @@ export const PendingPaymentsTable = ({ data }: { data: Item[] }) => {
     [t],
   )
 
-  const accordionContent = (item: Item) => {
+  const accordionContent = (item: FundingTxOrderFragment) => {
     return (
       <Stack
         w="full"
@@ -143,7 +116,7 @@ export const PendingPaymentsTable = ({ data }: { data: Item[] }) => {
         alignItems="flex-start"
         spacing="20px"
       >
-        <HStack w="full">
+        <HStack w="full" flex={1}>
           <VStack alignItems="flex-start">
             <Body2>
               <Trans
@@ -166,14 +139,14 @@ export const PendingPaymentsTable = ({ data }: { data: Item[] }) => {
         >
           <Body2 color="neutral.700">{t('Items')}:</Body2>
           <VStack spacing="5px">
-            {item.rewards.map((reward) => {
+            {item.order?.items.map((orderItem) => {
               return (
-                <HStack key={reward.id}>
+                <HStack key={orderItem.item.id}>
                   <Body2 semiBold color="neutral.900">
-                    {reward.quantity}x
+                    {orderItem.quantity}x
                   </Body2>
                   <Body2 semiBold color="neutral.900">
-                    {reward.name}
+                    {orderItem.item.name}
                   </Body2>
                 </HStack>
               )
@@ -191,10 +164,10 @@ export const PendingPaymentsTable = ({ data }: { data: Item[] }) => {
           </VStack>
           <VStack spacing="5px">
             <Body2 semiBold color="neutral.900">
-              {item.rewards.reduce((acc, reward) => acc + reward.price, 0)}
+              {getUSD(item.amount - item.donationAmount, item.bitcoinQuote)}
             </Body2>
             <Body2 semiBold color="neutral.900">
-              {item.rewards.reduce((acc, reward) => acc + reward.price, 0)}
+              {item.amount - item.donationAmount}
             </Body2>
           </VStack>
         </HStack>
@@ -209,10 +182,10 @@ export const PendingPaymentsTable = ({ data }: { data: Item[] }) => {
           </VStack>
           <VStack spacing="5px">
             <Body2 semiBold color="neutral.900">
-              {item.amount}
+              {getUSD(item.donationAmount, item.bitcoinQuote)}
             </Body2>
             <Body2 semiBold color="neutral.900">
-              {item.amount}
+              {item.donationAmount}
             </Body2>
           </VStack>
         </HStack>
@@ -226,15 +199,15 @@ export const PendingPaymentsTable = ({ data }: { data: Item[] }) => {
             <Body2 color="neutral.700">{t('Total (Sats)')}:</Body2>
             <Body2 color="neutral.700">{t('Bitcoin Price')}:</Body2>
           </VStack>
-          <VStack spacing="5px">
+          <VStack alignItems="flex-start" spacing="5px">
             <Body2 semiBold color="neutral.900">
-              {item.amount}
+              {getUSD(item.amount, item.bitcoinQuote)}
             </Body2>
             <Body2 semiBold color="neutral.900">
               {item.amount}
             </Body2>
             <Body2 semiBold color="neutral.900">
-              {item.amount}
+              ${item.bitcoinQuote?.quote}
             </Body2>
           </VStack>
         </HStack>
@@ -243,10 +216,103 @@ export const PendingPaymentsTable = ({ data }: { data: Item[] }) => {
   }
 
   return (
-    <TableWithAccordion<Item>
+    <TableWithAccordion<FundingTxOrderFragment>
       items={data}
       schema={tableData}
       accordionContent={accordionContent}
     />
   )
+}
+
+export const FundingAmount = ({
+  fundingTx,
+  handleUpdate,
+}: {
+  fundingTx: FundingTxOrderFragment
+  handleUpdate: (input: FundingConfirmInput) => Promise<void>
+}) => {
+  const confirmModal = useModal()
+  const { colors } = useCustomTheme()
+
+  const differenceAmount = fundingTx.amount - fundingTx.amountPaid
+
+  const handleAccept = async () => {
+    await handleUpdate({
+      amount: fundingTx.amountPaid,
+      paidAt: DateTime.now().toMillis(),
+      offChain: {
+        bolt11: {
+          invoiceId: fundingTx.invoiceId || '',
+        },
+      },
+    })
+    confirmModal.onClose()
+  }
+
+  return (
+    <>
+      <Button
+        size="sm"
+        variant="ghost"
+        backgroundColor="secondary.yellow"
+        border="1px solid"
+        borderColor="neutral.1000"
+        color="black"
+        rightIcon={<PiWarningCircleFill fill={'black'} fontSize={'20px'} />}
+        _hover={{
+          color: 'white',
+          backgroundColor: 'neutral.200',
+          ' & svg': { fill: 'white' },
+        }}
+        onClick={confirmModal.onOpen}
+      >
+        {t('Accept')}
+      </Button>
+      <Modal {...confirmModal} title={t('Accept Purchase')}>
+        <VStack>
+          <VStack w="full">
+            <Body1>{`Reward purchase is missing $${getUSD(
+              differenceAmount,
+              fundingTx.bitcoinQuote,
+            )} (${differenceAmount} Sats)`}</Body1>
+            <Body1>
+              Once you accept this payment, the purchase of this reward will
+              show in the Rewards section. Are you sure you want to accept it?
+            </Body1>
+          </VStack>
+          <VStack w="full">
+            <Button variant="primaryNeutral" w="full">
+              {t('Cancel')}
+            </Button>
+            <Button
+              variant="primary"
+              w="full"
+              rightIcon={
+                <PiWarningCircleFill
+                  fontSize={'20px'}
+                  fill={colors.neutral[1000]}
+                />
+              }
+              onClick={handleAccept}
+            >
+              {t('Accept')}
+            </Button>
+          </VStack>
+        </VStack>
+      </Modal>
+    </>
+  )
+}
+
+const getUSD = (
+  sats: number,
+  bitcoinQuote: FundingTxOrderFragment['bitcoinQuote'],
+) => {
+  if (!bitcoinQuote) return 'NAN'
+  const total = sats / bitcoinQuote.quote
+  if (total > 1) {
+    return `$${total.toFixed(2)}`
+  }
+
+  return '< $1'
 }

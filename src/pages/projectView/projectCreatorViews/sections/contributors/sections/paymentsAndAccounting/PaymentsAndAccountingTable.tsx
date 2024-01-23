@@ -1,59 +1,34 @@
-import { Button, HStack, Stack, VStack } from '@chakra-ui/react'
+/* eslint-disable no-unsafe-optional-chaining */
+import { HStack, Stack, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
-import { useCallback, useMemo } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
-import { PiWarningCircleFill } from 'react-icons/pi'
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Body2 } from '../../../../../../../components/typography'
 import {
   AnonymousAvatar,
   LinkableAvatar,
 } from '../../../../../../../components/ui'
-import { useCustomTheme } from '../../../../../../../utils'
-import { ShippingStatusSelect } from '../../components/ShippingStatusSelect'
+import { FundingTxOrderFragment } from '../../../../../../../types'
 import {
   TableData,
   TableWithAccordion,
 } from '../../components/TableWithAccordion'
-import { Item } from './PaymentsAndAccoutningList'
 
-export enum RewardStatus {
-  todo = 'todo',
-  shipped = 'shipped',
-  delivered = 'delivered',
-}
-
-type RewardStatusOption = {
-  label: string
-  value: RewardStatus
-}
-
-const RewardStatusOptions: RewardStatusOption[] = [
-  {
-    label: 'Todo',
-    value: RewardStatus.todo,
-  },
-  {
-    label: 'Shipped',
-    value: RewardStatus.shipped,
-  },
-  {
-    label: 'Delivered',
-    value: RewardStatus.delivered,
-  },
-]
-
-export const PaymentsAndAccountingTable = ({ data }: { data: Item[] }) => {
+export const PaymentsAndAccountingTable = ({
+  data,
+}: {
+  data: FundingTxOrderFragment[]
+}) => {
   const { t } = useTranslation()
-  const { colors } = useCustomTheme()
 
-  const tableData: TableData<Item>[] = useMemo(
+  const tableData: TableData<FundingTxOrderFragment>[] = useMemo(
     () => [
       {
         header: t('Contributor'),
         key: 'name',
-        render(val: Item) {
-          const isFunderAnonymous = !val.funder
+        render(val: FundingTxOrderFragment) {
+          const isFunderAnonymous = !val.funder.user?.id
           if (isFunderAnonymous) {
             return (
               <AnonymousAvatar
@@ -66,9 +41,9 @@ export const PaymentsAndAccountingTable = ({ data }: { data: Item[] }) => {
 
           return (
             <LinkableAvatar
-              avatarUsername={val.funder.name || ''}
-              userProfileID={val.funder.name}
-              imageSrc={val.funder.imageUrl || ''}
+              avatarUsername={val.funder.user?.username || ''}
+              userProfileID={val.funder.user?.id}
+              imageSrc={val.funder.user?.imageUrl || ''}
             />
           )
         },
@@ -83,21 +58,24 @@ export const PaymentsAndAccountingTable = ({ data }: { data: Item[] }) => {
       {
         header: t('Date'),
         key: 'paidAt',
-        value(val: Item) {
+        value(val: FundingTxOrderFragment) {
           return DateTime.fromMillis(val.paidAt).toFormat('LLL dd, yyyy')
         },
         colSpan: 2,
         isMobile: true,
       },
       {
-        header: t('Reference codes'),
-        key: 'reference',
+        header: t('Reference'),
+        key: 'uuid',
         colSpan: 2,
       },
       {
         header: t('Amount'),
         key: 'amount',
-        colSpan: 1,
+        value(val: FundingTxOrderFragment) {
+          return `${val.amount} Sats`
+        },
+        colSpan: 2,
       },
       {
         header: '',
@@ -109,7 +87,17 @@ export const PaymentsAndAccountingTable = ({ data }: { data: Item[] }) => {
     [t],
   )
 
-  const accordionContent = (item: Item) => {
+  const accordionContent = (item: FundingTxOrderFragment) => {
+    const getUSD = (sats: number) => {
+      if (!item.bitcoinQuote?.quote) return 'NAN'
+      const total = sats / item.bitcoinQuote?.quote
+      if (total > 1) {
+        return `$${total.toFixed(2)}`
+      }
+
+      return '< $1'
+    }
+
     return (
       <Stack
         w="full"
@@ -126,14 +114,14 @@ export const PaymentsAndAccountingTable = ({ data }: { data: Item[] }) => {
         >
           <Body2 color="neutral.700">{t('Items')}:</Body2>
           <VStack spacing="5px">
-            {item.rewards.map((reward) => {
+            {item.order?.items.map((orderItem) => {
               return (
-                <HStack key={reward.id}>
+                <HStack key={orderItem.item.id}>
                   <Body2 semiBold color="neutral.900">
-                    {reward.quantity}x
+                    {orderItem.quantity}x
                   </Body2>
                   <Body2 semiBold color="neutral.900">
-                    {reward.name}
+                    {orderItem.item.name}
                   </Body2>
                 </HStack>
               )
@@ -146,55 +134,19 @@ export const PaymentsAndAccountingTable = ({ data }: { data: Item[] }) => {
           spacing="10px"
         >
           <VStack alignItems="flex-start" spacing="5px">
-            <Body2 color="neutral.700">{t('Rewards')}:</Body2>
-            <Body2 color="neutral.700">{t('Rewards (Sats)')}:</Body2>
-          </VStack>
-          <VStack spacing="5px">
-            <Body2 semiBold color="neutral.900">
-              {item.rewards.reduce((acc, reward) => acc + reward.price, 0)}
-            </Body2>
-            <Body2 semiBold color="neutral.900">
-              {item.rewards.reduce((acc, reward) => acc + reward.price, 0)}
-            </Body2>
-          </VStack>
-        </HStack>
-        <HStack
-          w={{ base: 'full', lg: 'auto' }}
-          justifyContent="space-between"
-          spacing="10px"
-        >
-          <VStack alignItems="flex-start" spacing="5px">
-            <Body2 color="neutral.700">{t('Donation')}:</Body2>
-            <Body2 color="neutral.700">{t('Donation (Sats)')}:</Body2>
-          </VStack>
-          <VStack spacing="5px">
-            <Body2 semiBold color="neutral.900">
-              {item.amount}
-            </Body2>
-            <Body2 semiBold color="neutral.900">
-              {item.amount}
-            </Body2>
-          </VStack>
-        </HStack>
-        <HStack
-          w={{ base: 'full', lg: 'auto' }}
-          justifyContent="space-between"
-          spacing="10px"
-        >
-          <VStack alignItems="flex-start" spacing="5px">
             <Body2 color="neutral.700">{t('Total')}:</Body2>
             <Body2 color="neutral.700">{t('Total (Sats)')}:</Body2>
             <Body2 color="neutral.700">{t('Bitcoin Price')}:</Body2>
           </VStack>
-          <VStack spacing="5px">
+          <VStack alignItems="flex-start" spacing="5px">
             <Body2 semiBold color="neutral.900">
-              {item.amount}
+              {getUSD(item.amount)}
             </Body2>
             <Body2 semiBold color="neutral.900">
               {item.amount}
             </Body2>
             <Body2 semiBold color="neutral.900">
-              {item.amount}
+              ${item.bitcoinQuote?.quote}
             </Body2>
           </VStack>
         </HStack>
@@ -203,7 +155,7 @@ export const PaymentsAndAccountingTable = ({ data }: { data: Item[] }) => {
   }
 
   return (
-    <TableWithAccordion<Item>
+    <TableWithAccordion<FundingTxOrderFragment>
       items={data}
       schema={tableData}
       accordionContent={accordionContent}

@@ -46,7 +46,7 @@ export const ProjectContributionList = ({
     FundingTxFragment,
     FundingTxWithCount
   >({
-    queryName: 'fundingTxsGet',
+    queryName: ['fundingTxsGet', 'fundingTxs'],
     itemLimit: CONTRIBUTION_ITEM_LIMIT,
     query: QUERY_GET_FUNDING_TXS_LANDING,
     resultMap: aggregateTransactions,
