@@ -1,4 +1,4 @@
-import { Box, Button, HStack, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Stack, VStack } from '@chakra-ui/react'
 import { useAtom } from 'jotai'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -10,6 +10,7 @@ import { dimensions } from '../../../../../constants'
 import { lightModeColors } from '../../../../../styles'
 import { useCustomTheme, useMobileMode } from '../../../../../utils'
 import { ContributionView, contributionViewAtom } from './atoms'
+import { ExportComponent } from './components'
 import { PaymentsAndAccounting } from './sections/paymentsAndAccounting'
 import { PendingPayments } from './sections/pendingPayments'
 import { Rewards } from './sections/rewards'
@@ -74,40 +75,50 @@ export const ProjectCreatorContributors = () => {
           spacing={{ base: '10px', lg: '20px' }}
         >
           <H2>{t('Contributors')}</H2>
-          <HStack spacing="10px" flexWrap={'wrap'}>
-            <Button
-              size="sm"
-              variant={isActiveVariant(ContributionView.rewards)}
-              onClick={() => setContributionView(ContributionView.rewards)}
-            >
-              {t('Rewards')}
-            </Button>
-            <Button
-              size="sm"
-              variant={isActiveVariant(ContributionView.pending)}
-              onClick={() => setContributionView(ContributionView.pending)}
-              rightIcon={
-                <Box
-                  borderRadius="50%"
-                  backgroundColor={lightModeColors.neutral[1000]}
-                >
-                  <PiWarningCircleFill
-                    fill={colors.secondary.yellow}
-                    fontSize={'20px'}
-                  />
-                </Box>
-              }
-            >
-              {isMobile ? t('Partial') : t('Partial Payments')}
-            </Button>
-            <Button
-              size="sm"
-              variant={isActiveVariant(ContributionView.accounts)}
-              onClick={() => setContributionView(ContributionView.accounts)}
-            >
-              {isMobile ? t('Payments') : t('Payments and Accounting')}
-            </Button>
-          </HStack>
+          <Stack
+            w="full"
+            direction={{ base: 'column', lg: 'row' }}
+            spacing="10px"
+            justifyContent="space-between"
+          >
+            <HStack spacing="10px" flexWrap={'wrap'}>
+              <Button
+                size="sm"
+                variant={isActiveVariant(ContributionView.rewards)}
+                onClick={() => setContributionView(ContributionView.rewards)}
+              >
+                {t('Rewards')}
+              </Button>
+              <Button
+                size="sm"
+                variant={isActiveVariant(ContributionView.pending)}
+                onClick={() => setContributionView(ContributionView.pending)}
+                rightIcon={
+                  <Box
+                    borderRadius="50%"
+                    backgroundColor={lightModeColors.neutral[1000]}
+                  >
+                    <PiWarningCircleFill
+                      fill={colors.secondary.yellow}
+                      fontSize={'20px'}
+                    />
+                  </Box>
+                }
+              >
+                {isMobile ? t('Partial') : t('Partial Payments')}
+              </Button>
+              <Button
+                size="sm"
+                variant={isActiveVariant(ContributionView.accounts)}
+                onClick={() => setContributionView(ContributionView.accounts)}
+              >
+                {isMobile ? t('Payments') : t('Payments and Accounting')}
+              </Button>
+            </HStack>
+            {contributionView === ContributionView.accounts ? (
+              <ExportComponent />
+            ) : null}
+          </Stack>
         </VStack>
         {renderView}
       </CardLayout>

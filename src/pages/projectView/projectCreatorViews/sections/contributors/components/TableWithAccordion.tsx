@@ -6,6 +6,7 @@ import {
   AccordionPanel,
   HStack,
   IconButton,
+  Stack,
   Table,
   TableContainer,
   Tbody,
@@ -30,6 +31,7 @@ export interface TableData<TItem> {
   value?: (val: TItem) => string | number
   colSpan?: number
   isMobile?: boolean
+  isAccordion?: boolean
 }
 
 interface TableProps<TItem> {
@@ -53,7 +55,7 @@ export function TableWithAccordion<TItem>({
         <Thead>
           <Tr>
             {schema.map((item) => {
-              if (isMobile && !item.isMobile) return null
+              if ((isMobile && !item.isMobile) || item.isAccordion) return null
 
               return (
                 <Th
@@ -109,30 +111,36 @@ export function TableItemWithAccordion<TItem>({
   const { isOpen, onToggle } = useDisclosure()
 
   const backgroundColor = index % 2 === 0 ? 'neutral.100' : 'neutral.0'
+
+  const tableSchema = useMemo(
+    () => schema.filter((val) => !val.isAccordion),
+    [schema],
+  )
+
+  const accordionSchema = useMemo(
+    () => schema.filter((val) => val.isAccordion),
+    [schema],
+  )
+
   const accordionColSpan = useMemo(
     () =>
-      schema.reduce((sum, val) => {
+      tableSchema.reduce((sum, val) => {
         if (isMobile && !val.isMobile) return sum
 
         return sum + (val.colSpan || 1)
       }, 0),
-    [schema, isMobile],
+    [tableSchema, isMobile],
   )
+
+  const showAccordion = accordionSchema.length > 0 || accordionContent
 
   return (
     <>
       <Tr backgroundColor={backgroundColor}>
-        {schema.map((row) => {
-          let value: any = ''
-          if (row.value) {
-            value = row.value(item)
-          } else if (row.render) {
-            value = row.render(item)
-          } else {
-            value = item && item[row.key as keyof TItem]
-          }
-
+        {tableSchema.map((row) => {
           if (isMobile && !row.isMobile) return null
+
+          const value = getValueFromTableItem({ row, item })
 
           return (
             <Td
@@ -147,9 +155,11 @@ export function TableItemWithAccordion<TItem>({
               px={halfStandardPadding}
               _first={{ pl: standardPadding }}
               _last={{ pr: standardPadding }}
+              textAlign={row.key === 'dropdown' ? 'center' : 'left'}
             >
               {row.key === 'dropdown' ? (
                 <IconButton
+                  alignSelf={'center'}
                   aria-label="dropdown"
                   variant="ghost"
                   icon={<ChevronDownIcon fontSize={'30px'} />}
@@ -162,7 +172,7 @@ export function TableItemWithAccordion<TItem>({
           )
         })}
       </Tr>
-      {accordionContent && (
+      {showAccordion && (
         <Td
           colSpan={accordionColSpan}
           p={0}
@@ -180,38 +190,44 @@ export function TableItemWithAccordion<TItem>({
                 maxWidth="100%"
                 whiteSpace="normal"
               >
-                {isMobile && (
-                  <VStack w="full" pb="20px">
-                    {schema.map((row) => {
-                      if (!isMobile || row.isMobile) {
-                        return null
-                      }
+                <Stack
+                  w="full"
+                  direction={{ base: 'column', lg: 'row' }}
+                  justifyContent="flex-end"
+                  alignItems="flex-start"
+                  spacing="20px"
+                >
+                  {accordionContent ? accordionContent(item) : null}
 
-                      let value: any = ''
-                      if (row.value) {
-                        value = row.value(item)
-                      } else if (row.render) {
-                        value = row.render(item)
-                      } else {
-                        value = item && item[row.key as keyof TItem]
-                      }
+                  {isMobile && (
+                    <VStack w="full" pb="20px" spacing="10px">
+                      {tableSchema.map((row) => {
+                        if (!isMobile || row.isMobile) {
+                          return null
+                        }
 
-                      return (
-                        <HStack
-                          w="full"
-                          justifyContent={'space-between'}
-                          key={row.header}
-                          spacing="5px"
-                        >
-                          <Body2>{row.header}:</Body2>
-                          <Body2>{value}</Body2>
-                        </HStack>
-                      )
+                        const value = getValueFromTableItem({ row, item })
+                        return (
+                          <HStack
+                            w="full"
+                            justifyContent={'space-between'}
+                            key={row.header}
+                            spacing="5px"
+                          >
+                            <Body2>{row.header}:</Body2>
+                            <Body2>{value}</Body2>
+                          </HStack>
+                        )
+                      })}
+                    </VStack>
+                  )}
+
+                  {accordionSchema.length > 0 &&
+                    accordionSchema.map((row) => {
+                      const value = getValueFromTableItem({ row, item })
+                      return value
                     })}
-                  </VStack>
-                )}
-
-                {accordionContent(item)}
+                </Stack>
               </AccordionPanel>
             </AccordionItem>
           </Accordion>
@@ -219,4 +235,26 @@ export function TableItemWithAccordion<TItem>({
       )}
     </>
   )
+}
+
+export function getValueFromTableItem<TItem>({
+  row,
+  item,
+}: {
+  row: TableData<TItem>
+  item: TItem
+}): React.ReactNode {
+  if (row.value) {
+    return row.value(item)
+  }
+
+  if (row.render) {
+    return row.render(item)
+  }
+
+  if (item) {
+    return item[row.key as keyof TItem] as React.ReactNode
+  }
+
+  return null
 }
