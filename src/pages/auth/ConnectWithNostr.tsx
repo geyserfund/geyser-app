@@ -66,7 +66,7 @@ export const ConnectWithNostr = ({
       >
         {!isIconOnly && (
           <Box as="span" color="neutral.900">
-            {t('Login with Nostr')}
+            {t('Continue with Nostr')}
           </Box>
         )}
       </ButtonComponent>
