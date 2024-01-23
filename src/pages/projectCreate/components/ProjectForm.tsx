@@ -247,7 +247,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           <HStack width="100%" justifyContent="space-between">
             <Text fontSize="12px" color="neutral.700" />
             <Text fontSize="12px" color="neutral.700">{`${
-              watch('shortDescription').length
+              watch('shortDescription') ? watch('shortDescription').length : 0
             }/${ProjectValidations.shortDescription.maxLength}`}</Text>
           </HStack>
         )}

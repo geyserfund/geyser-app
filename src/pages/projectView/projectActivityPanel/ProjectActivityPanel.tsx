@@ -5,14 +5,15 @@ import { useContext, useEffect } from 'react'
 import { AuthModal } from '../../../components/molecules'
 import { fundingStages } from '../../../constants'
 import { AuthContext, MobileViews, useProjectContext } from '../../../context'
-import { useBtcContext } from '../../../context/btc'
 import { IFundForm } from '../../../hooks'
 import {
   FundingInput,
   FundingResourceType,
+  OrderItemInput,
+  OrderItemType,
   ProjectFragment,
   ProjectReward,
-  RewardFundingInput,
+  QuoteCurrency
 } from '../../../types'
 import { toInt, useCustomTheme, useMobileMode } from '../../../utils'
 import {
@@ -23,14 +24,13 @@ import {
   SuccessScreen,
 } from './screens'
 import { useStyles } from './styles'
+import { useBtcContext } from '../../../context/btc'
 
 type Props = {
   project?: ProjectFragment | null
   resourceType: FundingResourceType
   resourceId: number
 }
-
-type FilteredReward = { id: number; quantity: number }
 
 export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   const { user } = useContext(AuthContext)
@@ -45,7 +45,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
     state: formState,
     setState: setFormState,
     resetForm,
-    hasSelectedRewards,
+    hasSelectedRewards
   } = fundForm
 
   const { fundState, setFundState, resetFundingFlow, requestFunding } =
@@ -68,9 +68,6 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   useEffect(() => {
     if (mobileView === MobileViews.funding) {
       setFundState(fundingStages.form)
-    } else {
-      resetFundingFlow()
-      resetForm()
     }
   }, [mobileView, resetForm, resetFundingFlow, setFundState])
 
@@ -99,44 +96,48 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   const formatFundingInput = (state: IFundForm) => {
     const {
       donationAmount,
-      rewardsCost,
-      shippingCost: cost,
-      shippingDestination: destination,
       rewardsByIDAndCount,
       email,
       anonymous,
       comment,
       media,
     } = state
+
+
+    const orderItemInputs: OrderItemInput[] = [];
+    if (hasSelectedRewards && rewardsByIDAndCount) {
+      Object.keys(rewardsByIDAndCount).map((key) => {
+        const rewardQuantity = rewardsByIDAndCount[key as keyof ProjectReward];
+        if(rewardQuantity && rewardQuantity > 0) {
+          orderItemInputs.push({
+            itemId: toInt(key),
+            itemType: OrderItemType.ProjectReward,
+            quantity: rewardQuantity
+          })
+        }
+      });
+    }
+
     const input: FundingInput = {
       projectId: toInt(project?.id),
       anonymous,
-      ...(donationAmount !== 0 && { donationInput: { donationAmount } }),
+      donationAmount: toInt(donationAmount),
       metadataInput: {
         ...(email && { email }),
         ...(media && { media }),
         ...(comment && { comment }),
       },
+      orderInput: {
+        bitcoinQuote: {
+          quote: btcRate,
+          quoteCurrency: QuoteCurrency.Usd
+        },
+        items: orderItemInputs
+      },
       sourceResourceInput: {
         resourceId: toInt(resourceId) || toInt(project?.id),
         resourceType: resourceType || 'project',
       },
-    }
-
-    if (hasSelectedRewards && rewardsByIDAndCount) {
-      const rewardsArray = Object.keys(rewardsByIDAndCount).map((key) => ({
-        id: toInt(key),
-        quantity: rewardsByIDAndCount[key as keyof ProjectReward],
-      }))
-      const filteredRewards = rewardsArray.filter(
-        (reward): reward is FilteredReward =>
-          reward.quantity !== 0 && reward.quantity !== undefined,
-      )
-      input.rewardInput = {
-        shipping: { cost, destination },
-        rewards: filteredRewards,
-        rewardsCost: Math.round(rewardsCost / (100 * btcRate)), // reward cost is in USDcent only for now.
-      } as RewardFundingInput
     }
 
     return input

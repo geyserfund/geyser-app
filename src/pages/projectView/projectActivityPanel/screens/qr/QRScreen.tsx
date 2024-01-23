@@ -72,7 +72,7 @@ export const QRScreen = ({
       marginTop={2}
     >
       <HStack justifyContent="space-between" width="100%">
-        <SectionTitle>{t('Confirm & Contribute')}</SectionTitle>
+        <SectionTitle>{t('Invoice')}</SectionTitle>
         <CloseButton onClick={handleCloseButton} />
       </HStack>
       <QRCodeSection fundingFlow={fundingFlow} />
@@ -85,8 +85,7 @@ export const QRScreen = ({
         funderUsername={state.funderUsername}
         funderEmail={state.email}
         funderAvatarURL={state.funderAvatarURL}
-        backgroundColor={'neutral.100'}
-        showGeyserFee={true}
+        showGeyserFee={false}
       />
       <Button
         as={Link}

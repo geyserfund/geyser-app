@@ -8,6 +8,7 @@ export interface FieldContainerProps extends Omit<StackProps, 'title'> {
   info?: ReactNode
   error?: ReactNode
   children?: ReactNode
+  boldTitle?: boolean
 }
 
 export const FieldContainer = ({
@@ -16,12 +17,13 @@ export const FieldContainer = ({
   children,
   info,
   error = null,
+  boldTitle = false,
   ...props
 }: FieldContainerProps) => {
   return (
     <VStack spacing={1} alignItems="start" w="100%" {...props}>
       {title && (
-        <Text variant="body1" wordBreak="keep-all">
+        <Text variant="body1" wordBreak="keep-all" fontWeight={boldTitle ? 500 : "normal"}>
           {title}
         </Text>
       )}

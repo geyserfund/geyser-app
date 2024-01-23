@@ -60,7 +60,6 @@ export const ConnectWithNostr = ({
         aria-label="Connect with Nostr"
         variant="login"
         color={'social.nostr'}
-        fontWeight={600}
         onClick={handleClick}
         {...buttonProps}
         {...rest}

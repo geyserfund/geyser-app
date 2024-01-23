@@ -12,12 +12,6 @@ export const MUTATION_FUND = gql`
       fundingTx {
         ...FundingTx
       }
-      # amountSummary {
-      #   total
-      #   donationAmount
-      #   shippingCost
-      #   rewardsCost
-      # }
     }
   }
 `

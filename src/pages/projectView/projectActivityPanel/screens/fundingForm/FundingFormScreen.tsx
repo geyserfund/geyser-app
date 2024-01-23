@@ -1,11 +1,11 @@
 import { Box, Divider, VStack } from '@chakra-ui/react'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 
 import { MAX_FUNDING_AMOUNT_USD } from '../../../../../constants'
 import { useProjectContext } from '../../../../../context'
 import { useFundCalc } from '../../../../../helpers/fundingCalculation'
 import { ProjectRewardForCreateUpdateFragment } from '../../../../../types/generated/graphql'
-import { useMobileMode, useNotification } from '../../../../../utils'
+import { useMobileMode, useNotification, validateEmail } from '../../../../../utils'
 import { FundingFormSection } from './components/FundingFormSection'
 import { FundingFormUserInfoSection } from './components/FundingFormUserInfoSection'
 import { ProjectFundingSummaryCard } from './components/ProjectFundingSummaryCard'
@@ -26,10 +26,8 @@ export const FundingFormScreen = ({
   const isMobile = useMobileMode()
   const summaryCardRef = useRef<any>(null)
 
-  const [step, setStep] = useState<'contribution' | 'info'>('contribution')
-
   const {
-    fundForm: { state: formState, hasSelectedRewards },
+    fundForm: { state: formState, hasSelectedRewards, setState },
   } = useProjectContext()
 
   const { getTotalAmount } = useFundCalc(formState)
@@ -41,7 +39,7 @@ export const FundingFormScreen = ({
     contribution() {
       const valid = validateFundingAmount()
       if (valid) {
-        setStep('info')
+        setState('step', 'info')
       }
     },
     info() {
@@ -55,8 +53,15 @@ export const FundingFormScreen = ({
   const validateFundingUserInfo = () => {
     if (hasSelectedRewards && !formState.email) {
       toast({
-        title: 'Email is a required field when donating for a reward.',
+        title: 'Email is required when purchasing a reward.',
         description: 'Please enter an email.',
+        status: 'error',
+      })
+      return false
+    } else if(hasSelectedRewards && !validateEmail(formState.email)) {
+      toast({
+        title: 'A valid email is required.',
+        description: 'Please enter a valid email.',
         status: 'error',
       })
       return false
@@ -112,18 +117,18 @@ export const FundingFormScreen = ({
         flex={1}
         px={{ base: '10px', lg: '20px' }}
       >
-        {step === 'contribution' ? (
+        {formState.step === 'contribution' ? (
           <FundingFormSection onBackClick={handleCloseButton} />
         ) : (
           <FundingFormUserInfoSection
-            onBackClick={() => setStep('contribution')}
+            onBackClick={() => setState('step', 'contribution')}
           />
         )}
       </Box>
       <VStack
         backgroundColor="neutral.0"
         position={isMobile ? 'fixed' : 'relative'}
-        bottom={isMobile ? '60px' : '0px'}
+        bottom={0}
         px={{ base: '10px', lg: '20px' }}
         paddingBottom="5px"
         width={'100%'}
@@ -138,7 +143,7 @@ export const FundingFormScreen = ({
         )}
         <ProjectFundingSummaryCard
           ref={summaryCardRef}
-          onSubmit={handleSubmit[step]}
+          onSubmit={handleSubmit[formState.step]}
         />
       </VStack>
     </VStack>

@@ -23,6 +23,7 @@ export interface IFundForm {
   funderAvatarURL: string
   rewardsByIDAndCount?: { [key: string]: number } | undefined
   rewardCurrency: RewardCurrency
+  step: 'contribution' | 'info'
 }
 
 type UseFundStateProps = {
@@ -61,6 +62,7 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
       media: '',
       rewardsByIDAndCount: undefined,
       rewardCurrency: RewardCurrency.Usdcent,
+      step: 'contribution',
     }),
     [isAnonymous, user.imageUrl, user.username],
   )

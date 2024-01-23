@@ -34,7 +34,7 @@ export const DeleteConfirmModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="sm" isCentered>
       <ModalOverlay />
-      <ModalContent display="flex" alignItems="center" padding="20px 20px">
+      <ModalContent display="flex" alignItems="center" padding="0 20px 20px 20px">
         <ModalHeader>
           <Text fontSize="16px" fontWeight={600}>
             {title}
