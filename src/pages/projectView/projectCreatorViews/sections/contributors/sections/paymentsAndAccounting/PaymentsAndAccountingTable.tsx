@@ -1,15 +1,13 @@
-/* eslint-disable no-unsafe-optional-chaining */
-import { HStack, Stack, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Body2 } from '../../../../../../../components/typography'
 import {
   AnonymousAvatar,
   LinkableAvatar,
 } from '../../../../../../../components/ui'
 import { FundingTxOrderFragment } from '../../../../../../../types'
+import { OrderAmounts, OrderItems } from '../../components'
 import {
   TableData,
   TableWithAccordion,
@@ -70,12 +68,29 @@ export const PaymentsAndAccountingTable = ({
         colSpan: 2,
       },
       {
+        header: t('Type'),
+        key: 'type',
+        colSpan: 2,
+        value(val: FundingTxOrderFragment) {
+          if (val.amount === val.donationAmount) {
+            return 'Donation'
+          }
+
+          if (val.donationAmount === 0) {
+            return 'Rewards'
+          }
+
+          return 'Rewards, Donation'
+        },
+      },
+      {
         header: t('Amount'),
         key: 'amount',
         value(val: FundingTxOrderFragment) {
           return `${val.amount} Sats`
         },
         colSpan: 2,
+        isMobile: true,
       },
       {
         header: '',
@@ -83,82 +98,35 @@ export const PaymentsAndAccountingTable = ({
         colSpan: 1,
         isMobile: true,
       },
+      {
+        header: 'Items',
+        key: 'items',
+        isAccordion: true,
+        render(fundingTx: FundingTxOrderFragment) {
+          return <OrderItems orderItems={fundingTx.order?.items} />
+        },
+      },
+      {
+        header: 'Total',
+        key: 'total',
+        isAccordion: true,
+        render(fundingTx: FundingTxOrderFragment) {
+          return (
+            <OrderAmounts
+              amount={fundingTx.amount}
+              quote={fundingTx.bitcoinQuote?.quote}
+            />
+          )
+        },
+      },
     ],
     [t],
   )
-
-  const accordionContent = (item: FundingTxOrderFragment) => {
-    const getUSD = (sats: number) => {
-      if (!item.bitcoinQuote?.quote) return 'NAN'
-      const total = sats / item.bitcoinQuote?.quote
-      if (total > 1) {
-        return `$${total.toFixed(2)}`
-      }
-
-      return '< $1'
-    }
-
-    return (
-      <Stack
-        w="full"
-        direction={{ base: 'column', lg: 'row' }}
-        justifyContent="flex-end"
-        alignItems="flex-start"
-        spacing="20px"
-      >
-        <HStack
-          w={{ base: 'full', lg: 'auto' }}
-          alignItems="flex-start"
-          justifyContent="space-between"
-          spacing="10px"
-        >
-          <Body2 color="neutral.700">{t('Items')}:</Body2>
-          <VStack spacing="5px">
-            {item.order?.items.map((orderItem) => {
-              return (
-                <HStack key={orderItem.item.id}>
-                  <Body2 semiBold color="neutral.900">
-                    {orderItem.quantity}x
-                  </Body2>
-                  <Body2 semiBold color="neutral.900">
-                    {orderItem.item.name}
-                  </Body2>
-                </HStack>
-              )
-            })}
-          </VStack>
-        </HStack>
-        <HStack
-          w={{ base: 'full', lg: 'auto' }}
-          justifyContent="space-between"
-          spacing="10px"
-        >
-          <VStack alignItems="flex-start" spacing="5px">
-            <Body2 color="neutral.700">{t('Total')}:</Body2>
-            <Body2 color="neutral.700">{t('Total (Sats)')}:</Body2>
-            <Body2 color="neutral.700">{t('Bitcoin Price')}:</Body2>
-          </VStack>
-          <VStack alignItems="flex-start" spacing="5px">
-            <Body2 semiBold color="neutral.900">
-              {getUSD(item.amount)}
-            </Body2>
-            <Body2 semiBold color="neutral.900">
-              {item.amount}
-            </Body2>
-            <Body2 semiBold color="neutral.900">
-              ${item.bitcoinQuote?.quote}
-            </Body2>
-          </VStack>
-        </HStack>
-      </Stack>
-    )
-  }
 
   return (
     <TableWithAccordion<FundingTxOrderFragment>
       items={data}
       schema={tableData}
-      accordionContent={accordionContent}
     />
   )
 }

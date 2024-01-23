@@ -1,6 +1,21 @@
 import { gql } from '@apollo/client'
 
+export const FRAGMENT_ORDER_ITEM = gql`
+  fragment OrderItem on OrderItem {
+    item {
+      id
+      name
+      cost
+      rewardCurrency
+      rewardType
+    }
+    quantity
+    unitPriceInSats
+  }
+`
+
 export const FRAGMENT_ORDER = gql`
+  ${FRAGMENT_ORDER_ITEM}
   fragment Order on Order {
     confirmedAt
     createdAt
@@ -17,15 +32,7 @@ export const FRAGMENT_ORDER = gql`
       email
     }
     items {
-      item {
-        id
-        name
-        cost
-        rewardCurrency
-        rewardType
-      }
-      quantity
-      unitPriceInSats
+      ...OrderItem
     }
     fundingTx {
       id
@@ -48,6 +55,7 @@ export const FRAGMENT_ORDER = gql`
 `
 
 export const FRAGMENT_TRANSACTION_ORDER = gql`
+  ${FRAGMENT_ORDER_ITEM}
   fragment FundingTxOrder on FundingTx {
     id
     invoiceStatus
@@ -80,15 +88,10 @@ export const FRAGMENT_TRANSACTION_ORDER = gql`
     order {
       id
       referenceCode
-      items {
-        item {
-          id
-          name
-        }
-        quantity
-        unitPriceInSats
-      }
       totalInSats
+      items {
+        ...OrderItem
+      }
     }
   }
 `

@@ -4,7 +4,7 @@ import { StylesConfig } from 'react-select'
 import Select from 'react-select'
 import { StateManagerProps } from 'react-select/dist/declarations/src/useStateManager'
 
-import { useCustomTheme } from '../../../../../../utils'
+import { useCustomTheme } from '../../../../../../../utils'
 
 export interface ShippingStatusSelectProps<T = any, S extends boolean = any>
   extends StateManagerProps<T, S, any> {

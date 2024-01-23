@@ -5256,6 +5256,20 @@ export type FundingTxForOverviewPageFragment = {
   }
 }
 
+export type OrderItemFragment = {
+  __typename?: 'OrderItem'
+  quantity: number
+  unitPriceInSats: any
+  item: {
+    __typename?: 'ProjectReward'
+    id: any
+    name: any
+    cost: number
+    rewardCurrency: RewardCurrency
+    rewardType?: RewardType | null
+  }
+}
+
 export type OrderFragment = {
   __typename?: 'Order'
   confirmedAt?: any | null
@@ -5273,19 +5287,7 @@ export type OrderFragment = {
     username: string
     email?: string | null
   } | null
-  items: Array<{
-    __typename?: 'OrderItem'
-    quantity: number
-    unitPriceInSats: any
-    item: {
-      __typename?: 'ProjectReward'
-      id: any
-      name: any
-      cost: number
-      rewardCurrency: RewardCurrency
-      rewardType?: RewardType | null
-    }
-  }>
+  items: Array<{ __typename?: 'OrderItem' } & OrderItemFragment>
   fundingTx: {
     __typename?: 'FundingTx'
     id: any
@@ -5346,12 +5348,7 @@ export type FundingTxOrderFragment = {
     id: any
     referenceCode: string
     totalInSats: any
-    items: Array<{
-      __typename?: 'OrderItem'
-      quantity: number
-      unitPriceInSats: any
-      item: { __typename?: 'ProjectReward'; id: any; name: any }
-    }>
+    items: Array<{ __typename?: 'OrderItem' } & OrderItemFragment>
   } | null
 }
 
@@ -7208,6 +7205,19 @@ export const FundingTxForOverviewPageFragmentDoc = gql`
     comment
   }
 `
+export const OrderItemFragmentDoc = gql`
+  fragment OrderItem on OrderItem {
+    item {
+      id
+      name
+      cost
+      rewardCurrency
+      rewardType
+    }
+    quantity
+    unitPriceInSats
+  }
+`
 export const OrderFragmentDoc = gql`
   fragment Order on Order {
     confirmedAt
@@ -7225,15 +7235,7 @@ export const OrderFragmentDoc = gql`
       email
     }
     items {
-      item {
-        id
-        name
-        cost
-        rewardCurrency
-        rewardType
-      }
-      quantity
-      unitPriceInSats
+      ...OrderItem
     }
     fundingTx {
       id
@@ -7253,6 +7255,7 @@ export const OrderFragmentDoc = gql`
       uuid
     }
   }
+  ${OrderItemFragmentDoc}
 `
 export const FundingTxOrderFragmentDoc = gql`
   fragment FundingTxOrder on FundingTx {
@@ -7287,17 +7290,13 @@ export const FundingTxOrderFragmentDoc = gql`
     order {
       id
       referenceCode
-      items {
-        item {
-          id
-          name
-        }
-        quantity
-        unitPriceInSats
-      }
       totalInSats
+      items {
+        ...OrderItem
+      }
     }
   }
+  ${OrderItemFragmentDoc}
 `
 export const PaginationFragmentDoc = gql`
   fragment Pagination on CursorPaginationResponse {

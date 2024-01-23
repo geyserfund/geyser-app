@@ -1,20 +1,19 @@
-import { HStack, Stack, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Body2 } from '../../../../../../../components/typography'
 import {
   AnonymousAvatar,
   LinkableAvatar,
 } from '../../../../../../../components/ui'
 import { OrderFragment, UpdatableOrderStatus } from '../../../../../../../types'
 import { useCustomTheme } from '../../../../../../../utils'
-import { ShippingStatusSelect } from '../../components/ShippingStatusSelect'
+import { OrderAmounts, OrderItems } from '../../components'
 import {
   TableData,
   TableWithAccordion,
 } from '../../components/TableWithAccordion'
+import { ShippingStatusSelect } from './ShippingStatusSelect'
 
 export enum RewardStatus {
   todo = 'CONFIRMED',
@@ -88,13 +87,13 @@ export const RewardTable = ({
       {
         header: t('Status'),
         key: 'status',
-        render(item: OrderFragment) {
+        render(order: OrderFragment) {
           const { backgroundColor, hoverBgColor } = getBackgroundColors(
-            item.status as RewardStatus,
+            order.status as RewardStatus,
           )
 
           const options =
-            item.status === RewardStatus.todo
+            order.status === RewardStatus.todo
               ? RewardStatusOptions
               : RewardStatusOptions.slice(1)
 
@@ -106,15 +105,15 @@ export const RewardTable = ({
                 hoverBgColor={hoverBgColor}
                 options={options}
                 value={RewardStatusOptions.find(
-                  (val) => val.value === item.status,
+                  (val) => val.value === order.status,
                 )}
                 defaultValue={RewardStatusOptions.find(
-                  (val) => val.value === item.status,
+                  (val) => val.value === order.status,
                 )}
                 onChange={(option) => {
                   if (option) {
                     handlleUpdateOrderStatus(
-                      item.id,
+                      order.id,
                       option.value as UpdatableOrderStatus,
                     )
                   }
@@ -130,12 +129,12 @@ export const RewardTable = ({
       {
         header: t('Contributor'),
         key: 'name',
-        render(val: OrderFragment) {
-          const isFunderAnonymous = !val.user?.id
+        render(order: OrderFragment) {
+          const isFunderAnonymous = !order.user?.id
           if (isFunderAnonymous) {
             return (
               <AnonymousAvatar
-                seed={val.id}
+                seed={order.id}
                 imageSize={'20px'}
                 textColor="neutral.900"
               />
@@ -144,9 +143,9 @@ export const RewardTable = ({
 
           return (
             <LinkableAvatar
-              avatarUsername={val.user?.username || ''}
-              userProfileID={val.user?.id}
-              imageSrc={val.user?.imageUrl || ''}
+              avatarUsername={order.user?.username || ''}
+              userProfileID={order.user?.id}
+              imageSrc={order.user?.imageUrl || ''}
             />
           )
         },
@@ -156,16 +155,16 @@ export const RewardTable = ({
       {
         header: t('Email'),
         key: 'email',
-        value(val: OrderFragment) {
-          return val.fundingTx.email || ''
+        value(order: OrderFragment) {
+          return order.fundingTx.email || ''
         },
         colSpan: 2,
       },
       {
         header: t('Date'),
         key: 'paidAt',
-        value(val: OrderFragment) {
-          const dateToUse = getOrderDateToDisplay(val)
+        value(order: OrderFragment) {
+          const dateToUse = getOrderDateToDisplay(order)
           if (dateToUse) {
             return DateTime.fromMillis(dateToUse).toFormat('LLL dd, yyyy')
           }
@@ -178,8 +177,8 @@ export const RewardTable = ({
       {
         header: t('Reference codes'),
         key: 'reference',
-        value(val: OrderFragment) {
-          return val.fundingTx.uuid || 'NAN'
+        value(order: OrderFragment) {
+          return order.fundingTx.uuid || 'NAN'
         },
         colSpan: 2,
       },
@@ -189,88 +188,32 @@ export const RewardTable = ({
         colSpan: 1,
         isMobile: true,
       },
+      {
+        header: 'Items',
+        key: 'items',
+        isAccordion: true,
+        render(order: OrderFragment) {
+          return <OrderItems orderItems={order.items} />
+        },
+      },
+      {
+        header: 'Total',
+        key: 'total',
+        isAccordion: true,
+        render(order: OrderFragment) {
+          return (
+            <OrderAmounts
+              amount={order.totalInSats}
+              quote={order.fundingTx.bitcoinQuote?.quote}
+            />
+          )
+        },
+      },
     ],
     [t, getBackgroundColors, handlleUpdateOrderStatus],
   )
 
-  const accordionContent = (order: OrderFragment) => {
-    const renderTotal = () => {
-      if (order.fundingTx.bitcoinQuote?.quote) {
-        // eslint-disable-next-line no-unsafe-optional-chaining
-        const total = order.totalInSats / order.fundingTx.bitcoinQuote?.quote
-        if (total > 1) {
-          return `$${total.toFixed(2)}`
-        }
-
-        return '< $1'
-      }
-
-      return 'NAN'
-    }
-
-    return (
-      <Stack
-        w="full"
-        direction={{ base: 'column', lg: 'row' }}
-        justifyContent="flex-end"
-        alignItems="flex-start"
-        spacing="20px"
-      >
-        <HStack
-          w={{ base: 'full', lg: 'auto' }}
-          alignItems="flex-start"
-          justifyContent="space-between"
-          spacing="10px"
-        >
-          <Body2 color="neutral.700">{t('Items')}:</Body2>
-          <VStack spacing="5px">
-            {order.items.map((orderItem) => {
-              return (
-                <HStack key={orderItem.item.id}>
-                  <Body2 semiBold color="neutral.900">
-                    {orderItem.quantity}x
-                  </Body2>
-                  <Body2 semiBold color="neutral.900">
-                    {orderItem.item.name}
-                  </Body2>
-                </HStack>
-              )
-            })}
-          </VStack>
-        </HStack>
-        <HStack
-          w={{ base: 'full', lg: 'auto' }}
-          justifyContent="space-between"
-          spacing="10px"
-        >
-          <VStack alignItems="flex-start" spacing="5px">
-            <Body2 color="neutral.700">{t('Total')}:</Body2>
-            <Body2 color="neutral.700">{t('Total (Sats)')}:</Body2>
-            <Body2 color="neutral.700">{t('Bitcoin Price')}:</Body2>
-          </VStack>
-          <VStack spacing="5px">
-            <Body2 semiBold color="neutral.900">
-              {renderTotal()}
-            </Body2>
-            <Body2 semiBold color="neutral.900">
-              {order.totalInSats}
-            </Body2>
-            <Body2 semiBold color="neutral.900">
-              ${order.fundingTx.bitcoinQuote?.quote}
-            </Body2>
-          </VStack>
-        </HStack>
-      </Stack>
-    )
-  }
-
-  return (
-    <TableWithAccordion<OrderFragment>
-      items={data}
-      schema={tableData}
-      accordionContent={accordionContent}
-    />
-  )
+  return <TableWithAccordion<OrderFragment> items={data} schema={tableData} />
 }
 
 export const getOrderDateToDisplay = (order: OrderFragment) => {
