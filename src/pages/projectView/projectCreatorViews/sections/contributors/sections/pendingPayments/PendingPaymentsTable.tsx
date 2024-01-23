@@ -13,7 +13,6 @@ import {
 } from '../../../../../../../components/ui'
 import { useModal } from '../../../../../../../hooks'
 import {
-  BitcoinQuote,
   FundingConfirmInput,
   FundingTxOrderFragment,
 } from '../../../../../../../types'
@@ -104,7 +103,7 @@ export const PendingPaymentsTable = ({
         isMobile: true,
       },
     ],
-    [t],
+    [t, handleUpdate],
   )
 
   const accordionContent = (item: FundingTxOrderFragment) => {

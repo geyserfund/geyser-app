@@ -1,11 +1,11 @@
 import { Box, Button, HStack, VStack } from '@chakra-ui/react'
 import { useAtom } from 'jotai'
 import { useMemo } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { PiWarningCircleFill } from 'react-icons/pi'
 
 import { CardLayout } from '../../../../../components/layouts'
-import { Body1, H2 } from '../../../../../components/typography'
+import { H2 } from '../../../../../components/typography'
 import { dimensions } from '../../../../../constants'
 import { lightModeColors } from '../../../../../styles'
 import { useCustomTheme, useMobileMode } from '../../../../../utils'

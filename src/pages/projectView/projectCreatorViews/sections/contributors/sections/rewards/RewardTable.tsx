@@ -1,4 +1,4 @@
-import { HStack, Stack, Text, VStack } from '@chakra-ui/react'
+import { HStack, Stack, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -190,7 +190,7 @@ export const RewardTable = ({
         isMobile: true,
       },
     ],
-    [t, getBackgroundColors],
+    [t, getBackgroundColors, handlleUpdateOrderStatus],
   )
 
   const accordionContent = (order: OrderFragment) => {

@@ -143,6 +143,12 @@ export enum BaseCurrency {
   Btc = 'BTC',
 }
 
+export type BitcoinQuote = {
+  __typename?: 'BitcoinQuote'
+  quote: Scalars['Float']
+  quoteCurrency: QuoteCurrency
+}
+
 export type ConnectionDetails =
   | LightningAddressConnectionDetails
   | LndConnectionDetailsPrivate
@@ -565,6 +571,18 @@ export type FundingTxStatusUpdatedInput = {
 export type FundingTxStatusUpdatedSubscriptionResponse = {
   __typename?: 'FundingTxStatusUpdatedSubscriptionResponse'
   fundingTx: FundingTx
+}
+
+export type FundingTxsGetResponse = {
+  __typename?: 'FundingTxsGetResponse'
+  fundingTxs: Array<FundingTx>
+  pagination?: Maybe<CursorPaginationResponse>
+}
+
+export enum FundingTxsWhereFundingStatus {
+  Paid = 'paid',
+  PartiallyPaid = 'partially_paid',
+  Pending = 'pending',
 }
 
 export enum FundingType {
@@ -1179,9 +1197,14 @@ export type OffsetBasedPaginationInput = {
 
 export type Order = {
   __typename?: 'Order'
+  confirmedAt?: Maybe<Scalars['Date']>
   createdAt: Scalars['Date']
+  deliveredAt?: Maybe<Scalars['Date']>
+  fundingTx: FundingTx
   id: Scalars['BigInt']
   items: Array<OrderItem>
+  referenceCode: Scalars['String']
+  shippedAt?: Maybe<Scalars['Date']>
   status: Scalars['String']
   totalInSats: Scalars['BigInt']
   updatedAt: Scalars['Date']
@@ -1228,6 +1251,39 @@ export type OrderItemInput = {
 
 export enum OrderItemType {
   ProjectReward = 'PROJECT_REWARD',
+}
+
+export type OrderStatusUpdateInput = {
+  orderId?: InputMaybe<Scalars['BigInt']>
+  status?: InputMaybe<UpdatableOrderStatus>
+}
+
+export type OrdersGetInput = {
+  orderBy?: InputMaybe<Array<OrdersGetOrderByInput>>
+  pagination?: InputMaybe<PaginationInput>
+  where: OrdersGetWhereInput
+}
+
+export enum OrdersGetOrderByField {
+  ConfirmedAt = 'confirmedAt',
+  DeliveredAt = 'deliveredAt',
+  ShippedAt = 'shippedAt',
+}
+
+export type OrdersGetOrderByInput = {
+  direction: OrderByDirection
+  field: OrdersGetOrderByField
+}
+
+export type OrdersGetResponse = {
+  __typename?: 'OrdersGetResponse'
+  orders: Array<Order>
+  pagination?: Maybe<CursorPaginationResponse>
+}
+
+export type OrdersGetWhereInput = {
+  projectId?: InputMaybe<Scalars['BigInt']>
+  status?: InputMaybe<Scalars['String']>
 }
 
 export type Owner = {
@@ -1438,6 +1494,8 @@ export type ProjectReward = {
   name: Scalars['name_String_NotNull_maxLength_100']
   /** Boolean value to indicate whether this reward requires shipping */
   project: Project
+  /** Currency in which the reward cost is stored. */
+  rewardCurrency: RewardCurrency
   /** Type of Reward */
   rewardType?: Maybe<RewardType>
   /** Number of times this Project Reward was sold. */
@@ -2289,6 +2347,8 @@ export type ResolversTypes = {
   FundingTxMethodSum: ResolverTypeWrapper<FundingTxMethodSum>
   FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
   FundingTxStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<FundingTxStatusUpdatedSubscriptionResponse>
+  FundingTxsGetResponse: ResolverTypeWrapper<FundingTxsGetResponse>
+  FundingTxsWhereFundingStatus: FundingTxsWhereFundingStatus
   FundingType: FundingType
   FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>
   GetActivitiesInput: GetActivitiesInput
@@ -2361,6 +2421,12 @@ export type ResolversTypes = {
   OrderItem: ResolverTypeWrapper<OrderItem>
   OrderItemInput: OrderItemInput
   OrderItemType: OrderItemType
+  OrderStatusUpdateInput: OrderStatusUpdateInput
+  OrdersGetInput: OrdersGetInput
+  OrdersGetOrderByField: OrdersGetOrderByField
+  OrdersGetOrderByInput: OrdersGetOrderByInput
+  OrdersGetResponse: ResolverTypeWrapper<OrdersGetResponse>
+  OrdersGetWhereInput: OrdersGetWhereInput
   Owner: ResolverTypeWrapper<Owner>
   OwnerOf: ResolverTypeWrapper<OwnerOf>
   PageViewCountGraph: ResolverTypeWrapper<PageViewCountGraph>
@@ -2668,6 +2734,11 @@ export type ResolversParentTypes = {
   OrderFundingInput: OrderFundingInput
   OrderItem: OrderItem
   OrderItemInput: OrderItemInput
+  OrderStatusUpdateInput: OrderStatusUpdateInput
+  OrdersGetInput: OrdersGetInput
+  OrdersGetOrderByInput: OrdersGetOrderByInput
+  OrdersGetResponse: OrdersGetResponse
+  OrdersGetWhereInput: OrdersGetWhereInput
   Owner: Owner
   OwnerOf: OwnerOf
   PageViewCountGraph: PageViewCountGraph
@@ -2913,6 +2984,20 @@ export type CurrencyQuoteGetResponseResolvers<
     ContextType
   >
   timestamp?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type CursorPaginationResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['CursorPaginationResponse'] = ResolversParentTypes['CursorPaginationResponse'],
+> = {
+  count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  cursor?: Resolver<
+    Maybe<ResolversTypes['PaginationCursor']>,
+    ParentType,
+    ContextType
+  >
+  take?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -3759,9 +3844,14 @@ export type OrderResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order'],
 > = {
+  confirmedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  deliveredAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
+  fundingTx?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   items?: Resolver<Array<ResolversTypes['OrderItem']>, ParentType, ContextType>
+  referenceCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  shippedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
   status?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   totalInSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
@@ -3776,6 +3866,19 @@ export type OrderItemResolvers<
   item?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType>
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   unitPriceInSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type OrdersGetResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['OrdersGetResponse'] = ResolversParentTypes['OrdersGetResponse'],
+> = {
+  orders?: Resolver<Array<ResolversTypes['Order']>, ParentType, ContextType>
+  pagination?: Resolver<
+    Maybe<ResolversTypes['CursorPaginationResponse']>,
+    ParentType,
+    ContextType
+  >
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -4058,6 +4161,11 @@ export type ProjectRewardResolvers<
     ContextType
   >
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>
+  rewardCurrency?: Resolver<
+    ResolversTypes['RewardCurrency'],
+    ParentType,
+    ContextType
+  >
   rewardType?: Resolver<
     Maybe<ResolversTypes['RewardType']>,
     ParentType,
@@ -4845,6 +4953,7 @@ export type Resolvers<ContextType = any> = {
   ConnectionDetails?: ConnectionDetailsResolvers<ContextType>
   Country?: CountryResolvers<ContextType>
   CurrencyQuoteGetResponse?: CurrencyQuoteGetResponseResolvers<ContextType>
+  CursorPaginationResponse?: CursorPaginationResponseResolvers<ContextType>
   Date?: GraphQLScalarType
   DatetimeRange?: DatetimeRangeResolvers<ContextType>
   DeleteUserResponse?: DeleteUserResponseResolvers<ContextType>
@@ -4889,6 +4998,7 @@ export type Resolvers<ContextType = any> = {
   OTPResponse?: OtpResponseResolvers<ContextType>
   Order?: OrderResolvers<ContextType>
   OrderItem?: OrderItemResolvers<ContextType>
+  OrdersGetResponse?: OrdersGetResponseResolvers<ContextType>
   Owner?: OwnerResolvers<ContextType>
   OwnerOf?: OwnerOfResolvers<ContextType>
   PageViewCountGraph?: PageViewCountGraphResolvers<ContextType>

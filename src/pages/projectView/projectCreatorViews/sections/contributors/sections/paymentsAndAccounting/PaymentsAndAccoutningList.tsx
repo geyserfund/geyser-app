@@ -6,13 +6,10 @@ import { useProjectContext } from '../../../../../../../context'
 import { usePaginationHook } from '../../../../../../../hooks/usePaginationHook'
 import { standardPadding } from '../../../../../../../styles'
 import {
-  FundingStatus,
   FundingTxOrderFragment,
   FundingTxsWhereFundingStatus,
-  GetFundingTxsInput,
   GetFundingTxsOrderByInput,
   GetFundingTxsWhereInput,
-  OrderByDirection,
   OrderByOptions,
   useFundingTxsOrderGetQuery,
 } from '../../../../../../../types'
