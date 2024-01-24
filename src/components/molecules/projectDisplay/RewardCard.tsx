@@ -1,8 +1,9 @@
 import { Box, Text, Stack, Container, Button, Badge } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { ProjectRewardForCreateUpdateFragment } from '../../../types/generated/graphql'
+import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../types/generated/graphql'
 import { ICard } from '../../ui'
+import { useProjectContext } from '../../../context'
 
 type Props = ICard & {
   reward: ProjectRewardForCreateUpdateFragment
@@ -16,6 +17,7 @@ export const RewardCard = ({
   ...rest
 }: Props) => {
   const { t } = useTranslation()
+  const {project} = useProjectContext()
 
   return (
     <Box
@@ -30,7 +32,7 @@ export const RewardCard = ({
       <Stack direction='row' justify='space-between'>
         <Text fontWeight={700} fontSize={16} color='neutral.900'>{reward.name}</Text>
         <Stack direction='row'>
-          <Text fontWeight={700} fontSize={16} color='neutral.600'>${reward.cost / 100}</Text>
+          <Text fontWeight={700} fontSize={16} color='neutral.600'>{project && project.rewardCurrency == RewardCurrency.Usdcent ? `$${reward.cost / 100}` : `${reward.cost.toLocaleString()} sats`}</Text>
         </Stack>
       </Stack>
       <Stack direction='column' gap={1}>

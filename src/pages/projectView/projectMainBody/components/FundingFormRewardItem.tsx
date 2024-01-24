@@ -10,8 +10,8 @@ import {
 import { MouseEvent } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import {AppTheme} from '../../../../context'
-import { ProjectRewardForCreateUpdateFragment } from '../../../../types'
+import {AppTheme, useProjectContext} from '../../../../context'
+import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../types'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   focused: {
@@ -59,6 +59,9 @@ export const FundingFormRewardItem = ({
 }: IRewardItemProps) => {
   const classes = useStyles()
 
+  const {
+    project
+  } = useProjectContext()
   const { onOpen: setFocus, onClose: setBlur } = useDisclosure()
 
   return (
@@ -86,7 +89,7 @@ export const FundingFormRewardItem = ({
             }</Text>
           </Stack>
           <Stack direction="column" align={'flex-end'}>
-            <Text fontWeight={700} fontSize={16} color='neutral.600'>${reward.cost / 100}</Text>
+            <Text fontWeight={700} fontSize={16} color='neutral.600'>{project && project.rewardCurrency == RewardCurrency.Usdcent ? `$${reward.cost / 100}` : `${reward.cost.toLocaleString()} sats`}</Text>
             <Stack direction={"row"} gap={1}>
               <IconButton
                   onFocus={setFocus}

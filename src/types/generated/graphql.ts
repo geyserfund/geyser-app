@@ -920,6 +920,7 @@ export type Mutation = {
   projectFollow: Scalars['Boolean']
   projectPublish: Project
   projectRewardCreate: ProjectReward
+  projectRewardCurrencyUpdate: Array<ProjectReward>
   /** Soft deletes the reward. */
   projectRewardDelete: Scalars['Boolean']
   projectRewardUpdate: ProjectReward
@@ -1028,6 +1029,10 @@ export type MutationProjectPublishArgs = {
 
 export type MutationProjectRewardCreateArgs = {
   input: CreateProjectRewardInput
+}
+
+export type MutationProjectRewardCurrencyUpdateArgs = {
+  input: ProjectRewardCurrencyUpdate
 }
 
 export type MutationProjectRewardDeleteArgs = {
@@ -1422,6 +1427,16 @@ export type ProjectReward = {
   updatedAt: Scalars['Date']
 }
 
+export type ProjectRewardCurrencyUpdate = {
+  projectId: Scalars['BigInt']
+  rewardCurrency: RewardCurrency
+}
+
+export type ProjectRewardCurrencyUpdateRewardsInput = {
+  cost: Scalars['Int']
+  rewardId: Scalars['BigInt']
+}
+
 export type ProjectStatistics = {
   __typename?: 'ProjectStatistics'
   totalPageviews: Scalars['Int']
@@ -1676,6 +1691,7 @@ export type ResourceInput = {
 }
 
 export enum RewardCurrency {
+  Btcsat = 'BTCSAT',
   Usdcent = 'USDCENT',
 }
 
@@ -2323,6 +2339,8 @@ export type ResolversTypes = {
   ProjectPublishMutationInput: ProjectPublishMutationInput
   ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>
   ProjectReward: ResolverTypeWrapper<ProjectReward>
+  ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate
+  ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput
   ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>
   ProjectStats: ResolverTypeWrapper<ProjectStats>
   ProjectStatsBase: ResolverTypeWrapper<ProjectStatsBase>
@@ -2622,6 +2640,8 @@ export type ResolversParentTypes = {
   ProjectPublishMutationInput: ProjectPublishMutationInput
   ProjectRegionsGetResult: ProjectRegionsGetResult
   ProjectReward: ProjectReward
+  ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate
+  ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput
   ProjectStatistics: ProjectStatistics
   ProjectStats: ProjectStats
   ProjectStatsBase: ProjectStatsBase
@@ -3447,6 +3467,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationProjectRewardCreateArgs, 'input'>
+  >
+  projectRewardCurrencyUpdate?: Resolver<
+    Array<ResolversTypes['ProjectReward']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationProjectRewardCurrencyUpdateArgs, 'input'>
   >
   projectRewardDelete?: Resolver<
     ResolversTypes['Boolean'],
@@ -5622,6 +5648,25 @@ export type UpdateProjectMutation = {
       country?: { __typename?: 'Country'; name: string; code: string } | null
     } | null
   }
+}
+
+export type ProjectRewardCurrencyUpdateMutationVariables = Exact<{
+  input: ProjectRewardCurrencyUpdate
+}>
+
+export type ProjectRewardCurrencyUpdateMutation = {
+  __typename?: 'Mutation'
+  projectRewardCurrencyUpdate: Array<{
+    __typename?: 'ProjectReward'
+    project: {
+      __typename?: 'Project'
+      rewards: Array<{
+        __typename?: 'ProjectReward'
+        cost: number
+        rewardType?: RewardType | null
+      }>
+    }
+  }>
 }
 
 export type ProjectRewardCreateMutationVariables = Exact<{
@@ -8133,6 +8178,62 @@ export type UpdateProjectMutationOptions = Apollo.BaseMutationOptions<
   UpdateProjectMutation,
   UpdateProjectMutationVariables
 >
+export const ProjectRewardCurrencyUpdateDocument = gql`
+  mutation ProjectRewardCurrencyUpdate($input: ProjectRewardCurrencyUpdate!) {
+    projectRewardCurrencyUpdate(input: $input) {
+      project {
+        rewards {
+          cost
+          rewardType
+        }
+      }
+    }
+  }
+`
+export type ProjectRewardCurrencyUpdateMutationFn = Apollo.MutationFunction<
+  ProjectRewardCurrencyUpdateMutation,
+  ProjectRewardCurrencyUpdateMutationVariables
+>
+
+/**
+ * __useProjectRewardCurrencyUpdateMutation__
+ *
+ * To run a mutation, you first call `useProjectRewardCurrencyUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectRewardCurrencyUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectRewardCurrencyUpdateMutation, { data, loading, error }] = useProjectRewardCurrencyUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectRewardCurrencyUpdateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ProjectRewardCurrencyUpdateMutation,
+    ProjectRewardCurrencyUpdateMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    ProjectRewardCurrencyUpdateMutation,
+    ProjectRewardCurrencyUpdateMutationVariables
+  >(ProjectRewardCurrencyUpdateDocument, options)
+}
+export type ProjectRewardCurrencyUpdateMutationHookResult = ReturnType<
+  typeof useProjectRewardCurrencyUpdateMutation
+>
+export type ProjectRewardCurrencyUpdateMutationResult =
+  Apollo.MutationResult<ProjectRewardCurrencyUpdateMutation>
+export type ProjectRewardCurrencyUpdateMutationOptions =
+  Apollo.BaseMutationOptions<
+    ProjectRewardCurrencyUpdateMutation,
+    ProjectRewardCurrencyUpdateMutationVariables
+  >
 export const ProjectRewardCreateDocument = gql`
   mutation ProjectRewardCreate($input: CreateProjectRewardInput!) {
     projectRewardCreate(input: $input) {

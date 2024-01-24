@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client'
 import { Text, Stack, VStack, Checkbox, Button, IconButton, Select } from '@chakra-ui/react'
 import { CardLayout } from '../../../../../../../components/layouts'
 import { useTranslation } from 'react-i18next'
@@ -7,15 +8,18 @@ import { useState } from 'react'
 import {
   CreateProjectRewardInput,
   ProjectReward,
-  ProjectRewardForCreateUpdateFragment, RewardType, UpdateProjectRewardInput,
+  ProjectRewardForCreateUpdateFragment, RewardCurrency, RewardType, Satoshis, UpdateProjectRewardInput,
 } from '../../../../../../../types'
-import { commaFormatted, toInt} from '../../../../../../../utils'
+import { commaFormatted, toInt, useNotification} from '../../../../../../../utils'
 import { ProjectRewardValidations} from '../../../../../../../constants'
 import { useProjectContext } from '../../../../../../../context'
-import { CalendarButton, CreatorEmailButton, FileUpload } from '../../../../../../../components/molecules'
+import { CalendarButton, CreatorEmailButton, FileUpload, UpdateCurrencyModal } from '../../../../../../../components/molecules'
 import { RiArrowLeftSLine } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
 import { CloseIcon } from '@chakra-ui/icons'
+import { useModal } from '../../../../../../../hooks/useModal'
+import { useBTCConverter } from '../../../../../../../helpers/useBTCConverter'
+import { MUTATION_UPDATE_PROJECT_CURRENCY } from '../../../../../../../graphql/mutations'
 
 type Props = {
   buttonText: string,
@@ -28,17 +32,30 @@ type Props = {
 
 export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSaving, rewardData, createOrUpdate = 'create'}: Props) => {
   const { t } = useTranslation()
-  const {project} = useProjectContext();
+  const {project, updateProject} = useProjectContext();
   const navigate = useNavigate()
+  const { getUSDAmount } = useBTCConverter()
+  const { toast } = useNotification()
+
+  const {
+    isOpen: isCurrencyChangeModalOpen,
+    onClose: closeCurrencyChangeModal,
+    onOpen: openCurrencyChangeModal,
+  } = useModal()
 
   if(!project) {
     return null;
   }
 
+  const projectCurrency = project.rewardCurrency || RewardCurrency.Usdcent;
+  const [rewardCurrency, setRewardCurrency] =
+    useState<RewardCurrency>(projectCurrency)
   const ownerEmail = project.owners[0]?.user.email || ''
   const [reward, setReward] =
     useState<ProjectRewardForCreateUpdateFragment>(rewardData)
-  const [formCostDollarValue, setFormCostDollarValue] = useState(reward.cost > 0 ? (reward.cost / 100).toFixed(2) : '')
+  const [originalReward, setOriginalReward] =
+    useState<ProjectRewardForCreateUpdateFragment>(rewardData)
+  const [formCostValue, setFormCostValue] = useState(reward.cost > 0 && project.rewardCurrency == RewardCurrency.Usdcent ? (reward.cost / 100).toFixed(2) : reward.cost.toFixed(0) || '')
   const [formError, setFormError] = useState<any>({})
 
   const getRewardCreationInputVariables = (): CreateProjectRewardInput => {
@@ -88,29 +105,31 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
 
   const handleMaxClaimableAmountBlur = () => {
     // set cost with the dollar value converted to cents
-    setReward((current) => ({
-      ...current,
-      maxClaimable: toInt(Math.round(reward.maxClaimable || 0)),
-    }))
+    if(createOrUpdate == 'create') {
+      setReward((current) => ({
+        ...current,
+        maxClaimable: toInt(Math.round(reward.maxClaimable || 0)),
+      }))
+    }
   }
 
   const handleCostAmountChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const { value } = event.target
-    setFormCostDollarValue(value)
+    setFormCostValue(value)
   }
 
   const handleCostAmountBlur = () => {
 
-    // Dollar value rounded to two decimal places
-    const dollarValue = parseFloat(formCostDollarValue).toFixed(2)
-    setFormCostDollarValue(dollarValue)
+    // Dollar value rounded to two decimal places, satoshis int
+    let costValue = project.rewardCurrency && project.rewardCurrency == RewardCurrency.Usdcent ? (parseFloat(formCostValue).toFixed(2)) : (parseInt(formCostValue).toFixed(0));
+    setFormCostValue(costValue)
 
-    // set cost with the dollar value converted to cents
+    // set cost to the project reward type
     setReward((current) => ({
       ...current,
-      cost: toInt(parseFloat(dollarValue) * 100),
+      cost: project.rewardCurrency && project.rewardCurrency == RewardCurrency.Usdcent ? toInt(parseFloat(costValue) * 100) : toInt(costValue),
     }))
   }
 
@@ -149,7 +168,10 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
     }
 
     if (
-        parseFloat(formCostDollarValue) * 100 >
+        ( project.rewardCurrency && project.rewardCurrency == RewardCurrency.Usdcent ? 
+          parseFloat(formCostValue) * 100 : 
+          getUSDAmount(parseInt(formCostValue) as Satoshis)
+        ) >
         ProjectRewardValidations.cost.maxUSDCentsAmount
     ) {
       errors.cost = t('Price must be less than') + ` $${commaFormatted(
@@ -186,6 +208,57 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
       },
     });
 
+  }
+
+  const [updateProjectCurrencyMutation, {}] = useMutation<{
+    projectRewardCurrencyUpdate: {id: number, cost: number, name: string}[]
+  }>(MUTATION_UPDATE_PROJECT_CURRENCY, {
+    onCompleted(data) {
+
+      // Update the project
+      updateProject({
+        rewardCurrency: rewardCurrency,
+        rewards: data.projectRewardCurrencyUpdate as ProjectReward[]
+      });
+
+      // Update the rewardId to the new reward Id
+      const newReward = data.projectRewardCurrencyUpdate.find(newRewards => newRewards.name == originalReward.name) as ProjectReward;
+      setReward((current) => ({ ...current, 'id': newReward.id, 'cost': newReward.cost }))
+      let newCostValue = rewardCurrency == RewardCurrency.Usdcent ? ((newReward.cost / 100).toFixed(2)) : (newReward.cost.toFixed(0));
+      setFormCostValue(newCostValue)
+
+      // Set the original reward for tracking updates
+      // @TODO: Do a shallow react router update so if the user refreshes it wont 404 the page
+      setOriginalReward((current) => ({ ...current, ...newReward }))
+
+      // Close the modal
+      closeCurrencyChangeModal();
+
+      // Show the toast
+      toast({
+        title: 'Project updated successfully!',
+        status: 'success',
+      })
+    },
+    onError(error) {
+      setRewardCurrency(rewardCurrency === RewardCurrency.Usdcent ? RewardCurrency.Btcsat : RewardCurrency.Usdcent);
+      toast({
+        title: 'failed to update project',
+        description: `${error}`,
+        status: 'error',
+      })
+    },
+  })
+
+  const handleChangeProjectCurrency = () => {
+    updateProjectCurrencyMutation({
+        variables: {
+          input: {
+            projectId: Number(project?.id),
+            rewardCurrency: rewardCurrency
+          },
+        },
+      })
   }
 
   return(
@@ -233,23 +306,26 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
               onChange={handleFormTextChange}
               onBlur={handleMaxClaimableAmountBlur}
               error={formError.maxClaimable}
+              isDisabled={createOrUpdate == 'update'}
+              isReadOnly={createOrUpdate == 'update'}
             />
           </FieldContainer>
         </Stack>
         <Stack direction={{ base: 'column', lg: 'row' }}>
           <FieldContainer title={t('Currency')}>
-            <TextInputBox
-              placeholder={'USD'}
-              value={'USD'}
-              isReadOnly={true}
-              isDisabled={true}
-            />
+            <Select value={rewardCurrency} onChange={(event) => {
+              setRewardCurrency(event.target.value as RewardCurrency)
+              openCurrencyChangeModal();
+            }}>
+                <option value={RewardCurrency.Btcsat}>{t('BTC (sats)')}</option>
+                <option value={RewardCurrency.Usdcent}>{t('USD ($)')}</option>
+            </Select>
           </FieldContainer>
-          <FieldContainer title={t('Price (USD)')}>
+          <FieldContainer title={t('Price' + ` (${project.rewardCurrency == RewardCurrency.Usdcent ? 'USD' : 'SATS'})`)}>
             <TextInputBox
               placeholder={'150'}
               name="cost"
-              value={formCostDollarValue}
+              value={formCostValue}
               isInvalid={formError.cost}
               onChange={handleCostAmountChange}
               onBlur={handleCostAmountBlur}
@@ -356,6 +432,17 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
           </Button>
         </Stack>
       </CardLayout>
+      <UpdateCurrencyModal
+          isOpen={isCurrencyChangeModalOpen}
+          onClose={() => {
+            setRewardCurrency(rewardCurrency === RewardCurrency.Usdcent ? RewardCurrency.Btcsat : RewardCurrency.Usdcent);
+            closeCurrencyChangeModal();
+          }}
+          title={`${t('Are you sure you want to make the change?')}`}
+          confirm={handleChangeProjectCurrency}
+          description={`${t('Please note that all reward prices will be automatically updated to reflect their equivalent value in SWITCH_TO_REWARD_CURRENCY, based on the current Bitcoin price in US Dollars. If you wish you can update prices individually for each reward on reward’s page.').replace('SWITCH_TO_REWARD_CURRENCY', (rewardCurrency === RewardCurrency.Usdcent ? 'USD' : 'Bitcoin'))}`}
+          warning={`${t('You are about to switch the currency denomination for all your rewards from CURRENT_REWARD_CURRENCY to SWITCH_TO_REWARD_CURRENCY. ').replace('SWITCH_TO_REWARD_CURRENCY', (rewardCurrency === RewardCurrency.Usdcent ? 'USD($)' : 'Bitcoin(sats)')).replace('CURRENT_REWARD_CURRENCY', (project?.rewardCurrency === RewardCurrency.Usdcent ? 'USD($)' : 'Bitcoin(sats)'))}`}
+        />
     </VStack>
   )
 }

@@ -3,6 +3,7 @@ import { ProjectDashboardPage } from './ProjectDashboardPage'
 import { ProjectDescription } from './sections/ProjectDescription'
 import { ProjectDetails } from './sections/ProjectDetails'
 import { ProjectNostrSettings } from './sections/ProjectNostrSettings'
+import { ProjectRewardSettings } from './sections/ProjectRewardSettings'
 import { ProjectSettings } from './sections/ProjectSettings'
 import { ProjectStatusSection } from './sections/ProjectStatus'
 import { ProjectStory } from './sections/ProjectStory'
@@ -16,6 +17,7 @@ export {
   ProjectDescription,
   ProjectDetails,
   ProjectNostrSettings,
+  ProjectRewardSettings,
   ProjectSettings,
   ProjectStory,
   ProjectStatusSection,

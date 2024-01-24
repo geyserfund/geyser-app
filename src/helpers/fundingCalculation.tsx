@@ -32,7 +32,7 @@ export const useFundCalc = (state: IFundForm) => {
     const rewardsDollarCost =
       state.rewardCurrency === RewardCurrency.Usdcent
         ? state.rewardsCost / 100
-        : getUSDAmount(state.rewardsCost as Satoshis) / 100
+        : getUSDAmount(state.rewardsCost as Satoshis)
 
     return parseFloat((donationDollarAmount + rewardsDollarCost).toFixed(2))
   }

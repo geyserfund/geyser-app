@@ -61,6 +61,15 @@ export const MUTATION_UPDATE_PROJECT = gql`
   }
 `
 
+export const MUTATION_UPDATE_PROJECT_CURRENCY = gql`
+  ${FRAGMENT_PROJECT_REWARD_FOR_CREATE_UPDATE}
+  mutation ProjectRewardCurrencyUpdate($input: ProjectRewardCurrencyUpdate!) {
+    projectRewardCurrencyUpdate(input: $input) {
+      ...ProjectRewardForCreateUpdate
+    }
+  }
+`
+
 export const MUTATION_CREATE_PROJECT_REWARD = gql`
   ${FRAGMENT_PROJECT_REWARD_FOR_CREATE_UPDATE}
   mutation ProjectRewardCreate($input: CreateProjectRewardInput!) {
