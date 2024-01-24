@@ -47,6 +47,7 @@ export const ProjectCreateReward = () => {
       rewardSave={createReward}
       rewardSaving={createRewardLoading}
       rewardData={defaultProjectReward}
+      createOrUpdate='create'
     />
   )
 }

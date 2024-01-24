@@ -306,8 +306,8 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
               onChange={handleFormTextChange}
               onBlur={handleMaxClaimableAmountBlur}
               error={formError.maxClaimable}
-              isDisabled={createOrUpdate == 'update'}
-              isReadOnly={createOrUpdate == 'update'}
+              isDisabled={createOrUpdate == 'update' && reward.maxClaimable ? true : false}
+              isReadOnly={createOrUpdate == 'update' && reward.maxClaimable ? true : false}
             />
           </FieldContainer>
         </Stack>
