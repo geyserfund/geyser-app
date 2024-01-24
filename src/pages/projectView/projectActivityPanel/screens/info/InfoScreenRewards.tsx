@@ -5,13 +5,13 @@ import { MobileViews, useProjectContext } from '../../../../../context'
 import { PathName } from '../../../../../constants'
 import { useNavigate } from 'react-router-dom'
 import { ProjectFundersModal, useProjectFundersModal } from './components'
+import { InfoScreenFeed } from './InfoScreenFeed'
 
 export const InfoScreenRewards = () => {
 
   const { t } = useTranslation()
   const { setMobileView, project } = useProjectContext()
   const navigate = useNavigate()
-  const fundersModal = useProjectFundersModal()
 
   const handleAllRewardsButtonClick = () => {
     setMobileView(MobileViews.rewards)
@@ -24,7 +24,7 @@ export const InfoScreenRewards = () => {
 
   const activeProjectRewards = project.rewards.filter(reward => reward.isHidden === false);
   if(activeProjectRewards.length == 0) {
-    return <ProjectFundersModal {...fundersModal} />
+    return <InfoScreenFeed />
   }
 
   return (
