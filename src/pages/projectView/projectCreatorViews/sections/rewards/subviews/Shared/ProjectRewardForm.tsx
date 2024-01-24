@@ -80,20 +80,16 @@ export const ProjectRewardForm = ({
     onOpen: openCurrencyChangeModal,
   } = useModal()
 
-  if (!project) {
-    return null
-  }
-
-  const projectCurrency = project.rewardCurrency || RewardCurrency.Usdcent
+  const projectCurrency = project?.rewardCurrency || RewardCurrency.Usdcent
   const [rewardCurrency, setRewardCurrency] =
     useState<RewardCurrency>(projectCurrency)
-  const ownerEmail = project.owners[0]?.user.email || ''
+  const ownerEmail = project?.owners[0]?.user.email || ''
   const [reward, setReward] =
     useState<ProjectRewardForCreateUpdateFragment>(rewardData)
   const [originalReward, setOriginalReward] =
     useState<ProjectRewardForCreateUpdateFragment>(rewardData)
   const [formCostValue, setFormCostValue] = useState(
-    reward.cost > 0 && project.rewardCurrency == RewardCurrency.Usdcent
+    reward.cost > 0 && project?.rewardCurrency === RewardCurrency.Usdcent
       ? (reward.cost / 100).toFixed(2)
       : reward.cost.toFixed(0) || '',
   )
@@ -101,7 +97,7 @@ export const ProjectRewardForm = ({
 
   const getRewardCreationInputVariables = (): CreateProjectRewardInput => {
     return {
-      projectId: project.id,
+      projectId: project?.id,
       cost: reward.cost,
       description: reward.description,
       image: reward.image || undefined,
@@ -147,7 +143,7 @@ export const ProjectRewardForm = ({
 
   const handleMaxClaimableAmountBlur = () => {
     // set cost with the dollar value converted to cents
-    if (createOrUpdate == 'create') {
+    if (createOrUpdate === 'create') {
       setReward((current) => ({
         ...current,
         maxClaimable: toInt(Math.round(reward.maxClaimable || 0)),
@@ -165,17 +161,18 @@ export const ProjectRewardForm = ({
   const handleCostAmountBlur = () => {
     // Dollar value rounded to two decimal places, satoshis int
     const costValue =
-      project.rewardCurrency && project.rewardCurrency == RewardCurrency.Usdcent
+      project?.rewardCurrency &&
+      project?.rewardCurrency === RewardCurrency.Usdcent
         ? parseFloat(formCostValue).toFixed(2)
-        : parseInt(formCostValue).toFixed(0)
+        : toInt(formCostValue).toFixed(0)
     setFormCostValue(costValue)
 
     // set cost to the project reward type
     setReward((current) => ({
       ...current,
       cost:
-        project.rewardCurrency &&
-        project.rewardCurrency == RewardCurrency.Usdcent
+        project?.rewardCurrency &&
+        project?.rewardCurrency === RewardCurrency.Usdcent
           ? toInt(parseFloat(costValue) * 100)
           : toInt(costValue),
     }))
@@ -221,10 +218,10 @@ export const ProjectRewardForm = ({
     }
 
     if (
-      (project.rewardCurrency &&
-      project.rewardCurrency == RewardCurrency.Usdcent
+      (project?.rewardCurrency &&
+      project?.rewardCurrency === RewardCurrency.Usdcent
         ? parseFloat(formCostValue) * 100
-        : getUSDAmount(parseInt(formCostValue) as Satoshis)) >
+        : getUSDAmount(toInt(formCostValue) as Satoshis)) >
       ProjectRewardValidations.cost.maxUSDCentsAmount
     ) {
       errors.cost =
@@ -270,7 +267,7 @@ export const ProjectRewardForm = ({
     })
   }
 
-  const [updateProjectCurrencyMutation, {}] = useMutation<{
+  const [updateProjectCurrencyMutation] = useMutation<{
     projectRewardCurrencyUpdate: { id: number; cost: number; name: string }[]
   }>(MUTATION_UPDATE_PROJECT_CURRENCY, {
     onCompleted(data) {
@@ -282,7 +279,7 @@ export const ProjectRewardForm = ({
 
       // Update the rewardId to the new reward Id
       const newReward = data.projectRewardCurrencyUpdate.find(
-        (newRewards) => newRewards.name == originalReward.name,
+        (newRewards) => newRewards.name === originalReward.name,
       ) as ProjectReward
       if (newReward) {
         setReward((current) => ({
@@ -291,7 +288,7 @@ export const ProjectRewardForm = ({
           cost: newReward.cost,
         }))
         const newCostValue =
-          rewardCurrency == RewardCurrency.Usdcent
+          rewardCurrency === RewardCurrency.Usdcent
             ? (newReward.cost / 100).toFixed(2)
             : newReward.cost.toFixed(0)
         setFormCostValue(newCostValue)
@@ -301,8 +298,8 @@ export const ProjectRewardForm = ({
         setOriginalReward((current) => ({ ...current, ...newReward }))
       } else {
         setFormCostValue(
-          rewardCurrency == RewardCurrency.Usdcent
-            ? getUSDAmount(parseInt(formCostValue) as Satoshis).toFixed(2)
+          rewardCurrency === RewardCurrency.Usdcent
+            ? getUSDAmount(toInt(formCostValue) as Satoshis).toFixed(2)
             : getSatoshisFromUSDCents(
                 (parseFloat(formCostValue) * 100) as USDCents,
               ).toFixed(0),
@@ -341,6 +338,10 @@ export const ProjectRewardForm = ({
         },
       },
     })
+  }
+
+  if (!project) {
+    return null
   }
 
   return (
@@ -402,10 +403,10 @@ export const ProjectRewardForm = ({
               onBlur={handleMaxClaimableAmountBlur}
               error={formError.maxClaimable}
               isDisabled={Boolean(
-                createOrUpdate == 'update' && reward.maxClaimable,
+                createOrUpdate === 'update' && reward.maxClaimable,
               )}
               isReadOnly={Boolean(
-                createOrUpdate == 'update' && reward.maxClaimable,
+                createOrUpdate === 'update' && reward.maxClaimable,
               )}
             />
           </VStack>
@@ -427,7 +428,7 @@ export const ProjectRewardForm = ({
             title={t(
               'Price' +
                 ` (${
-                  project.rewardCurrency == RewardCurrency.Usdcent
+                  project.rewardCurrency === RewardCurrency.Usdcent
                     ? 'USD'
                     : 'SATS'
                 })`,
