@@ -143,12 +143,10 @@ export const ProjectRewardForm = ({
 
   const handleMaxClaimableAmountBlur = () => {
     // set cost with the dollar value converted to cents
-    if (createOrUpdate === 'create') {
-      setReward((current) => ({
-        ...current,
-        maxClaimable: toInt(Math.round(reward.maxClaimable || 0)),
-      }))
-    }
+    setReward((current) => ({
+      ...current,
+      maxClaimable: toInt(Math.round(reward.maxClaimable || 0)),
+    }))
   }
 
   const handleCostAmountChange = (
@@ -403,10 +401,10 @@ export const ProjectRewardForm = ({
               onBlur={handleMaxClaimableAmountBlur}
               error={formError.maxClaimable}
               isDisabled={Boolean(
-                createOrUpdate === 'update' && reward.maxClaimable,
+                createOrUpdate === 'update' && originalReward.maxClaimable,
               )}
               isReadOnly={Boolean(
-                createOrUpdate === 'update' && reward.maxClaimable,
+                createOrUpdate === 'update' && originalReward.maxClaimable,
               )}
             />
           </VStack>
