@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
 import { getPath } from '../../constants'
 import { useAuthContext } from '../../context'
+import { useModal } from '../../hooks'
 import {
   CreateProjectMutation,
   useCreateProjectMutation,
@@ -13,6 +14,7 @@ import {
   useUpdateProjectMutation,
 } from '../../types'
 import { useNotification } from '../../utils'
+import { ProjectExitConfirmModal } from './components'
 import { FormContinueButton } from './components/FormContinueButton'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 import { ProjectForm } from './components/ProjectForm'
@@ -100,6 +102,8 @@ export const ProjectCreate = () => {
     hasUnsaved: form.formState.isDirty,
   })
 
+  const exitModal = useModal()
+
   const onBackClick = () => {
     if (form.formState.isDirty) {
       return unsavedModal.onOpen({
@@ -142,7 +146,7 @@ export const ProjectCreate = () => {
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <ProjectCreateLayout
         continueButton={<FormContinueButton {...nextProps} flexGrow={1} />}
-        onBackClick={onBackClick}
+        onBackClick={isEdit ? exitModal.onOpen : onBackClick}
         title={
           <TitleWithProgressBar
             title={t('Project description')}
@@ -157,6 +161,7 @@ export const ProjectCreate = () => {
         </VStack>
       </ProjectCreateLayout>
       <ProjectUnsavedModal {...unsavedModal} />
+      <ProjectExitConfirmModal {...exitModal} onConfirm={onBackClick} />
     </form>
   )
 }
