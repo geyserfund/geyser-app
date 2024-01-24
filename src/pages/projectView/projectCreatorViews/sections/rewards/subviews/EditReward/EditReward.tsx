@@ -61,6 +61,7 @@ export const ProjectEditReward = () => {
       rewardSave={updateReward}
       rewardSaving={updateRewardLoading}
       rewardData={reward}
+      createOrUpdate='update'
     />
   )
 }

@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client'
-import { Text, Stack, VStack, Checkbox, Button, IconButton, Select } from '@chakra-ui/react'
+import { Text, Stack, VStack, Checkbox, Button, IconButton, Select, Tooltip, HStack } from '@chakra-ui/react'
 import { CardLayout } from '../../../../../../../components/layouts'
 import { useTranslation } from 'react-i18next'
 import { FieldContainer } from '../../../../../../../forms/components/FieldContainer'
@@ -8,7 +8,7 @@ import { useState } from 'react'
 import {
   CreateProjectRewardInput,
   ProjectReward,
-  ProjectRewardForCreateUpdateFragment, RewardCurrency, RewardType, Satoshis, UpdateProjectRewardInput,
+  ProjectRewardForCreateUpdateFragment, RewardCurrency, RewardType, Satoshis, USDCents, USDCents, UpdateProjectRewardInput,
 } from '../../../../../../../types'
 import { commaFormatted, toInt, useNotification} from '../../../../../../../utils'
 import { ProjectRewardValidations} from '../../../../../../../constants'
@@ -20,6 +20,7 @@ import { CloseIcon } from '@chakra-ui/icons'
 import { useModal } from '../../../../../../../hooks/useModal'
 import { useBTCConverter } from '../../../../../../../helpers/useBTCConverter'
 import { MUTATION_UPDATE_PROJECT_CURRENCY } from '../../../../../../../graphql/mutations'
+import { BiInfoCircle } from 'react-icons/bi'
 
 type Props = {
   buttonText: string,
@@ -34,7 +35,7 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
   const { t } = useTranslation()
   const {project, updateProject} = useProjectContext();
   const navigate = useNavigate()
-  const { getUSDAmount } = useBTCConverter()
+  const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
   const { toast } = useNotification()
 
   const {
@@ -223,13 +224,20 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
 
       // Update the rewardId to the new reward Id
       const newReward = data.projectRewardCurrencyUpdate.find(newRewards => newRewards.name == originalReward.name) as ProjectReward;
-      setReward((current) => ({ ...current, 'id': newReward.id, 'cost': newReward.cost }))
-      let newCostValue = rewardCurrency == RewardCurrency.Usdcent ? ((newReward.cost / 100).toFixed(2)) : (newReward.cost.toFixed(0));
-      setFormCostValue(newCostValue)
+      if(newReward) {
+        setReward((current) => ({ ...current, 'id': newReward.id, 'cost': newReward.cost }))
+        let newCostValue = rewardCurrency == RewardCurrency.Usdcent ? ((newReward.cost / 100).toFixed(2)) : (newReward.cost.toFixed(0));
+        setFormCostValue(newCostValue)
 
-      // Set the original reward for tracking updates
-      // @TODO: Do a shallow react router update so if the user refreshes it wont 404 the page
-      setOriginalReward((current) => ({ ...current, ...newReward }))
+        // Set the original reward for tracking updates
+        // @TODO: Do a shallow react router update so if the user refreshes it wont 404 the page
+        setOriginalReward((current) => ({ ...current, ...newReward }))
+      } else {
+        setFormCostValue(rewardCurrency == RewardCurrency.Usdcent ? 
+          getUSDAmount(parseInt(formCostValue) as Satoshis).toFixed(2) : 
+          getSatoshisFromUSDCents((parseFloat(formCostValue) * 100) as USDCents).toFixed(0)
+        );
+      }
 
       // Close the modal
       closeCurrencyChangeModal();
@@ -298,7 +306,17 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
               error={formError.name}
             />
           </FieldContainer>
-          <FieldContainer title={t('Limited Edition (skip if no limit)')}>
+          <VStack spacing={1} alignItems="start" w="100%">
+            <HStack>
+              <Text variant="body1" wordBreak="keep-all" fontWeight={"normal"}>
+                {t('Limited Edition (skip if no limit)')}
+              </Text>
+              <Tooltip label={t('Limited Rewards cannot be edited after reward has been published.')}>
+                <span>
+                  <BiInfoCircle />
+                </span>
+              </Tooltip>
+            </HStack>
             <TextInputBox
               placeholder={'100'}
               value={reward.maxClaimable || ''}
@@ -306,10 +324,10 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
               onChange={handleFormTextChange}
               onBlur={handleMaxClaimableAmountBlur}
               error={formError.maxClaimable}
-              isDisabled={createOrUpdate == 'update'}
-              isReadOnly={createOrUpdate == 'update'}
+              isDisabled={createOrUpdate == 'update' && reward.maxClaimable ? true : false}
+              isReadOnly={createOrUpdate == 'update' && reward.maxClaimable ? true : false}
             />
-          </FieldContainer>
+          </VStack>
         </Stack>
         <Stack direction={{ base: 'column', lg: 'row' }}>
           <FieldContainer title={t('Currency')}>
