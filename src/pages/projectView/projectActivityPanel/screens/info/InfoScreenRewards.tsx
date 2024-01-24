@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { MobileViews, useProjectContext } from '../../../../../context'
 import { PathName } from '../../../../../constants'
 import { useNavigate } from 'react-router-dom'
-import { ProjectFundersModal, useProjectFundersModal } from './components'
 import { InfoScreenFeed } from './InfoScreenFeed'
 
 export const InfoScreenRewards = () => {
