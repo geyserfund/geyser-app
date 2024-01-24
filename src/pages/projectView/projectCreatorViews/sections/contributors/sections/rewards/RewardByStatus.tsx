@@ -1,9 +1,9 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { Body1, H2 } from '../../../../../../../components/typography'
+import { Body1, H2, H3 } from '../../../../../../../components/typography'
 import { useProjectContext } from '../../../../../../../context'
-import { usePaginationHook } from '../../../../../../../hooks/usePaginationHook'
+import { usePaginationAtomHook } from '../../../../../../../hooks'
 import { standardPadding } from '../../../../../../../styles'
 import {
   OrderByDirection,
@@ -15,6 +15,7 @@ import {
   useOrderStatusUpdateMutation,
 } from '../../../../../../../types'
 import { useNotification } from '../../../../../../../utils'
+import { useRewardCountAtom, useRewardsAtom } from './rewardsAtom'
 import { RewardStatus, RewardTable } from './RewardTable'
 
 export const RewardStatusLabel = {
@@ -30,6 +31,11 @@ export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
   const { project } = useProjectContext()
   const { toast } = useNotification()
 
+  const [rewardsData, setRewardsData] = useRewardsAtom()
+  const [rewardCount, setRewardCount] = useRewardCountAtom()
+
+  const ordersData = rewardsData[status]
+
   const where: OrdersGetWhereInput = {
     status,
     projectId: project?.id,
@@ -43,6 +49,7 @@ export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
 
   const { fetchMore } = useOrdersGetQuery({
     skip: !project?.id,
+    fetchPolicy: 'cache-and-network',
     variables: {
       input: {
         where,
@@ -54,34 +61,44 @@ export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
     },
     onCompleted(data) {
       handleDataUpdate(data.ordersGet?.orders || [])
+      setRewardCount({ [status]: data.ordersGet?.pagination?.count })
     },
   })
 
-  const {
-    handleDataUpdate,
-    data: ordersData,
-    isLoadingMore,
-    noMoreItems,
-    fetchNext,
-    setData,
-  } = usePaginationHook<OrderFragment>({
-    fetchMore,
-    queryName: ['ordersGet', 'orders'],
-    itemLimit: MAXIMUM_REWARD_ITEMS,
-    where,
-    orderBy,
-  })
+  const { handleDataUpdate, isLoadingMore, noMoreItems, fetchNext } =
+    usePaginationAtomHook<OrderFragment>({
+      fetchMore,
+      queryName: ['ordersGet', 'orders'],
+      itemLimit: MAXIMUM_REWARD_ITEMS,
+      where,
+      orderBy,
+      list: ordersData,
+      setList: (newList) => setRewardsData({ [status]: newList }),
+    })
 
   const [updateOrderStatus] = useOrderStatusUpdateMutation({
     onCompleted(data) {
       if (data.orderStatusUpdate?.id === undefined) return
-      setData(
-        ordersData.map((order) =>
-          order.id === data.orderStatusUpdate?.id
-            ? { ...order, ...data.orderStatusUpdate }
-            : order,
+
+      const newRewardItem = {
+        ...ordersData.find((order) => order.id === data.orderStatusUpdate?.id),
+        status: data.orderStatusUpdate.status as RewardStatus,
+      }
+
+      setRewardsData({
+        [status]: rewardsData[status].filter(
+          (order) => order.id !== newRewardItem.id,
         ),
-      )
+        [newRewardItem.status]: [
+          newRewardItem,
+          ...rewardsData[newRewardItem.status],
+        ],
+      })
+      setRewardCount({
+        [status]: rewardCount[status] - 1,
+        [newRewardItem.status]: rewardCount[newRewardItem.status] + 1,
+      })
+
       toast({ title: 'Order status updated', status: 'success' })
     },
     onError(error) {
@@ -110,11 +127,12 @@ export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
   return (
     <VStack width="100%" flexGrow={1} pt={'10px'} spacing="10px">
       <HStack w="full" px={standardPadding}>
-        <H2>{t(RewardStatusLabel[status])}</H2>
+        <H2 color="neutral.900">{t(RewardStatusLabel[status])}</H2>
+        <H3 color="neutral.600">{`(${rewardCount[status]})`}</H3>
       </HStack>
       {ordersData.length === 0 ? (
         <HStack w="full" px={standardPadding}>
-          <Body1>{t('No data')}</Body1>
+          <Body1>{t("This group doesn't have any items yet.")}</Body1>
         </HStack>
       ) : (
         <RewardTable
