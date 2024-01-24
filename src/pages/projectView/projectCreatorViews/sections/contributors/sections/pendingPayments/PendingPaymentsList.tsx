@@ -1,4 +1,4 @@
-import { Button, HStack, VStack } from '@chakra-ui/react'
+import { Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -17,7 +17,6 @@ import {
   useFundingTxsOrderGetQuery,
 } from '../../../../../../../types'
 import { useNotification } from '../../../../../../../utils'
-import { EmptyContainer } from '../../components'
 import { PendingPaymentsTable } from './PendingPaymentsTable'
 
 const MAXIMUM_PARTIAL_PAYMENT_ITEMS = 15
@@ -101,7 +100,7 @@ export const PendingPaymentsList = () => {
   return (
     <VStack width="100%" flexGrow={1} pt={'10px'} spacing="10px">
       {ordersData.length === 0 ? (
-        <EmptyContainer text={t('No partial payments yet')} />
+        <Text>{t("This group doesn't have any items yet.")}</Text>
       ) : (
         <PendingPaymentsTable
           data={ordersData}

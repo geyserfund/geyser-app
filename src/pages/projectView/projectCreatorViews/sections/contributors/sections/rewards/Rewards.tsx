@@ -7,13 +7,14 @@ import { EmptyContainer } from '../../components'
 import { RewardByStatus } from './RewardByStatus'
 import { useRewardEmptyAtom } from './rewardsAtom'
 import { RewardStatus } from './RewardTable'
+import { ProjectRewardsImageUrl } from '../../../../../../../constants'
 
 export const Rewards = () => {
   const { t } = useTranslation()
   const isRewardEmpty = useRewardEmptyAtom()
 
   if (isRewardEmpty) {
-    return <EmptyContainer text={t('No rewards sold yet')} />
+    return <EmptyContainer image={ProjectRewardsImageUrl} text={t('No rewards sold yet')} />
   }
 
   return (

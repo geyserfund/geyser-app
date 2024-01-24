@@ -15,6 +15,7 @@ import {
 } from '../../../../../../../types'
 import { EmptyContainer } from '../../components'
 import { PaymentsAndAccountingTable } from './PaymentsAndAccountingTable'
+import { ProjectNoTransactionImageUrl } from '../../../../../../../constants'
 
 const MAXIMUM_ACCOUNTING_ITEMS = 15
 
@@ -73,7 +74,7 @@ export const PaymentsAndAccoutningList = () => {
       alignItems="center"
     >
       {ordersData.length === 0 ? (
-        <EmptyContainer text={t('No payments received yet')} />
+        <EmptyContainer image={ProjectNoTransactionImageUrl} text={t('No payments received yet')} />
       ) : (
         <PaymentsAndAccountingTable data={ordersData} />
       )}
