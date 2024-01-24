@@ -224,7 +224,6 @@ export const PendingPaymentsTable = ({
       : ''
     const externalAccounts = fundingTx.funder.user?.externalAccounts || []
 
-    console.log('checking userinfop', fundingTx.funder.user)
     return (
       <HStack w="full" flex={1}>
         <VStack alignItems="flex-start" maxWidth="400px">
