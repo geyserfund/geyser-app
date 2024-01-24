@@ -120,13 +120,10 @@ export const usePaginationAtomHook = <TEntity, TTransformed = TEntity>({
 
         const mappedData = handleMapData(data)
 
-        setList(
-          (current) =>
-            [...current, ...mappedData] as PaginatedListType<
-              TEntity,
-              TTransformed
-            >,
-        )
+        setList([...list, ...mappedData] as PaginatedListType<
+          TEntity,
+          TTransformed
+        >)
         // If the aggregated length of the data is too small next pagination is automatically fetched
         if (
           data.length === itemLimit &&

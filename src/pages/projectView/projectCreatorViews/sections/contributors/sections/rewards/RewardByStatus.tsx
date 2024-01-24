@@ -15,7 +15,11 @@ import {
   useOrderStatusUpdateMutation,
 } from '../../../../../../../types'
 import { useNotification } from '../../../../../../../utils'
-import { useRewardCountAtom, useRewardsAtom } from './rewardsAtom'
+import {
+  useRewardCountAtom,
+  useRewardsAtom,
+  useRewardStatusChangeAtom,
+} from './rewardsAtom'
 import { RewardStatus, RewardTable } from './RewardTable'
 
 export const RewardStatusLabel = {
@@ -33,6 +37,7 @@ export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
 
   const [rewardsData, setRewardsData] = useRewardsAtom()
   const [rewardCount, setRewardCount] = useRewardCountAtom()
+  const updateRewardStatus = useRewardStatusChangeAtom()
 
   const ordersData = rewardsData[status]
 
@@ -49,7 +54,7 @@ export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
 
   const { fetchMore } = useOrdersGetQuery({
     skip: !project?.id,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'network-only',
     variables: {
       input: {
         where,
@@ -80,24 +85,7 @@ export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
     onCompleted(data) {
       if (data.orderStatusUpdate?.id === undefined) return
 
-      const newRewardItem = {
-        ...ordersData.find((order) => order.id === data.orderStatusUpdate?.id),
-        status: data.orderStatusUpdate.status as RewardStatus,
-      }
-
-      setRewardsData({
-        [status]: rewardsData[status].filter(
-          (order) => order.id !== newRewardItem.id,
-        ),
-        [newRewardItem.status]: [
-          newRewardItem,
-          ...rewardsData[newRewardItem.status],
-        ],
-      })
-      setRewardCount({
-        [status]: rewardCount[status] - 1,
-        [newRewardItem.status]: rewardCount[newRewardItem.status] + 1,
-      })
+      updateRewardStatus({ status, update: data.orderStatusUpdate })
 
       toast({ title: 'Order status updated', status: 'success' })
     },

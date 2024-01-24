@@ -1,4 +1,4 @@
-import { atom, useAtom } from 'jotai'
+import { atom, useAtom, useSetAtom } from 'jotai'
 
 import { OrderFragment } from '../../../../../../../types'
 import { RewardStatus } from './RewardTable'
@@ -54,3 +54,42 @@ const rewardCountSetAtom = atom(
 )
 
 export const useRewardCountAtom = () => useAtom(rewardCountSetAtom)
+
+const rewardStatusChange = atom(
+  null,
+  (
+    get,
+    set,
+    {
+      status,
+      update,
+    }: { status: RewardStatus; update: Partial<OrderFragment> },
+  ) => {
+    const rewards = get(rewardsAtom)
+    const rewardsCount = get(rewardsCountAtom)
+
+    const newRewardItem = {
+      ...rewards[status].find((order) => order.id === update.id),
+      ...update,
+    }
+
+    const newStatus = newRewardItem.status as RewardStatus
+
+    const newRewards = {
+      ...rewards,
+      [status]: rewards[status].filter((r) => r.id !== update.id),
+      [newStatus]: [newRewardItem, ...rewards[newStatus]],
+    }
+
+    const newRewardsCount = {
+      ...rewardsCount,
+      [status]: rewardsCount[status] - 1,
+      [newStatus]: rewardsCount[newStatus] + 1,
+    }
+
+    set(rewardsAtom, newRewards)
+    set(rewardsCountAtom, newRewardsCount)
+  },
+)
+
+export const useRewardStatusChangeAtom = () => useSetAtom(rewardStatusChange)
