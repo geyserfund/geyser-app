@@ -1,19 +1,19 @@
 import { HStack, Image, Text, VStack } from '@chakra-ui/react'
 
-import { ProjectRewardsImageUrl } from '../../../../../../constants'
-
-export const EmptyContainer = ({ text }: { text: string }) => {
+export const EmptyContainer = ({
+  image,
+  text,
+}: {
+  image: string
+  text: string
+}) => {
   return (
     <HStack w="full" justifyContent={'center'}>
       <VStack spacing="20px">
-        <Image
-          maxHeight="350px"
-          src={ProjectRewardsImageUrl}
-          alt="Project Rewards"
-        />
+        <Image maxHeight="350px" src={image} alt="Project Rewards" />
         <Text
           color="neutral.600"
-          fontSize="48px"
+          fontSize="24px"
           fontWeight="bold"
           textAlign="center"
         >
