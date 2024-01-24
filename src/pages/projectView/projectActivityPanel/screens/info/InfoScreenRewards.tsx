@@ -4,25 +4,27 @@ import { useTranslation } from 'react-i18next'
 import { MobileViews, useProjectContext } from '../../../../../context'
 import { PathName } from '../../../../../constants'
 import { useNavigate } from 'react-router-dom'
+import { ProjectFundersModal, useProjectFundersModal } from './components'
 
 export const InfoScreenRewards = () => {
 
   const { t } = useTranslation()
   const { setMobileView, project } = useProjectContext()
   const navigate = useNavigate()
+  const fundersModal = useProjectFundersModal()
 
   const handleAllRewardsButtonClick = () => {
     setMobileView(MobileViews.rewards)
     navigate(PathName.projectRewards)
   }
 
-  if(!project || !project.rewards || project.rewards.length == 0) {
+  if(!project) {
     return null;
   }
 
   const activeProjectRewards = project.rewards.filter(reward => reward.isHidden === false);
   if(activeProjectRewards.length == 0) {
-    return null;
+    return <ProjectFundersModal {...fundersModal} />
   }
 
   return (

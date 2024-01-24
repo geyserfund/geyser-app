@@ -42,7 +42,10 @@ export interface IFundFormState {
 
 export type UseFundingFormStateReturn = ReturnType<typeof useFundingFormState>
 
-export const useFundingFormState = ({ rewards, rewardCurrency }: UseFundStateProps) => {
+export const useFundingFormState = ({
+  rewards,
+  rewardCurrency,
+}: UseFundStateProps) => {
   const { user, isAnonymous } = useContext(AuthContext)
   const { getUSDCentsAmount } = useBTCConverter()
 
@@ -131,7 +134,7 @@ export const useFundingFormState = ({ rewards, rewardCurrency }: UseFundStatePro
                 return 0
               }
 
-              const cost = reward.cost
+              const { cost } = reward
               rewardsCost += cost * rewardMultiplier
             }
           })
