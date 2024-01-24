@@ -153,7 +153,8 @@ export const ProjectProvider = ({
 
   const fundForm = useFundingFormState({
     rewards: project ? project.rewards : undefined,
-    rewardCurrency: project && project.rewardCurrency ? project.rewardCurrency : undefined
+    rewardCurrency:
+      project && project.rewardCurrency ? project.rewardCurrency : undefined,
   })
 
   const updateProjectOwner = useCallback(
