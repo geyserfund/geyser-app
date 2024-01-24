@@ -250,6 +250,9 @@ export const Grant2AnnouncementImageUrl =
 export const Grant2AnnouncementTwitterUrl =
   'https://twitter.com/geyserfund/status/1628842072802312193?s=20'
 
+export const GeyserEmailVerificationDocUrl =
+  'https://docs.geyser.fund/geyser-docs/product-features/update-your-project/email-verification'
+
 // PLATFORMS
 
 export const VoltageUrl =
