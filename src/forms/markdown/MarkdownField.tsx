@@ -228,7 +228,9 @@ export const MarkdownField = ({
       manager={manager}
       initialContent={initialContent?.()}
       hooks={hooks}
-      placeholder={t('The story of the project goes here...')}
+      placeholder={
+        'Traveling to 15 LATAM & CARICOM countries using Bitcoin, this journey aims to showcase the widespread adoption of Bitcoin through engaging travel vlogs. The main objectives include organizing Bitcoin meetups to raise awareness and demonstrate the benevolence of humanity.'
+      }
     >
       <Box
         display="flex"

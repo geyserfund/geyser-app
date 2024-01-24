@@ -6,7 +6,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom'
 
 import { Modal } from '../../components/layouts'
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
-import { Body2 } from '../../components/typography'
+import { Body1 } from '../../components/typography'
 import Loader from '../../components/ui/Loader'
 import { getPath } from '../../constants'
 import { useAuthContext } from '../../context'
@@ -156,11 +156,11 @@ export const ProjectCreateCompletion = ({
       </ProjectCreateLayout>
       <Modal {...confirmModal} title={t('Confirm project launch')}>
         <VStack spacing="20px">
-          <Body2 color="neutral.700">
+          <Body1 color="neutral.700">
             {t(
               'By launching your project the project will be visible to and searchable by the public. You will be able to disactivate your project but not to hide your project after launching it.',
             )}
-          </Body2>
+          </Body1>
           <Button variant="primary" w="full" onClick={onLaunchClick}>
             {t('Confirm launch')}
           </Button>

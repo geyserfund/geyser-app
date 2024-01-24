@@ -8,7 +8,7 @@ import { useState } from 'react'
 import {
   CreateProjectRewardInput,
   ProjectReward,
-  ProjectRewardForCreateUpdateFragment, RewardCurrency, RewardType, Satoshis, USDCents, USDCents, UpdateProjectRewardInput,
+  ProjectRewardForCreateUpdateFragment, RewardCurrency, RewardType, Satoshis, USDCents, UpdateProjectRewardInput,
 } from '../../../../../../../types'
 import { commaFormatted, toInt, useNotification} from '../../../../../../../utils'
 import { ProjectRewardValidations} from '../../../../../../../constants'

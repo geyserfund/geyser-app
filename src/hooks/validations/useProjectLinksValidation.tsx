@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { ProjectFragment } from '../../types'
+import { validUrl } from '../../utils'
 
 export const useProjectLinksValidation = ({
   updateProject,
@@ -19,10 +20,10 @@ export const useProjectLinksValidation = ({
           return
         }
 
-        const url = new URL(link)
+        const isValid = validUrl.test(link)
 
         const isDuplicate = links.indexOf(link) !== index
-        if (url.protocol.includes('https') && !isDuplicate) {
+        if (isValid && !isDuplicate) {
           errors.push(false)
         } else {
           errors.push(true)

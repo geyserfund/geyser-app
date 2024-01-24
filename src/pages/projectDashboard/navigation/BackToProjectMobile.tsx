@@ -15,7 +15,6 @@ export const BackToProjectMobile = ({
   return (
     <Button
       variant="secondary"
-      size="sm"
       w="full"
       type="submit"
       leftIcon={<BsArrowLeft />}

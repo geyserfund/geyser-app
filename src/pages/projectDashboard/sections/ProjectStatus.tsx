@@ -6,10 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useProjectContext } from '../../../context'
 import { MUTATION_UPDATE_PROJECT } from '../../../graphql/mutations'
-import {
-  Project,
-  ProjectStatus
-} from '../../../types'
+import { Project, ProjectStatus } from '../../../types'
 import { isActive, useNotification } from '../../../utils'
 import {
   ProjectUnsavedModal,
