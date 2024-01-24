@@ -128,7 +128,11 @@ export const ImageCropperModal = ({
             flex="1"
             variant="secondary"
             onClick={() => {
-              if (fileSrc) onCompleted(fileSrc)
+              if (fileSrc) {
+                onCompleted(fileSrc)
+              }
+
+              onClose()
             }}
           >
             {t('Skip crop')}

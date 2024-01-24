@@ -1,4 +1,5 @@
 import { Box, Button, IconButton, Link, Tooltip } from '@chakra-ui/react'
+import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -9,6 +10,9 @@ import { useNotification } from '../../utils'
 import { SocialConfig } from './SocialConfig'
 import { ConnectWithButtonProps } from './type'
 import { useAuthToken, useCanLogin } from './useAuthToken'
+
+export const TWITTER_AUTH_ATTEMPT_KEY = 'twitterAuthAttempt'
+export const TWITTER_AUTH_ATTEMPT_MESSAGE_TIME_MILLIS = 1000 * 60 * 15 // 15 minutes
 
 export const ConnectWithSocial = ({
   onClose,
@@ -86,6 +90,11 @@ export const ConnectWithSocial = ({
     if (canLogin) {
       setPollAuthStatus(true)
     }
+
+    localStorage.setItem(
+      TWITTER_AUTH_ATTEMPT_KEY,
+      DateTime.now().toMillis().toString(),
+    )
   }
 
   const handleToastError = (reason?: string) => {
@@ -116,7 +125,6 @@ export const ConnectWithSocial = ({
         variant="login"
         href={`${authServiceEndpoint}/${accountType}?nextPath=/auth/${accountType}`}
         isExternal
-        maxWidth={isIconOnly ? '40px' : '100%'}
         color={`social.${accountType}`}
         onClick={handleClick}
         isDisabled={isDisabled}

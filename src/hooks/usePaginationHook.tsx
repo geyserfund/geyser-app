@@ -36,7 +36,7 @@ export const usePaginationHook = <TEntity, TTransformed = TEntity>({
     [] as unknown as PaginatedListType<TEntity, TTransformed>,
   )
 
-  const [noMoreItems, setNoMoreItems] = useListenerState(false)
+  const [noMoreItems, setNoMoreItems] = useListenerState(true)
 
   const [isLoadingMore, setIsLoadingMore] = useListenerState(false)
 
@@ -49,6 +49,8 @@ export const usePaginationHook = <TEntity, TTransformed = TEntity>({
     if (data) {
       if (data.length < itemLimit) {
         setNoMoreItems(true)
+      } else {
+        setNoMoreItems(false)
       }
 
       handlePaginationChange(data)
@@ -148,5 +150,6 @@ export const usePaginationHook = <TEntity, TTransformed = TEntity>({
     noMoreItems,
     setNoMoreItems,
     data: list,
+    setData: setList,
   }
 }

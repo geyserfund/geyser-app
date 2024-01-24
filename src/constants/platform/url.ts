@@ -235,6 +235,9 @@ export const VerifyEmailImageUrl =
 export const ProjectLaunchedImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/project-launched.svg'
 
+export const ProjectRewardsImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/geyser-order.svg'
+
 // GRANTS
 
 export const Grant3AnnouncementImageUrl =
@@ -246,6 +249,9 @@ export const Grant2AnnouncementImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/grant-2-announcement.png'
 export const Grant2AnnouncementTwitterUrl =
   'https://twitter.com/geyserfund/status/1628842072802312193?s=20'
+
+export const GeyserEmailVerificationDocUrl =
+  'https://docs.geyser.fund/geyser-docs/product-features/update-your-project/email-verification'
 
 // PLATFORMS
 

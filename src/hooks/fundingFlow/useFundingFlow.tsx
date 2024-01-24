@@ -450,7 +450,9 @@ export const validateFundingInput = (input: FundingInput) => {
 
   if (
     (input.donationAmount && toInt(input.donationAmount) > 0) ||
-    (input.orderInput && input.orderInput.items && input.orderInput.items.length > 0)
+    (input.orderInput &&
+      input.orderInput.items &&
+      input.orderInput.items.length > 0)
   ) {
     isValid = true
     error = ''

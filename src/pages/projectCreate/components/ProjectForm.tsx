@@ -152,7 +152,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
         subtitle={
           <>
             {t(
-              'Set your unique project identifier to create your personalized URL and get a corresponding Lightning address.',
+              'Set your unique project identifier to create your personalized URL and get a corresponding Lightning address for your Geyser project.',
             )}{' '}
             {isEdit &&
               t(

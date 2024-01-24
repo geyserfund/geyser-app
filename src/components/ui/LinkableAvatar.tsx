@@ -86,6 +86,7 @@ export const LinkableAvatar = ({
       pointerEvents={userProfileID ? 'all' : 'none'}
       to={userProfileID ? getPath('userProfile', userProfileID) : '/'}
       color={textColor}
+      textDecoration={'none'}
       _hover={{ textDecoration: 'none' }}
       _active={{ textDecoration: 'none' }}
       _focus={{ textDecoration: 'none' }}
