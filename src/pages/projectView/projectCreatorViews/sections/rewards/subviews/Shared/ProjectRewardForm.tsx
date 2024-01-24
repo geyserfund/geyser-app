@@ -8,7 +8,7 @@ import { useState } from 'react'
 import {
   CreateProjectRewardInput,
   ProjectReward,
-  ProjectRewardForCreateUpdateFragment, RewardCurrency, RewardType, Satoshis, UpdateProjectRewardInput,
+  ProjectRewardForCreateUpdateFragment, RewardCurrency, RewardType, Satoshis, USDCents, USDCents, UpdateProjectRewardInput,
 } from '../../../../../../../types'
 import { commaFormatted, toInt, useNotification} from '../../../../../../../utils'
 import { ProjectRewardValidations} from '../../../../../../../constants'
@@ -35,7 +35,7 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
   const { t } = useTranslation()
   const {project, updateProject} = useProjectContext();
   const navigate = useNavigate()
-  const { getUSDAmount } = useBTCConverter()
+  const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
   const { toast } = useNotification()
 
   const {
@@ -224,13 +224,20 @@ export const ProjectRewardForm = ({buttonText, titleText, rewardSave, rewardSavi
 
       // Update the rewardId to the new reward Id
       const newReward = data.projectRewardCurrencyUpdate.find(newRewards => newRewards.name == originalReward.name) as ProjectReward;
-      setReward((current) => ({ ...current, 'id': newReward.id, 'cost': newReward.cost }))
-      let newCostValue = rewardCurrency == RewardCurrency.Usdcent ? ((newReward.cost / 100).toFixed(2)) : (newReward.cost.toFixed(0));
-      setFormCostValue(newCostValue)
+      if(newReward) {
+        setReward((current) => ({ ...current, 'id': newReward.id, 'cost': newReward.cost }))
+        let newCostValue = rewardCurrency == RewardCurrency.Usdcent ? ((newReward.cost / 100).toFixed(2)) : (newReward.cost.toFixed(0));
+        setFormCostValue(newCostValue)
 
-      // Set the original reward for tracking updates
-      // @TODO: Do a shallow react router update so if the user refreshes it wont 404 the page
-      setOriginalReward((current) => ({ ...current, ...newReward }))
+        // Set the original reward for tracking updates
+        // @TODO: Do a shallow react router update so if the user refreshes it wont 404 the page
+        setOriginalReward((current) => ({ ...current, ...newReward }))
+      } else {
+        setFormCostValue(rewardCurrency == RewardCurrency.Usdcent ? 
+          getUSDAmount(parseInt(formCostValue) as Satoshis).toFixed(2) : 
+          getSatoshisFromUSDCents((parseFloat(formCostValue) * 100) as USDCents).toFixed(0)
+        );
+      }
 
       // Close the modal
       closeCurrencyChangeModal();
