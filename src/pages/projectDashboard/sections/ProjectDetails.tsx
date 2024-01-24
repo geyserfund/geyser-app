@@ -70,12 +70,12 @@ export const ProjectDetails = () => {
       style={{ flexGrow: 1, display: 'flex' }}
     >
       <VStack w="100%" spacing={6} flexGrow={1}>
+        <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
+
         <ProjectRegion
           location={project?.location}
           updateProject={updateProject}
         />
-
-        <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
 
         <ProjectLinks
           links={(project?.links as string[]) || []}

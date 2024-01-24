@@ -1,23 +1,27 @@
 import {
+  Box,
   FormErrorIcon,
   HStack,
   Input,
-  InputGroup,
-  InputRightAddon,
   Stack,
   Text,
+  Tooltip,
   VStack,
 } from '@chakra-ui/react'
-import { ChangeEventHandler } from 'react'
+import { ChangeEventHandler, useCallback, useEffect } from 'react'
 import { Controller, UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { MdInfo } from 'react-icons/md'
 
 import { FileUpload } from '../../../components/molecules'
+import { ImageCrop } from '../../../components/molecules/ImageCropperModal'
+import { Body1 } from '../../../components/typography'
 import { TextArea, TextInputBox, UploadBox } from '../../../components/ui'
 import { ProjectValidations } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { FieldContainer } from '../../../forms/components/FieldContainer'
 import { validateImageUrl } from '../../../forms/validations/image'
+import { useDebounce } from '../../../hooks'
 import { useProjectByNameOrIdLazyQuery } from '../../../types'
 import { toMediumImageUrl, validLightningAddress } from '../../../utils'
 import { ProjectCreationVariables } from '../types'
@@ -33,30 +37,46 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
   const { t } = useTranslation()
   const { user } = useAuthContext()
 
-  const { formState, setValue, watch, setError, control } = form
+  const { formState, setValue, watch, setError, control, clearErrors } = form
 
   const [getProject] = useProjectByNameOrIdLazyQuery({
-    variables: {
-      where: {
-        name: watch('name'),
-      },
-    },
     onCompleted(data) {
-      if (data && data.projectGet && data.projectGet.id) {
-        setError('name', new Error('This lightning address is already taken.'))
+      if (
+        data &&
+        data.projectGet &&
+        data.projectGet.id &&
+        data.projectGet.name !== formState.defaultValues?.name
+      ) {
+        setError('name', {
+          message: 'This lightning address is already taken.',
+        })
+      } else {
+        clearErrors('name')
       }
     },
   })
 
-  const handleProjectFetch = () => {
-    if (
-      !isEdit &&
-      watch('name') &&
-      watch('name').length >= MIN_LENGTH_TO_QUERY_PROJECT
-    ) {
-      getProject()
+  const handleProjectFetch = useCallback(() => {
+    const projectName = watch('name')
+    if (projectName && projectName.length >= MIN_LENGTH_TO_QUERY_PROJECT) {
+      getProject({
+        variables: {
+          where: {
+            name: projectName,
+          },
+        },
+      })
     }
-  }
+  }, [getProject, watch])
+
+  const projectName = watch('name')
+  const debouncedProjectName = useDebounce(projectName, 300)
+
+  useEffect(() => {
+    if (debouncedProjectName) {
+      handleProjectFetch()
+    }
+  }, [debouncedProjectName, handleProjectFetch])
 
   const handleImageUpload = (url: string) => {
     setValue('thumbnailImage', toMediumImageUrl(url), { shouldDirty: true })
@@ -88,7 +108,10 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
         const projectName: string = value.split(' ').join('').toLowerCase()
         const sanitizedName = projectName.replaceAll(validLightningAddress, '')
 
-        setValue('name', sanitizedName, { shouldDirty: true })
+        setValue('name', sanitizedName, {
+          shouldDirty: true,
+          shouldValidate: true,
+        })
       }
 
       if (name === 'name') {
@@ -96,11 +119,15 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           .toLocaleLowerCase()
           .replaceAll(validLightningAddress, '')
 
-        return setValue(name, sanitizedName, { shouldDirty: true })
+        return setValue(name, sanitizedName, {
+          shouldDirty: true,
+          shouldValidate: true,
+        })
       }
 
       setValue(name as keyof ProjectCreationVariables, value, {
         shouldDirty: true,
+        shouldValidate: true,
       })
     }
   }
@@ -115,30 +142,79 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           name="title"
           onChange={handleChange}
           value={watch('title')}
+          placeholder={'Run With Bitcoin'}
           error={formState.errors.title?.message}
-          onBlur={handleProjectFetch}
         />
       </FieldContainer>
 
       <FieldContainer
-        title={t('Lightning Address Preview')}
-        subtitle={t(
-          'This is the lightning address for your project. Funds sent to this lightning address will show in your project activity',
-        )}
+        title={t('Project Identifier')}
+        subtitle={
+          <>
+            {t(
+              'Set your unique project identifier to create your personalized URL and get a corresponding Lightning address for your Geyser project.',
+            )}{' '}
+            {isEdit &&
+              t(
+                'Warning! By changing this identifier your old project links will not send you to your project',
+              )}
+          </>
+        }
         error={FormErrorIcon.name}
       >
-        <InputGroup size="md" borderRadius="8px">
-          <Input
+        <VStack p="0px" w="full" alignItems="start" spacing="0">
+          <TextInputBox
             name="name"
             onChange={handleChange}
             value={watch('name')}
-            isInvalid={Boolean(formState.errors.name)}
             focusBorderColor={'primary.400'}
-            disabled={isEdit}
-            onBlur={handleProjectFetch}
+            placeholder="runwithbitcoin"
+            error={formState.errors.name?.message}
+            borderBottomRightRadius={0}
+            borderBottomLeftRadius={0}
           />
-          <InputRightAddon>@geyser.fund</InputRightAddon>
-        </InputGroup>
+          <VStack
+            w="full"
+            backgroundColor="neutral.100"
+            border="2px solid"
+            borderColor="neutral.200"
+            borderTop="none"
+            borderRadius="0 0 12px 12px"
+            alignItems="start"
+            p="10px"
+            spacing={2}
+          >
+            <Body1 color="neutral.600">
+              {`${t('Project URL')}: `}
+              <Box as="span" color="neutral.900">
+                geyser.fund/project/
+              </Box>
+              <Box as="span" color="primary.600">
+                {watch('name')}
+              </Box>
+            </Body1>
+            <HStack w="full" justifyContent="space-between">
+              <Body1 color="neutral.600">
+                {`${t('Lightning Address')}: `}
+                <Box as="span" color="primary.600">
+                  {watch('name')}
+                </Box>
+                <Box as="span" color="neutral.900">
+                  {'@geyser.fund'}
+                </Box>
+              </Body1>
+              <Tooltip
+                label={t(
+                  `Lightning address is a simple way for others to send you funds. When someone sends money to this address, it's instantly routed to your private wallet. This ensures you have full custody and immediate access to your funds.`,
+                )}
+              >
+                <span>
+                  <MdInfo color="neutral.900" fontSize="20px" />
+                </span>
+              </Tooltip>
+            </HStack>
+          </VStack>
+        </VStack>
       </FieldContainer>
 
       <FieldContainer
@@ -151,6 +227,9 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           name="shortDescription"
           height="fit-content"
           overflowY="auto"
+          placeholder={t(
+            'Bitcoin Meetups and Travel Vlogs of Bitcoin Adoption in the Global South!',
+          )}
           value={watch('shortDescription')}
           onChange={({ target, ...event }) => {
             handleChange({
@@ -168,7 +247,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           <HStack width="100%" justifyContent="space-between">
             <Text fontSize="12px" color="neutral.700" />
             <Text fontSize="12px" color="neutral.700">{`${
-              watch('shortDescription').length
+              watch('shortDescription') ? watch('shortDescription').length : 0
             }/${ProjectValidations.shortDescription.maxLength}`}</Text>
           </HStack>
         )}
@@ -190,6 +269,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           onUploadComplete={handleImageUpload}
           onDeleteClick={handleDeleteThumbnail}
           childrenOnLoading={<UploadBox loading h={10} />}
+          imageCrop={ImageCrop.Square}
         >
           <UploadBox
             h={10}
@@ -217,6 +297,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
               >
                 <Input
                   width={{ base: 'full', lg: 'initial' }}
+                  minWidth={{ lg: '250px' }}
                   type="text"
                   placeholder="www.youtube.com/2ms0j2n93c"
                   {...field}
@@ -232,6 +313,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
                   onUploadComplete={handleHeaderImageUpload}
                   onDeleteClick={handleDeleteImage}
                   childrenOnLoading={<UploadBox loading h={10} />}
+                  imageCrop={ImageCrop.Rectangle}
                 >
                   <UploadBox
                     h={10}
@@ -255,7 +337,9 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           name="email"
           value={watch('email')}
           onChange={handleEmail}
+          placeholder="creator@gmail.com"
           error={formState.errors.email?.message}
+          onBlur={() => form.trigger('email')}
           isDisabled={Boolean(user.email)}
         />
       </FieldContainer>

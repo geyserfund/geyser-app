@@ -100,11 +100,20 @@ export const QRCodeImage = ({
   return (
     <VStack flexWrap="wrap" maxWidth="100%">
       <PaymentMethodSelection />
-      {(!onchainAddress && !isLightning) ? (
+      {!onchainAddress && !isLightning ? (
         <Box borderRadius={'12px'} borderWidth={'2px'} padding={'2px'}>
-          <VStack justifyContent={"center"} p={2}>
+          <VStack justifyContent={'center'} p={2}>
             <Image src={WarningIcon} />
-            <Text textAlign="center" color="#DF3634" fontSize={"16px"} fontWeight={"bold"}>{t("Onchain donations are temporarily unavailable. They should be operational by February 2024")}</Text>
+            <Text
+              textAlign="center"
+              color="#DF3634"
+              fontSize={'16px'}
+              fontWeight={'bold'}
+            >
+              {t(
+                'Onchain donations are temporarily unavailable. They should be operational by February 2024',
+              )}
+            </Text>
           </VStack>
         </Box>
       ) : (
@@ -166,9 +175,12 @@ export const QRCodeImage = ({
                 onClick={onCopyLightning}
                 variant="primary"
                 isDisabled={!lightningInvoice}
+                width={'100%'}
               >
                 <Text>
-                  {hasCopiedLightning ? t('Copied!') : t('Copy lightning invoice')}
+                  {hasCopiedLightning
+                    ? t('Copied!')
+                    : t('Copy lightning invoice')}
                 </Text>
               </Button>
             ) : (
@@ -176,6 +188,7 @@ export const QRCodeImage = ({
                 leftIcon={hasCopiedOnchain ? <RiLinkUnlink /> : <FaCopy />}
                 onClick={onCopyOnchain}
                 variant="primary"
+                width={'100%'}
               >
                 <Text>
                   {hasCopiedOnchain ? t('Copied!') : t('Copy onchain address')}

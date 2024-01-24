@@ -60,14 +60,13 @@ export const ConnectWithNostr = ({
         aria-label="Connect with Nostr"
         variant="login"
         color={'social.nostr'}
-        fontWeight={600}
         onClick={handleClick}
         {...buttonProps}
         {...rest}
       >
         {!isIconOnly && (
           <Box as="span" color="neutral.900">
-            {t('Login with Nostr')}
+            {t('Continue with Nostr')}
           </Box>
         )}
       </ButtonComponent>

@@ -185,6 +185,21 @@ export const theme = {
             backgroundColor: theme.colors.neutral[100],
           },
         }),
+        text: ({ theme }: StyleFunctionProps) => ({
+          boxShadow: 'none',
+          outline: 'none',
+          border: 'none',
+          color: theme.colors.neutral[900],
+          backgroundColor: 'transparent',
+          textdecoration: 'none',
+          _hover: {
+            backgroundColor: 'transparent',
+            textdecoration: 'underline',
+          },
+          _active: {
+            backgroundColor: 'transparent',
+          },
+        }),
       },
     },
     Text: {

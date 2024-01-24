@@ -1,12 +1,11 @@
-import { CheckIcon } from '@chakra-ui/icons'
-import { Box, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
+import { Box, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { ItemCard } from '../../../../../components/layouts/ItemCard'
 import { SectionTitle } from '../../../../../components/ui'
 import { useProjectContext } from '../../../../../context'
 import { ProjectRewardForCreateUpdateFragment } from '../../../../../types'
 import { FundingFormRewardItem } from '../../../projectMainBody/components'
+import {useMobileMode} from "../../../../../utils";
 
 type Props = {
   readOnly?: boolean
@@ -17,9 +16,9 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
   const { t } = useTranslation()
   const {
     project,
-    fundForm: { state, updateReward, resetRewards },
+    fundForm: { state, updateReward },
   } = useProjectContext()
-
+  const isMobile = useMobileMode()
   const rewards = project?.rewards || []
 
   const hasRewards = rewards && rewards.length
@@ -55,51 +54,66 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
     }
   }
 
+  const availableRewards = rewards.filter(reward => getRewardCount(reward.id) === 0)
+
   return (
     <Box width="100%">
-      <SectionTitle>{t('Buy reward item')}</SectionTitle>
+      <SectionTitle>{t('Rewards Basket')}</SectionTitle>
 
-      {rewards.length > 0 ? (
+      {hasSelectedRewards ? (
         <VStack mt={1} padding="2px">
-          {readOnly ? null : (
-            <ItemCard cursor="initial" onClick={resetRewards}>
-              <HStack>
-                <Text flexGrow={1} fontWeight={500}>
-                  {t('No reward')}
-                </Text>
-                <IconButton
-                  variant="secondary"
-                  isActive={!hasSelectedRewards}
-                  border={
-                    hasSelectedRewards ? '1px solid neutral.200' : undefined
-                  }
-                  aria-label="select-reward"
-                  icon={hasSelectedRewards ? undefined : <CheckIcon />}
-                />
-              </HStack>
-            </ItemCard>
-          )}
           {rewards.map((reward) => {
             const count = getRewardCount(reward.id)
             const add = () => handleAdd(reward.id, count)
-            return (
-              <FundingFormRewardItem
-                readOnly={readOnly}
-                onClick={onRewardClick ? () => onRewardClick(reward) : add}
-                onRemoveClick={(e) => {
-                  e.stopPropagation()
-                  e.preventDefault()
-                  handleRemove(reward.id, count)
-                }}
-                onAddClick={add}
-                key={reward.id}
-                item={reward}
-                count={count}
-              />
-            )
+
+            return (count > 0 ? (
+                <FundingFormRewardItem
+                    readOnly={readOnly}
+                    onClick={onRewardClick ? () => onRewardClick(reward) : add}
+                    onRemoveClick={(e) => {
+                      e.stopPropagation()
+                      e.preventDefault()
+                      handleRemove(reward.id, count)
+                    }}
+                    onAddClick={add}
+                    key={reward.id}
+                    reward={reward}
+                    count={count}
+                />
+            ) : null)
           })}
         </VStack>
-      ) : null}
+      ) : (
+          <Text>{t('No rewards are selected')}</Text>
+      )}
+
+      {availableRewards.length > 0 && isMobile && (
+        <VStack width={"100%"} direction={"column"} mt={5} flex={1} align={"flex-start"}>
+          <SectionTitle>{t('Available Rewards')}</SectionTitle>
+          <VStack mt={1} padding="2px" width={"100%"}>
+            {availableRewards.map((reward) => {
+              const count = getRewardCount(reward.id)
+              const add = () => handleAdd(reward.id, count)
+
+              return (count == 0 ? (
+                  <FundingFormRewardItem
+                      readOnly={readOnly}
+                      onClick={onRewardClick ? () => onRewardClick(reward) : add}
+                      onRemoveClick={(e) => {
+                        e.stopPropagation()
+                        e.preventDefault()
+                        handleRemove(reward.id, count)
+                      }}
+                      onAddClick={add}
+                      key={reward.id}
+                      reward={reward}
+                      count={count}
+                  />
+              ) : null)
+            })}
+          </VStack>
+        </VStack>
+      )}
     </Box>
   )
 }

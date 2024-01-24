@@ -51,9 +51,7 @@ export const AccountInfo = ({
     return userProfile.externalAccounts.length > 1 ? isEdit : false
   }
 
-  const userAccountToDisplay = userProfile.externalAccounts.filter(
-    (account) => account.accountType !== ExternalAccountType.google,
-  )
+  const userAccountToDisplay = userProfile.externalAccounts;
 
   return (
     <>
@@ -111,16 +109,16 @@ export const AccountInfo = ({
             })}
           </VStack>
         )}
-        {isEdit && userProfile && <ConnectAccounts user={userProfile} />}
       </CardLayout>
       {isEdit && userProfile && (
         <>
-          <Stack direction="column" w="full" pt="10px" spacing="5px">
+          <Stack direction="column" w="full" pt="20px" spacing="5px">
+            <ConnectAccounts user={userProfile} />
             <Button
               onClick={() => modalProps.onOpen({ user: userProfile })}
               width="100%"
               variant="secondary"
-              marginTop="20px"
+              marginTop="5px"
               leftIcon={<MdEdit />}
             >
               {t('Edit')}
@@ -129,7 +127,7 @@ export const AccountInfo = ({
               onClick={() => settingModalProps.onOpen()}
               width="100%"
               variant="secondary"
-              marginTop="20px"
+              marginTop="5px"
               leftIcon={<BsGearFill />}
             >
               {t('Settings')}

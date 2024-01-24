@@ -8,15 +8,20 @@ import {
   ModalOverlay,
 } from '@chakra-ui/modal'
 import { HStack, VStack } from '@chakra-ui/react'
+import { DateTime } from 'luxon'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useAuthContext } from '../../context'
 import { SocialAccountType } from '../../pages/auth'
-// import { ConnectWithEmail } from '../../pages/auth/ConnectWithEmail'
 import { ConnectWithLightning } from '../../pages/auth/ConnectWithLightning'
 import { ConnectWithNostr } from '../../pages/auth/ConnectWithNostr'
-import { ConnectWithSocial } from '../../pages/auth/ConnectWithSocial'
+import {
+  ConnectWithSocial,
+  TWITTER_AUTH_ATTEMPT_KEY,
+  TWITTER_AUTH_ATTEMPT_MESSAGE_TIME_MILLIS,
+} from '../../pages/auth/ConnectWithSocial'
 import {
   hasFacebookAccount,
   hasGithubAccount,
@@ -53,22 +58,37 @@ const ConnectAccounts = ({
 }: any) => {
   const { t } = useTranslation()
   const { user } = useAuthContext()
+
+  const [failedTwitter, setFailedTwitter] = useState(false)
+
+  useEffect(() => {
+    const val = localStorage.getItem(TWITTER_AUTH_ATTEMPT_KEY)
+
+    const previousAttemptTimeStamp = Number(val)
+    const currentTimestamp = DateTime.now().toMillis()
+
+    if (
+      previousAttemptTimeStamp &&
+      currentTimestamp - previousAttemptTimeStamp <
+        TWITTER_AUTH_ATTEMPT_MESSAGE_TIME_MILLIS
+    ) {
+      setFailedTwitter(true)
+    } else {
+      setFailedTwitter(false)
+    }
+  }, [])
+
   return (
     <VStack justifyContent="center" alignItems="center">
-      <Text color="neutral.6002" fontSize="12px" marginBottom={5}>
-        {t(
-          'Login with your social account to keep track of your favorite projects and launch your own.',
+      <Stack width="100%" spacing="10px">
+        {!hasNostrAccount(user) && showNostr && (
+          <ConnectWithNostr onClose={onClose} />
         )}
-      </Text>
-      <Stack width="100%">
         {!hasTwitterAccount(user) && showTwitter && (
           <ConnectWithSocial
             accountType={SocialAccountType.twitter}
             onClose={onClose}
           />
-        )}
-        {!hasNostrAccount(user) && showNostr && (
-          <ConnectWithNostr onClose={onClose} />
         )}
         {!hasFacebookAccount(user) && showFacebook && (
           <ConnectWithSocial
@@ -78,21 +98,23 @@ const ConnectAccounts = ({
         )}
         {/* <ConnectWithEmail onClose={onClose} /> */}
 
-        <Body2 color="neutral.600">{t('More logins')}</Body2>
-        <HStack w="full" spacing="20px" justifyContent={'center'}>
+        <Body2 color="neutral.900">{t('More connect options')}</Body2>
+        <HStack w="full" spacing="20px">
           {!hasGoogleAccount(user) && showGoogle && (
             <ConnectWithSocial
               accountType={SocialAccountType.google}
               onClose={onClose}
               isIconOnly
+              flex={1}
             />
           )}
 
           {showLightning && (
-            <ConnectWithLightning onClose={onClose} isIconOnly />
+            <ConnectWithLightning flex={1} onClose={onClose} isIconOnly />
           )}
           {!hasGithubAccount(user) && showGithub && (
             <ConnectWithSocial
+              flex={1}
               accountType={SocialAccountType.github}
               onClose={onClose}
               isIconOnly
@@ -100,11 +122,13 @@ const ConnectAccounts = ({
           )}
         </HStack>
       </Stack>
-      <Caption paddingTop="5px">
-        {t(
-          "If you're having trouble connecting with Twitter on Mobile, first try logging in on Twitter.com on your browser, then try again.",
-        )}
-      </Caption>
+      {failedTwitter && (
+        <Caption paddingTop="5px">
+          {t(
+            "If you're having trouble connecting with Twitter on Mobile, first try logging in on Twitter.com on your browser, then try again.",
+          )}
+        </Caption>
+      )}
     </VStack>
   )
 }
@@ -139,16 +163,17 @@ export const AuthModal = (authModalProps: IAuthModal) => {
     }
   }
 
-  const modalTitle = t(title || 'Login')
+  const modalTitle = t(title || 'Connect')
   const modalDescription = t(
     description ||
-      'Login to launch your idea and to appear as a contributor when you fund an initiative.',
+      'Connect your social media account to create a project or appear as a contributor of a project.',
   )
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
+      size="sm"
       closeOnOverlayClick={!privateRoute}
       closeOnEsc={!privateRoute}
       onOverlayClick={handlePrivateRouteModalClose}
@@ -162,7 +187,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
           </Text>
         </ModalHeader>
         {privateRoute || <ModalCloseButton />}
-        <ModalBody width="100%" padding={{ base: 0, lg: '8px 24px' }}>
+        <ModalBody width="100%" padding={{ base: 0, lg: '8px' }}>
           <Box
             justifyContent="center"
             alignItems="center"
@@ -183,18 +208,18 @@ export const AuthModal = (authModalProps: IAuthModal) => {
               showGithub={showGithub}
             />
           </Box>
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            marginTop={5}
-          >
-            {privateRoute && (
+          {privateRoute && (
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              marginTop={5}
+            >
               <ButtonComponent onClick={handlePrivateRouteModalClose}>
                 {t(location.key ? 'Go back' : 'Go home')}
               </ButtonComponent>
-            )}
-          </Box>
+            </Box>
+          )}
         </ModalBody>
       </ModalContent>
     </Modal>

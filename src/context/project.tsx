@@ -1,10 +1,13 @@
 import { captureException } from '@sentry/react'
-import { useAtomValue } from 'jotai'
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-import { useGetHistoryRoute } from '../config'
-import { routeMatchForProjectPageAtom } from '../config/routes/privateRoutesAtom'
 import { getPath, PathName } from '../constants'
 import {
   useFundingFlow,
@@ -14,16 +17,9 @@ import {
 } from '../hooks'
 import { useProjectState } from '../hooks/graphqlState'
 import { useModal } from '../hooks/useModal'
-import {
-  MilestoneAdditionModal,
-  RewardAdditionModal,
-} from '../pages/projectView/projectMainBody/components'
+import { MilestoneAdditionModal } from '../pages/projectView/projectMainBody/components'
 import { ProjectCreatorModal } from '../pages/projectView/projectNavigation/components/ProjectCreatorModal'
-import {
-  ProjectFragment,
-  ProjectMilestone,
-  ProjectRewardForCreateUpdateFragment,
-} from '../types'
+import { ProjectFragment, ProjectMilestone } from '../types'
 import { useAuthContext } from './auth'
 import { useNavContext } from './nav'
 
@@ -38,6 +34,9 @@ export enum MobileViews {
   milestones = 'milestones',
   insights = 'insights',
   contributors = 'contributors',
+  manageRewards = 'manage-rewards',
+  createReward = 'create-reward',
+  editReward = 'edit-reward',
 }
 
 type ProjectState = {
@@ -57,9 +56,6 @@ type ProjectContextProps = {
   fundingFlow: UseFundingFlowReturn
   isDirty?: boolean
   error: any
-  onRewardsModalOpen(props?: {
-    reward?: ProjectRewardForCreateUpdateFragment
-  }): void
   onMilestonesModalOpen(): void
   onCreatorModalOpen(): void
   refetch: any
@@ -93,12 +89,7 @@ export const ProjectProvider = ({
   children,
 }: { children: React.ReactNode } & ProjectState) => {
   const navigate = useNavigate()
-  const params = useParams<{ projectId: string }>()
   const location = useLocation()
-  const routeMatchForProjectPage = useAtomValue(routeMatchForProjectPageAtom)
-  const historyRoutes = useGetHistoryRoute()
-
-  const lastRoute = historyRoutes[historyRoutes.length - 2] || ''
 
   const { setNavData } = useNavContext()
 
@@ -110,13 +101,10 @@ export const ProjectProvider = ({
 
   const creatorModal = useModal()
   const milestonesModal = useModal()
-  const rewardsModal = useModal<{
-    reward?: ProjectRewardForCreateUpdateFragment
-  }>()
   const {
     error,
-    loading,
     project,
+    loading,
     updateProject,
     saveProject,
     isDirty,
@@ -124,7 +112,7 @@ export const ProjectProvider = ({
     refetch,
   } = useProjectState(projectId, {
     fetchPolicy: 'network-only',
-    onError(error) {
+    onError() {
       captureException(error, {
         tags: {
           'not-found': 'projectGet',
@@ -156,6 +144,8 @@ export const ProjectProvider = ({
             return Number(ownerInfo.user.id || -1)
           }) || [],
       })
+
+      updateProjectOwner(project)
     },
   })
 
@@ -163,35 +153,24 @@ export const ProjectProvider = ({
 
   const fundForm = useFundingFormState({
     rewards: project ? project.rewards : undefined,
+    rewardCurrency:
+      project && project.rewardCurrency ? project.rewardCurrency : undefined,
   })
 
-  useEffect(() => {
-    if (!project) {
-      return
-    }
+  const updateProjectOwner = useCallback(
+    (project: ProjectFragment) => {
+      if (!project || !user) {
+        return
+      }
 
-    if (project.id && project.owners[0]?.user.id === user.id) {
-      setIsProjectOwner(true)
-    } else {
-      setIsProjectOwner(false)
-    }
-  }, [project, user])
-
-  const shouldGoToOverviewPage = useMemo(
-    () =>
-      isProjectOwner &&
-      params.projectId &&
-      routeMatchForProjectPage &&
-      !lastRoute.includes('launch') &&
-      !(lastRoute.includes('project') && lastRoute.includes(params.projectId)),
-    [params.projectId, isProjectOwner, routeMatchForProjectPage, lastRoute],
+      if (project.id && project.owners[0]?.user.id === user.id) {
+        setIsProjectOwner(true)
+      } else {
+        setIsProjectOwner(false)
+      }
+    },
+    [user],
   )
-
-  useEffect(() => {
-    if (shouldGoToOverviewPage) {
-      navigate(getPath('projectOverview', `${params.projectId}`))
-    }
-  }, [params.projectId, navigate, shouldGoToOverviewPage])
 
   useEffect(() => {
     const view = getViewFromPath(location.pathname)
@@ -199,33 +178,6 @@ export const ProjectProvider = ({
       setMobileView(view)
     }
   }, [location.pathname])
-
-  const onRewardSubmit = (
-    reward: ProjectRewardForCreateUpdateFragment,
-    isEdit: boolean,
-  ) => {
-    if (!project) {
-      return
-    }
-
-    if (isEdit) {
-      const newRewards = project.rewards?.map((pr) => {
-        if (pr.id === reward.id) {
-          return reward
-        }
-
-        return pr
-      })
-
-      updateProject({ rewards: newRewards })
-
-      return
-    }
-
-    const newRewards = project.rewards || []
-
-    updateProject({ rewards: [...newRewards, reward] })
-  }
 
   const onMilestonesSubmit = (newMilestones: ProjectMilestone[]) => {
     updateProject({ milestones: newMilestones })
@@ -249,7 +201,6 @@ export const ProjectProvider = ({
         fundingFlow,
         refetch,
         onCreatorModalOpen: creatorModal.onOpen,
-        onRewardsModalOpen: rewardsModal.onOpen,
         onMilestonesModalOpen: milestonesModal.onOpen,
       }}
     >
@@ -262,12 +213,6 @@ export const ProjectProvider = ({
             onSubmit={onMilestonesSubmit}
             project={project}
           />
-          <RewardAdditionModal
-            {...rewardsModal}
-            isSatoshi={false}
-            onSubmit={onRewardSubmit}
-            project={project}
-          />
         </>
       )}
     </ProjectContext.Provider>
@@ -275,6 +220,18 @@ export const ProjectProvider = ({
 }
 
 const getViewFromPath = (path: string) => {
+  if (path.includes(PathName.projectManageRewards)) {
+    if (path.includes(PathName.projectCreateReward)) {
+      return MobileViews.createReward
+    }
+
+    if (path.includes(PathName.projectEditReward)) {
+      return MobileViews.editReward
+    }
+
+    return MobileViews.manageRewards
+  }
+
   if (path.includes(PathName.projectRewards)) {
     return MobileViews.rewards
   }

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Box, Button, HStack, Text } from '@chakra-ui/react'
+import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import {
   EditorComponent,
   Remirror,
@@ -42,6 +42,7 @@ import {
 } from 'remirror/extensions'
 import TurndownService from 'turndown'
 
+import { SkeletonLayout } from '../../components/layouts'
 import { useSignedUpload } from '../../hooks'
 import { useMobileMode } from '../../utils'
 import { ReactHookTextArea } from '../components/ReactHookTextArea'
@@ -227,6 +228,9 @@ export const MarkdownField = ({
       manager={manager}
       initialContent={initialContent?.()}
       hooks={hooks}
+      placeholder={
+        'Traveling to 15 LATAM & CARICOM countries using Bitcoin, this journey aims to showcase the widespread adoption of Bitcoin through engaging travel vlogs. The main objectives include organizing Bitcoin meetups to raise awareness and demonstrate the benevolence of humanity.'
+      }
     >
       <Box
         display="flex"
@@ -271,7 +275,12 @@ export const MarkdownField = ({
           fieldContainerProps={{ height: '100%' }}
         />
       )}
-      <StyleProvider flex={flex} display={isEditorMode ? 'none' : undefined}>
+      <StyleProvider
+        flex={flex}
+        flexGrow={1}
+        display={isEditorMode ? 'none' : undefined}
+        minHeight={'40vh'}
+      >
         <EditorComponent />
         <TableComponents
           tableCellMenuProps={{ Component: TableCellMenuComponent }}
@@ -279,5 +288,21 @@ export const MarkdownField = ({
       </StyleProvider>
       <SaveModule name={name} control={control} />
     </Remirror>
+  )
+}
+
+export const MarkdownFieldSkeleton = () => {
+  return (
+    <VStack w="full" p="10px" spacing="40px">
+      <HStack w="full">
+        <SkeletonLayout h="40px" w="80px" />
+        <SkeletonLayout h="40px" w="160px" />
+        <SkeletonLayout h="40px" w="120px" />
+        <SkeletonLayout h="40px" w="160px" />
+        <SkeletonLayout h="40px" w="80px" />
+        <SkeletonLayout h="40px" w="160px" />
+      </HStack>
+      <SkeletonLayout h="400px" w="full" />
+    </VStack>
   )
 }

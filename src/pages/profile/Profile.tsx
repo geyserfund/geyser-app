@@ -136,7 +136,7 @@ export const Profile = () => {
         </GridItem>
         <GridItem
           h="100%"
-          overflow={{ base: 'visible', lg: 'hidden' }}
+          overflow={{ base: 'visible', lg: 'auto' }}
           colSpan={{ base: 1, lg: 2 }}
           order={{ base: 2, lg: 3 }}
         >

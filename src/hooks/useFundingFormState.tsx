@@ -8,7 +8,6 @@ import {
   RewardCurrency,
   ShippingDestination,
 } from '../types/generated/graphql'
-import { Satoshis } from '../types/types'
 
 export interface IFundForm {
   donationAmount: number
@@ -23,10 +22,12 @@ export interface IFundForm {
   funderAvatarURL: string
   rewardsByIDAndCount?: { [key: string]: number } | undefined
   rewardCurrency: RewardCurrency
+  step: 'contribution' | 'info'
 }
 
 type UseFundStateProps = {
   rewards?: ProjectRewardForCreateUpdateFragment[]
+  rewardCurrency?: RewardCurrency
 }
 
 export type UpdateReward = (_: IRewardCount) => void
@@ -41,7 +42,10 @@ export interface IFundFormState {
 
 export type UseFundingFormStateReturn = ReturnType<typeof useFundingFormState>
 
-export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
+export const useFundingFormState = ({
+  rewards,
+  rewardCurrency,
+}: UseFundStateProps) => {
   const { user, isAnonymous } = useContext(AuthContext)
   const { getUSDCentsAmount } = useBTCConverter()
 
@@ -60,9 +64,10 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
       email: '',
       media: '',
       rewardsByIDAndCount: undefined,
-      rewardCurrency: RewardCurrency.Usdcent,
+      rewardCurrency: rewardCurrency || RewardCurrency.Usdcent,
+      step: 'contribution',
     }),
-    [isAnonymous, user.imageUrl, user.username],
+    [isAnonymous, user.imageUrl, user.username, rewardCurrency],
   )
 
   const [state, _setState] = useState<IFundForm>(initialState)
@@ -83,6 +88,10 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
       setState('anonymous', false)
     }
   }, [setState, user])
+
+  useEffect(() => {
+    setState('rewardCurrency', rewardCurrency)
+  }, [setState, rewardCurrency])
 
   const resetRewards = useCallback(() => {
     _setState((current) => ({
@@ -125,12 +134,7 @@ export const useFundingFormState = ({ rewards }: UseFundStateProps) => {
                 return 0
               }
 
-              const cost =
-                current.rewardCurrency === RewardCurrency.Usdcent
-                  ? reward.cost
-                  : // Assume sats if not USD cents
-                    getUSDCentsAmount(reward.cost as Satoshis)
-
+              const { cost } = reward
               rewardsCost += cost * rewardMultiplier
             }
           })

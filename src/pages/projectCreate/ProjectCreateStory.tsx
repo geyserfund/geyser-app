@@ -11,10 +11,6 @@ import { useNotification } from '../../utils'
 import { FormContinueButton } from './components/FormContinueButton'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 import { ProjectStoryForm } from './components/ProjectStoryForm'
-import {
-  ProjectUnsavedModal,
-  useProjectUnsavedModal,
-} from './components/ProjectUnsavedModal'
 import { useProjectStoryForm } from './hooks/useProjectStoryForm'
 
 export const ProjectCreateStory = () => {
@@ -52,12 +48,6 @@ export const ProjectCreateStory = () => {
   }
 
   const onBackCLick = () => {
-    if (form.formState.isDirty) {
-      return unsavedModal.onOpen({
-        onLeave,
-      })
-    }
-
     onLeave()
   }
 
@@ -69,10 +59,6 @@ export const ProjectCreateStory = () => {
     })
   }
 
-  const unsavedModal = useProjectUnsavedModal({
-    hasUnsaved: form.formState.isDirty,
-  })
-
   const nextProps = {
     isDisabled: loading || updateLoading || !form.formState.isValid,
     onClick: form.handleSubmit(onSubmit),
@@ -83,9 +69,10 @@ export const ProjectCreateStory = () => {
       maxWidth="3xl"
       continueButton={<FormContinueButton {...nextProps} flexGrow={1} />}
       onBackClick={onBackCLick}
+      height="100%"
       title={
         <TitleWithProgressBar
-          title={t('Project description')}
+          title={t('Story')}
           subtitle={t('Create a project')}
           index={3}
           length={4}
@@ -98,8 +85,6 @@ export const ProjectCreateStory = () => {
         isLoading={loading || !project}
         toolbarTop={dimensions.topNavBar.mobile.height + 'px'}
       />
-      <FormContinueButton width="100%" {...nextProps} />
-      <ProjectUnsavedModal {...unsavedModal} />
     </ProjectCreateLayout>
   )
 }

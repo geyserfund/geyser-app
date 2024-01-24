@@ -197,6 +197,7 @@ export const NodeAdditionModal = ({
         alignItems="flex-start"
         paddingY="20px"
         paddingX="0px"
+        maxHeight="100%"
       >
         <ModalHeader paddingX="20px">
           <VStack spacing={2} alignItems="flex-start">

@@ -1,7 +1,9 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import { useProjectContext } from '../../../context'
+import { useModal } from '../../../hooks'
 import { useUpdateProjectMutation } from '../../../types'
 import { useNotification } from '../../../utils'
 import { ProjectForm } from '../../projectCreate/components/ProjectForm'
@@ -11,11 +13,14 @@ import {
 } from '../../projectCreate/components/ProjectUnsavedModal'
 import { useProjectForm } from '../../projectCreate/hooks/useProjectForm'
 import { ProjectCreationVariables } from '../../projectCreate/types'
-import { BackToProjectMobile } from '../navigation/BackToProjectMobile'
+import { ProjectNameChangeConfirmModal } from '../components'
 
 export const ProjectDescription = () => {
   const { t } = useTranslation()
   const { toast } = useNotification()
+  const navigate = useNavigate()
+
+  const nameChangeModal = useModal()
 
   const { project, updateProject } = useProjectContext()
 
@@ -36,6 +41,16 @@ export const ProjectDescription = () => {
           title: 'Project updated successfully!',
           status: 'success',
         })
+        if (form.formState.dirtyFields.name) {
+          navigate(`/project/${data.updateProject.name}/dashboard`, {
+            replace: true,
+          })
+          form.resetField('name', {
+            defaultValue: data.updateProject.name,
+            keepError: false,
+            keepDirty: false,
+          })
+        }
       },
       onError(error) {
         toast({
@@ -46,7 +61,19 @@ export const ProjectDescription = () => {
       },
     })
 
-  const onSubmit = ({ email, name, ...values }: ProjectCreationVariables) => {
+  const onSubmit = (values: ProjectCreationVariables) => {
+    if (values.name !== project?.name) {
+      nameChangeModal.onOpen()
+      return
+    }
+
+    handleUpdateProjectMutation(values)
+  }
+
+  const handleUpdateProjectMutation = ({
+    email,
+    ...values
+  }: ProjectCreationVariables) => {
     if (project) {
       updateProjectMutation({
         variables: {
@@ -71,9 +98,12 @@ export const ProjectDescription = () => {
         >
           {t('Save')}
         </Button>
-        <BackToProjectMobile project={project} />
       </VStack>
       <ProjectUnsavedModal {...unsavedModal} />
+      <ProjectNameChangeConfirmModal
+        {...nameChangeModal}
+        onSave={() => handleUpdateProjectMutation(form.getValues())}
+      />
     </form>
   )
 }

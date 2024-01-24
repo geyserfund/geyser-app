@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
-import Loader from '../../components/ui/Loader'
 import { getPath } from '../../constants'
 import { useNotification } from '../../utils'
 import { ProjectRegion } from './components'
@@ -11,10 +10,6 @@ import { FormContinueButton } from './components/FormContinueButton'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 import { ProjectLinks } from './components/ProjectLinks'
 import { ProjectTagsCreateEdit } from './components/ProjectTagsCreateEdit'
-import {
-  ProjectUnsavedModal,
-  useProjectUnsavedModal,
-} from './components/ProjectUnsavedModal'
 import { useProjectDetailsForm } from './hooks/useProjectDetailsForm'
 
 export const ProjectDetails = () => {
@@ -32,7 +27,6 @@ export const ProjectDetails = () => {
     setTags,
     project,
     tags,
-    isDirty,
     linkError,
     tagsLoading,
     projectLoading,
@@ -70,27 +64,13 @@ export const ProjectDetails = () => {
     )
   }
 
-  const unsavedModal = useProjectUnsavedModal({
-    hasUnsaved: isDirty,
-  })
-
   const onBackClick = () => {
-    if (isDirty) {
-      return unsavedModal.onOpen({
-        onLeave,
-      })
-    }
-
     onLeave()
-  }
-
-  if (projectLoading) {
-    return <Loader />
   }
 
   const nextProps = {
     onClick: onSubmit,
-    isLoading: tagsLoading,
+    isLoading: tagsLoading || projectLoading,
     isDisabled: tagsLoading,
   }
 
@@ -120,11 +100,8 @@ export const ProjectDetails = () => {
             location={project?.location}
             updateProject={updateProject}
           />
-
-          <FormContinueButton width="100%" {...nextProps} />
         </VStack>
       </ProjectCreateLayout>
-      <ProjectUnsavedModal {...unsavedModal} />
     </>
   )
 }

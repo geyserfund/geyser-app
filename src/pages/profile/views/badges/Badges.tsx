@@ -63,7 +63,6 @@ export const Badges = ({
       padding="0"
       paddingY={{ base: '10px', lg: '20px' }}
       spacing="20px"
-      maxHeight="100%"
     >
       <HStack
         paddingX={{ base: '10px', lg: '20px' }}

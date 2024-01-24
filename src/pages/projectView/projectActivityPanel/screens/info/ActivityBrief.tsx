@@ -36,6 +36,7 @@ import {
   ProjectFundersModal,
   useProjectFundersModal,
 } from './components/ProjectFundersModal'
+import { InfoScreenFeed } from './InfoScreenFeed'
 
 const TIME_AFTER_WHICH_TOOLTIP_SHOULD_CLOSE_MILLIS = 1500
 
@@ -244,6 +245,20 @@ export const ActivityBrief = (props: StackProps) => {
           {getMilestoneValue()}
         </VStack>
       </HStack>
+
+      {!isMobile ? (
+        <VStack w="full" spacing="10px" pb={3}>
+          <ContributeButton w="full" />
+          {followedProjects.some(
+            (followedProject) => followedProject?.id === project?.id,
+          ) ? (
+            <ShareButton w="full" />
+          ) : (
+            <FollowButton size="md" w="full" projectId={project?.id} />
+          )}
+        </VStack>
+      ) : null}
+      
       {(funderLoading || latestFunders.length) && (
         <VStack
           textAlign="left"
@@ -304,18 +319,10 @@ export const ActivityBrief = (props: StackProps) => {
         </VStack>
       )}
 
-      {!isMobile ? (
-        <VStack w="full" spacing="10px">
-          <ContributeButton w="full" />
-          {followedProjects.some(
-            (followedProject) => followedProject?.id === project?.id,
-          ) ? (
-            <ShareButton w="full" />
-          ) : (
-            <FollowButton size="md" w="full" projectId={project?.id} />
-          )}
-        </VStack>
-      ) : null}
+      {(!project || !project.rewards || project.rewards.length == 0) && (
+        <InfoScreenFeed />
+      )}
+
       <ProjectFundersModal {...fundersModal} />
     </VStack>
   )
