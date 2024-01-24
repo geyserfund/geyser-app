@@ -17,7 +17,7 @@ export const Rewards = () => {
   }
 
   return (
-    <VStack alignItems="flex-start">
+    <VStack w="full" alignItems="flex-start">
       <Body1 px={standardPadding}>
         <Trans i18nKey="This page is for managing your reward sales. Mark your rewards as <0>Shipped</0> or <1>Delivered.</1>">
           {'This page is for managing your reward sales. Mark your rewards as '}

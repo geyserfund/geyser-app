@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { YellowWarningIcon } from '../../../../../components/icons'
-import { CardLayout } from '../../../../../components/layouts'
+import { CardLayout, SkeletonLayout } from '../../../../../components/layouts'
 import { H2 } from '../../../../../components/typography'
 import { dimensions } from '../../../../../constants'
 import { useProjectContext } from '../../../../../context'
@@ -43,7 +43,7 @@ export const ProjectCreatorContributors = () => {
     }
   }, [contributionView])
 
-  const { data } = useFundingTxsOrderCountGetQuery({
+  const { data, loading } = useFundingTxsOrderCountGetQuery({
     variables: {
       input: {
         where: {
@@ -119,12 +119,14 @@ export const ProjectCreatorContributors = () => {
                 {isMobile ? t('Payments') : t('Payments and Accounting')}
               </Button>
 
-              <Button
-                size="sm"
-                variant={isActiveVariant(ContributionView.pending)}
-                onClick={() => setContributionView(ContributionView.pending)}
-                rightIcon={
-                  count > 0 ? (
+              {loading ? (
+                <SkeletonLayout w="150px" height="32px" />
+              ) : count > 0 ? (
+                <Button
+                  size="sm"
+                  variant={isActiveVariant(ContributionView.pending)}
+                  onClick={() => setContributionView(ContributionView.pending)}
+                  rightIcon={
                     <Box
                       borderRadius="50%"
                       backgroundColor={lightModeColors.neutral[1000]}
@@ -135,11 +137,11 @@ export const ProjectCreatorContributors = () => {
                         color="secondary.yellow"
                       />
                     </Box>
-                  ) : undefined
-                }
-              >
-                {isMobile ? t('Partial') : t('Partial Payments')}
-              </Button>
+                  }
+                >
+                  {isMobile ? t('Partial') : t('Partial Payments')}
+                </Button>
+              ) : null}
             </HStack>
             {contributionView === ContributionView.accounts ? (
               <ExportComponent />

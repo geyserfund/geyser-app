@@ -1,6 +1,7 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { SkeletonLayout } from '../../../../../../../components/layouts'
 import { useProjectContext } from '../../../../../../../context'
 import { usePaginationHook } from '../../../../../../../hooks/usePaginationHook'
 import { standardPadding } from '../../../../../../../styles'
@@ -30,8 +31,9 @@ export const PaymentsAndAccoutningList = () => {
     createdAt: OrderByOptions.Desc,
   }
 
-  const { fetchMore } = useFundingTxsOrderGetQuery({
+  const { fetchMore, loading } = useFundingTxsOrderGetQuery({
     skip: !project?.id,
+    fetchPolicy: 'no-cache',
     variables: {
       input: {
         where,
@@ -60,6 +62,8 @@ export const PaymentsAndAccoutningList = () => {
     orderBy,
   })
 
+  if (loading) return <PaymentsAndAccoutningListSkeleton />
+
   return (
     <VStack
       width="100%"
@@ -85,6 +89,25 @@ export const PaymentsAndAccoutningList = () => {
           </Button>
         </HStack>
       )}
+    </VStack>
+  )
+}
+
+export const PaymentsAndAccoutningListSkeleton = () => {
+  return (
+    <VStack width="100%" flexGrow={1} pt={'30px'} spacing="10px">
+      <VStack w="full" spacing="10px">
+        <SkeletonLayout borderRadius={0} height="30px" />
+        <VStack w="full" spacing="60px">
+          <SkeletonLayout borderRadius={0} height="60px" />
+          <SkeletonLayout borderRadius={0} height="60px" />
+          <SkeletonLayout borderRadius={0} height="60px" />
+          <SkeletonLayout borderRadius={0} height="60px" />
+        </VStack>
+      </VStack>
+      <HStack w="full" px={standardPadding}>
+        <SkeletonLayout height="40px" />
+      </HStack>
     </VStack>
   )
 }

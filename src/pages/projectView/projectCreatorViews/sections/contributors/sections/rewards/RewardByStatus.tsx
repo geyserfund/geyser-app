@@ -1,6 +1,7 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { SkeletonLayout } from '../../../../../../../components/layouts'
 import { Body1, H2, H3 } from '../../../../../../../components/typography'
 import { useProjectContext } from '../../../../../../../context'
 import { usePaginationAtomHook } from '../../../../../../../hooks'
@@ -52,7 +53,7 @@ export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
     },
   ]
 
-  const { fetchMore } = useOrdersGetQuery({
+  const { fetchMore, loading } = useOrdersGetQuery({
     skip: !project?.id,
     fetchPolicy: 'network-only',
     variables: {
@@ -100,16 +101,21 @@ export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
 
   const handlleUpdateOrderStatus = (
     orderId: string,
-    status: UpdatableOrderStatus,
+    newStatus: UpdatableOrderStatus,
   ) => {
+    if (`${newStatus}` === `${status}`) return
     updateOrderStatus({
       variables: {
         input: {
           orderId,
-          status,
+          status: newStatus,
         },
       },
     })
+  }
+
+  if (loading) {
+    return <RewardByStatusSkeleton />
   }
 
   return (
@@ -142,6 +148,27 @@ export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
           </Button>
         </HStack>
       )}
+    </VStack>
+  )
+}
+
+export const RewardByStatusSkeleton = () => {
+  return (
+    <VStack width="100%" flexGrow={1} pt={'20px'} spacing="10px">
+      <HStack w="full" px={standardPadding}>
+        <SkeletonLayout width="200px" height="30px" />
+      </HStack>
+      <VStack w="full" spacing="10px">
+        <SkeletonLayout borderRadius={0} height="30px" />
+        <VStack w="full" spacing="60px">
+          <SkeletonLayout borderRadius={0} height="60px" />
+          <SkeletonLayout borderRadius={0} height="60px" />
+          <SkeletonLayout borderRadius={0} height="60px" />
+        </VStack>
+      </VStack>
+      <HStack w="full" px={standardPadding}>
+        <SkeletonLayout height="40px" />
+      </HStack>
     </VStack>
   )
 }

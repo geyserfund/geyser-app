@@ -1,6 +1,8 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { SkeletonLayout } from '../../../../../../../components/layouts'
 import { useProjectContext } from '../../../../../../../context'
 import { usePaginationHook } from '../../../../../../../hooks/usePaginationHook'
 import { standardPadding } from '../../../../../../../styles'
@@ -25,6 +27,8 @@ export const PendingPaymentsList = () => {
   const { project } = useProjectContext()
   const { toast } = useNotification()
 
+  const [loading, setLoading] = useState(true)
+
   const where: GetFundingTxsWhereInput = {
     projectId: project?.id,
     status: FundingTxsWhereFundingStatus.PartiallyPaid,
@@ -47,6 +51,7 @@ export const PendingPaymentsList = () => {
       },
     },
     onCompleted(data) {
+      setLoading(false)
       handleDataUpdate(data.fundingTxsGet?.fundingTxs || [])
     },
   })
@@ -91,6 +96,8 @@ export const PendingPaymentsList = () => {
     })
   }
 
+  if (loading) return <PendingPaymentsListSkeleton />
+
   return (
     <VStack width="100%" flexGrow={1} pt={'10px'} spacing="10px">
       {ordersData.length === 0 ? (
@@ -113,6 +120,26 @@ export const PendingPaymentsList = () => {
           </Button>
         </HStack>
       )}
+    </VStack>
+  )
+}
+
+export const PendingPaymentsListSkeleton = () => {
+  return (
+    <VStack width="100%" flexGrow={1} pt={'30px'} spacing="10px">
+      <VStack w="full" spacing="10px">
+        <SkeletonLayout borderRadius={0} height="30px" />
+        <VStack w="full" spacing="60px">
+          <SkeletonLayout borderRadius={0} height="60px" />
+          <SkeletonLayout borderRadius={0} height="60px" />
+          <SkeletonLayout borderRadius={0} height="60px" />
+          <SkeletonLayout borderRadius={0} height="60px" />
+        </VStack>
+      </VStack>
+
+      <HStack w="full" px={standardPadding}>
+        <SkeletonLayout height="40px" />
+      </HStack>
     </VStack>
   )
 }
