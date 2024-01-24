@@ -207,8 +207,8 @@ export const ProjectRewardForm = ({
       isValid = false
     }
 
-    if (reward.stock && reward.stock < 0) {
-      errors.stock = t(`Stock must be greater than 0 if set.`)
+    if (reward.maxClaimable && reward.maxClaimable < 0) {
+      errors.maxClaimable = t(`Limited Edition must be greater than 0 if set.`)
       isValid = false
     }
 
