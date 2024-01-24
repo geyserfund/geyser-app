@@ -1,6 +1,6 @@
 import { Box, Text, Stack, Button } from '@chakra-ui/react'
 import {
-  ProjectRewardForCreateUpdateFragment
+  ProjectRewardForCreateUpdateFragment, RewardCurrency
 } from '../../../../types'
 import { useTranslation } from 'react-i18next'
 import { MobileViews, useProjectContext } from '../../../../context'
@@ -54,7 +54,7 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
                   }</Text>
             </Stack>
             <Stack direction="column" align={'flex-end'}>
-                <Text fontWeight={700} fontSize={16} color='neutral.600'>${reward.cost / 100}</Text>
+                <Text fontWeight={700} fontSize={16} color='neutral.600'>{project.rewardCurrency == RewardCurrency.Usdcent ? `$${reward.cost / 100}` : `${reward.cost.toLocaleString()} sats`}</Text>
                 <Button
                     variant='secondary'
                     size='sm'

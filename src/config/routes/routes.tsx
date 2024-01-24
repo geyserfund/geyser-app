@@ -169,6 +169,15 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
+        path: getPath('dashboardRewards', PathName.projectId),
+        async lazy() {
+          const ProjectRewardSection = await ProjectDashboard().then(
+            (m) => m.ProjectRewardSettings,
+          )
+          return { Component: ProjectRewardSection }
+        },
+      },
+      {
         path: getPath('dashboardWallet', PathName.projectId),
         async lazy() {
           const ProjectWallet = await ProjectDashboard().then(

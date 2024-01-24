@@ -8,9 +8,10 @@ import {
 } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import {
-  ProjectRewardForLandingPageFragment
+  ProjectRewardForLandingPageFragment, RewardCurrency
 } from '../../../../types'
 import { TimeAgo } from '../../components'
+import { useProjectContext } from '../../../../context'
 
 export const RewardActivityItem = ({
   reward,
@@ -58,6 +59,7 @@ const RewardItem = ({
   reward: ProjectRewardForLandingPageFragment
 }) => {
   const { t } = useTranslation()
+  const { project } = useProjectContext();
 
   return (
     <Box
@@ -84,7 +86,7 @@ const RewardItem = ({
                 }</Text>
           </Stack>
           <Stack direction="column" align={'flex-end'}>
-              <Text fontWeight={700} fontSize={16} color='neutral.600'>${reward.cost / 100}</Text>
+              <Text fontWeight={700} fontSize={16} color='neutral.600'>{project && project.rewardCurrency == RewardCurrency.Usdcent ? `$${reward.cost / 100}` : `${reward.cost.toLocaleString()} sats`}</Text>
           </Stack>
       </Stack>
     </Box>

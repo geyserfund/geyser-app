@@ -8,7 +8,7 @@ import SplashRewardIcon from '../icons/splash-reward.svg';
 import { MobileViews, useProjectContext } from '../../../../../../context'
 import { PathName } from '../../../../../../constants'
 import { useNavigate } from 'react-router-dom'
-import { ProjectRewardForCreateUpdateFragment, Project } from '../../../../../../types/generated/graphql';
+import { ProjectRewardForCreateUpdateFragment, Project, RewardCurrency } from '../../../../../../types/generated/graphql';
 import { useState } from 'react';
 import { DeleteConfirmModal } from '../../../../../../components/molecules';
 import { useModal } from '../../../../../../hooks/useModal';
@@ -178,7 +178,7 @@ export const RewardsTable = () => {
                 </td>
                 <td style={{paddingTop: '10px', verticalAlign: 'top'}}>
                   {row.cost && (
-                    <TableText content={`$${(row.cost / 100).toFixed(2)}`} />
+                    <TableText content={project && project.rewardCurrency == RewardCurrency.Usdcent ? `$${row.cost / 100}` : `${row.cost.toLocaleString()} sats`} />
                   )}
                 </td>
                 <td style={{paddingTop: '10px', verticalAlign: 'top'}}>
