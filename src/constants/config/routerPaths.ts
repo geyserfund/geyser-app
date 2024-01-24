@@ -14,9 +14,13 @@ export enum PathName {
   projectOverview = 'overview',
   projectInsights = 'insights',
   projectContributors = 'contributors',
+  projectPost = 'posts',
   projectEntries = 'entries',
   projectRewards = 'rewards',
   projectMilestones = 'milestones',
+  projectManageRewards = 'manage-rewards',
+  projectCreateReward = 'create-reward',
+  projectEditReward = 'edit-reward',
 
   launchProject = 'launch',
   userProfile = 'profile',
@@ -34,12 +38,14 @@ export enum PathName {
   dashboardSettings = 'settings',
   dashboardStory = 'story',
   dashboardStatus = 'status',
+  dashboardRewards = 'rewards',
   dashboardShop = 'shop',
   dashboardNostr = 'nostr',
 
   badges = 'badges',
   about = 'about',
   projectId = ':projectId',
+  rewardId = ':rewardId',
   userId = ':userId',
   entryId = ':entryId',
   grantId = ':grantId',
@@ -82,6 +88,12 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectRewards}`,
   projectMilestones: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectMilestones}`,
+  projectManageRewards: (projectName: string) =>
+      `/${PathName.project}/${projectName}/${PathName.projectManageRewards}`,
+  projectCreateReward: (projectName: string) =>
+      `/${PathName.project}/${projectName}/${PathName.projectManageRewards}/${PathName.projectCreateReward}`,
+  projectEditReward: (projectName: string, rewardId: string) =>
+      `/${PathName.project}/${projectName}/${PathName.projectManageRewards}/${PathName.projectEditReward}/${rewardId}`,
 
   entry: (entryID: string) => `/${PathName.entry}/${entryID}`,
   projectEntryCreation: (projectName: string) =>
@@ -123,6 +135,8 @@ const pathsMap = {
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardStory}`,
   dashboardStatus: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardStatus}`,
+  dashboardRewards: (projectID: string) =>
+  `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardRewards}`,
   dashboardShop: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardShop}`,
   dashboardNostr: (projectID: string) =>

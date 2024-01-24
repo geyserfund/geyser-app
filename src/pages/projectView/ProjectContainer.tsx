@@ -33,7 +33,7 @@ export const ProjectContainer = () => {
   const launchModal = useModal({ onClose: onModalClose })
   const draftModal = useModal({ onClose: onModalClose })
 
-  const { project, loading, isProjectOwner } = useProjectContext()
+  const { project, loading, isProjectOwner, fundingFlow } = useProjectContext()
 
   const params = useParams<{ projectId: string }>()
   const routeMatchForProjectPage = useAtomValue(routeMatchForProjectPageAtom)
@@ -88,21 +88,37 @@ export const ProjectContainer = () => {
   }
 
   return (
-    <>
-      <Head
-        title={project?.title || ''}
-        description={project?.shortDescription || ''}
-        image={project?.thumbnailImage || ''}
-        type="article"
-      />
-      {!isMobile ? <ProjectNavigation /> : null}
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="100%"
+      pb={{ base: (fundingFlow.fundState === 'initial' ? "70px" : 0), lg: '0px' }}
+    >
+      <Box
+        width="100%"
+        height="100%"
+        display="flex"
+        overflow="hidden"
+        position="relative"
+        bg="neutral.0"
+        flexDirection={{ base: 'column', lg: 'row' }}
+      >
+        <Head
+          title={project?.title || ''}
+          description={project?.shortDescription || ''}
+          image={project?.thumbnailImage || ''}
+          type="article"
+        />
+        {!isMobile ? <ProjectNavigation /> : null}
 
-      <Outlet />
+        <Outlet />
 
-      <ProjectCreateLaunchedModal {...launchModal} />
-      <ProjectCreateDraftModal {...draftModal} />
+        <ProjectCreateLaunchedModal {...launchModal} />
+        <ProjectCreateDraftModal {...draftModal} />
 
-      {isMobile && <ProjectMobileBottomNavigation fixed />}
-    </>
+        {isMobile && fundingFlow.fundState === 'initial' && <ProjectMobileBottomNavigation fixed />}
+      </Box>
+    </Box>
   )
 }

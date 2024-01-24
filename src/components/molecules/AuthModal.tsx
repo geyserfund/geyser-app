@@ -55,7 +55,7 @@ const ConnectAccounts = ({
   const { user } = useAuthContext()
   return (
     <VStack justifyContent="center" alignItems="center">
-      <Text color="neutral.6002" fontSize="12px" marginBottom={5}>
+      <Text marginBottom={5}>
         {t(
           'Login with your social account to keep track of your favorite projects and launch your own.',
         )}

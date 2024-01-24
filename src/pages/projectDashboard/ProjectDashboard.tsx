@@ -38,6 +38,10 @@ export const projectSections: Record<string, DashboardSection> = {
     path: 'dashboardStatus',
     semiFullWidth: true,
   },
+  rewards: {
+    label: 'Rewards',
+    path: 'dashboardRewards'
+  },
   wallet: {
     label: 'Connect wallet',
     path: 'dashboardWallet',

@@ -55,6 +55,9 @@ export const projectCreatorRoutes = [
   getPath('projectContributors', PathName.projectId),
   getPath('projectInsights', PathName.projectId),
   getPath('projectOverview', PathName.projectId),
+  getPath('projectManageRewards', PathName.projectManageRewards),
+  getPath('projectCreateReward', PathName.projectCreateReward),
+  getPath('projectEditReward', PathName.projectEditReward, PathName.rewardId),
 ]
 
 export const projectRoutes = [
