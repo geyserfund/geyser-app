@@ -46,10 +46,12 @@ export const DateSelectModal = ({
             <DatePicker
               onChange={handleFromDate}
               maxDate={maxDate}
+              minDate={to ? DateTime.fromMillis(to).toJSDate() : undefined}
+              enableTabLoop={false}
               customInput={
                 <Button w="full" variant="secondary" size="sm">
                   {from
-                    ? DateTime.fromMillis(from).toFormat('yyyy/LLL/dd')
+                    ? DateTime.fromMillis(from).toFormat('yyyy/MM/dd')
                     : ' '}
                 </Button>
               }
@@ -60,9 +62,11 @@ export const DateSelectModal = ({
             <DatePicker
               onChange={handleToDate}
               maxDate={maxDate}
+              minDate={from ? DateTime.fromMillis(from).toJSDate() : undefined}
+              enableTabLoop={false}
               customInput={
                 <Button w="full" variant="secondary" size="sm">
-                  {to ? DateTime.fromMillis(to).toFormat('yyyy/LLL/dd') : ' '}
+                  {to ? DateTime.fromMillis(to).toFormat('yyyy/MM/dd') : ' '}
                 </Button>
               }
             />
