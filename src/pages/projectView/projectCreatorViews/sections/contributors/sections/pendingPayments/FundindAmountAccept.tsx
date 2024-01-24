@@ -59,8 +59,8 @@ export const FundingAmountAccept = ({
       </Button>
       <Modal {...confirmModal} title={t('Accept Purchase')}>
         <VStack>
-          <VStack w="full">
-            <Body1>{`${t('Reward purchase is missing')} $${getUSD(
+          <VStack w="full" alignItems={'flex-start'}>
+            <Body1>{`${t('Reward purchase is missing')} ${getUSD(
               differenceAmount,
               fundingTx.bitcoinQuote?.quote,
             )} (${differenceAmount} Sats)`}</Body1>

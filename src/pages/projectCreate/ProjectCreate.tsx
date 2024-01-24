@@ -7,10 +7,8 @@ import { getPath } from '../../constants'
 import { useAuthContext } from '../../context'
 import { useModal } from '../../hooks'
 import {
-  CreateProjectMutation,
   useCreateProjectMutation,
   useProjectByNameOrIdQuery,
-  User,
   useUpdateProjectMutation,
 } from '../../types'
 import { useNotification } from '../../utils'
@@ -31,7 +29,7 @@ export const ProjectCreate = () => {
   const navigate = useNavigate()
 
   const { toast } = useNotification()
-  const { user, setUser } = useAuthContext()
+  const { queryCurrentUser } = useAuthContext()
 
   const isEdit = Boolean(params.projectId)
 
@@ -48,23 +46,7 @@ export const ProjectCreate = () => {
   const [createProject, { loading: createLoading }] = useCreateProjectMutation({
     onCompleted({ createProject }) {
       if (createProject && createProject.owners[0]) {
-        const newOwnershipInfo = [
-          ...user.ownerOf,
-          {
-            project: createProject,
-            owner: createProject.owners[0],
-          },
-        ] satisfies CreateProjectMutation['createProject']['owners'][number]['user']['ownerOf']
-
-        setUser(
-          (current) =>
-            ({
-              ...current,
-              ownerOf: current.ownerOf
-                ? [...current.ownerOf, newOwnershipInfo]
-                : [newOwnershipInfo],
-            } as User),
-        )
+        queryCurrentUser()
 
         navigate(getPath('launchProjectDetails', createProject.id))
       }

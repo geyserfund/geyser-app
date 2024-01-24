@@ -79,8 +79,8 @@ const rewardStatusChange = atom(
 
     const newRewardsCount = {
       ...rewardsCount,
-      [status]: rewardsCount[status] || 0 - 1,
-      [newStatus]: rewardsCount[newStatus] || 0 + 1,
+      [status]: (rewardsCount[status] || 0) - 1,
+      [newStatus]: (rewardsCount[newStatus] || 0) + 1,
     }
 
     set(rewardsAtom, newRewards)
@@ -92,7 +92,6 @@ export const useRewardStatusChangeAtom = () => useSetAtom(rewardStatusChange)
 
 const rewardEmptyAtom = atom((get) => {
   const rewardsCount = get(rewardsCountAtom)
-  console.log('checking rewards counr', rewardsCount)
 
   if (
     rewardsCount[RewardStatus.todo] === 0 &&
