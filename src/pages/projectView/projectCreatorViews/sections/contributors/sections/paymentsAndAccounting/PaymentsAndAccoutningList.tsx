@@ -1,7 +1,6 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { Body1 } from '../../../../../../../components/typography'
 import { useProjectContext } from '../../../../../../../context'
 import { usePaginationHook } from '../../../../../../../hooks/usePaginationHook'
 import { standardPadding } from '../../../../../../../styles'
@@ -13,6 +12,7 @@ import {
   OrderByOptions,
   useFundingTxsOrderGetQuery,
 } from '../../../../../../../types'
+import { EmptyContainer } from '../../components'
 import { PaymentsAndAccountingTable } from './PaymentsAndAccountingTable'
 
 const MAXIMUM_ACCOUNTING_ITEMS = 15
@@ -61,11 +61,15 @@ export const PaymentsAndAccoutningList = () => {
   })
 
   return (
-    <VStack width="100%" flexGrow={1} pt={'10px'} spacing="10px">
+    <VStack
+      width="100%"
+      flexGrow={1}
+      pt={'10px'}
+      spacing="10px"
+      alignItems="center"
+    >
       {ordersData.length === 0 ? (
-        <HStack w="full" px={standardPadding}>
-          <Body1>{t('No data')}</Body1>
-        </HStack>
+        <EmptyContainer text={t('No payments received yet')} />
       ) : (
         <PaymentsAndAccountingTable data={ordersData} />
       )}

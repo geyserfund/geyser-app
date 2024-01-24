@@ -2,13 +2,18 @@ import { Box, Button, HStack, Stack, VStack } from '@chakra-ui/react'
 import { useAtom } from 'jotai'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiWarningCircleFill } from 'react-icons/pi'
 
+import { YellowWarningIcon } from '../../../../../components/icons'
 import { CardLayout } from '../../../../../components/layouts'
 import { H2 } from '../../../../../components/typography'
 import { dimensions } from '../../../../../constants'
+import { useProjectContext } from '../../../../../context'
 import { lightModeColors } from '../../../../../styles'
-import { useCustomTheme, useMobileMode } from '../../../../../utils'
+import {
+  FundingTxsWhereFundingStatus,
+  useFundingTxsOrderCountGetQuery,
+} from '../../../../../types'
+import { useMobileMode } from '../../../../../utils'
 import { ContributionView, contributionViewAtom } from './atoms'
 import { ExportComponent } from './components'
 import { PaymentsAndAccounting } from './sections/paymentsAndAccounting'
@@ -17,8 +22,8 @@ import { Rewards } from './sections/rewards'
 
 export const ProjectCreatorContributors = () => {
   const { t } = useTranslation()
-  const { colors } = useCustomTheme()
   const isMobile = useMobileMode()
+  const { project } = useProjectContext()
 
   const [contributionView, setContributionView] = useAtom(contributionViewAtom)
 
@@ -37,6 +42,22 @@ export const ProjectCreatorContributors = () => {
         return <Rewards />
     }
   }, [contributionView])
+
+  const { data } = useFundingTxsOrderCountGetQuery({
+    variables: {
+      input: {
+        where: {
+          projectId: project?.id,
+          status: FundingTxsWhereFundingStatus.PartiallyPaid,
+        },
+        pagination: {
+          take: 5,
+        },
+      },
+    },
+  })
+
+  const count = data?.fundingTxsGet?.pagination?.count || 0
 
   return (
     <VStack
@@ -89,30 +110,35 @@ export const ProjectCreatorContributors = () => {
               >
                 {t('Rewards')}
               </Button>
-              <Button
-                size="sm"
-                variant={isActiveVariant(ContributionView.pending)}
-                onClick={() => setContributionView(ContributionView.pending)}
-                rightIcon={
-                  <Box
-                    borderRadius="50%"
-                    backgroundColor={lightModeColors.neutral[1000]}
-                  >
-                    <PiWarningCircleFill
-                      fill={colors.secondary.yellow}
-                      fontSize={'20px'}
-                    />
-                  </Box>
-                }
-              >
-                {isMobile ? t('Partial') : t('Partial Payments')}
-              </Button>
+
               <Button
                 size="sm"
                 variant={isActiveVariant(ContributionView.accounts)}
                 onClick={() => setContributionView(ContributionView.accounts)}
               >
                 {isMobile ? t('Payments') : t('Payments and Accounting')}
+              </Button>
+
+              <Button
+                size="sm"
+                variant={isActiveVariant(ContributionView.pending)}
+                onClick={() => setContributionView(ContributionView.pending)}
+                rightIcon={
+                  count > 0 ? (
+                    <Box
+                      borderRadius="50%"
+                      backgroundColor={lightModeColors.neutral[1000]}
+                      margin="2px"
+                    >
+                      <YellowWarningIcon
+                        boxSize={'20px'}
+                        color="secondary.yellow"
+                      />
+                    </Box>
+                  ) : undefined
+                }
+              >
+                {isMobile ? t('Partial') : t('Partial Payments')}
               </Button>
             </HStack>
             {contributionView === ContributionView.accounts ? (

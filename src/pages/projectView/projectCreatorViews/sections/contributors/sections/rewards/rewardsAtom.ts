@@ -1,4 +1,4 @@
-import { atom, useAtom, useSetAtom } from 'jotai'
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
 
 import { OrderFragment } from '../../../../../../../types'
 import { RewardStatus } from './RewardTable'
@@ -21,11 +21,7 @@ export const rewardsAtom = atom<RewardsTableTypes>({
   [RewardStatus.delivered]: [],
 })
 
-export const rewardsCountAtom = atom<RewardsTableCountTypes>({
-  [RewardStatus.todo]: 0,
-  [RewardStatus.shipped]: 0,
-  [RewardStatus.delivered]: 0,
-})
+export const rewardsCountAtom = atom<Partial<RewardsTableCountTypes>>({})
 
 const rewardsSetAtom = atom(
   (get) => get(rewardsAtom),
@@ -83,8 +79,8 @@ const rewardStatusChange = atom(
 
     const newRewardsCount = {
       ...rewardsCount,
-      [status]: rewardsCount[status] - 1,
-      [newStatus]: rewardsCount[newStatus] + 1,
+      [status]: rewardsCount[status] || 0 - 1,
+      [newStatus]: rewardsCount[newStatus] || 0 + 1,
     }
 
     set(rewardsAtom, newRewards)
@@ -93,3 +89,20 @@ const rewardStatusChange = atom(
 )
 
 export const useRewardStatusChangeAtom = () => useSetAtom(rewardStatusChange)
+
+const rewardEmptyAtom = atom((get) => {
+  const rewardsCount = get(rewardsCountAtom)
+  console.log('checking rewards counr', rewardsCount)
+
+  if (
+    rewardsCount[RewardStatus.todo] === 0 &&
+    rewardsCount[RewardStatus.shipped] === 0 &&
+    rewardsCount[RewardStatus.delivered] === 0
+  ) {
+    return true
+  }
+
+  return false
+})
+
+export const useRewardEmptyAtom = () => useAtomValue(rewardEmptyAtom)

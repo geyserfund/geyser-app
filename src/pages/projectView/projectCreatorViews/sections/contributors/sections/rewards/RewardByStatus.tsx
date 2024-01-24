@@ -116,7 +116,9 @@ export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
     <VStack width="100%" flexGrow={1} pt={'10px'} spacing="10px">
       <HStack w="full" px={standardPadding}>
         <H2 color="neutral.900">{t(RewardStatusLabel[status])}</H2>
-        <H3 color="neutral.600">{`(${rewardCount[status]})`}</H3>
+        <H3 color="neutral.600">
+          {rewardCount[status] ? `(${rewardCount[status]})` : ''}
+        </H3>
       </HStack>
       {ordersData.length === 0 ? (
         <HStack w="full" px={standardPadding}>

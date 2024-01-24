@@ -35,3 +35,14 @@ export const QUERY_FUNDINGTXS_ORDER = gql`
     }
   }
 `
+
+export const QUERY_FUNDINGTXS_ORDER_COUNT = gql`
+  ${FRAGMENT_PAGINATION}
+  query FundingTxsOrderCountGet($input: GetFundingTxsInput) {
+    fundingTxsGet(input: $input) {
+      pagination {
+        ...Pagination
+      }
+    }
+  }
+`

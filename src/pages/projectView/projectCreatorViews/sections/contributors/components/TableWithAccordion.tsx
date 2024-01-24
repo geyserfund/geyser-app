@@ -155,7 +155,7 @@ export function TableItemWithAccordion<TItem>({
               px={halfStandardPadding}
               _first={{ pl: standardPadding }}
               _last={{ pr: standardPadding }}
-              textAlign={row.key === 'dropdown' ? 'center' : 'left'}
+              textAlign={row.key === 'dropdown' ? 'right' : 'left'}
             >
               {row.key === 'dropdown' ? (
                 <IconButton

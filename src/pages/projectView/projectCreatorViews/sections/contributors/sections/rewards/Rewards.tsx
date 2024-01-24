@@ -1,12 +1,21 @@
 import { VStack } from '@chakra-ui/react'
-import { Trans } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { Body1 } from '../../../../../../../components/typography'
 import { standardPadding } from '../../../../../../../styles'
+import { EmptyContainer } from '../../components'
 import { RewardByStatus } from './RewardByStatus'
+import { useRewardEmptyAtom } from './rewardsAtom'
 import { RewardStatus } from './RewardTable'
 
 export const Rewards = () => {
+  const { t } = useTranslation()
+  const isRewardEmpty = useRewardEmptyAtom()
+
+  if (isRewardEmpty) {
+    return <EmptyContainer text={t('No rewards sold yet')} />
+  }
+
   return (
     <VStack alignItems="flex-start">
       <Body1 px={standardPadding}>

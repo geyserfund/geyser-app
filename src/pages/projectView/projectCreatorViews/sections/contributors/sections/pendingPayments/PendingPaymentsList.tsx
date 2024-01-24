@@ -1,7 +1,6 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { Body1 } from '../../../../../../../components/typography'
 import { useProjectContext } from '../../../../../../../context'
 import { usePaginationHook } from '../../../../../../../hooks/usePaginationHook'
 import { standardPadding } from '../../../../../../../styles'
@@ -16,6 +15,7 @@ import {
   useFundingTxsOrderGetQuery,
 } from '../../../../../../../types'
 import { useNotification } from '../../../../../../../utils'
+import { EmptyContainer } from '../../components'
 import { PendingPaymentsTable } from './PendingPaymentsTable'
 
 const MAXIMUM_PARTIAL_PAYMENT_ITEMS = 15
@@ -94,9 +94,7 @@ export const PendingPaymentsList = () => {
   return (
     <VStack width="100%" flexGrow={1} pt={'10px'} spacing="10px">
       {ordersData.length === 0 ? (
-        <HStack w="full" px={standardPadding}>
-          <Body1>{t('No data')}</Body1>
-        </HStack>
+        <EmptyContainer text={t('No partial payments yet')} />
       ) : (
         <PendingPaymentsTable
           data={ordersData}

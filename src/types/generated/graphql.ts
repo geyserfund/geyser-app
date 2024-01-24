@@ -1206,7 +1206,7 @@ export type Order = {
   referenceCode: Scalars['String']
   shippedAt?: Maybe<Scalars['Date']>
   status: Scalars['String']
-  totalInSats: Scalars['BigInt']
+  totalInSats: Scalars['Int']
   updatedAt: Scalars['Date']
   user?: Maybe<User>
 }
@@ -1239,7 +1239,7 @@ export type OrderItem = {
   __typename?: 'OrderItem'
   item: ProjectReward
   quantity: Scalars['Int']
-  unitPriceInSats: Scalars['BigInt']
+  unitPriceInSats: Scalars['Int']
 }
 
 export type OrderItemInput = {
@@ -3853,7 +3853,7 @@ export type OrderResolvers<
   referenceCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   shippedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
   status?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  totalInSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  totalInSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
@@ -3865,7 +3865,7 @@ export type OrderItemResolvers<
 > = {
   item?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType>
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  unitPriceInSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  unitPriceInSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -5259,7 +5259,7 @@ export type FundingTxForOverviewPageFragment = {
 export type OrderItemFragment = {
   __typename?: 'OrderItem'
   quantity: number
-  unitPriceInSats: any
+  unitPriceInSats: number
   item: {
     __typename?: 'ProjectReward'
     id: any
@@ -5278,7 +5278,7 @@ export type OrderFragment = {
   id: any
   shippedAt?: any | null
   status: string
-  totalInSats: any
+  totalInSats: number
   updatedAt: any
   user?: {
     __typename?: 'User'
@@ -5347,7 +5347,7 @@ export type FundingTxOrderFragment = {
     __typename?: 'Order'
     id: any
     referenceCode: string
-    totalInSats: any
+    totalInSats: number
     items: Array<{ __typename?: 'OrderItem' } & OrderItemFragment>
   } | null
 }
@@ -6652,6 +6652,20 @@ export type FundingTxsOrderGetQuery = {
       | ({ __typename?: 'CursorPaginationResponse' } & PaginationFragment)
       | null
     fundingTxs: Array<{ __typename?: 'FundingTx' } & FundingTxOrderFragment>
+  } | null
+}
+
+export type FundingTxsOrderCountGetQueryVariables = Exact<{
+  input?: InputMaybe<GetFundingTxsInput>
+}>
+
+export type FundingTxsOrderCountGetQuery = {
+  __typename?: 'Query'
+  fundingTxsGet?: {
+    __typename?: 'FundingTxsGetResponse'
+    pagination?:
+      | ({ __typename?: 'CursorPaginationResponse' } & PaginationFragment)
+      | null
   } | null
 }
 
@@ -10847,6 +10861,67 @@ export type FundingTxsOrderGetLazyQueryHookResult = ReturnType<
 export type FundingTxsOrderGetQueryResult = Apollo.QueryResult<
   FundingTxsOrderGetQuery,
   FundingTxsOrderGetQueryVariables
+>
+export const FundingTxsOrderCountGetDocument = gql`
+  query FundingTxsOrderCountGet($input: GetFundingTxsInput) {
+    fundingTxsGet(input: $input) {
+      pagination {
+        ...Pagination
+      }
+    }
+  }
+  ${PaginationFragmentDoc}
+`
+
+/**
+ * __useFundingTxsOrderCountGetQuery__
+ *
+ * To run a query within a React component, call `useFundingTxsOrderCountGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFundingTxsOrderCountGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFundingTxsOrderCountGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFundingTxsOrderCountGetQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    FundingTxsOrderCountGetQuery,
+    FundingTxsOrderCountGetQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    FundingTxsOrderCountGetQuery,
+    FundingTxsOrderCountGetQueryVariables
+  >(FundingTxsOrderCountGetDocument, options)
+}
+export function useFundingTxsOrderCountGetLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FundingTxsOrderCountGetQuery,
+    FundingTxsOrderCountGetQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    FundingTxsOrderCountGetQuery,
+    FundingTxsOrderCountGetQueryVariables
+  >(FundingTxsOrderCountGetDocument, options)
+}
+export type FundingTxsOrderCountGetQueryHookResult = ReturnType<
+  typeof useFundingTxsOrderCountGetQuery
+>
+export type FundingTxsOrderCountGetLazyQueryHookResult = ReturnType<
+  typeof useFundingTxsOrderCountGetLazyQuery
+>
+export type FundingTxsOrderCountGetQueryResult = Apollo.QueryResult<
+  FundingTxsOrderCountGetQuery,
+  FundingTxsOrderCountGetQueryVariables
 >
 export const ProjectByNameOrIdDocument = gql`
   query ProjectByNameOrId(
