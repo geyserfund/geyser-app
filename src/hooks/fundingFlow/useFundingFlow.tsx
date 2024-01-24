@@ -445,17 +445,18 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 }
 
 export const validateFundingInput = (input: FundingInput) => {
-  const isValid = false
-  const error = 'cannot initiate funding without amount'
+  let isValid = false
+  let error = 'cannot initiate funding without amount'
 
-  // TODO
-  // if (
-  //   (input.donationInput && toInt(input.donationInput.donationAmount) > 0) ||
-  //   (input.rewardInput && toInt(input.rewardInput.rewardsCost) > 0)
-  // ) {
-  //   isValid = true
-  //   error = ''
-  // }
+  if (
+    (input.donationAmount && toInt(input.donationAmount) > 0) ||
+    (input.orderInput &&
+      input.orderInput.items &&
+      input.orderInput.items.length > 0)
+  ) {
+    isValid = true
+    error = ''
+  }
 
   return { isValid, error }
 }
