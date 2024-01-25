@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Container, VStack, HStack, useBreakpointValue, useDisclosure} from '@chakra-ui/react';
+import { Container, VStack, HStack, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
 import { SimplePool, Event } from 'nostr-tools';
 import NostrProjectList from '../components/NostrProjectList';
-import { CardLayout } from '../../../../components/layouts';
 import { FilterDrawer } from '../../filters/mobile/FilterDrawer';
 import { MobileTopBar } from '../../filters/mobile/MobileTopBar';
 
@@ -45,12 +44,12 @@ export const LatestNostrProjects = () => {
 
   const isMobile = useBreakpointValue({ base: true, sm: true, md: true, lg: false });
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onClose } = useDisclosure();
 
   return (
     <Container>
       <VStack>
-        {isMobile && <MobileTopBar isOpen={isOpen} onClose={onClose} />}
+        {isMobile && <MobileTopBar title="Latest Projects" />}
         {isMobile && <FilterDrawer isOpen={isOpen} onClose={onClose} />}
 
         <HStack>
