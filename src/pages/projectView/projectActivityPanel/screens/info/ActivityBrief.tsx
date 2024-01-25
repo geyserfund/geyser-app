@@ -63,6 +63,9 @@ export const ActivityBrief = (props: StackProps) => {
     }
   }, [isToolTipOpen, onToolTipClose])
 
+  const [allFunders, setAllFunders] = useState<FunderWithUserFragment[]>(
+    [],
+  )
   const [socialFunders, setSocialFunders] = useState<FunderWithUserFragment[]>(
     [],
   )
@@ -84,7 +87,6 @@ export const ActivityBrief = (props: StackProps) => {
       input: {
         where: {
           projectId: toInt(project?.id),
-          anonymous: false,
           confirmed: true,
         },
         orderBy: {
@@ -121,6 +123,7 @@ export const ActivityBrief = (props: StackProps) => {
         }
       }
 
+      setAllFunders(funders);
       funders.map((funder) => {})
       setSocialFunders(socialFilteredFunders)
     },
@@ -216,6 +219,7 @@ export const ActivityBrief = (props: StackProps) => {
   }, [balance, currentMilestone, milestoneIndex, prevMilestone, t])
 
   const latestFunders = socialFunders.slice(0, 12)
+  const activeProjectRewards = project ? project.rewards.filter(reward => reward.isHidden === false) : [];
 
   return (
     <VStack w="100%" {...props}>
@@ -259,7 +263,7 @@ export const ActivityBrief = (props: StackProps) => {
         </VStack>
       ) : null}
       
-      {(funderLoading || latestFunders.length) && (
+      {(funderLoading || allFunders.length) && (
         <VStack
           textAlign="left"
           alignItems="start"
@@ -280,18 +284,32 @@ export const ActivityBrief = (props: StackProps) => {
           <Text fontWeight={500}>{t('Contributors')}</Text>
           <HStack ml={1} spacing={0} alignItems="start">
             {!funderLoading
-              ? latestFunders.map((funder) => {
-                  return (
+              ? (
+                (latestFunders.length > 0 ? (
+                  latestFunders.map((funder) => {
+                    return (
+                      <UserAvatar
+                        size="sm"
+                        border={`2px solid ${colors.neutral[0]}`}
+                        display="inline-block"
+                        marginLeft="-5px"
+                        key={funder.id}
+                        user={funder.user}
+                      />
+                    )
+                  })
+                ): (
+                  allFunders.slice(0, 12).map((s, i) => (
                     <UserAvatar
-                      size="sm"
-                      border={`2px solid ${colors.neutral[0]}`}
-                      display="inline-block"
-                      marginLeft="-5px"
-                      key={funder.id}
-                      user={funder.user}
-                    />
-                  )
-                })
+                        size="sm"
+                        border={`2px solid ${colors.neutral[0]}`}
+                        display="inline-block"
+                        marginLeft="-5px"
+                        key={i}
+                      />
+                  ))
+                ))  
+              )
               : [1, 2, 3].map((s) => (
                   <SkeletonCircle
                     key={s}
@@ -319,7 +337,7 @@ export const ActivityBrief = (props: StackProps) => {
         </VStack>
       )}
 
-      {(!project || !project.rewards || project.rewards.length == 0) && (
+      {activeProjectRewards.length == 0 && (
         <InfoScreenFeed />
       )}
 
