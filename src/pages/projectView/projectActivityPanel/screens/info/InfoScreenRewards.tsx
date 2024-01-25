@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { MobileViews, useProjectContext } from '../../../../../context'
 import { PathName } from '../../../../../constants'
 import { useNavigate } from 'react-router-dom'
-import { InfoScreenFeed } from './InfoScreenFeed'
 
 export const InfoScreenRewards = () => {
 
@@ -23,7 +22,7 @@ export const InfoScreenRewards = () => {
 
   const activeProjectRewards = project.rewards.filter(reward => reward.isHidden === false);
   if(activeProjectRewards.length == 0) {
-    return <InfoScreenFeed />
+    return null;
   }
 
   return (
