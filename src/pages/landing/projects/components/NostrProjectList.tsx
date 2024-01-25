@@ -35,7 +35,7 @@ export default function NostrProjectList({ projects }: Props) {
     <Flex direction="column" margin="0 20px" padding="10px">
       <Flex direction="column">
         {renderProjects.map((nostr, index) => (
-          <NostrProjectCard key={index} nostrich={nostr.pubkey} content={nostr.content} />
+          <NostrProjectCard key={index} nostrich={{ pubkey: nostr.pubkey }} content={nostr.content} />
         ))}
         {projects.length > displayCount && (
           <Button style={buttonStyle} onClick={loadMore}>
