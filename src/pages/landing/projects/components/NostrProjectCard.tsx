@@ -1,3 +1,4 @@
+import React from 'react';
 import { Text, Box, Flex, Link as ChakraLink, useBreakpointValue } from '@chakra-ui/react';
 import { ImageWithReload } from '../../../../components/ui/ImageWithReload';
 
@@ -23,7 +24,7 @@ const NostrProjectCard: React.FC<NostrProjectCardProps> = ({ content, nostrich }
     parsedContent = JSON.parse(content);
   } catch (error) {
     console.error('Error parsing JSON:', error);
-    parsedContent = { };
+    parsedContent = { display_name: '', image: '', about: '', website: '' };
   }
   const { display_name, image, about, website } = parsedContent;
 
