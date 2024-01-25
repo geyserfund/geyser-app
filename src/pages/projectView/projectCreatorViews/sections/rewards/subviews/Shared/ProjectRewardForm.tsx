@@ -95,6 +95,13 @@ export const ProjectRewardForm = ({
   )
   const [formError, setFormError] = useState<any>({})
 
+  if(!reward.rewardType) {
+    setReward((current) => ({
+      ...current,
+      rewardType: RewardType.Physical,
+    }))
+  }
+
   const getRewardCreationInputVariables = (): CreateProjectRewardInput => {
     return {
       projectId: project?.id,
@@ -143,10 +150,18 @@ export const ProjectRewardForm = ({
 
   const handleMaxClaimableAmountBlur = () => {
     // set cost with the dollar value converted to cents
-    setReward((current) => ({
-      ...current,
-      maxClaimable: toInt(Math.round(reward.maxClaimable || 0)),
-    }))
+    if(reward.maxClaimable && toInt(reward.maxClaimable) < reward.sold) {
+      setReward((current) => ({
+        ...current,
+        maxClaimable: reward.sold,
+      }))
+      setFormError({...formError, maxClaimable: 'Limited edition must be at minimum the amount sold'})
+    } else {
+      setReward((current) => ({
+        ...current,
+        maxClaimable: toInt(Math.round(reward.maxClaimable || 0)),
+      }))
+    }
   }
 
   const handleCostAmountChange = (
