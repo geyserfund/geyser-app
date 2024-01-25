@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Container, VStack, HStack, useBreakpointValue, Button, useDisclosure, Box } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { Container, VStack, HStack, useBreakpointValue, useDisclosure} from '@chakra-ui/react';
 import { SimplePool, Event } from 'nostr-tools';
 import NostrProjectList from '../components/NostrProjectList';
 import { CardLayout } from '../../../../components/layouts';
