@@ -95,6 +95,13 @@ export const ProjectRewardForm = ({
   )
   const [formError, setFormError] = useState<any>({})
 
+  if(!reward.rewardType) {
+    setReward((current) => ({
+      ...current,
+      rewardType: RewardType.Physical,
+    }))
+  }
+
   const getRewardCreationInputVariables = (): CreateProjectRewardInput => {
     return {
       projectId: project?.id,
