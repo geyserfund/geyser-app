@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Event } from 'nostr-tools';
 import { Button, Flex } from '@chakra-ui/react';
-import NostrProjectCard from './NostrProjectCard.tsx';
+import NostrProjectCard from './NostrProjectCard';
 
 interface Props {
   projects: Event[];
@@ -10,7 +10,6 @@ interface Props {
 export default function NostrProjectList({ projects }: Props) {
   const initialDisplayCount = 12;
   const itemsPerPage = 10;
-  const [displayedProjects, setDisplayedProjects] = useState<Event[]>([]);
   const [displayCount, setDisplayCount] = useState(initialDisplayCount);
 
   const loadMore = () => {
