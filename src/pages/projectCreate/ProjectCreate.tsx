@@ -5,14 +5,14 @@ import { useNavigate, useParams } from 'react-router-dom'
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
 import { getPath } from '../../constants'
 import { useAuthContext } from '../../context'
+import { useModal } from '../../hooks'
 import {
-  CreateProjectMutation,
   useCreateProjectMutation,
   useProjectByNameOrIdQuery,
-  User,
   useUpdateProjectMutation,
 } from '../../types'
 import { useNotification } from '../../utils'
+import { ProjectExitConfirmModal } from './components'
 import { FormContinueButton } from './components/FormContinueButton'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 import { ProjectForm } from './components/ProjectForm'
@@ -29,7 +29,7 @@ export const ProjectCreate = () => {
   const navigate = useNavigate()
 
   const { toast } = useNotification()
-  const { user, setUser } = useAuthContext()
+  const { queryCurrentUser } = useAuthContext()
 
   const isEdit = Boolean(params.projectId)
 
@@ -46,23 +46,7 @@ export const ProjectCreate = () => {
   const [createProject, { loading: createLoading }] = useCreateProjectMutation({
     onCompleted({ createProject }) {
       if (createProject && createProject.owners[0]) {
-        const newOwnershipInfo = [
-          ...user.ownerOf,
-          {
-            project: createProject,
-            owner: createProject.owners[0],
-          },
-        ] satisfies CreateProjectMutation['createProject']['owners'][number]['user']['ownerOf']
-
-        setUser(
-          (current) =>
-            ({
-              ...current,
-              ownerOf: current.ownerOf
-                ? [...current.ownerOf, newOwnershipInfo]
-                : [newOwnershipInfo],
-            } as User),
-        )
+        queryCurrentUser()
 
         navigate(getPath('launchProjectDetails', createProject.id))
       }
@@ -99,6 +83,8 @@ export const ProjectCreate = () => {
   const unsavedModal = useProjectUnsavedModal({
     hasUnsaved: form.formState.isDirty,
   })
+
+  const exitModal = useModal()
 
   const onBackClick = () => {
     if (form.formState.isDirty) {
@@ -142,7 +128,7 @@ export const ProjectCreate = () => {
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <ProjectCreateLayout
         continueButton={<FormContinueButton {...nextProps} flexGrow={1} />}
-        onBackClick={onBackClick}
+        onBackClick={isEdit ? exitModal.onOpen : onBackClick}
         title={
           <TitleWithProgressBar
             title={t('Project description')}
@@ -157,6 +143,7 @@ export const ProjectCreate = () => {
         </VStack>
       </ProjectCreateLayout>
       <ProjectUnsavedModal {...unsavedModal} />
+      <ProjectExitConfirmModal {...exitModal} onConfirm={onBackClick} />
     </form>
   )
 }

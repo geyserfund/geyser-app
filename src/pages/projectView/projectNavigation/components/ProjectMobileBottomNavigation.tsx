@@ -80,7 +80,7 @@ export const ProjectNavUI = () => {
     setMobileView,
     project,
     isProjectOwner,
-    onCreatorModalOpen,
+    onCreatorModalOpen
   } = useProjectContext()
 
   const className = useLayoutAnimation()

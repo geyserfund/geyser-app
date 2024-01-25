@@ -26,7 +26,7 @@ export const getFeaturedProject = () => {
   }
 
   if (__production__) {
-    return 'theblackmambas'
+    return 'greatorchestraofchristmascharity'
   }
 
   return ''

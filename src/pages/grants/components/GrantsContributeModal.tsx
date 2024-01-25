@@ -26,8 +26,7 @@ import { useAuthContext } from '../../../context'
 import { useBTCConverter } from '../../../helpers'
 import { useFormState, useFundingFlow } from '../../../hooks'
 import { FormStateError } from '../../../interfaces'
-import { USDCents, useProjectByNameOrIdQuery } from '../../../types'
-import { FundingInput, FundingResourceType } from '../../../types'
+import { FundingInput, FundingResourceType, USDCents, useProjectByNameOrIdQuery } from '../../../types'
 import { toInt, useNotification } from '../../../utils'
 import { QRCodeSection } from '../../projectView/projectActivityPanel/screens'
 import { GRANTS_PROJECT_NAME } from '../constants'
@@ -95,7 +94,7 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
     fundingTx,
     gotoNextStage,
     resetFundingFlow,
-    requestFunding,
+    requestFunding
   } = fundingFlow
 
   useEffect(() => {
@@ -153,13 +152,9 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
       const input: FundingInput = {
         projectId: toInt(grantsData?.projectGet?.id),
         anonymous: Boolean(user),
-        ...(state.amount !== 0 && {
-          donationInput: {
-            donationAmount: getSatoshisFromUSDCents(
-              (state.amount * 100) as USDCents,
-            ),
-          },
-        }),
+        donationAmount: getSatoshisFromUSDCents(
+          (state.amount * 100) as USDCents,
+        ),
         metadataInput: {
           ...(state.comment && { comment: state.comment }),
         },

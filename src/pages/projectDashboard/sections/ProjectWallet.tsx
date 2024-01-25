@@ -1,10 +1,14 @@
-import { Button, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, Link, useDisclosure, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { Body2 } from '../../../components/typography'
-import { getPath, WalletConnectDetails } from '../../../constants'
+import {
+  getPath,
+  GeyserEmailVerificationDocUrl,
+  WalletConnectDetails,
+} from '../../../constants'
 import { useAuthContext, useProjectContext } from '../../../context'
 import {
   MfaAction,
@@ -130,9 +134,18 @@ export const ProjectWallet = () => {
     <>
       <VStack flexGrow={1} spacing="20px">
         <Body2 color="neutral.600">
-          {t(
-            'The project wallet can only be changed by the project creator with a verified email, for security reasons. You can verify your email in the Profile page’s Settings.',
-          )}
+          <Trans
+            i18nKey={
+              "The project wallet can only be changed by the project creator with a verified email, for security reasons. You can verify your email in your Profile's Settings. <0>Go to Profile Settings</0>"
+            }
+          >
+            {
+              "The project wallet can only be changed by the project creator with a verified email, for security reasons. You can verify your email in your Profile's Settings. "
+            }
+            <Link href={GeyserEmailVerificationDocUrl} isExternal>
+              Go to Profile Settings
+            </Link>
+          </Trans>
         </Body2>
         {project && (
           <ProjectCreationWalletConnectionForm

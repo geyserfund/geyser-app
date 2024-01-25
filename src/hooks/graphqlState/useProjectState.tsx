@@ -9,7 +9,7 @@ import {
   useProjectByNameOrIdQuery,
   useUpdateProjectMutation,
 } from '../../types'
-import { getDiff, toInt, useNotification } from '../../utils'
+import { getDiff, linkToHttps, toInt, useNotification } from '../../utils'
 
 export const useProjectState = (
   projectId?: string | number,
@@ -111,7 +111,9 @@ export const useProjectState = (
       }
 
       if (key === 'links') {
-        input.links = project.links.filter((link) => link)
+        input.links = project.links
+          .filter((link) => link)
+          .map((link) => linkToHttps(link))
         return
       }
 

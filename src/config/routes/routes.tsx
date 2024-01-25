@@ -170,6 +170,15 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
+        path: getPath('dashboardRewards', PathName.projectId),
+        async lazy() {
+          const ProjectRewardSection = await ProjectDashboard().then(
+            (m) => m.ProjectRewardSettings,
+          )
+          return { Component: ProjectRewardSection }
+        },
+      },
+      {
         path: getPath('dashboardWallet', PathName.projectId),
         async lazy() {
           const ProjectWallet = await ProjectDashboard().then(
@@ -301,6 +310,37 @@ export const platformRoutes: RouteObject[] = [
               )
               return {
                 element: renderPrivateRoute(ProjectCreatorContributors),
+              }
+            },
+          },
+          {
+            path: getPath('projectManageRewards', PathName.projectId),
+            async lazy() {
+              const ProjectManageRewards = await Project().then(
+                  (m) => m.ProjectManageRewards,
+              )
+              return {
+                element: renderPrivateRoute(ProjectManageRewards),
+              }
+            },
+          },
+          {
+            path: getPath('projectCreateReward', PathName.projectId),
+            async lazy() {
+              const ProjectCreateReward = await Project()
+                  .then((m) => m.ProjectCreateReward)
+              return {
+                element: renderPrivateRoute(ProjectCreateReward),
+              }
+            },
+          },
+          {
+            path: getPath('projectEditReward', PathName.projectId, PathName.rewardId),
+            async lazy() {
+              const ProjectEditReward = await Project()
+                  .then((m) => m.ProjectEditReward)
+              return {
+                element: renderPrivateRoute(ProjectEditReward),
               }
             },
           },

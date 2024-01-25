@@ -26,13 +26,14 @@ export const FundingFormSection = ({ onBackClick }: Props) => {
       overflowX="visible"
     >
       <Box width="100%">
-        <HStack>
+        <HStack mb={2}>
           <Button onClick={onBackClick} variant="transparent">
             <ArrowBackIcon />
           </Button>
-          <SectionTitle>{t('Donate to this idea')}</SectionTitle>
+          <SectionTitle>{t('Contribute')}</SectionTitle>
         </HStack>
 
+        <SectionTitle>{t('Make a donation')}</SectionTitle>
         <DonationInput
           inputGroup={{ padding: '2px' }}
           name="donationAmount"

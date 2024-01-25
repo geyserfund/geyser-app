@@ -92,11 +92,9 @@ export const FundingForm = ({
       const input: FundingInput = {
         projectId: Number(project.id),
         anonymous: !user,
-        donationInput: {
-          donationAmount: state.donationAmount,
-        },
+        donationAmount: state.donationAmount,
         metadataInput: {
-          ...(state.comment && { comment: state.comment }),
+          ...(state.comment && { comment: state.comment })
         },
         sourceResourceInput: {
           resourceId: Number(project.id),

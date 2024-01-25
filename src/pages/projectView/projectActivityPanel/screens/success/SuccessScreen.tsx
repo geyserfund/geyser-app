@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { Button, CloseButton, VStack } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { Button, CloseButton, VStack, Link as ChakraLink } from '@chakra-ui/react'
 import ReactConfetti from 'react-confetti'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -26,7 +25,6 @@ type Props = {
 
 export const SuccessScreen = ({ onCloseClick }: Props) => {
   const { t } = useTranslation()
-  const [hasCopiedProjectLink, setCopy] = useState(false)
 
   const {
     project,
@@ -35,18 +33,11 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
   } = useProjectContext()
 
   const { getTotalAmount } = useFundCalc(fundingState)
+  const projectUrl = project ? `${window.location.origin}/project/${project.name}` : '';
 
   const { data } = useQuery<{ userBadges: UserBadge[] }>(QUERY_USER_BADGES, {
     variables: { input: { where: { fundingTxId: fundingTx.id } } },
   })
-
-  useEffect(() => {
-    if (hasCopiedProjectLink) {
-      setTimeout(() => {
-        setCopy(false)
-      }, 2000)
-    }
-  }, [hasCopiedProjectLink])
 
   const userBadge = data?.userBadges[0]
   const currentBadge = userBadge ? userBadge.badge : undefined
@@ -63,7 +54,7 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
       }}
       spacing={4}
       width="100%"
-      height={{ base: 'calc(100vh - 115px)', lg: '100%' }}
+      height={{ base: 'calc(100vh - 54px)', lg: '100%' }}
       overflowX="hidden"
       position="relative"
       backgroundColor="primary.400"
@@ -98,6 +89,10 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
           </Button>
         )}
 
+        {needsShipping ? (
+          <ContributionShippingBox creatorEmail={fundingTx.creatorEmail} />
+        ) : null}
+
         <ContributionInfoBox
           project={project as Project}
           formState={fundingState}
@@ -111,9 +106,17 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
           showGeyserFee={false}
         />
 
-        {needsShipping ? (
-          <ContributionShippingBox creatorEmail={fundingTx.creatorEmail} />
-        ) : null}
+        <Button
+          as={ChakraLink}
+          href={projectUrl}
+          variant="secondary"
+          textDecoration={"none"}
+          size="sm"
+          w="full"
+          _hover={{ textDecoration: 'none' }}
+        >
+          {t('Back to project')}
+        </Button>
       </VStack>
     </VStack>
   )

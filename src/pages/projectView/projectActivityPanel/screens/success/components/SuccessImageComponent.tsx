@@ -1,6 +1,5 @@
 import {
   Button,
-  Center,
   HStack,
   Image,
   Text,
@@ -10,15 +9,14 @@ import {
 import * as htmlToImage from 'html-to-image'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BiCopy } from 'react-icons/bi'
-import { HiOutlineCheck } from 'react-icons/hi'
 
 import { Body2, H3 } from '../../../../../../components/typography'
 import { useProjectContext } from '../../../../../../context'
-import { fonts, lightModeColors } from '../../../../../../styles'
 import { Badge, FundingTxFragment } from '../../../../../../types'
 import { useCustomTheme, useNotification } from '../../../../../../utils'
 import { AvatarElement } from '../../../../projectMainBody/components'
+import ContributionIcon from './ContributionIcon.svg'
+import { BiCopy } from 'react-icons/bi'
 
 export const SuccessImageComponent = ({
   currentBadge,
@@ -52,6 +50,11 @@ export const SuccessImageComponent = ({
       setCopied(true)
       setTimeout(() => {
         setCopied(false)
+        toast({
+          status: 'success',
+          title: 'Copied!',
+          description: 'Ready to paste into Social media posts',
+        })
       }, 1000)
     } catch {
       toast({
@@ -80,93 +83,115 @@ export const SuccessImageComponent = ({
   } = fundingTx
 
   return (
-    <VStack w="full" spacing="10px">
-      <VStack
-        id="successful-contribution-banner"
-        ref={successComponent}
-        spacing="20px"
-        borderStyle="dashed"
-        borderWidth="2px"
-        borderColor={lightModeColors.neutral[900]}
-        backgroundColor={colors.primary[400]}
-        borderRadius="8px"
-        padding="10px 20px"
-        w="full"
-      >
-        <VStack spacing="0px">
-          <H3
-            color={lightModeColors.neutral[900]}
-            fontSize="22px"
-            fontWeight={500}
-            fontFamily={fonts.livvic}
-          >
-            {t('Successful contribution to')}
-          </H3>
-          <H3
-            color={lightModeColors.neutral[900]}
-            fontSize="22px"
-            fontWeight={700}
-            fontFamily={fonts.livvic}
-          >
-            {project.title}
-          </H3>
-        </VStack>
-        {currentBadge ? (
-          <VStack w="full" spacing="0px">
-            <Image src={currentBadge.image} width="125px" />
-            <Body2 color={lightModeColors.neutral[900]}>
-              {t('You won a Nostr badge!')}
-            </Body2>
+    <>
+      <VStack w="full" spacing="10px">
+        <HStack
+          id="successful-contribution-banner"
+          ref={successComponent}
+          spacing={0}
+          backgroundColor={colors.primary[100]}
+          padding="10px 20px"
+          w="full"
+          gap={4}
+          mb={1}
+          borderRadius="8px"
+        >
+          <Image src={ContributionIcon} width={"100px"}></Image>
+          <VStack alignItems={"flex-start"} gap={1}>
+            {user && (
+              <AvatarElement
+                borderRadius="50%"
+                user={user}
+                noLink
+                textProps={{ color: 'neutral.700' }}
+              />
+            )}
+            <H3
+              color={"neutral.600"}
+              fontSize="18px"
+              fontWeight={600}
+            >
+              {t('Successfully contributed to')}
+            </H3>
+            <H3
+              color={"neutral.900"}
+              fontSize="24px"
+              fontWeight={700}
+            >
+              {project.title}
+            </H3>
+            {currentBadge && (
+              <VStack w="full" spacing="0px">
+                <Image src={currentBadge.image} width="125px" />
+                <Body2 color={'neutral.900'}>
+                  {t('You won a Nostr badge!')}
+                </Body2>
+              </VStack>
+            )}
           </VStack>
-        ) : (
-          <Center
-            boxSize={'70px'}
-            borderRadius="full"
-            backgroundColor={lightModeColors.neutral[50]}
-          >
-            <HiOutlineCheck
-              color={lightModeColors.neutral[1000]}
-              fontSize="50px"
-            />
-          </Center>
-        )}
+        </HStack>
 
-        <VStack w="full" alignItems="start">
-          <HStack>
-            <AvatarElement
-              borderRadius="50%"
-              user={user}
-              noLink
-              textProps={{ color: lightModeColors.neutral[900] }}
-            />
-          </HStack>
-          <Body2 color={lightModeColors.neutral[900]} fontStyle="italic">
+        <HStack w="full" justifyContent="end">
+          <Tooltip
+            w="100%"
+            placement="top"
+            label={copied ? t('copied') : t('copy')}
+          >
+            <Button
+              size="md"
+              w="100%"
+              isActive={copied}
+              variant="secondary"
+              aria-label="copy-success-image"
+              leftIcon={<BiCopy />}
+              onClick={handleCopy}
+              isLoading={successComponent.current === null}
+            >
+              <Text fontSize="16px" fontWeight="500" color={"neutral.900"}>
+                {t('Copy Success image')}
+              </Text>
+            </Button>
+          </Tooltip>
+        </HStack>
+      </VStack>
+      <VStack
+        padding={2}
+        width={'full'}
+        borderRadius="8px"
+        backgroundColor={colors.primary[50]}
+        spacing={0}
+        justify={'flex-start'}
+        alignItems="flex-start"
+      >
+        <HStack>
+          <Text
+            fontSize={'16px'}
+            fontWeight={'normal'}
+            textColor={'neutral.900'}
+          >
+            {t('By')}
+          </Text>
+          <AvatarElement
+            borderRadius="50%"
+            user={user}
+            noLink
+            textProps={{ color: 'neutral.700' }}
+            avatarOnly={true}
+          />
+          <Text
+            fontSize={'16px'}
+            fontWeight={'normal'}
+            textColor={'neutral.900'}
+          >
+            {user ? user.username : 'Anonymous'}
+          </Text>
+        </HStack>
+        {comment && (
+          <Body2 color={'neutral.700'} fontStyle="italic" mt={2}>
             {comment}
           </Body2>
-        </VStack>
+        )}
       </VStack>
-      <HStack w="full" justifyContent="end">
-        <Tooltip
-          w="100%"
-          placement="top"
-          label={copied ? t('copied') : t('copy')}
-        >
-          <Button
-            size="md"
-            w="100%"
-            isActive={copied}
-            variant="secondary"
-            aria-label="copy-success-image"
-            leftIcon={<BiCopy />}
-            onClick={handleCopy}
-            isLoading={successComponent.current === null}
-          >
-            <Text variant="body1" fontWeight="bold" textTransform="capitalize">
-              {t('Copy success image')}
-            </Text>
-          </Button>
-        </Tooltip>
-      </HStack>
-    </VStack>
+    </>
   )
 }

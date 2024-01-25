@@ -121,6 +121,8 @@ export const socialColorsDark = {
 export const lightModeColors = {
   primary: primaryColorsLight,
   neutral: neutralColorsLight,
+  brand: primaryColorsLight,
+  nostr: nostrColorsLight,
   secondary: secondaryColors,
   social: socialColors,
   app: ColorsAppLight,
@@ -129,6 +131,8 @@ export const lightModeColors = {
 export const darkModeColors = {
   primary: primaryColorsDark,
   neutral: neutralColorsDark,
+  brand: primaryColorsDark,
+  nostr: nostrColorsDark,
   secondary: secondaryColors,
   social: socialColorsDark,
   app: ColorsAppDark,

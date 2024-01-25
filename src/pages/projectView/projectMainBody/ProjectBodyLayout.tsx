@@ -8,6 +8,7 @@ import { MobileViews, useProjectContext } from '../../../context'
 import { FundingResourceType } from '../../../types'
 import { useMobileMode } from '../../../utils'
 import { ProjectActivityPanel } from '../projectActivityPanel'
+import { useEffect, useRef } from 'react'
 
 type Rules = string
 
@@ -51,15 +52,25 @@ export const ProjectBodyLayout = () => {
   const isMobile = useMobileMode()
 
   const { mobileView, project } = useProjectContext()
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const inView = [
     MobileViews.description,
     MobileViews.rewards,
     MobileViews.entries,
-    MobileViews.milestones,
+    MobileViews.milestones
   ].includes(mobileView)
 
   const classes = useProjectLayoutStyles({ isMobile, inView })
+
+  useEffect(() => {
+    if(scrollRef.current ) {
+      scrollRef.current.scroll({
+        top: 0,
+        behavior: 'instant' as ScrollBehavior
+      });
+    }
+  }, [location.pathname])
 
   return (
     <>
@@ -71,7 +82,7 @@ export const ProjectBodyLayout = () => {
         flexDirection="column"
         overflow="hidden"
       >
-        <Box w="100%" className={classes.detailsContainer}>
+        <Box ref={scrollRef} w="100%" className={classes.detailsContainer}>
           <CardsStackLayout>
             <Outlet />
           </CardsStackLayout>

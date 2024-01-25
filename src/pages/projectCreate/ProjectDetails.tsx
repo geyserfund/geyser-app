@@ -10,10 +10,6 @@ import { FormContinueButton } from './components/FormContinueButton'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 import { ProjectLinks } from './components/ProjectLinks'
 import { ProjectTagsCreateEdit } from './components/ProjectTagsCreateEdit'
-import {
-  ProjectUnsavedModal,
-  useProjectUnsavedModal,
-} from './components/ProjectUnsavedModal'
 import { useProjectDetailsForm } from './hooks/useProjectDetailsForm'
 
 export const ProjectDetails = () => {
@@ -31,7 +27,6 @@ export const ProjectDetails = () => {
     setTags,
     project,
     tags,
-    isDirty,
     linkError,
     tagsLoading,
     projectLoading,
@@ -69,17 +64,7 @@ export const ProjectDetails = () => {
     )
   }
 
-  const unsavedModal = useProjectUnsavedModal({
-    hasUnsaved: isDirty,
-  })
-
   const onBackClick = () => {
-    if (isDirty) {
-      return unsavedModal.onOpen({
-        onLeave,
-      })
-    }
-
     onLeave()
   }
 
@@ -117,7 +102,6 @@ export const ProjectDetails = () => {
           />
         </VStack>
       </ProjectCreateLayout>
-      <ProjectUnsavedModal {...unsavedModal} />
     </>
   )
 }

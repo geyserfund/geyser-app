@@ -35,7 +35,6 @@ export type Scalars = {
   amount_Float_NotNull_min_1: any
   amount_Float_min_1: any
   comment_String_maxLength_280: any
-  cost_Int_NotNull_min_0: any
   cost_Int_NotNull_min_1_max_1000000: any
   cost_Int_min_1_max_1000000: any
   description_String_NotNull_maxLength_250: any
@@ -44,11 +43,11 @@ export type Scalars = {
   description_String_maxLength_250: any
   description_String_maxLength_2200: any
   description_String_maxLength_8000: any
-  donationAmount_Int_NotNull_min_1: any
-  email_String_NotNull_format_email: any
+  donationAmount_Int_NotNull_min_0: any
   email_String_format_email: any
   link_String_NotNull_format_uri: any
   links_List_String_NotNull_format_uri: any
+  maxClaimable_Int_min_0: any
   name_String_NotNull_maxLength_100: any
   name_String_NotNull_minLength_3_maxLength_60: any
   name_String_NotNull_minLength_3_maxLength_280: any
@@ -57,7 +56,6 @@ export type Scalars = {
   name_String_minLength_5_maxLength_60: any
   pubkey_String_minLength_66_maxLength_66: any
   quantity_Int_NotNull_min_1: any
-  rewardsCost_Int_NotNull_min_0: any
   shortDescription_String_maxLength_500: any
   stock_Int_min_0: any
   title_String_NotNull_maxLength_60: any
@@ -141,6 +139,16 @@ export type BadgesGetWhereInput = {
   userId?: InputMaybe<Scalars['BigInt']>
 }
 
+export enum BaseCurrency {
+  Btc = 'BTC',
+}
+
+export type BitcoinQuote = {
+  __typename?: 'BitcoinQuote'
+  quote: Scalars['Float']
+  quoteCurrency: QuoteCurrency
+}
+
 export type ConnectionDetails =
   | LightningAddressConnectionDetails
   | LndConnectionDetailsPrivate
@@ -169,7 +177,7 @@ export type CreateProjectInput = {
   countryCode?: InputMaybe<Scalars['String']>
   /** A short description of the project. */
   description: Scalars['description_String_NotNull_maxLength_8000']
-  email: Scalars['email_String_NotNull_format_email']
+  email: Scalars['String']
   /** Main project image. */
   image?: InputMaybe<Scalars['String']>
   name: Scalars['name_String_NotNull_minLength_3_maxLength_60']
@@ -197,13 +205,16 @@ export type CreateProjectMilestoneInput = {
 export type CreateProjectRewardInput = {
   /** Cost of the reward, currently only in USD cents */
   cost: Scalars['cost_Int_NotNull_min_1_max_1000000']
-  /** Currency used for the cost */
-  costCurrency: RewardCurrency
-  description: Scalars['description_String_NotNull_maxLength_250']
+  description?: InputMaybe<Scalars['description_String_maxLength_250']>
+  estimatedDeliveryDate?: InputMaybe<Scalars['Date']>
   hasShipping: Scalars['Boolean']
   image?: InputMaybe<Scalars['String']>
+  isAddon?: InputMaybe<Scalars['Boolean']>
+  isHidden?: InputMaybe<Scalars['Boolean']>
+  maxClaimable?: InputMaybe<Scalars['maxClaimable_Int_min_0']>
   name: Scalars['name_String_NotNull_maxLength_100']
   projectId: Scalars['BigInt']
+  rewardType?: InputMaybe<RewardType>
   stock?: InputMaybe<Scalars['stock_Int_min_0']>
 }
 
@@ -218,12 +229,32 @@ export enum Currency {
   Usdcent = 'USDCENT',
 }
 
+export type CurrencyQuoteGetInput = {
+  baseCurrency: BaseCurrency
+  quoteCurrency: QuoteCurrency
+}
+
+export type CurrencyQuoteGetResponse = {
+  __typename?: 'CurrencyQuoteGetResponse'
+  baseCurrency: BaseCurrency
+  quote: Scalars['Float']
+  quoteCurrency: QuoteCurrency
+  timestamp: Scalars['Date']
+}
+
 export type CursorInput = {
-  id: Scalars['Int']
+  id: Scalars['BigInt']
 }
 
 export type CursorInputString = {
   id: Scalars['String']
+}
+
+export type CursorPaginationResponse = {
+  __typename?: 'CursorPaginationResponse'
+  count?: Maybe<Scalars['Int']>
+  cursor?: Maybe<PaginationCursor>
+  take?: Maybe<Scalars['Int']>
 }
 
 export type DateRangeInput = {
@@ -251,11 +282,6 @@ export type DeleteUserResponse = MutationResponse & {
   __typename?: 'DeleteUserResponse'
   message?: Maybe<Scalars['String']>
   success: Scalars['Boolean']
-}
-
-export type DonationFundingInput = {
-  /** The donation amount, in satoshis. */
-  donationAmount: Scalars['donationAmount_Int_NotNull_min_1']
 }
 
 export type EmailVerifyInput = {
@@ -334,6 +360,8 @@ export type Funder = {
   /** Funder's funding txs. */
   fundingTxs: Array<FundingTx>
   id: Scalars['BigInt']
+  orders: Array<Order>
+  /** @deprecated Use 'orders' instead. */
   rewards: Array<FunderReward>
   /** Number of (confirmed) times a Funder funded a particular project. */
   timesFunded?: Maybe<Scalars['Int']>
@@ -410,11 +438,13 @@ export type FundingCreateFromPodcastKeysendInput = {
 }
 
 export type FundingInput = {
+  /** Set to true if the funder wishes to remain anonymous. The user will still be associated to the funding transaction. */
   anonymous: Scalars['Boolean']
-  donationInput?: InputMaybe<DonationFundingInput>
+  /** The donation amount, in satoshis. */
+  donationAmount: Scalars['donationAmount_Int_NotNull_min_0']
   metadataInput?: InputMaybe<FundingMetadataInput>
+  orderInput?: InputMaybe<OrderFundingInput>
   projectId: Scalars['BigInt']
-  rewardInput?: InputMaybe<RewardFundingInput>
   /** The resource from which the funding transaction is being created. */
   sourceResourceInput: ResourceInput
 }
@@ -435,7 +465,6 @@ export enum FundingMethod {
 
 export type FundingMutationResponse = {
   __typename?: 'FundingMutationResponse'
-  amountSummary?: Maybe<AmountSummary>
   fundingTx?: Maybe<FundingTx>
 }
 
@@ -488,18 +517,24 @@ export type FundingTx = {
   __typename?: 'FundingTx'
   address?: Maybe<Scalars['String']>
   amount: Scalars['Int']
+  amountPaid: Scalars['Int']
+  bitcoinQuote?: Maybe<BitcoinQuote>
   comment?: Maybe<Scalars['String']>
   /** Creator's email address. Only visible to the contributor. */
   creatorEmail?: Maybe<Scalars['String']>
+  donationAmount: Scalars['Int']
   /** Contributor's email address. Only visible to the project owner. */
   email?: Maybe<Scalars['String']>
   funder: Funder
+  fundingType: FundingType
   id: Scalars['BigInt']
   invoiceId?: Maybe<Scalars['String']>
   invoiceStatus: InvoiceStatus
+  isAnonymous: Scalars['Boolean']
   media?: Maybe<Scalars['String']>
   method?: Maybe<FundingMethod>
   onChain: Scalars['Boolean']
+  order?: Maybe<Order>
   paidAt?: Maybe<Scalars['Date']>
   paymentRequest?: Maybe<Scalars['String']>
   projectId: Scalars['BigInt']
@@ -536,6 +571,23 @@ export type FundingTxStatusUpdatedInput = {
 export type FundingTxStatusUpdatedSubscriptionResponse = {
   __typename?: 'FundingTxStatusUpdatedSubscriptionResponse'
   fundingTx: FundingTx
+}
+
+export type FundingTxsGetResponse = {
+  __typename?: 'FundingTxsGetResponse'
+  fundingTxs: Array<FundingTx>
+  pagination?: Maybe<CursorPaginationResponse>
+}
+
+export enum FundingTxsWhereFundingStatus {
+  Paid = 'paid',
+  PartiallyPaid = 'partially_paid',
+  Pending = 'pending',
+}
+
+export enum FundingType {
+  Donation = 'DONATION',
+  Purchase = 'PURCHASE',
 }
 
 export type FundinginvoiceCancel = {
@@ -633,6 +685,7 @@ export type GetFundingTxsWhereInput = {
   method?: InputMaybe<Scalars['String']>
   projectId?: InputMaybe<Scalars['BigInt']>
   sourceResourceInput?: InputMaybe<ResourceInput>
+  status?: InputMaybe<FundingTxsWhereFundingStatus>
 }
 
 export type GetProjectRewardInput = {
@@ -892,10 +945,12 @@ export type Mutation = {
   fundingInvoiceRefresh: FundingTx
   fundingPend: FundingPendingResponse
   grantApply: GrantApplicant
+  orderStatusUpdate?: Maybe<Order>
   projectDelete: ProjectDeleteResponse
   projectFollow: Scalars['Boolean']
   projectPublish: Project
   projectRewardCreate: ProjectReward
+  projectRewardCurrencyUpdate: Array<ProjectReward>
   /** Soft deletes the reward. */
   projectRewardDelete: Scalars['Boolean']
   projectRewardUpdate: ProjectReward
@@ -990,6 +1045,10 @@ export type MutationGrantApplyArgs = {
   input?: InputMaybe<GrantApplyInput>
 }
 
+export type MutationOrderStatusUpdateArgs = {
+  input: OrderStatusUpdateInput
+}
+
 export type MutationProjectDeleteArgs = {
   input: DeleteProjectInput
 }
@@ -1004,6 +1063,10 @@ export type MutationProjectPublishArgs = {
 
 export type MutationProjectRewardCreateArgs = {
   input: CreateProjectRewardInput
+}
+
+export type MutationProjectRewardCurrencyUpdateArgs = {
+  input: ProjectRewardCurrencyUpdate
 }
 
 export type MutationProjectRewardDeleteArgs = {
@@ -1132,6 +1195,27 @@ export type OffsetBasedPaginationInput = {
   take?: InputMaybe<Scalars['Int']>
 }
 
+export type Order = {
+  __typename?: 'Order'
+  confirmedAt?: Maybe<Scalars['Date']>
+  createdAt: Scalars['Date']
+  deliveredAt?: Maybe<Scalars['Date']>
+  fundingTx: FundingTx
+  id: Scalars['BigInt']
+  items: Array<OrderItem>
+  referenceCode: Scalars['String']
+  shippedAt?: Maybe<Scalars['Date']>
+  status: Scalars['String']
+  totalInSats: Scalars['Int']
+  updatedAt: Scalars['Date']
+  user?: Maybe<User>
+}
+
+export type OrderBitcoinQuoteInput = {
+  quote: Scalars['Float']
+  quoteCurrency: QuoteCurrency
+}
+
 export enum OrderByDirection {
   Asc = 'asc',
   Desc = 'desc',
@@ -1140,6 +1224,66 @@ export enum OrderByDirection {
 export enum OrderByOptions {
   Asc = 'asc',
   Desc = 'desc',
+}
+
+export type OrderFundingInput = {
+  /**
+   * Quote used client-side to compute the order total. That quote will be used unless the slippage exceeds
+   * a pre-defined threshold.
+   */
+  bitcoinQuote?: InputMaybe<OrderBitcoinQuoteInput>
+  items: Array<OrderItemInput>
+}
+
+export type OrderItem = {
+  __typename?: 'OrderItem'
+  item: ProjectReward
+  quantity: Scalars['Int']
+  unitPriceInSats: Scalars['Int']
+}
+
+export type OrderItemInput = {
+  itemId: Scalars['BigInt']
+  itemType: OrderItemType
+  /** Number of times a reward was selected. */
+  quantity: Scalars['quantity_Int_NotNull_min_1']
+}
+
+export enum OrderItemType {
+  ProjectReward = 'PROJECT_REWARD',
+}
+
+export type OrderStatusUpdateInput = {
+  orderId?: InputMaybe<Scalars['BigInt']>
+  status?: InputMaybe<UpdatableOrderStatus>
+}
+
+export type OrdersGetInput = {
+  orderBy?: InputMaybe<Array<OrdersGetOrderByInput>>
+  pagination?: InputMaybe<PaginationInput>
+  where: OrdersGetWhereInput
+}
+
+export enum OrdersGetOrderByField {
+  ConfirmedAt = 'confirmedAt',
+  DeliveredAt = 'deliveredAt',
+  ShippedAt = 'shippedAt',
+}
+
+export type OrdersGetOrderByInput = {
+  direction: OrderByDirection
+  field: OrdersGetOrderByField
+}
+
+export type OrdersGetResponse = {
+  __typename?: 'OrdersGetResponse'
+  orders: Array<Order>
+  pagination?: Maybe<CursorPaginationResponse>
+}
+
+export type OrdersGetWhereInput = {
+  projectId?: InputMaybe<Scalars['BigInt']>
+  status?: InputMaybe<Scalars['String']>
 }
 
 export type Owner = {
@@ -1159,6 +1303,11 @@ export type PageViewCountGraph = {
   dateTime: Scalars['Date']
   viewCount: Scalars['Int']
   visitorCount: Scalars['Int']
+}
+
+export type PaginationCursor = {
+  __typename?: 'PaginationCursor'
+  id?: Maybe<Scalars['BigInt']>
 }
 
 /** Cursor pagination input. */
@@ -1313,28 +1462,58 @@ export type ProjectRegionsGetResult = {
 
 export type ProjectReward = {
   __typename?: 'ProjectReward'
+  /** Number of people that purchased the Project Reward. */
+  backersCount: Scalars['Int']
   /** Cost of the reward, priced in USD cents. */
   cost: Scalars['Int']
+  /** The date the creator created the reward */
   createdAt: Scalars['Date']
   /**
    * Whether the reward is deleted or not. Deleted rewards should not appear in the funding flow. Moreover, deleted
    * rewards should only be visible by the project owner and the users that purchased it.
    */
   deleted: Scalars['Boolean']
+  /** Internally used to track whether a reward was soft deleted */
   deletedAt?: Maybe<Scalars['Date']>
   /** Short description of the reward. */
   description?: Maybe<Scalars['description_String_maxLength_250']>
+  /** Estimated Date when the Reward will be delivered */
+  estimatedDeliveryDate?: Maybe<Scalars['Date']>
   /** Boolean value to indicate whether this reward requires shipping */
   hasShipping: Scalars['Boolean']
   id: Scalars['BigInt']
   /** Image of the reward. */
   image?: Maybe<Scalars['String']>
+  /** Boolean value to indicate whether this reward is an addon */
+  isAddon: Scalars['Boolean']
+  /** Boolean value to indicate whether this reward is hidden */
+  isHidden: Scalars['Boolean']
+  /** Maximum times the item can be purchased */
+  maxClaimable?: Maybe<Scalars['Int']>
   /** Name of the reward. */
   name: Scalars['name_String_NotNull_maxLength_100']
+  /** Boolean value to indicate whether this reward requires shipping */
   project: Project
+  /** Currency in which the reward cost is stored. */
+  rewardCurrency: RewardCurrency
+  /** Type of Reward */
+  rewardType?: Maybe<RewardType>
+  /** Number of times this Project Reward was sold. */
   sold: Scalars['Int']
+  /** Tracks the stock of the reward */
   stock?: Maybe<Scalars['Int']>
+  /** The last date when the creator has updated the reward */
   updatedAt: Scalars['Date']
+}
+
+export type ProjectRewardCurrencyUpdate = {
+  projectId: Scalars['BigInt']
+  rewardCurrency: RewardCurrency
+}
+
+export type ProjectRewardCurrencyUpdateRewardsInput = {
+  cost: Scalars['Int']
+  rewardId: Scalars['BigInt']
 }
 
 export type ProjectStatistics = {
@@ -1456,10 +1635,11 @@ export type Query = {
   __typename?: 'Query'
   _?: Maybe<Scalars['Boolean']>
   badges: Array<Badge>
+  currencyQuoteGet: CurrencyQuoteGetResponse
   entry?: Maybe<Entry>
   fundersGet: Array<Funder>
   fundingTx: FundingTx
-  fundingTxsGet: Array<FundingTx>
+  fundingTxsGet?: Maybe<FundingTxsGetResponse>
   /** Returns all activities. */
   getActivities: Array<Activity>
   getDashboardFunders: Array<Funder>
@@ -1475,6 +1655,8 @@ export type Query = {
   grants: Array<Grant>
   lightningAddressVerify: LightningAddressVerifyResponse
   me?: Maybe<User>
+  orderGet?: Maybe<Order>
+  ordersGet?: Maybe<OrdersGetResponse>
   projectCountriesGet: Array<ProjectCountriesGetResult>
   projectGet?: Maybe<Project>
   projectRegionsGet: Array<ProjectRegionsGetResult>
@@ -1490,6 +1672,10 @@ export type Query = {
   user: User
   userBadge?: Maybe<UserBadge>
   userBadges: Array<UserBadge>
+}
+
+export type QueryCurrencyQuoteGetArgs = {
+  input: CurrencyQuoteGetInput
 }
 
 export type QueryEntryArgs = {
@@ -1544,6 +1730,14 @@ export type QueryLightningAddressVerifyArgs = {
   lightningAddress?: InputMaybe<Scalars['String']>
 }
 
+export type QueryOrderGetArgs = {
+  where: UniqueOrderInput
+}
+
+export type QueryOrdersGetArgs = {
+  input: OrdersGetInput
+}
+
 export type QueryProjectGetArgs = {
   where: UniqueProjectQueryInput
 }
@@ -1576,29 +1770,23 @@ export type QueryUserBadgesArgs = {
   input: BadgesGetInput
 }
 
+export enum QuoteCurrency {
+  Usd = 'USD',
+}
+
 export type ResourceInput = {
   resourceId: Scalars['BigInt']
   resourceType: FundingResourceType
 }
 
 export enum RewardCurrency {
+  Btcsat = 'BTCSAT',
   Usdcent = 'USDCENT',
 }
 
-export type RewardFundingInput = {
-  rewards: Array<RewardInput>
-  /**
-   * Total cost of rewards, in satoshis. This amount will be used for the invoice  unless there is more than 1%
-   * slippage with the reward cost calculated in the backend.
-   */
-  rewardsCost: Scalars['rewardsCost_Int_NotNull_min_0']
-  shipping?: InputMaybe<ShippingInput>
-}
-
-export type RewardInput = {
-  id: Scalars['BigInt']
-  /** Number of times a reward was selected. */
-  quantity: Scalars['quantity_Int_NotNull_min_1']
+export enum RewardType {
+  Digital = 'DIGITAL',
+  Physical = 'PHYSICAL',
 }
 
 export type SendOtpByEmailInput = {
@@ -1609,12 +1797,6 @@ export type SendOtpByEmailInput = {
 export enum ShippingDestination {
   International = 'international',
   National = 'national',
-}
-
-export type ShippingInput = {
-  /** The shipping cost, in satoshis. */
-  cost: Scalars['cost_Int_NotNull_min_0']
-  destination: ShippingDestination
 }
 
 export type SignedUploadUrl = {
@@ -1690,12 +1872,21 @@ export type TwoFaInput = {
   TOTP?: InputMaybe<TotpInput>
 }
 
+export type UniqueOrderInput = {
+  id?: InputMaybe<Scalars['BigInt']>
+}
+
 export type UniqueProjectQueryInput = {
   id?: InputMaybe<Scalars['BigInt']>
   /** Unique name for the project. Used for the project URL and lightning address. */
   name?: InputMaybe<Scalars['name_String_minLength_3_maxLength_280']>
   /** Project's Nostr Public Key in HEX format */
   nostrPublicKey?: InputMaybe<Scalars['String']>
+}
+
+export enum UpdatableOrderStatus {
+  Delivered = 'DELIVERED',
+  Shipped = 'SHIPPED',
 }
 
 export type UpdateEntryInput = {
@@ -1716,6 +1907,8 @@ export type UpdateProjectInput = {
   image?: InputMaybe<Scalars['String']>
   /** Project links */
   links?: InputMaybe<Array<Scalars['links_List_String_NotNull_format_uri']>>
+  /** Project name, used both for the project URL, project lightning address and NIP05. */
+  name?: InputMaybe<Scalars['String']>
   projectId: Scalars['BigInt']
   /** Project region */
   region?: InputMaybe<Scalars['String']>
@@ -1745,13 +1938,16 @@ export type UpdateProjectMilestoneInput = {
 export type UpdateProjectRewardInput = {
   /** Cost of the reward, priced in USD cents */
   cost?: InputMaybe<Scalars['cost_Int_min_1_max_1000000']>
-  /** Currency used for the cost */
-  costCurrency?: InputMaybe<RewardCurrency>
   description?: InputMaybe<Scalars['description_String_maxLength_250']>
+  estimatedDeliveryDate?: InputMaybe<Scalars['Date']>
   hasShipping?: InputMaybe<Scalars['Boolean']>
   image?: InputMaybe<Scalars['String']>
+  isAddon?: InputMaybe<Scalars['Boolean']>
+  isHidden?: InputMaybe<Scalars['Boolean']>
+  maxClaimable?: InputMaybe<Scalars['maxClaimable_Int_min_0']>
   name?: InputMaybe<Scalars['name_String_maxLength_100']>
   projectRewardId: Scalars['BigInt']
+  rewardType?: InputMaybe<RewardType>
   stock?: InputMaybe<Scalars['stock_Int_min_0']>
 }
 
@@ -2085,7 +2281,9 @@ export type ResolversTypes = {
   BadgeClaimInput: BadgeClaimInput
   BadgesGetInput: BadgesGetInput
   BadgesGetWhereInput: BadgesGetWhereInput
+  BaseCurrency: BaseCurrency
   BigInt: ResolverTypeWrapper<Scalars['BigInt']>
+  BitcoinQuote: ResolverTypeWrapper<BitcoinQuote>
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>
   ConnectionDetails: ResolverTypeWrapper<
     ResolversUnionTypes['ConnectionDetails']
@@ -2097,15 +2295,17 @@ export type ResolversTypes = {
   CreateProjectRewardInput: CreateProjectRewardInput
   CreateWalletInput: CreateWalletInput
   Currency: Currency
+  CurrencyQuoteGetInput: CurrencyQuoteGetInput
+  CurrencyQuoteGetResponse: ResolverTypeWrapper<CurrencyQuoteGetResponse>
   CursorInput: CursorInput
   CursorInputString: CursorInputString
+  CursorPaginationResponse: ResolverTypeWrapper<CursorPaginationResponse>
   Date: ResolverTypeWrapper<Scalars['Date']>
   DateRangeInput: DateRangeInput
   DatetimeRange: ResolverTypeWrapper<DatetimeRange>
   DeleteProjectInput: DeleteProjectInput
   DeleteProjectRewardInput: DeleteProjectRewardInput
   DeleteUserResponse: ResolverTypeWrapper<DeleteUserResponse>
-  DonationFundingInput: DonationFundingInput
   EmailVerifyInput: EmailVerifyInput
   Entry: ResolverTypeWrapper<Entry>
   EntryPublishedSubscriptionResponse: ResolverTypeWrapper<EntryPublishedSubscriptionResponse>
@@ -2147,6 +2347,9 @@ export type ResolversTypes = {
   FundingTxMethodSum: ResolverTypeWrapper<FundingTxMethodSum>
   FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
   FundingTxStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<FundingTxStatusUpdatedSubscriptionResponse>
+  FundingTxsGetResponse: ResolverTypeWrapper<FundingTxsGetResponse>
+  FundingTxsWhereFundingStatus: FundingTxsWhereFundingStatus
+  FundingType: FundingType
   FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>
   GetActivitiesInput: GetActivitiesInput
   GetActivityOrderByInput: GetActivityOrderByInput
@@ -2210,11 +2413,24 @@ export type ResolversTypes = {
   OTPLoginInput: OtpLoginInput
   OTPResponse: ResolverTypeWrapper<OtpResponse>
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
+  Order: ResolverTypeWrapper<Order>
+  OrderBitcoinQuoteInput: OrderBitcoinQuoteInput
   OrderByDirection: OrderByDirection
   OrderByOptions: OrderByOptions
+  OrderFundingInput: OrderFundingInput
+  OrderItem: ResolverTypeWrapper<OrderItem>
+  OrderItemInput: OrderItemInput
+  OrderItemType: OrderItemType
+  OrderStatusUpdateInput: OrderStatusUpdateInput
+  OrdersGetInput: OrdersGetInput
+  OrdersGetOrderByField: OrdersGetOrderByField
+  OrdersGetOrderByInput: OrdersGetOrderByInput
+  OrdersGetResponse: ResolverTypeWrapper<OrdersGetResponse>
+  OrdersGetWhereInput: OrdersGetWhereInput
   Owner: ResolverTypeWrapper<Owner>
   OwnerOf: ResolverTypeWrapper<OwnerOf>
   PageViewCountGraph: ResolverTypeWrapper<PageViewCountGraph>
+  PaginationCursor: ResolverTypeWrapper<PaginationCursor>
   PaginationInput: PaginationInput
   Project: ResolverTypeWrapper<Project>
   ProjectActivatedSubscriptionResponse: ResolverTypeWrapper<ProjectActivatedSubscriptionResponse>
@@ -2232,6 +2448,8 @@ export type ResolversTypes = {
   ProjectPublishMutationInput: ProjectPublishMutationInput
   ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>
   ProjectReward: ResolverTypeWrapper<ProjectReward>
+  ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate
+  ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput
   ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>
   ProjectStats: ResolverTypeWrapper<ProjectStats>
   ProjectStatsBase: ResolverTypeWrapper<ProjectStatsBase>
@@ -2248,13 +2466,12 @@ export type ResolversTypes = {
   ProjectsResponse: ResolverTypeWrapper<ProjectsResponse>
   ProjectsSummary: ResolverTypeWrapper<ProjectsSummary>
   Query: ResolverTypeWrapper<{}>
+  QuoteCurrency: QuoteCurrency
   ResourceInput: ResourceInput
   RewardCurrency: RewardCurrency
-  RewardFundingInput: RewardFundingInput
-  RewardInput: RewardInput
+  RewardType: RewardType
   SendOtpByEmailInput: SendOtpByEmailInput
   ShippingDestination: ShippingDestination
-  ShippingInput: ShippingInput
   SignedUploadUrl: ResolverTypeWrapper<SignedUploadUrl>
   SourceResource: ResolverTypeWrapper<ResolversUnionTypes['SourceResource']>
   Sponsor: ResolverTypeWrapper<Sponsor>
@@ -2266,7 +2483,9 @@ export type ResolversTypes = {
   TagCreateInput: TagCreateInput
   TagsGetResult: ResolverTypeWrapper<TagsGetResult>
   TwoFAInput: TwoFaInput
+  UniqueOrderInput: UniqueOrderInput
   UniqueProjectQueryInput: UniqueProjectQueryInput
+  UpdatableOrderStatus: UpdatableOrderStatus
   UpdateEntryInput: UpdateEntryInput
   UpdateProjectInput: UpdateProjectInput
   UpdateProjectMilestoneInput: UpdateProjectMilestoneInput
@@ -2301,7 +2520,6 @@ export type ResolversTypes = {
   comment_String_maxLength_280: ResolverTypeWrapper<
     Scalars['comment_String_maxLength_280']
   >
-  cost_Int_NotNull_min_0: ResolverTypeWrapper<Scalars['cost_Int_NotNull_min_0']>
   cost_Int_NotNull_min_1_max_1000000: ResolverTypeWrapper<
     Scalars['cost_Int_NotNull_min_1_max_1000000']
   >
@@ -2327,11 +2545,8 @@ export type ResolversTypes = {
   description_String_maxLength_8000: ResolverTypeWrapper<
     Scalars['description_String_maxLength_8000']
   >
-  donationAmount_Int_NotNull_min_1: ResolverTypeWrapper<
-    Scalars['donationAmount_Int_NotNull_min_1']
-  >
-  email_String_NotNull_format_email: ResolverTypeWrapper<
-    Scalars['email_String_NotNull_format_email']
+  donationAmount_Int_NotNull_min_0: ResolverTypeWrapper<
+    Scalars['donationAmount_Int_NotNull_min_0']
   >
   email_String_format_email: ResolverTypeWrapper<
     Scalars['email_String_format_email']
@@ -2342,6 +2557,7 @@ export type ResolversTypes = {
   links_List_String_NotNull_format_uri: ResolverTypeWrapper<
     Scalars['links_List_String_NotNull_format_uri']
   >
+  maxClaimable_Int_min_0: ResolverTypeWrapper<Scalars['maxClaimable_Int_min_0']>
   name_String_NotNull_maxLength_100: ResolverTypeWrapper<
     Scalars['name_String_NotNull_maxLength_100']
   >
@@ -2366,9 +2582,6 @@ export type ResolversTypes = {
   >
   quantity_Int_NotNull_min_1: ResolverTypeWrapper<
     Scalars['quantity_Int_NotNull_min_1']
-  >
-  rewardsCost_Int_NotNull_min_0: ResolverTypeWrapper<
-    Scalars['rewardsCost_Int_NotNull_min_0']
   >
   shortDescription_String_maxLength_500: ResolverTypeWrapper<
     Scalars['shortDescription_String_maxLength_500']
@@ -2403,6 +2616,7 @@ export type ResolversParentTypes = {
   BadgesGetInput: BadgesGetInput
   BadgesGetWhereInput: BadgesGetWhereInput
   BigInt: Scalars['BigInt']
+  BitcoinQuote: BitcoinQuote
   Boolean: Scalars['Boolean']
   ConnectionDetails: ResolversUnionTypes['ConnectionDetails']
   Country: Country
@@ -2411,15 +2625,17 @@ export type ResolversParentTypes = {
   CreateProjectMilestoneInput: CreateProjectMilestoneInput
   CreateProjectRewardInput: CreateProjectRewardInput
   CreateWalletInput: CreateWalletInput
+  CurrencyQuoteGetInput: CurrencyQuoteGetInput
+  CurrencyQuoteGetResponse: CurrencyQuoteGetResponse
   CursorInput: CursorInput
   CursorInputString: CursorInputString
+  CursorPaginationResponse: CursorPaginationResponse
   Date: Scalars['Date']
   DateRangeInput: DateRangeInput
   DatetimeRange: DatetimeRange
   DeleteProjectInput: DeleteProjectInput
   DeleteProjectRewardInput: DeleteProjectRewardInput
   DeleteUserResponse: DeleteUserResponse
-  DonationFundingInput: DonationFundingInput
   EmailVerifyInput: EmailVerifyInput
   Entry: Entry
   EntryPublishedSubscriptionResponse: EntryPublishedSubscriptionResponse
@@ -2454,6 +2670,7 @@ export type ResolversParentTypes = {
   FundingTxMethodSum: FundingTxMethodSum
   FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
   FundingTxStatusUpdatedSubscriptionResponse: FundingTxStatusUpdatedSubscriptionResponse
+  FundingTxsGetResponse: FundingTxsGetResponse
   FundinginvoiceCancel: FundinginvoiceCancel
   GetActivitiesInput: GetActivitiesInput
   GetActivityOrderByInput: GetActivityOrderByInput
@@ -2512,9 +2729,20 @@ export type ResolversParentTypes = {
   OTPLoginInput: OtpLoginInput
   OTPResponse: OtpResponse
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
+  Order: Order
+  OrderBitcoinQuoteInput: OrderBitcoinQuoteInput
+  OrderFundingInput: OrderFundingInput
+  OrderItem: OrderItem
+  OrderItemInput: OrderItemInput
+  OrderStatusUpdateInput: OrderStatusUpdateInput
+  OrdersGetInput: OrdersGetInput
+  OrdersGetOrderByInput: OrdersGetOrderByInput
+  OrdersGetResponse: OrdersGetResponse
+  OrdersGetWhereInput: OrdersGetWhereInput
   Owner: Owner
   OwnerOf: OwnerOf
   PageViewCountGraph: PageViewCountGraph
+  PaginationCursor: PaginationCursor
   PaginationInput: PaginationInput
   Project: Project
   ProjectActivatedSubscriptionResponse: ProjectActivatedSubscriptionResponse
@@ -2532,6 +2760,8 @@ export type ResolversParentTypes = {
   ProjectPublishMutationInput: ProjectPublishMutationInput
   ProjectRegionsGetResult: ProjectRegionsGetResult
   ProjectReward: ProjectReward
+  ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate
+  ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput
   ProjectStatistics: ProjectStatistics
   ProjectStats: ProjectStats
   ProjectStatsBase: ProjectStatsBase
@@ -2546,10 +2776,7 @@ export type ResolversParentTypes = {
   ProjectsSummary: ProjectsSummary
   Query: {}
   ResourceInput: ResourceInput
-  RewardFundingInput: RewardFundingInput
-  RewardInput: RewardInput
   SendOtpByEmailInput: SendOtpByEmailInput
-  ShippingInput: ShippingInput
   SignedUploadUrl: SignedUploadUrl
   SourceResource: ResolversUnionTypes['SourceResource']
   Sponsor: Sponsor
@@ -2560,6 +2787,7 @@ export type ResolversParentTypes = {
   TagCreateInput: TagCreateInput
   TagsGetResult: TagsGetResult
   TwoFAInput: TwoFaInput
+  UniqueOrderInput: UniqueOrderInput
   UniqueProjectQueryInput: UniqueProjectQueryInput
   UpdateEntryInput: UpdateEntryInput
   UpdateProjectInput: UpdateProjectInput
@@ -2585,7 +2813,6 @@ export type ResolversParentTypes = {
   amount_Float_NotNull_min_1: Scalars['amount_Float_NotNull_min_1']
   amount_Float_min_1: Scalars['amount_Float_min_1']
   comment_String_maxLength_280: Scalars['comment_String_maxLength_280']
-  cost_Int_NotNull_min_0: Scalars['cost_Int_NotNull_min_0']
   cost_Int_NotNull_min_1_max_1000000: Scalars['cost_Int_NotNull_min_1_max_1000000']
   cost_Int_min_1_max_1000000: Scalars['cost_Int_min_1_max_1000000']
   dashboardFundersGetInput: DashboardFundersGetInput
@@ -2595,11 +2822,11 @@ export type ResolversParentTypes = {
   description_String_maxLength_250: Scalars['description_String_maxLength_250']
   description_String_maxLength_2200: Scalars['description_String_maxLength_2200']
   description_String_maxLength_8000: Scalars['description_String_maxLength_8000']
-  donationAmount_Int_NotNull_min_1: Scalars['donationAmount_Int_NotNull_min_1']
-  email_String_NotNull_format_email: Scalars['email_String_NotNull_format_email']
+  donationAmount_Int_NotNull_min_0: Scalars['donationAmount_Int_NotNull_min_0']
   email_String_format_email: Scalars['email_String_format_email']
   link_String_NotNull_format_uri: Scalars['link_String_NotNull_format_uri']
   links_List_String_NotNull_format_uri: Scalars['links_List_String_NotNull_format_uri']
+  maxClaimable_Int_min_0: Scalars['maxClaimable_Int_min_0']
   name_String_NotNull_maxLength_100: Scalars['name_String_NotNull_maxLength_100']
   name_String_NotNull_minLength_3_maxLength_60: Scalars['name_String_NotNull_minLength_3_maxLength_60']
   name_String_NotNull_minLength_3_maxLength_280: Scalars['name_String_NotNull_minLength_3_maxLength_280']
@@ -2609,7 +2836,6 @@ export type ResolversParentTypes = {
   projectsMostFundedOfTheWeekGet: ProjectsMostFundedOfTheWeekGet
   pubkey_String_minLength_66_maxLength_66: Scalars['pubkey_String_minLength_66_maxLength_66']
   quantity_Int_NotNull_min_1: Scalars['quantity_Int_NotNull_min_1']
-  rewardsCost_Int_NotNull_min_0: Scalars['rewardsCost_Int_NotNull_min_0']
   shortDescription_String_maxLength_500: Scalars['shortDescription_String_maxLength_500']
   stock_Int_min_0: Scalars['stock_Int_min_0']
   title_String_NotNull_maxLength_60: Scalars['title_String_NotNull_maxLength_60']
@@ -2707,6 +2933,19 @@ export interface BigIntScalarConfig
   name: 'BigInt'
 }
 
+export type BitcoinQuoteResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['BitcoinQuote'] = ResolversParentTypes['BitcoinQuote'],
+> = {
+  quote?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
+  quoteCurrency?: Resolver<
+    ResolversTypes['QuoteCurrency'],
+    ParentType,
+    ContextType
+  >
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type ConnectionDetailsResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ConnectionDetails'] = ResolversParentTypes['ConnectionDetails'],
@@ -2726,6 +2965,39 @@ export type CountryResolvers<
 > = {
   code?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type CurrencyQuoteGetResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['CurrencyQuoteGetResponse'] = ResolversParentTypes['CurrencyQuoteGetResponse'],
+> = {
+  baseCurrency?: Resolver<
+    ResolversTypes['BaseCurrency'],
+    ParentType,
+    ContextType
+  >
+  quote?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
+  quoteCurrency?: Resolver<
+    ResolversTypes['QuoteCurrency'],
+    ParentType,
+    ContextType
+  >
+  timestamp?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type CursorPaginationResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['CursorPaginationResponse'] = ResolversParentTypes['CursorPaginationResponse'],
+> = {
+  count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  cursor?: Resolver<
+    Maybe<ResolversTypes['PaginationCursor']>,
+    ParentType,
+    ContextType
+  >
+  take?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -2824,6 +3096,7 @@ export type FunderResolvers<
     Partial<FunderFundingTxsArgs>
   >
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  orders?: Resolver<Array<ResolversTypes['Order']>, ParentType, ContextType>
   rewards?: Resolver<
     Array<ResolversTypes['FunderReward']>,
     ParentType,
@@ -2885,11 +3158,6 @@ export type FundingMutationResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['FundingMutationResponse'] = ResolversParentTypes['FundingMutationResponse'],
 > = {
-  amountSummary?: Resolver<
-    Maybe<ResolversTypes['AmountSummary']>,
-    ParentType,
-    ContextType
-  >
   fundingTx?: Resolver<
     Maybe<ResolversTypes['FundingTx']>,
     ParentType,
@@ -2927,14 +3195,22 @@ export type FundingTxResolvers<
 > = {
   address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  amountPaid?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  bitcoinQuote?: Resolver<
+    Maybe<ResolversTypes['BitcoinQuote']>,
+    ParentType,
+    ContextType
+  >
   comment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   creatorEmail?: Resolver<
     Maybe<ResolversTypes['String']>,
     ParentType,
     ContextType
   >
+  donationAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   funder?: Resolver<ResolversTypes['Funder'], ParentType, ContextType>
+  fundingType?: Resolver<ResolversTypes['FundingType'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   invoiceId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   invoiceStatus?: Resolver<
@@ -2942,6 +3218,7 @@ export type FundingTxResolvers<
     ParentType,
     ContextType
   >
+  isAnonymous?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   media?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   method?: Resolver<
     Maybe<ResolversTypes['FundingMethod']>,
@@ -2949,6 +3226,7 @@ export type FundingTxResolvers<
     ContextType
   >
   onChain?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  order?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType>
   paidAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
   paymentRequest?: Resolver<
     Maybe<ResolversTypes['String']>,
@@ -2999,6 +3277,23 @@ export type FundingTxStatusUpdatedSubscriptionResponseResolvers<
   ParentType extends ResolversParentTypes['FundingTxStatusUpdatedSubscriptionResponse'] = ResolversParentTypes['FundingTxStatusUpdatedSubscriptionResponse'],
 > = {
   fundingTx?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type FundingTxsGetResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['FundingTxsGetResponse'] = ResolversParentTypes['FundingTxsGetResponse'],
+> = {
+  fundingTxs?: Resolver<
+    Array<ResolversTypes['FundingTx']>,
+    ParentType,
+    ContextType
+  >
+  pagination?: Resolver<
+    Maybe<ResolversTypes['CursorPaginationResponse']>,
+    ParentType,
+    ContextType
+  >
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -3321,6 +3616,12 @@ export type MutationResolvers<
     ContextType,
     Partial<MutationGrantApplyArgs>
   >
+  orderStatusUpdate?: Resolver<
+    Maybe<ResolversTypes['Order']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationOrderStatusUpdateArgs, 'input'>
+  >
   projectDelete?: Resolver<
     ResolversTypes['ProjectDeleteResponse'],
     ParentType,
@@ -3344,6 +3645,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationProjectRewardCreateArgs, 'input'>
+  >
+  projectRewardCurrencyUpdate?: Resolver<
+    Array<ResolversTypes['ProjectReward']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationProjectRewardCurrencyUpdateArgs, 'input'>
   >
   projectRewardDelete?: Resolver<
     ResolversTypes['Boolean'],
@@ -3533,6 +3840,48 @@ export type OtpResponseResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
+export type OrderResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order'],
+> = {
+  confirmedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  deliveredAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
+  fundingTx?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  items?: Resolver<Array<ResolversTypes['OrderItem']>, ParentType, ContextType>
+  referenceCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  shippedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
+  status?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  totalInSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type OrderItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['OrderItem'] = ResolversParentTypes['OrderItem'],
+> = {
+  item?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType>
+  quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  unitPriceInSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type OrdersGetResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['OrdersGetResponse'] = ResolversParentTypes['OrdersGetResponse'],
+> = {
+  orders?: Resolver<Array<ResolversTypes['Order']>, ParentType, ContextType>
+  pagination?: Resolver<
+    Maybe<ResolversTypes['CursorPaginationResponse']>,
+    ParentType,
+    ContextType
+  >
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type OwnerResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Owner'] = ResolversParentTypes['Owner'],
@@ -3558,6 +3907,14 @@ export type PageViewCountGraphResolvers<
   dateTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
   viewCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   visitorCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type PaginationCursorResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['PaginationCursor'] = ResolversParentTypes['PaginationCursor'],
+> = {
+  id?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -3777,6 +4134,7 @@ export type ProjectRewardResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ProjectReward'] = ResolversParentTypes['ProjectReward'],
 > = {
+  backersCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
   deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
@@ -3786,15 +4144,33 @@ export type ProjectRewardResolvers<
     ParentType,
     ContextType
   >
+  estimatedDeliveryDate?: Resolver<
+    Maybe<ResolversTypes['Date']>,
+    ParentType,
+    ContextType
+  >
   hasShipping?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  isAddon?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  isHidden?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  maxClaimable?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   name?: Resolver<
     ResolversTypes['name_String_NotNull_maxLength_100'],
     ParentType,
     ContextType
   >
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>
+  rewardCurrency?: Resolver<
+    ResolversTypes['RewardCurrency'],
+    ParentType,
+    ContextType
+  >
+  rewardType?: Resolver<
+    Maybe<ResolversTypes['RewardType']>,
+    ParentType,
+    ContextType
+  >
   sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   stock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
@@ -3935,6 +4311,12 @@ export type QueryResolvers<
 > = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>
   badges?: Resolver<Array<ResolversTypes['Badge']>, ParentType, ContextType>
+  currencyQuoteGet?: Resolver<
+    ResolversTypes['CurrencyQuoteGetResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryCurrencyQuoteGetArgs, 'input'>
+  >
   entry?: Resolver<
     Maybe<ResolversTypes['Entry']>,
     ParentType,
@@ -3954,7 +4336,7 @@ export type QueryResolvers<
     RequireFields<QueryFundingTxArgs, 'id'>
   >
   fundingTxsGet?: Resolver<
-    Array<ResolversTypes['FundingTx']>,
+    Maybe<ResolversTypes['FundingTxsGetResponse']>,
     ParentType,
     ContextType,
     Partial<QueryFundingTxsGetArgs>
@@ -4020,6 +4402,18 @@ export type QueryResolvers<
     Partial<QueryLightningAddressVerifyArgs>
   >
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
+  orderGet?: Resolver<
+    Maybe<ResolversTypes['Order']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryOrderGetArgs, 'where'>
+  >
+  ordersGet?: Resolver<
+    Maybe<ResolversTypes['OrdersGetResponse']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryOrdersGetArgs, 'input'>
+  >
   projectCountriesGet?: Resolver<
     Array<ResolversTypes['ProjectCountriesGetResult']>,
     ParentType,
@@ -4324,14 +4718,6 @@ export interface Comment_String_MaxLength_280ScalarConfig
   name: 'comment_String_maxLength_280'
 }
 
-export interface Cost_Int_NotNull_Min_0ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['cost_Int_NotNull_min_0'],
-    any
-  > {
-  name: 'cost_Int_NotNull_min_0'
-}
-
 export interface Cost_Int_NotNull_Min_1_Max_1000000ScalarConfig
   extends GraphQLScalarTypeConfig<
     ResolversTypes['cost_Int_NotNull_min_1_max_1000000'],
@@ -4396,20 +4782,12 @@ export interface Description_String_MaxLength_8000ScalarConfig
   name: 'description_String_maxLength_8000'
 }
 
-export interface DonationAmount_Int_NotNull_Min_1ScalarConfig
+export interface DonationAmount_Int_NotNull_Min_0ScalarConfig
   extends GraphQLScalarTypeConfig<
-    ResolversTypes['donationAmount_Int_NotNull_min_1'],
+    ResolversTypes['donationAmount_Int_NotNull_min_0'],
     any
   > {
-  name: 'donationAmount_Int_NotNull_min_1'
-}
-
-export interface Email_String_NotNull_Format_EmailScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['email_String_NotNull_format_email'],
-    any
-  > {
-  name: 'email_String_NotNull_format_email'
+  name: 'donationAmount_Int_NotNull_min_0'
 }
 
 export interface Email_String_Format_EmailScalarConfig
@@ -4434,6 +4812,14 @@ export interface Links_List_String_NotNull_Format_UriScalarConfig
     any
   > {
   name: 'links_List_String_NotNull_format_uri'
+}
+
+export interface MaxClaimable_Int_Min_0ScalarConfig
+  extends GraphQLScalarTypeConfig<
+    ResolversTypes['maxClaimable_Int_min_0'],
+    any
+  > {
+  name: 'maxClaimable_Int_min_0'
 }
 
 export interface Name_String_NotNull_MaxLength_100ScalarConfig
@@ -4511,14 +4897,6 @@ export interface Quantity_Int_NotNull_Min_1ScalarConfig
   name: 'quantity_Int_NotNull_min_1'
 }
 
-export interface RewardsCost_Int_NotNull_Min_0ScalarConfig
-  extends GraphQLScalarTypeConfig<
-    ResolversTypes['rewardsCost_Int_NotNull_min_0'],
-    any
-  > {
-  name: 'rewardsCost_Int_NotNull_min_0'
-}
-
 export interface ShortDescription_String_MaxLength_500ScalarConfig
   extends GraphQLScalarTypeConfig<
     ResolversTypes['shortDescription_String_maxLength_500'],
@@ -4571,8 +4949,11 @@ export type Resolvers<ContextType = any> = {
   AmountSummary?: AmountSummaryResolvers<ContextType>
   Badge?: BadgeResolvers<ContextType>
   BigInt?: GraphQLScalarType
+  BitcoinQuote?: BitcoinQuoteResolvers<ContextType>
   ConnectionDetails?: ConnectionDetailsResolvers<ContextType>
   Country?: CountryResolvers<ContextType>
+  CurrencyQuoteGetResponse?: CurrencyQuoteGetResponseResolvers<ContextType>
+  CursorPaginationResponse?: CursorPaginationResponseResolvers<ContextType>
   Date?: GraphQLScalarType
   DatetimeRange?: DatetimeRangeResolvers<ContextType>
   DeleteUserResponse?: DeleteUserResponseResolvers<ContextType>
@@ -4592,6 +4973,7 @@ export type Resolvers<ContextType = any> = {
   FundingTxMethodCount?: FundingTxMethodCountResolvers<ContextType>
   FundingTxMethodSum?: FundingTxMethodSumResolvers<ContextType>
   FundingTxStatusUpdatedSubscriptionResponse?: FundingTxStatusUpdatedSubscriptionResponseResolvers<ContextType>
+  FundingTxsGetResponse?: FundingTxsGetResponseResolvers<ContextType>
   FundinginvoiceCancel?: FundinginvoiceCancelResolvers<ContextType>
   Grant?: GrantResolvers<ContextType>
   GrantApplicant?: GrantApplicantResolvers<ContextType>
@@ -4614,9 +4996,13 @@ export type Resolvers<ContextType = any> = {
   NostrPrivateKey?: NostrPrivateKeyResolvers<ContextType>
   NostrPublicKey?: NostrPublicKeyResolvers<ContextType>
   OTPResponse?: OtpResponseResolvers<ContextType>
+  Order?: OrderResolvers<ContextType>
+  OrderItem?: OrderItemResolvers<ContextType>
+  OrdersGetResponse?: OrdersGetResponseResolvers<ContextType>
   Owner?: OwnerResolvers<ContextType>
   OwnerOf?: OwnerOfResolvers<ContextType>
   PageViewCountGraph?: PageViewCountGraphResolvers<ContextType>
+  PaginationCursor?: PaginationCursorResolvers<ContextType>
   Project?: ProjectResolvers<ContextType>
   ProjectActivatedSubscriptionResponse?: ProjectActivatedSubscriptionResponseResolvers<ContextType>
   ProjectCountriesGetResult?: ProjectCountriesGetResultResolvers<ContextType>
@@ -4650,7 +5036,6 @@ export type Resolvers<ContextType = any> = {
   amount_Float_NotNull_min_1?: GraphQLScalarType
   amount_Float_min_1?: GraphQLScalarType
   comment_String_maxLength_280?: GraphQLScalarType
-  cost_Int_NotNull_min_0?: GraphQLScalarType
   cost_Int_NotNull_min_1_max_1000000?: GraphQLScalarType
   cost_Int_min_1_max_1000000?: GraphQLScalarType
   description_String_NotNull_maxLength_250?: GraphQLScalarType
@@ -4659,11 +5044,11 @@ export type Resolvers<ContextType = any> = {
   description_String_maxLength_250?: GraphQLScalarType
   description_String_maxLength_2200?: GraphQLScalarType
   description_String_maxLength_8000?: GraphQLScalarType
-  donationAmount_Int_NotNull_min_1?: GraphQLScalarType
-  email_String_NotNull_format_email?: GraphQLScalarType
+  donationAmount_Int_NotNull_min_0?: GraphQLScalarType
   email_String_format_email?: GraphQLScalarType
   link_String_NotNull_format_uri?: GraphQLScalarType
   links_List_String_NotNull_format_uri?: GraphQLScalarType
+  maxClaimable_Int_min_0?: GraphQLScalarType
   name_String_NotNull_maxLength_100?: GraphQLScalarType
   name_String_NotNull_minLength_3_maxLength_60?: GraphQLScalarType
   name_String_NotNull_minLength_3_maxLength_280?: GraphQLScalarType
@@ -4673,7 +5058,6 @@ export type Resolvers<ContextType = any> = {
   projectsMostFundedOfTheWeekGet?: ProjectsMostFundedOfTheWeekGetResolvers<ContextType>
   pubkey_String_minLength_66_maxLength_66?: GraphQLScalarType
   quantity_Int_NotNull_min_1?: GraphQLScalarType
-  rewardsCost_Int_NotNull_min_0?: GraphQLScalarType
   shortDescription_String_maxLength_500?: GraphQLScalarType
   stock_Int_min_0?: GraphQLScalarType
   title_String_NotNull_maxLength_60?: GraphQLScalarType
@@ -4872,6 +5256,109 @@ export type FundingTxForOverviewPageFragment = {
   }
 }
 
+export type OrderItemFragment = {
+  __typename?: 'OrderItem'
+  quantity: number
+  unitPriceInSats: number
+  item: {
+    __typename?: 'ProjectReward'
+    id: any
+    name: any
+    cost: number
+    rewardCurrency: RewardCurrency
+    rewardType?: RewardType | null
+  }
+}
+
+export type OrderFragment = {
+  __typename?: 'Order'
+  confirmedAt?: any | null
+  createdAt: any
+  deliveredAt?: any | null
+  id: any
+  shippedAt?: any | null
+  status: string
+  totalInSats: number
+  updatedAt: any
+  user?: {
+    __typename?: 'User'
+    id: any
+    imageUrl?: string | null
+    username: string
+    email?: string | null
+  } | null
+  items: Array<{ __typename?: 'OrderItem' } & OrderItemFragment>
+  fundingTx: {
+    __typename?: 'FundingTx'
+    id: any
+    amount: number
+    amountPaid: number
+    donationAmount: number
+    address?: string | null
+    email?: string | null
+    fundingType: FundingType
+    invoiceStatus: InvoiceStatus
+    isAnonymous: boolean
+    status: FundingStatus
+    uuid?: string | null
+    bitcoinQuote?: {
+      __typename?: 'BitcoinQuote'
+      quoteCurrency: QuoteCurrency
+      quote: number
+    } | null
+  }
+}
+
+export type FundingTxOrderFragment = {
+  __typename?: 'FundingTx'
+  id: any
+  invoiceStatus: InvoiceStatus
+  donationAmount: number
+  amountPaid: number
+  amount: number
+  email?: string | null
+  paidAt?: any | null
+  status: FundingStatus
+  invoiceId?: string | null
+  uuid?: string | null
+  bitcoinQuote?: {
+    __typename?: 'BitcoinQuote'
+    quoteCurrency: QuoteCurrency
+    quote: number
+  } | null
+  funder: {
+    __typename?: 'Funder'
+    user?: {
+      __typename?: 'User'
+      id: any
+      imageUrl?: string | null
+      username: string
+      externalAccounts: Array<{
+        __typename?: 'ExternalAccount'
+        id: any
+        externalUsername: string
+        externalId: string
+        accountType: string
+        public: boolean
+      }>
+    } | null
+  }
+  order?: {
+    __typename?: 'Order'
+    id: any
+    referenceCode: string
+    totalInSats: number
+    items: Array<{ __typename?: 'OrderItem' } & OrderItemFragment>
+  } | null
+}
+
+export type PaginationFragment = {
+  __typename?: 'CursorPaginationResponse'
+  take?: number | null
+  count?: number | null
+  cursor?: { __typename?: 'PaginationCursor'; id?: any | null } | null
+}
+
 export type ProjectNostrKeysFragment = {
   __typename?: 'Project'
   id: any
@@ -4947,6 +5434,7 @@ export type ProjectRewardForLandingPageFragment = {
   image?: string | null
   sold: number
   stock?: number | null
+  maxClaimable?: number | null
   rewardName: any
   rewardProject: {
     __typename?: 'Project'
@@ -4978,6 +5466,11 @@ export type ProjectRewardForCreateUpdateFragment = {
   stock?: number | null
   sold: number
   hasShipping: boolean
+  maxClaimable?: number | null
+  estimatedDeliveryDate?: any | null
+  isAddon: boolean
+  isHidden: boolean
+  rewardType?: RewardType | null
 }
 
 export type ProjectFragment = {
@@ -5385,13 +5878,6 @@ export type FundMutation = {
   fund: {
     __typename?: 'FundingMutationResponse'
     fundingTx?: ({ __typename?: 'FundingTx' } & FundingTxFragment) | null
-    amountSummary?: {
-      __typename?: 'AmountSummary'
-      total: number
-      donationAmount: number
-      shippingCost: number
-      rewardsCost: number
-    } | null
   }
 }
 
@@ -5426,6 +5912,34 @@ export type GrantApplyMutationVariables = Exact<{
 export type GrantApplyMutation = {
   __typename?: 'Mutation'
   grantApply: { __typename?: 'GrantApplicant'; status: GrantApplicantStatus }
+}
+
+export type OrderStatusUpdateMutationVariables = Exact<{
+  input: OrderStatusUpdateInput
+}>
+
+export type OrderStatusUpdateMutation = {
+  __typename?: 'Mutation'
+  orderStatusUpdate?: {
+    __typename?: 'Order'
+    status: string
+    id: any
+    shippedAt?: any | null
+    deliveredAt?: any | null
+  } | null
+}
+
+export type FundingConfirmMutationVariables = Exact<{
+  input: FundingConfirmInput
+}>
+
+export type FundingConfirmMutation = {
+  __typename?: 'Mutation'
+  fundingConfirm: {
+    __typename?: 'FundingConfirmResponse'
+    id: any
+    success: boolean
+  }
 }
 
 export type ProjectPublishMutationVariables = Exact<{
@@ -5491,6 +6005,25 @@ export type UpdateProjectMutation = {
       country?: { __typename?: 'Country'; name: string; code: string } | null
     } | null
   }
+}
+
+export type ProjectRewardCurrencyUpdateMutationVariables = Exact<{
+  input: ProjectRewardCurrencyUpdate
+}>
+
+export type ProjectRewardCurrencyUpdateMutation = {
+  __typename?: 'Mutation'
+  projectRewardCurrencyUpdate: Array<{
+    __typename?: 'ProjectReward'
+    project: {
+      __typename?: 'Project'
+      rewards: Array<{
+        __typename?: 'ProjectReward'
+        cost: number
+        rewardType?: RewardType | null
+      }>
+    }
+  }>
 }
 
 export type ProjectRewardCreateMutationVariables = Exact<{
@@ -5938,9 +6471,12 @@ export type FundingTxsForLandingPageQueryVariables = Exact<{
 
 export type FundingTxsForLandingPageQuery = {
   __typename?: 'Query'
-  fundingTxsGet: Array<
-    { __typename?: 'FundingTx' } & FundingTxForLandingPageFragment
-  >
+  fundingTxsGet?: {
+    __typename?: 'FundingTxsGetResponse'
+    fundingTxs: Array<
+      { __typename?: 'FundingTx' } & FundingTxForLandingPageFragment
+    >
+  } | null
 }
 
 export type FundingTxForUserContributionQueryVariables = Exact<{
@@ -5958,9 +6494,12 @@ export type FundingTxForOverviewPageQueryVariables = Exact<{
 
 export type FundingTxForOverviewPageQuery = {
   __typename?: 'Query'
-  fundingTxsGet: Array<
-    { __typename?: 'FundingTx' } & FundingTxForOverviewPageFragment
-  >
+  fundingTxsGet?: {
+    __typename?: 'FundingTxsGetResponse'
+    fundingTxs: Array<
+      { __typename?: 'FundingTx' } & FundingTxForOverviewPageFragment
+    >
+  } | null
 }
 
 export type GrantsQueryVariables = Exact<{ [key: string]: never }>
@@ -6103,6 +6642,50 @@ export type GrantStatisticsQuery = {
       countFunded: number
     } | null
   }
+}
+
+export type OrdersGetQueryVariables = Exact<{
+  input: OrdersGetInput
+}>
+
+export type OrdersGetQuery = {
+  __typename?: 'Query'
+  ordersGet?: {
+    __typename?: 'OrdersGetResponse'
+    pagination?:
+      | ({ __typename?: 'CursorPaginationResponse' } & PaginationFragment)
+      | null
+    orders: Array<{ __typename?: 'Order' } & OrderFragment>
+  } | null
+}
+
+export type FundingTxsOrderGetQueryVariables = Exact<{
+  input?: InputMaybe<GetFundingTxsInput>
+}>
+
+export type FundingTxsOrderGetQuery = {
+  __typename?: 'Query'
+  fundingTxsGet?: {
+    __typename?: 'FundingTxsGetResponse'
+    pagination?:
+      | ({ __typename?: 'CursorPaginationResponse' } & PaginationFragment)
+      | null
+    fundingTxs: Array<{ __typename?: 'FundingTx' } & FundingTxOrderFragment>
+  } | null
+}
+
+export type FundingTxsOrderCountGetQueryVariables = Exact<{
+  input?: InputMaybe<GetFundingTxsInput>
+}>
+
+export type FundingTxsOrderCountGetQuery = {
+  __typename?: 'Query'
+  fundingTxsGet?: {
+    __typename?: 'FundingTxsGetResponse'
+    pagination?:
+      | ({ __typename?: 'CursorPaginationResponse' } & PaginationFragment)
+      | null
+  } | null
 }
 
 export type ProjectByNameOrIdQueryVariables = Exact<{
@@ -6655,6 +7238,108 @@ export const FundingTxForOverviewPageFragmentDoc = gql`
     comment
   }
 `
+export const OrderItemFragmentDoc = gql`
+  fragment OrderItem on OrderItem {
+    item {
+      id
+      name
+      cost
+      rewardCurrency
+      rewardType
+    }
+    quantity
+    unitPriceInSats
+  }
+`
+export const OrderFragmentDoc = gql`
+  fragment Order on Order {
+    confirmedAt
+    createdAt
+    deliveredAt
+    id
+    shippedAt
+    status
+    totalInSats
+    updatedAt
+    user {
+      id
+      imageUrl
+      username
+      email
+    }
+    items {
+      ...OrderItem
+    }
+    fundingTx {
+      id
+      bitcoinQuote {
+        quoteCurrency
+        quote
+      }
+      amount
+      amountPaid
+      donationAmount
+      address
+      email
+      fundingType
+      invoiceStatus
+      isAnonymous
+      status
+      uuid
+    }
+  }
+  ${OrderItemFragmentDoc}
+`
+export const FundingTxOrderFragmentDoc = gql`
+  fragment FundingTxOrder on FundingTx {
+    id
+    invoiceStatus
+    donationAmount
+    amountPaid
+    amount
+    email
+    paidAt
+    status
+    invoiceId
+    uuid
+    bitcoinQuote {
+      quoteCurrency
+      quote
+    }
+    funder {
+      user {
+        id
+        imageUrl
+        username
+        externalAccounts {
+          id
+          externalUsername
+          externalId
+          accountType
+          public
+        }
+      }
+    }
+    order {
+      id
+      referenceCode
+      totalInSats
+      items {
+        ...OrderItem
+      }
+    }
+  }
+  ${OrderItemFragmentDoc}
+`
+export const PaginationFragmentDoc = gql`
+  fragment Pagination on CursorPaginationResponse {
+    take
+    cursor {
+      id
+    }
+    count
+  }
+`
 export const ProjectNostrKeysFragmentDoc = gql`
   fragment ProjectNostrKeys on Project {
     id
@@ -6737,6 +7422,11 @@ export const ProjectRewardForCreateUpdateFragmentDoc = gql`
     stock
     sold
     hasShipping
+    maxClaimable
+    estimatedDeliveryDate
+    isAddon
+    isHidden
+    rewardType
   }
 `
 export const EntryForProjectFragmentDoc = gql`
@@ -7091,6 +7781,7 @@ export const ProjectRewardForLandingPageFragmentDoc = gql`
     rewardName: name
     sold
     stock
+    maxClaimable
     rewardProject: project {
       id
       name
@@ -7619,12 +8310,6 @@ export const FundDocument = gql`
       fundingTx {
         ...FundingTx
       }
-      amountSummary {
-        total
-        donationAmount
-        shippingCost
-        rewardsCost
-      }
     }
   }
   ${FundingTxFragmentDoc}
@@ -7817,6 +8502,110 @@ export type GrantApplyMutationOptions = Apollo.BaseMutationOptions<
   GrantApplyMutation,
   GrantApplyMutationVariables
 >
+export const OrderStatusUpdateDocument = gql`
+  mutation OrderStatusUpdate($input: OrderStatusUpdateInput!) {
+    orderStatusUpdate(input: $input) {
+      status
+      id
+      shippedAt
+      deliveredAt
+    }
+  }
+`
+export type OrderStatusUpdateMutationFn = Apollo.MutationFunction<
+  OrderStatusUpdateMutation,
+  OrderStatusUpdateMutationVariables
+>
+
+/**
+ * __useOrderStatusUpdateMutation__
+ *
+ * To run a mutation, you first call `useOrderStatusUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useOrderStatusUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [orderStatusUpdateMutation, { data, loading, error }] = useOrderStatusUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useOrderStatusUpdateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    OrderStatusUpdateMutation,
+    OrderStatusUpdateMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    OrderStatusUpdateMutation,
+    OrderStatusUpdateMutationVariables
+  >(OrderStatusUpdateDocument, options)
+}
+export type OrderStatusUpdateMutationHookResult = ReturnType<
+  typeof useOrderStatusUpdateMutation
+>
+export type OrderStatusUpdateMutationResult =
+  Apollo.MutationResult<OrderStatusUpdateMutation>
+export type OrderStatusUpdateMutationOptions = Apollo.BaseMutationOptions<
+  OrderStatusUpdateMutation,
+  OrderStatusUpdateMutationVariables
+>
+export const FundingConfirmDocument = gql`
+  mutation FundingConfirm($input: FundingConfirmInput!) {
+    fundingConfirm(input: $input) {
+      id
+      success
+    }
+  }
+`
+export type FundingConfirmMutationFn = Apollo.MutationFunction<
+  FundingConfirmMutation,
+  FundingConfirmMutationVariables
+>
+
+/**
+ * __useFundingConfirmMutation__
+ *
+ * To run a mutation, you first call `useFundingConfirmMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFundingConfirmMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [fundingConfirmMutation, { data, loading, error }] = useFundingConfirmMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFundingConfirmMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    FundingConfirmMutation,
+    FundingConfirmMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    FundingConfirmMutation,
+    FundingConfirmMutationVariables
+  >(FundingConfirmDocument, options)
+}
+export type FundingConfirmMutationHookResult = ReturnType<
+  typeof useFundingConfirmMutation
+>
+export type FundingConfirmMutationResult =
+  Apollo.MutationResult<FundingConfirmMutation>
+export type FundingConfirmMutationOptions = Apollo.BaseMutationOptions<
+  FundingConfirmMutation,
+  FundingConfirmMutationVariables
+>
 export const ProjectPublishDocument = gql`
   mutation ProjectPublish($input: ProjectPublishMutationInput!) {
     projectPublish(input: $input) {
@@ -8002,6 +8791,62 @@ export type UpdateProjectMutationOptions = Apollo.BaseMutationOptions<
   UpdateProjectMutation,
   UpdateProjectMutationVariables
 >
+export const ProjectRewardCurrencyUpdateDocument = gql`
+  mutation ProjectRewardCurrencyUpdate($input: ProjectRewardCurrencyUpdate!) {
+    projectRewardCurrencyUpdate(input: $input) {
+      project {
+        rewards {
+          cost
+          rewardType
+        }
+      }
+    }
+  }
+`
+export type ProjectRewardCurrencyUpdateMutationFn = Apollo.MutationFunction<
+  ProjectRewardCurrencyUpdateMutation,
+  ProjectRewardCurrencyUpdateMutationVariables
+>
+
+/**
+ * __useProjectRewardCurrencyUpdateMutation__
+ *
+ * To run a mutation, you first call `useProjectRewardCurrencyUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectRewardCurrencyUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectRewardCurrencyUpdateMutation, { data, loading, error }] = useProjectRewardCurrencyUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectRewardCurrencyUpdateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ProjectRewardCurrencyUpdateMutation,
+    ProjectRewardCurrencyUpdateMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    ProjectRewardCurrencyUpdateMutation,
+    ProjectRewardCurrencyUpdateMutationVariables
+  >(ProjectRewardCurrencyUpdateDocument, options)
+}
+export type ProjectRewardCurrencyUpdateMutationHookResult = ReturnType<
+  typeof useProjectRewardCurrencyUpdateMutation
+>
+export type ProjectRewardCurrencyUpdateMutationResult =
+  Apollo.MutationResult<ProjectRewardCurrencyUpdateMutation>
+export type ProjectRewardCurrencyUpdateMutationOptions =
+  Apollo.BaseMutationOptions<
+    ProjectRewardCurrencyUpdateMutation,
+    ProjectRewardCurrencyUpdateMutationVariables
+  >
 export const ProjectRewardCreateDocument = gql`
   mutation ProjectRewardCreate($input: CreateProjectRewardInput!) {
     projectRewardCreate(input: $input) {
@@ -9543,7 +10388,9 @@ export type FundingTxWithInvoiceStatusQueryResult = Apollo.QueryResult<
 export const FundingTxsForLandingPageDocument = gql`
   query FundingTxsForLandingPage($input: GetFundingTxsInput) {
     fundingTxsGet(input: $input) {
-      ...FundingTxForLandingPage
+      fundingTxs {
+        ...FundingTxForLandingPage
+      }
     }
   }
   ${FundingTxForLandingPageFragmentDoc}
@@ -9661,7 +10508,9 @@ export type FundingTxForUserContributionQueryResult = Apollo.QueryResult<
 export const FundingTxForOverviewPageDocument = gql`
   query FundingTxForOverviewPage($input: GetFundingTxsInput) {
     fundingTxsGet(input: $input) {
-      ...FundingTxForOverviewPage
+      fundingTxs {
+        ...FundingTxForOverviewPage
+      }
     }
   }
   ${FundingTxForOverviewPageFragmentDoc}
@@ -9962,6 +10811,192 @@ export type GrantStatisticsLazyQueryHookResult = ReturnType<
 export type GrantStatisticsQueryResult = Apollo.QueryResult<
   GrantStatisticsQuery,
   GrantStatisticsQueryVariables
+>
+export const OrdersGetDocument = gql`
+  query OrdersGet($input: OrdersGetInput!) {
+    ordersGet(input: $input) {
+      pagination {
+        ...Pagination
+      }
+      orders {
+        ...Order
+      }
+    }
+  }
+  ${PaginationFragmentDoc}
+  ${OrderFragmentDoc}
+`
+
+/**
+ * __useOrdersGetQuery__
+ *
+ * To run a query within a React component, call `useOrdersGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrdersGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrdersGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useOrdersGetQuery(
+  baseOptions: Apollo.QueryHookOptions<OrdersGetQuery, OrdersGetQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<OrdersGetQuery, OrdersGetQueryVariables>(
+    OrdersGetDocument,
+    options,
+  )
+}
+export function useOrdersGetLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    OrdersGetQuery,
+    OrdersGetQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<OrdersGetQuery, OrdersGetQueryVariables>(
+    OrdersGetDocument,
+    options,
+  )
+}
+export type OrdersGetQueryHookResult = ReturnType<typeof useOrdersGetQuery>
+export type OrdersGetLazyQueryHookResult = ReturnType<
+  typeof useOrdersGetLazyQuery
+>
+export type OrdersGetQueryResult = Apollo.QueryResult<
+  OrdersGetQuery,
+  OrdersGetQueryVariables
+>
+export const FundingTxsOrderGetDocument = gql`
+  query FundingTxsOrderGet($input: GetFundingTxsInput) {
+    fundingTxsGet(input: $input) {
+      pagination {
+        ...Pagination
+      }
+      fundingTxs {
+        ...FundingTxOrder
+      }
+    }
+  }
+  ${PaginationFragmentDoc}
+  ${FundingTxOrderFragmentDoc}
+`
+
+/**
+ * __useFundingTxsOrderGetQuery__
+ *
+ * To run a query within a React component, call `useFundingTxsOrderGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFundingTxsOrderGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFundingTxsOrderGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFundingTxsOrderGetQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    FundingTxsOrderGetQuery,
+    FundingTxsOrderGetQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    FundingTxsOrderGetQuery,
+    FundingTxsOrderGetQueryVariables
+  >(FundingTxsOrderGetDocument, options)
+}
+export function useFundingTxsOrderGetLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FundingTxsOrderGetQuery,
+    FundingTxsOrderGetQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    FundingTxsOrderGetQuery,
+    FundingTxsOrderGetQueryVariables
+  >(FundingTxsOrderGetDocument, options)
+}
+export type FundingTxsOrderGetQueryHookResult = ReturnType<
+  typeof useFundingTxsOrderGetQuery
+>
+export type FundingTxsOrderGetLazyQueryHookResult = ReturnType<
+  typeof useFundingTxsOrderGetLazyQuery
+>
+export type FundingTxsOrderGetQueryResult = Apollo.QueryResult<
+  FundingTxsOrderGetQuery,
+  FundingTxsOrderGetQueryVariables
+>
+export const FundingTxsOrderCountGetDocument = gql`
+  query FundingTxsOrderCountGet($input: GetFundingTxsInput) {
+    fundingTxsGet(input: $input) {
+      pagination {
+        ...Pagination
+      }
+    }
+  }
+  ${PaginationFragmentDoc}
+`
+
+/**
+ * __useFundingTxsOrderCountGetQuery__
+ *
+ * To run a query within a React component, call `useFundingTxsOrderCountGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFundingTxsOrderCountGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFundingTxsOrderCountGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFundingTxsOrderCountGetQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    FundingTxsOrderCountGetQuery,
+    FundingTxsOrderCountGetQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    FundingTxsOrderCountGetQuery,
+    FundingTxsOrderCountGetQueryVariables
+  >(FundingTxsOrderCountGetDocument, options)
+}
+export function useFundingTxsOrderCountGetLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FundingTxsOrderCountGetQuery,
+    FundingTxsOrderCountGetQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    FundingTxsOrderCountGetQuery,
+    FundingTxsOrderCountGetQueryVariables
+  >(FundingTxsOrderCountGetDocument, options)
+}
+export type FundingTxsOrderCountGetQueryHookResult = ReturnType<
+  typeof useFundingTxsOrderCountGetQuery
+>
+export type FundingTxsOrderCountGetLazyQueryHookResult = ReturnType<
+  typeof useFundingTxsOrderCountGetLazyQuery
+>
+export type FundingTxsOrderCountGetQueryResult = Apollo.QueryResult<
+  FundingTxsOrderCountGetQuery,
+  FundingTxsOrderCountGetQueryVariables
 >
 export const ProjectByNameOrIdDocument = gql`
   query ProjectByNameOrId(

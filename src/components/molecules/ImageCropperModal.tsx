@@ -124,16 +124,6 @@ export const ImageCropperModal = ({
         </HStack>
 
         <HStack width="full">
-          <Button
-            flex="1"
-            variant="secondary"
-            onClick={() => {
-              if (fileSrc) onCompleted(fileSrc)
-            }}
-          >
-            {t('Skip crop')}
-          </Button>
-
           <Button flex="1" variant="primary" onClick={uploadCroppedImage}>
             {t('Save')}
           </Button>
