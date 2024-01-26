@@ -5,38 +5,21 @@ import { useCallback, useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import {
-  DocsUrl,
-  FeedbackUrl,
-  getPath,
-  GeyserGithubUrl,
-  PathName,
-} from '../../constants'
-import {
-  AuthContext,
-  useNavContext,
-  useServiceWorkerUpdate,
-} from '../../context'
+import { DocsUrl, FeedbackUrl, getPath, GeyserGithubUrl, PathName } from '../../constants'
+import { AuthContext, useNavContext, useServiceWorkerUpdate } from '../../context'
 import { MobileDivider } from '../../pages/grants/components'
 import { useMobileMode } from '../../utils'
 import { useRouteMatchesForTopNavBar } from '../topNavBar/topNavBarAtom'
-import {
-  MenuItemLink,
-  ModeChange,
-  NavBarUserProfileMenuItem,
-  NavBarUserProjectMenuItem,
-} from './components'
+import { MenuItemLink, ModeChange, NavBarUserProfileMenuItem, NavBarUserProjectMenuItem } from './components'
 
 export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
   const { t } = useTranslation()
 
   const isMobile = useMobileMode()
-  const { user, isLoggedIn, isUserAProjectCreator, loginOnOpen, logout } =
-    useContext(AuthContext)
+  const { user, isLoggedIn, isUserAProjectCreator, loginOnOpen, logout } = useContext(AuthContext)
   const { canInstall, handlePrompt } = useServiceWorkerUpdate()
 
-  const { hideMyProjectsButton, showSignInButton } =
-    useRouteMatchesForTopNavBar()
+  const { hideMyProjectsButton, showSignInButton } = useRouteMatchesForTopNavBar()
 
   const navigate = useNavigate()
   const { navData } = useNavContext()
@@ -54,9 +37,7 @@ export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
   const isViewingOwnProject: boolean = useMemo(() => {
     return (
       (currentPathName.startsWith(`/${PathName.entry}`) ||
-        currentPathName.startsWith(
-          `/${PathName._deprecatedPathNameForProject}`,
-        ) ||
+        currentPathName.startsWith(`/${PathName._deprecatedPathNameForProject}`) ||
         currentPathName.startsWith(`/${PathName.project}`)) &&
       navData.projectOwnerIDs.includes(Number(user.id))
     )
@@ -71,14 +52,7 @@ export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
       hideMyProjectsButton === false &&
       !userHasOnlyOneProject
     )
-  }, [
-    hideMyProjectsButton,
-    isMobile,
-    isLoggedIn,
-    isUserAProjectCreator,
-    isViewingOwnProject,
-    userHasOnlyOneProject,
-  ])
+  }, [hideMyProjectsButton, isMobile, isLoggedIn, isUserAProjectCreator, isViewingOwnProject, userHasOnlyOneProject])
 
   const shouldShowSignInMenuItem: boolean = useMemo(() => {
     return isLoggedIn === false && isMobile === true && showSignInButton
@@ -102,11 +76,7 @@ export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
         {shouldShowMyProjectsMenuItem ? (
           <>
             <MenuItem as={Stack} px={4} py={2}>
-              <Button
-                variant="primary"
-                width="100%"
-                onClick={onMyProjectsSelected}
-              >
+              <Button variant="primary" width="100%" onClick={onMyProjectsSelected}>
                 {t('View my projects')}
               </Button>
             </MenuItem>
@@ -133,10 +103,7 @@ export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
           {t('Recent Activity')}
         </MenuItemLink>
 
-        <MenuItemLink
-          fontWeight={'bold'}
-          destinationPath={getPath('projectDiscovery')}
-        >
+        <MenuItemLink fontWeight={'bold'} destinationPath={getPath('projectDiscovery')}>
           {t('Discover Projects')}
         </MenuItemLink>
 
@@ -161,11 +128,7 @@ export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
           {t('Docs')}
         </MenuItemLink>
 
-        <MenuItemLink
-          color={'neutral.700'}
-          destinationPath={FeedbackUrl}
-          isExternal
-        >
+        <MenuItemLink color={'neutral.700'} destinationPath={FeedbackUrl} isExternal>
           {t('Feedback')}
         </MenuItemLink>
 
@@ -183,12 +146,7 @@ export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
         {canInstall && isLoggedIn && (
           <>
             <MenuItem as={Stack}>
-              <Button
-                variant="secondary"
-                leftIcon={<DownloadIcon />}
-                width="100%"
-                onClick={handlePrompt}
-              >
+              <Button variant="secondary" leftIcon={<DownloadIcon />} width="100%" onClick={handlePrompt}>
                 {t('Install Geyser')}
               </Button>
             </MenuItem>
