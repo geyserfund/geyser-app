@@ -24,10 +24,8 @@ export const slideInRight = {
     },
   },
   slideInRight: {
-    webkitAnimation:
-      '$slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
-    animation:
-      '$slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+    webkitAnimation: '$slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+    animation: '$slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
   },
 }
 
@@ -57,10 +55,8 @@ export const slideInLeft = {
     },
   },
   slideInLeft: {
-    webkitAnimation:
-      '$slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
-    animation:
-      '$slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+    webkitAnimation: '$slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+    animation: '$slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
   },
 }
 
@@ -121,10 +117,8 @@ export const slideOutRight = {
     },
   },
   slideOutRight: {
-    webkitAnimation:
-      '$slide-out-right 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both',
-    animation:
-      '$slide-out-right 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both',
+    webkitAnimation: '$slide-out-right 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both',
+    animation: '$slide-out-right 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both',
   },
 }
 
@@ -185,10 +179,8 @@ export const slideOutLeft = {
     },
   },
   slideOutLeft: {
-    webkitAnimation:
-      '$slide-out-left 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both',
-    animation:
-      '$slide-out-left 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both',
+    webkitAnimation: '$slide-out-left 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both',
+    animation: '$slide-out-left 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both',
   },
 }
 

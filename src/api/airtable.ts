@@ -1,17 +1,14 @@
 import { VITE_APP_AIR_TABLE_KEY } from '../constants'
 
 export const createCreatorRecord = async (data: any) => {
-  fetch(
-    'https://api.airtable.com/v0/appyM7XlNIWVypuP5/Subscribers%20(Funders%2BCreators)',
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${VITE_APP_AIR_TABLE_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
+  fetch('https://api.airtable.com/v0/appyM7XlNIWVypuP5/Subscribers%20(Funders%2BCreators)', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${VITE_APP_AIR_TABLE_KEY}`,
+      'Content-Type': 'application/json',
     },
-  ).then((response) => response.json())
+    body: JSON.stringify(data),
+  }).then((response) => response.json())
 }
 
 export const createApplicantRecord = async (data: any) => {

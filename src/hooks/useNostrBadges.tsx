@@ -29,10 +29,7 @@ export const useNostrBadges = (pubKey: string) => {
   const [claiming, setClaiming] = useState(true)
   const [badgeIds, setBadgeIds] = useState<string[]>([])
 
-  const [awardBadge] = useMutation<
-    { userBadgeAward: UserBadge },
-    MutationUserBadgeAwardArgs
-  >(MUTATION_USER_BADGE_AWARD)
+  const [awardBadge] = useMutation<{ userBadgeAward: UserBadge }, MutationUserBadgeAwardArgs>(MUTATION_USER_BADGE_AWARD)
 
   // NOTE: these are for when  we do have to fetch badges data from nostr
   // const [badges, setBadges] = useState<NostrBadges[]>([])
@@ -85,13 +82,7 @@ export const useNostrBadges = (pubKey: string) => {
     })
   }
 
-  const claimABadge = async ({
-    userBadgeId,
-    badgeId,
-    badgeAwardId,
-    onFail,
-    isClaiming,
-  }: ClaimABadgeProps) => {
+  const claimABadge = async ({ userBadgeId, badgeId, badgeAwardId, onFail, isClaiming }: ClaimABadgeProps) => {
     if (relay) {
       setClaiming(true)
       isClaiming?.(true)
@@ -100,8 +91,7 @@ export const useNostrBadges = (pubKey: string) => {
       if (!badgeAwardId) {
         try {
           const result = await awardBadge({ variables: { userBadgeId } })
-          badgeAwardEventId =
-            result.data?.userBadgeAward.badgeAwardEventId || ''
+          badgeAwardEventId = result.data?.userBadgeAward.badgeAwardEventId || ''
           if (!badgeAwardEventId) {
             handleErrorToast()
             return

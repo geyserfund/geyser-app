@@ -1,22 +1,10 @@
 import { ApolloError } from '@apollo/client'
 import { useDisclosure } from '@chakra-ui/react'
-import {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 
 import { getAuthEndPoint } from '../config/domain'
 import { defaultUser } from '../defaults'
-import {
-  Project,
-  useMeLazyQuery,
-  useMeProjectFollowsLazyQuery,
-  UserMeFragment,
-} from '../types'
+import { Project, useMeLazyQuery, useMeProjectFollowsLazyQuery, UserMeFragment } from '../types'
 
 const defaultContext: AuthContextProps = {
   isLoggedIn: false,
@@ -72,9 +60,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [initialLoad, setInitialLoad] = useState(false)
 
   const [user, setUser] = useState<UserMeFragment>(defaultUser)
-  const [followedProjects, setFollowedProjects] = useState<
-    Pick<Project, 'id' | 'title' | 'name'>[]
-  >([])
+  const [followedProjects, setFollowedProjects] = useState<Pick<Project, 'id' | 'title' | 'name'>[]>([])
 
   const [isUserAProjectCreator, setIsUserAProjectCreator] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -122,11 +108,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     },
   })
 
-  const {
-    isOpen: loginIsOpen,
-    onOpen: loginOnOpen,
-    onClose: loginOnClose,
-  } = useDisclosure()
+  const { isOpen: loginIsOpen, onOpen: loginOnOpen, onClose: loginOnClose } = useDisclosure()
 
   const logout = () => {
     setUser({ ...defaultUser })

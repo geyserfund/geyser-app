@@ -10,12 +10,7 @@ interface UseScrollDirectionProps {
   direction?: string
 }
 
-export const useScrollDirection = ({
-  elementId,
-  loading,
-  initialValue,
-  mobileView,
-}: UseScrollDirectionProps) => {
+export const useScrollDirection = ({ elementId, loading, initialValue, mobileView }: UseScrollDirectionProps) => {
   const [prevValue, setPrevValue] = useListenerState(0)
   const [value, setValue] = useListenerState(0)
 
