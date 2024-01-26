@@ -42,24 +42,28 @@ export const ProjectFundingQRModal = ({
   const { toast } = useNotification()
   const endPoint = getAppEndPoint()
 
-  const bannerRef = useCallback((node: HTMLDivElement) => {
+  const bannerRef = useCallback(async(node: HTMLDivElement) => {
     if (!node) {
       return
     }
-    setTimeout(function(){
-      htmlToImage
-        .toPng(node, { style: { opacity: '1', position: 'static' } })
-        .then((image) => {
-          setImageDownload(image)
-        })
-        .catch((error) => {
-          toast({
-            status: 'error',
-            title: 'something went wrong rendering the html to image',
-            description: `${error}`,
-          })
-        })
-    }, 500);
+    // Adjustment for Safari
+    if(navigator.userAgent.toLowerCase().indexOf('safari/') > -1) {
+      await htmlToImage.toPng(node, { style: { opacity: '1', position: 'static' } })
+      await htmlToImage.toPng(node, { style: { opacity: '1', position: 'static' } })
+      await htmlToImage.toPng(node, { style: { opacity: '1', position: 'static' } })
+    }
+    const pngImage = await htmlToImage.toPng(node, { style: { opacity: '1', position: 'static' } });
+
+    if(pngImage) {
+      setImageDownload(pngImage)
+    } else {
+      toast({
+        status: 'error',
+        title: 'something went wrong rendering the html to image',
+        description: `Unable to convert image`,
+      })
+    }
+
   }, [])
 
   const lnurlPayUrl = encodeLNURL(
