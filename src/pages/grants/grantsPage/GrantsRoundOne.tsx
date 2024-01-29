@@ -1,14 +1,5 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons'
-import {
-  Box,
-  Button,
-  Grid,
-  GridItem,
-  Image,
-  Link,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Button, Grid, GridItem, Image, Link, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { FaArrowLeft } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
@@ -86,26 +77,11 @@ export const GrantsRoundOne = ({
         alignItems={'center'}
         flexDirection="column"
       >
-        <Box
-          my={5}
-          width={isMobile ? '100%' : '909px'}
-          px={isMobile ? '1rem' : ''}
-        >
-          <Button
-            size={'sm'}
-            bg="neutral.0"
-            variant={'outline'}
-            gap={2}
-            onClick={() => navigate(-1)}
-            fontSize="sm"
-          >
+        <Box my={5} width={isMobile ? '100%' : '909px'} px={isMobile ? '1rem' : ''}>
+          <Button size={'sm'} bg="neutral.0" variant={'outline'} gap={2} onClick={() => navigate(-1)} fontSize="sm">
             <FaArrowLeft /> {t('See all Grants')}
           </Button>
-          <Text
-            fontSize={isMobile ? '4xl' : '47px'}
-            fontWeight="medium"
-            textAlign="center"
-          >
+          <Text fontSize={isMobile ? '4xl' : '47px'} fontWeight="medium" textAlign="center">
             🧊
           </Text>
           <Text
@@ -118,12 +94,7 @@ export const GrantsRoundOne = ({
           >
             {t('Geyser Grants')}
           </Text>
-          <Box
-            display="flex"
-            alignItems={'center'}
-            justifyContent="center"
-            gap={4}
-          >
+          <Box display="flex" alignItems={'center'} justifyContent="center" gap={4}>
             <Text
               fontFamily={fonts.interBlack}
               fontSize={isMobile ? '30' : '35px'}
@@ -135,13 +106,7 @@ export const GrantsRoundOne = ({
             </Text>
           </Box>
           <Box display="flex" justifyContent={'center'} my="2" rounded={'sm'}>
-            <Text
-              bg="neutral.200"
-              px={'3'}
-              py="2"
-              fontWeight={'500'}
-              fontSize="14px"
-            >
+            <Text bg="neutral.200" px={'3'} py="2" fontWeight={'500'} fontSize="14px">
               {t('CLOSED')}
             </Text>
           </Box>
@@ -152,11 +117,8 @@ export const GrantsRoundOne = ({
             textAlign="center"
             justifyContent="center"
           >
-            {t(
-              'Funding educators, creatives and builders doing Bitcoin-only projects on Geyser.',
-            )}
-            {isMobile ? '' : <br />}{' '}
-            {t('Funded by bitcoiners who want to change the world.')}
+            {t('Funding educators, creatives and builders doing Bitcoin-only projects on Geyser.')}
+            {isMobile ? '' : <br />} {t('Funded by bitcoiners who want to change the world.')}
           </Text>
           <Box display="flex" flexDirection={'column'} alignItems="center">
             <Box color={'primary.500'} my={8}>
@@ -165,12 +127,7 @@ export const GrantsRoundOne = ({
               </Box>
             </Box>
 
-            <Grid
-              templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}
-              gap={6}
-              minWidth="100%"
-              mt={8}
-            >
+            <Grid templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }} gap={6} minWidth="100%" mt={8}>
               {grants.map((item, idx) => (
                 <GridItem w={'100%'} key={idx}>
                   <ApplyGrantCard
@@ -195,13 +152,7 @@ export const GrantsRoundOne = ({
             margin="0 auto"
           >
             <VStack>
-              <Text
-                fontFamily={fonts.interBlack}
-                fontSize="24px"
-                fontWeight={'bold'}
-                textAlign="center"
-                mt={8}
-              >
+              <Text fontFamily={fonts.interBlack} fontSize="24px" fontWeight={'bold'} textAlign="center" mt={8}>
                 {t('Round 1 Announcement')}
               </Text>
               <Text textAlign="justify" fontSize="sm">
@@ -252,34 +203,22 @@ export const GrantsRoundOne = ({
           ) : null}
 
           <Box my={8}>
-            <Text
-              fontFamily={fonts.interBlack}
-              fontSize="24px"
-              fontWeight={'bold'}
-            >
+            <Text fontFamily={fonts.interBlack} fontSize="24px" fontWeight={'bold'}>
               {t('Principled Bitcoiners Board')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">
-              {t(
-                'The board will be responsible for reviewing and evaluating the applications.',
-              )}
+              {t('The board will be responsible for reviewing and evaluating the applications.')}
             </Text>
           </Box>
           <Box minWidth={'100%'} p="2" bg="neutral.200">
             <Board />
           </Box>
           <Box my={8}>
-            <Text
-              fontFamily={fonts.interBlack}
-              fontSize="24px"
-              fontWeight={'bold'}
-            >
+            <Text fontFamily={fonts.interBlack} fontSize="24px" fontWeight={'bold'}>
               {t('Made possible by sponsors')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">
-              {t(
-                'Bitcoin companies and anon individuals that want to bring hope to the world.',
-              )}
+              {t('Bitcoin companies and anon individuals that want to bring hope to the world.')}
             </Text>
           </Box>
           <Box

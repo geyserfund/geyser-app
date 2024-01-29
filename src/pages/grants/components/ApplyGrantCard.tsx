@@ -46,35 +46,18 @@ export const ApplyGrantCard = ({
         <Text fontWeight={'300'} fontSize="13px">
           {subtitle}
         </Text>
-        <Box
-          display="flex"
-          mt={3}
-          justifyContent={'center'}
-          flexDirection="column"
-          alignItems="center"
-        >
+        <Box display="flex" mt={3} justifyContent={'center'} flexDirection="column" alignItems="center">
           {isClose ? (
             <>
               <Text fontWeight={'400'} fontSize="9px" color={'neutral.700'}>
                 {applicant}
               </Text>
-              <Text
-                fontWeight={'400'}
-                fontSize="11px"
-                color={'neutral.700'}
-                mt={1}
-                textTransform="uppercase"
-              >
+              <Text fontWeight={'400'} fontSize="11px" color={'neutral.700'} mt={1} textTransform="uppercase">
                 {t('applicants')}
               </Text>
             </>
           ) : (
-            <HStack
-              justifyContent="center"
-              spacing="40px"
-              alignItems="center"
-              my={3}
-            >
+            <HStack justifyContent="center" spacing="40px" alignItems="center" my={3}>
               <Box>
                 <HStack justifyContent="center">
                   <SatoshiIconTilted />
@@ -82,12 +65,7 @@ export const ApplyGrantCard = ({
                     {contributed}
                   </Text>
                 </HStack>
-                <Text
-                  fontSize="xs"
-                  color="neutral600"
-                  fontWeight="bold"
-                  textTransform="uppercase"
-                >
+                <Text fontSize="xs" color="neutral600" fontWeight="bold" textTransform="uppercase">
                   {t('contributed')}
                 </Text>
               </Box>
@@ -99,12 +77,7 @@ export const ApplyGrantCard = ({
                     {distributed}
                   </Text>
                 </HStack>
-                <Text
-                  fontSize="xs"
-                  color="neutral600"
-                  fontWeight="bold"
-                  textTransform="uppercase"
-                >
+                <Text fontSize="xs" color="neutral600" fontWeight="bold" textTransform="uppercase">
                   {'distributed'}
                 </Text>
               </Box>

@@ -19,7 +19,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { FaCheck } from 'react-icons/fa'
 
-import { createGrantContributionRecord } from '../../../api'
 import { Body2, Caption } from '../../../components/typography'
 import { fundingStages, MAX_FUNDING_AMOUNT_USD } from '../../../constants'
 import { useAuthContext } from '../../../context'
@@ -63,11 +62,9 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
 
   const [modalHeader, setModalHeader] = useState(defaultModalHeader)
 
-  const { state, setState, setTarget, setValue } =
-    useFormState<GrantContributeInput>(defaultGrantContribution)
+  const { state, setState, setTarget, setValue } = useFormState<GrantContributeInput>(defaultGrantContribution)
 
-  const [formError, setFormError] =
-    useState<FormStateError<GrantContributeInput>>()
+  const [formError, setFormError] = useState<FormStateError<GrantContributeInput>>()
 
   const { data: grantsData } = useProjectByNameOrIdQuery({
     variables: { where: { name: grantProjectName || GRANTS_PROJECT_NAME } },
@@ -89,13 +86,7 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
     },
   })
 
-  const {
-    fundState,
-    fundingTx,
-    gotoNextStage,
-    resetFundingFlow,
-    requestFunding
-  } = fundingFlow
+  const { fundState, fundingTx, gotoNextStage, resetFundingFlow, requestFunding } = fundingFlow
 
   useEffect(() => {
     setFormError({})
@@ -104,28 +95,6 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
   useEffect(() => {
     if (fundState === fundingStages.completed) {
       setModalHeader('Contribution Successful')
-      const data = {
-        records: [
-          {
-            fields: {
-              Name: state.name || undefined,
-              Amount: state.amount,
-              Comment: state.comment || undefined,
-              'Email/contact': state.email || undefined,
-              'PFP link': state.imageUrl || undefined,
-            },
-          },
-        ],
-      }
-      try {
-        createGrantContributionRecord(data)
-      } catch (error) {
-        toast({
-          status: 'error',
-          title: 'failed to record contribution',
-          description: 'please contact us if this happened despite payment',
-        })
-      }
     }
   }, [fundState])
 
@@ -152,9 +121,7 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
       const input: FundingInput = {
         projectId: toInt(grantsData?.projectGet?.id),
         anonymous: Boolean(user),
-        donationAmount: getSatoshisFromUSDCents(
-          (state.amount * 100) as USDCents,
-        ),
+        donationAmount: getSatoshisFromUSDCents((state.amount * 100) as USDCents),
         metadataInput: {
           ...(state.comment && { comment: state.comment }),
         },
@@ -202,26 +169,10 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
           {t('Amount')}
         </Text>
         <Box display="flex" alignItems={'flex-start'} gap={3}>
-          <AmountButtonComponent
-            stateAmount={state.amount}
-            amount={10}
-            setValue={setValue}
-          />
-          <AmountButtonComponent
-            stateAmount={state.amount}
-            amount={50}
-            setValue={setValue}
-          />
-          <AmountButtonComponent
-            stateAmount={state.amount}
-            amount={100}
-            setValue={setValue}
-          />
-          <AmountButtonComponent
-            stateAmount={state.amount}
-            amount={1000}
-            setValue={setValue}
-          />
+          <AmountButtonComponent stateAmount={state.amount} amount={10} setValue={setValue} />
+          <AmountButtonComponent stateAmount={state.amount} amount={50} setValue={setValue} />
+          <AmountButtonComponent stateAmount={state.amount} amount={100} setValue={setValue} />
+          <AmountButtonComponent stateAmount={state.amount} amount={1000} setValue={setValue} />
         </Box>
       </VStack>
       <VStack width="100%" alignItems={'center'} mt={1} cursor="pointer">
@@ -293,17 +244,13 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
         </Box>
         <Text fontSize={'14px'}>
           <Trans
-            i18nKey={
-              'Your <1>{{amount}}</1> contribution to Geyser Grants was successful!'
-            }
+            i18nKey={'Your <1>{{amount}}</1> contribution to Geyser Grants was successful!'}
             values={{
-              amount: `${getSatoshisFromUSDCents(
-                (state.amount * 100) as USDCents,
-              )} sats`,
+              amount: `${getSatoshisFromUSDCents((state.amount * 100) as USDCents)} sats`,
             }}
           >
-            Your <span style={{ fontWeight: 'bold' }}>{'{{amount}}'}</span>{' '}
-            contribution to Geyser Grants Round 2 was successful!
+            Your <span style={{ fontWeight: 'bold' }}>{'{{amount}}'}</span> contribution to Geyser Grants Round 2 was
+            successful!
           </Trans>
         </Text>
         <Text fontSize={'14px'}>
@@ -311,21 +258,12 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
             'Your donation will help accelerate bitcoin adoption by recognizing and pushing forward bitcoin projects.',
           )}
         </Text>
-        <Text fontSize={'14px'}>
-          {t('Donations are non-refundable and not tax deductible.')}
-        </Text>
+        <Text fontSize={'14px'}>{t('Donations are non-refundable and not tax deductible.')}</Text>
         {fundingTx.onChain && (
           <Text mt={4} fontSize={'14px'}>
             {t('Check out')}{' '}
-            <ChakraLink
-              href={`https://mempool.space/address/${fundingTx.address}`}
-            >
-              <Box
-                as="span"
-                fontWeight="bold"
-                borderBottom="1px solid"
-                borderColor="neutral.1000"
-              >
+            <ChakraLink href={`https://mempool.space/address/${fundingTx.address}`}>
+              <Box as="span" fontWeight="bold" borderBottom="1px solid" borderColor="neutral.1000">
                 {t('the block explorer')}
               </Box>
             </ChakraLink>
