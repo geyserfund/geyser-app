@@ -1,5 +1,7 @@
-import { Button, StackProps, VStack } from '@chakra-ui/react'
+import { Button, StackProps, VStack, Box } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
+import { AiOutlineFieldTime } from 'react-icons/ai'
 
 import { Body1 } from '../../../../components/typography'
 import { useFilterContext } from '../../../../context'
@@ -38,7 +40,13 @@ export const StatusFilterBody = ({
     { type: ProjectType.Reward },
     { status: ProjectStatus.Active },
     { status: ProjectStatus.Inactive },
-  ]
+    {
+      linkTo: '/latest',
+      text: 'Latest Projects',
+      icon: AiOutlineFieldTime,
+      size: '1.5em',
+    },
+  ];
 
   return (
     <VStack
@@ -49,27 +57,60 @@ export const StatusFilterBody = ({
       {...rest}
     >
       {options.map((option, index) => {
+        if (option.linkTo) {
+          return (
+            <Box>
+            <Link key={index} to={option.linkTo}>
+              <Button
+                background={
+                  filters.type === option.type && filters.status === option.status
+                    ? 'transparent'
+                    : 'neutral.100'
+                }
+                color="neutral.800"
+                onClick={() => handleClick(option)}
+                w="100%"
+                display="flex"
+                justifyContent="start"
+                _hover={{
+                  background:
+                    filters.type !== option.type || filters.status !== option.status
+                      ? 'neutral.100'
+                      : 'neutral.100',
+                }}
+              >
+                {option.icon && (
+                  <option.icon size={option.size} />
+                )}
+                <Body1 ml="10px" mr="94px" color={filters.type === option.type && filters.status === option.status ? 'neutral.900' : 'neutral.700'}>
+                  {t(option.text)}
+                </Body1>
+              </Button>
+            </Link>
+            </Box>
+          );
+        }
         const isActive =
-          filters.type === option.type && filters.status === option.status
+          filters.type === option.type && filters.status === option.status;
 
-        const { icon: Icon, text, color } = getStatusTypeButtonContent(option)
+        const { icon: Icon, text } = getStatusTypeButtonContent(option);
         return (
           <Button
             key={index}
-            background={isActive ? 'neutral.100' : 'neutral.0'}
+            background={isActive ? 'neutral.100' : 'transparent'}
             color="neutral.800"
             onClick={() => handleClick(option)}
             w="100%"
             display="flex"
             justifyContent="start"
           >
-            <Icon color={color} />
-            <Body1 ml="10px" color={'neutral.900'}>
+            <Icon />
+            <Body1 ml="10px" color={isActive ? 'neutral.900' : 'neutral.700'}>
               {t(text)}
             </Body1>
           </Button>
-        )
+        );
       })}
     </VStack>
-  )
-}
+  );
+};
