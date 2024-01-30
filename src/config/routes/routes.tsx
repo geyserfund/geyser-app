@@ -18,6 +18,7 @@ const ProfilePage = () => import('../../pages/profile/Profile')
 const Badges = () => import('../../pages/badges/BadgesPage')
 const Landing = () => import('../../pages/landing')
 const AboutPage = () => import('../../pages/about/About')
+const Widgets = () => import('../../pages/widgets')
 
 export const platformRoutes: RouteObject[] = [
   {
@@ -316,7 +317,7 @@ export const platformRoutes: RouteObject[] = [
             path: getPath('projectManageRewards', PathName.projectId),
             async lazy() {
               const ProjectManageRewards = await Project().then(
-                  (m) => m.ProjectManageRewards,
+                (m) => m.ProjectManageRewards,
               )
               return {
                 element: renderPrivateRoute(ProjectManageRewards),
@@ -326,18 +327,24 @@ export const platformRoutes: RouteObject[] = [
           {
             path: getPath('projectCreateReward', PathName.projectId),
             async lazy() {
-              const ProjectCreateReward = await Project()
-                  .then((m) => m.ProjectCreateReward)
+              const ProjectCreateReward = await Project().then(
+                (m) => m.ProjectCreateReward,
+              )
               return {
                 element: renderPrivateRoute(ProjectCreateReward),
               }
             },
           },
           {
-            path: getPath('projectEditReward', PathName.projectId, PathName.rewardId),
+            path: getPath(
+              'projectEditReward',
+              PathName.projectId,
+              PathName.rewardId,
+            ),
             async lazy() {
-              const ProjectEditReward = await Project()
-                  .then((m) => m.ProjectEditReward)
+              const ProjectEditReward = await Project().then(
+                (m) => m.ProjectEditReward,
+              )
               return {
                 element: renderPrivateRoute(ProjectEditReward),
               }
@@ -443,6 +450,16 @@ export const platformRoutes: RouteObject[] = [
   },
 ]
 
+export const widgetsRoutesV1: RouteObject[] = [
+  {
+    path: '/widgets/v1/link-to-project/:projectId',
+    async lazy() {
+      const LinkToProject = await Widgets().then((m) => m.LinkToProject)
+      return { Component: LinkToProject }
+    },
+  },
+]
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -454,6 +471,15 @@ export const router = createBrowserRouter([
         children: platformRoutes,
         ErrorBoundary,
         // ,
+      },
+      {
+        path: '/widgets',
+        children: [
+          {
+            path: '/widgets/v1',
+            children: widgetsRoutesV1,
+          },
+        ],
       },
     ],
   },
