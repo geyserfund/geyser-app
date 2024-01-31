@@ -1,4 +1,4 @@
-import { Button, ButtonProps, HStack, Tooltip } from '@chakra-ui/react'
+import { Button, ButtonProps, HStack, Tooltip, useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -14,6 +14,7 @@ interface NpubDisplayProps extends ButtonProps {
 export const NpubDisplay = ({ npub, iconOnly, ...rest }: NpubDisplayProps) => {
   const { t } = useTranslation()
   const [copy, setCopy] = useState(false)
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleCopyPubkey = () => {
     copyTextToClipboard(npub)
@@ -24,7 +25,8 @@ export const NpubDisplay = ({ npub, iconOnly, ...rest }: NpubDisplayProps) => {
     setCopy(true)
     setTimeout(() => {
       setCopy(false)
-    }, 1000)
+      onClose();
+    }, 2000)
   }
 
   return (
@@ -32,6 +34,7 @@ export const NpubDisplay = ({ npub, iconOnly, ...rest }: NpubDisplayProps) => {
       label={copy ? t('Copied!') : t('Copy')}
       placement="top-start"
       closeOnClick={false}
+      isOpen={isOpen}
     >
       <Button
         size="sm"
@@ -42,6 +45,8 @@ export const NpubDisplay = ({ npub, iconOnly, ...rest }: NpubDisplayProps) => {
         padding="5px 10px"
         justifyContent="space-between"
         border="none"
+        onMouseEnter={onOpen}
+        onMouseLeave={onClose}
         {...rest}
       >
         <HStack spacing="10px">

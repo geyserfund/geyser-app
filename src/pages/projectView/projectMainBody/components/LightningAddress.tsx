@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Tooltip } from '@chakra-ui/react'
+import { Button, ButtonProps, Tooltip, useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -21,6 +21,7 @@ export const GEYSER_DOMAIN_POSTFIX = '@geyser.fund'
 export const LightningAddress = ({ name, isGeyser, ...rest }: ILightningQR) => {
   const { t } = useTranslation()
   const [copy, setCopy] = useState(false)
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleAddressCopy = () => {
     let toCopy = name
@@ -32,6 +33,7 @@ export const LightningAddress = ({ name, isGeyser, ...rest }: ILightningQR) => {
     setCopy(true)
     setTimeout(() => {
       setCopy(false)
+      onClose();
     }, 2000)
   }
 
@@ -45,6 +47,7 @@ export const LightningAddress = ({ name, isGeyser, ...rest }: ILightningQR) => {
         }
         placement="top"
         closeOnClick={false}
+        isOpen={isOpen}
       >
         <Button
           size="sm"
@@ -52,6 +55,8 @@ export const LightningAddress = ({ name, isGeyser, ...rest }: ILightningQR) => {
           leftIcon={<BoltIcon height="16px" color={nostrColorsLight[400]} />}
           variant="secondary"
           onClick={handleAddressCopy}
+          onMouseEnter={onOpen}
+          onMouseLeave={onClose}
           id="lightning-address"
           border="none"
           {...rest}
