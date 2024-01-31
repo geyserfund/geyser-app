@@ -115,7 +115,6 @@ export const ConnectWithLightning = ({
       <ButtonComponent
         aria-label="Connect with Lightning"
         variant="login"
-        fontWeight={600}
         color={'social.lightning'}
         onClick={onModalOpen}
         {...buttonProps}
