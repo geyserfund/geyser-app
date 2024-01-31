@@ -34,6 +34,7 @@ import {
 import { hasOwnNode } from '../../../../../../utils/helpers'
 import { CopyIcon } from '@chakra-ui/icons'
 import { copyTextToClipboard } from '../../../../../../utils'
+import { DownloadInvoice } from './DownloadInvoice'
 
 export enum ContributionInfoBoxVersion {
   NEUTRAL = 'neutral',
@@ -53,6 +54,7 @@ type Props = HTMLChakraProps<'div'> & {
   badgesEarned?: IBadge[]
   formState: IFundForm
   version: ContributionInfoBoxVersion
+  fundingTxId: BigInt
 }
 
 const ContributionInfoBoxDivider = ({
@@ -84,6 +86,7 @@ export const ContributionInfoBox = ({
   funderAvatarURL,
   showGeyserFee,
   version,
+  fundingTxId,
   ...rest
 }: Props) => {
   const { t } = useTranslation()
@@ -123,15 +126,16 @@ export const ContributionInfoBox = ({
       alignItems="flex-start"
       {...rest}
     >
-      {referenceCode ? (
-        <HStack direction="column" spacing="2" justifyContent={'space-between'}>
+      {referenceCode && fundingTxId ? (
+        <HStack direction="column" spacing="2" justifyContent={'space-between'} width={'100%'}>
           <Text
             fontSize={'16px'}
             fontWeight={'bold'}
             textColor={'neutral.900'}
           >
-            {t('Summary')}
+            {t('Download Invoice')}
           </Text>
+          <DownloadInvoice fundingTxId={fundingTxId} />
         </HStack>
       ): (
         <>
