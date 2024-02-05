@@ -5,14 +5,17 @@ import { useTranslation } from 'react-i18next'
 import {
   AnonymousAvatar,
   LinkableAvatar,
-} from '../../../../../../../components/ui'
-import { OrderFragment, UpdatableOrderStatus } from '../../../../../../../types'
-import { useCustomTheme } from '../../../../../../../utils'
-import { OrderAmounts, OrderItems } from '../../components'
+} from '../../../../../../../../components/ui'
+import {
+  OrderFragment,
+  UpdatableOrderStatus,
+} from '../../../../../../../../types'
+import { useCustomTheme } from '../../../../../../../../utils'
+import { OrderAmounts, OrderItems } from '../../../components'
 import {
   TableData,
   TableWithAccordion,
-} from '../../components/TableWithAccordion'
+} from '../../../components/TableWithAccordion'
 import { ShippingStatusSelect } from './ShippingStatusSelect'
 
 export enum RewardStatus {
@@ -43,13 +46,10 @@ const RewardStatusOptions: RewardStatusOption[] = [
 
 export const RewardTable = ({
   data,
-  handlleUpdateOrderStatus,
+  updateOrderStatus,
 }: {
   data: OrderFragment[]
-  handlleUpdateOrderStatus: (
-    orderId: string,
-    status: UpdatableOrderStatus,
-  ) => void
+  updateOrderStatus: (orderId: string, status: UpdatableOrderStatus) => void
 }) => {
   const { t } = useTranslation()
   const { colors } = useCustomTheme()
@@ -112,7 +112,7 @@ export const RewardTable = ({
                 )}
                 onChange={(option) => {
                   if (option) {
-                    handlleUpdateOrderStatus(
+                    updateOrderStatus(
                       order.id,
                       option.value as UpdatableOrderStatus,
                     )
@@ -210,7 +210,7 @@ export const RewardTable = ({
         },
       },
     ],
-    [t, getBackgroundColors, handlleUpdateOrderStatus],
+    [t, getBackgroundColors, updateOrderStatus],
   )
 
   return <TableWithAccordion<OrderFragment> items={data} schema={tableData} />

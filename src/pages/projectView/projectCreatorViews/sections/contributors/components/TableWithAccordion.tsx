@@ -18,7 +18,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { useMemo } from 'react'
+import { Fragment, useMemo } from 'react'
 
 import { Body2 } from '../../../../../../components/typography'
 import { halfStandardPadding, standardPadding } from '../../../../../../styles'
@@ -225,7 +225,7 @@ export function TableItemWithAccordion<TItem>({
                   {accordionSchema.length > 0 &&
                     accordionSchema.map((row) => {
                       const value = getValueFromTableItem({ row, item })
-                      return value
+                      return <Fragment key={row.header}>{value}</Fragment>
                     })}
                 </Stack>
               </AccordionPanel>
