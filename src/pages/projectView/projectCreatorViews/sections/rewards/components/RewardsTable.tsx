@@ -234,7 +234,7 @@ export const RewardsTable = () => {
                       {row.name}
                     </Text>
                     <Text fontSize="16px" color="neutral.900" lineHeight={1}>
-                    {`${t('Price')}: $${(row.cost / 100).toFixed(2)}`}
+                    {`${t('Price')}: ${project && project.rewardCurrency == RewardCurrency.Usdcent ? `$${row.cost / 100}` : `${row.cost.toLocaleString()} sats`}`}
                     </Text>
                   </Stack>
                   <Stack direction='row'>
