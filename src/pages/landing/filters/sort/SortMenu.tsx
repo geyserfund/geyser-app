@@ -25,7 +25,7 @@ export const SortMenu = () => {
       <MenuButton as={Button} size="xs" backgroundColor="neutral.100">
         <HStack overflow="hidden">
           <Body2 semiBold isTruncated>
-            {t(getCurrentSelection(filters.sort))}
+            {t(filters.search ? 'Most Relevant' : getCurrentSelection(filters.sort))}
           </Body2>
           <BsSliders fontSize="16px" />
         </HStack>

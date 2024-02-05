@@ -77,7 +77,7 @@ export const SortBody = ({ isMobile }: { isMobile?: boolean }) => {
             backgroundColor={getBackgroundColor(value)}
             onClick={() => onSortSelect(value)}
           >
-            {t(value)}
+            {t(filters.search ? 'Most Relevant' : value)}
           </MenuItem>
         )
       })}
