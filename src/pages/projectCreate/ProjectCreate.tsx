@@ -1,149 +1,178 @@
-import { VStack } from '@chakra-ui/react'
+import { Button, VStack } from '@chakra-ui/react'
+import { Dispatch, SetStateAction } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
+import { BiRocket } from 'react-icons/bi'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
 
+import { Modal } from '../../components/layouts'
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
+import { Body1 } from '../../components/typography'
+import Loader from '../../components/ui/Loader'
 import { getPath } from '../../constants'
 import { useAuthContext } from '../../context'
 import { useModal } from '../../hooks'
 import {
-  useCreateProjectMutation,
+  CreateWalletInput,
+  ProjectFragment,
+  useCreateWalletMutation,
   useProjectByNameOrIdQuery,
-  useUpdateProjectMutation,
+  useProjectPublishMutation,
 } from '../../types'
-import { useNotification } from '../../utils'
-import { ProjectExitConfirmModal } from './components'
-import { FormContinueButton } from './components/FormContinueButton'
+import { toInt, useNotification } from '../../utils'
+import { ProjectCreateCompleted } from './components/ProjectCreateCompleted'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
-import { ProjectForm } from './components/ProjectForm'
-import {
-  ProjectUnsavedModal,
-  useProjectUnsavedModal,
-} from './components/ProjectUnsavedModal'
-import { useProjectForm } from './hooks/useProjectForm'
-import { ProjectCreationVariables } from './types'
 
-export const ProjectCreate = () => {
+interface ProjectCreateCompletionProps {
+  project?: ProjectFragment
+  createWalletInput: CreateWalletInput | null
+  isSubmitEnabled: boolean
+  setReadyToLaunch: Dispatch<SetStateAction<boolean>>
+}
+
+export const ProjectCreateCompletion = ({
+  project,
+  createWalletInput,
+  isSubmitEnabled,
+  setReadyToLaunch,
+}: ProjectCreateCompletionProps) => {
   const { t } = useTranslation()
-  const params = useParams<{ projectId: string }>()
-  const navigate = useNavigate()
-
-  const { toast } = useNotification()
   const { queryCurrentUser } = useAuthContext()
 
-  const isEdit = Boolean(params.projectId)
+  const navigate = useNavigate()
 
-  const { loading, data } = useProjectByNameOrIdQuery({
-    skip: !params.projectId,
-    variables: { where: { id: Number(params.projectId) } },
+  const params = useParams<{ projectId: string }>()
+  const { toast } = useNotification()
+
+  const confirmModal = useModal()
+
+  const {
+    loading: isGetProjectLoading,
+    error: projectLoadingError,
+    data: responseData,
+  } = useProjectByNameOrIdQuery({
+    variables: { where: { id: toInt(params.projectId) } },
+    onError() {
+      toast({
+        title: 'Error fetching project',
+        status: 'error',
+      })
+    },
   })
 
-  const form = useProjectForm({
-    isEdit,
-    project: data?.projectGet,
-  })
-
-  const [createProject, { loading: createLoading }] = useCreateProjectMutation({
-    onCompleted({ createProject }) {
-      if (createProject && createProject.owners[0]) {
+  const [publishProject, { loading: isUpdateStatusLoading }] =
+    useProjectPublishMutation({
+      onCompleted() {
         queryCurrentUser()
+      },
+    })
 
-        navigate(getPath('launchProjectDetails', createProject.id))
-      }
-    },
-    onError(error) {
-      toast({
-        title: 'failed to create project',
-        description: `${error}`,
-        status: 'error',
-      })
-    },
-  })
+  const [createWallet, { loading: isCreateWalletLoading }] =
+    useCreateWalletMutation()
 
-  const [updateProject, { loading: updateLoading }] = useUpdateProjectMutation({
-    onCompleted() {
-      navigate(getPath('launchProjectDetails', params.projectId || ''))
-    },
-    onError(error) {
-      toast({
-        title: 'failed to update project',
-        description: `${error}`,
-        status: 'error',
-      })
-    },
-  })
-
-  const onLeave = () =>
-    navigate(
-      params.projectId
-        ? `${getPath('publicProjectLaunch')}/${params.projectId}`
-        : getPath('publicProjectLaunch'),
-    )
-
-  const unsavedModal = useProjectUnsavedModal({
-    hasUnsaved: form.formState.isDirty,
-  })
-
-  const exitModal = useModal()
-
-  const onBackClick = () => {
-    if (form.formState.isDirty) {
-      return unsavedModal.onOpen({
-        onLeave,
-      })
-    }
-
-    onLeave()
+  const handleBackClick = () => {
+    setReadyToLaunch(false)
   }
 
-  const onSubmit = async ({ email, ...values }: ProjectCreationVariables) => {
-    if (isEdit && data?.projectGet) {
-      updateProject({
-        variables: {
-          input: {
-            projectId: Number(data.projectGet?.id),
-            ...values,
-          },
-        },
+  const handleLaunch = async () => {
+    if (!createWalletInput) {
+      toast({
+        title: 'failed to create project wallet',
+        description: 'please provide valid wallet details',
+        status: 'error',
       })
-    } else {
-      createProject({
-        variables: {
-          input: {
-            ...values,
-            email,
-          },
-        },
+      return
+    }
+
+    await createWallet({ variables: { input: createWalletInput } })
+    await publishProject({
+      variables: {
+        input: { projectId: project?.id },
+      },
+    })
+  }
+
+  const onLaunchClick = async () => {
+    try {
+      await handleLaunch()
+      navigate(getPath('projectLaunch', project?.name))
+    } catch (error) {
+      toast({
+        title: 'Something went wrong',
+        description: `${error}`,
+        status: 'error',
       })
     }
   }
 
-  const nextProps = {
-    isLoading: loading || createLoading || updateLoading,
-    isDisabled: createLoading || updateLoading || !form.formState.isValid,
-    onClick: form.handleSubmit(onSubmit),
+  const onSaveDraftClick = async () => {
+    if (!project) {
+      return
+    }
+
+    navigate(getPath('projectLaunch', project.name, 'draft'))
+  }
+
+  const isLaunchLoading = isCreateWalletLoading || isUpdateStatusLoading
+
+  if (isGetProjectLoading) {
+    return <Loader />
+  }
+
+  if (projectLoadingError || !responseData || !responseData.projectGet) {
+    return <Navigate to={getPath('notFound')} />
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
+    <>
       <ProjectCreateLayout
-        continueButton={<FormContinueButton {...nextProps} flexGrow={1} />}
-        onBackClick={isEdit ? exitModal.onOpen : onBackClick}
+        onBackClick={handleBackClick}
         title={
           <TitleWithProgressBar
-            title={t('Project description')}
-            subtitle={t('Create a project')}
-            index={1}
+            hideSteps
+            title={t('Launch project')}
+            subtitle={t('You’re ready to launch!')}
+            index={4}
             length={4}
           />
         }
       >
-        <VStack width="100%" alignItems="flex-start" spacing={6}>
-          <ProjectForm form={form} isEdit={isEdit} />
-        </VStack>
+        <ProjectCreateCompleted>
+          <VStack w="100%">
+            {createWalletInput && (
+              <Button
+                variant="primary"
+                w="full"
+                leftIcon={<BiRocket />}
+                onClick={confirmModal.onOpen}
+                disabled={!isSubmitEnabled}
+                isLoading={isLaunchLoading}
+              >
+                {t('Launch Project')}
+              </Button>
+            )}
+            <Button variant="secondary" w="full" onClick={onSaveDraftClick}>
+              {t('Save As Draft')}
+            </Button>
+          </VStack>
+        </ProjectCreateCompleted>
       </ProjectCreateLayout>
-      <ProjectUnsavedModal {...unsavedModal} />
-      <ProjectExitConfirmModal {...exitModal} onConfirm={onBackClick} />
-    </form>
+      <Modal {...confirmModal} title={t('Confirm project launch')}>
+        <VStack spacing="20px">
+          <Body1 color="neutral.700">
+            {t(
+              'By launching your project the project will be visible to and searchable by the public. You will be able to disactivate your project but not to hide your project after launching it.',
+            )}
+          </Body1>
+          <Button
+            variant="primary"
+            w="full"
+            onClick={onLaunchClick}
+            isLoading={isLaunchLoading}
+          >
+            {t('Confirm launch')}
+          </Button>
+        </VStack>
+      </Modal>
+    </>
   )
 }
