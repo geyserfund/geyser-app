@@ -1,5 +1,4 @@
 import { SetStateAction } from 'jotai'
-import { Dispatch } from 'react'
 
 import { PaginationInput } from '../../types'
 import { validNumber } from '../../utils'
@@ -119,14 +118,16 @@ export const usePaginationAtomHook = <TEntity, TTransformed = TEntity>({
 
         handlePaginationChange(data)
 
-        const mappedData = handleMapData(data)
+        const mappedData: PaginatedListType<TEntity, TTransformed> =
+          handleMapData(data)
 
-        setData((prev) => {
-          return prev.concat(mappedData) as PaginatedListType<
-            TEntity,
-            TTransformed
-          >
-        })
+        setData(
+          (prev) =>
+            [...prev, ...mappedData] as PaginatedListType<
+              TEntity,
+              TTransformed
+            >,
+        )
 
         // If the aggregated length of the data is too small next pagination is automatically fetched
         if (
