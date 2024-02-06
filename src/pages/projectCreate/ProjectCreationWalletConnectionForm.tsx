@@ -74,10 +74,7 @@ export const ProjectCreationWalletConnectionForm = ({
         return <Loader size="md"></Loader>
       case LNAddressEvaluationState.FAILED:
         return (
-          <BsFillXCircleFill
-            fill={lightModeColors.secondary.yellow}
-            size="24px"
-          />
+          <BsFillXCircleFill fill={lightModeColors.secondary.red} size="24px" />
         )
       case LNAddressEvaluationState.SUCCEEDED:
         return (
@@ -132,16 +129,12 @@ export const ProjectCreationWalletConnectionForm = ({
                       lightningAddress.setValue(event.target.value)
                     }}
                     onBlur={lightningAddress.validate}
-                    isInvalid={
-                      Boolean(lightningAddress.error) ||
-                      Boolean(lightningAddress.warn)
-                    }
+                    isInvalid={Boolean(lightningAddress.error)}
                     focusBorderColor={'neutral.200'}
                     _valid={{
                       focusBorderColor: 'primary.500',
                     }}
                     error={lightningAddress.error}
-                    warn={lightningAddress.warn}
                     isDisabled={readOnly}
                   />
                   <InputRightElement>
