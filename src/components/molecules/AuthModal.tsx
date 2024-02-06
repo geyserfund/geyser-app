@@ -154,13 +154,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const refreshAuthToken = useRefreshAuthToken()
-
-  useEffect(() => {
-    if (isOpen) {
-      refreshAuthToken()
-    }
-  }, [isOpen, refreshAuthToken])
+  useRefreshAuthToken(isOpen)
 
   const handlePrivateRouteModalClose = () => {
     if (privateRoute) {
