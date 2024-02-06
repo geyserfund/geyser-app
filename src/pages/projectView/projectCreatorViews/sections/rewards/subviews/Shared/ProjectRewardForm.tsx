@@ -40,7 +40,6 @@ import {
   ProjectReward,
   ProjectRewardForCreateUpdateFragment,
   RewardCurrency,
-  RewardType,
   Satoshis,
   UpdateProjectRewardInput,
   USDCents,
@@ -58,6 +57,21 @@ type Props = {
   rewardSaving: boolean
   rewardData: ProjectReward
   createOrUpdate?: 'create' | 'update'
+}
+
+export enum ProjectRewardCategory {
+  Collectible = 'Collectible',
+  Book = 'Book',
+  Course = 'Course',
+  Ticket = 'Ticket',
+  Gift = 'Gift',
+  Game = 'Game',
+  Membership = 'Membership',
+  Merch = 'Merch',
+  NostrBadge = 'Nostr Badge',
+  Raffle = 'Raffle',
+  Sponsorship = 'Sponsorship',
+  Service = 'Service'
 }
 
 export const ProjectRewardForm = ({
@@ -95,10 +109,10 @@ export const ProjectRewardForm = ({
   )
   const [formError, setFormError] = useState<any>({})
 
-  if(!reward.rewardType) {
+  if(!reward.category) {
     setReward((current) => ({
       ...current,
-      rewardType: RewardType.Physical,
+      category: ProjectRewardCategory.Collectible,
     }))
   }
 
@@ -114,7 +128,7 @@ export const ProjectRewardForm = ({
       estimatedDeliveryDate: reward.estimatedDeliveryDate || undefined,
       isAddon: reward.isAddon,
       isHidden: reward.isHidden,
-      rewardType: reward.rewardType,
+      category: reward.category || undefined,
     }
   }
 
@@ -131,7 +145,7 @@ export const ProjectRewardForm = ({
         estimatedDeliveryDate: reward.estimatedDeliveryDate || undefined,
         isAddon: reward.isAddon,
         isHidden: reward.isHidden,
-        rewardType: reward.rewardType,
+        category: reward.category || undefined,
       }
     }
 
@@ -459,18 +473,28 @@ export const ProjectRewardForm = ({
           </FieldContainer>
         </Stack>
         <Stack direction={{ base: 'column', lg: 'row' }}>
-          <FieldContainer title={t('Reward Type')}>
+          <FieldContainer title={t('Category')}>
             <Select
-              value={reward.rewardType || RewardType.Physical}
+              value={reward.category || ProjectRewardCategory.Collectible}
               onChange={(event) => {
                 setReward((current) => ({
                   ...current,
-                  rewardType: event.target.value as RewardType,
+                  category: event.target.value as ProjectRewardCategory,
                 }))
               }}
             >
-              <option value="PHYSICAL">{t('Physical')}</option>
-              <option value="DIGITAL">{t('Digital')}</option>
+              <option value={ProjectRewardCategory.Collectible}>{ProjectRewardCategory.Collectible}</option>
+              <option value={ProjectRewardCategory.Book}>{ProjectRewardCategory.Book}</option>
+              <option value={ProjectRewardCategory.Course}>{ProjectRewardCategory.Course}</option>
+              <option value={ProjectRewardCategory.Ticket}>{ProjectRewardCategory.Ticket}</option>
+              <option value={ProjectRewardCategory.Gift}>{ProjectRewardCategory.Gift}</option>
+              <option value={ProjectRewardCategory.Game}>{ProjectRewardCategory.Game}</option>
+              <option value={ProjectRewardCategory.Membership}>{ProjectRewardCategory.Membership}</option>
+              <option value={ProjectRewardCategory.Merch}>{ProjectRewardCategory.Merch}</option>
+              <option value={ProjectRewardCategory.NostrBadge}>{ProjectRewardCategory.NostrBadge}</option>
+              <option value={ProjectRewardCategory.Raffle}>{ProjectRewardCategory.Raffle}</option>
+              <option value={ProjectRewardCategory.Sponsorship}>{ProjectRewardCategory.Sponsorship}</option>
+              <option value={ProjectRewardCategory.Service}>{ProjectRewardCategory.Service}</option>
             </Select>
           </FieldContainer>
         </Stack>
