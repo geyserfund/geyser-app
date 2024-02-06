@@ -1,21 +1,12 @@
-import {
-  HStack,
-  IconButton,
-  Link,
-  Stack,
-  Text,
-  useDisclosure,
-  VStack,
-  Wrap,
-} from '@chakra-ui/react'
-import { Link as ReactLink } from "react-router-dom";
+import { HStack, IconButton, Link, Stack, Text, useDisclosure, VStack, Wrap } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { FaGithub, FaPodcast, FaTelegramPlane } from 'react-icons/fa'
 import { RiTwitterXLine } from 'react-icons/ri'
+import { Link as ReactLink } from 'react-router-dom'
 
 import {
-  getPath,
   AnalyticsUrl,
+  getPath,
   GeyserGithubUrl,
   GeyserHomepageUrl,
   GeyserPodcastUrl,
@@ -124,11 +115,11 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
             <Text>₿ = ❤</Text>
           </Link>
 
-          <ReactLink to={getPath('legalPrivacy')}  style={{textDecoration: 'underline'}}>
+          <ReactLink to={getPath('legalPrivacy')} style={{ textDecoration: 'underline' }}>
             <Text>{t('Privacy')}</Text>
           </ReactLink>
 
-          <ReactLink to={getPath('legalTerms')} style={{textDecoration: 'underline'}}>
+          <ReactLink to={getPath('legalTerms')} style={{ textDecoration: 'underline' }}>
             <Text>T&amp;C</Text>
           </ReactLink>
 
