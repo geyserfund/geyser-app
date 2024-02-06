@@ -1,7 +1,4 @@
-import {
-  EntryForProjectFragment,
-  ProjectStatus,
-} from '../types/generated/graphql'
+import { EntryForProjectFragment, ProjectStatus } from '../types/generated/graphql'
 import { IFundingTx } from './funding'
 import { IFunder, IParticipant, ISponsor } from './participant'
 

@@ -69,10 +69,7 @@ export const BtcProvider = ({ children }: { children: React.ReactNode }) => {
           setBtcRate(satoshirate)
         }
 
-        if (
-          (localValues.isOld && retries < maxRetires) ||
-          !localValues.usdRate
-        ) {
+        if ((localValues.isOld && retries < maxRetires) || !localValues.usdRate) {
           setTimeout(() => {
             retries += 1
             getBitcoinRates()
@@ -88,9 +85,7 @@ export const BtcProvider = ({ children }: { children: React.ReactNode }) => {
     getBitcoinRates()
   }, [])
 
-  return (
-    <BtcContext.Provider value={{ btcRate }}>{children}</BtcContext.Provider>
-  )
+  return <BtcContext.Provider value={{ btcRate }}>{children}</BtcContext.Provider>
 }
 
 export const useBtcContext = () => useContext(BtcContext)

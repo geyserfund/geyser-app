@@ -1,20 +1,9 @@
 import { captureException } from '@sentry/react'
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { getPath, PathName } from '../constants'
-import {
-  useFundingFlow,
-  UseFundingFlowReturn,
-  useFundingFormState,
-  UseFundingFormStateReturn,
-} from '../hooks'
+import { useFundingFlow, UseFundingFlowReturn, useFundingFormState, UseFundingFormStateReturn } from '../hooks'
 import { useProjectState } from '../hooks/graphqlState'
 import { useModal } from '../hooks/useModal'
 import { MilestoneAdditionModal } from '../pages/projectView/projectMainBody/components'
@@ -84,33 +73,19 @@ export const useProjectContext = ({
   return context
 }
 
-export const ProjectProvider = ({
-  projectId,
-  children,
-}: { children: React.ReactNode } & ProjectState) => {
+export const ProjectProvider = ({ projectId, children }: { children: React.ReactNode } & ProjectState) => {
   const navigate = useNavigate()
   const location = useLocation()
 
   const { setNavData } = useNavContext()
 
-  const [mobileView, setMobileView] = useState<MobileViews>(
-    MobileViews.description,
-  )
+  const [mobileView, setMobileView] = useState<MobileViews>(MobileViews.description)
   const [isProjectOwner, setIsProjectOwner] = useState<boolean | undefined>()
   const { user } = useAuthContext()
 
   const creatorModal = useModal()
   const milestonesModal = useModal()
-  const {
-    error,
-    project,
-    loading,
-    updateProject,
-    saveProject,
-    isDirty,
-    saving,
-    refetch,
-  } = useProjectState(projectId, {
+  const { error, project, loading, updateProject, saveProject, isDirty, saving, refetch } = useProjectState(projectId, {
     fetchPolicy: 'network-only',
     onError() {
       captureException(error, {
@@ -153,8 +128,7 @@ export const ProjectProvider = ({
 
   const fundForm = useFundingFormState({
     rewards: project ? project.rewards : undefined,
-    rewardCurrency:
-      project && project.rewardCurrency ? project.rewardCurrency : undefined,
+    rewardCurrency: project && project.rewardCurrency ? project.rewardCurrency : undefined,
   })
 
   const updateProjectOwner = useCallback(
@@ -208,11 +182,7 @@ export const ProjectProvider = ({
       {project && isProjectOwner && (
         <>
           <ProjectCreatorModal {...creatorModal} />
-          <MilestoneAdditionModal
-            {...milestonesModal}
-            onSubmit={onMilestonesSubmit}
-            project={project}
-          />
+          <MilestoneAdditionModal {...milestonesModal} onSubmit={onMilestonesSubmit} project={project} />
         </>
       )}
     </ProjectContext.Provider>

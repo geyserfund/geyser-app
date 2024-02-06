@@ -1,17 +1,9 @@
 import { useLazyQuery, useMutation } from '@apollo/client'
 import { useCallback, useState } from 'react'
 
-import {
-  MUTATION_CREATE_WALLET,
-  MUTATION_DELETE_WALLET,
-  MUTATION_UPDATE_WALLET,
-} from '../graphql/mutations'
+import { MUTATION_CREATE_WALLET, MUTATION_DELETE_WALLET, MUTATION_UPDATE_WALLET } from '../graphql/mutations'
 import { QUERY_LIGHTNING_ADDRESS_VERIFY } from '../graphql/queries/wallet'
-import {
-  LightningAddressVerifyResponse,
-  User,
-  WalletResourceType,
-} from '../types'
+import { LightningAddressVerifyResponse, User, WalletResourceType } from '../types'
 import { useNotification, validateEmail } from '../utils'
 import { getUserLightningAddress } from '../utils/validations/wallet'
 
@@ -40,8 +32,7 @@ export const useUserLightningAddress = (user?: User) => {
   const [evaluationError, setEvaluationError] = useState<string | null>(null)
   const [mutationError, setMutationError] = useState<string | null>(null)
 
-  const [evaluationState, setEvaluationState] =
-    useState<LNAddressEvaluationState>(LNAddressEvaluationState.IDLE)
+  const [evaluationState, setEvaluationState] = useState<LNAddressEvaluationState>(LNAddressEvaluationState.IDLE)
 
   const [evaluateLightningAddress] = useLazyQuery<
     LightningAddressVerificationResponseData,
@@ -53,9 +44,7 @@ export const useUserLightningAddress = (user?: User) => {
     onCompleted({ lightningAddressVerify: { valid } }) {
       if (Boolean(valid) === false) {
         setEvaluationState(LNAddressEvaluationState.FAILED)
-        setValidationError(
-          'We could not validate this as a working Lightning Address.',
-        )
+        setValidationError('We could not validate this as a working Lightning Address.')
       } else {
         setEvaluationState(LNAddressEvaluationState.SUCCEEDED)
       }
@@ -66,29 +55,20 @@ export const useUserLightningAddress = (user?: User) => {
     },
   })
 
-  const [createWallet, { loading: createLoading }] = useMutation(
-    MUTATION_CREATE_WALLET,
-    {
-      onError: unexpected,
-    },
-  )
+  const [createWallet, { loading: createLoading }] = useMutation(MUTATION_CREATE_WALLET, {
+    onError: unexpected,
+  })
 
-  const [updateWallet, { loading: updateLoading }] = useMutation(
-    MUTATION_UPDATE_WALLET,
-    {
-      onError: unexpected,
-    },
-  )
+  const [updateWallet, { loading: updateLoading }] = useMutation(MUTATION_UPDATE_WALLET, {
+    onError: unexpected,
+  })
 
-  const [deleteWallet, { loading: deleteLoading }] = useMutation(
-    MUTATION_DELETE_WALLET,
-    {
-      onError() {
-        unexpected()
-        setLightningAddress(getUserLightningAddress(user))
-      },
+  const [deleteWallet, { loading: deleteLoading }] = useMutation(MUTATION_DELETE_WALLET, {
+    onError() {
+      unexpected()
+      setLightningAddress(getUserLightningAddress(user))
     },
-  )
+  })
 
   const validate = useCallback(() => {
     setEvaluationState(LNAddressEvaluationState.IDLE)
@@ -99,16 +79,12 @@ export const useUserLightningAddress = (user?: User) => {
     }
 
     if (lightningAddress.endsWith('@geyser.fund')) {
-      setValidationError(
-        `Custom Lightning Addresses can't end with "@geyser.fund".`,
-      )
+      setValidationError(`Custom Lightning Addresses can't end with "@geyser.fund".`)
       return false
     }
 
     if (validateEmail(lightningAddress) === false) {
-      setValidationError(
-        `Please use a valid email-formatted address for your Lightning Address.`,
-      )
+      setValidationError(`Please use a valid email-formatted address for your Lightning Address.`)
       return false
     }
 
@@ -120,19 +96,13 @@ export const useUserLightningAddress = (user?: User) => {
     setEvaluationState(LNAddressEvaluationState.LOADING)
     const { data } = await evaluateLightningAddress()
 
-    if (
-      data &&
-      data.lightningAddressVerify &&
-      Boolean(data.lightningAddressVerify.valid)
-    ) {
+    if (data && data.lightningAddressVerify && Boolean(data.lightningAddressVerify.valid)) {
       setEvaluationState(LNAddressEvaluationState.SUCCEEDED)
       return true
     }
 
     setEvaluationState(LNAddressEvaluationState.FAILED)
-    setEvaluationError(
-      'We could not validate this as a working Lightning Address.',
-    )
+    setEvaluationError('We could not validate this as a working Lightning Address.')
     return false
   }, [evaluateLightningAddress])
 
@@ -140,10 +110,7 @@ export const useUserLightningAddress = (user?: User) => {
     if (!user) return
 
     const alreadyHasAddress =
-      user?.wallet &&
-      user.wallet.id &&
-      user.wallet.connectionDetails.__typename ===
-        'LightningAddressConnectionDetails'
+      user?.wallet && user.wallet.id && user.wallet.connectionDetails.__typename === 'LightningAddressConnectionDetails'
 
     if (lightningAddress.length === 0) {
       // delete wallet if it exists
@@ -161,20 +128,14 @@ export const useUserLightningAddress = (user?: User) => {
       return
     }
 
-    if (
-      !validationError &&
-      lightningAddress !== getUserLightningAddress(user) &&
-      (await evaluate())
-    ) {
+    if (!validationError && lightningAddress !== getUserLightningAddress(user) && (await evaluate())) {
       if (alreadyHasAddress) {
         return updateWallet({
           variables: {
             input: getUpdateWalletInput(lightningAddress, user.wallet?.id),
           },
           onError() {
-            setMutationError(
-              'We could not save this as your Lightning Address, please try again later',
-            )
+            setMutationError('We could not save this as your Lightning Address, please try again later')
           },
         })
       }
@@ -182,21 +143,11 @@ export const useUserLightningAddress = (user?: User) => {
       return createWallet({
         variables: { input: getCreateWalletInput(lightningAddress, user.id) },
         onError() {
-          setMutationError(
-            'We could not save this as your Lightning Address, please try again later',
-          )
+          setMutationError('We could not save this as your Lightning Address, please try again later')
         },
       })
     }
-  }, [
-    validationError,
-    lightningAddress,
-    user,
-    evaluate,
-    updateWallet,
-    createWallet,
-    deleteWallet,
-  ])
+  }, [validationError, lightningAddress, user, evaluate, updateWallet, createWallet, deleteWallet])
 
   return {
     evaluationState,

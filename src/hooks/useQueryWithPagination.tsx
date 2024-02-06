@@ -29,9 +29,7 @@ export const useQueryWithPagination = <TEntity, TTransformed = TEntity>({
     throw Error('Invalid query')
   }
 
-  const { error, loading, fetchMore, refetch } = useQuery<
-    QueryResponseData<TEntity>
-  >(query, {
+  const { error, loading, fetchMore, refetch } = useQuery<QueryResponseData<TEntity>>(query, {
     fetchPolicy: 'network-only',
     variables: {
       input: {
@@ -44,10 +42,7 @@ export const useQueryWithPagination = <TEntity, TTransformed = TEntity>({
     },
     ...options,
     onCompleted(data) {
-      const resultItems = getNestedValue<QueryResponseData<TEntity>>(
-        data,
-        queryName,
-      )
+      const resultItems = getNestedValue<QueryResponseData<TEntity>>(data, queryName)
       handleDataUpdate(resultItems)
       if (skipPagination) {
         setNoMoreItems(true)
@@ -59,14 +54,10 @@ export const useQueryWithPagination = <TEntity, TTransformed = TEntity>({
     },
   })
 
-  const {
-    data,
-    isLoadingMore,
-    fetchNext,
-    noMoreItems,
-    handleDataUpdate,
-    setNoMoreItems,
-  } = usePaginationHook<TEntity, TTransformed>({
+  const { data, isLoadingMore, fetchNext, noMoreItems, handleDataUpdate, setNoMoreItems } = usePaginationHook<
+    TEntity,
+    TTransformed
+  >({
     fetchMore,
     resultMap,
     queryName,
@@ -86,10 +77,7 @@ export const useQueryWithPagination = <TEntity, TTransformed = TEntity>({
   } as PaginationHookReturn<(typeof data)[number]>
 }
 
-export function getNestedValue<T extends Record<string, any>>(
-  obj: T,
-  name: string | string[],
-) {
+export function getNestedValue<T extends Record<string, any>>(obj: T, name: string | string[]) {
   if (typeof name === 'string') {
     return obj[name]
   }

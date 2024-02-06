@@ -1,23 +1,68 @@
-import { ReactElement } from "react";
+import { useEffect, useState } from "react"
+import { FundingTx, Project } from "../../../../../../types"
+import { QUERY_FUNDING_TX_FOR_DOWNLOAD_INVOICE, QUERY_PROJECT_BY_NAME_OR_ID } from "../../../../../../graphql"
+import { useLazyQuery, useQuery } from "@apollo/client"
+import { toInt } from "../../../../../../utils"
+import { PDFDownloadLink } from "@react-pdf/renderer"
+import { DownloadInvoicePDF } from "./DownloadInvoicePDF"
+import { DownloadIcon } from "@chakra-ui/icons"
 
 export const DownloadInvoice = ({
-    orderId,
-    content
-  }: {
-    orderId?: Number | null
-    content?: ReactElement
-  }) => {
+        fundingTxId,
+        showFee
+    }: {
+        fundingTxId: BigInt,
+        showFee?: false
+    }) => {
 
-  if (!orderId) {
-    return null
-  }
+    const [invoiceData, setInvoiceData] = useState<FundingTx | null>(null)
+    const [projectData, setProjectData] = useState<Project | null>(null)
 
-  return (
-    <div onClick={() => {
-        // retrive the order Id
-        alert('retrive the orderId');
-    }}>
-        {content}
-    </div>
-  )
+    const transactionQuery = useQuery<{ fundingTx: FundingTx }>(QUERY_FUNDING_TX_FOR_DOWNLOAD_INVOICE, {
+        variables: { fundingTxId: toInt(fundingTxId) },
+        onCompleted(data) {
+            setInvoiceData(data.fundingTx);
+        },
+    })
+
+    const [getProjectDetails] = useLazyQuery(QUERY_PROJECT_BY_NAME_OR_ID, {
+    fetchPolicy: 'network-only'
+    })
+
+    useEffect(() => {
+        invoiceData && getProjectDetails({
+            variables: { where: { id: toInt(invoiceData.projectId) } },
+        }).then((data) => {
+            if(data && data.data && data.data.projectGet) {
+            setProjectData(data.data.projectGet);
+            }
+        })
+    }, [invoiceData])
+
+    if(transactionQuery.loading || !projectData || !invoiceData) {
+        return <></>;
+    }
+
+    return (
+        <PDFDownloadLink
+            document={
+                <DownloadInvoicePDF
+                    invoiceData={invoiceData}
+                    projectData={projectData}
+                    showFee={showFee}
+                />
+            }
+            style={{
+                padding: '10px',
+                backgroundColor: '#FFF',
+                borderRadius: '8px',
+                width: '36px',
+                display: 'flex',
+                justifyContent: 'center',
+                color: 'black',
+            }}
+        >
+            <DownloadIcon />
+        </PDFDownloadLink>
+    )
 }
