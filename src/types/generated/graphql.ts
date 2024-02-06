@@ -1504,6 +1504,8 @@ export type ProjectReward = {
   stock?: Maybe<Scalars['Int']>
   /** The last date when the creator has updated the reward */
   updatedAt: Scalars['Date']
+  /** UUID for the reward, it stays consistent throughout the project reward updates (the ID does not) */
+  uuid: Scalars['String']
 }
 
 export type ProjectRewardCurrencyUpdate = {
@@ -4174,6 +4176,7 @@ export type ProjectRewardResolvers<
   sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   stock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -5256,6 +5259,36 @@ export type FundingTxForOverviewPageFragment = {
   }
 }
 
+export type FundingTxForDownloadInvoiceFragment = {
+  __typename?: 'FundingTx'
+  id: any
+  donationAmount: number
+  amountPaid: number
+  uuid?: string | null
+  projectId: any
+  paidAt?: any | null
+  status: FundingStatus
+  funder: {
+    __typename?: 'Funder'
+    user?: { __typename?: 'User'; username: string } | null
+  }
+  order?: {
+    __typename?: 'Order'
+    totalInSats: number
+    items: Array<{
+      __typename?: 'OrderItem'
+      quantity: number
+      unitPriceInSats: number
+      item: { __typename?: 'ProjectReward'; name: any }
+    }>
+  } | null
+  bitcoinQuote?: {
+    __typename?: 'BitcoinQuote'
+    quote: number
+    quoteCurrency: QuoteCurrency
+  } | null
+}
+
 export type OrderItemFragment = {
   __typename?: 'OrderItem'
   quantity: number
@@ -6013,17 +6046,9 @@ export type ProjectRewardCurrencyUpdateMutationVariables = Exact<{
 
 export type ProjectRewardCurrencyUpdateMutation = {
   __typename?: 'Mutation'
-  projectRewardCurrencyUpdate: Array<{
-    __typename?: 'ProjectReward'
-    project: {
-      __typename?: 'Project'
-      rewards: Array<{
-        __typename?: 'ProjectReward'
-        cost: number
-        rewardType?: RewardType | null
-      }>
-    }
-  }>
+  projectRewardCurrencyUpdate: Array<
+    { __typename?: 'ProjectReward' } & ProjectRewardForCreateUpdateFragment
+  >
 }
 
 export type ProjectRewardCreateMutationVariables = Exact<{
@@ -6500,6 +6525,15 @@ export type FundingTxForOverviewPageQuery = {
       { __typename?: 'FundingTx' } & FundingTxForOverviewPageFragment
     >
   } | null
+}
+
+export type FundingTxForDownloadInvoiceQueryVariables = Exact<{
+  fundingTxId: Scalars['BigInt']
+}>
+
+export type FundingTxForDownloadInvoiceQuery = {
+  __typename?: 'Query'
+  fundingTx: { __typename?: 'FundingTx' } & FundingTxForDownloadInvoiceFragment
 }
 
 export type GrantsQueryVariables = Exact<{ [key: string]: never }>
@@ -7236,6 +7270,36 @@ export const FundingTxForOverviewPageFragmentDoc = gql`
     id
     amount
     comment
+  }
+`
+export const FundingTxForDownloadInvoiceFragmentDoc = gql`
+  fragment FundingTxForDownloadInvoice on FundingTx {
+    id
+    donationAmount
+    amountPaid
+    uuid
+    funder {
+      user {
+        username
+      }
+    }
+    projectId
+    paidAt
+    order {
+      items {
+        item {
+          name
+        }
+        quantity
+        unitPriceInSats
+      }
+      totalInSats
+    }
+    status
+    bitcoinQuote {
+      quote
+      quoteCurrency
+    }
   }
 `
 export const OrderItemFragmentDoc = gql`
@@ -8794,14 +8858,10 @@ export type UpdateProjectMutationOptions = Apollo.BaseMutationOptions<
 export const ProjectRewardCurrencyUpdateDocument = gql`
   mutation ProjectRewardCurrencyUpdate($input: ProjectRewardCurrencyUpdate!) {
     projectRewardCurrencyUpdate(input: $input) {
-      project {
-        rewards {
-          cost
-          rewardType
-        }
-      }
+      ...ProjectRewardForCreateUpdate
     }
   }
+  ${ProjectRewardForCreateUpdateFragmentDoc}
 `
 export type ProjectRewardCurrencyUpdateMutationFn = Apollo.MutationFunction<
   ProjectRewardCurrencyUpdateMutation,
@@ -10565,6 +10625,65 @@ export type FundingTxForOverviewPageLazyQueryHookResult = ReturnType<
 export type FundingTxForOverviewPageQueryResult = Apollo.QueryResult<
   FundingTxForOverviewPageQuery,
   FundingTxForOverviewPageQueryVariables
+>
+export const FundingTxForDownloadInvoiceDocument = gql`
+  query FundingTxForDownloadInvoice($fundingTxId: BigInt!) {
+    fundingTx(id: $fundingTxId) {
+      ...FundingTxForDownloadInvoice
+    }
+  }
+  ${FundingTxForDownloadInvoiceFragmentDoc}
+`
+
+/**
+ * __useFundingTxForDownloadInvoiceQuery__
+ *
+ * To run a query within a React component, call `useFundingTxForDownloadInvoiceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFundingTxForDownloadInvoiceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFundingTxForDownloadInvoiceQuery({
+ *   variables: {
+ *      fundingTxId: // value for 'fundingTxId'
+ *   },
+ * });
+ */
+export function useFundingTxForDownloadInvoiceQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    FundingTxForDownloadInvoiceQuery,
+    FundingTxForDownloadInvoiceQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    FundingTxForDownloadInvoiceQuery,
+    FundingTxForDownloadInvoiceQueryVariables
+  >(FundingTxForDownloadInvoiceDocument, options)
+}
+export function useFundingTxForDownloadInvoiceLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FundingTxForDownloadInvoiceQuery,
+    FundingTxForDownloadInvoiceQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    FundingTxForDownloadInvoiceQuery,
+    FundingTxForDownloadInvoiceQueryVariables
+  >(FundingTxForDownloadInvoiceDocument, options)
+}
+export type FundingTxForDownloadInvoiceQueryHookResult = ReturnType<
+  typeof useFundingTxForDownloadInvoiceQuery
+>
+export type FundingTxForDownloadInvoiceLazyQueryHookResult = ReturnType<
+  typeof useFundingTxForDownloadInvoiceLazyQuery
+>
+export type FundingTxForDownloadInvoiceQueryResult = Apollo.QueryResult<
+  FundingTxForDownloadInvoiceQuery,
+  FundingTxForDownloadInvoiceQueryVariables
 >
 export const GrantsDocument = gql`
   query Grants {
