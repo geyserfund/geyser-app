@@ -1,8 +1,4 @@
-import {
-  Project,
-  ProjectReward,
-  RewardCurrency,
-} from '../types/generated/graphql'
+import { Project, ProjectReward, RewardCurrency } from '../types/generated/graphql'
 
 export const defaultProjectReward: ProjectReward = {
   uuid: '',
