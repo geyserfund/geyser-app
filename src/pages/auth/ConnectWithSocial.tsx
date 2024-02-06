@@ -1,11 +1,11 @@
 import { Box, Button, IconButton, Link, Tooltip } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
-import { useMeQuery } from '../../types'
+import { useMeLazyQuery, useMeQuery } from '../../types'
 import { useNotification } from '../../utils'
 import { SocialConfig } from './SocialConfig'
 import { ConnectWithButtonProps } from './type'
@@ -14,7 +14,12 @@ import { useAuthToken, useCanLogin } from './useAuthToken'
 export const TWITTER_AUTH_ATTEMPT_KEY = 'twitterAuthAttempt'
 export const TWITTER_AUTH_ATTEMPT_MESSAGE_TIME_MILLIS = 1000 * 60 * 15 // 15 minutes
 
-export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }: ConnectWithButtonProps) => {
+export const ConnectWithSocial = ({
+  onClose,
+  isIconOnly,
+  accountType,
+  ...rest
+}: ConnectWithButtonProps) => {
   const { t } = useTranslation()
   const { login } = useAuthContext()
   const { toast } = useNotification()
@@ -26,11 +31,12 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
 
   const { hasSocialAccount, icon, label } = SocialConfig[accountType]
 
-  const { stopPolling } = useMeQuery({
+  const [getMe, { stopPolling, startPolling }] = useMeLazyQuery({
+    fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
     onCompleted(data) {
       if (data && data.me) {
         const hasAccount = hasSocialAccount(data.me)
-
         if (hasAccount) {
           if (onClose !== undefined) {
             onClose()
@@ -41,11 +47,20 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
         }
       }
     },
-    fetchPolicy: 'network-only',
-    pollInterval: 1000,
   })
 
   const [pollAuthStatus, setPollAuthStatus] = useState(false)
+
+  const handleToastError = useCallback(
+    (reason?: string) => {
+      toast({
+        title: 'Something went wrong.',
+        description: `${t('The authentication request failed.')} ${reason}.`,
+        status: 'error',
+      })
+    },
+    [toast, t],
+  )
 
   useEffect(() => {
     if (pollAuthStatus) {
@@ -79,22 +94,19 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
 
       return () => clearInterval(id)
     }
-  }, [pollAuthStatus])
+  }, [pollAuthStatus, stopPolling, authServiceEndpoint, handleToastError])
 
   const handleClick = async () => {
     if (canLogin) {
       setPollAuthStatus(true)
+      getMe()
+      startPolling(1000)
     }
 
-    localStorage.setItem(TWITTER_AUTH_ATTEMPT_KEY, DateTime.now().toMillis().toString())
-  }
-
-  const handleToastError = (reason?: string) => {
-    toast({
-      title: 'Something went wrong.',
-      description: `${t('The authentication request failed.')} ${reason}.`,
-      status: 'error',
-    })
+    localStorage.setItem(
+      TWITTER_AUTH_ATTEMPT_KEY,
+      DateTime.now().toMillis().toString(),
+    )
   }
 
   const ButtonComponent = isIconOnly ? IconButton : Button
