@@ -28,13 +28,13 @@ export const PendingPaymentsList = () => {
 
   const [loading, setLoading] = useState(true)
 
+  const [orderBy, setOrderBy] = useState<GetFundingTxsOrderByInput>({
+    createdAt: OrderByOptions.Desc,
+  })
+
   const where: GetFundingTxsWhereInput = {
     projectId: project?.id,
     status: FundingTxsWhereFundingStatus.PartiallyPaid,
-  }
-
-  const orderBy: GetFundingTxsOrderByInput = {
-    createdAt: OrderByOptions.Desc,
   }
 
   const { fetchMore } = useFundingTxsOrderGetQuery({
@@ -50,8 +50,16 @@ export const PendingPaymentsList = () => {
       },
     },
     onCompleted(data) {
-      setLoading(false)
       handleDataUpdate(data.fundingTxsGet?.fundingTxs || [])
+      setLoading(false)
+    },
+    onError(error) {
+      toast({
+        title: t('Error fetching payments'),
+        description: `${error.message}`,
+        status: 'error',
+      })
+      setLoading(false)
     },
   })
 
@@ -105,6 +113,8 @@ export const PendingPaymentsList = () => {
         <PendingPaymentsTable
           data={ordersData}
           handleUpdate={handleUpdateFundingStatus}
+          setOrderBy={setOrderBy}
+          orderBy={orderBy}
         />
       )}
       {!noMoreItems.current && (

@@ -28,6 +28,8 @@ export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
     rewardsCount,
     updateOrderStatus,
     fetchNext,
+    orderBy,
+    setOrderBy,
   } = useRewardByStatus({
     status,
     projectId: project?.id,
@@ -65,7 +67,13 @@ export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
         <H3 color="neutral.600">{rewardsCount ? `(${rewardsCount})` : ''}</H3>
       </HStack>
       {rewards.length > 0 ? (
-        <RewardTable data={rewards} updateOrderStatus={updateOrderStatus} />
+        <RewardTable
+          status={status}
+          data={rewards}
+          updateOrderStatus={updateOrderStatus}
+          orderBy={orderBy}
+          setOrderBy={setOrderBy}
+        />
       ) : (
         <HStack w="full" px={standardPadding}>
           <Body1>{t("This group doesn't have any items yet.")}</Body1>

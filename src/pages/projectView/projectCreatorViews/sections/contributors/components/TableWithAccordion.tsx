@@ -19,13 +19,21 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { Fragment, useMemo } from 'react'
+import { BsCaretDownFill } from 'react-icons/bs'
 
 import { Body2 } from '../../../../../../components/typography'
 import { halfStandardPadding, standardPadding } from '../../../../../../styles'
+import { OrderByDirection, OrderByOptions } from '../../../../../../types'
 import { useMobileMode } from '../../../../../../utils'
+
+export type TableSortOnColumn = {
+  order: OrderByOptions
+  updateOrder?: () => void
+}
 
 export interface TableData<TItem> {
   header: string
+  sort?: { order: OrderByOptions | OrderByDirection; updateOrder: () => void }
   key: string | number
   render?: (val: TItem) => React.ReactNode
   value?: (val: TItem) => string | number
@@ -71,6 +79,24 @@ export function TableWithAccordion<TItem>({
                   _last={{ pr: standardPadding }}
                 >
                   {item.header}
+                  {item.sort && (
+                    <IconButton
+                      variant="ghost"
+                      aria-label="sort-icon"
+                      ml={'10px'}
+                      _hover={{}}
+                      icon={
+                        <BsCaretDownFill
+                          transform={
+                            item.sort.order === OrderByOptions.Asc
+                              ? 'rotate(180)'
+                              : undefined
+                          }
+                        />
+                      }
+                      onClick={item.sort.updateOrder}
+                    />
+                  )}
                 </Th>
               )
             })}

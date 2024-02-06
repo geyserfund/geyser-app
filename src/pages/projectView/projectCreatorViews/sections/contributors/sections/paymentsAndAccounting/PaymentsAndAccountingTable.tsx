@@ -1,12 +1,16 @@
 import { DateTime } from 'luxon'
-import { useMemo } from 'react'
+import { Dispatch, SetStateAction, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
   AnonymousAvatar,
   LinkableAvatar,
 } from '../../../../../../../components/ui'
-import { FundingTxOrderFragment } from '../../../../../../../types'
+import {
+  FundingTxOrderFragment,
+  GetFundingTxsOrderByInput,
+  OrderByOptions,
+} from '../../../../../../../types'
 import { OrderAmounts, OrderItems } from '../../components'
 import {
   TableData,
@@ -15,8 +19,12 @@ import {
 
 export const PaymentsAndAccountingTable = ({
   data,
+  setOrderBy,
+  orderBy,
 }: {
   data: FundingTxOrderFragment[]
+  setOrderBy: Dispatch<SetStateAction<GetFundingTxsOrderByInput>>
+  orderBy: GetFundingTxsOrderByInput
 }) => {
   const { t } = useTranslation()
 
@@ -56,6 +64,18 @@ export const PaymentsAndAccountingTable = ({
       {
         header: t('Date'),
         key: 'paidAt',
+        sort: {
+          order: orderBy.createdAt,
+          updateOrder() {
+            setOrderBy((prev) => {
+              if (prev.createdAt === OrderByOptions.Asc) {
+                return { createdAt: OrderByOptions.Desc }
+              }
+
+              return { createdAt: OrderByOptions.Asc }
+            })
+          },
+        },
         value(val: FundingTxOrderFragment) {
           return DateTime.fromMillis(val.paidAt).toFormat('LLL dd, yyyy')
         },
@@ -120,7 +140,7 @@ export const PaymentsAndAccountingTable = ({
         },
       },
     ],
-    [t],
+    [t, setOrderBy, orderBy.createdAt],
   )
 
   return (

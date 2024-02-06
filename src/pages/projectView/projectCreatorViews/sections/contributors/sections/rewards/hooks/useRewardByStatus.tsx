@@ -1,5 +1,6 @@
 import { MutationHookOptions, QueryHookOptions } from '@apollo/client'
 import { useAtom, useSetAtom } from 'jotai'
+import { useEffect, useState } from 'react'
 
 import { usePaginationAtomHook } from '../../../../../../../../hooks'
 import {
@@ -8,6 +9,7 @@ import {
   OrderFragment,
   OrdersGetInput,
   OrdersGetOrderByField,
+  OrdersGetOrderByInput,
   OrdersGetQuery,
   OrdersGetWhereInput,
   OrderStatusUpdateInput,
@@ -54,18 +56,36 @@ export const useRewardByStatus = ({
 
   const updateStatus = useSetAtom(rewardStatusUpdateAtom)
 
-  const where: OrdersGetWhereInput = {
-    status,
-    projectId,
-  }
-  const orderBy = [
+  const [isLoading, setIsLoading] = useState(true)
+
+  const [orderBy, setOrderBy] = useState<OrdersGetOrderByInput[]>([
     {
       direction: OrderByDirection.Desc,
       field: OrdersGetOrderByField.ConfirmedAt,
     },
-  ]
+  ])
 
-  const { fetchMore, loading } = useOrdersGetQuery({
+  useEffect(() => {
+    const orderBy = {
+      direction: OrderByDirection.Desc,
+      field: OrdersGetOrderByField.ConfirmedAt,
+    }
+
+    if (status === RewardStatus.shipped) {
+      orderBy.field = OrdersGetOrderByField.ShippedAt
+    } else if (status === RewardStatus.delivered) {
+      orderBy.field = OrdersGetOrderByField.DeliveredAt
+    }
+
+    setOrderBy([orderBy])
+  }, [status])
+
+  const where: OrdersGetWhereInput = {
+    status,
+    projectId,
+  }
+
+  const { fetchMore } = useOrdersGetQuery({
     skip: !projectId,
     fetchPolicy: 'network-only',
     variables: {
@@ -84,7 +104,12 @@ export const useRewardByStatus = ({
         ...prev,
         [status]: data.ordersGet?.pagination?.count,
       }))
+      setIsLoading(false)
       if (getRewardQueryProps.onCompleted) getRewardQueryProps.onCompleted(data)
+    },
+    onError(error) {
+      setIsLoading(false)
+      if (getRewardQueryProps.onError) getRewardQueryProps.onError(error)
     },
   })
 
@@ -126,12 +151,14 @@ export const useRewardByStatus = ({
   }
 
   return {
-    isLoading: loading,
+    isLoading,
     isLoadingMore,
     noMoreItems,
     fetchNext,
     rewards,
     rewardsCount: rewardsCount[status],
     updateOrderStatus,
+    orderBy,
+    setOrderBy,
   }
 }
