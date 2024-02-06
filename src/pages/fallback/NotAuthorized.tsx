@@ -1,8 +1,7 @@
-import { Link, Text, VStack } from '@chakra-ui/react'
-import { Trans, useTranslation } from 'react-i18next'
+import { Text, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { BiErrorAlt } from 'react-icons/bi'
 
-import { GeyserFeedbackFromUrl } from '../../constants'
 import { CommonFeedbackMessage } from './CommonFeedbackMessage'
 
 export const NotAuthorized = () => {

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
-import { useMeLazyQuery, useMeQuery } from '../../types'
+import { useMeLazyQuery } from '../../types'
 import { useNotification } from '../../utils'
 import { SocialConfig } from './SocialConfig'
 import { ConnectWithButtonProps } from './type'

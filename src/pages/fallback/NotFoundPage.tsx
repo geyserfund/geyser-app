@@ -1,10 +1,10 @@
-import { Button, Link, Text, VStack } from '@chakra-ui/react'
-import { Trans, useTranslation } from 'react-i18next'
+import { Button, Text, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { BiErrorAlt } from 'react-icons/bi'
 import { useMatch } from 'react-router-dom'
 
 import { Head } from '../../config'
-import { getPath, GeyserFeedbackFromUrl } from '../../constants'
+import { getPath } from '../../constants'
 import { useServiceWorkerUpdate } from '../../context'
 import { CommonFeedbackMessage } from './CommonFeedbackMessage'
 
