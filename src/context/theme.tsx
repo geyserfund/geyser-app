@@ -1,9 +1,4 @@
-import {
-  extendTheme,
-  ThemeProvider,
-  ThemeProviderProps,
-  useColorMode,
-} from '@chakra-ui/react'
+import { extendTheme, ThemeProvider, ThemeProviderProps, useColorMode } from '@chakra-ui/react'
 import { useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { useEffect } from 'react'
@@ -29,10 +24,7 @@ const nostrColorAtom = atomWithStorage('isNostrColor', false)
 
 export const useNostrColor = () => useAtom(nostrColorAtom)
 
-export const ChakraThemeProvider = ({
-  children,
-  ...props
-}: Omit<ThemeProviderProps, 'theme'>) => {
+export const ChakraThemeProvider = ({ children, ...props }: Omit<ThemeProviderProps, 'theme'>) => {
   const { colorMode, setColorMode } = useColorMode()
   const [isNostrColor] = useNostrColor()
 
@@ -64,9 +56,7 @@ export const ChakraThemeProvider = ({
 
   return (
     <ThemeProvider {...props} theme={chakraTheme}>
-      <ReactJSSThemeProvider theme={finalTheme}>
-        {children}
-      </ReactJSSThemeProvider>
+      <ReactJSSThemeProvider theme={finalTheme}>{children}</ReactJSSThemeProvider>
     </ThemeProvider>
   )
 }

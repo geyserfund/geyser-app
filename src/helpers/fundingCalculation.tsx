@@ -25,9 +25,7 @@ export const useFundCalc = (state: IFundForm) => {
       return Math.round(rewardsCost) + state.donationAmount + shippingAmount
     }
 
-    const donationDollarAmount = Math.round(
-      getUSDAmount((state.donationAmount + shippingAmount) as Satoshis),
-    )
+    const donationDollarAmount = Math.round(getUSDAmount((state.donationAmount + shippingAmount) as Satoshis))
 
     const rewardsDollarCost =
       state.rewardCurrency === RewardCurrency.Usdcent
@@ -50,10 +48,7 @@ export const useFundCalc = (state: IFundForm) => {
   }
 
   const getRewardsQuantity = () => {
-    return Object.values(state.rewardsByIDAndCount || {}).reduce(
-      (totalCount, current) => totalCount + current,
-      0,
-    )
+    return Object.values(state.rewardsByIDAndCount || {}).reduce((totalCount, current) => totalCount + current, 0)
   }
 
   return {

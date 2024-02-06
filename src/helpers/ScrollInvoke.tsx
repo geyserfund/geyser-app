@@ -11,12 +11,7 @@ interface ScrollInvokeProps {
 
 const ThresholdHeightBeforeScrollEnd = 300
 
-export const ScrollInvoke = ({
-  elementId,
-  onScrollEnd,
-  isLoading,
-  noMoreItems,
-}: ScrollInvokeProps) => {
+export const ScrollInvoke = ({ elementId, onScrollEnd, isLoading, noMoreItems }: ScrollInvokeProps) => {
   const [loading, setLoading] = useListenerState(false)
   const [prevValue, setPrevValue] = useListenerState(false)
 
@@ -43,11 +38,7 @@ export const ScrollInvoke = ({
   }, [elementId])
 
   async function handleScroll(this: HTMLElement) {
-    if (
-      (isLoading && isLoading.current) ||
-      (noMoreItems && noMoreItems.current) ||
-      loading.current
-    ) {
+    if ((isLoading && isLoading.current) || (noMoreItems && noMoreItems.current) || loading.current) {
       return
     }
 
@@ -67,8 +58,7 @@ export const ScrollInvoke = ({
       clientHeight = document.scrollingElement?.clientHeight || 0
     }
 
-    const isInView =
-      scrollHeight - scrollTop - clientHeight <= ThresholdHeightBeforeScrollEnd
+    const isInView = scrollHeight - scrollTop - clientHeight <= ThresholdHeightBeforeScrollEnd
     if (isInView && prevValue.current !== isInView) {
       await onScrollEnd()
     }

@@ -2,9 +2,7 @@ import { useCallback, useState } from 'react'
 
 import { copyTextToClipboard } from '../utils'
 
-export const useAnimatedClipboard = (
-  defaultValue?: string,
-): [(v?: string) => void, boolean] => {
+export const useAnimatedClipboard = (defaultValue?: string): [(v?: string) => void, boolean] => {
   const [hasCopied, setCopied] = useState(false)
 
   const copy = useCallback(

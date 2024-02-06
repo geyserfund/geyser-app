@@ -19,9 +19,7 @@ export const useLayoutAnimation = () => {
     if (animate.left) {
       setClassName(classes.slideOutRight)
     } else {
-      setClassName((current) =>
-        current === classes.slideOutRight ? classes.slideInRight : '',
-      )
+      setClassName((current) => (current === classes.slideOutRight ? classes.slideInRight : ''))
     }
   }, [animate.left, classes, isMobile])
 
@@ -34,9 +32,7 @@ export const useLayoutAnimation = () => {
     if (animate.right) {
       setClassName(classes.slideOutLeft)
     } else {
-      setClassName((current) =>
-        current === classes.slideOutLeft ? classes.slideInLeft : '',
-      )
+      setClassName((current) => (current === classes.slideOutLeft ? classes.slideInLeft : ''))
     }
   }, [animate.right, classes, isMobile])
 
@@ -46,10 +42,7 @@ export const useLayoutAnimation = () => {
       return
     }
 
-    if (
-      className === classes.slideInLeft ||
-      className === classes.slideInRight
-    ) {
+    if (className === classes.slideInLeft || className === classes.slideInRight) {
       setTimeout(() => {
         setClassName('')
       }, 300)

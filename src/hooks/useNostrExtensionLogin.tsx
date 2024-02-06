@@ -43,17 +43,15 @@ export const useNostrExtensonLogin = () => {
       const signedEvent = await signEvent(event)
       const serialisedEvent = JSON.stringify(signedEvent)
 
-      const nostrAuthToken = encodeURIComponent(
-        Buffer.from(serialisedEvent).toString('base64'),
-      ).replace(/[!'()*]/g, (c) => '%' + c.charCodeAt(0).toString(16))
-
-      const response = await fetch(
-        `${authServiceEndpoint}/nostr?token=${nostrAuthToken}`,
-        {
-          credentials: 'include',
-          redirect: 'follow',
-        },
+      const nostrAuthToken = encodeURIComponent(Buffer.from(serialisedEvent).toString('base64')).replace(
+        /[!'()*]/g,
+        (c) => '%' + c.charCodeAt(0).toString(16),
       )
+
+      const response = await fetch(`${authServiceEndpoint}/nostr?token=${nostrAuthToken}`, {
+        credentials: 'include',
+        redirect: 'follow',
+      })
 
       if (response.status >= 200 && response.status < 400) {
         const { data } = await queryCurrentUser()
