@@ -112,3 +112,34 @@ export const FRAGMENT_FUNDING_TX_OVERVIEW_PAGE = gql`
     comment
   }
 `
+
+export const FRAGMENT_FUNDING_TX_DOWNLOAD_INVOICE = gql`
+  fragment FundingTxForDownloadInvoice on FundingTx {
+    id
+    donationAmount
+    amountPaid
+    uuid
+    funder {
+      user {
+        username
+      }
+    }
+    projectId
+    paidAt
+    order {
+      items {
+        item {
+          name
+        }
+        quantity
+        unitPriceInSats
+      }
+      totalInSats
+    }
+    status
+    bitcoinQuote {
+      quote
+      quoteCurrency
+    }
+  }
+`

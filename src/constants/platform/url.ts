@@ -12,7 +12,7 @@ export const AboutUsUrl =
   'https://geyser.notion.site/About-Us-2dd9468a27e84531bcbcbe89c24d7f09'
 export const FAQUrl =
   'https://geyser.notion.site/Geyser-FAQs-310e7900fa904732b9b64043831edec3'
-export const DocsUrl = 'https://docs.geyser.fund/'
+export const LearnUrl = 'https://learn.geyser.fund/'
 export const FeedbackUrl = 'https://airtable.com/shrGiEJKsPoDsysPf'
 
 // Geyser footer Links
@@ -211,7 +211,8 @@ export const WalletCreationFindOutMoreUrl =
 
 export const commonMarkdownUrl = 'https://commonmark.org/help/'
 
-export const GeyserFeedbackFromUrl = 'https://airtable.com/shr2GiORBI2CWSuhk'
+export const GeyserFeedbackFromUrl =
+  'https://app.steelsync.io/clrxkiwf400l8oofs8pz7aq7k/new?request=bug'
 
 export const GeyserPrimalUrl =
   'https://primal.net/p/npub1kmwdmhuxvafg05dyap3qmy42jpwztrv9p0uvey3a8803ahlwtmnsnhxqk9'
@@ -254,7 +255,7 @@ export const Grant2AnnouncementTwitterUrl =
   'https://twitter.com/geyserfund/status/1628842072802312193?s=20'
 
 export const GeyserEmailVerificationDocUrl =
-  'https://docs.geyser.fund/geyser-docs/product-features/update-your-project/email-verification'
+  'https://learn.geyser.fund/geyser-docs/product-features/update-your-project/email-verification'
 
 // PLATFORMS
 

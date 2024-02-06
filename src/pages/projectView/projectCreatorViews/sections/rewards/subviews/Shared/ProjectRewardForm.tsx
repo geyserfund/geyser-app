@@ -24,6 +24,7 @@ import {
   FileUpload,
   UpdateCurrencyModal,
 } from '../../../../../../../components/molecules'
+import { ImageCrop } from '../../../../../../../components/molecules/ImageCropperModal'
 import {
   TextArea,
   TextInputBox,
@@ -149,12 +150,15 @@ export const ProjectRewardForm = ({
 
   const handleMaxClaimableAmountBlur = () => {
     // set cost with the dollar value converted to cents
-    if(reward.maxClaimable && toInt(reward.maxClaimable) < reward.sold) {
+    if (reward.maxClaimable && toInt(reward.maxClaimable) < reward.sold) {
       setReward((current) => ({
         ...current,
         maxClaimable: reward.sold,
       }))
-      setFormError({...formError, maxClaimable: 'Limited edition must be at minimum the amount sold'})
+      setFormError({
+        ...formError,
+        maxClaimable: 'Limited edition must be at minimum the amount sold',
+      })
     } else {
       setReward((current) => ({
         ...current,
@@ -363,7 +367,7 @@ export const ProjectRewardForm = ({
       pt={{ base: '10px', lg: '20px' }}
       backgroundColor={{ base: 'neutral.0', lg: 'inherit' }}
       pb={{ base: '80px', lg: '20px' }}
-      px={{ base: '10px', lg: '80px' }}
+      px={{ base: '10px', lg: '40px' }}
       spacing={{ base: '10px', lg: '20px' }}
     >
       <CardLayout h="auto" padding="30px 30px" minWidth="100%">
@@ -493,6 +497,7 @@ export const ProjectRewardForm = ({
               onUploadComplete={handleUpload}
               onDeleteClick={handleDeleteThumbnail}
               childrenOnLoading={<UploadBox loading h={10} />}
+              imageCrop={ImageCrop.Square}
             >
               <UploadBox h={10} title="Select an Image" />
             </FileUpload>

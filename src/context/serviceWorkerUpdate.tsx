@@ -1,13 +1,6 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { captureException } from '@sentry/react'
-import {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 
@@ -34,18 +27,13 @@ export type ServiceWorkerUpdateProps = {
   handlePrompt: () => void
 }
 
-export const ServiceWorkerUpdate =
-  createContext<ServiceWorkerUpdateProps>(defaultContext)
+export const ServiceWorkerUpdate = createContext<ServiceWorkerUpdateProps>(defaultContext)
 
 const REFETCH_SW_INTERVAL_MS = __production__ ? 5 * 60 * 1000 : 10 * 1000
 
 let defferedPrompt: any
 
-export const ServiceWorkerProvider = ({
-  children,
-}: {
-  children: React.ReactNode
-}) => {
+export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode }) => {
   const { t } = useTranslation()
   const [refresh, setRefresh] = useState(false)
   const [canInstall, setCanInstall] = useState(false)
@@ -130,9 +118,7 @@ export const ServiceWorkerProvider = ({
             <Body1 color={lightModeColors.neutral[700]} bold>
               {t("There's a new version of Geyser!")}
             </Body1>
-            <Body1 color={lightModeColors.neutral[700]}>
-              {t('Restart the app to load the new version')}
-            </Body1>
+            <Body1 color={lightModeColors.neutral[700]}>{t('Restart the app to load the new version')}</Body1>
           </VStack>
           <HStack>
             <Button
@@ -143,12 +129,7 @@ export const ServiceWorkerProvider = ({
             >
               {t('Not now')}
             </Button>
-            <Button
-              size="sm"
-              variant="primary"
-              onClick={handleConfirm}
-              color={lightModeColors.neutral[700]}
-            >
+            <Button size="sm" variant="primary" onClick={handleConfirm} color={lightModeColors.neutral[700]}>
               {t('Restart app')}
             </Button>
           </HStack>
@@ -158,5 +139,4 @@ export const ServiceWorkerProvider = ({
   )
 }
 
-export const useServiceWorkerUpdate = (): ServiceWorkerUpdateProps =>
-  useContext(ServiceWorkerUpdate)
+export const useServiceWorkerUpdate = (): ServiceWorkerUpdateProps => useContext(ServiceWorkerUpdate)

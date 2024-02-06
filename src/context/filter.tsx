@@ -1,16 +1,5 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
-import {
-  useLocation,
-  useMatch,
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import { useLocation, useMatch, useNavigate, useSearchParams } from 'react-router-dom'
 
 import { getPath } from '../constants'
 import { disableSortByTrending } from '../pages/landing/filters/sort'
@@ -51,13 +40,7 @@ export const FilterContext = createContext<FilterState>(defaultFilterContext)
 
 export const useFilterContext = () => useContext(FilterContext)
 
-export const FilterProvider = ({
-  children,
-  isLoggedIn,
-}: {
-  children: React.ReactNode
-  isLoggedIn?: boolean
-}) => {
+export const FilterProvider = ({ children, isLoggedIn }: { children: React.ReactNode; isLoggedIn?: boolean }) => {
   const [filters, setFilters] = useState<FilterType>({} as FilterType)
 
   const isLandingFeedPage = useMatch(getPath('landingFeed'))
@@ -122,14 +105,7 @@ export const FilterProvider = ({
       navigate(location.pathname, { state: null })
       setSearchParams(newParameters)
     },
-    [
-      isLandingFeedPage,
-      isLoggedIn,
-      searchParams,
-      navigate,
-      location.pathname,
-      setSearchParams,
-    ],
+    [isLandingFeedPage, isLoggedIn, searchParams, navigate, location.pathname, setSearchParams],
   )
 
   useEffect(() => {
@@ -171,8 +147,7 @@ const getFiltersFromUrlParams = (searchParams: URLSearchParams) => {
       ?.split(',')
       ?.map((val) => toInt(val)) || undefined
   const recent = Boolean(searchParams.get('recent')) || undefined
-  const activity =
-    (searchParams.get('activity') as ActivityResourceType) || undefined
+  const activity = (searchParams.get('activity') as ActivityResourceType) || undefined
   const sort = (searchParams.get('sort') as SortType) || undefined
 
   return {

@@ -1,18 +1,24 @@
 import { DateTime } from 'luxon'
-import { useCallback, useMemo } from 'react'
+import { Dispatch, SetStateAction, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
   AnonymousAvatar,
   LinkableAvatar,
-} from '../../../../../../../components/ui'
-import { OrderFragment, UpdatableOrderStatus } from '../../../../../../../types'
-import { useCustomTheme } from '../../../../../../../utils'
-import { OrderAmounts, OrderItems } from '../../components'
+} from '../../../../../../../../components/ui'
+import {
+  OrderByDirection,
+  OrderFragment,
+  OrdersGetOrderByField,
+  OrdersGetOrderByInput,
+  UpdatableOrderStatus,
+} from '../../../../../../../../types'
+import { useCustomTheme } from '../../../../../../../../utils'
+import { OrderAmounts, OrderItems } from '../../../components'
 import {
   TableData,
   TableWithAccordion,
-} from '../../components/TableWithAccordion'
+} from '../../../components/TableWithAccordion'
 import { ShippingStatusSelect } from './ShippingStatusSelect'
 
 export enum RewardStatus {
@@ -42,17 +48,31 @@ const RewardStatusOptions: RewardStatusOption[] = [
 ]
 
 export const RewardTable = ({
+  status,
   data,
-  handlleUpdateOrderStatus,
+  updateOrderStatus,
+  orderBy,
+  setOrderBy,
 }: {
+  status: RewardStatus
   data: OrderFragment[]
-  handlleUpdateOrderStatus: (
-    orderId: string,
-    status: UpdatableOrderStatus,
-  ) => void
+  updateOrderStatus: (orderId: string, status: UpdatableOrderStatus) => void
+  orderBy: OrdersGetOrderByInput[]
+  setOrderBy: Dispatch<SetStateAction<OrdersGetOrderByInput[]>>
 }) => {
   const { t } = useTranslation()
   const { colors } = useCustomTheme()
+
+  const sortField = useMemo(() => {
+    switch (status) {
+      case RewardStatus.shipped:
+        return OrdersGetOrderByField.ShippedAt
+      case RewardStatus.delivered:
+        return OrdersGetOrderByField.DeliveredAt
+      default:
+        return OrdersGetOrderByField.ConfirmedAt
+    }
+  }, [status])
 
   const getBackgroundColors = useCallback(
     (value: RewardStatus) => {
@@ -112,7 +132,7 @@ export const RewardTable = ({
                 )}
                 onChange={(option) => {
                   if (option) {
-                    handlleUpdateOrderStatus(
+                    updateOrderStatus(
                       order.id,
                       option.value as UpdatableOrderStatus,
                     )
@@ -163,8 +183,31 @@ export const RewardTable = ({
       {
         header: t('Date'),
         key: 'paidAt',
+        sort: {
+          order:
+            orderBy.find((o) => o.field === sortField)?.direction ||
+            OrderByDirection.Desc,
+          updateOrder() {
+            setOrderBy((prev) =>
+              prev.map((p) => {
+                if (p.field === sortField) {
+                  if (p.direction === OrderByDirection.Asc) {
+                    return {
+                      field: sortField,
+                      direction: OrderByDirection.Desc,
+                    }
+                  }
+
+                  return { field: sortField, direction: OrderByDirection.Asc }
+                }
+
+                return p
+              }),
+            )
+          },
+        },
         value(order: OrderFragment) {
-          const dateToUse = getOrderDateToDisplay(order)
+          const dateToUse = order[sortField]
           if (dateToUse) {
             return DateTime.fromMillis(dateToUse).toFormat('LLL dd, yyyy')
           }
@@ -210,21 +253,8 @@ export const RewardTable = ({
         },
       },
     ],
-    [t, getBackgroundColors, handlleUpdateOrderStatus],
+    [t, getBackgroundColors, updateOrderStatus, orderBy, setOrderBy, sortField],
   )
 
   return <TableWithAccordion<OrderFragment> items={data} schema={tableData} />
-}
-
-export const getOrderDateToDisplay = (order: OrderFragment) => {
-  switch (order.status) {
-    case RewardStatus.todo:
-      return order.confirmedAt
-    case RewardStatus.shipped:
-      return order.shippedAt
-    case RewardStatus.delivered:
-      return order.deliveredAt
-    default:
-      return order.createdAt
-  }
 }

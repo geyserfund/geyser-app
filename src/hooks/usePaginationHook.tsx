@@ -15,10 +15,9 @@ export type usePaginationHookProps<TEntity, TTransformed = TEntity> = {
   resultMap?: (_: TEntity[]) => TTransformed[]
 }
 
-export type PaginatedListType<
-  TEntity,
-  TTransformed = TEntity,
-> = TTransformed extends never[] ? TEntity[] : TTransformed[]
+export type PaginatedListType<TEntity, TTransformed = TEntity> = TTransformed extends never[]
+  ? TEntity[]
+  : TTransformed[]
 
 const thresholdNoOfAggregatedResultsToFetchMore = 5
 const noOfTimesToRefetchMore = 5
@@ -59,8 +58,7 @@ export const usePaginationHook = <TEntity, TTransformed = TEntity>({
 
       if (
         data.length === itemLimit &&
-        data.length - mappedData.length >
-          thresholdNoOfAggregatedResultsToFetchMore &&
+        data.length - mappedData.length > thresholdNoOfAggregatedResultsToFetchMore &&
         !noMoreItems.current
       ) {
         fetchNext()
@@ -83,9 +81,7 @@ export const usePaginationHook = <TEntity, TTransformed = TEntity>({
     }
   }
 
-  const handleMapData = (
-    data: TEntity[],
-  ): PaginatedListType<TEntity, TTransformed> => {
+  const handleMapData = (data: TEntity[]): PaginatedListType<TEntity, TTransformed> => {
     if (resultMap) {
       return resultMap(data) as PaginatedListType<TEntity, TTransformed>
     }
@@ -119,18 +115,11 @@ export const usePaginationHook = <TEntity, TTransformed = TEntity>({
 
         const mappedData = handleMapData(data)
 
-        setList(
-          (current) =>
-            [...current, ...mappedData] as PaginatedListType<
-              TEntity,
-              TTransformed
-            >,
-        )
+        setList((current) => [...current, ...mappedData] as PaginatedListType<TEntity, TTransformed>)
         // If the aggregated length of the data is too small next pagination is automatically fetched
         if (
           data.length === itemLimit &&
-          data.length - mappedData.length >=
-            thresholdNoOfAggregatedResultsToFetchMore &&
+          data.length - mappedData.length >= thresholdNoOfAggregatedResultsToFetchMore &&
           (count ? count < noOfTimesToRefetchMore : true)
         ) {
           fetchNext(count ? count + 1 : 1)

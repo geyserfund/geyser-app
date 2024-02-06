@@ -32,7 +32,7 @@ COPY ./src ./src
 COPY index.html tsconfig.json tsconfig.node.json vite.config.ts .eslintrc.cjs .prettierrc ./
 
 ARG VITE_APP_API_ENDPOINT
-ARG VITE_APP_AIR_TABLE_KEY
+ARG VITE_APP_FLODESK_API_KEY
 ARG VITE_APP_GIPHY_API_KEY
 ARG VITE_APP_GEYSER_NOSTR_PUBKEY
 ARG VITE_APP_ENV
