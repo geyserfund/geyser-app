@@ -109,14 +109,14 @@ export const SuccessImageComponent = ({
             <H3
               color={"neutral.600"}
               fontSize="18px"
-              fontWeight={600}
+              fontWeight={400}
             >
               {t('Successfully contributed to')}
             </H3>
             <H3
               color={"neutral.900"}
               fontSize="24px"
-              fontWeight={700}
+              fontWeight={600}
             >
               {project.title}
             </H3>

@@ -13,9 +13,7 @@ interface UseExternalAccountsProps {
   accounts?: ExternalAccount[]
 }
 
-export const useExternalAccountsButtons = ({
-  accounts,
-}: UseExternalAccountsProps) => {
+export const useExternalAccountsButtons = ({ accounts }: UseExternalAccountsProps) => {
   const theme = useTheme()
 
   const [copy, setCopy] = useState(false)

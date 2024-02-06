@@ -1,20 +1,40 @@
-import { atom, useAtom, useAtomValue } from 'jotai'
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { DateTime } from 'luxon'
 import { useEffect } from 'react'
 
 import { getAuthEndPoint } from '../../config/domain'
 
 const canLoginAtom = atom(false)
 
+const refreshLoginAtom = atom(DateTime.now())
+
+const refreshLoginTriggerAtom = atom(null, (get, set) => {
+  set(canLoginAtom, false)
+  set(refreshLoginAtom, DateTime.now().minus({ minutes: 6 }))
+})
+
 export const useCanLogin = () => useAtomValue(canLoginAtom)
+
+export const useRefreshAuthToken = () => useSetAtom(refreshLoginTriggerAtom)
 
 export const useAuthToken = () => {
   const [canLogin, setCanLogin] = useAtom(canLoginAtom)
+
+  const [refreshLogin, setRefreshLogin] = useAtom(refreshLoginAtom)
 
   const authServiceEndpoint = getAuthEndPoint()
 
   useEffect(() => {
     const initalizeLogin = async () => {
       if (!authServiceEndpoint || !setCanLogin || canLogin) return
+
+      const diff = refreshLogin.diffNow().as('minutes')
+
+      if (Math.abs(diff) < 5) {
+        return
+      }
+
+      setRefreshLogin(DateTime.now())
 
       try {
         const response = await fetch(`${authServiceEndpoint}/auth-token`, {
@@ -33,5 +53,5 @@ export const useAuthToken = () => {
     }
 
     initalizeLogin()
-  }, [authServiceEndpoint, setCanLogin, canLogin])
+  }, [authServiceEndpoint, setCanLogin, canLogin, refreshLogin, setRefreshLogin])
 }

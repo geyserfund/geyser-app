@@ -8,11 +8,10 @@ export const interceptNostr = (handler: RouteHandler) => {
 
 export const openConnectPopup = () => {
   cy.get('button').contains('Login').click()
-  cy.get('p').contains('Login').should('be.visible')
+  cy.get('p').contains('Connect').should('be.visible')
 }
 
-export const getDropdownButton = () =>
-  cy.get('button[data-testid="topnavbar-dropdown-menu"]')
+export const getDropdownButton = () => cy.get('button[data-testid="topnavbar-dropdown-menu"]')
 
 export const loginWithNostr = () => {
   openConnectPopup()
@@ -29,8 +28,7 @@ export const loginWithNostr = () => {
               id: 1,
               email: 'test@geyser.fund',
               username: 'testusername',
-              imageUrl:
-                'https://storage.googleapis.com/geyser-projects-media/app/logo.png',
+              imageUrl: 'https://storage.googleapis.com/geyser-projects-media/app/logo.png',
               externalAccounts: [],
               contributions: [],
               ownerOf: [],

@@ -1,14 +1,5 @@
-import {
-  getDropdownButton,
-  loginWithNostr,
-  logoutUser,
-  openConnectPopup,
-} from '../utils/auth'
-import {
-  aliasQuery,
-  hasOperationName,
-  interceptGraphql,
-} from '../utils/graphql'
+import { getDropdownButton, loginWithNostr, logoutUser, openConnectPopup } from '../utils/auth'
+import { aliasQuery, hasOperationName, interceptGraphql } from '../utils/graphql'
 
 /**
  * THIS IS THE NOSTR EVENT USED FOR TESTING THIS MODULE
@@ -32,8 +23,7 @@ describe('Login', () => {
         signEvent: () => ({
           sig: '5d097183ae4b599a83f6f78249bc35be58c6d58ce35d0c4ca165a41f980902378437711c288d9f3410741009b8459e65e824f927ca8f8072247de93144fa51fd',
         }),
-        getPublicKey: () =>
-          '217ac0828c448c1e68c2e781df89884bcae16a1e79fe6df267863155ab789c02',
+        getPublicKey: () => '217ac0828c448c1e68c2e781df89884bcae16a1e79fe6df267863155ab789c02',
       }
     })
 
@@ -43,8 +33,7 @@ describe('Login', () => {
         body: {
           event: {
             id: 'd0d5289d90e8ffd7ebff068ffd93e1a84b69f1b890a3055d5039b353e73ca46f',
-            pubkey:
-              '217ac0828c448c1e68c2e781df89884bcae16a1e79fe6df267863155ab789c02',
+            pubkey: '217ac0828c448c1e68c2e781df89884bcae16a1e79fe6df267863155ab789c02',
             // eslint-disable-next-line camelcase
             created_at: 1688585029,
             kind: 1,
@@ -65,7 +54,7 @@ describe('Login', () => {
       },
     ).as('NostrAuthToken')
 
-    cy.visit('https://staging.geyser.fund')
+    cy.visit('http://staging.geyser.fund')
   })
 
   it('Should open login popup on landing page', () => {
