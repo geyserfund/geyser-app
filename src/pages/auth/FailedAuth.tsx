@@ -66,6 +66,11 @@ export const FailedAuthComponent = () => {
       <Body1>
         {t("Please clear your browser's cache & cookies and try again.")}
       </Body1>
+      <Body1>
+        {t(
+          'You can do this by opening your Development environment (Right click -> inspect), then clicking on Application > Storage > Clear site data.',
+        )}
+      </Body1>
 
       <ButtonComponent
         as={Link}

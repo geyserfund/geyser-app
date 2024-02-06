@@ -162,7 +162,8 @@ export const WalletCreationFindOutMoreUrl =
 
 export const commonMarkdownUrl = 'https://commonmark.org/help/'
 
-export const GeyserFeedbackFromUrl = 'https://airtable.com/shr2GiORBI2CWSuhk'
+export const GeyserFeedbackFromUrl =
+  'https://app.steelsync.io/clrxkiwf400l8oofs8pz7aq7k/new?request=bug'
 
 export const GeyserPrimalUrl = 'https://primal.net/p/npub1kmwdmhuxvafg05dyap3qmy42jpwztrv9p0uvey3a8803ahlwtmnsnhxqk9'
 
