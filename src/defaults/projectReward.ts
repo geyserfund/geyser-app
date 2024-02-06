@@ -6,6 +6,7 @@ import {
 } from '../types/generated/graphql'
 
 export const defaultProjectReward: ProjectReward = {
+  uuid: '',
   id: 0,
   name: '',
   description: '',

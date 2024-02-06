@@ -54,7 +54,7 @@ type Props = HTMLChakraProps<'div'> & {
   badgesEarned?: IBadge[]
   formState: IFundForm
   version: ContributionInfoBoxVersion
-  fundingTxId: BigInt
+  fundingTxId?: BigInt
 }
 
 const ContributionInfoBoxDivider = ({
