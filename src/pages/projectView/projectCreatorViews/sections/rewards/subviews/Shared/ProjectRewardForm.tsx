@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/client'
+import { gql, useMutation, useQuery } from '@apollo/client'
 import { CloseIcon } from '@chakra-ui/icons'
 import {
   Button,
@@ -59,21 +59,6 @@ type Props = {
   createOrUpdate?: 'create' | 'update'
 }
 
-export enum ProjectRewardCategory {
-  Collectible = 'Collectible',
-  Book = 'Book',
-  Course = 'Course',
-  Ticket = 'Ticket',
-  Gift = 'Gift',
-  Game = 'Game',
-  Membership = 'Membership',
-  Merch = 'Merch',
-  NostrBadge = 'Nostr Badge',
-  Raffle = 'Raffle',
-  Sponsorship = 'Sponsorship',
-  Service = 'Service'
-}
-
 export const ProjectRewardForm = ({
   buttonText,
   titleText,
@@ -109,12 +94,12 @@ export const ProjectRewardForm = ({
   )
   const [formError, setFormError] = useState<any>({})
 
-  if(!reward.category) {
-    setReward((current) => ({
-      ...current,
-      category: ProjectRewardCategory.Collectible,
-    }))
-  }
+  const {
+    loading: isRewardCategoriesLoading,
+    data: rewardCategoriesData,
+  } = useQuery(gql`query Query {
+    projectRewardCategoriesGet
+  }`);
 
   const getRewardCreationInputVariables = (): CreateProjectRewardInput => {
     return {
@@ -367,7 +352,7 @@ export const ProjectRewardForm = ({
     })
   }
 
-  if (!project) {
+  if (!project || isRewardCategoriesLoading) {
     return null
   }
 
@@ -475,26 +460,16 @@ export const ProjectRewardForm = ({
         <Stack direction={{ base: 'column', lg: 'row' }}>
           <FieldContainer title={t('Category')}>
             <Select
-              value={reward.category || ProjectRewardCategory.Collectible}
+              value={reward.category || ''}
               onChange={(event) => {
                 setReward((current) => ({
                   ...current,
-                  category: event.target.value as ProjectRewardCategory,
+                  category: event.target.value,
                 }))
               }}
             >
-              <option value={ProjectRewardCategory.Collectible}>{ProjectRewardCategory.Collectible}</option>
-              <option value={ProjectRewardCategory.Book}>{ProjectRewardCategory.Book}</option>
-              <option value={ProjectRewardCategory.Course}>{ProjectRewardCategory.Course}</option>
-              <option value={ProjectRewardCategory.Ticket}>{ProjectRewardCategory.Ticket}</option>
-              <option value={ProjectRewardCategory.Gift}>{ProjectRewardCategory.Gift}</option>
-              <option value={ProjectRewardCategory.Game}>{ProjectRewardCategory.Game}</option>
-              <option value={ProjectRewardCategory.Membership}>{ProjectRewardCategory.Membership}</option>
-              <option value={ProjectRewardCategory.Merch}>{ProjectRewardCategory.Merch}</option>
-              <option value={ProjectRewardCategory.NostrBadge}>{ProjectRewardCategory.NostrBadge}</option>
-              <option value={ProjectRewardCategory.Raffle}>{ProjectRewardCategory.Raffle}</option>
-              <option value={ProjectRewardCategory.Sponsorship}>{ProjectRewardCategory.Sponsorship}</option>
-              <option value={ProjectRewardCategory.Service}>{ProjectRewardCategory.Service}</option>
+              <option value=''>{t('Select Category')}</option>
+              {rewardCategoriesData.projectRewardCategoriesGet && rewardCategoriesData.projectRewardCategoriesGet.map((category: string) => <option value={category}>{category}</option>)}
             </Select>
           </FieldContainer>
         </Stack>
