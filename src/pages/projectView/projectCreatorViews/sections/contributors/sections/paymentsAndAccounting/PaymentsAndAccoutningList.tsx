@@ -1,7 +1,9 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SkeletonLayout } from '../../../../../../../components/layouts'
+import { ProjectNoTransactionImageUrl } from '../../../../../../../constants'
 import { useProjectContext } from '../../../../../../../context'
 import { usePaginationHook } from '../../../../../../../hooks/usePaginationHook'
 import { standardPadding } from '../../../../../../../styles'
@@ -13,26 +15,28 @@ import {
   OrderByOptions,
   useFundingTxsOrderGetQuery,
 } from '../../../../../../../types'
+import { useNotification } from '../../../../../../../utils'
 import { EmptyContainer } from '../../components'
 import { PaymentsAndAccountingTable } from './PaymentsAndAccountingTable'
-import { ProjectNoTransactionImageUrl } from '../../../../../../../constants'
 
 const MAXIMUM_ACCOUNTING_ITEMS = 15
 
 export const PaymentsAndAccoutningList = () => {
   const { t } = useTranslation()
   const { project } = useProjectContext()
+  const { toast } = useNotification()
+
+  const [isLoading, setIsLoading] = useState(true)
+  const [orderBy, setOrderBy] = useState<GetFundingTxsOrderByInput>({
+    createdAt: OrderByOptions.Desc,
+  })
 
   const where: GetFundingTxsWhereInput = {
     projectId: project?.id,
     status: FundingTxsWhereFundingStatus.Paid,
   }
 
-  const orderBy: GetFundingTxsOrderByInput = {
-    createdAt: OrderByOptions.Desc,
-  }
-
-  const { fetchMore, loading } = useFundingTxsOrderGetQuery({
+  const { fetchMore } = useFundingTxsOrderGetQuery({
     skip: !project?.id,
     fetchPolicy: 'no-cache',
     variables: {
@@ -46,6 +50,15 @@ export const PaymentsAndAccoutningList = () => {
     },
     onCompleted(data) {
       handleDataUpdate(data.fundingTxsGet?.fundingTxs || [])
+      setIsLoading(false)
+    },
+    onError(error) {
+      toast({
+        title: t('Error fetching payments'),
+        description: `${error.message}`,
+        status: 'error',
+      })
+      setIsLoading(false)
     },
   })
 
@@ -63,7 +76,7 @@ export const PaymentsAndAccoutningList = () => {
     orderBy,
   })
 
-  if (loading) return <PaymentsAndAccoutningListSkeleton />
+  if (isLoading) return <PaymentsAndAccoutningListSkeleton />
 
   return (
     <VStack
@@ -74,9 +87,16 @@ export const PaymentsAndAccoutningList = () => {
       alignItems="center"
     >
       {ordersData.length === 0 ? (
-        <EmptyContainer image={ProjectNoTransactionImageUrl} text={t('No payments received yet')} />
+        <EmptyContainer
+          image={ProjectNoTransactionImageUrl}
+          text={t('No payments received yet')}
+        />
       ) : (
-        <PaymentsAndAccountingTable data={ordersData} />
+        <PaymentsAndAccountingTable
+          data={ordersData}
+          setOrderBy={setOrderBy}
+          orderBy={orderBy}
+        />
       )}
       {!noMoreItems.current && (
         <HStack w="full" px={standardPadding}>

@@ -2,19 +2,24 @@ import { VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { Body1 } from '../../../../../../../components/typography'
+import { ProjectRewardsImageUrl } from '../../../../../../../constants'
 import { standardPadding } from '../../../../../../../styles'
 import { EmptyContainer } from '../../components'
+import { RewardStatus } from './components/RewardTable'
 import { RewardByStatus } from './RewardByStatus'
-import { useRewardEmptyAtom } from './rewardsAtom'
-import { RewardStatus } from './RewardTable'
-import { ProjectRewardsImageUrl } from '../../../../../../../constants'
+import { useRewardEmptyAtom } from './state/rewardsAtom'
 
 export const Rewards = () => {
   const { t } = useTranslation()
   const isRewardEmpty = useRewardEmptyAtom()
 
   if (isRewardEmpty) {
-    return <EmptyContainer image={ProjectRewardsImageUrl} text={t('No rewards sold yet')} />
+    return (
+      <EmptyContainer
+        image={ProjectRewardsImageUrl}
+        text={t('No rewards sold yet')}
+      />
+    )
   }
 
   return (
