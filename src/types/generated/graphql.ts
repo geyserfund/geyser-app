@@ -203,6 +203,7 @@ export type CreateProjectMilestoneInput = {
 }
 
 export type CreateProjectRewardInput = {
+  category?: InputMaybe<Scalars['String']>
   /** Cost of the reward, currently only in USD cents */
   cost: Scalars['cost_Int_NotNull_min_1_max_1000000']
   description?: InputMaybe<Scalars['description_String_maxLength_250']>
@@ -214,7 +215,6 @@ export type CreateProjectRewardInput = {
   maxClaimable?: InputMaybe<Scalars['maxClaimable_Int_min_0']>
   name: Scalars['name_String_NotNull_maxLength_100']
   projectId: Scalars['BigInt']
-  rewardType?: InputMaybe<RewardType>
   stock?: InputMaybe<Scalars['stock_Int_min_0']>
 }
 
@@ -1464,6 +1464,8 @@ export type ProjectReward = {
   __typename?: 'ProjectReward'
   /** Number of people that purchased the Project Reward. */
   backersCount: Scalars['Int']
+  /** Category of ProjectReward */
+  category?: Maybe<Scalars['String']>
   /** Cost of the reward, priced in USD cents. */
   cost: Scalars['Int']
   /** The date the creator created the reward */
@@ -1496,8 +1498,6 @@ export type ProjectReward = {
   project: Project
   /** Currency in which the reward cost is stored. */
   rewardCurrency: RewardCurrency
-  /** Type of Reward */
-  rewardType?: Maybe<RewardType>
   /** Number of times this Project Reward was sold. */
   sold: Scalars['Int']
   /** Tracks the stock of the reward */
@@ -1662,6 +1662,7 @@ export type Query = {
   projectCountriesGet: Array<ProjectCountriesGetResult>
   projectGet?: Maybe<Project>
   projectRegionsGet: Array<ProjectRegionsGetResult>
+  projectRewardCategoriesGet: Array<Scalars['String']>
   projectRewardsGet: Array<ProjectReward>
   projectStatsGet: ProjectStats
   /** By default, returns a list of all active projects. */
@@ -1784,11 +1785,6 @@ export type ResourceInput = {
 export enum RewardCurrency {
   Btcsat = 'BTCSAT',
   Usdcent = 'USDCENT',
-}
-
-export enum RewardType {
-  Digital = 'DIGITAL',
-  Physical = 'PHYSICAL',
 }
 
 export type SendOtpByEmailInput = {
@@ -1938,6 +1934,7 @@ export type UpdateProjectMilestoneInput = {
 }
 
 export type UpdateProjectRewardInput = {
+  category?: InputMaybe<Scalars['String']>
   /** Cost of the reward, priced in USD cents */
   cost?: InputMaybe<Scalars['cost_Int_min_1_max_1000000']>
   description?: InputMaybe<Scalars['description_String_maxLength_250']>
@@ -1949,7 +1946,6 @@ export type UpdateProjectRewardInput = {
   maxClaimable?: InputMaybe<Scalars['maxClaimable_Int_min_0']>
   name?: InputMaybe<Scalars['name_String_maxLength_100']>
   projectRewardId: Scalars['BigInt']
-  rewardType?: InputMaybe<RewardType>
   stock?: InputMaybe<Scalars['stock_Int_min_0']>
 }
 
@@ -2471,7 +2467,6 @@ export type ResolversTypes = {
   QuoteCurrency: QuoteCurrency
   ResourceInput: ResourceInput
   RewardCurrency: RewardCurrency
-  RewardType: RewardType
   SendOtpByEmailInput: SendOtpByEmailInput
   ShippingDestination: ShippingDestination
   SignedUploadUrl: ResolverTypeWrapper<SignedUploadUrl>
@@ -4137,6 +4132,7 @@ export type ProjectRewardResolvers<
   ParentType extends ResolversParentTypes['ProjectReward'] = ResolversParentTypes['ProjectReward'],
 > = {
   backersCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  category?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
   deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
@@ -4165,11 +4161,6 @@ export type ProjectRewardResolvers<
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>
   rewardCurrency?: Resolver<
     ResolversTypes['RewardCurrency'],
-    ParentType,
-    ContextType
-  >
-  rewardType?: Resolver<
-    Maybe<ResolversTypes['RewardType']>,
     ParentType,
     ContextType
   >
@@ -4430,6 +4421,11 @@ export type QueryResolvers<
   >
   projectRegionsGet?: Resolver<
     Array<ResolversTypes['ProjectRegionsGetResult']>,
+    ParentType,
+    ContextType
+  >
+  projectRewardCategoriesGet?: Resolver<
+    Array<ResolversTypes['String']>,
     ParentType,
     ContextType
   >
@@ -5299,7 +5295,6 @@ export type OrderItemFragment = {
     name: any
     cost: number
     rewardCurrency: RewardCurrency
-    rewardType?: RewardType | null
   }
 }
 
@@ -5503,7 +5498,7 @@ export type ProjectRewardForCreateUpdateFragment = {
   estimatedDeliveryDate?: any | null
   isAddon: boolean
   isHidden: boolean
-  rewardType?: RewardType | null
+  category?: string | null
 }
 
 export type ProjectFragment = {
@@ -7309,7 +7304,6 @@ export const OrderItemFragmentDoc = gql`
       name
       cost
       rewardCurrency
-      rewardType
     }
     quantity
     unitPriceInSats
@@ -7490,7 +7484,7 @@ export const ProjectRewardForCreateUpdateFragmentDoc = gql`
     estimatedDeliveryDate
     isAddon
     isHidden
-    rewardType
+    category
   }
 `
 export const EntryForProjectFragmentDoc = gql`

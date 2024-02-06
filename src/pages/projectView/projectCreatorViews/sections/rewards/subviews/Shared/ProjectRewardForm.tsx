@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/client'
+import { gql, useMutation, useQuery } from '@apollo/client'
 import { CloseIcon } from '@chakra-ui/icons'
 import {
   Button,
@@ -41,7 +41,6 @@ import {
   ProjectReward,
   ProjectRewardForCreateUpdateFragment,
   RewardCurrency,
-  RewardType,
   Satoshis,
   UpdateProjectRewardInput,
   USDCents,
@@ -96,12 +95,12 @@ export const ProjectRewardForm = ({
   )
   const [formError, setFormError] = useState<any>({})
 
-  if (!reward.rewardType) {
-    setReward((current) => ({
-      ...current,
-      rewardType: RewardType.Physical,
-    }))
-  }
+  const {
+    loading: isRewardCategoriesLoading,
+    data: rewardCategoriesData,
+  } = useQuery(gql`query Query {
+    projectRewardCategoriesGet
+  }`);
 
   const getRewardCreationInputVariables = (): CreateProjectRewardInput => {
     return {
@@ -115,7 +114,7 @@ export const ProjectRewardForm = ({
       estimatedDeliveryDate: reward.estimatedDeliveryDate || undefined,
       isAddon: reward.isAddon,
       isHidden: reward.isHidden,
-      rewardType: reward.rewardType,
+      category: reward.category || undefined,
     }
   }
 
@@ -132,7 +131,7 @@ export const ProjectRewardForm = ({
         estimatedDeliveryDate: reward.estimatedDeliveryDate || undefined,
         isAddon: reward.isAddon,
         isHidden: reward.isHidden,
-        rewardType: reward.rewardType,
+        category: reward.category || undefined,
       }
     }
 
@@ -357,7 +356,7 @@ export const ProjectRewardForm = ({
     })
   }
 
-  if (!project) {
+  if (!project || isRewardCategoriesLoading) {
     return null
   }
 
@@ -463,18 +462,18 @@ export const ProjectRewardForm = ({
           </FieldContainer>
         </Stack>
         <Stack direction={{ base: 'column', lg: 'row' }}>
-          <FieldContainer title={t('Reward Type')}>
+          <FieldContainer title={t('Category')}>
             <Select
-              value={reward.rewardType || RewardType.Physical}
+              value={reward.category || ''}
               onChange={(event) => {
                 setReward((current) => ({
                   ...current,
-                  rewardType: event.target.value as RewardType,
+                  category: event.target.value,
                 }))
               }}
             >
-              <option value="PHYSICAL">{t('Physical')}</option>
-              <option value="DIGITAL">{t('Digital')}</option>
+              <option value=''>{t('Select Category')}</option>
+              {rewardCategoriesData.projectRewardCategoriesGet && rewardCategoriesData.projectRewardCategoriesGet.map((category: string) => <option value={category}>{category}</option>)}
             </Select>
           </FieldContainer>
         </Stack>
