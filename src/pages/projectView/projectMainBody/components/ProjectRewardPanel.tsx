@@ -1,15 +1,14 @@
-import { Box, Text, Stack, Button } from '@chakra-ui/react'
-import {
-  ProjectRewardForCreateUpdateFragment, RewardCurrency
-} from '../../../../types'
+import { Box, Button, Stack, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+
+import { PathName } from '../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
 import {
-  isActive,
-  toInt
-} from '../../../../utils'
-import { useNavigate } from 'react-router-dom'
-import { PathName } from '../../../../constants'
+  ProjectRewardForCreateUpdateFragment,
+  RewardCurrency,
+} from '../../../../types'
+import { isActive, toInt } from '../../../../utils'
 
 type Props = {
   reward: ProjectRewardForCreateUpdateFragment,
@@ -17,7 +16,6 @@ type Props = {
 }
 
 export const ProjectRewardPanel = ({ reward }: Props) => {
-
   const { t } = useTranslation()
   const {
     project,
@@ -27,8 +25,8 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
   const navigate = useNavigate()
   const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : -1;
 
-  if(!project || !isActive) {
-    return <></>;
+  if (!project || !isActive) {
+    return <></>
   }
 
   const renderRewardAvailability = () => {
@@ -43,9 +41,10 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
 
   return (
     <Box
+      w="100%"
       backgroundColor="neutral.50"
-      border='2px'
-      borderColor='neutral.200'
+      border="2px"
+      borderColor="neutral.200"
       borderRadius={12}
       mt={2}
       p={3}

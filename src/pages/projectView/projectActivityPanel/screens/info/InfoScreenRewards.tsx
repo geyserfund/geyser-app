@@ -1,13 +1,16 @@
-import { Badge, Box, Link, Stack, Text } from '@chakra-ui/react'
-import { ProjectRewardPanel } from '../../../projectMainBody/components'
+import { Badge, Box, Link, Stack, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { MobileViews, useProjectContext } from '../../../../../context'
-import { PathName } from '../../../../../constants'
 import { useNavigate } from 'react-router-dom'
 
-export const InfoScreenRewards = () => {
+import { StickToTop } from '../../../../../components/layouts'
+import { dimensions, ID, PathName } from '../../../../../constants'
+import { MobileViews, useProjectContext } from '../../../../../context'
+import { standardPadding } from '../../../../../styles'
+import { useMobileMode } from '../../../../../utils'
+import { ProjectRewardPanel } from '../../../projectMainBody/components'
 
-  const { t } = useTranslation()
+export const InfoScreenRewards = () => {
+  const isMobile = useMobileMode()
   const { setMobileView, project } = useProjectContext()
   const navigate = useNavigate()
 
@@ -16,31 +19,86 @@ export const InfoScreenRewards = () => {
     navigate(PathName.projectRewards)
   }
 
-  if(!project) {
-    return null;
+  if (!project) {
+    return null
   }
 
-  const activeProjectRewards = project.rewards.filter(reward => reward.isHidden === false);
-  if(activeProjectRewards.length == 0) {
-    return null;
+  const activeProjectRewards = project.rewards.filter(
+    (reward) => reward.isHidden === false,
+  )
+  if (activeProjectRewards.length === 0) {
+    return null
   }
 
   return (
     <Box
-      style={{width: '100%'}}
+      id={ID.project.activity.rewards.wrapper}
+      width="100%"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      overflow="hidden"
+      flex="1"
     >
-      <Stack direction='row' justify='space-between' alignItems={'center'}>
-        <Stack direction='row' alignItems={'center'}>
-          <Text fontWeight={500} fontSize={18} color='neutral.900' lineHeight={1}>{t('Rewards')}</Text>
-          <Badge>
-            {activeProjectRewards.length}
-          </Badge>
-        </Stack>
-        <Text fontWeight={500} onClick={handleAllRewardsButtonClick}><Link fontSize={'16px'} color={'neutral.600'} textDecoration={'none'}>{t('See all rewards')}</Link></Text>
-      </Stack>
-      {activeProjectRewards.map((reward) => (
-        <ProjectRewardPanel key={reward.id} reward={reward} />
-      ))}
+      <StickToTop
+        id={ID.project.activity.rewards.body}
+        wrapperId={ID.project.activity.rewards.wrapper}
+        width="100%"
+        offset={dimensions.topNavBar.desktop.height}
+        bias={10}
+        buffer={10}
+        disable={!isMobile}
+      >
+        <InfoScreenRewardsTitle
+          rewardsLength={activeProjectRewards.length}
+          handleAllRewardsButtonClick={handleAllRewardsButtonClick}
+        />
+      </StickToTop>
+
+      <VStack
+        width="100%"
+        overflow="auto"
+        height={'100%'}
+        pb="20px"
+        px={standardPadding}
+      >
+        {activeProjectRewards.map((reward) => (
+          <ProjectRewardPanel key={reward.id} reward={reward} />
+        ))}
+      </VStack>
     </Box>
+  )
+}
+
+export const InfoScreenRewardsTitle = ({
+  rewardsLength,
+  handleAllRewardsButtonClick,
+}: {
+  rewardsLength: number
+  handleAllRewardsButtonClick: () => void
+}) => {
+  const { t } = useTranslation()
+
+  return (
+    <Stack
+      w="full"
+      direction="row"
+      justify="space-between"
+      alignItems={'center'}
+      px={standardPadding}
+      py="10px"
+    >
+      <Stack direction="row" alignItems={'center'}>
+        <Text fontWeight={500} fontSize={18} color="neutral.900" lineHeight={1}>
+          {t('Rewards')}
+        </Text>
+        <Badge>{rewardsLength}</Badge>
+      </Stack>
+      <Text fontWeight={500} onClick={handleAllRewardsButtonClick}>
+        <Link fontSize={'16px'} color={'neutral.600'} textDecoration={'none'}>
+          {t('See all rewards')}
+        </Link>
+      </Text>
+    </Stack>
   )
 }
