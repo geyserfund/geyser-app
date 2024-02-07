@@ -19,11 +19,14 @@ import { ConnectWithLightning } from './ConnectWithLightning'
 import { ConnectWithNostr } from './ConnectWithNostr'
 import { ConnectWithSocial } from './ConnectWithSocial'
 import { SocialAccountType } from './type'
+import { useRefreshAuthToken } from './useAuthToken'
 
 export const ConnectAccounts = ({ user }: { user: User }) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
   const { isOpen, onOpen, onClose } = useModal()
+
+  useRefreshAuthToken(isOpen)
 
   const displayNostrButton = !hasNostrAccount(user) && !isMobile
 
