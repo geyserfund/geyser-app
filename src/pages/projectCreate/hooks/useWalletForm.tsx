@@ -34,7 +34,6 @@ export enum LNAddressEvaluationState {
 
 export type LightingWalletForm = {
   error: string | null
-  warn: string | null
   state: LNAddressEvaluationState
   value: string
   setValue: (lightningAddress: string) => void
@@ -78,9 +77,6 @@ export const useWalletForm = ({
   const [lightningAddressFormError, setLightningAddressFormError] = useState<
     string | null
   >(null)
-  const [lightningAddressFormWarn, setLightningAddressFormWarn] = useState<
-    string | null
-  >(null)
   const [lnAddressEvaluationState, setLnAddressEvaluationState] =
     useState<LNAddressEvaluationState>(LNAddressEvaluationState.IDLE)
 
@@ -92,6 +88,33 @@ export const useWalletForm = ({
 
   const debouncedLightningAddress = useDebounce(lightningAddressFormValue, 200)
 
+  const [evaluateLightningAddress, { loading: isEvaluatingLightningAddress }] =
+    useLightningAddressVerifyLazyQuery({
+      onCompleted({ lightningAddressVerify: { valid, reason } }) {
+        if (Boolean(valid) === false) {
+          setLnAddressEvaluationState(LNAddressEvaluationState.FAILED)
+          setLightningAddressFormError(
+            `We could not validate this as a working Lightning Address: ${reason}`,
+          )
+        } else {
+          setLightningAddressFormError('')
+          setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED)
+        }
+      },
+    })
+
+  const validateLightningAddress = useCallback(async () => {
+    if (!lightningAddressFormValue) {
+      setLightningAddressFormError(null)
+      setLnAddressEvaluationState(LNAddressEvaluationState.IDLE)
+      return
+    }
+
+    await evaluateLightningAddress({
+      variables: { lightningAddress: lightningAddressFormValue },
+    })
+  }, [evaluateLightningAddress, lightningAddressFormValue])
+
   useEffect(() => {
     if (debouncedLightningAddress) {
       const valid = validateLightningAddressFormat(debouncedLightningAddress)
@@ -99,7 +122,7 @@ export const useWalletForm = ({
         validateLightningAddress()
       }
     }
-  }, [debouncedLightningAddress])
+  }, [debouncedLightningAddress, validateLightningAddress])
 
   useEffect(() => {
     if (projectWallet) {
@@ -131,21 +154,6 @@ export const useWalletForm = ({
       }
     }
   }, [projectWallet])
-
-  const [evaluateLightningAddress, { loading: isEvaluatingLightningAddress }] =
-    useLightningAddressVerifyLazyQuery({
-      onCompleted({ lightningAddressVerify: { valid, reason } }) {
-        if (Boolean(valid) === false) {
-          setLnAddressEvaluationState(LNAddressEvaluationState.FAILED)
-          setLightningAddressFormWarn(
-            `We could not validate this as a working Lightning Address: ${reason}`,
-          )
-        } else {
-          setLightningAddressFormWarn('')
-          setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED)
-        }
-      },
-    })
 
   const createWalletInput: CreateWalletInput | null = useMemo(() => {
     const resourceInput: {
@@ -197,18 +205,6 @@ export const useWalletForm = ({
     return null
   }, [project, nodeInput, connectionOption, lightningAddressFormValue])
 
-  const validateLightningAddress = useCallback(async () => {
-    if (!lightningAddressFormValue) {
-      setLightningAddressFormWarn(null)
-      setLnAddressEvaluationState(LNAddressEvaluationState.IDLE)
-      return
-    }
-
-    await evaluateLightningAddress({
-      variables: { lightningAddress: lightningAddressFormValue },
-    })
-  }, [evaluateLightningAddress, lightningAddressFormValue])
-
   const handleConfirm = useCallback(async () => {
     if (
       connectionOption === ConnectionOption.LIGHTNING_ADDRESS &&
@@ -247,7 +243,6 @@ export const useWalletForm = ({
   const validateLightningAddressFormat = (lightningAddress: string) => {
     if (!lightningAddress) {
       setLightningAddressFormError(null)
-      setLightningAddressFormWarn(null)
       setLnAddressEvaluationState(LNAddressEvaluationState.IDLE)
       return false
     }
@@ -256,7 +251,6 @@ export const useWalletForm = ({
       setLightningAddressFormError(
         `Custom Lightning Addresses can't end with "@geyser.fund".`,
       )
-      setLightningAddressFormWarn(null)
       return false
     }
 
@@ -264,7 +258,6 @@ export const useWalletForm = ({
       setLightningAddressFormError(
         `Please use a valid email-formatted address for your Lightning Address.`,
       )
-      setLightningAddressFormWarn(null)
       return false
     }
 
@@ -336,7 +329,6 @@ export const useWalletForm = ({
     handleConfirm,
     lightningAddress: {
       error: lightningAddressFormError,
-      warn: lightningAddressFormWarn,
       state: lnAddressEvaluationState,
       value: lightningAddressFormValue,
       setValue: setLightningAddressFormValue,

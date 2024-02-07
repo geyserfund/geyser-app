@@ -1,7 +1,7 @@
 import { EmailIcon } from '@chakra-ui/icons'
 import { HStack, IconButton, Link, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
-import { useMemo } from 'react'
+import { Dispatch, SetStateAction, useMemo } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { BsFacebook } from 'react-icons/bs'
 import { RiTwitterXLine } from 'react-icons/ri'
@@ -16,6 +16,8 @@ import {
   ExternalAccount,
   FundingConfirmInput,
   FundingTxOrderFragment,
+  GetFundingTxsOrderByInput,
+  OrderByOptions,
 } from '../../../../../../../types'
 import { ExternalAccountType } from '../../../../../../auth'
 import { getUSD, OrderItems } from '../../components'
@@ -29,9 +31,13 @@ import { FundingAmountAccept } from './FundindAmountAccept'
 export const PendingPaymentsTable = ({
   data,
   handleUpdate,
+  setOrderBy,
+  orderBy,
 }: {
   data: FundingTxOrderFragment[]
   handleUpdate: (input: FundingConfirmInput) => Promise<void>
+  setOrderBy: Dispatch<SetStateAction<GetFundingTxsOrderByInput>>
+  orderBy: GetFundingTxsOrderByInput
 }) => {
   const { t } = useTranslation()
 
@@ -82,6 +88,18 @@ export const PendingPaymentsTable = ({
       {
         header: t('Date'),
         key: 'paidAt',
+        sort: {
+          order: orderBy.createdAt,
+          updateOrder() {
+            setOrderBy((prev) => {
+              if (prev.createdAt === OrderByOptions.Asc) {
+                return { createdAt: OrderByOptions.Desc }
+              }
+
+              return { createdAt: OrderByOptions.Asc }
+            })
+          },
+        },
         value(val: FundingTxOrderFragment) {
           if (!val.paidAt) return 'NAN'
           return DateTime.fromMillis(val.paidAt).toFormat('LLL dd, yyyy')

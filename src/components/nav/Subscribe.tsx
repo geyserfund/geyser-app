@@ -24,7 +24,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { FaTelegramPlane } from 'react-icons/fa'
 import { RiTwitterXLine } from 'react-icons/ri'
 
-import { createCreatorRecord } from '../../api'
+import { createSubscriber } from '../../api'
 import { GeyserTelegramUrl, GeyserTwitterUrl } from '../../constants'
 import { useMobileMode, useNotification, validateEmail } from '../../utils'
 import { ButtonComponent, TextInputBox } from '../ui'
@@ -71,29 +71,19 @@ export const Subscribe = ({
 
     try {
       setSubmitting(true)
-      let records
+      let records = {} as any
       if (interest === 'grants') {
-        records = [
-          {
-            fields: {
-              Email: email,
-              Type: ['Subscriber'],
-              fldOWbMeUVrRjXrYu: ['Geyser Grants'],
-            },
+        records = {
+          email,
+          custom_fields: {
+            interest: 'grants',
           },
-        ]
+        }
       } else {
-        records = [
-          {
-            fields: {
-              Email: email,
-              Type: ['Subscriber'],
-            },
-          },
-        ]
+        records = { email }
       }
 
-      await createCreatorRecord({ records })
+      await createSubscriber(records)
 
       setSubmitting(false)
       setSuccess(true)

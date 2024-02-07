@@ -17,26 +17,13 @@ import { AiOutlineEllipsis } from 'react-icons/ai'
 
 import { UserAvatar } from '../../../../../components/ui/UserAvatar'
 import { useAuthContext, useProjectContext } from '../../../../../context'
-import {
-  FunderWithUserFragment,
-  OrderByOptions,
-  ProjectMilestone,
-  useProjectFundersQuery,
-} from '../../../../../types'
+import { FunderWithUserFragment, OrderByOptions, ProjectMilestone, useProjectFundersQuery } from '../../../../../types'
 import { toInt, useMobileMode, useNotification } from '../../../../../utils'
 import { getProjectBalance } from '../../../../../utils/helpers'
 import { ExternalAccountType } from '../../../../auth'
-import {
-  ContributeButton,
-  FollowButton,
-  ShareButton,
-} from '../../../projectMainBody/components'
+import { ContributeButton, FollowButton, ShareButton } from '../../../projectMainBody/components'
 import { BalanceDisplayButton } from './components'
-import {
-  ProjectFundersModal,
-  useProjectFundersModal,
-} from './components/ProjectFundersModal'
-import { InfoScreenFeed } from './InfoScreenFeed'
+import { ProjectFundersModal, useProjectFundersModal } from './components/ProjectFundersModal'
 
 const TIME_AFTER_WHICH_TOOLTIP_SHOULD_CLOSE_MILLIS = 1500
 
@@ -48,11 +35,7 @@ export const ActivityBrief = (props: StackProps) => {
   const { project } = useProjectContext()
   const { followedProjects } = useAuthContext()
 
-  const {
-    isOpen: isToolTipOpen,
-    onOpen: onToolTipOpen,
-    onClose: onToolTipClose,
-  } = useDisclosure()
+  const { isOpen: isToolTipOpen, onOpen: onToolTipOpen, onClose: onToolTipClose } = useDisclosure()
   const { isOpen: isUsd, onToggle: toggleUsd } = useDisclosure()
 
   useEffect(() => {
@@ -63,22 +46,15 @@ export const ActivityBrief = (props: StackProps) => {
     }
   }, [isToolTipOpen, onToolTipClose])
 
-  const [allFunders, setAllFunders] = useState<FunderWithUserFragment[]>(
-    [],
-  )
-  const [socialFunders, setSocialFunders] = useState<FunderWithUserFragment[]>(
-    [],
-  )
+  const [allFunders, setAllFunders] = useState<FunderWithUserFragment[]>([])
+  const [socialFunders, setSocialFunders] = useState<FunderWithUserFragment[]>([])
   const [currentMilestone, setCurrentMilestone] = useState<ProjectMilestone>()
   const [milestoneIndex, setMilestoneIndex] = useState<number>(0)
   const [prevMilestone, setPrevMilestone] = useState(0)
 
   const { colors } = useTheme()
 
-  const balance = useMemo(
-    () => (project ? getProjectBalance(project) : 0),
-    [project],
-  )
+  const balance = useMemo(() => (project ? getProjectBalance(project) : 0), [project])
 
   const fundersModal = useProjectFundersModal()
 
@@ -115,15 +91,14 @@ export const ActivityBrief = (props: StackProps) => {
           funder.user &&
           funder.user.externalAccounts.find(
             (account) =>
-              account.accountType === ExternalAccountType.nostr ||
-              account.accountType === ExternalAccountType.twitter,
+              account.accountType === ExternalAccountType.nostr || account.accountType === ExternalAccountType.twitter,
           )
         ) {
           socialFilteredFunders.push(funder)
         }
       }
 
-      setAllFunders(funders);
+      setAllFunders(funders)
       funders.map((funder) => {})
       setSocialFunders(socialFilteredFunders)
     },
@@ -139,8 +114,7 @@ export const ActivityBrief = (props: StackProps) => {
       let prevTotal = 0
 
       project.milestones.map((milestone, index) => {
-        const hasNextMilestone =
-          project.milestones && Boolean(project.milestones[index + 1])
+        const hasNextMilestone = project.milestones && Boolean(project.milestones[index + 1])
         if (!selectedMilestone) {
           if (milestone && (milestone.amount >= balance || !hasNextMilestone)) {
             selectedMilestone = milestone
@@ -172,11 +146,7 @@ export const ActivityBrief = (props: StackProps) => {
 
   const circularPercentage = useMemo(() => {
     if (currentMilestone) {
-      return (
-        ((balance - prevMilestone) /
-          (currentMilestone.amount - prevMilestone)) *
-        100
-      )
+      return ((balance - prevMilestone) / (currentMilestone.amount - prevMilestone)) * 100
     }
   }, [balance, currentMilestone, prevMilestone])
 
@@ -200,11 +170,7 @@ export const ActivityBrief = (props: StackProps) => {
 
   const getMilestoneValue = useCallback(() => {
     if (currentMilestone) {
-      const percentage = Math.ceil(
-        ((balance - prevMilestone) /
-          (currentMilestone.amount - prevMilestone)) *
-          100,
-      )
+      const percentage = Math.ceil(((balance - prevMilestone) / (currentMilestone.amount - prevMilestone)) * 100)
       return (
         <Box pl={2} color="neutral.600" w="100%">
           <Text fontWeight={500} display="inline">
@@ -219,7 +185,6 @@ export const ActivityBrief = (props: StackProps) => {
   }, [balance, currentMilestone, milestoneIndex, prevMilestone, t])
 
   const latestFunders = socialFunders.slice(0, 12)
-  const activeProjectRewards = project ? project.rewards.filter(reward => reward.isHidden === false) : [];
 
   return (
     <VStack w="100%" {...props}>
@@ -240,11 +205,7 @@ export const ActivityBrief = (props: StackProps) => {
           px={2}
           alignItems={circularPercentage === undefined ? 'center' : 'start'}
         >
-          <BalanceDisplayButton
-            balance={balance}
-            isToolTipOpen={isToolTipOpen}
-            isUsd={isUsd}
-          />
+          <BalanceDisplayButton balance={balance} isToolTipOpen={isToolTipOpen} isUsd={isUsd} />
 
           {getMilestoneValue()}
         </VStack>
@@ -253,16 +214,14 @@ export const ActivityBrief = (props: StackProps) => {
       {!isMobile ? (
         <VStack w="full" spacing="10px" pb={3}>
           <ContributeButton w="full" />
-          {followedProjects.some(
-            (followedProject) => followedProject?.id === project?.id,
-          ) ? (
+          {followedProjects.some((followedProject) => followedProject?.id === project?.id) ? (
             <ShareButton w="full" />
           ) : (
             <FollowButton size="md" w="full" projectId={project?.id} />
           )}
         </VStack>
       ) : null}
-      
+
       {(funderLoading || allFunders.length) && (
         <VStack
           textAlign="left"
@@ -284,9 +243,8 @@ export const ActivityBrief = (props: StackProps) => {
           <Text fontWeight={500}>{t('Contributors')}</Text>
           <HStack ml={1} spacing={0} alignItems="start">
             {!funderLoading
-              ? (
-                (latestFunders.length > 0 ? (
-                  latestFunders.map((funder) => {
+              ? latestFunders.length > 0
+                ? latestFunders.map((funder) => {
                     return (
                       <UserAvatar
                         size="sm"
@@ -298,18 +256,17 @@ export const ActivityBrief = (props: StackProps) => {
                       />
                     )
                   })
-                ): (
-                  allFunders.slice(0, 12).map((s, i) => (
-                    <UserAvatar
+                : allFunders
+                    .slice(0, 12)
+                    .map((s, i) => (
+                      <UserAvatar
                         size="sm"
                         border={`2px solid ${colors.neutral[0]}`}
                         display="inline-block"
                         marginLeft="-5px"
                         key={i}
                       />
-                  ))
-                ))  
-              )
+                    ))
               : [1, 2, 3].map((s) => (
                   <SkeletonCircle
                     key={s}
@@ -336,11 +293,6 @@ export const ActivityBrief = (props: StackProps) => {
           </HStack>
         </VStack>
       )}
-
-      {activeProjectRewards.length == 0 && (
-        <InfoScreenFeed />
-      )}
-
       <ProjectFundersModal {...fundersModal} />
     </VStack>
   )

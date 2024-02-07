@@ -4,24 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { SkeletonLayout } from '../../../../../../../components/layouts'
 import { Body1, H2, H3 } from '../../../../../../../components/typography'
 import { useProjectContext } from '../../../../../../../context'
-import { usePaginationAtomHook } from '../../../../../../../hooks'
 import { standardPadding } from '../../../../../../../styles'
-import {
-  OrderByDirection,
-  OrderFragment,
-  OrdersGetOrderByField,
-  OrdersGetWhereInput,
-  UpdatableOrderStatus,
-  useOrdersGetQuery,
-  useOrderStatusUpdateMutation,
-} from '../../../../../../../types'
 import { useNotification } from '../../../../../../../utils'
-import {
-  useRewardCountAtom,
-  useRewardsAtom,
-  useRewardStatusChangeAtom,
-} from './rewardsAtom'
-import { RewardStatus, RewardTable } from './RewardTable'
+import { RewardStatus, RewardTable } from './components/RewardTable'
+import { useRewardByStatus } from './hooks/useRewardByStatus'
 
 export const RewardStatusLabel = {
   [RewardStatus.todo]: 'To do',
@@ -29,92 +15,48 @@ export const RewardStatusLabel = {
   [RewardStatus.delivered]: 'Delivered',
 }
 
-const MAXIMUM_REWARD_ITEMS = 6
-
 export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
   const { t } = useTranslation()
   const { project } = useProjectContext()
   const { toast } = useNotification()
 
-  const [rewardsData, setRewardsData] = useRewardsAtom()
-  const [rewardCount, setRewardCount] = useRewardCountAtom()
-  const updateRewardStatus = useRewardStatusChangeAtom()
-
-  const ordersData = rewardsData[status]
-
-  const where: OrdersGetWhereInput = {
+  const {
+    isLoading,
+    isLoadingMore,
+    noMoreItems,
+    rewards,
+    rewardsCount,
+    updateOrderStatus,
+    fetchNext,
+    orderBy,
+    setOrderBy,
+  } = useRewardByStatus({
     status,
     projectId: project?.id,
-  }
-  const orderBy = [
-    {
-      direction: OrderByDirection.Desc,
-      field: OrdersGetOrderByField.ConfirmedAt,
-    },
-  ]
-
-  const { fetchMore, loading } = useOrdersGetQuery({
-    skip: !project?.id,
-    fetchPolicy: 'network-only',
-    variables: {
-      input: {
-        where,
-        orderBy,
-        pagination: {
-          take: MAXIMUM_REWARD_ITEMS,
-        },
+    getRewardQueryProps: {
+      onError(error) {
+        toast({
+          title: 'Error fetching rewards',
+          status: 'error',
+          description: `${error}`,
+        })
       },
     },
-    onCompleted(data) {
-      handleDataUpdate(data.ordersGet?.orders || [])
-      setRewardCount({ [status]: data.ordersGet?.pagination?.count })
+    statusUpdateMutationProps: {
+      onCompleted() {
+        toast({ title: 'Order status updated', status: 'success' })
+      },
+      onError(error) {
+        toast({
+          title: 'Error updating order status',
+          status: 'error',
+          description: `${error}`,
+        })
+      },
     },
   })
 
-  const { handleDataUpdate, isLoadingMore, noMoreItems, fetchNext } =
-    usePaginationAtomHook<OrderFragment>({
-      fetchMore,
-      queryName: ['ordersGet', 'orders'],
-      itemLimit: MAXIMUM_REWARD_ITEMS,
-      where,
-      orderBy,
-      list: ordersData,
-      setList: (newList) => setRewardsData({ [status]: newList }),
-    })
-
-  const [updateOrderStatus] = useOrderStatusUpdateMutation({
-    onCompleted(data) {
-      if (data.orderStatusUpdate?.id === undefined) return
-
-      updateRewardStatus({ status, update: data.orderStatusUpdate })
-
-      toast({ title: 'Order status updated', status: 'success' })
-    },
-    onError(error) {
-      toast({
-        title: 'Error updating order status',
-        status: 'error',
-        description: `${error}`,
-      })
-    },
-  })
-
-  const handlleUpdateOrderStatus = (
-    orderId: string,
-    newStatus: UpdatableOrderStatus,
-  ) => {
-    if (`${newStatus}` === `${status}`) return
-    updateOrderStatus({
-      variables: {
-        input: {
-          orderId,
-          status: newStatus,
-        },
-      },
-    })
-  }
-
-  if (loading) {
+  if (isLoading || !rewards) {
     return <RewardByStatusSkeleton />
   }
 
@@ -122,19 +64,20 @@ export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
     <VStack width="100%" flexGrow={1} pt={'10px'} spacing="10px">
       <HStack w="full" px={standardPadding}>
         <H2 color="neutral.900">{t(RewardStatusLabel[status])}</H2>
-        <H3 color="neutral.600">
-          {rewardCount[status] ? `(${rewardCount[status]})` : ''}
-        </H3>
+        <H3 color="neutral.600">{rewardsCount ? `(${rewardsCount})` : ''}</H3>
       </HStack>
-      {ordersData.length === 0 ? (
-        <HStack w="full" px={standardPadding}>
-          <Body1>{t("This group doesn't have any items yet.")}</Body1>
-        </HStack>
-      ) : (
+      {rewards.length > 0 ? (
         <RewardTable
-          data={ordersData}
-          handlleUpdateOrderStatus={handlleUpdateOrderStatus}
+          status={status}
+          data={rewards}
+          updateOrderStatus={updateOrderStatus}
+          orderBy={orderBy}
+          setOrderBy={setOrderBy}
         />
+      ) : (
+        <HStack w="full" px={standardPadding}>
+          <Body1>{t("No items with this status.")}</Body1>
+        </HStack>
       )}
       {!noMoreItems.current && (
         <HStack w="full" px={standardPadding}>

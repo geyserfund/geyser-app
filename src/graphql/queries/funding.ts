@@ -5,6 +5,7 @@ import {
   FRAGMENT_FUNDING_TX_FOR_LANDING_PAGE,
   FRAGMENT_FUNDING_TX_OVERVIEW_PAGE,
   FRAGMENT_FUNDING_TX_WITH_INVOICE_STATUS,
+  FRAGMENT_FUNDING_TX_DOWNLOAD_INVOICE
 } from '../fragments/funding'
 
 export const QUERY_GET_FUNDING = gql`
@@ -95,6 +96,15 @@ export const QUERYY_FUNDING_TX_FOR_OVERVIEW_PAGE = gql`
       fundingTxs {
         ...FundingTxForOverviewPage
       }
+    }
+  }
+`
+
+export const QUERY_FUNDING_TX_FOR_DOWNLOAD_INVOICE = gql`
+  ${FRAGMENT_FUNDING_TX_DOWNLOAD_INVOICE}
+  query FundingTxForDownloadInvoice($fundingTxId: BigInt!) {
+    fundingTx(id: $fundingTxId) {
+      ...FundingTxForDownloadInvoice
     }
   }
 `

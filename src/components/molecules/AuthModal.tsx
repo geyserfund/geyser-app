@@ -1,5 +1,12 @@
 import { Box, Stack, Text } from '@chakra-ui/layout'
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
+import {
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+} from '@chakra-ui/modal'
 import { HStack, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
@@ -63,7 +70,8 @@ const ConnectAccounts = ({
 
     if (
       previousAttemptTimeStamp &&
-      currentTimestamp - previousAttemptTimeStamp < TWITTER_AUTH_ATTEMPT_MESSAGE_TIME_MILLIS
+      currentTimestamp - previousAttemptTimeStamp <
+        TWITTER_AUTH_ATTEMPT_MESSAGE_TIME_MILLIS
     ) {
       setFailedTwitter(true)
     } else {
@@ -74,24 +82,44 @@ const ConnectAccounts = ({
   return (
     <VStack justifyContent="center" alignItems="center">
       <Stack width="100%" spacing="10px">
-        {!hasNostrAccount(user) && showNostr && <ConnectWithNostr onClose={onClose} />}
+        {!hasNostrAccount(user) && showNostr && (
+          <ConnectWithNostr onClose={onClose} />
+        )}
         {!hasTwitterAccount(user) && showTwitter && (
-          <ConnectWithSocial accountType={SocialAccountType.twitter} onClose={onClose} />
+          <ConnectWithSocial
+            accountType={SocialAccountType.twitter}
+            onClose={onClose}
+          />
         )}
         {!hasFacebookAccount(user) && showFacebook && (
-          <ConnectWithSocial accountType={SocialAccountType.facebook} onClose={onClose} />
+          <ConnectWithSocial
+            accountType={SocialAccountType.facebook}
+            onClose={onClose}
+          />
         )}
         {/* <ConnectWithEmail onClose={onClose} /> */}
 
         <Body2 color="neutral.900">{t('More connect options')}</Body2>
         <HStack w="full" spacing="20px">
           {!hasGoogleAccount(user) && showGoogle && (
-            <ConnectWithSocial accountType={SocialAccountType.google} onClose={onClose} isIconOnly flex={1} />
+            <ConnectWithSocial
+              accountType={SocialAccountType.google}
+              onClose={onClose}
+              isIconOnly
+              flex={1}
+            />
           )}
 
-          {showLightning && <ConnectWithLightning flex={1} onClose={onClose} isIconOnly />}
+          {showLightning && (
+            <ConnectWithLightning flex={1} onClose={onClose} isIconOnly />
+          )}
           {!hasGithubAccount(user) && showGithub && (
-            <ConnectWithSocial flex={1} accountType={SocialAccountType.github} onClose={onClose} isIconOnly />
+            <ConnectWithSocial
+              flex={1}
+              accountType={SocialAccountType.github}
+              onClose={onClose}
+              isIconOnly
+            />
           )}
         </HStack>
       </Stack>
@@ -126,13 +154,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const refreshAuthToken = useRefreshAuthToken()
-
-  useEffect(() => {
-    if (isOpen) {
-      refreshAuthToken()
-    }
-  }, [isOpen, refreshAuthToken])
+  useRefreshAuthToken(isOpen)
 
   const handlePrivateRouteModalClose = () => {
     if (privateRoute) {
@@ -146,7 +168,8 @@ export const AuthModal = (authModalProps: IAuthModal) => {
 
   const modalTitle = t(title || 'Connect')
   const modalDescription = t(
-    description || 'Connect your social media account to create a project or appear as a contributor of a project.',
+    description ||
+      'Connect your social media account to create a project or appear as a contributor of a project.',
   )
 
   return (
@@ -168,8 +191,16 @@ export const AuthModal = (authModalProps: IAuthModal) => {
         </ModalHeader>
         {privateRoute || <ModalCloseButton />}
         <ModalBody width="100%" padding={{ base: 0, lg: '8px' }}>
-          <Box justifyContent="center" alignItems="center" marginTop={2} marginLeft={2} marginRight={2}>
-            {modalDescription && <Text marginBottom={5}>{modalDescription}</Text>}
+          <Box
+            justifyContent="center"
+            alignItems="center"
+            marginTop={2}
+            marginLeft={2}
+            marginRight={2}
+          >
+            {modalDescription && (
+              <Text marginBottom={5}>{modalDescription}</Text>
+            )}
             <ConnectAccounts
               onClose={onClose}
               showNostr={showNostr && !isMobile}
@@ -181,7 +212,12 @@ export const AuthModal = (authModalProps: IAuthModal) => {
             />
           </Box>
           {privateRoute && (
-            <Box display="flex" justifyContent="center" alignItems="center" marginTop={5}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              marginTop={5}
+            >
               <ButtonComponent onClick={handlePrivateRouteModalClose}>
                 {t(location.key ? 'Go back' : 'Go home')}
               </ButtonComponent>

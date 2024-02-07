@@ -1,19 +1,9 @@
 import { useSubscription } from '@apollo/client'
 import { DateTime } from 'luxon'
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 
 import { ACTIVITY_CREATION_SUBSCRIPTION } from '../graphql/subscriptions'
-import {
-  ActivityCreatedSubscription,
-  ActivityCreatedSubscriptionInput,
-  ActivityForLandingPageFragment,
-} from '../types'
+import { ActivityCreatedSubscription, ActivityCreatedSubscriptionInput, ActivityForLandingPageFragment } from '../types'
 import { toInt } from '../utils'
 import { useAuthContext } from './auth'
 
@@ -31,26 +21,16 @@ const defaultActivitySubscriptionContext = {
 
 export const NEW_ACTIVITY_FLAG = 'NEW_ACTIVITY_FLAG'
 
-export const ActivitySubscriptionContext =
-  createContext<ActivitySubscriptionState>(defaultActivitySubscriptionContext)
+export const ActivitySubscriptionContext = createContext<ActivitySubscriptionState>(defaultActivitySubscriptionContext)
 
-export const ActivitySubscriptionProvider = ({
-  children,
-}: {
-  children: React.ReactNode
-}) => {
+export const ActivitySubscriptionProvider = ({ children }: { children: React.ReactNode }) => {
   const [hasNewActivity, setHasNewActivity] = useState(false)
 
-  const [activities, setActivities] = useState<
-    ActivityForLandingPageFragment[]
-  >([])
+  const [activities, setActivities] = useState<ActivityForLandingPageFragment[]>([])
   const { isLoggedIn, followedProjects } = useAuthContext()
 
   const skipSubscription = !isLoggedIn || !(followedProjects.length > 0)
-  useSubscription<
-    ActivityCreatedSubscription,
-    ActivityCreatedSubscriptionInput
-  >(ACTIVITY_CREATION_SUBSCRIPTION, {
+  useSubscription<ActivityCreatedSubscription, ActivityCreatedSubscriptionInput>(ACTIVITY_CREATION_SUBSCRIPTION, {
     variables: {
       where: {
         projectIds: followedProjects.map((projects) => toInt(projects?.id)),
@@ -95,13 +75,10 @@ export const ActivitySubscriptionProvider = ({
   }, [isLoggedIn])
 
   return (
-    <ActivitySubscriptionContext.Provider
-      value={{ hasNewActivity, activities, clearActivity }}
-    >
+    <ActivitySubscriptionContext.Provider value={{ hasNewActivity, activities, clearActivity }}>
       {children}
     </ActivitySubscriptionContext.Provider>
   )
 }
 
-export const useActivitySubsciptionContext = () =>
-  useContext(ActivitySubscriptionContext)
+export const useActivitySubsciptionContext = () => useContext(ActivitySubscriptionContext)

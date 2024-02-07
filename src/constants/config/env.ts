@@ -30,8 +30,8 @@ if (!import.meta.env.VITE_APP_GIPHY_API_KEY) {
   console.warn('Missing GIPHY API key from environment variables')
 }
 
-if (!import.meta.env.VITE_APP_AIR_TABLE_KEY) {
-  console.warn('Missing AIR_TABLE_KEY API key from environment variables')
+if (!import.meta.env.VITE_APP_FLODESK_API_KEY) {
+  console.warn('Missing FLODESK_API_KEY API key from environment variables')
 }
 
 if (!import.meta.env.VITE_APP_GEYSER_NOSTR_PUBKEY) {
@@ -41,7 +41,7 @@ if (!import.meta.env.VITE_APP_GEYSER_NOSTR_PUBKEY) {
 }
 
 export const {
-  VITE_APP_AIR_TABLE_KEY,
+  VITE_APP_FLODESK_API_KEY,
   VITE_APP_GIPHY_API_KEY,
   VITE_APP_GEYSER_NOSTR_PUBKEY,
 } = import.meta.env

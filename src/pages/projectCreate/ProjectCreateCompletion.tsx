@@ -112,6 +112,8 @@ export const ProjectCreateCompletion = ({
     navigate(getPath('projectLaunch', project.name, 'draft'))
   }
 
+  const isLaunchLoading = isCreateWalletLoading || isUpdateStatusLoading
+
   if (isGetProjectLoading) {
     return <Loader />
   }
@@ -143,7 +145,7 @@ export const ProjectCreateCompletion = ({
                 leftIcon={<BiRocket />}
                 onClick={confirmModal.onOpen}
                 disabled={!isSubmitEnabled}
-                isLoading={isCreateWalletLoading || isUpdateStatusLoading}
+                isLoading={isLaunchLoading}
               >
                 {t('Launch Project')}
               </Button>
@@ -161,7 +163,12 @@ export const ProjectCreateCompletion = ({
               'By launching your project the project will be visible to and searchable by the public. You will be able to disactivate your project but not to hide your project after launching it.',
             )}
           </Body1>
-          <Button variant="primary" w="full" onClick={onLaunchClick}>
+          <Button
+            variant="primary"
+            w="full"
+            onClick={onLaunchClick}
+            isLoading={isLaunchLoading}
+          >
             {t('Confirm launch')}
           </Button>
         </VStack>

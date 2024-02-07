@@ -1,4 +1,4 @@
-import { Box, HStack, Stack, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Stack, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -63,55 +63,40 @@ const RewardItem = ({
   return (
     <Box
       backgroundColor="neutral.50"
-      border="2px"
-      borderColor="neutral.200"
+      border='2px'
+      borderColor='neutral.200'
       borderRadius={12}
       mt={2}
       p={3}
       pos={'relative'}
       width={'100%'}
     >
-      <Stack direction="row">
-        <Box borderRadius={12} overflow={'hidden'} width="70px">
-          <div
-            style={{
-              display: 'block',
-              position: 'relative',
-              paddingTop: '100%',
-              width: '100%',
-            }}
-          >
-            <div
-              style={{
-                display: 'block',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: `transparent url(${reward.image}) no-repeat center center / cover`,
-              }}
-            ></div>
-          </div>
-        </Box>
-        <Stack direction="column" flex={1} pl={2} gap={0.25}>
-          <Text fontWeight={700} fontSize={16} color="neutral.900">
-            {reward.rewardName}
-          </Text>
-          <Text fontSize={12} color="neutral.600">{`${
-            reward.maxClaimable && reward.maxClaimable > 0
-              ? reward.maxClaimable - reward.sold + ` ${t('remaining')}, `
-              : ''
-          }${reward.sold} ${t('sold')}`}</Text>
+        <Stack direction="row">
+            <Box borderRadius={12} overflow={'hidden'} width="70px">
+                <Box style={{display: 'block', position: 'relative', paddingTop: '100%', width: '100%'}}>
+                    <Box style={{display: 'block', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: `transparent url(${reward.image}) no-repeat center center / cover`}}>
+                    </Box>
+                </Box>
+            </Box>
+            <Stack direction="column" flex={1} pl={2} gap={0.25}>
+                <Text fontWeight={700} fontSize={14} color='neutral.900'>{reward.rewardName}</Text>
+                <Text fontSize={14} color='neutral.600'>{
+                    `${(reward.maxClaimable && reward.maxClaimable > 0 ? (reward.maxClaimable - reward.sold) + ` ${t('remaining')}, ` : '')}${reward.sold} ${t('sold')}`
+                  }</Text>
+            </Stack>
+            <Stack direction="column" align={'flex-end'} justifyContent={'space-between'}>
+                <Text lineHeight={1.4} fontWeight={700} fontSize={14} color='neutral.600'>{project.rewardCurrency == RewardCurrency.Usdcent ? `$${reward.cost / 100}` : `${reward.cost.toLocaleString()} sats`}</Text>
+                <Button
+                    as={Link}
+                    to={getPath('project', reward.rewardProject.name) + '?addRewardToBasket=' + reward.id}
+                    variant='secondary'
+                    size='sm'
+                    px={2}
+                >
+                    <Text isTruncated>{t('Select')}</Text>
+                </Button>
+            </Stack>
         </Stack>
-        <Stack direction="column" align={'flex-end'}>
-          <Text fontWeight={700} fontSize={16} color="neutral.600">
-            {project && project.rewardCurrency === RewardCurrency.Usdcent
-              ? `$${reward.cost / 100}`
-              : `${reward.cost.toLocaleString()} sats`}
-          </Text>
-        </Stack>
-      </Stack>
     </Box>
   )
 }

@@ -1,11 +1,7 @@
 import { DateTime, Interval } from 'luxon'
 
 import { IBadge } from '../interfaces'
-import {
-  Funder,
-  FundingTxForLandingPageFragment,
-  FundingTxFragment,
-} from '../types/generated/graphql'
+import { Funder, FundingTxForLandingPageFragment, FundingTxFragment } from '../types/generated/graphql'
 
 type IBadges<TKey extends string = string> = Record<TKey, IBadge>
 
@@ -39,18 +35,14 @@ const roleBadges: IBadges<RoleBadges> = {
   },
   earlyFunder: {
     badge: 'Early Funder',
-    description:
-      'This user funded within the first 24 hours of the project start!',
+    description: 'This user funded within the first 24 hours of the project start!',
   },
 }
 
 interface Props {
   useShortForm?: boolean
   creationDateStringOfFundedContent: string
-  funder:
-    | Funder
-    | FundingTxForLandingPageFragment['funder']
-    | FundingTxFragment['funder']
+  funder: Funder | FundingTxForLandingPageFragment['funder'] | FundingTxFragment['funder']
 }
 
 /**
@@ -85,12 +77,8 @@ export const computeFunderBadges = ({
 
   // Check if early funder
   if (funder.confirmedAt) {
-    const funderConfirmedAt = DateTime.fromMillis(
-      parseInt(funder.confirmedAt, 10),
-    )
-    const projectCreatedAt = DateTime.fromMillis(
-      parseInt(creationDateStringOfFundedContent, 10),
-    )
+    const funderConfirmedAt = DateTime.fromMillis(parseInt(funder.confirmedAt, 10))
+    const projectCreatedAt = DateTime.fromMillis(parseInt(creationDateStringOfFundedContent, 10))
     const interval = Interval.fromDateTimes(projectCreatedAt, funderConfirmedAt)
 
     if (interval.length('hours') < 24) {
@@ -112,9 +100,7 @@ export const computeFunderBadges = ({
 
   const longFormBadges = funderBadges.map((funderBadge) => ({
     ...funderBadge,
-    badge: funderBadge.badge.includes('Funder')
-      ? funderBadge.badge
-      : funderBadge.badge + ' Funder',
+    badge: funderBadge.badge.includes('Funder') ? funderBadge.badge : funderBadge.badge + ' Funder',
   }))
 
   return longFormBadges

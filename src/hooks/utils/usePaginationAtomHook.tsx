@@ -1,5 +1,4 @@
 import { SetStateAction } from 'jotai'
-import { Dispatch } from 'react'
 
 import { PaginationInput } from '../../types'
 import { validNumber } from '../../utils'
@@ -19,8 +18,10 @@ export type usePaginationAtomHookProps<TEntity, TTransformed = TEntity> = {
   where?: any
   orderBy?: any
   resultMap?: (_: TEntity[]) => TTransformed[]
-  list: PaginatedListType<TEntity, TTransformed>
-  setList: Dispatch<SetStateAction<PaginatedListType<TEntity, TTransformed>>>
+  setData: SetAtom<
+    [SetStateAction<PaginatedListType<TEntity, TTransformed>>],
+    void
+  >
 }
 
 const thresholdNoOfAggregatedResultsToFetchMore = 5
@@ -34,8 +35,7 @@ export const usePaginationAtomHook = <TEntity, TTransformed = TEntity>({
   where,
   orderBy,
   resultMap,
-  list,
-  setList,
+  setData,
 }: usePaginationAtomHookProps<TEntity, TTransformed>) => {
   const [noMoreItems, setNoMoreItems] = useListenerState(true)
 
@@ -67,7 +67,7 @@ export const usePaginationAtomHook = <TEntity, TTransformed = TEntity>({
         fetchNext()
       }
 
-      setList(mappedData)
+      setData(mappedData)
     }
   }
 
@@ -118,12 +118,17 @@ export const usePaginationAtomHook = <TEntity, TTransformed = TEntity>({
 
         handlePaginationChange(data)
 
-        const mappedData = handleMapData(data)
+        const mappedData: PaginatedListType<TEntity, TTransformed> =
+          handleMapData(data)
 
-        setList([...list, ...mappedData] as PaginatedListType<
-          TEntity,
-          TTransformed
-        >)
+        setData(
+          (prev) =>
+            [...prev, ...mappedData] as PaginatedListType<
+              TEntity,
+              TTransformed
+            >,
+        )
+
         // If the aggregated length of the data is too small next pagination is automatically fetched
         if (
           data.length === itemLimit &&

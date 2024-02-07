@@ -7,7 +7,7 @@ export const FRAGMENT_ORDER_ITEM = gql`
       name
       cost
       rewardCurrency
-      rewardType
+      category
     }
     quantity
     unitPriceInSats

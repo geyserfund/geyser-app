@@ -24,13 +24,9 @@ const getUsdQuote = async (): Promise<number> => {
       }),
   )
 
-  const usdQuote =
-    Number(
-      await Promise.any(requests).catch((error) => captureException(error)),
-    ) || 0
+  const usdQuote = Number(await Promise.any(requests).catch((error) => captureException(error))) || 0
 
   return usdQuote
 }
 
-export const fetchBitcoinRates = ({ currency: _ }: { currency: 'usd' }) =>
-  getUsdQuote()
+export const fetchBitcoinRates = ({ currency: _ }: { currency: 'usd' }) => getUsdQuote()

@@ -1,3 +1,54 @@
+## [0.6.8](https://github.com/geyserfund/geyser-app/compare/v0.6.7...v0.6.8) (2024-02-07)
+
+
+### Features
+
+* add sort by date to all the tables in contributors reward table ([d4d32d8](https://github.com/geyserfund/geyser-app/commit/d4d32d85a415a578e4416792d328e02002b410d8))
+* added query to fetch categories ([5a40f28](https://github.com/geyserfund/geyser-app/commit/5a40f284b7d0260865a6ff24e6bb2a3941fdd0c8))
+* download invoice ([5d915e9](https://github.com/geyserfund/geyser-app/commit/5d915e9f461e2da6bde0a5468d256b468f152d56))
+* frontend for project reward categories ([208696f](https://github.com/geyserfund/geyser-app/commit/208696fc670bc596917f1737366b0b663a910521))
+* use flodesk for adding subscribers instead of airtable ([8328a1c](https://github.com/geyserfund/geyser-app/commit/8328a1cebdc14bce298b65858868f241fbdb258e))
+
+
+### Bug Fixes
+
+* add fixed height so scroll will invoke on contributions/leaderboard ([77e1664](https://github.com/geyserfund/geyser-app/commit/77e1664fd47f15236249a4046a4bd5d1b68b7375))
+* add flodesk api key to docker config ([32c931a](https://github.com/geyserfund/geyser-app/commit/32c931a8a0ff9a7527f8bdc3d56b517ffdf151ff))
+* add image crop feature for reward image ([a10a689](https://github.com/geyserfund/geyser-app/commit/a10a68957b3b1e3e1977a1cd2bccd4202a42a5fe))
+* add more info to clear cache notice ([571191b](https://github.com/geyserfund/geyser-app/commit/571191b633feff548a06521c47d93b354aa2f1b4))
+* build issues ([0e518de](https://github.com/geyserfund/geyser-app/commit/0e518de38936880fc608b1d84ef852220219fadc))
+* color update ([4da82c1](https://github.com/geyserfund/geyser-app/commit/4da82c1c22f5e7bbc2b809dd4d5595e064e14311))
+* copy tooltip not working on IOS safari ([466bd96](https://github.com/geyserfund/geyser-app/commit/466bd965d182018b697777f4af58e38c52751d69))
+* copy update to connect with lightning ([8dc1b9a](https://github.com/geyserfund/geyser-app/commit/8dc1b9a0cf139c574f5fab79989992b9a3c69ad0))
+* default rewardType to Physical on rewardForm ([a90c849](https://github.com/geyserfund/geyser-app/commit/a90c84961655923d37e512f3fec4db1bd587e2d3))
+* error in staging with renamed backend field ([bfc50b6](https://github.com/geyserfund/geyser-app/commit/bfc50b69984543ca3cba74e3fa25063d84e8f317))
+* font update on succes screen image ([17d4e92](https://github.com/geyserfund/geyser-app/commit/17d4e92da98696ac71d95faa257dc0d2cb596cbe))
+* log in options are grayed out ([ffd4793](https://github.com/geyserfund/geyser-app/commit/ffd4793cd34759f62876a2a8bddc39d2285f32a7))
+* missing auth token issue,GYS-6054 ([136d570](https://github.com/geyserfund/geyser-app/commit/136d57077960191e1895fad045d61f3b1ef9080e))
+* missing auth token on relogin ([491f63d](https://github.com/geyserfund/geyser-app/commit/491f63d31e015778a113b99649bd9ba2f16ecd8f))
+* modified filter value for search results when searching ([32856d7](https://github.com/geyserfund/geyser-app/commit/32856d714c71530b552d2c53aeb9bd13aeca004d))
+* padding to align with the rest of the component ([0e5e78e](https://github.com/geyserfund/geyser-app/commit/0e5e78e5e1521baa732507ff7e74722f27e6c978))
+* pr updates ([15c98c6](https://github.com/geyserfund/geyser-app/commit/15c98c6e5e4df26c2f7c6166a02bedae14ed6e3d))
+* profile page failing ([d6dda17](https://github.com/geyserfund/geyser-app/commit/d6dda176190a99150c22b31441e474d598e2b50b))
+* project launch button was clickable ([17ab1a9](https://github.com/geyserfund/geyser-app/commit/17ab1a994c5e3b406aa7cbc3962be943ad39f6bc))
+* qa production hotfixes ([730f22d](https://github.com/geyserfund/geyser-app/commit/730f22d09fefeef932c531cd36227648c1c3b960))
+* remove height override ([53deb1d](https://github.com/geyserfund/geyser-app/commit/53deb1d910bd58c57e2a55d1508dd6da2c20735b))
+* remove references from estimatedDeliveryDate, add in inDevelopment ([289e9a1](https://github.com/geyserfund/geyser-app/commit/289e9a1e6e0bac906324e5baff1c702f0402ad94))
+* replace wrong file ([d175327](https://github.com/geyserfund/geyser-app/commit/d175327d3fa1b62935d9d9c125206a905348e1f4))
+* rewards final updates ([9e49469](https://github.com/geyserfund/geyser-app/commit/9e494694593ee7c69c4bbf7fa8f2133b68865ab4))
+* scroll issue and add scroll to rewards section in activity panel ([3ec9812](https://github.com/geyserfund/geyser-app/commit/3ec9812c461c6640ad3341aa4ff45277ec8b34c4))
+* test ([b1276db](https://github.com/geyserfund/geyser-app/commit/b1276db18ffe94e4e184f124c406257defa127a1))
+* translation for feedback form ([b934872](https://github.com/geyserfund/geyser-app/commit/b934872ba26d51e145c67a835b187c168176f4d4))
+* unbold lightning font on buton ([69c3012](https://github.com/geyserfund/geyser-app/commit/69c30125eaa03d160cd3428302904cbfb0674087))
+* update copy ([0adec17](https://github.com/geyserfund/geyser-app/commit/0adec17807abcc13f2b83664adb8b61f3c2aef79))
+* update copy for funding anonymous ([0f53f46](https://github.com/geyserfund/geyser-app/commit/0f53f46d5c73881b09ecd9df9c2f8dced5e96af2))
+* update docs.geyser url to learn.geyser ([1a071f4](https://github.com/geyserfund/geyser-app/commit/1a071f481bec654f14a707db4bcae9020d205fbe))
+* update feedback form link ([0b64012](https://github.com/geyserfund/geyser-app/commit/0b640122ada3eaa7fb8e4ea5be5e15f695fb437f))
+* update prettier max length to 120 from 80, and changes to workspace ([7e82904](https://github.com/geyserfund/geyser-app/commit/7e82904a3f61b0edc5ade250833df4e6f8b197e0))
+* update reward crop aspect ratio ([bb70086](https://github.com/geyserfund/geyser-app/commit/bb700861da256b0bedaa1a135f6aa38930dfc4f6))
+* update styling for lightning error ([cc0ab5b](https://github.com/geyserfund/geyser-app/commit/cc0ab5b8862e21aa519bb22f130c225af9adf95a))
+* update typo ([2721abb](https://github.com/geyserfund/geyser-app/commit/2721abbf504aab43d110159514fcffe00c2030e0))
+
 ## [0.6.7](https://github.com/geyserfund/geyser-app/compare/v0.6.4...v0.6.7) (2024-01-24)
 
 

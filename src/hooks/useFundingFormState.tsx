@@ -3,11 +3,7 @@ import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { AuthContext } from '../context'
 import { useBTCConverter } from '../helpers'
 import { IRewardCount } from '../interfaces'
-import {
-  ProjectRewardForCreateUpdateFragment,
-  RewardCurrency,
-  ShippingDestination,
-} from '../types/generated/graphql'
+import { ProjectRewardForCreateUpdateFragment, RewardCurrency, ShippingDestination } from '../types/generated/graphql'
 
 export interface IFundForm {
   donationAmount: number
@@ -42,10 +38,7 @@ export interface IFundFormState {
 
 export type UseFundingFormStateReturn = ReturnType<typeof useFundingFormState>
 
-export const useFundingFormState = ({
-  rewards,
-  rewardCurrency,
-}: UseFundStateProps) => {
+export const useFundingFormState = ({ rewards, rewardCurrency }: UseFundStateProps) => {
   const { user, isAnonymous } = useContext(AuthContext)
   const { getUSDCentsAmount } = useBTCConverter()
 
@@ -120,9 +113,7 @@ export const useFundingFormState = ({
           Object.keys(newRewardsCountInfo).forEach((rewardID: string) => {
             const id = parseInt(rewardID, 10)
 
-            const reward = rewards.find(
-              (reward) => reward.id === id || `${reward.id}` === rewardID,
-            )
+            const reward = rewards.find((reward) => reward.id === id || `${reward.id}` === rewardID)
 
             if (reward && reward.id) {
               if (reward.hasShipping) {
@@ -157,11 +148,7 @@ export const useFundingFormState = ({
   }, [initialState])
 
   const hasSelectedRewards = useMemo(
-    () =>
-      Boolean(
-        state.rewardsByIDAndCount &&
-          Object.keys(state.rewardsByIDAndCount).length > 0,
-      ),
+    () => Boolean(state.rewardsByIDAndCount && Object.keys(state.rewardsByIDAndCount).length > 0),
     [state.rewardsByIDAndCount],
   )
 

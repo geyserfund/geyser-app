@@ -6,7 +6,7 @@ import {
   Outlet,
   useLocation,
   useNavigate,
-  useParams,
+  useParams
 } from 'react-router-dom'
 
 import Loader from '../../components/ui/Loader'
@@ -15,14 +15,20 @@ import {
   routeMatchForProjectPageAtom,
   useGetHistoryRoute,
 } from '../../config'
-import { getPath } from '../../constants'
-import { useProjectContext } from '../../context'
+import { PathName, getPath } from '../../constants'
+import { MobileViews, useProjectContext } from '../../context'
 import { useModal } from '../../hooks/useModal'
-import { useMobileMode } from '../../utils'
+import { toInt, useMobileMode } from '../../utils'
 import { ProjectCreateDraftModal } from '../projectCreate/components/ProjectCreateDraftModal'
 import { ProjectCreateLaunchedModal } from '../projectCreate/components/ProjectCreateLaunchedModal'
 import { ProjectMobileBottomNavigation } from './projectNavigation/components/ProjectMobileBottomNavigation'
 import { ProjectNavigation } from './projectNavigation/components/ProjectNavigation'
+import React from 'react'
+
+function useQuery() {
+  const { search } = useLocation();
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}
 
 export const ProjectContainer = () => {
   const navigate = useNavigate()
@@ -33,9 +39,10 @@ export const ProjectContainer = () => {
   const launchModal = useModal({ onClose: onModalClose })
   const draftModal = useModal({ onClose: onModalClose })
 
-  const { project, loading, isProjectOwner, fundingFlow } = useProjectContext()
+  const { project, loading, isProjectOwner, fundingFlow, fundForm: { updateReward }, setMobileView, mobileView } = useProjectContext()
 
-  const params = useParams<{ projectId: string }>()
+  const params = useParams<{ projectId: string, addRewardToBasket: string }>()
+  const query = useQuery();
   const routeMatchForProjectPage = useAtomValue(routeMatchForProjectPageAtom)
   const historyRoutes = useGetHistoryRoute()
   const lastRoute = historyRoutes[historyRoutes.length - 2] || ''
@@ -76,11 +83,20 @@ export const ProjectContainer = () => {
     )
   }
 
+
+  // If the user is being directed to the product page with addToCart, this takes first priority
+  if(query.get('addRewardToBasket')) {
+    updateReward({ id: toInt(query.get('addRewardToBasket')), count: 1 })
+    navigate(PathName.projectRewards)
+    setMobileView(MobileViews.funding)
+  }
+  
   // If the user is project creator and the route is project main page, we redirect to project overview page
-  if (
+  else if (
     params.projectId &&
     routeMatchForProjectPage &&
     isProjectOwner &&
+    mobileView !== "funding" &&
     !lastRoute.includes('launch') &&
     !(lastRoute.includes('project') && lastRoute.includes(params.projectId))
   ) {
