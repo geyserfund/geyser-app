@@ -197,11 +197,11 @@ export type CreateProjectRewardInput = {
   estimatedDeliveryInWeeks?: InputMaybe<Scalars['Int']>
   hasShipping: Scalars['Boolean']
   image?: InputMaybe<Scalars['String']>
-  inDevelopment: Scalars['Boolean']
   isAddon?: InputMaybe<Scalars['Boolean']>
   isHidden?: InputMaybe<Scalars['Boolean']>
   maxClaimable?: InputMaybe<Scalars['maxClaimable_Int_min_0']>
   name: Scalars['name_String_NotNull_maxLength_100']
+  preOrder?: InputMaybe<Scalars['Boolean']>
   projectId: Scalars['BigInt']
   stock?: InputMaybe<Scalars['stock_Int_min_0']>
 }
@@ -1485,8 +1485,6 @@ export type ProjectReward = {
   id: Scalars['BigInt']
   /** Image of the reward. */
   image?: Maybe<Scalars['String']>
-  /** Boolean value to indicate whether this reward is in development or ready to ship */
-  inDevelopment: Scalars['Boolean']
   /** Boolean value to indicate whether this reward is an addon */
   isAddon: Scalars['Boolean']
   /** Boolean value to indicate whether this reward is hidden */
@@ -1495,6 +1493,8 @@ export type ProjectReward = {
   maxClaimable?: Maybe<Scalars['Int']>
   /** Name of the reward. */
   name: Scalars['name_String_NotNull_maxLength_100']
+  /** Boolean value to indicate whether this reward is in development or ready to ship */
+  preOrder: Scalars['Boolean']
   /** Boolean value to indicate whether this reward requires shipping */
   project: Project
   /** Currency in which the reward cost is stored. */
@@ -1936,7 +1936,7 @@ export type UpdateProjectMilestoneInput = {
 export type UpdateProjectRewardDevelopmentStatusInput = {
   estimatedAvailabilityDate?: InputMaybe<Scalars['Date']>
   estimatedDeliveryInWeeks?: InputMaybe<Scalars['Int']>
-  inDevelopment?: InputMaybe<Scalars['Boolean']>
+  preOrder?: InputMaybe<Scalars['Boolean']>
   projectRewardId: Scalars['BigInt']
 }
 
@@ -3754,11 +3754,11 @@ export type ProjectRewardResolvers<
   hasShipping?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  inDevelopment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   isAddon?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   isHidden?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   maxClaimable?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   name?: Resolver<ResolversTypes['name_String_NotNull_maxLength_100'], ParentType, ContextType>
+  preOrder?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>
   rewardCurrency?: Resolver<ResolversTypes['RewardCurrency'], ParentType, ContextType>
   rewardType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
@@ -4756,7 +4756,7 @@ export type ProjectRewardForCreateUpdateFragment = {
   isAddon: boolean
   isHidden: boolean
   category?: string | null
-  inDevelopment: boolean
+  preOrder: boolean
 }
 
 export type ProjectFragment = {
@@ -6491,7 +6491,7 @@ export const ProjectRewardForCreateUpdateFragmentDoc = gql`
     isAddon
     isHidden
     category
-    inDevelopment
+    preOrder
   }
 `
 export const EntryForProjectFragmentDoc = gql`

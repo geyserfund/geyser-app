@@ -111,7 +111,7 @@ export const FRAGMENT_PROJECT_REWARD_FOR_CREATE_UPDATE = gql`
     isAddon
     isHidden
     category
-    inDevelopment
+    preOrder
   }
 `
 

@@ -86,24 +86,25 @@ export const ProjectRewardForm = ({
       isAddon: reward.isAddon,
       isHidden: reward.isHidden,
       category: reward.category || undefined,
-      inDevelopment: reward.inDevelopment || true,
+      preOrder: reward.preOrder || true
     }
   }
 
-  const getRewardUpdateProjectRewardInputVariables = (): UpdateProjectRewardInput => {
-    return {
-      projectRewardId: reward.id,
-      cost: reward.cost,
-      description: reward.description,
-      image: reward.image || undefined,
-      name: reward.name,
-      maxClaimable: reward.maxClaimable || undefined,
-      hasShipping: reward.hasShipping,
-      isAddon: reward.isAddon,
-      isHidden: reward.isHidden,
-      category: reward.category || undefined,
+  const getRewardUpdateProjectRewardInputVariables =
+    (): UpdateProjectRewardInput => {
+      return {
+        projectRewardId: reward.id,
+        cost: reward.cost,
+        description: reward.description,
+        image: reward.image || undefined,
+        name: reward.name,
+        maxClaimable: reward.maxClaimable || undefined,
+        hasShipping: reward.hasShipping,
+        isAddon: reward.isAddon,
+        isHidden: reward.isHidden,
+        category: reward.category || ''
+      }
     }
-  }
 
   const handleFormTextChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target
