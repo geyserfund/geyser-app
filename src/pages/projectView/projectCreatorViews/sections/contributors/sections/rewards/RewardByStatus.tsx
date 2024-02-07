@@ -76,7 +76,7 @@ export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
         />
       ) : (
         <HStack w="full" px={standardPadding}>
-          <Body1>{t("This group doesn't have any items yet.")}</Body1>
+          <Body1>{t("No items with this status.")}</Body1>
         </HStack>
       )}
       {!noMoreItems.current && (

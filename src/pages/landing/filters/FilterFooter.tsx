@@ -34,7 +34,7 @@ export const FilterFooter = () => {
         </Link>
 
         <Link href={DocsUrl} isExternal>
-          <Caption bold>{t('Docs')}</Caption>
+          <Caption bold>{t('Learn')}</Caption>
         </Link>
 
         <ReactLink to={getPath('legalTerms')} style={{ textDecoration: 'underline' }}>

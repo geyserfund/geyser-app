@@ -125,7 +125,7 @@ export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
         </MenuItemLink>
 
         <MenuItemLink color={'neutral.700'} destinationPath={DocsUrl} isExternal>
-          {t('Docs')}
+          {t('Learn')}
         </MenuItemLink>
 
         <MenuItemLink color={'neutral.700'} destinationPath={FeedbackUrl} isExternal>
