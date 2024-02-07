@@ -1,5 +1,4 @@
 import { gql, useMutation, useQuery } from '@apollo/client'
-import { CloseIcon } from '@chakra-ui/icons'
 import { Button, Checkbox, HStack, IconButton, Select, Stack, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -8,12 +7,7 @@ import { RiArrowLeftSLine } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../../../../components/layouts'
-import {
-  CalendarButton,
-  CreatorEmailButton,
-  FileUpload,
-  UpdateCurrencyModal,
-} from '../../../../../../../components/molecules'
+import { CreatorEmailButton, FileUpload, UpdateCurrencyModal } from '../../../../../../../components/molecules'
 import { ImageCrop } from '../../../../../../../components/molecules/ImageCropperModal'
 import { TextArea, TextInputBox, UploadBox } from '../../../../../../../components/ui'
 import { ProjectRewardValidations } from '../../../../../../../constants'
@@ -89,10 +83,10 @@ export const ProjectRewardForm = ({
       name: reward.name,
       maxClaimable: reward.maxClaimable || undefined,
       hasShipping: reward.hasShipping,
-      estimatedDeliveryDate: reward.estimatedDeliveryDate || undefined,
       isAddon: reward.isAddon,
       isHidden: reward.isHidden,
       category: reward.category || undefined,
+      inDevelopment: reward.inDevelopment || true,
     }
   }
 
@@ -105,7 +99,6 @@ export const ProjectRewardForm = ({
       name: reward.name,
       maxClaimable: reward.maxClaimable || undefined,
       hasShipping: reward.hasShipping,
-      estimatedDeliveryDate: reward.estimatedDeliveryDate || undefined,
       isAddon: reward.isAddon,
       isHidden: reward.isHidden,
       category: reward.category || undefined,
@@ -117,10 +110,6 @@ export const ProjectRewardForm = ({
     if (name) {
       setReward((current) => ({ ...current, [name]: value }))
     }
-  }
-
-  const handleFormCalendarChange = (date: Date) => {
-    setReward((current) => ({ ...current, estimatedDeliveryDate: date }))
   }
 
   const handleMaxClaimableAmountBlur = () => {
@@ -436,32 +425,6 @@ export const ProjectRewardForm = ({
             >
               <UploadBox h={10} title="Select an Image" />
             </FileUpload>
-          </FieldContainer>
-          <FieldContainer title={t('Estimated Delivery Date')} visibility={'hidden'}>
-            <div style={{ position: 'relative', width: '100%' }}>
-              <CalendarButton
-                onChange={handleFormCalendarChange}
-                value={reward.estimatedDeliveryDate}
-                containerProps={{ w: '100%' }}
-              >
-                <TextInputBox
-                  style={{ border: 0, background: 'none', width: '100%' }}
-                  value={reward.estimatedDeliveryDate}
-                />
-              </CalendarButton>
-              {reward.estimatedDeliveryDate && (
-                <div style={{ position: 'absolute', top: '5px', right: '10px' }}>
-                  <CloseIcon
-                    onClick={() => {
-                      setReward((current) => ({
-                        ...current,
-                        estimatedDeliveryDate: undefined,
-                      }))
-                    }}
-                  ></CloseIcon>
-                </div>
-              )}
-            </div>
           </FieldContainer>
         </Stack>
         <VStack spacing={4} w="100%" align={'flex-start'}>
