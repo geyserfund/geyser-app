@@ -73,10 +73,10 @@ const RewardItem = ({
     >
         <Stack direction="row">
             <Box borderRadius={12} overflow={'hidden'} width="70px">
-                <div style={{display: 'block', position: 'relative', paddingTop: '100%', width: '100%'}}>
-                    <div style={{display: 'block', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: `transparent url(${reward.image}) no-repeat center center / cover`}}>
-                    </div>
-                </div>
+                <Box style={{display: 'block', position: 'relative', paddingTop: '100%', width: '100%'}}>
+                    <Box style={{display: 'block', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: `transparent url(${reward.image}) no-repeat center center / cover`}}>
+                    </Box>
+                </Box>
             </Box>
             <Stack direction="column" flex={1} pl={2} gap={0.25}>
                 <Text fontWeight={700} fontSize={14} color='neutral.900'>{reward.rewardName}</Text>

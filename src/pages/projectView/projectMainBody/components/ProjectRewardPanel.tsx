@@ -33,9 +33,9 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
 
   const renderRewardAvailability = () => {
     if(rewardStockRemaining > 0) {
-      return <><span style={{color: '#DF3634'}}>{rewardStockRemaining + ` ${t('remaining')}`}</span> <span style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</span> </>;
+      return <><Box as={'span'} color={'secondary.red'}>{rewardStockRemaining + ` ${t('remaining')}`}</Box> <Box as={'span'} style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</Box> </>;
     } else if (rewardStockRemaining === 0) {
-      return <><span style={{color: 'neutral.600', fontWeight: 700}}>{t('Sold Out')}</span> <span style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</span> </>;
+      return <><Box as={'span'} color={'neutral.600'} fontWeight={700}>{t('Sold Out')}</Box> <Box as={'span'} style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</Box> </>;
     } else {
       return '';
     }
@@ -53,10 +53,10 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
     >
         <Stack direction="row">
             <Box width="70px">
-                <div style={{display: 'block', position: 'relative', paddingTop: '100%', width: '100%', borderRadius: "12px", overflow: "hidden"}}>
-                    <div style={{display: 'block', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: `transparent url(${reward.image}) no-repeat center center / cover`}}>
-                    </div>
-                </div>
+                <Box style={{display: 'block', position: 'relative', paddingTop: '100%', width: '100%', borderRadius: "12px", overflow: "hidden"}}>
+                    <Box style={{display: 'block', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: `transparent url(${reward.image}) no-repeat center center / cover`}}>
+                    </Box>
+                </Box>
             </Box>
             <Stack direction="column" flex={1} pl={2} gap={0.25}>
                 <Text fontWeight={700} fontSize={14} color='neutral.900'>{reward.name}</Text>

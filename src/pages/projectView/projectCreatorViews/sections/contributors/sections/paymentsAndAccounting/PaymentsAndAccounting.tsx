@@ -9,8 +9,8 @@ export const PaymentsAndAccounting = () => {
   return (
     <VStack w="full" alignItems="flex-start">
       <Body1 px={standardPadding}>
-        <Trans i18nKey="This page is for reviewing all your received contributions (donations and reward purchases). For more informationa bout each transaction you can <0>Export</0> the CSV file.</1>">
-          {'This page is for reviewing all your received contributions (donations and reward purchases). For more informationa bout each transaction you can '}
+        <Trans i18nKey="This page is for reviewing all your received contributions (donations and reward purchases). For more information about each transaction you can <1>Export</1> the CSV file.">
+          {'This page is for reviewing all your received contributions (donations and reward purchases). For more information about each transaction you can '}
           <strong>Export</strong>
           {' the CSV file.'}
         </Trans>

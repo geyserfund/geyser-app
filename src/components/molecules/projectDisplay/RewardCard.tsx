@@ -22,9 +22,9 @@ export const RewardCard = ({
 
   const renderRewardAvailability = () => {
     if(rewardStockRemaining > 0) {
-      return <><span style={{color: '#DF3634'}}>{rewardStockRemaining + ` ${t('remaining')}`}</span> <span style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</span> </>;
+      return <><Box as={'span'} color={'secondary.red'}>{rewardStockRemaining + ` ${t('remaining')}`}</Box> <Box as={'span'} style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</Box> </>;
     } else if (rewardStockRemaining === 0) {
-      return <><span style={{color: 'neutral.600', fontWeight: 700}}>{t('Sold Out')}</span> <span style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</span> </>;
+      return <><Box as={'span'} color={'neutral.600'} fontWeight={700}>{t('Sold Out')}</Box> <Box as={'span'} style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</Box> </>;
     } else {
       return '';
     }
