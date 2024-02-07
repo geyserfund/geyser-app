@@ -89,7 +89,7 @@ export const ProjectContributionList = ({
       noborder
       width="100%"
       overflow="auto"
-      height={'500px'}
+      height={'100%'}
       py="0px"
       px={{ base: '10px', lg: '20px' }}
       {...props}
