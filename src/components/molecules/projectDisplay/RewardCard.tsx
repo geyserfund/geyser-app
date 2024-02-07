@@ -18,6 +18,17 @@ export const RewardCard = ({
 }: Props) => {
   const { t } = useTranslation()
   const {project} = useProjectContext()
+  const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : -1;
+
+  const renderRewardAvailability = () => {
+    if(rewardStockRemaining > 0) {
+      return <><Box as={'span'} color={'secondary.red'}>{rewardStockRemaining + ` ${t('remaining')}`}</Box> <Box as={'span'} style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</Box> </>;
+    } else if (rewardStockRemaining === 0) {
+      return <><Box as={'span'} color={'neutral.600'} fontWeight={700}>{t('Sold Out')}</Box> <Box as={'span'} style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</Box> </>;
+    } else {
+      return '';
+    }
+  }
 
   return (
     <Box
@@ -43,7 +54,10 @@ export const RewardCard = ({
           </div>
         </Box>
         <Stack direction={"row"} justifyContent="space-between" align="center" alignItems={'center'}>
-          <Text fontWeight={400} fontSize='14px' color='neutral.900'>{reward.maxClaimable && reward.maxClaimable >= 0 ? `${reward.maxClaimable - reward.sold} ${t('remaining')}, ` : ''}{reward.sold || 0} {t('sold')}</Text>
+          <Text fontWeight={400} fontSize='14px' color='neutral.900'>
+            {renderRewardAvailability()}
+            {reward.sold || 0} {t('sold')}
+          </Text>
           {reward.category && (
             <Badge fontSize={'10px'} borderRadius={'6px'} height={'20px'} backgroundColor={'neutral.100'} textTransform={'none'} fontWeight={600} lineHeight={"20px"} p={"0 4px"}>
               {reward.category}
@@ -54,13 +68,14 @@ export const RewardCard = ({
         <Container pos={'absolute'} bottom={3} left={3} right={3} width={'auto'} p={0}>
           <Stack direction='row' style={{ marginTop: '10px' }}>
             <Button
-              variant='primary'
+              variant={rewardStockRemaining === 0 ? 'secondary' : 'primary'}
               size='sm'
               height={'40px'}
               onClick={(e) => {
                 rest.onRewardClick?.(e);
               }}
               style={{ flex: 1 }}
+              isDisabled={rewardStockRemaining === 0}
             >
               <Text fontSize={16} fontWeight={500} isTruncated>{t('Add to Basket')}</Text>
             </Button>

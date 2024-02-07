@@ -108,7 +108,7 @@ export const PendingPaymentsList = () => {
   return (
     <VStack width="100%" flexGrow={1} pt={'10px'} spacing="10px">
       {ordersData.length === 0 ? (
-        <Text>{t("This group doesn't have any items yet.")}</Text>
+        <Text>{t("No items with this status.")}</Text>
       ) : (
         <PendingPaymentsTable
           data={ordersData}

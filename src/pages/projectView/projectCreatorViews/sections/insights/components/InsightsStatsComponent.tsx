@@ -125,7 +125,7 @@ export const InsightsStatsComponent = () => {
           flex={1}
         />
         <StatsBlock
-          title={t('Rewards purchased')}
+          title={t('Rewards sold')}
           prevValue={projectStats.prevRewardsPurchased}
           value={projectStats.rewardsPurchased}
           flex={1}

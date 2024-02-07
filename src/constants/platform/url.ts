@@ -181,10 +181,10 @@ export const VerifyEmailImageUrl = 'https://storage.googleapis.com/geyser-projec
 
 export const ProjectLaunchedImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/project-launched.svg'
 
-export const ProjectRewardsImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/no-rewards.png'
+export const ProjectRewardsImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/no-rewards.svg'
 
 export const ProjectNoTransactionImageUrl =
-  'https://storage.googleapis.com/geyser-projects-media/utils/no-transaction.png'
+  'https://storage.googleapis.com/geyser-projects-media/utils/no-transaction.svg'
 
 // GRANTS
 
