@@ -21,6 +21,10 @@ export const ID = {
       supporterModal: 'project-supporter-modal',
       contribution: 'project-activity-list-container',
       leaderboard: 'project-leaderboard-list-container',
+      rewards: {
+        wrapper: 'project-rewards-wrapper',
+        body: 'project-rewards-body',
+      },
     },
     story: {
       markdown: {
