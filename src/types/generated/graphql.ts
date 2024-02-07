@@ -4753,10 +4753,10 @@ export type ProjectRewardForCreateUpdateFragment = {
   sold: number
   hasShipping: boolean
   maxClaimable?: number | null
-  estimatedDeliveryDate?: any | null
   isAddon: boolean
   isHidden: boolean
   category?: string | null
+  inDevelopment: boolean
 }
 
 export type ProjectFragment = {
@@ -6488,10 +6488,10 @@ export const ProjectRewardForCreateUpdateFragmentDoc = gql`
     sold
     hasShipping
     maxClaimable
-    estimatedDeliveryDate
     isAddon
     isHidden
     category
+    inDevelopment
   }
 `
 export const EntryForProjectFragmentDoc = gql`
