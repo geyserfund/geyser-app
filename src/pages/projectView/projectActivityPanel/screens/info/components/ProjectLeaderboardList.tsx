@@ -57,7 +57,7 @@ export const ProjectLeaderboardList = ({
       noborder
       width="100%"
       overflow="auto"
-      height={isMobile ? 'calc(100% - 44px)' : '100%'}
+      height={isMobile ? 'calc(100% - 44px)' : '500px'}
       py="0px"
       px={{ base: '10px', lg: '20px' }}
       {...props}
