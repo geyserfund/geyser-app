@@ -1,4 +1,4 @@
-import { Project, ProjectReward, RewardCurrency, RewardType } from '../types/generated/graphql'
+import { Project, ProjectReward, RewardCurrency } from '../types/generated/graphql'
 
 export const defaultProjectReward: ProjectReward = {
   uuid: '',
@@ -14,7 +14,7 @@ export const defaultProjectReward: ProjectReward = {
   createdAt: new Date(),
   updatedAt: new Date(),
   project: {} as Project,
-  rewardType: RewardType.Physical,
+  category: '',
   rewardCurrency: RewardCurrency.Usdcent,
   backersCount: 0,
   isAddon: false,

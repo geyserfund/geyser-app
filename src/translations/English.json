@@ -369,7 +369,7 @@
   "Disconnect": "Disconnect",
   "Edit Profile": "Edit Profile",
   "Bio": "Bio",
-  "If the problem persists let us know via. <1>telegram</1> or this <1>feedback form.</1>": "If the problem persists let us know via. <1>telegram</1> or this <1>feedback form.</1>",
+  "If the problem persists let us know via. <1>telegram</1> or this <3>feedback form.</3>": "If the problem persists let us know via. <1>telegram</1> or this <3>feedback form.</3>",
   "This page was not found, please try again.": "This page was not found, please try again.",
   "Oops!": "Oops!",
   "You do not have permission to access this page.": "You do not have permission to access this page.",
@@ -672,7 +672,7 @@
   "URL is required": "URL is required",
   "Insert tweet": "Insert tweet",
   "Failed to insert tweet": "Failed to insert tweet",
-  "Funding as anonymous. <1>Click here</1> to connect your profile to contribution": "Funding as anonymous. <1>Click here</1> to connect your profile to contribution",
+  "Funding anonymously. <1>Click here</1> to connect your profile to the contribution": "Funding anonymously. <1>Click here</1> to connect your profile to the contribution",
   "My contributions": "My contributions",
   "Pulldown to refresh":"Pulldown to refresh",
   "Overview":"Overview",
@@ -866,5 +866,6 @@
   "USD ($)": "USD ($)",
   "Make a donation": "Make a donation",
   "You can do this by opening your Development environment (Right click -> inspect), then clicking on Application > Storage > Clear site data.":"You can do this by opening your Development environment (Right click -> inspect), then clicking on Application > Storage > Clear site data.",
-  "No items with this status.": "No items with this status."
+  "No items with this status.": "No items with this status.",
+  "Category": "Category"
 }

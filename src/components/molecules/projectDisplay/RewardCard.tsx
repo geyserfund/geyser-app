@@ -58,9 +58,9 @@ export const RewardCard = ({
             {renderRewardAvailability()}
             {reward.sold || 0} {t('sold')}
           </Text>
-          {reward.rewardType && (
+          {reward.category && (
             <Badge fontSize={'10px'} borderRadius={'6px'} height={'20px'} backgroundColor={'neutral.100'} textTransform={'none'} fontWeight={600} lineHeight={"20px"} p={"0 4px"}>
-              {reward.rewardType === 'PHYSICAL' ? t('Physical Item') : t('Digital Item')}
+              {reward.category}
             </Badge>
           )}
         </Stack>

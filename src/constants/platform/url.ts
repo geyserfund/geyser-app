@@ -7,8 +7,8 @@ export const LaunchUrl = 'https://geyser.fund/launch/start'
 export const GrantsUrl = 'https://geyser.fund/grants'
 export const AboutUsUrl = 'https://geyser.notion.site/About-Us-2dd9468a27e84531bcbcbe89c24d7f09'
 export const FAQUrl = 'https://geyser.notion.site/Geyser-FAQs-310e7900fa904732b9b64043831edec3'
-export const DocsUrl = 'https://learn.geyser.fund/'
-export const FeedbackUrl = 'https://airtable.com/shrGiEJKsPoDsysPf'
+export const LearnUrl = 'https://learn.geyser.fund/'
+export const FeedbackUrl = 'https://app.steelsync.io/clrxkiwf400l8oofs8pz7aq7k/new?request=bug'
 
 // Geyser footer Links
 
@@ -20,7 +20,6 @@ export const GeyserHomepageUrl = 'https://geyser.fund/'
 
 export const GeyserNostrUrl = 'https://snort.social/p/npub1kmwdmhuxvafg05dyap3qmy42jpwztrv9p0uvey3a8803ahlwtmnsnhxqk9'
 
-export const SubscribeUrl = 'https://airtable.com/shrE0ffCRdX6CkYYw'
 export const StartCrowdFundUrl = 'https://airtable.com/shrOzN3U8ePy4Y0uf'
 export const AnalyticsUrl = 'https://simpleanalytics.com/geyser.fund'
 
@@ -162,8 +161,7 @@ export const WalletCreationFindOutMoreUrl =
 
 export const commonMarkdownUrl = 'https://commonmark.org/help/'
 
-export const GeyserFeedbackFromUrl =
-  'https://app.steelsync.io/clrxkiwf400l8oofs8pz7aq7k/new?request=bug'
+export const GeyserFeedbackFromUrl = 'https://app.steelsync.io/clrxkiwf400l8oofs8pz7aq7k/new?request=bug'
 
 export const GeyserPrimalUrl = 'https://primal.net/p/npub1kmwdmhuxvafg05dyap3qmy42jpwztrv9p0uvey3a8803ahlwtmnsnhxqk9'
 

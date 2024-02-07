@@ -90,8 +90,8 @@ export const ProjectFundingFormCommentField = ({
 
           <Text pt={1} px={1} fontSize="10px" color="neutral.600">
             {isAnonymous ? (
-              <Trans i18nKey="Funding as anonymous. <1>Click here</1> to connect your profile to contribution">
-                {'Funding as anonymous. '}
+              <Trans i18nKey="Funding anonymously. <1>Click here</1> to connect your profile to the contribution">
+                {'Funding anonymously. '}
                 <span onClick={loginOnOpen} className={classes.clickSpan}>
                   Click here
                 </span>
