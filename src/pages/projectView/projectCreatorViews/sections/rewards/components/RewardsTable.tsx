@@ -15,6 +15,7 @@ import { useModal } from '../../../../../../hooks/useModal';
 import { useMutation } from '@apollo/client'
 import { MUTATION_DELETE_PROJECT_REWARD, MUTATION_UPDATE_PROJECT_REWARD } from '../../../../../../graphql/mutations';
 import { useNotification } from '../../../../../../utils';
+import { neutralColorsLight } from '../../../../../../styles';
 
 export const RewardsTable = () => {
   const { t } = useTranslation()
@@ -156,7 +157,7 @@ export const RewardsTable = () => {
           </tr>
           {project.rewards.map((row,index) => {
             return (
-              <tr key={index} style={{borderBottom: `1px solid ${ colorMode === 'light' ? '#E9ECEF' : '#141A19' }`, opacity: row.isHidden ? '0.5' : '1'}}>
+              <tr key={index} style={{borderBottom: `1px solid ${ colorMode === 'light' ? neutralColorsLight[100] : neutralColorsLight[900] }`}}>
                 <td style={{paddingTop: '10px', verticalAlign: 'top'}}>
                   <Stack style={{cursor: 'pointer'}} direction='row' align={'center'} onClick={() => {
                       setSelectedReward(row);
