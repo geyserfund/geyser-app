@@ -1,12 +1,5 @@
 import { CloseIcon } from '@chakra-ui/icons'
-import {
-  Box,
-  HStack,
-  IconButton,
-  StackProps,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, HStack, IconButton, StackProps, Text, VStack } from '@chakra-ui/react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
@@ -106,20 +99,9 @@ export const FileUpload = ({
         <HStack w="100%">
           {showcase && uploadedImage ? (
             <HStack>
-              <ImageWithReload
-                alt="uploaded image"
-                h={showcaseH}
-                w={showcaseW}
-                objectFit="cover"
-                src={uploadedImage}
-              />
+              <ImageWithReload alt="uploaded image" h={showcaseH} w={showcaseW} objectFit="cover" src={uploadedImage} />
               {onDeleteClick ? (
-                <IconButton
-                  size="sm"
-                  variant="ghost"
-                  aria-label="remove image"
-                  onClick={onDeleteClick}
-                >
+                <IconButton size="sm" variant="ghost" aria-label="remove image" onClick={onDeleteClick}>
                   <CloseIcon fontSize="xs" />
                 </IconButton>
               ) : null}
@@ -132,23 +114,13 @@ export const FileUpload = ({
         </HStack>
 
         {caption && (
-          <Text
-            w="100%"
-            textAlign="right"
-            variant="caption"
-            color="neutral.600"
-          >
+          <Text w="100%" textAlign="right" variant="caption" color="neutral.600">
             {caption}
           </Text>
         )}
       </VStack>
       {imageCrop && (
-        <ImageCropperModal
-          {...cropModal}
-          fileSrc={originalFile}
-          aspectRatio={imageCrop === ImageCrop.Square ? 1 : 3}
-          onCompleted={uploadFile}
-        />
+        <ImageCropperModal {...cropModal} fileSrc={originalFile} aspectRatio={imageCrop} onCompleted={uploadFile} />
       )}
     </>
   )
