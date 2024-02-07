@@ -1,16 +1,6 @@
 import { gql, useMutation, useQuery } from '@apollo/client'
 import { CloseIcon } from '@chakra-ui/icons'
-import {
-  Button,
-  Checkbox,
-  HStack,
-  IconButton,
-  Select,
-  Stack,
-  Text,
-  Tooltip,
-  VStack,
-} from '@chakra-ui/react'
+import { Button, Checkbox, HStack, IconButton, Select, Stack, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BiInfoCircle } from 'react-icons/bi'
@@ -25,11 +15,7 @@ import {
   UpdateCurrencyModal,
 } from '../../../../../../../components/molecules'
 import { ImageCrop } from '../../../../../../../components/molecules/ImageCropperModal'
-import {
-  TextArea,
-  TextInputBox,
-  UploadBox,
-} from '../../../../../../../components/ui'
+import { TextArea, TextInputBox, UploadBox } from '../../../../../../../components/ui'
 import { ProjectRewardValidations } from '../../../../../../../constants'
 import { useProjectContext } from '../../../../../../../context'
 import { FieldContainer } from '../../../../../../../forms/components/FieldContainer'
@@ -45,11 +31,7 @@ import {
   UpdateProjectRewardInput,
   USDCents,
 } from '../../../../../../../types'
-import {
-  commaFormatted,
-  toInt,
-  useNotification,
-} from '../../../../../../../utils'
+import { commaFormatted, toInt, useNotification } from '../../../../../../../utils'
 
 type Props = {
   buttonText: string
@@ -81,13 +63,10 @@ export const ProjectRewardForm = ({
   } = useModal()
 
   const projectCurrency = project?.rewardCurrency || RewardCurrency.Usdcent
-  const [rewardCurrency, setRewardCurrency] =
-    useState<RewardCurrency>(projectCurrency)
+  const [rewardCurrency, setRewardCurrency] = useState<RewardCurrency>(projectCurrency)
   const ownerEmail = project?.owners[0]?.user.email || ''
-  const [reward, setReward] =
-    useState<ProjectRewardForCreateUpdateFragment>(rewardData)
-  const [originalReward, setOriginalReward] =
-    useState<ProjectRewardForCreateUpdateFragment>(rewardData)
+  const [reward, setReward] = useState<ProjectRewardForCreateUpdateFragment>(rewardData)
+  const [originalReward, setOriginalReward] = useState<ProjectRewardForCreateUpdateFragment>(rewardData)
   const [formCostValue, setFormCostValue] = useState(
     reward.cost > 0 && project?.rewardCurrency === RewardCurrency.Usdcent
       ? (reward.cost / 100).toFixed(2)
@@ -95,12 +74,11 @@ export const ProjectRewardForm = ({
   )
   const [formError, setFormError] = useState<any>({})
 
-  const {
-    loading: isRewardCategoriesLoading,
-    data: rewardCategoriesData,
-  } = useQuery(gql`query Query {
-    projectRewardCategoriesGet
-  }`);
+  const { loading: isRewardCategoriesLoading, data: rewardCategoriesData } = useQuery(gql`
+    query Query {
+      projectRewardCategoriesGet
+    }
+  `)
 
   const getRewardCreationInputVariables = (): CreateProjectRewardInput => {
     return {
@@ -118,26 +96,23 @@ export const ProjectRewardForm = ({
     }
   }
 
-  const getRewardUpdateProjectRewardInputVariables =
-    (): UpdateProjectRewardInput => {
-      return {
-        projectRewardId: reward.id,
-        cost: reward.cost,
-        description: reward.description,
-        image: reward.image || undefined,
-        name: reward.name,
-        maxClaimable: reward.maxClaimable || undefined,
-        hasShipping: reward.hasShipping,
-        estimatedDeliveryDate: reward.estimatedDeliveryDate || undefined,
-        isAddon: reward.isAddon,
-        isHidden: reward.isHidden,
-        category: reward.category || undefined,
-      }
+  const getRewardUpdateProjectRewardInputVariables = (): UpdateProjectRewardInput => {
+    return {
+      projectRewardId: reward.id,
+      cost: reward.cost,
+      description: reward.description,
+      image: reward.image || undefined,
+      name: reward.name,
+      maxClaimable: reward.maxClaimable || undefined,
+      hasShipping: reward.hasShipping,
+      estimatedDeliveryDate: reward.estimatedDeliveryDate || undefined,
+      isAddon: reward.isAddon,
+      isHidden: reward.isHidden,
+      category: reward.category || undefined,
     }
+  }
 
-  const handleFormTextChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleFormTextChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target
     if (name) {
       setReward((current) => ({ ...current, [name]: value }))
@@ -167,9 +142,7 @@ export const ProjectRewardForm = ({
     }
   }
 
-  const handleCostAmountChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleCostAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
     setFormCostValue(value)
   }
@@ -177,8 +150,7 @@ export const ProjectRewardForm = ({
   const handleCostAmountBlur = () => {
     // Dollar value rounded to two decimal places, satoshis int
     const costValue =
-      project?.rewardCurrency &&
-      project?.rewardCurrency === RewardCurrency.Usdcent
+      project?.rewardCurrency && project?.rewardCurrency === RewardCurrency.Usdcent
         ? parseFloat(formCostValue).toFixed(2)
         : toInt(formCostValue).toFixed(0)
     setFormCostValue(costValue)
@@ -187,8 +159,7 @@ export const ProjectRewardForm = ({
     setReward((current) => ({
       ...current,
       cost:
-        project?.rewardCurrency &&
-        project?.rewardCurrency === RewardCurrency.Usdcent
+        project?.rewardCurrency && project?.rewardCurrency === RewardCurrency.Usdcent
           ? toInt(parseFloat(costValue) * 100)
           : toInt(costValue),
     }))
@@ -202,9 +173,7 @@ export const ProjectRewardForm = ({
     setReward((current) => ({ ...current, image: null }))
   }
 
-  const handleFormShippingChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleFormShippingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setReward((current) => ({ ...current, hasShipping: event.target.checked }))
   }
 
@@ -216,10 +185,7 @@ export const ProjectRewardForm = ({
       errors.name = t('Name is a required field')
       isValid = false
     } else if (reward.name.length > ProjectRewardValidations.name.maxLength) {
-      errors.name =
-        t('Name should be less than') +
-        ` ${ProjectRewardValidations.name.maxLength} ` +
-        t('characters')
+      errors.name = t('Name should be less than') + ` ${ProjectRewardValidations.name.maxLength} ` + t('characters')
       isValid = false
     }
 
@@ -234,28 +200,18 @@ export const ProjectRewardForm = ({
     }
 
     if (
-      (project?.rewardCurrency &&
-      project?.rewardCurrency === RewardCurrency.Usdcent
+      (project?.rewardCurrency && project?.rewardCurrency === RewardCurrency.Usdcent
         ? parseFloat(formCostValue) * 100
-        : getUSDAmount(toInt(formCostValue) as Satoshis)) >
-      ProjectRewardValidations.cost.maxUSDCentsAmount
+        : getUSDAmount(toInt(formCostValue) as Satoshis)) > ProjectRewardValidations.cost.maxUSDCentsAmount
     ) {
       errors.cost =
-        t('Price must be less than') +
-        ` $${commaFormatted(
-          ProjectRewardValidations.cost.maxUSDCentsAmount / 100,
-        )}.`
+        t('Price must be less than') + ` $${commaFormatted(ProjectRewardValidations.cost.maxUSDCentsAmount / 100)}.`
       isValid = false
     }
 
-    if (
-      reward.description &&
-      reward.description.length > ProjectRewardValidations.description.maxLength
-    ) {
+    if (reward.description && reward.description.length > ProjectRewardValidations.description.maxLength) {
       errors.description =
-        t('Description should be less than') +
-        ` ${ProjectRewardValidations.description.maxLength} ` +
-        t('characters')
+        t('Description should be less than') + ` ${ProjectRewardValidations.description.maxLength} ` + t('characters')
       isValid = false
     }
 
@@ -275,10 +231,7 @@ export const ProjectRewardForm = ({
 
     rewardSave({
       variables: {
-        input:
-          reward.id > 0
-            ? getRewardUpdateProjectRewardInputVariables()
-            : getRewardCreationInputVariables(),
+        input: reward.id > 0 ? getRewardUpdateProjectRewardInputVariables() : getRewardCreationInputVariables(),
       },
     })
   }
@@ -304,9 +257,7 @@ export const ProjectRewardForm = ({
           cost: newReward.cost,
         }))
         const newCostValue =
-          rewardCurrency === RewardCurrency.Usdcent
-            ? (newReward.cost / 100).toFixed(2)
-            : newReward.cost.toFixed(0)
+          rewardCurrency === RewardCurrency.Usdcent ? (newReward.cost / 100).toFixed(2) : newReward.cost.toFixed(0)
         setFormCostValue(newCostValue)
 
         // Set the original reward for tracking updates
@@ -316,9 +267,7 @@ export const ProjectRewardForm = ({
         setFormCostValue(
           rewardCurrency === RewardCurrency.Usdcent
             ? getUSDAmount(toInt(formCostValue) as Satoshis).toFixed(2)
-            : getSatoshisFromUSDCents(
-                (parseFloat(formCostValue) * 100) as USDCents,
-              ).toFixed(0),
+            : getSatoshisFromUSDCents((parseFloat(formCostValue) * 100) as USDCents).toFixed(0),
         )
       }
 
@@ -332,11 +281,7 @@ export const ProjectRewardForm = ({
       })
     },
     onError(error) {
-      setRewardCurrency(
-        rewardCurrency === RewardCurrency.Usdcent
-          ? RewardCurrency.Btcsat
-          : RewardCurrency.Usdcent,
-      )
+      setRewardCurrency(rewardCurrency === RewardCurrency.Usdcent ? RewardCurrency.Btcsat : RewardCurrency.Usdcent)
       toast({
         title: 'failed to update project',
         description: `${error}`,
@@ -401,11 +346,7 @@ export const ProjectRewardForm = ({
               <Text variant="body1" wordBreak="keep-all" fontWeight={'normal'}>
                 {t('Limited Edition (skip if no limit)')}
               </Text>
-              <Tooltip
-                label={t(
-                  'Limited Rewards cannot be edited after reward has been published.',
-                )}
-              >
+              <Tooltip label={t('Limited Rewards cannot be edited after reward has been published.')}>
                 <span>
                   <BiInfoCircle />
                 </span>
@@ -418,12 +359,8 @@ export const ProjectRewardForm = ({
               onChange={handleFormTextChange}
               onBlur={handleMaxClaimableAmountBlur}
               error={formError.maxClaimable}
-              isDisabled={Boolean(
-                createOrUpdate === 'update' && originalReward.maxClaimable,
-              )}
-              isReadOnly={Boolean(
-                createOrUpdate === 'update' && originalReward.maxClaimable,
-              )}
+              isDisabled={Boolean(createOrUpdate === 'update' && originalReward.maxClaimable)}
+              isReadOnly={Boolean(createOrUpdate === 'update' && originalReward.maxClaimable)}
             />
           </VStack>
         </Stack>
@@ -441,14 +378,7 @@ export const ProjectRewardForm = ({
             </Select>
           </FieldContainer>
           <FieldContainer
-            title={t(
-              'Price' +
-                ` (${
-                  project.rewardCurrency === RewardCurrency.Usdcent
-                    ? 'USD'
-                    : 'SATS'
-                })`,
-            )}
+            title={t('Price' + ` (${project.rewardCurrency === RewardCurrency.Usdcent ? 'USD' : 'SATS'})`)}
           >
             <TextInputBox
               placeholder={'150'}
@@ -472,8 +402,13 @@ export const ProjectRewardForm = ({
                 }))
               }}
             >
-              <option value=''>{t('Select Category')}</option>
-              {rewardCategoriesData.projectRewardCategoriesGet && rewardCategoriesData.projectRewardCategoriesGet.map((category: string) => <option value={category}>{category}</option>)}
+              <option value="">{t('Select Category')}</option>
+              {rewardCategoriesData.projectRewardCategoriesGet &&
+                rewardCategoriesData.projectRewardCategoriesGet.map((category: string) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
             </Select>
           </FieldContainer>
         </Stack>
@@ -497,15 +432,12 @@ export const ProjectRewardForm = ({
               onUploadComplete={handleUpload}
               onDeleteClick={handleDeleteThumbnail}
               childrenOnLoading={<UploadBox loading h={10} />}
-              imageCrop={ImageCrop.Square}
+              imageCrop={ImageCrop.Reward}
             >
               <UploadBox h={10} title="Select an Image" />
             </FileUpload>
           </FieldContainer>
-          <FieldContainer
-            title={t('Estimated Delivery Date')}
-            visibility={'hidden'}
-          >
+          <FieldContainer title={t('Estimated Delivery Date')} visibility={'hidden'}>
             <div style={{ position: 'relative', width: '100%' }}>
               <CalendarButton
                 onChange={handleFormCalendarChange}
@@ -518,9 +450,7 @@ export const ProjectRewardForm = ({
                 />
               </CalendarButton>
               {reward.estimatedDeliveryDate && (
-                <div
-                  style={{ position: 'absolute', top: '5px', right: '10px' }}
-                >
+                <div style={{ position: 'absolute', top: '5px', right: '10px' }}>
                   <CloseIcon
                     onClick={() => {
                       setReward((current) => ({
@@ -536,21 +466,11 @@ export const ProjectRewardForm = ({
         </Stack>
         <VStack spacing={4} w="100%" align={'flex-start'}>
           <FieldContainer>
-            <Checkbox
-              w="100%"
-              isChecked={reward.hasShipping}
-              onChange={handleFormShippingChange}
-            >
+            <Checkbox w="100%" isChecked={reward.hasShipping} onChange={handleFormShippingChange}>
               <Text>{t('Includes Shipping')}</Text>
             </Checkbox>
             {reward.hasShipping ? (
-              <VStack
-                pl={2}
-                spacing={2}
-                borderLeft="2px solid"
-                borderColor="primary.400"
-                align={'flex-start'}
-              >
+              <VStack pl={2} spacing={2} borderLeft="2px solid" borderColor="primary.400" align={'flex-start'}>
                 <Text variant="body1" fontWeight={500}>
                   {t(
                     'Funders will see the following message in the shipping section. Make sure your email is up to date.',
@@ -567,12 +487,7 @@ export const ProjectRewardForm = ({
           </FieldContainer>
         </VStack>
         <Stack>
-          <Button
-            display={{ base: 'block' }}
-            variant="primary"
-            onClick={handleConfirmReward}
-            isLoading={rewardSaving}
-          >
+          <Button display={{ base: 'block' }} variant="primary" onClick={handleConfirmReward} isLoading={rewardSaving}>
             {buttonText}
           </Button>
         </Stack>
@@ -580,35 +495,21 @@ export const ProjectRewardForm = ({
       <UpdateCurrencyModal
         isOpen={isCurrencyChangeModalOpen}
         onClose={() => {
-          setRewardCurrency(
-            rewardCurrency === RewardCurrency.Usdcent
-              ? RewardCurrency.Btcsat
-              : RewardCurrency.Usdcent,
-          )
+          setRewardCurrency(rewardCurrency === RewardCurrency.Usdcent ? RewardCurrency.Btcsat : RewardCurrency.Usdcent)
           closeCurrencyChangeModal()
         }}
         title={`${t('Are you sure you want to make the change?')}`}
         confirm={handleChangeProjectCurrency}
         description={`${t(
           'Please note that all reward prices will be automatically updated to reflect their equivalent value in SWITCH_TO_REWARD_CURRENCY, based on the current Bitcoin price in US Dollars. If you wish you can update prices individually for each reward on reward’s page.',
-        ).replace(
-          'SWITCH_TO_REWARD_CURRENCY',
-          rewardCurrency === RewardCurrency.Usdcent ? 'USD' : 'Bitcoin',
-        )}`}
+        ).replace('SWITCH_TO_REWARD_CURRENCY', rewardCurrency === RewardCurrency.Usdcent ? 'USD' : 'Bitcoin')}`}
         warning={`${t(
           'You are about to switch the currency denomination for all your rewards from CURRENT_REWARD_CURRENCY to SWITCH_TO_REWARD_CURRENCY. ',
         )
-          .replace(
-            'SWITCH_TO_REWARD_CURRENCY',
-            rewardCurrency === RewardCurrency.Usdcent
-              ? 'USD($)'
-              : 'Bitcoin(sats)',
-          )
+          .replace('SWITCH_TO_REWARD_CURRENCY', rewardCurrency === RewardCurrency.Usdcent ? 'USD($)' : 'Bitcoin(sats)')
           .replace(
             'CURRENT_REWARD_CURRENCY',
-            project?.rewardCurrency === RewardCurrency.Usdcent
-              ? 'USD($)'
-              : 'Bitcoin(sats)',
+            project?.rewardCurrency === RewardCurrency.Usdcent ? 'USD($)' : 'Bitcoin(sats)',
           )}`}
       />
     </VStack>
