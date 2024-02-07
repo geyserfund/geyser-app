@@ -19,4 +19,5 @@ export const defaultProjectReward: ProjectReward = {
   backersCount: 0,
   isAddon: false,
   isHidden: false,
+  inDevelopment: true
 }

@@ -108,10 +108,10 @@ export const FRAGMENT_PROJECT_REWARD_FOR_CREATE_UPDATE = gql`
     sold
     hasShipping
     maxClaimable
-    estimatedDeliveryDate
     isAddon
     isHidden
     category
+    inDevelopment
   }
 `
 
