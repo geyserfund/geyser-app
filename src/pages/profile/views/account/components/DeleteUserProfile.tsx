@@ -62,13 +62,7 @@ export const DeleteUserProfile = () => {
       <VStack w="full" spacing="10px" alignItems="start">
         <Body1 semiBold>{t('Delete profile')}</Body1>
         <Body2>{t('Delete your profile permanently from Geyser.')}</Body2>
-        <Tooltip
-          label={
-            isUserAProjectCreator
-              ? t('As a project creator, you cannot delete your profile')
-              : ''
-          }
-        >
+        <Tooltip label={isUserAProjectCreator ? t('As a project creator, you cannot delete your profile') : ''}>
           <Button
             variant="secondary"
             color="secondary.red"
@@ -81,11 +75,7 @@ export const DeleteUserProfile = () => {
         </Tooltip>
       </VStack>
 
-      <DeleteTextConfirm
-        isOpen={deleteProfile.isOpen}
-        onClose={deleteProfile.onClose}
-        {...deleteTextProps}
-      />
+      <DeleteTextConfirm isOpen={deleteProfile.isOpen} onClose={deleteProfile.onClose} {...deleteTextProps} />
     </>
   )
 }

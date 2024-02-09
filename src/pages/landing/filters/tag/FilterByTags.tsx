@@ -5,10 +5,7 @@ import { useFilterContext } from '../../../../context'
 import { QUERY_TAGS } from '../../../../graphql/queries'
 import { TagsGetResult } from '../../../../types'
 import { useNotification } from '../../../../utils'
-import {
-  DesktopFilterLayoutSkeleton,
-  DesktopTagsFilter,
-} from './DesktopTagsFilter'
+import { DesktopFilterLayoutSkeleton, DesktopTagsFilter } from './DesktopTagsFilter'
 import { MobileTagsFilter } from './MobileTagsFilter'
 
 interface FilterByTagsProps {

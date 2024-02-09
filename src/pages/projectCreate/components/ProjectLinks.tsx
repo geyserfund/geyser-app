@@ -13,11 +13,7 @@ interface ProjectLinksProps {
   linkError?: boolean[]
 }
 
-export const ProjectLinks = ({
-  links = [],
-  setLinks,
-  linkError = [],
-}: ProjectLinksProps) => {
+export const ProjectLinks = ({ links = [], setLinks, linkError = [] }: ProjectLinksProps) => {
   const { t } = useTranslation()
   const handleClose = (val: Maybe<string>) => {
     const newLinks = links.filter((link) => link !== val)
@@ -41,10 +37,7 @@ export const ProjectLinks = ({
     }
   }, [links, setLinks])
 
-  const handleChange = (
-    index: number,
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
     const newLinkList = links.map((val, i) => (i === index ? value : val))
     setLinks(newLinkList)
@@ -53,9 +46,7 @@ export const ProjectLinks = ({
   return (
     <FieldContainer
       title={t('Project links')}
-      subtitle={t(
-        'Connect your sites so viewers can see more proof of your work',
-      )}
+      subtitle={t('Connect your sites so viewers can see more proof of your work')}
       info={t('Please provide secure links, starting with https://')}
     >
       <VStack w="full" spacing={3}>
@@ -72,13 +63,7 @@ export const ProjectLinks = ({
               />
             )
           })}
-        <Button
-          size="sm"
-          variant="secondary"
-          w="full"
-          onClick={addNewLink}
-          isDisabled={links.length >= 7}
-        >
+        <Button size="sm" variant="secondary" w="full" onClick={addNewLink} isDisabled={links.length >= 7}>
           {t('Add Project Link')}
         </Button>
       </VStack>

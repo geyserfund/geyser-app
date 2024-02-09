@@ -11,19 +11,12 @@ interface TagsFilterBodyProps {
   handleTagsClick: (tag: TagsGetResult) => void
 }
 
-export const TagsFilterBody = ({
-  allTags,
-  handleTagsClick,
-}: TagsFilterBodyProps) => {
+export const TagsFilterBody = ({ allTags, handleTagsClick }: TagsFilterBodyProps) => {
   const { filters, updateFilter } = useFilterContext()
 
   const { tagIds = [] } = filters
 
-  const {
-    isOpen: selectMenuOpen,
-    onOpen: onSelectMenuOpen,
-    onClose: onSelectMenuClose,
-  } = useDisclosure()
+  const { isOpen: selectMenuOpen, onOpen: onSelectMenuOpen, onClose: onSelectMenuClose } = useDisclosure()
 
   const isDisabled = tagIds.length >= 3
 
@@ -58,12 +51,7 @@ export const TagsFilterBody = ({
       </Box>
 
       <Box width="100%" overflowY="auto">
-        <VStack
-          width="100%"
-          padding="0px 24px"
-          alignItems="start"
-          spacing="5px"
-        >
+        <VStack width="100%" padding="0px 24px" alignItems="start" spacing="5px">
           <RenderTags {...{ allTags, tagIds, handleClick: handleTagsClick }} />
         </VStack>
       </Box>

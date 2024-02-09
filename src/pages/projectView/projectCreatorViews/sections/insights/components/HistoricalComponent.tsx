@@ -5,10 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { CardLayout } from '../../../../../../components/layouts'
 import { H3 } from '../../../../../../components/typography'
 import { useProjectContext } from '../../../../../../context'
-import {
-  AnalyticsGroupByInterval,
-  useProjectHistoryStatsGetLazyQuery,
-} from '../../../../../../types'
+import { AnalyticsGroupByInterval, useProjectHistoryStatsGetLazyQuery } from '../../../../../../types'
 import { useNotification } from '../../../../../../utils'
 import { HistoricalChart, HistoryDataType } from '../elements'
 import { getNameForDate } from '../helpers'
@@ -24,61 +21,54 @@ export const HistoricalComponent = () => {
 
   const [historyData, setHistoryData] = useState<HistoryDataType[]>([])
 
-  const [getProjectHistoryStats, { loading }] =
-    useProjectHistoryStatsGetLazyQuery({
-      onCompleted(data) {
-        const stats = data.projectStatsGet
+  const [getProjectHistoryStats, { loading }] = useProjectHistoryStatsGetLazyQuery({
+    onCompleted(data) {
+      const stats = data.projectStatsGet
 
-        const nameParam = {} as { [key: string]: HistoryDataType }
+      const nameParam = {} as { [key: string]: HistoryDataType }
 
-        stats.current?.projectViews?.visitorGraph.map((visitorData) => {
-          const name = getNameForDate(
-            visitorData?.dateTime || 0,
-            selectionOption,
-          )
+      stats.current?.projectViews?.visitorGraph.map((visitorData) => {
+        const name = getNameForDate(visitorData?.dateTime || 0, selectionOption)
 
-          if (!nameParam[name]) {
-            nameParam[name] = {} as HistoryDataType
-          }
+        if (!nameParam[name]) {
+          nameParam[name] = {} as HistoryDataType
+        }
 
-          nameParam[name] = {
-            visitorCount: visitorData?.visitorCount || 0,
-            name,
-            dateTime: visitorData?.dateTime || 0,
-            amount: 0,
-          }
-        })
+        nameParam[name] = {
+          visitorCount: visitorData?.visitorCount || 0,
+          name,
+          dateTime: visitorData?.dateTime || 0,
+          amount: 0,
+        }
+      })
 
-        stats.current?.projectFundingTxs?.amountGraph?.map((amountData) => {
-          const name = getNameForDate(
-            amountData?.dateTime || 0,
-            selectionOption,
-          )
+      stats.current?.projectFundingTxs?.amountGraph?.map((amountData) => {
+        const name = getNameForDate(amountData?.dateTime || 0, selectionOption)
 
-          const val = nameParam[name] || ({} as HistoryDataType)
+        const val = nameParam[name] || ({} as HistoryDataType)
 
-          nameParam[name] = {
-            ...val,
-            name,
-            dateTime: amountData?.dateTime || 0,
-            amount: amountData?.sum || 0,
-          }
-        })
+        nameParam[name] = {
+          ...val,
+          name,
+          dateTime: amountData?.dateTime || 0,
+          amount: amountData?.sum || 0,
+        }
+      })
 
-        const historyDataWithAmount = Object.keys(nameParam).map((key) => {
-          return nameParam[key]
-        }) as HistoryDataType[]
+      const historyDataWithAmount = Object.keys(nameParam).map((key) => {
+        return nameParam[key]
+      }) as HistoryDataType[]
 
-        setHistoryData(historyDataWithAmount)
-      },
-      onError(error) {
-        toast({
-          title: 'Error fetching project stats',
-          description: 'Please refresh the page and try again.',
-          status: 'error',
-        })
-      },
-    })
+      setHistoryData(historyDataWithAmount)
+    },
+    onError(error) {
+      toast({
+        title: 'Error fetching project stats',
+        description: 'Please refresh the page and try again.',
+        status: 'error',
+      })
+    },
+  })
 
   useEffect(() => {
     if (project?.id) {

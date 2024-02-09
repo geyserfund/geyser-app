@@ -28,13 +28,7 @@ export const GrantDevelopers = () => {
       <Box width={isMobile ? '100%' : '600px'}>
         <Wrap spacing="20px" align="center" justify={'center'}>
           {members.map((item, idx) => (
-            <BitcoinerCard
-              key={idx}
-              name={item.name}
-              role={item.role}
-              link={item.link}
-              image={item.image}
-            />
+            <BitcoinerCard key={idx} name={item.name} role={item.role} link={item.link} image={item.image} />
           ))}
         </Wrap>
       </Box>

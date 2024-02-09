@@ -74,34 +74,28 @@ export const useWalletForm = ({
 
   const [lightningAddressFormValue, setLightningAddressFormValue] = useState('')
 
-  const [lightningAddressFormError, setLightningAddressFormError] = useState<
-    string | null
-  >(null)
-  const [lnAddressEvaluationState, setLnAddressEvaluationState] =
-    useState<LNAddressEvaluationState>(LNAddressEvaluationState.IDLE)
-
-  const [connectionOption, setConnectionOption] = useState<ConnectionOption>(
-    defaultConnectionOption,
+  const [lightningAddressFormError, setLightningAddressFormError] = useState<string | null>(null)
+  const [lnAddressEvaluationState, setLnAddressEvaluationState] = useState<LNAddressEvaluationState>(
+    LNAddressEvaluationState.IDLE,
   )
+
+  const [connectionOption, setConnectionOption] = useState<ConnectionOption>(defaultConnectionOption)
 
   const projectWallet = project?.wallets[0]
 
   const debouncedLightningAddress = useDebounce(lightningAddressFormValue, 200)
 
-  const [evaluateLightningAddress, { loading: isEvaluatingLightningAddress }] =
-    useLightningAddressVerifyLazyQuery({
-      onCompleted({ lightningAddressVerify: { valid, reason } }) {
-        if (Boolean(valid) === false) {
-          setLnAddressEvaluationState(LNAddressEvaluationState.FAILED)
-          setLightningAddressFormError(
-            `We could not validate this as a working Lightning Address: ${reason}`,
-          )
-        } else {
-          setLightningAddressFormError('')
-          setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED)
-        }
-      },
-    })
+  const [evaluateLightningAddress, { loading: isEvaluatingLightningAddress }] = useLightningAddressVerifyLazyQuery({
+    onCompleted({ lightningAddressVerify: { valid, reason } }) {
+      if (Boolean(valid) === false) {
+        setLnAddressEvaluationState(LNAddressEvaluationState.FAILED)
+        setLightningAddressFormError(`We could not validate this as a working Lightning Address: ${reason}`)
+      } else {
+        setLightningAddressFormError('')
+        setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED)
+      }
+    },
+  })
 
   const validateLightningAddress = useCallback(async () => {
     if (!lightningAddressFormValue) {
@@ -126,17 +120,9 @@ export const useWalletForm = ({
 
   useEffect(() => {
     if (projectWallet) {
-      if (
-        projectWallet.connectionDetails.__typename ===
-        WalletConnectDetails.LightningAddressConnectionDetails
-      ) {
-        setLightningAddressFormValue(
-          projectWallet.connectionDetails.lightningAddress,
-        )
-      } else if (
-        projectWallet.connectionDetails.__typename ===
-        WalletConnectDetails.LndConnectionDetailsPrivate
-      ) {
+      if (projectWallet.connectionDetails.__typename === WalletConnectDetails.LightningAddressConnectionDetails) {
+        setLightningAddressFormValue(projectWallet.connectionDetails.lightningAddress)
+      } else if (projectWallet.connectionDetails.__typename === WalletConnectDetails.LndConnectionDetailsPrivate) {
         const details = {
           name: projectWallet.name,
           hostname: projectWallet.connectionDetails.hostname,
@@ -144,8 +130,7 @@ export const useWalletForm = ({
           invoiceMacaroon: projectWallet.connectionDetails.macaroon,
           tlsCert: projectWallet.connectionDetails.tlsCertificate || '',
           grpc: `${projectWallet.connectionDetails.grpcPort}`,
-          isVoltage:
-            projectWallet.connectionDetails.lndNodeType === LndNodeType.Voltage,
+          isVoltage: projectWallet.connectionDetails.lndNodeType === LndNodeType.Voltage,
         }
         setNode((current) => ({
           ...current,
@@ -174,14 +159,8 @@ export const useWalletForm = ({
           macaroon: nodeInput.invoiceMacaroon,
           tlsCertificate: nodeInput.tlsCert,
           hostname: nodeInput.hostname,
-          grpcPort: nodeInput.isVoltage
-            ? 10009
-            : nodeInput.grpc
-            ? parseInt(nodeInput.grpc, 10)
-            : 0,
-          lndNodeType: nodeInput.isVoltage
-            ? LndNodeType.Voltage
-            : LndNodeType.Custom,
+          grpcPort: nodeInput.isVoltage ? 10009 : nodeInput.grpc ? parseInt(nodeInput.grpc, 10) : 0,
+          lndNodeType: nodeInput.isVoltage ? LndNodeType.Voltage : LndNodeType.Custom,
           pubkey: nodeInput.publicKey,
         },
         name: nodeInput.name,
@@ -248,16 +227,12 @@ export const useWalletForm = ({
     }
 
     if (lightningAddress.endsWith('@geyser.fund')) {
-      setLightningAddressFormError(
-        `Custom Lightning Addresses can't end with "@geyser.fund".`,
-      )
+      setLightningAddressFormError(`Custom Lightning Addresses can't end with "@geyser.fund".`)
       return false
     }
 
     if (validateEmail(lightningAddress) === false) {
-      setLightningAddressFormError(
-        `Please use a valid email-formatted address for your Lightning Address.`,
-      )
+      setLightningAddressFormError(`Please use a valid email-formatted address for your Lightning Address.`)
       return false
     }
 
@@ -268,14 +243,10 @@ export const useWalletForm = ({
   const isFormDirty = useCallback(() => {
     if (projectWallet) {
       if (connectionOption === ConnectionOption.LIGHTNING_ADDRESS) {
-        if (
-          projectWallet.connectionDetails.__typename ===
-          WalletConnectDetails.LightningAddressConnectionDetails
-        ) {
+        if (projectWallet.connectionDetails.__typename === WalletConnectDetails.LightningAddressConnectionDetails) {
           return (
             Boolean(projectWallet?.connectionDetails?.lightningAddress) &&
-            projectWallet?.connectionDetails?.lightningAddress !==
-              lightningAddressFormValue
+            projectWallet?.connectionDetails?.lightningAddress !== lightningAddressFormValue
           )
         }
 
@@ -283,22 +254,14 @@ export const useWalletForm = ({
       }
 
       if (connectionOption === ConnectionOption.PERSONAL_NODE) {
-        if (
-          projectWallet.connectionDetails.__typename ===
-          WalletConnectDetails.LndConnectionDetailsPrivate
-        ) {
+        if (projectWallet.connectionDetails.__typename === WalletConnectDetails.LndConnectionDetailsPrivate) {
           const value =
-            `${projectWallet.connectionDetails.grpcPort}` !==
-              `${nodeInput?.grpc}` ||
+            `${projectWallet.connectionDetails.grpcPort}` !== `${nodeInput?.grpc}` ||
             projectWallet.connectionDetails.hostname !== nodeInput?.hostname ||
-            (projectWallet.connectionDetails.lndNodeType ===
-              LndNodeType.Voltage) !==
-              nodeInput?.isVoltage ||
-            projectWallet.connectionDetails.macaroon !==
-              nodeInput?.invoiceMacaroon ||
+            (projectWallet.connectionDetails.lndNodeType === LndNodeType.Voltage) !== nodeInput?.isVoltage ||
+            projectWallet.connectionDetails.macaroon !== nodeInput?.invoiceMacaroon ||
             projectWallet.connectionDetails.pubkey !== nodeInput?.publicKey ||
-            `${projectWallet.connectionDetails.tlsCertificate || ''}` !==
-              `${nodeInput?.tlsCert}`
+            `${projectWallet.connectionDetails.tlsCertificate || ''}` !== `${nodeInput?.tlsCert}`
 
           return value
         }

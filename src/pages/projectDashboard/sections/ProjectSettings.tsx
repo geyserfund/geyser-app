@@ -7,14 +7,9 @@ import { useNavigate } from 'react-router-dom'
 import { useAuthContext, useProjectContext } from '../../../context'
 import { TextField } from '../../../forms/components/TextField'
 import { useModal } from '../../../hooks/useModal'
-import {
-  useProjectDeleteMutation,
-} from '../../../types'
+import { useProjectDeleteMutation } from '../../../types'
 import { useNotification } from '../../../utils'
-import {
-  ProjectUnsavedModal,
-  useProjectUnsavedModal,
-} from '../../projectCreate/components/ProjectUnsavedModal'
+import { ProjectUnsavedModal, useProjectUnsavedModal } from '../../projectCreate/components/ProjectUnsavedModal'
 import { DeleteProjectModal } from '../components/DeleteProjectModal'
 import { BackToProjectMobile } from '../navigation/BackToProjectMobile'
 
@@ -33,7 +28,7 @@ export const ProjectSettings = () => {
   const form = useForm<ProjectSettingsVariables>({
     values: useMemo(
       () => ({
-        email: user.email || ''
+        email: user.email || '',
       }),
       [user.email],
     ),
@@ -67,9 +62,7 @@ export const ProjectSettings = () => {
           deleteProjectModal.onClose()
           setTimeout(() => navigate('/'), 2500)
         })
-        .catch(() =>
-          toast({ title: 'failed to delete project', status: 'error' }),
-        )
+        .catch(() => toast({ title: 'failed to delete project', status: 'error' }))
     }
   }
 
@@ -78,9 +71,7 @@ export const ProjectSettings = () => {
   }
 
   return (
-    <form
-      style={{ flexGrow: 1, display: 'flex' }}
-    >
+    <form style={{ flexGrow: 1, display: 'flex' }}>
       <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1}>
         <TextField
           isDisabled={Boolean(user.email)}
@@ -114,11 +105,7 @@ export const ProjectSettings = () => {
         </VStack>
       </VStack>
       <ProjectUnsavedModal {...unsavedModal} />
-      <DeleteProjectModal
-        {...deleteProjectModal}
-        isLoading={deleteLoading}
-        onConfirm={() => handleDeleteProject()}
-      />
+      <DeleteProjectModal {...deleteProjectModal} isLoading={deleteLoading} onConfirm={() => handleDeleteProject()} />
     </form>
   )
 }

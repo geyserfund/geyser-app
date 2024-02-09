@@ -2,10 +2,7 @@ import { DateTime } from 'luxon'
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  AnonymousAvatar,
-  LinkableAvatar,
-} from '../../../../../../../../components/ui'
+import { AnonymousAvatar, LinkableAvatar } from '../../../../../../../../components/ui'
 import {
   OrderByDirection,
   OrderFragment,
@@ -15,10 +12,7 @@ import {
 } from '../../../../../../../../types'
 import { useCustomTheme } from '../../../../../../../../utils'
 import { OrderAmounts, OrderItems } from '../../../components'
-import {
-  TableData,
-  TableWithAccordion,
-} from '../../../components/TableWithAccordion'
+import { TableData, TableWithAccordion } from '../../../components/TableWithAccordion'
 import { ShippingStatusSelect } from './ShippingStatusSelect'
 
 export enum RewardStatus {
@@ -108,14 +102,9 @@ export const RewardTable = ({
         header: t('Status'),
         key: 'status',
         render(order: OrderFragment) {
-          const { backgroundColor, hoverBgColor } = getBackgroundColors(
-            order.status as RewardStatus,
-          )
+          const { backgroundColor, hoverBgColor } = getBackgroundColors(order.status as RewardStatus)
 
-          const options =
-            order.status === RewardStatus.todo
-              ? RewardStatusOptions
-              : RewardStatusOptions.slice(1)
+          const options = order.status === RewardStatus.todo ? RewardStatusOptions : RewardStatusOptions.slice(1)
 
           return (
             <>
@@ -124,18 +113,11 @@ export const RewardTable = ({
                 backgroundColor={backgroundColor}
                 hoverBgColor={hoverBgColor}
                 options={options}
-                value={RewardStatusOptions.find(
-                  (val) => val.value === order.status,
-                )}
-                defaultValue={RewardStatusOptions.find(
-                  (val) => val.value === order.status,
-                )}
+                value={RewardStatusOptions.find((val) => val.value === order.status)}
+                defaultValue={RewardStatusOptions.find((val) => val.value === order.status)}
                 onChange={(option) => {
                   if (option) {
-                    updateOrderStatus(
-                      order.id,
-                      option.value as UpdatableOrderStatus,
-                    )
+                    updateOrderStatus(order.id, option.value as UpdatableOrderStatus)
                   }
                 }}
                 menuPortalTarget={document.body}
@@ -152,13 +134,7 @@ export const RewardTable = ({
         render(order: OrderFragment) {
           const isFunderAnonymous = !order.user?.id
           if (isFunderAnonymous) {
-            return (
-              <AnonymousAvatar
-                seed={order.id}
-                imageSize={'20px'}
-                textColor="neutral.900"
-              />
-            )
+            return <AnonymousAvatar seed={order.id} imageSize={'20px'} textColor="neutral.900" />
           }
 
           return (
@@ -184,9 +160,7 @@ export const RewardTable = ({
         header: t('Date'),
         key: 'paidAt',
         sort: {
-          order:
-            orderBy.find((o) => o.field === sortField)?.direction ||
-            OrderByDirection.Desc,
+          order: orderBy.find((o) => o.field === sortField)?.direction || OrderByDirection.Desc,
           updateOrder() {
             setOrderBy((prev) =>
               prev.map((p) => {
@@ -244,12 +218,7 @@ export const RewardTable = ({
         key: 'total',
         isAccordion: true,
         render(order: OrderFragment) {
-          return (
-            <OrderAmounts
-              amount={order.totalInSats}
-              quote={order.fundingTx.bitcoinQuote?.quote}
-            />
-          )
+          return <OrderAmounts amount={order.totalInSats} quote={order.fundingTx.bitcoinQuote?.quote} />
         },
       },
     ],

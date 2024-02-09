@@ -1,11 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
 import { LandingCardBaseSkeleton } from '../../../../components/layouts'
-import {
-  ProjectForProfilePageFragment,
-  User,
-  useUserProfileProjectsQuery,
-} from '../../../../types'
+import { ProjectForProfilePageFragment, User, useUserProfileProjectsQuery } from '../../../../types'
 import { CreateAProjectButton, ProfileTabLayout } from '../../components'
 import { ProfileProjectCard } from './components/ProfileProjectCard'
 import { CreateProject } from './CreateProject'
@@ -27,39 +23,23 @@ export const ProfileProjects = ({
     skip: !userProfile?.id,
   })
 
-  const projects =
-    (data?.user.ownerOf?.map(
-      (val) => val?.project,
-    ) as ProjectForProfilePageFragment[]) || []
+  const projects = (data?.user.ownerOf?.map((val) => val?.project) as ProjectForProfilePageFragment[]) || []
 
   if (projects.length === 0 && isViewingOwnProfile) {
     return <CreateProject marginTop="20px" />
   }
 
-  const projectsToRender = projects.sort(
-    (a, b) => Number(b.createdAt) - Number(a.createdAt),
-  )
+  const projectsToRender = projects.sort((a, b) => Number(b.createdAt) - Number(a.createdAt))
 
   return (
     <ProfileTabLayout
       title={t('Projects')}
-      headerContent={
-        isViewingOwnProfile ? (
-          <CreateAProjectButton size="sm" marginTop={'0px'} />
-        ) : undefined
-      }
+      headerContent={isViewingOwnProfile ? <CreateAProjectButton size="sm" marginTop={'0px'} /> : undefined}
     >
       {projectsLoading
         ? [1, 2].map((val) => <LandingCardBaseSkeleton key={val} isMobile />)
         : projectsToRender.map((project) => {
-            return (
-              <ProfileProjectCard
-                key={project.id}
-                project={project}
-                isMobile
-                showStatus
-              />
-            )
+            return <ProfileProjectCard key={project.id} project={project} isMobile showStatus />
           })}
     </ProfileTabLayout>
   )

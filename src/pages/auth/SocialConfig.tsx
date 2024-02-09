@@ -2,12 +2,7 @@ import { BsFacebook, BsGithub } from 'react-icons/bs'
 import { RiTwitterXLine } from 'react-icons/ri'
 
 import { GoogleGLogoIcon } from '../../components/icons/svg/GoogleGLogoIcon'
-import {
-  hasFacebookAccount,
-  hasGithubAccount,
-  hasGoogleAccount,
-  hasTwitterAccount,
-} from '../../utils'
+import { hasFacebookAccount, hasGithubAccount, hasGoogleAccount, hasTwitterAccount } from '../../utils'
 import { SocialAccountType } from './type'
 
 type SocialConfigType = {

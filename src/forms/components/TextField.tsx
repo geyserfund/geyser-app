@@ -12,15 +12,7 @@ export type TextFieldProps = InputProps & {
   control: Control<FieldValue<any>, any>
 }
 
-export const TextField = ({
-  control,
-  name,
-  placeholder,
-  required,
-  label,
-  caption,
-  ...props
-}: TextFieldProps) => {
+export const TextField = ({ control, name, placeholder, required, label, caption, ...props }: TextFieldProps) => {
   return (
     <Controller
       name={name}
@@ -37,18 +29,9 @@ export const TextField = ({
               )
             }
             subtitle={caption}
-            error={
-              fieldState.error
-                ? fieldState.error.message?.toString() || ''
-                : null
-            }
+            error={fieldState.error ? fieldState.error.message?.toString() || '' : null}
           >
-            <Input
-              type="text"
-              placeholder={placeholder || 'Type here'}
-              {...props}
-              {...field}
-            />
+            <Input type="text" placeholder={placeholder || 'Type here'} {...props} {...field} />
           </FieldContainer>
         </FormControl>
       )}

@@ -40,12 +40,7 @@ export const FailedToConnectAccount = (props: FailedToConnectAccountProps) => {
     </Body1>
   )
 
-  const {
-    isOpen,
-    onClose,
-    title = DEFAULT_TITLE,
-    children = DefaultDescription,
-  } = props
+  const { isOpen, onClose, title = DEFAULT_TITLE, children = DefaultDescription } = props
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -57,19 +52,10 @@ export const FailedToConnectAccount = (props: FailedToConnectAccountProps) => {
         <ModalBody width="100%">
           <VStack w="full" padding="12px" spacing="20px">
             <Box width="200px">
-              <Image
-                w="full"
-                h="auto"
-                alt="feed-logged-out"
-                src={CannotConnectAccountUrl}
-              />
+              <Image w="full" h="auto" alt="feed-logged-out" src={CannotConnectAccountUrl} />
             </Box>
             <Box pb={6}>{children}</Box>
-            <ButtonComponent
-              width="100%"
-              leftIcon={<BsArrowLeft fontSize="25px" />}
-              onClick={onClose}
-            >
+            <ButtonComponent width="100%" leftIcon={<BsArrowLeft fontSize="25px" />} onClick={onClose}>
               {t('Back')}
             </ButtonComponent>
           </VStack>

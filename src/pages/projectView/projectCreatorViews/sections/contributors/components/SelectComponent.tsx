@@ -6,8 +6,7 @@ import { StateManagerProps } from 'react-select/dist/declarations/src/useStateMa
 
 import { useCustomTheme } from '../../../../../../utils'
 
-export interface SelectComponentProps<T = any, S extends boolean = any>
-  extends StateManagerProps<T, S, any> {
+export interface SelectComponentProps<T = any, S extends boolean = any> extends StateManagerProps<T, S, any> {
   placeholder?: string
   backgroundColor?: string
   hoverBgColor?: string
@@ -154,12 +153,5 @@ export function SelectComponent<T, S extends boolean>({
     [backgroundColor, colors, currentPlacement],
   )
 
-  return (
-    <Select
-      styles={styles}
-      placeholder={placeholder || t('Select')}
-      menuPlacement="auto"
-      {...rest}
-    />
-  )
+  return <Select styles={styles} placeholder={placeholder || t('Select')} menuPlacement="auto" {...rest} />
 }

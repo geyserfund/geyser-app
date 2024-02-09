@@ -1,16 +1,7 @@
 import { Sector } from 'recharts'
 
 export const ActiveShapeComponent = (props: any) => {
-  const {
-    cx,
-    cy,
-    innerRadius,
-    outerRadius,
-    startAngle,
-    endAngle,
-    fill,
-    payload,
-  } = props
+  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill, payload } = props
 
   return (
     <g>

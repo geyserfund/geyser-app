@@ -22,13 +22,7 @@ export const GrantsLandingPage = () => {
   }
 
   return (
-    <VStack
-      paddingTop={{ base: '10px', lg: '20px' }}
-      bg="neutral.0"
-      minHeight="100%"
-      width="100%"
-      alignItems="center"
-    >
+    <VStack paddingTop={{ base: '10px', lg: '20px' }} bg="neutral.0" minHeight="100%" width="100%" alignItems="center">
       <VStack
         my={{ base: 0, lg: 5 }}
         px={{ base: '10px', lg: '0px' }}
@@ -36,11 +30,7 @@ export const GrantsLandingPage = () => {
         width={isMobile ? '100%' : '909px'}
       >
         <VStack spacing="10px">
-          <Text
-            fontSize={isMobile ? '4xl' : '44px'}
-            fontWeight="medium"
-            textAlign="center"
-          >
+          <Text fontSize={isMobile ? '4xl' : '44px'} fontWeight="medium" textAlign="center">
             🥳
           </Text>
           <Text
@@ -54,19 +44,12 @@ export const GrantsLandingPage = () => {
           >
             {t('Geyser Grants')}
           </Text>
-          <H2
-            textAlign="center"
-            paddingY="5px"
-            fontSize="44px"
-            fontWeight="700"
-          >
+          <H2 textAlign="center" paddingY="5px" fontSize="44px" fontWeight="700">
             {t('Empowering bitcoin creators')}
           </H2>
           <H3 textAlign="center" color={'neutral.600'}>
-            {t(
-              'Funding educators, creatives and builders doing Bitcoin-only projects on Geyser.',
-            )}{' '}
-            <br /> {t('Funded by bitcoiners who want to change the world.')}
+            {t('Funding educators, creatives and builders doing Bitcoin-only projects on Geyser.')} <br />{' '}
+            {t('Funded by bitcoiners who want to change the world.')}
           </H3>
         </VStack>
 
@@ -74,27 +57,14 @@ export const GrantsLandingPage = () => {
 
         {activeGrant && (
           <VStack w="full" alignItems="start" spacing="10px">
-            <Text
-              fontWeight={'bold'}
-              fontSize="19px"
-              mb={1}
-              fontFamily={fonts.interBlack}
-            >
+            <Text fontWeight={'bold'} fontSize="19px" mb={1} fontFamily={fonts.interBlack}>
               {t('Latest Grant')}
             </Text>
-            <CustomGrantCard
-              grant={activeGrant}
-              to={getPath('grants', activeGrant.id)}
-              showBanner
-            />
+            <CustomGrantCard grant={activeGrant} to={getPath('grants', activeGrant.id)} showBanner />
           </VStack>
         )}
         <VStack w="full" alignItems="start" spacing="10px">
-          <Text
-            fontWeight={'bold'}
-            fontSize="19px"
-            fontFamily={fonts.interBlack}
-          >
+          <Text fontWeight={'bold'} fontSize="19px" fontFamily={fonts.interBlack}>
             {t('Previous Grants')}
           </Text>
           {inactiveGrants
@@ -106,12 +76,7 @@ export const GrantsLandingPage = () => {
               return Number(grantB) - Number(grantA)
             })
             .map((grant) => (
-              <CustomGrantCard
-                key={grant.id}
-                to={getPath('grants', grant.id)}
-                showBanner={false}
-                grant={grant}
-              />
+              <CustomGrantCard key={grant.id} to={getPath('grants', grant.id)} showBanner={false} grant={grant} />
             ))}
         </VStack>
         <MoreInfo />

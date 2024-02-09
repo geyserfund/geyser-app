@@ -73,9 +73,7 @@ export const AmountInputWithSatoshiToggle = ({
   const classes = useStyles()
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = isUsingSatoshis
-      ? parseInt(event.target.value, 10)
-      : parseFloat(event.target.value)
+    const value = isUsingSatoshis ? parseInt(event.target.value, 10) : parseFloat(event.target.value)
 
     onValueChanged(value as Satoshis)
   }
@@ -83,33 +81,19 @@ export const AmountInputWithSatoshiToggle = ({
   return (
     <>
       <InputGroup {...inputGroup}>
-        <InputLeftElement>
-          {isUsingSatoshis ? (
-            <SatoshiIconTilted />
-          ) : (
-            <BiDollar fontSize="25px" />
-          )}
-        </InputLeftElement>
+        <InputLeftElement>{isUsingSatoshis ? <SatoshiIconTilted /> : <BiDollar fontSize="25px" />}</InputLeftElement>
 
         <Input
           value={value}
           type="number"
-          className={classNames(
-            classes.inputElement,
-            { [classes.inputError]: Boolean(error) },
-            className,
-          )}
+          className={classNames(classes.inputElement, { [classes.inputError]: Boolean(error) }, className)}
           onInput={handleInput}
           {...rest}
           placeholder="0"
         />
 
         <InputRightElement width="50px">
-          <Button
-            className={classes.switchButtton}
-            onClick={() => onUnitTypeChanged(!isUsingSatoshis)}
-            variant="ghost"
-          >
+          <Button className={classes.switchButtton} onClick={() => onUnitTypeChanged(!isUsingSatoshis)} variant="ghost">
             <BsArrowRepeat className={classes.switchIcon} />
 
             {isUsingSatoshis ? (

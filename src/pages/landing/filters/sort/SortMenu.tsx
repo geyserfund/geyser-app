@@ -1,12 +1,4 @@
-import {
-  Button,
-  CloseButton,
-  HStack,
-  Menu,
-  MenuButton,
-  MenuList,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { Button, CloseButton, HStack, Menu, MenuButton, MenuList, useDisclosure } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { BsSliders } from 'react-icons/bs'
 

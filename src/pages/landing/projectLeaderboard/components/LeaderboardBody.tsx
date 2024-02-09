@@ -1,11 +1,4 @@
-import {
-  HStack,
-  Skeleton,
-  SkeletonCircle,
-  SkeletonText,
-  StackProps,
-  VStack,
-} from '@chakra-ui/react'
+import { HStack, Skeleton, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
 
 import { ProjectForLandingPageFragment } from '../../../../types'
 import { LeaderboardCardListItem, LeaderboardFeatureProject } from '.'
@@ -14,17 +7,12 @@ export interface LeaderboardBodyProps extends StackProps {
   projects: ProjectForLandingPageFragment[]
 }
 
-export const LeaderboardBody = ({
-  projects,
-  ...rest
-}: LeaderboardBodyProps) => {
+export const LeaderboardBody = ({ projects, ...rest }: LeaderboardBodyProps) => {
   const [featuredCard, ...restOfTheCards] = projects
 
   return (
     <VStack width="100%" spacing="10px" {...rest}>
-      {featuredCard && (
-        <LeaderboardFeatureProject project={featuredCard} marginTop="10px" />
-      )}
+      {featuredCard && <LeaderboardFeatureProject project={featuredCard} marginTop="10px" />}
       {restOfTheCards?.map((project) => (
         <LeaderboardCardListItem key={project.id} project={project} />
       ))}
@@ -55,13 +43,7 @@ export const LeaderboardBodySkeleton = () => {
         >
           <Skeleton height="60px" width="60px" borderRadius="8px" />
 
-          <VStack
-            height="100%"
-            flex={1}
-            overflow="hidden"
-            alignItems="start"
-            justifyContent="space-between"
-          >
+          <VStack height="100%" flex={1} overflow="hidden" alignItems="start" justifyContent="space-between">
             <Skeleton borderRadius="8px" height="20px" width="60%" />
             <SkeletonText width="100%" noOfLines={1} />
           </VStack>

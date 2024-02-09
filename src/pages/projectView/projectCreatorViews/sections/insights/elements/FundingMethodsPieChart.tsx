@@ -10,13 +10,7 @@ import { commaFormatted, useCustomTheme } from '../../../../../../utils'
 import { getColorByIndex } from '../helpers'
 import { ActiveShapeComponent } from './ActiveShapeComponent'
 
-export const FundingMethodsPieChart = ({
-  data,
-  loading,
-}: {
-  data: FundingTxMethodSum[]
-  loading?: boolean
-}) => {
+export const FundingMethodsPieChart = ({ data, loading }: { data: FundingTxMethodSum[]; loading?: boolean }) => {
   const { colors } = useCustomTheme()
   const { t } = useTranslation()
   const ref = useRef<HTMLDivElement>(null)
@@ -53,11 +47,7 @@ export const FundingMethodsPieChart = ({
             onMouseLeave={() => setActiveIndex(undefined)}
           >
             {data.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={getColorByIndex(index)}
-                min={2}
-              />
+              <Cell key={`cell-${index}`} fill={getColorByIndex(index)} min={2} />
             ))}
           </Pie>
           <Legend iconType="circle" />

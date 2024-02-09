@@ -14,12 +14,7 @@ export const Rewards = () => {
   const isRewardEmpty = useRewardEmptyAtom()
 
   if (isRewardEmpty) {
-    return (
-      <EmptyContainer
-        image={ProjectRewardsImageUrl}
-        text={t('No rewards sold yet')}
-      />
-    )
+    return <EmptyContainer image={ProjectRewardsImageUrl} text={t('No rewards sold yet')} />
   }
 
   return (

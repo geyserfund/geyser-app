@@ -6,12 +6,7 @@ type Props = MenuItemProps & {
   isExternal?: boolean
 }
 
-export const MenuItemLink = ({
-  children,
-  destinationPath,
-  isExternal,
-  ...rest
-}: Props) => {
+export const MenuItemLink = ({ children, destinationPath, isExternal, ...rest }: Props) => {
   return (
     <MenuItem {...rest}>
       {isExternal ? (

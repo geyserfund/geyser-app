@@ -6,10 +6,7 @@ import { useNotification } from '../../../utils'
 import { ProjectRegion } from '../../projectCreate/components'
 import { ProjectLinks } from '../../projectCreate/components/ProjectLinks'
 import { ProjectTagsCreateEdit } from '../../projectCreate/components/ProjectTagsCreateEdit'
-import {
-  ProjectUnsavedModal,
-  useProjectUnsavedModal,
-} from '../../projectCreate/components/ProjectUnsavedModal'
+import { ProjectUnsavedModal, useProjectUnsavedModal } from '../../projectCreate/components/ProjectUnsavedModal'
 import { useProjectDetailsForm } from '../../projectCreate/hooks/useProjectDetailsForm'
 
 export const ProjectDetails = () => {
@@ -72,24 +69,12 @@ export const ProjectDetails = () => {
       <VStack w="100%" spacing={6} flexGrow={1}>
         <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
 
-        <ProjectRegion
-          location={project?.location}
-          updateProject={updateProject}
-        />
+        <ProjectRegion location={project?.location} updateProject={updateProject} />
 
-        <ProjectLinks
-          links={(project?.links as string[]) || []}
-          setLinks={setLinks}
-          linkError={linkError}
-        />
+        <ProjectLinks links={(project?.links as string[]) || []} setLinks={setLinks} linkError={linkError} />
 
         <VStack w="100%" flexGrow={1} justifyContent="end">
-          <Button
-            isLoading={tagsLoading || projectLoading}
-            variant="primary"
-            w="full"
-            type="submit"
-          >
+          <Button isLoading={tagsLoading || projectLoading} variant="primary" w="full" type="submit">
             {t('Save')}
           </Button>
         </VStack>

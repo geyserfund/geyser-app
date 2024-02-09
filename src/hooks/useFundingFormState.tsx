@@ -139,7 +139,7 @@ export const useFundingFormState = ({ rewards, rewardCurrency }: UseFundStatePro
         }
       })
     },
-    [getUSDCentsAmount, rewards],
+    [rewards],
   )
 
   const resetForm = useCallback(() => {

@@ -1,12 +1,5 @@
 import { ArrowBackIcon, CloseIcon } from '@chakra-ui/icons'
-import {
-  Box,
-  BoxProps,
-  Button,
-  Drawer,
-  DrawerContent,
-  DrawerOverlay,
-} from '@chakra-ui/react'
+import { Box, BoxProps, Button, Drawer, DrawerContent, DrawerOverlay } from '@chakra-ui/react'
 import { Dispatch, SetStateAction } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
@@ -67,24 +60,13 @@ export const DashboardNavigation = ({
   return (
     <Box {...props}>
       <NavLink to={getPath('project', project.name)}>
-        <Button
-          leftIcon={<ArrowBackIcon />}
-          variant="secondary"
-          w="100%"
-          size="sm"
-          mb={4}
-        >
+        <Button leftIcon={<ArrowBackIcon />} variant="secondary" w="100%" size="sm" mb={4}>
           {t('Back to project')}
         </Button>
       </NavLink>
       <CardLayout p={4}>
         {Object.entries(projectSections).map(([key, section]) => (
-          <NavItem
-            key={key}
-            isActive={activeSectionKey === key}
-            projectName={project.name}
-            section={section}
-          />
+          <NavItem key={key} isActive={activeSectionKey === key} projectName={project.name} section={section} />
         ))}
       </CardLayout>
     </Box>

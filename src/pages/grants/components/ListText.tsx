@@ -30,12 +30,7 @@ export const ListText = ({
           </Box>
         ) : null}
         {typeof children === 'string' || typeof children === 'number' ? (
-          <Text
-            fontWeight={'700'}
-            fontSize={'19px'}
-            fontFamily={fonts.interBlack}
-            {...titleProps}
-          >
+          <Text fontWeight={'700'} fontSize={'19px'} fontFamily={fonts.interBlack} {...titleProps}>
             {children || '-'}
           </Text>
         ) : (
@@ -43,13 +38,7 @@ export const ListText = ({
         )}
       </Box>
       {subtitle && (
-        <Text
-          fontWeight={'700'}
-          fontSize="13px"
-          fontFamily={fonts.interBlack}
-          color="neutral.600"
-          {...subtitleProps}
-        >
+        <Text fontWeight={'700'} fontSize="13px" fontFamily={fonts.interBlack} color="neutral.600" {...subtitleProps}>
           {subtitle}
         </Text>
       )}

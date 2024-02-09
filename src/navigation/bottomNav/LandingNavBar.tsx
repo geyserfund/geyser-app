@@ -2,12 +2,7 @@ import { Box, Button, HStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { Link, matchPath, matchRoutes, useLocation } from 'react-router-dom'
 
-import {
-  FeedNavIcon,
-  GrantsNavIcon,
-  HomeNavIcon2,
-  LeaderboardNavIcon,
-} from '../../components/icons'
+import { FeedNavIcon, GrantsNavIcon, HomeNavIcon2, LeaderboardNavIcon } from '../../components/icons'
 import { getPath } from '../../constants'
 import { BottomNavContainerCommonStyles } from '../../constants/styles'
 import { useLayoutAnimation } from '../../hooks'
@@ -54,17 +49,12 @@ export const LandingNavBar = () => {
   )
 
   const shouldShowLandingNav = useMemo(
-    () =>
-      routeMatchesForShowingLandingMenu?.some((routeMatch) =>
-        Boolean(routeMatch),
-      ),
+    () => routeMatchesForShowingLandingMenu?.some((routeMatch) => Boolean(routeMatch)),
     [routeMatchesForShowingLandingMenu],
   )
 
   const handleScrollUp = (path: string) => {
-    const currentRoute = routeMatchesForShowingLandingMenu?.find((routeMatch) =>
-      Boolean(routeMatch),
-    )
+    const currentRoute = routeMatchesForShowingLandingMenu?.find((routeMatch) => Boolean(routeMatch))
 
     if (currentRoute?.pathname === path) {
       document.scrollingElement?.scrollTo({ top: 0, behavior: 'smooth' })
@@ -79,13 +69,7 @@ export const LandingNavBar = () => {
     return (
       <>
         <Box height="60px" width="100%"></Box>
-        <HStack
-          className={className}
-          paddingX="15%"
-          spacing="20%"
-          position="fixed"
-          {...BottomNavContainerCommonStyles}
-        >
+        <HStack className={className} paddingX="15%" spacing="20%" position="fixed" {...BottomNavContainerCommonStyles}>
           {LandingNavItems.map(({ name, path, Icon }) => {
             const isActive = Boolean(matchPath(path, location.pathname))
             return (

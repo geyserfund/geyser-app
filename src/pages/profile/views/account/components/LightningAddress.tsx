@@ -24,11 +24,7 @@ export const LightningAddress = ({ name, ...rest }: ILightningQR) => {
 
   return (
     <>
-      <Tooltip
-        label={copy ? t('Copied!') : t('Copy Lightning Address')}
-        placement="top"
-        closeOnClick={false}
-      >
+      <Tooltip label={copy ? t('Copied!') : t('Copy Lightning Address')} placement="top" closeOnClick={false}>
         <Button
           size="sm"
           color="neutral.600"

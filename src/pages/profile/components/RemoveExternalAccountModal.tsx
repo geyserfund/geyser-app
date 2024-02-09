@@ -24,13 +24,7 @@ interface IDeleteConfirmModal {
   isNostr?: boolean
 }
 
-export const RemoveExternalAccountModal = ({
-  isOpen,
-  onClose,
-  confirm,
-  isLoading,
-  isNostr,
-}: IDeleteConfirmModal) => {
+export const RemoveExternalAccountModal = ({ isOpen, onClose, confirm, isLoading, isNostr }: IDeleteConfirmModal) => {
   const { t } = useTranslation()
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="md" isCentered>
@@ -62,22 +56,15 @@ export const RemoveExternalAccountModal = ({
               </Body2>
             )}
             <Body2 semiBold wordBreak="break-word" alignSelf="start">
-              {`${
-                isNostr
-                  ? t('Your badges are connected to this Nostr account.')
-                  : ''
-              } ${t('Are you sure you want to disconnect this account?')}`}
+              {`${isNostr ? t('Your badges are connected to this Nostr account.') : ''} ${t(
+                'Are you sure you want to disconnect this account?',
+              )}`}
             </Body2>
             <HStack width="100%" justifyContent="space-between" spacing="20px">
               <ButtonComponent w="full" onClick={onClose}>
                 {t('Cancel')}
               </ButtonComponent>
-              <Button
-                variant="danger"
-                w="full"
-                onClick={confirm}
-                isLoading={isLoading}
-              >
+              <Button variant="danger" w="full" onClick={confirm} isLoading={isLoading}>
                 {t('Disconnect')}
               </Button>
             </HStack>

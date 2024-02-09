@@ -36,12 +36,7 @@ import { lightModeColors } from '../../styles'
 import { LndNodeType } from '../../types'
 import { WalletConnectionDetails } from '../projectDashboard/components'
 import { NodeAdditionModal, WalletConnectionOptionInfoBox } from './components'
-import {
-  ConnectionOption,
-  LightingWalletForm,
-  LNAddressEvaluationState,
-  NodeWalletForm,
-} from './hooks/useWalletForm'
+import { ConnectionOption, LightingWalletForm, LNAddressEvaluationState, NodeWalletForm } from './hooks/useWalletForm'
 
 type Props = {
   readOnly?: boolean
@@ -73,16 +68,9 @@ export const ProjectCreationWalletConnectionForm = ({
       case LNAddressEvaluationState.LOADING:
         return <Loader size="md"></Loader>
       case LNAddressEvaluationState.FAILED:
-        return (
-          <BsFillXCircleFill fill={lightModeColors.secondary.red} size="24px" />
-        )
+        return <BsFillXCircleFill fill={lightModeColors.secondary.red} size="24px" />
       case LNAddressEvaluationState.SUCCEEDED:
-        return (
-          <BsFillCheckCircleFill
-            fill={lightModeColors.primary[500]}
-            size="24px"
-          />
-        )
+        return <BsFillCheckCircleFill fill={lightModeColors.primary[500]} size="24px" />
       default:
         return null
     }
@@ -137,9 +125,7 @@ export const ProjectCreationWalletConnectionForm = ({
                     error={lightningAddress.error}
                     isDisabled={readOnly}
                   />
-                  <InputRightElement>
-                    {renderRightElementContent()}
-                  </InputRightElement>
+                  <InputRightElement>{renderRightElementContent()}</InputRightElement>
                 </InputGroup>
               }
               promoText={t('2% Geyser fee per transaction')}
@@ -149,11 +135,7 @@ export const ProjectCreationWalletConnectionForm = ({
                     '<0>Lightning Addresses</0> are like an email address, but for your Bitcoin. You’ll receive all on-chain and lightning transactions directly to your lightning wallet. Get your own lightning access using these recommended apps.'
                   }
                 >
-                  <Link
-                    textDecoration="underline"
-                    href="https://lightningaddress.com/"
-                    isExternal
-                  >
+                  <Link textDecoration="underline" href="https://lightningaddress.com/" isExternal>
                     Lightning Addresses
                   </Link>
                   {
@@ -162,20 +144,9 @@ export const ProjectCreationWalletConnectionForm = ({
                 </Trans>
               }
             >
-              <HStack
-                width={'full'}
-                justifyContent={'flex-start'}
-                spacing={4}
-                flexWrap="wrap"
-              >
-                <RenderSponsorImage
-                  url={AlbyLightningAddressURL}
-                  imageUrl={AlbyUrl}
-                />
-                <RenderSponsorImage
-                  url={WalletOfSatoshiLightningAddressURL}
-                  imageUrl={WalletOfSatoshiUrl}
-                />
+              <HStack width={'full'} justifyContent={'flex-start'} spacing={4} flexWrap="wrap">
+                <RenderSponsorImage url={AlbyLightningAddressURL} imageUrl={AlbyUrl} />
+                <RenderSponsorImage url={WalletOfSatoshiLightningAddressURL} imageUrl={WalletOfSatoshiUrl} />
                 <RenderSponsorImage url={BitNobURL} imageUrl={BitnobUrl} />
                 <RenderSponsorImage url={BlinkUrl} imageUrl={BlinkLogoUrl} />
               </HStack>
@@ -212,9 +183,7 @@ export const ProjectCreationWalletConnectionForm = ({
                         connectionDetails: {
                           grpcPort: Number(nodeInput.grpc),
                           hostname: nodeInput.hostname,
-                          lndNodeType: nodeInput.isVoltage
-                            ? LndNodeType.Voltage
-                            : LndNodeType.Geyser,
+                          lndNodeType: nodeInput.isVoltage ? LndNodeType.Voltage : LndNodeType.Geyser,
                           macaroon: nodeInput.invoiceMacaroon,
                           pubkey: nodeInput.publicKey,
                           tlsCertificate: nodeInput.tlsCert,
@@ -236,47 +205,25 @@ export const ProjectCreationWalletConnectionForm = ({
                     {
                       'Connect your lightning node to receive incoming transactions directly. Dont have a node? You can '
                     }
-                    <Link href={VoltageExplainerPageForGeyserURL}>
-                      create a cloud node
-                    </Link>{' '}
-                    with the recommended app.
+                    <Link href={VoltageExplainerPageForGeyserURL}>create a cloud node</Link> with the recommended app.
                   </Trans>
                 </span>
               }
             >
-              <RenderSponsorImage
-                url={VoltageExplainerPageForGeyserURL}
-                imageUrl={VoltageUrl}
-              />
+              <RenderSponsorImage url={VoltageExplainerPageForGeyserURL} imageUrl={VoltageUrl} />
             </WalletConnectionOptionInfoBox>
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
 
-      <NodeAdditionModal
-        isOpen={node.isOpen}
-        onClose={node.onClose}
-        nodeInput={nodeInput}
-        onSubmit={node.setValue}
-      />
+      <NodeAdditionModal isOpen={node.isOpen} onClose={node.onClose} nodeInput={nodeInput} onSubmit={node.setValue} />
     </VStack>
   )
 }
 
-const RenderSponsorImage = ({
-  url,
-  imageUrl,
-}: {
-  url: string
-  imageUrl: string
-}) => {
+const RenderSponsorImage = ({ url, imageUrl }: { url: string; imageUrl: string }) => {
   return (
-    <Box
-      backgroundColor={lightModeColors.neutral[100]}
-      borderRadius={'10px'}
-      px={3}
-      py={1}
-    >
+    <Box backgroundColor={lightModeColors.neutral[100]} borderRadius={'10px'} px={3} py={1}>
       <Link isExternal href={url}>
         <Image src={imageUrl} height="24px" />
       </Link>

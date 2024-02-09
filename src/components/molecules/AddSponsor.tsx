@@ -1,12 +1,5 @@
 import { Box, Text } from '@chakra-ui/layout'
-import {
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-} from '@chakra-ui/modal'
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
 
 import { AddSponsorUrl } from '../../constants'
 import { ButtonComponent, UndecoratedLink } from '../ui'

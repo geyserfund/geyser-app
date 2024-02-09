@@ -43,18 +43,8 @@ export const AppLayout = () => {
       isPullable={isMobile}
     >
       <Fade in={true}>
-        <Box
-          w="full"
-          h={'100%'}
-          position="relative"
-          className={layoutAnimationClassName}
-        >
-          <Box
-            minHeight="100vh"
-            height={isMobile ? '100%' : '100vh'}
-            display="flex"
-            flexDir="column"
-          >
+        <Box w="full" h={'100%'} position="relative" className={layoutAnimationClassName}>
+          <Box minHeight="100vh" height={isMobile ? '100%' : '100vh'} display="flex" flexDir="column">
             <TopNavBar />
             <ProfileSideNavigation />
             <Box

@@ -44,9 +44,7 @@ export const BadgesFAQ = () => {
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem>
-          <AccordionButton>
-            {t('Where can I see my Geyser badges?')}
-          </AccordionButton>
+          <AccordionButton>{t('Where can I see my Geyser badges?')}</AccordionButton>
           <AccordionPanel>
             {t(
               'You can access your Geyser badges on any Nostr platform that showcases Nostr badges such as badges.page and Amethist.',
@@ -54,9 +52,7 @@ export const BadgesFAQ = () => {
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem>
-          <AccordionButton>
-            {t('Who can edit and update Nostr Badges?')}
-          </AccordionButton>
+          <AccordionButton>{t('Who can edit and update Nostr Badges?')}</AccordionButton>
           <AccordionPanel>
             {t(
               'The issuer of the badges can edit information pertaining to the badges, but not revoke the badge at any point. Therefore Geyser can make edits to the badges if this is ever needed',
@@ -72,9 +68,7 @@ export const BadgesFAQ = () => {
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem>
-          <AccordionButton>
-            {t('Hey, I should have that badge!')}
-          </AccordionButton>
+          <AccordionButton>{t('Hey, I should have that badge!')}</AccordionButton>
           <AccordionPanel>
             <Trans
               i18nKey={
@@ -82,8 +76,7 @@ export const BadgesFAQ = () => {
               }
             >
               If you think you should have access to a badge reach out to us at
-              <Link href="mailto:hello@geyser.fund">hello@geyser.fund</Link> and
-              we can review your badge privilege!
+              <Link href="mailto:hello@geyser.fund">hello@geyser.fund</Link> and we can review your badge privilege!
             </Trans>
           </AccordionPanel>
         </AccordionItem>

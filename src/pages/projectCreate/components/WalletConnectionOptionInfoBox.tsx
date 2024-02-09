@@ -6,13 +6,7 @@ type Props = HTMLChakraProps<'div'> & {
   secondaryText: string | React.ReactElement
 }
 
-export const WalletConnectionOptionInfoBox = ({
-  primaryNode,
-  promoText,
-  secondaryText,
-  children,
-  ...rest
-}: Props) => {
+export const WalletConnectionOptionInfoBox = ({ primaryNode, promoText, secondaryText, children, ...rest }: Props) => {
   return (
     <VStack
       backgroundColor={'neutral.100'}

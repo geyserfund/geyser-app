@@ -13,13 +13,7 @@ interface FollowButtonProps extends ButtonProps {
 export const FollowButton = ({ projectId, ...rest }: FollowButtonProps) => {
   const { t } = useTranslation()
   const { isLoggedIn, loginOnOpen } = useAuthContext()
-  const {
-    isFollowed,
-    handleFollow,
-    handleUnFollow,
-    followLoading,
-    unfollowLoading,
-  } = useFollowProject(projectId)
+  const { isFollowed, handleFollow, handleUnFollow, followLoading, unfollowLoading } = useFollowProject(projectId)
 
   const handleClick = () => {
     if (!isLoggedIn) {

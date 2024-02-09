@@ -7,14 +7,7 @@ export const LoadingPage = () => {
   const [isNostrColor] = useNostrColor()
 
   return (
-    <VStack
-      height="100vh"
-      width="100%"
-      color="primary.400"
-      justifyContent="center"
-      alignItems="center"
-      spacing="20px"
-    >
+    <VStack height="100vh" width="100%" color="primary.400" justifyContent="center" alignItems="center" spacing="20px">
       <Image
         height="75px"
         src={isNostrColor ? LogoNameNostr : LogoNameBrand}

@@ -19,14 +19,10 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
 
   const { onOpen, onClose, isOpen } = useDisclosure()
 
-  const { isProjectCreatorRoute, isEntryCreationRoute } =
-    useRouteMatchesForPrivateRoute()
+  const { isProjectCreatorRoute, isEntryCreationRoute } = useRouteMatchesForPrivateRoute()
 
   const isUserViewingTheirOwnProject: boolean = useMemo(() => {
-    return user?.ownerOf?.some(
-      ({ project }) =>
-        project?.id === params.projectId || project?.name === params.projectId,
-    )
+    return user?.ownerOf?.some(({ project }) => project?.id === params.projectId || project?.name === params.projectId)
   }, [params.projectId, user.ownerOf])
 
   useEffect(() => {
@@ -51,11 +47,7 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
     return <LoadingPage />
   }
 
-  if (
-    isProjectCreatorRoute &&
-    Boolean(isUserViewingTheirOwnProject) === false &&
-    params?.projectId
-  ) {
+  if (isProjectCreatorRoute && Boolean(isUserViewingTheirOwnProject) === false && params?.projectId) {
     return <Navigate to={getPath('project', params?.projectId)} />
   }
 

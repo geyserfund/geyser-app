@@ -5,10 +5,9 @@ import { validNumber } from '../../utils'
 import { useListenerState } from '../useListenerState'
 import { getNestedValue } from '../useQueryWithPagination'
 
-export type PaginatedListType<
-  TEntity,
-  TTransformed = TEntity,
-> = TTransformed extends never[] ? TEntity[] : TTransformed[]
+export type PaginatedListType<TEntity, TTransformed = TEntity> = TTransformed extends never[]
+  ? TEntity[]
+  : TTransformed[]
 
 export type usePaginationAtomHookProps<TEntity, TTransformed = TEntity> = {
   fetchMore: any
@@ -18,10 +17,7 @@ export type usePaginationAtomHookProps<TEntity, TTransformed = TEntity> = {
   where?: any
   orderBy?: any
   resultMap?: (_: TEntity[]) => TTransformed[]
-  setData: SetAtom<
-    [SetStateAction<PaginatedListType<TEntity, TTransformed>>],
-    void
-  >
+  setData: SetAtom<[SetStateAction<PaginatedListType<TEntity, TTransformed>>], void>
 }
 
 const thresholdNoOfAggregatedResultsToFetchMore = 5
@@ -60,8 +56,7 @@ export const usePaginationAtomHook = <TEntity, TTransformed = TEntity>({
 
       if (
         data.length === itemLimit &&
-        data.length - mappedData.length >
-          thresholdNoOfAggregatedResultsToFetchMore &&
+        data.length - mappedData.length > thresholdNoOfAggregatedResultsToFetchMore &&
         !noMoreItems.current
       ) {
         fetchNext()
@@ -84,9 +79,7 @@ export const usePaginationAtomHook = <TEntity, TTransformed = TEntity>({
     }
   }
 
-  const handleMapData = (
-    data: TEntity[],
-  ): PaginatedListType<TEntity, TTransformed> => {
+  const handleMapData = (data: TEntity[]): PaginatedListType<TEntity, TTransformed> => {
     if (resultMap) {
       return resultMap(data) as PaginatedListType<TEntity, TTransformed>
     }
@@ -118,22 +111,14 @@ export const usePaginationAtomHook = <TEntity, TTransformed = TEntity>({
 
         handlePaginationChange(data)
 
-        const mappedData: PaginatedListType<TEntity, TTransformed> =
-          handleMapData(data)
+        const mappedData: PaginatedListType<TEntity, TTransformed> = handleMapData(data)
 
-        setData(
-          (prev) =>
-            [...prev, ...mappedData] as PaginatedListType<
-              TEntity,
-              TTransformed
-            >,
-        )
+        setData((prev) => [...prev, ...mappedData] as PaginatedListType<TEntity, TTransformed>)
 
         // If the aggregated length of the data is too small next pagination is automatically fetched
         if (
           data.length === itemLimit &&
-          data.length - mappedData.length >=
-            thresholdNoOfAggregatedResultsToFetchMore &&
+          data.length - mappedData.length >= thresholdNoOfAggregatedResultsToFetchMore &&
           (count ? count < noOfTimesToRefetchMore : true)
         ) {
           fetchNext(count ? count + 1 : 1)

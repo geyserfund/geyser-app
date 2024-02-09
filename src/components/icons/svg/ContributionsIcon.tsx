@@ -2,12 +2,7 @@ import { Icon, IconProps } from '@chakra-ui/react'
 
 export const ContributionsIcon = (props: IconProps) => {
   return (
-    <Icon
-      viewBox="0 0 36 36"
-      color={props.color || 'currentColor'}
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+    <Icon viewBox="0 0 36 36" color={props.color || 'currentColor'} xmlns="http://www.w3.org/2000/svg" {...props}>
       <path
         d="M9.79828 12.7646C10.2809 11.9924 10.2809 11.1237 9.89481 10.3515C9.70176 9.86894 9.31568 9.48285 8.83307 9.28981C8.54351 9.09677 8.25394 9.00024 7.86786 9.00024H7.48177C6.61308 9.00024 5.74439 9.48285 5.26178 10.255C4.68266 11.2202 4.8757 12.282 5.45483 13.1507C5.64787 13.4402 5.93743 13.6333 6.227 13.8263C6.61308 14.0193 7.09569 14.2124 7.48177 14.2124H7.67482C8.64003 13.9228 9.4122 13.5367 9.79828 12.7646Z"
         fill="currentColor"

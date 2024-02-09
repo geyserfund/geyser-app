@@ -33,64 +33,32 @@ export const ProjectCreateStart = () => {
 
   const handleNext = () =>
     navigate(
-      params.projectId
-        ? `${getPath('privateProjectLaunch')}/${params.projectId}`
-        : getPath('privateProjectLaunch'),
+      params.projectId ? `${getPath('privateProjectLaunch')}/${params.projectId}` : getPath('privateProjectLaunch'),
     )
 
   return (
     <ProjectCreateLayout
       title={<Text variant="h2">{t('Create a new project')}</Text>}
-      continueButton={
-        <FormContinueButton
-          flexGrow={1}
-          onClick={handleNext}
-          isDisabled={!isLoggedIn}
-        />
-      }
+      continueButton={<FormContinueButton flexGrow={1} onClick={handleNext} isDisabled={!isLoggedIn} />}
       onBackClick={handleBack}
     >
       <VStack spacing={8} w="100%">
-        <Text variant="h3">
-          {t(
-            'Transform your ideas into real world projects backed by your community',
-          )}
-        </Text>
+        <Text variant="h3">{t('Transform your ideas into real world projects backed by your community')}</Text>
 
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          w="100%"
-          flexWrap="wrap"
-        >
-          <ProjectInfoButton
-            src={LaunchProjectWorldUrl}
-            alt="create project world"
-          >
+        <Box display="flex" justifyContent="space-between" w="100%" flexWrap="wrap">
+          <ProjectInfoButton src={LaunchProjectWorldUrl} alt="create project world">
             {t('Raise funds from anywhere in the world')}
           </ProjectInfoButton>
-          <ProjectInfoButton
-            src={LaunchProjectCoinsUrl}
-            alt="create project lightning"
-          >
+          <ProjectInfoButton src={LaunchProjectCoinsUrl} alt="create project lightning">
             {t('Receive funds from on-chain & lightning')}
           </ProjectInfoButton>
-          <ProjectInfoButton
-            src={LaunchProjectGiftUrl}
-            alt="create project gift"
-          >
+          <ProjectInfoButton src={LaunchProjectGiftUrl} alt="create project gift">
             {t('Sell rewards and perks for your project')}
           </ProjectInfoButton>
-          <ProjectInfoButton
-            src={LaunchProjectEntryUrl}
-            alt="create project entry"
-          >
+          <ProjectInfoButton src={LaunchProjectEntryUrl} alt="create project entry">
             {t('Update your community by writing Entries')}
           </ProjectInfoButton>
-          <ProjectInfoButton
-            src={LaunchProjectFeesUrl}
-            alt="create project fees"
-          >
+          <ProjectInfoButton src={LaunchProjectFeesUrl} alt="create project fees">
             {t('Low 2% fees and no fees for node-runners')}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectKeyUrl} alt="create project key">
@@ -104,24 +72,12 @@ export const ProjectCreateStart = () => {
               {t('You need to login before creating your project.')}
             </Text>
             <VStack>
-              <ConnectWithSocial
-                accountType={SocialAccountType.twitter}
-                w="full"
-              />
+              <ConnectWithSocial accountType={SocialAccountType.twitter} w="full" />
               {!isMobile && <ConnectWithNostr w="full" />}
-              <ConnectWithSocial
-                accountType={SocialAccountType.facebook}
-                w="full"
-              />
-              <ConnectWithSocial
-                accountType={SocialAccountType.google}
-                w="full"
-              />
+              <ConnectWithSocial accountType={SocialAccountType.facebook} w="full" />
+              <ConnectWithSocial accountType={SocialAccountType.google} w="full" />
               <ConnectWithLightning w="full" />
-              <ConnectWithSocial
-                accountType={SocialAccountType.github}
-                w="full"
-              />
+              <ConnectWithSocial accountType={SocialAccountType.github} w="full" />
             </VStack>
 
             {!isMobile ? (
@@ -149,11 +105,7 @@ export const ProjectCreateStart = () => {
   )
 }
 
-const ProjectInfoButton = ({
-  src,
-  alt,
-  children,
-}: PropsWithChildren<Pick<ImageProps, 'src' | 'alt'>>) => {
+const ProjectInfoButton = ({ src, alt, children }: PropsWithChildren<Pick<ImageProps, 'src' | 'alt'>>) => {
   const [isHover, setHover] = useState(false)
   return (
     <Button
@@ -172,12 +124,7 @@ const ProjectInfoButton = ({
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      <Image
-        sx={isHover ? { transform: 'scale(1.2)' } : undefined}
-        src={src}
-        alt={alt}
-        maxHeight="80px"
-      />
+      <Image sx={isHover ? { transform: 'scale(1.2)' } : undefined} src={src} alt={alt} maxHeight="80px" />
       <Text whiteSpace="break-spaces" color="neutral.700">
         {children}
       </Text>

@@ -55,53 +55,24 @@ export const ConnectAccounts = ({ user }: { user: User }) => {
   return (
     <>
       {canConnectAccount && (
-        <Button
-          onClick={onOpen}
-          width="100%"
-          variant="secondary"
-          leftIcon={<AddIcon />}
-        >
+        <Button onClick={onOpen} width="100%" variant="secondary" leftIcon={<AddIcon />}>
           {t('Connect your accounts')}
         </Button>
       )}
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        title={t('Connect more accounts')}
-      >
+      <Modal isOpen={isOpen} onClose={onClose} title={t('Connect more accounts')}>
         <VStack w="full" alignItems="center">
           <Body2 color="neutral.600" mb={4}>
             {t('Connect more social profiles to your Geyser account.')}
           </Body2>
           <VStack>
-            {displayTwitterButton && (
-              <ConnectWithSocial
-                accountType={SocialAccountType.twitter}
-                w="full"
-              />
-            )}
+            {displayTwitterButton && <ConnectWithSocial accountType={SocialAccountType.twitter} w="full" />}
             {displayNostrButton && <ConnectWithNostr w="full" />}
-            {displayFacebookButton && (
-              <ConnectWithSocial
-                accountType={SocialAccountType.facebook}
-                w="full"
-              />
-            )}
-            {displayGoogleButton && (
-              <ConnectWithSocial
-                accountType={SocialAccountType.google}
-                w="full"
-              />
-            )}
+            {displayFacebookButton && <ConnectWithSocial accountType={SocialAccountType.facebook} w="full" />}
+            {displayGoogleButton && <ConnectWithSocial accountType={SocialAccountType.google} w="full" />}
 
             {displayLightningButton && <ConnectWithLightning w="full" />}
 
-            {displayGithubButton && (
-              <ConnectWithSocial
-                accountType={SocialAccountType.github}
-                w="full"
-              />
-            )}
+            {displayGithubButton && <ConnectWithSocial accountType={SocialAccountType.github} w="full" />}
           </VStack>
         </VStack>
       </Modal>

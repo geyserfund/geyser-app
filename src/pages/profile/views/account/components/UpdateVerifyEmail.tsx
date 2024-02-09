@@ -1,11 +1,5 @@
 import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons'
-import {
-  Button,
-  InputGroup,
-  InputRightElement,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Button, InputGroup, InputRightElement, Text, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -34,9 +28,7 @@ export const UpdateVerifyEmail = () => {
 
   const verifyEmailModal = useModal()
 
-  const [currentMfaAction, setCurrentMfaAction] = useState(
-    MfaAction.UserEmailUpdate,
-  )
+  const [currentMfaAction, setCurrentMfaAction] = useState(MfaAction.UserEmailUpdate)
 
   const { formState, control, handleSubmit, getValues } = useForm<{
     email: string
@@ -154,8 +146,7 @@ export const UpdateVerifyEmail = () => {
     }
   }
 
-  const isSavedEmailUnverified =
-    !formState.isDirty && user.email && !user.isEmailVerified
+  const isSavedEmailUnverified = !formState.isDirty && user.email && !user.isEmailVerified
 
   const isSavedEmailVerfied = !formState.isDirty && user.isEmailVerified
 
@@ -179,12 +170,8 @@ export const UpdateVerifyEmail = () => {
             <InputGroup>
               <TextField required control={control} name="email" />
               <InputRightElement>
-                {isSavedEmailVerfied && (
-                  <CheckCircleIcon color={'primary.400'} />
-                )}
-                {isSavedEmailUnverified && (
-                  <WarningIcon color={'neutral.600'} />
-                )}
+                {isSavedEmailVerfied && <CheckCircleIcon color={'primary.400'} />}
+                {isSavedEmailUnverified && <WarningIcon color={'neutral.600'} />}
               </InputRightElement>
             </InputGroup>
             {isSavedEmailVerfied && (
@@ -205,12 +192,7 @@ export const UpdateVerifyEmail = () => {
               {t('Verify email')}
             </Button>
           ) : (
-            <Button
-              variant="primary"
-              w="full"
-              type="submit"
-              isDisabled={!formState.isDirty}
-            >
+            <Button variant="primary" w="full" type="submit" isDisabled={!formState.isDirty}>
               {t('Update email')}
             </Button>
           )}
@@ -220,11 +202,7 @@ export const UpdateVerifyEmail = () => {
         <VerifyYourEmail
           onClose={handleModalClosed}
           isOpen={verifyEmailModal.isOpen}
-          handleVerify={
-            currentMfaAction === MfaAction.UserEmailUpdate
-              ? handleEmailUpdate
-              : undefined
-          }
+          handleVerify={currentMfaAction === MfaAction.UserEmailUpdate ? handleEmailUpdate : undefined}
           action={currentMfaAction}
           otpSent={otpSent}
           otpData={otpData}

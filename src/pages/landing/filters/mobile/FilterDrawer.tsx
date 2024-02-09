@@ -22,9 +22,7 @@ export const FilterDrawer = ({ title, ...rest }: FilterDrawerProps) => {
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
-        <DrawerHeader color="neutral.600">
-          {title || t('Sort & Filter')}
-        </DrawerHeader>
+        <DrawerHeader color="neutral.600">{title || t('Sort & Filter')}</DrawerHeader>
 
         <DrawerBody paddingX="0px">
           <FilterAndSorts />

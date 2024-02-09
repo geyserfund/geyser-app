@@ -10,11 +10,7 @@ interface LandingEntryCardProps extends CardLayoutProps {
   isMobile?: boolean
 }
 
-export const LandingEntryCard = ({
-  entry,
-  isMobile,
-  ...rest
-}: LandingEntryCardProps) => {
+export const LandingEntryCard = ({ entry, isMobile, ...rest }: LandingEntryCardProps) => {
   const navigate = useNavigate()
 
   return (

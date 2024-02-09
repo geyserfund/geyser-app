@@ -1,7 +1,8 @@
 import { HStack, Text, VStack } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { Link as ReactLink } from "react-router-dom";
+import { Link as ReactLink } from 'react-router-dom'
+
 import { getPath } from '../../../constants'
 
 export const ProjectCreateCompleted = ({ children }: PropsWithChildren) => {
@@ -16,17 +17,9 @@ export const ProjectCreateCompleted = ({ children }: PropsWithChildren) => {
       {children}
       <HStack w="100%" spacing={2} mt={2}>
         <Text textAlign="left" color="neutral.600">
-          <Trans
-            i18nKey={
-              "By continuing, I agree with Geyser's <1>Terms & Conditions</1>"
-            }
-          >
+          <Trans i18nKey={"By continuing, I agree with Geyser's <1>Terms & Conditions</1>"}>
             {"By continuing, I agree with Geyser's "}
-            <ReactLink
-              style={{textDecoration: 'underline'}}
-              to={getPath('legalTerms')}
-              target="_blank"
-            >
+            <ReactLink style={{ textDecoration: 'underline' }} to={getPath('legalTerms')} target="_blank">
               Terms & Conditions
             </ReactLink>
           </Trans>

@@ -52,8 +52,7 @@ export const tableCellStyles = {
 }
 
 export const tableHandler = (props: any) => {
-  const hasHeader =
-    props?.children[0]?.props?.json?.content[0]?.type === 'tableHeaderCell'
+  const hasHeader = props?.children[0]?.props?.json?.content[0]?.type === 'tableHeaderCell'
 
   return (
     <Table
@@ -90,10 +89,7 @@ export const FrameHandler = (props: any) => {
     setHeight(`${ref?.current?.contentWindow?.document?.body?.scrollHeight}px`)
   }
 
-  const newSrc = `${props.node.attrs.src}`.replace(
-    /theme=dark|theme=light/,
-    `theme=${colorMode || 'light'}`,
-  )
+  const newSrc = `${props.node.attrs.src}`.replace(/theme=dark|theme=light/, `theme=${colorMode || 'light'}`)
   const splitValues =
     `${props.node.attrs.style}`
       .replaceAll(/"|\{|\}/g, '')

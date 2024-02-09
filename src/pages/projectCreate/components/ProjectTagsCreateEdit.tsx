@@ -1,14 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
-import {
-  Button,
-  HStack,
-  StackProps,
-  useDisclosure,
-  VStack,
-  Wrap,
-  WrapItem,
-} from '@chakra-ui/react'
+import { Button, HStack, StackProps, useDisclosure, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
@@ -16,11 +8,7 @@ import { components, MenuProps, MultiValue } from 'react-select'
 
 import { Modal, SkeletonLayout } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
-import {
-  ButtonComponent,
-  IconButtonComponent,
-  SelectComponent,
-} from '../../../components/ui'
+import { ButtonComponent, IconButtonComponent, SelectComponent } from '../../../components/ui'
 import { getListOfTags } from '../../../constants'
 import { AppTheme } from '../../../context'
 import { FieldContainer } from '../../../forms/components/FieldContainer'
@@ -59,11 +47,7 @@ interface ProjectTagsCreateEditProps extends StackProps {
 const TAG_MIN_LENGTH = 3
 const TAG_MAX_LENGTH = 25
 
-export const ProjectTagsCreateEdit = ({
-  tags,
-  updateTags,
-  ...rest
-}: ProjectTagsCreateEditProps) => {
+export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTagsCreateEditProps) => {
   const classes = useStyles()
   const { t } = useTranslation()
   const { toast } = useNotification()
@@ -72,11 +56,7 @@ export const ProjectTagsCreateEdit = ({
   const [inputValue, setInputValue] = useState('')
 
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const {
-    isOpen: infoIsOpen,
-    onOpen: infoOnOpen,
-    onClose: infoOnClose,
-  } = useDisclosure()
+  const { isOpen: infoIsOpen, onOpen: infoOnOpen, onClose: infoOnClose } = useDisclosure()
 
   const { loading } = useQuery<{ tagsGet: TagsGetResult[] }>(QUERY_TAGS, {
     onCompleted(data) {
@@ -84,24 +64,24 @@ export const ProjectTagsCreateEdit = ({
     },
   })
 
-  const [createTag, { loading: createLoading }] = useMutation<
-    { tagCreate: Tag },
-    { input: TagCreateInput }
-  >(MUTATION_TAG_CREATE, {
-    onError() {
-      toast({
-        status: 'error',
-        title: 'failed to create new tag',
-      })
+  const [createTag, { loading: createLoading }] = useMutation<{ tagCreate: Tag }, { input: TagCreateInput }>(
+    MUTATION_TAG_CREATE,
+    {
+      onError() {
+        toast({
+          status: 'error',
+          title: 'failed to create new tag',
+        })
+      },
+      onCompleted(data) {
+        if (data.tagCreate) {
+          updateTags((current) => [...current, data.tagCreate])
+          setInputValue('')
+          onClose()
+        }
+      },
     },
-    onCompleted(data) {
-      if (data.tagCreate) {
-        updateTags((current) => [...current, data.tagCreate])
-        setInputValue('')
-        onClose()
-      }
-    },
-  })
+  )
 
   const handleChange = (value: MultiValue<TagsGetResult>) => {
     if (!value[0]) {
@@ -130,16 +110,11 @@ export const ProjectTagsCreateEdit = ({
   }
 
   const handleCreateTag = () => {
-    if (
-      inputValue.length < TAG_MIN_LENGTH ||
-      inputValue.length > TAG_MAX_LENGTH
-    ) {
+    if (inputValue.length < TAG_MIN_LENGTH || inputValue.length > TAG_MAX_LENGTH) {
       toast({
         status: 'error',
         title: 'failed to create tag',
-        description: `${t('tag length must be between')} ${TAG_MIN_LENGTH} ${t(
-          'and',
-        )} ${TAG_MAX_LENGTH}`,
+        description: `${t('tag length must be between')} ${TAG_MIN_LENGTH} ${t('and')} ${TAG_MAX_LENGTH}`,
       })
       return
     }
@@ -180,11 +155,8 @@ export const ProjectTagsCreateEdit = ({
   }
 
   const isDisabled = tags.length >= MAX_TAGS_ALLOWED
-  const showAddTag = !tagOptions.some((tag) =>
-    tag.label.toLowerCase().includes(inputValue.toLowerCase()),
-  )
-  const disableShowAddTag =
-    inputValue.length < MAX_TAGS_ALLOWED || createLoading
+  const showAddTag = !tagOptions.some((tag) => tag.label.toLowerCase().includes(inputValue.toLowerCase()))
+  const disableShowAddTag = inputValue.length < MAX_TAGS_ALLOWED || createLoading
 
   const SubTitle = (
     <span>
@@ -233,12 +205,7 @@ export const ProjectTagsCreateEdit = ({
           <HStack width="100%" spacing="10px">
             {tags.map((tag) => {
               return (
-                <HStack
-                  key={tag.id}
-                  borderRadius="4px"
-                  paddingLeft="8px"
-                  backgroundColor="neutral.100"
-                >
+                <HStack key={tag.id} borderRadius="4px" paddingLeft="8px" backgroundColor="neutral.100">
                   <Body1 semiBold>{tag.label}</Body1>
                   <IconButtonComponent
                     noBorder
@@ -264,20 +231,12 @@ export const ProjectTagsCreateEdit = ({
       >
         <VStack w="full">
           <Body1 color="neutral.600" semiBold>
-            {t(
-              'The trending page showcases the following list of general tags',
-            )}
+            {t('The trending page showcases the following list of general tags')}
           </Body1>
           <Wrap>
             {getListOfTags().map((tag) => {
               return (
-                <WrapItem
-                  key={tag.label}
-                  background="neutral.100"
-                  borderRadius={'8px'}
-                  px="8px"
-                  py="3px"
-                >
+                <WrapItem key={tag.label} background="neutral.100" borderRadius={'8px'} px="8px" py="3px">
                   <Body1 color="neutral.900" semiBold>
                     {tag.label}
                   </Body1>

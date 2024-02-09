@@ -26,9 +26,7 @@ export const useNotification = (options?: UseToastOptions | undefined) => {
     })
   }, [toast])
 
-  const invokeToast = (
-    input: UseToastOptions & { description?: string; title: string },
-  ) => {
+  const invokeToast = (input: UseToastOptions & { description?: string; title: string }) => {
     toast({
       ...input,
       description: t(input.description || ''),

@@ -42,9 +42,7 @@ export const ProfileActivity = ({ userProfile }: { userProfile: User }) => {
         height="200px"
         status="error"
         title={t('An error occurred while attempting to fetch user activity.')}
-        message={t(
-          'Please try refreshing the page. You may also want to contact support if the problem persists.',
-        )}
+        message={t('Please try refreshing the page. You may also want to contact support if the problem persists.')}
       />
     )
   }

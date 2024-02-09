@@ -17,11 +17,7 @@ export type GetDownloadUrlProps = {
   to?: number
 }
 
-export const getDownloadUrl = ({
-  projectId,
-  from,
-  to,
-}: GetDownloadUrlProps) => {
+export const getDownloadUrl = ({ projectId, from, to }: GetDownloadUrlProps) => {
   const appEndpoint = getAppEndPoint()
 
   let url = `${appEndpoint}/export/payments/${projectId}`

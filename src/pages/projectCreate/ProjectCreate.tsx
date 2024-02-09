@@ -6,20 +6,13 @@ import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBa
 import { getPath } from '../../constants'
 import { useAuthContext } from '../../context'
 import { useModal } from '../../hooks'
-import {
-  useCreateProjectMutation,
-  useProjectByNameOrIdQuery,
-  useUpdateProjectMutation,
-} from '../../types'
+import { useCreateProjectMutation, useProjectByNameOrIdQuery, useUpdateProjectMutation } from '../../types'
 import { useNotification } from '../../utils'
 import { ProjectExitConfirmModal } from './components'
 import { FormContinueButton } from './components/FormContinueButton'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
 import { ProjectForm } from './components/ProjectForm'
-import {
-  ProjectUnsavedModal,
-  useProjectUnsavedModal,
-} from './components/ProjectUnsavedModal'
+import { ProjectUnsavedModal, useProjectUnsavedModal } from './components/ProjectUnsavedModal'
 import { useProjectForm } from './hooks/useProjectForm'
 import { ProjectCreationVariables } from './types'
 
@@ -75,9 +68,7 @@ export const ProjectCreate = () => {
 
   const onLeave = () =>
     navigate(
-      params.projectId
-        ? `${getPath('publicProjectLaunch')}/${params.projectId}`
-        : getPath('publicProjectLaunch'),
+      params.projectId ? `${getPath('publicProjectLaunch')}/${params.projectId}` : getPath('publicProjectLaunch'),
     )
 
   const unsavedModal = useProjectUnsavedModal({

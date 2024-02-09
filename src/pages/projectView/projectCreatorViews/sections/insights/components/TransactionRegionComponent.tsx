@@ -1,9 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import {
-  CardLayout,
-  CardLayoutProps,
-} from '../../../../../../components/layouts'
+import { CardLayout, CardLayoutProps } from '../../../../../../components/layouts'
 import { H3 } from '../../../../../../components/typography'
 import { FundingRegionsPieChart } from '../elements'
 import { useStatsInsightsAtom } from '../insightsAtom'

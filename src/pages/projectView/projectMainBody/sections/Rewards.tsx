@@ -1,20 +1,14 @@
-import { GridItem, Text, SimpleGrid, useBreakpoint } from '@chakra-ui/react'
+import { GridItem, SimpleGrid, Text, useBreakpoint } from '@chakra-ui/react'
 import { forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
-import {
-  RewardCard,
-} from '../../../../components/molecules'
+import { RewardCard } from '../../../../components/molecules'
 import { TitleDivider } from '../../../../components/ui/TitleDivider'
 import { ID } from '../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
-import {
-  isActive,
-  toInt,
-  useMobileMode
-} from '../../../../utils'
+import { isActive, toInt, useMobileMode } from '../../../../utils'
 import { truthyFilter } from '../../../../utils/array'
 
 export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
@@ -22,7 +16,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   const isMobile = useMobileMode()
   const location = useLocation()
   const breakpoint = useBreakpoint({ ssr: false })
-  const largeView = ['xl','2xl'].includes(breakpoint);
+  const largeView = ['xl', '2xl'].includes(breakpoint)
 
   const {
     project,
@@ -33,23 +27,25 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   if (!project || !isActive || project.rewards.length == 0) {
     return null
   }
-  const activeProjectRewards = project.rewards.filter(reward => reward.isHidden == false);
+
+  const activeProjectRewards = project.rewards.filter((reward) => reward.isHidden == false)
 
   const renderRewards = () => {
     if (activeProjectRewards.length > 0) {
       return activeProjectRewards.filter(truthyFilter).map((reward) => {
         return (
           <RewardCard
-              key={reward.id}
-              width="100%"
-              reward={reward}
-              onRewardClick={() => {
-                const count = (fundFormState.rewardsByIDAndCount && fundFormState.rewardsByIDAndCount[`${reward.id}`]) || 0
-                updateReward({ id: toInt(reward.id), count: count + 1 })
-                setMobileView(MobileViews.funding)
-                setFundingFormState('step', 'contribution')
-              }}
-            />
+            key={reward.id}
+            width="100%"
+            reward={reward}
+            onRewardClick={() => {
+              const count =
+                (fundFormState.rewardsByIDAndCount && fundFormState.rewardsByIDAndCount[`${reward.id}`]) || 0
+              updateReward({ id: toInt(reward.id), count: count + 1 })
+              setMobileView(MobileViews.funding)
+              setFundingFormState('step', 'contribution')
+            }}
+          />
         )
       })
     }
@@ -78,14 +74,11 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
         spacing="25px"
         mobileDense
       >
-        <TitleDivider
-          badge={activeProjectRewards.length}
-          isFixed={isRewardTitleFixed}
-        >
+        <TitleDivider badge={activeProjectRewards.length} isFixed={isRewardTitleFixed}>
           {t('Rewards')}
         </TitleDivider>
 
-        <SimpleGrid columns={largeView ? 2 : 1} spacing={3} width={"100%"}>
+        <SimpleGrid columns={largeView ? 2 : 1} spacing={3} width={'100%'}>
           {renderRewards()}
         </SimpleGrid>
       </CardLayout>

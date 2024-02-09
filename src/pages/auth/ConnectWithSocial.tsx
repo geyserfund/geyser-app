@@ -14,12 +14,7 @@ import { useAuthToken, useCanLogin } from './useAuthToken'
 export const TWITTER_AUTH_ATTEMPT_KEY = 'twitterAuthAttempt'
 export const TWITTER_AUTH_ATTEMPT_MESSAGE_TIME_MILLIS = 1000 * 60 * 15 // 15 minutes
 
-export const ConnectWithSocial = ({
-  onClose,
-  isIconOnly,
-  accountType,
-  ...rest
-}: ConnectWithButtonProps) => {
+export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }: ConnectWithButtonProps) => {
   const { t } = useTranslation()
   const { login } = useAuthContext()
   const { toast } = useNotification()
@@ -103,10 +98,7 @@ export const ConnectWithSocial = ({
       startPolling(1000)
     }
 
-    localStorage.setItem(
-      TWITTER_AUTH_ATTEMPT_KEY,
-      DateTime.now().toMillis().toString(),
-    )
+    localStorage.setItem(TWITTER_AUTH_ATTEMPT_KEY, DateTime.now().toMillis().toString())
   }
 
   const ButtonComponent = isIconOnly ? IconButton : Button

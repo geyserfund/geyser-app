@@ -2,18 +2,10 @@ import { CheckCircleIcon } from '@chakra-ui/icons'
 import { HStack, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  LightningAddressConnectionDetails,
-  LndConnectionDetailsPrivate,
-  Wallet,
-} from '../../../types'
+import { LightningAddressConnectionDetails, LndConnectionDetailsPrivate, Wallet } from '../../../types'
 import { ProjectFundingSettingsLightningAddressView } from '../components/ProjectFundingSettingsLightningAddressView'
 
-export const WalletConnectionDetails = ({
-  projectWallet,
-}: {
-  projectWallet: Partial<Wallet>
-}) => {
+export const WalletConnectionDetails = ({ projectWallet }: { projectWallet: Partial<Wallet> }) => {
   const { t } = useTranslation()
   const { connectionDetails } = projectWallet || {}
 
@@ -22,14 +14,11 @@ export const WalletConnectionDetails = ({
   }
 
   if (connectionDetails.__typename === 'LightningAddressConnectionDetails') {
-    const lightningConnectionDetails =
-      connectionDetails as LightningAddressConnectionDetails
+    const lightningConnectionDetails = connectionDetails as LightningAddressConnectionDetails
 
     return (
       // <GridItem colSpan={8} display="flex" justifyContent="center">
-      <ProjectFundingSettingsLightningAddressView
-        lightningAddress={lightningConnectionDetails.lightningAddress}
-      />
+      <ProjectFundingSettingsLightningAddressView lightningAddress={lightningConnectionDetails.lightningAddress} />
       // </GridItem>
     )
   }
@@ -74,12 +63,7 @@ export const WalletConnectionDetails = ({
             {lndConnectionDetails.pubkey}
           </Text>
         </VStack>
-        <VStack
-          width="100%"
-          spacing="4px"
-          alignItems="flex-start"
-          flexWrap="wrap"
-        >
+        <VStack width="100%" spacing="4px" alignItems="flex-start" flexWrap="wrap">
           <Text color="neutral.700" fontSize="10px">
             {t('Invoice Macaroon')}
           </Text>

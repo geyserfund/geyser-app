@@ -60,21 +60,20 @@ export const Details = () => {
           }
         >
           <Wrap spacing="5px">
-            {project?.location?.country?.name &&
-              project.location.country.name !== 'Online' && (
-                <Link
-                  key={project?.location?.country?.name}
-                  to={getPath('landingPage')}
-                  state={{
-                    filter: {
-                      countryCode: project?.location?.country?.code,
-                      sort: SortType.balance,
-                    },
-                  }}
-                >
-                  <TagBox>{project?.location?.country?.name}</TagBox>
-                </Link>
-              )}
+            {project?.location?.country?.name && project.location.country.name !== 'Online' && (
+              <Link
+                key={project?.location?.country?.name}
+                to={getPath('landingPage')}
+                state={{
+                  filter: {
+                    countryCode: project?.location?.country?.code,
+                    sort: SortType.balance,
+                  },
+                }}
+              >
+                <TagBox>{project?.location?.country?.name}</TagBox>
+              </Link>
+            )}
             {project?.location?.region && (
               <Link
                 key={project?.location?.region}
@@ -102,11 +101,9 @@ export const Details = () => {
           </span>
         }
       >
-        <Text variant="body2" color="neutral.600">{`${t(
-          'Launched',
-        )} ${DateTime.fromMillis(Number(project.createdAt)).toFormat(
-          'dd LLL yyyy',
-        )}`}</Text>
+        <Text variant="body2" color="neutral.600">{`${t('Launched')} ${DateTime.fromMillis(
+          Number(project.createdAt),
+        ).toFormat('dd LLL yyyy')}`}</Text>
       </SummaryInfoLine>
     </CardLayout>
   )

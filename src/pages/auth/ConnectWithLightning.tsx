@@ -28,11 +28,7 @@ import { useAuthContext } from '../../context'
 import { defaultUser } from '../../defaults'
 import { lightModeColors } from '../../styles'
 import { User } from '../../types'
-import {
-  copyTextToClipboard,
-  useMobileMode,
-  useNotification,
-} from '../../utils'
+import { copyTextToClipboard, useMobileMode, useNotification } from '../../utils'
 import { ConnectWithButtonProps } from './type'
 
 type LNURLResponse =
@@ -79,16 +75,8 @@ interface ConnectWithLightningModalProps {
   onClose: () => void
 }
 
-export const ConnectWithLightning = ({
-  onClose,
-  isIconOnly,
-  ...rest
-}: Omit<ConnectWithButtonProps, 'accountType'>) => {
-  const {
-    isOpen: isModalOpen,
-    onClose: onModalClose,
-    onOpen: onModalOpen,
-  } = useDisclosure()
+export const ConnectWithLightning = ({ onClose, isIconOnly, ...rest }: Omit<ConnectWithButtonProps, 'accountType'>) => {
+  const { isOpen: isModalOpen, onClose: onModalClose, onOpen: onModalOpen } = useDisclosure()
 
   const { t } = useTranslation()
 
@@ -127,17 +115,12 @@ export const ConnectWithLightning = ({
         )}
       </ButtonComponent>
       {/* To make sure the polling gets stopped, the component is demounted. */}
-      {isModalOpen && (
-        <ConnectWithLightningModal isOpen={isModalOpen} onClose={handleClose} />
-      )}
+      {isModalOpen && <ConnectWithLightningModal isOpen={isModalOpen} onClose={handleClose} />}
     </>
   )
 }
 
-export const ConnectWithLightningModal = ({
-  isOpen,
-  onClose,
-}: ConnectWithLightningModalProps) => {
+export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightningModalProps) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
   const { toast } = useNotification()
@@ -156,11 +139,7 @@ export const ConnectWithLightningModal = ({
     }, 2000)
   }
 
-  const startWebLNFlow = async ({
-    paymentRequest,
-  }: {
-    paymentRequest: string
-  }) => {
+  const startWebLNFlow = async ({ paymentRequest }: { paymentRequest: string }) => {
     try {
       await requestWebLNUrlAuth(paymentRequest)
     } catch (error: any) {
@@ -168,10 +147,7 @@ export const ConnectWithLightningModal = ({
         throw error
       }
 
-      if (
-        error.constructor === RejectionError ||
-        error.message === 'User rejected'
-      ) {
+      if (error.constructor === RejectionError || error.message === 'User rejected') {
         toast({
           title: 'Requested operation declined',
           description: 'Please use the invoice instead.',
@@ -273,16 +249,8 @@ export const ConnectWithLightningModal = ({
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody width="100%">
-          <Box
-            justifyContent="center"
-            alignItems="center"
-            marginTop={2}
-            marginLeft={2}
-            marginRight={2}
-          >
-            <Text marginBottom={5}>
-              {t('Scan the QR code to connect to your Lightning wallet.')}
-            </Text>
+          <Box justifyContent="center" alignItems="center" marginTop={2} marginLeft={2} marginRight={2}>
+            <Text marginBottom={5}>{t('Scan the QR code to connect to your Lightning wallet.')}</Text>
 
             <Link
               href="https://github.com/fiatjaf/lnurl-rfc#lnurl-documents"
@@ -293,11 +261,7 @@ export const ConnectWithLightningModal = ({
               {t('Check if your wallet supports LNURL-auth here.')}
             </Link>
             <VStack marginTop={3} marginBottom={3}>
-              <Box
-                border="4px solid"
-                borderColor="primary.400"
-                borderRadius={4}
-              >
+              <Box border="4px solid" borderColor="primary.400" borderRadius={4}>
                 <Link href={`lightning:${qrContent}`}>
                   <QRCode
                     qrStyle="dots"
@@ -336,13 +300,7 @@ export const ConnectWithLightningModal = ({
               <Text w="75%" color="neutral.600" cursor="default">
                 {qrContent?.slice(0, isMobile ? 21 : 30)}...
               </Text>
-              <ButtonComponent
-                w="25%"
-                primary
-                onClick={handleCopy}
-                fontWeight="bold"
-                fontSize="md"
-              >
+              <ButtonComponent w="25%" primary onClick={handleCopy} fontWeight="bold" fontSize="md">
                 {!copy ? t('Copy') : t('Copied!')}
               </ButtonComponent>
             </Box>

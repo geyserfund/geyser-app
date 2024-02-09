@@ -51,12 +51,7 @@ interface PeopleSayingCardProps {
   imageUrl: string
 }
 
-const PeopleSayingCard = ({
-  name,
-  userName,
-  description,
-  imageUrl,
-}: PeopleSayingCardProps) => {
+const PeopleSayingCard = ({ name, userName, description, imageUrl }: PeopleSayingCardProps) => {
   return (
     <CardLayout padding={5} spacing={2} maxWidth={350} alignItems={'center'}>
       <Avatar size={'xl'} src={imageUrl} />

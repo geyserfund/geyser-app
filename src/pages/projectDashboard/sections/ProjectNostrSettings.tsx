@@ -1,12 +1,5 @@
 import { CopyIcon } from '@chakra-ui/icons'
-import {
-  HStack,
-  IconButton,
-  Input,
-  InputGroup,
-  InputRightElement,
-  VStack,
-} from '@chakra-ui/react'
+import { HStack, IconButton, Input, InputGroup, InputRightElement, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TbWorld } from 'react-icons/tb'
@@ -27,9 +20,7 @@ export const ProjectNostrSettings = () => {
 
   const handleCopyNPub = async () => {
     try {
-      navigator.clipboard.writeText(
-        project?.keys.nostrKeys.publicKey.npub || '',
-      )
+      navigator.clipboard.writeText(project?.keys.nostrKeys.publicKey.npub || '')
       setCopied(true)
       setTimeout(() => {
         setCopied(false)
@@ -51,11 +42,7 @@ export const ProjectNostrSettings = () => {
               'Nostr is a simple, open protocol that enables global, decentralized, and censorship-resistant broadcasting of information. Geyser provides each project with its own npub. This means that you are able to access your project from other Nostr clients, and that your activity on Geyser will be viewable and accessible cross-platform.',
             )}
           </Body2>
-          <Body2>
-            {t(
-              'Below you can find the information you need to access your public and private keys.',
-            )}
-          </Body2>
+          <Body2>{t('Below you can find the information you need to access your public and private keys.')}</Body2>
         </VStack>
 
         <VStack width="full" alignItems="flex-start">
@@ -69,12 +56,7 @@ export const ProjectNostrSettings = () => {
                 backgroundColor={copied ? 'primary.400' : 'initial'}
               />
               <InputRightElement>
-                <IconButton
-                  aria-label="copy-nostr-npub"
-                  size="sm"
-                  onClick={handleCopyNPub}
-                  icon={<CopyIcon />}
-                />
+                <IconButton aria-label="copy-nostr-npub" size="sm" onClick={handleCopyNPub} icon={<CopyIcon />} />
               </InputRightElement>
             </InputGroup>
           )}
@@ -90,9 +72,7 @@ export const ProjectNostrSettings = () => {
             alignItems="flex-start"
           >
             <Body2 color="secondary.red">
-              {t(
-                'Warning: Before exporting your private keys, make sure to read the following message.',
-              )}
+              {t('Warning: Before exporting your private keys, make sure to read the following message.')}
             </Body2>
 
             <Body2>
@@ -122,10 +102,7 @@ export const ProjectNostrSettings = () => {
                 </li>
               </ul>
             </Body2>
-            <ExportNostrKeysModal
-              projectTitle={project?.title}
-              projectId={project?.id}
-            />
+            <ExportNostrKeysModal projectTitle={project?.title} projectId={project?.id} />
           </VStack>
         </VStack>
 

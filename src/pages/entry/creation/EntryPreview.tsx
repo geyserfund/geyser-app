@@ -5,32 +5,15 @@ import { BsCheckLg } from 'react-icons/bs'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { CardLayout } from '../../../components/layouts'
-import {
-  ButtonComponent,
-  ImageWithReload,
-  TextInputBox,
-} from '../../../components/ui'
+import { ButtonComponent, ImageWithReload, TextInputBox } from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
 import { getPath } from '../../../constants'
 import { ProjectEntryValidations } from '../../../constants'
 import { useNavContext } from '../../../context'
-import {
-  MUTATION_PUBLISH_ENTRY,
-  MUTATION_UPDATE_ENTRY,
-} from '../../../graphql/mutations'
+import { MUTATION_PUBLISH_ENTRY, MUTATION_UPDATE_ENTRY } from '../../../graphql/mutations'
 import { IEntryUpdateInput } from '../../../interfaces/entry'
-import {
-  EntryFragment,
-  EntryStatus,
-  useEntryLazyQuery,
-  useProjectByNameOrIdQuery,
-} from '../../../types'
-import {
-  copyTextToClipboard,
-  isDraft,
-  toInt,
-  useNotification,
-} from '../../../utils'
+import { EntryFragment, EntryStatus, useEntryLazyQuery, useProjectByNameOrIdQuery } from '../../../types'
+import { copyTextToClipboard, isDraft, toInt, useNotification } from '../../../utils'
 import { defaultEntry } from './editor'
 import { CreateNav } from './editor/CreateNav'
 
@@ -48,22 +31,19 @@ export const EntryPreview = () => {
 
   const [entry, setEntry] = useState<EntryFragment>(defaultEntry)
 
-  const [getPost, { loading: loadingPosts, data: entryData }] =
-    useEntryLazyQuery({
-      onCompleted(data) {
-        if (!data.entry) {
-          return navigate(getPath('notFound'))
-        }
+  const [getPost, { loading: loadingPosts, data: entryData }] = useEntryLazyQuery({
+    onCompleted(data) {
+      if (!data.entry) {
+        return navigate(getPath('notFound'))
+      }
 
-        if (data.entry.status === EntryStatus.Published) {
-          navigate(getPath('entry', `${params.entryId}`))
-        }
-      },
-    })
+      if (data.entry.status === EntryStatus.Published) {
+        navigate(getPath('entry', `${params.entryId}`))
+      }
+    },
+  })
 
-  const [updatePost, { loading: updatePostLoading }] = useMutation(
-    MUTATION_UPDATE_ENTRY,
-  )
+  const [updatePost, { loading: updatePostLoading }] = useMutation(MUTATION_UPDATE_ENTRY)
 
   const [publishPost] = useMutation(MUTATION_PUBLISH_ENTRY, {
     onCompleted() {
@@ -78,10 +58,7 @@ export const EntryPreview = () => {
         projectName: data.projectGet?.name,
         projectTitle: data.projectGet?.title,
         projectPath: getPath('project', data.projectGet?.name),
-        projectOwnerIDs:
-          data.projectGet?.owners.map((ownerInfo) =>
-            Number(ownerInfo.user.id || -1),
-          ) || [],
+        projectOwnerIDs: data.projectGet?.owners.map((ownerInfo) => Number(ownerInfo.user.id || -1)) || [],
       })
     },
     onError() {
@@ -138,17 +115,11 @@ export const EntryPreview = () => {
 
   const handleInput = (event: any) => {
     const { name, value } = event.target
-    if (
-      name === 'title' &&
-      value.length > ProjectEntryValidations.title.maxLength
-    ) {
+    if (name === 'title' && value.length > ProjectEntryValidations.title.maxLength) {
       return
     }
 
-    if (
-      name === 'description' &&
-      value.length > ProjectEntryValidations.description.maxLength
-    ) {
+    if (name === 'description' && value.length > ProjectEntryValidations.description.maxLength) {
       return
     }
 
@@ -186,9 +157,7 @@ export const EntryPreview = () => {
 
   const handleTwitterShareButtonTapped = () => {
     if (params.entryId) {
-      copyTextToClipboard(
-        `${window.location.origin}${getPath('entry', params.entryId)}`,
-      )
+      copyTextToClipboard(`${window.location.origin}${getPath('entry', params.entryId)}`)
 
       setHasCopiedSharingLink(true)
     }
@@ -230,11 +199,7 @@ export const EntryPreview = () => {
 
           {isEntryPublished ? (
             <VStack width="100%" alignItems="center">
-              <Box
-                borderRadius="50%"
-                backgroundColor="primary.400"
-                padding="10px"
-              >
+              <Box borderRadius="50%" backgroundColor="primary.400" padding="10px">
                 <BsCheckLg />
               </Box>
 
@@ -254,12 +219,7 @@ export const EntryPreview = () => {
             borderRadius="4px"
           >
             <Box height="220px" width="350px" overflow="hidden">
-              <ImageWithReload
-                src={entry.image || ''}
-                height="220px"
-                width="350px"
-                objectFit="cover"
-              />
+              <ImageWithReload src={entry.image || ''} height="220px" width="350px" objectFit="cover" />
             </Box>
             <VStack width="100%" padding="5px">
               <Text fontSize="11px" color="neutral.700">
@@ -304,19 +264,12 @@ export const EntryPreview = () => {
                 Linked project
               </Text>
               <Text>Where should Satoshi donations go to?</Text>
-              <TextInputBox
-                isDisabled
-                value={`${projectData?.projectGet?.name}@geyser.fund`}
-              />
+              <TextInputBox isDisabled value={`${projectData?.projectGet?.name}@geyser.fund`} />
             </VStack>
           )}
           {isEntryPublished ? (
             <VStack width="100%">
-              <ButtonComponent
-                w="full"
-                onClick={handleTwitterShareButtonTapped}
-                primary={hasCopiedSharingLink}
-              >
+              <ButtonComponent w="full" onClick={handleTwitterShareButtonTapped} primary={hasCopiedSharingLink}>
                 {hasCopiedSharingLink ? 'Copied Link!' : 'Share on Twitter'}
               </ButtonComponent>
 
@@ -327,18 +280,13 @@ export const EntryPreview = () => {
           ) : isDraft(projectData?.projectGet?.status) ? (
             <>
               <Text>
-                You cannot publish a entry in an inactive project. Finish the
-                project configuration or re-activate the project to publish this
-                entry.
+                You cannot publish a entry in an inactive project. Finish the project configuration or re-activate the
+                project to publish this entry.
               </Text>
               <ButtonComponent
                 primary
                 w="full"
-                onClick={() =>
-                  navigate(
-                    getPath('projectDashboard', projectData?.projectGet?.name),
-                  )
-                }
+                onClick={() => navigate(getPath('projectDashboard', projectData?.projectGet?.name))}
               >
                 Go to Project Dashboard
               </ButtonComponent>

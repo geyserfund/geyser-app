@@ -5,11 +5,7 @@ import { useMatch, useNavigate } from 'react-router-dom'
 import { CardLayout, CardLayoutProps } from '../../../components/layouts'
 import { ButtonComponent } from '../../../components/ui'
 import { getPath } from '../../../constants'
-import {
-  useActivitySubsciptionContext,
-  useAuthContext,
-  useFilterContext,
-} from '../../../context'
+import { useActivitySubsciptionContext, useAuthContext, useFilterContext } from '../../../context'
 
 type TabBarProps = CardLayoutProps
 
@@ -53,17 +49,8 @@ export const TabBar = (props: TabBarProps) => {
         backgroundColor={isCurrentTabActivity ? 'neutral.100' : 'neutral.0'}
         onClick={handleActivityClick}
       >
-        {user.imageUrl ? (
-          <Avatar height="23px" width="23px" src={user.imageUrl} mr="10px" />
-        ) : (
-          ''
-        )}
-        <VStack
-          h="100%"
-          position="relative"
-          justifyContent="center"
-          alignItems="center"
-        >
+        {user.imageUrl ? <Avatar height="23px" width="23px" src={user.imageUrl} mr="10px" /> : ''}
+        <VStack h="100%" position="relative" justifyContent="center" alignItems="center">
           <Text fontSize="16px" textTransform="capitalize">
             {t('activity')}
           </Text>

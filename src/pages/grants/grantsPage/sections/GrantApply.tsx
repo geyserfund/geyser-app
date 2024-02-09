@@ -20,18 +20,10 @@ import { BsCheckLg } from 'react-icons/bs'
 
 import { CardLayout } from '../../../../components/layouts'
 import { Body1, Body2, H3 } from '../../../../components/typography'
-import {
-  GrantApplicationDetailsUrl,
-  LockedConnectAccountUrl,
-} from '../../../../constants'
+import { GrantApplicationDetailsUrl, LockedConnectAccountUrl } from '../../../../constants'
 import { useAuthContext } from '../../../../context'
 import { MUTATION_APPLY_GRANT } from '../../../../graphql/mutations'
-import {
-  Grant,
-  GrantApplicantStatus,
-  GrantApplyInput,
-  Project,
-} from '../../../../types'
+import { Grant, GrantApplicantStatus, GrantApplyInput, Project } from '../../../../types'
 import { toInt, useCustomTheme, useNotification } from '../../../../utils'
 import { SocialAccountType } from '../../../auth'
 import { ConnectWithNostr } from '../../../auth/ConnectWithNostr'
@@ -45,12 +37,7 @@ interface GrantProps {
 export const GrantApply = ({ grant }: GrantProps) => {
   const { t } = useTranslation()
   return (
-    <CardLayout
-      noMobileBorder
-      w="full"
-      p={{ base: '10px', lg: '20px' }}
-      alignItems="center"
-    >
+    <CardLayout noMobileBorder w="full" p={{ base: '10px', lg: '20px' }} alignItems="center">
       <H3 alignSelf="start">{t('Apply')}</H3>
       <Body1 alignSelf="start">
         <Trans
@@ -91,11 +78,7 @@ interface ApplyGrantModalProps {
   onClose: () => void
 }
 
-export const ApplyGrantModal = ({
-  grant,
-  isOpen,
-  onClose,
-}: ApplyGrantModalProps) => {
+export const ApplyGrantModal = ({ grant, isOpen, onClose }: ApplyGrantModalProps) => {
   const { t } = useTranslation()
   const { isLoggedIn, user } = useAuthContext()
 
@@ -145,12 +128,7 @@ export const ApplyGrantModal = ({
   return (
     <Modal size="lg" isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
-      <ModalContent
-        display="flex"
-        alignItems="center"
-        padding="20px 15px"
-        marginX="10px"
-      >
+      <ModalContent display="flex" alignItems="center" padding="20px 15px" marginX="10px">
         <ModalHeader alignSelf="start">
           <H3>{t(getModalTitle())}</H3>
         </ModalHeader>
@@ -168,9 +146,7 @@ export const LoginForGrant = () => {
   return (
     <>
       <Image src={LockedConnectAccountUrl} maxWidth="200px" />
-      <Body1>
-        {t('To apply to a grant you need to first login into Geyser.')}
-      </Body1>
+      <Body1>{t('To apply to a grant you need to first login into Geyser.')}</Body1>
       <VStack w="full">
         <ConnectWithSocial accountType={SocialAccountType.facebook} />
         <ConnectWithSocial accountType={SocialAccountType.github} />
@@ -186,21 +162,11 @@ export const CreateAProject = () => {
   const { t } = useTranslation()
   return (
     <>
-      <Body2 alignSelf="start">
-        {t('Select your Geyser project from the list')}
-      </Body2>
-      <Box
-        w="full"
-        paddingY="10px"
-        backgroundColor="neutral.100"
-        borderRadius="8px"
-        textAlign="center"
-      >
+      <Body2 alignSelf="start">{t('Select your Geyser project from the list')}</Body2>
+      <Box w="full" paddingY="10px" backgroundColor="neutral.100" borderRadius="8px" textAlign="center">
         {t('You have not created any projects')}
       </Box>
-      <Body1>
-        {t('To apply for a grant you need to create a project on Geyser.')}
-      </Body1>
+      <Body1>{t('To apply for a grant you need to create a project on Geyser.')}</Body1>
       <CreateAProjectButton />
     </>
   )
@@ -221,8 +187,7 @@ export const ApplicationSuccessful = ({ onClose }: { onClose: () => void }) => {
         <BsCheckLg fontSize="35px" color={colors.neutral[1000]} />
       </HStack>
       <Body1>
-        You successfully applied to be part of the Geyser Grant. You should be
-        receiving a notification soon.
+        You successfully applied to be part of the Geyser Grant. You should be receiving a notification soon.
       </Body1>
       <Button w="full" variant="primary" onClick={onClose}>
         Close
@@ -237,11 +202,7 @@ interface SelectAProjectProps {
   onSuccess: () => void
 }
 
-export const SelectAProject = ({
-  grantId,
-  projects,
-  onSuccess,
-}: SelectAProjectProps) => {
+export const SelectAProject = ({ grantId, projects, onSuccess }: SelectAProjectProps) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
 
@@ -286,9 +247,7 @@ export const SelectAProject = ({
 
   return (
     <>
-      <Body2 alignSelf="start">
-        {t('Select your Geyser project from the list')}
-      </Body2>
+      <Body2 alignSelf="start">{t('Select your Geyser project from the list')}</Body2>
       <VStack w="full">
         {projects.map((project) => {
           const isSelected = selectedProjectId === project.id
@@ -309,24 +268,13 @@ export const SelectAProject = ({
                 borderColor: isSelected ? 'primary.400' : 'neutral.400',
               }}
             >
-              <Image
-                h="100%"
-                width="135px"
-                src={project.thumbnailImage || ''}
-                objectFit="cover"
-              />
+              <Image h="100%" width="135px" src={project.thumbnailImage || ''} objectFit="cover" />
               <Body1 bold>{project.title}</Body1>
             </CardLayout>
           )
         })}
       </VStack>
-      <Button
-        w="full"
-        variant="primary"
-        isDisabled={!selectedProjectId}
-        onClick={handleApply}
-        isLoading={loading}
-      >
+      <Button w="full" variant="primary" isDisabled={!selectedProjectId} onClick={handleApply} isLoading={loading}>
         {t('Apply')}
       </Button>
     </>

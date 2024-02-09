@@ -14,10 +14,7 @@ interface ProjectDisplayProps {
 
 const NO_OF_PROJECT_TO_LOAD = 3
 
-export const ProjectsDisplayMostFundedThisWeek = ({
-  tag,
-  hasMobileDivider,
-}: ProjectDisplayProps) => {
+export const ProjectsDisplayMostFundedThisWeek = ({ tag, hasMobileDivider }: ProjectDisplayProps) => {
   const { t } = useTranslation()
   const { updateFilter } = useFilterContext()
 

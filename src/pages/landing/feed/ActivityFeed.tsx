@@ -3,11 +3,7 @@ import { useEffect, useState } from 'react'
 
 import { AlertBox } from '../../../components/ui'
 import { ID } from '../../../constants'
-import {
-  useActivitySubsciptionContext,
-  useAuthContext,
-  useFilterContext,
-} from '../../../context'
+import { useActivitySubsciptionContext, useAuthContext, useFilterContext } from '../../../context'
 import { QUERY_ACTIVITIES_FOR_LANDING_PAGE } from '../../../graphql/queries/activities'
 import { ScrollInvoke } from '../../../helpers'
 import { useQueryWithPagination } from '../../../hooks'
@@ -25,18 +21,13 @@ export const ActivityFeed = () => {
   const isMobile = useMobileMode()
 
   const { followedProjects } = useAuthContext()
-  const { clearActivity, activities: subscriptionActivities } =
-    useActivitySubsciptionContext()
+  const { clearActivity, activities: subscriptionActivities } = useActivitySubsciptionContext()
   const { filters } = useFilterContext()
   const { activity, tagIds, region, countryCode } = filters
 
-  const [aggregatedActivites, setAggregatedActivites] = useState<
-    ActivityForLandingPageFragment[]
-  >([])
+  const [aggregatedActivites, setAggregatedActivites] = useState<ActivityForLandingPageFragment[]>([])
 
-  const [initialFollowedProjects, setInitialFollowedProject] = useState<
-    Pick<Project, 'id' | 'title' | 'name'>[]
-  >([])
+  const [initialFollowedProjects, setInitialFollowedProject] = useState<Pick<Project, 'id' | 'title' | 'name'>[]>([])
 
   useEffect(() => {
     if (followedProjects && initialFollowedProjects.length === 0) {
@@ -104,20 +95,11 @@ export const ActivityFeed = () => {
 
   return (
     <VStack flexDirection={'column'} spacing={6} width="full">
-      <VStack
-        alignItems={'center'}
-        width="full"
-        spacing={'20px'}
-        maxWidth="500px"
-        paddingX={{ base: 0, lg: '10px' }}
-      >
+      <VStack alignItems={'center'} width="full" spacing={'20px'} maxWidth="500px" paddingX={{ base: 0, lg: '10px' }}>
         {!isMobile && <FilterTopBar noSort paddingBottom="20px" />}
 
         {subscriptionActivities.length > 0 && (
-          <ViewUpdates
-            length={subscriptionActivities.length}
-            onClick={handleClick}
-          />
+          <ViewUpdates length={subscriptionActivities.length} onClick={handleClick} />
         )}
 
         <ActivityList activities={aggregatedActivites} />
@@ -141,13 +123,7 @@ export const ContributionsSkeleton = () => {
           return (
             <VStack key={value} width="full">
               <ContributionActivityItemSkeleton />
-              {value < 6 && (
-                <Divider
-                  borderBottomWidth="2px"
-                  maxWidth="500px"
-                  color="neutral.200"
-                />
-              )}
+              {value < 6 && <Divider borderBottomWidth="2px" maxWidth="500px" color="neutral.200" />}
             </VStack>
           )
         })}
@@ -156,15 +132,8 @@ export const ContributionsSkeleton = () => {
   )
 }
 
-const ViewUpdates = ({
-  onClick,
-  length,
-}: {
-  length: number
-  onClick: () => void
-}) => {
-  const displayText =
-    length > 1 ? `Show ${length} new items` : `Show ${length} new item`
+const ViewUpdates = ({ onClick, length }: { length: number; onClick: () => void }) => {
+  const displayText = length > 1 ? `Show ${length} new items` : `Show ${length} new item`
   return (
     <>
       <Button

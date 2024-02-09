@@ -2,12 +2,7 @@ import { Icon, IconProps } from '@chakra-ui/react'
 
 export const TimerIcon = (props: IconProps) => {
   return (
-    <Icon
-      viewBox="0 0 36 37"
-      color={props.color || 'currentColor'}
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+    <Icon viewBox="0 0 36 37" color={props.color || 'currentColor'} xmlns="http://www.w3.org/2000/svg" {...props}>
       <path
         d="M15.8711 12.113V19.3518C15.8711 19.6907 16.0056 20.0156 16.2453 20.255C16.4847 20.4947 16.8097 20.6293 17.1486 20.6293H23.1098V18.0742H18.426V12.113L15.8711 12.113Z"
         fill="currentColor"

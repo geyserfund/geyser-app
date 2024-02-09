@@ -8,28 +8,18 @@ import {
 } from './routesAtom'
 
 const routesForPrivateProjectLaunch = [getPath('privateProjectLaunch')]
-const routesForPrivateProjectLaunchAtom = atom(
-  routeMatchForAtom(routesForPrivateProjectLaunch),
-)
+const routesForPrivateProjectLaunchAtom = atom(routeMatchForAtom(routesForPrivateProjectLaunch))
 
-export const routesForProjectCreatorAtom = atom(
-  routeMatchForAtom(routesForProjectCreator),
-)
+export const routesForProjectCreatorAtom = atom(routeMatchForAtom(routesForProjectCreator))
 
-export const routeMatchForProjectPageAtom = atom(
-  routeMatchForAtom([getPath('project', PathName.projectId)]),
-)
+export const routeMatchForProjectPageAtom = atom(routeMatchForAtom([getPath('project', PathName.projectId)]))
 
-const routesForEntryCreationAtom = atom(
-  routeMatchForAtom(routesForEntryCreation),
-)
+const routesForEntryCreationAtom = atom(routeMatchForAtom(routesForEntryCreation))
 
 export const useRouteMatchesForPrivateRoute = () => {
   const isProjectCreatorRoute = useAtomValue(routesForProjectCreatorAtom)
   const isEntryCreationRoute = useAtomValue(routesForEntryCreationAtom)
-  const isPrivateProjectLaunchRoute = useAtomValue(
-    routesForPrivateProjectLaunchAtom,
-  )
+  const isPrivateProjectLaunchRoute = useAtomValue(routesForPrivateProjectLaunchAtom)
   return {
     isProjectCreatorRoute,
     isEntryCreationRoute,

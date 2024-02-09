@@ -59,15 +59,13 @@ export const ProjectCreateCompletion = ({
     },
   })
 
-  const [publishProject, { loading: isUpdateStatusLoading }] =
-    useProjectPublishMutation({
-      onCompleted() {
-        queryCurrentUser()
-      },
-    })
+  const [publishProject, { loading: isUpdateStatusLoading }] = useProjectPublishMutation({
+    onCompleted() {
+      queryCurrentUser()
+    },
+  })
 
-  const [createWallet, { loading: isCreateWalletLoading }] =
-    useCreateWalletMutation()
+  const [createWallet, { loading: isCreateWalletLoading }] = useCreateWalletMutation()
 
   const handleBackClick = () => {
     setReadyToLaunch(false)
@@ -163,12 +161,7 @@ export const ProjectCreateCompletion = ({
               'By launching your project the project will be visible to and searchable by the public. You will be able to disactivate your project but not to hide your project after launching it.',
             )}
           </Body1>
-          <Button
-            variant="primary"
-            w="full"
-            onClick={onLaunchClick}
-            isLoading={isLaunchLoading}
-          >
+          <Button variant="primary" w="full" onClick={onLaunchClick} isLoading={isLaunchLoading}>
             {t('Confirm launch')}
           </Button>
         </VStack>

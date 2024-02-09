@@ -6,8 +6,7 @@ import { StateManagerProps } from 'react-select/dist/declarations/src/useStateMa
 
 import { useCustomTheme } from '../../../../../../../../utils'
 
-export interface ShippingStatusSelectProps<T = any, S extends boolean = any>
-  extends StateManagerProps<T, S, any> {
+export interface ShippingStatusSelectProps<T = any, S extends boolean = any> extends StateManagerProps<T, S, any> {
   placeholder?: string
   backgroundColor?: string
   hoverBgColor?: string

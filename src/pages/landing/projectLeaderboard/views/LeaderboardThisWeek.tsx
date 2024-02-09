@@ -8,10 +8,7 @@ interface LeaderboardThisWeekProps extends StackProps {
   items?: number
 }
 
-export const LeaderboardThisWeek = ({
-  items = 4,
-  ...rest
-}: LeaderboardThisWeekProps) => {
+export const LeaderboardThisWeek = ({ items = 4, ...rest }: LeaderboardThisWeekProps) => {
   const { loading, projects, error } = useMostFundedOfTheWeekProjectsState({
     take: items,
   })

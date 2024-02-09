@@ -24,10 +24,7 @@ interface DesktopStatusFilterProps extends CardLayoutProps {
   button: StatusTypeButton
 }
 
-export const DesktopStatusFilter = ({
-  button,
-  ...rest
-}: DesktopStatusFilterProps) => {
+export const DesktopStatusFilter = ({ button, ...rest }: DesktopStatusFilterProps) => {
   const { t } = useTranslation()
   const { filters, updateFilter } = useFilterContext()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -50,32 +47,14 @@ export const DesktopStatusFilter = ({
         spacing="0px"
         {...rest}
       >
-        <ButtonComponent
-          noBorder
-          onClick={onOpen}
-          w="full"
-          _hover={{}}
-          paddingX="10px"
-        >
+        <ButtonComponent noBorder onClick={onOpen} w="full" _hover={{}} paddingX="10px">
           <HStack width="100%" spacing="10px">
             <button.icon color={button.color} height="20px" />
             <Body1 color={'neutral.900'}>{t(button.text)}</Body1>
           </HStack>
-          {!isSelected && (
-            <ChevronRightIcon
-              position="absolute"
-              right="10px"
-              fontSize="20px"
-            />
-          )}
+          {!isSelected && <ChevronRightIcon position="absolute" right="10px" fontSize="20px" />}
         </ButtonComponent>
-        {isSelected && (
-          <CloseIconButton
-            position="absolute"
-            right="10px"
-            onClick={handleClear}
-          />
-        )}
+        {isSelected && <CloseIconButton position="absolute" right="10px" onClick={handleClear} />}
       </CardLayout>
       <Modal isOpen={isOpen} onClose={onClose} size="xs">
         <ModalOverlay />
@@ -86,12 +65,7 @@ export const DesktopStatusFilter = ({
             </HStack>
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody
-            as={VStack}
-            overflow="hidden"
-            paddingX="0px"
-            paddingBottom="20px"
-          >
+          <ModalBody as={VStack} overflow="hidden" paddingX="0px" paddingBottom="20px">
             <StatusFilterBody button={button} onClose={onClose} />
           </ModalBody>
         </ModalContent>

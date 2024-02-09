@@ -1,13 +1,4 @@
-import {
-  Box,
-  HStack,
-  Image,
-  Text,
-  Tooltip,
-  VStack,
-  Wrap,
-  WrapItem,
-} from '@chakra-ui/react'
+import { Box, HStack, Image, Text, Tooltip, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
@@ -32,12 +23,10 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
     minWidth: '300px',
     marginLeft: '15px',
     paddingBottom: '10px',
-    boxShadow:
-      'rgba(50, 50, 93, 0.25) 0px 0px 12px -2px, rgba(0, 0, 0, 0.3) 0px 0px 7px -3px',
+    boxShadow: 'rgba(50, 50, 93, 0.25) 0px 0px 12px -2px, rgba(0, 0, 0, 0.3) 0px 0px 7px -3px',
     '&:hover': {
       cursor: 'pointer',
-      boxShadow:
-        'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px',
+      boxShadow: 'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px',
       '.rocketicon': {
         color: colors.primary[400],
       },
@@ -55,11 +44,7 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   },
 }))
 
-export const ProjectContributionCard = ({
-  contribution,
-  className,
-  ...rest
-}: Props) => {
+export const ProjectContributionCard = ({ contribution, className, ...rest }: Props) => {
   const classes = useStyles()
 
   const { project } = contribution
@@ -68,18 +53,9 @@ export const ProjectContributionCard = ({
 
   return (
     <Link to={`/project/${project.name}`}>
-      <Card
-        className={classNames(classes.container, className)}
-        backgroundColor="neutral.0"
-        {...rest}
-      >
+      <Card className={classNames(classes.container, className)} backgroundColor="neutral.0" {...rest}>
         <Box height="160px" width="100%" position="relative">
-          <Image
-            src={imgSrc || ''}
-            height="100%"
-            width="100%"
-            objectFit="cover"
-          />
+          <Image src={imgSrc || ''} height="100%" width="100%" objectFit="cover" />
         </Box>
         <VStack spacing="5px" width="100%" padding="10px">
           <HStack spacing="10px" justifyContent="flex-start" width="100%">
@@ -100,11 +76,7 @@ export const ProjectContributionCard = ({
   )
 }
 
-const RenderBadges = ({
-  contribution,
-}: {
-  contribution: UserProjectContribution
-}) => {
+const RenderBadges = ({ contribution }: { contribution: UserProjectContribution }) => {
   const { project, funder, isSponsor, isFunder } = contribution
   const badges =
     isFunder && funder
@@ -134,11 +106,7 @@ const RenderBadges = ({
       {badges.map((badge) => (
         <WrapItem key={badge.badge}>
           <Tooltip label={badge.description}>
-            <Box
-              backgroundColor="neutral.300"
-              padding="2px 10px"
-              borderRadius="7px"
-            >
+            <Box backgroundColor="neutral.300" padding="2px 10px" borderRadius="7px">
               <Text fontSize="12px" fontWeight={500}>
                 {badge.badge}
               </Text>

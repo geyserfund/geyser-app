@@ -4,9 +4,7 @@ import { RouteObject } from 'react-router-dom'
 
 import { getPath, PathName } from '../../constants'
 
-const matchRoutesAtom = atom<AgnosticRouteMatch<string, RouteObject>[] | null>(
-  [],
-)
+const matchRoutesAtom = atom<AgnosticRouteMatch<string, RouteObject>[] | null>([])
 const currentRouteAtom = atom((get) => {
   const matchRoutes = get(matchRoutesAtom)
   const matchLength = matchRoutes?.length || 0
@@ -14,10 +12,7 @@ const currentRouteAtom = atom((get) => {
   let matchRoute: RouteObject | undefined
 
   if (matchLength > 0 && matchRoutes) {
-    if (
-      matchLength > 1 &&
-      matchRoutes?.[matchLength - 1]?.route.index === true
-    ) {
+    if (matchLength > 1 && matchRoutes?.[matchLength - 1]?.route.index === true) {
       matchRoute = matchRoutes?.[matchLength - 2]?.route
     } else {
       matchRoute = matchRoutes?.[matchLength - 1]?.route
@@ -68,15 +63,8 @@ export const projectRoutes = [
   ...projectCreatorRoutes,
 ]
 
-export const grantRoutes = [
-  getPath('grants'),
-  getPath('grants', PathName.grantId),
-]
+export const grantRoutes = [getPath('grants'), getPath('grants', PathName.grantId)]
 
-export const landingRoutes = [
-  getPath('index'),
-  getPath('landingPage'),
-  getPath('landingFeed'),
-]
+export const landingRoutes = [getPath('index'), getPath('landingPage'), getPath('landingFeed')]
 
 export const fallBackRoutes = [getPath('notFound'), getPath('notAuthorized')]

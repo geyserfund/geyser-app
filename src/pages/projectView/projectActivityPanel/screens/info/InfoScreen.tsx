@@ -13,9 +13,7 @@ export const InfoScreen = () => {
     return null
   }
 
-  const activeProjectRewards = project
-    ? project.rewards.filter((reward) => reward.isHidden === false)
-    : []
+  const activeProjectRewards = project ? project.rewards.filter((reward) => reward.isHidden === false) : []
 
   return (
     <VStack
@@ -28,11 +26,7 @@ export const InfoScreen = () => {
     >
       <ActivityBrief px={standardPadding} />
 
-      {activeProjectRewards.length > 0 ? (
-        <InfoScreenRewards />
-      ) : (
-        <InfoScreenFeed />
-      )}
+      {activeProjectRewards.length > 0 ? <InfoScreenRewards /> : <InfoScreenFeed />}
     </VStack>
   )
 }

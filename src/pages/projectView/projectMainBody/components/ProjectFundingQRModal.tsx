@@ -28,13 +28,7 @@ interface IQRModal {
   title: string
 }
 
-export const ProjectFundingQRModal = ({
-  isOpen,
-  onClose,
-  name,
-  projectId,
-  title,
-}: IQRModal) => {
+export const ProjectFundingQRModal = ({ isOpen, onClose, name, projectId, title }: IQRModal) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
   const [imageDownload, setImageDownload] = useState<string | undefined>()
@@ -46,7 +40,8 @@ export const ProjectFundingQRModal = ({
     if (!node) {
       return
     }
-    setTimeout(function(){
+
+    setTimeout(function () {
       htmlToImage
         .toPng(node, { style: { opacity: '1', position: 'static' } })
         .then((image) => {
@@ -59,20 +54,13 @@ export const ProjectFundingQRModal = ({
             description: `${error}`,
           })
         })
-    }, 500);
+    }, 500)
   }, [])
 
-  const lnurlPayUrl = encodeLNURL(
-    `${endPoint}/lnurl/pay?projectId=${projectId}`,
-  )
+  const lnurlPayUrl = encodeLNURL(`${endPoint}/lnurl/pay?projectId=${projectId}`)
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      size={isMobile ? 'md' : '3xl'}
-      isCentered
-    >
+    <Modal isOpen={isOpen} onClose={onClose} size={isMobile ? 'md' : '3xl'} isCentered>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
@@ -85,22 +73,12 @@ export const ProjectFundingQRModal = ({
               'Lightning addresses and QR codes make it possible for anyone to fund projects from anywhere. Share one of the image and let the sats flow!',
             )}
           </Text>
-          <ProjectFundingBanner
-            banner={imageDownload}
-            ref={bannerRef}
-            lnurlPayUrl={lnurlPayUrl}
-            title={title}
-          />
+          <ProjectFundingBanner banner={imageDownload} ref={bannerRef} lnurlPayUrl={lnurlPayUrl} title={title} />
         </ModalBody>
         <ModalFooter>
           <Box w="100%">
             {!imageDownload ? (
-              <ButtonComponent
-                disabled={true}
-                isLoading={true}
-                w="100%"
-                primary
-              >
+              <ButtonComponent disabled={true} isLoading={true} w="100%" primary>
                 <DownloadIcon mr={2} /> {t('Download')}
               </ButtonComponent>
             ) : (

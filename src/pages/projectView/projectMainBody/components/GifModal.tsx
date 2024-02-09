@@ -37,8 +37,7 @@ export const GifModal = ({ isOpen, onClose, onSelect }: GifModalProps) => {
 
   const debouncedGifSearch = useDebounce(gifSearch, 500)
 
-  const fetchGifs = (offset: number) =>
-    giphy.search(debouncedGifSearch, { offset, sort: 'relevant', limit: 12 })
+  const fetchGifs = (offset: number) => giphy.search(debouncedGifSearch, { offset, sort: 'relevant', limit: 12 })
 
   return (
     <Modal

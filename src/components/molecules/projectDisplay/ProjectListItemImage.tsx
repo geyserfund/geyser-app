@@ -11,13 +11,7 @@ type Props = HTMLChakraProps<'div'> & {
   borderRadius?: string
 }
 
-export const ProjectListItemImage = ({
-  imageSrc,
-  project,
-  boxSize = '42px',
-  borderRadius = 'md',
-  ...rest
-}: Props) => {
+export const ProjectListItemImage = ({ imageSrc, project, boxSize = '42px', borderRadius = 'md', ...rest }: Props) => {
   const imageSource = toSmallImageUrl(project.thumbnailImage || '')
 
   return (

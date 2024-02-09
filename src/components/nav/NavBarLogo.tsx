@@ -12,13 +12,7 @@ type Props = BoxProps & {
   small?: boolean
 }
 
-export const NavBarLogo = ({
-  className,
-  full,
-  small,
-  color,
-  ...rest
-}: Props) => {
+export const NavBarLogo = ({ className, full, small, color, ...rest }: Props) => {
   const isLg = useBreakpoint('lg')
 
   const useFullOne = (isLg || full) && !small
@@ -27,17 +21,9 @@ export const NavBarLogo = ({
     <Box {...rest} className={className} _hover={{ cursor: 'pointer' }}>
       <Link to="/">
         {useFullOne ? (
-          <GeyserLogoNameIcon
-            height="32px"
-            width="auto"
-            color={color || 'primary.400'}
-          />
+          <GeyserLogoNameIcon height="32px" width="auto" color={color || 'primary.400'} />
         ) : (
-          <GeyserLogoIcon
-            height="32px"
-            width="auto"
-            color={color || 'primary.400'}
-          />
+          <GeyserLogoIcon height="32px" width="auto" color={color || 'primary.400'} />
         )}
       </Link>
     </Box>

@@ -1,24 +1,10 @@
-import {
-  Box,
-  Button,
-  HStack,
-  IconButton,
-  Link,
-  Text,
-  Tooltip,
-  useDisclosure,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Button, HStack, IconButton, Link, Text, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { MdColorLens } from 'react-icons/md'
 
 import { SatSymbolIcon } from '../../../components/icons'
 import { Modal } from '../../../components/layouts'
-import {
-  languageFalgs,
-  LanguageRequestUrl,
-  languages,
-} from '../../../constants'
+import { languageFalgs, LanguageRequestUrl, languages } from '../../../constants'
 import { useNostrColor } from '../../../context'
 import { nostrColorsLight, primaryColorsLight } from '../../../styles'
 import { allTranslations } from '../../../translations'
@@ -48,13 +34,7 @@ export const ModeChange = () => {
 
   return (
     <>
-      <VStack
-        bgColor="neutral.200"
-        borderRadius={{ base: '8px', lg: '0px' }}
-        mx={{ base: '10px', lg: 0 }}
-        mt={2}
-        p={3}
-      >
+      <VStack bgColor="neutral.200" borderRadius={{ base: '8px', lg: '0px' }} mx={{ base: '10px', lg: 0 }} mt={2} p={3}>
         <HStack width="full" spacing={3}>
           <ColorModeSwitcher flex={1} />
           <IconButton
@@ -87,9 +67,7 @@ export const ModeChange = () => {
           variant="primaryNeutral"
           onClick={onOpen}
         >
-          <Text isTruncated>
-            {languages[i18n.resolvedLanguage as keyof typeof languages]}
-          </Text>
+          <Text isTruncated>{languages[i18n.resolvedLanguage as keyof typeof languages]}</Text>
         </Button>
       </VStack>
       <Modal
@@ -104,8 +82,7 @@ export const ModeChange = () => {
             <Tooltip key={lng.key} label={lng.disabled ? t('Coming soon') : ''}>
               <Button
                 style={{
-                  fontWeight:
-                    i18n.resolvedLanguage === lng.key ? 'bold' : 'normal',
+                  fontWeight: i18n.resolvedLanguage === lng.key ? 'bold' : 'normal',
                 }}
                 type="submit"
                 onClick={() => {

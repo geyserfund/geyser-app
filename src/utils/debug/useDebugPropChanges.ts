@@ -1,9 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 function logPropDifferences(newProps: any, lastProps: any) {
-  const allKeys = new Set<any>(Object.keys(newProps)).add(
-    Object.keys(lastProps),
-  )
+  const allKeys = new Set<any>(Object.keys(newProps)).add(Object.keys(lastProps))
   allKeys.forEach((key) => {
     const newValue = newProps[key]
     const lastValue = lastProps[key]

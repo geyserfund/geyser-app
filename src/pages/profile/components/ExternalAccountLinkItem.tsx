@@ -63,25 +63,13 @@ export const ExternalAccountLinkItem = ({ account }: Props) => {
 
   return isLinkExternal ? (
     <Link href={linkDestination} isExternal className={styles.linkContainer}>
-      <Button
-        leftIcon={buttonIcon}
-        variant={'ghost'}
-        className={styles.linkButton}
-      >
+      <Button leftIcon={buttonIcon} variant={'ghost'} className={styles.linkButton}>
         {account.externalUsername}
       </Button>
     </Link>
   ) : (
-    <Link
-      as={ReactRouterLink}
-      to={linkDestination}
-      className={styles.linkContainer}
-    >
-      <Button
-        leftIcon={buttonIcon}
-        variant={'ghost'}
-        className={styles.linkButton}
-      >
+    <Link as={ReactRouterLink} to={linkDestination} className={styles.linkContainer}>
+      <Button leftIcon={buttonIcon} variant={'ghost'} className={styles.linkButton}>
         {account.externalUsername}
       </Button>
     </Link>

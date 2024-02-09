@@ -8,10 +8,7 @@ import { useProjectContext } from '../../../context'
 import { MUTATION_UPDATE_PROJECT } from '../../../graphql/mutations'
 import { Project, ProjectStatus } from '../../../types'
 import { isActive, useNotification } from '../../../utils'
-import {
-  ProjectUnsavedModal,
-  useProjectUnsavedModal,
-} from '../../projectCreate/components/ProjectUnsavedModal'
+import { ProjectUnsavedModal, useProjectUnsavedModal } from '../../projectCreate/components/ProjectUnsavedModal'
 import { BackToProjectMobile } from '../navigation/BackToProjectMobile'
 
 export type ProjectStatusVariables = {
@@ -67,10 +64,7 @@ export const ProjectStatusSection = () => {
     if (event) {
       const shouldDeactivate = !event.target.checked
       setValue('deactivate', shouldDeactivate, { shouldDirty: true })
-      setValue(
-        'status',
-        shouldDeactivate ? ProjectStatus.Inactive : ProjectStatus.Active,
-      )
+      setValue('status', shouldDeactivate ? ProjectStatus.Inactive : ProjectStatus.Active)
     }
   }
 
@@ -92,10 +86,7 @@ export const ProjectStatusSection = () => {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      style={{ flexGrow: 1, display: 'flex' }}
-    >
+    <form onSubmit={handleSubmit(onSubmit)} style={{ flexGrow: 1, display: 'flex' }}>
       <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1}>
         {project.status !== ProjectStatus.Deleted && (
           <VStack>
@@ -103,11 +94,7 @@ export const ProjectStatusSection = () => {
               <Text variant="body2" flexGrow={1}>
                 {t('Active')}
               </Text>
-              <Switch
-                defaultChecked={!watch('deactivate')}
-                onChange={handleDeactivate}
-                colorScheme="primary"
-              />
+              <Switch defaultChecked={!watch('deactivate')} onChange={handleDeactivate} colorScheme="primary" />
             </HStack>
             <Text color="neutral.600">
               {t(
@@ -118,12 +105,7 @@ export const ProjectStatusSection = () => {
         )}
 
         <VStack w="100%" flexGrow={1} justifyContent="end">
-          <Button
-            isLoading={updateLoading}
-            variant="primary"
-            w="full"
-            type="submit"
-          >
+          <Button isLoading={updateLoading} variant="primary" w="full" type="submit">
             {t('Save')}
           </Button>
           <BackToProjectMobile project={project} />

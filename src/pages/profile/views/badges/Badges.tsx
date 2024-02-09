@@ -22,16 +22,15 @@ export const Badges = ({
   const { t } = useTranslation()
   const { toast } = useNotification()
 
-  const [getUserBadges, { data: userBadgesData, loading: userBadgeLoading }] =
-    useUserBadgesLazyQuery({
-      onError() {
-        toast({
-          title: 'Error fetching badges',
-          description: 'Please refresh the page and try again.',
-          status: 'error',
-        })
-      },
-    })
+  const [getUserBadges, { data: userBadgesData, loading: userBadgeLoading }] = useUserBadgesLazyQuery({
+    onError() {
+      toast({
+        title: 'Error fetching badges',
+        description: 'Please refresh the page and try again.',
+        status: 'error',
+      })
+    },
+  })
 
   useEffect(() => {
     if (userProfile.id) {
@@ -58,25 +57,10 @@ export const Badges = ({
   }
 
   return (
-    <CardLayout
-      noMobileBorder
-      padding="0"
-      paddingY={{ base: '10px', lg: '20px' }}
-      spacing="20px"
-    >
-      <HStack
-        paddingX={{ base: '10px', lg: '20px' }}
-        w="full"
-        justifyContent="space-between"
-      >
+    <CardLayout noMobileBorder padding="0" paddingY={{ base: '10px', lg: '20px' }} spacing="20px">
+      <HStack paddingX={{ base: '10px', lg: '20px' }} w="full" justifyContent="space-between">
         <H2>{t('Badges')}</H2>
-        <Button
-          as={ChakraLink}
-          href={getPath('badges')}
-          isExternal
-          size="sm"
-          leftIcon={<BsBoxArrowUpRight />}
-        >
+        <Button as={ChakraLink} href={getPath('badges')} isExternal size="sm" leftIcon={<BsBoxArrowUpRight />}>
           {t('See badges')}
         </Button>
       </HStack>

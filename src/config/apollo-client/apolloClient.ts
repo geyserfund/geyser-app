@@ -1,11 +1,4 @@
-import {
-  ApolloClient,
-  ApolloClientOptions,
-  createHttpLink,
-  from,
-  NormalizedCacheObject,
-  split,
-} from '@apollo/client'
+import { ApolloClient, ApolloClientOptions, createHttpLink, from, NormalizedCacheObject, split } from '@apollo/client'
 import { RetryLink } from '@apollo/client/link/retry'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { getMainDefinition } from '@apollo/client/utilities'
@@ -102,10 +95,7 @@ const wsLink = new GraphQLWsLink(
 const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query)
-    return (
-      definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
-    )
+    return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
   },
   wsLink,
   httpLink,

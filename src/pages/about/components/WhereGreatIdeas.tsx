@@ -11,22 +11,10 @@ export const WhereGreatIdeas = () => {
     <VStack w={'full'} maxWidth={'1068px'} spacing={50} padding={3}>
       <VStack>
         <H1>{t('Where great ideas find great communities')}</H1>
-        <H3 color={'neutral.600'}>
-          {t(
-            'Some of the most successful projects and brands have launched on Geyser',
-          )}
-        </H3>
+        <H3 color={'neutral.600'}>{t('Some of the most successful projects and brands have launched on Geyser')}</H3>
       </VStack>
-      <Image
-        src={GeyserAboutProjectsBannerImage}
-        alt="great-ideas-geyser-image"
-      />
-      <Button
-        as={Link}
-        to={getPath('landingPage')}
-        variant={'primaryGradient'}
-        minWidth={300}
-      >
+      <Image src={GeyserAboutProjectsBannerImage} alt="great-ideas-geyser-image" />
+      <Button as={Link} to={getPath('landingPage')} variant={'primaryGradient'} minWidth={300}>
         {t('View all projects')}
       </Button>
     </VStack>
