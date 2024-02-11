@@ -28,6 +28,17 @@ app.use((request, response) => {
   return handler(request, response, {
     public: './dist',
     rewrites: [{ source: '*', destination: '/index.html' }],
+    headers: [
+      {
+        source: '/widgets/**',
+        headers: [
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: '*',
+          },
+        ],
+      },
+    ],
   })
 })
 
