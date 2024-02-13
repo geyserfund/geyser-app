@@ -137,3 +137,5 @@ export const darkModeColors = {
   social: socialColorsDark,
   app: ColorsAppDark,
 }
+
+export const colorOrange = '#DD6B20';
