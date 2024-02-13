@@ -5,15 +5,16 @@ import { ID } from '../../../../constants'
 import { QUERY_ACTIVITIES_FOR_LANDING_PAGE } from '../../../../graphql/queries/activities'
 import { ScrollInvoke } from '../../../../helpers'
 import { useQueryWithPagination } from '../../../../hooks'
-import { ActivityForLandingPageFragment, User } from '../../../../types'
+import { ActivityForLandingPageFragment } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { ContributionsSkeleton } from '../../../landing/feed/ActivityFeed'
 import { ActivityList } from '../../../landing/feed/views/ActivityList'
 import { ProfileTabLayout } from '../../components'
+import { UserProfile } from '../../type'
 
 const MaxProfileActivityLimit = 12
 
-export const ProfileActivity = ({ userProfile }: { userProfile: User }) => {
+export const ProfileActivity = ({ userProfile }: { userProfile: UserProfile }) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
 
@@ -42,9 +43,7 @@ export const ProfileActivity = ({ userProfile }: { userProfile: User }) => {
         height="200px"
         status="error"
         title={t('An error occurred while attempting to fetch user activity.')}
-        message={t(
-          'Please try refreshing the page. You may also want to contact support if the problem persists.',
-        )}
+        message={t('Please try refreshing the page. You may also want to contact support if the problem persists.')}
       />
     )
   }

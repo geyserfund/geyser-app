@@ -1,18 +1,18 @@
+import { Box, HStack, Link, Text, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Box, HStack, VStack, Link, Text } from '@chakra-ui/react'
-
-import type { User, UserProjectContribution } from '../../../../types'
-import { getPath } from '../../../../constants'
 import { H3 } from '../../../../components/typography'
 import { ImageWithReload, SatoshiAmount } from '../../../../components/ui'
+import { getPath } from '../../../../constants'
 import { ProfileTabLayout } from '../../components'
+import { UserProfile, UserProfileContributionType } from '../../type'
 
-function contributionAmount(c: UserProjectContribution) {
+function contributionAmount(c: UserProfileContributionType) {
   if (c.funder) {
     return c.funder.amountFunded ?? 0
   }
+
   return 0
 }
 
@@ -23,12 +23,7 @@ interface ContributionSummaryProps {
   amount: number
 }
 
-const ContributionSummary = ({
-  title,
-  url,
-  amount,
-  imageSrc,
-}: ContributionSummaryProps) => {
+const ContributionSummary = ({ title, url, amount, imageSrc }: ContributionSummaryProps) => {
   return (
     <Link href={url} textDecoration="none" _hover={{ textDecoration: 'none' }}>
       <HStack spacing={2}>
@@ -53,23 +48,16 @@ const ContributionSummary = ({
   )
 }
 
-export const ProfileContributions = ({
-  userProfile,
-}: {
-  userProfile: User
-}) => {
+export const ProfileContributions = ({ userProfile }: { userProfile: UserProfile }) => {
   const { t } = useTranslation()
   const contributions = useMemo(() => {
     const contributions = [...userProfile.contributions]
-    contributions.sort(
-      (a: UserProjectContribution, b: UserProjectContribution) =>
-        contributionAmount(b) - contributionAmount(a),
-    )
+    contributions.sort((a, b) => contributionAmount(b) - contributionAmount(a))
     return contributions
   }, [userProfile])
   return (
     <ProfileTabLayout title={t('My contributions')}>
-      {contributions.map((c: UserProjectContribution) => (
+      {contributions.map((c: UserProfileContributionType) => (
         <ContributionSummary
           key={c.project.id}
           title={c.project.title}
@@ -78,9 +66,7 @@ export const ProfileContributions = ({
           amount={contributionAmount(c)}
         />
       ))}
-      {contributions.length === 0 && (
-        <Text>{t('This user has no contributions yet.')}</Text>
-      )}
+      {contributions.length === 0 && <Text>{t('This user has no contributions yet.')}</Text>}
     </ProfileTabLayout>
   )
 }

@@ -1,8 +1,8 @@
 import { useModal } from '../../../hooks/useModal'
-import { User } from '../../../types'
+import { UserProfile } from '../type'
 
 export type EditProfileModalProps = ReturnType<typeof useEditProfileModal>
 
 export const useEditProfileModal = () => {
-  return useModal<{ user?: User }>()
+  return useModal<{ user?: UserProfile }>()
 }

@@ -6,8 +6,9 @@ import { BsBoxArrowUpRight } from 'react-icons/bs'
 import { CardLayout } from '../../../../components/layouts'
 import { Body2, H2 } from '../../../../components/typography'
 import { getPath } from '../../../../constants'
-import { User, useUserBadgesLazyQuery } from '../../../../types'
+import { useUserBadgesLazyQuery } from '../../../../types'
 import { toInt, useNotification } from '../../../../utils'
+import { UserProfile } from '../../type'
 import { BadgesBody, BadgesBodySkeleton } from './BadgesBody'
 
 export const Badges = ({
@@ -15,23 +16,22 @@ export const Badges = ({
   isEdit,
   isLoading,
 }: {
-  userProfile: User
+  userProfile: UserProfile
   isEdit: boolean
   isLoading: boolean
 }) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
 
-  const [getUserBadges, { data: userBadgesData, loading: userBadgeLoading }] =
-    useUserBadgesLazyQuery({
-      onError() {
-        toast({
-          title: 'Error fetching badges',
-          description: 'Please refresh the page and try again.',
-          status: 'error',
-        })
-      },
-    })
+  const [getUserBadges, { data: userBadgesData, loading: userBadgeLoading }] = useUserBadgesLazyQuery({
+    onError() {
+      toast({
+        title: 'Error fetching badges',
+        description: 'Please refresh the page and try again.',
+        status: 'error',
+      })
+    },
+  })
 
   useEffect(() => {
     if (userProfile.id) {
@@ -58,25 +58,10 @@ export const Badges = ({
   }
 
   return (
-    <CardLayout
-      noMobileBorder
-      padding="0"
-      paddingY={{ base: '10px', lg: '20px' }}
-      spacing="20px"
-    >
-      <HStack
-        paddingX={{ base: '10px', lg: '20px' }}
-        w="full"
-        justifyContent="space-between"
-      >
+    <CardLayout noMobileBorder padding="0" paddingY={{ base: '10px', lg: '20px' }} spacing="20px">
+      <HStack paddingX={{ base: '10px', lg: '20px' }} w="full" justifyContent="space-between">
         <H2>{t('Badges')}</H2>
-        <Button
-          as={ChakraLink}
-          href={getPath('badges')}
-          isExternal
-          size="sm"
-          leftIcon={<BsBoxArrowUpRight />}
-        >
+        <Button as={ChakraLink} href={getPath('badges')} isExternal size="sm" leftIcon={<BsBoxArrowUpRight />}>
           {t('See badges')}
         </Button>
       </HStack>
