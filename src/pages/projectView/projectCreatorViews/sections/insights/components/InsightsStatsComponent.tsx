@@ -88,8 +88,6 @@ export const InsightsStatsComponent = () => {
           },
         },
       })
-
-      debugger;
     }
   }, [project?.id, getProjectStatsInsight, selectionOption])
 
