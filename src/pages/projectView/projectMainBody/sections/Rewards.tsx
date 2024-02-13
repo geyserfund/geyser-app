@@ -40,20 +40,21 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   const renderRewards = () => {
     if (activeProjectRewards.length > 0) {
       return activeProjectRewards.filter(truthyFilter).map((reward) => {
+        const count = (fundFormState.rewardsByIDAndCount && fundFormState.rewardsByIDAndCount[`${reward.id}`]) || 0
         return (
           <RewardCard
               key={reward.id}
               width="100%"
               reward={reward}
+              count={count}
               onRewardClick={() => {
-                const count = (fundFormState.rewardsByIDAndCount && fundFormState.rewardsByIDAndCount[`${reward.id}`]) || 0
                 const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : 100;
                 if(rewardStockRemaining > count) {
                   updateReward({ id: toInt(reward.id), count: count + 1 })
                 } else {
                   toast({
                     title: 'Reward Limit',
-                    description: `Maximum number of ${rewardStockRemaining} available for this reward`,
+                    description: `Maximum number of ${rewardStockRemaining} rewards are available`,
                     status: 'error',
                   })
                 }
