@@ -45,8 +45,17 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
     return 0
   }
 
-  const handleAdd = (rewardId: number, count: number) => {
-    updateReward({ id: rewardId, count: count + 1 })
+  const handleAdd = (reward: ProjectRewardForCreateUpdateFragment, count: number) => {
+    const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : -1;
+    if(rewardStockRemaining > count) {
+      updateReward({ id: reward.id, count: count + 1 })
+    } else {
+      toast({
+        title: 'Reward Limit',
+        description: `Maximum number of ${rewardStockRemaining} available for this reward`,
+        status: 'error',
+      })
+    }
   }
 
   const handleRemove = (rewardId: number, count: number) => {
@@ -66,16 +75,7 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
           {rewards.map((reward) => {
             const count = getRewardCount(reward.id)
             const add = () => {
-              const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : -1;
-              if(rewardStockRemaining > count) {
-                handleAdd(reward.id, count)
-              } else {
-                toast({
-                  title: 'Reward Limit',
-                  description: `Maximum number of ${rewardStockRemaining} available for this reward`,
-                  status: 'error',
-                })
-              }
+              handleAdd(reward, count);
             }
 
             return (count > 0 ? (
@@ -106,16 +106,7 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
             {availableRewards.map((reward) => {
               const count = getRewardCount(reward.id)
               const add = () => {
-                const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : 100;
-                if(rewardStockRemaining > count) {
-                  handleAdd(reward.id, count)
-                } else {
-                  toast({
-                    title: 'Reward Limit',
-                    description: `Maximum number of ${rewardStockRemaining} available for this reward`,
-                    status: 'error',
-                  })
-                }
+                handleAdd(reward, count);
               }
 
               return (count == 0 ? (

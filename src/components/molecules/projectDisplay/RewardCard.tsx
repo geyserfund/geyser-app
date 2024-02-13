@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../types/generated/graphql'
 import { ICard } from '../../ui'
 import { useProjectContext } from '../../../context'
+import { ProjectRewardAvailability } from './ProjectRewardAvailability'
 
 type Props = ICard & {
   reward: ProjectRewardForCreateUpdateFragment
@@ -19,22 +20,6 @@ export const RewardCard = ({
   const { t } = useTranslation()
   const {project} = useProjectContext()
   const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : -1;
-
-  const renderRewardAvailability = () => {
-
-    if(rewardStockRemaining === 0) {
-      return <><Box as={'span'} color={'neutral.600'} fontWeight={700}>{t('Sold Out')}</Box> <Box as={'span'} style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</Box> </>;
-    } 
-    else if ( rewardStockRemaining > 3 ) {
-      return <><Box as={'span'}>{rewardStockRemaining + ` ${t('remaining')}`}</Box> <Box as={'span'} style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</Box> </>;
-    } 
-    else if ( rewardStockRemaining > 0 && rewardStockRemaining <= 3 ) {
-      return <><Box as={'span'} color={'secondary.red'}>{rewardStockRemaining + ` ${t('remaining')}`}</Box> <Box as={'span'} style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</Box> </>;
-    }
-    else {
-      return '';
-    }
-  }
 
   return (
     <Box
@@ -61,7 +46,7 @@ export const RewardCard = ({
         </Box>
         <Stack direction={"row"} justifyContent="space-between" align="center" alignItems={'center'}>
           <Text fontWeight={400} fontSize='14px' color='neutral.900'>
-            {renderRewardAvailability()}
+            <ProjectRewardAvailability numberOfRewardsAvailable={rewardStockRemaining} />
             {reward.sold || 0} {t('sold')}
           </Text>
           {reward.category && (

@@ -9,6 +9,7 @@ import {
   RewardCurrency,
 } from '../../../../types'
 import { isActive, toInt } from '../../../../utils'
+import { ProjectRewardAvailability } from '../../../../components/molecules/projectDisplay/ProjectRewardAvailability'
 
 type Props = {
   reward: ProjectRewardForCreateUpdateFragment,
@@ -27,22 +28,6 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
 
   if (!project || !isActive) {
     return <></>
-  }
-
-  const renderRewardAvailability = () => {
-
-    if(rewardStockRemaining === 0) {
-      return <><Box as={'span'} color={'neutral.600'} fontWeight={700}>{t('Sold Out')}</Box> <Box as={'span'} style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</Box> </>;
-    } 
-    else if ( rewardStockRemaining > 3 ) {
-      return <><Box as={'span'}>{rewardStockRemaining + ` ${t('remaining')}`}</Box> <Box as={'span'} style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</Box> </>;
-    } 
-    else if ( rewardStockRemaining > 0 && rewardStockRemaining <= 3 ) {
-      return <><Box as={'span'} color={'secondary.red'}>{rewardStockRemaining + ` ${t('remaining')}`}</Box> <Box as={'span'} style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</Box> </>;
-    }
-    else {
-      return '';
-    }
   }
 
   return (
@@ -66,7 +51,7 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
             <Stack direction="column" flex={1} pl={2} gap={0.25}>
                 <Text fontWeight={700} fontSize={14} color='neutral.900'>{reward.name}</Text>
                 <Text fontSize={14} color='neutral.600'>
-                    {renderRewardAvailability()}
+                    <ProjectRewardAvailability numberOfRewardsAvailable={rewardStockRemaining} />
                     {`${reward.sold} ${t('sold')}`}
                 </Text>
             </Stack>
