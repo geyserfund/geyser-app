@@ -24,33 +24,40 @@ export const Profile = () => {
 
   const [userProfile, setUserProfile] = useState<UserProfile>(defaultUser as UserProfile)
 
-  const isViewingOwnProfile = useMemo(() => params.userId === currentAppUser.id, [params.userId, currentAppUser.id])
+  const isViewingOwnProfile = useMemo(
+    () => currentAppUser && params.userId === currentAppUser.id,
+    [params.userId, currentAppUser],
+  )
 
-  const {
-    loading: profileLoading,
-    error,
-    data: queryUserProfile,
-  } = useUserProfileQuery({
+  const { loading: profileLoading, error } = useUserProfileQuery({
     variables: {
       where: {
         id,
       },
     },
     skip: !id,
+    onCompleted(data) {
+      if (data.user) {
+        if (isViewingOwnProfile) {
+          setUserProfile({
+            ...data.user,
+            ...currentAppUser,
+          })
+        } else {
+          setUserProfile(data.user)
+        }
+      }
+    },
   })
 
   useEffect(() => {
-    if (queryUserProfile?.user) {
-      if (isViewingOwnProfile) {
-        setUserProfile({
-          ...queryUserProfile.user,
-          ...currentAppUser,
-        })
-      } else {
-        setUserProfile(queryUserProfile.user)
-      }
+    if (isViewingOwnProfile) {
+      setUserProfile((current) => ({
+        ...current,
+        ...currentAppUser,
+      }))
     }
-  }, [currentAppUser, queryUserProfile, isViewingOwnProfile])
+  }, [isViewingOwnProfile, currentAppUser])
 
   if (error) {
     return (
