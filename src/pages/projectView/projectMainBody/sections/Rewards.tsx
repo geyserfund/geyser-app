@@ -13,7 +13,8 @@ import { MobileViews, useProjectContext } from '../../../../context'
 import {
   isActive,
   toInt,
-  useMobileMode
+  useMobileMode,
+  useNotification
 } from '../../../../utils'
 import { truthyFilter } from '../../../../utils/array'
 
@@ -23,6 +24,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   const location = useLocation()
   const breakpoint = useBreakpoint({ ssr: false })
   const largeView = ['xl','2xl'].includes(breakpoint);
+  const { toast } = useNotification()
 
   const {
     project,
@@ -45,7 +47,16 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
               reward={reward}
               onRewardClick={() => {
                 const count = (fundFormState.rewardsByIDAndCount && fundFormState.rewardsByIDAndCount[`${reward.id}`]) || 0
-                updateReward({ id: toInt(reward.id), count: count + 1 })
+                const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : 100;
+                if(rewardStockRemaining > count) {
+                  updateReward({ id: toInt(reward.id), count: count + 1 })
+                } else {
+                  toast({
+                    title: 'Reward Limit',
+                    description: `Maximum number of ${rewardStockRemaining} available for this reward`,
+                    status: 'error',
+                  })
+                }
                 setMobileView(MobileViews.funding)
                 setFundingFormState('step', 'contribution')
               }}

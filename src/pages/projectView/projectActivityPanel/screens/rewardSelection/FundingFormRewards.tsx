@@ -5,7 +5,7 @@ import { SectionTitle } from '../../../../../components/ui'
 import { useProjectContext } from '../../../../../context'
 import { ProjectRewardForCreateUpdateFragment } from '../../../../../types'
 import { FundingFormRewardItem } from '../../../projectMainBody/components'
-import {useMobileMode} from "../../../../../utils";
+import {useMobileMode, useNotification} from "../../../../../utils";
 
 type Props = {
   readOnly?: boolean
@@ -20,6 +20,7 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
   } = useProjectContext()
   const isMobile = useMobileMode()
   const rewards = project?.rewards || []
+  const { toast } = useNotification()
 
   const hasRewards = rewards && rewards.length
 
@@ -64,7 +65,18 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
         <VStack mt={1} padding="2px">
           {rewards.map((reward) => {
             const count = getRewardCount(reward.id)
-            const add = () => handleAdd(reward.id, count)
+            const add = () => {
+              const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : -1;
+              if(rewardStockRemaining > count) {
+                handleAdd(reward.id, count)
+              } else {
+                toast({
+                  title: 'Reward Limit',
+                  description: `Maximum number of ${rewardStockRemaining} available for this reward`,
+                  status: 'error',
+                })
+              }
+            }
 
             return (count > 0 ? (
                 <FundingFormRewardItem
@@ -93,7 +105,18 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
           <VStack mt={1} padding="2px" width={"100%"}>
             {availableRewards.map((reward) => {
               const count = getRewardCount(reward.id)
-              const add = () => handleAdd(reward.id, count)
+              const add = () => {
+                const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : 100;
+                if(rewardStockRemaining > count) {
+                  handleAdd(reward.id, count)
+                } else {
+                  toast({
+                    title: 'Reward Limit',
+                    description: `Maximum number of ${rewardStockRemaining} available for this reward`,
+                    status: 'error',
+                  })
+                }
+              }
 
               return (count == 0 ? (
                   <FundingFormRewardItem

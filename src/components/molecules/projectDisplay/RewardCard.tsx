@@ -21,11 +21,17 @@ export const RewardCard = ({
   const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : -1;
 
   const renderRewardAvailability = () => {
-    if(rewardStockRemaining > 0) {
-      return <><Box as={'span'} color={'secondary.red'}>{rewardStockRemaining + ` ${t('remaining')}`}</Box> <Box as={'span'} style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</Box> </>;
-    } else if (rewardStockRemaining === 0) {
+
+    if(rewardStockRemaining === 0) {
       return <><Box as={'span'} color={'neutral.600'} fontWeight={700}>{t('Sold Out')}</Box> <Box as={'span'} style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</Box> </>;
-    } else {
+    } 
+    else if ( rewardStockRemaining > 3 ) {
+      return <><Box as={'span'}>{rewardStockRemaining + ` ${t('remaining')}`}</Box> <Box as={'span'} style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</Box> </>;
+    } 
+    else if ( rewardStockRemaining > 0 && rewardStockRemaining <= 3 ) {
+      return <><Box as={'span'} color={'secondary.red'}>{rewardStockRemaining + ` ${t('remaining')}`}</Box> <Box as={'span'} style={{fontSize: "10px", position: "relative", top: "-2px"}}>&#8226;</Box> </>;
+    }
+    else {
       return '';
     }
   }
