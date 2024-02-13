@@ -1,6 +1,10 @@
-import { User } from '../../types'
+import { UserProfileQuery } from '../../types'
+
+export type UserProfile = UserProfileQuery['user']
+
+export type UserProfileContributionType = UserProfile['contributions'][0]
 
 export type UserProfileState = {
-  userProfile: User
-  setUserProfile: React.Dispatch<React.SetStateAction<User>>
+  userProfile: UserProfile
+  setUserProfile: React.Dispatch<React.SetStateAction<UserProfile>>
 }

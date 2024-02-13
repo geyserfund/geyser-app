@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 
 import { RenderTab, TabComponent } from '../../../../components/molecules'
-import { User } from '../../../../types'
+import { UserProfile } from '../../type'
 import { ProfileActivity } from './ProfileActivity'
 import { ProfileContributions } from './ProfileContributions'
 import { ProfileFollowed } from './ProfileFollowed'
@@ -12,7 +12,7 @@ export const ProfileTabs = ({
   isLoading,
   isViewingOwnProfile,
 }: {
-  userProfile: User
+  userProfile: UserProfile
   isLoading: boolean
   isViewingOwnProfile?: boolean
 }) => {
@@ -36,12 +36,7 @@ export const ProfileTabs = ({
     () => ({
       title: 'Projects',
       sub: userProfile.ownerOf?.length || undefined,
-      Component: () => (
-        <ProfileProjects
-          userProfile={userProfile}
-          isViewingOwnProfile={isViewingOwnProfile}
-        />
-      ),
+      Component: () => <ProfileProjects userProfile={userProfile} isViewingOwnProfile={isViewingOwnProfile} />,
     }),
     [userProfile, isViewingOwnProfile],
   )
@@ -70,15 +65,7 @@ export const ProfileTabs = ({
     }
 
     return tabs
-  }, [
-    userProfile,
-    isLoading,
-    activityTab,
-    followedTab,
-    contributionsTab,
-    isViewingOwnProfile,
-    projectsTab,
-  ])
+  }, [userProfile, isLoading, activityTab, followedTab, contributionsTab, isViewingOwnProfile, projectsTab])
 
   return <TabComponent tabs={getTabs()} />
 }

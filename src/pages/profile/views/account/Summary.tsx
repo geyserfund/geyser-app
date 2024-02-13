@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { CardLayout } from '../../../../components/layouts'
 import { H2, H3 } from '../../../../components/typography'
 import { SatoshiAmount } from '../../../../components/ui'
-import type { User, UserProjectContribution } from '../../../../types'
 import { getShortAmountLabel, numberWithCommas } from '../../../../utils'
+import { UserProfile, UserProfileContributionType } from '../../type'
 
 interface SummaryBodyProps {
   totalFunded: number
@@ -14,23 +14,12 @@ interface SummaryBodyProps {
   ranking?: number
 }
 
-export const SummaryBody = ({
-  totalFunded,
-  projectsFunded,
-  ranking,
-}: SummaryBodyProps) => {
+export const SummaryBody = ({ totalFunded, projectsFunded, ranking }: SummaryBodyProps) => {
   const { t } = useTranslation()
   return (
     <CardLayout width="100%" wrap="wrap" noMobileBorder>
       <H2>{t('Contributions summary')}</H2>
-      <HStack
-        w="full"
-        h="full"
-        justifyContent="space-between"
-        mt={4}
-        flexWrap="wrap"
-        spacing="10px"
-      >
+      <HStack w="full" h="full" justifyContent="space-between" mt={4} flexWrap="wrap" spacing="10px">
         <VStack
           bg="neutral.50"
           p={4}
@@ -70,14 +59,11 @@ export const SummaryBody = ({
   )
 }
 
-export const Summary = ({ userProfile }: { userProfile: User }) => {
+export const Summary = ({ userProfile }: { userProfile: UserProfile }) => {
   const totalFunded = useMemo(() => {
-    return userProfile.contributions.reduce(
-      (acc: number, c: UserProjectContribution) => {
-        return acc + (c.funder?.amountFunded ?? 0)
-      },
-      0,
-    )
+    return userProfile.contributions.reduce((acc: number, c: UserProfileContributionType) => {
+      return acc + (c.funder?.amountFunded ?? 0)
+    }, 0)
   }, [userProfile.contributions])
 
   const projectsFunded = useMemo(() => {

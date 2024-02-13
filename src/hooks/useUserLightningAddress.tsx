@@ -3,7 +3,8 @@ import { useCallback, useState } from 'react'
 
 import { MUTATION_CREATE_WALLET, MUTATION_DELETE_WALLET, MUTATION_UPDATE_WALLET } from '../graphql/mutations'
 import { QUERY_LIGHTNING_ADDRESS_VERIFY } from '../graphql/queries/wallet'
-import { LightningAddressVerifyResponse, User, WalletResourceType } from '../types'
+import { UserProfile } from '../pages/profile'
+import { LightningAddressVerifyResponse, WalletResourceType } from '../types'
 import { useNotification, validateEmail } from '../utils'
 import { getUserLightningAddress } from '../utils/validations/wallet'
 
@@ -22,7 +23,7 @@ type LightningAddressVerificationResponseData = {
   lightningAddressVerify: LightningAddressVerifyResponse
 }
 
-export const useUserLightningAddress = (user?: User) => {
+export const useUserLightningAddress = (user?: UserProfile) => {
   const { unexpected } = useNotification()
   const [lightningAddress, setLightningAddress] = useState(() => {
     return getUserLightningAddress(user)
