@@ -85,7 +85,7 @@ export const ProjectRewardForm = ({
       hasShipping: reward.hasShipping,
       isAddon: reward.isAddon,
       isHidden: reward.isHidden,
-      category: reward.category || undefined,
+      category: reward.category || null,
       preOrder: reward.preOrder || true
     }
   }
@@ -102,7 +102,7 @@ export const ProjectRewardForm = ({
         hasShipping: reward.hasShipping,
         isAddon: reward.isAddon,
         isHidden: reward.isHidden,
-        category: reward.category || ''
+        category: reward.category || null
       }
     }
 

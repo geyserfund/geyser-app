@@ -20,7 +20,7 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
   const {
     project,
     setMobileView,
-    fundForm: { updateReward },
+    fundForm: { updateReward, setState: setFundingFormState },
   } = useProjectContext()
   const navigate = useNavigate()
   const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : -1;
@@ -70,10 +70,11 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
                     variant='secondary'
                     size='sm'
                     px={2}
-                    onClick={() => {
+                    onClick={async () => {
                         updateReward({ id: toInt(reward.id), count: 1 })
-                        navigate(PathName.projectRewards)
+                        await navigate(PathName.projectRewards)
                         setMobileView(MobileViews.funding)
+                        setFundingFormState('step', 'contribution')
                     }}
                     isDisabled={rewardStockRemaining === 0}
                 >
