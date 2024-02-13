@@ -6,20 +6,21 @@ import { QUERY_USER_FOLLOWED_PROJECTS } from '../../../../graphql'
 import { User, UserGetInput } from '../../../../types'
 import { LandingProjectCard } from '../../../landing/components'
 import { ProfileTabLayout } from '../../components'
+import { UserProfile } from '../../type'
 
-export const ProfileFollowed = ({ userProfile }: { userProfile: User }) => {
+export const ProfileFollowed = ({ userProfile }: { userProfile: UserProfile }) => {
   const { t } = useTranslation()
-  const { data, loading: projectsLoading } = useQuery<
-    { user: User },
-    { where: UserGetInput }
-  >(QUERY_USER_FOLLOWED_PROJECTS, {
-    variables: {
-      where: {
-        id: userProfile.id,
+  const { data, loading: projectsLoading } = useQuery<{ user: User }, { where: UserGetInput }>(
+    QUERY_USER_FOLLOWED_PROJECTS,
+    {
+      variables: {
+        where: {
+          id: userProfile.id,
+        },
       },
+      skip: !userProfile?.id,
     },
-    skip: !userProfile?.id,
-  })
+  )
 
   const projects = data?.user.projectFollows || []
 
@@ -28,9 +29,7 @@ export const ProfileFollowed = ({ userProfile }: { userProfile: User }) => {
       {projectsLoading
         ? [1, 2].map((val) => <LandingCardBaseSkeleton key={val} isMobile />)
         : projects.map((project) => {
-            return (
-              <LandingProjectCard key={project.id} project={project} isMobile />
-            )
+            return <LandingProjectCard key={project.id} project={project} isMobile />
           })}
     </ProfileTabLayout>
   )

@@ -19,12 +19,7 @@ interface AccountInfoProps extends UserProfileState {
   isLoading?: boolean
 }
 
-export const AccountInfo = ({
-  userProfile,
-  setUserProfile,
-  isEdit,
-  isLoading,
-}: AccountInfoProps) => {
+export const AccountInfo = ({ userProfile, setUserProfile, isEdit, isLoading }: AccountInfoProps) => {
   const { t } = useTranslation()
   const modalProps = useEditProfileModal()
   const settingModalProps = useModal()
@@ -34,15 +29,13 @@ export const AccountInfo = ({
   }
 
   const lightningAddress =
-    userProfile.wallet?.connectionDetails.__typename ===
-    'LightningAddressConnectionDetails'
+    userProfile.wallet?.connectionDetails.__typename === 'LightningAddressConnectionDetails'
       ? userProfile.wallet.connectionDetails.lightningAddress
       : ''
 
   const getIsEdit = (accountType: ExternalAccountType) => {
     if (
-      (accountType === ExternalAccountType.nostr ||
-        accountType === ExternalAccountType.twitter) &&
+      (accountType === ExternalAccountType.nostr || accountType === ExternalAccountType.twitter) &&
       userProfile.ownerOf.length > 0
     ) {
       return false
@@ -51,7 +44,7 @@ export const AccountInfo = ({
     return userProfile.externalAccounts.length > 1 ? isEdit : false
   }
 
-  const userAccountToDisplay = userProfile.externalAccounts;
+  const userAccountToDisplay = userProfile.externalAccounts
 
   return (
     <>
@@ -100,9 +93,7 @@ export const AccountInfo = ({
                     account={externalAccount}
                     userProfile={userProfile}
                     setUserProfile={setUserProfile}
-                    isEdit={getIsEdit(
-                      externalAccount.accountType as ExternalAccountType,
-                    )}
+                    isEdit={getIsEdit(externalAccount.accountType as ExternalAccountType)}
                   />
                 )
               }
@@ -135,9 +126,7 @@ export const AccountInfo = ({
           </Stack>
 
           {modalProps.isOpen && <EditProfileModal {...modalProps} />}
-          {settingModalProps.isOpen && (
-            <ProfileSettingsModal {...settingModalProps} />
-          )}
+          {settingModalProps.isOpen && <ProfileSettingsModal {...settingModalProps} />}
         </>
       )}
     </>
@@ -146,12 +135,7 @@ export const AccountInfo = ({
 
 export const AccountInfoSkeleton = () => {
   return (
-    <CardLayout
-      padding="20px"
-      direction="column"
-      alignItems="start"
-      spacing="10px"
-    >
+    <CardLayout padding="20px" direction="column" alignItems="start" spacing="10px">
       <SkeletonCircle height="100px" width="100px" />
       <SkeletonLayout height="25px" width="60%" />
       <SkeletonLayout height="32px" width="80%" />

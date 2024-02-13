@@ -100,16 +100,18 @@ export const FRAGMENT_FUNDING_TX_OVERVIEW_PAGE = gql`
         id
         username
       }
-      rewards {
-        quantity
-        projectReward {
-          id
-        }
-      }
     }
     id
     amount
     comment
+    order {
+      items {
+        quantity
+        item {
+          id
+        }
+      }
+    }
   }
 `
 

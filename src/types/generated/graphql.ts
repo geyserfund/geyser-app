@@ -4544,12 +4544,11 @@ export type FundingTxForOverviewPageFragment = {
   funder: {
     __typename?: 'Funder'
     user?: { __typename?: 'User'; imageUrl?: string | null; id: any; username: string } | null
-    rewards: Array<{
-      __typename?: 'FunderReward'
-      quantity: number
-      projectReward: { __typename?: 'ProjectReward'; id: any }
-    }>
   }
+  order?: {
+    __typename?: 'Order'
+    items: Array<{ __typename?: 'OrderItem'; quantity: number; item: { __typename?: 'ProjectReward'; id: any } }>
+  } | null
 }
 
 export type FundingTxForDownloadInvoiceFragment = {
@@ -6261,16 +6260,18 @@ export const FundingTxForOverviewPageFragmentDoc = gql`
         id
         username
       }
-      rewards {
-        quantity
-        projectReward {
-          id
-        }
-      }
     }
     id
     amount
     comment
+    order {
+      items {
+        quantity
+        item {
+          id
+        }
+      }
+    }
   }
 `
 export const FundingTxForDownloadInvoiceFragmentDoc = gql`

@@ -20,20 +20,13 @@ import { TextArea, TextInputBox } from '../../../../components/ui'
 import Loader from '../../../../components/ui/Loader'
 import { MUTATION_UPDATE_USER } from '../../../../graphql'
 import { useDebounce } from '../../../../hooks'
-import {
-  LNAddressEvaluationState,
-  useUserLightningAddress,
-} from '../../../../hooks/useUserLightningAddress'
+import { LNAddressEvaluationState, useUserLightningAddress } from '../../../../hooks/useUserLightningAddress'
 import { useNotification } from '../../../../utils'
 import { getUserLightningAddress } from '../../../../utils'
 import { EditableAvatar } from '../../components'
 import { EditProfileModalProps } from '../../hooks/useEditProfileModal'
 
-export const EditProfileModal = ({
-  isOpen,
-  onClose,
-  props,
-}: EditProfileModalProps) => {
+export const EditProfileModal = ({ isOpen, onClose, props }: EditProfileModalProps) => {
   const { t } = useTranslation()
 
   const { unexpected } = useNotification()
@@ -112,19 +105,11 @@ export const EditProfileModal = ({
               {isOpen && (
                 <Box>
                   <VStack align="start" gap={3}>
-                    <EditableAvatar
-                      onUploadImage={onUploadImage}
-                      userId={user.id}
-                      imageUrl={imageUrl}
-                    />
+                    <EditableAvatar onUploadImage={onUploadImage} userId={user.id} imageUrl={imageUrl} />
 
                     <VStack align="start" gap={1} w="100%">
                       <Text>{t('Name')}</Text>
-                      <Input
-                        name="name"
-                        value={name}
-                        onChange={(e) => setName(e.currentTarget.value)}
-                      />
+                      <Input name="name" value={name} onChange={(e) => setName(e.currentTarget.value)} />
                     </VStack>
 
                     <VStack align="start" gap={1} w="100%">
@@ -149,10 +134,7 @@ export const EditProfileModal = ({
 
                     <VStack align="start" gap={1} w="100%">
                       <Text>{t('Bio')}</Text>
-                      <TextArea
-                        value={bio}
-                        onChange={(e) => setBio(e.currentTarget.value)}
-                      />
+                      <TextArea value={bio} onChange={(e) => setBio(e.currentTarget.value)} />
                     </VStack>
 
                     <Button

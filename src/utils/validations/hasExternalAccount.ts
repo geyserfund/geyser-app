@@ -1,7 +1,10 @@
 import { ExternalAccountType } from '../../pages/auth'
+import { UserProfile } from '../../pages/profile'
 import { UserMeFragment } from '../../types/generated/graphql'
 
-export const hasNostrAccount = (user: UserMeFragment) => {
+type UserAccount = UserMeFragment | UserProfile
+
+export const hasNostrAccount = (user: UserAccount) => {
   if (!user || !user.id) {
     return false
   }
@@ -11,7 +14,7 @@ export const hasNostrAccount = (user: UserMeFragment) => {
   })
 }
 
-export const hasTwitterAccount = (user: UserMeFragment) => {
+export const hasTwitterAccount = (user: UserAccount) => {
   if (!user || !user.id) {
     return false
   }
@@ -21,7 +24,7 @@ export const hasTwitterAccount = (user: UserMeFragment) => {
   })
 }
 
-export const hasFacebookAccount = (user: UserMeFragment) => {
+export const hasFacebookAccount = (user: UserAccount) => {
   if (!user || !user.id) {
     return false
   }
@@ -31,7 +34,7 @@ export const hasFacebookAccount = (user: UserMeFragment) => {
   })
 }
 
-export const hasGoogleAccount = (user: UserMeFragment) => {
+export const hasGoogleAccount = (user: UserAccount) => {
   if (!user || !user.id) {
     return false
   }
@@ -41,7 +44,7 @@ export const hasGoogleAccount = (user: UserMeFragment) => {
   })
 }
 
-export const hasGithubAccount = (user: UserMeFragment) => {
+export const hasGithubAccount = (user: UserAccount) => {
   if (!user || !user.id) {
     return false
   }
@@ -51,7 +54,7 @@ export const hasGithubAccount = (user: UserMeFragment) => {
   })
 }
 
-export const hasLightningAccount = (user: UserMeFragment) => {
+export const hasLightningAccount = (user: UserAccount) => {
   if (!user || !user.id) {
     return false
   }
