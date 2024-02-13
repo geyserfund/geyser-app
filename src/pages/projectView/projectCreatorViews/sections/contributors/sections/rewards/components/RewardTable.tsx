@@ -195,8 +195,8 @@ export const RewardTable = ({
       },
 
       {
-        header: 'Items',
-        key: 'items',
+        header: 'Rewards',
+        key: 'rewards',
         render(order: OrderFragment) {
           return <OrderItems orderItems={order.items} noLabel />
         },
