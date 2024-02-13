@@ -65,39 +65,29 @@ const pathsMap = {
   leaderboard: () => `/${PathName.leaderboard}`,
   projectDiscovery: () => `/${PathName.projectDiscovery}`,
 
-  grants: (grantId?: string) =>
-    grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`,
+  grants: (grantId?: string) => (grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`),
   grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,
   grantsRoundTwo: () => `/${PathName.grants}/${PathName.grantsRoundTwo}`,
 
   notFound: () => `/${PathName.notFound}`,
   notAuthorized: () => `/${PathName.notAuthorized}`,
-  _deprecatedPathForProject: (projectName: string) =>
-    `/${PathName._deprecatedPathNameForProject}/${projectName}`,
+  _deprecatedPathForProject: (projectName: string) => `/${PathName._deprecatedPathNameForProject}/${projectName}`,
 
   project: (projectName: string) => `/${PathName.project}/${projectName}`,
-  projectOverview: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectOverview}`,
-  projectInsights: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectInsights}`,
-  projectContributors: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectContributors}`,
-  projectEntries: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectEntries}`,
-  projectRewards: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectRewards}`,
-  projectMilestones: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectMilestones}`,
-  projectManageRewards: (projectName: string) =>
-      `/${PathName.project}/${projectName}/${PathName.projectManageRewards}`,
+  projectOverview: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectOverview}`,
+  projectInsights: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectInsights}`,
+  projectContributors: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectContributors}`,
+  projectEntries: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectEntries}`,
+  projectRewards: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectRewards}`,
+  projectMilestones: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectMilestones}`,
+  projectManageRewards: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectManageRewards}`,
   projectCreateReward: (projectName: string) =>
-      `/${PathName.project}/${projectName}/${PathName.projectManageRewards}/${PathName.projectCreateReward}`,
+    `/${PathName.project}/${projectName}/${PathName.projectManageRewards}/${PathName.projectCreateReward}`,
   projectEditReward: (projectName: string, rewardId: string) =>
-      `/${PathName.project}/${projectName}/${PathName.projectManageRewards}/${PathName.projectEditReward}/${rewardId}`,
+    `/${PathName.project}/${projectName}/${PathName.projectManageRewards}/${PathName.projectEditReward}/${rewardId}`,
 
   entry: (entryID: string) => `/${PathName.entry}/${entryID}`,
-  projectEntryCreation: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.entry}`,
+  projectEntryCreation: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.entry}`,
   projectEntryDetails: (projectName: string, entryID: string) =>
     `/${PathName.project}/${projectName}/${PathName.entry}/${entryID}`,
   projectEntryPreview: (projectName: string, entryID: string) =>
@@ -108,17 +98,15 @@ const pathsMap = {
   projectLaunch: (projectName: string, state: 'draft' | 'launch' = 'launch') =>
     `/${PathName.project}/${projectName}/${PathName.projectOverview}/?${state}`,
 
-  launchProjectWithNode: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.node}`,
+  launchProject: (projectID: string) => `/${PathName.launchProject}/${projectID}`,
+  launchProjectWithNode: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.node}`,
   launchProjectDetails: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectDetails}`,
-  launchProjectStory: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectStory}`,
+  launchProjectStory: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchProjectStory}`,
 
   userProfile: (userID: string) => `/${PathName.userProfile}/${userID}`,
 
-  projectDashboard: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}`,
+  projectDashboard: (projectID: string) => `/${PathName.project}/${projectID}/${PathName.projectDashboard}`,
   dashboardDescription: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardDescription}`,
   dashboardContributors: (projectID: string) =>
@@ -136,7 +124,7 @@ const pathsMap = {
   dashboardStatus: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardStatus}`,
   dashboardRewards: (projectID: string) =>
-  `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardRewards}`,
+    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardRewards}`,
   dashboardShop: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardShop}`,
   dashboardNostr: (projectID: string) =>
@@ -151,10 +139,7 @@ const pathsMap = {
 
 export type PathsMap = typeof pathsMap
 
-export const getPath = <TRoute extends keyof PathsMap>(
-  route: TRoute,
-  ...params: Parameters<PathsMap[TRoute]>
-) => {
+export const getPath = <TRoute extends keyof PathsMap>(route: TRoute, ...params: Parameters<PathsMap[TRoute]>) => {
   const pathCallback: (...args: any[]) => string = pathsMap[route]
 
   return pathCallback(...params)
