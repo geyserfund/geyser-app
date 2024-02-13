@@ -25,7 +25,7 @@ import {
   UpdateProjectRewardInput,
   USDCents,
 } from '../../../../../../../types'
-import { commaFormatted, toInt, useNotification } from '../../../../../../../utils'
+import { commaFormatted, isProjectAnException, toInt, useNotification } from '../../../../../../../utils'
 
 type Props = {
   buttonText: string
@@ -86,25 +86,24 @@ export const ProjectRewardForm = ({
       isAddon: reward.isAddon,
       isHidden: reward.isHidden,
       category: reward.category || null,
-      preOrder: reward.preOrder || true
+      preOrder: reward.preOrder || true,
     }
   }
 
-  const getRewardUpdateProjectRewardInputVariables =
-    (): UpdateProjectRewardInput => {
-      return {
-        projectRewardId: reward.id,
-        cost: reward.cost,
-        description: reward.description,
-        image: reward.image || undefined,
-        name: reward.name,
-        maxClaimable: reward.maxClaimable || undefined,
-        hasShipping: reward.hasShipping,
-        isAddon: reward.isAddon,
-        isHidden: reward.isHidden,
-        category: reward.category || null
-      }
+  const getRewardUpdateProjectRewardInputVariables = (): UpdateProjectRewardInput => {
+    return {
+      projectRewardId: reward.id,
+      cost: reward.cost,
+      description: reward.description,
+      image: reward.image || undefined,
+      name: reward.name,
+      maxClaimable: reward.maxClaimable || undefined,
+      hasShipping: reward.hasShipping,
+      isAddon: reward.isAddon,
+      isHidden: reward.isHidden,
+      category: reward.category || null,
     }
+  }
 
   const handleFormTextChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target
@@ -189,7 +188,10 @@ export const ProjectRewardForm = ({
       isValid = false
     }
 
+    const isException = isProjectAnException(project?.name)
+
     if (
+      !isException &&
       (project?.rewardCurrency && project?.rewardCurrency === RewardCurrency.Usdcent
         ? parseFloat(formCostValue) * 100
         : getUSDAmount(toInt(formCostValue) as Satoshis)) > ProjectRewardValidations.cost.maxUSDCentsAmount
