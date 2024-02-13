@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  Text,
-} from '@chakra-ui/react'
+import { Box, Button, FormControl, FormLabel, Input, Text } from '@chakra-ui/react'
 import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
@@ -14,13 +7,8 @@ import { MAX_FUNDING_AMOUNT_USD } from '../../../constants'
 import { useBtcContext } from '../../../context/btc'
 import { useFormState, UseFundingFlowReturn } from '../../../hooks'
 import { FormStateError } from '../../../interfaces'
-import {
-  FundingInput,
-  FundingResourceType,
-  Project,
-  UserMeFragment,
-} from '../../../types'
-import { useNotification } from '../../../utils'
+import { FundingInput, FundingResourceType, Project, UserMeFragment } from '../../../types'
+import { isProjectAnException, useNotification } from '../../../utils'
 
 export type ProjectFundingFormState = {
   donationAmount: number
@@ -39,22 +27,15 @@ interface Props {
   onFundingRequested?(state: ProjectFundingFormState): void
 }
 
-export const FundingForm = ({
-  project,
-  user,
-  fundingFlow,
-  onFundingRequested = () => {},
-}: Props) => {
+export const FundingForm = ({ project, user, fundingFlow, onFundingRequested = () => {} }: Props) => {
   const { t } = useTranslation()
   const { btcRate } = useBtcContext()
   const { requestFunding } = fundingFlow
 
   const { toast } = useNotification()
-  const { state, setTarget, setValue } =
-    useFormState<ProjectFundingFormState>(defaultFormState)
+  const { state, setTarget, setValue } = useFormState<ProjectFundingFormState>(defaultFormState)
 
-  const [formError, setFormError] =
-    useState<FormStateError<ProjectFundingFormState> | void>()
+  const [formError, setFormError] = useState<FormStateError<ProjectFundingFormState> | void>()
 
   const validateForm = () => {
     if (!state.donationAmount || state.donationAmount === 0) {
@@ -64,14 +45,14 @@ export const FundingForm = ({
 
     const amountInDollars = state.donationAmount * btcRate
 
-    if (amountInDollars > MAX_FUNDING_AMOUNT_USD) {
+    const isException = isProjectAnException(project.name)
+
+    if (!isException && amountInDollars > MAX_FUNDING_AMOUNT_USD) {
       setFormError({
         donationAmount: `amount cannot be greater than \${{MAX_FUNDING_AMOUNT_USD}} in value`,
       })
       return false
     }
-
-    return true
   }
 
   const onSubmit = () => {
@@ -94,7 +75,7 @@ export const FundingForm = ({
         anonymous: !user,
         donationAmount: state.donationAmount,
         metadataInput: {
-          ...(state.comment && { comment: state.comment })
+          ...(state.comment && { comment: state.comment }),
         },
         sourceResourceInput: {
           resourceId: Number(project.id),
@@ -115,17 +96,10 @@ export const FundingForm = ({
         )}
       </Text>
       <Box mb={3}>
-        <DonationInput
-          inputGroup={{ padding: '2px' }}
-          name="donationAmount"
-          onChange={setValue}
-        />
+        <DonationInput inputGroup={{ padding: '2px' }} name="donationAmount" onChange={setValue} />
         {formError?.donationAmount && (
           <Text color="secondary.red" fontSize="12px">
-            <Trans
-              i18nKey={formError?.donationAmount}
-              values={{ MAX_FUNDING_AMOUNT_USD }}
-            >
+            <Trans i18nKey={formError?.donationAmount} values={{ MAX_FUNDING_AMOUNT_USD }}>
               {formError?.donationAmount}
             </Trans>
           </Text>
