@@ -138,4 +138,4 @@ export const darkModeColors = {
   app: ColorsAppDark,
 }
 
-export const colorOrange = '#DD6B20';
+export const colorOrange = '#DD6B20'
