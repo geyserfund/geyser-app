@@ -5,6 +5,7 @@ import { Navigate, useParams } from 'react-router-dom'
 import { AuthModal } from '../../components/molecules'
 import { getPath } from '../../constants'
 import { useAuthContext } from '../../context'
+import { ExternalAccountType } from '../../pages/auth'
 import { LoadingPage } from '../../pages/loading'
 import { useRouteMatchesForPrivateRoute } from './privateRoutesAtom'
 
@@ -19,15 +20,15 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
 
   const { onOpen, onClose, isOpen } = useDisclosure()
 
-  const { isProjectCreatorRoute, isEntryCreationRoute } =
-    useRouteMatchesForPrivateRoute()
+  const { isProjectCreatorRoute, isEntryCreationRoute, isPrivateProjectLaunchRoute } = useRouteMatchesForPrivateRoute()
 
   const isUserViewingTheirOwnProject: boolean = useMemo(() => {
-    return user?.ownerOf?.some(
-      ({ project }) =>
-        project?.id === params.projectId || project?.name === params.projectId,
-    )
+    return user?.ownerOf?.some(({ project }) => project?.id === params.projectId || project?.name === params.projectId)
   }, [params.projectId, user.ownerOf])
+
+  const isUserCreatorEnabled: boolean = useMemo(() => {
+    return Boolean(user?.externalAccounts.find((account) => account.accountType !== ExternalAccountType.lightning))
+  }, [user])
 
   useEffect(() => {
     if (!loading) {
@@ -51,11 +52,11 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
     return <LoadingPage />
   }
 
-  if (
-    isProjectCreatorRoute &&
-    Boolean(isUserViewingTheirOwnProject) === false &&
-    params?.projectId
-  ) {
+  if (isPrivateProjectLaunchRoute && !isUserCreatorEnabled) {
+    return <Navigate to={getPath('publicProjectLaunch')} />
+  }
+
+  if (isProjectCreatorRoute && Boolean(isUserViewingTheirOwnProject) === false && params?.projectId) {
     return <Navigate to={getPath('project', params?.projectId)} />
   }
 

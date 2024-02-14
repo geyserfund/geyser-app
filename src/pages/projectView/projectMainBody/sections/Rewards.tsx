@@ -13,7 +13,8 @@ import { MobileViews, useProjectContext } from '../../../../context'
 import {
   isActive,
   toInt,
-  useMobileMode
+  useMobileMode,
+  useNotification
 } from '../../../../utils'
 import { truthyFilter } from '../../../../utils/array'
 
@@ -23,6 +24,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   const location = useLocation()
   const breakpoint = useBreakpoint({ ssr: false })
   const largeView = ['xl','2xl'].includes(breakpoint);
+  const { toast } = useNotification()
 
   const {
     project,
@@ -38,14 +40,24 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   const renderRewards = () => {
     if (activeProjectRewards.length > 0) {
       return activeProjectRewards.filter(truthyFilter).map((reward) => {
+        const count = (fundFormState.rewardsByIDAndCount && fundFormState.rewardsByIDAndCount[`${reward.id}`]) || 0
         return (
           <RewardCard
               key={reward.id}
               width="100%"
               reward={reward}
+              count={count}
               onRewardClick={() => {
-                const count = (fundFormState.rewardsByIDAndCount && fundFormState.rewardsByIDAndCount[`${reward.id}`]) || 0
-                updateReward({ id: toInt(reward.id), count: count + 1 })
+                const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : 100;
+                if(rewardStockRemaining > count) {
+                  updateReward({ id: toInt(reward.id), count: count + 1 })
+                } else {
+                  toast({
+                    title: 'Reward Limit',
+                    description: `Maximum number of ${rewardStockRemaining} rewards are available`,
+                    status: 'error',
+                  })
+                }
                 setMobileView(MobileViews.funding)
                 setFundingFormState('step', 'contribution')
               }}

@@ -1,26 +1,17 @@
-import { useQuery } from '@apollo/client'
 import { Center, Container, GridItem, SimpleGrid, VStack } from '@chakra-ui/react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
 import { AlertBox } from '../../components/ui'
 import { useAuthContext } from '../../context'
 import { defaultUser } from '../../defaults'
-import { QUERY_USER_PROFILE } from '../../graphql'
-import { User, UserGetInput } from '../../types'
+import { useUserProfileQuery } from '../../types'
 import { toInt } from '../../utils'
 import { MobileDivider } from '../grants/components'
+import { UserProfile } from './type'
 import { AccountInfo, Badges, Summary } from './views'
 import { ProfileTabs } from './views/profileTabs'
-
-type ResponseData = {
-  user: User
-}
-
-type QueryVariables = {
-  where: UserGetInput
-}
 
 export const Profile = () => {
   const { t } = useTranslation()
@@ -31,11 +22,14 @@ export const Profile = () => {
     return toInt(params.userId)
   }, [params])
 
-  const [userProfile, setUserProfile] = useState<User>({ ...defaultUser })
+  const [userProfile, setUserProfile] = useState<UserProfile>(defaultUser as UserProfile)
 
-  const isViewingOwnProfile = useMemo(() => params.userId === currentAppUser.id, [params.userId, currentAppUser.id])
+  const isViewingOwnProfile = useMemo(
+    () => currentAppUser && params.userId === currentAppUser.id,
+    [params.userId, currentAppUser],
+  )
 
-  const { loading: profileLoading, error } = useQuery<ResponseData, QueryVariables>(QUERY_USER_PROFILE, {
+  const { loading: profileLoading, error } = useUserProfileQuery({
     variables: {
       where: {
         id,
@@ -43,19 +37,27 @@ export const Profile = () => {
     },
     skip: !id,
     onCompleted(data) {
-      if (data && data.user) {
-        const user = data.user as User
+      if (data.user) {
         if (isViewingOwnProfile) {
           setUserProfile({
+            ...data.user,
             ...currentAppUser,
-            ...user,
           })
         } else {
-          setUserProfile(user)
+          setUserProfile(data.user)
         }
       }
     },
   })
+
+  useEffect(() => {
+    if (isViewingOwnProfile) {
+      setUserProfile((current) => ({
+        ...current,
+        ...currentAppUser,
+      }))
+    }
+  }, [isViewingOwnProfile, currentAppUser])
 
   if (error) {
     return (
@@ -70,6 +72,10 @@ export const Profile = () => {
         </Center>
       </Container>
     )
+  }
+
+  if (!userProfile) {
+    return null
   }
 
   return (

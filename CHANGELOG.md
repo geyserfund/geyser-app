@@ -1,3 +1,26 @@
+## [0.6.9](https://github.com/geyserfund/geyser-app/compare/v0.6.8...v0.6.9) (2024-02-14)
+
+
+### Features
+
+* high priority bugs ([e2a1944](https://github.com/geyserfund/geyser-app/commit/e2a1944c28329015322ef6ecdb404a09426816db))
+* move reward items to table and reference code to inside accordion ([4eff770](https://github.com/geyserfund/geyser-app/commit/4eff77063bfc3fecae19a30d13c8d60626a8d23e))
+* reward limits on cart ([4568c30](https://github.com/geyserfund/geyser-app/commit/4568c30ee744c300424925bdb691a8dd5e890caf))
+
+
+### Bug Fixes
+
+* add amount exception for spirit of satoshi ([d279eac](https://github.com/geyserfund/geyser-app/commit/d279eac012f22b7d5c97c5c05e1366d049df579d))
+* change items column to rewards ([f6389bf](https://github.com/geyserfund/geyser-app/commit/f6389bf1035c5734a830efc704951bc6088da678))
+* computing dollar amount on contribution ([faf74fa](https://github.com/geyserfund/geyser-app/commit/faf74fa8ff45125e71e97fdb720c579887797bf0))
+* disabled project creation for lightning errors ([0c17c93](https://github.com/geyserfund/geyser-app/commit/0c17c93c1705d36a8b01218ea77565b61fd0c7b4))
+* final fixes ([829efe3](https://github.com/geyserfund/geyser-app/commit/829efe382c3f85754a3af61c906409b6c4d3b8d5))
+* fixes needed ([8af0a0e](https://github.com/geyserfund/geyser-app/commit/8af0a0eda9c1259b79541674f1a4d08b0a7840f8))
+* pr updates ([c7d8955](https://github.com/geyserfund/geyser-app/commit/c7d89553946be44ba5834ae77798b124db5fa1e1))
+* profile page crash ([027f97e](https://github.com/geyserfund/geyser-app/commit/027f97e25676476901f71ebc17f30b26151af299))
+* put alby on the end of example wallets ([3157326](https://github.com/geyserfund/geyser-app/commit/3157326bc5d6a840f783eb0007ae9bb28ceb40b3))
+* refresh user on add account, and change type ([b841d8d](https://github.com/geyserfund/geyser-app/commit/b841d8dd51cb330030c7f0f2ad3f72ce1cc0278a))
+
 ## [0.6.8](https://github.com/geyserfund/geyser-app/compare/v0.6.7...v0.6.8) (2024-02-07)
 
 

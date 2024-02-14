@@ -50,17 +50,10 @@ export const ContributorsComponent = () => {
   const aggregateMap = useCallback(
     (fundingTxs: FundingTxForOverviewPageFragment[]) =>
       fundingTxs.map((fundingTx) => {
-        let noOfRewards = 0
-        const rewards = fundingTx.funder.rewards.filter((reward) =>
-          project?.rewards.some(
-            (projectRewards) => projectRewards.id === reward.projectReward.id,
-          ),
-        )
-        if (rewards.length > 0) {
-          rewards.map((reward) => {
-            noOfRewards += reward.quantity
-          })
-        }
+        let noOfRewards = fundingTx?.order?.items.reduce(
+          (accumulator, currentValue) => accumulator + currentValue.quantity,
+          0,
+        ) || 0;
 
         const contributor: ContributorDisplayType = {
           user: fundingTx.funder.user,
@@ -109,7 +102,7 @@ export const ContributorsComponent = () => {
     FundingTxForOverviewPageFragment,
     ContributorDisplayType
   >({
-    queryName: 'fundingTxsGet',
+    queryName: ['fundingTxsGet','fundingTxs'],
     fetchMore,
     itemLimit: CONTRIBUTORS_TO_DISPLAY,
     resultMap: aggregateMap,

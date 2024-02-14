@@ -63,6 +63,7 @@ export const FundingFormRewardItem = ({
     project
   } = useProjectContext()
   const { onOpen: setFocus, onClose: setBlur } = useDisclosure()
+  const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : 100;
 
   return (
       <Box
@@ -119,6 +120,7 @@ export const FundingFormRewardItem = ({
                   aria-label="add-reward"
                   icon={<AddIcon />}
                   onClick={onAddClick}
+                  isDisabled={rewardStockRemaining === count}
               />
             </Stack>
           </Stack>
