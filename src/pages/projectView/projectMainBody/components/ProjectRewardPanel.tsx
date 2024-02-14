@@ -67,7 +67,7 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
                         setMobileView(MobileViews.funding)
                         setFundingFormState('step', 'contribution')
                     }}
-                    isDisabled={rewardStockRemaining === 0}
+                    isDisabled={rewardStockRemaining !== null && rewardStockRemaining <= 0}
                 >
                     <Text isTruncated>{t('Select')}</Text>
                 </Button>
