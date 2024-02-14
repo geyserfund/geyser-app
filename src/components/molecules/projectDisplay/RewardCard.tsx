@@ -21,7 +21,7 @@ export const RewardCard = ({
 }: Props) => {
   const { t } = useTranslation()
   const {project} = useProjectContext()
-  const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : 100;
+  const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : null;
 
   return (
     <Box

@@ -24,7 +24,7 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
     fundForm: { updateReward, setState: setFundingFormState },
   } = useProjectContext()
   const navigate = useNavigate()
-  const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : -1;
+  const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : null;
 
   if (!project || !isActive) {
     return <></>
