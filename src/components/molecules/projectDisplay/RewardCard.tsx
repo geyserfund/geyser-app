@@ -21,7 +21,7 @@ export const RewardCard = ({
 }: Props) => {
   const { t } = useTranslation()
   const {project} = useProjectContext()
-  const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : 100;
+  const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : null;
 
   return (
     <Box
@@ -61,14 +61,14 @@ export const RewardCard = ({
         <Container pos={'absolute'} bottom={3} left={3} right={3} width={'auto'} p={0}>
           <Stack direction='row' style={{ marginTop: '10px' }}>
             <Button
-              variant={rewardStockRemaining === 0 || count === rewardStockRemaining ? 'secondary' : 'primary'}
+              variant={(rewardStockRemaining !== null && rewardStockRemaining <= 0 ) || count === rewardStockRemaining ? 'secondary' : 'primary'}
               size='sm'
               height={'40px'}
               onClick={(e) => {
                 rest.onRewardClick?.(e);
               }}
               style={{ flex: 1 }}
-              isDisabled={rewardStockRemaining === 0 || count === rewardStockRemaining}
+              isDisabled={(rewardStockRemaining !== null && rewardStockRemaining <= 0 ) || count === rewardStockRemaining}
             >
               <Text fontSize={16} fontWeight={500} isTruncated>{t('Add to Basket')}</Text>
             </Button>

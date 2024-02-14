@@ -59,6 +59,7 @@ const RewardItem = ({
   const { t } = useTranslation()
 
   const project = reward.rewardProject
+  const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : null;
 
   return (
     <Box
@@ -92,6 +93,7 @@ const RewardItem = ({
                     variant='secondary'
                     size='sm'
                     px={2}
+                    isDisabled={rewardStockRemaining !== null && rewardStockRemaining <= 0}
                 >
                     <Text isTruncated>{t('Select')}</Text>
                 </Button>

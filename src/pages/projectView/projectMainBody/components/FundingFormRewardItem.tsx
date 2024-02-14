@@ -63,7 +63,7 @@ export const FundingFormRewardItem = ({
     project
   } = useProjectContext()
   const { onOpen: setFocus, onClose: setBlur } = useDisclosure()
-  const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : 100;
+  const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : null;
 
   return (
       <Box
