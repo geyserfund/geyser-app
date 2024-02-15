@@ -1,7 +1,43 @@
 import { gql } from '@apollo/client'
 
+export const FRAGMENT_EXTERNAL_ACCOUNT = gql`
+  fragment ExternalAccount on ExternalAccount {
+    id
+    accountType
+    externalUsername
+    externalId
+    public
+  }
+`
+
 export const FRAGMENT_USER_ME = gql`
+  ${FRAGMENT_EXTERNAL_ACCOUNT}
   fragment UserMe on User {
+    id
+    username
+    imageUrl
+    email
+    ranking
+    isEmailVerified
+    externalAccounts {
+      ...ExternalAccount
+    }
+    ownerOf {
+      project {
+        id
+        name
+        image
+        thumbnailImage
+        title
+        status
+      }
+    }
+  }
+`
+
+export const FRAGMENT_USER_FOR_PROFILE_PAGE = gql`
+  ${FRAGMENT_EXTERNAL_ACCOUNT}
+  fragment UserForProfilePage on User {
     id
     username
     imageUrl
@@ -14,16 +50,6 @@ export const FRAGMENT_USER_ME = gql`
       externalUsername
       externalId
       public
-    }
-    ownerOf {
-      project {
-        id
-        name
-        image
-        thumbnailImage
-        title
-        status
-      }
     }
   }
 `
