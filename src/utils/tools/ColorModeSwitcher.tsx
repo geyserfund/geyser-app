@@ -1,9 +1,4 @@
-import {
-  IconButton,
-  IconButtonProps,
-  useColorMode,
-  useColorModeValue,
-} from '@chakra-ui/react'
+import { IconButton, IconButtonProps, useColorMode, useColorModeValue } from '@chakra-ui/react'
 import * as React from 'react'
 import { BsFillBrightnessLowFill, BsFillMoonStarsFill } from 'react-icons/bs'
 import { useTheme } from 'react-jss'
@@ -17,10 +12,7 @@ export const UserSetColorMode = 'userSetColorMode'
 export const ColorModeSwitcher: React.FC<ColorModeSwitcherProps> = (props) => {
   const { toggleColorMode } = useColorMode()
   const text = useColorModeValue('dark', 'light')
-  const SwitchIcon = useColorModeValue(
-    BsFillMoonStarsFill,
-    BsFillBrightnessLowFill,
-  )
+  const SwitchIcon = useColorModeValue(BsFillMoonStarsFill, BsFillBrightnessLowFill)
 
   const handleToggleColorMode = () => {
     toggleColorMode()

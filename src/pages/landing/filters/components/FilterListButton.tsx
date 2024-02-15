@@ -12,13 +12,7 @@ interface FilterListItemProps {
   isActive?: boolean
 }
 
-export const FilterListItem = ({
-  label,
-  value,
-  count,
-  handleClick,
-  isActive,
-}: FilterListItemProps) => {
+export const FilterListItem = ({ label, value, count, handleClick, isActive }: FilterListItemProps) => {
   return (
     <ButtonComponent
       size="sm"

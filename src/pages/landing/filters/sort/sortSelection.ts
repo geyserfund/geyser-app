@@ -14,11 +14,7 @@ export const getCurrentSelection = (sort?: SortType) => {
 
 export const disableSortByTrending = (filters: FilterType) => {
   if (
-    checkKeyValueExists(
-      filters,
-      ['region', 'countryCode', 'search', 'status', 'type'],
-      'any',
-    ) ||
+    checkKeyValueExists(filters, ['region', 'countryCode', 'search', 'status', 'type'], 'any') ||
     (filters.tagIds && filters.tagIds.length >= 2)
   ) {
     return true

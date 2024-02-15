@@ -76,17 +76,12 @@ export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
         />
       ) : (
         <HStack w="full" px={standardPadding}>
-          <Body1>{t("No items with this status.")}</Body1>
+          <Body1>{t('No items with this status.')}</Body1>
         </HStack>
       )}
       {!noMoreItems.current && (
         <HStack w="full" px={standardPadding}>
-          <Button
-            width="100%"
-            variant="secondary"
-            onClick={() => fetchNext()}
-            isLoading={isLoadingMore.current}
-          >
+          <Button width="100%" variant="secondary" onClick={() => fetchNext()} isLoading={isLoadingMore.current}>
             {t('Show more')}...
           </Button>
         </HStack>

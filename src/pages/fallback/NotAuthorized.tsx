@@ -19,9 +19,7 @@ export const NotAuthorized = () => {
     >
       <BiErrorAlt fontSize="80px" />
       <Text fontSize="20px">{t('Oops!')}</Text>
-      <Text fontSize="20px">
-        {t('You do not have permission to access this page.')}
-      </Text>
+      <Text fontSize="20px">{t('You do not have permission to access this page.')}</Text>
       <CommonFeedbackMessage />
     </VStack>
   )

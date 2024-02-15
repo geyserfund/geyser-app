@@ -13,21 +13,15 @@ import { getDiff, linkToHttps, toInt, useNotification } from '../../utils'
 
 export const useProjectState = (
   projectId?: string | number,
-  options?: QueryHookOptions<
-    ProjectByNameOrIdQuery,
-    ProjectByNameOrIdQueryVariables
-  >,
+  options?: QueryHookOptions<ProjectByNameOrIdQuery, ProjectByNameOrIdQueryVariables>,
   type: 'name' | 'id' = 'name',
 ) => {
   const { toast } = useNotification()
 
   const [project, setProject] = useState<ProjectFragment | null>(null)
-  const [baseProject, setBaseProject] = useState<ProjectFragment>(
-    {} as ProjectFragment,
-  )
+  const [baseProject, setBaseProject] = useState<ProjectFragment>({} as ProjectFragment)
 
-  const idType =
-    type === 'name' && typeof projectId === 'string' ? 'name' : 'id'
+  const idType = type === 'name' && typeof projectId === 'string' ? 'name' : 'id'
 
   const invalidId = idType === 'name' && String(projectId).length < 3
 
@@ -51,21 +45,19 @@ export const useProjectState = (
     },
   })
 
-  const [updateProjectMutation, { loading: saving }] = useUpdateProjectMutation(
-    {
-      onError() {
-        toast({
-          status: 'error',
-          title: 'failed to update project',
-        })
-      },
-      onCompleted(data) {
-        if (data.updateProject) {
-          syncProject({ ...baseProject, ...data.updateProject })
-        }
-      },
+  const [updateProjectMutation, { loading: saving }] = useUpdateProjectMutation({
+    onError() {
+      toast({
+        status: 'error',
+        title: 'failed to update project',
+      })
     },
-  )
+    onCompleted(data) {
+      if (data.updateProject) {
+        syncProject({ ...baseProject, ...data.updateProject })
+      }
+    },
+  })
 
   const syncProject = (project: ProjectFragment) => {
     setProject(project)
@@ -73,9 +65,7 @@ export const useProjectState = (
   }
 
   const updateProject = (value: Partial<ProjectFragment>) => {
-    setProject((current) =>
-      current ? { ...current, ...value } : (value as ProjectFragment),
-    )
+    setProject((current) => (current ? { ...current, ...value } : (value as ProjectFragment)))
   }
 
   const [isDiff, diffKeys] = useMemo(
@@ -111,9 +101,7 @@ export const useProjectState = (
       }
 
       if (key === 'links') {
-        input.links = project.links
-          .filter((link) => link)
-          .map((link) => linkToHttps(link))
+        input.links = project.links.filter((link) => link).map((link) => linkToHttps(link))
         return
       }
 

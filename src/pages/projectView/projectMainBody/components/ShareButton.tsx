@@ -11,9 +11,7 @@ export const ShareButton = (props: ButtonProps) => {
   const [copied, setCopied] = useState(false)
 
   const handleShareClick = () => {
-    navigator.clipboard.writeText(
-      `${window.location.origin}/project/${project?.name}`,
-    )
+    navigator.clipboard.writeText(`${window.location.origin}/project/${project?.name}`)
     setCopied(true)
     setTimeout(() => {
       setCopied(false)
@@ -25,11 +23,7 @@ export const ShareButton = (props: ButtonProps) => {
   }
 
   return (
-    <Button
-      variant={copied ? 'primary' : 'secondary'}
-      onClick={handleShareClick}
-      {...props}
-    >
+    <Button variant={copied ? 'primary' : 'secondary'} onClick={handleShareClick} {...props}>
       {copied ? t('Project link copied!') : t('Share')}
     </Button>
   )

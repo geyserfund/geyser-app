@@ -13,10 +13,7 @@ interface LeaderboardFeatureProjectProps extends StackProps {
   project: ProjectForLandingPageFragment
 }
 
-export const LeaderboardFeatureProject = ({
-  project,
-  ...rest
-}: LeaderboardFeatureProjectProps) => {
+export const LeaderboardFeatureProject = ({ project, ...rest }: LeaderboardFeatureProjectProps) => {
   return (
     <CardLayout
       as={Link}
@@ -30,27 +27,14 @@ export const LeaderboardFeatureProject = ({
       {...rest}
     >
       <Box height="200px" borderRadius="8px" overflow="hidden">
-        <ImageWithReload
-          h="full"
-          w="full"
-          src={`${project.thumbnailImage}`}
-          alt="leaderboard-featured-project-image"
-        />
+        <ImageWithReload h="full" w="full" src={`${project.thumbnailImage}`} alt="leaderboard-featured-project-image" />
       </Box>
-      <LeaderboardFundingStats
-        funders={project.fundersCount}
-        funded={project.balance}
-      />
+      <LeaderboardFundingStats funders={project.fundersCount} funded={project.balance} />
       <Body1 bold color="neutral.9000" width="100%" isTruncated>
         {project.title}
       </Body1>
       <AvatarElement noLink borderRadius="50%" user={project.owners[0]?.user} />
-      <Body2
-        color="neutral.800"
-        noOfLines={3}
-        isTruncated
-        whiteSpace="pre-wrap"
-      >
+      <Body2 color="neutral.800" noOfLines={3} isTruncated whiteSpace="pre-wrap">
         {project.shortDescription}
       </Body2>
     </CardLayout>

@@ -31,25 +31,19 @@ export const StatsComponent = () => {
 
   const { project } = useProjectContext()
 
-  const [projectStats, setProjectStats] =
-    useState<ProjectStatsOverviewType>(defaultProjectStats)
+  const [projectStats, setProjectStats] = useState<ProjectStatsOverviewType>(defaultProjectStats)
 
   const [projectStatsGetOverview] = useProjectStatsGetOverViewLazyQuery({
     onCompleted(data) {
       const projectStats = data.projectStatsGet
 
-      const contributionCount =
-        projectStats.current?.projectFundingTxs?.amountSum ?? 0
+      const contributionCount = projectStats.current?.projectFundingTxs?.amountSum ?? 0
       const contributorsCount = projectStats.current?.projectFunders?.count ?? 0
-      const rewardsPurchased =
-        projectStats.current?.projectFunderRewards?.quantitySum ?? 0
+      const rewardsPurchased = projectStats.current?.projectFunderRewards?.quantitySum ?? 0
 
-      const prevContributionCount =
-        projectStats.prevTimeRange?.projectFundingTxs?.amountSum ?? 0
-      const prevContributorsCount =
-        projectStats.prevTimeRange?.projectFunders?.count ?? 0
-      const prevRewardsPurchased =
-        projectStats.prevTimeRange?.projectFunderRewards?.quantitySum ?? 0
+      const prevContributionCount = projectStats.prevTimeRange?.projectFundingTxs?.amountSum ?? 0
+      const prevContributorsCount = projectStats.prevTimeRange?.projectFunders?.count ?? 0
+      const prevRewardsPurchased = projectStats.prevTimeRange?.projectFunderRewards?.quantitySum ?? 0
 
       setProjectStats({
         contributionCount,
@@ -96,12 +90,7 @@ export const StatsComponent = () => {
           value={projectStats.contributionCount}
           width={{ base: '100%', lg: 'auto' }}
         />
-        <HStack
-          flex={2}
-          width={{ base: '100%', lg: 'auto' }}
-          spacing="20px"
-          alignItems="start"
-        >
+        <HStack flex={2} width={{ base: '100%', lg: 'auto' }} spacing="20px" alignItems="start">
           <StatsBlock
             title={t('Contributors')}
             prevValue={projectStats.prevContributorsCount}

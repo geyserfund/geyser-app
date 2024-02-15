@@ -5,25 +5,13 @@ import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
-import {
-  DeleteConfirmModal,
-  ProjectEntryCard,
-} from '../../../../components/molecules'
+import { DeleteConfirmModal, ProjectEntryCard } from '../../../../components/molecules'
 import { TitleDivider } from '../../../../components/ui/TitleDivider'
 import { getPath } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { MUTATION_DELETE_ENTRY } from '../../../../graphql/mutations'
-import {
-  EntryForProjectFragment,
-  useProjectUnplublishedEntriesLazyQuery,
-} from '../../../../types'
-import {
-  isActive,
-  isDraft,
-  toInt,
-  useMobileMode,
-  useNotification,
-} from '../../../../utils'
+import { EntryForProjectFragment, useProjectUnplublishedEntriesLazyQuery } from '../../../../types'
+import { isActive, isDraft, toInt, useMobileMode, useNotification } from '../../../../utils'
 import { truthyFilter } from '../../../../utils/array'
 
 export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
@@ -41,9 +29,7 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
       if (data.projectGet && updateProject) {
         updateProject({
           ...data.projectGet,
-          entries: project
-            ? [...project.entries, ...data.projectGet.entries]
-            : data.projectGet.entries,
+          entries: project ? [...project.entries, ...data.projectGet.entries] : data.projectGet.entries,
         })
       }
     },
@@ -59,24 +45,12 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
     return null
   }
 
-  const canCreateEntries: boolean =
-    Boolean(isProjectOwner) &&
-    (isActive(project.status) || isDraft(project.status))
+  const canCreateEntries: boolean = Boolean(isProjectOwner) && (isActive(project.status) || isDraft(project.status))
   const isEntriesTitleFixed = location.pathname.includes('entries') && isMobile
 
   return (
-    <CardLayout
-      ref={ref}
-      mobileDense
-      width="100%"
-      alignItems="flex-start"
-      spacing="20px"
-      flexDirection="column"
-    >
-      <TitleDivider
-        badge={project.entries.length}
-        isFixed={isEntriesTitleFixed}
-      >
+    <CardLayout ref={ref} mobileDense width="100%" alignItems="flex-start" spacing="20px" flexDirection="column">
+      <TitleDivider badge={project.entries.length} isFixed={isEntriesTitleFixed}>
         {t('Entries')}
       </TitleDivider>
 
@@ -95,11 +69,7 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
   )
 })
 
-export const RenderEntries = ({
-  entries,
-}: {
-  entries: EntryForProjectFragment[]
-}) => {
+export const RenderEntries = ({ entries }: { entries: EntryForProjectFragment[] }) => {
   const navigate = useNavigate()
   const { t } = useTranslation()
 
@@ -109,17 +79,11 @@ export const RenderEntries = ({
   const [selectedEntry, setSelectedEntry] = useState<EntryForProjectFragment>()
   const { isOpen: isShowAll, onOpen: onShowAll } = useDisclosure()
 
-  const {
-    isOpen: isDeleteEntryOpen,
-    onClose: closeDeleteEntry,
-    onOpen: openDeleteEntry,
-  } = useDisclosure()
+  const { isOpen: isDeleteEntryOpen, onClose: closeDeleteEntry, onOpen: openDeleteEntry } = useDisclosure()
 
   const [deleteEntry] = useMutation(MUTATION_DELETE_ENTRY, {
     onCompleted() {
-      const newEntries = project?.entries.filter(
-        (entry) => entry?.id !== selectedEntry?.id,
-      )
+      const newEntries = project?.entries.filter((entry) => entry?.id !== selectedEntry?.id)
       updateProject({ entries: newEntries })
       setSelectedEntry(undefined)
     },
@@ -160,10 +124,7 @@ export const RenderEntries = ({
   }
 
   const sortedEntries =
-    entries &&
-    entries
-      .filter(truthyFilter)
-      .sort((a, b) => Number(b.createdAt || '') - Number(a.createdAt || ''))
+    entries && entries.filter(truthyFilter).sort((a, b) => Number(b.createdAt || '') - Number(a.createdAt || ''))
   return (
     <>
       {sortedEntries.map((entry, index) => {

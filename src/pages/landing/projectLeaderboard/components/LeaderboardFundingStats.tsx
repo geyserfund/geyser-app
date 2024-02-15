@@ -11,11 +11,7 @@ interface LeaderboardFundingStatsProps extends StackProps {
   funded: Project['balance']
 }
 
-export const LeaderboardFundingStats = ({
-  funders,
-  funded,
-  ...rest
-}: LeaderboardFundingStatsProps) => {
+export const LeaderboardFundingStats = ({ funders, funded, ...rest }: LeaderboardFundingStatsProps) => {
   const { t } = useTranslation()
   return (
     <HStack w="full" spacing="20px" {...rest}>

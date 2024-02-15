@@ -65,49 +65,41 @@ export const EntryCreateEdit = () => {
   const [isEdit, setIsEdit] = useState(false)
   const [focusFlag, setFocusFlag] = useState('')
 
-  const { loading, saving, updateEntry, hasDiff, entry, saveEntry } =
-    useEntryState(
-      toInt(
-        user?.ownerOf?.find(
-          (project) => project?.project?.name === params.projectId,
-        )?.project?.id || '',
-      ),
-      params.entryId,
-      {
-        fetchPolicy: 'network-only',
-        onError() {
-          navigate(getPath('notFound'))
-        },
-        onCompleted(data) {
-          if (data.entry === null) {
-            navigate(getPath('notFound'))
-          }
-
-          const project = data.entry.project as Project
-
-          if (!project.owners.some((owner) => owner.user.id === user.id)) {
-            navigate(getPath('notAuthorized'))
-          }
-
-          setNavData({
-            projectName: project.name,
-            projectTitle: project.title,
-            projectPath: getPath('project', project.name),
-            projectOwnerIDs:
-              project.owners.map((ownerInfo: Owner) => {
-                return Number(ownerInfo.user.id || -1)
-              }) || [],
-          })
-        },
+  const { loading, saving, updateEntry, hasDiff, entry, saveEntry } = useEntryState(
+    toInt(user?.ownerOf?.find((project) => project?.project?.name === params.projectId)?.project?.id || ''),
+    params.entryId,
+    {
+      fetchPolicy: 'network-only',
+      onError() {
+        navigate(getPath('notFound'))
       },
-    )
+      onCompleted(data) {
+        if (data.entry === null) {
+          navigate(getPath('notFound'))
+        }
+
+        const project = data.entry.project as Project
+
+        if (!project.owners.some((owner) => owner.user.id === user.id)) {
+          navigate(getPath('notAuthorized'))
+        }
+
+        setNavData({
+          projectName: project.name,
+          projectTitle: project.title,
+          projectPath: getPath('project', project.name),
+          projectOwnerIDs:
+            project.owners.map((ownerInfo: Owner) => {
+              return Number(ownerInfo.user.id || -1)
+            }) || [],
+        })
+      },
+    },
+  )
   const debouncedUpdateEntry = useDebounce(entry, 1000)
 
   useEffect(() => {
-    if (
-      debouncedUpdateEntry &&
-      debouncedUpdateEntry.status !== EntryStatus.Published
-    ) {
+    if (debouncedUpdateEntry && debouncedUpdateEntry.status !== EntryStatus.Published) {
       saveEntry()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -126,17 +118,11 @@ export const EntryCreateEdit = () => {
   const handleInput = (event: any) => {
     const { name, value } = event.target
 
-    if (
-      name === 'title' &&
-      value.length > ProjectEntryValidations.title.maxLength
-    ) {
+    if (name === 'title' && value.length > ProjectEntryValidations.title.maxLength) {
       return
     }
 
-    if (
-      name === 'description' &&
-      value.length > ProjectEntryValidations.description.maxLength
-    ) {
+    if (name === 'description' && value.length > ProjectEntryValidations.description.maxLength) {
       return
     }
 
@@ -147,9 +133,7 @@ export const EntryCreateEdit = () => {
 
   const onPreview = () => {
     if (isEdit) {
-      navigate(
-        getPath('projectEntryPreview', `${params.projectId}`, `${entry.id}`),
-      )
+      navigate(getPath('projectEntryPreview', `${params.projectId}`, `${entry.id}`))
     } else {
       toast({
         title: 'Cannot preview',
@@ -176,11 +160,7 @@ export const EntryCreateEdit = () => {
         if (event.key === 'ArrowUp') {
           event.preventDefault()
           document.getElementById('entry-title-input')?.focus()
-        } else if (
-          event.key === 'ArrowDown' ||
-          event.key === 'Tab' ||
-          event.key === 'Enter'
-        ) {
+        } else if (event.key === 'ArrowDown' || event.key === 'Tab' || event.key === 'Enter') {
           event.preventDefault()
           const newDate = new Date()
           setFocusFlag(newDate.toISOString())
@@ -258,11 +238,7 @@ export const EntryCreateEdit = () => {
                       borderRadius="4px"
                       overflow="hidden"
                     >
-                      <ImageWithReload
-                        width="100%"
-                        objectFit="cover"
-                        src={entry.image}
-                      />
+                      <ImageWithReload width="100%" objectFit="cover" src={entry.image} />
                     </HStack>
                   ) : (
                     <HStack className={classes.uploadContainer}>

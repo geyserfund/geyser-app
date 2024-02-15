@@ -22,15 +22,9 @@ export const InsightsOptionsSelect = () => {
       backgroundColor="neutral.100"
       size="sm"
     >
-      <option value={InsightsOptions.lastWeek}>
-        {t(InsightsOptions.lastWeek)}
-      </option>
-      <option value={InsightsOptions.lastMonth}>
-        {t(InsightsOptions.lastMonth)}
-      </option>
-      <option value={InsightsOptions.lastYear}>
-        {t(InsightsOptions.lastYear)}
-      </option>
+      <option value={InsightsOptions.lastWeek}>{t(InsightsOptions.lastWeek)}</option>
+      <option value={InsightsOptions.lastMonth}>{t(InsightsOptions.lastMonth)}</option>
+      <option value={InsightsOptions.lastYear}>{t(InsightsOptions.lastYear)}</option>
     </Select>
   )
 }

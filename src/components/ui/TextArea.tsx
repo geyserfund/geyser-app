@@ -30,10 +30,7 @@ const HEIGHT_DIFFERENCE_BETWEEN_SCROLL_OFFSET = 4
 let minTextToReturnBackTo = 5
 
 export const TextArea = forwardRef<HTMLTextAreaElement, ITextBoxProps>(
-  (
-    { children, error, minHeight, maxHeight, supportMarkup, value, ...rest },
-    forwardedRef,
-  ) => {
+  ({ children, error, minHeight, maxHeight, supportMarkup, value, ...rest }, forwardedRef) => {
     const { t } = useTranslation()
     const classes = useStyles()
 
@@ -49,19 +46,12 @@ export const TextArea = forwardRef<HTMLTextAreaElement, ITextBoxProps>(
         setDynamicHeight(minHeight)
       }
 
-      if (
-        minHeight &&
-        maxHeight &&
-        scrollHeight > offsetHeight &&
-        scrollHeight <= getIntFromHeight(maxHeight)
-      ) {
+      if (minHeight && maxHeight && scrollHeight > offsetHeight && scrollHeight <= getIntFromHeight(maxHeight)) {
         if (!minTextToReturnBackTo) {
           minTextToReturnBackTo = textLength - 1
         }
 
-        setDynamicHeight(
-          `${scrollHeight + HEIGHT_DIFFERENCE_BETWEEN_SCROLL_OFFSET}px`,
-        )
+        setDynamicHeight(`${scrollHeight + HEIGHT_DIFFERENCE_BETWEEN_SCROLL_OFFSET}px`)
       }
     }
 

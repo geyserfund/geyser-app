@@ -4,8 +4,7 @@ import { ProjectForLandingPageFragment } from '../../../../types'
 import { LandingProjectCard } from '../../components'
 import { ProjectRowLayout, ProjectRowLayoutProps } from '../elements'
 
-interface ProjectDisplayBodyProps
-  extends Omit<ProjectRowLayoutProps, 'children'> {
+interface ProjectDisplayBodyProps extends Omit<ProjectRowLayoutProps, 'children'> {
   projects: ProjectForLandingPageFragment[]
   seeAllText?: string
 }
@@ -25,11 +24,7 @@ export const ProjectDisplayBody = ({
       onSeeAllClick={onSeeAllClick}
       seeAllText={seeAllText}
     >
-      <Stack
-        width="100%"
-        direction={{ base: 'column', xl: 'row' }}
-        spacing="20px"
-      >
+      <Stack width="100%" direction={{ base: 'column', xl: 'row' }} spacing="20px">
         {projects.map((project) => {
           return <LandingProjectCard key={project.id} project={project} />
         })}

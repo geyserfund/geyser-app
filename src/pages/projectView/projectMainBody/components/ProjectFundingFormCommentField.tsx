@@ -1,15 +1,5 @@
 import { CloseIcon } from '@chakra-ui/icons'
-import {
-  Box,
-  Button,
-  HStack,
-  HTMLChakraProps,
-  Image,
-  Text,
-  Tooltip,
-  useBoolean,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { Box, Button, HStack, HTMLChakraProps, Image, Text, Tooltip, useBoolean, useDisclosure } from '@chakra-ui/react'
 import { IGif } from '@giphy/js-types'
 import { useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
@@ -35,12 +25,7 @@ const useStyles = createUseStyles({
   },
 })
 
-export const ProjectFundingFormCommentField = ({
-  comment,
-  setTarget,
-  setFormState,
-  ...rest
-}: Props) => {
+export const ProjectFundingFormCommentField = ({ comment, setTarget, setFormState, ...rest }: Props) => {
   const { t } = useTranslation()
   const { isAnonymous, loginOnOpen, user } = useAuthContext()
   const classes = useStyles()
@@ -48,11 +33,7 @@ export const ProjectFundingFormCommentField = ({
 
   const logoutConfirmationModal = useModal()
 
-  const {
-    isOpen: isGIFModalOpen,
-    onOpen: onGIFModalOpened,
-    onClose: onGIFModalClosed,
-  } = useDisclosure()
+  const { isOpen: isGIFModalOpen, onOpen: onGIFModalOpened, onClose: onGIFModalClosed } = useDisclosure()
 
   const onGIFModalOpenClick = () => {
     textAreaRef.current?.blur()
@@ -61,8 +42,7 @@ export const ProjectFundingFormCommentField = ({
 
   const [selectedGIF, setSelectedGIF] = useState<IGif | null>(null)
 
-  const [isHoveringOverGIFButton, setIsHoveringOverGIFButton] =
-    useBoolean(false)
+  const [isHoveringOverGIFButton, setIsHoveringOverGIFButton] = useBoolean(false)
 
   const handleSelectGif = (gif: IGif) => {
     setSelectedGIF(gif)
@@ -104,36 +84,16 @@ export const ProjectFundingFormCommentField = ({
             )}
           </Text>
         </Box>
-        {isHoveringOverGIFButton && selectedGIF && (
-          <CloseIcon position="absolute" top="31px" right="29px" />
-        )}
+        {isHoveringOverGIFButton && selectedGIF && <CloseIcon position="absolute" top="31px" right="29px" />}
 
         <Box zIndex="10" position="absolute" left={2} top={2}>
           {isAnonymous || !user ? (
-            <Tooltip
-              shouldWrapChildren
-              label={t('Funding anonymously. Click to login')}
-            >
-              <AvatarElement
-                borderRadius="50%"
-                noLink
-                onClick={loginOnOpen}
-                avatarOnly
-              />
+            <Tooltip shouldWrapChildren label={t('Funding anonymously. Click to login')}>
+              <AvatarElement borderRadius="50%" noLink onClick={loginOnOpen} avatarOnly />
             </Tooltip>
           ) : (
-            <Tooltip
-              shouldWrapChildren
-              label={`${t('Funding as')} ${user.username}. ${t(
-                'Click to logout',
-              )}`}
-            >
-              <AvatarElement
-                onClick={logoutConfirmationModal.onOpen}
-                borderRadius="50%"
-                user={user}
-                avatarOnly
-              />
+            <Tooltip shouldWrapChildren label={`${t('Funding as')} ${user.username}. ${t('Click to logout')}`}>
+              <AvatarElement onClick={logoutConfirmationModal.onOpen} borderRadius="50%" user={user} avatarOnly />
             </Tooltip>
           )}
         </Box>
@@ -162,11 +122,7 @@ export const ProjectFundingFormCommentField = ({
         </Box>
       </HStack>
 
-      <GifModal
-        isOpen={isGIFModalOpen}
-        onClose={onGIFModalClosed}
-        onSelect={handleSelectGif}
-      />
+      <GifModal isOpen={isGIFModalOpen} onClose={onGIFModalClosed} onSelect={handleSelectGif} />
 
       <LogoutConfirmationModal {...logoutConfirmationModal} />
     </Box>

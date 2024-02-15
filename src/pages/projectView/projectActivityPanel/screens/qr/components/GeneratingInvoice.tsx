@@ -8,11 +8,7 @@ import Loader from '../../../../../../components/ui/Loader'
 
 const FUNDING_REQUEST_TIMEOUT = 45_000
 
-export const GeneratingInvoice = ({
-  refreshInvoice,
-}: {
-  refreshInvoice: () => void
-}) => {
+export const GeneratingInvoice = ({ refreshInvoice }: { refreshInvoice: () => void }) => {
   const { t } = useTranslation()
   const { onOpen, onClose, isOpen } = useDisclosure()
   const timeout = useRef<number | undefined>()

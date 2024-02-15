@@ -2,11 +2,7 @@ import { HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
-import {
-  EntryEditIcon,
-  MilestoneIcon,
-  RewardGiftIcon,
-} from '../../../../components/icons'
+import { EntryEditIcon, MilestoneIcon, RewardGiftIcon } from '../../../../components/icons'
 import { CardLayout, CardLayoutProps } from '../../../../components/layouts'
 import { Modal } from '../../../../components/layouts'
 import { Body2, H3 } from '../../../../components/typography'
@@ -16,8 +12,7 @@ import { UseModalReturn } from '../../../../hooks/useModal'
 
 export const ProjectCreatorModal = (props: UseModalReturn) => {
   const { t } = useTranslation()
-  const { project, onMilestonesModalOpen, setMobileView } =
-    useProjectContext()
+  const { project, onMilestonesModalOpen, setMobileView } = useProjectContext()
   const navigate = useNavigate()
   return (
     <Modal {...props} title="Create content">
@@ -27,28 +22,22 @@ export const ProjectCreatorModal = (props: UseModalReturn) => {
           to={getPath('projectEntryCreation', project?.name)}
           icon={<EntryEditIcon />}
           title={t('Write an entry')}
-          description={t(
-            'Engage your community with articles about your project updates',
-          )}
+          description={t('Engage your community with articles about your project updates')}
         />
         <CreationMenuItem
           icon={<RewardGiftIcon />}
           title={t('Sell a reward item')}
-          description={t(
-            'Sell your work, merch, art, sponsorships, badges, or services',
-          )}
+          description={t('Sell your work, merch, art, sponsorships, badges, or services')}
           onClick={() => {
-            setMobileView(MobileViews.createReward);
-            navigate(getPath("projectCreateReward", project?.name))
+            setMobileView(MobileViews.createReward)
+            navigate(getPath('projectCreateReward', project?.name))
             props.onClose()
           }}
         />
         <CreationMenuItem
           icon={<MilestoneIcon fontSize="25px" />}
           title={t('Add goal')}
-          description={t(
-            'Setting milestones helps you reach your overall project goal',
-          )}
+          description={t('Setting milestones helps you reach your overall project goal')}
           onClick={() => {
             props.onClose()
             onMilestonesModalOpen()
@@ -65,12 +54,7 @@ interface CreationMenuItemProps extends CardLayoutProps {
   description: string
 }
 
-export const CreationMenuItem = ({
-  icon,
-  title,
-  description,
-  ...rest
-}: CreationMenuItemProps) => {
+export const CreationMenuItem = ({ icon, title, description, ...rest }: CreationMenuItemProps) => {
   return (
     <CardLayout hover height="100%" padding="12px" {...rest}>
       <HStack>

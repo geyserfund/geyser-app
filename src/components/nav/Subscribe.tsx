@@ -38,14 +38,7 @@ interface ISubscribe {
   titleSize?: string
 }
 
-export const Subscribe = ({
-  isOpen,
-  onClose,
-  style,
-  interest,
-  parentState,
-  titleSize,
-}: ISubscribe) => {
+export const Subscribe = ({ isOpen, onClose, style, interest, parentState, titleSize }: ISubscribe) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
   const isMobile = useMobileMode()
@@ -113,9 +106,7 @@ export const Subscribe = ({
 
   return (
     <>
-      {style === 'button-modal' &&
-      isOpen !== undefined &&
-      onClose !== undefined ? (
+      {style === 'button-modal' && isOpen !== undefined && onClose !== undefined ? (
         <Modal isOpen={isOpen} onClose={handleClose} isCentered>
           <ModalOverlay />
           <ModalContent display="flex" alignItems="center" padding="20px 15px">
@@ -136,13 +127,7 @@ export const Subscribe = ({
                         'To get information on the latest Geyser projects and product subscribe by dropping your email below.',
                       )}
                 </Text>
-                {!success && (
-                  <TextInputBox
-                    value={email}
-                    placeholder={t('Contact Email')}
-                    onChange={handleEmail}
-                  />
-                )}
+                {!success && <TextInputBox value={email} placeholder={t('Contact Email')} onChange={handleEmail} />}
                 {error && <Text fontSize={'12px'}>{t(error)}</Text>}
                 {success && (
                   <HStack>
@@ -197,10 +182,7 @@ export const Subscribe = ({
               <CheckIcon w={7} h={7} />
             </Box>
           )}
-          <Text
-            textAlign={isMobile ? 'left' : 'center'}
-            w={isMobile ? '80%' : '400px'}
-          >
+          <Text textAlign={isMobile ? 'left' : 'center'} w={isMobile ? '80%' : '400px'}>
             {success
               ? 'Thanks for signing up. We’ll be sharing more info about Geyser Grants soon.'
               : 'Receive news on recent and upcoming Grants by joining our newsletter and join our community on Telegram.'}
@@ -209,11 +191,7 @@ export const Subscribe = ({
             {!success && (
               <>
                 <Box>
-                  <InputGroup
-                    w={isMobile ? '100%' : '250px'}
-                    mr={isMobile ? 0 : 5}
-                    mb={isMobile ? 2 : 0}
-                  >
+                  <InputGroup w={isMobile ? '100%' : '250px'} mr={isMobile ? 0 : 5} mb={isMobile ? 2 : 0}>
                     <Input
                       focusBorderColor="primary.400"
                       type="email"
@@ -256,12 +234,7 @@ export const Subscribe = ({
               justifyContent="center"
               alignItems="center"
             >
-              <Icon
-                boxSize={6}
-                aria-label="telegram"
-                as={FaTelegramPlane}
-                mr={2}
-              />
+              <Icon boxSize={6} aria-label="telegram" as={FaTelegramPlane} mr={2} />
               {t('Join us on Telegram')}
             </Link>
           </Box>
@@ -278,13 +251,7 @@ export const Subscribe = ({
                 value={email}
                 onChange={handleEmail}
               />
-              <ButtonComponent
-                w="100%"
-                primary
-                disabled={!email}
-                onClick={handleConfirm}
-                isLoading={submitting}
-              >
+              <ButtonComponent w="100%" primary disabled={!email} onClick={handleConfirm} isLoading={submitting}>
                 {t('Subscribe')}
               </ButtonComponent>
               {error && <Text fontSize={'12px'}>{t(error)}</Text>}

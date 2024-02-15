@@ -1,14 +1,8 @@
-import {
-  Button,
-  HStack,
-  Image,
-  Text,
-  Tooltip,
-  VStack,
-} from '@chakra-ui/react'
+import { Button, HStack, Image, Text, Tooltip, VStack } from '@chakra-ui/react'
 import * as htmlToImage from 'html-to-image'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { BiCopy } from 'react-icons/bi'
 
 import { Body2, H3 } from '../../../../../../components/typography'
 import { useProjectContext } from '../../../../../../context'
@@ -16,7 +10,6 @@ import { Badge, FundingTxFragment } from '../../../../../../types'
 import { useCustomTheme, useNotification } from '../../../../../../utils'
 import { AvatarElement } from '../../../../projectMainBody/components'
 import ContributionIcon from './ContributionIcon.svg'
-import { BiCopy } from 'react-icons/bi'
 
 export const SuccessImageComponent = ({
   currentBadge,
@@ -96,47 +89,26 @@ export const SuccessImageComponent = ({
           mb={1}
           borderRadius="8px"
         >
-          <Image src={ContributionIcon} width={"100px"}></Image>
-          <VStack alignItems={"flex-start"} gap={1}>
-            {user && (
-              <AvatarElement
-                borderRadius="50%"
-                user={user}
-                noLink
-                textProps={{ color: 'neutral.700' }}
-              />
-            )}
-            <H3
-              color={"neutral.600"}
-              fontSize="18px"
-              fontWeight={400}
-            >
+          <Image src={ContributionIcon} width={'100px'}></Image>
+          <VStack alignItems={'flex-start'} gap={1}>
+            {user && <AvatarElement borderRadius="50%" user={user} noLink textProps={{ color: 'neutral.700' }} />}
+            <H3 color={'neutral.600'} fontSize="18px" fontWeight={400}>
               {t('Successfully contributed to')}
             </H3>
-            <H3
-              color={"neutral.900"}
-              fontSize="24px"
-              fontWeight={600}
-            >
+            <H3 color={'neutral.900'} fontSize="24px" fontWeight={600}>
               {project.title}
             </H3>
             {currentBadge && (
               <VStack w="full" spacing="0px">
                 <Image src={currentBadge.image} width="125px" />
-                <Body2 color={'neutral.900'}>
-                  {t('You won a Nostr badge!')}
-                </Body2>
+                <Body2 color={'neutral.900'}>{t('You won a Nostr badge!')}</Body2>
               </VStack>
             )}
           </VStack>
         </HStack>
 
         <HStack w="full" justifyContent="end">
-          <Tooltip
-            w="100%"
-            placement="top"
-            label={copied ? t('copied') : t('copy')}
-          >
+          <Tooltip w="100%" placement="top" label={copied ? t('copied') : t('copy')}>
             <Button
               size="md"
               w="100%"
@@ -147,7 +119,7 @@ export const SuccessImageComponent = ({
               onClick={handleCopy}
               isLoading={successComponent.current === null}
             >
-              <Text fontSize="16px" fontWeight="500" color={"neutral.900"}>
+              <Text fontSize="16px" fontWeight="500" color={'neutral.900'}>
                 {t('Copy Success image')}
               </Text>
             </Button>
@@ -164,25 +136,11 @@ export const SuccessImageComponent = ({
         alignItems="flex-start"
       >
         <HStack>
-          <Text
-            fontSize={'16px'}
-            fontWeight={'normal'}
-            textColor={'neutral.900'}
-          >
+          <Text fontSize={'16px'} fontWeight={'normal'} textColor={'neutral.900'}>
             {t('By')}
           </Text>
-          <AvatarElement
-            borderRadius="50%"
-            user={user}
-            noLink
-            textProps={{ color: 'neutral.700' }}
-            avatarOnly={true}
-          />
-          <Text
-            fontSize={'16px'}
-            fontWeight={'normal'}
-            textColor={'neutral.900'}
-          >
+          <AvatarElement borderRadius="50%" user={user} noLink textProps={{ color: 'neutral.700' }} avatarOnly={true} />
+          <Text fontSize={'16px'} fontWeight={'normal'} textColor={'neutral.900'}>
             {user ? user.username : 'Anonymous'}
           </Text>
         </HStack>

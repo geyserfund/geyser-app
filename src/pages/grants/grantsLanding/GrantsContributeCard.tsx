@@ -2,11 +2,7 @@ import { useQuery } from '@apollo/client'
 import { Box, Link, Stack, Text, Tooltip } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  CardLayout,
-  CardLayoutProps,
-  SkeletonLayout,
-} from '../../../components/layouts'
+import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../components/layouts'
 import { QUERY_GRANT_STATISTICS } from '../../../graphql/queries/grant'
 import { useAnimatedClipboard } from '../../../hooks/useAnimatedClipboard'
 import { GrantStatistics } from '../../../types'
@@ -19,25 +15,15 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
 
-  const [handleCopyAddress, hasCopied] =
-    useAnimatedClipboard(CONTRIBUTION_ADDRESS)
+  const [handleCopyAddress, hasCopied] = useAnimatedClipboard(CONTRIBUTION_ADDRESS)
 
-  const { data, loading } = useQuery<{ grantStatistics: GrantStatistics }>(
-    QUERY_GRANT_STATISTICS,
-  )
+  const { data, loading } = useQuery<{ grantStatistics: GrantStatistics }>(QUERY_GRANT_STATISTICS)
 
   const grantContributions = data?.grantStatistics.grants?.amountFunded || 0
   const grantDistributed = data?.grantStatistics.grants?.amountGranted || 0
 
   return (
-    <CardLayout
-      width="100%"
-      maxWidth="909px"
-      padding="20px"
-      alignItems="center"
-      spacing="20px"
-      {...props}
-    >
+    <CardLayout width="100%" maxWidth="909px" padding="20px" alignItems="center" spacing="20px" {...props}>
       <Box
         display="flex"
         alignItems="center"
@@ -51,11 +37,7 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
           subtitleProps={{ fontSize: '10px' }}
           isSatLogo={true}
         >
-          {loading ? (
-            <SkeletonLayout h="36px" w="40px" />
-          ) : (
-            getShortAmountLabel(grantContributions)
-          )}
+          {loading ? <SkeletonLayout h="36px" w="40px" /> : getShortAmountLabel(grantContributions)}
         </ListText>
         <ListText
           titleProps={{ fontSize: '24px' }}
@@ -63,30 +45,17 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
           subtitleProps={{ fontSize: '10px' }}
           isSatLogo={true}
         >
-          {loading ? (
-            <SkeletonLayout h="36px" w="40px" />
-          ) : (
-            getShortAmountLabel(grantDistributed)
-          )}
+          {loading ? <SkeletonLayout h="36px" w="40px" /> : getShortAmountLabel(grantDistributed)}
         </ListText>
       </Box>
-      <Stack
-        display="flex"
-        mt="6"
-        direction={{ base: 'column', lg: 'row' }}
-        justify="center"
-      >
+      <Stack display="flex" mt="6" direction={{ base: 'column', lg: 'row' }} justify="center">
         <GrantsContributeModal />
         {isMobile ? (
           <Text fontSize={'14px'} fontWeight="500" mt={3} color="neutral.600">
             {t(
               'Contribute to the Bitcoin ecosystem by becoming a Geyser Grants sponsor. You can also easily contribute by sending or streaming recurring payments to',
             )}{' '}
-            <Link
-              textColor={hasCopied ? undefined : 'primary.500'}
-              href="#"
-              onClick={() => handleCopyAddress()}
-            >
+            <Link textColor={hasCopied ? undefined : 'primary.500'} href="#" onClick={() => handleCopyAddress()}>
               {CONTRIBUTION_ADDRESS}
             </Link>
           </Text>
@@ -95,11 +64,7 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
             <Text fontWeight="500" mr={1} color="neutral.600">
               {t('Or sending SATs to our lightning address:')}{' '}
               <Tooltip label={t('Copied to clipboard!')} isOpen={hasCopied}>
-                <Link
-                  textColor={hasCopied ? undefined : 'primary.500'}
-                  href="#"
-                  onClick={() => handleCopyAddress()}
-                >
+                <Link textColor={hasCopied ? undefined : 'primary.500'} href="#" onClick={() => handleCopyAddress()}>
                   {CONTRIBUTION_ADDRESS}
                 </Link>
               </Tooltip>

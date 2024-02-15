@@ -10,23 +10,15 @@ import { TextField } from '../../components/TextField'
 import { validateTwitterUrl } from '../../validations/twitter'
 
 const schema = yup.object({
-  url: yup
-    .string()
-    .required('URL is required')
-    .test('twitter', 'Must be a valid twitter URL', validateTwitterUrl),
+  url: yup.string().required('URL is required').test('twitter', 'Must be a valid twitter URL', validateTwitterUrl),
 })
 
 export interface MarkdownTwitter {
   url: string
 }
 
-export const useInsertTwitterModal = (
-  onSubmit: SubmitHandler<MarkdownTwitter>,
-) => {
-  return useModal<{ onSubmit: SubmitHandler<MarkdownTwitter> }>(
-    {},
-    { onSubmit },
-  )
+export const useInsertTwitterModal = (onSubmit: SubmitHandler<MarkdownTwitter>) => {
+  return useModal<{ onSubmit: SubmitHandler<MarkdownTwitter> }>({}, { onSubmit })
 }
 
 export const InsertTwitterModal = ({
@@ -48,12 +40,7 @@ export const InsertTwitterModal = ({
         }}
       >
         <VStack spacing={4}>
-          <TextField
-            control={form.control}
-            name="url"
-            label="Tweet URL"
-            required
-          />
+          <TextField control={form.control} name="url" label="Tweet URL" required />
           <Button w="100%" variant="primary" type="submit">
             {t('Insert')}
           </Button>

@@ -1,13 +1,7 @@
-import {
-  CardLayoutProps,
-  LandingCardBase,
-} from '../../../../../components/layouts'
+import { CardLayoutProps, LandingCardBase } from '../../../../../components/layouts'
 import { ProjectStatusLabels } from '../../../../../components/ui'
 import { getPath } from '../../../../../constants'
-import {
-  ProjectForProfilePageFragment,
-  WalletStatus,
-} from '../../../../../types'
+import { ProjectForProfilePageFragment, WalletStatus } from '../../../../../types'
 import { isActive, isDraft, isInactive } from '../../../../../utils'
 
 interface ProfileProjectCardProps extends Omit<CardLayoutProps, 'to'> {
@@ -16,28 +10,17 @@ interface ProfileProjectCardProps extends Omit<CardLayoutProps, 'to'> {
   isMobile?: boolean
 }
 
-export const ProfileProjectCard = ({
-  project,
-  isMobile,
-  showStatus,
-  ...rest
-}: ProfileProjectCardProps) => {
+export const ProfileProjectCard = ({ project, isMobile, showStatus, ...rest }: ProfileProjectCardProps) => {
   if (!project.owners[0]) {
     return null
   }
 
   const getStatus = () => {
-    if (
-      project?.wallets[0] &&
-      project.wallets[0].state.status === WalletStatus.Inactive
-    ) {
+    if (project?.wallets[0] && project.wallets[0].state.status === WalletStatus.Inactive) {
       return ProjectStatusLabels.INACTIVE_WALLET
     }
 
-    if (
-      project?.wallets[0] &&
-      project.wallets[0].state.status === WalletStatus.Unstable
-    ) {
+    if (project?.wallets[0] && project.wallets[0].state.status === WalletStatus.Unstable) {
       return ProjectStatusLabels.UNSTABLE_WALLET
     }
 

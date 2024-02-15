@@ -32,9 +32,7 @@ export const CreatorEmailContentButton = ({ ...props }: StackProps) => {
 
   const rewards = project ? project.rewards : []
 
-  const rewardEntries = state.rewardsByIDAndCount
-    ? Object.entries(state.rewardsByIDAndCount)
-    : []
+  const rewardEntries = state.rewardsByIDAndCount ? Object.entries(state.rewardsByIDAndCount) : []
 
   if (!fundingTx) {
     return null

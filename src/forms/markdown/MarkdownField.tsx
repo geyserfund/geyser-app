@@ -1,13 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
-import {
-  EditorComponent,
-  Remirror,
-  TableComponents,
-  useCommands,
-  useKeymap,
-  useRemirror,
-} from '@remirror/react'
+import { EditorComponent, Remirror, TableComponents, useCommands, useKeymap, useRemirror } from '@remirror/react'
 import { ForwardedRef, useCallback } from 'react'
 import { Control } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -47,13 +40,7 @@ import { useSignedUpload } from '../../hooks'
 import { useMobileMode } from '../../utils'
 import { ReactHookTextArea } from '../components/ReactHookTextArea'
 import { TableCellMenuComponent } from '../components/TableCellMenuComponent'
-import {
-  FrameHandler,
-  imageHandler,
-  PreviewRenderer,
-  SaveModule,
-  StyleProvider,
-} from './helpers'
+import { FrameHandler, imageHandler, PreviewRenderer, SaveModule, StyleProvider } from './helpers'
 import { MarkdownToolbar } from './MarkdownToolbar'
 
 const turndownService = new TurndownService()
@@ -90,13 +77,10 @@ export const MarkdownField = ({
 }: Props) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
-  const onError: InvalidContentHandler = useCallback(
-    ({ json, invalidContent, transformers }) => {
-      // Automatically remove all invalid nodes and marks.
-      return transformers.remove(json, invalidContent)
-    },
-    [],
-  )
+  const onError: InvalidContentHandler = useCallback(({ json, invalidContent, transformers }) => {
+    // Automatically remove all invalid nodes and marks.
+    return transformers.remove(json, invalidContent)
+  }, [])
 
   const { uploadFile } = useSignedUpload()
 
@@ -167,12 +151,8 @@ export const MarkdownField = ({
     react: {
       nodeViewComponents: {
         image: imageHandler,
-        bulletList: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
-          <Box pl={5} ref={forwardRef} />
-        ),
-        orderedList: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => (
-          <Box pl={5} ref={forwardRef} />
-        ),
+        bulletList: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => <Box pl={5} ref={forwardRef} />,
+        orderedList: ({ forwardRef }: { forwardRef: ForwardedRef<any> }) => <Box pl={5} ref={forwardRef} />,
         iframe: (props: any) => FrameHandler(props),
       },
     },
@@ -260,8 +240,7 @@ export const MarkdownField = ({
             isActive={isEditorMode}
             onClick={toggleEditorMode}
           >
-            {<BsGear />}{' '}
-            {!isMobile && <Text paddingLeft="5px">{t('Edit')}</Text>}
+            {<BsGear />} {!isMobile && <Text paddingLeft="5px">{t('Edit')}</Text>}
           </Button>
         </HStack>
       </Box>
@@ -275,16 +254,9 @@ export const MarkdownField = ({
           fieldContainerProps={{ height: '100%' }}
         />
       )}
-      <StyleProvider
-        flex={flex}
-        flexGrow={1}
-        display={isEditorMode ? 'none' : undefined}
-        minHeight={'40vh'}
-      >
+      <StyleProvider flex={flex} flexGrow={1} display={isEditorMode ? 'none' : undefined} minHeight={'40vh'}>
         <EditorComponent />
-        <TableComponents
-          tableCellMenuProps={{ Component: TableCellMenuComponent }}
-        />
+        <TableComponents tableCellMenuProps={{ Component: TableCellMenuComponent }} />
       </StyleProvider>
       <SaveModule name={name} control={control} />
     </Remirror>

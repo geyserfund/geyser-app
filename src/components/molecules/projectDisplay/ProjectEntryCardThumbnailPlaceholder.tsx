@@ -60,21 +60,9 @@ export const ProjectEntryCardThumbnailPlaceholder = ({ ...rest }: Props) => {
           <feOffset dx="1.2" dy="2.4" />
           <feGaussianBlur stdDeviation="2" />
           <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"
-          />
-          <feBlend
-            mode="normal"
-            in2="BackgroundImageFix"
-            result="effect1_dropShadow_2775_127526"
-          />
-          <feBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="effect1_dropShadow_2775_127526"
-            result="shape"
-          />
+          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
+          <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2775_127526" />
+          <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2775_127526" result="shape" />
         </filter>
         <filter
           id="filter1_d_2775_127526"
@@ -95,21 +83,9 @@ export const ProjectEntryCardThumbnailPlaceholder = ({ ...rest }: Props) => {
           <feOffset dx="1.2" dy="2.4" />
           <feGaussianBlur stdDeviation="2" />
           <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"
-          />
-          <feBlend
-            mode="normal"
-            in2="BackgroundImageFix"
-            result="effect1_dropShadow_2775_127526"
-          />
-          <feBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="effect1_dropShadow_2775_127526"
-            result="shape"
-          />
+          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
+          <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2775_127526" />
+          <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2775_127526" result="shape" />
         </filter>
       </defs>
     </svg>

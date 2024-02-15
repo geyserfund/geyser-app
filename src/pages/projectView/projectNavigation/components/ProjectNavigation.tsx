@@ -36,11 +36,9 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
   const location = useLocation()
   const [_, changeProjectSideNavOpen] = useProjectSideNavAtom()
 
-  const { isProjectOwner, onCreatorModalOpen, project, setMobileView } =
-    useProjectContext()
+  const { isProjectOwner, onCreatorModalOpen, project, setMobileView } = useProjectContext()
 
-  const { entriesLength, rewardsLength, milestonesLength } =
-    useProjectDetails(project)
+  const { entriesLength, rewardsLength, milestonesLength } = useProjectDetails(project)
 
   const ProjectNavigationButtons = useMemo(
     () => [
@@ -100,10 +98,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         name: 'Rewards',
         path: PathName.projectManageRewards,
         mobileView: MobileViews.manageRewards,
-        subViews: [
-          MobileViews.createReward,
-          MobileViews.editReward
-        ],
+        subViews: [MobileViews.createReward, MobileViews.editReward],
         icon: RewardGiftIcon,
       },
       {
@@ -120,19 +115,16 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
   const currentActiveButton = useMemo(() => {
     const currentPath = location.pathname.split('/').pop()
 
-    const allButtons = [
-      ...ProjectNavigationButtons,
-      ...ProjectCreatorNavigationButtons,
-    ]
+    const allButtons = [...ProjectNavigationButtons, ...ProjectCreatorNavigationButtons]
 
     return (
-        allButtons.find((button) => button.path === currentPath || (button.subViews && button.subViews.find((subview: MobileViews) => subview === currentPath)))?.path || ''
+      allButtons.find(
+        (button) =>
+          button.path === currentPath ||
+          (button.subViews && button.subViews.find((subview: MobileViews) => subview === currentPath)),
+      )?.path || ''
     )
-  }, [
-    ProjectNavigationButtons,
-    ProjectCreatorNavigationButtons,
-    location.pathname,
-  ])
+  }, [ProjectNavigationButtons, ProjectCreatorNavigationButtons, location.pathname])
 
   const handleProjectDashboardButtonPress = () => {
     if (project?.name) {
@@ -200,29 +192,25 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
                   </Caption>
                 </HStack>
 
-                {ProjectCreatorNavigationButtons.map(
-                  (creatorNavigationButtons) => {
-                    const handleProjectNavigationButtonClick = () => {
-                      setMobileView(creatorNavigationButtons.mobileView)
-                      navigate(creatorNavigationButtons.path)
-                    }
+                {ProjectCreatorNavigationButtons.map((creatorNavigationButtons) => {
+                  const handleProjectNavigationButtonClick = () => {
+                    setMobileView(creatorNavigationButtons.mobileView)
+                    navigate(creatorNavigationButtons.path)
+                  }
 
-                    return (
-                      <ProjectNavigationButton
-                        showLabel={showLabel}
-                        key={creatorNavigationButtons.name}
-                        onClick={handleProjectNavigationButtonClick}
-                        aria-label={creatorNavigationButtons.name}
-                        NavigationIcon={creatorNavigationButtons.icon}
-                        isActive={
-                          currentActiveButton === creatorNavigationButtons.path
-                        }
-                      >
-                        {t(creatorNavigationButtons.name)}
-                      </ProjectNavigationButton>
-                    )
-                  },
-                )}
+                  return (
+                    <ProjectNavigationButton
+                      showLabel={showLabel}
+                      key={creatorNavigationButtons.name}
+                      onClick={handleProjectNavigationButtonClick}
+                      aria-label={creatorNavigationButtons.name}
+                      NavigationIcon={creatorNavigationButtons.icon}
+                      isActive={currentActiveButton === creatorNavigationButtons.path}
+                    >
+                      {t(creatorNavigationButtons.name)}
+                    </ProjectNavigationButton>
+                  )
+                })}
               </VStack>
             )}
             <VStack width="100%">
@@ -318,10 +306,7 @@ export const ProjectNavigationButton = ({
       showLabel?: boolean
     }
 >) => {
-  const hideLabel = useBreakpointValue(
-    { base: true, xl: false },
-    { ssr: false },
-  )
+  const hideLabel = useBreakpointValue({ base: true, xl: false }, { ssr: false })
 
   const color = props.isActive ? 'neutral.900' : 'neutral.700'
 

@@ -20,17 +20,12 @@ interface TextInputBoxProps extends InputProps {
 }
 
 export const TextInputBox = forwardRef<HTMLInputElement, TextInputBoxProps>(
-  (
-    { children, error, warn, leftIcon, rightIcon, wrapperProps, ...rest },
-    ref,
-  ) => {
+  ({ children, error, warn, leftIcon, rightIcon, wrapperProps, ...rest }, ref) => {
     const { t } = useTranslation()
     return (
       <Box width="100%" {...wrapperProps}>
         <InputGroup>
-          {leftIcon && (
-            <InputLeftElement pointerEvents="none">{leftIcon}</InputLeftElement>
-          )}
+          {leftIcon && <InputLeftElement pointerEvents="none">{leftIcon}</InputLeftElement>}
           <Input
             ref={ref}
             isInvalid={Boolean(error)}
@@ -49,11 +44,7 @@ export const TextInputBox = forwardRef<HTMLInputElement, TextInputBoxProps>(
           >
             {children}
           </Input>
-          {rightIcon && (
-            <InputRightElement pointerEvents="none">
-              {rightIcon}
-            </InputRightElement>
-          )}
+          {rightIcon && <InputRightElement pointerEvents="none">{rightIcon}</InputRightElement>}
         </InputGroup>
         {error ? (
           typeof error === 'object' ? (

@@ -7,16 +7,12 @@ type Props = {
 
 // @TODO: This view should eventually support updates.
 
-export const ProjectFundingSettingsLightningAddressView = ({
-  lightningAddress,
-}: Props) => {
+export const ProjectFundingSettingsLightningAddressView = ({ lightningAddress }: Props) => {
   const { t } = useTranslation()
   return (
     <Container maxW="md">
       <VStack alignItems={'flex-start'} spacing={2.5}>
-        <Text color="neutral.700">
-          {t('Where are all your funds going to?')}
-        </Text>
+        <Text color="neutral.700">{t('Where are all your funds going to?')}</Text>
 
         <VStack
           spacing="7px"

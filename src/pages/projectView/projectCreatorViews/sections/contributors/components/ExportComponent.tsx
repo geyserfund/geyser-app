@@ -68,9 +68,7 @@ export function ExportComponent() {
   )
 
   const DropdownIndicator = ({ innerRef, innerProps }: any) => {
-    return (
-      <BsArrowDownSquare ref={innerRef} {...innerProps} fontSize={'16px'} />
-    )
+    return <BsArrowDownSquare ref={innerRef} {...innerProps} fontSize={'16px'} />
   }
 
   const Option = useCallback(

@@ -16,14 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  Link,
-  Location,
-  matchPath,
-  matchRoutes,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom'
+import { Link, Location, matchPath, matchRoutes, useLocation, useNavigate } from 'react-router-dom'
 
 import { SideNavIcon } from '../../components/icons'
 import { AuthModal } from '../../components/molecules'
@@ -91,10 +84,7 @@ export const TopNavBar = () => {
 
   const currentPathName = location.pathname
 
-  const currentProjectRouteMatch = matchPath(
-    `/${PathName.project}/:projectId/`,
-    currentPathName,
-  )
+  const currentProjectRouteMatch = matchPath(`/${PathName.project}/:projectId/`, currentPathName)
 
   const {
     isOpen: isLoginAlertModalOpen,
@@ -156,26 +146,20 @@ export const TopNavBar = () => {
   }
 
   const handleProjectButtonPress = () => {
-    const projectName =
-      currentProjectRouteMatch?.params?.projectId || navData.projectName
+    const projectName = currentProjectRouteMatch?.params?.projectId || navData.projectName
     navigate(getPath('project', projectName))
   }
 
   const isViewingOwnProject: boolean = useMemo(() => {
     return (
       (currentPathName.startsWith(`/${PathName.entry}`) ||
-        currentPathName.startsWith(
-          `/${PathName._deprecatedPathNameForProject}`,
-        ) ||
+        currentPathName.startsWith(`/${PathName._deprecatedPathNameForProject}`) ||
         currentPathName.startsWith(`/${PathName.project}`)) &&
       navData.projectOwnerIDs.includes(Number(user.id))
     )
   }, [user.id, navData.projectOwnerIDs, currentPathName])
 
-  const userHasOnlyOneProject: boolean = useMemo(
-    () => user && user.ownerOf && user.ownerOf.length === 1,
-    [user],
-  )
+  const userHasOnlyOneProject: boolean = useMemo(() => user && user.ownerOf && user.ownerOf.length === 1, [user])
 
   const shouldShowProjectButton: boolean = useMemo(() => {
     return !isMobile && showProjectButton && Boolean(navData)
@@ -224,14 +208,7 @@ export const TopNavBar = () => {
       hideMyProjectsButton === false &&
       !userHasOnlyOneProject
     )
-  }, [
-    hideMyProjectsButton,
-    isMobile,
-    isLoggedIn,
-    isUserAProjectCreator,
-    isViewingOwnProject,
-    userHasOnlyOneProject,
-  ])
+  }, [hideMyProjectsButton, isMobile, isLoggedIn, isUserAProjectCreator, isViewingOwnProject, userHasOnlyOneProject])
 
   const shouldShowMyProjectButton: boolean = useMemo(() => {
     return (
@@ -242,14 +219,7 @@ export const TopNavBar = () => {
       hideMyProjectsButton === false &&
       userHasOnlyOneProject
     )
-  }, [
-    hideMyProjectsButton,
-    isMobile,
-    isLoggedIn,
-    isUserAProjectCreator,
-    isViewingOwnProject,
-    userHasOnlyOneProject,
-  ])
+  }, [hideMyProjectsButton, isMobile, isLoggedIn, isUserAProjectCreator, isViewingOwnProject, userHasOnlyOneProject])
 
   /**
    * Logic:
@@ -260,11 +230,7 @@ export const TopNavBar = () => {
    *    - The Landing, Discovery, and Grant Pages.
    */
   const shouldShowProjectLaunchButton: boolean = useMemo(() => {
-    return (
-      (isLoggedIn === false ||
-        (isLoggedIn && isUserAProjectCreator === false)) &&
-      showProjectLaunchButton
-    )
+    return (isLoggedIn === false || (isLoggedIn && isUserAProjectCreator === false)) && showProjectLaunchButton
   }, [showProjectLaunchButton, isLoggedIn, isUserAProjectCreator])
 
   /**
@@ -308,18 +274,10 @@ export const TopNavBar = () => {
         left={0}
         zIndex={1000}
         borderBottom="2px solid"
-        borderBottomColor={
-          showHaveTransparentBackground ? 'transparent' : 'neutral.100'
-        }
+        borderBottomColor={showHaveTransparentBackground ? 'transparent' : 'neutral.100'}
         transition="background 0.5s ease-out"
       >
-        <HStack
-          className={className}
-          paddingY="10px"
-          alignItems="center"
-          justifyContent="start"
-          position="relative"
-        >
+        <HStack className={className} paddingY="10px" alignItems="center" justifyContent="start" position="relative">
           {shouldShowLeftSideMenuButton ? (
             <IconButton
               aria-label="left-side-menu-button"
@@ -346,12 +304,7 @@ export const TopNavBar = () => {
                   if (item.name === 'About') {
                     return (
                       <a key={item.to} href={item.to}>
-                        <Text
-                          fontWeight={'500'}
-                          textDecoration="none"
-                          fontSize="16px"
-                          color={'neutral.700'}
-                        >
+                        <Text fontWeight={'500'} textDecoration="none" fontSize="16px" color={'neutral.700'}>
                           {t(item.name)}
                         </Text>
                       </a>
@@ -365,12 +318,7 @@ export const TopNavBar = () => {
                   return (
                     <Link key={item.to} to={item.to}>
                       <Box position="relative" padding="5px 7px">
-                        <Text
-                          fontWeight={'500'}
-                          textDecoration="none"
-                          fontSize="16px"
-                          color={'neutral.700'}
-                        >
+                        <Text fontWeight={'500'} textDecoration="none" fontSize="16px" color={'neutral.700'}>
                           {t(item.name)}
                         </Text>
                         {item.new && (
@@ -393,52 +341,31 @@ export const TopNavBar = () => {
             ) : null}
 
             {shouldShowMyProjectsButton ? (
-              <Button
-                variant={'primary'}
-                size="sm"
-                onClick={handleMyProjectsButtonPress}
-              >
+              <Button variant={'primary'} size="sm" onClick={handleMyProjectsButtonPress}>
                 {t('View my projects')}
               </Button>
             ) : null}
 
             {shouldShowMyProjectButton ? (
-              <Button
-                variant={'primary'}
-                size="sm"
-                onClick={handleMyProjectButtonPress}
-              >
+              <Button variant={'primary'} size="sm" onClick={handleMyProjectButtonPress}>
                 {t('View my project')}
               </Button>
             ) : null}
 
             {shouldShowProjectButton && (
-              <Button
-                variant={'primary'}
-                size="sm"
-                onClick={handleProjectButtonPress}
-              >
+              <Button variant={'primary'} size="sm" onClick={handleProjectButtonPress}>
                 {t('Project')}
               </Button>
             )}
 
             {shouldShowProjectLaunchButton ? (
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={handleProjectLaunchButtonPress}
-              >
+              <Button variant="primary" size="sm" onClick={handleProjectLaunchButtonPress}>
                 {t('Launch Your Project')}
               </Button>
             ) : null}
 
             {shouldShowSignInButton ? (
-              <Button
-                size="sm"
-                variant="secondary"
-                borderWidth={1}
-                onClick={loginOnOpen}
-              >
+              <Button size="sm" variant="secondary" borderWidth={1} onClick={loginOnOpen}>
                 {t('Login')}
               </Button>
             ) : null}
@@ -462,11 +389,7 @@ export const TopNavBar = () => {
                   onClick={changeProfileSideNavAtom}
                 >
                   {isLoggedIn ? (
-                    <Avatar
-                      height="22px"
-                      width="22px"
-                      src={user.imageUrl || ''}
-                    />
+                    <Avatar height="22px" width="22px" src={user.imageUrl || ''} />
                   ) : (
                     <HamburgerIcon color="neutral.500" fontSize="22px" />
                   )}
@@ -487,30 +410,12 @@ export const TopNavBar = () => {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text>
-              {t(
-                'Please log back in with your profile, or press continue if want to stay anonymous.',
-              )}
-            </Text>
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              paddingTop="20px"
-            >
-              <Button
-                variant="primary"
-                width="50%"
-                mx={1}
-                onClick={loginOnOpen}
-              >
+            <Text>{t('Please log back in with your profile, or press continue if want to stay anonymous.')}</Text>
+            <Box display="flex" justifyContent="space-between" paddingTop="20px">
+              <Button variant="primary" width="50%" mx={1} onClick={loginOnOpen}>
                 {t('Login')}
               </Button>
-              <Button
-                variant="primaryNeutral"
-                width="50%"
-                mx={1}
-                onClick={onLoginAlertModalClose}
-              >
+              <Button variant="primaryNeutral" width="50%" mx={1} onClick={onLoginAlertModalClose}>
                 {t('Continue')}
               </Button>
             </Box>

@@ -10,11 +10,7 @@ import { FailedToConnectAccount } from './components/FailedToConnectAccount'
 import { NostrHelpModal } from './components/NostrHelpModal'
 import { ConnectWithButtonProps } from './type'
 
-export const ConnectWithNostr = ({
-  onClose,
-  isIconOnly,
-  ...rest
-}: Omit<ConnectWithButtonProps, 'accountType'>) => {
+export const ConnectWithNostr = ({ onClose, isIconOnly, ...rest }: Omit<ConnectWithButtonProps, 'accountType'>) => {
   const { connect, error, clearError } = useNostrExtensonLogin()
 
   const { t } = useTranslation()

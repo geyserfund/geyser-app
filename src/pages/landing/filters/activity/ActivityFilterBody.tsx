@@ -3,11 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Body1 } from '../../../../components/typography'
 import { useFilterContext } from '../../../../context'
-import {
-  ActivityResourceType,
-  ProjectStatus,
-  ProjectType,
-} from '../../../../types'
+import { ActivityResourceType, ProjectStatus, ProjectType } from '../../../../types'
 import { StatusTypeButton } from '../status'
 import { getActivityButtonContent } from './FilterByActivity'
 
@@ -21,11 +17,7 @@ export type StatusAndType = {
   type?: ProjectType
 }
 
-export const ActivityFilterBody = ({
-  onClose,
-  button,
-  ...rest
-}: ActivityFilterBodyProps) => {
+export const ActivityFilterBody = ({ onClose, button, ...rest }: ActivityFilterBodyProps) => {
   const { t } = useTranslation()
   const { filters, updateFilter } = useFilterContext()
 
@@ -43,13 +35,7 @@ export const ActivityFilterBody = ({
   ]
 
   return (
-    <VStack
-      width="100%"
-      alignItems="start"
-      spacing="20px"
-      paddingX="30px"
-      {...rest}
-    >
+    <VStack width="100%" alignItems="start" spacing="20px" paddingX="30px" {...rest}>
       {options.map((option, index) => {
         const isActive = filters.activity === option
 

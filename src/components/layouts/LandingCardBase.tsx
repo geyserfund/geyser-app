@@ -1,23 +1,8 @@
-import {
-  Box,
-  HStack,
-  Icon,
-  Skeleton,
-  SkeletonCircle,
-  SkeletonText,
-  Tooltip,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, HStack, Icon, Skeleton, SkeletonCircle, SkeletonText, Tooltip, VStack } from '@chakra-ui/react'
 
-import {
-  FundingStatWithFollow,
-  FundingStatWithFollowProps,
-} from '../../pages/landing/components/FundingStatWithFollow'
+import { FundingStatWithFollow, FundingStatWithFollowProps } from '../../pages/landing/components/FundingStatWithFollow'
 import { AvatarElement } from '../../pages/projectView/projectMainBody/components'
-import {
-  EntryForLandingPageFragment,
-  ProjectForLandingPageFragment,
-} from '../../types'
+import { EntryForLandingPageFragment, ProjectForLandingPageFragment } from '../../types'
 import { H3 } from '../typography'
 import {
   ImageWithReload,
@@ -28,16 +13,12 @@ import {
 } from '../ui'
 import { CardLayout, CardLayoutProps } from '.'
 
-export interface LandingCardBaseProps
-  extends FundingStatWithFollowProps,
-    CardLayoutProps {
+export interface LandingCardBaseProps extends FundingStatWithFollowProps, CardLayoutProps {
   isMobile?: boolean
   projectStatus?: ProjectStatusLabels
   imageSrc: string
   title: string
-  user:
-    | EntryForLandingPageFragment['creator']
-    | ProjectForLandingPageFragment['owners'][number]['user']
+  user: EntryForLandingPageFragment['creator'] | ProjectForLandingPageFragment['owners'][number]['user']
 }
 
 export const LandingCardBase = ({
@@ -76,13 +57,7 @@ export const LandingCardBase = ({
         width={getResponsiveValue({ base: '125px', xl: 'full' })}
         height={getResponsiveValue({ base: '125px', xl: '200px' })}
       >
-        <ImageWithReload
-          width="100%"
-          height="100%"
-          objectFit="cover"
-          src={imageSrc}
-          alt={`${title}-header-image`}
-        />
+        <ImageWithReload width="100%" height="100%" objectFit="cover" src={imageSrc} alt={`${title}-header-image`} />
       </Box>
       <VStack
         flex={1}
@@ -131,11 +106,7 @@ export const LandingCardBase = ({
   )
 }
 
-export const LandingCardBaseSkeleton = ({
-  isMobile,
-}: {
-  isMobile?: boolean
-}) => {
+export const LandingCardBaseSkeleton = ({ isMobile }: { isMobile?: boolean }) => {
   const getResponsiveValue = (value: any) => {
     if (isMobile) {
       return { base: value.base }

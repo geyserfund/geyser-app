@@ -9,15 +9,9 @@ type ResponseData = {
 }
 
 export const useGrant = (id?: string | number) => {
-  const variables = useMemo(
-    () => (id ? { variables: { input: { where: { id } } } } : undefined),
-    [id],
-  )
+  const variables = useMemo(() => (id ? { variables: { input: { where: { id } } } } : undefined), [id])
 
-  const { data, error, loading, refetch } = useQuery<ResponseData>(
-    QUERY_GRANT,
-    variables,
-  )
+  const { data, error, loading, refetch } = useQuery<ResponseData>(QUERY_GRANT, variables)
 
   return {
     grant: data ? data.grant : null,

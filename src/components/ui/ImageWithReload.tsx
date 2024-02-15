@@ -41,11 +41,7 @@ export const ImageWithReload = ({
   const handleError = ({ currentTarget }: any) => {
     setLoading(true)
 
-    if (
-      componentRef.current !== null &&
-      componentRef.current !== undefined &&
-      componentRef.current < MAX_RETRIES
-    ) {
+    if (componentRef.current !== null && componentRef.current !== undefined && componentRef.current < MAX_RETRIES) {
       setTimeout(() => {
         currentTarget.onerror = null
         currentTarget.src = src
@@ -74,12 +70,7 @@ export const ImageWithReload = ({
   const renderSkeletonImage = () => {
     return (
       <>
-        <Skeleton
-          height={'350px'}
-          width={'500px'}
-          maxHeight={'500px'}
-          {...rest}
-        />
+        <Skeleton height={'350px'} width={'500px'} maxHeight={'500px'} {...rest} />
       </>
     )
   }
@@ -104,11 +95,7 @@ export const ImageWithReload = ({
 
   return (
     <>
-      {hasValidSource ? (
-        loading && renderSkeletonImage()
-      ) : (
-        <DefaultImage grey {...rest} />
-      )}
+      {hasValidSource ? loading && renderSkeletonImage() : <DefaultImage grey {...rest} />}
       {hasValidSource && renderSourceImage()}
     </>
   )

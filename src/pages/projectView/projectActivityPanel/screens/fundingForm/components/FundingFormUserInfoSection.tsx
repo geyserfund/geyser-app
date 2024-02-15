@@ -33,38 +33,24 @@ export const FundingFormUserInfoSection = ({ onBackClick }: Props) => {
       </HStack>
 
       {hasSelectedRewards ? (
-          <>
-            {needsShipping ? (
-                <FieldContainer
-                    title={t('Delivery Address')}
-                    subtitle={t(
-                        "To receive the selected items, you will need to send your shipping details to the creator's email. Which will be revealed in the success screen.",
-                    )}
-                    boldTitle={true}
-                />
-            ) : null}
+        <>
+          {needsShipping ? (
             <FieldContainer
-                title="Your email*"
-                subtitle="The seller may want to reach out."
-            >
-              <Input
-                  type="email"
-                  name="email"
-                  placeholder="funderemail@gmail.com"
-                  value={email}
-                  onChange={setTarget}
-              />
-            </FieldContainer>
-          </>
+              title={t('Delivery Address')}
+              subtitle={t(
+                "To receive the selected items, you will need to send your shipping details to the creator's email. Which will be revealed in the success screen.",
+              )}
+              boldTitle={true}
+            />
+          ) : null}
+          <FieldContainer title="Your email*" subtitle="The seller may want to reach out.">
+            <Input type="email" name="email" placeholder="funderemail@gmail.com" value={email} onChange={setTarget} />
+          </FieldContainer>
+        </>
       ) : null}
 
       <FieldContainer title={t('Public comment')} boldTitle={true}>
-        <ProjectFundingFormCommentField
-          comment={comment}
-          setTarget={setTarget}
-          setFormState={setState}
-          width="full"
-        />
+        <ProjectFundingFormCommentField comment={comment} setTarget={setTarget} setFormState={setState} width="full" />
       </FieldContainer>
     </VStack>
   )

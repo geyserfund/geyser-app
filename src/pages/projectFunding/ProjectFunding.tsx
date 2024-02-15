@@ -17,11 +17,7 @@ interface Props {
 
 const noop = () => {}
 
-export const ProjectFunding = ({
-  project,
-  user,
-  onTitleChange = noop,
-}: Props) => {
+export const ProjectFunding = ({ project, user, onTitleChange = noop }: Props) => {
   const fundingFlow = useFundingFlow()
 
   const [title, setTitle] = useState<string | null>(null)
@@ -32,9 +28,7 @@ export const ProjectFunding = ({
     }
   }, [onTitleChange, title])
 
-  const [formState, setFormState] = useState<
-    ProjectFundingFormState | undefined
-  >()
+  const [formState, setFormState] = useState<ProjectFundingFormState | undefined>()
 
   const { fundState, setFundState } = fundingFlow
 
@@ -58,13 +52,6 @@ export const ProjectFunding = ({
     case fundingStages.completed:
       return <FundingComplete formState={formState} fundingFlow={fundingFlow} />
     default:
-      return (
-        <FundingForm
-          fundingFlow={fundingFlow}
-          project={project}
-          user={user}
-          onFundingRequested={setFormState}
-        />
-      )
+      return <FundingForm fundingFlow={fundingFlow} project={project} user={user} onFundingRequested={setFormState} />
   }
 }

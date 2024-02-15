@@ -5,11 +5,7 @@ import { BsExclamationCircle } from 'react-icons/bs'
 
 import { Body2 } from '../../../../../../components/typography'
 
-export const InvoiceErrorView = ({
-  onRefreshSelected,
-}: {
-  onRefreshSelected: () => void
-}) => {
+export const InvoiceErrorView = ({ onRefreshSelected }: { onRefreshSelected: () => void }) => {
   const { t } = useTranslation()
   return (
     <VStack

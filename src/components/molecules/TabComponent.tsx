@@ -1,12 +1,4 @@
-import {
-  Box,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  TabProps,
-  Tabs,
-} from '@chakra-ui/react'
+import { Box, Tab, TabList, TabPanel, TabPanels, TabProps, Tabs } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { dimensions, ID } from '../../constants'
@@ -28,15 +20,7 @@ export const TabComponent = ({ tabs }: TabComponentProps) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
   return (
-    <Tabs
-      id={ID.profile.tabs}
-      display="flex"
-      flexDirection="column"
-      h="full"
-      variant="unstyled"
-      size="sm"
-      w="full"
-    >
+    <Tabs id={ID.profile.tabs} display="flex" flexDirection="column" h="full" variant="unstyled" size="sm" w="full">
       <StickToTop
         id={ID.profile.tabList}
         wrapperId={ID.profile.tabs}
@@ -52,13 +36,7 @@ export const TabComponent = ({ tabs }: TabComponentProps) => {
               <Tab key={title} {...tabButtonStyles}>
                 {t(title)}
                 {sub && (
-                  <Box
-                    as="span"
-                    ml="5px"
-                    paddingX="7px"
-                    backgroundColor="neutral.200"
-                    borderRadius="4px"
-                  >
+                  <Box as="span" ml="5px" paddingX="7px" backgroundColor="neutral.200" borderRadius="4px">
                     {sub}
                   </Box>
                 )}
@@ -69,11 +47,7 @@ export const TabComponent = ({ tabs }: TabComponentProps) => {
         <MobileDivider mt={2} />
       </StickToTop>
 
-      <TabPanels
-        height={{ base: '100%', lg: `calc(100% - 74px)` }}
-        flex="1"
-        marginTop="22px"
-      >
+      <TabPanels height={{ base: '100%', lg: `calc(100% - 74px)` }} flex="1" marginTop="22px">
         {tabs.map(({ title, Component }) => {
           return (
             <TabPanel h="full" key={title} padding="0px">

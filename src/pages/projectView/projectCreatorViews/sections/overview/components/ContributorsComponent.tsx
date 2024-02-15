@@ -1,24 +1,10 @@
-import {
-  Button,
-  HStack,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  VStack,
-} from '@chakra-ui/react'
+import { Button, HStack, Table, TableContainer, Tbody, Td, Th, Thead, Tr, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import {
-  CardLayout,
-  SkeletonLayout,
-} from '../../../../../../components/layouts'
+import { CardLayout, SkeletonLayout } from '../../../../../../components/layouts'
 import { Body1, H3 } from '../../../../../../components/typography'
 import { getPath, ID } from '../../../../../../constants'
 import { useProjectContext } from '../../../../../../context'
@@ -50,10 +36,8 @@ export const ContributorsComponent = () => {
   const aggregateMap = useCallback(
     (fundingTxs: FundingTxForOverviewPageFragment[]) =>
       fundingTxs.map((fundingTx) => {
-        let noOfRewards = fundingTx?.order?.items.reduce(
-          (accumulator, currentValue) => accumulator + currentValue.quantity,
-          0,
-        ) || 0;
+        const noOfRewards =
+          fundingTx?.order?.items.reduce((accumulator, currentValue) => accumulator + currentValue.quantity, 0) || 0
 
         const contributor: ContributorDisplayType = {
           user: fundingTx.funder.user,
@@ -67,19 +51,18 @@ export const ContributorsComponent = () => {
     [project?.rewards],
   )
 
-  const [getFundingTxForOverview, { fetchMore, loading }] =
-    useFundingTxForOverviewPageLazyQuery({
-      onError() {
-        toast({
-          title: 'Error fetching project stats',
-          description: 'Please refresh the page and try again.',
-          status: 'error',
-        })
-      },
-      onCompleted(data) {
-        handleDataUpdate(data.fundingTxsGet?.fundingTxs || [])
-      },
-    })
+  const [getFundingTxForOverview, { fetchMore, loading }] = useFundingTxForOverviewPageLazyQuery({
+    onError() {
+      toast({
+        title: 'Error fetching project stats',
+        description: 'Please refresh the page and try again.',
+        status: 'error',
+      })
+    },
+    onCompleted(data) {
+      handleDataUpdate(data.fundingTxsGet?.fundingTxs || [])
+    },
+  })
 
   const where = useMemo(
     () => ({
@@ -98,11 +81,8 @@ export const ContributorsComponent = () => {
     isLoadingMore,
     noMoreItems,
     fetchNext,
-  } = usePaginationHook<
-    FundingTxForOverviewPageFragment,
-    ContributorDisplayType
-  >({
-    queryName: ['fundingTxsGet','fundingTxs'],
+  } = usePaginationHook<FundingTxForOverviewPageFragment, ContributorDisplayType>({
+    queryName: ['fundingTxsGet', 'fundingTxs'],
     fetchMore,
     itemLimit: CONTRIBUTORS_TO_DISPLAY,
     resultMap: aggregateMap,
@@ -139,12 +119,7 @@ export const ContributorsComponent = () => {
       <HStack w="full" justifyContent="space-between">
         <H3>{t('Contributors')}</H3>
 
-        <Button
-          as={Link}
-          to={getPath('projectContributors', project?.name)}
-          variant="primaryLink"
-          size="sm"
-        >
+        <Button as={Link} to={getPath('projectContributors', project?.name)} variant="primaryLink" size="sm">
           {t('View all')}
         </Button>
       </HStack>
@@ -181,10 +156,7 @@ export const ContributorsComponent = () => {
                   return (
                     <Tr key={index}>
                       <Td>
-                        <AvatarElement
-                          noLink={!contributor?.user?.id}
-                          user={contributor.user}
-                        />
+                        <AvatarElement noLink={!contributor?.user?.id} user={contributor.user} />
                       </Td>
                       <Td>{contributor.amount} sats</Td>
                       <Td isTruncated maxWidth="250px">
@@ -202,11 +174,7 @@ export const ContributorsComponent = () => {
         </CardLayout>
       )}
       {!loading && !noMoreItems.current && (
-        <Button
-          w="full"
-          onClick={() => fetchNext()}
-          isLoading={isLoadingMore.current}
-        >
+        <Button w="full" onClick={() => fetchNext()} isLoading={isLoadingMore.current}>
           {t('Load more')}
         </Button>
       )}

@@ -17,13 +17,7 @@ export const CopyText = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <Tooltip label={copy ? 'copied' : 'copy'}>
-      <Box
-        as="span"
-        color="primary.500"
-        textDecoration="underline"
-        onClick={handleCopy}
-        _hover={{ cursor: 'pointer' }}
-      >
+      <Box as="span" color="primary.500" textDecoration="underline" onClick={handleCopy} _hover={{ cursor: 'pointer' }}>
         {children}
       </Box>
     </Tooltip>

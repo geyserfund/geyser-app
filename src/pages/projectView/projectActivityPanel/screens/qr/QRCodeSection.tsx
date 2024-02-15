@@ -4,17 +4,9 @@ import { useTranslation } from 'react-i18next'
 
 import Loader from '../../../../../components/ui/Loader'
 import { UseFundingFlowReturn } from '../../../../../hooks'
-import {
-  FundingStatus,
-  InvoiceStatus,
-} from '../../../../../types/generated/graphql'
+import { FundingStatus, InvoiceStatus } from '../../../../../types/generated/graphql'
 import { getBip21Invoice } from '../../../../../utils/lightning/bip21'
-import {
-  FundingErrorView,
-  GeneratingInvoice,
-  InvoiceErrorView,
-  QRCodeImage,
-} from './components'
+import { FundingErrorView, GeneratingInvoice, InvoiceErrorView, QRCodeImage } from './components'
 
 type Props = {
   fundingFlow: UseFundingFlowReturn
@@ -43,9 +35,7 @@ export const QRCodeSection = ({ fundingFlow }: Props) => {
   const [lightningInvoice, setLightningInvoice] = useState<string>('')
   const [onchainAddress, setOnchainAddress] = useState<string>('')
 
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethods>(
-    PaymentMethods.LIGHTNING,
-  )
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethods>(PaymentMethods.LIGHTNING)
 
   const {
     fundingTx,
@@ -69,10 +59,7 @@ export const QRCodeSection = ({ fundingFlow }: Props) => {
       return QRDisplayState.FUNDING_CANCELED
     }
 
-    if (
-      fundingTx.invoiceStatus === InvoiceStatus.Canceled ||
-      invoiceRefreshErrored
-    ) {
+    if (fundingTx.invoiceStatus === InvoiceStatus.Canceled || invoiceRefreshErrored) {
       return QRDisplayState.INVOICE_CANCELLED
     }
 
@@ -105,12 +92,7 @@ export const QRCodeSection = ({ fundingFlow }: Props) => {
     // setFallbackAddress(getBip21Invoice(amount, address, paymentRequest))
     setOnchainAddress(getBip21Invoice(amount, address))
     setLightningInvoice(paymentRequest || '')
-  }, [
-    fundingTx,
-    fundingTx.paymentRequest,
-    fundingTx.address,
-    refreshFundingInvoice,
-  ])
+  }, [fundingTx, fundingTx.paymentRequest, fundingTx.address, refreshFundingInvoice])
 
   switch (qrDisplayState) {
     case QRDisplayState.AWAITING_PAYMENT:

@@ -34,12 +34,7 @@ export const ProjectRowLayout = ({
           {title}
         </H3>
         {onSeeAllClick && (
-          <ButtonComponent
-            size="sm"
-            noBorder
-            rightIcon={<ChevronRightIcon fontSize="25px" />}
-            onClick={onSeeAllClick}
-          >
+          <ButtonComponent size="sm" noBorder rightIcon={<ChevronRightIcon fontSize="25px" />} onClick={onSeeAllClick}>
             {seeAllText || t('See all')}
           </ButtonComponent>
         )}

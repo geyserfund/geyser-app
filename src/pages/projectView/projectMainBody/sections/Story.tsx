@@ -26,9 +26,7 @@ export const Story = () => {
             isProjectOwner ? (
               <IconButton
                 aria-label="go to edit story"
-                onClick={() =>
-                  project && navigate(getPath('dashboardStory', project.name))
-                }
+                onClick={() => project && navigate(getPath('dashboardStory', project.name))}
                 variant="transparent"
               >
                 <BiPencil />

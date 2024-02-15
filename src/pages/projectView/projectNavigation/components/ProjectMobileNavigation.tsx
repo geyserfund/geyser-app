@@ -9,52 +9,27 @@ import { isActive, useMobileMode } from '../../../../utils'
 import { ProjectBackButton } from './ProjectBackButton'
 
 export const ProjectMobileNavigation = () => {
-  const {
-    mobileView,
-    project,
-    setMobileView,
-    isProjectOwner,
-    onCreatorModalOpen,
-  } = useProjectContext()
+  const { mobileView, project, setMobileView, isProjectOwner, onCreatorModalOpen } = useProjectContext()
 
   const { t } = useTranslation()
   const isMobile = useMobileMode()
 
-  if (
-    !project ||
-    (isMobile && mobileView && mobileView !== MobileViews.description)
-  ) {
+  if (!project || (isMobile && mobileView && mobileView !== MobileViews.description)) {
     return null
   }
 
   const isFundingDisabled = !isActive(project.status)
 
   return (
-    <HStack
-      padding={3}
-      bg="neutral.0"
-      borderBottom="2px solid"
-      borderColor="neutral.200"
-    >
+    <HStack padding={3} bg="neutral.0" borderBottom="2px solid" borderColor="neutral.200">
       <ProjectBackButton flexGrow={isProjectOwner ? 1 : 0} />
 
       {isProjectOwner ? (
         <>
-          <Button
-            as={Link}
-            to={getPath('projectDashboard', project.name)}
-            flexGrow={1}
-            size="sm"
-            variant="secondary"
-          >
+          <Button as={Link} to={getPath('projectDashboard', project.name)} flexGrow={1} size="sm" variant="secondary">
             {t('Dashboard')}
           </Button>
-          <Button
-            flexGrow={1}
-            size="sm"
-            variant="primary"
-            onClick={() => onCreatorModalOpen()}
-          >
+          <Button flexGrow={1} size="sm" variant="primary" onClick={() => onCreatorModalOpen()}>
             {t('Add')}
           </Button>
         </>

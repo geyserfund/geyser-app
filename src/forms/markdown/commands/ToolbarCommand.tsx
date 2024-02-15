@@ -13,18 +13,8 @@ export interface ToolbarCommandProps {
   isDisabled?: boolean
 }
 
-export const ToolbarCommand = ({
-  name,
-  cmd,
-  label,
-  Icon,
-  isDisabled,
-}: ToolbarCommandProps) => {
-  const {
-    runCommand,
-    isActive,
-    isDisabled: hasBeenDisabled,
-  } = useToolbarCommand(name, cmd)
+export const ToolbarCommand = ({ name, cmd, label, Icon, isDisabled }: ToolbarCommandProps) => {
+  const { runCommand, isActive, isDisabled: hasBeenDisabled } = useToolbarCommand(name, cmd)
 
   return (
     <ToolbarCommandButton

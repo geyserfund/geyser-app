@@ -6,11 +6,7 @@ import { CardLayout } from '../../../../components/layouts'
 import { getPath } from '../../../../constants'
 import { ProjectFragment } from '../../../../types'
 
-export const LaunchProjectNotice = ({
-  project,
-}: {
-  project: ProjectFragment
-}) => {
+export const LaunchProjectNotice = ({ project }: { project: ProjectFragment }) => {
   const { t } = useTranslation()
   const hasWallet = project.wallets.length > 0
   const navigate = useNavigate()

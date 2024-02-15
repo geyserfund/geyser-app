@@ -1,11 +1,4 @@
-import {
-  Button,
-  IconButton,
-  Link,
-  useDisclosure,
-  VStack,
-  Wrap,
-} from '@chakra-ui/react'
+import { Button, IconButton, Link, useDisclosure, VStack, Wrap } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { FaGithub, FaPodcast, FaTelegramPlane } from 'react-icons/fa'
 import { RiTwitterXLine } from 'react-icons/ri'
@@ -32,13 +25,7 @@ export const FilterFooter = () => {
 
   return (
     <VStack width="100%" alignItems="start" color="neutral.500">
-      <Button
-        variant="primaryNeutral"
-        color="neutral.600"
-        size="sm"
-        width="100%"
-        onClick={onOpen}
-      >
+      <Button variant="primaryNeutral" color="neutral.600" size="sm" width="100%" onClick={onOpen}>
         {t('Subscribe')}
       </Button>
       <Wrap>
@@ -50,17 +37,11 @@ export const FilterFooter = () => {
           <Caption bold>{t('Learn')}</Caption>
         </Link>
 
-        <ReactLink
-          to={getPath('legalTerms')}
-          style={{ textDecoration: 'underline' }}
-        >
+        <ReactLink to={getPath('legalTerms')} style={{ textDecoration: 'underline' }}>
           <Caption bold>T&amp;C</Caption>
         </ReactLink>
 
-        <ReactLink
-          to={getPath('legalPrivacy')}
-          style={{ textDecoration: 'underline' }}
-        >
+        <ReactLink to={getPath('legalPrivacy')} style={{ textDecoration: 'underline' }}>
           <Caption bold>{t('Privacy')}</Caption>
         </ReactLink>
 

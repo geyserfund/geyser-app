@@ -4,11 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { BoltIcon } from '../../../../components/icons'
 import { Body1 } from '../../../../components/typography'
-import {
-  nostrColorsLight,
-  primaryColorsLight,
-  secondaryColors,
-} from '../../../../styles'
+import { nostrColorsLight, primaryColorsLight, secondaryColors } from '../../../../styles'
 import { copyTextToClipboard } from '../../../../utils'
 
 interface ILightningQR extends ButtonProps {
@@ -21,7 +17,7 @@ export const GEYSER_DOMAIN_POSTFIX = '@geyser.fund'
 export const LightningAddress = ({ name, isGeyser, ...rest }: ILightningQR) => {
   const { t } = useTranslation()
   const [copy, setCopy] = useState(false)
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const handleAddressCopy = () => {
     let toCopy = name
@@ -33,18 +29,14 @@ export const LightningAddress = ({ name, isGeyser, ...rest }: ILightningQR) => {
     setCopy(true)
     setTimeout(() => {
       setCopy(false)
-      onClose();
+      onClose()
     }, 2000)
   }
 
   return (
     <>
       <Tooltip
-        label={
-          copy
-            ? t('Copied!')
-            : t('Copy Lightning Address / Nostr identifier (NIP-05)')
-        }
+        label={copy ? t('Copied!') : t('Copy Lightning Address / Nostr identifier (NIP-05)')}
         placement="top"
         closeOnClick={false}
         isOpen={isOpen}

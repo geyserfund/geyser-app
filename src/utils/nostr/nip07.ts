@@ -19,10 +19,7 @@ export const getPubkey = async () => {
 }
 
 // Deprecate in favour of signEvent
-export const signEventToBeDeprecated = async (event: {
-  [x: string]: unknown
-  content: string
-}) => {
+export const signEventToBeDeprecated = async (event: { [x: string]: unknown; content: string }) => {
   if (window.nostr) {
     try {
       const { sig } = await window.nostr.signEvent(event)
@@ -33,10 +30,7 @@ export const signEventToBeDeprecated = async (event: {
   throw new Error('No nostr extension available')
 }
 
-export const signEvent = async (event: {
-  [x: string]: unknown
-  content: string
-}) => {
+export const signEvent = async (event: { [x: string]: unknown; content: string }) => {
   if (window.nostr) {
     try {
       const signedEvent = await window.nostr.signEvent(event)

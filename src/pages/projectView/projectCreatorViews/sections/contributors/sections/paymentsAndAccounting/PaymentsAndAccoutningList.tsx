@@ -79,33 +79,15 @@ export const PaymentsAndAccoutningList = () => {
   if (isLoading) return <PaymentsAndAccoutningListSkeleton />
 
   return (
-    <VStack
-      width="100%"
-      flexGrow={1}
-      pt={'10px'}
-      spacing="10px"
-      alignItems="center"
-    >
+    <VStack width="100%" flexGrow={1} pt={'10px'} spacing="10px" alignItems="center">
       {ordersData.length === 0 ? (
-        <EmptyContainer
-          image={ProjectNoTransactionImageUrl}
-          text={t('No payments received yet')}
-        />
+        <EmptyContainer image={ProjectNoTransactionImageUrl} text={t('No payments received yet')} />
       ) : (
-        <PaymentsAndAccountingTable
-          data={ordersData}
-          setOrderBy={setOrderBy}
-          orderBy={orderBy}
-        />
+        <PaymentsAndAccountingTable data={ordersData} setOrderBy={setOrderBy} orderBy={orderBy} />
       )}
       {!noMoreItems.current && (
         <HStack w="full" px={standardPadding}>
-          <Button
-            width="100%"
-            variant="secondary"
-            isLoading={isLoadingMore.current}
-            onClick={() => fetchNext()}
-          >
+          <Button width="100%" variant="secondary" isLoading={isLoadingMore.current} onClick={() => fetchNext()}>
             {t('Show more')}...
           </Button>
         </HStack>

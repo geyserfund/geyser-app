@@ -1,9 +1,6 @@
 import { gql } from '@apollo/client'
 
-import {
-  FRAGMENT_EMAIL_UPDATE_USER,
-  FRAGMENT_OTP_RESPONSE,
-} from '../fragments/email'
+import { FRAGMENT_EMAIL_UPDATE_USER, FRAGMENT_OTP_RESPONSE } from '../fragments/email'
 
 export const MUTATION_SEND_OTP_BY_EMAIL = gql`
   ${FRAGMENT_OTP_RESPONSE}

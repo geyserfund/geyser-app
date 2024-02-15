@@ -40,7 +40,7 @@ export const projectSections: Record<string, DashboardSection> = {
   },
   rewards: {
     label: 'Rewards',
-    path: 'dashboardRewards'
+    path: 'dashboardRewards',
   },
   wallet: {
     label: 'Connect wallet',
@@ -65,9 +65,7 @@ export const ProjectDashboard = () => {
 
   const { project } = useProjectContext({ ownerAccessOnly: true })
 
-  const match = useMatch(
-    `${getPath('projectDashboard', project?.name)}/:section`,
-  )
+  const match = useMatch(`${getPath('projectDashboard', project?.name)}/:section`)
 
   const activeSectionKey = match?.params.section || 'description'
   const activeSection = sections[activeSectionKey]
@@ -91,11 +89,7 @@ export const ProjectDashboard = () => {
           onClick={() => setDrawerOpen(true)}
           top={dimensions.topNavBar.desktop.height + 'px'}
           rightAction={
-            <IconButton
-              aria-label="open dashboard menu"
-              variant="transparent"
-              justifyContent="end"
-            >
+            <IconButton aria-label="open dashboard menu" variant="transparent" justifyContent="end">
               <ChevronRightIcon fontSize="1.7em" />
             </IconButton>
           }
@@ -110,11 +104,7 @@ export const ProjectDashboard = () => {
   )
 
   return (
-    <HStack
-      alignItems="stretch"
-      flexGrow={1}
-      minHeight={`calc(100vh - ${dimensions.topNavBar.mobile.height}px)`}
-    >
+    <HStack alignItems="stretch" flexGrow={1} minHeight={`calc(100vh - ${dimensions.topNavBar.mobile.height}px)`}>
       <DashboardNavigation
         project={project}
         setDrawerOpen={setDrawerOpen}
@@ -137,11 +127,7 @@ export const ProjectDashboard = () => {
           }}
           maxWidth={{
             base: '100%',
-            lg: activeSection?.fullWidth
-              ? '100%'
-              : activeSection?.semiFullWidth
-              ? '4xl'
-              : '3xl',
+            lg: activeSection?.fullWidth ? '100%' : activeSection?.semiFullWidth ? '4xl' : '3xl',
           }}
           justifyItems="center"
         >

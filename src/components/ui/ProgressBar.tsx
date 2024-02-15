@@ -5,18 +5,7 @@ interface IProgressBar extends BoxProps {
 }
 
 export const ProgressBar = ({ value, ...rest }: IProgressBar) => (
-  <Box
-    display="flex"
-    borderRadius="3px"
-    height="4px"
-    backgroundColor="neutral.300"
-    {...rest}
-  >
-    <Box
-      height={'100%'}
-      borderRadius="3px"
-      width={`${value}%`}
-      backgroundColor="primary.600"
-    ></Box>
+  <Box display="flex" borderRadius="3px" height="4px" backgroundColor="neutral.300" {...rest}>
+    <Box height={'100%'} borderRadius="3px" width={`${value}%`} backgroundColor="primary.600"></Box>
   </Box>
 )

@@ -10,11 +10,7 @@ import {
 import { SlLocationPin } from 'react-icons/sl'
 
 import { Body1 } from '../../../../components/typography'
-import {
-  Country,
-  ProjectCountriesGetResult,
-  ProjectRegionsGetResult,
-} from '../../../../types'
+import { Country, ProjectCountriesGetResult, ProjectRegionsGetResult } from '../../../../types'
 import { RegionFilterBody } from './RegionFilterBody'
 
 interface MobileRegionFilterProps extends AccordionItemProps {
@@ -24,13 +20,7 @@ interface MobileRegionFilterProps extends AccordionItemProps {
   options: Country[]
 }
 
-export const MobileRegionFilter = ({
-  label,
-  regions,
-  countries,
-  options,
-  ...rest
-}: MobileRegionFilterProps) => {
+export const MobileRegionFilter = ({ label, regions, countries, options, ...rest }: MobileRegionFilterProps) => {
   return (
     <AccordionItem {...rest}>
       <AccordionButton paddingY="15px">
@@ -42,12 +32,7 @@ export const MobileRegionFilter = ({
         </HStack>
         <AccordionIcon />
       </AccordionButton>
-      <AccordionPanel
-        as={VStack}
-        overflow="hidden"
-        paddingX="0px"
-        maxHeight="400px"
-      >
+      <AccordionPanel as={VStack} overflow="hidden" paddingX="0px" maxHeight="400px">
         <RegionFilterBody {...{ regions, countries, options, onClose() {} }} />
       </AccordionPanel>
     </AccordionItem>

@@ -17,10 +17,7 @@ import { BsExclamation, BsQuestion } from 'react-icons/bs'
 
 import { DescriptionLinkWithIconComponent } from '../../../components/molecules'
 import { ButtonComponent, TextArea, TextInputBox } from '../../../components/ui'
-import {
-  VoltageNodeConnectionDemoURL,
-  WalletCreationFindOutMoreUrl,
-} from '../../../constants'
+import { VoltageNodeConnectionDemoURL, WalletCreationFindOutMoreUrl } from '../../../constants'
 import { ProjectNodeValidations } from '../../../constants/validations'
 import { useMobileMode } from '../../../utils'
 import { checkMacaroonPermissions } from '../../../utils/validations/checkMacaroonPermissions'
@@ -45,12 +42,7 @@ export const defaultNode = {
   grpc: '',
 }
 
-export const NodeAdditionModal = ({
-  isOpen,
-  onClose,
-  nodeInput,
-  onSubmit,
-}: Props) => {
+export const NodeAdditionModal = ({ isOpen, onClose, nodeInput, onSubmit }: Props) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
 
@@ -69,9 +61,7 @@ export const NodeAdditionModal = ({
     }
   }, [nodeInput])
 
-  const handleTextChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormError({})
 
     const { name, value } = event.target
@@ -79,9 +69,7 @@ export const NodeAdditionModal = ({
     setForm({ ...form, [name]: value })
   }
 
-  const handleVoltageNodeToggled = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleVoltageNodeToggled = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormError({})
 
     const isVoltageNode = event.target.checked
@@ -107,9 +95,9 @@ export const NodeAdditionModal = ({
       errors.name = 'Node name' + additionalText
       isValid = false
     } else if (form.name.length > ProjectNodeValidations.nodeName.maxLength) {
-      errors.name = `${t('Node name cannot be longer than')} ${
-        ProjectNodeValidations.nodeName.maxLength
-      } ${t('characters')}.`
+      errors.name = `${t('Node name cannot be longer than')} ${ProjectNodeValidations.nodeName.maxLength} ${t(
+        'characters',
+      )}.`
       isValid = false
     }
 
@@ -127,12 +115,10 @@ export const NodeAdditionModal = ({
     if (!form.publicKey) {
       errors.publicKey = 'Public Key' + additionalText
       isValid = false
-    } else if (
-      form.publicKey.length !== ProjectNodeValidations.publicKey.length
-    ) {
-      errors.publicKey = `${t('Public Key must be')} ${
-        ProjectNodeValidations.publicKey.length
-      } ${t('characters long')}.`
+    } else if (form.publicKey.length !== ProjectNodeValidations.publicKey.length) {
+      errors.publicKey = `${t('Public Key must be')} ${ProjectNodeValidations.publicKey.length} ${t(
+        'characters long',
+      )}.`
       isValid = false
     } else {
       const val = isSecp256k1Compressed(form.publicKey)
@@ -145,15 +131,10 @@ export const NodeAdditionModal = ({
     if (!form.invoiceMacaroon) {
       errors.invoiceMacaroon = 'Invoice Macaroon' + additionalText
       isValid = false
-    } else if (
-      form.invoiceMacaroon.length >
-      ProjectNodeValidations.invoiceMacaroon.maxLength
-    ) {
-      errors.invoiceMacaroon = `${t(
-        'Invoice Macaroon cannot be longer than',
-      )} ${ProjectNodeValidations.invoiceMacaroon.maxLength} ${t(
-        'characters',
-      )}.`
+    } else if (form.invoiceMacaroon.length > ProjectNodeValidations.invoiceMacaroon.maxLength) {
+      errors.invoiceMacaroon = `${t('Invoice Macaroon cannot be longer than')} ${
+        ProjectNodeValidations.invoiceMacaroon.maxLength
+      } ${t('characters')}.`
       isValid = false
     } else {
       const val = checkMacaroonPermissions(form.invoiceMacaroon)
@@ -183,12 +164,7 @@ export const NodeAdditionModal = ({
   }
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      size={isMobile ? 'sm' : 'md'}
-      isCentered
-    >
+    <Modal isOpen={isOpen} onClose={onClose} size={isMobile ? 'sm' : 'md'} isCentered>
       <ModalOverlay />
 
       <ModalContent
@@ -206,29 +182,19 @@ export const NodeAdditionModal = ({
             </Text>
 
             <Text fontSize={'14px'} fontWeight="medium" color="neutral.600">
-              {t(
-                'We currently support LND and clearnet nodes. So Tor nodes will not work at this time.',
-              )}
+              {t('We currently support LND and clearnet nodes. So Tor nodes will not work at this time.')}
             </Text>
             <DescriptionLinkWithIconComponent
               title={
                 <>
-                  {t(
-                    'Keep in mind that you are responsible for managing the liquidity of your node.',
-                  )}{' '}
+                  {t('Keep in mind that you are responsible for managing the liquidity of your node.')}{' '}
                   <Link href={WalletCreationFindOutMoreUrl} target="_blank">
                     {t('Find out more')}
                   </Link>
                   .
                 </>
               }
-              icon={
-                <Avatar
-                  bgColor="neutral.300"
-                  color="neutral.900"
-                  icon={<BsExclamation fontSize="36px" />}
-                />
-              }
+              icon={<Avatar bgColor="neutral.300" color="neutral.900" icon={<BsExclamation fontSize="36px" />} />}
             />
           </VStack>
         </ModalHeader>
@@ -247,21 +213,11 @@ export const NodeAdditionModal = ({
           >
             <VStack width="100%" alignItems="flex-start">
               <Text>{t('Node Name')}</Text>
-              <TextInputBox
-                name="name"
-                onChange={handleTextChange}
-                value={form.name}
-                error={formError.name}
-              />
+              <TextInputBox name="name" onChange={handleTextChange} value={form.name} error={formError.name} />
             </VStack>
 
             <VStack width="100%" alignItems="flex-start">
-              <Checkbox
-                size="lg"
-                colorScheme="green"
-                isChecked={isVoltage}
-                onChange={handleVoltageNodeToggled}
-              >
+              <Checkbox size="lg" colorScheme="green" isChecked={isVoltage} onChange={handleVoltageNodeToggled}>
                 <Text>{t('This is a Voltage Node')}</Text>
               </Checkbox>
 
@@ -269,21 +225,13 @@ export const NodeAdditionModal = ({
                 <DescriptionLinkWithIconComponent
                   title={t('Find our demo here on how to load a Voltage node.')}
                   link={VoltageNodeConnectionDemoURL}
-                  icon={
-                    <Avatar
-                      bgColor="neutral.300"
-                      color="neutral.900"
-                      icon={<BsQuestion fontSize="36px" />}
-                    />
-                  }
+                  icon={<Avatar bgColor="neutral.300" color="neutral.900" icon={<BsQuestion fontSize="36px" />} />}
                 />
               ) : null}
             </VStack>
 
             <VStack width="100%" alignItems="flex-start">
-              <Text>{`${t('Hostname or IP address')} (${t(
-                'API endpoint',
-              )})`}</Text>
+              <Text>{`${t('Hostname or IP address')} (${t('API endpoint')})`}</Text>
 
               <TextInputBox
                 name="hostname"

@@ -11,11 +11,7 @@ import { FundingStatWithFollow } from '../../components/FundingStatWithFollow'
 import { FeaturedCardSkeleton } from './FeaturedSkeleton'
 import { ProjectRowLayout } from './ProjectRowLayout'
 
-export const FeaturedProjectCard = ({
-  projectName,
-}: {
-  projectName: string
-}) => {
+export const FeaturedProjectCard = ({ projectName }: { projectName: string }) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { data, loading } = useFeaturedProjectForLandingPageQuery({
@@ -53,12 +49,7 @@ export const FeaturedProjectCard = ({
           borderBottomRightRadius="8px"
           overflow="hidden"
         >
-          <ImageWithReload
-            height="full"
-            width="full"
-            src={`${project.thumbnailImage}`}
-            objectFit="cover"
-          />
+          <ImageWithReload height="full" width="full" src={`${project.thumbnailImage}`} objectFit="cover" />
         </Box>
         <VStack
           width={{ base: '100%', sm: '45%' }}

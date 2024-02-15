@@ -1,10 +1,7 @@
 import { HStack } from '@chakra-ui/react'
 import { BsArrowDown, BsArrowUp } from 'react-icons/bs'
 
-import {
-  CardLayout,
-  CardLayoutProps,
-} from '../../../../../../components/layouts'
+import { CardLayout, CardLayoutProps } from '../../../../../../components/layouts'
 import { Body1, Body2, H2 } from '../../../../../../components/typography'
 import { commaFormatted, useCustomTheme } from '../../../../../../utils'
 
@@ -15,40 +12,20 @@ interface StatsBlockProps extends CardLayoutProps {
   isPercent?: boolean
 }
 
-export const StatsBlock = ({
-  title,
-  value,
-  prevValue,
-  isPercent,
-  ...rest
-}: StatsBlockProps) => {
+export const StatsBlock = ({ title, value, prevValue, isPercent, ...rest }: StatsBlockProps) => {
   const { colors } = useCustomTheme()
 
-  const isHigher =
-    prevValue && value > prevValue
-      ? Math.round(((value - prevValue) / prevValue) * 100)
-      : 0
+  const isHigher = prevValue && value > prevValue ? Math.round(((value - prevValue) / prevValue) * 100) : 0
 
-  const isLower =
-    prevValue && value < prevValue
-      ? Math.round(((prevValue - value) / prevValue) * 100)
-      : 0
+  const isLower = prevValue && value < prevValue ? Math.round(((prevValue - value) / prevValue) * 100) : 0
 
   return (
     <CardLayout h="auto" padding="10px 20px" minWidth="150px" {...rest}>
       <Body1 color="neutral.900" xBold>
         {title}
       </Body1>
-      <HStack
-        w="full"
-        justifyContent="start"
-        spacing="0"
-        alignItems="end"
-        flexWrap="wrap"
-      >
-        <H2>
-          {isPercent ? `${commaFormatted(value)}%` : commaFormatted(value)}
-        </H2>
+      <HStack w="full" justifyContent="start" spacing="0" alignItems="end" flexWrap="wrap">
+        <H2>{isPercent ? `${commaFormatted(value)}%` : commaFormatted(value)}</H2>
         <HStack spacing="0">
           {isHigher > 0 && (
             <>
