@@ -151,6 +151,7 @@ export const RewardsTable = () => {
                   borderBottom: `1px solid ${
                     colorMode === 'light' ? neutralColorsLight[100] : neutralColorsLight[900]
                   }`,
+                  opacity: row.isHidden ? 0.5 : 1
                 }}
               >
                 <td style={{ paddingTop: '10px', verticalAlign: 'top' }}>
