@@ -16,11 +16,7 @@ export const ProjectExitConfirmModal = ({
   return (
     <Modal {...rest} title={t('Exit the creation flow')}>
       <VStack w="full" spacing="40px">
-        <Body1>
-          {t(
-            'The project will be saved as a Draft and you can access it in your Profile page.',
-          )}
-        </Body1>
+        <Body1>{t('The project will be saved as a Draft and you can access it in your Profile page.')}</Body1>
 
         <Button w="full" variant="primary" onClick={onConfirm}>
           {t('Save as draft')}

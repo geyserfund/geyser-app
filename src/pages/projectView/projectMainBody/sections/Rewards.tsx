@@ -1,21 +1,14 @@
-import { GridItem, Text, SimpleGrid, useBreakpoint } from '@chakra-ui/react'
+import { GridItem, SimpleGrid, Text, useBreakpoint } from '@chakra-ui/react'
 import { forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
-import {
-  RewardCard,
-} from '../../../../components/molecules'
+import { RewardCard } from '../../../../components/molecules'
 import { TitleDivider } from '../../../../components/ui/TitleDivider'
 import { ID } from '../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
-import {
-  isActive,
-  toInt,
-  useMobileMode,
-  useNotification
-} from '../../../../utils'
+import { isActive, toInt, useMobileMode, useNotification } from '../../../../utils'
 import { truthyFilter } from '../../../../utils/array'
 
 export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
@@ -23,7 +16,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   const isMobile = useMobileMode()
   const location = useLocation()
   const breakpoint = useBreakpoint({ ssr: false })
-  const largeView = ['xl','2xl'].includes(breakpoint);
+  const largeView = ['xl', '2xl'].includes(breakpoint)
   const { toast } = useNotification()
 
   const {
@@ -35,7 +28,8 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   if (!project || !isActive || project.rewards.length == 0) {
     return null
   }
-  const activeProjectRewards = project.rewards.filter(reward => reward.isHidden == false);
+
+  const activeProjectRewards = project.rewards.filter((reward) => reward.isHidden == false)
 
   const renderRewards = () => {
     if (activeProjectRewards.length > 0) {
@@ -43,25 +37,26 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
         const count = (fundFormState.rewardsByIDAndCount && fundFormState.rewardsByIDAndCount[`${reward.id}`]) || 0
         return (
           <RewardCard
-              key={reward.id}
-              width="100%"
-              reward={reward}
-              count={count}
-              onRewardClick={() => {
-                const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : 100;
-                if(rewardStockRemaining > count) {
-                  updateReward({ id: toInt(reward.id), count: count + 1 })
-                } else {
-                  toast({
-                    title: 'Reward Limit',
-                    description: `Maximum number of ${rewardStockRemaining} rewards are available`,
-                    status: 'error',
-                  })
-                }
-                setMobileView(MobileViews.funding)
-                setFundingFormState('step', 'contribution')
-              }}
-            />
+            key={reward.id}
+            width="100%"
+            reward={reward}
+            count={count}
+            onRewardClick={() => {
+              const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : null
+              if (rewardStockRemaining !== null && rewardStockRemaining > count) {
+                updateReward({ id: toInt(reward.id), count: count + 1 })
+              } else if (rewardStockRemaining !== null) {
+                toast({
+                  title: 'Reward Limit',
+                  description: `Maximum number of ${rewardStockRemaining} rewards are available`,
+                  status: 'error',
+                })
+              }
+
+              setMobileView(MobileViews.funding)
+              setFundingFormState('step', 'contribution')
+            }}
+          />
         )
       })
     }
@@ -90,14 +85,11 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
         spacing="25px"
         mobileDense
       >
-        <TitleDivider
-          badge={activeProjectRewards.length}
-          isFixed={isRewardTitleFixed}
-        >
+        <TitleDivider badge={activeProjectRewards.length} isFixed={isRewardTitleFixed}>
           {t('Rewards')}
         </TitleDivider>
 
-        <SimpleGrid columns={largeView ? 2 : 1} spacing={3} width={"100%"}>
+        <SimpleGrid columns={largeView ? 2 : 1} spacing={3} width={'100%'}>
           {renderRewards()}
         </SimpleGrid>
       </CardLayout>

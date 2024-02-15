@@ -5,12 +5,7 @@ interface SummaryInfoLineProps extends StackProps {
   icon: React.ReactNode
 }
 
-export const SummaryInfoLine = ({
-  label,
-  icon,
-  children,
-  ...rest
-}: SummaryInfoLineProps) => {
+export const SummaryInfoLine = ({ label, icon, children, ...rest }: SummaryInfoLineProps) => {
   return (
     <HStack spacing="8px" alignItems="center" {...rest}>
       <Tooltip label={label} placement="top">

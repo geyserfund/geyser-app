@@ -24,11 +24,7 @@ export const RenderTags = ({
       let toBeRenderedTags = usedTags.slice(0, max)
 
       selectedTags.map((selectedTag) => {
-        if (
-          !toBeRenderedTags.some(
-            (toBeRenderedTag) => toBeRenderedTag.id === selectedTag.id,
-          )
-        ) {
+        if (!toBeRenderedTags.some((toBeRenderedTag) => toBeRenderedTag.id === selectedTag.id)) {
           toBeRenderedTags = [selectedTag, ...toBeRenderedTags]
         }
       })

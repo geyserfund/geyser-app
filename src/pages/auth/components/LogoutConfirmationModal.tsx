@@ -13,11 +13,7 @@ export const LogoutConfirmationModal = ({ ...modalProps }: UseModalProps) => {
   }
 
   return (
-    <Modal
-      {...modalProps}
-      title={<Text variant="h3">{t('About to logout')}</Text>}
-      isOpen={modalProps.isOpen}
-    >
+    <Modal {...modalProps} title={<Text variant="h3">{t('About to logout')}</Text>} isOpen={modalProps.isOpen}>
       <VStack w="100%" spacing={6} pt={1}>
         <Text>{t('You are about to logout of your account')}</Text>
         <Button

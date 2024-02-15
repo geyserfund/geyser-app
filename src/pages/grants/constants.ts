@@ -1,7 +1,4 @@
-import {
-  Grant3AnnouncementImageUrl,
-  Grant3AnnouncementTwitterUrl,
-} from '../../constants'
+import { Grant3AnnouncementImageUrl, Grant3AnnouncementTwitterUrl } from '../../constants'
 import { GrantStatusEnum } from '../../types'
 
 export const CONTRIBUTION_ADDRESS = 'grants@geyser.fund'

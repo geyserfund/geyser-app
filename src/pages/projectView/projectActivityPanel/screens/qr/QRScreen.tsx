@@ -8,16 +8,9 @@ import { SectionTitle } from '../../../../../components/ui'
 import { fundingStages, GeyserTelegramUrl } from '../../../../../constants'
 import { useFundCalc } from '../../../../../helpers'
 import { IFundForm, UseFundingFlowReturn } from '../../../../../hooks'
-import {
-  ProjectFragment,
-  Satoshis,
-  useFundingInvoiceCancelMutation,
-} from '../../../../../types'
+import { ProjectFragment, Satoshis, useFundingInvoiceCancelMutation } from '../../../../../types'
 import { useMobileMode } from '../../../../../utils'
-import {
-  ContributionInfoBox,
-  ContributionInfoBoxVersion,
-} from '../../../projectMainBody/components'
+import { ContributionInfoBox, ContributionInfoBoxVersion } from '../../../projectMainBody/components'
 import { QRCodeSection } from './QRCodeSection'
 
 type Props = {
@@ -27,12 +20,7 @@ type Props = {
   project: ProjectFragment
 }
 
-export const QRScreen = ({
-  fundingFlow,
-  state,
-  project,
-  handleCloseButton,
-}: Props) => {
+export const QRScreen = ({ fundingFlow, state, project, handleCloseButton }: Props) => {
   const { t } = useTranslation()
   const { getTotalAmount } = useFundCalc(state)
   const isMobile = useMobileMode()

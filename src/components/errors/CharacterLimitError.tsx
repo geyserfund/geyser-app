@@ -6,19 +6,9 @@ interface CharacterLimitErrorProps extends StackProps {
   message?: string
 }
 
-export const CharacterLimitError = ({
-  message,
-  length,
-  limit,
-  ...rest
-}: CharacterLimitErrorProps) => {
+export const CharacterLimitError = ({ message, length, limit, ...rest }: CharacterLimitErrorProps) => {
   return (
-    <HStack
-      width="100%"
-      justifyContent="space-between"
-      paddingTop="5px"
-      {...rest}
-    >
+    <HStack width="100%" justifyContent="space-between" paddingTop="5px" {...rest}>
       <Text fontSize="12px" color="secondary.red">
         {message || " You're over the character limit"}
       </Text>

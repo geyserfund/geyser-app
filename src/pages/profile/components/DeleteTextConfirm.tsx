@@ -58,10 +58,7 @@ export const DeleteTextConfirm = ({
               <Text wordBreak="break-word">{description}</Text>
               {textToConfirm && (
                 <Text wordBreak="break-word">
-                  <Trans
-                    i18nKey={"Type '{{textToConfirm}}' and confirm"}
-                    values={{ textToConfirm }}
-                  >
+                  <Trans i18nKey={"Type '{{textToConfirm}}' and confirm"} values={{ textToConfirm }}>
                     {"Type '{{textToConfirm}}' and confirm"}
                   </Trans>
                   {description}
@@ -72,30 +69,17 @@ export const DeleteTextConfirm = ({
             {textToConfirm && (
               <TextInputBox
                 value={confirmText}
-                onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                  setConfirmText(event.target.value)
-                }
+                onChange={(event: ChangeEvent<HTMLInputElement>) => setConfirmText(event.target.value)}
                 error={!textValid}
               />
             )}
             {confirm && (
-              <Button
-                w="full"
-                variant="danger"
-                onClick={confirm}
-                isLoading={isLoading}
-                isDisabled={!textValid}
-              >
+              <Button w="full" variant="danger" onClick={confirm} isLoading={isLoading} isDisabled={!textValid}>
                 {t('Confirm')}
               </Button>
             )}
             {close && (
-              <Button
-                w="full"
-                variant="primary"
-                onClick={close}
-                isLoading={isLoading}
-              >
+              <Button w="full" variant="primary" onClick={close} isLoading={isLoading}>
                 {t('Close')}
               </Button>
             )}

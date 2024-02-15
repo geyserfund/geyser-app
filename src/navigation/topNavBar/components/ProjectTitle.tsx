@@ -13,9 +13,7 @@ export const ProjectTitle = () => {
   const { isOpen, onClose, onOpen } = useDisclosure()
 
   const handleTitleClick = () => {
-    navigator.clipboard.writeText(
-      `${window.location.origin}${navData.projectPath}`,
-    )
+    navigator.clipboard.writeText(`${window.location.origin}${navData.projectPath}`)
     setCopied(true)
     onOpen()
     setTimeout(() => {
@@ -27,11 +25,7 @@ export const ProjectTitle = () => {
   if (!navData.projectTitle) return <Box flexGrow={1} />
 
   return (
-    <Tooltip
-      isOpen={isOpen}
-      label={copied ? t('Project link copied!') : t('Copy project link')}
-      closeOnClick={false}
-    >
+    <Tooltip isOpen={isOpen} label={copied ? t('Project link copied!') : t('Copy project link')} closeOnClick={false}>
       <HStack
         flexGrow={1}
         overflow={'hidden'}

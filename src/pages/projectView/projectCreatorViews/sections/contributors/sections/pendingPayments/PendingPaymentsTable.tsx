@@ -8,10 +8,7 @@ import { RiTwitterXLine } from 'react-icons/ri'
 
 import { NostrSvgIcon } from '../../../../../../../components/icons'
 import { Body2 } from '../../../../../../../components/typography'
-import {
-  AnonymousAvatar,
-  LinkableAvatar,
-} from '../../../../../../../components/ui'
+import { AnonymousAvatar, LinkableAvatar } from '../../../../../../../components/ui'
 import {
   ExternalAccount,
   FundingConfirmInput,
@@ -22,10 +19,7 @@ import {
 import { ExternalAccountType } from '../../../../../../auth'
 import { getUSD, OrderItems } from '../../components'
 import { AccordionListItem } from '../../components/AccordionListItem'
-import {
-  TableData,
-  TableWithAccordion,
-} from '../../components/TableWithAccordion'
+import { TableData, TableWithAccordion } from '../../components/TableWithAccordion'
 import { FundingAmountAccept } from './FundindAmountAccept'
 
 export const PendingPaymentsTable = ({
@@ -47,9 +41,7 @@ export const PendingPaymentsTable = ({
         header: t('Action'),
         key: 'action',
         render(item: FundingTxOrderFragment) {
-          return (
-            <FundingAmountAccept fundingTx={item} handleUpdate={handleUpdate} />
-          )
+          return <FundingAmountAccept fundingTx={item} handleUpdate={handleUpdate} />
         },
         isMobile: true,
         colSpan: 2,
@@ -60,13 +52,7 @@ export const PendingPaymentsTable = ({
         render(val: FundingTxOrderFragment) {
           const isFunderAnonymous = !val.funder.user?.id
           if (isFunderAnonymous) {
-            return (
-              <AnonymousAvatar
-                seed={val.id}
-                imageSize={'20px'}
-                textColor="neutral.900"
-              />
-            )
+            return <AnonymousAvatar seed={val.id} imageSize={'20px'} textColor="neutral.900" />
           }
 
           return (
@@ -176,10 +162,7 @@ export const PendingPaymentsTable = ({
               ? [
                   {
                     label: t('Donation'),
-                    value: getUSD(
-                      fundingTx.donationAmount,
-                      fundingTx.bitcoinQuote?.quote,
-                    ),
+                    value: getUSD(fundingTx.donationAmount, fundingTx.bitcoinQuote?.quote),
                   },
                 ]
               : []),
@@ -202,10 +185,7 @@ export const PendingPaymentsTable = ({
               ? [
                   {
                     label: t('Invoice total'),
-                    value: getUSD(
-                      fundingTx.amount,
-                      fundingTx.bitcoinQuote?.quote,
-                    ),
+                    value: getUSD(fundingTx.amount, fundingTx.bitcoinQuote?.quote),
                   },
                 ]
               : []),
@@ -259,9 +239,7 @@ export const PendingPaymentsTable = ({
           <HStack>
             {externalAccounts?.map((account) => {
               const values =
-                externalAccountIconAndColors[
-                  account.accountType as keyof typeof externalAccountIconAndColors
-                ]
+                externalAccountIconAndColors[account.accountType as keyof typeof externalAccountIconAndColors]
               if (!values) return null
               return (
                 <IconButton
@@ -296,11 +274,7 @@ export const PendingPaymentsTable = ({
   }
 
   return (
-    <TableWithAccordion<FundingTxOrderFragment>
-      items={data}
-      schema={tableData}
-      accordionContent={accordionContent}
-    />
+    <TableWithAccordion<FundingTxOrderFragment> items={data} schema={tableData} accordionContent={accordionContent} />
   )
 }
 
@@ -308,19 +282,16 @@ export const externalAccountIconAndColors = {
   [ExternalAccountType.facebook]: {
     icon: BsFacebook,
     color: 'social.facebook',
-    link: (account: ExternalAccount) =>
-      `https://facebook.com/${account.externalUsername}`,
+    link: (account: ExternalAccount) => `https://facebook.com/${account.externalUsername}`,
   },
   [ExternalAccountType.twitter]: {
     icon: RiTwitterXLine,
     color: 'social.twitter',
-    link: (account: ExternalAccount) =>
-      `https://twitter.com/${account.externalUsername}`,
+    link: (account: ExternalAccount) => `https://twitter.com/${account.externalUsername}`,
   },
   [ExternalAccountType.nostr]: {
     icon: NostrSvgIcon,
     color: 'social.nostr',
-    link: (account: ExternalAccount) =>
-      `https://primal.net/profile/${account.externalId}`,
+    link: (account: ExternalAccount) => `https://primal.net/profile/${account.externalId}`,
   },
 }

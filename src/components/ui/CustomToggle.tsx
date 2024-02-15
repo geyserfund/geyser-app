@@ -62,13 +62,7 @@ interface ICustomToggle {
   name?: string
 }
 
-export const CustomToggle = ({
-  first,
-  second,
-  value,
-  onChange,
-  name,
-}: ICustomToggle) => {
+export const CustomToggle = ({ first, second, value, onChange, name }: ICustomToggle) => {
   const classes = useStyles()
   const [anonymous, setAnonymous] = useState(value)
 

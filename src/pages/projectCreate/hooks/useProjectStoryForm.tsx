@@ -16,18 +16,10 @@ const schema = yup.object({
     .required('You must write a project story.'),
 })
 
-export const useProjectStoryForm = ({
-  project,
-}: {
-  project?: ProjectFragment | null
-}) => {
+export const useProjectStoryForm = ({ project }: { project?: ProjectFragment | null }) => {
   const form = useForm<{ description: string }>({
     resolver: yupResolver(schema),
-    values: useMemo(
-      () =>
-        project ? { description: project.description } : { description: '' },
-      [project],
-    ),
+    values: useMemo(() => (project ? { description: project.description } : { description: '' }), [project]),
   })
 
   return form

@@ -1,11 +1,4 @@
-import {
-  Alert,
-  AlertIcon,
-  Button,
-  Checkbox,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Alert, AlertIcon, Button, Checkbox, Text, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -36,14 +29,8 @@ export const DeleteProjectModal = ({
             )}
           </Text>
         </Alert>
-        <Checkbox
-          w="100%"
-          checked={checked}
-          onChange={() => setChecked((current) => !current)}
-        >
-          <Text variant="body2">
-            {t('Confirm that you want to delete the project')}
-          </Text>
+        <Checkbox w="100%" checked={checked} onChange={() => setChecked((current) => !current)}>
+          <Text variant="body2">{t('Confirm that you want to delete the project')}</Text>
         </Checkbox>
         <Button
           isLoading={isLoading}

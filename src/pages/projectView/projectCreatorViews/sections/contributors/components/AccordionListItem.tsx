@@ -14,11 +14,7 @@ type AccordionListItemProps = {
 
 export const AccordionListItem = ({ items }: AccordionListItemProps) => {
   return (
-    <HStack
-      w={{ base: 'full', lg: 'auto' }}
-      justifyContent="space-between"
-      spacing="10px"
-    >
+    <HStack w={{ base: 'full', lg: 'auto' }} justifyContent="space-between" spacing="10px">
       <VStack alignItems="flex-start" spacing="5px">
         {items.map((item) => {
           return (

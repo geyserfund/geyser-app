@@ -51,13 +51,7 @@ export const ProjectLinkInput = ({
         {...inputProps}
       />
       <Box paddingX="5px" backgroundColor="neutral.0" border="none">
-        <IconButtonComponent
-          noBorder
-          variant="ghost"
-          size="sm"
-          aria-label="close-icon"
-          onClick={handleClose}
-        >
+        <IconButtonComponent noBorder variant="ghost" size="sm" aria-label="close-icon" onClick={handleClose}>
           <CloseIcon />
         </IconButtonComponent>
       </Box>

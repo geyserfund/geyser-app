@@ -23,12 +23,7 @@ interface ITwitterComponent {
   [key: string]: any
 }
 
-export const TwitterComponent = ({
-  options,
-  className,
-  id,
-  ...rest
-}: ITwitterComponent) => {
+export const TwitterComponent = ({ options, className, id, ...rest }: ITwitterComponent) => {
   const classes = useStyles()
   const [twitterLoading, setTwitterLoading] = useState(true)
 

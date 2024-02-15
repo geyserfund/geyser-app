@@ -47,12 +47,7 @@ export const TableCommand = ({ isDisabled }: TableCommandProps) => {
 
   return (
     <>
-      <Popover
-        isOpen={debouncedIsOpen}
-        onClose={onClose}
-        placement={'bottom'}
-        closeOnBlur
-      >
+      <Popover isOpen={debouncedIsOpen} onClose={onClose} placement={'bottom'} closeOnBlur>
         <PopoverTrigger>
           <ToolbarCommandButton
             isDisabled={isDisabled}
@@ -65,11 +60,7 @@ export const TableCommand = ({ isDisabled }: TableCommandProps) => {
             <BsTable />
           </ToolbarCommandButton>
         </PopoverTrigger>
-        <PopoverContent
-          maxWidth="170px"
-          onMouseOver={onOpen}
-          onMouseLeave={onClose}
-        >
+        <PopoverContent maxWidth="170px" onMouseOver={onOpen} onMouseLeave={onClose}>
           <PopoverArrow />
           <PopoverBody>
             <VStack>
@@ -88,9 +79,7 @@ export const TableCommand = ({ isDisabled }: TableCommandProps) => {
                           width="20px"
                           borderRadius="4px"
                           backgroundColor={
-                            i <= currentPosition.i && j <= currentPosition.j
-                              ? 'neutral.300'
-                              : 'neutral.800'
+                            i <= currentPosition.i && j <= currentPosition.j ? 'neutral.300' : 'neutral.800'
                           }
                           transition="background-color 0.1s ease-in-out"
                         />
@@ -99,9 +88,7 @@ export const TableCommand = ({ isDisabled }: TableCommandProps) => {
                   </HStack>
                 ))}
               </VStack>
-              <MonoBody2 semiBold>{`${currentPosition.i + 1}X${
-                currentPosition.j + 1
-              }`}</MonoBody2>
+              <MonoBody2 semiBold>{`${currentPosition.i + 1}X${currentPosition.j + 1}`}</MonoBody2>
             </VStack>
           </PopoverBody>
         </PopoverContent>

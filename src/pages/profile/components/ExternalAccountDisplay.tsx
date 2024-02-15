@@ -7,10 +7,7 @@ import { ExternalAccount } from '../../../types'
 import { copyTextToClipboard, toInt, useNotification } from '../../../utils'
 import { ExternalAccountType } from '../../auth'
 import { UserProfileState } from '../type'
-import {
-  ExternalAccountBody,
-  ExternalAccountBodyProps,
-} from './ExternalAccountBody'
+import { ExternalAccountBody, ExternalAccountBodyProps } from './ExternalAccountBody'
 import { RemoveExternalAccountModal } from './RemoveExternalAccountModal'
 
 interface ExternalAccountDisplayProps extends UserProfileState {
@@ -31,21 +28,18 @@ export const ExternalAccountDisplay = ({
     copyTextToClipboard(npub)
   }
 
-  const [unlinkAccount, { loading: unlinkAccountLoading }] = useMutation(
-    MUTATION_UNLINK_ACCOUNT,
-    {
-      onError(error) {
-        toast({
-          title: 'Failed to unlink account',
-          description: `${error.message}`,
-          status: 'error',
-        })
-      },
-      onCompleted(data) {
-        setUserProfile({ ...userProfile, ...data.unlinkExternalAccount })
-      },
+  const [unlinkAccount, { loading: unlinkAccountLoading }] = useMutation(MUTATION_UNLINK_ACCOUNT, {
+    onError(error) {
+      toast({
+        title: 'Failed to unlink account',
+        description: `${error.message}`,
+        status: 'error',
+      })
     },
-  )
+    onCompleted(data) {
+      setUserProfile({ ...userProfile, ...data.unlinkExternalAccount })
+    },
+  })
 
   const handleAccountDisconnect = () => {
     unlinkAccount({ variables: { id: toInt(account.id) } })
@@ -66,8 +60,7 @@ export const ExternalAccountDisplay = ({
         props = {
           ...props,
           username: nip19.npubEncode(account.externalId),
-          handleCopy: () =>
-            handleCopyPubkey(nip19.npubEncode(account.externalId)),
+          handleCopy: () => handleCopyPubkey(nip19.npubEncode(account.externalId)),
         }
         break
       case ExternalAccountType.twitter:
@@ -82,14 +75,14 @@ export const ExternalAccountDisplay = ({
         props = {
           ...props,
           isExternal: true,
-          username: ''
+          username: '',
         }
         break
       case ExternalAccountType.lightning:
         props = {
           ...props,
           isExternal: true,
-          username: isEdit ? account.externalId : ''
+          username: isEdit ? account.externalId : '',
         }
         break
       case ExternalAccountType.facebook:

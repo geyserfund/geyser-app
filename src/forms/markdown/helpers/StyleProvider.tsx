@@ -38,12 +38,7 @@ const Container = styled(Box, {
   },
 })
 
-export const StyleProvider = ({
-  children,
-  flex,
-  display,
-  ...rest
-}: { flex?: boolean } & Omit<BoxProps, 'flex'>) => {
+export const StyleProvider = ({ children, flex, display, ...rest }: { flex?: boolean } & Omit<BoxProps, 'flex'>) => {
   const { colors } = useCustomTheme()
 
   const remirrorTheme: RemirrorThemeType = useMemo(
@@ -69,9 +64,7 @@ export const StyleProvider = ({
 
   useEffect(() => {
     try {
-      twttr.widgets.load(
-        document.getElementById(ID.project.story.markdown.container),
-      )
+      twttr.widgets.load(document.getElementById(ID.project.story.markdown.container))
     } catch (e) {
       captureException(e, {
         tags: { area: 'twitter-widgets' },
@@ -97,12 +90,11 @@ export const StyleProvider = ({
                 pt: 0,
                 m: 0,
               },
-              '& div.remirror-editor-wrapper, & div.remirror-editor, & div.remirror-theme':
-                {
-                  display: 'flex',
-                  flexDirection: 'column',
-                  flexGrow: 1,
-                },
+              '& div.remirror-editor-wrapper, & div.remirror-editor, & div.remirror-theme': {
+                display: 'flex',
+                flexDirection: 'column',
+                flexGrow: 1,
+              },
               '& div.tableWrapper': {
                 padding: '10px',
                 paddingBottom: '20px',

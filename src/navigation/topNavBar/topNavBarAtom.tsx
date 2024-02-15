@@ -17,9 +17,7 @@ const routesForHidingTopNav = entryCreationRoutes
 const routesForHidingTopNavAtom = atom(routeMatchForAtom(routesForHidingTopNav))
 
 const routesForShowingProjectButton = projectDashboardRoutes
-const routesForShowingProjectButtonAtom = atom(
-  routeMatchForAtom(routesForShowingProjectButton),
-)
+const routesForShowingProjectButtonAtom = atom(routeMatchForAtom(routesForShowingProjectButton))
 
 const routesForHidingMyProjectsButton = [
   getPath('userProfile', PathName.userId),
@@ -27,24 +25,15 @@ const routesForHidingMyProjectsButton = [
   ...entryCreationRoutes,
   ...projectDashboardRoutes,
 ]
-const routesForHidingMyProjectsButtonAtom = atom(
-  routeMatchForAtom(routesForHidingMyProjectsButton),
-)
+const routesForHidingMyProjectsButtonAtom = atom(routeMatchForAtom(routesForHidingMyProjectsButton))
 
 const routesForLeftSideMenuButtonAtom = atom(routeMatchForAtom(projectRoutes))
 
-const routesForTransparentBackground = [
-  getPath('index'),
-  getPath('landingFeed'),
-]
-const routesForTransparentBackgroundAtom = atom(
-  routeMatchForAtom(routesForTransparentBackground),
-)
+const routesForTransparentBackground = [getPath('index'), getPath('landingFeed')]
+const routesForTransparentBackgroundAtom = atom(routeMatchForAtom(routesForTransparentBackground))
 
 const routesForShowingNavItems = [`/`, getPath('landingFeed'), ...grantRoutes]
-const routesForShowingNavItemsAtom = atom(
-  routeMatchForAtom(routesForShowingNavItems),
-)
+const routesForShowingNavItemsAtom = atom(routeMatchForAtom(routesForShowingNavItems))
 
 const routesForCustomTitle = [
   ...projectRoutes,
@@ -55,14 +44,10 @@ const routesForCustomTitle = [
 const routesForCustomTitleAtom = atom(routeMatchForAtom(routesForCustomTitle))
 
 const routesToShowProjectLaunchButton = [...landingRoutes, ...grantRoutes]
-const routesToShowProjectLaunchButtonAtom = atom(
-  routeMatchForAtom(routesToShowProjectLaunchButton),
-)
+const routesToShowProjectLaunchButtonAtom = atom(routeMatchForAtom(routesToShowProjectLaunchButton))
 
 const routesForHidingDropdownMenu = entryCreationRoutes
-const routesForHidingDropdownMenuAtom = atom(
-  routeMatchForAtom(routesForHidingDropdownMenu),
-)
+const routesForHidingDropdownMenuAtom = atom(routeMatchForAtom(routesForHidingDropdownMenu))
 
 const routesToShowSignInButton = [
   ...projectRoutes,
@@ -73,9 +58,7 @@ const routesToShowSignInButton = [
   `/${PathName.userProfile}/:userId`,
   `/${PathName.entry}/:entryId`,
 ]
-const routesToShowSignInButtonAtom = atom(
-  routeMatchForAtom(routesToShowSignInButton),
-)
+const routesToShowSignInButtonAtom = atom(routeMatchForAtom(routesToShowSignInButton))
 
 const topNavBarAnimateAtom = atom((get) => {
   const profileSidebar = get(profileSideNavAtom)
@@ -94,12 +77,8 @@ export const useRouteMatchesForTopNavBar = () => {
   const showLeftSideMenuButton = useAtomValue(routesForLeftSideMenuButtonAtom)
   const showNavItems = useAtomValue(routesForShowingNavItemsAtom)
   const showCustomTitle = useAtomValue(routesForCustomTitleAtom)
-  const showProjectLaunchButton = useAtomValue(
-    routesToShowProjectLaunchButtonAtom,
-  )
-  const showTransparentBackground = useAtomValue(
-    routesForTransparentBackgroundAtom,
-  )
+  const showProjectLaunchButton = useAtomValue(routesToShowProjectLaunchButtonAtom)
+  const showTransparentBackground = useAtomValue(routesForTransparentBackgroundAtom)
   const hideDropdownMenu = useAtomValue(routesForHidingDropdownMenuAtom)
   const showSignInButton = useAtomValue(routesToShowSignInButtonAtom)
 

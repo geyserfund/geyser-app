@@ -1,10 +1,4 @@
-import {
-  Avatar,
-  AvatarProps,
-  Button,
-  ButtonProps,
-  Text,
-} from '@chakra-ui/react'
+import { Avatar, AvatarProps, Button, ButtonProps, Text } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../constants'
@@ -17,14 +11,7 @@ type Props = {
 
 export const UserAvatar = ({ user, seed, ...props }: Props) => {
   const image = user?.imageUrl || undefined
-  return (
-    <Avatar
-      p={0}
-      src={image}
-      alt={user ? `user-${user.username}-avatar` : 'anonymous-avatar'}
-      {...props}
-    />
-  )
+  return <Avatar p={0} src={image} alt={user ? `user-${user.username}-avatar` : 'anonymous-avatar'} {...props} />
 }
 
 export const UserAvatarWithLink = ({ ...props }: Props) => {
@@ -34,11 +21,7 @@ export const UserAvatarWithLink = ({ ...props }: Props) => {
       as={props.user ? Button : undefined}
       minWidth="initial"
       p={0}
-      onClick={
-        props.user
-          ? () => navigate(getPath('userProfile', props.user?.id))
-          : undefined
-      }
+      onClick={props.user ? () => navigate(getPath('userProfile', props.user?.id)) : undefined}
       {...props}
     />
   )
@@ -52,18 +35,11 @@ export const UserAvatarButton = ({
 }: Pick<Props, 'seed' | 'user'> & {
   avatarProps?: AvatarProps
 } & ButtonProps) => {
-  const avatar = (
-    <UserAvatar size="2xs" seed={seed} user={user} {...avatarProps} />
-  )
+  const avatar = <UserAvatar size="2xs" seed={seed} user={user} {...avatarProps} />
 
   if (user) {
     return (
-      <Button
-        justifyContent="start"
-        variant="ghost"
-        leftIcon={avatar}
-        {...props}
-      >
+      <Button justifyContent="start" variant="ghost" leftIcon={avatar} {...props}>
         <Text overflow="ellipsis" isTruncated>
           {user.username}
         </Text>

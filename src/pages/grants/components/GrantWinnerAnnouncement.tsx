@@ -9,33 +9,15 @@ interface GrantWinnerAnnouncementProps extends CardLayoutProps {
   linkUrl: string
 }
 
-export const GrantWinnerAnnouncement = ({
-  imageUrl,
-  linkUrl,
-  ...rest
-}: GrantWinnerAnnouncementProps) => {
+export const GrantWinnerAnnouncement = ({ imageUrl, linkUrl, ...rest }: GrantWinnerAnnouncementProps) => {
   const { t } = useTranslation()
   return (
-    <CardLayout
-      backgroundColor="neutral.0"
-      w="full"
-      alignItems="center"
-      spacing="20px"
-      {...rest}
-    >
+    <CardLayout backgroundColor="neutral.0" w="full" alignItems="center" spacing="20px" {...rest}>
       <H3>{t('See the winner announcement')}</H3>
 
       <Image maxWidth="350px" alt="grant-3-announcement-url" src={imageUrl} />
 
-      <Button
-        as={Link}
-        isExternal
-        href={linkUrl}
-        size="sm"
-        variant="secondary"
-        px="10px"
-        textDecoration="none"
-      >
+      <Button as={Link} isExternal href={linkUrl} size="sm" variant="secondary" px="10px" textDecoration="none">
         {t('Announcement')}
       </Button>
     </CardLayout>

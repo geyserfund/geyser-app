@@ -19,7 +19,7 @@ export {
   ProjectNostrSettings,
   ProjectRewardSettings,
   ProjectSettings,
-  ProjectStory,
   ProjectStatusSection,
+  ProjectStory,
   ProjectWallet,
 }

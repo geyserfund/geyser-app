@@ -5,8 +5,7 @@ import { StateManagerProps } from 'react-select/dist/declarations/src/useStateMa
 
 import { useCustomTheme } from '../../utils'
 
-export interface SelectComponentProps<T = any, S extends boolean = any>
-  extends StateManagerProps<T, S, any> {
+export interface SelectComponentProps<T = any, S extends boolean = any> extends StateManagerProps<T, S, any> {
   fullWidth?: boolean
   showIndicator?: boolean
   placeholder?: string

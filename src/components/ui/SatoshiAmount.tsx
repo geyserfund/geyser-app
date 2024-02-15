@@ -31,9 +31,7 @@ export const SatoshiAmount = ({
       ) : null}
 
       <Text variant="satoshi" {...rest}>
-        {isShortened
-          ? getShortAmountLabel(Number(children), isDecimal)
-          : numberWithCommas(`${children}`)}
+        {isShortened ? getShortAmountLabel(Number(children), isDecimal) : numberWithCommas(`${children}`)}
       </Text>
     </HStack>
   )

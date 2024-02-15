@@ -6,21 +6,9 @@ interface DescriptionLinkWithIconComponentProps {
   icon?: React.ReactNode
 }
 
-export const DescriptionLinkWithIconComponent = ({
-  title,
-  link,
-  icon,
-}: DescriptionLinkWithIconComponentProps) => {
+export const DescriptionLinkWithIconComponent = ({ title, link, icon }: DescriptionLinkWithIconComponentProps) => {
   return (
-    <HStack
-      width="100%"
-      borderRadius="4px"
-      spacing={3}
-      py={2}
-      px={3}
-      minHeight="42px"
-      backgroundColor="neutral.100"
-    >
+    <HStack width="100%" borderRadius="4px" spacing={3} py={2} px={3} minHeight="42px" backgroundColor="neutral.100">
       {icon}
       {link ? (
         <Link isExternal href={link}>

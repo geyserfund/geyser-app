@@ -8,12 +8,7 @@ interface Props {
   dividerProps?: TextProps
 }
 
-export const Countdown = ({
-  endDate,
-  sectionProps = {},
-  dividerProps = {},
-  ...props
-}: Props & BoxProps) => {
+export const Countdown = ({ endDate, sectionProps = {}, dividerProps = {}, ...props }: Props & BoxProps) => {
   const { days, hours, minutes } = useCountdown(endDate)
 
   const Divider = (

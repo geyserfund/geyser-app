@@ -5,11 +5,7 @@ import { RiTwitterXLine } from 'react-icons/ri'
 
 import { useDarkMode, useNotification } from '../../../utils'
 import { TwitterRegex } from '../../validations/twitter'
-import {
-  InsertTwitterModal,
-  MarkdownTwitter,
-  useInsertTwitterModal,
-} from '../modals/InsertTwitterModal'
+import { InsertTwitterModal, MarkdownTwitter, useInsertTwitterModal } from '../modals/InsertTwitterModal'
 import { ToolbarCommandButton } from './ToolbarCommandButton'
 
 export const TweetCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
@@ -33,14 +29,10 @@ export const TweetCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
     }
 
     try {
-      const value = await twttr.widgets.createTweet(
-        tweetId,
-        document.getElementById('tweet-container'),
-        {
-          width: '350px',
-          theme: isDarkMode ? 'dark' : 'light',
-        },
-      )
+      const value = await twttr.widgets.createTweet(tweetId, document.getElementById('tweet-container'), {
+        width: '350px',
+        theme: isDarkMode ? 'dark' : 'light',
+      })
 
       commands.insertHtml(value.innerHTML, {})
       commands.insertHardBreak()

@@ -1,10 +1,6 @@
 export type CheckKeyValueExistsType = 'any' | 'all'
 
-export const checkKeyValueExists = (
-  val: any,
-  keys: string[],
-  type: 'any' | 'all' = 'all',
-) => {
+export const checkKeyValueExists = (val: any, keys: string[], type: 'any' | 'all' = 'all') => {
   if (type === 'all') {
     let isValid = true
     keys.map((key) => {
@@ -24,13 +20,8 @@ export const checkKeyValueExists = (
   return isValid
 }
 
-export const checkDiff = <T extends {}>(
-  val1: T,
-  val2: Partial<T>,
-  keys?: (keyof Partial<T>)[],
-): boolean => {
-  const loopVal =
-    Object.keys(val1).length >= Object.keys(val2).length ? val1 : val2
+export const checkDiff = <T extends {}>(val1: T, val2: Partial<T>, keys?: (keyof Partial<T>)[]): boolean => {
+  const loopVal = Object.keys(val1).length >= Object.keys(val2).length ? val1 : val2
 
   return (keys || (Object.keys(loopVal) as (keyof T)[])).some((key) => {
     if (val1[key] && val2[key] && typeof val1[key] === 'object') {
@@ -46,8 +37,7 @@ export const getDiff = <T extends {}>(
   val2: Partial<T>,
   keys?: Partial<keyof T>[],
 ): [boolean, Partial<keyof T>[]] => {
-  const loopVal =
-    Object.keys(val1).length >= Object.keys(val2).length ? val1 : val2
+  const loopVal = Object.keys(val1).length >= Object.keys(val2).length ? val1 : val2
 
   const diffKeys =
     (keys || (Object.keys(loopVal) as (keyof T)[])).filter((key) => {

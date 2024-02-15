@@ -31,9 +31,7 @@ export const InfoScreenFeed = () => {
   }, [mobileView])
 
   const stickToTopEnable =
-    (mobileView === MobileViews.contribution ||
-      mobileView === MobileViews.leaderboard) &&
-    isMobile
+    (mobileView === MobileViews.contribution || mobileView === MobileViews.leaderboard) && isMobile
 
   const renderActivityList = useCallback(() => {
     if (!project) {
@@ -57,10 +55,7 @@ export const InfoScreenFeed = () => {
           />
         )}
         {(!isActivity || visitedLeaderboard) && (
-          <ProjectLeaderboardList
-            display={isActivity && visitedLeaderboard ? 'none' : undefined}
-            project={project}
-          />
+          <ProjectLeaderboardList display={isActivity && visitedLeaderboard ? 'none' : undefined} project={project} />
         )}
       </>
     )

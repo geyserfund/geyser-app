@@ -1,12 +1,4 @@
-import {
-  Badge,
-  Box,
-  Divider,
-  HStack,
-  StackProps,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Badge, Box, Divider, HStack, StackProps, Text, VStack } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 
 import { dimensions } from '../../constants'
@@ -17,13 +9,7 @@ type Props = StackProps & {
   isFixed?: boolean
 }
 
-export const TitleDivider = ({
-  children,
-  rightAction,
-  badge,
-  isFixed,
-  ...props
-}: Props) => {
+export const TitleDivider = ({ children, rightAction, badge, isFixed, ...props }: Props) => {
   const heightOffSet = `${dimensions.topNavBar.desktop.height}px`
   return (
     <>

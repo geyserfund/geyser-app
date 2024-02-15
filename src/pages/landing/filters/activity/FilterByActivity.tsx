@@ -2,11 +2,7 @@ import { Icon } from '@chakra-ui/react'
 import { BsCardText } from 'react-icons/bs'
 import { FaHeart } from 'react-icons/fa'
 
-import {
-  EntryEditIcon,
-  ProjectNavIcon,
-  RewardGiftIcon,
-} from '../../../../components/icons'
+import { EntryEditIcon, ProjectNavIcon, RewardGiftIcon } from '../../../../components/icons'
 import { useFilterContext } from '../../../../context'
 import { ActivityResourceType } from '../../../../types'
 import { StatusTypeButton } from '../status'
@@ -32,9 +28,7 @@ export const FilterByActivity = ({ mobile }: FilterByActivityProps) => {
   )
 }
 
-export const getActivityButtonContent = (
-  activityType?: ActivityResourceType,
-): StatusTypeButton => {
+export const getActivityButtonContent = (activityType?: ActivityResourceType): StatusTypeButton => {
   switch (activityType) {
     case ActivityResourceType.Project:
       return {

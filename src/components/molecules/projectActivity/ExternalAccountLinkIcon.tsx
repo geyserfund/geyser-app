@@ -17,10 +17,7 @@ import {
 } from '../../../types'
 
 type ExternalAccountLinkIconProps = {
-  fundingTx:
-    | FundingTxForLandingPageFragment
-    | FundingTxForUserContributionFragment
-    | FundingTxFragment
+  fundingTx: FundingTxForLandingPageFragment | FundingTxForUserContributionFragment | FundingTxFragment
 }
 
 const sourceUrlMap: any = {
@@ -32,9 +29,7 @@ const sourceUrlMap: any = {
   Fountain: FountainLogoUrl,
 }
 
-export const ExternalAccountLinkIcon = ({
-  fundingTx,
-}: ExternalAccountLinkIconProps) => {
+export const ExternalAccountLinkIcon = ({ fundingTx }: ExternalAccountLinkIconProps) => {
   const { t } = useTranslation()
   const { source, funder } = fundingTx
 
@@ -42,9 +37,7 @@ export const ExternalAccountLinkIcon = ({
     return (
       funder.user &&
       'externalAccounts' in funder.user &&
-      funder.user.externalAccounts.find(
-        (account) => account?.accountType === type,
-      )?.externalUsername
+      funder.user.externalAccounts.find((account) => account?.accountType === type)?.externalUsername
     )
   }
 
@@ -66,12 +59,7 @@ export const ExternalAccountLinkIcon = ({
       <Text fontSize="xs">{t('from')}</Text>
       <Link href={linkDestination} isExternal>
         <Button size="xs" rounded="full" padding="0px" overflow="hidden">
-          <Image
-            width="24px"
-            height="24px"
-            src={sourceUrlMap[source]}
-            alt={`contribution-source-${source}-logo`}
-          />
+          <Image width="24px" height="24px" src={sourceUrlMap[source]} alt={`contribution-source-${source}-logo`} />
         </Button>
       </Link>
     </>

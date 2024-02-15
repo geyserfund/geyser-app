@@ -1,5 +1,4 @@
-export const commaFormatted = (amount: number) =>
-  amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+export const commaFormatted = (amount: number) => amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
 export const getBitcoinAmount = (amount: number, decimal?: boolean) => {
   const divisor = 100000000
@@ -75,8 +74,7 @@ export const validateFundingAmount = (amount: number, btcRate: number) => {
   }
 }
 
-export const randomIntFromInterval = (min: number, max: number) =>
-  Math.floor(Math.random() * (max - min + 1) + min)
+export const randomIntFromInterval = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min)
 
 export const numberWithCommas = (x: string | number) => {
   let value = `${x}`

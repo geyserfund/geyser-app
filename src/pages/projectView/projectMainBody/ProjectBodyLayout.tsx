@@ -1,5 +1,6 @@
 import { Box } from '@chakra-ui/react'
 import classNames from 'classnames'
+import { useEffect, useRef } from 'react'
 import { createUseStyles } from 'react-jss'
 import { Outlet } from 'react-router-dom'
 
@@ -8,7 +9,6 @@ import { MobileViews, useProjectContext } from '../../../context'
 import { FundingResourceType } from '../../../types'
 import { useMobileMode } from '../../../utils'
 import { ProjectActivityPanel } from '../projectActivityPanel'
-import { useEffect, useRef } from 'react'
 
 type Rules = string
 
@@ -52,23 +52,20 @@ export const ProjectBodyLayout = () => {
   const isMobile = useMobileMode()
 
   const { mobileView, project } = useProjectContext()
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null)
 
-  const inView = [
-    MobileViews.description,
-    MobileViews.rewards,
-    MobileViews.entries,
-    MobileViews.milestones
-  ].includes(mobileView)
+  const inView = [MobileViews.description, MobileViews.rewards, MobileViews.entries, MobileViews.milestones].includes(
+    mobileView,
+  )
 
   const classes = useProjectLayoutStyles({ isMobile, inView })
 
   useEffect(() => {
-    if(scrollRef.current ) {
+    if (scrollRef.current) {
       scrollRef.current.scroll({
         top: 0,
-        behavior: 'instant' as ScrollBehavior
-      });
+        behavior: 'instant' as ScrollBehavior,
+      })
     }
   }, [location.pathname])
 
@@ -88,10 +85,7 @@ export const ProjectBodyLayout = () => {
           </CardsStackLayout>
         </Box>
       </Box>
-      <ProjectActivityPanel
-        resourceType={FundingResourceType.Project}
-        resourceId={project?.id}
-      />
+      <ProjectActivityPanel resourceType={FundingResourceType.Project} resourceId={project?.id} />
     </>
   )
 }

@@ -12,11 +12,7 @@ interface BadgeItemProps {
   claimABadge: (_: ClaimABadgeProps) => void
 }
 
-export const BadgeItem = ({
-  userBadge,
-  isClaimed,
-  claimABadge,
-}: BadgeItemProps) => {
+export const BadgeItem = ({ userBadge, isClaimed, claimABadge }: BadgeItemProps) => {
   const { t } = useTranslation()
   const { badge } = userBadge
 
@@ -34,12 +30,7 @@ export const BadgeItem = ({
     <VStack key={userBadge.id} overflow="hidden" spacing="0px">
       <Image width="175px" maxWidth="175px" src={badge.image} />
       {!isClaimed && (
-        <ButtonComponent
-          size="sm"
-          primary
-          onClick={handleClick}
-          isLoading={claiming}
-        >
+        <ButtonComponent size="sm" primary onClick={handleClick} isLoading={claiming}>
           {t('Claim')}
         </ButtonComponent>
       )}

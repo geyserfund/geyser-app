@@ -55,11 +55,7 @@ export const ProjectBalance = ({ balance, rate }: IProjectBalance) => {
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
-        {hover ? (
-          <USDBalance balance={balance * rate} />
-        ) : (
-          <BTCBalance balance={balance} />
-        )}
+        {hover ? <USDBalance balance={balance * rate} /> : <BTCBalance balance={balance} />}
       </Box>
       <Text color="neutral.600" fontSize="xs" textAlign="center">
         RAISED

@@ -9,10 +9,7 @@ import { H2 } from '../../../../../components/typography'
 import { dimensions } from '../../../../../constants'
 import { useProjectContext } from '../../../../../context'
 import { lightModeColors } from '../../../../../styles'
-import {
-  FundingTxsWhereFundingStatus,
-  useFundingTxsOrderCountGetQuery,
-} from '../../../../../types'
+import { FundingTxsWhereFundingStatus, useFundingTxsOrderCountGetQuery } from '../../../../../types'
 import { useMobileMode } from '../../../../../utils'
 import { ContributionView, contributionViewAtom } from './atoms'
 import { ExportComponent } from './components'
@@ -27,8 +24,7 @@ export const ProjectCreatorContributors = () => {
 
   const [contributionView, setContributionView] = useAtom(contributionViewAtom)
 
-  const isActiveVariant = (view: ContributionView) =>
-    contributionView === view ? 'primary' : 'secondary'
+  const isActiveVariant = (view: ContributionView) => (contributionView === view ? 'primary' : 'secondary')
 
   const renderView = useMemo(() => {
     switch (contributionView) {
@@ -96,12 +92,7 @@ export const ProjectCreatorContributors = () => {
           spacing={{ base: '10px', lg: '20px' }}
         >
           <H2>{t('Contributors')}</H2>
-          <Stack
-            w="full"
-            direction={{ base: 'column', lg: 'row' }}
-            spacing="10px"
-            justifyContent="space-between"
-          >
+          <Stack w="full" direction={{ base: 'column', lg: 'row' }} spacing="10px" justifyContent="space-between">
             <HStack spacing="10px" flexWrap={'wrap'}>
               <Button
                 size="sm"
@@ -127,15 +118,8 @@ export const ProjectCreatorContributors = () => {
                   variant={isActiveVariant(ContributionView.pending)}
                   onClick={() => setContributionView(ContributionView.pending)}
                   rightIcon={
-                    <Box
-                      borderRadius="50%"
-                      backgroundColor={lightModeColors.neutral[1000]}
-                      margin="2px"
-                    >
-                      <YellowWarningIcon
-                        boxSize={'20px'}
-                        color="secondary.yellow"
-                      />
+                    <Box borderRadius="50%" backgroundColor={lightModeColors.neutral[1000]} margin="2px">
+                      <YellowWarningIcon boxSize={'20px'} color="secondary.yellow" />
                     </Box>
                   }
                 >
@@ -143,9 +127,7 @@ export const ProjectCreatorContributors = () => {
                 </Button>
               ) : null}
             </HStack>
-            {contributionView === ContributionView.accounts ? (
-              <ExportComponent />
-            ) : null}
+            {contributionView === ContributionView.accounts ? <ExportComponent /> : null}
           </Stack>
         </VStack>
         {renderView}

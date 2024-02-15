@@ -46,11 +46,7 @@ export const DeleteConfirmModal = ({
             <Text wordBreak="break-word">{description}</Text>
             <HStack width="100%" justifyContent="space-between" spacing="20px">
               <ButtonComponent onClick={onClose}>{t('Cancel')}</ButtonComponent>
-              <ButtonComponent
-                backgroundColor="red.500"
-                onClick={confirm}
-                isLoading={isLoading}
-              >
+              <ButtonComponent backgroundColor="red.500" onClick={confirm} isLoading={isLoading}>
                 {t('Confirm')}
               </ButtonComponent>
             </HStack>

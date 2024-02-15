@@ -5,9 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Modal } from '../../../components/layouts'
 import TitleWithProgressBar from '../../../components/molecules/TitleWithProgressBar'
 
-export const ProjectCreateDraftModal = (
-  props: Omit<ModalProps, 'children'>,
-) => {
+export const ProjectCreateDraftModal = (props: Omit<ModalProps, 'children'>) => {
   const { t } = useTranslation()
   return (
     <Modal

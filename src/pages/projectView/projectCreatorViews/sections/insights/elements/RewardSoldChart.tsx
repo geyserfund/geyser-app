@@ -60,21 +60,13 @@ export const RewardSoldChart = ({
             width={ref.current?.clientWidth || 730}
             height={250}
             data={data}
-            margin={
-              isMobile
-                ? { top: 0, right: 0, left: 0, bottom: 0 }
-                : { top: 10, right: 10, left: 10, bottom: 10 }
-            }
+            margin={isMobile ? { top: 0, right: 0, left: 0, bottom: 0 } : { top: 10, right: 10, left: 10, bottom: 10 }}
             barGap={0}
             barSize={10}
           >
             <CartesianGrid strokeDasharray="4" vertical={false} />
             <XAxis dataKey="name" tick={<TickComponent dy={10} />} />
-            <YAxis
-              width={isMobile ? 40 : 60}
-              tick={<TickComponent />}
-              domain={[0, 'dataMax']}
-            />
+            <YAxis width={isMobile ? 40 : 60} tick={<TickComponent />} domain={[0, 'dataMax']} />
             <Tooltip
               cursor={{ fill: 'transparent' }}
               shared={false}
@@ -86,9 +78,7 @@ export const RewardSoldChart = ({
               formatter={(value, name, props) => {
                 const rewardId = name.toString().split('.')[1]
                 if (!rewardId) return [value, name]
-                const rewardName = rewardList.find(
-                  (reward) => reward.rewardId === Number(rewardId),
-                )?.rewardName
+                const rewardName = rewardList.find((reward) => reward.rewardId === Number(rewardId))?.rewardName
                 if (!rewardName) return [value, name]
 
                 return [value, rewardName]

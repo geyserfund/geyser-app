@@ -57,11 +57,7 @@ export const ProjectDetails = () => {
   }
 
   const onLeave = () => {
-    navigate(
-      project
-        ? `${getPath('privateProjectLaunch')}/${project.id}`
-        : getPath('privateProjectLaunch'),
-    )
+    navigate(project ? `${getPath('privateProjectLaunch')}/${project.id}` : getPath('privateProjectLaunch'))
   }
 
   const onBackClick = () => {
@@ -79,27 +75,13 @@ export const ProjectDetails = () => {
       <ProjectCreateLayout
         continueButton={<FormContinueButton flexGrow={1} {...nextProps} />}
         onBackClick={onBackClick}
-        title={
-          <TitleWithProgressBar
-            title={t('Links & tags')}
-            subtitle={t('Create a project')}
-            index={2}
-            length={4}
-          />
-        }
+        title={<TitleWithProgressBar title={t('Links & tags')} subtitle={t('Create a project')} index={2} length={4} />}
       >
         <VStack spacing={6}>
-          <ProjectLinks
-            links={project?.links || []}
-            setLinks={setLinks}
-            linkError={linkError}
-          />
+          <ProjectLinks links={project?.links || []} setLinks={setLinks} linkError={linkError} />
           <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
 
-          <ProjectRegion
-            location={project?.location}
-            updateProject={updateProject}
-          />
+          <ProjectRegion location={project?.location} updateProject={updateProject} />
         </VStack>
       </ProjectCreateLayout>
     </>

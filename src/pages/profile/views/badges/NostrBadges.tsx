@@ -21,27 +21,18 @@ export const NostrBadges = ({
   const [claimedBadges, setClaimedBadges] = useState<UserBadge[]>([])
   const [unClaimedBadges, setUnClaimedBadges] = useState<UserBadge[]>([])
 
-  const {
-    badgeIds: nostrBadgeIds,
-    loading: nostrBadgesLoading,
-    claimABadge,
-  } = useNostrBadges(nostrId)
+  const { badgeIds: nostrBadgeIds, loading: nostrBadgesLoading, claimABadge } = useNostrBadges(nostrId)
 
   useEffect(() => {
     if (userBadges.length > 0) {
       const claimedBadges =
         (nostrBadgeIds.length > 0 &&
-          userBadges?.filter((userbadge) =>
-            nostrBadgeIds.includes(userbadge.badge.uniqueName),
-          )) ||
+          userBadges?.filter((userbadge) => nostrBadgeIds.includes(userbadge.badge.uniqueName))) ||
         []
 
       const unClaimedBadges =
         nostrBadgeIds.length > 0
-          ? userBadges?.filter(
-              (userbadge) =>
-                !nostrBadgeIds.includes(userbadge.badge.uniqueName),
-            ) || []
+          ? userBadges?.filter((userbadge) => !nostrBadgeIds.includes(userbadge.badge.uniqueName)) || []
           : userBadges
 
       setClaimedBadges(claimedBadges)
@@ -52,9 +43,7 @@ export const NostrBadges = ({
   const numberOfBadges = nostrBadgeIds?.length || 0
 
   const getTitleToDisplay = () => {
-    return numberOfBadges
-      ? `${numberOfBadges} ${t('Geyser badges')}`
-      : t('No Geyser badges')
+    return numberOfBadges ? `${numberOfBadges} ${t('Geyser badges')}` : t('No Geyser badges')
   }
 
   if (nostrBadgesLoading) {
@@ -64,35 +53,18 @@ export const NostrBadges = ({
   return (
     <>
       {!isEdit && (
-        <VStack
-          background="neutral.100"
-          borderRadius="8px"
-          padding="5px 15px"
-          width="fit-content"
-          alignSelf="center"
-        >
+        <VStack background="neutral.100" borderRadius="8px" padding="5px 15px" width="fit-content" alignSelf="center">
           <Body2 color="neutral.900" semiBold>
             {getTitleToDisplay()}
           </Body2>
         </VStack>
       )}
 
-      <Wrap
-        w="full"
-        spacingX="10px"
-        spacingY="40px"
-        justify="center"
-        overflowY="auto"
-        paddingBottom="20px"
-      >
+      <Wrap w="full" spacingX="10px" spacingY="40px" justify="center" overflowY="auto" paddingBottom="20px">
         {claimedBadges.map((userBadge) => {
           return (
             <WrapItem key={userBadge.id}>
-              <BadgeItem
-                isClaimed
-                userBadge={userBadge}
-                claimABadge={claimABadge}
-              />
+              <BadgeItem isClaimed userBadge={userBadge} claimABadge={claimABadge} />
             </WrapItem>
           )
         })}

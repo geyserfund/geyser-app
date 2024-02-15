@@ -14,9 +14,7 @@ export const RenderRegions = ({
   region?: string
   handleClick: (_: string) => void
 }) => {
-  const [regionsToRender, setRegionsToRender] = useState<
-    ProjectRegionsGetResult[]
-  >([])
+  const [regionsToRender, setRegionsToRender] = useState<ProjectRegionsGetResult[]>([])
 
   useEffect(() => {
     if (regions.length > 0) {
@@ -28,12 +26,7 @@ export const RenderRegions = ({
         let toBeRenderedRegions = usedRegions.slice(0, max)
 
         selectedRegions.map((selectedRegion) => {
-          if (
-            !toBeRenderedRegions.some(
-              (toBeRenderedRegion) =>
-                toBeRenderedRegion.region === selectedRegion.region,
-            )
-          ) {
+          if (!toBeRenderedRegions.some((toBeRenderedRegion) => toBeRenderedRegion.region === selectedRegion.region)) {
             toBeRenderedRegions = [selectedRegion, ...toBeRenderedRegions]
           }
         })

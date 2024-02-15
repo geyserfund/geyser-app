@@ -19,15 +19,9 @@ export const useToolbarCommand = (name: string, cmd: string) => {
 
   const keyActive = (active as any)[name]
 
-  const isActive = useCallback(
-    (attrs: any = {}) => keyActive && keyActive(attrs),
-    [keyActive],
-  )
+  const isActive = useCallback((attrs: any = {}) => keyActive && keyActive(attrs), [keyActive])
 
-  const isDisabled = useCallback(
-    () => !command || !command.enabled(),
-    [command],
-  )
+  const isDisabled = useCallback(() => !command || !command.enabled(), [command])
 
   return { runCommand, isActive, isDisabled }
 }

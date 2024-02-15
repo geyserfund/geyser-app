@@ -1,12 +1,4 @@
-import {
-  Avatar,
-  Box,
-  HStack,
-  Image,
-  Stack,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Avatar, Box, HStack, Image, Stack, Text, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
 import { BiLeftArrowAlt } from 'react-icons/bi'
@@ -34,20 +26,11 @@ export const EntryDetails = ({ entry }: Props) => {
   return (
     <VStack width="100%" alignItems="flex-start" height={'100%'}>
       {/* At the moment entries are always tied to a project so we can force unwrap this term */}
-      <ButtonComponent
-        size="sm"
-        onClick={handleViewProject}
-        leftIcon={<BiLeftArrowAlt fontSize="15px" />}
-      >
+      <ButtonComponent size="sm" onClick={handleViewProject} leftIcon={<BiLeftArrowAlt fontSize="15px" />}>
         {t('View project')}
       </ButtonComponent>
 
-      <Stack
-        direction={{ base: 'column', lg: 'row' }}
-        overflow="hidden"
-        width="100%"
-        justifyContent="space-between"
-      >
+      <Stack direction={{ base: 'column', lg: 'row' }} overflow="hidden" width="100%" justifyContent="space-between">
         <Text fontSize="35px" fontWeight={700} color="neutral.900">
           {entry.title}
         </Text>
@@ -55,13 +38,7 @@ export const EntryDetails = ({ entry }: Props) => {
       </Stack>
 
       {headerImageSrc ? (
-        <HStack
-          width={'100%'}
-          justifyContent="center"
-          maxHeight="400px"
-          borderRadius="4px"
-          overflow="hidden"
-        >
+        <HStack width={'100%'} justifyContent="center" maxHeight="400px" borderRadius="4px" overflow="hidden">
           <Image width="100%" src={headerImageSrc} />
         </HStack>
       ) : null}
@@ -73,9 +50,7 @@ export const EntryDetails = ({ entry }: Props) => {
             <Text fontWeight={500}>{entry.creator.username}</Text>
             {entry.status === EntryStatus.Published && entry.publishedAt && (
               <Text paddingX="10px" color="neutral.900">
-                {DateTime.fromMillis(parseInt(entry.publishedAt, 10)).toFormat(
-                  'dd LLL yyyy',
-                )}
+                {DateTime.fromMillis(parseInt(entry.publishedAt, 10)).toFormat('dd LLL yyyy')}
               </Text>
             )}
           </HStack>

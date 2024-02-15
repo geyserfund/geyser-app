@@ -11,11 +11,7 @@ import { useLayoutAnimation, useScrollDirection } from '../../../../hooks'
 import { isActive } from '../../../../utils'
 import { navigationItems } from './BottomNavList'
 
-export const ProjectMobileBottomNavigation = ({
-  fixed,
-}: {
-  fixed?: boolean
-}) => {
+export const ProjectMobileBottomNavigation = ({ fixed }: { fixed?: boolean }) => {
   const { mobileView } = useProjectContext()
 
   const { isScrollingUp } = useScrollDirection({
@@ -75,13 +71,7 @@ export const ProjectMobileBottomNavigation = ({
 export const ProjectNavUI = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const {
-    mobileView,
-    setMobileView,
-    project,
-    isProjectOwner,
-    onCreatorModalOpen
-  } = useProjectContext()
+  const { mobileView, setMobileView, project, isProjectOwner, onCreatorModalOpen } = useProjectContext()
 
   const className = useLayoutAnimation()
 
@@ -123,11 +113,7 @@ export const ProjectNavUI = () => {
         if (isProjectOwner && !item.isCreator) return null
         if (!isProjectOwner && !item.isContributor) return null
 
-        if (
-          item.name === 'Rewards' &&
-          (!project.rewards || project.rewards.length === 0)
-        )
-          return null
+        if (item.name === 'Rewards' && (!project.rewards || project.rewards.length === 0)) return null
 
         const handleClick = () => {
           handleMobileViewClick(item.mobileView)

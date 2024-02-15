@@ -19,8 +19,7 @@ import { LaunchYourProjectButton } from './LaunchYourProjectButton'
 const CardContents = [
   {
     title: 'Lightning fast',
-    description:
-      "Funding a project is easy and doesn't require users to log in or add their credit card information",
+    description: "Funding a project is easy and doesn't require users to log in or add their credit card information",
     imageUrl: Lightning3DImageUrl,
   },
   {
@@ -42,8 +41,7 @@ const CardContents = [
   },
   {
     title: 'Be found easily',
-    description:
-      'Through the use of #tags it’s easy to be discovered on Geyser’s landing page and activity feed',
+    description: 'Through the use of #tags it’s easy to be discovered on Geyser’s landing page and activity feed',
     imageUrl: Search3DImageUrl,
   },
   {
@@ -77,19 +75,11 @@ export const BuildByCreators = () => {
     <VStack width={'auto'} spacing={50} paddingX={3} zIndex={9}>
       <VStack>
         <H1>{t('Built by creators, for creators')}</H1>
-        <H3 color={'neutral.600'}>
-          {t(
-            'Supercharge your fundraising efforts with our tools, features and support',
-          )}
-        </H3>
+        <H3 color={'neutral.600'}>{t('Supercharge your fundraising efforts with our tools, features and support')}</H3>
       </VStack>
       <SimpleGrid columns={3} spacingX="20px" spacingY="20px">
         {CardContents.map((card) => (
-          <GridItem
-            key={card.title}
-            colSpan={{ base: 3, lg: 1 }}
-            overflow="hidden"
-          >
+          <GridItem key={card.title} colSpan={{ base: 3, lg: 1 }} overflow="hidden">
             <AboutPageSquares key={card.title} {...card} />
           </GridItem>
         ))}
@@ -106,20 +96,10 @@ interface AboutPageSquaresProps {
   imageUrl: string
 }
 
-const AboutPageSquares = ({
-  title,
-  description,
-  imageUrl,
-}: AboutPageSquaresProps) => {
+const AboutPageSquares = ({ title, description, imageUrl }: AboutPageSquaresProps) => {
   const { t } = useTranslation()
   return (
-    <CardLayout
-      alignItems={'center'}
-      padding={4}
-      direction={'column'}
-      height={310}
-      maxWidth={350}
-    >
+    <CardLayout alignItems={'center'} padding={4} direction={'column'} height={310} maxWidth={350}>
       <Box maxHeight={'120px'}>
         <Image width={'auto'} height={'100%'} src={imageUrl} />
       </Box>

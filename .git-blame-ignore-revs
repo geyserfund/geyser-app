@@ -1,0 +1,5 @@
+# Run this command to always ignore formatting commits in `git blame`
+# git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# Changed everything to max-length 120
+9ab33ca7bcc591ad8e8ae033b64a515235f747ba

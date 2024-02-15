@@ -20,13 +20,7 @@ import { AppTheme } from '../../context'
 import { useBtcContext } from '../../context/btc'
 import { fonts } from '../../styles'
 import { commaFormatted } from '../../utils'
-import {
-  CrownIcon,
-  MedalIcon,
-  SatoshiIconTilted,
-  StarIcon,
-  TrophyIcon,
-} from '../icons'
+import { CrownIcon, MedalIcon, SatoshiIconTilted, StarIcon, TrophyIcon } from '../icons'
 import { SatSymbolIcon } from '../icons/svg'
 import { MonoBody1 } from '../typography'
 
@@ -79,13 +73,7 @@ interface IDonationInputProps extends InputProps {
   inputGroup?: InputGroupProps
 }
 
-export const DonationInput = ({
-  className,
-  onChange,
-  name,
-  inputGroup,
-  ...rest
-}: IDonationInputProps) => {
+export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }: IDonationInputProps) => {
   const { btcRate } = useBtcContext()
 
   const classes = useStyles()
@@ -180,23 +168,13 @@ export const DonationInput = ({
 
       <InputGroup {...inputGroup}>
         <InputLeftElement pt={1} pl={4} height={14}>
-          {isSatoshi ? (
-            <SatSymbolIcon fontSize="24px" />
-          ) : (
-            <BiDollar fontSize="24px" />
-          )}
+          {isSatoshi ? <SatSymbolIcon fontSize="24px" /> : <BiDollar fontSize="24px" />}
         </InputLeftElement>
         <Input
           ref={inputRef}
           height={14}
           borderRadius="8px"
-          value={
-            satoshi > 0
-              ? isSatoshi
-                ? commaFormatted(satoshi)
-                : commaFormatted(dollar)
-              : ''
-          }
+          value={satoshi > 0 ? (isSatoshi ? commaFormatted(satoshi) : commaFormatted(dollar)) : ''}
           type="text"
           className={classNames(classes.inputElement, className)}
           onChange={handleInput}
@@ -209,39 +187,18 @@ export const DonationInput = ({
           color="neutral.1000"
           placeholder="0"
         />
-        <InputRightElement
-          pt={1}
-          pr={'10px'}
-          height={14}
-          w="fit-content"
-          minWidth="100px"
-          maxWidth="150px"
-        >
-          <Button
-            w="100%"
-            className={classes.switchButtton}
-            onClick={onToggle}
-            variant="ghost"
-          >
+        <InputRightElement pt={1} pr={'10px'} height={14} w="fit-content" minWidth="100px" maxWidth="150px">
+          <Button w="100%" className={classes.switchButtton} onClick={onToggle} variant="ghost">
             {isSatoshi ? (
               <>
                 <MonoBody1 isTruncated>
-                  {dollar > 0
-                    ? `$${commaFormatted(dollar)}`
-                    : satoshi > 0
-                    ? '< $1'
-                    : '$0'}
+                  {dollar > 0 ? `$${commaFormatted(dollar)}` : satoshi > 0 ? '< $1' : '$0'}
                 </MonoBody1>
               </>
             ) : (
               <>
-                <SatoshiIconTilted
-                  scale={0.7}
-                  style={{ paddingBottom: '3px' }}
-                />
-                <MonoBody1 isTruncated>
-                  {commaFormatted(satoshi) || 0}
-                </MonoBody1>
+                <SatoshiIconTilted scale={0.7} style={{ paddingBottom: '3px' }} />
+                <MonoBody1 isTruncated>{commaFormatted(satoshi) || 0}</MonoBody1>
               </>
             )}
           </Button>

@@ -32,12 +32,7 @@ export const MobileSort = ({ ...rest }: MobileSortProps) => {
         </HStack>
         <AccordionIcon />
       </AccordionButton>
-      <AccordionPanel
-        as={VStack}
-        overflow="hidden"
-        paddingX="0px"
-        maxHeight="500px"
-      >
+      <AccordionPanel as={VStack} overflow="hidden" paddingX="0px" maxHeight="500px">
         <Menu isOpen={true}>
           <SortBody isMobile />
         </Menu>

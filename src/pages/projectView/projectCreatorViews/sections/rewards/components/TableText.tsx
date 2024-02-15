@@ -2,8 +2,6 @@ export interface TableTextProps {
   content: string
 }
 
-export const TableText = ({content}: TableTextProps) => {
-  return (
-    <p>{content}</p>
-  )
+export const TableText = ({ content }: TableTextProps) => {
+  return <p>{content}</p>
 }

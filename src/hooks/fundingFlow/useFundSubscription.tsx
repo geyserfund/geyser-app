@@ -1,9 +1,6 @@
 import { useCallback, useState } from 'react'
 
-import {
-  FundingTxFragment,
-  useFundingTxStatusUpdatedSubscription,
-} from '../../types'
+import { FundingTxFragment, useFundingTxStatusUpdatedSubscription } from '../../types'
 
 type UseFundSubscriptionProps = {
   projectId?: number
@@ -11,11 +8,7 @@ type UseFundSubscriptionProps = {
   onComplete?: (fundingTx: FundingTxFragment) => void
 }
 
-export const useFundSubscription = ({
-  projectId,
-  fundingTxId,
-  onComplete,
-}: UseFundSubscriptionProps) => {
+export const useFundSubscription = ({ projectId, fundingTxId, onComplete }: UseFundSubscriptionProps) => {
   const [skip, setSkip] = useState(true)
   const [fundingActivity, setFundingActivity] = useState<FundingTxFragment>()
 

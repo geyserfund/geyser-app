@@ -14,19 +14,11 @@ import {
   GrantHasVoting,
 } from '../../constants'
 
-export const GrantSummary = ({
-  grant,
-  grantHasVoting,
-}: {
-  grant: Grant
-  grantHasVoting?: boolean
-}) => {
+export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHasVoting?: boolean }) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
 
-  const votingEndDate = grant.statuses.find(
-    (s) => s.status === grant.status,
-  )?.endAt
+  const votingEndDate = grant.statuses.find((s) => s.status === grant.status)?.endAt
   return (
     <CardLayout noborder={isMobile} padding={{ base: '10px', lg: 0 }}>
       {grant.image ? (
@@ -44,18 +36,10 @@ export const GrantSummary = ({
       ) : null}
       <Box px={{ base: 0, lg: 5 }}>
         <Box pb={2}>
-          <StatusLabel textTransform="uppercase">
-            {t(GRANT_STATUS_MAP[grant.status])}
-          </StatusLabel>
+          <StatusLabel textTransform="uppercase">{t(GRANT_STATUS_MAP[grant.status])}</StatusLabel>
         </Box>
 
-        <Box
-          display="flex"
-          flexDir={{ base: 'column', lg: 'row' }}
-          width="100%"
-          pt={2}
-          justifyContent="space-between"
-        >
+        <Box display="flex" flexDir={{ base: 'column', lg: 'row' }} width="100%" pt={2} justifyContent="space-between">
           <Box pt={2}>
             <H1>{t(grant.title)}</H1>
           </Box>
@@ -76,10 +60,7 @@ export const GrantSummary = ({
             balance={getShortAmountLabel(grant.balance || 0, true)}
             hasVoting={GrantHasVoting[grant.name]}
             contributions={getShortAmountLabel(
-              grant.applicants.reduce(
-                (prev, curr) => prev + (curr?.funding.communityFunding || 0),
-                0,
-              ) || 0,
+              grant.applicants.reduce((prev, curr) => prev + (curr?.funding.communityFunding || 0), 0) || 0,
               true,
             )}
           />

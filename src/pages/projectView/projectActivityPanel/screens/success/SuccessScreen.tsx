@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { Button, CloseButton, VStack, Link as ChakraLink } from '@chakra-ui/react'
+import { Button, CloseButton, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import ReactConfetti from 'react-confetti'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -33,7 +33,7 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
   } = useProjectContext()
 
   const { getTotalAmount } = useFundCalc(fundingState)
-  const projectUrl = project ? `${window.location.origin}/project/${project.name}` : '';
+  const projectUrl = project ? `${window.location.origin}/project/${project.name}` : ''
 
   const { data } = useQuery<{ userBadges: UserBadge[] }>(QUERY_USER_BADGES, {
     variables: { input: { where: { fundingTxId: fundingTx.id } } },
@@ -73,10 +73,7 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
       />
 
       <VStack w="full" spacing="20px" pt={4}>
-        <SuccessImageComponent
-          currentBadge={currentBadge}
-          fundingTx={fundingTx}
-        />
+        <SuccessImageComponent currentBadge={currentBadge} fundingTx={fundingTx} />
         {fundingTx.funder.user?.id && currentBadge && (
           <Button
             variant="secondary"
@@ -89,9 +86,7 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
           </Button>
         )}
 
-        {needsShipping ? (
-          <ContributionShippingBox creatorEmail={fundingTx.creatorEmail} />
-        ) : null}
+        {needsShipping ? <ContributionShippingBox creatorEmail={fundingTx.creatorEmail} /> : null}
 
         <ContributionInfoBox
           project={project as Project}
@@ -111,7 +106,7 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
           as={ChakraLink}
           href={projectUrl}
           variant="secondary"
-          textDecoration={"none"}
+          textDecoration={'none'}
           size="sm"
           w="full"
           _hover={{ textDecoration: 'none' }}

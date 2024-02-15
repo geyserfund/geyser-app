@@ -2,12 +2,7 @@ import { HStack, Stack, VStack } from '@chakra-ui/react'
 
 import { useProjectContext } from '../../../../../context'
 import { LaunchProjectNotice } from '../../../projectMainBody'
-import {
-  ContributorsComponent,
-  LearnComponent,
-  OverviewHeader,
-  StatsComponent,
-} from './components'
+import { ContributorsComponent, LearnComponent, OverviewHeader, StatsComponent } from './components'
 
 export const ProjectCreatorOverview = () => {
   const { project } = useProjectContext()
@@ -21,20 +16,8 @@ export const ProjectCreatorOverview = () => {
       px={{ base: '10px', lg: '0px' }}
       spacing={{ base: '20px', lg: '0px' }}
     >
-      <HStack
-        w="full"
-        h="full"
-        flex="1"
-        justifyContent="center"
-        alignItems="start"
-      >
-        <VStack
-          w="full"
-          h="full"
-          maxWidth="1000px"
-          spacing="20px"
-          px={{ base: '0px', lg: '40px' }}
-        >
+      <HStack w="full" h="full" flex="1" justifyContent="center" alignItems="start">
+        <VStack w="full" h="full" maxWidth="1000px" spacing="20px" px={{ base: '0px', lg: '40px' }}>
           <OverviewHeader />
           <StatsComponent />
           <ContributorsComponent />
@@ -42,11 +25,7 @@ export const ProjectCreatorOverview = () => {
         </VStack>
       </HStack>
 
-      <VStack
-        maxWidth={{ base: '100%', lg: '450px' }}
-        width="100%"
-        alignItems="start"
-      >
+      <VStack maxWidth={{ base: '100%', lg: '450px' }} width="100%" alignItems="start">
         <LearnComponent />
       </VStack>
     </Stack>

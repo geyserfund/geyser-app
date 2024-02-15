@@ -29,14 +29,8 @@ export const MobileLeaderboard = () => {
   const renderTabs = () => {
     return (
       <>
-        <LeaderboardThisWeek
-          display={tab === LeaderboardTabs.thisWeek ? 'flex' : 'none'}
-          items={20}
-        />
-        <LeaderboardAllTime
-          display={tab === LeaderboardTabs.allTime ? 'flex' : 'none'}
-          items={20}
-        />
+        <LeaderboardThisWeek display={tab === LeaderboardTabs.thisWeek ? 'flex' : 'none'} items={20} />
+        <LeaderboardAllTime display={tab === LeaderboardTabs.allTime ? 'flex' : 'none'} items={20} />
       </>
     )
   }
@@ -52,11 +46,7 @@ export const MobileLeaderboard = () => {
       position="relative"
     >
       <VStack id={ID.leaderboard.wrapper} maxWidth="500px" width="100%">
-        <StickToTop
-          id={ID.leaderboard.body}
-          wrapperId={ID.leaderboard.wrapper}
-          width="100%"
-        >
+        <StickToTop id={ID.leaderboard.body} wrapperId={ID.leaderboard.wrapper} width="100%">
           <LeaderboardTopbar tab={tab} setTab={setTab} />
         </StickToTop>
       </VStack>
@@ -78,29 +68,17 @@ export const LeaderboardTopbar = ({
   const { t } = useTranslation()
   return (
     <VStack w="full" spacing="0px">
-      <HStack
-        width="100%"
-        borderBottom="2px solid"
-        borderColor="neutral.200"
-        paddingY="6px"
-      >
+      <HStack width="100%" borderBottom="2px solid" borderColor="neutral.200" paddingY="6px">
         <H2 color="neutral.1000">{t('Leaderboard')}</H2>
       </HStack>
-      <HStack
-        width="100%"
-        borderBottom="2px solid"
-        borderColor="neutral.200"
-        paddingY="6px"
-      >
+      <HStack width="100%" borderBottom="2px solid" borderColor="neutral.200" paddingY="6px">
         <ButtonComponent
           noBorder
           flex={1}
           size="sm"
           fontSize="16px"
           borderRadius="8px"
-          backgroundColor={
-            tab === LeaderboardTabs.thisWeek ? 'neutral.100' : 'neutral.0'
-          }
+          backgroundColor={tab === LeaderboardTabs.thisWeek ? 'neutral.100' : 'neutral.0'}
           onClick={() => setTab(LeaderboardTabs.thisWeek)}
         >
           {t('This week')}
@@ -111,9 +89,7 @@ export const LeaderboardTopbar = ({
           size="sm"
           fontSize="16px"
           borderRadius="8px"
-          backgroundColor={
-            tab === LeaderboardTabs.allTime ? 'neutral.100' : 'neutral.0'
-          }
+          backgroundColor={tab === LeaderboardTabs.allTime ? 'neutral.100' : 'neutral.0'}
           onClick={() => setTab(LeaderboardTabs.allTime)}
         >
           {t('All time')}

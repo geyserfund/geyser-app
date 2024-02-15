@@ -8,10 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
 import { AvatarElement } from '../../../pages/projectView/projectMainBody/components'
-import {
-  EntryForProjectFragment,
-  EntryStatus,
-} from '../../../types/generated/graphql'
+import { EntryForProjectFragment, EntryStatus } from '../../../types/generated/graphql'
 import { getShortAmountLabel, toInt } from '../../../utils'
 import { CardLayout } from '../../layouts'
 import { Body1, Body2, H2 } from '../../typography'
@@ -98,12 +95,7 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
         alignItems="flex-start"
         p={1}
       >
-        <Stack
-          width="100%"
-          direction="row"
-          justifyContent="space-between"
-          alignItems="start"
-        >
+        <Stack width="100%" direction="row" justifyContent="space-between" alignItems="start">
           <Stack
             flex={1}
             direction={{ base: 'column', lg: 'row' }}
@@ -142,13 +134,7 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
           </HStack>
         </Stack>
 
-        <Body1
-          marginTop="2"
-          color={'neutral.600'}
-          fontSize="lg"
-          as={'p'}
-          noOfLines={[0, 2]}
-        >
+        <Body1 marginTop="2" color={'neutral.600'} fontSize="lg" as={'p'} noOfLines={[0, 2]}>
           {entry.description}
         </Body1>
 
@@ -162,12 +148,7 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
           spacing={{ base: '10px', lg: '22px' }}
           overflow="hidden"
         >
-          <HStack
-            spacing={'10px'}
-            align={'center'}
-            flex={0}
-            color="primary.400"
-          >
+          <HStack spacing={'10px'} align={'center'} flex={0} color="primary.400">
             <HStack spacing={1}>
               <Text variant="body1">{entry.fundersCount}</Text>
               <Text variant="body1">
@@ -175,23 +156,13 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
               </Text>
             </HStack>
 
-            <SatoshiAmount variant="body1">
-              {getShortAmountLabel(entry.amountFunded)}
-            </SatoshiAmount>
+            <SatoshiAmount variant="body1">{getShortAmountLabel(entry.amountFunded)}</SatoshiAmount>
           </HStack>
 
-          <AvatarElement
-            borderRadius="50%"
-            user={entry.creator}
-            wrapperProps={{ overflow: 'hidden' }}
-          />
+          <AvatarElement borderRadius="50%" user={entry.creator} wrapperProps={{ overflow: 'hidden' }} />
 
           {entry.publishedAt && (
-            <Body2 whiteSpace="nowrap">
-              {DateTime.fromMillis(toInt(entry.publishedAt)).toFormat(
-                'dd LLL yyyy',
-              )}
-            </Body2>
+            <Body2 whiteSpace="nowrap">{DateTime.fromMillis(toInt(entry.publishedAt)).toFormat('dd LLL yyyy')}</Body2>
           )}
         </Stack>
       </Stack>

@@ -1,16 +1,9 @@
 import { AddIcon, MinusIcon } from '@chakra-ui/icons'
-import {
-  Box,
-  IconButton,
-  Stack,
-  Text,
-  useDisclosure
-} from '@chakra-ui/react'
-
+import { Box, IconButton, Stack, Text, useDisclosure } from '@chakra-ui/react'
 import { MouseEvent } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import {AppTheme, useProjectContext} from '../../../../context'
+import { AppTheme, useProjectContext } from '../../../../context'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../types'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
@@ -37,7 +30,7 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   inputField: {
     padding: '10px 5px',
     height: '30px',
-  }
+  },
 }))
 
 interface IRewardItemProps {
@@ -59,72 +52,85 @@ export const FundingFormRewardItem = ({
 }: IRewardItemProps) => {
   const classes = useStyles()
 
-  const {
-    project
-  } = useProjectContext()
+  const { project } = useProjectContext()
   const { onOpen: setFocus, onClose: setBlur } = useDisclosure()
-  const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : 100;
+  const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : null
 
   return (
-      <Box
-          backgroundColor="neutral.50"
-          border='2px'
-          borderColor='neutral.200'
-          borderRadius={12}
-          mt={2}
-          p={3}
-          pos={'relative'}
-          width={"100%"}
-      >
-        <Stack direction="row">
-          <Box borderRadius={12} overflow={'hidden'} width="70px">
-            <div style={{display: 'block', position: 'relative', paddingTop: '100%', width: '100%'}}>
-              <div style={{display: 'block', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: `transparent url(${reward.image}) no-repeat center center / cover`}}>
-              </div>
-            </div>
-          </Box>
-          <Stack direction="column" flex={1} pl={2} gap={0.25}>
-            <Text fontWeight={700} fontSize={16} color='neutral.900'>{reward.name}</Text>
-            <Text fontSize={12} color='neutral.600'>{
-              `${(reward.maxClaimable && reward.maxClaimable > 0 ? (reward.maxClaimable - reward.sold) + ' remaining, ' : '')}${reward.sold} sold`
-            }</Text>
-          </Stack>
-          <Stack direction="column" align={'flex-end'}>
-            <Text fontWeight={700} fontSize={16} color='neutral.600'>{project && project.rewardCurrency == RewardCurrency.Usdcent ? `$${reward.cost / 100}` : `${reward.cost.toLocaleString()} sats`}</Text>
-            <Stack direction={"row"} gap={1}>
-              <IconButton
-                  onFocus={setFocus}
-                  onBlur={setBlur}
-                  size="xs"
-                  className={classes.extraIcons}
-                  aria-label="remove-reward"
-                  icon={<MinusIcon />}
-                  onClick={onRemoveClick}
-              />
-              <IconButton
-                  onFocus={setFocus}
-                  onBlur={setBlur}
-                  variant="secondary"
-                  isActive={Boolean(count)}
-                  className={classes.inputField}
-                  size="sm"
-                  aria-label="select-reward"
-                  icon={<Text fontSize="14px">{count}</Text>}
-                  onClick={onAddClick}
-              />
-              <IconButton
-                  onFocus={setFocus}
-                  onBlur={setBlur}
-                  size="xs"
-                  className={classes.extraIcons}
-                  aria-label="add-reward"
-                  icon={<AddIcon />}
-                  onClick={onAddClick}
-                  isDisabled={rewardStockRemaining === count}
-              />
-            </Stack>
+    <Box
+      backgroundColor="neutral.50"
+      border="2px"
+      borderColor="neutral.200"
+      borderRadius={12}
+      mt={2}
+      p={3}
+      pos={'relative'}
+      width={'100%'}
+    >
+      <Stack direction="row">
+        <Box borderRadius={12} overflow={'hidden'} width="70px">
+          <div style={{ display: 'block', position: 'relative', paddingTop: '100%', width: '100%' }}>
+            <div
+              style={{
+                display: 'block',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: `transparent url(${reward.image}) no-repeat center center / cover`,
+              }}
+            ></div>
+          </div>
+        </Box>
+        <Stack direction="column" flex={1} pl={2} gap={0.25}>
+          <Text fontWeight={700} fontSize={16} color="neutral.900">
+            {reward.name}
+          </Text>
+          <Text fontSize={12} color="neutral.600">{`${
+            reward.maxClaimable && reward.maxClaimable > 0 ? reward.maxClaimable - reward.sold + ' remaining, ' : ''
+          }${reward.sold} sold`}</Text>
+        </Stack>
+        <Stack direction="column" align={'flex-end'}>
+          <Text fontWeight={700} fontSize={16} color="neutral.600">
+            {project && project.rewardCurrency == RewardCurrency.Usdcent
+              ? `$${reward.cost / 100}`
+              : `${reward.cost.toLocaleString()} sats`}
+          </Text>
+          <Stack direction={'row'} gap={1}>
+            <IconButton
+              onFocus={setFocus}
+              onBlur={setBlur}
+              size="xs"
+              className={classes.extraIcons}
+              aria-label="remove-reward"
+              icon={<MinusIcon />}
+              onClick={onRemoveClick}
+            />
+            <IconButton
+              onFocus={setFocus}
+              onBlur={setBlur}
+              variant="secondary"
+              isActive={Boolean(count)}
+              className={classes.inputField}
+              size="sm"
+              aria-label="select-reward"
+              icon={<Text fontSize="14px">{count}</Text>}
+              onClick={onAddClick}
+            />
+            <IconButton
+              onFocus={setFocus}
+              onBlur={setBlur}
+              size="xs"
+              className={classes.extraIcons}
+              aria-label="add-reward"
+              icon={<AddIcon />}
+              onClick={onAddClick}
+              isDisabled={rewardStockRemaining === count}
+            />
           </Stack>
         </Stack>
-      </Box>
+      </Stack>
+    </Box>
   )
 }

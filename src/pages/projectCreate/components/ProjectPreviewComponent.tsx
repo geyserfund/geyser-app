@@ -16,9 +16,7 @@ interface ProjectPreviewComponentProps {
   }
 }
 
-export const ProjectPreviewComponent = ({
-  data,
-}: ProjectPreviewComponentProps) => {
+export const ProjectPreviewComponent = ({ data }: ProjectPreviewComponentProps) => {
   const { t } = useTranslation()
   return (
     <VStack
@@ -66,9 +64,7 @@ export const ProjectPreviewComponent = ({
           <H2 width="100%" isTruncated>
             {data.title || t('Project Title')}
           </H2>
-          <H3 wordBreak="break-all">
-            {data.shortDescription || t('Project Objective')}
-          </H3>
+          <H3 wordBreak="break-all">{data.shortDescription || t('Project Objective')}</H3>
           <MarkdownField preview content={data.description || t('Story')} />
         </VStack>
       </Card>

@@ -8,11 +8,7 @@ import { Head } from '../../config'
 import { getPath, ProjectEntryThumbnailPlaceholderUrl } from '../../constants'
 import { useProjectContext } from '../../context'
 import { ProjectProvider } from '../../context'
-import {
-  EntryFragment,
-  FundingResourceType,
-  useEntryLazyQuery,
-} from '../../types'
+import { EntryFragment, FundingResourceType, useEntryLazyQuery } from '../../types'
 import { toInt, useMobileMode } from '../../utils'
 import { NotFoundPage } from '../fallback/NotFoundPage'
 import { ProjectActivityPanel } from '../projectView/projectActivityPanel'
@@ -42,16 +38,8 @@ export const EntryPage = () => {
   }, [entryId, getEntry])
 
   return (
-    <ProjectProvider
-      projectId={Number(
-        entryData && entryData.entry && entryData.entry.project?.id,
-      )}
-    >
-      <EntryViewWrapper
-        loading={loading}
-        error={error}
-        entry={entryData?.entry}
-      />
+    <ProjectProvider projectId={Number(entryData && entryData.entry && entryData.entry.project?.id)}>
+      <EntryViewWrapper loading={loading} error={error} entry={entryData?.entry} />
     </ProjectProvider>
   )
 }
@@ -65,11 +53,7 @@ interface IEntryViewWrapper {
 const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
   const isMobile = useMobileMode()
 
-  const {
-    project,
-    error: projectError,
-    loading: projectLoading,
-  } = useProjectContext()
+  const { project, error: projectError, loading: projectLoading } = useProjectContext()
 
   if (loading || projectLoading || !project) {
     return <Loader paddingTop="65px" />
@@ -80,12 +64,7 @@ const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
   }
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      height="100%"
-    >
+    <Box display="flex" justifyContent="center" alignItems="center" height="100%">
       <Box
         width="100%"
         height="100%"
@@ -98,17 +77,10 @@ const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
         <Head
           title={`${entry.title} - ${project.title}`}
           description={entry.description}
-          image={
-            entry.image ||
-            entry.project?.image ||
-            ProjectEntryThumbnailPlaceholderUrl
-          }
+          image={entry.image || entry.project?.image || ProjectEntryThumbnailPlaceholderUrl}
         />
         <EntryContainer entry={entry} />
-        <ProjectActivityPanel
-          resourceType={FundingResourceType.Entry}
-          resourceId={entry.id}
-        />
+        <ProjectActivityPanel resourceType={FundingResourceType.Entry} resourceId={entry.id} />
         {isMobile && <ProjectMobileBottomNavigation fixed />}
       </Box>
     </Box>

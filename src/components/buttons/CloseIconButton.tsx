@@ -2,9 +2,7 @@ import { CloseIcon } from '@chakra-ui/icons'
 
 import { IconButtonComponent, IconButtonComponentProps } from '../ui'
 
-export const CloseIconButton = (
-  props: Omit<IconButtonComponentProps, 'aria-label'>,
-) => {
+export const CloseIconButton = (props: Omit<IconButtonComponentProps, 'aria-label'>) => {
   return (
     <IconButtonComponent
       noBorder

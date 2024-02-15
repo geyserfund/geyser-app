@@ -2,14 +2,7 @@ import { Icon, IconProps } from '@chakra-ui/react'
 
 export const ContributorsIcon = (props: IconProps) => {
   return (
-    <Icon
-      width="30"
-      height="30"
-      viewBox="0 0 30 30"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+    <Icon width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path
         d="M14.8438 16.1875C16.6559 16.1875 18.125 14.7184 18.125 12.9062C18.125 11.0941 16.6559 9.625 14.8438 9.625C13.0316 9.625 11.5625 11.0941 11.5625 12.9062C11.5625 14.7184 13.0316 16.1875 14.8438 16.1875Z"
         stroke="currentColor"

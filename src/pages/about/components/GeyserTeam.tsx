@@ -3,12 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { CardLayout } from '../../../components/layouts'
 import { Body1, H1, H2, H3 } from '../../../components/typography'
-import {
-  AuwalProfileUrl,
-  MickProfileUrl,
-  SajalProfileUrl,
-  SteliosProfileUrl,
-} from '../../../constants'
+import { AuwalProfileUrl, MickProfileUrl, SajalProfileUrl, SteliosProfileUrl } from '../../../constants'
 
 const CardContents = [
   {
@@ -65,12 +60,7 @@ interface TeamCardProps {
 const TeamCard = ({ name, title, imageUrl }: TeamCardProps) => {
   const { t } = useTranslation()
   return (
-    <CardLayout
-      alignItems={'center'}
-      padding={5}
-      direction={'column'}
-      width={230}
-    >
+    <CardLayout alignItems={'center'} padding={5} direction={'column'} width={230}>
       <Avatar size={'xl'} src={imageUrl}></Avatar>
       <H2>{t(name)}</H2>
       <Body1>{t(title)}</Body1>

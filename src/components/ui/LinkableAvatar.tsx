@@ -54,18 +54,13 @@ export const LinkableAvatar = ({
     }
 
     if (
-      (badgeElements &&
-        badgeElements.length === 0 &&
-        avatarUsername.length > (isMedium ? 12 : 21)) ||
+      (badgeElements && badgeElements.length === 0 && avatarUsername.length > (isMedium ? 12 : 21)) ||
       (!badgeElements && avatarUsername.length > (isMedium ? 12 : 21))
     ) {
       return `${avatarUsername.slice(0, isMedium ? 10 : 19)}...`
     }
 
-    if (
-      badgeElements &&
-      badgeElements.length >= (isMobile ? 2 : isMedium ? 1 : 3)
-    ) {
+    if (badgeElements && badgeElements.length >= (isMobile ? 2 : isMedium ? 1 : 3)) {
       return
     }
 
@@ -107,11 +102,7 @@ export const LinkableAvatar = ({
           icon={<FaUserCircle fontSize="25px" size={'1em'} />}
         />
 
-        <Body2
-          fontSize={fontSize}
-          semiBold
-          _hover={{ textDecoration: 'underline' }}
-        >
+        <Body2 fontSize={fontSize} semiBold _hover={{ textDecoration: 'underline' }}>
           {' '}
           {getFormattedUsername()}
         </Body2>

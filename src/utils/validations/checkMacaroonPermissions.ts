@@ -22,9 +22,7 @@ export const checkMacaroonPermissions = (macaroon: string): string => {
 
     const permissions = chunks.reduce((prev: any, chunk: any) => {
       const newPrev = { ...prev }
-      const keyParts = chunk.filter(
-        (word: string) => !['read', 'write'].includes(word),
-      )
+      const keyParts = chunk.filter((word: string) => !['read', 'write'].includes(word))
       const key = keyParts.join('')
       newPrev[key] = chunk.slice(keyParts.length)
       return newPrev
@@ -42,9 +40,7 @@ export const checkMacaroonPermissions = (macaroon: string): string => {
       if (!permissions[key]) {
         missingPermissions.push(`${key}: ${required.join()}`)
       } else {
-        const missingPermission = required
-          .filter((permission) => !permission.includes(permission))
-          .join()
+        const missingPermission = required.filter((permission) => !permission.includes(permission)).join()
         if (missingPermission) {
           missingPermissions.push(`${key}: ${missingPermission}`)
         }
@@ -52,9 +48,7 @@ export const checkMacaroonPermissions = (macaroon: string): string => {
     })
 
     if (missingPermissions.length > 0) {
-      return `macaroon is missing the following permissions: ${JSON.stringify(
-        missingPermissions,
-      )}`
+      return `macaroon is missing the following permissions: ${JSON.stringify(missingPermissions)}`
     }
 
     const extraPermissions: string[] = []
@@ -65,9 +59,7 @@ export const checkMacaroonPermissions = (macaroon: string): string => {
       } else {
         const required = requiredPermissions[key]
         if (required) {
-          const extraPermission = permissions[key]
-            .filter((permission: string) => !required.includes(permission))
-            .join()
+          const extraPermission = permissions[key].filter((permission: string) => !required.includes(permission)).join()
           if (extraPermission) {
             missingPermissions.push(`${key}: ${extraPermission}`)
           }
@@ -95,14 +87,11 @@ export const convertMacaroonToBase64 = (macaroon: string): string => {
     return macaroon
   }
 
-  throw new Error(
-    'unknown macaroon encoding, please check the macaroon is either in Hex or Base64 format',
-  )
+  throw new Error('unknown macaroon encoding, please check the macaroon is either in Hex or Base64 format')
 }
 
 export const isBase64 = (text: string) => {
-  const base64Regex =
-    /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
+  const base64Regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/
   return base64Regex.test(text)
 }
 

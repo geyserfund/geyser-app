@@ -11,11 +11,7 @@ const headingsArray = [
 ]
 
 export const ToolbarHeading = ({ isDisabled }: { isDisabled?: boolean }) => {
-  const {
-    runCommand,
-    isDisabled: hasBeenDisabled,
-    isActive,
-  } = useToolbarCommand('heading', 'toggleHeading')
+  const { runCommand, isDisabled: hasBeenDisabled, isActive } = useToolbarCommand('heading', 'toggleHeading')
 
   return (
     <ButtonGroup isAttached py={1}>

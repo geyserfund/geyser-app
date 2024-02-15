@@ -37,18 +37,14 @@ export const platformRoutes: RouteObject[] = [
   {
     path: getPath('publicProjectLaunch'),
     async lazy() {
-      const ProjectCreateStart = await ProjectLaunch().then(
-        (m) => m.ProjectCreateStart,
-      )
+      const ProjectCreateStart = await ProjectLaunch().then((m) => m.ProjectCreateStart)
       return { Component: ProjectCreateStart }
     },
   },
   {
     path: `${getPath('publicProjectLaunch')}/:projectId`,
     async lazy() {
-      const ProjectCreateStart = await ProjectLaunch().then(
-        (m) => m.ProjectCreateStart,
-      )
+      const ProjectCreateStart = await ProjectLaunch().then((m) => m.ProjectCreateStart)
       return { Component: ProjectCreateStart }
     },
   },
@@ -66,9 +62,7 @@ export const platformRoutes: RouteObject[] = [
   {
     path: getPath('launchProjectDetails', PathName.projectId),
     async lazy() {
-      const ProjectAdditionalDetails = await ProjectLaunch().then(
-        (m) => m.ProjectAdditionalDetails,
-      )
+      const ProjectAdditionalDetails = await ProjectLaunch().then((m) => m.ProjectAdditionalDetails)
       return { Component: ProjectAdditionalDetails }
     },
   },
@@ -82,9 +76,7 @@ export const platformRoutes: RouteObject[] = [
   {
     path: getPath('launchProjectStory', PathName.projectId),
     async lazy() {
-      const ProjectCreateStory = await ProjectLaunch().then(
-        (m) => m.ProjectCreateStory,
-      )
+      const ProjectCreateStory = await ProjectLaunch().then((m) => m.ProjectCreateStory)
       return { element: renderPrivateRoute(ProjectCreateStory) }
     },
   },
@@ -126,90 +118,70 @@ export const platformRoutes: RouteObject[] = [
   {
     path: getPath('projectDashboard', PathName.projectId),
     async lazy() {
-      const ProjectDashboardPage = await ProjectDashboard().then(
-        (m) => m.ProjectDashboardPage,
-      )
+      const ProjectDashboardPage = await ProjectDashboard().then((m) => m.ProjectDashboardPage)
       return { element: renderPrivateRoute(ProjectDashboardPage) }
     },
     children: [
       {
         index: true,
         async lazy() {
-          const ProjectDescription = await ProjectDashboard().then(
-            (m) => m.ProjectDescription,
-          )
+          const ProjectDescription = await ProjectDashboard().then((m) => m.ProjectDescription)
           return { Component: ProjectDescription }
         },
       },
       {
         path: getPath('dashboardDetails', PathName.projectId),
         async lazy() {
-          const ProjectDetails = await ProjectDashboard().then(
-            (m) => m.ProjectDetails,
-          )
+          const ProjectDetails = await ProjectDashboard().then((m) => m.ProjectDetails)
           return { Component: ProjectDetails }
         },
       },
       {
         path: getPath('dashboardStory', PathName.projectId),
         async lazy() {
-          const ProjectStory = await ProjectDashboard().then(
-            (m) => m.ProjectStory,
-          )
+          const ProjectStory = await ProjectDashboard().then((m) => m.ProjectStory)
           return { Component: ProjectStory }
         },
       },
       {
         path: getPath('dashboardStatus', PathName.projectId),
         async lazy() {
-          const ProjectStatusSection = await ProjectDashboard().then(
-            (m) => m.ProjectStatusSection,
-          )
+          const ProjectStatusSection = await ProjectDashboard().then((m) => m.ProjectStatusSection)
           return { Component: ProjectStatusSection }
         },
       },
       {
         path: getPath('dashboardRewards', PathName.projectId),
         async lazy() {
-          const ProjectRewardSection = await ProjectDashboard().then(
-            (m) => m.ProjectRewardSettings,
-          )
+          const ProjectRewardSection = await ProjectDashboard().then((m) => m.ProjectRewardSettings)
           return { Component: ProjectRewardSection }
         },
       },
       {
         path: getPath('dashboardWallet', PathName.projectId),
         async lazy() {
-          const ProjectWallet = await ProjectDashboard().then(
-            (m) => m.ProjectWallet,
-          )
+          const ProjectWallet = await ProjectDashboard().then((m) => m.ProjectWallet)
           return { Component: ProjectWallet }
         },
       },
       {
         path: getPath('dashboardSettings', PathName.projectId),
         async lazy() {
-          const ProjectSettings = await ProjectDashboard().then(
-            (m) => m.ProjectSettings,
-          )
+          const ProjectSettings = await ProjectDashboard().then((m) => m.ProjectSettings)
           return { Component: ProjectSettings }
         },
       },
       {
         path: getPath('dashboardNostr', PathName.projectId),
         async lazy() {
-          const ProjectNostrSettings = await ProjectDashboard().then(
-            (m) => m.ProjectNostrSettings,
-          )
+          const ProjectNostrSettings = await ProjectDashboard().then((m) => m.ProjectNostrSettings)
           return { Component: ProjectNostrSettings }
         },
       },
       {
         path: getPath('dashboardShop', PathName.projectId),
         async lazy() {
-          const ProjectSettings = await ProjectDashboard().then(
-            (m) => m.ProjectSettings,
-          )
+          const ProjectSettings = await ProjectDashboard().then((m) => m.ProjectSettings)
           return { Component: ProjectSettings }
         },
       },
@@ -225,36 +197,28 @@ export const platformRoutes: RouteObject[] = [
       {
         path: getPath('project', PathName.projectId),
         async lazy() {
-          const ProjectBodyLayout = await Project().then(
-            (m) => m.ProjectBodyLayout,
-          )
+          const ProjectBodyLayout = await Project().then((m) => m.ProjectBodyLayout)
           return { Component: ProjectBodyLayout }
         },
         children: [
           {
             index: true,
             async lazy() {
-              const ProjectMainBody = await Project().then(
-                (m) => m.ProjectMainBody,
-              )
+              const ProjectMainBody = await Project().then((m) => m.ProjectMainBody)
               return { Component: ProjectMainBody }
             },
           },
           {
             path: getPath('projectRewards', PathName.projectId),
             async lazy() {
-              const MainBodyRewards = await Project().then(
-                (m) => m.MainBodyRewards,
-              )
+              const MainBodyRewards = await Project().then((m) => m.MainBodyRewards)
               return { Component: MainBodyRewards }
             },
           },
           {
             path: getPath('projectEntries', PathName.projectId),
             async lazy() {
-              const MainBodyEntries = await Project().then(
-                (m) => m.MainBodyEntries,
-              )
+              const MainBodyEntries = await Project().then((m) => m.MainBodyEntries)
               return { Component: MainBodyEntries }
             },
           },
@@ -262,9 +226,7 @@ export const platformRoutes: RouteObject[] = [
           {
             path: getPath('projectMilestones', PathName.projectId),
             async lazy() {
-              const MainBodyMilestones = await Project().then(
-                (m) => m.MainBodyMilestones,
-              )
+              const MainBodyMilestones = await Project().then((m) => m.MainBodyMilestones)
               return { Component: MainBodyMilestones }
             },
           },
@@ -273,18 +235,14 @@ export const platformRoutes: RouteObject[] = [
       {
         path: getPath('project', PathName.projectId),
         async lazy() {
-          const ProjectCreatorViews = await Project().then(
-            (m) => m.ProjectCreatorViews,
-          )
+          const ProjectCreatorViews = await Project().then((m) => m.ProjectCreatorViews)
           return { Component: ProjectCreatorViews }
         },
         children: [
           {
             path: getPath('projectOverview', PathName.projectId),
             async lazy() {
-              const ProjectCreatorOverview = await Project().then(
-                (m) => m.ProjectCreatorOverview,
-              )
+              const ProjectCreatorOverview = await Project().then((m) => m.ProjectCreatorOverview)
               return {
                 element: renderPrivateRoute(ProjectCreatorOverview),
               }
@@ -293,9 +251,7 @@ export const platformRoutes: RouteObject[] = [
           {
             path: getPath('projectInsights', PathName.projectId),
             async lazy() {
-              const ProjectCreatorInsights = await Project().then(
-                (m) => m.ProjectCreatorInsights,
-              )
+              const ProjectCreatorInsights = await Project().then((m) => m.ProjectCreatorInsights)
               return {
                 element: renderPrivateRoute(ProjectCreatorInsights),
               }
@@ -304,9 +260,7 @@ export const platformRoutes: RouteObject[] = [
           {
             path: getPath('projectContributors', PathName.projectId),
             async lazy() {
-              const ProjectCreatorContributors = await Project().then(
-                (m) => m.ProjectCreatorContributors,
-              )
+              const ProjectCreatorContributors = await Project().then((m) => m.ProjectCreatorContributors)
               return {
                 element: renderPrivateRoute(ProjectCreatorContributors),
               }
@@ -315,9 +269,7 @@ export const platformRoutes: RouteObject[] = [
           {
             path: getPath('projectManageRewards', PathName.projectId),
             async lazy() {
-              const ProjectManageRewards = await Project().then(
-                  (m) => m.ProjectManageRewards,
-              )
+              const ProjectManageRewards = await Project().then((m) => m.ProjectManageRewards)
               return {
                 element: renderPrivateRoute(ProjectManageRewards),
               }
@@ -326,8 +278,7 @@ export const platformRoutes: RouteObject[] = [
           {
             path: getPath('projectCreateReward', PathName.projectId),
             async lazy() {
-              const ProjectCreateReward = await Project()
-                  .then((m) => m.ProjectCreateReward)
+              const ProjectCreateReward = await Project().then((m) => m.ProjectCreateReward)
               return {
                 element: renderPrivateRoute(ProjectCreateReward),
               }
@@ -336,8 +287,7 @@ export const platformRoutes: RouteObject[] = [
           {
             path: getPath('projectEditReward', PathName.projectId, PathName.rewardId),
             async lazy() {
-              const ProjectEditReward = await Project()
-                  .then((m) => m.ProjectEditReward)
+              const ProjectEditReward = await Project().then((m) => m.ProjectEditReward)
               return {
                 element: renderPrivateRoute(ProjectEditReward),
               }
@@ -386,9 +336,7 @@ export const platformRoutes: RouteObject[] = [
       {
         path: getPath('landingPage'),
         async lazy() {
-          const LandingPageProjects = await Landing().then(
-            (m) => m.LandingPageProjects,
-          )
+          const LandingPageProjects = await Landing().then((m) => m.LandingPageProjects)
           return { Component: LandingPageProjects }
         },
         index: true,

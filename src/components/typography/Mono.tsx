@@ -7,12 +7,7 @@ interface MonoProps extends TextProps {
   bold?: boolean
 }
 
-export const MonoHeader = ({
-  children,
-  bold,
-  semiBold,
-  ...rest
-}: MonoProps) => {
+export const MonoHeader = ({ children, bold, semiBold, ...rest }: MonoProps) => {
   return (
     <Text
       fontSize={{ base: '26px', lg: '30px' }}

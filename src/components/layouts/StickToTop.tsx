@@ -31,8 +31,7 @@ export const StickToTop = ({
 }: StickToTopProps) => {
   const [stick, setStick] = useListenerState(false)
   const containerRef = useRef<any>(null)
-  const [wrapperElement, setWrapperElement] =
-    useListenerState<HTMLElement | null>(null)
+  const [wrapperElement, setWrapperElement] = useListenerState<HTMLElement | null>(null)
 
   useEffect(() => {
     if (disable) {
@@ -83,11 +82,7 @@ export const StickToTop = ({
     }
 
     if (currentElement) {
-      const scrollValue =
-        currentElement.offsetTop -
-        currentElement.scrollTop +
-        currentElement.clientTop -
-        scrollTop
+      const scrollValue = currentElement.offsetTop - currentElement.scrollTop + currentElement.clientTop - scrollTop
       if (scrollValue > 0 && scrollValue <= offset + bias) {
         setStick(true)
       } else if (scrollValue > offset + bias + buffer) {
@@ -96,9 +91,7 @@ export const StickToTop = ({
     }
   }
 
-  const onStick = stick.current
-    ? _onStick || { width: wrapperElement.current?.clientWidth }
-    : {}
+  const onStick = stick.current ? _onStick || { width: wrapperElement.current?.clientWidth } : {}
 
   const palceholderId = `${id}-placeholder`
   return (
@@ -115,12 +108,7 @@ export const StickToTop = ({
       >
         {children}
       </Box>
-      {stick.current && (
-        <Box
-          id={palceholderId}
-          height={`${containerRef.current?.offsetHeight}px`}
-        />
-      )}
+      {stick.current && <Box id={palceholderId} height={`${containerRef.current?.offsetHeight}px`} />}
     </>
   )
 }
