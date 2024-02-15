@@ -2,11 +2,7 @@ import { Avatar, AvatarProps, Box, HStack, StackProps } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
 import { Body2, BodyProps } from '../../../../components/typography'
-import {
-  Maybe,
-  User,
-  UserMeFragment,
-} from '../../../../types/generated/graphql'
+import { Maybe, User, UserMeFragment } from '../../../../types/generated/graphql'
 import { getRandomOrb } from '../../../../utils'
 
 interface IAvatarElement extends AvatarProps {
@@ -60,6 +56,4 @@ export const AvatarElement = ({
   )
 }
 
-export const AvatarCircle = (props: AvatarProps) => (
-  <Avatar size="xs" borderRadius="4px" {...props} />
-)
+export const AvatarCircle = (props: AvatarProps) => <Avatar size="xs" borderRadius="4px" {...props} />

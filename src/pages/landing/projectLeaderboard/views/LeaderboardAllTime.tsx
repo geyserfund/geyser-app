@@ -10,10 +10,7 @@ interface LeaderboardAllTimeProps extends StackProps {
   items?: number
 }
 
-export const LeaderboardAllTime = ({
-  items = 4,
-  ...rest
-}: LeaderboardAllTimeProps) => {
+export const LeaderboardAllTime = ({ items = 4, ...rest }: LeaderboardAllTimeProps) => {
   const {
     isLoading,
     data: projects,

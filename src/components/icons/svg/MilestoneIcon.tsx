@@ -5,12 +5,7 @@ import { useCustomTheme } from '../../../utils'
 export const MilestoneIcon = (props: IconProps) => {
   const { colors } = useCustomTheme()
   return (
-    <Icon
-      viewBox="0 0 30 30"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+    <Icon viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path
         d="M30.0001 14.9865C30.0001 23.2634 23.2844 29.9731 15.0001 29.9731C6.71588 29.9731 0.000160217 23.2634 0.000160217 14.9865C0.000160217 6.7097 6.71588 0 15.0001 0C23.2844 0 30.0001 6.7097 30.0001 14.9865ZM6.00016 14.9865C6.00016 19.9526 10.0296 23.9785 15.0001 23.9785C19.9707 23.9785 24.0001 19.9526 24.0001 14.9865C24.0001 10.0204 19.9707 5.99461 15.0001 5.99461C10.0296 5.99461 6.00016 10.0204 6.00016 14.9865Z"
         fill={colors.neutral[400]}

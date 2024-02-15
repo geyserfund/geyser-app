@@ -23,12 +23,7 @@ export const ImageCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
 
   return (
     <>
-      <ToolbarCommandButton
-        name="image"
-        label="Insert image"
-        onClick={() => modal.onOpen()}
-        isDisabled={isDisabled}
-      >
+      <ToolbarCommandButton name="image" label="Insert image" onClick={() => modal.onOpen()} isDisabled={isDisabled}>
         <BiImageAdd />
       </ToolbarCommandButton>
       {modal.isOpen ? <InsertImageModal {...modal} /> : null}

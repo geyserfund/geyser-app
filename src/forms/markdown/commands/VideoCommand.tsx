@@ -1,11 +1,7 @@
 import { useCommands } from '@remirror/react'
 import { BsYoutube } from 'react-icons/bs'
 
-import {
-  InsertVideoModal,
-  MarkdownVideo,
-  useInsertVideoModal,
-} from '../modals/InsertVideoModal'
+import { InsertVideoModal, MarkdownVideo, useInsertVideoModal } from '../modals/InsertVideoModal'
 import { ToolbarCommandButton } from './ToolbarCommandButton'
 
 export const VideoCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
@@ -21,12 +17,7 @@ export const VideoCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
 
   return (
     <>
-      <ToolbarCommandButton
-        name="video"
-        label="Insert video"
-        onClick={() => modal.onOpen()}
-        isDisabled={isDisabled}
-      >
+      <ToolbarCommandButton name="video" label="Insert video" onClick={() => modal.onOpen()} isDisabled={isDisabled}>
         <BsYoutube />
       </ToolbarCommandButton>
       {modal.isOpen ? <InsertVideoModal {...modal} /> : null}

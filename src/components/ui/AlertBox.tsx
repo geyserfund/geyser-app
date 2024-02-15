@@ -1,10 +1,4 @@
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertProps,
-  AlertTitle,
-} from '@chakra-ui/react'
+import { Alert, AlertDescription, AlertIcon, AlertProps, AlertTitle } from '@chakra-ui/react'
 import { MdOutlineReportGmailerrorred } from 'react-icons/md'
 
 type Props = AlertProps & {

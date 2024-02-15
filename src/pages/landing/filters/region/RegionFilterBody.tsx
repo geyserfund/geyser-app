@@ -4,11 +4,7 @@ import { SingleValue } from 'react-select'
 
 import { SelectComponent } from '../../../../components/ui'
 import { useFilterContext } from '../../../../context'
-import {
-  Country,
-  ProjectCountriesGetResult,
-  ProjectRegionsGetResult,
-} from '../../../../types'
+import { Country, ProjectCountriesGetResult, ProjectRegionsGetResult } from '../../../../types'
 import { RenderCountries, RenderRegions } from '../components'
 
 interface RegionFilterBodyProps {
@@ -18,21 +14,12 @@ interface RegionFilterBodyProps {
   onClose: () => void
 }
 
-export const RegionFilterBody = ({
-  regions,
-  countries,
-  options,
-  onClose,
-}: RegionFilterBodyProps) => {
+export const RegionFilterBody = ({ regions, countries, options, onClose }: RegionFilterBodyProps) => {
   const { t } = useTranslation()
   const { filters, updateFilter } = useFilterContext()
   const { countryCode, region } = filters
 
-  const {
-    isOpen: selectMenuOpen,
-    onOpen: onSelectMenuOpen,
-    onClose: onSelectMenuClose,
-  } = useDisclosure()
+  const { isOpen: selectMenuOpen, onOpen: onSelectMenuOpen, onClose: onSelectMenuClose } = useDisclosure()
 
   const handleRegionSelect = (option: SingleValue<Country>) => {
     if (!option) {
@@ -76,9 +63,7 @@ export const RegionFilterBody = ({
     onClose()
   }
 
-  const currentCountry = countries.find(
-    (country) => country.country.code === countryCode,
-  )
+  const currentCountry = countries.find((country) => country.country.code === countryCode)
 
   const value = currentCountry
     ? currentCountry.country
@@ -103,17 +88,9 @@ export const RegionFilterBody = ({
 
       <Box width="100%" overflowY="auto">
         <VStack width="100%" alignItems="start" spacing="5px" paddingX="24px">
-          <RenderRegions
-            region={region}
-            regions={regions}
-            handleClick={handleRegionClick}
-          />
+          <RenderRegions region={region} regions={regions} handleClick={handleRegionClick} />
           <Divider />
-          <RenderCountries
-            countries={countries}
-            countryCode={countryCode}
-            handleClick={handleCountryClick}
-          />
+          <RenderCountries countries={countries} countryCode={countryCode} handleClick={handleCountryClick} />
         </VStack>
       </Box>
     </>

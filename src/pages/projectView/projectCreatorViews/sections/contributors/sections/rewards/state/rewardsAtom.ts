@@ -13,30 +13,20 @@ type RewardsTableCountTypes = {
 export const rewardsCountAtom = atom<Partial<RewardsTableCountTypes>>({})
 
 export const rewardsFamily = atomFamily(
-  ({ value }: { status: RewardStatus; value?: OrderFragment[] }) =>
-    atom(value || []),
+  ({ value }: { status: RewardStatus; value?: OrderFragment[] }) => atom(value || []),
   (a, b) => a.status === b.status,
 )
 
 export const rewardStatusUpdateAtom = atom(
   null,
-  (
-    get,
-    set,
-    {
-      status,
-      update,
-    }: { status: RewardStatus; update: Partial<OrderFragment> },
-  ) => {
+  (get, set, { status, update }: { status: RewardStatus; update: Partial<OrderFragment> }) => {
     const newStatus = update.status as RewardStatus
 
     const rewardsFromPrevStatus = get(rewardsFamily({ status }))
     const rewardsFromNewStatus = get(rewardsFamily({ status: newStatus }))
     const rewardsCount = get(rewardsCountAtom)
 
-    const oldRewardItem = rewardsFromPrevStatus.find(
-      (order) => order.id === update.id,
-    )
+    const oldRewardItem = rewardsFromPrevStatus.find((order) => order.id === update.id)
 
     if (!oldRewardItem) {
       return
@@ -47,9 +37,7 @@ export const rewardStatusUpdateAtom = atom(
       ...update,
     }
 
-    const newRewardsFromPrevStatus = rewardsFromPrevStatus.filter(
-      (r) => r.id !== update.id,
-    )
+    const newRewardsFromPrevStatus = rewardsFromPrevStatus.filter((r) => r.id !== update.id)
 
     const newRewardsFromNewStatus =
       newStatus === RewardStatus.delivered

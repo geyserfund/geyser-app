@@ -2,14 +2,7 @@ import { Icon, IconProps } from '@chakra-ui/react'
 
 export const LetTheSatsFlowIcon = (props: IconProps) => {
   return (
-    <Icon
-      width="296"
-      height="53"
-      viewBox="0 0 296 53"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+    <Icon width="296" height="53" viewBox="0 0 296 53" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <g filter="url(#filter0_d_9641_42693)">
         <path
           d="M10 42.4602C10.3561 40.5718 10.7134 38.6382 11.1591 35.8507L14.5917 16.2481C15.0374 13.9102 15.3051 12.2465 15.5728 10.5376H21.3684C21.0123 12.2904 20.6998 13.9993 20.2989 16.3373L16.6435 37.1992H18.694C20.0312 37.1992 21.0571 37.1992 22.7504 37.154L21.8141 42.459H10V42.4602Z"
@@ -88,21 +81,9 @@ export const LetTheSatsFlowIcon = (props: IconProps) => {
           <feOffset />
           <feGaussianBlur stdDeviation="5" />
           <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0"
-          />
-          <feBlend
-            mode="normal"
-            in2="BackgroundImageFix"
-            result="effect1_dropShadow_9641_42693"
-          />
-          <feBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="effect1_dropShadow_9641_42693"
-            result="shape"
-          />
+          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0" />
+          <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_9641_42693" />
+          <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_9641_42693" result="shape" />
         </filter>
       </defs>
     </Icon>

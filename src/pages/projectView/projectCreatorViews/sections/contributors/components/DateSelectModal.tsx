@@ -16,10 +16,7 @@ interface DateSelectModalProps {
   onClose: () => void
 }
 
-export const DateSelectModal = ({
-  projectId,
-  ...rest
-}: DateSelectModalProps) => {
+export const DateSelectModal = ({ projectId, ...rest }: DateSelectModalProps) => {
   const { t } = useTranslation()
 
   const [from, setFrom] = useState(0)
@@ -50,9 +47,7 @@ export const DateSelectModal = ({
               enableTabLoop={false}
               customInput={
                 <Button w="full" variant="secondary" size="sm">
-                  {from
-                    ? DateTime.fromMillis(from).toFormat('yyyy/MM/dd')
-                    : ' '}
+                  {from ? DateTime.fromMillis(from).toFormat('yyyy/MM/dd') : ' '}
                 </Button>
               }
             />

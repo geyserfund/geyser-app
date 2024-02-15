@@ -7,13 +7,7 @@ import { getPath } from '../../../../constants'
 import { EntryForLandingPageFragment } from '../../../../types'
 import { LandingEntryCard, TimeAgo } from '../../components'
 
-export const EntryActivityItem = ({
-  entry,
-  dateTime,
-}: {
-  entry: EntryForLandingPageFragment
-  dateTime?: string
-}) => {
+export const EntryActivityItem = ({ entry, dateTime }: { entry: EntryForLandingPageFragment; dateTime?: string }) => {
   const { t } = useTranslation()
   const { creator } = entry
   return (

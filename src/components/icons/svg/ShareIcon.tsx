@@ -2,14 +2,7 @@ import { Icon, IconProps } from '@chakra-ui/react'
 
 export const ShareIcon = (props: IconProps) => {
   return (
-    <Icon
-      width="auto"
-      height="22"
-      viewBox="0 0 14 22"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+    <Icon width="auto" height="22" viewBox="0 0 14 22" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <svg>
         <path
           d="M3.40002 5.00002L7.00002 1.40002L10.6 5.00002"

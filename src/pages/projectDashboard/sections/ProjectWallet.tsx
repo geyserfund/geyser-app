@@ -4,25 +4,13 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { Body2 } from '../../../components/typography'
-import {
-  getPath,
-  GeyserEmailVerificationDocUrl,
-  WalletConnectDetails,
-} from '../../../constants'
+import { getPath, GeyserEmailVerificationDocUrl, WalletConnectDetails } from '../../../constants'
 import { useAuthContext, useProjectContext } from '../../../context'
-import {
-  MfaAction,
-  OtpResponseFragment,
-  useUpdateWalletMutation,
-  Wallet,
-} from '../../../types'
+import { MfaAction, OtpResponseFragment, useUpdateWalletMutation, Wallet } from '../../../types'
 import { useNotification } from '../../../utils'
 import { VerifyYourEmail } from '../../otp'
 import { ProjectCreationWalletConnectionForm } from '../../projectCreate'
-import {
-  ConnectionOption,
-  useWalletForm,
-} from '../../projectCreate/hooks/useWalletForm'
+import { ConnectionOption, useWalletForm } from '../../projectCreate/hooks/useWalletForm'
 
 export const ProjectWallet = () => {
   const { t } = useTranslation()
@@ -31,11 +19,7 @@ export const ProjectWallet = () => {
 
   const { user } = useAuthContext()
 
-  const {
-    isOpen: emailVerifyOpen,
-    onClose: emailVerifyOnClose,
-    onOpen: emailVerifyOnOpen,
-  } = useDisclosure()
+  const { isOpen: emailVerifyOpen, onClose: emailVerifyOnClose, onOpen: emailVerifyOnOpen } = useDisclosure()
 
   const { project, refetch } = useProjectContext()
 
@@ -63,8 +47,7 @@ export const ProjectWallet = () => {
     isLightningAddressInValid,
   } = useWalletForm({
     defaultConnectionOption: projectWallet
-      ? projectWallet.connectionDetails.__typename ===
-        WalletConnectDetails.LightningAddressConnectionDetails
+      ? projectWallet.connectionDetails.__typename === WalletConnectDetails.LightningAddressConnectionDetails
         ? ConnectionOption.LIGHTNING_ADDRESS
         : ConnectionOption.PERSONAL_NODE
       : undefined,
@@ -73,37 +56,31 @@ export const ProjectWallet = () => {
     onSubmit: handleNext,
   })
 
-  const [updateWallet, { loading: updateWalletLoading }] =
-    useUpdateWalletMutation({
-      onCompleted() {
-        handleWalletUpdateCompletion()
-        emailVerifyOnClose()
-        toast({
-          status: 'success',
-          title: 'Wallet updated successfully!',
-        })
-      },
-      onError() {
-        toast({
-          status: 'error',
-          title: 'Failed to update wallet.',
-          description: 'Please try again',
-        })
-      },
-    })
+  const [updateWallet, { loading: updateWalletLoading }] = useUpdateWalletMutation({
+    onCompleted() {
+      handleWalletUpdateCompletion()
+      emailVerifyOnClose()
+      toast({
+        status: 'success',
+        title: 'Wallet updated successfully!',
+      })
+    },
+    onError() {
+      toast({
+        status: 'error',
+        title: 'Failed to update wallet.',
+        description: 'Please try again',
+      })
+    },
+  })
 
-  const handleWalletUpdate = async (
-    otp: number,
-    otpData: OtpResponseFragment,
-  ) => {
+  const handleWalletUpdate = async (otp: number, otpData: OtpResponseFragment) => {
     updateWallet({
       variables: {
         input: {
           name: createWalletInput?.name,
-          lndConnectionDetailsInput:
-            createWalletInput?.lndConnectionDetailsInput,
-          lightningAddressConnectionDetailsInput:
-            createWalletInput?.lightningAddressConnectionDetailsInput,
+          lndConnectionDetailsInput: createWalletInput?.lndConnectionDetailsInput,
+          lightningAddressConnectionDetailsInput: createWalletInput?.lightningAddressConnectionDetailsInput,
           id: projectWallet?.id,
           twoFAInput: {
             OTP: {

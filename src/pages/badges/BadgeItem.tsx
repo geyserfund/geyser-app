@@ -2,10 +2,7 @@ import { HStack, Image, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { User } from '../../types'
-import {
-  AvatarCircle,
-  AvatarElement,
-} from '../projectView/projectMainBody/components'
+import { AvatarCircle, AvatarElement } from '../projectView/projectMainBody/components'
 
 interface BadgeItemProps {
   image: string
@@ -45,9 +42,7 @@ const BadgeItem = ({ image, name, description, winners }: BadgeItemProps) => {
             user={user}
           />
         ))}
-        {winners && hasLeftoverWinners && (
-          <AvatarCircle>+{winners.length - topWinners.length}</AvatarCircle>
-        )}
+        {winners && hasLeftoverWinners && <AvatarCircle>+{winners.length - topWinners.length}</AvatarCircle>}
       </HStack>
     </VStack>
   )

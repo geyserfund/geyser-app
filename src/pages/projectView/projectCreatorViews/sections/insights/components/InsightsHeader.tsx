@@ -16,11 +16,7 @@ export const InsightsHeader = () => {
   const isMobile = useMobileMode()
 
   return (
-    <Stack
-      direction={{ base: 'column', lg: 'row' }}
-      w="full"
-      justifyContent="space-between"
-    >
+    <Stack direction={{ base: 'column', lg: 'row' }} w="full" justifyContent="space-between">
       <HStack w="full" justifyContent={'start'}>
         <H2>{t('Insights')}</H2>
         <InsightsOptionsSelect />

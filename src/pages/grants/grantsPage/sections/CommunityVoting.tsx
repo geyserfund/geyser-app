@@ -8,12 +8,7 @@ import { CardLayout } from '../../../../components/layouts'
 import { H3 } from '../../../../components/typography'
 import { getPath } from '../../../../constants'
 import { fonts } from '../../../../styles'
-import {
-  GrantApplicant,
-  GrantApplicantFunding,
-  GrantStatusEnum,
-  Project,
-} from '../../../../types'
+import { GrantApplicant, GrantApplicantFunding, GrantStatusEnum, Project } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
 import { useProjectFundingModal } from '../../../projectFunding/hooks/useProjectFundingModal'
 import { ProjectFundingModal } from '../../../projectFunding/ProjectFundingModal'
@@ -67,9 +62,7 @@ export const CommunityVoting = ({
     return (
       <WidgetItem subtitle={!isClosed ? t('worth of votes') : t('distributed')}>
         {getShortAmountLabel(
-          !isClosed
-            ? funding.communityFunding
-            : funding.grantAmount + funding.communityFunding || 0,
+          !isClosed ? funding.communityFunding : funding.grantAmount + funding.communityFunding || 0,
         )}
       </WidgetItem>
     )
@@ -94,12 +87,7 @@ export const CommunityVoting = ({
 
     if (grantStatus !== GrantStatusEnum.Closed) {
       return (
-        <Button
-          as={Link}
-          to={getPath('project', project.name)}
-          size={'sm'}
-          variant={'primary'}
-        >
+        <Button as={Link} to={getPath('project', project.name)} size={'sm'} variant={'primary'}>
           {t('View project')}
         </Button>
       )
@@ -107,12 +95,7 @@ export const CommunityVoting = ({
   }
 
   return (
-    <CardLayout
-      noMobileBorder
-      p={{ base: '10px', lg: '20px' }}
-      spacing={{ base: '10px', lg: '20px' }}
-      w="full"
-    >
+    <CardLayout noMobileBorder p={{ base: '10px', lg: '20px' }} spacing={{ base: '10px', lg: '20px' }} w="full">
       <H3 fontSize="18px">{t(title)}</H3>
       {applicants.map(({ project, funding }) => {
         const projectLink = getPath('project', project.name)
@@ -123,10 +106,7 @@ export const CommunityVoting = ({
                 <Box mr={3} height={'101px'}>
                   <Link
                     to={projectLink}
-                    className={classNames(
-                      classes.image,
-                      isMobile ? classes.mobileImage : classes.desktopImage,
-                    )}
+                    className={classNames(classes.image, isMobile ? classes.mobileImage : classes.desktopImage)}
                   >
                     <Image
                       objectFit="cover"
@@ -168,9 +148,7 @@ export const CommunityVoting = ({
                 {project.funders
                   .filter(
                     (funder) =>
-                      funder &&
-                      funder.confirmedAt > fundingOpenStartDate &&
-                      funder.confirmedAt <= fundingOpenEndDate,
+                      funder && funder.confirmedAt > fundingOpenStartDate && funder.confirmedAt <= fundingOpenEndDate,
                   )
                   .map(
                     (funder) =>

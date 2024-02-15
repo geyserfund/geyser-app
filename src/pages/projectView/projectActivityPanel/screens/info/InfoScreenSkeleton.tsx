@@ -19,14 +19,7 @@ export const InfoScreenSkeleton = () => {
       <SkeletonCircle height="208px" width="208px" marginY="30px" />
       <Skeleton height="40px" width="100%" />
 
-      <Box
-        width="100%"
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        overflow="hidden"
-        flex="1"
-      >
+      <Box width="100%" display="flex" flexDirection="column" alignItems="center" overflow="hidden" flex="1">
         <HStack display="flex" marginBottom="10px" w="95%" spacing="5px">
           <Box w="50%">
             <Skeleton w="100%" h="40px" />

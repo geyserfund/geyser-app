@@ -12,31 +12,18 @@ export const NavBarUserProjectMenuItem = () => {
 
   const toDisplayProject =
     user.ownerOf?.length > 0
-      ? user.ownerOf.find(
-          (data) => data?.project?.status === ProjectStatus.Active,
-        )?.project || user.ownerOf[0]?.project
+      ? user.ownerOf.find((data) => data?.project?.status === ProjectStatus.Active)?.project || user.ownerOf[0]?.project
       : undefined
 
   if (!toDisplayProject) return null
 
   return (
     <>
-      <Body2
-        fontSize={'10px'}
-        xBold
-        fontWeight={700}
-        color={'neutral.500'}
-        px={3}
-      >
+      <Body2 fontSize={'10px'} xBold fontWeight={700} color={'neutral.500'} px={3}>
         Project
       </Body2>
 
-      <MenuItem
-        as={Link}
-        display="block"
-        to={getPath('project', toDisplayProject.name)}
-        _focus={{ boxShadow: 'none' }}
-      >
+      <MenuItem as={Link} display="block" to={getPath('project', toDisplayProject.name)} _focus={{ boxShadow: 'none' }}>
         <HStack spacing={1} overflow="hidden" width="full">
           <ProjectListItemImage project={toDisplayProject} flexShrink={0} />
 

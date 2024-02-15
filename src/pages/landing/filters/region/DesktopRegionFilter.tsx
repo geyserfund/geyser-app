@@ -18,11 +18,7 @@ import { CardLayout, CardLayoutProps } from '../../../../components/layouts'
 import { Body1 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
 import { useFilterContext } from '../../../../context'
-import {
-  Country,
-  ProjectCountriesGetResult,
-  ProjectRegionsGetResult,
-} from '../../../../types'
+import { Country, ProjectCountriesGetResult, ProjectRegionsGetResult } from '../../../../types'
 import { RegionFilterBody } from './RegionFilterBody'
 
 interface DesktopRegionFilterProps extends CardLayoutProps {
@@ -32,13 +28,7 @@ interface DesktopRegionFilterProps extends CardLayoutProps {
   options: Country[]
 }
 
-export const DesktopRegionFilter = ({
-  label,
-  regions,
-  countries,
-  options,
-  ...rest
-}: DesktopRegionFilterProps) => {
+export const DesktopRegionFilter = ({ label, regions, countries, options, ...rest }: DesktopRegionFilterProps) => {
   const { t } = useTranslation()
   const { filters, updateFilter } = useFilterContext()
 
@@ -65,43 +55,21 @@ export const DesktopRegionFilter = ({
         spacing="0px"
         {...rest}
       >
-        <ButtonComponent
-          noBorder
-          onClick={onOpen}
-          w="full"
-          _hover={{}}
-          paddingX="10px"
-        >
+        <ButtonComponent noBorder onClick={onOpen} w="full" _hover={{}} paddingX="10px">
           <HStack width="100%">
             <SlLocationPin color={'neutral.600'} fontSize="20px" />
             <Body1 color={'neutral.900'}>{label}</Body1>
           </HStack>
-          {!isSelected && (
-            <ChevronRightIcon
-              position="absolute"
-              right="10px"
-              fontSize="20px"
-            />
-          )}
+          {!isSelected && <ChevronRightIcon position="absolute" right="10px" fontSize="20px" />}
         </ButtonComponent>
-        {isSelected && (
-          <CloseIconButton
-            position="absolute"
-            right="10px"
-            onClick={handleClear}
-          />
-        )}
+        {isSelected && <CloseIconButton position="absolute" right="10px" onClick={handleClear} />}
       </CardLayout>
       <Modal isOpen={isOpen} onClose={onClose} size="sm">
         <ModalOverlay />
         <ModalContent maxHeight="700px" overflow="hidden" borderRadius="8px">
           <ModalHeader>
             <HStack width="100%" position="relative" alignItems="center">
-              <SlLocationPin
-                stroke={'neutral.600'}
-                color={'neutral.600'}
-                fontSize="20px"
-              />
+              <SlLocationPin stroke={'neutral.600'} color={'neutral.600'} fontSize="20px" />
               <Body1 color={'neutral.600'}>{t('Filter by location')}</Body1>
             </HStack>
           </ModalHeader>

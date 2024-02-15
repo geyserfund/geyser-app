@@ -1,11 +1,7 @@
 import { Box, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  BadgeIcon,
-  ContributionsIcon,
-  TimerIcon,
-} from '../../../components/icons'
+import { BadgeIcon, ContributionsIcon, TimerIcon } from '../../../components/icons'
 import { Countdown } from '../../../components/ui/Countdown'
 import { fonts } from '../../../styles'
 import { Maybe, Sponsor } from '../../../types'
@@ -32,12 +28,7 @@ export const ContributionsWidget = ({
   const { t } = useTranslation()
   return (
     <Box borderRadius="8px" backgroundColor="neutral.100" pb={4} pt={2} mt={4}>
-      <Box
-        display="flex"
-        flexWrap="wrap"
-        alignItems="center"
-        justifyContent="space-around"
-      >
+      <Box display="flex" flexWrap="wrap" alignItems="center" justifyContent="space-around">
         <Box
           px={2}
           width={{ base: '100%', lg: 'auto' }}
@@ -46,13 +37,7 @@ export const ContributionsWidget = ({
           justifyContent="center"
           my={2}
         >
-          <TimerIcon
-            mt={1}
-            mr={2}
-            width="36px"
-            height="100%"
-            color="primary.500"
-          />
+          <TimerIcon mt={1} mr={2} width="36px" height="100%" color="primary.500" />
           <WidgetItem subtitle={endDateSubtitle}>
             <Countdown
               endDate={endDateTimestamp}
@@ -72,36 +57,17 @@ export const ContributionsWidget = ({
           </WidgetItem>
         </Box>
         <Box px={2} display="flex" alignItems="start" my={2}>
-          <BadgeIcon
-            mt={1}
-            mr={2}
-            width="36px"
-            height="100%"
-            color="primary.500"
-          />
+          <BadgeIcon mt={1} mr={2} width="36px" height="100%" color="primary.500" />
           <WidgetItem subtitle={t('Geyser grant')}>{balance}</WidgetItem>
         </Box>
         {hasVoting && (
           <Box px={2} display="flex" alignItems="start" my={2}>
-            <ContributionsIcon
-              mt={1}
-              mr={2}
-              width="36px"
-              height="100%"
-              color="primary.500"
-            />
-            <WidgetItem subtitle={t('Worth of votes')}>
-              {contributions}
-            </WidgetItem>
+            <ContributionsIcon mt={1} mr={2} width="36px" height="100%" color="primary.500" />
+            <WidgetItem subtitle={t('Worth of votes')}>{contributions}</WidgetItem>
           </Box>
         )}
       </Box>
-      <Box
-        mt={{ base: 1, lg: 4 }}
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Box mt={{ base: 1, lg: 4 }} display="flex" alignItems="center" justifyContent="center">
         <SponsorList sponsors={sponsors}>
           <Text fontSize="18px">{t('Sponsored by')}</Text>
         </SponsorList>

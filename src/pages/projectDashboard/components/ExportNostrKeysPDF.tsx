@@ -1,11 +1,4 @@
-import {
-  Document,
-  Image,
-  Page,
-  StyleSheet,
-  Text,
-  View,
-} from '@react-pdf/renderer'
+import { Document, Image, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
 
@@ -111,13 +104,9 @@ export const ExportNostrKeysPDF = ({
         <View style={styles.header}>
           <Image
             style={styles.imageStyle}
-            src={
-              'https://storage.googleapis.com/geyser-projects-media/app/geyser-padded-logo.png'
-            }
+            src={'https://storage.googleapis.com/geyser-projects-media/app/geyser-padded-logo.png'}
           />
-          <Text style={styles.title}>
-            {t('Project Private Key Kit (nsec)')}
-          </Text>
+          <Text style={styles.title}>{t('Project Private Key Kit (nsec)')}</Text>
         </View>
         <View style={styles.exportDateContainer}>
           <Text style={styles.exportDate}>{`${t('Exported on')} ${date}`}</Text>
@@ -129,21 +118,14 @@ export const ExportNostrKeysPDF = ({
             )}
           </Text>
           <Text style={styles.normalText}>
-            1.{' '}
-            {t(
-              'Get your Private Key Kit off your computer and print out a copy',
-            )}
+            1. {t('Get your Private Key Kit off your computer and print out a copy')}
           </Text>
-          <Text style={styles.normalText}>
-            2. {t('Store it somewhere safe.')}
-          </Text>
+          <Text style={styles.normalText}>2. {t('Store it somewhere safe.')}</Text>
         </View>
 
         <View>
           <View style={styles.infoHeaderContainer}>
-            <Text style={styles.headerText}>
-              {t('Nostr Private Key information')}
-            </Text>
+            <Text style={styles.headerText}>{t('Nostr Private Key information')}</Text>
           </View>
           <View style={styles.infoBox}>
             <Text style={styles.headerText}>{t('Title')}</Text>
@@ -160,9 +142,7 @@ export const ExportNostrKeysPDF = ({
         </View>
 
         <View style={styles.noteContainer}>
-          <Text style={styles.normalText}>
-            {t('Be aware of the following:')}
-          </Text>
+          <Text style={styles.normalText}>{t('Be aware of the following:')}</Text>
           <View style={styles.noteInnerContainer}>
             <Text style={styles.normalText}>-</Text>
             <Text style={styles.normalText}>

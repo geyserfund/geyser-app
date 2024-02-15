@@ -28,11 +28,7 @@ interface DesktopTagsFilterProps extends CardLayoutProps {
   handleTagsClick: (tag: TagsGetResult) => void
 }
 
-export const DesktopTagsFilter = ({
-  allTags,
-  handleTagsClick,
-  ...rest
-}: DesktopTagsFilterProps) => {
+export const DesktopTagsFilter = ({ allTags, handleTagsClick, ...rest }: DesktopTagsFilterProps) => {
   const { t } = useTranslation()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -42,13 +38,7 @@ export const DesktopTagsFilter = ({
 
   return (
     <>
-      <CardLayout
-        width="100%"
-        direction="column"
-        padding="10px"
-        spacing="10px"
-        {...rest}
-      >
+      <CardLayout width="100%" direction="column" padding="10px" spacing="10px" {...rest}>
         <ProjectTagsHeader />
         <VStack width="100%" alignItems="start" spacing="5px">
           <RenderTags
@@ -71,12 +61,7 @@ export const DesktopTagsFilter = ({
             <ProjectTagsHeader />
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody
-            as={VStack}
-            overflow="hidden"
-            paddingX="0px"
-            spacing="10px"
-          >
+          <ModalBody as={VStack} overflow="hidden" paddingX="0px" spacing="10px">
             <TagsFilterBody {...{ allTags, handleTagsClick }} />
           </ModalBody>
         </ModalContent>
@@ -101,9 +86,7 @@ export const DesktopFilterLayoutSkeleton = () => {
       <ProjectTagsHeader />
       <VStack width="100%" alignItems="start" spacing="10px">
         {[1, 2, 3, 4, 5].map((val) => {
-          return (
-            <Skeleton key={val} height="25px" borderRadius="8px" width="60%" />
-          )
+          return <Skeleton key={val} height="25px" borderRadius="8px" width="60%" />
         })}
       </VStack>
       <Skeleton height="25px" borderRadius="8px" width="100%" />

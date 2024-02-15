@@ -6,12 +6,7 @@ import { Body1, H3 } from '../../../../../../components/typography'
 import { useProjectContext } from '../../../../../../context'
 import { useProjectRewardSoldGraphStatsGetLazyQuery } from '../../../../../../types'
 import { useNotification } from '../../../../../../utils'
-import {
-  RewardListType,
-  RewardSoldChart,
-  RewardSoldDataType,
-  RewardSoldGraphType,
-} from '../elements/RewardSoldChart'
+import { RewardListType, RewardSoldChart, RewardSoldDataType, RewardSoldGraphType } from '../elements/RewardSoldChart'
 import { getDateParams, getNameForDate } from '../helpers'
 import { useSelectionAtom } from '../insightsAtom'
 
@@ -22,74 +17,63 @@ export const RewardSoldComponent = () => {
 
   const [selectionOption] = useSelectionAtom()
 
-  const [rewardSoldData, setRewardSoldData] = useState<RewardSoldGraphType[]>(
-    [],
-  )
+  const [rewardSoldData, setRewardSoldData] = useState<RewardSoldGraphType[]>([])
   const [rewardList, setRewardList] = useState<RewardListType[]>([])
 
-  const [getProjectRewardSoldGraphStats, { loading }] =
-    useProjectRewardSoldGraphStatsGetLazyQuery({
-      onCompleted(data) {
-        const stats = data.projectStatsGet
+  const [getProjectRewardSoldGraphStats, { loading }] = useProjectRewardSoldGraphStatsGetLazyQuery({
+    onCompleted(data) {
+      const stats = data.projectStatsGet
 
-        const rewardList = [] as RewardListType[]
+      const rewardList = [] as RewardListType[]
 
-        const dateParam = {} as {
-          [key: string]: { [key: string]: RewardSoldDataType }
+      const dateParam = {} as {
+        [key: string]: { [key: string]: RewardSoldDataType }
+      }
+      stats.current?.projectFunderRewards?.quantityGraph?.map((data) => {
+        const name = getNameForDate(data?.dateTime || 0, selectionOption)
+
+        if (data?.rewardId && !rewardList.some((reward) => reward.rewardId === Number(data?.rewardId))) {
+          rewardList.push({
+            rewardId: Number(data?.rewardId),
+            rewardName: data?.rewardName,
+          })
         }
-        stats.current?.projectFunderRewards?.quantityGraph?.map((data) => {
-          const name = getNameForDate(data?.dateTime || 0, selectionOption)
 
-          if (
-            data?.rewardId &&
-            !rewardList.some(
-              (reward) => reward.rewardId === Number(data?.rewardId),
-            )
-          ) {
-            rewardList.push({
-              rewardId: Number(data?.rewardId),
-              rewardName: data?.rewardName,
-            })
-          }
+        const param: RewardSoldDataType = {
+          dateTime: data?.dateTime || 0,
+          sum: data?.sum || 0,
+          rewardId: data?.rewardId || 0,
+          rewardName: data?.rewardName || '',
+        }
 
-          const param: RewardSoldDataType = {
-            dateTime: data?.dateTime || 0,
-            sum: data?.sum || 0,
-            rewardId: data?.rewardId || 0,
-            rewardName: data?.rewardName || '',
-          }
+        dateParam[name] = {
+          ...dateParam[name],
+          [param.rewardId]: param,
+        }
+      })
 
-          dateParam[name] = {
-            ...dateParam[name],
-            [param.rewardId]: param,
-          }
-        })
+      const rewardSoldGraphData: RewardSoldGraphType[] = Object.keys(dateParam).map((key) => {
+        return {
+          name: key,
+          rewards: dateParam[key] || {},
+        }
+      })
 
-        const rewardSoldGraphData: RewardSoldGraphType[] = Object.keys(
-          dateParam,
-        ).map((key) => {
-          return {
-            name: key,
-            rewards: dateParam[key] || {},
-          }
-        })
-
-        setRewardSoldData(rewardSoldGraphData)
-        setRewardList(rewardList)
-      },
-      onError(error) {
-        toast({
-          title: 'Error fetching project stats',
-          description: 'Please refresh the page and try again.',
-          status: 'error',
-        })
-      },
-    })
+      setRewardSoldData(rewardSoldGraphData)
+      setRewardList(rewardList)
+    },
+    onError(error) {
+      toast({
+        title: 'Error fetching project stats',
+        description: 'Please refresh the page and try again.',
+        status: 'error',
+      })
+    },
+  })
 
   useEffect(() => {
     if (project?.id) {
-      const { startDateTime, endDateTime, groupBy } =
-        getDateParams(selectionOption)
+      const { startDateTime, endDateTime, groupBy } = getDateParams(selectionOption)
 
       getProjectRewardSoldGraphStats({
         variables: {
@@ -120,11 +104,7 @@ export const RewardSoldComponent = () => {
       <H3>{t('Rewards sold')}</H3>
 
       {rewardSoldData.length > 0 ? (
-        <RewardSoldChart
-          data={rewardSoldData}
-          rewardList={rewardList}
-          loading={loading}
-        />
+        <RewardSoldChart data={rewardSoldData} rewardList={rewardList} loading={loading} />
       ) : (
         <Body1>{t('No data available')}</Body1>
       )}

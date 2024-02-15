@@ -6,9 +6,7 @@ export interface FundingTxWithCount extends FundingTxFragment {
 
 const ThresholdTimeToAggregateTransactions = 3600000 // 60 * 60 * 1000  -> 1 hour;
 
-export const aggregateTransactions = (
-  data: FundingTxFragment[],
-): FundingTxWithCount[] => {
+export const aggregateTransactions = (data: FundingTxFragment[]): FundingTxWithCount[] => {
   const aggregatedTxs: FundingTxWithCount[] = []
 
   // Array of group of alike FundingTx that are grouped together based on defined categories.
@@ -33,8 +31,7 @@ export const aggregateTransactions = (
       }
       // We start the second loop to match items with this first Item that started a new match group, skipping FundingTx that are already grouped.
 
-      const isAnon = (f: FundingTxFragment) =>
-        f.funder.user === null || f.funder.user === undefined
+      const isAnon = (f: FundingTxFragment) => f.funder.user === null || f.funder.user === undefined
 
       if (
         f1.id !== f2.id &&
@@ -42,13 +39,7 @@ export const aggregateTransactions = (
         f1.projectId === f2.projectId &&
         f2.method === FundingMethod.PodcastKeysend
       ) {
-        if (
-          matches.some(
-            (match) =>
-              Math.abs(match.paidAt - f2.paidAt) <=
-              ThresholdTimeToAggregateTransactions,
-          )
-        ) {
+        if (matches.some((match) => Math.abs(match.paidAt - f2.paidAt) <= ThresholdTimeToAggregateTransactions)) {
           matches.push(f2)
           groupedTxIds.push(f2.id)
         }

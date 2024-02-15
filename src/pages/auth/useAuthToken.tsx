@@ -63,11 +63,5 @@ export const useAuthToken = () => {
     }
 
     initalizeLogin()
-  }, [
-    authServiceEndpoint,
-    setCanLogin,
-    canLogin,
-    refreshLogin,
-    setRefreshLogin,
-  ])
+  }, [authServiceEndpoint, setCanLogin, canLogin, refreshLogin, setRefreshLogin])
 }

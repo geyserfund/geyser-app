@@ -44,41 +44,18 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
 
 export const ButtonComponent = forwardRef<HTMLButtonElement, IButtonComponentP>(
   (
-    {
-      className,
-      variant,
-      primary,
-      children,
-      standard,
-      circular,
-      backgroundColor,
-      _hover,
-      color,
-      noBorder,
-      ...rest
-    },
+    { className, variant, primary, children, standard, circular, backgroundColor, _hover, color, noBorder, ...rest },
     ref,
   ) => {
     const classes = useStyles()
-    const bodyColor =
-      color || primary ? lightModeColors.neutral[1000] : 'neutral.1000'
+    const bodyColor = color || primary ? lightModeColors.neutral[1000] : 'neutral.1000'
     return (
       <Button
         ref={ref}
-        className={classNames(
-          className,
-          { [classes.container]: standard },
-          { primary },
-        )}
+        className={classNames(className, { [classes.container]: standard }, { primary })}
         variant={variant || 'solid'}
         minWidth={standard ? '200px' : ''}
-        backgroundColor={
-          backgroundColor
-            ? backgroundColor
-            : primary
-            ? 'primary.400'
-            : 'neutral.0'
-        }
+        backgroundColor={backgroundColor ? backgroundColor : primary ? 'primary.400' : 'neutral.0'}
         borderRadius={circular ? '50px' : standard ? '8px' : undefined}
         _hover={_hover ? _hover : primary ? { bg: 'primary.600' } : undefined}
         fontSize="14px"
@@ -87,12 +64,7 @@ export const ButtonComponent = forwardRef<HTMLButtonElement, IButtonComponentP>(
         {...rest}
         sx={!noBorder ? buttonCommon : {}}
       >
-        <Box
-          as="span"
-          className={classes.text}
-          textColor={bodyColor}
-          color={bodyColor}
-        >
+        <Box as="span" className={classes.text} textColor={bodyColor} color={bodyColor}>
           {children}
         </Box>
       </Button>

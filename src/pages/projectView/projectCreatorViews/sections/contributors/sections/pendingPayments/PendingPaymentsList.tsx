@@ -81,9 +81,7 @@ export const PendingPaymentsList = () => {
   const [confirmFunding] = useFundingConfirmMutation({
     onCompleted(data) {
       if (data.fundingConfirm?.id === undefined) return
-      setData(
-        ordersData.filter((order) => order.id !== data.fundingConfirm?.id),
-      )
+      setData(ordersData.filter((order) => order.id !== data.fundingConfirm?.id))
       toast({ title: 'Transaction updated successfully', status: 'success' })
     },
     onError(error) {
@@ -108,7 +106,7 @@ export const PendingPaymentsList = () => {
   return (
     <VStack width="100%" flexGrow={1} pt={'10px'} spacing="10px">
       {ordersData.length === 0 ? (
-        <Text>{t("No items with this status.")}</Text>
+        <Text>{t('No items with this status.')}</Text>
       ) : (
         <PendingPaymentsTable
           data={ordersData}
@@ -119,12 +117,7 @@ export const PendingPaymentsList = () => {
       )}
       {!noMoreItems.current && (
         <HStack w="full" px={standardPadding}>
-          <Button
-            width="100%"
-            variant="secondary"
-            isLoading={isLoadingMore.current}
-            onClick={() => fetchNext()}
-          >
+          <Button width="100%" variant="secondary" isLoading={isLoadingMore.current} onClick={() => fetchNext()}>
             {t('Show more')}...
           </Button>
         </HStack>

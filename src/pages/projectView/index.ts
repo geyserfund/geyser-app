@@ -1,10 +1,10 @@
 import {
+  ProjectCreateReward,
   ProjectCreatorContributors,
   ProjectCreatorOverview,
   ProjectCreatorViews,
+  ProjectEditReward,
   ProjectManageRewards,
-  ProjectCreateReward,
-  ProjectEditReward
 } from './projectCreatorViews'
 import { ProjectCreatorInsights } from './projectCreatorViews/sections/insights'
 import {
@@ -21,13 +21,13 @@ export {
   MainBodyMilestones,
   MainBodyRewards,
   ProjectBodyLayout,
+  ProjectCreateReward,
   ProjectCreatorContributors,
   ProjectCreatorInsights,
   ProjectCreatorOverview,
   ProjectCreatorViews,
-  ProjectManageRewards,
-  ProjectCreateReward,
   ProjectEditReward,
   ProjectMainBody,
+  ProjectManageRewards,
   ProjectView,
 }

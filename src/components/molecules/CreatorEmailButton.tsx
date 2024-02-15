@@ -4,10 +4,7 @@ import { useState } from 'react'
 
 import { copyTextToClipboard } from '../../utils'
 
-export const CreatorEmailButton = ({
-  email,
-  ...props
-}: { email: string } & ButtonProps) => {
+export const CreatorEmailButton = ({ email, ...props }: { email: string } & ButtonProps) => {
   const [isEmailCopied, setEmailCopied] = useState(false)
 
   const handleCopyEmail = () => {

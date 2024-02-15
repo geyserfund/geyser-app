@@ -3,11 +3,7 @@ import { useFilterContext } from '../../../../context'
 import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../../../graphql'
 import { ScrollInvoke } from '../../../../helpers'
 import { useQueryWithPagination } from '../../../../hooks'
-import {
-  OrderByOptions,
-  ProjectForLandingPageFragment,
-  ProjectStatus,
-} from '../../../../types'
+import { OrderByOptions, ProjectForLandingPageFragment, ProjectStatus } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { FilteredProjectList } from '../components'
 

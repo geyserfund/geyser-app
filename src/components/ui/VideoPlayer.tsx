@@ -6,11 +6,7 @@ export const VideoPlayer = (props: ReactPlayerProps) => {
   const [isReady, setReady] = useState(false)
 
   return (
-    <Box
-      position="relative"
-      sx={{ '& iframe': { borderRadius: '8px' } }}
-      pt="56.25%"
-    >
+    <Box position="relative" sx={{ '& iframe': { borderRadius: '8px' } }} pt="56.25%">
       {/* 56.25% makes an aspect ratio of 16:9 */}
       <ReactPlayer
         controls

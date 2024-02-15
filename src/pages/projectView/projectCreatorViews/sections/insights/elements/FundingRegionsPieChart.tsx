@@ -10,13 +10,7 @@ import { commaFormatted, useCustomTheme } from '../../../../../../utils'
 import { getColorByIndex } from '../helpers'
 import { ActiveShapeComponent } from './ActiveShapeComponent'
 
-export const FundingRegionsPieChart = ({
-  data,
-  loading,
-}: {
-  data: ProjectViewBaseStats[]
-  loading?: boolean
-}) => {
+export const FundingRegionsPieChart = ({ data, loading }: { data: ProjectViewBaseStats[]; loading?: boolean }) => {
   const { colors } = useCustomTheme()
   const ref = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()

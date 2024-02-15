@@ -18,13 +18,7 @@ export const FundingFormSection = ({ onBackClick }: Props) => {
     fundForm: { setState },
   } = useProjectContext()
   return (
-    <VStack
-      marginTop="0px !important"
-      width="100%"
-      spacing="30px"
-      flex="1"
-      overflowX="visible"
-    >
+    <VStack marginTop="0px !important" width="100%" spacing="30px" flex="1" overflowX="visible">
       <Box width="100%">
         <HStack mb={2}>
           <Button onClick={onBackClick} variant="transparent">
@@ -34,11 +28,7 @@ export const FundingFormSection = ({ onBackClick }: Props) => {
         </HStack>
 
         <SectionTitle>{t('Make a donation')}</SectionTitle>
-        <DonationInput
-          inputGroup={{ padding: '2px' }}
-          name="donationAmount"
-          onChange={setState}
-        />
+        <DonationInput inputGroup={{ padding: '2px' }} name="donationAmount" onChange={setState} />
       </Box>
 
       <FundingFormRewards />

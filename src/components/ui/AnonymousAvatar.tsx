@@ -10,12 +10,7 @@ type Props = {
   textColor?: string
 }
 
-export const AnonymousAvatar = ({
-  seed,
-  image,
-  textColor,
-  imageSize = '30px',
-}: Props) => (
+export const AnonymousAvatar = ({ seed, image, textColor, imageSize = '30px' }: Props) => (
   <Stack
     width={imageSize}
     height={imageSize}

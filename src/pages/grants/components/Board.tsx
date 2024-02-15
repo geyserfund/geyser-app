@@ -1,14 +1,6 @@
 import { Avatar, Box, Link, Text } from '@chakra-ui/react'
 
-import {
-  bradUrl,
-  conorUrl,
-  cryptoUrl,
-  desUrl,
-  lucasUrl,
-  princeUrl,
-  zuccoUrl,
-} from '../../../constants'
+import { bradUrl, conorUrl, cryptoUrl, desUrl, lucasUrl, princeUrl, zuccoUrl } from '../../../constants'
 
 interface BoardMemberProps {
   image: string
@@ -29,8 +21,7 @@ const BoardMember = ({ image, name, link, handle }: BoardMemberProps) => (
     height="200px"
     rounded="md"
     _hover={{
-      boxShadow:
-        'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px',
+      boxShadow: 'rgba(60, 64, 67, 0.3) 0px 0px 2px 0px, rgba(60, 64, 67, 0.15) 0px 0px 3px 1px',
     }}
     boxShadow="rgba(50, 50, 93, 0.25) 0px 0px 12px -2px, rgba(0, 0, 0, 0.3) 0px 0px 7px -3px"
     transition="box-shadow 0.3s ease-in-out"
@@ -43,12 +34,7 @@ const BoardMember = ({ image, name, link, handle }: BoardMemberProps) => (
         {name}
       </Text>
       <Box display="flex" justifyContent="center">
-        <Link
-          _hover={{ textDecoration: 'none' }}
-          isExternal
-          href={link}
-          color="social.twitter"
-        >
+        <Link _hover={{ textDecoration: 'none' }} isExternal href={link} color="social.twitter">
           @{handle}
         </Link>
       </Box>
@@ -102,12 +88,7 @@ const boardMembers = [
 ]
 
 export const Board = () => (
-  <Box
-    display="flex"
-    justifyContent="center"
-    alignItems="center"
-    flexWrap="wrap"
-  >
+  <Box display="flex" justifyContent="center" alignItems="center" flexWrap="wrap">
     {boardMembers.map((member: BoardMemberProps) => (
       <BoardMember
         key={member.handle}

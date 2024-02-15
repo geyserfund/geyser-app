@@ -21,13 +21,7 @@ export const ToolbarBlocks = ({ isDisabled }: { isDisabled?: boolean }) => {
         Icon={BiListOl}
         isDisabled={isDisabled}
       />
-      <ToolbarCommand
-        cmd="toggleCode"
-        name="code"
-        label="Code"
-        Icon={BiCode}
-        isDisabled={isDisabled}
-      />
+      <ToolbarCommand cmd="toggleCode" name="code" label="Code" Icon={BiCode} isDisabled={isDisabled} />
       <ToolbarCommand
         cmd="toggleBlockquote"
         name="blockquote"

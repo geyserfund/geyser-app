@@ -7,11 +7,7 @@ interface LandingProjectCardProps extends Omit<CardLayoutProps, 'to'> {
   isMobile?: boolean
 }
 
-export const LandingProjectCard = ({
-  project,
-  isMobile,
-  ...rest
-}: LandingProjectCardProps) => {
+export const LandingProjectCard = ({ project, isMobile, ...rest }: LandingProjectCardProps) => {
   if (!project.owners[0]) {
     return null
   }

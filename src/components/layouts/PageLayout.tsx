@@ -8,12 +8,7 @@ interface PageLayoutProps {
 
 export const PageLayout = ({ children }: PageLayoutProps) => {
   return (
-    <Box
-      position="relative"
-      paddingTop={`${dimensions.topNavBar.desktop.height}px`}
-      width="full"
-      height="full"
-    >
+    <Box position="relative" paddingTop={`${dimensions.topNavBar.desktop.height}px`} width="full" height="full">
       {children}
     </Box>
   )

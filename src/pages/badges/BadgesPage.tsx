@@ -35,15 +35,7 @@ export const BadgesPage = () => {
 
   return (
     <Container maxWidth="5xl" pt={10}>
-      <Button
-        mt={4}
-        size="sm"
-        bg="neutral.0"
-        variant="outline"
-        gap={2}
-        onClick={() => navigate(-1)}
-        fontSize="sm"
-      >
+      <Button mt={4} size="sm" bg="neutral.0" variant="outline" gap={2} onClick={() => navigate(-1)} fontSize="sm">
         <FaArrowLeft /> {t('Back')}
       </Button>
       <VStack spacing={4} justify="center" textAlign="center" mb={12}>
@@ -79,16 +71,9 @@ export const BadgesPage = () => {
                         const subtypeBadges = subtypes[subtype]
                         return (
                           <Box key={subtype}>
-                            <BadgeList
-                              title={t(BADGE_SUBTYPE_MAP[subtype] || '')}
-                            >
+                            <BadgeList title={t(BADGE_SUBTYPE_MAP[subtype] || '')}>
                               {subtypeBadges &&
-                                subtypeBadges.map(
-                                  (badge) =>
-                                    badge && (
-                                      <BadgeItem key={badge.id} {...badge} />
-                                    ),
-                                )}
+                                subtypeBadges.map((badge) => badge && <BadgeItem key={badge.id} {...badge} />)}
                             </BadgeList>
                           </Box>
                         )

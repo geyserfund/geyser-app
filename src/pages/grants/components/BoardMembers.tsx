@@ -86,11 +86,7 @@ export const BoardMembers = ({ members }: { members?: GrantBoardMember[] }) => {
               ))
             : defaultMembers.map((item, idx) => (
                 <WrapItem key={idx}>
-                  <BitcoinerCard
-                    name={item.name}
-                    image={item.image}
-                    link={item.link}
-                  />
+                  <BitcoinerCard name={item.name} image={item.image} link={item.link} />
                 </WrapItem>
               ))}
         </Wrap>

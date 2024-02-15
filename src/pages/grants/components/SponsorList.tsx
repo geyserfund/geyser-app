@@ -9,22 +9,10 @@ interface Props {
   titleProps?: BoxProps
 }
 
-export const SponsorList = ({
-  sponsors = [],
-  titleProps,
-  children,
-  ...props
-}: PropsWithChildren<Props & BoxProps>) => {
+export const SponsorList = ({ sponsors = [], titleProps, children, ...props }: PropsWithChildren<Props & BoxProps>) => {
   const { t } = useTranslation()
   return sponsors.length ? (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      flexWrap="wrap"
-      mt={4}
-      {...props}
-    >
+    <Box display="flex" alignItems="center" justifyContent="center" flexWrap="wrap" mt={4} {...props}>
       {children || (
         <Box {...titleProps}>
           <Text color="neutral.600" fontSize="11px" fontWeight="700">

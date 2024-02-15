@@ -9,10 +9,7 @@ export const testImage = (url: string, timesT?: number) =>
 
     img.onerror = function () {
       if (timeout < MAX_RETRY_ATTEMPTS) {
-        setTimeout(
-          () => testImage(url, timeout + 1).then(resolve),
-          WAIT_BEFORE_RETRY_MILLIS,
-        )
+        setTimeout(() => testImage(url, timeout + 1).then(resolve), WAIT_BEFORE_RETRY_MILLIS)
         return
       }
 
@@ -21,10 +18,7 @@ export const testImage = (url: string, timesT?: number) =>
 
     img.onabort = function () {
       if (timeout < MAX_RETRY_ATTEMPTS) {
-        setTimeout(
-          () => testImage(url, timeout + 1).then(resolve),
-          WAIT_BEFORE_RETRY_MILLIS,
-        )
+        setTimeout(() => testImage(url, timeout + 1).then(resolve), WAIT_BEFORE_RETRY_MILLIS)
         return
       }
 

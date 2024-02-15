@@ -15,13 +15,7 @@ interface ICreateNavProps {
   onBack?: () => void
 }
 
-export const CreateNav = ({
-  isSaving,
-  saveText,
-  onSave,
-  onPreview,
-  onBack,
-}: ICreateNavProps) => {
+export const CreateNav = ({ isSaving, saveText, onSave, onPreview, onBack }: ICreateNavProps) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
 
@@ -51,20 +45,11 @@ export const CreateNav = ({
         >
           <HStack spacing="5px" justifyContent="center" alignItems="center">
             <NavBarLogo small />
-            <Avatar
-              borderRadius="6px"
-              height="40px"
-              width="40px"
-              src={`${user.imageUrl}`}
-            />
+            <Avatar borderRadius="6px" height="40px" width="40px" src={`${user.imageUrl}`} />
           </HStack>
           <HStack>
             {onBack && (
-              <ButtonComponent
-                paddingX="6px"
-                aria-label="back"
-                onClick={onBack}
-              >
+              <ButtonComponent paddingX="6px" aria-label="back" onClick={onBack}>
                 <MdOutlineArrowBackIos />
               </ButtonComponent>
             )}

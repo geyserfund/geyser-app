@@ -9,13 +9,7 @@ export interface BodyProps extends TextProps {
   to?: string
 }
 
-export const Body1 = ({
-  children,
-  bold,
-  semiBold,
-  xBold,
-  ...rest
-}: BodyProps) => {
+export const Body1 = ({ children, bold, semiBold, xBold, ...rest }: BodyProps) => {
   return (
     <Text
       fontSize={{ base: '14px', lg: '16px' }}
@@ -28,13 +22,7 @@ export const Body1 = ({
   )
 }
 
-export const Body2 = ({
-  children,
-  bold,
-  semiBold,
-  xBold,
-  ...rest
-}: BodyProps) => {
+export const Body2 = ({ children, bold, semiBold, xBold, ...rest }: BodyProps) => {
   return (
     <Text
       fontSize={{ base: '12px', lg: '14px' }}
@@ -47,13 +35,7 @@ export const Body2 = ({
   )
 }
 
-export const Caption = ({
-  children,
-  bold,
-  semiBold,
-  xBold,
-  ...rest
-}: BodyProps) => {
+export const Caption = ({ children, bold, semiBold, xBold, ...rest }: BodyProps) => {
   return (
     <Text
       fontSize="10px"

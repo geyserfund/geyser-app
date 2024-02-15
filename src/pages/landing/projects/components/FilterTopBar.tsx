@@ -25,20 +25,9 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
   const { filters, updateFilter } = useFilterContext()
   const isMobile = useMobileMode()
 
-  const {
-    tagIds = [],
-    region,
-    countryCode,
-    search,
-    type,
-    status,
-    activity,
-    recent,
-  } = filters
+  const { tagIds = [], region, countryCode, search, type, status, activity, recent } = filters
 
-  const { loading: tagsLoading, data } = useQuery<{ tagsGet: TagsGetResult[] }>(
-    QUERY_TAGS,
-  )
+  const { loading: tagsLoading, data } = useQuery<{ tagsGet: TagsGetResult[] }>(QUERY_TAGS)
 
   const { loading: countriesLoading, data: countriesData } = useQuery<{
     projectCountriesGet: ProjectCountriesGetResult[]
@@ -76,9 +65,7 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
 
   const renderFilterRegion = () => {
     if (countryCode) {
-      const country = countriesData?.projectCountriesGet.find(
-        (result) => result.country.code === countryCode,
-      )
+      const country = countriesData?.projectCountriesGet.find((result) => result.country.code === countryCode)
       if (country) {
         return (
           <TagComponent
@@ -184,12 +171,7 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
     filters.recent
   ) {
     return (
-      <HStack
-        width="100%"
-        justifyContent="space-between"
-        alignItems="start"
-        {...rest}
-      >
+      <HStack width="100%" justifyContent="space-between" alignItems="start" {...rest}>
         <Wrap>
           {viewRecentProjects}
           {viewFilterActivity}

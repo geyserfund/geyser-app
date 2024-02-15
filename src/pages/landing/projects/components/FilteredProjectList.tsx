@@ -1,10 +1,7 @@
 import { GridItem, SimpleGrid } from '@chakra-ui/react'
 
 import { NoDataError } from '../../../../components/errors'
-import {
-  CardLayout,
-  LandingCardBaseSkeleton,
-} from '../../../../components/layouts'
+import { CardLayout, LandingCardBaseSkeleton } from '../../../../components/layouts'
 import { ProjectForLandingPageFragment } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { LandingProjectCard, NoSearchResults } from '../../components'
@@ -16,11 +13,7 @@ interface FilteredProjectListProps {
   loading?: boolean
 }
 
-export const FilteredProjectList = ({
-  projects,
-  error,
-  loading,
-}: FilteredProjectListProps) => {
+export const FilteredProjectList = ({ projects, error, loading }: FilteredProjectListProps) => {
   const isMobile = useMobileMode()
 
   const renderProjects = () => {
@@ -46,21 +39,12 @@ export const FilteredProjectList = ({
   }
 
   return (
-    <CardLayout
-      noborder={isMobile}
-      w="full"
-      spacing="30px"
-      padding={{ base: 0, lg: '20px' }}
-    >
+    <CardLayout noborder={isMobile} w="full" spacing="30px" padding={{ base: 0, lg: '20px' }}>
       {!isMobile && <FilterTopBar />}
       {error ? (
         <NoDataError />
       ) : (
-        <SimpleGrid
-          columns={{ base: 1, xl: 3 }}
-          spacingX="20px"
-          spacingY="20px"
-        >
+        <SimpleGrid columns={{ base: 1, xl: 3 }} spacingX="20px" spacingY="20px">
           {renderProjects()}
         </SimpleGrid>
       )}

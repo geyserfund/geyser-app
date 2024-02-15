@@ -1,21 +1,12 @@
 import { Box } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
-import {
-  Navigate,
-  Outlet,
-  useLocation,
-  useNavigate,
-  useParams
-} from 'react-router-dom'
+import React from 'react'
+import { Navigate, Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import Loader from '../../components/ui/Loader'
-import {
-  Head,
-  routeMatchForProjectPageAtom,
-  useGetHistoryRoute,
-} from '../../config'
-import { PathName, getPath } from '../../constants'
+import { Head, routeMatchForProjectPageAtom, useGetHistoryRoute } from '../../config'
+import { getPath, PathName } from '../../constants'
 import { MobileViews, useProjectContext } from '../../context'
 import { useModal } from '../../hooks/useModal'
 import { toInt, useMobileMode } from '../../utils'
@@ -23,11 +14,10 @@ import { ProjectCreateDraftModal } from '../projectCreate/components/ProjectCrea
 import { ProjectCreateLaunchedModal } from '../projectCreate/components/ProjectCreateLaunchedModal'
 import { ProjectMobileBottomNavigation } from './projectNavigation/components/ProjectMobileBottomNavigation'
 import { ProjectNavigation } from './projectNavigation/components/ProjectNavigation'
-import React from 'react'
 
 function useQuery() {
-  const { search } = useLocation();
-  return React.useMemo(() => new URLSearchParams(search), [search]);
+  const { search } = useLocation()
+  return React.useMemo(() => new URLSearchParams(search), [search])
 }
 
 export const ProjectContainer = () => {
@@ -39,10 +29,18 @@ export const ProjectContainer = () => {
   const launchModal = useModal({ onClose: onModalClose })
   const draftModal = useModal({ onClose: onModalClose })
 
-  const { project, loading, isProjectOwner, fundingFlow, fundForm: { updateReward }, setMobileView, mobileView } = useProjectContext()
+  const {
+    project,
+    loading,
+    isProjectOwner,
+    fundingFlow,
+    fundForm: { updateReward },
+    setMobileView,
+    mobileView,
+  } = useProjectContext()
 
-  const params = useParams<{ projectId: string, addRewardToBasket: string }>()
-  const query = useQuery();
+  const params = useParams<{ projectId: string; addRewardToBasket: string }>()
+  const query = useQuery()
   const routeMatchForProjectPage = useAtomValue(routeMatchForProjectPageAtom)
   const historyRoutes = useGetHistoryRoute()
   const lastRoute = historyRoutes[historyRoutes.length - 2] || ''
@@ -72,31 +70,25 @@ export const ProjectContainer = () => {
 
   if (loading || isProjectOwner === undefined) {
     return (
-      <Box
-        width="100%"
-        display="flex"
-        justifyContent="center"
-        background={'transparent'}
-      >
+      <Box width="100%" display="flex" justifyContent="center" background={'transparent'}>
         <Loader paddingTop="65px" />
       </Box>
     )
   }
 
-
   // If the user is being directed to the product page with addToCart, this takes first priority
-  if(query.get('addRewardToBasket')) {
+  if (query.get('addRewardToBasket')) {
     updateReward({ id: toInt(query.get('addRewardToBasket')), count: 1 })
     navigate(PathName.projectRewards)
     setMobileView(MobileViews.funding)
   }
-  
+
   // If the user is project creator and the route is project main page, we redirect to project overview page
   else if (
     params.projectId &&
     routeMatchForProjectPage &&
     isProjectOwner &&
-    mobileView !== "funding" &&
+    mobileView !== 'funding' &&
     !lastRoute.includes('launch') &&
     !(lastRoute.includes('project') && lastRoute.includes(params.projectId))
   ) {
@@ -109,7 +101,7 @@ export const ProjectContainer = () => {
       justifyContent="center"
       alignItems="center"
       height="100%"
-      pb={{ base: (fundingFlow.fundState === 'initial' ? "70px" : 0), lg: '0px' }}
+      pb={{ base: fundingFlow.fundState === 'initial' ? '70px' : 0, lg: '0px' }}
     >
       <Box
         width="100%"

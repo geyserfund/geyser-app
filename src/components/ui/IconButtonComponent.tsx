@@ -8,22 +8,19 @@ export interface IconButtonComponentProps extends IconButtonProps {
   noBorder?: boolean
 }
 
-export const IconButtonComponent = forwardRef<
-  HTMLButtonElement,
-  IconButtonComponentProps
->(({ primary, noBorder, ...rest }, ref) => {
-  return (
-    <IconButton
-      ref={ref}
-      variant="solid"
-      backgroundColor={
-        noBorder ? 'transparent' : primary ? 'primary.400' : 'neutral.0'
-      }
-      borderRadius="50%"
-      color={'neutral.1000'}
-      _hover={primary ? { bg: 'primary.400Tint' } : undefined}
-      border={noBorder ? undefined : `1px solid ${'neutral.300'}`}
-      {...rest}
-    />
-  )
-})
+export const IconButtonComponent = forwardRef<HTMLButtonElement, IconButtonComponentProps>(
+  ({ primary, noBorder, ...rest }, ref) => {
+    return (
+      <IconButton
+        ref={ref}
+        variant="solid"
+        backgroundColor={noBorder ? 'transparent' : primary ? 'primary.400' : 'neutral.0'}
+        borderRadius="50%"
+        color={'neutral.1000'}
+        _hover={primary ? { bg: 'primary.400Tint' } : undefined}
+        border={noBorder ? undefined : `1px solid ${'neutral.300'}`}
+        {...rest}
+      />
+    )
+  },
+)

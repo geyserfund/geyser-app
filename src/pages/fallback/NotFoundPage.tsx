@@ -37,9 +37,7 @@ export const NotFoundPage = () => {
       >
         <BiErrorAlt fontSize="80px" />
         <Text fontSize="20px">{t('Oops!')}</Text>
-        <Text fontSize="20px">
-          {t('This page was not found, please try again.')}
-        </Text>
+        <Text fontSize="20px">{t('This page was not found, please try again.')}</Text>
         <Button onClick={handleActionButton}>{t('Refresh')}</Button>
         <CommonFeedbackMessage />
       </VStack>

@@ -1,10 +1,4 @@
-import {
-  Button,
-  Checkbox,
-  HStack,
-  useDisclosure,
-  VStack,
-} from '@chakra-ui/react'
+import { Button, Checkbox, HStack, useDisclosure, VStack } from '@chakra-ui/react'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { ChangeEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -21,10 +15,7 @@ interface ExportNostrKeysModalProps {
   projectTitle: ProjectFragment['title']
 }
 
-export const ExportNostrKeysModal = ({
-  projectId,
-  projectTitle,
-}: ExportNostrKeysModalProps) => {
+export const ExportNostrKeysModal = ({ projectId, projectTitle }: ExportNostrKeysModalProps) => {
   const { t } = useTranslation()
   const { isOpen, onClose, onOpen } = useDisclosure()
   const { colors } = useCustomTheme()
@@ -48,34 +39,19 @@ export const ExportNostrKeysModal = ({
         {' '}
         {t('Export Private key (nsec)')}
       </Button>
-      <Modal
-        size="sm"
-        title={t('Export Private Key (nsec)')}
-        isOpen={isOpen}
-        onClose={onClose}
-      >
+      <Modal size="sm" title={t('Export Private Key (nsec)')} isOpen={isOpen} onClose={onClose}>
         <VStack spacing="20px">
           <Body2 semiBold color="neutral.600">
             {t('Are you sure you want to export your private keys?')}
           </Body2>
-          <HStack
-            padding="6px 12px"
-            backgroundColor="rgba(223, 54, 52, 0.10)"
-            borderRadius="8px"
-          >
+          <HStack padding="6px 12px" backgroundColor="rgba(223, 54, 52, 0.10)" borderRadius="8px">
             <BiErrorCircle color={colors.secondary.red} fontSize="30px" />
             <Caption color="secondary.red" xBold>
-              {t(
-                'Warning: your project risks being compromised if you leak your private key.',
-              )}
+              {t('Warning: your project risks being compromised if you leak your private key.')}
             </Caption>
           </HStack>
 
-          <Checkbox
-            colorScheme="teal"
-            isChecked={isChecked}
-            onChange={handleCheckBox}
-          >
+          <Checkbox colorScheme="teal" isChecked={isChecked} onChange={handleCheckBox}>
             {t('I understand the risks of exporting my private key')}
           </Checkbox>
 
@@ -102,12 +78,7 @@ export const ExportNostrKeysModal = ({
               {t('Export Private key (nsec)')}
             </PDFDownloadLink>
           ) : (
-            <Button
-              width="full"
-              variant="secondary"
-              isLoading={loading}
-              isDisabled
-            >
+            <Button width="full" variant="secondary" isLoading={loading} isDisabled>
               {t('Export Private key (nsec)')}
             </Button>
           )}

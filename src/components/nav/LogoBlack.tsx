@@ -25,13 +25,7 @@ export const LogoBlack = ({ imageClassName, full, ...rest }: ILogoP) => {
       {...rest}
       onClick={handleClick}
     >
-      <Image
-        className={imageClassName}
-        height="40px"
-        src={geyserBlack}
-        alt="geyser logo image"
-        objectFit="contain"
-      />
+      <Image className={imageClassName} height="40px" src={geyserBlack} alt="geyser logo image" objectFit="contain" />
     </Box>
   )
 }

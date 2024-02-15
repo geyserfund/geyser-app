@@ -12,10 +12,7 @@ interface ConnectWithEmailProps extends ButtonProps {
   onClose?: () => void
 }
 
-export const ConnectWithEmail = ({
-  onClose,
-  ...rest
-}: ConnectWithEmailProps) => {
+export const ConnectWithEmail = ({ onClose, ...rest }: ConnectWithEmailProps) => {
   const { isOpen, onClose: onModalClose, onOpen } = useDisclosure()
   const { isLoggedIn, queryCurrentUser } = useAuthContext()
   const { toast } = useNotification()
@@ -32,11 +29,7 @@ export const ConnectWithEmail = ({
     }
   }, [isLoggedIn, onModalClose])
 
-  const handleLogin = async (
-    otpCode: Number,
-    otpData: OtpResponseFragment,
-    email?: string,
-  ) => {
+  const handleLogin = async (otpCode: Number, otpData: OtpResponseFragment, email?: string) => {
     if (email) {
       fetch(`${authServiceEndPoint}/email`, {
         method: 'POST',
@@ -70,22 +63,10 @@ export const ConnectWithEmail = ({
 
   return (
     <>
-      <Button
-        variant="primary"
-        w="100%"
-        leftIcon={<MdEmail />}
-        onClick={handleClick}
-        textDecoration={'none'}
-        {...rest}
-      >
+      <Button variant="primary" w="100%" leftIcon={<MdEmail />} onClick={handleClick} textDecoration={'none'} {...rest}>
         Email
       </Button>
-      <VerifyYourEmail
-        isOpen={isOpen}
-        onClose={onModalClose}
-        action={MfaAction.Login}
-        handleVerify={handleLogin}
-      />
+      <VerifyYourEmail isOpen={isOpen} onClose={onModalClose} action={MfaAction.Login} handleVerify={handleLogin} />
     </>
   )
 }

@@ -1,5 +1,4 @@
-export const TwitterRegex =
-  /^(?:https?:\/\/)?(?:www\.)?twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)/
+export const TwitterRegex = /^(?:https?:\/\/)?(?:www\.)?twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)/
 
 export function validateTwitterUrl(url?: string | null) {
   if (url) {

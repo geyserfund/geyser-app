@@ -13,13 +13,7 @@ export type ImageFieldProps = {
   control: Control<FieldValue<any>, any>
 }
 
-export const ImageField = ({
-  control,
-  name,
-  caption,
-  required,
-  label,
-}: ImageFieldProps) => {
+export const ImageField = ({ control, name, caption, required, label }: ImageFieldProps) => {
   return (
     <Controller
       name={name}
@@ -34,11 +28,7 @@ export const ImageField = ({
               </>
             }
             subtitle={caption}
-            error={
-              fieldState.error
-                ? fieldState.error.message?.toString() || ''
-                : null
-            }
+            error={fieldState.error ? fieldState.error.message?.toString() || '' : null}
           >
             <FileUpload
               showcase
@@ -48,10 +38,7 @@ export const ImageField = ({
               onDeleteClick={() => field.onChange('')}
               childrenOnLoading={<UploadBox loading />}
             >
-              <UploadBox
-                h={10}
-                title={field.value ? 'Change image' : undefined}
-              />
+              <UploadBox h={10} title={field.value ? 'Change image' : undefined} />
             </FileUpload>
           </FieldContainer>
         </FormControl>

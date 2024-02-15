@@ -5,10 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { ProjectValidations } from '../../../constants'
 import { FieldContainer } from '../../../forms/components/FieldContainer'
-import {
-  MarkdownField,
-  MarkdownFieldSkeleton,
-} from '../../../forms/markdown/MarkdownField'
+import { MarkdownField, MarkdownFieldSkeleton } from '../../../forms/markdown/MarkdownField'
 import { useMobileMode } from '../../../utils'
 
 interface Props {
@@ -18,12 +15,7 @@ interface Props {
   toolbarTop?: string
 }
 
-export const ProjectStoryForm = ({
-  autoFocus,
-  form,
-  isLoading,
-  toolbarTop,
-}: Props) => {
+export const ProjectStoryForm = ({ autoFocus, form, isLoading, toolbarTop }: Props) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
 
@@ -47,17 +39,9 @@ export const ProjectStoryForm = ({
         <FieldContainer
           width="100%"
           flexGrow={1}
-          subtitle={t(
-            'Write a more in-depth description of the project. You can also add images and videos.',
-          )}
+          subtitle={t('Write a more in-depth description of the project. You can also add images and videos.')}
         >
-          <Box
-            width="100%"
-            pt={3}
-            flexGrow={1}
-            display="flex"
-            flexDirection="column"
-          >
+          <Box width="100%" pt={3} flexGrow={1} display="flex" flexDirection="column">
             {isStoryLoading ? (
               <MarkdownFieldSkeleton />
             ) : (
@@ -79,14 +63,8 @@ export const ProjectStoryForm = ({
                   {t(form.getFieldState('description').error?.message || '')}
                 </Text>
               )}
-              <Text
-                fontSize="12px"
-                color="neutral.700"
-                flexGrow={1}
-                textAlign="right"
-              >
-                <span>{form.watch('description').length}</span>/
-                <span>{ProjectValidations.description.maxLength}</span>
+              <Text fontSize="12px" color="neutral.700" flexGrow={1} textAlign="right">
+                <span>{form.watch('description').length}</span>/<span>{ProjectValidations.description.maxLength}</span>
               </Text>
             </HStack>
           </Box>

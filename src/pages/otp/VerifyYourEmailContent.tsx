@@ -5,11 +5,7 @@ import { BsArrowLeft } from 'react-icons/bs'
 
 import { Body1 } from '../../components/typography'
 import { VerifyEmailImageUrl } from '../../constants'
-import {
-  MfaAction,
-  OtpResponseFragment,
-  useSendOtpByEmailMutation,
-} from '../../types'
+import { MfaAction, OtpResponseFragment, useSendOtpByEmailMutation } from '../../types'
 import { useNotification } from '../../utils'
 import { ReceiveOneTimePassword, VerifyOneTimePassword } from './components'
 
@@ -17,11 +13,7 @@ export interface VerifyYourEmailContentProps {
   action: MfaAction
   otpSent?: boolean
   otpData?: OtpResponseFragment
-  handleVerify?: (
-    otpCode: number,
-    otpData: OtpResponseFragment,
-    email?: string,
-  ) => void
+  handleVerify?: (otpCode: number, otpData: OtpResponseFragment, email?: string) => void
 }
 
 export const VerifyYourEmailContent = ({
@@ -67,15 +59,11 @@ export const VerifyYourEmailContent = ({
 
   const getDescription = () => {
     if (action === MfaAction.ProjectWalletUpdate) {
-      return t(
-        'You can update your wallet securely by using the One Time Password sent to your verified email.',
-      )
+      return t('You can update your wallet securely by using the One Time Password sent to your verified email.')
     }
 
     if (action === MfaAction.UserEmailUpdate) {
-      return t(
-        'You can update your email securely by using One Time Password sent to your last verfied email.',
-      )
+      return t('You can update your email securely by using One Time Password sent to your last verfied email.')
     }
 
     return t(
@@ -96,13 +84,7 @@ export const VerifyYourEmailContent = ({
           {'Back'}
         </Button>
       )}
-      <Image
-        src={VerifyEmailImageUrl}
-        alt="verify-email-image"
-        w={200}
-        h={200}
-        alignSelf="center"
-      />
+      <Image src={VerifyEmailImageUrl} alt="verify-email-image" w={200} h={200} alignSelf="center" />
 
       <Body1 semiBold>
         {getDescription()} {t('Check your SPAM folder for the email.')}

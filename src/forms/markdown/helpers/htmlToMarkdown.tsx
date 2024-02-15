@@ -4,12 +4,7 @@
  * Use `turndown` to provide a github flavoured markdown converter and the
  * default common mark converter.
  */
-import {
-  defaultImport,
-  ErrorConstant,
-  invariant,
-  isElementDomNode,
-} from '@remirror/core'
+import { defaultImport, ErrorConstant, invariant, isElementDomNode } from '@remirror/core'
 import _TurndownService from 'turndown'
 
 const TurndownService = defaultImport(_TurndownService)
@@ -44,10 +39,7 @@ function isHeadingRow(tableRow: Node): tableRow is HTMLTableRowElement {
   }
 
   const childNodes = [...tableRow.childNodes]
-  return (
-    childNodes.every((n) => n.nodeName === 'TH') &&
-    childNodes.some((n) => Boolean(n.textContent))
-  )
+  return childNodes.every((n) => n.nodeName === 'TH') && childNodes.some((n) => Boolean(n.textContent))
 }
 
 /**
@@ -66,9 +58,7 @@ function isControllerHeadingCell(cell: unknown): cell is HTMLTableCellElement {
  *   following a blank THEAD)
  * - and every cell is a controller cell
  */
-function isControllerHeadingRow(
-  tableRow: Node,
-): tableRow is HTMLTableRowElement {
+function isControllerHeadingRow(tableRow: Node): tableRow is HTMLTableRowElement {
   const { parentNode } = tableRow
 
   if (!isElementDomNode(parentNode)) {
@@ -98,9 +88,7 @@ function isFirstTbody(element: Node): element is HTMLTableSectionElement {
   }
 
   return (
-    isElementDomNode(previousSibling) &&
-    previousSibling.nodeName === 'THEAD' &&
-    !previousSibling.textContent?.trim()
+    isElementDomNode(previousSibling) && previousSibling.nodeName === 'THEAD' && !previousSibling.textContent?.trim()
   )
 }
 
@@ -154,8 +142,7 @@ const turndownService = new TurndownService({
 })
   .keep(['iframe'])
   .addRule('taskListItems', {
-    filter: (node) =>
-      node.nodeName === 'LI' && node.hasAttribute('data-task-list-item'),
+    filter: (node) => node.nodeName === 'LI' && node.hasAttribute('data-task-list-item'),
     replacement(content, node) {
       const isChecked = (node as HTMLElement).hasAttribute('data-checked')
       return `- ${isChecked ? '[x]' : '[ ]'} ${content.trimStart()}`
@@ -178,9 +165,7 @@ const turndownService = new TurndownService({
       const alignMap = { left: ':--', right: '--:', center: ':-:' }
 
       // Get child nodes ignoring controller cells
-      const childNodes = [...node.childNodes].filter(
-        (n) => !isControllerHeadingCell(n),
-      )
+      const childNodes = [...node.childNodes].filter((n) => !isControllerHeadingCell(n))
 
       if (isHeadingRow(node)) {
         for (const childNode of childNodes) {
@@ -190,9 +175,7 @@ const turndownService = new TurndownService({
           }
 
           let border = '---'
-          const align = (
-            childNode.getAttribute('align') ?? ''
-          ).toLowerCase() as keyof typeof alignMap
+          const align = (childNode.getAttribute('align') ?? '').toLowerCase() as keyof typeof alignMap
 
           if (align) {
             border = alignMap[align] || border
@@ -238,11 +221,7 @@ const turndownService = new TurndownService({
       return content
     },
   })
-  .keep(
-    (node) =>
-      node.nodeName === 'TABLE' &&
-      !isHeadingRow((node as HTMLTableElement).rows[0] as any),
-  )
+  .keep((node) => node.nodeName === 'TABLE' && !isHeadingRow((node as HTMLTableElement).rows[0] as any))
   .keep((node) => node.nodeName === 'TABLE' && isNestedTable(node))
   .addRule('strikethrough', {
     filter: ['del', 's', 'strike' as 'del'],

@@ -11,12 +11,7 @@ interface ProfileTabLayoutProps extends CardLayoutProps {
   children: React.ReactNode
 }
 
-export const ProfileTabLayout = ({
-  title,
-  headerContent,
-  children,
-  ...rest
-}: ProfileTabLayoutProps) => {
+export const ProfileTabLayout = ({ title, headerContent, children, ...rest }: ProfileTabLayoutProps) => {
   const isMobile = useMobileMode()
   return (
     <CardLayout

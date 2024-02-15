@@ -50,8 +50,7 @@ export const ProjectsDisplay = ({ tag, seeAllText }: ProjectDisplayProps) => {
     }
   }
 
-  const projectList =
-    (data?.projectsGet.projects.slice(0, 3) as Project[]) || []
+  const projectList = (data?.projectsGet.projects.slice(0, 3) as Project[]) || []
 
   if (loading) {
     return <ProjectsDisplaySkeleton />
@@ -79,11 +78,7 @@ export const ProjectsDisplaySkeleton = () => {
         <Skeleton borderRadius="8px" height="20px" width="30%" />
         <Skeleton borderRadius="8px" height="20px" width="40px" />
       </HStack>
-      <Stack
-        width="100%"
-        direction={{ base: 'column', xl: 'row' }}
-        spacing="20px"
-      >
+      <Stack width="100%" direction={{ base: 'column', xl: 'row' }} spacing="20px">
         {[1, 2, 3].map((value) => {
           return <LandingCardBaseSkeleton key={value} />
         })}

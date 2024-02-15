@@ -82,12 +82,7 @@ export const ProjectCreationWalletConnectionPage = () => {
         Boolean(lightningAddress.value) &&
         !isLightningAddressInValid)
     )
-  }, [
-    connectionOption,
-    lightningAddress.value,
-    createWalletInput,
-    isLightningAddressInValid,
-  ])
+  }, [connectionOption, lightningAddress.value, createWalletInput, isLightningAddressInValid])
 
   // if (isGetProjectLoading) {
   //   return <Loader />
@@ -119,14 +114,7 @@ export const ProjectCreationWalletConnectionPage = () => {
           flexGrow={1}
         />
       }
-      title={
-        <TitleWithProgressBar
-          title={t('Connect wallet')}
-          subtitle={t('Create a project')}
-          index={4}
-          length={4}
-        />
-      }
+      title={<TitleWithProgressBar title={t('Connect wallet')} subtitle={t('Create a project')} index={4} length={4} />}
     >
       <VStack w="full" alignItems="start" pb="20px">
         <Body1 semiBold color="neutral.900">
@@ -147,9 +135,7 @@ export const ProjectCreationWalletConnectionPage = () => {
           </Body2>
         </Box>
       </VStack>
-      <ProjectCreationWalletConnectionForm
-        {...{ connectionOption, lightningAddress, node, setConnectionOption }}
-      />
+      <ProjectCreationWalletConnectionForm {...{ connectionOption, lightningAddress, node, setConnectionOption }} />
     </ProjectCreateLayout>
   )
 }

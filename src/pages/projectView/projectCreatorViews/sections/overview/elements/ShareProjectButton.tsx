@@ -14,9 +14,7 @@ export const ShareProjectButton = (props: ButtonProps) => {
 
   const handleCopyLink = async () => {
     try {
-      navigator.clipboard.writeText(
-        `${window.location.origin}/project/${project?.name}`,
-      )
+      navigator.clipboard.writeText(`${window.location.origin}/project/${project?.name}`)
       setCopied(true)
       setTimeout(() => {
         setCopied(false)
@@ -30,10 +28,7 @@ export const ShareProjectButton = (props: ButtonProps) => {
   }
 
   return (
-    <Tooltip
-      label={copied ? t('Copied to clipboard!') : t('Copy project link')}
-      closeOnClick={false}
-    >
+    <Tooltip label={copied ? t('Copied to clipboard!') : t('Copy project link')} closeOnClick={false}>
       <IconButton
         size="sm"
         aria-label="share-icon"

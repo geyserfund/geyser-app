@@ -2,20 +2,10 @@ import { DateTime } from 'luxon'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  AnonymousAvatar,
-  LinkableAvatar,
-} from '../../../../../../../components/ui'
-import {
-  FundingTxOrderFragment,
-  GetFundingTxsOrderByInput,
-  OrderByOptions,
-} from '../../../../../../../types'
+import { AnonymousAvatar, LinkableAvatar } from '../../../../../../../components/ui'
+import { FundingTxOrderFragment, GetFundingTxsOrderByInput, OrderByOptions } from '../../../../../../../types'
 import { OrderAmounts, OrderItems } from '../../components'
-import {
-  TableData,
-  TableWithAccordion,
-} from '../../components/TableWithAccordion'
+import { TableData, TableWithAccordion } from '../../components/TableWithAccordion'
 
 export const PaymentsAndAccountingTable = ({
   data,
@@ -36,13 +26,7 @@ export const PaymentsAndAccountingTable = ({
         render(val: FundingTxOrderFragment) {
           const isFunderAnonymous = !val.funder.user?.id
           if (isFunderAnonymous) {
-            return (
-              <AnonymousAvatar
-                seed={val.id}
-                imageSize={'20px'}
-                textColor="neutral.900"
-              />
-            )
+            return <AnonymousAvatar seed={val.id} imageSize={'20px'} textColor="neutral.900" />
           }
 
           return (
@@ -131,22 +115,12 @@ export const PaymentsAndAccountingTable = ({
         key: 'total',
         isAccordion: true,
         render(fundingTx: FundingTxOrderFragment) {
-          return (
-            <OrderAmounts
-              amount={fundingTx.amount}
-              quote={fundingTx.bitcoinQuote?.quote}
-            />
-          )
+          return <OrderAmounts amount={fundingTx.amount} quote={fundingTx.bitcoinQuote?.quote} />
         },
       },
     ],
     [t, setOrderBy, orderBy.createdAt],
   )
 
-  return (
-    <TableWithAccordion<FundingTxOrderFragment>
-      items={data}
-      schema={tableData}
-    />
-  )
+  return <TableWithAccordion<FundingTxOrderFragment> items={data} schema={tableData} />
 }

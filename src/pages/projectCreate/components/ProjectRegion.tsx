@@ -53,11 +53,7 @@ interface ProjectRegionProps extends StackProps {
   updateProject: (project: Partial<ProjectFragment>) => void
 }
 
-export const ProjectRegion = ({
-  location,
-  updateProject,
-  ...rest
-}: ProjectRegionProps) => {
+export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegionProps) => {
   const { t } = useTranslation()
   const classes = useStyles()
 
@@ -79,9 +75,7 @@ export const ProjectRegion = ({
       return
     }
 
-    const countryOptions = countries.projectCountriesGet.map(
-      (val) => val.country,
-    )
+    const countryOptions = countries.projectCountriesGet.map((val) => val.country)
 
     const regionOptions = regions.projectRegionsGet.map((val) => ({
       name: val.region,
@@ -128,11 +122,7 @@ export const ProjectRegion = ({
     <FieldContainer
       title={t('Region')}
       subtitle={
-        <span>
-          {t(
-            'Get found more easily by putting your project on the map. Select a country or region',
-          )}
-        </span>
+        <span>{t('Get found more easily by putting your project on the map. Select a country or region')}</span>
       }
       {...rest}
     >
@@ -157,11 +147,7 @@ export const ProjectRegion = ({
         )}
         <HStack width="100%" spacing="10px">
           {displayLocation && (
-            <HStack
-              borderRadius="4px"
-              paddingLeft="8px"
-              backgroundColor="neutral.100"
-            >
+            <HStack borderRadius="4px" paddingLeft="8px" backgroundColor="neutral.100">
               <Body1 semiBold>{displayLocation}</Body1>
               <IconButtonComponent
                 noBorder

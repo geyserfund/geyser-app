@@ -5,10 +5,7 @@ import { useProjectContext } from '../../../context'
 import { useUpdateProjectMutation } from '../../../types'
 import { useNotification } from '../../../utils'
 import { ProjectStoryForm } from '../../projectCreate/components/ProjectStoryForm'
-import {
-  ProjectUnsavedModal,
-  useProjectUnsavedModal,
-} from '../../projectCreate/components/ProjectUnsavedModal'
+import { ProjectUnsavedModal, useProjectUnsavedModal } from '../../projectCreate/components/ProjectUnsavedModal'
 import { useProjectStoryForm } from '../../projectCreate/hooks/useProjectStoryForm'
 import { BackToProjectMobile } from '../navigation/BackToProjectMobile'
 
@@ -20,26 +17,25 @@ export const ProjectStory = () => {
 
   const form = useProjectStoryForm({ project })
 
-  const [updateProjectMutation, { loading: updateLoading }] =
-    useUpdateProjectMutation({
-      onCompleted(data) {
-        if (updateProject) {
-          updateProject(data.updateProject)
-        }
+  const [updateProjectMutation, { loading: updateLoading }] = useUpdateProjectMutation({
+    onCompleted(data) {
+      if (updateProject) {
+        updateProject(data.updateProject)
+      }
 
-        toast({
-          title: 'Project story updated successfully!',
-          status: 'success',
-        })
-      },
-      onError(error) {
-        toast({
-          title: 'There was a problem while trying to update the project story',
-          description: `${error}`,
-          status: 'error',
-        })
-      },
-    })
+      toast({
+        title: 'Project story updated successfully!',
+        status: 'success',
+      })
+    },
+    onError(error) {
+      toast({
+        title: 'There was a problem while trying to update the project story',
+        description: `${error}`,
+        status: 'error',
+      })
+    },
+  })
 
   const unsavedModal = useProjectUnsavedModal({
     hasUnsaved: form.formState.isDirty,
@@ -58,24 +54,10 @@ export const ProjectStory = () => {
   }
 
   return (
-    <form
-      onSubmit={form.handleSubmit(onSubmit)}
-      style={{ flexGrow: 1, display: 'flex' }}
-    >
-      <VStack
-        width="100%"
-        flexGrow={1}
-        display="flex"
-        flexDirection="column"
-        justifyContent="start"
-        alignItems="start"
-      >
+    <form onSubmit={form.handleSubmit(onSubmit)} style={{ flexGrow: 1, display: 'flex' }}>
+      <VStack width="100%" flexGrow={1} display="flex" flexDirection="column" justifyContent="start" alignItems="start">
         <VStack width="100%" alignItems="flex-start" flexGrow={1}>
-          <ProjectStoryForm
-            form={form}
-            isLoading={loading}
-            toolbarTop="5.9em"
-          />
+          <ProjectStoryForm form={form} isLoading={loading} toolbarTop="5.9em" />
           <Button
             isLoading={updateLoading}
             isDisabled={!form.formState.isValid}

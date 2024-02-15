@@ -23,28 +23,15 @@ export const DefaultView = () => {
   const restOfTheTags = allTags.slice(3)
 
   return (
-    <CardLayout
-      noborder={isMobile}
-      w="full"
-      spacing={{ base: '15px', lg: '50px' }}
-      padding={{ base: 0, lg: '20px' }}
-    >
+    <CardLayout noborder={isMobile} w="full" spacing={{ base: '15px', lg: '50px' }} padding={{ base: 0, lg: '20px' }}>
       <FeaturedProjectCard projectName={getFeaturedProject()} />
       <MobileDivider mt={2} />
       {/* <FeaturedGrantCard grant={activeGrant} loading={loading} /> */}
       {firstThreeTags.map((tag) => (
-        <ProjectsDisplayMostFundedThisWeek
-          key={tag.id}
-          tag={tag}
-          hasMobileDivider
-        />
+        <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} hasMobileDivider />
       ))}
       {restOfTheTags.map((tag, index) => (
-        <ProjectsDisplayMostFundedThisWeek
-          key={tag.id}
-          tag={tag}
-          hasMobileDivider={index < restOfTheTags.length - 1}
-        />
+        <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} hasMobileDivider={index < restOfTheTags.length - 1} />
       ))}
     </CardLayout>
   )

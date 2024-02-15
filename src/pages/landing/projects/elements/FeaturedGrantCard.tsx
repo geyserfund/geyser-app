@@ -61,12 +61,7 @@ export const FeaturedGrantCard = ({ grant, loading }: Props) => {
           padding="10px"
         >
           <H2 color="neutral.700"> {grant.title} </H2>
-          <H3
-            color="neutral.800"
-            noOfLines={3}
-            isTruncated
-            whiteSpace="normal"
-          >
+          <H3 color="neutral.800" noOfLines={3} isTruncated whiteSpace="normal">
             {grant.shortDescription}
           </H3>
         </VStack>

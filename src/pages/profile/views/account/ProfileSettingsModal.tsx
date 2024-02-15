@@ -14,11 +14,7 @@ import { EditProfileModalProps } from '../../hooks/useEditProfileModal'
 import { UpdateVerifyEmail } from './components'
 import { DeleteUserProfile } from './components/DeleteUserProfile'
 
-export const ProfileSettingsModal = ({
-  isOpen,
-  onClose,
-  props,
-}: EditProfileModalProps) => {
+export const ProfileSettingsModal = ({ isOpen, onClose, props }: EditProfileModalProps) => {
   const { t } = useTranslation()
 
   return (

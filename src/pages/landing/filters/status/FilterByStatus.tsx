@@ -40,10 +40,7 @@ export type StatusTypeButton = {
   color: string
 }
 
-export const getStatusTypeButtonContent = ({
-  status,
-  type,
-}: StatusAndType): StatusTypeButton => {
+export const getStatusTypeButtonContent = ({ status, type }: StatusAndType): StatusTypeButton => {
   if (type && type === projectTypes.reward) {
     return {
       icon: RewardGiftIcon,

@@ -1,10 +1,6 @@
 import { SATOSHIS_IN_BTC } from '../../constants'
 
-export const getBip21Invoice = (
-  amountInSats: number,
-  onChainAddress?: string | null,
-  lnAddress?: string | null,
-) => {
+export const getBip21Invoice = (amountInSats: number, onChainAddress?: string | null, lnAddress?: string | null) => {
   if (!onChainAddress) {
     return lnAddress || ''
   }

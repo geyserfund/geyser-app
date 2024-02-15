@@ -7,10 +7,7 @@ import { useModal } from '../../../hooks'
 import { useUpdateProjectMutation } from '../../../types'
 import { useNotification } from '../../../utils'
 import { ProjectForm } from '../../projectCreate/components/ProjectForm'
-import {
-  ProjectUnsavedModal,
-  useProjectUnsavedModal,
-} from '../../projectCreate/components/ProjectUnsavedModal'
+import { ProjectUnsavedModal, useProjectUnsavedModal } from '../../projectCreate/components/ProjectUnsavedModal'
 import { useProjectForm } from '../../projectCreate/hooks/useProjectForm'
 import { ProjectCreationVariables } from '../../projectCreate/types'
 import { ProjectNameChangeConfirmModal } from '../components'
@@ -30,36 +27,35 @@ export const ProjectDescription = () => {
     hasUnsaved: form.formState.isDirty,
   })
 
-  const [updateProjectMutation, { loading: updateLoading }] =
-    useUpdateProjectMutation({
-      onCompleted(data) {
-        if (updateProject) {
-          updateProject(data.updateProject)
-        }
+  const [updateProjectMutation, { loading: updateLoading }] = useUpdateProjectMutation({
+    onCompleted(data) {
+      if (updateProject) {
+        updateProject(data.updateProject)
+      }
 
-        toast({
-          title: 'Project updated successfully!',
-          status: 'success',
+      toast({
+        title: 'Project updated successfully!',
+        status: 'success',
+      })
+      if (form.formState.dirtyFields.name) {
+        navigate(`/project/${data.updateProject.name}/dashboard`, {
+          replace: true,
         })
-        if (form.formState.dirtyFields.name) {
-          navigate(`/project/${data.updateProject.name}/dashboard`, {
-            replace: true,
-          })
-          form.resetField('name', {
-            defaultValue: data.updateProject.name,
-            keepError: false,
-            keepDirty: false,
-          })
-        }
-      },
-      onError(error) {
-        toast({
-          title: 'Project update failed!',
-          description: `${error}`,
-          status: 'error',
+        form.resetField('name', {
+          defaultValue: data.updateProject.name,
+          keepError: false,
+          keepDirty: false,
         })
-      },
-    })
+      }
+    },
+    onError(error) {
+      toast({
+        title: 'Project update failed!',
+        description: `${error}`,
+        status: 'error',
+      })
+    },
+  })
 
   const onSubmit = (values: ProjectCreationVariables) => {
     if (values.name !== project?.name) {
@@ -70,10 +66,7 @@ export const ProjectDescription = () => {
     handleUpdateProjectMutation(values)
   }
 
-  const handleUpdateProjectMutation = ({
-    email,
-    ...values
-  }: ProjectCreationVariables) => {
+  const handleUpdateProjectMutation = ({ email, ...values }: ProjectCreationVariables) => {
     if (project) {
       updateProjectMutation({
         variables: {
@@ -90,12 +83,7 @@ export const ProjectDescription = () => {
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <VStack width="100%" alignItems="flex-start" spacing="24px">
         <ProjectForm form={form} isEdit />
-        <Button
-          isLoading={updateLoading}
-          variant="primary"
-          w="full"
-          type="submit"
-        >
+        <Button isLoading={updateLoading} variant="primary" w="full" type="submit">
           {t('Save')}
         </Button>
       </VStack>

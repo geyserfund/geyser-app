@@ -49,14 +49,9 @@ export const SortBody = ({ isMobile }: { isMobile?: boolean }) => {
     }
   }
 
-  const sortList = [
-    SortOptions.mostFundedThisWeek,
-    SortOptions.mostFundedAllTime,
-  ]
+  const sortList = [SortOptions.mostFundedThisWeek, SortOptions.mostFundedAllTime]
 
-  const renderButtons = disableSortByTrending(filters)
-    ? sortList.slice(1)
-    : sortList
+  const renderButtons = disableSortByTrending(filters) ? sortList.slice(1) : sortList
 
   const getBackgroundColor = (value: SortOptions) => {
     const filterTruth = getCurrentSelection(filters.sort) === value
@@ -72,11 +67,7 @@ export const SortBody = ({ isMobile }: { isMobile?: boolean }) => {
     <>
       {renderButtons.map((value) => {
         return (
-          <MenuItem
-            key={value}
-            backgroundColor={getBackgroundColor(value)}
-            onClick={() => onSortSelect(value)}
-          >
+          <MenuItem key={value} backgroundColor={getBackgroundColor(value)} onClick={() => onSortSelect(value)}>
             {t(filters.search ? 'Most Relevant' : value)}
           </MenuItem>
         )

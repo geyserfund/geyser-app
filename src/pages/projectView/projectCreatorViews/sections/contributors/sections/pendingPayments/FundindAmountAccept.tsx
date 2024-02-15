@@ -6,10 +6,7 @@ import { PiWarningCircleFill } from 'react-icons/pi'
 import { Modal } from '../../../../../../../components/layouts'
 import { Body1 } from '../../../../../../../components/typography'
 import { useModal } from '../../../../../../../hooks'
-import {
-  FundingConfirmInput,
-  FundingTxOrderFragment,
-} from '../../../../../../../types'
+import { FundingConfirmInput, FundingTxOrderFragment } from '../../../../../../../types'
 import { useCustomTheme } from '../../../../../../../utils'
 import { getUSD } from '../../components/helpers'
 
@@ -77,12 +74,7 @@ export const FundingAmountAccept = ({
             <Button
               variant="primary"
               w="full"
-              rightIcon={
-                <PiWarningCircleFill
-                  fontSize={'20px'}
-                  fill={colors.neutral[1000]}
-                />
-              }
+              rightIcon={<PiWarningCircleFill fontSize={'20px'} fill={colors.neutral[1000]} />}
               onClick={handleAccept}
             >
               {t('Accept')}

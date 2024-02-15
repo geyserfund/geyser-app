@@ -1,10 +1,4 @@
-import {
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-} from '@chakra-ui/react'
+import { IconButton, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { BsThreeDots } from 'react-icons/bs'
 import { Link } from 'react-router-dom'

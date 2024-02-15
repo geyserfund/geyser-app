@@ -3,11 +3,7 @@ import { Outlet } from 'react-router-dom'
 
 import { StickToTop } from '../../components/layouts'
 import { dimensions, ID } from '../../constants'
-import {
-  ActivitySubscriptionProvider,
-  FilterProvider,
-  useAuthContext,
-} from '../../context'
+import { ActivitySubscriptionProvider, FilterProvider, useAuthContext } from '../../context'
 import { useMobileMode } from '../../utils'
 import { GradientBanner, TabBar } from './components'
 import { Filters } from './filters'
@@ -38,13 +34,7 @@ export const LandingPage = () => {
             paddingX={{ base: '10px', lg: '20px' }}
           >
             {!isMobile && (
-              <VStack
-                id={ID.landing.filters.wrapper}
-                flex={1}
-                width="full"
-                minWidth="220px"
-                maxWidth="320px"
-              >
+              <VStack id={ID.landing.filters.wrapper} flex={1} width="full" minWidth="220px" maxWidth="320px">
                 <StickToTop
                   id={ID.landing.filters.body}
                   scrollContainerId={ID.root}
@@ -71,13 +61,7 @@ export const LandingPage = () => {
             </VStack>
 
             {!isMobile && (
-              <VStack
-                id={ID.landing.leaderboard.wrapper}
-                flex={1}
-                width="full"
-                minWidth="220px"
-                maxWidth="320px"
-              >
+              <VStack id={ID.landing.leaderboard.wrapper} flex={1} width="full" minWidth="220px" maxWidth="320px">
                 <StickToTop
                   id={ID.landing.leaderboard.body}
                   scrollContainerId={ID.root}
@@ -89,11 +73,7 @@ export const LandingPage = () => {
                   buffer={10}
                 >
                   <ProjectLeaderboard
-                    maxHeight={`${
-                      window.innerHeight -
-                      dimensions.topNavBar.desktop.height -
-                      40
-                    }px`}
+                    maxHeight={`${window.innerHeight - dimensions.topNavBar.desktop.height - 40}px`}
                     overflowY="auto"
                   />
                 </StickToTop>

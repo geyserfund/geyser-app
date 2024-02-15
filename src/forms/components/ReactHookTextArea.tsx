@@ -1,9 +1,4 @@
-import {
-  FormControl,
-  FormControlProps,
-  Textarea,
-  TextareaProps,
-} from '@chakra-ui/react'
+import { FormControl, FormControlProps, Textarea, TextareaProps } from '@chakra-ui/react'
 import { Control, Controller, FieldValue } from 'react-hook-form'
 
 import { FieldContainer, FieldContainerProps } from './FieldContainer'
@@ -46,18 +41,10 @@ export const ReactHookTextArea = ({
               )
             }
             subtitle={caption}
-            error={
-              fieldState.error
-                ? fieldState.error.message?.toString() || ''
-                : null
-            }
+            error={fieldState.error ? fieldState.error.message?.toString() || '' : null}
             {...fieldContainerProps}
           >
-            <Textarea
-              placeholder={placeholder || 'Type here'}
-              {...props}
-              {...field}
-            />
+            <Textarea placeholder={placeholder || 'Type here'} {...props} {...field} />
           </FieldContainer>
         </FormControl>
       )}

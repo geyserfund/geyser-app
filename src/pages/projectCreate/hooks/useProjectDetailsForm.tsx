@@ -7,9 +7,7 @@ type UseProjectDetailsFormProps = {
   projectId?: number | string
 }
 
-export const useProjectDetailsForm = ({
-  projectId,
-}: UseProjectDetailsFormProps) => {
+export const useProjectDetailsForm = ({ projectId }: UseProjectDetailsFormProps) => {
   const { toast } = useNotification()
 
   const {

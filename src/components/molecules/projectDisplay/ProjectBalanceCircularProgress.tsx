@@ -32,11 +32,7 @@ const useStyles = createUseStyles({
   },
 })
 
-const BTCBalance = (params: {
-  balance: number
-  pixelFontSize?: number
-  color?: IconBaseProps['color']
-}) => {
+const BTCBalance = (params: { balance: number; pixelFontSize?: number; color?: IconBaseProps['color'] }) => {
   const { balance, pixelFontSize } = params
   const displaySatoshis = balance < 1000000
 
@@ -53,12 +49,7 @@ const BTCBalance = (params: {
   )
 }
 
-export const ProjectBalanceCircularProgress = ({
-  goal,
-  rate,
-  balance,
-  loading,
-}: IProjectBalanceCircularProgress) => {
+export const ProjectBalanceCircularProgress = ({ goal, rate, balance, loading }: IProjectBalanceCircularProgress) => {
   const classes = useStyles()
   const isDark = useDarkMode()
   const balanceUSD = (balance * rate).toFixed(2)
@@ -90,27 +81,14 @@ export const ProjectBalanceCircularProgress = ({
       <StatLabel fontSize="12px" color={isDark ? 'neutral.0' : 'neutral.600'}>
         Raised
       </StatLabel>
-      <StatNumber
-        className="amount-label-sat"
-        position="relative"
-        display={!display ? 'flex' : 'none'}
-      >
+      <StatNumber className="amount-label-sat" position="relative" display={!display ? 'flex' : 'none'}>
         <BTCBalance balance={balance} />
       </StatNumber>
-      <StatNumber
-        className="amount-label-usd"
-        display={display ? 'block' : 'none'}
-        position="relative"
-      >
+      <StatNumber className="amount-label-usd" display={display ? 'block' : 'none'} position="relative">
         {'$'}
         {balanceUSD}{' '}
       </StatNumber>
-      <HStack
-        justify="center"
-        spacing={0}
-        fontSize="12px"
-        color={isDark ? 'neutral.0' : 'neutral.600'}
-      >
+      <HStack justify="center" spacing={0} fontSize="12px" color={isDark ? 'neutral.0' : 'neutral.600'}>
         <Text fontSize="12px">{getDisplayPercent(percentage)}% of</Text>
         <BTCBalance balance={goal} pixelFontSize={12} />
       </HStack>
@@ -136,14 +114,7 @@ export const ProjectBalanceCircularProgress = ({
           </Box>
         </CircularProgress>
       ) : (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          width="208px"
-          height="208px"
-          padding="16px"
-        >
+        <Box display="flex" justifyContent="center" alignItems="center" width="208px" height="208px" padding="16px">
           <Box
             width="176px"
             height="176px"

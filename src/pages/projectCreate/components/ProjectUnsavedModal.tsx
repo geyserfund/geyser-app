@@ -16,8 +16,7 @@ export type UseProjectUnsavedModalProps = Pick<Props, 'hasUnsaved'>
 
 export const useProjectUnsavedModal = ({
   hasUnsaved,
-}: UseProjectUnsavedModalProps): UseProjectUnsavedModalProps &
-  UseModalReturn<{ onLeave(): void }> => {
+}: UseProjectUnsavedModalProps): UseProjectUnsavedModalProps & UseModalReturn<{ onLeave(): void }> => {
   const modal = useModal<{ onLeave(): void }>()
 
   return { ...modal, hasUnsaved }
@@ -35,12 +34,7 @@ export const ProjectUnsavedModal = ({ hasUnsaved, ...modalProps }: Props) => {
     >
       <VStack w="100%" spacing={6} pt={1}>
         <Text>{ARE_YOU_SURE}</Text>
-        <Button
-          w="100%"
-          variant="secondary"
-          color="secondary.red"
-          onClick={modalProps.props.onLeave || undefined}
-        >
+        <Button w="100%" variant="secondary" color="secondary.red" onClick={modalProps.props.onLeave || undefined}>
           {t('Leave without saving')}
         </Button>
       </VStack>

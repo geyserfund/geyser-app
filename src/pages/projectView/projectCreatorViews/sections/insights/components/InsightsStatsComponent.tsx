@@ -18,58 +18,51 @@ export const InsightsStatsComponent = () => {
   const [selectionOption] = useSelectionAtom()
   const [projectStats, setProjectStats] = useStatsInsightsAtom()
 
-  const [getProjectStatsInsight, { loading }] =
-    useProjectStatsGetInsightLazyQuery({
-      onCompleted(data) {
-        const stats = data.projectStatsGet
-        const contributionSum = stats.current?.projectFundingTxs?.amountSum ?? 0
-        const contributorsCount = stats.current?.projectFunders?.count ?? 0
-        const contributionCount = stats.current?.projectFundingTxs?.count ?? 0
-        const rewardsPurchased =
-          stats.current?.projectFunderRewards?.quantitySum ?? 0
-        const viewCount = stats.current?.projectViews?.viewCount ?? 0
-        const visitorCount = stats.current?.projectViews?.visitorCount ?? 0
+  const [getProjectStatsInsight, { loading }] = useProjectStatsGetInsightLazyQuery({
+    onCompleted(data) {
+      const stats = data.projectStatsGet
+      const contributionSum = stats.current?.projectFundingTxs?.amountSum ?? 0
+      const contributorsCount = stats.current?.projectFunders?.count ?? 0
+      const contributionCount = stats.current?.projectFundingTxs?.count ?? 0
+      const rewardsPurchased = stats.current?.projectFunderRewards?.quantitySum ?? 0
+      const viewCount = stats.current?.projectViews?.viewCount ?? 0
+      const visitorCount = stats.current?.projectViews?.visitorCount ?? 0
 
-        const prevContributionSum =
-          stats.prevTimeRange?.projectFundingTxs?.amountSum ?? 0
-        const prevContributionCount =
-          stats.prevTimeRange?.projectFundingTxs?.count ?? 0
-        const prevContributorsCount =
-          stats.prevTimeRange?.projectFunders?.count ?? 0
-        const prevRewardsPurchased =
-          stats.prevTimeRange?.projectFunderRewards?.quantitySum ?? 0
-        const prevViewCount = stats.prevTimeRange?.projectViews?.viewCount ?? 0
-        const prevVisitorCount =
-          stats.prevTimeRange?.projectViews?.visitorCount ?? 0
+      const prevContributionSum = stats.prevTimeRange?.projectFundingTxs?.amountSum ?? 0
+      const prevContributionCount = stats.prevTimeRange?.projectFundingTxs?.count ?? 0
+      const prevContributorsCount = stats.prevTimeRange?.projectFunders?.count ?? 0
+      const prevRewardsPurchased = stats.prevTimeRange?.projectFunderRewards?.quantitySum ?? 0
+      const prevViewCount = stats.prevTimeRange?.projectViews?.viewCount ?? 0
+      const prevVisitorCount = stats.prevTimeRange?.projectViews?.visitorCount ?? 0
 
-        const regions = stats.current?.projectViews?.regions ?? []
-        const referrers = stats.current?.projectViews?.referrers ?? []
+      const regions = stats.current?.projectViews?.regions ?? []
+      const referrers = stats.current?.projectViews?.referrers ?? []
 
-        setProjectStats({
-          contributionSum,
-          prevContributionSum,
-          contributionCount,
-          prevContributionCount,
-          contributorsCount,
-          prevContributorsCount,
-          rewardsPurchased,
-          prevRewardsPurchased,
-          viewCount,
-          prevViewCount,
-          visitorCount,
-          prevVisitorCount,
-          regions,
-          referrers,
-        })
-      },
-      onError() {
-        toast({
-          title: 'Error fetching project stats',
-          description: 'Please refresh the page and try again.',
-          status: 'error',
-        })
-      },
-    })
+      setProjectStats({
+        contributionSum,
+        prevContributionSum,
+        contributionCount,
+        prevContributionCount,
+        contributorsCount,
+        prevContributorsCount,
+        rewardsPurchased,
+        prevRewardsPurchased,
+        viewCount,
+        prevViewCount,
+        visitorCount,
+        prevVisitorCount,
+        regions,
+        referrers,
+      })
+    },
+    onError() {
+      toast({
+        title: 'Error fetching project stats',
+        description: 'Please refresh the page and try again.',
+        status: 'error',
+      })
+    },
+  })
 
   useEffect(() => {
     if (project?.id) {
@@ -93,15 +86,12 @@ export const InsightsStatsComponent = () => {
 
   const contribViewRatio =
     projectStats.viewCount && projectStats.contributionCount
-      ? Math.round(projectStats.contributionCount / projectStats.viewCount) *
-        100
+      ? Math.round(projectStats.contributionCount / projectStats.viewCount) * 100
       : 0
 
   const prevContribViewRatio =
     projectStats.prevViewCount && projectStats.prevContributionCount
-      ? Math.round(
-          projectStats.prevContributionCount / projectStats.prevViewCount,
-        ) * 100
+      ? Math.round(projectStats.prevContributionCount / projectStats.prevViewCount) * 100
       : 0
 
   if (loading) {

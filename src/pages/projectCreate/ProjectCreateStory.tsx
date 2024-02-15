@@ -3,10 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
 import { dimensions, getPath } from '../../constants'
-import {
-  useProjectByNameOrIdQuery,
-  useUpdateProjectMutation,
-} from '../../types'
+import { useProjectByNameOrIdQuery, useUpdateProjectMutation } from '../../types'
 import { useNotification } from '../../utils'
 import { FormContinueButton } from './components/FormContinueButton'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
@@ -70,14 +67,7 @@ export const ProjectCreateStory = () => {
       continueButton={<FormContinueButton {...nextProps} flexGrow={1} />}
       onBackClick={onBackCLick}
       height="100%"
-      title={
-        <TitleWithProgressBar
-          title={t('Story')}
-          subtitle={t('Create a project')}
-          index={3}
-          length={4}
-        />
-      }
+      title={<TitleWithProgressBar title={t('Story')} subtitle={t('Create a project')} index={3} length={4} />}
     >
       <ProjectStoryForm
         autoFocus

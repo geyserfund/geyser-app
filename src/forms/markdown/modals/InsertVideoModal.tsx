@@ -10,10 +10,7 @@ import { TextField } from '../../components/TextField'
 import { validateYouTubeUrl } from '../../validations/youtube'
 
 const schema = yup.object({
-  url: yup
-    .string()
-    .required('URL is required')
-    .test('youtube', 'Must be a valid youtube URL', validateYouTubeUrl),
+  url: yup.string().required('URL is required').test('youtube', 'Must be a valid youtube URL', validateYouTubeUrl),
 })
 
 export interface MarkdownVideo {
@@ -44,12 +41,7 @@ export const InsertVideoModal = ({
         }}
       >
         <VStack spacing={4}>
-          <TextField
-            control={form.control}
-            name="url"
-            label="Youtube URL"
-            required
-          />
+          <TextField control={form.control} name="url" label="Youtube URL" required />
           <Button w="100%" variant="primary" type="submit">
             {t('Insert')}
           </Button>

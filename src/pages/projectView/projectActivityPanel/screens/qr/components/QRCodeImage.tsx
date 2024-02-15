@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  HStack,
-  Image,
-  Text,
-  useBreakpointValue,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Button, HStack, Image, Text, useBreakpointValue, VStack } from '@chakra-ui/react'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FaCopy } from 'react-icons/fa'
@@ -93,9 +85,7 @@ export const QRCodeImage = ({
   }, [isLightning, setPaymentMethod, t])
 
   const isColored = hasCopiedLightning || hasCopiedOnchain
-  const fgColor = isColored
-    ? lightModeColors.primary[400]
-    : lightModeColors.neutral[1000]
+  const fgColor = isColored ? lightModeColors.primary[400] : lightModeColors.neutral[1000]
 
   return (
     <VStack flexWrap="wrap" maxWidth="100%">
@@ -104,15 +94,8 @@ export const QRCodeImage = ({
         <Box borderRadius={'12px'} borderWidth={'2px'} padding={'2px'}>
           <VStack justifyContent={'center'} p={2}>
             <Image src={WarningIcon} />
-            <Text
-              textAlign="center"
-              color="#DF3634"
-              fontSize={'16px'}
-              fontWeight={'bold'}
-            >
-              {t(
-                'Onchain donations are temporarily unavailable. They should be operational by February 2024',
-              )}
+            <Text textAlign="center" color="#DF3634" fontSize={'16px'} fontWeight={'bold'}>
+              {t('Onchain donations are temporarily unavailable. They should be operational by February 2024')}
             </Text>
           </VStack>
         </Box>
@@ -144,11 +127,7 @@ export const QRCodeImage = ({
                   src={LogoIcon}
                 />
                 <QRCode
-                  value={
-                    paymentMethod === PaymentMethods.LIGHTNING
-                      ? lightningInvoice
-                      : onchainAddress
-                  }
+                  value={paymentMethod === PaymentMethods.LIGHTNING ? lightningInvoice : onchainAddress}
                   id={fgColor}
                   size={debouncedQRSize}
                   bgColor={lightModeColors.neutral[0]}
@@ -177,11 +156,7 @@ export const QRCodeImage = ({
                 isDisabled={!lightningInvoice}
                 width={'100%'}
               >
-                <Text>
-                  {hasCopiedLightning
-                    ? t('Copied!')
-                    : t('Copy lightning invoice')}
-                </Text>
+                <Text>{hasCopiedLightning ? t('Copied!') : t('Copy lightning invoice')}</Text>
               </Button>
             ) : (
               <Button
@@ -190,9 +165,7 @@ export const QRCodeImage = ({
                 variant="primary"
                 width={'100%'}
               >
-                <Text>
-                  {hasCopiedOnchain ? t('Copied!') : t('Copy onchain address')}
-                </Text>
+                <Text>{hasCopiedOnchain ? t('Copied!') : t('Copy onchain address')}</Text>
               </Button>
             )}
           </HStack>

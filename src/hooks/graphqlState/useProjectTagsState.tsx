@@ -1,11 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import {
-  ProjectFragment,
-  Tag,
-  useProjectTagAddMutation,
-  useProjectTagRemoveMutation,
-} from '../../types'
+import { ProjectFragment, Tag, useProjectTagAddMutation, useProjectTagRemoveMutation } from '../../types'
 import { toInt, useNotification } from '../../utils'
 
 export const useProjectTagsState = ({
@@ -42,30 +37,26 @@ export const useProjectTagsState = ({
     },
   })
 
-  const [removeTag, { loading: removeTagLoading }] =
-    useProjectTagRemoveMutation({
-      onError() {
-        toast({
-          title: 'failed to remove tag',
-          status: 'error',
+  const [removeTag, { loading: removeTagLoading }] = useProjectTagRemoveMutation({
+    onError() {
+      toast({
+        title: 'failed to remove tag',
+        status: 'error',
+      })
+    },
+    onCompleted(data) {
+      if (updateProject && data.projectTagRemove) {
+        updateProject({
+          tags: data.projectTagRemove,
         })
-      },
-      onCompleted(data) {
-        if (updateProject && data.projectTagRemove) {
-          updateProject({
-            tags: data.projectTagRemove,
-          })
-        }
-      },
-    })
+      }
+    },
+  })
 
   const addTags = useMemo(
     () =>
       project && project.tags?.length > 0
-        ? tags.filter(
-            (tag) =>
-              !project.tags.some((projectTag) => tag.id === projectTag.id),
-          )
+        ? tags.filter((tag) => !project.tags.some((projectTag) => tag.id === projectTag.id))
         : tags,
 
     [project, tags],
@@ -74,17 +65,12 @@ export const useProjectTagsState = ({
   const removeTags = useMemo(
     () =>
       project && project.tags?.length > 0
-        ? project.tags.filter(
-            (tag) => !tags.some((projectTag) => tag.id === projectTag.id),
-          )
+        ? project.tags.filter((tag) => !tags.some((projectTag) => tag.id === projectTag.id))
         : [],
     [project, tags],
   )
 
-  const isDirty = useMemo(
-    () => Boolean(addTags.length || removeTags.length),
-    [addTags.length, removeTags.length],
-  )
+  const isDirty = useMemo(() => Boolean(addTags.length || removeTags.length), [addTags.length, removeTags.length])
 
   const saveTags = async () => {
     if (!project) {

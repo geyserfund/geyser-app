@@ -3,12 +3,7 @@ import { Stack, VStack } from '@chakra-ui/react'
 import { useProjectContext } from '../../../../../context'
 import { MobileDivider } from '../../../../grants/components'
 import { LaunchProjectNotice } from '../../../projectMainBody'
-import {
-  HistoricalComponent,
-  InsightsHeader,
-  InsightsStatsComponent,
-  TransactionMethodComponent,
-} from './components'
+import { HistoricalComponent, InsightsHeader, InsightsStatsComponent, TransactionMethodComponent } from './components'
 import { RewardSoldComponent } from './components/RewardSoldComponent'
 import { TransactionRegionComponent } from './components/TransactionRegionComponent'
 

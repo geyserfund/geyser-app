@@ -20,12 +20,7 @@ export const EditableAvatar = ({ onUploadImage, imageUrl, userId }: Props) => {
 
   return (
     <FileUpload onUploadComplete={onUploadImage} onLoading={setImageLoading}>
-      <Box
-        borderRadius="50%"
-        width="100px"
-        position="relative"
-        cursor="pointer"
-      >
+      <Box borderRadius="50%" width="100px" position="relative" cursor="pointer">
         <ImageWithReload
           borderRadius="50%"
           src={src}
@@ -44,11 +39,7 @@ export const EditableAvatar = ({ onUploadImage, imageUrl, userId }: Props) => {
           opacity={0.3}
         />
         <Box position="absolute" left="39px" top="40px" color="neutral.0">
-          {isImageLoading ? (
-            <Loader size="md" />
-          ) : (
-            <AddPictureIcon w="22px" h="20px" />
-          )}
+          {isImageLoading ? <Loader size="md" /> : <AddPictureIcon w="22px" h="20px" />}
         </Box>
       </Box>
     </FileUpload>

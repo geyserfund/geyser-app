@@ -10,13 +10,7 @@ interface ITitleWithProgressBar {
   hideSteps?: boolean
 }
 
-export default function TitleWithProgressBar({
-  title,
-  subtitle,
-  index,
-  length,
-  hideSteps,
-}: ITitleWithProgressBar) {
+export default function TitleWithProgressBar({ title, subtitle, index, length, hideSteps }: ITitleWithProgressBar) {
   const percentage = Math.floor((index / length) * 100)
   return (
     <Box width="100%">
