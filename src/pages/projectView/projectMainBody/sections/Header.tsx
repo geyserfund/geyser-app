@@ -90,10 +90,10 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} size={isMobile ? 'md' : 'xl'} isCentered>
         <ModalOverlay />
         <ModalContent padding="0" minWidth="0">
-          <img src={toLargeImageUrl(project.thumbnailImage || '')} alt={project.title} />
+          <img src={project.thumbnailImage || ''} alt={project.title} />
         </ModalContent>
       </Modal>
       <CardLayout
@@ -110,7 +110,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             <ImageWithReload
               borderRadius="8px"
               objectFit="cover"
-              src={toMediumImageUrl(project.thumbnailImage || '')}
+              src={project.thumbnailImage || ''}
               width={{ base: '42px', lg: '80px' }}
               height={{ base: '42px', lg: '80px' }}
               maxHeight="80px"
