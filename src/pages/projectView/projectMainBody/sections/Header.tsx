@@ -90,7 +90,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent padding="0" minWidth="0">
           <img src={toLargeImageUrl(project.thumbnailImage || '')} alt={project.title} />
@@ -116,6 +116,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
               maxHeight="80px"
               alignSelf={'start'}
               onClick={onOpen}
+              cursor={'pointer'}
             />
             <Text flex={1} variant="h2" width="100%" color="neutral.900">
               {project.title}
