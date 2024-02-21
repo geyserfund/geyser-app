@@ -57,15 +57,13 @@ export const RewardTable = ({
             colors,
           )
 
-          const options = order.status === RewardStatus.todo ? RewardStatusOptions : RewardStatusOptions.slice(1)
-
           return (
             <>
               <ShippingStatusSelect<any, false>
                 isSearchable={false}
                 backgroundColor={backgroundColor}
                 hoverBgColor={hoverBgColor}
-                options={options}
+                options={RewardStatusOptions}
                 value={RewardStatusOptions.find((val) => val.value === order.status)}
                 defaultValue={RewardStatusOptions.find((val) => val.value === order.status)}
                 onChange={(option) => {
