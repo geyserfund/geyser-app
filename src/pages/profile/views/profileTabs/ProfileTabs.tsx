@@ -1,71 +1,42 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 
-import { RenderTab, TabComponent } from '../../../../components/molecules'
-import { UserProfile } from '../../type'
-import { ProfileActivity } from './ProfileActivity'
-import { ProfileContributions } from './ProfileContributions'
-import { ProfileFollowed } from './ProfileFollowed'
-import { ProfileProjects } from './ProfileProjects'
+import { useUserProfileAtomValue, useViewingOwnProfileAtomValue } from '../../state'
+import { RenderTab, TabComponent } from './components/TabComponent'
+import { useProfileContributions } from './hooks/useProfileContributions'
+import { useProfileFollowed } from './hooks/useProfileFollowed'
+import { useProfileOrders } from './hooks/useProfileOrders'
+import { useProfileProjects } from './hooks/useProfileProjects'
 
-export const ProfileTabs = ({
-  userProfile,
-  isLoading,
-  isViewingOwnProfile,
-}: {
-  userProfile: UserProfile
-  isLoading: boolean
-  isViewingOwnProfile?: boolean
-}) => {
-  const activityTab = useMemo(
-    () => ({
-      title: 'Activity',
-      Component: () => <ProfileActivity userProfile={userProfile} />,
-    }),
-    [userProfile],
-  )
+export const ProfileTabs = ({ isLoading }: { isLoading: boolean }) => {
+  const userProfile = useUserProfileAtomValue()
+  const isViewingOwnProfile = useViewingOwnProfileAtomValue()
 
-  const contributionsTab = useMemo(
-    () => ({
-      title: 'My contributions',
-      Component: () => <ProfileContributions userProfile={userProfile} />,
-    }),
-    [userProfile],
-  )
-
-  const projectsTab = useMemo(
-    () => ({
-      title: 'Projects',
-      sub: userProfile.ownerOf?.length || undefined,
-      Component: () => <ProfileProjects userProfile={userProfile} isViewingOwnProfile={isViewingOwnProfile} />,
-    }),
-    [userProfile, isViewingOwnProfile],
-  )
-
-  const followedTab = useMemo(
-    () => ({
-      title: 'Following',
-      sub: userProfile.projectFollows?.length || undefined,
-      Component: () => <ProfileFollowed userProfile={userProfile} />,
-    }),
-    [userProfile],
-  )
+  const projectsTab = useProfileProjects(userProfile.id)
+  const followedTab = useProfileFollowed(userProfile.id)
+  const contributionsTab = useProfileContributions(userProfile.id)
+  const purchasesTab = useProfileOrders(userProfile.id, isViewingOwnProfile)
 
   const getTabs = useCallback(() => {
-    const tabs: RenderTab[] = [contributionsTab, activityTab]
-    if (isLoading) {
-      return [activityTab]
-    }
+    const tabs: RenderTab[] = [contributionsTab]
 
-    if (userProfile.ownerOf?.length > 0 || isViewingOwnProfile) {
+    if (projectsTab.sub > 0 || isViewingOwnProfile || projectsTab.isLoading) {
       tabs.unshift(projectsTab)
     }
 
-    if (userProfile.projectFollows?.length) {
+    if ((purchasesTab.sub > 0 || purchasesTab.isLoading) && isViewingOwnProfile) {
+      tabs.push(purchasesTab)
+    }
+
+    if (followedTab.sub > 0 || followedTab.isLoading) {
       tabs.push(followedTab)
     }
 
     return tabs
-  }, [userProfile, isLoading, activityTab, followedTab, contributionsTab, isViewingOwnProfile, projectsTab])
+  }, [followedTab, contributionsTab, isViewingOwnProfile, projectsTab, purchasesTab])
 
-  return <TabComponent tabs={getTabs()} />
+  const allLoading =
+    isLoading ||
+    (projectsTab.isLoading && followedTab.isLoading && contributionsTab.isLoading && purchasesTab.isLoading)
+
+  return <TabComponent tabs={getTabs()} isLoading={allLoading} />
 }

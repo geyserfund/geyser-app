@@ -1,58 +1,51 @@
-import { useMutation } from '@apollo/client'
 import { Link, useDisclosure } from '@chakra-ui/react'
 import { nip19 } from 'nostr-tools'
+import { useCallback } from 'react'
 
-import { MUTATION_UNLINK_ACCOUNT } from '../../../graphql'
-import { ExternalAccount } from '../../../types'
-import { copyTextToClipboard, toInt, useNotification } from '../../../utils'
-import { ExternalAccountType } from '../../auth'
-import { UserProfileState } from '../type'
+import { ExternalAccountFragment } from '../../../../../types'
+import { copyTextToClipboard, toInt, useNotification } from '../../../../../utils'
+import { ExternalAccountType } from '../../../../auth'
+import { RemoveExternalAccountModal } from '../../../components/RemoveExternalAccountModal'
+import { useViewingOwnProfileAtomValue } from '../../../state'
+import { useAccountUnlink } from '../hooks/useAccountUnlink'
 import { ExternalAccountBody, ExternalAccountBodyProps } from './ExternalAccountBody'
-import { RemoveExternalAccountModal } from './RemoveExternalAccountModal'
 
-interface ExternalAccountDisplayProps extends UserProfileState {
-  account: ExternalAccount
-  isEdit?: boolean
+interface ExternalAccountDisplayProps {
+  account: ExternalAccountFragment
 }
 
-export const ExternalAccountDisplay = ({
-  account,
-  isEdit,
-  userProfile,
-  setUserProfile,
-}: ExternalAccountDisplayProps) => {
+export const ExternalAccountDisplay = ({ account }: ExternalAccountDisplayProps) => {
   const { toast } = useNotification()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const handleCopyPubkey = (npub: string) => {
-    copyTextToClipboard(npub)
-  }
+  const isViewingOwnProfile = useViewingOwnProfileAtomValue()
 
-  const [unlinkAccount, { loading: unlinkAccountLoading }] = useMutation(MUTATION_UNLINK_ACCOUNT, {
-    onError(error) {
-      toast({
-        title: 'Failed to unlink account',
-        description: `${error.message}`,
-        status: 'error',
-      })
-    },
-    onCompleted(data) {
-      setUserProfile({ ...userProfile, ...data.unlinkExternalAccount })
+  const { isLoading, handleAccountUnlink, isEdit } = useAccountUnlink({
+    accountId: toInt(account.id),
+    accountType: account.accountType as ExternalAccountType,
+    mutationProps: {
+      onError(error) {
+        toast({
+          title: 'Failed to unlink account',
+          description: `${error.message}`,
+          status: 'error',
+        })
+      },
     },
   })
 
-  const handleAccountDisconnect = () => {
-    unlinkAccount({ variables: { id: toInt(account.id) } })
-  }
+  const handleCopyPubkey = useCallback((npub: string) => {
+    copyTextToClipboard(npub)
+  }, [])
 
   const isNostr = account.accountType === ExternalAccountType.nostr
 
-  const renderExternalAccountBody = () => {
+  const renderExternalAccountBody = useCallback(() => {
     let props: ExternalAccountBodyProps = {
       type: account.accountType as ExternalAccountType,
       username: account.externalUsername,
       handleDelete: isEdit ? onOpen : undefined,
-      isLoading: unlinkAccountLoading,
+      isLoading,
     }
 
     switch (account.accountType) {
@@ -82,7 +75,7 @@ export const ExternalAccountDisplay = ({
         props = {
           ...props,
           isExternal: true,
-          username: isEdit ? account.externalId : '',
+          username: isViewingOwnProfile ? account.externalId : '',
         }
         break
       case ExternalAccountType.facebook:
@@ -98,7 +91,7 @@ export const ExternalAccountDisplay = ({
     }
 
     return <ExternalAccountBody {...props} />
-  }
+  }, [account, handleCopyPubkey, isLoading, isEdit, onOpen, isViewingOwnProfile])
 
   return (
     <>
@@ -108,8 +101,8 @@ export const ExternalAccountDisplay = ({
           isOpen={isOpen}
           onClose={onClose}
           isNostr={isNostr}
-          confirm={handleAccountDisconnect}
-          isLoading={unlinkAccountLoading}
+          confirm={handleAccountUnlink}
+          isLoading={isLoading}
         />
       )}
     </>

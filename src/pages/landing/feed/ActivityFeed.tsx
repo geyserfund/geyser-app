@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react'
 
 import { AlertBox } from '../../../components/ui'
 import { ID } from '../../../constants'
-import { useActivitySubsciptionContext, useAuthContext, useFilterContext } from '../../../context'
+import { useActivitySubsciptionContext, useFilterContext } from '../../../context'
 import { QUERY_ACTIVITIES_FOR_LANDING_PAGE } from '../../../graphql/queries/activities'
 import { ScrollInvoke } from '../../../helpers'
 import { useQueryWithPagination } from '../../../hooks'
 import { ActivityForLandingPageFragment, Project } from '../../../types'
 import { useMobileMode } from '../../../utils'
+import { useFollowedProjectsValue } from '../../auth/state'
 import { NoSearchResults } from '../components'
 import { FilterTopBar } from '../projects/components'
 import { ContributionActivityItemSkeleton } from './components'
@@ -20,7 +21,7 @@ const itemLimit = 50
 export const ActivityFeed = () => {
   const isMobile = useMobileMode()
 
-  const { followedProjects } = useAuthContext()
+  const followedProjects = useFollowedProjectsValue()
   const { clearActivity, activities: subscriptionActivities } = useActivitySubsciptionContext()
   const { filters } = useFilterContext()
   const { activity, tagIds, region, countryCode } = filters

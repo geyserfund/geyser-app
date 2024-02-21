@@ -1,10 +1,9 @@
-import { UserProfileQuery } from '../../types'
+import { SetStateAction } from 'jotai'
+import { Dispatch } from 'react'
 
-export type UserProfile = UserProfileQuery['user']
-
-export type UserProfileContributionType = UserProfile['contributions'][0]
+import { UserForProfilePageFragment } from '../../types'
 
 export type UserProfileState = {
-  userProfile: UserProfile
-  setUserProfile: React.Dispatch<React.SetStateAction<UserProfile>>
+  userProfile: UserForProfilePageFragment
+  setUserProfile: Dispatch<SetStateAction<UserForProfilePageFragment>>
 }

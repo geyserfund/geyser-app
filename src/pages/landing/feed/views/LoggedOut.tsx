@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { Body1 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
 import { FeedLoggedOutUrl } from '../../../../constants'
-import { useAuthContext } from '../../../../context'
+import { useAuthModal } from '../../../auth/hooks'
 
 export const LoggedOut = () => {
   const { t } = useTranslation()
-  const { loginOnOpen } = useAuthContext()
+  const { loginOnOpen } = useAuthModal()
   return (
     <VStack w="full" padding="12px" spacing="20px">
       <Box width="200px">

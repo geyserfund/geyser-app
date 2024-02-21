@@ -4,13 +4,15 @@ import { useEffect } from 'react'
 
 import { getAuthEndPoint } from '../../config/domain'
 
+const AUTH_TOKEN_EXPIRATION_MINUTES = 5
+
 const canLoginAtom = atom(false)
 
 const refreshLoginAtom = atom(DateTime.now())
 
 const refreshLoginTriggerAtom = atom(null, (get, set) => {
   set(canLoginAtom, false)
-  set(refreshLoginAtom, DateTime.now().minus({ minutes: 6 }))
+  set(refreshLoginAtom, DateTime.now().minus({ minutes: AUTH_TOKEN_EXPIRATION_MINUTES + 1 }))
 })
 
 export const useCanLogin = () => useAtomValue(canLoginAtom)
@@ -40,7 +42,7 @@ export const useAuthToken = () => {
 
       const diff = refreshLogin.diffNow().as('minutes')
 
-      if (Math.abs(diff) < 5) {
+      if (Math.abs(diff) < AUTH_TOKEN_EXPIRATION_MINUTES) {
         return
       }
 

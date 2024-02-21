@@ -8,10 +8,11 @@ import { Body1 } from '../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../components/ui'
 import { VideoPlayer } from '../../../../components/ui/VideoPlayer'
 import { ID } from '../../../../constants'
-import { useAuthContext, useProjectContext } from '../../../../context'
+import { useProjectContext } from '../../../../context'
 import { validateImageUrl } from '../../../../forms/validations/image'
 import { ProjectStatus, WalletStatus } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
+import { useFollowedProjectsValue } from '../../../auth/state'
 import { ContributeButton, FollowButton, LightningAddress, ProjectFundingQR, ShareButton } from '../components'
 import { NpubDisplay } from '../components/NpubDisplay'
 import { CreatorSocial } from './CreatorSocial'
@@ -19,7 +20,7 @@ import { CreatorSocial } from './CreatorSocial'
 export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()
   const { project } = useProjectContext()
-  const { followedProjects } = useAuthContext()
+  const followedProjects = useFollowedProjectsValue()
   const isMobile = useMobileMode()
 
   if (!project) {

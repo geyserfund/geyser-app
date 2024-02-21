@@ -1,10 +1,11 @@
-import { AddIcon } from '@chakra-ui/icons'
 import { Button, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { TiPlus } from 'react-icons/ti'
 
-import { Modal } from '../../components/layouts/Modal'
-import { Body2 } from '../../components/typography'
-import { useModal } from '../../hooks/useModal'
+import { Modal } from '../../../../../components/layouts/Modal'
+import { Body2 } from '../../../../../components/typography'
+import { useModal } from '../../../../../hooks/useModal'
+import { UserForProfilePageFragment } from '../../../../../types'
 import {
   hasFacebookAccount,
   hasGithubAccount,
@@ -13,15 +14,14 @@ import {
   hasNostrAccount,
   hasTwitterAccount,
   useMobileMode,
-} from '../../utils'
-import { UserProfile } from '../profile'
-import { ConnectWithLightning } from './ConnectWithLightning'
-import { ConnectWithNostr } from './ConnectWithNostr'
-import { ConnectWithSocial } from './ConnectWithSocial'
-import { SocialAccountType } from './type'
-import { useRefreshAuthToken } from './useAuthToken'
+} from '../../../../../utils'
+import { ConnectWithLightning } from '../../../../auth/ConnectWithLightning'
+import { ConnectWithNostr } from '../../../../auth/ConnectWithNostr'
+import { ConnectWithSocial } from '../../../../auth/ConnectWithSocial'
+import { SocialAccountType } from '../../../../auth/type'
+import { useRefreshAuthToken } from '../../../../auth/useAuthToken'
 
-export const ConnectAccounts = ({ user }: { user: UserProfile }) => {
+export const ConnectAccounts = ({ user }: { user: UserForProfilePageFragment }) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
   const { isOpen, onOpen, onClose } = useModal()
@@ -55,8 +55,8 @@ export const ConnectAccounts = ({ user }: { user: UserProfile }) => {
   return (
     <>
       {canConnectAccount && (
-        <Button onClick={onOpen} width="100%" variant="secondary" leftIcon={<AddIcon />}>
-          {t('Connect your accounts')}
+        <Button size="sm" onClick={onOpen} width="100%" variant="secondary" leftIcon={<TiPlus />}>
+          {t('Connect more accounts')}
         </Button>
       )}
       <Modal isOpen={isOpen} onClose={onClose} title={t('Connect more accounts')}>

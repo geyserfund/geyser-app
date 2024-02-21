@@ -1,50 +1,31 @@
 import { Avatar, Button, SkeletonCircle, Stack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { BsGearFill } from 'react-icons/bs'
-import { MdEdit } from 'react-icons/md'
+import { Link } from 'react-router-dom'
 
 import { CardLayout, SkeletonLayout } from '../../../../components/layouts'
 import { Body1, H1 } from '../../../../components/typography'
-import { useModal } from '../../../../hooks/useModal'
-import { ConnectAccounts, ExternalAccountType } from '../../../auth'
-import { ExternalAccountDisplay } from '../../components'
-import { useEditProfileModal } from '../../hooks/useEditProfileModal'
-import { UserProfileState } from '../../type'
-import { LightningAddress } from './components/LightningAddress'
-import { EditProfileModal } from './EditProfileModal'
-import { ProfileSettingsModal } from './ProfileSettingsModal'
+import { getPath } from '../../../../constants'
+import { ConnectAccounts } from '../../../auth'
+import { useUserProfileAtomValue, useViewingOwnProfileAtomValue } from '../../state'
+import { ExternalAccountDisplay } from './components/ExternalAccountDisplay'
 
-interface AccountInfoProps extends UserProfileState {
-  isEdit: boolean
+interface AccountInfoProps {
   isLoading?: boolean
 }
 
-export const AccountInfo = ({ userProfile, setUserProfile, isEdit, isLoading }: AccountInfoProps) => {
+export const AccountInfo = ({ isLoading }: AccountInfoProps) => {
   const { t } = useTranslation()
-  const modalProps = useEditProfileModal()
-  const settingModalProps = useModal()
+
+  const userProfile = useUserProfileAtomValue()
+
+  const isViewingOwnProfile = useViewingOwnProfileAtomValue()
+
+  const userAccountToDisplay = userProfile.externalAccounts
 
   if (isLoading) {
     return <AccountInfoSkeleton />
   }
-
-  const lightningAddress =
-    userProfile.wallet?.connectionDetails.__typename === 'LightningAddressConnectionDetails'
-      ? userProfile.wallet.connectionDetails.lightningAddress
-      : ''
-
-  const getIsEdit = (accountType: ExternalAccountType) => {
-    if (
-      (accountType === ExternalAccountType.nostr || accountType === ExternalAccountType.twitter) &&
-      userProfile.ownerOf.length > 0
-    ) {
-      return false
-    }
-
-    return userProfile.externalAccounts.length > 1 ? isEdit : false
-  }
-
-  const userAccountToDisplay = userProfile.externalAccounts
 
   return (
     <>
@@ -55,7 +36,7 @@ export const AccountInfo = ({ userProfile, setUserProfile, isEdit, isLoading }: 
         alignItems="start"
         spacing="20px"
       >
-        <VStack w="full" alignItems="start" spacing="10px">
+        <VStack w="full" alignItems="center" spacing="10px">
           <Avatar
             src={`${userProfile.imageUrl}`}
             h="100px"
@@ -64,16 +45,6 @@ export const AccountInfo = ({ userProfile, setUserProfile, isEdit, isLoading }: 
             borderColor="neutral.200 !important"
           />
           <H1>{userProfile.username}</H1>
-          {lightningAddress && (
-            <LightningAddress
-              name={lightningAddress}
-              border="1px solid"
-              borderColor="neutral.200"
-              backgroundColor="neutral.100"
-              overflow="hidden"
-              maxWidth="full"
-            />
-          )}
           {userProfile.bio && (
             <Body1 semiBold color="neutral.600" wordBreak="break-word">
               {userProfile.bio}
@@ -82,40 +53,21 @@ export const AccountInfo = ({ userProfile, setUserProfile, isEdit, isLoading }: 
         </VStack>
         {userAccountToDisplay.length > 0 && (
           <VStack w="full" alignItems="start">
-            <Body1 bold color="neutral.900">
-              {t('Connected accounts')}
-            </Body1>
             {userAccountToDisplay.map((externalAccount) => {
               if (externalAccount) {
-                return (
-                  <ExternalAccountDisplay
-                    key={externalAccount?.id}
-                    account={externalAccount}
-                    userProfile={userProfile}
-                    setUserProfile={setUserProfile}
-                    isEdit={getIsEdit(externalAccount.accountType as ExternalAccountType)}
-                  />
-                )
+                return <ExternalAccountDisplay key={externalAccount?.id} account={externalAccount} />
               }
             })}
           </VStack>
         )}
+        <ConnectAccounts user={userProfile} />
       </CardLayout>
-      {isEdit && userProfile && (
+      {isViewingOwnProfile && userProfile && (
         <>
           <Stack direction="column" w="full" pt="20px" spacing="5px">
-            <ConnectAccounts user={userProfile} />
             <Button
-              onClick={() => modalProps.onOpen({ user: userProfile })}
-              width="100%"
-              variant="secondary"
-              marginTop="5px"
-              leftIcon={<MdEdit />}
-            >
-              {t('Edit')}
-            </Button>
-            <Button
-              onClick={() => settingModalProps.onOpen()}
+              as={Link}
+              to={getPath('userProfileSettings', userProfile.id)}
               width="100%"
               variant="secondary"
               marginTop="5px"
@@ -124,9 +76,6 @@ export const AccountInfo = ({ userProfile, setUserProfile, isEdit, isLoading }: 
               {t('Settings')}
             </Button>
           </Stack>
-
-          {modalProps.isOpen && <EditProfileModal {...modalProps} />}
-          {settingModalProps.isOpen && <ProfileSettingsModal {...settingModalProps} />}
         </>
       )}
     </>

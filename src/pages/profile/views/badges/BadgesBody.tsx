@@ -4,15 +4,14 @@ import { useTranslation } from 'react-i18next'
 import { SkeletonLayout } from '../../../../components/layouts'
 import { Body2 } from '../../../../components/typography'
 import { BadgesGroupUrl } from '../../../../constants'
-import { UserBadge } from '../../../../types'
+import { UserBadge, UserForProfilePageFragment } from '../../../../types'
 import { ExternalAccountType } from '../../../auth'
-import { UserProfile } from '../../type'
 import { NostrBadges } from './NostrBadges'
 
 interface BadgesBodyProps {
   userBadges: UserBadge[]
   isEdit: boolean
-  userProfile: UserProfile
+  userProfile: UserForProfilePageFragment
 }
 
 export const BadgesBody = ({ userBadges, userProfile, isEdit }: BadgesBodyProps) => {

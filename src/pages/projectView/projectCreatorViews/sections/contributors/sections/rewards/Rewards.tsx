@@ -2,10 +2,9 @@ import { VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { Body1 } from '../../../../../../../components/typography'
-import { ProjectRewardsImageUrl } from '../../../../../../../constants'
+import { ProjectRewardsImageUrl, RewardStatus } from '../../../../../../../constants'
 import { standardPadding } from '../../../../../../../styles'
 import { EmptyContainer } from '../../components'
-import { RewardStatus } from './components/RewardTable'
 import { RewardByStatus } from './RewardByStatus'
 import { useRewardEmptyAtom } from './state/rewardsAtom'
 

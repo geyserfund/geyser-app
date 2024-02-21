@@ -1,8 +1,7 @@
-import { Box, useDisclosure } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { useContext, useEffect } from 'react'
 
-import { AuthModal } from '../../../components/molecules'
 import { fundingStages } from '../../../constants'
 import { AuthContext, MobileViews, useProjectContext } from '../../../context'
 import { useBtcContext } from '../../../context/btc'
@@ -17,6 +16,7 @@ import {
   QuoteCurrency,
 } from '../../../types'
 import { toInt, useCustomTheme, useMobileMode } from '../../../utils'
+import { useAuthModal } from '../../auth/hooks'
 import { FundingFormScreen, InfoScreen, InfoScreenSkeleton, QRScreen, SuccessScreen } from './screens'
 import { useStyles } from './styles'
 
@@ -38,7 +38,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
 
   const { fundState, setFundState, resetFundingFlow, requestFunding } = fundingFlow
 
-  const { isOpen: loginIsOpen, onOpen: loginOnOpen, onClose: loginOnClose } = useDisclosure()
+  const { loginOnOpen } = useAuthModal()
 
   const inView = [MobileViews.contribution, MobileViews.leaderboard, MobileViews.funding].includes(mobileView)
 
@@ -154,27 +154,23 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   }
 
   return (
-    <>
-      <Box
-        className={classNames(classes.container)}
-        flex={2}
-        maxWidth={isMobile ? 'auto' : '450px'}
-        width={isMobile ? '100%' : undefined}
-        flexDirection="column"
-        justifyContent="flex-start"
-        alignItems="center"
-        backgroundColor="neutral.0"
-        marginTop={isMobile ? '0px' : '20px'}
-        height="calc(100% - 20px)"
-        borderTopLeftRadius={isMobile ? 'initial' : '8px'}
-        overflowX="hidden"
-        borderTop={{ base: 'none', lg: `2px solid ${colors.neutral[200]}` }}
-        borderLeft={{ base: 'none', lg: `2px solid ${colors.neutral[200]}` }}
-      >
-        {renderPanelContent()}
-      </Box>
-
-      <AuthModal isOpen={loginIsOpen} onClose={loginOnClose} />
-    </>
+    <Box
+      className={classNames(classes.container)}
+      flex={2}
+      maxWidth={isMobile ? 'auto' : '450px'}
+      width={isMobile ? '100%' : undefined}
+      flexDirection="column"
+      justifyContent="flex-start"
+      alignItems="center"
+      backgroundColor="neutral.0"
+      marginTop={isMobile ? '0px' : '20px'}
+      height="calc(100% - 20px)"
+      borderTopLeftRadius={isMobile ? 'initial' : '8px'}
+      overflowX="hidden"
+      borderTop={{ base: 'none', lg: `2px solid ${colors.neutral[200]}` }}
+      borderLeft={{ base: 'none', lg: `2px solid ${colors.neutral[200]}` }}
+    >
+      {renderPanelContent()}
+    </Box>
   )
 }

@@ -10,7 +10,7 @@ import { getPubkey, signEvent } from '../utils/nostr/nip07'
 
 export const useNostrExtensonLogin = () => {
   const { toast } = useNotification()
-  const { getAuthToken, login } = useAuthContext()
+  const { login } = useAuthContext()
   const [error, setError] = useState<any>()
 
   const [queryCurrentUser] = useMeLazyQuery({
@@ -21,12 +21,6 @@ export const useNostrExtensonLogin = () => {
 
   const connect = async () => {
     try {
-      const token = await getAuthToken()
-
-      if (!token) {
-        throw new Error('Could not get auth token')
-      }
-
       const pubkey = await getPubkey()
 
       const getAuthEvent = await fetch(`${authServiceEndpoint}/nostr`, {

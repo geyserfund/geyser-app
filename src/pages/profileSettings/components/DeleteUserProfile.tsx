@@ -1,16 +1,16 @@
 import { ApolloError } from '@apollo/client'
-import { Button, Tooltip, VStack } from '@chakra-ui/react'
+import { Button, HStack, Tooltip, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { Body1, Body2 } from '../../../../../components/typography'
-import { getPath } from '../../../../../constants'
-import { useAuthContext } from '../../../../../context'
-import { useModal } from '../../../../../hooks/useModal'
-import { useUserDeleteMutation } from '../../../../../types'
-import { useNotification } from '../../../../../utils'
-import { DeleteTextConfirm } from '../../../components'
+import { Body2, H3 } from '../../../components/typography'
+import { getPath } from '../../../constants'
+import { useAuthContext } from '../../../context'
+import { useModal } from '../../../hooks/useModal'
+import { useUserDeleteMutation } from '../../../types'
+import { useNotification } from '../../../utils'
+import { DeleteTextConfirm } from '../../profile/components'
 
 export const DeleteUserProfile = () => {
   const { t } = useTranslation()
@@ -60,19 +60,21 @@ export const DeleteUserProfile = () => {
   return (
     <>
       <VStack w="full" spacing="10px" alignItems="start">
-        <Body1 semiBold>{t('Delete profile')}</Body1>
+        <HStack w="full" justifyContent={'space-between'}>
+          <H3>{t('Delete profile')}</H3>
+
+          <Tooltip label={isUserAProjectCreator ? t('As a project creator, you cannot delete your profile') : ''}>
+            <Button
+              variant="secondary"
+              color="secondary.red"
+              onClick={deleteProfile.onOpen}
+              isDisabled={isUserAProjectCreator}
+            >
+              {t('Delete')}
+            </Button>
+          </Tooltip>
+        </HStack>
         <Body2>{t('Delete your profile permanently from Geyser.')}</Body2>
-        <Tooltip label={isUserAProjectCreator ? t('As a project creator, you cannot delete your profile') : ''}>
-          <Button
-            variant="secondary"
-            color="secondary.red"
-            w="full"
-            onClick={deleteProfile.onOpen}
-            isDisabled={isUserAProjectCreator}
-          >
-            {t('Delete')}
-          </Button>
-        </Tooltip>
       </VStack>
 
       <DeleteTextConfirm isOpen={deleteProfile.isOpen} onClose={deleteProfile.onClose} {...deleteTextProps} />

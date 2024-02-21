@@ -1,8 +1,7 @@
 import { ExternalAccountType } from '../../pages/auth'
-import { UserProfile } from '../../pages/profile'
-import { UserMeFragment } from '../../types/generated/graphql'
+import { UserForProfilePageFragment, UserMeFragment } from '../../types/generated/graphql'
 
-type UserAccount = UserMeFragment | UserProfile
+type UserAccount = UserMeFragment | UserForProfilePageFragment
 
 export const hasNostrAccount = (user: UserAccount) => {
   if (!user || !user.id) {

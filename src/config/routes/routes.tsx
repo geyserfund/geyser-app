@@ -15,6 +15,7 @@ const Entry = () => import('../../pages/entry')
 const ProjectDashboard = () => import('../../pages/projectDashboard')
 const Project = () => import('../../pages/projectView')
 const ProfilePage = () => import('../../pages/profile/Profile')
+const ProfileSettingsPage = () => import('../../pages/profileSettings/ProfileSettings')
 const Badges = () => import('../../pages/badges/BadgesPage')
 const Landing = () => import('../../pages/landing')
 const AboutPage = () => import('../../pages/about/About')
@@ -85,6 +86,13 @@ export const platformRoutes: RouteObject[] = [
     async lazy() {
       const ProjectCreate = await ProjectLaunch().then((m) => m.ProjectCreate)
       return { element: renderPrivateRoute(ProjectCreate) }
+    },
+  },
+  {
+    path: getPath('userProfileSettings', PathName.userId),
+    async lazy() {
+      const ProfileSettings = await ProfileSettingsPage().then((m) => m.ProfileSettings)
+      return { element: renderPrivateRoute(ProfileSettings) }
     },
   },
   {

@@ -186,6 +186,8 @@ export const ProjectRewardsImageUrl = 'https://storage.googleapis.com/geyser-pro
 export const ProjectNoTransactionImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/no-transaction.svg'
 
+export const NoContributionImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/no-contribution.svg'
+
 // GRANTS
 
 export const Grant3AnnouncementImageUrl =

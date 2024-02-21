@@ -1,8 +1,8 @@
 import { atom, useAtomValue } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 
+import { RewardStatus } from '../../../../../../../../constants'
 import { OrderFragment } from '../../../../../../../../types'
-import { RewardStatus } from '../components/RewardTable'
 
 type RewardsTableCountTypes = {
   [RewardStatus.todo]: number

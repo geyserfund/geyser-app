@@ -1,57 +1,100 @@
-import { CardLayoutProps, LandingCardBase } from '../../../../../components/layouts'
-import { ProjectStatusLabels } from '../../../../../components/ui'
+import { Box, HStack, SkeletonText, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
+
+import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../components/layouts'
+import { Body1, Body2 } from '../../../../../components/typography'
+import { ImageWithReload, ProjectStatusLabel } from '../../../../../components/ui'
 import { getPath } from '../../../../../constants'
-import { ProjectForProfilePageFragment, WalletStatus } from '../../../../../types'
-import { isActive, isDraft, isInactive } from '../../../../../utils'
+import { ProjectForProfilePageFragment } from '../../../../../types'
+import { commaFormatted, toSmallImageUrl } from '../../../../../utils'
+import { FollowButton } from '../../../../projectView/projectMainBody/components'
 
 interface ProfileProjectCardProps extends Omit<CardLayoutProps, 'to'> {
   project: ProjectForProfilePageFragment
   showStatus?: boolean
-  isMobile?: boolean
+  showFollow?: boolean
+  showStats?: boolean
 }
 
-export const ProfileProjectCard = ({ project, isMobile, showStatus, ...rest }: ProfileProjectCardProps) => {
-  if (!project.owners[0]) {
+export const ProfileProjectCard = ({
+  project,
+  showStatus,
+  showFollow,
+  showStats,
+  ...rest
+}: ProfileProjectCardProps) => {
+  const { t } = useTranslation()
+
+  if (!project) {
     return null
   }
 
-  const getStatus = () => {
-    if (project?.wallets[0] && project.wallets[0].state.status === WalletStatus.Inactive) {
-      return ProjectStatusLabels.INACTIVE_WALLET
-    }
-
-    if (project?.wallets[0] && project.wallets[0].state.status === WalletStatus.Unstable) {
-      return ProjectStatusLabels.UNSTABLE_WALLET
-    }
-
-    if (isActive(project.status)) {
-      return ProjectStatusLabels.RUNNING
-    }
-
-    if (isDraft(project.status)) {
-      return ProjectStatusLabels.DRAFT
-    }
-
-    if (isInactive(project.status)) {
-      return ProjectStatusLabels.INACTIVE
-    }
-
-    return undefined
-  }
-
   return (
-    <LandingCardBase
+    <CardLayout
+      as={Link}
       to={getPath('project', project.name)}
-      projectStatus={showStatus ? getStatus() : undefined}
-      isMobile={isMobile}
-      imageSrc={`${project.thumbnailImage}`}
-      title={project.title}
-      user={project.owners[0].user}
-      fundersCount={project.fundersCount || 0}
-      amountFunded={project.balance}
-      projectId={project.id}
-      minHeight="125px"
+      hover
+      padding="10px"
+      direction={'row'}
+      w="full"
+      alignItems="start"
+      overflow="visible"
       {...rest}
-    />
+    >
+      <Box width="70px" height="70px">
+        <ImageWithReload
+          w="100%"
+          h="100%"
+          objectFit="cover"
+          src={toSmallImageUrl(project.thumbnailImage || '')}
+          alt={`${project.title}-header-image`}
+          borderRadius="8px"
+        />
+      </Box>
+
+      <VStack w={`calc(100% - 80px)`} alignItems="flex-start">
+        <HStack w="full" justifyContent={'space-between'}>
+          <Body1 xBold color="neutral.900" isTruncated>
+            {project.title}
+          </Body1>
+          {showStatus && <ProjectStatusLabel iconOnly project={project} />}
+          {showFollow && <FollowButton projectId={project.id} />}
+        </HStack>
+        <Body1 color="neutral.600" lineHeight={1.2}>
+          {project.shortDescription}
+        </Body1>
+        {showStats && (
+          <HStack w="full" spacing="20px">
+            <Body2 color="neutral.600">
+              <Box as="span" color="neutral.900">
+                {project.fundersCount}{' '}
+              </Box>{' '}
+              {t('Contributors')}
+            </Body2>
+            <Body2 color="neutral.600">
+              <Box as="span" color="neutral.900">
+                {commaFormatted(project.balance)}{' '}
+              </Box>{' '}
+              {t('Sats funded')}
+            </Body2>
+          </HStack>
+        )}
+      </VStack>
+    </CardLayout>
+  )
+}
+
+export const ProfileProjectCardSkeleton = () => {
+  return (
+    <CardLayout padding="10px" direction={'row'} w="full" alignItems="start" overflow="visible">
+      <Box width="70px" height="70px">
+        <SkeletonLayout w="100%" h="100%" />
+      </Box>
+      <VStack w={`calc(100% - 80px)`} alignItems="flex-start">
+        <SkeletonLayout w="100px" h="32px" />
+        <SkeletonText w="100%" noOfLines={2} />
+      </VStack>
+    </CardLayout>
   )
 }

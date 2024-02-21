@@ -4,15 +4,15 @@ import { useTranslation } from 'react-i18next'
 
 import { LightningIcon, SatoshiIconTilted } from '../../../../components/icons'
 import { SkeletonLayout } from '../../../../components/layouts'
-import { ExternalAccountLinkIcon } from '../../../../components/molecules'
+import { ExternalAccountLinkIcon, TransactionTime } from '../../../../components/molecules'
 import { renderFunderBadges } from '../../../../components/molecules/projectActivity/renderFunderBadges'
-import { Caption, MonoBody1 } from '../../../../components/typography'
+import { MonoBody1 } from '../../../../components/typography'
 import { AnonymousAvatar, AvatarLink, LinkableAvatar } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import { computeFunderBadges, getAvatarMetadata } from '../../../../helpers'
 import { fonts } from '../../../../styles'
 import { FundingTxForLandingPageFragment, FundingTxFragment } from '../../../../types'
-import { commaFormatted, GetDaysAgo, getRandomOrb, toSmallImageUrl } from '../../../../utils'
+import { commaFormatted, getRandomOrb, toSmallImageUrl } from '../../../../utils'
 
 type Props = HTMLChakraProps<'div'> & {
   fundingTx: FundingTxFragment | FundingTxForLandingPageFragment
@@ -25,7 +25,6 @@ export const ContributionActivityItem = ({ fundingTx, dateTime, count, showsProj
   const { funder } = fundingTx
 
   const isFunderAnonymous = !funder?.user
-  const timeAgo = GetDaysAgo(dateTime || fundingTx.paidAt)
   const wasMadeOnChain = fundingTx.onChain
 
   const avatarMetadata = getAvatarMetadata({
@@ -136,10 +135,7 @@ export const ContributionActivityItem = ({ fundingTx, dateTime, count, showsProj
           {/* Timestamp and Funded-Project Info */}
 
           <HStack w="full" color="neutral.700" spacing={2}>
-            <Caption whiteSpace="nowrap">
-              {`${wasMadeOnChain ? '⛓' : '⚡️'}`}
-              {timeAgo ? `${timeAgo} ${t('ago')}` : t('Some time ago')}
-            </Caption>
+            <TransactionTime onChain={wasMadeOnChain} dateTime={dateTime || fundingTx.paidAt} />
 
             <ExternalAccountLinkIcon fundingTx={fundingTx} />
 

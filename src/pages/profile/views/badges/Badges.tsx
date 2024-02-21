@@ -8,20 +8,15 @@ import { Body2, H2 } from '../../../../components/typography'
 import { getPath } from '../../../../constants'
 import { useUserBadgesLazyQuery } from '../../../../types'
 import { toInt, useNotification } from '../../../../utils'
-import { UserProfile } from '../../type'
+import { useUserProfileAtomValue, useViewingOwnProfileAtomValue } from '../../state'
 import { BadgesBody, BadgesBodySkeleton } from './BadgesBody'
 
-export const Badges = ({
-  userProfile,
-  isEdit,
-  isLoading,
-}: {
-  userProfile: UserProfile
-  isEdit: boolean
-  isLoading: boolean
-}) => {
+export const Badges = ({ isLoading }: { isLoading: boolean }) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
+
+  const userProfile = useUserProfileAtomValue()
+  const isEdit = useViewingOwnProfileAtomValue()
 
   const [getUserBadges, { data: userBadgesData, loading: userBadgeLoading }] = useUserBadgesLazyQuery({
     onError() {
