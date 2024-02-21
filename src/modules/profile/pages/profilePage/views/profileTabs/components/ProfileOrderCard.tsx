@@ -87,7 +87,7 @@ export const ProfileOrderCard = ({ order }: { order: ProfileOrderFragment }) => 
 
               <Body2 color="neutral.600">{item.item.description}</Body2>
               <HStack flexWrap={'wrap'} spacing="20px">
-                <KeyValueDisplay label={t('Cost per unit')} value={`${item.unitPriceInSats} sats`} />
+                <KeyValueDisplay label={t('Cost per unit')} value={`${commaFormatted(item.unitPriceInSats)} sats`} />
                 <KeyValueDisplay label={t('Quantity')} value={`${item.quantity}x`} />
                 {item.item.category && (
                   <Caption px="10px" py="3px" bgColor="neutral.100">
