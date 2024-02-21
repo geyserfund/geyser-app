@@ -26,7 +26,9 @@ export const ProfileOrderCard = ({ order }: { order: ProfileOrderFragment }) => 
       <VStack w="full" p="10px" pb={0} spacing="10px">
         <HStack w="full" justifyContent={'space-between'}>
           <HStack>
-            <TransactionTime onChain={order.fundingTx.onChain} dateTime={order.confirmedAt} fontSize={'16px'} />
+            {order.confirmedAt && (
+              <TransactionTime onChain={order.fundingTx.onChain} dateTime={order.confirmedAt} fontSize={'16px'} />
+            )}
             <Body1>▶</Body1>
             <ProjectAvatarLink project={project} />
           </HStack>
@@ -49,10 +51,12 @@ export const ProfileOrderCard = ({ order }: { order: ProfileOrderFragment }) => 
         <VStack w="full" alignItems={'start'}>
           <HStack flexWrap={'wrap'} spacing="20px">
             <KeyValueDisplay label={t('Total')} value={`${commaFormatted(order.totalInSats)} sats`} />
-            <KeyValueDisplay
-              label={t('Date Purchased')}
-              value={DateTime.fromMillis(order.confirmedAt).toFormat('LLL dd, yyyy')}
-            />
+            {order.confirmedAt && (
+              <KeyValueDisplay
+                label={t('Date Purchased')}
+                value={DateTime.fromMillis(order.confirmedAt).toFormat('LLL dd, yyyy')}
+              />
+            )}
           </HStack>
           <KeyValueDisplay label={t('Reference code')} value={order.referenceCode} />
         </VStack>
