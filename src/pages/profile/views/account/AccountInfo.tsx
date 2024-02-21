@@ -1,4 +1,4 @@
-import { Avatar, Button, SkeletonCircle, Stack, VStack } from '@chakra-ui/react'
+import { Avatar, Button, SkeletonCircle, SkeletonText, Stack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { BsGearFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
@@ -84,12 +84,16 @@ export const AccountInfo = ({ isLoading }: AccountInfoProps) => {
 
 export const AccountInfoSkeleton = () => {
   return (
-    <CardLayout padding="20px" direction="column" alignItems="start" spacing="10px">
+    <CardLayout padding="20px" direction="column" justifyContent={'center'} alignItems="center" spacing="20px">
       <SkeletonCircle height="100px" width="100px" />
-      <SkeletonLayout height="25px" width="60%" />
-      <SkeletonLayout height="32px" width="80%" />
-      <SkeletonLayout height="44px" width="100%" />
-      <SkeletonLayout height="44px" width="100%" />
+      <SkeletonLayout height="42px" width="60%" />
+
+      <SkeletonText height="32px" width="100%" />
+
+      <SkeletonLayout height="32px" width="100%" />
+      <SkeletonLayout height="32px" width="100%" />
+
+      <SkeletonLayout height="32px" width="100%" />
     </CardLayout>
   )
 }
