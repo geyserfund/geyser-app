@@ -1885,6 +1885,7 @@ export type UniqueProjectQueryInput = {
 }
 
 export enum UpdatableOrderStatus {
+  Confirmed = 'CONFIRMED',
   Delivered = 'DELIVERED',
   Shipped = 'SHIPPED',
 }
@@ -5021,7 +5022,7 @@ export type FunderWithUserFragment = {
 
 export type UserProjectContributionsFragment = {
   __typename?: 'UserProjectContribution'
-  project: { __typename?: 'Project'; id: any; thumbnailImage?: string | null; name: any; title: any }
+  project: { __typename?: 'Project' } & ProjectAvatarFragment
   funder?: {
     __typename?: 'Funder'
     amountFunded?: number | null
@@ -6857,10 +6858,7 @@ export const FunderWithUserFragmentDoc = gql`
 export const UserProjectContributionsFragmentDoc = gql`
   fragment UserProjectContributions on UserProjectContribution {
     project {
-      id
-      thumbnailImage
-      name
-      title
+      ...ProjectAvatar
     }
     funder {
       amountFunded
@@ -6876,6 +6874,7 @@ export const UserProjectContributionsFragmentDoc = gql`
       }
     }
   }
+  ${ProjectAvatarFragmentDoc}
 `
 export const EntryForLandingPageFragmentDoc = gql`
   fragment EntryForLandingPage on Entry {

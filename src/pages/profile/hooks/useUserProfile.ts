@@ -5,7 +5,7 @@ import { useAuthContext } from '../../../context'
 import { useUserForProfilePageQuery } from '../../../types'
 import { userProfileAtom, useViewingOwnProfileAtomValue } from '../state'
 
-export const useUserProfile = (useId: number) => {
+export const useUserProfile = (userId: number) => {
   const isViewingOwnProfile = useViewingOwnProfileAtomValue()
   const [userProfile, setUserProfile] = useAtom(userProfileAtom)
   const { user: currentAppUser } = useAuthContext()
@@ -13,10 +13,10 @@ export const useUserProfile = (useId: number) => {
   const { loading, error } = useUserForProfilePageQuery({
     variables: {
       where: {
-        id: useId,
+        id: userId,
       },
     },
-    skip: !useId,
+    skip: !userId,
     onCompleted(data) {
       if (data.user) {
         setUserProfile(data.user)

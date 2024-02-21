@@ -1,12 +1,12 @@
 import { gql } from '@apollo/client'
 
+import { FRAGMENT_PROJECT_AVATAR } from './project'
+
 export const FRAGMENT_USER_PROJECT_CONTRIBUTIONS = gql`
+  ${FRAGMENT_PROJECT_AVATAR}
   fragment UserProjectContributions on UserProjectContribution {
     project {
-      id
-      thumbnailImage
-      name
-      title
+      ...ProjectAvatar
     }
     funder {
       amountFunded
