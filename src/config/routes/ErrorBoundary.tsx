@@ -11,6 +11,7 @@ const FAILED_FETCH_ERROR = [
   'Importing a module script failed',
   'error loading dynamically imported module',
   'dynamically imported module',
+  'not a valid JavaScript MIME type',
 ]
 const CHUNK_LOAD_ERROR = 'ChunkLoadError'
 const LOCAL_STORAGE_LAST_REFRESH_KEY = 'ChunkLoadError'
