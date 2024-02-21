@@ -1,9 +1,7 @@
-import { UpdatableOrderStatus } from '../../types'
-
 export enum RewardStatus {
-  todo = UpdatableOrderStatus.Confirmed,
-  shipped = UpdatableOrderStatus.Shipped,
-  delivered = UpdatableOrderStatus.Delivered,
+  todo = 'CONFIRMED',
+  shipped = 'SHIPPED',
+  delivered = 'DELIVERED',
 }
 
 export type RewardStatusOption = {
