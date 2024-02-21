@@ -34,7 +34,6 @@ export const ProfileProjectCard = ({
     <CardLayout
       as={Link}
       to={getPath('project', project.name)}
-      hover
       padding="10px"
       direction={'row'}
       w="full"
@@ -85,9 +84,9 @@ export const ProfileProjectCard = ({
   )
 }
 
-export const ProfileProjectCardSkeleton = () => {
+export const ProfileProjectCardSkeleton = (props: CardLayoutProps) => {
   return (
-    <CardLayout padding="10px" direction={'row'} w="full" alignItems="start" overflow="visible">
+    <CardLayout padding="10px" direction={'row'} w="full" alignItems="start" overflow="visible" {...props}>
       <Box width="70px" height="70px">
         <SkeletonLayout w="100%" h="100%" />
       </Box>

@@ -4,7 +4,7 @@ import { ProjectForProfilePageFragment } from '../../../../../types'
 import { CreateAProjectButton, ProfileTabLayout } from '../../../components'
 import { useViewingOwnProfileAtomValue } from '../../../state'
 import { CreateProject } from '../components/CreateProject'
-import { ProfileProjectCard } from '../components/ProfileProjectCard'
+import { ProfileProjectList } from '../components/ProfileProjectList'
 import { TabPanelSkeleton } from '../components/TabPanelSkeleton'
 
 const ProfileProjectsLayout = ({ children }: { children: React.ReactNode }) => {
@@ -41,17 +41,12 @@ export const ProfileProjects = ({
 
   return (
     <ProfileProjectsLayout>
-      {projectsToRender.map((project) => {
-        return (
-          <ProfileProjectCard
-            key={project.id}
-            project={project}
-            showStatus={isViewingOwnProfile}
-            showFollow={!isViewingOwnProfile}
-            showStats
-          />
-        )
-      })}
+      <ProfileProjectList
+        projects={projectsToRender}
+        showStatus={isViewingOwnProfile}
+        showFollow={!isViewingOwnProfile}
+        showStats
+      />
     </ProfileProjectsLayout>
   )
 }

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 import { ProjectForProfilePageFragment } from '../../../../../types'
 import { ProfileTabLayout } from '../../../components'
-import { ProfileProjectCard } from '../components/ProfileProjectCard'
+import { ProfileProjectList } from '../components/ProfileProjectList'
 import { TabPanelSkeleton } from '../components/TabPanelSkeleton'
 
 interface ProfileFollowedProps {
@@ -19,9 +19,7 @@ export const ProfileFollowed = ({ projects, isLoading }: ProfileFollowedProps) =
 
   return (
     <ProfileTabLayout heading={t('Followed projects')}>
-      {projects.map((project) => {
-        return <ProfileProjectCard key={project.id} project={project} showFollow />
-      })}
+      <ProfileProjectList projects={projects} showFollow />
     </ProfileTabLayout>
   )
 }
