@@ -39,17 +39,13 @@ export const FRAGMENT_USER_FOR_PROFILE_PAGE = gql`
   ${FRAGMENT_EXTERNAL_ACCOUNT}
   fragment UserForProfilePage on User {
     id
+    bio
     username
     imageUrl
-    email
     ranking
     isEmailVerified
     externalAccounts {
-      id
-      accountType
-      externalUsername
-      externalId
-      public
+      ...ExternalAccount
     }
   }
 `

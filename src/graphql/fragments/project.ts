@@ -48,16 +48,9 @@ export const FRAGMENT_PROJECT_FOR_PROFILE_PAGE = gql`
     fundersCount
     thumbnailImage
     title
+    shortDescription
     createdAt
     status
-    owners {
-      id
-      user {
-        id
-        username
-        imageUrl
-      }
-    }
     wallets {
       id
       name
@@ -217,5 +210,14 @@ export const FRAGMENT_PROJECT = gql`
         }
       }
     }
+  }
+`
+
+export const FRAGMENT_PROJECT_AVATAR = gql`
+  fragment ProjectAvatar on Project {
+    id
+    name
+    thumbnailImage
+    title
   }
 `
