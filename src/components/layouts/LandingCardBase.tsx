@@ -28,7 +28,7 @@ export const LandingCardBase = ({
   title,
   fundersCount,
   amountFunded,
-  projectId,
+  project,
   user,
   ...rest
 }: LandingCardBaseProps) => {
@@ -89,7 +89,7 @@ export const LandingCardBase = ({
           width="100%"
           fundersCount={fundersCount}
           amountFunded={amountFunded}
-          projectId={projectId}
+          project={project}
           justifyContent={
             isMobile
               ? 'start'

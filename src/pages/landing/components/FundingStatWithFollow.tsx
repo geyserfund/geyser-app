@@ -9,12 +9,13 @@ import { IconButtonComponent } from '../../../components/ui'
 import { useAuthContext } from '../../../context'
 import { useFollowProject } from '../../../hooks/graphqlState'
 import { fonts } from '../../../styles'
+import { Project } from '../../../types'
 import { getShortAmountLabel } from '../../../utils'
 
 export interface FundingStatWithFollowProps extends StackProps {
   fundersCount: number
   amountFunded: number
-  projectId: number
+  project: Pick<Project, 'id' | 'name' | 'title'>
   bold?: boolean
 }
 
@@ -22,13 +23,13 @@ export const FundingStatWithFollow = ({
   bold,
   fundersCount = 0,
   amountFunded = 0,
-  projectId,
+  project,
   ...rest
 }: FundingStatWithFollowProps) => {
   const { t } = useTranslation()
   const { isLoggedIn } = useAuthContext()
 
-  const { isFollowed, handleFollow, handleUnFollow, followLoading, unfollowLoading } = useFollowProject(projectId)
+  const { isFollowed, handleFollow, handleUnFollow, followLoading, unfollowLoading } = useFollowProject(project)
 
   return (
     <HStack direction={'row'} spacing="20px" {...rest}>

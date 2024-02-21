@@ -77,7 +77,7 @@ export const FeaturedProjectCard = ({ projectName }: { projectName: string }) =>
             justifyContent={'space-between'}
             fundersCount={project.fundersCount || 0}
             amountFunded={project.balance}
-            projectId={project.id}
+            project={project}
             bold
           />
         </VStack>

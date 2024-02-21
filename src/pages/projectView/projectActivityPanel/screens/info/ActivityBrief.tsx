@@ -187,6 +187,10 @@ export const ActivityBrief = (props: StackProps) => {
 
   const latestFunders = socialFunders.slice(0, 12)
 
+  if (!project) {
+    return null
+  }
+
   return (
     <VStack w="100%" {...props}>
       <HStack
@@ -218,7 +222,7 @@ export const ActivityBrief = (props: StackProps) => {
           {followedProjects.some((followedProject) => followedProject?.id === project?.id) ? (
             <ShareButton w="full" />
           ) : (
-            <FollowButton hasIcon variant="secondary" size="md" w="full" projectId={project?.id} />
+            <FollowButton hasIcon variant="secondary" size="md" w="full" project={project} />
           )}
         </VStack>
       ) : null}
