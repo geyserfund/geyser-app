@@ -23,8 +23,6 @@ export type Scalars = {
   amount_Float_NotNull_min_1: any
   amount_Float_min_1: any
   comment_String_maxLength_280: any
-  cost_Int_NotNull_min_1_max_1000000: any
-  cost_Int_min_1_max_1000000: any
   description_String_NotNull_maxLength_250: any
   description_String_NotNull_maxLength_2200: any
   description_String_NotNull_maxLength_8000: any
@@ -191,7 +189,7 @@ export type CreateProjectMilestoneInput = {
 export type CreateProjectRewardInput = {
   category?: InputMaybe<Scalars['String']>
   /** Cost of the reward, currently only in USD cents */
-  cost: Scalars['cost_Int_NotNull_min_1_max_1000000']
+  cost: Scalars['Int']
   description?: InputMaybe<Scalars['description_String_maxLength_250']>
   estimatedAvailabilityDate?: InputMaybe<Scalars['Date']>
   estimatedDeliveryInWeeks?: InputMaybe<Scalars['Int']>
@@ -664,6 +662,8 @@ export type GetFundingTxsInput = {
 
 export type GetFundingTxsOrderByInput = {
   createdAt: OrderByOptions
+  /** @deprecated Use createdAt instead. */
+  paidAt?: InputMaybe<OrderByOptions>
 }
 
 export type GetFundingTxsWhereInput = {
@@ -1311,7 +1311,7 @@ export type PaginationInput = {
 
 export type Project = {
   __typename?: 'Project'
-  /** @deprecated No longer supported */
+  /** @deprecated Field no longer supported */
   ambassadors: Array<Ambassador>
   /** Total amount raised by the project, in satoshis. */
   balance: Scalars['Int']
@@ -1346,7 +1346,7 @@ export type Project = {
   rewards: Array<ProjectReward>
   /** Short description of the project. */
   shortDescription?: Maybe<Scalars['shortDescription_String_maxLength_500']>
-  /** @deprecated No longer supported */
+  /** @deprecated Field no longer supported */
   sponsors: Array<Sponsor>
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>
@@ -1885,6 +1885,7 @@ export type UniqueProjectQueryInput = {
 }
 
 export enum UpdatableOrderStatus {
+  Confirmed = 'CONFIRMED',
   Delivered = 'DELIVERED',
   Shipped = 'SHIPPED',
 }
@@ -1943,7 +1944,7 @@ export type UpdateProjectRewardDevelopmentStatusInput = {
 export type UpdateProjectRewardInput = {
   category?: InputMaybe<Scalars['String']>
   /** Cost of the reward, priced in USD cents */
-  cost?: InputMaybe<Scalars['cost_Int_min_1_max_1000000']>
+  cost?: InputMaybe<Scalars['Int']>
   description?: InputMaybe<Scalars['description_String_maxLength_250']>
   hasShipping?: InputMaybe<Scalars['Boolean']>
   image?: InputMaybe<Scalars['String']>
@@ -2000,6 +2001,7 @@ export type User = {
   id: Scalars['BigInt']
   imageUrl?: Maybe<Scalars['String']>
   isEmailVerified: Scalars['Boolean']
+  orders?: Maybe<Array<Order>>
   ownerOf: Array<OwnerOf>
   projectFollows: Array<Project>
   /**
@@ -2061,14 +2063,14 @@ export type UserProjectContribution = {
   funder?: Maybe<Funder>
   /**
    * Boolean value indicating if the User was an ambassador of the project.
-   * @deprecated No longer supported
+   * @deprecated Field no longer supported
    */
   isAmbassador: Scalars['Boolean']
   /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean']
   /**
    * Boolean value indicating if the User was a sponsor for the project.
-   * @deprecated No longer supported
+   * @deprecated Field no longer supported
    */
   isSponsor: Scalars['Boolean']
   /** Project linked to the contributions. */
@@ -2466,8 +2468,6 @@ export type ResolversTypes = {
   amount_Float_NotNull_min_1: ResolverTypeWrapper<Scalars['amount_Float_NotNull_min_1']>
   amount_Float_min_1: ResolverTypeWrapper<Scalars['amount_Float_min_1']>
   comment_String_maxLength_280: ResolverTypeWrapper<Scalars['comment_String_maxLength_280']>
-  cost_Int_NotNull_min_1_max_1000000: ResolverTypeWrapper<Scalars['cost_Int_NotNull_min_1_max_1000000']>
-  cost_Int_min_1_max_1000000: ResolverTypeWrapper<Scalars['cost_Int_min_1_max_1000000']>
   dashboardFundersGetInput: DashboardFundersGetInput
   description_String_NotNull_maxLength_250: ResolverTypeWrapper<Scalars['description_String_NotNull_maxLength_250']>
   description_String_NotNull_maxLength_2200: ResolverTypeWrapper<Scalars['description_String_NotNull_maxLength_2200']>
@@ -2704,8 +2704,6 @@ export type ResolversParentTypes = {
   amount_Float_NotNull_min_1: Scalars['amount_Float_NotNull_min_1']
   amount_Float_min_1: Scalars['amount_Float_min_1']
   comment_String_maxLength_280: Scalars['comment_String_maxLength_280']
-  cost_Int_NotNull_min_1_max_1000000: Scalars['cost_Int_NotNull_min_1_max_1000000']
-  cost_Int_min_1_max_1000000: Scalars['cost_Int_min_1_max_1000000']
   dashboardFundersGetInput: DashboardFundersGetInput
   description_String_NotNull_maxLength_250: Scalars['description_String_NotNull_maxLength_250']
   description_String_NotNull_maxLength_2200: Scalars['description_String_NotNull_maxLength_2200']
@@ -4059,6 +4057,7 @@ export type UserResolvers<
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   isEmailVerified?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  orders?: Resolver<Maybe<Array<ResolversTypes['Order']>>, ParentType, ContextType>
   ownerOf?: Resolver<Array<ResolversTypes['OwnerOf']>, ParentType, ContextType>
   projectFollows?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType>
   projects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType, Partial<UserProjectsArgs>>
@@ -4128,16 +4127,6 @@ export interface Amount_Float_Min_1ScalarConfig
 export interface Comment_String_MaxLength_280ScalarConfig
   extends GraphQLScalarTypeConfig<ResolversTypes['comment_String_maxLength_280'], any> {
   name: 'comment_String_maxLength_280'
-}
-
-export interface Cost_Int_NotNull_Min_1_Max_1000000ScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes['cost_Int_NotNull_min_1_max_1000000'], any> {
-  name: 'cost_Int_NotNull_min_1_max_1000000'
-}
-
-export interface Cost_Int_Min_1_Max_1000000ScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes['cost_Int_min_1_max_1000000'], any> {
-  name: 'cost_Int_min_1_max_1000000'
 }
 
 export interface Description_String_NotNull_MaxLength_250ScalarConfig
@@ -4369,8 +4358,6 @@ export type Resolvers<ContextType = any> = {
   amount_Float_NotNull_min_1?: GraphQLScalarType
   amount_Float_min_1?: GraphQLScalarType
   comment_String_maxLength_280?: GraphQLScalarType
-  cost_Int_NotNull_min_1_max_1000000?: GraphQLScalarType
-  cost_Int_min_1_max_1000000?: GraphQLScalarType
   description_String_NotNull_maxLength_250?: GraphQLScalarType
   description_String_NotNull_maxLength_2200?: GraphQLScalarType
   description_String_NotNull_maxLength_8000?: GraphQLScalarType
@@ -4656,6 +4643,43 @@ export type FundingTxOrderFragment = {
   } | null
 }
 
+export type ProfileOrderItemFragment = {
+  __typename?: 'OrderItem'
+  quantity: number
+  unitPriceInSats: number
+  item: {
+    __typename?: 'ProjectReward'
+    id: any
+    name: any
+    cost: number
+    rewardCurrency: RewardCurrency
+    description?: any | null
+    image?: string | null
+    category?: string | null
+  }
+}
+
+export type ProfileOrderFragment = {
+  __typename?: 'Order'
+  id: any
+  referenceCode: string
+  totalInSats: number
+  status: string
+  confirmedAt?: any | null
+  updatedAt: any
+  items: Array<{ __typename?: 'OrderItem' } & ProfileOrderItemFragment>
+  fundingTx: {
+    __typename?: 'FundingTx'
+    id: any
+    amountPaid: number
+    amount: number
+    status: FundingStatus
+    onChain: boolean
+    bitcoinQuote?: { __typename?: 'BitcoinQuote'; quote: number; quoteCurrency: QuoteCurrency } | null
+    sourceResource?: { __typename?: 'Entry' } | ({ __typename?: 'Project' } & ProjectAvatarFragment) | null
+  }
+}
+
 export type PaginationFragment = {
   __typename?: 'CursorPaginationResponse'
   take?: number | null
@@ -4701,13 +4725,9 @@ export type ProjectForProfilePageFragment = {
   fundersCount?: number | null
   thumbnailImage?: string | null
   title: any
+  shortDescription?: any | null
   createdAt: string
   status?: ProjectStatus | null
-  owners: Array<{
-    __typename?: 'Owner'
-    id: any
-    user: { __typename?: 'User'; id: any; username: string; imageUrl?: string | null }
-  }>
   wallets: Array<{
     __typename?: 'Wallet'
     id: any
@@ -4831,6 +4851,14 @@ export type ProjectFragment = {
   }
 }
 
+export type ProjectAvatarFragment = {
+  __typename?: 'Project'
+  id: any
+  name: any
+  thumbnailImage?: string | null
+  title: any
+}
+
 export type ProjectStatsForOverviewPageFragment = {
   __typename?: 'ProjectStats'
   current?: {
@@ -4919,6 +4947,15 @@ export type ProjectFundingMethodStatsFragment = {
   } | null
 }
 
+export type ExternalAccountFragment = {
+  __typename?: 'ExternalAccount'
+  id: any
+  accountType: string
+  externalUsername: string
+  externalId: string
+  public: boolean
+}
+
 export type UserMeFragment = {
   __typename?: 'User'
   id: any
@@ -4927,14 +4964,7 @@ export type UserMeFragment = {
   email?: string | null
   ranking?: any | null
   isEmailVerified: boolean
-  externalAccounts: Array<{
-    __typename?: 'ExternalAccount'
-    id: any
-    accountType: string
-    externalUsername: string
-    externalId: string
-    public: boolean
-  }>
+  externalAccounts: Array<{ __typename?: 'ExternalAccount' } & ExternalAccountFragment>
   ownerOf: Array<{
     __typename?: 'OwnerOf'
     project?: {
@@ -4947,6 +4977,17 @@ export type UserMeFragment = {
       status?: ProjectStatus | null
     } | null
   }>
+}
+
+export type UserForProfilePageFragment = {
+  __typename?: 'User'
+  id: any
+  bio?: string | null
+  username: string
+  imageUrl?: string | null
+  ranking?: any | null
+  isEmailVerified: boolean
+  externalAccounts: Array<{ __typename?: 'ExternalAccount' } & ExternalAccountFragment>
 }
 
 export type UserForAvatarFragment = {
@@ -4975,6 +5016,26 @@ export type FunderWithUserFragment = {
       externalUsername: string
       id: any
       accountType: string
+    }>
+  } | null
+}
+
+export type UserProjectContributionsFragment = {
+  __typename?: 'UserProjectContribution'
+  project: { __typename?: 'Project' } & ProjectAvatarFragment
+  funder?: {
+    __typename?: 'Funder'
+    amountFunded?: number | null
+    confirmedAt?: any | null
+    confirmed: boolean
+    id: any
+    fundingTxs: Array<{
+      __typename?: 'FundingTx'
+      amountPaid: number
+      comment?: string | null
+      media?: string | null
+      paidAt?: any | null
+      onChain: boolean
     }>
   } | null
 }
@@ -6045,61 +6106,13 @@ export type MeProjectFollowsQuery = {
   me?: { __typename?: 'User'; projectFollows: Array<{ __typename?: 'Project'; id: any; title: any; name: any }> } | null
 }
 
-export type UserProfileQueryVariables = Exact<{
+export type UserForProfilePageQueryVariables = Exact<{
   where: UserGetInput
 }>
 
-export type UserProfileQuery = {
+export type UserForProfilePageQuery = {
   __typename?: 'Query'
-  user: {
-    __typename: 'User'
-    id: any
-    username: string
-    bio?: string | null
-    imageUrl?: string | null
-    ranking?: any | null
-    wallet?: {
-      __typename?: 'Wallet'
-      id: any
-      connectionDetails:
-        | { __typename?: 'LightningAddressConnectionDetails'; lightningAddress: string }
-        | { __typename?: 'LndConnectionDetailsPrivate' }
-        | { __typename?: 'LndConnectionDetailsPublic' }
-    } | null
-    externalAccounts: Array<{
-      __typename?: 'ExternalAccount'
-      id: any
-      accountType: string
-      externalUsername: string
-      externalId: string
-      public: boolean
-    }>
-    contributions: Array<{
-      __typename?: 'UserProjectContribution'
-      isAmbassador: boolean
-      isFunder: boolean
-      isSponsor: boolean
-      funder?: {
-        __typename?: 'Funder'
-        id: any
-        amountFunded?: number | null
-        timesFunded?: number | null
-        confirmedAt?: any | null
-      } | null
-      project: {
-        __typename?: 'Project'
-        id: any
-        title: any
-        name: any
-        description?: any | null
-        createdAt: string
-        status?: ProjectStatus | null
-        thumbnailImage?: string | null
-      }
-    }>
-    ownerOf: Array<{ __typename?: 'OwnerOf'; project?: { __typename?: 'Project'; id: any } | null }>
-    projectFollows: Array<{ __typename?: 'Project'; id: any }>
-  }
+  user: { __typename?: 'User' } & UserForProfilePageFragment
 }
 
 export type UserProfileProjectsQueryVariables = Exact<{
@@ -6123,7 +6136,28 @@ export type UserFollowedProjectsQueryVariables = Exact<{
 
 export type UserFollowedProjectsQuery = {
   __typename?: 'Query'
-  user: { __typename?: 'User'; projectFollows: Array<{ __typename?: 'Project' } & ProjectForLandingPageFragment> }
+  user: { __typename?: 'User'; projectFollows: Array<{ __typename?: 'Project' } & ProjectForProfilePageFragment> }
+}
+
+export type UserProfileContributionsQueryVariables = Exact<{
+  where: UserGetInput
+}>
+
+export type UserProfileContributionsQuery = {
+  __typename?: 'Query'
+  user: {
+    __typename?: 'User'
+    contributions: Array<{ __typename?: 'UserProjectContribution' } & UserProjectContributionsFragment>
+  }
+}
+
+export type UserProfileOrdersQueryVariables = Exact<{
+  where: UserGetInput
+}>
+
+export type UserProfileOrdersQuery = {
+  __typename?: 'Query'
+  user: { __typename?: 'User'; orders?: Array<{ __typename?: 'Order' } & ProfileOrderFragment> | null }
 }
 
 export type LightningAddressVerifyQueryVariables = Exact<{
@@ -6397,6 +6431,60 @@ export const FundingTxOrderFragmentDoc = gql`
   }
   ${OrderItemFragmentDoc}
 `
+export const ProfileOrderItemFragmentDoc = gql`
+  fragment ProfileOrderItem on OrderItem {
+    item {
+      id
+      name
+      cost
+      rewardCurrency
+      description
+      image
+      category
+    }
+    quantity
+    unitPriceInSats
+  }
+`
+export const ProjectAvatarFragmentDoc = gql`
+  fragment ProjectAvatar on Project {
+    id
+    name
+    thumbnailImage
+    title
+  }
+`
+export const ProfileOrderFragmentDoc = gql`
+  fragment ProfileOrder on Order {
+    id
+    referenceCode
+    totalInSats
+    status
+    confirmedAt
+    updatedAt
+    items {
+      ...ProfileOrderItem
+    }
+    fundingTx {
+      id
+      bitcoinQuote {
+        quote
+        quoteCurrency
+      }
+      amountPaid
+      amount
+      status
+      onChain
+      sourceResource {
+        ... on Project {
+          ...ProjectAvatar
+        }
+      }
+    }
+  }
+  ${ProfileOrderItemFragmentDoc}
+  ${ProjectAvatarFragmentDoc}
+`
 export const PaginationFragmentDoc = gql`
   fragment Pagination on CursorPaginationResponse {
     take
@@ -6430,16 +6518,9 @@ export const ProjectForProfilePageFragmentDoc = gql`
     fundersCount
     thumbnailImage
     title
+    shortDescription
     createdAt
     status
-    owners {
-      id
-      user {
-        id
-        username
-        imageUrl
-      }
-    }
     wallets {
       id
       name
@@ -6448,6 +6529,15 @@ export const ProjectForProfilePageFragmentDoc = gql`
         statusCode
       }
     }
+  }
+`
+export const ExternalAccountFragmentDoc = gql`
+  fragment ExternalAccount on ExternalAccount {
+    id
+    accountType
+    externalUsername
+    externalId
+    public
   }
 `
 export const UserMeFragmentDoc = gql`
@@ -6459,11 +6549,7 @@ export const UserMeFragmentDoc = gql`
     ranking
     isEmailVerified
     externalAccounts {
-      id
-      accountType
-      externalUsername
-      externalId
-      public
+      ...ExternalAccount
     }
     ownerOf {
       project {
@@ -6476,6 +6562,7 @@ export const UserMeFragmentDoc = gql`
       }
     }
   }
+  ${ExternalAccountFragmentDoc}
 `
 export const ProjectRewardForCreateUpdateFragmentDoc = gql`
   fragment ProjectRewardForCreateUpdate on ProjectReward {
@@ -6734,6 +6821,20 @@ export const ProjectFundingMethodStatsFragmentDoc = gql`
     }
   }
 `
+export const UserForProfilePageFragmentDoc = gql`
+  fragment UserForProfilePage on User {
+    id
+    bio
+    username
+    imageUrl
+    ranking
+    isEmailVerified
+    externalAccounts {
+      ...ExternalAccount
+    }
+  }
+  ${ExternalAccountFragmentDoc}
+`
 export const FunderWithUserFragmentDoc = gql`
   fragment FunderWithUser on Funder {
     amountFunded
@@ -6753,6 +6854,27 @@ export const FunderWithUserFragmentDoc = gql`
       imageUrl
     }
   }
+`
+export const UserProjectContributionsFragmentDoc = gql`
+  fragment UserProjectContributions on UserProjectContribution {
+    project {
+      ...ProjectAvatar
+    }
+    funder {
+      amountFunded
+      confirmedAt
+      confirmed
+      id
+      fundingTxs {
+        amountPaid
+        comment
+        media
+        paidAt
+        onChain
+      }
+    }
+  }
+  ${ProjectAvatarFragmentDoc}
 `
 export const EntryForLandingPageFragmentDoc = gql`
   fragment EntryForLandingPage on Entry {
@@ -10529,91 +10651,52 @@ export function useMeProjectFollowsLazyQuery(
 export type MeProjectFollowsQueryHookResult = ReturnType<typeof useMeProjectFollowsQuery>
 export type MeProjectFollowsLazyQueryHookResult = ReturnType<typeof useMeProjectFollowsLazyQuery>
 export type MeProjectFollowsQueryResult = Apollo.QueryResult<MeProjectFollowsQuery, MeProjectFollowsQueryVariables>
-export const UserProfileDocument = gql`
-  query UserProfile($where: UserGetInput!) {
+export const UserForProfilePageDocument = gql`
+  query UserForProfilePage($where: UserGetInput!) {
     user(where: $where) {
-      __typename
-      id
-      username
-      bio
-      imageUrl
-      ranking
-      wallet {
-        id
-        connectionDetails {
-          ... on LightningAddressConnectionDetails {
-            lightningAddress
-          }
-        }
-      }
-      externalAccounts {
-        id
-        accountType
-        externalUsername
-        externalId
-        public
-      }
-      contributions {
-        isAmbassador
-        isFunder
-        isSponsor
-        funder {
-          id
-          amountFunded
-          timesFunded
-          confirmedAt
-        }
-        project {
-          id
-          title
-          name
-          description
-          createdAt
-          status
-          thumbnailImage
-        }
-      }
-      ownerOf {
-        project {
-          id
-        }
-      }
-      projectFollows {
-        id
-      }
+      ...UserForProfilePage
     }
   }
+  ${UserForProfilePageFragmentDoc}
 `
 
 /**
- * __useUserProfileQuery__
+ * __useUserForProfilePageQuery__
  *
- * To run a query within a React component, call `useUserProfileQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useUserForProfilePageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserForProfilePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUserProfileQuery({
+ * const { data, loading, error } = useUserForProfilePageQuery({
  *   variables: {
  *      where: // value for 'where'
  *   },
  * });
  */
-export function useUserProfileQuery(baseOptions: Apollo.QueryHookOptions<UserProfileQuery, UserProfileQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<UserProfileQuery, UserProfileQueryVariables>(UserProfileDocument, options)
-}
-export function useUserProfileLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<UserProfileQuery, UserProfileQueryVariables>,
+export function useUserForProfilePageQuery(
+  baseOptions: Apollo.QueryHookOptions<UserForProfilePageQuery, UserForProfilePageQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<UserProfileQuery, UserProfileQueryVariables>(UserProfileDocument, options)
+  return Apollo.useQuery<UserForProfilePageQuery, UserForProfilePageQueryVariables>(UserForProfilePageDocument, options)
 }
-export type UserProfileQueryHookResult = ReturnType<typeof useUserProfileQuery>
-export type UserProfileLazyQueryHookResult = ReturnType<typeof useUserProfileLazyQuery>
-export type UserProfileQueryResult = Apollo.QueryResult<UserProfileQuery, UserProfileQueryVariables>
+export function useUserForProfilePageLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UserForProfilePageQuery, UserForProfilePageQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<UserForProfilePageQuery, UserForProfilePageQueryVariables>(
+    UserForProfilePageDocument,
+    options,
+  )
+}
+export type UserForProfilePageQueryHookResult = ReturnType<typeof useUserForProfilePageQuery>
+export type UserForProfilePageLazyQueryHookResult = ReturnType<typeof useUserForProfilePageLazyQuery>
+export type UserForProfilePageQueryResult = Apollo.QueryResult<
+  UserForProfilePageQuery,
+  UserForProfilePageQueryVariables
+>
 export const UserProfileProjectsDocument = gql`
   query UserProfileProjects($where: UserGetInput!) {
     user(where: $where) {
@@ -10671,11 +10754,11 @@ export const UserFollowedProjectsDocument = gql`
   query UserFollowedProjects($where: UserGetInput!) {
     user(where: $where) {
       projectFollows {
-        ...ProjectForLandingPage
+        ...ProjectForProfilePage
       }
     }
   }
-  ${ProjectForLandingPageFragmentDoc}
+  ${ProjectForProfilePageFragmentDoc}
 `
 
 /**
@@ -10718,6 +10801,102 @@ export type UserFollowedProjectsQueryResult = Apollo.QueryResult<
   UserFollowedProjectsQuery,
   UserFollowedProjectsQueryVariables
 >
+export const UserProfileContributionsDocument = gql`
+  query UserProfileContributions($where: UserGetInput!) {
+    user(where: $where) {
+      contributions {
+        ...UserProjectContributions
+      }
+    }
+  }
+  ${UserProjectContributionsFragmentDoc}
+`
+
+/**
+ * __useUserProfileContributionsQuery__
+ *
+ * To run a query within a React component, call `useUserProfileContributionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserProfileContributionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserProfileContributionsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUserProfileContributionsQuery(
+  baseOptions: Apollo.QueryHookOptions<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>(
+    UserProfileContributionsDocument,
+    options,
+  )
+}
+export function useUserProfileContributionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>(
+    UserProfileContributionsDocument,
+    options,
+  )
+}
+export type UserProfileContributionsQueryHookResult = ReturnType<typeof useUserProfileContributionsQuery>
+export type UserProfileContributionsLazyQueryHookResult = ReturnType<typeof useUserProfileContributionsLazyQuery>
+export type UserProfileContributionsQueryResult = Apollo.QueryResult<
+  UserProfileContributionsQuery,
+  UserProfileContributionsQueryVariables
+>
+export const UserProfileOrdersDocument = gql`
+  query UserProfileOrders($where: UserGetInput!) {
+    user(where: $where) {
+      orders {
+        ...ProfileOrder
+      }
+    }
+  }
+  ${ProfileOrderFragmentDoc}
+`
+
+/**
+ * __useUserProfileOrdersQuery__
+ *
+ * To run a query within a React component, call `useUserProfileOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserProfileOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserProfileOrdersQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUserProfileOrdersQuery(
+  baseOptions: Apollo.QueryHookOptions<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>(UserProfileOrdersDocument, options)
+}
+export function useUserProfileOrdersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>(
+    UserProfileOrdersDocument,
+    options,
+  )
+}
+export type UserProfileOrdersQueryHookResult = ReturnType<typeof useUserProfileOrdersQuery>
+export type UserProfileOrdersLazyQueryHookResult = ReturnType<typeof useUserProfileOrdersLazyQuery>
+export type UserProfileOrdersQueryResult = Apollo.QueryResult<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>
 export const LightningAddressVerifyDocument = gql`
   query LightningAddressVerify($lightningAddress: String) {
     lightningAddressVerify(lightningAddress: $lightningAddress) {

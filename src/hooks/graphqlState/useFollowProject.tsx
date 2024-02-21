@@ -1,12 +1,13 @@
 import React from 'react'
 
 import { useAuthContext } from '../../context'
-import { QUERY_ME_PROJECT_FOLLOWS } from '../../graphql'
+import { useFollowedProjectsValue } from '../../pages/auth/state'
 import { useProjectFollowMutation, useProjectUnfollowMutation } from '../../types'
 import { toInt } from '../../utils'
 
 export const useFollowProject = (projectId: number) => {
-  const { followedProjects } = useAuthContext()
+  const followedProjects = useFollowedProjectsValue()
+  const { queryFollowedProjects } = useAuthContext()
 
   const [followProject, { loading: followLoading }] = useProjectFollowMutation({
     variables: {
@@ -14,7 +15,9 @@ export const useFollowProject = (projectId: number) => {
         projectId: toInt(projectId),
       },
     },
-    refetchQueries: [QUERY_ME_PROJECT_FOLLOWS],
+    onCompleted() {
+      queryFollowedProjects()
+    },
   })
 
   const [unFollowProject, { loading: unfollowLoading }] = useProjectUnfollowMutation({
@@ -23,7 +26,9 @@ export const useFollowProject = (projectId: number) => {
         projectId: toInt(projectId),
       },
     },
-    refetchQueries: [QUERY_ME_PROJECT_FOLLOWS],
+    onCompleted() {
+      queryFollowedProjects()
+    },
   })
 
   const isFollowed = Boolean(followedProjects.find((project) => toInt(project?.id) === toInt(projectId)))

@@ -20,7 +20,7 @@ export type GetDownloadUrlProps = {
 export const getDownloadUrl = ({ projectId, from, to }: GetDownloadUrlProps) => {
   const appEndpoint = getAppEndPoint()
 
-  let url = `${appEndpoint}/export/payments/${projectId}`
+  let url = `${appEndpoint}/export/payments/project/${projectId}`
 
   if (from && to) {
     url += `?from=${from}&to=${to}`

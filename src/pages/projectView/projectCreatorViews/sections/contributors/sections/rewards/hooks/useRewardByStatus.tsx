@@ -2,6 +2,7 @@ import { MutationHookOptions, QueryHookOptions } from '@apollo/client'
 import { useAtom, useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 
+import { RewardStatus } from '../../../../../../../../constants'
 import { usePaginationAtomHook } from '../../../../../../../../hooks'
 import {
   Exact,
@@ -18,7 +19,6 @@ import {
   useOrdersGetQuery,
   useOrderStatusUpdateMutation,
 } from '../../../../../../../../types'
-import { RewardStatus } from '../components/RewardTable'
 import { rewardsCountAtom, rewardsFamily, rewardStatusUpdateAtom } from '../state/rewardsAtom'
 
 interface UseRewardByStatusProps {

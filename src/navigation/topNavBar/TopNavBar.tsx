@@ -26,6 +26,7 @@ import { useSetMatchRoutes } from '../../config/routes/routesAtom'
 import { getPath, ID, PathName } from '../../constants'
 import { useAuthContext, useNavContext } from '../../context'
 import { useLayoutAnimation, useScrollDirection } from '../../hooks'
+import { useAuthModal } from '../../pages/auth/hooks'
 import { useProjectSideNavAtom } from '../../pages/projectView/projectNavigation/sideNav'
 import { useMobileMode } from '../../utils'
 import { useProfileSideNavAtom } from '../profileRightSideNav'
@@ -94,16 +95,9 @@ export const TopNavBar = () => {
 
   const { navData } = useNavContext()
 
-  const {
-    user,
-    isLoggedIn,
-    queryCurrentUser,
-    logout,
-    isUserAProjectCreator,
-    isAuthModalOpen,
-    loginOnOpen,
-    loginOnClose,
-  } = useAuthContext()
+  const { user, isLoggedIn, queryCurrentUser, logout, isUserAProjectCreator } = useAuthContext()
+
+  const { loginIsOpen, loginOnOpen, loginOnClose } = useAuthModal()
 
   const {
     hideTopNavBar,
@@ -424,7 +418,7 @@ export const TopNavBar = () => {
       </Modal>
 
       <AuthModal
-        isOpen={isAuthModalOpen}
+        isOpen={loginIsOpen}
         onClose={() => {
           loginOnClose()
           onLoginAlertModalClose()

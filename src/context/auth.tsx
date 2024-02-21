@@ -1,10 +1,11 @@
 import { ApolloError } from '@apollo/client'
-import { useDisclosure } from '@chakra-ui/react'
+import { useAtom, useSetAtom } from 'jotai'
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 
 import { getAuthEndPoint } from '../config/domain'
 import { defaultUser } from '../defaults'
-import { Project, useMeLazyQuery, useMeProjectFollowsLazyQuery, UserMeFragment } from '../types'
+import { authUserAtom, followedProjectsAtom, useIsUserAProjectCreatorValue } from '../pages/auth/state/authAtom'
+import { useMeLazyQuery, useMeProjectFollowsLazyQuery, UserMeFragment } from '../types'
 
 const defaultContext: AuthContextProps = {
   isLoggedIn: false,
@@ -14,17 +15,10 @@ const defaultContext: AuthContextProps = {
   error: undefined,
   login() {},
   logout() {},
-  isAuthModalOpen: false,
   isUserAProjectCreator: false,
-  loginOnOpen() {},
-  loginOnClose() {},
-  setIsLoggedIn() {},
   queryCurrentUser() {},
-  async getAuthToken() {
-    return false
-  },
   setUser() {},
-  followedProjects: [],
+  queryFollowedProjects() {},
 }
 
 export type NavContextProps = {
@@ -42,15 +36,10 @@ type AuthContextProps = {
   error?: ApolloError
   login: (me: UserMeFragment) => void
   logout: () => void
-  isAuthModalOpen: boolean
-  loginOnOpen: () => void
-  loginOnClose: () => void
   isUserAProjectCreator: boolean
-  setIsLoggedIn: Dispatch<SetStateAction<boolean>>
   queryCurrentUser: () => void
-  getAuthToken: () => Promise<boolean>
+  queryFollowedProjects: () => void
   setUser: Dispatch<SetStateAction<UserMeFragment>>
-  followedProjects: Pick<Project, 'id' | 'title' | 'name'>[]
 }
 
 export const AuthContext = createContext<AuthContextProps>(defaultContext)
@@ -58,12 +47,13 @@ export const AuthContext = createContext<AuthContextProps>(defaultContext)
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true)
   const [initialLoad, setInitialLoad] = useState(false)
-
-  const [user, setUser] = useState<UserMeFragment>(defaultUser)
-  const [followedProjects, setFollowedProjects] = useState<Pick<Project, 'id' | 'title' | 'name'>[]>([])
-
-  const [isUserAProjectCreator, setIsUserAProjectCreator] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  const [user, setUser] = useAtom(authUserAtom)
+  const setFollowedProjects = useSetAtom(followedProjectsAtom)
+  const isUserAProjectCreator = useIsUserAProjectCreatorValue()
+
+  const authServiceEndPoint = getAuthEndPoint()
 
   const [queryCurrentUser, { loading: loadingUser, error }] = useMeLazyQuery({
     fetchPolicy: 'network-only',
@@ -74,31 +64,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     },
   })
 
-  const login = (me: UserMeFragment) => {
-    setUser({ ...defaultUser, ...me })
-    setIsLoggedIn(true)
-    setIsUserAProjectCreator(me.ownerOf?.length > 0)
-  }
-
-  const authServiceEndPoint = getAuthEndPoint()
-
-  const getAuthToken = async () => {
-    try {
-      const response = await fetch(`${authServiceEndPoint}/auth-token`, {
-        credentials: 'include',
-        redirect: 'follow',
-      })
-
-      if (response.status >= 200 && response.status < 400) {
-        return true
-      }
-
-      return false
-    } catch (e) {
-      return false
-    }
-  }
-
   const [queryFollowedProjects] = useMeProjectFollowsLazyQuery({
     fetchPolicy: 'network-only',
     onCompleted(data) {
@@ -108,7 +73,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     },
   })
 
-  const { isOpen: loginIsOpen, onOpen: loginOnOpen, onClose: loginOnClose } = useDisclosure()
+  const login = (me: UserMeFragment) => {
+    setUser(me)
+    setIsLoggedIn(true)
+    setInitialLoad(false)
+  }
 
   const logout = () => {
     setUser({ ...defaultUser })
@@ -158,15 +127,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         loading,
         error,
         isLoggedIn,
-        setIsLoggedIn,
         isUserAProjectCreator,
         login,
         logout,
-        isAuthModalOpen: loginIsOpen,
-        loginOnOpen,
-        loginOnClose,
-        followedProjects,
-        getAuthToken,
+        queryFollowedProjects,
       }}
     >
       {children}

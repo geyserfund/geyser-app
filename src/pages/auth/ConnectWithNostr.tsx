@@ -9,8 +9,13 @@ import { isAccountDuplicateError } from '../../utils'
 import { FailedToConnectAccount } from './components/FailedToConnectAccount'
 import { NostrHelpModal } from './components/NostrHelpModal'
 import { ConnectWithButtonProps } from './type'
+import { useAuthToken, useCanLogin } from './useAuthToken'
 
 export const ConnectWithNostr = ({ onClose, isIconOnly, ...rest }: Omit<ConnectWithButtonProps, 'accountType'>) => {
+  useAuthToken()
+
+  const canLogin = useCanLogin()
+
   const { connect, error, clearError } = useNostrExtensonLogin()
 
   const { t } = useTranslation()
@@ -57,6 +62,7 @@ export const ConnectWithNostr = ({ onClose, isIconOnly, ...rest }: Omit<ConnectW
         variant="login"
         color={'social.nostr'}
         onClick={handleClick}
+        isDisabled={!canLogin}
         {...buttonProps}
         {...rest}
       >

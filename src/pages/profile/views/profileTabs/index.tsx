@@ -1,5 +1,0 @@
-export * from './CreateProject'
-export * from './ProfileActivity'
-export * from './ProfileFollowed'
-export * from './ProfileProjects'
-export * from './ProfileTabs'

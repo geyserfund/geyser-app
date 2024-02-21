@@ -10,6 +10,7 @@ import { TextArea } from '../../../../components/ui'
 import { useAuthContext } from '../../../../context'
 import { useModal } from '../../../../hooks/useModal'
 import { LogoutConfirmationModal } from '../../../auth/components/LogoutConfirmationModal'
+import { useAuthModal } from '../../../auth/hooks'
 import { AvatarElement } from './AvatarElement'
 import { GifModal } from './GifModal'
 
@@ -27,7 +28,9 @@ const useStyles = createUseStyles({
 
 export const ProjectFundingFormCommentField = ({ comment, setTarget, setFormState, ...rest }: Props) => {
   const { t } = useTranslation()
-  const { isAnonymous, loginOnOpen, user } = useAuthContext()
+  const { isAnonymous, user } = useAuthContext()
+  const { loginOnOpen } = useAuthModal()
+
   const classes = useStyles()
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 

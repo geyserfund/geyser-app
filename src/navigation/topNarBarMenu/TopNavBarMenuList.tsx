@@ -1,12 +1,13 @@
 import { DownloadIcon } from '@chakra-ui/icons'
 import { MenuItem } from '@chakra-ui/menu'
 import { Button, MenuDivider, MenuGroup, Stack } from '@chakra-ui/react'
-import { useCallback, useContext, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { FeedbackUrl, getPath, GeyserGithubUrl, GeyserTelegramUrl, LearnUrl, PathName } from '../../constants'
-import { AuthContext, useNavContext, useServiceWorkerUpdate } from '../../context'
+import { useAuthContext, useNavContext, useServiceWorkerUpdate } from '../../context'
+import { useAuthModal } from '../../pages/auth/hooks'
 import { MobileDivider } from '../../pages/grants/components'
 import { useMobileMode } from '../../utils'
 import { useRouteMatchesForTopNavBar } from '../topNavBar/topNavBarAtom'
@@ -16,7 +17,8 @@ export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
   const { t } = useTranslation()
 
   const isMobile = useMobileMode()
-  const { user, isLoggedIn, isUserAProjectCreator, loginOnOpen, logout } = useContext(AuthContext)
+  const { user, isLoggedIn, isUserAProjectCreator, logout } = useAuthContext()
+  const { loginOnOpen } = useAuthModal()
   const { canInstall, handlePrompt } = useServiceWorkerUpdate()
 
   const { hideMyProjectsButton, showSignInButton } = useRouteMatchesForTopNavBar()

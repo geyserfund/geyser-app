@@ -3,6 +3,7 @@ import { DateTime } from 'luxon'
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 
 import { ACTIVITY_CREATION_SUBSCRIPTION } from '../graphql/subscriptions'
+import { useFollowedProjectsValue } from '../pages/auth/state'
 import { ActivityCreatedSubscription, ActivityCreatedSubscriptionInput, ActivityForLandingPageFragment } from '../types'
 import { toInt } from '../utils'
 import { useAuthContext } from './auth'
@@ -27,7 +28,8 @@ export const ActivitySubscriptionProvider = ({ children }: { children: React.Rea
   const [hasNewActivity, setHasNewActivity] = useState(false)
 
   const [activities, setActivities] = useState<ActivityForLandingPageFragment[]>([])
-  const { isLoggedIn, followedProjects } = useAuthContext()
+  const { isLoggedIn } = useAuthContext()
+  const followedProjects = useFollowedProjectsValue()
 
   const skipSubscription = !isLoggedIn || !(followedProjects.length > 0)
   useSubscription<ActivityCreatedSubscription, ActivityCreatedSubscriptionInput>(ACTIVITY_CREATION_SUBSCRIPTION, {

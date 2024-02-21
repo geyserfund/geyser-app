@@ -19,7 +19,7 @@ export const fallbackCopyTextToClipboard = (text: string) => {
 }
 
 export const copyTextToClipboard = (text: string) => {
-  if (!navigator.clipboard) {
+  if (!navigator || !navigator.clipboard) {
     fallbackCopyTextToClipboard(text)
     return
   }

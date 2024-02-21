@@ -1,3 +1,4 @@
+/* Listed map of element ID used for different tags across the paltform */
 export const ID = {
   root: 'app-route-content-root',
   landing: {

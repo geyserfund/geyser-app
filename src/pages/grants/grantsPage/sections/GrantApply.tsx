@@ -23,12 +23,12 @@ import { Body1, Body2, H3 } from '../../../../components/typography'
 import { GrantApplicationDetailsUrl, LockedConnectAccountUrl } from '../../../../constants'
 import { useAuthContext } from '../../../../context'
 import { MUTATION_APPLY_GRANT } from '../../../../graphql/mutations'
+import { CreateAProjectButton } from '../../../../modules/profile/pages/profilePage/components'
 import { Grant, GrantApplicantStatus, GrantApplyInput, Project } from '../../../../types'
 import { toInt, useCustomTheme, useNotification } from '../../../../utils'
 import { SocialAccountType } from '../../../auth'
 import { ConnectWithNostr } from '../../../auth/ConnectWithNostr'
 import { ConnectWithSocial } from '../../../auth/ConnectWithSocial'
-import { CreateAProjectButton } from '../../../profile/components'
 
 interface GrantProps {
   grant: Grant

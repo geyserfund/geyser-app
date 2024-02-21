@@ -304,12 +304,12 @@ export const theme = {
     Select: selectTheme,
     Input: {
       defaultProps: {
-        focusBorderColor: 'primary.400',
+        focusBorderColor: 'primary.500',
       },
     },
     Textarea: {
       defaultProps: {
-        focusBorderColor: 'primary.400',
+        focusBorderColor: 'primary.500',
       },
     },
   },

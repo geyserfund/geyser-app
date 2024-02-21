@@ -6,7 +6,7 @@ import { Project } from '../../types/generated/graphql'
 import { toSmallImageUrl } from '../../utils'
 
 type Props = {
-  project: Project
+  project: Pick<Project, 'thumbnailImage' | 'name' | 'title'>
   textColor?: string
 }
 
