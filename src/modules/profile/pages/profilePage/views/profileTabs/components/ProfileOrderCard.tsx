@@ -3,11 +3,11 @@ import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
 
 import { CardLayout } from '../../../../../../../components/layouts'
-import { TransactionTime } from '../../../../../../../components/molecules'
 import { Body1, Body2, Caption } from '../../../../../../../components/typography'
-import { ImageWithReload, ProjectAvatarLink } from '../../../../../../../components/ui'
+import { ImageWithReload } from '../../../../../../../components/ui'
 import { RewardStatus, RewardStatusLabel } from '../../../../../../../constants'
 import { getRewardShippingStatusBackgroundColor } from '../../../../../../../helpers/getProjectShippingStatusBackgroundColor'
+import { getUSD } from '../../../../../../../pages/projectView/projectCreatorViews/sections/contributors/components'
 import { ProfileOrderFragment, ProjectAvatarFragment } from '../../../../../../../types'
 import { commaFormatted, toSmallImageUrl, useCustomTheme } from '../../../../../../../utils'
 
@@ -21,17 +21,25 @@ export const ProfileOrderCard = ({ order }: { order: ProfileOrderFragment }) => 
 
   const project = order.fundingTx.sourceResource as ProjectAvatarFragment
 
+  const bitcoinPrice = order.fundingTx.bitcoinQuote?.quote || 0
+  const usdPrice = getUSD(order.totalInSats, bitcoinPrice)
+
   return (
-    <CardLayout w="full" p={0} overflow="visible">
-      <VStack w="full" p="10px" pb={0} spacing="10px">
-        <HStack w="full" justifyContent={'space-between'}>
-          <HStack>
+    <CardLayout w="full" p={0} overflow="visible" borderColor="neutral.100" spacing="0">
+      <VStack w="full" p="10px" spacing="0px" backgroundColor="neutral.100">
+        <HStack w="full" justifyContent={'space-between'} alignItems={'start'}>
+          <VStack w="full" alignItems="start" spacing="0">
             {order.confirmedAt && (
-              <TransactionTime onChain={order.fundingTx.onChain} dateTime={order.confirmedAt} fontSize={'16px'} />
+              <KeyValueDisplay
+                label={t('Order placed')}
+                value={DateTime.fromMillis(order.confirmedAt).toFormat('LLL dd, yyyy')}
+              />
             )}
-            <Body1>▶</Body1>
-            <ProjectAvatarLink project={project} />
-          </HStack>
+            <KeyValueDisplay
+              label={t('Total')}
+              value={`${bitcoinPrice ? usdPrice : ''} ( ${commaFormatted(order.totalInSats)} sats )`}
+            />
+          </VStack>
           <Tooltip label={t('Shipping status')}>
             <HStack
               bgColor={backgroundColor}
@@ -48,17 +56,9 @@ export const ProfileOrderCard = ({ order }: { order: ProfileOrderFragment }) => 
             </HStack>
           </Tooltip>
         </HStack>
-        <VStack w="full" alignItems={'start'}>
-          <HStack flexWrap={'wrap'} spacing="20px">
-            <KeyValueDisplay label={t('Total')} value={`${commaFormatted(order.totalInSats)} sats`} />
-            {order.confirmedAt && (
-              <KeyValueDisplay
-                label={t('Date Purchased')}
-                value={DateTime.fromMillis(order.confirmedAt).toFormat('LLL dd, yyyy')}
-              />
-            )}
-          </HStack>
-          <KeyValueDisplay label={t('Reference code')} value={order.referenceCode} />
+        <VStack w="full" alignItems={'start'} spacing="0">
+          <KeyValueDisplay label={t('Project')} value={project.title} />
+          <KeyValueDisplay label={t('Order number')} value={order.referenceCode} />
         </VStack>
       </VStack>
       {items.map((item, index) => {
@@ -67,7 +67,7 @@ export const ProfileOrderCard = ({ order }: { order: ProfileOrderFragment }) => 
             key={`order-item-${index}`}
             p="10px"
             borderTop="2px solid"
-            borderColor="neutral.200"
+            borderColor="neutral.100"
             alignItems={'start'}
           >
             <Box height="60px" width="80px">
@@ -80,15 +80,15 @@ export const ProfileOrderCard = ({ order }: { order: ProfileOrderFragment }) => 
                 borderRadius="8px"
               />
             </Box>
-            <VStack flex="1" alignItems="start">
+            <VStack flex="1" alignItems="start" spacing="5px">
               <Body1 semiBold color="neutral.900">
                 {item.item.name}
               </Body1>
 
               <Body2 color="neutral.600">{item.item.description}</Body2>
-              <HStack flexWrap={'wrap'} spacing="20px">
-                <KeyValueDisplay label={t('Cost per unit')} value={`${commaFormatted(item.unitPriceInSats)} sats`} />
+              <HStack flexWrap={'wrap'} spacing="10px">
                 <KeyValueDisplay label={t('Quantity')} value={`${item.quantity}x`} />
+                <KeyValueDisplay label={t('Unit price')} value={`${commaFormatted(item.unitPriceInSats)} sats`} />
                 {item.item.category && (
                   <Caption px="10px" py="3px" bgColor="neutral.100">
                     {item.item.category}
@@ -105,7 +105,7 @@ export const ProfileOrderCard = ({ order }: { order: ProfileOrderFragment }) => 
 
 export const KeyValueDisplay = ({ label, value }: { label: string; value: string }) => {
   return (
-    <HStack flexWrap={'wrap'}>
+    <HStack flexWrap={'wrap'} spacing="5px">
       <Body2 color="neutral.600" whiteSpace={'nowrap'}>
         {label}:
       </Body2>
