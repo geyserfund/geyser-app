@@ -1,10 +1,11 @@
-import { Box, Stack, Tab, TabList, TabPanel, TabPanels, TabProps, Tabs } from '@chakra-ui/react'
+import { Box, Stack, Tab, TabList, TabPanel, TabPanels, TabProps, Tabs, Tooltip } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { IoMdLock } from 'react-icons/io'
 
 import { SkeletonLayout, StickToTop } from '../../../../../../../components/layouts'
 import { dimensions, ID } from '../../../../../../../constants'
 import { MobileDivider } from '../../../../../../../pages/grants/components'
-import { useMobileMode } from '../../../../../../../utils'
+import { useCustomTheme, useMobileMode } from '../../../../../../../utils'
 
 interface TabComponentProps {
   tabs: RenderTab[]
@@ -15,12 +16,14 @@ export type RenderTab = {
   title: string
   sub?: string | number
   isLoading?: boolean
+  isPrivate?: boolean
   renderComponent: JSX.Element
 }
 
 export const TabComponent = ({ tabs, isLoading }: TabComponentProps) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
+  const { colors } = useCustomTheme()
   return (
     <Tabs id={ID.profile.tabs} display="flex" flexDirection="column" h="full" variant="unstyled" size="sm" w="full">
       <StickToTop
@@ -46,7 +49,7 @@ export const TabComponent = ({ tabs, isLoading }: TabComponentProps) => {
           {isLoading ? (
             <SkeletonLayout w="full" height="32px" />
           ) : (
-            tabs.map(({ title, sub, isLoading }) => {
+            tabs.map(({ title, sub, isLoading, isPrivate }) => {
               if (isLoading) {
                 return (
                   <Tab key={title} {...tabButtonStyles} p={0} isDisabled>
@@ -63,6 +66,13 @@ export const TabComponent = ({ tabs, isLoading }: TabComponentProps) => {
                       {sub}
                     </Box>
                   ) : null}
+                  {isPrivate && (
+                    <Tooltip label={t('Visible to you only')} hasArrow placement="top">
+                      <Box borderRadius={'50%'} p="5px" backgroundColor="neutral.900" ml="5px">
+                        <IoMdLock color={colors.neutral[0]} fontSize="10px" />
+                      </Box>
+                    </Tooltip>
+                  )}
                 </Tab>
               )
             })

@@ -41,6 +41,7 @@ export const useProfileOrders = (userId: number, enable: boolean) => {
     title: 'Purchases',
     sub: orders.length,
     isLoading,
+    isPrivate: true,
     renderComponent,
   }
 }
