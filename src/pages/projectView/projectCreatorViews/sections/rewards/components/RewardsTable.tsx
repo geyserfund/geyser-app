@@ -120,7 +120,7 @@ export const RewardsTable = () => {
     })
   }
 
-  if (!project.rewards || project.rewards.length == 0) {
+  if (!project.rewards || project.rewards.length === 0) {
     return (
       <VStack align={'center'}>
         <Image src={SplashRewardIcon} htmlWidth={300} />
@@ -151,7 +151,7 @@ export const RewardsTable = () => {
                   borderBottom: `1px solid ${
                     colorMode === 'light' ? neutralColorsLight[100] : neutralColorsLight[900]
                   }`,
-                  opacity: row.isHidden ? 0.5 : 1
+                  opacity: row.isHidden ? 0.5 : 1,
                 }}
               >
                 <td style={{ paddingTop: '10px', verticalAlign: 'top' }}>
@@ -240,7 +240,14 @@ export const RewardsTable = () => {
       <Stack direction={'column'}>
         {project.rewards.map((row, index) => {
           return (
-            <Stack direction={'row'} align={'center'} py={3} borderTop={'2px solid'} borderTopColor={'neutral.200'}>
+            <Stack
+              key={index}
+              direction={'row'}
+              align={'center'}
+              py={3}
+              borderTop={'2px solid'}
+              borderTopColor={'neutral.200'}
+            >
               <Image borderRadius={8} boxSize="60px" objectFit="cover" src={row.image || ''} alt={row.name} />
               <Stack direction={'column'} flex={1}>
                 <Text fontSize="16px" color="neutral.900" fontWeight="700" lineHeight={1.3}>
