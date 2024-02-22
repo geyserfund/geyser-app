@@ -21,7 +21,7 @@ export const LandingProjectCard = ({ project, isMobile, ...rest }: LandingProjec
       user={project.owners[0].user}
       fundersCount={project.fundersCount || 0}
       amountFunded={project.balance}
-      projectId={project.id}
+      project={project}
       minHeight="125px"
       {...rest}
     />

@@ -1,37 +1,38 @@
+import { useSetAtom } from 'jotai'
 import React from 'react'
 
-import { useAuthContext } from '../../context'
-import { useFollowedProjectsValue } from '../../pages/auth/state'
-import { useProjectFollowMutation, useProjectUnfollowMutation } from '../../types'
+import { followedProjectsAtom, useFollowedProjectsValue } from '../../pages/auth/state'
+import { Project, useProjectFollowMutation, useProjectUnfollowMutation } from '../../types'
 import { toInt } from '../../utils'
 
-export const useFollowProject = (projectId: number) => {
+export const useFollowProject = (project: Pick<Project, 'id' | 'name' | 'title'>) => {
   const followedProjects = useFollowedProjectsValue()
-  const { queryFollowedProjects } = useAuthContext()
+
+  const setFollowedProjects = useSetAtom(followedProjectsAtom)
 
   const [followProject, { loading: followLoading }] = useProjectFollowMutation({
     variables: {
       input: {
-        projectId: toInt(projectId),
+        projectId: toInt(project.id),
       },
     },
     onCompleted() {
-      queryFollowedProjects()
+      setFollowedProjects((prev) => [...prev, project])
     },
   })
 
   const [unFollowProject, { loading: unfollowLoading }] = useProjectUnfollowMutation({
     variables: {
       input: {
-        projectId: toInt(projectId),
+        projectId: toInt(project.id),
       },
     },
     onCompleted() {
-      queryFollowedProjects()
+      setFollowedProjects((prev) => prev.filter((p) => toInt(p.id) !== toInt(project.id)))
     },
   })
 
-  const isFollowed = Boolean(followedProjects.find((project) => toInt(project?.id) === toInt(projectId)))
+  const isFollowed = Boolean(followedProjects.find((fp) => toInt(project?.id) === toInt(fp.id)))
 
   const handleFollow = (event?: React.MouseEvent<HTMLButtonElement>) => {
     if (event) {
