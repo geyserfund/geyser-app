@@ -5,7 +5,7 @@ import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { FeedbackUrl, getPath, GeyserGithubUrl, GeyserTelegramUrl, LearnUrl, PathName } from '../../constants'
+import { FeedbackUrl, getPath, GeyserGithubUrl, GeyserTelegramUrl, GuideUrl, PathName } from '../../constants'
 import { useAuthContext, useNavContext, useServiceWorkerUpdate } from '../../context'
 import { useAuthModal } from '../../pages/auth/hooks'
 import { MobileDivider } from '../../pages/grants/components'
@@ -126,8 +126,8 @@ export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
           {t('About')}
         </MenuItemLink>
 
-        <MenuItemLink color={'neutral.700'} destinationPath={LearnUrl} isExternal>
-          {t('Learn')}
+        <MenuItemLink color={'neutral.700'} destinationPath={GuideUrl} isExternal>
+          {t('Guide')}
         </MenuItemLink>
 
         <MenuItemLink color={'neutral.700'} destinationPath={FeedbackUrl} isExternal>
