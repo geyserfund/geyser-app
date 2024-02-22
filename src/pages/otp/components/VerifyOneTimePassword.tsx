@@ -5,11 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Body1 } from '../../../components/typography'
 import { TextInputBox } from '../../../components/ui'
 import { useAuthContext } from '../../../context'
-import {
-  MfaAction,
-  OtpResponseFragment,
-  useUserEmailVerifyMutation,
-} from '../../../types'
+import { MfaAction, OtpResponseFragment, useUserEmailVerifyMutation } from '../../../types'
 import { toInt, useNotification } from '../../../utils'
 
 const DEFAULT_WAIT_SECONDS_FOR_RESEND = 60
@@ -18,11 +14,7 @@ interface VerifyOneTimePasswordProps {
   action: MfaAction
   otp: OtpResponseFragment
   handleSendOtpByEmail(email: string): void
-  handleVerify?: (
-    otpCode: number,
-    otpData: OtpResponseFragment,
-    email?: string,
-  ) => void
+  handleVerify?: (otpCode: number, otpData: OtpResponseFragment, email?: string) => void
   inputEmail: string
 }
 
@@ -128,12 +120,7 @@ export const VerifyOneTimePassword = ({
         </VStack>
 
         <VStack w="full" spacing="10px">
-          <Button
-            w="full"
-            variant="secondary"
-            onClick={handleSendCodeAgain}
-            isDisabled={!user.email || timeLeft > 0}
-          >
+          <Button w="full" variant="secondary" onClick={handleSendCodeAgain} isDisabled={!user.email || timeLeft > 0}>
             {t('Send code again')}
             {timeLeft > 0 && `( ${timeLeft}s )`}
           </Button>

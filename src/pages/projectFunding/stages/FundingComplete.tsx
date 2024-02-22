@@ -10,10 +10,7 @@ interface Props {
   fundingFlow: UseFundingFlowReturn
 }
 
-export const FundingComplete = ({
-  fundingFlow: { fundingTx },
-  formState,
-}: Props) => {
+export const FundingComplete = ({ fundingFlow: { fundingTx }, formState }: Props) => {
   const { t } = useTranslation()
   return (
     <VStack justify={'center'} spacing={5}>
@@ -37,31 +34,20 @@ export const FundingComplete = ({
             values={{ amount: `${formState.donationAmount} sats` }}
           >
             Your
-            <span style={{ fontWeight: 'bold' }}>{'{{amount}}'}</span>{' '}
-            contribution to Geyser Grants Round 2 was successful!
+            <span style={{ fontWeight: 'bold' }}>{'{{amount}}'}</span> contribution to Geyser Grants Round 2 was
+            successful!
           </Trans>
         </Text>
       )}
       <Text fontSize={'14px'}>
-        {t(
-          'Your donation will help accelerate bitcoin adoption by recognizing and pushing forward bitcoin projects.',
-        )}
+        {t('Your donation will help accelerate bitcoin adoption by recognizing and pushing forward bitcoin projects.')}
       </Text>
-      <Text fontSize={'14px'}>
-        {t('Donations are non-refundable and not tax deductible.')}
-      </Text>
+      <Text fontSize={'14px'}>{t('Donations are non-refundable and not tax deductible.')}</Text>
       {fundingTx.onChain && (
         <Text mt={4} fontSize={'14px'}>
           {t('Check out')}{' '}
-          <ChakraLink
-            href={`https://mempool.space/address/${fundingTx.address}`}
-          >
-            <Box
-              as="span"
-              fontWeight="bold"
-              borderBottom="1px solid"
-              borderColor="neutral.1000"
-            >
+          <ChakraLink href={`https://mempool.space/address/${fundingTx.address}`}>
+            <Box as="span" fontWeight="bold" borderBottom="1px solid" borderColor="neutral.1000">
               {t('the block explorer')}
             </Box>
           </ChakraLink>

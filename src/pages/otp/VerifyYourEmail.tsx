@@ -3,22 +3,11 @@ import { useTranslation } from 'react-i18next'
 
 import { CustomModalProps, Modal } from '../../components/layouts'
 import { MfaAction } from '../../types'
-import {
-  VerifyYourEmailContent,
-  VerifyYourEmailContentProps,
-} from './VerifyYourEmailContent'
+import { VerifyYourEmailContent, VerifyYourEmailContentProps } from './VerifyYourEmailContent'
 
-interface VerifyYourEmailProps
-  extends VerifyYourEmailContentProps,
-    Omit<CustomModalProps, 'children'> {}
+interface VerifyYourEmailProps extends VerifyYourEmailContentProps, Omit<CustomModalProps, 'children'> {}
 
-export const VerifyYourEmail = ({
-  action,
-  handleVerify,
-  otpSent,
-  otpData,
-  ...rest
-}: VerifyYourEmailProps) => {
+export const VerifyYourEmail = ({ action, handleVerify, otpSent, otpData, ...rest }: VerifyYourEmailProps) => {
   const { t } = useTranslation()
 
   const getAction = () => {
@@ -35,11 +24,7 @@ export const VerifyYourEmail = ({
 
   return (
     <VStack w="100%" h="100%" justifyContent="center" alignItems="center">
-      <Modal
-        title={<Text variant="h3">{t('Verify your email')}</Text>}
-        size="lg"
-        {...rest}
-      >
+      <Modal title={<Text variant="h3">{t('Verify your email')}</Text>} size="lg" {...rest}>
         <Stack w="100%" padding="10px" spacing="20px" maxWidth="500px">
           <VerifyYourEmailContent
             action={getAction()}

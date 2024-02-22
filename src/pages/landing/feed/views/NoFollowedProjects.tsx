@@ -13,21 +13,14 @@ export const NoFollowedProjects = () => {
   return (
     <VStack w="full" padding="12px" spacing="20px">
       <Box width="200px">
-        <Image
-          w="full"
-          h="auto"
-          alt="feed-logged-out"
-          src={FollowAProjectUrl}
-        />
+        <Image w="full" h="auto" alt="feed-logged-out" src={FollowAProjectUrl} />
       </Box>
       <VStack w="full">
         <Body1 bold color="neutral.1000">
           {t("You don't follow any project")}
         </Body1>
         <Body1 color="neutral.1000">
-          {t(
-            'Check out some trending projects this week that you can follow in the discovery view!',
-          )}
+          {t('Check out some trending projects this week that you can follow in the discovery view!')}
         </Body1>
       </VStack>
       <Button

@@ -19,11 +19,7 @@ interface MobileTagsFilterProps extends AccordionItemProps {
   handleTagsClick: (tag: TagsGetResult) => void
 }
 
-export const MobileTagsFilter = ({
-  allTags,
-  handleTagsClick,
-  ...rest
-}: MobileTagsFilterProps) => {
+export const MobileTagsFilter = ({ allTags, handleTagsClick, ...rest }: MobileTagsFilterProps) => {
   const { t } = useTranslation()
   return (
     <AccordionItem height="100%" {...rest}>
@@ -36,14 +32,7 @@ export const MobileTagsFilter = ({
         </HStack>
         <AccordionIcon />
       </AccordionButton>
-      <AccordionPanel
-        as={VStack}
-        overflow="hidden"
-        paddingX="0px"
-        overflowY="auto"
-        maxHeight="400px"
-        spacing="10px"
-      >
+      <AccordionPanel as={VStack} overflow="hidden" paddingX="0px" overflowY="auto" maxHeight="400px" spacing="10px">
         <TagsFilterBody {...{ allTags, handleTagsClick }} />
       </AccordionPanel>
     </AccordionItem>

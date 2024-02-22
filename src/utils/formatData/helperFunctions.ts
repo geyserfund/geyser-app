@@ -1,13 +1,11 @@
-export const commaFormatted = (amount: number) =>
-  amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+export const commaFormatted = (amount: number) => amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
 export const getBitcoinAmount = (amount: number, decimal?: boolean) => {
   const divisor = 100000000
-  const decimalDivider = 10000000
   const rest = amount % divisor
-  const result = Math.round(amount / divisor)
+  const result = Math.floor(amount / divisor)
 
-  const restValueInFirstDigitBTC = Math.round(rest / decimalDivider)
+  const restValueInFirstDigitBTC = Math.round((rest / divisor) * 100)
 
   const restDigit = restValueInFirstDigitBTC.toString().charAt(0)
 
@@ -45,7 +43,7 @@ export const getShortAmountLabel = (amount: number, decimal?: boolean) => {
   if (amount >= 1000000000 && amount < 1000000000000) {
     divisor = 1000000000
     symbol = 'B'
-    rest = amount % divisor
+    rest = ((amount % divisor) / divisor) * 100
     result = Math.floor(amount / divisor)
   }
 
@@ -75,8 +73,7 @@ export const validateFundingAmount = (amount: number, btcRate: number) => {
   }
 }
 
-export const randomIntFromInterval = (min: number, max: number) =>
-  Math.floor(Math.random() * (max - min + 1) + min)
+export const randomIntFromInterval = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min)
 
 export const numberWithCommas = (x: string | number) => {
   let value = `${x}`

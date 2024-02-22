@@ -8,13 +8,7 @@ export const ToolbarTable = ({ isDisabled }: { isDisabled?: boolean }) => {
   return (
     <ButtonGroup isAttached py={1}>
       <TableCommand isDisabled={isDisabled} />
-      <ToolbarCommand
-        cmd="leftAlign"
-        name="leftAlign"
-        label="align right"
-        Icon={BiAlignLeft}
-        isDisabled={isDisabled}
-      />
+      <ToolbarCommand cmd="leftAlign" name="leftAlign" label="align right" Icon={BiAlignLeft} isDisabled={isDisabled} />
       <ToolbarCommand
         cmd="centerAlign"
         name="centerAlign"

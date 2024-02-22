@@ -1,10 +1,6 @@
 import { gql } from '@apollo/client'
 
-import {
-  FRAGMENT_ORDER,
-  FRAGMENT_PAGINATION,
-  FRAGMENT_TRANSACTION_ORDER,
-} from '../fragments'
+import { FRAGMENT_ORDER, FRAGMENT_PAGINATION, FRAGMENT_TRANSACTION_ORDER } from '../fragments'
 
 export const QUERY_ORDERS = gql`
   ${FRAGMENT_ORDER}

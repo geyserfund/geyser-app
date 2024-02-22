@@ -23,9 +23,7 @@ export const InfoScreenRewards = () => {
     return null
   }
 
-  const activeProjectRewards = project.rewards.filter(
-    (reward) => reward.isHidden === false,
-  )
+  const activeProjectRewards = project.rewards.filter((reward) => reward.isHidden === false)
   if (activeProjectRewards.length === 0) {
     return null
   }
@@ -55,13 +53,7 @@ export const InfoScreenRewards = () => {
         />
       </StickToTop>
 
-      <VStack
-        width="100%"
-        overflow="auto"
-        height={'100%'}
-        pb="20px"
-        px={standardPadding}
-      >
+      <VStack width="100%" overflow="auto" height={'100%'} pb="20px" px={standardPadding}>
         {activeProjectRewards.map((reward) => (
           <ProjectRewardPanel key={reward.id} reward={reward} />
         ))}
@@ -80,14 +72,7 @@ export const InfoScreenRewardsTitle = ({
   const { t } = useTranslation()
 
   return (
-    <Stack
-      w="full"
-      direction="row"
-      justify="space-between"
-      alignItems={'center'}
-      px={standardPadding}
-      py="10px"
-    >
+    <Stack w="full" direction="row" justify="space-between" alignItems={'center'} px={standardPadding} py="10px">
       <Stack direction="row" alignItems={'center'}>
         <Text fontWeight={500} fontSize={18} color="neutral.900" lineHeight={1}>
           {t('Rewards')}

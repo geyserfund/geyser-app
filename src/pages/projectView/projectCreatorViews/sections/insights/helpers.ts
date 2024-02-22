@@ -3,10 +3,7 @@ import { DateTime } from 'luxon'
 import { AnalyticsGroupByInterval } from '../../../../../types'
 import { InsightsOptions } from './components'
 
-export const getNameForDate = (
-  date: number,
-  selectionOption: InsightsOptions,
-) => {
+export const getNameForDate = (date: number, selectionOption: InsightsOptions) => {
   let name
 
   if (selectionOption === InsightsOptions.lastYear) {

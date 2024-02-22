@@ -867,5 +867,19 @@
   "Make a donation": "Make a donation",
   "You can do this by opening your Development environment (Right click -> inspect), then clicking on Application > Storage > Clear site data.":"You can do this by opening your Development environment (Right click -> inspect), then clicking on Application > Storage > Clear site data.",
   "No items with this status.": "No items with this status.",
-  "Category": "Category"
+  "Category": "Category",
+  "Help": "Help",
+  "months": "months",
+  "Purchases":"Purchases",
+  "Followed":"Followed",
+  "month":"month",
+  "Quantity":"Quantity",
+  "Cost per unit":"Cost per unit",
+  "Sats funded":"Sats funded",
+  "Reference code":"Reference code",
+  "Date Purchased":"Date Purchased",
+  "Shipping status":"Shipping status",
+  "Visible to you only":"Visible to you only",
+  "guide":"guide"
+
 }

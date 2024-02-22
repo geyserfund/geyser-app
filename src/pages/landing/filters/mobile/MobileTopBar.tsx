@@ -1,10 +1,4 @@
-import {
-  Button,
-  HStack,
-  StackProps,
-  useDisclosure,
-  VStack,
-} from '@chakra-ui/react'
+import { Button, HStack, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsSliders } from 'react-icons/bs'
@@ -18,11 +12,7 @@ interface MobileTopBarProps extends StackProps {
   subTitle?: string
 }
 
-export const MobileTopBar = ({
-  title,
-  subTitle,
-  ...rest
-}: MobileTopBarProps) => {
+export const MobileTopBar = ({ title, subTitle, ...rest }: MobileTopBarProps) => {
   const { t } = useTranslation()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -30,13 +20,7 @@ export const MobileTopBar = ({
 
   return (
     <>
-      <VStack
-        width="100%"
-        borderBottom="2px solid"
-        borderColor="neutral.200"
-        spacing="0px"
-        {...rest}
-      >
+      <VStack width="100%" borderBottom="2px solid" borderColor="neutral.200" spacing="0px" {...rest}>
         <HStack width="100%" justifyContent="space-between" paddingY="6px">
           <H2 color="neutral.1000">{title}</H2>
           <Button
@@ -53,12 +37,7 @@ export const MobileTopBar = ({
         <FilterTopBar paddingBottom="10px" />
       </VStack>
 
-      <FilterDrawer
-        isOpen={isOpen}
-        onClose={onClose}
-        finalFocusRef={btnRef}
-        title={title}
-      />
+      <FilterDrawer isOpen={isOpen} onClose={onClose} finalFocusRef={btnRef} title={title} />
     </>
   )
 }

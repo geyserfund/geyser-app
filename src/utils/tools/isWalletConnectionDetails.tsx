@@ -2,10 +2,7 @@ import { WalletConnectDetails } from '../../constants'
 import { Wallet } from '../../types'
 
 export const isWalletLightning = (projectWallet: Wallet) => {
-  if (
-    projectWallet.connectionDetails.__typename ===
-    WalletConnectDetails.LightningAddressConnectionDetails
-  ) {
+  if (projectWallet.connectionDetails.__typename === WalletConnectDetails.LightningAddressConnectionDetails) {
     return true
   }
 
@@ -13,10 +10,7 @@ export const isWalletLightning = (projectWallet: Wallet) => {
 }
 
 export const isWalletNode = (projectWallet: Wallet) => {
-  if (
-    projectWallet.connectionDetails.__typename ===
-    WalletConnectDetails.LndConnectionDetailsPrivate
-  ) {
+  if (projectWallet.connectionDetails.__typename === WalletConnectDetails.LndConnectionDetailsPrivate) {
     return true
   }
 

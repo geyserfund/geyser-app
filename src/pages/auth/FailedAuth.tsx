@@ -44,11 +44,7 @@ export const FailedAuthComponent = () => {
       paddingBottom="30%"
       paddingX="20px"
     >
-      <Text
-        fontWeight="bold"
-        fontSize={isMobile ? '2xl' : '3xl'}
-        textAlign="center"
-      >
+      <Text fontWeight="bold" fontSize={isMobile ? '2xl' : '3xl'} textAlign="center">
         {t('Error')}
       </Text>
       <Box
@@ -63,22 +59,14 @@ export const FailedAuthComponent = () => {
         <CloseIcon w={7} h={7} />
       </Box>
       <Body1>{t('Authentication failed.')}</Body1>
-      <Body1>
-        {t("Please clear your browser's cache & cookies and try again.")}
-      </Body1>
+      <Body1>{t("Please clear your browser's cache & cookies and try again.")}</Body1>
       <Body1>
         {t(
           'You can do this by opening your Development environment (Right click -> inspect), then clicking on Application > Storage > Clear site data.',
         )}
       </Body1>
 
-      <ButtonComponent
-        as={Link}
-        to={'/'}
-        width="full"
-        maxWidth="200px"
-        leftIcon={<BsArrowLeft fontSize="25px" />}
-      >
+      <ButtonComponent as={Link} to={'/'} width="full" maxWidth="200px" leftIcon={<BsArrowLeft fontSize="25px" />}>
         {t('Go back')}
       </ButtonComponent>
     </VStack>

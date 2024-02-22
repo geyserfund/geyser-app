@@ -6,12 +6,7 @@ import { useProfileSideNavAtom } from './profileSideNavAtom'
 export const ProfileRightSideNav = () => {
   const [_, changeProjectSideNavOpen] = useProfileSideNavAtom()
   return (
-    <Menu
-      placement="bottom-end"
-      isOpen={true}
-      closeOnSelect={true}
-      onClose={changeProjectSideNavOpen}
-    >
+    <Menu placement="bottom-end" isOpen={true} closeOnSelect={true} onClose={changeProjectSideNavOpen}>
       <MenuList
         minWidth={100}
         width="full"

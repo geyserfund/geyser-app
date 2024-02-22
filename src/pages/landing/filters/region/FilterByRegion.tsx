@@ -5,11 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useFilterContext } from '../../../../context'
 import { QUERY_COUNTRIES, QUERY_REGION } from '../../../../graphql/queries'
-import {
-  Country,
-  ProjectCountriesGetResult,
-  ProjectRegionsGetResult,
-} from '../../../../types'
+import { Country, ProjectCountriesGetResult, ProjectRegionsGetResult } from '../../../../types'
 import { DesktopRegionFilter } from './DesktopRegionFilter'
 import { MobileRegionFilter } from './MobileRegionFilter'
 
@@ -31,9 +27,7 @@ export const FilterByRegion = ({ mobile }: FilterByRegionProps) => {
   }>(QUERY_COUNTRIES, {
     onCompleted(data) {
       if (data.projectCountriesGet) {
-        const sortedCountries = [...data.projectCountriesGet].sort(
-          (a, b) => b.count - a.count,
-        )
+        const sortedCountries = [...data.projectCountriesGet].sort((a, b) => b.count - a.count)
         setCountries(sortedCountries)
       }
     },
@@ -44,9 +38,7 @@ export const FilterByRegion = ({ mobile }: FilterByRegionProps) => {
   }>(QUERY_REGION, {
     onCompleted(data) {
       if (data.projectRegionsGet) {
-        const sortedRegions = [...data.projectRegionsGet].sort(
-          (a, b) => b.count - a.count,
-        )
+        const sortedRegions = [...data.projectRegionsGet].sort((a, b) => b.count - a.count)
         setRegions(sortedRegions)
       }
     },
@@ -73,10 +65,7 @@ export const FilterByRegion = ({ mobile }: FilterByRegionProps) => {
     }
 
     if (countryCode) {
-      return (
-        countries.find((country) => country.country.code === countryCode)
-          ?.country.name || ''
-      )
+      return countries.find((country) => country.country.code === countryCode)?.country.name || ''
     }
 
     return t('Everywhere')
@@ -87,16 +76,8 @@ export const FilterByRegion = ({ mobile }: FilterByRegionProps) => {
   }
 
   if (mobile) {
-    return (
-      <MobileRegionFilter
-        {...{ options, countries, regions, label: getCurrentButtonName() }}
-      />
-    )
+    return <MobileRegionFilter {...{ options, countries, regions, label: getCurrentButtonName() }} />
   }
 
-  return (
-    <DesktopRegionFilter
-      {...{ options, countries, regions, label: getCurrentButtonName() }}
-    />
-  )
+  return <DesktopRegionFilter {...{ options, countries, regions, label: getCurrentButtonName() }} />
 }

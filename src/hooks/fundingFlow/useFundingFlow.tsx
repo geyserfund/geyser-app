@@ -1,20 +1,8 @@
 import { ApolloError } from '@apollo/client'
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { RejectionError, WebLNProvider } from 'webln'
 
-import {
-  ApolloErrors,
-  fundingStages,
-  IFundingStages,
-  stageList,
-} from '../../constants'
+import { ApolloErrors, fundingStages, IFundingStages, stageList } from '../../constants'
 import { AuthContext } from '../../context'
 import {
   FundingInput,
@@ -107,9 +95,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const { user } = useContext(AuthContext)
   const { toast } = useNotification()
 
-  const [fundState, setFundState] = useState<IFundingStages>(
-    fundingStages.initial,
-  )
+  const [fundState, setFundState] = useState<IFundingStages>(fundingStages.initial)
   const [error, setError] = useState('')
 
   const [fundingRequestErrored, setFundingRequestErrored] = useState(false)
@@ -166,25 +152,19 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   }, [])
 
   const handleFundingStatusCheck = useCallback(
-    (
-      fundingTx: FundingTxWithInvoiceStatusFragment,
-      method: ConfirmationMethod,
-    ) => {
+    (fundingTx: FundingTxWithInvoiceStatusFragment, method: ConfirmationMethod) => {
       /*
         We also check the invoiceIds are the same so that the useEffect does not try to update the funding status of an
         older invoice. This can happen due to sync delays between the funding status polling and the funding invoice update.
       */
 
-      if (
-        ![FundingStatus.Paid, FundingStatus.Pending].includes(fundingTx.status)
-      ) {
+      if (![FundingStatus.Paid, FundingStatus.Pending].includes(fundingTx.status)) {
         return
       }
 
       setFundingTx((current) => {
         if (
-          (fundingTx.invoiceStatus !== current.invoiceStatus ||
-            fundingTx.status !== current.status) &&
+          (fundingTx.invoiceStatus !== current.invoiceStatus || fundingTx.status !== current.status) &&
           fundingTx.invoiceId === current.invoiceId
         ) {
           if (
@@ -234,17 +214,13 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         if (error.message === 'wrong preimage') {
           toast({
             title: 'Wrong payment preimage',
-            description:
-              'The payment preimage returned by the WebLN provider did not match the payment hash.',
+            description: 'The payment preimage returned by the WebLN provider did not match the payment hash.',
             status: 'error',
           })
           return false
         }
 
-        if (
-          error.constructor === RejectionError ||
-          error.message === 'User rejected'
-        ) {
+        if (error.constructor === RejectionError || error.message === 'User rejected') {
           toast({
             title: 'Requested operation declined',
             description: 'Please use the invoice instead.',
@@ -316,11 +292,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       }
     },
     onError(error: ApolloError) {
-      if (
-        error?.graphQLErrors[0] &&
-        error?.graphQLErrors[0]?.extensions?.code ===
-          ApolloErrors.BAD_USER_INPUT
-      ) {
+      if (error?.graphQLErrors[0] && error?.graphQLErrors[0]?.extensions?.code === ApolloErrors.BAD_USER_INPUT) {
         setError(error?.graphQLErrors[0].message)
       }
 
@@ -336,11 +308,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   })
 
   useEffect(() => {
-    if (
-      fundState === fundingStages.completed ||
-      fundState === fundingStages.canceled ||
-      fundState
-    ) {
+    if (fundState === fundingStages.completed || fundState === fundingStages.canceled || fundState) {
       stopListening()
       clearInterval(fundIntervalRef.current)
     }
@@ -450,9 +418,7 @@ export const validateFundingInput = (input: FundingInput) => {
 
   if (
     (input.donationAmount && toInt(input.donationAmount) > 0) ||
-    (input.orderInput &&
-      input.orderInput.items &&
-      input.orderInput.items.length > 0)
+    (input.orderInput && input.orderInput.items && input.orderInput.items.length > 0)
   ) {
     isValid = true
     error = ''

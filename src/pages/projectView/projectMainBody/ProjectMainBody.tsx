@@ -1,12 +1,6 @@
 import { useProjectContext } from '../../../context'
 import { useProjectDetails } from '../projectNavigation/hooks/useProjectDetails'
-import {
-  Entries,
-  Header,
-  LaunchProjectNotice,
-  Milestones,
-  Story,
-} from './sections'
+import { Entries, Header, LaunchProjectNotice, Milestones, Story } from './sections'
 import { Details } from './sections/Details'
 
 export const ProjectMainBody = () => {
@@ -18,9 +12,7 @@ export const ProjectMainBody = () => {
     <>
       <Header />
 
-      {project && isProjectOwner ? (
-        <LaunchProjectNotice project={project} />
-      ) : null}
+      {project && isProjectOwner ? <LaunchProjectNotice project={project} /> : null}
       <Story />
       {projectDetails.entriesLength ? <Entries /> : null}
       {projectDetails.milestonesLength ? <Milestones /> : null}

@@ -3,17 +3,12 @@ import { useTranslation } from 'react-i18next'
 
 import { SkeletonLayout } from '../../../../../../../components/layouts'
 import { Body1, H2, H3 } from '../../../../../../../components/typography'
+import { RewardStatus, RewardStatusLabel } from '../../../../../../../constants'
 import { useProjectContext } from '../../../../../../../context'
 import { standardPadding } from '../../../../../../../styles'
 import { useNotification } from '../../../../../../../utils'
-import { RewardStatus, RewardTable } from './components/RewardTable'
+import { RewardTable } from './components/RewardTable'
 import { useRewardByStatus } from './hooks/useRewardByStatus'
-
-export const RewardStatusLabel = {
-  [RewardStatus.todo]: 'To do',
-  [RewardStatus.shipped]: 'Shipped',
-  [RewardStatus.delivered]: 'Delivered',
-}
 
 export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
   const { t } = useTranslation()
@@ -76,17 +71,12 @@ export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
         />
       ) : (
         <HStack w="full" px={standardPadding}>
-          <Body1>{t("No items with this status.")}</Body1>
+          <Body1>{t('No items with this status.')}</Body1>
         </HStack>
       )}
       {!noMoreItems.current && (
         <HStack w="full" px={standardPadding}>
-          <Button
-            width="100%"
-            variant="secondary"
-            onClick={() => fetchNext()}
-            isLoading={isLoadingMore.current}
-          >
+          <Button width="100%" variant="secondary" onClick={() => fetchNext()} isLoading={isLoadingMore.current}>
             {t('Show more')}...
           </Button>
         </HStack>

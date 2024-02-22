@@ -23,25 +23,13 @@ const ButtonDateInput = forwardRef<
   HTMLButtonElement,
   Pick<ButtonProps, 'onClick'> & Pick<ICalendarButton, 'value' | 'children'>
 >(({ value, onClick, children, ...props }, ref) => (
-  <Button
-    variant="secondary"
-    width="100%"
-    ref={ref}
-    onClick={onClick}
-    {...props}
-  >
+  <Button variant="secondary" width="100%" ref={ref} onClick={onClick} {...props}>
     <Text>{value?.toString() || children}</Text>
   </Button>
 ))
 ButtonDateInput.displayName = 'ButtonDateInput'
 
-export const CalendarButton = ({
-  children,
-  value,
-  onChange,
-  containerProps,
-  ...buttonProps
-}: ICalendarButton) => {
+export const CalendarButton = ({ children, value, onChange, containerProps, ...buttonProps }: ICalendarButton) => {
   const classes = useStyles()
 
   const currentDate = DateTime.now().plus({ days: 7 })

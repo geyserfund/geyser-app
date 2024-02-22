@@ -9,9 +9,7 @@ export const PullingDownContent = (props: any) => {
   const { colors } = useCustomTheme()
 
   const renderNArrows = (n: number) => {
-    return [...Array(n).keys()].map((_, i) => (
-      <FiChevronsDown color={colors.neutral[1000]} key={i} />
-    ))
+    return [...Array(n).keys()].map((_, i) => <FiChevronsDown color={colors.neutral[1000]} key={i} />)
   }
 
   return (

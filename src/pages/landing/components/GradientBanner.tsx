@@ -9,13 +9,7 @@ import { Body2, H3, MonoBody1 } from '../../../components/typography'
 import { dimensions } from '../../../constants'
 import { QUERY_PROJECTS_SUMMARY } from '../../../graphql'
 import { fonts } from '../../../styles'
-import {
-  getBitcoinAmount,
-  getShortAmountLabel,
-  toInt,
-  useMobileMode,
-  useNotification,
-} from '../../../utils'
+import { getBitcoinAmount, getShortAmountLabel, toInt, useMobileMode, useNotification } from '../../../utils'
 import { BannerBackground } from './BannerBackground'
 
 export const GradientBanner = () => {
@@ -23,11 +17,7 @@ export const GradientBanner = () => {
   const { toast } = useNotification()
   const isMobile = useMobileMode()
 
-  const {
-    loading: isSummaryLoading,
-    error: summaryError,
-    data: summaryData,
-  } = useQuery(QUERY_PROJECTS_SUMMARY)
+  const { loading: isSummaryLoading, error: summaryError, data: summaryData } = useQuery(QUERY_PROJECTS_SUMMARY)
 
   const projectsSummaryData = (summaryData && summaryData.projectsSummary) || {}
 
@@ -89,6 +79,7 @@ export const GradientBanner = () => {
           >
             <H3 fontFamily="inherit">
               {t('Play a part in world-changing ideas')}
+              {'!'}
             </H3>
             <HStack fontSize={'sm'} spacing={4}>
               {isSummaryLoading ? (

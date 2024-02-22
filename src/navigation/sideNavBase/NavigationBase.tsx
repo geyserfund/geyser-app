@@ -27,12 +27,7 @@ type classForSideMenu = {
   }
 }
 
-export const NavigationBase = ({
-  isSideNavOpen,
-  changeSideNavOpen,
-  navigation,
-  direction,
-}: NavigationBaseProps) => {
+export const NavigationBase = ({ isSideNavOpen, changeSideNavOpen, navigation, direction }: NavigationBaseProps) => {
   const classes = useNavAnimationStyles()
   const isMobile = useMobileMode()
 
@@ -69,15 +64,11 @@ export const NavigationBase = ({
       setClassForSideMenu((current) => {
         return {
           left: {
-            bar: current.left.bar.includes(classes.barShow)
-              ? classes.slideOutLeft
-              : classes.barHidden,
+            bar: current.left.bar.includes(classes.barShow) ? classes.slideOutLeft : classes.barHidden,
             body: current.left.body ? classes.slideInRight : '',
           },
           right: {
-            bar: current.right.bar.includes(classes.barShow)
-              ? classes.slideOutRight
-              : classes.barHidden,
+            bar: current.right.bar.includes(classes.barShow) ? classes.slideOutRight : classes.barHidden,
             body: current.right.body ? classes.slideInLeft : '',
           },
         }
@@ -98,17 +89,11 @@ export const NavigationBase = ({
     }
   }, [isSideNavOpen, classes, isMobile])
 
-  const barIsNotHidden =
-    isSideNavOpen ||
-    Boolean(classsForSideMenu[direction].bar !== classes.barHidden)
+  const barIsNotHidden = isSideNavOpen || Boolean(classsForSideMenu[direction].bar !== classes.barHidden)
 
   if (isMobile) {
     return (
-      <Modal
-        variant="blurryBackdrop"
-        isOpen={barIsNotHidden}
-        onClose={() => changeSideNavOpen(false)}
-      >
+      <Modal variant="blurryBackdrop" isOpen={barIsNotHidden} onClose={() => changeSideNavOpen(false)}>
         <ModalOverlay />
         <ModalContent
           containerProps={{
@@ -126,13 +111,7 @@ export const NavigationBase = ({
           height={`100%`}
           shadow="none"
         >
-          <HStack
-            backgroundColor={'neutral.0'}
-            alignItems="start"
-            overflow="hidden"
-            height="100%"
-            w="full"
-          >
+          <HStack backgroundColor={'neutral.0'} alignItems="start" overflow="hidden" height="100%" w="full">
             {navigation}
           </HStack>
         </ModalContent>

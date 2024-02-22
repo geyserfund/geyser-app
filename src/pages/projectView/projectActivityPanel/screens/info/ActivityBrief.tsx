@@ -16,11 +16,12 @@ import { useTranslation } from 'react-i18next'
 import { AiOutlineEllipsis } from 'react-icons/ai'
 
 import { UserAvatar } from '../../../../../components/ui/UserAvatar'
-import { useAuthContext, useProjectContext } from '../../../../../context'
+import { useProjectContext } from '../../../../../context'
 import { FunderWithUserFragment, OrderByOptions, ProjectMilestone, useProjectFundersQuery } from '../../../../../types'
 import { toInt, useMobileMode, useNotification } from '../../../../../utils'
 import { getProjectBalance } from '../../../../../utils/helpers'
 import { ExternalAccountType } from '../../../../auth'
+import { useFollowedProjectsValue } from '../../../../auth/state'
 import { ContributeButton, FollowButton, ShareButton } from '../../../projectMainBody/components'
 import { BalanceDisplayButton } from './components'
 import { ProjectFundersModal, useProjectFundersModal } from './components/ProjectFundersModal'
@@ -33,7 +34,7 @@ export const ActivityBrief = (props: StackProps) => {
   const isMobile = useMobileMode()
 
   const { project } = useProjectContext()
-  const { followedProjects } = useAuthContext()
+  const followedProjects = useFollowedProjectsValue()
 
   const { isOpen: isToolTipOpen, onOpen: onToolTipOpen, onClose: onToolTipClose } = useDisclosure()
   const { isOpen: isUsd, onToggle: toggleUsd } = useDisclosure()
@@ -186,6 +187,10 @@ export const ActivityBrief = (props: StackProps) => {
 
   const latestFunders = socialFunders.slice(0, 12)
 
+  if (!project) {
+    return null
+  }
+
   return (
     <VStack w="100%" {...props}>
       <HStack
@@ -217,7 +222,7 @@ export const ActivityBrief = (props: StackProps) => {
           {followedProjects.some((followedProject) => followedProject?.id === project?.id) ? (
             <ShareButton w="full" />
           ) : (
-            <FollowButton size="md" w="full" projectId={project?.id} />
+            <FollowButton hasIcon variant="secondary" size="md" w="full" project={project} />
           )}
         </VStack>
       ) : null}

@@ -7,16 +7,9 @@ import { useTranslation } from 'react-i18next'
 import { Modal } from '../../../../components/layouts/Modal'
 import { AmountInputWithSatoshiToggle } from '../../../../components/molecules'
 import { Body2 } from '../../../../components/typography'
-import {
-  ButtonComponent,
-  IconButtonComponent,
-  TextInputBox,
-} from '../../../../components/ui'
+import { ButtonComponent, IconButtonComponent, TextInputBox } from '../../../../components/ui'
 import { MilestoneValidations } from '../../../../constants/validations'
-import {
-  MUTATION_DELETE_PROJECT_MILESTONE,
-  MUTATION_UPDATE_PROJECT_MILESTONE,
-} from '../../../../graphql/mutations'
+import { MUTATION_DELETE_PROJECT_MILESTONE, MUTATION_UPDATE_PROJECT_MILESTONE } from '../../../../graphql/mutations'
 import { useBTCConverter } from '../../../../helpers'
 import {
   CreateProjectMilestoneInput,
@@ -43,12 +36,7 @@ export const defaultMilestone = {
   reached: false,
 } as ProjectMilestone
 
-export const MilestoneAdditionModal = ({
-  project,
-  isOpen,
-  onClose,
-  onSubmit,
-}: Props) => {
+export const MilestoneAdditionModal = ({ project, isOpen, onClose, onSubmit }: Props) => {
   const { toast } = useNotification()
   const { getUSDCentsAmount, getSatoshisFromUSDCents } = useBTCConverter()
 
@@ -75,22 +63,14 @@ export const MilestoneAdditionModal = ({
   }
 
   const getFilteredMilestones = (): ProjectMilestone[] => {
-    return milestones.filter(
-      (milestone: ProjectMilestone) => milestone.amount > 0 && milestone.name,
-    )
+    return milestones.filter((milestone: ProjectMilestone) => milestone.amount > 0 && milestone.name)
   }
 
-  const getMutationConvertedMilestoneAmount = (
-    amount: Satoshis | USDollars,
-  ): Satoshis => {
-    return isFormInputUsingSatoshis
-      ? (amount as Satoshis)
-      : getSatoshisFromUSDCents((amount * 100) as USDCents)
+  const getMutationConvertedMilestoneAmount = (amount: Satoshis | USDollars): Satoshis => {
+    return isFormInputUsingSatoshis ? (amount as Satoshis) : getSatoshisFromUSDCents((amount * 100) as USDCents)
   }
 
-  const getFormConvertedMilestoneAmount = (
-    satoshiAmount: Satoshis,
-  ): Satoshis | USDollars => {
+  const getFormConvertedMilestoneAmount = (satoshiAmount: Satoshis): Satoshis | USDollars => {
     if (isFormInputUsingSatoshis) {
       return satoshiAmount as Satoshis
     }
@@ -207,9 +187,7 @@ export const MilestoneAdditionModal = ({
 
   const handleRemoveMilestone = async (itemIndex: number) => {
     const currentMilestone = milestones[itemIndex]
-    const newMilestones = milestones.filter(
-      (_milestone, index) => index !== itemIndex,
-    )
+    const newMilestones = milestones.filter((_milestone, index) => index !== itemIndex)
 
     if (currentMilestone && currentMilestone.id) {
       try {
@@ -229,16 +207,11 @@ export const MilestoneAdditionModal = ({
     }
   }
 
-  const [createMilestone, { loading: createMilestoneLoading }] =
-    useCreateProjectMilestoneMutation()
+  const [createMilestone, { loading: createMilestoneLoading }] = useCreateProjectMilestoneMutation()
 
-  const [updateMilestone, { loading: updateMilestoneLoading }] = useMutation(
-    MUTATION_UPDATE_PROJECT_MILESTONE,
-  )
+  const [updateMilestone, { loading: updateMilestoneLoading }] = useMutation(MUTATION_UPDATE_PROJECT_MILESTONE)
 
-  const [removeMilestone, { loading: removeMilestoneLoading }] = useMutation(
-    MUTATION_DELETE_PROJECT_MILESTONE,
-  )
+  const [removeMilestone, { loading: removeMilestoneLoading }] = useMutation(MUTATION_DELETE_PROJECT_MILESTONE)
 
   const validateMilestones = () => {
     let isValid = true
@@ -266,11 +239,7 @@ export const MilestoneAdditionModal = ({
         isValid = false
       }
 
-      if (
-        milestone.description &&
-        milestone.description.length >
-          MilestoneValidations.description.maxLength
-      ) {
+      if (milestone.description && milestone.description.length > MilestoneValidations.description.maxLength) {
         errors.description = `Description cannot be longer than ${MilestoneValidations.description.maxLength} characters.`
         isValid = false
       }
@@ -313,12 +282,7 @@ export const MilestoneAdditionModal = ({
         spacing="15px"
       >
         {milestones.map((milestone, index) => (
-          <VStack
-            key={index}
-            width="100%"
-            alignItems="flex-start"
-            paddingX="2px"
-          >
+          <VStack key={index} width="100%" alignItems="flex-start" paddingX="2px">
             <HStack justifyContent="space-between" width="100%">
               <Text marginTop="10px" marginBottom="5px">
                 {`${t('Milestone')} ${index + 1}`}
@@ -343,14 +307,9 @@ export const MilestoneAdditionModal = ({
             <AmountInputWithSatoshiToggle
               isUsingSatoshis={isFormInputUsingSatoshis}
               onUnitTypeChanged={setIsFormInputUsingSatoshis}
-              value={getFormConvertedMilestoneAmount(
-                milestone.amount as Satoshis,
-              )}
+              value={getFormConvertedMilestoneAmount(milestone.amount as Satoshis)}
               onValueChanged={(newAmount: Satoshis | USDollars) =>
-                handleAmountChange(
-                  getMutationConvertedMilestoneAmount(newAmount),
-                  index,
-                )
+                handleAmountChange(getMutationConvertedMilestoneAmount(newAmount), index)
               }
               error={formError[index] && formError[index].amount}
             />
@@ -364,11 +323,7 @@ export const MilestoneAdditionModal = ({
         <ButtonComponent
           w="full"
           primary
-          isLoading={
-            createMilestoneLoading ||
-            updateMilestoneLoading ||
-            removeMilestoneLoading
-          }
+          isLoading={createMilestoneLoading || updateMilestoneLoading || removeMilestoneLoading}
           onClick={handleConfirmMilestone}
         >
           {t('Confirm')}

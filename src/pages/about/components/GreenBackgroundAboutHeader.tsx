@@ -11,37 +11,18 @@ import { LaunchYourProjectButton } from './LaunchYourProjectButton'
 export const GreenBackgroundAboutHeader = () => {
   const { t } = useTranslation()
   return (
-    <BannerBackground
-      width={'100%'}
-      position={'relative'}
-      justifyContent={'center'}
-    >
-      <VStack
-        spacing={30}
-        width={'100%'}
-        maxWidth={'895px'}
-        padding={'40px 40px 80px 40px'}
-      >
-        <H1 color={lightModeColors.neutral[900]}>
-          {t('Transform ideas into real-life projects')}
-        </H1>
+    <BannerBackground width={'100%'} position={'relative'} justifyContent={'center'}>
+      <VStack spacing={30} width={'100%'} maxWidth={'895px'} padding={'40px 40px 80px 40px'}>
+        <H1 color={lightModeColors.neutral[900]}>{t('Transform ideas into real-life projects')}</H1>
         <H3 color={lightModeColors.neutral[900]} textAlign={'center'}>
           {t(
             'Geyser is a bitcoin-native crowdfunding platform where you can fund project ideas with the support from global communities.',
           )}
         </H3>
         <HStack justifyContent="center" spacing={30}>
-          <LaunchYourProjectButton
-            size={{ base: 'sm', lg: 'md' }}
-            variant="primaryNeutral"
-          />
+          <LaunchYourProjectButton size={{ base: 'sm', lg: 'md' }} variant="primaryNeutral" />
 
-          <Button
-            as={Link}
-            to={getPath('landingPage')}
-            size={{ base: 'sm', lg: 'md' }}
-            variant="secondary"
-          >
+          <Button as={Link} to={getPath('landingPage')} size={{ base: 'sm', lg: 'md' }} variant="secondary">
             {t('Explore projects to fund')}
           </Button>
         </HStack>

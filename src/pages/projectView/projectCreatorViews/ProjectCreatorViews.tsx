@@ -17,19 +17,13 @@ export const ProjectCreatorViews = () => {
     MobileViews.contributors,
     MobileViews.manageRewards,
     MobileViews.createReward,
-    MobileViews.editReward
+    MobileViews.editReward,
   ].includes(mobileView)
 
   const classes = useProjectLayoutStyles({ isMobile, inView })
 
   return (
-    <Box
-      className={classNames(classes.container)}
-      height="100%"
-      w="100%"
-      flexDirection="column"
-      overflow="hidden"
-    >
+    <Box className={classNames(classes.container)} height="100%" w="100%" flexDirection="column" overflow="hidden">
       <Box w="100%" className={classes.detailsContainer}>
         <Outlet />
       </Box>

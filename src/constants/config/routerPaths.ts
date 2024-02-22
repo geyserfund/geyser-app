@@ -23,7 +23,10 @@ export enum PathName {
   projectEditReward = 'edit-reward',
 
   launchProject = 'launch',
+
   userProfile = 'profile',
+  userProfileSettings = 'settings',
+
   projectDashboard = 'dashboard',
   preview = 'preview',
   launchProjectDetails = 'details',
@@ -105,6 +108,7 @@ const pathsMap = {
   launchProjectStory: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchProjectStory}`,
 
   userProfile: (userID: string) => `/${PathName.userProfile}/${userID}`,
+  userProfileSettings: (userID: string) => `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}`,
 
   projectDashboard: (projectID: string) => `/${PathName.project}/${projectID}/${PathName.projectDashboard}`,
   dashboardDescription: (projectID: string) =>

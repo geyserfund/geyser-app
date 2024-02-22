@@ -5,8 +5,7 @@ import { ToolbarCommandProps } from './ToolbarCommand'
 
 export const ToolbarCommandButton = forwardRef<
   HTMLButtonElement,
-  Pick<ToolbarCommandProps, 'name' | 'label'> &
-    Omit<IconButtonProps, 'aria-label'>
+  Pick<ToolbarCommandProps, 'name' | 'label'> & Omit<IconButtonProps, 'aria-label'>
 >(({ name, label, ...props }, ref) => {
   return (
     <Tooltip openDelay={300} isDisabled={!label} label={label}>

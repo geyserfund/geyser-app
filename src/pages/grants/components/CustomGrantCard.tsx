@@ -3,11 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { Grant, GrantApplicantStatus, GrantStatusEnum } from '../../../types'
-import {
-  getFormattedDate,
-  getShortAmountLabel,
-  useMobileMode,
-} from '../../../utils'
+import { getFormattedDate, getShortAmountLabel, useMobileMode } from '../../../utils'
 import { ListText } from './ListText'
 import { SponsorList } from './SponsorList'
 
@@ -40,21 +36,14 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
 
   const renderApplicants = (value?: number) =>
     value || grant.applicants ? (
-      <ListText
-        mx={4}
-        subtitle={t('applicants')}
-        subtitleProps={{ textTransform: 'uppercase' }}
-        isSatLogo={false}
-      >
+      <ListText mx={4} subtitle={t('applicants')} subtitleProps={{ textTransform: 'uppercase' }} isSatLogo={false}>
         {value ||
           grant.applicants.filter(
             (applicant) =>
               applicant &&
-              [
-                GrantApplicantStatus.Accepted,
-                GrantApplicantStatus.Pending,
-                GrantApplicantStatus.Funded,
-              ].includes(applicant.status),
+              [GrantApplicantStatus.Accepted, GrantApplicantStatus.Pending, GrantApplicantStatus.Funded].includes(
+                applicant.status,
+              ),
           ).length ||
           0}
       </ListText>
@@ -72,17 +61,8 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
       bgColor="neutral.0"
     >
       {showBanner && grant.image ? (
-        <Box
-          borderTopRightRadius="12px"
-          borderTopLeftRadius="12px"
-          overflow="hidden"
-        >
-          <Image
-            objectFit="cover"
-            src={grant.image}
-            minWidth={'100%'}
-            height={isMobile ? '273px' : undefined}
-          />
+        <Box borderTopRightRadius="12px" borderTopLeftRadius="12px" overflow="hidden">
+          <Image objectFit="cover" src={grant.image} minWidth={'100%'} height={isMobile ? '273px' : undefined} />
         </Box>
       ) : null}
       <Box display="flex" flexDirection="column" p="4">
@@ -109,34 +89,19 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
               </Text>
             </Box>
             <Text color={'neutral.600'}>
-              {getFormattedDate(
-                grant.statuses.find(
-                  (status) => status.status === GrantStatusEnum.Closed,
-                )?.startAt,
-              )}
+              {getFormattedDate(grant.statuses.find((status) => status.status === GrantStatusEnum.Closed)?.startAt)}
             </Text>
           </Box>
           <Box mt={isMobile ? 4 : 1} px={6}>
             {isActive ? (
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-around"
-              >
+              <Box display="flex" alignItems="center" justifyContent="space-around">
                 {renderApplicants(GrantValues[grant.name]?.applicants)}
                 <ListText mx={4} subtitle={t('GRANT')} isSatLogo={true}>
-                  {getShortAmountLabel(
-                    GrantValues[grant.name]?.applicants || grant.balance || 0,
-                  )}
+                  {getShortAmountLabel(GrantValues[grant.name]?.applicants || grant.balance || 0)}
                 </ListText>
               </Box>
             ) : (
-              <Box
-                mt={2}
-                display="flex"
-                alignItems="center"
-                justifyContent="space-around"
-              >
+              <Box mt={2} display="flex" alignItems="center" justifyContent="space-around">
                 {renderApplicants(GrantValues[grant.name]?.applicants)}
                 {
                   <ListText mx={4} subtitle={t('GRANT')} isSatLogo={true}>
@@ -144,9 +109,7 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
                       GrantValues[grant.name]?.amount ||
                         grant.applicants?.reduce(
                           (prev, curr) =>
-                            prev +
-                            (curr?.funding.communityFunding || 0) +
-                            (curr?.funding.grantAmount || 0),
+                            prev + (curr?.funding.communityFunding || 0) + (curr?.funding.grantAmount || 0),
                           0,
                         ) ||
                         0,
@@ -157,9 +120,7 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
             )}
           </Box>
         </Box>
-        {!isMobile && (
-          <SponsorList justifyContent="start" sponsors={grant.sponsors} />
-        )}
+        {!isMobile && <SponsorList justifyContent="start" sponsors={grant.sponsors} />}
       </Box>
     </Box>
   )

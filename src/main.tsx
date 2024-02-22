@@ -4,24 +4,18 @@ import { ColorModeScript } from '@chakra-ui/react'
 import * as Sentry from '@sentry/react'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import {
-  createRoutesFromChildren,
-  matchRoutes,
-  RouterProvider,
-  useLocation,
-  useNavigationType,
-} from 'react-router-dom'
+import { createRoutesFromChildren, matchRoutes, RouterProvider, useLocation, useNavigationType } from 'react-router-dom'
 
 import { GlobalStyles, router } from './config'
-import { __production__ } from './constants'
+import { __production__, __staging__ } from './constants'
 
-const SENTRY_DSN =
-  'https://2355dca8304c4e32b35bf421d3cf4d87@o4504351883984896.ingest.sentry.io/4505088829292544'
+const SENTRY_DSN = 'https://2355dca8304c4e32b35bf421d3cf4d87@o4504351883984896.ingest.sentry.io/4505088829292544'
 
-if (__production__) {
+if (__production__ || __staging__) {
   Sentry.init({
     release: `geyser-app@${import.meta.env.PACKAGE_VERSION}`,
     dsn: SENTRY_DSN,
+    environment: import.meta.env.VITE_APP_ENV,
     integrations: [
       new Sentry.BrowserTracing({
         // Browser tracing integration creates a new transaction for each page load and navigation event, and creates a child span for every XMLHttpRequest or fetch request that occurs while those transactions are open.

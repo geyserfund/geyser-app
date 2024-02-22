@@ -7,42 +7,20 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Loader from '../../../components/ui/Loader'
 import { Head } from '../../../config'
 import { getPath } from '../../../constants'
-import {
-  GrantApplicant,
-  GrantApplicantStatus,
-  GrantStatusEnum,
-  Maybe,
-} from '../../../types'
+import { GrantApplicant, GrantApplicantStatus, GrantStatusEnum, Maybe } from '../../../types'
 import { useNotification } from '../../../utils'
 import { GrantWinnerAnnouncement, MobileDivider } from '../components'
-import {
-  GrantAnnouncements,
-  GrantHasVoting,
-  GrantProjectNameMap,
-} from '../constants'
+import { GrantAnnouncements, GrantHasVoting, GrantProjectNameMap } from '../constants'
 import { useGrant } from '../hooks/useGrant'
 import { GrantsRoundOne } from './GrantsRoundOne'
 import { GrantsRoundTwo } from './GrantsRoundTwo'
 import { GrantContribute, GrantSummary } from './sections'
-import {
-  CommunityVoting,
-  DistributionChart,
-  GrantApply,
-  MoreInfo,
-} from './sections'
+import { CommunityVoting, DistributionChart, GrantApply, MoreInfo } from './sections'
 import { CommonBoardMembers } from './sections/CommonBoardMembers'
 
-const PageContainer = ({
-  children,
-  image,
-  title,
-}: PropsWithChildren<{ image?: Maybe<string>; title?: string }>) => {
+const PageContainer = ({ children, image, title }: PropsWithChildren<{ image?: Maybe<string>; title?: string }>) => {
   return (
-    <Container
-      marginTop={{ base: 0, lg: '40px' }}
-      maxWidth="879px"
-      px={{ base: '0px', lg: '20px' }}
-    >
+    <Container marginTop={{ base: 0, lg: '40px' }} maxWidth="879px" px={{ base: '0px', lg: '20px' }}>
       <Head title={title} image={image || ''} />
       {children}
     </Container>
@@ -80,15 +58,12 @@ export const GrantPage = () => {
       ? (grant.applicants.filter((applicant) =>
           Boolean(
             applicant &&
-              (applicant.status === GrantApplicantStatus.Accepted ||
-                applicant.status === GrantApplicantStatus.Funded),
+              (applicant.status === GrantApplicantStatus.Accepted || applicant.status === GrantApplicantStatus.Funded),
           ),
         ) as Array<GrantApplicant>)
       : []
 
-  const fundingOpenStatus = grant.statuses.find(
-    (s) => s.status === GrantStatusEnum.FundingOpen,
-  )
+  const fundingOpenStatus = grant.statuses.find((s) => s.status === GrantStatusEnum.FundingOpen)
 
   if (grant.name === 'grant-round-001') {
     return (
@@ -128,12 +103,10 @@ export const GrantPage = () => {
 
   const grantHasVoting = GrantHasVoting[grant.name]
   const showCommunityVoting = grant.status !== GrantStatusEnum.ApplicationsOpen
-  const showDistributionChart =
-    grant.status !== GrantStatusEnum.ApplicationsOpen && grantHasVoting
+  const showDistributionChart = grant.status !== GrantStatusEnum.ApplicationsOpen && grantHasVoting
   const showGrantApply = grant.status !== GrantStatusEnum.Closed
 
-  const showBoardMembers =
-    !GrantHasVoting[grant.name] && grant.boardMembers.length > 0
+  const showBoardMembers = !GrantHasVoting[grant.name] && grant.boardMembers.length > 0
 
   return (
     <PageContainer title={t(grant.title)} image={grant.image}>

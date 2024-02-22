@@ -49,12 +49,7 @@ interface TableProps<TItem> {
   accordionContent?: (item: TItem) => React.ReactNode
 }
 
-export function TableWithAccordion<TItem>({
-  items,
-  schema,
-  accordionContent,
-  footerContent,
-}: TableProps<TItem>) {
+export function TableWithAccordion<TItem>({ items, schema, accordionContent, footerContent }: TableProps<TItem>) {
   const isMobile = useMobileMode()
 
   return (
@@ -87,11 +82,7 @@ export function TableWithAccordion<TItem>({
                       _hover={{}}
                       icon={
                         <BsCaretDownFill
-                          transform={
-                            item.sort.order === OrderByOptions.Asc
-                              ? 'rotate(180)'
-                              : undefined
-                          }
+                          transform={item.sort.order === OrderByOptions.Asc ? 'rotate(180)' : undefined}
                         />
                       }
                       onClick={item.sort.updateOrder}
@@ -138,15 +129,9 @@ export function TableItemWithAccordion<TItem>({
 
   const backgroundColor = index % 2 === 0 ? 'neutral.100' : 'neutral.0'
 
-  const tableSchema = useMemo(
-    () => schema.filter((val) => !val.isAccordion),
-    [schema],
-  )
+  const tableSchema = useMemo(() => schema.filter((val) => !val.isAccordion), [schema])
 
-  const accordionSchema = useMemo(
-    () => schema.filter((val) => val.isAccordion),
-    [schema],
-  )
+  const accordionSchema = useMemo(() => schema.filter((val) => val.isAccordion), [schema])
 
   const accordionColSpan = useMemo(
     () =>
@@ -199,23 +184,11 @@ export function TableItemWithAccordion<TItem>({
         })}
       </Tr>
       {showAccordion && (
-        <Td
-          colSpan={accordionColSpan}
-          p={0}
-          m={0}
-          border="none"
-          px={standardPadding}
-          backgroundColor={backgroundColor}
-        >
+        <Td colSpan={accordionColSpan} p={0} m={0} border="none" px={standardPadding} backgroundColor={backgroundColor}>
           <Accordion index={isOpen ? 0 : undefined}>
             <AccordionItem border="none">
               <AccordionButton display="none"></AccordionButton>
-              <AccordionPanel
-                padding={0}
-                pb={4}
-                maxWidth="100%"
-                whiteSpace="normal"
-              >
+              <AccordionPanel padding={0} pb={4} maxWidth="100%" whiteSpace="normal">
                 <Stack
                   w="full"
                   direction={{ base: 'column', lg: 'row' }}
@@ -234,12 +207,7 @@ export function TableItemWithAccordion<TItem>({
 
                         const value = getValueFromTableItem({ row, item })
                         return (
-                          <HStack
-                            w="full"
-                            justifyContent={'space-between'}
-                            key={row.header}
-                            spacing="5px"
-                          >
+                          <HStack w="full" justifyContent={'space-between'} key={row.header} spacing="5px">
                             <Body2>{row.header}:</Body2>
                             <Body2>{value}</Body2>
                           </HStack>
@@ -263,13 +231,7 @@ export function TableItemWithAccordion<TItem>({
   )
 }
 
-export function getValueFromTableItem<TItem>({
-  row,
-  item,
-}: {
-  row: TableData<TItem>
-  item: TItem
-}): React.ReactNode {
+export function getValueFromTableItem<TItem>({ row, item }: { row: TableData<TItem>; item: TItem }): React.ReactNode {
   if (row.value) {
     return row.value(item)
   }

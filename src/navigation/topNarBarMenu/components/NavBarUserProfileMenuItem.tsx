@@ -11,13 +11,7 @@ export const NavBarUserProfileMenuItem = () => {
 
   return (
     <>
-      <Body2
-        fontSize={'10px'}
-        xBold
-        fontWeight={700}
-        color={'neutral.500'}
-        px={3}
-      >
+      <Body2 fontSize={'10px'} xBold fontWeight={700} color={'neutral.500'} px={3}>
         Profile
       </Body2>
       <MenuItem

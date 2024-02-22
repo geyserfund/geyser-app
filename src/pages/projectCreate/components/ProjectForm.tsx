@@ -1,13 +1,4 @@
-import {
-  Box,
-  FormErrorIcon,
-  HStack,
-  Input,
-  Stack,
-  Text,
-  Tooltip,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, FormErrorIcon, HStack, Input, Stack, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { ChangeEventHandler, useCallback, useEffect } from 'react'
 import { Controller, UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -41,12 +32,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
   const [getProject] = useProjectByNameOrIdLazyQuery({
     onCompleted(data) {
-      if (
-        data &&
-        data.projectGet &&
-        data.projectGet.id &&
-        data.projectGet.name !== formState.defaultValues?.name
-      ) {
+      if (data && data.projectGet && data.projectGet.id && data.projectGet.name !== formState.defaultValues?.name) {
         setError('name', {
           message: 'This lightning address is already taken.',
         })
@@ -98,9 +84,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
     setValue('image', '', { shouldDirty: true })
   }
 
-  const handleChange: ChangeEventHandler<
-    HTMLInputElement | HTMLTextAreaElement
-  > = (event) => {
+  const handleChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (event) => {
     if (event) {
       const { name, value } = event.target
 
@@ -115,9 +99,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
       }
 
       if (name === 'name') {
-        const sanitizedName = `${value}`
-          .toLocaleLowerCase()
-          .replaceAll(validLightningAddress, '')
+        const sanitizedName = `${value}`.toLocaleLowerCase().replaceAll(validLightningAddress, '')
 
         return setValue(name, sanitizedName, {
           shouldDirty: true,
@@ -134,10 +116,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
   return (
     <VStack spacing={6} w="100%">
-      <FieldContainer
-        title={t('Title')}
-        subtitle={t('A few words that make your project stand out')}
-      >
+      <FieldContainer title={t('Title')} subtitle={t('A few words that make your project stand out')}>
         <TextInputBox
           name="title"
           onChange={handleChange}
@@ -155,9 +134,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
               'Set your unique project identifier to create your personalized URL and get a corresponding Lightning address for your Geyser project.',
             )}{' '}
             {isEdit &&
-              t(
-                'Warning! By changing this identifier your old project links will not send you to your project',
-              )}
+              t('Warning! By changing this identifier your old project links will not send you to your project')}
           </>
         }
         error={FormErrorIcon.name}
@@ -219,17 +196,13 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
       <FieldContainer
         title={t('Objective')}
-        subtitle={t(
-          "Add 'one liner' a simple descriptions of what your project is about",
-        )}
+        subtitle={t("Add 'one liner' a simple descriptions of what your project is about")}
       >
         <TextArea
           name="shortDescription"
           height="fit-content"
           overflowY="auto"
-          placeholder={t(
-            'Bitcoin Meetups and Travel Vlogs of Bitcoin Adoption in the Global South!',
-          )}
+          placeholder={t('Bitcoin Meetups and Travel Vlogs of Bitcoin Adoption in the Global South!')}
           value={watch('shortDescription')}
           onChange={({ target, ...event }) => {
             handleChange({
@@ -255,34 +228,25 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
       <FieldContainer
         title={t('Image')}
-        subtitle={t(
-          'Add the main project image that will be displayed in all thumbnails',
-        )}
+        subtitle={t('Add the main project image that will be displayed in all thumbnails')}
       >
         <FileUpload
           showcase
           containerProps={{ w: '100%' }}
-          caption={t(
-            'For best fit, pick a square image. Image size limit: 10MB.',
-          )}
+          caption={t('For best fit, pick a square image. Image size limit: 10MB.')}
           src={watch('thumbnailImage')}
           onUploadComplete={handleImageUpload}
           onDeleteClick={handleDeleteThumbnail}
           childrenOnLoading={<UploadBox loading h={10} />}
           imageCrop={ImageCrop.Square}
         >
-          <UploadBox
-            h={10}
-            title={watch('thumbnailImage') ? t('Change image') : undefined}
-          />
+          <UploadBox h={10} title={watch('thumbnailImage') ? t('Change image') : undefined} />
         </FileUpload>
       </FieldContainer>
 
       <FieldContainer
         title={t('Header')}
-        subtitle={t(
-          'Add a header with a video link or by uploading an image to help bring your project to life',
-        )}
+        subtitle={t('Add a header with a video link or by uploading an image to help bring your project to life')}
       >
         <Controller
           name="image"
@@ -290,11 +254,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           render={({ field }) => {
             const isImage = validateImageUrl(field.value)
             return (
-              <Stack
-                alignItems="start"
-                direction={{ base: 'column', lg: 'row' }}
-                w={'full'}
-              >
+              <Stack alignItems="start" direction={{ base: 'column', lg: 'row' }} w={'full'}>
                 <Input
                   width={{ base: 'full', lg: 'initial' }}
                   minWidth={{ lg: '250px' }}
@@ -306,20 +266,14 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
                   containerProps={{ flexGrow: 1, w: 'full' }}
                   showcase={isImage}
                   showcaseW="80px"
-                  caption={t(
-                    'For best fit, select horizontal 1:3 image. Image size limit: 10MB.',
-                  )}
+                  caption={t('For best fit, select horizontal 1:3 image. Image size limit: 10MB.')}
                   src={isImage ? field.value : undefined}
                   onUploadComplete={handleHeaderImageUpload}
                   onDeleteClick={handleDeleteImage}
                   childrenOnLoading={<UploadBox loading h={10} />}
                   imageCrop={ImageCrop.Rectangle}
                 >
-                  <UploadBox
-                    h={10}
-                    flex={1}
-                    title={field.value ? t('Change header') : undefined}
-                  />
+                  <UploadBox h={10} flex={1} title={field.value ? t('Change header') : undefined} />
                 </FileUpload>
               </Stack>
             )

@@ -10,12 +10,12 @@ interface LandingEntryCardProps extends CardLayoutProps {
   isMobile?: boolean
 }
 
-export const LandingEntryCard = ({
-  entry,
-  isMobile,
-  ...rest
-}: LandingEntryCardProps) => {
+export const LandingEntryCard = ({ entry, isMobile, ...rest }: LandingEntryCardProps) => {
   const navigate = useNavigate()
+
+  if (!entry.project) {
+    return null
+  }
 
   return (
     <LandingCardBase
@@ -26,7 +26,7 @@ export const LandingEntryCard = ({
       user={entry.creator}
       fundersCount={entry.entryFundersCount}
       amountFunded={entry.amountFunded}
-      projectId={entry.project?.id}
+      project={entry.project}
       {...rest}
     />
   )

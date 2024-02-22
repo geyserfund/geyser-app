@@ -4,27 +4,15 @@ import { useTranslation } from 'react-i18next'
 
 import { LightningIcon, SatoshiIconTilted } from '../../../../components/icons'
 import { SkeletonLayout } from '../../../../components/layouts'
-import { ExternalAccountLinkIcon } from '../../../../components/molecules'
+import { ExternalAccountLinkIcon, TransactionTime } from '../../../../components/molecules'
 import { renderFunderBadges } from '../../../../components/molecules/projectActivity/renderFunderBadges'
-import { Caption, MonoBody1 } from '../../../../components/typography'
-import {
-  AnonymousAvatar,
-  AvatarLink,
-  LinkableAvatar,
-} from '../../../../components/ui'
+import { MonoBody1 } from '../../../../components/typography'
+import { AnonymousAvatar, AvatarLink, LinkableAvatar } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import { computeFunderBadges, getAvatarMetadata } from '../../../../helpers'
 import { fonts } from '../../../../styles'
-import {
-  FundingTxForLandingPageFragment,
-  FundingTxFragment,
-} from '../../../../types'
-import {
-  commaFormatted,
-  GetDaysAgo,
-  getRandomOrb,
-  toSmallImageUrl,
-} from '../../../../utils'
+import { FundingTxForLandingPageFragment, FundingTxFragment } from '../../../../types'
+import { commaFormatted, getRandomOrb, toSmallImageUrl } from '../../../../utils'
 
 type Props = HTMLChakraProps<'div'> & {
   fundingTx: FundingTxFragment | FundingTxForLandingPageFragment
@@ -32,18 +20,11 @@ type Props = HTMLChakraProps<'div'> & {
   showsProjectLink?: boolean
   count?: number
 }
-export const ContributionActivityItem = ({
-  fundingTx,
-  dateTime,
-  count,
-  showsProjectLink,
-  ...rest
-}: Props) => {
+export const ContributionActivityItem = ({ fundingTx, dateTime, count, showsProjectLink, ...rest }: Props) => {
   const { t } = useTranslation()
   const { funder } = fundingTx
 
   const isFunderAnonymous = !funder?.user
-  const timeAgo = GetDaysAgo(dateTime || fundingTx.paidAt)
   const wasMadeOnChain = fundingTx.onChain
 
   const avatarMetadata = getAvatarMetadata({
@@ -53,9 +34,7 @@ export const ContributionActivityItem = ({
 
   const funderBadges = computeFunderBadges({
     creationDateStringOfFundedContent:
-      'sourceResource' in fundingTx && fundingTx.sourceResource?.createdAt
-        ? fundingTx.sourceResource.createdAt
-        : '',
+      'sourceResource' in fundingTx && fundingTx.sourceResource?.createdAt ? fundingTx.sourceResource.createdAt : '',
     funder,
   })
 
@@ -116,17 +95,8 @@ export const ContributionActivityItem = ({
               />
             )}
             {count && count > 1 && (
-              <HStack
-                backgroundColor="neutral.200"
-                px="3px"
-                borderRadius="sm"
-                spacing="2px"
-              >
-                <Text
-                  fontFamily={fonts.inter}
-                  fontSize="12px"
-                  fontWeight={500}
-                >{`${count}x`}</Text>
+              <HStack backgroundColor="neutral.200" px="3px" borderRadius="sm" spacing="2px">
+                <Text fontFamily={fonts.inter} fontSize="12px" fontWeight={500}>{`${count}x`}</Text>
                 <LightningIcon height="15px" width="10px" />
                 <Text fontFamily={fonts.inter} fontSize="12px" fontWeight={500}>
                   {t('STREAMS')}
@@ -138,9 +108,7 @@ export const ContributionActivityItem = ({
           {/* Funding Amount */}
           <Box display="flex" alignItems="center">
             <SatoshiIconTilted scale={0.7} />
-            <MonoBody1 fontFamily={fonts.mono}>
-              {commaFormatted(fundingTx.amount)}
-            </MonoBody1>
+            <MonoBody1 fontFamily={fonts.mono}>{commaFormatted(fundingTx.amount)}</MonoBody1>
           </Box>
         </Box>
 
@@ -152,12 +120,7 @@ export const ContributionActivityItem = ({
           {/* Funding Media Attachment */}
 
           {fundingTx.media ? (
-            <Box
-              h={'178px'}
-              bg={'gray.100'}
-              pos={'relative'}
-              borderRadius="8px"
-            >
+            <Box h={'178px'} bg={'gray.100'} pos={'relative'} borderRadius="8px">
               <Image
                 src={fundingTx.media}
                 alt="Contribution media attachment"
@@ -172,20 +135,12 @@ export const ContributionActivityItem = ({
           {/* Timestamp and Funded-Project Info */}
 
           <HStack w="full" color="neutral.700" spacing={2}>
-            <Caption whiteSpace="nowrap">
-              {`${wasMadeOnChain ? '⛓' : '⚡️'}`}
-              {timeAgo ? `${timeAgo} ${t('ago')}` : t('Some time ago')}
-            </Caption>
+            <TransactionTime onChain={wasMadeOnChain} dateTime={dateTime || fundingTx.paidAt} />
 
             <ExternalAccountLinkIcon fundingTx={fundingTx} />
 
             {showsProjectLink && 'sourceResource' in fundingTx && (
-              <HStack
-                overflow="hidden"
-                backgroundColor="neutral.100"
-                padding="2px 10px"
-                borderRadius="8px"
-              >
+              <HStack overflow="hidden" backgroundColor="neutral.100" padding="2px 10px" borderRadius="8px">
                 <Text>▶</Text>
                 {renderResource()}
               </HStack>

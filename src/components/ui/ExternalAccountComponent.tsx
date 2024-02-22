@@ -7,11 +7,7 @@ interface IExternalAccountComponentProps extends ButtonProps {
   username: string
 }
 
-export const ExternalAccountComponent = ({
-  icon,
-  username,
-  ...rest
-}: IExternalAccountComponentProps) => (
+export const ExternalAccountComponent = ({ icon, username, ...rest }: IExternalAccountComponentProps) => (
   <ButtonComponent
     leftIcon={<Icon mr={2} as={icon} />}
     border="2px solid"

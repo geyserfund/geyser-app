@@ -16,11 +16,7 @@ export type StatusAndType = {
   type?: ProjectType
 }
 
-export const StatusFilterBody = ({
-  onClose,
-  button,
-  ...rest
-}: StatusFilterBodyProps) => {
+export const StatusFilterBody = ({ onClose, button, ...rest }: StatusFilterBodyProps) => {
   const { t } = useTranslation()
   const { filters, updateFilter } = useFilterContext()
 
@@ -34,23 +30,12 @@ export const StatusFilterBody = ({
     onClose()
   }
 
-  const options = [
-    { type: ProjectType.Reward },
-    { status: ProjectStatus.Active },
-    { status: ProjectStatus.Inactive },
-  ]
+  const options = [{ type: ProjectType.Reward }, { status: ProjectStatus.Active }, { status: ProjectStatus.Inactive }]
 
   return (
-    <VStack
-      width="100%"
-      alignItems="start"
-      spacing="20px"
-      paddingX="30px"
-      {...rest}
-    >
+    <VStack width="100%" alignItems="start" spacing="20px" paddingX="30px" {...rest}>
       {options.map((option, index) => {
-        const isActive =
-          filters.type === option.type && filters.status === option.status
+        const isActive = filters.type === option.type && filters.status === option.status
 
         const { icon: Icon, text, color } = getStatusTypeButtonContent(option)
         return (

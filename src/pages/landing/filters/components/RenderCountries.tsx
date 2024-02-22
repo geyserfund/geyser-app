@@ -14,26 +14,20 @@ export const RenderCountries = ({
   countryCode?: string
   handleClick: (_: string) => void
 }) => {
-  const [countriesToRender, setCountriesToRender] = useState<
-    ProjectCountriesGetResult[]
-  >([])
+  const [countriesToRender, setCountriesToRender] = useState<ProjectCountriesGetResult[]>([])
 
   useEffect(() => {
     if (countries.length > 0) {
       const usedCountries = countries.filter((country) => country.count > 0)
       if (max) {
-        const selectedCountries = countries.filter(
-          (country) => country.country.code === countryCode,
-        )
+        const selectedCountries = countries.filter((country) => country.country.code === countryCode)
 
         let toBeRenderedCountries = usedCountries.slice(0, max)
 
         selectedCountries.map((selectedCountry) => {
           if (
             !toBeRenderedCountries.some(
-              (toBeRenderedCountry) =>
-                toBeRenderedCountry.country.code ===
-                selectedCountry.country.code,
+              (toBeRenderedCountry) => toBeRenderedCountry.country.code === selectedCountry.country.code,
             )
           ) {
             toBeRenderedCountries = [selectedCountry, ...toBeRenderedCountries]

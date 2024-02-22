@@ -1,10 +1,10 @@
-import { useTranslation } from 'react-i18next'
 import { Box } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
+import { createUseStyles } from 'react-jss'
 
 import { Modal } from '../../../../../../components/layouts'
 import { useModal } from '../../../../../../hooks/useModal'
 import { InfoScreenFeed } from '../InfoScreenFeed'
-import { createUseStyles } from 'react-jss'
 
 export const useProjectFundersModal = () => {
   return useModal<{}>()
@@ -35,12 +35,9 @@ export const useProjectLayoutStyles = createUseStyles<Rules, Styles>({
   },
 })
 
-export const ProjectFundersModal = ({
-  props: {},
-  ...props
-}: Props) => {
+export const ProjectFundersModal = ({ props: {}, ...props }: Props) => {
   const { t } = useTranslation()
-  const classes = useProjectLayoutStyles();
+  const classes = useProjectLayoutStyles()
 
   if (!props.isOpen) {
     return null
@@ -48,9 +45,7 @@ export const ProjectFundersModal = ({
 
   return (
     <Modal title={t(' ')} size={'lg'} {...props}>
-      <Box
-        className={classes.detailsContainer}
-      >
+      <Box className={classes.detailsContainer}>
         <InfoScreenFeed />
       </Box>
     </Modal>

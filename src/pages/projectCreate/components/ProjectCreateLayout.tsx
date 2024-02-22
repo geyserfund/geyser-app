@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Container,
-  ContainerProps,
-  HStack,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Button, Container, ContainerProps, HStack, VStack } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BiLeftArrowAlt } from 'react-icons/bi'
@@ -14,8 +7,7 @@ import { CardLayout } from '../../../components/layouts'
 import { dimensions } from '../../../constants'
 import { useMobileMode } from '../../../utils'
 
-interface ProjectCreateLayoutProps
-  extends Omit<ContainerProps, 'children' | 'title'> {
+interface ProjectCreateLayoutProps extends Omit<ContainerProps, 'children' | 'title'> {
   children: ReactNode
   title: ReactNode
   continueButton?: ReactNode
@@ -38,14 +30,7 @@ export const ProjectCreateLayout = ({
 
   const content = (
     <>
-      <VStack
-        spacing={6}
-        width="100%"
-        marginBottom={6}
-        display="flex"
-        flexDirection="column"
-        alignItems="flex-start"
-      >
+      <VStack spacing={6} width="100%" marginBottom={6} display="flex" flexDirection="column" alignItems="flex-start">
         {title}
       </VStack>
       {children}
@@ -70,13 +55,7 @@ export const ProjectCreateLayout = ({
           {content}
         </Box>
       ) : (
-        <CardLayout
-          sx={contentSx}
-          mt={'40px'}
-          mb={'20px'}
-          overflowY={'auto'}
-          h="full"
-        >
+        <CardLayout sx={contentSx} mt={'40px'} mb={'20px'} overflowY={'auto'} h="full">
           {content}
         </CardLayout>
       )}
@@ -90,12 +69,7 @@ export const ProjectCreateLayout = ({
         bottom={{ base: '0px', lg: '-50px' }}
         alignSelf="center"
       >
-        <Button
-          flexGrow={1}
-          variant="secondary"
-          onClick={onBackClick}
-          leftIcon={<BiLeftArrowAlt fontSize="25px" />}
-        >
+        <Button flexGrow={1} variant="secondary" onClick={onBackClick} leftIcon={<BiLeftArrowAlt fontSize="25px" />}>
           {t('Back')}
         </Button>
         {continueButton}

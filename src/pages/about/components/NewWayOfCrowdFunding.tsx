@@ -3,11 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { CardLayout } from '../../../components/layouts'
 import { H1, H2, H3 } from '../../../components/typography'
-import {
-  CoinGlobe3DImageUrl,
-  CoinLightning3DImageUrl,
-  NewbieBag3DImageUrl,
-} from '../../../constants'
+import { CoinGlobe3DImageUrl, CoinLightning3DImageUrl, NewbieBag3DImageUrl } from '../../../constants'
 import { LaunchYourProjectButton } from './LaunchYourProjectButton'
 
 const CardContents = [
@@ -35,13 +31,7 @@ const CardContents = [
 export const NewWayOfCrowdFunding = () => {
   const { t } = useTranslation()
   return (
-    <VStack
-      maxWidth={'764px'}
-      width={'100%'}
-      spacing={50}
-      padding={3}
-      zIndex={9}
-    >
+    <VStack maxWidth={'764px'} width={'100%'} spacing={50} padding={3} zIndex={9}>
       <VStack>
         <H1>{t('Welcome to the new way of crowdfunding')}</H1>
         <H3 color={'neutral.600'}>
@@ -67,12 +57,7 @@ interface AboutPageCardProps {
   isLeft?: boolean
 }
 
-const AboutPageCard = ({
-  title,
-  description,
-  imageUrl,
-  isLeft,
-}: AboutPageCardProps) => {
+const AboutPageCard = ({ title, description, imageUrl, isLeft }: AboutPageCardProps) => {
   const { t } = useTranslation()
   return (
     <CardLayout
@@ -82,13 +67,8 @@ const AboutPageCard = ({
       direction={{ base: 'column-reverse', lg: isLeft ? 'row-reverse' : 'row' }}
     >
       <VStack alignItems={'start'}>
-        <H2 textAlign={{ base: 'left', lg: isLeft ? 'right' : 'left' }}>
-          {t(title)}
-        </H2>
-        <H3
-          textAlign={{ base: 'left', lg: isLeft ? 'right' : 'left' }}
-          color={'neutral.600'}
-        >
+        <H2 textAlign={{ base: 'left', lg: isLeft ? 'right' : 'left' }}>{t(title)}</H2>
+        <H3 textAlign={{ base: 'left', lg: isLeft ? 'right' : 'left' }} color={'neutral.600'}>
           {t(description)}
         </H3>
       </VStack>

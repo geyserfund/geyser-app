@@ -24,13 +24,7 @@ export const StarIcon = (props: ImageProps) => (
 
 export const MagnifyGlassIcon = (props: ImageProps) => (
   <Box padding="3px 0px">
-    <Image
-      height="20px"
-      width="20px"
-      src={MagnifyUrl}
-      alt="magnify glass"
-      {...props}
-    />
+    <Image height="20px" width="20px" src={MagnifyUrl} alt="magnify glass" {...props} />
   </Box>
 )
 
@@ -42,13 +36,7 @@ export const MedalIcon = (props: ImageProps) => (
 
 export const LightningIcon = (props: ImageProps) => (
   <Box padding="3px 0px">
-    <Image
-      height="20px"
-      width="20px"
-      src={LightningUrl}
-      alt="lightning"
-      {...props}
-    />
+    <Image height="20px" width="20px" src={LightningUrl} alt="lightning" {...props} />
   </Box>
 )
 
@@ -66,13 +54,7 @@ export const CrownIcon = (props: ImageProps) => (
 
 export const HourglassIcon = (props: ImageProps) => (
   <Box padding="3px 0px">
-    <Image
-      height="20px"
-      width="20px"
-      src={HourglassUrl}
-      alt="hourglass"
-      {...props}
-    />
+    <Image height="20px" width="20px" src={HourglassUrl} alt="hourglass" {...props} />
   </Box>
 )
 
@@ -84,13 +66,7 @@ export const GiftIcon = (props: ImageProps) => (
 
 export const EnvelopeIcon = (props: ImageProps) => (
   <Box padding="3px 0px">
-    <Image
-      height="20px"
-      width="20px"
-      src={EnvelopeUrl}
-      alt="envelope"
-      {...props}
-    />
+    <Image height="20px" width="20px" src={EnvelopeUrl} alt="envelope" {...props} />
   </Box>
 )
 
@@ -102,13 +78,7 @@ export const RopeIcon = (props: ImageProps) => (
 
 export const FountainIcon = (props: ImageProps) => (
   <Box padding="3px 0px">
-    <Image
-      height="20px"
-      width="20px"
-      src={FountainLogoUrl}
-      alt="Fountain Podcasts"
-      {...props}
-    />
+    <Image height="20px" width="20px" src={FountainLogoUrl} alt="Fountain Podcasts" {...props} />
   </Box>
 )
 

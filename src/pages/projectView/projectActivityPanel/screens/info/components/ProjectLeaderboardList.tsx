@@ -1,20 +1,13 @@
 import { Divider, VStack } from '@chakra-ui/react'
 import { Fragment } from 'react'
 
-import {
-  CardLayout,
-  CardLayoutProps,
-  SkeletonLayout,
-} from '../../../../../../components/layouts'
+import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../../components/layouts'
 import { ProjectFundingLeaderboardFeedItem } from '../../../../../../components/molecules'
 import { ID } from '../../../../../../constants/components'
 import { QUERY_PROJECT_FUNDERS } from '../../../../../../graphql'
 import { ScrollInvoke } from '../../../../../../helpers'
 import { useQueryWithPagination } from '../../../../../../hooks'
-import {
-  FunderWithUserFragment,
-  ProjectFragment,
-} from '../../../../../../types/generated/graphql'
+import { FunderWithUserFragment, ProjectFragment } from '../../../../../../types/generated/graphql'
 import { useMobileMode, useNotification } from '../../../../../../utils'
 
 const LEADERBOARD_ITEM_LIMIT = 50
@@ -23,10 +16,7 @@ interface ProjectLeaderboardListProps extends CardLayoutProps {
   project: ProjectFragment
 }
 
-export const ProjectLeaderboardList = ({
-  project,
-  ...props
-}: ProjectLeaderboardListProps) => {
+export const ProjectLeaderboardList = ({ project, ...props }: ProjectLeaderboardListProps) => {
   const isMobile = useMobileMode()
   const { toast } = useNotification()
 
@@ -83,11 +73,7 @@ export const ProjectLeaderboardList = ({
                   project={project}
                 />
                 {index < funders.data.length - 1 && (
-                  <Divider
-                    borderBottomWidth="2px"
-                    maxWidth="500px"
-                    borderColor="neutral.200"
-                  />
+                  <Divider borderBottomWidth="2px" maxWidth="500px" borderColor="neutral.200" />
                 )}
               </Fragment>
             )
@@ -111,13 +97,7 @@ export const LeaderboardListSkeleton = () => {
         return (
           <Fragment key={value}>
             <SkeletonLayout width="100%" height="40px" />
-            {index < 4 && (
-              <Divider
-                borderBottomWidth="2px"
-                maxWidth="500px"
-                borderColor="neutral.200"
-              />
-            )}
+            {index < 4 && <Divider borderBottomWidth="2px" maxWidth="500px" borderColor="neutral.200" />}
           </Fragment>
         )
       })}

@@ -11,12 +11,7 @@ interface ComingSoonProps {
   marginRight?: boolean
 }
 
-export const ComingSoon = ({
-  image,
-  number,
-  title,
-  marginRight,
-}: ComingSoonProps) => {
+export const ComingSoon = ({ image, number, title, marginRight }: ComingSoonProps) => {
   const isMobile = useMobileMode()
   const [imageLoad, setImageLoad] = useState(false)
   return (
@@ -47,12 +42,7 @@ export const ComingSoon = ({
               ROUND {number}: COMING SOON
             </Text>
 
-            <HStack
-              justifyContent="center"
-              spacing="40px"
-              alignItems="center"
-              my={3}
-            >
+            <HStack justifyContent="center" spacing="40px" alignItems="center" my={3}>
               <Box>
                 <HStack justifyContent="center">
                   <SatoshiIconTilted />

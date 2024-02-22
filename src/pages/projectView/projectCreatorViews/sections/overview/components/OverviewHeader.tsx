@@ -13,17 +13,11 @@ export const OverviewHeader = () => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
 
-  const { project, onMilestonesModalOpen, setMobileView } =
-    useProjectContext()
+  const { project, onMilestonesModalOpen, setMobileView } = useProjectContext()
   const navigate = useNavigate()
 
   return (
-    <Stack
-      direction={{ base: 'column', lg: 'row' }}
-      w="full"
-      justifyContent="space-between"
-      flexWrap="wrap"
-    >
+    <Stack direction={{ base: 'column', lg: 'row' }} w="full" justifyContent="space-between" flexWrap="wrap">
       <HStack justifyContent={'space-between'} alignItems="start">
         <H2 whiteSpace="nowrap">{t('Weekly overview')}</H2>
         {isMobile && <ShareProjectButton />}
@@ -39,12 +33,7 @@ export const OverviewHeader = () => {
         >
           {t('Write entry')}
         </Button>
-        <Button
-          size="sm"
-          variant="primary"
-          leftIcon={<AddIcon />}
-          onClick={onMilestonesModalOpen}
-        >
+        <Button size="sm" variant="primary" leftIcon={<AddIcon />} onClick={onMilestonesModalOpen}>
           {t('Add goal')}
         </Button>
         <Button
@@ -52,8 +41,8 @@ export const OverviewHeader = () => {
           variant="primary"
           leftIcon={<AddIcon />}
           onClick={() => {
-            setMobileView(MobileViews.createReward);
-            navigate(getPath("projectCreateReward", project?.name))
+            setMobileView(MobileViews.createReward)
+            navigate(getPath('projectCreateReward', project?.name))
           }}
         >
           {t('Add reward')}

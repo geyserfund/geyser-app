@@ -9,10 +9,7 @@ import { useExternalAccountsButtons } from '../../../../hooks/useExternalAccount
 import { NpubDisplay } from '../components/NpubDisplay'
 
 export const CreatorSocial = () => {
-  const isMd = useBreakpointValue(
-    { base: true, sm: false, md: false, lg: true, xl: false },
-    { ssr: false },
-  )
+  const isMd = useBreakpointValue({ base: true, sm: false, md: false, lg: true, xl: false }, { ssr: false })
   const { project } = useProjectContext()
 
   const user = project?.owners[0]?.user
@@ -26,65 +23,48 @@ export const CreatorSocial = () => {
   }
 
   return (
-    <HStack
-      spacing={2}
-      px={1}
-      py={1}
-      borderRadius="8px"
-      background="neutral.100"
-    >
+    <HStack spacing={2} px={1} py={1} borderRadius="8px" background="neutral.100">
       <Box>
-        <UserAvatarWithLink
-          height="30px"
-          width="30px"
-          user={user}
-          seed={project.id}
-        />
+        <UserAvatarWithLink height="30px" width="30px" user={user} seed={project.id} />
       </Box>
-      <Link
-        textDecoration="none"
-        as={NavLink}
-        to={getPath('userProfile', user.id)}
-      >
+      <Link textDecoration="none" as={NavLink} to={getPath('userProfile', user.id)}>
         <Body1 semiBold color="neutral.600">
           {user.username}
         </Body1>
       </Link>
       <HStack>
-        {accountButtonProps.map(
-          ({ username, icon, color, props, key }, index) => {
-            if (!icon || !props) {
-              return
-            }
+        {accountButtonProps.map(({ username, icon, color, props, key }, index) => {
+          if (!icon || !props) {
+            return
+          }
 
-            if (key === 'nostr') {
-              return <NpubDisplay key={index} npub={username} iconOnly={isMd} />
-            }
+          if (key === 'nostr') {
+            return <NpubDisplay key={index} npub={username} iconOnly={isMd} />
+          }
 
-            return (
-              <Text
-                key={index}
-                {...props}
-                whiteSpace="nowrap"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                borderRadius="8px"
-                color="neutral.600"
-                textDecoration={'none'}
-                px={3}
-                py={1}
-              >
-                {icon}
-                {!isMd ? (
-                  <Body1 semiBold ml={2} maxW="12em" isTruncated>
-                    {username}
-                  </Body1>
-                ) : null}
-              </Text>
-            )
-          },
-        )}
+          return (
+            <Text
+              key={index}
+              {...props}
+              whiteSpace="nowrap"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              borderRadius="8px"
+              color="neutral.600"
+              textDecoration={'none'}
+              px={3}
+              py={1}
+            >
+              {icon}
+              {!isMd ? (
+                <Body1 semiBold ml={2} maxW="12em" isTruncated>
+                  {username}
+                </Body1>
+              ) : null}
+            </Text>
+          )
+        })}
       </HStack>
     </HStack>
   )

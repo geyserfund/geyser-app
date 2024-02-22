@@ -1,9 +1,6 @@
 import { gql } from '@apollo/client'
 
-import {
-  FRAGMENT_FUNDING_TX,
-  FRAGMENT_FUNDING_TX_WITH_INVOICE_STATUS,
-} from '../fragments/funding'
+import { FRAGMENT_FUNDING_TX, FRAGMENT_FUNDING_TX_WITH_INVOICE_STATUS } from '../fragments/funding'
 
 export const MUTATION_FUND = gql`
   ${FRAGMENT_FUNDING_TX}

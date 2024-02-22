@@ -1,38 +1,38 @@
+import { useSetAtom } from 'jotai'
 import React from 'react'
 
-import { useAuthContext } from '../../context'
-import { QUERY_ME_PROJECT_FOLLOWS } from '../../graphql'
-import {
-  useProjectFollowMutation,
-  useProjectUnfollowMutation,
-} from '../../types'
+import { followedProjectsAtom, useFollowedProjectsValue } from '../../pages/auth/state'
+import { Project, useProjectFollowMutation, useProjectUnfollowMutation } from '../../types'
 import { toInt } from '../../utils'
 
-export const useFollowProject = (projectId: number) => {
-  const { followedProjects } = useAuthContext()
+export const useFollowProject = (project: Pick<Project, 'id' | 'name' | 'title'>) => {
+  const followedProjects = useFollowedProjectsValue()
+
+  const setFollowedProjects = useSetAtom(followedProjectsAtom)
 
   const [followProject, { loading: followLoading }] = useProjectFollowMutation({
     variables: {
       input: {
-        projectId: toInt(projectId),
+        projectId: toInt(project.id),
       },
     },
-    refetchQueries: [QUERY_ME_PROJECT_FOLLOWS],
+    onCompleted() {
+      setFollowedProjects((prev) => [...prev, project])
+    },
   })
 
-  const [unFollowProject, { loading: unfollowLoading }] =
-    useProjectUnfollowMutation({
-      variables: {
-        input: {
-          projectId: toInt(projectId),
-        },
+  const [unFollowProject, { loading: unfollowLoading }] = useProjectUnfollowMutation({
+    variables: {
+      input: {
+        projectId: toInt(project.id),
       },
-      refetchQueries: [QUERY_ME_PROJECT_FOLLOWS],
-    })
+    },
+    onCompleted() {
+      setFollowedProjects((prev) => prev.filter((p) => toInt(p.id) !== toInt(project.id)))
+    },
+  })
 
-  const isFollowed = Boolean(
-    followedProjects.find((project) => toInt(project?.id) === toInt(projectId)),
-  )
+  const isFollowed = Boolean(followedProjects.find((fp) => toInt(project?.id) === toInt(fp.id)))
 
   const handleFollow = (event?: React.MouseEvent<HTMLButtonElement>) => {
     if (event) {

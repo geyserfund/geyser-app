@@ -3,7 +3,7 @@ import { getAppEndPoint } from '../../../../../../config/domain'
 export const getUSD = (sats: number, bitcoinQuote?: number) => {
   if (!bitcoinQuote) return 'NAN'
   if (!sats) return '0'
-  const total = sats / 100000000 * bitcoinQuote
+  const total = (sats / 100000000) * bitcoinQuote
   if (total > 1) {
     return `$${total.toFixed(2)}`
   }
@@ -17,14 +17,10 @@ export type GetDownloadUrlProps = {
   to?: number
 }
 
-export const getDownloadUrl = ({
-  projectId,
-  from,
-  to,
-}: GetDownloadUrlProps) => {
+export const getDownloadUrl = ({ projectId, from, to }: GetDownloadUrlProps) => {
   const appEndpoint = getAppEndPoint()
 
-  let url = `${appEndpoint}/export/payments/${projectId}`
+  let url = `${appEndpoint}/export/payments/project/${projectId}`
 
   if (from && to) {
     url += `?from=${from}&to=${to}`

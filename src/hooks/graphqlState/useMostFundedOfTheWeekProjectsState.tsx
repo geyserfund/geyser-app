@@ -9,10 +9,7 @@ import {
 import { truthyFilter } from '../../utils/array'
 
 interface UseMostFundedOfTheWeekProjectsStateProps
-  extends QueryHookOptions<
-    ProjectsMostFundedOfTheWeekGetQuery,
-    ProjectsMostFundedOfTheWeekGetQueryVariables
-  > {
+  extends QueryHookOptions<ProjectsMostFundedOfTheWeekGetQuery, ProjectsMostFundedOfTheWeekGetQueryVariables> {
   take: number
   tagIds?: number[]
 }

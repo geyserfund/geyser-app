@@ -17,13 +17,7 @@ export interface CustomModalProps extends ModalProps {
   noClose?: boolean
 }
 
-export const Modal = ({
-  children,
-  title,
-  contentProps,
-  noClose,
-  ...props
-}: CustomModalProps) => {
+export const Modal = ({ children, title, contentProps, noClose, ...props }: CustomModalProps) => {
   return (
     <ChakraModal isCentered size="sm" {...props}>
       <ModalOverlay />

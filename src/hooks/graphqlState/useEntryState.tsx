@@ -2,22 +2,9 @@ import { QueryHookOptions, useLazyQuery, useMutation } from '@apollo/client'
 import { useEffect, useState } from 'react'
 
 import { QUERY_ENTRY_WITH_OWNERS } from '../../graphql'
-import {
-  MUTATION_CREATE_ENTRY,
-  MUTATION_UPDATE_ENTRY,
-} from '../../graphql/mutations'
-import {
-  CreateEntryInput,
-  Entry,
-  EntryType,
-  UpdateEntryInput,
-} from '../../types'
-import {
-  checkDiff,
-  checkKeyValueExists,
-  toInt,
-  useNotification,
-} from '../../utils'
+import { MUTATION_CREATE_ENTRY, MUTATION_UPDATE_ENTRY } from '../../graphql/mutations'
+import { CreateEntryInput, Entry, EntryType, UpdateEntryInput } from '../../types'
+import { checkDiff, checkKeyValueExists, toInt, useNotification } from '../../utils'
 import { useListenerState } from '../useListenerState'
 import { useUnsavedAlert } from '../useUnsavedAlert'
 
@@ -46,12 +33,7 @@ type TEntryUpdateData = {
   updateEntry: Entry
 }
 
-const entryEditKeyList: (keyof Entry)[] = [
-  'content',
-  'description',
-  'image',
-  'title',
-]
+const entryEditKeyList: (keyof Entry)[] = ['content', 'description', 'image', 'title']
 
 export const useEntryState = (
   projectId: number,
@@ -69,10 +51,7 @@ export const useEntryState = (
 
   useUnsavedAlert(hasDiff)
 
-  const [createEntryMutation] = useMutation<
-    TEntryCreateData,
-    TEntryCreateVariables
-  >(MUTATION_CREATE_ENTRY, {
+  const [createEntryMutation] = useMutation<TEntryCreateData, TEntryCreateVariables>(MUTATION_CREATE_ENTRY, {
     onError() {
       setSaving(false)
       toast({
@@ -89,10 +68,7 @@ export const useEntryState = (
     },
   })
 
-  const [updateEntryMutation] = useMutation<
-    TEntryUpdateData,
-    TEntryUpdateVariables
-  >(MUTATION_UPDATE_ENTRY, {
+  const [updateEntryMutation] = useMutation<TEntryUpdateData, TEntryUpdateVariables>(MUTATION_UPDATE_ENTRY, {
     onError() {
       setSaving(false)
       toast({
@@ -109,10 +85,7 @@ export const useEntryState = (
     },
   })
 
-  const [getEntryQuery, { loading }] = useLazyQuery<
-    TEntryData,
-    TEntryVariables
-  >(QUERY_ENTRY_WITH_OWNERS, {
+  const [getEntryQuery, { loading }] = useLazyQuery<TEntryData, TEntryVariables>(QUERY_ENTRY_WITH_OWNERS, {
     variables: {
       id: toInt(entryId),
     },

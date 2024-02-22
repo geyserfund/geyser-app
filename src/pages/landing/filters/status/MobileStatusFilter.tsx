@@ -17,10 +17,7 @@ interface MobileStatusFilterProps extends AccordionItemProps {
   button: StatusTypeButton
 }
 
-export const MobileStatusFilter = ({
-  button,
-  ...rest
-}: MobileStatusFilterProps) => {
+export const MobileStatusFilter = ({ button, ...rest }: MobileStatusFilterProps) => {
   const { t } = useTranslation()
   return (
     <AccordionItem {...rest}>

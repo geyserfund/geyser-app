@@ -13,6 +13,15 @@ export const GetDaysAgo = (date: string) => {
     return t('a day')
   }
 
+  if (days >= 30) {
+    const months = Math.floor(i.length('months'))
+    if (months === 1) {
+      return `${months} ${t('month')}`
+    }
+
+    return `${months} ${t('months')}`
+  }
+
   if (days > 1) {
     return `${days} ${t('days')}`
   }

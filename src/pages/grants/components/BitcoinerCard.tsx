@@ -9,13 +9,7 @@ interface BitcoinersProp {
   to?: string
 }
 
-export const BitcoinerCard = ({
-  image,
-  name,
-  role,
-  link,
-  to,
-}: BitcoinersProp) => {
+export const BitcoinerCard = ({ image, name, role, link, to }: BitcoinersProp) => {
   const renderBody = () => (
     <WrapItem>
       <Center>

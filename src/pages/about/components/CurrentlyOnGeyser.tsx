@@ -5,23 +5,14 @@ import { useTranslation } from 'react-i18next'
 
 import { Body2, H1, MonoBody1 } from '../../../components/typography'
 import { QUERY_PROJECTS_SUMMARY } from '../../../graphql'
-import {
-  getBitcoinAmount,
-  getShortAmountLabel,
-  toInt,
-  useNotification,
-} from '../../../utils'
+import { getBitcoinAmount, getShortAmountLabel, toInt, useNotification } from '../../../utils'
 import { SummarySkeleton } from '../../landing/components'
 
 export const CurrentlyOnGeyser = () => {
   const { t } = useTranslation()
   const { toast } = useNotification()
 
-  const {
-    loading: isSummaryLoading,
-    error: summaryError,
-    data: summaryData,
-  } = useQuery(QUERY_PROJECTS_SUMMARY)
+  const { loading: isSummaryLoading, error: summaryError, data: summaryData } = useQuery(QUERY_PROJECTS_SUMMARY)
 
   const projectsSummaryData = (summaryData && summaryData.projectsSummary) || {}
 
@@ -60,21 +51,9 @@ export const CurrentlyOnGeyser = () => {
         ) : (
           satsDataArray.map((statsData, index) => {
             return (
-              <VStack
-                spacing={0}
-                key={index}
-                justifyContent="flex-start"
-                alignItems={'center'}
-              >
-                <MonoBody1
-                  bold
-                  marginTop="2px"
-                  color="primary.500"
-                  fontSize={{ base: '35px', lg: '55px' }}
-                >
-                  {index === 1
-                    ? getBitcoinAmount(toInt(statsData[0]), true)
-                    : getShortAmountLabel(toInt(statsData[0]))}
+              <VStack spacing={0} key={index} justifyContent="flex-start" alignItems={'center'}>
+                <MonoBody1 bold marginTop="2px" color="primary.500" fontSize={{ base: '35px', lg: '55px' }}>
+                  {index === 1 ? getBitcoinAmount(toInt(statsData[0]), true) : getShortAmountLabel(toInt(statsData[0]))}
                 </MonoBody1>
 
                 <Body2

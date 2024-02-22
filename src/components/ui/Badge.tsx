@@ -11,12 +11,7 @@ export const Badge = ({ badge }: { badge: string }) => {
       padding="0px 8px"
       borderRadius="20px"
       onMouseEnter={() => {
-        if (
-          badge === '🏅' ||
-          badge === '🏆' ||
-          badge === '👑' ||
-          badge === '⭐'
-        ) {
+        if (badge === '🏅' || badge === '🏆' || badge === '👑' || badge === '⭐') {
           setHover(true)
         }
       }}
@@ -24,15 +19,7 @@ export const Badge = ({ badge }: { badge: string }) => {
     >
       {hover && (
         <>
-          <Box
-            position="absolute"
-            bottom="-85px"
-            left="-93px"
-            p={2}
-            zIndex={2}
-            bg="neutral.500"
-            rounded="lg"
-          >
+          <Box position="absolute" bottom="-85px" left="-93px" p={2} zIndex={2} bg="neutral.500" rounded="lg">
             <Text color="neutral.0" fontWeight="bold" fontSize="10px">
               Emoji badges
             </Text>

@@ -6,22 +6,15 @@ import { Project } from '../../types/generated/graphql'
 import { toSmallImageUrl } from '../../utils'
 
 type Props = {
-  project: Project
+  project: Pick<Project, 'thumbnailImage' | 'name' | 'title'>
   textColor?: string
 }
 
-export const ProjectAvatarLink = ({
-  project,
-  textColor = 'neutral.700',
-}: Props) => {
+export const ProjectAvatarLink = ({ project, textColor = 'neutral.700' }: Props) => {
   const avatarSrc = toSmallImageUrl(project.thumbnailImage || '')
 
   return (
-    <Link
-      as={ReactRouterLink}
-      to={getPath('project', project.name)}
-      color={textColor}
-    >
+    <Link as={ReactRouterLink} to={getPath('project', project.name)} color={textColor}>
       <HStack spacing={1}>
         <Avatar borderRadius="4px" src={avatarSrc} boxSize={'1em'} />
         <Text fontWeight={'bold'} noOfLines={1}>

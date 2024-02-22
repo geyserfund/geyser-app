@@ -8,24 +8,19 @@ import { Body1 } from '../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../components/ui'
 import { VideoPlayer } from '../../../../components/ui/VideoPlayer'
 import { ID } from '../../../../constants'
-import { useAuthContext, useProjectContext } from '../../../../context'
+import { useProjectContext } from '../../../../context'
 import { validateImageUrl } from '../../../../forms/validations/image'
 import { ProjectStatus, WalletStatus } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
-import {
-  ContributeButton,
-  FollowButton,
-  LightningAddress,
-  ProjectFundingQR,
-  ShareButton,
-} from '../components'
+import { useFollowedProjectsValue } from '../../../auth/state'
+import { ContributeButton, FollowButton, LightningAddress, ProjectFundingQR, ShareButton } from '../components'
 import { NpubDisplay } from '../components/NpubDisplay'
 import { CreatorSocial } from './CreatorSocial'
 
 export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()
   const { project } = useProjectContext()
-  const { followedProjects } = useAuthContext()
+  const followedProjects = useFollowedProjectsValue()
   const isMobile = useMobileMode()
 
   if (!project) {
@@ -33,10 +28,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   }
 
   const statusContent = () => {
-    if (
-      project.status === ProjectStatus.Active &&
-      project?.wallets[0]?.state.status === WalletStatus.Ok
-    ) {
+    if (project.status === ProjectStatus.Active && project?.wallets[0]?.state.status === WalletStatus.Ok) {
       return null
     }
 
@@ -87,12 +79,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       >
         {statusContent()}
         <Box>{renderImageOrVideo()}</Box>
-        <VStack
-          w="full"
-          spacing="10px"
-          paddingX={{ base: '10px', lg: 0 }}
-          alignItems="start"
-        >
+        <VStack w="full" spacing="10px" paddingX={{ base: '10px', lg: 0 }} alignItems="start">
           <HStack flexGrow={1} width="100%" spacing={3} alignItems="center">
             <ImageWithReload
               borderRadius="8px"
@@ -105,6 +92,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             />
             <Text flex={1} variant="h2" width="100%" color="neutral.900">
               {project.title}
+              {'!'}
             </Text>
           </HStack>
           <Text variant="h3" color="neutral.900">
@@ -116,15 +104,11 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             <ProjectFundingQR project={project} />
           </HStack>
           <HStack w="full" color="neutral.600">
-            <Body1 semiBold>{`${project.fundersCount} ${t(
-              'contributors',
-            )}`}</Body1>
+            <Body1 semiBold>{`${project.fundersCount} ${t('contributors')}`}</Body1>
             <Text paddingBottom="22px" lineHeight={0} fontSize="40px">
               .
             </Text>
-            <Body1 semiBold>{`${project.followers?.length || 0} ${t(
-              'followers',
-            )}`}</Body1>
+            <Body1 semiBold>{`${project.followers?.length || 0} ${t('followers')}`}</Body1>
 
             <Text paddingBottom="22px" lineHeight={0} fontSize="40px">
               .
@@ -143,12 +127,10 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             <VStack w="full" paddingTop="5px">
               <ContributeButton w="full" />
 
-              {followedProjects.some(
-                (followedProject) => followedProject?.id === project?.id,
-              ) ? (
+              {followedProjects.some((followedProject) => followedProject?.id === project?.id) ? (
                 <ShareButton w="full" />
               ) : (
-                <FollowButton size="md" w="full" projectId={project?.id} />
+                <FollowButton size="md" w="full" project={project} />
               )}
             </VStack>
           )}

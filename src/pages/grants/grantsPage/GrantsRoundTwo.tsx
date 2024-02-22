@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Image,
-  Link,
-  Text,
-  Wrap,
-  WrapItem,
-} from '@chakra-ui/react'
+import { Box, Button, Image, Link, Text, Wrap, WrapItem } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { FaArrowLeft } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
@@ -78,20 +70,8 @@ export const GrantsRoundTwo = ({
           <Box display="flex" justifyContent={'center'}>
             <Image height={'220px'} src={GrantsRound2Url} />
           </Box>
-          <Box
-            display="flex"
-            alignItems={'center'}
-            justifyContent="center"
-            my={1}
-            gap={4}
-          >
-            <Text
-              bg="neutral.100"
-              fontSize={'10px'}
-              px="14px"
-              py={'5px'}
-              fontWeight="500"
-            >
+          <Box display="flex" alignItems={'center'} justifyContent="center" my={1} gap={4}>
+            <Text bg="neutral.100" fontSize={'10px'} px="14px" py={'5px'} fontWeight="500">
               {t('CLOSED')}
             </Text>
           </Box>
@@ -102,37 +82,20 @@ export const GrantsRoundTwo = ({
             textAlign="center"
             justifyContent="center"
           >
-            {t(
-              'Funding educators, creatives and builders doing Bitcoin-only projects on Geyser.',
-            )}
-            {isMobile ? '' : <br />}{' '}
-            {t('Funded by bitcoiners who want to change the world.')}
+            {t('Funding educators, creatives and builders doing Bitcoin-only projects on Geyser.')}
+            {isMobile ? '' : <br />} {t('Funded by bitcoiners who want to change the world.')}
           </Text>
           <Box display="flex" flexDirection={'column'} alignItems="center">
             <Box color={'primary.500'} my={8}>
-              <Box
-                display={'flex'}
-                alignItems="center"
-                justifyContent={'center'}
-              >
+              <Box display={'flex'} alignItems="center" justifyContent={'center'}>
                 <Box mr={1}>
                   <SatoshiIconTilted scale={1.4} />
                 </Box>
 
-                <Text
-                  fontWeight={'700'}
-                  fontSize={'36px'}
-                  fontFamily={fonts.livvic}
-                  textAlign="center"
-                >
+                <Text fontWeight={'700'} fontSize={'36px'} fontFamily={fonts.livvic} textAlign="center">
                   100 M
                 </Text>
-                <Text
-                  fontSize={'xs'}
-                  ml="1"
-                  fontWeight="800"
-                  color="neutral.400"
-                >
+                <Text fontSize={'xs'} ml="1" fontWeight="800" color="neutral.400">
                   <small>($20K)</small>
                 </Text>
               </Box>
@@ -141,16 +104,9 @@ export const GrantsRoundTwo = ({
               </Text>
             </Box>
 
-            <Box
-              minWidth={'100%'}
-              borderRadius="12px"
-              rounded="md"
-              overflow="hidden"
-            >
+            <Box minWidth={'100%'} borderRadius="12px" rounded="md" overflow="hidden">
               <img
-                src={
-                  'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-proposal-x3%20copy.jpg'
-                }
+                src={'https://storage.googleapis.com/geyser-images-distribution-prod-us/geyser-proposal-x3%20copy.jpg'}
               />
             </Box>
 
@@ -179,43 +135,28 @@ export const GrantsRoundTwo = ({
           <Box display={'flex'} justifyContent="center" my={6}>
             <Text fontWeight={'400'} fontSize="14px" color={'neutral.600'}>
               {t('Designs by')}
-              <Link
-                href="https://twitter.com/tachirahomestd"
-                color={'primary.500'}
-              >
+              <Link href="https://twitter.com/tachirahomestd" color={'primary.500'}>
                 @tachirahomestd
               </Link>
             </Text>
           </Box>
           <Box my={8}>
-            <Text
-              fontFamily={fonts.interBlack}
-              fontSize="24px"
-              fontWeight={'bold'}
-            >
+            <Text fontFamily={fonts.interBlack} fontSize="24px" fontWeight={'bold'}>
               {t('Principled Bitcoiners Board')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">
-              {t(
-                'The board will be responsible for reviewing and evaluating the applications.',
-              )}
+              {t('The board will be responsible for reviewing and evaluating the applications.')}
             </Text>
           </Box>
           <BoardMembers />
 
           <MoreInfo titleProps={{ fontSize: '24px' }} />
           <Box my={8}>
-            <Text
-              fontFamily={fonts.interBlack}
-              fontSize="24px"
-              fontWeight={'bold'}
-            >
+            <Text fontFamily={fonts.interBlack} fontSize="24px" fontWeight={'bold'}>
               {t('Made possible by sponsors')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">
-              {t(
-                'Bitcoin companies and anon individuals that want to bring hope to the world.',
-              )}
+              {t('Bitcoin companies and anon individuals that want to bring hope to the world.')}
             </Text>
           </Box>
           <Box
@@ -247,9 +188,7 @@ export const GrantsRoundTwo = ({
           </Box>
           <Box my={6}>
             <Text color={'neutral.600'} fontWeight="600" mb={4}>
-              {t(
-                'Thanks to the developers and designers that built and designed Geyser Grants.',
-              )}
+              {t('Thanks to the developers and designers that built and designed Geyser Grants.')}
             </Text>
             <GrantDevelopers />
           </Box>

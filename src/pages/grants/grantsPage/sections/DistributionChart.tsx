@@ -5,13 +5,7 @@ import { CardLayout } from '../../../../components/layouts'
 import { H2 } from '../../../../components/typography'
 import { GrantApplicant } from '../../../../types'
 
-const CHART_BAR_COLORS = [
-  'primary.900',
-  'primary.700',
-  'primary.500',
-  'primary.400',
-  'primary.100',
-]
+const CHART_BAR_COLORS = ['primary.900', 'primary.700', 'primary.500', 'primary.400', 'primary.100']
 
 interface Props {
   applicants: Array<GrantApplicant>
@@ -23,13 +17,10 @@ export const DistributionChart = ({ applicants }: Props) => {
     return prev + (curr?.funding.communityFunding || 0)
   }, 0)
 
-  const percentages: Array<GrantApplicant & { percentage: number }> =
-    applicants.map((applicant) => ({
-      ...applicant,
-      percentage: Math.round(
-        ((applicant.funding?.communityFunding || 0) * 100) / (total || 1),
-      ),
-    }))
+  const percentages: Array<GrantApplicant & { percentage: number }> = applicants.map((applicant) => ({
+    ...applicant,
+    percentage: Math.round(((applicant.funding?.communityFunding || 0) * 100) / (total || 1)),
+  }))
 
   const maxPercentage = Math.max(...percentages.map((p) => p.percentage))
 
@@ -57,17 +48,7 @@ export const DistributionChart = ({ applicants }: Props) => {
   )
 }
 
-const Item = ({
-  bg,
-  title,
-  width,
-  percentage,
-}: {
-  bg?: string
-  title: string
-  width: number
-  percentage: number
-}) => {
+const Item = ({ bg, title, width, percentage }: { bg?: string; title: string; width: number; percentage: number }) => {
   return (
     <Box pt={1} alignItems="center" justifyContent="start" display="flex">
       <Box pr={3} maxWidth="186px" width="50%">
@@ -75,12 +56,7 @@ const Item = ({
           {title}
         </Text>
       </Box>
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="start"
-        flexGrow={1}
-      >
+      <Box display="flex" alignItems="center" justifyContent="start" flexGrow={1}>
         <ChartBar bg={bg} width={`${width}%`}>
           {percentage}%
         </ChartBar>
@@ -89,20 +65,10 @@ const Item = ({
   )
 }
 
-const ChartBar = ({
-  width,
-  bg,
-  children,
-}: Pick<BoxProps, 'width' | 'bg' | 'children'>) => (
+const ChartBar = ({ width, bg, children }: Pick<BoxProps, 'width' | 'bg' | 'children'>) => (
   <Box width={width}>
     <Box display="flex" flexGrow={1} alignItems="center">
-      <Box
-        width="90%"
-        height="16px"
-        bg={bg}
-        borderTopRightRadius="8px"
-        borderBottomRightRadius="8px"
-      >
+      <Box width="90%" height="16px" bg={bg} borderTopRightRadius="8px" borderBottomRightRadius="8px">
         &nbsp;
       </Box>
       <Text ml={2} fontSize="18px" fontWeight={700} overflowWrap="normal">

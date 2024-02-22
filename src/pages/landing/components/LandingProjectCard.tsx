@@ -7,11 +7,7 @@ interface LandingProjectCardProps extends Omit<CardLayoutProps, 'to'> {
   isMobile?: boolean
 }
 
-export const LandingProjectCard = ({
-  project,
-  isMobile,
-  ...rest
-}: LandingProjectCardProps) => {
+export const LandingProjectCard = ({ project, isMobile, ...rest }: LandingProjectCardProps) => {
   if (!project.owners[0]) {
     return null
   }
@@ -25,7 +21,7 @@ export const LandingProjectCard = ({
       user={project.owners[0].user}
       fundersCount={project.fundersCount || 0}
       amountFunded={project.balance}
-      projectId={project.id}
+      project={project}
       minHeight="125px"
       {...rest}
     />

@@ -44,13 +44,7 @@ export const LandingFeed = () => {
 
 export const ActivityTopbar = () => {
   return (
-    <HStack
-      width="100%"
-      borderBottom="2px solid"
-      borderColor="neutral.200"
-      paddingY="6px"
-      marginBottom="10px"
-    >
+    <HStack width="100%" borderBottom="2px solid" borderColor="neutral.200" paddingY="6px" marginBottom="10px">
       <Body1 semiBold color="neutral.1000">
         Activity
       </Body1>

@@ -16,22 +16,9 @@ export const fundingStages: {
   canceled: 'canceled',
 }
 
-export const stageList: IFundingStages[] = [
-  'loading',
-  'initial',
-  'form',
-  'started',
-  'completed',
-  'canceled',
-]
+export const stageList: IFundingStages[] = ['loading', 'initial', 'form', 'started', 'completed', 'canceled']
 
-export type IFundingStages =
-  | 'loading'
-  | 'initial'
-  | 'form'
-  | 'started'
-  | 'completed'
-  | 'canceled'
+export type IFundingStages = 'loading' | 'initial' | 'form' | 'started' | 'completed' | 'canceled'
 
 export const authModalStates: {
   loading: IAuthModalState
@@ -49,13 +36,7 @@ export const authModalStates: {
   manage: 'manage',
 }
 
-export type IAuthModalState =
-  | 'loading'
-  | 'initial'
-  | 'lnurl'
-  | 'completed'
-  | 'connect'
-  | 'manage'
+export type IAuthModalState = 'loading' | 'initial' | 'lnurl' | 'completed' | 'connect' | 'manage'
 
 export const projectTypes = {
   donation: 'donation' as IProjectType,

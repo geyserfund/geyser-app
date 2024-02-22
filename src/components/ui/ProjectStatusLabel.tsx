@@ -1,21 +1,15 @@
-import {
-  Icon,
-  SkeletonText,
-  Stack,
-  StackDirection,
-  Text,
-  Tooltip,
-} from '@chakra-ui/react'
+import { Icon, SkeletonText, Stack, StackDirection, Text, Tooltip } from '@chakra-ui/react'
 import { HTMLChakraProps } from '@chakra-ui/system'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 
-import { ProjectFragment, WalletStatus } from '../../types/generated/graphql'
+import { ProjectStatus, Wallet, WalletStatus } from '../../types/generated/graphql'
 import { isActive, isDraft, isInactive } from '../../utils'
 
 interface IProjectStatusLabel extends HTMLChakraProps<'div'> {
-  project: ProjectFragment
+  project: { status?: ProjectStatus | null; wallets: Pick<Wallet, 'state'>[] }
+  iconOnly?: boolean
   fontSize?: string
   iconSize?: string
   fontFamily?: string
@@ -51,12 +45,9 @@ export const ProjectStatusTooltip = {
     'The last time someone tried to send funds to this wallet, there was a liquidity issue.',
   [ProjectStatusLabels.INACTIVE_WALLET]:
     'The last time someone tried to make a transaction to this project, the invoice generation failed.',
-  [ProjectStatusLabels.RUNNING]:
-    'This project is live and wallet running smoothly.',
-  [ProjectStatusLabels.DRAFT]:
-    'This project has not been launched yet and is only visible to the project creator.',
-  [ProjectStatusLabels.INACTIVE]:
-    'This project has been deactivated by the project creator.',
+  [ProjectStatusLabels.RUNNING]: 'This project is live and wallet running smoothly.',
+  [ProjectStatusLabels.DRAFT]: 'This project has not been launched yet and is only visible to the project creator.',
+  [ProjectStatusLabels.INACTIVE]: 'This project has been deactivated by the project creator.',
 }
 
 export const ProjectStatusLabel = ({
@@ -65,6 +56,7 @@ export const ProjectStatusLabel = ({
   fontFamily,
   iconSize = '16px',
   direction = 'row',
+  iconOnly,
 }: IProjectStatusLabel) => {
   const { t } = useTranslation()
 
@@ -82,17 +74,11 @@ export const ProjectStatusLabel = ({
     }
 
     const getStatus = () => {
-      if (
-        project?.wallets[0] &&
-        project.wallets[0].state.status === WalletStatus.Inactive
-      ) {
+      if (project?.wallets[0] && project.wallets[0].state.status === WalletStatus.Inactive) {
         return ProjectStatusLabels.INACTIVE_WALLET
       }
 
-      if (
-        project?.wallets[0] &&
-        project.wallets[0].state.status === WalletStatus.Unstable
-      ) {
+      if (project?.wallets[0] && project.wallets[0].state.status === WalletStatus.Unstable) {
         return ProjectStatusLabels.UNSTABLE_WALLET
       }
 
@@ -116,11 +102,15 @@ export const ProjectStatusLabel = ({
   }, [project])
 
   if (!status) {
-    return (
-      <Stack direction={direction} alignItems="center">
-        <SkeletonText width="80px" skeletonHeight={4} noOfLines={1} />
-      </Stack>
-    )
+    if (!iconOnly) {
+      return (
+        <Stack direction={direction} alignItems="center">
+          <SkeletonText width="80px" skeletonHeight={4} noOfLines={1} />
+        </Stack>
+      )
+    }
+
+    return null
   }
 
   const CurrentIcon = ProjectStatusIcons[status]
@@ -131,9 +121,11 @@ export const ProjectStatusLabel = ({
     <Tooltip label={t(tooltip)} placement="top" size="sm">
       <Stack direction={direction} alignItems="center">
         <Icon as={CurrentIcon} fontSize={iconSize} color={color} />
-        <Text color={color} {...commonStyles}>
-          {t(status)}
-        </Text>
+        {!iconOnly && (
+          <Text color={color} {...commonStyles}>
+            {t(status)}
+          </Text>
+        )}
       </Stack>
     </Tooltip>
   )

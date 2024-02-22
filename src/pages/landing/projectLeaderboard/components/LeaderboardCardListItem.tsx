@@ -8,11 +8,7 @@ import { ProjectForLandingPageFragment } from '../../../../types'
 import { toSmallImageUrl } from '../../../../utils'
 import { LeaderboardFundingStats } from '.'
 
-export const LeaderboardCardListItem = ({
-  project,
-}: {
-  project: ProjectForLandingPageFragment
-}) => {
+export const LeaderboardCardListItem = ({ project }: { project: ProjectForLandingPageFragment }) => {
   return (
     <HStack
       as={Link}
@@ -35,10 +31,7 @@ export const LeaderboardCardListItem = ({
         <Body1 color="neutral.900" isTruncated bold width="100%">
           {project.title}
         </Body1>
-        <LeaderboardFundingStats
-          funders={project.fundersCount}
-          funded={project.balance}
-        />
+        <LeaderboardFundingStats funders={project.fundersCount} funded={project.balance} />
       </VStack>
     </HStack>
   )

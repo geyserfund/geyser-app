@@ -6,6 +6,4 @@ export enum ContributionView {
   accounts = 'accounts',
 }
 
-export const contributionViewAtom = atom<ContributionView>(
-  ContributionView.rewards,
-)
+export const contributionViewAtom = atom<ContributionView>(ContributionView.rewards)

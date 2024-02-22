@@ -34,9 +34,7 @@ export const TopNavBarMenu = ({ isOpen }: Props) => {
           <HStack color="neutral.700" spacing="4px">
             <HamburgerIcon color="neutral.500" fontSize="22px" />
 
-            {isLoggedIn ? (
-              <Avatar height="22px" width="22px" src={user.imageUrl || ''} />
-            ) : null}
+            {isLoggedIn ? <Avatar height="22px" width="22px" src={user.imageUrl || ''} /> : null}
           </HStack>
         </MenuButton>
       )}

@@ -1,8 +1,4 @@
-import {
-  GEYSER_FEE,
-  noFeeProjects,
-  WalletConnectDetails,
-} from '../../constants'
+import { GEYSER_FEE, noFeeProjects, WalletConnectDetails } from '../../constants'
 import { ProjectFragment } from '../../types'
 
 type PickProject = Pick<ProjectFragment, 'name' | 'balance' | 'wallets'>
@@ -23,8 +19,5 @@ export const hasOwnNode = (project: PickProject) => {
     return false
   }
 
-  return (
-    connectionDetails.__typename !==
-    WalletConnectDetails.LightningAddressConnectionDetails
-  )
+  return connectionDetails.__typename !== WalletConnectDetails.LightningAddressConnectionDetails
 }

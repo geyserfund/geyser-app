@@ -12,29 +12,12 @@ type Props = {
   rounded?: boolean
 }
 
-export const AvatarLink = ({
-  title,
-  path,
-  imageSrc,
-  textColor = 'neutral.700',
-  rounded,
-}: Props) => {
+export const AvatarLink = ({ title, path, imageSrc, textColor = 'neutral.700', rounded }: Props) => {
   const avatarSrc = toSmallImageUrl(imageSrc)
 
   return (
-    <HStack
-      as={ReactRouterLink}
-      to={path}
-      color={textColor}
-      spacing={1}
-      w="full"
-      overflow="hidden"
-    >
-      <Avatar
-        borderRadius={rounded ? '50%' : '4px'}
-        src={avatarSrc}
-        boxSize={'1em'}
-      />
+    <HStack as={ReactRouterLink} to={path} color={textColor} spacing={1} w="full" overflow="hidden">
+      <Avatar borderRadius={rounded ? '50%' : '4px'} src={avatarSrc} boxSize={'1em'} />
       <Body2 semiBold isTruncated _hover={{ textDecoration: 'underline' }}>
         {title}
       </Body2>

@@ -1,10 +1,12 @@
 import { HStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
-import { Dispatch, SetStateAction, useCallback, useMemo } from 'react'
+import { Dispatch, SetStateAction, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Body2 } from '../../../../../../../../components/typography'
 import { AnonymousAvatar, LinkableAvatar } from '../../../../../../../../components/ui'
+import { RewardStatus, RewardStatusOptions } from '../../../../../../../../constants'
+import { getRewardShippingStatusBackgroundColor } from '../../../../../../../../helpers/getProjectShippingStatusBackgroundColor'
 import {
   OrderByDirection,
   OrderFragment,
@@ -16,32 +18,6 @@ import { useCustomTheme } from '../../../../../../../../utils'
 import { OrderAmounts, OrderItems } from '../../../components'
 import { TableData, TableWithAccordion } from '../../../components/TableWithAccordion'
 import { ShippingStatusSelect } from './ShippingStatusSelect'
-
-export enum RewardStatus {
-  todo = 'CONFIRMED',
-  shipped = 'SHIPPED',
-  delivered = 'DELIVERED',
-}
-
-type RewardStatusOption = {
-  label: string
-  value: RewardStatus
-}
-
-const RewardStatusOptions: RewardStatusOption[] = [
-  {
-    label: 'Todo',
-    value: RewardStatus.todo,
-  },
-  {
-    label: 'Shipped',
-    value: RewardStatus.shipped,
-  },
-  {
-    label: 'Delivered',
-    value: RewardStatus.delivered,
-  },
-]
 
 export const RewardTable = ({
   status,
@@ -70,43 +46,16 @@ export const RewardTable = ({
     }
   }, [status])
 
-  const getBackgroundColors = useCallback(
-    (value: RewardStatus) => {
-      switch (value) {
-        case RewardStatus.todo:
-          return {
-            backgroundColor: colors.neutral[200],
-            hoverBgColor: colors.neutral[400],
-          }
-        case RewardStatus.shipped:
-          return {
-            backgroundColor: colors.nostr[100],
-            hoverBgColor: colors.nostr[300],
-          }
-        case RewardStatus.delivered:
-          return {
-            backgroundColor: colors.brand[100],
-            hoverBgColor: colors.brand[300],
-          }
-        default:
-          return {
-            backgroundColor: colors.neutral[200],
-            hoverBgColor: colors.neutral[400],
-          }
-      }
-    },
-    [colors],
-  )
-
   const tableData: TableData<OrderFragment>[] = useMemo(
     () => [
       {
         header: t('Status'),
         key: 'status',
         render(order: OrderFragment) {
-          const { backgroundColor, hoverBgColor } = getBackgroundColors(order.status as RewardStatus)
-
-          const options = order.status === RewardStatus.todo ? RewardStatusOptions : RewardStatusOptions.slice(1)
+          const { backgroundColor, hoverBgColor } = getRewardShippingStatusBackgroundColor(
+            order.status as RewardStatus,
+            colors,
+          )
 
           return (
             <>
@@ -114,7 +63,7 @@ export const RewardTable = ({
                 isSearchable={false}
                 backgroundColor={backgroundColor}
                 hoverBgColor={hoverBgColor}
-                options={options}
+                options={RewardStatusOptions}
                 value={RewardStatusOptions.find((val) => val.value === order.status)}
                 defaultValue={RewardStatusOptions.find((val) => val.value === order.status)}
                 onChange={(option) => {
@@ -237,7 +186,7 @@ export const RewardTable = ({
         },
       },
     ],
-    [t, getBackgroundColors, updateOrderStatus, orderBy, setOrderBy, sortField],
+    [t, updateOrderStatus, orderBy, setOrderBy, sortField, colors],
   )
 
   return <TableWithAccordion<OrderFragment> items={data} schema={tableData} />

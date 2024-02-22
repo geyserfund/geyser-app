@@ -2,6 +2,7 @@ import { MutationHookOptions, QueryHookOptions } from '@apollo/client'
 import { useAtom, useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 
+import { RewardStatus } from '../../../../../../../../constants'
 import { usePaginationAtomHook } from '../../../../../../../../hooks'
 import {
   Exact,
@@ -18,12 +19,7 @@ import {
   useOrdersGetQuery,
   useOrderStatusUpdateMutation,
 } from '../../../../../../../../types'
-import { RewardStatus } from '../components/RewardTable'
-import {
-  rewardsCountAtom,
-  rewardsFamily,
-  rewardStatusUpdateAtom,
-} from '../state/rewardsAtom'
+import { rewardsCountAtom, rewardsFamily, rewardStatusUpdateAtom } from '../state/rewardsAtom'
 
 interface UseRewardByStatusProps {
   status: RewardStatus
@@ -113,15 +109,14 @@ export const useRewardByStatus = ({
     },
   })
 
-  const { handleDataUpdate, isLoadingMore, noMoreItems, fetchNext } =
-    usePaginationAtomHook<OrderFragment>({
-      fetchMore,
-      queryName: ['ordersGet', 'orders'],
-      itemLimit: MAXIMUM_REWARD_ITEMS,
-      where,
-      orderBy,
-      setData: setRewards,
-    })
+  const { handleDataUpdate, isLoadingMore, noMoreItems, fetchNext } = usePaginationAtomHook<OrderFragment>({
+    fetchMore,
+    queryName: ['ordersGet', 'orders'],
+    itemLimit: MAXIMUM_REWARD_ITEMS,
+    where,
+    orderBy,
+    setData: setRewards,
+  })
 
   const [orderStatusUpdate] = useOrderStatusUpdateMutation({
     ...statusUpdateMutationProps,
@@ -130,15 +125,11 @@ export const useRewardByStatus = ({
 
       updateStatus({ status, update: data.orderStatusUpdate })
 
-      if (statusUpdateMutationProps.onCompleted)
-        statusUpdateMutationProps.onCompleted(data)
+      if (statusUpdateMutationProps.onCompleted) statusUpdateMutationProps.onCompleted(data)
     },
   })
 
-  const updateOrderStatus = (
-    orderId: string,
-    newStatus: UpdatableOrderStatus,
-  ) => {
+  const updateOrderStatus = (orderId: string, newStatus: UpdatableOrderStatus) => {
     if (`${newStatus}` === `${status}`) return
     orderStatusUpdate({
       variables: {
