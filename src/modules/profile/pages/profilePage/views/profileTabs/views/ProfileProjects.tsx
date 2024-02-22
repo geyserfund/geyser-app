@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next'
 
 import { ProjectForProfilePageFragment } from '../../../../../../../types'
-import { CreateAProjectButton, ProfileTabLayout } from '../../../components'
 import { useViewingOwnProfileAtomValue } from '../../../../../state'
+import { CreateAProjectButton, ProfileTabLayout } from '../../../components'
 import { CreateProject } from '../components/CreateProject'
 import { ProfileProjectList } from '../components/ProfileProjectList'
 import { TabPanelSkeleton } from '../components/TabPanelSkeleton'
