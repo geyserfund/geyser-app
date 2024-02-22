@@ -6,6 +6,7 @@ import { Body2 } from '../../../../../../../components/typography'
 import { getAppEndPoint } from '../../../../../../../config/domain'
 import { NoContributionImageUrl } from '../../../../../../../constants'
 import { UserProjectContributionsFragment } from '../../../../../../../types'
+import { useViewingOwnProfileAtomValue } from '../../../../../state'
 import { ProfileTabLayout } from '../../../components'
 import { ContributionSummary } from '../components/ContributionSummary'
 import { TabPanelSkeleton } from '../components/TabPanelSkeleton'
@@ -17,6 +18,7 @@ interface ProfileContributionsProps {
 
 export const ProfileContributions = ({ contributions, isLoading }: ProfileContributionsProps) => {
   const { t } = useTranslation()
+  const isViewingOwnProfile = useViewingOwnProfileAtomValue()
 
   if (isLoading) {
     return <TabPanelSkeleton />
@@ -30,17 +32,19 @@ export const ProfileContributions = ({ contributions, isLoading }: ProfileContri
     <ProfileTabLayout
       heading={t('Contributions')}
       headerContent={
-        <Button
-          as={Link}
-          href={downloadUrl}
-          isExternal
-          size="sm"
-          textDecoration={'none'}
-          variant="secondary"
-          rightIcon={<BsArrowDownSquare fontSize={'16px'} />}
-        >
-          {t('Export')}
-        </Button>
+        isViewingOwnProfile ? (
+          <Button
+            as={Link}
+            href={downloadUrl}
+            isExternal
+            size="sm"
+            textDecoration={'none'}
+            variant="secondary"
+            rightIcon={<BsArrowDownSquare fontSize={'16px'} />}
+          >
+            {t('Export')}
+          </Button>
+        ) : undefined
       }
     >
       {contributions.map((c: UserProjectContributionsFragment) => (
