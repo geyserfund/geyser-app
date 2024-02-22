@@ -7,6 +7,7 @@ import { menuTheme } from './menuTheme'
 import { modalTheme } from './modalTheme'
 import { popOverTheme } from './popOverTheme'
 import { selectTheme } from './selectTheme'
+import { switchTheme } from './switchTheme'
 
 export const theme = {
   initialColorMode: 'system',
@@ -302,6 +303,7 @@ export const theme = {
     Drawer: drawerTheme,
     Popover: popOverTheme,
     Select: selectTheme,
+    Switch: switchTheme,
     Input: {
       defaultProps: {
         focusBorderColor: 'primary.500',

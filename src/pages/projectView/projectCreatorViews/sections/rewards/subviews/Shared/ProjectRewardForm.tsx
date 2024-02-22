@@ -1,5 +1,6 @@
 import { gql, useMutation, useQuery } from '@apollo/client'
-import { Button, Checkbox, HStack, IconButton, Select, Stack, Text, Tooltip, VStack } from '@chakra-ui/react'
+import { CloseIcon } from '@chakra-ui/icons'
+import { Button, Checkbox, HStack, IconButton, Select, Stack, Switch, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BiInfoCircle } from 'react-icons/bi'
@@ -7,13 +8,13 @@ import { RiArrowLeftSLine } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../../../../components/layouts'
-import { CreatorEmailButton, FileUpload, UpdateCurrencyModal } from '../../../../../../../components/molecules'
+import { CalendarButton, CreatorEmailButton, FileUpload, UpdateCurrencyModal } from '../../../../../../../components/molecules'
 import { ImageCrop } from '../../../../../../../components/molecules/ImageCropperModal'
 import { TextArea, TextInputBox, UploadBox } from '../../../../../../../components/ui'
 import { ProjectRewardValidations } from '../../../../../../../constants'
 import { useProjectContext } from '../../../../../../../context'
 import { FieldContainer } from '../../../../../../../forms/components/FieldContainer'
-import { MUTATION_UPDATE_PROJECT_CURRENCY } from '../../../../../../../graphql/mutations'
+import { MUTATION_UPDATE_PROJECT_CURRENCY, MUTATION_UPDATE_PROJECT_REWARD_DEVELOPMENT_STATUS } from '../../../../../../../graphql/mutations'
 import { useBTCConverter } from '../../../../../../../helpers/useBTCConverter'
 import { useModal } from '../../../../../../../hooks/useModal'
 import {
@@ -22,10 +23,12 @@ import {
   ProjectRewardForCreateUpdateFragment,
   RewardCurrency,
   Satoshis,
+  UpdateProjectRewardDevelopmentStatusInput,
   UpdateProjectRewardInput,
   USDCents,
 } from '../../../../../../../types'
 import { commaFormatted, isProjectAnException, toInt, useNotification } from '../../../../../../../utils'
+import { ContributionsSkeleton } from '../../../../../../landing/feed/ActivityFeed'
 
 type Props = {
   buttonText: string
@@ -67,12 +70,27 @@ export const ProjectRewardForm = ({
       : reward.cost.toFixed(0) || '',
   )
   const [formError, setFormError] = useState<any>({})
+  console.log(reward);
 
   const { loading: isRewardCategoriesLoading, data: rewardCategoriesData } = useQuery(gql`
     query Query {
       projectRewardCategoriesGet
     }
   `)
+
+  const [updateRewardDevelopmentStatus] = useMutation<any, { input: { projectRewardId: Number; preOrder: Boolean; estimatedDeliveryInWeeks: Number | null; estimatedAvailabilityDate: Date | null } }>(
+    MUTATION_UPDATE_PROJECT_REWARD_DEVELOPMENT_STATUS,
+    {
+      onCompleted(data) {},
+      onError(error) {
+        toast({
+          title: 'Failed to update reward development status',
+          description: `${error}`,
+          status: 'error',
+        })
+      },
+    },
+  )
 
   const getRewardCreationInputVariables = (): CreateProjectRewardInput => {
     return {
@@ -87,6 +105,8 @@ export const ProjectRewardForm = ({
       isHidden: reward.isHidden,
       category: reward.category || null,
       preOrder: reward.preOrder || true,
+      estimatedAvailabilityDate: reward.estimatedAvailabilityDate || null,
+      estimatedDeliveryInWeeks: reward.estimatedDeliveryInWeeks || null
     }
   }
 
@@ -101,7 +121,16 @@ export const ProjectRewardForm = ({
       hasShipping: reward.hasShipping,
       isAddon: reward.isAddon,
       isHidden: reward.isHidden,
-      category: reward.category || null,
+      category: reward.category || null
+    }
+  }
+
+  const getRewardUpdateProjectRewardDevelopmentStatusInputVariables = (): UpdateProjectRewardDevelopmentStatusInput => {
+    return {
+      projectRewardId: reward.id,
+      preOrder: !!reward.preOrder,
+      estimatedAvailabilityDate: reward.estimatedAvailabilityDate || null,
+      estimatedDeliveryInWeeks: reward.estimatedDeliveryInWeeks || null
     }
   }
 
@@ -110,6 +139,10 @@ export const ProjectRewardForm = ({
     if (name) {
       setReward((current) => ({ ...current, [name]: value }))
     }
+  }
+
+  const handleFormCalendarChange = (date: Date) => {
+    setReward((current) => ({ ...current, estimatedAvailabilityDate: date }))
   }
 
   const handleMaxClaimableAmountBlur = () => {
@@ -219,6 +252,20 @@ export const ProjectRewardForm = ({
 
     if (!isValid) {
       return
+    }
+
+    // If editing, save the delivery info first
+    if(createOrUpdate === 'update') {
+      updateRewardDevelopmentStatus({
+        variables: {
+          input: {
+            projectRewardId: reward.id,
+            preOrder: reward.preOrder,
+            estimatedAvailabilityDate: reward.estimatedAvailabilityDate || null,
+            estimatedDeliveryInWeeks: reward.estimatedDeliveryInWeeks || null
+          },
+        },
+      })
     }
 
     rewardSave({
@@ -429,6 +476,84 @@ export const ProjectRewardForm = ({
               <UploadBox h={10} title="Select an Image" />
             </FileUpload>
           </FieldContainer>
+        </Stack>
+        <Stack direction={{ base: 'column', lg: 'row' }} my={4} gap={1}>
+          <VStack>
+            <HStack w={'100%'}>
+              <Text variant="body1" wordBreak="keep-all" fontWeight={500}>
+                {t('Pre-Order')}
+              </Text>
+              <Switch isChecked={reward.preOrder} size={'md'} sx={{'--switch-track-width': '2.4rem'}} onChange={() => {
+                setReward((current) => ({ ...current, preOrder: !!!reward.preOrder }))
+              }}/>
+            </HStack>
+            <Text variant="body1" fontWeight={400} pr={{ base: 0, lg: 2 }} maxWidth={'450px'}>
+              {t(
+                "For rewards that are still in development and not ready to ship, set them to 'Pre-order' to enable advance purchases by users.",
+              )}
+            </Text>
+          </VStack>
+          {reward.preOrder ? (
+            <FieldContainer
+              title={t('Expected Availability Date')}
+              boldTitle={true}
+            >
+              <div style={{ position: 'relative', width: '100%' }}>
+                <CalendarButton
+                  onChange={handleFormCalendarChange}
+                  value={reward.estimatedAvailabilityDate}
+                  containerProps={{ w: '100%' }}
+                  showMonthYearPicker={true}
+                >
+                  <TextInputBox
+                    style={{ border: 0, background: 'none', width: '100%' }}
+                    value={reward.estimatedAvailabilityDate}
+                  />
+                </CalendarButton>
+                {reward.estimatedAvailabilityDate && (
+                  <div
+                    style={{ position: 'absolute', top: '5px', right: '10px' }}
+                  >
+                    <CloseIcon
+                      onClick={() => {
+                        setReward((current) => ({
+                          ...current,
+                          estimatedAvailabilityDate: undefined,
+                        }))
+                      }}
+                    ></CloseIcon>
+                  </div>
+                )}
+              </div>
+              <Text variant="body1" fontWeight={400}>
+                {t(
+                  "Use “Expected Availability Date' to set when your reward will be developed and available.",
+                )}
+              </Text>
+            </FieldContainer>
+          ) : (
+            <FieldContainer
+              title={t('Delivery Time (Weeks)')}
+              boldTitle={true}
+            >
+              <TextInputBox
+                placeholder={'Enter number of weeks'}
+                name="estimatedDeliveryInWeeks"
+                value={reward.estimatedDeliveryInWeeks && reward.estimatedDeliveryInWeeks > 0 ? reward.estimatedDeliveryInWeeks : undefined }
+                isInvalid={formError.estimatedDeliveryInWeeks}
+                onChange={(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+                  const { value } = event.target;
+                  setReward((current) => ({ ...current, estimatedAvailabilityDate: null, estimatedDeliveryInWeeks: toInt(value) }))
+                }}
+                error={formError.estimatedDeliveryInWeeks}
+              />
+              <Text variant="body1" fontWeight={400}>
+                {t(
+                  "Specify estimated delivery time for the reward from the moment it is ordered.",
+                )}
+              </Text>
+            </FieldContainer>
+          )}
         </Stack>
         <VStack spacing={4} w="100%" align={'flex-start'}>
           <FieldContainer>
