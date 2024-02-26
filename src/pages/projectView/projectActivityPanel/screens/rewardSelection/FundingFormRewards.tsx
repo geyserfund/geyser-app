@@ -46,10 +46,6 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
   }
 
   const handleAdd = (reward: ProjectRewardForCreateUpdateFragment, count: number) => {
-    if (!reward.maxClaimable) {
-      updateReward({ id: reward.id, count: count + 1 })
-    }
-
     const isRewardAvailable = reward.maxClaimable ? reward.maxClaimable - reward.sold > count : true
     if (isRewardAvailable || !reward.maxClaimable) {
       updateReward({ id: reward.id, count: count + 1 })
