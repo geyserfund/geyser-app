@@ -42,8 +42,8 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
             reward={reward}
             count={count}
             onRewardClick={() => {
-              const canUpdateReward = reward.maxClaimable ? reward.maxClaimable - reward.sold > count : true
-              if (canUpdateReward) {
+              const isRewardAvailable = reward.maxClaimable ? reward.maxClaimable - reward.sold > count : true
+              if (isRewardAvailable) {
                 updateReward({ id: toInt(reward.id), count: count + 1 })
               } else {
                 toast({
