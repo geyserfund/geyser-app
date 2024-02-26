@@ -285,16 +285,14 @@ export const EntryCreateEdit = () => {
               />
             </VStack>
 
-            {entry && (
-              <Box flex={1} width="100%">
-                <ProjectEntryEditor
-                  name="content"
-                  handleChange={handleContentUpdate}
-                  value={entry.content as string}
-                  focusFlag={focusFlag}
-                />
-              </Box>
-            )}
+            <Box flex={1} width="100%">
+              <ProjectEntryEditor
+                name="content"
+                handleChange={handleContentUpdate}
+                value={entry.content as string}
+                focusFlag={focusFlag}
+              />
+            </Box>
           </VStack>
         </Box>
       </VStack>
