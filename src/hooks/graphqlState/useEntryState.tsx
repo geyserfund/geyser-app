@@ -45,6 +45,8 @@ export const useEntryState = (
   const [entry, setEntry] = useState<Entry>({} as Entry)
   const [baseEntry, setBaseEntry] = useState<Entry>({} as Entry)
 
+  const [loading, setLoading] = useState(true)
+
   const [hasDiff, setHasDiff] = useState(false)
 
   const [saving, setSaving] = useListenerState(false)
@@ -85,7 +87,7 @@ export const useEntryState = (
     },
   })
 
-  const [getEntryQuery, { loading }] = useLazyQuery<TEntryData, TEntryVariables>(QUERY_ENTRY_WITH_OWNERS, {
+  const [getEntryQuery] = useLazyQuery<TEntryData, TEntryVariables>(QUERY_ENTRY_WITH_OWNERS, {
     variables: {
       id: toInt(entryId),
     },
@@ -98,14 +100,26 @@ export const useEntryState = (
       if (options?.onCompleted) {
         options?.onCompleted(data)
       }
+
+      setLoading(false)
+    },
+    onError(error) {
+      if (options?.onError) {
+        options?.onError(error)
+      }
+
+      setLoading(false)
     },
   })
 
   useEffect(() => {
     if (entryId && entryId !== 'new') {
+      setLoading(true)
       getEntryQuery()
+    } else {
+      setLoading(false)
     }
-  }, [entryId])
+  }, [entryId, getEntryQuery])
 
   useEffect(() => {
     const isDiff = checkDiff(entry, baseEntry, entryEditKeyList)
