@@ -1,6 +1,6 @@
 import { Box, Button, Stack, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ProjectRewardAvailability } from '../../../../components/molecules/projectDisplay/ProjectRewardAvailability'
 import { PathName } from '../../../../constants'
@@ -15,6 +15,7 @@ type Props = {
 
 export const ProjectRewardPanel = ({ reward }: Props) => {
   const { t } = useTranslation()
+  const location = useLocation()
   const {
     project,
     setMobileView,
@@ -22,6 +23,8 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
   } = useProjectContext()
   const navigate = useNavigate()
   const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : null
+
+  const isInProjectPage = location.pathname.includes(PathName.project)
 
   if (!project || !isActive) {
     return <></>
@@ -84,7 +87,10 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
             px={2}
             onClick={async () => {
               updateReward({ id: toInt(reward.id), count: 1 })
-              await navigate(PathName.projectRewards)
+              if (isInProjectPage) {
+                await navigate(PathName.projectRewards)
+              }
+
               setMobileView(MobileViews.funding)
               setFundingFormState('step', 'contribution')
             }}
