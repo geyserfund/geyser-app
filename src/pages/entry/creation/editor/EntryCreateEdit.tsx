@@ -1,4 +1,4 @@
-import { Box, HStack, Input, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, Input, Text, Textarea, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsImage } from 'react-icons/bs'
@@ -268,7 +268,7 @@ export const EntryCreateEdit = () => {
                 onKeyDown={handleKeyDown}
               />
 
-              <Input
+              <Textarea
                 id={'entry-description-input'}
                 border="none"
                 _focus={{ border: 'none' }}
@@ -285,14 +285,16 @@ export const EntryCreateEdit = () => {
               />
             </VStack>
 
-            <Box flex={1} width="100%">
-              <ProjectEntryEditor
-                name="content"
-                handleChange={handleContentUpdate}
-                value={entry.content as string}
-                focusFlag={focusFlag}
-              />
-            </Box>
+            {entry && (
+              <Box flex={1} width="100%">
+                <ProjectEntryEditor
+                  name="content"
+                  handleChange={handleContentUpdate}
+                  value={entry.content as string}
+                  focusFlag={focusFlag}
+                />
+              </Box>
+            )}
           </VStack>
         </Box>
       </VStack>
