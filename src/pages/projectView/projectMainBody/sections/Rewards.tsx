@@ -25,11 +25,11 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
     fundForm: { state: fundFormState, setState: setFundingFormState, updateReward },
   } = useProjectContext()
 
-  if (!project || !isActive || project.rewards.length == 0) {
+  if (!project || !isActive || project.rewards.length === 0) {
     return null
   }
 
-  const activeProjectRewards = project.rewards.filter((reward) => reward.isHidden == false)
+  const activeProjectRewards = project.rewards.filter((reward) => reward.isHidden === false)
 
   const renderRewards = () => {
     if (activeProjectRewards.length > 0) {
@@ -42,13 +42,13 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
             reward={reward}
             count={count}
             onRewardClick={() => {
-              const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : null
-              if (rewardStockRemaining !== null && rewardStockRemaining > count) {
+              const canUpdateReward = reward.maxClaimable ? reward.maxClaimable - reward.sold > count : true
+              if (canUpdateReward) {
                 updateReward({ id: toInt(reward.id), count: count + 1 })
-              } else if (rewardStockRemaining !== null) {
+              } else {
                 toast({
                   title: 'Reward Limit',
-                  description: `Maximum number of ${rewardStockRemaining} rewards are available`,
+                  description: `Maximum number of ${reward.maxClaimable - reward.sold} rewards are available`,
                   status: 'error',
                 })
               }
