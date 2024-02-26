@@ -46,13 +46,17 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
   }
 
   const handleAdd = (reward: ProjectRewardForCreateUpdateFragment, count: number) => {
-    const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : null
-    if (rewardStockRemaining !== null && rewardStockRemaining > count) {
+    if (!reward.maxClaimable) {
       updateReward({ id: reward.id, count: count + 1 })
-    } else if (rewardStockRemaining !== null) {
+    }
+
+    const isRewardAvailable = reward.maxClaimable ? reward.maxClaimable - reward.sold > count : true
+    if (isRewardAvailable || !reward.maxClaimable) {
+      updateReward({ id: reward.id, count: count + 1 })
+    } else {
       toast({
         title: 'Reward Limit',
-        description: `Maximum number of ${rewardStockRemaining} rewards are available`,
+        description: `Maximum number of ${reward.maxClaimable - reward.sold} rewards are available`,
         status: 'error',
       })
     }

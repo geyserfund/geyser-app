@@ -22,7 +22,8 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
     fundForm: { updateReward, setState: setFundingFormState },
   } = useProjectContext()
   const navigate = useNavigate()
-  const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : null
+
+  const isRewardAvailable = reward.maxClaimable ? reward.maxClaimable - reward.sold > 0 : true
 
   const isInProjectPage = location.pathname.includes(PathName.project)
 
@@ -71,7 +72,7 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
             {reward.name}
           </Text>
           <Text fontSize={14} color="neutral.600">
-            <ProjectRewardAvailability numberOfRewardsAvailable={rewardStockRemaining} />
+            <ProjectRewardAvailability reward={reward} />
             {`${reward.sold} ${t('sold')}`}
           </Text>
         </Stack>
@@ -94,7 +95,7 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
               setMobileView(MobileViews.funding)
               setFundingFormState('step', 'contribution')
             }}
-            isDisabled={rewardStockRemaining !== null && rewardStockRemaining <= 0}
+            isDisabled={!isRewardAvailable}
           >
             <Text isTruncated>{t('Select')}</Text>
           </Button>
