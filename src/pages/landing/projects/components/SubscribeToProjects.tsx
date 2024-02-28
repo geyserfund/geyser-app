@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { CardLayout } from '../../../../components/layouts'
 import { Body1, H3 } from '../../../../components/typography'
 import { BetaBox } from '../../../../components/ui'
-import { projectsWithSubscription, subscriptionFeedbackUrl } from '../../../../constants'
+import { FlashGeyserUrl, projectsWithSubscription, subscriptionFeedbackUrl } from '../../../../constants'
 import { standardPadding } from '../../../../styles'
 import { LandingSubscriptionCard } from '../../components'
 import { ProjectRowLayout } from '../elements'
@@ -22,7 +22,7 @@ export const SubscribeToProjects = () => {
       width="100%"
       seeAllProps={{
         as: Link,
-        href: 'https://app.paywithflash.com/geyser',
+        href: FlashGeyserUrl,
         isExternal: true,
         textDecoration: 'none',
       }}

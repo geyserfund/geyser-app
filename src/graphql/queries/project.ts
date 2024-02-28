@@ -4,8 +4,8 @@ import { FRAGMENT_ENTRY_FOR_PROJECT } from '../fragments/entries'
 import {
   FRAGMENT_PROJECT,
   FRAGMENT_PROJECT_FOR_LANDING_PAGE,
+  FRAGMENT_PROJECT_FOR_SUBSCRIPTION,
   FRAGMENT_PROJECT_NOSTR_KEYS,
-  FRAGMENT_PROJECT_SUBSCRIPTION,
 } from '../fragments/project'
 import { FRAGMENT_FUNDER_WITH_USER } from '../fragments/user'
 
@@ -19,10 +19,10 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
 `
 
 export const QUERY_PROJECT_FOR_SUBSCRIPTION = gql`
-  ${FRAGMENT_PROJECT_SUBSCRIPTION}
+  ${FRAGMENT_PROJECT_FOR_SUBSCRIPTION}
   query ProjectForSubscription($where: UniqueProjectQueryInput!) {
     projectGet(where: $where) {
-      ...ProjectSubscription
+      ...ProjectForSubscription
     }
   }
 `

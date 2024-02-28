@@ -7,7 +7,7 @@ import { CardLayout } from '../../../../components/layouts'
 import { Body1 } from '../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../components/ui'
 import { VideoPlayer } from '../../../../components/ui/VideoPlayer'
-import { ID, projectFlashIds, projectsWithSubscription } from '../../../../constants'
+import { FlashMembershipCountUrl, ID, projectFlashIds, projectsWithSubscription } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { validateImageUrl } from '../../../../forms/validations/image'
 import { ProjectStatus, WalletStatus } from '../../../../types'
@@ -41,9 +41,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   }
 
   const getSubscriptionValue = async (flashId: number) => {
-    const value = await fetch(
-      `http://app.nostreggs.io/geyser/api/external/get_geyser_user_memberships_count?geyser_flash_id=${flashId}`,
-    ).then((res) => res.json())
+    const value = await fetch(`${FlashMembershipCountUrl}?geyser_flash_id=${flashId}`).then((res) => res.json())
     setSubscribers(toInt(`${value.membership_count}`))
   }
 

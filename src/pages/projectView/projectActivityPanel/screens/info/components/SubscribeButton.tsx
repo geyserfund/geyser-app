@@ -20,7 +20,12 @@ import { SubscribeIcon } from '../../../../../../components/icons'
 import { CardLayout } from '../../../../../../components/layouts'
 import { Body2 } from '../../../../../../components/typography'
 import { BetaBox } from '../../../../../../components/ui'
-import { projectFlashIds, projectsWithSubscription, subscriptionFeedbackUrl } from '../../../../../../constants'
+import {
+  FlashsubscribeUrl,
+  projectFlashIds,
+  projectsWithSubscription,
+  subscriptionFeedbackUrl,
+} from '../../../../../../constants'
 import { useModal } from '../../../../../../hooks'
 import { useCustomTheme } from '../../../../../../utils'
 
@@ -72,7 +77,7 @@ export const SubscribeButton = ({ projectName, ...props }: SubscribeButtonProps)
             <ModalBody height={renderIframe ? '800px' : 'auto'} p={renderIframe ? '0' : '20px'}>
               {renderIframe ? (
                 <iframe
-                  src={`https://app.paywithflash.com/external-login/geyser?flashId=${flashId}`}
+                  src={`${FlashsubscribeUrl}?flashId=${flashId}`}
                   width="100%"
                   height="100%"
                   title="Geyser Subscribe"

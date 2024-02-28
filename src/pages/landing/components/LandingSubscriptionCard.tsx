@@ -21,7 +21,7 @@ export const LandingSubscriptionCard = ({ projectName }: { projectName: string }
   return (
     <LandingCardBase
       to={getPath('project', project?.name)}
-      isSubscribe
+      hasSubscribe
       title={project?.name}
       imageSrc={project?.thumbnailImage || ''}
       project={project}

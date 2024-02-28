@@ -20,7 +20,7 @@ export interface LandingCardBaseProps extends FundingStatWithFollowProps, CardLa
   imageSrc: string
   title: string
   user: EntryForLandingPageFragment['creator'] | ProjectForLandingPageFragment['owners'][number]['user']
-  isSubscribe?: boolean
+  hasSubscribe?: boolean
 }
 
 export const LandingCardBase = ({
@@ -32,7 +32,7 @@ export const LandingCardBase = ({
   amountFunded,
   project,
   user,
-  isSubscribe,
+  hasSubscribe,
   ...rest
 }: LandingCardBaseProps) => {
   const getResponsiveValue = (value: any) => {
@@ -88,7 +88,7 @@ export const LandingCardBase = ({
         <Box width="100%">
           <AvatarElement borderRadius="50%" user={user} noLink />
         </Box>
-        {isSubscribe ? (
+        {hasSubscribe ? (
           <SubscribeButton mt="10px" w="full" projectName={project.name} />
         ) : (
           <FundingStatWithFollow

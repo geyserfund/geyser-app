@@ -213,9 +213,9 @@ export const FRAGMENT_PROJECT = gql`
   }
 `
 
-export const FRAGMENT_PROJECT_SUBSCRIPTION = gql`
+export const FRAGMENT_PROJECT_FOR_SUBSCRIPTION = gql`
   ${FRAGMENT_USER_ME}
-  fragment ProjectSubscription on Project {
+  fragment ProjectForSubscription on Project {
     id
     title
     name

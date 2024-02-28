@@ -249,3 +249,8 @@ export const AuwalProfileUrl = 'https://storage.googleapis.com/geyser-projects-m
 export const MickProfileUrl = 'https://storage.googleapis.com/geyser-projects-media/team/mick.png'
 export const SajalProfileUrl = 'https://storage.googleapis.com/geyser-projects-media/team/sajal.png'
 export const SteliosProfileUrl = 'https://storage.googleapis.com/geyser-projects-media/team/stelios.png'
+
+// FLASH URlS
+export const FlashGeyserUrl = 'https://app.paywithflash.com/geyser'
+export const FlashsubscribeUrl = 'https://app.paywithflash.com/external-login/geyser'
+export const FlashMembershipCountUrl = 'http://app.nostreggs.io/geyser/api/external/get_geyser_user_memberships_count'

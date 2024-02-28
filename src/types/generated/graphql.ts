@@ -4834,7 +4834,7 @@ export type ProjectFragment = {
   }
 }
 
-export type ProjectSubscriptionFragment = {
+export type ProjectForSubscriptionFragment = {
   __typename?: 'Project'
   id: any
   title: any
@@ -5865,7 +5865,7 @@ export type ProjectForSubscriptionQueryVariables = Exact<{
 
 export type ProjectForSubscriptionQuery = {
   __typename?: 'Query'
-  projectGet?: ({ __typename?: 'Project' } & ProjectSubscriptionFragment) | null
+  projectGet?: ({ __typename?: 'Project' } & ProjectForSubscriptionFragment) | null
 }
 
 export type ProjectsQueryVariables = Exact<{
@@ -6705,8 +6705,8 @@ export const ProjectFragmentDoc = gql`
   ${UserForAvatarFragmentDoc}
   ${EntryForProjectFragmentDoc}
 `
-export const ProjectSubscriptionFragmentDoc = gql`
-  fragment ProjectSubscription on Project {
+export const ProjectForSubscriptionFragmentDoc = gql`
+  fragment ProjectForSubscription on Project {
     id
     title
     name
@@ -9683,10 +9683,10 @@ export type ProjectByNameOrIdQueryResult = Apollo.QueryResult<ProjectByNameOrIdQ
 export const ProjectForSubscriptionDocument = gql`
   query ProjectForSubscription($where: UniqueProjectQueryInput!) {
     projectGet(where: $where) {
-      ...ProjectSubscription
+      ...ProjectForSubscription
     }
   }
-  ${ProjectSubscriptionFragmentDoc}
+  ${ProjectForSubscriptionFragmentDoc}
 `
 
 /**
