@@ -13,8 +13,8 @@ import { Project } from '../../../types'
 import { getShortAmountLabel } from '../../../utils'
 
 export interface FundingStatWithFollowProps extends StackProps {
-  fundersCount: number
-  amountFunded: number
+  fundersCount?: number
+  amountFunded?: number
   project: Pick<Project, 'id' | 'name' | 'title'>
   bold?: boolean
 }

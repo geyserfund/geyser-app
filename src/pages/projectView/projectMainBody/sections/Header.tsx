@@ -1,5 +1,5 @@
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
-import { forwardRef } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsArrowRight } from 'react-icons/bs'
 
@@ -7,12 +7,13 @@ import { CardLayout } from '../../../../components/layouts'
 import { Body1 } from '../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../components/ui'
 import { VideoPlayer } from '../../../../components/ui/VideoPlayer'
-import { ID } from '../../../../constants'
+import { FlashMembershipCountUrl, ID, projectFlashIds, projectsWithSubscription } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { validateImageUrl } from '../../../../forms/validations/image'
 import { ProjectStatus, WalletStatus } from '../../../../types'
-import { useMobileMode } from '../../../../utils'
+import { toInt, useMobileMode } from '../../../../utils'
 import { useFollowedProjectsValue } from '../../../auth/state'
+import { SubscribeButton } from '../../projectActivityPanel/screens/info/components'
 import { ContributeButton, FollowButton, LightningAddress, ProjectFundingQR, ShareButton } from '../components'
 import { NpubDisplay } from '../components/NpubDisplay'
 import { CreatorSocial } from './CreatorSocial'
@@ -23,8 +24,25 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const followedProjects = useFollowedProjectsValue()
   const isMobile = useMobileMode()
 
+  const [subscribers, setSubscribers] = useState(0)
+  const isProjectSubscriptionEnabled = projectsWithSubscription.includes(project?.name)
+
+  useEffect(() => {
+    if (isProjectSubscriptionEnabled) {
+      const flashId = projectFlashIds[project?.name]
+      if (flashId) {
+        getSubscriptionValue(flashId)
+      }
+    }
+  }, [isProjectSubscriptionEnabled, project])
+
   if (!project) {
     return null
+  }
+
+  const getSubscriptionValue = async (flashId: number) => {
+    const value = await fetch(`${FlashMembershipCountUrl}?geyser_flash_id=${flashId}`).then((res) => res.json())
+    setSubscribers(toInt(`${value.membership_count}`))
   }
 
   const statusContent = () => {
@@ -103,13 +121,20 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             <LightningAddress name={`${project.name}`} isGeyser />
             <ProjectFundingQR project={project} />
           </HStack>
-          <HStack w="full" color="neutral.600">
+          <HStack w="full" color="neutral.600" flexWrap={'wrap'}>
             <Body1 semiBold>{`${project.fundersCount} ${t('contributors')}`}</Body1>
             <Text paddingBottom="22px" lineHeight={0} fontSize="40px">
               .
             </Text>
             <Body1 semiBold>{`${project.followers?.length || 0} ${t('followers')}`}</Body1>
-
+            {subscribers && (
+              <>
+                <Text paddingBottom="22px" lineHeight={0} fontSize="40px">
+                  .
+                </Text>
+                <Body1 semiBold>{`${subscribers || 0} ${t('subscribers')}`}</Body1>
+              </>
+            )}
             <Text paddingBottom="22px" lineHeight={0} fontSize="40px">
               .
             </Text>
@@ -125,7 +150,10 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           <CreatorSocial />
           {isMobile && (
             <VStack w="full" paddingTop="5px">
-              <ContributeButton w="full" />
+              <HStack w="full">
+                <ContributeButton flex={1} />
+                <SubscribeButton flex={1} projectName={project.name} />
+              </HStack>
 
               {followedProjects.some((followedProject) => followedProject?.id === project?.id) ? (
                 <ShareButton w="full" />

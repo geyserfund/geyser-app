@@ -6,6 +6,7 @@ import { useMobileMode } from '../../../../utils'
 import { MobileDivider } from '../../../grants/components'
 // import { useGrants } from '../../../grants/hooks/useGrants'
 import { ProjectsDisplayMostFundedThisWeek } from '../components'
+import { SubscribeToProjects } from '../components/SubscribeToProjects'
 // import { FeaturedProjectCard } from '../elements'
 import {
   //  FeaturedGrantCard,
@@ -24,6 +25,8 @@ export const DefaultView = () => {
 
   return (
     <CardLayout noborder={isMobile} w="full" spacing={{ base: '15px', lg: '50px' }} padding={{ base: 0, lg: '20px' }}>
+      <SubscribeToProjects />
+      <MobileDivider mt={2} />
       <FeaturedProjectCard projectName={getFeaturedProject()} />
       <MobileDivider mt={2} />
       {/* <FeaturedGrantCard grant={activeGrant} loading={loading} /> */}
