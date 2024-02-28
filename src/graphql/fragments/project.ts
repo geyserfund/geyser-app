@@ -213,6 +213,22 @@ export const FRAGMENT_PROJECT = gql`
   }
 `
 
+export const FRAGMENT_PROJECT_SUBSCRIPTION = gql`
+  ${FRAGMENT_USER_ME}
+  fragment ProjectSubscription on Project {
+    id
+    title
+    name
+    thumbnailImage
+    owners {
+      id
+      user {
+        ...UserMe
+      }
+    }
+  }
+`
+
 export const FRAGMENT_PROJECT_AVATAR = gql`
   fragment ProjectAvatar on Project {
     id

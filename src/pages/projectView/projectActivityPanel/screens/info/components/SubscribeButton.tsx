@@ -19,7 +19,8 @@ import { PiWarningCircleFill } from 'react-icons/pi'
 import { SubscribeIcon } from '../../../../../../components/icons'
 import { CardLayout } from '../../../../../../components/layouts'
 import { Body2 } from '../../../../../../components/typography'
-import { projectFlashIds, projectsWithSubscription } from '../../../../../../constants'
+import { BetaBox } from '../../../../../../components/ui'
+import { projectFlashIds, projectsWithSubscription, subscriptionFeedbackUrl } from '../../../../../../constants'
 import { useModal } from '../../../../../../hooks'
 import { useCustomTheme } from '../../../../../../utils'
 
@@ -64,18 +65,7 @@ export const SubscribeButton = ({ projectName, ...props }: SubscribeButtonProps)
           <Box borderRadius="8px" bg="neutral.0">
             {!renderIframe && (
               <ModalHeader pb={2}>
-                {`${t('Subscribe to')} ${projectName}`}{' '}
-                <Box
-                  as="span"
-                  fontSize="10px"
-                  fontWeight={700}
-                  backgroundColor="primary.400"
-                  borderRadius="4px"
-                  padding="3px 5px"
-                  ml="10px"
-                >
-                  Beta
-                </Box>
+                {`${t('Subscribe to')} ${projectName}`} <BetaBox />
               </ModalHeader>
             )}
             <ModalCloseButton />
@@ -105,12 +95,7 @@ export const SubscribeButton = ({ projectName, ...props }: SubscribeButtonProps)
                       <Body2>
                         <Trans i18nKey="For more information and to drop your feedback please follow this  <1>link</1>.">
                           For more information and to drop your feedback please follow this{' '}
-                          <Link
-                            isExternal
-                            href="https://airtable.com/appyM7XlNIWVypuP5/shrh83bnc3jdpmEcv"
-                            fontWeight={700}
-                            textDecoration={'none'}
-                          >
+                          <Link isExternal href={subscriptionFeedbackUrl} fontWeight={700} textDecoration={'none'}>
                             link
                           </Link>
                           .

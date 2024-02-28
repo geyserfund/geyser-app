@@ -225,6 +225,8 @@ export const LightningUrl = 'https://storage.googleapis.com/geyser-projects-medi
 // AIRTABLE LINKS
 export const LanguageRequestUrl = 'https://airtable.com/shrEs5AsmkC07tWcX'
 
+export const subscriptionFeedbackUrl = 'https://airtable.com/appyM7XlNIWVypuP5/shrh83bnc3jdpmEcv'
+
 // ABOUT PAGE
 
 export const GeyserAboutProjectsBannerImage =

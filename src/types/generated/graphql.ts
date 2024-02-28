@@ -941,7 +941,6 @@ export type Mutation = {
   projectRewardCurrencyUpdate: Array<ProjectReward>
   /** Soft deletes the reward. */
   projectRewardDelete: Scalars['Boolean']
-  projectRewardDevelopmentStatusUpdate: ProjectReward
   projectRewardUpdate: ProjectReward
   projectStatusUpdate: Project
   projectTagAdd: Array<Tag>
@@ -1060,10 +1059,6 @@ export type MutationProjectRewardCurrencyUpdateArgs = {
 
 export type MutationProjectRewardDeleteArgs = {
   input: DeleteProjectRewardInput
-}
-
-export type MutationProjectRewardDevelopmentStatusUpdateArgs = {
-  input: UpdateProjectRewardDevelopmentStatusInput
 }
 
 export type MutationProjectRewardUpdateArgs = {
@@ -1934,24 +1929,20 @@ export type UpdateProjectMilestoneInput = {
   projectMilestoneId: Scalars['BigInt']
 }
 
-export type UpdateProjectRewardDevelopmentStatusInput = {
-  estimatedAvailabilityDate?: InputMaybe<Scalars['Date']>
-  estimatedDeliveryInWeeks?: InputMaybe<Scalars['Int']>
-  preOrder?: InputMaybe<Scalars['Boolean']>
-  projectRewardId: Scalars['BigInt']
-}
-
 export type UpdateProjectRewardInput = {
   category?: InputMaybe<Scalars['String']>
   /** Cost of the reward, priced in USD cents */
   cost?: InputMaybe<Scalars['Int']>
   description?: InputMaybe<Scalars['description_String_maxLength_250']>
+  estimatedAvailabilityDate?: InputMaybe<Scalars['Date']>
+  estimatedDeliveryInWeeks?: InputMaybe<Scalars['Int']>
   hasShipping?: InputMaybe<Scalars['Boolean']>
   image?: InputMaybe<Scalars['String']>
   isAddon?: InputMaybe<Scalars['Boolean']>
   isHidden?: InputMaybe<Scalars['Boolean']>
   maxClaimable?: InputMaybe<Scalars['maxClaimable_Int_min_0']>
   name?: InputMaybe<Scalars['name_String_maxLength_100']>
+  preOrder?: InputMaybe<Scalars['Boolean']>
   projectRewardId: Scalars['BigInt']
   stock?: InputMaybe<Scalars['stock_Int_min_0']>
 }
@@ -2442,7 +2433,6 @@ export type ResolversTypes = {
   UpdateEntryInput: UpdateEntryInput
   UpdateProjectInput: UpdateProjectInput
   UpdateProjectMilestoneInput: UpdateProjectMilestoneInput
-  UpdateProjectRewardDevelopmentStatusInput: UpdateProjectRewardDevelopmentStatusInput
   UpdateProjectRewardInput: UpdateProjectRewardInput
   UpdateUserInput: UpdateUserInput
   UpdateWalletInput: UpdateWalletInput
@@ -2684,7 +2674,6 @@ export type ResolversParentTypes = {
   UpdateEntryInput: UpdateEntryInput
   UpdateProjectInput: UpdateProjectInput
   UpdateProjectMilestoneInput: UpdateProjectMilestoneInput
-  UpdateProjectRewardDevelopmentStatusInput: UpdateProjectRewardDevelopmentStatusInput
   UpdateProjectRewardInput: UpdateProjectRewardInput
   UpdateUserInput: UpdateUserInput
   UpdateWalletInput: UpdateWalletInput
@@ -3379,12 +3368,6 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationProjectRewardDeleteArgs, 'input'>
-  >
-  projectRewardDevelopmentStatusUpdate?: Resolver<
-    ResolversTypes['ProjectReward'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationProjectRewardDevelopmentStatusUpdateArgs, 'input'>
   >
   projectRewardUpdate?: Resolver<
     ResolversTypes['ProjectReward'],
@@ -4851,6 +4834,15 @@ export type ProjectFragment = {
   }
 }
 
+export type ProjectSubscriptionFragment = {
+  __typename?: 'Project'
+  id: any
+  title: any
+  name: any
+  thumbnailImage?: string | null
+  owners: Array<{ __typename?: 'Owner'; id: any; user: { __typename?: 'User' } & UserMeFragment }>
+}
+
 export type ProjectAvatarFragment = {
   __typename?: 'Project'
   id: any
@@ -5867,6 +5859,15 @@ export type ProjectByNameOrIdQuery = {
   projectGet?: ({ __typename?: 'Project' } & ProjectFragment) | null
 }
 
+export type ProjectForSubscriptionQueryVariables = Exact<{
+  where: UniqueProjectQueryInput
+}>
+
+export type ProjectForSubscriptionQuery = {
+  __typename?: 'Query'
+  projectGet?: ({ __typename?: 'Project' } & ProjectSubscriptionFragment) | null
+}
+
 export type ProjectsQueryVariables = Exact<{
   input?: InputMaybe<ProjectsGetQueryInput>
 }>
@@ -6703,6 +6704,21 @@ export const ProjectFragmentDoc = gql`
   ${ProjectRewardForCreateUpdateFragmentDoc}
   ${UserForAvatarFragmentDoc}
   ${EntryForProjectFragmentDoc}
+`
+export const ProjectSubscriptionFragmentDoc = gql`
+  fragment ProjectSubscription on Project {
+    id
+    title
+    name
+    thumbnailImage
+    owners {
+      id
+      user {
+        ...UserMe
+      }
+    }
+  }
+  ${UserMeFragmentDoc}
 `
 export const ProjectStatsForOverviewPageFragmentDoc = gql`
   fragment ProjectStatsForOverviewPage on ProjectStats {
@@ -9664,6 +9680,55 @@ export function useProjectByNameOrIdLazyQuery(
 export type ProjectByNameOrIdQueryHookResult = ReturnType<typeof useProjectByNameOrIdQuery>
 export type ProjectByNameOrIdLazyQueryHookResult = ReturnType<typeof useProjectByNameOrIdLazyQuery>
 export type ProjectByNameOrIdQueryResult = Apollo.QueryResult<ProjectByNameOrIdQuery, ProjectByNameOrIdQueryVariables>
+export const ProjectForSubscriptionDocument = gql`
+  query ProjectForSubscription($where: UniqueProjectQueryInput!) {
+    projectGet(where: $where) {
+      ...ProjectSubscription
+    }
+  }
+  ${ProjectSubscriptionFragmentDoc}
+`
+
+/**
+ * __useProjectForSubscriptionQuery__
+ *
+ * To run a query within a React component, call `useProjectForSubscriptionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectForSubscriptionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectForSubscriptionQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectForSubscriptionQuery(
+  baseOptions: Apollo.QueryHookOptions<ProjectForSubscriptionQuery, ProjectForSubscriptionQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ProjectForSubscriptionQuery, ProjectForSubscriptionQueryVariables>(
+    ProjectForSubscriptionDocument,
+    options,
+  )
+}
+export function useProjectForSubscriptionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ProjectForSubscriptionQuery, ProjectForSubscriptionQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<ProjectForSubscriptionQuery, ProjectForSubscriptionQueryVariables>(
+    ProjectForSubscriptionDocument,
+    options,
+  )
+}
+export type ProjectForSubscriptionQueryHookResult = ReturnType<typeof useProjectForSubscriptionQuery>
+export type ProjectForSubscriptionLazyQueryHookResult = ReturnType<typeof useProjectForSubscriptionLazyQuery>
+export type ProjectForSubscriptionQueryResult = Apollo.QueryResult<
+  ProjectForSubscriptionQuery,
+  ProjectForSubscriptionQueryVariables
+>
 export const ProjectsDocument = gql`
   query Projects($input: ProjectsGetQueryInput) {
     projectsGet(input: $input) {
