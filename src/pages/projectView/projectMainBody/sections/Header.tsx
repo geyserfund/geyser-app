@@ -13,6 +13,7 @@ import { validateImageUrl } from '../../../../forms/validations/image'
 import { ProjectStatus, WalletStatus } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { useFollowedProjectsValue } from '../../../auth/state'
+import { SubscribeButton } from '../../projectActivityPanel/screens/info/components'
 import { ContributeButton, FollowButton, LightningAddress, ProjectFundingQR, ShareButton } from '../components'
 import { NpubDisplay } from '../components/NpubDisplay'
 import { CreatorSocial } from './CreatorSocial'
@@ -125,7 +126,10 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           <CreatorSocial />
           {isMobile && (
             <VStack w="full" paddingTop="5px">
-              <ContributeButton w="full" />
+              <HStack w="full">
+                <ContributeButton flex={1} />
+                <SubscribeButton flex={1} projectName={project.name} />
+              </HStack>
 
               {followedProjects.some((followedProject) => followedProject?.id === project?.id) ? (
                 <ShareButton w="full" />
