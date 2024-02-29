@@ -219,7 +219,7 @@ export const ActivityBrief = (props: StackProps) => {
       {!isMobile ? (
         <VStack w="full" spacing="10px" pb={3}>
           <HStack w="full">
-            <SubscribeButton flex="1" projectName={project.name} />
+            <SubscribeButton flex="1" projectName={project.name} projectTitle={project.title} />
             <ContributeButton flex="1" />
           </HStack>
 

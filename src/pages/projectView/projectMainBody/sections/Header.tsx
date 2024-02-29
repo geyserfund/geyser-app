@@ -152,7 +152,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             <VStack w="full" paddingTop="5px">
               <HStack w="full">
                 <ContributeButton flex={1} />
-                <SubscribeButton flex={1} projectName={project.name} />
+                <SubscribeButton flex={1} projectName={project.name} projectTitle={project.title} />
               </HStack>
 
               {followedProjects.some((followedProject) => followedProject?.id === project?.id) ? (

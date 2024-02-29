@@ -31,9 +31,11 @@ import { useCustomTheme } from '../../../../../../utils'
 
 interface SubscribeButtonProps extends ButtonProps {
   projectName: string
+  projectTitle: string
+  noIcon?: boolean
 }
 
-export const SubscribeButton = ({ projectName, ...props }: SubscribeButtonProps) => {
+export const SubscribeButton = ({ projectName, projectTitle, noIcon, ...props }: SubscribeButtonProps) => {
   const { t } = useTranslation()
   const subscribeModal = useModal()
   const { colors } = useCustomTheme()
@@ -62,8 +64,9 @@ export const SubscribeButton = ({ projectName, ...props }: SubscribeButtonProps)
     <>
       <Button
         variant="primary"
+        size="sm"
         backgroundColor={'secondary.orange'}
-        leftIcon={<SubscribeIcon />}
+        leftIcon={!noIcon ? <SubscribeIcon /> : undefined}
         onClick={handleSubscribeClick}
         {...props}
       >
@@ -75,7 +78,7 @@ export const SubscribeButton = ({ projectName, ...props }: SubscribeButtonProps)
           <Box borderRadius="8px" bg="neutral.0">
             {!renderIframe && (
               <ModalHeader pb={2}>
-                {`${t('Subscribe to')} ${projectName}`} <BetaBox />
+                {`${t('Subscribe to')} ${projectTitle}`} <BetaBox />
               </ModalHeader>
             )}
             <ModalCloseButton />
@@ -90,7 +93,7 @@ export const SubscribeButton = ({ projectName, ...props }: SubscribeButtonProps)
               ) : (
                 <VStack alignItems={'start'} spacing="20px">
                   <CardLayout p="10px 20px" direction="row">
-                    <PiWarningCircleFill color={colors.primary[400]} size="30px" />
+                    <PiWarningCircleFill color={colors.primary[500]} size="30px" />
                     <VStack flex="1">
                       <Body2>
                         {t(
@@ -115,16 +118,18 @@ export const SubscribeButton = ({ projectName, ...props }: SubscribeButtonProps)
                   </CardLayout>
                   <Body2>
                     <Trans
-                      i18nKey="Subscribe to the {{PROJECT_NAME}} with recurring payments to ensure your continuous support for the project. By choosing a subscription model, you'll automatically contribute to the project on a regular basis."
-                      values={{ PROJECT_NAME: projectName }}
+                      i18nKey="Subscribe to the <1>{{PROJECT_NAME}}</1> with recurring payments to ensure your continuous support for the project. By choosing a subscription model, you'll automatically contribute to the project on a regular basis."
+                      values={{ PROJECT_NAME: projectTitle }}
                     >
+                      {'Subscribe to the '}
+                      <strong>{'{{PROJECT_NAME}}'}</strong>
                       {
-                        "Subscribe to the {{PROJECT_NAME}} with recurring payments to ensure your continuous support for the project. By choosing a subscription model, you'll automatically contribute to the project on a regular basis."
+                        " with recurring payments to ensure your continuous support for the project. By choosing a subscription model, you'll automatically contribute to the project on a regular basis."
                       }
                     </Trans>
                   </Body2>
                   <HStack w="full">
-                    <Button flex={1} as={Link} variant="primaryNeutral" onClick={handleClose}>
+                    <Button flex={1} variant="primaryNeutral" onClick={handleClose}>
                       {t('Cancel')}
                     </Button>
                     <Button flex={1} variant="primary" onClick={() => setRenderIframe(true)}>
