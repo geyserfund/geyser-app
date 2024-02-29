@@ -12,7 +12,6 @@ import {
   Link,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
