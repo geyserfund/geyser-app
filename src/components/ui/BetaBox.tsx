@@ -11,6 +11,7 @@ export const BetaBox = (props: BoxProps) => {
       backgroundColor="primary.400"
       borderRadius="4px"
       padding="3px 5px"
+      verticalAlign="middle"
       ml="10px"
       {...props}
     >
