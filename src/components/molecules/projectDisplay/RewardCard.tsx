@@ -5,6 +5,7 @@ import { useProjectContext } from '../../../context'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../types/generated/graphql'
 import { ICard } from '../../ui'
 import { ProjectRewardAvailability } from './ProjectRewardAvailability'
+import { ProjectRewardShippingEstimate } from './ProjectRewardShippingEstimate'
 
 type Props = ICard & {
   reward: ProjectRewardForCreateUpdateFragment
@@ -69,6 +70,18 @@ export const RewardCard = ({ reward, count, ...rest }: Props) => {
             </Badge>
           )}
         </Stack>
+        <Badge
+          fontSize={'10px'}
+          borderRadius={'6px'}
+          height={'20px'}
+          backgroundColor={'neutral.100'}
+          textTransform={'none'}
+          fontWeight={700}
+          lineHeight={'20px'}
+          p={'0 8px'}
+        >
+          <ProjectRewardShippingEstimate reward={reward} />
+        </Badge>
         <Text fontWeight={400} fontSize="14px" color="neutral.600" lineHeight={'1.4'}>
           {reward.description}
         </Text>

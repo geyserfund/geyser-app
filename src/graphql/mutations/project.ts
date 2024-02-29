@@ -79,17 +79,6 @@ export const MUTATION_CREATE_PROJECT_REWARD = gql`
   }
 `
 
-export const MUTATION_UPDATE_PROJECT_REWARD_DEVELOPMENT_STATUS = gql`
-  mutation ProjectRewardDevelopmentStatusUpdate($input: UpdateProjectRewardDevelopmentStatusInput!) {
-    projectRewardDevelopmentStatusUpdate(input: $input) {
-      id,
-      preOrder,
-      estimatedAvailabilityDate,
-      estimatedDeliveryInWeeks
-    }
-  }
-`
-
 export const MUTATION_UPDATE_PROJECT_REWARD = gql`
   ${FRAGMENT_PROJECT_REWARD_FOR_CREATE_UPDATE}
   mutation ProjectRewardUpdate($input: UpdateProjectRewardInput!) {

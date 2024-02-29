@@ -939,7 +939,6 @@ export type Mutation = {
   projectRewardCurrencyUpdate: Array<ProjectReward>
   /** Soft deletes the reward. */
   projectRewardDelete: Scalars['Boolean']
-  projectRewardDevelopmentStatusUpdate: ProjectReward
   projectRewardUpdate: ProjectReward
   projectStatusUpdate: Project
   projectTagAdd: Array<Tag>
@@ -1058,10 +1057,6 @@ export type MutationProjectRewardCurrencyUpdateArgs = {
 
 export type MutationProjectRewardDeleteArgs = {
   input: DeleteProjectRewardInput
-}
-
-export type MutationProjectRewardDevelopmentStatusUpdateArgs = {
-  input: UpdateProjectRewardDevelopmentStatusInput
 }
 
 export type MutationProjectRewardUpdateArgs = {
@@ -1932,24 +1927,20 @@ export type UpdateProjectMilestoneInput = {
   projectMilestoneId: Scalars['BigInt']
 }
 
-export type UpdateProjectRewardDevelopmentStatusInput = {
-  estimatedAvailabilityDate?: InputMaybe<Scalars['Date']>
-  estimatedDeliveryInWeeks?: InputMaybe<Scalars['Int']>
-  preOrder?: InputMaybe<Scalars['Boolean']>
-  projectRewardId: Scalars['BigInt']
-}
-
 export type UpdateProjectRewardInput = {
   category?: InputMaybe<Scalars['String']>
   /** Cost of the reward, priced in USD cents */
   cost?: InputMaybe<Scalars['Int']>
   description?: InputMaybe<Scalars['description_String_maxLength_250']>
+  estimatedAvailabilityDate?: InputMaybe<Scalars['Date']>
+  estimatedDeliveryInWeeks?: InputMaybe<Scalars['Int']>
   hasShipping?: InputMaybe<Scalars['Boolean']>
   image?: InputMaybe<Scalars['String']>
   isAddon?: InputMaybe<Scalars['Boolean']>
   isHidden?: InputMaybe<Scalars['Boolean']>
   maxClaimable?: InputMaybe<Scalars['maxClaimable_Int_min_0']>
   name?: InputMaybe<Scalars['name_String_maxLength_100']>
+  preOrder?: InputMaybe<Scalars['Boolean']>
   projectRewardId: Scalars['BigInt']
   stock?: InputMaybe<Scalars['stock_Int_min_0']>
 }
@@ -2440,7 +2431,6 @@ export type ResolversTypes = {
   UpdateEntryInput: UpdateEntryInput
   UpdateProjectInput: UpdateProjectInput
   UpdateProjectMilestoneInput: UpdateProjectMilestoneInput
-  UpdateProjectRewardDevelopmentStatusInput: UpdateProjectRewardDevelopmentStatusInput
   UpdateProjectRewardInput: UpdateProjectRewardInput
   UpdateUserInput: UpdateUserInput
   UpdateWalletInput: UpdateWalletInput
@@ -2682,7 +2672,6 @@ export type ResolversParentTypes = {
   UpdateEntryInput: UpdateEntryInput
   UpdateProjectInput: UpdateProjectInput
   UpdateProjectMilestoneInput: UpdateProjectMilestoneInput
-  UpdateProjectRewardDevelopmentStatusInput: UpdateProjectRewardDevelopmentStatusInput
   UpdateProjectRewardInput: UpdateProjectRewardInput
   UpdateUserInput: UpdateUserInput
   UpdateWalletInput: UpdateWalletInput
@@ -3377,12 +3366,6 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationProjectRewardDeleteArgs, 'input'>
-  >
-  projectRewardDevelopmentStatusUpdate?: Resolver<
-    ResolversTypes['ProjectReward'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationProjectRewardDevelopmentStatusUpdateArgs, 'input'>
   >
   projectRewardUpdate?: Resolver<
     ResolversTypes['ProjectReward'],

@@ -14,7 +14,7 @@ import { TextArea, TextInputBox, UploadBox } from '../../../../../../../componen
 import { ProjectRewardValidations } from '../../../../../../../constants'
 import { useProjectContext } from '../../../../../../../context'
 import { FieldContainer } from '../../../../../../../forms/components/FieldContainer'
-import { MUTATION_UPDATE_PROJECT_CURRENCY, MUTATION_UPDATE_PROJECT_REWARD_DEVELOPMENT_STATUS } from '../../../../../../../graphql/mutations'
+import { MUTATION_UPDATE_PROJECT_CURRENCY } from '../../../../../../../graphql/mutations'
 import { useBTCConverter } from '../../../../../../../helpers/useBTCConverter'
 import { useModal } from '../../../../../../../hooks/useModal'
 import {
@@ -23,12 +23,10 @@ import {
   ProjectRewardForCreateUpdateFragment,
   RewardCurrency,
   Satoshis,
-  UpdateProjectRewardDevelopmentStatusInput,
   UpdateProjectRewardInput,
   USDCents,
 } from '../../../../../../../types'
 import { commaFormatted, isProjectAnException, toInt, useNotification } from '../../../../../../../utils'
-import { ContributionsSkeleton } from '../../../../../../landing/feed/ActivityFeed'
 
 type Props = {
   buttonText: string
@@ -78,20 +76,6 @@ export const ProjectRewardForm = ({
     }
   `)
 
-  const [updateRewardDevelopmentStatus] = useMutation<any, { input: { projectRewardId: Number; preOrder: Boolean; estimatedDeliveryInWeeks: Number | null; estimatedAvailabilityDate: Date | null } }>(
-    MUTATION_UPDATE_PROJECT_REWARD_DEVELOPMENT_STATUS,
-    {
-      onCompleted(data) {},
-      onError(error) {
-        toast({
-          title: 'Failed to update reward development status',
-          description: `${error}`,
-          status: 'error',
-        })
-      },
-    },
-  )
-
   const getRewardCreationInputVariables = (): CreateProjectRewardInput => {
     return {
       projectId: project?.id,
@@ -104,9 +88,9 @@ export const ProjectRewardForm = ({
       isAddon: reward.isAddon,
       isHidden: reward.isHidden,
       category: reward.category || null,
-      preOrder: reward.preOrder || true,
-      estimatedAvailabilityDate: reward.estimatedAvailabilityDate || null,
-      estimatedDeliveryInWeeks: reward.estimatedDeliveryInWeeks || null
+      preOrder: !!reward.preOrder,
+      estimatedAvailabilityDate: reward.preOrder ? (reward.estimatedAvailabilityDate ? reward.estimatedAvailabilityDate.valueOf() : null) : null,
+      estimatedDeliveryInWeeks: reward.preOrder ? null : (reward.estimatedDeliveryInWeeks || null)
     }
   }
 
@@ -121,16 +105,10 @@ export const ProjectRewardForm = ({
       hasShipping: reward.hasShipping,
       isAddon: reward.isAddon,
       isHidden: reward.isHidden,
-      category: reward.category || null
-    }
-  }
-
-  const getRewardUpdateProjectRewardDevelopmentStatusInputVariables = (): UpdateProjectRewardDevelopmentStatusInput => {
-    return {
-      projectRewardId: reward.id,
+      category: reward.category || null,
       preOrder: !!reward.preOrder,
-      estimatedAvailabilityDate: reward.estimatedAvailabilityDate || null,
-      estimatedDeliveryInWeeks: reward.estimatedDeliveryInWeeks || null
+      estimatedAvailabilityDate: reward.preOrder ? (reward.estimatedAvailabilityDate ? reward.estimatedAvailabilityDate.valueOf() : null) : null,
+      estimatedDeliveryInWeeks: reward.preOrder ? null : (reward.estimatedDeliveryInWeeks || null)
     }
   }
 
@@ -252,20 +230,6 @@ export const ProjectRewardForm = ({
 
     if (!isValid) {
       return
-    }
-
-    // If editing, save the delivery info first
-    if(createOrUpdate === 'update') {
-      updateRewardDevelopmentStatus({
-        variables: {
-          input: {
-            projectRewardId: reward.id,
-            preOrder: reward.preOrder,
-            estimatedAvailabilityDate: reward.estimatedAvailabilityDate || null,
-            estimatedDeliveryInWeeks: reward.estimatedDeliveryInWeeks || null
-          },
-        },
-      })
     }
 
     rewardSave({
