@@ -115,7 +115,6 @@ export const Subscribe = ({ isOpen, onClose, style, interest, parentState, title
                 {success ? t('Success!') : t('Subscribe')}
               </Text>
             </ModalHeader>
-            <ModalCloseButton />
             <ModalBody width="100%">
               <VStack spacing="15px" width="100%">
                 <Text>
