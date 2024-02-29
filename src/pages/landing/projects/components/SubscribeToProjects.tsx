@@ -5,18 +5,19 @@ import { CardLayout } from '../../../../components/layouts'
 import { Body1, H3 } from '../../../../components/typography'
 import { BetaBox } from '../../../../components/ui'
 import { FlashGeyserUrl, projectsWithSubscription, subscriptionJoinUrl } from '../../../../constants'
-import { standardPadding } from '../../../../styles'
+import { useMobileMode } from '../../../../utils'
 import { LandingSubscriptionCard } from '../../components'
 import { ProjectRowLayout } from '../elements'
 
 export const SubscribeToProjects = () => {
   const { t } = useTranslation()
+  const isMobile = useMobileMode()
 
   return (
     <ProjectRowLayout
       title={
         <H3>
-          {t('Subscribe to Projects')} <BetaBox verticalAlign="middle" />
+          {t('Subscribe to Projects')} <BetaBox />
         </H3>
       }
       width="100%"
@@ -33,9 +34,27 @@ export const SubscribeToProjects = () => {
           return <LandingSubscriptionCard key={projectName} projectName={projectName} />
         })}
       </Stack>
-      <CardLayout direction="row" w="full" alignItems={'center'} spacing={'20px'} padding={standardPadding}>
+      <CardLayout
+        noborder={!isMobile}
+        direction="row"
+        w="full"
+        alignItems={'center'}
+        padding={'10px'}
+        pb={{ base: '10px', lg: '0px' }}
+        justifyContent={'space-between'}
+        flexWrap={'wrap'}
+      >
         <Body1>{t('Want to integrate subscriptions?')} </Body1>
-        <Button flex={1} as={Link} href={subscriptionJoinUrl} textDecoration="none" variant="secondary">
+        <Button
+          maxWidth="300px"
+          minWidth="100px"
+          flex={1}
+          as={Link}
+          href={subscriptionJoinUrl}
+          textDecoration="none"
+          variant="secondaryNeutral"
+          bgColor={'neutral.100'}
+        >
           {t('Join Beta')}
         </Button>
       </CardLayout>
