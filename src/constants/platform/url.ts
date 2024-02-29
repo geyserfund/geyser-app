@@ -227,6 +227,8 @@ export const LanguageRequestUrl = 'https://airtable.com/shrEs5AsmkC07tWcX'
 
 export const subscriptionFeedbackUrl = 'https://airtable.com/appyM7XlNIWVypuP5/shrh83bnc3jdpmEcv'
 
+export const subscriptionJoinUrl = 'https://airtable.com/appyM7XlNIWVypuP5/shrEbNwIAI39vcsnx'
+
 // ABOUT PAGE
 
 export const GeyserAboutProjectsBannerImage =

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { CardLayout } from '../../../../components/layouts'
 import { Body1, H3 } from '../../../../components/typography'
 import { BetaBox } from '../../../../components/ui'
-import { FlashGeyserUrl, projectsWithSubscription, subscriptionFeedbackUrl } from '../../../../constants'
+import { FlashGeyserUrl, projectsWithSubscription, subscriptionJoinUrl } from '../../../../constants'
 import { standardPadding } from '../../../../styles'
 import { LandingSubscriptionCard } from '../../components'
 import { ProjectRowLayout } from '../elements'
@@ -20,6 +20,7 @@ export const SubscribeToProjects = () => {
         </H3>
       }
       width="100%"
+      seeAllText={t('See more')}
       seeAllProps={{
         as: Link,
         href: FlashGeyserUrl,
@@ -34,7 +35,7 @@ export const SubscribeToProjects = () => {
       </Stack>
       <CardLayout direction="row" w="full" alignItems={'center'} spacing={'20px'} padding={standardPadding}>
         <Body1>{t('Want to integrate subscriptions?')} </Body1>
-        <Button flex={1} as={Link} href={subscriptionFeedbackUrl} textDecoration="none" variant="primary">
+        <Button flex={1} as={Link} href={subscriptionJoinUrl} textDecoration="none" variant="secondary">
           {t('Join Beta')}
         </Button>
       </CardLayout>

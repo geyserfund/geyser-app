@@ -53,13 +53,18 @@ export const SubscribeButton = ({ projectName, ...props }: SubscribeButtonProps)
 
   const flashId = projectFlashIds[projectName]
 
+  const handleSubscribeClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    subscribeModal.onOpen()
+  }
+
   return (
     <>
       <Button
         variant="primary"
         backgroundColor={'secondary.orange'}
         leftIcon={<SubscribeIcon />}
-        onClick={subscribeModal.onOpen}
+        onClick={handleSubscribeClick}
         {...props}
       >
         {t('Subscribe')}
