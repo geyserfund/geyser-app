@@ -13,6 +13,7 @@ export const BetaBox = (props: BoxProps) => {
       padding="3px 5px"
       verticalAlign="middle"
       ml="10px"
+      color="black"
       {...props}
     >
       {t('Beta')}
