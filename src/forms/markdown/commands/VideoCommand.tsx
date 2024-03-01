@@ -1,4 +1,5 @@
 import { useCommands } from '@remirror/react'
+import getVideoId from 'get-video-id'
 import { BsYoutube } from 'react-icons/bs'
 
 import { InsertVideoModal, MarkdownVideo, useInsertVideoModal } from '../modals/InsertVideoModal'
@@ -8,9 +9,10 @@ export const VideoCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
   const commands = useCommands()
 
   const modal = useInsertVideoModal(({ url }: MarkdownVideo) => {
-    if (!commands.addYouTubeVideo) return
+    const video = getVideoId(url)
+    if (!commands.addYouTubeVideo || !video.id) return
     commands.insertHardBreak()
-    commands.addYouTubeVideo({ video: url })
+    commands.addYouTubeVideo({ video: video.id })
     commands.insertHardBreak()
     modal.onClose()
   })
