@@ -1,26 +1,9 @@
-import { LandingCardBase, LandingCardBaseSkeleton } from '../../../components/layouts'
+import { LandingCardBase } from '../../../components/layouts'
 import { getPath } from '../../../constants'
-import { useProjectForSubscriptionQuery } from '../../../types'
+import { ProjectForSubscriptionFragment } from '../../../types'
 
-export const LandingSubscriptionCard = ({ projectName }: { projectName: string }) => {
-  const { data, loading } = useProjectForSubscriptionQuery({
-    variables: {
-      where: {
-        name: projectName,
-      },
-    },
-  })
-
-  const project = data?.projectGet
-  const owner = project?.owners[0]
-
-  if (loading) {
-    return <LandingCardBaseSkeleton />
-  }
-
-  if (!project || !owner) {
-    return null
-  }
+export const LandingSubscriptionCard = ({ project }: { project: ProjectForSubscriptionFragment }) => {
+  const owner = project?.owners?.[0]
 
   return (
     <LandingCardBase
@@ -29,7 +12,7 @@ export const LandingSubscriptionCard = ({ projectName }: { projectName: string }
       title={project?.name}
       imageSrc={project?.thumbnailImage || ''}
       project={project}
-      user={owner.user}
+      user={owner?.user}
     />
   )
 }

@@ -1,10 +1,11 @@
 import { Button, Link, Stack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout } from '../../../../components/layouts'
+import { CardLayout, LandingCardBaseSkeleton } from '../../../../components/layouts'
 import { Body1, H3 } from '../../../../components/typography'
 import { BetaBox } from '../../../../components/ui'
-import { FlashGeyserUrl, projectsWithSubscription, subscriptionJoinUrl } from '../../../../constants'
+import { FlashGeyserUrl, projectsWithSubscriptionGeyserIds, subscriptionJoinUrl } from '../../../../constants'
+import { useProjectsForSubscriptionQuery } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { LandingSubscriptionCard } from '../../components'
 import { ProjectRowLayout } from '../elements'
@@ -12,6 +13,18 @@ import { ProjectRowLayout } from '../elements'
 export const SubscribeToProjects = () => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
+
+  const { loading, data } = useProjectsForSubscriptionQuery({
+    variables: {
+      input: {
+        where: {
+          ids: projectsWithSubscriptionGeyserIds,
+        },
+      },
+    },
+  })
+
+  const projects = data?.projectsGet.projects || []
 
   return (
     <ProjectRowLayout
@@ -30,9 +43,11 @@ export const SubscribeToProjects = () => {
       }}
     >
       <Stack width="100%" direction={{ base: 'column', xl: 'row' }} spacing="20px">
-        {projectsWithSubscription.map((projectName) => {
-          return <LandingSubscriptionCard key={projectName} projectName={projectName} />
-        })}
+        {loading
+          ? subscribeToProjectsSkeleton()
+          : projects.map((project) => {
+              return <LandingSubscriptionCard key={project.id} project={project} />
+            })}
       </Stack>
       <CardLayout
         noborder={!isMobile}
@@ -61,3 +76,8 @@ export const SubscribeToProjects = () => {
     </ProjectRowLayout>
   )
 }
+
+export const subscribeToProjectsSkeleton = () =>
+  [1, 2, 3].map((i) => {
+    return <LandingCardBaseSkeleton key={i} />
+  })
