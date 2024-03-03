@@ -1,6 +1,7 @@
 import { Box, HStack, Icon, Skeleton, SkeletonCircle, SkeletonText, Tooltip, VStack } from '@chakra-ui/react'
 
 import { FundingStatWithFollow, FundingStatWithFollowProps } from '../../pages/landing/components/FundingStatWithFollow'
+import { SubscribeButton } from '../../pages/projectView/projectActivityPanel/screens/info/components'
 import { AvatarElement } from '../../pages/projectView/projectMainBody/components'
 import { EntryForLandingPageFragment, ProjectForLandingPageFragment } from '../../types'
 import { H3 } from '../typography'
@@ -18,7 +19,8 @@ export interface LandingCardBaseProps extends FundingStatWithFollowProps, CardLa
   projectStatus?: ProjectStatusLabels
   imageSrc: string
   title: string
-  user: EntryForLandingPageFragment['creator'] | ProjectForLandingPageFragment['owners'][number]['user']
+  user?: EntryForLandingPageFragment['creator'] | ProjectForLandingPageFragment['owners'][number]['user']
+  hasSubscribe?: boolean
 }
 
 export const LandingCardBase = ({
@@ -30,6 +32,7 @@ export const LandingCardBase = ({
   amountFunded,
   project,
   user,
+  hasSubscribe,
   ...rest
 }: LandingCardBaseProps) => {
   const getResponsiveValue = (value: any) => {
@@ -82,25 +85,38 @@ export const LandingCardBase = ({
           )}
         </HStack>
 
-        <Box width="100%">
-          <AvatarElement borderRadius="50%" user={user} noLink />
-        </Box>
-        <FundingStatWithFollow
-          width="100%"
-          fundersCount={fundersCount}
-          amountFunded={amountFunded}
-          project={project}
-          justifyContent={
-            isMobile
-              ? 'start'
-              : {
-                  base: 'space-between',
-                  sm: 'start',
-                  xl: 'space-between',
-                }
-          }
-          spacing={isMobile ? '25px' : { base: '0px', sm: '25px', xl: '0px' }}
-        />
+        {user && (
+          <Box width="100%">
+            <AvatarElement borderRadius="50%" user={user} noLink />
+          </Box>
+        )}
+        {hasSubscribe ? (
+          <SubscribeButton
+            size="sm"
+            mt="10px"
+            w="full"
+            projectName={project.name}
+            projectTitle={project.title}
+            noIcon
+          />
+        ) : (
+          <FundingStatWithFollow
+            width="100%"
+            fundersCount={fundersCount}
+            amountFunded={amountFunded}
+            project={project}
+            justifyContent={
+              isMobile
+                ? 'start'
+                : {
+                    base: 'space-between',
+                    sm: 'start',
+                    xl: 'space-between',
+                  }
+            }
+            spacing={isMobile ? '25px' : { base: '0px', sm: '25px', xl: '0px' }}
+          />
+        )}
       </VStack>
     </CardLayout>
   )

@@ -225,6 +225,10 @@ export const LightningUrl = 'https://storage.googleapis.com/geyser-projects-medi
 // AIRTABLE LINKS
 export const LanguageRequestUrl = 'https://airtable.com/shrEs5AsmkC07tWcX'
 
+export const subscriptionFeedbackUrl = 'https://airtable.com/appyM7XlNIWVypuP5/shrh83bnc3jdpmEcv'
+
+export const subscriptionJoinUrl = 'https://airtable.com/appyM7XlNIWVypuP5/shrEbNwIAI39vcsnx'
+
 // ABOUT PAGE
 
 export const GeyserAboutProjectsBannerImage =
@@ -247,3 +251,8 @@ export const AuwalProfileUrl = 'https://storage.googleapis.com/geyser-projects-m
 export const MickProfileUrl = 'https://storage.googleapis.com/geyser-projects-media/team/mick.png'
 export const SajalProfileUrl = 'https://storage.googleapis.com/geyser-projects-media/team/sajal.png'
 export const SteliosProfileUrl = 'https://storage.googleapis.com/geyser-projects-media/team/stelios.png'
+
+// FLASH URlS
+export const FlashGeyserUrl = 'https://app.paywithflash.com/geyser'
+export const FlashsubscribeUrl = 'https://app.paywithflash.com/external-login/geyser'
+export const FlashMembershipCountUrl = 'https://app.nostreggs.io/geyser/api/external/get_geyser_user_memberships_count'

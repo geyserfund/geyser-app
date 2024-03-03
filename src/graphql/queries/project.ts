@@ -1,7 +1,12 @@
 import { gql } from '@apollo/client'
 
 import { FRAGMENT_ENTRY_FOR_PROJECT } from '../fragments/entries'
-import { FRAGMENT_PROJECT, FRAGMENT_PROJECT_FOR_LANDING_PAGE, FRAGMENT_PROJECT_NOSTR_KEYS } from '../fragments/project'
+import {
+  FRAGMENT_PROJECT,
+  FRAGMENT_PROJECT_FOR_LANDING_PAGE,
+  FRAGMENT_PROJECT_FOR_SUBSCRIPTION,
+  FRAGMENT_PROJECT_NOSTR_KEYS,
+} from '../fragments/project'
 import { FRAGMENT_FUNDER_WITH_USER } from '../fragments/user'
 
 export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
@@ -9,6 +14,17 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
   query ProjectByNameOrId($where: UniqueProjectQueryInput!, $input: ProjectEntriesGetInput) {
     projectGet(where: $where) {
       ...Project
+    }
+  }
+`
+
+export const QUERY_PROJECT_FOR_SUBSCRIPTION = gql`
+  ${FRAGMENT_PROJECT_FOR_SUBSCRIPTION}
+  query ProjectsForSubscription($input: ProjectsGetQueryInput!) {
+    projectsGet(input: $input) {
+      projects {
+        ...ProjectForSubscription
+      }
     }
   }
 `
