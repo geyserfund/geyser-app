@@ -64,7 +64,6 @@ export const SubscribeButton = ({ projectName, projectTitle, noIcon, ...props }:
     <>
       <Button
         variant="primary"
-        size="sm"
         backgroundColor={'secondary.orange'}
         leftIcon={!noIcon ? <SubscribeIcon /> : undefined}
         onClick={handleSubscribeClick}
