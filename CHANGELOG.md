@@ -1,3 +1,73 @@
+## [0.7.0](https://github.com/geyserfund/geyser-app/compare/v0.6.8...v0.7.0) (2024-03-03)
+
+
+### Features
+
+* add export contributions ([43f29c4](https://github.com/geyserfund/geyser-app/commit/43f29c4171512428de6185e83844ebe2f45242dc))
+* add git blame ignore revs file to ignore certain commits ([3f10a61](https://github.com/geyserfund/geyser-app/commit/3f10a61a5a29e4b8c0bfe73074f5c13d9424b1f0))
+* add graphql for granular profile sections and rewards ([bb5b724](https://github.com/geyserfund/geyser-app/commit/bb5b724a4950a28b3bb08131c5282d529404b9d5))
+* add subscription button to project page ([3a61131](https://github.com/geyserfund/geyser-app/commit/3a611315aaaac758b14e1f7b818c43e4b14e0299))
+* add subscription section to landing page ([3fde552](https://github.com/geyserfund/geyser-app/commit/3fde55203d712fd8e27a224347bdc34efb574896))
+* create new components ([54ddb9d](https://github.com/geyserfund/geyser-app/commit/54ddb9dd8e0570274e3ba53803f88ea11467f767))
+* high priority bugs ([e2a1944](https://github.com/geyserfund/geyser-app/commit/e2a1944c28329015322ef6ecdb404a09426816db))
+* move reward items to table and reference code to inside accordion ([4eff770](https://github.com/geyserfund/geyser-app/commit/4eff77063bfc3fecae19a30d13c8d60626a8d23e))
+* reward limits on cart ([4568c30](https://github.com/geyserfund/geyser-app/commit/4568c30ee744c300424925bdb691a8dd5e890caf))
+
+
+### Bug Fixes
+
+* add amount exception for spirit of satoshi ([d279eac](https://github.com/geyserfund/geyser-app/commit/d279eac012f22b7d5c97c5c05e1366d049df579d))
+* add comma separated value ([60231dd](https://github.com/geyserfund/geyser-app/commit/60231ddf460e562a9bcd2e04815bd8ed0ad60af7))
+* add help button ([b461f44](https://github.com/geyserfund/geyser-app/commit/b461f444f4580afb1e820ec57846bca4dbf7bec4))
+* add lint option in commit prefix ([d2e5307](https://github.com/geyserfund/geyser-app/commit/d2e53079ff31c8113aad8828c3f06a10ae9ee307))
+* add subscriber numbers ([9b86d57](https://github.com/geyserfund/geyser-app/commit/9b86d57138c865ebb1fdab9fda623a97ea867cfe))
+* add updated react icons ([a02ca18](https://github.com/geyserfund/geyser-app/commit/a02ca18caf0d75fb08383d331288039a5f0152a5))
+* add use credentials for cors and add refresh when it happens ([5d6c623](https://github.com/geyserfund/geyser-app/commit/5d6c623ecf2c94b128415e82fcca6e458b4cc519))
+* can't click on rewards, can't add more rewards without limits ([2f5fec8](https://github.com/geyserfund/geyser-app/commit/2f5fec8993941f8875d46f4f603ece5c993cc56a))
+* change items column to rewards ([f6389bf](https://github.com/geyserfund/geyser-app/commit/f6389bf1035c5734a830efc704951bc6088da678))
+* change logic for all rewardStockRemaining ([270cded](https://github.com/geyserfund/geyser-app/commit/270cdedc32becd4c31d64ab3f1946823379fee6e))
+* computing dollar amount on contribution ([faf74fa](https://github.com/geyserfund/geyser-app/commit/faf74fa8ff45125e71e97fdb720c579887797bf0))
+* disable export button for other contributors ([98bccae](https://github.com/geyserfund/geyser-app/commit/98bccae442fd58628ec7d47ab1855846468abf19))
+* disabled button logic ([524013b](https://github.com/geyserfund/geyser-app/commit/524013bf42fc56e6db0b52ca5a29da27947dbb60))
+* disabled project creation for lightning errors ([0c17c93](https://github.com/geyserfund/geyser-app/commit/0c17c93c1705d36a8b01218ea77565b61fd0c7b4))
+* enable move back to TODO status ([bc77a46](https://github.com/geyserfund/geyser-app/commit/bc77a464a41dfb780559231ea9707cce38f023e1))
+* final fixes ([829efe3](https://github.com/geyserfund/geyser-app/commit/829efe382c3f85754a3af61c906409b6c4d3b8d5))
+* final touchups ([1a12b8f](https://github.com/geyserfund/geyser-app/commit/1a12b8fa2122b544d75d2d79740e6f2ecfd5cdf2))
+* fix when confirmedAt is not avialable ([5406a74](https://github.com/geyserfund/geyser-app/commit/5406a746bdbd61e250f9ebd30763236663bce7ef))
+* fixes needed ([8af0a0e](https://github.com/geyserfund/geyser-app/commit/8af0a0eda9c1259b79541674f1a4d08b0a7840f8))
+* get bitcoin amount rounding off ([c8691f3](https://github.com/geyserfund/geyser-app/commit/c8691f321146ecf01098f86c33f0e7cf47bd4e42))
+* hotfix cannot edit entry ([28a646b](https://github.com/geyserfund/geyser-app/commit/28a646b4e7d3e4e5ae4af3f457770179554e01c9))
+* improve accoutn info skeleton ([0e48584](https://github.com/geyserfund/geyser-app/commit/0e48584ea2a7c11326b71f159e9b9e85f691870e))
+* landing page subscribe button triggered project  click ([e494a72](https://github.com/geyserfund/geyser-app/commit/e494a7217b97a03c3846a1ac2daa8bc9dc8d6367))
+* link and button for join beta ([4a9ee14](https://github.com/geyserfund/geyser-app/commit/4a9ee14d5d4d4242b3bc2a8887bad67afe528f4b))
+* make follow seamless ([ac8740f](https://github.com/geyserfund/geyser-app/commit/ac8740fd70c698c7289c8a1acabe41af5f2ef497))
+* pr updates ([c7d8955](https://github.com/geyserfund/geyser-app/commit/c7d89553946be44ba5834ae77798b124db5fa1e1))
+* profile page crash ([027f97e](https://github.com/geyserfund/geyser-app/commit/027f97e25676476901f71ebc17f30b26151af299))
+* project list layout ([3b79691](https://github.com/geyserfund/geyser-app/commit/3b7969141710b648d194b2fc511364d930803006))
+* put alby on the end of example wallets ([3157326](https://github.com/geyserfund/geyser-app/commit/3157326bc5d6a840f783eb0007ae9bb28ceb40b3))
+* refresh user on add account, and change type ([b841d8d](https://github.com/geyserfund/geyser-app/commit/b841d8dd51cb330030c7f0f2ad3f72ce1cc0278a))
+* remove modal close button ([b715501](https://github.com/geyserfund/geyser-app/commit/b7155019431250f547d6a5553ccbc18bf4f246b1))
+* revert RewardStatusEnum to string ([20ae4eb](https://github.com/geyserfund/geyser-app/commit/20ae4eb7c0f796df4a8be49e8e5a4a6f941f4218))
+* reward activity feed module ([9f3d9d4](https://github.com/geyserfund/geyser-app/commit/9f3d9d4263ea708d24985dbe24ec0cb9cabc41b8))
+* reward logic for rewards remaining ([e422631](https://github.com/geyserfund/geyser-app/commit/e4226312cfaa9b0ba717abc8825801ccc69f1b24))
+* reward select in entry view ([c5d0532](https://github.com/geyserfund/geyser-app/commit/c5d0532afed6222ce2507a9b0eddb2eed3bbbc90))
+* reward table currency issue on mobile ([6fc2876](https://github.com/geyserfund/geyser-app/commit/6fc2876702ddaf623d9d8963eda5c10803d69401))
+* row opacity changes on hidden rewards ([0c40438](https://github.com/geyserfund/geyser-app/commit/0c40438474d6ba248aa0dc507aba4fb2ca646ca1))
+* subscribe button size ([fe2517a](https://github.com/geyserfund/geyser-app/commit/fe2517a92011780f9ab77280767d1345a92225a5))
+* update breaking change for rewards export ([80b1206](https://github.com/geyserfund/geyser-app/commit/80b1206c2c4d3caa688e7b5cd4cfd00f73366ac7))
+* update color for beta to remain static ([0f00070](https://github.com/geyserfund/geyser-app/commit/0f000709e8e18cf27c9ea13b1bb02ac7a9006300))
+* update design for purchase cards ([4053e0b](https://github.com/geyserfund/geyser-app/commit/4053e0b75402bf2db807c71c4522a5b7bb47c1cd))
+* update landing page view ([928daab](https://github.com/geyserfund/geyser-app/commit/928daabec67d4545a0b08ee999614d869872a2e8))
+* update learn to guide ([806c3b7](https://github.com/geyserfund/geyser-app/commit/806c3b7de74ee57a661df218a4de269f38564d03))
+* update subscribe button and modal properties ([b779403](https://github.com/geyserfund/geyser-app/commit/b7794035ecbe413f1166644d46f6dbd3278e0b7f))
+* update url to https ([e7b866e](https://github.com/geyserfund/geyser-app/commit/e7b866eca7c0f4e2ab0df55c744449807b28190a))
+* wip ([0d1f590](https://github.com/geyserfund/geyser-app/commit/0d1f5900f19ec82347419dd70005bc45fb05b73d))
+
+
+### Reverts
+
+* Revert "Update English.json (POEditor.com)" ([06a3498](https://github.com/geyserfund/geyser-app/commit/06a34986974a9011429b59ac78aaa8efbb53a8a9))
+
 ## [0.6.9](https://github.com/geyserfund/geyser-app/compare/v0.6.8...v0.6.9) (2024-02-14)
 
 
