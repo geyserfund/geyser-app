@@ -89,7 +89,14 @@ export const LandingCardBase = ({
           <AvatarElement borderRadius="50%" user={user} noLink />
         </Box>
         {hasSubscribe ? (
-          <SubscribeButton mt="10px" w="full" projectName={project.name} projectTitle={project.title} noIcon />
+          <SubscribeButton
+            size="sm"
+            mt="10px"
+            w="full"
+            projectName={project.name}
+            projectTitle={project.title}
+            noIcon
+          />
         ) : (
           <FundingStatWithFollow
             width="100%"
