@@ -20,9 +20,11 @@ export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
 
 export const QUERY_PROJECT_FOR_SUBSCRIPTION = gql`
   ${FRAGMENT_PROJECT_FOR_SUBSCRIPTION}
-  query ProjectForSubscription($where: UniqueProjectQueryInput!) {
-    projectGet(where: $where) {
-      ...ProjectForSubscription
+  query ProjectsForSubscription($input: ProjectsGetQueryInput!) {
+    projectsGet(input: $input) {
+      projects {
+        ...ProjectForSubscription
+      }
     }
   }
 `

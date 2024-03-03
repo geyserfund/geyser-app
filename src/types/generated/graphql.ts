@@ -662,8 +662,6 @@ export type GetFundingTxsInput = {
 
 export type GetFundingTxsOrderByInput = {
   createdAt: OrderByOptions
-  /** @deprecated Use createdAt instead. */
-  paidAt?: InputMaybe<OrderByOptions>
 }
 
 export type GetFundingTxsWhereInput = {
@@ -1306,7 +1304,7 @@ export type PaginationInput = {
 
 export type Project = {
   __typename?: 'Project'
-  /** @deprecated Field no longer supported */
+  /** @deprecated No longer supported */
   ambassadors: Array<Ambassador>
   /** Total amount raised by the project, in satoshis. */
   balance: Scalars['Int']
@@ -1341,7 +1339,7 @@ export type Project = {
   rewards: Array<ProjectReward>
   /** Short description of the project. */
   shortDescription?: Maybe<Scalars['shortDescription_String_maxLength_500']>
-  /** @deprecated Field no longer supported */
+  /** @deprecated No longer supported */
   sponsors: Array<Sponsor>
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>
@@ -1582,18 +1580,6 @@ export type ProjectViewStats = {
   visitorGraph: Array<Maybe<PageViewCountGraph>>
 }
 
-export type ProjectWhereInput = {
-  countryCode?: InputMaybe<Scalars['String']>
-  id?: InputMaybe<Scalars['BigInt']>
-  /** Unique name for the project. Used for the project URL and lightning address. */
-  name?: InputMaybe<Scalars['name_String_minLength_3_maxLength_280']>
-  region?: InputMaybe<Scalars['String']>
-  search?: InputMaybe<Scalars['String']>
-  status?: InputMaybe<ProjectStatus>
-  tagIds?: InputMaybe<Array<Scalars['Int']>>
-  type?: InputMaybe<ProjectType>
-}
-
 export type ProjectsGetQueryInput = {
   /**
    * Takes an array of Project OrderBy options. When passing multiple ordering options, each option must
@@ -1602,7 +1588,20 @@ export type ProjectsGetQueryInput = {
    */
   orderBy?: InputMaybe<Array<ProjectsOrderByInput>>
   pagination?: InputMaybe<PaginationInput>
-  where: ProjectWhereInput
+  where: ProjectsGetWhereInput
+}
+
+export type ProjectsGetWhereInput = {
+  countryCode?: InputMaybe<Scalars['String']>
+  id?: InputMaybe<Scalars['BigInt']>
+  ids?: InputMaybe<Array<Scalars['BigInt']>>
+  /** Unique name for the project. Used for the project URL and lightning address. */
+  name?: InputMaybe<Scalars['name_String_minLength_3_maxLength_280']>
+  region?: InputMaybe<Scalars['String']>
+  search?: InputMaybe<Scalars['String']>
+  status?: InputMaybe<ProjectStatus>
+  tagIds?: InputMaybe<Array<Scalars['Int']>>
+  type?: InputMaybe<ProjectType>
 }
 
 export enum ProjectsOrderByField {
@@ -2054,14 +2053,14 @@ export type UserProjectContribution = {
   funder?: Maybe<Funder>
   /**
    * Boolean value indicating if the User was an ambassador of the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isAmbassador: Scalars['Boolean']
   /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean']
   /**
    * Boolean value indicating if the User was a sponsor for the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isSponsor: Scalars['Boolean']
   /** Project linked to the contributions. */
@@ -2404,8 +2403,8 @@ export type ResolversTypes = {
   ProjectType: ProjectType
   ProjectViewBaseStats: ResolverTypeWrapper<ProjectViewBaseStats>
   ProjectViewStats: ResolverTypeWrapper<ProjectViewStats>
-  ProjectWhereInput: ProjectWhereInput
   ProjectsGetQueryInput: ProjectsGetQueryInput
+  ProjectsGetWhereInput: ProjectsGetWhereInput
   ProjectsOrderByField: ProjectsOrderByField
   ProjectsOrderByInput: ProjectsOrderByInput
   ProjectsResponse: ResolverTypeWrapper<ProjectsResponse>
@@ -2651,8 +2650,8 @@ export type ResolversParentTypes = {
   ProjectTagMutationInput: ProjectTagMutationInput
   ProjectViewBaseStats: ProjectViewBaseStats
   ProjectViewStats: ProjectViewStats
-  ProjectWhereInput: ProjectWhereInput
   ProjectsGetQueryInput: ProjectsGetQueryInput
+  ProjectsGetWhereInput: ProjectsGetWhereInput
   ProjectsOrderByInput: ProjectsOrderByInput
   ProjectsResponse: ProjectsResponse
   ProjectsSummary: ProjectsSummary
@@ -5859,13 +5858,16 @@ export type ProjectByNameOrIdQuery = {
   projectGet?: ({ __typename?: 'Project' } & ProjectFragment) | null
 }
 
-export type ProjectForSubscriptionQueryVariables = Exact<{
-  where: UniqueProjectQueryInput
+export type ProjectsForSubscriptionQueryVariables = Exact<{
+  input: ProjectsGetQueryInput
 }>
 
-export type ProjectForSubscriptionQuery = {
+export type ProjectsForSubscriptionQuery = {
   __typename?: 'Query'
-  projectGet?: ({ __typename?: 'Project' } & ProjectForSubscriptionFragment) | null
+  projectsGet: {
+    __typename?: 'ProjectsResponse'
+    projects: Array<{ __typename?: 'Project' } & ProjectForSubscriptionFragment>
+  }
 }
 
 export type ProjectsQueryVariables = Exact<{
@@ -9680,54 +9682,56 @@ export function useProjectByNameOrIdLazyQuery(
 export type ProjectByNameOrIdQueryHookResult = ReturnType<typeof useProjectByNameOrIdQuery>
 export type ProjectByNameOrIdLazyQueryHookResult = ReturnType<typeof useProjectByNameOrIdLazyQuery>
 export type ProjectByNameOrIdQueryResult = Apollo.QueryResult<ProjectByNameOrIdQuery, ProjectByNameOrIdQueryVariables>
-export const ProjectForSubscriptionDocument = gql`
-  query ProjectForSubscription($where: UniqueProjectQueryInput!) {
-    projectGet(where: $where) {
-      ...ProjectForSubscription
+export const ProjectsForSubscriptionDocument = gql`
+  query ProjectsForSubscription($input: ProjectsGetQueryInput!) {
+    projectsGet(input: $input) {
+      projects {
+        ...ProjectForSubscription
+      }
     }
   }
   ${ProjectForSubscriptionFragmentDoc}
 `
 
 /**
- * __useProjectForSubscriptionQuery__
+ * __useProjectsForSubscriptionQuery__
  *
- * To run a query within a React component, call `useProjectForSubscriptionQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectForSubscriptionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useProjectsForSubscriptionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectsForSubscriptionQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useProjectForSubscriptionQuery({
+ * const { data, loading, error } = useProjectsForSubscriptionQuery({
  *   variables: {
- *      where: // value for 'where'
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useProjectForSubscriptionQuery(
-  baseOptions: Apollo.QueryHookOptions<ProjectForSubscriptionQuery, ProjectForSubscriptionQueryVariables>,
+export function useProjectsForSubscriptionQuery(
+  baseOptions: Apollo.QueryHookOptions<ProjectsForSubscriptionQuery, ProjectsForSubscriptionQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<ProjectForSubscriptionQuery, ProjectForSubscriptionQueryVariables>(
-    ProjectForSubscriptionDocument,
+  return Apollo.useQuery<ProjectsForSubscriptionQuery, ProjectsForSubscriptionQueryVariables>(
+    ProjectsForSubscriptionDocument,
     options,
   )
 }
-export function useProjectForSubscriptionLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ProjectForSubscriptionQuery, ProjectForSubscriptionQueryVariables>,
+export function useProjectsForSubscriptionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ProjectsForSubscriptionQuery, ProjectsForSubscriptionQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<ProjectForSubscriptionQuery, ProjectForSubscriptionQueryVariables>(
-    ProjectForSubscriptionDocument,
+  return Apollo.useLazyQuery<ProjectsForSubscriptionQuery, ProjectsForSubscriptionQueryVariables>(
+    ProjectsForSubscriptionDocument,
     options,
   )
 }
-export type ProjectForSubscriptionQueryHookResult = ReturnType<typeof useProjectForSubscriptionQuery>
-export type ProjectForSubscriptionLazyQueryHookResult = ReturnType<typeof useProjectForSubscriptionLazyQuery>
-export type ProjectForSubscriptionQueryResult = Apollo.QueryResult<
-  ProjectForSubscriptionQuery,
-  ProjectForSubscriptionQueryVariables
+export type ProjectsForSubscriptionQueryHookResult = ReturnType<typeof useProjectsForSubscriptionQuery>
+export type ProjectsForSubscriptionLazyQueryHookResult = ReturnType<typeof useProjectsForSubscriptionLazyQuery>
+export type ProjectsForSubscriptionQueryResult = Apollo.QueryResult<
+  ProjectsForSubscriptionQuery,
+  ProjectsForSubscriptionQueryVariables
 >
 export const ProjectsDocument = gql`
   query Projects($input: ProjectsGetQueryInput) {

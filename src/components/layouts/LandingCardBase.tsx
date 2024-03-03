@@ -19,7 +19,7 @@ export interface LandingCardBaseProps extends FundingStatWithFollowProps, CardLa
   projectStatus?: ProjectStatusLabels
   imageSrc: string
   title: string
-  user: EntryForLandingPageFragment['creator'] | ProjectForLandingPageFragment['owners'][number]['user']
+  user?: EntryForLandingPageFragment['creator'] | ProjectForLandingPageFragment['owners'][number]['user']
   hasSubscribe?: boolean
 }
 
@@ -85,9 +85,11 @@ export const LandingCardBase = ({
           )}
         </HStack>
 
-        <Box width="100%">
-          <AvatarElement borderRadius="50%" user={user} noLink />
-        </Box>
+        {user && (
+          <Box width="100%">
+            <AvatarElement borderRadius="50%" user={user} noLink />
+          </Box>
+        )}
         {hasSubscribe ? (
           <SubscribeButton
             size="sm"
