@@ -255,4 +255,4 @@ export const SteliosProfileUrl = 'https://storage.googleapis.com/geyser-projects
 // FLASH URlS
 export const FlashGeyserUrl = 'https://app.paywithflash.com/geyser'
 export const FlashsubscribeUrl = 'https://app.paywithflash.com/external-login/geyser'
-export const FlashMembershipCountUrl = 'http://app.nostreggs.io/geyser/api/external/get_geyser_user_memberships_count'
+export const FlashMembershipCountUrl = 'https://app.nostreggs.io/geyser/api/external/get_geyser_user_memberships_count'
