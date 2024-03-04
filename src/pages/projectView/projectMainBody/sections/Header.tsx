@@ -12,9 +12,9 @@ import { useProjectContext } from '../../../../context'
 import { validateImageUrl } from '../../../../forms/validations/image'
 import { ProjectStatus, WalletStatus } from '../../../../types'
 import { toInt, useMobileMode } from '../../../../utils'
+import { toLargeImageUrl } from '../../../../utils/tools/imageSizes'
 import { useFollowedProjectsValue } from '../../../auth/state'
 import { SubscribeButton } from '../../projectActivityPanel/screens/info/components'
-import { toLargeImageUrl, toMediumImageUrl } from '../../../../utils/tools/imageSizes'
 import { ContributeButton, FollowButton, LightningAddress, ProjectFundingQR, ShareButton } from '../components'
 import { NpubDisplay } from '../components/NpubDisplay'
 import { CreatorSocial } from './CreatorSocial'
@@ -93,7 +93,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       <Modal isOpen={isOpen} onClose={onClose} size={isMobile ? 'md' : 'xl'} isCentered>
         <ModalOverlay />
         <ModalContent padding="0" minWidth="0">
-          <img src={project.thumbnailImage || ''} alt={project.title} />
+          <img src={toLargeImageUrl(project.thumbnailImage || '')} alt={project.title} />
         </ModalContent>
       </Modal>
       <CardLayout
