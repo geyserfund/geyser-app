@@ -1,4 +1,4 @@
-import { LightningAddressConnectionDetails, User, Wallet } from '../../types'
+import { LightningAddressConnectionDetails, Maybe, User, Wallet } from '../../types'
 
 export const getUserLightningAddress = (user?: User) => {
   const connectionDetails = (
@@ -9,7 +9,9 @@ export const getUserLightningAddress = (user?: User) => {
   return connectionDetails.lightningAddress || ''
 }
 
-export const getPossibleWalletPubkey = (wallet: Pick<Wallet, 'connectionDetails'> | undefined): string | undefined => {
+export const getPossibleWalletPubkey = (
+  wallet: Pick<Wallet, 'connectionDetails'> | undefined,
+): Maybe<string> | undefined => {
   if (wallet && wallet.connectionDetails) {
     if (
       wallet.connectionDetails.__typename === 'LndConnectionDetailsPublic' ||

@@ -13,6 +13,9 @@ export const BackToProjectMobile = ({
   project?: Pick<ProjectFragment, 'name'> | null
 } & ButtonProps) => {
   const { t } = useTranslation()
+
+  if (!project) return null
+
   return (
     <Button
       variant="secondary"

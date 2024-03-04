@@ -124,9 +124,9 @@ export const useWalletForm = ({
         setLightningAddressFormValue(projectWallet.connectionDetails.lightningAddress)
       } else if (projectWallet.connectionDetails.__typename === WalletConnectDetails.LndConnectionDetailsPrivate) {
         const details = {
-          name: projectWallet.name,
+          name: projectWallet.name || '',
           hostname: projectWallet.connectionDetails.hostname,
-          publicKey: projectWallet.connectionDetails.pubkey,
+          publicKey: projectWallet.connectionDetails.pubkey || '',
           invoiceMacaroon: projectWallet.connectionDetails.macaroon,
           tlsCert: projectWallet.connectionDetails.tlsCertificate || '',
           grpc: `${projectWallet.connectionDetails.grpcPort}`,

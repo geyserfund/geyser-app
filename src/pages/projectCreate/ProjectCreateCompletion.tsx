@@ -90,6 +90,10 @@ export const ProjectCreateCompletion = ({
   }
 
   const onLaunchClick = async () => {
+    if (!project) {
+      return
+    }
+
     try {
       await handleLaunch()
       navigate(getPath('projectLaunch', project?.name))

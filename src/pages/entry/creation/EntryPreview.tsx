@@ -54,6 +54,7 @@ export const EntryPreview = () => {
   const { loading, data: projectData } = useProjectByNameOrIdQuery({
     variables: { where: { name: params.projectId } },
     onCompleted(data) {
+      if (!data.projectGet) return
       setNavData({
         projectName: data.projectGet?.name,
         projectTitle: data.projectGet?.title,
@@ -286,7 +287,9 @@ export const EntryPreview = () => {
               <ButtonComponent
                 primary
                 w="full"
-                onClick={() => navigate(getPath('projectDashboard', projectData?.projectGet?.name))}
+                onClick={() =>
+                  projectData?.projectGet?.name && navigate(getPath('projectDashboard', projectData?.projectGet?.name))
+                }
               >
                 Go to Project Dashboard
               </ButtonComponent>

@@ -42,6 +42,8 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
   const userBadge = data?.userBadges[0]
   const currentBadge = userBadge ? userBadge.badge : undefined
 
+  if (!project) return null
+
   return (
     <VStack
       paddingX={{

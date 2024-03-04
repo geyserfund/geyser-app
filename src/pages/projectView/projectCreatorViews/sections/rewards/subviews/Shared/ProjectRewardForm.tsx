@@ -188,7 +188,7 @@ export const ProjectRewardForm = ({
       isValid = false
     }
 
-    const isException = isProjectAnException(project?.name)
+    const isException = project && isProjectAnException(project?.name)
 
     if (
       !isException &&
@@ -408,7 +408,7 @@ export const ProjectRewardForm = ({
           <FieldContainer title={t('Description')}>
             <TextArea
               placeholder={t('Describe the item you would like to sell')}
-              value={reward.description}
+              value={reward.description || ''}
               name="description"
               onChange={handleFormTextChange}
               error={formError.description}
