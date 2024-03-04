@@ -11,14 +11,16 @@ import { cache } from './apollo-client-cache'
 const retryLink = new RetryLink({
   attempts(count, _, error) {
     const err = error?.result?.error
+    const statusCode = error?.statusCode || 0
     return (
       err &&
-      Boolean(
-        (err.code === 'STALE_REFRESH_TOKEN' ||
+      count <= 2 &&
+      (Boolean(
+        err.code === 'STALE_REFRESH_TOKEN' ||
           err.code === 'EXPIRED_REFRESH_TOKEN' ||
-          err.code === 'INVALIDE_REFRESH_TOKEN') &&
-          count <= 2,
-      )
+          err.code === 'INVALIDE_REFRESH_TOKEN',
+      ) ||
+        statusCode === 408)
     )
   },
   delay: {
@@ -104,6 +106,7 @@ const splitLink = split(
 const clientConfig: ApolloClientOptions<NormalizedCacheObject> = {
   link: from([retryLink, splitLink]),
   cache,
+  queryDeduplication: false,
 }
 
 export const client = new ApolloClient(clientConfig)
