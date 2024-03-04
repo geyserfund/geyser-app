@@ -16,7 +16,7 @@ import {
   GeyserPodcastUrl,
   GeyserTelegramUrl,
   GeyserTwitterUrl,
-  LearnUrl,
+  GuideUrl,
 } from '../../../constants'
 
 export const FilterFooter = () => {
@@ -33,8 +33,10 @@ export const FilterFooter = () => {
           <Caption bold>Geyser, Inc.</Caption>
         </Link>
 
-        <Link href={LearnUrl} isExternal>
-          <Caption bold>{t('Learn')}</Caption>
+        <Link href={GuideUrl} isExternal>
+          <Caption bold textTransform="capitalize">
+            {t('guide')}
+          </Caption>
         </Link>
 
         <ReactLink to={getPath('legalTerms')} style={{ textDecoration: 'underline' }}>

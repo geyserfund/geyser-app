@@ -55,7 +55,7 @@ export const ContributionSummary = ({ funder, project }: ContributionSummaryProp
             borderBottom="none"
             borderColor="neutral.200"
             direction="row"
-            alignItems="center"
+            alignItems="start"
             w="full"
           >
             <VStack flex={1} alignItems={'start'}>

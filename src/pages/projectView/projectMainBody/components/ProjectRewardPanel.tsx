@@ -1,6 +1,6 @@
 import { Badge, Box, Button, Stack, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ProjectRewardAvailability } from '../../../../components/molecules/projectDisplay/ProjectRewardAvailability'
 import { PathName } from '../../../../constants'
@@ -16,13 +16,17 @@ type Props = {
 
 export const ProjectRewardPanel = ({ reward }: Props) => {
   const { t } = useTranslation()
+  const location = useLocation()
   const {
     project,
     setMobileView,
     fundForm: { updateReward, setState: setFundingFormState },
   } = useProjectContext()
   const navigate = useNavigate()
-  const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : null
+
+  const isRewardAvailable = reward.maxClaimable ? reward.maxClaimable - reward.sold > 0 : true
+
+  const isInProjectPage = location.pathname.includes(PathName.project)
 
   if (!project || !isActive) {
     return <></>
@@ -69,7 +73,7 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
             {reward.name}
           </Text>
           <Text fontSize={14} color="neutral.600">
-            <ProjectRewardAvailability numberOfRewardsAvailable={rewardStockRemaining} />
+            <ProjectRewardAvailability reward={reward} />
             {`${reward.sold} ${t('sold')}`}
           </Text>
           <Badge
@@ -97,11 +101,14 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
             px={2}
             onClick={async () => {
               updateReward({ id: toInt(reward.id), count: 1 })
-              await navigate(PathName.projectRewards)
+              if (isInProjectPage) {
+                await navigate(PathName.projectRewards)
+              }
+
               setMobileView(MobileViews.funding)
               setFundingFormState('step', 'contribution')
             }}
-            isDisabled={rewardStockRemaining !== null && rewardStockRemaining <= 0}
+            isDisabled={!isRewardAvailable}
           >
             <Text isTruncated>{t('Select')}</Text>
           </Button>

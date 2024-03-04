@@ -94,6 +94,7 @@ export const secondaryColors = {
   green: '#00E34D',
   red: '#DF3634',
   yellow: '#FFE600',
+  orange: '#FB923C',
   pink: '#FC257A',
   blue: '#438FF2',
   purple: '#670C8B',

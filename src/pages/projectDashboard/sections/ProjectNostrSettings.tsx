@@ -33,6 +33,8 @@ export const ProjectNostrSettings = () => {
     }
   }
 
+  if (!project) return null
+
   return (
     <>
       <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1}>

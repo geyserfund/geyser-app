@@ -878,5 +878,8 @@
   "Sats funded":"Sats funded",
   "Reference code":"Reference code",
   "Date Purchased":"Date Purchased",
-  "Shipping status":"Shipping status"
+  "Shipping status":"Shipping status",
+  "Visible to you only":"Visible to you only",
+  "guide":"guide"
+
 }

@@ -19,7 +19,7 @@ const schema = yup.object({
 export const useProjectStoryForm = ({ project }: { project?: ProjectFragment | null }) => {
   const form = useForm<{ description: string }>({
     resolver: yupResolver(schema),
-    values: useMemo(() => (project ? { description: project.description } : { description: '' }), [project]),
+    values: useMemo(() => ({ description: project?.description || '' }), [project]),
   })
 
   return form

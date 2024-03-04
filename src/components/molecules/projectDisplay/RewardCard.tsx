@@ -18,7 +18,8 @@ type Props = ICard & {
 export const RewardCard = ({ reward, count, ...rest }: Props) => {
   const { t } = useTranslation()
   const { project } = useProjectContext()
-  const rewardStockRemaining = reward.maxClaimable ? reward.maxClaimable - reward.sold : null
+
+  const isRewardAvailable = reward.maxClaimable ? reward.maxClaimable - reward.sold > count : true
 
   return (
     <Box border="2px" borderColor="neutral.200" borderRadius={12} mt={2} p={3} pb={16} pos={'relative'}>
@@ -52,7 +53,7 @@ export const RewardCard = ({ reward, count, ...rest }: Props) => {
         </Box>
         <Stack direction={'row'} justifyContent="space-between" align="center" alignItems={'center'}>
           <Text fontWeight={400} fontSize="14px" color="neutral.900">
-            <ProjectRewardAvailability numberOfRewardsAvailable={rewardStockRemaining} />
+            <ProjectRewardAvailability reward={reward} />
             {reward.sold || 0} {t('sold')}
           </Text>
           {reward.category && (
@@ -88,20 +89,14 @@ export const RewardCard = ({ reward, count, ...rest }: Props) => {
         <Container pos={'absolute'} bottom={3} left={3} right={3} width={'auto'} p={0}>
           <Stack direction="row" style={{ marginTop: '10px' }}>
             <Button
-              variant={
-                (rewardStockRemaining !== null && rewardStockRemaining <= 0) || count === rewardStockRemaining
-                  ? 'secondary'
-                  : 'primary'
-              }
+              variant={isRewardAvailable ? 'secondary' : 'primary'}
               size="sm"
               height={'40px'}
               onClick={(e) => {
                 rest.onRewardClick?.(e)
               }}
               style={{ flex: 1 }}
-              isDisabled={
-                (rewardStockRemaining !== null && rewardStockRemaining <= 0) || count === rewardStockRemaining
-              }
+              isDisabled={!isRewardAvailable}
             >
               <Text fontSize={16} fontWeight={500} isTruncated>
                 {t('Add to Basket')}

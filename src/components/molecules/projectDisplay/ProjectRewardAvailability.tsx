@@ -2,17 +2,20 @@ import { Box } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { colorOrange } from '../../../styles/colors'
+import { ProjectRewardForCreateUpdateFragment } from '../../../types'
 
 type Props = {
-  numberOfRewardsAvailable: number | null
+  reward: ProjectRewardForCreateUpdateFragment
 }
 
-export const ProjectRewardAvailability = ({ numberOfRewardsAvailable }: Props) => {
+export const ProjectRewardAvailability = ({ reward }: Props) => {
   const { t } = useTranslation()
 
-  if (numberOfRewardsAvailable == null) {
-    return <></>
+  if (!reward.maxClaimable) {
+    return null
   }
+
+  const numberOfRewardsAvailable = reward.maxClaimable - reward.sold
 
   if (numberOfRewardsAvailable <= 0) {
     return (
@@ -27,18 +30,14 @@ export const ProjectRewardAvailability = ({ numberOfRewardsAvailable }: Props) =
     )
   }
 
-  if (numberOfRewardsAvailable > 0) {
-    return (
-      <>
-        <Box as={'span'} color={colorOrange}>
-          {numberOfRewardsAvailable + ` ${t('remaining')}`}
-        </Box>{' '}
-        <Box as={'span'} style={{ fontSize: '10px', position: 'relative', top: '-2px' }}>
-          &#8226;
-        </Box>{' '}
-      </>
-    )
-  }
-
-  return <></>
+  return (
+    <>
+      <Box as={'span'} color={colorOrange}>
+        {numberOfRewardsAvailable + ` ${t('remaining')}`}
+      </Box>{' '}
+      <Box as={'span'} style={{ fontSize: '10px', position: 'relative', top: '-2px' }}>
+        &#8226;
+      </Box>{' '}
+    </>
+  )
 }

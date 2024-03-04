@@ -136,6 +136,7 @@ export const TopNavBar = () => {
   }
 
   const handleMyProjectButtonPress = () => {
+    if (!user.ownerOf[0]?.project?.name) return
     navigate(getPath('project', user.ownerOf[0]?.project?.name))
   }
 

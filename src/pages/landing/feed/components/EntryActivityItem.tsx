@@ -10,6 +10,9 @@ import { LandingEntryCard, TimeAgo } from '../../components'
 export const EntryActivityItem = ({ entry, dateTime }: { entry: EntryForLandingPageFragment; dateTime?: string }) => {
   const { t } = useTranslation()
   const { creator } = entry
+
+  if (!entry.project) return null
+
   return (
     <VStack w="full" alignItems="start">
       <HStack w="full" justifyContent="start">

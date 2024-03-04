@@ -7,7 +7,7 @@ export const LaunchUrl = 'https://geyser.fund/launch/start'
 export const GrantsUrl = 'https://geyser.fund/grants'
 export const AboutUsUrl = 'https://geyser.notion.site/About-Us-2dd9468a27e84531bcbcbe89c24d7f09'
 export const FAQUrl = 'https://geyser.notion.site/Geyser-FAQs-310e7900fa904732b9b64043831edec3'
-export const LearnUrl = 'https://learn.geyser.fund/'
+export const GuideUrl = 'https://guide.geyser.fund/'
 export const FeedbackUrl = 'https://app.steelsync.io/clrxkiwf400l8oofs8pz7aq7k/new?request=bug'
 
 // Geyser footer Links
@@ -199,7 +199,7 @@ export const Grant2AnnouncementImageUrl =
 export const Grant2AnnouncementTwitterUrl = 'https://twitter.com/geyserfund/status/1628842072802312193?s=20'
 
 export const GeyserEmailVerificationDocUrl =
-  'https://learn.geyser.fund/geyser-docs/product-features/update-your-project/email-verification'
+  'https://guide.geyser.fund/geyser-docs/product-features/update-your-project/email-verification'
 
 // PLATFORMS
 
@@ -225,6 +225,10 @@ export const LightningUrl = 'https://storage.googleapis.com/geyser-projects-medi
 // AIRTABLE LINKS
 export const LanguageRequestUrl = 'https://airtable.com/shrEs5AsmkC07tWcX'
 
+export const subscriptionFeedbackUrl = 'https://airtable.com/appyM7XlNIWVypuP5/shrh83bnc3jdpmEcv'
+
+export const subscriptionJoinUrl = 'https://airtable.com/appyM7XlNIWVypuP5/shrEbNwIAI39vcsnx'
+
 // ABOUT PAGE
 
 export const GeyserAboutProjectsBannerImage =
@@ -247,3 +251,8 @@ export const AuwalProfileUrl = 'https://storage.googleapis.com/geyser-projects-m
 export const MickProfileUrl = 'https://storage.googleapis.com/geyser-projects-media/team/mick.png'
 export const SajalProfileUrl = 'https://storage.googleapis.com/geyser-projects-media/team/sajal.png'
 export const SteliosProfileUrl = 'https://storage.googleapis.com/geyser-projects-media/team/stelios.png'
+
+// FLASH URlS
+export const FlashGeyserUrl = 'https://app.paywithflash.com/geyser'
+export const FlashsubscribeUrl = 'https://app.paywithflash.com/external-login/geyser'
+export const FlashMembershipCountUrl = 'https://app.nostreggs.io/geyser/api/external/get_geyser_user_memberships_count'

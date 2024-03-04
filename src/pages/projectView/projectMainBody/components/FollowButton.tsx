@@ -6,18 +6,19 @@ import { BsFillHeartFill } from 'react-icons/bs'
 
 import { useAuthContext } from '../../../../context'
 import { useFollowProject } from '../../../../hooks/graphqlState'
+import { Project } from '../../../../types'
 import { useAuthModal } from '../../../auth/hooks'
 
 interface FollowButtonProps extends ButtonProps {
-  projectId: number
+  project: Pick<Project, 'id' | 'name' | 'title'>
   hasIcon?: boolean
 }
 
-export const FollowButton = ({ projectId, hasIcon, ...rest }: FollowButtonProps) => {
+export const FollowButton = ({ project, hasIcon, ...rest }: FollowButtonProps) => {
   const { t } = useTranslation()
   const { isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
-  const { isFollowed, handleFollow, handleUnFollow, followLoading, unfollowLoading } = useFollowProject(projectId)
+  const { isFollowed, handleFollow, handleUnFollow, followLoading, unfollowLoading } = useFollowProject(project)
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()

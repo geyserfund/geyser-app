@@ -23,7 +23,7 @@ import { getProjectBalance } from '../../../../../utils/helpers'
 import { ExternalAccountType } from '../../../../auth'
 import { useFollowedProjectsValue } from '../../../../auth/state'
 import { ContributeButton, FollowButton, ShareButton } from '../../../projectMainBody/components'
-import { BalanceDisplayButton } from './components'
+import { BalanceDisplayButton, SubscribeButton } from './components'
 import { ProjectFundersModal, useProjectFundersModal } from './components/ProjectFundersModal'
 
 const TIME_AFTER_WHICH_TOOLTIP_SHOULD_CLOSE_MILLIS = 1500
@@ -187,6 +187,10 @@ export const ActivityBrief = (props: StackProps) => {
 
   const latestFunders = socialFunders.slice(0, 12)
 
+  if (!project) {
+    return null
+  }
+
   return (
     <VStack w="100%" {...props}>
       <HStack
@@ -214,11 +218,15 @@ export const ActivityBrief = (props: StackProps) => {
 
       {!isMobile ? (
         <VStack w="full" spacing="10px" pb={3}>
-          <ContributeButton w="full" />
+          <HStack w="full">
+            <SubscribeButton flex="1" projectName={project.name} projectTitle={project.title} />
+            <ContributeButton flex="1" />
+          </HStack>
+
           {followedProjects.some((followedProject) => followedProject?.id === project?.id) ? (
             <ShareButton w="full" />
           ) : (
-            <FollowButton hasIcon variant="secondary" size="md" w="full" projectId={project?.id} />
+            <FollowButton hasIcon variant="secondary" size="md" w="full" project={project} />
           )}
         </VStack>
       ) : null}
