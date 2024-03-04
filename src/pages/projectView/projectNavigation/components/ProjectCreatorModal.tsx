@@ -14,6 +14,7 @@ export const ProjectCreatorModal = (props: UseModalReturn) => {
   const { t } = useTranslation()
   const { project, onMilestonesModalOpen, setMobileView } = useProjectContext()
   const navigate = useNavigate()
+  if (!project) return null
   return (
     <Modal {...props} title="Create content">
       <VStack spacing={4} alignItems="start">

@@ -16,6 +16,8 @@ export const OverviewHeader = () => {
   const { project, onMilestonesModalOpen, setMobileView } = useProjectContext()
   const navigate = useNavigate()
 
+  if (!project) return null
+
   return (
     <Stack direction={{ base: 'column', lg: 'row' }} w="full" justifyContent="space-between" flexWrap="wrap">
       <HStack justifyContent={'space-between'} alignItems="start">

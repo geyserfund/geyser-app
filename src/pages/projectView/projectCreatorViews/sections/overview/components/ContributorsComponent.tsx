@@ -107,6 +107,8 @@ export const ContributorsComponent = () => {
     }
   }, [project?.id, getFundingTxForOverview, where])
 
+  if (!project) return null
+
   return (
     <CardLayout
       as={VStack}

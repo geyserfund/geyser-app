@@ -25,7 +25,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const isMobile = useMobileMode()
 
   const [subscribers, setSubscribers] = useState(0)
-  const isProjectSubscriptionEnabled = projectsWithSubscription.includes(project?.name)
+  const isProjectSubscriptionEnabled = project && projectsWithSubscription.includes(project?.name)
 
   useEffect(() => {
     if (isProjectSubscriptionEnabled) {

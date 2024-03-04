@@ -143,7 +143,7 @@ export const MilestoneAdditionModal = ({ project, isOpen, onClose, onSubmit }: P
           const createMilestoneInput: CreateProjectMilestoneInput = {
             projectId: project.id,
             amount: milestone.amount,
-            description: milestone.description,
+            description: milestone.description || '',
             name: milestone.name,
           }
 
