@@ -106,7 +106,6 @@ const splitLink = split(
 const clientConfig: ApolloClientOptions<NormalizedCacheObject> = {
   link: from([retryLink, splitLink]),
   cache,
-  queryDeduplication: false,
 }
 
 export const client = new ApolloClient(clientConfig)
