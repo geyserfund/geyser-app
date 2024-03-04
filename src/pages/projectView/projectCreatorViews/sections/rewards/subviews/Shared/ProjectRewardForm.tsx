@@ -8,7 +8,12 @@ import { RiArrowLeftSLine } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../../../../components/layouts'
-import { CalendarButton, CreatorEmailButton, FileUpload, UpdateCurrencyModal } from '../../../../../../../components/molecules'
+import {
+  CalendarButton,
+  CreatorEmailButton,
+  FileUpload,
+  UpdateCurrencyModal,
+} from '../../../../../../../components/molecules'
 import { ImageCrop } from '../../../../../../../components/molecules/ImageCropperModal'
 import { TextArea, TextInputBox, UploadBox } from '../../../../../../../components/ui'
 import { ProjectRewardValidations } from '../../../../../../../constants'
@@ -68,7 +73,6 @@ export const ProjectRewardForm = ({
       : reward.cost.toFixed(0) || '',
   )
   const [formError, setFormError] = useState<any>({})
-  console.log(reward);
 
   const { loading: isRewardCategoriesLoading, data: rewardCategoriesData } = useQuery(gql`
     query Query {
@@ -88,9 +92,13 @@ export const ProjectRewardForm = ({
       isAddon: reward.isAddon,
       isHidden: reward.isHidden,
       category: reward.category || null,
-      preOrder: !!reward.preOrder,
-      estimatedAvailabilityDate: reward.preOrder ? (reward.estimatedAvailabilityDate ? reward.estimatedAvailabilityDate.valueOf() : null) : null,
-      estimatedDeliveryInWeeks: reward.preOrder ? null : (reward.estimatedDeliveryInWeeks || null)
+      preOrder: Boolean(reward.preOrder),
+      estimatedAvailabilityDate: reward.preOrder
+        ? reward.estimatedAvailabilityDate
+          ? reward.estimatedAvailabilityDate.valueOf()
+          : null
+        : null,
+      estimatedDeliveryInWeeks: reward.preOrder ? null : reward.estimatedDeliveryInWeeks || null,
     }
   }
 
@@ -106,9 +114,13 @@ export const ProjectRewardForm = ({
       isAddon: reward.isAddon,
       isHidden: reward.isHidden,
       category: reward.category || null,
-      preOrder: !!reward.preOrder,
-      estimatedAvailabilityDate: reward.preOrder ? (reward.estimatedAvailabilityDate ? reward.estimatedAvailabilityDate.valueOf() : null) : null,
-      estimatedDeliveryInWeeks: reward.preOrder ? null : (reward.estimatedDeliveryInWeeks || null)
+      preOrder: Boolean(reward.preOrder),
+      estimatedAvailabilityDate: reward.preOrder
+        ? reward.estimatedAvailabilityDate
+          ? reward.estimatedAvailabilityDate.valueOf()
+          : null
+        : null,
+      estimatedDeliveryInWeeks: reward.preOrder ? null : reward.estimatedDeliveryInWeeks || null,
     }
   }
 
@@ -447,9 +459,14 @@ export const ProjectRewardForm = ({
               <Text variant="body1" wordBreak="keep-all" fontWeight={500}>
                 {t('Pre-Order')}
               </Text>
-              <Switch isChecked={reward.preOrder} size={'md'} sx={{'--switch-track-width': '2.4rem'}} onChange={() => {
-                setReward((current) => ({ ...current, preOrder: !!!reward.preOrder }))
-              }}/>
+              <Switch
+                isChecked={reward.preOrder}
+                size={'md'}
+                sx={{ '--switch-track-width': '2.4rem' }}
+                onChange={() => {
+                  setReward((current) => ({ ...current, preOrder: Boolean(!reward.preOrder) }))
+                }}
+              />
             </HStack>
             <Text variant="body1" fontWeight={400} pr={{ base: 0, lg: 2 }} maxWidth={'450px'}>
               {t(
@@ -458,10 +475,7 @@ export const ProjectRewardForm = ({
             </Text>
           </VStack>
           {reward.preOrder ? (
-            <FieldContainer
-              title={t('Expected Availability Date')}
-              boldTitle={true}
-            >
+            <FieldContainer title={t('Expected Availability Date')} boldTitle={true}>
               <div style={{ position: 'relative', width: '100%' }}>
                 <CalendarButton
                   onChange={handleFormCalendarChange}
@@ -475,9 +489,7 @@ export const ProjectRewardForm = ({
                   />
                 </CalendarButton>
                 {reward.estimatedAvailabilityDate && (
-                  <div
-                    style={{ position: 'absolute', top: '5px', right: '10px' }}
-                  >
+                  <div style={{ position: 'absolute', top: '5px', right: '10px' }}>
                     <CloseIcon
                       onClick={() => {
                         setReward((current) => ({
@@ -490,31 +502,32 @@ export const ProjectRewardForm = ({
                 )}
               </div>
               <Text variant="body1" fontWeight={400}>
-                {t(
-                  "Use “Expected Availability Date' to set when your reward will be developed and available.",
-                )}
+                {t("Use “Expected Availability Date' to set when your reward will be developed and available.")}
               </Text>
             </FieldContainer>
           ) : (
-            <FieldContainer
-              title={t('Delivery Time (Weeks)')}
-              boldTitle={true}
-            >
+            <FieldContainer title={t('Delivery Time (Weeks)')} boldTitle={true}>
               <TextInputBox
                 placeholder={'Enter number of weeks'}
                 name="estimatedDeliveryInWeeks"
-                value={reward.estimatedDeliveryInWeeks && reward.estimatedDeliveryInWeeks > 0 ? reward.estimatedDeliveryInWeeks : undefined }
+                value={
+                  reward.estimatedDeliveryInWeeks && reward.estimatedDeliveryInWeeks > 0
+                    ? reward.estimatedDeliveryInWeeks
+                    : undefined
+                }
                 isInvalid={formError.estimatedDeliveryInWeeks}
                 onChange={(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-                  const { value } = event.target;
-                  setReward((current) => ({ ...current, estimatedAvailabilityDate: null, estimatedDeliveryInWeeks: toInt(value) }))
+                  const { value } = event.target
+                  setReward((current) => ({
+                    ...current,
+                    estimatedAvailabilityDate: null,
+                    estimatedDeliveryInWeeks: toInt(value),
+                  }))
                 }}
                 error={formError.estimatedDeliveryInWeeks}
               />
               <Text variant="body1" fontWeight={400}>
-                {t(
-                  "Specify estimated delivery time for the reward from the moment it is ordered.",
-                )}
+                {t('Specify estimated delivery time for the reward from the moment it is ordered.')}
               </Text>
             </FieldContainer>
           )}
