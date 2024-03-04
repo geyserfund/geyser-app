@@ -4473,6 +4473,8 @@ export type ProjectRewardForCreateUpdateFragment = {
   isHidden: boolean
   category?: string | null
   preOrder: boolean
+  estimatedAvailabilityDate?: any | null
+  estimatedDeliveryInWeeks?: number | null
 }
 
 export type ProjectFragment = {
@@ -6301,6 +6303,8 @@ export const ProjectRewardForCreateUpdateFragmentDoc = gql`
     isHidden
     category
     preOrder
+    estimatedAvailabilityDate
+    estimatedDeliveryInWeeks
   }
 `
 export const EntryForProjectFragmentDoc = gql`

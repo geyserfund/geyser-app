@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Text } from '@chakra-ui/react'
+import { Badge, Box, Button, Stack, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -7,6 +7,7 @@ import { PathName } from '../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../types'
 import { isActive, toInt } from '../../../../utils'
+import { ProjectRewardShippingEstimate } from '../../../../components/molecules/projectDisplay/ProjectRewardShippingEstimate'
 
 type Props = {
   reward: ProjectRewardForCreateUpdateFragment
@@ -75,6 +76,18 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
             <ProjectRewardAvailability reward={reward} />
             {`${reward.sold} ${t('sold')}`}
           </Text>
+          <Badge
+            fontSize={'10px'}
+            borderRadius={'6px'}
+            height={'20px'}
+            backgroundColor={'neutral.100'}
+            textTransform={'none'}
+            fontWeight={700}
+            lineHeight={'20px'}
+            p={'0 8px'}
+          >
+            <ProjectRewardShippingEstimate reward={reward} />
+          </Badge>
         </Stack>
         <Stack direction="column" align={'flex-end'} justifyContent={'space-between'}>
           <Text lineHeight={1.4} fontWeight={700} fontSize={14} color="neutral.600">

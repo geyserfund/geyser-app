@@ -105,6 +105,8 @@ export const FRAGMENT_PROJECT_REWARD_FOR_CREATE_UPDATE = gql`
     isHidden
     category
     preOrder
+    estimatedAvailabilityDate
+    estimatedDeliveryInWeeks
   }
 `
 
