@@ -13,14 +13,19 @@ import { useMobileMode, useNotification } from '../../../../../../utils'
 const LEADERBOARD_ITEM_LIMIT = 50
 
 interface ProjectLeaderboardListProps extends CardLayoutProps {
+  id?: string
+  isBounded?: boolean
   project: ProjectFragment
 }
 
-export const ProjectLeaderboardList = ({ project, ...props }: ProjectLeaderboardListProps) => {
+export const ProjectLeaderboardList = ({
+  id = ID.project.activity.leaderboard,
+  isBounded,
+  project,
+  ...props
+}: ProjectLeaderboardListProps) => {
   const isMobile = useMobileMode()
   const { toast } = useNotification()
-
-  const id = ID.project.activity.leaderboard
 
   const funders = useQueryWithPagination<FunderWithUserFragment>({
     queryName: 'fundersGet',
@@ -80,7 +85,7 @@ export const ProjectLeaderboardList = ({ project, ...props }: ProjectLeaderboard
           })
         )}
         <ScrollInvoke
-          elementId={!isMobile ? id : undefined}
+          elementId={!isMobile || isBounded ? id : undefined}
           onScrollEnd={funders.fetchNext}
           isLoading={funders.isLoadingMore}
           noMoreItems={funders.noMoreItems}
