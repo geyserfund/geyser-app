@@ -53,7 +53,7 @@ interface IEntryViewWrapper {
 const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
   const isMobile = useMobileMode()
 
-  const { project, error: projectError, loading: projectLoading } = useProjectContext()
+  const { project, error: projectError, loading: projectLoading, fundingFlow } = useProjectContext()
 
   if (loading || projectLoading || !project) {
     return <Loader paddingTop="65px" />
@@ -81,7 +81,7 @@ const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
         />
         <EntryContainer entry={entry} />
         <ProjectActivityPanel resourceType={FundingResourceType.Entry} resourceId={entry.id} />
-        {isMobile && <ProjectMobileBottomNavigation fixed />}
+        {isMobile && fundingFlow.fundState === 'initial' && <ProjectMobileBottomNavigation fixed />}
       </Box>
     </Box>
   )
