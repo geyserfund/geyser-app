@@ -4,12 +4,14 @@ import {
   ButtonProps,
   HStack,
   Link,
+  ListItem,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  UnorderedList,
   VStack,
 } from '@chakra-ui/react'
 import { useState } from 'react'
@@ -93,26 +95,24 @@ export const SubscribeButton = ({ projectName, projectTitle, noIcon, ...props }:
                 <VStack alignItems={'start'} spacing="20px">
                   <CardLayout p="10px 20px" direction="row">
                     <PiWarningCircleFill color={colors.primary[500]} size="30px" />
-                    <VStack flex="1">
-                      <Body2>
-                        {t(
-                          "This feature is in beta, it's important to note that contributions will not be recorded with your Geyser account but will instead be recorded with your Flash account. ",
-                        )}
-                      </Body2>
-                      <Body2>
-                        {t(
-                          'Currently, this feature is only compatible with NWC wallets, which include Alby, Mutinity, and the Umbrel node wallets.',
-                        )}
-                      </Body2>
-                      <Body2>
-                        <Trans i18nKey="For more information and to drop your feedback please follow this  <1>link</1>.">
-                          For more information and to drop your feedback please follow this{' '}
-                          <Link isExternal href={subscriptionFeedbackUrl} fontWeight={700} textDecoration={'none'}>
-                            link
-                          </Link>
-                          .
-                        </Trans>
-                      </Body2>
+                    <VStack flex="1" alignItems={'start'}>
+                      <Body2>{t('This feature is in beta')}:</Body2>
+                      <UnorderedList fontSize={'14px'}>
+                        <ListItem>{t('You need to signup with Flash')}</ListItem>
+                        <ListItem>
+                          {t('You can contribute with compatible with NWC wallets: Alby, Mutiny, and Umbrel node')}
+                        </ListItem>
+                        <ListItem>{t('Contributions will not be made through your Geyser account')}</ListItem>
+                        <ListItem>
+                          <Trans i18nKey="For more information and feedback please follow this <1>link</1>.">
+                            For more information and feedback please follow this
+                            <Link isExternal href={subscriptionFeedbackUrl} fontWeight={700} textDecoration={'none'}>
+                              link
+                            </Link>
+                            .
+                          </Trans>
+                        </ListItem>
+                      </UnorderedList>
                     </VStack>
                   </CardLayout>
                   <Body2>

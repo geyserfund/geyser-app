@@ -11,7 +11,7 @@ import { ProjectLeaderboardList } from './components/ProjectLeaderboardList'
 let visitedContribution = false
 let visitedLeaderboard = false
 
-export const InfoScreenFeed = () => {
+export const InfoScreenFeed = ({ id, isBounded }: { id?: string; isBounded?: boolean }) => {
   const isMobile = useMobileMode()
   const { mobileView, project } = useProjectContext()
 
@@ -50,16 +50,23 @@ export const InfoScreenFeed = () => {
       <>
         {(isActivity || visitedContribution) && (
           <ProjectContributionList
+            isBounded={isBounded}
+            id={`${id}-${ID.project.activity.contribution}`}
             display={!isActivity && visitedContribution ? 'none' : undefined}
             project={project}
           />
         )}
         {(!isActivity || visitedLeaderboard) && (
-          <ProjectLeaderboardList display={isActivity && visitedLeaderboard ? 'none' : undefined} project={project} />
+          <ProjectLeaderboardList
+            isBounded={isBounded}
+            id={`${id}-${ID.project.activity.leaderboard}`}
+            display={isActivity && visitedLeaderboard ? 'none' : undefined}
+            project={project}
+          />
         )}
       </>
     )
-  }, [tab, project])
+  }, [tab, project, isBounded, id])
 
   if (!project) {
     return null

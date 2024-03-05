@@ -880,6 +880,20 @@
   "Date Purchased":"Date Purchased",
   "Shipping status":"Shipping status",
   "Visible to you only":"Visible to you only",
-  "guide":"guide"
+  "guide":"guide",
+  "This feature is in beta":"This feature is in beta",
+  "You need to signup with Flash":"You need to signup with Flash",
+  "You can contribute with compatible with NWC wallets: Alby, Mutiny, and Umbrel node":"You can contribute with compatible with NWC wallets: Alby, Mutiny, and Umbrel node",
+  "Contributions will not be made through your Geyser account":"Contributions will not be made through your Geyser account",
+  "For more information and feedback please follow this <1>link</1>.":"For more information and feedback please follow this <1>link</1>.",
+  "Subscribe to the <1>{{PROJECT_NAME}}</1> with recurring payments to ensure your continuous support for the project. By choosing a subscription model, you'll automatically contribute to the project on a regular basis.":"Subscribe to the <1>{{PROJECT_NAME}}</1> with recurring payments to ensure your continuous support for the project. By choosing a subscription model, you'll automatically contribute to the project on a regular basis.",
+  "Subscribe to":"Subscribe to",
+   "Beta":"Beta",
+   "Join Beta":"Join Beta",
+   "Guide":"Guide",
+   "Subscribe to Projects":"Subscribe to Projects",
+   "Want to integrate subscriptions?":"Want to integrate subscriptions?",
+   "See more":"See more"
+
 
 }
