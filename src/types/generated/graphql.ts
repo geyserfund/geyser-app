@@ -4501,7 +4501,7 @@ export type ProjectFragment = {
     country?: { __typename?: 'Country'; name: string; code: string } | null
   } | null
   tags: Array<{ __typename?: 'Tag'; id: number; label: string }>
-  owners: Array<{ __typename?: 'Owner'; id: any; user: { __typename?: 'User' } & UserMeFragment }>
+  owners: Array<{ __typename?: 'Owner'; id: any; user: { __typename?: 'User' } & ProjectOwnerUserFragment }>
   rewards: Array<{ __typename?: 'ProjectReward' } & ProjectRewardForCreateUpdateFragment>
   ambassadors: Array<{
     __typename?: 'Ambassador'
@@ -4662,6 +4662,17 @@ export type ExternalAccountFragment = {
   externalUsername: string
   externalId: string
   public: boolean
+}
+
+export type ProjectOwnerUserFragment = {
+  __typename?: 'User'
+  id: any
+  username: string
+  imageUrl?: string | null
+  email?: string | null
+  ranking?: any | null
+  isEmailVerified: boolean
+  externalAccounts: Array<{ __typename?: 'ExternalAccount' } & ExternalAccountFragment>
 }
 
 export type UserMeFragment = {
@@ -6263,8 +6274,8 @@ export const ExternalAccountFragmentDoc = gql`
     public
   }
 `
-export const UserMeFragmentDoc = gql`
-  fragment UserMe on User {
+export const ProjectOwnerUserFragmentDoc = gql`
+  fragment ProjectOwnerUser on User {
     id
     username
     imageUrl
@@ -6273,16 +6284,6 @@ export const UserMeFragmentDoc = gql`
     isEmailVerified
     externalAccounts {
       ...ExternalAccount
-    }
-    ownerOf {
-      project {
-        id
-        name
-        image
-        thumbnailImage
-        title
-        status
-      }
     }
   }
   ${ExternalAccountFragmentDoc}
@@ -6357,7 +6358,7 @@ export const ProjectFragmentDoc = gql`
     owners {
       id
       user {
-        ...UserMe
+        ...ProjectOwnerUser
       }
     }
     rewards {
@@ -6424,10 +6425,34 @@ export const ProjectFragmentDoc = gql`
       }
     }
   }
-  ${UserMeFragmentDoc}
+  ${ProjectOwnerUserFragmentDoc}
   ${ProjectRewardForCreateUpdateFragmentDoc}
   ${UserForAvatarFragmentDoc}
   ${EntryForProjectFragmentDoc}
+`
+export const UserMeFragmentDoc = gql`
+  fragment UserMe on User {
+    id
+    username
+    imageUrl
+    email
+    ranking
+    isEmailVerified
+    externalAccounts {
+      ...ExternalAccount
+    }
+    ownerOf {
+      project {
+        id
+        name
+        image
+        thumbnailImage
+        title
+        status
+      }
+    }
+  }
+  ${ExternalAccountFragmentDoc}
 `
 export const ProjectForSubscriptionFragmentDoc = gql`
   fragment ProjectForSubscription on Project {
