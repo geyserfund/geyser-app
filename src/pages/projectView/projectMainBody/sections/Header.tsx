@@ -1,4 +1,4 @@
-import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, Modal, ModalContent, ModalOverlay, Text, useDisclosure, VStack } from '@chakra-ui/react'
 import { forwardRef, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsArrowRight } from 'react-icons/bs'
@@ -12,6 +12,7 @@ import { useProjectContext } from '../../../../context'
 import { validateImageUrl } from '../../../../forms/validations/image'
 import { ProjectStatus, WalletStatus } from '../../../../types'
 import { toInt, useMobileMode } from '../../../../utils'
+import { toLargeImageUrl } from '../../../../utils/tools/imageSizes'
 import { useFollowedProjectsValue } from '../../../auth/state'
 import { SubscribeButton } from '../../projectActivityPanel/screens/info/components'
 import { ContributeButton, FollowButton, LightningAddress, ProjectFundingQR, ShareButton } from '../components'
@@ -23,6 +24,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const { project } = useProjectContext()
   const followedProjects = useFollowedProjectsValue()
   const isMobile = useMobileMode()
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [subscribers, setSubscribers] = useState(0)
   const isProjectSubscriptionEnabled = project && projectsWithSubscription.includes(project?.name)
@@ -88,6 +90,12 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
 
   return (
     <>
+      <Modal isOpen={isOpen} onClose={onClose} size={isMobile ? 'md' : 'xl'} isCentered>
+        <ModalOverlay />
+        <ModalContent padding="0" minWidth="0">
+          <img src={toLargeImageUrl(project.thumbnailImage || '')} alt={project.title} />
+        </ModalContent>
+      </Modal>
       <CardLayout
         ref={ref}
         mobileDense
@@ -102,11 +110,13 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             <ImageWithReload
               borderRadius="8px"
               objectFit="cover"
-              src={project.thumbnailImage || undefined}
+              src={project.thumbnailImage || ''}
               width={{ base: '42px', lg: '80px' }}
               height={{ base: '42px', lg: '80px' }}
               maxHeight="80px"
               alignSelf={'start'}
+              onClick={onOpen}
+              cursor={'pointer'}
             />
             <Text flex={1} variant="h2" width="100%" color="neutral.900">
               {project.title}
