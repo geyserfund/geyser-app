@@ -5,20 +5,22 @@ import { getMainDefinition } from '@apollo/client/utilities'
 import { createClient } from 'graphql-ws'
 
 import { __development__ } from '../../constants'
+import { toInt } from '../../utils'
 import { getAppEndPoint } from '../domain'
 import { cache } from './apollo-client-cache'
 
 const retryLink = new RetryLink({
   attempts(count, _, error) {
     const err = error?.result?.error
-    const statusCode = error?.statusCode || 0
+    const statusCode = toInt(`${error?.statusCode}`)
+
     return (
-      err &&
       count <= 2 &&
       (Boolean(
-        err.code === 'STALE_REFRESH_TOKEN' ||
-          err.code === 'EXPIRED_REFRESH_TOKEN' ||
-          err.code === 'INVALIDE_REFRESH_TOKEN',
+        err &&
+          (err.code === 'STALE_REFRESH_TOKEN' ||
+            err.code === 'EXPIRED_REFRESH_TOKEN' ||
+            err.code === 'INVALIDE_REFRESH_TOKEN'),
       ) ||
         statusCode === 408)
     )
@@ -29,7 +31,6 @@ const retryLink = new RetryLink({
 })
 
 const apiServiceEndPoint = getAppEndPoint()
-
 const httpLink = createHttpLink({
   uri: `${apiServiceEndPoint}/graphql`,
   credentials: 'include',
