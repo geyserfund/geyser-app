@@ -5,6 +5,11 @@ import { TiPlus } from 'react-icons/ti'
 import { Modal } from '../../../../../../../components/layouts/Modal'
 import { Body2 } from '../../../../../../../components/typography'
 import { useModal } from '../../../../../../../hooks/useModal'
+import { ConnectWithLightning } from '../../../../../../../pages/auth/ConnectWithLightning'
+import { ConnectWithNostr } from '../../../../../../../pages/auth/ConnectWithNostr'
+import { ConnectWithSocial } from '../../../../../../../pages/auth/ConnectWithSocial'
+import { SocialAccountType } from '../../../../../../../pages/auth/type'
+import { useRefreshAuthToken } from '../../../../../../../pages/auth/useAuthToken'
 import { UserForProfilePageFragment } from '../../../../../../../types'
 import {
   hasFacebookAccount,
@@ -15,16 +20,14 @@ import {
   hasTwitterAccount,
   useMobileMode,
 } from '../../../../../../../utils'
-import { ConnectWithLightning } from '../../../../../../../pages/auth/ConnectWithLightning'
-import { ConnectWithNostr } from '../../../../../../../pages/auth/ConnectWithNostr'
-import { ConnectWithSocial } from '../../../../../../../pages/auth/ConnectWithSocial'
-import { SocialAccountType } from '../../../../../../../pages/auth/type'
-import { useRefreshAuthToken } from '../../../../../../../pages/auth/useAuthToken'
+import { useViewingOwnProfileAtomValue } from '../../../../../state'
 
 export const ConnectAccounts = ({ user }: { user: UserForProfilePageFragment }) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
   const { isOpen, onOpen, onClose } = useModal()
+
+  const isViewingOwnProfile = useViewingOwnProfileAtomValue()
 
   useRefreshAuthToken(isOpen)
 
@@ -48,7 +51,7 @@ export const ConnectAccounts = ({ user }: { user: UserForProfilePageFragment }) 
     displayGoogleButton ||
     displayGithubButton
 
-  if (!canConnectAccount) {
+  if (!canConnectAccount || !isViewingOwnProfile) {
     return null
   }
 
