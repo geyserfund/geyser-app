@@ -1,7 +1,7 @@
 import { ApolloError } from '@apollo/client'
 import { Box } from '@chakra-ui/layout'
 import { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Outlet, useNavigate, useParams } from 'react-router-dom'
 
 import Loader from '../../components/ui/Loader'
 import { Head } from '../../config'
@@ -13,18 +13,23 @@ import { toInt, useMobileMode } from '../../utils'
 import { NotFoundPage } from '../fallback/NotFoundPage'
 import { ProjectActivityPanel } from '../projectView/projectActivityPanel'
 import { ProjectMobileBottomNavigation } from '../projectView/projectNavigation/components/ProjectMobileBottomNavigation'
-import { EntryContainer } from './EntryContainer'
+import { useEntryAtom } from './entryAtom'
 
 export const EntryPage = () => {
   const { entryId } = useParams<{ entryId: string }>()
   const navigate = useNavigate()
 
-  const [getEntry, { loading, error, data: entryData }] = useEntryLazyQuery({
+  const [entry, setEntry] = useEntryAtom()
+
+  const [getEntry, { loading, error }] = useEntryLazyQuery({
     onCompleted(data) {
       const { entry } = data
-      if (!entry) {
-        navigate(getPath('notFound'))
+      if (entry) {
+        setEntry(entry)
+        return
       }
+
+      navigate(getPath('notFound'))
     },
     onError() {
       navigate(getPath('notFound'))
@@ -38,8 +43,8 @@ export const EntryPage = () => {
   }, [entryId, getEntry])
 
   return (
-    <ProjectProvider projectId={Number(entryData && entryData.entry && entryData.entry.project?.id)}>
-      <EntryViewWrapper loading={loading} error={error} entry={entryData?.entry} />
+    <ProjectProvider projectId={Number(entry.project?.id)}>
+      <EntryViewWrapper loading={loading} error={error} entry={entry} />
     </ProjectProvider>
   )
 }
@@ -79,7 +84,7 @@ const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
           description={entry.description}
           image={entry.image || entry.project?.image || ProjectEntryThumbnailPlaceholderUrl}
         />
-        <EntryContainer entry={entry} />
+        <Outlet />
         <ProjectActivityPanel resourceType={FundingResourceType.Entry} resourceId={entry.id} />
         {isMobile && fundingFlow.fundState === 'initial' && <ProjectMobileBottomNavigation fixed />}
       </Box>

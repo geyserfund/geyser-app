@@ -10,6 +10,7 @@ import { MobileViews, useProjectContext } from '../../../../context'
 import { useLayoutAnimation, useScrollDirection } from '../../../../hooks'
 import { useIsProjectPage } from '../../../../navigation/topNavBar/topNavBarAtom'
 import { isActive } from '../../../../utils'
+import { useEntryAtom } from '../../../entry/entryAtom'
 import { navigationItems } from './BottomNavList'
 
 export const ProjectMobileBottomNavigation = ({ fixed }: { fixed?: boolean }) => {
@@ -74,6 +75,7 @@ export const ProjectNavUI = () => {
   const navigate = useNavigate()
 
   const { mobileView, setMobileView, project, isProjectOwner, onCreatorModalOpen } = useProjectContext()
+  const [entry] = useEntryAtom()
 
   const className = useLayoutAnimation()
 
@@ -116,7 +118,6 @@ export const ProjectNavUI = () => {
       {navigationItems.map((item, index) => {
         if (isProjectOwner && !item.isCreator) return null
         if (!isProjectOwner && !item.isContributor) return null
-        if (!isProjectPage && item.name === 'Rewards') return null
 
         if (item.name === 'Rewards' && (!project.rewards || project.rewards.length === 0)) return null
 
@@ -126,6 +127,8 @@ export const ProjectNavUI = () => {
             navigate(item.pathName)
           } else if (isProjectPage) {
             navigate(getPath('project', project.name))
+          } else {
+            navigate(getPath('entry', entry.id))
           }
         }
 
