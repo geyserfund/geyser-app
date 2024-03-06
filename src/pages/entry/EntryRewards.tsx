@@ -16,7 +16,7 @@ export const EntryRewards = () => {
 
   useEffect(() => {
     if (!isMobile && project) {
-      navigate(getPath('projectRewards', project?.name))
+      navigate(getPath('projectRewards', project.name))
     }
   }, [isMobile, project, navigate])
 
