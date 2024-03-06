@@ -8,7 +8,9 @@ import { getPath } from '../../../../constants'
 import { BottomNavContainerCommonStyles } from '../../../../constants/styles'
 import { MobileViews, useProjectContext } from '../../../../context'
 import { useLayoutAnimation, useScrollDirection } from '../../../../hooks'
+import { useIsProjectPage } from '../../../../navigation/topNavBar/topNavBarAtom'
 import { isActive } from '../../../../utils'
+import { useEntryAtom } from '../../../entry/entryAtom'
 import { navigationItems } from './BottomNavList'
 
 export const ProjectMobileBottomNavigation = ({ fixed }: { fixed?: boolean }) => {
@@ -71,9 +73,13 @@ export const ProjectMobileBottomNavigation = ({ fixed }: { fixed?: boolean }) =>
 export const ProjectNavUI = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+
   const { mobileView, setMobileView, project, isProjectOwner, onCreatorModalOpen } = useProjectContext()
+  const [entry] = useEntryAtom()
 
   const className = useLayoutAnimation()
+
+  const isProjectPage = useIsProjectPage()
 
   const getTextColor = (value?: MobileViews) => {
     if (!value) return 'neutral.600'
@@ -119,8 +125,10 @@ export const ProjectNavUI = () => {
           handleMobileViewClick(item.mobileView)
           if (item.pathName) {
             navigate(item.pathName)
-          } else {
+          } else if (isProjectPage) {
             navigate(getPath('project', project.name))
+          } else {
+            navigate(getPath('entry', entry.id))
           }
         }
 

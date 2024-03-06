@@ -1,10 +1,9 @@
 import { Box, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { useLocation } from 'react-router-dom'
 
 import { SectionTitle } from '../../../../../components/ui'
-import { PathName } from '../../../../../constants'
 import { useProjectContext } from '../../../../../context'
+import { useIsProjectPage } from '../../../../../navigation/topNavBar/topNavBarAtom'
 import { ProjectRewardForCreateUpdateFragment } from '../../../../../types'
 import { useMobileMode, useNotification } from '../../../../../utils'
 import { FundingFormRewardItem } from '../../../projectMainBody/components'
@@ -16,7 +15,6 @@ type Props = {
 
 export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
   const { t } = useTranslation()
-  const location = useLocation()
   const {
     project,
     fundForm: { state, updateReward },
@@ -27,7 +25,7 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
 
   const hasRewards = rewards && rewards.length
 
-  const isProjectPage = location.pathname.includes(PathName.project)
+  const isProjectPage = useIsProjectPage()
 
   if (!hasRewards) {
     return null
@@ -109,7 +107,7 @@ export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
                 handleAdd(reward, count)
               }
 
-              return count == 0 ? (
+              return count === 0 ? (
                 <FundingFormRewardItem
                   readOnly={readOnly}
                   onClick={onRewardClick ? () => onRewardClick(reward) : add}

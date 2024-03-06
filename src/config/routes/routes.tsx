@@ -311,7 +311,25 @@ export const platformRoutes: RouteObject[] = [
       const EntryPage = await Entry().then((m) => m.EntryPage)
       return { Component: EntryPage }
     },
+    children: [
+      {
+        index: true,
+        path: getPath('entry', PathName.entryId),
+        async lazy() {
+          const EntryContainer = await Entry().then((m) => m.EntryContainer)
+          return { Component: EntryContainer }
+        },
+      },
+      {
+        path: getPath('entryRewards', PathName.entryId),
+        async lazy() {
+          const EntryRewards = await Entry().then((m) => m.EntryRewards)
+          return { Component: EntryRewards }
+        },
+      },
+    ],
   },
+
   {
     path: getPath('notFound'),
     Component: NotFoundPage,

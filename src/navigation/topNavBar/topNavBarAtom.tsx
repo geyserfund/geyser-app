@@ -27,7 +27,7 @@ const routesForHidingMyProjectsButton = [
 ]
 const routesForHidingMyProjectsButtonAtom = atom(routeMatchForAtom(routesForHidingMyProjectsButton))
 
-const routesForLeftSideMenuButtonAtom = atom(routeMatchForAtom(projectRoutes))
+const routesForProjectPage = atom(routeMatchForAtom(projectRoutes))
 
 const routesForTransparentBackground = [getPath('index'), getPath('landingFeed')]
 const routesForTransparentBackgroundAtom = atom(routeMatchForAtom(routesForTransparentBackground))
@@ -74,7 +74,7 @@ export const useRouteMatchesForTopNavBar = () => {
   const hideTopNavBar = useAtomValue(routesForHidingTopNavAtom)
   const showProjectButton = useAtomValue(routesForShowingProjectButtonAtom)
   const hideMyProjectsButton = useAtomValue(routesForHidingMyProjectsButtonAtom)
-  const showLeftSideMenuButton = useAtomValue(routesForLeftSideMenuButtonAtom)
+  const showLeftSideMenuButton = useAtomValue(routesForProjectPage)
   const showNavItems = useAtomValue(routesForShowingNavItemsAtom)
   const showCustomTitle = useAtomValue(routesForCustomTitleAtom)
   const showProjectLaunchButton = useAtomValue(routesToShowProjectLaunchButtonAtom)
@@ -95,3 +95,5 @@ export const useRouteMatchesForTopNavBar = () => {
     showSignInButton,
   }
 }
+
+export const useIsProjectPage = () => useAtomValue(routesForProjectPage)
