@@ -1,31 +1,57 @@
+import { HStack, StackProps } from '@chakra-ui/react'
+import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
-import { ProjectReward, ProjectRewardForCreateUpdateFragment } from '../../../types'
+import { BsStars } from 'react-icons/bs'
 
-type Props = {
+import { ProjectReward, ProjectRewardForCreateUpdateFragment } from '../../../types'
+import { Caption } from '../../typography'
+
+interface Props extends StackProps {
   reward: ProjectRewardForCreateUpdateFragment | ProjectReward
 }
 
-export const ProjectRewardShippingEstimate = ({ reward }: Props) => {
+export const ProjectRewardShippingEstimate = ({ reward, ...rest }: Props) => {
   const { t } = useTranslation()
 
-  const dateOfDelivery = new Date(reward.estimatedAvailabilityDate).toLocaleString('en-us',{month:'short', year:'numeric'});
+  const getTextToRender = () => {
+    if (reward.preOrder === true && !reward.estimatedAvailabilityDate) {
+      return <>{t('Pre-order now')}</>
+    }
 
-  if (reward.preOrder === true && !reward.estimatedAvailabilityDate) {
-    return <>{t('Pre-order')}</>
+    if (reward.preOrder === false && !reward.estimatedDeliveryInWeeks) {
+      return (
+        <>
+          <BsStars fontSize={'14px'} style={{ marginRight: '5px' }} />
+          {t('Reward is ready for delivery')}
+        </>
+      )
+    }
+
+    if (reward.preOrder === true && reward.estimatedAvailabilityDate) {
+      const dateOfDelivery = DateTime.fromMillis(reward.estimatedAvailabilityDate).toFormat('LLL, yyyy')
+
+      return (
+        <>
+          {t('Pre-order now')} &#8226; {t('Available on')}: {dateOfDelivery}
+        </>
+      )
+    }
+
+    if (reward.preOrder === false && reward.estimatedDeliveryInWeeks) {
+      return (
+        <>
+          <BsStars fontSize={'14px'} style={{ marginRight: '5px' }} />
+          {t('Delivery in')}: {reward.estimatedDeliveryInWeeks} {t('weeks')}
+        </>
+      )
+    }
   }
 
-  if (reward.preOrder === false && !reward.estimatedDeliveryInWeeks) {
-    // Add icon
-    return <>{t('Reward is Ready')}</>
-  }
-
-  if(reward.preOrder === true && reward.estimatedAvailabilityDate) {
-    return <>{t('Pre-order by')}: {dateOfDelivery}</>
-  }
-
-  if(reward.preOrder === false && reward.estimatedDeliveryInWeeks) {
-    return <>{t('Delivery in')}: {reward.estimatedDeliveryInWeeks} {t('weeks')}</>
-  }
-
-  return <></>
+  return (
+    <HStack p="5px 10px" backgroundColor="neutral.100" borderRadius={4} {...rest}>
+      <Caption color="neutral.700" xBold display="inline-flex">
+        {getTextToRender()}
+      </Caption>
+    </HStack>
+  )
 }

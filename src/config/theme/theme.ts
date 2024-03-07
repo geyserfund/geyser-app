@@ -77,14 +77,14 @@ export const theme = {
           },
         }),
         primaryNeutral: ({ theme }: StyleFunctionProps) => ({
-          backgroundColor: theme.colors.neutral[100],
+          backgroundColor: theme.colors.neutral[600],
           border: 'none',
-          color: theme.colors.neutral[900],
+          color: theme.colors.neutral[0],
           _hover: {
-            backgroundColor: theme.colors.neutral[200],
+            backgroundColor: theme.colors.neutral[700],
           },
           _active: {
-            backgroundColor: theme.colors.neutral[300],
+            backgroundColor: theme.colors.neutral[900],
           },
         }),
         primaryGradient: ({ theme }: StyleFunctionProps) => ({

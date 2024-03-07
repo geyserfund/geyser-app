@@ -94,7 +94,7 @@ export const secondaryColors = {
   green: '#00E34D',
   red: '#DF3634',
   yellow: '#FFE600',
-  orange: '#FB923C',
+  orange: '#DD6B20',
   pink: '#FC257A',
   blue: '#438FF2',
   purple: '#670C8B',
@@ -139,4 +139,4 @@ export const darkModeColors = {
   app: ColorsAppDark,
 }
 
-export const colorOrange = '#DD6B20'
+export const colorOrange = ' '
