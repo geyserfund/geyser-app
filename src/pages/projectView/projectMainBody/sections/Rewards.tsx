@@ -89,7 +89,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
           {t('Rewards')}
         </TitleDivider>
 
-        <SimpleGrid columns={largeView ? 2 : 1} spacing={3} width={'100%'}>
+        <SimpleGrid columns={largeView ? 2 : 1} spacing={'20px'} width={'100%'}>
           {renderRewards()}
         </SimpleGrid>
       </CardLayout>
