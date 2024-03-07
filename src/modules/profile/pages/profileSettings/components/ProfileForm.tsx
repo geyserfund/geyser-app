@@ -48,39 +48,40 @@ export const ProfileForm = ({ isLoading }: { isLoading?: boolean }) => {
   }
 
   return (
-    <form onSubmit={onSubmit}>
-      <VStack spacing="30px" w="full">
-        <VStack w="full" align="start" gap={3}>
-          <H3>{t('Profile information')}</H3>
-          <HStack w="full" alignItems={'start'} spacing="20px">
-            <EditableAvatar onUploadImage={onUploadImage} userId={user.id} imageUrl={imageUrl} />
+    <>
+      <form onSubmit={onSubmit}>
+        <VStack spacing="30px" w="full">
+          <VStack w="full" align="start" gap={3}>
+            <H3>{t('Profile information')}</H3>
+            <HStack w="full" alignItems={'start'} spacing="20px">
+              <EditableAvatar onUploadImage={onUploadImage} userId={user.id} imageUrl={imageUrl} />
 
-            <VStack align="start" w="100%">
-              <Text>{t('Name')}</Text>
-              <Input name="name" value={name} onChange={(e) => setName(e.currentTarget.value)} />
+              <VStack align="start" w="100%">
+                <Text>{t('Name')}</Text>
+                <Input name="name" value={name} onChange={(e) => setName(e.currentTarget.value)} />
+              </VStack>
+            </HStack>
+
+            <VStack align="start" gap={1} w="100%">
+              <Text>{t('Bio')}</Text>
+              <TextArea value={bio} onChange={(e) => setBio(e.currentTarget.value)} />
             </VStack>
-          </HStack>
-
-          <VStack align="start" gap={1} w="100%">
-            <Text>{t('Bio')}</Text>
-            <TextArea value={bio} onChange={(e) => setBio(e.currentTarget.value)} />
           </VStack>
+
+          <Button
+            isLoading={isLoading || editLoading}
+            isDisabled={isLoading}
+            variant="primary"
+            width="100%"
+            type="submit"
+          >
+            {t('Save')}
+          </Button>
         </VStack>
-
-        <UpdateVerifyEmail />
-        <DeleteUserProfile />
-
-        <Button
-          isLoading={isLoading || editLoading}
-          isDisabled={isLoading}
-          variant="primary"
-          width="100%"
-          type="submit"
-        >
-          {t('Save')}
-        </Button>
-      </VStack>
-    </form>
+      </form>
+      <UpdateVerifyEmail />
+      <DeleteUserProfile />
+    </>
   )
 }
 
