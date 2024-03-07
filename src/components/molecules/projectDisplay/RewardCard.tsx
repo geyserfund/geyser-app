@@ -1,10 +1,13 @@
-import { Badge, Box, Button, Container, Stack, Text } from '@chakra-ui/react'
+import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { useProjectContext } from '../../../context'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../types/generated/graphql'
-import { ICard } from '../../ui'
+import { CardLayout } from '../../layouts'
+import { Body1, Body2 } from '../../typography'
+import { ICard, ImageWithReload } from '../../ui'
 import { ProjectRewardAvailability } from './ProjectRewardAvailability'
+import { ProjectRewardShippingEstimate } from './ProjectRewardShippingEstimate'
 
 type Props = ICard & {
   reward: ProjectRewardForCreateUpdateFragment
@@ -21,77 +24,59 @@ export const RewardCard = ({ reward, count, ...rest }: Props) => {
   const isRewardAvailable = reward.maxClaimable ? reward.maxClaimable - reward.sold > count : true
 
   return (
-    <Box border="2px" borderColor="neutral.200" borderRadius={12} mt={2} p={3} pb={16} pos={'relative'}>
-      <Stack direction="row" justify="space-between">
-        <Text fontWeight={700} fontSize={16} color="neutral.900">
-          {reward.name}
-        </Text>
-        <Stack direction="row">
-          <Text fontWeight={700} fontSize={16} color="neutral.600">
-            {project && project.rewardCurrency == RewardCurrency.Usdcent
-              ? `$${reward.cost / 100}`
-              : `${reward.cost.toLocaleString()} sats`}
-          </Text>
-        </Stack>
-      </Stack>
-      <Stack direction="column" gap={1}>
-        <Box mt={2} mb={2} borderRadius={12} overflow={'hidden'}>
-          <div style={{ display: 'block', position: 'relative', paddingTop: '56.25%', width: '100%' }}>
-            <div
-              style={{
-                display: 'block',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: `transparent url(${reward.image}) no-repeat center center / cover`,
-              }}
-            ></div>
-          </div>
+    <CardLayout p={'20px'} pos={'relative'} direction="column" spacing="10px" justifyContent={'space-between'}>
+      <VStack spacing="10px" alignItems="start">
+        <HStack justify="space-between">
+          <Body1 xBold color="neutral.900">
+            {reward.name}
+          </Body1>
+          <HStack>
+            <Body1 xBold color="neutral.600">
+              {project && project.rewardCurrency === RewardCurrency.Usdcent
+                ? `$${reward.cost / 100}`
+                : `${reward.cost.toLocaleString()} sats`}
+            </Body1>
+          </HStack>
+        </HStack>
+        <Box
+          borderRadius={8}
+          border="1px solid"
+          borderColor={'neutral.700'}
+          overflow={'hidden'}
+          width="100%"
+          height="160px"
+        >
+          <ImageWithReload src={reward.image || ''} alt={reward.name} width="100%" height="100%" objectFit="cover" />
         </Box>
-        <Stack direction={'row'} justifyContent="space-between" align="center" alignItems={'center'}>
+        <HStack w="full" justifyContent="space-between" align="center" alignItems={'center'}>
           <Text fontWeight={400} fontSize="14px" color="neutral.900">
             <ProjectRewardAvailability reward={reward} />
-            {reward.sold || 0} {t('sold')}
+            {reward.sold || 0} {t('backers')}
           </Text>
           {reward.category && (
-            <Badge
-              fontSize={'10px'}
-              borderRadius={'6px'}
-              height={'20px'}
-              backgroundColor={'neutral.100'}
-              textTransform={'none'}
-              fontWeight={600}
-              lineHeight={'20px'}
-              p={'0 4px'}
-            >
+            <Body2 color="neutral.900" xBold>
               {reward.category}
-            </Badge>
+            </Body2>
           )}
-        </Stack>
+        </HStack>
+        <ProjectRewardShippingEstimate w="full" reward={reward} />
         <Text fontWeight={400} fontSize="14px" color="neutral.600" lineHeight={'1.4'}>
           {reward.description}
         </Text>
-        <Container pos={'absolute'} bottom={3} left={3} right={3} width={'auto'} p={0}>
-          <Stack direction="row" style={{ marginTop: '10px' }}>
-            <Button
-              variant={isRewardAvailable ? 'secondary' : 'primary'}
-              size="sm"
-              height={'40px'}
-              onClick={(e) => {
-                rest.onRewardClick?.(e)
-              }}
-              style={{ flex: 1 }}
-              isDisabled={!isRewardAvailable}
-            >
-              <Text fontSize={16} fontWeight={500} isTruncated>
-                {t('Add to Basket')}
-              </Text>
-            </Button>
-          </Stack>
-        </Container>
-      </Stack>
-    </Box>
+      </VStack>
+      <Button
+        variant="primaryNeutral"
+        size="sm"
+        height={'40px'}
+        onClick={(e) => {
+          rest.onRewardClick?.(e)
+        }}
+        isDisabled={!isRewardAvailable}
+      >
+        <Text fontSize={16} fontWeight={500} isTruncated>
+          {t('Select item')}
+        </Text>
+      </Button>
+    </CardLayout>
   )
 }

@@ -4,8 +4,8 @@ import { createUseStyles } from 'react-jss'
 
 import { MobileViews, useProjectContext } from '../../context'
 import { fadeOut, slideInLeft } from '../../styles'
-import { EntryFragment } from '../../types'
 import { useMobileMode } from '../../utils'
+import { useEntryAtom } from './entryAtom'
 import { EntryDetails } from './EntryDetails'
 
 type Rules = string
@@ -44,12 +44,10 @@ const useStyles = createUseStyles<Rules, IStyles>({
   ...fadeOut,
 })
 
-interface IActivityProps {
-  entry: EntryFragment
-}
-
-export const EntryContainer = ({ entry }: IActivityProps) => {
+export const EntryContainer = () => {
   const isMobile = useMobileMode()
+
+  const [entry] = useEntryAtom()
 
   const { mobileView } = useProjectContext()
 

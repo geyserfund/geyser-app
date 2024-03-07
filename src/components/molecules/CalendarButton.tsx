@@ -11,6 +11,7 @@ interface ICalendarButton extends Pick<ButtonProps, 'isActive'> {
   value?: Date | null
   onChange: (_: Date) => void
   containerProps: BoxProps
+  showMonthYearPicker?: true | false
 }
 
 const useStyles = createUseStyles({
@@ -19,17 +20,24 @@ const useStyles = createUseStyles({
   },
 })
 
+const renderDateValue = (value: Date | null | undefined) => {
+  if(value) {
+    return new Date(value).toLocaleString('en-us',{month:'short', year:'numeric'});
+  }
+  return '';
+}
+
 const ButtonDateInput = forwardRef<
   HTMLButtonElement,
-  Pick<ButtonProps, 'onClick'> & Pick<ICalendarButton, 'value' | 'children'>
->(({ value, onClick, children, ...props }, ref) => (
+  Pick<ButtonProps, 'onClick'> & Pick<ICalendarButton, 'value' | 'children' | 'showMonthYearPicker'>
+>(({ value, onClick, children, showMonthYearPicker, ...props }, ref) => (
   <Button variant="secondary" width="100%" ref={ref} onClick={onClick} {...props}>
-    <Text>{value?.toString() || children}</Text>
+    <Text>{showMonthYearPicker ? (renderDateValue(value)) : (value?.toString() || children)}</Text>
   </Button>
 ))
 ButtonDateInput.displayName = 'ButtonDateInput'
 
-export const CalendarButton = ({ children, value, onChange, containerProps, ...buttonProps }: ICalendarButton) => {
+export const CalendarButton = ({ children, value, onChange, containerProps, showMonthYearPicker, ...buttonProps }: ICalendarButton) => {
   const classes = useStyles()
 
   const currentDate = DateTime.now().plus({ days: 7 })
@@ -40,8 +48,9 @@ export const CalendarButton = ({ children, value, onChange, containerProps, ...b
         wrapperClassName={classes.dateTimeWrapper}
         selected={value}
         onChange={onChange}
+        showMonthYearPicker={showMonthYearPicker}
         customInput={
-          <ButtonDateInput {...buttonProps} value={value}>
+          <ButtonDateInput {...buttonProps} showMonthYearPicker={showMonthYearPicker} value={value}>
             {children}
           </ButtonDateInput>
         }

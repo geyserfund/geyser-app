@@ -90,6 +90,7 @@ export const RenderEntries = ({ entries }: { entries: EntryForProjectFragment[] 
   })
 
   const handleEntryEditButtonTapped = (entry: EntryForProjectFragment) => {
+    if (!project?.name) return
     navigate(getPath('projectEntryDetails', project?.name, entry.id))
   }
 

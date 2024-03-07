@@ -7,6 +7,7 @@ import { menuTheme } from './menuTheme'
 import { modalTheme } from './modalTheme'
 import { popOverTheme } from './popOverTheme'
 import { selectTheme } from './selectTheme'
+import { switchTheme } from './switchTheme'
 
 export const theme = {
   initialColorMode: 'system',
@@ -76,14 +77,14 @@ export const theme = {
           },
         }),
         primaryNeutral: ({ theme }: StyleFunctionProps) => ({
-          backgroundColor: theme.colors.neutral[100],
+          backgroundColor: theme.colors.neutral[600],
           border: 'none',
-          color: theme.colors.neutral[900],
+          color: theme.colors.neutral[0],
           _hover: {
-            backgroundColor: theme.colors.neutral[200],
+            backgroundColor: theme.colors.neutral[700],
           },
           _active: {
-            backgroundColor: theme.colors.neutral[300],
+            backgroundColor: theme.colors.neutral[900],
           },
         }),
         primaryGradient: ({ theme }: StyleFunctionProps) => ({
@@ -302,6 +303,7 @@ export const theme = {
     Drawer: drawerTheme,
     Popover: popOverTheme,
     Select: selectTheme,
+    Switch: switchTheme,
     Input: {
       defaultProps: {
         focusBorderColor: 'primary.500',

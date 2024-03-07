@@ -1,19 +1,25 @@
 import { VStack } from '@chakra-ui/layout'
 
-import { useProjectContext } from '../../../../../context'
+import { MobileViews, useProjectContext } from '../../../../../context'
 import { standardPadding } from '../../../../../styles'
+import { useMobileMode } from '../../../../../utils'
 import { ActivityBrief } from './ActivityBrief'
 import { InfoScreenFeed } from './InfoScreenFeed'
 import { InfoScreenRewards } from './InfoScreenRewards'
 
 export const InfoScreen = () => {
-  const { project } = useProjectContext()
+  const { project, mobileView } = useProjectContext()
+
+  const isMobile = useMobileMode()
 
   if (!project) {
     return null
   }
 
   const activeProjectRewards = project ? project.rewards.filter((reward) => reward.isHidden === false) : []
+  const showFeed =
+    (isMobile && (mobileView === MobileViews.leaderboard || mobileView === MobileViews.contributors)) ||
+    activeProjectRewards.length === 0
 
   return (
     <VStack
@@ -26,7 +32,7 @@ export const InfoScreen = () => {
     >
       <ActivityBrief px={standardPadding} />
 
-      {activeProjectRewards.length > 0 ? <InfoScreenRewards /> : <InfoScreenFeed />}
+      {showFeed ? <InfoScreenFeed /> : <InfoScreenRewards />}
     </VStack>
   )
 }

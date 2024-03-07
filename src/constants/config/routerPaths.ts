@@ -90,6 +90,7 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectManageRewards}/${PathName.projectEditReward}/${rewardId}`,
 
   entry: (entryID: string) => `/${PathName.entry}/${entryID}`,
+  entryRewards: (entryID: string) => `/${PathName.entry}/${entryID}/${PathName.projectRewards}`,
   projectEntryCreation: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.entry}`,
   projectEntryDetails: (projectName: string, entryID: string) =>
     `/${PathName.project}/${projectName}/${PathName.entry}/${entryID}`,

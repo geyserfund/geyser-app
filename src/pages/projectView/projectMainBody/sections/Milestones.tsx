@@ -25,7 +25,7 @@ export const Milestones = forwardRef<HTMLDivElement>((_, ref) => {
             <MilestoneComponent
               key={milestone.id}
               name={milestone.name}
-              description={milestone.description}
+              description={milestone.description || ''}
               isReached={milestone.amount <= project.balance}
               amountRemaining={milestone.amount - project.balance}
             />

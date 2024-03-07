@@ -67,8 +67,8 @@ export const useProjectForm = ({ isEdit, project }: UseProjectFormProps) => {
           name: project.name,
           image: project.image || '',
           thumbnailImage: project.thumbnailImage || '',
-          shortDescription: project.shortDescription,
-          description: project.description,
+          shortDescription: project.shortDescription || '',
+          description: project.description || '',
           email: user.email || '',
         }
       }

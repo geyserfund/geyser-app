@@ -35,7 +35,7 @@ export const useProjectLayoutStyles = createUseStyles<Rules, Styles>({
   },
 })
 
-export const ProjectFundersModal = ({ props: {}, ...props }: Props) => {
+export const ProjectFundersModal = ({ ...props }: Props) => {
   const { t } = useTranslation()
   const classes = useProjectLayoutStyles()
 
@@ -46,7 +46,7 @@ export const ProjectFundersModal = ({ props: {}, ...props }: Props) => {
   return (
     <Modal title={t(' ')} size={'lg'} {...props}>
       <Box className={classes.detailsContainer}>
-        <InfoScreenFeed />
+        <InfoScreenFeed id={'modal'} isBounded />
       </Box>
     </Modal>
   )

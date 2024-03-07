@@ -65,7 +65,7 @@ export const ProjectDashboard = () => {
 
   const { project } = useProjectContext({ ownerAccessOnly: true })
 
-  const match = useMatch(`${getPath('projectDashboard', project?.name)}/:section`)
+  const match = useMatch(project ? `${getPath('projectDashboard', project?.name)}/:section` : '')
 
   const activeSectionKey = match?.params.section || 'description'
   const activeSection = sections[activeSectionKey]

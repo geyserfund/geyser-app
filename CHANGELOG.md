@@ -1,3 +1,31 @@
+## [0.7.1](https://github.com/geyserfund/geyser-app/compare/v0.7.0...v0.7.1) (2024-03-06)
+
+
+### Features
+
+* added thumbnail popup ([c92c790](https://github.com/geyserfund/geyser-app/commit/c92c79046fb36b2cde0f8fdd2b44af5b0fba9216))
+* estimated Delivery Date updates ([81e9dd2](https://github.com/geyserfund/geyser-app/commit/81e9dd27c7bc8a87319dd43de17aca3dd45bb473))
+
+
+### Bug Fixes
+
+* adapt image size with utils ([57ff367](https://github.com/geyserfund/geyser-app/commit/57ff36753dffd19654a1abd8d58d256b52a78598))
+* add null/undefined checks to resolves type issues ([5ca0b6a](https://github.com/geyserfund/geyser-app/commit/5ca0b6ad3724a6953b0956e4d1f67c1f4e431bcd))
+* add rewards to entry mobile ([7ef6760](https://github.com/geyserfund/geyser-app/commit/7ef67606a199b09cfbe7b57a51e633e276957b97))
+* added cursor to show clickable ([f699666](https://github.com/geyserfund/geyser-app/commit/f6996667f78ef86aae3e55b4b493871ae6f80224))
+* center the image ([4506e23](https://github.com/geyserfund/geyser-app/commit/4506e23ee3c3cf238353695f293678398109fd32))
+* contributions list inside modal not adding on scroll, resolves GYS-6509 ([fdaf02f](https://github.com/geyserfund/geyser-app/commit/fdaf02f6bfec529e307e6996d613976431ecc972))
+* entries mobile menu bar ([d30c564](https://github.com/geyserfund/geyser-app/commit/d30c564b8673f5cc067113fa28d312b7f9a015d9))
+* graphql types ([001d5eb](https://github.com/geyserfund/geyser-app/commit/001d5ebf6e11a358c8bd2d67f29cf35392194e4a))
+* pausing to do testing ([319333a](https://github.com/geyserfund/geyser-app/commit/319333a6e5c321fafdc8a7a401f45cc385568649))
+* refresh link ([4fd535f](https://github.com/geyserfund/geyser-app/commit/4fd535f5130d312d26c0727eb549b0c7e23a5d37))
+* remove connect accounts on other profile ([1cf9f85](https://github.com/geyserfund/geyser-app/commit/1cf9f85138abe083bd58396e1e578f7e9755250e))
+* remove deduplication config ([2a8ed55](https://github.com/geyserfund/geyser-app/commit/2a8ed554f135b0af24d9195294d3118a89973af0))
+* remove owneroffield from projectGet, resolves GYS-5808 ([502f6ad](https://github.com/geyserfund/geyser-app/commit/502f6add62d62c5aed09219fe9ddc840f913e704))
+* retry when status code is 408 ([05870cb](https://github.com/geyserfund/geyser-app/commit/05870cb33d1f45de6af3d1a050bf658c5cb414ce))
+* update copy, resolves GYS-6511 ([f9e0684](https://github.com/geyserfund/geyser-app/commit/f9e068490b03c70eb39464a7ac528ccbd437b51c))
+* use single query for multiple project get ([0aa9573](https://github.com/geyserfund/geyser-app/commit/0aa9573773a75dc63e1fe15999fb408b8e9f3184))
+
 ## [0.7.0](https://github.com/geyserfund/geyser-app/compare/v0.6.8...v0.7.0) (2024-03-03)
 
 

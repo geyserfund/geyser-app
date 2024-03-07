@@ -20,6 +20,7 @@ export const EntryDetails = ({ entry }: Props) => {
   const navigate = useNavigate()
 
   const handleViewProject = () => {
+    if (!entry.project) return
     navigate(getPath('project', entry.project?.name))
   }
 

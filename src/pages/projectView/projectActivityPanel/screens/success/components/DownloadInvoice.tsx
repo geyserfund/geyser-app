@@ -24,7 +24,7 @@ export const DownloadInvoice = ({ fundingTxId, showFee }: { fundingTxId: BigInt;
   })
 
   useEffect(() => {
-    invoiceData &&
+    if (invoiceData) {
       getProjectDetails({
         variables: { where: { id: toInt(invoiceData.projectId) } },
       }).then((data) => {
@@ -32,10 +32,11 @@ export const DownloadInvoice = ({ fundingTxId, showFee }: { fundingTxId: BigInt;
           setProjectData(data.data.projectGet)
         }
       })
-  }, [invoiceData])
+    }
+  }, [invoiceData, getProjectDetails])
 
   if (transactionQuery.loading || !projectData || !invoiceData) {
-    return <></>
+    return null
   }
 
   return (

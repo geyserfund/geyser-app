@@ -14,18 +14,23 @@ import { ContributionActivityItem } from '../../../../../landing/feed/components
 const CONTRIBUTION_ITEM_LIMIT = 50
 
 interface ProjectContributionListProps extends CardLayoutProps {
+  id?: string
+  isBounded?: boolean
   project: ProjectFragment
 }
 
-export const ProjectContributionList = ({ project, ...props }: ProjectContributionListProps) => {
+export const ProjectContributionList = ({
+  id = ID.project.activity.contribution,
+  isBounded,
+  project,
+  ...props
+}: ProjectContributionListProps) => {
   const isMobile = useMobileMode()
   const { toast } = useNotification()
 
   const { startListening, stopListening, fundingActivity } = useFundSubscription({ projectId: project.id })
 
   const [aggregatedFundingTxs, setAggregatedFundingTxs] = useState<FundingTxWithCount[]>([])
-
-  const id = ID.project.activity.contribution
 
   const fundingTxs = useQueryWithPagination<FundingTxFragment, FundingTxWithCount>({
     queryName: ['fundingTxsGet', 'fundingTxs'],
@@ -90,7 +95,7 @@ export const ProjectContributionList = ({ project, ...props }: ProjectContributi
         )}
 
         <ScrollInvoke
-          elementId={!isMobile ? id : undefined}
+          elementId={!isMobile || isBounded ? id : undefined}
           onScrollEnd={fundingTxs.fetchNext}
           isLoading={fundingTxs.isLoadingMore}
           noMoreItems={fundingTxs.noMoreItems}
