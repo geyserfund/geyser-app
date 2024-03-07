@@ -25,7 +25,7 @@ export const FilterFooter = () => {
 
   return (
     <VStack width="100%" alignItems="start" color="neutral.500">
-      <Button variant="primaryNeutral" color="neutral.600" size="sm" width="100%" onClick={onOpen}>
+      <Button variant="primaryNeutral" size="sm" width="100%" onClick={onOpen}>
         {t('Subscribe')}
       </Button>
       <Wrap>
