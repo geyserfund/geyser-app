@@ -26,7 +26,10 @@ Note: For `development` the backend server is expected to be running at `http://
 
 ### Leveraging Fragments
 
-Using fragments during Codegen helps in generating types for fragments as well. This enhances development and ensures the availability of queried fields in React component props. Here is a sample fragment:
+Using fragments during Codegen helps in generating types for fragments as well. This enhances development and ensures the availability of queried fields in React component props. 
+To learn more about fragments [click here](https://www.apollographql.com/docs/react/data/fragments/).
+
+Here is a sample fragment:
 
 ```ts
 export const FRAGMENT_USER_ME = gql`
@@ -64,8 +67,11 @@ export const QUERY_ME = gql`
 `
 ```
 
-Will generate a hook named `useMeQuery` and another `useMeLazyQuery`.
-Both will return responses typed with `UserMeFragment` saving time to map response to types.
+- Will generate a hook named `useMeQuery` and another `useMeLazyQuery`.
+
+- These can be used as alternatives for `useQuery(QUERY_ME)` and `useLazyQuery(useMeLazyQuery)` along with type benefits.
+
+- Both will return responses typed with `UserMeFragment`, with the exact same parameters we put up in the query, saving time to create and map types.
 
 ### Mutations
 
@@ -82,8 +88,11 @@ export const MUTATION_UPDATE_USER = gql`
 `
 ```
 
-Will generate a hook named `useUpdateUserMutation`, and types named `UpdateUserInput` for input and `UserMeFragment` for the response.
-This hook will already know what the input types should be and is type script. Similarly the response of the mutation will also be typed.
+- Will generate a hook named `useUpdateUserMutation`, and types named `UpdateUserInput` for input and `UserMeFragment` for the response.
+
+- This hook is a replacement for `useMutation(MUTATION_UPDATE_USER)` along with type benefits.
+
+- This hook will already know what the input types should be. Similarly the response of the mutation will also be typed.
 
 ## Forms
 
