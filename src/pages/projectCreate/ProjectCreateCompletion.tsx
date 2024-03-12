@@ -11,13 +11,7 @@ import Loader from '../../components/ui/Loader'
 import { getPath } from '../../constants'
 import { useAuthContext } from '../../context'
 import { useModal } from '../../hooks'
-import {
-  CreateWalletInput,
-  ProjectFragment,
-  useCreateWalletMutation,
-  useProjectByNameOrIdQuery,
-  useProjectPublishMutation,
-} from '../../types'
+import { CreateWalletInput, ProjectFragment, useProjectByNameOrIdQuery, useProjectPublishMutation } from '../../types'
 import { toInt, useNotification } from '../../utils'
 import { ProjectCreateCompleted } from './components/ProjectCreateCompleted'
 import { ProjectCreateLayout } from './components/ProjectCreateLayout'
@@ -65,23 +59,11 @@ export const ProjectCreateCompletion = ({
     },
   })
 
-  const [createWallet, { loading: isCreateWalletLoading }] = useCreateWalletMutation()
-
   const handleBackClick = () => {
     setReadyToLaunch(false)
   }
 
   const handleLaunch = async () => {
-    if (!createWalletInput) {
-      toast({
-        title: 'failed to create project wallet',
-        description: 'please provide valid wallet details',
-        status: 'error',
-      })
-      return
-    }
-
-    await createWallet({ variables: { input: createWalletInput } })
     await publishProject({
       variables: {
         input: { projectId: project?.id },
@@ -114,8 +96,6 @@ export const ProjectCreateCompletion = ({
     navigate(getPath('projectLaunch', project.name, 'draft'))
   }
 
-  const isLaunchLoading = isCreateWalletLoading || isUpdateStatusLoading
-
   if (isGetProjectLoading) {
     return <Loader />
   }
@@ -147,7 +127,7 @@ export const ProjectCreateCompletion = ({
                 leftIcon={<BiRocket />}
                 onClick={confirmModal.onOpen}
                 disabled={!isSubmitEnabled}
-                isLoading={isLaunchLoading}
+                isLoading={isUpdateStatusLoading}
               >
                 {t('Launch Project')}
               </Button>
@@ -165,7 +145,7 @@ export const ProjectCreateCompletion = ({
               'By launching your project the project will be visible to and searchable by the public. You will be able to disactivate your project but not to hide your project after launching it.',
             )}
           </Body1>
-          <Button variant="primary" w="full" onClick={onLaunchClick} isLoading={isLaunchLoading}>
+          <Button variant="primary" w="full" onClick={onLaunchClick} isLoading={isUpdateStatusLoading}>
             {t('Confirm launch')}
           </Button>
         </VStack>
