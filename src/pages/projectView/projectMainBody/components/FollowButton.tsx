@@ -50,7 +50,7 @@ export const FollowButton = ({ project, hasIcon, ...rest }: FollowButtonProps) =
         : {})}
       {...rest}
     >
-      <Text> {isFollowed ? t('Followed') : t('Follow')}</Text>
+      {isFollowed ? t('Followed') : t('Follow')}
     </Button>
   )
 }
