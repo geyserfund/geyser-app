@@ -4,7 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { CardLayout, LandingCardBaseSkeleton } from '../../../../components/layouts'
 import { Body1, H3 } from '../../../../components/typography'
 import { BetaBox } from '../../../../components/ui'
-import { FlashGeyserUrl, projectsWithSubscriptionGeyserIds, subscriptionJoinUrl } from '../../../../constants'
+import {
+  FlashGeyserUrl,
+  projectsWithSubscriptionInLandingPageGeyserIds,
+  subscriptionJoinUrl,
+} from '../../../../constants'
 import { useProjectsForSubscriptionQuery } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { LandingSubscriptionCard } from '../../components'
@@ -18,7 +22,7 @@ export const SubscribeToProjects = () => {
     variables: {
       input: {
         where: {
-          ids: projectsWithSubscriptionGeyserIds,
+          ids: projectsWithSubscriptionInLandingPageGeyserIds,
         },
       },
     },
