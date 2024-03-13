@@ -4,7 +4,6 @@ import { AppFooter } from '../../components/molecules'
 import {
   BuildByCreators,
   CurrentlyOnGeyser,
-  GeyserTeam,
   GreenBackgroundAboutHeader,
   NewWayOfCrowdFunding,
   SubscribeAbout,
@@ -45,7 +44,6 @@ export const About = () => {
       <CurrentlyOnGeyser />
       <WhatPeopleAreSaying />
       <WhyGeyser />
-      <GeyserTeam />
       <SubscribeAbout />
       <AppFooter />
     </VStack>
