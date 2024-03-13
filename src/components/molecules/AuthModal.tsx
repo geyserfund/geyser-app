@@ -140,7 +140,8 @@ export const AuthModal = (authModalProps: IAuthModal) => {
 
   const modalTitle = t(title || 'Connect')
   const modalDescription = t(
-    description || 'Connect your social media account to create a project or appear as a contributor of a project.',
+    description ||
+      'Connect your social account with the biggest social proof, allowing users to discover you and verify your reputation more easily',
   )
 
   return (
