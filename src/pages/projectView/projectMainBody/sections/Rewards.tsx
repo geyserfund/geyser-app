@@ -1,12 +1,13 @@
-import { GridItem, SimpleGrid, Text, useBreakpoint } from '@chakra-ui/react'
+import { GridItem, IconButton, SimpleGrid, Text, useBreakpoint } from '@chakra-ui/react'
 import { forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation } from 'react-router-dom'
+import { BsPencilFill } from 'react-icons/bs'
+import { Link, useLocation } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import { RewardCard } from '../../../../components/molecules'
 import { TitleDivider } from '../../../../components/ui/TitleDivider'
-import { ID } from '../../../../constants'
+import { getPath, ID } from '../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
 import { isActive, toInt, useMobileMode, useNotification } from '../../../../utils'
 import { truthyFilter } from '../../../../utils/array'
@@ -23,6 +24,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
     project,
     setMobileView,
     fundForm: { state: fundFormState, setState: setFundingFormState, updateReward },
+    isProjectOwner,
   } = useProjectContext()
 
   if (!project || !isActive || project.rewards.length === 0) {
@@ -70,6 +72,16 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
 
   const isRewardTitleFixed = location.pathname.includes('rewards') && isMobile
 
+  const rightActionButton = isProjectOwner ? (
+    <IconButton
+      aria-label="editRewards"
+      as={Link}
+      to={getPath('projectManageRewards', project.name)}
+      variant="ghost"
+      icon={<BsPencilFill />}
+    />
+  ) : undefined
+
   if (!project.rewards.length) {
     return null
   }
@@ -85,7 +97,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
         spacing="25px"
         mobileDense
       >
-        <TitleDivider badge={activeProjectRewards.length} isFixed={isRewardTitleFixed}>
+        <TitleDivider badge={activeProjectRewards.length} isFixed={isRewardTitleFixed} rightAction={rightActionButton}>
           {t('Rewards')}
         </TitleDivider>
 
