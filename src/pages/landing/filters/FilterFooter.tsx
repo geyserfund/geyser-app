@@ -99,7 +99,7 @@ export const FilterFooter = () => {
             marginLeft="5px"
           />
         </Link>
-        <Link href={GeyserGithubUrl} isExternal>
+        <Link href={GeyserDiscordUrl} isExternal>
           <IconButton
             size="sm"
             background={'none'}
