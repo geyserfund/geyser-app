@@ -44,7 +44,7 @@ export const LightningAddress = ({ name, isGeyser, ...rest }: ILightningQR) => {
         <Button
           size="sm"
           color="neutral.600"
-          leftIcon={<BoltIcon height="16px" color={nostrColorsLight[400]} />}
+          leftIcon={<BoltIcon color={nostrColorsLight[400]} />}
           variant="secondary"
           onClick={handleAddressCopy}
           onMouseEnter={onOpen}
