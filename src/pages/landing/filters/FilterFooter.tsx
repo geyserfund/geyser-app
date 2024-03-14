@@ -53,7 +53,7 @@ export const FilterFooter = () => {
         </Link>
       </Wrap>
       <Wrap spacing="5px">
-        <Link href={GeyserDiscordUrl} isExternal>
+        <Link href={GeyserTwitterUrl} isExternal>
           <IconButton
             size="sm"
             background={'none'}
