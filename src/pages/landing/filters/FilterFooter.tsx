@@ -1,6 +1,6 @@
 import { Button, IconButton, Link, useDisclosure, VStack, Wrap } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { FaGithub, FaPodcast, FaTelegramPlane } from 'react-icons/fa'
+import { FaDiscord, FaGithub, FaPodcast, FaTelegramPlane } from 'react-icons/fa'
 import { RiTwitterXLine } from 'react-icons/ri'
 import { Link as ReactLink } from 'react-router-dom'
 
@@ -10,6 +10,7 @@ import { Caption } from '../../../components/typography'
 import {
   AnalyticsUrl,
   getPath,
+  GeyserDiscordUrl,
   GeyserGithubUrl,
   GeyserHomepageUrl,
   GeyserNostrUrl,
@@ -26,7 +27,7 @@ export const FilterFooter = () => {
   return (
     <VStack width="100%" alignItems="start" color="neutral.500">
       <Button variant="primaryNeutral" size="sm" width="100%" onClick={onOpen}>
-        {t('Subscribe')}
+        {t('Subscribe to Newsletter')}
       </Button>
       <Wrap>
         <Link href={GeyserHomepageUrl} isExternal>
@@ -51,8 +52,8 @@ export const FilterFooter = () => {
           <Caption bold>{t('Analytics')}</Caption>
         </Link>
       </Wrap>
-      <Wrap>
-        <Link href={GeyserTwitterUrl} isExternal>
+      <Wrap spacing="5px">
+        <Link href={GeyserDiscordUrl} isExternal>
           <IconButton
             size="sm"
             background={'none'}
@@ -95,6 +96,15 @@ export const FilterFooter = () => {
             background={'none'}
             aria-label="Geyser github"
             icon={<FaGithub fontSize="20px" />}
+            marginLeft="5px"
+          />
+        </Link>
+        <Link href={GeyserGithubUrl} isExternal>
+          <IconButton
+            size="sm"
+            background={'none'}
+            aria-label="Geyser discord"
+            icon={<FaDiscord fontSize="20px" />}
             marginLeft="5px"
           />
         </Link>
