@@ -1,4 +1,3 @@
-
 ## Graphql
 
 This project uses Apollo GraphQL, a comprehensive GraphQL platform that provides a unified, graph-based layer to interact with your services.
@@ -94,6 +93,14 @@ export const MUTATION_UPDATE_USER = gql`
 
 - This hook will already know what the input types should be. Similarly the response of the mutation will also be typed.
 
+### Using Mock TypeDefs
+
+Sometimes, the GraphQL schema from our back-end `staging` environment will be late to adopt changes from its `development` environment that we know we'll want to be leveraging on the front-end. Apollo GraphQL allows us to account for this via [client-side mocking](https://www.apollographql.com/docs/react/development-testing/client-schema-mocking/).
+
+[This PR](https://github.com/geyserfund/geyser-app/pull/459/files/fe0782ed6029dc4ded90c999e49fda1267376361#diff-e2b8491b4d090a7e9a32b2ae2e0f854802977754f8399cf05e0b57b624544bb4) contains an example of how mocking can be achieved -- with the important caveat that the file at [`src/config/apollo-client/customClientTypeDefs`](../../src/config/apollo-client/customClientTypeDefs.ts) is intended for local use only, and is part of the project's `.gitignore` specification.
+
+
+
 ## Forms
 
 This project has `react-hook-form` installed, and it's transitioning to use on all the forms that require validation and other logic.
@@ -173,6 +180,8 @@ This button with type submit inside a form will make it submit on ENTER key pres
 Form components located at `src/forms` are already setup to use with `react-hook-form` together with `chakra` by passing only the form's `control`
 
 
+
+
 ## State Management ( Jotai )
 
 We've recently included [Jotai](https://jotai.org/docs/core/atom) as one of the modular tools for handling state managment. Jotai creates modular atoms and derived atoms that are accessible throughout the app through the atom. 
@@ -193,95 +202,3 @@ However, there are situations where a larger image size is required, like in a p
 
 To facilitate this, we've provided functions in the utils folder: `toLargeImageUrl`, `toMediumImageUrl`, and `toSmallImageUrl`. These functions can be used to display images of different sizes as necessary. Even if the incoming image size is unknown, these functions act as filters, ensuring the correct image size renders.
 
-
-
-## Architecture Goal 
-
-The geyser-app is currently being restructured to improve maintainability, readability, and performance.
-Guided by Domain Driven Design (DDD) principles and the Horizontal Split principle, we'll reorganize all pages and components into Modules.
-
-### Project Structure
-The base structure of the app would be introduced with the following folders among the existing ones:
-- /src/shared
-- /src/modules
-
-#### Shared
-This would contain all of the business-logic-less ui components, contants, helpers and utils, that would be required by the modules.
-
-A general structure looks like:
-1. `shared` package
-    1. `components` 
-        1. `ui`
-        2. `layout`
-        3. `input`
-            1. `form`
-            2. `elements`
-    2. `constants`
-    3. `utils`
-
-#### Modules
-We will have a module per domain, and a domain would consist of multiple pages, along with other tools. Based on the nature of pages and the difference in complexity. We have `views` inside `pages` that replicate a `pages` structure, so we can go as deeply nested as needed.
-
- A general structure for modules looks like:
-
-1.  `states` *( state manipulation / atoms )*
-2.  `hooks` *( logic, and communication backend )*
-3.   `components` *( ui and layout components )*
-4.  `graphQL` *( fragment, queries definition )*
-5.  `types` *( fragment types, query and mutation hooks )*
-6.  `pages` 
-	1.  `states`
-	2.  `hooks`
-	5.  `components`
-	6. ` views`
-        1.  *…recursive ( pages )*
-
-Below are the planned modules and the pages that would go in them based on the pages that are currently in the app. 
-
-1.  **project**
-	1. `projectView`
-	2. `projectCreate`
-	3. `projectDashboard`
-	4. `projectFunding`
-	5. `entry`
-2.  **discovery**
-	1. `landing`
-	2. `projectLeaderboard`
-3.  **grants**
-	1. `grantsLanding`
-	2. `grantsPage`
-4.  **profile**
-	1. `profilePage`
-	2. `profileSettings`
-5.  **auth**
-	1. `loginAuth`
-	2. `otp`
-6.  **general**
-	1. `badges`
-	2. `legal`
-	3. `about`
-	4. `fallback`
-
-### Guiding Principles
-
-These are some of the principles that drive us towards the architectural goal discussed above and is expected as we build geyser together:
-
-1. *React Components (.tsx) inside `pages/views`, would have entire focus on the UI, with invocation of hooks to support them.*
-
-	  This means, anything relating towards business-logic and state-management apart from low level boolean and store of value, will not be implemented inside the components, keeping UI components clean and easy to maintain.
-
-2. *All state management logic will house inside `states` folder at coresponding layer ( pages/views/sections), and we use Jotai for state management.*
-
-	  For boolean logic and simple store of value ( without any expected change or access at a different level), can use normal `useState` inside component itsself else use `Jotai` atoms, such that the state logic is abstracted away to the states folder.
-
-3. *All communication logic (graphql/api), form logic, business logic would house inside the `hooks` folder, based on usecase.*
-
-	  This hook would be used inside `pages/views`, to support the fuctionality for UI.
-
-4. *Inside the `views` folder, we re-iterate the folder structure in `pages`.*
-
-	  This can be left with bare-components without sub-folders, if the components are small with little to no business-logic.
-
-5. *All the UI components would be housed inside `components` folder closes to it's implementation.*
-
-	  If used in multiple places, the component would be placed inside the `components` folder of the closest parent. Similarly, components used in multiple modules will be kept in `shared` folder.
