@@ -1,9 +1,9 @@
 ## Architecture Goal 
 
 The geyser-app is currently being restructured to improve maintainability, readability, and performance.
-Guided by Domain Driven Design (DDD) principles and the Horizontal Split principle, we'll reorganize all pages and components into Modules.
+Guided by Domain Driven Design (DDD) principles and the Vertical Split principle, we'll reorganize all pages and components into Modules.
 Learn more about [DDD in geyer.](https://www.notion.so/geyser/Domain-Driven-Design-DDD-8c080fee21c644569e99ce1d0d9e8e99)
-Learn more about [Horizontal Split principle]()
+Learn more about [Vertical Split principle](https://x.com/TkDodo/status/1749717832642736184?s=20)
 
 ### Project Structure
 The base structure of the app would be introduced with the following folders among the existing ones:
