@@ -44,7 +44,7 @@
   "Rewards": "Rewards",
   "All activity": "All activity",
   "Connect": "Connect",
-  "Connect your social media account to create a project or appear as a contributor of a project.":"Connect your social media account to create a project or appear as a contributor of a project.",
+  "Connect your social account with the biggest social proof, allowing users to discover you and verify your reputation more easily":"Connect your social account with the biggest social proof, allowing users to discover you and verify your reputation more easily",
   "Go back": "Go back",
   "Go home": "Go home",
   "If you're having trouble connecting with Twitter on Mobile, first try logging in on Twitter.com on your browser, then try again.": "If you're having trouble connecting with Twitter on Mobile, first try logging in on Twitter.com on your browser, then try again.",
@@ -893,7 +893,11 @@
    "Guide":"Guide",
    "Subscribe to Projects":"Subscribe to Projects",
    "Want to integrate subscriptions?":"Want to integrate subscriptions?",
-   "See more":"See more"
+   "See more":"See more",
+   "Subscribe to Newsletter":"Subscribe to Newsletter",
+   "Select item":"Select item",
+   "Pre-order now":"Pre-order now"
+
 
 
 }

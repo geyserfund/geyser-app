@@ -5,7 +5,7 @@ export const getBitcoinAmount = (amount: number, decimal?: boolean) => {
   const rest = amount % divisor
   const result = Math.floor(amount / divisor)
 
-  const restValueInFirstDigitBTC = Math.round((rest / divisor) * 100)
+  const restValueInFirstDigitBTC = Math.round((rest / divisor) * 10)
 
   const restDigit = restValueInFirstDigitBTC.toString().charAt(0)
 

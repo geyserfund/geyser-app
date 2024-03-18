@@ -2,11 +2,11 @@ import { Link, useDisclosure } from '@chakra-ui/react'
 import { nip19 } from 'nostr-tools'
 import { useCallback } from 'react'
 
+import { ExternalAccountType } from '../../../../../../../pages/auth'
 import { ExternalAccountFragment } from '../../../../../../../types'
 import { copyTextToClipboard, toInt, useNotification } from '../../../../../../../utils'
-import { ExternalAccountType } from '../../../../../../../pages/auth'
-import { RemoveExternalAccountModal } from '../../../components/RemoveExternalAccountModal'
 import { useViewingOwnProfileAtomValue } from '../../../../../state'
+import { RemoveExternalAccountModal } from '../../../components/RemoveExternalAccountModal'
 import { useAccountUnlink } from '../hooks/useAccountUnlink'
 import { ExternalAccountBody, ExternalAccountBodyProps } from './ExternalAccountBody'
 
@@ -83,6 +83,14 @@ export const ExternalAccountDisplay = ({ account }: ExternalAccountDisplayProps)
           ...props,
           as: Link,
           href: `https://facebook.com/${account.externalUsername}`,
+          isExternal: true,
+        }
+        break
+      case ExternalAccountType.github:
+        props = {
+          ...props,
+          as: Link,
+          href: `https://github.com/${account.externalUsername}`,
           isExternal: true,
         }
         break

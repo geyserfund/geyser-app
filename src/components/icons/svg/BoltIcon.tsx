@@ -2,7 +2,15 @@ import { Icon, IconProps } from '@chakra-ui/react'
 
 export const BoltIcon = (props: IconProps) => {
   return (
-    <Icon width="31" height="30" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <Icon
+      width="31"
+      height="30"
+      viewBox="0 0 31 30"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      fontSize="20px"
+      {...props}
+    >
       <path
         d="M14.212 21.0632C14.0659 21.2868 13.7181 21.1563 13.7551 20.8918L14.2758 17.1727C14.2903 17.0689 14.2386 16.9671 14.1463 16.9177L11.7404 15.6288C11.6111 15.5595 11.569 15.3944 11.6492 15.2717L15.788 8.93677C15.9341 8.71318 16.2819 8.84367 16.2449 9.10816L15.7242 12.8273C15.7097 12.9311 15.7614 13.0329 15.8537 13.0823L18.2596 14.3712C18.3889 14.4405 18.431 14.6056 18.3508 14.7283L14.212 21.0632Z"
         fill="currentColor"
