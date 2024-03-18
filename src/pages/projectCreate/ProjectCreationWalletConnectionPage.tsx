@@ -6,7 +6,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import TitleWithProgressBar from '../../components/molecules/TitleWithProgressBar'
 import { Body1, Body2 } from '../../components/typography'
 import { getPath } from '../../constants'
-import { useProjectByNameOrIdQuery } from '../../types'
+import { CreateWalletInput, useCreateWalletMutation, useProjectByNameOrIdQuery } from '../../types'
 import { toInt, useNotification } from '../../utils'
 import { ProjectCreationWalletConnectionForm } from '.'
 import { FormContinueButton } from './components/FormContinueButton'
@@ -21,6 +21,18 @@ export const ProjectCreationWalletConnectionPage = () => {
   const { toast } = useNotification()
 
   const [isReadyForLaunch, setReadyForLaunch] = useState(false)
+
+  const [createWallet, { loading: isCreateWalletLoading }] = useCreateWalletMutation({
+    onError() {
+      toast({
+        title: 'Error creating wallet',
+        status: 'error',
+      })
+    },
+    onCompleted() {
+      setReadyForLaunch(true)
+    },
+  })
 
   const {
     loading: isGetProjectLoading,
@@ -38,8 +50,12 @@ export const ProjectCreationWalletConnectionPage = () => {
 
   const project = responseData?.projectGet || undefined
 
-  const handleNext = async () => {
-    setReadyForLaunch(true)
+  const handleNext = (createWalletInput: CreateWalletInput | null) => {
+    if (createWalletInput) {
+      createWallet({ variables: { input: createWalletInput } })
+    } else {
+      setReadyForLaunch(true)
+    }
   }
 
   const {
@@ -84,10 +100,6 @@ export const ProjectCreationWalletConnectionPage = () => {
     )
   }, [connectionOption, lightningAddress.value, createWalletInput, isLightningAddressInValid])
 
-  // if (isGetProjectLoading) {
-  //   return <Loader />
-  // }
-
   if (projectLoadingError) {
     return <Navigate to={getPath('notFound')} />
   }
@@ -103,13 +115,15 @@ export const ProjectCreationWalletConnectionPage = () => {
     )
   }
 
+  const isContinueButtonLoading = lightningAddress.evaluating || isGetProjectLoading || isCreateWalletLoading
+
   return (
     <ProjectCreateLayout
       onBackClick={handleBackClick}
       continueButton={
         <FormContinueButton
           onClick={handleConfirm}
-          isLoading={lightningAddress.evaluating || isGetProjectLoading}
+          isLoading={isContinueButtonLoading}
           isDisabled={!isFormDirty() || isLightningAddressInValid}
           flexGrow={1}
         />
