@@ -26,9 +26,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-.nvmrc
-
 faker/custom-extended-schemas/
 src/config/apollo-client/customClientTypeDefs.ts
 
 caddy/certificate/root.crt
+
+*storybook.log
