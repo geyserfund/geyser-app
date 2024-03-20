@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import { getPath } from '../../../../constants'
-import { ProjectFragment } from '../../../../types'
+import { ProjectFragment, ProjectStatus } from '../../../../types'
 
 export const LaunchProjectNotice = ({ project }: { project: ProjectFragment }) => {
   const { t } = useTranslation()
@@ -16,7 +16,7 @@ export const LaunchProjectNotice = ({ project }: { project: ProjectFragment }) =
     navigate(nodeConfigurationPath)
   }
 
-  if (hasWallet) return null
+  if (hasWallet && project.status !== ProjectStatus.Draft) return null
 
   return (
     <CardLayout mobileDense w="full">

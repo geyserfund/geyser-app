@@ -633,6 +633,8 @@ export type GetFundingTxsInput = {
 
 export type GetFundingTxsOrderByInput = {
   createdAt: OrderByOptions
+  /** @deprecated Use createdAt instead. */
+  paidAt?: InputMaybe<OrderByOptions>
 }
 
 export type GetFundingTxsWhereInput = {
@@ -1238,9 +1240,16 @@ export type OrdersGetResponse = {
   pagination?: Maybe<CursorPaginationResponse>
 }
 
+export enum OrdersGetStatus {
+  AwaitingPayment = 'AWAITING_PAYMENT',
+  Confirmed = 'CONFIRMED',
+  Delivered = 'DELIVERED',
+  Shipped = 'SHIPPED',
+}
+
 export type OrdersGetWhereInput = {
   projectId?: InputMaybe<Scalars['BigInt']>
-  status?: InputMaybe<Scalars['String']>
+  status?: InputMaybe<OrdersGetStatus>
 }
 
 export type Owner = {
@@ -1275,7 +1284,7 @@ export type PaginationInput = {
 
 export type Project = {
   __typename?: 'Project'
-  /** @deprecated No longer supported */
+  /** @deprecated Field no longer supported */
   ambassadors: Array<Ambassador>
   /** Total amount raised by the project, in satoshis. */
   balance: Scalars['Int']
@@ -1310,7 +1319,7 @@ export type Project = {
   rewards: Array<ProjectReward>
   /** Short description of the project. */
   shortDescription?: Maybe<Scalars['String']>
-  /** @deprecated No longer supported */
+  /** @deprecated Field no longer supported */
   sponsors: Array<Sponsor>
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>
@@ -2023,14 +2032,14 @@ export type UserProjectContribution = {
   funder?: Maybe<Funder>
   /**
    * Boolean value indicating if the User was an ambassador of the project.
-   * @deprecated No longer supported
+   * @deprecated Field no longer supported
    */
   isAmbassador: Scalars['Boolean']
   /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean']
   /**
    * Boolean value indicating if the User was a sponsor for the project.
-   * @deprecated No longer supported
+   * @deprecated Field no longer supported
    */
   isSponsor: Scalars['Boolean']
   /** Project linked to the contributions. */
@@ -2340,6 +2349,7 @@ export type ResolversTypes = {
   OrdersGetOrderByField: OrdersGetOrderByField
   OrdersGetOrderByInput: OrdersGetOrderByInput
   OrdersGetResponse: ResolverTypeWrapper<OrdersGetResponse>
+  OrdersGetStatus: OrdersGetStatus
   OrdersGetWhereInput: OrdersGetWhereInput
   Owner: ResolverTypeWrapper<Owner>
   OwnerOf: ResolverTypeWrapper<OwnerOf>
@@ -4220,21 +4230,6 @@ export type FundingTxFragment = {
   }
 }
 
-export type FundingTxForOverviewPageFragment = {
-  __typename?: 'FundingTx'
-  id: any
-  amount: number
-  comment?: string | null
-  funder: {
-    __typename?: 'Funder'
-    user?: { __typename?: 'User'; imageUrl?: string | null; id: any; username: string } | null
-  }
-  order?: {
-    __typename?: 'Order'
-    items: Array<{ __typename?: 'OrderItem'; quantity: number; item: { __typename?: 'ProjectReward'; id: any } }>
-  } | null
-}
-
 export type FundingTxForDownloadInvoiceFragment = {
   __typename?: 'FundingTx'
   id: any
@@ -4565,22 +4560,6 @@ export type ProjectAvatarFragment = {
   name: string
   thumbnailImage?: string | null
   title: string
-}
-
-export type ProjectStatsForOverviewPageFragment = {
-  __typename?: 'ProjectStats'
-  current?: {
-    __typename?: 'ProjectStatsBase'
-    projectFundingTxs?: { __typename?: 'ProjectFundingTxStats'; amountSum?: number | null } | null
-    projectFunders?: { __typename?: 'ProjectFunderStats'; count: number } | null
-    projectFunderRewards?: { __typename?: 'ProjectFunderRewardStats'; quantitySum: number } | null
-  } | null
-  prevTimeRange?: {
-    __typename?: 'ProjectStatsBase'
-    projectFundingTxs?: { __typename?: 'ProjectFundingTxStats'; amountSum?: number | null } | null
-    projectFunders?: { __typename?: 'ProjectFunderStats'; count: number } | null
-    projectFunderRewards?: { __typename?: 'ProjectFunderRewardStats'; quantitySum: number } | null
-  } | null
 }
 
 export type ProjectStatsForInsightsPageFragment = {
@@ -5398,18 +5377,6 @@ export type FundingTxForUserContributionQuery = {
   fundingTx: { __typename?: 'FundingTx' } & FundingTxForUserContributionFragment
 }
 
-export type FundingTxForOverviewPageQueryVariables = Exact<{
-  input?: InputMaybe<GetFundingTxsInput>
-}>
-
-export type FundingTxForOverviewPageQuery = {
-  __typename?: 'Query'
-  fundingTxsGet?: {
-    __typename?: 'FundingTxsGetResponse'
-    fundingTxs: Array<{ __typename?: 'FundingTx' } & FundingTxForOverviewPageFragment>
-  } | null
-}
-
 export type FundingTxForDownloadInvoiceQueryVariables = Exact<{
   fundingTxId: Scalars['BigInt']
 }>
@@ -5756,15 +5723,6 @@ export type ProjectNostrKeysQuery = {
   projectGet?: ({ __typename?: 'Project' } & ProjectNostrKeysFragment) | null
 }
 
-export type ProjectStatsGetOverViewQueryVariables = Exact<{
-  input: GetProjectStatsInput
-}>
-
-export type ProjectStatsGetOverViewQuery = {
-  __typename?: 'Query'
-  projectStatsGet: { __typename?: 'ProjectStats' } & ProjectStatsForOverviewPageFragment
-}
-
 export type ProjectStatsGetInsightQueryVariables = Exact<{
   input: GetProjectStatsInput
 }>
@@ -6016,28 +5974,6 @@ export const FundingTxFragmentDoc = gql`
         id
         username
         imageUrl
-      }
-    }
-  }
-`
-export const FundingTxForOverviewPageFragmentDoc = gql`
-  fragment FundingTxForOverviewPage on FundingTx {
-    funder {
-      user {
-        imageUrl
-        id
-        username
-      }
-    }
-    id
-    amount
-    comment
-    order {
-      items {
-        quantity
-        item {
-          id
-        }
       }
     }
   }
@@ -6468,32 +6404,6 @@ export const ProjectForSubscriptionFragmentDoc = gql`
     }
   }
   ${UserMeFragmentDoc}
-`
-export const ProjectStatsForOverviewPageFragmentDoc = gql`
-  fragment ProjectStatsForOverviewPage on ProjectStats {
-    current {
-      projectFundingTxs {
-        amountSum
-      }
-      projectFunders {
-        count
-      }
-      projectFunderRewards {
-        quantitySum
-      }
-    }
-    prevTimeRange {
-      projectFundingTxs {
-        amountSum
-      }
-      projectFunders {
-        count
-      }
-      projectFunderRewards {
-        quantitySum
-      }
-    }
-  }
 `
 export const ProjectStatsForInsightsPageFragmentDoc = gql`
   fragment ProjectStatsForInsightsPage on ProjectStats {
@@ -8934,57 +8844,6 @@ export type FundingTxForUserContributionQueryResult = Apollo.QueryResult<
   FundingTxForUserContributionQuery,
   FundingTxForUserContributionQueryVariables
 >
-export const FundingTxForOverviewPageDocument = gql`
-  query FundingTxForOverviewPage($input: GetFundingTxsInput) {
-    fundingTxsGet(input: $input) {
-      fundingTxs {
-        ...FundingTxForOverviewPage
-      }
-    }
-  }
-  ${FundingTxForOverviewPageFragmentDoc}
-`
-
-/**
- * __useFundingTxForOverviewPageQuery__
- *
- * To run a query within a React component, call `useFundingTxForOverviewPageQuery` and pass it any options that fit your needs.
- * When your component renders, `useFundingTxForOverviewPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFundingTxForOverviewPageQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useFundingTxForOverviewPageQuery(
-  baseOptions?: Apollo.QueryHookOptions<FundingTxForOverviewPageQuery, FundingTxForOverviewPageQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<FundingTxForOverviewPageQuery, FundingTxForOverviewPageQueryVariables>(
-    FundingTxForOverviewPageDocument,
-    options,
-  )
-}
-export function useFundingTxForOverviewPageLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<FundingTxForOverviewPageQuery, FundingTxForOverviewPageQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<FundingTxForOverviewPageQuery, FundingTxForOverviewPageQueryVariables>(
-    FundingTxForOverviewPageDocument,
-    options,
-  )
-}
-export type FundingTxForOverviewPageQueryHookResult = ReturnType<typeof useFundingTxForOverviewPageQuery>
-export type FundingTxForOverviewPageLazyQueryHookResult = ReturnType<typeof useFundingTxForOverviewPageLazyQuery>
-export type FundingTxForOverviewPageQueryResult = Apollo.QueryResult<
-  FundingTxForOverviewPageQuery,
-  FundingTxForOverviewPageQueryVariables
->
 export const FundingTxForDownloadInvoiceDocument = gql`
   query FundingTxForDownloadInvoice($fundingTxId: BigInt!) {
     fundingTx(id: $fundingTxId) {
@@ -10003,55 +9862,6 @@ export function useProjectNostrKeysLazyQuery(
 export type ProjectNostrKeysQueryHookResult = ReturnType<typeof useProjectNostrKeysQuery>
 export type ProjectNostrKeysLazyQueryHookResult = ReturnType<typeof useProjectNostrKeysLazyQuery>
 export type ProjectNostrKeysQueryResult = Apollo.QueryResult<ProjectNostrKeysQuery, ProjectNostrKeysQueryVariables>
-export const ProjectStatsGetOverViewDocument = gql`
-  query ProjectStatsGetOverView($input: GetProjectStatsInput!) {
-    projectStatsGet(input: $input) {
-      ...ProjectStatsForOverviewPage
-    }
-  }
-  ${ProjectStatsForOverviewPageFragmentDoc}
-`
-
-/**
- * __useProjectStatsGetOverViewQuery__
- *
- * To run a query within a React component, call `useProjectStatsGetOverViewQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectStatsGetOverViewQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProjectStatsGetOverViewQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectStatsGetOverViewQuery(
-  baseOptions: Apollo.QueryHookOptions<ProjectStatsGetOverViewQuery, ProjectStatsGetOverViewQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<ProjectStatsGetOverViewQuery, ProjectStatsGetOverViewQueryVariables>(
-    ProjectStatsGetOverViewDocument,
-    options,
-  )
-}
-export function useProjectStatsGetOverViewLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ProjectStatsGetOverViewQuery, ProjectStatsGetOverViewQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<ProjectStatsGetOverViewQuery, ProjectStatsGetOverViewQueryVariables>(
-    ProjectStatsGetOverViewDocument,
-    options,
-  )
-}
-export type ProjectStatsGetOverViewQueryHookResult = ReturnType<typeof useProjectStatsGetOverViewQuery>
-export type ProjectStatsGetOverViewLazyQueryHookResult = ReturnType<typeof useProjectStatsGetOverViewLazyQuery>
-export type ProjectStatsGetOverViewQueryResult = Apollo.QueryResult<
-  ProjectStatsGetOverViewQuery,
-  ProjectStatsGetOverViewQueryVariables
->
 export const ProjectStatsGetInsightDocument = gql`
   query ProjectStatsGetInsight($input: GetProjectStatsInput!) {
     projectStatsGet(input: $input) {

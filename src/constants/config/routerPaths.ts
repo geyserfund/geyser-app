@@ -11,7 +11,6 @@ export enum PathName {
   _deprecatedPathNameForProject = 'project',
 
   project = 'project',
-  projectOverview = 'overview',
   projectInsights = 'insights',
   projectContributors = 'contributors',
   projectPost = 'posts',
@@ -77,7 +76,6 @@ const pathsMap = {
   _deprecatedPathForProject: (projectName: string) => `/${PathName._deprecatedPathNameForProject}/${projectName}`,
 
   project: (projectName: string) => `/${PathName.project}/${projectName}`,
-  projectOverview: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectOverview}`,
   projectInsights: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectInsights}`,
   projectContributors: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectContributors}`,
   projectEntries: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectEntries}`,
@@ -100,7 +98,7 @@ const pathsMap = {
   publicProjectLaunch: () => `/${PathName.launchProject}/start`,
   privateProjectLaunch: () => `/${PathName.launchProject}`,
   projectLaunch: (projectName: string, state: 'draft' | 'launch' = 'launch') =>
-    `/${PathName.project}/${projectName}/${PathName.projectOverview}/?${state}`,
+    `/${PathName.project}/${projectName}/?${state}`,
 
   launchProject: (projectID: string) => `/${PathName.launchProject}/${projectID}`,
   launchProjectWithNode: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.node}`,

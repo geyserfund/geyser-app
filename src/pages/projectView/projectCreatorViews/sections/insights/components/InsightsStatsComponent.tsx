@@ -6,7 +6,7 @@ import { SkeletonLayout } from '../../../../../../components/layouts'
 import { useProjectContext } from '../../../../../../context'
 import { useProjectStatsGetInsightLazyQuery } from '../../../../../../types'
 import { useNotification } from '../../../../../../utils'
-import { StatsBlock } from '../../overview/elements'
+import { StatsBlock } from '../elements'
 import { getDateParams } from '../helpers'
 import { useSelectionAtom, useStatsInsightsAtom } from '../insightsAtom'
 

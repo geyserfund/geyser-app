@@ -1,31 +1,28 @@
-export enum RewardStatus {
-  todo = 'CONFIRMED',
-  shipped = 'SHIPPED',
-  delivered = 'DELIVERED',
-}
+import { OrdersGetStatus } from '../../types'
 
 export type RewardStatusOption = {
   label: string
-  value: RewardStatus
+  value: OrdersGetStatus
 }
 
 export const RewardStatusOptions: RewardStatusOption[] = [
   {
     label: 'Todo',
-    value: RewardStatus.todo,
+    value: OrdersGetStatus.Confirmed,
   },
   {
     label: 'Shipped',
-    value: RewardStatus.shipped,
+    value: OrdersGetStatus.Shipped,
   },
   {
     label: 'Delivered',
-    value: RewardStatus.delivered,
+    value: OrdersGetStatus.Delivered,
   },
 ]
 
 export const RewardStatusLabel = {
-  [RewardStatus.todo]: 'To do',
-  [RewardStatus.shipped]: 'Shipped',
-  [RewardStatus.delivered]: 'Delivered',
+  [OrdersGetStatus.AwaitingPayment]: 'Pending',
+  [OrdersGetStatus.Confirmed]: 'To do',
+  [OrdersGetStatus.Shipped]: 'Shipped',
+  [OrdersGetStatus.Delivered]: 'Delivered',
 }

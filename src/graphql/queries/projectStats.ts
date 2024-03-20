@@ -4,18 +4,8 @@ import {
   FRAGMENT_FUNDING_METHOD_STATS,
   FRAGMENT_PROJECT_HISTORY_STATS,
   FRAGMENT_PROJECT_STATS_INSIGHTS_PAGE,
-  FRAGMENT_PROJECT_STATS_OVERVIEW_PAGE,
   FRAGMENT_REWARDS_SOLD_GRAPH_STATS,
 } from '../fragments'
-
-export const QUERY_PROJECT_STATS_OVERVIEW = gql`
-  ${FRAGMENT_PROJECT_STATS_OVERVIEW_PAGE}
-  query ProjectStatsGetOverView($input: GetProjectStatsInput!) {
-    projectStatsGet(input: $input) {
-      ...ProjectStatsForOverviewPage
-    }
-  }
-`
 
 export const QUERY_PROJECT_STATS_INSIGHT = gql`
   ${FRAGMENT_PROJECT_STATS_INSIGHTS_PAGE}

@@ -1,12 +1,10 @@
 import { Box } from '@chakra-ui/react'
-import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import React from 'react'
-import { Navigate, Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
-import Loader from '../../components/ui/Loader'
-import { Head, routeMatchForProjectPageAtom, useGetHistoryRoute } from '../../config'
-import { getPath, PathName } from '../../constants'
+import { Head } from '../../config'
+import { PathName } from '../../constants'
 import { MobileViews, useProjectContext } from '../../context'
 import { useModal } from '../../hooks/useModal'
 import { toInt, useMobileMode } from '../../utils'
@@ -31,19 +29,12 @@ export const ProjectContainer = () => {
 
   const {
     project,
-    loading,
-    isProjectOwner,
     fundingFlow,
     fundForm: { updateReward },
     setMobileView,
-    mobileView,
   } = useProjectContext()
 
-  const params = useParams<{ projectId: string; addRewardToBasket: string }>()
   const query = useQuery()
-  const routeMatchForProjectPage = useAtomValue(routeMatchForProjectPageAtom)
-  const historyRoutes = useGetHistoryRoute()
-  const lastRoute = historyRoutes[historyRoutes.length - 2] || ''
 
   useEffect(() => {
     const launchModalShouldOpen = location.search.split('launch').length > 1
@@ -68,31 +59,11 @@ export const ProjectContainer = () => {
 
   const isMobile = useMobileMode()
 
-  if (loading || isProjectOwner === undefined) {
-    return (
-      <Box width="100%" display="flex" justifyContent="center" background={'transparent'}>
-        <Loader paddingTop="65px" />
-      </Box>
-    )
-  }
-
   // If the user is being directed to the product page with addToCart, this takes first priority
   if (query.get('addRewardToBasket')) {
     updateReward({ id: toInt(query.get('addRewardToBasket')), count: 1 })
     navigate(PathName.projectRewards)
     setMobileView(MobileViews.funding)
-  }
-
-  // If the user is project creator and the route is project main page, we redirect to project overview page
-  else if (
-    params.projectId &&
-    routeMatchForProjectPage &&
-    isProjectOwner &&
-    mobileView !== 'funding' &&
-    !lastRoute.includes('launch') &&
-    !(lastRoute.includes('project') && lastRoute.includes(params.projectId))
-  ) {
-    return <Navigate to={getPath('projectOverview', `${params.projectId}`)} />
   }
 
   return (
@@ -111,6 +82,7 @@ export const ProjectContainer = () => {
         position="relative"
         bg="neutral.0"
         flexDirection={{ base: 'column', lg: 'row' }}
+        gap="20px"
       >
         <Head
           title={project?.title || ''}

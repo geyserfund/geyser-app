@@ -248,15 +248,6 @@ export const platformRoutes: RouteObject[] = [
         },
         children: [
           {
-            path: getPath('projectOverview', PathName.projectId),
-            async lazy() {
-              const ProjectCreatorOverview = await Project().then((m) => m.ProjectCreatorOverview)
-              return {
-                element: renderPrivateRoute(ProjectCreatorOverview),
-              }
-            },
-          },
-          {
             path: getPath('projectInsights', PathName.projectId),
             async lazy() {
               const ProjectCreatorInsights = await Project().then((m) => m.ProjectCreatorInsights)

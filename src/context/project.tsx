@@ -18,7 +18,6 @@ export enum MobileViews {
   contribution = 'contribution',
   leaderboard = 'leaderBoard',
   funding = 'funding',
-  overview = 'overview',
   entries = 'entries',
   milestones = 'milestones',
   insights = 'insights',
@@ -220,10 +219,6 @@ const getViewFromPath = (path: string) => {
 
   if (path.includes(PathName.projectContributors)) {
     return MobileViews.contributors
-  }
-
-  if (path.includes(PathName.projectOverview)) {
-    return MobileViews.overview
   }
 
   return ''
