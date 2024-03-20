@@ -27,6 +27,8 @@ import {
   BitnobUrl,
   BlinkLogoUrl,
   BlinkUrl,
+  StrikeLogoUrl,
+  StrikeUrl,
   VoltageExplainerPageForGeyserURL,
   VoltageUrl,
   WalletOfSatoshiLightningAddressURL,
@@ -144,7 +146,8 @@ export const ProjectCreationWalletConnectionForm = ({
                 </Trans>
               }
             >
-              <HStack width={'full'} justifyContent={'flex-start'} spacing={4} flexWrap="wrap">
+              <HStack width={'full'} justifyContent={'flex-start'} spacing={'10px'} flexWrap="wrap">
+                <RenderSponsorImage url={StrikeUrl} imageUrl={StrikeLogoUrl} />
                 <RenderSponsorImage url={WalletOfSatoshiLightningAddressURL} imageUrl={WalletOfSatoshiUrl} />
                 <RenderSponsorImage url={BitNobURL} imageUrl={BitnobUrl} />
                 <RenderSponsorImage url={BlinkUrl} imageUrl={BlinkLogoUrl} />
@@ -223,7 +226,7 @@ export const ProjectCreationWalletConnectionForm = ({
 
 const RenderSponsorImage = ({ url, imageUrl }: { url: string; imageUrl: string }) => {
   return (
-    <Box backgroundColor={lightModeColors.neutral[100]} borderRadius={'10px'} px={3} py={1}>
+    <Box backgroundColor={lightModeColors.neutral[100]} borderRadius={'8px'} px={2} py={1}>
       <Link isExternal href={url}>
         <Image src={imageUrl} height="24px" />
       </Link>

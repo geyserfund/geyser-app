@@ -17,6 +17,7 @@ export const GeyserTelegramUrl = 'https://t.me/geyserfund'
 export const GeyserPodcastUrl = 'https://fountain.fm/show/P5kWpoVIT7YGmPRenVN4'
 export const GeyserGithubUrl = 'https://github.com/geyserfund/geyser-app'
 export const GeyserHomepageUrl = 'https://geyser.fund/'
+export const GeyserDiscordUrl = 'https://discord.gg/JxCuVHv9'
 
 export const GeyserNostrUrl = 'https://snort.social/p/npub1kmwdmhuxvafg05dyap3qmy42jpwztrv9p0uvey3a8803ahlwtmnsnhxqk9'
 
@@ -82,6 +83,7 @@ export const WalletOfSatoshiLightningAddressURL = 'https://www.walletofsatoshi.c
 export const BitNobURL = 'https://bitnob.com/'
 export const AmbossUrl = 'https://amboss.space/node/'
 export const BlinkUrl = 'https://www.blink.sv/'
+export const StrikeUrl = 'https://strike.me/'
 
 // External Platform Image Urls
 export const BoostCLILogoUrl = 'https://storage.googleapis.com/geyser-projects-media/platform/boostcli.png'
@@ -188,6 +190,10 @@ export const ProjectNoTransactionImageUrl =
 
 export const NoContributionImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/no-contribution.svg'
 
+export const MegaphoneUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/megaphone.png'
+
+export const MilestonesFlagUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/milestone.png'
+
 // GRANTS
 
 export const Grant3AnnouncementImageUrl =
@@ -208,6 +214,7 @@ export const AlbyUrl = 'https://storage.googleapis.com/geyser-projects-media/pla
 export const BitnobUrl = 'https://storage.googleapis.com/geyser-projects-media/platform/bitnob.png'
 export const WalletOfSatoshiUrl = 'https://storage.googleapis.com/geyser-projects-media/platform/wallet-logo.svg'
 export const BlinkLogoUrl = 'https://storage.googleapis.com/geyser-projects-media/platform/blink.png'
+export const StrikeLogoUrl = 'https://storage.googleapis.com/geyser-projects-media/platform/strikeme.png'
 
 // ICONS
 

@@ -5,10 +5,10 @@ import { useTranslation } from 'react-i18next'
 import { CardLayout } from '../../../../../../../components/layouts'
 import { Body1, Body2, Caption } from '../../../../../../../components/typography'
 import { ImageWithReload } from '../../../../../../../components/ui'
-import { RewardStatus, RewardStatusLabel } from '../../../../../../../constants'
+import { RewardStatusLabel } from '../../../../../../../constants'
 import { getRewardShippingStatusBackgroundColor } from '../../../../../../../helpers/getProjectShippingStatusBackgroundColor'
 import { getUSD } from '../../../../../../../pages/projectView/projectCreatorViews/sections/contributors/components'
-import { ProfileOrderFragment, ProjectAvatarFragment } from '../../../../../../../types'
+import { OrdersGetStatus, ProfileOrderFragment, ProjectAvatarFragment } from '../../../../../../../types'
 import { commaFormatted, toSmallImageUrl, useCustomTheme } from '../../../../../../../utils'
 
 export const ProfileOrderCard = ({ order }: { order: ProfileOrderFragment }) => {
@@ -17,7 +17,7 @@ export const ProfileOrderCard = ({ order }: { order: ProfileOrderFragment }) => 
 
   const { items } = order
 
-  const { backgroundColor } = getRewardShippingStatusBackgroundColor(order.status as RewardStatus, colors)
+  const { backgroundColor } = getRewardShippingStatusBackgroundColor(order.status as OrdersGetStatus, colors)
 
   const project = order.fundingTx.sourceResource as ProjectAvatarFragment
 
@@ -52,7 +52,7 @@ export const ProfileOrderCard = ({ order }: { order: ProfileOrderFragment }) => 
               justifySelf={'flex-end'}
               py="4px"
             >
-              <Body2 color={'neutral.900'}>{RewardStatusLabel[order.status as RewardStatus]}</Body2>
+              <Body2 color={'neutral.900'}>{RewardStatusLabel[order.status as OrdersGetStatus]}</Body2>
             </HStack>
           </Tooltip>
         </HStack>

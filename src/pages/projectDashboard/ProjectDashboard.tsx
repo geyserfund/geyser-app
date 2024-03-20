@@ -39,7 +39,7 @@ export const projectSections: Record<string, DashboardSection> = {
     semiFullWidth: true,
   },
   rewards: {
-    label: 'Rewards',
+    label: 'Currency Denominations',
     path: 'dashboardRewards',
   },
   wallet: {

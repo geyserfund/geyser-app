@@ -122,8 +122,9 @@ export const ProjectNostrSettings = () => {
           >
             <RelayDisplayComponent relayLink="wss://relay.geyser.fund" />
             <RelayDisplayComponent relayLink="wss://relay.damus.io" />
-            <RelayDisplayComponent relayLink="wss://relay.nostr.info" />
-            <RelayDisplayComponent relayLink="wss://brb.io" />
+            <RelayDisplayComponent relayLink="wss://relay.snort.social" />
+            <RelayDisplayComponent relayLink="wss://nos.lol" />
+            <RelayDisplayComponent relayLink="wss://relay.primal.net" />
           </VStack>
         </VStack>
       </VStack>

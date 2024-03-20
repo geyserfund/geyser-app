@@ -1,5 +1,5 @@
 import { AddIcon } from '@chakra-ui/icons'
-import { Button, ButtonProps, Text } from '@chakra-ui/react'
+import { Button, ButtonProps } from '@chakra-ui/react'
 import { MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsFillHeartFill } from 'react-icons/bs'
@@ -50,7 +50,7 @@ export const FollowButton = ({ project, hasIcon, ...rest }: FollowButtonProps) =
         : {})}
       {...rest}
     >
-      <Text> {isFollowed ? t('Followed') : t('Follow')}</Text>
+      {isFollowed ? t('Followed') : t('Follow')}
     </Button>
   )
 }

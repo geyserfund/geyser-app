@@ -326,11 +326,11 @@ Contributions to Geyser are always welcome!
 
 - 📥 Pull requests and 🌟 Stars are always welcome.
 
-- Read our [contributing guide](/CONTRIBUTING.md) to get started,
-- Read our [style guide](/STYLE_GUIDE.md) to know more about style considerations.
-- Read our [Architecture guide](/ARCHITECTURE.md) to learn more about the project.
+- Read our [contributing guide](/docs/CONTRIBUTING.md) and [coding guidelines](/docs/CODING_GUIDELINES.md) to get started,
+- Read our [style guide](/docs/STYLE_GUIDE.md) to know more about style considerations.
+- Read our [Architecture guide](/docs/ARCHITECTURE.md) to learn more about the project.
 
-  or find us on [Discord](https://discord.gg/geyseryfund), we will take the time to guide you.
+  or find us on [Discord](https://discord.gg/PgBQRxbtgJ), we will take the time to guide you.
 
 <br />
 
@@ -404,7 +404,7 @@ Use this space to list resources you find helpful and would like to give credit 
 [linkedin-shield]: https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=fff&style=for-the-badge
 [linkedin-url]: https://www.linkedin.com/company/geyserfund/
 [discord-shield]: https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=fff&style=for-the-badge
-[discord-url]: https://discord.gg/R6qukEFgh
+[discord-url]: https://discord.gg/JxCuVHv9
 [telegram-shield]: https://img.shields.io/badge/Telegram-26A5E4?logo=telegram&logoColor=fff&style=for-the-badge
 [telegram-url]: https://t.me/geyserfund
 [x-shield]: https://img.shields.io/badge/X-000?logo=x&logoColor=fff&style=for-the-badge

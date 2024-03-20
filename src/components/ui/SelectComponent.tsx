@@ -78,6 +78,12 @@ export function SelectComponent<T, S extends boolean>({
           color: colors.neutral[900],
         }
       },
+      menuPortal(base) {
+        return {
+          ...base,
+          zIndex: 9999,
+        }
+      },
       menu(base, props) {
         setCurrentPlacement(props.placement)
         return {

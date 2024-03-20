@@ -5,13 +5,14 @@ import { useTranslation } from 'react-i18next'
 
 import { Body2 } from '../../../../../../../../components/typography'
 import { AnonymousAvatar, LinkableAvatar } from '../../../../../../../../components/ui'
-import { RewardStatus, RewardStatusOptions } from '../../../../../../../../constants'
+import { RewardStatusOptions } from '../../../../../../../../constants'
 import { getRewardShippingStatusBackgroundColor } from '../../../../../../../../helpers/getProjectShippingStatusBackgroundColor'
 import {
   OrderByDirection,
   OrderFragment,
   OrdersGetOrderByField,
   OrdersGetOrderByInput,
+  OrdersGetStatus,
   UpdatableOrderStatus,
 } from '../../../../../../../../types'
 import { useCustomTheme } from '../../../../../../../../utils'
@@ -26,7 +27,7 @@ export const RewardTable = ({
   orderBy,
   setOrderBy,
 }: {
-  status: RewardStatus
+  status: OrdersGetStatus
   data: OrderFragment[]
   updateOrderStatus: (orderId: string, status: UpdatableOrderStatus) => void
   orderBy: OrdersGetOrderByInput[]
@@ -37,9 +38,9 @@ export const RewardTable = ({
 
   const sortField = useMemo(() => {
     switch (status) {
-      case RewardStatus.shipped:
+      case OrdersGetStatus.Shipped:
         return OrdersGetOrderByField.ShippedAt
-      case RewardStatus.delivered:
+      case OrdersGetStatus.Delivered:
         return OrdersGetOrderByField.DeliveredAt
       default:
         return OrdersGetOrderByField.ConfirmedAt
@@ -53,7 +54,7 @@ export const RewardTable = ({
         key: 'status',
         render(order: OrderFragment) {
           const { backgroundColor, hoverBgColor } = getRewardShippingStatusBackgroundColor(
-            order.status as RewardStatus,
+            order.status as OrdersGetStatus,
             colors,
           )
 

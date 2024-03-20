@@ -44,13 +44,14 @@ export const LightningAddress = ({ name, isGeyser, ...rest }: ILightningQR) => {
         <Button
           size="sm"
           color="neutral.600"
-          leftIcon={<BoltIcon height="16px" color={nostrColorsLight[400]} />}
+          leftIcon={<BoltIcon color={nostrColorsLight[400]} />}
           variant="secondary"
           onClick={handleAddressCopy}
           onMouseEnter={onOpen}
           onMouseLeave={onClose}
           id="lightning-address"
           border="none"
+          iconSpacing={0}
           {...rest}
         >
           <Body1 semiBold isTruncated color={nostrColorsLight[400]} flex={1}>

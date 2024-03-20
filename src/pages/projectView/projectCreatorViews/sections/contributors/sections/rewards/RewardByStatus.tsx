@@ -3,14 +3,15 @@ import { useTranslation } from 'react-i18next'
 
 import { SkeletonLayout } from '../../../../../../../components/layouts'
 import { Body1, H2, H3 } from '../../../../../../../components/typography'
-import { RewardStatus, RewardStatusLabel } from '../../../../../../../constants'
+import { RewardStatusLabel } from '../../../../../../../constants'
 import { useProjectContext } from '../../../../../../../context'
 import { standardPadding } from '../../../../../../../styles'
+import { OrdersGetStatus } from '../../../../../../../types'
 import { useNotification } from '../../../../../../../utils'
 import { RewardTable } from './components/RewardTable'
 import { useRewardByStatus } from './hooks/useRewardByStatus'
 
-export const RewardByStatus = ({ status }: { status: RewardStatus }) => {
+export const RewardByStatus = ({ status }: { status: OrdersGetStatus }) => {
   const { t } = useTranslation()
   const { project } = useProjectContext()
   const { toast } = useNotification()

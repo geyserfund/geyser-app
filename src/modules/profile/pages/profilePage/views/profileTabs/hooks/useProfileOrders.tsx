@@ -23,7 +23,6 @@ export const useProfileOrders = (userId: number, enable: boolean) => {
       }
 
       setIsLoading(false)
-      console.log('chekcing data', data)
     },
     onError(error) {
       toast({

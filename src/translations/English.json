@@ -44,7 +44,7 @@
   "Rewards": "Rewards",
   "All activity": "All activity",
   "Connect": "Connect",
-  "Connect your social media account to create a project or appear as a contributor of a project.":"Connect your social media account to create a project or appear as a contributor of a project.",
+  "Connect your social account with the biggest social proof, allowing users to discover you and verify your reputation more easily":"Connect your social account with the biggest social proof, allowing users to discover you and verify your reputation more easily",
   "Go back": "Go back",
   "Go home": "Go home",
   "If you're having trouble connecting with Twitter on Mobile, first try logging in on Twitter.com on your browser, then try again.": "If you're having trouble connecting with Twitter on Mobile, first try logging in on Twitter.com on your browser, then try again.",
@@ -793,7 +793,7 @@
   "Your Geyser lightning address is <1>{{projectAddress}}</1>. All funds sent to this address will be instantly routed to the wallet you specify below.":"Your Geyser lightning address is <1>{{projectAddress}}</1>. All funds sent to this address will be instantly routed to the wallet you specify below.",
   "The story of the project goes here...":"The story of the project goes here...",
   "Confirm project launch":"Confirm project launch",
-  "By launching your project the project will be visible to and searchable by the public. You will be able to disactivate your project but not to hide your project after launching it.":"By launching your project the project will be visible to and searchable by the public. You will be able to disactivate your project but not to hide your project after launching it.",
+  "By launching your project the project will be visible to and searchable by the public. You will be able to disactivate your project but not to hide your project after launching it.":"By launching your project, it will be visible to and searchable by the public. You will be able to disactivate your project but not to hide your project after launching it.",
   "Lightning Node":"Lightning Node",
   "Confirm launch":"Confirm launch",
   "You’re all set!":"You’re all set!",
@@ -893,7 +893,17 @@
    "Guide":"Guide",
    "Subscribe to Projects":"Subscribe to Projects",
    "Want to integrate subscriptions?":"Want to integrate subscriptions?",
-   "See more":"See more"
+   "See more":"See more",
+   "Subscribe to Newsletter":"Subscribe to Newsletter",
+   "Select item":"Select item",
+   "Pre-order now":"Pre-order now",
+   "Share your project":"Share your project",
+   "Launch":"Launch",
+   "Sharing on social media helps you reach more people and get closer to achieving your goals":"Sharing on social media helps you reach more people and get closer to achieving your goals",
+   "Your project is in draft mode. Click launch to get it out into the world!":"Your project is in draft mode. Click launch to get it out into the world!",
+   "Use Entries to share updates and engage with your community in your own way Use Entries to share updates and engage with your community in your own way":"Use Entries to share updates and engage with your community in your own way Use Entries to share updates and engage with your community in your own way",
+   "Add Entry":"Add Entry"
+
 
 
 }
