@@ -15,7 +15,7 @@ const retryLink = new RetryLink({
     const statusCode = toInt(`${error?.statusCode}`)
 
     return (
-      count <= 2 &&
+      count <= 4 &&
       (Boolean(
         err &&
           (err.code === 'STALE_REFRESH_TOKEN' ||
