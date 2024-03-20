@@ -1,10 +1,12 @@
 import { gql } from '@apollo/client'
 
+import { FRAGMENT_PROJECT_WALLET } from '../fragments/wallet'
+
 export const MUTATION_CREATE_WALLET = gql`
+  ${FRAGMENT_PROJECT_WALLET}
   mutation CreateWallet($input: CreateWalletInput!) {
     createWallet(input: $input) {
-      id
-      name
+      ...ProjectWallet
     }
   }
 `

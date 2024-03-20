@@ -6,7 +6,14 @@ import { useNavigate } from 'react-router-dom'
 import { Body2 } from '../../../components/typography'
 import { getPath, GeyserEmailVerificationDocUrl, WalletConnectDetails } from '../../../constants'
 import { useAuthContext, useProjectContext } from '../../../context'
-import { MfaAction, OtpResponseFragment, useUpdateWalletMutation, Wallet } from '../../../types'
+import {
+  MfaAction,
+  OtpResponseFragment,
+  ProjectStatus,
+  useCreateWalletMutation,
+  useUpdateWalletMutation,
+  Wallet,
+} from '../../../types'
 import { useNotification } from '../../../utils'
 import { VerifyYourEmail } from '../../otp'
 import { ProjectCreationWalletConnectionForm } from '../../projectCreate'
@@ -21,7 +28,7 @@ export const ProjectWallet = () => {
 
   const { isOpen: emailVerifyOpen, onClose: emailVerifyOnClose, onOpen: emailVerifyOnOpen } = useDisclosure()
 
-  const { project, refetch } = useProjectContext()
+  const { project, refetch, updateProject } = useProjectContext()
 
   const projectWallet: Wallet | undefined = useMemo(() => {
     return project?.wallets && project.wallets[0]
@@ -29,7 +36,14 @@ export const ProjectWallet = () => {
   const isEdit = Boolean(projectWallet)
 
   const handleNext = () => {
-    if (!project && !isEdit) {
+    if (!project) return
+
+    if (project.status === ProjectStatus.Draft && createWalletInput) {
+      createWallet({ variables: { input: createWalletInput } })
+      return
+    }
+
+    if (!isEdit) {
       return
     }
 
@@ -54,6 +68,24 @@ export const ProjectWallet = () => {
     project,
     isEdit,
     onSubmit: handleNext,
+  })
+
+  const [createWallet, { loading: isCreateWalletLoading }] = useCreateWalletMutation({
+    onError() {
+      toast({
+        title: 'Error creating wallet',
+        status: 'error',
+      })
+    },
+    onCompleted(data) {
+      if (data.createWallet) {
+        updateProject({ wallets: [data.createWallet] })
+        toast({
+          status: 'success',
+          title: 'Wallet created successfully!',
+        })
+      }
+    },
   })
 
   const [updateWallet, { loading: updateWalletLoading }] = useUpdateWalletMutation({
@@ -107,6 +139,10 @@ export const ProjectWallet = () => {
     })
   }
 
+  console.log('checking project, and isedit', project, isEdit)
+
+  const isReadOnly = !user.isEmailVerified && (!isEdit ? project?.status !== ProjectStatus.Draft : true)
+
   return (
     <>
       <VStack flexGrow={1} spacing="20px">
@@ -126,7 +162,7 @@ export const ProjectWallet = () => {
         </Body2>
         {project && (
           <ProjectCreationWalletConnectionForm
-            readOnly={!user.isEmailVerified}
+            readOnly={isReadOnly}
             isEdit={isEdit}
             lightningAddress={lightningAddress}
             node={node}
@@ -137,7 +173,7 @@ export const ProjectWallet = () => {
       </VStack>
       <Button
         justifySelf={'flex-end'}
-        isLoading={updateWalletLoading}
+        isLoading={updateWalletLoading || isCreateWalletLoading}
         variant="primary"
         w="full"
         onClick={handleConfirm}

@@ -51,6 +51,7 @@ export const LightningAddress = ({ name, isGeyser, ...rest }: ILightningQR) => {
           onMouseLeave={onClose}
           id="lightning-address"
           border="none"
+          iconSpacing={0}
           {...rest}
         >
           <Body1 semiBold isTruncated color={nostrColorsLight[400]} flex={1}>

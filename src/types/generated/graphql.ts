@@ -4520,24 +4520,7 @@ export type ProjectFragment = {
     reached: boolean
   }>
   entries: Array<{ __typename?: 'Entry' } & EntryForProjectFragment>
-  wallets: Array<{
-    __typename?: 'Wallet'
-    id: any
-    name?: string | null
-    state: { __typename?: 'WalletState'; status: WalletStatus; statusCode: WalletStatusCode }
-    connectionDetails:
-      | { __typename?: 'LightningAddressConnectionDetails'; lightningAddress: string }
-      | {
-          __typename?: 'LndConnectionDetailsPrivate'
-          macaroon: string
-          tlsCertificate?: string | null
-          hostname: string
-          grpcPort: number
-          lndNodeType: LndNodeType
-          pubkey?: string | null
-        }
-      | { __typename?: 'LndConnectionDetailsPublic'; pubkey?: string | null }
-  }>
+  wallets: Array<{ __typename?: 'Wallet' } & ProjectWalletFragment>
   followers: Array<{ __typename?: 'User'; id: any; username: string }>
   keys: {
     __typename?: 'ProjectKeys'
@@ -4736,6 +4719,25 @@ export type UserProjectContributionsFragment = {
       onChain: boolean
     }>
   } | null
+}
+
+export type ProjectWalletFragment = {
+  __typename?: 'Wallet'
+  id: any
+  name?: string | null
+  state: { __typename?: 'WalletState'; status: WalletStatus; statusCode: WalletStatusCode }
+  connectionDetails:
+    | { __typename?: 'LightningAddressConnectionDetails'; lightningAddress: string }
+    | {
+        __typename?: 'LndConnectionDetailsPrivate'
+        macaroon: string
+        tlsCertificate?: string | null
+        hostname: string
+        grpcPort: number
+        lndNodeType: LndNodeType
+        pubkey?: string | null
+      }
+    | { __typename?: 'LndConnectionDetailsPublic'; pubkey?: string | null }
 }
 
 export type UserBadgeAwardMutationVariables = Exact<{
@@ -5143,7 +5145,7 @@ export type CreateWalletMutationVariables = Exact<{
 
 export type CreateWalletMutation = {
   __typename?: 'Mutation'
-  createWallet: { __typename?: 'Wallet'; id: any; name?: string | null }
+  createWallet: { __typename?: 'Wallet' } & ProjectWalletFragment
 }
 
 export type UpdateWalletMutationVariables = Exact<{
@@ -6262,6 +6264,32 @@ export const EntryForProjectFragmentDoc = gql`
   }
   ${UserForAvatarFragmentDoc}
 `
+export const ProjectWalletFragmentDoc = gql`
+  fragment ProjectWallet on Wallet {
+    id
+    name
+    state {
+      status
+      statusCode
+    }
+    connectionDetails {
+      ... on LightningAddressConnectionDetails {
+        lightningAddress
+      }
+      ... on LndConnectionDetailsPrivate {
+        macaroon
+        tlsCertificate
+        hostname
+        grpcPort
+        lndNodeType
+        pubkey
+      }
+      ... on LndConnectionDetailsPublic {
+        pubkey
+      }
+    }
+  }
+`
 export const ProjectFragmentDoc = gql`
   fragment Project on Project {
     id
@@ -6326,28 +6354,7 @@ export const ProjectFragmentDoc = gql`
       ...EntryForProject
     }
     wallets {
-      id
-      name
-      state {
-        status
-        statusCode
-      }
-      connectionDetails {
-        ... on LightningAddressConnectionDetails {
-          lightningAddress
-        }
-        ... on LndConnectionDetailsPrivate {
-          macaroon
-          tlsCertificate
-          hostname
-          grpcPort
-          lndNodeType
-          pubkey
-        }
-        ... on LndConnectionDetailsPublic {
-          pubkey
-        }
-      }
+      ...ProjectWallet
     }
     followers {
       id
@@ -6365,6 +6372,7 @@ export const ProjectFragmentDoc = gql`
   ${ProjectRewardForCreateUpdateFragmentDoc}
   ${UserForAvatarFragmentDoc}
   ${EntryForProjectFragmentDoc}
+  ${ProjectWalletFragmentDoc}
 `
 export const UserMeFragmentDoc = gql`
   fragment UserMe on User {
@@ -8161,10 +8169,10 @@ export type UserDeleteMutationOptions = Apollo.BaseMutationOptions<UserDeleteMut
 export const CreateWalletDocument = gql`
   mutation CreateWallet($input: CreateWalletInput!) {
     createWallet(input: $input) {
-      id
-      name
+      ...ProjectWallet
     }
   }
+  ${ProjectWalletFragmentDoc}
 `
 export type CreateWalletMutationFn = Apollo.MutationFunction<CreateWalletMutation, CreateWalletMutationVariables>
 

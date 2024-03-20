@@ -7,12 +7,13 @@ import { Body2 } from '../../../../components/typography'
 import { TitleDivider } from '../../../../components/ui/TitleDivider'
 import { getPath, MilestonesFlagUrl, ProjectNoTransactionImageUrl, ProjectRewardsImageUrl } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
+import { ProjectStatus } from '../../../../types'
 
 export const CreatorTools = () => {
   const { t } = useTranslation()
   const { project, isProjectOwner, onMilestonesModalOpen } = useProjectContext()
 
-  if (!project || !isProjectOwner) return null
+  if (!project || !isProjectOwner || project.status !== ProjectStatus.Active) return null
 
   const projectHasRewards = project?.rewards.length > 0
   const projectHasMilestones = project?.milestones.length > 0

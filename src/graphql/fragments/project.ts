@@ -2,6 +2,7 @@ import { gql } from '@apollo/client'
 
 import { FRAGMENT_ENTRY_FOR_PROJECT } from './entries'
 import { FRAGMENT_PROJECT_OWNER_USER, FRAGMENT_USER_FOR_AVATAR, FRAGMENT_USER_ME } from './user'
+import { FRAGMENT_PROJECT_WALLET } from './wallet'
 
 export const FRAGMENT_PROJECT_NOSTR_KEYS = gql`
   fragment ProjectNostrKeys on Project {
@@ -115,6 +116,7 @@ export const FRAGMENT_PROJECT = gql`
   ${FRAGMENT_ENTRY_FOR_PROJECT}
   ${FRAGMENT_PROJECT_OWNER_USER}
   ${FRAGMENT_USER_FOR_AVATAR}
+  ${FRAGMENT_PROJECT_WALLET}
   fragment Project on Project {
     id
     title
@@ -178,28 +180,7 @@ export const FRAGMENT_PROJECT = gql`
       ...EntryForProject
     }
     wallets {
-      id
-      name
-      state {
-        status
-        statusCode
-      }
-      connectionDetails {
-        ... on LightningAddressConnectionDetails {
-          lightningAddress
-        }
-        ... on LndConnectionDetailsPrivate {
-          macaroon
-          tlsCertificate
-          hostname
-          grpcPort
-          lndNodeType
-          pubkey
-        }
-        ... on LndConnectionDetailsPublic {
-          pubkey
-        }
-      }
+      ...ProjectWallet
     }
     followers {
       id

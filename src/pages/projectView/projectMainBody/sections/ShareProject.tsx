@@ -9,6 +9,7 @@ import { Body2, H3 } from '../../../../components/typography'
 import { MegaphoneUrl } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
 import { standardPadding } from '../../../../styles'
+import { ProjectStatus } from '../../../../types'
 
 const SHARE_PROJECT_CLOSED_STORAGE_KEY = 'shareProjectClosed'
 
@@ -20,7 +21,7 @@ export const ShareProject = () => {
 
   const [copied, setCopied] = useState(false)
 
-  if (!project || !isProjectOwner) return null
+  if (!project || !isProjectOwner || project.status !== ProjectStatus.Active) return null
 
   const handleShareClick = () => {
     navigator.clipboard.writeText(`${window.location.origin}/project/${project?.name}`)
