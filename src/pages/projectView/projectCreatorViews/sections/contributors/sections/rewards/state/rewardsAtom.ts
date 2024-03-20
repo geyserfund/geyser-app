@@ -1,26 +1,26 @@
 import { atom, useAtomValue } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 
-import { RewardStatus } from '../../../../../../../../constants'
-import { OrderFragment } from '../../../../../../../../types'
+import { OrderFragment, OrdersGetStatus } from '../../../../../../../../types'
 
 type RewardsTableCountTypes = {
-  [RewardStatus.todo]: number
-  [RewardStatus.shipped]: number
-  [RewardStatus.delivered]: number
+  [OrdersGetStatus.AwaitingPayment]: number
+  [OrdersGetStatus.Confirmed]: number
+  [OrdersGetStatus.Shipped]: number
+  [OrdersGetStatus.Delivered]: number
 }
 
 export const rewardsCountAtom = atom<Partial<RewardsTableCountTypes>>({})
 
 export const rewardsFamily = atomFamily(
-  ({ value }: { status: RewardStatus; value?: OrderFragment[] }) => atom(value || []),
+  ({ value }: { status: OrdersGetStatus; value?: OrderFragment[] }) => atom(value || []),
   (a, b) => a.status === b.status,
 )
 
 export const rewardStatusUpdateAtom = atom(
   null,
-  (get, set, { status, update }: { status: RewardStatus; update: Partial<OrderFragment> }) => {
-    const newStatus = update.status as RewardStatus
+  (get, set, { status, update }: { status: OrdersGetStatus; update: Partial<OrderFragment> }) => {
+    const newStatus = update.status as OrdersGetStatus
 
     const rewardsFromPrevStatus = get(rewardsFamily({ status }))
     const rewardsFromNewStatus = get(rewardsFamily({ status: newStatus }))
@@ -40,7 +40,7 @@ export const rewardStatusUpdateAtom = atom(
     const newRewardsFromPrevStatus = rewardsFromPrevStatus.filter((r) => r.id !== update.id)
 
     const newRewardsFromNewStatus =
-      newStatus === RewardStatus.delivered
+      newStatus === OrdersGetStatus.Delivered
         ? [newRewardItem, ...rewardsFromNewStatus]
         : [...rewardsFromNewStatus, newRewardItem]
 
@@ -61,9 +61,9 @@ const rewardEmptyAtom = atom((get) => {
   const rewardsCount = get(rewardsCountAtom)
 
   if (
-    rewardsCount[RewardStatus.todo] === 0 &&
-    rewardsCount[RewardStatus.shipped] === 0 &&
-    rewardsCount[RewardStatus.delivered] === 0
+    rewardsCount[OrdersGetStatus.Confirmed] === 0 &&
+    rewardsCount[OrdersGetStatus.Shipped] === 0 &&
+    rewardsCount[OrdersGetStatus.Delivered] === 0
   ) {
     return true
   }

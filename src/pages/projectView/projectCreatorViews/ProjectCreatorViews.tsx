@@ -12,7 +12,6 @@ export const ProjectCreatorViews = () => {
   const { mobileView } = useProjectContext()
 
   const inView = [
-    MobileViews.overview,
     MobileViews.insights,
     MobileViews.contributors,
     MobileViews.manageRewards,

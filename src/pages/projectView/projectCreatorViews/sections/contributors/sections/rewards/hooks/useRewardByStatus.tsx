@@ -2,7 +2,6 @@ import { MutationHookOptions, QueryHookOptions } from '@apollo/client'
 import { useAtom, useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 
-import { RewardStatus } from '../../../../../../../../constants'
 import { usePaginationAtomHook } from '../../../../../../../../hooks'
 import {
   Exact,
@@ -12,6 +11,7 @@ import {
   OrdersGetOrderByField,
   OrdersGetOrderByInput,
   OrdersGetQuery,
+  OrdersGetStatus,
   OrdersGetWhereInput,
   OrderStatusUpdateInput,
   OrderStatusUpdateMutation,
@@ -22,7 +22,7 @@ import {
 import { rewardsCountAtom, rewardsFamily, rewardStatusUpdateAtom } from '../state/rewardsAtom'
 
 interface UseRewardByStatusProps {
-  status: RewardStatus
+  status: OrdersGetStatus
   projectId: number
   getRewardQueryProps: QueryHookOptions<
     OrdersGetQuery,
@@ -67,9 +67,9 @@ export const useRewardByStatus = ({
       field: OrdersGetOrderByField.ConfirmedAt,
     }
 
-    if (status === RewardStatus.shipped) {
+    if (status === OrdersGetStatus.Shipped) {
       orderBy.field = OrdersGetOrderByField.ShippedAt
-    } else if (status === RewardStatus.delivered) {
+    } else if (status === OrdersGetStatus.Delivered) {
       orderBy.field = OrdersGetOrderByField.DeliveredAt
     }
 
@@ -77,7 +77,7 @@ export const useRewardByStatus = ({
   }, [status])
 
   const where: OrdersGetWhereInput = {
-    status,
+    status: status as OrdersGetStatus,
     projectId,
   }
 

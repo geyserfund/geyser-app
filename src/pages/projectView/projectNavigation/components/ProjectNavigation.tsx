@@ -19,7 +19,6 @@ import {
   EntryEditIcon,
   HomeNavIcon2,
   InsightsNavIcon,
-  OverviewNavIcon,
   RewardGiftIcon,
 } from '../../../../components/icons'
 import { MilestoneIcon } from '../../../../components/icons/svg'
@@ -81,13 +80,6 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
 
   const ProjectCreatorNavigationButtons = useMemo(
     () => [
-      {
-        name: 'Overview',
-        path: PathName.projectOverview,
-        mobileView: MobileViews.overview,
-        subViews: [],
-        icon: OverviewNavIcon,
-      },
       {
         name: 'Insights',
         path: PathName.projectInsights,

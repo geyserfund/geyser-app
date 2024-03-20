@@ -2,8 +2,9 @@ import { VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { Body1 } from '../../../../../../../components/typography'
-import { ProjectRewardsImageUrl, RewardStatus } from '../../../../../../../constants'
+import { ProjectRewardsImageUrl } from '../../../../../../../constants'
 import { standardPadding } from '../../../../../../../styles'
+import { OrdersGetStatus } from '../../../../../../../types'
 import { EmptyContainer } from '../../components'
 import { RewardByStatus } from './RewardByStatus'
 import { useRewardEmptyAtom } from './state/rewardsAtom'
@@ -26,9 +27,9 @@ export const Rewards = () => {
           <strong>Delivered.</strong>
         </Trans>
       </Body1>
-      <RewardByStatus status={RewardStatus.todo} />
-      <RewardByStatus status={RewardStatus.shipped} />
-      <RewardByStatus status={RewardStatus.delivered} />
+      <RewardByStatus status={OrdersGetStatus.Confirmed} />
+      <RewardByStatus status={OrdersGetStatus.Shipped} />
+      <RewardByStatus status={OrdersGetStatus.Delivered} />
     </VStack>
   )
 }

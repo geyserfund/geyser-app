@@ -20,6 +20,7 @@ export const ProjectMainBody = () => {
   const projectDetails = useProjectDetails(project)
   return (
     <VStack w="full" spacing="20px" overflow="visible">
+      {project && <LaunchProjectNotice project={project} />}
       <Header />
 
       {project && isProjectOwner ? <LaunchProjectNotice project={project} /> : null}
