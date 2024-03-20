@@ -793,7 +793,7 @@
   "Your Geyser lightning address is <1>{{projectAddress}}</1>. All funds sent to this address will be instantly routed to the wallet you specify below.":"Your Geyser lightning address is <1>{{projectAddress}}</1>. All funds sent to this address will be instantly routed to the wallet you specify below.",
   "The story of the project goes here...":"The story of the project goes here...",
   "Confirm project launch":"Confirm project launch",
-  "By launching your project the project will be visible to and searchable by the public. You will be able to disactivate your project but not to hide your project after launching it.":"By launching your project the project will be visible to and searchable by the public. You will be able to disactivate your project but not to hide your project after launching it.",
+  "By launching your project the project will be visible to and searchable by the public. You will be able to disactivate your project but not to hide your project after launching it.":"By launching your project, it will be visible to and searchable by the public. You will be able to disactivate your project but not to hide your project after launching it.",
   "Lightning Node":"Lightning Node",
   "Confirm launch":"Confirm launch",
   "You’re all set!":"You’re all set!",
@@ -900,7 +900,9 @@
    "Share your project":"Share your project",
    "Launch":"Launch",
    "Sharing on social media helps you reach more people and get closer to achieving your goals":"Sharing on social media helps you reach more people and get closer to achieving your goals",
-   "Your project is in draft mode. Click launch to get it out into the world!":"Your project is in draft mode. Click launch to get it out into the world!"
+   "Your project is in draft mode. Click launch to get it out into the world!":"Your project is in draft mode. Click launch to get it out into the world!",
+   "Use Entries to share updates and engage with your community in your own way Use Entries to share updates and engage with your community in your own way":"Use Entries to share updates and engage with your community in your own way Use Entries to share updates and engage with your community in your own way",
+   "Add Entry":"Add Entry"
 
 
 
