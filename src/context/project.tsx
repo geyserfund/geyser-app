@@ -8,7 +8,7 @@ import { useProjectState } from '../hooks/graphqlState'
 import { useModal } from '../hooks/useModal'
 import { MilestoneAdditionModal } from '../pages/projectView/projectMainBody/components'
 import { ProjectCreatorModal } from '../pages/projectView/projectNavigation/components/ProjectCreatorModal'
-import { ProjectFragment, ProjectMilestone } from '../types'
+import { ProjectFragment, ProjectMilestone, UserMeFragment } from '../types'
 import { useAuthContext } from './auth'
 import { useNavContext } from './nav'
 
@@ -80,6 +80,7 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
 
   const [mobileView, setMobileView] = useState<MobileViews>(MobileViews.description)
   const [isProjectOwner, setIsProjectOwner] = useState<boolean | undefined>()
+
   const { user } = useAuthContext()
 
   const creatorModal = useModal()
@@ -119,10 +120,24 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
             return Number(ownerInfo.user.id || -1)
           }) || [],
       })
-
-      updateProjectOwner(project)
     },
   })
+
+  const updateProjectOwner = useCallback((project: ProjectFragment, user: UserMeFragment) => {
+    if (project.id && project.owners[0]?.user.id === user.id) {
+      setIsProjectOwner(true)
+    } else {
+      setIsProjectOwner(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!project || !user) {
+      return
+    }
+
+    updateProjectOwner(project, user)
+  }, [project, user, updateProjectOwner])
 
   const fundingFlow = useFundingFlow()
 
@@ -130,21 +145,6 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
     rewards: project ? project.rewards : undefined,
     rewardCurrency: project && project.rewardCurrency ? project.rewardCurrency : undefined,
   })
-
-  const updateProjectOwner = useCallback(
-    (project: ProjectFragment) => {
-      if (!project || !user) {
-        return
-      }
-
-      if (project.id && project.owners[0]?.user.id === user.id) {
-        setIsProjectOwner(true)
-      } else {
-        setIsProjectOwner(false)
-      }
-    },
-    [user],
-  )
 
   useEffect(() => {
     const view = getViewFromPath(location.pathname)
