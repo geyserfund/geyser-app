@@ -1,9 +1,19 @@
-import { Box, HStack, Modal, ModalContent, ModalOverlay, Text, useDisclosure, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  HStack,
+  Modal,
+  ModalContent,
+  ModalOverlay,
+  SkeletonText,
+  Text,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react'
 import { forwardRef, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsArrowRight } from 'react-icons/bs'
 
-import { CardLayout } from '../../../../components/layouts'
+import { CardLayout, SkeletonLayout } from '../../../../components/layouts'
 import { Body1 } from '../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../components/ui'
 import { VideoPlayer } from '../../../../components/ui/VideoPlayer'
@@ -39,7 +49,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   }, [isProjectSubscriptionEnabled, project])
 
   if (!project) {
-    return null
+    return <HeaderSkeleton />
   }
 
   const getSubscriptionValue = async (flashId: number) => {
@@ -97,6 +107,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
         </ModalContent>
       </Modal>
       <CardLayout
+        w="full"
         ref={ref}
         mobileDense
         paddingX={{ base: 0, lg: '20px' }}
@@ -176,3 +187,38 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
     </>
   )
 })
+
+export const HeaderSkeleton = () => {
+  return (
+    <CardLayout
+      w="full"
+      mobileDense
+      paddingX={{ base: 0, lg: '20px' }}
+      paddingTop={{ base: '0', lg: '20px' }}
+      spacing="10px"
+    >
+      <Box>
+        <SkeletonLayout width="100%" height="350px" borderRadius={{ base: 0, lg: '8px' }} />
+      </Box>
+      <VStack w="full" spacing="10px" paddingX={{ base: '10px', lg: 0 }} alignItems="start">
+        <HStack flexGrow={1} width="100%" spacing={3} alignItems="center">
+          <SkeletonLayout
+            width={{ base: '42px', lg: '80px' }}
+            height={{ base: '42px', lg: '80px' }}
+            maxHeight="80px"
+            alignSelf={'start'}
+          />
+          <SkeletonLayout width="100%" height="35px" />
+        </HStack>
+        <SkeletonText noOfLines={2} w="full" />
+        <HStack w="full">
+          <SkeletonLayout width="90px" height="32px" />
+          <SkeletonLayout width="200px" height="32px" />
+          <SkeletonLayout width="30px" height="32px" />
+        </HStack>
+        <SkeletonText noOfLines={2} w="full" />
+        <SkeletonLayout width="230px" height="40px" />
+      </VStack>
+    </CardLayout>
+  )
+}

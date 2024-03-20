@@ -190,6 +190,10 @@ export const ProjectNoTransactionImageUrl =
 
 export const NoContributionImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/no-contribution.svg'
 
+export const MegaphoneUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/megaphone.png'
+
+export const MilestonesFlagUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/milestone.png'
+
 // GRANTS
 
 export const Grant3AnnouncementImageUrl =

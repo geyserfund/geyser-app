@@ -1,9 +1,9 @@
-import { IconButton } from '@chakra-ui/react'
+import { IconButton, SkeletonText } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { BiPencil } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 
-import { CardLayout } from '../../../../components/layouts'
+import { CardLayout, SkeletonLayout } from '../../../../components/layouts'
 import { TitleDivider } from '../../../../components/ui/TitleDivider'
 import { getPath } from '../../../../constants'
 import { useProjectContext } from '../../../../context'
@@ -14,12 +14,16 @@ export const Story = () => {
   const navigate = useNavigate()
   const { project, isProjectOwner } = useProjectContext()
 
+  if (!project) {
+    return <StorySkeleton />
+  }
+
   if (!project?.description) {
     return null
   }
 
   return (
-    <CardLayout mobileDense>
+    <CardLayout w="full" mobileDense>
       <article>
         <TitleDivider
           rightAction={
@@ -37,6 +41,19 @@ export const Story = () => {
           {t('Story')}
         </TitleDivider>
         <MarkdownField preview content={project?.description} />
+      </article>
+    </CardLayout>
+  )
+}
+
+export const StorySkeleton = () => {
+  return (
+    <CardLayout w="full" mobileDense>
+      <article>
+        <TitleDivider>
+          <SkeletonLayout w="100px" h="30px" />
+        </TitleDivider>
+        <SkeletonText noOfLines={10} spacing="4" />
       </article>
     </CardLayout>
   )
