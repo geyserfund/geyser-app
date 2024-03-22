@@ -16,7 +16,8 @@ export const InfoScreen = () => {
     return null
   }
 
-  const activeProjectRewards = project ? project.rewards?.filter((reward) => reward.isHidden === false) : []
+  const activeProjectRewards =
+    project && project.rewards ? project.rewards.filter((reward) => reward.isHidden === false) : []
   const showFeed =
     (isMobile && (mobileView === MobileViews.leaderboard || mobileView === MobileViews.contributors)) ||
     activeProjectRewards.length === 0
