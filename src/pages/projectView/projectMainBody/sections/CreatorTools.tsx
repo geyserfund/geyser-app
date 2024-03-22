@@ -15,9 +15,9 @@ export const CreatorTools = () => {
 
   if (!project || !isProjectOwner || project.status !== ProjectStatus.Active) return null
 
-  const projectHasRewards = project?.rewards.length > 0
-  const projectHasMilestones = project?.milestones.length > 0
-  const projectHasEntries = project?.entries.length > 0
+  const projectHasRewards = project?.rewards?.length > 0
+  const projectHasMilestones = project?.milestones?.length > 0
+  const projectHasEntries = project?.entries?.length > 0
 
   return (
     <Stack w="full" direction={{ base: 'column', lg: 'row' }} flexWrap={'wrap'}>
