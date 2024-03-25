@@ -7,7 +7,6 @@ import {
   HomeNavIcon2,
   InsightsNavIcon,
   LeaderboardNavIcon,
-  OverviewNavIcon,
   RewardGiftIcon,
 } from '../../../../components/icons'
 import { PathName } from '../../../../constants'
@@ -31,13 +30,6 @@ export const navigationItems: ProjectNavigationItem[] = [
     name: 'Project',
     isCreator: true,
     isContributor: true,
-  },
-  {
-    icon: OverviewNavIcon,
-    pathName: PathName.projectOverview,
-    mobileView: MobileViews.overview,
-    name: 'Overview',
-    isCreator: true,
   },
   {
     icon: AddIcon,

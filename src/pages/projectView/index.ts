@@ -1,7 +1,6 @@
 import {
   ProjectCreateReward,
   ProjectCreatorContributors,
-  ProjectCreatorOverview,
   ProjectCreatorViews,
   ProjectEditReward,
   ProjectManageRewards,
@@ -24,7 +23,6 @@ export {
   ProjectCreateReward,
   ProjectCreatorContributors,
   ProjectCreatorInsights,
-  ProjectCreatorOverview,
   ProjectCreatorViews,
   ProjectEditReward,
   ProjectMainBody,

@@ -5,6 +5,7 @@ import {
   CircularProgress,
   HStack,
   SkeletonCircle,
+  SkeletonText,
   StackProps,
   Text,
   useDisclosure,
@@ -15,6 +16,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEllipsis } from 'react-icons/ai'
 
+import { SkeletonLayout } from '../../../../../components/layouts'
 import { UserAvatar } from '../../../../../components/ui/UserAvatar'
 import { useProjectContext } from '../../../../../context'
 import { FunderWithUserFragment, OrderByOptions, ProjectMilestone, useProjectFundersQuery } from '../../../../../types'
@@ -303,6 +305,54 @@ export const ActivityBrief = (props: StackProps) => {
         </VStack>
       )}
       <ProjectFundersModal {...fundersModal} />
+    </VStack>
+  )
+}
+
+export const ActivityBriefSkeleton = (props: StackProps) => {
+  return (
+    <VStack w="100%" {...props}>
+      <HStack w="100%" padding={3} justifyContent="start">
+        <SkeletonCircle height="116px" width="116px" />
+        <VStack flex="1" spacing={'20px'} width="100%" px={2}>
+          <SkeletonLayout height="40px" width="180px" />
+          <SkeletonText noOfLines={2} w="100%" />
+        </VStack>
+      </HStack>
+
+      <VStack w="full" spacing="10px" pb={3} px={3}>
+        <SkeletonLayout height="40px" width="100%" />
+        <SkeletonLayout height="40px" width="100%" />
+      </VStack>
+
+      <VStack
+        textAlign="left"
+        alignItems="start"
+        w="100%"
+        py={10}
+        px="10px"
+        overflow="hidden"
+        spacing={1}
+        as={Button}
+        size="lg"
+        variant="transparent"
+      >
+        <SkeletonLayout height="32px" width="200px" />
+        <HStack ml={1} spacing={0} alignItems="start">
+          {[1, 2, 3].map((s) => (
+            <SkeletonCircle
+              key={s}
+              border={`2px solid`}
+              borderColor={'neutral.0'}
+              display="inline-block"
+              marginLeft="-5px"
+              bg="neutral.100"
+              color="neutral.900"
+              size="8"
+            />
+          ))}
+        </HStack>
+      </VStack>
     </VStack>
   )
 }

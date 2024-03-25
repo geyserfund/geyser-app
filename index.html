@@ -58,4 +58,10 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
+  <script>
+    function useColor(light="white", dark="#0d0d0d"){
+      return window.localStorage.getItem("chakra-ui-color-mode") === "dark" ? dark : light
+    }
+    document.body.style.background = useColor();
+</script>
 </html>

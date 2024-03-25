@@ -1,3 +1,42 @@
+## [0.7.2](https://github.com/geyserfund/geyser-app/compare/v0.7.1...v0.7.2) (2024-03-20)
+
+
+### Features
+
+* add launch project when wallet is present but project is in draft ([e9cf14a](https://github.com/geyserfund/geyser-app/commit/e9cf14ad981eb3050b8a409484078c3005e92da9))
+* create new blocks and fix project navigation ([d9500fd](https://github.com/geyserfund/geyser-app/commit/d9500fdef992850ed5a4a2b353bbb032c732613f))
+
+
+### Bug Fixes
+
+* add missing translations and remove log ([e6c6664](https://github.com/geyserfund/geyser-app/commit/e6c66642f0147e741ee24f4ad061aa27894a23d7))
+* add primal relay ([9bbd3c0](https://github.com/geyserfund/geyser-app/commit/9bbd3c08002f18d96a2c47b0c129eabd56052b7c))
+* allow to create wallet from dashbaord if not created yet ([58cf023](https://github.com/geyserfund/geyser-app/commit/58cf0234660b8329999eb79ae3fbd31b23439c1f))
+* broken filters, are hidden behind list, resolves GYS-6605 ([11ed6c0](https://github.com/geyserfund/geyser-app/commit/11ed6c006359dbdd04c8c2845ec66f01122a40c8))
+* button color for subscribe button ([0059226](https://github.com/geyserfund/geyser-app/commit/005922602582854da283965a1cbe1e5a107fc9b0))
+* change text color, resolves GYS-6306 ([2b3b749](https://github.com/geyserfund/geyser-app/commit/2b3b749b7971b5bcdc22e7f00ba4b4e065e332cb))
+* create wallet on project wallet add page ([9b71d96](https://github.com/geyserfund/geyser-app/commit/9b71d9697ac732b48f31427a919d8a8d02777cb3))
+* follow button has differnt font size ([9022947](https://github.com/geyserfund/geyser-app/commit/902294787bbaa017cb68fbce0c770a4b532fef9e))
+* github is not a link ([666411b](https://github.com/geyserfund/geyser-app/commit/666411b549fdbecbf94c3cf4f43fc9027d96b5cf))
+* icon spacing ([2231e22](https://github.com/geyserfund/geyser-app/commit/2231e227b3e3d1ac6364f030c0e809f5991823bc))
+* links in landing page ([ad94dca](https://github.com/geyserfund/geyser-app/commit/ad94dca8044499d61cbaf0b16e7c5bd0c346ea18))
+* move email and delete profile outside of profile settings form ([259f75d](https://github.com/geyserfund/geyser-app/commit/259f75d12ba12be31c4e11388dba22d5f8a0f6ee))
+* remirror not recognizing youtube's new alternate link format ([9cb4823](https://github.com/geyserfund/geyser-app/commit/9cb482330cfdf064ea240d63e30446ecf74861b9))
+* remove exclamation ([28e654a](https://github.com/geyserfund/geyser-app/commit/28e654a24e02f522b8b3b1b425b7e6b9ef586a71))
+* remove exclamation ([bd52461](https://github.com/geyserfund/geyser-app/commit/bd52461edf3440edd824ba478bffe12b2778f701))
+* remove overview page ([07439d4](https://github.com/geyserfund/geyser-app/commit/07439d426a72375dbdbfa9702fa3f356261c3ea7))
+* remove the team on Geyser About page, resolves GYS-6549 ([cabeef8](https://github.com/geyserfund/geyser-app/commit/cabeef8e0b7d525bfb59f77037b0f082e9c14e02))
+* show rewards in main page, resolves GYS-6399 ([659ceaf](https://github.com/geyserfund/geyser-app/commit/659ceafc25293dda3f85f58b3dc0b3a3b6cb8f58))
+* showing wrong amount of bitcoin transacted, resolves GYS-6415 ([e28a1a3](https://github.com/geyserfund/geyser-app/commit/e28a1a3a006cf64bac89a93c7d641e2f98cc0eb3))
+* subscribe button color is darker, resolves GYS-6658 ([18865a4](https://github.com/geyserfund/geyser-app/commit/18865a4d4dc65ed8a30edae5faf9cc26a366fd60))
+* update comment to 250 characters ([8ed2cfb](https://github.com/geyserfund/geyser-app/commit/8ed2cfb953bb95b42d824aa73acb84867cb16b1a))
+* update discord url ([e75d9d8](https://github.com/geyserfund/geyser-app/commit/e75d9d8deb80e059b3f280f4ac3336452bd50e91))
+* update icon size ([bf215b3](https://github.com/geyserfund/geyser-app/commit/bf215b3f87e023860aa00762d228cbf27acc0f6e))
+* update realy info ([47166f9](https://github.com/geyserfund/geyser-app/commit/47166f9c4c327beae31fc6d31737c25a2af7e8b5))
+* update reward card design uptodate with figma ([c708345](https://github.com/geyserfund/geyser-app/commit/c708345e4a9cbabafd87f71c769b10c4d368eec0))
+* use button as link ([33c3a8e](https://github.com/geyserfund/geyser-app/commit/33c3a8ee8d5cc30b034a3d818827f8629e73556f))
+* users can't find rewards, resolves GYS-6407 ([9115a3c](https://github.com/geyserfund/geyser-app/commit/9115a3cbf8aa9f62d985409740739ffb08d447a6))
+
 ## [0.7.1](https://github.com/geyserfund/geyser-app/compare/v0.7.0...v0.7.1) (2024-03-06)
 
 

@@ -17,6 +17,7 @@ import { useMobileMode } from './utils'
 
 export const AppLayout = () => {
   const { loading } = useAuthContext()
+
   const isMobile = useMobileMode()
 
   const location = useLocation()
@@ -27,40 +28,39 @@ export const AppLayout = () => {
 
   const layoutAnimationClassName = useLayoutAnimation()
 
-  if (loading) {
-    return <LoadingPage />
-  }
-
   const handleFunction = async () => {
     window.location.reload()
   }
 
   return (
-    <PullToRefresh
-      onRefresh={handleFunction}
-      pullingContent={<PullingDownContent />}
-      pullDownThreshold={dimensions.pullDownThreshold}
-      isPullable={isMobile}
-    >
-      <Fade in={true}>
-        <Box w="full" h={'100%'} position="relative" className={layoutAnimationClassName}>
-          <Box minHeight="100vh" height={isMobile ? '100%' : '100vh'} display="flex" flexDir="column">
-            <TopNavBar />
-            <ProfileSideNavigation />
-            <Box
-              id={ID.root}
-              maxHeight="100%"
-              flex="1"
-              paddingTop={`${dimensions.topNavBar.desktop.height}px`}
-              backgroundColor="neutral.0"
-              overflowY={isMobile ? 'initial' : 'auto'}
-            >
-              <Outlet />
+    <>
+      {loading && <LoadingPage />}
+      <PullToRefresh
+        onRefresh={handleFunction}
+        pullingContent={<PullingDownContent />}
+        pullDownThreshold={dimensions.pullDownThreshold}
+        isPullable={isMobile}
+      >
+        <Fade in={true}>
+          <Box w="full" h={'100%'} position="relative" className={layoutAnimationClassName}>
+            <Box minHeight="100vh" height={isMobile ? '100%' : '100vh'} display="flex" flexDir="column">
+              <TopNavBar />
+              <ProfileSideNavigation />
+              <Box
+                id={ID.root}
+                maxHeight="100%"
+                flex="1"
+                paddingTop={`${dimensions.topNavBar.desktop.height}px`}
+                backgroundColor="neutral.0"
+                overflowY={isMobile ? 'initial' : 'auto'}
+              >
+                <Outlet />
+              </Box>
+              {isMobile && <LandingNavBar />}
             </Box>
-            {isMobile && <LandingNavBar />}
           </Box>
-        </Box>
-      </Fade>
-    </PullToRefresh>
+        </Fade>
+      </PullToRefresh>
+    </>
   )
 }

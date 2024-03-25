@@ -92,29 +92,6 @@ export const FRAGMENT_FUNDING_TX = gql`
   }
 `
 
-export const FRAGMENT_FUNDING_TX_OVERVIEW_PAGE = gql`
-  fragment FundingTxForOverviewPage on FundingTx {
-    funder {
-      user {
-        imageUrl
-        id
-        username
-      }
-    }
-    id
-    amount
-    comment
-    order {
-      items {
-        quantity
-        item {
-          id
-        }
-      }
-    }
-  }
-`
-
 export const FRAGMENT_FUNDING_TX_DOWNLOAD_INVOICE = gql`
   fragment FundingTxForDownloadInvoice on FundingTx {
     id

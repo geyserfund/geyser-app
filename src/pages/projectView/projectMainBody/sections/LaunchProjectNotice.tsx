@@ -4,33 +4,66 @@ import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import { getPath } from '../../../../constants'
-import { ProjectFragment } from '../../../../types'
+import { useAuthContext, useProjectContext } from '../../../../context'
+import { useModal } from '../../../../hooks'
+import { ProjectStatus, useProjectPublishMutation } from '../../../../types'
+import { useNotification } from '../../../../utils'
+import { ProjectLaunchConfirmModal } from '../../../projectCreate/components/ProjectLaunchConfirmModal'
 
-export const LaunchProjectNotice = ({ project }: { project: ProjectFragment }) => {
+export const LaunchProjectNotice = () => {
   const { t } = useTranslation()
-  const hasWallet = project.wallets.length > 0
-  const navigate = useNavigate()
 
-  const handleConnectNodeClick = () => {
-    const nodeConfigurationPath = getPath('launchProjectWithNode', project.id)
-    navigate(nodeConfigurationPath)
+  const { project, isProjectOwner, refetch } = useProjectContext()
+  const confirmModal = useModal()
+
+  const navigate = useNavigate()
+  const { toast } = useNotification()
+
+  const { queryCurrentUser } = useAuthContext()
+
+  const [publishProject, { loading: isUpdateStatusLoading }] = useProjectPublishMutation({
+    onCompleted() {
+      refetch()
+      queryCurrentUser()
+    },
+  })
+
+  if (!project || !isProjectOwner) return null
+
+  const hasWallet = project.wallets.length > 0
+
+  const handleLaunchClick = async () => {
+    try {
+      await publishProject({ variables: { input: { projectId: project.id } } })
+      confirmModal.onClose()
+      navigate(getPath('projectLaunch', project?.name))
+    } catch (error) {
+      toast({
+        title: 'Something went wrong',
+        description: `${error}`,
+        status: 'error',
+      })
+    }
   }
 
-  if (hasWallet) return null
+  if (!hasWallet || project.status !== ProjectStatus.Draft) return null
 
   return (
-    <CardLayout mobileDense w="full">
-      <Text variant="h3">{t('Finalize project')}</Text>
+    <>
+      <CardLayout mobileDense w="full">
+        <Text variant="h3">{t('Launch Project')}</Text>
 
-      <Text variant="body1">
-        {t(
-          'Your project is not live yet. Head back to the creation flow to finalize your project information and launch it!',
-        )}
-      </Text>
+        <Text variant="body1">{t('Your project is in draft mode. Click launch to get it out into the world!')}</Text>
 
-      <Button variant="primary" w="full" onClick={handleConnectNodeClick}>
-        {t('Finalize project')}
-      </Button>
-    </CardLayout>
+        <Button variant="primary" w="full" isLoading={isUpdateStatusLoading} onClick={confirmModal.onOpen}>
+          {t('Launch')}
+        </Button>
+      </CardLayout>
+      <ProjectLaunchConfirmModal
+        isLoading={isUpdateStatusLoading}
+        onLaunchClick={handleLaunchClick}
+        {...confirmModal}
+      />
+    </>
   )
 }

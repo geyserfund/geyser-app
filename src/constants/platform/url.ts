@@ -17,7 +17,7 @@ export const GeyserTelegramUrl = 'https://t.me/geyserfund'
 export const GeyserPodcastUrl = 'https://fountain.fm/show/P5kWpoVIT7YGmPRenVN4'
 export const GeyserGithubUrl = 'https://github.com/geyserfund/geyser-app'
 export const GeyserHomepageUrl = 'https://geyser.fund/'
-export const GeyserDiscordUrl = 'https://discord.gg/3JTT9sPt'
+export const GeyserDiscordUrl = 'https://discord.gg/JxCuVHv9'
 
 export const GeyserNostrUrl = 'https://snort.social/p/npub1kmwdmhuxvafg05dyap3qmy42jpwztrv9p0uvey3a8803ahlwtmnsnhxqk9'
 
@@ -189,6 +189,10 @@ export const ProjectNoTransactionImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/no-transaction.svg'
 
 export const NoContributionImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/no-contribution.svg'
+
+export const MegaphoneUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/megaphone.png'
+
+export const MilestonesFlagUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/milestone.png'
 
 // GRANTS
 

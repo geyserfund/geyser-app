@@ -21,7 +21,7 @@ export const Details = () => {
   }
 
   return (
-    <CardLayout mobileDense id={ID.project.details.container}>
+    <CardLayout w="full" mobileDense id={ID.project.details.container}>
       <TitleDivider>{t('Details')}</TitleDivider>
       {project.tags?.length > 0 && (
         <SummaryInfoLine

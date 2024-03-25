@@ -1,23 +1,37 @@
+import { VStack } from '@chakra-ui/react'
+
 import { useProjectContext } from '../../../context'
 import { useProjectDetails } from '../projectNavigation/hooks/useProjectDetails'
-import { Entries, Header, LaunchProjectNotice, Milestones, Rewards, Story } from './sections'
-import { Details } from './sections/Details'
+import {
+  CreatorTools,
+  Details,
+  Entries,
+  FinalizeProjectNotice,
+  Header,
+  LaunchProjectNotice,
+  Milestones,
+  Rewards,
+  ShareProject,
+  Story,
+} from './sections'
 
 export const ProjectMainBody = () => {
-  const { project, isProjectOwner } = useProjectContext()
+  const { project } = useProjectContext()
 
   const projectDetails = useProjectDetails(project)
-
   return (
-    <>
+    <VStack w="full" spacing="20px" overflow="visible">
+      <FinalizeProjectNotice />
+      <LaunchProjectNotice />
       <Header />
 
-      {project && isProjectOwner ? <LaunchProjectNotice project={project} /> : null}
       <Story />
+      <ShareProject />
       <Rewards />
       {projectDetails.entriesLength ? <Entries /> : null}
       {projectDetails.milestonesLength ? <Milestones /> : null}
+      <CreatorTools />
       <Details />
-    </>
+    </VStack>
   )
 }
