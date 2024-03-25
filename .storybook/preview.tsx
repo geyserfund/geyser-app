@@ -4,6 +4,7 @@ import { lightModeColors } from '../src/styles'
 
 const preview: Preview = {
   parameters: {
+    layout: 'centered',
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -13,6 +14,7 @@ const preview: Preview = {
     chakra: {
       theme: {...theme, colors: lightModeColors},
     }
+    
   },
 }
 
