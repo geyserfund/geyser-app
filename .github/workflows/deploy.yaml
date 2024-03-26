@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - "sajal/gys-6400-start-working-on-storybook" # change to the branch you wish to deploy from
+      - "staging" # change to the branch you wish to deploy from
 
 permissions:
   contents: read
