@@ -34,3 +34,5 @@ src/config/apollo-client/customClientTypeDefs.ts
 caddy/certificate/root.crt
 
 .app.env
+
+*.env~
