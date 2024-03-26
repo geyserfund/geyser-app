@@ -10,10 +10,14 @@ permissions:
 
 jobs:
   deploy:
+    environment:
+        name: github-pages
+        url: ${{ steps.build-publish.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
     - id: build-publish
       uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
       with:
-        path: storybook-static # change to your build folder
-        build_command: yarn build-storybook
+        path: build # change to your build folder
+        install_command: yarn install
+        build_command: yarn run build-storybook
