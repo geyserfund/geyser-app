@@ -12,6 +12,18 @@ const meta = {
     children: 'Button',
   },
   argTypes: {
+    variant: {
+      options: [
+        'primary',
+        'primaryNeutral',
+        'primaryLink',
+        'primaryGradient',
+        'secondary',
+        'secondaryNeutral',
+        'transparent',
+      ],
+      control: { type: 'select' },
+    },
     size: {
       options: ['sm', 'md', 'lg'],
       control: { type: 'radio' },
@@ -26,20 +38,6 @@ export const SimpleButton: Story = {
   args: {
     variant: 'primary',
   },
-  argTypes: {
-    variant: {
-      options: [
-        'primary',
-        'primaryNeutral',
-        'primaryLink',
-        'primaryGradient',
-        'secondary',
-        'secondaryNeutral',
-        'transparent',
-      ],
-      control: { type: 'select' },
-    },
-  },
 }
 
 export const LeftIconButton: Story = {
@@ -47,23 +45,11 @@ export const LeftIconButton: Story = {
     variant: 'primary',
     leftIcon: <BellIcon />,
   },
-  argTypes: {
-    variant: {
-      options: [],
-      control: { type: 'radio' },
-    },
-  },
 }
 
 export const RightIconButton: Story = {
   args: {
     variant: 'primary',
     rightIcon: <BellIcon />,
-  },
-  argTypes: {
-    variant: {
-      options: [],
-      control: { type: 'radio' },
-    },
   },
 }
