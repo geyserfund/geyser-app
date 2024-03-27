@@ -202,3 +202,10 @@ However, there are situations where a larger image size is required, like in a p
 
 To facilitate this, we've provided functions in the utils folder: `toLargeImageUrl`, `toMediumImageUrl`, and `toSmallImageUrl`. These functions can be used to display images of different sizes as necessary. Even if the incoming image size is unknown, these functions act as filters, ensuring the correct image size renders.
 
+
+## Storybook
+
+We use storybook for showcasing all of the components, starting out with the base UI components like buttons, inputs, to complex ones like activity panel.
+This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
+More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
+
