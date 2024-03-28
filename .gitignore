@@ -35,3 +35,4 @@ src/config/apollo-client/customClientTypeDefs.ts
 caddy/certificate/root.crt
 
 *storybook.log
+.app.env

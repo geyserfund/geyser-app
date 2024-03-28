@@ -31,7 +31,7 @@ const CardContents = [
   {
     title: 'Super low fees',
     description:
-      'If you run your own node, Geyser is free to use. Otherwise, we charge a 2% fee on transactions (5% lower than other crowdfunding platforms out there).',
+      'If you run your own node, Geyser is free to use. Otherwise, we charge a 4% fee on transactions (5% lower than other crowdfunding platforms out there).',
     imageUrl: CoinPercentage3DImageUrl,
   },
   {

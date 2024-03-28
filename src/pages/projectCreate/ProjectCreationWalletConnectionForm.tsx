@@ -130,7 +130,7 @@ export const ProjectCreationWalletConnectionForm = ({
                   <InputRightElement>{renderRightElementContent()}</InputRightElement>
                 </InputGroup>
               }
-              promoText={t('2% Geyser fee per transaction')}
+              promoText={t('4% Geyser fee per transaction')}
               secondaryText={
                 <Trans
                   i18nKey={
