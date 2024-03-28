@@ -213,7 +213,7 @@ export const DownloadInvoicePDF = ({
             <Text style={styles.tableRegularFont}>Geyser fee:</Text>
             <View style={styles.geyserFeeFixed}>
               <Text style={styles.tableRegularFont}>
-                {Math.round(totalAmountInSats * 0.02).toLocaleString()} sats (2%)
+                {Math.round(totalAmountInSats * 0.02).toLocaleString()} sats (4%)
               </Text>
             </View>
           </View>

@@ -223,7 +223,7 @@ export const ContributionInfoBox = ({
                 {isNoFees ? 0 : Math.round(contributionAmount * 0.02)}
               </SatoshiAmount>
               <Text fontSize="14px" textColor={'neutral.700'} fontWeight={'normal'}>
-                {isNoFees ? `(0%)` : `(2%)`}
+                {isNoFees ? `(0%)` : `(4%)`}
               </Text>
             </HStack>
           </HStack>
