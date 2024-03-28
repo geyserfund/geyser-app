@@ -9,7 +9,7 @@ type ProjectFeeSelectionProps = {
 };
 
 const ProjectFeeSelection: React.FC<ProjectFeeSelectionProps> = ({ readOnly, value, onChange }) => {
-  
+
     const { t } = useTranslation()
 
     const options = [
@@ -28,9 +28,9 @@ const ProjectFeeSelection: React.FC<ProjectFeeSelectionProps> = ({ readOnly, val
 
     const group = getRootProps();
 
-  return (
+    return (
 
-     
+        
     <VStack
         width="100%"
         border="2px solid"
@@ -46,17 +46,17 @@ const ProjectFeeSelection: React.FC<ProjectFeeSelectionProps> = ({ readOnly, val
         </Text>
 
     <Text >
-      {t('Geyser provides you with a platform to showcase and amplify your project. Consider giving some value back to us so we can keep improving our product.')}
+        {t('Geyser provides you with a platform to showcase and amplify your project. Consider giving some value back to us so we can keep improving our product.')}
     </Text>
     <VStack
-      width="100%"
-      alignItems="flex-start"
-      spacing="5px"
+        width="100%"
+        alignItems="flex-start"
+        spacing="5px"
     >
-      <Text fontWeight="500">
+        <Text fontWeight="500">
         {t('Choose Geyser split per transaction:')}
-      </Text>
-      <HStack {...group}  spacing={4}>
+        </Text>
+        <HStack {...group}  spacing={4}>
             {options.map((option) => {
                 const radio = getRadioProps({ value: option.value });
                 return (
@@ -67,37 +67,37 @@ const ProjectFeeSelection: React.FC<ProjectFeeSelectionProps> = ({ readOnly, val
             })}
         </HStack>
     </VStack>
-  </VStack>
-    
-  );
+    </VStack>
+
+    );
 };
 
 const RadioCard: React.FC<any> = ({ children, isDisabled, ...props }) => {
-  const { getInputProps, getRadioProps } = useRadio(props);
+    const { getInputProps, getRadioProps } = useRadio(props);
 
-  return (
-    <Box as="label">
-      <input {...getInputProps()} disabled={isDisabled} />
-      <Box
-        {...getRadioProps()}
-        cursor="pointer"
-        border="2px solid"
-        borderRadius="8px"
-        borderColor="neutral.200"
-        backgroundColor="white"
-        _checked={{
-          bg: 'primary.400',
-          color: 'neutral.900',
-          borderColor: 'primary.600',
-        }}
-       
-        px={2}
-        py={1}
-      >
-        {children}
-      </Box>
-    </Box>
-  );
+    return (
+        <Box as="label">
+            <input {...getInputProps()} disabled={isDisabled} />
+            <Box
+                {...getRadioProps()}
+                cursor="pointer"
+                border="2px solid"
+                borderRadius="8px"
+                borderColor="neutral.200"
+                backgroundColor="white"
+                _checked={{
+                    bg: 'primary.400',
+                    color: 'neutral.900',
+                    borderColor: 'primary.600',
+                }}
+                
+                px={2}
+                py={1}
+            >
+            {children}
+            </Box>
+        </Box>
+    );
 };
 
 export default ProjectFeeSelection;
