@@ -61,7 +61,7 @@ export const ProjectCreationWalletConnectionForm = ({
 }: Props) => {
   const { t } = useTranslation()
 
-  const [selectedFee, setSelectedFee] = useState('0%');
+  const [selectedFee, setSelectedFee] = useState('6.00');
 
   const renderRightElementContent = () => {
     if (lightningAddress.evaluating) {
@@ -92,8 +92,8 @@ export const ProjectCreationWalletConnectionForm = ({
     }
   }
 
-  const handleFeeSelection = (fee: string) => {
-    setSelectedFee(fee)
+  const handleFeeSelection = (feeValue: string) => {
+    setSelectedFee(feeValue);
   }
 
   return (

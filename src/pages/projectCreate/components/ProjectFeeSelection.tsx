@@ -12,7 +12,13 @@ const ProjectFeeSelection: React.FC<ProjectFeeSelectionProps> = ({ readOnly, val
   
     const { t } = useTranslation()
 
-    const options = ['0%', '2%', '4%', '6%', '8%'];
+    const options = [
+        { label: '0%', value: "0.00" },
+        { label: '2%', value: "2.00" },
+        { label: '4%', value: "4.00" },
+        { label: '6%', value: "6.00" },
+        { label: '8%', value: "8.00" },
+    ];
 
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: 'transactionFee',
@@ -52,10 +58,10 @@ const ProjectFeeSelection: React.FC<ProjectFeeSelectionProps> = ({ readOnly, val
       </Text>
       <HStack {...group}  spacing={4}>
             {options.map((option) => {
-                const radio = getRadioProps({ value: option });
+                const radio = getRadioProps({ value: option.value });
                 return (
-                <RadioCard key={option} {...radio} isDisabled={readOnly}>
-                    <Text variant="body1" fontWeight="700" >{option}</Text>
+                <RadioCard key={option.value} {...radio} isDisabled={readOnly}>
+                    <Text variant="body1" fontWeight="700" >{option.label}</Text>
                 </RadioCard>
                 );
             })}
