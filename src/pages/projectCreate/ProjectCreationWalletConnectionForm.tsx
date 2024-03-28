@@ -16,6 +16,7 @@ import {
 import { Trans, useTranslation } from 'react-i18next'
 import { AiOutlineSetting } from 'react-icons/ai'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
+import { useState } from 'react'
 
 import { BoltIcon, NodeIcon } from '../../components/icons'
 import { TextInputBox } from '../../components/ui'
@@ -39,6 +40,7 @@ import { LndNodeType } from '../../types'
 import { WalletConnectionDetails } from '../projectDashboard/components'
 import { NodeAdditionModal, WalletConnectionOptionInfoBox } from './components'
 import { ConnectionOption, LightingWalletForm, LNAddressEvaluationState, NodeWalletForm } from './hooks/useWalletForm'
+import ProjectFeeSelection from './components/ProjectFeeSelection'
 
 type Props = {
   readOnly?: boolean
@@ -58,6 +60,8 @@ export const ProjectCreationWalletConnectionForm = ({
   setConnectionOption,
 }: Props) => {
   const { t } = useTranslation()
+
+  const [selectedFee, setSelectedFee] = useState('0%');
 
   const renderRightElementContent = () => {
     if (lightningAddress.evaluating) {
@@ -86,6 +90,10 @@ export const ProjectCreationWalletConnectionForm = ({
     } else if (expandedIndex === 1) {
       setConnectionOption(ConnectionOption.PERSONAL_NODE)
     }
+  }
+
+  const handleFeeSelection = (fee: string) => {
+    setSelectedFee(fee)
   }
 
   return (
@@ -213,7 +221,14 @@ export const ProjectCreationWalletConnectionForm = ({
                 </span>
               }
             >
-              <RenderSponsorImage url={VoltageExplainerPageForGeyserURL} imageUrl={VoltageUrl} />
+              <>
+                <RenderSponsorImage url={VoltageExplainerPageForGeyserURL} imageUrl={VoltageUrl} />
+                <ProjectFeeSelection
+                  readOnly={readOnly}
+                  value={selectedFee}
+                  onChange={handleFeeSelection}
+                />
+              </>
             </WalletConnectionOptionInfoBox>
           </AccordionPanel>
         </AccordionItem>
