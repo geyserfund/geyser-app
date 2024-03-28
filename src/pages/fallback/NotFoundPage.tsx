@@ -1,10 +1,10 @@
-import { Button, Text, VStack } from '@chakra-ui/react'
+import { Button, Image, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { BiErrorAlt } from 'react-icons/bi'
 import { useMatch } from 'react-router-dom'
 
 import { Head } from '../../config'
 import { getPath } from '../../constants'
+import { NotFoundPageImageUrl } from '../../constants/platform/url'
 import { useServiceWorkerUpdate } from '../../context'
 import { CommonFeedbackMessage } from './CommonFeedbackMessage'
 
@@ -28,18 +28,21 @@ export const NotFoundPage = () => {
       <VStack
         width="100%"
         height="100%"
-        backgroundColor="neutral.100"
+        padding="40px"
         display="flex"
         flexDirection="column"
         justifyContent="center"
         alignItems="center"
-        spacing="10px"
+        spacing="20px"
       >
-        <BiErrorAlt fontSize="80px" />
-        <Text fontSize="20px">{t('Oops!')}</Text>
-        <Text fontSize="20px">{t('This page was not found, please try again.')}</Text>
-        <Button onClick={handleActionButton}>{t('Refresh')}</Button>
-        <CommonFeedbackMessage />
+        <Image width={308} height={278} src={NotFoundPageImageUrl} />
+        <Text textAlign="center" variant="h2">
+          {t('Oops, looks like this page got lost in space')}
+        </Text>
+        <Button variant="primary" width={'400px'} onClick={handleActionButton}>
+          <Text variant="body1">{t('Refresh Page')}</Text>
+        </Button>
+        <CommonFeedbackMessage prefix={t('Please try refreshing the page.')} />
       </VStack>
     </>
   )
