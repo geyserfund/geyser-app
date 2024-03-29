@@ -13,10 +13,10 @@ import {
   Link,
   VStack,
 } from '@chakra-ui/react'
+import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { AiOutlineSetting } from 'react-icons/ai'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
-import { useState } from 'react'
 
 import { BoltIcon, NodeIcon } from '../../components/icons'
 import { TextInputBox } from '../../components/ui'
@@ -39,8 +39,8 @@ import { lightModeColors } from '../../styles'
 import { LndNodeType } from '../../types'
 import { WalletConnectionDetails } from '../projectDashboard/components'
 import { NodeAdditionModal, WalletConnectionOptionInfoBox } from './components'
-import { ConnectionOption, LightingWalletForm, LNAddressEvaluationState, NodeWalletForm } from './hooks/useWalletForm'
 import ProjectFeeSelection from './components/ProjectFeeSelection'
+import { ConnectionOption, LightingWalletForm, LNAddressEvaluationState, NodeWalletForm } from './hooks/useWalletForm'
 
 type Props = {
   readOnly?: boolean
@@ -61,7 +61,7 @@ export const ProjectCreationWalletConnectionForm = ({
 }: Props) => {
   const { t } = useTranslation()
 
-  const [selectedFee, setSelectedFee] = useState('6.00');
+  const [selectedFee, setSelectedFee] = useState('6.00')
 
   const renderRightElementContent = () => {
     if (lightningAddress.evaluating) {
@@ -93,7 +93,7 @@ export const ProjectCreationWalletConnectionForm = ({
   }
 
   const handleFeeSelection = (feeValue: string) => {
-    setSelectedFee(feeValue);
+    setSelectedFee(feeValue)
   }
 
   return (
@@ -223,11 +223,7 @@ export const ProjectCreationWalletConnectionForm = ({
             >
               <>
                 <RenderSponsorImage url={VoltageExplainerPageForGeyserURL} imageUrl={VoltageUrl} />
-                <ProjectFeeSelection
-                  readOnly={readOnly}
-                  value={selectedFee}
-                  onChange={handleFeeSelection}
-                />
+                <ProjectFeeSelection readOnly={readOnly} value={selectedFee} onChange={handleFeeSelection} />
               </>
             </WalletConnectionOptionInfoBox>
           </AccordionPanel>
