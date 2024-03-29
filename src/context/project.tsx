@@ -87,7 +87,6 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
   const milestonesModal = useModal()
   const { error, project, loading, updateProject, saveProject, isDirty, saving, refetch } = useProjectState(projectId, {
     fetchPolicy: 'network-only',
-    notifyOnNetworkStatusChange: true,
     onError() {
       captureException(error, {
         tags: {

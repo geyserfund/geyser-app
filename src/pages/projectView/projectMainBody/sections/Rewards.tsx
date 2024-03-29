@@ -27,7 +27,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
     isProjectOwner,
   } = useProjectContext()
 
-  if (!project || !isActive || project.rewards.length === 0) {
+  if (!project || !isActive || !project.rewards || project.rewards.length === 0) {
     return null
   }
 
