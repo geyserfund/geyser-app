@@ -56,7 +56,7 @@ export const EntryCreateEdit = () => {
   const isMobile = useMobileMode()
   const { toast } = useNotification()
   const navigate = useNavigate()
-  const params = useParams<{ entryId: string; projectId: string }>()
+  const params = useParams<{ entryId: string; projectName: string }>()
   const { user } = useAuthContext()
   const { setNavData } = useNavContext()
 
@@ -66,7 +66,7 @@ export const EntryCreateEdit = () => {
   const [focusFlag, setFocusFlag] = useState('')
 
   const { loading, saving, updateEntry, hasDiff, entry, saveEntry } = useEntryState(
-    toInt(user?.ownerOf?.find((project) => project?.project?.name === params.projectId)?.project?.id || ''),
+    toInt(user?.ownerOf?.find((project) => project?.project?.name === params.projectName)?.project?.id || ''),
     params.entryId,
     {
       fetchPolicy: 'network-only',
@@ -133,7 +133,7 @@ export const EntryCreateEdit = () => {
 
   const onPreview = () => {
     if (isEdit) {
-      navigate(getPath('projectEntryPreview', `${params.projectId}`, `${entry.id}`))
+      navigate(getPath('projectEntryPreview', `${params.projectName}`, `${entry.id}`))
     } else {
       toast({
         title: 'Cannot preview',
@@ -144,7 +144,7 @@ export const EntryCreateEdit = () => {
   }
 
   const onBack = () => {
-    navigate(getPath('project', params.projectId || ''))
+    navigate(getPath('project', params.projectName || ''))
   }
 
   const onImageUpload = (url: string) => updateEntry({ image: url })

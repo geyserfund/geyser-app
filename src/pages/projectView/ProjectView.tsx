@@ -5,10 +5,10 @@ import { ProjectContainer } from './ProjectContainer'
 import { ProjectSideNavigation } from './projectNavigation/sideNav'
 
 export const ProjectView = () => {
-  const params = useParams<{ projectId: string }>()
-  const { projectId } = params
+  const params = useParams<{ projectName: string }>()
+  const { projectName } = params
   return (
-    <ProjectProvider projectId={projectId || ''}>
+    <ProjectProvider projectName={projectName || ''}>
       <ProjectSideNavigation />
       <ProjectContainer />
     </ProjectProvider>

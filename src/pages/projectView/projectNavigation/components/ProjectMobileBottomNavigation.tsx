@@ -128,7 +128,7 @@ export const ProjectNavUI = () => {
           } else if (isProjectPage) {
             navigate(getPath('project', project.name))
           } else {
-            navigate(getPath('entry', entry.id))
+            navigate(getPath('entry', project.name, entry.id))
           }
         }
 

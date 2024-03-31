@@ -4,10 +4,10 @@ import { ProjectProvider } from '../../context'
 import { ProjectDashboard } from './ProjectDashboard'
 
 export const ProjectDashboardPage = () => {
-  const { projectId } = useParams<{ projectId: string }>()
+  const { projectName } = useParams<{ projectName: string }>()
 
   return (
-    <ProjectProvider projectId={projectId || ''}>
+    <ProjectProvider projectName={projectName || ''}>
       <ProjectDashboard />
     </ProjectProvider>
   )

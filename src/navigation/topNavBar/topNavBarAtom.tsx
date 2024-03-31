@@ -39,7 +39,7 @@ const routesForCustomTitle = [
   ...projectRoutes,
   ...projectDashboardRoutes,
   // `/${PathName.project}/:projectId/${PathName.entry}`,
-  getPath('entry', PathName.entryId),
+  getPath('entry', PathName.projectName, PathName.entryId),
 ]
 const routesForCustomTitleAtom = atom(routeMatchForAtom(routesForCustomTitle))
 

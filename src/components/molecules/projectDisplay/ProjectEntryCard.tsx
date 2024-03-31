@@ -4,7 +4,7 @@ import { DateTime } from 'luxon'
 import { useMemo } from 'react'
 import { BiPencil } from 'react-icons/bi'
 import { BsHeartFill } from 'react-icons/bs'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
 import { AvatarElement } from '../../../pages/projectView/projectMainBody/components'
@@ -24,6 +24,7 @@ type Props = ICard & {
 
 export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
   const navigate = useNavigate()
+  const params = useParams<{ projectName: string }>()
 
   const isDraft = useMemo(() => {
     return entry.status === EntryStatus.Unpublished
@@ -44,7 +45,9 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
   }
 
   const handleClick = () => {
-    navigate(getPath('entry', `${entry.id}`))
+    if (params.projectName) {
+      navigate(getPath('entry', params.projectName, `${entry.id}`))
+    }
   }
 
   return (

@@ -72,7 +72,7 @@ export const useProjectContext = ({
   return context
 }
 
-export const ProjectProvider = ({ projectId, children }: { children: React.ReactNode } & ProjectState) => {
+export const ProjectProvider = ({ projectName, children }: { children: React.ReactNode; projectName: string }) => {
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -85,42 +85,45 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
 
   const creatorModal = useModal()
   const milestonesModal = useModal()
-  const { error, project, loading, updateProject, saveProject, isDirty, saving, refetch } = useProjectState(projectId, {
-    fetchPolicy: 'network-only',
-    onError() {
-      captureException(error, {
-        tags: {
-          'not-found': 'projectGet',
-          'error.on': 'query error',
-        },
-      })
-      navigate(getPath('notFound'))
-    },
-    onCompleted(data) {
-      if (!data?.projectGet) {
-        captureException(data, {
+  const { error, project, loading, updateProject, saveProject, isDirty, saving, refetch } = useProjectState(
+    projectName,
+    {
+      fetchPolicy: 'network-only',
+      onError() {
+        captureException(error, {
           tags: {
             'not-found': 'projectGet',
-            'error.on': 'invalid data',
+            'error.on': 'query error',
           },
         })
         navigate(getPath('notFound'))
-        return
-      }
+      },
+      onCompleted(data) {
+        if (!data?.projectGet) {
+          captureException(data, {
+            tags: {
+              'not-found': 'projectGet',
+              'error.on': 'invalid data',
+            },
+          })
+          navigate(getPath('notFound'))
+          return
+        }
 
-      const { projectGet: project } = data
+        const { projectGet: project } = data
 
-      setNavData({
-        projectName: project.name,
-        projectTitle: project.title,
-        projectPath: getPath('project', project.name),
-        projectOwnerIDs:
-          project.owners.map((ownerInfo) => {
-            return Number(ownerInfo.user.id || -1)
-          }) || [],
-      })
+        setNavData({
+          projectName: project.name,
+          projectTitle: project.title,
+          projectPath: getPath('project', project.name),
+          projectOwnerIDs:
+            project.owners.map((ownerInfo) => {
+              return Number(ownerInfo.user.id || -1)
+            }) || [],
+        })
+      },
     },
-  })
+  )
 
   const updateProjectOwner = useCallback((project: ProjectFragment, user: UserMeFragment) => {
     if (project.id && project.owners[0]?.user.id === user.id) {

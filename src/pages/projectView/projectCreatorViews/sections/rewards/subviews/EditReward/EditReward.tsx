@@ -15,18 +15,9 @@ export const ProjectEditReward = () => {
   const params = useParams<{ rewardId: string; projectId: string }>()
   const navigate = useNavigate()
 
-  if (!project || !isProjectOwner) {
-    return null
-  }
-
-  const reward = project.rewards?.find((pr) => {
-    if (pr.id === params.rewardId) {
-      return { ...pr, projectRewardId: pr.id }
-    }
-  }) as ProjectReward
-
   const [updateReward, { loading: updateRewardLoading }] = useProjectRewardUpdateMutation({
     onCompleted(data) {
+      if (!project) return
       const newRewards = project.rewards?.map((pr) => {
         if (pr.id === params.rewardId) {
           return data.projectRewardUpdate
@@ -50,6 +41,16 @@ export const ProjectEditReward = () => {
       })
     },
   })
+
+  if (!project || !isProjectOwner) {
+    return null
+  }
+
+  const reward = project.rewards?.find((pr) => {
+    if (pr.id === params.rewardId) {
+      return { ...pr, projectRewardId: pr.id }
+    }
+  }) as ProjectReward
 
   return (
     <ProjectRewardForm

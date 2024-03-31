@@ -16,7 +16,7 @@ import { ProjectMobileBottomNavigation } from '../projectView/projectNavigation/
 import { useEntryAtom } from './entryAtom'
 
 export const EntryPage = () => {
-  const { entryId } = useParams<{ entryId: string }>()
+  const { entryId, projectName } = useParams<{ entryId: string; projectName: string }>()
   const navigate = useNavigate()
 
   const [entry, setEntry] = useEntryAtom()
@@ -42,8 +42,12 @@ export const EntryPage = () => {
     }
   }, [entryId, getEntry])
 
+  if (!projectName || !entry.project?.name) {
+    return null
+  }
+
   return (
-    <ProjectProvider projectId={Number(entry.project?.id)}>
+    <ProjectProvider projectName={projectName || entry.project?.name}>
       <EntryViewWrapper loading={loading} error={error} entry={entry} />
     </ProjectProvider>
   )

@@ -41,6 +41,10 @@ export const FRAGMENT_FUNDING_TX_FOR_LANDING_PAGE = gql`
         id
         image
         title
+        project {
+          id
+          name
+        }
       }
     }
   }

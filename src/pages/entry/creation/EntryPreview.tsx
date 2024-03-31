@@ -1,8 +1,8 @@
 import { useMutation } from '@apollo/client'
-import { Box, Input, Text, VStack } from '@chakra-ui/react'
+import { Box, Input, Link, Text, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { BsCheckLg } from 'react-icons/bs'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { CardLayout } from '../../../components/layouts'
 import { ButtonComponent, ImageWithReload, TextInputBox } from '../../../components/ui'
@@ -20,7 +20,7 @@ import { CreateNav } from './editor/CreateNav'
 let isEdited = false
 
 export const EntryPreview = () => {
-  const params = useParams<{ entryId: string; projectId: string }>()
+  const params = useParams<{ entryId: string; projectName: string }>()
 
   const { toast } = useNotification()
   const navigate = useNavigate()
@@ -37,8 +37,8 @@ export const EntryPreview = () => {
         return navigate(getPath('notFound'))
       }
 
-      if (data.entry.status === EntryStatus.Published) {
-        navigate(getPath('entry', `${params.entryId}`))
+      if (data.entry.status === EntryStatus.Published && params.projectName && params.entryId) {
+        navigate(getPath('entry', params.projectName, params.entryId))
       }
     },
   })
@@ -52,7 +52,7 @@ export const EntryPreview = () => {
   })
 
   const { loading, data: projectData } = useProjectByNameOrIdQuery({
-    variables: { where: { name: params.projectId } },
+    variables: { where: { name: params.projectName } },
     onCompleted(data) {
       if (!data.projectGet) return
       setNavData({
@@ -109,8 +109,8 @@ export const EntryPreview = () => {
   }
 
   const onBack = () => {
-    if (params.projectId && params.entryId) {
-      navigate(getPath('projectEntryDetails', params.projectId, params.entryId))
+    if (params.projectName && params.entryId) {
+      navigate(getPath('projectEntryDetails', params.projectName, params.entryId))
     }
   }
 
@@ -151,12 +151,17 @@ export const EntryPreview = () => {
   }
 
   const handleTwitterShareButtonTapped = () => {
-    if (params.entryId) {
-      copyTextToClipboard(`${window.location.origin}${getPath('entry', params.entryId)}`)
+    if (params.entryId && params.projectName) {
+      copyTextToClipboard(`${window.location.origin}${getPath('entry', params.projectName, params.entryId)}`)
 
       setHasCopiedSharingLink(true)
     }
   }
+
+  console.log(
+    'checking values',
+    `${window.location.origin}${getPath('entry', params.projectName || '', params.entryId || '')}`,
+  )
 
   if (loadingPosts || loading) {
     return <Loader />
@@ -267,10 +272,16 @@ export const EntryPreview = () => {
               <ButtonComponent w="full" onClick={handleTwitterShareButtonTapped} primary={hasCopiedSharingLink}>
                 {hasCopiedSharingLink ? 'Copied Link!' : 'Share on Twitter'}
               </ButtonComponent>
-
-              <ButtonComponent as={Link} to={getPath('entry', params.entryId || '')} primary w="full">
-                Go to entry
-              </ButtonComponent>
+              {params.entryId && params.projectName && (
+                <ButtonComponent
+                  as={Link}
+                  href={`${window.location.origin}${getPath('entry', params.projectName, params.entryId)}`}
+                  primary
+                  w="full"
+                >
+                  Go to entry
+                </ButtonComponent>
+              )}
             </VStack>
           ) : isDraft(projectData?.projectGet?.status) ? (
             <>

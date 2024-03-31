@@ -20,7 +20,7 @@ export const LandingEntryCard = ({ entry, isMobile, ...rest }: LandingEntryCardP
   return (
     <LandingCardBase
       isMobile={isMobile}
-      onClick={() => navigate(getPath('entry', entry.id))}
+      onClick={() => navigate(getPath('entry', entry.project?.name || '', entry.id))}
       imageSrc={toSmallImageUrl(`${entry.image}`)}
       title={entry.title}
       user={entry.creator}

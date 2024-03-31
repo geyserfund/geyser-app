@@ -4177,7 +4177,14 @@ export type FundingTxForLandingPageFragment = {
     } | null
   }
   sourceResource?:
-    | { __typename?: 'Entry'; createdAt: string; id: any; image?: string | null; title: string }
+    | {
+        __typename?: 'Entry'
+        createdAt: string
+        id: any
+        image?: string | null
+        title: string
+        project?: { __typename?: 'Project'; id: any; name: string } | null
+      }
     | {
         __typename?: 'Project'
         id: any
@@ -6639,6 +6646,10 @@ export const FundingTxForLandingPageFragmentDoc = gql`
         id
         image
         title
+        project {
+          id
+          name
+        }
       }
     }
   }
