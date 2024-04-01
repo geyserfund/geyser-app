@@ -8,6 +8,7 @@ import { Head } from '../../config'
 import { getPath, ProjectEntryThumbnailPlaceholderUrl } from '../../constants'
 import { useProjectContext } from '../../context'
 import { ProjectProvider } from '../../context'
+import { FundingStages, useFundingStage } from '../../hooks/fundingFlow/state/fundingStagesAtom'
 import { EntryFragment, FundingResourceType, useEntryLazyQuery } from '../../types'
 import { toInt, useMobileMode } from '../../utils'
 import { NotFoundPage } from '../fallback/NotFoundPage'
@@ -58,7 +59,8 @@ interface IEntryViewWrapper {
 const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
   const isMobile = useMobileMode()
 
-  const { project, error: projectError, loading: projectLoading, fundingFlow } = useProjectContext()
+  const { project, error: projectError, loading: projectLoading } = useProjectContext()
+  const { fundingStage } = useFundingStage()
 
   if (loading || projectLoading || !project) {
     return <Loader paddingTop="65px" />
@@ -86,7 +88,7 @@ const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
         />
         <Outlet />
         <ProjectActivityPanel resourceType={FundingResourceType.Entry} resourceId={entry.id} />
-        {isMobile && fundingFlow.fundState === 'initial' && <ProjectMobileBottomNavigation fixed />}
+        {isMobile && fundingStage === FundingStages.initial && <ProjectMobileBottomNavigation fixed />}
       </Box>
     </Box>
   )

@@ -2,10 +2,10 @@ import { Box } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { useContext, useEffect } from 'react'
 
-import { fundingStages } from '../../../constants'
 import { AuthContext, MobileViews, useProjectContext } from '../../../context'
 import { useBtcContext } from '../../../context/btc'
 import { IFundForm } from '../../../hooks'
+import { FundingStages, useFundingStage } from '../../../hooks/fundingFlow/state'
 import {
   FundingInput,
   FundingResourceType,
@@ -36,7 +36,8 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
 
   const { state: formState, setState: setFormState, resetForm, hasSelectedRewards } = fundForm
 
-  const { fundState, setFundState, resetFundingFlow, requestFunding } = fundingFlow
+  const { resetFundingFlow, requestFunding } = fundingFlow
+  const { fundingStage, setFundingStage } = useFundingStage()
 
   const { loginOnOpen } = useAuthModal()
 
@@ -46,9 +47,9 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
 
   useEffect(() => {
     if (mobileView === MobileViews.funding) {
-      setFundState(fundingStages.form)
+      setFundingStage(FundingStages.form)
     }
-  }, [mobileView, resetForm, resetFundingFlow, setFundState])
+  }, [mobileView, resetForm, resetFundingFlow, setFundingStage])
 
   useEffect(() => {
     if (user && user.id) {
@@ -69,7 +70,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   }
 
   const handleQRCloseButton = () => {
-    setFundState(fundingStages.form)
+    setFundingStage(FundingStages.form)
   }
 
   const formatFundingInput = (state: IFundForm) => {
@@ -124,10 +125,10 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
       return <InfoScreenSkeleton />
     }
 
-    switch (fundState) {
-      case fundingStages.initial:
+    switch (fundingStage) {
+      case FundingStages.initial:
         return <InfoScreen />
-      case fundingStages.form:
+      case FundingStages.form:
         return (
           <FundingFormScreen
             handleCloseButton={handleCloseButton}
@@ -136,7 +137,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
             name={project.name}
           />
         )
-      case fundingStages.started:
+      case FundingStages.started:
         return (
           <QRScreen
             state={formState}
@@ -145,7 +146,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
             handleCloseButton={handleQRCloseButton}
           />
         )
-      case fundingStages.completed:
+      case FundingStages.completed:
         return <SuccessScreen onCloseClick={handleCloseButton} />
 
       default:

@@ -1,8 +1,6 @@
-import { useAtom } from 'jotai'
 import { useCallback, useState } from 'react'
 
-import { FundingTxFragment, useFundingTxStatusUpdatedSubscription } from '../../types'
-import { subscriptionActiveAtom } from './state/pollingFundingTx'
+import { FundingTxFragment, useFundingTxStatusUpdatedSubscription } from '../../../../../../types'
 
 type UseFundSubscriptionProps = {
   projectId?: number
@@ -10,20 +8,20 @@ type UseFundSubscriptionProps = {
   onComplete?: (fundingTx: FundingTxFragment) => void
 }
 
-export const useFundSubscription = ({ projectId, fundingTxId, onComplete }: UseFundSubscriptionProps) => {
-  const [isSubscriptionActive, setIsSubscriptionActive] = useAtom(subscriptionActiveAtom)
-
-  const startSubscription = useCallback(() => {
-    setIsSubscriptionActive(true)
-  }, [setIsSubscriptionActive])
-
-  const stopSubscription = useCallback(() => {
-    setIsSubscriptionActive(false)
-  }, [setIsSubscriptionActive])
-
+export const useFundingActivitySubscription = ({ projectId, fundingTxId, onComplete }: UseFundSubscriptionProps) => {
+  const [skip, setSkip] = useState(true)
   const [fundingActivity, setFundingActivity] = useState<FundingTxFragment>()
 
-  const skipSubscription = !isSubscriptionActive || !projectId
+  const startSubscription = useCallback(() => {
+    setSkip(false)
+  }, [])
+
+  const stopSubscription = useCallback(() => {
+    setFundingActivity(undefined)
+    setSkip(true)
+  }, [])
+
+  const skipSubscription = skip || !projectId
   useFundingTxStatusUpdatedSubscription({
     variables: {
       input: {

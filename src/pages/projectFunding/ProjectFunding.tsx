@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-import { fundingStages } from '../../constants'
 import { useFundingFlow } from '../../hooks'
+import { FundingStages, useFundingStage } from '../../hooks/fundingFlow/state'
 import { Project, UserMeFragment } from '../../types'
 import { QRCodeSection } from '../projectView/projectActivityPanel/screens'
 import { FundingComplete } from './stages/FundingComplete'
@@ -30,26 +30,26 @@ export const ProjectFunding = ({ project, user, onTitleChange = noop }: Props) =
 
   const [formState, setFormState] = useState<ProjectFundingFormState | undefined>()
 
-  const { fundState, setFundState } = fundingFlow
+  const { fundingStage, setFundingStage } = useFundingStage()
 
   useEffect(() => {
-    if (fundState === fundingStages.initial) {
-      setFundState(fundingStages.form)
+    if (fundingStage === FundingStages.initial) {
+      setFundingStage(FundingStages.form)
     }
 
-    if (fundState === fundingStages.completed) {
+    if (fundingStage === FundingStages.completed) {
       setTitle(SUCCESS_TITLE)
     }
-  }, [fundState])
+  }, [fundingStage, setFundingStage])
 
   if (!project) {
     return null
   }
 
-  switch (fundState) {
-    case fundingStages.started:
+  switch (fundingStage) {
+    case FundingStages.started:
       return <QRCodeSection fundingFlow={fundingFlow} />
-    case fundingStages.completed:
+    case FundingStages.completed:
       return <FundingComplete formState={formState} fundingFlow={fundingFlow} />
     default:
       return <FundingForm fundingFlow={fundingFlow} project={project} user={user} onFundingRequested={setFormState} />

@@ -6,6 +6,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { Head } from '../../config'
 import { PathName } from '../../constants'
 import { MobileViews, useProjectContext } from '../../context'
+import { FundingStages, useFundingStage } from '../../hooks/fundingFlow/state'
 import { useModal } from '../../hooks/useModal'
 import { toInt, useMobileMode } from '../../utils'
 import { ProjectCreateDraftModal } from '../projectCreate/components/ProjectCreateDraftModal'
@@ -29,10 +30,10 @@ export const ProjectContainer = () => {
 
   const {
     project,
-    fundingFlow,
     fundForm: { updateReward },
     setMobileView,
   } = useProjectContext()
+  const { fundingStage } = useFundingStage()
 
   const query = useQuery()
 
@@ -66,13 +67,15 @@ export const ProjectContainer = () => {
     setMobileView(MobileViews.funding)
   }
 
+  const isFundingFlowInitial = fundingStage === FundingStages.initial
+
   return (
     <Box
       display="flex"
       justifyContent="center"
       alignItems="center"
       height="100%"
-      pb={{ base: fundingFlow.fundState === 'initial' ? '70px' : 0, lg: '0px' }}
+      pb={{ base: isFundingFlowInitial ? '70px' : 0, lg: '0px' }}
     >
       <Box
         width="100%"
@@ -97,7 +100,7 @@ export const ProjectContainer = () => {
         <ProjectCreateLaunchedModal {...launchModal} />
         <ProjectCreateDraftModal {...draftModal} />
 
-        {isMobile && fundingFlow.fundState === 'initial' && <ProjectMobileBottomNavigation fixed />}
+        {isMobile && isFundingFlowInitial && <ProjectMobileBottomNavigation fixed />}
       </Box>
     </Box>
   )

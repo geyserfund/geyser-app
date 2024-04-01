@@ -6,10 +6,10 @@ import { ID } from '../../../../../../constants/components'
 import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../../../../graphql'
 import { ScrollInvoke } from '../../../../../../helpers'
 import { useQueryWithPagination } from '../../../../../../hooks'
-import { useFundSubscription } from '../../../../../../hooks/fundingFlow/useFundSubscription'
 import { FundingTxFragment, ProjectFragment } from '../../../../../../types'
 import { aggregateTransactions, FundingTxWithCount, useMobileMode, useNotification } from '../../../../../../utils'
 import { ContributionActivityItem } from '../../../../../landing/feed/components'
+import { useFundingActivitySubscription } from '../hooks/useFundingActivitySubscription'
 
 const CONTRIBUTION_ITEM_LIMIT = 50
 
@@ -28,7 +28,9 @@ export const ProjectContributionList = ({
   const isMobile = useMobileMode()
   const { toast } = useNotification()
 
-  const { startListening, stopListening, fundingActivity } = useFundSubscription({ projectId: project.id })
+  const { startSubscription, stopSubscription, fundingActivity } = useFundingActivitySubscription({
+    projectId: project.id,
+  })
 
   const [aggregatedFundingTxs, setAggregatedFundingTxs] = useState<FundingTxWithCount[]>([])
 
@@ -54,12 +56,12 @@ export const ProjectContributionList = ({
   }, [fundingTxs.data])
 
   useEffect(() => {
-    startListening()
+    startSubscription()
 
     return () => {
-      stopListening()
+      stopSubscription()
     }
-  }, [startListening, stopListening])
+  }, [startSubscription, stopSubscription])
 
   useEffect(() => {
     if (fundingActivity && !aggregatedFundingTxs.some((txs) => txs.id === fundingActivity.id)) {

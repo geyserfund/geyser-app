@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import Loader from '../../../../../components/ui/Loader'
 import { UseFundingFlowReturn } from '../../../../../hooks'
+import { useRefreshInvoice } from '../../../../../hooks/fundingFlow/useRefreshInvoice'
 import { FundingStatus, InvoiceStatus } from '../../../../../types/generated/graphql'
 import { getBip21Invoice } from '../../../../../utils/lightning/bip21'
 import { FundingErrorView, GeneratingInvoice, InvoiceErrorView, QRCodeImage } from './components'
@@ -37,18 +38,10 @@ export const QRCodeSection = ({ fundingFlow }: Props) => {
 
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethods>(PaymentMethods.LIGHTNING)
 
-  const {
-    fundingTx,
-    fundingRequestErrored,
-    invoiceRefreshErrored,
-    invoiceRefreshLoading,
-    fundingRequestLoading,
-    hasWebLN,
-    weblnErrored,
-    error,
-    refreshFundingInvoice,
-    retryFundingFlow,
-  } = fundingFlow
+  const { invoiceRefreshErrored, invoiceRefreshLoading, refreshFundingInvoice } = useRefreshInvoice()
+
+  const { fundingTx, fundingRequestErrored, fundingRequestLoading, hasWebLN, weblnErrored, error, retryFundingFlow } =
+    fundingFlow
 
   const qrDisplayState = useMemo(() => {
     if (invoiceRefreshLoading || fundingRequestLoading) {

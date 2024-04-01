@@ -5,9 +5,10 @@ import { useTranslation } from 'react-i18next'
 import { FaTelegramPlane } from 'react-icons/fa'
 
 import { SectionTitle } from '../../../../../components/ui'
-import { fundingStages, GeyserTelegramUrl } from '../../../../../constants'
+import { GeyserTelegramUrl } from '../../../../../constants'
 import { useFundCalc } from '../../../../../helpers'
 import { IFundForm, UseFundingFlowReturn } from '../../../../../hooks'
+import { FundingStages, useFundingStage } from '../../../../../hooks/fundingFlow/state'
 import { ProjectFragment, Satoshis, useFundingInvoiceCancelMutation } from '../../../../../types'
 import { useMobileMode } from '../../../../../utils'
 import { ContributionInfoBox, ContributionInfoBoxVersion } from '../../../projectMainBody/components'
@@ -29,12 +30,14 @@ export const QRScreen = ({ fundingFlow, state, project, handleCloseButton }: Pro
     ignoreResults: true,
   })
 
+  const { fundingStage } = useFundingStage()
+
   useEffect(() => {
     // Cancel invoice on the backend after QR section unmounts
     return () => {
       if (
-        fundingFlow.fundState !== fundingStages.started &&
-        fundingFlow.fundState !== fundingStages.canceled &&
+        fundingStage !== FundingStages.started &&
+        fundingStage !== FundingStages.canceled &&
         fundingFlow.fundingTx.invoiceId
       ) {
         cancelInvoice({
@@ -42,7 +45,7 @@ export const QRScreen = ({ fundingFlow, state, project, handleCloseButton }: Pro
         })
       }
     }
-  }, [cancelInvoice, fundingFlow])
+  }, [cancelInvoice, fundingStage, fundingFlow.fundingTx.invoiceId])
 
   return (
     <VStack

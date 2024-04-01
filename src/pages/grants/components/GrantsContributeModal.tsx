@@ -20,10 +20,11 @@ import { Trans, useTranslation } from 'react-i18next'
 import { FaCheck } from 'react-icons/fa'
 
 import { Body2, Caption } from '../../../components/typography'
-import { fundingStages, MAX_FUNDING_AMOUNT_USD } from '../../../constants'
+import { MAX_FUNDING_AMOUNT_USD } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { useBTCConverter } from '../../../helpers'
 import { useFormState, useFundingFlow } from '../../../hooks'
+import { FundingStages, useFundingStage } from '../../../hooks/fundingFlow/state'
 import { FormStateError } from '../../../interfaces'
 import { FundingInput, FundingResourceType, USDCents, useProjectByNameOrIdQuery } from '../../../types'
 import { toInt, useNotification } from '../../../utils'
@@ -86,17 +87,19 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
     },
   })
 
-  const { fundState, fundingTx, gotoNextStage, resetFundingFlow, requestFunding } = fundingFlow
+  const { fundingStage, setNextFundingStage } = useFundingStage()
+
+  const { fundingTx, resetFundingFlow, requestFunding } = fundingFlow
 
   useEffect(() => {
     setFormError({})
   }, [state])
 
   useEffect(() => {
-    if (fundState === fundingStages.completed) {
+    if (fundingStage === FundingStages.completed) {
       setModalHeader('Contribution Successful')
     }
-  }, [fundState])
+  }, [fundingStage])
 
   const handleClose = () => {
     resetFundingFlow()
@@ -276,10 +279,10 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
   const qrSection = () => <QRCodeSection fundingFlow={fundingFlow} />
 
   const renderModalBody = () => {
-    switch (fundState) {
-      case fundingStages.started:
+    switch (fundingStage) {
+      case FundingStages.started:
         return qrSection()
-      case fundingStages.completed:
+      case FundingStages.completed:
         return completedScreen()
       default:
         return contributionForm()
@@ -292,7 +295,7 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
         variant="primary"
         px={12}
         onClick={() => {
-          gotoNextStage()
+          setNextFundingStage()
           onOpen()
         }}
       >
