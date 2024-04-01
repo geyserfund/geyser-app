@@ -1,12 +1,28 @@
-import { Text, VStack } from '@chakra-ui/react'
+import { Button, Image, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { BiErrorAlt } from 'react-icons/bi'
+import { useNavigate } from 'react-router-dom'
 
 import { Head } from '../../config'
+import { NotAuthorizedImageUrl } from '../../constants/platform/url'
+import { useServiceWorkerUpdate } from '../../context'
 import { CommonFeedbackMessage } from './CommonFeedbackMessage'
 
 export const NotAuthorized = () => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+
+  const { updateServiceWorker } = useServiceWorkerUpdate()
+
+  const handleActionButton = () => {
+    updateServiceWorker()
+
+    if (window.history.length > 1) {
+      window.history.back()
+    } else {
+      navigate('/')
+    }
+  }
+
   return (
     <>
       <Head title="Not authorized" />
@@ -17,12 +33,15 @@ export const NotAuthorized = () => {
         flexDirection="column"
         justifyContent="center"
         alignItems="center"
-        spacing="10px"
+        spacing="20px"
       >
-        <BiErrorAlt fontSize="80px" />
+        <Image width={308} height={175} src={NotAuthorizedImageUrl} />
         <Text variant="h2" textAlign="center">
           {t('Oops!')} {t('You do not have permission to access this page.')}
         </Text>
+        <Button variant="primary" width={'400px'} onClick={handleActionButton}>
+          <Text variant="body1">{t('Go back')}</Text>
+        </Button>
         <CommonFeedbackMessage />
       </VStack>
     </>
