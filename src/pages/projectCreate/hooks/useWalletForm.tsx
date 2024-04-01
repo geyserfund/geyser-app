@@ -56,6 +56,8 @@ export type WalletForm = {
   isFormDirty: () => boolean
   connectionOption: ConnectionOption
   setConnectionOption: (connectionOption: ConnectionOption) => void
+  feePercentage: number
+  setFeePercentage: (feePercentage: number) => void
   createWalletInput: CreateWalletInput | null
   isLightningAddressInValid: boolean
 }
@@ -82,6 +84,8 @@ export const useWalletForm = ({
   const [connectionOption, setConnectionOption] = useState<ConnectionOption>(defaultConnectionOption)
 
   const projectWallet = project?.wallets[0]
+
+  const [feePercentage, setFeePercentage] = useState<number>(0.06)
 
   const debouncedLightningAddress = useDebounce(lightningAddressFormValue, 200)
 
@@ -165,6 +169,7 @@ export const useWalletForm = ({
         },
         name: nodeInput.name,
         resourceInput,
+        feePercentage,
       }
     }
 
@@ -178,11 +183,12 @@ export const useWalletForm = ({
           lightningAddress: lightningAddressFormValue,
         },
         resourceInput,
+        feePercentage,
       }
     }
 
     return null
-  }, [project, nodeInput, connectionOption, lightningAddressFormValue])
+  }, [project, nodeInput, connectionOption, lightningAddressFormValue, feePercentage])
 
   const handleConfirm = useCallback(async () => {
     if (
@@ -310,5 +316,7 @@ export const useWalletForm = ({
     setConnectionOption,
     createWalletInput,
     isLightningAddressInValid,
+    feePercentage,
+    setFeePercentage,
   }
 }

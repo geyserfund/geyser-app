@@ -13,7 +13,6 @@ import {
   Link,
   VStack,
 } from '@chakra-ui/react'
-import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { AiOutlineSetting } from 'react-icons/ai'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
@@ -49,6 +48,8 @@ type Props = {
   lightningAddress: LightingWalletForm
   node: NodeWalletForm
   setConnectionOption: (connectionOption: ConnectionOption) => void
+  feePercentage: number
+  setFeePercentage: (feePercentage: number) => void
 }
 
 export const ProjectCreationWalletConnectionForm = ({
@@ -58,10 +59,10 @@ export const ProjectCreationWalletConnectionForm = ({
   lightningAddress,
   node,
   setConnectionOption,
+  feePercentage,
+  setFeePercentage,
 }: Props) => {
   const { t } = useTranslation()
-
-  const [selectedFee, setSelectedFee] = useState('6.00')
 
   const renderRightElementContent = () => {
     if (lightningAddress.evaluating) {
@@ -90,10 +91,6 @@ export const ProjectCreationWalletConnectionForm = ({
     } else if (expandedIndex === 1) {
       setConnectionOption(ConnectionOption.PERSONAL_NODE)
     }
-  }
-
-  const handleFeeSelection = (feeValue: string) => {
-    setSelectedFee(feeValue)
   }
 
   return (
@@ -223,7 +220,7 @@ export const ProjectCreationWalletConnectionForm = ({
             >
               <>
                 <RenderSponsorImage url={VoltageExplainerPageForGeyserURL} imageUrl={VoltageUrl} />
-                <ProjectFeeSelection readOnly={readOnly} value={selectedFee} onChange={handleFeeSelection} />
+                <ProjectFeeSelection readOnly={readOnly} value={feePercentage} onChange={setFeePercentage} />
               </>
             </WalletConnectionOptionInfoBox>
           </AccordionPanel>

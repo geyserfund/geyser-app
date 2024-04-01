@@ -59,6 +59,8 @@ export const ProjectWallet = () => {
     setConnectionOption,
     createWalletInput,
     isLightningAddressInValid,
+    feePercentage,
+    setFeePercentage,
   } = useWalletForm({
     defaultConnectionOption: projectWallet
       ? projectWallet.connectionDetails.__typename === WalletConnectDetails.LightningAddressConnectionDetails
@@ -78,8 +80,8 @@ export const ProjectWallet = () => {
       })
     },
     onCompleted(data) {
-      if (data.createWallet) {
-        updateProject({ wallets: [data.createWallet] })
+      if (data.walletCreate) {
+        updateProject({ wallets: [data.walletCreate] })
         toast({
           status: 'success',
           title: 'Wallet created successfully!',
@@ -114,6 +116,7 @@ export const ProjectWallet = () => {
           lndConnectionDetailsInput: createWalletInput?.lndConnectionDetailsInput,
           lightningAddressConnectionDetailsInput: createWalletInput?.lightningAddressConnectionDetailsInput,
           id: projectWallet?.id,
+          feePercentage,
           twoFAInput: {
             OTP: {
               otp,
@@ -138,8 +141,6 @@ export const ProjectWallet = () => {
       description: 'Project is now active',
     })
   }
-
-  console.log('checking project, and isedit', project, isEdit)
 
   const isReadOnly = !user.isEmailVerified && (!isEdit ? project?.status !== ProjectStatus.Draft : true)
 
@@ -168,6 +169,8 @@ export const ProjectWallet = () => {
             node={node}
             connectionOption={connectionOption}
             setConnectionOption={setConnectionOption}
+            feePercentage={feePercentage}
+            setFeePercentage={setFeePercentage}
           />
         )}
       </VStack>

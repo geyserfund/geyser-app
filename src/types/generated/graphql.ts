@@ -176,6 +176,7 @@ export type CreateProjectRewardInput = {
 }
 
 export type CreateWalletInput = {
+  feePercentage: Scalars['Float']
   lightningAddressConnectionDetailsInput?: InputMaybe<LightningAddressConnectionDetailsCreateInput>
   lndConnectionDetailsInput?: InputMaybe<LndConnectionDetailsCreateInput>
   name?: InputMaybe<Scalars['String']>
@@ -633,8 +634,6 @@ export type GetFundingTxsInput = {
 
 export type GetFundingTxsOrderByInput = {
   createdAt: OrderByOptions
-  /** @deprecated Use createdAt instead. */
-  paidAt?: InputMaybe<OrderByOptions>
 }
 
 export type GetFundingTxsWhereInput = {
@@ -892,7 +891,6 @@ export type Mutation = {
   createEntry: Entry
   createProject: Project
   createProjectMilestone: ProjectMilestone
-  createWallet: Wallet
   deleteEntry: Entry
   deleteProjectMilestone: Scalars['Boolean']
   fund: FundingMutationResponse
@@ -930,14 +928,15 @@ export type Mutation = {
   updateProject: Project
   updateProjectMilestone: ProjectMilestone
   updateUser: User
-  /** This operation is currently not supported. */
-  updateWallet: Wallet
   updateWalletState: Wallet
   userBadgeAward: UserBadge
   userDelete: DeleteUserResponse
   userEmailUpdate: User
   userEmailVerify: Scalars['Boolean']
+  walletCreate: Wallet
   walletDelete: Scalars['Boolean']
+  /** This operation is currently not supported. */
+  walletUpdate: Wallet
 }
 
 export type MutationClaimBadgeArgs = {
@@ -954,10 +953,6 @@ export type MutationCreateProjectArgs = {
 
 export type MutationCreateProjectMilestoneArgs = {
   input?: InputMaybe<CreateProjectMilestoneInput>
-}
-
-export type MutationCreateWalletArgs = {
-  input: CreateWalletInput
 }
 
 export type MutationDeleteEntryArgs = {
@@ -1084,10 +1079,6 @@ export type MutationUpdateUserArgs = {
   input: UpdateUserInput
 }
 
-export type MutationUpdateWalletArgs = {
-  input: UpdateWalletInput
-}
-
 export type MutationUpdateWalletStateArgs = {
   input: UpdateWalletStateInput
 }
@@ -1104,8 +1095,16 @@ export type MutationUserEmailVerifyArgs = {
   input: EmailVerifyInput
 }
 
+export type MutationWalletCreateArgs = {
+  input: CreateWalletInput
+}
+
 export type MutationWalletDeleteArgs = {
   id: Scalars['BigInt']
+}
+
+export type MutationWalletUpdateArgs = {
+  input: UpdateWalletInput
 }
 
 export type MutationResponse = {
@@ -1284,7 +1283,7 @@ export type PaginationInput = {
 
 export type Project = {
   __typename?: 'Project'
-  /** @deprecated Field no longer supported */
+  /** @deprecated No longer supported */
   ambassadors: Array<Ambassador>
   /** Total amount raised by the project, in satoshis. */
   balance: Scalars['Int']
@@ -1319,7 +1318,7 @@ export type Project = {
   rewards: Array<ProjectReward>
   /** Short description of the project. */
   shortDescription?: Maybe<Scalars['String']>
-  /** @deprecated Field no longer supported */
+  /** @deprecated No longer supported */
   sponsors: Array<Sponsor>
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>
@@ -1933,6 +1932,7 @@ export type UpdateUserInput = {
 }
 
 export type UpdateWalletInput = {
+  feePercentage?: InputMaybe<Scalars['Float']>
   id: Scalars['BigInt']
   lightningAddressConnectionDetailsInput?: InputMaybe<LightningAddressConnectionDetailsUpdateInput>
   lndConnectionDetailsInput?: InputMaybe<LndConnectionDetailsUpdateInput>
@@ -2032,14 +2032,14 @@ export type UserProjectContribution = {
   funder?: Maybe<Funder>
   /**
    * Boolean value indicating if the User was an ambassador of the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isAmbassador: Scalars['Boolean']
   /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean']
   /**
    * Boolean value indicating if the User was a sponsor for the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isSponsor: Scalars['Boolean']
   /** Project linked to the contributions. */
@@ -2057,6 +2057,8 @@ export type UserProjectsGetWhereInput = {
 export type Wallet = {
   __typename?: 'Wallet'
   connectionDetails: ConnectionDetails
+  /** The fee percentage applied to contributions going to this wallet. */
+  feePercentage?: Maybe<Scalars['Float']>
   id: Scalars['BigInt']
   /** Wallet name */
   name?: Maybe<Scalars['String']>
@@ -3160,12 +3162,6 @@ export type MutationResolvers<
     ContextType,
     Partial<MutationCreateProjectMilestoneArgs>
   >
-  createWallet?: Resolver<
-    ResolversTypes['Wallet'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateWalletArgs, 'input'>
-  >
   deleteEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationDeleteEntryArgs, 'id'>>
   deleteProjectMilestone?: Resolver<
     ResolversTypes['Boolean'],
@@ -3332,12 +3328,6 @@ export type MutationResolvers<
     Partial<MutationUpdateProjectMilestoneArgs>
   >
   updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>
-  updateWallet?: Resolver<
-    ResolversTypes['Wallet'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateWalletArgs, 'input'>
-  >
   updateWalletState?: Resolver<
     ResolversTypes['Wallet'],
     ParentType,
@@ -3363,11 +3353,23 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationUserEmailVerifyArgs, 'input'>
   >
+  walletCreate?: Resolver<
+    ResolversTypes['Wallet'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationWalletCreateArgs, 'input'>
+  >
   walletDelete?: Resolver<
     ResolversTypes['Boolean'],
     ParentType,
     ContextType,
     RequireFields<MutationWalletDeleteArgs, 'id'>
+  >
+  walletUpdate?: Resolver<
+    ResolversTypes['Wallet'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationWalletUpdateArgs, 'input'>
   >
 }
 
@@ -3977,6 +3979,7 @@ export type WalletResolvers<
   ParentType extends ResolversParentTypes['Wallet'] = ResolversParentTypes['Wallet'],
 > = {
   connectionDetails?: Resolver<ResolversTypes['ConnectionDetails'], ParentType, ContextType>
+  feePercentage?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   state?: Resolver<ResolversTypes['WalletState'], ParentType, ContextType>
@@ -5145,7 +5148,7 @@ export type CreateWalletMutationVariables = Exact<{
 
 export type CreateWalletMutation = {
   __typename?: 'Mutation'
-  createWallet: { __typename?: 'Wallet' } & ProjectWalletFragment
+  walletCreate: { __typename?: 'Wallet' } & ProjectWalletFragment
 }
 
 export type UpdateWalletMutationVariables = Exact<{
@@ -5154,7 +5157,7 @@ export type UpdateWalletMutationVariables = Exact<{
 
 export type UpdateWalletMutation = {
   __typename?: 'Mutation'
-  updateWallet: { __typename?: 'Wallet'; id: any; name?: string | null }
+  walletUpdate: { __typename?: 'Wallet'; id: any; name?: string | null }
 }
 
 export type WalletDeleteMutationVariables = Exact<{
@@ -8168,7 +8171,7 @@ export type UserDeleteMutationResult = Apollo.MutationResult<UserDeleteMutation>
 export type UserDeleteMutationOptions = Apollo.BaseMutationOptions<UserDeleteMutation, UserDeleteMutationVariables>
 export const CreateWalletDocument = gql`
   mutation CreateWallet($input: CreateWalletInput!) {
-    createWallet(input: $input) {
+    walletCreate(input: $input) {
       ...ProjectWallet
     }
   }
@@ -8207,7 +8210,7 @@ export type CreateWalletMutationOptions = Apollo.BaseMutationOptions<
 >
 export const UpdateWalletDocument = gql`
   mutation UpdateWallet($input: UpdateWalletInput!) {
-    updateWallet(input: $input) {
+    walletUpdate(input: $input) {
       id
       name
     }

@@ -4,25 +4,25 @@ import { useTranslation } from 'react-i18next'
 
 type ProjectFeeSelectionProps = {
   readOnly?: boolean
-  value: string
-  onChange: (value: string) => void
+  value: number
+  onChange: (value: number) => void
 }
 
 const ProjectFeeSelection: React.FC<ProjectFeeSelectionProps> = ({ readOnly, value, onChange }) => {
   const { t } = useTranslation()
 
   const options = [
-    { label: '0%', value: '0.00' },
-    { label: '2%', value: '2.00' },
-    { label: '4%', value: '4.00' },
-    { label: '6%', value: '6.00' },
-    { label: '8%', value: '8.00' },
+    { label: '0%', value: '0.0' },
+    { label: '2%', value: '0.02' },
+    { label: '4%', value: '0.04' },
+    { label: '6%', value: '0.06' },
+    { label: '8%', value: '0.08' },
   ]
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'transactionFee',
-    defaultValue: value,
-    onChange,
+    defaultValue: String(value),
+    onChange: (value) => onChange(Number(value)),
   })
 
   const group = getRootProps()
