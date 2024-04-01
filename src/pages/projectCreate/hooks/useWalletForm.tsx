@@ -85,7 +85,7 @@ export const useWalletForm = ({
 
   const projectWallet = project?.wallets[0]
 
-  const [feePercentage, setFeePercentage] = useState<number>(0.06)
+  const [feePercentage, setFeePercentage] = useState<number>(projectWallet?.feePercentage || 0.6)
 
   const debouncedLightningAddress = useDebounce(lightningAddressFormValue, 200)
 
@@ -140,6 +140,7 @@ export const useWalletForm = ({
           ...current,
           ...details,
         }))
+        setFeePercentage(projectWallet.feePercentage || 0.0)
       }
     }
   }, [projectWallet])
@@ -267,7 +268,8 @@ export const useWalletForm = ({
             (projectWallet.connectionDetails.lndNodeType === LndNodeType.Voltage) !== nodeInput?.isVoltage ||
             projectWallet.connectionDetails.macaroon !== nodeInput?.invoiceMacaroon ||
             projectWallet.connectionDetails.pubkey !== nodeInput?.publicKey ||
-            `${projectWallet.connectionDetails.tlsCertificate || ''}` !== `${nodeInput?.tlsCert}`
+            `${projectWallet.connectionDetails.tlsCertificate || ''}` !== `${nodeInput?.tlsCert}` ||
+            `${projectWallet.feePercentage}` !== `${feePercentage}`
 
           return value
         }
@@ -279,7 +281,7 @@ export const useWalletForm = ({
     }
 
     return true
-  }, [connectionOption, lightningAddressFormValue, nodeInput, projectWallet])
+  }, [connectionOption, lightningAddressFormValue, nodeInput, projectWallet, feePercentage])
 
   const isLightningAddressInValid = useMemo(() => {
     if (

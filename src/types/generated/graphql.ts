@@ -4728,6 +4728,7 @@ export type ProjectWalletFragment = {
   __typename?: 'Wallet'
   id: any
   name?: string | null
+  feePercentage?: number | null
   state: { __typename?: 'WalletState'; status: WalletStatus; statusCode: WalletStatusCode }
   connectionDetails:
     | { __typename?: 'LightningAddressConnectionDetails'; lightningAddress: string }
@@ -6271,6 +6272,7 @@ export const ProjectWalletFragmentDoc = gql`
   fragment ProjectWallet on Wallet {
     id
     name
+    feePercentage
     state {
       status
       statusCode
