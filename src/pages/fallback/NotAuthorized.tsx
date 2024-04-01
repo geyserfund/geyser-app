@@ -2,8 +2,8 @@ import { Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { BiErrorAlt } from 'react-icons/bi'
 
-import { CommonFeedbackMessage } from './CommonFeedbackMessage'
 import { Head } from '../../config'
+import { CommonFeedbackMessage } from './CommonFeedbackMessage'
 
 export const NotAuthorized = () => {
   const { t } = useTranslation()
@@ -23,7 +23,7 @@ export const NotAuthorized = () => {
         <Text variant="h2" textAlign="center">
           {t('Oops!')} {t('You do not have permission to access this page.')}
         </Text>
-        <CommonFeedbackMessage prefix={''}/>
+        <CommonFeedbackMessage />
       </VStack>
     </>
   )

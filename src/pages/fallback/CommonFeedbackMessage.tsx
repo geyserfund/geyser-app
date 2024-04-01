@@ -3,12 +3,12 @@ import { Trans } from 'react-i18next'
 
 import { GeyserFeedbackFromUrl } from '../../constants'
 
-export const CommonFeedbackMessage = ({prefix}: {prefix: string | ''}) => {
+export const CommonFeedbackMessage = ({ prefix }: { prefix?: string }) => {
   return (
     <Text variant="body1" textAlign="center">
       {prefix}
       <Trans
-        i18nKey={'If the issue persists let us know through our <1>feedback form</3> or reach out on <3>Telegram</1>'}
+        i18nKey={'If the issue persists let us know through our <1>feedback form</1> or reach out on <3>Telegram</3>'}
       >
         {' If the issue persists let us know through our '}
         <Link
