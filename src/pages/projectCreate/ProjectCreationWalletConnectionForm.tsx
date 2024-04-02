@@ -189,7 +189,7 @@ export const ProjectCreationWalletConnectionForm = ({
                     <WalletConnectionDetails
                       projectWallet={{
                         connectionDetails: {
-                          grpcPort: Number(nodeInput.grpc),
+                          grpcPort: nodeInput.isVoltage ? 10009 : Number(nodeInput.grpc),
                           hostname: nodeInput.hostname,
                           lndNodeType: nodeInput.isVoltage ? LndNodeType.Voltage : LndNodeType.Geyser,
                           macaroon: nodeInput.invoiceMacaroon,
