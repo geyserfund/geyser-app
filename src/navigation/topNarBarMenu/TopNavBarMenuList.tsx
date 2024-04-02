@@ -101,7 +101,7 @@ export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
           </>
         ) : null}
 
-        <MenuItemLink fontWeight={'bold'} destinationPath={getPath('index')}>
+        <MenuItemLink fontWeight={'bold'} destinationPath={getPath('landingFeed')}>
           {t('Recent Activity')}
         </MenuItemLink>
 
