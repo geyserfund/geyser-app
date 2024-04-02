@@ -115,7 +115,7 @@ export const ProjectWallet = () => {
           lndConnectionDetailsInput: createWalletInput?.lndConnectionDetailsInput,
           lightningAddressConnectionDetailsInput: createWalletInput?.lightningAddressConnectionDetailsInput,
           id: projectWallet?.id,
-          feePercentage: fee.value,
+          feePercentage: createWalletInput?.feePercentage,
           twoFAInput: {
             OTP: {
               otp,
