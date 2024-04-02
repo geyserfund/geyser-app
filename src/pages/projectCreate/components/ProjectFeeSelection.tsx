@@ -76,12 +76,13 @@ const RadioCard: React.FC<any> = ({ children, isDisabled, ...props }) => {
         {...getRadioProps()}
         cursor="pointer"
         border="2px solid"
+        color="#141A19"
         borderRadius="8px"
         borderColor="neutral.200"
         backgroundColor="white"
         _checked={{
           bg: 'primary.400',
-          color: 'neutral.900',
+          color: '#141A19',
           borderColor: 'primary.600',
         }}
         px={2}
