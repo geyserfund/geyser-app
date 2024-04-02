@@ -393,7 +393,7 @@ export const ProjectRewardForm = ({
             </Select>
           </FieldContainer>
           <FieldContainer
-            title={t('Price' + ` (${project.rewardCurrency === RewardCurrency.Usdcent ? 'USD' : 'SATS'})`)}
+            title={`${t('Price')} (${project.rewardCurrency === RewardCurrency.Usdcent ? 'USD' : 'SATS'})`}
           >
             <TextInputBox
               placeholder={'150'}
