@@ -143,6 +143,8 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
             getOptionValue={(option: Country) => option.code}
             onInputChange={handleInputChange}
             inputValue={inputValue}
+            onMenuOpen={onOpen}
+            onMenuClose={onClose}
           />
         )}
         <HStack width="100%" spacing="10px">
