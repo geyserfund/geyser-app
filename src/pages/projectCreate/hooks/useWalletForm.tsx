@@ -62,6 +62,8 @@ export type WalletForm = {
   isLightningAddressInValid: boolean
 }
 
+const DEFAULT_FEE_PERCENTAGE = 0.02
+
 export const useWalletForm = ({
   defaultConnectionOption = ConnectionOption.LIGHTNING_ADDRESS,
   project,
@@ -85,7 +87,7 @@ export const useWalletForm = ({
 
   const projectWallet = project?.wallets[0]
 
-  const [feePercentage, setFeePercentage] = useState<number>(projectWallet?.feePercentage || 0.6)
+  const [feePercentage, setFeePercentage] = useState<number>(projectWallet?.feePercentage ?? DEFAULT_FEE_PERCENTAGE)
 
   const debouncedLightningAddress = useDebounce(lightningAddressFormValue, 200)
 

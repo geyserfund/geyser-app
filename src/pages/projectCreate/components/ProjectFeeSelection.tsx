@@ -8,16 +8,24 @@ type ProjectFeeSelectionProps = {
   onChange: (value: number) => void
 }
 
+enum FeeValues {
+  ZeroPercent = '0.0',
+  TwoPercent = '0.02',
+  FourPercent = '0.04',
+  SixPercent = '0.06',
+  EightPercent = '0.08',
+}
+
+const options = [
+  { label: '0%', value: FeeValues.ZeroPercent },
+  { label: '2%', value: FeeValues.TwoPercent },
+  { label: '4%', value: FeeValues.FourPercent },
+  { label: '6%', value: FeeValues.SixPercent },
+  { label: '8%', value: FeeValues.EightPercent },
+]
+
 const ProjectFeeSelection: React.FC<ProjectFeeSelectionProps> = ({ readOnly, value, onChange }) => {
   const { t } = useTranslation()
-
-  const options = [
-    { label: '0%', value: '0.0' },
-    { label: '2%', value: '0.02' },
-    { label: '4%', value: '0.04' },
-    { label: '6%', value: '0.06' },
-    { label: '8%', value: '0.08' },
-  ]
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'transactionFee',
