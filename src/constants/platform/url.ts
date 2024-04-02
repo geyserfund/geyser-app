@@ -148,7 +148,7 @@ export const LogoNameNostr = 'https://storage.googleapis.com/geyser-projects-med
 
 // Geyser Notion Links
 
-export const GrantsFAQUrl = 'https://geyser.notion.site/About-Geyser-Grants-925d6b2adc1a4043b70d2835ecfebdde?pvs=4'
+export const GrantsFAQUrl = 'https://guide.geyser.fund/geyser-docs/product-features/geyser-grants'
 export const LearnAboutCrowdfundingUrl =
   'https://geyser.notion.site/Crowdfunding-Resources-134d19c1214741a7bae5d0bf9b8c8463'
 export const GeyserProhibitedItemsUrl = 'https://geyser.notion.site/Prohibited-items-a67b8e1e050d433ca747a3522833a7f3'
