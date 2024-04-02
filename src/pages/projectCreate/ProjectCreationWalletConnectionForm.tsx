@@ -34,6 +34,7 @@ import {
   WalletOfSatoshiLightningAddressURL,
   WalletOfSatoshiUrl,
 } from '../../constants'
+import { LIGHTNING_FEE_PERCENTAGE } from '../../constants/platform/wallet'
 import { lightModeColors } from '../../styles'
 import { LndNodeType } from '../../types'
 import { WalletConnectionDetails } from '../projectDashboard/components'
@@ -135,7 +136,7 @@ export const ProjectCreationWalletConnectionForm = ({
                   <InputRightElement>{renderRightElementContent()}</InputRightElement>
                 </InputGroup>
               }
-              promoText={t('4% Geyser fee per transaction')}
+              promoText={t(`${LIGHTNING_FEE_PERCENTAGE}% Geyser fee per transaction`)}
               secondaryText={
                 <Trans
                   i18nKey={

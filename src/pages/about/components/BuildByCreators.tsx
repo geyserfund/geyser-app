@@ -14,6 +14,7 @@ import {
   Search3DImageUrl,
   TextMessage3DImageUrl,
 } from '../../../constants'
+import { LIGHTNING_FEE_PERCENTAGE } from '../../../constants/platform/wallet'
 import { LaunchYourProjectButton } from './LaunchYourProjectButton'
 
 const CardContents = [
@@ -30,8 +31,7 @@ const CardContents = [
   },
   {
     title: 'Super low fees',
-    description:
-      'If you run your own node, Geyser is free to use. Otherwise, we charge a 4% fee on transactions.',
+    description: `If you run your own node, Geyser is free to use. Otherwise, we charge a ${LIGHTNING_FEE_PERCENTAGE}% fee on transactions.`,
     imageUrl: CoinPercentage3DImageUrl,
   },
   {
