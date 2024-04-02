@@ -159,6 +159,9 @@ export const GrantApplicationDetailsUrl =
 export const WalletCreationFindOutMoreUrl =
   'https://geyser.notion.site/About-Geyser-Grants-925d6b2adc1a4043b70d2835ecfebdde?pvs=4'
 
+export const GeyserEmailVerificationDocUrl =
+  'https://guide.geyser.fund/geyser-docs/product-features/edit-your-project/verify-your-email'
+
 // External website Links
 
 export const commonMarkdownUrl = 'https://commonmark.org/help/'
@@ -207,9 +210,6 @@ export const Grant3AnnouncementTwitterUrl = 'https://twitter.com/geyserfund/stat
 export const Grant2AnnouncementImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/grant-2-announcement.png'
 export const Grant2AnnouncementTwitterUrl = 'https://twitter.com/geyserfund/status/1628842072802312193?s=20'
-
-export const GeyserEmailVerificationDocUrl =
-  'https://guide.geyser.fund/geyser-docs/product-features/update-your-project/email-verification'
 
 // PLATFORMS
 
