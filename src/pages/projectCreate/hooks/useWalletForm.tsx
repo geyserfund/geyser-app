@@ -263,6 +263,7 @@ export const useWalletForm = ({
       if (connectionOption === ConnectionOption.PERSONAL_NODE) {
         if (projectWallet.connectionDetails.__typename === WalletConnectDetails.LndConnectionDetailsPrivate) {
           const value =
+            `${projectWallet.name}` !== `${nodeInput?.name}` ||
             `${projectWallet.connectionDetails.grpcPort}` !== `${nodeInput?.grpc}` ||
             projectWallet.connectionDetails.hostname !== nodeInput?.hostname ||
             (projectWallet.connectionDetails.lndNodeType === LndNodeType.Voltage) !== nodeInput?.isVoltage ||
