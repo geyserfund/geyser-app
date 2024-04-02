@@ -194,6 +194,10 @@ export const MegaphoneUrl = 'https://storage.googleapis.com/geyser-projects-medi
 
 export const MilestonesFlagUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/milestone.png'
 
+export const NotFoundPageImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/404-page-not-found.png'
+
+export const NotAuthorizedImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/403-not-authorized.png'
+
 // GRANTS
 
 export const Grant3AnnouncementImageUrl =
