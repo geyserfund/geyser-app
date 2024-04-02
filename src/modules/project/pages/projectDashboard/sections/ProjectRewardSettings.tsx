@@ -5,12 +5,12 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { UpdateCurrencyModal } from '../../../../../components/molecules'
-import { useProjectContext } from '../../../../../context'
 import { FieldContainer } from '../../../../../forms/components/FieldContainer'
 import { MUTATION_UPDATE_PROJECT_CURRENCY } from '../../../../../graphql/mutations'
 import { useModal } from '../../../../../hooks/useModal'
 import { ProjectReward, RewardCurrency } from '../../../../../types'
 import { useNotification } from '../../../../../utils'
+import { useProjectContext } from '../../../context'
 import { ProjectUnsavedModal, useProjectUnsavedModal } from '../components/ProjectUnsavedModal'
 import { BackToProjectMobile } from '../navigation/BackToProjectMobile'
 
@@ -74,7 +74,7 @@ export const ProjectRewardSettings = () => {
       const currentRewardCurrency = watch('rewardCurrency')
 
       // if no changes, just toast
-      if (currentRewardCurrency == project?.rewardCurrency) {
+      if (currentRewardCurrency === project?.rewardCurrency) {
         toast({
           title: 'failed to update project',
           description: `Your project is already set to ${

@@ -7,8 +7,8 @@ import { CardLayout, CardLayoutProps } from '../../../../../../../components/lay
 import { Modal } from '../../../../../../../components/layouts'
 import { Body2, H3 } from '../../../../../../../components/typography'
 import { getPath } from '../../../../../../../constants'
-import { MobileViews, useProjectContext } from '../../../../../../../context'
 import { UseModalReturn } from '../../../../../../../hooks/useModal'
+import { MobileViews, useProjectContext } from '../../../../../context'
 
 export const ProjectCreatorModal = (props: UseModalReturn) => {
   const { t } = useTranslation()

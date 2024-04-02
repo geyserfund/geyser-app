@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 
 import { SkeletonLayout } from '../../../../../../../../../../components/layouts'
 import { ProjectNoTransactionImageUrl } from '../../../../../../../../../../constants'
-import { useProjectContext } from '../../../../../../../../../../context'
 import { usePaginationHook } from '../../../../../../../../../../hooks/usePaginationHook'
 import { standardPadding } from '../../../../../../../../../../styles'
 import {
@@ -16,6 +15,7 @@ import {
   useFundingTxsOrderGetQuery,
 } from '../../../../../../../../../../types'
 import { useNotification } from '../../../../../../../../../../utils'
+import { useProjectContext } from '../../../../../../../../context'
 import { EmptyContainer } from '../../components'
 import { PaymentsAndAccountingTable } from './PaymentsAndAccountingTable'
 

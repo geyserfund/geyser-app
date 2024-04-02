@@ -3,9 +3,9 @@ import { FormEventHandler, forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { BoltIcon } from '../../../../../../../../../components/icons'
-import { useProjectContext } from '../../../../../../../../../context'
 import { useFundCalc } from '../../../../../../../../../helpers'
 import { toInt } from '../../../../../../../../../utils'
+import { useProjectContext } from '../../../../../../../context'
 import { Badge } from './Badge'
 
 type Props = {

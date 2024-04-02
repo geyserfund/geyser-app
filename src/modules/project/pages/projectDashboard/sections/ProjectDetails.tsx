@@ -1,8 +1,8 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { useProjectContext } from '../../../../../context'
 import { useNotification } from '../../../../../utils'
+import { useProjectContext } from '../../../context'
 import { ProjectLinks } from '../../../forms/ProjectLinks'
 import { ProjectRegion } from '../../../forms/ProjectRegion'
 import { ProjectTagsCreateEdit } from '../../../forms/ProjectTagsCreateEdit'

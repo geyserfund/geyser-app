@@ -4,8 +4,8 @@ import { MouseEventHandler } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SectionTitle } from '../../../../../../../../../components/ui'
-import { useProjectContext } from '../../../../../../../../../context'
 import { FieldContainer } from '../../../../../../../../../forms/components/FieldContainer'
+import { useProjectContext } from '../../../../../../../context'
 import { ProjectFundingFormCommentField } from '../../../../projectMainBody/components'
 
 type Props = {

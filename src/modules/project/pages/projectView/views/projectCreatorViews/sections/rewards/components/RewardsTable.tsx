@@ -7,8 +7,10 @@ import { useNavigate } from 'react-router-dom'
 
 import { DeleteConfirmModal } from '../../../../../../../../../components/molecules'
 import { PathName } from '../../../../../../../../../constants'
-import { MobileViews, useProjectContext } from '../../../../../../../../../context'
-import { MUTATION_DELETE_PROJECT_REWARD, MUTATION_UPDATE_PROJECT_REWARD } from '../../../../../../../../../graphql/mutations'
+import {
+  MUTATION_DELETE_PROJECT_REWARD,
+  MUTATION_UPDATE_PROJECT_REWARD,
+} from '../../../../../../../../../graphql/mutations'
 import { useModal } from '../../../../../../../../../hooks/useModal'
 import { neutralColorsLight } from '../../../../../../../../../styles'
 import {
@@ -17,10 +19,11 @@ import {
   RewardCurrency,
 } from '../../../../../../../../../types/generated/graphql'
 import { useNotification } from '../../../../../../../../../utils'
-import { TableImageAndTitle, TableText } from '.'
+import { MobileViews, useProjectContext } from '../../../../../../../context'
 import DeleteIcon from '../icons/delete.svg'
 import EditIcon from '../icons/edit.svg'
 import SplashRewardIcon from '../icons/splash-reward.svg'
+import { TableImageAndTitle, TableText } from '.'
 
 export const RewardsTable = () => {
   const { t } = useTranslation()
@@ -63,7 +66,7 @@ export const RewardsTable = () => {
     {
       onCompleted(data) {
         const updatedRewards = project?.rewards?.map((reward) => {
-          if (reward?.id == selectedReward?.id) {
+          if (reward?.id === selectedReward?.id) {
             return { ...reward, isHidden: data.projectRewardUpdate.isHidden, id: data.projectRewardUpdate.id }
           }
 
@@ -182,7 +185,7 @@ export const RewardsTable = () => {
                   {row.cost && (
                     <TableText
                       content={
-                        project && project.rewardCurrency == RewardCurrency.Usdcent
+                        project && project.rewardCurrency === RewardCurrency.Usdcent
                           ? `$${row.cost / 100}`
                           : `${row.cost.toLocaleString()} sats`
                       }

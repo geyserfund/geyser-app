@@ -8,8 +8,8 @@ import { CardLayout } from '../../../../components/layouts'
 import Loader from '../../../../components/ui/Loader'
 import { TitleDivider } from '../../../../components/ui/TitleDivider'
 import { dimensions, getPath, PathsMap } from '../../../../constants'
-import { useProjectContext } from '../../../../context'
 import { useMobileMode } from '../../../../utils'
+import { useProjectContext } from '../../context'
 import { DashboardNavigation } from './navigation/DashboardNavigation'
 
 export type DashboardSection = {

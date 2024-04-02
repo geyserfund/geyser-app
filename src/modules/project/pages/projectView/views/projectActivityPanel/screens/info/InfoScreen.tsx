@@ -1,8 +1,8 @@
 import { VStack } from '@chakra-ui/layout'
 
-import { MobileViews, useProjectContext } from '../../../../../../../../context'
 import { standardPadding } from '../../../../../../../../styles'
 import { useMobileMode } from '../../../../../../../../utils'
+import { MobileViews, useProjectContext } from '../../../../../../context'
 import { ActivityBrief } from './views/ActivityBrief'
 import { InfoScreenFeed } from './views/InfoScreenFeed'
 import { InfoScreenRewards } from './views/InfoScreenRewards'

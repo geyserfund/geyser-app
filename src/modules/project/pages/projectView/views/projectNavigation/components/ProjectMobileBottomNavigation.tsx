@@ -6,11 +6,11 @@ import { useNavigate } from 'react-router-dom'
 import { BoltIcon } from '../../../../../../../components/icons'
 import { getPath } from '../../../../../../../constants'
 import { BottomNavContainerCommonStyles } from '../../../../../../../constants/styles'
-import { MobileViews, useProjectContext } from '../../../../../../../context'
 import { useLayoutAnimation, useScrollDirection } from '../../../../../../../hooks'
 import { useIsProjectPage } from '../../../../../../../navigation/topNavBar/topNavBarAtom'
-import { isActive } from '../../../../../../../utils'
 import { useEntryAtom } from '../../../../../../../pages/entry/entryAtom'
+import { isActive } from '../../../../../../../utils'
+import { MobileViews, useProjectContext } from '../../../../../context'
 import { navigationItems } from './BottomNavList'
 
 export const ProjectMobileBottomNavigation = ({ fixed }: { fixed?: boolean }) => {

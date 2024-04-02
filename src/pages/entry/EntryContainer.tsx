@@ -2,7 +2,7 @@ import { Box, VStack } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { createUseStyles } from 'react-jss'
 
-import { MobileViews, useProjectContext } from '../../context'
+import { MobileViews, useProjectContext } from '../../modules/project/context'
 import { fadeOut, slideInLeft } from '../../styles'
 import { useMobileMode } from '../../utils'
 import { useEntryAtom } from './entryAtom'

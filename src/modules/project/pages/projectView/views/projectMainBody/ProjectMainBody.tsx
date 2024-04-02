@@ -1,6 +1,6 @@
 import { VStack } from '@chakra-ui/react'
 
-import { useProjectContext } from '../../../../../../context'
+import { useProjectContext } from '../../../../context'
 import { useProjectDetails } from '../projectNavigation/hooks/useProjectDetails'
 import {
   CreatorTools,

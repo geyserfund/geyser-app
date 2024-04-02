@@ -1,7 +1,7 @@
 import { HStack } from '@chakra-ui/react'
 
 import { CardLayout } from '../../../../../../../components/layouts'
-import { useProjectContext } from '../../../../../../../context'
+import { useProjectContext } from '../../../../../context'
 import { ContributeButton } from '../components'
 import { ShareButton } from '../components/ShareButton'
 

@@ -7,9 +7,9 @@ import { PiLinkBold } from 'react-icons/pi'
 import { CardLayout } from '../../../../../../../components/layouts'
 import { Body2, H3 } from '../../../../../../../components/typography'
 import { MegaphoneUrl } from '../../../../../../../constants'
-import { useProjectContext } from '../../../../../../../context'
 import { standardPadding } from '../../../../../../../styles'
 import { ProjectStatus } from '../../../../../../../types'
+import { useProjectContext } from '../../../../../context'
 
 const SHARE_PROJECT_CLOSED_STORAGE_KEY = 'shareProjectClosed'
 

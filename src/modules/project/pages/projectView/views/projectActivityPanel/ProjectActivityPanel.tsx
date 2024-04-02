@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { useContext, useEffect } from 'react'
 
-import { AuthContext, MobileViews, useProjectContext } from '../../../../../../context'
+import { AuthContext } from '../../../../../../context'
 import { useBtcContext } from '../../../../../../context/btc'
 import { IFundForm } from '../../../../../../hooks'
 import { useAuthModal } from '../../../../../../pages/auth/hooks'
@@ -16,7 +16,8 @@ import {
   QuoteCurrency,
 } from '../../../../../../types'
 import { toInt, useCustomTheme, useMobileMode } from '../../../../../../utils'
-import { useFundingContext } from '../../../../funding/context/FundingFlow'
+import { MobileViews, useProjectContext } from '../../../../context'
+import { useFundingContext } from '../../../../context/FundingProvider'
 import { FundingStages, useFundingStage } from '../../../../funding/state'
 import { FundingFormScreen, InfoScreen, InfoScreenSkeleton, QRScreen, SuccessScreen } from './screens'
 import { useStyles } from './styles'

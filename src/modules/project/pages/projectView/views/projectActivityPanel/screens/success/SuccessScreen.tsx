@@ -5,13 +5,13 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { getPath } from '../../../../../../../../constants'
-import { useProjectContext } from '../../../../../../../../context'
 import { QUERY_USER_BADGES } from '../../../../../../../../graphql/queries/badges'
 import { useFundCalc } from '../../../../../../../../helpers'
 import { lightModeColors } from '../../../../../../../../styles'
 import { Satoshis } from '../../../../../../../../types'
 import { Project, UserBadge } from '../../../../../../../../types'
-import { useFundingContext } from '../../../../../../funding/context/FundingFlow'
+import { useProjectContext } from '../../../../../../context'
+import { useFundingContext } from '../../../../../../context/FundingProvider'
 import {} from '../../../projectMainBody/components'
 import {
   ContributionInfoBox,

@@ -4,8 +4,8 @@ import { NavLink } from 'react-router-dom'
 import { Body1 } from '../../../../../../../components/typography'
 import { UserAvatarWithLink } from '../../../../../../../components/ui/UserAvatar'
 import { getPath } from '../../../../../../../constants'
-import { useProjectContext } from '../../../../../../../context'
 import { useExternalAccountsButtons } from '../../../../../../../hooks/useExternalAccountsButtons'
+import { useProjectContext } from '../../../../../context'
 import { NpubDisplay } from '../components/NpubDisplay'
 
 export const CreatorSocial = () => {

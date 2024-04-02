@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import Loader from '../../../../../../../../components/ui/Loader'
 import { FundingStatus, InvoiceStatus } from '../../../../../../../../types/generated/graphql'
 import { getBip21Invoice } from '../../../../../../../../utils/lightning/bip21'
-import { useFundingContext } from '../../../../../../funding/context/FundingFlow'
+import { useFundingContext } from '../../../../../../context/FundingProvider'
 import { useRefreshInvoice } from '../../../../../../funding/hooks/useRefreshInvoice'
 import { FundingErrorView, GeneratingInvoice, InvoiceErrorView, QRCodeImage } from './components'
 

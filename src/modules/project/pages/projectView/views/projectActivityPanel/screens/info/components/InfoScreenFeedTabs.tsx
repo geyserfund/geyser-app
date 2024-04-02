@@ -3,8 +3,8 @@ import { Button } from '@chakra-ui/react'
 import { Dispatch, SetStateAction, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { MobileViews } from '../../../../../../../../../context'
 import { ProjectFragment } from '../../../../../../../../../types'
+import { MobileViews } from '../../../../../../../context'
 
 interface InfoScreenTabsProps {
   project: ProjectFragment

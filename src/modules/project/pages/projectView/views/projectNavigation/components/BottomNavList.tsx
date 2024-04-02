@@ -10,7 +10,7 @@ import {
   RewardGiftIcon,
 } from '../../../../../../../components/icons'
 import { PathName } from '../../../../../../../constants'
-import { MobileViews } from '../../../../../../../context'
+import { MobileViews } from '../../../../../context'
 
 export type ProjectNavigationItem = {
   icon: IconType | React.FC<IconProps>

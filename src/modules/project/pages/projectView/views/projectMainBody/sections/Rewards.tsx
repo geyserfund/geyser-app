@@ -5,12 +5,12 @@ import { BsPencilFill } from 'react-icons/bs'
 import { Link, useLocation } from 'react-router-dom'
 
 import { CardLayout } from '../../../../../../../components/layouts'
-import { RewardCard } from '../../../../../../../components/molecules'
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
 import { getPath, ID } from '../../../../../../../constants'
-import { MobileViews, useProjectContext } from '../../../../../../../context'
 import { isActive, toInt, useMobileMode, useNotification } from '../../../../../../../utils'
 import { truthyFilter } from '../../../../../../../utils/array'
+import { MobileViews, useProjectContext } from '../../../../../context'
+import { RewardCard } from '../components/RewardCard'
 
 export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()

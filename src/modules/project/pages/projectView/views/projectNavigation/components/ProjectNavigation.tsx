@@ -26,7 +26,7 @@ import { GeyserLogoIcon } from '../../../../../../../components/icons/svg/Geyser
 import { SkeletonLayout } from '../../../../../../../components/layouts'
 import { Body1, Caption } from '../../../../../../../components/typography'
 import { getPath, PathName } from '../../../../../../../constants'
-import { MobileViews, useProjectContext } from '../../../../../../../context'
+import { MobileViews, useProjectContext } from '../../../../../context'
 import { useProjectDetails } from '../hooks/useProjectDetails'
 import { useProjectSideNavAtom } from '../sideNav'
 

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../../../../components/layouts'
 import { getPath } from '../../../../../../../constants'
-import { useProjectContext } from '../../../../../../../context'
+import { useProjectContext } from '../../../../../context'
 
 export const FinalizeProjectNotice = () => {
   const { t } = useTranslation()

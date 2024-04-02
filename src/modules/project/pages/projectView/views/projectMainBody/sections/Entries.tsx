@@ -8,11 +8,11 @@ import { CardLayout } from '../../../../../../../components/layouts'
 import { DeleteConfirmModal, ProjectEntryCard } from '../../../../../../../components/molecules'
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
 import { getPath } from '../../../../../../../constants'
-import { useProjectContext } from '../../../../../../../context'
 import { MUTATION_DELETE_ENTRY } from '../../../../../../../graphql/mutations'
 import { EntryForProjectFragment, useProjectUnplublishedEntriesLazyQuery } from '../../../../../../../types'
 import { isActive, isDraft, toInt, useMobileMode, useNotification } from '../../../../../../../utils'
 import { truthyFilter } from '../../../../../../../utils/array'
+import { useProjectContext } from '../../../../../context'
 
 export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()

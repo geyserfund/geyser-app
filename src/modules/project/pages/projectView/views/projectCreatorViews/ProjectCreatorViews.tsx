@@ -2,8 +2,8 @@ import { Box } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { Outlet } from 'react-router-dom'
 
-import { MobileViews, useProjectContext } from '../../../../../../context'
 import { useMobileMode } from '../../../../../../utils'
+import { MobileViews, useProjectContext } from '../../../../context'
 import { useProjectLayoutStyles } from '../projectMainBody'
 
 export const ProjectCreatorViews = () => {

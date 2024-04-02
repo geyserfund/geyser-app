@@ -3,8 +3,9 @@ import { Box, IconButton, Stack, Text, useDisclosure } from '@chakra-ui/react'
 import { MouseEvent } from 'react'
 import { createUseStyles } from 'react-jss'
 
-import { AppTheme, useProjectContext } from '../../../../../../../context'
+import { AppTheme } from '../../../../../../../context'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../../../../types'
+import { useProjectContext } from '../../../../../context'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   focused: {
@@ -93,7 +94,7 @@ export const FundingFormRewardItem = ({
         </Stack>
         <Stack direction="column" align={'flex-end'}>
           <Text fontWeight={700} fontSize={16} color="neutral.600">
-            {project && project.rewardCurrency == RewardCurrency.Usdcent
+            {project && project.rewardCurrency === RewardCurrency.Usdcent
               ? `$${reward.cost / 100}`
               : `${reward.cost.toLocaleString()} sats`}
           </Text>

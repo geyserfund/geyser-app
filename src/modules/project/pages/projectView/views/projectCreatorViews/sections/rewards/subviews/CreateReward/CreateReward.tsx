@@ -2,10 +2,10 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../../../../../../../../constants'
-import { useProjectContext } from '../../../../../../../../../../context'
 import { defaultProjectReward } from '../../../../../../../../../../defaults'
 import { useProjectRewardCreateMutation } from '../../../../../../../../../../types/generated/graphql'
 import { useNotification } from '../../../../../../../../../../utils'
+import { useProjectContext } from '../../../../../../../../context'
 import { ProjectRewardForm } from '../Shared/ProjectRewardForm'
 
 export const ProjectCreateReward = () => {
@@ -14,19 +14,16 @@ export const ProjectCreateReward = () => {
   const navigate = useNavigate()
   const { project, updateProject } = useProjectContext()
 
-  if (!project) {
-    return null
-  }
-
   const [createReward, { loading: createRewardLoading }] = useProjectRewardCreateMutation({
     onCompleted(data) {
-      const existingRewards = project.rewards || []
+      const existingRewards = project?.rewards || []
       updateProject({ rewards: [...existingRewards, data.projectRewardCreate] })
       toast({
         title: 'Successfully created reward!',
         status: 'success',
       })
-      navigate(getPath('projectManageRewards', project.name))
+      if (!project) return
+      navigate(getPath('projectManageRewards', project?.name))
     },
     onError(error) {
       toast({
@@ -36,6 +33,10 @@ export const ProjectCreateReward = () => {
       })
     },
   })
+
+  if (!project) {
+    return null
+  }
 
   return (
     <ProjectRewardForm

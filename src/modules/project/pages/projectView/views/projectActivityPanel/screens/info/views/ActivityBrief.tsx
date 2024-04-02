@@ -18,7 +18,6 @@ import { AiOutlineEllipsis } from 'react-icons/ai'
 
 import { SkeletonLayout } from '../../../../../../../../../components/layouts'
 import { UserAvatar } from '../../../../../../../../../components/ui/UserAvatar'
-import { useProjectContext } from '../../../../../../../../../context'
 import { ExternalAccountType } from '../../../../../../../../../pages/auth'
 import { useFollowedProjectsValue } from '../../../../../../../../../pages/auth/state'
 import {
@@ -29,6 +28,7 @@ import {
 } from '../../../../../../../../../types'
 import { toInt, useMobileMode, useNotification } from '../../../../../../../../../utils'
 import { getProjectBalance } from '../../../../../../../../../utils/helpers'
+import { useProjectContext } from '../../../../../../../context'
 import { ContributeButton, FollowButton, ShareButton } from '../../../../projectMainBody/components'
 import { BalanceDisplayButton, SubscribeButton } from '../components'
 import { ProjectFundersModal, useProjectFundersModal } from '../components/ProjectFundersModal'

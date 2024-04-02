@@ -3,8 +3,8 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { StickToTop } from '../../../../../../../../../components/layouts'
 import { dimensions, ID } from '../../../../../../../../../constants'
-import { MobileViews, useProjectContext } from '../../../../../../../../../context'
 import { useMobileMode } from '../../../../../../../../../utils'
+import { MobileViews, useProjectContext } from '../../../../../../../context'
 import { InfoScreenFeedTabs, ProjectContributionList } from '../components'
 import { ProjectLeaderboardList } from '../components/ProjectLeaderboardList'
 

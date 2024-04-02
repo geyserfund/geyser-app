@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { DonationInput } from '../../../../../../../../../components/molecules'
 import { SectionTitle } from '../../../../../../../../../components/ui'
-import { useProjectContext } from '../../../../../../../../../context'
+import { useProjectContext } from '../../../../../../../context'
 import { FundingFormRewards } from '../../rewardSelection/FundingFormRewards'
 
 type Props = {

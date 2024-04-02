@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom'
 
 import { Body2 } from '../../../../../components/typography'
 import { getPath, GeyserEmailVerificationDocUrl, WalletConnectDetails } from '../../../../../constants'
-import { useAuthContext, useProjectContext } from '../../../../../context'
+import { useAuthContext } from '../../../../../context'
+import { VerifyYourEmail } from '../../../../../pages/otp'
 import {
   MfaAction,
   OtpResponseFragment,
@@ -15,7 +16,7 @@ import {
   Wallet,
 } from '../../../../../types'
 import { useNotification } from '../../../../../utils'
-import { VerifyYourEmail } from '../../../../../pages/otp'
+import { useProjectContext } from '../../../context'
 import { ProjectCreationWalletConnectionForm } from '../../projectCreate'
 import { ConnectionOption, useWalletForm } from '../../projectCreate/hooks/useWalletForm'
 

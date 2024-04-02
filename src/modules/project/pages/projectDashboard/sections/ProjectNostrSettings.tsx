@@ -6,8 +6,8 @@ import { TbWorld } from 'react-icons/tb'
 
 import { SkeletonLayout } from '../../../../../components/layouts'
 import { Body1, Body2 } from '../../../../../components/typography'
-import { useProjectContext } from '../../../../../context'
 import { useNotification } from '../../../../../utils'
+import { useProjectContext } from '../../../context'
 import { ExportNostrKeysModal } from '../components/ExportNostrKeysModal'
 
 export const ProjectNostrSettings = () => {

@@ -2,7 +2,7 @@ import { Button, ButtonProps } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useProjectContext } from '../../../../../../../context'
+import { useProjectContext } from '../../../../../context'
 
 export const ShareButton = (props: ButtonProps) => {
   const { project } = useProjectContext()

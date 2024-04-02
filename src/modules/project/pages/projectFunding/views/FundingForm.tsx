@@ -9,7 +9,7 @@ import { useFormState } from '../../../../../hooks'
 import { FormStateError } from '../../../../../interfaces'
 import { FundingInput, FundingResourceType, Project, UserMeFragment } from '../../../../../types'
 import { isProjectAnException, useNotification } from '../../../../../utils'
-import { useFundingContext } from '../../../funding/context/FundingFlow'
+import { useFundingContext } from '../../../context/FundingProvider'
 
 export type ProjectFundingFormState = {
   donationAmount: number

@@ -1,12 +1,12 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { useProjectContext } from '../../../../../context'
 import { useUpdateProjectMutation } from '../../../../../types'
 import { useNotification } from '../../../../../utils'
+import { useProjectContext } from '../../../context'
 import { ProjectStoryForm } from '../../../forms/ProjectStoryForm'
-import { ProjectUnsavedModal, useProjectUnsavedModal } from '../components/ProjectUnsavedModal'
 import { useProjectStoryForm } from '../../projectCreate/hooks/useProjectStoryForm'
+import { ProjectUnsavedModal, useProjectUnsavedModal } from '../components/ProjectUnsavedModal'
 import { BackToProjectMobile } from '../navigation/BackToProjectMobile'
 
 export const ProjectStory = () => {

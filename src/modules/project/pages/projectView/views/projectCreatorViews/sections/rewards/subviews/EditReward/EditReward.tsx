@@ -3,9 +3,9 @@ import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../../../../../../../../constants'
-import { useProjectContext } from '../../../../../../../../../../context'
 import { ProjectReward, useProjectRewardUpdateMutation } from '../../../../../../../../../../types/generated/graphql'
 import { useNotification } from '../../../../../../../../../../utils'
+import { useProjectContext } from '../../../../../../../../context'
 import { ProjectRewardForm } from '../Shared/ProjectRewardForm'
 
 export const ProjectEditReward = () => {

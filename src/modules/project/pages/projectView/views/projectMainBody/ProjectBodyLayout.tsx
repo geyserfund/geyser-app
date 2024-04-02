@@ -5,9 +5,9 @@ import { createUseStyles } from 'react-jss'
 import { Outlet } from 'react-router-dom'
 
 import { CardsStackLayout } from '../../../../../../components/layouts'
-import { MobileViews, useProjectContext } from '../../../../../../context'
 import { FundingResourceType } from '../../../../../../types'
 import { useMobileMode } from '../../../../../../utils'
+import { MobileViews, useProjectContext } from '../../../../context'
 import { ProjectActivityPanel } from '../projectActivityPanel'
 
 type Rules = string

@@ -17,7 +17,6 @@ import {
 import { ImageCrop } from '../../../../../../../../../../components/molecules/ImageCropperModal'
 import { TextArea, TextInputBox, UploadBox } from '../../../../../../../../../../components/ui'
 import { ProjectRewardValidations } from '../../../../../../../../../../constants'
-import { useProjectContext } from '../../../../../../../../../../context'
 import { FieldContainer } from '../../../../../../../../../../forms/components/FieldContainer'
 import { MUTATION_UPDATE_PROJECT_CURRENCY } from '../../../../../../../../../../graphql/mutations'
 import { useBTCConverter } from '../../../../../../../../../../helpers/useBTCConverter'
@@ -32,6 +31,7 @@ import {
   USDCents,
 } from '../../../../../../../../../../types'
 import { commaFormatted, isProjectAnException, toInt, useNotification } from '../../../../../../../../../../utils'
+import { useProjectContext } from '../../../../../../../../context'
 
 type Props = {
   buttonText: string

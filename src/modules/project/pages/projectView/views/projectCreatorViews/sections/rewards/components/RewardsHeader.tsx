@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { H2 } from '../../../../../../../../../components/typography'
 import { PathName } from '../../../../../../../../../constants'
-import { MobileViews, useProjectContext } from '../../../../../../../../../context'
+import { MobileViews, useProjectContext } from '../../../../../../../context'
 
 export const RewardsHeader = () => {
   const { t } = useTranslation()

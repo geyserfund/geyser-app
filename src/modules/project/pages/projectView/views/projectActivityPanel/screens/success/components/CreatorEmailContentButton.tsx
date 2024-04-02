@@ -3,9 +3,9 @@ import { HStack, StackProps, Text, VStack } from '@chakra-ui/react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useProjectContext } from '../../../../../../../../../context'
 import { copyTextToClipboard } from '../../../../../../../../../utils'
-import { useFundingContext } from '../../../../../../../funding/context/FundingFlow'
+import { useProjectContext } from '../../../../../../../context'
+import { useFundingContext } from '../../../../../../../context/FundingProvider'
 
 export const CreatorEmailContentButton = ({ ...props }: StackProps) => {
   const { t } = useTranslation()

@@ -2,10 +2,10 @@ import { useAtom } from 'jotai'
 import { ScopeProvider } from 'jotai-scope'
 import React, { createContext, PropsWithChildren, useContext } from 'react'
 
-import { authUserAtom } from '../../../../pages/auth/state'
-import { FundingInput, FundingTxFragment } from '../../../../types'
-import { useFundingFlow } from '../hooks/useFundingFlow'
-import { fundingTxEffect } from '../state/fundingTxAtom'
+import { authUserAtom } from '../../../pages/auth/state'
+import { FundingInput, FundingTxFragment } from '../../../types'
+import { useFundingFlow } from '../funding/hooks/useFundingFlow'
+import { fundingTxEffect } from '../funding/state/fundingTxAtom'
 
 type FundingContextProps = {
   fundingRequestErrored: boolean

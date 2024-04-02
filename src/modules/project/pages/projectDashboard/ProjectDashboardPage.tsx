@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom'
 
-import { ProjectProvider } from '../../../../context'
+import { ProjectProvider } from '../../context'
 import { ProjectDashboard } from './ProjectDashboard'
 
 export const ProjectDashboardPage = () => {

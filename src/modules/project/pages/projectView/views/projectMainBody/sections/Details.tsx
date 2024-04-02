@@ -9,7 +9,8 @@ import { Link } from 'react-router-dom'
 import { CardLayout } from '../../../../../../../components/layouts'
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
 import { getPath, ID } from '../../../../../../../constants'
-import { SortType, useProjectContext } from '../../../../../../../context'
+import { SortType } from '../../../../../../../context'
+import { useProjectContext } from '../../../../../context'
 import { ProjectLinks, SummaryInfoLine, TagBox } from '../components'
 
 export const Details = () => {

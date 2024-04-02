@@ -7,9 +7,9 @@ import { ProjectRewardShippingEstimate } from '../../../../../../../components/m
 import { Body2 } from '../../../../../../../components/typography'
 import { ImageWithReload } from '../../../../../../../components/ui'
 import { PathName } from '../../../../../../../constants'
-import { MobileViews, useProjectContext } from '../../../../../../../context'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../../../../types'
 import { isActive, toInt } from '../../../../../../../utils'
+import { MobileViews, useProjectContext } from '../../../../../context'
 
 type Props = {
   reward: ProjectRewardForCreateUpdateFragment

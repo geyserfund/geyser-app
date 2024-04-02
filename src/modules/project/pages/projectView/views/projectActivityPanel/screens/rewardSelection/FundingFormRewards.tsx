@@ -2,10 +2,10 @@ import { Box, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { SectionTitle } from '../../../../../../../../components/ui'
-import { useProjectContext } from '../../../../../../../../context'
 import { useIsProjectPage } from '../../../../../../../../navigation/topNavBar/topNavBarAtom'
 import { ProjectRewardForCreateUpdateFragment } from '../../../../../../../../types'
 import { useMobileMode, useNotification } from '../../../../../../../../utils'
+import { useProjectContext } from '../../../../../../context'
 import { FundingFormRewardItem } from '../../../projectMainBody/components'
 
 type Props = {

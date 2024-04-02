@@ -4,7 +4,7 @@ import { createUseStyles } from 'react-jss'
 import { QRCode } from 'react-qrcode-logo'
 
 import { LogoIcon } from '../../../../../../../assets'
-import LogoDark from '../../../../assets/logo-dark.svg'
+import LogoDark from '../../../../../../../assets/logo-dark.svg'
 import { BoltSvgIcon, CurvedArrow } from '../../../../../../../components/icons'
 import { lightModeColors } from '../../../../../../../styles'
 

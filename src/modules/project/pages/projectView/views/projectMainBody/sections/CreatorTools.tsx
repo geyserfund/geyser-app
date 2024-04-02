@@ -5,9 +5,14 @@ import { Link } from 'react-router-dom'
 import { CardLayout } from '../../../../../../../components/layouts'
 import { Body2 } from '../../../../../../../components/typography'
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
-import { getPath, MilestonesFlagUrl, ProjectNoTransactionImageUrl, ProjectRewardsImageUrl } from '../../../../../../../constants'
-import { useProjectContext } from '../../../../../../../context'
+import {
+  getPath,
+  MilestonesFlagUrl,
+  ProjectNoTransactionImageUrl,
+  ProjectRewardsImageUrl,
+} from '../../../../../../../constants'
 import { ProjectStatus } from '../../../../../../../types'
+import { useProjectContext } from '../../../../../context'
 
 export const CreatorTools = () => {
   const { t } = useTranslation()

@@ -5,8 +5,8 @@ import { PiSealCheckBold } from 'react-icons/pi'
 import { Modal } from '../../../../../components/layouts/Modal'
 import { Body1 } from '../../../../../components/typography'
 import { ProjectLaunchedImageUrl } from '../../../../../constants'
-import { useProjectContext } from '../../../../../context'
 import { useCustomTheme } from '../../../../../utils'
+import { useProjectContext } from '../../../context'
 
 export const ProjectCreateLaunchedModal = (props: Omit<ModalProps, 'children'>) => {
   const { t } = useTranslation()

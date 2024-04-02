@@ -1,13 +1,13 @@
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { useProjectContext } from '../../../context'
-import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../types/generated/graphql'
-import { CardLayout } from '../../layouts'
-import { Body1, Body2 } from '../../typography'
-import { ICard, ImageWithReload } from '../../ui'
-import { ProjectRewardAvailability } from './ProjectRewardAvailability'
-import { ProjectRewardShippingEstimate } from './ProjectRewardShippingEstimate'
+import { CardLayout } from '../../../../../../../components/layouts'
+import { ProjectRewardAvailability } from '../../../../../../../components/molecules/projectDisplay/ProjectRewardAvailability'
+import { ProjectRewardShippingEstimate } from '../../../../../../../components/molecules/projectDisplay/ProjectRewardShippingEstimate'
+import { Body1, Body2 } from '../../../../../../../components/typography'
+import { ICard, ImageWithReload } from '../../../../../../../components/ui'
+import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../../../../types/generated/graphql'
+import { useProjectContext } from '../../../../../context'
 
 type Props = ICard & {
   reward: ProjectRewardForCreateUpdateFragment

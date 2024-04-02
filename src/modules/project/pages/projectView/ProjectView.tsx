@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 
-import { ProjectProvider } from '../../../../context'
-import { FundingProvider } from '../../funding/context/FundingFlow'
+import { ProjectProvider } from '../../context'
+import { FundingProvider } from '../../context/FundingProvider'
 import { ProjectContainer } from './ProjectContainer'
 import { ProjectSideNavigation } from './views/projectNavigation/sideNav'
 

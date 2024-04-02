@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom'
 
 import { StickToTop } from '../../../../../../../../../components/layouts'
 import { dimensions, ID, PathName } from '../../../../../../../../../constants'
-import { MobileViews, useProjectContext } from '../../../../../../../../../context'
 import { standardPadding } from '../../../../../../../../../styles'
 import { useMobileMode } from '../../../../../../../../../utils'
+import { MobileViews, useProjectContext } from '../../../../../../../context'
 import { ProjectRewardPanel } from '../../../../projectMainBody/components'
 
 export const InfoScreenRewards = () => {

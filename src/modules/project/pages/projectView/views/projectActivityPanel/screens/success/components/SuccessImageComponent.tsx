@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next'
 import { BiCopy } from 'react-icons/bi'
 
 import { Body2, H3 } from '../../../../../../../../../components/typography'
-import { useProjectContext } from '../../../../../../../../../context'
 import { Badge, FundingTxFragment } from '../../../../../../../../../types'
 import { useCustomTheme, useNotification } from '../../../../../../../../../utils'
+import { useProjectContext } from '../../../../../../../context'
 import { AvatarElement } from '../../../../projectMainBody/components'
 import ContributionIcon from './ContributionIcon.svg'
 

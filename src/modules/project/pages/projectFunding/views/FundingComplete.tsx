@@ -2,7 +2,7 @@ import { Box, Link as ChakraLink, Text, VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 import { FaCheck } from 'react-icons/fa'
 
-import { useFundingContext } from '../../../funding/context/FundingFlow'
+import { useFundingContext } from '../../../context/FundingProvider'
 import { ProjectFundingFormState } from './FundingForm'
 
 interface Props {

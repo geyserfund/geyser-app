@@ -4,11 +4,12 @@ import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../../../../components/layouts'
 import { getPath } from '../../../../../../../constants'
-import { useAuthContext, useProjectContext } from '../../../../../../../context'
+import { useAuthContext } from '../../../../../../../context'
 import { useModal } from '../../../../../../../hooks'
 import { ProjectStatus, useProjectPublishMutation } from '../../../../../../../types'
 import { useNotification } from '../../../../../../../utils'
 import { ProjectLaunchConfirmModal } from '../../../../../components/ProjectLaunchConfirmModal'
+import { useProjectContext } from '../../../../../context'
 
 export const LaunchProjectNotice = () => {
   const { t } = useTranslation()

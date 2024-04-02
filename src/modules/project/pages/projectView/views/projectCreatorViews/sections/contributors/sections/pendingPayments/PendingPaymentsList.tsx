@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SkeletonLayout } from '../../../../../../../../../../components/layouts'
-import { useProjectContext } from '../../../../../../../../../../context'
 import { usePaginationHook } from '../../../../../../../../../../hooks/usePaginationHook'
 import { standardPadding } from '../../../../../../../../../../styles'
 import {
@@ -17,6 +16,7 @@ import {
   useFundingTxsOrderGetQuery,
 } from '../../../../../../../../../../types'
 import { useNotification } from '../../../../../../../../../../utils'
+import { useProjectContext } from '../../../../../../../../context'
 import { PendingPaymentsTable } from './PendingPaymentsTable'
 
 const MAXIMUM_PARTIAL_PAYMENT_ITEMS = 15

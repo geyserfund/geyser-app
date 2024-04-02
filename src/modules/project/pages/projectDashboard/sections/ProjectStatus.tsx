@@ -4,10 +4,10 @@ import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { useProjectContext } from '../../../../../context'
 import { MUTATION_UPDATE_PROJECT } from '../../../../../graphql/mutations'
 import { Project, ProjectStatus } from '../../../../../types'
 import { isActive, useNotification } from '../../../../../utils'
+import { useProjectContext } from '../../../context'
 import { ProjectUnsavedModal, useProjectUnsavedModal } from '../components/ProjectUnsavedModal'
 import { BackToProjectMobile } from '../navigation/BackToProjectMobile'
 

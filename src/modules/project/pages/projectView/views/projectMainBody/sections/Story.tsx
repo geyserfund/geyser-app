@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom'
 import { CardLayout, SkeletonLayout } from '../../../../../../../components/layouts'
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
 import { getPath } from '../../../../../../../constants'
-import { useProjectContext } from '../../../../../../../context'
 import { MarkdownField } from '../../../../../../../forms/markdown/MarkdownField'
+import { useProjectContext } from '../../../../../context'
 
 export const Story = () => {
   const { t } = useTranslation()

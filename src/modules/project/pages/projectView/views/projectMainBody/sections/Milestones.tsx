@@ -6,7 +6,7 @@ import { BiPencil } from 'react-icons/bi'
 import { CardLayout } from '../../../../../../../components/layouts'
 import { IconButtonComponent } from '../../../../../../../components/ui'
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
-import { useProjectContext } from '../../../../../../../context'
+import { useProjectContext } from '../../../../../context'
 import { MilestoneComponent } from '../components/MilestoneComponent'
 
 export const Milestones = forwardRef<HTMLDivElement>((_, ref) => {
