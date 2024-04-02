@@ -2,12 +2,12 @@ import { Badge, Box, Link, Stack, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { StickToTop } from '../../../../../../../../components/layouts'
-import { dimensions, ID, PathName } from '../../../../../../../../constants'
-import { MobileViews, useProjectContext } from '../../../../../../../../context'
-import { standardPadding } from '../../../../../../../../styles'
-import { useMobileMode } from '../../../../../../../../utils'
-import { ProjectRewardPanel } from '../../../projectMainBody/components'
+import { StickToTop } from '../../../../../../../../../components/layouts'
+import { dimensions, ID, PathName } from '../../../../../../../../../constants'
+import { MobileViews, useProjectContext } from '../../../../../../../../../context'
+import { standardPadding } from '../../../../../../../../../styles'
+import { useMobileMode } from '../../../../../../../../../utils'
+import { ProjectRewardPanel } from '../../../../projectMainBody/components'
 
 export const InfoScreenRewards = () => {
   const isMobile = useMobileMode()

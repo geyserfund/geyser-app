@@ -12,7 +12,7 @@ import { ProjectFragment, Satoshis, useFundingInvoiceCancelMutation } from '../.
 import { useMobileMode } from '../../../../../../../../utils'
 import { useFundingContext } from '../../../../../../funding/context/FundingFlow'
 import { FundingStages, useFundingStage } from '../../../../../../funding/state'
-import { ContributionInfoBox, ContributionInfoBoxVersion } from '../../../projectMainBody/components'
+import { ContributionInfoBox, ContributionInfoBoxVersion } from '../success/components'
 import { QRCodeSection } from './QRCodeSection'
 
 type Props = {

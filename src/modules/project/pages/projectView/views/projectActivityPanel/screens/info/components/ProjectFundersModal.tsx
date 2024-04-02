@@ -4,7 +4,7 @@ import { createUseStyles } from 'react-jss'
 
 import { Modal } from '../../../../../../../../../components/layouts'
 import { useModal } from '../../../../../../../../../hooks/useModal'
-import { InfoScreenFeed } from '../InfoScreenFeed'
+import { InfoScreenFeed } from '../views/InfoScreenFeed'
 
 export const useProjectFundersModal = () => {
   return useModal<{}>()

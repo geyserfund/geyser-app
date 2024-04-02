@@ -1,12 +1,12 @@
 import { Box } from '@chakra-ui/layout'
 import { useCallback, useEffect, useState } from 'react'
 
-import { StickToTop } from '../../../../../../../../components/layouts'
-import { dimensions, ID } from '../../../../../../../../constants'
-import { MobileViews, useProjectContext } from '../../../../../../../../context'
-import { useMobileMode } from '../../../../../../../../utils'
-import { InfoScreenFeedTabs, ProjectContributionList } from './components'
-import { ProjectLeaderboardList } from './components/ProjectLeaderboardList'
+import { StickToTop } from '../../../../../../../../../components/layouts'
+import { dimensions, ID } from '../../../../../../../../../constants'
+import { MobileViews, useProjectContext } from '../../../../../../../../../context'
+import { useMobileMode } from '../../../../../../../../../utils'
+import { InfoScreenFeedTabs, ProjectContributionList } from '../components'
+import { ProjectLeaderboardList } from '../components/ProjectLeaderboardList'
 
 let visitedContribution = false
 let visitedLeaderboard = false

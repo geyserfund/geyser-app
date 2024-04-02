@@ -2,7 +2,7 @@ import { Box, HStack, VStack } from '@chakra-ui/layout'
 
 import { SkeletonLayout } from '../../../../../../../../components/layouts'
 import { useMobileMode } from '../../../../../../../../utils'
-import { ActivityBriefSkeleton } from './ActivityBrief'
+import { ActivityBriefSkeleton } from './views/ActivityBrief'
 
 export const InfoScreenSkeleton = () => {
   const isMobile = useMobileMode()

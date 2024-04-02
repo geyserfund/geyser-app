@@ -3,9 +3,9 @@ import { VStack } from '@chakra-ui/layout'
 import { MobileViews, useProjectContext } from '../../../../../../../../context'
 import { standardPadding } from '../../../../../../../../styles'
 import { useMobileMode } from '../../../../../../../../utils'
-import { ActivityBrief } from './ActivityBrief'
-import { InfoScreenFeed } from './InfoScreenFeed'
-import { InfoScreenRewards } from './InfoScreenRewards'
+import { ActivityBrief } from './views/ActivityBrief'
+import { InfoScreenFeed } from './views/InfoScreenFeed'
+import { InfoScreenRewards } from './views/InfoScreenRewards'
 
 export const InfoScreen = () => {
   const { project, mobileView } = useProjectContext()

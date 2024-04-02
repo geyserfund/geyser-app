@@ -1,4 +1,4 @@
-export * from './ActivityBrief'
+export * from './views/ActivityBrief'
 export * from './InfoScreen'
-export * from './InfoScreenFeed'
+export * from './views/InfoScreenFeed'
 export * from './InfoScreenSkeleton'
