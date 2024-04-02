@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom'
 
 import { ProjectProvider } from '../../context'
+import { FundingProvider } from '../projectFunding/context/FundingFlow'
 import { ProjectContainer } from './ProjectContainer'
 import { ProjectSideNavigation } from './projectNavigation/sideNav'
 
@@ -9,8 +10,10 @@ export const ProjectView = () => {
   const { projectId } = params
   return (
     <ProjectProvider projectId={projectId || ''}>
-      <ProjectSideNavigation />
-      <ProjectContainer />
+      <FundingProvider>
+        <ProjectSideNavigation />
+        <ProjectContainer />
+      </FundingProvider>
     </ProjectProvider>
   )
 }

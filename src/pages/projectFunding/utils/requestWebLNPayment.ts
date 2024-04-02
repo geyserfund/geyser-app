@@ -1,7 +1,7 @@
 import { WebLNProvider } from 'webln'
 
-import { FundingTxFragment } from '../../types'
-import { sha256 } from '../../utils'
+import { FundingTxFragment } from '../../../types'
+import { sha256 } from '../../../utils'
 
 export const WEBLN_ENABLE_ERROR = 'Failed to enable webln'
 

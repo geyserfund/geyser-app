@@ -1,8 +1,8 @@
 import { useAtom } from 'jotai'
 import { useCallback, useState } from 'react'
 
-import { FundingTxFragment, useFundingTxStatusUpdatedSubscription } from '../../types'
-import { subscriptionActiveAtom } from './state/pollingFundingTx'
+import { FundingTxFragment, useFundingTxStatusUpdatedSubscription } from '../../../types'
+import { subscriptionActiveAtom } from '../state/pollingFundingTx'
 
 type UseFundSubscriptionProps = {
   projectId?: number

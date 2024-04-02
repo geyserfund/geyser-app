@@ -5,10 +5,11 @@ import { Trans, useTranslation } from 'react-i18next'
 import { DonationInput } from '../../../components/molecules'
 import { MAX_FUNDING_AMOUNT_USD } from '../../../constants'
 import { useBtcContext } from '../../../context/btc'
-import { useFormState, UseFundingFlowReturn } from '../../../hooks'
+import { useFormState } from '../../../hooks'
 import { FormStateError } from '../../../interfaces'
 import { FundingInput, FundingResourceType, Project, UserMeFragment } from '../../../types'
 import { isProjectAnException, useNotification } from '../../../utils'
+import { useFundingContext } from '../context/FundingFlow'
 
 export type ProjectFundingFormState = {
   donationAmount: number
@@ -23,14 +24,13 @@ const defaultFormState = {
 interface Props {
   project: Project
   user?: UserMeFragment
-  fundingFlow: UseFundingFlowReturn
   onFundingRequested?(state: ProjectFundingFormState): void
 }
 
-export const FundingForm = ({ project, user, fundingFlow, onFundingRequested = () => {} }: Props) => {
+export const FundingForm = ({ project, user, onFundingRequested = () => {} }: Props) => {
   const { t } = useTranslation()
   const { btcRate } = useBtcContext()
-  const { requestFunding } = fundingFlow
+  const { requestFunding } = useFundingContext()
 
   const { toast } = useNotification()
   const { state, setTarget, setValue } = useFormState<ProjectFundingFormState>(defaultFormState)

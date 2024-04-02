@@ -2,14 +2,15 @@ import { ApolloError } from '@apollo/client'
 import { useAtom } from 'jotai'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { ApolloErrors, fundingStages } from '../../constants'
-import { FundingInput, useFundingTxWithInvoiceStatusLazyQuery, useFundMutation } from '../../types'
-import { toInt, useNotification } from '../../utils'
-import { webln } from './requestWebLNPayment'
-import { fundingFlowErrorAtom, fundingRequestErrorAtom, weblnErrorAtom } from './state/errorAtom'
-import { useFundingStage } from './state/fundingStagesAtom'
-import { useCheckFundingStatus, useFundingTx } from './state/fundingTxAtom'
-import { useFundPollingAndSubscription } from './state/pollingFundingTx'
+import { ApolloErrors, fundingStages } from '../../../constants'
+import { FundingInput, useFundingTxWithInvoiceStatusLazyQuery, useFundMutation } from '../../../types'
+import { toInt, useNotification } from '../../../utils'
+import { fundingFlowErrorAtom, fundingRequestErrorAtom, weblnErrorAtom } from '../state/errorAtom'
+import { useFundingStage } from '../state/fundingStagesAtom'
+import { useCheckFundingStatus, useFundingTx } from '../state/fundingTxAtom'
+import { useFundPollingAndSubscription } from '../state/pollingFundingTx'
+import { validateFundingInput } from '../utils/helpers'
+import { webln } from '../utils/requestWebLNPayment'
 import { useFundSubscription } from './useFundSubscription'
 import { useResetFundingFlow } from './useResetFundingFlow'
 import { useWebLNFlow } from './useWebLNFlow'
@@ -35,13 +36,10 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const { toast } = useNotification()
 
   const { fundingStage, setNextFundingStage } = useFundingStage()
-
   const startWebLNFlow = useWebLNFlow()
-
   const resetFundingFlow = useResetFundingFlow()
 
   const [error, setError] = useAtom(fundingFlowErrorAtom)
-
   const [fundingRequestErrored, setFundingRequestErrored] = useAtom(fundingRequestErrorAtom)
 
   const [weblnErrored] = useAtom(weblnErrorAtom)
@@ -55,20 +53,12 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   useFundSubscription({
     projectId: fundingTx.projectId,
     fundingTxId: fundingTx.id,
-    onComplete(fundingTx) {
+    onComplete() {
       getFundingStatus()
     },
   })
 
   const checkFundingStatus = useCheckFundingStatus()
-
-  // useEffect(() => {
-  //   const interval = fundIntervalRef.current
-  //   return () => {
-  //     stopSubscription()
-  //     clearInterval(interval)
-  //   }
-  // }, [stopSubscription])
 
   const [getFundingStatus] = useFundingTxWithInvoiceStatusLazyQuery({
     variables: {
@@ -185,19 +175,4 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
     hasWebLN: useMemo(() => hasWebLN && Boolean(webln), [hasWebLN]),
   }
-}
-
-export const validateFundingInput = (input: FundingInput) => {
-  let isValid = false
-  let error = 'cannot initiate funding without amount'
-
-  if (
-    (input.donationAmount && toInt(input.donationAmount) > 0) ||
-    (input.orderInput && input.orderInput.items && input.orderInput.items.length > 0)
-  ) {
-    isValid = true
-    error = ''
-  }
-
-  return { isValid, error }
 }

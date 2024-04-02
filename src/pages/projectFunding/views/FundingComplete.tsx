@@ -2,16 +2,16 @@ import { Box, Link as ChakraLink, Text, VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 import { FaCheck } from 'react-icons/fa'
 
-import { UseFundingFlowReturn } from '../../../hooks'
+import { useFundingContext } from '../context/FundingFlow'
 import { ProjectFundingFormState } from './FundingForm'
 
 interface Props {
   formState: ProjectFundingFormState | undefined
-  fundingFlow: UseFundingFlowReturn
 }
 
-export const FundingComplete = ({ fundingFlow: { fundingTx }, formState }: Props) => {
+export const FundingComplete = ({ formState }: Props) => {
   const { t } = useTranslation()
+  const { fundingTx } = useFundingContext()
   return (
     <VStack justify={'center'} spacing={5}>
       <Box display="flex" justifyContent={'center'} my={4}>

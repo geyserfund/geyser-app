@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useProjectContext } from '../../../../../../context'
 import { copyTextToClipboard } from '../../../../../../utils'
+import { useFundingContext } from '../../../../../projectFunding/context/FundingFlow'
 
 export const CreatorEmailContentButton = ({ ...props }: StackProps) => {
   const { t } = useTranslation()
@@ -14,9 +15,10 @@ export const CreatorEmailContentButton = ({ ...props }: StackProps) => {
 
   const {
     project,
-    fundingFlow: { fundingTx },
     fundForm: { state },
   } = useProjectContext()
+
+  const { fundingTx } = useFundingContext()
 
   const handleCopyContent = () => {
     const content = ref.current?.innerText || ''

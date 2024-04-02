@@ -8,7 +8,7 @@ import {
   useFundingStage,
   useFundingTx,
   weblnErrorAtom,
-} from './state'
+} from '../state'
 
 export const useResetFundingFlow = () => {
   const { resetFundingStage } = useFundingStage()

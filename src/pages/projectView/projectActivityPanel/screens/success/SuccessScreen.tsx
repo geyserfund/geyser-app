@@ -11,6 +11,7 @@ import { useFundCalc } from '../../../../../helpers'
 import { lightModeColors } from '../../../../../styles'
 import { Satoshis } from '../../../../../types'
 import { Project, UserBadge } from '../../../../../types'
+import { useFundingContext } from '../../../../projectFunding/context/FundingFlow'
 import {} from '../../../projectMainBody/components'
 import {
   ContributionInfoBox,
@@ -28,9 +29,10 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
 
   const {
     project,
-    fundingFlow: { fundingTx },
     fundForm: { needsShipping, state: fundingState },
   } = useProjectContext()
+
+  const { fundingTx } = useFundingContext()
 
   const { getTotalAmount } = useFundCalc(fundingState)
   const projectUrl = project ? `${window.location.origin}/project/${project.name}` : ''

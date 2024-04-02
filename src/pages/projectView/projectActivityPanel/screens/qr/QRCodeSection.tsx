@@ -3,15 +3,11 @@ import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import Loader from '../../../../../components/ui/Loader'
-import { UseFundingFlowReturn } from '../../../../../hooks'
-import { useRefreshInvoice } from '../../../../../hooks/fundingFlow/useRefreshInvoice'
 import { FundingStatus, InvoiceStatus } from '../../../../../types/generated/graphql'
 import { getBip21Invoice } from '../../../../../utils/lightning/bip21'
+import { useFundingContext } from '../../../../projectFunding/context/FundingFlow'
+import { useRefreshInvoice } from '../../../../projectFunding/hooks/useRefreshInvoice'
 import { FundingErrorView, GeneratingInvoice, InvoiceErrorView, QRCodeImage } from './components'
-
-type Props = {
-  fundingFlow: UseFundingFlowReturn
-}
 
 export enum PaymentMethods {
   LIGHTNING = 'LIGHTNING',
@@ -30,7 +26,7 @@ enum QRDisplayState {
   FUNDING_CANCELED = 'FUNDING_CANCELED',
 }
 
-export const QRCodeSection = ({ fundingFlow }: Props) => {
+export const QRCodeSection = () => {
   const { t } = useTranslation()
 
   const [lightningInvoice, setLightningInvoice] = useState<string>('')
@@ -41,7 +37,7 @@ export const QRCodeSection = ({ fundingFlow }: Props) => {
   const { invoiceRefreshErrored, invoiceRefreshLoading, refreshFundingInvoice } = useRefreshInvoice()
 
   const { fundingTx, fundingRequestErrored, fundingRequestLoading, hasWebLN, weblnErrored, error, retryFundingFlow } =
-    fundingFlow
+    useFundingContext()
 
   const qrDisplayState = useMemo(() => {
     if (invoiceRefreshLoading || fundingRequestLoading) {

@@ -7,21 +7,21 @@ import { FaTelegramPlane } from 'react-icons/fa'
 import { SectionTitle } from '../../../../../components/ui'
 import { GeyserTelegramUrl } from '../../../../../constants'
 import { useFundCalc } from '../../../../../helpers'
-import { IFundForm, UseFundingFlowReturn } from '../../../../../hooks'
-import { FundingStages, useFundingStage } from '../../../../../hooks/fundingFlow/state'
+import { IFundForm } from '../../../../../hooks'
 import { ProjectFragment, Satoshis, useFundingInvoiceCancelMutation } from '../../../../../types'
 import { useMobileMode } from '../../../../../utils'
+import { useFundingContext } from '../../../../projectFunding/context/FundingFlow'
+import { FundingStages, useFundingStage } from '../../../../projectFunding/state'
 import { ContributionInfoBox, ContributionInfoBoxVersion } from '../../../projectMainBody/components'
 import { QRCodeSection } from './QRCodeSection'
 
 type Props = {
   handleCloseButton: () => void
-  fundingFlow: UseFundingFlowReturn
   state: IFundForm
   project: ProjectFragment
 }
 
-export const QRScreen = ({ fundingFlow, state, project, handleCloseButton }: Props) => {
+export const QRScreen = ({ state, project, handleCloseButton }: Props) => {
   const { t } = useTranslation()
   const { getTotalAmount } = useFundCalc(state)
   const isMobile = useMobileMode()
@@ -30,22 +30,19 @@ export const QRScreen = ({ fundingFlow, state, project, handleCloseButton }: Pro
     ignoreResults: true,
   })
 
+  const { fundingTx } = useFundingContext()
   const { fundingStage } = useFundingStage()
 
   useEffect(() => {
     // Cancel invoice on the backend after QR section unmounts
     return () => {
-      if (
-        fundingStage !== FundingStages.started &&
-        fundingStage !== FundingStages.canceled &&
-        fundingFlow.fundingTx.invoiceId
-      ) {
+      if (fundingStage !== FundingStages.started && fundingStage !== FundingStages.canceled && fundingTx.invoiceId) {
         cancelInvoice({
-          variables: { invoiceId: fundingFlow.fundingTx.invoiceId },
+          variables: { invoiceId: fundingTx.invoiceId },
         })
       }
     }
-  }, [cancelInvoice, fundingStage, fundingFlow.fundingTx.invoiceId])
+  }, [cancelInvoice, fundingStage, fundingTx.invoiceId])
 
   return (
     <VStack
@@ -66,7 +63,7 @@ export const QRScreen = ({ fundingFlow, state, project, handleCloseButton }: Pro
         <SectionTitle>{t('Invoice')}</SectionTitle>
         <CloseButton onClick={handleCloseButton} />
       </HStack>
-      <QRCodeSection fundingFlow={fundingFlow} />
+      <QRCodeSection />
       <ContributionInfoBox
         formState={state}
         version={ContributionInfoBoxVersion.NEUTRAL}

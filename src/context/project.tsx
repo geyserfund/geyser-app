@@ -3,7 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useState } from 'rea
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { getPath, PathName } from '../constants'
-import { useFundingFlow, UseFundingFlowReturn, useFundingFormState, UseFundingFormStateReturn } from '../hooks'
+import { useFundingFormState, UseFundingFormStateReturn } from '../hooks'
 import { useProjectState } from '../hooks/graphqlState'
 import { useModal } from '../hooks/useModal'
 import { MilestoneAdditionModal } from '../pages/projectView/projectMainBody/components'
@@ -41,7 +41,6 @@ type ProjectContextProps = {
   loading?: boolean
   saving?: boolean
   fundForm: UseFundingFormStateReturn
-  fundingFlow: UseFundingFlowReturn
   isDirty?: boolean
   error: any
   onMilestonesModalOpen(): void
@@ -87,7 +86,6 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
   const milestonesModal = useModal()
   const { error, project, loading, updateProject, saveProject, isDirty, saving, refetch } = useProjectState(projectId, {
     fetchPolicy: 'network-only',
-    notifyOnNetworkStatusChange: true,
     onError() {
       captureException(error, {
         tags: {
@@ -139,8 +137,6 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
     updateProjectOwner(project, user)
   }, [project, user, updateProjectOwner])
 
-  const fundingFlow = useFundingFlow()
-
   const fundForm = useFundingFormState({
     rewards: project ? project.rewards : undefined,
     rewardCurrency: project && project.rewardCurrency ? project.rewardCurrency : undefined,
@@ -172,7 +168,6 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
         error,
         loading,
         fundForm,
-        fundingFlow,
         refetch,
         onCreatorModalOpen: creatorModal.onOpen,
         onMilestonesModalOpen: milestonesModal.onOpen,

@@ -1,9 +1,9 @@
 import { Box, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
-import { useAuthContext } from '../../context'
-import { ProjectFundingModalProps } from './hooks/useProjectFundingModal'
-import { ProjectFunding } from './ProjectFunding'
+import { useAuthContext } from '../../../context'
+import { ProjectFundingModalProps } from '../../grants/grantsPage/components/useProjectFundingModal'
+import { ProjectFunding } from '../ProjectFunding'
 
 export const ProjectFundingModal = ({ isOpen, onClose, props }: ProjectFundingModalProps) => {
   const [title, setTitle] = useState<string | null>(null)

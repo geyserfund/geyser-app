@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 
-import { useFundingFlow } from '../../hooks'
-import { FundingStages, useFundingStage } from '../../hooks/fundingFlow/state'
 import { Project, UserMeFragment } from '../../types'
 import { QRCodeSection } from '../projectView/projectActivityPanel/screens'
-import { FundingComplete } from './stages/FundingComplete'
-import { FundingForm, ProjectFundingFormState } from './stages/FundingForm'
+import { FundingProvider } from './context/FundingFlow'
+import { FundingStages, useFundingStage } from './state'
+import { FundingComplete } from './views/FundingComplete'
+import { FundingForm, ProjectFundingFormState } from './views/FundingForm'
 
 const SUCCESS_TITLE = 'Contribution Successfull'
 
@@ -17,9 +17,7 @@ interface Props {
 
 const noop = () => {}
 
-export const ProjectFunding = ({ project, user, onTitleChange = noop }: Props) => {
-  const fundingFlow = useFundingFlow()
-
+export const ProjectFundingContent = ({ project, user, onTitleChange = noop }: Props) => {
   const [title, setTitle] = useState<string | null>(null)
 
   useEffect(() => {
@@ -48,10 +46,18 @@ export const ProjectFunding = ({ project, user, onTitleChange = noop }: Props) =
 
   switch (fundingStage) {
     case FundingStages.started:
-      return <QRCodeSection fundingFlow={fundingFlow} />
+      return <QRCodeSection />
     case FundingStages.completed:
-      return <FundingComplete formState={formState} fundingFlow={fundingFlow} />
+      return <FundingComplete formState={formState} />
     default:
-      return <FundingForm fundingFlow={fundingFlow} project={project} user={user} onFundingRequested={setFormState} />
+      return <FundingForm project={project} user={user} onFundingRequested={setFormState} />
   }
+}
+
+export const ProjectFunding = (props: Props) => {
+  return (
+    <FundingProvider>
+      <ProjectFundingContent {...props} />
+    </FundingProvider>
+  )
 }

@@ -5,7 +5,6 @@ import { useContext, useEffect } from 'react'
 import { AuthContext, MobileViews, useProjectContext } from '../../../context'
 import { useBtcContext } from '../../../context/btc'
 import { IFundForm } from '../../../hooks'
-import { FundingStages, useFundingStage } from '../../../hooks/fundingFlow/state'
 import {
   FundingInput,
   FundingResourceType,
@@ -17,6 +16,8 @@ import {
 } from '../../../types'
 import { toInt, useCustomTheme, useMobileMode } from '../../../utils'
 import { useAuthModal } from '../../auth/hooks'
+import { useFundingContext } from '../../projectFunding/context/FundingFlow'
+import { FundingStages, useFundingStage } from '../../projectFunding/state'
 import { FundingFormScreen, InfoScreen, InfoScreenSkeleton, QRScreen, SuccessScreen } from './screens'
 import { useStyles } from './styles'
 
@@ -32,11 +33,11 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   const { btcRate } = useBtcContext()
   const isMobile = useMobileMode()
 
-  const { mobileView, setMobileView, project, fundingFlow, fundForm } = useProjectContext()
+  const { mobileView, setMobileView, project, fundForm } = useProjectContext()
 
   const { state: formState, setState: setFormState, resetForm, hasSelectedRewards } = fundForm
 
-  const { resetFundingFlow, requestFunding } = fundingFlow
+  const { resetFundingFlow, requestFunding } = useFundingContext()
   const { fundingStage, setFundingStage } = useFundingStage()
 
   const { loginOnOpen } = useAuthModal()
@@ -138,14 +139,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
           />
         )
       case FundingStages.started:
-        return (
-          <QRScreen
-            state={formState}
-            project={project}
-            fundingFlow={fundingFlow}
-            handleCloseButton={handleQRCloseButton}
-          />
-        )
+        return <QRScreen state={formState} project={project} handleCloseButton={handleQRCloseButton} />
       case FundingStages.completed:
         return <SuccessScreen onCloseClick={handleCloseButton} />
 

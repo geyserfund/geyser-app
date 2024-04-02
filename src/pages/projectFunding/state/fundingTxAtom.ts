@@ -2,9 +2,9 @@ import { atom, useAtomValue, useSetAtom } from 'jotai'
 import { atomEffect } from 'jotai-effect'
 import { useCallback } from 'react'
 
-import { authUserAtom } from '../../../pages/auth/state'
 import { FundingStatus, FundingTxFragment, FundingTxWithInvoiceStatusFragment, InvoiceStatus } from '../../../types'
-import { findNextFundingStage } from '../helpers'
+import { authUserAtom } from '../../auth/state'
+import { findNextFundingStage } from '../utils/helpers'
 import { fundingStageAtom } from './fundingStagesAtom'
 import { pollingFundingTxAtom, subscriptionActiveAtom } from './pollingFundingTx'
 

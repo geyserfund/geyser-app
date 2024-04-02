@@ -23,11 +23,12 @@ import { Body2, Caption } from '../../../components/typography'
 import { MAX_FUNDING_AMOUNT_USD } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { useBTCConverter } from '../../../helpers'
-import { useFormState, useFundingFlow } from '../../../hooks'
-import { FundingStages, useFundingStage } from '../../../hooks/fundingFlow/state'
+import { useFormState } from '../../../hooks'
 import { FormStateError } from '../../../interfaces'
 import { FundingInput, FundingResourceType, USDCents, useProjectByNameOrIdQuery } from '../../../types'
 import { toInt, useNotification } from '../../../utils'
+import { FundingProvider, useFundingContext } from '../../projectFunding/context/FundingFlow'
+import { FundingStages, useFundingStage } from '../../projectFunding/state'
 import { QRCodeSection } from '../../projectView/projectActivityPanel/screens'
 import { GRANTS_PROJECT_NAME } from '../constants'
 
@@ -53,12 +54,12 @@ interface Props {
   grantProjectName?: string
 }
 
-export const GrantsContributeModal = ({ grantProjectName }: Props) => {
+export const GrantsContributeModalContent = ({ grantProjectName }: Props) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
   const { user } = useAuthContext()
   const { getSatoshisFromUSDCents } = useBTCConverter()
-  const fundingFlow = useFundingFlow()
+
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [modalHeader, setModalHeader] = useState(defaultModalHeader)
@@ -89,7 +90,7 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
 
   const { fundingStage, setNextFundingStage } = useFundingStage()
 
-  const { fundingTx, resetFundingFlow, requestFunding } = fundingFlow
+  const { fundingTx, resetFundingFlow, requestFunding } = useFundingContext()
 
   useEffect(() => {
     setFormError({})
@@ -276,7 +277,7 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
     )
   }
 
-  const qrSection = () => <QRCodeSection fundingFlow={fundingFlow} />
+  const qrSection = () => <QRCodeSection />
 
   const renderModalBody = () => {
     switch (fundingStage) {
@@ -314,6 +315,14 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
         </Modal>
       )}
     </>
+  )
+}
+
+export const GrantsContributeModal = ({ grantProjectName }: Props) => {
+  return (
+    <FundingProvider>
+      <GrantsContributeModalContent grantProjectName={grantProjectName} />
+    </FundingProvider>
   )
 }
 

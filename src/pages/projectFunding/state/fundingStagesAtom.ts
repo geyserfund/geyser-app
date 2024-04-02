@@ -1,6 +1,6 @@
 import { atom, useAtom, useSetAtom } from 'jotai'
 
-import { findNextFundingStage } from '../helpers'
+import { findNextFundingStage } from '../utils/helpers'
 
 export enum FundingStages {
   loading = 'loading',

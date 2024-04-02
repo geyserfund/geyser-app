@@ -10,10 +10,10 @@ import { getPath } from '../../../../constants'
 import { fonts } from '../../../../styles'
 import { GrantApplicant, GrantApplicantFunding, GrantStatusEnum, Project } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
-import { useProjectFundingModal } from '../../../projectFunding/hooks/useProjectFundingModal'
-import { ProjectFundingModal } from '../../../projectFunding/ProjectFundingModal'
+import { ProjectFundingModal } from '../../../projectFunding/components/ProjectFundingModal'
 import { AvatarElement } from '../../../projectView/projectMainBody/components'
 import { WidgetItem } from '../../components/WidgetItem'
+import { useProjectFundingModal } from '../components/useProjectFundingModal'
 
 interface Props {
   applicants: Array<GrantApplicant>

@@ -1,5 +1,5 @@
-import { useModal } from '../../../hooks/useModal'
-import { Project } from '../../../types'
+import { useModal } from '../../../../hooks/useModal'
+import { Project } from '../../../../types'
 
 export type ProjectFundingModalProps = ReturnType<typeof useProjectFundingModal>
 

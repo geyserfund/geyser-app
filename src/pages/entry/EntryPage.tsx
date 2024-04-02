@@ -8,10 +8,11 @@ import { Head } from '../../config'
 import { getPath, ProjectEntryThumbnailPlaceholderUrl } from '../../constants'
 import { useProjectContext } from '../../context'
 import { ProjectProvider } from '../../context'
-import { FundingStages, useFundingStage } from '../../hooks/fundingFlow/state/fundingStagesAtom'
 import { EntryFragment, FundingResourceType, useEntryLazyQuery } from '../../types'
 import { toInt, useMobileMode } from '../../utils'
 import { NotFoundPage } from '../fallback/NotFoundPage'
+import { FundingProvider } from '../projectFunding/context/FundingFlow'
+import { FundingStages, useFundingStage } from '../projectFunding/state/fundingStagesAtom'
 import { ProjectActivityPanel } from '../projectView/projectActivityPanel'
 import { ProjectMobileBottomNavigation } from '../projectView/projectNavigation/components/ProjectMobileBottomNavigation'
 import { useEntryAtom } from './entryAtom'
@@ -45,7 +46,9 @@ export const EntryPage = () => {
 
   return (
     <ProjectProvider projectId={Number(entry.project?.id)}>
-      <EntryViewWrapper loading={loading} error={error} entry={entry} />
+      <FundingProvider>
+        <EntryViewWrapper loading={loading} error={error} entry={entry} />
+      </FundingProvider>
     </ProjectProvider>
   )
 }
