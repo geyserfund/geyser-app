@@ -59,8 +59,7 @@ export const ProjectWallet = () => {
     setConnectionOption,
     createWalletInput,
     isLightningAddressInValid,
-    feePercentage,
-    setFeePercentage,
+    fee,
   } = useWalletForm({
     defaultConnectionOption: projectWallet
       ? projectWallet.connectionDetails.__typename === WalletConnectDetails.LightningAddressConnectionDetails
@@ -116,7 +115,7 @@ export const ProjectWallet = () => {
           lndConnectionDetailsInput: createWalletInput?.lndConnectionDetailsInput,
           lightningAddressConnectionDetailsInput: createWalletInput?.lightningAddressConnectionDetailsInput,
           id: projectWallet?.id,
-          feePercentage,
+          feePercentage: fee.value,
           twoFAInput: {
             OTP: {
               otp,
@@ -169,8 +168,7 @@ export const ProjectWallet = () => {
             node={node}
             connectionOption={connectionOption}
             setConnectionOption={setConnectionOption}
-            feePercentage={feePercentage}
-            setFeePercentage={setFeePercentage}
+            fee={fee}
           />
         )}
       </VStack>

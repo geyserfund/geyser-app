@@ -56,8 +56,10 @@ export type WalletForm = {
   isFormDirty: () => boolean
   connectionOption: ConnectionOption
   setConnectionOption: (connectionOption: ConnectionOption) => void
-  feePercentage: number
-  setFeePercentage: (feePercentage: number) => void
+  fee: {
+    value: number
+    setValue: (feePercentage: number) => void
+  }
   createWalletInput: CreateWalletInput | null
   isLightningAddressInValid: boolean
 }
@@ -317,12 +319,14 @@ export const useWalletForm = ({
       onClose,
       onOpen,
     },
+    fee: {
+      value: feePercentage,
+      setValue: setFeePercentage,
+    },
     isFormDirty,
     connectionOption,
     setConnectionOption,
     createWalletInput,
     isLightningAddressInValid,
-    feePercentage,
-    setFeePercentage,
   }
 }

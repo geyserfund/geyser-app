@@ -40,7 +40,13 @@ import { LndNodeType } from '../../types'
 import { WalletConnectionDetails } from '../projectDashboard/components'
 import { NodeAdditionModal, WalletConnectionOptionInfoBox } from './components'
 import ProjectFeeSelection from './components/ProjectFeeSelection'
-import { ConnectionOption, LightingWalletForm, LNAddressEvaluationState, NodeWalletForm } from './hooks/useWalletForm'
+import {
+  ConnectionOption,
+  LightingWalletForm,
+  LNAddressEvaluationState,
+  NodeWalletForm,
+  WalletForm,
+} from './hooks/useWalletForm'
 
 type Props = {
   readOnly?: boolean
@@ -49,8 +55,7 @@ type Props = {
   lightningAddress: LightingWalletForm
   node: NodeWalletForm
   setConnectionOption: (connectionOption: ConnectionOption) => void
-  feePercentage: number
-  setFeePercentage: (feePercentage: number) => void
+  fee: WalletForm['fee']
 }
 
 export const ProjectCreationWalletConnectionForm = ({
@@ -60,8 +65,7 @@ export const ProjectCreationWalletConnectionForm = ({
   lightningAddress,
   node,
   setConnectionOption,
-  feePercentage,
-  setFeePercentage,
+  fee,
 }: Props) => {
   const { t } = useTranslation()
 
@@ -221,7 +225,7 @@ export const ProjectCreationWalletConnectionForm = ({
             >
               <>
                 <RenderSponsorImage url={VoltageExplainerPageForGeyserURL} imageUrl={VoltageUrl} />
-                <ProjectFeeSelection readOnly={readOnly} value={feePercentage} onChange={setFeePercentage} />
+                <ProjectFeeSelection readOnly={readOnly} value={fee.value} onChange={fee.setValue} />
               </>
             </WalletConnectionOptionInfoBox>
           </AccordionPanel>

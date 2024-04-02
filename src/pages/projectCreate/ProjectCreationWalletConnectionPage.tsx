@@ -65,8 +65,7 @@ export const ProjectCreationWalletConnectionPage = () => {
     lightningAddress,
     node,
     setConnectionOption,
-    feePercentage,
-    setFeePercentage,
+    fee,
     createWalletInput,
     isLightningAddressInValid,
   } = useWalletForm({
@@ -152,7 +151,7 @@ export const ProjectCreationWalletConnectionPage = () => {
         </Box>
       </VStack>
       <ProjectCreationWalletConnectionForm
-        {...{ connectionOption, lightningAddress, node, setConnectionOption, feePercentage, setFeePercentage }}
+        {...{ connectionOption, lightningAddress, node, setConnectionOption, fee }}
       />
     </ProjectCreateLayout>
   )
