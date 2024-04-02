@@ -1,4 +1,4 @@
-export * from '../pages/projectFunding/hooks/useFundingFlow'
+export * from '../modules/project/funding/hooks/useFundingFlow'
 export * from './useAllGeyserProjectEntries'
 export * from './useDebounce'
 export * from './useFormState'

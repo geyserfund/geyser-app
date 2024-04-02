@@ -7,7 +7,7 @@ import { Body1, Body2, Caption } from '../../../../../../../components/typograph
 import { ImageWithReload } from '../../../../../../../components/ui'
 import { RewardStatusLabel } from '../../../../../../../constants'
 import { getRewardShippingStatusBackgroundColor } from '../../../../../../../helpers/getProjectShippingStatusBackgroundColor'
-import { getUSD } from '../../../../../../../pages/projectView/projectCreatorViews/sections/contributors/components'
+import { getUSD } from '../../../../../../project/pages/projectView/views/projectCreatorViews/sections/contributors/components'
 import { OrdersGetStatus, ProfileOrderFragment, ProjectAvatarFragment } from '../../../../../../../types'
 import { commaFormatted, toSmallImageUrl, useCustomTheme } from '../../../../../../../utils'
 

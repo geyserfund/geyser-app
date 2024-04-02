@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { getPath } from '../../constants'
 import { MobileViews, useProjectContext } from '../../context'
 import { useMobileMode } from '../../utils'
-import { Rewards } from '../projectView/projectMainBody'
+import { Rewards } from '../../modules/project/pages/projectView/views/projectMainBody'
 
 export const EntryRewards = () => {
   const isMobile = useMobileMode()
