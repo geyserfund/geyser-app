@@ -2,6 +2,8 @@ import { Box, HStack, Text, useRadio, useRadioGroup, VStack } from '@chakra-ui/r
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { neutralColorsLight } from '../../../styles/colors'
+
 type ProjectFeeSelectionProps = {
   readOnly?: boolean
   value: number
@@ -84,13 +86,13 @@ const RadioCard: React.FC<any> = ({ children, isDisabled, ...props }) => {
         {...getRadioProps()}
         cursor="pointer"
         border="2px solid"
-        color="#141A19"
+        color={neutralColorsLight[900]}
         borderRadius="8px"
         borderColor="neutral.200"
         backgroundColor="white"
         _checked={{
           bg: 'primary.400',
-          color: '#141A19',
+          color: neutralColorsLight[900],
           borderColor: 'primary.600',
         }}
         px={2}
