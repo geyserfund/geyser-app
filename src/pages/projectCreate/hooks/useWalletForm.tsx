@@ -63,6 +63,7 @@ export type WalletForm = {
 }
 
 const DEFAULT_FEE_PERCENTAGE = 0.02
+const DEFAULT_LIGHTNING_FEE_PERCENTAGE = 0.04
 
 export const useWalletForm = ({
   defaultConnectionOption = ConnectionOption.LIGHTNING_ADDRESS,
@@ -186,7 +187,7 @@ export const useWalletForm = ({
           lightningAddress: lightningAddressFormValue,
         },
         resourceInput,
-        feePercentage,
+        feePercentage: DEFAULT_LIGHTNING_FEE_PERCENTAGE,
       }
     }
 
