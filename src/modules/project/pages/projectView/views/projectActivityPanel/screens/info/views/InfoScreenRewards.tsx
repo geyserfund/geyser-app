@@ -23,7 +23,7 @@ export const InfoScreenRewards = () => {
     return null
   }
 
-  const activeProjectRewards = project.rewards.filter((reward) => reward.isHidden === false)
+  const activeProjectRewards = project.rewards?.filter((reward) => reward.isHidden === false)
   if (activeProjectRewards.length === 0) {
     return null
   }

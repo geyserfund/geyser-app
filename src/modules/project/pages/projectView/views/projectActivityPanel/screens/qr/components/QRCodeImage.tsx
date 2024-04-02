@@ -95,7 +95,7 @@ export const QRCodeImage = ({
           <VStack justifyContent={'center'} p={2}>
             <Image src={WarningIcon} />
             <Text textAlign="center" color="#DF3634" fontSize={'16px'} fontWeight={'bold'}>
-              {t('Onchain donations are temporarily unavailable. They should be operational by February 2024')}
+              {t('Onchain donations are temporarily unavailable. They should be operational by the end of April 2024')}
             </Text>
           </VStack>
         </Box>

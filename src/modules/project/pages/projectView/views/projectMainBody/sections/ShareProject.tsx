@@ -36,6 +36,8 @@ export const ShareProject = () => {
     localStorage.setItem(SHARE_PROJECT_CLOSED_STORAGE_KEY, 'true')
   }
 
+  if (shareClosed) return null
+
   return (
     <CardLayout
       w="full"
@@ -46,18 +48,17 @@ export const ShareProject = () => {
       spacing={{ base: '0px', lg: '10px' }}
       position="relative"
     >
-      {!shareClosed && (
-        <IconButton
-          position="absolute"
-          top={0}
-          right={0}
-          aria-label="close-share-project"
-          size="sm"
-          variant="ghost"
-          icon={<CloseIcon />}
-          onClick={handleCloseClick}
-        />
-      )}
+      <IconButton
+        position="absolute"
+        top={0}
+        right={0}
+        aria-label="close-share-project"
+        size="sm"
+        variant="ghost"
+        icon={<CloseIcon />}
+        onClick={handleCloseClick}
+      />
+
       <Box height="100px" maxHeight="200px">
         <Image h="100%" src={MegaphoneUrl} aria-label="share-project-megaphone" objectFit="contain" />
       </Box>

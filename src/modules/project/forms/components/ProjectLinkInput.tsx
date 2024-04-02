@@ -2,7 +2,7 @@ import { CloseIcon } from '@chakra-ui/icons'
 import { Box, HStack, Input, InputProps, StackProps } from '@chakra-ui/react'
 import { IconType } from 'react-icons'
 
-import { IconButtonComponent } from '../ui'
+import { IconButtonComponent } from '../../../../components/ui'
 
 interface ProjectLinkInputProps extends StackProps {
   leftIcon: IconType

@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next'
 
 import { useProjectContext } from '../../../../../context'
 import { useNotification } from '../../../../../utils'
-import { ProjectRegion } from '../../projectCreate/components'
 import { ProjectLinks } from '../../../forms/ProjectLinks'
+import { ProjectRegion } from '../../../forms/ProjectRegion'
 import { ProjectTagsCreateEdit } from '../../../forms/ProjectTagsCreateEdit'
-import { ProjectUnsavedModal, useProjectUnsavedModal } from '../components/ProjectUnsavedModal'
 import { useProjectDetailsForm } from '../../projectCreate/hooks/useProjectDetailsForm'
+import { ProjectUnsavedModal, useProjectUnsavedModal } from '../components/ProjectUnsavedModal'
 
 export const ProjectDetails = () => {
   const { t } = useTranslation()

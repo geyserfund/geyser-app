@@ -20,7 +20,8 @@ export const useProjectDetails = (
 ): ProjectDetails => {
   const entriesLength = useMemo(() => (project && project.entries ? project.entries.length : 0), [project])
   const rewardsLength = useMemo(() => {
-    const activeProjectRewards = project && project.rewards.filter((reward) => reward.isHidden === false)
+    const activeProjectRewards =
+      project && project.rewards && project.rewards.filter((reward) => reward.isHidden === false)
     return activeProjectRewards ? activeProjectRewards.length : 0
   }, [project])
   const milestonesLength = useMemo(() => (project && project.milestones ? project.milestones.length : 0), [project])

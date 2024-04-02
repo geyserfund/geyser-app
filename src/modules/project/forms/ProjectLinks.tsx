@@ -2,10 +2,10 @@ import { Button, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ProjectLinkInput } from '../../../components/inputs'
 import { FieldContainer } from '../../../forms/components/FieldContainer'
 import { getIconForLink } from '../../../helpers/getIconForLinks'
 import { Maybe } from '../../../types'
+import { ProjectLinkInput } from './components/ProjectLinkInput'
 
 interface ProjectLinksProps {
   links: string[]

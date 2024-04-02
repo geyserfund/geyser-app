@@ -36,7 +36,6 @@ import {
 } from '../../../constants'
 import { lightModeColors } from '../../../styles'
 import { LndNodeType } from '../../../types'
-import { NodeAdditionModal } from '../pages/projectCreate/components'
 import { WalletConnectionOptionInfoBox } from '../pages/projectCreate/components/WalletConnectionOptionInfoBox'
 import {
   ConnectionOption,
@@ -45,6 +44,7 @@ import {
   NodeWalletForm,
 } from '../pages/projectCreate/hooks/useWalletForm'
 import { WalletConnectionDetails } from '../pages/projectDashboard/components'
+import { NodeAdditionModal } from './components/NodeAdditionModal'
 
 type Props = {
   readOnly?: boolean
