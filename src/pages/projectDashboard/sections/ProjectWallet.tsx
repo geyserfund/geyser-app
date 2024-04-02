@@ -38,7 +38,7 @@ export const ProjectWallet = () => {
   const handleNext = () => {
     if (!project) return
 
-    if (project.status === ProjectStatus.Draft && createWalletInput) {
+    if (!isEdit && project.status === ProjectStatus.Draft && createWalletInput) {
       createWallet({ variables: { input: createWalletInput } })
       return
     }
