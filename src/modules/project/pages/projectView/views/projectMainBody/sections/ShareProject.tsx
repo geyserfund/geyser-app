@@ -1,8 +1,9 @@
 import { CloseIcon } from '@chakra-ui/icons'
-import { Box, Button, IconButton, Image, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, IconButton, Image, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiLinkBold } from 'react-icons/pi'
+import { RiTwitterXLine } from 'react-icons/ri'
 
 import { CardLayout } from '../../../../../../../components/layouts'
 import { Body2, H3 } from '../../../../../../../components/typography'
@@ -65,14 +66,26 @@ export const ShareProject = () => {
       <VStack w="full" alignItems={'start'}>
         <H3>{t('Share your project')}</H3>
         <Body2>{t('Sharing on social media helps you reach more people and get closer to achieving your goals')}</Body2>
-        <Button
-          variant={copied ? 'secondary' : 'primary'}
-          leftIcon={<PiLinkBold />}
-          w="full"
-          onClick={handleShareClick}
-        >
-          {copied ? t('Project link copied!') : t('Share your project')}
-        </Button>
+        <HStack w="full" alignItems="start">
+          <Button
+            w="full"
+            backgroundColor="neutral.1000"
+            color="neutral.0"
+            // X twitter icon
+            leftIcon={<RiTwitterXLine />}
+            _hover={{ backgroundColor: 'neutral.300', color: 'neutral.1000' }}
+          >
+            {t('Post')}
+          </Button>
+          <Button
+            variant={copied ? 'secondary' : 'primary'}
+            leftIcon={<PiLinkBold />}
+            w="full"
+            onClick={handleShareClick}
+          >
+            {copied ? t('Project link copied!') : t('Copy project link')}
+          </Button>
+        </HStack>
       </VStack>
     </CardLayout>
   )
