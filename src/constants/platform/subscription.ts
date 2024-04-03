@@ -5,6 +5,8 @@ export const projectsWithSubscription = [
   'joenakamoto',
   'studiobtc',
   'defendpow',
+  'theprogressivebitcoiner',
+  '21jclp',
 ]
 
 export const projectsWithSubscriptionInLandingPageGeyserIds = [101, 71, 588]
@@ -16,4 +18,6 @@ export const projectFlashIds = {
   joenakamoto: 111,
   studiobtc: 112,
   defendpow: 113,
+  theprogressivebitcoiner: 101,
+  '21jclp': 114,
 } as { [key: string]: number }

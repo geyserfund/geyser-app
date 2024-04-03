@@ -59,7 +59,7 @@ export const ProjectCreateStart = () => {
             {t('Receive funds from on-chain & lightning')}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectGiftUrl} alt="create project gift">
-            {t('Sell rewards and perks for your project')}
+            {t('Sell anything to reward your contributors')}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectEntryUrl} alt="create project entry">
             {t('Update your community by writing Entries')}
