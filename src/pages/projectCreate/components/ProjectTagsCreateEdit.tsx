@@ -200,6 +200,8 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
               onKeyDown={handleKeyDown}
               inputValue={inputValue}
               components={{ Menu }}
+              onMenuOpen={onOpen}
+              onMenuClose={onClose}
             />
           )}
           <HStack width="100%" spacing="10px">
