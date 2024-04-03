@@ -96,7 +96,7 @@ export const EntryCreateEdit = () => {
       },
     },
   )
-  const debouncedUpdateEntry = useDebounce(entry, 1000)
+  const debouncedUpdateEntry = useDebounce(entry, entry.id ? 500 : 1000)
 
   useEffect(() => {
     if (debouncedUpdateEntry && debouncedUpdateEntry.status !== EntryStatus.Published) {

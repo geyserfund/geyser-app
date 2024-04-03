@@ -8,7 +8,7 @@ import { useProjectState } from '../hooks/graphqlState'
 import { useModal } from '../hooks/useModal'
 import { MilestoneAdditionModal } from '../pages/projectView/projectMainBody/components'
 import { ProjectCreatorModal } from '../pages/projectView/projectNavigation/components/ProjectCreatorModal'
-import { ProjectFragment, ProjectMilestone, UserMeFragment } from '../types'
+import { ProjectFragment, ProjectMilestone, useProjectUnplublishedEntriesQuery, UserMeFragment } from '../types'
 import { useAuthContext } from './auth'
 import { useNavContext } from './nav'
 
@@ -119,6 +119,21 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
             return Number(ownerInfo.user.id || -1)
           }) || [],
       })
+    },
+  })
+
+  useProjectUnplublishedEntriesQuery({
+    variables: {
+      where: { name: project?.name },
+    },
+    skip: !project || !isProjectOwner,
+    onCompleted(data) {
+      if (data.projectGet && updateProject) {
+        updateProject({
+          ...data.projectGet,
+          entries: project ? [...project.entries, ...data.projectGet.entries] : data.projectGet.entries,
+        })
+      }
     },
   })
 
