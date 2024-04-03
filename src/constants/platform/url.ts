@@ -157,7 +157,7 @@ export const GrantApplicationDetailsUrl =
   'https://geyser.notion.site/About-Geyser-Grants-925d6b2adc1a4043b70d2835ecfebdde'
 
 export const WalletCreationFindOutMoreUrl =
-  'https://geyser.notion.site/About-Geyser-Grants-925d6b2adc1a4043b70d2835ecfebdde?pvs=4'
+  'https://guide.geyser.fund/geyser-docs/product-features/launch-a-project/connect-your-lightning-node'
 
 export const GeyserEmailVerificationDocUrl =
   'https://guide.geyser.fund/geyser-docs/product-features/edit-your-project/verify-your-email'
