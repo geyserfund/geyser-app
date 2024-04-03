@@ -18,7 +18,7 @@ export const ContributeButton = (props: ButtonProps) => {
 
   const isFundingDisabled = !isActive(project.status)
 
-  const isInProjectPage = location.pathname.includes(PathName.project)
+  const isInProjectPage = location.pathname.includes(PathName.project) && project.rewards.length > 0
 
   return (
     <Button

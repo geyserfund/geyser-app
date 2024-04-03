@@ -1,5 +1,5 @@
 import { QueryHookOptions, useLazyQuery, useMutation } from '@apollo/client'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { QUERY_ENTRY_WITH_OWNERS } from '../../graphql'
 import { MUTATION_CREATE_ENTRY, MUTATION_UPDATE_ENTRY } from '../../graphql/mutations'
@@ -135,7 +135,7 @@ export const useEntryState = (
     setEntry({ ...entry, ...value })
   }
 
-  const saveEntry = () => {
+  const saveEntry = useCallback(() => {
     if (saving.current) {
       return
     }
@@ -148,6 +148,8 @@ export const useEntryState = (
       return
     }
 
+    setSaving(true)
+
     if (entryId || Boolean(baseEntry.id)) {
       const input: UpdateEntryInput = {
         content: entry.content,
@@ -156,7 +158,6 @@ export const useEntryState = (
         image: entry.image,
         title: entry.title,
       }
-      setSaving(true)
       updateEntryMutation({ variables: { input } })
     } else {
       const input: CreateEntryInput = {
@@ -167,10 +168,9 @@ export const useEntryState = (
         title: entry.title || '',
         type: EntryType.Article,
       }
-      setSaving(true)
       createEntryMutation({ variables: { input } })
     }
-  }
+  }, [saving, entry, baseEntry, entryId, projectId, createEntryMutation, updateEntryMutation, setSaving])
 
   return {
     loading,
