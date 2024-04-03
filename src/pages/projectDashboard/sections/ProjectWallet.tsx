@@ -14,6 +14,7 @@ import {
   useUpdateWalletMutation,
   Wallet,
 } from '../../../types'
+import { UpdateWalletInput } from '../../../types'
 import { useNotification } from '../../../utils'
 import { VerifyYourEmail } from '../../otp'
 import { ProjectCreationWalletConnectionForm } from '../../projectCreate'
@@ -108,21 +109,26 @@ export const ProjectWallet = () => {
   })
 
   const handleWalletUpdate = async (otp: number, otpData: OtpResponseFragment) => {
+    let input: UpdateWalletInput = {
+      id: projectWallet?.id,
+      name: createWalletInput?.name,
+      lndConnectionDetailsInput: createWalletInput?.lndConnectionDetailsInput,
+      lightningAddressConnectionDetailsInput: createWalletInput?.lightningAddressConnectionDetailsInput,
+      twoFAInput: {
+        OTP: {
+          otp,
+          otpVerificationToken: otpData.otpVerificationToken,
+        },
+      },
+    }
+
+    if (connectionOption === ConnectionOption.PERSONAL_NODE) {
+      input = { ...input, feePercentage: createWalletInput?.feePercentage }
+    }
+
     updateWallet({
       variables: {
-        input: {
-          name: createWalletInput?.name,
-          lndConnectionDetailsInput: createWalletInput?.lndConnectionDetailsInput,
-          lightningAddressConnectionDetailsInput: createWalletInput?.lightningAddressConnectionDetailsInput,
-          id: projectWallet?.id,
-          feePercentage: createWalletInput?.feePercentage,
-          twoFAInput: {
-            OTP: {
-              otp,
-              otpVerificationToken: otpData.otpVerificationToken,
-            },
-          },
-        },
+        input,
       },
     })
   }
