@@ -26,7 +26,7 @@ const options = [
   { label: '8%', value: FeeValues.EightPercent },
 ]
 
-const ProjectFeeSelection: React.FC<ProjectFeeSelectionProps> = ({ readOnly, value, onChange }) => {
+export const ProjectFeeSelection: React.FC<ProjectFeeSelectionProps> = ({ readOnly, value, onChange }) => {
   const { t } = useTranslation()
 
   const { getRootProps, getRadioProps } = useRadioGroup({
@@ -103,5 +103,3 @@ const RadioCard: React.FC<any> = ({ children, isDisabled, ...props }) => {
     </Box>
   )
 }
-
-export default ProjectFeeSelection

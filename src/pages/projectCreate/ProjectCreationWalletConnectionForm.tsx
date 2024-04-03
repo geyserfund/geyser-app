@@ -39,7 +39,7 @@ import { lightModeColors } from '../../styles'
 import { LndNodeType } from '../../types'
 import { WalletConnectionDetails } from '../projectDashboard/components'
 import { NodeAdditionModal, WalletConnectionOptionInfoBox } from './components'
-import ProjectFeeSelection from './components/ProjectFeeSelection'
+import { ProjectFeeSelection } from './components/ProjectFeeSelection'
 import {
   ConnectionOption,
   LightingWalletForm,

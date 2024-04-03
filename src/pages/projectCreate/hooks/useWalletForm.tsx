@@ -64,7 +64,7 @@ export type WalletForm = {
   isLightningAddressInValid: boolean
 }
 
-const DEFAULT_FEE_PERCENTAGE = 0.02
+const DEFAULT_FEE_PERCENTAGE = 0.04
 const DEFAULT_LIGHTNING_FEE_PERCENTAGE = 0.04
 
 export const useWalletForm = ({
