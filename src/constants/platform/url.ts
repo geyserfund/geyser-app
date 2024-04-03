@@ -148,7 +148,7 @@ export const LogoNameNostr = 'https://storage.googleapis.com/geyser-projects-med
 
 // Geyser Notion Links
 
-export const GrantsFAQUrl = 'https://geyser.notion.site/About-Geyser-Grants-925d6b2adc1a4043b70d2835ecfebdde?pvs=4'
+export const GrantsFAQUrl = 'https://guide.geyser.fund/geyser-docs/product-features/geyser-grants'
 export const LearnAboutCrowdfundingUrl =
   'https://geyser.notion.site/Crowdfunding-Resources-134d19c1214741a7bae5d0bf9b8c8463'
 export const GeyserProhibitedItemsUrl = 'https://geyser.notion.site/Prohibited-items-a67b8e1e050d433ca747a3522833a7f3'
@@ -157,7 +157,10 @@ export const GrantApplicationDetailsUrl =
   'https://geyser.notion.site/About-Geyser-Grants-925d6b2adc1a4043b70d2835ecfebdde'
 
 export const WalletCreationFindOutMoreUrl =
-  'https://geyser.notion.site/About-Geyser-Grants-925d6b2adc1a4043b70d2835ecfebdde?pvs=4'
+  'https://guide.geyser.fund/geyser-docs/product-features/launch-a-project/connect-your-lightning-node'
+
+export const GeyserEmailVerificationDocUrl =
+  'https://guide.geyser.fund/geyser-docs/product-features/edit-your-project/verify-your-email'
 
 // External website Links
 
@@ -194,6 +197,10 @@ export const MegaphoneUrl = 'https://storage.googleapis.com/geyser-projects-medi
 
 export const MilestonesFlagUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/milestone.png'
 
+export const NotFoundPageImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/404-page-not-found.png'
+
+export const NotAuthorizedImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/403-not-authorized.png'
+
 // GRANTS
 
 export const Grant3AnnouncementImageUrl =
@@ -203,9 +210,6 @@ export const Grant3AnnouncementTwitterUrl = 'https://twitter.com/geyserfund/stat
 export const Grant2AnnouncementImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/grant-2-announcement.png'
 export const Grant2AnnouncementTwitterUrl = 'https://twitter.com/geyserfund/status/1628842072802312193?s=20'
-
-export const GeyserEmailVerificationDocUrl =
-  'https://guide.geyser.fund/geyser-docs/product-features/update-your-project/email-verification'
 
 // PLATFORMS
 

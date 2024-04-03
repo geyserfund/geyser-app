@@ -3,15 +3,7 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: [
-    'plugin:react/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'xo',
-    'plugin:jest-dom/recommended',
-    'plugin:react-hooks/recommended',
-    'plugin:testing-library/react',
-    'plugin:prettier/recommended',
-  ],
+  extends: ['plugin:react/recommended', 'plugin:@typescript-eslint/recommended', 'xo', 'plugin:jest-dom/recommended', 'plugin:react-hooks/recommended', 'plugin:testing-library/react', 'plugin:prettier/recommended', 'plugin:storybook/recommended'],
   plugins: [
     'react',
     'simple-import-sort',

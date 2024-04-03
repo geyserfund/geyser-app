@@ -69,6 +69,7 @@ export function SelectComponent<T, S extends boolean>({
       }),
       input: (provided: any, state: any) => ({
         ...provided,
+        color: colors.neutral[900],
         margin: '0px',
         padding: '0px',
       }),

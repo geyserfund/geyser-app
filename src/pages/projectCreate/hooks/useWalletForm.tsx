@@ -56,9 +56,16 @@ export type WalletForm = {
   isFormDirty: () => boolean
   connectionOption: ConnectionOption
   setConnectionOption: (connectionOption: ConnectionOption) => void
+  fee: {
+    value: number
+    setValue: (feePercentage: number) => void
+  }
   createWalletInput: CreateWalletInput | null
   isLightningAddressInValid: boolean
 }
+
+const DEFAULT_FEE_PERCENTAGE = 0.02
+const DEFAULT_LIGHTNING_FEE_PERCENTAGE = 0.04
 
 export const useWalletForm = ({
   defaultConnectionOption = ConnectionOption.LIGHTNING_ADDRESS,
@@ -82,6 +89,8 @@ export const useWalletForm = ({
   const [connectionOption, setConnectionOption] = useState<ConnectionOption>(defaultConnectionOption)
 
   const projectWallet = project?.wallets[0]
+
+  const [feePercentage, setFeePercentage] = useState<number>(projectWallet?.feePercentage ?? DEFAULT_FEE_PERCENTAGE)
 
   const debouncedLightningAddress = useDebounce(lightningAddressFormValue, 200)
 
@@ -136,6 +145,7 @@ export const useWalletForm = ({
           ...current,
           ...details,
         }))
+        setFeePercentage(projectWallet.feePercentage || 0.0)
       }
     }
   }, [projectWallet])
@@ -165,6 +175,7 @@ export const useWalletForm = ({
         },
         name: nodeInput.name,
         resourceInput,
+        feePercentage,
       }
     }
 
@@ -178,11 +189,12 @@ export const useWalletForm = ({
           lightningAddress: lightningAddressFormValue,
         },
         resourceInput,
+        feePercentage: DEFAULT_LIGHTNING_FEE_PERCENTAGE,
       }
     }
 
     return null
-  }, [project, nodeInput, connectionOption, lightningAddressFormValue])
+  }, [project, nodeInput, connectionOption, lightningAddressFormValue, feePercentage])
 
   const handleConfirm = useCallback(async () => {
     if (
@@ -256,12 +268,14 @@ export const useWalletForm = ({
       if (connectionOption === ConnectionOption.PERSONAL_NODE) {
         if (projectWallet.connectionDetails.__typename === WalletConnectDetails.LndConnectionDetailsPrivate) {
           const value =
+            `${projectWallet.name}` !== `${nodeInput?.name}` ||
             `${projectWallet.connectionDetails.grpcPort}` !== `${nodeInput?.grpc}` ||
             projectWallet.connectionDetails.hostname !== nodeInput?.hostname ||
             (projectWallet.connectionDetails.lndNodeType === LndNodeType.Voltage) !== nodeInput?.isVoltage ||
             projectWallet.connectionDetails.macaroon !== nodeInput?.invoiceMacaroon ||
             projectWallet.connectionDetails.pubkey !== nodeInput?.publicKey ||
-            `${projectWallet.connectionDetails.tlsCertificate || ''}` !== `${nodeInput?.tlsCert}`
+            `${projectWallet.connectionDetails.tlsCertificate || ''}` !== `${nodeInput?.tlsCert}` ||
+            `${projectWallet.feePercentage}` !== `${feePercentage}`
 
           return value
         }
@@ -273,7 +287,7 @@ export const useWalletForm = ({
     }
 
     return true
-  }, [connectionOption, lightningAddressFormValue, nodeInput, projectWallet])
+  }, [connectionOption, lightningAddressFormValue, nodeInput, projectWallet, feePercentage])
 
   const isLightningAddressInValid = useMemo(() => {
     if (
@@ -304,6 +318,10 @@ export const useWalletForm = ({
       isOpen,
       onClose,
       onOpen,
+    },
+    fee: {
+      value: feePercentage,
+      setValue: setFeePercentage,
     },
     isFormDirty,
     connectionOption,

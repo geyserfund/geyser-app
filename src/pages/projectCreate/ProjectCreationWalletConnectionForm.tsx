@@ -34,11 +34,19 @@ import {
   WalletOfSatoshiLightningAddressURL,
   WalletOfSatoshiUrl,
 } from '../../constants'
+import { LIGHTNING_FEE_PERCENTAGE } from '../../constants/platform/wallet'
 import { lightModeColors } from '../../styles'
 import { LndNodeType } from '../../types'
 import { WalletConnectionDetails } from '../projectDashboard/components'
 import { NodeAdditionModal, WalletConnectionOptionInfoBox } from './components'
-import { ConnectionOption, LightingWalletForm, LNAddressEvaluationState, NodeWalletForm } from './hooks/useWalletForm'
+import ProjectFeeSelection from './components/ProjectFeeSelection'
+import {
+  ConnectionOption,
+  LightingWalletForm,
+  LNAddressEvaluationState,
+  NodeWalletForm,
+  WalletForm,
+} from './hooks/useWalletForm'
 
 type Props = {
   readOnly?: boolean
@@ -47,6 +55,7 @@ type Props = {
   lightningAddress: LightingWalletForm
   node: NodeWalletForm
   setConnectionOption: (connectionOption: ConnectionOption) => void
+  fee: WalletForm['fee']
 }
 
 export const ProjectCreationWalletConnectionForm = ({
@@ -56,6 +65,7 @@ export const ProjectCreationWalletConnectionForm = ({
   lightningAddress,
   node,
   setConnectionOption,
+  fee,
 }: Props) => {
   const { t } = useTranslation()
 
@@ -130,7 +140,7 @@ export const ProjectCreationWalletConnectionForm = ({
                   <InputRightElement>{renderRightElementContent()}</InputRightElement>
                 </InputGroup>
               }
-              promoText={t('2% Geyser fee per transaction')}
+              promoText={t(`${LIGHTNING_FEE_PERCENTAGE}% Geyser fee per transaction`)}
               secondaryText={
                 <Trans
                   i18nKey={
@@ -184,7 +194,7 @@ export const ProjectCreationWalletConnectionForm = ({
                     <WalletConnectionDetails
                       projectWallet={{
                         connectionDetails: {
-                          grpcPort: Number(nodeInput.grpc),
+                          grpcPort: nodeInput.isVoltage ? 10009 : Number(nodeInput.grpc),
                           hostname: nodeInput.hostname,
                           lndNodeType: nodeInput.isVoltage ? LndNodeType.Voltage : LndNodeType.Geyser,
                           macaroon: nodeInput.invoiceMacaroon,
@@ -197,7 +207,7 @@ export const ProjectCreationWalletConnectionForm = ({
                   )}
                 </>
               }
-              promoText={t('No fee per transaction')}
+              promoText={t('No set fee per transaction')}
               secondaryText={
                 <span>
                   <Trans
@@ -213,7 +223,10 @@ export const ProjectCreationWalletConnectionForm = ({
                 </span>
               }
             >
-              <RenderSponsorImage url={VoltageExplainerPageForGeyserURL} imageUrl={VoltageUrl} />
+              <>
+                <RenderSponsorImage url={VoltageExplainerPageForGeyserURL} imageUrl={VoltageUrl} />
+                <ProjectFeeSelection readOnly={readOnly} value={fee.value} onChange={fee.setValue} />
+              </>
             </WalletConnectionOptionInfoBox>
           </AccordionPanel>
         </AccordionItem>

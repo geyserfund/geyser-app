@@ -1,6 +1,7 @@
 import { ListItem, OrderedList, UnorderedList, VStack } from '@chakra-ui/react'
 
 import { AppFooter } from '../../components/molecules'
+import { LIGHTNING_FEE_PERCENTAGE } from '../../constants/platform/wallet'
 
 export const TermsAndConditions = () => {
   return (
@@ -222,7 +223,8 @@ export const TermsAndConditions = () => {
                 change, we’ll announce that on our Site.{' '}
               </ListItem>
               <ListItem>
-                We will take a 2% fee from any contribution taking place if a project uses a lightning address.{' '}
+                We will take a {LIGHTNING_FEE_PERCENTAGE}% fee from any contribution taking place if a project uses a
+                lightning address.{' '}
               </ListItem>
               <ListItem>
                 Geyser will be taking fees from processing on-chain transactions to projects using lightning addresses.

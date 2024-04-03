@@ -3,3 +3,5 @@ export enum WalletConnectDetails {
   LndConnectionDetailsPublic = 'LndConnectionDetailsPublic',
   LndConnectionDetailsPrivate = 'LndConnectionDetailsPrivate',
 }
+
+export const LIGHTNING_FEE_PERCENTAGE = 4

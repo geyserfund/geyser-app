@@ -1,8 +1,8 @@
 import { useMutation } from '@apollo/client'
-import { Box, Input, Text, VStack } from '@chakra-ui/react'
+import { Box, Input, Link, Text, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { BsCheckLg } from 'react-icons/bs'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { CardLayout } from '../../../components/layouts'
 import { ButtonComponent, ImageWithReload, TextInputBox } from '../../../components/ui'
@@ -158,7 +158,7 @@ export const EntryPreview = () => {
     }
   }
 
-  if (loadingPosts || loading) {
+  if (loadingPosts || loading || !params.entryId) {
     return <Loader />
   }
 
@@ -268,7 +268,12 @@ export const EntryPreview = () => {
                 {hasCopiedSharingLink ? 'Copied Link!' : 'Share on Twitter'}
               </ButtonComponent>
 
-              <ButtonComponent as={Link} to={getPath('entry', params.entryId || '')} primary w="full">
+              <ButtonComponent
+                as={Link}
+                href={`${window.location.origin}${getPath('entry', params.entryId)}`}
+                primary
+                w="full"
+              >
                 Go to entry
               </ButtonComponent>
             </VStack>
