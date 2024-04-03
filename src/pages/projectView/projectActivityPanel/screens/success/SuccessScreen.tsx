@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { Button, CloseButton, Link as ChakraLink, VStack } from '@chakra-ui/react'
+import { Button, CloseButton, VStack } from '@chakra-ui/react'
 import ReactConfetti from 'react-confetti'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
