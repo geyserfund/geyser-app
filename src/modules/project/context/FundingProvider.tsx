@@ -1,11 +1,9 @@
-import { useAtom } from 'jotai'
 import { ScopeProvider } from 'jotai-scope'
 import React, { createContext, PropsWithChildren, useContext } from 'react'
 
 import { authUserAtom } from '../../../pages/auth/state'
 import { FundingInput, FundingTxFragment } from '../../../types'
 import { useFundingFlow } from '../funding/hooks/useFundingFlow'
-import { fundingTxEffect } from '../funding/state/fundingTxAtom'
 
 type FundingContextProps = {
   fundingRequestErrored: boolean
@@ -13,7 +11,7 @@ type FundingContextProps = {
   requestFunding: (input: FundingInput) => Promise<void>
   retryFundingFlow: () => void
   resetFundingFlow: () => void
-  fundingTx: FundingTxFragment
+  fundingTx: Omit<FundingTxFragment, 'funder'>
   error: string
   weblnErrored: boolean
   hasWebLN: boolean
@@ -27,8 +25,6 @@ export const useFundingContext = () => useContext(FundingContext)
 // It ensures there is a different scope for the atoms used in the funding flow
 
 export const FundingProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  useAtom(fundingTxEffect)
-
   // To enable access of atoms outside the scope, we need to add the atoms that need to be acessed outside the scope
   return (
     <ScopeProvider atoms={[authUserAtom]}>

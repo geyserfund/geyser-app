@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { getPath } from '../../../../../../../../constants'
+import { useAuthContext } from '../../../../../../../../context'
 import { QUERY_USER_BADGES } from '../../../../../../../../graphql/queries/badges'
 import { useFundCalc } from '../../../../../../../../helpers'
 import { lightModeColors } from '../../../../../../../../styles'
@@ -33,6 +34,7 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
   } = useProjectContext()
 
   const { fundingTx } = useFundingContext()
+  const { user } = useAuthContext()
 
   const { getTotalAmount } = useFundCalc(fundingState)
   const projectUrl = project ? `${window.location.origin}/project/${project.name}` : ''
@@ -77,15 +79,9 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
       />
 
       <VStack w="full" spacing="20px" pt={4}>
-        <SuccessImageComponent currentBadge={currentBadge} fundingTx={fundingTx} />
-        {fundingTx.funder.user?.id && currentBadge && (
-          <Button
-            variant="secondary"
-            as={Link}
-            size="sm"
-            to={getPath('userProfile', fundingTx.funder.user?.id)}
-            width="100%"
-          >
+        <SuccessImageComponent currentBadge={currentBadge} />
+        {user?.id && currentBadge && (
+          <Button variant="secondary" as={Link} size="sm" to={getPath('userProfile', user?.id)} width="100%">
             {t('See badge in Profile')}
           </Button>
         )}

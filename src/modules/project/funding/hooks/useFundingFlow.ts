@@ -3,12 +3,12 @@ import { useAtom } from 'jotai'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { ApolloErrors, fundingStages } from '../../../../constants'
-import { FundingInput, useFundingTxWithInvoiceStatusLazyQuery, useFundMutation } from '../../../../types'
+import { FundingInput, useFundingTxWithInvoiceStatusQuery, useFundMutation } from '../../../../types'
 import { toInt, useNotification } from '../../../../utils'
 import { validateFundingInput } from '../../utils/helpers'
 import { webln } from '../../utils/requestWebLNPayment'
 import { fundingFlowErrorAtom, fundingRequestErrorAtom, weblnErrorAtom } from '../state/errorAtom'
-import { useFundingStage } from '../state/fundingStagesAtom'
+import { fundingStageAtomEffect, useFundingStage } from '../state/fundingStagesAtom'
 import { useCheckFundingStatus, useFundingTx } from '../state/fundingTxAtom'
 import { useFundPollingAndSubscription } from '../state/pollingFundingTx'
 import { useFundSubscription } from './useFundSubscription'
@@ -50,20 +50,24 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
   const { pollingFundingTx, startPollingAndSubscription, clearPollingAndSubscription } = useFundPollingAndSubscription()
 
+  useAtom(fundingStageAtomEffect)
+
   useFundSubscription({
     projectId: fundingTx.projectId,
     fundingTxId: fundingTx.id,
     onComplete() {
-      getFundingStatus()
+      refetch()
     },
   })
 
   const checkFundingStatus = useCheckFundingStatus()
 
-  const [getFundingStatus] = useFundingTxWithInvoiceStatusLazyQuery({
+  const { refetch } = useFundingTxWithInvoiceStatusQuery({
     variables: {
       fundingTxID: toInt(fundingTx.id),
     },
+    notifyOnNetworkStatusChange: true,
+    skip: pollingFundingTx === 0,
     onCompleted(data) {
       if (data && data.fundingTx) {
         checkFundingStatus(data.fundingTx, ConfirmationMethod.Polling)

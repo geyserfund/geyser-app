@@ -1,14 +1,12 @@
 import { atom, useAtomValue, useSetAtom } from 'jotai'
-import { atomEffect } from 'jotai-effect'
 import { useCallback } from 'react'
 
-import { authUserAtom } from '../../../../pages/auth/state'
 import { FundingStatus, FundingTxFragment, FundingTxWithInvoiceStatusFragment, InvoiceStatus } from '../../../../types'
 import { findNextFundingStage } from '../../utils/helpers'
 import { fundingStageAtom } from './fundingStagesAtom'
 import { pollingFundingTxAtom, subscriptionActiveAtom } from './pollingFundingTx'
 
-const initialFunding: FundingTxFragment = {
+const initialFunding: Omit<FundingTxFragment, 'funder'> = {
   id: 0,
   uuid: '',
   invoiceId: '',
@@ -23,13 +21,6 @@ const initialFunding: FundingTxFragment = {
   paidAt: '',
   onChain: false,
   source: '',
-  funder: {
-    id: 0,
-    user: {
-      id: 0,
-      username: '',
-    },
-  },
 }
 
 export enum ConfirmationMethod {
@@ -39,23 +30,13 @@ export enum ConfirmationMethod {
 
 const fundingTxAtom = atom(initialFunding)
 
-// If user logs in in the middle of the funding flow, update the funder
-export const fundingTxEffect = atomEffect((get, set) => {
-  const value = get.peek(fundingTxAtom)
-  const user = get(authUserAtom)
-  if (user.id) {
-    set(fundingTxAtom, { ...value, funder: { ...value.funder, user } })
-  }
-})
-
 const fundingTxPartialUpdateAtom = atom(null, (get, set, partial: Partial<FundingTxFragment>) => {
   const currentFundingTx = get(fundingTxAtom)
   set(fundingTxAtom, { ...currentFundingTx, ...partial })
 })
 
 const resetFundingTxAtom = atom(null, (get, set) => {
-  const user = get(authUserAtom)
-  set(fundingTxAtom, { ...initialFunding, funder: { ...initialFunding.funder, user } })
+  set(fundingTxAtom, initialFunding)
 })
 
 const fundingStatusCheckAtom = atom(

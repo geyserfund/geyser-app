@@ -1,6 +1,8 @@
 import { atom, useAtom, useSetAtom } from 'jotai'
+import { atomEffect } from 'jotai-effect'
 
 import { findNextFundingStage } from '../../utils/helpers'
+import { pollingFundingTxAtom, subscriptionActiveAtom } from './pollingFundingTx'
 
 export enum FundingStages {
   loading = 'loading',
@@ -22,6 +24,14 @@ export const setNextFundingStageAtom = atom(null, (get, set) => {
   const currentState = get(fundingStageAtom)
   const nextState = findNextFundingStage(currentState)
   set(fundingStageAtom, nextState)
+})
+
+export const fundingStageAtomEffect = atomEffect((get, set) => {
+  const currentState = get(fundingStageAtom)
+  if (currentState !== FundingStages.started) {
+    set(subscriptionActiveAtom, false)
+    set(pollingFundingTxAtom, 0)
+  }
 })
 
 export const resetFundingStageAtom = atom(null, (get, set) => {

@@ -5,22 +5,19 @@ import { useTranslation } from 'react-i18next'
 import { BiCopy } from 'react-icons/bi'
 
 import { Body2, H3 } from '../../../../../../../../../components/typography'
-import { Badge, FundingTxFragment } from '../../../../../../../../../types'
+import { useAuthContext } from '../../../../../../../../../context'
+import { Badge } from '../../../../../../../../../types'
 import { useCustomTheme, useNotification } from '../../../../../../../../../utils'
-import { useProjectContext } from '../../../../../../../context'
+import { useFundingContext, useProjectContext } from '../../../../../../../context'
 import { AvatarElement } from '../../../../projectMainBody/components'
 import ContributionIcon from './ContributionIcon.svg'
 
-export const SuccessImageComponent = ({
-  currentBadge,
-  fundingTx,
-}: {
-  currentBadge?: Badge
-  fundingTx: FundingTxFragment
-}) => {
+export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
   const [copied, setCopied] = useState(false)
+  const { fundingTx } = useFundingContext()
+  const { user } = useAuthContext()
 
   const { project } = useProjectContext()
 
@@ -70,10 +67,7 @@ export const SuccessImageComponent = ({
     return ''
   }
 
-  const {
-    comment,
-    funder: { user },
-  } = fundingTx
+  const { comment } = fundingTx
 
   return (
     <>

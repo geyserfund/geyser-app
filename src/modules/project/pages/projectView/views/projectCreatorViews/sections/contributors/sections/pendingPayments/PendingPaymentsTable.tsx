@@ -9,6 +9,7 @@ import { RiTwitterXLine } from 'react-icons/ri'
 import { NostrSvgIcon } from '../../../../../../../../../../components/icons'
 import { Body2 } from '../../../../../../../../../../components/typography'
 import { AnonymousAvatar, LinkableAvatar } from '../../../../../../../../../../components/ui'
+import { ExternalAccountType } from '../../../../../../../../../../pages/auth'
 import {
   ExternalAccount,
   FundingConfirmInput,
@@ -16,7 +17,6 @@ import {
   GetFundingTxsOrderByInput,
   OrderByOptions,
 } from '../../../../../../../../../../types'
-import { ExternalAccountType } from '../../../../../../../../../../pages/auth'
 import { getUSD, OrderItems } from '../../components'
 import { AccordionListItem } from '../../components/AccordionListItem'
 import { TableData, TableWithAccordion } from '../../components/TableWithAccordion'
@@ -211,7 +211,7 @@ export const PendingPaymentsTable = ({
         },
       },
     ],
-    [t, handleUpdate],
+    [t, handleUpdate, setOrderBy, orderBy.createdAt],
   )
 
   const accordionContent = (fundingTx: FundingTxOrderFragment) => {
