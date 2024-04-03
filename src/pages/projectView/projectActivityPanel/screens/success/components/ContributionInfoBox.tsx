@@ -17,6 +17,7 @@ import { BsInfoCircle } from 'react-icons/bs'
 
 import { AnonymousAvatar, SatoshiAmount } from '../../../../../../components/ui'
 import { GEYSER_FEE_DISCLAIMER, noFeeProjects } from '../../../../../../constants'
+import { LIGHTNING_FEE_PERCENTAGE } from '../../../../../../constants/platform/wallet'
 import { useFundCalc } from '../../../../../../helpers'
 import { IFundForm } from '../../../../../../hooks'
 import { IBadge } from '../../../../../../interfaces'
@@ -223,7 +224,7 @@ export const ContributionInfoBox = ({
                 {isNoFees ? 0 : Math.round(contributionAmount * 0.02)}
               </SatoshiAmount>
               <Text fontSize="14px" textColor={'neutral.700'} fontWeight={'normal'}>
-                {isNoFees ? `(0%)` : `(2%)`}
+                {isNoFees ? `(0%)` : `(${LIGHTNING_FEE_PERCENTAGE}%)`}
               </Text>
             </HStack>
           </HStack>

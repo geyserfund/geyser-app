@@ -5,7 +5,7 @@ import { FRAGMENT_PROJECT_WALLET } from '../fragments/wallet'
 export const MUTATION_CREATE_WALLET = gql`
   ${FRAGMENT_PROJECT_WALLET}
   mutation CreateWallet($input: CreateWalletInput!) {
-    createWallet(input: $input) {
+    walletCreate(input: $input) {
       ...ProjectWallet
     }
   }
@@ -13,7 +13,7 @@ export const MUTATION_CREATE_WALLET = gql`
 
 export const MUTATION_UPDATE_WALLET = gql`
   mutation UpdateWallet($input: UpdateWalletInput!) {
-    updateWallet(input: $input) {
+    walletUpdate(input: $input) {
       id
       name
     }

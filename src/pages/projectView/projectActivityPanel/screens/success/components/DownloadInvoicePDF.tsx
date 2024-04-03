@@ -1,5 +1,6 @@
 import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 
+import { LIGHTNING_FEE_PERCENTAGE } from '../../../../../../constants/platform/wallet'
 import { neutralColorsLight, primaryColorsLight } from '../../../../../../styles'
 import { FundingTx, Project } from '../../../../../../types'
 
@@ -213,7 +214,7 @@ export const DownloadInvoicePDF = ({
             <Text style={styles.tableRegularFont}>Geyser fee:</Text>
             <View style={styles.geyserFeeFixed}>
               <Text style={styles.tableRegularFont}>
-                {Math.round(totalAmountInSats * 0.02).toLocaleString()} sats (2%)
+                {Math.round(totalAmountInSats * 0.02).toLocaleString()} sats ({LIGHTNING_FEE_PERCENTAGE}%)
               </Text>
             </View>
           </View>

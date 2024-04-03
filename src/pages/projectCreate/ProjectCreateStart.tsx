@@ -12,6 +12,7 @@ import {
   LaunchProjectKeyUrl,
   LaunchProjectWorldUrl,
 } from '../../constants'
+import { LIGHTNING_FEE_PERCENTAGE } from '../../constants/platform/wallet'
 import { useAuthContext } from '../../context'
 import { useMobileMode } from '../../utils'
 import { ExternalAccountType, SocialAccountType } from '../auth'
@@ -64,7 +65,7 @@ export const ProjectCreateStart = () => {
             {t('Update your community by writing Entries')}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectFeesUrl} alt="create project fees">
-            {t('Low 2% fees and no fees for node-runners')}
+            {t(`Low ${LIGHTNING_FEE_PERCENTAGE}% fees and no fees for node-runners`)}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectKeyUrl} alt="create project key">
             {t('Remain in control of your funds')}

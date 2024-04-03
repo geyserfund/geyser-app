@@ -167,7 +167,7 @@
   "Reference Code": "Reference Code",
   "Email": "Email",
   "Geyser fee": "Geyser fee",
-  "Geyser charges a 2% operational fee from projects using lightning addresses, and no fees from projects that run their own nodes.": "Geyser charges a 2% operational fee from projects using lightning addresses, and no fees from projects that run their own nodes.",
+  "Geyser charges a 4% operational fee from projects using lightning addresses, and no fees from projects that run their own nodes.": "Geyser charges a 4% operational fee from projects using lightning addresses, and no fees from projects that run their own nodes.",
   "See badge in Profile": "See badge in Profile",
   "Project link copied!": "Project link copied!",
   "Copy project link": "Copy project link",
@@ -283,7 +283,7 @@
   "Launch Project": "Launch Project",
   "Save As Draft": "Save As Draft",
   "Connect your lightning address": "Connect your lightning address",
-  "2% Geyser fee per transaction": "2% Geyser fee per transaction",
+  "4% Geyser fee per transaction": "4% Geyser fee per transaction",
   "<1>Lightning Addresses</1> are like an email address, but for your Bitcoin. You’ll receive all on-chain and lightning transactions directly to your lightning wallet. Get your own lightning access using these recommended apps.": "<1>Lightning Addresses</1> are like an email address, but for your Bitcoin. You’ll receive all on-chain and lightning transactions directly to your lightning wallet. Get your own lightning access using these recommended apps.",
   "Connect Your Node": "Connect Your Node",
   "No fee per transaction": "No fee per transaction",
@@ -320,7 +320,7 @@
   "Receive funds from on-chain & lightning": "Receive funds from on-chain & lightning",
   "Sell anything to reward your contributors": "Sell anything to reward your contributors",
   "Update your community by writing Entries": "Update your community by writing Entries",
-  "Low 2% fees and no fees for node-runners": "Low 2% fees and no fees for node-runners",
+  "Low 4% fees and no fees for node-runners": "Low 4% fees and no fees for node-runners",
   "Remain in control of your funds": "Remain in control of your funds",
   "You need to login before creating your project.": "You need to login before creating your project.",
   "If twitter button isn't opening a Twitter authentication page, make sure pop-ups are enabled in your browser's preferences.": "If twitter button isn't opening a Twitter authentication page, make sure pop-ups are enabled in your browser's preferences.",
@@ -420,7 +420,7 @@
   "Funding over $1000 can get you featured as a sponsor. Reach out to us at hello@geyser.fund to let us know.": "Funding over $1000 can get you featured as a sponsor. Reach out to us at hello@geyser.fund to let us know.",
   "Love what you guys are doing.": "Love what you guys are doing.",
   "Your <1>{{amount}}</1> contribution to Geyser Grants Round 2 was successful!": "Your <1>{{amount}}</1> contribution to Geyser Grants Round 2 was successful!",
-  "Bitcoin is signal, everything else is noise.\n          We created Geyser Grants to help broadcast more Bitcoin signal into the world.\n          That is, to accelerate the growth of the Bitcoin ecosystem by increasing Bitcoin awareness, enabling Bitcoin culture, and supporting needed development.\n          Through these grants we will be supporting Bitcoin educators, developers, entrepreneurs and creatives with the resources they need to bootstrap their initiatives.\n          We accept Bitcoin contributions for each individual grant and don't charge any grant operations fees - Geyser charges no fee to node-running projects, \n          and 2% to projects that use a lightning address. For more information see this doc.": "Bitcoin is signal, everything else is noise.\n          We created Geyser Grants to help broadcast more Bitcoin signal into the world.\n          That is, to accelerate the growth of the Bitcoin ecosystem by increasing Bitcoin awareness, enabling Bitcoin culture, and supporting needed development.\n          Through these grants we will be supporting Bitcoin educators, developers, entrepreneurs and creatives with the resources they need to bootstrap their initiatives.\n          We accept Bitcoin contributions for each individual grant and don't charge any grant operations fees - Geyser charges no fee to node-running projects, \n          and 2% to projects that use a lightning address. For more information see this doc.",
+  "Bitcoin is signal, everything else is noise.\n          We created Geyser Grants to help broadcast more Bitcoin signal into the world.\n          That is, to accelerate the growth of the Bitcoin ecosystem by increasing Bitcoin awareness, enabling Bitcoin culture, and supporting needed development.\n          Through these grants we will be supporting Bitcoin educators, developers, entrepreneurs and creatives with the resources they need to bootstrap their initiatives.\n          We accept Bitcoin contributions for each individual grant and don't charge any grant operations fees. For more information see this doc.": "Bitcoin is signal, everything else is noise.\n          We created Geyser Grants to help broadcast more Bitcoin signal into the world.\n          That is, to accelerate the growth of the Bitcoin ecosystem by increasing Bitcoin awareness, enabling Bitcoin culture, and supporting needed development.\n          Through these grants we will be supporting Bitcoin educators, developers, entrepreneurs and creatives with the resources they need to bootstrap their initiatives.\n          We accept Bitcoin contributions for each individual grant and don't charge any grant operations fees. For more information see this doc.",
   "More Information": "More Information",
   "Grant Winners!": "Grant Winners!",
   "See all Grants": "See all Grants",
@@ -524,7 +524,7 @@
   "Keep control": "Keep control",
   "Funds are exchanged peer-to-peer and go straight into your wallet. Geyser doesn’t custody and cannot freeze funds.": "Funds are exchanged peer-to-peer and go straight into your wallet. Geyser doesn’t custody and cannot freeze funds.",
   "Super low fees": "Super low fees",
-  "If you run your own node, Geyser is free to use. Otherwise, we charge a 2% fee on transactions (5% lower than other crowdfunding platforms out there).": "If you run your own node, Geyser is free to use. Otherwise, we charge a 2% fee on transactions (5% lower than other crowdfunding platforms out there).",
+  "If you run your own node, Geyser is free to use. Otherwise, we charge a 4% fee on transactions (5% lower than other crowdfunding platforms out there).": "If you run your own node, Geyser is free to use. Otherwise, we charge a 4% fee on transactions (5% lower than other crowdfunding platforms out there).",
   "Ongoing grants": "Ongoing grants",
   "Over 100 projects have earned funds through our grants": "Over 100 projects have earned funds through our grants",
   "Be found easily": "Be found easily",
@@ -903,8 +903,8 @@
    "Sharing on social media helps you reach more people and get closer to achieving your goals":"Sharing on social media helps you reach more people and get closer to achieving your goals",
    "Your project is in draft mode. Click launch to get it out into the world!":"Your project is in draft mode. Click launch to get it out into the world!",
    "Use Entries to share updates and engage with your community in your own way Use Entries to share updates and engage with your community in your own way":"Use Entries to share updates and engage with your community in your own way Use Entries to share updates and engage with your community in your own way",
-   "Add Entry":"Add Entry"
-
-
-
+   "Add Entry":"Add Entry",
+   "Support Geyser":"Support Geyser",
+   "Geyser provides you with a platform to showcase and amplify your project. Consider giving some value back to us so we can keep improving our product.":"Geyser provides you with a platform to showcase and amplify your project. Consider giving some value back to us so we can keep improving our product.",
+   "Choose Geyser split per transaction":"Choose Geyser split per transaction"
 }
