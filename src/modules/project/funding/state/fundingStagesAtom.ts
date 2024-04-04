@@ -1,7 +1,7 @@
 import { atom, useAtom, useSetAtom } from 'jotai'
 import { atomEffect } from 'jotai-effect'
 
-import { findNextFundingStage } from '../../utils/helpers'
+import { findNextFundingStage } from '../utils/helpers'
 import { pollingFundingTxAtom, subscriptionActiveAtom } from './pollingFundingTx'
 
 export enum FundingStages {

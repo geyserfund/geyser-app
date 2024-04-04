@@ -2,7 +2,7 @@ import { atom, useAtomValue, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
 import { FundingStatus, FundingTxFragment, FundingTxWithInvoiceStatusFragment, InvoiceStatus } from '../../../../types'
-import { findNextFundingStage } from '../../utils/helpers'
+import { findNextFundingStage } from '../utils/helpers'
 import { fundingStageAtom } from './fundingStagesAtom'
 import { pollingFundingTxAtom, subscriptionActiveAtom } from './pollingFundingTx'
 

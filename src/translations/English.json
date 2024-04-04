@@ -908,5 +908,8 @@
    "Invoice":"Invoice",
    "Support Geyser":"Support Geyser",
    "Geyser provides you with a platform to showcase and amplify your project. Consider giving some value back to us so we can keep improving our product.":"Geyser provides you with a platform to showcase and amplify your project. Consider giving some value back to us so we can keep improving our product.",
-   "Choose Geyser split per transaction":"Choose Geyser split per transaction"
+   "Choose Geyser split per transaction":"Choose Geyser split per transaction",
+   "Lightning":"Lightning",
+   "Onchain":"Onchain"
+
 }
