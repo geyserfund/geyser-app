@@ -20,14 +20,16 @@ import { Trans, useTranslation } from 'react-i18next'
 import { FaCheck } from 'react-icons/fa'
 
 import { Body2, Caption } from '../../../components/typography'
-import { fundingStages, MAX_FUNDING_AMOUNT_USD } from '../../../constants'
+import { MAX_FUNDING_AMOUNT_USD } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { useBTCConverter } from '../../../helpers'
-import { useFormState, useFundingFlow } from '../../../hooks'
+import { useFormState } from '../../../hooks'
 import { FormStateError } from '../../../interfaces'
+import { FundingProvider, useFundingContext } from '../../../modules/project/context/FundingProvider'
+import { FundingStages, useFundingStage } from '../../../modules/project/funding/state'
+import { QRCodeSection } from '../../../modules/project/pages/projectView/views/projectActivityPanel/screens'
 import { FundingInput, FundingResourceType, USDCents, useProjectByNameOrIdQuery } from '../../../types'
 import { toInt, useNotification } from '../../../utils'
-import { QRCodeSection } from '../../projectView/projectActivityPanel/screens'
 import { GRANTS_PROJECT_NAME } from '../constants'
 
 const defaultModalHeader = 'Contribute'
@@ -52,12 +54,12 @@ interface Props {
   grantProjectName?: string
 }
 
-export const GrantsContributeModal = ({ grantProjectName }: Props) => {
+export const GrantsContributeModalContent = ({ grantProjectName }: Props) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
   const { user } = useAuthContext()
   const { getSatoshisFromUSDCents } = useBTCConverter()
-  const fundingFlow = useFundingFlow()
+
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [modalHeader, setModalHeader] = useState(defaultModalHeader)
@@ -86,17 +88,19 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
     },
   })
 
-  const { fundState, fundingTx, gotoNextStage, resetFundingFlow, requestFunding } = fundingFlow
+  const { fundingStage, setNextFundingStage } = useFundingStage()
+
+  const { fundingTx, resetFundingFlow, requestFunding } = useFundingContext()
 
   useEffect(() => {
     setFormError({})
   }, [state])
 
   useEffect(() => {
-    if (fundState === fundingStages.completed) {
+    if (fundingStage === FundingStages.completed) {
       setModalHeader('Contribution Successful')
     }
-  }, [fundState])
+  }, [fundingStage])
 
   const handleClose = () => {
     resetFundingFlow()
@@ -273,13 +277,13 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
     )
   }
 
-  const qrSection = () => <QRCodeSection fundingFlow={fundingFlow} />
+  const qrSection = () => <QRCodeSection />
 
   const renderModalBody = () => {
-    switch (fundState) {
-      case fundingStages.started:
+    switch (fundingStage) {
+      case FundingStages.started:
         return qrSection()
-      case fundingStages.completed:
+      case FundingStages.completed:
         return completedScreen()
       default:
         return contributionForm()
@@ -292,7 +296,7 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
         variant="primary"
         px={12}
         onClick={() => {
-          gotoNextStage()
+          setNextFundingStage()
           onOpen()
         }}
       >
@@ -311,6 +315,14 @@ export const GrantsContributeModal = ({ grantProjectName }: Props) => {
         </Modal>
       )}
     </>
+  )
+}
+
+export const GrantsContributeModal = ({ grantProjectName }: Props) => {
+  return (
+    <FundingProvider>
+      <GrantsContributeModalContent grantProjectName={grantProjectName} />
+    </FundingProvider>
   )
 }
 

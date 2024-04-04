@@ -767,7 +767,6 @@
   "Reward Name": "Reward Name",
   "Limited Edition (skip if no limit)": "Limited Edition (skip if no limit)",
   "Currency": "Currency",
-  "Price (USD)": "Price (USD)",
   "Describe the item you would like to sell": "Describe the item you would like to sell",
   "Estimated Delivery Date": "Estimated Delivery Date",
   "Includes Shipping": "Includes Shipping",
@@ -904,7 +903,13 @@
    "Your project is in draft mode. Click launch to get it out into the world!":"Your project is in draft mode. Click launch to get it out into the world!",
    "Use Entries to share updates and engage with your community in your own way Use Entries to share updates and engage with your community in your own way":"Use Entries to share updates and engage with your community in your own way Use Entries to share updates and engage with your community in your own way",
    "Add Entry":"Add Entry",
+   "No rewards are selected":"No rewards are selected",
+   "Sold Out":"Sold Out",
+   "Invoice":"Invoice",
    "Support Geyser":"Support Geyser",
    "Geyser provides you with a platform to showcase and amplify your project. Consider giving some value back to us so we can keep improving our product.":"Geyser provides you with a platform to showcase and amplify your project. Consider giving some value back to us so we can keep improving our product.",
-   "Choose Geyser split per transaction":"Choose Geyser split per transaction"
+   "Choose Geyser split per transaction":"Choose Geyser split per transaction",
+   "Lightning":"Lightning",
+   "Onchain":"Onchain"
+
 }

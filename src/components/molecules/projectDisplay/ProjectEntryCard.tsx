@@ -7,7 +7,7 @@ import { BsHeartFill } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
-import { AvatarElement } from '../../../pages/projectView/projectMainBody/components'
+import { AvatarElement } from '../../../modules/project/pages/projectView/views/projectMainBody/components'
 import { EntryForProjectFragment, EntryStatus } from '../../../types/generated/graphql'
 import { getShortAmountLabel, toInt } from '../../../utils'
 import { CardLayout } from '../../layouts'

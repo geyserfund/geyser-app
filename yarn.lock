@@ -13509,6 +13509,16 @@ jose@^4.11.4:
   resolved "https://registry.npmjs.org/jose/-/jose-4.13.1.tgz"
   integrity sha512-MSJQC5vXco5Br38mzaQKiq9mwt7lwj2eXpgpRyQYNHYt2lq1PjkWa7DLXX0WVcQLE9HhMh3jPiufS7fhJf+CLQ==
 
+jotai-effect@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/jotai-effect/-/jotai-effect-0.6.0.tgz#80418f8a8be17342a4cdc93f3cf8e723db16f8ff"
+  integrity sha512-PCewL5ThH3MXYI6+sQwvkk3o+gje4K1qw2YnyqjRVnZbIxqX3zHZv11JXqXosRkT8p3a51gd3pLv7+cBfyXz7A==
+
+jotai-scope@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/jotai-scope/-/jotai-scope-0.5.1.tgz#a0eee96435262ff195901c420ca55b411639d8ef"
+  integrity sha512-GKaqtCj1Hv36nyl63PVm+s5jo+hQqz+wAb81iqA8VuUXp5ot4eXGOZt4Hc66lFZMP0N/yEOISMlazprmDI6kFA==
+
 jotai@^2.6.4:
   version "2.6.4"
   resolved "https://registry.yarnpkg.com/jotai/-/jotai-2.6.4.tgz#a68a76f0e5cd2b614afae7112cfc52a77dbfe038"

@@ -10,10 +10,10 @@ import { ErrorBoundary } from './ErrorBoundary'
 import { renderPrivateRoute } from './PrivateRoute'
 
 const Grants = () => import('../../pages/grants')
-const ProjectLaunch = () => import('../../pages/projectCreate')
+const ProjectLaunch = () => import('../../modules/project/pages/projectCreate')
 const Entry = () => import('../../pages/entry')
-const ProjectDashboard = () => import('../../pages/projectDashboard')
-const Project = () => import('../../pages/projectView')
+const ProjectDashboard = () => import('../../modules/project/pages/projectDashboard')
+const Project = () => import('../../modules/project/pages/projectView')
 const ProfilePage = () => import('../../modules/profile/pages/profilePage/Profile')
 const ProfileSettingsPage = () => import('../../modules/profile/pages/profileSettings/ProfileSettings')
 const Badges = () => import('../../pages/badges/BadgesPage')

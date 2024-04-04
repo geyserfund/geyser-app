@@ -1,8 +1,8 @@
 import { Box, HStack, Icon, Skeleton, SkeletonCircle, SkeletonText, Tooltip, VStack } from '@chakra-ui/react'
 
+import { SubscribeButton } from '../../modules/project/pages/projectView/views/projectActivityPanel/screens/info/components'
+import { AvatarElement } from '../../modules/project/pages/projectView/views/projectMainBody/components'
 import { FundingStatWithFollow, FundingStatWithFollowProps } from '../../pages/landing/components/FundingStatWithFollow'
-import { SubscribeButton } from '../../pages/projectView/projectActivityPanel/screens/info/components'
-import { AvatarElement } from '../../pages/projectView/projectMainBody/components'
 import { EntryForLandingPageFragment, ProjectForLandingPageFragment } from '../../types'
 import { H3 } from '../typography'
 import {
