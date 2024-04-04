@@ -8,7 +8,7 @@ import { useNavContext } from '../../../context/nav'
 import { useFundingFormState, UseFundingFormStateReturn } from '../../../hooks'
 import { useProjectState } from '../../../hooks/graphqlState'
 import { useModal } from '../../../hooks/useModal'
-import { ProjectFragment, ProjectMilestone, UserMeFragment } from '../../../types'
+import { ProjectFragment, ProjectMilestone, useProjectUnplublishedEntriesQuery, UserMeFragment } from '../../../types'
 import { MilestoneAdditionModal } from '../pages/projectView/views/projectMainBody/components'
 import { ProjectCreatorModal } from '../pages/projectView/views/projectNavigation/components/ProjectCreatorModal'
 
@@ -118,6 +118,21 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
             return Number(ownerInfo.user.id || -1)
           }) || [],
       })
+    },
+  })
+
+  useProjectUnplublishedEntriesQuery({
+    variables: {
+      where: { name: project?.name },
+    },
+    skip: !project || !isProjectOwner,
+    onCompleted(data) {
+      if (data.projectGet && updateProject) {
+        updateProject({
+          ...data.projectGet,
+          entries: project ? [...project.entries, ...data.projectGet.entries] : data.projectGet.entries,
+        })
+      }
     },
   })
 

@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { BsInfoCircle } from 'react-icons/bs'
 
 import { AnonymousAvatar, SatoshiAmount } from '../../../../../../../../../components/ui'
-import { GEYSER_FEE_DISCLAIMER, noFeeProjects } from '../../../../../../../../../constants'
+import { GEYSER_FEE_DISCLAIMER, LIGHTNING_FEE_PERCENTAGE, noFeeProjects } from '../../../../../../../../../constants'
 import { useFundCalc } from '../../../../../../../../../helpers'
 import { IFundForm } from '../../../../../../../../../hooks'
 import { IBadge } from '../../../../../../../../../interfaces'
@@ -223,7 +223,7 @@ export const ContributionInfoBox = ({
                 {isNoFees ? 0 : Math.round(contributionAmount * 0.02)}
               </SatoshiAmount>
               <Text fontSize="14px" textColor={'neutral.700'} fontWeight={'normal'}>
-                {isNoFees ? `(0%)` : `(2%)`}
+                {isNoFees ? `(0%)` : `(${LIGHTNING_FEE_PERCENTAGE}%)`}
               </Text>
             </HStack>
           </HStack>
@@ -262,7 +262,7 @@ export const ContributionInfoBox = ({
             fontSize={'16px'}
             width="100%"
             onClick={() => {
-              if (copy == false) {
+              if (copy === false) {
                 copyTextToClipboard(`${window.location.origin}/project/${project.name}`)
                 setCopy(true)
                 setTimeout(() => {

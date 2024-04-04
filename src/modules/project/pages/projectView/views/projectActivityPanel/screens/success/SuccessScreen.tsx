@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { Button, CloseButton, Link as ChakraLink, VStack } from '@chakra-ui/react'
+import { Button, CloseButton, VStack } from '@chakra-ui/react'
 import ReactConfetti from 'react-confetti'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -37,7 +37,6 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
   const { user } = useAuthContext()
 
   const { getTotalAmount } = useFundCalc(fundingState)
-  const projectUrl = project ? `${window.location.origin}/project/${project.name}` : ''
 
   const { data } = useQuery<{ userBadges: UserBadge[] }>(QUERY_USER_BADGES, {
     variables: { input: { where: { fundingTxId: fundingTx.id } } },
@@ -102,15 +101,7 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
           showGeyserFee={false}
         />
 
-        <Button
-          as={ChakraLink}
-          href={projectUrl}
-          variant="secondary"
-          textDecoration={'none'}
-          size="sm"
-          w="full"
-          _hover={{ textDecoration: 'none' }}
-        >
+        <Button variant="secondary" size="sm" w="full" onClick={onCloseClick}>
           {t('Back to project')}
         </Button>
       </VStack>

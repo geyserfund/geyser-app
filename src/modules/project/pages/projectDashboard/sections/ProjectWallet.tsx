@@ -1,16 +1,17 @@
 import { Button, Link, useDisclosure, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { Link as ReactLink, useNavigate } from 'react-router-dom'
 
 import { Body2 } from '../../../../../components/typography'
-import { getPath, GeyserEmailVerificationDocUrl, WalletConnectDetails } from '../../../../../constants'
+import { getPath, GeyserEmailVerificationDocUrl, PathName, WalletConnectDetails } from '../../../../../constants'
 import { useAuthContext } from '../../../../../context'
 import { VerifyYourEmail } from '../../../../../pages/otp'
 import {
   MfaAction,
   OtpResponseFragment,
   ProjectStatus,
+  UpdateWalletInput,
   useCreateWalletMutation,
   useUpdateWalletMutation,
   Wallet,
@@ -39,7 +40,7 @@ export const ProjectWallet = () => {
   const handleNext = () => {
     if (!project) return
 
-    if (project.status === ProjectStatus.Draft && createWalletInput) {
+    if (!isEdit && project.status === ProjectStatus.Draft && createWalletInput) {
       createWallet({ variables: { input: createWalletInput } })
       return
     }
@@ -60,6 +61,7 @@ export const ProjectWallet = () => {
     setConnectionOption,
     createWalletInput,
     isLightningAddressInValid,
+    fee,
   } = useWalletForm({
     defaultConnectionOption: projectWallet
       ? projectWallet.connectionDetails.__typename === WalletConnectDetails.LightningAddressConnectionDetails
@@ -79,8 +81,8 @@ export const ProjectWallet = () => {
       })
     },
     onCompleted(data) {
-      if (data.createWallet) {
-        updateProject({ wallets: [data.createWallet] })
+      if (data.walletCreate) {
+        updateProject({ wallets: [data.walletCreate] })
         toast({
           status: 'success',
           title: 'Wallet created successfully!',
@@ -108,20 +110,26 @@ export const ProjectWallet = () => {
   })
 
   const handleWalletUpdate = async (otp: number, otpData: OtpResponseFragment) => {
+    let input: UpdateWalletInput = {
+      id: projectWallet?.id,
+      name: createWalletInput?.name,
+      lndConnectionDetailsInput: createWalletInput?.lndConnectionDetailsInput,
+      lightningAddressConnectionDetailsInput: createWalletInput?.lightningAddressConnectionDetailsInput,
+      twoFAInput: {
+        OTP: {
+          otp,
+          otpVerificationToken: otpData.otpVerificationToken,
+        },
+      },
+    }
+
+    if (connectionOption === ConnectionOption.PERSONAL_NODE) {
+      input = { ...input, feePercentage: createWalletInput?.feePercentage }
+    }
+
     updateWallet({
       variables: {
-        input: {
-          name: createWalletInput?.name,
-          lndConnectionDetailsInput: createWalletInput?.lndConnectionDetailsInput,
-          lightningAddressConnectionDetailsInput: createWalletInput?.lightningAddressConnectionDetailsInput,
-          id: projectWallet?.id,
-          twoFAInput: {
-            OTP: {
-              otp,
-              otpVerificationToken: otpData.otpVerificationToken,
-            },
-          },
-        },
+        input,
       },
     })
   }
@@ -140,8 +148,6 @@ export const ProjectWallet = () => {
     })
   }
 
-  console.log('checking project, and isedit', project, isEdit)
-
   const isReadOnly = !user.isEmailVerified && (!isEdit ? project?.status !== ProjectStatus.Draft : true)
 
   return (
@@ -150,14 +156,16 @@ export const ProjectWallet = () => {
         <Body2 color="neutral.600">
           <Trans
             i18nKey={
-              "The project wallet can only be changed by the project creator with a verified email, for security reasons. You can verify your email in your Profile's Settings. <0>Go to Profile Settings</0>"
+              'To edit your wallet, you must verify your email address for security reasons. You can do this in your <0> profile settings </0> <1>  Learn more in the Guide. </1> '
             }
           >
-            {
-              "The project wallet can only be changed by the project creator with a verified email, for security reasons. You can verify your email in your Profile's Settings. "
-            }
+            {'To edit your wallet, you must verify your email address for security reasons. You can do this in your '}
+            <ReactLink to={getPath('userProfileSettings', PathName.userId)} style={{ textDecoration: 'underline' }}>
+              profile settings
+            </ReactLink>
+            {'. '}
             <Link href={GeyserEmailVerificationDocUrl} isExternal>
-              Go to Profile Settings
+              Learn more in the Guide.
             </Link>
           </Trans>
         </Body2>
@@ -169,6 +177,7 @@ export const ProjectWallet = () => {
             node={node}
             connectionOption={connectionOption}
             setConnectionOption={setConnectionOption}
+            fee={fee}
           />
         )}
       </VStack>

@@ -11,6 +11,7 @@ import {
   LaunchProjectGiftUrl,
   LaunchProjectKeyUrl,
   LaunchProjectWorldUrl,
+  LIGHTNING_FEE_PERCENTAGE,
 } from '../../../../../constants'
 import { useAuthContext } from '../../../../../context'
 import { ExternalAccountType, SocialAccountType } from '../../../../../pages/auth'
@@ -58,13 +59,13 @@ export const ProjectCreateStart = () => {
             {t('Receive funds from on-chain & lightning')}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectGiftUrl} alt="create project gift">
-            {t('Sell rewards and perks for your project')}
+            {t('Sell anything to reward your contributors')}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectEntryUrl} alt="create project entry">
             {t('Update your community by writing Entries')}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectFeesUrl} alt="create project fees">
-            {t('Low 2% fees and no fees for node-runners')}
+            {t(`Low ${LIGHTNING_FEE_PERCENTAGE}% fees and no fees for node-runners`)}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectKeyUrl} alt="create project key">
             {t('Remain in control of your funds')}

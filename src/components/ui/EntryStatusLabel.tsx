@@ -33,7 +33,7 @@ export const EntryStatusLabel = ({
   return (
     <Stack direction={direction} alignItems="center">
       <BsFillXCircleFill fontSize={iconSize} color={'secondary.yellow'} />
-      <Text color={'secondary.yellow'} {...commonStyles}>
+      <Text color={'neutral.900'} {...commonStyles}>
         {t('DRAFT')}
       </Text>
     </Stack>

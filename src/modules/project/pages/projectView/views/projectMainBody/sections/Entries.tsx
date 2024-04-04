@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { Button, Center, Text, useDisclosure } from '@chakra-ui/react'
-import { forwardRef, useEffect, useState } from 'react'
+import { forwardRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -9,7 +9,7 @@ import { DeleteConfirmModal, ProjectEntryCard } from '../../../../../../../compo
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
 import { getPath } from '../../../../../../../constants'
 import { MUTATION_DELETE_ENTRY } from '../../../../../../../graphql/mutations'
-import { EntryForProjectFragment, useProjectUnplublishedEntriesLazyQuery } from '../../../../../../../types'
+import { EntryForProjectFragment } from '../../../../../../../types'
 import { isActive, isDraft, toInt, useMobileMode, useNotification } from '../../../../../../../utils'
 import { truthyFilter } from '../../../../../../../utils/array'
 import { useProjectContext } from '../../../../../context'
@@ -19,27 +19,7 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
   const location = useLocation()
   const isMobile = useMobileMode()
 
-  const { project, isProjectOwner, updateProject } = useProjectContext()
-
-  const [fetchUnpublishedEntries] = useProjectUnplublishedEntriesLazyQuery({
-    variables: {
-      where: { name: project?.name },
-    },
-    onCompleted(data) {
-      if (data.projectGet && updateProject) {
-        updateProject({
-          ...data.projectGet,
-          entries: project ? [...project.entries, ...data.projectGet.entries] : data.projectGet.entries,
-        })
-      }
-    },
-  })
-
-  useEffect(() => {
-    if (isProjectOwner) {
-      fetchUnpublishedEntries()
-    }
-  }, [fetchUnpublishedEntries, isProjectOwner])
+  const { project, isProjectOwner } = useProjectContext()
 
   if (!project || !project.entries.length) {
     return null

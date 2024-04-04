@@ -36,5 +36,3 @@ caddy/certificate/root.crt
 
 *storybook.log
 .app.env
-
-*.env~

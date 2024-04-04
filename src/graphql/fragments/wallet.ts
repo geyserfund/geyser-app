@@ -4,6 +4,7 @@ export const FRAGMENT_PROJECT_WALLET = gql`
   fragment ProjectWallet on Wallet {
     id
     name
+    feePercentage
     state {
       status
       statusCode
