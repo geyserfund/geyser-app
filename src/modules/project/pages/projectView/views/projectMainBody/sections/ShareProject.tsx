@@ -23,8 +23,6 @@ export const ShareProject = () => {
 
   const isTwitterAccount = hasTwitterAccount(user)
 
-  console.log('isTwitterAccount', isTwitterAccount)
-
   const [shareClosed, setShareClosed] = useState(localStorage.getItem(SHARE_PROJECT_CLOSED_STORAGE_KEY) === 'true')
 
   const [copied, setCopied] = useState(false)
@@ -42,6 +40,23 @@ export const ShareProject = () => {
   const handleCloseClick = () => {
     setShareClosed(true)
     localStorage.setItem(SHARE_PROJECT_CLOSED_STORAGE_KEY, 'true')
+  }
+
+  const handleTwitterShareClick = () => {
+    const projectLink = `${window.location.origin}/project/${project?.name}`
+    const tweets = [
+      `Check out my project in geyser: ${projectLink}`,
+      `🔥 We're on a mission to change the game and we need your help. Dive into our project on @geyserfund and let's make a difference. Are you in? ${projectLink}`,
+      `Dream with us! We're launching something incredible on @geyserfund and you're invited to be part of the journey. Join us! ${projectLink}`,
+      `✨ Big news! We've just launched our latest project on @geyserfund and we need YOUR help to make it a reality. Ready to make a difference? ${projectLink}`,
+      `💌 Join us in bringing our dream project to life on @geyserfund. Let's change things together! ${projectLink}`,
+      `🚨 Breaking news: We're shaking things up with our new project on @geyserfund! Check it out: ${projectLink} #BreakingNews`,
+      `🌟 We're transforming our dreams into reality with this project on @geyserfund. Your support matters: ${projectLink}`,
+      `🌍 Making a difference, one step at a time. Join our mission on @geyserfund and help us leave a lasting impact. Your support makes all the difference: ${projectLink} #MakeADifference`,
+    ]
+    const tweet = tweets[Math.floor(Math.random() * tweets.length)] || ''
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}`
+    window.open(twitterUrl, '_blank')
   }
 
   if (shareClosed) return null
@@ -81,6 +96,7 @@ export const ShareProject = () => {
               color="neutral.0"
               leftIcon={<RiTwitterXLine />}
               _hover={{ backgroundColor: 'neutral.300', color: 'neutral.1000' }}
+              onClick={handleTwitterShareClick}
             >
               {t('Post')}
             </Button>
