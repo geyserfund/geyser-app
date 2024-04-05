@@ -5,18 +5,25 @@ import { useTranslation } from 'react-i18next'
 import { PiLinkBold } from 'react-icons/pi'
 import { RiTwitterXLine } from 'react-icons/ri'
 
-import { CardLayout } from '../../../../../../../components/layouts'
-import { Body2, H3 } from '../../../../../../../components/typography'
-import { MegaphoneUrl } from '../../../../../../../constants'
-import { standardPadding } from '../../../../../../../styles'
-import { ProjectStatus } from '../../../../../../../types'
-import { useProjectContext } from '../../../../../context'
+import { CardLayout } from '../../../../components/layouts'
+import { Body2, H3 } from '../../../../components/typography'
+import { MegaphoneUrl } from '../../../../constants'
+import { useAuthContext, useProjectContext } from '../../../../context'
+import { standardPadding } from '../../../../styles'
+import { ProjectStatus } from '../../../../types'
+import { hasTwitterAccount } from '../../../../utils'
 
 const SHARE_PROJECT_CLOSED_STORAGE_KEY = 'shareProjectClosed'
 
 export const ShareProject = () => {
   const { t } = useTranslation()
   const { project, isProjectOwner } = useProjectContext()
+
+  const { user } = useAuthContext()
+
+  const isTwitterAccount = hasTwitterAccount(user)
+
+  console.log('isTwitterAccount', isTwitterAccount)
 
   const [shareClosed, setShareClosed] = useState(localStorage.getItem(SHARE_PROJECT_CLOSED_STORAGE_KEY) === 'true')
 
@@ -67,16 +74,17 @@ export const ShareProject = () => {
         <H3>{t('Share your project')}</H3>
         <Body2>{t('Sharing on social media helps you reach more people and get closer to achieving your goals')}</Body2>
         <HStack w="full" alignItems="start">
-          <Button
-            w="full"
-            backgroundColor="neutral.1000"
-            color="neutral.0"
-            // X twitter icon
-            leftIcon={<RiTwitterXLine />}
-            _hover={{ backgroundColor: 'neutral.300', color: 'neutral.1000' }}
-          >
-            {t('Post')}
-          </Button>
+          {isTwitterAccount && (
+            <Button
+              w="full"
+              backgroundColor="neutral.1000"
+              color="neutral.0"
+              leftIcon={<RiTwitterXLine />}
+              _hover={{ backgroundColor: 'neutral.300', color: 'neutral.1000' }}
+            >
+              {t('Post')}
+            </Button>
+          )}
           <Button
             variant={copied ? 'secondary' : 'primary'}
             leftIcon={<PiLinkBold />}
