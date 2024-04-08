@@ -72,6 +72,7 @@ export const ActivityBrief = (props: StackProps) => {
         where: {
           projectId: toInt(project?.id),
           confirmed: true,
+          anonymous: false,
         },
         orderBy: {
           amountFunded: OrderByOptions.Desc,
@@ -97,10 +98,7 @@ export const ActivityBrief = (props: StackProps) => {
           funder &&
           funder.confirmedAt &&
           funder.user &&
-          funder.user.externalAccounts.find(
-            (account) =>
-              account.accountType === ExternalAccountType.nostr || account.accountType === ExternalAccountType.twitter,
-          )
+          funder.user.externalAccounts.find((account) => account.accountType !== ExternalAccountType.lightning)
         ) {
           socialFilteredFunders.push(funder)
         }
@@ -256,7 +254,7 @@ export const ActivityBrief = (props: StackProps) => {
           size="lg"
           variant="transparent"
         >
-          <Text fontWeight={500}>{t('Contributors')}</Text>
+          <Text fontWeight={500}>{t('Contributorsss')}</Text>
           <HStack ml={1} spacing={0} alignItems="start">
             {!funderLoading
               ? latestFunders.length > 0
