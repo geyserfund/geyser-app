@@ -1,13 +1,12 @@
-import { Box, Image, Text, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import WarningIcon from '../../../../../../../../assets/warning.svg'
 import { getBip21Invoice } from '../../../../../../../../utils/lightning/bip21'
 import { useFundingContext } from '../../../../../../context'
 import { PaymentMethodSelection } from './components/PaymentMethodSelection'
 import { useIsLightingMethodAtom } from './states/paymentMethodAtom'
-import { LightningPayment } from './views/lightning/LightningPayment'
+import { LightningQR } from './views/lightning/LightningQR'
 import { OnchainBoltz } from './views/onchain/OnChainBoltz'
 
 export const QRCodeImage = () => {
@@ -34,7 +33,7 @@ export const QRCodeImage = () => {
   }, [fundingTx, fundingTx.paymentRequest, fundingTx.address])
 
   return (
-    <VStack flexWrap="wrap" maxWidth="100%">
+    <VStack flexWrap="wrap" width="100%">
       <PaymentMethodSelection />
       {/* {!onChainAddress && !isLightning ? (
         <Box borderRadius={'12px'} borderWidth={'2px'} padding={'2px'}>
@@ -48,7 +47,7 @@ export const QRCodeImage = () => {
       ) : ( */}
       <>
         {isLightning ? (
-          <LightningPayment lightningInvoice={lightningInvoice} />
+          <LightningQR lightningInvoice={lightningInvoice} />
         ) : (
           <OnchainBoltz onChainAddress={onChainAddress} />
         )}

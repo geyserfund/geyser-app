@@ -1,7 +1,8 @@
 import { ArrowBackIcon } from '@chakra-ui/icons'
-import { Button, HStack, Input, VStack } from '@chakra-ui/react'
+import { Button, HStack, IconButton, Input, VStack } from '@chakra-ui/react'
 import { MouseEventHandler } from 'react'
 import { useTranslation } from 'react-i18next'
+import { PiCaretLeftBold } from 'react-icons/pi'
 
 import { SectionTitle } from '../../../../../../../../../components/ui'
 import { FieldContainer } from '../../../../../../../../../forms/components/FieldContainer'
@@ -26,9 +27,13 @@ export const FundingFormUserInfoSection = ({ onBackClick }: Props) => {
   return (
     <VStack alignItems="start" width="100%" flexGrow={1} px={1} spacing={5}>
       <HStack>
-        <Button onClick={onBackClick} variant="transparent">
-          <ArrowBackIcon />
-        </Button>
+        <IconButton
+          aria-label="back-icon"
+          size="sm"
+          icon={<PiCaretLeftBold />}
+          onClick={onBackClick}
+          variant="neutral"
+        />
         <SectionTitle>{t('Checkout')}</SectionTitle>
       </HStack>
 

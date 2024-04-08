@@ -7,13 +7,13 @@ import Loader from '../../../../../../../../../components/ui/Loader'
 export const WaitingForPayment = () => {
   const { t } = useTranslation()
   return (
-    <Box marginBottom={4} fontSize={'10px'}>
+    <Box fontSize={'10px'}>
       <HStack spacing={5}>
         <Loader size="md" />
         <Text color={'neutral.900'} fontWeight={400}>
           {t('Waiting for payment')}
         </Text>
-        <WarningIcon />
+        <WarningIcon fontSize="20px" />
       </HStack>
     </Box>
   )

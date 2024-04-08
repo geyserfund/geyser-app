@@ -1,6 +1,14 @@
 import { atom, useAtom, useSetAtom } from 'jotai'
 import { atomEffect } from 'jotai-effect'
 
+import {
+  paymentMethodAtom,
+  PaymentMethods,
+} from '../../pages/projectView/views/projectActivityPanel/screens/qr/states/paymentMethodAtom'
+import {
+  OnChainStatus,
+  onchainStatusAtom,
+} from '../../pages/projectView/views/projectActivityPanel/screens/qr/views/onchain/states/onChainStatus'
 import { findNextFundingStage } from '../utils/helpers'
 import { pollingFundingTxAtom, subscriptionActiveAtom } from './pollingFundingTx'
 
@@ -26,11 +34,14 @@ export const setNextFundingStageAtom = atom(null, (get, set) => {
   set(fundingStageAtom, nextState)
 })
 
+// This effect is used to reset the subscriptionActiveAtom, pollingFundingTxAtom, paymentMethodAtom, and onchainStatusAtom
 export const fundingStageAtomEffect = atomEffect((get, set) => {
   const currentState = get(fundingStageAtom)
   if (currentState !== FundingStages.started) {
     set(subscriptionActiveAtom, false)
     set(pollingFundingTxAtom, 0)
+    set(paymentMethodAtom, PaymentMethods.lightning)
+    set(onchainStatusAtom, OnChainStatus.prompt)
   }
 })
 

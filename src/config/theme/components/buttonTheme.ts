@@ -189,8 +189,6 @@ export const buttonTheme: ComponentStyleConfig = {
   },
   // default values for 'size', 'variant' and 'colorScheme'
   defaultProps: {
-    size: '',
-    variant: '',
-    colorScheme: '',
+    size: 'md',
   },
 }
