@@ -23,7 +23,7 @@ export const ProjectCreateStory = () => {
 
   const [updateProject, { loading: updateLoading }] = useUpdateProjectMutation({
     onCompleted() {
-      navigate(getPath('launchProjectWithNode', project?.id))
+      navigate(getPath('launchProjectRewards', project?.id))
     },
     onError() {
       toast({
@@ -67,7 +67,7 @@ export const ProjectCreateStory = () => {
       continueButton={<FormContinueButton {...nextProps} flexGrow={1} />}
       onBackClick={onBackCLick}
       height="100%"
-      title={<TitleWithProgressBar title={t('Story')} subtitle={t('Create a project')} index={3} length={4} />}
+      title={<TitleWithProgressBar title={t('Story')} subtitle={t('Create a project')} index={3} length={5} />}
     >
       <ProjectStoryForm
         autoFocus

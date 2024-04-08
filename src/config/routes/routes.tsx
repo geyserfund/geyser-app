@@ -82,6 +82,13 @@ export const platformRoutes: RouteObject[] = [
     },
   },
   {
+    path: getPath('launchProjectRewards', PathName.projectId),
+    async lazy() {
+      const ProjectCreateRewards = await ProjectLaunch().then((m) => m.ProjectCreateRewards)
+      return { element: renderPrivateRoute(ProjectCreateRewards) }
+    },
+  },
+  {
     path: getPath('privateProjectLaunch'),
     async lazy() {
       const ProjectCreate = await ProjectLaunch().then((m) => m.ProjectCreate)

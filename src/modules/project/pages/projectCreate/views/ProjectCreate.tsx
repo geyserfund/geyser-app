@@ -125,7 +125,7 @@ export const ProjectCreate = () => {
             title={t('Project description')}
             subtitle={t('Create a project')}
             index={1}
-            length={4}
+            length={5}
           />
         }
       >
