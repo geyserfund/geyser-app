@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { SectionTitle } from '../../../../../../../../../components/ui'
 import { FieldContainer } from '../../../../../../../../../forms/components/FieldContainer'
 import { useProjectContext } from '../../../../../../../context'
-import { ProjectFundingFormCommentField } from '../../../../projectMainBody/components'
+import { ProjectFundingFormCommentField } from '../components/ProjectFundingFormCommentField'
 
 type Props = {
   onBackClick: MouseEventHandler<HTMLButtonElement>

@@ -1,18 +1,12 @@
 import { Text, VStack } from '@chakra-ui/react'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import Loader from '../../../../../../../../components/ui/Loader'
 import { FundingStatus, InvoiceStatus } from '../../../../../../../../types/generated/graphql'
-import { getBip21Invoice } from '../../../../../../../../utils/lightning/bip21'
 import { useFundingContext } from '../../../../../../context/FundingProvider'
 import { useRefreshInvoice } from '../../../../../../funding/hooks/useRefreshInvoice'
 import { FundingErrorView, GeneratingInvoice, InvoiceErrorView, QRCodeImage } from './components'
-
-export enum PaymentMethods {
-  LIGHTNING = 'LIGHTNING',
-  ONCHAIN = 'ONCHAIN',
-}
 
 enum QRDisplayState {
   REFRESHING = 'REFRESHING',
@@ -28,11 +22,6 @@ enum QRDisplayState {
 
 export const QRCodeSection = () => {
   const { t } = useTranslation()
-
-  const [lightningInvoice, setLightningInvoice] = useState<string>('')
-  const [onchainAddress, setOnchainAddress] = useState<string>('')
-
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethods>(PaymentMethods.LIGHTNING)
 
   const { invoiceRefreshErrored, invoiceRefreshLoading, refreshFundingInvoice } = useRefreshInvoice()
 
@@ -68,33 +57,9 @@ export const QRCodeSection = () => {
     weblnErrored,
   ])
 
-  useEffect(() => {
-    const { id, paymentRequest, address, amount } = fundingTx
-
-    if (id === 0) {
-      setOnchainAddress('')
-      setLightningInvoice('')
-      // setFallbackAddress('')
-      return
-    }
-
-    // setFallbackAddress(getBip21Invoice(amount, address, paymentRequest))
-    setOnchainAddress(getBip21Invoice(amount, address))
-    setLightningInvoice(paymentRequest || '')
-  }, [fundingTx, fundingTx.paymentRequest, fundingTx.address, refreshFundingInvoice])
-
   switch (qrDisplayState) {
     case QRDisplayState.AWAITING_PAYMENT:
-      return (
-        <QRCodeImage
-          {...{
-            paymentMethod,
-            setPaymentMethod,
-            lightningInvoice,
-            onchainAddress,
-          }}
-        />
-      )
+      return <QRCodeImage />
 
     case QRDisplayState.AWAITING_PAYMENT_WEB_LN:
       return (

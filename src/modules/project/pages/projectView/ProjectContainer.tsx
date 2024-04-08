@@ -12,7 +12,7 @@ import { FundingStages, useFundingStage } from '../../funding/state'
 import { ProjectCreateDraftModal } from './components/ProjectCreateDraftModal'
 import { ProjectCreateLaunchedModal } from './components/ProjectCreateLaunchedModal'
 import { ProjectMobileBottomNavigation } from './views/projectNavigation/components/ProjectMobileBottomNavigation'
-import { ProjectNavigation } from './views/projectNavigation/components/ProjectNavigation'
+import { ProjectNavigation } from './views/projectNavigation/ProjectNavigation'
 
 function useQuery() {
   const { search } = useLocation()

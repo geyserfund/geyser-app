@@ -71,6 +71,7 @@ export const ErrorBoundary = () => {
         })
       }
     } else {
+      console.log('checking error', e)
       captureException(e, {
         tags: { 'Router Boundary Error': 'true' },
       })

@@ -4,14 +4,14 @@ import { IGif } from '@giphy/js-types'
 import { useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
-import { GifIcon } from '../../../../../../../components/icons'
-import { TextArea } from '../../../../../../../components/ui'
-import { useAuthContext } from '../../../../../../../context'
-import { useModal } from '../../../../../../../hooks/useModal'
-import { LogoutConfirmationModal } from '../../../../../../../pages/auth/components/LogoutConfirmationModal'
-import { useAuthModal } from '../../../../../../../pages/auth/hooks'
-import { AvatarElement } from './AvatarElement'
-import { GifModal } from './GifModal'
+import { GifIcon } from '../../../../../../../../../components/icons'
+import { TextArea } from '../../../../../../../../../components/ui'
+import { useAuthContext } from '../../../../../../../../../context'
+import { useModal } from '../../../../../../../../../hooks/useModal'
+import { LogoutConfirmationModal } from '../../../../../../../../../pages/auth/components/LogoutConfirmationModal'
+import { useAuthModal } from '../../../../../../../../../pages/auth/hooks'
+import { AvatarElement } from '../../../../projectMainBody/components/AvatarElement'
+import { GifModal } from '../../../../projectMainBody/components/GifModal'
 
 type Props = HTMLChakraProps<'div'> & {
   comment: string

@@ -1,7 +1,6 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
 import { AuthContext } from '../context'
-import { useBTCConverter } from '../helpers'
 import { IRewardCount } from '../interfaces'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency, ShippingDestination } from '../types/generated/graphql'
 
@@ -40,7 +39,6 @@ export type UseFundingFormStateReturn = ReturnType<typeof useFundingFormState>
 
 export const useFundingFormState = ({ rewards, rewardCurrency }: UseFundStateProps) => {
   const { user, isAnonymous } = useContext(AuthContext)
-  const { getUSDCentsAmount } = useBTCConverter()
 
   const [needsShipping, setNeedsShipping] = useState(false)
 
@@ -139,7 +137,7 @@ export const useFundingFormState = ({ rewards, rewardCurrency }: UseFundStatePro
         }
       })
     },
-    [getUSDCentsAmount, rewards],
+    [rewards],
   )
 
   const resetForm = useCallback(() => {

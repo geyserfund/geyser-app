@@ -3,12 +3,13 @@ import { useRef } from 'react'
 
 import { MAX_FUNDING_AMOUNT_USD } from '../../../../../../../../constants'
 import { useFundCalc } from '../../../../../../../../helpers/fundingCalculation'
+import { standardPadding } from '../../../../../../../../styles'
 import { ProjectRewardForCreateUpdateFragment } from '../../../../../../../../types/generated/graphql'
 import { isProjectAnException, useMobileMode, useNotification, validateEmail } from '../../../../../../../../utils'
 import { useProjectContext } from '../../../../../../context'
-import { FundingFormSection } from './components/FundingFormSection'
-import { FundingFormUserInfoSection } from './components/FundingFormUserInfoSection'
 import { ProjectFundingSummaryCard } from './components/ProjectFundingSummaryCard'
+import { FundingFormSection } from './views/FundingFormSection'
+import { FundingFormUserInfoSection } from './views/FundingFormUserInfoSection'
 
 type Props = {
   handleCloseButton: () => void
@@ -27,8 +28,6 @@ export const FundingFormScreen = ({ handleCloseButton, handleFund, rewards, name
 
   const { getTotalAmount } = useFundCalc(formState)
   const { toast } = useNotification()
-
-  const hasRewards = rewards && rewards.length > 0
 
   const handleSubmit = {
     contribution() {
@@ -93,15 +92,15 @@ export const FundingFormScreen = ({ handleCloseButton, handleFund, rewards, name
 
   return (
     <VStack
-      paddingY={isMobile ? '10px' : '20px'}
       width="100%"
       height="100%"
       position="relative"
       alignItems="flex-start"
       backgroundColor="neutral.0"
+      spacing={0}
       marginBottom={isMobile && summaryCardRef.current ? `${summaryCardRef.current.offsetHeight}px` : undefined}
     >
-      <Box width="100%" overflowY="auto" flex={1} px={{ base: '10px', lg: '20px' }}>
+      <Box width="100%" overflowY="auto" flex={1} px={{ base: '10px', lg: '20px' }} pt={standardPadding}>
         {formState.step === 'contribution' ? (
           <FundingFormSection onBackClick={handleCloseButton} />
         ) : (
@@ -109,16 +108,14 @@ export const FundingFormScreen = ({ handleCloseButton, handleFund, rewards, name
         )}
       </Box>
       <VStack
-        backgroundColor="neutral.0"
+        backgroundColor="neutral.50"
         position={isMobile ? 'fixed' : 'relative'}
         bottom={0}
-        px={{ base: '10px', lg: '20px' }}
-        paddingBottom="5px"
         width={'100%'}
+        spacing={0}
       >
-        {hasRewards && (
-          <Divider borderTopWidth="3px" borderBottomWidth="0px" orientation="horizontal" marginTop="0px !important" />
-        )}
+        <Divider borderTopWidth="2px" borderBottomWidth="0px" orientation="horizontal" marginTop="0px !important" />
+
         <ProjectFundingSummaryCard ref={summaryCardRef} onSubmit={handleSubmit[formState.step]} />
       </VStack>
     </VStack>

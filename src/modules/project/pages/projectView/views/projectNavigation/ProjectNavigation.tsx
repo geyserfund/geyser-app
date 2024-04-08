@@ -20,15 +20,16 @@ import {
   HomeNavIcon2,
   InsightsNavIcon,
   RewardGiftIcon,
-} from '../../../../../../../components/icons'
-import { MilestoneIcon } from '../../../../../../../components/icons/svg'
-import { GeyserLogoIcon } from '../../../../../../../components/icons/svg/GeyserLogoIcon'
-import { SkeletonLayout } from '../../../../../../../components/layouts'
-import { Body1, Caption } from '../../../../../../../components/typography'
-import { getPath, PathName } from '../../../../../../../constants'
-import { MobileViews, useProjectContext } from '../../../../../context'
-import { useProjectDetails } from '../hooks/useProjectDetails'
-import { useProjectSideNavAtom } from '../sideNav'
+} from '../../../../../../components/icons'
+import { MilestoneIcon } from '../../../../../../components/icons/svg'
+import { GeyserLogoIcon } from '../../../../../../components/icons/svg/GeyserLogoIcon'
+import { SkeletonLayout } from '../../../../../../components/layouts'
+import { Body1, Caption } from '../../../../../../components/typography'
+import { getPath, PathName } from '../../../../../../constants'
+import { MobileViews, useProjectContext } from '../../../../context'
+import { standardProjectPageSideMargin } from '../../constants'
+import { useProjectDetails } from './hooks/useProjectDetails'
+import { useProjectSideNavAtom } from './sideNav'
 
 export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
   const { t } = useTranslation()
@@ -127,10 +128,10 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
 
   return (
     <VStack
-      mx={{ base: '10px', lg: 4 }}
+      ml={standardProjectPageSideMargin}
       pt={5}
       pb={2}
-      maxWidth={{ base: 'auto', lg: '100px', xl: '250px' }}
+      maxWidth={{ base: 'auto', lg: '100px', xl: '220px' }}
       width="100%"
       height="100%"
       alignItems="end"
@@ -138,7 +139,8 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
     >
       <VStack
         height="100%"
-        width={{ base: '190px', lg: '100px', xl: '200px' }}
+        mx="10px"
+        width={{ base: '190px', lg: '80px', xl: '200px' }}
         justifyContent={{ base: 'space-between', lg: 'flex-start' }}
       >
         <VStack width="100%">
