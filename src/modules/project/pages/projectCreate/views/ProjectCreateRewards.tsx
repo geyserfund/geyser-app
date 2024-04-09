@@ -15,25 +15,34 @@ import { FormContinueButton } from '../components/FormContinueButton'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout'
 import { RewardTemplate } from '../components/RewardTemplate'
 
-const rewardTemplates: { title: string; type: 'membership' | 'gift' | 'tickets' | 'nostr_badge'; image: string }[] = [
+const rewardTemplates: {
+  title: string
+  type: 'membership' | 'gift' | 'tickets' | 'nostr_badge'
+  description: string
+  image: string
+}[] = [
   {
     title: 'Membership',
     type: 'membership',
+    description: 'Allow your users to be part of your membership club',
     image: '/icons/192-maskable.png',
   },
   {
     title: 'Gift',
     type: 'gift',
+    description: 'Give your contributors a gift',
     image: '/icons/192-maskable.png',
   },
   {
     title: 'Tickets',
     type: 'tickets',
+    description: 'Give your contributors a ticket to your event',
     image: '/icons/192-maskable.png',
   },
   {
     title: 'Nostr badge',
     type: 'nostr_badge',
+    description: 'Give your contributors a nostr badge',
     image: '/icons/192-maskable.png',
   },
 ]
