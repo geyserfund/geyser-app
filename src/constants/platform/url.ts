@@ -162,6 +162,9 @@ export const WalletCreationFindOutMoreUrl =
 export const GeyserEmailVerificationDocUrl =
   'https://guide.geyser.fund/geyser-docs/product-features/edit-your-project/verify-your-email'
 
+export const GeyserRewardsGuideLink =
+  'https://guide.geyser.fund/geyser-docs/guides/step-by-step-tutorials/how-to-leverage-the-power-of-rewards'
+
 // External website Links
 
 export const commonMarkdownUrl = 'https://commonmark.org/help/'

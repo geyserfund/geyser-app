@@ -1,5 +1,5 @@
 import { AddIcon } from '@chakra-ui/icons'
-import { Box, Button, VStack } from '@chakra-ui/react'
+import { Box, Button, Link, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BiLeftArrowAlt } from 'react-icons/bi'
@@ -8,6 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
 import { Body1 } from '../../../../../components/typography'
 import { getPath } from '../../../../../constants'
+import { GeyserRewardsGuideLink } from '../../../../../constants/platform/url'
 import { useProjectByNameOrIdQuery } from '../../../../../types'
 import { ProjectProvider } from '../../../context'
 import { ProjectCreateReward } from '../../projectView/views/projectCreatorViews/sections/rewards/subviews/CreateReward/CreateReward'
@@ -122,10 +123,14 @@ export const ProjectCreateRewards = () => {
               <Body1 semiBold color="neutral.900">
                 {t('Create a reward')}
               </Body1>
+
               <Body1 fontSize="14px" color="neutral.500">
                 {t(
-                  'Rewards allow you to give something back to your contributors, from digital badges and physical products to sponsorships. Check out our guide on How to leverage the power of Rewards.',
+                  'Rewards allow you to give something back to your contributors, from digital badges and physical products to sponsorships. Check out our guide on ',
                 )}
+                <Link href={GeyserRewardsGuideLink} target="_blank" isExternal>
+                  {t('How to leverage the power of Rewards')}
+                </Link>
               </Body1>
               <Button
                 w="100%"
