@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../../../../../../../../constants'
 import { defaultProjectReward } from '../../../../../../../../../../defaults'
@@ -12,7 +12,10 @@ export const ProjectCreateReward = () => {
   const { t } = useTranslation()
   const { toast } = useNotification()
   const navigate = useNavigate()
+  const location = useLocation()
   const { project, updateProject } = useProjectContext()
+
+  const isLaunch = location.pathname.includes('launch')
 
   const [createReward, { loading: createRewardLoading }] = useProjectRewardCreateMutation({
     onCompleted(data) {
@@ -34,13 +37,13 @@ export const ProjectCreateReward = () => {
     },
   })
 
-  if (!project) {
+  if (!project && !isLaunch) {
     return null
   }
 
   return (
     <ProjectRewardForm
-      buttonText={t('Publish Reward')}
+      buttonText={isLaunch ? t('Save Reward') : t('Publish Reward')}
       titleText={t('Create Reward')}
       rewardSave={createReward}
       rewardSaving={createRewardLoading}

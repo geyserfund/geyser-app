@@ -1,5 +1,6 @@
 import { AddIcon } from '@chakra-ui/icons'
 import { Box, Button, VStack } from '@chakra-ui/react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -7,6 +8,8 @@ import TitleWithProgressBar from '../../../../../components/molecules/TitleWithP
 import { Body1 } from '../../../../../components/typography'
 import { getPath } from '../../../../../constants'
 import { useProjectByNameOrIdQuery } from '../../../../../types'
+import { ProjectProvider } from '../../../context'
+import { ProjectCreateReward } from '../../projectView/views/projectCreatorViews/sections/rewards/subviews/CreateReward/CreateReward'
 import { FormContinueButton } from '../components/FormContinueButton'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout'
 import { RewardTemplate } from '../components/RewardTemplate'
@@ -46,8 +49,14 @@ export const ProjectCreateRewards = () => {
 
   const project = data?.projectGet
 
+  const [showCreateReward, setShowCreateReward] = useState(false)
+
   const handleNext = () => {
     navigate(getPath('launchProjectWithNode', project?.id))
+  }
+
+  const handleCreateRewardClick = () => {
+    setShowCreateReward(true)
   }
 
   const handleBack = () => {
@@ -59,36 +68,47 @@ export const ProjectCreateRewards = () => {
   }
 
   return (
-    <ProjectCreateLayout
-      title={<TitleWithProgressBar title={t('Add Rewards')} subtitle={t('Create a project')} index={4} length={5} />}
-      continueButton={<FormContinueButton flexGrow={1} onClick={handleNext} />}
-      onBackClick={handleBack}
-      minW={720}
-      height="80%"
-    >
-      <VStack spacing={8} width="100%" height="100%" gap={3}>
-        <Box width="100%" display={'flex'} flexDirection={'column'} gap={2}>
-          <Body1 semiBold color="neutral.900">
-            {t('Create a reward')}
-          </Body1>
-          <Body1 fontSize="14px" color="neutral.500">
-            {t(
-              'Rewards allow you to give something back to your contributors, from digital badges and physical products to sponsorships. Check out our guide on How to leverage the power of Rewards.',
-            )}
-          </Body1>
-          <Button w="100%" leftIcon={<AddIcon fontSize="10px" />} variant="primary">
-            {t('Create reward')}
-          </Button>
-        </Box>
-        <Body1 fontSize="14px" color="neutral.500">
-          {t('Or, use a reward template below')}
-        </Body1>
-        <Box width="100%" display={'flex'} flexDirection={'row'} gap={2}>
-          {rewardTemplates.map((reward) => (
-            <RewardTemplate key={reward.type} reward={reward} />
-          ))}
-        </Box>
-      </VStack>
-    </ProjectCreateLayout>
+    <ProjectProvider projectId={params.projectId || ''}>
+      <ProjectCreateLayout
+        title={<TitleWithProgressBar title={t('Add Rewards')} subtitle={t('Create a project')} index={4} length={5} />}
+        continueButton={<FormContinueButton flexGrow={1} onClick={handleNext} />}
+        onBackClick={handleBack}
+        minW={720}
+        height="80%"
+      >
+        {showCreateReward ? (
+          <ProjectCreateReward />
+        ) : (
+          <VStack spacing={8} width="100%" height="100%" gap={3}>
+            <Box width="100%" display={'flex'} flexDirection={'column'} gap={2}>
+              <Body1 semiBold color="neutral.900">
+                {t('Create a reward')}
+              </Body1>
+              <Body1 fontSize="14px" color="neutral.500">
+                {t(
+                  'Rewards allow you to give something back to your contributors, from digital badges and physical products to sponsorships. Check out our guide on How to leverage the power of Rewards.',
+                )}
+              </Body1>
+              <Button
+                w="100%"
+                leftIcon={<AddIcon fontSize="10px" />}
+                variant="primary"
+                onClick={handleCreateRewardClick}
+              >
+                {t('Create reward')}
+              </Button>
+            </Box>
+            <Body1 fontSize="14px" color="neutral.500">
+              {t('Or, use a reward template below')}
+            </Body1>
+            <Box width="100%" display={'flex'} flexDirection={'row'} gap={2}>
+              {rewardTemplates.map((reward) => (
+                <RewardTemplate key={reward.type} reward={reward} />
+              ))}
+            </Box>
+          </VStack>
+        )}
+      </ProjectCreateLayout>
+    </ProjectProvider>
   )
 }

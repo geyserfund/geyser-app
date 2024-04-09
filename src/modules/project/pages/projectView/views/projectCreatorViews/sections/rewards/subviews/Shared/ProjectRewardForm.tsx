@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { gql, useMutation, useQuery } from '@apollo/client'
 import { CloseIcon } from '@chakra-ui/icons'
 import { Button, Checkbox, HStack, IconButton, Select, Stack, Switch, Text, Tooltip, VStack } from '@chakra-ui/react'
@@ -5,7 +6,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BiInfoCircle } from 'react-icons/bi'
 import { RiArrowLeftSLine } from 'react-icons/ri'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../../../../../../../components/layouts'
 import {
@@ -53,6 +54,8 @@ export const ProjectRewardForm = ({
   const { t } = useTranslation()
   const { project, updateProject } = useProjectContext()
   const navigate = useNavigate()
+  const location = useLocation()
+  const isLaunch = location.pathname.includes('launch')
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
   const { toast } = useNotification()
 
@@ -316,7 +319,7 @@ export const ProjectRewardForm = ({
     })
   }
 
-  if (!project || isRewardCategoriesLoading) {
+  if ((!project || isRewardCategoriesLoading) && !isLaunch) {
     return null
   }
 
@@ -324,28 +327,34 @@ export const ProjectRewardForm = ({
     <VStack
       direction={{ base: 'column', lg: 'row' }}
       w="full"
-      pt={{ base: '10px', lg: '20px' }}
+      {...(isLaunch
+        ? {}
+        : {
+            pt: { base: '10px', lg: '20px' },
+            pb: { base: '80px', lg: '20px' },
+            px: { base: '10px', lg: '40px' },
+          })}
       backgroundColor={{ base: 'neutral.0', lg: 'inherit' }}
-      pb={{ base: '80px', lg: '20px' }}
-      px={{ base: '10px', lg: '40px' }}
       spacing={{ base: '10px', lg: '20px' }}
     >
-      <CardLayout h="auto" padding="30px 30px" minWidth="100%">
-        <Stack direction={'row'} align={'center'}>
-          <IconButton
-            size="sm"
-            background={'none'}
-            aria-label="twitter"
-            icon={<RiArrowLeftSLine fontSize="20px" />}
-            color={'neutral.700'}
-            onClick={() => {
-              navigate(-1)
-            }}
-          />
-          <Text fontSize="18px" fontWeight={600}>
-            {t(titleText)}
-          </Text>
-        </Stack>
+      <CardLayout h="auto" minWidth="100%" {...(isLaunch ? { border: 'none' } : { padding: '30px 30px' })}>
+        {!isLaunch && (
+          <Stack direction={'row'} align={'center'}>
+            <IconButton
+              size="sm"
+              background={'none'}
+              aria-label="twitter"
+              icon={<RiArrowLeftSLine fontSize="20px" />}
+              color={'neutral.700'}
+              onClick={() => {
+                navigate(-1)
+              }}
+            />
+            <Text fontSize="18px" fontWeight={600}>
+              {t(titleText)}
+            </Text>
+          </Stack>
+        )}
         <Stack direction={{ base: 'column', lg: 'row' }}>
           <FieldContainer title={t('Reward Name')}>
             <TextInputBox
@@ -393,7 +402,7 @@ export const ProjectRewardForm = ({
             </Select>
           </FieldContainer>
           <FieldContainer
-            title={`${t('Price')} (${project.rewardCurrency === RewardCurrency.Usdcent ? 'USD' : 'SATS'})`}
+            title={`${t('Price')} (${project?.rewardCurrency === RewardCurrency.Usdcent ? 'USD' : 'SATS'})`}
           >
             <TextInputBox
               placeholder={'150'}
@@ -418,8 +427,8 @@ export const ProjectRewardForm = ({
               }}
             >
               <option value="">{t('Select Category')}</option>
-              {rewardCategoriesData.projectRewardCategoriesGet &&
-                rewardCategoriesData.projectRewardCategoriesGet.map((category: string) => (
+              {rewardCategoriesData?.projectRewardCategoriesGet &&
+                rewardCategoriesData?.projectRewardCategoriesGet.map((category: string) => (
                   <option key={category} value={category}>
                     {category}
                   </option>
