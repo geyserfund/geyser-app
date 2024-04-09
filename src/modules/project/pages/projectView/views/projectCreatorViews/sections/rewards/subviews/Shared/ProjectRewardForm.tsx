@@ -563,11 +563,18 @@ export const ProjectRewardForm = ({
             ) : null}
           </FieldContainer>
         </VStack>
-        <Stack>
-          <Button display={{ base: 'block' }} variant="primary" onClick={handleConfirmReward} isLoading={rewardSaving}>
-            {buttonText}
-          </Button>
-        </Stack>
+        {!isLaunch && (
+          <Stack>
+            <Button
+              display={{ base: 'block' }}
+              variant="primary"
+              onClick={handleConfirmReward}
+              isLoading={rewardSaving}
+            >
+              {buttonText}
+            </Button>
+          </Stack>
+        )}
       </CardLayout>
       <UpdateCurrencyModal
         isOpen={isCurrencyChangeModalOpen}

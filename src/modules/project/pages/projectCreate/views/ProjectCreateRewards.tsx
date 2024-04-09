@@ -2,6 +2,7 @@ import { AddIcon } from '@chakra-ui/icons'
 import { Box, Button, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { BiLeftArrowAlt } from 'react-icons/bi'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
@@ -55,6 +56,10 @@ export const ProjectCreateRewards = () => {
     navigate(getPath('launchProjectWithNode', project?.id))
   }
 
+  const handleSaveReward = () => {
+    console.log('save reward')
+  }
+
   const handleCreateRewardClick = () => {
     setShowCreateReward(true)
   }
@@ -67,14 +72,38 @@ export const ProjectCreateRewards = () => {
     navigate(getPath('launchProjectStory', project?.id))
   }
 
+  const handleCancel = () => {
+    setShowCreateReward(false)
+  }
+
   return (
     <ProjectProvider projectId={params.projectId || ''}>
       <ProjectCreateLayout
         title={<TitleWithProgressBar title={t('Add Rewards')} subtitle={t('Create a project')} index={4} length={5} />}
-        continueButton={<FormContinueButton flexGrow={1} onClick={handleNext} />}
-        onBackClick={handleBack}
+        continueButton={
+          showCreateReward ? (
+            <Button flexGrow={1} variant="primary" onClick={handleSaveReward}>
+              {t('Save Reward')}
+            </Button>
+          ) : (
+            <FormContinueButton flexGrow={1} onClick={handleNext} />
+          )
+        }
+        backButton={
+          showCreateReward ? (
+            <Button
+              flexGrow={1}
+              variant="secondary"
+              onClick={handleCancel}
+              leftIcon={<BiLeftArrowAlt fontSize="25px" />}
+            >
+              {t('Cancel')}
+            </Button>
+          ) : undefined
+        }
+        onBackClick={showCreateReward ? handleCancel : handleBack}
         minW={720}
-        height="80%"
+        height="100%"
       >
         {showCreateReward ? (
           <ProjectCreateReward />

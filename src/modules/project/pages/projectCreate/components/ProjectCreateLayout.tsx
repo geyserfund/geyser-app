@@ -11,6 +11,7 @@ interface ProjectCreateLayoutProps extends Omit<ContainerProps, 'children' | 'ti
   children: ReactNode
   title: ReactNode
   continueButton?: ReactNode
+  backButton?: ReactNode
   onBackClick: () => void
 }
 
@@ -23,6 +24,7 @@ export const ProjectCreateLayout = ({
   onBackClick,
   title,
   continueButton = null,
+  backButton = null,
   ...props
 }: ProjectCreateLayoutProps) => {
   const { t } = useTranslation()
@@ -69,9 +71,13 @@ export const ProjectCreateLayout = ({
         bottom={{ base: '0px', lg: '-50px' }}
         alignSelf="center"
       >
-        <Button flexGrow={1} variant="secondary" onClick={onBackClick} leftIcon={<BiLeftArrowAlt fontSize="25px" />}>
-          {t('Back')}
-        </Button>
+        {backButton ? (
+          backButton
+        ) : (
+          <Button flexGrow={1} variant="secondary" onClick={onBackClick} leftIcon={<BiLeftArrowAlt fontSize="25px" />}>
+            {t('Back')}
+          </Button>
+        )}
         {continueButton}
       </HStack>
     </Container>

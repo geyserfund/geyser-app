@@ -43,7 +43,7 @@ export const ProjectCreateReward = () => {
 
   return (
     <ProjectRewardForm
-      buttonText={isLaunch ? t('Save Reward') : t('Publish Reward')}
+      buttonText={t('Publish Reward')}
       titleText={t('Create Reward')}
       rewardSave={createReward}
       rewardSaving={createRewardLoading}
