@@ -59,6 +59,7 @@ export const ProjectRewardForm = ({
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
   const { toast } = useNotification()
 
+  console.log('rewardData', rewardData)
   const {
     isOpen: isCurrencyChangeModalOpen,
     onClose: closeCurrencyChangeModal,

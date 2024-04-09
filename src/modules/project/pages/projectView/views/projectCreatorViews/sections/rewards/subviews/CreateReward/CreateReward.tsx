@@ -16,6 +16,7 @@ export const ProjectCreateReward = () => {
   const { project, updateProject } = useProjectContext()
 
   const isLaunch = location.pathname.includes('launch')
+  const category = location.state?.category
 
   const [createReward, { loading: createRewardLoading }] = useProjectRewardCreateMutation({
     onCompleted(data) {
@@ -39,6 +40,10 @@ export const ProjectCreateReward = () => {
 
   if (!project && !isLaunch) {
     return null
+  }
+
+  if (category) {
+    defaultProjectReward.category = category
   }
 
   return (

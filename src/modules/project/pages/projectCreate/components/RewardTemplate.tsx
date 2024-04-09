@@ -6,12 +6,13 @@ interface RewardTemplateProps {
   reward: {
     title: string
     image: string
-    type: 'membership' | 'gift' | 'tickets' | 'nostr_badge'
+    category: 'Membership' | 'Gift' | 'Ticket' | 'Nostr Badge'
     description: string
   }
+  onClick: () => void
 }
 
-export const RewardTemplate = ({ reward }: RewardTemplateProps) => {
+export const RewardTemplate = ({ reward, onClick }: RewardTemplateProps) => {
   return (
     <Box
       display="flex"
@@ -24,6 +25,12 @@ export const RewardTemplate = ({ reward }: RewardTemplateProps) => {
       borderColor="neutral.100"
       padding={2}
       width="100%"
+      transition="transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)"
+      _hover={{
+        transform: 'scale(1.05)',
+      }}
+      onClick={onClick}
+      cursor="pointer"
     >
       <Box
         display="flex"

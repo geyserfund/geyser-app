@@ -3,7 +3,7 @@ import { Box, Button, Link, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BiLeftArrowAlt } from 'react-icons/bi'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Outlet, useNavigate, useParams } from 'react-router-dom'
 
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
 import { Body1 } from '../../../../../components/typography'
@@ -18,31 +18,31 @@ import { RewardTemplate } from '../components/RewardTemplate'
 
 const rewardTemplates: {
   title: string
-  type: 'membership' | 'gift' | 'tickets' | 'nostr_badge'
+  category: 'Membership' | 'Gift' | 'Ticket' | 'Nostr Badge'
   description: string
   image: string
 }[] = [
   {
     title: 'Membership',
-    type: 'membership',
+    category: 'Membership',
     description: 'Allow your users to be part of your membership club',
     image: '/icons/192-maskable.png',
   },
   {
     title: 'Gift',
-    type: 'gift',
+    category: 'Gift',
     description: 'Give your contributors a gift',
     image: '/icons/192-maskable.png',
   },
   {
     title: 'Tickets',
-    type: 'tickets',
+    category: 'Ticket',
     description: 'Give your contributors a ticket to your event',
     image: '/icons/192-maskable.png',
   },
   {
     title: 'Nostr badge',
-    type: 'nostr_badge',
+    category: 'Nostr Badge',
     description: 'Give your contributors a nostr badge',
     image: '/icons/192-maskable.png',
   },
@@ -72,6 +72,12 @@ export const ProjectCreateRewards = () => {
 
   const handleCreateRewardClick = () => {
     setShowCreateReward(true)
+    navigate(getPath('launchProjectRewardsNew', project?.id))
+  }
+
+  const handleSelectRewardTemplate = (category: 'Membership' | 'Gift' | 'Ticket' | 'Nostr Badge') => {
+    setShowCreateReward(true)
+    navigate(getPath('launchProjectRewardsNew', project?.id), { state: { category } })
   }
 
   const handleBack = () => {
@@ -83,6 +89,7 @@ export const ProjectCreateRewards = () => {
   }
 
   const handleCancel = () => {
+    navigate(getPath('launchProjectRewards', project?.id))
     setShowCreateReward(false)
   }
 
@@ -116,7 +123,7 @@ export const ProjectCreateRewards = () => {
         height="100%"
       >
         {showCreateReward ? (
-          <ProjectCreateReward />
+          <Outlet />
         ) : (
           <VStack spacing={8} width="100%" height="100%" gap={3}>
             <Box width="100%" display={'flex'} flexDirection={'column'} gap={2}>
@@ -146,7 +153,11 @@ export const ProjectCreateRewards = () => {
             </Body1>
             <Box width="100%" display={'flex'} flexDirection={'row'} gap={2}>
               {rewardTemplates.map((reward) => (
-                <RewardTemplate key={reward.type} reward={reward} />
+                <RewardTemplate
+                  key={reward.category}
+                  reward={reward}
+                  onClick={() => handleSelectRewardTemplate(reward.category)}
+                />
               ))}
             </Box>
           </VStack>
