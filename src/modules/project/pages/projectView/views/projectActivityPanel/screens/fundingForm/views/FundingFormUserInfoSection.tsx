@@ -1,12 +1,10 @@
-import { ArrowBackIcon } from '@chakra-ui/icons'
-import { Button, HStack, IconButton, Input, VStack } from '@chakra-ui/react'
+import { Input, VStack } from '@chakra-ui/react'
 import { MouseEventHandler } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiCaretLeftBold } from 'react-icons/pi'
 
-import { SectionTitle } from '../../../../../../../../../components/ui'
 import { FieldContainer } from '../../../../../../../../../forms/components/FieldContainer'
 import { useProjectContext } from '../../../../../../../context'
+import { SectionTitleBlock } from '../../../components/SectionTitleBlock'
 import { ProjectFundingFormCommentField } from '../components/ProjectFundingFormCommentField'
 
 type Props = {
@@ -25,17 +23,8 @@ export const FundingFormUserInfoSection = ({ onBackClick }: Props) => {
     },
   } = useProjectContext()
   return (
-    <VStack alignItems="start" width="100%" flexGrow={1} px={1} spacing={5}>
-      <HStack>
-        <IconButton
-          aria-label="back-icon"
-          size="sm"
-          icon={<PiCaretLeftBold />}
-          onClick={onBackClick}
-          variant="neutral"
-        />
-        <SectionTitle>{t('Checkout')}</SectionTitle>
-      </HStack>
+    <VStack alignItems="start" width="100%" flexGrow={1} spacing={5}>
+      <SectionTitleBlock title={t('Checkout')} onBackClick={onBackClick} />
 
       {hasSelectedRewards ? (
         <>

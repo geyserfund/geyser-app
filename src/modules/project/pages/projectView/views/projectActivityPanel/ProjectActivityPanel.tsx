@@ -130,7 +130,8 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
 
     switch (fundingStage) {
       case FundingStages.initial:
-        return <InfoScreen />
+        return <QRScreen state={formState} project={project} handleCloseButton={handleQRCloseButton} />
+      // return <InfoScreen />
       case FundingStages.form:
         return (
           <FundingFormScreen

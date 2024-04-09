@@ -1,18 +1,19 @@
-import { HStack, Link, Text, VStack } from '@chakra-ui/layout'
-import { Button, CloseButton } from '@chakra-ui/react'
+import { Link, Text, VStack } from '@chakra-ui/layout'
+import { Button } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FaTelegramPlane } from 'react-icons/fa'
 
-import { SectionTitle } from '../../../../../../../../components/ui'
 import { GeyserTelegramUrl } from '../../../../../../../../constants'
 import { useFundCalc } from '../../../../../../../../helpers'
 import { IFundForm } from '../../../../../../../../hooks'
+import { standardPadding } from '../../../../../../../../styles'
 import { ProjectFragment, Satoshis, useFundingInvoiceCancelMutation } from '../../../../../../../../types'
 import { useMobileMode } from '../../../../../../../../utils'
 import { useFundingContext } from '../../../../../../context/FundingProvider'
 import { FundingStages, useFundingStage } from '../../../../../../funding/state'
-import { ContributionInfoBox, ContributionInfoBoxVersion } from '../success/components'
+import { SectionTitleBlock } from '../../components/SectionTitleBlock'
+import { ContributionInfoBox, ContributionInfoBoxVersion } from '../contributionInfo/ContributionInfoBox'
 import { QRCodeSection } from './QRCodeSection'
 
 type Props = {
@@ -46,23 +47,17 @@ export const QRScreen = ({ state, project, handleCloseButton }: Props) => {
 
   return (
     <VStack
-      padding={isMobile ? '10px 0px' : '10px 20px'}
       spacing="20px"
       width="100%"
       height="100%"
       overflowY="auto"
-      margin="10px 15px"
       display="flex"
       flexDirection="column"
       justifyContent="start"
       alignItems="center"
-      paddingX={5}
-      marginTop={2}
+      padding={standardPadding}
     >
-      <HStack justifyContent="space-between" width="100%">
-        <SectionTitle>{t('Invoice')}</SectionTitle>
-        <CloseButton onClick={handleCloseButton} />
-      </HStack>
+      <SectionTitleBlock title={t('Invoice')} onBackClick={handleCloseButton} />
       <QRCodeSection />
       <ContributionInfoBox
         formState={state}

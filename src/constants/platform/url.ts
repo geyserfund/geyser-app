@@ -201,6 +201,11 @@ export const NotFoundPageImageUrl = 'https://storage.googleapis.com/geyser-proje
 
 export const NotAuthorizedImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/403-not-authorized.png'
 
+// FUNDING FLOW
+
+export const TransactionProcessingUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/transaction-processing.png'
+
 // GRANTS
 
 export const Grant3AnnouncementImageUrl =

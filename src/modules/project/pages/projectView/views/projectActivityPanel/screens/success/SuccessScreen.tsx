@@ -14,12 +14,8 @@ import { Project, UserBadge } from '../../../../../../../../types'
 import { useProjectContext } from '../../../../../../context'
 import { useFundingContext } from '../../../../../../context/FundingProvider'
 import {} from '../../../projectMainBody/components'
-import {
-  ContributionInfoBox,
-  ContributionInfoBoxVersion,
-  ContributionShippingBox,
-  SuccessImageComponent,
-} from './components'
+import { ContributionInfoBox, ContributionInfoBoxVersion, ContributionShippingBox } from '../contributionInfo'
+import { SuccessImageComponent } from './components'
 
 type Props = {
   onCloseClick: () => void

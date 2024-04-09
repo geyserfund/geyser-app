@@ -6,6 +6,7 @@ import { fundingStageAtom, FundingStages } from '../../../../../../../../../fund
 export enum OnChainStatus {
   prompt = 'PROMPT',
   awaiting = 'AWAITING',
+  processing = 'PROCESSING',
 }
 
 export const onchainStatusAtom = atom(OnChainStatus.prompt)
@@ -17,6 +18,8 @@ const goToNextOnChainStatusAtom = atom(null, (get, set) => {
 
   if (current === OnChainStatus.prompt) {
     set(onchainStatusAtom, OnChainStatus.awaiting)
+  } else if (current === OnChainStatus.awaiting) {
+    set(onchainStatusAtom, OnChainStatus.processing)
   }
 })
 

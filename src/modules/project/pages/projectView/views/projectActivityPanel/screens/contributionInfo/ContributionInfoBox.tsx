@@ -15,16 +15,17 @@ import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsInfoCircle } from 'react-icons/bs'
 
-import { AnonymousAvatar, SatoshiAmount } from '../../../../../../../../../components/ui'
-import { GEYSER_FEE_DISCLAIMER, LIGHTNING_FEE_PERCENTAGE, noFeeProjects } from '../../../../../../../../../constants'
-import { useFundCalc } from '../../../../../../../../../helpers'
-import { IFundForm } from '../../../../../../../../../hooks'
-import { IBadge } from '../../../../../../../../../interfaces'
-import { ProjectFragment, ProjectReward, Satoshis } from '../../../../../../../../../types'
-import { copyTextToClipboard } from '../../../../../../../../../utils'
-import { hasOwnNode } from '../../../../../../../../../utils/helpers'
-import { Badge } from '../../fundingForm/components/Badge'
-import { DownloadInvoice } from './DownloadInvoice'
+import { AnonymousAvatar, SatoshiAmount } from '../../../../../../../../components/ui'
+import { GEYSER_FEE_DISCLAIMER, LIGHTNING_FEE_PERCENTAGE, noFeeProjects } from '../../../../../../../../constants'
+import { useFundCalc } from '../../../../../../../../helpers'
+import { IFundForm } from '../../../../../../../../hooks'
+import { IBadge } from '../../../../../../../../interfaces'
+import { ProjectFragment, ProjectReward, Satoshis } from '../../../../../../../../types'
+import { copyTextToClipboard } from '../../../../../../../../utils'
+import { hasOwnNode } from '../../../../../../../../utils/helpers'
+import { Badge } from '../fundingForm/components/Badge'
+import { CopyReferenceCode } from './components'
+import { DownloadInvoice } from './components/DownloadInvoice'
 
 export enum ContributionInfoBoxVersion {
   NEUTRAL = 'neutral',
@@ -77,7 +78,6 @@ export const ContributionInfoBox = ({
   const isNoFees = noFeeProjects.includes(project.name) || hasOwnNode(project)
 
   const { getTotalAmount } = useFundCalc(formState)
-  const [copy, setCopy] = useState(false)
 
   const [isFeeTooltipOpen, setFeeTooltipOpen] = useState(false)
   const tooltipContainerRef = useRef(null)
@@ -89,10 +89,10 @@ export const ContributionInfoBox = ({
 
   return (
     <VStack
-      padding={2}
+      padding={'15px'}
       width={'full'}
       borderRadius="8px"
-      backgroundColor={version === ContributionInfoBoxVersion.NEUTRAL ? 'neutral.000' : 'primary.50'}
+      backgroundColor={version === ContributionInfoBoxVersion.NEUTRAL ? 'neutral.100' : 'primary.50'}
       spacing={2}
       justify={'flex-start'}
       alignItems="flex-start"
@@ -100,14 +100,14 @@ export const ContributionInfoBox = ({
     >
       {referenceCode && fundingTxId ? (
         <HStack direction="column" spacing="2" justifyContent={'space-between'} width={'100%'}>
-          <Text fontSize={'16px'} fontWeight={'bold'} textColor={'neutral.900'}>
+          <Text lineHeight="1.0" fontSize={'16px'} fontWeight={'bold'} textColor={'neutral.900'}>
             {t('Download Invoice')}
           </Text>
           <DownloadInvoice fundingTxId={fundingTxId} />
         </HStack>
       ) : (
         <>
-          <Text fontSize={'18px'} fontWeight={'semibold'}>
+          <Text lineHeight={'1.0'} fontSize={'18px'} fontWeight={'semibold'}>
             {project.title}
           </Text>
           <ContributionInfoBoxDivider version={version} />
@@ -244,37 +244,7 @@ export const ContributionInfoBox = ({
           </Text>
         </HStack>
       </HStack>
-
-      {referenceCode && (
-        <VStack align={'flex-start'} mt={2}>
-          <Text color="neutral.900" fontWeight="bold" fontSize={'16px'}>
-            {t('Share')}
-          </Text>
-          <Text color="neutral.900" fontWeight="medium" fontSize={'14px'}>
-            {t('Consider sharing the project on social media to help the project reach even more people!')}
-          </Text>
-          <Button
-            size="sm"
-            color="neutral.900"
-            leftIcon={<CopyIcon height="16px" color={'neutral.600'} />}
-            variant="secondary"
-            fontWeight={'medium'}
-            fontSize={'16px'}
-            width="100%"
-            onClick={() => {
-              if (copy === false) {
-                copyTextToClipboard(`${window.location.origin}/project/${project.name}`)
-                setCopy(true)
-                setTimeout(() => {
-                  setCopy(false)
-                }, 2000)
-              }
-            }}
-          >
-            {t('Copy link')}
-          </Button>
-        </VStack>
-      )}
+      <CopyReferenceCode referenceCode={referenceCode} projectName={project.name} />
     </VStack>
   )
 }

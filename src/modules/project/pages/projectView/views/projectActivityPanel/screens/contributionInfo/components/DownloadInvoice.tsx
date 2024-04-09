@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { QUERY_FUNDING_TX_FOR_DOWNLOAD_INVOICE, QUERY_PROJECT_BY_NAME_OR_ID } from '../../../../../../../../../graphql'
 import { FundingTx, Project } from '../../../../../../../../../types'
 import { toInt } from '../../../../../../../../../utils'
-import { DownloadInvoicePDF } from './DownloadInvoicePDF'
+import { DownloadInvoicePDF } from '../../success/components/DownloadInvoicePDF'
 
 export const DownloadInvoice = ({ fundingTxId, showFee }: { fundingTxId: BigInt; showFee?: false }) => {
   const [invoiceData, setInvoiceData] = useState<FundingTx | null>(null)

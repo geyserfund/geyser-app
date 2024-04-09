@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { CreatorEmailButton } from '../../../../../../../../../components/molecules'
 import { useCustomTheme } from '../../../../../../../../../utils'
-import { CreatorEmailContentButton } from './CreatorEmailContentButton'
+import { CreatorEmailContentButton } from '../../success/components/CreatorEmailContentButton'
 
 export const ContributionShippingBox = ({ creatorEmail }: { creatorEmail?: string | null }) => {
   const { t } = useTranslation()
@@ -23,11 +23,12 @@ export const ContributionShippingBox = ({ creatorEmail }: { creatorEmail?: strin
         {t('Send Email to Creator')}
       </Text>
       <Text fontSize={'14px'} fontWeight={'normal'} textColor={'neutral.600'}>
-        To receive the selected items, you need to send your shipping details to the creator's email. Geyser does not
-        want to store your private information for security reasons.
+        {t(
+          "To receive the selected items, you need to send your shipping details to the creator's email. Geyser does not want to store your private information for security reasons.",
+        )}
       </Text>
       <Text fontSize={'16px'} fontWeight={'semibold'} textColor={'neutral.900'}>
-        Creator email
+        {t('Creator email')}
       </Text>
       <CreatorEmailButton email={creatorEmail || ''} />
       <CreatorEmailContentButton />

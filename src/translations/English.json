@@ -910,6 +910,10 @@
    "Geyser provides you with a platform to showcase and amplify your project. Consider giving some value back to us so we can keep improving our product.":"Geyser provides you with a platform to showcase and amplify your project. Consider giving some value back to us so we can keep improving our product.",
    "Choose Geyser split per transaction":"Choose Geyser split per transaction",
    "Lightning":"Lightning",
-   "Onchain":"Onchain"
+   "Onchain":"Onchain",
+   "To receive the selected items, you need to send your shipping details to the creator's email. Geyser does not want to store your private information for security reasons.":"To receive the selected items, you need to send your shipping details to the creator's email. Geyser does not want to store your private information for security reasons.",
+   "Creator email":"Creator email",
+   "Send Email to Creator":"Send Email to Creator",
+   "Transaction is being processed...":"Transaction is being processed..."
 
 }
