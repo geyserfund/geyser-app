@@ -84,12 +84,14 @@ export const ProjectContainer = () => {
         flexDirection={{ base: 'column', lg: 'row' }}
         gap="20px"
       >
-        <Head
-          title={project?.title || ''}
-          description={project?.shortDescription || ''}
-          image={project?.thumbnailImage || ''}
-          type="article"
-        />
+        {project && (
+          <Head
+            title={project?.title || ''}
+            description={project?.shortDescription || ''}
+            image={project?.thumbnailImage || ''}
+            type="article"
+          />
+        )}
         {!isMobile ? <ProjectNavigation /> : null}
 
         <Outlet />
