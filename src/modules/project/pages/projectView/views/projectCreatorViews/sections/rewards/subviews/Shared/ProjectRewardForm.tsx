@@ -338,23 +338,22 @@ export const ProjectRewardForm = ({
       spacing={{ base: '10px', lg: '20px' }}
     >
       <CardLayout minWidth="100%" {...(isLaunch ? { border: 'none', h: '100%' } : { padding: '30px 30px' })}>
-        {!isLaunch && (
-          <Stack direction={'row'} align={'center'}>
-            <IconButton
-              size="sm"
-              background={'none'}
-              aria-label="twitter"
-              icon={<RiArrowLeftSLine fontSize="20px" />}
-              color={'neutral.700'}
-              onClick={() => {
-                navigate(-1)
-              }}
-            />
-            <Text fontSize="18px" fontWeight={600}>
-              {t(titleText)}
-            </Text>
-          </Stack>
-        )}
+        <Stack direction={'row'} align={'center'}>
+          <IconButton
+            size="sm"
+            background={'none'}
+            aria-label="twitter"
+            icon={<RiArrowLeftSLine fontSize="20px" />}
+            color={'neutral.700'}
+            onClick={() => {
+              navigate(-1)
+            }}
+          />
+          <Text fontSize="18px" fontWeight={600}>
+            {t(titleText)}
+          </Text>
+        </Stack>
+
         <Stack direction={{ base: 'column', lg: 'row' }}>
           <FieldContainer title={t('Reward Name')}>
             <TextInputBox
