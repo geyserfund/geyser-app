@@ -19,6 +19,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   const breakpoint = useBreakpoint({ ssr: false })
   const largeView = ['xl', '2xl'].includes(breakpoint)
   const { toast } = useNotification()
+  const isLaunch = location.pathname.includes('launch')
 
   const {
     project,
@@ -96,10 +97,17 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
         alignItems="flex-start"
         spacing="25px"
         mobileDense
+        {...(isLaunch ? { border: 'none', p: 0 } : {})}
       >
-        <TitleDivider badge={activeProjectRewards.length} isFixed={isRewardTitleFixed} rightAction={rightActionButton}>
-          {t('Rewards')}
-        </TitleDivider>
+        {!isLaunch && (
+          <TitleDivider
+            badge={activeProjectRewards.length}
+            isFixed={isRewardTitleFixed}
+            rightAction={rightActionButton}
+          >
+            {t('Rewards')}
+          </TitleDivider>
+        )}
 
         <SimpleGrid columns={largeView ? 2 : 1} spacing={'20px'} width={'100%'}>
           {renderRewards()}

@@ -7,6 +7,7 @@ import { Body1 } from '../../../../../components/typography'
 import { getPath } from '../../../../../constants'
 import { GeyserRewardsGuideLink } from '../../../../../constants/platform/url'
 import { useProjectByNameOrIdQuery } from '../../../../../types'
+import { Rewards } from '../../projectView/views/projectMainBody/sections/Rewards'
 import { RewardTemplate } from './RewardTemplate'
 
 const rewardTemplates: {
@@ -55,6 +56,12 @@ export const ProjectCreateRewardMain = () => {
 
   const project = data?.projectGet
 
+  let hasRewards = false
+
+  if (project) {
+    hasRewards = project.rewards?.length > 0
+  }
+
   const handleCreateRewardClick = () => {
     navigate(getPath('launchProjectRewardsNew', project?.id))
   }
@@ -94,6 +101,15 @@ export const ProjectCreateRewardMain = () => {
           />
         ))}
       </Box>
+
+      {hasRewards && (
+        <Box width="100%" display={'flex'} flexDirection={'column'} gap={2}>
+          <Body1 semiBold color="neutral.900">
+            {t('Edit rewards')}
+          </Body1>
+          <Rewards />
+        </Box>
+      )}
     </VStack>
   )
 }
