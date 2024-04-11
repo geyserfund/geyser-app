@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Body1 } from '../../../../../components/typography'
 import { getPath } from '../../../../../constants'
 import { GeyserRewardsGuideLink } from '../../../../../constants/platform/url'
+import { MegaphoneUrl } from '../../../../../constants/platform/url'
 import { useProjectByNameOrIdQuery } from '../../../../../types'
 import { Rewards } from '../../projectView/views/projectMainBody/sections/Rewards'
 import { RewardTemplate } from './RewardTemplate'
@@ -20,25 +21,25 @@ const rewardTemplates: {
     title: 'Membership',
     category: 'Membership',
     description: 'Allow your users to be part of your membership club',
-    image: '/icons/192-maskable.png',
+    image: MegaphoneUrl,
   },
   {
     title: 'Gift',
     category: 'Gift',
     description: 'Give your contributors a gift',
-    image: '/icons/192-maskable.png',
+    image: MegaphoneUrl,
   },
   {
     title: 'Tickets',
     category: 'Ticket',
     description: 'Give your contributors a ticket to your event',
-    image: '/icons/192-maskable.png',
+    image: MegaphoneUrl,
   },
   {
     title: 'Nostr badge',
     category: 'Nostr Badge',
     description: 'Give your contributors a nostr badge',
-    image: '/icons/192-maskable.png',
+    image: MegaphoneUrl,
   },
 ]
 

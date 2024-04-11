@@ -19,7 +19,6 @@ export const RewardTemplate = ({ reward, onClick }: RewardTemplateProps) => {
       flexDirection="column"
       alignItems="center"
       justifyContent="flex-start"
-      gap={2}
       borderRadius="8px"
       border="2px solid"
       borderColor="neutral.100"
@@ -37,7 +36,7 @@ export const RewardTemplate = ({ reward, onClick }: RewardTemplateProps) => {
         flexDirection="column"
         gap={1}
         width="100%"
-        height="100%"
+        height="60px"
         alignItems={'center'}
         justifyContent={'flex-start'}
       >
@@ -48,8 +47,9 @@ export const RewardTemplate = ({ reward, onClick }: RewardTemplateProps) => {
           {reward.description}
         </Caption>
       </Box>
-
-      <Image width="140px" height="100px" src={reward.image} borderRadius="8px" />
+      <Box height="100px" maxHeight="200px">
+        <Image h={'100%'} src={reward.image} objectFit="contain" borderRadius="8px" />
+      </Box>
     </Box>
   )
 }
