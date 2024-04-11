@@ -59,7 +59,6 @@ export const ProjectRewardForm = ({
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
   const { toast } = useNotification()
 
-  console.log('rewardData', rewardData)
   const {
     isOpen: isCurrencyChangeModalOpen,
     onClose: closeCurrencyChangeModal,
@@ -564,18 +563,11 @@ export const ProjectRewardForm = ({
             ) : null}
           </FieldContainer>
         </VStack>
-        {!isLaunch && (
-          <Stack>
-            <Button
-              display={{ base: 'block' }}
-              variant="primary"
-              onClick={handleConfirmReward}
-              isLoading={rewardSaving}
-            >
-              {buttonText}
-            </Button>
-          </Stack>
-        )}
+        <Stack>
+          <Button display={{ base: 'block' }} variant="primary" onClick={handleConfirmReward} isLoading={rewardSaving}>
+            {buttonText}
+          </Button>
+        </Stack>
       </CardLayout>
       <UpdateCurrencyModal
         isOpen={isCurrencyChangeModalOpen}

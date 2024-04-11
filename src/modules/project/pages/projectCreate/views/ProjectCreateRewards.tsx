@@ -94,7 +94,7 @@ export const ProjectCreateRewards = () => {
   }
 
   return (
-    <ProjectProvider projectId={params.projectId || ''}>
+    <ProjectProvider projectId={project?.title || ''}>
       <ProjectCreateLayout
         title={<TitleWithProgressBar title={t('Add Rewards')} subtitle={t('Create a project')} index={4} length={5} />}
         continueButton={
