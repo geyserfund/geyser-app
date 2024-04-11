@@ -27,7 +27,12 @@ export const ProjectCreateReward = () => {
         status: 'success',
       })
       if (!project) return
-      navigate(getPath('projectManageRewards', project?.name))
+
+      if (isLaunch) {
+        navigate(-1)
+      } else {
+        navigate(getPath('projectManageRewards', project?.name))
+      }
     },
     onError(error) {
       toast({
