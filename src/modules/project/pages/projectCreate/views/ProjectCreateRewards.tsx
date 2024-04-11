@@ -106,18 +106,7 @@ export const ProjectCreateRewards = () => {
             <FormContinueButton flexGrow={1} onClick={handleNext} />
           )
         }
-        backButton={
-          showCreateReward ? (
-            <Button
-              flexGrow={1}
-              variant="secondary"
-              onClick={handleCancel}
-              leftIcon={<BiLeftArrowAlt fontSize="25px" />}
-            >
-              {t('Cancel')}
-            </Button>
-          ) : undefined
-        }
+        isNestedProcess={showCreateReward}
         onBackClick={showCreateReward ? handleCancel : handleBack}
         minW={720}
         height="100%"

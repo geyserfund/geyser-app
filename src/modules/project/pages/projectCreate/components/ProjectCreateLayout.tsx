@@ -11,7 +11,7 @@ interface ProjectCreateLayoutProps extends Omit<ContainerProps, 'children' | 'ti
   children: ReactNode
   title: ReactNode
   continueButton?: ReactNode
-  backButton?: ReactNode
+  isNestedProcess?: boolean
   onBackClick: () => void
 }
 
@@ -24,7 +24,7 @@ export const ProjectCreateLayout = ({
   onBackClick,
   title,
   continueButton = null,
-  backButton = null,
+  isNestedProcess = false,
   ...props
 }: ProjectCreateLayoutProps) => {
   const { t } = useTranslation()
@@ -46,7 +46,7 @@ export const ProjectCreateLayout = ({
       flexDirection="column"
       maxHeight={{
         base: '100%',
-        lg: `calc(100vh - ${dimensions.topNavBar.desktop.height + 80}px)`,
+        ...(isNestedProcess ? {} : { lg: `calc(100vh - ${dimensions.topNavBar.desktop.height + 80}px)` }),
       }}
       flexGrow={1}
       position="relative"
@@ -61,25 +61,26 @@ export const ProjectCreateLayout = ({
           {content}
         </CardLayout>
       )}
-      <HStack
-        position={{ base: 'fixed', lg: 'absolute' }}
-        w="full"
-        px={{ base: '10px', lg: '0px' }}
-        py="10px"
-        bg="neutral.0"
-        maxWidth={{ base: 600, lg: 'none' }}
-        bottom={{ base: '0px', lg: '-50px' }}
-        alignSelf="center"
-      >
-        {backButton ? (
-          backButton
-        ) : (
+      {isNestedProcess ? (
+        ''
+      ) : (
+        <HStack
+          position={{ base: 'fixed', lg: 'absolute' }}
+          w="full"
+          px={{ base: '10px', lg: '0px' }}
+          py="10px"
+          bg="neutral.0"
+          maxWidth={{ base: 600, lg: 'none' }}
+          bottom={{ base: '0px', lg: '-50px' }}
+          alignSelf="center"
+        >
           <Button flexGrow={1} variant="secondary" onClick={onBackClick} leftIcon={<BiLeftArrowAlt fontSize="25px" />}>
             {t('Back')}
           </Button>
-        )}
-        {continueButton}
-      </HStack>
+
+          {continueButton}
+        </HStack>
+      )}
     </Container>
   )
 }

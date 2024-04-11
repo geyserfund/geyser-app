@@ -328,7 +328,7 @@ export const ProjectRewardForm = ({
       direction={{ base: 'column', lg: 'row' }}
       w="full"
       {...(isLaunch
-        ? {}
+        ? { height: '100%' }
         : {
             pt: { base: '10px', lg: '20px' },
             pb: { base: '80px', lg: '20px' },
@@ -337,7 +337,7 @@ export const ProjectRewardForm = ({
       backgroundColor={{ base: 'neutral.0', lg: 'inherit' }}
       spacing={{ base: '10px', lg: '20px' }}
     >
-      <CardLayout h="auto" minWidth="100%" {...(isLaunch ? { border: 'none' } : { padding: '30px 30px' })}>
+      <CardLayout minWidth="100%" {...(isLaunch ? { border: 'none', h: '100%' } : { padding: '30px 30px' })}>
         {!isLaunch && (
           <Stack direction={'row'} align={'center'}>
             <IconButton
@@ -563,8 +563,30 @@ export const ProjectRewardForm = ({
             ) : null}
           </FieldContainer>
         </VStack>
-        <Stack>
-          <Button display={{ base: 'block' }} variant="primary" onClick={handleConfirmReward} isLoading={rewardSaving}>
+        <Stack
+          {...(isLaunch
+            ? {
+                h: '100%',
+                w: '100%',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+              }
+            : {})}
+        >
+          {isLaunch && (
+            <Button variant="secondary" flexGrow={1} onClick={() => navigate(-1)}>
+              {t('Cancel')}
+            </Button>
+          )}
+          <Button
+            {...(isLaunch ? { flexGrow: 1 } : {})}
+            display={{ base: 'block' }}
+            variant="primary"
+            onClick={handleConfirmReward}
+            isLoading={rewardSaving}
+          >
             {buttonText}
           </Button>
         </Stack>
