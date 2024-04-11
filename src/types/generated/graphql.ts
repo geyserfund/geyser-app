@@ -375,7 +375,8 @@ export type FundingConfirmOffChainInput = {
 }
 
 export type FundingConfirmOnChainInput = {
-  address?: InputMaybe<Scalars['String']>
+  address: Scalars['String']
+  tx?: InputMaybe<OnChainTxInput>
 }
 
 export type FundingConfirmResponse = {
@@ -405,6 +406,7 @@ export type FundingInput = {
   projectId: Scalars['BigInt']
   /** The resource from which the funding transaction is being created. */
   sourceResourceInput: ResourceInput
+  swapPublicKey?: InputMaybe<Scalars['String']>
 }
 
 export type FundingMetadataInput = {
@@ -424,6 +426,7 @@ export enum FundingMethod {
 export type FundingMutationResponse = {
   __typename?: 'FundingMutationResponse'
   fundingTx?: Maybe<FundingTx>
+  swap?: Maybe<Swap>
 }
 
 export type FundingPendingInput = {
@@ -441,7 +444,8 @@ export type FundingPendingOffChainInput = {
 }
 
 export type FundingPendingOnChainInput = {
-  address?: InputMaybe<Scalars['String']>
+  address: Scalars['String']
+  tx?: InputMaybe<OnChainTxInput>
 }
 
 export type FundingPendingResponse = {
@@ -492,6 +496,7 @@ export type FundingTx = {
   media?: Maybe<Scalars['String']>
   method?: Maybe<FundingMethod>
   onChain: Scalars['Boolean']
+  onChainTxId?: Maybe<Scalars['String']>
   order?: Maybe<Order>
   paidAt?: Maybe<Scalars['Date']>
   paymentRequest?: Maybe<Scalars['String']>
@@ -507,6 +512,11 @@ export type FundingTxAmountGraph = GraphSumData & {
   __typename?: 'FundingTxAmountGraph'
   dateTime: Scalars['Date']
   sum: Scalars['Int']
+}
+
+export type FundingTxEmailUpdateInput = {
+  email: Scalars['String']
+  fundingTxId: Scalars['BigInt']
 }
 
 export type FundingTxMethodCount = {
@@ -795,8 +805,15 @@ export type LightningAddressConnectionDetailsUpdateInput = {
   lightningAddress: Scalars['String']
 }
 
+export type LightningAddressContributionLimits = {
+  __typename?: 'LightningAddressContributionLimits'
+  max?: Maybe<Scalars['Int']>
+  min?: Maybe<Scalars['Int']>
+}
+
 export type LightningAddressVerifyResponse = {
   __typename?: 'LightningAddressVerifyResponse'
+  limits?: Maybe<LightningAddressContributionLimits>
   reason?: Maybe<Scalars['String']>
   valid: Scalars['Boolean']
 }
@@ -901,6 +918,7 @@ export type Mutation = {
   fundingInvoiceCancel: FundinginvoiceCancel
   fundingInvoiceRefresh: FundingTx
   fundingPend: FundingPendingResponse
+  fundingTxEmailUpdate: FundingTx
   grantApply: GrantApplicant
   orderStatusUpdate?: Maybe<Order>
   projectDelete: ProjectDeleteResponse
@@ -993,6 +1011,10 @@ export type MutationFundingInvoiceRefreshArgs = {
 
 export type MutationFundingPendArgs = {
   input: FundingPendingInput
+}
+
+export type MutationFundingTxEmailUpdateArgs = {
+  input?: InputMaybe<FundingTxEmailUpdateInput>
 }
 
 export type MutationGrantApplyArgs = {
@@ -1151,6 +1173,10 @@ export type OtpResponse = {
 export type OffsetBasedPaginationInput = {
   skip?: InputMaybe<Scalars['Int']>
   take?: InputMaybe<Scalars['Int']>
+}
+
+export type OnChainTxInput = {
+  id: Scalars['String']
 }
 
 export type Order = {
@@ -1665,7 +1691,8 @@ export type QueryFundersGetArgs = {
 }
 
 export type QueryFundingTxArgs = {
-  id: Scalars['BigInt']
+  id?: InputMaybe<Scalars['BigInt']>
+  swapId?: InputMaybe<Scalars['String']>
 }
 
 export type QueryFundingTxsGetArgs = {
@@ -1816,6 +1843,11 @@ export type SubscriptionActivityCreatedArgs = {
 
 export type SubscriptionFundingTxStatusUpdatedArgs = {
   input?: InputMaybe<FundingTxStatusUpdatedInput>
+}
+
+export type Swap = {
+  __typename?: 'Swap'
+  json: Scalars['String']
 }
 
 export type TotpInput = {
@@ -2060,9 +2092,36 @@ export type Wallet = {
   /** The fee percentage applied to contributions going to this wallet. */
   feePercentage?: Maybe<Scalars['Float']>
   id: Scalars['BigInt']
+  /** Funding limits on this wallet */
+  limits?: Maybe<WalletLimits>
   /** Wallet name */
   name?: Maybe<Scalars['String']>
   state: WalletState
+}
+
+export type WalletContributionLimits = {
+  __typename?: 'WalletContributionLimits'
+  max?: Maybe<Scalars['Int']>
+  min?: Maybe<Scalars['Int']>
+  offChain?: Maybe<WalletOffChainContributionLimits>
+  onChain?: Maybe<WalletOnChainContributionLimits>
+}
+
+export type WalletLimits = {
+  __typename?: 'WalletLimits'
+  contribution?: Maybe<WalletContributionLimits>
+}
+
+export type WalletOffChainContributionLimits = {
+  __typename?: 'WalletOffChainContributionLimits'
+  max?: Maybe<Scalars['Int']>
+  min?: Maybe<Scalars['Int']>
+}
+
+export type WalletOnChainContributionLimits = {
+  __typename?: 'WalletOnChainContributionLimits'
+  max?: Maybe<Scalars['Int']>
+  min?: Maybe<Scalars['Int']>
 }
 
 export type WalletResourceInput = {
@@ -2272,6 +2331,7 @@ export type ResolversTypes = {
     Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversTypes['SourceResource']> }
   >
   FundingTxAmountGraph: ResolverTypeWrapper<FundingTxAmountGraph>
+  FundingTxEmailUpdateInput: FundingTxEmailUpdateInput
   FundingTxMethodCount: ResolverTypeWrapper<FundingTxMethodCount>
   FundingTxMethodSum: ResolverTypeWrapper<FundingTxMethodSum>
   FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
@@ -2320,6 +2380,7 @@ export type ResolversTypes = {
   LightningAddressConnectionDetails: ResolverTypeWrapper<LightningAddressConnectionDetails>
   LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput
   LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput
+  LightningAddressContributionLimits: ResolverTypeWrapper<LightningAddressContributionLimits>
   LightningAddressVerifyResponse: ResolverTypeWrapper<LightningAddressVerifyResponse>
   LndConnectionDetails: never
   LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput
@@ -2338,6 +2399,7 @@ export type ResolversTypes = {
   OTPLoginInput: OtpLoginInput
   OTPResponse: ResolverTypeWrapper<OtpResponse>
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
+  OnChainTxInput: OnChainTxInput
   Order: ResolverTypeWrapper<Order>
   OrderBitcoinQuoteInput: OrderBitcoinQuoteInput
   OrderByDirection: OrderByDirection
@@ -2403,6 +2465,7 @@ export type ResolversTypes = {
   SponsorStatus: SponsorStatus
   String: ResolverTypeWrapper<Scalars['String']>
   Subscription: ResolverTypeWrapper<{}>
+  Swap: ResolverTypeWrapper<Swap>
   TOTPInput: TotpInput
   Tag: ResolverTypeWrapper<Tag>
   TagCreateInput: TagCreateInput
@@ -2431,6 +2494,10 @@ export type ResolversTypes = {
   Wallet: ResolverTypeWrapper<
     Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversTypes['ConnectionDetails'] }
   >
+  WalletContributionLimits: ResolverTypeWrapper<WalletContributionLimits>
+  WalletLimits: ResolverTypeWrapper<WalletLimits>
+  WalletOffChainContributionLimits: ResolverTypeWrapper<WalletOffChainContributionLimits>
+  WalletOnChainContributionLimits: ResolverTypeWrapper<WalletOnChainContributionLimits>
   WalletResourceInput: WalletResourceInput
   WalletResourceType: WalletResourceType
   WalletState: ResolverTypeWrapper<WalletState>
@@ -2501,6 +2568,7 @@ export type ResolversParentTypes = {
   FundingQueryResponse: FundingQueryResponse
   FundingTx: Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversParentTypes['SourceResource']> }
   FundingTxAmountGraph: FundingTxAmountGraph
+  FundingTxEmailUpdateInput: FundingTxEmailUpdateInput
   FundingTxMethodCount: FundingTxMethodCount
   FundingTxMethodSum: FundingTxMethodSum
   FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
@@ -2544,6 +2612,7 @@ export type ResolversParentTypes = {
   LightningAddressConnectionDetails: LightningAddressConnectionDetails
   LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput
   LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput
+  LightningAddressContributionLimits: LightningAddressContributionLimits
   LightningAddressVerifyResponse: LightningAddressVerifyResponse
   LndConnectionDetails: never
   LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput
@@ -2560,6 +2629,7 @@ export type ResolversParentTypes = {
   OTPLoginInput: OtpLoginInput
   OTPResponse: OtpResponse
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
+  OnChainTxInput: OnChainTxInput
   Order: Order
   OrderBitcoinQuoteInput: OrderBitcoinQuoteInput
   OrderFundingInput: OrderFundingInput
@@ -2613,6 +2683,7 @@ export type ResolversParentTypes = {
   Sponsor: Sponsor
   String: Scalars['String']
   Subscription: {}
+  Swap: Swap
   TOTPInput: TotpInput
   Tag: Tag
   TagCreateInput: TagCreateInput
@@ -2637,6 +2708,10 @@ export type ResolversParentTypes = {
   UserProjectsGetInput: UserProjectsGetInput
   UserProjectsGetWhereInput: UserProjectsGetWhereInput
   Wallet: Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversParentTypes['ConnectionDetails'] }
+  WalletContributionLimits: WalletContributionLimits
+  WalletLimits: WalletLimits
+  WalletOffChainContributionLimits: WalletOffChainContributionLimits
+  WalletOnChainContributionLimits: WalletOnChainContributionLimits
   WalletResourceInput: WalletResourceInput
   WalletState: WalletState
   dashboardFundersGetInput: DashboardFundersGetInput
@@ -2873,6 +2948,7 @@ export type FundingMutationResponseResolvers<
   ParentType extends ResolversParentTypes['FundingMutationResponse'] = ResolversParentTypes['FundingMutationResponse'],
 > = {
   fundingTx?: Resolver<Maybe<ResolversTypes['FundingTx']>, ParentType, ContextType>
+  swap?: Resolver<Maybe<ResolversTypes['Swap']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -2916,6 +2992,7 @@ export type FundingTxResolvers<
   media?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   method?: Resolver<Maybe<ResolversTypes['FundingMethod']>, ParentType, ContextType>
   onChain?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  onChainTxId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   order?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType>
   paidAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
   paymentRequest?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
@@ -3082,10 +3159,20 @@ export type LightningAddressConnectionDetailsResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
+export type LightningAddressContributionLimitsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['LightningAddressContributionLimits'] = ResolversParentTypes['LightningAddressContributionLimits'],
+> = {
+  max?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  min?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type LightningAddressVerifyResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['LightningAddressVerifyResponse'] = ResolversParentTypes['LightningAddressVerifyResponse'],
 > = {
+  limits?: Resolver<Maybe<ResolversTypes['LightningAddressContributionLimits']>, ParentType, ContextType>
   reason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   valid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
@@ -3216,6 +3303,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationFundingPendArgs, 'input'>
+  >
+  fundingTxEmailUpdate?: Resolver<
+    ResolversTypes['FundingTx'],
+    ParentType,
+    ContextType,
+    Partial<MutationFundingTxEmailUpdateArgs>
   >
   grantApply?: Resolver<ResolversTypes['GrantApplicant'], ParentType, ContextType, Partial<MutationGrantApplyArgs>>
   orderStatusUpdate?: Resolver<
@@ -3738,7 +3831,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryFundersGetArgs, 'input'>
   >
-  fundingTx?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType, RequireFields<QueryFundingTxArgs, 'id'>>
+  fundingTx?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType, Partial<QueryFundingTxArgs>>
   fundingTxsGet?: Resolver<
     Maybe<ResolversTypes['FundingTxsGetResponse']>,
     ParentType,
@@ -3903,6 +3996,14 @@ export type SubscriptionResolvers<
   >
 }
 
+export type SwapResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Swap'] = ResolversParentTypes['Swap'],
+> = {
+  json?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type TagResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Tag'] = ResolversParentTypes['Tag'],
@@ -3981,8 +4082,46 @@ export type WalletResolvers<
   connectionDetails?: Resolver<ResolversTypes['ConnectionDetails'], ParentType, ContextType>
   feePercentage?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  limits?: Resolver<Maybe<ResolversTypes['WalletLimits']>, ParentType, ContextType>
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   state?: Resolver<ResolversTypes['WalletState'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type WalletContributionLimitsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['WalletContributionLimits'] = ResolversParentTypes['WalletContributionLimits'],
+> = {
+  max?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  min?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  offChain?: Resolver<Maybe<ResolversTypes['WalletOffChainContributionLimits']>, ParentType, ContextType>
+  onChain?: Resolver<Maybe<ResolversTypes['WalletOnChainContributionLimits']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type WalletLimitsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['WalletLimits'] = ResolversParentTypes['WalletLimits'],
+> = {
+  contribution?: Resolver<Maybe<ResolversTypes['WalletContributionLimits']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type WalletOffChainContributionLimitsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['WalletOffChainContributionLimits'] = ResolversParentTypes['WalletOffChainContributionLimits'],
+> = {
+  max?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  min?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type WalletOnChainContributionLimitsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['WalletOnChainContributionLimits'] = ResolversParentTypes['WalletOnChainContributionLimits'],
+> = {
+  max?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  min?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -4049,6 +4188,7 @@ export type Resolvers<ContextType = any> = {
   GrantStatus?: GrantStatusResolvers<ContextType>
   GraphSumData?: GraphSumDataResolvers<ContextType>
   LightningAddressConnectionDetails?: LightningAddressConnectionDetailsResolvers<ContextType>
+  LightningAddressContributionLimits?: LightningAddressContributionLimitsResolvers<ContextType>
   LightningAddressVerifyResponse?: LightningAddressVerifyResponseResolvers<ContextType>
   LndConnectionDetails?: LndConnectionDetailsResolvers<ContextType>
   LndConnectionDetailsPrivate?: LndConnectionDetailsPrivateResolvers<ContextType>
@@ -4090,12 +4230,17 @@ export type Resolvers<ContextType = any> = {
   SourceResource?: SourceResourceResolvers<ContextType>
   Sponsor?: SponsorResolvers<ContextType>
   Subscription?: SubscriptionResolvers<ContextType>
+  Swap?: SwapResolvers<ContextType>
   Tag?: TagResolvers<ContextType>
   TagsGetResult?: TagsGetResultResolvers<ContextType>
   User?: UserResolvers<ContextType>
   UserBadge?: UserBadgeResolvers<ContextType>
   UserProjectContribution?: UserProjectContributionResolvers<ContextType>
   Wallet?: WalletResolvers<ContextType>
+  WalletContributionLimits?: WalletContributionLimitsResolvers<ContextType>
+  WalletLimits?: WalletLimitsResolvers<ContextType>
+  WalletOffChainContributionLimits?: WalletOffChainContributionLimitsResolvers<ContextType>
+  WalletOnChainContributionLimits?: WalletOnChainContributionLimitsResolvers<ContextType>
   WalletState?: WalletStateResolvers<ContextType>
   projectsMostFundedOfTheWeekGet?: ProjectsMostFundedOfTheWeekGetResolvers<ContextType>
 }
@@ -4858,6 +5003,7 @@ export type FundMutation = {
   fund: {
     __typename?: 'FundingMutationResponse'
     fundingTx?: ({ __typename?: 'FundingTx' } & FundingTxFragment) | null
+    swap?: { __typename?: 'Swap'; json: string } | null
   }
 }
 
@@ -7086,6 +7232,9 @@ export const FundDocument = gql`
     fund(input: $input) {
       fundingTx {
         ...FundingTx
+      }
+      swap {
+        json
       }
     }
   }

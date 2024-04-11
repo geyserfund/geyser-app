@@ -9,7 +9,8 @@ import {
   OnChainStatus,
   onchainStatusAtom,
 } from '../../pages/projectView/views/projectActivityPanel/screens/qr/views/onchain/states/onChainStatus'
-import { findNextFundingStage } from '../utils/helpers'
+import { findNextFundingStage, generatePrivatePublicKeyPair } from '../utils/helpers'
+import { keyPairAtom } from './keyPairAtom'
 import { pollingFundingTxAtom, subscriptionActiveAtom } from './pollingFundingTx'
 
 export enum FundingStages {
@@ -38,10 +39,17 @@ export const setNextFundingStageAtom = atom(null, (get, set) => {
 export const fundingStageAtomEffect = atomEffect((get, set) => {
   const currentState = get(fundingStageAtom)
   if (currentState !== FundingStages.started) {
+    // reset subscription & polling
     set(subscriptionActiveAtom, false)
     set(pollingFundingTxAtom, 0)
+
+    // reset subscription method
     set(paymentMethodAtom, PaymentMethods.lightning)
     set(onchainStatusAtom, OnChainStatus.prompt)
+
+    // reset key pair
+    const keyPair = generatePrivatePublicKeyPair()
+    set(keyPairAtom, keyPair)
   }
 })
 

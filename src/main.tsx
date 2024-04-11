@@ -37,6 +37,12 @@ if (__production__ || __staging__) {
   })
 }
 
+// Needed for the nodejs modules that is used by the dependencies that are used for generating keypairs
+if (typeof window !== 'undefined') {
+  const { Buffer } = await import('buffer/')
+  ;(window as any).Buffer = Buffer
+}
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <ColorModeScript initialColorMode="system" type="localStorage" />

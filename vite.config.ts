@@ -4,6 +4,8 @@ import { defineConfig, loadEnv, PluginOption } from 'vite'
 import mkcert from 'vite-plugin-mkcert'
 import loadVersion from 'vite-plugin-package-version'
 import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
+import topLevelAwait from 'vite-plugin-top-level-await'
+import wasm from 'vite-plugin-wasm'
 
 const pwaOptions: Partial<VitePWAOptions> = {
   base: '/',
@@ -112,7 +114,7 @@ export default defineConfig(({ command, mode }) => {
   }
 
   pwaOptions.mode = env.APP_ENV === 'development' ? 'development' : 'production'
-  const plugins: PluginOption[] = [VitePWA(pwaOptions), react(), loadVersion()]
+  const plugins: PluginOption[] = [VitePWA(pwaOptions), react(), loadVersion(), wasm(), topLevelAwait()]
   if (mode !== 'production') {
     plugins.push(mkcert())
   }
@@ -128,6 +130,14 @@ export default defineConfig(({ command, mode }) => {
       globals: true,
       environment: 'jsdom',
       setupFiles: './setupTests.ts',
+    },
+    optimizeDeps: {
+      include: ['ecpair', 'tiny-secp256k1'],
+      esbuildOptions: {
+        define: {
+          global: 'globalThis',
+        },
+      },
     },
   }
 })

@@ -1,4 +1,4 @@
-import { Box, Button, Divider, FormControl, FormErrorMessage, FormLabel, HStack, Input } from '@chakra-ui/react'
+import { Button, Divider, FormControl, FormErrorMessage, FormLabel, HStack, Input } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useForm } from 'react-hook-form'
@@ -6,7 +6,7 @@ import { TbMailFilled } from 'react-icons/tb'
 import * as yup from 'yup'
 
 import { CardLayout } from '../../../../../../../../../../../components/layouts'
-import { H3 } from '../../../../../../../../../../../components/typography'
+import { Body2, H3 } from '../../../../../../../../../../../components/typography'
 import { useCustomTheme } from '../../../../../../../../../../../utils'
 
 const schema = yup
@@ -39,7 +39,7 @@ export const OnChainEmailAddress = () => {
           height="24px"
           width="24px"
           bgColor={'primary.500'}
-          borderRadius="8px"
+          borderRadius="4px"
         >
           <TbMailFilled size="14px" fill="neutral.0" />
         </HStack>
@@ -59,6 +59,11 @@ export const OnChainEmailAddress = () => {
           />
           <FormErrorMessage>{errors.email && errors.email.message}</FormErrorMessage>
         </FormControl>
+        <Body2>
+          {t(
+            'If previously provided, your email will be pre-filled, but still editable. Otherwise, if you want you can enter your email to receive transaction confirmation and status updates.',
+          )}
+        </Body2>
         <Button mt={4} isLoading={isSubmitting} type="submit">
           Submit
         </Button>

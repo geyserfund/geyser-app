@@ -5,11 +5,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ApolloErrors, fundingStages } from '../../../../constants'
 import { FundingInput, useFundingTxWithInvoiceStatusQuery, useFundMutation } from '../../../../types'
 import { toInt, useNotification } from '../../../../utils'
+import { useSetKeyPairAtom } from '../state'
 import { fundingFlowErrorAtom, fundingRequestErrorAtom, weblnErrorAtom } from '../state/errorAtom'
 import { fundingStageAtomEffect, useFundingStage } from '../state/fundingStagesAtom'
 import { useCheckFundingStatus, useFundingTx } from '../state/fundingTxAtom'
 import { useFundPollingAndSubscription } from '../state/pollingFundingTx'
-import { validateFundingInput } from '../utils/helpers'
+import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/helpers'
 import { webln } from '../utils/requestWebLNPayment'
 import { useFundSubscription } from './useFundSubscription'
 import { useResetFundingFlow } from './useResetFundingFlow'
@@ -35,9 +36,10 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
   const { toast } = useNotification()
 
-  const { fundingStage, setNextFundingStage } = useFundingStage()
+  const { setNextFundingStage } = useFundingStage()
   const startWebLNFlow = useWebLNFlow()
   const resetFundingFlow = useResetFundingFlow()
+  const setKeyPair = useSetKeyPairAtom()
 
   const [error, setError] = useAtom(fundingFlowErrorAtom)
   const [fundingRequestErrored, setFundingRequestErrored] = useAtom(fundingRequestErrorAtom)
@@ -128,12 +130,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     },
   })
 
-  useEffect(() => {
-    if (fundingStage === fundingStages.completed || fundingStage === fundingStages.canceled) {
-      clearPollingAndSubscription()
-    }
-  }, [fundingStage, clearPollingAndSubscription])
-
   const requestFunding = useCallback(
     async (input: FundingInput) => {
       const { isValid, error } = validateFundingInput(input)
@@ -147,12 +143,17 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         return
       }
 
+      const keyPair = generatePrivatePublicKeyPair()
+      setKeyPair(keyPair)
       setNextFundingStage()
+
+      input.swapPublicKey = keyPair.publicKey.toString('hex')
+
       setFundingInput(input)
 
       await fundProject({ variables: { input } })
     },
-    [fundProject, setNextFundingStage, toast],
+    [fundProject, setNextFundingStage, toast, setKeyPair],
   )
 
   const retryFundingFlow = useCallback(() => {

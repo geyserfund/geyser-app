@@ -9,6 +9,9 @@ export const MUTATION_FUND = gql`
       fundingTx {
         ...FundingTx
       }
+      swap {
+        json
+      }
     }
   }
 `
