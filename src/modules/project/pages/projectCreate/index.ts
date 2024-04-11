@@ -1,6 +1,7 @@
 import { ProjectCreationWalletConnectionForm } from '../../forms/ProjectCreationWalletConnectionForm'
 import { ProjectCreateReward } from '../projectView/views/projectCreatorViews/sections/rewards/subviews/CreateReward/CreateReward'
 import { ProjectEditReward } from '../projectView/views/projectCreatorViews/sections/rewards/subviews/EditReward/EditReward'
+import { ProjectCreateRewardMain } from './components/ProjectCreateRewardMain'
 import { ProjectCreate } from './views/ProjectCreate'
 import { ProjectCreateRewards } from './views/ProjectCreateRewards'
 import { ProjectCreateStart } from './views/ProjectCreateStart'
@@ -13,6 +14,7 @@ export {
   ProjectEditReward as EditReward,
   ProjectDetails as ProjectAdditionalDetails,
   ProjectCreate,
+  ProjectCreateRewardMain,
   ProjectCreateRewards,
   ProjectCreateStart,
   ProjectCreateStory,

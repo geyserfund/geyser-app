@@ -91,14 +91,21 @@ export const platformRoutes: RouteObject[] = [
     },
     children: [
       {
-        path: 'new', // Path for creating a new reward
+        index: true,
+        async lazy() {
+          const ProjectCreateRewardMain = await ProjectLaunch().then((m) => m.ProjectCreateRewardMain)
+          return { element: renderPrivateRoute(ProjectCreateRewardMain) }
+        },
+      },
+      {
+        path: 'new',
         async lazy() {
           const CreateReward = await ProjectLaunch().then((m) => m.CreateReward)
           return { element: renderPrivateRoute(CreateReward) }
         },
       },
       {
-        path: 'edit/:rewardId', // Path for editing an existing reward
+        path: 'edit/:rewardId',
         async lazy() {
           const EditReward = await ProjectLaunch().then((m) => m.EditReward)
           return { element: renderPrivateRoute(EditReward) }
