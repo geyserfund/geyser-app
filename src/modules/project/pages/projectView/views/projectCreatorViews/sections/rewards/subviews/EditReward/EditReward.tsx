@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../../../../../../../../constants'
 import { ProjectReward, useProjectRewardUpdateMutation } from '../../../../../../../../../../types/generated/graphql'
@@ -14,6 +14,9 @@ export const ProjectEditReward = () => {
   const { project, updateProject, isProjectOwner } = useProjectContext()
   const params = useParams<{ rewardId: string; projectId: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
+
+  const isLaunch = location.pathname.includes('launch')
 
   const [updateReward, { loading: updateRewardLoading }] = useProjectRewardUpdateMutation({
     onCompleted(data) {
@@ -30,7 +33,11 @@ export const ProjectEditReward = () => {
         description: `Reward ${data.projectRewardUpdate.name} was successfully updated`,
         status: 'success',
       })
-      navigate(getPath('projectManageRewards', project?.name || ''))
+      if (isLaunch) {
+        navigate(getPath('launchProjectRewards', project?.id || ''))
+      } else {
+        navigate(getPath('projectManageRewards', project?.name || ''))
+      }
     },
     onError(error) {
       toast({

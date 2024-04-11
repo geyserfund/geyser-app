@@ -73,7 +73,7 @@ export const ProjectCreateRewardMain = () => {
   return (
     <VStack spacing={8} width="100%" height="100%" gap={3}>
       <Box width="100%" display={'flex'} flexDirection={'column'} gap={2}>
-        <Body1 semiBold color="neutral.900">
+        <Body1 semiBold color="neutral.9000">
           {t('Create a reward')}
         </Body1>
 
@@ -103,7 +103,7 @@ export const ProjectCreateRewardMain = () => {
       </Box>
 
       {hasRewards && (
-        <Box width="100%" display={'flex'} flexDirection={'column'} gap={2}>
+        <Box width="100%" display={'flex'} flexDirection={'column'} gap={2} pb={10}>
           <Body1 semiBold color="neutral.900">
             {t('Edit rewards')}
           </Body1>

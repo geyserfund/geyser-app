@@ -43,7 +43,7 @@ export const ProjectCreateReward = () => {
     },
   })
 
-  if (!project && !isLaunch) {
+  if (!project) {
     return null
   }
 

@@ -76,6 +76,7 @@ export const RewardCard = ({ reward, count, ...rest }: Props) => {
             variant="primaryNeutral"
             size="sm"
             height={'40px'}
+            flexGrow={1}
             onClick={(e) => {
               rest.onRewardClick?.(e)
             }}
@@ -87,12 +88,25 @@ export const RewardCard = ({ reward, count, ...rest }: Props) => {
           </Button>
         ) : (
           <>
-            <Button flexGrow={1} variant="primaryNeutral" size="sm" height={'40px'}>
+            <Button
+              flexGrow={1}
+              variant="primaryNeutral"
+              size="sm"
+              height={'40px'}
+              onClick={(e) => {
+                rest.handleEdit?.(e)
+              }}
+            >
               <Text fontSize={16} fontWeight={500} isTruncated>
                 {t('Edit')}
               </Text>
             </Button>
-            <Button bg={secondaryColors.red} color="neutral.0" _hover={{ color: 'neutral.900', bg: 'neutral.400' }}>
+            <Button
+              bg={secondaryColors.red}
+              color="neutral.0"
+              _hover={{ color: 'neutral.900', bg: 'neutral.400' }}
+              onClick={(e) => rest.handleRemove?.(e)}
+            >
               <DeleteIcon />
             </Button>
           </>
