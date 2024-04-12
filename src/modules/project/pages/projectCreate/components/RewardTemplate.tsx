@@ -1,12 +1,13 @@
 import { Box, Image } from '@chakra-ui/react'
 
 import { Body1, Caption } from '../../../../../components/typography'
+import { RewardCategory } from '../types'
 
 interface RewardTemplateProps {
   reward: {
     title: string
     image: string
-    category: 'Membership' | 'Gift' | 'Ticket' | 'Nostr Badge'
+    category: RewardCategory
     description: string
   }
   onClick: () => void

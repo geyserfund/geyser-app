@@ -34,6 +34,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
     fundForm: { state: fundFormState, setState: setFundingFormState, updateReward },
     isProjectOwner,
     updateProject,
+    refetch,
   } = useProjectContext()
 
   const [selectedReward, setSelectedReward] = useState<ProjectRewardForCreateUpdateFragment>()
@@ -46,6 +47,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
         const newRewards = project?.rewards?.filter((reward) => reward?.id !== selectedReward?.id)
         updateProject({ rewards: newRewards || [] } as Project)
         handleClose()
+        refetch()
         toast({
           title: 'Successfully removed!',
           description: `${t('Reward')} ${selectedReward?.name} ${t('was successfully removed')}`,

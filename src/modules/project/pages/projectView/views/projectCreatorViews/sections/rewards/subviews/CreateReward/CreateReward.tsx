@@ -13,7 +13,7 @@ export const ProjectCreateReward = () => {
   const { toast } = useNotification()
   const navigate = useNavigate()
   const location = useLocation()
-  const { project, updateProject } = useProjectContext()
+  const { project, updateProject, refetch } = useProjectContext()
 
   const isLaunch = location.pathname.includes('launch')
   const category = location.state?.category
@@ -30,6 +30,7 @@ export const ProjectCreateReward = () => {
 
       if (isLaunch) {
         navigate(-1)
+        refetch()
       } else {
         navigate(getPath('projectManageRewards', project?.name))
       }

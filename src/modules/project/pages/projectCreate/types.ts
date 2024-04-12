@@ -75,3 +75,25 @@ export type TNodeInput = {
   tlsCert: string
   grpc: string
 }
+
+const RewardCategories = [
+  'Membership',
+  'Gift',
+  'Ticket',
+  'Nostr Badge',
+  'Collectible',
+  'Book',
+  'Course',
+  'Game',
+  'Merch',
+  'Raffle',
+  'Sponsorship',
+  'Service',
+  'Shoutout',
+  'Digital Content',
+  'Artwork',
+  'Physical Product',
+  'Experience',
+] as const
+
+export type RewardCategory = (typeof RewardCategories)[number]

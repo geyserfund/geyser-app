@@ -1,47 +1,17 @@
 import { AddIcon } from '@chakra-ui/icons'
 import { Box, Button, Link, VStack } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { Body1 } from '../../../../../components/typography'
 import { getPath } from '../../../../../constants'
 import { GeyserRewardsGuideLink } from '../../../../../constants/platform/url'
-import { MegaphoneUrl } from '../../../../../constants/platform/url'
 import { useProjectByNameOrIdQuery } from '../../../../../types'
 import { Rewards } from '../../projectView/views/projectMainBody/sections/Rewards'
+import { rewardTemplates } from '../constants'
+import { RewardCategory } from '../types'
 import { RewardTemplate } from './RewardTemplate'
-
-const rewardTemplates: {
-  title: string
-  category: 'Membership' | 'Gift' | 'Ticket' | 'Nostr Badge'
-  description: string
-  image: string
-}[] = [
-  {
-    title: 'Membership',
-    category: 'Membership',
-    description: 'Allow your users to be part of your membership club',
-    image: MegaphoneUrl,
-  },
-  {
-    title: 'Gift',
-    category: 'Gift',
-    description: 'Give your contributors a gift',
-    image: MegaphoneUrl,
-  },
-  {
-    title: 'Tickets',
-    category: 'Ticket',
-    description: 'Give your contributors a ticket to your event',
-    image: MegaphoneUrl,
-  },
-  {
-    title: 'Nostr badge',
-    category: 'Nostr Badge',
-    description: 'Give your contributors a nostr badge',
-    image: MegaphoneUrl,
-  },
-]
 
 export const ProjectCreateRewardMain = () => {
   const { t } = useTranslation()
@@ -57,17 +27,17 @@ export const ProjectCreateRewardMain = () => {
 
   const project = data?.projectGet
 
-  let hasRewards = false
+  const [hasRewards, setHasRewards] = useState(Boolean(project?.rewards.length))
 
-  if (project) {
-    hasRewards = project.rewards?.length > 0
-  }
+  useEffect(() => {
+    setHasRewards(Boolean(project?.rewards.length))
+  }, [project?.rewards.length])
 
   const handleCreateRewardClick = () => {
     navigate(getPath('launchProjectRewardsNew', project?.id))
   }
 
-  const handleSelectRewardTemplate = (category: 'Membership' | 'Gift' | 'Ticket' | 'Nostr Badge') => {
+  const handleSelectRewardTemplate = (category: RewardCategory) => {
     navigate(getPath('launchProjectRewardsNew', project?.id), { state: { category } })
   }
 
@@ -94,7 +64,7 @@ export const ProjectCreateRewardMain = () => {
         {t('Or, use a reward template below')}
       </Body1>
       <Box width="100%" display={'flex'} flexDirection={'row'} gap={2}>
-        {rewardTemplates.map((reward) => (
+        {rewardTemplates.slice(0, 4).map((reward) => (
           <RewardTemplate
             key={reward.category}
             reward={reward}
