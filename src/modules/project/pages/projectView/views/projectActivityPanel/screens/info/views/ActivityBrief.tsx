@@ -254,7 +254,7 @@ export const ActivityBrief = (props: StackProps) => {
           size="lg"
           variant="transparent"
         >
-          <Text fontWeight={500}>{t('Contributorsss')}</Text>
+          <Text fontWeight={500}>{t('Contributors')}</Text>
           <HStack ml={1} spacing={0} alignItems="start">
             {!funderLoading
               ? latestFunders.length > 0
