@@ -94,6 +94,15 @@ const RewardCategories = [
   'Artwork',
   'Physical Product',
   'Experience',
+  'Event',
+  'Song',
 ] as const
 
 export type RewardCategory = (typeof RewardCategories)[number]
+
+export type RewardTemplateType = {
+  title: string
+  category: RewardCategory
+  description: string
+  image: string
+}

@@ -9,7 +9,7 @@ import { getPath } from '../../../../../constants'
 import { GeyserRewardsGuideLink } from '../../../../../constants/platform/url'
 import { useProjectByNameOrIdQuery } from '../../../../../types'
 import { Rewards } from '../../projectView/views/projectMainBody/sections/Rewards'
-import { rewardTemplates } from '../constants'
+import useProjectRewardTemplates from '../hooks/useProjectRewardTemplates'
 import { RewardCategory } from '../types'
 import { RewardTemplate } from './RewardTemplate'
 
@@ -28,6 +28,8 @@ export const ProjectCreateRewardMain = () => {
   const project = data?.projectGet
 
   const [hasRewards, setHasRewards] = useState(Boolean(project?.rewards.length))
+
+  const displayedTemplates = useProjectRewardTemplates(project?.tags || [])
 
   useEffect(() => {
     setHasRewards(Boolean(project?.rewards.length))
@@ -64,7 +66,7 @@ export const ProjectCreateRewardMain = () => {
         {t('Or, use a reward template below')}
       </Body1>
       <Box width="100%" display={'flex'} flexDirection={'row'} gap={2}>
-        {rewardTemplates.slice(0, 4).map((reward) => (
+        {displayedTemplates.map((reward) => (
           <RewardTemplate
             key={reward.category}
             reward={reward}
