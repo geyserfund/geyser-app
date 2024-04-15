@@ -8,6 +8,7 @@ export enum PathName {
   entry = 'entry',
   notFound = 'not-found',
   notAuthorized = 'not-authorized',
+  notFoundProject = 'not-found-project',
   _deprecatedPathNameForProject = 'project',
 
   project = 'project',
@@ -73,6 +74,7 @@ const pathsMap = {
 
   notFound: () => `/${PathName.notFound}`,
   notAuthorized: () => `/${PathName.notAuthorized}`,
+  notFoundProject: () => `/${PathName.notFoundProject}`,
   _deprecatedPathForProject: (projectName: string) => `/${PathName._deprecatedPathNameForProject}/${projectName}`,
 
   project: (projectName: string) => `/${PathName.project}/${projectName}`,
