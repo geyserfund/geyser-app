@@ -1,4 +1,4 @@
-import { Box, Button, Image, Text, VStack } from '@chakra-ui/react'
+import { Box, Image, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { Body1 } from '../../components/typography'
