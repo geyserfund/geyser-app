@@ -330,7 +330,7 @@ export const platformRoutes: RouteObject[] = [
     Component: NotAuthorized,
   },
   {
-    path: getPath('notFoundProject'),
+    path: getPath('projectNotFound'),
     Component: NotFoundProject,
   },
   {

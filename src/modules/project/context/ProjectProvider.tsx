@@ -93,7 +93,7 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
           'error.on': 'query error',
         },
       })
-      navigate(getPath('notFoundProject'))
+      navigate(getPath('projectNotFound'))
     },
     onCompleted(data) {
       if (!data?.projectGet) {
@@ -103,7 +103,7 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
             'error.on': 'invalid data',
           },
         })
-        navigate(getPath('notFoundProject'))
+        navigate(getPath('projectNotFound'))
         return
       }
 
