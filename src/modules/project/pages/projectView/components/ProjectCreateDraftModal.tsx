@@ -23,9 +23,7 @@ export const ProjectCreateDraftModal = (props: Omit<ModalProps, 'children'>) => 
       <VStack w="100%" spacing={6} pt={2}>
         <CheckCircleIcon fontSize="3.4em" color="primary.400" />
         <Text variant="body1">
-          {t(
-            'Your project data has been saved, except for your wallet information (lightning address or node). Come back to the creation flow in order to add your wallet information or edit your project.',
-          )}
+          {t("By keeping your project in 'draft', it will remain hidden until you decide to launch it")}
         </Text>
         <Button w="100%" variant="secondary" onClick={props.onClose}>
           {t('Go to project')}
