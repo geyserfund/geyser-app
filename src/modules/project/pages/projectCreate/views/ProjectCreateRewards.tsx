@@ -20,8 +20,8 @@ export const ProjectCreateRewards = () => {
 
   const project = data?.projectGet
 
-  const isNew = useMatch(getPath('launchProjectRewardsNew', project?.id)) || ''
-  const isEdit = useMatch(getPath('launchProjectRewardsEdit', project?.id, ':rewardId')) || ''
+  const isNew = useMatch(getPath('launchProjectRewardsNew', project?.id))
+  const isEdit = useMatch(getPath('launchProjectRewardsEdit', project?.id, ':rewardId'))
   const isCreatingOrEditing = isNew || isEdit
 
   const handleNext = () => {

@@ -41,6 +41,7 @@ type Props = {
   rewardSaving: boolean
   rewardData: ProjectReward
   createOrUpdate?: 'create' | 'update'
+  isLaunch?: boolean
 }
 
 export const ProjectRewardForm = ({
@@ -50,12 +51,11 @@ export const ProjectRewardForm = ({
   rewardSaving,
   rewardData,
   createOrUpdate = 'create',
+  isLaunch = false,
 }: Props) => {
   const { t } = useTranslation()
   const { project, updateProject } = useProjectContext()
   const navigate = useNavigate()
-  const location = useLocation()
-  const isLaunch = location.pathname.includes('launch')
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
   const { toast } = useNotification()
 
@@ -324,19 +324,7 @@ export const ProjectRewardForm = ({
   }
 
   return (
-    <VStack
-      direction={{ base: 'column', lg: 'row' }}
-      w="full"
-      {...(isLaunch
-        ? { height: '100%' }
-        : {
-            pt: { base: '10px', lg: '20px' },
-            pb: { base: '80px', lg: '20px' },
-            px: { base: '10px', lg: '40px' },
-          })}
-      backgroundColor={{ base: 'neutral.0', lg: 'inherit' }}
-      spacing={{ base: '10px', lg: '20px' }}
-    >
+    <>
       <CardLayout minWidth="100%" {...(isLaunch ? { border: 'none', h: '100%' } : { padding: '30px 30px' })}>
         <Stack direction={'row'} align={'center'}>
           <IconButton
@@ -610,6 +598,6 @@ export const ProjectRewardForm = ({
             project?.rewardCurrency === RewardCurrency.Usdcent ? 'USD($)' : 'Bitcoin(sats)',
           )}`}
       />
-    </VStack>
+    </>
   )
 }
