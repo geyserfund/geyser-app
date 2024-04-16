@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BiInfoCircle } from 'react-icons/bi'
 import { RiArrowLeftSLine } from 'react-icons/ri'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../../../../../../../components/layouts'
 import {

@@ -1,7 +1,6 @@
 import { DeleteIcon } from '@chakra-ui/icons'
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { useLocation } from 'react-router-dom'
 
 import { CardLayout } from '../../../../../../../components/layouts'
 import { ProjectRewardAvailability } from '../../../../../../../components/molecules/projectDisplay/ProjectRewardAvailability'
