@@ -18,14 +18,12 @@ type Props = ICard & {
   handleEdit?: any
   handleRemove?: any
   onRewardClick?: Function
+  isLaunch?: boolean
 }
 
-export const RewardCard = ({ reward, count, ...rest }: Props) => {
+export const RewardCard = ({ reward, count, isLaunch = false, handleEdit, handleRemove, onRewardClick }: Props) => {
   const { t } = useTranslation()
   const { project } = useProjectContext()
-  const location = useLocation()
-
-  const isLaunch = location.pathname.includes('launch')
 
   const isRewardAvailable = reward.maxClaimable ? reward.maxClaimable - reward.sold > count : true
 
@@ -78,7 +76,7 @@ export const RewardCard = ({ reward, count, ...rest }: Props) => {
             height={'40px'}
             flexGrow={1}
             onClick={(e) => {
-              rest.onRewardClick?.(e)
+              onRewardClick?.(e)
             }}
             isDisabled={!isRewardAvailable}
           >
@@ -94,7 +92,7 @@ export const RewardCard = ({ reward, count, ...rest }: Props) => {
               size="sm"
               height={'40px'}
               onClick={(e) => {
-                rest.handleEdit?.(e)
+                handleEdit?.(e)
               }}
             >
               <Text fontSize={16} fontWeight={500} isTruncated>
@@ -105,7 +103,7 @@ export const RewardCard = ({ reward, count, ...rest }: Props) => {
               bg={secondaryColors.red}
               color="neutral.0"
               _hover={{ color: 'neutral.900', bg: 'neutral.400' }}
-              onClick={(e) => rest.handleRemove?.(e)}
+              onClick={(e) => handleRemove?.(e)}
             >
               <DeleteIcon />
             </Button>

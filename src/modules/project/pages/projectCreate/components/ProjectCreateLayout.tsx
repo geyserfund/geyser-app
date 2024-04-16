@@ -61,9 +61,7 @@ export const ProjectCreateLayout = ({
           {content}
         </CardLayout>
       )}
-      {isNestedProcess ? (
-        ''
-      ) : (
+      {isNestedProcess ? null : (
         <HStack
           position={{ base: 'fixed', lg: 'absolute' }}
           w="full"
