@@ -8,7 +8,5 @@ export const shareOnTwitter = (tweetTemplates: string[], projectName: string, t:
 
   const randomKey = tweetTemplates[Math.floor(Math.random() * tweetTemplates.length)] || ''
   const tweetTemplate = t(randomKey)
-  const twitterUrl = generateTwitterShareUrl(tweetTemplate, projectLink)
-
-  window.open(twitterUrl, '_blank')
+  return generateTwitterShareUrl(tweetTemplate, projectLink)
 }

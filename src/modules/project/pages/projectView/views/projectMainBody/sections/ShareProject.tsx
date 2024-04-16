@@ -56,7 +56,7 @@ export const ShareProject = () => {
   }
 
   const handleTwitterShareClick = () => {
-    shareOnTwitter(tweetKeys, project?.name, t)
+    return shareOnTwitter(tweetKeys, project?.name, t)
   }
 
   if (shareClosed) return null
@@ -90,16 +90,18 @@ export const ShareProject = () => {
         <Body2>{t('Sharing on social media helps you reach more people and get closer to achieving your goals')}</Body2>
         <HStack w="full" alignItems="start">
           {isTwitterAccount && (
-            <Button
-              w="full"
-              backgroundColor="neutral.1000"
-              color="neutral.0"
-              leftIcon={<RiTwitterXLine />}
-              _hover={{ backgroundColor: 'neutral.300', color: 'neutral.1000' }}
-              onClick={handleTwitterShareClick}
-            >
-              {t('Post')}
-            </Button>
+            <a href={handleTwitterShareClick()} target="_blank" rel="noopener noreferrer" style={{ width: '100%' }}>
+              <Button
+                as="div"
+                w="full"
+                backgroundColor="neutral.1000"
+                color="neutral.0"
+                leftIcon={<RiTwitterXLine />}
+                _hover={{ backgroundColor: 'neutral.300', color: 'neutral.1000' }}
+              >
+                {t('Post')}
+              </Button>
+            </a>
           )}
           <Button
             variant={copied ? 'secondary' : 'primary'}
