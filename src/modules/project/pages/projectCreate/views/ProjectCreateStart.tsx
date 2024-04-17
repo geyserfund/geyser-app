@@ -74,8 +74,10 @@ export const ProjectCreateStart = () => {
 
         {!loading && (!isLoggedIn || !userHasProjectCreatableAccounts) ? (
           <VStack w="100%">
-            <Text color="neutral.700" pb={3}>
-              {t('You need to login before creating your project.')}
+            <Text align="center" color="neutral.700" pb={3}>
+              {t(
+                'To create a project you first need to connect a social account to your profile using one of the following methods: ',
+              )}
             </Text>
             <VStack>
               <ConnectWithSocial accountType={SocialAccountType.twitter} w="full" />
