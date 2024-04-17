@@ -4,7 +4,6 @@ import { Provider } from 'jotai'
 import { Outlet } from 'react-router-dom'
 
 import { client } from './config'
-import { Head } from './config/Head'
 import { AuthProvider, ChakraThemeProvider, NavProvider, ServiceWorkerProvider } from './context'
 import { BtcProvider } from './context/btc'
 
@@ -18,7 +17,6 @@ export const App = () => {
               <AuthProvider>
                 <NavProvider>
                   <BtcProvider>
-                    <Head />
                     <Outlet />
                   </BtcProvider>
                 </NavProvider>
