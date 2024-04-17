@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { gql, useMutation, useQuery } from '@apollo/client'
 import { CloseIcon } from '@chakra-ui/icons'
 import { Button, Checkbox, HStack, IconButton, Select, Stack, Switch, Text, Tooltip, VStack } from '@chakra-ui/react'
@@ -40,6 +41,7 @@ type Props = {
   rewardSaving: boolean
   rewardData: ProjectReward
   createOrUpdate?: 'create' | 'update'
+  isLaunch?: boolean
 }
 
 export const ProjectRewardForm = ({
@@ -49,6 +51,7 @@ export const ProjectRewardForm = ({
   rewardSaving,
   rewardData,
   createOrUpdate = 'create',
+  isLaunch = false,
 }: Props) => {
   const { t } = useTranslation()
   const { project, updateProject } = useProjectContext()
@@ -316,21 +319,13 @@ export const ProjectRewardForm = ({
     })
   }
 
-  if (!project || isRewardCategoriesLoading) {
+  if ((!project || isRewardCategoriesLoading) && !isLaunch) {
     return null
   }
 
   return (
-    <VStack
-      direction={{ base: 'column', lg: 'row' }}
-      w="full"
-      pt={{ base: '10px', lg: '20px' }}
-      backgroundColor={{ base: 'neutral.0', lg: 'inherit' }}
-      pb={{ base: '80px', lg: '20px' }}
-      px={{ base: '10px', lg: '40px' }}
-      spacing={{ base: '10px', lg: '20px' }}
-    >
-      <CardLayout h="auto" padding="30px 30px" minWidth="100%">
+    <>
+      <CardLayout minWidth="100%" {...(isLaunch ? { border: 'none', h: '100%' } : { padding: '30px 30px' })}>
         <Stack direction={'row'} align={'center'}>
           <IconButton
             size="sm"
@@ -346,6 +341,7 @@ export const ProjectRewardForm = ({
             {t(titleText)}
           </Text>
         </Stack>
+
         <Stack direction={{ base: 'column', lg: 'row' }}>
           <FieldContainer title={t('Reward Name')}>
             <TextInputBox
@@ -393,7 +389,7 @@ export const ProjectRewardForm = ({
             </Select>
           </FieldContainer>
           <FieldContainer
-            title={`${t('Price')} (${project.rewardCurrency === RewardCurrency.Usdcent ? 'USD' : 'SATS'})`}
+            title={`${t('Price')} (${project?.rewardCurrency === RewardCurrency.Usdcent ? 'USD' : 'SATS'})`}
           >
             <TextInputBox
               placeholder={'150'}
@@ -418,8 +414,8 @@ export const ProjectRewardForm = ({
               }}
             >
               <option value="">{t('Select Category')}</option>
-              {rewardCategoriesData.projectRewardCategoriesGet &&
-                rewardCategoriesData.projectRewardCategoriesGet.map((category: string) => (
+              {rewardCategoriesData?.projectRewardCategoriesGet &&
+                rewardCategoriesData?.projectRewardCategoriesGet.map((category: string) => (
                   <option key={category} value={category}>
                     {category}
                   </option>
@@ -554,8 +550,30 @@ export const ProjectRewardForm = ({
             ) : null}
           </FieldContainer>
         </VStack>
-        <Stack>
-          <Button display={{ base: 'block' }} variant="primary" onClick={handleConfirmReward} isLoading={rewardSaving}>
+        <Stack
+          {...(isLaunch
+            ? {
+                h: '100%',
+                w: '100%',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+              }
+            : {})}
+        >
+          {isLaunch && (
+            <Button variant="secondary" flexGrow={1} onClick={() => navigate(-1)}>
+              {t('Cancel')}
+            </Button>
+          )}
+          <Button
+            {...(isLaunch ? { flexGrow: 1 } : {})}
+            display={{ base: 'block' }}
+            variant="primary"
+            onClick={handleConfirmReward}
+            isLoading={rewardSaving}
+          >
             {buttonText}
           </Button>
         </Stack>
@@ -580,6 +598,6 @@ export const ProjectRewardForm = ({
             project?.rewardCurrency === RewardCurrency.Usdcent ? 'USD($)' : 'Bitcoin(sats)',
           )}`}
       />
-    </VStack>
+    </>
   )
 }

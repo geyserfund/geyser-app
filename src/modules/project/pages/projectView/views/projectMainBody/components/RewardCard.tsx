@@ -1,3 +1,4 @@
+import { DeleteIcon } from '@chakra-ui/icons'
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
@@ -6,6 +7,7 @@ import { ProjectRewardAvailability } from '../../../../../../../components/molec
 import { ProjectRewardShippingEstimate } from '../../../../../../../components/molecules/projectDisplay/ProjectRewardShippingEstimate'
 import { Body1, Body2 } from '../../../../../../../components/typography'
 import { ICard, ImageWithReload } from '../../../../../../../components/ui'
+import { secondaryColors } from '../../../../../../../styles'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../../../../types/generated/graphql'
 import { useProjectContext } from '../../../../../context'
 
@@ -15,9 +17,10 @@ type Props = ICard & {
   handleEdit?: any
   handleRemove?: any
   onRewardClick?: Function
+  isLaunch?: boolean
 }
 
-export const RewardCard = ({ reward, count, ...rest }: Props) => {
+export const RewardCard = ({ reward, count, isLaunch = false, handleEdit, handleRemove, onRewardClick }: Props) => {
   const { t } = useTranslation()
   const { project } = useProjectContext()
 
@@ -26,7 +29,7 @@ export const RewardCard = ({ reward, count, ...rest }: Props) => {
   return (
     <CardLayout p={'20px'} pos={'relative'} direction="column" spacing="10px" justifyContent={'space-between'}>
       <VStack spacing="10px" alignItems="start">
-        <HStack justify="space-between">
+        <HStack w="full" justify="space-between">
           <Body1 xBold color="neutral.900">
             {reward.name}
           </Body1>
@@ -64,19 +67,48 @@ export const RewardCard = ({ reward, count, ...rest }: Props) => {
           {reward.description}
         </Text>
       </VStack>
-      <Button
-        variant="primaryNeutral"
-        size="sm"
-        height={'40px'}
-        onClick={(e) => {
-          rest.onRewardClick?.(e)
-        }}
-        isDisabled={!isRewardAvailable}
-      >
-        <Text fontSize={16} fontWeight={500} isTruncated>
-          {t('Select item')}
-        </Text>
-      </Button>
+      <HStack>
+        {!isLaunch ? (
+          <Button
+            variant="primaryNeutral"
+            size="sm"
+            height={'40px'}
+            flexGrow={1}
+            onClick={(e) => {
+              onRewardClick?.(e)
+            }}
+            isDisabled={!isRewardAvailable}
+          >
+            <Text fontSize={16} fontWeight={500} isTruncated>
+              {t('Select item')}
+            </Text>
+          </Button>
+        ) : (
+          <>
+            <Button
+              flexGrow={1}
+              variant="primaryNeutral"
+              size="sm"
+              height={'40px'}
+              onClick={(e) => {
+                handleEdit?.(e)
+              }}
+            >
+              <Text fontSize={16} fontWeight={500} isTruncated>
+                {t('Edit')}
+              </Text>
+            </Button>
+            <Button
+              bg={secondaryColors.red}
+              color="neutral.0"
+              _hover={{ color: 'neutral.900', bg: 'neutral.400' }}
+              onClick={(e) => handleRemove?.(e)}
+            >
+              <DeleteIcon />
+            </Button>
+          </>
+        )}
+      </HStack>
     </CardLayout>
   )
 }
