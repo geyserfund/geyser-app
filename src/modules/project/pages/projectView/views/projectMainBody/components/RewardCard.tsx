@@ -25,8 +25,6 @@ export const RewardCard = ({ reward, count, isLaunch = false, handleEdit, handle
   const { t } = useTranslation()
   const { project } = useProjectContext()
 
-  console.log('project', project?.status)
-
   const isRewardAvailable = reward.maxClaimable ? reward.maxClaimable - reward.sold > count : true
 
   return (
