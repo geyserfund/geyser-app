@@ -1,11 +1,10 @@
-import { OnChainStatus, useOnchainStausValue } from './states/onChainStatus'
-import { OnChainEmailAddress } from './views/onChainEmailAddress'
+import { OnChainStatus, useOnChainStatusValue } from './states/onChainStatus'
 import { OnChainProcessing } from './views/OnChainProcessing'
 import { OnChainPrompt } from './views/OnChainPrompt'
 import { OnChainQR } from './views/OnChainQR'
 
 export const OnchainBoltz = ({ onChainAddress }: { onChainAddress: string }) => {
-  const onChainStatus = useOnchainStausValue()
+  const onChainStatus = useOnChainStatusValue()
 
   switch (onChainStatus) {
     case OnChainStatus.prompt:
@@ -13,12 +12,9 @@ export const OnchainBoltz = ({ onChainAddress }: { onChainAddress: string }) => 
     case OnChainStatus.awaiting:
       return <OnChainQR onChainAddress={onChainAddress} />
     case OnChainStatus.processing:
-      return (
-        <>
-          <OnChainProcessing />
-          <OnChainEmailAddress />
-        </>
-      )
+      return <OnChainProcessing />
+    case OnChainStatus.refund:
+      return <OnChainProcessing />
     default:
       return null
   }

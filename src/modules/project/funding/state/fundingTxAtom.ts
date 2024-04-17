@@ -2,6 +2,10 @@ import { atom, useAtomValue, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
 import { FundingStatus, FundingTxFragment, FundingTxWithInvoiceStatusFragment, InvoiceStatus } from '../../../../types'
+import {
+  OnChainStatus,
+  onChainStatusAtom,
+} from '../../pages/projectView/views/projectActivityPanel/screens/qr/views/onchain/states'
 import { findNextFundingStage } from '../utils/helpers'
 import { fundingStageAtom } from './fundingStagesAtom'
 import { pollingFundingTxAtom, subscriptionActiveAtom } from './pollingFundingTx'
@@ -52,10 +56,18 @@ const fundingStatusCheckAtom = atom(
       (fundingTx.invoiceStatus !== currentFundingTx.invoiceStatus || fundingTx.status !== currentFundingTx.status) &&
       fundingTx.invoiceId === currentFundingTx.invoiceId
     ) {
-      if (
-        fundingTx.status === FundingStatus.Paid ||
-        (fundingTx.onChain && fundingTx.status === FundingStatus.Pending)
-      ) {
+      if (fundingTx.onChain && fundingTx.status === FundingStatus.Pending) {
+        const currentOnChainStatus = get(onChainStatusAtom)
+        if (currentOnChainStatus === OnChainStatus.awaiting) {
+          set(onChainStatusAtom, OnChainStatus.processing)
+        }
+
+        // Resetting the polling and subscription after status check shows transaction completed.
+        set(pollingFundingTxAtom, 0)
+        set(subscriptionActiveAtom, false)
+      }
+
+      if (fundingTx.status === FundingStatus.Paid) {
         const currentState = get(fundingStageAtom)
         const nextState = findNextFundingStage(currentState)
         set(fundingStageAtom, nextState)

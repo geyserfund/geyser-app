@@ -4,14 +4,16 @@ import React, { createContext, PropsWithChildren, useContext } from 'react'
 import { authUserAtom } from '../../../pages/auth/state'
 import { FundingInput, FundingTxFragment } from '../../../types'
 import { useFundingFlow } from '../funding/hooks/useFundingFlow'
+import { SwapData } from '../funding/state'
 
 type FundingContextProps = {
-  fundingRequestErrored: boolean
+  fundingRequestErrored: Error | boolean
   fundingRequestLoading: boolean
   requestFunding: (input: FundingInput) => Promise<void>
   retryFundingFlow: () => void
   resetFundingFlow: () => void
   fundingTx: Omit<FundingTxFragment, 'funder'>
+  swapData: SwapData | null
   error: string
   weblnErrored: boolean
   hasWebLN: boolean

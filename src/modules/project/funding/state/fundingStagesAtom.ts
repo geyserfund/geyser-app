@@ -7,7 +7,7 @@ import {
 } from '../../pages/projectView/views/projectActivityPanel/screens/qr/states/paymentMethodAtom'
 import {
   OnChainStatus,
-  onchainStatusAtom,
+  onChainStatusAtom,
 } from '../../pages/projectView/views/projectActivityPanel/screens/qr/views/onchain/states/onChainStatus'
 import { findNextFundingStage, generatePrivatePublicKeyPair } from '../utils/helpers'
 import { keyPairAtom } from './keyPairAtom'
@@ -35,7 +35,7 @@ export const setNextFundingStageAtom = atom(null, (get, set) => {
   set(fundingStageAtom, nextState)
 })
 
-// This effect is used to reset the subscriptionActiveAtom, pollingFundingTxAtom, paymentMethodAtom, and onchainStatusAtom
+// This effect is used to reset the subscriptionActiveAtom, pollingFundingTxAtom, paymentMethodAtom, and onChainStatusAtom
 export const fundingStageAtomEffect = atomEffect((get, set) => {
   const currentState = get(fundingStageAtom)
   if (currentState !== FundingStages.started) {
@@ -45,7 +45,7 @@ export const fundingStageAtomEffect = atomEffect((get, set) => {
 
     // reset subscription method
     set(paymentMethodAtom, PaymentMethods.lightning)
-    set(onchainStatusAtom, OnChainStatus.prompt)
+    set(onChainStatusAtom, OnChainStatus.prompt)
 
     // reset key pair
     const keyPair = generatePrivatePublicKeyPair()

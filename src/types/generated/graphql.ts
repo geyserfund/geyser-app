@@ -5025,6 +5025,15 @@ export type FundingInvoiceCancelMutation = {
   fundingInvoiceCancel: { __typename?: 'FundinginvoiceCancel'; id: any; success: boolean }
 }
 
+export type FundingTxEmailUpdateMutationVariables = Exact<{
+  input?: InputMaybe<FundingTxEmailUpdateInput>
+}>
+
+export type FundingTxEmailUpdateMutation = {
+  __typename?: 'Mutation'
+  fundingTxEmailUpdate: { __typename?: 'FundingTx'; id: any; email?: string | null }
+}
+
 export type GrantApplyMutationVariables = Exact<{
   input?: InputMaybe<GrantApplyInput>
 }>
@@ -7355,6 +7364,51 @@ export type FundingInvoiceCancelMutationResult = Apollo.MutationResult<FundingIn
 export type FundingInvoiceCancelMutationOptions = Apollo.BaseMutationOptions<
   FundingInvoiceCancelMutation,
   FundingInvoiceCancelMutationVariables
+>
+export const FundingTxEmailUpdateDocument = gql`
+  mutation FundingTxEmailUpdate($input: FundingTxEmailUpdateInput) {
+    fundingTxEmailUpdate(input: $input) {
+      id
+      email
+    }
+  }
+`
+export type FundingTxEmailUpdateMutationFn = Apollo.MutationFunction<
+  FundingTxEmailUpdateMutation,
+  FundingTxEmailUpdateMutationVariables
+>
+
+/**
+ * __useFundingTxEmailUpdateMutation__
+ *
+ * To run a mutation, you first call `useFundingTxEmailUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFundingTxEmailUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [fundingTxEmailUpdateMutation, { data, loading, error }] = useFundingTxEmailUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFundingTxEmailUpdateMutation(
+  baseOptions?: Apollo.MutationHookOptions<FundingTxEmailUpdateMutation, FundingTxEmailUpdateMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<FundingTxEmailUpdateMutation, FundingTxEmailUpdateMutationVariables>(
+    FundingTxEmailUpdateDocument,
+    options,
+  )
+}
+export type FundingTxEmailUpdateMutationHookResult = ReturnType<typeof useFundingTxEmailUpdateMutation>
+export type FundingTxEmailUpdateMutationResult = Apollo.MutationResult<FundingTxEmailUpdateMutation>
+export type FundingTxEmailUpdateMutationOptions = Apollo.BaseMutationOptions<
+  FundingTxEmailUpdateMutation,
+  FundingTxEmailUpdateMutationVariables
 >
 export const GrantApplyDocument = gql`
   mutation GrantApply($input: GrantApplyInput) {

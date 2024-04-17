@@ -1,28 +1,47 @@
-import { Button, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout } from '../../../../../../../../../../../components/layouts'
-import { Body2, H3 } from '../../../../../../../../../../../components/typography'
-import { TransactionProcessingUrl } from '../../../../../../../../../../../constants'
+import { useFundingStage, useRefundFileValue } from '../../../../../../../../../funding/state'
+import { TransactionProcessing } from '../components'
+import { UpdateFundingTxEmailAddress } from '../components/UpdateFundingTxEmailAddress'
+import { useGetTransactionId } from '../hooks/useGetTransactionId'
+import { SwapStatusUpdate, useTransactionStatusUpdate } from '../hooks/useTransactionStatusUpdate'
+import { OnChainStatus, useOnChainStatusSet, useSetOnChainErrorAtom } from '../states'
+
+export const BLOCK_EXPLORER_BASE_URL = 'https://mempool.space/tx/'
 
 export const OnChainProcessing = () => {
   const { t } = useTranslation()
+
+  const { id } = useRefundFileValue()
+  // const transactionId = useGetTransactionId(id)
+
+  const { setNextFundingStage } = useFundingStage()
+  const setOnChainError = useSetOnChainErrorAtom()
+  const setOnChainStatus = useOnChainStatusSet()
+
+  const handleConfirmed = () => {
+    setNextFundingStage()
+  }
+
+  const handleFailed = (value: SwapStatusUpdate) => {
+    console.log('checking swap error', value)
+    setOnChainError(value.error)
+    setOnChainStatus(OnChainStatus.refund)
+  }
+
+  useTransactionStatusUpdate({
+    handleConfirmed,
+    handleFailed,
+    swapId: id,
+  })
+
   return (
     <>
-      <CardLayout w="100%" spacing="20px" alignItems="center">
-        <Image maxHeight="150px" height="auto" width="auto" objectFit={'contain'} src={TransactionProcessingUrl} />
-        <VStack spacing="10px" pb="20px">
-          <H3>{t('Transaction is being processed...')}</H3>
-          <Body2>
-            {t(
-              'Completion time may vary due to Bitcoin network conditions, such as mempool size and transaction fees. Thank you for your patience.',
-            )}
-          </Body2>
-        </VStack>
-        <Button variant="neutral" border="1px solid" borderColor="neutral.900">
-          {t('View transaction on explorer')}
-        </Button>
-      </CardLayout>
+      <TransactionProcessing
+        //  buttonUrl={`${BLOCK_EXPLORER_BASE_URL}${transactionId}`}
+        buttonUrl={`${BLOCK_EXPLORER_BASE_URL}`}
+      />
+      <UpdateFundingTxEmailAddress />
     </>
   )
 }

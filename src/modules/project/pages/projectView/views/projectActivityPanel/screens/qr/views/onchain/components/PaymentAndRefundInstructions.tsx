@@ -2,12 +2,25 @@ import { Button, ListItem, UnorderedList } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { Body2 } from '../../../../../../../../../../../components/typography'
-import { WarningCardLayout } from './WarningCardLayout'
+import { useMobileMode } from '../../../../../../../../../../../utils'
+import { useDownloadRefund } from '../hooks/useDownloadRefund'
+import { FeedbackCard } from './FeedbackCard'
 
 export const PaymentAndRefundInstructions = () => {
   const { t } = useTranslation()
+  const isMobile = useMobileMode()
+  const { downloadRefundJson, downloadRefundQr } = useDownloadRefund()
+
+  const handleClick = () => {
+    if (isMobile) {
+      downloadRefundQr()
+    } else {
+      downloadRefundJson()
+    }
+  }
+
   return (
-    <WarningCardLayout title={t('Critical payment & refund Instructions')}>
+    <FeedbackCard variant="warning" title={t('Critical payment & refund Instructions')}>
       <UnorderedList>
         <ListItem>
           <strong>Send the exact payment amount in Satoshis</strong> to ensure successful processing and avoid payment
@@ -22,8 +35,10 @@ export const PaymentAndRefundInstructions = () => {
         </ListItem>
       </UnorderedList>
 
-      <Button variant="secondary">{t('Download refund file')}</Button>
+      <Button variant="secondary" onClick={handleClick}>
+        {t('Download refund file')}
+      </Button>
       <Body2 pt="10px">{t('For more info on Refund Policies and Fees click here.')}</Body2>
-    </WarningCardLayout>
+    </FeedbackCard>
   )
 }

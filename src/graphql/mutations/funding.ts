@@ -33,3 +33,11 @@ export const MUTATION_FUNDING_INVOICE_CANCEL = gql`
     }
   }
 `
+export const MUTATION_FUNDING_EMAIL_UPDATE = gql`
+  mutation FundingTxEmailUpdate($input: FundingTxEmailUpdateInput) {
+    fundingTxEmailUpdate(input: $input) {
+      id
+      email
+    }
+  }
+`

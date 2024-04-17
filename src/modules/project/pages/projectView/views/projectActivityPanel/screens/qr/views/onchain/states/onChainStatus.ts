@@ -7,27 +7,30 @@ export enum OnChainStatus {
   prompt = 'PROMPT',
   awaiting = 'AWAITING',
   processing = 'PROCESSING',
+  success = 'SUCCESS',
+  refund = 'REFUND',
 }
 
-export const onchainStatusAtom = atom(OnChainStatus.prompt)
+export const onChainStatusAtom = atom(OnChainStatus.prompt)
 
-export const useOnchainStausValue = () => useAtomValue(onchainStatusAtom)
+export const useOnChainStatusValue = () => useAtomValue(onChainStatusAtom)
+export const useOnChainStatusSet = () => useSetAtom(onChainStatusAtom)
 
-const goToNextOnChainStatusAtom = atom(null, (get, set) => {
-  const current = get(onchainStatusAtom)
+const goToNextonChainStatusAtom = atom(null, (get, set) => {
+  const current = get(onChainStatusAtom)
 
   if (current === OnChainStatus.prompt) {
-    set(onchainStatusAtom, OnChainStatus.awaiting)
+    set(onChainStatusAtom, OnChainStatus.awaiting)
   } else if (current === OnChainStatus.awaiting) {
-    set(onchainStatusAtom, OnChainStatus.processing)
+    set(onChainStatusAtom, OnChainStatus.processing)
   }
 })
 
-export const useGoToNextOnChainStatus = () => useSetAtom(goToNextOnChainStatusAtom)
+export const useGoToNextOnChainStatus = () => useSetAtom(goToNextonChainStatusAtom)
 
 export const onChainStatusEffectAtom = atomEffect((get, set) => {
   const currentFundingStage = get(fundingStageAtom)
   if (currentFundingStage !== FundingStages.started) {
-    set(onchainStatusAtom, OnChainStatus.prompt)
+    set(onChainStatusAtom, OnChainStatus.prompt)
   }
 })
