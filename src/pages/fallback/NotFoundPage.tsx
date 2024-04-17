@@ -40,7 +40,11 @@ export const NotFoundPage = () => {
           {t('Oops, looks like this page got lost in space')}
         </Text>
         <Button variant="primary" width={'400px'} onClick={handleActionButton}>
-          <Text variant="body1">{t('Refresh Page')}</Text>
+          <Text variant="body1">
+            {t(
+              'Please try refreshing this page or try Clearing Site Data (Inspect -> Application -> Clear Site Data).',
+            )}
+          </Text>
         </Button>
         <CommonFeedbackMessage prefix={t('Please try refreshing the page.')} />
       </VStack>
