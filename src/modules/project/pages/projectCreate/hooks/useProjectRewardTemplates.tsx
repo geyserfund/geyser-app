@@ -46,7 +46,6 @@ const useProjectRewardTemplates = (selectedTags: Tag[]): RewardTemplateType[] =>
 
   const displayedTemplates = useMemo(() => {
     const categories = getCategoriesByTags(tags)
-    console.log(categories)
     if (categories.length === 0) {
       return [...rewardTemplates].sort(() => 0.5 - Math.random()).slice(0, 4)
     }

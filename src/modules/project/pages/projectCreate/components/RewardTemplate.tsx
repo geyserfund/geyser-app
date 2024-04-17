@@ -25,9 +25,10 @@ export const RewardTemplate = ({ reward, onClick }: RewardTemplateProps) => {
       borderColor="neutral.100"
       padding={2}
       width="100%"
-      transition="transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)"
+      transition="transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.5s cubic-bezier(0.22, 1, 0.36, 1)"
       _hover={{
         transform: 'scale(1.05)',
+        borderColor: 'primary.400',
       }}
       onClick={onClick}
       cursor="pointer"
@@ -41,10 +42,10 @@ export const RewardTemplate = ({ reward, onClick }: RewardTemplateProps) => {
         alignItems={'center'}
         justifyContent={'flex-start'}
       >
-        <Body1 fontSize="14px" color="neutral.500">
+        <Body1 bold fontSize="14px" color="neutral.900" fontWeight="500">
           {reward.title}
         </Body1>
-        <Caption fontSize="10px" color="neutral.600" fontWeight="400">
+        <Caption fontSize="11px" color="neutral.900" fontWeight="400">
           {reward.description}
         </Caption>
       </Box>
