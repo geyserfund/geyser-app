@@ -51,7 +51,6 @@ export const ProjectCreationCreateReward = () => {
     <VStack
       direction={{ base: 'column', lg: 'row' }}
       w="full"
-      height="100%"
       backgroundColor={{ base: 'neutral.0', lg: 'inherit' }}
       spacing={{ base: '10px', lg: '20px' }}
     >
