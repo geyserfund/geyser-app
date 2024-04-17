@@ -4,7 +4,7 @@ import { App } from '../../App'
 import { AppLayout } from '../../AppLayout'
 import { __production__, getPath, PathName } from '../../constants'
 import { ExternalAuthSuccess, FailedAuth } from '../../pages/auth'
-import { NotAuthorized, NotFoundPage } from '../../pages/fallback'
+import { NotAuthorized, NotFoundPage, NotFoundProject } from '../../pages/fallback'
 import { PrivacyPolicy, TermsAndConditions } from '../../pages/legal'
 import { ErrorBoundary } from './ErrorBoundary'
 import { renderPrivateRoute } from './PrivateRoute'
@@ -360,6 +360,10 @@ export const platformRoutes: RouteObject[] = [
   {
     path: getPath('notAuthorized'),
     Component: NotAuthorized,
+  },
+  {
+    path: getPath('projectNotFound'),
+    Component: NotFoundProject,
   },
   {
     path: getPath('leaderboard'),
