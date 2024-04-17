@@ -39,7 +39,6 @@ export const ProjectFeeSelection: React.FC<ProjectFeeSelectionProps> = ({ readOn
 
   return (
     <VStack
-      width="100%"
       border="2px solid"
       borderColor="neutral.200"
       backgroundColor="primary.50"
