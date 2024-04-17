@@ -4,16 +4,16 @@ import { App } from '../../App'
 import { AppLayout } from '../../AppLayout'
 import { __production__, getPath, PathName } from '../../constants'
 import { ExternalAuthSuccess, FailedAuth } from '../../pages/auth'
-import { NotAuthorized, NotFoundPage } from '../../pages/fallback'
+import { NotAuthorized, NotFoundPage, NotFoundProject } from '../../pages/fallback'
 import { PrivacyPolicy, TermsAndConditions } from '../../pages/legal'
 import { ErrorBoundary } from './ErrorBoundary'
 import { renderPrivateRoute } from './PrivateRoute'
 
 const Grants = () => import('../../pages/grants')
-const ProjectLaunch = () => import('../../pages/projectCreate')
+const ProjectLaunch = () => import('../../modules/project/pages/projectCreate')
 const Entry = () => import('../../pages/entry')
-const ProjectDashboard = () => import('../../pages/projectDashboard')
-const Project = () => import('../../pages/projectView')
+const ProjectDashboard = () => import('../../modules/project/pages/projectDashboard')
+const Project = () => import('../../modules/project/pages/projectView')
 const ProfilePage = () => import('../../modules/profile/pages/profilePage/Profile')
 const ProfileSettingsPage = () => import('../../modules/profile/pages/profileSettings/ProfileSettings')
 const Badges = () => import('../../pages/badges/BadgesPage')
@@ -80,6 +80,38 @@ export const platformRoutes: RouteObject[] = [
       const ProjectCreateStory = await ProjectLaunch().then((m) => m.ProjectCreateStory)
       return { element: renderPrivateRoute(ProjectCreateStory) }
     },
+  },
+  {
+    path: getPath('launchProjectRewards', PathName.projectId),
+    async lazy() {
+      const ProjectCreateRewards = await ProjectLaunch().then((m) => m.ProjectCreateRewards)
+      return {
+        element: renderPrivateRoute(ProjectCreateRewards),
+      }
+    },
+    children: [
+      {
+        index: true,
+        async lazy() {
+          const ProjectCreateRewardMain = await ProjectLaunch().then((m) => m.ProjectCreateRewardMain)
+          return { element: renderPrivateRoute(ProjectCreateRewardMain) }
+        },
+      },
+      {
+        path: 'new',
+        async lazy() {
+          const ProjectCreationCreateReward = await ProjectLaunch().then((m) => m.ProjectCreationCreateReward)
+          return { element: renderPrivateRoute(ProjectCreationCreateReward) }
+        },
+      },
+      {
+        path: 'edit/:rewardId',
+        async lazy() {
+          const ProjectCreationEditReward = await ProjectLaunch().then((m) => m.ProjectCreationEditReward)
+          return { element: renderPrivateRoute(ProjectCreationEditReward) }
+        },
+      },
+    ],
   },
   {
     path: getPath('privateProjectLaunch'),
@@ -328,6 +360,10 @@ export const platformRoutes: RouteObject[] = [
   {
     path: getPath('notAuthorized'),
     Component: NotAuthorized,
+  },
+  {
+    path: getPath('projectNotFound'),
+    Component: NotFoundProject,
   },
   {
     path: getPath('leaderboard'),

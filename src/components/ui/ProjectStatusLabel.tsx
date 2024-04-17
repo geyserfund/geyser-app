@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 
 import { ProjectStatus, Wallet, WalletStatus } from '../../types/generated/graphql'
-import { isActive, isDraft, isInactive } from '../../utils'
+import { isActive, isDraft, isInactive, isInReview } from '../../utils'
+import { InReviewIcon } from '../icons/svg/InReviewIcon'
 
 interface IProjectStatusLabel extends HTMLChakraProps<'div'> {
   project: { status?: ProjectStatus | null; wallets: Pick<Wallet, 'state'>[] }
@@ -22,6 +23,7 @@ export enum ProjectStatusLabels {
   RUNNING = 'RUNNING',
   DRAFT = 'DRAFT',
   INACTIVE = 'INACTIVE',
+  IN_REVIEW = 'IN REVIEW',
 }
 
 export const ProjectStatusColors = {
@@ -30,6 +32,7 @@ export const ProjectStatusColors = {
   [ProjectStatusLabels.RUNNING]: 'primary.500',
   [ProjectStatusLabels.DRAFT]: 'neutral.500',
   [ProjectStatusLabels.INACTIVE]: 'neutral.500',
+  [ProjectStatusLabels.IN_REVIEW]: 'neutral.500',
 }
 
 export const ProjectStatusIcons = {
@@ -38,6 +41,7 @@ export const ProjectStatusIcons = {
   [ProjectStatusLabels.RUNNING]: BsFillCheckCircleFill,
   [ProjectStatusLabels.DRAFT]: BsFillXCircleFill,
   [ProjectStatusLabels.INACTIVE]: BsFillXCircleFill,
+  [ProjectStatusLabels.IN_REVIEW]: InReviewIcon,
 }
 
 export const ProjectStatusTooltip = {
@@ -48,6 +52,7 @@ export const ProjectStatusTooltip = {
   [ProjectStatusLabels.RUNNING]: 'This project is live and wallet running smoothly.',
   [ProjectStatusLabels.DRAFT]: 'This project has not been launched yet and is only visible to the project creator.',
   [ProjectStatusLabels.INACTIVE]: 'This project has been deactivated by the project creator.',
+  [ProjectStatusLabels.IN_REVIEW]: 'This project is in review.',
 }
 
 export const ProjectStatusLabel = ({
@@ -92,6 +97,10 @@ export const ProjectStatusLabel = ({
 
       if (isInactive(project.status)) {
         return ProjectStatusLabels.INACTIVE
+      }
+
+      if (isInReview(project.status)) {
+        return ProjectStatusLabels.IN_REVIEW
       }
 
       return null

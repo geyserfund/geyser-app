@@ -6,13 +6,14 @@ import { Outlet, useNavigate, useParams } from 'react-router-dom'
 import Loader from '../../components/ui/Loader'
 import { Head } from '../../config'
 import { getPath, ProjectEntryThumbnailPlaceholderUrl } from '../../constants'
-import { useProjectContext } from '../../context'
-import { ProjectProvider } from '../../context'
+import { ProjectProvider, useProjectContext } from '../../modules/project/context'
+import { FundingProvider } from '../../modules/project/context/FundingProvider'
+import { FundingStages, useFundingStage } from '../../modules/project/funding/state/fundingStagesAtom'
+import { ProjectActivityPanel } from '../../modules/project/pages/projectView/views/projectActivityPanel'
+import { ProjectMobileBottomNavigation } from '../../modules/project/pages/projectView/views/projectNavigation/components/ProjectMobileBottomNavigation'
 import { EntryFragment, FundingResourceType, useEntryLazyQuery } from '../../types'
 import { toInt, useMobileMode } from '../../utils'
 import { NotFoundPage } from '../fallback/NotFoundPage'
-import { ProjectActivityPanel } from '../projectView/projectActivityPanel'
-import { ProjectMobileBottomNavigation } from '../projectView/projectNavigation/components/ProjectMobileBottomNavigation'
 import { useEntryAtom } from './entryAtom'
 
 export const EntryPage = () => {
@@ -44,7 +45,9 @@ export const EntryPage = () => {
 
   return (
     <ProjectProvider projectId={Number(entry.project?.id)}>
-      <EntryViewWrapper loading={loading} error={error} entry={entry} />
+      <FundingProvider>
+        <EntryViewWrapper loading={loading} error={error} entry={entry} />
+      </FundingProvider>
     </ProjectProvider>
   )
 }
@@ -58,7 +61,8 @@ interface IEntryViewWrapper {
 const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
   const isMobile = useMobileMode()
 
-  const { project, error: projectError, loading: projectLoading, fundingFlow } = useProjectContext()
+  const { project, error: projectError, loading: projectLoading } = useProjectContext()
+  const { fundingStage } = useFundingStage()
 
   if (loading || projectLoading || !project) {
     return <Loader paddingTop="65px" />
@@ -86,7 +90,7 @@ const EntryViewWrapper = ({ entry, loading, error }: IEntryViewWrapper) => {
         />
         <Outlet />
         <ProjectActivityPanel resourceType={FundingResourceType.Entry} resourceId={entry.id} />
-        {isMobile && fundingFlow.fundState === 'initial' && <ProjectMobileBottomNavigation fixed />}
+        {isMobile && fundingStage === FundingStages.initial && <ProjectMobileBottomNavigation fixed />}
       </Box>
     </Box>
   )

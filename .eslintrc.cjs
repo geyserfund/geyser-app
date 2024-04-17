@@ -11,6 +11,7 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:testing-library/react',
     'plugin:prettier/recommended',
+    'plugin:storybook/recommended',
   ],
   plugins: [
     'react',

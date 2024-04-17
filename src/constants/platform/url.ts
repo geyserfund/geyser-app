@@ -162,6 +162,9 @@ export const WalletCreationFindOutMoreUrl =
 export const GeyserEmailVerificationDocUrl =
   'https://guide.geyser.fund/geyser-docs/product-features/edit-your-project/verify-your-email'
 
+export const GeyserRewardsGuideLink =
+  'https://guide.geyser.fund/geyser-docs/guides/step-by-step-tutorials/how-to-leverage-the-power-of-rewards'
+
 // External website Links
 
 export const commonMarkdownUrl = 'https://commonmark.org/help/'
@@ -265,3 +268,27 @@ export const SteliosProfileUrl = 'https://storage.googleapis.com/geyser-projects
 export const FlashGeyserUrl = 'https://app.paywithflash.com/geyser'
 export const FlashsubscribeUrl = 'https://app.paywithflash.com/external-login/geyser'
 export const FlashMembershipCountUrl = 'https://app.nostreggs.io/geyser/api/external/get_geyser_user_memberships_count'
+
+// REWARD TEMPLATE URLS
+export const MembershipImageUrl = 'https://storage.googleapis.com/geyser-projects-media/reward-templates/membership.png'
+export const GiftImageUrl = 'https://storage.googleapis.com/geyser-projects-media/reward-templates/gift.png'
+export const TicketImageUrl = 'https://storage.googleapis.com/geyser-projects-media/reward-templates/ticket.png'
+export const NostrBadgeImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/reward-templates/nostr-badge.png'
+export const CollectibleImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/reward-templates/collectible.png'
+export const BookImageUrl = 'https://storage.googleapis.com/geyser-projects-media/reward-templates/book.png'
+export const CourseImageUrl = 'https://storage.googleapis.com/geyser-projects-media/reward-templates/course.png'
+export const GameImageUrl = 'https://storage.googleapis.com/geyser-projects-media/reward-templates/game.png'
+export const MerchImageUrl = 'https://storage.googleapis.com/geyser-projects-media/reward-templates/merch.png'
+export const RaffleImageUrl = 'https://storage.googleapis.com/geyser-projects-media/reward-templates/raffle.png'
+export const SponsorshipImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/reward-templates/sponsorship.png'
+export const ServiceImageUrl = 'https://storage.googleapis.com/geyser-projects-media/reward-templates/service.png'
+export const ShoutoutImageUrl = 'https://storage.googleapis.com/geyser-projects-media/reward-templates/shoutout.png'
+export const DigitalContentImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/reward-templates/digital-content.png'
+export const ArtworkImageUrl = 'https://storage.googleapis.com/geyser-projects-media/reward-templates/artwork.png'
+export const PhysicalProductImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/reward-templates/physical-product.png'
+export const ExperienceImageUrl = 'https://storage.googleapis.com/geyser-projects-media/reward-templates/experience.png'

@@ -42,7 +42,11 @@ export const NotFoundPage = () => {
         <Button variant="primary" width={'400px'} onClick={handleActionButton}>
           <Text variant="body1">{t('Refresh Page')}</Text>
         </Button>
-        <CommonFeedbackMessage prefix={t('Please try refreshing the page.')} />
+        <CommonFeedbackMessage
+          prefix={t(
+            'Please try refreshing this page or try Clearing Site Data (Inspect -> Application -> Clear Site Data).',
+          )}
+        />
       </VStack>
     </>
   )

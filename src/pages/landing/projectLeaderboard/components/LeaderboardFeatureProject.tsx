@@ -6,7 +6,7 @@ import { Body1, Body2 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import { ProjectForLandingPageFragment } from '../../../../types'
-import { AvatarElement } from '../../../projectView/projectMainBody/components'
+import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
 import { LeaderboardFundingStats } from '.'
 
 interface LeaderboardFeatureProjectProps extends StackProps {
