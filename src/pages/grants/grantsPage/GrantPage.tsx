@@ -58,7 +58,10 @@ export const GrantPage = () => {
       ? (grant.applicants.filter((applicant) =>
           Boolean(
             applicant &&
-              (applicant.status === GrantApplicantStatus.Accepted || applicant.status === GrantApplicantStatus.Funded),
+              (grant.status === GrantStatusEnum.Closed
+                ? applicant.status === GrantApplicantStatus.Funded
+                : applicant.status === GrantApplicantStatus.Accepted ||
+                  applicant.status === GrantApplicantStatus.Funded),
           ),
         ) as Array<GrantApplicant>)
       : []
