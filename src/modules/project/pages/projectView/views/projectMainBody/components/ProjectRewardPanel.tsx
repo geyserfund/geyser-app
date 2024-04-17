@@ -8,6 +8,7 @@ import { Body2 } from '../../../../../../../components/typography'
 import { ImageWithReload } from '../../../../../../../components/ui'
 import { PathName } from '../../../../../../../constants'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../../../../types'
+import { ProjectStatus } from '../../../../../../../types'
 import { isActive, toInt } from '../../../../../../../utils'
 import { MobileViews, useProjectContext } from '../../../../../context'
 
@@ -76,7 +77,7 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
               setMobileView(MobileViews.funding)
               setFundingFormState('step', 'contribution')
             }}
-            isDisabled={!isRewardAvailable}
+            isDisabled={!isRewardAvailable || project?.status === ProjectStatus.Inactive}
           >
             <Text isTruncated>{t('Select item')}</Text>
           </Button>

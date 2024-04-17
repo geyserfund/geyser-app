@@ -8,6 +8,7 @@ import { ProjectRewardShippingEstimate } from '../../../../../../../components/m
 import { Body1, Body2 } from '../../../../../../../components/typography'
 import { ICard, ImageWithReload } from '../../../../../../../components/ui'
 import { secondaryColors } from '../../../../../../../styles'
+import { ProjectStatus } from '../../../../../../../types'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../../../../types/generated/graphql'
 import { useProjectContext } from '../../../../../context'
 
@@ -23,6 +24,8 @@ type Props = ICard & {
 export const RewardCard = ({ reward, count, isLaunch = false, handleEdit, handleRemove, onRewardClick }: Props) => {
   const { t } = useTranslation()
   const { project } = useProjectContext()
+
+  console.log('project', project?.status)
 
   const isRewardAvailable = reward.maxClaimable ? reward.maxClaimable - reward.sold > count : true
 
@@ -77,7 +80,7 @@ export const RewardCard = ({ reward, count, isLaunch = false, handleEdit, handle
             onClick={(e) => {
               onRewardClick?.(e)
             }}
-            isDisabled={!isRewardAvailable}
+            isDisabled={!isRewardAvailable || project?.status === ProjectStatus.Inactive}
           >
             <Text fontSize={16} fontWeight={500} isTruncated>
               {t('Select item')}
