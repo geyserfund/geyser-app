@@ -27,7 +27,6 @@ import {
   useProjectFundersQuery,
 } from '../../../../../../../../../types'
 import { toInt, useMobileMode, useNotification } from '../../../../../../../../../utils'
-import { getProjectBalance } from '../../../../../../../../../utils/helpers'
 import { useProjectContext } from '../../../../../../../context'
 import { ContributeButton, FollowButton, ShareButton } from '../../../../projectMainBody/components'
 import { BalanceDisplayButton, SubscribeButton } from '../components'
@@ -62,7 +61,7 @@ export const ActivityBrief = (props: StackProps) => {
 
   const { colors } = useTheme()
 
-  const balance = useMemo(() => (project ? getProjectBalance(project) : 0), [project])
+  const balance = useMemo(() => (project ? project.balance : 0), [project])
 
   const fundersModal = useProjectFundersModal()
 
