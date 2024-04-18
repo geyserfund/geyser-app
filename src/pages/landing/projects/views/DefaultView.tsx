@@ -2,22 +2,20 @@ import { VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 
 import { CardLayout } from '../../../../components/layouts'
-import { getFeaturedProject, getListOfTags } from '../../../../constants'
+import { getListOfTags } from '../../../../constants'
 import { useMobileMode } from '../../../../utils'
 import { MobileDivider } from '../../../grants/components'
-// import { useGrants } from '../../../grants/hooks/useGrants'
+import { useGrants } from '../../../grants/hooks/useGrants'
 import { ProjectsDisplayMostFundedThisWeek } from '../components'
-import { SubscribeToProjects } from '../components/SubscribeToProjects'
-// import { FeaturedProjectCard } from '../elements'
 import {
-  //  FeaturedGrantCard,
-  FeaturedProjectCard,
+  FeaturedGrantCard,
+  // FeaturedProjectCard,
 } from '../elements'
 
 export const DefaultView = () => {
   const isMobile = useMobileMode()
 
-  // const { activeGrant, loading } = useGrants()
+  const { activeGrant, loading } = useGrants()
 
   const allTags = useMemo(() => getListOfTags(), [])
 
@@ -26,15 +24,16 @@ export const DefaultView = () => {
 
   return (
     <VStack w="full" spacing="20px" pt="20px">
-      <CardLayout noborder={isMobile} w="full" spacing={{ base: '15px', lg: '50px' }} padding={{ base: 0, lg: '20px' }}>
+      {/* Subscribe to projects block is commented out */}
+      {/* <CardLayout noborder={isMobile} w="full" spacing={{ base: '15px', lg: '50px' }} padding={{ base: 0, lg: '20px' }}>
         <SubscribeToProjects />
         <MobileDivider mt={2} />
-      </CardLayout>
+      </CardLayout> */}
 
       <CardLayout noborder={isMobile} w="full" spacing={{ base: '15px', lg: '50px' }} padding={{ base: 0, lg: '20px' }}>
-        <FeaturedProjectCard projectName={getFeaturedProject()} />
+        {/* <FeaturedProjectCard projectName={getFeaturedProject()} /> */}
+        <FeaturedGrantCard grant={activeGrant} loading={loading} />
         <MobileDivider mt={2} />
-        {/* <FeaturedGrantCard grant={activeGrant} loading={loading} /> */}
         {firstThreeTags.map((tag) => (
           <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} hasMobileDivider />
         ))}
