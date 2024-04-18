@@ -176,5 +176,5 @@
   "main": "main.tsx",
   "author": "geyser",
   "license": "MIT",
-  "packageManager": "yarn@1.22.19"
+  "packageManager": "yarn@4.1.1"
 }

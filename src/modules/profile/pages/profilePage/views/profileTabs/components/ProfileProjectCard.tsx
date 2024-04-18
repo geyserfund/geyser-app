@@ -6,9 +6,9 @@ import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../../.
 import { Body1, Body2 } from '../../../../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../../../../components/ui'
 import { getPath } from '../../../../../../../constants'
-import { FollowButton } from '../../../../../../project/pages/projectView/views/projectMainBody/components'
 import { ProjectForProfilePageFragment } from '../../../../../../../types'
 import { commaFormatted, toSmallImageUrl } from '../../../../../../../utils'
+import { FollowButton } from '../../../../../../project/pages/projectView/views/projectMainBody/components'
 
 interface ProfileProjectCardProps extends Omit<CardLayoutProps, 'to'> {
   project: ProjectForProfilePageFragment

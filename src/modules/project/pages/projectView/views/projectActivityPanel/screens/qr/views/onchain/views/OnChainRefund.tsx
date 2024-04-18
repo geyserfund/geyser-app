@@ -1,8 +1,3 @@
-
-
 export const OnChainRefund = () => {
-  return (
-    <div>Something</div>
-  )
+  return <div>Something</div>
 }
-

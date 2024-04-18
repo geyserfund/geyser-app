@@ -13,7 +13,7 @@ export const TableToggle = ({ isChecked, value, onChange, labelPosition = 'right
 
   return (
     <Stack direction="row" align={'center'}>
-      {labelPosition == 'left' && renderLabel()}
+      {labelPosition === 'left' && renderLabel()}
       <span style={{ transform: 'rotate(180deg)' }}>
         <Switch
           isChecked={isChecked}
@@ -24,7 +24,7 @@ export const TableToggle = ({ isChecked, value, onChange, labelPosition = 'right
           }}
         />
       </span>
-      {labelPosition == 'right' && renderLabel()}
+      {labelPosition === 'right' && renderLabel()}
     </Stack>
   )
 }
