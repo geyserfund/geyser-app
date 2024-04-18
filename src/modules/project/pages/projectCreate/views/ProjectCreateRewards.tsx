@@ -37,7 +37,7 @@ export const ProjectCreateRewards = () => {
   }
 
   return (
-    <ProjectProvider projectId={project?.title || ''}>
+    <ProjectProvider projectId={project?.name || ''}>
       <ProjectCreateLayout
         title={<TitleWithProgressBar title={t('Add Rewards')} subtitle={t('Create a project')} index={4} length={5} />}
         continueButton={!isCreatingOrEditing && <FormContinueButton flexGrow={1} onClick={handleNext} />}
