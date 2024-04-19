@@ -7,11 +7,11 @@ import { Link } from 'react-router-dom'
 import { CardLayout } from '../../../../components/layouts'
 import { H3 } from '../../../../components/typography'
 import { getPath } from '../../../../constants'
+import { ProjectFundingModal } from '../../../../modules/project/pages/projectFunding/components/ProjectFundingModal'
+import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
 import { fonts } from '../../../../styles'
 import { GrantApplicant, GrantApplicantFunding, GrantStatusEnum, Project } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
-import { ProjectFundingModal } from '../../../../modules/project/pages/projectFunding/components/ProjectFundingModal'
-import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
 import { WidgetItem } from '../../components/WidgetItem'
 import { useProjectFundingModal } from '../components/useProjectFundingModal'
 
@@ -112,7 +112,7 @@ export const CommunityVoting = ({
                       objectFit="cover"
                       borderRadius="7px"
                       width={isMobile ? '90px' : '144px'}
-                      height={'101px'}
+                      height={isMobile ? '90px' : '144px'}
                       src={project.thumbnailImage}
                       alt="project thumbnail"
                     />
@@ -125,7 +125,7 @@ export const CommunityVoting = ({
                 </Link>
                 <Link to={projectLink}>
                   <Text noOfLines={4} wordBreak="break-word">
-                    {project.description}
+                    {project.shortDescription}
                   </Text>
                 </Link>
               </Box>
