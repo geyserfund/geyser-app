@@ -53,6 +53,8 @@ export const FundingForm = ({ project, user, onFundingRequested = () => {} }: Pr
       })
       return false
     }
+
+    return true;
   }
 
   const onSubmit = () => {
