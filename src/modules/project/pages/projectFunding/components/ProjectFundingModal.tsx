@@ -16,7 +16,7 @@ export const ProjectFundingModal = ({ isOpen, onClose, props }: ProjectFundingMo
   }, [props])
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose} size="sm">
+    <Modal isCentered isOpen={isOpen} onClose={onClose} size="md">
       <ModalOverlay />
       <ModalContent bg="transparent" boxShadow={0}>
         <Box borderRadius="4px" bg="neutral.0" pb={3}>
