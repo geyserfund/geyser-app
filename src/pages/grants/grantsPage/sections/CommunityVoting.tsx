@@ -1,4 +1,4 @@
-import { Box, Button, Image, Text } from '@chakra-ui/react'
+import { Box, Button, Text } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import { H3 } from '../../../../components/typography'
+import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import { ProjectFundingModal } from '../../../../modules/project/pages/projectFunding/components/ProjectFundingModal'
 import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
@@ -99,26 +100,29 @@ export const CommunityVoting = ({
       <H3 fontSize="18px">{t(title)}</H3>
       {applicants.map(({ project, funding }) => {
         const projectLink = getPath('project', project.name)
+        const currentFunders = project.funders.filter(
+          (funder) => funder && funder.confirmedAt > fundingOpenStartDate && funder.confirmedAt <= fundingOpenEndDate,
+        )
         return (
           <CardLayout p={2} key={project.id}>
             <Box display="flex">
-              {project.thumbnailImage && (
-                <Box mr={3} height={'101px'}>
+              {
+                <Box mr={3} height={{ base: '90px', lg: '144px' }}>
                   <Link
                     to={projectLink}
                     className={classNames(classes.image, isMobile ? classes.mobileImage : classes.desktopImage)}
                   >
-                    <Image
+                    <ImageWithReload
                       objectFit="cover"
                       borderRadius="7px"
                       width={isMobile ? '90px' : '144px'}
                       height={isMobile ? '90px' : '144px'}
-                      src={project.thumbnailImage}
+                      src={project.thumbnailImage || ''}
                       alt="project thumbnail"
                     />
                   </Link>
                 </Box>
-              )}
+              }
               <Box pr={2} flexGrow={1}>
                 <Link to={projectLink}>
                   <H3 fontSize="18px">{project.title}</H3>
@@ -143,32 +147,27 @@ export const CommunityVoting = ({
                 </Box>
               )}
             </Box>
-            {canVote && (
+            {canVote && currentFunders.length > 0 && (
               <Box pl={2} filter="opacity(0.4)">
-                {project.funders
-                  .filter(
-                    (funder) =>
-                      funder && funder.confirmedAt > fundingOpenStartDate && funder.confirmedAt <= fundingOpenEndDate,
-                  )
-                  .map(
-                    (funder) =>
-                      funder && (
-                        <AvatarElement
-                          key={funder.id}
-                          width="28px"
-                          height="28px"
-                          wrapperProps={{
-                            display: 'inline-block',
-                            marginLeft: '-5px',
-                            marginTop: 2,
-                          }}
-                          avatarOnly
-                          borderRadius="50%"
-                          seed={funder.id}
-                          user={funder.user}
-                        />
-                      ),
-                  )}
+                {currentFunders.map(
+                  (funder) =>
+                    funder && (
+                      <AvatarElement
+                        key={funder.id}
+                        width="28px"
+                        height="28px"
+                        wrapperProps={{
+                          display: 'inline-block',
+                          marginLeft: '-5px',
+                          marginTop: 2,
+                        }}
+                        avatarOnly
+                        borderRadius="50%"
+                        seed={funder.id}
+                        user={funder.user}
+                      />
+                    ),
+                )}
               </Box>
             )}
             {isMobile && renderButton(project)}
