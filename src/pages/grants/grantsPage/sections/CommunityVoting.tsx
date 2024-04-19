@@ -174,7 +174,7 @@ export const CommunityVoting = ({
           </CardLayout>
         )
       })}
-      <ProjectFundingModal {...modalProps} />
+      {modalProps.isOpen && <ProjectFundingModal {...modalProps} />}
     </CardLayout>
   )
 }
