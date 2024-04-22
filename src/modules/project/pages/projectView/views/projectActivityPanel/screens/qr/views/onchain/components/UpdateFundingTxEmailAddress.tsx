@@ -6,6 +6,7 @@ import { TbMailFilled } from 'react-icons/tb'
 import * as yup from 'yup'
 
 import { Body2 } from '../../../../../../../../../../../components/typography'
+import { TextField } from '../../../../../../../../../../../forms/components/TextField'
 import { useFundingTxEmailUpdateMutation } from '../../../../../../../../../../../types'
 import { useNotification } from '../../../../../../../../../../../utils'
 import { useFundingContext } from '../../../../../../../../../context'
@@ -42,6 +43,7 @@ export const UpdateFundingTxEmailAddress = () => {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
+    control,
   } = useForm<{ email: string }>({
     resolver: yupResolver(schema),
   })
@@ -76,10 +78,7 @@ export const UpdateFundingTxEmailAddress = () => {
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack spacing="10px">
-          <FormControl isInvalid={Boolean(errors.email)}>
-            <Input id="email" placeholder={t('Enter email address')} {...register('email')} />
-            <FormErrorMessage>{errors.email && errors.email.message}</FormErrorMessage>
-          </FormControl>
+          <TextField placeholder={t('Enter email address')} name="email" control={control} />
           <Body2>
             {t(
               'If previously provided, your email will be pre-filled, but still editable. Otherwise, if you want you can enter your email to receive transaction confirmation and status updates.',

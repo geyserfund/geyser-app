@@ -4,7 +4,7 @@ import useWebSocket, { ReadyState } from 'react-use-websocket'
 
 import { __production__, __staging__ } from '../../../../../../../../../../../constants'
 
-const getSwapServiceDomain = () => {
+export const getSwapServiceDomain = () => {
   if (__production__) {
     return 'api.boltz.exchange'
   }
@@ -17,7 +17,6 @@ const getSwapServiceDomain = () => {
 }
 
 const swapServiceDomain = getSwapServiceDomain()
-const swapServiceEndpoint = `https://${swapServiceDomain}/v2`
 const swapServiceWsEndpoint = `wss://${swapServiceDomain}/v2/ws`
 
 const HEARTBEAT_INTERVAL_MS = __production__ ? 5_000 : 30_000
@@ -57,11 +56,12 @@ export const useTransactionStatusUpdate = ({
 }: useTransactionStatusUpdateProps) => {
   const { sendMessage, lastJsonMessage, readyState } = useWebSocket<any>(swapServiceWsEndpoint, {
     heartbeat: {
-      message: JSON.stringify({ op: 'ping' }),
-      returnMessage: JSON.stringify({ op: 'pong' }),
+      message: JSON.stringify({ type: 'ping' }),
+      returnMessage: JSON.stringify({ type: 'pong' }),
       timeout: 60000, // 1 minute, if no response is received, the connection will be closed
       interval: HEARTBEAT_INTERVAL_MS,
     },
+
     retryOnError: true,
   })
   // const {HEARTBEAT_INTERVAL_MS= use useWebSocket(swapServiceWsEndpoint, handleMessage)
@@ -122,13 +122,4 @@ export const useTransactionStatusUpdate = ({
       }
     }
   }, [lastJsonMessage, handleSwapStatusUpdate])
-}
-
-export const getTransactionFromSwap = async (swapId: string) => {
-  try {
-    const resp = await fetch(`${swapServiceEndpoint}/swap/submarine/${swapId}/transaction`).then((res) => res.json())
-    return resp
-  } catch (error) {
-    console.log('checking error', error)
-  }
 }

@@ -5,7 +5,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { ApolloErrors } from '../../../../constants'
 import { FundingInput, useFundingTxWithInvoiceStatusQuery, useFundMutation } from '../../../../types'
 import { toInt, useNotification } from '../../../../utils'
-import { useSetKeyPairAtom, useSwapAtom } from '../state'
+import { useParseResponseToSwapAtom, useRefundFileValue, useSetKeyPairAtom } from '../state'
 import { fundingFlowErrorAtom, fundingRequestErrorAtom, weblnErrorAtom } from '../state/errorAtom'
 import { fundingStageAtomEffect, useFundingStage } from '../state/fundingStagesAtom'
 import { useCheckFundingStatus, useFundingTx } from '../state/fundingTxAtom'
@@ -47,7 +47,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const [weblnErrored] = useAtom(weblnErrorAtom)
 
   const [fundingInput, setFundingInput] = useState<FundingInput | null>(null)
-  const [swapData, setSwapData] = useSwapAtom()
+  const parseResponseToSwap = useParseResponseToSwapAtom()
 
   const { fundingTx, updateFundingTx } = useFundingTx()
 
@@ -93,7 +93,9 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         console.log('OnChain Adddress:', data.fund.fundingTx.address)
         console.log('OnChain admount:', data.fund.fundingTx.amount)
         updateFundingTx(data.fund.fundingTx)
-        setSwapData(data.fund.swap)
+        if (data.fund?.swap?.json) {
+          parseResponseToSwap(data.fund.swap)
+        }
 
         if (hasBolt11 && hasWebLN && webln) {
           startWebLNFlow(data.fund.fundingTx)
@@ -178,7 +180,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     resetFundingFlow,
 
     fundingTx,
-    swapData,
 
     error,
     weblnErrored,

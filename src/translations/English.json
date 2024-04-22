@@ -936,7 +936,27 @@
    "Copy Success image":"Copy Success image",
    "By":"By",
    "Do you wish to initiate a refund now? You can request a refund at any time if you have your refund file ready.":"Do you wish to initiate a refund now? You can request a refund at any time if you have your refund file ready.",
-   "Claim refund":"Claim refund"
+   "Claim refund":"Claim refund",
+   "Transaction has failed":"Transaction has failed",
+   "The transaction failed because the transaction fee set was not high enough to ensure transaction within 24 hours, leading to its automatic rejection.":"The transaction failed because the transaction fee set was not high enough to ensure transaction within 24 hours, leading to its automatic rejection.",
+   "Refund address":"Refund address",
+   "Enter your Bitcoin address":"Enter your Bitcoin address",
+   "Enter Bitcoin on-chain address on which you wish to get a refund.":"Enter Bitcoin on-chain address on which you wish to get a refund.",
+   "Send the exact payment amount in Satoshis":"Send the exact payment amount in Satoshis",
+   "Set the transaction fee to medium or high":"Set the transaction fee to medium or high",
+   "Download and securely store your Refund File":"Download and securely store your Refund File",
+   "Failed to fetch swap transaction":"Failed to fetch swap transaction",
+   "Address is required to claim funds":"Address is required to claim funds",
+   "Upload refund file":"Upload refund file",
+   "Enter refund address":"Enter refund address",
+   "Initiate refund":"Initiate refund",
+   "Refund initiated successfully":"Refund initiated successfully",
+   "Here you can initiate refunds for failed contribution transactions. If your browser has stored Refund files locally, simply enter your Bitcoin on-chain address to proceed. If not, you will also need to upload the Refund file that you should have securely saved during the contribution process.":"Here you can initiate refunds for failed contribution transactions. If your browser has stored Refund files locally, simply enter your Bitcoin on-chain address to proceed. If not, you will also need to upload the Refund file that you should have securely saved during the contribution process.",
+   "For more info on Refund Policies and Fees <1>click here.</1>":"For more info on Refund Policies and Fees <1>click here.</1>"
+
+
+
+
 
 
 }

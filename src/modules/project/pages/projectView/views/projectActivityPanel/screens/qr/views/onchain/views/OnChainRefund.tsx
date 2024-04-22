@@ -1,3 +1,15 @@
+import { DownloadRefund, TransactionFailed } from '../components'
+import { ClaimRefund } from '../components/ClaimRefund'
+import { useSwapTransaction } from '../hooks/useSwapTransaction'
+
 export const OnChainRefund = () => {
-  return <div>Something</div>
+  useSwapTransaction()
+
+  return (
+    <>
+      <TransactionFailed />
+      <ClaimRefund />
+      <DownloadRefund />
+    </>
+  )
 }

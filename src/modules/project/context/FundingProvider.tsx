@@ -4,7 +4,6 @@ import React, { createContext, PropsWithChildren, useContext } from 'react'
 import { authUserAtom } from '../../../pages/auth/state'
 import { FundingInput, FundingTxFragment } from '../../../types'
 import { useFundingFlow } from '../funding/hooks/useFundingFlow'
-import { SwapData } from '../funding/state'
 
 type FundingContextProps = {
   fundingRequestErrored: Error | boolean
@@ -13,7 +12,6 @@ type FundingContextProps = {
   retryFundingFlow: () => void
   resetFundingFlow: () => void
   fundingTx: Omit<FundingTxFragment, 'funder'>
-  swapData: SwapData | null
   error: string
   weblnErrored: boolean
   hasWebLN: boolean
@@ -27,11 +25,11 @@ export const useFundingContext = () => useContext(FundingContext)
 // It ensures there is a different scope for the atoms used in the funding flow
 
 export const FundingProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  // To enable access of atoms outside the scope, we need to add the atoms that need to be acessed outside the scope
+  // To enable access of atoms outside the scope, we need to add the atoms that need to be accessed outside the scope
   return (
-    <ScopeProvider atoms={[authUserAtom]}>
-      <FundingContextProvider>{children}</FundingContextProvider>
-    </ScopeProvider>
+    // <ScopeProvider atoms={[authUserAtom]}>
+    <FundingContextProvider>{children}</FundingContextProvider>
+    // </ScopeProvider>
   )
 }
 

@@ -203,7 +203,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
                     {t(navigationButton.name)}
                   </ProjectNavigationButton>
                 ) : loading || !project ? (
-                  <ProjectNavigationButtonSkeleton />
+                  <ProjectNavigationButtonSkeleton key={navigationButton.name} />
                 ) : null
               })}
             </VStack>

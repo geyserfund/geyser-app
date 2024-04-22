@@ -7,6 +7,8 @@ import { FundingStatus, InvoiceStatus } from '../../../../../../../../types/gene
 import { useFundingContext } from '../../../../../../context/FundingProvider'
 import { useRefreshInvoice } from '../../../../../../funding/hooks/useRefreshInvoice'
 import { FundingErrorView, GeneratingInvoice, InvoiceErrorView, QRCodeImage } from './components'
+import { useRefundTransactionId } from './views/onchain/states/onChainTransaction'
+import { RefundInitiated } from './views/refund/RefundInitiated'
 
 enum QRDisplayState {
   REFRESHING = 'REFRESHING',
@@ -15,6 +17,8 @@ enum QRDisplayState {
 
   AWAITING_PAYMENT_WEB_LN = 'AWAITING_PAYMENT_WEB_LN',
 
+  REFUND_INITIALIZED = 'REFUND_INITIALIZED',
+
   INVOICE_CANCELLED = 'INVOICE_CANCELLED',
 
   FUNDING_CANCELED = 'FUNDING_CANCELED',
@@ -22,12 +26,12 @@ enum QRDisplayState {
 
 export const QRCodeSection = () => {
   const { t } = useTranslation()
-
+  const [refundTransactionId] = useRefundTransactionId()
   const { invoiceRefreshErrored, invoiceRefreshLoading, refreshFundingInvoice } = useRefreshInvoice()
 
   const { fundingTx, fundingRequestErrored, fundingRequestLoading, hasWebLN, weblnErrored, error, retryFundingFlow } =
     useFundingContext()
-
+  console.log('chekcing refund transactionId in qrcodesection:', refundTransactionId)
   const qrDisplayState = useMemo(() => {
     if (invoiceRefreshLoading || fundingRequestLoading) {
       return QRDisplayState.REFRESHING
@@ -39,6 +43,10 @@ export const QRCodeSection = () => {
 
     if (fundingTx.invoiceStatus === InvoiceStatus.Canceled || invoiceRefreshErrored) {
       return QRDisplayState.INVOICE_CANCELLED
+    }
+
+    if (refundTransactionId) {
+      return QRDisplayState.REFUND_INITIALIZED
     }
 
     if (hasWebLN && !weblnErrored) {
@@ -55,28 +63,36 @@ export const QRCodeSection = () => {
     invoiceRefreshErrored,
     hasWebLN,
     weblnErrored,
+    refundTransactionId,
   ])
 
-  switch (qrDisplayState) {
-    case QRDisplayState.AWAITING_PAYMENT:
-      return <QRCodeImage />
+  const renderQRCodeSection = () => {
+    switch (qrDisplayState) {
+      case QRDisplayState.AWAITING_PAYMENT:
+        return <QRCodeImage />
 
-    case QRDisplayState.AWAITING_PAYMENT_WEB_LN:
-      return (
-        <VStack width={'350px'} height={'335px'} justifyContent={'center'}>
-          <VStack>
-            <Loader />
-            <Text>{t('Awaiting Payment')}</Text>
+      case QRDisplayState.REFUND_INITIALIZED:
+        return <RefundInitiated />
+
+      case QRDisplayState.AWAITING_PAYMENT_WEB_LN:
+        return (
+          <VStack width={'350px'} height={'335px'} justifyContent={'center'}>
+            <VStack>
+              <Loader />
+              <Text>{t('Awaiting Payment')}</Text>
+            </VStack>
           </VStack>
-        </VStack>
-      )
-    case QRDisplayState.INVOICE_CANCELLED:
-      return <InvoiceErrorView onRefreshSelected={refreshFundingInvoice} />
+        )
+      case QRDisplayState.INVOICE_CANCELLED:
+        return <InvoiceErrorView onRefreshSelected={refreshFundingInvoice} />
 
-    case QRDisplayState.FUNDING_CANCELED:
-      return <FundingErrorView error={error} />
+      case QRDisplayState.FUNDING_CANCELED:
+        return <FundingErrorView error={error} />
 
-    default:
-      return <GeneratingInvoice refreshInvoice={retryFundingFlow} />
+      default:
+        return <GeneratingInvoice refreshInvoice={retryFundingFlow} />
+    }
   }
+
+  return <>{renderQRCodeSection()}</>
 }

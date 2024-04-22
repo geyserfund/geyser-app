@@ -14,6 +14,7 @@ const ProjectLaunch = () => import('../../modules/project/pages/projectCreate')
 const Entry = () => import('../../pages/entry')
 const ProjectDashboard = () => import('../../modules/project/pages/projectDashboard')
 const Project = () => import('../../modules/project/pages/projectView')
+const Refund = () => import('../../modules/project/pages/refund')
 const ProfilePage = () => import('../../modules/profile/pages/profilePage/Profile')
 const ProfileSettingsPage = () => import('../../modules/profile/pages/profileSettings/ProfileSettings')
 const Badges = () => import('../../pages/badges/BadgesPage')
@@ -295,6 +296,20 @@ export const platformRoutes: RouteObject[] = [
         ],
       },
     ],
+  },
+  {
+    path: getPath('refundInitiated'),
+    async lazy() {
+      const RefundInitiatedPage = await Refund().then((m) => m.RefundInitiatedPage)
+      return { Component: RefundInitiatedPage }
+    },
+  },
+  {
+    path: getPath('refund'),
+    async lazy() {
+      const RefundPage = await Refund().then((m) => m.RefundPage)
+      return { Component: RefundPage }
+    },
   },
   {
     path: getPath('entry', PathName.entryId),

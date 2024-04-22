@@ -1,22 +1,66 @@
-import { atom, useAtom, useAtomValue } from 'jotai'
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
 
-import { FundingMutationResponse } from '../../../../types'
 import { keyPairAtom } from './keyPairAtom'
 
-export type SwapData = FundingMutationResponse['swap']
+export type SwapData = {
+  id: string
+  asset: string
+  version: number
+  claimPublicKey: string
+  timeoutBlockHeight: number
+  privateKey: string
+  refundTx?: string
+  swapTree: {
+    claimLeaf: {
+      version: number
+      output: string
+    }
+    refundLeaf: {
+      version: number
+      output: string
+    }
+  }
+}
 
-const swapAtom = atom<SwapData | null>(null)
-export const useSwapAtom = () => useAtom(swapAtom)
+type SwapDataStructure = { [key: string]: SwapData }
 
-const refundFileAtom = atom((get) => {
-  const swap = get(swapAtom)
+const currentSwapAtomId = atomWithStorage<string>('currentSwap', '')
+
+const swapAtom = atomWithStorage<SwapDataStructure>('swapArray', {})
+
+const swapParseAtom = atom(null, (get, set, swap: { json: string }) => {
   const keys = get(keyPairAtom)
-
-  const refundFile = JSON.parse(swap?.json || '')
-
+  const swapData = get(swapAtom)
+  const refundFile = JSON.parse(swap.json)
   refundFile.privateKey = keys?.privateKey?.toString('hex')
-
-  return refundFile
+  set(currentSwapAtomId, refundFile.id) // Set the current id as current swap id
+  set(swapAtom, { [refundFile.id]: refundFile, ...swapData })
 })
 
-export const useRefundFileValue = () => useAtomValue(refundFileAtom)
+const currentSwapAtom = atom(
+  (get) => {
+    const currentSwapId = get(currentSwapAtomId)
+    const swapData = get(swapAtom)
+    const currentSwap = swapData[currentSwapId]
+    if (currentSwap) {
+      return currentSwap
+    }
+  },
+  (get, set, data: SwapData) => {
+    const currentSwapId = get(currentSwapAtomId)
+    const swapData = get(swapAtom)
+    swapData[currentSwapId] = data
+    set(swapAtom, swapData)
+  },
+)
+
+// Used for starting out the refund file
+export const useParseResponseToSwapAtom = () => useSetAtom(swapParseAtom)
+
+// For fetching and updating refund file
+export const useRefundFileValue = () => useAtomValue(currentSwapAtom)
+export const useRefundFileSet = () => useSetAtom(currentSwapAtom)
+
+// Setting current swapId
+export const useSetCurrentSwapId = () => useSetAtom(currentSwapAtomId)

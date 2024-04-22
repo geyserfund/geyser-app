@@ -1,8 +1,10 @@
-import { Button, ListItem, UnorderedList } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
+import { Button, Link, ListItem, UnorderedList } from '@chakra-ui/react'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { Body2 } from '../../../../../../../../../../../components/typography'
+import { GeyserFAQUrl } from '../../../../../../../../../../../constants'
 import { useMobileMode } from '../../../../../../../../../../../utils'
+import { RefundPolicyNote } from '../../../components'
 import { useDownloadRefund } from '../hooks/useDownloadRefund'
 import { FeedbackCard } from './FeedbackCard'
 
@@ -38,7 +40,7 @@ export const PaymentAndRefundInstructions = () => {
       <Button variant="secondary" onClick={handleClick}>
         {t('Download refund file')}
       </Button>
-      <Body2 pt="10px">{t('For more info on Refund Policies and Fees click here.')}</Body2>
+      <RefundPolicyNote />
     </FeedbackCard>
   )
 }

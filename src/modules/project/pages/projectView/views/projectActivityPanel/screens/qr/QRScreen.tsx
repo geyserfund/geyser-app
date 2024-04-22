@@ -9,7 +9,6 @@ import { useFundCalc } from '../../../../../../../../helpers'
 import { IFundForm } from '../../../../../../../../hooks'
 import { standardPadding } from '../../../../../../../../styles'
 import { ProjectFragment, Satoshis, useFundingInvoiceCancelMutation } from '../../../../../../../../types'
-import { useMobileMode } from '../../../../../../../../utils'
 import { useFundingContext } from '../../../../../../context/FundingProvider'
 import { FundingStages, useFundingStage } from '../../../../../../funding/state'
 import { SectionTitleBlock } from '../../components/SectionTitleBlock'
@@ -25,7 +24,6 @@ type Props = {
 export const QRScreen = ({ state, project, handleCloseButton }: Props) => {
   const { t } = useTranslation()
   const { getTotalAmount } = useFundCalc(state)
-  const isMobile = useMobileMode()
 
   const [cancelInvoice] = useFundingInvoiceCancelMutation({
     ignoreResults: true,

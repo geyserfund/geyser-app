@@ -6,7 +6,7 @@ import { Body2, H3 } from '../../../../../../../../../../../components/typograph
 import { TransactionFailedImageUrl } from '../../../../../../../../../../../constants'
 import { standardPadding } from '../../../../../../../../../../../styles'
 
-export const OnChainTransactionFailed = () => {
+export const TransactionFailed = () => {
   const { t } = useTranslation()
   return (
     <CardLayout padding={standardPadding}>
@@ -14,8 +14,9 @@ export const OnChainTransactionFailed = () => {
       <VStack spacing="10px">
         <H3 color="secondary.red">{t('Transaction has failed')}</H3>
         <Body2>
-          The transaction failed because the transaction fee set was not high enough to ensure transaction within 24
-          hours, leading to its automatic rejection.
+          {t(
+            'The transaction failed because the transaction fee set was not high enough to ensure transaction within 24 hours, leading to its automatic rejection.',
+          )}
         </Body2>
       </VStack>
     </CardLayout>
