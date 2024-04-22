@@ -15,7 +15,7 @@ import {
 export const DefaultView = () => {
   const isMobile = useMobileMode()
 
-  const { activeGrant, loading } = useGrants()
+  const { latestGrant, loading } = useGrants()
 
   const allTags = useMemo(() => getListOfTags(), [])
 
@@ -32,7 +32,7 @@ export const DefaultView = () => {
 
       <CardLayout noborder={isMobile} w="full" spacing={{ base: '15px', lg: '50px' }} padding={{ base: 0, lg: '20px' }}>
         {/* <FeaturedProjectCard projectName={getFeaturedProject()} /> */}
-        <FeaturedGrantCard grant={activeGrant} loading={loading} />
+        <FeaturedGrantCard grant={latestGrant} loading={loading} />
         <MobileDivider mt={2} />
         {firstThreeTags.map((tag) => (
           <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} hasMobileDivider />
