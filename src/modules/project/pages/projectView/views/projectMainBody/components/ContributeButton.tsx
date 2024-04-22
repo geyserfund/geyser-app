@@ -4,13 +4,14 @@ import { useNavigate } from 'react-router-dom'
 
 import { BoltIcon } from '../../../../../../../components/icons'
 import { PathName } from '../../../../../../../constants'
-import { isActive } from '../../../../../../../utils'
+import { isActive, useMobileMode } from '../../../../../../../utils'
 import { MobileViews, useProjectContext } from '../../../../../context'
 
 export const ContributeButton = (props: ButtonProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { project, setMobileView } = useProjectContext()
+  const isMobile = useMobileMode()
 
   if (!project) {
     return null
@@ -26,7 +27,7 @@ export const ContributeButton = (props: ButtonProps) => {
       leftIcon={<BoltIcon />}
       onClick={() => {
         setMobileView(MobileViews.funding)
-        if (isInProjectPage) {
+        if (isInProjectPage && !isMobile) {
           navigate(PathName.projectRewards)
         }
       }}
