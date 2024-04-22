@@ -43,7 +43,7 @@ export const ProjectCreateRewards = () => {
         continueButton={!isCreatingOrEditing && <FormContinueButton flexGrow={1} onClick={handleNext} />}
         isNestedProcess={Boolean(isCreatingOrEditing)}
         onBackClick={handleBack}
-        minW={720}
+        maxW="3xl"
         height="100%"
       >
         <Outlet />
