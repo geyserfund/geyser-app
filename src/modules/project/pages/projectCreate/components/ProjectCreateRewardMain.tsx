@@ -65,7 +65,12 @@ export const ProjectCreateRewardMain = () => {
       <Body1 fontSize="14px" color="neutral.500">
         {t('Or, use a reward template below')}
       </Body1>
-      <Box width="100%" display={'flex'} flexDirection={'row'} gap={2}>
+      <Box
+        width="100%"
+        display="grid"
+        gridTemplateColumns={['repeat(2, 1fr)', 'repeat(2, 1fr)', 'repeat(4, 1fr)']}
+        gap={2}
+      >
         {displayedTemplates.map((reward) => (
           <RewardTemplate
             key={reward.category}

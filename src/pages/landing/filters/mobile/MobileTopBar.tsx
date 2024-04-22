@@ -27,7 +27,6 @@ export const MobileTopBar = ({ title, subTitle, ...rest }: MobileTopBarProps) =>
             ref={btnRef}
             size="sm"
             variant="primaryNeutral"
-            color="neutral.800"
             rightIcon={<BsSliders fontSize="16px" />}
             onClick={onOpen}
           >

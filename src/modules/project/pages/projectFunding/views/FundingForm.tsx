@@ -53,6 +53,8 @@ export const FundingForm = ({ project, user, onFundingRequested = () => {} }: Pr
       })
       return false
     }
+
+    return true
   }
 
   const onSubmit = () => {
@@ -118,7 +120,7 @@ export const FundingForm = ({ project, user, onFundingRequested = () => {} }: Pr
         />
       </FormControl>
       <Box mt={4}>
-        <Button bg="primary.400" onClick={onSubmit} w="full">
+        <Button variant={'primary'} onClick={onSubmit} w="full">
           {t('Confirm')}
         </Button>
       </Box>
