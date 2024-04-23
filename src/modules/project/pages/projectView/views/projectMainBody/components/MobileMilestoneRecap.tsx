@@ -16,6 +16,28 @@ export const MobileMilestoneRecap = () => {
     return Math.ceil(((balance - prevMilestone) / (currentMilestone.amount - prevMilestone)) * 100)
   }, [balance, currentMilestone, prevMilestone])
 
+  function formatAmount(amount: number) {
+    if (amount < 10000) {
+      return `${amount} sats`
+    }
+
+    if (amount < 1000000) {
+      return `${amount / 1000}K sats`
+    }
+
+    const millions = amount / 1000000
+
+    if (millions < 10) {
+      return `${millions.toFixed(2)}M sats`
+    }
+
+    if (millions < 100) {
+      return `${millions.toFixed(1)}M sats`
+    }
+
+    return `${Math.round(millions)}M sats`
+  }
+
   return (
     <VStack px={1} spacing={1} width="100%">
       <HStack display="flex" justifyContent="space-between" width="100%">
@@ -23,9 +45,8 @@ export const MobileMilestoneRecap = () => {
           {t('Amount raised:')}{' '}
           <Text as="span" color="neutral.900" fontWeight={700}>
             {' '}
-            {currentMilestone?.amount}M
+            {formatAmount(currentMilestone?.amount ?? 0)}
           </Text>{' '}
-          {t('sats')}
         </Body1>
         <Body1 fontWeight={400} color="neutral.600">
           {getMilestoneValue()}%
