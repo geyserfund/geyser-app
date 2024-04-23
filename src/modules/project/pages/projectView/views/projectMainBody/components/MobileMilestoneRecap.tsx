@@ -38,7 +38,7 @@ export const MobileMilestoneRecap = () => {
       </HStack>
       <HStack width="100%" justifyContent="flex-start">
         <Body1 fontWeight={400} color="neutral.600">
-          {t('Milestone')} {milestoneIndex}:{' '}
+          {t('Current Milestone')} {milestoneIndex}:{' '}
           <Text as="span" color="neutral.900" fontWeight={500}>
             {currentMilestone?.description}
           </Text>
