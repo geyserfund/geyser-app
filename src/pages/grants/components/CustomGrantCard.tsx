@@ -105,15 +105,7 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
                 {renderApplicants(GrantValues[grant.name]?.applicants)}
                 {
                   <ListText mx={4} subtitle={t('GRANT')} isSatLogo={true}>
-                    {getShortAmountLabel(
-                      GrantValues[grant.name]?.amount ||
-                        grant.applicants?.reduce(
-                          (prev, curr) =>
-                            prev + (curr?.funding.communityFunding || 0) + (curr?.funding.grantAmount || 0),
-                          0,
-                        ) ||
-                        0,
-                    )}
+                    {getShortAmountLabel(GrantValues[grant.name]?.amount || grant.balance || 0)}
                   </ListText>
                 }
               </Box>
