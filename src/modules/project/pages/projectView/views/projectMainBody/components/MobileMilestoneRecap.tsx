@@ -1,18 +1,21 @@
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Body1 } from '../../../../../../../components/typography'
-import { useProjectContext } from '../../../../../context'
-
-const mockMilestoneData = {
-  amountRaised: 3.5,
-  progressPercentage: 75,
-  milestoneNumber: 2,
-  milestoneDescription: 'Completion of the prototype for the new eco-friendly packaging.',
-}
+import { useProjectMilestones } from '../../../../../pages/projectView/hooks/useProjectMilestones'
 
 export const MobileMilestoneRecap = () => {
   const { t } = useTranslation()
+
+  const { currentMilestone, milestoneIndex, prevMilestone, balance } = useProjectMilestones()
+
+  const getMilestoneValue = useCallback(() => {
+    if (!currentMilestone) return null
+
+    return Math.ceil(((balance - prevMilestone) / (currentMilestone.amount - prevMilestone)) * 100)
+  }, [balance, currentMilestone, prevMilestone])
+
   return (
     <VStack px={1} spacing={1} width="100%">
       <HStack display="flex" justifyContent="space-between" width="100%">
@@ -20,24 +23,24 @@ export const MobileMilestoneRecap = () => {
           {t('Amount raised:')}{' '}
           <Text as="span" color="neutral.900" fontWeight={700}>
             {' '}
-            {mockMilestoneData.amountRaised}M
+            {currentMilestone?.amount}M
           </Text>{' '}
           {t('sats')}
         </Body1>
         <Body1 fontWeight={400} color="neutral.600">
-          {mockMilestoneData.progressPercentage}%
+          {getMilestoneValue()}%
         </Body1>
       </HStack>
-      <HStack width="100%">
-        <Box bg="neutral.100" h="8px" borderRadius="51px" width="100%">
-          <Box bg="primary.400" h="8px" borderRadius="51px" width={`${mockMilestoneData.progressPercentage}%`}></Box>
+      <HStack width="100%" maxW="100%">
+        <Box bg="neutral.100" h="8px" borderRadius="51px" width="100%" maxW="100%">
+          <Box bg="primary.400" h="8px" borderRadius="51px" width={`${getMilestoneValue()}%`} maxW={'100%'}></Box>
         </Box>
       </HStack>
-      <HStack>
+      <HStack width="100%" justifyContent="flex-start">
         <Body1 fontWeight={400} color="neutral.600">
-          {t('Milestone')} {mockMilestoneData.milestoneNumber}:{' '}
+          {t('Milestone')} {milestoneIndex}:{' '}
           <Text as="span" color="neutral.900" fontWeight={500}>
-            {mockMilestoneData.milestoneDescription}
+            {currentMilestone?.description}
           </Text>
         </Body1>
       </HStack>
