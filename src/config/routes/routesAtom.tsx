@@ -1,10 +1,9 @@
-import { AgnosticRouteMatch } from '@sentry/react/types/types'
 import { atom, Getter, useSetAtom } from 'jotai'
-import { RouteObject } from 'react-router-dom'
+import { RouteMatch, RouteObject } from 'react-router-dom'
 
 import { getPath, PathName } from '../../constants'
 
-const matchRoutesAtom = atom<AgnosticRouteMatch<string, RouteObject>[] | null>([])
+const matchRoutesAtom = atom<RouteMatch<string, RouteObject>[] | null>([])
 const currentRouteAtom = atom((get) => {
   const matchRoutes = get(matchRoutesAtom)
   const matchLength = matchRoutes?.length || 0
