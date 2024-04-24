@@ -696,6 +696,11 @@ export type Grant = {
   title: Scalars['String']['output'];
 };
 
+
+export type GrantApplicantsArgs = {
+  input?: InputMaybe<GrantApplicantGetInput>;
+};
+
 export type GrantApplicant = {
   __typename?: 'GrantApplicant';
   funding: GrantApplicantFunding;
@@ -717,12 +722,25 @@ export type GrantApplicantFunding = {
   grantAmountDistributed: Scalars['Int']['output'];
 };
 
+export type GrantApplicantGetInput = {
+  where: GrantApplicantGetWhereInput;
+};
+
+export type GrantApplicantGetWhereInput = {
+  satus?: InputMaybe<GrantApplicantStatusFilter>;
+};
+
 export enum GrantApplicantStatus {
   Accepted = 'ACCEPTED',
   Canceled = 'CANCELED',
   Funded = 'FUNDED',
   Pending = 'PENDING',
   Rejected = 'REJECTED'
+}
+
+export enum GrantApplicantStatusFilter {
+  Accepted = 'ACCEPTED',
+  Funded = 'FUNDED'
 }
 
 export type GrantApplyInput = {
@@ -1586,6 +1604,7 @@ export enum ProjectStatus {
   Active = 'active',
   Deleted = 'deleted',
   Draft = 'draft',
+  InReview = 'in_review',
   Inactive = 'inactive'
 }
 
@@ -2135,14 +2154,14 @@ export type UserProjectContribution = {
   funder?: Maybe<Funder>;
   /**
    * Boolean value indicating if the User was an ambassador of the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isAmbassador: Scalars['Boolean']['output'];
   /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean']['output'];
   /**
    * Boolean value indicating if the User was a sponsor for the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isSponsor: Scalars['Boolean']['output'];
   /** Project linked to the contributions. */
@@ -2433,7 +2452,10 @@ export type ResolversTypes = {
   Grant: ResolverTypeWrapper<Grant>;
   GrantApplicant: ResolverTypeWrapper<GrantApplicant>;
   GrantApplicantFunding: ResolverTypeWrapper<GrantApplicantFunding>;
+  GrantApplicantGetInput: GrantApplicantGetInput;
+  GrantApplicantGetWhereInput: GrantApplicantGetWhereInput;
   GrantApplicantStatus: GrantApplicantStatus;
+  GrantApplicantStatusFilter: GrantApplicantStatusFilter;
   GrantApplyInput: GrantApplyInput;
   GrantBoardMember: ResolverTypeWrapper<GrantBoardMember>;
   GrantGetInput: GrantGetInput;
@@ -2666,6 +2688,8 @@ export type ResolversParentTypes = {
   Grant: Grant;
   GrantApplicant: GrantApplicant;
   GrantApplicantFunding: GrantApplicantFunding;
+  GrantApplicantGetInput: GrantApplicantGetInput;
+  GrantApplicantGetWhereInput: GrantApplicantGetWhereInput;
   GrantApplyInput: GrantApplyInput;
   GrantBoardMember: GrantBoardMember;
   GrantGetInput: GrantGetInput;
@@ -3032,7 +3056,7 @@ export type FundinginvoiceCancelResolvers<ContextType = any, ParentType extends 
 };
 
 export type GrantResolvers<ContextType = any, ParentType extends ResolversParentTypes['Grant'] = ResolversParentTypes['Grant']> = {
-  applicants?: Resolver<Array<ResolversTypes['GrantApplicant']>, ParentType, ContextType>;
+  applicants?: Resolver<Array<ResolversTypes['GrantApplicant']>, ParentType, ContextType, Partial<GrantApplicantsArgs>>;
   balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   boardMembers?: Resolver<Array<ResolversTypes['GrantBoardMember']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
