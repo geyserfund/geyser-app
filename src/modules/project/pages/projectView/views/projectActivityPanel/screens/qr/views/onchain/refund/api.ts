@@ -1,9 +1,9 @@
 import { Transaction } from 'bitcoinjs-lib'
 import { Musig } from 'boltz-core'
 
-import { getSwapServiceDomain } from '../hooks/useTransactionStatusUpdate'
+import { BOLTZ_DOMAIN } from '../../../../../../../../../../../constants'
 
-const swapServiceEndpoint = `https://${getSwapServiceDomain()}/v2`
+const swapServiceEndpoint = `https://${BOLTZ_DOMAIN}/v2`
 // const swapServiceEndpoint = `http://localhost:9001/v2`
 
 export type BoltzTransaction = {

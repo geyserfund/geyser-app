@@ -2,22 +2,9 @@ import { captureException } from '@sentry/react'
 import { useCallback, useEffect } from 'react'
 import useWebSocket from 'react-use-websocket'
 
-import { __production__, __staging__ } from '../../../../../../../../../../../constants'
+import { __production__, BOLTZ_DOMAIN } from '../../../../../../../../../../../constants'
 
-export const getSwapServiceDomain = () => {
-  if (__production__) {
-    return 'api.boltz.exchange'
-  }
-
-  if (__staging__) {
-    return 'api.testnet.boltz.exchange'
-  }
-
-  return 'swap.dev.geyser.fund'
-}
-
-const swapServiceDomain = getSwapServiceDomain()
-const swapServiceWsEndpoint = `wss://${swapServiceDomain}/v2/ws`
+const swapServiceWsEndpoint = `wss://${BOLTZ_DOMAIN}/v2/ws`
 
 const HEARTBEAT_INTERVAL_MS = __production__ ? 5_000 : 30_000
 
