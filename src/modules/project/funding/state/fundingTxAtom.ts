@@ -32,7 +32,7 @@ export enum ConfirmationMethod {
   Polling = 'polling',
 }
 
-const fundingTxAtom = atom(initialFunding)
+export const fundingTxAtom = atom(initialFunding)
 
 const fundingTxPartialUpdateAtom = atom(null, (get, set, partial: Partial<FundingTxFragment>) => {
   const currentFundingTx = get(fundingTxAtom)

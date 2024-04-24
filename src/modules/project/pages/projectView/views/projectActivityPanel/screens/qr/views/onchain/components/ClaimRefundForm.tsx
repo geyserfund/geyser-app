@@ -23,9 +23,10 @@ const schema = yup
 
 interface ClaimRefundFormProps {
   onSuccess?: Function
+  showUpload?: boolean
 }
 
-export const ClaimRefundForm = ({ onSuccess }: ClaimRefundFormProps) => {
+export const ClaimRefundForm = ({ onSuccess, showUpload }: ClaimRefundFormProps) => {
   const { toast } = useNotification()
   const refundFile = useRefundFileValue()
   const { initiateRefund, loading } = useRefund()
@@ -47,11 +48,11 @@ export const ClaimRefundForm = ({ onSuccess }: ClaimRefundFormProps) => {
     }
   }
 
-  console.log('checking refund file', refundFile)
+  console.log('checking refund file in claimrefundform', refundFile)
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <VStack spacing="10px" alignItems="start">
-        {!refundFile && <RefundFileInput name="refundFile" label={t('Upload refund file')} />}
+        {showUpload && <RefundFileInput name="refundFile" label={t('Upload refund file')} />}
 
         <TextField
           name="bitcoinAddress"

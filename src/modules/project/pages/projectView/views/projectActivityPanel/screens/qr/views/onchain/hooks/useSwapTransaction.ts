@@ -8,7 +8,7 @@ import { swapTransactionAtom } from '../states/onChainTransaction'
 
 export const useSwapTransaction = () => {
   const { toast } = useNotification()
-  const { id } = useRefundFileValue()
+  const refundFile = useRefundFileValue()
 
   const [swapTransaction, setSwapTransaction] = useAtom(swapTransactionAtom)
 
@@ -25,10 +25,10 @@ export const useSwapTransaction = () => {
       }
     }
 
-    if (id) {
-      fetchTransaction(id)
+    if (refundFile?.id) {
+      fetchTransaction(refundFile.id)
     }
-  }, [id])
+  }, [refundFile])
 
   return swapTransaction
 }

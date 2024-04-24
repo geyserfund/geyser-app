@@ -14,6 +14,7 @@ import { FundingStages, useFundingStage } from '../../../../../../funding/state'
 import { SectionTitleBlock } from '../../components/SectionTitleBlock'
 import { ContributionInfoBox, ContributionInfoBoxVersion } from '../contributionInfo/ContributionInfoBox'
 import { QRCodeSection } from './QRCodeSection'
+import { useShowContributionInfoBoxValue } from './states'
 
 type Props = {
   handleCloseButton: () => void
@@ -24,6 +25,7 @@ type Props = {
 export const QRScreen = ({ state, project, handleCloseButton }: Props) => {
   const { t } = useTranslation()
   const { getTotalAmount } = useFundCalc(state)
+  const showContributionInfoBox = useShowContributionInfoBoxValue()
 
   const [cancelInvoice] = useFundingInvoiceCancelMutation({
     ignoreResults: true,
@@ -57,17 +59,19 @@ export const QRScreen = ({ state, project, handleCloseButton }: Props) => {
     >
       <SectionTitleBlock title={t('Invoice')} onBackClick={handleCloseButton} />
       <QRCodeSection />
-      <ContributionInfoBox
-        formState={state}
-        version={ContributionInfoBoxVersion.NEUTRAL}
-        project={project}
-        contributionAmount={getTotalAmount('sats', project.name) as Satoshis}
-        isFunderAnonymous={state.anonymous}
-        funderUsername={state.funderUsername}
-        funderEmail={state.email}
-        funderAvatarURL={state.funderAvatarURL}
-        showGeyserFee={false}
-      />
+      {showContributionInfoBox && (
+        <ContributionInfoBox
+          formState={state}
+          version={ContributionInfoBoxVersion.NEUTRAL}
+          project={project}
+          contributionAmount={getTotalAmount('sats', project.name) as Satoshis}
+          isFunderAnonymous={state.anonymous}
+          funderUsername={state.funderUsername}
+          funderEmail={state.email}
+          funderAvatarURL={state.funderAvatarURL}
+          showGeyserFee={false}
+        />
+      )}
       <Button
         as={Link}
         textDecoration="none"

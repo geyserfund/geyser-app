@@ -6,8 +6,8 @@ import Loader from '../../../../../../../../components/ui/Loader'
 import { FundingStatus, InvoiceStatus } from '../../../../../../../../types/generated/graphql'
 import { useFundingContext } from '../../../../../../context/FundingProvider'
 import { useRefreshInvoice } from '../../../../../../funding/hooks/useRefreshInvoice'
+import { useRefundedSwapData } from '../../../../../../funding/state'
 import { FundingErrorView, GeneratingInvoice, InvoiceErrorView, QRCodeImage } from './components'
-import { useRefundTransactionId } from './views/onchain/states/onChainTransaction'
 import { RefundInitiated } from './views/refund/RefundInitiated'
 
 enum QRDisplayState {
@@ -26,12 +26,12 @@ enum QRDisplayState {
 
 export const QRCodeSection = () => {
   const { t } = useTranslation()
-  const [refundTransactionId] = useRefundTransactionId()
+  const [refundedSwapData] = useRefundedSwapData()
   const { invoiceRefreshErrored, invoiceRefreshLoading, refreshFundingInvoice } = useRefreshInvoice()
 
   const { fundingTx, fundingRequestErrored, fundingRequestLoading, hasWebLN, weblnErrored, error, retryFundingFlow } =
     useFundingContext()
-  console.log('chekcing refund transactionId in qrcodesection:', refundTransactionId)
+  console.log('chekcing refund transactionId in qrcodesection:', refundedSwapData)
   const qrDisplayState = useMemo(() => {
     if (invoiceRefreshLoading || fundingRequestLoading) {
       return QRDisplayState.REFRESHING
@@ -45,7 +45,7 @@ export const QRCodeSection = () => {
       return QRDisplayState.INVOICE_CANCELLED
     }
 
-    if (refundTransactionId) {
+    if (refundedSwapData?.refundTx) {
       return QRDisplayState.REFUND_INITIALIZED
     }
 
@@ -63,7 +63,7 @@ export const QRCodeSection = () => {
     invoiceRefreshErrored,
     hasWebLN,
     weblnErrored,
-    refundTransactionId,
+    refundedSwapData?.refundTx,
   ])
 
   const renderQRCodeSection = () => {

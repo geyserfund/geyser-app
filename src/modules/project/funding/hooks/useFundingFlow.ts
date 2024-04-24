@@ -3,9 +3,9 @@ import { useAtom } from 'jotai'
 import { useCallback, useMemo, useState } from 'react'
 
 import { ApolloErrors } from '../../../../constants'
-import { FundingInput, useFundingTxWithInvoiceStatusQuery, useFundMutation } from '../../../../types'
+import { FundingInput, ProjectFragment, useFundingTxWithInvoiceStatusQuery, useFundMutation } from '../../../../types'
 import { toInt, useNotification } from '../../../../utils'
-import { useParseResponseToSwapAtom, useRefundFileValue, useSetKeyPairAtom } from '../state'
+import { useParseResponseToSwapAtom, useSetKeyPairAtom } from '../state'
 import { fundingFlowErrorAtom, fundingRequestErrorAtom, weblnErrorAtom } from '../state/errorAtom'
 import { fundingStageAtomEffect, useFundingStage } from '../state/fundingStagesAtom'
 import { useCheckFundingStatus, useFundingTx } from '../state/fundingTxAtom'
@@ -26,10 +26,15 @@ export type UseFundingFlowReturn = ReturnType<typeof useFundingFlow>
 interface IFundingFlowOptions {
   hasBolt11?: boolean
   hasWebLN?: boolean
+  project?: Partial<ProjectFragment> | null
 }
 
 export const useFundingFlow = (options?: IFundingFlowOptions) => {
-  const { hasBolt11 = true, hasWebLN = true } = options || {
+  const {
+    hasBolt11 = true,
+    hasWebLN = true,
+    project,
+  } = options || {
     hasBolt11: true,
     hasWebLN: true,
   }
@@ -90,11 +95,15 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
           throw new Error('Undefined funding tx')
         }
 
-        console.log('OnChain Adddress:', data.fund.fundingTx.address)
-        console.log('OnChain admount:', data.fund.fundingTx.amount)
         updateFundingTx(data.fund.fundingTx)
         if (data.fund?.swap?.json) {
-          parseResponseToSwap(data.fund.swap)
+          parseResponseToSwap(data.fund.swap, {
+            projectTitle: project?.title,
+            reference: data.fund.fundingTx.uuid,
+            amount: data.fund.fundingTx.amount,
+            bitcoinQuote: data.fund.fundingTx.bitcoinQuote,
+            datetime: data.fund.fundingTx.createdAt,
+          })
         }
 
         if (hasBolt11 && hasWebLN && webln) {

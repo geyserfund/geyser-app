@@ -1,4 +1,4 @@
-import { Divider, HStack, Icon } from '@chakra-ui/react'
+import { Divider, HStack } from '@chakra-ui/react'
 import React from 'react'
 import { BsExclamationSquareFill } from 'react-icons/bs'
 
@@ -8,9 +8,10 @@ import { H3 } from '../../../../../../../../../../../components/typography'
 type FeedbackCardVariants = 'primary' | 'warning' | 'neutral' | 'danger'
 
 interface FeedbackCardProps extends CardLayoutProps {
-  variant: FeedbackCardVariants
+  variant?: FeedbackCardVariants
   title: string
   icon?: React.ReactNode
+  noIcon?: boolean
 }
 
 const feedbackCardVariantColors: { [key in FeedbackCardVariants]: string } = {
@@ -20,14 +21,21 @@ const feedbackCardVariantColors: { [key in FeedbackCardVariants]: string } = {
   danger: 'secondary.red',
 }
 
-export const FeedbackCard: React.FC<FeedbackCardProps> = ({ variant, title, icon, children, ...rest }) => {
+export const FeedbackCard: React.FC<FeedbackCardProps> = ({
+  variant = 'neutral',
+  title,
+  icon,
+  noIcon,
+  children,
+  ...rest
+}) => {
   return (
     <CardLayout borderColor={feedbackCardVariantColors[variant]} padding="20px" spacing="10px" {...rest}>
       <HStack spacing="10px">
-        {icon ? icon : <BsExclamationSquareFill size="24" />}
+        {noIcon ? null : icon ? icon : <BsExclamationSquareFill size="24" />}
         <H3>{title}</H3>
       </HStack>
-      <Divider borderColor="neutral.200" />
+      <Divider borderBottomWidth="2px" borderColor="neutral.400" />
       {children}
     </CardLayout>
   )

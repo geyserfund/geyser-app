@@ -56,7 +56,7 @@ export const ProjectFundingContent = ({ project, user, onTitleChange = noop }: P
 
 export const ProjectFunding = (props: Props) => {
   return (
-    <FundingProvider>
+    <FundingProvider project={props.project}>
       <ProjectFundingContent {...props} />
     </FundingProvider>
   )

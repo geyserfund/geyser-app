@@ -1,8 +1,7 @@
-import { Button, Link } from '@chakra-ui/react'
-import { Trans, useTranslation } from 'react-i18next'
+import { Button } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
-import { Body1, Body2 } from '../../../../../../../../../../../components/typography'
-import { GeyserFAQUrl } from '../../../../../../../../../../../constants'
+import { Body1 } from '../../../../../../../../../../../components/typography'
 import { useMobileMode } from '../../../../../../../../../../../utils'
 import { RefundPolicyNote } from '../../../components'
 import { useDownloadRefund } from '../hooks/useDownloadRefund'

@@ -1,4 +1,5 @@
 import { HStack } from '@chakra-ui/react'
+import { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -6,34 +7,33 @@ import { CardLayout } from '../../../../components/layouts'
 import { H2 } from '../../../../components/typography'
 import { getPath } from '../../../../constants'
 import { standardPadding } from '../../../../styles'
-import { TransactionProcessing } from '../projectView/views/projectActivityPanel/screens/qr/views/onchain/components'
-import { useRefundTransactionId } from '../projectView/views/projectActivityPanel/screens/qr/views/onchain/states/onChainTransaction'
-import { BLOCK_EXPLORER_BASE_URL } from '../projectView/views/projectActivityPanel/screens/qr/views/onchain/views/OnChainProcessing'
+import { useRefundedSwapData } from '../../funding/state'
+import { RefundProcessing, RefundSummary, SafeToDeleteNotice } from './components'
 
 export const RefundInitiatedPage = () => {
   const { t } = useTranslation()
-  const refundTransactionId = useRefundTransactionId()
   const navigate = useNavigate()
+  const [refundedSwapData] = useRefundedSwapData()
 
-  // setTimeout(() => {
-  //   if (!refundTransactionId) {
-  //     navigate(getPath('refund'))
-  //   }
-  // }, 100)
+  useEffect(() => {
+    setTimeout(() => {
+      handleCheckIfRefundTransactionIsThere()
+    }, 100)
+  }, [])
+
+  const handleCheckIfRefundTransactionIsThere = useCallback(() => {
+    if (!refundedSwapData) {
+      navigate(getPath('refund'))
+    }
+  }, [refundedSwapData, navigate])
 
   return (
     <HStack w="full" h="full" justifyContent="center" alignItems="center">
       <CardLayout maxWidth="700px" padding={standardPadding} spacing="20px">
         <H2>{t('Refund')}</H2>
-        <TransactionProcessing
-          title={t('Your refund has been successfully intiated.')}
-          subTitle={t(
-            'We apologize for any inconvenience caused. In future transactions, please ensure to set a higher transaction fee for timely processing.',
-          )}
-          //  buttonUrl={`${BLOCK_EXPLORER_BASE_URL}${transactionId}`}
-          buttonUrl={`${BLOCK_EXPLORER_BASE_URL}/${refundTransactionId}`}
-          noborder
-        />
+        <RefundProcessing noborder />
+        <RefundSummary />
+        <SafeToDeleteNotice />
       </CardLayout>
     </HStack>
   )

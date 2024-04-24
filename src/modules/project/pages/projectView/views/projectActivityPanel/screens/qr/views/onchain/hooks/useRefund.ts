@@ -1,21 +1,28 @@
 import { useState } from 'react'
 
-import { useRefundFileValue } from '../../../../../../../../../funding/state'
+import { useNotification } from '../../../../../../../../../../../utils'
+import { useRefundedSwapData, useRefundFileValue, useRemoveRefundFile } from '../../../../../../../../../funding/state'
 import { getTransactionFromSwap } from '../refund/api'
 import { refund } from '../refund/refund'
-import { useRefundTransactionId, useSwapTransactionValue } from '../states/onChainTransaction'
+import { useSwapTransactionValue } from '../states/onChainTransaction'
 
 export const useRefund = () => {
+  const { toast } = useNotification()
+
   const swapTransaction = useSwapTransactionValue()
   const refundFile = useRefundFileValue()
 
-  const [_, setRefundTransactionId] = useRefundTransactionId()
+  const [_, setRefundedSwapData] = useRefundedSwapData()
+  const removeRefundSwapData = useRemoveRefundFile()
 
   const [loading, setLoading] = useState(false)
 
   const initiateRefund = async (refundAddress: string) => {
+    if (!refundFile) {
+      return false
+    }
+
     let transaction = swapTransaction
-    console.log('chekcing swapTransaction in useRefund:', swapTransaction)
     try {
       setLoading(true)
       if (!swapTransaction.hex) {
@@ -23,17 +30,31 @@ export const useRefund = () => {
       }
 
       const value = await refund(refundFile, refundAddress, transaction)
-      console.log('chekcing refund in useRefund:', value)
 
       if (value && value.refundTx) {
-        setRefundTransactionId(value.refundTx)
+        setRefundedSwapData(value)
         return true
       }
 
       setLoading(false)
+      if (value.error) {
+        toast({
+          status: 'error',
+          title: 'Refund failed',
+          description: `${value.error}`,
+        })
+      }
+
+      removeRefundSwapData(refundFile.id)
+
       return false
     } catch (error) {
       setLoading(false)
+      toast({
+        status: 'error',
+        title: 'Refund failed',
+        description: `${error}`,
+      })
       return false
     }
   }

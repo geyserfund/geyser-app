@@ -1,6 +1,6 @@
 import { captureException } from '@sentry/react'
 import { useCallback, useEffect } from 'react'
-import useWebSocket, { ReadyState } from 'react-use-websocket'
+import useWebSocket from 'react-use-websocket'
 
 import { __production__, __staging__ } from '../../../../../../../../../../../constants'
 
@@ -44,7 +44,7 @@ export type SwapStatusUpdate = {
 }
 
 type useTransactionStatusUpdateProps = {
-  swapId: string
+  swapId?: string
   handleConfirmed: Function
   handleFailed: Function
 }

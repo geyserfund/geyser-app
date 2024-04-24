@@ -70,6 +70,7 @@ export async function refund(
 
   const resFees = await getFeeEstimations()
   const fees = resFees.BTC || 0
+  swap.fees = fees
 
   const tx = Transaction.fromHex(transactionToRefund.hex)
   const privateKey = parsePrivateKey(swap.privateKey)
@@ -113,7 +114,8 @@ export async function refund(
   console.log('refund result:', res)
   if (res.id) {
     swap.refundTx = res.id
+    return swap
   }
 
-  return swap
+  return res
 }

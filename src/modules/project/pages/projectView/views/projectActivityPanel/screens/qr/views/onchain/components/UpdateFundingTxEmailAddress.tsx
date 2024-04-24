@@ -1,4 +1,4 @@
-import { Button, FormControl, FormErrorMessage, HStack, Input, VStack } from '@chakra-ui/react'
+import { Button, HStack, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useForm } from 'react-hook-form'
@@ -41,8 +41,7 @@ export const UpdateFundingTxEmailAddress = () => {
 
   const {
     handleSubmit,
-    register,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
     control,
   } = useForm<{ email: string }>({
     resolver: yupResolver(schema),

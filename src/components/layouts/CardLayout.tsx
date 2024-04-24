@@ -26,11 +26,11 @@ export const CardLayout = forwardRef<HTMLDivElement, CardLayoutProps>(
       transition: 'border-color 0.5s',
       boxShadow: 'none',
       as: rest.to ? Link : undefined,
-      borderColor: noborder || (isMobile && noMobileBorder) ? 'transparent' : 'neutral.200',
       _hover: hover ? { cursor: 'pointer', borderColor: 'neutral.400' } : {},
       _active: click ? { borderColor: 'primary.400' } : {},
       _focus: click ? { borderColor: 'primary.400' } : {},
       ...rest,
+      borderColor: noborder || (isMobile && noMobileBorder) ? 'transparent' : rest.borderColor || 'neutral.200',
     }
 
     if (mobileDense && isMobile) {

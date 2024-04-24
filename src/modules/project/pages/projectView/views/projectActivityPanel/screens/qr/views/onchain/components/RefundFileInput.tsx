@@ -1,4 +1,5 @@
-import { Box, FormControl } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
+import { useSetAtom } from 'jotai'
 import QrScanner from 'qr-scanner'
 import { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
@@ -6,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 
 import { UploadBox } from '../../../../../../../../../../../components/ui'
 import { FieldContainer } from '../../../../../../../../../../../forms/components/FieldContainer'
-import { useRefundFileSet } from '../../../../../../../../../funding/state'
+import { currentSwapAtomId, useRefundFileAdd } from '../../../../../../../../../funding/state'
 
 export type ImageFieldProps = {
   name: string
@@ -18,7 +19,8 @@ export type ImageFieldProps = {
 export const RefundFileInput = ({ name, caption, required, label }: ImageFieldProps) => {
   const { t } = useTranslation()
 
-  const setRefundFile = useRefundFileSet()
+  const addRefundFile = useRefundFileAdd()
+  const setCurrentSwapId = useSetAtom(currentSwapAtomId)
 
   const [isInvalid, setIsInvalid] = useState(false)
 
@@ -28,14 +30,15 @@ export const RefundFileInput = ({ name, caption, required, label }: ImageFieldPr
         const valid = ['id', 'asset', 'privateKey'].every((key) => key in json)
 
         if (valid) {
-          setRefundFile(json)
+          setCurrentSwapId(json.id)
+          addRefundFile(json)
           return
         }
       }
 
       setIsInvalid(true)
     },
-    [setRefundFile],
+    [addRefundFile, setCurrentSwapId],
   )
 
   const handleFile = useCallback(

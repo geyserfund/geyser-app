@@ -11,7 +11,7 @@ const FUNDING_REQUEST_TIMEOUT = 45_000
 export const GeneratingInvoice = ({ refreshInvoice }: { refreshInvoice: () => void }) => {
   const { t } = useTranslation()
   const { onOpen, onClose, isOpen } = useDisclosure()
-  const timeout = useRef<number | undefined>()
+  const timeout = useRef<NodeJS.Timeout | undefined>()
 
   useEffect(() => {
     timeout.current = setTimeout(onOpen, FUNDING_REQUEST_TIMEOUT)

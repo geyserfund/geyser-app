@@ -1,9 +1,8 @@
-import { ScopeProvider } from 'jotai-scope'
 import React, { createContext, PropsWithChildren, useContext } from 'react'
 
-import { authUserAtom } from '../../../pages/auth/state'
-import { FundingInput, FundingTxFragment } from '../../../types'
+import { FundingInput, FundingTxFragment, ProjectFragment } from '../../../types'
 import { useFundingFlow } from '../funding/hooks/useFundingFlow'
+import { useProjectContext } from './ProjectProvider'
 
 type FundingContextProps = {
   fundingRequestErrored: Error | boolean
@@ -15,6 +14,7 @@ type FundingContextProps = {
   error: string
   weblnErrored: boolean
   hasWebLN: boolean
+  project?: Partial<ProjectFragment> | null
 }
 
 export const FundingContext = createContext<FundingContextProps>({} as FundingContextProps)
@@ -24,16 +24,15 @@ export const useFundingContext = () => useContext(FundingContext)
 // This component is used to wrap the children of the FundingProvider
 // It ensures there is a different scope for the atoms used in the funding flow
 
-export const FundingProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  // To enable access of atoms outside the scope, we need to add the atoms that need to be accessed outside the scope
-  return (
-    // <ScopeProvider atoms={[authUserAtom]}>
-    <FundingContextProvider>{children}</FundingContextProvider>
-    // </ScopeProvider>
-  )
+export const FundingProvider: React.FC<PropsWithChildren<{ project?: Partial<ProjectFragment> | null }>> = ({
+  children,
+  project,
+}) => {
+  const fundingFlow = useFundingFlow({ project })
+  return <FundingContext.Provider value={{ ...fundingFlow, project }}>{children}</FundingContext.Provider>
 }
 
-export const FundingContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const fundingFlow = useFundingFlow()
-  return <FundingContext.Provider value={{ ...fundingFlow }}>{children}</FundingContext.Provider>
+export const FundingProviderWithProjectContext: React.FC<PropsWithChildren> = ({ children }) => {
+  const { project } = useProjectContext()
+  return <FundingProvider project={project}>{children}</FundingProvider>
 }

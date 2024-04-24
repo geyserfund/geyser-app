@@ -1,8 +1,6 @@
-import { Button, Link, ListItem, UnorderedList } from '@chakra-ui/react'
-import { Trans, useTranslation } from 'react-i18next'
+import { Button, ListItem, UnorderedList } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
-import { Body2 } from '../../../../../../../../../../../components/typography'
-import { GeyserFAQUrl } from '../../../../../../../../../../../constants'
 import { useMobileMode } from '../../../../../../../../../../../utils'
 import { RefundPolicyNote } from '../../../components'
 import { useDownloadRefund } from '../hooks/useDownloadRefund'

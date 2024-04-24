@@ -16,7 +16,7 @@ export const OnchainBoltz = ({ onChainAddress }: { onChainAddress: string }) => 
   useOnChainStatusEffect()
 
   const onChainStatus = useOnChainStatusValue()
-  const { id } = useRefundFileValue()
+  const refundFile = useRefundFileValue()
 
   const { setNextFundingStage } = useFundingStage()
   const setOnChainError = useSetOnChainErrorAtom()
@@ -34,8 +34,12 @@ export const OnchainBoltz = ({ onChainAddress }: { onChainAddress: string }) => 
   useTransactionStatusUpdate({
     handleConfirmed,
     handleFailed,
-    swapId: id,
+    swapId: refundFile?.id,
   })
+
+  if (!refundFile) {
+    return null
+  }
 
   switch (onChainStatus) {
     case OnChainStatus.prompt:

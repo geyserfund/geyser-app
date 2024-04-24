@@ -1,23 +1,31 @@
-import { useTranslation } from 'react-i18next'
+import { useEffect } from 'react'
 
-import { TransactionProcessing } from '../onchain/components'
-import { useRefundTransactionId } from '../onchain/states/onChainTransaction'
-import { BLOCK_EXPLORER_BASE_URL } from '../onchain/views/OnChainProcessing'
+import { useRefundedSwapData } from '../../../../../../../../funding/state'
+import { RefundProcessing, RefundSummary, SafeToDeleteNotice } from '../../../../../../../refund/components'
+import { useShowContributionInfoBoxSet } from '../../states'
 
 export const RefundInitiated = () => {
-  const { t } = useTranslation()
-  const refundTransactionId = useRefundTransactionId()
+  const [refundedSwapData] = useRefundedSwapData()
+
+  const setShowContributionInfoBox = useShowContributionInfoBoxSet()
+
+  useEffect(() => {
+    setShowContributionInfoBox(false)
+
+    return () => {
+      setShowContributionInfoBox(true)
+    }
+  }, [setShowContributionInfoBox])
+
+  if (!refundedSwapData) {
+    return null
+  }
 
   return (
     <>
-      <TransactionProcessing
-        title={t('Your refund has been successfully intiated.')}
-        subTitle={t(
-          'We apologize for any inconvenience caused. In future transactions, please ensure to set a higher transaction fee for timely processing.',
-        )}
-        //  buttonUrl={`${BLOCK_EXPLORER_BASE_URL}${transactionId}`}
-        buttonUrl={`${BLOCK_EXPLORER_BASE_URL}/${refundTransactionId}`}
-      />
+      <RefundProcessing />
+      <RefundSummary />
+      <SafeToDeleteNotice />
     </>
   )
 }

@@ -5,8 +5,8 @@ const config: CodegenConfig = {
   schema: process.env.APOLLO_GRAPH_VARIANT === 'development' ? 'http://geyser-server:4000/graphql' : './schema.graphql',
   documents: 'src/graphql/**/*',
   config: {
-    maybeValue: 'T | undefined',
-    inputMaybeValue: 'T | undefined',
+    maybe: 'T | null | undefined',
+    inputMaybe: 'T | null | undefined',
   },
   generates: {
     'src/types/generated/graphql.ts': {

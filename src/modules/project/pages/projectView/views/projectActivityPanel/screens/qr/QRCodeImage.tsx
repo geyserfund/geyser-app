@@ -1,6 +1,5 @@
 import { VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { getBip21Invoice } from '../../../../../../../../utils/lightning/bip21'
 import { useFundingContext } from '../../../../../../context'
@@ -10,8 +9,6 @@ import { LightningQR } from './views/lightning/LightningQR'
 import { OnchainBoltz } from './views/onchain/OnChainBoltz'
 
 export const QRCodeImage = () => {
-  const { t } = useTranslation()
-
   const [lightningInvoice, setLightningInvoice] = useState<string>('')
   const [onChainAddress, setOnChainAddress] = useState<string>('')
 

@@ -1,7 +1,7 @@
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { atomEffect } from 'jotai-effect'
 
-import { fundingStageAtom, FundingStages } from '../../../../../../../../../funding/state'
+import { fundingStageAtom, FundingStages, refundedSwapDataAtom } from '../../../../../../../../../funding/state'
 import { pollingFundingTxAtom, subscriptionActiveAtom } from '../../../../../../../../../funding/state/pollingFundingTx'
 import { paymentMethodAtom, PaymentMethods } from '../../../states/paymentMethodAtom'
 
@@ -42,6 +42,7 @@ const onChainStatusEffectAtom = atomEffect((get, set) => {
 
   if (currentFundingStage !== FundingStages.started) {
     set(onChainStatusAtom, OnChainStatus.prompt)
+    set(refundedSwapDataAtom, undefined)
   }
 
   // Stop polling and subscription when user gets to the refund screen, if onChain is selected.

@@ -1,16 +1,4 @@
-import { CopyIcon } from '@chakra-ui/icons'
-import {
-  Avatar,
-  Box,
-  Button,
-  Divider,
-  HStack,
-  HTMLChakraProps,
-  Text,
-  Tooltip,
-  useOutsideClick,
-  VStack,
-} from '@chakra-ui/react'
+import { Avatar, Box, Divider, HStack, HTMLChakraProps, Text, Tooltip, useOutsideClick, VStack } from '@chakra-ui/react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsInfoCircle } from 'react-icons/bs'
@@ -21,7 +9,6 @@ import { useFundCalc } from '../../../../../../../../helpers'
 import { IFundForm } from '../../../../../../../../hooks'
 import { IBadge } from '../../../../../../../../interfaces'
 import { ProjectFragment, ProjectReward, Satoshis } from '../../../../../../../../types'
-import { copyTextToClipboard } from '../../../../../../../../utils'
 import { hasOwnNode } from '../../../../../../../../utils/helpers'
 import { Badge } from '../fundingForm/components/Badge'
 import { CopyReferenceCode } from './components'
