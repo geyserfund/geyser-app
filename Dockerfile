@@ -12,8 +12,11 @@ FROM base AS dependencies
 
 WORKDIR /usr/app
 
+RUN yarn set version berry
+
 # Install production packages
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn .yarn
 RUN yarn install --production
 RUN cp -R node_modules prod_node_modules
 
