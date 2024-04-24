@@ -17,11 +17,9 @@ RUN yarn set version berry
 # Install production packages
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn .yarn
-RUN yarn install --production
-RUN cp -R node_modules prod_node_modules
-
-# Install all packages (used for build and testing image in step 4)
-RUN yarn install
+RUN yarn workspaces focus -A --production \
+    && cp -R node_modules prod_node_modules \
+    && yarn install 
 
 
 #####################
