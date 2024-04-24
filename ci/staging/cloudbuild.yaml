@@ -34,7 +34,7 @@ steps:
         --target build \
         -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build \
         --build-arg VITE_APP_API_ENDPOINT=${_API_ENDPOINT} \
-        --build-arg VITE_APP_BOLTZ_SWAP_DOMAIN=${BOLTZ_SWAP_DOMAIN} \
+        --build-arg VITE_APP_BOLTZ_SWAP_DOMAIN=$$BOLTZ_SWAP_DOMAIN \
         --build-arg VITE_APP_FLODESK_API_KEY=$$FLODESK_API_KEY \
         --build-arg VITE_APP_GIPHY_API_KEY=$$GIPHY_API_KEY \
         --build-arg VITE_APP_GEYSER_NOSTR_PUBKEY=$$GEYSER_NOSTR_PUBKEY \
@@ -54,7 +54,7 @@ steps:
         -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA \
         -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest \
         --build-arg VITE_APP_API_ENDPOINT=${_API_ENDPOINT} \
-        --build-arg VITE_APP_BOLTZ_SWAP_DOMAIN=${BOLTZ_SWAP_DOMAIN} \
+        --build-arg VITE_APP_BOLTZ_SWAP_DOMAIN=$$BOLTZ_SWAP_DOMAIN \
         --build-arg VITE_APP_FLODESK_API_KEY=$$FLODESK_API_KEY \
         --build-arg VITE_APP_GIPHY_API_KEY=$$GIPHY_API_KEY \
         --build-arg VITE_APP_GEYSER_NOSTR_PUBKEY=$$GEYSER_NOSTR_PUBKEY \
