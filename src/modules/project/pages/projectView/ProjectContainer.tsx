@@ -32,6 +32,7 @@ export const ProjectContainer = () => {
     project,
     fundForm: { updateReward },
     setMobileView,
+    mobileView,
   } = useProjectContext()
   const { fundingStage } = useFundingStage()
 
@@ -67,7 +68,7 @@ export const ProjectContainer = () => {
     setMobileView(MobileViews.funding)
   }
 
-  const isFundingFlowInitial = fundingStage === FundingStages.initial
+  const isFundingFlowInitial = mobileView === MobileViews.funding && fundingStage !== FundingStages.initial
 
   return (
     <Box
@@ -75,7 +76,7 @@ export const ProjectContainer = () => {
       justifyContent="center"
       alignItems="center"
       height="100%"
-      pb={{ base: isFundingFlowInitial ? '70px' : 0, lg: '0px' }}
+      pb={{ base: !isFundingFlowInitial ? '70px' : 0, lg: '0px' }}
     >
       <Box
         width="100%"
@@ -100,7 +101,7 @@ export const ProjectContainer = () => {
         <ProjectCreateLaunchedModal {...launchModal} />
         <ProjectCreateDraftModal {...draftModal} />
 
-        {isMobile && isFundingFlowInitial && <ProjectMobileBottomNavigation fixed />}
+        {isMobile && !isFundingFlowInitial && <ProjectMobileBottomNavigation fixed />}
       </Box>
     </Box>
   )

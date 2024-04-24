@@ -81,7 +81,7 @@ export const ProjectCreationWalletConnectionPage = () => {
     }
 
     if (params.projectId) {
-      navigate(getPath('launchProjectStory', params.projectId))
+      navigate(getPath('launchProjectRewards', params.projectId))
       return
     }
 
@@ -129,7 +129,7 @@ export const ProjectCreationWalletConnectionPage = () => {
           flexGrow={1}
         />
       }
-      title={<TitleWithProgressBar title={t('Connect wallet')} subtitle={t('Create a project')} index={4} length={4} />}
+      title={<TitleWithProgressBar title={t('Connect wallet')} subtitle={t('Create a project')} index={5} length={5} />}
     >
       <VStack w="full" alignItems="start" pb="20px">
         <Body1 semiBold color="neutral.900">

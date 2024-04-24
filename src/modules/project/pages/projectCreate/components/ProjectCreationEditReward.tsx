@@ -3,16 +3,15 @@ import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
-import { getPath } from '../../../../../../../../../../constants'
-import { ProjectReward, useProjectRewardUpdateMutation } from '../../../../../../../../../../types/generated/graphql'
-import { useNotification } from '../../../../../../../../../../utils'
-import { useProjectContext } from '../../../../../../../../context'
-import { ProjectRewardForm } from '../Shared/ProjectRewardForm'
+import { ProjectReward, useProjectRewardUpdateMutation } from '../../../../../types/generated/graphql'
+import { useNotification } from '../../../../../utils'
+import { useProjectContext } from '../../../context'
+import { ProjectRewardForm } from '../../projectView/views/projectCreatorViews/sections/rewards/subviews/Shared/ProjectRewardForm'
 
-export const ProjectEditReward = () => {
+export const ProjectCreationEditReward = () => {
   const { t } = useTranslation()
   const { toast } = useNotification()
-  const { project, updateProject, isProjectOwner } = useProjectContext()
+  const { project, updateProject, isProjectOwner, refetch } = useProjectContext()
   const params = useParams<{ rewardId: string; projectId: string }>()
   const navigate = useNavigate()
 
@@ -31,8 +30,8 @@ export const ProjectEditReward = () => {
         description: `Reward ${data.projectRewardUpdate.name} was successfully updated`,
         status: 'success',
       })
-
-      navigate(getPath('projectManageRewards', project?.name || ''))
+      navigate(-1)
+      refetch()
     },
     onError(error) {
       toast({
@@ -57,9 +56,6 @@ export const ProjectEditReward = () => {
     <VStack
       direction={{ base: 'column', lg: 'row' }}
       w="full"
-      pt={{ base: '10px', lg: '20px' }}
-      pb={{ base: '80px', lg: '20px' }}
-      px={{ base: '10px', lg: '40px' }}
       backgroundColor={{ base: 'neutral.0', lg: 'inherit' }}
       spacing={{ base: '10px', lg: '20px' }}
     >
@@ -70,6 +66,7 @@ export const ProjectEditReward = () => {
         rewardSaving={updateRewardLoading}
         rewardData={reward}
         createOrUpdate="update"
+        isLaunch={true}
       />
     </VStack>
   )

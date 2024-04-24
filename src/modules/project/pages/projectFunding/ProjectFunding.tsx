@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { Project, UserMeFragment } from '../../../../types'
-import { FundingProvider } from '../../context/FundingProvider'
+import { FundingProvider, useFundingContext } from '../../context/FundingProvider'
 import { FundingStages, useFundingStage } from '../../funding/state'
 import { QRCodeSection } from '../projectView/views/projectActivityPanel/screens'
 import { FundingComplete } from './views/FundingComplete'
@@ -29,6 +29,7 @@ export const ProjectFundingContent = ({ project, user, onTitleChange = noop }: P
   const [formState, setFormState] = useState<ProjectFundingFormState | undefined>()
 
   const { fundingStage, setFundingStage } = useFundingStage()
+  const { resetFundingFlow } = useFundingContext()
 
   useEffect(() => {
     if (fundingStage === FundingStages.initial) {
@@ -39,6 +40,12 @@ export const ProjectFundingContent = ({ project, user, onTitleChange = noop }: P
       setTitle(SUCCESS_TITLE)
     }
   }, [fundingStage, setFundingStage])
+
+  useEffect(() => {
+    return () => {
+      resetFundingFlow()
+    }
+  }, [resetFundingFlow])
 
   if (!project) {
     return null

@@ -11,6 +11,7 @@ import { fundingStageAtomEffect, useFundingStage } from '../state/fundingStagesA
 import { useCheckFundingStatus, useFundingTx } from '../state/fundingTxAtom'
 import { useFundPollingAndSubscription } from '../state/pollingFundingTx'
 import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/helpers'
+
 import { webln } from '../utils/requestWebLNPayment'
 import { useFundSubscription } from './useFundSubscription'
 import { useResetFundingFlow } from './useResetFundingFlow'

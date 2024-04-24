@@ -8,6 +8,7 @@ export enum PathName {
   entry = 'entry',
   notFound = 'not-found',
   notAuthorized = 'not-authorized',
+  projectNotFound = 'project-not-found',
   _deprecatedPathNameForProject = 'project',
 
   project = 'project',
@@ -33,6 +34,9 @@ export enum PathName {
   preview = 'preview',
   launchProjectDetails = 'details',
   launchProjectStory = 'story',
+  launchProjectRewards = 'rewards',
+  launchProjectRewardsNew = 'rewards/new',
+  launchProjectRewardsEdit = 'rewards/edit',
   node = 'node',
   discover = 'discover',
   dashboardDescription = 'description',
@@ -76,6 +80,7 @@ const pathsMap = {
 
   notFound: () => `/${PathName.notFound}`,
   notAuthorized: () => `/${PathName.notAuthorized}`,
+  projectNotFound: () => `/${PathName.projectNotFound}`,
   _deprecatedPathForProject: (projectName: string) => `/${PathName._deprecatedPathNameForProject}/${projectName}`,
 
   refundInitiated: () => `/${PathName.refund}/${PathName.refundInitiated}`,
@@ -111,6 +116,12 @@ const pathsMap = {
   launchProjectDetails: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectDetails}`,
   launchProjectStory: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchProjectStory}`,
+  launchProjectRewards: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}`,
+  launchProjectRewardsNew: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/new`,
+  launchProjectRewardsEdit: (projectID: string, rewardID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/edit/${rewardID}`,
 
   userProfile: (userID: string) => `/${PathName.userProfile}/${userID}`,
   userProfileSettings: (userID: string) => `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}`,

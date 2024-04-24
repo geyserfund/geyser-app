@@ -1,19 +1,21 @@
 import { VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-import { getPath } from '../../../../../../../../../../constants'
-import { defaultProjectReward } from '../../../../../../../../../../defaults'
-import { useProjectRewardCreateMutation } from '../../../../../../../../../../types/generated/graphql'
-import { useNotification } from '../../../../../../../../../../utils'
-import { useProjectContext } from '../../../../../../../../context'
-import { ProjectRewardForm } from '../Shared/ProjectRewardForm'
+import { defaultProjectReward } from '../../../../../defaults'
+import { useProjectRewardCreateMutation } from '../../../../../types/generated/graphql'
+import { useNotification } from '../../../../../utils'
+import { useProjectContext } from '../../../context'
+import { ProjectRewardForm } from '../../projectView/views/projectCreatorViews/sections/rewards/subviews/Shared/ProjectRewardForm'
 
-export const ProjectCreateReward = () => {
+export const ProjectCreationCreateReward = () => {
   const { t } = useTranslation()
   const { toast } = useNotification()
   const navigate = useNavigate()
-  const { project, updateProject } = useProjectContext()
+  const location = useLocation()
+  const { project, updateProject, refetch } = useProjectContext()
+
+  const category = location.state?.category
 
   const [createReward, { loading: createRewardLoading }] = useProjectRewardCreateMutation({
     onCompleted(data) {
@@ -25,7 +27,8 @@ export const ProjectCreateReward = () => {
       })
       if (!project) return
 
-      navigate(getPath('projectManageRewards', project?.name))
+      navigate(-1)
+      refetch()
     },
     onError(error) {
       toast({
@@ -40,23 +43,25 @@ export const ProjectCreateReward = () => {
     return null
   }
 
+  if (category) {
+    defaultProjectReward.category = category
+  }
+
   return (
     <VStack
       direction={{ base: 'column', lg: 'row' }}
       w="full"
-      pt={{ base: '10px', lg: '20px' }}
-      pb={{ base: '80px', lg: '20px' }}
-      px={{ base: '10px', lg: '40px' }}
       backgroundColor={{ base: 'neutral.0', lg: 'inherit' }}
       spacing={{ base: '10px', lg: '20px' }}
     >
       <ProjectRewardForm
-        buttonText={t('Publish Reward')}
+        buttonText={t('Save reward')}
         titleText={t('Create Reward')}
         rewardSave={createReward}
         rewardSaving={createRewardLoading}
         rewardData={defaultProjectReward}
         createOrUpdate="create"
+        isLaunch={true}
       />
     </VStack>
   )

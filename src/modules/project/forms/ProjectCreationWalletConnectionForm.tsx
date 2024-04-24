@@ -35,9 +35,9 @@ import {
   WalletOfSatoshiLightningAddressURL,
   WalletOfSatoshiUrl,
 } from '../../../constants'
-import { ProjectFeeSelection } from '../../../pages/projectCreate/components/ProjectFeeSelection'
 import { lightModeColors } from '../../../styles'
 import { LndNodeType } from '../../../types'
+import { ProjectFeeSelection } from '../components/ProjectFeeSelection'
 import { WalletConnectionOptionInfoBox } from '../pages/projectCreate/components/WalletConnectionOptionInfoBox'
 import {
   ConnectionOption,

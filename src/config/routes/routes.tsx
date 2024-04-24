@@ -4,7 +4,7 @@ import { App } from '../../App'
 import { AppLayout } from '../../AppLayout'
 import { __production__, getPath, PathName } from '../../constants'
 import { ExternalAuthSuccess, FailedAuth } from '../../pages/auth'
-import { NotAuthorized, NotFoundPage } from '../../pages/fallback'
+import { NotAuthorized, NotFoundPage, NotFoundProject } from '../../pages/fallback'
 import { PrivacyPolicy, TermsAndConditions } from '../../pages/legal'
 import { ErrorBoundary } from './ErrorBoundary'
 import { renderPrivateRoute } from './PrivateRoute'
@@ -81,6 +81,38 @@ export const platformRoutes: RouteObject[] = [
       const ProjectCreateStory = await ProjectLaunch().then((m) => m.ProjectCreateStory)
       return { element: renderPrivateRoute(ProjectCreateStory) }
     },
+  },
+  {
+    path: getPath('launchProjectRewards', PathName.projectId),
+    async lazy() {
+      const ProjectCreateRewards = await ProjectLaunch().then((m) => m.ProjectCreateRewards)
+      return {
+        element: renderPrivateRoute(ProjectCreateRewards),
+      }
+    },
+    children: [
+      {
+        index: true,
+        async lazy() {
+          const ProjectCreateRewardMain = await ProjectLaunch().then((m) => m.ProjectCreateRewardMain)
+          return { element: renderPrivateRoute(ProjectCreateRewardMain) }
+        },
+      },
+      {
+        path: 'new',
+        async lazy() {
+          const ProjectCreationCreateReward = await ProjectLaunch().then((m) => m.ProjectCreationCreateReward)
+          return { element: renderPrivateRoute(ProjectCreationCreateReward) }
+        },
+      },
+      {
+        path: 'edit/:rewardId',
+        async lazy() {
+          const ProjectCreationEditReward = await ProjectLaunch().then((m) => m.ProjectCreationEditReward)
+          return { element: renderPrivateRoute(ProjectCreationEditReward) }
+        },
+      },
+    ],
   },
   {
     path: getPath('privateProjectLaunch'),
@@ -343,6 +375,10 @@ export const platformRoutes: RouteObject[] = [
   {
     path: getPath('notAuthorized'),
     Component: NotAuthorized,
+  },
+  {
+    path: getPath('projectNotFound'),
+    Component: NotFoundProject,
   },
   {
     path: getPath('leaderboard'),

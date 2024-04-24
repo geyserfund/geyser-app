@@ -1,21 +1,40 @@
 import { CloseIcon } from '@chakra-ui/icons'
-import { Box, Button, IconButton, Image, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, IconButton, Image, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiLinkBold } from 'react-icons/pi'
+import { RiTwitterXLine } from 'react-icons/ri'
 
 import { CardLayout } from '../../../../../../../components/layouts'
 import { Body2, H3 } from '../../../../../../../components/typography'
 import { MegaphoneUrl } from '../../../../../../../constants'
+import { useAuthContext } from '../../../../../../../context'
 import { standardPadding } from '../../../../../../../styles'
 import { ProjectStatus } from '../../../../../../../types'
+import { hasTwitterAccount } from '../../../../../../../utils'
 import { useProjectContext } from '../../../../../context'
+import { shareOnTwitter } from '../utils'
 
 const SHARE_PROJECT_CLOSED_STORAGE_KEY = 'shareProjectClosed'
+
+const tweetKeys = [
+  'Check out my project in geyser: {{projectLink}}',
+  "We're on a mission to change the game and we need your help. Dive into our project on @geyserfund and let's make a difference. Are you in? {{projectLink}}",
+  "Dream with us! We're launching something incredible on @geyserfund and you're invited to be part of the journey. Join us! {{projectLink}}",
+  "Big news! We've just launched our latest project on @geyserfund and we need YOUR help to make it a reality. Ready to make a difference? {{projectLink}}",
+  "Join us in bringing our dream project to life on @geyserfund. Let's change things together! {{projectLink}}",
+  "Breaking news: We're shaking things up with our new project on @geyserfund! Check it out: {{projectLink}} #BreakingNews",
+  "We're transforming our dreams into reality with this project on @geyserfund. Your support matters: {{projectLink}}",
+  'Making a difference, one step at a time. Join our mission on @geyserfund and help us leave a lasting impact. Your support makes all the difference: {{projectLink}} #MakeADifference',
+]
 
 export const ShareProject = () => {
   const { t } = useTranslation()
   const { project, isProjectOwner } = useProjectContext()
+
+  const { user } = useAuthContext()
+
+  const isTwitterAccount = hasTwitterAccount(user)
 
   const [shareClosed, setShareClosed] = useState(localStorage.getItem(SHARE_PROJECT_CLOSED_STORAGE_KEY) === 'true')
 
@@ -34,6 +53,10 @@ export const ShareProject = () => {
   const handleCloseClick = () => {
     setShareClosed(true)
     localStorage.setItem(SHARE_PROJECT_CLOSED_STORAGE_KEY, 'true')
+  }
+
+  const handleTwitterShareClick = () => {
+    return shareOnTwitter(tweetKeys, project?.name, t)
   }
 
   if (shareClosed) return null
@@ -65,14 +88,30 @@ export const ShareProject = () => {
       <VStack w="full" alignItems={'start'}>
         <H3>{t('Share your project')}</H3>
         <Body2>{t('Sharing on social media helps you reach more people and get closer to achieving your goals')}</Body2>
-        <Button
-          variant={copied ? 'secondary' : 'primary'}
-          leftIcon={<PiLinkBold />}
-          w="full"
-          onClick={handleShareClick}
-        >
-          {copied ? t('Project link copied!') : t('Share your project')}
-        </Button>
+        <HStack w="full" alignItems="start">
+          {isTwitterAccount && (
+            <a href={handleTwitterShareClick()} target="_blank" rel="noopener noreferrer" style={{ width: '100%' }}>
+              <Button
+                as="div"
+                w="full"
+                backgroundColor="neutral.1000"
+                color="neutral.0"
+                leftIcon={<RiTwitterXLine />}
+                _hover={{ backgroundColor: 'neutral.300', color: 'neutral.1000' }}
+              >
+                {t('Post')}
+              </Button>
+            </a>
+          )}
+          <Button
+            variant={copied ? 'secondary' : 'primary'}
+            leftIcon={<PiLinkBold />}
+            w="full"
+            onClick={handleShareClick}
+          >
+            {copied ? t('Project link copied!') : t('Copy project link')}
+          </Button>
+        </HStack>
       </VStack>
     </CardLayout>
   )
