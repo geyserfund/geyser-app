@@ -55,4 +55,4 @@ COPY --from=build /usr/app/prod_node_modules ./node_modules
 COPY --from=build /usr/app/dist ./dist
 
 # RUN yarn global add serve
-CMD ["node","--max_old_space_size=8192","-r","dotenv/config","build/server.js"]
+CMD node -r dotenv/config server.ts
