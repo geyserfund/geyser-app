@@ -17,7 +17,7 @@ export const OnChainProcessing = () => {
         subTitle={t(
           'Completion time may vary due to Bitcoin network conditions, such as mempool size and transaction fees. Thank you for your patience.',
         )}
-        buttonUrl={`${BLOCK_EXPLORER_BASE_URL}/${transaction.hex}`}
+        buttonUrl={`${BLOCK_EXPLORER_BASE_URL}${transaction.hex}`}
       />
       <UpdateFundingTxEmailAddress />
     </>
