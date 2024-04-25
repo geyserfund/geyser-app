@@ -20,7 +20,7 @@ export const API_SERVICE_ENDPOINT = import.meta.env.VITE_APP_API_ENDPOINT as Ext
 export const AUTH_SERVICE_ENDPOINT = __production__
   ? import.meta.env.VITE_APP_AUTH_SERVICE_ENDPOINT
   : `${API_SERVICE_ENDPOINT}/auth`
-export const BOLTZ_DOMAIN = import.meta.env.VITE_APP_BOLTZ_DOMAIN as string
+export const BOLTZ_DOMAIN = import.meta.env.VITE_APP_BOLTZ_SWAP_DOMAIN as string
 /*
  Other environment vars
 */
