@@ -36,7 +36,7 @@ export const QUERY_GRANTS = gql`
   }
 `
 
-export const QUERY_GRANT = gql`
+export const QUERY_GRANT_WITH_FUNDERS = gql`
   query Grant($input: GrantGetInput!) {
     grant(input: $input) {
       id
@@ -83,6 +83,64 @@ export const QUERY_GRANT = gql`
               imageUrl
             }
           }
+        }
+        status
+        funding {
+          communityFunding
+          grantAmount
+          grantAmountDistributed
+        }
+      }
+      sponsors {
+        id
+        name
+        url
+        image
+        status
+        createdAt
+      }
+    }
+  }
+`
+
+export const QUERY_GRANT = gql`
+  query Grant($input: GrantGetInput!) {
+    grant(input: $input) {
+      id
+      title
+      name
+      shortDescription
+      description
+      balance
+      status
+      image
+      statuses {
+        status
+        endAt
+        startAt
+      }
+      boardMembers {
+        user {
+          username
+          imageUrl
+          id
+          externalAccounts {
+            accountType
+            externalId
+            externalUsername
+            id
+            public
+          }
+        }
+      }
+      applicants {
+        project {
+          id
+          name
+          title
+          thumbnailImage
+          shortDescription
+          description
         }
         status
         funding {
