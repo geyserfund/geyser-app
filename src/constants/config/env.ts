@@ -37,4 +37,8 @@ if (!import.meta.env.VITE_APP_GEYSER_NOSTR_PUBKEY) {
   console.warn('Missing VITE_APP_GEYSER_NOSTR_PUBKEY API key from environment variables')
 }
 
+if (!import.meta.env.VITE_APP_BOLTZ_SWAP_DOMAIN) {
+  console.warn('Missing VITE_APP_BOLTZ_SWAP_DOMAIN from environment variables')
+}
+
 export const { VITE_APP_FLODESK_API_KEY, VITE_APP_GIPHY_API_KEY, VITE_APP_GEYSER_NOSTR_PUBKEY } = import.meta.env
