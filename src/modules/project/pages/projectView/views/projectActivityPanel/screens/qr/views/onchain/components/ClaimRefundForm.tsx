@@ -7,6 +7,7 @@ import * as yup from 'yup'
 import { Body2 } from '../../../../../../../../../../../components/typography'
 import { TextField } from '../../../../../../../../../../../forms/components/TextField'
 import { useNotification } from '../../../../../../../../../../../utils'
+import { getBitcoinAddress } from '../../../../../../../../../../../utils/lightning/bip21'
 import { useRefundFileValue } from '../../../../../../../../../funding/state'
 import { useRefund } from '../hooks/useRefund'
 import { validateBitcoinAddress } from '../utils/validateAddress'
@@ -17,7 +18,14 @@ const schema = yup
     bitcoinAddress: yup
       .string()
       .required('Address is required to claim funds')
-      .test((value) => validateBitcoinAddress(value)),
+      .test((value) => {
+        const bitcoinAddress = getBitcoinAddress(value)
+        if (bitcoinAddress.valid && bitcoinAddress.address) {
+          return validateBitcoinAddress(bitcoinAddress.address)
+        }
+
+        return validateBitcoinAddress(value)
+      }),
   })
   .required()
 
