@@ -3829,7 +3829,10 @@ export type ProjectFragment = { __typename?: 'Project', id: any, title: string, 
     { __typename?: 'Entry' }
     & EntryForProjectFragment
   )>, wallets: Array<(
-    { __typename?: 'Wallet' }
+    { __typename?: 'Wallet', limits?: (
+      { __typename?: 'WalletLimits' }
+      & WalletLimitsFragment
+    ) | null }
     & ProjectWalletFragment
   )>, followers: Array<{ __typename?: 'User', id: any, username: string }>, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', npub: string } } } };
 
@@ -3875,6 +3878,8 @@ export type UserProjectContributionsFragment = { __typename?: 'UserProjectContri
   ), funder?: { __typename?: 'Funder', amountFunded?: number | null, confirmedAt?: any | null, confirmed: boolean, id: any, fundingTxs: Array<{ __typename?: 'FundingTx', amountPaid: number, comment?: string | null, media?: string | null, paidAt?: any | null, onChain: boolean }> } | null };
 
 export type ProjectWalletFragment = { __typename?: 'Wallet', id: any, name?: string | null, feePercentage?: number | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode }, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'LndConnectionDetailsPrivate', macaroon: string, tlsCertificate?: string | null, hostname: string, grpcPort: number, lndNodeType: LndNodeType, pubkey?: string | null } | { __typename?: 'LndConnectionDetailsPublic', pubkey?: string | null } };
+
+export type WalletLimitsFragment = { __typename?: 'WalletLimits', contribution?: { __typename?: 'WalletContributionLimits', min?: number | null, max?: number | null, offChain?: { __typename?: 'WalletOffChainContributionLimits', min?: number | null, max?: number | null } | null, onChain?: { __typename?: 'WalletOnChainContributionLimits', min?: number | null, max?: number | null } | null } | null };
 
 export type UserBadgeAwardMutationVariables = Exact<{
   userBadgeId: Scalars['BigInt']['input'];
@@ -4569,7 +4574,7 @@ export type LightningAddressVerifyQueryVariables = Exact<{
 }>;
 
 
-export type LightningAddressVerifyQuery = { __typename?: 'Query', lightningAddressVerify: { __typename?: 'LightningAddressVerifyResponse', reason?: string | null, valid: boolean } };
+export type LightningAddressVerifyQuery = { __typename?: 'Query', lightningAddressVerify: { __typename?: 'LightningAddressVerifyResponse', reason?: string | null, valid: boolean, limits?: { __typename?: 'LightningAddressContributionLimits', max?: number | null, min?: number | null } | null } };
 
 export type ActivityCreatedSubscriptionVariables = Exact<{
   input?: InputMaybe<ActivityCreatedSubscriptionInput>;
@@ -5002,6 +5007,22 @@ export const ProjectWalletFragmentDoc = gql`
   }
 }
     `;
+export const WalletLimitsFragmentDoc = gql`
+    fragment WalletLimits on WalletLimits {
+  contribution {
+    min
+    max
+    offChain {
+      min
+      max
+    }
+    onChain {
+      min
+      max
+    }
+  }
+}
+    `;
 export const ProjectFragmentDoc = gql`
     fragment Project on Project {
   id
@@ -5067,6 +5088,9 @@ export const ProjectFragmentDoc = gql`
   }
   wallets {
     ...ProjectWallet
+    limits {
+      ...WalletLimits
+    }
   }
   followers {
     id
@@ -5084,7 +5108,8 @@ export const ProjectFragmentDoc = gql`
 ${ProjectRewardForCreateUpdateFragmentDoc}
 ${UserForAvatarFragmentDoc}
 ${EntryForProjectFragmentDoc}
-${ProjectWalletFragmentDoc}`;
+${ProjectWalletFragmentDoc}
+${WalletLimitsFragmentDoc}`;
 export const UserMeFragmentDoc = gql`
     fragment UserMe on User {
   id
@@ -8831,6 +8856,10 @@ export const LightningAddressVerifyDocument = gql`
   lightningAddressVerify(lightningAddress: $lightningAddress) {
     reason
     valid
+    limits {
+      max
+      min
+    }
   }
 }
     `;

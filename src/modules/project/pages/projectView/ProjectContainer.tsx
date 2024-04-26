@@ -7,7 +7,7 @@ import { Head } from '../../../../config'
 import { PathName } from '../../../../constants'
 import { useModal } from '../../../../hooks/useModal'
 import { toInt, useMobileMode } from '../../../../utils'
-import { MobileViews, useProjectContext } from '../../context'
+import { MobileViews, useFundingContext, useProjectContext } from '../../context'
 import { FundingStages, useFundingStage } from '../../funding/state'
 import { ProjectCreateDraftModal } from './components/ProjectCreateDraftModal'
 import { ProjectCreateLaunchedModal } from './components/ProjectCreateLaunchedModal'
@@ -28,13 +28,11 @@ export const ProjectContainer = () => {
   const launchModal = useModal({ onClose: onModalClose })
   const draftModal = useModal({ onClose: onModalClose })
 
-  const {
-    project,
-    fundForm: { updateReward },
-    setMobileView,
-    mobileView,
-  } = useProjectContext()
+  const { project, setMobileView, mobileView } = useProjectContext()
   const { fundingStage } = useFundingStage()
+  const {
+    fundForm: { updateReward },
+  } = useFundingContext()
 
   const query = useQuery()
 

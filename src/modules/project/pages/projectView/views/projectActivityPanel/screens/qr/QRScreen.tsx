@@ -17,12 +17,11 @@ import { QRCodeSection } from './QRCodeSection'
 import { useShowContributionInfoBoxValue } from './states'
 
 type Props = {
-  handleCloseButton: () => void
   state: IFundForm
   project: ProjectFragment
 }
 
-export const QRScreen = ({ state, project, handleCloseButton }: Props) => {
+export const QRScreen = ({ state, project }: Props) => {
   const { t } = useTranslation()
   const { getTotalAmount } = useFundCalc(state)
   const showContributionInfoBox = useShowContributionInfoBoxValue()
@@ -32,7 +31,11 @@ export const QRScreen = ({ state, project, handleCloseButton }: Props) => {
   })
 
   const { fundingTx } = useFundingContext()
-  const { fundingStage } = useFundingStage()
+  const { fundingStage, setFundingStage } = useFundingStage()
+
+  const handleCloseButton = () => {
+    setFundingStage(FundingStages.form)
+  }
 
   useEffect(() => {
     // Cancel invoice on the backend after QR section unmounts

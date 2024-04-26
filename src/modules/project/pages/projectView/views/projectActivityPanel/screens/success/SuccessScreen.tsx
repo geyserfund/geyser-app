@@ -28,14 +28,14 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
   const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const {
-    project,
-    fundForm: { needsShipping, state: fundingState },
-  } = useProjectContext()
+  const { project } = useProjectContext()
 
   const isLightning = useIsLightingMethodAtom()
 
-  const { fundingTx } = useFundingContext()
+  const {
+    fundingTx,
+    fundForm: { needsShipping, state: fundingState },
+  } = useFundingContext()
   const { user } = useAuthContext()
 
   const { getTotalAmount } = useFundCalc(fundingState)

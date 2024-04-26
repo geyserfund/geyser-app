@@ -3,7 +3,7 @@ import { MouseEventHandler } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FieldContainer } from '../../../../../../../../../forms/components/FieldContainer'
-import { useProjectContext } from '../../../../../../../context'
+import { useFundingContext } from '../../../../../../../context'
 import { SectionTitleBlock } from '../../../components/SectionTitleBlock'
 import { ProjectFundingFormCommentField } from '../components/ProjectFundingFormCommentField'
 
@@ -21,7 +21,8 @@ export const FundingFormUserInfoSection = ({ onBackClick }: Props) => {
       hasSelectedRewards,
       state: { comment, email },
     },
-  } = useProjectContext()
+  } = useFundingContext()
+
   return (
     <VStack alignItems="start" width="100%" flexGrow={1} spacing={5}>
       <SectionTitleBlock title={t('Checkout')} onBackClick={onBackClick} />

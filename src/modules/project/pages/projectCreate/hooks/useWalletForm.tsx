@@ -5,9 +5,14 @@ import { WalletConnectDetails } from '../../../../../constants'
 import { useDebounce } from '../../../../../hooks'
 import {
   CreateWalletInput,
+  LightningAddressContributionLimits,
   LndNodeType,
+  Maybe,
   ProjectFragment,
   useLightningAddressVerifyLazyQuery,
+  WalletLimitsFragment,
+  WalletOffChainContributionLimits,
+  WalletOnChainContributionLimits,
   WalletResourceType,
 } from '../../../../../types'
 import { toInt, useNotification, validateEmail } from '../../../../../utils'
@@ -49,6 +54,11 @@ export type NodeWalletForm = {
   onOpen: () => void
 }
 
+export type Limits = {
+  max?: Maybe<number>
+  min?: Maybe<number>
+}
+
 export type WalletForm = {
   handleConfirm: () => void
   lightningAddress: LightingWalletForm
@@ -62,6 +72,7 @@ export type WalletForm = {
   }
   createWalletInput: CreateWalletInput | null
   isLightningAddressInValid: boolean
+  limits: Limits
 }
 
 const DEFAULT_FEE_PERCENTAGE = 0.04
@@ -90,18 +101,31 @@ export const useWalletForm = ({
 
   const projectWallet = project?.wallets[0]
 
+  const [limits, setLimits] = useState<
+    LightningAddressContributionLimits | WalletOffChainContributionLimits | WalletOnChainContributionLimits
+  >(
+    projectWallet
+      ? projectWallet?.connectionDetails.__typename === WalletConnectDetails.LightningAddressConnectionDetails
+        ? projectWallet?.limits?.contribution?.offChain || {}
+        : projectWallet?.limits?.contribution?.onChain || {}
+      : {},
+  )
+
   const [feePercentage, setFeePercentage] = useState<number>(projectWallet?.feePercentage ?? DEFAULT_FEE_PERCENTAGE)
 
   const debouncedLightningAddress = useDebounce(lightningAddressFormValue, 200)
 
   const [evaluateLightningAddress, { loading: isEvaluatingLightningAddress }] = useLightningAddressVerifyLazyQuery({
-    onCompleted({ lightningAddressVerify: { valid, reason } }) {
+    onCompleted({ lightningAddressVerify: { valid, reason, limits } }) {
       if (Boolean(valid) === false) {
         setLnAddressEvaluationState(LNAddressEvaluationState.FAILED)
         setLightningAddressFormError(`We could not validate this as a working Lightning Address: ${reason}`)
       } else {
         setLightningAddressFormError('')
         setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED)
+        if (limits) {
+          setLimits(limits)
+        }
       }
     },
   })
@@ -323,6 +347,7 @@ export const useWalletForm = ({
       value: feePercentage,
       setValue: setFeePercentage,
     },
+    limits,
     isFormDirty,
     connectionOption,
     setConnectionOption,

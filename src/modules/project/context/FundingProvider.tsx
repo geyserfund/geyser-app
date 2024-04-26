@@ -1,5 +1,6 @@
 import React, { createContext, PropsWithChildren, useContext } from 'react'
 
+import { useFundingFormState, UseFundingFormStateReturn } from '../../../hooks'
 import { FundingInput, FundingTxFragment, ProjectFragment } from '../../../types'
 import { useFundingFlow } from '../funding/hooks/useFundingFlow'
 import { useProjectContext } from './ProjectProvider'
@@ -14,7 +15,8 @@ type FundingContextProps = {
   error: string
   weblnErrored: boolean
   hasWebLN: boolean
-  project?: Partial<ProjectFragment> | null
+  project?: Partial<ProjectFragment> | null // Partial Project context, for usage inside fundingFlow, Only useful when ProjctProvider is not used
+  fundForm: UseFundingFormStateReturn
 }
 
 export const FundingContext = createContext<FundingContextProps>({} as FundingContextProps)
@@ -29,7 +31,14 @@ export const FundingProvider: React.FC<PropsWithChildren<{ project?: Partial<Pro
   project,
 }) => {
   const fundingFlow = useFundingFlow({ project })
-  return <FundingContext.Provider value={{ ...fundingFlow, project }}>{children}</FundingContext.Provider>
+
+  const fundForm = useFundingFormState({
+    rewards: project ? project.rewards : undefined,
+    rewardCurrency: project && project.rewardCurrency ? project.rewardCurrency : undefined,
+    walletLimits: project ? project?.wallets?.[0]?.limits?.contribution : ({} as any),
+  })
+
+  return <FundingContext.Provider value={{ ...fundingFlow, project, fundForm }}>{children}</FundingContext.Provider>
 }
 
 export const FundingProviderWithProjectContext: React.FC<PropsWithChildren> = ({ children }) => {

@@ -1,4 +1,7 @@
-export const commaFormatted = (amount: number) => amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+import { Maybe } from 'yup'
+
+export const commaFormatted = (amount?: Maybe<number>) =>
+  amount ? amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''
 
 export const getBitcoinAmount = (amount: number, decimal?: boolean) => {
   const divisor = 100000000

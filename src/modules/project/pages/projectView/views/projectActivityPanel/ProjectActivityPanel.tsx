@@ -35,11 +35,11 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   const { btcRate } = useBtcContext()
   const isMobile = useMobileMode()
 
-  const { mobileView, setMobileView, project, fundForm } = useProjectContext()
+  const { mobileView, setMobileView, project } = useProjectContext()
+  const { resetFundingFlow, requestFunding, fundForm } = useFundingContext()
 
   const { state: formState, setState: setFormState, resetForm, hasSelectedRewards } = fundForm
 
-  const { resetFundingFlow, requestFunding } = useFundingContext()
   const { fundingStage, setFundingStage } = useFundingStage()
 
   const { loginOnOpen } = useAuthModal()
@@ -70,10 +70,6 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
     setMobileView(MobileViews.contribution)
     resetFundingFlow()
     resetForm()
-  }
-
-  const handleQRCloseButton = () => {
-    setFundingStage(FundingStages.form)
   }
 
   const formatFundingInput = (state: IFundForm) => {
@@ -141,7 +137,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
           />
         )
       case FundingStages.started:
-        return <QRScreen state={formState} project={project} handleCloseButton={handleQRCloseButton} />
+        return <QRScreen state={formState} project={project} />
       case FundingStages.completed:
         return <SuccessScreen onCloseClick={handleCloseButton} />
 

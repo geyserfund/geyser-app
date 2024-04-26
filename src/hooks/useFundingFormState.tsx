@@ -2,7 +2,14 @@ import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
 import { AuthContext } from '../context'
 import { IRewardCount } from '../interfaces'
-import { ProjectRewardForCreateUpdateFragment, RewardCurrency, ShippingDestination } from '../types/generated/graphql'
+import {
+  ProjectRewardForCreateUpdateFragment,
+  RewardCurrency,
+  ShippingDestination,
+  WalletContributionLimits,
+} from '../types/generated/graphql'
+import { commaFormatted } from '../utils'
+import { useDebounce } from './useDebounce'
 
 export interface IFundForm {
   donationAmount: number
@@ -17,12 +24,14 @@ export interface IFundForm {
   funderAvatarURL: string
   rewardsByIDAndCount?: { [key: string]: number } | undefined
   rewardCurrency: RewardCurrency
+  totalAmount?: number
   step: 'contribution' | 'info'
 }
 
 type UseFundStateProps = {
   rewards?: ProjectRewardForCreateUpdateFragment[]
   rewardCurrency?: RewardCurrency
+  walletLimits?: WalletContributionLimits
 }
 
 export type UpdateReward = (_: IRewardCount) => void
@@ -37,10 +46,13 @@ export interface IFundFormState {
 
 export type UseFundingFormStateReturn = ReturnType<typeof useFundingFormState>
 
-export const useFundingFormState = ({ rewards, rewardCurrency }: UseFundStateProps) => {
+export const useFundingFormState = ({ rewards, rewardCurrency, walletLimits }: UseFundStateProps) => {
   const { user, isAnonymous } = useContext(AuthContext)
 
   const [needsShipping, setNeedsShipping] = useState(false)
+
+  const [amountWarning, setAmountWarning] = useState('')
+  const [amountError, setAmountError] = useState('')
 
   const initialState: IFundForm = useMemo(
     () => ({
@@ -62,6 +74,53 @@ export const useFundingFormState = ({ rewards, rewardCurrency }: UseFundStatePro
   )
 
   const [state, _setState] = useState<IFundForm>(initialState)
+  const debouncedTotalAmount = useDebounce(state.totalAmount, 200)
+  console.log('checkign debouncedTotalAmount and walletLimits', debouncedTotalAmount, walletLimits)
+
+  useEffect(() => {
+    if (debouncedTotalAmount && walletLimits) {
+      const { max, min, onChain, offChain } = walletLimits
+
+      if (!debouncedTotalAmount) {
+        setAmountWarning('')
+        setAmountError('')
+        return
+      }
+
+      if ((max && debouncedTotalAmount > max) || (offChain?.max && debouncedTotalAmount > offChain.max)) {
+        setAmountError(`amount exceeds wallet max: ${commaFormatted(max)} sats`)
+        setAmountWarning('')
+        return
+      }
+
+      if ((min && debouncedTotalAmount < min) || (offChain?.min && debouncedTotalAmount < offChain.min)) {
+        setAmountError(`amount is lower than wallet min: ${commaFormatted(min)} sats`)
+        setAmountWarning('')
+        return
+      }
+
+      if (onChain?.max && debouncedTotalAmount > onChain.max) {
+        setAmountWarning(
+          `can be funded via. Lightning invoice only. amount exceeds onChain max: ${commaFormatted(onChain.max)} sats`,
+        )
+        setAmountError('')
+        return
+      }
+
+      if (onChain?.min && debouncedTotalAmount < onChain.min) {
+        setAmountWarning(
+          `can be funded via. Lightning invoice only. amount is lower than onChain min: ${commaFormatted(
+            onChain.max,
+          )} sats`,
+        )
+        setAmountError('')
+        return
+      }
+
+      setAmountWarning('')
+      setAmountError('')
+    }
+  }, [debouncedTotalAmount, walletLimits])
 
   const setTarget = useCallback((event: any) => {
     const { name, value } = event.target
@@ -69,7 +128,19 @@ export const useFundingFormState = ({ rewards, rewardCurrency }: UseFundStatePro
   }, [])
 
   const setState = useCallback((name: string, value: any) => {
-    _setState((current) => ({ ...current, [name]: value }))
+    if (name === 'donationAmount') {
+      _setState((current) => ({
+        ...current,
+        donationAmount: value,
+        totalAmount: value + current.rewardsCost + current.shippingCost,
+      }))
+      return
+    }
+
+    _setState((current) => ({
+      ...current,
+      [name]: value,
+    }))
   }, [])
 
   useEffect(() => {
@@ -133,7 +204,7 @@ export const useFundingFormState = ({ rewards, rewardCurrency }: UseFundStatePro
           ...current,
           rewardsByIDAndCount: newRewardsCountInfo,
           rewardsCost,
-          totalAmount: rewardsCost + current.donationAmount,
+          totalAmount: rewardsCost + current.donationAmount + current.shippingCost,
         }
       })
     },
@@ -159,5 +230,7 @@ export const useFundingFormState = ({ rewards, rewardCurrency }: UseFundStatePro
     resetRewards,
     needsShipping,
     hasSelectedRewards,
+    amountWarning,
+    amountError,
   }
 }

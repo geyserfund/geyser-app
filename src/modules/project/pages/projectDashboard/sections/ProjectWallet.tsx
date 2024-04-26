@@ -62,6 +62,7 @@ export const ProjectWallet = () => {
     createWalletInput,
     isLightningAddressInValid,
     fee,
+    limits,
   } = useWalletForm({
     defaultConnectionOption: projectWallet
       ? projectWallet.connectionDetails.__typename === WalletConnectDetails.LightningAddressConnectionDetails
@@ -178,6 +179,7 @@ export const ProjectWallet = () => {
             connectionOption={connectionOption}
             setConnectionOption={setConnectionOption}
             fee={fee}
+            limits={limits}
           />
         )}
       </VStack>

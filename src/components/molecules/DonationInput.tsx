@@ -18,6 +18,7 @@ import { createUseStyles } from 'react-jss'
 
 import { AppTheme } from '../../context'
 import { useBtcContext } from '../../context/btc'
+import { useProjectContext } from '../../modules/project/context'
 import { fonts } from '../../styles'
 import { commaFormatted } from '../../utils'
 import { CrownIcon, MedalIcon, SatoshiIconTilted, StarIcon, TrophyIcon } from '../icons'
@@ -74,9 +75,11 @@ interface IDonationInputProps extends InputProps {
 }
 
 export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }: IDonationInputProps) => {
+  const classes = useStyles()
+
   const { btcRate } = useBtcContext()
 
-  const classes = useStyles()
+  const { project } = useProjectContext()
 
   const inputRef = useRef<HTMLInputElement>(null)
 

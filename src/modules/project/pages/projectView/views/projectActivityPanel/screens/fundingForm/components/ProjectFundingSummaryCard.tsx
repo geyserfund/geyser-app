@@ -6,7 +6,7 @@ import { BoltIcon } from '../../../../../../../../../components/icons'
 import { useFundCalc } from '../../../../../../../../../helpers'
 import { standardPadding } from '../../../../../../../../../styles'
 import { toInt } from '../../../../../../../../../utils'
-import { useProjectContext } from '../../../../../../../context'
+import { useFundingContext, useProjectContext } from '../../../../../../../context'
 import { Badge } from './Badge'
 
 type Props = {
@@ -15,7 +15,8 @@ type Props = {
 
 export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(({ onSubmit }, ref) => {
   const { t } = useTranslation()
-  const { fundForm, project } = useProjectContext()
+  const { project } = useProjectContext()
+  const { fundForm } = useFundingContext()
 
   const { state: formState, hasSelectedRewards } = fundForm
 

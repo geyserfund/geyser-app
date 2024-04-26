@@ -9,7 +9,7 @@ import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
 import { getPath, ID } from '../../../../../../../constants'
 import { isActive, toInt, useMobileMode, useNotification } from '../../../../../../../utils'
 import { truthyFilter } from '../../../../../../../utils/array'
-import { MobileViews, useProjectContext } from '../../../../../context'
+import { MobileViews, useFundingContext, useProjectContext } from '../../../../../context'
 import { RewardCard } from '../components/RewardCard'
 
 export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
@@ -20,12 +20,10 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   const largeView = ['xl', '2xl'].includes(breakpoint)
   const { toast } = useNotification()
 
+  const { project, setMobileView, isProjectOwner } = useProjectContext()
   const {
-    project,
-    setMobileView,
     fundForm: { state: fundFormState, setState: setFundingFormState, updateReward },
-    isProjectOwner,
-  } = useProjectContext()
+  } = useFundingContext()
 
   if (!project || !isActive || !project.rewards || project.rewards.length === 0) {
     return null

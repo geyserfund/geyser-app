@@ -5,6 +5,10 @@ export const QUERY_LIGHTNING_ADDRESS_VERIFY = gql`
     lightningAddressVerify(lightningAddress: $lightningAddress) {
       reason
       valid
+      limits {
+        max
+        min
+      }
     }
   }
 `

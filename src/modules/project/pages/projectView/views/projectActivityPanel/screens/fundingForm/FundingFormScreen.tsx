@@ -6,7 +6,7 @@ import { useFundCalc } from '../../../../../../../../helpers/fundingCalculation'
 import { standardPadding } from '../../../../../../../../styles'
 import { ProjectRewardForCreateUpdateFragment } from '../../../../../../../../types/generated/graphql'
 import { isProjectAnException, useMobileMode, useNotification, validateEmail } from '../../../../../../../../utils'
-import { useProjectContext } from '../../../../../../context'
+import { useFundingContext } from '../../../../../../context'
 import { ProjectFundingSummaryCard } from './components/ProjectFundingSummaryCard'
 import { FundingFormSection } from './views/FundingFormSection'
 import { FundingFormUserInfoSection } from './views/FundingFormUserInfoSection'
@@ -24,7 +24,7 @@ export const FundingFormScreen = ({ handleCloseButton, handleFund, rewards, name
 
   const {
     fundForm: { state: formState, hasSelectedRewards, setState },
-  } = useProjectContext()
+  } = useFundingContext()
 
   const { getTotalAmount } = useFundCalc(formState)
   const { toast } = useNotification()

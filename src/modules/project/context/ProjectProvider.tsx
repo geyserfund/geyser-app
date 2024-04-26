@@ -5,7 +5,6 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { getPath, PathName } from '../../../constants'
 import { useAuthContext } from '../../../context/auth'
 import { useNavContext } from '../../../context/nav'
-import { useFundingFormState, UseFundingFormStateReturn } from '../../../hooks'
 import { useProjectState } from '../../../hooks/graphqlState'
 import { useModal } from '../../../hooks/useModal'
 import { ProjectFragment, ProjectMilestone, useProjectUnplublishedEntriesQuery, UserMeFragment } from '../../../types'
@@ -40,7 +39,6 @@ type ProjectContextProps = {
   isProjectOwner: boolean | undefined
   loading?: boolean
   saving?: boolean
-  fundForm: UseFundingFormStateReturn
   isDirty?: boolean
   error: any
   onMilestonesModalOpen(): void
@@ -152,11 +150,6 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
     updateProjectOwner(project, user)
   }, [project, user, updateProjectOwner])
 
-  const fundForm = useFundingFormState({
-    rewards: project ? project.rewards : undefined,
-    rewardCurrency: project && project.rewardCurrency ? project.rewardCurrency : undefined,
-  })
-
   useEffect(() => {
     const view = getViewFromPath(location.pathname)
     if (view) {
@@ -182,7 +175,6 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
         saving,
         error,
         loading,
-        fundForm,
         refetch,
         onCreatorModalOpen: creatorModal.onOpen,
         onMilestonesModalOpen: milestonesModal.onOpen,
