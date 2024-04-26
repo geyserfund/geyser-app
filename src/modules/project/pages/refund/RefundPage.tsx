@@ -1,4 +1,4 @@
-import { Button, HStack, VStack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
 import { useAtom } from 'jotai'
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
@@ -28,11 +28,11 @@ export const RefundPage = () => {
 
   return (
     <HStack w="full" h="full" justifyContent="center" alignItems="center">
-      <CardLayout maxWidth="700px" spacing="20px">
+      <CardLayout maxWidth="700px" spacing="20px" noMobileBorder>
         <H2>{t('Refund')}</H2>
 
         {hasRefundFile && (
-          <VStack w="full" alignItems="start">
+          <VStack w="full" alignItems="start" overflowX="hidden">
             <Body1>
               {t('Refund File')}
               {swapArray.length > 1 ? 's' : ''}:
@@ -44,17 +44,30 @@ export const RefundPage = () => {
                 return null
               }
 
-              const dateString = datetime ? DateTime.fromMillis(datetime).toFormat('YYYY-MM-DD') : 'N/A'
+              const dateString = datetime ? DateTime.fromMillis(datetime).toFormat('dd LLL, yyyy') : 'N/A'
               const amountString = amount || 'N/A'
               const projectString = projectTitle || 'N/A'
 
               return (
-                <Button
+                <HStack
                   key={swapItem.id}
-                  variant="secondary"
+                  border="2px solid"
+                  borderRadius="8px"
+                  padding="5px 10px"
                   borderColor={currentSwapId === swapItem.id ? 'primary.400' : 'neutral.200'}
                   onClick={() => setCurrentSwapId(swapItem.id)}
-                >{`Date: ${dateString}  Amount: ${amountString} Project: ${projectString}`}</Button>
+                  display="flex"
+                  flexWrap={'wrap'}
+                >
+                  <Body2>
+                    {`${t('Date')}:  `}
+                    <strong>{dateString} </strong>
+                    {`${t('Amount')}:  `}
+                    <strong>{amountString} </strong>
+                    {`${t('Project')}:  `}
+                    <strong>{projectString} </strong>
+                  </Body2>
+                </HStack>
               )
             })}
           </VStack>

@@ -75,7 +75,6 @@ export const useFundingFormState = ({ rewards, rewardCurrency, walletLimits }: U
 
   const [state, _setState] = useState<IFundForm>(initialState)
   const debouncedTotalAmount = useDebounce(state.totalAmount, 200)
-  console.log('checkign debouncedTotalAmount and walletLimits', debouncedTotalAmount, walletLimits)
 
   useEffect(() => {
     if (debouncedTotalAmount && walletLimits) {
