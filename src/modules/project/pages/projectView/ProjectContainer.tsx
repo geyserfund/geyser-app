@@ -23,7 +23,9 @@ export const ProjectContainer = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const onModalClose = () => navigate(location.pathname, { replace: true })
+  const onModalClose = () => {
+    navigate(location.pathname, { replace: true })
+  }
 
   const launchModal = useModal({ onClose: onModalClose })
   const draftModal = useModal({ onClose: onModalClose })
@@ -35,10 +37,10 @@ export const ProjectContainer = () => {
   } = useFundingContext()
 
   const query = useQuery()
-
+  console.log('search for draft', location)
   useEffect(() => {
-    const launchModalShouldOpen = location.search.split('launch').length > 1
-    const draftModalShouldOpen = location.search.split('draft').length > 1
+    const launchModalShouldOpen = location.search.includes('launch')
+    const draftModalShouldOpen = location.search.includes('draft')
 
     if (launchModalShouldOpen) {
       return launchModal.onOpen()
