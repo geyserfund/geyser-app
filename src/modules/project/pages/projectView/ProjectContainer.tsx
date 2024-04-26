@@ -39,7 +39,7 @@ export const ProjectContainer = () => {
   const { fundingStage } = useFundingStage()
 
   const query = useQuery()
-  console.log('search for draft', location)
+
   useEffect(() => {
     const launchModalShouldOpen = location.search.includes('launch')
     const draftModalShouldOpen = location.search.includes('draft')
