@@ -97,7 +97,7 @@ export const ProjectCreateCompletionPage = ({
       return
     }
 
-    navigate(getPath('projectLaunch', project.name, 'draft'))
+    navigate(`${getPath('projectDraft', project.name)}/?draft`)
   }
 
   if (isGetProjectLoading) {

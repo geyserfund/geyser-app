@@ -12,6 +12,7 @@ export enum PathName {
   _deprecatedPathNameForProject = 'project',
 
   project = 'project',
+  projectDraft = 'draft',
   projectInsights = 'insights',
   projectContributors = 'contributors',
   projectPost = 'posts',
@@ -81,6 +82,7 @@ const pathsMap = {
   _deprecatedPathForProject: (projectName: string) => `/${PathName._deprecatedPathNameForProject}/${projectName}`,
 
   project: (projectName: string) => `/${PathName.project}/${projectName}`,
+  projectDraft: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDraft}`,
   projectInsights: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectInsights}`,
   projectContributors: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectContributors}`,
   projectEntries: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectEntries}`,
