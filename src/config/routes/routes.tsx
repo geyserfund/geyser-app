@@ -249,6 +249,13 @@ export const platformRoutes: RouteObject[] = [
             },
           },
           {
+            path: getPath('projectDraft', PathName.projectId),
+            async lazy() {
+              const ProjectMainBody = await Project().then((m) => m.ProjectMainBody)
+              return { Component: ProjectMainBody }
+            },
+          },
+          {
             path: getPath('projectRewards', PathName.projectId),
             async lazy() {
               const MainBodyRewards = await Project().then((m) => m.MainBodyRewards)
