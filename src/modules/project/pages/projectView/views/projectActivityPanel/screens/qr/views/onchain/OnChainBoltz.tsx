@@ -27,7 +27,7 @@ export const OnchainBoltz = ({ onChainAddress }: { onChainAddress: string }) => 
   }
 
   const handleFailed = (value: SwapStatusUpdate) => {
-    setOnChainError(value.error)
+    setOnChainError(value.failureReason)
     goToOnChainRefund()
   }
 

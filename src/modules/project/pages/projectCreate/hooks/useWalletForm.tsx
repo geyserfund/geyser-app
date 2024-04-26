@@ -10,7 +10,6 @@ import {
   Maybe,
   ProjectFragment,
   useLightningAddressVerifyLazyQuery,
-  WalletLimitsFragment,
   WalletOffChainContributionLimits,
   WalletOnChainContributionLimits,
   WalletResourceType,

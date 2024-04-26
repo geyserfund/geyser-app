@@ -18,7 +18,7 @@ export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(({ on
   const { project } = useProjectContext()
   const { fundForm } = useFundingContext()
 
-  const { state: formState, hasSelectedRewards } = fundForm
+  const { state: formState, hasSelectedRewards, amountError } = fundForm
 
   const { getTotalAmount } = useFundCalc(formState)
 
@@ -88,7 +88,7 @@ export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(({ on
           )}
         </VStack>
 
-        <Button w="full" variant="primary" type="submit" leftIcon={<BoltIcon />}>
+        <Button w="full" variant="primary" type="submit" leftIcon={<BoltIcon />} isDisabled={Boolean(amountError)}>
           {t('Checkout')}
         </Button>
       </VStack>

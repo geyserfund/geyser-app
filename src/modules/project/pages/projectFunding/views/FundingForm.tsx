@@ -4,21 +4,15 @@ import { Trans, useTranslation } from 'react-i18next'
 
 import { DonationInput } from '../../../../../components/molecules'
 import { MAX_FUNDING_AMOUNT_USD } from '../../../../../constants'
-import { useBtcContext } from '../../../../../context/btc'
-import { useFormState } from '../../../../../hooks'
 import { FormStateError } from '../../../../../interfaces'
 import { FundingInput, FundingResourceType, Project, UserMeFragment } from '../../../../../types'
-import { isProjectAnException, useNotification } from '../../../../../utils'
+import { useNotification } from '../../../../../utils'
 import { useFundingContext } from '../../../context/FundingProvider'
+import { DonationInputError } from '../../projectView/views/projectActivityPanel/screens/fundingForm/components/DonationInputError'
 
 export type ProjectFundingFormState = {
   donationAmount: number
   comment: string
-}
-
-const defaultFormState = {
-  donationAmount: 0,
-  comment: '',
 }
 
 interface Props {
@@ -29,11 +23,13 @@ interface Props {
 
 export const FundingForm = ({ project, user, onFundingRequested = () => {} }: Props) => {
   const { t } = useTranslation()
-  const { btcRate } = useBtcContext()
-  const { requestFunding } = useFundingContext()
+  // const { btcRate } = useBtcContext()
+  const {
+    requestFunding,
+    fundForm: { state, setState, amountError },
+  } = useFundingContext()
 
   const { toast } = useNotification()
-  const { state, setTarget, setValue } = useFormState<ProjectFundingFormState>(defaultFormState)
 
   const [formError, setFormError] = useState<FormStateError<ProjectFundingFormState> | void>()
 
@@ -43,16 +39,16 @@ export const FundingForm = ({ project, user, onFundingRequested = () => {} }: Pr
       return false
     }
 
-    const amountInDollars = state.donationAmount * btcRate
+    // const amountInDollars = state.donationAmount * btcRate
 
-    const isException = isProjectAnException(project.name)
+    // const isException = isProjectAnException(project.name)
 
-    if (!isException && amountInDollars > MAX_FUNDING_AMOUNT_USD) {
-      setFormError({
-        donationAmount: `amount cannot be greater than \${{MAX_FUNDING_AMOUNT_USD}} in value`,
-      })
-      return false
-    }
+    // if (!isException && amountInDollars > MAX_FUNDING_AMOUNT_USD) {
+    //   setFormError({
+    //     donationAmount: `amount cannot be greater than \${{MAX_FUNDING_AMOUNT_USD}} in value`,
+    //   })
+    //   return false
+    // }
 
     return true
   }
@@ -98,7 +94,8 @@ export const FundingForm = ({ project, user, onFundingRequested = () => {} }: Pr
         )}
       </Text>
       <Box mb={3}>
-        <DonationInput inputGroup={{ padding: '2px' }} name="donationAmount" onChange={setValue} />
+        <DonationInput inputGroup={{ padding: '2px' }} name="donationAmount" onChange={setState} />
+        <DonationInputError />
         {formError?.donationAmount && (
           <Text color="secondary.red" fontSize="12px">
             <Trans i18nKey={formError?.donationAmount} values={{ MAX_FUNDING_AMOUNT_USD }}>
@@ -116,11 +113,11 @@ export const FundingForm = ({ project, user, onFundingRequested = () => {} }: Pr
           placeholder={t('Love what you guys are doing. Let the Sats flow!')}
           name="comment"
           value={state.comment}
-          onChange={setTarget}
+          onChange={(event) => setState('comment', event.target.value)}
         />
       </FormControl>
       <Box mt={4}>
-        <Button variant={'primary'} onClick={onSubmit} w="full">
+        <Button variant={'primary'} onClick={onSubmit} w="full" isDisabled={Boolean(amountError)}>
           {t('Confirm')}
         </Button>
       </Box>

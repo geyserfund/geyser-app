@@ -27,7 +27,7 @@ export type SwapStatusUpdate = {
   id: string
   status: SwapStatusType
   transaction?: { id: string; hex?: string }
-  error?: string
+  failureReason?: string
 }
 
 type useTransactionStatusUpdateProps = {
@@ -67,9 +67,9 @@ export const useTransactionStatusUpdate = ({
 
   const handleSwapStatusUpdate = useCallback(
     async (swapStatusUpdate: SwapStatusUpdate) => {
-      const { id, status, error } = swapStatusUpdate
+      const { id, status, failureReason } = swapStatusUpdate
 
-      if (error) {
+      if (failureReason) {
         handleFailed(swapStatusUpdate)
         return
       }
@@ -82,13 +82,13 @@ export const useTransactionStatusUpdate = ({
             handleConfirmed()
             break
           case 'invoice.failedToPay':
-            handleFailed(swapStatusUpdate, 'Failed to pay')
+            handleFailed(swapStatusUpdate)
             break
           case 'transaction.lockupFailed':
-            handleFailed(swapStatusUpdate, "Fees too low, didn't go through in 24 hrs")
+            handleFailed(swapStatusUpdate)
             break
           case 'swap.expired':
-            handleFailed(swapStatusUpdate, 'Swap Expired')
+            handleFailed(swapStatusUpdate)
             break
 
           default:

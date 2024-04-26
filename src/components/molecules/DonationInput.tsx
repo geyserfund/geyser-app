@@ -18,7 +18,6 @@ import { createUseStyles } from 'react-jss'
 
 import { AppTheme } from '../../context'
 import { useBtcContext } from '../../context/btc'
-import { useProjectContext } from '../../modules/project/context'
 import { fonts } from '../../styles'
 import { commaFormatted } from '../../utils'
 import { CrownIcon, MedalIcon, SatoshiIconTilted, StarIcon, TrophyIcon } from '../icons'
@@ -79,8 +78,6 @@ export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }
 
   const { btcRate } = useBtcContext()
 
-  const { project } = useProjectContext()
-
   const inputRef = useRef<HTMLInputElement>(null)
 
   const { isOpen: isSatoshi, onToggle } = useDisclosure({ defaultIsOpen: true })
@@ -114,7 +111,7 @@ export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }
     } else {
       onChange(name, satoshi)
     }
-  }, [satoshi])
+  }, [satoshi, name, onChange])
 
   const handleDefaultAmountButtonClick = (val: number) => {
     setDollar(val)

@@ -1,11 +1,10 @@
 import { Box, Divider, VStack } from '@chakra-ui/react'
 import { useRef } from 'react'
 
-import { MAX_FUNDING_AMOUNT_USD } from '../../../../../../../../constants'
 import { useFundCalc } from '../../../../../../../../helpers/fundingCalculation'
 import { standardPadding } from '../../../../../../../../styles'
 import { ProjectRewardForCreateUpdateFragment } from '../../../../../../../../types/generated/graphql'
-import { isProjectAnException, useMobileMode, useNotification, validateEmail } from '../../../../../../../../utils'
+import { useMobileMode, useNotification, validateEmail } from '../../../../../../../../utils'
 import { useFundingContext } from '../../../../../../context'
 import { ProjectFundingSummaryCard } from './components/ProjectFundingSummaryCard'
 import { FundingFormSection } from './views/FundingFormSection'
@@ -67,16 +66,16 @@ export const FundingFormScreen = ({ handleCloseButton, handleFund, rewards, name
   }
 
   const validateFundingAmount = () => {
-    const isException = isProjectAnException(name)
+    // const isException = isProjectAnException(name)
 
-    if (!isException && getTotalAmount('dollar', name) >= MAX_FUNDING_AMOUNT_USD) {
-      toast({
-        title: `Payment above ${MAX_FUNDING_AMOUNT_USD} is not allowed at the moment.`,
-        description: 'Please update the amount, or contact us for donating a higher amount.',
-        status: 'error',
-      })
-      return false
-    }
+    // if (!isException && getTotalAmount('dollar', name) >= MAX_FUNDING_AMOUNT_USD) {
+    //   toast({
+    //     title: `Payment above ${MAX_FUNDING_AMOUNT_USD} is not allowed at the moment.`,
+    //     description: 'Please update the amount, or contact us for donating a higher amount.',
+    //     status: 'error',
+    //   })
+    //   return false
+    // }
 
     if (getTotalAmount('sats', name) < 1) {
       toast({
