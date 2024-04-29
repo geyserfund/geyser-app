@@ -20,7 +20,7 @@ export const PaymentAndRefundInstructions = () => {
   }
 
   return (
-    <FeedbackCard variant="warning" title={t('Critical payment & refund Instructions')}>
+    <FeedbackCard variant="warning" title={t('Critical payment & refund instructions')}>
       <UnorderedList>
         <ListItem>
           <strong>Send the exact payment amount in Satoshis</strong> to ensure successful processing and avoid payment
@@ -34,11 +34,11 @@ export const PaymentAndRefundInstructions = () => {
           <strong>Download and securely store your Refund File;</strong> if in doubt, re-download to ensure its safety.
         </ListItem>
       </UnorderedList>
+      <RefundPolicyNote />
 
       <Button variant="secondary" onClick={handleClick}>
         {t('Download refund file')}
       </Button>
-      <RefundPolicyNote />
     </FeedbackCard>
   )
 }

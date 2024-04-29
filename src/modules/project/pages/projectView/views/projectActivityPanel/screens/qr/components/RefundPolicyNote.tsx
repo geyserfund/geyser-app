@@ -6,7 +6,7 @@ import { GeyserFAQUrl } from '../../../../../../../../../constants'
 
 export const RefundPolicyNote = () => {
   return (
-    <Body2 pt="10px">
+    <Body2 pb="10px">
       <Trans i18nKey={'For more info on Refund Policies and Fees <1>click here.</1>'}>
         {'For more info on Refund Policies and Fees '}
         <Link href={GeyserFAQUrl} isExternal>

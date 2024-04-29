@@ -36,7 +36,7 @@ export const OnChainPrompt = () => {
       <Body1 paddingBottom={'20px'}>
         {t(
           'To keep Geyser KYC-free, on-chain transactions are swapped to Lightning in a non-custodial way. So, we require you to download a Refund File as backup in the rare case a payment fails.',
-        )}
+        )}{' '}
         <Link isExternal href="">
           <strong>{t('More info')}.</strong>
         </Link>
