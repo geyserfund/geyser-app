@@ -18,13 +18,16 @@ const schema = yup
     bitcoinAddress: yup
       .string()
       .required('Address is required to claim funds')
-      .test((value) => {
-        const bitcoinAddress = getBitcoinAddress(value)
-        if (bitcoinAddress.valid && bitcoinAddress.address) {
-          return validateBitcoinAddress(bitcoinAddress.address)
-        }
+      .test({
+        test(value) {
+          const bitcoinAddress = getBitcoinAddress(value)
+          if (bitcoinAddress.valid && bitcoinAddress.address) {
+            return validateBitcoinAddress(bitcoinAddress.address)
+          }
 
-        return validateBitcoinAddress(value)
+          return validateBitcoinAddress(value)
+        },
+        message: t('The Bitcoin address you entered is invalid'),
       }),
   })
   .required()

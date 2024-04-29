@@ -17,7 +17,7 @@ export const RefundSummary = () => {
   const { amount } = contributionInfo
 
   return (
-    <FeedbackCard noIcon noborder bgColor="neutral.50" title={t('Refund summary')}>
+    <FeedbackCard w="full" noIcon noborder bgColor="neutral.50" title={t('Refund summary')}>
       {contributionInfo?.projectTitle && (
         <HStack w="full" justifyContent="space-between">
           <Body2 color="neutral.900">{t('Contribution to')}:</Body2>
