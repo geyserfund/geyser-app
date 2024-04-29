@@ -1,6 +1,7 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
 import { AuthContext } from '../context'
+import { useFundCalc } from '../helpers'
 import { IRewardCount } from '../interfaces'
 import {
   ProjectRewardForCreateUpdateFragment,
@@ -8,7 +9,7 @@ import {
   ShippingDestination,
   WalletContributionLimits,
 } from '../types/generated/graphql'
-import { commaFormatted } from '../utils'
+import { commaFormatted, isProjectAnException } from '../utils'
 import { useDebounce } from './useDebounce'
 
 export interface IFundForm {
@@ -52,7 +53,6 @@ export const useFundingFormState = ({ rewards, rewardCurrency, walletLimits }: U
   const [needsShipping, setNeedsShipping] = useState(false)
 
   const [amountWarning, setAmountWarning] = useState('')
-  const [amountError, setAmountError] = useState('')
 
   const initialState: IFundForm = useMemo(
     () => ({
@@ -75,51 +75,32 @@ export const useFundingFormState = ({ rewards, rewardCurrency, walletLimits }: U
 
   const [state, _setState] = useState<IFundForm>(initialState)
   const debouncedTotalAmount = useDebounce(state.totalAmount, 200)
-
+  const { getTotalAmount } = useFundCalc(state)
   useEffect(() => {
     if (debouncedTotalAmount && walletLimits) {
-      const { max, min, onChain, offChain } = walletLimits
+      const { onChain } = walletLimits
 
       if (!debouncedTotalAmount) {
-        setAmountWarning('')
-        setAmountError('')
-        return
-      }
-
-      if ((max && debouncedTotalAmount > max) || (offChain?.max && debouncedTotalAmount > offChain.max)) {
-        setAmountError(`amount exceeds wallet max: ${commaFormatted(max)} sats`)
-        setAmountWarning('')
-        return
-      }
-
-      if ((min && debouncedTotalAmount < min) || (offChain?.min && debouncedTotalAmount < offChain.min)) {
-        setAmountError(`amount is lower than wallet min: ${commaFormatted(min)} sats`)
         setAmountWarning('')
         return
       }
 
       if (onChain?.max && debouncedTotalAmount > onChain.max) {
         setAmountWarning(
-          `The maximum amount for on-chain contributions is ${commaFormatted(
+          `The amount you are trying to send is too high for on-chain payments. Only payments below ${commaFormatted(
             onChain.max,
-          )} Sats. For higher amounts, you can pay with Lightning.`,
+          )} sats can be sent on-chain.`,
         )
-        setAmountError('')
         return
       }
 
       if (onChain?.min && debouncedTotalAmount < onChain.min) {
         setAmountWarning(
-          `The minimum amount for on-chain contributions is ${commaFormatted(
+          `The amount you are trying to send is too low for on-chain payments. Only payments over ${commaFormatted(
             onChain.min,
-          )} Sats. For smaller amounts, you can pay with Lightning.`,
+          )} sats can be sent on-chain.`,
         )
-        setAmountError('')
-        return
       }
-
-      setAmountWarning('')
-      setAmountError('')
     }
   }, [debouncedTotalAmount, walletLimits])
 
@@ -222,6 +203,31 @@ export const useFundingFormState = ({ rewards, rewardCurrency, walletLimits }: U
     [state.rewardsByIDAndCount],
   )
 
+  const validateInputAmount = useCallback(
+    (name: string) => {
+      const isException = isProjectAnException(name)
+
+      if (!isException && walletLimits?.max && getTotalAmount('dollar', name) >= walletLimits.max) {
+        return {
+          title: `Payment above ${walletLimits.max} is not allowed at the moment.`,
+          description: 'Please update the amount, or contact us for donating a higher amount.',
+          valid: false,
+        }
+      }
+
+      if (walletLimits?.min && getTotalAmount('sats', name) < walletLimits.min) {
+        return {
+          title: 'The payment minimum is 1 satoshi.',
+          description: 'Please update the amount.',
+          valid: false,
+        }
+      }
+
+      return { title: '', description: '', valid: true }
+    },
+    [getTotalAmount, walletLimits],
+  )
+
   return {
     state,
     setTarget,
@@ -232,6 +238,6 @@ export const useFundingFormState = ({ rewards, rewardCurrency, walletLimits }: U
     needsShipping,
     hasSelectedRewards,
     amountWarning,
-    amountError,
+    validateInputAmount,
   }
 }

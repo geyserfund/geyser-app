@@ -8,7 +8,6 @@ import { FormStateError } from '../../../../../interfaces'
 import { FundingInput, FundingResourceType, Project, UserMeFragment } from '../../../../../types'
 import { useNotification } from '../../../../../utils'
 import { useFundingContext } from '../../../context/FundingProvider'
-import { DonationInputError } from '../../projectView/views/projectActivityPanel/screens/fundingForm/components/DonationInputError'
 
 export type ProjectFundingFormState = {
   donationAmount: number
@@ -26,37 +25,15 @@ export const FundingForm = ({ project, user, onFundingRequested = () => {} }: Pr
   // const { btcRate } = useBtcContext()
   const {
     requestFunding,
-    fundForm: { state, setState, amountError },
+    fundForm: { state, setState, validateInputAmount },
   } = useFundingContext()
 
   const { toast } = useNotification()
 
   const [formError, setFormError] = useState<FormStateError<ProjectFundingFormState> | void>()
 
-  const validateForm = () => {
-    if (!state.donationAmount || state.donationAmount === 0) {
-      setFormError({ donationAmount: 'amount is required' })
-      return false
-    }
-
-    // const amountInDollars = state.donationAmount * btcRate
-
-    // const isException = isProjectAnException(project.name)
-
-    // if (!isException && amountInDollars > MAX_FUNDING_AMOUNT_USD) {
-    //   setFormError({
-    //     donationAmount: `amount cannot be greater than \${{MAX_FUNDING_AMOUNT_USD}} in value`,
-    //   })
-    //   return false
-    // }
-
-    return true
-  }
-
   const onSubmit = () => {
     setFormError({})
-
-    const isValid = validateForm()
 
     if (!project || !project.id) {
       toast({
@@ -67,7 +44,9 @@ export const FundingForm = ({ project, user, onFundingRequested = () => {} }: Pr
       return
     }
 
-    if (isValid) {
+    const { valid, title, description } = validateInputAmount(project.name)
+
+    if (valid) {
       const input: FundingInput = {
         projectId: Number(project.id),
         anonymous: !user,
@@ -83,6 +62,12 @@ export const FundingForm = ({ project, user, onFundingRequested = () => {} }: Pr
 
       requestFunding(input)
       onFundingRequested(state)
+    } else {
+      toast({
+        status: 'error',
+        title,
+        description,
+      })
     }
   }
 
@@ -95,7 +80,7 @@ export const FundingForm = ({ project, user, onFundingRequested = () => {} }: Pr
       </Text>
       <Box mb={3}>
         <DonationInput inputGroup={{ padding: '2px' }} name="donationAmount" onChange={setState} />
-        <DonationInputError />
+
         {formError?.donationAmount && (
           <Text color="secondary.red" fontSize="12px">
             <Trans i18nKey={formError?.donationAmount} values={{ MAX_FUNDING_AMOUNT_USD }}>
@@ -117,7 +102,7 @@ export const FundingForm = ({ project, user, onFundingRequested = () => {} }: Pr
         />
       </FormControl>
       <Box mt={4}>
-        <Button variant={'primary'} onClick={onSubmit} w="full" isDisabled={Boolean(amountError)}>
+        <Button variant={'primary'} onClick={onSubmit} w="full">
           {t('Confirm')}
         </Button>
       </Box>

@@ -1,7 +1,6 @@
 import { Box, Divider, VStack } from '@chakra-ui/react'
 import { useRef } from 'react'
 
-import { useFundCalc } from '../../../../../../../../helpers/fundingCalculation'
 import { standardPadding } from '../../../../../../../../styles'
 import { ProjectRewardForCreateUpdateFragment } from '../../../../../../../../types/generated/graphql'
 import { useMobileMode, useNotification, validateEmail } from '../../../../../../../../utils'
@@ -22,17 +21,22 @@ export const FundingFormScreen = ({ handleCloseButton, handleFund, rewards, name
   const summaryCardRef = useRef<any>(null)
 
   const {
-    fundForm: { state: formState, hasSelectedRewards, setState },
+    fundForm: { state: formState, hasSelectedRewards, setState, validateInputAmount },
   } = useFundingContext()
 
-  const { getTotalAmount } = useFundCalc(formState)
   const { toast } = useNotification()
 
   const handleSubmit = {
     contribution() {
-      const valid = validateFundingAmount()
+      const { valid, title, description } = validateInputAmount(name)
       if (valid) {
         setState('step', 'info')
+      } else {
+        toast({
+          status: 'error',
+          title,
+          description,
+        })
       }
     },
     info() {
@@ -57,30 +61,6 @@ export const FundingFormScreen = ({ handleCloseButton, handleFund, rewards, name
       toast({
         title: 'A valid email is required.',
         description: 'Please enter a valid email.',
-        status: 'error',
-      })
-      return false
-    }
-
-    return true
-  }
-
-  const validateFundingAmount = () => {
-    // const isException = isProjectAnException(name)
-
-    // if (!isException && getTotalAmount('dollar', name) >= MAX_FUNDING_AMOUNT_USD) {
-    //   toast({
-    //     title: `Payment above ${MAX_FUNDING_AMOUNT_USD} is not allowed at the moment.`,
-    //     description: 'Please update the amount, or contact us for donating a higher amount.',
-    //     status: 'error',
-    //   })
-    //   return false
-    // }
-
-    if (getTotalAmount('sats', name) < 1) {
-      toast({
-        title: 'The payment minimum is 1 satoshi.',
-        description: 'Please update the amount.',
         status: 'error',
       })
       return false

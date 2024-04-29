@@ -7,7 +7,6 @@ import { useFundingContext } from '../../../../../../../context'
 import { SectionTitle } from '../../../components/SectionTitle'
 import { SectionTitleBlock } from '../../../components/SectionTitleBlock'
 import { FundingFormRewards } from '../../rewardSelection/FundingFormRewards'
-import { DonationInputError } from '../components/DonationInputError'
 
 type Props = {
   onBackClick: MouseEventHandler<HTMLButtonElement>
@@ -26,7 +25,6 @@ export const FundingFormSection = ({ onBackClick }: Props) => {
 
         <SectionTitle paddingTop="20px">{t('Make a donation')}</SectionTitle>
         <DonationInput inputGroup={{ padding: '2px' }} name="donationAmount" onChange={setState} />
-        <DonationInputError />
       </Box>
 
       <FundingFormRewards />
