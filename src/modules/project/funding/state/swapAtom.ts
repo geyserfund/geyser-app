@@ -100,3 +100,7 @@ export const useSetCurrentSwapId = () => useSetAtom(currentSwapIdAtom)
 
 export const refundedSwapDataAtom = atom<SwapData | undefined>(undefined)
 export const useRefundedSwapData = () => useAtom(refundedSwapDataAtom)
+export const clearRefundedSwapDataAtom = atom(null, (get, set) => {
+  set(refundedSwapDataAtom, undefined)
+})
+export const useClearRefundedSwapData = () => useSetAtom(clearRefundedSwapDataAtom)

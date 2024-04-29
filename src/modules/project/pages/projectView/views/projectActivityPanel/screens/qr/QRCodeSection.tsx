@@ -74,7 +74,7 @@ export const QRCodeSection = ({ onCloseClick }: { onCloseClick: () => void }) =>
         return <QRCodeImage />
 
       case QRDisplayState.REFUND_INITIALIZED:
-        return <RefundInitiated />
+        return <RefundInitiated onCloseClick={onCloseClick} />
 
       case QRDisplayState.AWAITING_PAYMENT_WEB_LN:
         return (

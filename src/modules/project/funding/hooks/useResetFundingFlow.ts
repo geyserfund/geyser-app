@@ -6,6 +6,7 @@ import {
   fundingFlowErrorAtom,
   fundingRequestErrorAtom,
   invoiceRefreshErrorAtom,
+  useClearRefundedSwapData,
   useFundingStage,
   useFundingTx,
   weblnErrorAtom,
@@ -22,6 +23,7 @@ export const useResetFundingFlow = () => {
   const setWebLNErrored = useSetAtom(weblnErrorAtom)
 
   const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
+  const setRefundedSwapData = useClearRefundedSwapData()
 
   const resetFundingFlow = useCallback(() => {
     resetFundingStage()
@@ -32,6 +34,8 @@ export const useResetFundingFlow = () => {
     resetFundingTx()
 
     setCurrentSwapId('')
+
+    setRefundedSwapData()
   }, [
     resetFundingStage,
     setFundingRequestErrored,
@@ -40,6 +44,8 @@ export const useResetFundingFlow = () => {
     setWebLNErrored,
     resetFundingTx,
     setCurrentSwapId,
+
+    setRefundedSwapData,
   ])
 
   return resetFundingFlow
