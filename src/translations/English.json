@@ -975,6 +975,7 @@
    "Breaking news: We're shaking things up with our new project on @geyserfund! Check it out: {{projectLink}} #BreakingNews": "🚨 Breaking news: We're shaking things up with our new project on @geyserfund! Check it out: {{projectLink}} #BreakingNews",
    "We're transforming our dreams into reality with this project on @geyserfund. Your support matters: {{projectLink}}": "🌟 We're transforming our dreams into reality with this project on @geyserfund. Your support matters: {{projectLink}}",
    "Making a difference, one step at a time. Join our mission on @geyserfund and help us leave a lasting impact. Your support makes all the difference: {{projectLink}} #MakeADifference": "🌍 Making a difference, one step at a time. Join our mission on @geyserfund and help us leave a lasting impact. Your support makes all the difference: {{projectLink}} #MakeADifference",
-   "By keeping your project in 'draft', it will remain hidden until you decide to launch it":"By keeping your project in 'draft', it will remain hidden until you decide to launch it"
-
+   "By keeping your project in 'draft', it will remain hidden until you decide to launch it":"By keeping your project in 'draft', it will remain hidden until you decide to launch it",
+   "Alternatively, you can explore other Lightning address providers and their respective limits through this link: <1>List of Lightning Wallets</1>":"Alternatively, you can explore other Lightning address providers and their respective limits through this link: <1>List of Lightning Wallets</1>",
+   "We're sorry, but your transaction cannot be completed. The project's wallet you are trying to fund has reached its maximum limit and cannot receive more than {{amount}} Sats at this time.":"We're sorry, but your transaction cannot be completed. The project's wallet you are trying to fund has reached its maximum limit and cannot receive more than {{amount}} Sats at this time."
 }

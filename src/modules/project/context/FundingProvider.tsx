@@ -3,6 +3,7 @@ import React, { createContext, PropsWithChildren, useContext } from 'react'
 import { useFundingFormState, UseFundingFormStateReturn } from '../../../hooks'
 import { FundingInput, FundingTxFragment, ProjectFragment } from '../../../types'
 import { useFundingFlow } from '../funding/hooks/useFundingFlow'
+import { FundingFlowGraphQLError } from '../funding/state'
 import { useProjectContext } from './ProjectProvider'
 
 type FundingContextProps = {
@@ -12,7 +13,7 @@ type FundingContextProps = {
   retryFundingFlow: () => void
   resetFundingFlow: () => void
   fundingTx: Omit<FundingTxFragment, 'funder'>
-  error: string
+  error?: FundingFlowGraphQLError
   weblnErrored: boolean
   hasWebLN: boolean
   project?: Partial<ProjectFragment> | null // Partial Project context, for usage inside fundingFlow, Only useful when ProjctProvider is not used

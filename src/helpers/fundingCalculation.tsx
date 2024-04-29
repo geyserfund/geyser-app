@@ -13,7 +13,7 @@ export const useFundCalc = (state: IFundForm) => {
   const { btcRate } = useBtcContext()
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
 
-  const getTotalAmount = (type: 'sats' | 'dollar', projectName: string) => {
+  const getTotalAmount = (type: 'sats' | 'dollar', projectName = '') => {
     const shippingAmount = hasShipping(projectName) ? getShippingCost() : 0
 
     if (type === 'sats') {

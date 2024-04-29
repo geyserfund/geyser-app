@@ -9,10 +9,8 @@ import { Body2 } from '../../../../../../../../components/typography'
 import { getPath } from '../../../../../../../../constants'
 import { useAuthContext } from '../../../../../../../../context'
 import { QUERY_USER_BADGES } from '../../../../../../../../graphql/queries/badges'
-import { useFundCalc } from '../../../../../../../../helpers'
 import { lightModeColors, standardPadding } from '../../../../../../../../styles'
-import { Satoshis } from '../../../../../../../../types'
-import { Project, UserBadge } from '../../../../../../../../types'
+import { UserBadge } from '../../../../../../../../types'
 import { useProjectContext } from '../../../../../../context'
 import { useFundingContext } from '../../../../../../context/FundingProvider'
 import {} from '../../../projectMainBody/components'
@@ -34,11 +32,9 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
 
   const {
     fundingTx,
-    fundForm: { needsShipping, state: fundingState },
+    fundForm: { needsShipping },
   } = useFundingContext()
   const { user } = useAuthContext()
-
-  const { getTotalAmount } = useFundCalc(fundingState)
 
   const { data } = useQuery<{ userBadges: UserBadge[] }>(QUERY_USER_BADGES, {
     variables: { input: { where: { fundingTxId: fundingTx.id } } },
@@ -98,19 +94,7 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
 
         {needsShipping ? <ContributionShippingBox creatorEmail={fundingTx.creatorEmail} /> : null}
 
-        <ContributionInfoBox
-          project={project as Project}
-          formState={fundingState}
-          contributionAmount={getTotalAmount('sats', project?.name) as Satoshis}
-          isFunderAnonymous={fundingState.anonymous}
-          funderUsername={fundingState.funderUsername}
-          funderEmail={fundingState.email}
-          funderAvatarURL={fundingState.funderAvatarURL}
-          version={ContributionInfoBoxVersion.PRIMARY}
-          referenceCode={fundingTx.uuid || ''}
-          fundingTxId={fundingTx.id}
-          showGeyserFee={false}
-        />
+        <ContributionInfoBox version={ContributionInfoBoxVersion.PRIMARY} showGeyserFee={false} />
 
         <Button variant="secondary" size="sm" w="full" onClick={onCloseClick}>
           {t('Back to project')}

@@ -2,7 +2,6 @@ import { ApolloError } from '@apollo/client'
 import { useAtom } from 'jotai'
 import { useCallback, useMemo, useState } from 'react'
 
-import { ApolloErrors } from '../../../../constants'
 import { FundingInput, ProjectFragment, useFundingTxWithInvoiceStatusQuery, useFundMutation } from '../../../../types'
 import { toInt, useNotification } from '../../../../utils'
 import { useParseResponseToSwapAtom, useSetKeyPairAtom } from '../state'
@@ -88,7 +87,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const [fundProject, { loading: fundingRequestLoading }] = useFundMutation({
     onCompleted(data) {
       try {
-        setError('')
+        setError(undefined)
         setFundingRequestErrored(false)
 
         if (!data.fund || !data.fund.fundingTx) {
@@ -130,8 +129,8 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       }
     },
     onError(error: ApolloError) {
-      if (error?.graphQLErrors[0] && error?.graphQLErrors[0]?.extensions?.code === ApolloErrors.BAD_USER_INPUT) {
-        setError(error?.graphQLErrors[0].message)
+      if (error?.graphQLErrors[0] && error?.graphQLErrors[0]?.extensions?.code) {
+        setError(error?.graphQLErrors[0].extensions)
       }
 
       setFundingRequestErrored(true)

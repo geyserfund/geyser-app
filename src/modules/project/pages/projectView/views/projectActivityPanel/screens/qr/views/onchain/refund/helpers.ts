@@ -28,7 +28,7 @@ export const getConstructRefundTransaction = () => {
 }
 
 export const getNetwork = () => {
-  const networkValue = __production__ ? 'bitcoin' : __staging__ ? 'testnet' : 'regtest'
+  const networkValue = __production__ ? 'bitcoin' : 'regtest'
 
   return networks[networkValue]
 }

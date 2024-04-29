@@ -3,7 +3,7 @@ import { ProjectFragment } from '../../types'
 
 type PickProject = Pick<ProjectFragment, 'name' | 'balance' | 'wallets'>
 
-export const hasOwnNode = (project: PickProject) => {
+export const hasOwnNode = (project: Partial<PickProject>) => {
   const currentWallet = project.wallets && project.wallets[0]
   const { connectionDetails } = currentWallet || {}
 

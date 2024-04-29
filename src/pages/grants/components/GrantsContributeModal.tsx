@@ -263,7 +263,7 @@ export const GrantsContributeModalContent = ({ grantsData }: Props) => {
     )
   }
 
-  const qrSection = () => <QRCodeSection />
+  const qrSection = () => <QRCodeSection onCloseClick={handleClose} />
 
   const renderModalBody = () => {
     switch (fundingStage) {

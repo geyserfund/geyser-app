@@ -24,7 +24,7 @@ export const useResetFundingFlow = () => {
     resetFundingStage()
     setFundingRequestErrored(false)
     setInvoiceRefreshErrored(false)
-    setError('')
+    setError(undefined)
     setWebLNErrored(false)
     resetFundingTx()
   }, [resetFundingStage, setFundingRequestErrored, setInvoiceRefreshErrored, setError, setWebLNErrored, resetFundingTx])

@@ -7,7 +7,8 @@ import { FundingStatus, InvoiceStatus } from '../../../../../../../../types/gene
 import { useFundingContext } from '../../../../../../context/FundingProvider'
 import { useRefreshInvoice } from '../../../../../../funding/hooks/useRefreshInvoice'
 import { useRefundedSwapData } from '../../../../../../funding/state'
-import { FundingErrorView, GeneratingInvoice, InvoiceErrorView, QRCodeImage } from './components'
+import { GeneratingInvoice, InvoiceErrorView, QRCodeImage } from './components'
+import { FundingError } from './views/error'
 import { RefundInitiated } from './views/refund/RefundInitiated'
 
 enum QRDisplayState {
@@ -24,7 +25,7 @@ enum QRDisplayState {
   FUNDING_CANCELED = 'FUNDING_CANCELED',
 }
 
-export const QRCodeSection = () => {
+export const QRCodeSection = ({ onCloseClick }: { onCloseClick: () => void }) => {
   const { t } = useTranslation()
   const [refundedSwapData] = useRefundedSwapData()
   const { invoiceRefreshErrored, invoiceRefreshLoading, refreshFundingInvoice } = useRefreshInvoice()
@@ -37,7 +38,7 @@ export const QRCodeSection = () => {
       return QRDisplayState.REFRESHING
     }
 
-    if (fundingRequestErrored || fundingTx.status === FundingStatus.Canceled) {
+    if (fundingRequestErrored || error || fundingTx.status === FundingStatus.Canceled) {
       return QRDisplayState.FUNDING_CANCELED
     }
 
@@ -64,6 +65,7 @@ export const QRCodeSection = () => {
     hasWebLN,
     weblnErrored,
     refundedSwapData?.refundTx,
+    error,
   ])
 
   const renderQRCodeSection = () => {
@@ -87,7 +89,7 @@ export const QRCodeSection = () => {
         return <InvoiceErrorView onRefreshSelected={refreshFundingInvoice} />
 
       case QRDisplayState.FUNDING_CANCELED:
-        return <FundingErrorView error={error} />
+        return <FundingError onCloseClick={onCloseClick} />
 
       default:
         return <GeneratingInvoice refreshInvoice={retryFundingFlow} />

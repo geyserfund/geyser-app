@@ -47,13 +47,19 @@ export const ProjectFundingContent = ({ project, user, onTitleChange = noop }: P
     }
   }, [resetFundingFlow])
 
+  const handleClose = () => {
+    setFundingStage(FundingStages.form)
+    setTitle(null)
+    resetFundingFlow()
+  }
+
   if (!project) {
     return null
   }
 
   switch (fundingStage) {
     case FundingStages.started:
-      return <QRCodeSection />
+      return <QRCodeSection onCloseClick={handleClose} />
     case FundingStages.completed:
       return <FundingComplete formState={formState} />
     default:

@@ -5,6 +5,7 @@ import { IoMdRefresh } from 'react-icons/io'
 
 import { Body2 } from '../../../../../../../../../components/typography'
 import Loader from '../../../../../../../../../components/ui/Loader'
+import { ContributionInfoBox, ContributionInfoBoxVersion } from '../../contributionInfo'
 
 const FUNDING_REQUEST_TIMEOUT = 45_000
 
@@ -25,30 +26,34 @@ export const GeneratingInvoice = ({ refreshInvoice }: { refreshInvoice: () => vo
   }
 
   return (
-    <VStack width={'350px'} height={'335px'} justifyContent={'center'}>
-      {isOpen ? (
-        <VStack w="full" alignItems="center">
-          <Body2 bold textAlign="center">
-            {t('Generating an invoice is taking longer than expected')}
-          </Body2>
-          <Body2>{t('Click refresh to try again')}</Body2>
-          <Button
-            textTransform="uppercase"
-            variant="secondary"
-            size="sm"
-            borderRadius="40px"
-            leftIcon={<IoMdRefresh />}
-            onClick={handleRefresh}
-          >
-            {t('Refresh')}
-          </Button>
-        </VStack>
-      ) : (
-        <VStack>
-          <Loader />
-          <Text>{t('Generating Invoice')}</Text>
-        </VStack>
-      )}
-    </VStack>
+    <>
+      <VStack width={'350px'} height={'335px'} justifyContent={'center'}>
+        {isOpen ? (
+          <VStack w="full" alignItems="center">
+            <Body2 bold textAlign="center">
+              {t('Generating an invoice is taking longer than expected')}
+            </Body2>
+            <Body2>{t('Click refresh to try again')}</Body2>
+            <Button
+              textTransform="uppercase"
+              variant="secondary"
+              size="sm"
+              borderRadius="40px"
+              leftIcon={<IoMdRefresh />}
+              onClick={handleRefresh}
+            >
+              {t('Refresh')}
+            </Button>
+          </VStack>
+        ) : (
+          <VStack>
+            <Loader />
+            <Text>{t('Generating Invoice')}</Text>
+          </VStack>
+        )}
+      </VStack>
+
+      <ContributionInfoBox version={ContributionInfoBoxVersion.NEUTRAL} showGeyserFee={false} />
+    </>
   )
 }

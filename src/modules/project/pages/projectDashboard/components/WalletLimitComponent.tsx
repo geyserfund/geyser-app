@@ -1,7 +1,8 @@
-import { HStack, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
+import { HStack, Link, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { Body1, Body2 } from '../../../../../components/typography'
+import { GeyserLightningWalletGuideLink } from '../../../../../constants'
 import { commaFormatted } from '../../../../../utils'
 import { Limits } from '../../projectCreate/hooks/useWalletForm'
 import { FeedbackCard } from '../../projectView/views/projectActivityPanel/screens/qr/views/onchain/components'
@@ -34,9 +35,14 @@ export const WalletLimitComponent = ({ limit }: { limit: Limits }) => {
           {t('Reaching out to your wallet provider, as they might provide an option to increase these limits.')}
         </ListItem>
         <ListItem as={Body2}>
-          {t(
-            'Alternatively, you can explore other Lightning address providers and their respective limits through this link: List of Lightning Wallets',
-          )}
+          <Trans i18nKey="Alternatively, you can explore other Lightning address providers and their respective limits through this link: <1>List of Lightning Wallets</1>">
+            {
+              'Alternatively, you can explore other Lightning address providers and their respective limits through this link: '
+            }
+            <Link href={GeyserLightningWalletGuideLink} isExternal>
+              List of Lightning Wallets
+            </Link>
+          </Trans>
         </ListItem>
       </UnorderedList>
     </FeedbackCard>
