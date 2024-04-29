@@ -12,9 +12,7 @@ export const RefundProcessing = (props: CardLayoutProps) => {
   return (
     <TransactionProcessing
       title={t('Your refund has been successfully intiated.')}
-      subTitle={t(
-        'We apologize for any inconvenience caused. In future transactions, please ensure to set a higher transaction fee for timely processing.',
-      )}
+      subTitle={t('We apologize for any inconvenience caused.')}
       //  buttonUrl={`${BLOCK_EXPLORER_BASE_URL}${transactionId}`}
       buttonUrl={refundedSwapData?.refundTx ? `${BLOCK_EXPLORER_BASE_URL}${refundedSwapData?.refundTx}` : undefined}
       {...props}

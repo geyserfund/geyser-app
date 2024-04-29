@@ -1,4 +1,5 @@
 import QRCode from 'qrcode'
+import { useTranslation } from 'react-i18next'
 
 import { useNotification } from '../../../../../../../../../../../utils'
 import { useRefundFileValue } from '../../../../../../../../../funding/state'
@@ -9,6 +10,7 @@ const REFUND_QR_FILE_NAME = 'refundFile'
 export const useDownloadRefund = () => {
   const refundFile = useRefundFileValue()
   const { toast } = useNotification()
+  const { t } = useTranslation()
 
   const downloadRefundQr = () => {
     QRCode.toDataURL(JSON.stringify(refundFile), { width: 400 })
@@ -21,7 +23,7 @@ export const useDownloadRefund = () => {
                 <!DOCTYPE html>
                 <body>
                     <img src="${url}">
-                    <h1>${'ios_image_download'}</h1>
+                    <h1>${t('ios_imageLong press and select "Save to Photos" to download refund file')}</h1>
                 </body>`
           }
         } else {

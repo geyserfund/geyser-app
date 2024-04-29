@@ -36,9 +36,7 @@ export const OnChainRefund = () => {
       <TransactionFailed error={errorMessage} />
       <FeedbackCard variant="primary" title={t('Claim refund')}>
         <Body2>
-          {t(
-            'Do you wish to initiate a refund now? You can request a refund at any time if you have your refund file ready.',
-          )}
+          {t('You can get your payment refund now or at a later point in time with the use of the refund file.')}
         </Body2>
 
         <ClaimRefundForm showUpload={!refundFile} />

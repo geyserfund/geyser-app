@@ -2,6 +2,7 @@ import { HStack, VStack } from '@chakra-ui/react'
 import { useAtom } from 'jotai'
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
+import { FaFileAlt } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
@@ -29,12 +30,12 @@ export const RefundPage = () => {
   return (
     <HStack w="full" h="full" justifyContent="center" alignItems="center">
       <CardLayout maxWidth="700px" spacing="20px" noMobileBorder>
-        <H2>{t('Refund')}</H2>
+        <H2>{t('Claim Refund')}</H2>
 
         {hasRefundFile && (
           <VStack w="full" alignItems="start" overflowX="hidden">
             <Body1>
-              {t('Refund File')}
+              {t('Select refund file found')}
               {swapArray.length > 1 ? 's' : ''}:
             </Body1>
             {swapArray.map((swapItem) => {
@@ -58,7 +59,9 @@ export const RefundPage = () => {
                   onClick={() => setCurrentSwapId(swapItem.id)}
                   display="flex"
                   flexWrap={'wrap'}
+                  _hover={{ cursor: 'pointer' }}
                 >
+                  <FaFileAlt />
                   <Body2>
                     {`${t('Date')}:  `}
                     <strong>{dateString} </strong>
