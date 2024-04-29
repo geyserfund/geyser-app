@@ -36,7 +36,7 @@ export type SwapData = {
 
 type SwapDataStructure = { [key: string]: SwapData }
 
-export const currentSwapAtomId = atomWithStorage<string>('currentSwap', '')
+export const currentSwapIdAtom = atom<string>('')
 
 export const swapAtom = atomWithStorage<SwapDataStructure>('swapArray', {})
 
@@ -48,13 +48,13 @@ const swapParseAtom = atom(null, (get, set, swap: { json: string }, contribution
 
   refundFile.contributionInfo = contributionInfo
 
-  set(currentSwapAtomId, refundFile.id) // Set the current id as current swap id
+  set(currentSwapIdAtom, refundFile.id) // Set the current id as current swap id
   set(swapAtom, { [refundFile.id]: refundFile, ...swapData })
 })
 
 const currentSwapAtom = atom(
   (get) => {
-    const currentSwapId = get(currentSwapAtomId)
+    const currentSwapId = get(currentSwapIdAtom)
     const swapData = get(swapAtom)
     const currentSwap = swapData[currentSwapId]
     if (currentSwap) {
@@ -62,7 +62,7 @@ const currentSwapAtom = atom(
     }
   },
   (get, set, data: SwapData) => {
-    const currentSwapId = get(currentSwapAtomId)
+    const currentSwapId = get(currentSwapIdAtom)
     const swapData = get(swapAtom)
     swapData[currentSwapId] = data
     set(swapAtom, swapData)
@@ -83,7 +83,7 @@ const removeRefundedSwapAtom = atom(null, (get, set, swapId: string) => {
       newSwapData[swapItem.id] = swapItem
     }
   })
-  set(currentSwapAtomId, '')
+  set(currentSwapIdAtom, '')
   set(swapAtom, newSwapData)
 })
 
@@ -96,7 +96,7 @@ export const useRefundFileAdd = () => useSetAtom(addSwapAtom)
 export const useRemoveRefundFile = () => useSetAtom(removeRefundedSwapAtom)
 
 // Setting current swapId
-export const useSetCurrentSwapId = () => useSetAtom(currentSwapAtomId)
+export const useSetCurrentSwapId = () => useSetAtom(currentSwapIdAtom)
 
 export const refundedSwapDataAtom = atom<SwapData | undefined>(undefined)
 export const useRefundedSwapData = () => useAtom(refundedSwapDataAtom)

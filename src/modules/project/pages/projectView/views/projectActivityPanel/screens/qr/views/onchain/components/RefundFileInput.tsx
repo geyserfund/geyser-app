@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 
 import { UploadBox } from '../../../../../../../../../../../components/ui'
 import { FieldContainer } from '../../../../../../../../../../../forms/components/FieldContainer'
-import { currentSwapAtomId, useRefundFileAdd } from '../../../../../../../../../funding/state'
+import { currentSwapIdAtom, useRefundFileAdd } from '../../../../../../../../../funding/state'
 
 export type ImageFieldProps = {
   name: string
@@ -20,7 +20,7 @@ export const RefundFileInput = ({ name, caption, required, label }: ImageFieldPr
   const { t } = useTranslation()
 
   const addRefundFile = useRefundFileAdd()
-  const setCurrentSwapId = useSetAtom(currentSwapAtomId)
+  const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
 
   const [isInvalid, setIsInvalid] = useState(false)
 

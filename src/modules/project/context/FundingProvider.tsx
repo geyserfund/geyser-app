@@ -1,6 +1,8 @@
-import React, { createContext, PropsWithChildren, useContext } from 'react'
+import { ScopeProvider } from 'jotai-scope'
+import React, { createContext, PropsWithChildren, useContext, useEffect } from 'react'
 
 import { useFundingFormState, UseFundingFormStateReturn } from '../../../hooks'
+import { authUserAtom } from '../../../pages/auth/state'
 import { FundingInput, FundingTxFragment, ProjectFragment } from '../../../types'
 import { useFundingFlow } from '../funding/hooks/useFundingFlow'
 import { FundingFlowGraphQLError } from '../funding/state'
@@ -24,10 +26,7 @@ export const FundingContext = createContext<FundingContextProps>({} as FundingCo
 
 export const useFundingContext = () => useContext(FundingContext)
 
-// This component is used to wrap the children of the FundingProvider
-// It ensures there is a different scope for the atoms used in the funding flow
-
-export const FundingProvider: React.FC<PropsWithChildren<{ project?: Partial<ProjectFragment> | null }>> = ({
+export const FundingContextProvider: React.FC<PropsWithChildren<{ project?: Partial<ProjectFragment> | null }>> = ({
   children,
   project,
 }) => {
@@ -39,7 +38,28 @@ export const FundingProvider: React.FC<PropsWithChildren<{ project?: Partial<Pro
     walletLimits: project ? project?.wallets?.[0]?.limits?.contribution : ({} as any),
   })
 
+  useEffect(() => {
+    return () => {
+      fundingFlow.resetFundingFlow()
+      fundForm.resetForm()
+    }
+  }, [])
+
   return <FundingContext.Provider value={{ ...fundingFlow, project, fundForm }}>{children}</FundingContext.Provider>
+}
+
+// This component is used to wrap the children of the FundingProvider
+// It ensures there is a different scope for the atoms used in the funding flow
+
+export const FundingProvider: React.FC<PropsWithChildren<{ project?: Partial<ProjectFragment> | null }>> = ({
+  children,
+  project,
+}) => {
+  return (
+    <ScopeProvider atoms={[authUserAtom]}>
+      <FundingContextProvider project={project}>{children}</FundingContextProvider>
+    </ScopeProvider>
+  )
 }
 
 export const FundingProviderWithProjectContext: React.FC<PropsWithChildren> = ({ children }) => {

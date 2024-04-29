@@ -1,6 +1,7 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
@@ -8,6 +9,7 @@ import { Body2 } from '../../../../../../../../../../../components/typography'
 import { TextField } from '../../../../../../../../../../../forms/components/TextField'
 import { useNotification } from '../../../../../../../../../../../utils'
 import { getBitcoinAddress } from '../../../../../../../../../../../utils/lightning/bip21'
+import { currentSwapIdAtom } from '../../../../../../../../../funding/state'
 import { useRefund } from '../hooks/useRefund'
 import { validateBitcoinAddress } from '../utils/validateAddress'
 import { RefundFileInput } from './RefundFileInput'
@@ -40,6 +42,8 @@ export const ClaimRefundForm = ({ onSuccess, showUpload }: ClaimRefundFormProps)
   const { toast } = useNotification()
   const { initiateRefund, loading } = useRefund()
 
+  const currentSwapId = useAtomValue(currentSwapIdAtom)
+
   const { handleSubmit, control } = useForm<{ bitcoinAddress: string }>({
     resolver: yupResolver(schema),
   })
@@ -70,7 +74,7 @@ export const ClaimRefundForm = ({ onSuccess, showUpload }: ClaimRefundFormProps)
         />
         <Body2 color="neutral.600">{t('Enter Bitcoin on-chain address on which you wish to get a refund.')}</Body2>
 
-        <Button type="submit" w="full" variant="primary" isLoading={loading} isDisabled={!showUpload}>
+        <Button type="submit" w="full" variant="primary" isLoading={loading} isDisabled={!showUpload && !currentSwapId}>
           {t('Initiate refund')}
         </Button>
       </VStack>

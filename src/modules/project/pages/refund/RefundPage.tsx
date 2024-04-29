@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { CardLayout } from '../../../../components/layouts'
 import { Body1, Body2, H2 } from '../../../../components/typography'
 import { getPath } from '../../../../constants'
-import { currentSwapAtomId, swapAtom, SwapContributionInfo } from '../../funding/state'
+import { currentSwapIdAtom, swapAtom, SwapContributionInfo } from '../../funding/state'
 import { RefundPolicyNote } from '../projectView/views/projectActivityPanel/screens/qr/components'
 import { ClaimRefundForm } from '../projectView/views/projectActivityPanel/screens/qr/views/onchain/components/ClaimRefundForm'
 
@@ -17,7 +17,7 @@ export const RefundPage = () => {
   const navigate = useNavigate()
 
   const [swapData] = useAtom(swapAtom)
-  const [currentSwapId, setCurrentSwapId] = useAtom(currentSwapAtomId)
+  const [currentSwapId, setCurrentSwapId] = useAtom(currentSwapIdAtom)
 
   const handleSuccess = () => {
     navigate(getPath('refundInitiated'))
