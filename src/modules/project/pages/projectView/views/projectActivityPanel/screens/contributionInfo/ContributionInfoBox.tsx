@@ -6,7 +6,7 @@ import { BsInfoCircle } from 'react-icons/bs'
 import { AnonymousAvatar, SatoshiAmount } from '../../../../../../../../components/ui'
 import { GEYSER_FEE_DISCLAIMER, LIGHTNING_FEE_PERCENTAGE, noFeeProjects } from '../../../../../../../../constants'
 import { useFundCalc } from '../../../../../../../../helpers'
-import { ProjectReward, Satoshis } from '../../../../../../../../types'
+import { FundingTxsWhereFundingStatus, InvoiceStatus, ProjectReward, Satoshis } from '../../../../../../../../types'
 import { hasOwnNode } from '../../../../../../../../utils/helpers'
 import { useFundingContext } from '../../../../../../context'
 import { Badge } from '../fundingForm/components/Badge'
@@ -58,12 +58,12 @@ export const ContributionInfoBox = ({ showGeyserFee, version, ...rest }: Props) 
   const hasSelectedRewards = formState.rewardsByIDAndCount && Object.entries(formState.rewardsByIDAndCount).length > 0
   const isNoFees = noFeeProjects.includes(project.name) || hasOwnNode(project)
   const contributionAmount = getTotalAmount('sats', project.name) as Satoshis
-  const { uuid: referenceCode, id: fundingTxId } = fundingTx
+  const { uuid: referenceCode, id: fundingTxId, invoiceStatus } = fundingTx
 
   const { funderUsername, funderAvatarURL, anonymous: isFunderAnonymous, email: funderEmail } = formState
 
   const renderTitle = () => {
-    if (referenceCode && fundingTxId) {
+    if (referenceCode && fundingTxId && invoiceStatus === InvoiceStatus.Paid) {
       return (
         <HStack direction="column" spacing="2" justifyContent={'space-between'} width={'100%'}>
           <Text lineHeight="1.0" fontSize={'16px'} fontWeight={'bold'} textColor={'neutral.900'}>
