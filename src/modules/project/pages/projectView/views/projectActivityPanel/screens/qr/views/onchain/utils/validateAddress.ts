@@ -7,5 +7,5 @@ export const validateBitcoinAddress = (address: string) => {
     return validate(address, Network.mainnet)
   }
 
-  return validate(address, Network.testnet)
+  return validate(address, Network.regtest)
 }
