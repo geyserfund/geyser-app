@@ -100,7 +100,9 @@ export const useFundingFormState = ({ rewards, rewardCurrency, walletLimits }: U
 
       if (onChain?.max && debouncedTotalAmount > onChain.max) {
         setAmountWarning(
-          `can be funded via. Lightning invoice only. amount exceeds onChain max: ${commaFormatted(onChain.max)} sats`,
+          `The maximum amount for on-chain contributions is ${commaFormatted(
+            onChain.max,
+          )} Sats. For higher amounts, you can pay with Lightning.`,
         )
         setAmountError('')
         return
@@ -108,9 +110,9 @@ export const useFundingFormState = ({ rewards, rewardCurrency, walletLimits }: U
 
       if (onChain?.min && debouncedTotalAmount < onChain.min) {
         setAmountWarning(
-          `can be funded via. Lightning invoice only. amount is lower than onChain min: ${commaFormatted(
+          `The minimum amount for on-chain contributions is ${commaFormatted(
             onChain.min,
-          )} sats`,
+          )} Sats. For smaller amounts, you can pay with Lightning.`,
         )
         setAmountError('')
         return
