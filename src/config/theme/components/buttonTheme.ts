@@ -37,7 +37,10 @@ export const buttonTheme: ComponentStyleConfig = {
       border: 'none',
       color: theme.isNostrColor ? lightModeColors.neutral[0] : lightModeColors.neutral[900],
       _hover: {
-        backgroundColor: theme.isNostrColor ? darkModeColors.neutral[200] : lightModeColors.neutral[200],
+        backgroundColor: {
+          base: theme.colors.primary[400],
+          lg: theme.isNostrColor ? darkModeColors.neutral[200] : lightModeColors.neutral[200],
+        },
       },
       _active: {
         backgroundColor: theme.isNostrColor ? darkModeColors.neutral[300] : lightModeColors.neutral[300],
