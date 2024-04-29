@@ -1,6 +1,6 @@
-import { WarningIcon } from '@chakra-ui/icons'
-import { Box, HStack, Text } from '@chakra-ui/react'
+import { Box, HStack, Text, Tooltip } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { AiFillQuestionCircle } from 'react-icons/ai'
 
 import Loader from '../../../../../../../../../components/ui/Loader'
 
@@ -13,7 +13,11 @@ export const WaitingForPayment = () => {
         <Text color={'neutral.900'} fontWeight={400}>
           {t('Waiting for payment')}
         </Text>
-        <WarningIcon fontSize="20px" />
+        <Tooltip label={t('Scan and pay invoice with Bitcoin.')} placement="top" hasArrow>
+          <Box>
+            <AiFillQuestionCircle fontSize="20px" />
+          </Box>
+        </Tooltip>
       </HStack>
     </Box>
   )
