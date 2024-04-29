@@ -109,7 +109,7 @@ export const useFundingFormState = ({ rewards, rewardCurrency, walletLimits }: U
       if (onChain?.min && debouncedTotalAmount < onChain.min) {
         setAmountWarning(
           `can be funded via. Lightning invoice only. amount is lower than onChain min: ${commaFormatted(
-            onChain.max,
+            onChain.min,
           )} sats`,
         )
         setAmountError('')

@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Body2 } from '../../../../../../../../../../../components/typography'
@@ -14,9 +15,25 @@ export const OnChainRefund = () => {
 
   useSwapTransaction()
 
+  const errorMessage = useMemo(() => {
+    if (!onChainError) return
+
+    switch (onChainError.status) {
+      case 'transaction.lockupFailed':
+        return 'Transaction fee set was not high enough to ensure transaction within 24 hours'
+
+      case 'invoice.failedToPay':
+        return 'Transaction amount was not enough to cover the invoice'
+      case 'swap.expired':
+        return 'Transaction has expired'
+      default:
+        return onChainError.failureReason || 'Transaction failed'
+    }
+  }, [onChainError])
+
   return (
     <>
-      <TransactionFailed error={onChainError} />
+      <TransactionFailed error={errorMessage} />
       <FeedbackCard variant="primary" title={t('Claim refund')}>
         <Body2>
           {t(
