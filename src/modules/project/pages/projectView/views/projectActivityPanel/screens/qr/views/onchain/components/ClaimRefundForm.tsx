@@ -8,7 +8,6 @@ import { Body2 } from '../../../../../../../../../../../components/typography'
 import { TextField } from '../../../../../../../../../../../forms/components/TextField'
 import { useNotification } from '../../../../../../../../../../../utils'
 import { getBitcoinAddress } from '../../../../../../../../../../../utils/lightning/bip21'
-import { useRefundFileValue } from '../../../../../../../../../funding/state'
 import { useRefund } from '../hooks/useRefund'
 import { validateBitcoinAddress } from '../utils/validateAddress'
 import { RefundFileInput } from './RefundFileInput'
@@ -39,7 +38,6 @@ interface ClaimRefundFormProps {
 
 export const ClaimRefundForm = ({ onSuccess, showUpload }: ClaimRefundFormProps) => {
   const { toast } = useNotification()
-  const refundFile = useRefundFileValue()
   const { initiateRefund, loading } = useRefund()
 
   const { handleSubmit, control } = useForm<{ bitcoinAddress: string }>({
@@ -59,7 +57,6 @@ export const ClaimRefundForm = ({ onSuccess, showUpload }: ClaimRefundFormProps)
     }
   }
 
-  console.log('checking refund file in claimrefundform', refundFile)
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <VStack spacing="10px" alignItems="start">
@@ -73,7 +70,7 @@ export const ClaimRefundForm = ({ onSuccess, showUpload }: ClaimRefundFormProps)
         />
         <Body2 color="neutral.600">{t('Enter Bitcoin on-chain address on which you wish to get a refund.')}</Body2>
 
-        <Button type="submit" w="full" variant="primary" isLoading={loading} isDisabled={!refundFile}>
+        <Button type="submit" w="full" variant="primary" isLoading={loading} isDisabled={!showUpload}>
           {t('Initiate refund')}
         </Button>
       </VStack>
