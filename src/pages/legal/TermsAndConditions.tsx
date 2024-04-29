@@ -179,14 +179,15 @@ export const TermsAndConditions = () => {
                 straight to the creator. Geyser does not custody the funds at any time.
               </ListItem>
               <ListItem>
-                <strong>The creator may need to reach out with questions about your reward.</strong> To deliver rewards,
-                the creator might need information from you, like your mailing address or t-shirt size. They’ll request
-                that information after the campaign has succeeded by using email. To receive the reward, you’ll need to
-                provide the information in a reasonable amount of time. Creators should not ask for personal information
-                that is not necessary to provide your reward, and should never request sensitive personal information
-                such as your Social Security number or payment information. Contact us at{' '}
-                <a href="mailto:hello@geyser.fund">hello@geyser.fund</a> if you receive a request for information that
-                seems inappropriate or excessive.
+                <strong>
+                  {"Onchain transactions are swapped to lightning using Boltz Exchange's non-custodial submarine swap."}
+                </strong>{' '}
+                This means that you are solely responsible for maintaining and securing the backup file (&quot;Refund
+                File&quot;) associated with your onchan transactions - which Geyser does not store. The Refund File is
+                intended to serve as a mechanism for you to secure access to your funds in the event of an onchain
+                transaction failing. The loss of the Refund File may irreversibly prevent access to your funds. Geyser
+                shall not be liable for any loss or damage of funds arising from your failure to comply with the
+                aforementioned backup requirements.
               </ListItem>
               <ListItem>
                 <strong>Geyser doesn’t offer refunds.</strong> Responsibility for finishing a project lies entirely with
