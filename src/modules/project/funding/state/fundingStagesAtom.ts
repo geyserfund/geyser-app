@@ -12,7 +12,7 @@ import {
 import { findNextFundingStage, generatePrivatePublicKeyPair } from '../utils/helpers'
 import { keyPairAtom } from './keyPairAtom'
 import { pollingFundingTxAtom, subscriptionActiveAtom } from './pollingFundingTx'
-import { currentSwapIdAtom } from './swapAtom'
+import { currentSwapIdAtom, refundedSwapDataAtom } from './swapAtom'
 
 export enum FundingStages {
   loading = 'loading',
@@ -55,6 +55,7 @@ export const fundingStageAtomEffect = atomEffect((get, set) => {
 
     // reset current swap id
     set(currentSwapIdAtom, '')
+    set(refundedSwapDataAtom, undefined)
   }
 })
 

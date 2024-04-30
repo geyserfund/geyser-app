@@ -13,12 +13,15 @@ import { RefundProcessing, RefundSummary, SafeToDeleteNotice } from './component
 export const RefundInitiatedPage = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const [refundedSwapData] = useRefundedSwapData()
+  const [refundedSwapData, setRefundedSwapData] = useRefundedSwapData()
 
   useEffect(() => {
     setTimeout(() => {
       handleCheckIfRefundTransactionIsThere()
     }, 100)
+    return () => {
+      setRefundedSwapData(undefined)
+    }
   }, [])
 
   const handleCheckIfRefundTransactionIsThere = useCallback(() => {

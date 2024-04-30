@@ -30,7 +30,7 @@ export const useRefund = () => {
         if (transaction.error) {
           toast({
             status: 'error',
-            title: 'Cannot refund unlocked transaction',
+            title: 'The transaction for this refund file did not get swapped',
             description: `${transaction.error}`,
           })
           removeRefundFile(refundFile.id)
