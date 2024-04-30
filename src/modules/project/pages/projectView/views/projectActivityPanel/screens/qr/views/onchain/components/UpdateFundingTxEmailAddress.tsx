@@ -21,9 +21,12 @@ const schema = yup
   .required()
 
 export const UpdateFundingTxEmailAddress = () => {
-  const { fundingTx } = useFundingContext()
+  const {
+    fundingTx,
+    fundForm: { state },
+  } = useFundingContext()
   const { toast } = useNotification()
-  const [updatedEmail, setUpdatedEmail] = useState('')
+  const [updatedEmail, setUpdatedEmail] = useState(state.email)
 
   const [updateEmail, { loading }] = useFundingTxEmailUpdateMutation({
     onCompleted(data) {
@@ -64,6 +67,7 @@ export const UpdateFundingTxEmailAddress = () => {
 
   return (
     <FeedbackCard
+      w="full"
       variant="primary"
       title={t('Get notified (optional)')}
       icon={
@@ -86,7 +90,7 @@ export const UpdateFundingTxEmailAddress = () => {
               i18nKey="Check your email ({{email}}) to receive notifications about transaction confirmation."
               values={{ email: updatedEmail }}
             >
-              {'Check your email (mick@geyser.fund) to receive notifications about transaction confirmation.'}
+              {'Check your email ({{email}}) to receive notifications about transaction confirmation.'}
             </Trans>
           </Body2>
 
