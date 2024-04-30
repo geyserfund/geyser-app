@@ -41,7 +41,7 @@ caddy/certificate/root.crt
 .yarn-integrity
 
 # Yarn v2 new files
-.yarn/
+.yarn/*
 !.yarn/patches
 !.yarn/releases
 !.yarn/plugins
