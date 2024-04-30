@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { CardLayout } from '../../../../components/layouts'
 import { Body1, Body2, H2 } from '../../../../components/typography'
 import { getPath } from '../../../../constants'
+import { commaFormatted } from '../../../../utils'
 import { currentSwapIdAtom, swapAtom, SwapContributionInfo } from '../../funding/state'
 import { RefundPolicyNote } from '../projectView/views/projectActivityPanel/screens/qr/components'
 import { ClaimRefundForm } from '../projectView/views/projectActivityPanel/screens/qr/views/onchain/components/ClaimRefundForm'
@@ -45,8 +46,10 @@ export const RefundPage = () => {
                 return null
               }
 
-              const dateString = datetime ? DateTime.fromMillis(datetime).toFormat('dd LLL, yyyy') : 'N/A'
-              const amountString = amount || 'N/A'
+              const dateString = datetime
+                ? DateTime.fromMillis(datetime).toLocal().toFormat('HH:mm,  dd LLL, yyyy')
+                : 'N/A'
+              const amountString = amount ? `${commaFormatted(amount)} sats` : 'N/A'
               const projectString = projectTitle || 'N/A'
 
               return (
@@ -63,7 +66,7 @@ export const RefundPage = () => {
                 >
                   <FaFileAlt />
                   <Body2>
-                    {`${t('Date')}:  `}
+                    {`${t('Datetime')}:  `}
                     <strong>{dateString} </strong>
                     {`${t('Amount')}:  `}
                     <strong>{amountString} </strong>
