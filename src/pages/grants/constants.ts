@@ -11,6 +11,8 @@ export const GRANT_STATUS_MAP: Record<GrantStatusEnum, string> = {
   [GrantStatusEnum.FundingOpen]: 'Active',
 }
 
+export const GRANT_IDS_WITH_FUNDERS = ['1', '4']
+
 export const GrantHasVoting: { [key: string]: boolean } = {
   'grant-round-001': false,
   'grant-round-002': false,

@@ -20,14 +20,10 @@ import { SkeletonLayout } from '../../../../../../../../../components/layouts'
 import { UserAvatar } from '../../../../../../../../../components/ui/UserAvatar'
 import { ExternalAccountType } from '../../../../../../../../../pages/auth'
 import { useFollowedProjectsValue } from '../../../../../../../../../pages/auth/state'
-import {
-  FunderWithUserFragment,
-  OrderByOptions,
-  ProjectMilestone,
-  useProjectFundersQuery,
-} from '../../../../../../../../../types'
+import { FunderWithUserFragment, OrderByOptions, useProjectFundersQuery } from '../../../../../../../../../types'
 import { toInt, useMobileMode, useNotification } from '../../../../../../../../../utils'
 import { useProjectContext } from '../../../../../../../context'
+import { useProjectMilestones } from '../../../../../../../pages/projectView/hooks/useProjectMilestones'
 import { ContributeButton, FollowButton, ShareButton } from '../../../../projectMainBody/components'
 import { BalanceDisplayButton, SubscribeButton } from '../components'
 import { ProjectFundersModal, useProjectFundersModal } from '../components/ProjectFundersModal'
@@ -55,13 +51,10 @@ export const ActivityBrief = (props: StackProps) => {
 
   const [allFunders, setAllFunders] = useState<FunderWithUserFragment[]>([])
   const [socialFunders, setSocialFunders] = useState<FunderWithUserFragment[]>([])
-  const [currentMilestone, setCurrentMilestone] = useState<ProjectMilestone>()
-  const [milestoneIndex, setMilestoneIndex] = useState<number>(0)
-  const [prevMilestone, setPrevMilestone] = useState(0)
+
+  const { currentMilestone, milestoneIndex, prevMilestone, balance } = useProjectMilestones()
 
   const { colors } = useTheme()
-
-  const balance = useMemo(() => (project ? project.balance : 0), [project])
 
   const fundersModal = useProjectFundersModal()
 
@@ -108,31 +101,6 @@ export const ActivityBrief = (props: StackProps) => {
       setSocialFunders(socialFilteredFunders)
     },
   })
-
-  useEffect(() => {
-    if (!project) {
-      return
-    }
-
-    if (project.milestones && project.milestones.length > 0) {
-      let selectedMilestone: ProjectMilestone | undefined
-      let prevTotal = 0
-
-      project.milestones.map((milestone, index) => {
-        const hasNextMilestone = project.milestones && Boolean(project.milestones[index + 1])
-        if (!selectedMilestone) {
-          if (milestone && (milestone.amount >= balance || !hasNextMilestone)) {
-            selectedMilestone = milestone
-            setCurrentMilestone(milestone)
-            setMilestoneIndex(index + 1)
-          } else {
-            prevTotal = milestone?.amount || 0
-          }
-        }
-      })
-      setPrevMilestone(prevTotal)
-    }
-  }, [balance, project])
 
   const getColor = useCallback(() => {
     switch (milestoneIndex % 4) {
