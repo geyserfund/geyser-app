@@ -84,7 +84,7 @@ export const UpdateFundingTxEmailAddress = () => {
       }
     >
       {updatedEmail ? (
-        <VStack w="full" spacing="20px">
+        <VStack w="full" spacing="20px" alignItems="start">
           <Body2>
             <Trans
               i18nKey="Check your email ({{email}}) to receive notifications about transaction confirmation."
@@ -100,7 +100,7 @@ export const UpdateFundingTxEmailAddress = () => {
         </VStack>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
-          <VStack spacing="10px">
+          <VStack spacing="10px" alignItems="start">
             <TextField placeholder={t('Enter email address')} name="email" control={control} />
             <Body2>{t('Enter your email to receive transaction confirmation')}</Body2>
             <Button type="submit" w="full" variant="primary" mt={4} isLoading={isSubmitting || loading}>
