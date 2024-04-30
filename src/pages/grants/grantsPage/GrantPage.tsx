@@ -8,6 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Loader from '../../../components/ui/Loader'
 import { Head } from '../../../config'
 import { getPath } from '../../../constants'
+import { useAuthContext } from '../../../context'
 import { GrantApplicant, GrantApplicantStatus, GrantStatusEnum, Maybe } from '../../../types'
 import { useNotification } from '../../../utils'
 import { GrantWinnerAnnouncement, MobileDivider } from '../components'
@@ -36,6 +37,8 @@ export const GrantPage = () => {
   const navigate = useNavigate()
 
   const { grant, loading, error } = useGrant(grantId)
+
+  const { user } = useAuthContext()
 
   useEffect(() => {
     if (error) {
@@ -68,9 +71,13 @@ export const GrantPage = () => {
         ) as Array<GrantApplicant>)
       : []
 
+  const userProjectIds = new Set(user.ownerOf.map((ownership) => ownership.project?.id))
+
   const pendingApplicants: Array<GrantApplicant> =
     grant && grant.applicants
-      ? grant.applicants.filter((applicant) => applicant.status === GrantApplicantStatus.Pending)
+      ? grant.applicants
+          .filter((applicant) => applicant.status === GrantApplicantStatus.Pending)
+          .sort((a, b) => Number(userProjectIds.has(b.project.id)) - Number(userProjectIds.has(a.project.id)))
       : []
 
   const fundingOpenStatus = grant.statuses.find((s) => s.status === GrantStatusEnum.FundingOpen)
