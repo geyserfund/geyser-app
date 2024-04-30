@@ -325,7 +325,11 @@ export const ProjectRewardForm = ({
 
   return (
     <>
-      <CardLayout minWidth="100%" {...(isLaunch ? { border: 'none', h: '100%' } : { padding: '30px 30px' })}>
+      <CardLayout
+        minWidth="100%"
+        {...(isLaunch ? { border: 'none', h: '100%' } : { padding: '30px 30px' })}
+        noMobileBorder
+      >
         <Stack direction={'row'} align={'center'}>
           <IconButton
             size="sm"

@@ -14,7 +14,7 @@ export const ProjectManageRewards = () => {
       px={{ base: '10px', lg: '40px' }}
       spacing={{ base: '10px', lg: '20px' }}
     >
-      <CardLayout h="auto" padding="30px 30px" minWidth="100%">
+      <CardLayout h="auto" padding="30px 30px" minWidth="100%" noMobileBorder>
         <RewardsHeader />
         <RewardsTable />
       </CardLayout>
