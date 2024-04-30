@@ -3,6 +3,7 @@ import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Body1 } from '../../../../../../../components/typography'
+import { getShortAmountLabel } from '../../../../../../../utils'
 import { useProjectMilestones } from '../../../../../pages/projectView/hooks/useProjectMilestones'
 
 export const MobileMilestoneRecap = () => {
@@ -23,9 +24,8 @@ export const MobileMilestoneRecap = () => {
           {t('Amount raised:')}{' '}
           <Text as="span" color="neutral.900" fontWeight={700}>
             {' '}
-            {currentMilestone?.amount}M
+            {getShortAmountLabel(currentMilestone?.amount ?? 0, true)}
           </Text>{' '}
-          {t('sats')}
         </Body1>
         <Body1 fontWeight={400} color="neutral.600">
           {getMilestoneValue()}%
