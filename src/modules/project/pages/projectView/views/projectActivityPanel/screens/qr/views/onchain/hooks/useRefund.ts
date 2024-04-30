@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { useNotification } from '../../../../../../../../../../../utils'
 import { useRefundedSwapData, useRefundFileValue, useRemoveRefundFile } from '../../../../../../../../../funding/state'
-import { getTransactionFromSwap } from '../refund/api'
+import { BoltzTransaction, getTransactionFromSwap } from '../refund/api'
 import { refund } from '../refund/refund'
 import { useSwapTransactionValue } from '../states/onChainTransaction'
 
@@ -13,7 +13,7 @@ export const useRefund = () => {
   const refundFile = useRefundFileValue()
 
   const [_, setRefundedSwapData] = useRefundedSwapData()
-  const removeRefundSwapData = useRemoveRefundFile()
+  const removeRefundFile = useRemoveRefundFile()
 
   const [loading, setLoading] = useState(false)
 
@@ -22,17 +22,28 @@ export const useRefund = () => {
       return false
     }
 
-    let transaction = swapTransaction
+    let transaction = swapTransaction as BoltzTransaction & { error?: string }
     try {
       setLoading(true)
       if (!swapTransaction.hex) {
         transaction = await getTransactionFromSwap(refundFile.id)
+        if (transaction.error) {
+          toast({
+            status: 'error',
+            title: 'Cannot refund unlocked transaction',
+            description: `${transaction.error}`,
+          })
+          removeRefundFile(refundFile.id)
+          setLoading(false)
+          return false
+        }
       }
 
       const value = await refund(refundFile, refundAddress, transaction)
 
       if (value && value.refundTx) {
         setRefundedSwapData(value)
+        removeRefundFile(refundFile.id)
         return true
       }
 
@@ -44,8 +55,6 @@ export const useRefund = () => {
           description: `${value.error}`,
         })
       }
-
-      removeRefundSwapData(refundFile.id)
 
       return false
     } catch (error) {
