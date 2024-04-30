@@ -36,3 +36,11 @@ caddy/certificate/root.crt
 
 *storybook.log
 .app.env
+
+# Yarn v2 new files
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
