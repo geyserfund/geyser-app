@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Button, Container, VStack } from '@chakra-ui/react'
 import { PropsWithChildren, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -17,6 +18,7 @@ import { GrantsRoundTwo } from './GrantsRoundTwo'
 import { GrantContribute, GrantSummary } from './sections'
 import { CommunityVoting, DistributionChart, GrantApply, MoreInfo } from './sections'
 import { CommonBoardMembers } from './sections/CommonBoardMembers'
+import { PendingApplications } from './sections/PendingApplications'
 
 const PageContainer = ({ children, image, title }: PropsWithChildren<{ image?: Maybe<string>; title?: string }>) => {
   return (
@@ -66,6 +68,11 @@ export const GrantPage = () => {
         ) as Array<GrantApplicant>)
       : []
 
+  const pendingApplicants: Array<GrantApplicant> =
+    grant && grant.applicants
+      ? grant.applicants.filter((applicant) => applicant.status === GrantApplicantStatus.Pending)
+      : []
+
   const fundingOpenStatus = grant.statuses.find((s) => s.status === GrantStatusEnum.FundingOpen)
 
   if (grant.name === 'grant-round-001') {
@@ -110,6 +117,9 @@ export const GrantPage = () => {
   const showGrantApply = grant.status !== GrantStatusEnum.Closed
 
   const showBoardMembers = !GrantHasVoting[grant.name] && grant.boardMembers.length > 0
+  const showApplicationPending =
+    (GrantHasVoting[grant.name] || showBoardMembers) &&
+    (grant.status === GrantStatusEnum.ApplicationsOpen || grant.status === GrantStatusEnum.FundingOpen)
 
   return (
     <PageContainer title={t(grant.title)} image={grant.image}>
@@ -157,6 +167,13 @@ export const GrantPage = () => {
         {showGrantApply && (
           <>
             <GrantApply grant={grant} />
+            <MobileDivider />
+          </>
+        )}
+
+        {showApplicationPending && pendingApplicants.length > 0 && (
+          <>
+            <PendingApplications applicants={pendingApplicants} />
             <MobileDivider />
           </>
         )}
