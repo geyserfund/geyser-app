@@ -4,6 +4,7 @@
   "version": "0.7.4",
   "scripts": {
     "dev": "vite",
+    "knip": "knip",
     "dev:stage": "vite --mode staging",
     "build": "tsc && vite build",
     "preview": "vite preview --port 3000",
@@ -169,6 +170,7 @@
     "eslint-plugin-testing-library": "^5.10.0",
     "husky": "^8.0.3",
     "jsdom": "^21.1.0",
+    "knip": "^5.11.0",
     "prettier": "^2.8.3",
     "sitemap": "^7.1.1",
     "storybook": "^8.0.4",
