@@ -1,9 +1,11 @@
 import { VStack } from '@chakra-ui/react'
 
 import { CardLayout } from '../../../../../../../../components/layouts'
+import { useMobileMode } from '../../../../../../../../utils'
 import { RewardsHeader, RewardsTable } from './components'
 
 export const ProjectManageRewards = () => {
+  const isMobile = useMobileMode()
   return (
     <VStack
       direction={{ base: 'column', lg: 'row' }}
@@ -14,7 +16,7 @@ export const ProjectManageRewards = () => {
       px={{ base: '10px', lg: '40px' }}
       spacing={{ base: '10px', lg: '20px' }}
     >
-      <CardLayout h="auto" padding="30px 30px" minWidth="100%" noMobileBorder>
+      <CardLayout h="auto" padding={isMobile ? '10px 10px' : '20px 20px'} minWidth="100%" noMobileBorder>
         <RewardsHeader />
         <RewardsTable />
       </CardLayout>

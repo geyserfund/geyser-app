@@ -32,6 +32,7 @@ import {
   USDCents,
 } from '../../../../../../../../../../types'
 import { commaFormatted, isProjectAnException, toInt, useNotification } from '../../../../../../../../../../utils'
+import { useMobileMode } from '../../../../../../../../../../utils'
 import { useProjectContext } from '../../../../../../../../context'
 
 type Props = {
@@ -58,6 +59,7 @@ export const ProjectRewardForm = ({
   const navigate = useNavigate()
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
   const { toast } = useNotification()
+  const isMobile = useMobileMode()
 
   const {
     isOpen: isCurrencyChangeModalOpen,
@@ -327,7 +329,7 @@ export const ProjectRewardForm = ({
     <>
       <CardLayout
         minWidth="100%"
-        {...(isLaunch ? { border: 'none', h: '100%' } : { padding: '30px 30px' })}
+        {...(isLaunch ? { border: 'none', h: '100%' } : { padding: isMobile ? '10px 10px' : '20px 20px' })}
         noMobileBorder
       >
         <Stack direction={'row'} align={'center'}>
