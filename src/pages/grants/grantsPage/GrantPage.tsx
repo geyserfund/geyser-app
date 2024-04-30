@@ -58,20 +58,24 @@ export const GrantPage = () => {
     )
   }
 
+  const userProjectIds = new Set(user.ownerOf.map((ownership) => ownership.project?.id))
+
   const applicants: Array<GrantApplicant> =
     grant && grant.applicants
-      ? (grant.applicants.filter((applicant) =>
-          Boolean(
-            applicant &&
-              (grant.status === GrantStatusEnum.Closed
-                ? applicant.status === GrantApplicantStatus.Funded
-                : applicant.status === GrantApplicantStatus.Accepted ||
-                  applicant.status === GrantApplicantStatus.Funded),
-          ),
-        ) as Array<GrantApplicant>)
+      ? (grant.applicants
+          .filter((applicant) =>
+            Boolean(
+              applicant &&
+                (grant.status === GrantStatusEnum.Closed
+                  ? applicant.status === GrantApplicantStatus.Funded
+                  : applicant.status === GrantApplicantStatus.Accepted ||
+                    applicant.status === GrantApplicantStatus.Funded),
+            ),
+          )
+          .sort(
+            (a, b) => Number(userProjectIds.has(b.project.id)) - Number(userProjectIds.has(a.project.id)),
+          ) as Array<GrantApplicant>)
       : []
-
-  const userProjectIds = new Set(user.ownerOf.map((ownership) => ownership.project?.id))
 
   const pendingApplicants: Array<GrantApplicant> =
     grant && grant.applicants
