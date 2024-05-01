@@ -5,17 +5,17 @@ import { useTranslation } from 'react-i18next'
 
 import { copyTextToClipboard } from '../../../../../../../../../utils'
 
-interface CopyReferenceCodeProps {
-  referenceCode?: string | null
+interface CopyProjectLinkProps {
+  showCopy?: boolean
   projectName: string
 }
 
-export const CopyReferenceCode = ({ referenceCode, projectName }: CopyReferenceCodeProps) => {
+export const CopyProjectLink = ({ showCopy, projectName }: CopyProjectLinkProps) => {
   const [copy, setCopy] = useState(false)
 
   const { t } = useTranslation()
 
-  const handleCopyReferenceCode = () => {
+  const handleCopyProjectLink = () => {
     if (copy === false) {
       copyTextToClipboard(`${window.location.origin}/project/${projectName}`)
       setCopy(true)
@@ -25,7 +25,7 @@ export const CopyReferenceCode = ({ referenceCode, projectName }: CopyReferenceC
     }
   }
 
-  if (!referenceCode) return null
+  if (!showCopy) return null
   return (
     <VStack align={'flex-start'} mt={2}>
       <Text color="neutral.900" fontWeight="bold" fontSize={'16px'}>
@@ -42,7 +42,7 @@ export const CopyReferenceCode = ({ referenceCode, projectName }: CopyReferenceC
         fontWeight={'medium'}
         fontSize={'16px'}
         width="100%"
-        onClick={handleCopyReferenceCode}
+        onClick={handleCopyProjectLink}
       >
         {t('Copy link')}
       </Button>

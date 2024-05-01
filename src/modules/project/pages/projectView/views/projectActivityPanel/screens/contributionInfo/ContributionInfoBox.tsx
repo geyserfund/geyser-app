@@ -6,11 +6,11 @@ import { BsInfoCircle } from 'react-icons/bs'
 import { AnonymousAvatar, SatoshiAmount } from '../../../../../../../../components/ui'
 import { GEYSER_FEE_DISCLAIMER, LIGHTNING_FEE_PERCENTAGE, noFeeProjects } from '../../../../../../../../constants'
 import { useFundCalc } from '../../../../../../../../helpers'
-import { InvoiceStatus, ProjectReward, Satoshis } from '../../../../../../../../types'
+import { FundingStatus, InvoiceStatus, ProjectReward, Satoshis } from '../../../../../../../../types'
 import { hasOwnNode } from '../../../../../../../../utils/helpers'
 import { useFundingContext } from '../../../../../../context'
 import { Badge } from '../fundingForm/components/Badge'
-import { CopyReferenceCode } from './components'
+import { CopyProjectLink } from './components'
 import { DownloadInvoice } from './components/DownloadInvoice'
 
 export enum ContributionInfoBoxVersion {
@@ -58,12 +58,14 @@ export const ContributionInfoBox = ({ showGeyserFee, version, ...rest }: Props) 
   const hasSelectedRewards = formState.rewardsByIDAndCount && Object.entries(formState.rewardsByIDAndCount).length > 0
   const isNoFees = noFeeProjects.includes(project.name) || hasOwnNode(project)
   const contributionAmount = getTotalAmount('sats', project.name) as Satoshis
-  const { uuid: referenceCode, id: fundingTxId, invoiceStatus } = fundingTx
+  const { id: fundingTxId, invoiceStatus, status } = fundingTx
 
   const { funderUsername, funderAvatarURL, anonymous: isFunderAnonymous, email: funderEmail } = formState
 
+  const isPaid = invoiceStatus === InvoiceStatus.Paid || status === FundingStatus.Pending
+
   const renderTitle = () => {
-    if (referenceCode && fundingTxId && invoiceStatus === InvoiceStatus.Paid) {
+    if (fundingTxId && isPaid) {
       return (
         <HStack direction="column" spacing="2" justifyContent={'space-between'} width={'100%'}>
           <Text lineHeight="1.0" fontSize={'16px'} fontWeight={'bold'} textColor={'neutral.900'}>
@@ -85,7 +87,7 @@ export const ContributionInfoBox = ({ showGeyserFee, version, ...rest }: Props) 
   }
 
   const renderEmail = () => {
-    if (funderEmail && !referenceCode) {
+    if (funderEmail && isPaid) {
       return (
         <HStack justify={'space-between'} width={'full'}>
           <Text fontSize={'14px'} fontWeight={'medium'} textColor={'neutral.900'}>
@@ -102,7 +104,7 @@ export const ContributionInfoBox = ({ showGeyserFee, version, ...rest }: Props) 
   }
 
   const renderFundingAs = () => {
-    if (!referenceCode) {
+    if (!isPaid) {
       return (
         <HStack spacing={2} width={'full'} justify={'space-between'}>
           <Text fontSize={'14px'} fontWeight={'medium'} textColor={'neutral.900'}>
@@ -243,7 +245,7 @@ export const ContributionInfoBox = ({ showGeyserFee, version, ...rest }: Props) 
           </Text>
         </HStack>
       </HStack>
-      <CopyReferenceCode referenceCode={referenceCode} projectName={project.name} />
+      <CopyProjectLink showCopy={isPaid} projectName={project.name} />
     </VStack>
   )
 }

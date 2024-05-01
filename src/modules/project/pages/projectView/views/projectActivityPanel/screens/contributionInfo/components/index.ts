@@ -1,3 +1,3 @@
 export * from './ContributionShippingBox'
-export * from './CopyReferenceCode'
+export * from './CopyProjectLink'
 export * from './DownloadInvoice'
