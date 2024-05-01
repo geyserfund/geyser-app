@@ -1,10 +1,11 @@
-import { Button, HStack, Text, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, HStack, SkeletonText, useDisclosure, VStack } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IoMdRefresh } from 'react-icons/io'
 
 import { SkeletonLayout } from '../../../../../../../../../components/layouts'
 import { Body2 } from '../../../../../../../../../components/typography'
+import { QRCodeSizeMap } from './QRCodeComponent'
 
 const FUNDING_REQUEST_TIMEOUT = 45_000
 
@@ -48,13 +49,17 @@ export const GeneratingInvoice = ({ refreshInvoice }: { refreshInvoice: () => vo
   }
 
   return (
-    <VStack w="full" spacing="10px">
-      <HStack w="full" pt="20px">
-        <SkeletonLayout height="40px" width="100%" />
-        <SkeletonLayout height="40px" width="100%" />
-      </HStack>
-      <SkeletonLayout height="300px" width="300px" />
-      <Text>{t('Generating Invoice')}</Text>
+    <VStack w="full" spacing="20px">
+      <VStack w="full" spacing="10px" alignItems="center">
+        <HStack w="full">
+          <SkeletonLayout height="40px" width="100%" />
+          <SkeletonLayout height="40px" width="100%" />
+        </HStack>
+        <SkeletonLayout height={QRCodeSizeMap} width={QRCodeSizeMap} />
+        <SkeletonText noOfLines={2} width="200px" />
+      </VStack>
+      <SkeletonLayout maxWidth="360px" height="40px" width="100%" />
+      <SkeletonLayout height="300px" width="100%" />
     </VStack>
   )
 }

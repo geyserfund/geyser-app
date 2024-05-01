@@ -11,14 +11,16 @@ type QRCodeComponentProps = {
   isColored: boolean
 }
 
+export const QRCodeSizeMap = {
+  base: 240,
+  xs: 300,
+  sm: 380,
+  lg: 280,
+  xl: 340,
+}
+
 export const QRCodeComponent = ({ value, isColored, onClick }: QRCodeComponentProps) => {
-  const qrSize = useBreakpointValue({
-    base: 240,
-    xs: 300,
-    sm: 380,
-    lg: 280,
-    xl: 340,
-  })
+  const qrSize = useBreakpointValue(QRCodeSizeMap)
 
   const debouncedQRSize = useDebounce(qrSize, 100)
 
