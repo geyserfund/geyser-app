@@ -26,7 +26,7 @@ import {
   ProjectMilestone,
   useProjectFundersQuery,
 } from '../../../../../../../../../types'
-import { toInt, useMobileMode, useNotification } from '../../../../../../../../../utils'
+import { removeProjectAmountException, toInt, useMobileMode, useNotification } from '../../../../../../../../../utils'
 import { useProjectContext } from '../../../../../../../context'
 import { ContributeButton, FollowButton, ShareButton } from '../../../../projectMainBody/components'
 import { BalanceDisplayButton, SubscribeButton } from '../components'
@@ -191,6 +191,8 @@ export const ActivityBrief = (props: StackProps) => {
 
   const latestFunders = socialFunders.slice(0, 12)
 
+  const hideBalance = removeProjectAmountException(project?.name)
+
   if (!project) {
     return null
   }
@@ -207,6 +209,7 @@ export const ActivityBrief = (props: StackProps) => {
         onClick={toggleUsd}
       >
         {renderCircularProgress()}
+
         <VStack
           flex="1"
           spacing={0}
@@ -214,7 +217,9 @@ export const ActivityBrief = (props: StackProps) => {
           px={2}
           alignItems={circularPercentage === undefined ? 'center' : 'start'}
         >
-          <BalanceDisplayButton balance={balance} isToolTipOpen={isToolTipOpen} isUsd={isUsd} />
+          {!hideBalance && balance && (
+            <BalanceDisplayButton balance={balance} isToolTipOpen={isToolTipOpen} isUsd={isUsd} />
+          )}
 
           {getMilestoneValue()}
         </VStack>
