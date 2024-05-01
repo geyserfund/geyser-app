@@ -2,11 +2,13 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Body2 } from '../../../../../../../../../../../components/typography'
+import { commaFormatted } from '../../../../../../../../../../../utils'
 import { useRefundFileValue } from '../../../../../../../../../funding/state'
 import { DownloadRefund, FeedbackCard, TransactionFailed } from '../components'
 import { ClaimRefundForm } from '../components/ClaimRefundForm'
 import { useSwapTransaction } from '../hooks/useSwapTransaction'
 import { useSetOnChainErrorValue } from '../states'
+import { extractValuesFromError } from '../utils/parseError'
 
 export const OnChainRefund = () => {
   const { t } = useTranslation()
@@ -19,13 +21,21 @@ export const OnChainRefund = () => {
     if (!onChainError) return
 
     switch (onChainError.status) {
-      case 'transaction.lockupFailed':
-        return 'Transaction fee set was not high enough to ensure transaction within 24 hours'
+      case 'transaction.lockupFailed': {
+        const values = extractValuesFromError(onChainError.failureReason || '')
+        if (values.locked && values.expected) {
+          return `Amount received ${commaFormatted(values.locked)} sats was less than expected ${commaFormatted(
+            values.expected,
+          )} sats`
+        }
+
+        return 'Transaction amount was not enough to cover the invoice'
+      }
 
       case 'invoice.failedToPay':
-        return 'Transaction amount was not enough to cover the invoice'
+        return 'Failed to pay invoice'
       case 'swap.expired':
-        return 'Transaction has expired'
+        return 'Transaction has expired no payment detected'
       default:
         return onChainError.failureReason || 'Transaction failed'
     }

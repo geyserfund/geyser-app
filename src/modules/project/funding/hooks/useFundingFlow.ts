@@ -99,7 +99,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
           parseResponseToSwap(data.fund.swap, {
             projectTitle: project?.title,
             reference: data.fund.fundingTx.uuid,
-            amount: data.fund.fundingTx.amount,
             bitcoinQuote: data.fund.fundingTx.bitcoinQuote,
             datetime: data.fund.fundingTx.createdAt,
           })

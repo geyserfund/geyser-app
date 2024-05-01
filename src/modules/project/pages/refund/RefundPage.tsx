@@ -49,7 +49,7 @@ export const RefundPage = () => {
               const dateString = datetime
                 ? DateTime.fromMillis(datetime).toLocal().toFormat('HH:mm,  dd LLL, yyyy')
                 : 'N/A'
-              const amountString = amount ? `${commaFormatted(amount)} sats` : 'N/A'
+              const amountString = amount ? `${commaFormatted(amount)} sats` : ''
               const projectString = projectTitle || 'N/A'
 
               return (
@@ -68,7 +68,7 @@ export const RefundPage = () => {
                   <Body2>
                     {`${t('Datetime')}:  `}
                     <strong>{dateString} </strong>
-                    {`${t('Amount')}:  `}
+                    {amountString && `${t('Amount')}:  `}
                     <strong>{amountString} </strong>
                     {`${t('Project')}:  `}
                     <strong>{projectString} </strong>

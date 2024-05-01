@@ -3,6 +3,7 @@ import { useCallback, useEffect } from 'react'
 import useWebSocket from 'react-use-websocket'
 
 import { __production__, BOLTZ_DOMAIN } from '../../../../../../../../../../../constants'
+import { OnChainErrorStatuses } from '../states'
 
 const swapServiceWsEndpoint = `wss://${BOLTZ_DOMAIN}/v2/ws`
 
@@ -51,7 +52,6 @@ export const useTransactionStatusUpdate = ({
 
     retryOnError: true,
   })
-  // const {HEARTBEAT_INTERVAL_MS= use useWebSocket(swapServiceWsEndpoint, handleMessage)
 
   useEffect(() => {
     if (readyState && swapId) {
@@ -67,30 +67,16 @@ export const useTransactionStatusUpdate = ({
 
   const handleSwapStatusUpdate = useCallback(
     async (swapStatusUpdate: SwapStatusUpdate) => {
-      const { id, status, failureReason } = swapStatusUpdate
-
-      if (failureReason) {
-        handleFailed(swapStatusUpdate)
-        return
-      }
-
-      console.log(`swap ${id}: received status ${status}`)
-
       try {
-        switch (status) {
+        switch (swapStatusUpdate.status) {
           case 'transaction.confirmed':
             handleConfirmed()
             break
-          case 'invoice.failedToPay':
+          case OnChainErrorStatuses.INVOICE_FAILED:
+          case OnChainErrorStatuses.LOCKUP_FAILED:
+          case OnChainErrorStatuses.SWAP_EXPIRED:
             handleFailed(swapStatusUpdate)
             break
-          case 'transaction.lockupFailed':
-            handleFailed(swapStatusUpdate)
-            break
-          case 'swap.expired':
-            handleFailed(swapStatusUpdate)
-            break
-
           default:
             break
         }
@@ -102,8 +88,6 @@ export const useTransactionStatusUpdate = ({
   )
   useEffect(() => {
     if (lastJsonMessage) {
-      console.log('last json message', lastJsonMessage)
-
       if (lastJsonMessage.event === 'update' && lastJsonMessage.args[0]) {
         handleSwapStatusUpdate(lastJsonMessage.args[0])
       }

@@ -11,9 +11,9 @@ export const TransactionFailed = ({ error }: { error?: Error | string }) => {
   return (
     <CardLayout padding={standardPadding} w="full">
       <Image src={TransactionFailedImageUrl} height="160px" width="auto" objectFit={'contain'} />
-      <VStack spacing="10px">
+      <VStack spacing="10px" alignItems="center">
         <H3 color="secondary.red">{t('Transaction has failed')}</H3>
-        <Body2 color="secondary.red">{`${error}`}</Body2>
+        <Body2 color="secondary.red" textAlign={'center'}>{`${error}`}</Body2>
       </VStack>
     </CardLayout>
   )
