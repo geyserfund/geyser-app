@@ -10,7 +10,7 @@ import { getPath } from '../../../constants'
 import { GrantApplicant, GrantApplicantStatus, GrantStatusEnum, Maybe } from '../../../types'
 import { useNotification } from '../../../utils'
 import { GrantWinnerAnnouncement, MobileDivider } from '../components'
-import { GRANT_IDS_WITH_FUNDERS, GrantAnnouncements, GrantHasVoting, GrantProjectNameMap } from '../constants'
+import { GrantAnnouncements, GrantHasVoting, GrantProjectNameMap } from '../constants'
 import { useGrant } from '../hooks/useGrant'
 import { GrantsRoundOne } from './GrantsRoundOne'
 import { GrantsRoundTwo } from './GrantsRoundTwo'
@@ -33,9 +33,7 @@ export const GrantPage = () => {
   const { grantId } = useParams<{ grantId: string }>()
   const navigate = useNavigate()
 
-  const isGrantWithFunders = GRANT_IDS_WITH_FUNDERS.includes(grantId || '')
-
-  const { grant, loading, error } = useGrant(grantId, isGrantWithFunders)
+  const { grant, loading, error } = useGrant(grantId)
 
   useEffect(() => {
     if (error) {
