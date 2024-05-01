@@ -26,7 +26,6 @@ import { toLargeImageUrl } from '../../../../../../../utils/tools/imageSizes'
 import { useProjectContext } from '../../../../../context'
 import { SubscribeButton } from '../../projectActivityPanel/screens/info/components'
 import { ContributeButton, FollowButton, LightningAddress, ProjectFundingQR, ShareButton } from '../components'
-import { MobileMilestoneRecap } from '../components/MobileMilestoneRecap'
 import { NpubDisplay } from '../components/NpubDisplay'
 import { CreatorSocial } from './CreatorSocial'
 
@@ -171,7 +170,6 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           <CreatorSocial />
           {isMobile && (
             <VStack w="full" paddingTop="5px" pb={5}>
-              <MobileMilestoneRecap />
               <HStack w="full">
                 <ContributeButton flex={1} />
                 <SubscribeButton flex={1} projectName={project.name} projectTitle={project.title} />
