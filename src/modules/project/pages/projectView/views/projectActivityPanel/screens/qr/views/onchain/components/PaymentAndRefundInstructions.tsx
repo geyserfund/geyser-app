@@ -20,7 +20,7 @@ export const PaymentAndRefundInstructions = () => {
   }
 
   return (
-    <FeedbackCard variant="warning" title={t('Critical payment & refund instructions')}>
+    <FeedbackCard variant="warning" title={t('Payment & refund instructions')}>
       <UnorderedList>
         <ListItem>
           <strong>Send the exact payment amount in Satoshis</strong> to ensure successful processing and avoid payment

@@ -13,7 +13,7 @@ export const WaitingForPayment = () => {
         <Text color={'neutral.900'} fontWeight={400}>
           {t('Waiting for payment')}
         </Text>
-        <Tooltip label={t('Scan and pay invoice with Bitcoin.')} placement="top" hasArrow>
+        <Tooltip label={t('Scan and pay invoice with bitcoin.')} placement="top" hasArrow>
           <Box>
             <AiFillQuestionCircle fontSize="20px" />
           </Box>
