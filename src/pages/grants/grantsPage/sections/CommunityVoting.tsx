@@ -100,9 +100,9 @@ export const CommunityVoting = ({
       <H3 fontSize="18px">{t(title)}</H3>
       {applicants.map(({ project, funding }) => {
         const projectLink = getPath('project', project.name)
-        const currentFunders = project.funders.filter(
-          (funder) => funder && funder.confirmedAt > fundingOpenStartDate && funder.confirmedAt <= fundingOpenEndDate,
-        )
+        // const currentFunders = project.funders.filter(
+        //   (funder) => funder && funder.confirmedAt > fundingOpenStartDate && funder.confirmedAt <= fundingOpenEndDate,
+        // )
         return (
           <CardLayout p={2} key={project.id}>
             <Box display="flex">
@@ -147,7 +147,7 @@ export const CommunityVoting = ({
                 </Box>
               )}
             </Box>
-            {canVote && currentFunders.length > 0 && (
+            {/* {canVote && currentFunders.length > 0 && (
               <Box pl={2} filter="opacity(0.4)">
                 {currentFunders.map(
                   (funder) =>
@@ -169,7 +169,7 @@ export const CommunityVoting = ({
                     ),
                 )}
               </Box>
-            )}
+            )} */}
             {isMobile && renderButton(project)}
           </CardLayout>
         )
