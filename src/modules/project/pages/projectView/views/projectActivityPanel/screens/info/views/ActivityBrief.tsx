@@ -20,12 +20,7 @@ import { SkeletonLayout } from '../../../../../../../../../components/layouts'
 import { UserAvatar } from '../../../../../../../../../components/ui/UserAvatar'
 import { ExternalAccountType } from '../../../../../../../../../pages/auth'
 import { useFollowedProjectsValue } from '../../../../../../../../../pages/auth/state'
-import {
-  FunderWithUserFragment,
-  OrderByOptions,
-  ProjectMilestone,
-  useProjectFundersQuery,
-} from '../../../../../../../../../types'
+import { FunderWithUserFragment, OrderByOptions, useProjectFundersQuery } from '../../../../../../../../../types'
 import { removeProjectAmountException, toInt, useMobileMode, useNotification } from '../../../../../../../../../utils'
 import { useProjectContext } from '../../../../../../../context'
 import { useProjectMilestones } from '../../../../../../../pages/projectView/hooks/useProjectMilestones'
