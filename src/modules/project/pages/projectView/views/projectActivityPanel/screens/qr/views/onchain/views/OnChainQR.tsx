@@ -13,7 +13,7 @@ export const OnChainQR = ({ onChainAddress }: { onChainAddress: string }) => {
   const { onCopy, hasCopied } = useCopyToClipboard(onChainAddress)
 
   return (
-    <VStack flexWrap="wrap" maxWidth="100%" spacing="20px">
+    <VStack flexWrap="wrap" width="100%" spacing="20px">
       <VStack w="full">
         <QRCodeComponent value={onChainAddress} onClick={onCopy} isColored={hasCopied} />
         <WaitingForPayment />

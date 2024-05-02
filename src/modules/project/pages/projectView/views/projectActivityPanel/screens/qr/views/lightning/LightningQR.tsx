@@ -17,13 +17,14 @@ export const LightningQR = ({ lightningInvoice }: LightningQRProps) => {
   const { onCopy, hasCopied } = useCopyToClipboard(lightningInvoice)
 
   return (
-    <VStack flexWrap="wrap" maxWidth="100%" spacing="20px">
+    <VStack flexWrap="wrap" width="100%" spacing="20px">
       <VStack w="full">
         <QRCodeComponent value={lightningInvoice} onClick={onCopy} isColored={hasCopied} />
         <WaitingForPayment />
       </VStack>
 
       <Button
+        size="md"
         leftIcon={hasCopied ? <RiLinkUnlink /> : <FaCopy />}
         onClick={onCopy}
         variant="primary"
