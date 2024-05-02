@@ -22,7 +22,7 @@ interface Props {
 
 export const FundingForm = ({ project, user, onFundingRequested = () => {} }: Props) => {
   const { t } = useTranslation()
-  // const { btcRate } = useBtcContext()
+
   const {
     requestFunding,
     fundForm: { state, setState, validateInputAmount },

@@ -7,11 +7,11 @@ import { ECPairInterface } from 'ecpair'
 import { secp } from './helpers'
 import { generateRandomBytes } from './utils'
 
-export const createMusig = (ourKeys: ECPairInterface, theirPublicKey: Buffer) => {
-  return new Musig(secp, ourKeys, generateRandomBytes(), [
+export const createMusig = (privateKey: ECPairInterface, boltzPublicKey: Buffer) => {
+  return new Musig(secp, privateKey, generateRandomBytes(), [
     // The key of Boltz always comes first
-    theirPublicKey,
-    ourKeys.publicKey,
+    boltzPublicKey,
+    privateKey.publicKey,
   ])
 }
 

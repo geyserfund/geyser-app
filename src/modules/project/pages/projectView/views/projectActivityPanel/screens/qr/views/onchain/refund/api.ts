@@ -4,7 +4,6 @@ import { Musig } from 'boltz-core'
 import { BOLTZ_DOMAIN } from '../../../../../../../../../../../constants'
 
 const swapServiceEndpoint = `https://${BOLTZ_DOMAIN}/v2`
-// const swapServiceEndpoint = `http://localhost:9001/v2`
 
 export type BoltzTransaction = {
   id: string
