@@ -23,7 +23,7 @@ export const useDownloadRefund = () => {
                 <!DOCTYPE html>
                 <body>
                     <img src="${url}">
-                    <h1>${t('ios_imageLong press and select "Save to Photos" to download refund file')}</h1>
+                    <h1>${t('Long press and select "Save to Photos" to download refund file')}</h1>
                 </body>`
           }
         } else {
