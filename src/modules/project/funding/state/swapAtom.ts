@@ -7,7 +7,6 @@ import { keyPairAtom } from './keyPairAtom'
 export type SwapContributionInfo = {
   projectTitle?: Maybe<string>
   reference?: Maybe<string>
-  amount?: number
   bitcoinQuote?: Maybe<BitcoinQuote>
   datetime?: number
 }
@@ -32,6 +31,7 @@ export type SwapData = {
   }
   contributionInfo?: SwapContributionInfo
   fees?: number
+  amount?: number
 }
 
 type SwapDataStructure = { [key: string]: SwapData }

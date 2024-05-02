@@ -1,8 +1,6 @@
-import { ScopeProvider } from 'jotai-scope'
 import React, { createContext, PropsWithChildren, useContext, useEffect } from 'react'
 
 import { useFundingFormState, UseFundingFormStateReturn } from '../../../hooks'
-import { authUserAtom } from '../../../pages/auth/state'
 import { FundingInput, FundingTxFragment, ProjectFragment, WalletLimitsFragment } from '../../../types'
 import { useFundingFlow } from '../funding/hooks/useFundingFlow'
 import { FundingFlowGraphQLError } from '../funding/state'
@@ -32,7 +30,8 @@ export const FundingContext = createContext<FundingContextProps>({} as FundingCo
 
 export const useFundingContext = () => useContext(FundingContext)
 
-export const FundingContextProvider = ({ children, project, limits }: FundingProviderProps) => {
+// Used if the project context is not available
+export const FundingProvider = ({ children, project, limits }: FundingProviderProps) => {
   const fundingFlow = useFundingFlow({ project })
 
   const fundForm = useFundingFormState({
@@ -50,15 +49,6 @@ export const FundingContextProvider = ({ children, project, limits }: FundingPro
 
   return (
     <FundingContext.Provider value={{ ...fundingFlow, project, limits, fundForm }}>{children}</FundingContext.Provider>
-  )
-}
-
-// Used if the project context is not available
-export const FundingProvider = (props: FundingProviderProps) => {
-  return (
-    <ScopeProvider atoms={[authUserAtom]}>
-      <FundingContextProvider {...props} />
-    </ScopeProvider>
   )
 }
 

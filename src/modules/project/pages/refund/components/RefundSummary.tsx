@@ -14,8 +14,7 @@ export const RefundSummary = () => {
     return null
   }
 
-  const { contributionInfo, fees } = refundedSwapData
-  const { amount } = contributionInfo
+  const { contributionInfo, fees, amount } = refundedSwapData
 
   return (
     <FeedbackCard w="full" noIcon noborder bgColor="neutral.50" title={t('Refund summary')}>
@@ -26,18 +25,18 @@ export const RefundSummary = () => {
         </HStack>
       )}
       {contributionInfo?.reference && (
-        <HStack w="full" justifyContent="space-between">
+        <HStack w="full" justifyContent="space-between" flexWrap={'wrap'}>
           <Body2 color="neutral.900">{t('Reference')}:</Body2>
-          <Body1 color="neutral.700">XX...X{contributionInfo?.reference.slice(-10)}</Body1>
+          <Body1 color="neutral.700">{contributionInfo?.reference}</Body1>
         </HStack>
       )}
-      {contributionInfo?.projectTitle && (
+      {amount && (
         <HStack w="full" justifyContent="space-between">
           <Body2 color="neutral.900">{t('Amount contributed')}:</Body2>
           <Body1 color="neutral.700">{commaFormatted(amount)}</Body1>
         </HStack>
       )}
-      {contributionInfo?.projectTitle && (
+      {fees && (
         <HStack w="full" justifyContent="space-between">
           <Body2 color="neutral.900">{t('Refund Transaction Fees')}:</Body2>
           <Body1 color="neutral.700">{commaFormatted(fees)} sats</Body1>

@@ -9,7 +9,7 @@ import { CardLayout } from '../../../../components/layouts'
 import { Body1, Body2, H2 } from '../../../../components/typography'
 import { getPath } from '../../../../constants'
 import { commaFormatted } from '../../../../utils'
-import { currentSwapIdAtom, swapAtom, SwapContributionInfo } from '../../funding/state'
+import { currentSwapIdAtom, swapAtom, SwapContributionInfo, useRefundFileValue } from '../../funding/state'
 import { RefundPolicyNote } from '../projectView/views/projectActivityPanel/screens/qr/components'
 import { ClaimRefundForm } from '../projectView/views/projectActivityPanel/screens/qr/views/onchain/components/ClaimRefundForm'
 
@@ -20,6 +20,7 @@ export const RefundPage = () => {
 
   const [swapData] = useAtom(swapAtom)
   const [currentSwapId, setCurrentSwapId] = useAtom(currentSwapIdAtom)
+  const refundFile = useRefundFileValue()
 
   const handleSuccess = () => {
     navigate(getPath('refundInitiated'))
@@ -37,7 +38,8 @@ export const RefundPage = () => {
           <VStack w="full" alignItems="start" overflowX="hidden">
             <Body1>{t('Select refund file')}:</Body1>
             {swapArray.map((swapItem) => {
-              const { datetime, amount, projectTitle } = swapItem.contributionInfo || ({} as SwapContributionInfo)
+              const { amount } = swapItem
+              const { datetime, projectTitle } = swapItem.contributionInfo || ({} as SwapContributionInfo)
 
               if (!datetime && !amount && !projectTitle) {
                 return null
@@ -76,7 +78,7 @@ export const RefundPage = () => {
           </VStack>
         )}
 
-        <ClaimRefundForm onSuccess={handleSuccess} showUpload={!hasRefundFile} />
+        <ClaimRefundForm onSuccess={handleSuccess} showUpload={!hasRefundFile} refundFile={refundFile} />
         <CardLayout spacing="10px">
           <Body2>
             {t(

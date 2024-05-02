@@ -210,7 +210,7 @@ export const useFundingFormState = ({ rewards, rewardCurrency, walletLimits }: U
 
       if (!isException && walletLimits?.max && getTotalAmount('sats', name) >= walletLimits.max) {
         return {
-          title: `Payment above ${walletLimits.max} is not allowed at the moment.`,
+          title: `Amount above the project wallet limit: ${commaFormatted(walletLimits.max)} sats.`,
           description: 'Please update the amount, or contact us for donating a higher amount.',
           valid: false,
         }
@@ -218,7 +218,7 @@ export const useFundingFormState = ({ rewards, rewardCurrency, walletLimits }: U
 
       if (walletLimits?.min && getTotalAmount('sats', name) < walletLimits.min) {
         return {
-          title: 'The payment minimum is 1 satoshi.',
+          title: `The payment minimum is ${walletLimits.min} satoshi.`,
           description: 'Please update the amount.',
           valid: false,
         }

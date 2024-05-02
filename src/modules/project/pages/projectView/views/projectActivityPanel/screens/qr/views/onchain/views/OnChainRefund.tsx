@@ -3,16 +3,16 @@ import { useTranslation } from 'react-i18next'
 
 import { Body2 } from '../../../../../../../../../../../components/typography'
 import { commaFormatted } from '../../../../../../../../../../../utils'
-import { useRefundFileValue } from '../../../../../../../../../funding/state'
+import { SwapData } from '../../../../../../../../../funding/state'
 import { DownloadRefund, FeedbackCard, TransactionFailed } from '../components'
 import { ClaimRefundForm } from '../components/ClaimRefundForm'
 import { useSwapTransaction } from '../hooks/useSwapTransaction'
 import { useSetOnChainErrorValue } from '../states'
 import { extractValuesFromError } from '../utils/parseError'
 
-export const OnChainRefund = () => {
+export const OnChainRefund = ({ refundFile }: { refundFile?: SwapData }) => {
   const { t } = useTranslation()
-  const refundFile = useRefundFileValue()
+
   const onChainError = useSetOnChainErrorValue()
 
   useSwapTransaction()
@@ -40,7 +40,7 @@ export const OnChainRefund = () => {
         return onChainError.failureReason || 'Transaction failed'
     }
   }, [onChainError])
-
+  console.log('checking refundFile inside onChainRefund', refundFile)
   return (
     <>
       <TransactionFailed error={errorMessage} />
@@ -49,7 +49,7 @@ export const OnChainRefund = () => {
           {t('You can get your payment refund now or at a later point in time with the use of the refund file.')}
         </Body2>
 
-        <ClaimRefundForm showUpload={!refundFile} />
+        <ClaimRefundForm refundFile={refundFile} showUpload={!refundFile} />
       </FeedbackCard>
       <DownloadRefund />
     </>

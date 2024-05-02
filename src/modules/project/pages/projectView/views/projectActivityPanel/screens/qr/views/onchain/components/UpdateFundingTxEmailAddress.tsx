@@ -10,7 +10,7 @@ import * as yup from 'yup'
 import { Body2 } from '../../../../../../../../../../../components/typography'
 import { TextField } from '../../../../../../../../../../../forms/components/TextField'
 import { useFundingTxEmailUpdateMutation } from '../../../../../../../../../../../types'
-import { useNotification } from '../../../../../../../../../../../utils'
+import { useCustomTheme, useNotification } from '../../../../../../../../../../../utils'
 import { useFundingContext } from '../../../../../../../../../context'
 import { FeedbackCard } from './FeedbackCard'
 
@@ -26,6 +26,8 @@ export const UpdateFundingTxEmailAddress = () => {
     fundForm: { state },
   } = useFundingContext()
   const { toast } = useNotification()
+  const { colors } = useCustomTheme()
+
   const [updatedEmail, setUpdatedEmail] = useState(state.email)
 
   const [updateEmail, { loading }] = useFundingTxEmailUpdateMutation({
@@ -79,7 +81,7 @@ export const UpdateFundingTxEmailAddress = () => {
           bgColor={'primary.500'}
           borderRadius="4px"
         >
-          <TbMailFilled size="14px" color={'black'} />
+          <TbMailFilled size="14px" color={colors.neutral[1000]} />
         </HStack>
       }
     >

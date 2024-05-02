@@ -30,6 +30,7 @@ export const TransactionProcessing = ({ title, subTitle, buttonUrl, ...rest }: T
           borderColor="neutral.900"
           w="full"
           isDisabled={!buttonUrl}
+          textDecoration="none"
         >
           {t('View transaction on explorer')}
         </Button>

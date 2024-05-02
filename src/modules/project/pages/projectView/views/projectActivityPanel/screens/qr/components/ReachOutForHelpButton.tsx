@@ -9,12 +9,12 @@ export const ReachOutForHelpButton = (props: ButtonProps) => {
   return (
     <Button
       as={Link}
-      textDecoration="none"
       href={GeyserTelegramUrl}
       target="_blank"
       variant="outline"
       width="100%"
       leftIcon={<FaTelegramPlane aria-label="telegram" fontSize="20px" />}
+      textDecoration="none"
       {...props}
     >
       {t('Reach out for help')}

@@ -1,4 +1,6 @@
-import { useFundingStage, useRefundFileAdd, useRefundFileValue } from '../../../../../../../../funding/state'
+import { useState } from 'react'
+
+import { SwapData, useFundingStage, useRefundFileAdd, useRefundFileValue } from '../../../../../../../../funding/state'
 import { SwapStatusUpdate, useTransactionStatusUpdate } from './hooks/useTransactionStatusUpdate'
 import { OnChainErrorStatuses, useSetOnChainErrorAtom } from './states'
 import {
@@ -19,6 +21,7 @@ export const OnchainBoltz = ({ onChainAddress }: { onChainAddress: string }) => 
   const onChainStatus = useOnChainStatusValue()
   const refundFile = useRefundFileValue()
   const addRefundFile = useRefundFileAdd()
+  const [currentRefundFile, setCurrentRefundFile] = useState<SwapData | undefined>()
 
   const { setNextFundingStage } = useFundingStage()
   const setOnChainError = useSetOnChainErrorAtom()
@@ -33,11 +36,13 @@ export const OnchainBoltz = ({ onChainAddress }: { onChainAddress: string }) => 
 
     if (value.status === OnChainErrorStatuses.LOCKUP_FAILED && refundFile) {
       const values = extractValuesFromError(value.failureReason || '')
+
       if (values.locked) {
         const newRefundFile = {
           ...refundFile,
-          contributionInfo: { ...refundFile?.contributionInfo, amount: values.locked },
+          amount: values.locked,
         }
+        setCurrentRefundFile(newRefundFile)
         addRefundFile(newRefundFile)
       }
     }
@@ -63,7 +68,7 @@ export const OnchainBoltz = ({ onChainAddress }: { onChainAddress: string }) => 
     case OnChainStatus.processing:
       return <OnChainProcessing />
     case OnChainStatus.refund:
-      return <OnChainRefund />
+      return <OnChainRefund refundFile={currentRefundFile} />
     default:
       return null
   }

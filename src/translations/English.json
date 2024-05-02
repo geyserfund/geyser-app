@@ -981,5 +981,18 @@
    "Making a difference, one step at a time. Join our mission on @geyserfund and help us leave a lasting impact. Your support makes all the difference: {{projectLink}} #MakeADifference": "🌍 Making a difference, one step at a time. Join our mission on @geyserfund and help us leave a lasting impact. Your support makes all the difference: {{projectLink}} #MakeADifference",
    "By keeping your project in 'draft', it will remain hidden until you decide to launch it":"By keeping your project in 'draft', it will remain hidden until you decide to launch it",
    "Alternatively, you can explore other Lightning address providers and their respective limits through this link: <1>List of Lightning Wallets</1>":"Alternatively, you can explore other Lightning address providers and their respective limits through this link: <1>List of Lightning Wallets</1>",
-   "We're sorry, but your transaction cannot be completed. The project's wallet you are trying to fund has reached its maximum limit and cannot receive more than {{amount}} Sats at this time.":"We're sorry, but your transaction cannot be completed. The project's wallet you are trying to fund has reached its maximum limit and cannot receive more than {{amount}} Sats at this time."
+   "We're sorry, but your transaction cannot be completed. The project's wallet you are trying to fund has reached its maximum limit and cannot receive more than {{amount}} Sats at this time.":"We're sorry, but your transaction cannot be completed. The project's wallet you are trying to fund has reached its maximum limit and cannot receive more than {{amount}} Sats at this time.",
+   "Scan and pay invoice with bitcoin.":"Scan and pay invoice with bitcoin.",
+   "Download and securely store your Refund File.":"Download and securely store your Refund File.",
+   "If you did so, and you have determined that you do not wish to proceed with a refund at this moment, it is completely safe for you to close this window":"If you did so, and you have determined that you do not wish to proceed with a refund at this moment, it is completely safe for you to close this window",
+   "Do not close this window":"Do not close this window",
+   "The Refund file is safe to delete, as your transaction has been successfully processed.":"The Refund file is safe to delete, as your transaction has been successfully processed.",
+   "Refund Transaction Fees":"Refund Transaction Fees",
+   "Amount contributed":"Amount contributed",
+   "Contribution to":"Contribution to",
+   "Refund summary":"Refund summary",
+   "Total Refunded":"Total Refunded",
+   "We apologize for any inconvenience caused.":"We apologize for any inconvenience caused."
+
+
 }
