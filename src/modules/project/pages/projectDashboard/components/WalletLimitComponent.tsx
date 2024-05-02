@@ -31,18 +31,22 @@ export const WalletLimitComponent = ({ limit }: { limit: Limits }) => {
         )}
       </Body2>
       <UnorderedList>
-        <ListItem as={Body2}>
-          {t('Reaching out to your wallet provider, as they might provide an option to increase these limits.')}
+        <ListItem>
+          <Body2>
+            {t('Reaching out to your wallet provider, as they might provide an option to increase these limits.')}
+          </Body2>
         </ListItem>
-        <ListItem as={Body2}>
-          <Trans i18nKey="Alternatively, you can explore other Lightning address providers and their respective limits through this link: <1>List of Lightning Wallets</1>">
-            {
-              'Alternatively, you can explore other Lightning address providers and their respective limits through this link: '
-            }
-            <Link href={GeyserLightningWalletGuideLink} isExternal>
-              List of Lightning Wallets
-            </Link>
-          </Trans>
+        <ListItem>
+          <Body2>
+            <Trans i18nKey="Alternatively, you can explore other Lightning address providers and their respective limits through this link: <1>List of Lightning Wallets</1>">
+              {
+                'Alternatively, you can explore other Lightning address providers and their respective limits through this link: '
+              }
+              <Link href={GeyserLightningWalletGuideLink} isExternal>
+                List of Lightning Wallets
+              </Link>
+            </Trans>
+          </Body2>
         </ListItem>
       </UnorderedList>
     </FeedbackCard>
