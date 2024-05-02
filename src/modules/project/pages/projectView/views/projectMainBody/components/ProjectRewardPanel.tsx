@@ -10,7 +10,7 @@ import { PathName } from '../../../../../../../constants'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../../../../types'
 import { ProjectStatus } from '../../../../../../../types'
 import { isActive, toInt } from '../../../../../../../utils'
-import { MobileViews, useProjectContext } from '../../../../../context'
+import { MobileViews, useFundingContext, useProjectContext } from '../../../../../context'
 
 type Props = {
   reward: ProjectRewardForCreateUpdateFragment
@@ -20,11 +20,10 @@ type Props = {
 export const ProjectRewardPanel = ({ reward }: Props) => {
   const { t } = useTranslation()
   const location = useLocation()
+  const { project, setMobileView } = useProjectContext()
   const {
-    project,
-    setMobileView,
     fundForm: { updateReward, setState: setFundingFormState },
-  } = useProjectContext()
+  } = useFundingContext()
   const navigate = useNavigate()
 
   const isRewardAvailable = reward.maxClaimable ? reward.maxClaimable - reward.sold > 0 : true

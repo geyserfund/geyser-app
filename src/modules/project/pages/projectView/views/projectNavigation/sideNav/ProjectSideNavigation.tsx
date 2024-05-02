@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react'
 
 import { NavigationBase, NavigationDirection } from '../../../../../../../navigation/sideNavBase/NavigationBase'
-import { ProjectNavigation } from '../components/ProjectNavigation'
+import { ProjectNavigation } from '../ProjectNavigation'
 import { useProjectSideNavAtom } from './projectSideNavAtom'
 
 export const ProjectSideNavigation = ({ children }: PropsWithChildren) => {

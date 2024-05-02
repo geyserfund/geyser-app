@@ -9,7 +9,10 @@ import { AmountInputWithSatoshiToggle } from '../../../../../../../components/mo
 import { Body2 } from '../../../../../../../components/typography'
 import { ButtonComponent, IconButtonComponent, TextInputBox } from '../../../../../../../components/ui'
 import { MilestoneValidations } from '../../../../../../../constants/validations'
-import { MUTATION_DELETE_PROJECT_MILESTONE, MUTATION_UPDATE_PROJECT_MILESTONE } from '../../../../../../../graphql/mutations'
+import {
+  MUTATION_DELETE_PROJECT_MILESTONE,
+  MUTATION_UPDATE_PROJECT_MILESTONE,
+} from '../../../../../../../graphql/mutations'
 import { useBTCConverter } from '../../../../../../../helpers'
 import {
   CreateProjectMilestoneInput,

@@ -21,10 +21,11 @@ const useStyles = createUseStyles({
 })
 
 const renderDateValue = (value: Date | null | undefined) => {
-  if(value) {
-    return new Date(value).toLocaleString('en-us',{month:'short', year:'numeric'});
+  if (value) {
+    return new Date(value).toLocaleString('en-us', { month: 'short', year: 'numeric' })
   }
-  return '';
+
+  return ''
 }
 
 const ButtonDateInput = forwardRef<
@@ -32,12 +33,19 @@ const ButtonDateInput = forwardRef<
   Pick<ButtonProps, 'onClick'> & Pick<ICalendarButton, 'value' | 'children' | 'showMonthYearPicker'>
 >(({ value, onClick, children, showMonthYearPicker, ...props }, ref) => (
   <Button variant="secondary" width="100%" ref={ref} onClick={onClick} {...props}>
-    <Text>{showMonthYearPicker ? (renderDateValue(value)) : (value?.toString() || children)}</Text>
+    <Text>{showMonthYearPicker ? renderDateValue(value) : value?.toString() || children}</Text>
   </Button>
 ))
 ButtonDateInput.displayName = 'ButtonDateInput'
 
-export const CalendarButton = ({ children, value, onChange, containerProps, showMonthYearPicker, ...buttonProps }: ICalendarButton) => {
+export const CalendarButton = ({
+  children,
+  value,
+  onChange,
+  containerProps,
+  showMonthYearPicker,
+  ...buttonProps
+}: ICalendarButton) => {
   const classes = useStyles()
 
   const currentDate = DateTime.now().plus({ days: 7 })

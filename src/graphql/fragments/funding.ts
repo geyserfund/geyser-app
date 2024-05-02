@@ -78,6 +78,11 @@ export const FRAGMENT_FUNDING_TX = gql`
     method
     projectId
     creatorEmail
+    createdAt
+    bitcoinQuote {
+      quote
+      quoteCurrency
+    }
     funder {
       id
       amountFunded

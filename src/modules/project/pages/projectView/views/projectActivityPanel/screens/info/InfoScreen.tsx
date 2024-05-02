@@ -28,7 +28,7 @@ export const InfoScreen = () => {
       spacing={4}
       width="100%"
       height="100%"
-      overflowY="hidden"
+      overflow="hidden"
       position="relative"
     >
       <ActivityBrief px={standardPadding} />

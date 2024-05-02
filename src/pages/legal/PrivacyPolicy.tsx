@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { ListItem, UnorderedList, VStack } from '@chakra-ui/react'
 
 import { AppFooter } from '../../components/molecules'

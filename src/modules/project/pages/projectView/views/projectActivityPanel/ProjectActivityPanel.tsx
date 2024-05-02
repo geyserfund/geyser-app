@@ -19,6 +19,7 @@ import { toInt, useCustomTheme, useMobileMode } from '../../../../../../utils'
 import { MobileViews, useProjectContext } from '../../../../context'
 import { useFundingContext } from '../../../../context/FundingProvider'
 import { FundingStages, useFundingStage } from '../../../../funding/state'
+import { standardProjectPageSideMargin } from '../../constants'
 import { FundingFormScreen, InfoScreen, InfoScreenSkeleton, QRScreen, SuccessScreen } from './screens'
 import { useStyles } from './styles'
 
@@ -34,11 +35,11 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   const { btcRate } = useBtcContext()
   const isMobile = useMobileMode()
 
-  const { mobileView, setMobileView, project, fundForm } = useProjectContext()
+  const { mobileView, setMobileView, project } = useProjectContext()
+  const { resetFundingFlow, requestFunding, fundForm } = useFundingContext()
 
   const { state: formState, setState: setFormState, resetForm, hasSelectedRewards } = fundForm
 
-  const { resetFundingFlow, requestFunding } = useFundingContext()
   const { fundingStage, setFundingStage } = useFundingStage()
 
   const { loginOnOpen } = useAuthModal()
@@ -69,10 +70,6 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
     setMobileView(MobileViews.contribution)
     resetFundingFlow()
     resetForm()
-  }
-
-  const handleQRCloseButton = () => {
-    setFundingStage(FundingStages.form)
   }
 
   const formatFundingInput = (state: IFundForm) => {
@@ -140,7 +137,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
           />
         )
       case FundingStages.started:
-        return <QRScreen state={formState} project={project} handleCloseButton={handleQRCloseButton} />
+        return <QRScreen project={project} onCloseClick={handleCloseButton} />
       case FundingStages.completed:
         return <SuccessScreen onCloseClick={handleCloseButton} />
 
@@ -153,18 +150,18 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
     <Box
       className={classNames(classes.container)}
       flex={2}
-      maxWidth={isMobile ? 'auto' : '450px'}
+      maxWidth={isMobile ? 'auto' : '490px'}
       width={isMobile ? '100%' : undefined}
       flexDirection="column"
       justifyContent="flex-start"
       alignItems="center"
       backgroundColor="neutral.0"
-      marginTop={isMobile ? '0px' : '20px'}
-      height="calc(100% - 20px)"
-      borderTopLeftRadius={isMobile ? 'initial' : '8px'}
+      marginY={{ base: '0px', lg: '20px' }}
+      mr={standardProjectPageSideMargin}
+      height={'calc(100% - 40px)'}
+      borderRadius={isMobile ? 'initial' : '8px'}
       overflowX="hidden"
-      borderTop={{ base: 'none', lg: `2px solid ${colors.neutral[200]}` }}
-      borderLeft={{ base: 'none', lg: `2px solid ${colors.neutral[200]}` }}
+      border={{ base: 'none', lg: `2px solid ${colors.neutral[200]}` }}
     >
       {renderPanelContent()}
     </Box>

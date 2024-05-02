@@ -5,8 +5,8 @@ import { CardLayout } from '../../../../components/layouts'
 import { Body1, Body2 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
-import { ProjectForLandingPageFragment } from '../../../../types'
 import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
+import { ProjectForLandingPageFragment } from '../../../../types'
 import { LeaderboardFundingStats } from '.'
 
 interface LeaderboardFeatureProjectProps extends StackProps {

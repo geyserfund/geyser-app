@@ -1,5 +1,2 @@
-export * from './ContributionInfoBox'
-export * from './ContributionShippingBox'
-export * from './DownloadInvoice'
 export * from './DownloadInvoicePDF'
 export * from './SuccessImageComponent'

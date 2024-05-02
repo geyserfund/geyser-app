@@ -28,7 +28,14 @@ import { FormStateError } from '../../../interfaces'
 import { FundingProvider, useFundingContext } from '../../../modules/project/context/FundingProvider'
 import { FundingStages, useFundingStage } from '../../../modules/project/funding/state'
 import { QRCodeSection } from '../../../modules/project/pages/projectView/views/projectActivityPanel/screens'
-import { FundingInput, FundingResourceType, USDCents, useProjectByNameOrIdQuery } from '../../../types'
+import {
+  FundingInput,
+  FundingResourceType,
+  ProjectByNameOrIdQuery,
+  USDCents,
+  useProjectByNameOrIdQuery,
+  useWalletLimitQuery,
+} from '../../../types'
 import { toInt, useNotification } from '../../../utils'
 import { GRANTS_PROJECT_NAME } from '../constants'
 
@@ -51,10 +58,10 @@ export const defaultGrantContribution = {
 }
 
 interface Props {
-  grantProjectName?: string
+  grantsData?: ProjectByNameOrIdQuery
 }
 
-export const GrantsContributeModalContent = ({ grantProjectName }: Props) => {
+export const GrantsContributeModalContent = ({ grantsData }: Props) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
   const { user } = useAuthContext()
@@ -67,26 +74,6 @@ export const GrantsContributeModalContent = ({ grantProjectName }: Props) => {
   const { state, setState, setTarget, setValue } = useFormState<GrantContributeInput>(defaultGrantContribution)
 
   const [formError, setFormError] = useState<FormStateError<GrantContributeInput>>()
-
-  const { data: grantsData } = useProjectByNameOrIdQuery({
-    variables: { where: { name: grantProjectName || GRANTS_PROJECT_NAME } },
-    onCompleted(data) {
-      if (!data?.projectGet?.id) {
-        toast({
-          status: 'error',
-          title: 'Failed to fetch grants project.',
-          description: 'Please refresh the page and try again.',
-        })
-      }
-    },
-    onError() {
-      toast({
-        status: 'error',
-        title: 'Failed to fetch grants project.',
-        description: 'Please refresh the page and try again.',
-      })
-    },
-  })
 
   const { fundingStage, setNextFundingStage } = useFundingStage()
 
@@ -277,7 +264,7 @@ export const GrantsContributeModalContent = ({ grantProjectName }: Props) => {
     )
   }
 
-  const qrSection = () => <QRCodeSection />
+  const qrSection = () => <QRCodeSection onCloseClick={handleClose} />
 
   const renderModalBody = () => {
     switch (fundingStage) {
@@ -318,10 +305,39 @@ export const GrantsContributeModalContent = ({ grantProjectName }: Props) => {
   )
 }
 
-export const GrantsContributeModal = ({ grantProjectName }: Props) => {
+export const GrantsContributeModal = ({ grantProjectName }: { grantProjectName?: string }) => {
+  const { toast } = useNotification()
+
+  const { data: grantsData } = useProjectByNameOrIdQuery({
+    variables: { where: { name: grantProjectName || GRANTS_PROJECT_NAME } },
+    onCompleted(data) {
+      if (!data?.projectGet?.id) {
+        toast({
+          status: 'error',
+          title: 'Failed to fetch grants project.',
+          description: 'Please refresh the page and try again.',
+        })
+      }
+    },
+    onError() {
+      toast({
+        status: 'error',
+        title: 'Failed to fetch grants project.',
+        description: 'Please refresh the page and try again.',
+      })
+    },
+  })
+  const { data } = useWalletLimitQuery({
+    variables: {
+      getWalletId: grantsData?.projectGet?.wallets[0]?.id,
+    },
+    skip: !grantsData?.projectGet || !grantsData?.projectGet.wallets[0] || !grantsData?.projectGet.wallets[0].id,
+  })
+  const limits = data?.getWallet.limits
+
   return (
-    <FundingProvider>
-      <GrantsContributeModalContent grantProjectName={grantProjectName} />
+    <FundingProvider project={grantsData?.projectGet} limits={limits}>
+      <GrantsContributeModalContent grantsData={grantsData} />
     </FundingProvider>
   )
 }

@@ -7,7 +7,7 @@ import Loader from '../../components/ui/Loader'
 import { Head } from '../../config'
 import { getPath, ProjectEntryThumbnailPlaceholderUrl } from '../../constants'
 import { ProjectProvider, useProjectContext } from '../../modules/project/context'
-import { FundingProvider } from '../../modules/project/context/FundingProvider'
+import { FundingProviderWithProjectContext } from '../../modules/project/context/FundingProvider'
 import { FundingStages, useFundingStage } from '../../modules/project/funding/state/fundingStagesAtom'
 import { ProjectActivityPanel } from '../../modules/project/pages/projectView/views/projectActivityPanel'
 import { ProjectMobileBottomNavigation } from '../../modules/project/pages/projectView/views/projectNavigation/components/ProjectMobileBottomNavigation'
@@ -45,9 +45,9 @@ export const EntryPage = () => {
 
   return (
     <ProjectProvider projectId={Number(entry.project?.id)}>
-      <FundingProvider>
+      <FundingProviderWithProjectContext>
         <EntryViewWrapper loading={loading} error={error} entry={entry} />
-      </FundingProvider>
+      </FundingProviderWithProjectContext>
     </ProjectProvider>
   )
 }

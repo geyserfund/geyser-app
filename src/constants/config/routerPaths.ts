@@ -22,6 +22,9 @@ export enum PathName {
   projectCreateReward = 'create-reward',
   projectEditReward = 'edit-reward',
 
+  refund = 'refund',
+  refundInitiated = 'initiated',
+
   launchProject = 'launch',
 
   userProfile = 'profile',
@@ -79,6 +82,9 @@ const pathsMap = {
   notAuthorized: () => `/${PathName.notAuthorized}`,
   projectNotFound: () => `/${PathName.projectNotFound}`,
   _deprecatedPathForProject: (projectName: string) => `/${PathName._deprecatedPathNameForProject}/${projectName}`,
+
+  refundInitiated: () => `/${PathName.refund}/${PathName.refundInitiated}`,
+  refund: () => `/${PathName.refund}`,
 
   project: (projectName: string) => `/${PathName.project}/${projectName}`,
   projectInsights: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectInsights}`,

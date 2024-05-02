@@ -9,6 +9,9 @@ export const MUTATION_FUND = gql`
       fundingTx {
         ...FundingTx
       }
+      swap {
+        json
+      }
     }
   }
 `
@@ -27,6 +30,14 @@ export const MUTATION_FUNDING_INVOICE_CANCEL = gql`
     fundingInvoiceCancel(invoiceId: $invoiceId) {
       id
       success
+    }
+  }
+`
+export const MUTATION_FUNDING_EMAIL_UPDATE = gql`
+  mutation FundingTxEmailUpdate($input: FundingTxEmailUpdateInput) {
+    fundingTxEmailUpdate(input: $input) {
+      id
+      email
     }
   }
 `

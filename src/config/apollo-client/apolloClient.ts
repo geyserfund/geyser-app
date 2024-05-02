@@ -36,7 +36,7 @@ const httpLink = createHttpLink({
   credentials: 'include',
 })
 
-const prefix = __development__ ? 'ws' : 'wss'
+const prefix = 'wss'
 
 let restartRequestedBeforeConnected = false
 let gracefullyRestart = () => {
@@ -44,7 +44,7 @@ let gracefullyRestart = () => {
 }
 
 let activeSocket: WebSocket | null = null
-let timedOut = 0
+let timedOut: any = 0
 
 const closeSocket = (socket: WebSocket | null) => {
   if (socket?.readyState === WebSocket?.OPEN) {

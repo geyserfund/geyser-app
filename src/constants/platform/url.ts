@@ -146,7 +146,7 @@ export const LogoNameBrand = 'https://storage.googleapis.com/geyser-projects-med
 export const LogoNameDark = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-dark.svg'
 export const LogoNameNostr = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-nostr.svg'
 
-// Geyser Notion Links
+// Geyser Guide Links
 
 export const GrantsFAQUrl = 'https://guide.geyser.fund/geyser-docs/product-features/geyser-grants'
 export const LearnAboutCrowdfundingUrl =
@@ -164,6 +164,14 @@ export const GeyserEmailVerificationDocUrl =
 
 export const GeyserRewardsGuideLink =
   'https://guide.geyser.fund/geyser-docs/guides/step-by-step-tutorials/how-to-leverage-the-power-of-rewards'
+
+export const GeyserLightningWalletGuideLink = 'https://guide.geyser.fund/geyser-docs/resources/lightning-wallets'
+
+export const GeyserOnChainGuideUrl =
+  'https://guide.geyser.fund/geyser-docs/product-features/getting-started/how-onchain-contributions-work'
+
+export const GeyserOnChainFeesGuideUrl =
+  'https://guide.geyser.fund/geyser-docs/product-features/getting-started/how-onchain-contributions-work#fees-for-onchain-donations'
 
 // External website Links
 
@@ -201,6 +209,28 @@ export const MilestonesFlagUrl = 'https://storage.googleapis.com/geyser-projects
 export const NotFoundPageImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/404-page-not-found.png'
 
 export const NotAuthorizedImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/403-not-authorized.png'
+
+export const TransactionFailedImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/emails/transactionFailed.png'
+
+// FUNDING FLOW ERRORS
+
+export const FundingErrorUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/errors/error.png'
+export const FundingErrorWalletmaxUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/errors/walletmax.png'
+export const FundingErrorInactiveProjectUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/errors/inactiveProject.png'
+export const FundingErrorWalletUnreachableUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/errors/walletUnreachable.png'
+export const FundingErrorRewardsOutOfStockUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/errors/rewardsOutOfStock.png'
+export const FundingErrorWalletMinUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/errors/walletMin.png'
+
+// FUNDING FLOW
+
+export const TransactionProcessingUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/transaction-processing.png'
 
 // GRANTS
 

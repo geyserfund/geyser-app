@@ -4,9 +4,9 @@ import { RejectionError } from 'webln'
 
 import { FundingTxFragment } from '../../../../types'
 import { useNotification } from '../../../../utils'
-import { requestWebLNPayment, WEBLN_ENABLE_ERROR } from '../utils/requestWebLNPayment'
 import { weblnErrorAtom } from '../state/errorAtom'
 import { setNextFundingStageAtom } from '../state/fundingStagesAtom'
+import { requestWebLNPayment, WEBLN_ENABLE_ERROR } from '../utils/requestWebLNPayment'
 
 export const useWebLNFlow = () => {
   const { toast } = useNotification()

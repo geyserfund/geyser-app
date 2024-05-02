@@ -30,7 +30,7 @@ export const ProjectWallet = () => {
 
   const { isOpen: emailVerifyOpen, onClose: emailVerifyOnClose, onOpen: emailVerifyOnOpen } = useDisclosure()
 
-  const { project, refetch, updateProject } = useProjectContext()
+  const { project, walletLimits, refetch, updateProject } = useProjectContext()
 
   const projectWallet: Wallet | undefined = useMemo(() => {
     return project?.wallets && project.wallets[0]
@@ -62,6 +62,7 @@ export const ProjectWallet = () => {
     createWalletInput,
     isLightningAddressInValid,
     fee,
+    limits,
   } = useWalletForm({
     defaultConnectionOption: projectWallet
       ? projectWallet.connectionDetails.__typename === WalletConnectDetails.LightningAddressConnectionDetails
@@ -69,6 +70,7 @@ export const ProjectWallet = () => {
         : ConnectionOption.PERSONAL_NODE
       : undefined,
     project,
+    walletLimits,
     isEdit,
     onSubmit: handleNext,
   })
@@ -178,6 +180,7 @@ export const ProjectWallet = () => {
             connectionOption={connectionOption}
             setConnectionOption={setConnectionOption}
             fee={fee}
+            limits={limits}
           />
         )}
       </VStack>

@@ -1,39 +1,63 @@
-import { ScopeProvider } from 'jotai-scope'
-import React, { createContext, PropsWithChildren, useContext } from 'react'
+import React, { createContext, PropsWithChildren, useContext, useEffect } from 'react'
 
-import { authUserAtom } from '../../../pages/auth/state'
-import { FundingInput, FundingTxFragment } from '../../../types'
+import { useFundingFormState, UseFundingFormStateReturn } from '../../../hooks'
+import { FundingInput, FundingTxFragment, ProjectFragment, WalletLimitsFragment } from '../../../types'
 import { useFundingFlow } from '../funding/hooks/useFundingFlow'
+import { FundingFlowGraphQLError } from '../funding/state'
+import { useProjectContext } from './ProjectProvider'
 
 type FundingContextProps = {
-  fundingRequestErrored: boolean
+  fundingRequestErrored: Error | boolean
   fundingRequestLoading: boolean
   requestFunding: (input: FundingInput) => Promise<void>
   retryFundingFlow: () => void
   resetFundingFlow: () => void
   fundingTx: Omit<FundingTxFragment, 'funder'>
-  error: string
+  error?: FundingFlowGraphQLError
   weblnErrored: boolean
   hasWebLN: boolean
+  project?: Partial<ProjectFragment> | null // Partial Project context, for usage inside fundingFlow, Only useful when ProjctProvider is not used
+  limits?: WalletLimitsFragment | null
+  fundForm: UseFundingFormStateReturn
+}
+
+interface FundingProviderProps extends PropsWithChildren {
+  project?: Partial<ProjectFragment> | null
+  limits?: WalletLimitsFragment | null
 }
 
 export const FundingContext = createContext<FundingContextProps>({} as FundingContextProps)
 
 export const useFundingContext = () => useContext(FundingContext)
 
-// This component is used to wrap the children of the FundingProvider
-// It ensures there is a different scope for the atoms used in the funding flow
+// Used if the project context is not available
+export const FundingProvider = ({ children, project, limits }: FundingProviderProps) => {
+  const fundingFlow = useFundingFlow({ project })
 
-export const FundingProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  // To enable access of atoms outside the scope, we need to add the atoms that need to be acessed outside the scope
+  const fundForm = useFundingFormState({
+    rewards: project ? project.rewards : undefined,
+    rewardCurrency: project && project.rewardCurrency ? project.rewardCurrency : undefined,
+    walletLimits: limits?.contribution || ({} as any),
+  })
+
+  useEffect(() => {
+    return () => {
+      fundingFlow.resetFundingFlow()
+      fundForm.resetForm()
+    }
+  }, [])
+
   return (
-    <ScopeProvider atoms={[authUserAtom]}>
-      <FundingContextProvider>{children}</FundingContextProvider>
-    </ScopeProvider>
+    <FundingContext.Provider value={{ ...fundingFlow, project, limits, fundForm }}>{children}</FundingContext.Provider>
   )
 }
 
-export const FundingContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const fundingFlow = useFundingFlow()
-  return <FundingContext.Provider value={{ ...fundingFlow }}>{children}</FundingContext.Provider>
+// Used if the project context is available
+export const FundingProviderWithProjectContext: React.FC<PropsWithChildren> = ({ children }) => {
+  const { project, walletLimits } = useProjectContext()
+  return (
+    <FundingProvider project={project} limits={walletLimits}>
+      {children}
+    </FundingProvider>
+  )
 }

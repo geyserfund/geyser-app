@@ -93,7 +93,7 @@ const RewardItem = ({ reward }: { reward: ProjectRewardForLandingPageFragment })
         </Stack>
         <Stack direction="column" align={'flex-end'} justifyContent={'space-between'}>
           <Text lineHeight={1.4} fontWeight={700} fontSize={14} color="neutral.600">
-            {project.rewardCurrency == RewardCurrency.Usdcent
+            {project.rewardCurrency === RewardCurrency.Usdcent
               ? `$${reward.cost / 100}`
               : `${reward.cost.toLocaleString()} sats`}
           </Text>

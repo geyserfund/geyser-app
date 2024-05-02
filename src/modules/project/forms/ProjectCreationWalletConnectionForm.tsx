@@ -42,11 +42,13 @@ import { WalletConnectionOptionInfoBox } from '../pages/projectCreate/components
 import {
   ConnectionOption,
   LightingWalletForm,
+  Limits,
   LNAddressEvaluationState,
   NodeWalletForm,
   WalletForm,
 } from '../pages/projectCreate/hooks/useWalletForm'
 import { WalletConnectionDetails } from '../pages/projectDashboard/components'
+import { WalletLimitComponent } from '../pages/projectDashboard/components/WalletLimitComponent'
 import { NodeAdditionModal } from './components/NodeAdditionModal'
 
 type Props = {
@@ -57,6 +59,7 @@ type Props = {
   node: NodeWalletForm
   setConnectionOption: (connectionOption: ConnectionOption) => void
   fee: WalletForm['fee']
+  limits: Limits
 }
 
 export const ProjectCreationWalletConnectionForm = ({
@@ -67,6 +70,7 @@ export const ProjectCreationWalletConnectionForm = ({
   node,
   setConnectionOption,
   fee,
+  limits,
 }: Props) => {
   const { t } = useTranslation()
 
@@ -157,13 +161,17 @@ export const ProjectCreationWalletConnectionForm = ({
                 </Trans>
               }
             >
-              <HStack width={'full'} justifyContent={'flex-start'} spacing={'10px'} flexWrap="wrap">
-                <RenderSponsorImage url={StrikeUrl} imageUrl={StrikeLogoUrl} />
-                <RenderSponsorImage url={WalletOfSatoshiLightningAddressURL} imageUrl={WalletOfSatoshiUrl} />
-                <RenderSponsorImage url={BitNobURL} imageUrl={BitnobUrl} />
-                <RenderSponsorImage url={BlinkUrl} imageUrl={BlinkLogoUrl} />
-                <RenderSponsorImage url={AlbyLightningAddressURL} imageUrl={AlbyUrl} />
-              </HStack>
+              {lightningAddress.value && lightningAddress.state === LNAddressEvaluationState.SUCCEEDED ? (
+                <WalletLimitComponent limit={limits} />
+              ) : (
+                <HStack width={'full'} justifyContent={'flex-start'} spacing={'10px'} flexWrap="wrap">
+                  <RenderSponsorImage url={StrikeUrl} imageUrl={StrikeLogoUrl} />
+                  <RenderSponsorImage url={WalletOfSatoshiLightningAddressURL} imageUrl={WalletOfSatoshiUrl} />
+                  <RenderSponsorImage url={BitNobURL} imageUrl={BitnobUrl} />
+                  <RenderSponsorImage url={BlinkUrl} imageUrl={BlinkLogoUrl} />
+                  <RenderSponsorImage url={AlbyLightningAddressURL} imageUrl={AlbyUrl} />
+                </HStack>
+              )}
             </WalletConnectionOptionInfoBox>
           </AccordionPanel>
         </AccordionItem>
