@@ -49,11 +49,9 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
   const { handleSubmit, control } = useForm<{ bitcoinAddress: string }>({
     resolver: yupResolver(schema),
   })
-  console.log('chekcing ClaimRefundForm refund', refundFile)
 
   const onSubmit = useCallback(
     async ({ bitcoinAddress }: { bitcoinAddress: string }) => {
-      console.log('chekcing initiate refund', refundFile)
       const successful = await initiateRefund(bitcoinAddress, refundFile)
       if (successful) {
         toast({

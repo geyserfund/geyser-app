@@ -40,7 +40,7 @@ export const OnChainRefund = ({ refundFile }: { refundFile?: SwapData }) => {
         return onChainError.failureReason || 'Transaction failed'
     }
   }, [onChainError])
-  console.log('checking refundFile inside onChainRefund', refundFile)
+
   return (
     <>
       <TransactionFailed error={errorMessage} />
