@@ -69,7 +69,7 @@ export const ClaimRefundForm = ({ onSuccess, showUpload }: ClaimRefundFormProps)
         <TextField
           name="bitcoinAddress"
           label={t('Enter refund address')}
-          placeholder={t('Enter your Bitcoin address')}
+          placeholder={t('bc1ilyp21…')}
           control={control}
         />
         <Body2 color="neutral.600">{t('Enter Bitcoin on-chain address on which you wish to get a refund.')}</Body2>
