@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Button, Container, VStack } from '@chakra-ui/react'
 import { PropsWithChildren, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -7,6 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Loader from '../../../components/ui/Loader'
 import { Head } from '../../../config'
 import { getPath } from '../../../constants'
+import { useAuthContext } from '../../../context'
 import { GrantApplicant, GrantApplicantStatus, GrantStatusEnum, Maybe } from '../../../types'
 import { useNotification } from '../../../utils'
 import { GrantWinnerAnnouncement, MobileDivider } from '../components'
@@ -17,6 +19,7 @@ import { GrantsRoundTwo } from './GrantsRoundTwo'
 import { GrantContribute, GrantSummary } from './sections'
 import { CommunityVoting, DistributionChart, GrantApply, MoreInfo } from './sections'
 import { CommonBoardMembers } from './sections/CommonBoardMembers'
+import { PendingApplications } from './sections/PendingApplications'
 
 const PageContainer = ({ children, image, title }: PropsWithChildren<{ image?: Maybe<string>; title?: string }>) => {
   return (
@@ -34,6 +37,8 @@ export const GrantPage = () => {
   const navigate = useNavigate()
 
   const { grant, loading, error } = useGrant(grantId)
+
+  const { user } = useAuthContext()
 
   useEffect(() => {
     if (error) {
@@ -53,17 +58,30 @@ export const GrantPage = () => {
     )
   }
 
+  const userProjectIds = new Set(user.ownerOf.map((ownership) => ownership.project?.id))
+
   const applicants: Array<GrantApplicant> =
     grant && grant.applicants
-      ? (grant.applicants.filter((applicant) =>
-          Boolean(
-            applicant &&
-              (grant.status === GrantStatusEnum.Closed
-                ? applicant.status === GrantApplicantStatus.Funded
-                : applicant.status === GrantApplicantStatus.Accepted ||
-                  applicant.status === GrantApplicantStatus.Funded),
-          ),
-        ) as Array<GrantApplicant>)
+      ? (grant.applicants
+          .filter((applicant) =>
+            Boolean(
+              applicant &&
+                (grant.status === GrantStatusEnum.Closed
+                  ? applicant.status === GrantApplicantStatus.Funded
+                  : applicant.status === GrantApplicantStatus.Accepted ||
+                    applicant.status === GrantApplicantStatus.Funded),
+            ),
+          )
+          .sort(
+            (a, b) => Number(userProjectIds.has(b.project.id)) - Number(userProjectIds.has(a.project.id)),
+          ) as Array<GrantApplicant>)
+      : []
+
+  const pendingApplicants: Array<GrantApplicant> =
+    grant && grant.applicants
+      ? grant.applicants
+          .filter((applicant) => applicant.status === GrantApplicantStatus.Pending)
+          .sort((a, b) => Number(userProjectIds.has(b.project.id)) - Number(userProjectIds.has(a.project.id)))
       : []
 
   const fundingOpenStatus = grant.statuses.find((s) => s.status === GrantStatusEnum.FundingOpen)
@@ -110,6 +128,9 @@ export const GrantPage = () => {
   const showGrantApply = grant.status !== GrantStatusEnum.Closed
 
   const showBoardMembers = !GrantHasVoting[grant.name] && grant.boardMembers.length > 0
+  const showApplicationPending =
+    (GrantHasVoting[grant.name] || showBoardMembers) &&
+    (grant.status === GrantStatusEnum.ApplicationsOpen || grant.status === GrantStatusEnum.FundingOpen)
 
   return (
     <PageContainer title={t(grant.title)} image={grant.image}>
@@ -157,6 +178,13 @@ export const GrantPage = () => {
         {showGrantApply && (
           <>
             <GrantApply grant={grant} />
+            <MobileDivider />
+          </>
+        )}
+
+        {showApplicationPending && pendingApplicants.length > 0 && (
+          <>
+            <PendingApplications applicants={pendingApplicants} />
             <MobileDivider />
           </>
         )}

@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next'
 
 import { BoltIcon } from '../../../../../../../../../components/icons'
 import { useFundCalc } from '../../../../../../../../../helpers'
+import { standardPadding } from '../../../../../../../../../styles'
 import { toInt } from '../../../../../../../../../utils'
-import { useProjectContext } from '../../../../../../../context'
+import { useFundingContext, useProjectContext } from '../../../../../../../context'
 import { Badge } from './Badge'
 
 type Props = {
@@ -14,7 +15,8 @@ type Props = {
 
 export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(({ onSubmit }, ref) => {
   const { t } = useTranslation()
-  const { fundForm, project } = useProjectContext()
+  const { project } = useProjectContext()
+  const { fundForm } = useFundingContext()
 
   const { state: formState, hasSelectedRewards } = fundForm
 
@@ -36,15 +38,8 @@ export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(({ on
 
   return (
     <form style={{ width: '100%' }} onSubmit={handleSubmit}>
-      <VStack ref={ref} padding={2} width={'100%'} borderRadius={'md'} spacing={2}>
-        <VStack
-          padding={2}
-          color={'neutral.700'}
-          fontWeight={'medium'}
-          width={'full'}
-          alignItems="flex-start"
-          spacing={0}
-        >
+      <VStack ref={ref} width={'100%'} borderRadius={'md'} p={standardPadding} spacing={2}>
+        <VStack color={'neutral.700'} fontWeight={'medium'} width={'full'} alignItems="flex-start" spacing={0}>
           {formState.donationAmount && formState.donationAmount > 0 && (
             <HStack>
               <Text fontSize="16px" textColor={'neutral.700'} fontWeight={'normal'}>

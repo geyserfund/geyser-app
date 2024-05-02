@@ -104,7 +104,7 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
         <HStack w="full" justifyContent="end">
           <Tooltip w="100%" placement="top" label={copied ? t('copied') : t('copy')}>
             <Button
-              size="md"
+              size="sm"
               w="100%"
               isActive={copied}
               variant="secondary"

@@ -54,6 +54,7 @@ module.exports = {
     'no-unused-vars': 0,
     'capitalized-comments': 0,
     camelcase: 'warn',
+    'no-throw-literal': 0,
     'react/prop-types': 0,
     'react/display-name': 0,
     'no-undef': 0,

@@ -1,3 +1,6 @@
+import { ECPairFactory } from 'ecpair'
+import * as ecc from 'tiny-secp256k1'
+
 import { FundingInput } from '../../../../types'
 import { toInt } from '../../../../utils'
 import { FundingStages, stageList } from '../state/fundingStagesAtom'
@@ -27,3 +30,5 @@ export const validateFundingInput = (input: FundingInput) => {
 
   return { isValid, error }
 }
+
+export const generatePrivatePublicKeyPair = () => ECPairFactory(ecc).makeRandom()

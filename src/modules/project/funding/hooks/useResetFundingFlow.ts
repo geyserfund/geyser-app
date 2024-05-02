@@ -2,9 +2,11 @@ import { useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
 import {
+  currentSwapIdAtom,
   fundingFlowErrorAtom,
   fundingRequestErrorAtom,
   invoiceRefreshErrorAtom,
+  useClearRefundedSwapData,
   useFundingStage,
   useFundingTx,
   weblnErrorAtom,
@@ -20,14 +22,31 @@ export const useResetFundingFlow = () => {
   const setError = useSetAtom(fundingFlowErrorAtom)
   const setWebLNErrored = useSetAtom(weblnErrorAtom)
 
+  const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
+  const setRefundedSwapData = useClearRefundedSwapData()
+
   const resetFundingFlow = useCallback(() => {
     resetFundingStage()
     setFundingRequestErrored(false)
     setInvoiceRefreshErrored(false)
-    setError('')
+    setError(undefined)
     setWebLNErrored(false)
     resetFundingTx()
-  }, [resetFundingStage, setFundingRequestErrored, setInvoiceRefreshErrored, setError, setWebLNErrored, resetFundingTx])
+
+    setCurrentSwapId('')
+
+    setRefundedSwapData()
+  }, [
+    resetFundingStage,
+    setFundingRequestErrored,
+    setInvoiceRefreshErrored,
+    setError,
+    setWebLNErrored,
+    resetFundingTx,
+    setCurrentSwapId,
+
+    setRefundedSwapData,
+  ])
 
   return resetFundingFlow
 }

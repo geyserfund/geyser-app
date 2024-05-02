@@ -23,12 +23,7 @@ export const ProjectCreationRewards = forwardRef<HTMLDivElement>((_, ref) => {
   const largeView = ['xl', '2xl'].includes(breakpoint)
   const { toast } = useNotification()
 
-  const {
-    project,
-    fundForm: { state: fundFormState },
-    updateProject,
-    refetch,
-  } = useProjectContext()
+  const { project, updateProject, refetch } = useProjectContext()
 
   const [selectedReward, setSelectedReward] = useState<ProjectRewardForCreateUpdateFragment>()
   const { isOpen: isRewardDeleteOpen, onClose: onRewardDeleteClose, onOpen: openRewardDelete } = useModal()
@@ -104,13 +99,12 @@ export const ProjectCreationRewards = forwardRef<HTMLDivElement>((_, ref) => {
   const renderRewards = () => {
     if (activeProjectRewards.length > 0) {
       return activeProjectRewards.filter(truthyFilter).map((reward) => {
-        const count = (fundFormState.rewardsByIDAndCount && fundFormState.rewardsByIDAndCount[`${reward.id}`]) || 0
         return (
           <RewardCard
             key={reward.id}
             width="100%"
             reward={reward}
-            count={count}
+            count={0}
             handleEdit={() => handleOnRewardEdit(reward)}
             handleRemove={() => handleOnRewardDelete(reward)}
             isLaunch={true}

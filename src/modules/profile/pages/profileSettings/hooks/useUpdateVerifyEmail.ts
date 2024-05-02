@@ -4,7 +4,12 @@ import { useForm } from 'react-hook-form'
 
 import { useAuthContext } from '../../../../../context'
 import { useModal } from '../../../../../hooks/useModal'
-import { MfaAction, OtpResponseFragment, useSendOtpByEmailMutation, useUserEmailUpdateMutation } from '../../../../../types'
+import {
+  MfaAction,
+  OtpResponseFragment,
+  useSendOtpByEmailMutation,
+  useUserEmailUpdateMutation,
+} from '../../../../../types'
 import { emailValidationSchema, useNotification } from '../../../../../utils'
 
 export const useUpdateVerifyEmail = () => {

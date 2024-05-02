@@ -12,13 +12,14 @@ FROM base AS dependencies
 
 WORKDIR /usr/app
 
-# Install production packages
-COPY package.json yarn.lock ./
-RUN yarn install --production
-RUN cp -R node_modules prod_node_modules
+RUN yarn set version berry
 
-# Install all packages (used for build and testing image in step 4)
-RUN yarn install
+# Install production packages
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn .yarn
+RUN yarn workspaces focus -A --production \
+    && cp -R node_modules prod_node_modules \
+    && yarn install 
 
 
 #####################
@@ -37,7 +38,8 @@ ARG VITE_APP_GIPHY_API_KEY
 ARG VITE_APP_GEYSER_NOSTR_PUBKEY
 ARG VITE_APP_ENV
 ARG VITE_APP_AUTH_SERVICE_ENDPOINT
-RUN /bin/sh -c "printenv > .env && yarn build"
+ARG VITE_APP_BOLTZ_SWAP_DOMAIN
+RUN /bin/sh -c "printenv > .env && NODE_OPTIONS=--max-old-space-size=8192 yarn build"
 RUN rm -rf ./src
 
 ###########################

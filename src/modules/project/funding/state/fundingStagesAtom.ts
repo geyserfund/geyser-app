@@ -1,8 +1,18 @@
 import { atom, useAtom, useSetAtom } from 'jotai'
 import { atomEffect } from 'jotai-effect'
 
-import { findNextFundingStage } from '../utils/helpers'
+import {
+  paymentMethodAtom,
+  PaymentMethods,
+} from '../../pages/projectView/views/projectActivityPanel/screens/qr/states/paymentMethodAtom'
+import {
+  OnChainStatus,
+  onChainStatusAtom,
+} from '../../pages/projectView/views/projectActivityPanel/screens/qr/views/onchain/states/onChainStatus'
+import { findNextFundingStage, generatePrivatePublicKeyPair } from '../utils/helpers'
+import { keyPairAtom } from './keyPairAtom'
 import { pollingFundingTxAtom, subscriptionActiveAtom } from './pollingFundingTx'
+import { currentSwapIdAtom, refundedSwapDataAtom } from './swapAtom'
 
 export enum FundingStages {
   loading = 'loading',
@@ -26,11 +36,26 @@ export const setNextFundingStageAtom = atom(null, (get, set) => {
   set(fundingStageAtom, nextState)
 })
 
+// This effect is used to reset the subscriptionActiveAtom, pollingFundingTxAtom, paymentMethodAtom, and onChainStatusAtom
 export const fundingStageAtomEffect = atomEffect((get, set) => {
   const currentState = get(fundingStageAtom)
+
   if (currentState !== FundingStages.started) {
+    // reset subscription & polling
     set(subscriptionActiveAtom, false)
     set(pollingFundingTxAtom, 0)
+
+    // reset subscription method
+    set(paymentMethodAtom, PaymentMethods.lightning)
+    set(onChainStatusAtom, OnChainStatus.prompt)
+
+    // reset key pair
+    const keyPair = generatePrivatePublicKeyPair()
+    set(keyPairAtom, keyPair)
+
+    // reset current swap id
+    set(currentSwapIdAtom, '')
+    set(refundedSwapDataAtom, undefined)
   }
 })
 

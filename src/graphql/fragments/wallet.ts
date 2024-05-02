@@ -27,3 +27,19 @@ export const FRAGMENT_PROJECT_WALLET = gql`
     }
   }
 `
+export const FRAGMENT_FRAGMENT_WALLET_LIMIT = gql`
+  fragment WalletLimits on WalletLimits {
+    contribution {
+      min
+      max
+      offChain {
+        min
+        max
+      }
+      onChain {
+        min
+        max
+      }
+    }
+  }
+`

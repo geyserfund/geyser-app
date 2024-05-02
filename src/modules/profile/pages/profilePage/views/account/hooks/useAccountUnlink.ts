@@ -3,8 +3,8 @@ import { useAtom } from 'jotai'
 import { useMemo } from 'react'
 
 import { useAuthContext } from '../../../../../../../context'
-import { Exact, UnlinkExternalAccountMutation, useUnlinkExternalAccountMutation } from '../../../../../../../types'
 import { ExternalAccountType } from '../../../../../../../pages/auth'
+import { Exact, UnlinkExternalAccountMutation, useUnlinkExternalAccountMutation } from '../../../../../../../types'
 import { userProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
 
 const MIN_ACCOUNTS_TO_REMOVE_ACCOUNT = 2

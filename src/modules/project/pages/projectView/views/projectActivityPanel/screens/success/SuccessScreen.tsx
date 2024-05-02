@@ -1,25 +1,22 @@
 import { useQuery } from '@apollo/client'
-import { Button, CloseButton, VStack } from '@chakra-ui/react'
+import { Box, Button, CloseButton, VStack } from '@chakra-ui/react'
+import { useRef } from 'react'
 import ReactConfetti from 'react-confetti'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import { Body2 } from '../../../../../../../../components/typography'
 import { getPath } from '../../../../../../../../constants'
 import { useAuthContext } from '../../../../../../../../context'
 import { QUERY_USER_BADGES } from '../../../../../../../../graphql/queries/badges'
-import { useFundCalc } from '../../../../../../../../helpers'
-import { lightModeColors } from '../../../../../../../../styles'
-import { Satoshis } from '../../../../../../../../types'
-import { Project, UserBadge } from '../../../../../../../../types'
+import { lightModeColors, standardPadding } from '../../../../../../../../styles'
+import { UserBadge } from '../../../../../../../../types'
 import { useProjectContext } from '../../../../../../context'
 import { useFundingContext } from '../../../../../../context/FundingProvider'
 import {} from '../../../projectMainBody/components'
-import {
-  ContributionInfoBox,
-  ContributionInfoBoxVersion,
-  ContributionShippingBox,
-  SuccessImageComponent,
-} from './components'
+import { ContributionInfoBox, ContributionInfoBoxVersion, ContributionShippingBox } from '../contributionInfo'
+import { useIsLightingMethodAtom } from '../qr/states/paymentMethodAtom'
+import { SuccessImageComponent } from './components'
 
 type Props = {
   onCloseClick: () => void
@@ -27,16 +24,17 @@ type Props = {
 
 export const SuccessScreen = ({ onCloseClick }: Props) => {
   const { t } = useTranslation()
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const { project } = useProjectContext()
+
+  const isLightning = useIsLightingMethodAtom()
 
   const {
-    project,
-    fundForm: { needsShipping, state: fundingState },
-  } = useProjectContext()
-
-  const { fundingTx } = useFundingContext()
+    fundingTx,
+    fundForm: { needsShipping },
+  } = useFundingContext()
   const { user } = useAuthContext()
-
-  const { getTotalAmount } = useFundCalc(fundingState)
 
   const { data } = useQuery<{ userBadges: UserBadge[] }>(QUERY_USER_BADGES, {
     variables: { input: { where: { fundingTxId: fundingTx.id } } },
@@ -49,6 +47,7 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
 
   return (
     <VStack
+      ref={containerRef}
       paddingX={{
         base: '10px',
         lg: '20px',
@@ -66,7 +65,7 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
       alignItems="center"
       justifyContent="flex-start"
     >
-      <ReactConfetti />
+      <ReactConfetti height={containerRef?.current?.clientHeight || undefined} />
 
       <CloseButton
         borderRadius="50%"
@@ -85,21 +84,17 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
           </Button>
         )}
 
+        {!isLightning && (
+          <Box w="full" bgColor="secondary.blue" borderRadius="8px" padding={standardPadding}>
+            <Body2 color="white">
+              {t('The Refund File is safe to delete, as your transaction has been successfully processed.')}
+            </Body2>
+          </Box>
+        )}
+
         {needsShipping ? <ContributionShippingBox creatorEmail={fundingTx.creatorEmail} /> : null}
 
-        <ContributionInfoBox
-          project={project as Project}
-          formState={fundingState}
-          contributionAmount={getTotalAmount('sats', project?.name) as Satoshis}
-          isFunderAnonymous={fundingState.anonymous}
-          funderUsername={fundingState.funderUsername}
-          funderEmail={fundingState.email}
-          funderAvatarURL={fundingState.funderAvatarURL}
-          version={ContributionInfoBoxVersion.PRIMARY}
-          referenceCode={fundingTx.uuid || ''}
-          fundingTxId={fundingTx.id}
-          showGeyserFee={false}
-        />
+        <ContributionInfoBox version={ContributionInfoBoxVersion.PRIMARY} showGeyserFee={false} />
 
         <Button variant="secondary" size="sm" w="full" onClick={onCloseClick}>
           {t('Back to project')}

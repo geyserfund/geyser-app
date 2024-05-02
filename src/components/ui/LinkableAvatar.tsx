@@ -69,7 +69,7 @@ export const LinkableAvatar = ({
       badgeElements.length &&
       avatarUsername.length + calculateBadgesLength() > (isMedium ? 13 : 21)
     ) {
-      return `${avatarUsername.slice(0, isMedium ? 3 : 6)}...`
+      return `${avatarUsername.slice(0, isMedium ? 9 : 12)}...`
     }
 
     return avatarUsername

@@ -1,15 +1,15 @@
 import { ApolloError } from '@apollo/client'
 import { useAtom } from 'jotai'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
-import { ApolloErrors, fundingStages } from '../../../../constants'
-import { FundingInput, useFundingTxWithInvoiceStatusQuery, useFundMutation } from '../../../../types'
+import { FundingInput, ProjectFragment, useFundingTxWithInvoiceStatusQuery, useFundMutation } from '../../../../types'
 import { toInt, useNotification } from '../../../../utils'
+import { useParseResponseToSwapAtom, useSetKeyPairAtom } from '../state'
 import { fundingFlowErrorAtom, fundingRequestErrorAtom, weblnErrorAtom } from '../state/errorAtom'
 import { fundingStageAtomEffect, useFundingStage } from '../state/fundingStagesAtom'
 import { useCheckFundingStatus, useFundingTx } from '../state/fundingTxAtom'
 import { useFundPollingAndSubscription } from '../state/pollingFundingTx'
-import { validateFundingInput } from '../utils/helpers'
+import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/helpers'
 import { webln } from '../utils/requestWebLNPayment'
 import { useFundSubscription } from './useFundSubscription'
 import { useResetFundingFlow } from './useResetFundingFlow'
@@ -25,19 +25,25 @@ export type UseFundingFlowReturn = ReturnType<typeof useFundingFlow>
 interface IFundingFlowOptions {
   hasBolt11?: boolean
   hasWebLN?: boolean
+  project?: Partial<ProjectFragment> | null
 }
 
 export const useFundingFlow = (options?: IFundingFlowOptions) => {
-  const { hasBolt11 = true, hasWebLN = true } = options || {
+  const {
+    hasBolt11 = true,
+    hasWebLN = true,
+    project,
+  } = options || {
     hasBolt11: true,
     hasWebLN: true,
   }
 
   const { toast } = useNotification()
 
-  const { fundingStage, setNextFundingStage } = useFundingStage()
+  const { setNextFundingStage } = useFundingStage()
   const startWebLNFlow = useWebLNFlow()
   const resetFundingFlow = useResetFundingFlow()
+  const setKeyPair = useSetKeyPairAtom()
 
   const [error, setError] = useAtom(fundingFlowErrorAtom)
   const [fundingRequestErrored, setFundingRequestErrored] = useAtom(fundingRequestErrorAtom)
@@ -45,6 +51,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const [weblnErrored] = useAtom(weblnErrorAtom)
 
   const [fundingInput, setFundingInput] = useState<FundingInput | null>(null)
+  const parseResponseToSwap = useParseResponseToSwapAtom()
 
   const { fundingTx, updateFundingTx } = useFundingTx()
 
@@ -80,7 +87,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const [fundProject, { loading: fundingRequestLoading }] = useFundMutation({
     onCompleted(data) {
       try {
-        setError('')
+        setError(undefined)
         setFundingRequestErrored(false)
 
         if (!data.fund || !data.fund.fundingTx) {
@@ -88,6 +95,14 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         }
 
         updateFundingTx(data.fund.fundingTx)
+        if (data.fund?.swap?.json) {
+          parseResponseToSwap(data.fund.swap, {
+            projectTitle: project?.title,
+            reference: data.fund.fundingTx.uuid,
+            bitcoinQuote: data.fund.fundingTx.bitcoinQuote,
+            datetime: data.fund.fundingTx.createdAt,
+          })
+        }
 
         if (hasBolt11 && hasWebLN && webln) {
           startWebLNFlow(data.fund.fundingTx)
@@ -113,8 +128,8 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       }
     },
     onError(error: ApolloError) {
-      if (error?.graphQLErrors[0] && error?.graphQLErrors[0]?.extensions?.code === ApolloErrors.BAD_USER_INPUT) {
-        setError(error?.graphQLErrors[0].message)
+      if (error?.graphQLErrors[0] && error?.graphQLErrors[0]?.extensions?.code) {
+        setError(error?.graphQLErrors[0].extensions)
       }
 
       setFundingRequestErrored(true)
@@ -127,12 +142,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       })
     },
   })
-
-  useEffect(() => {
-    if (fundingStage === fundingStages.completed || fundingStage === fundingStages.canceled) {
-      clearPollingAndSubscription()
-    }
-  }, [fundingStage, clearPollingAndSubscription])
 
   const requestFunding = useCallback(
     async (input: FundingInput) => {
@@ -147,12 +156,17 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         return
       }
 
+      const keyPair = generatePrivatePublicKeyPair()
+      setKeyPair(keyPair)
       setNextFundingStage()
+
+      input.swapPublicKey = keyPair.publicKey.toString('hex')
+
       setFundingInput(input)
 
       await fundProject({ variables: { input } })
     },
-    [fundProject, setNextFundingStage, toast],
+    [fundProject, setNextFundingStage, toast, setKeyPair],
   )
 
   const retryFundingFlow = useCallback(() => {

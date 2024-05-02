@@ -74,9 +74,9 @@ interface IDonationInputProps extends InputProps {
 }
 
 export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }: IDonationInputProps) => {
-  const { btcRate } = useBtcContext()
-
   const classes = useStyles()
+
+  const { btcRate } = useBtcContext()
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -111,7 +111,7 @@ export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }
     } else {
       onChange(name, satoshi)
     }
-  }, [satoshi])
+  }, [satoshi, name, onChange])
 
   const handleDefaultAmountButtonClick = (val: number) => {
     setDollar(val)

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { Project, UserMeFragment } from '../../../../types'
+import { Project, UserMeFragment, useWalletLimitQuery } from '../../../../types'
 import { FundingProvider, useFundingContext } from '../../context/FundingProvider'
 import { FundingStages, useFundingStage } from '../../funding/state'
 import { QRCodeSection } from '../projectView/views/projectActivityPanel/screens'
@@ -47,13 +47,19 @@ export const ProjectFundingContent = ({ project, user, onTitleChange = noop }: P
     }
   }, [resetFundingFlow])
 
+  const handleClose = () => {
+    setFundingStage(FundingStages.form)
+    setTitle(null)
+    resetFundingFlow()
+  }
+
   if (!project) {
     return null
   }
 
   switch (fundingStage) {
     case FundingStages.started:
-      return <QRCodeSection />
+      return <QRCodeSection onCloseClick={handleClose} />
     case FundingStages.completed:
       return <FundingComplete formState={formState} />
     default:
@@ -62,8 +68,15 @@ export const ProjectFundingContent = ({ project, user, onTitleChange = noop }: P
 }
 
 export const ProjectFunding = (props: Props) => {
+  const { data } = useWalletLimitQuery({
+    variables: {
+      getWalletId: props.project?.wallets[0]?.id,
+    },
+    skip: !props.project || !props.project.wallets[0] || !props.project.wallets[0].id,
+  })
+  const limits = data?.getWallet.limits
   return (
-    <FundingProvider>
+    <FundingProvider project={props.project} limits={limits}>
       <ProjectFundingContent {...props} />
     </FundingProvider>
   )

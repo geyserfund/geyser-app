@@ -6,8 +6,8 @@ import { BsFillHeartFill } from 'react-icons/bs'
 
 import { useAuthContext } from '../../../../../../../context'
 import { useFollowProject } from '../../../../../../../hooks/graphqlState'
-import { Project } from '../../../../../../../types'
 import { useAuthModal } from '../../../../../../../pages/auth/hooks'
+import { Project } from '../../../../../../../types'
 
 interface FollowButtonProps extends ButtonProps {
   project: Pick<Project, 'id' | 'name' | 'title'>

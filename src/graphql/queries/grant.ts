@@ -74,15 +74,6 @@ export const QUERY_GRANT = gql`
           thumbnailImage
           shortDescription
           description
-          funders {
-            id
-            confirmedAt
-            user {
-              id
-              username
-              imageUrl
-            }
-          }
         }
         status
         funding {

@@ -2,6 +2,7 @@ import { Stack, StackProps } from '@chakra-ui/react'
 import { forwardRef } from 'react'
 import { Link, LinkProps } from 'react-router-dom'
 
+import { standardPadding } from '../../styles'
 import { useMobileMode } from '../../utils'
 
 export interface CardLayoutProps extends StackProps, Partial<Pick<LinkProps, 'to'>> {
@@ -25,11 +26,11 @@ export const CardLayout = forwardRef<HTMLDivElement, CardLayoutProps>(
       transition: 'border-color 0.5s',
       boxShadow: 'none',
       as: rest.to ? Link : undefined,
-      borderColor: noborder || (isMobile && noMobileBorder) ? 'transparent' : 'neutral.200',
       _hover: hover ? { cursor: 'pointer', borderColor: 'neutral.400' } : {},
       _active: click ? { borderColor: 'primary.400' } : {},
       _focus: click ? { borderColor: 'primary.400' } : {},
       ...rest,
+      borderColor: noborder || (isMobile && noMobileBorder) ? 'transparent' : rest.borderColor || 'neutral.200',
     }
 
     if (mobileDense && isMobile) {
@@ -41,7 +42,7 @@ export const CardLayout = forwardRef<HTMLDivElement, CardLayoutProps>(
     }
 
     return (
-      <Stack p={5} borderRadius="8px" {...props}>
+      <Stack p={standardPadding} borderRadius="8px" {...props}>
         {children}
       </Stack>
     )

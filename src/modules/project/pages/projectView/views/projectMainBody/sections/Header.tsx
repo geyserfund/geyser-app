@@ -169,7 +169,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
           </HStack>
           <CreatorSocial />
           {isMobile && (
-            <VStack w="full" paddingTop="5px">
+            <VStack w="full" paddingTop="5px" pb={5}>
               <HStack w="full">
                 <ContributeButton flex={1} />
                 <SubscribeButton flex={1} projectName={project.name} projectTitle={project.title} />

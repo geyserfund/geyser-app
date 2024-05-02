@@ -1,9 +1,16 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
 import { AuthContext } from '../context'
-import { useBTCConverter } from '../helpers'
+import { useFundCalc } from '../helpers'
 import { IRewardCount } from '../interfaces'
-import { ProjectRewardForCreateUpdateFragment, RewardCurrency, ShippingDestination } from '../types/generated/graphql'
+import {
+  ProjectRewardForCreateUpdateFragment,
+  RewardCurrency,
+  ShippingDestination,
+  WalletContributionLimits,
+} from '../types/generated/graphql'
+import { commaFormatted, isProjectAnException } from '../utils'
+import { useDebounce } from './useDebounce'
 
 export interface IFundForm {
   donationAmount: number
@@ -18,12 +25,14 @@ export interface IFundForm {
   funderAvatarURL: string
   rewardsByIDAndCount?: { [key: string]: number } | undefined
   rewardCurrency: RewardCurrency
+  totalAmount?: number
   step: 'contribution' | 'info'
 }
 
 type UseFundStateProps = {
   rewards?: ProjectRewardForCreateUpdateFragment[]
   rewardCurrency?: RewardCurrency
+  walletLimits?: WalletContributionLimits
 }
 
 export type UpdateReward = (_: IRewardCount) => void
@@ -38,11 +47,12 @@ export interface IFundFormState {
 
 export type UseFundingFormStateReturn = ReturnType<typeof useFundingFormState>
 
-export const useFundingFormState = ({ rewards, rewardCurrency }: UseFundStateProps) => {
+export const useFundingFormState = ({ rewards, rewardCurrency, walletLimits }: UseFundStateProps) => {
   const { user, isAnonymous } = useContext(AuthContext)
-  const { getUSDCentsAmount } = useBTCConverter()
 
   const [needsShipping, setNeedsShipping] = useState(false)
+
+  const [amountWarning, setAmountWarning] = useState('')
 
   const initialState: IFundForm = useMemo(
     () => ({
@@ -64,6 +74,36 @@ export const useFundingFormState = ({ rewards, rewardCurrency }: UseFundStatePro
   )
 
   const [state, _setState] = useState<IFundForm>(initialState)
+  const debouncedTotalAmount = useDebounce(state.totalAmount, 200)
+  const { getTotalAmount } = useFundCalc(state)
+
+  useEffect(() => {
+    if (debouncedTotalAmount && walletLimits) {
+      const { onChain } = walletLimits
+
+      if (!debouncedTotalAmount) {
+        setAmountWarning('')
+        return
+      }
+
+      if (onChain?.max && debouncedTotalAmount > onChain.max) {
+        setAmountWarning(
+          `The amount you are trying to send is too high for on-chain payments. Only payments below ${commaFormatted(
+            onChain.max,
+          )} sats can be sent on-chain.`,
+        )
+        return
+      }
+
+      if (onChain?.min && debouncedTotalAmount < onChain.min) {
+        setAmountWarning(
+          `The amount you are trying to send is too low for on-chain payments. Only payments over ${commaFormatted(
+            onChain.min,
+          )} sats can be sent on-chain.`,
+        )
+      }
+    }
+  }, [debouncedTotalAmount, walletLimits])
 
   const setTarget = useCallback((event: any) => {
     const { name, value } = event.target
@@ -71,7 +111,19 @@ export const useFundingFormState = ({ rewards, rewardCurrency }: UseFundStatePro
   }, [])
 
   const setState = useCallback((name: string, value: any) => {
-    _setState((current) => ({ ...current, [name]: value }))
+    if (name === 'donationAmount') {
+      _setState((current) => ({
+        ...current,
+        donationAmount: value,
+        totalAmount: value + current.rewardsCost + current.shippingCost,
+      }))
+      return
+    }
+
+    _setState((current) => ({
+      ...current,
+      [name]: value,
+    }))
   }, [])
 
   useEffect(() => {
@@ -135,11 +187,11 @@ export const useFundingFormState = ({ rewards, rewardCurrency }: UseFundStatePro
           ...current,
           rewardsByIDAndCount: newRewardsCountInfo,
           rewardsCost,
-          totalAmount: rewardsCost + current.donationAmount,
+          totalAmount: rewardsCost + current.donationAmount + current.shippingCost,
         }
       })
     },
-    [getUSDCentsAmount, rewards],
+    [rewards],
   )
 
   const resetForm = useCallback(() => {
@@ -152,6 +204,31 @@ export const useFundingFormState = ({ rewards, rewardCurrency }: UseFundStatePro
     [state.rewardsByIDAndCount],
   )
 
+  const validateInputAmount = useCallback(
+    (name: string) => {
+      const isException = isProjectAnException(name)
+
+      if (!isException && walletLimits?.max && getTotalAmount('sats', name) >= walletLimits.max) {
+        return {
+          title: `Amount above the project wallet limit: ${commaFormatted(walletLimits.max)} sats.`,
+          description: 'Please update the amount, or contact us for donating a higher amount.',
+          valid: false,
+        }
+      }
+
+      if (walletLimits?.min && getTotalAmount('sats', name) < walletLimits.min) {
+        return {
+          title: `The payment minimum is ${walletLimits.min} satoshi.`,
+          description: 'Please update the amount.',
+          valid: false,
+        }
+      }
+
+      return { title: '', description: '', valid: true }
+    },
+    [getTotalAmount, walletLimits],
+  )
+
   return {
     state,
     setTarget,
@@ -161,5 +238,7 @@ export const useFundingFormState = ({ rewards, rewardCurrency }: UseFundStatePro
     resetRewards,
     needsShipping,
     hasSelectedRewards,
+    amountWarning,
+    validateInputAmount,
   }
 }

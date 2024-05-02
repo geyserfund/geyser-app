@@ -13,12 +13,12 @@ export const CreatorEmailContentButton = ({ ...props }: StackProps) => {
 
   const ref = useRef<HTMLDivElement>(null)
 
-  const {
-    project,
-    fundForm: { state },
-  } = useProjectContext()
+  const { project } = useProjectContext()
 
-  const { fundingTx } = useFundingContext()
+  const {
+    fundingTx,
+    fundForm: { state },
+  } = useFundingContext()
 
   const handleCopyContent = () => {
     const content = ref.current?.innerText || ''

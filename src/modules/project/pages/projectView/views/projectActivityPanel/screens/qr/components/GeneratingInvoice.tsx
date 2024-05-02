@@ -1,17 +1,18 @@
-import { Button, Text, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, HStack, SkeletonText, useDisclosure, VStack } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IoMdRefresh } from 'react-icons/io'
 
+import { SkeletonLayout } from '../../../../../../../../../components/layouts'
 import { Body2 } from '../../../../../../../../../components/typography'
-import Loader from '../../../../../../../../../components/ui/Loader'
+import { QRCodeSizeMap } from './QRCodeComponent'
 
 const FUNDING_REQUEST_TIMEOUT = 45_000
 
 export const GeneratingInvoice = ({ refreshInvoice }: { refreshInvoice: () => void }) => {
   const { t } = useTranslation()
   const { onOpen, onClose, isOpen } = useDisclosure()
-  const timeout = useRef<number | undefined>()
+  const timeout = useRef<NodeJS.Timeout | undefined>()
 
   useEffect(() => {
     timeout.current = setTimeout(onOpen, FUNDING_REQUEST_TIMEOUT)
@@ -24,9 +25,9 @@ export const GeneratingInvoice = ({ refreshInvoice }: { refreshInvoice: () => vo
     timeout.current = setTimeout(onOpen, FUNDING_REQUEST_TIMEOUT)
   }
 
-  return (
-    <VStack width={'350px'} height={'335px'} justifyContent={'center'}>
-      {isOpen ? (
+  if (isOpen) {
+    return (
+      <VStack width={'350px'} height={'335px'} justifyContent={'center'}>
         <VStack w="full" alignItems="center">
           <Body2 bold textAlign="center">
             {t('Generating an invoice is taking longer than expected')}
@@ -43,12 +44,22 @@ export const GeneratingInvoice = ({ refreshInvoice }: { refreshInvoice: () => vo
             {t('Refresh')}
           </Button>
         </VStack>
-      ) : (
-        <VStack>
-          <Loader />
-          <Text>{t('Generating Invoice')}</Text>
-        </VStack>
-      )}
+      </VStack>
+    )
+  }
+
+  return (
+    <VStack w="full" spacing="20px">
+      <VStack w="full" spacing="10px" alignItems="center">
+        <HStack w="full">
+          <SkeletonLayout height="40px" width="100%" />
+          <SkeletonLayout height="40px" width="100%" />
+        </HStack>
+        <SkeletonLayout height={QRCodeSizeMap} width={QRCodeSizeMap} />
+        <SkeletonText noOfLines={2} width="200px" />
+      </VStack>
+      <SkeletonLayout maxWidth="360px" height="40px" width="100%" />
+      <SkeletonLayout height="300px" width="100%" />
     </VStack>
   )
 }
