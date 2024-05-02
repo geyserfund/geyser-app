@@ -8,6 +8,14 @@ const baseStyle = definePartsStyle({
     bg: 'neutral.0',
     borderRadius: '8px',
   },
+  content: {
+    maxWidth: 'unset',
+    width: 'unset',
+  },
+  popper: {
+    maxWidth: 'unset',
+    width: 'unset',
+  },
 })
 
 export const popOverTheme = defineMultiStyleConfig({ baseStyle })
