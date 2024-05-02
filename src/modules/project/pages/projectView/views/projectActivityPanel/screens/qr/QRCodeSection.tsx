@@ -32,7 +32,6 @@ export const QRCodeSection = ({ onCloseClick }: { onCloseClick: () => void }) =>
 
   const { fundingTx, fundingRequestErrored, fundingRequestLoading, hasWebLN, weblnErrored, error, retryFundingFlow } =
     useFundingContext()
-  console.log('chekcing refund transactionId in qrcodesection:', refundedSwapData)
   const qrDisplayState = useMemo(() => {
     if (invoiceRefreshLoading || fundingRequestLoading) {
       return QRDisplayState.REFRESHING

@@ -20,7 +20,6 @@ const useProjectRewardTemplates = (selectedTags: Tag[]): RewardTemplateType[] =>
 
   const getCategoriesByTags = useCallback((tags: string[]): string[] => {
     let matchedCategories: string[] = []
-    console.log(tags)
     tags.forEach((tag) => {
       const normalizedTag = normalizeTagLabel(tag)
       const categories = tagToRewardCategoryMapping[normalizedTag] || []
