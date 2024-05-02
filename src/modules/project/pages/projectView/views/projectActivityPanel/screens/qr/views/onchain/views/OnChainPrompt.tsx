@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { BsExclamationSquareFill } from 'react-icons/bs'
 
 import { Body1, Body2 } from '../../../../../../../../../../../components/typography'
+import { GeyserOnChainGuideUrl } from '../../../../../../../../../../../constants'
 import { useCustomTheme, useMobileMode } from '../../../../../../../../../../../utils'
 import { FeedbackCard } from '../components/FeedbackCard'
 import { useDownloadRefund } from '../hooks/useDownloadRefund'
@@ -37,8 +38,8 @@ export const OnChainPrompt = () => {
         {t(
           'To keep Geyser KYC-free, on-chain transactions are swapped to Lightning in a non-custodial way. So, we require you to download a Refund File as backup in the rare case a payment fails.',
         )}{' '}
-        <Link isExternal href="">
-          <strong>{t('More info')}.</strong>
+        <Link isExternal href={GeyserOnChainGuideUrl}>
+          {t('More info')}.
         </Link>
       </Body1>
 

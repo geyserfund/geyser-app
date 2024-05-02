@@ -167,6 +167,12 @@ export const GeyserRewardsGuideLink =
 
 export const GeyserLightningWalletGuideLink = 'https://guide.geyser.fund/geyser-docs/resources/lightning-wallets'
 
+export const GeyserOnChainGuideUrl =
+  'https://guide.geyser.fund/geyser-docs/product-features/getting-started/how-onchain-contributions-work'
+
+export const GeyserOnChainFeesGuideUrl =
+  'https://guide.geyser.fund/geyser-docs/product-features/getting-started/how-onchain-contributions-work#fees-for-onchain-donations'
+
 // External website Links
 
 export const commonMarkdownUrl = 'https://commonmark.org/help/'

@@ -35,10 +35,7 @@ export const RefundPage = () => {
 
         {hasRefundFile && (
           <VStack w="full" alignItems="start" overflowX="hidden">
-            <Body1>
-              {t('Select refund file found')}
-              {swapArray.length > 1 ? 's' : ''}:
-            </Body1>
+            <Body1>{t('Select refund file')}:</Body1>
             {swapArray.map((swapItem) => {
               const { datetime, amount, projectTitle } = swapItem.contributionInfo || ({} as SwapContributionInfo)
 
