@@ -4301,7 +4301,7 @@ export type GrantQueryVariables = Exact<{
 }>;
 
 
-export type GrantQuery = { __typename?: 'Query', grant: { __typename?: 'Grant', id: any, title: string, name: string, shortDescription: string, description?: string | null, balance: number, status: GrantStatusEnum, image?: string | null, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, boardMembers: Array<{ __typename?: 'GrantBoardMember', user: { __typename?: 'User', username: string, imageUrl?: string | null, id: any, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalId: string, externalUsername: string, id: any, public: boolean }> } }>, applicants: Array<{ __typename?: 'GrantApplicant', status: GrantApplicantStatus, project: { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, funders: Array<{ __typename?: 'Funder', id: any, confirmedAt?: any | null, user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } | null }> }, funding: { __typename?: 'GrantApplicantFunding', communityFunding: number, grantAmount: number, grantAmountDistributed: number } }>, sponsors: Array<{ __typename?: 'Sponsor', id: any, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }> } };
+export type GrantQuery = { __typename?: 'Query', grant: { __typename?: 'Grant', id: any, title: string, name: string, shortDescription: string, description?: string | null, balance: number, status: GrantStatusEnum, image?: string | null, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, boardMembers: Array<{ __typename?: 'GrantBoardMember', user: { __typename?: 'User', username: string, imageUrl?: string | null, id: any, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalId: string, externalUsername: string, id: any, public: boolean }> } }>, applicants: Array<{ __typename?: 'GrantApplicant', status: GrantApplicantStatus, project: { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null }, funding: { __typename?: 'GrantApplicantFunding', communityFunding: number, grantAmount: number, grantAmountDistributed: number } }>, sponsors: Array<{ __typename?: 'Sponsor', id: any, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }> } };
 
 export type GrantStatisticsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -7478,15 +7478,6 @@ export const GrantDocument = gql`
         thumbnailImage
         shortDescription
         description
-        funders {
-          id
-          confirmedAt
-          user {
-            id
-            username
-            imageUrl
-          }
-        }
       }
       status
       funding {

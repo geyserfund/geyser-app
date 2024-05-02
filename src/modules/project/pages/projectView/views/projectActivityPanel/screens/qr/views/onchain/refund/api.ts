@@ -46,6 +46,10 @@ export const getPartialRefundSignature = async (
     }),
   }).then((res) => res.json())
 
+  if (resp.error) {
+    throw new Error(resp.error)
+  }
+
   return {
     pubNonce: Musig.parsePubNonce(resp.pubNonce),
     signature: Buffer.from(resp.partialSignature, 'hex'),

@@ -79,7 +79,7 @@ export const UpdateFundingTxEmailAddress = () => {
           bgColor={'primary.500'}
           borderRadius="4px"
         >
-          <TbMailFilled size="14px" fill="neutral.1000" />
+          <TbMailFilled size="14px" color={'black'} />
         </HStack>
       }
     >

@@ -6,6 +6,8 @@ import { BoltzTransaction, getTransactionFromSwap } from '../refund/api'
 import { refund } from '../refund/refund'
 import { useSwapTransactionValue } from '../states/onChainTransaction'
 
+const BAD_REFUND_FILE_ERROR = 'This refund file is not associated with any failed funding transaction'
+
 export const useRefund = () => {
   const { toast } = useNotification()
 
@@ -30,8 +32,8 @@ export const useRefund = () => {
         if (transaction.error) {
           toast({
             status: 'error',
-            title: 'The transaction for this refund file did not get swapped',
-            description: `${transaction.error}`,
+            title: 'Refund failed',
+            description: BAD_REFUND_FILE_ERROR,
           })
           removeRefundFile(refundFile.id)
           setLoading(false)
@@ -57,12 +59,18 @@ export const useRefund = () => {
       }
 
       return false
-    } catch (error) {
+    } catch (error: any) {
+      let toastMessage = error.message
+      if (error.message === 'swap not eligible for a cooperative refund') {
+        removeRefundFile(refundFile.id)
+        toastMessage = BAD_REFUND_FILE_ERROR
+      }
+
       setLoading(false)
       toast({
         status: 'error',
         title: 'Refund failed',
-        description: `${error}`,
+        description: toastMessage,
       })
       return false
     }
