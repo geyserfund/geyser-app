@@ -76,6 +76,7 @@ export const useFundingFormState = ({ rewards, rewardCurrency, walletLimits }: U
   const [state, _setState] = useState<IFundForm>(initialState)
   const debouncedTotalAmount = useDebounce(state.totalAmount, 200)
   const { getTotalAmount } = useFundCalc(state)
+
   useEffect(() => {
     if (debouncedTotalAmount && walletLimits) {
       const { onChain } = walletLimits
@@ -207,7 +208,7 @@ export const useFundingFormState = ({ rewards, rewardCurrency, walletLimits }: U
     (name: string) => {
       const isException = isProjectAnException(name)
 
-      if (!isException && walletLimits?.max && getTotalAmount('dollar', name) >= walletLimits.max) {
+      if (!isException && walletLimits?.max && getTotalAmount('sats', name) >= walletLimits.max) {
         return {
           title: `Payment above ${walletLimits.max} is not allowed at the moment.`,
           description: 'Please update the amount, or contact us for donating a higher amount.',

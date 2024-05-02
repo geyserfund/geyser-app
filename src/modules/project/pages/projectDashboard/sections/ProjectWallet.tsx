@@ -30,7 +30,7 @@ export const ProjectWallet = () => {
 
   const { isOpen: emailVerifyOpen, onClose: emailVerifyOnClose, onOpen: emailVerifyOnOpen } = useDisclosure()
 
-  const { project, refetch, updateProject } = useProjectContext()
+  const { project, walletLimits, refetch, updateProject } = useProjectContext()
 
   const projectWallet: Wallet | undefined = useMemo(() => {
     return project?.wallets && project.wallets[0]
@@ -70,6 +70,7 @@ export const ProjectWallet = () => {
         : ConnectionOption.PERSONAL_NODE
       : undefined,
     project,
+    walletLimits,
     isEdit,
     onSubmit: handleNext,
   })

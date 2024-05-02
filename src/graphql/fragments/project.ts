@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 import { FRAGMENT_ENTRY_FOR_PROJECT } from './entries'
 import { FRAGMENT_PROJECT_OWNER_USER, FRAGMENT_USER_FOR_AVATAR, FRAGMENT_USER_ME } from './user'
-import { FRAGMENT_FRAGMENT_WALLET_LIMIT, FRAGMENT_PROJECT_WALLET } from './wallet'
+import { FRAGMENT_PROJECT_WALLET } from './wallet'
 
 export const FRAGMENT_PROJECT_NOSTR_KEYS = gql`
   fragment ProjectNostrKeys on Project {
@@ -117,7 +117,6 @@ export const FRAGMENT_PROJECT = gql`
   ${FRAGMENT_PROJECT_OWNER_USER}
   ${FRAGMENT_USER_FOR_AVATAR}
   ${FRAGMENT_PROJECT_WALLET}
-  ${FRAGMENT_FRAGMENT_WALLET_LIMIT}
   fragment Project on Project {
     id
     title
@@ -182,9 +181,6 @@ export const FRAGMENT_PROJECT = gql`
     }
     wallets {
       ...ProjectWallet
-      limits {
-        ...WalletLimits
-      }
     }
     followers {
       id

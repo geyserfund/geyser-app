@@ -34,6 +34,7 @@ import {
   ProjectByNameOrIdQuery,
   USDCents,
   useProjectByNameOrIdQuery,
+  useWalletLimitQuery,
 } from '../../../types'
 import { toInt, useNotification } from '../../../utils'
 import { GRANTS_PROJECT_NAME } from '../constants'
@@ -326,9 +327,16 @@ export const GrantsContributeModal = ({ grantProjectName }: { grantProjectName?:
       })
     },
   })
+  const { data } = useWalletLimitQuery({
+    variables: {
+      getWalletId: grantsData?.projectGet?.wallets[0]?.id,
+    },
+    skip: !grantsData?.projectGet || !grantsData?.projectGet.wallets[0] || !grantsData?.projectGet.wallets[0].id,
+  })
+  const limits = data?.getWallet.limits
 
   return (
-    <FundingProvider project={grantsData?.projectGet}>
+    <FundingProvider project={grantsData?.projectGet} limits={limits}>
       <GrantsContributeModalContent grantsData={grantsData} />
     </FundingProvider>
   )

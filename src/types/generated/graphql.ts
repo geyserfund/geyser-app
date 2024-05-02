@@ -3829,10 +3829,7 @@ export type ProjectFragment = { __typename?: 'Project', id: any, title: string, 
     { __typename?: 'Entry' }
     & EntryForProjectFragment
   )>, wallets: Array<(
-    { __typename?: 'Wallet', limits?: (
-      { __typename?: 'WalletLimits' }
-      & WalletLimitsFragment
-    ) | null }
+    { __typename?: 'Wallet' }
     & ProjectWalletFragment
   )>, followers: Array<{ __typename?: 'User', id: any, username: string }>, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', npub: string } } } };
 
@@ -4576,6 +4573,16 @@ export type LightningAddressVerifyQueryVariables = Exact<{
 
 export type LightningAddressVerifyQuery = { __typename?: 'Query', lightningAddressVerify: { __typename?: 'LightningAddressVerifyResponse', reason?: string | null, valid: boolean, limits?: { __typename?: 'LightningAddressContributionLimits', max?: number | null, min?: number | null } | null } };
 
+export type WalletLimitQueryVariables = Exact<{
+  getWalletId: Scalars['BigInt']['input'];
+}>;
+
+
+export type WalletLimitQuery = { __typename?: 'Query', getWallet: { __typename?: 'Wallet', limits?: (
+      { __typename?: 'WalletLimits' }
+      & WalletLimitsFragment
+    ) | null } };
+
 export type ActivityCreatedSubscriptionVariables = Exact<{
   input?: InputMaybe<ActivityCreatedSubscriptionInput>;
 }>;
@@ -5007,22 +5014,6 @@ export const ProjectWalletFragmentDoc = gql`
   }
 }
     `;
-export const WalletLimitsFragmentDoc = gql`
-    fragment WalletLimits on WalletLimits {
-  contribution {
-    min
-    max
-    offChain {
-      min
-      max
-    }
-    onChain {
-      min
-      max
-    }
-  }
-}
-    `;
 export const ProjectFragmentDoc = gql`
     fragment Project on Project {
   id
@@ -5088,9 +5079,6 @@ export const ProjectFragmentDoc = gql`
   }
   wallets {
     ...ProjectWallet
-    limits {
-      ...WalletLimits
-    }
   }
   followers {
     id
@@ -5108,8 +5096,7 @@ export const ProjectFragmentDoc = gql`
 ${ProjectRewardForCreateUpdateFragmentDoc}
 ${UserForAvatarFragmentDoc}
 ${EntryForProjectFragmentDoc}
-${ProjectWalletFragmentDoc}
-${WalletLimitsFragmentDoc}`;
+${ProjectWalletFragmentDoc}`;
 export const UserMeFragmentDoc = gql`
     fragment UserMe on User {
   id
@@ -5291,6 +5278,22 @@ export const UserProjectContributionsFragmentDoc = gql`
   }
 }
     ${ProjectAvatarFragmentDoc}`;
+export const WalletLimitsFragmentDoc = gql`
+    fragment WalletLimits on WalletLimits {
+  contribution {
+    min
+    max
+    offChain {
+      min
+      max
+    }
+    onChain {
+      min
+      max
+    }
+  }
+}
+    `;
 export const EntryForLandingPageFragmentDoc = gql`
     fragment EntryForLandingPage on Entry {
   amountFunded
@@ -8887,6 +8890,48 @@ export type LightningAddressVerifyQueryHookResult = ReturnType<typeof useLightni
 export type LightningAddressVerifyLazyQueryHookResult = ReturnType<typeof useLightningAddressVerifyLazyQuery>;
 export type LightningAddressVerifySuspenseQueryHookResult = ReturnType<typeof useLightningAddressVerifySuspenseQuery>;
 export type LightningAddressVerifyQueryResult = Apollo.QueryResult<LightningAddressVerifyQuery, LightningAddressVerifyQueryVariables>;
+export const WalletLimitDocument = gql`
+    query WalletLimit($getWalletId: BigInt!) {
+  getWallet(id: $getWalletId) {
+    limits {
+      ...WalletLimits
+    }
+  }
+}
+    ${WalletLimitsFragmentDoc}`;
+
+/**
+ * __useWalletLimitQuery__
+ *
+ * To run a query within a React component, call `useWalletLimitQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWalletLimitQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWalletLimitQuery({
+ *   variables: {
+ *      getWalletId: // value for 'getWalletId'
+ *   },
+ * });
+ */
+export function useWalletLimitQuery(baseOptions: Apollo.QueryHookOptions<WalletLimitQuery, WalletLimitQueryVariables> & ({ variables: WalletLimitQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<WalletLimitQuery, WalletLimitQueryVariables>(WalletLimitDocument, options);
+      }
+export function useWalletLimitLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WalletLimitQuery, WalletLimitQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<WalletLimitQuery, WalletLimitQueryVariables>(WalletLimitDocument, options);
+        }
+export function useWalletLimitSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<WalletLimitQuery, WalletLimitQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<WalletLimitQuery, WalletLimitQueryVariables>(WalletLimitDocument, options);
+        }
+export type WalletLimitQueryHookResult = ReturnType<typeof useWalletLimitQuery>;
+export type WalletLimitLazyQueryHookResult = ReturnType<typeof useWalletLimitLazyQuery>;
+export type WalletLimitSuspenseQueryHookResult = ReturnType<typeof useWalletLimitSuspenseQuery>;
+export type WalletLimitQueryResult = Apollo.QueryResult<WalletLimitQuery, WalletLimitQueryVariables>;
 export const ActivityCreatedDocument = gql`
     subscription ActivityCreated($input: ActivityCreatedSubscriptionInput) {
   activityCreated(input: $input) {

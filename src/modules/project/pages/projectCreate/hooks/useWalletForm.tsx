@@ -10,6 +10,7 @@ import {
   Maybe,
   ProjectFragment,
   useLightningAddressVerifyLazyQuery,
+  WalletLimitsFragment,
   WalletOffChainContributionLimits,
   WalletOnChainContributionLimits,
   WalletResourceType,
@@ -20,6 +21,7 @@ import { TNodeInput } from '../types'
 interface useWalletFormProps {
   defaultConnectionOption?: ConnectionOption
   project?: ProjectFragment | null
+  walletLimits?: WalletLimitsFragment
   onSubmit: (createWalletInput: CreateWalletInput | null) => void
   isEdit?: boolean
 }
@@ -82,6 +84,7 @@ export const useWalletForm = ({
   project,
   onSubmit,
   isEdit,
+  walletLimits,
 }: useWalletFormProps): WalletForm => {
   const { toast } = useNotification()
 
@@ -105,8 +108,8 @@ export const useWalletForm = ({
   >(
     projectWallet
       ? projectWallet?.connectionDetails.__typename === WalletConnectDetails.LightningAddressConnectionDetails
-        ? projectWallet?.limits?.contribution?.offChain || {}
-        : projectWallet?.limits?.contribution?.onChain || {}
+        ? walletLimits?.contribution?.offChain || {}
+        : walletLimits?.contribution?.onChain || {}
       : {},
   )
 

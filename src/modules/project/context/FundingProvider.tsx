@@ -3,7 +3,7 @@ import React, { createContext, PropsWithChildren, useContext, useEffect } from '
 
 import { useFundingFormState, UseFundingFormStateReturn } from '../../../hooks'
 import { authUserAtom } from '../../../pages/auth/state'
-import { FundingInput, FundingTxFragment, ProjectFragment } from '../../../types'
+import { FundingInput, FundingTxFragment, ProjectFragment, WalletLimitsFragment } from '../../../types'
 import { useFundingFlow } from '../funding/hooks/useFundingFlow'
 import { FundingFlowGraphQLError } from '../funding/state'
 import { useProjectContext } from './ProjectProvider'
@@ -19,23 +19,26 @@ type FundingContextProps = {
   weblnErrored: boolean
   hasWebLN: boolean
   project?: Partial<ProjectFragment> | null // Partial Project context, for usage inside fundingFlow, Only useful when ProjctProvider is not used
+  limits?: WalletLimitsFragment | null
   fundForm: UseFundingFormStateReturn
+}
+
+interface FundingProviderProps extends PropsWithChildren {
+  project?: Partial<ProjectFragment> | null
+  limits?: WalletLimitsFragment | null
 }
 
 export const FundingContext = createContext<FundingContextProps>({} as FundingContextProps)
 
 export const useFundingContext = () => useContext(FundingContext)
 
-export const FundingContextProvider: React.FC<PropsWithChildren<{ project?: Partial<ProjectFragment> | null }>> = ({
-  children,
-  project,
-}) => {
+export const FundingContextProvider = ({ children, project, limits }: FundingProviderProps) => {
   const fundingFlow = useFundingFlow({ project })
 
   const fundForm = useFundingFormState({
     rewards: project ? project.rewards : undefined,
     rewardCurrency: project && project.rewardCurrency ? project.rewardCurrency : undefined,
-    walletLimits: project ? project?.wallets?.[0]?.limits?.contribution : ({} as any),
+    walletLimits: limits?.contribution || ({} as any),
   })
 
   useEffect(() => {
@@ -45,24 +48,26 @@ export const FundingContextProvider: React.FC<PropsWithChildren<{ project?: Part
     }
   }, [])
 
-  return <FundingContext.Provider value={{ ...fundingFlow, project, fundForm }}>{children}</FundingContext.Provider>
+  return (
+    <FundingContext.Provider value={{ ...fundingFlow, project, limits, fundForm }}>{children}</FundingContext.Provider>
+  )
 }
 
-// This component is used to wrap the children of the FundingProvider
-// It ensures there is a different scope for the atoms used in the funding flow
-
-export const FundingProvider: React.FC<PropsWithChildren<{ project?: Partial<ProjectFragment> | null }>> = ({
-  children,
-  project,
-}) => {
+// Used if the project context is not available
+export const FundingProvider = (props: FundingProviderProps) => {
   return (
     <ScopeProvider atoms={[authUserAtom]}>
-      <FundingContextProvider project={project}>{children}</FundingContextProvider>
+      <FundingContextProvider {...props} />
     </ScopeProvider>
   )
 }
 
+// Used if the project context is available
 export const FundingProviderWithProjectContext: React.FC<PropsWithChildren> = ({ children }) => {
-  const { project } = useProjectContext()
-  return <FundingProvider project={project}>{children}</FundingProvider>
+  const { project, walletLimits } = useProjectContext()
+  return (
+    <FundingProvider project={project} limits={walletLimits}>
+      {children}
+    </FundingProvider>
+  )
 }
