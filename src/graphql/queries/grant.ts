@@ -69,6 +69,14 @@ export const QUERY_GRANT = gql`
         }
       }
       applicants {
+        contributors {
+          amount
+          timesContributed
+          user {
+            id
+            imageUrl
+          }
+        }
         project {
           id
           name
