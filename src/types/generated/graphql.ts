@@ -710,17 +710,26 @@ export type GrantApplicantsArgs = {
 export type GrantApplicant = {
   __typename?: 'GrantApplicant'
   contributors?: Maybe<Array<GrantApplicantContributor>>
+  contributorsCount: Scalars['Int']['output']
   funding: GrantApplicantFunding
   grant: Grant
   project: Project
   status: GrantApplicantStatus
 }
 
+export type GrantApplicantContributorsArgs = {
+  input?: InputMaybe<GrantApplicantContributorsInput>
+}
+
 export type GrantApplicantContributor = {
   __typename?: 'GrantApplicantContributor'
   amount: Scalars['Int']['output']
   timesContributed: Scalars['Int']['output']
-  user: User
+  user?: Maybe<User>
+}
+
+export type GrantApplicantContributorsInput = {
+  pagination?: InputMaybe<PaginationInput>
 }
 
 export type GrantApplicantFunding = {
@@ -815,6 +824,7 @@ export enum GrantStatusEnum {
 export enum GrantType {
   BoardVote = 'BOARD_VOTE',
   CommunityVote = 'COMMUNITY_VOTE',
+  CompetitionVote = 'COMPETITION_VOTE',
 }
 
 export type GraphSumData = {
@@ -2408,6 +2418,7 @@ export type ResolversTypes = {
   Grant: ResolverTypeWrapper<Grant>
   GrantApplicant: ResolverTypeWrapper<GrantApplicant>
   GrantApplicantContributor: ResolverTypeWrapper<GrantApplicantContributor>
+  GrantApplicantContributorsInput: GrantApplicantContributorsInput
   GrantApplicantFunding: ResolverTypeWrapper<GrantApplicantFunding>
   GrantApplicantGetInput: GrantApplicantGetInput
   GrantApplicantGetWhereInput: GrantApplicantGetWhereInput
@@ -2648,6 +2659,7 @@ export type ResolversParentTypes = {
   Grant: Grant
   GrantApplicant: GrantApplicant
   GrantApplicantContributor: GrantApplicantContributor
+  GrantApplicantContributorsInput: GrantApplicantContributorsInput
   GrantApplicantFunding: GrantApplicantFunding
   GrantApplicantGetInput: GrantApplicantGetInput
   GrantApplicantGetWhereInput: GrantApplicantGetWhereInput
@@ -3134,7 +3146,13 @@ export type GrantApplicantResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['GrantApplicant'] = ResolversParentTypes['GrantApplicant'],
 > = {
-  contributors?: Resolver<Maybe<Array<ResolversTypes['GrantApplicantContributor']>>, ParentType, ContextType>
+  contributors?: Resolver<
+    Maybe<Array<ResolversTypes['GrantApplicantContributor']>>,
+    ParentType,
+    ContextType,
+    Partial<GrantApplicantContributorsArgs>
+  >
+  contributorsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   funding?: Resolver<ResolversTypes['GrantApplicantFunding'], ParentType, ContextType>
   grant?: Resolver<ResolversTypes['Grant'], ParentType, ContextType>
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>
@@ -3148,7 +3166,7 @@ export type GrantApplicantContributorResolvers<
 > = {
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   timesContributed?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -5640,6 +5658,7 @@ export type GrantsQuery = {
     status: GrantStatusEnum
     image?: string | null
     balance: number
+    type: GrantType
     statuses: Array<{ __typename?: 'GrantStatus'; status: GrantStatusEnum; endAt?: any | null; startAt: any }>
     applicants: Array<{
       __typename?: 'GrantApplicant'
@@ -5679,6 +5698,7 @@ export type GrantQuery = {
     balance: number
     status: GrantStatusEnum
     image?: string | null
+    type: GrantType
     statuses: Array<{ __typename?: 'GrantStatus'; status: GrantStatusEnum; endAt?: any | null; startAt: any }>
     boardMembers: Array<{
       __typename?: 'GrantBoardMember'
@@ -5700,6 +5720,12 @@ export type GrantQuery = {
     applicants: Array<{
       __typename?: 'GrantApplicant'
       status: GrantApplicantStatus
+      contributors?: Array<{
+        __typename?: 'GrantApplicantContributor'
+        amount: number
+        timesContributed: number
+        user?: { __typename?: 'User'; id: any; imageUrl?: string | null } | null
+      }> | null
       project: {
         __typename?: 'Project'
         id: any
@@ -9373,6 +9399,7 @@ export const GrantsDocument = gql`
       status
       image
       balance
+      type
       statuses {
         status
         endAt
@@ -9442,6 +9469,7 @@ export const GrantDocument = gql`
       balance
       status
       image
+      type
       statuses {
         status
         endAt
@@ -9462,6 +9490,14 @@ export const GrantDocument = gql`
         }
       }
       applicants {
+        contributors {
+          amount
+          timesContributed
+          user {
+            id
+            imageUrl
+          }
+        }
         project {
           id
           name

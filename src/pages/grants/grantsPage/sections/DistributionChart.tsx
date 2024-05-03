@@ -9,19 +9,30 @@ const CHART_BAR_COLORS = ['primary.900', 'primary.700', 'primary.500', 'primary.
 
 interface Props {
   applicants: Array<GrantApplicant>
+  isCompetitionVote: boolean
 }
 
-export const DistributionChart = ({ applicants }: Props) => {
+export const DistributionChart = ({ applicants, isCompetitionVote }: Props) => {
   const { t } = useTranslation()
-  const total = applicants.reduce((prev, curr) => {
-    return prev + (curr?.funding.communityFunding || 0)
-  }, 0)
+
+  const total = isCompetitionVote
+    ? applicants.reduce((prev, curr) => {
+        return prev + (curr?.contributors?.reduce((acc, contributor) => acc + contributor.amount, 0) || 0)
+      }, 0)
+    : applicants.reduce((prev, curr) => {
+        return prev + (curr?.funding.communityFunding || 0)
+      }, 0)
 
   const percentages: Array<GrantApplicant & { percentage: number; numberOfContributors: number }> = applicants.map(
     (applicant) => ({
       ...applicant,
-      percentage: Math.round(((applicant.funding?.communityFunding || 0) * 100) / (total || 1)),
-      numberOfContributors: applicant.contributors?.length || 0,
+      percentage: isCompetitionVote
+        ? Math.round(
+            ((applicant.contributors?.reduce((acc, contributor) => acc + contributor.amount, 0) || 0) * 100) /
+              (total || 1),
+          )
+        : Math.round(((applicant.funding?.communityFunding || 0) * 100) / (total || 1)),
+      numberOfContributors: applicant.contributorsCount,
     }),
   )
 
