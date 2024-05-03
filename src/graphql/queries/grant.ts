@@ -11,6 +11,7 @@ export const QUERY_GRANTS = gql`
       status
       image
       balance
+      type
       statuses {
         status
         endAt
@@ -47,6 +48,7 @@ export const QUERY_GRANT = gql`
       balance
       status
       image
+      type
       statuses {
         status
         endAt
@@ -67,6 +69,13 @@ export const QUERY_GRANT = gql`
         }
       }
       applicants {
+        contributorsCount
+        contributors(input: { pagination: { take: 50 } }) {
+          user {
+            id
+            imageUrl
+          }
+        }
         project {
           id
           name

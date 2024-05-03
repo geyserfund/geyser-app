@@ -57,10 +57,12 @@ export const GrantsRoundOne = ({
   applicants,
   fundingOpenStartDate,
   fundingOpenEndDate,
+  isCompetitionVote,
 }: {
   applicants?: GrantApplicant[]
   fundingOpenStartDate: number
   fundingOpenEndDate: number
+  isCompetitionVote: boolean
 }) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
@@ -198,6 +200,7 @@ export const GrantsRoundOne = ({
                 isClosed={true}
                 fundingOpenEndDate={fundingOpenEndDate}
                 fundingOpenStartDate={fundingOpenStartDate}
+                isCompetitionVote={isCompetitionVote}
               />
             </Box>
           ) : null}
