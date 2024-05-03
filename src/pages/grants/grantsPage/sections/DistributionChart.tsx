@@ -58,7 +58,7 @@ const Item = ({ bg, title, width, percentage }: { bg?: string; title: string; wi
       </Box>
       <Box display="flex" alignItems="center" justifyContent="start" flexGrow={1}>
         <ChartBar bg={bg} width={`${width}%`}>
-          {percentage}%
+          {percentage.toFixed(1)}%
         </ChartBar>
       </Box>
     </Box>
