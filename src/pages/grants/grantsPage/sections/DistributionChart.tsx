@@ -15,13 +15,9 @@ interface Props {
 export const DistributionChart = ({ applicants, isCompetitionVote }: Props) => {
   const { t } = useTranslation()
 
-  const total = isCompetitionVote
-    ? applicants.reduce((prev, curr) => {
-        return prev + (curr?.contributors?.reduce((acc, contributor) => acc + contributor.amount, 0) || 0)
-      }, 0)
-    : applicants.reduce((prev, curr) => {
-        return prev + (curr?.funding.communityFunding || 0)
-      }, 0)
+  const total = applicants.reduce((prev, curr) => {
+    return prev + (curr?.funding.communityFunding || 0)
+  }, 0)
 
   const percentages: Array<GrantApplicant & { percentage: number; numberOfContributors: number }> = applicants.map(
     (applicant) => ({
