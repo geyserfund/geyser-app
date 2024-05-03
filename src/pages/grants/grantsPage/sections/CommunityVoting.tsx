@@ -59,7 +59,7 @@ export const CommunityVoting = ({
     return null
   }
 
-  const canVote = grantHasVoting && grantStatus === GrantStatusEnum.FundingOpen
+  const canVote = grantHasVoting
 
   const renderWidgetItem = (funding: GrantApplicantFunding, contributorsCount: number) => {
     return (
