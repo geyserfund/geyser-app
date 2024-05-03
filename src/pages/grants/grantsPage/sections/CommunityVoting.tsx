@@ -1,4 +1,4 @@
-import { Box, Button, Text } from '@chakra-ui/react'
+import { Box, Button, HStack, Text } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
@@ -9,7 +9,7 @@ import { H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import { ProjectFundingModal } from '../../../../modules/project/pages/projectFunding/components/ProjectFundingModal'
-// import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
+import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
 import { fonts } from '../../../../styles'
 import { GrantApplicant, GrantApplicantFunding, GrantStatusEnum, Project } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
@@ -24,6 +24,7 @@ interface Props {
   isClosed?: boolean
   fundingOpenStartDate: number
   fundingOpenEndDate: number
+  isCompetitionVote: boolean
 }
 
 const useStyles = createUseStyles({
@@ -47,6 +48,7 @@ export const CommunityVoting = ({
   grantStatus,
   title,
   isClosed,
+  isCompetitionVote,
 }: Props) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
@@ -59,13 +61,28 @@ export const CommunityVoting = ({
 
   const canVote = grantHasVoting && grantStatus === GrantStatusEnum.FundingOpen
 
-  const renderWidgetItem = (funding: GrantApplicantFunding) => {
+  const renderWidgetItem = (funding: GrantApplicantFunding, contributorsCount: number) => {
     return (
-      <WidgetItem subtitle={!isClosed ? t('worth of votes') : t('distributed')}>
-        {getShortAmountLabel(
-          !isClosed ? funding.communityFunding : funding.grantAmount + funding.communityFunding || 0,
+      <HStack gap={5}>
+        {isCompetitionVote && (
+          <Box display={'flex'} alignItems="center" flexDirection="column">
+            <Box display={'flex'} alignItems="center">
+              <Text fontWeight={'700'} fontSize={'26px'} fontFamily={fonts.livvic} color="primary.500">
+                {contributorsCount || 0}
+              </Text>
+            </Box>
+
+            <Text fontWeight={'400'} fontSize="10px" fontStyle="normal" color="neutral.900">
+              {t('voters')}
+            </Text>
+          </Box>
         )}
-      </WidgetItem>
+        <WidgetItem subtitle={!isClosed ? t('worth of votes') : t('distributed')}>
+          {getShortAmountLabel(
+            !isClosed ? funding.communityFunding : funding.grantAmount + funding.communityFunding || 0,
+          )}
+        </WidgetItem>
+      </HStack>
     )
   }
 
@@ -98,11 +115,9 @@ export const CommunityVoting = ({
   return (
     <CardLayout noMobileBorder p={{ base: '10px', lg: '20px' }} spacing={{ base: '10px', lg: '20px' }} w="full">
       <H3 fontSize="18px">{t(title)}</H3>
-      {applicants.map(({ project, funding }) => {
+      {applicants.map(({ project, funding, contributors, contributorsCount }) => {
         const projectLink = getPath('project', project.name)
-        // const currentFunders = project.funders.filter(
-        //   (funder) => funder && funder.confirmedAt > fundingOpenStartDate && funder.confirmedAt <= fundingOpenEndDate,
-        // )
+
         return (
           <CardLayout p={2} key={project.id}>
             <Box display="flex">
@@ -143,17 +158,17 @@ export const CommunityVoting = ({
                   alignItems="center"
                 >
                   {renderButton(project)}
-                  {(grantHasVoting || isClosed) && renderWidgetItem(funding)}
+                  {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
                 </Box>
               )}
             </Box>
-            {/* {canVote && currentFunders.length > 0 && (
+            {contributors && contributors.length > 0 && (
               <Box pl={2} filter="opacity(0.4)">
-                {currentFunders.map(
-                  (funder) =>
-                    funder && (
+                {contributors.map(
+                  (contributor) =>
+                    contributor && (
                       <AvatarElement
-                        key={funder.id}
+                        key={contributor.user?.id}
                         width="28px"
                         height="28px"
                         wrapperProps={{
@@ -163,13 +178,13 @@ export const CommunityVoting = ({
                         }}
                         avatarOnly
                         borderRadius="50%"
-                        seed={funder.id}
-                        user={funder.user}
+                        seed={contributor?.user?.id}
+                        user={contributor?.user}
                       />
                     ),
                 )}
               </Box>
-            )} */}
+            )}
             {isMobile && renderButton(project)}
           </CardLayout>
         )

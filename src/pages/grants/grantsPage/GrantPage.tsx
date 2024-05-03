@@ -9,7 +9,7 @@ import Loader from '../../../components/ui/Loader'
 import { Head } from '../../../config'
 import { getPath } from '../../../constants'
 import { useAuthContext } from '../../../context'
-import { GrantApplicant, GrantApplicantStatus, GrantStatusEnum, Maybe } from '../../../types'
+import { GrantApplicant, GrantApplicantStatus, GrantStatusEnum, GrantType, Maybe } from '../../../types'
 import { useNotification } from '../../../utils'
 import { GrantWinnerAnnouncement, MobileDivider } from '../components'
 import { GrantAnnouncements, GrantHasVoting, GrantProjectNameMap } from '../constants'
@@ -92,6 +92,7 @@ export const GrantPage = () => {
         fundingOpenEndDate={fundingOpenStatus?.endAt}
         fundingOpenStartDate={fundingOpenStatus?.startAt}
         applicants={applicants}
+        isCompetitionVote={grant.type === GrantType.CompetitionVote}
       />
     )
   }
@@ -102,6 +103,7 @@ export const GrantPage = () => {
         fundingOpenEndDate={fundingOpenStatus?.endAt}
         fundingOpenStartDate={fundingOpenStatus?.startAt}
         applicants={applicants}
+        isCompetitionVote={grant.type === GrantType.CompetitionVote}
       />
     )
   }
@@ -111,6 +113,10 @@ export const GrantPage = () => {
   const getTitle = () => {
     if (grant.status === GrantStatusEnum.Closed) {
       return t('Grant Winners!')
+    }
+
+    if (grant.type === GrantType.CommunityVote) {
+      return t('Vote for your favorite projects with your Sats!')
     }
 
     const defaultTitle = 'Let the Sats flow to your favorite projects.'
@@ -123,6 +129,7 @@ export const GrantPage = () => {
   }
 
   const grantHasVoting = GrantHasVoting[grant.name]
+  const isCompetitionVote = grant.type === GrantType.CompetitionVote
   const showCommunityVoting = grant.status !== GrantStatusEnum.ApplicationsOpen
   const showDistributionChart = grant.status !== GrantStatusEnum.ApplicationsOpen && grantHasVoting
   const showGrantApply = grant.status !== GrantStatusEnum.Closed
@@ -151,7 +158,7 @@ export const GrantPage = () => {
         <MobileDivider />
         {showDistributionChart && (
           <>
-            <DistributionChart applicants={applicants} />
+            <DistributionChart applicants={applicants} isCompetitionVote={isCompetitionVote} />
             <MobileDivider />
           </>
         )}
@@ -171,29 +178,37 @@ export const GrantPage = () => {
               fundingOpenEndDate={fundingOpenStatus?.endAt}
               fundingOpenStartDate={fundingOpenStatus?.startAt}
               isClosed={grant.status === GrantStatusEnum.Closed}
+              isCompetitionVote={isCompetitionVote}
             />
             <MobileDivider />
           </>
         )}
-        {showGrantApply && (
+        {showGrantApply && !isCompetitionVote && (
           <>
             <GrantApply grant={grant} />
             <MobileDivider />
           </>
         )}
 
-        {showApplicationPending && pendingApplicants.length > 0 && (
+        {showApplicationPending && pendingApplicants.length > 0 && !isCompetitionVote && (
           <>
             <PendingApplications applicants={pendingApplicants} />
             <MobileDivider />
           </>
         )}
-        <GrantContribute
-          grantProjectName={GrantProjectNameMap[grant.name]}
-          grantTitle={grant.title}
-          grantHasVoting={grantHasVoting}
-        />
-        <MobileDivider />
+
+        {!isCompetitionVote && (
+          <>
+            <GrantContribute
+              grantProjectName={GrantProjectNameMap[grant.name]}
+              grantTitle={grant.title}
+              grantHasVoting={grantHasVoting}
+            />
+
+            <MobileDivider />
+          </>
+        )}
+
         {showBoardMembers && (
           <>
             <CommonBoardMembers members={grant.boardMembers} />

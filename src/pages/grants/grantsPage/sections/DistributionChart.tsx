@@ -9,18 +9,23 @@ const CHART_BAR_COLORS = ['primary.900', 'primary.700', 'primary.500', 'primary.
 
 interface Props {
   applicants: Array<GrantApplicant>
+  isCompetitionVote: boolean
 }
 
-export const DistributionChart = ({ applicants }: Props) => {
+export const DistributionChart = ({ applicants, isCompetitionVote }: Props) => {
   const { t } = useTranslation()
+
   const total = applicants.reduce((prev, curr) => {
     return prev + (curr?.funding.communityFunding || 0)
   }, 0)
 
-  const percentages: Array<GrantApplicant & { percentage: number }> = applicants.map((applicant) => ({
-    ...applicant,
-    percentage: Math.round(((applicant.funding?.communityFunding || 0) * 100) / (total || 1)),
-  }))
+  const percentages: Array<GrantApplicant & { percentage: number; numberOfContributors: number }> = applicants.map(
+    (applicant) => ({
+      ...applicant,
+      percentage: ((applicant.funding?.communityFunding || 0) * 100) / (total || 1),
+      numberOfContributors: applicant.contributorsCount,
+    }),
+  )
 
   const maxPercentage = Math.max(...percentages.map((p) => p.percentage))
 
@@ -33,13 +38,15 @@ export const DistributionChart = ({ applicants }: Props) => {
             .sort((a, b) => {
               return a.percentage < b.percentage ? 1 : -1
             })
-            .map(({ project, percentage }, i) => (
+            .map(({ project, percentage, numberOfContributors }, i) => (
               <Item
                 key={project.id}
                 bg={CHART_BAR_COLORS[i] || CHART_BAR_COLORS[4]}
                 title={project.title}
                 percentage={percentage}
                 width={Math.trunc((percentage * 100) / maxPercentage)}
+                numberOfContributors={numberOfContributors}
+                isCompetitionVote={isCompetitionVote}
               />
             ))}
         </Box>
@@ -48,17 +55,38 @@ export const DistributionChart = ({ applicants }: Props) => {
   )
 }
 
-const Item = ({ bg, title, width, percentage }: { bg?: string; title: string; width: number; percentage: number }) => {
+const Item = ({
+  bg,
+  title,
+  width,
+  percentage,
+  numberOfContributors,
+  isCompetitionVote,
+}: {
+  bg?: string
+  title: string
+  width: number
+  percentage: number
+  numberOfContributors: number
+  isCompetitionVote: boolean
+}) => {
+  const { t } = useTranslation()
   return (
     <Box pt={1} alignItems="center" justifyContent="start" display="flex">
-      <Box pr={3} maxWidth="186px" width="50%">
+      <Box pr={3} maxWidth="330px" width="75%" display="flex" flexDirection="row" gap={5}>
         <Text isTruncated={true} whiteSpace="nowrap" fontWeight={500}>
           {title}
+        </Text>
+        <Text>
+          <Text as="span" fontWeight={700}>
+            {numberOfContributors}
+          </Text>{' '}
+          {isCompetitionVote ? t('voters') : t('contributors')}
         </Text>
       </Box>
       <Box display="flex" alignItems="center" justifyContent="start" flexGrow={1}>
         <ChartBar bg={bg} width={`${width}%`}>
-          {percentage}%
+          {percentage.toFixed(1)}%
         </ChartBar>
       </Box>
     </Box>
