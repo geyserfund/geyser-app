@@ -1,4 +1,4 @@
-import { Box, BoxProps, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, HStack, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { CardLayout } from '../../../../components/layouts'
