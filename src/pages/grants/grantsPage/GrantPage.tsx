@@ -92,6 +92,7 @@ export const GrantPage = () => {
         fundingOpenEndDate={fundingOpenStatus?.endAt}
         fundingOpenStartDate={fundingOpenStatus?.startAt}
         applicants={applicants}
+        isCompetitionVote={grant.type === GrantType.CompetitionVote}
       />
     )
   }
@@ -102,6 +103,7 @@ export const GrantPage = () => {
         fundingOpenEndDate={fundingOpenStatus?.endAt}
         fundingOpenStartDate={fundingOpenStatus?.startAt}
         applicants={applicants}
+        isCompetitionVote={grant.type === GrantType.CompetitionVote}
       />
     )
   }
