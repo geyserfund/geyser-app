@@ -69,9 +69,8 @@ export const QUERY_GRANT = gql`
         }
       }
       applicants {
-        contributors {
-          amount
-          timesContributed
+        contributorsCount
+        contributors(input: { pagination: { take: 50 } }) {
           user {
             id
             imageUrl

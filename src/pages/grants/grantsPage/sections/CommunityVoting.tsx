@@ -11,13 +11,7 @@ import { getPath } from '../../../../constants'
 import { ProjectFundingModal } from '../../../../modules/project/pages/projectFunding/components/ProjectFundingModal'
 import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
 import { fonts } from '../../../../styles'
-import {
-  GrantApplicant,
-  GrantApplicantContributor,
-  GrantApplicantFunding,
-  GrantStatusEnum,
-  Project,
-} from '../../../../types'
+import { GrantApplicant, GrantApplicantFunding, GrantStatusEnum, Project } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
 import { WidgetItem } from '../../components/WidgetItem'
 import { useProjectFundingModal } from '../components/useProjectFundingModal'
@@ -67,17 +61,14 @@ export const CommunityVoting = ({
 
   const canVote = grantHasVoting && grantStatus === GrantStatusEnum.FundingOpen
 
-  const renderWidgetItem = (funding: GrantApplicantFunding, contributors: GrantApplicantContributor[]) => {
-    const numberOfContributors = contributors.length
-    const worthOfVotes = contributors.reduce((acc, contributor) => acc + contributor.amount, 0)
-
+  const renderWidgetItem = (funding: GrantApplicantFunding, contributorsCount: number) => {
     return (
       <HStack gap={5}>
         {isCompetitionVote && (
           <Box display={'flex'} alignItems="center" flexDirection="column">
             <Box display={'flex'} alignItems="center">
               <Text fontWeight={'700'} fontSize={'26px'} fontFamily={fonts.livvic} color="primary.500">
-                {numberOfContributors || 0}
+                {contributorsCount || 0}
               </Text>
             </Box>
 
@@ -87,11 +78,9 @@ export const CommunityVoting = ({
           </Box>
         )}
         <WidgetItem subtitle={!isClosed ? t('worth of votes') : t('distributed')}>
-          {isCompetitionVote
-            ? getShortAmountLabel(worthOfVotes)
-            : getShortAmountLabel(
-                !isClosed ? funding.communityFunding : funding.grantAmount + funding.communityFunding || 0,
-              )}
+          {getShortAmountLabel(
+            !isClosed ? funding.communityFunding : funding.grantAmount + funding.communityFunding || 0,
+          )}
         </WidgetItem>
       </HStack>
     )
@@ -126,18 +115,8 @@ export const CommunityVoting = ({
   return (
     <CardLayout noMobileBorder p={{ base: '10px', lg: '20px' }} spacing={{ base: '10px', lg: '20px' }} w="full">
       <H3 fontSize="18px">{t(title)}</H3>
-      {applicants.map(({ project, funding, contributors }) => {
+      {applicants.map(({ project, funding, contributors, contributorsCount }) => {
         const projectLink = getPath('project', project.name)
-
-        let currentFunders = []
-
-        if (!isCompetitionVote) {
-          currentFunders = project.funders.filter(
-            (funder) => funder && funder.confirmedAt > fundingOpenStartDate && funder.confirmedAt <= fundingOpenEndDate,
-          )
-        } else {
-          currentFunders = contributors || []
-        }
 
         return (
           <CardLayout p={2} key={project.id}>
@@ -179,17 +158,17 @@ export const CommunityVoting = ({
                   alignItems="center"
                 >
                   {renderButton(project)}
-                  {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributors || [])}
+                  {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
                 </Box>
               )}
             </Box>
-            {canVote && currentFunders.length > 0 && isCompetitionVote && (
+            {canVote && contributors && contributors.length > 0 && (
               <Box pl={2} filter="opacity(0.4)">
-                {currentFunders.map(
-                  (funder) =>
-                    funder && (
+                {contributors.map(
+                  (contributor) =>
+                    contributor && (
                       <AvatarElement
-                        key={isCompetitionVote ? (funder as any).id : funder?.user?.id}
+                        key={contributor.user?.id}
                         width="28px"
                         height="28px"
                         wrapperProps={{
@@ -199,8 +178,8 @@ export const CommunityVoting = ({
                         }}
                         avatarOnly
                         borderRadius="50%"
-                        seed={isCompetitionVote ? (funder as any).id : funder?.user?.id}
-                        user={isCompetitionVote ? (funder as any).user : funder?.user}
+                        seed={contributor?.user?.id}
+                        user={contributor?.user}
                       />
                     ),
                 )}
