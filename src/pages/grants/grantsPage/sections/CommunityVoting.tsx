@@ -162,7 +162,7 @@ export const CommunityVoting = ({
                 </Box>
               )}
             </Box>
-            {canVote && contributors && contributors.length > 0 && (
+            {contributors && contributors.length > 0 && (
               <Box pl={2} filter="opacity(0.4)">
                 {contributors.map(
                   (contributor) =>
