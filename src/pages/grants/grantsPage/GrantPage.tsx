@@ -9,7 +9,7 @@ import Loader from '../../../components/ui/Loader'
 import { Head } from '../../../config'
 import { getPath } from '../../../constants'
 import { useAuthContext } from '../../../context'
-import { GrantApplicant, GrantApplicantStatus, GrantStatusEnum, Maybe } from '../../../types'
+import { GrantApplicant, GrantApplicantStatus, GrantStatusEnum, GrantType, Maybe } from '../../../types'
 import { useNotification } from '../../../utils'
 import { GrantWinnerAnnouncement, MobileDivider } from '../components'
 import { GrantAnnouncements, GrantHasVoting, GrantProjectNameMap } from '../constants'
@@ -123,6 +123,8 @@ export const GrantPage = () => {
   }
 
   const grantHasVoting = GrantHasVoting[grant.name]
+  // TODO: Change with commpetition vote when available
+  const isCompetitionVote = grant.type === GrantType.CommunityVote
   const showCommunityVoting = grant.status !== GrantStatusEnum.ApplicationsOpen
   const showDistributionChart = grant.status !== GrantStatusEnum.ApplicationsOpen && grantHasVoting
   const showGrantApply = grant.status !== GrantStatusEnum.Closed
@@ -175,25 +177,32 @@ export const GrantPage = () => {
             <MobileDivider />
           </>
         )}
-        {showGrantApply && (
+        {showGrantApply && !isCompetitionVote && (
           <>
             <GrantApply grant={grant} />
             <MobileDivider />
           </>
         )}
 
-        {showApplicationPending && pendingApplicants.length > 0 && (
+        {showApplicationPending && pendingApplicants.length > 0 && !isCompetitionVote && (
           <>
             <PendingApplications applicants={pendingApplicants} />
             <MobileDivider />
           </>
         )}
-        <GrantContribute
-          grantProjectName={GrantProjectNameMap[grant.name]}
-          grantTitle={grant.title}
-          grantHasVoting={grantHasVoting}
-        />
-        <MobileDivider />
+
+        {!isCompetitionVote && (
+          <>
+            <GrantContribute
+              grantProjectName={GrantProjectNameMap[grant.name]}
+              grantTitle={grant.title}
+              grantHasVoting={grantHasVoting}
+            />
+
+            <MobileDivider />
+          </>
+        )}
+
         {showBoardMembers && (
           <>
             <CommonBoardMembers members={grant.boardMembers} />
