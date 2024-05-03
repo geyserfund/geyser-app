@@ -83,6 +83,9 @@ export const QUERY_GRANT = gql`
           thumbnailImage
           shortDescription
           description
+          wallets {
+            id
+          }
         }
         status
         funding {

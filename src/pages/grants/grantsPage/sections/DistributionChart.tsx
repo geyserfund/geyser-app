@@ -51,6 +51,7 @@ export const DistributionChart = ({ applicants, isCompetitionVote }: Props) => {
                 percentage={percentage}
                 width={Math.trunc((percentage * 100) / maxPercentage)}
                 numberOfContributors={numberOfContributors}
+                isCompetitionVote={isCompetitionVote}
               />
             ))}
         </Box>
@@ -65,13 +66,16 @@ const Item = ({
   width,
   percentage,
   numberOfContributors,
+  isCompetitionVote,
 }: {
   bg?: string
   title: string
   width: number
   percentage: number
   numberOfContributors: number
+  isCompetitionVote: boolean
 }) => {
+  const { t } = useTranslation()
   return (
     <Box pt={1} alignItems="center" justifyContent="start" display="flex">
       <Box pr={3} maxWidth="330px" width="75%" display="flex" flexDirection="row" gap={5}>
@@ -82,7 +86,7 @@ const Item = ({
           <Text as="span" fontWeight={700}>
             {numberOfContributors}
           </Text>{' '}
-          contributions
+          {isCompetitionVote ? t('voters') : t('contributors')}
         </Text>
       </Box>
       <Box display="flex" alignItems="center" justifyContent="start" flexGrow={1}>
