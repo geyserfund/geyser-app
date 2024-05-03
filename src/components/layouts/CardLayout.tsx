@@ -2,7 +2,6 @@ import { Stack, StackProps } from '@chakra-ui/react'
 import { forwardRef } from 'react'
 import { Link, LinkProps } from 'react-router-dom'
 
-import { standardPadding } from '../../styles'
 import { useMobileMode } from '../../utils'
 
 export interface CardLayoutProps extends StackProps, Partial<Pick<LinkProps, 'to'>> {
@@ -42,7 +41,7 @@ export const CardLayout = forwardRef<HTMLDivElement, CardLayoutProps>(
     }
 
     return (
-      <Stack p={standardPadding} borderRadius="8px" {...props}>
+      <Stack p={5} borderRadius="8px" {...props}>
         {children}
       </Stack>
     )
