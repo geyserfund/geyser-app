@@ -1,4 +1,4 @@
-import { Box, Button, Text } from '@chakra-ui/react'
+import { Box, Button, HStack, Text } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
@@ -11,8 +11,15 @@ import { getPath } from '../../../../constants'
 import { ProjectFundingModal } from '../../../../modules/project/pages/projectFunding/components/ProjectFundingModal'
 // import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
 import { fonts } from '../../../../styles'
-import { GrantApplicant, GrantApplicantFunding, GrantStatusEnum, Project } from '../../../../types'
+import {
+  GrantApplicant,
+  GrantApplicantContributor,
+  GrantApplicantFunding,
+  GrantStatusEnum,
+  Project,
+} from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
+import { ListText } from '../../components/ListText'
 import { WidgetItem } from '../../components/WidgetItem'
 import { useProjectFundingModal } from '../components/useProjectFundingModal'
 
@@ -24,6 +31,7 @@ interface Props {
   isClosed?: boolean
   fundingOpenStartDate: number
   fundingOpenEndDate: number
+  isCompetitionVote: boolean
 }
 
 const useStyles = createUseStyles({
@@ -47,6 +55,7 @@ export const CommunityVoting = ({
   grantStatus,
   title,
   isClosed,
+  isCompetitionVote,
 }: Props) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
@@ -59,13 +68,29 @@ export const CommunityVoting = ({
 
   const canVote = grantHasVoting && grantStatus === GrantStatusEnum.FundingOpen
 
-  const renderWidgetItem = (funding: GrantApplicantFunding) => {
+  const renderWidgetItem = (funding: GrantApplicantFunding, contributors: GrantApplicantContributor[]) => {
+    const numberOfContributors = contributors.length
     return (
-      <WidgetItem subtitle={!isClosed ? t('worth of votes') : t('distributed')}>
-        {getShortAmountLabel(
-          !isClosed ? funding.communityFunding : funding.grantAmount + funding.communityFunding || 0,
+      <HStack gap={5}>
+        {isCompetitionVote && (
+          <Box display={'flex'} alignItems="center" flexDirection="column">
+            <Box display={'flex'} alignItems="center">
+              <Text fontWeight={'700'} fontSize={'26px'} fontFamily={fonts.livvic} color="primary.500">
+                {numberOfContributors || 0}
+              </Text>
+            </Box>
+
+            <Text fontWeight={'400'} fontSize="10px" fontStyle="normal" color="neutral.900">
+              {t('voters')}
+            </Text>
+          </Box>
         )}
-      </WidgetItem>
+        <WidgetItem subtitle={!isClosed ? t('worth of votes') : t('distributed')}>
+          {getShortAmountLabel(
+            !isClosed ? funding.communityFunding : funding.grantAmount + funding.communityFunding || 0,
+          )}
+        </WidgetItem>
+      </HStack>
     )
   }
 
@@ -98,7 +123,7 @@ export const CommunityVoting = ({
   return (
     <CardLayout noMobileBorder p={{ base: '10px', lg: '20px' }} spacing={{ base: '10px', lg: '20px' }} w="full">
       <H3 fontSize="18px">{t(title)}</H3>
-      {applicants.map(({ project, funding }) => {
+      {applicants.map(({ project, funding, contributors }) => {
         const projectLink = getPath('project', project.name)
         // const currentFunders = project.funders.filter(
         //   (funder) => funder && funder.confirmedAt > fundingOpenStartDate && funder.confirmedAt <= fundingOpenEndDate,
@@ -143,7 +168,7 @@ export const CommunityVoting = ({
                   alignItems="center"
                 >
                   {renderButton(project)}
-                  {(grantHasVoting || isClosed) && renderWidgetItem(funding)}
+                  {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributors || [])}
                 </Box>
               )}
             </Box>

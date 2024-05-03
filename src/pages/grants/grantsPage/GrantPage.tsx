@@ -113,6 +113,10 @@ export const GrantPage = () => {
       return t('Grant Winners!')
     }
 
+    if (grant.type === GrantType.CommunityVote) {
+      return t('Vote for your favorite projects with your Sats!')
+    }
+
     const defaultTitle = 'Let the Sats flow to your favorite projects.'
 
     if (grantHasVoting) {
@@ -173,6 +177,7 @@ export const GrantPage = () => {
               fundingOpenEndDate={fundingOpenStatus?.endAt}
               fundingOpenStartDate={fundingOpenStatus?.startAt}
               isClosed={grant.status === GrantStatusEnum.Closed}
+              isCompetitionVote={isCompetitionVote}
             />
             <MobileDivider />
           </>
