@@ -22,12 +22,7 @@ export const DistributionChart = ({ applicants, isCompetitionVote }: Props) => {
   const percentages: Array<GrantApplicant & { percentage: number; numberOfContributors: number }> = applicants.map(
     (applicant) => ({
       ...applicant,
-      percentage: isCompetitionVote
-        ? Math.round(
-            ((applicant.contributors?.reduce((acc, contributor) => acc + contributor.amount, 0) || 0) * 100) /
-              (total || 1),
-          )
-        : Math.round(((applicant.funding?.communityFunding || 0) * 100) / (total || 1)),
+      percentage: ((applicant.funding?.communityFunding || 0) * 100) / (total || 1),
       numberOfContributors: applicant.contributorsCount,
     }),
   )
