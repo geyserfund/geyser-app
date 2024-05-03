@@ -9,7 +9,7 @@ import { H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import { ProjectFundingModal } from '../../../../modules/project/pages/projectFunding/components/ProjectFundingModal'
-// import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
+import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
 import { fonts } from '../../../../styles'
 import {
   GrantApplicant,
@@ -19,7 +19,6 @@ import {
   Project,
 } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
-import { ListText } from '../../components/ListText'
 import { WidgetItem } from '../../components/WidgetItem'
 import { useProjectFundingModal } from '../components/useProjectFundingModal'
 
@@ -70,6 +69,8 @@ export const CommunityVoting = ({
 
   const renderWidgetItem = (funding: GrantApplicantFunding, contributors: GrantApplicantContributor[]) => {
     const numberOfContributors = contributors.length
+    const worthOfVotes = contributors.reduce((acc, contributor) => acc + contributor.amount, 0)
+
     return (
       <HStack gap={5}>
         {isCompetitionVote && (
@@ -86,9 +87,11 @@ export const CommunityVoting = ({
           </Box>
         )}
         <WidgetItem subtitle={!isClosed ? t('worth of votes') : t('distributed')}>
-          {getShortAmountLabel(
-            !isClosed ? funding.communityFunding : funding.grantAmount + funding.communityFunding || 0,
-          )}
+          {isCompetitionVote
+            ? getShortAmountLabel(worthOfVotes)
+            : getShortAmountLabel(
+                !isClosed ? funding.communityFunding : funding.grantAmount + funding.communityFunding || 0,
+              )}
         </WidgetItem>
       </HStack>
     )
@@ -125,9 +128,17 @@ export const CommunityVoting = ({
       <H3 fontSize="18px">{t(title)}</H3>
       {applicants.map(({ project, funding, contributors }) => {
         const projectLink = getPath('project', project.name)
-        // const currentFunders = project.funders.filter(
-        //   (funder) => funder && funder.confirmedAt > fundingOpenStartDate && funder.confirmedAt <= fundingOpenEndDate,
-        // )
+
+        let currentFunders = []
+
+        if (!isCompetitionVote) {
+          currentFunders = project.funders.filter(
+            (funder) => funder && funder.confirmedAt > fundingOpenStartDate && funder.confirmedAt <= fundingOpenEndDate,
+          )
+        } else {
+          currentFunders = contributors || []
+        }
+
         return (
           <CardLayout p={2} key={project.id}>
             <Box display="flex">
@@ -172,13 +183,13 @@ export const CommunityVoting = ({
                 </Box>
               )}
             </Box>
-            {/* {canVote && currentFunders.length > 0 && (
+            {canVote && currentFunders.length > 0 && isCompetitionVote && (
               <Box pl={2} filter="opacity(0.4)">
                 {currentFunders.map(
                   (funder) =>
                     funder && (
                       <AvatarElement
-                        key={funder.id}
+                        key={isCompetitionVote ? (funder as any).id : funder?.user?.id}
                         width="28px"
                         height="28px"
                         wrapperProps={{
@@ -188,13 +199,13 @@ export const CommunityVoting = ({
                         }}
                         avatarOnly
                         borderRadius="50%"
-                        seed={funder.id}
-                        user={funder.user}
+                        seed={isCompetitionVote ? (funder as any).id : funder?.user?.id}
+                        user={isCompetitionVote ? (funder as any).user : funder?.user}
                       />
                     ),
                 )}
               </Box>
-            )} */}
+            )}
             {isMobile && renderButton(project)}
           </CardLayout>
         )

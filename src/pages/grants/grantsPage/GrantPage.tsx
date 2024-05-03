@@ -127,8 +127,7 @@ export const GrantPage = () => {
   }
 
   const grantHasVoting = GrantHasVoting[grant.name]
-  // TODO: Change with commpetition vote when available
-  const isCompetitionVote = grant.type === GrantType.CommunityVote
+  const isCompetitionVote = grant.type === GrantType.CompetitionVote
   const showCommunityVoting = grant.status !== GrantStatusEnum.ApplicationsOpen
   const showDistributionChart = grant.status !== GrantStatusEnum.ApplicationsOpen && grantHasVoting
   const showGrantApply = grant.status !== GrantStatusEnum.Closed
@@ -157,7 +156,7 @@ export const GrantPage = () => {
         <MobileDivider />
         {showDistributionChart && (
           <>
-            <DistributionChart applicants={applicants} />
+            <DistributionChart applicants={applicants} isCompetitionVote={isCompetitionVote} />
             <MobileDivider />
           </>
         )}
