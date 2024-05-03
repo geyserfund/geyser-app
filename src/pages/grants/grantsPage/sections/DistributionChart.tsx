@@ -82,7 +82,7 @@ const Item = ({
           <Text as="span" fontWeight={700}>
             {numberOfContributors}
           </Text>{' '}
-          contributions
+          contributors
         </Text>
       </Box>
       <Box display="flex" alignItems="center" justifyContent="start" flexGrow={1}>
