@@ -104,7 +104,15 @@ const ChartBar = ({
 
   return (
     <HStack width="100%" alignItems="center">
-      <HStack p={3} width={width} height="20px" bg={bg} borderRadius="20px" justifyContent={'end'} alignItems="center">
+      <HStack
+        p={3}
+        width={`calc(${width} - 100px)`}
+        height="20px"
+        bg={bg}
+        borderRadius="20px"
+        justifyContent={'end'}
+        alignItems="center"
+      >
         <Caption fontSize={'12px'} bold color={bg === 'primary.100' ? 'neutral.1000' : 'neutral.0'}>
           {percentage.toFixed(1)}%
         </Caption>
