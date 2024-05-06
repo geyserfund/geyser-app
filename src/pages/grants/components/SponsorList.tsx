@@ -1,4 +1,4 @@
-import { Box, BoxProps, HStack, Image, Link, Text } from '@chakra-ui/react'
+import { Box, BoxProps, Image, Link, Text, Wrap, WrapItem } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -20,10 +20,11 @@ export const SponsorList = ({ sponsors = [], titleProps, children, ...props }: P
           </Text>
         </Box>
       )}
-      <Box ml={2} my={2} display="flex" flexWrap="wrap">
+      <Wrap ml={2} my={2} justify={'center'}>
         {sponsors.map((item) =>
           item && item.image ? (
-            <HStack
+            <WrapItem
+              display="flex"
               key={item.id}
               mr={3}
               background={'white'}
@@ -35,10 +36,10 @@ export const SponsorList = ({ sponsors = [], titleProps, children, ...props }: P
               <Link target="_blank" href={item.url || '#'}>
                 <Image src={item.image} alt="sponsor logo" height="30px" />
               </Link>
-            </HStack>
+            </WrapItem>
           ) : null,
         )}
-      </Box>
+      </Wrap>
     </Box>
   ) : null
 }

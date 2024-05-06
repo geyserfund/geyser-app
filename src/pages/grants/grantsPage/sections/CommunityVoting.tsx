@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Text } from '@chakra-ui/react'
+import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
@@ -65,7 +65,7 @@ export const CommunityVoting = ({
     return (
       <HStack gap={5}>
         {isCompetitionVote && (
-          <Box display={'flex'} alignItems="center" flexDirection="column">
+          <Box display={'flex'} alignItems="center" flexDirection={'column'}>
             <Box display={'flex'} alignItems="center">
               <Text fontWeight={'700'} fontSize={'26px'} fontFamily={fonts.livvic} color="primary.500">
                 {contributorsCount || 0}
@@ -185,7 +185,12 @@ export const CommunityVoting = ({
                 )}
               </Box>
             )}
-            {isMobile && renderButton(project)}
+            {isMobile && (
+              <VStack w="full">
+                {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
+                {renderButton(project)}
+              </VStack>
+            )}
           </CardLayout>
         )
       })}

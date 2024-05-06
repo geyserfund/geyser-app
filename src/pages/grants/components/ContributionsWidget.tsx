@@ -27,7 +27,7 @@ export const ContributionsWidget = ({
 }: Props) => {
   const { t } = useTranslation()
   return (
-    <Box borderRadius="8px" backgroundColor="neutral.100" pb={4} pt={2} mt={4}>
+    <Box borderRadius="8px" backgroundColor="neutral.100" pb={4} pt={2} my={4}>
       <Box display="flex" flexWrap="wrap" alignItems="center" justifyContent="space-around">
         <Box
           px={2}
