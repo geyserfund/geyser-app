@@ -22,6 +22,7 @@ import { FieldContainer } from '../../../../../../../../../../forms/components/F
 import { MUTATION_UPDATE_PROJECT_CURRENCY } from '../../../../../../../../../../graphql/mutations'
 import { useBTCConverter } from '../../../../../../../../../../helpers/useBTCConverter'
 import { useModal } from '../../../../../../../../../../hooks/useModal'
+import { standardPadding } from '../../../../../../../../../../styles'
 import {
   CreateProjectRewardInput,
   ProjectReward,
@@ -329,7 +330,7 @@ export const ProjectRewardForm = ({
     <>
       <CardLayout
         minWidth="100%"
-        {...(isLaunch ? { border: 'none', h: '100%' } : { padding: isMobile ? '10px 10px' : '20px 20px' })}
+        {...(isLaunch ? { border: 'none', h: '100%' } : { padding: standardPadding })}
         noMobileBorder
       >
         <Stack direction={'row'} align={'center'}>
