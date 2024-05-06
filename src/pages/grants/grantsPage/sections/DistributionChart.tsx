@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next'
 
 import { CardLayout } from '../../../../components/layouts'
 import { Caption, H3 } from '../../../../components/typography'
+import { standardPadding } from '../../../../styles'
 import { GrantApplicant } from '../../../../types'
-import { getShortAmountLabel } from '../../../../utils'
+import { getShortAmountLabel, useMobileMode } from '../../../../utils'
 
 const CHART_BAR_COLORS = ['primary.900', 'primary.700', 'primary.500', 'primary.400', 'primary.100']
 
@@ -32,8 +33,8 @@ export const DistributionChart = ({ applicants, isCompetitionVote }: Props) => {
   const maxPercentage = Math.max(...percentages.map((p) => p.percentage))
 
   return (
-    <CardLayout noMobileBorder p={{ base: 0, lg: 5 }} w="full">
-      <H3>{isCompetitionVote ? t('Leaderboard') : t('Grant distribution status')}</H3>
+    <CardLayout noMobileBorder p={standardPadding} w="full">
+      <H3>{t('Leaderboard')}</H3>
       {percentages.length > 0 && (
         <Box py={2}>
           {percentages
@@ -73,8 +74,8 @@ const Item = ({
   communityFundingAmount: number
 }) => {
   return (
-    <HStack pt={2} alignItems="center" justifyContent="start">
-      <HStack pr={1} width="150px">
+    <HStack pt={2} alignItems="center" justifyContent="start" spacing="10px">
+      <HStack pr={1} width="120px">
         <Text isTruncated={true} whiteSpace="nowrap" fontWeight={500}>
           {title}
         </Text>
@@ -89,42 +90,47 @@ const Item = ({
 const ChartBar = ({
   width,
   bg,
-  children,
   percentage,
   numberOfContributors,
   isCompetitionVote,
   communityFundingAmount,
-}: Pick<BoxProps, 'width' | 'bg' | 'children'> & {
+}: Pick<BoxProps, 'width' | 'bg'> & {
   percentage: number
   numberOfContributors: number
   isCompetitionVote: boolean
   communityFundingAmount: number
 }) => {
   const { t } = useTranslation()
+  const isMobile = useMobileMode()
 
   return (
     <HStack width="100%" alignItems="center">
       <HStack
-        p={3}
-        width={`calc(${width} - 100px)`}
+        p={'5px'}
+        width={percentage > 0 ? `calc(${width} - 150px)` : `calc(${width} - 190px)`}
+        minWidth="40px"
         height="20px"
         bg={bg}
         borderRadius="20px"
         justifyContent={'end'}
         alignItems="center"
       >
-        <Caption fontSize={'12px'} bold color={bg === 'primary.100' ? 'neutral.1000' : 'neutral.0'}>
-          {percentage.toFixed(1)}%
+        <Caption
+          fontSize={'12px'}
+          bold
+          color={['primary.100', 'primary.400'].includes(`${bg}`) ? 'neutral.1000' : 'neutral.0'}
+        >
+          {isMobile ? Math.round(percentage) : percentage.toFixed(1)}%
         </Caption>
       </HStack>
-      <HStack minWidth="100px">
+      <HStack minWidth="150px">
         <Caption fontSize={'12px'} bold color="neutral.9000">
           {getShortAmountLabel(communityFundingAmount, true)}
         </Caption>
-        <Caption fontSize={'12px'} bold color="neutral.600">
-          {'( '}
+        <Caption fontSize={'12px'} bold color="neutral.600" isTruncated>
+          {'('}
           {getShortAmountLabel(numberOfContributors, true)} {isCompetitionVote ? t('voters') : t('contributors')}
-          {' )'}
+          {')'}
         </Caption>
       </HStack>
     </HStack>

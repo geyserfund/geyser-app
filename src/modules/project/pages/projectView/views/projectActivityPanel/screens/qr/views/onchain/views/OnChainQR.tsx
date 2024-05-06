@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { FaCopy } from 'react-icons/fa'
 import { RiLinkUnlink } from 'react-icons/ri'
 
+import { TotalAmountToPay, WaitingForPayment } from '../../../components'
 import { QRCodeComponent } from '../../../components/QRCodeComponent'
-import { WaitingForPayment } from '../../../components/WaitingForPayment'
 import { useCopyToClipboard } from '../../../hooks/useCopyButton'
 import { PaymentAndRefundInstructions } from '../components'
 
@@ -16,6 +16,7 @@ export const OnChainQR = ({ onChainAddress }: { onChainAddress: string }) => {
     <VStack flexWrap="wrap" width="100%" spacing="20px">
       <VStack w="full">
         <QRCodeComponent value={onChainAddress} onClick={onCopy} isColored={hasCopied} />
+        <TotalAmountToPay />
         <WaitingForPayment />
       </VStack>
 

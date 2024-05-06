@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { FaCopy } from 'react-icons/fa'
 import { RiLinkUnlink } from 'react-icons/ri'
 
+import { TotalAmountToPay, WaitingForPayment } from '../../components'
 import { QRCodeComponent } from '../../components/QRCodeComponent'
-import { WaitingForPayment } from '../../components/WaitingForPayment'
 import { useCopyToClipboard } from '../../hooks/useCopyButton'
 
 interface LightningQRProps {
@@ -20,6 +20,7 @@ export const LightningQR = ({ lightningInvoice }: LightningQRProps) => {
     <VStack flexWrap="wrap" width="100%" spacing="20px">
       <VStack w="full">
         <QRCodeComponent value={lightningInvoice} onClick={onCopy} isColored={hasCopied} />
+        <TotalAmountToPay />
         <WaitingForPayment />
       </VStack>
 
