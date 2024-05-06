@@ -33,7 +33,6 @@ import {
   USDCents,
 } from '../../../../../../../../../../types'
 import { commaFormatted, isProjectAnException, toInt, useNotification } from '../../../../../../../../../../utils'
-import { useMobileMode } from '../../../../../../../../../../utils'
 import { useProjectContext } from '../../../../../../../../context'
 
 type Props = {
@@ -60,7 +59,6 @@ export const ProjectRewardForm = ({
   const navigate = useNavigate()
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
   const { toast } = useNotification()
-  const isMobile = useMobileMode()
 
   const {
     isOpen: isCurrencyChangeModalOpen,
