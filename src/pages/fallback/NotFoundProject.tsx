@@ -4,9 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { Body1 } from '../../components/typography'
 import { Head } from '../../config'
 import { NotFoundPageImageUrl } from '../../constants/platform/url'
+import { useMobileMode } from '../../utils'
 
 export const NotFoundProject = () => {
   const { t } = useTranslation()
+  const isMobile = useMobileMode()
 
   return (
     <>
@@ -26,7 +28,7 @@ export const NotFoundProject = () => {
           {t('This project does not exist')}
         </Text>
         <VStack
-          width={600}
+          width={isMobile ? '100%' : '600px'}
           border="2px solid"
           borderColor="neutral.400"
           backgroundColor="neutral.50"
