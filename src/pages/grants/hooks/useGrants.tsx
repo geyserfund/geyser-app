@@ -9,6 +9,8 @@ type ResponseData = {
   grants: Grant[]
 }
 
+const CurrentFeaturedGrant = 'grant-round-007'
+
 export const useGrants = () => {
   const { data, error, loading, refetch } = useQuery<ResponseData>(QUERY_GRANTS)
 
@@ -46,6 +48,11 @@ export const useGrants = () => {
     [data],
   )
 
+  const featuredGrant = useMemo(
+    () => (data ? data.grants.find((grant) => grant.name === CurrentFeaturedGrant) : null),
+    [data],
+  )
+
   return {
     grants: data ? data.grants : null,
     error,
@@ -54,5 +61,6 @@ export const useGrants = () => {
     activeGrant,
     inactiveGrants,
     latestGrant,
+    featuredGrant,
   }
 }

@@ -21,6 +21,7 @@ export const GrantHasVoting: { [key: string]: boolean } = {
   'grant-round-005': false,
   'grant-round-006': true,
   'grant-round-007': true,
+  'grant-round-008': true,
 }
 
 export type GrantAnnouncement = {
