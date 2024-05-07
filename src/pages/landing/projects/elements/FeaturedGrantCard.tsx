@@ -9,7 +9,7 @@ import { FeaturedCardSkeleton } from './FeaturedSkeleton'
 import { ProjectRowLayout } from './ProjectRowLayout'
 
 interface Props {
-  grant: Grant | null
+  grant?: Grant | null
   loading: boolean
 }
 
