@@ -10,7 +10,7 @@ import { useAuthContext } from '../../../context'
 import { useFollowProject } from '../../../hooks/graphqlState'
 import { fonts } from '../../../styles'
 import { Project } from '../../../types'
-import { getShortAmountLabel } from '../../../utils'
+import { getShortAmountLabel, removeProjectAmountException } from '../../../utils'
 
 export interface FundingStatWithFollowProps extends StackProps {
   fundersCount?: number
@@ -30,7 +30,7 @@ export const FundingStatWithFollow = ({
   const { isLoggedIn } = useAuthContext()
 
   const { isFollowed, handleFollow, handleUnFollow, followLoading, unfollowLoading } = useFollowProject(project)
-
+  const isRemoveAmountException = removeProjectAmountException(project.name)
   return (
     <HStack direction={'row'} spacing="20px" {...rest}>
       <VStack alignItems={'center'} spacing={0}>
@@ -41,15 +41,17 @@ export const FundingStatWithFollow = ({
         </Text>
       </VStack>
 
-      <VStack alignItems={'center'} spacing={0}>
-        <HStack spacing="3px">
-          <SatSymbolIcon fontSize="14px" />
-          <MonoBody1 bold={bold}>{getShortAmountLabel(amountFunded)}</MonoBody1>
-        </HStack>
-        <Text fontSize="12px" color={'neutral.600'} fontFamily={fonts.mono} textTransform="uppercase">
-          {t('funded')}
-        </Text>
-      </VStack>
+      {!isRemoveAmountException && (
+        <VStack alignItems={'center'} spacing={0}>
+          <HStack spacing="3px">
+            <SatSymbolIcon fontSize="14px" />
+            <MonoBody1 bold={bold}>{getShortAmountLabel(amountFunded)}</MonoBody1>
+          </HStack>
+          <Text fontSize="12px" color={'neutral.600'} fontFamily={fonts.mono} textTransform="uppercase">
+            {t('funded')}
+          </Text>
+        </VStack>
+      )}
       {!isFollowed ? (
         <Tooltip label={isLoggedIn ? t('follow project') : t('login to follow project')} placement="top">
           <IconButtonComponent
