@@ -1,4 +1,4 @@
-import { Box, HStack, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react'
+import { Box, HStack, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { AiFillQuestionCircle } from 'react-icons/ai'
 
