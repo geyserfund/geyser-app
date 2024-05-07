@@ -630,7 +630,6 @@
   "from": "from",
   "Coming soon": "Coming soon",
   "Grant funds will be distributed by principled bitcoin board members.": "Grant funds will be distributed by principled bitcoin board members.",
-  "Apply to be part of the {{title}} grant. Find out more about how projects will be selected and how voting works <1>here.</1>": "Apply to be part of the {{title}} grant. Find out more about how projects will be selected and how voting works <1>here.</1>",
   "Contribute directly to {{title}} Grant via QR code (lightning and onchain)": "Contribute directly to {{title}} Grant via QR code (lightning and onchain)",
   "Verify your email": "Verify your email",
   "Backup your Geyser account and project with your email. This will ensure that you can always access Geyser (in case of social media censorship) and can securely update your project information.": "Backup your Geyser account and project with your email. This will ensure that you can always access Geyser (in case of social media censorship) and can securely update your project information.",
@@ -992,7 +991,6 @@
    "Contribution to":"Contribution to",
    "Refund summary":"Refund summary",
    "Total Refunded":"Total Refunded",
-   "We apologize for any inconvenience caused.":"We apologize for any inconvenience caused."
-
-
+   "We apologize for any inconvenience caused.":"We apologize for any inconvenience caused.",
+   "Apply to be participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow":"Apply to be participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow"
 }
