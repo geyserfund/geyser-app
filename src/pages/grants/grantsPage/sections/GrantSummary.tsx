@@ -2,8 +2,9 @@ import { Box, Image } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { CardLayout } from '../../../../components/layouts'
-import { Body1, H1, H3 } from '../../../../components/typography'
+import { H1, H3 } from '../../../../components/typography'
 import { StatusLabel } from '../../../../components/ui/StatusLabel'
+import { MarkdownField } from '../../../../forms/markdown/MarkdownField'
 import { Grant } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
 import { ContributionsWidget } from '../../components/ContributionsWidget'
@@ -46,9 +47,9 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
         </Box>
         <Box pt={4}>
           <H3 fontSize="18px">{t(grant.shortDescription)}</H3>
-          <Body1 fontSize="16px" pt={4}>
-            {t(grant.description || '')}
-          </Body1>
+          <Box pt={4}>
+            <MarkdownField preview content={grant.description || ''} />
+          </Box>
           <ContributionsWidget
             sponsors={grant.sponsors}
             endDateSubtitle={
