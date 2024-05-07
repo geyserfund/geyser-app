@@ -24,6 +24,8 @@ export const GrantHasVoting: { [key: string]: boolean } = {
   'grant-round-008': false,
 }
 
+export const NoContributionInGrant = ['grant-round-008']
+
 export type GrantAnnouncement = {
   linkUrl: string
   imageUrl: string
