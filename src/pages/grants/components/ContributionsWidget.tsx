@@ -58,7 +58,7 @@ export const ContributionsWidget = ({
         </Box>
         <Box px={2} display="flex" alignItems="start" my={2}>
           <BadgeIcon mt={1} mr={2} width="36px" height="100%" color="primary.500" />
-          <WidgetItem subtitle={t('Geyser grant')}>{balance}</WidgetItem>
+          <WidgetItem subtitle={t('Grant amount')}>{balance}</WidgetItem>
         </Box>
         {hasVoting && (
           <Box px={2} display="flex" alignItems="start" my={2}>
