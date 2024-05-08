@@ -391,7 +391,7 @@
   "Active": "Active",
   "Countdown to grant going live": "Countdown to grant going live",
   "Time left to vote": "Time left to vote",
-  "Geyser grant": "Geyser grant",
+  "Grant amount": "Grant amount",
   "Worth of votes": "Worth of votes",
   "Sponsored by": "Sponsored by",
   "SPONSORS": "SPONSORS",
@@ -992,5 +992,5 @@
    "Refund summary":"Refund summary",
    "Total Refunded":"Total Refunded",
    "We apologize for any inconvenience caused.":"We apologize for any inconvenience caused.",
-   "Apply to be participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow":"Apply to be participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow"
+   "Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow":"Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow"
 }

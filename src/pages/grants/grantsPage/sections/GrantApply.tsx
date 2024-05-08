@@ -42,11 +42,11 @@ export const GrantApply = ({ grant }: GrantProps) => {
         <Trans
           values={{ title: grant.title }}
           i18nKey={
-            'Apply to be participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow'
+            'Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow'
           }
         >
           {
-            'Apply to be participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow'
+            'Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow'
           }
         </Trans>
       </Body1>
