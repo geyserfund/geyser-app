@@ -1,3 +1,4 @@
+import { geyserUrl } from '../contants'
 import { getDropdownButton, loginWithNostr, logoutUser, openConnectPopup } from '../utils/auth'
 import { aliasQuery, hasOperationName, interceptGraphql } from '../utils/graphql'
 
@@ -54,7 +55,7 @@ describe('Login', () => {
       },
     ).as('NostrAuthToken')
 
-    cy.visit('http://staging.geyser.fund')
+    cy.visit(geyserUrl)
   })
 
   it('Should open login popup on landing page', () => {

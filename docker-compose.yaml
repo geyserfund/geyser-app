@@ -1,40 +1,13 @@
-version: '3.9'
 services:
-  geyser-app:
-    container_name: geyser-app-standalone
-    build:
-      context: .
-      target: base
-    command: sh -c "RUN_DOCKER=true && yarn install && yarn dev"
-    depends_on:
-      - caddy
-    working_dir: /usr/app
-    image: geyser-app
-    env_file: .env
-    ports:
-      - '3000:3000'
+  e2e:
+    image: cypress/included:12.3.0
+    build: /cypress
+    container_name: cypress
+    environment:
+      - ENV=development
+      - CYPRESS_baseUrl=https://dev.geyser.fund
+    working_dir: /cypress
     volumes:
-      - .:/usr/app:cached
+      - ./:/cypress
+    network_mode: host
 
-  graphql-faker:
-    container_name: graphql-faker
-    working_dir: /workdir
-    build:
-      context: ./faker
-      args:
-        - APOLLO_KEY=$APOLLO_KEY
-    image: graphql-faker
-    env_file: .env
-    ports:
-      - '9002:9002'
-
-  caddy:
-    container_name: geyser-caddy-standalone
-    image: caddy:2-alpine
-    restart: unless-stopped
-    ports:
-      - '443:443'
-      - '80:80'
-    volumes:
-      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:cached
-      - ./caddy/config:/config

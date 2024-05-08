@@ -4,4 +4,3 @@ dev-staging:
 	docker compose up geyser-app caddy
 dev-faker:
 	docker compose up
-	
