@@ -13,6 +13,7 @@ export const OnChainProcessing = () => {
   return (
     <>
       <TransactionProcessing
+        id="onchain-transaction-processing-card"
         title={t('Transaction is being processed...')}
         subTitle={t(
           'Completion time may vary due to Bitcoin network conditions, such as mempool size and transaction fees. Thank you for your patience.',
