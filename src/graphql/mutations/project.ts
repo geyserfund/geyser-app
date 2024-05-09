@@ -95,30 +95,32 @@ export const MUTATION_DELETE_PROJECT_REWARD = gql`
 `
 
 export const MUTATION_CREATE_PROJECT_MILESTONE = gql`
-  mutation CreateProjectMilestone($input: CreateProjectMilestoneInput) {
-    createProjectMilestone(input: $input) {
+  mutation ProjectGoalCreate($input: ProjectGoalCreateInput!) {
+    projectGoalCreate(input: $input) {
       id
-      name
+      title
       description
-      amount
+      targetAmount
     }
   }
 `
 
 export const MUTATION_UPDATE_PROJECT_MILESTONE = gql`
-  mutation UpdateProjectMilestone($input: UpdateProjectMilestoneInput) {
-    updateProjectMilestone(input: $input) {
+  mutation ProjectGoalUpdate($input: ProjectGoalUpdateInput!) {
+    projectGoalUpdate(input: $input) {
       id
-      name
+      title
       description
-      amount
+      targetAmount
     }
   }
 `
 
 export const MUTATION_DELETE_PROJECT_MILESTONE = gql`
-  mutation DeleteProjectMilestone($projectMilestoneId: BigInt!) {
-    deleteProjectMilestone(projectMilestoneId: $projectMilestoneId)
+  mutation ProjectGoalDelete($projectGoalId: BigInt!) {
+    projectGoalDelete(projectGoalId: $projectGoalId) {
+      id
+    }
   }
 `
 
