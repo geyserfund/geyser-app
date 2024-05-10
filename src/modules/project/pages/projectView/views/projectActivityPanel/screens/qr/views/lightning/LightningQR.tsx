@@ -25,6 +25,7 @@ export const LightningQR = ({ lightningInvoice }: LightningQRProps) => {
       </VStack>
 
       <Button
+        id="copy-lightning-invoice-button"
         size="md"
         leftIcon={hasCopied ? <RiLinkUnlink /> : <FaCopy />}
         onClick={onCopy}

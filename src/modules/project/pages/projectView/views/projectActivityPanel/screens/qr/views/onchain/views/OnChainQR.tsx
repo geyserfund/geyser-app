@@ -21,6 +21,7 @@ export const OnChainQR = ({ onChainAddress }: { onChainAddress: string }) => {
       </VStack>
 
       <Button
+        id="copy-onchain-address-button"
         size="md"
         leftIcon={hasCopied ? <RiLinkUnlink /> : <FaCopy />}
         onClick={onCopy}
