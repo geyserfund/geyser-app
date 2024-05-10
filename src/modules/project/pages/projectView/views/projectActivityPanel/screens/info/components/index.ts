@@ -1,5 +1,5 @@
-export * from './BalanceDisplayButton'
 export * from './InfoScreenFeedTabs'
+export * from './ProjectBalanceDisplay'
 export * from './ProjectContributionList'
 export * from './ProjectFundersModal'
 export * from './ProjectLeaderboardList'

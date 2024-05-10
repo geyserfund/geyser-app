@@ -1,18 +1,15 @@
 import {
   Avatar,
-  Box,
   Button,
-  CircularProgress,
   HStack,
   SkeletonCircle,
   SkeletonText,
   StackProps,
   Text,
-  useDisclosure,
   useTheme,
   VStack,
 } from '@chakra-ui/react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEllipsis } from 'react-icons/ai'
 
@@ -21,15 +18,12 @@ import { UserAvatar } from '../../../../../../../../../components/ui/UserAvatar'
 import { ExternalAccountType } from '../../../../../../../../../pages/auth'
 import { useFollowedProjectsValue } from '../../../../../../../../../pages/auth/state'
 import { FunderWithUserFragment, OrderByOptions, useProjectFundersQuery } from '../../../../../../../../../types'
-import { removeProjectAmountException, toInt, useMobileMode, useNotification } from '../../../../../../../../../utils'
+import { toInt, useMobileMode, useNotification } from '../../../../../../../../../utils'
 import { useProjectContext } from '../../../../../../../context'
-import { useProjectGoals } from '../../../../../hooks/useProjectGoals'
 import { ContributeButton, FollowButton, ShareButton } from '../../../../projectMainBody/components'
-import { BalanceDisplayButton, SubscribeButton } from '../components'
+import { SubscribeButton } from '../components'
 import { ProjectBalanceDisplay } from '../components/ProjectBalanceDisplay'
 import { ProjectFundersModal, useProjectFundersModal } from '../components/ProjectFundersModal'
-
-const TIME_AFTER_WHICH_TOOLTIP_SHOULD_CLOSE_MILLIS = 1500
 
 export const ActivityBrief = (props: StackProps) => {
   const { t } = useTranslation()
@@ -38,16 +32,6 @@ export const ActivityBrief = (props: StackProps) => {
 
   const { project } = useProjectContext()
   const followedProjects = useFollowedProjectsValue()
-
-  const { isOpen: isToolTipOpen, onOpen: onToolTipOpen, onClose: onToolTipClose } = useDisclosure()
-
-  useEffect(() => {
-    if (isToolTipOpen) {
-      setTimeout(() => {
-        onToolTipClose()
-      }, TIME_AFTER_WHICH_TOOLTIP_SHOULD_CLOSE_MILLIS)
-    }
-  }, [isToolTipOpen, onToolTipClose])
 
   const [allFunders, setAllFunders] = useState<FunderWithUserFragment[]>([])
   const [socialFunders, setSocialFunders] = useState<FunderWithUserFragment[]>([])
