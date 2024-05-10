@@ -72,6 +72,7 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
         {showUpload && <RefundFileInput name="refundFile" label={t('Upload refund file')} />}
 
         <TextField
+          id="refund-address-input"
           name="bitcoinAddress"
           label={t('Enter refund address')}
           placeholder={t('bc1ilyp21…')}
@@ -79,7 +80,14 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
         />
         <Body2 color="neutral.600">{t('Enter Bitcoin on-chain address on which you wish to get a refund.')}</Body2>
 
-        <Button type="submit" w="full" variant="primary" isLoading={loading} isDisabled={!showUpload && !currentSwapId}>
+        <Button
+          id="initiate-refund-button"
+          type="submit"
+          w="full"
+          variant="primary"
+          isLoading={loading}
+          isDisabled={!showUpload && !currentSwapId}
+        >
           {t('Initiate refund')}
         </Button>
       </VStack>
