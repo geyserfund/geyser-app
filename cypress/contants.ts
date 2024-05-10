@@ -1,1 +1,15 @@
-export const geyserUrl = process.env.ENV === 'staging' ? 'https://staging.geyser.fund' : 'https://dev.geyser.fund'
+export const geyserUrl = Cypress.env('APP_URL')
+export const CONTRIBUTOR_LND_ENDPOINT = Cypress.env('CONTRIBUTOR_LND_ENDPOINT')
+export const CONTRIBUTOR_LND_ADMIN_MACAROON_HEX = Cypress.env('CONTRIBUTOR_LND_ADMIN_MACAROON_HEX')
+export const MINE_BLOCK_ADDRESS = Cypress.env('MINE_BLOCK_ADDRESS')
+export const BITCOIND_ENDPOINT = Cypress.env('BITCOIND_ENDPOINT')
+export const BITCOIND_AUTH = Cypress.env('BITCOIND_AUTH')
+
+export enum ApolloErrors {
+  BAD_USER_INPUT = 'BAD_USER_INPUT',
+  INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
+  INVALID_FUNDING_AMOUNT = 'INVALID_FUNDING_AMOUNT',
+  WALLET_UNREACHABLE = 'WALLET_UNREACHABLE',
+  NON_ACTIVE_PROJECT = 'NON_ACTIVE_PROJECT',
+  REWARD_OUT_OF_STOCK = 'REWARD_OUT_OF_STOCK',
+}

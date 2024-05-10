@@ -1,12 +1,10 @@
-import { readFileSync } from 'fs'
-
-const REST_HOST = 'localhost:8081'
-const MACAROON_PATH = '/geyser-regtest-infra/data/contributor-lnd/data/chain/bitcoin/regtest/admin.macaroon'
-
-const requestBody = {
-  addr: 'bcrt1q2q03za80s5pua75srnqn0dujfr2qp9km7jfmnn', // <string>
-  amount: 60000, // <int64>
-}
+import {
+  BITCOIND_AUTH,
+  BITCOIND_ENDPOINT,
+  CONTRIBUTOR_LND_ADMIN_MACAROON_HEX,
+  CONTRIBUTOR_LND_ENDPOINT,
+  MINE_BLOCK_ADDRESS,
+} from '../contants'
 
 export const payOnChainOptions = (addr: string, amount: number | string) => {
   const requestBody = {
@@ -15,10 +13,43 @@ export const payOnChainOptions = (addr: string, amount: number | string) => {
   }
   return {
     method: 'POST',
-    url: `http://${REST_HOST}/v1/transactions`,
+    url: `${CONTRIBUTOR_LND_ENDPOINT}/v1/transactions`,
     headers: {
       'Content-Type': 'application/json',
-      'Grpc-Metadata-Macaroon': readFileSync(MACAROON_PATH).toString('hex'),
+      'Grpc-Metadata-Macaroon': CONTRIBUTOR_LND_ADMIN_MACAROON_HEX,
+    },
+    body: JSON.stringify(requestBody),
+  }
+}
+
+export const payLightningInvoice = (payment_request: string) => {
+  const requestBody = {
+    payment_request,
+  }
+  return {
+    method: 'POST',
+    url: `${CONTRIBUTOR_LND_ENDPOINT}/v1/channels/transaction-stream`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Grpc-Metadata-Macaroon': CONTRIBUTOR_LND_ADMIN_MACAROON_HEX,
+    },
+    body: JSON.stringify(requestBody),
+  }
+}
+
+export const mineBlockOptions = () => {
+  const requestBody = {
+    jsonrpc: '2.0',
+    id: 'curltest',
+    method: 'generatetoaddress',
+    params: [1, MINE_BLOCK_ADDRESS],
+  }
+  return {
+    method: 'POST',
+    url: BITCOIND_ENDPOINT,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Basic ${BITCOIND_AUTH}`,
     },
     body: JSON.stringify(requestBody),
   }

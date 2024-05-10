@@ -61,6 +61,7 @@ module.exports = {
     'new-cap': 0,
     'no-alert': 0,
     'testing-library/render-result-naming-convention': 0,
+    'max-nested-callbacks': 0,
     'no-restricted-syntax': [
       'off',
       {

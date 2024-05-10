@@ -9,6 +9,9 @@
 # testing
 /coverage
 /cypress/videos
+/cypress/downloads
+cypress.env.json
+
 
 # production
 /dist

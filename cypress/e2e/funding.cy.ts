@@ -1,107 +1,133 @@
-import { cli } from 'cypress'
-
 import {
   clickContribute,
+  clickCopyLightningInvoiceButton,
+  clickCopyOnChainButton,
   clickOnchainQrTab,
   enterAmountAndHitCheckout,
   enterCommentAndHitCheckout,
+  enterRefundAddressAndClickRefund,
 } from '../actions/funding'
-import { geyserUrl } from '../contants'
-import { getDropdownButton, loginWithNostr, logoutUser, openConnectPopup } from '../utils/auth'
-import { aliasQuery, hasOperationName, interceptGraphql } from '../utils/graphql'
+import {
+  commentScreenIsVisible,
+  fundingAmountScreenIsVisible,
+  lightningQrScreenIsVisible,
+  onChainQrScreenIsVisible,
+  onChainTransactionProcessingScreenIsVisible,
+  refundInitiatedScreenIsVisible,
+  successScreenIsVisible,
+  transactionFailedScreenIsVisible,
+} from '../assertions/funding'
+import { geyserUrl, MINE_BLOCK_ADDRESS } from '../contants'
+import { mineBlockOptions, payLightningInvoice, payOnChainOptions } from '../utils/lncli'
 
-/**
- * THIS IS THE NOSTR EVENT USED FOR TESTING THIS MODULE
-  {
-    "id": "d0d5289d90e8ffd7ebff068ffd93e1a84b69f1b890a3055d5039b353e73ca46f",
-    "pubkey": "217ac0828c448c1e68c2e781df89884bcae16a1e79fe6df267863155ab789c02",
-    // npub1y9avpq5vgjxpu6xzu7qalzvgf09wz6s708lxmun8scc4t2mcnspqrmt40y
-    // nsec1smf92mawwjfluyj8neww9xllwyeq88dhu70zuvdyc54mq9hg286ql40vtq
-    "created_at": 1688585029,
-    "kind": 1,
-    "tags": [],
-    "content": "hello",
-    "sig": "5d097183ae4b599a83f6f78249bc35be58c6d58ce35d0c4ca165a41f980902378437711c288d9f3410741009b8459e65e824f927ca8f8072247de93144fa51fd"
-  }
- */
+const FUNDING_AMOUNT = 60000
+const FUNDING_COMMENT = 'This was the test comment'
 
-describe('Invoice Generation LND', () => {
+describe('When lightning qr is selected', () => {
   beforeEach(() => {
-    cy.visit(`${geyserUrl}/project/lndtestproject`)
+    cy.visit(`${geyserUrl}/project/lndtestproject`, {
+      onBeforeLoad(win: Window): void {
+        cy.spy(win.navigator.clipboard, 'writeText').as('copy')
+      },
+    })
   })
 
-  // it('Should open up donation form', () => {
-  //   clickContribute()
+  context('When lightning payment is sent correctly', () => {
+    it('Paymnent successfull through lightning', () => {
+      clickContribute()
+      fundingAmountScreenIsVisible()
 
-  //   cy.get('p').contains('Make a donation').should('be.visible')
-  //   cy.get('input[data-testid="donation-input"]').should('be.visible')
-  // })
+      enterAmountAndHitCheckout(FUNDING_AMOUNT)
+      commentScreenIsVisible()
 
-  // it('Should open up comments screen', () => {
-  //   clickContribute()
-  //   enterAmountAndHitCheckout()
+      enterCommentAndHitCheckout(FUNDING_COMMENT)
+      lightningQrScreenIsVisible()
 
-  //   cy.get('p').contains('Public comment').should('be.visible')
-  // })
+      clickCopyLightningInvoiceButton()
 
-  // it('Should show lightning qr screen', async () => {
-  //   clickContribute()
-  //   enterAmountAndHitCheckout()
-  //   enterCommentAndHitCheckout()
+      cy.get('@copy')
+        .its('lastCall.args.0')
+        .then((value) => {
+          const payLightningOptions = payLightningInvoice(value)
+          cy.request(payLightningOptions).then(() => {
+            successScreenIsVisible()
+          })
+        })
+    })
+  })
+})
 
-  //   cy.get('canvas').should('have.id', 'qr-code') // This is the QR code
-  //   cy.get('button').contains('Copy lightning invoice').should('be.visible')
-  // })
-
-  // it('Should show onChain qr screen', async () => {
-  //   clickContribute()
-  //   enterAmountAndHitCheckout()
-  //   enterCommentAndHitCheckout()
-  //   clickOnchainQrTab()
-
-  //   cy.get('canvas').should('have.id', 'qr-code') // This is the QR code
-  //   cy.get('button').contains('Copy onchain address').should('be.visible')
-  // })
-
-  it('Should show onChain success screen', async () => {
-    clickContribute()
-    enterAmountAndHitCheckout()
-    enterCommentAndHitCheckout()
-    clickOnchainQrTab()
-
-    cy.get('canvas').should('have.id', 'qr-code') // This is the QR code
-    cy.get('button').contains('Copy onchain address').should('be.visible')
-
-    cy.get('button').contains('Copy onchain address').click()
-    cy.window()
-      .its('navigator.clipboard')
-      .then((clipboard) => {
-        const value = clipboard.readText()
-        cy.task('log', `checking values: ${value}`)
-      })
-
-    cy.get('h3').contains('Transaction is being processed...').should('not.be.visible')
-
-    // cy.request(payOnChain('bcrt1q2q03za80s5pua75srnqn0dujfr2qp9km7jfmnn', 60000))
-
-    cy.get('h3').contains('Transaction is being processed...').should('be.visible')
+describe('When onChain qr is selected', () => {
+  beforeEach(() => {
+    cy.visit(`${geyserUrl}/project/lndtestproject`, {
+      onBeforeLoad(win: Window): void {
+        cy.spy(win.navigator.clipboard, 'writeText').as('copy')
+      },
+    })
   })
 
-  //   it('Should login with nostr', () => {
-  //     getDropdownButton().find('img').should('not.exist')
+  context('Amount paid is correct', () => {
+    it('Should show onChain success screen', () => {
+      clickContribute()
+      fundingAmountScreenIsVisible()
 
-  //     loginWithNostr()
+      enterAmountAndHitCheckout(FUNDING_AMOUNT)
+      commentScreenIsVisible()
 
-  //     getDropdownButton().find('img').should('exist')
-  //   })
+      enterCommentAndHitCheckout(FUNDING_COMMENT)
+      lightningQrScreenIsVisible()
 
-  //   it('Should login and logout', () => {
-  //     loginWithNostr()
+      clickOnchainQrTab()
+      onChainQrScreenIsVisible()
 
-  //     getDropdownButton().find('img').should('exist')
+      clickCopyOnChainButton()
 
-  //     logoutUser()
+      cy.get('@copy')
+        .its('lastCall.args.0')
+        .then((value) => {
+          const onChainAddress = value.split(':')[1].split('?')[0]
+          const payOnchain = payOnChainOptions(onChainAddress, FUNDING_AMOUNT)
+          cy.request(payOnchain).then((response) => {
+            onChainTransactionProcessingScreenIsVisible()
 
-  //     getDropdownButton().find('img').should('not.exist')
-  //   })
+            const mineBlock = mineBlockOptions()
+            cy.request(mineBlock).then(() => {
+              successScreenIsVisible()
+            })
+          })
+        })
+    })
+  })
+
+  context('Amount paid is short', () => {
+    it('Should show refund initiated', () => {
+      clickContribute()
+      fundingAmountScreenIsVisible()
+
+      enterAmountAndHitCheckout(FUNDING_AMOUNT)
+      commentScreenIsVisible()
+
+      enterCommentAndHitCheckout(FUNDING_COMMENT)
+      lightningQrScreenIsVisible()
+
+      clickOnchainQrTab()
+      onChainQrScreenIsVisible()
+
+      clickCopyOnChainButton()
+
+      cy.get('@copy')
+        .its('lastCall.args.0')
+        .then((value) => {
+          const onChainAddress = value.split(':')[1].split('?')[0]
+          const payOnchain = payOnChainOptions(onChainAddress, FUNDING_AMOUNT - 1000)
+          cy.request(payOnchain).then((response) => {
+            transactionFailedScreenIsVisible()
+
+            enterRefundAddressAndClickRefund(MINE_BLOCK_ADDRESS)
+
+            refundInitiatedScreenIsVisible()
+          })
+        })
+    })
+  })
 })
