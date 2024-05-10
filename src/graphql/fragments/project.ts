@@ -169,13 +169,7 @@ export const FRAGMENT_PROJECT = gql`
         ...UserForAvatar
       }
     }
-    milestones {
-      id
-      name
-      description
-      amount
-      reached
-    }
+
     entries(input: $input) {
       ...EntryForProject
     }

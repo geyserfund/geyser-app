@@ -9,13 +9,12 @@ import { useProjectState } from '../../../hooks/graphqlState'
 import { useModal } from '../../../hooks/useModal'
 import {
   ProjectFragment,
-  ProjectMilestone,
   useProjectUnplublishedEntriesQuery,
   UserMeFragment,
   useWalletLimitQuery,
   WalletLimitsFragment,
 } from '../../../types'
-import { MilestoneAdditionModal } from '../pages/projectView/views/projectMainBody/components'
+// import { MilestoneAdditionModal } from '../pages/projectView/views/projectMainBody/components'
 import { ProjectCreatorModal } from '../pages/projectView/views/projectNavigation/components/ProjectCreatorModal'
 
 export enum MobileViews {
@@ -179,10 +178,10 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
     }
   }, [location.pathname])
 
-  const onMilestonesSubmit = (newMilestones: ProjectMilestone[]) => {
-    updateProject({ milestones: newMilestones })
-    milestonesModal.onClose()
-  }
+  // const onMilestonesSubmit = (newMilestones: ProjectMilestone[]) => {
+  //   updateProject({ milestones: newMilestones })
+  //   milestonesModal.onClose()
+  // }
 
   return (
     <ProjectContext.Provider
@@ -207,7 +206,7 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
       {project && isProjectOwner && (
         <>
           <ProjectCreatorModal {...creatorModal} />
-          <MilestoneAdditionModal {...milestonesModal} onSubmit={onMilestonesSubmit} project={project} />
+          {/* <MilestoneAdditionModal {...milestonesModal} onSubmit={onMilestonesSubmit} project={project} /> */}
         </>
       )}
     </ProjectContext.Provider>
