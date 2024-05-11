@@ -15,7 +15,9 @@ export function ProjectBalanceDisplay() {
   const [showTotalProject, setShowTotalProject] = useState(!project?.defaultGoalId)
 
   const toggleTotalProject = () => {
-    setShowTotalProject(!showTotalProject)
+    if (project?.defaultGoalId) {
+      setShowTotalProject(!showTotalProject)
+    }
   }
 
   const circularPercentage = useMemo(() => {
@@ -111,7 +113,7 @@ export function ProjectBalanceDisplay() {
       w="100%"
       onClick={toggleTotalProject}
       _hover={{
-        cursor: 'pointer',
+        cursor: project?.defaultGoalId ? 'pointer' : 'default',
       }}
       p={2}
     >
