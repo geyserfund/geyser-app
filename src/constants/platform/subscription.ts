@@ -7,6 +7,7 @@ export const projectsWithSubscription = [
   'defendpow',
   'theprogressivebitcoiner',
   '21jclp',
+  'wecollectdonationsforsacrificesofeidaladhapalestine',
 ]
 
 export const projectsWithSubscriptionInLandingPageGeyserIds = [101, 71, 588]
@@ -20,4 +21,5 @@ export const projectFlashIds = {
   defendpow: 113,
   theprogressivebitcoiner: 101,
   '21jclp': 114,
+  wecollectdonationsforsacrificesofeidaladhapalestine: 115,
 } as { [key: string]: number }
