@@ -21,19 +21,29 @@ export const useProjectGoals = () => {
 
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
 
-  const { inProgress } = data?.projectGoals || {}
+  const projectGoals = data?.projectGoals
 
   const [priorityGoal, setPriorityGoal] = useState<ProjectGoal>()
+  const [hasGoal, setHasGoal] = useState(false)
 
   useEffect(() => {
-    if (!project || !project.defaultGoalId || !inProgress) return
+    if (
+      (projectGoals?.inProgress && projectGoals.inProgress.length > 0) ||
+      (projectGoals?.completed && projectGoals.completed.length > 0)
+    ) {
+      setHasGoal(true)
+    }
+  }, [projectGoals])
 
-    const inProgressGoals = inProgress || []
+  useEffect(() => {
+    if (!project || !project.defaultGoalId || !projectGoals?.inProgress) return
+
+    const inProgressGoals = projectGoals?.inProgress || []
 
     const goalToDisplay = inProgressGoals.find((goal) => goal.id === project.defaultGoalId)
 
     setPriorityGoal(goalToDisplay as ProjectGoal)
-  }, [project, inProgress])
+  }, [project, projectGoals])
 
   const formattedUsdAmount = useCallback(() => {
     const amount = getUSDAmount(priorityGoal?.amountContributed as Satoshis)
@@ -55,6 +65,7 @@ export const useProjectGoals = () => {
 
   return {
     priorityGoal,
+    hasGoal,
     project,
     formattedUsdAmount,
     formattedTotalUsdAmount,

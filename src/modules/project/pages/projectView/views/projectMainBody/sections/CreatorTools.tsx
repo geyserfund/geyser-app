@@ -7,21 +7,22 @@ import { Body2 } from '../../../../../../../components/typography'
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
 import {
   getPath,
-  MilestonesFlagUrl,
+  GoalsFlagUrl,
   ProjectNoTransactionImageUrl,
   ProjectRewardsImageUrl,
 } from '../../../../../../../constants'
 import { ProjectStatus } from '../../../../../../../types'
 import { useProjectContext } from '../../../../../context'
+import { useProjectGoals } from '../../../../projectView/hooks/useProjectGoals'
 
 export const CreatorTools = () => {
   const { t } = useTranslation()
   const { project, isProjectOwner, onMilestonesModalOpen } = useProjectContext()
+  const { hasGoal } = useProjectGoals()
 
   if (!project || !isProjectOwner || project.status !== ProjectStatus.Active) return null
 
   const projectHasRewards = project?.rewards?.length > 0
-  const projectHasMilestones = project?.milestones?.length > 0
   const projectHasEntries = project?.entries?.length > 0
 
   return (
@@ -35,12 +36,12 @@ export const CreatorTools = () => {
           buttonProps={{ as: Link, to: getPath('projectCreateReward', project?.name) }}
         />
       )}
-      {!projectHasMilestones && (
+      {!hasGoal && (
         <DisplayCard
-          title={t('Milestones')}
-          body={t('Use milestones to inspire donors by showing them how your project is progressing.')}
-          buttonLabel={t('Create Milestone')}
-          imageSrc={MilestonesFlagUrl}
+          title={t('Goals')}
+          body={t('Use goals to inspire donors by showing them how your project is progressing.')}
+          buttonLabel={t('Create Goal')}
+          imageSrc={GoalsFlagUrl}
           buttonProps={{ onClick: onMilestonesModalOpen }}
         />
       )}
