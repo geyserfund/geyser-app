@@ -5,12 +5,13 @@ import { useTranslation } from 'react-i18next'
 import { H1 } from '../../../../../../../../../components/typography'
 import { ProjectGoalCurrency } from '../../../../../../../../../types'
 import { numberWithCommas } from '../../../../../../../../../utils'
-import { useProjectGoals } from '../../../../../hooks/useProjectGoals'
+import { useProjectDefaultGoal } from '../hooks/useProjectDefaultGoal'
 
 export function ProjectBalanceDisplay() {
   const { t } = useTranslation()
 
-  const { priorityGoal, project, formattedUsdAmount, formattedTotalUsdAmount, formattedSatsAmount } = useProjectGoals()
+  const { priorityGoal, project, formattedUsdAmount, formattedTotalUsdAmount, formattedSatsAmount } =
+    useProjectDefaultGoal()
 
   const [showTotalProject, setShowTotalProject] = useState(!project?.defaultGoalId)
 

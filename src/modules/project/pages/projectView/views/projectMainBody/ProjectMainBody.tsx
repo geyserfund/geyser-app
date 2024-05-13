@@ -10,9 +10,9 @@ import {
   Details,
   Entries,
   FinalizeProjectNotice,
+  Goals,
   Header,
   LaunchProjectNotice,
-  Milestones,
   Rewards,
   ShareProject,
   Story,
@@ -45,7 +45,7 @@ export const ProjectMainBody = () => {
       <ShareProject />
       <Rewards />
       {projectDetails.entriesLength ? <Entries /> : null}
-      {projectDetails.milestonesLength ? <Milestones /> : null}
+      <Goals />
       <CreatorTools />
       <Details />
     </VStack>

@@ -4566,6 +4566,15 @@ export type FundingTxForDownloadInvoiceFragment = {
   bitcoinQuote?: { __typename?: 'BitcoinQuote'; quote: number; quoteCurrency: QuoteCurrency } | null
 }
 
+export type ProjectDefaultGoalFragment = {
+  __typename?: 'ProjectGoal'
+  id: any
+  title: string
+  targetAmount: number
+  currency: ProjectGoalCurrency
+  amountContributed: number
+}
+
 export type ProjectGoalFragment = {
   __typename?: 'ProjectGoal'
   id: any
@@ -5734,6 +5743,18 @@ export type FundingTxForDownloadInvoiceQuery = {
   fundingTx: { __typename?: 'FundingTx' } & FundingTxForDownloadInvoiceFragment
 }
 
+export type ProjectDefaultGoalQueryVariables = Exact<{
+  projectId: Scalars['BigInt']['input']
+}>
+
+export type ProjectDefaultGoalQuery = {
+  __typename?: 'Query'
+  projectGoals: {
+    __typename?: 'ProjectGoals'
+    inProgress: Array<{ __typename?: 'ProjectGoal' } & ProjectDefaultGoalFragment>
+  }
+}
+
 export type ProjectGoalsQueryVariables = Exact<{
   projectId: Scalars['BigInt']['input']
 }>
@@ -5742,8 +5763,8 @@ export type ProjectGoalsQuery = {
   __typename?: 'Query'
   projectGoals: {
     __typename?: 'ProjectGoals'
-    completed: Array<{ __typename?: 'ProjectGoal' } & ProjectGoalFragment>
     inProgress: Array<{ __typename?: 'ProjectGoal' } & ProjectGoalFragment>
+    completed: Array<{ __typename?: 'ProjectGoal' } & ProjectGoalFragment>
   }
 }
 
@@ -6388,6 +6409,15 @@ export const FundingTxForDownloadInvoiceFragmentDoc = gql`
       quote
       quoteCurrency
     }
+  }
+`
+export const ProjectDefaultGoalFragmentDoc = gql`
+  fragment ProjectDefaultGoal on ProjectGoal {
+    id
+    title
+    targetAmount
+    currency
+    amountContributed
   }
 `
 export const ProjectGoalFragmentDoc = gql`
@@ -9502,13 +9532,72 @@ export type FundingTxForDownloadInvoiceQueryResult = Apollo.QueryResult<
   FundingTxForDownloadInvoiceQuery,
   FundingTxForDownloadInvoiceQueryVariables
 >
+export const ProjectDefaultGoalDocument = gql`
+  query ProjectDefaultGoal($projectId: BigInt!) {
+    projectGoals(projectId: $projectId) {
+      inProgress {
+        ...ProjectDefaultGoal
+      }
+    }
+  }
+  ${ProjectDefaultGoalFragmentDoc}
+`
+
+/**
+ * __useProjectDefaultGoalQuery__
+ *
+ * To run a query within a React component, call `useProjectDefaultGoalQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectDefaultGoalQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectDefaultGoalQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useProjectDefaultGoalQuery(
+  baseOptions: Apollo.QueryHookOptions<ProjectDefaultGoalQuery, ProjectDefaultGoalQueryVariables> &
+    ({ variables: ProjectDefaultGoalQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ProjectDefaultGoalQuery, ProjectDefaultGoalQueryVariables>(ProjectDefaultGoalDocument, options)
+}
+export function useProjectDefaultGoalLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ProjectDefaultGoalQuery, ProjectDefaultGoalQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<ProjectDefaultGoalQuery, ProjectDefaultGoalQueryVariables>(
+    ProjectDefaultGoalDocument,
+    options,
+  )
+}
+export function useProjectDefaultGoalSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectDefaultGoalQuery, ProjectDefaultGoalQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<ProjectDefaultGoalQuery, ProjectDefaultGoalQueryVariables>(
+    ProjectDefaultGoalDocument,
+    options,
+  )
+}
+export type ProjectDefaultGoalQueryHookResult = ReturnType<typeof useProjectDefaultGoalQuery>
+export type ProjectDefaultGoalLazyQueryHookResult = ReturnType<typeof useProjectDefaultGoalLazyQuery>
+export type ProjectDefaultGoalSuspenseQueryHookResult = ReturnType<typeof useProjectDefaultGoalSuspenseQuery>
+export type ProjectDefaultGoalQueryResult = Apollo.QueryResult<
+  ProjectDefaultGoalQuery,
+  ProjectDefaultGoalQueryVariables
+>
 export const ProjectGoalsDocument = gql`
   query ProjectGoals($projectId: BigInt!) {
     projectGoals(projectId: $projectId) {
-      completed {
+      inProgress {
         ...ProjectGoal
       }
-      inProgress {
+      completed {
         ...ProjectGoal
       }
     }

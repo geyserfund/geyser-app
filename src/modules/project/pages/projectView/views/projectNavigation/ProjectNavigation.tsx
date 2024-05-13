@@ -39,7 +39,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
 
   const { isProjectOwner, onCreatorModalOpen, project, setMobileView, loading } = useProjectContext()
 
-  const { entriesLength, rewardsLength, milestonesLength } = useProjectDetails(project)
+  const { entriesLength, rewardsLength } = useProjectDetails(project)
 
   const ProjectNavigationButtons = useMemo(
     () => [
@@ -69,14 +69,14 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
       },
       {
         name: 'Milestones',
-        path: PathName.projectMilestones,
-        mobileView: MobileViews.milestones,
+        path: PathName.projectGoals,
+        mobileView: MobileViews.goals,
         icon: MilestoneIcon,
         subViews: [],
-        render: Boolean(milestonesLength),
+        render: Boolean(true),
       },
     ],
-    [entriesLength, rewardsLength, milestonesLength],
+    [entriesLength, rewardsLength],
   )
 
   const ProjectCreatorNavigationButtons = useMemo(
