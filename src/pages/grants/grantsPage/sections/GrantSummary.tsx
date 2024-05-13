@@ -36,7 +36,7 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
             borderTopLeftRadius="6px"
             borderTopRightRadius="6px"
             alt="grant header image"
-            src={grant.image}
+            src={grant.image || undefined}
           />
         </Box>
       )
