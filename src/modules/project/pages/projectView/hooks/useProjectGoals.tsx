@@ -20,6 +20,7 @@ export const useProjectGoals = () => {
 
   const [inProgressGoals, setInProgressGoals] = useState<ProjectGoal[]>()
   const [completedGoals, setCompletedGoals] = useState<ProjectGoal[]>()
+  const [hasGoals, setHasGoals] = useState(false)
 
   useEffect(() => {
     if (projectGoals?.inProgress && projectGoals.inProgress.length > 0) {
@@ -33,7 +34,14 @@ export const useProjectGoals = () => {
     }
   }, [projectGoals?.completed])
 
+  useEffect(() => {
+    if (inProgressGoals || completedGoals) {
+      setHasGoals(true)
+    }
+  }, [inProgressGoals, completedGoals])
+
   return {
+    hasGoals,
     inProgressGoals,
     completedGoals,
   }
