@@ -4,7 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { CardLayout } from '../../../../components/layouts'
 import { H1, H3 } from '../../../../components/typography'
 import { StatusLabel } from '../../../../components/ui/StatusLabel'
+import { VideoPlayer } from '../../../../components/ui/VideoPlayer'
 import { MarkdownField } from '../../../../forms/markdown/MarkdownField'
+import { validateImageUrl } from '../../../../forms/validations/image'
 import { Grant } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
 import { ContributionsWidget } from '../../components/ContributionsWidget'
@@ -20,9 +22,12 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
   const isMobile = useMobileMode()
 
   const votingEndDate = grant.statuses.find((s) => s.status === grant.status)?.endAt
-  return (
-    <CardLayout noborder={isMobile} padding={{ base: '10px', lg: 0 }}>
-      {grant.image ? (
+
+  const renderImageOrVideo = () => {
+    const isImage = validateImageUrl(grant.image)
+
+    if (isImage) {
+      return (
         <Box width="100%">
           <Image
             width="100%"
@@ -34,7 +39,19 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
             src={grant.image}
           />
         </Box>
-      ) : null}
+      )
+    }
+
+    if (grant.image && !isImage) {
+      return <VideoPlayer url={grant.image} />
+    }
+
+    return null
+  }
+
+  return (
+    <CardLayout noborder={isMobile} padding={{ base: '10px', lg: 0 }}>
+      {renderImageOrVideo()}
       <Box px={{ base: 0, lg: 5 }}>
         <Box pb={2}>
           <StatusLabel textTransform="uppercase">{t(GRANT_STATUS_MAP[grant.status])}</StatusLabel>
