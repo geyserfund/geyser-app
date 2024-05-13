@@ -23,7 +23,7 @@ import { mineBlockOptions, payLightningInvoice, payOnChainOptions } from '../uti
 const FUNDING_AMOUNT = 60000
 const FUNDING_COMMENT = 'This was the test comment'
 
-describe('When lightning qr is selected', () => {
+describe('Testing Project with lightning node', () => {
   beforeEach(() => {
     cy.visit(`${geyserUrl}/project/lndtestproject`, {
       onBeforeLoad(win: Window): void {
@@ -32,7 +32,23 @@ describe('When lightning qr is selected', () => {
     })
   })
 
-  context('When lightning payment is sent correctly', () => {
+  textLightningSuccessFlow()
+  onChainSuccessFlow()
+  onChainRefundFlow()
+})
+
+describe('Testing Project with lightning wallet', () => {
+  beforeEach(() => {
+    cy.visit(`${geyserUrl}/project/lightningtestproject`, {
+      onBeforeLoad(win: Window): void {
+        cy.spy(win.navigator.clipboard, 'writeText').as('copy')
+      },
+    })
+  })
+})
+
+const textLightningSuccessFlow = () => {
+  context('When lightning invoice payment is sent correctly', () => {
     it('Paymnent successfull through lightning', () => {
       clickContribute()
       fundingAmountScreenIsVisible()
@@ -55,18 +71,10 @@ describe('When lightning qr is selected', () => {
         })
     })
   })
-})
+}
 
-describe('When onChain qr is selected', () => {
-  beforeEach(() => {
-    cy.visit(`${geyserUrl}/project/lndtestproject`, {
-      onBeforeLoad(win: Window): void {
-        cy.spy(win.navigator.clipboard, 'writeText').as('copy')
-      },
-    })
-  })
-
-  context('Amount paid is correct', () => {
+const onChainSuccessFlow = () => {
+  context('When onchain amount paid is correct', () => {
     it('Should show onChain success screen', () => {
       clickContribute()
       fundingAmountScreenIsVisible()
@@ -98,8 +106,10 @@ describe('When onChain qr is selected', () => {
         })
     })
   })
+}
 
-  context('Amount paid is short', () => {
+const onChainRefundFlow = () => {
+  context('when onchain amount paid is short', () => {
     it('Should show refund initiated', () => {
       clickContribute()
       fundingAmountScreenIsVisible()
@@ -130,4 +140,4 @@ describe('When onChain qr is selected', () => {
         })
     })
   })
-})
+}

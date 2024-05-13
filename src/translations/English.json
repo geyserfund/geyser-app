@@ -992,7 +992,17 @@
    "Contribution to":"Contribution to",
    "Refund summary":"Refund summary",
    "Total Refunded":"Total Refunded",
-   "We apologize for any inconvenience caused.":"We apologize for any inconvenience caused."
+   "We apologize for any inconvenience caused.":"We apologize for any inconvenience caused.",
+   "You can try the transaction again, in case the wallet becomes accessible again.":"You can try the transaction again, in case the wallet becomes accessible again.",
+   "If you need assistance, please don't hesitate to reach out to us for support.":"If you need assistance, please don't hesitate to reach out to us for support.",
+   "Feel free to <1>contact the creator</1> to inform them of your funding attempt.":"Feel free to <1>contact the creator</1> to inform them of your funding attempt.",
+   "Alternatively":"Alternatively" ,
+   "We notified the creator about this issue, and we hope for a quick resolution on their end.":"We notified the creator about this issue, and we hope for a quick resolution on their end.",
+   "We took actions":"We took actions",
+   "The lightning address provided for the wallet might no longer be valid.":"The lightning address provided for the wallet might no longer be valid.",
+   "The lightning node may be temporarily down.":"The lightning node may be temporarily down.",
+   "This could be happening because Unfortunately, we're unable to reach the wallet to generate an invoice. This could be happening because":"This could be happening because Unfortunately, we're unable to reach the wallet to generate an invoice. This could be happening because",
+   "Receiver’s wallet maximum limit Reached":"Receiver’s wallet maximum limit Reached"
 
 
 }
