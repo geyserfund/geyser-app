@@ -2,7 +2,11 @@ import { useMutation } from '@apollo/client'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { MUTATION_CREATE_PROJECT_GOAL, MUTATION_UPDATE_PROJECT_GOAL } from '../../../../../graphql/mutations/goals'
+import {
+  MUTATION_CREATE_PROJECT_GOAL,
+  MUTATION_DELETE_PROJECT_GOAL,
+  MUTATION_UPDATE_PROJECT_GOAL,
+} from '../../../../../graphql/mutations/goals'
 import { ProjectGoal, ProjectGoalCurrency } from '../../../../../types'
 
 type FormValues = Record<string, string | number | ProjectGoalCurrency>
@@ -20,6 +24,7 @@ export const useProjectGoalForm = (goal: ProjectGoal | null, projectId: string, 
 
   const [createProjectGoal, { loading: creating, error: createError }] = useMutation(MUTATION_CREATE_PROJECT_GOAL)
   const [updateProjectGoal, { loading: updating, error: updateError }] = useMutation(MUTATION_UPDATE_PROJECT_GOAL)
+  const [deleteProjectGoal, { loading: deleting, error: deleteError }] = useMutation(MUTATION_DELETE_PROJECT_GOAL)
 
   useEffect(() => {
     if (goal) {
@@ -75,11 +80,27 @@ export const useProjectGoalForm = (goal: ProjectGoal | null, projectId: string, 
     }
   }
 
+  const handleDelete = async (projectGoalId: bigint) => {
+    try {
+      const { data } = await deleteProjectGoal({
+        variables: {
+          projectGoalId,
+        },
+      })
+      if (data) {
+        onClose()
+      }
+    } catch (error) {
+      console.error('Error deleting project goal:', error)
+    }
+  }
+
   return {
     control,
     handleSubmit: handleSubmit(onSubmit),
-    loading: creating || updating,
-    error: createError || updateError,
+    handleDelete,
+    loading: creating || updating || deleting,
+    error: createError || updateError || deleteError,
     watch,
   }
 }

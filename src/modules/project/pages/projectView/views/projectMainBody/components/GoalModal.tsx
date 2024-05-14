@@ -39,14 +39,23 @@ const denominationOptions = [
 export const GoalModal = ({ isOpen, onClose, goal, projectId }: Props) => {
   const { t } = useTranslation()
 
-  const { control, handleSubmit, loading, watch } = useProjectGoalForm(goal || null, projectId, onClose)
+  const { control, handleSubmit, handleDelete, loading, watch } = useProjectGoalForm(goal || null, projectId, onClose)
 
   const renderActions = () => {
     return (
       <VStack width="100%">
         {goal && (
           <HStack width="100%">
-            <Button flexGrow={1} variant="primary" bg="secondary.red" color="neutral.0" onClick={onClose}>
+            <Button
+              flexGrow={1}
+              variant="primary"
+              bg="secondary.red"
+              color="neutral.0"
+              onClick={() => {
+                handleDelete(goal.id)
+                onClose()
+              }}
+            >
               {t('Delete Goal')}
             </Button>
           </HStack>
