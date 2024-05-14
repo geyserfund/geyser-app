@@ -34,7 +34,7 @@ export const DistributionChart = ({ applicants, isCompetitionVote }: Props) => {
 
   return (
     <CardLayout noMobileBorder p={standardPadding} w="full">
-      <H3>{t('Leaderboard')}</H3>
+      <H3 fontSize={'18px'}>{t('Leaderboard')}</H3>
       {percentages.length > 0 && (
         <Box py={2}>
           {percentages

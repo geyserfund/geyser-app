@@ -21,13 +21,13 @@ export const TotalAmountToPay = () => {
     <HStack w="full" justifyContent="center">
       <Body1 color="neutral.900" semiBold>
         {' '}
-        {t('Total to Pay')}:{' '}
+        {t('Pay')}:{' '}
       </Body1>
       <HStack>
         <Body1 color="neutral.900" xBold>
-          {`$${getTotalAmount('dollar', project.name)}`}
+          {`${getTotalAmount('sats', project.name).toLocaleString()} sats`}
         </Body1>
-        <Body1 color="neutral.700">{`(${getTotalAmount('sats', project.name).toLocaleString()} sats)`}</Body1>
+        <Body1 color="neutral.700">{`($${getTotalAmount('dollar', project.name)})`}</Body1>
       </HStack>
     </HStack>
   )

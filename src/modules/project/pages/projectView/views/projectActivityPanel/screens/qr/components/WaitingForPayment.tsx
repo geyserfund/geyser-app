@@ -1,8 +1,8 @@
-import { Box, HStack, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react'
+import { Box, HStack, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { AiFillQuestionCircle } from 'react-icons/ai'
 
-import { Caption } from '../../../../../../../../../components/typography'
+import { Body1, Caption } from '../../../../../../../../../components/typography'
 import Loader from '../../../../../../../../../components/ui/Loader'
 import { useMobileMode } from '../../../../../../../../../utils'
 
@@ -13,9 +13,7 @@ export const WaitingForPayment = () => {
     <Box fontSize={'10px'}>
       <HStack spacing={5}>
         <Loader size="md" />
-        <Text color={'neutral.900'} fontWeight={400}>
-          {t('Waiting for payment')}
-        </Text>
+        <Body1 color={'neutral.900'}>{t('Waiting for payment')}</Body1>
         <Popover size="sm" trigger={isMobile ? 'click' : 'hover'} placement="top">
           <PopoverTrigger>
             <Box>
