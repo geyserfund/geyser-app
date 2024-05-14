@@ -9,7 +9,6 @@ import { IconButtonComponent } from '../../../../../../../components/ui'
 import { useBTCConverter } from '../../../../../../../helpers'
 import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../types'
 import { Satoshis, USDCents } from '../../../../../../../types'
-import { useMobileMode } from '../../../../../../../utils'
 import { commaFormatted } from '../../../../../../../utils'
 import { getFormattedDate } from '../../../../../../../utils'
 
@@ -21,8 +20,6 @@ type Props = {
 
 export const GoalCompleted = ({ goal, isEditing = false, onOpenGoalModal }: Props) => {
   const { t } = useTranslation()
-
-  const isMobile = useMobileMode()
 
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
 
@@ -39,7 +36,7 @@ export const GoalCompleted = ({ goal, isEditing = false, onOpenGoalModal }: Prop
   }, [getSatoshisFromUSDCents, goal?.amountContributed])
 
   const handleEditGoal = () => {
-    console.log('open edit goal modal', goal)
+    onOpenGoalModal(goal)
   }
 
   return (

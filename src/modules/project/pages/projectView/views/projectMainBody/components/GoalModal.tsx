@@ -21,7 +21,7 @@ import {
 } from '../../../../../../../components/inputs'
 import { Body2 } from '../../../../../../../components/typography'
 import { IconButtonComponent } from '../../../../../../../components/ui'
-import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../types'
+import { ProjectGoal, ProjectGoalCurrency, ProjectGoalStatus } from '../../../../../../../types'
 import { useProjectGoalForm } from '../../../../projectView/hooks/useProjectGoalForm'
 
 type Props = {
@@ -47,6 +47,8 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch }: Props) 
     refetch,
   )
 
+  const isCompleted = goal && goal.status === ProjectGoalStatus.Completed
+
   const renderActions = () => {
     return (
       <VStack width="100%">
@@ -66,14 +68,18 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch }: Props) 
             </Button>
           </HStack>
         )}
-        <HStack width="100%">
-          <Button flexGrow={1} variant="secondary" onClick={onClose}>
-            {t('Back')}
-          </Button>{' '}
-          <Button flexGrow={1} variant="primary" isLoading={loading} type="submit" isDisabled={!enableSubmit}>
-            {t('Confirm')}
-          </Button>
-        </HStack>
+        {!goal || goal.status === ProjectGoalStatus.InProgress ? (
+          <HStack width="100%">
+            <Button flexGrow={1} variant="secondary" onClick={onClose}>
+              {t('Back')}
+            </Button>{' '}
+            <Button flexGrow={1} variant="primary" isLoading={loading} type="submit" isDisabled={!enableSubmit}>
+              {t('Confirm')}
+            </Button>
+          </HStack>
+        ) : (
+          <></>
+        )}
       </VStack>
     )
   }
@@ -111,18 +117,21 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch }: Props) 
                   name="title"
                   placeholder="Your goal title"
                   label={t('Goal Title')}
+                  isDisabled={Boolean(isCompleted)}
                 />
                 <ControlledTextArea
                   control={control}
                   name="description"
                   placeholder="Description"
                   label={t('Description')}
+                  isDisabled={Boolean(isCompleted)}
                 />
                 <ControlledGoalAmount
                   control={control}
                   name="targetAmount"
                   label={t('Goal Amount')}
                   currency={watch('currency') as ProjectGoalCurrency}
+                  isDisabled={Boolean(isCompleted)}
                 />
                 {errors.targetAmount && (
                   <Text fontSize={'14px'} fontWeight={400} color="secondary.red">
@@ -136,7 +145,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch }: Props) 
                   options={denominationOptions}
                   description={t('Denominate your goal in Bitcoin or USD')}
                   defaultValue={ProjectGoalCurrency.Usdcent}
-                  isDisabled={Boolean(goal)}
+                  isDisabled={Boolean(goal?.hasReceivedContributions)}
                 />
                 <HStack mt={4} width="100%" justifyContent="space-between">
                   {renderActions()}

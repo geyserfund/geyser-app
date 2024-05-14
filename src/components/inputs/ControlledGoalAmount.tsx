@@ -94,13 +94,19 @@ export function ControlledGoalAmount(props: Props) {
             left="1rem"
             transform="translateY(-50%)"
             pointerEvents="none"
-            color="neutral.600"
+            color={props.isDisabled ? 'neutral.400' : 'neutral.600'}
+            opacity={props.isDisabled ? 0.5 : 1}
           >
             {props.currency === ProjectGoalCurrency.Usdcent ? '$' : 'Sats'}
           </Text>
         </Box>
         <InputRightElement width="50%" justifyContent="flex-end" pr={2}>
-          <Text fontSize="16px" fontWeight="400">
+          <Text
+            fontSize="16px"
+            fontWeight="400"
+            color={props.isDisabled ? 'neutral.400' : 'neutral.600'}
+            opacity={props.isDisabled ? 0.5 : 1}
+          >
             {props.currency === ProjectGoalCurrency.Btcsat ? formattedUsdAmount() : formattedSatsAmount()}
           </Text>
         </InputRightElement>

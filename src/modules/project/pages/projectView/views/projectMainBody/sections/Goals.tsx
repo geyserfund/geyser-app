@@ -8,7 +8,6 @@ import { CardLayout } from '../../../../../../../components/layouts'
 import { IconButtonComponent } from '../../../../../../../components/ui'
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
 import { ProjectGoal } from '../../../../../../../types'
-import { useMobileMode } from '../../../../../../../utils'
 import { useProjectContext } from '../../../../../context'
 import { useProjectGoals } from '../../../hooks/useProjectGoals'
 import { GoalCompleted, GoalInProgress } from '../components'
@@ -18,7 +17,6 @@ export const Goals = () => {
   const { t } = useTranslation()
   const { project, isProjectOwner } = useProjectContext()
   const [editMode, setEditMode] = useState(false)
-  const isMobile = useMobileMode()
 
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false)
   const [goalModalData, setGoalModalData] = useState<ProjectGoal | null>(null)
