@@ -93,37 +93,6 @@ export const MUTATION_DELETE_PROJECT_REWARD = gql`
     projectRewardDelete(input: $input)
   }
 `
-
-export const MUTATION_CREATE_PROJECT_MILESTONE = gql`
-  mutation ProjectGoalCreate($input: ProjectGoalCreateInput!) {
-    projectGoalCreate(input: $input) {
-      id
-      title
-      description
-      targetAmount
-    }
-  }
-`
-
-export const MUTATION_UPDATE_PROJECT_MILESTONE = gql`
-  mutation ProjectGoalUpdate($input: ProjectGoalUpdateInput!) {
-    projectGoalUpdate(input: $input) {
-      id
-      title
-      description
-      targetAmount
-    }
-  }
-`
-
-export const MUTATION_DELETE_PROJECT_MILESTONE = gql`
-  mutation ProjectGoalDelete($projectGoalId: BigInt!) {
-    projectGoalDelete(projectGoalId: $projectGoalId) {
-      id
-    }
-  }
-`
-
 export const MUTATION_FOLLOW_PROJECT = gql`
   mutation ProjectFollow($input: ProjectFollowMutationInput!) {
     projectFollow(input: $input)

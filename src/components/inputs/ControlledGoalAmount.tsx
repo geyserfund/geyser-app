@@ -36,7 +36,7 @@ export function ControlledGoalAmount(props: Props) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/[^0-9]/g, '')
     if (value.length > 12) {
-      value = value.substring(0, 12)
+      value = value.substring(0, 11)
     }
 
     setUnformattedValue(value)
@@ -57,8 +57,8 @@ export function ControlledGoalAmount(props: Props) {
 
   const formattedSatsAmount = useCallback(() => {
     const amount = getSatoshisFromUSDCents(field.value as USDCents)
-    if (amount < 1) return 'less than 1'
-    return `${commaFormatted(Math.round(amount))} sats`
+    if (amount < 1) return '0 sats'
+    return `${commaFormatted(Math.round(amount * 100))} sats`
   }, [getSatoshisFromUSDCents, field.value])
 
   const formattedValue = commaFormatted(unformattedValue)

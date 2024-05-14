@@ -10,8 +10,6 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { IoMdCloseCircle } from 'react-icons/io'
 
@@ -24,6 +22,7 @@ import {
 import { Body2 } from '../../../../../../../components/typography'
 import { IconButtonComponent } from '../../../../../../../components/ui'
 import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../types'
+import { useProjectGoalForm } from '../../../../projectView/hooks/useProjectGoalForm'
 
 type Props = {
   isOpen: boolean
@@ -37,51 +36,30 @@ const denominationOptions = [
   { value: ProjectGoalCurrency.Usdcent, label: 'USD' },
 ]
 
-type FormValues = Record<string, string | number | ProjectGoalCurrency>
-
 export const GoalModal = ({ isOpen, onClose, goal, projectId }: Props) => {
   const { t } = useTranslation()
 
-  const { control, handleSubmit, reset } = useForm<FormValues>({
-    defaultValues: {
-      title: '',
-      description: '',
-      targetAmount: 0,
-      currency: ProjectGoalCurrency.Usdcent,
-      projectId,
-    },
-  })
-
-  useEffect(() => {
-    if (goal) {
-      reset({
-        title: goal.title || '',
-        description: goal.description || '',
-        targetAmount: goal.targetAmount || 0,
-        currency: goal.currency,
-        projectId,
-      })
-    }
-  }, [goal, reset, projectId])
-
-  useEffect(() => {
-    reset()
-  }, [onClose, reset])
-
-  const onSubmit = (data: FormValues) => {
-    console.log(data)
-  }
+  const { control, handleSubmit, loading, watch } = useProjectGoalForm(goal || null, projectId, onClose)
 
   const renderActions = () => {
     return (
-      <>
-        <Button flexGrow={1} variant="secondary" onClick={onClose}>
-          {t('Back')}
-        </Button>{' '}
-        <Button flexGrow={1} variant="primary">
-          {t('Confirm')}
-        </Button>
-      </>
+      <VStack width="100%">
+        {goal && (
+          <HStack width="100%">
+            <Button flexGrow={1} variant="primary" bg="secondary.red" color="neutral.0" onClick={onClose}>
+              {t('Delete Goal')}
+            </Button>
+          </HStack>
+        )}
+        <HStack width="100%">
+          <Button flexGrow={1} variant="secondary" onClick={onClose}>
+            {t('Back')}
+          </Button>{' '}
+          <Button flexGrow={1} variant="primary" isLoading={loading} type="submit">
+            {t('Confirm')}
+          </Button>
+        </HStack>
+      </VStack>
     )
   }
 
@@ -105,15 +83,20 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId }: Props) => {
 
             <Body2 color="neutral.700" fontSize={14} fontWeight={400}>
               {t(
-                'Goals help you clarify what you can achieve with given amounts, and users can contribute to any live goal to support this achievement.',
+                'Goals are a great way to motivate and inspire others to donate by showing what happens when a certain threshold is reached',
               )}
             </Body2>
           </ModalHeader>
 
           <ModalBody>
-            <form style={{ width: '100%', height: '100%' }} onSubmit={handleSubmit(onSubmit)}>
+            <form style={{ width: '100%', height: '100%' }} onSubmit={handleSubmit}>
               <VStack width="100%" alignItems="flex-start" gap={5}>
-                <ControlledTextInput control={control} name="title" placeholder="Your goal title" label={t('Title')} />
+                <ControlledTextInput
+                  control={control}
+                  name="title"
+                  placeholder="Your goal title"
+                  label={t('Goal Title')}
+                />
                 <ControlledTextArea
                   control={control}
                   name="description"
@@ -123,8 +106,8 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId }: Props) => {
                 <ControlledGoalAmount
                   control={control}
                   name="targetAmount"
-                  label={t('Amount')}
-                  currency={goal?.currency || ProjectGoalCurrency.Usdcent}
+                  label={t('Goal Amount')}
+                  currency={watch('currency') as ProjectGoalCurrency}
                 />
                 <ControlledSelect
                   control={control}

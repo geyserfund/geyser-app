@@ -4089,6 +4089,27 @@ export type FundingTxEmailUpdateMutationVariables = Exact<{
 
 export type FundingTxEmailUpdateMutation = { __typename?: 'Mutation', fundingTxEmailUpdate: { __typename?: 'FundingTx', id: any, email?: string | null } };
 
+export type ProjectGoalCreateMutationVariables = Exact<{
+  input: ProjectGoalCreateInput;
+}>;
+
+
+export type ProjectGoalCreateMutation = { __typename?: 'Mutation', projectGoalCreate: Array<{ __typename?: 'ProjectGoal', title: string, description?: string | null, targetAmount: number, projectId: any, currency: ProjectGoalCurrency }> };
+
+export type ProjectGoalUpdateMutationVariables = Exact<{
+  input: ProjectGoalUpdateInput;
+}>;
+
+
+export type ProjectGoalUpdateMutation = { __typename?: 'Mutation', projectGoalUpdate: { __typename?: 'ProjectGoal', id: any, title: string, description?: string | null, targetAmount: number } };
+
+export type ProjectGoalDeleteMutationVariables = Exact<{
+  projectGoalId: Scalars['BigInt']['input'];
+}>;
+
+
+export type ProjectGoalDeleteMutation = { __typename?: 'Mutation', projectGoalDelete: Array<{ __typename?: 'ProjectGoal', id: any }> };
+
 export type GrantApplyMutationVariables = Exact<{
   input?: InputMaybe<GrantApplyInput>;
 }>;
@@ -4167,27 +4188,6 @@ export type ProjectRewardDeleteMutationVariables = Exact<{
 
 
 export type ProjectRewardDeleteMutation = { __typename?: 'Mutation', projectRewardDelete: boolean };
-
-export type ProjectGoalCreateMutationVariables = Exact<{
-  input: ProjectGoalCreateInput;
-}>;
-
-
-export type ProjectGoalCreateMutation = { __typename?: 'Mutation', projectGoalCreate: Array<{ __typename?: 'ProjectGoal', id: any, title: string, description?: string | null, targetAmount: number }> };
-
-export type ProjectGoalUpdateMutationVariables = Exact<{
-  input: ProjectGoalUpdateInput;
-}>;
-
-
-export type ProjectGoalUpdateMutation = { __typename?: 'Mutation', projectGoalUpdate: { __typename?: 'ProjectGoal', id: any, title: string, description?: string | null, targetAmount: number } };
-
-export type ProjectGoalDeleteMutationVariables = Exact<{
-  projectGoalId: Scalars['BigInt']['input'];
-}>;
-
-
-export type ProjectGoalDeleteMutation = { __typename?: 'Mutation', projectGoalDelete: Array<{ __typename?: 'ProjectGoal', id: any }> };
 
 export type ProjectFollowMutationVariables = Exact<{
   input: ProjectFollowMutationInput;
@@ -6065,6 +6065,112 @@ export function useFundingTxEmailUpdateMutation(baseOptions?: Apollo.MutationHoo
 export type FundingTxEmailUpdateMutationHookResult = ReturnType<typeof useFundingTxEmailUpdateMutation>;
 export type FundingTxEmailUpdateMutationResult = Apollo.MutationResult<FundingTxEmailUpdateMutation>;
 export type FundingTxEmailUpdateMutationOptions = Apollo.BaseMutationOptions<FundingTxEmailUpdateMutation, FundingTxEmailUpdateMutationVariables>;
+export const ProjectGoalCreateDocument = gql`
+    mutation ProjectGoalCreate($input: ProjectGoalCreateInput!) {
+  projectGoalCreate(input: $input) {
+    title
+    description
+    targetAmount
+    projectId
+    currency
+  }
+}
+    `;
+export type ProjectGoalCreateMutationFn = Apollo.MutationFunction<ProjectGoalCreateMutation, ProjectGoalCreateMutationVariables>;
+
+/**
+ * __useProjectGoalCreateMutation__
+ *
+ * To run a mutation, you first call `useProjectGoalCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectGoalCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectGoalCreateMutation, { data, loading, error }] = useProjectGoalCreateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectGoalCreateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectGoalCreateMutation, ProjectGoalCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectGoalCreateMutation, ProjectGoalCreateMutationVariables>(ProjectGoalCreateDocument, options);
+      }
+export type ProjectGoalCreateMutationHookResult = ReturnType<typeof useProjectGoalCreateMutation>;
+export type ProjectGoalCreateMutationResult = Apollo.MutationResult<ProjectGoalCreateMutation>;
+export type ProjectGoalCreateMutationOptions = Apollo.BaseMutationOptions<ProjectGoalCreateMutation, ProjectGoalCreateMutationVariables>;
+export const ProjectGoalUpdateDocument = gql`
+    mutation ProjectGoalUpdate($input: ProjectGoalUpdateInput!) {
+  projectGoalUpdate(input: $input) {
+    id
+    title
+    description
+    targetAmount
+  }
+}
+    `;
+export type ProjectGoalUpdateMutationFn = Apollo.MutationFunction<ProjectGoalUpdateMutation, ProjectGoalUpdateMutationVariables>;
+
+/**
+ * __useProjectGoalUpdateMutation__
+ *
+ * To run a mutation, you first call `useProjectGoalUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectGoalUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectGoalUpdateMutation, { data, loading, error }] = useProjectGoalUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectGoalUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectGoalUpdateMutation, ProjectGoalUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectGoalUpdateMutation, ProjectGoalUpdateMutationVariables>(ProjectGoalUpdateDocument, options);
+      }
+export type ProjectGoalUpdateMutationHookResult = ReturnType<typeof useProjectGoalUpdateMutation>;
+export type ProjectGoalUpdateMutationResult = Apollo.MutationResult<ProjectGoalUpdateMutation>;
+export type ProjectGoalUpdateMutationOptions = Apollo.BaseMutationOptions<ProjectGoalUpdateMutation, ProjectGoalUpdateMutationVariables>;
+export const ProjectGoalDeleteDocument = gql`
+    mutation ProjectGoalDelete($projectGoalId: BigInt!) {
+  projectGoalDelete(projectGoalId: $projectGoalId) {
+    id
+  }
+}
+    `;
+export type ProjectGoalDeleteMutationFn = Apollo.MutationFunction<ProjectGoalDeleteMutation, ProjectGoalDeleteMutationVariables>;
+
+/**
+ * __useProjectGoalDeleteMutation__
+ *
+ * To run a mutation, you first call `useProjectGoalDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectGoalDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectGoalDeleteMutation, { data, loading, error }] = useProjectGoalDeleteMutation({
+ *   variables: {
+ *      projectGoalId: // value for 'projectGoalId'
+ *   },
+ * });
+ */
+export function useProjectGoalDeleteMutation(baseOptions?: Apollo.MutationHookOptions<ProjectGoalDeleteMutation, ProjectGoalDeleteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectGoalDeleteMutation, ProjectGoalDeleteMutationVariables>(ProjectGoalDeleteDocument, options);
+      }
+export type ProjectGoalDeleteMutationHookResult = ReturnType<typeof useProjectGoalDeleteMutation>;
+export type ProjectGoalDeleteMutationResult = Apollo.MutationResult<ProjectGoalDeleteMutation>;
+export type ProjectGoalDeleteMutationOptions = Apollo.BaseMutationOptions<ProjectGoalDeleteMutation, ProjectGoalDeleteMutationVariables>;
 export const GrantApplyDocument = gql`
     mutation GrantApply($input: GrantApplyInput) {
   grantApply(input: $input) {
@@ -6432,111 +6538,6 @@ export function useProjectRewardDeleteMutation(baseOptions?: Apollo.MutationHook
 export type ProjectRewardDeleteMutationHookResult = ReturnType<typeof useProjectRewardDeleteMutation>;
 export type ProjectRewardDeleteMutationResult = Apollo.MutationResult<ProjectRewardDeleteMutation>;
 export type ProjectRewardDeleteMutationOptions = Apollo.BaseMutationOptions<ProjectRewardDeleteMutation, ProjectRewardDeleteMutationVariables>;
-export const ProjectGoalCreateDocument = gql`
-    mutation ProjectGoalCreate($input: ProjectGoalCreateInput!) {
-  projectGoalCreate(input: $input) {
-    id
-    title
-    description
-    targetAmount
-  }
-}
-    `;
-export type ProjectGoalCreateMutationFn = Apollo.MutationFunction<ProjectGoalCreateMutation, ProjectGoalCreateMutationVariables>;
-
-/**
- * __useProjectGoalCreateMutation__
- *
- * To run a mutation, you first call `useProjectGoalCreateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useProjectGoalCreateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [projectGoalCreateMutation, { data, loading, error }] = useProjectGoalCreateMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectGoalCreateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectGoalCreateMutation, ProjectGoalCreateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ProjectGoalCreateMutation, ProjectGoalCreateMutationVariables>(ProjectGoalCreateDocument, options);
-      }
-export type ProjectGoalCreateMutationHookResult = ReturnType<typeof useProjectGoalCreateMutation>;
-export type ProjectGoalCreateMutationResult = Apollo.MutationResult<ProjectGoalCreateMutation>;
-export type ProjectGoalCreateMutationOptions = Apollo.BaseMutationOptions<ProjectGoalCreateMutation, ProjectGoalCreateMutationVariables>;
-export const ProjectGoalUpdateDocument = gql`
-    mutation ProjectGoalUpdate($input: ProjectGoalUpdateInput!) {
-  projectGoalUpdate(input: $input) {
-    id
-    title
-    description
-    targetAmount
-  }
-}
-    `;
-export type ProjectGoalUpdateMutationFn = Apollo.MutationFunction<ProjectGoalUpdateMutation, ProjectGoalUpdateMutationVariables>;
-
-/**
- * __useProjectGoalUpdateMutation__
- *
- * To run a mutation, you first call `useProjectGoalUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useProjectGoalUpdateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [projectGoalUpdateMutation, { data, loading, error }] = useProjectGoalUpdateMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectGoalUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectGoalUpdateMutation, ProjectGoalUpdateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ProjectGoalUpdateMutation, ProjectGoalUpdateMutationVariables>(ProjectGoalUpdateDocument, options);
-      }
-export type ProjectGoalUpdateMutationHookResult = ReturnType<typeof useProjectGoalUpdateMutation>;
-export type ProjectGoalUpdateMutationResult = Apollo.MutationResult<ProjectGoalUpdateMutation>;
-export type ProjectGoalUpdateMutationOptions = Apollo.BaseMutationOptions<ProjectGoalUpdateMutation, ProjectGoalUpdateMutationVariables>;
-export const ProjectGoalDeleteDocument = gql`
-    mutation ProjectGoalDelete($projectGoalId: BigInt!) {
-  projectGoalDelete(projectGoalId: $projectGoalId) {
-    id
-  }
-}
-    `;
-export type ProjectGoalDeleteMutationFn = Apollo.MutationFunction<ProjectGoalDeleteMutation, ProjectGoalDeleteMutationVariables>;
-
-/**
- * __useProjectGoalDeleteMutation__
- *
- * To run a mutation, you first call `useProjectGoalDeleteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useProjectGoalDeleteMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [projectGoalDeleteMutation, { data, loading, error }] = useProjectGoalDeleteMutation({
- *   variables: {
- *      projectGoalId: // value for 'projectGoalId'
- *   },
- * });
- */
-export function useProjectGoalDeleteMutation(baseOptions?: Apollo.MutationHookOptions<ProjectGoalDeleteMutation, ProjectGoalDeleteMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ProjectGoalDeleteMutation, ProjectGoalDeleteMutationVariables>(ProjectGoalDeleteDocument, options);
-      }
-export type ProjectGoalDeleteMutationHookResult = ReturnType<typeof useProjectGoalDeleteMutation>;
-export type ProjectGoalDeleteMutationResult = Apollo.MutationResult<ProjectGoalDeleteMutation>;
-export type ProjectGoalDeleteMutationOptions = Apollo.BaseMutationOptions<ProjectGoalDeleteMutation, ProjectGoalDeleteMutationVariables>;
 export const ProjectFollowDocument = gql`
     mutation ProjectFollow($input: ProjectFollowMutationInput!) {
   projectFollow(input: $input)
