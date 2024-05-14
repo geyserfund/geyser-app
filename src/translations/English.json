@@ -1002,7 +1002,7 @@
    "The lightning address provided for the wallet might no longer be valid.":"The lightning address provided for the wallet might no longer be valid.",
    "The lightning node may be temporarily down.":"The lightning node may be temporarily down.",
    "This could be happening because Unfortunately, we're unable to reach the wallet to generate an invoice. This could be happening because":"This could be happening because Unfortunately, we're unable to reach the wallet to generate an invoice. This could be happening because",
-   "Receiver’s wallet maximum limit Reached":"Receiver’s wallet maximum limit Reached"
+   "Receiver’s Wallet maximum limit Reached":"Receiver’s Wallet maximum limit Reached"
 
 
 }

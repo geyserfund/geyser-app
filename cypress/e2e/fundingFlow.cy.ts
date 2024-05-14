@@ -1,9 +1,9 @@
-import { geyserUrl } from '../contants'
+import { GEYSER_URL, LIGHTNING_TEST_PROJECT_NAME, LND_TEST_PROJECT_NAME } from '../contants'
 import { onChainRefundFlow, onChainSuccessFlow, testLightningSuccessFlow } from './funding'
 
 describe('Testing Project with lightning node', () => {
   beforeEach(() => {
-    cy.visit(`${geyserUrl}/project/lndtestproject`, {
+    cy.visit(`${GEYSER_URL}/project/${LND_TEST_PROJECT_NAME}`, {
       onBeforeLoad(win: Window): void {
         cy.spy(win.navigator.clipboard, 'writeText').as('copy')
       },
@@ -17,7 +17,7 @@ describe('Testing Project with lightning node', () => {
 
 describe('Testing Project with lightning wallet', () => {
   beforeEach(() => {
-    cy.visit(`${geyserUrl}/project/lightningtestproject`, {
+    cy.visit(`${GEYSER_URL}/project/${LIGHTNING_TEST_PROJECT_NAME}`, {
       onBeforeLoad(win: Window): void {
         cy.spy(win.navigator.clipboard, 'writeText').as('copy')
       },

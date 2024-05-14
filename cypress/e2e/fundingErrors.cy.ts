@@ -1,6 +1,6 @@
 import { clickContribute, enterAmountAndHitCheckout, enterCommentAndHitCheckout } from '../actions/funding'
 import { commentScreenIsVisible, fundingAmountScreenIsVisible } from '../assertions/funding'
-import { ApolloErrors, geyserUrl } from '../contants'
+import { ApolloErrors, GEYSER_URL } from '../contants'
 import { ErrorExtensionType, interceptFundingWithError } from '../utils/funding'
 
 const FUNDING_AMOUNT = 60000
@@ -8,7 +8,7 @@ const FUNDING_COMMENT = 'This was the test comment'
 
 describe('When fund mutation fails', () => {
   beforeEach(() => {
-    cy.visit(`${geyserUrl}/project/lndtestproject`)
+    cy.visit(`${GEYSER_URL}/project/lndtestproject`)
   })
 
   context('when invoice is higher than limit', () => {
@@ -18,7 +18,7 @@ describe('When fund mutation fails', () => {
         maxAmount: 50000,
       })
 
-      cy.get('h2').contains('Receiver’s wallet maximum limit Reached').should('be.visible')
+      cy.get('h2').contains('Receiver’s Wallet maximum limit Reached').should('be.visible')
     })
   })
 
@@ -29,7 +29,7 @@ describe('When fund mutation fails', () => {
         minAmount: 80000,
       })
 
-      cy.get('h2').contains('Receiver’s wallet Transaction Below Minimum Limit').should('be.visible')
+      cy.get('h2').contains('Receiver’s Wallet Transaction Below Minimum Limit').should('be.visible')
     })
   })
 

@@ -1,4 +1,4 @@
-export const geyserUrl = Cypress.env('APP_URL')
+export const GEYSER_URL = Cypress.env('APP_URL')
 export const CONTRIBUTOR_LND_ENDPOINT = Cypress.env('CONTRIBUTOR_LND_ENDPOINT')
 export const CONTRIBUTOR_LND_ADMIN_MACAROON_HEX = Cypress.env('CONTRIBUTOR_LND_ADMIN_MACAROON_HEX')
 export const MINE_BLOCK_ADDRESS = Cypress.env('MINE_BLOCK_ADDRESS')
@@ -13,3 +13,6 @@ export enum ApolloErrors {
   NON_ACTIVE_PROJECT = 'NON_ACTIVE_PROJECT',
   REWARD_OUT_OF_STOCK = 'REWARD_OUT_OF_STOCK',
 }
+
+export const LND_TEST_PROJECT_NAME = 'lndtestproject'
+export const LIGHTNING_TEST_PROJECT_NAME = 'lightningtestproject'

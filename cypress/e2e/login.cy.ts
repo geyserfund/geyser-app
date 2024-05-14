@@ -1,4 +1,4 @@
-import { geyserUrl } from '../contants'
+import { GEYSER_URL } from '../contants'
 import { getDropdownButton, loginWithNostr, logoutUser, openConnectPopup } from '../utils/auth'
 import { aliasQuery, hasOperationName, interceptGraphql } from '../utils/graphql'
 
@@ -55,7 +55,7 @@ describe('Login', () => {
       },
     ).as('NostrAuthToken')
 
-    cy.visit(geyserUrl)
+    cy.visit(GEYSER_URL)
   })
 
   it('Should open login popup on landing page', () => {

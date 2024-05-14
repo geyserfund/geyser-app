@@ -25,7 +25,7 @@ const FUNDING_COMMENT = 'This was the test comment'
 
 export const testLightningSuccessFlow = () => {
   context('When lightning invoice payment is sent correctly', () => {
-    it('Paymnent successfull through lightning', () => {
+    it('Payment successfull through lightning', () => {
       clickContribute()
       fundingAmountScreenIsVisible()
 
