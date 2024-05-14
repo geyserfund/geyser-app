@@ -22,6 +22,7 @@ export const QUERY_PROJECT_GOALS = gql`
       }
       completed {
         ...ProjectGoal
+        completedAt
       }
     }
   }

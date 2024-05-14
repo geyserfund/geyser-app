@@ -11,18 +11,29 @@ import { ProjectGoal } from '../../../../../../../types'
 import { useMobileMode } from '../../../../../../../utils'
 import { useProjectContext } from '../../../../../context'
 import { useProjectGoals } from '../../../hooks/useProjectGoals'
-import { Goal } from '../components/Goal'
+import { GoalCompleted, GoalInProgress } from '../components'
+import { GoalModal } from '../components/GoalModal'
 
 export const Goals = () => {
   const { t } = useTranslation()
-  const { project, isProjectOwner, onMilestonesModalOpen } = useProjectContext()
+  const { project, isProjectOwner } = useProjectContext()
   const [editMode, setEditMode] = useState(false)
   const isMobile = useMobileMode()
+
+  const [isGoalModalOpen, setIsGoalModalOpen] = useState(false)
 
   const { inProgressGoals, completedGoals } = useProjectGoals()
 
   if (!project) {
     return null
+  }
+
+  const handleGoalModalOpen = () => {
+    setIsGoalModalOpen(true)
+  }
+
+  const handleGoalModalClose = () => {
+    setIsGoalModalOpen(false)
   }
 
   const handleEditMode = () => {
@@ -33,7 +44,7 @@ export const Goals = () => {
     if (inProgressGoals && inProgressGoals.length > 0) {
       return inProgressGoals.map((goal: ProjectGoal) => {
         if (goal) {
-          return <Goal key={goal.id} goal={goal} isEditing={editMode} />
+          return <GoalInProgress key={goal.id} goal={goal} isEditing={editMode} />
         }
       })
     }
@@ -45,7 +56,7 @@ export const Goals = () => {
     if (completedGoals && completedGoals.length > 0) {
       return completedGoals.map((goal: ProjectGoal) => {
         if (goal) {
-          return <Goal key={goal.id} goal={goal} isEditing={editMode} />
+          return <GoalCompleted key={goal.id} goal={goal} isEditing={editMode} />
         }
       })
     }
@@ -105,7 +116,7 @@ export const Goals = () => {
                   mt={5}
                   mb={5}
                   rightIcon={<MdAdd fontSize="18px" />}
-                  onClick={onMilestonesModalOpen}
+                  onClick={handleGoalModalOpen}
                 >
                   {t('Add Goal')}
                 </Button>
@@ -122,6 +133,8 @@ export const Goals = () => {
           </>
         )}
       </CardLayout>
+
+      <GoalModal isOpen={isGoalModalOpen} onClose={handleGoalModalClose} projectId={project?.id} />
     </>
   )
 }
