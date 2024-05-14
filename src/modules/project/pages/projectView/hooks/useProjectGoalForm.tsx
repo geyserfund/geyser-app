@@ -11,7 +11,12 @@ import { ProjectGoal, ProjectGoalCurrency } from '../../../../../types'
 
 type FormValues = Record<string, string | number | ProjectGoalCurrency>
 
-export const useProjectGoalForm = (goal: ProjectGoal | null, projectId: string, onClose: () => void) => {
+export const useProjectGoalForm = (
+  goal: ProjectGoal | null,
+  projectId: string,
+  onClose: () => void,
+  refetch: () => void,
+) => {
   const { control, handleSubmit, reset, watch } = useForm<FormValues>({
     defaultValues: {
       title: '',
@@ -57,6 +62,7 @@ export const useProjectGoalForm = (goal: ProjectGoal | null, projectId: string, 
           },
         })
         if (data) {
+          refetch()
           onClose()
         }
       } else {
@@ -72,6 +78,7 @@ export const useProjectGoalForm = (goal: ProjectGoal | null, projectId: string, 
           },
         })
         if (data) {
+          refetch()
           onClose()
         }
       }
@@ -88,6 +95,7 @@ export const useProjectGoalForm = (goal: ProjectGoal | null, projectId: string, 
         },
       })
       if (data) {
+        refetch()
         onClose()
       }
     } catch (error) {

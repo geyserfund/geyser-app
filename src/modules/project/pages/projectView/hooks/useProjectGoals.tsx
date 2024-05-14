@@ -12,7 +12,7 @@ type ResponseData = {
 export const useProjectGoals = () => {
   const { project } = useProjectContext()
 
-  const { data } = useQuery<ResponseData>(QUERY_PROJECT_GOALS, {
+  const { data, refetch } = useQuery<ResponseData>(QUERY_PROJECT_GOALS, {
     variables: { projectId: project?.id },
   })
 
@@ -44,5 +44,6 @@ export const useProjectGoals = () => {
     hasGoals,
     inProgressGoals,
     completedGoals,
+    refetch,
   }
 }

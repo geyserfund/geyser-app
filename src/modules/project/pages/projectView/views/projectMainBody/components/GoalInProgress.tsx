@@ -152,7 +152,7 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
         <Box
           display="flex"
           alignItems="start"
-          justifyContent="center"
+          justifyContent={isEditing ? 'flex-end' : 'center'}
           minWidth="100px"
           height="100%"
           width={{ base: '100%', lg: '192px' }}

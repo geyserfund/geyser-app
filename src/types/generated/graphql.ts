@@ -958,7 +958,7 @@ export type Mutation = {
   projectDelete: ProjectDeleteResponse;
   projectFollow: Scalars['Boolean']['output'];
   projectGoalCreate: Array<ProjectGoal>;
-  projectGoalDelete: Array<ProjectGoal>;
+  projectGoalDelete: ProjectGoalDeleteResponse;
   /** Only returns ProjectGoals that are in progress */
   projectGoalOrderingUpdate: Array<ProjectGoal>;
   projectGoalUpdate: ProjectGoal;
@@ -1536,6 +1536,12 @@ export enum ProjectGoalCurrency {
   Btcsat = 'BTCSAT',
   Usdcent = 'USDCENT'
 }
+
+export type ProjectGoalDeleteResponse = MutationResponse & {
+  __typename?: 'ProjectGoalDeleteResponse';
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
+};
 
 export type ProjectGoalOrderingUpdateInput = {
   projectGoalIdsOrder: Array<Scalars['BigInt']['input']>;
@@ -2418,7 +2424,7 @@ export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
 export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
   GraphSumData: ( FunderRewardGraphSum ) | ( FundingTxAmountGraph );
   LndConnectionDetails: never;
-  MutationResponse: ( DeleteUserResponse ) | ( ProjectDeleteResponse );
+  MutationResponse: ( DeleteUserResponse ) | ( ProjectDeleteResponse ) | ( ProjectGoalDeleteResponse );
 };
 
 /** Mapping between all available schema types and the resolvers types */
@@ -2598,6 +2604,7 @@ export type ResolversTypes = {
   ProjectGoal: ResolverTypeWrapper<ProjectGoal>;
   ProjectGoalCreateInput: ProjectGoalCreateInput;
   ProjectGoalCurrency: ProjectGoalCurrency;
+  ProjectGoalDeleteResponse: ResolverTypeWrapper<ProjectGoalDeleteResponse>;
   ProjectGoalOrderingUpdateInput: ProjectGoalOrderingUpdateInput;
   ProjectGoalStatus: ProjectGoalStatus;
   ProjectGoalStatusInCreate: ProjectGoalStatusInCreate;
@@ -2829,6 +2836,7 @@ export type ResolversParentTypes = {
   ProjectFundingTxStats: ProjectFundingTxStats;
   ProjectGoal: ProjectGoal;
   ProjectGoalCreateInput: ProjectGoalCreateInput;
+  ProjectGoalDeleteResponse: ProjectGoalDeleteResponse;
   ProjectGoalOrderingUpdateInput: ProjectGoalOrderingUpdateInput;
   ProjectGoalUpdateInput: ProjectGoalUpdateInput;
   ProjectGoals: ProjectGoals;
@@ -3284,7 +3292,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   projectDelete?: Resolver<ResolversTypes['ProjectDeleteResponse'], ParentType, ContextType, RequireFields<MutationProjectDeleteArgs, 'input'>>;
   projectFollow?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectFollowArgs, 'input'>>;
   projectGoalCreate?: Resolver<Array<ResolversTypes['ProjectGoal']>, ParentType, ContextType, RequireFields<MutationProjectGoalCreateArgs, 'input'>>;
-  projectGoalDelete?: Resolver<Array<ResolversTypes['ProjectGoal']>, ParentType, ContextType, RequireFields<MutationProjectGoalDeleteArgs, 'projectGoalId'>>;
+  projectGoalDelete?: Resolver<ResolversTypes['ProjectGoalDeleteResponse'], ParentType, ContextType, RequireFields<MutationProjectGoalDeleteArgs, 'projectGoalId'>>;
   projectGoalOrderingUpdate?: Resolver<Array<ResolversTypes['ProjectGoal']>, ParentType, ContextType, RequireFields<MutationProjectGoalOrderingUpdateArgs, 'input'>>;
   projectGoalUpdate?: Resolver<ResolversTypes['ProjectGoal'], ParentType, ContextType, RequireFields<MutationProjectGoalUpdateArgs, 'input'>>;
   projectPublish?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectPublishArgs, 'input'>>;
@@ -3314,7 +3322,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type MutationResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['MutationResponse'] = ResolversParentTypes['MutationResponse']> = {
-  __resolveType: TypeResolveFn<'DeleteUserResponse' | 'ProjectDeleteResponse', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'DeleteUserResponse' | 'ProjectDeleteResponse' | 'ProjectGoalDeleteResponse', ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 };
@@ -3482,6 +3490,12 @@ export type ProjectGoalResolvers<ContextType = any, ParentType extends Resolvers
   targetAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProjectGoalDeleteResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectGoalDeleteResponse'] = ResolversParentTypes['ProjectGoalDeleteResponse']> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3831,6 +3845,7 @@ export type Resolvers<ContextType = any> = {
   ProjectFunderStats?: ProjectFunderStatsResolvers<ContextType>;
   ProjectFundingTxStats?: ProjectFundingTxStatsResolvers<ContextType>;
   ProjectGoal?: ProjectGoalResolvers<ContextType>;
+  ProjectGoalDeleteResponse?: ProjectGoalDeleteResponseResolvers<ContextType>;
   ProjectGoals?: ProjectGoalsResolvers<ContextType>;
   ProjectKeys?: ProjectKeysResolvers<ContextType>;
   ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>;
@@ -4101,14 +4116,14 @@ export type ProjectGoalUpdateMutationVariables = Exact<{
 }>;
 
 
-export type ProjectGoalUpdateMutation = { __typename?: 'Mutation', projectGoalUpdate: { __typename?: 'ProjectGoal', id: any, title: string, description?: string | null, targetAmount: number } };
+export type ProjectGoalUpdateMutation = { __typename?: 'Mutation', projectGoalUpdate: { __typename?: 'ProjectGoal', title: string, targetAmount: number, projectId: any, description?: string | null, currency: ProjectGoalCurrency } };
 
 export type ProjectGoalDeleteMutationVariables = Exact<{
   projectGoalId: Scalars['BigInt']['input'];
 }>;
 
 
-export type ProjectGoalDeleteMutation = { __typename?: 'Mutation', projectGoalDelete: Array<{ __typename?: 'ProjectGoal', id: any }> };
+export type ProjectGoalDeleteMutation = { __typename?: 'Mutation', projectGoalDelete: { __typename?: 'ProjectGoalDeleteResponse', success: boolean } };
 
 export type GrantApplyMutationVariables = Exact<{
   input?: InputMaybe<GrantApplyInput>;
@@ -6105,10 +6120,11 @@ export type ProjectGoalCreateMutationOptions = Apollo.BaseMutationOptions<Projec
 export const ProjectGoalUpdateDocument = gql`
     mutation ProjectGoalUpdate($input: ProjectGoalUpdateInput!) {
   projectGoalUpdate(input: $input) {
-    id
     title
-    description
     targetAmount
+    projectId
+    description
+    currency
   }
 }
     `;
@@ -6141,7 +6157,7 @@ export type ProjectGoalUpdateMutationOptions = Apollo.BaseMutationOptions<Projec
 export const ProjectGoalDeleteDocument = gql`
     mutation ProjectGoalDelete($projectGoalId: BigInt!) {
   projectGoalDelete(projectGoalId: $projectGoalId) {
-    id
+    success
   }
 }
     `;

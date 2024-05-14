@@ -23,7 +23,7 @@ export const Goals = () => {
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false)
   const [goalModalData, setGoalModalData] = useState<ProjectGoal | null>(null)
 
-  const { inProgressGoals, completedGoals } = useProjectGoals()
+  const { inProgressGoals, completedGoals, refetch } = useProjectGoals()
 
   if (!project) {
     return null
@@ -108,36 +108,44 @@ export const Goals = () => {
             <VStack alignItems="flex-start" gap={30} width="100%">
               {renderInProgressGoals()}
             </VStack>
-            {isProjectOwner && editMode && (
-              <Box display="flex" alignItems="center" justifyContent="center" width="100%">
-                <Button
-                  variant="primary"
-                  padding="8px 10px"
-                  width={isMobile ? '100%' : '192px'}
-                  size="md"
-                  borderRadius="8px"
-                  mt={5}
-                  mb={5}
-                  rightIcon={<MdAdd fontSize="18px" />}
-                  onClick={() => handleGoalModalOpen(null)}
-                >
-                  {t('Add Goal')}
-                </Button>
-              </Box>
-            )}
           </>
         )}
         {completedGoals && completedGoals?.length > 0 && (
           <>
-            <TitleDivider badge={completedGoals?.length}>{t('Completed Goals')}</TitleDivider>
+            <TitleDivider badge={completedGoals?.length} rightAction={!inProgressGoals && renderRightAction()}>
+              {t('Completed Goals')}
+            </TitleDivider>
             <VStack alignItems="flex-start" gap={30} width="100%">
               {renderCompletedGoals()}
             </VStack>
           </>
         )}
+        {isProjectOwner && editMode && (
+          <Box display="flex" alignItems="center" justifyContent="center" width="100%">
+            <Button
+              variant="primary"
+              padding="8px 10px"
+              width={{ base: '100%', lg: '192px' }}
+              size="md"
+              borderRadius="8px"
+              mt={5}
+              mb={5}
+              rightIcon={<MdAdd fontSize="18px" />}
+              onClick={() => handleGoalModalOpen(null)}
+            >
+              {t('Add Goal')}
+            </Button>
+          </Box>
+        )}
       </CardLayout>
 
-      <GoalModal isOpen={isGoalModalOpen} onClose={handleGoalModalClose} projectId={project?.id} goal={goalModalData} />
+      <GoalModal
+        isOpen={isGoalModalOpen}
+        onClose={handleGoalModalClose}
+        projectId={project?.id}
+        goal={goalModalData}
+        refetch={refetch}
+      />
     </>
   )
 }

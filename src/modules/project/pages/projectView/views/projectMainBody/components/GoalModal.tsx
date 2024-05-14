@@ -29,6 +29,7 @@ type Props = {
   onClose: () => void
   goal?: ProjectGoal | null
   projectId: string
+  refetch: () => void
 }
 
 const denominationOptions = [
@@ -36,10 +37,15 @@ const denominationOptions = [
   { value: ProjectGoalCurrency.Usdcent, label: 'USD' },
 ]
 
-export const GoalModal = ({ isOpen, onClose, goal, projectId }: Props) => {
+export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch }: Props) => {
   const { t } = useTranslation()
 
-  const { control, handleSubmit, handleDelete, loading, watch } = useProjectGoalForm(goal || null, projectId, onClose)
+  const { control, handleSubmit, handleDelete, loading, watch } = useProjectGoalForm(
+    goal || null,
+    projectId,
+    onClose,
+    refetch,
+  )
 
   const renderActions = () => {
     return (

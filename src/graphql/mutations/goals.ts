@@ -27,7 +27,7 @@ export const MUTATION_UPDATE_PROJECT_GOAL = gql`
 export const MUTATION_DELETE_PROJECT_GOAL = gql`
   mutation ProjectGoalDelete($projectGoalId: BigInt!) {
     projectGoalDelete(projectGoalId: $projectGoalId) {
-      id
+      success
     }
   }
 `
