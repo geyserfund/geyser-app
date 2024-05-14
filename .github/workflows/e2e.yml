@@ -4,7 +4,7 @@ on:
     branches:
       - 'staging'
 jobs:
-  chrome:
+  cypress-run:
     runs-on: ubuntu-22.04
     name: E2E on Chrome
     steps:
@@ -12,7 +12,8 @@ jobs:
         uses: actions/checkout@v4
       - uses: cypress-io/github-action@v6
         with:
-          browser: chrome
+          record: true
+          config: baseUrl=${{ secrets.APP_URL }}
         env:
           CYPRESS_APP_URL: ${{ secrets.APP_URL }}
           CYPRESS_CONTRIBUTOR_LND_ENDPOINT: ${{ secrets.CONTRIBUTOR_LND_ENDPOINT }}
