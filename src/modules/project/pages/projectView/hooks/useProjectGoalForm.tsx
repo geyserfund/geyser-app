@@ -13,14 +13,22 @@ import { ProjectGoal, ProjectGoalCurrency } from '../../../../../types'
 
 type FormValues = Record<string, string | number | ProjectGoalCurrency>
 
-const goalFormSchema = yup
-  .object({
-    title: yup.string().required('Title is required'),
-    description: yup.string().max(400, 'Description must be at most 400 characters long'),
-    targetAmount: yup.number().positive('Amount must be positive').required('Amount is required'),
-    currency: yup.string().required('Currency is required'),
-  })
-  .required()
+const goalFormSchema = (amountContributed: number) =>
+  yup
+    .object({
+      title: yup.string().required('Title is required'),
+      description: yup.string().max(400, 'Description must be at most 400 characters long'),
+      targetAmount: yup
+        .number()
+        .required('Amount is required')
+        .min(
+          amountContributed,
+          'The Goal amount is lower than your funded amount. Please choose a Goal amount that is higher than the current Goal’s funded amount.',
+        ),
+
+      currency: yup.string().required('Currency is required'),
+    })
+    .required()
 
 export const useProjectGoalForm = (
   goal: ProjectGoal | null,
@@ -29,7 +37,7 @@ export const useProjectGoalForm = (
   refetch: () => void,
 ) => {
   const { control, handleSubmit, reset, watch, formState } = useForm<FormValues>({
-    resolver: yupResolver(goalFormSchema),
+    resolver: yupResolver(goalFormSchema(goal?.amountContributed || 0)),
     defaultValues: {
       title: '',
       description: '',

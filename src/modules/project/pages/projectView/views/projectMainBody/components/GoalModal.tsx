@@ -47,9 +47,6 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch }: Props) 
     refetch,
   )
 
-  console.log(enableSubmit)
-  console.log(errors)
-
   const renderActions = () => {
     return (
       <VStack width="100%">
@@ -127,6 +124,11 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch }: Props) 
                   label={t('Goal Amount')}
                   currency={watch('currency') as ProjectGoalCurrency}
                 />
+                {errors.targetAmount && (
+                  <Text fontSize={'14px'} fontWeight={400} color="secondary.red">
+                    {errors.targetAmount.message}
+                  </Text>
+                )}
                 <ControlledSelect
                   control={control}
                   name="currency"
@@ -134,6 +136,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch }: Props) 
                   options={denominationOptions}
                   description={t('Denominate your goal in Bitcoin or USD')}
                   defaultValue={ProjectGoalCurrency.Usdcent}
+                  isDisabled={Boolean(goal)}
                 />
                 <HStack mt={4} width="100%" justifyContent="space-between">
                   {renderActions()}
