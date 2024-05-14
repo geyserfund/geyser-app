@@ -23,4 +23,7 @@ describe('Testing Project with lightning wallet', () => {
       },
     })
   })
+  testLightningSuccessFlow()
+  onChainSuccessFlow()
+  onChainRefundFlow()
 })
