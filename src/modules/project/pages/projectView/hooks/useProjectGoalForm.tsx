@@ -1,8 +1,8 @@
 import { useMutation } from '@apollo/client'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { MUTATION_CREATE_PROJECT_GOAL } from '../../../../../graphql/mutations/goals'
+import { MUTATION_CREATE_PROJECT_GOAL, MUTATION_UPDATE_PROJECT_GOAL } from '../../../../../graphql/mutations/goals'
 import { ProjectGoal, ProjectGoalCurrency } from '../../../../../types'
 
 type FormValues = Record<string, string | number | ProjectGoalCurrency>
@@ -18,7 +18,8 @@ export const useProjectGoalForm = (goal: ProjectGoal | null, projectId: string, 
     },
   })
 
-  const [createProjectGoal, { loading, error }] = useMutation(MUTATION_CREATE_PROJECT_GOAL)
+  const [createProjectGoal, { loading: creating, error: createError }] = useMutation(MUTATION_CREATE_PROJECT_GOAL)
+  const [updateProjectGoal, { loading: updating, error: updateError }] = useMutation(MUTATION_UPDATE_PROJECT_GOAL)
 
   useEffect(() => {
     if (goal) {
@@ -38,24 +39,47 @@ export const useProjectGoalForm = (goal: ProjectGoal | null, projectId: string, 
 
   const onSubmit = async (formData: FormValues) => {
     try {
-      const { data } = await createProjectGoal({
-        variables: {
-          input: {
-            title: formData.title,
-            description: formData.description,
-            targetAmount: Number(formData.targetAmount),
-            currency: formData.currency,
-            projectId: formData.projectId,
+      if (goal) {
+        const { data } = await updateProjectGoal({
+          variables: {
+            input: {
+              title: formData.title,
+              description: formData.description,
+              targetAmount: Number(formData.targetAmount),
+              currency: formData.currency,
+              projectGoalId: goal.id,
+            },
           },
-        },
-      })
-      if (data) {
-        onClose()
+        })
+        if (data) {
+          onClose()
+        }
+      } else {
+        const { data } = await createProjectGoal({
+          variables: {
+            input: {
+              title: formData.title,
+              description: formData.description,
+              targetAmount: Number(formData.targetAmount),
+              currency: formData.currency,
+              projectId: formData.projectId,
+            },
+          },
+        })
+        if (data) {
+          onClose()
+        }
       }
     } catch (error) {
-      console.error('Error creating project goal:', error)
+      console.error('Error submitting project goal:', error)
     }
   }
 
-  return { control, handleSubmit: handleSubmit(onSubmit), loading, error, watch }
+  return {
+    control,
+    handleSubmit: handleSubmit(onSubmit),
+    loading: creating || updating,
+    error: createError || updateError,
+    watch,
+  }
 }

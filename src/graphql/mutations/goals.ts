@@ -15,10 +15,11 @@ export const MUTATION_CREATE_PROJECT_GOAL = gql`
 export const MUTATION_UPDATE_PROJECT_GOAL = gql`
   mutation ProjectGoalUpdate($input: ProjectGoalUpdateInput!) {
     projectGoalUpdate(input: $input) {
-      id
       title
-      description
       targetAmount
+      projectId
+      description
+      currency
     }
   }
 `
