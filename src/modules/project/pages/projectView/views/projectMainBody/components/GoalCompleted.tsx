@@ -21,8 +21,6 @@ type Props = {
 export const GoalCompleted = ({ goal, isEditing = false }: Props) => {
   const { t } = useTranslation()
 
-  console.log('goal', goal)
-
   const isMobile = useMobileMode()
 
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()

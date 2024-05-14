@@ -87,7 +87,9 @@ export const GoalInProgress = ({ goal, isEditing = false }: Props) => {
         minHeight="40px"
         width="100%"
       >
-        <H3>{goal.title}</H3>
+        <H3 fontSize="18px" fontWeight={600}>
+          {goal.title}
+        </H3>
         {isEditing && isMobile && (
           <IconButtonComponent
             aria-label="is-editing-goal"
@@ -99,7 +101,9 @@ export const GoalInProgress = ({ goal, isEditing = false }: Props) => {
         )}
       </HStack>
       <HStack display="flex" alignItems="flex-start" width="100%">
-        <Body1>{goal.description}</Body1>
+        <Body1 fontSize="14px" fontWeight={400}>
+          {goal.description}
+        </Body1>
       </HStack>
       <HStack display="flex" alignItems="flex-start" width="100%"></HStack>
       <Box
@@ -112,7 +116,7 @@ export const GoalInProgress = ({ goal, isEditing = false }: Props) => {
         <VStack width="100%">
           <GoalProgressBar
             width="100%"
-            bg={percentage > 0 ? 'primary.900' : 'neutral.400'}
+            bg={percentage > 0 ? 'neutral.900' : 'neutral.400'}
             percentage={percentage}
             captionColor={percentage > 0 ? 'neutral.0' : 'neutral.900'}
           />
