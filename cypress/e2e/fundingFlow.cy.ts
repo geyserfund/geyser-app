@@ -1,24 +1,4 @@
-import {
-  clickContribute,
-  clickCopyLightningInvoiceButton,
-  clickCopyOnChainButton,
-  clickOnchainQrTab,
-  enterAmountAndHitCheckout,
-  enterCommentAndHitCheckout,
-  enterRefundAddressAndClickRefund,
-} from '../actions/funding'
-import {
-  commentScreenIsVisible,
-  fundingAmountScreenIsVisible,
-  lightningQrScreenIsVisible,
-  onChainQrScreenIsVisible,
-  onChainTransactionProcessingScreenIsVisible,
-  refundInitiatedScreenIsVisible,
-  successScreenIsVisible,
-  transactionFailedScreenIsVisible,
-} from '../assertions/funding'
-import { geyserUrl, MINE_BLOCK_ADDRESS } from '../contants'
-import { mineBlockOptions, payLightningInvoice, payOnChainOptions } from '../utils/lncli'
+import { geyserUrl } from '../contants'
 import { onChainRefundFlow, onChainSuccessFlow, testLightningSuccessFlow } from './funding'
 
 describe('Testing Project with lightning node', () => {
