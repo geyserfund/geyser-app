@@ -15,9 +15,10 @@ import { commaFormatted } from '../../../../../../../utils'
 type Props = {
   goal: ProjectGoal
   isEditing?: boolean
+  onOpenGoalModal: (goal: ProjectGoal) => void
 }
 
-export const GoalInProgress = ({ goal, isEditing = false }: Props) => {
+export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Props) => {
   const { t } = useTranslation()
 
   const isMobile = useMobileMode()
@@ -75,7 +76,7 @@ export const GoalInProgress = ({ goal, isEditing = false }: Props) => {
   }
 
   const handleEditGoal = () => {
-    console.log('open edit goal modal', goal)
+    onOpenGoalModal(goal)
   }
 
   return (

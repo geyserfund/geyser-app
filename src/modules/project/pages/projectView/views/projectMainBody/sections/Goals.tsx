@@ -21,6 +21,7 @@ export const Goals = () => {
   const isMobile = useMobileMode()
 
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false)
+  const [goalModalData, setGoalModalData] = useState<ProjectGoal | null>(null)
 
   const { inProgressGoals, completedGoals } = useProjectGoals()
 
@@ -28,12 +29,14 @@ export const Goals = () => {
     return null
   }
 
-  const handleGoalModalOpen = () => {
+  const handleGoalModalOpen = (goal: ProjectGoal | null) => {
+    setGoalModalData(goal)
     setIsGoalModalOpen(true)
   }
 
   const handleGoalModalClose = () => {
     setIsGoalModalOpen(false)
+    setGoalModalData(null)
   }
 
   const handleEditMode = () => {
@@ -44,7 +47,7 @@ export const Goals = () => {
     if (inProgressGoals && inProgressGoals.length > 0) {
       return inProgressGoals.map((goal: ProjectGoal) => {
         if (goal) {
-          return <GoalInProgress key={goal.id} goal={goal} isEditing={editMode} />
+          return <GoalInProgress key={goal.id} goal={goal} isEditing={editMode} onOpenGoalModal={handleGoalModalOpen} />
         }
       })
     }
@@ -56,7 +59,7 @@ export const Goals = () => {
     if (completedGoals && completedGoals.length > 0) {
       return completedGoals.map((goal: ProjectGoal) => {
         if (goal) {
-          return <GoalCompleted key={goal.id} goal={goal} isEditing={editMode} />
+          return <GoalCompleted key={goal.id} goal={goal} isEditing={editMode} onOpenGoalModal={handleGoalModalOpen} />
         }
       })
     }
@@ -116,7 +119,7 @@ export const Goals = () => {
                   mt={5}
                   mb={5}
                   rightIcon={<MdAdd fontSize="18px" />}
-                  onClick={handleGoalModalOpen}
+                  onClick={() => handleGoalModalOpen(null)}
                 >
                   {t('Add Goal')}
                 </Button>
@@ -134,7 +137,7 @@ export const Goals = () => {
         )}
       </CardLayout>
 
-      <GoalModal isOpen={isGoalModalOpen} onClose={handleGoalModalClose} projectId={project?.id} />
+      <GoalModal isOpen={isGoalModalOpen} onClose={handleGoalModalClose} projectId={project?.id} goal={goalModalData} />
     </>
   )
 }

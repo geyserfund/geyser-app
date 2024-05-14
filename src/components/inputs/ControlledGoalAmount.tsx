@@ -12,7 +12,7 @@ type Props = UseControllerProps<FieldValues> &
     width?: string | number
     inputRef?: React.Ref<HTMLInputElement>
     label: string
-    denomination: ProjectGoalCurrency
+    currency: ProjectGoalCurrency
     description?: string
   }
 
@@ -84,7 +84,7 @@ export function ControlledGoalAmount(props: Props) {
             onBlur={handleBlur}
             onChange={handleChange}
             value={formattedValue}
-            pl="3rem"
+            pl={props.currency === ProjectGoalCurrency.Usdcent ? '2rem' : '3rem'}
             fontSize="16px"
             fontWeight="400"
           />
@@ -94,14 +94,14 @@ export function ControlledGoalAmount(props: Props) {
             left="1rem"
             transform="translateY(-50%)"
             pointerEvents="none"
-            color="gray.500"
+            color="neutral.600"
           >
-            {props.denomination === ProjectGoalCurrency.Usdcent ? '$' : 'Sats'}
+            {props.currency === ProjectGoalCurrency.Usdcent ? '$' : 'Sats'}
           </Text>
         </Box>
         <InputRightElement width="50%" justifyContent="flex-end" pr={2}>
           <Text fontSize="16px" fontWeight="400">
-            {props.denomination === ProjectGoalCurrency.Btcsat ? formattedUsdAmount() : formattedSatsAmount()}
+            {props.currency === ProjectGoalCurrency.Btcsat ? formattedUsdAmount() : formattedSatsAmount()}
           </Text>
         </InputRightElement>
       </InputGroup>

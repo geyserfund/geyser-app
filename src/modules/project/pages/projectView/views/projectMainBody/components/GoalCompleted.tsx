@@ -16,9 +16,10 @@ import { getFormattedDate } from '../../../../../../../utils'
 type Props = {
   goal: ProjectGoal
   isEditing?: boolean
+  onOpenGoalModal: (goal: ProjectGoal) => void
 }
 
-export const GoalCompleted = ({ goal, isEditing = false }: Props) => {
+export const GoalCompleted = ({ goal, isEditing = false, onOpenGoalModal }: Props) => {
   const { t } = useTranslation()
 
   const isMobile = useMobileMode()

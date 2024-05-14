@@ -10,6 +10,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { IoMdCloseCircle } from 'react-icons/io'
@@ -27,7 +28,7 @@ import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../types'
 type Props = {
   isOpen: boolean
   onClose: () => void
-  goal?: ProjectGoal
+  goal?: ProjectGoal | null
   projectId: string
 }
 
@@ -36,10 +37,40 @@ const denominationOptions = [
   { value: ProjectGoalCurrency.Usdcent, label: 'USD' },
 ]
 
+type FormValues = Record<string, string | number | ProjectGoalCurrency>
+
 export const GoalModal = ({ isOpen, onClose, goal, projectId }: Props) => {
   const { t } = useTranslation()
 
-  const { control } = useForm()
+  const { control, handleSubmit, reset } = useForm<FormValues>({
+    defaultValues: {
+      title: '',
+      description: '',
+      targetAmount: 0,
+      currency: ProjectGoalCurrency.Usdcent,
+      projectId,
+    },
+  })
+
+  useEffect(() => {
+    if (goal) {
+      reset({
+        title: goal.title || '',
+        description: goal.description || '',
+        targetAmount: goal.targetAmount || 0,
+        currency: goal.currency,
+        projectId,
+      })
+    }
+  }, [goal, reset, projectId])
+
+  useEffect(() => {
+    reset()
+  }, [onClose, reset])
+
+  const onSubmit = (data: FormValues) => {
+    console.log(data)
+  }
 
   const renderActions = () => {
     return (
@@ -80,32 +111,34 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId }: Props) => {
           </ModalHeader>
 
           <ModalBody>
-            <VStack width="100%" alignItems="flex-start" gap={5}>
-              <ControlledTextInput control={control} name="title" placeholder="Your goal title" label={t('Title')} />
-              <ControlledTextArea
-                control={control}
-                name="description"
-                placeholder="Description"
-                label={t('Description')}
-              />
-              <ControlledGoalAmount
-                control={control}
-                name="amount"
-                label={t('Amount')}
-                denomination={ProjectGoalCurrency.Btcsat}
-              />
-              <ControlledSelect
-                control={control}
-                name="denomination"
-                label={t('Denomination')}
-                options={denominationOptions}
-                description={t('Denominate your goal in Bitcoin or USD')}
-                defaultValue={ProjectGoalCurrency.Usdcent}
-              />
-              <HStack mt={4} width="100%" justifyContent="space-between">
-                {renderActions()}
-              </HStack>
-            </VStack>
+            <form style={{ width: '100%', height: '100%' }} onSubmit={handleSubmit(onSubmit)}>
+              <VStack width="100%" alignItems="flex-start" gap={5}>
+                <ControlledTextInput control={control} name="title" placeholder="Your goal title" label={t('Title')} />
+                <ControlledTextArea
+                  control={control}
+                  name="description"
+                  placeholder="Description"
+                  label={t('Description')}
+                />
+                <ControlledGoalAmount
+                  control={control}
+                  name="targetAmount"
+                  label={t('Amount')}
+                  currency={goal?.currency || ProjectGoalCurrency.Usdcent}
+                />
+                <ControlledSelect
+                  control={control}
+                  name="currency"
+                  label={t('Denomination')}
+                  options={denominationOptions}
+                  description={t('Denominate your goal in Bitcoin or USD')}
+                  defaultValue={ProjectGoalCurrency.Usdcent}
+                />
+                <HStack mt={4} width="100%" justifyContent="space-between">
+                  {renderActions()}
+                </HStack>
+              </VStack>
+            </form>
           </ModalBody>
         </Box>
       </ModalContent>

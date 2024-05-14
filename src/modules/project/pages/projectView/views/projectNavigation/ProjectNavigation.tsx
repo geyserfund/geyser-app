@@ -68,7 +68,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         render: Boolean(rewardsLength),
       },
       {
-        name: 'Milestones',
+        name: 'Goals',
         path: PathName.projectGoals,
         mobileView: MobileViews.goals,
         icon: MilestoneIcon,
