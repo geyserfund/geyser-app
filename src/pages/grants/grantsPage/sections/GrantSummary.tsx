@@ -17,6 +17,8 @@ import {
   GrantHasVoting,
 } from '../../constants'
 
+const CUSTOM_VIDEO_URL = 'https://youtu.be/7gO2YgJ75pw'
+
 export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHasVoting?: boolean }) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
@@ -24,6 +26,10 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
   const votingEndDate = grant.statuses.find((s) => s.status === grant.status)?.endAt
 
   const renderImageOrVideo = () => {
+    if (grant.name === 'grant-round-008') {
+      return <VideoPlayer url={CUSTOM_VIDEO_URL} />
+    }
+
     const isImage = validateImageUrl(grant.image)
 
     if (isImage) {
