@@ -11,15 +11,18 @@ import { ProjectGoal } from '../../../../../../../types'
 import { useProjectContext } from '../../../../../context'
 import { useProjectGoals } from '../../../hooks/useProjectGoals'
 import { GoalCompleted, GoalInProgress } from '../components'
+import { GoalDeleteModal } from '../components/GoalDeleteModal'
 import { GoalModal } from '../components/GoalModal'
 
 export const Goals = () => {
   const { t } = useTranslation()
-  const { project, isProjectOwner } = useProjectContext()
+  const { project, isProjectOwner, refetch: refetchProject } = useProjectContext()
   const [editMode, setEditMode] = useState(false)
 
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false)
   const [goalModalData, setGoalModalData] = useState<ProjectGoal | null>(null)
+  const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false)
+  const [goalToDelete, setGoalToDelete] = useState<ProjectGoal | null>(null)
 
   const { inProgressGoals, completedGoals, refetch } = useProjectGoals()
 
@@ -27,25 +30,43 @@ export const Goals = () => {
     return null
   }
 
-  const handleGoalModalOpen = (goal: ProjectGoal | null) => {
+  const handleCreateGoalModalOpen = () => {
+    setGoalModalData(null)
+    setIsGoalModalOpen(true)
+  }
+
+  const handleEditGoalModalOpen = (goal: ProjectGoal | null) => {
     setGoalModalData(goal)
     setIsGoalModalOpen(true)
   }
 
   const handleGoalModalClose = () => {
-    setIsGoalModalOpen(false)
     setGoalModalData(null)
+    setIsGoalModalOpen(false)
   }
 
   const handleEditMode = () => {
     setEditMode(!editMode)
   }
 
+  const openDeleteModal = (goal: ProjectGoal) => {
+    setGoalToDelete(goal)
+    setIsConfirmDeleteOpen(true)
+    setIsGoalModalOpen(false)
+  }
+
+  const closeDeleteModal = () => {
+    setIsConfirmDeleteOpen(false)
+    setGoalToDelete(null)
+  }
+
   const renderInProgressGoals = () => {
     if (inProgressGoals && inProgressGoals.length > 0) {
       return inProgressGoals.map((goal: ProjectGoal) => {
         if (goal) {
-          return <GoalInProgress key={goal.id} goal={goal} isEditing={editMode} onOpenGoalModal={handleGoalModalOpen} />
+          return (
+            <GoalInProgress key={goal.id} goal={goal} isEditing={editMode} onOpenGoalModal={handleEditGoalModalOpen} />
+          )
         }
       })
     }
@@ -57,7 +78,9 @@ export const Goals = () => {
     if (completedGoals && completedGoals.length > 0) {
       return completedGoals.map((goal: ProjectGoal) => {
         if (goal) {
-          return <GoalCompleted key={goal.id} goal={goal} isEditing={editMode} onOpenGoalModal={handleGoalModalOpen} />
+          return (
+            <GoalCompleted key={goal.id} goal={goal} isEditing={editMode} onOpenGoalModal={handleEditGoalModalOpen} />
+          )
         }
       })
     }
@@ -129,7 +152,7 @@ export const Goals = () => {
               mt={5}
               mb={5}
               rightIcon={<MdAdd fontSize="18px" />}
-              onClick={() => handleGoalModalOpen(null)}
+              onClick={handleCreateGoalModalOpen}
             >
               {t('Add Goal')}
             </Button>
@@ -141,8 +164,17 @@ export const Goals = () => {
         isOpen={isGoalModalOpen}
         onClose={handleGoalModalClose}
         projectId={project?.id}
-        goal={goalModalData}
+        openDeleteModal={openDeleteModal}
+        goal={goalModalData || null}
         refetch={refetch}
+      />
+
+      <GoalDeleteModal
+        isOpen={isConfirmDeleteOpen}
+        onClose={closeDeleteModal}
+        goal={goalToDelete}
+        refetch={refetch}
+        refetchProject={refetchProject}
       />
     </>
   )

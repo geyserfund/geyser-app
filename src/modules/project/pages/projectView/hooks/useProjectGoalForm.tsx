@@ -4,11 +4,7 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-import {
-  MUTATION_CREATE_PROJECT_GOAL,
-  MUTATION_DELETE_PROJECT_GOAL,
-  MUTATION_UPDATE_PROJECT_GOAL,
-} from '../../../../../graphql/mutations/goals'
+import { MUTATION_CREATE_PROJECT_GOAL, MUTATION_UPDATE_PROJECT_GOAL } from '../../../../../graphql/mutations/goals'
 import { ProjectGoal, ProjectGoalCurrency } from '../../../../../types'
 
 type FormValues = Record<string, string | number | ProjectGoalCurrency>
@@ -24,8 +20,23 @@ const goalFormSchema = (amountContributed: number) =>
         .min(
           amountContributed,
           'The Goal amount is lower than your funded amount. Please choose a Goal amount that is higher than the current Goal’s funded amount.',
-        ),
+        )
+        .test(
+          'currency-based-minimum',
+          'Target amount does not meet the minimum requirement of 10$ USD or 10,000 Sats if the currency is denominated in Bitcoin',
+          function (value) {
+            const { currency } = this.parent
+            if (currency === ProjectGoalCurrency.Usdcent) {
+              return value >= 10
+            }
 
+            if (currency === ProjectGoalCurrency.Btcsat) {
+              return value >= 10000
+            }
+
+            return true
+          },
+        ),
       currency: yup.string().required('Currency is required'),
     })
     .required()
@@ -41,7 +52,7 @@ export const useProjectGoalForm = (
     defaultValues: {
       title: '',
       description: '',
-      targetAmount: 0,
+      targetAmount: '',
       currency: ProjectGoalCurrency.Usdcent,
       projectId,
     },
@@ -54,7 +65,6 @@ export const useProjectGoalForm = (
 
   const [createProjectGoal, { loading: creating, error: createError }] = useMutation(MUTATION_CREATE_PROJECT_GOAL)
   const [updateProjectGoal, { loading: updating, error: updateError }] = useMutation(MUTATION_UPDATE_PROJECT_GOAL)
-  const [deleteProjectGoal, { loading: deleting, error: deleteError }] = useMutation(MUTATION_DELETE_PROJECT_GOAL)
 
   useEffect(() => {
     if (goal) {
@@ -63,6 +73,14 @@ export const useProjectGoalForm = (
         description: goal.description || '',
         targetAmount: goal.targetAmount || 0,
         currency: goal.currency,
+        projectId,
+      })
+    } else {
+      reset({
+        title: '',
+        description: '',
+        targetAmount: '',
+        currency: ProjectGoalCurrency.Usdcent,
         projectId,
       })
     }
@@ -112,30 +130,14 @@ export const useProjectGoalForm = (
     }
   }
 
-  const handleDelete = async (projectGoalId: bigint) => {
-    try {
-      const { data } = await deleteProjectGoal({
-        variables: {
-          projectGoalId,
-        },
-      })
-      if (data) {
-        refetch()
-        onClose()
-      }
-    } catch (error) {
-      console.error('Error deleting project goal:', error)
-    }
-  }
-
   return {
     control,
     handleSubmit: handleSubmit(onSubmit),
-    handleDelete,
-    loading: creating || updating || deleting,
-    error: createError || updateError || deleteError,
+    loading: creating || updating,
+    error: createError || updateError,
     watch,
     errors,
+    reset,
     enableSubmit,
   }
 }

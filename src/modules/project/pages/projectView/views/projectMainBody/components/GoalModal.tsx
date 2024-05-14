@@ -30,6 +30,7 @@ type Props = {
   goal?: ProjectGoal | null
   projectId: string
   refetch: () => void
+  openDeleteModal?: (goal: ProjectGoal) => void
 }
 
 const denominationOptions = [
@@ -37,10 +38,10 @@ const denominationOptions = [
   { value: ProjectGoalCurrency.Usdcent, label: 'USD' },
 ]
 
-export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch }: Props) => {
+export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDeleteModal }: Props) => {
   const { t } = useTranslation()
 
-  const { control, handleSubmit, handleDelete, loading, watch, errors, enableSubmit } = useProjectGoalForm(
+  const { control, handleSubmit, loading, watch, errors, enableSubmit, reset } = useProjectGoalForm(
     goal || null,
     projectId,
     onClose,
@@ -59,10 +60,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch }: Props) 
               variant="primary"
               bg="secondary.red"
               color="neutral.0"
-              onClick={() => {
-                handleDelete(goal.id)
-                onClose()
-              }}
+              onClick={() => openDeleteModal && openDeleteModal(goal)}
             >
               {t('Delete Goal')}
             </Button>
@@ -133,11 +131,12 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch }: Props) 
                   currency={watch('currency') as ProjectGoalCurrency}
                   isDisabled={Boolean(isCompleted)}
                 />
-                {errors.targetAmount && (
-                  <Text fontSize={'14px'} fontWeight={400} color="secondary.red">
-                    {errors.targetAmount.message}
-                  </Text>
-                )}
+                {errors.targetAmount?.type === 'currency-based-minimum' ||
+                  (errors.targetAmount?.type === 'min' && (
+                    <Text fontSize={'14px'} fontWeight={400} color="secondary.red">
+                      {errors.targetAmount.message}
+                    </Text>
+                  ))}
                 <ControlledSelect
                   control={control}
                   name="currency"
