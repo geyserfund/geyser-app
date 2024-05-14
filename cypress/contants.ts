@@ -1,9 +1,9 @@
-export const geyserUrl = Cypress.env('CYPRESS_APP_URL')
-export const CONTRIBUTOR_LND_ENDPOINT = Cypress.env('CYPRESS_CONTRIBUTOR_LND_ENDPOINT')
-export const CONTRIBUTOR_LND_ADMIN_MACAROON_HEX = Cypress.env('CYPRESS_CONTRIBUTOR_LND_ADMIN_MACAROON_HEX')
-export const MINE_BLOCK_ADDRESS = Cypress.env('CYPRESS_MINE_BLOCK_ADDRESS')
-export const BITCOIND_ENDPOINT = Cypress.env('CYPRESS_BITCOIND_ENDPOINT')
-export const BITCOIND_AUTH = Cypress.env('CYPRESS_BITCOIND_AUTH')
+export const geyserUrl = Cypress.env('APP_URL')
+export const CONTRIBUTOR_LND_ENDPOINT = Cypress.env('CONTRIBUTOR_LND_ENDPOINT')
+export const CONTRIBUTOR_LND_ADMIN_MACAROON_HEX = Cypress.env('CONTRIBUTOR_LND_ADMIN_MACAROON_HEX')
+export const MINE_BLOCK_ADDRESS = Cypress.env('MINE_BLOCK_ADDRESS')
+export const BITCOIND_ENDPOINT = Cypress.env('BITCOIND_ENDPOINT')
+export const BITCOIND_AUTH = Cypress.env('BITCOIND_AUTH')
 
 export enum ApolloErrors {
   BAD_USER_INPUT = 'BAD_USER_INPUT',
