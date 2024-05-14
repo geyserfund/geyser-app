@@ -17,37 +17,13 @@ import {
   successScreenIsVisible,
   transactionFailedScreenIsVisible,
 } from '../assertions/funding'
-import { geyserUrl, MINE_BLOCK_ADDRESS } from '../contants'
+import { MINE_BLOCK_ADDRESS } from '../contants'
 import { mineBlockOptions, payLightningInvoice, payOnChainOptions } from '../utils/lncli'
 
 const FUNDING_AMOUNT = 60000
 const FUNDING_COMMENT = 'This was the test comment'
 
-describe('Testing Project with lightning node', () => {
-  beforeEach(() => {
-    cy.visit(`${geyserUrl}/project/lndtestproject`, {
-      onBeforeLoad(win: Window): void {
-        cy.spy(win.navigator.clipboard, 'writeText').as('copy')
-      },
-    })
-  })
-
-  textLightningSuccessFlow()
-  onChainSuccessFlow()
-  onChainRefundFlow()
-})
-
-describe('Testing Project with lightning wallet', () => {
-  beforeEach(() => {
-    cy.visit(`${geyserUrl}/project/lightningtestproject`, {
-      onBeforeLoad(win: Window): void {
-        cy.spy(win.navigator.clipboard, 'writeText').as('copy')
-      },
-    })
-  })
-})
-
-const textLightningSuccessFlow = () => {
+export const testLightningSuccessFlow = () => {
   context('When lightning invoice payment is sent correctly', () => {
     it('Paymnent successfull through lightning', () => {
       clickContribute()
@@ -73,7 +49,7 @@ const textLightningSuccessFlow = () => {
   })
 }
 
-const onChainSuccessFlow = () => {
+export const onChainSuccessFlow = () => {
   context('When onchain amount paid is correct', () => {
     it('Should show onChain success screen', () => {
       clickContribute()
@@ -108,7 +84,7 @@ const onChainSuccessFlow = () => {
   })
 }
 
-const onChainRefundFlow = () => {
+export const onChainRefundFlow = () => {
   context('when onchain amount paid is short', () => {
     it('Should show refund initiated', () => {
       clickContribute()

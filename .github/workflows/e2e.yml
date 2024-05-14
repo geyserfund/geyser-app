@@ -2,17 +2,28 @@ name: Test
 on:
   pull_request:
     branches:
-      - '*'
+      - 'main'
 jobs:
   chrome:
     runs-on: ubuntu-22.04
     name: E2E on Chrome
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Create cypress.env.json
+        run: |
+          echo '{
+            "APP_URL": "${{ secrets.APP_URL }}"
+            "CONTRIBUTOR_LND_ENDPOINT": "${{ secrets.CONTRIBUTOR_LND_ENDPOINT }}"
+            "CONTRIBUTOR_LND_ADMIN_MACAROON_HEX": "${{ secrets.CONTRIBUTOR_LND_ADMIN_MACAROON_HEX }}"
+            "MINE_BLOCK_ADDRESS": "${{ secrets.MINE_BLOCK_ADDRESS }}"
+            "BITCOIND_ENDPOINT": "${{ secrets.BITCOIND_ENDPOINT }}"
+            "BITCOIND_AUTH": "${{ secrets.BITCOIND_AUTH }}"
+          }' > cypress.env.json     
       - uses: cypress-io/github-action@v6
         with:
           browser: chrome
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: cypress-videos
