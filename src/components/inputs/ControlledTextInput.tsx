@@ -1,0 +1,49 @@
+import { Input, InputProps, Text, VStack } from '@chakra-ui/react'
+import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
+
+type Props = UseControllerProps<FieldValues> &
+  Omit<InputProps, 'size'> & { width?: string | number; inputRef?: React.Ref<HTMLInputElement>; label: string }
+
+export function ControlledTextInput(props: Props) {
+  const { field } = useController(props)
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (field?.onBlur) {
+      field.onBlur()
+    }
+
+    if (props.onBlur) {
+      props.onBlur(e)
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (field?.onChange) {
+      field.onChange(e)
+    }
+
+    if (props.onChange) {
+      props.onChange(e)
+    }
+  }
+
+  return (
+    <VStack display="flex" alignItems="flex-start" width="100%">
+      <Text fontSize="16px" fontWeight="500">
+        {props.label}
+      </Text>
+      <Input
+        {...field}
+        {...props}
+        variant="outline"
+        colorScheme="primary.400"
+        ref={props.inputRef}
+        isDisabled={props.isDisabled}
+        onBlur={handleBlur}
+        onChange={handleChange}
+        width={props.width || '100%'}
+        value={field?.value || props.value || ''}
+      />
+    </VStack>
+  )
+}
