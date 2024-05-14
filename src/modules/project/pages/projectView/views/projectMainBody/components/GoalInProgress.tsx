@@ -47,7 +47,7 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
           padding={'3px 15px'}
           size={'md'}
           onClick={handleContribute}
-          width={isMobile ? '100%' : '192px'}
+          width={{ base: '100%', lg: '192px' }}
         >
           {t('Contribute')}
         </Button>
@@ -84,7 +84,7 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
       <HStack
         display="flex"
         alignItems={'center'}
-        justifyContent={isMobile ? 'space-between' : 'flex-start'}
+        justifyContent={{ base: 'space-between', lg: 'flex-start' }}
         minHeight="40px"
         width="100%"
       >
@@ -109,10 +109,10 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
       <HStack display="flex" alignItems="flex-start" width="100%"></HStack>
       <Box
         display="flex"
-        flexDirection={isMobile ? 'column' : 'row'}
+        flexDirection={{ base: 'column', lg: 'row' }}
         alignItems="center"
         width="100%"
-        gap={isMobile ? 2 : 10}
+        gap={{ base: 2, lg: 10 }}
       >
         <VStack width="100%">
           <GoalProgressBar
@@ -155,7 +155,7 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
           justifyContent="center"
           minWidth="100px"
           height="100%"
-          width={isMobile ? '100%' : '192px'}
+          width={{ base: '100%', lg: '192px' }}
         >
           {renderActionButton()}
         </Box>

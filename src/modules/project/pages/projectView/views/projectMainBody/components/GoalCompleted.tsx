@@ -62,10 +62,10 @@ export const GoalCompleted = ({ goal, isEditing = false, onOpenGoalModal }: Prop
       <HStack display="flex" alignItems="flex-start" width="100%"></HStack>
       <Box
         display="flex"
-        flexDirection={isMobile ? 'column' : 'row'}
+        flexDirection={{ base: 'column', lg: 'row' }}
         alignItems="center"
         width="100%"
-        gap={isMobile ? 2 : 10}
+        gap={{ base: 2, lg: 10 }}
       >
         <VStack width="100%">
           <HStack display="flex" alignItems="flex-start" justifyContent="space-between" width="100%">
