@@ -40,12 +40,15 @@ const denominationOptions = [
 export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch }: Props) => {
   const { t } = useTranslation()
 
-  const { control, handleSubmit, handleDelete, loading, watch } = useProjectGoalForm(
+  const { control, handleSubmit, handleDelete, loading, watch, errors, enableSubmit } = useProjectGoalForm(
     goal || null,
     projectId,
     onClose,
     refetch,
   )
+
+  console.log(enableSubmit)
+  console.log(errors)
 
   const renderActions = () => {
     return (
@@ -70,7 +73,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch }: Props) 
           <Button flexGrow={1} variant="secondary" onClick={onClose}>
             {t('Back')}
           </Button>{' '}
-          <Button flexGrow={1} variant="primary" isLoading={loading} type="submit">
+          <Button flexGrow={1} variant="primary" isLoading={loading} type="submit" isDisabled={!enableSubmit}>
             {t('Confirm')}
           </Button>
         </HStack>

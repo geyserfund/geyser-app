@@ -1,6 +1,8 @@
 import { useMutation } from '@apollo/client'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import * as yup from 'yup'
 
 import {
   MUTATION_CREATE_PROJECT_GOAL,
@@ -11,13 +13,23 @@ import { ProjectGoal, ProjectGoalCurrency } from '../../../../../types'
 
 type FormValues = Record<string, string | number | ProjectGoalCurrency>
 
+const goalFormSchema = yup
+  .object({
+    title: yup.string().required('Title is required'),
+    description: yup.string().max(400, 'Description must be at most 400 characters long'),
+    targetAmount: yup.number().positive('Amount must be positive').required('Amount is required'),
+    currency: yup.string().required('Currency is required'),
+  })
+  .required()
+
 export const useProjectGoalForm = (
   goal: ProjectGoal | null,
   projectId: string,
   onClose: () => void,
   refetch: () => void,
 ) => {
-  const { control, handleSubmit, reset, watch } = useForm<FormValues>({
+  const { control, handleSubmit, reset, watch, formState } = useForm<FormValues>({
+    resolver: yupResolver(goalFormSchema),
     defaultValues: {
       title: '',
       description: '',
@@ -25,7 +37,12 @@ export const useProjectGoalForm = (
       currency: ProjectGoalCurrency.Usdcent,
       projectId,
     },
+    mode: 'onChange',
   })
+
+  const { errors, isDirty, isValid } = formState
+
+  const enableSubmit = isDirty && isValid
 
   const [createProjectGoal, { loading: creating, error: createError }] = useMutation(MUTATION_CREATE_PROJECT_GOAL)
   const [updateProjectGoal, { loading: updating, error: updateError }] = useMutation(MUTATION_UPDATE_PROJECT_GOAL)
@@ -110,5 +127,7 @@ export const useProjectGoalForm = (
     loading: creating || updating || deleting,
     error: createError || updateError || deleteError,
     watch,
+    errors,
+    enableSubmit,
   }
 }
