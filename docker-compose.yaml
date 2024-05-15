@@ -1,6 +1,6 @@
 services:
   e2e:
-    image: cypress/included:12.3.0
+    image: cypress/included:13.9.0
     build: /cypress
     container_name: cypress
     environment:

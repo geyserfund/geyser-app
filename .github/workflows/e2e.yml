@@ -20,6 +20,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - uses: cypress-io/github-action@v6
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          browser: chrome
+          node-version: '20'
+          cache: 'yarn'
+      - uses: cypress-io/github-action@v6

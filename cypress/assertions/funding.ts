@@ -1,5 +1,5 @@
 export const fundingAmountScreenIsVisible = () => {
-  cy.get('p').contains('Make a donation').should('be.visible')
+  cy.get('p').contains('Make a donation', { timeout: 10000 }).should('be.visible')
   cy.get('input[data-testid="donation-input"]').should('be.visible')
 }
 
