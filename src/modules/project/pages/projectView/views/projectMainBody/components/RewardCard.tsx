@@ -7,6 +7,7 @@ import { ProjectRewardAvailability } from '../../../../../../../components/molec
 import { ProjectRewardShippingEstimate } from '../../../../../../../components/molecules/projectDisplay/ProjectRewardShippingEstimate'
 import { Body1, Body2 } from '../../../../../../../components/typography'
 import { ICard, ImageWithReload } from '../../../../../../../components/ui'
+import { MarkdownField } from '../../../../../../../forms/markdown/MarkdownField'
 import { secondaryColors } from '../../../../../../../styles'
 import { ProjectStatus } from '../../../../../../../types'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../../../../types/generated/graphql'
@@ -64,9 +65,7 @@ export const RewardCard = ({ reward, count, isLaunch = false, handleEdit, handle
           )}
         </HStack>
         <ProjectRewardShippingEstimate w="full" reward={reward} />
-        <Text fontWeight={400} fontSize="14px" color="neutral.600" lineHeight={'1.4'}>
-          {reward.description}
-        </Text>
+        <MarkdownField preview content={reward.description || ''} />
       </VStack>
       <HStack>
         {!isLaunch ? (
