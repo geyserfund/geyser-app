@@ -14,14 +14,12 @@ jobs:
       CYPRESS_MINE_BLOCK_ADDRESS: ${{ secrets.MINE_BLOCK_ADDRESS }}
       CYPRESS_BITCOIND_ENDPOINT: ${{ secrets.BITCOIND_ENDPOINT }}
       CYPRESS_BITCOIND_AUTH: ${{ secrets.BITCOIND_AUTH }}
+    container:
+      image: cypress/browsers:node-20.13.0-chrome-124.0.6367.155-1-ff-125.0.3-edge-124.0.2478.80-1
+      options: --user 1001
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
       - uses: cypress-io/github-action@v6
         with:
           browser: chrome
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: cypress-videos
-          path: cypress/videos
