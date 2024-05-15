@@ -1,3 +1,5 @@
+import { GEYSER_URL } from '../contants'
+
 export const clickContribute = () => {
   cy.get('button').contains('Contribute').realClick()
 }
@@ -29,4 +31,12 @@ export const clickCopyLightningInvoiceButton = () => {
 export const enterRefundAddressAndClickRefund = (comment: string) => {
   cy.get('#refund-address-input').type(comment)
   cy.get('#initiate-refund-button').realClick()
+}
+
+export const visitProject = (projectName: string) => {
+  cy.visit(`${GEYSER_URL}/project/${projectName}`, {
+    onBeforeLoad(win: Window): void {
+      cy.spy(win.navigator.clipboard, 'writeText').as('copy')
+    },
+  })
 }
