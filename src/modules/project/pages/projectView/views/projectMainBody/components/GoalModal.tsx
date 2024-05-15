@@ -100,9 +100,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
             </HStack>
 
             <Body2 color="neutral.700" fontSize={14} fontWeight={400}>
-              {t(
-                'Goals are a great way to motivate and inspire others to donate by showing what happens when a certain threshold is reached',
-              )}
+              {t('Inspire your followers to contribute to specific objectives.')}
             </Body2>
           </ModalHeader>
 
