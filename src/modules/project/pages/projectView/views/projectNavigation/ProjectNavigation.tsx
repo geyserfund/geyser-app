@@ -21,7 +21,7 @@ import {
   InsightsNavIcon,
   RewardGiftIcon,
 } from '../../../../../../components/icons'
-import { MilestoneIcon } from '../../../../../../components/icons/svg'
+import { GoalIcon } from '../../../../../../components/icons/svg'
 import { GeyserLogoIcon } from '../../../../../../components/icons/svg/GeyserLogoIcon'
 import { SkeletonLayout } from '../../../../../../components/layouts'
 import { Body1, Caption } from '../../../../../../components/typography'
@@ -74,7 +74,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         name: 'Goals',
         path: PathName.projectGoals,
         mobileView: MobileViews.goals,
-        icon: MilestoneIcon,
+        icon: GoalIcon,
         subViews: [],
         render: hasGoals,
       },
