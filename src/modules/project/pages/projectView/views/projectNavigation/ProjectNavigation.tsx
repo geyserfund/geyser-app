@@ -28,6 +28,7 @@ import { Body1, Caption } from '../../../../../../components/typography'
 import { getPath, PathName } from '../../../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
 import { standardProjectPageSideMargin } from '../../constants'
+import { useProjectGoals } from '../../hooks/useProjectGoals'
 import { useProjectDetails } from './hooks/useProjectDetails'
 import { useProjectSideNavAtom } from './sideNav'
 
@@ -40,6 +41,8 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
   const { isProjectOwner, onCreatorModalOpen, project, setMobileView, loading } = useProjectContext()
 
   const { entriesLength, rewardsLength } = useProjectDetails(project)
+
+  const { hasGoals } = useProjectGoals()
 
   const ProjectNavigationButtons = useMemo(
     () => [
@@ -73,10 +76,10 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         mobileView: MobileViews.goals,
         icon: MilestoneIcon,
         subViews: [],
-        render: Boolean(true),
+        render: hasGoals,
       },
     ],
-    [entriesLength, rewardsLength],
+    [entriesLength, rewardsLength, hasGoals],
   )
 
   const ProjectCreatorNavigationButtons = useMemo(
