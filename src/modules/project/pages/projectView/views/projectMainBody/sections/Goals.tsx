@@ -26,6 +26,8 @@ export const Goals = () => {
 
   const { inProgressGoals, completedGoals, refetch } = useProjectGoals()
 
+  const onlyCompletedGoalsAvailable = completedGoals && completedGoals.length > 0 && !inProgressGoals
+
   if (!project) {
     return null
   }
@@ -141,7 +143,7 @@ export const Goals = () => {
             </VStack>
           </>
         )}
-        {isProjectOwner && editMode && (
+        {((isProjectOwner && editMode) || (onlyCompletedGoalsAvailable && isProjectOwner)) && (
           <Box display="flex" alignItems="center" justifyContent="center" width="100%">
             <Button
               variant="primary"
