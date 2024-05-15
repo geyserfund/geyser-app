@@ -1,5 +1,5 @@
 import { Box, Input, InputGroup, InputProps, InputRightElement, Text, VStack } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
 
 import { useCurrencyFormatter } from '../../modules/project/pages/projectView/hooks/useCurrencyFormatter'
@@ -19,8 +19,21 @@ export function ControlledGoalAmount(props: Props) {
   const { field } = useController(props)
 
   const [unformattedValue, setUnformattedValue] = useState(field.value || '')
+  const [formattedValue, setFormattedValue] = useState('')
 
   const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
+
+  useEffect(() => {
+    setUnformattedValue('0')
+  }, [props.currency])
+
+  useEffect(() => {
+    setFormattedValue(
+      props.currency === ProjectGoalCurrency.Usdcent
+        ? centsToDollarsFormatted(unformattedValue)
+        : commaFormatted(unformattedValue),
+    )
+  }, [unformattedValue, props.currency])
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     if (field?.onBlur) {
@@ -51,11 +64,6 @@ export function ControlledGoalAmount(props: Props) {
 
   const usdAmount = formatUsdAmount(field.value)
   const satsAmount = formatSatsAmount(field.value)
-
-  const formattedValue =
-    props.currency === ProjectGoalCurrency.Usdcent
-      ? centsToDollarsFormatted(unformattedValue)
-      : commaFormatted(unformattedValue)
 
   return (
     <VStack display="flex" alignItems="flex-start" width="100%">

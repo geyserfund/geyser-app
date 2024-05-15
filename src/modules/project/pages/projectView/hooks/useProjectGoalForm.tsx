@@ -47,7 +47,7 @@ export const useProjectGoalForm = (
   onClose: () => void,
   refetch: () => void,
 ) => {
-  const { control, handleSubmit, reset, watch, formState } = useForm<FormValues>({
+  const { control, handleSubmit, reset, watch, formState, setValue } = useForm<FormValues>({
     resolver: yupResolver(goalFormSchema(goal?.amountContributed || 0)),
     defaultValues: {
       title: '',
@@ -65,6 +65,12 @@ export const useProjectGoalForm = (
 
   const [createProjectGoal, { loading: creating, error: createError }] = useMutation(MUTATION_CREATE_PROJECT_GOAL)
   const [updateProjectGoal, { loading: updating, error: updateError }] = useMutation(MUTATION_UPDATE_PROJECT_GOAL)
+
+  const currency = watch('currency')
+
+  useEffect(() => {
+    setValue('targetAmount', '')
+  }, [currency, setValue])
 
   useEffect(() => {
     if (goal) {
