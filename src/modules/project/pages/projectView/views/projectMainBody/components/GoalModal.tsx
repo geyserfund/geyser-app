@@ -112,7 +112,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
                 <ControlledTextInput
                   control={control}
                   name="title"
-                  placeholder="Your goal title"
+                  placeholder="Episode 21 with Hal Finney"
                   label={t('Goal Title')}
                   isDisabled={Boolean(isCompleted)}
                   error={errors.title?.message}
@@ -120,7 +120,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
                 <ControlledTextArea
                   control={control}
                   name="description"
-                  placeholder="Description"
+                  placeholder="Enable your community to contribute toward one or more specific goals"
                   label={t('Description')}
                   isDisabled={Boolean(isCompleted)}
                   error={errors.description?.message}
@@ -129,6 +129,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
                   control={control}
                   name="targetAmount"
                   label={t('Goal Amount')}
+                  placeholder="210000000"
                   currency={watch('currency') as ProjectGoalCurrency}
                   isDisabled={Boolean(isCompleted)}
                   error={errors.targetAmount?.message}
