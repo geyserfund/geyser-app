@@ -1,11 +1,10 @@
 import { Box, Input, InputGroup, InputProps, InputRightElement, Text, VStack } from '@chakra-ui/react'
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
 
-import { useBTCConverter } from '../../helpers'
-import { Satoshis, USDCents } from '../../types'
+import { useCurrencyFormatter } from '../../modules/project/pages/projectView/hooks/useCurrencyFormatter'
 import { ProjectGoalCurrency } from '../../types'
-import { commaFormatted } from '../../utils'
+import { centsToDollarsFormatted, commaFormatted } from '../../utils'
 
 type Props = UseControllerProps<FieldValues> &
   Omit<InputProps, 'size'> & {
@@ -21,7 +20,7 @@ export function ControlledGoalAmount(props: Props) {
 
   const [unformattedValue, setUnformattedValue] = useState(field.value || '')
 
-  const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
+  const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     if (field?.onBlur) {
@@ -40,6 +39,7 @@ export function ControlledGoalAmount(props: Props) {
     }
 
     setUnformattedValue(value)
+
     if (field?.onChange) {
       field.onChange(value)
     }
@@ -49,19 +49,13 @@ export function ControlledGoalAmount(props: Props) {
     }
   }
 
-  const formattedUsdAmount = useCallback(() => {
-    const amount = getUSDAmount(field.value as Satoshis)
-    if (amount < 1) return 'less than $1'
-    return `$${commaFormatted(Math.round(amount))}`
-  }, [getUSDAmount, field.value])
+  const usdAmount = formatUsdAmount(field.value)
+  const satsAmount = formatSatsAmount(field.value)
 
-  const formattedSatsAmount = useCallback(() => {
-    const amount = getSatoshisFromUSDCents(field.value as USDCents)
-    if (amount < 1) return '0 sats'
-    return `${commaFormatted(Math.round(amount * 100))} sats`
-  }, [getSatoshisFromUSDCents, field.value])
-
-  const formattedValue = commaFormatted(unformattedValue)
+  const formattedValue =
+    props.currency === ProjectGoalCurrency.Usdcent
+      ? centsToDollarsFormatted(unformattedValue)
+      : commaFormatted(unformattedValue)
 
   return (
     <VStack display="flex" alignItems="flex-start" width="100%">
@@ -107,7 +101,7 @@ export function ControlledGoalAmount(props: Props) {
             color={props.isDisabled ? 'neutral.400' : 'neutral.600'}
             opacity={props.isDisabled ? 0.5 : 1}
           >
-            {props.currency === ProjectGoalCurrency.Btcsat ? formattedUsdAmount() : formattedSatsAmount()}
+            {props.currency === ProjectGoalCurrency.Btcsat ? usdAmount : satsAmount}
           </Text>
         </InputRightElement>
       </InputGroup>

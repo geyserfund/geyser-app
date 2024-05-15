@@ -144,7 +144,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
                   options={denominationOptions}
                   description={t('Denominate your goal in Bitcoin or USD')}
                   defaultValue={ProjectGoalCurrency.Usdcent}
-                  isDisabled={Boolean(goal?.hasReceivedContributions)}
+                  isDisabled={Boolean(goal?.hasReceivedContribution)}
                 />
                 <HStack mt={4} width="100%" justifyContent="space-between">
                   {renderActions()}

@@ -2,11 +2,9 @@ import { useQuery } from '@apollo/client'
 import { useCallback, useEffect, useState } from 'react'
 
 import { QUERY_PROJECT_DEFAULT_GOAL } from '../../../../../../../../../graphql/queries/goals'
-import { useBTCConverter } from '../../../../../../../../../helpers'
-import { Satoshis, USDCents } from '../../../../../../../../../types'
 import { ProjectGoal, ProjectGoals } from '../../../../../../../../../types'
-import { commaFormatted } from '../../../../../../../../../utils'
 import { useProjectContext } from '../../../../../../../context'
+import { useCurrencyFormatter } from '../../../../../../projectView/hooks/useCurrencyFormatter'
 
 type ResponseData = {
   projectGoals: ProjectGoals
@@ -19,7 +17,7 @@ export const useProjectDefaultGoal = () => {
     variables: { projectId: project?.id },
   })
 
-  const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
+  const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
 
   const projectGoals = data?.projectGoals
 
@@ -36,22 +34,16 @@ export const useProjectDefaultGoal = () => {
   }, [project, projectGoals])
 
   const formattedUsdAmount = useCallback(() => {
-    const amount = getUSDAmount(priorityGoal?.amountContributed as Satoshis)
-    if (amount < 1) return 'less than $1'
-    return `$${commaFormatted(Math.round(amount))}`
-  }, [getUSDAmount, priorityGoal?.amountContributed])
+    return formatUsdAmount(priorityGoal?.amountContributed ?? 0)
+  }, [formatUsdAmount, priorityGoal?.amountContributed])
 
   const formattedTotalUsdAmount = useCallback(() => {
-    const amount = getUSDAmount(project?.balance as Satoshis)
-    if (amount < 1) return 'less than $1'
-    return `$${commaFormatted(Math.round(amount))}`
-  }, [getUSDAmount, project?.balance])
+    return formatUsdAmount(project?.balance ?? 0)
+  }, [formatUsdAmount, project?.balance])
 
   const formattedSatsAmount = useCallback(() => {
-    const amount = getSatoshisFromUSDCents(priorityGoal?.amountContributed as USDCents)
-    if (amount < 1) return 'less than 1'
-    return `${commaFormatted(Math.round(amount))} sats`
-  }, [getSatoshisFromUSDCents, priorityGoal?.amountContributed])
+    return formatSatsAmount(priorityGoal?.amountContributed ?? 0)
+  }, [formatSatsAmount, priorityGoal?.amountContributed])
 
   return {
     priorityGoal,

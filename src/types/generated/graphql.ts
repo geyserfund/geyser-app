@@ -1515,7 +1515,7 @@ export type ProjectGoal = {
   createdAt: Scalars['Date']['output'];
   currency: ProjectGoalCurrency;
   description?: Maybe<Scalars['String']['output']>;
-  hasReceivedContributions?: Maybe<Scalars['Boolean']['output']>;
+  hasReceivedContribution: Scalars['Boolean']['output'];
   id: Scalars['BigInt']['output'];
   projectId: Scalars['BigInt']['output'];
   status: ProjectGoalStatus;
@@ -3483,7 +3483,7 @@ export type ProjectGoalResolvers<ContextType = any, ParentType extends Resolvers
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   currency?: Resolver<ResolversTypes['ProjectGoalCurrency'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  hasReceivedContributions?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  hasReceivedContribution?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['ProjectGoalStatus'], ParentType, ContextType>;
@@ -3907,7 +3907,7 @@ export type FundingTxForDownloadInvoiceFragment = { __typename?: 'FundingTx', id
 
 export type ProjectDefaultGoalFragment = { __typename?: 'ProjectGoal', id: any, title: string, targetAmount: number, currency: ProjectGoalCurrency, amountContributed: number };
 
-export type ProjectGoalFragment = { __typename?: 'ProjectGoal', id: any, title: string, description?: string | null, targetAmount: number, currency: ProjectGoalCurrency, status: ProjectGoalStatus, projectId: any, amountContributed: number, createdAt: any, updatedAt: any, hasReceivedContributions?: boolean | null };
+export type ProjectGoalFragment = { __typename?: 'ProjectGoal', id: any, title: string, description?: string | null, targetAmount: number, currency: ProjectGoalCurrency, status: ProjectGoalStatus, projectId: any, amountContributed: number, createdAt: any, updatedAt: any, hasReceivedContribution: boolean };
 
 export type OrderItemFragment = { __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', id: any, name: string, cost: number, rewardCurrency: RewardCurrency, category?: string | null } };
 
@@ -4912,7 +4912,7 @@ export const ProjectGoalFragmentDoc = gql`
   amountContributed
   createdAt
   updatedAt
-  hasReceivedContributions
+  hasReceivedContribution
 }
     `;
 export const OrderItemFragmentDoc = gql`

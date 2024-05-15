@@ -1,16 +1,13 @@
 import { Box, BoxProps, Button, HStack, Text, VStack } from '@chakra-ui/react'
-import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MdModeEdit } from 'react-icons/md'
 
 import { DollarIconCircled, SatoshiIconCircled } from '../../../../../../../components/icons'
 import { Body1, Caption, H3 } from '../../../../../../../components/typography'
 import { IconButtonComponent } from '../../../../../../../components/ui'
-import { useBTCConverter } from '../../../../../../../helpers'
 import { ProjectGoal, ProjectGoalCurrency, ProjectGoalStatus } from '../../../../../../../types'
-import { Satoshis, USDCents } from '../../../../../../../types'
 import { useMobileMode } from '../../../../../../../utils'
-import { commaFormatted } from '../../../../../../../utils'
+import { useCurrencyFormatter } from '../../../hooks/useCurrencyFormatter'
 
 type Props = {
   goal: ProjectGoal
@@ -23,21 +20,16 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
 
   const isMobile = useMobileMode()
 
-  const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
+  const { formatAmount, formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
 
   const percentage = (goal.amountContributed / goal.targetAmount) * 100
 
-  const formattedUsdAmount = useCallback(() => {
-    const amount = getUSDAmount(goal?.amountContributed as Satoshis)
-    if (amount < 1) return '0 $'
-    return `$${commaFormatted(Math.round(amount))}`
-  }, [getUSDAmount, goal?.amountContributed])
-
-  const formattedSatsAmount = useCallback(() => {
-    const amount = getSatoshisFromUSDCents(goal?.amountContributed as USDCents)
-    if (amount < 1) return '0 sats'
-    return `${commaFormatted(Math.round(amount))} sats`
-  }, [getSatoshisFromUSDCents, goal?.amountContributed])
+  const formattedTargetAmount = formatAmount(goal.targetAmount, goal.currency)
+  const formattedAmountContributed = formatAmount(goal.amountContributed, goal.currency)
+  const targetUsdAmount = formatUsdAmount(goal.targetAmount)
+  const targetSatsAmount = formatSatsAmount(goal.targetAmount)
+  const usdAmount = formatUsdAmount(goal.amountContributed)
+  const satsAmount = formatSatsAmount(goal.amountContributed)
 
   const renderActionButton = () => {
     if (!isEditing && goal.status === ProjectGoalStatus.InProgress) {
@@ -123,24 +115,20 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
           />
           <HStack display="flex" alignItems="flex-start" justifyContent="space-between" width="100%">
             <Body1 bold>
-              {goal.amountContributed > 0 ? commaFormatted(goal.amountContributed) : '0'}{' '}
+              {goal.amountContributed > 0 ? formattedAmountContributed : '0'}{' '}
               {goal.currency === ProjectGoalCurrency.Btcsat ? ' sats ' : ' $ '}
               <Text as="span" color="neutral.600" fontWeight={500}>
-                {goal.currency === ProjectGoalCurrency.Btcsat
-                  ? `(${formattedUsdAmount()})`
-                  : `(${formattedSatsAmount()})`}
+                {goal.currency === ProjectGoalCurrency.Btcsat ? `(${usdAmount})` : `(${satsAmount})`}
               </Text>
             </Body1>
             <HStack display="flex" alignItems="center" justifyContent="flex-end" gap={2}>
               <Body1>
                 {' of '}
                 <Body1 as="span" bold>
-                  {commaFormatted(goal.targetAmount)} {goal.currency === ProjectGoalCurrency.Btcsat ? ' sats ' : ' $ '}
+                  {formattedTargetAmount} {goal.currency === ProjectGoalCurrency.Btcsat ? ' sats ' : ' $ '}
                 </Body1>
                 <Text as="span" color="neutral.600" fontWeight={500}>
-                  {goal.currency === ProjectGoalCurrency.Btcsat
-                    ? `(${formattedUsdAmount()})`
-                    : `(${formattedSatsAmount()})`}{' '}
+                  {goal.currency === ProjectGoalCurrency.Btcsat ? `(${targetUsdAmount})` : `(${targetSatsAmount})`}{' '}
                   {'goal'}
                 </Text>
               </Body1>

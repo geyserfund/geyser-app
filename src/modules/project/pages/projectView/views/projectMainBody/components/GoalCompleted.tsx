@@ -1,16 +1,13 @@
 import { CheckCircleIcon } from '@chakra-ui/icons'
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
-import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MdModeEdit } from 'react-icons/md'
 
 import { Body1, H3 } from '../../../../../../../components/typography'
 import { IconButtonComponent } from '../../../../../../../components/ui'
-import { useBTCConverter } from '../../../../../../../helpers'
 import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../types'
-import { Satoshis, USDCents } from '../../../../../../../types'
-import { commaFormatted } from '../../../../../../../utils'
 import { getFormattedDate } from '../../../../../../../utils'
+import { useCurrencyFormatter } from '../../../hooks/useCurrencyFormatter'
 
 type Props = {
   goal: ProjectGoal
@@ -21,20 +18,11 @@ type Props = {
 export const GoalCompleted = ({ goal, isEditing = false, onOpenGoalModal }: Props) => {
   const { t } = useTranslation()
 
-  const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
+  const { formatAmount, formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
 
-  const formattedUsdAmount = useCallback(() => {
-    const amount = getUSDAmount(goal?.amountContributed as Satoshis)
-    if (amount < 1) return '0 $'
-    return `$${commaFormatted(Math.round(amount))}`
-  }, [getUSDAmount, goal?.amountContributed])
-
-  const formattedSatsAmount = useCallback(() => {
-    const amount = getSatoshisFromUSDCents(goal?.amountContributed as USDCents)
-    if (amount < 1) return '0 sats'
-    return `${commaFormatted(Math.round(amount))} sats`
-  }, [getSatoshisFromUSDCents, goal?.amountContributed])
-
+  const formattedAmountContributed = formatAmount(goal.amountContributed, goal.currency)
+  const usdAmount = formatUsdAmount(goal.amountContributed)
+  const satsAmount = formatSatsAmount(goal.amountContributed)
   const handleEditGoal = () => {
     onOpenGoalModal(goal)
   }
@@ -67,12 +55,10 @@ export const GoalCompleted = ({ goal, isEditing = false, onOpenGoalModal }: Prop
         <VStack width="100%">
           <HStack display="flex" alignItems="flex-start" justifyContent="space-between" width="100%">
             <Body1 bold>
-              {goal.amountContributed > 0 ? commaFormatted(goal.amountContributed) : '0'}{' '}
+              {goal.amountContributed > 0 ? formattedAmountContributed : '0'}{' '}
               {goal.currency === ProjectGoalCurrency.Btcsat ? ' sats ' : ' $ '}
               <Text as="span" color="neutral.600" fontWeight={500}>
-                {goal.currency === ProjectGoalCurrency.Btcsat
-                  ? `(${formattedUsdAmount()})`
-                  : `(${formattedSatsAmount()})`}
+                {goal.currency === ProjectGoalCurrency.Btcsat ? `(${usdAmount})` : `(${satsAmount})`}
               </Text>
             </Body1>
             <HStack display="flex" alignItems="center" justifyContent="flex-end" gap={2}>

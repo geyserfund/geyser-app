@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { H1 } from '../../../../../../../../../components/typography'
 import { ProjectGoalCurrency } from '../../../../../../../../../types'
 import { numberWithCommas } from '../../../../../../../../../utils'
+import { centsToDollars } from '../../../../../../../../../utils'
 import { useProjectDefaultGoal } from '../hooks/useProjectDefaultGoal'
 
 export function ProjectBalanceDisplay() {
@@ -51,7 +52,7 @@ export function ProjectBalanceDisplay() {
         <>
           <HStack w="100%" display="flex" justifyContent="start">
             <H1 fontSize="35px">
-              {numberWithCommas(priorityGoal.amountContributed ?? 0)}
+              {numberWithCommas(centsToDollars(priorityGoal.amountContributed) ?? 0)}
               <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
                 {priorityGoal.currency === ProjectGoalCurrency.Btcsat ? ' sats' : ' $'}
               </Text>

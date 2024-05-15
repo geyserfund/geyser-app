@@ -98,7 +98,7 @@ export const useProjectGoalForm = (
             input: {
               title: formData.title,
               description: formData.description,
-              targetAmount: Number(formData.targetAmount),
+              targetAmount: formData.targetAmount,
               currency: formData.currency,
               projectGoalId: goal.id,
             },
@@ -114,7 +114,7 @@ export const useProjectGoalForm = (
             input: {
               title: formData.title,
               description: formData.description,
-              targetAmount: Number(formData.targetAmount),
+              targetAmount: formData.targetAmount,
               currency: formData.currency,
               projectId: formData.projectId,
             },
