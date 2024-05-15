@@ -8,6 +8,7 @@ import { IconButtonComponent } from '../../../../../../../components/ui'
 import { ProjectGoal, ProjectGoalCurrency, ProjectGoalStatus } from '../../../../../../../types'
 import { useMobileMode } from '../../../../../../../utils'
 import { useCurrencyFormatter } from '../../../hooks/useCurrencyFormatter'
+import { GoalContributeButton } from './GoalContributeButton'
 
 type Props = {
   goal: ProjectGoal
@@ -33,17 +34,7 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
 
   const renderActionButton = () => {
     if (!isEditing && goal.status === ProjectGoalStatus.InProgress) {
-      return (
-        <Button
-          variant="primary"
-          padding={'3px 15px'}
-          size={'md'}
-          onClick={handleContribute}
-          width={{ base: '100%', lg: '192px' }}
-        >
-          {t('Contribute')}
-        </Button>
-      )
+      return <GoalContributeButton projectGoalId={goal.id}>{t('Contribute')}</GoalContributeButton>
     }
 
     if (isEditing && !isMobile) {

@@ -41,7 +41,7 @@ const denominationOptions = [
 export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDeleteModal }: Props) => {
   const { t } = useTranslation()
 
-  const { control, handleSubmit, loading, watch, errors, enableSubmit, reset } = useProjectGoalForm(
+  const { control, handleSubmit, loading, watch, errors, enableSubmit } = useProjectGoalForm(
     goal || null,
     projectId,
     onClose,
