@@ -10,7 +10,7 @@ import { Body2 } from '../typography'
 export enum ImageCrop {
   Square = 1,
   Rectangle = 3,
-  Reward = 1.78,
+  Reward = 4 / 3,
 }
 
 interface ImageCropperModalProps {

@@ -42,16 +42,24 @@ export const RewardCard = ({ reward, count, isLaunch = false, handleEdit, handle
             </Body1>
           </HStack>
         </HStack>
-        <Box
-          borderRadius={8}
-          border="1px solid"
-          borderColor={'neutral.700'}
-          overflow={'hidden'}
-          width="100%"
-          height="160px"
-        >
-          <ImageWithReload src={reward.image || ''} alt={reward.name} width="100%" height="100%" objectFit="cover" />
-        </Box>
+        {reward.image && (
+          <Box
+            borderRadius={8}
+            border="1px solid"
+            borderColor={'neutral.700'}
+            overflow={'hidden'}
+            width="100%"
+            height="auto"
+          >
+            <ImageWithReload
+              src={reward.image || ''}
+              alt={reward.name}
+              width="100%"
+              height="100%"
+              objectFit="contain"
+            />
+          </Box>
+        )}
         <HStack w="full" justifyContent="space-between" align="center" alignItems={'center'}>
           <Text fontWeight={400} fontSize="14px" color="neutral.900">
             <ProjectRewardAvailability reward={reward} />
