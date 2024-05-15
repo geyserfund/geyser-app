@@ -10,6 +10,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IoMdCloseCircle } from 'react-icons/io'
 
@@ -47,7 +48,6 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
     onClose,
     refetch,
   )
-
   const isCompleted = goal && goal.status === ProjectGoalStatus.Completed
 
   const renderActions = () => {
@@ -131,12 +131,11 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
                   currency={watch('currency') as ProjectGoalCurrency}
                   isDisabled={Boolean(isCompleted)}
                 />
-                {errors.targetAmount?.type === 'currency-based-minimum' ||
-                  (errors.targetAmount?.type === 'min' && (
-                    <Text fontSize={'14px'} fontWeight={400} color="secondary.red">
-                      {errors.targetAmount.message}
-                    </Text>
-                  ))}
+                {(errors.targetAmount?.type === 'currency-based-minimum' || errors.targetAmount?.type === 'min') && (
+                  <Text fontSize={'14px'} fontWeight={400} color="secondary.red">
+                    {errors.targetAmount.message}
+                  </Text>
+                )}
                 <ControlledSelect
                   control={control}
                   name="currency"
