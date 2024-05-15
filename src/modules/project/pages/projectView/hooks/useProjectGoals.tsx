@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { QUERY_PROJECT_GOALS } from '../../../../../graphql/queries/goals'
 import { ProjectGoal, ProjectGoals } from '../../../../../types'
@@ -12,33 +12,27 @@ type ResponseData = {
 export const useProjectGoals = () => {
   const { project } = useProjectContext()
 
-  const { data, refetch } = useQuery<ResponseData>(QUERY_PROJECT_GOALS, {
-    variables: { projectId: project?.id },
-  })
-
-  const projectGoals = data?.projectGoals
-
   const [inProgressGoals, setInProgressGoals] = useState<ProjectGoal[]>()
   const [completedGoals, setCompletedGoals] = useState<ProjectGoal[]>()
   const [hasGoals, setHasGoals] = useState(false)
 
-  useEffect(() => {
-    if (projectGoals?.inProgress && projectGoals.inProgress.length > 0) {
-      setInProgressGoals(projectGoals.inProgress)
-    }
-  }, [projectGoals?.inProgress])
+  const { refetch } = useQuery<ResponseData>(QUERY_PROJECT_GOALS, {
+    variables: { projectId: project?.id },
+    notifyOnNetworkStatusChange: true,
+    onCompleted(data) {
+      const projectGoals = data?.projectGoals
 
-  useEffect(() => {
-    if (projectGoals?.completed && projectGoals.completed.length > 0) {
-      setCompletedGoals(projectGoals.completed)
-    }
-  }, [projectGoals?.completed])
+      setInProgressGoals(projectGoals.inProgress || [])
+      setCompletedGoals(projectGoals.completed || [])
 
-  useEffect(() => {
-    if (inProgressGoals || completedGoals) {
-      setHasGoals(true)
-    }
-  }, [inProgressGoals, completedGoals])
+      if (
+        (projectGoals.inProgress && projectGoals.inProgress.length > 0) ||
+        (projectGoals.completed && projectGoals.completed.length > 0)
+      ) {
+        setHasGoals(true)
+      }
+    },
+  })
 
   return {
     hasGoals,

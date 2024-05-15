@@ -27,6 +27,8 @@ export const Goals = () => {
   const { inProgressGoals, completedGoals, refetch } = useProjectGoals()
 
   const onlyCompletedGoalsAvailable = completedGoals && completedGoals.length > 0 && !inProgressGoals
+  const hasInProgressGoals = inProgressGoals && inProgressGoals.length > 0
+  const hasCompletedGoals = completedGoals && completedGoals.length > 0
 
   if (!project) {
     return null
@@ -63,7 +65,7 @@ export const Goals = () => {
   }
 
   const renderInProgressGoals = () => {
-    if (inProgressGoals && inProgressGoals.length > 0) {
+    if (hasInProgressGoals) {
       return inProgressGoals.map((goal: ProjectGoal) => {
         if (goal) {
           return (
@@ -77,7 +79,7 @@ export const Goals = () => {
   }
 
   const renderCompletedGoals = () => {
-    if (completedGoals && completedGoals.length > 0) {
+    if (hasCompletedGoals) {
       return completedGoals.map((goal: ProjectGoal) => {
         if (goal) {
           return (
@@ -116,14 +118,14 @@ export const Goals = () => {
     }
   }
 
-  if (inProgressGoals?.length === 0 && completedGoals?.length === 0) {
+  if (!hasInProgressGoals && !hasCompletedGoals) {
     return null
   }
 
   return (
     <>
       <CardLayout flexDirection="column" width="100%" alignItems="flex-start" spacing="25px" mobileDense>
-        {inProgressGoals && inProgressGoals?.length > 0 && (
+        {hasInProgressGoals && (
           <>
             <TitleDivider badge={inProgressGoals?.length} rightAction={renderRightAction()}>
               {t('Goals')}
@@ -133,9 +135,9 @@ export const Goals = () => {
             </VStack>
           </>
         )}
-        {completedGoals && completedGoals?.length > 0 && (
+        {hasCompletedGoals && (
           <>
-            <TitleDivider badge={completedGoals?.length} rightAction={!inProgressGoals && renderRightAction()}>
+            <TitleDivider badge={completedGoals?.length} rightAction={!hasInProgressGoals && renderRightAction()}>
               {t('Completed Goals')}
             </TitleDivider>
             <VStack alignItems="flex-start" gap={30} width="100%">
