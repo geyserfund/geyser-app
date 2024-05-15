@@ -1,4 +1,4 @@
-import { Box, BoxProps, Button, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, HStack, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { MdModeEdit } from 'react-icons/md'
 
@@ -52,10 +52,6 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
     if (isEditing && isMobile) {
       return <></>
     }
-  }
-
-  const handleContribute = () => {
-    console.log('Contribute')
   }
 
   const handleEditGoal = () => {

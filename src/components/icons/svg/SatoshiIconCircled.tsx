@@ -5,13 +5,6 @@ export interface SatoshiIconCircledProps extends IconProps {
 }
 
 export const SatoshiIconCircled = ({ size = 'md', ...props }: SatoshiIconCircledProps) => {
-  let dimensions = { width: '16', height: '16' }
-  if (size === 'lg') {
-    dimensions = { width: '24', height: '24' }
-  } else if (size === 'sm') {
-    dimensions = { width: '12', height: '12' }
-  }
-
   return (
     <Icon viewBox="0 0 16 16" width="4" height="4" {...props}>
       <mask
