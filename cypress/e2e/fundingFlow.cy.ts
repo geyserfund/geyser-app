@@ -10,9 +10,23 @@ describe('Testing Project with lightning node', () => {
     })
   })
 
-  testLightningSuccessFlow()
-  onChainSuccessFlow()
-  onChainRefundFlow()
+  context('When lightning invoice payment is sent correctly', () => {
+    it('Payment successfull through lightning', () => {
+      testLightningSuccessFlow()
+    })
+  })
+
+  context('When onchain amount paid is correct', () => {
+    it('Should show onChain success screen', () => {
+      onChainSuccessFlow()
+    })
+  })
+
+  context('when onchain amount paid is short', () => {
+    it('Should show refund initiated', () => {
+      onChainRefundFlow()
+    })
+  })
 })
 
 describe('Testing Project with lightning wallet', () => {
@@ -23,7 +37,9 @@ describe('Testing Project with lightning wallet', () => {
       },
     })
   })
-  testLightningSuccessFlow()
-  onChainSuccessFlow()
-  onChainRefundFlow()
+  context('When lightning invoice payment is sent correctly', () => {
+    it('Payment successfull through lightning', () => {
+      testLightningSuccessFlow()
+    })
+  })
 })
