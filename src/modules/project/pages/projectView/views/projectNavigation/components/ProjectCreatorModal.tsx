@@ -2,7 +2,7 @@ import { HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { EntryEditIcon, MilestoneIcon, RewardGiftIcon } from '../../../../../../../components/icons'
+import { EntryEditIcon, RewardGiftIcon } from '../../../../../../../components/icons'
 import { CardLayout, CardLayoutProps } from '../../../../../../../components/layouts'
 import { Modal } from '../../../../../../../components/layouts'
 import { Body2, H3 } from '../../../../../../../components/typography'
@@ -12,7 +12,7 @@ import { MobileViews, useProjectContext } from '../../../../../context'
 
 export const ProjectCreatorModal = (props: UseModalReturn) => {
   const { t } = useTranslation()
-  const { project, onMilestonesModalOpen, setMobileView } = useProjectContext()
+  const { project, setMobileView } = useProjectContext()
   const navigate = useNavigate()
   if (!project) return null
   return (
@@ -33,15 +33,6 @@ export const ProjectCreatorModal = (props: UseModalReturn) => {
             setMobileView(MobileViews.createReward)
             navigate(getPath('projectCreateReward', project?.name))
             props.onClose()
-          }}
-        />
-        <CreationMenuItem
-          icon={<MilestoneIcon fontSize="25px" />}
-          title={t('Add goal')}
-          description={t('Setting milestones helps you reach your overall project goal')}
-          onClick={() => {
-            props.onClose()
-            onMilestonesModalOpen()
           }}
         />
       </VStack>
