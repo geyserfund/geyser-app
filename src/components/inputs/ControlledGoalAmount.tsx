@@ -13,6 +13,7 @@ type Props = UseControllerProps<FieldValues> &
     label: string
     currency: ProjectGoalCurrency
     description?: string
+    error?: string
   }
 
 export function ControlledGoalAmount(props: Props) {
@@ -113,6 +114,11 @@ export function ControlledGoalAmount(props: Props) {
           </Text>
         </InputRightElement>
       </InputGroup>
+      {props.error && (
+        <Text fontSize="14px" fontWeight="400" color="secondary.red">
+          {props.error}
+        </Text>
+      )}
     </VStack>
   )
 }

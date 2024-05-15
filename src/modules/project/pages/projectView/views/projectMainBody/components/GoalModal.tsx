@@ -10,7 +10,6 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IoMdCloseCircle } from 'react-icons/io'
 
@@ -116,6 +115,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
                   placeholder="Your goal title"
                   label={t('Goal Title')}
                   isDisabled={Boolean(isCompleted)}
+                  error={errors.title?.message}
                 />
                 <ControlledTextArea
                   control={control}
@@ -123,6 +123,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
                   placeholder="Description"
                   label={t('Description')}
                   isDisabled={Boolean(isCompleted)}
+                  error={errors.description?.message}
                 />
                 <ControlledGoalAmount
                   control={control}
@@ -130,12 +131,9 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
                   label={t('Goal Amount')}
                   currency={watch('currency') as ProjectGoalCurrency}
                   isDisabled={Boolean(isCompleted)}
+                  error={errors.targetAmount?.message}
                 />
-                {(errors.targetAmount?.type === 'currency-based-minimum' || errors.targetAmount?.type === 'min') && (
-                  <Text fontSize={'14px'} fontWeight={400} color="secondary.red">
-                    {errors.targetAmount.message}
-                  </Text>
-                )}
+
                 <ControlledSelect
                   control={control}
                   name="currency"

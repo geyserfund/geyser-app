@@ -2,7 +2,13 @@ import { Input, InputProps, Text, VStack } from '@chakra-ui/react'
 import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
 
 type Props = UseControllerProps<FieldValues> &
-  Omit<InputProps, 'size'> & { width?: string | number; inputRef?: React.Ref<HTMLInputElement>; label: string }
+  Omit<InputProps, 'size'> & {
+    width?: string | number
+    inputRef?: React.Ref<HTMLInputElement>
+    description?: string
+    label: string
+    error?: string
+  }
 
 export function ControlledTextInput(props: Props) {
   const { field } = useController(props)
@@ -32,6 +38,11 @@ export function ControlledTextInput(props: Props) {
       <Text fontSize="16px" fontWeight="500">
         {props.label}
       </Text>
+      {props.description && (
+        <Text fontSize="14px" fontWeight="400">
+          {props.description}
+        </Text>
+      )}
       <Input
         {...field}
         {...props}
@@ -44,6 +55,11 @@ export function ControlledTextInput(props: Props) {
         width={props.width || '100%'}
         value={field?.value || props.value || ''}
       />
+      {props.error && (
+        <Text fontSize="14px" fontWeight="400" color="secondary.red">
+          {props.error}
+        </Text>
+      )}
     </VStack>
   )
 }

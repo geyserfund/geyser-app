@@ -12,7 +12,7 @@ type FormValues = Record<string, string | number | ProjectGoalCurrency>
 const goalFormSchema = (amountContributed: number) =>
   yup
     .object({
-      title: yup.string().required('Title is required'),
+      title: yup.string().required('Title is required').max(50, 'Title must be at most 50 characters long'),
       description: yup.string().max(400, 'Description must be at most 400 characters long'),
       targetAmount: yup
         .number()
@@ -27,7 +27,7 @@ const goalFormSchema = (amountContributed: number) =>
           function (value) {
             const { currency } = this.parent
             if (currency === ProjectGoalCurrency.Usdcent) {
-              return value >= 10
+              return value >= 1000
             }
 
             if (currency === ProjectGoalCurrency.Btcsat) {

@@ -7,6 +7,7 @@ type Props = UseControllerProps<FieldValues> &
     inputRef?: React.Ref<HTMLInputElement>
     label: string
     description?: string
+    error?: string
   }
 
 export function ControlledTextArea(props: Props) {
@@ -53,6 +54,11 @@ export function ControlledTextArea(props: Props) {
         rows={props.rows || 3}
         resize="none"
       />
+      {props.error && (
+        <Text fontSize="14px" fontWeight="400" color="secondary.red">
+          {props.error}
+        </Text>
+      )}
     </VStack>
   )
 }
