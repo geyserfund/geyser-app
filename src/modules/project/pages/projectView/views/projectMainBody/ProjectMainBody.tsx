@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ProjectStatus } from '../../../../../../types'
 import { useProjectContext } from '../../../../context'
+import { useProjectGoals } from '../../hooks/useProjectGoals'
 import { useProjectDetails } from '../projectNavigation/hooks/useProjectDetails'
 import {
   CreatorTools,
@@ -23,6 +24,8 @@ export const ProjectMainBody = () => {
 
   const location = useLocation()
   const navigate = useNavigate()
+
+  const { hasGoals } = useProjectGoals()
 
   useEffect(() => {
     if (loading) return
@@ -45,7 +48,7 @@ export const ProjectMainBody = () => {
       <ShareProject />
       <Rewards />
       {projectDetails.entriesLength ? <Entries /> : null}
-      <Goals />
+      {hasGoals ? <Goals /> : null}
       <CreatorTools />
       <Details />
     </VStack>
