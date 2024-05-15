@@ -50,12 +50,21 @@ export function ProjectBalanceDisplay() {
       const percentage = Math.ceil((priorityGoal.amountContributed / priorityGoal.targetAmount) * 100)
       return (
         <>
-          <HStack w="100%" display="flex" justifyContent="start">
+          <HStack w="100%" display="flex" justifyContent="start" alignItems="center">
             <H1 fontSize="35px">
+              {priorityGoal.currency === ProjectGoalCurrency.Usdcent && (
+                <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
+                  {'$'}
+                </Text>
+              )}
+
               {numberWithCommas(centsToDollars(priorityGoal.amountContributed) ?? 0)}
-              <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
-                {priorityGoal.currency === ProjectGoalCurrency.Btcsat ? ' sats' : ' $'}
-              </Text>
+
+              {priorityGoal.currency === ProjectGoalCurrency.Btcsat && (
+                <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
+                  {' sats'}
+                </Text>
+              )}
             </H1>
           </HStack>
 
@@ -82,7 +91,7 @@ export function ProjectBalanceDisplay() {
   const getProjectTotalValue = useCallback(() => {
     return (
       <VStack w="100%" display="flex" alignItems="center">
-        <Box display="flex" flexDirection="column" justifyContent="center" alignItems="start">
+        <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
           <H1 fontSize="35px">
             {numberWithCommas(project?.balance ?? 0)}
             <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">

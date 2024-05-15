@@ -18,7 +18,7 @@ export const useCurrencyFormatter = () => {
   const formatUsdAmount = useCallback(
     (amount: number) => {
       const usdAmount = getUSDAmount(amount as Satoshis)
-      if (usdAmount < 1) return '0 $'
+      if (usdAmount < 1) return '$0'
       return `$${commaFormatted(Math.round(usdAmount))}`
     },
     [getUSDAmount],
