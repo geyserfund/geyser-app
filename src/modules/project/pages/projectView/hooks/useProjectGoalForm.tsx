@@ -98,11 +98,13 @@ export const useProjectGoalForm = (
 
   const onSubmit = async (formData: FormValues) => {
     try {
+      const trimmedTitle = typeof formData.title === 'string' ? formData.title.trim() : ''
+
       if (goal) {
         const { data } = await updateProjectGoal({
           variables: {
             input: {
-              title: formData.title,
+              title: trimmedTitle,
               description: formData.description,
               targetAmount: formData.targetAmount,
               currency: formData.currency,
@@ -118,7 +120,7 @@ export const useProjectGoalForm = (
         const { data } = await createProjectGoal({
           variables: {
             input: {
-              title: formData.title,
+              title: trimmedTitle,
               description: formData.description,
               targetAmount: formData.targetAmount,
               currency: formData.currency,
