@@ -14,6 +14,7 @@ import {
   ProjectRewardsImageUrl,
 } from '../../../../../../../constants'
 import { ProjectStatus } from '../../../../../../../types'
+import { useMobileMode } from '../../../../../../../utils'
 import { useProjectContext } from '../../../../../context'
 import { useProjectGoals } from '../../../../projectView/hooks/useProjectGoals'
 import { GoalModal } from '../components/GoalModal'
@@ -92,6 +93,9 @@ export const DisplayCard = ({ title, body, buttonLabel, imageSrc, buttonProps, r
 
 const GoalTooltip = () => {
   const { t } = useTranslation()
+
+  const isMobile = useMobileMode()
+
   const tooltipText = (
     <VStack align="flex-start" display="flex" gap="10px">
       <Text>{t('We recently enhanced Milestones by transforming them into Goals.')}</Text>
@@ -113,8 +117,12 @@ const GoalTooltip = () => {
       fontWeight={'600'}
       padding={5}
       hasArrow
+      shouldWrapChildren
+      openDelay={isMobile ? 100 : 0}
+      closeDelay={isMobile ? 100 : 0}
+      closeOnClick={isMobile}
     >
-      <QuestionIcon color={'primary.900'} />
+      <QuestionIcon color={'primary.900'} cursor="pointer" />
     </Tooltip>
   )
 }
