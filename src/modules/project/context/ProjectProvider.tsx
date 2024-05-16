@@ -9,13 +9,11 @@ import { useProjectState } from '../../../hooks/graphqlState'
 import { useModal } from '../../../hooks/useModal'
 import {
   ProjectFragment,
-  ProjectMilestone,
   useProjectUnplublishedEntriesQuery,
   UserMeFragment,
   useWalletLimitQuery,
   WalletLimitsFragment,
 } from '../../../types'
-import { MilestoneAdditionModal } from '../pages/projectView/views/projectMainBody/components'
 import { ProjectCreatorModal } from '../pages/projectView/views/projectNavigation/components/ProjectCreatorModal'
 
 export enum MobileViews {
@@ -25,7 +23,7 @@ export enum MobileViews {
   leaderboard = 'leaderBoard',
   funding = 'funding',
   entries = 'entries',
-  milestones = 'milestones',
+  goals = 'goals',
   insights = 'insights',
   contributors = 'contributors',
   manageRewards = 'manage-rewards',
@@ -48,10 +46,11 @@ type ProjectContextProps = {
   saving?: boolean
   isDirty?: boolean
   error: any
-  onMilestonesModalOpen(): void
   onCreatorModalOpen(): void
   refetch: any
   walletLimits: WalletLimitsFragment
+  projectGoalId: string | null
+  setProjectGoalId: (projectGoalId: string | null) => void
 }
 
 export const ProjectContext = createContext<ProjectContextProps | null>(null)
@@ -85,11 +84,11 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
 
   const [mobileView, setMobileView] = useState<MobileViews>(MobileViews.description)
   const [isProjectOwner, setIsProjectOwner] = useState<boolean | undefined>()
+  const [projectGoalId, setProjectGoalId] = useState<string | null>(null)
 
   const { user } = useAuthContext()
 
   const creatorModal = useModal()
-  const milestonesModal = useModal()
   const { error, project, loading, updateProject, saveProject, isDirty, saving, refetch } = useProjectState(projectId, {
     fetchPolicy: 'network-only',
     onError() {
@@ -179,11 +178,6 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
     }
   }, [location.pathname])
 
-  const onMilestonesSubmit = (newMilestones: ProjectMilestone[]) => {
-    updateProject({ milestones: newMilestones })
-    milestonesModal.onClose()
-  }
-
   return (
     <ProjectContext.Provider
       value={{
@@ -200,14 +194,14 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
         loading,
         refetch,
         onCreatorModalOpen: creatorModal.onOpen,
-        onMilestonesModalOpen: milestonesModal.onOpen,
+        projectGoalId,
+        setProjectGoalId,
       }}
     >
       {children}
       {project && isProjectOwner && (
         <>
           <ProjectCreatorModal {...creatorModal} />
-          <MilestoneAdditionModal {...milestonesModal} onSubmit={onMilestonesSubmit} project={project} />
         </>
       )}
     </ProjectContext.Provider>
@@ -231,8 +225,8 @@ const getViewFromPath = (path: string) => {
     return MobileViews.rewards
   }
 
-  if (path.includes(PathName.projectMilestones)) {
-    return MobileViews.milestones
+  if (path.includes(PathName.projectGoals)) {
+    return MobileViews.goals
   }
 
   if (path.includes(PathName.projectEntries)) {

@@ -272,10 +272,10 @@ export const platformRoutes: RouteObject[] = [
           },
 
           {
-            path: getPath('projectMilestones', PathName.projectId),
+            path: getPath('projectGoals', PathName.projectId),
             async lazy() {
-              const MainBodyMilestones = await Project().then((m) => m.MainBodyMilestones)
-              return { Component: MainBodyMilestones }
+              const MainBodyGoals = await Project().then((m) => m.MainBodyGoals)
+              return { Component: MainBodyGoals }
             },
           },
         ],

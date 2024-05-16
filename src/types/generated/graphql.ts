@@ -147,14 +147,6 @@ export type CreateProjectInput = {
   type?: InputMaybe<ProjectType>;
 };
 
-export type CreateProjectMilestoneInput = {
-  /** Amount the project balance must reach to consider the milestone completed, in satoshis. */
-  amount: Scalars['Int']['input'];
-  description: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-  projectId: Scalars['BigInt']['input'];
-};
-
 export type CreateProjectRewardInput = {
   category?: InputMaybe<Scalars['String']['input']>;
   /** Cost of the reward, currently only in USD cents */
@@ -401,6 +393,8 @@ export type FundingInput = {
   donationAmount: Scalars['Int']['input'];
   metadataInput?: InputMaybe<FundingMetadataInput>;
   orderInput?: InputMaybe<OrderFundingInput>;
+  /** The ProjectGoal linked to this funding transaction. */
+  projectGoalId?: InputMaybe<Scalars['BigInt']['input']>;
   projectId: Scalars['BigInt']['input'];
   /** The resource from which the funding transaction is being created. */
   sourceResourceInput: ResourceInput;
@@ -949,9 +943,7 @@ export type Mutation = {
   claimBadge: UserBadge;
   createEntry: Entry;
   createProject: Project;
-  createProjectMilestone: ProjectMilestone;
   deleteEntry: Entry;
-  deleteProjectMilestone: Scalars['Boolean']['output'];
   fund: FundingMutationResponse;
   fundingCancel: FundingCancelResponse;
   fundingClaimAnonymous: FundingMutationResponse;
@@ -965,6 +957,11 @@ export type Mutation = {
   orderStatusUpdate?: Maybe<Order>;
   projectDelete: ProjectDeleteResponse;
   projectFollow: Scalars['Boolean']['output'];
+  projectGoalCreate: Array<ProjectGoal>;
+  projectGoalDelete: ProjectGoalDeleteResponse;
+  /** Only returns ProjectGoals that are in progress */
+  projectGoalOrderingUpdate: Array<ProjectGoal>;
+  projectGoalUpdate: ProjectGoal;
   projectPublish: Project;
   projectRewardCreate: ProjectReward;
   projectRewardCurrencyUpdate: Array<ProjectReward>;
@@ -986,7 +983,6 @@ export type Mutation = {
   unlinkExternalAccount: User;
   updateEntry: Entry;
   updateProject: Project;
-  updateProjectMilestone: ProjectMilestone;
   updateUser: User;
   updateWalletState: Wallet;
   userBadgeAward: UserBadge;
@@ -1015,18 +1011,8 @@ export type MutationCreateProjectArgs = {
 };
 
 
-export type MutationCreateProjectMilestoneArgs = {
-  input?: InputMaybe<CreateProjectMilestoneInput>;
-};
-
-
 export type MutationDeleteEntryArgs = {
   id: Scalars['BigInt']['input'];
-};
-
-
-export type MutationDeleteProjectMilestoneArgs = {
-  projectMilestoneId: Scalars['BigInt']['input'];
 };
 
 
@@ -1092,6 +1078,26 @@ export type MutationProjectDeleteArgs = {
 
 export type MutationProjectFollowArgs = {
   input: ProjectFollowMutationInput;
+};
+
+
+export type MutationProjectGoalCreateArgs = {
+  input: ProjectGoalCreateInput;
+};
+
+
+export type MutationProjectGoalDeleteArgs = {
+  projectGoalId: Scalars['BigInt']['input'];
+};
+
+
+export type MutationProjectGoalOrderingUpdateArgs = {
+  input: ProjectGoalOrderingUpdateInput;
+};
+
+
+export type MutationProjectGoalUpdateArgs = {
+  input: ProjectGoalUpdateInput;
 };
 
 
@@ -1167,11 +1173,6 @@ export type MutationUpdateEntryArgs = {
 
 export type MutationUpdateProjectArgs = {
   input: UpdateProjectInput;
-};
-
-
-export type MutationUpdateProjectMilestoneArgs = {
-  input?: InputMaybe<UpdateProjectMilestoneInput>;
 };
 
 
@@ -1401,6 +1402,7 @@ export type Project = {
   /** Boolean flag to indicate if the project can be deleted. */
   canDelete: Scalars['Boolean']['output'];
   createdAt: Scalars['String']['output'];
+  defaultGoalId?: Maybe<Scalars['BigInt']['output']>;
   /** Description of the project. */
   description?: Maybe<Scalars['String']['output']>;
   /**
@@ -1421,7 +1423,6 @@ export type Project = {
   keys: ProjectKeys;
   links: Array<Scalars['String']['output']>;
   location?: Maybe<Location>;
-  milestones: Array<ProjectMilestone>;
   /** Unique name for the project. Used for the project URL and lightning address. */
   name: Scalars['String']['output'];
   owners: Array<Owner>;
@@ -1507,6 +1508,70 @@ export type ProjectFundingTxStats = {
   methodSum?: Maybe<Array<Maybe<FundingTxMethodSum>>>;
 };
 
+export type ProjectGoal = {
+  __typename?: 'ProjectGoal';
+  amountContributed: Scalars['Int']['output'];
+  completedAt?: Maybe<Scalars['Date']['output']>;
+  createdAt: Scalars['Date']['output'];
+  currency: ProjectGoalCurrency;
+  description?: Maybe<Scalars['String']['output']>;
+  hasReceivedContribution: Scalars['Boolean']['output'];
+  id: Scalars['BigInt']['output'];
+  projectId: Scalars['BigInt']['output'];
+  status: ProjectGoalStatus;
+  targetAmount: Scalars['Int']['output'];
+  title: Scalars['String']['output'];
+  updatedAt: Scalars['Date']['output'];
+};
+
+export type ProjectGoalCreateInput = {
+  currency: ProjectGoalCurrency;
+  description?: InputMaybe<Scalars['String']['input']>;
+  projectId: Scalars['BigInt']['input'];
+  targetAmount: Scalars['Int']['input'];
+  title: Scalars['String']['input'];
+};
+
+export enum ProjectGoalCurrency {
+  Btcsat = 'BTCSAT',
+  Usdcent = 'USDCENT'
+}
+
+export type ProjectGoalDeleteResponse = MutationResponse & {
+  __typename?: 'ProjectGoalDeleteResponse';
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
+};
+
+export type ProjectGoalOrderingUpdateInput = {
+  projectGoalIdsOrder: Array<Scalars['BigInt']['input']>;
+  projectId: Scalars['BigInt']['input'];
+};
+
+export enum ProjectGoalStatus {
+  Completed = 'COMPLETED',
+  InProgress = 'IN_PROGRESS'
+}
+
+export enum ProjectGoalStatusInCreate {
+  Inactive = 'INACTIVE',
+  InProgress = 'IN_PROGRESS'
+}
+
+export type ProjectGoalUpdateInput = {
+  currency?: InputMaybe<ProjectGoalCurrency>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  projectGoalId: Scalars['BigInt']['input'];
+  targetAmount?: InputMaybe<Scalars['Int']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ProjectGoals = {
+  __typename?: 'ProjectGoals';
+  completed: Array<ProjectGoal>;
+  inProgress: Array<ProjectGoal>;
+};
+
 export type ProjectKeys = {
   __typename?: 'ProjectKeys';
   nostrKeys: NostrKeys;
@@ -1515,16 +1580,6 @@ export type ProjectKeys = {
 export type ProjectLinkMutationInput = {
   link: Scalars['String']['input'];
   projectId: Scalars['BigInt']['input'];
-};
-
-export type ProjectMilestone = {
-  __typename?: 'ProjectMilestone';
-  /** Amount the project balance must reach to consider the milestone completed, in satoshis. */
-  amount: Scalars['Float']['output'];
-  description?: Maybe<Scalars['String']['output']>;
-  id: Scalars['BigInt']['output'];
-  name: Scalars['String']['output'];
-  reached: Scalars['Boolean']['output'];
 };
 
 export type ProjectPublishMutationInput = {
@@ -1749,6 +1804,7 @@ export type Query = {
   ordersGet?: Maybe<OrdersGetResponse>;
   projectCountriesGet: Array<ProjectCountriesGetResult>;
   projectGet?: Maybe<Project>;
+  projectGoals: ProjectGoals;
   projectRegionsGet: Array<ProjectRegionsGetResult>;
   projectRewardCategoriesGet: Array<Scalars['String']['output']>;
   projectRewardsGet: Array<ProjectReward>;
@@ -1849,6 +1905,11 @@ export type QueryOrdersGetArgs = {
 
 export type QueryProjectGetArgs = {
   where: UniqueProjectQueryInput;
+};
+
+
+export type QueryProjectGoalsArgs = {
+  projectId: Scalars['BigInt']['input'];
 };
 
 
@@ -2042,14 +2103,6 @@ export type UpdateProjectInput = {
   /** Public title of the project. */
   title?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<ProjectType>;
-};
-
-export type UpdateProjectMilestoneInput = {
-  /** Amount the project balance must reach to consider the milestone completed, in satoshis. */
-  amount?: InputMaybe<Scalars['Int']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  projectMilestoneId: Scalars['BigInt']['input'];
 };
 
 export type UpdateProjectRewardInput = {
@@ -2371,7 +2424,7 @@ export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
 export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
   GraphSumData: ( FunderRewardGraphSum ) | ( FundingTxAmountGraph );
   LndConnectionDetails: never;
-  MutationResponse: ( DeleteUserResponse ) | ( ProjectDeleteResponse );
+  MutationResponse: ( DeleteUserResponse ) | ( ProjectDeleteResponse ) | ( ProjectGoalDeleteResponse );
 };
 
 /** Mapping between all available schema types and the resolvers types */
@@ -2396,7 +2449,6 @@ export type ResolversTypes = {
   Country: ResolverTypeWrapper<Country>;
   CreateEntryInput: CreateEntryInput;
   CreateProjectInput: CreateProjectInput;
-  CreateProjectMilestoneInput: CreateProjectMilestoneInput;
   CreateProjectRewardInput: CreateProjectRewardInput;
   CreateWalletInput: CreateWalletInput;
   Currency: Currency;
@@ -2549,9 +2601,17 @@ export type ResolversTypes = {
   ProjectFunderRewardStats: ResolverTypeWrapper<ProjectFunderRewardStats>;
   ProjectFunderStats: ResolverTypeWrapper<ProjectFunderStats>;
   ProjectFundingTxStats: ResolverTypeWrapper<ProjectFundingTxStats>;
+  ProjectGoal: ResolverTypeWrapper<ProjectGoal>;
+  ProjectGoalCreateInput: ProjectGoalCreateInput;
+  ProjectGoalCurrency: ProjectGoalCurrency;
+  ProjectGoalDeleteResponse: ResolverTypeWrapper<ProjectGoalDeleteResponse>;
+  ProjectGoalOrderingUpdateInput: ProjectGoalOrderingUpdateInput;
+  ProjectGoalStatus: ProjectGoalStatus;
+  ProjectGoalStatusInCreate: ProjectGoalStatusInCreate;
+  ProjectGoalUpdateInput: ProjectGoalUpdateInput;
+  ProjectGoals: ResolverTypeWrapper<ProjectGoals>;
   ProjectKeys: ResolverTypeWrapper<ProjectKeys>;
   ProjectLinkMutationInput: ProjectLinkMutationInput;
-  ProjectMilestone: ResolverTypeWrapper<ProjectMilestone>;
   ProjectPublishMutationInput: ProjectPublishMutationInput;
   ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>;
   ProjectReward: ResolverTypeWrapper<ProjectReward>;
@@ -2595,7 +2655,6 @@ export type ResolversTypes = {
   UpdatableOrderStatus: UpdatableOrderStatus;
   UpdateEntryInput: UpdateEntryInput;
   UpdateProjectInput: UpdateProjectInput;
-  UpdateProjectMilestoneInput: UpdateProjectMilestoneInput;
   UpdateProjectRewardInput: UpdateProjectRewardInput;
   UpdateUserInput: UpdateUserInput;
   UpdateWalletInput: UpdateWalletInput;
@@ -2643,7 +2702,6 @@ export type ResolversParentTypes = {
   Country: Country;
   CreateEntryInput: CreateEntryInput;
   CreateProjectInput: CreateProjectInput;
-  CreateProjectMilestoneInput: CreateProjectMilestoneInput;
   CreateProjectRewardInput: CreateProjectRewardInput;
   CreateWalletInput: CreateWalletInput;
   CurrencyQuoteGetInput: CurrencyQuoteGetInput;
@@ -2776,9 +2834,14 @@ export type ResolversParentTypes = {
   ProjectFunderRewardStats: ProjectFunderRewardStats;
   ProjectFunderStats: ProjectFunderStats;
   ProjectFundingTxStats: ProjectFundingTxStats;
+  ProjectGoal: ProjectGoal;
+  ProjectGoalCreateInput: ProjectGoalCreateInput;
+  ProjectGoalDeleteResponse: ProjectGoalDeleteResponse;
+  ProjectGoalOrderingUpdateInput: ProjectGoalOrderingUpdateInput;
+  ProjectGoalUpdateInput: ProjectGoalUpdateInput;
+  ProjectGoals: ProjectGoals;
   ProjectKeys: ProjectKeys;
   ProjectLinkMutationInput: ProjectLinkMutationInput;
-  ProjectMilestone: ProjectMilestone;
   ProjectPublishMutationInput: ProjectPublishMutationInput;
   ProjectRegionsGetResult: ProjectRegionsGetResult;
   ProjectReward: ProjectReward;
@@ -2814,7 +2877,6 @@ export type ResolversParentTypes = {
   UniqueProjectQueryInput: UniqueProjectQueryInput;
   UpdateEntryInput: UpdateEntryInput;
   UpdateProjectInput: UpdateProjectInput;
-  UpdateProjectMilestoneInput: UpdateProjectMilestoneInput;
   UpdateProjectRewardInput: UpdateProjectRewardInput;
   UpdateUserInput: UpdateUserInput;
   UpdateWalletInput: UpdateWalletInput;
@@ -3215,9 +3277,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   claimBadge?: Resolver<ResolversTypes['UserBadge'], ParentType, ContextType, RequireFields<MutationClaimBadgeArgs, 'input'>>;
   createEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationCreateEntryArgs, 'input'>>;
   createProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationCreateProjectArgs, 'input'>>;
-  createProjectMilestone?: Resolver<ResolversTypes['ProjectMilestone'], ParentType, ContextType, Partial<MutationCreateProjectMilestoneArgs>>;
   deleteEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationDeleteEntryArgs, 'id'>>;
-  deleteProjectMilestone?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteProjectMilestoneArgs, 'projectMilestoneId'>>;
   fund?: Resolver<ResolversTypes['FundingMutationResponse'], ParentType, ContextType, RequireFields<MutationFundArgs, 'input'>>;
   fundingCancel?: Resolver<ResolversTypes['FundingCancelResponse'], ParentType, ContextType, RequireFields<MutationFundingCancelArgs, 'input'>>;
   fundingClaimAnonymous?: Resolver<ResolversTypes['FundingMutationResponse'], ParentType, ContextType, RequireFields<MutationFundingClaimAnonymousArgs, 'uuid'>>;
@@ -3231,6 +3291,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   orderStatusUpdate?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<MutationOrderStatusUpdateArgs, 'input'>>;
   projectDelete?: Resolver<ResolversTypes['ProjectDeleteResponse'], ParentType, ContextType, RequireFields<MutationProjectDeleteArgs, 'input'>>;
   projectFollow?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectFollowArgs, 'input'>>;
+  projectGoalCreate?: Resolver<Array<ResolversTypes['ProjectGoal']>, ParentType, ContextType, RequireFields<MutationProjectGoalCreateArgs, 'input'>>;
+  projectGoalDelete?: Resolver<ResolversTypes['ProjectGoalDeleteResponse'], ParentType, ContextType, RequireFields<MutationProjectGoalDeleteArgs, 'projectGoalId'>>;
+  projectGoalOrderingUpdate?: Resolver<Array<ResolversTypes['ProjectGoal']>, ParentType, ContextType, RequireFields<MutationProjectGoalOrderingUpdateArgs, 'input'>>;
+  projectGoalUpdate?: Resolver<ResolversTypes['ProjectGoal'], ParentType, ContextType, RequireFields<MutationProjectGoalUpdateArgs, 'input'>>;
   projectPublish?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectPublishArgs, 'input'>>;
   projectRewardCreate?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<MutationProjectRewardCreateArgs, 'input'>>;
   projectRewardCurrencyUpdate?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType, RequireFields<MutationProjectRewardCurrencyUpdateArgs, 'input'>>;
@@ -3246,7 +3310,6 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   unlinkExternalAccount?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUnlinkExternalAccountArgs, 'id'>>;
   updateEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationUpdateEntryArgs, 'input'>>;
   updateProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationUpdateProjectArgs, 'input'>>;
-  updateProjectMilestone?: Resolver<ResolversTypes['ProjectMilestone'], ParentType, ContextType, Partial<MutationUpdateProjectMilestoneArgs>>;
   updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
   updateWalletState?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationUpdateWalletStateArgs, 'input'>>;
   userBadgeAward?: Resolver<ResolversTypes['UserBadge'], ParentType, ContextType, RequireFields<MutationUserBadgeAwardArgs, 'userBadgeId'>>;
@@ -3259,7 +3322,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type MutationResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['MutationResponse'] = ResolversParentTypes['MutationResponse']> = {
-  __resolveType: TypeResolveFn<'DeleteUserResponse' | 'ProjectDeleteResponse', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'DeleteUserResponse' | 'ProjectDeleteResponse' | 'ProjectGoalDeleteResponse', ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 };
@@ -3346,6 +3409,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  defaultGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   entries?: Resolver<Array<ResolversTypes['Entry']>, ParentType, ContextType, Partial<ProjectEntriesArgs>>;
   followers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
@@ -3359,7 +3423,6 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   keys?: Resolver<ResolversTypes['ProjectKeys'], ParentType, ContextType>;
   links?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
-  milestones?: Resolver<Array<ResolversTypes['ProjectMilestone']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   owners?: Resolver<Array<ResolversTypes['Owner']>, ParentType, ContextType>;
   rewardCurrency?: Resolver<Maybe<ResolversTypes['RewardCurrency']>, ParentType, ContextType>;
@@ -3414,17 +3477,36 @@ export type ProjectFundingTxStatsResolvers<ContextType = any, ParentType extends
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProjectKeysResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectKeys'] = ResolversParentTypes['ProjectKeys']> = {
-  nostrKeys?: Resolver<ResolversTypes['NostrKeys'], ParentType, ContextType>;
+export type ProjectGoalResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectGoal'] = ResolversParentTypes['ProjectGoal']> = {
+  amountContributed?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  completedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  currency?: Resolver<ResolversTypes['ProjectGoalCurrency'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  hasReceivedContribution?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['ProjectGoalStatus'], ParentType, ContextType>;
+  targetAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProjectMilestoneResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectMilestone'] = ResolversParentTypes['ProjectMilestone']> = {
-  amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  reached?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+export type ProjectGoalDeleteResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectGoalDeleteResponse'] = ResolversParentTypes['ProjectGoalDeleteResponse']> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProjectGoalsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectGoals'] = ResolversParentTypes['ProjectGoals']> = {
+  completed?: Resolver<Array<ResolversTypes['ProjectGoal']>, ParentType, ContextType>;
+  inProgress?: Resolver<Array<ResolversTypes['ProjectGoal']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProjectKeysResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectKeys'] = ResolversParentTypes['ProjectKeys']> = {
+  nostrKeys?: Resolver<ResolversTypes['NostrKeys'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3538,6 +3620,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   ordersGet?: Resolver<Maybe<ResolversTypes['OrdersGetResponse']>, ParentType, ContextType, RequireFields<QueryOrdersGetArgs, 'input'>>;
   projectCountriesGet?: Resolver<Array<ResolversTypes['ProjectCountriesGetResult']>, ParentType, ContextType>;
   projectGet?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryProjectGetArgs, 'where'>>;
+  projectGoals?: Resolver<ResolversTypes['ProjectGoals'], ParentType, ContextType, RequireFields<QueryProjectGoalsArgs, 'projectId'>>;
   projectRegionsGet?: Resolver<Array<ResolversTypes['ProjectRegionsGetResult']>, ParentType, ContextType>;
   projectRewardCategoriesGet?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   projectRewardsGet?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType, RequireFields<QueryProjectRewardsGetArgs, 'input'>>;
@@ -3761,8 +3844,10 @@ export type Resolvers<ContextType = any> = {
   ProjectFunderRewardStats?: ProjectFunderRewardStatsResolvers<ContextType>;
   ProjectFunderStats?: ProjectFunderStatsResolvers<ContextType>;
   ProjectFundingTxStats?: ProjectFundingTxStatsResolvers<ContextType>;
+  ProjectGoal?: ProjectGoalResolvers<ContextType>;
+  ProjectGoalDeleteResponse?: ProjectGoalDeleteResponseResolvers<ContextType>;
+  ProjectGoals?: ProjectGoalsResolvers<ContextType>;
   ProjectKeys?: ProjectKeysResolvers<ContextType>;
-  ProjectMilestone?: ProjectMilestoneResolvers<ContextType>;
   ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>;
   ProjectReward?: ProjectRewardResolvers<ContextType>;
   ProjectStatistics?: ProjectStatisticsResolvers<ContextType>;
@@ -3820,6 +3905,10 @@ export type FundingTxFragment = { __typename?: 'FundingTx', id: any, uuid?: stri
 
 export type FundingTxForDownloadInvoiceFragment = { __typename?: 'FundingTx', id: any, donationAmount: number, amountPaid: number, uuid?: string | null, projectId: any, paidAt?: any | null, status: FundingStatus, funder: { __typename?: 'Funder', user?: { __typename?: 'User', username: string } | null }, order?: { __typename?: 'Order', totalInSats: number, items: Array<{ __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', name: string } }> } | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null };
 
+export type ProjectDefaultGoalFragment = { __typename?: 'ProjectGoal', id: any, title: string, targetAmount: number, currency: ProjectGoalCurrency, amountContributed: number };
+
+export type ProjectGoalFragment = { __typename?: 'ProjectGoal', id: any, title: string, description?: string | null, targetAmount: number, currency: ProjectGoalCurrency, status: ProjectGoalStatus, projectId: any, amountContributed: number, createdAt: any, updatedAt: any, hasReceivedContribution: boolean };
+
 export type OrderItemFragment = { __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', id: any, name: string, cost: number, rewardCurrency: RewardCurrency, category?: string | null } };
 
 export type OrderFragment = { __typename?: 'Order', confirmedAt?: any | null, createdAt: any, deliveredAt?: any | null, id: any, shippedAt?: any | null, status: string, totalInSats: number, updatedAt: any, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null } | null, items: Array<(
@@ -3854,7 +3943,7 @@ export type ProjectRewardForLandingPageFragment = { __typename?: 'ProjectReward'
 
 export type ProjectRewardForCreateUpdateFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, cost: number, image?: string | null, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null };
 
-export type ProjectFragment = { __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, balance: number, createdAt: string, updatedAt: string, image?: string | null, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, fundingTxsCount?: number | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, owners: Array<{ __typename?: 'Owner', id: any, user: (
+export type ProjectFragment = { __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, defaultGoalId?: any | null, balance: number, createdAt: string, updatedAt: string, image?: string | null, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, fundingTxsCount?: number | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, owners: Array<{ __typename?: 'Owner', id: any, user: (
       { __typename?: 'User' }
       & ProjectOwnerUserFragment
     ) }>, rewards: Array<(
@@ -3866,7 +3955,7 @@ export type ProjectFragment = { __typename?: 'Project', id: any, title: string, 
     ) }>, sponsors: Array<{ __typename?: 'Sponsor', id: any, url?: string | null, image?: string | null, user?: (
       { __typename?: 'User' }
       & UserForAvatarFragment
-    ) | null }>, milestones: Array<{ __typename?: 'ProjectMilestone', id: any, name: string, description?: string | null, amount: number, reached: boolean }>, entries: Array<(
+    ) | null }>, entries: Array<(
     { __typename?: 'Entry' }
     & EntryForProjectFragment
   )>, wallets: Array<(
@@ -4015,6 +4104,27 @@ export type FundingTxEmailUpdateMutationVariables = Exact<{
 
 export type FundingTxEmailUpdateMutation = { __typename?: 'Mutation', fundingTxEmailUpdate: { __typename?: 'FundingTx', id: any, email?: string | null } };
 
+export type ProjectGoalCreateMutationVariables = Exact<{
+  input: ProjectGoalCreateInput;
+}>;
+
+
+export type ProjectGoalCreateMutation = { __typename?: 'Mutation', projectGoalCreate: Array<{ __typename?: 'ProjectGoal', title: string, description?: string | null, targetAmount: number, projectId: any, currency: ProjectGoalCurrency }> };
+
+export type ProjectGoalUpdateMutationVariables = Exact<{
+  input: ProjectGoalUpdateInput;
+}>;
+
+
+export type ProjectGoalUpdateMutation = { __typename?: 'Mutation', projectGoalUpdate: { __typename?: 'ProjectGoal', title: string, targetAmount: number, projectId: any, description?: string | null, currency: ProjectGoalCurrency } };
+
+export type ProjectGoalDeleteMutationVariables = Exact<{
+  projectGoalId: Scalars['BigInt']['input'];
+}>;
+
+
+export type ProjectGoalDeleteMutation = { __typename?: 'Mutation', projectGoalDelete: { __typename?: 'ProjectGoalDeleteResponse', success: boolean } };
+
 export type GrantApplyMutationVariables = Exact<{
   input?: InputMaybe<GrantApplyInput>;
 }>;
@@ -4093,27 +4203,6 @@ export type ProjectRewardDeleteMutationVariables = Exact<{
 
 
 export type ProjectRewardDeleteMutation = { __typename?: 'Mutation', projectRewardDelete: boolean };
-
-export type CreateProjectMilestoneMutationVariables = Exact<{
-  input?: InputMaybe<CreateProjectMilestoneInput>;
-}>;
-
-
-export type CreateProjectMilestoneMutation = { __typename?: 'Mutation', createProjectMilestone: { __typename?: 'ProjectMilestone', id: any, name: string, description?: string | null, amount: number } };
-
-export type UpdateProjectMilestoneMutationVariables = Exact<{
-  input?: InputMaybe<UpdateProjectMilestoneInput>;
-}>;
-
-
-export type UpdateProjectMilestoneMutation = { __typename?: 'Mutation', updateProjectMilestone: { __typename?: 'ProjectMilestone', id: any, name: string, description?: string | null, amount: number } };
-
-export type DeleteProjectMilestoneMutationVariables = Exact<{
-  projectMilestoneId: Scalars['BigInt']['input'];
-}>;
-
-
-export type DeleteProjectMilestoneMutation = { __typename?: 'Mutation', deleteProjectMilestone: boolean };
 
 export type ProjectFollowMutationVariables = Exact<{
   input: ProjectFollowMutationInput;
@@ -4328,6 +4417,29 @@ export type FundingTxForDownloadInvoiceQuery = { __typename?: 'Query', fundingTx
     { __typename?: 'FundingTx' }
     & FundingTxForDownloadInvoiceFragment
   ) };
+
+export type ProjectDefaultGoalQueryVariables = Exact<{
+  projectId: Scalars['BigInt']['input'];
+}>;
+
+
+export type ProjectDefaultGoalQuery = { __typename?: 'Query', projectGoals: { __typename?: 'ProjectGoals', inProgress: Array<(
+      { __typename?: 'ProjectGoal' }
+      & ProjectDefaultGoalFragment
+    )> } };
+
+export type ProjectGoalsQueryVariables = Exact<{
+  projectId: Scalars['BigInt']['input'];
+}>;
+
+
+export type ProjectGoalsQuery = { __typename?: 'Query', projectGoals: { __typename?: 'ProjectGoals', inProgress: Array<(
+      { __typename?: 'ProjectGoal' }
+      & ProjectGoalFragment
+    )>, completed: Array<(
+      { __typename?: 'ProjectGoal', completedAt?: any | null }
+      & ProjectGoalFragment
+    )> } };
 
 export type GrantsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -4779,6 +4891,30 @@ export const FundingTxForDownloadInvoiceFragmentDoc = gql`
   }
 }
     `;
+export const ProjectDefaultGoalFragmentDoc = gql`
+    fragment ProjectDefaultGoal on ProjectGoal {
+  id
+  title
+  targetAmount
+  currency
+  amountContributed
+}
+    `;
+export const ProjectGoalFragmentDoc = gql`
+    fragment ProjectGoal on ProjectGoal {
+  id
+  title
+  description
+  targetAmount
+  currency
+  status
+  projectId
+  amountContributed
+  createdAt
+  updatedAt
+  hasReceivedContribution
+}
+    `;
 export const OrderItemFragmentDoc = gql`
     fragment OrderItem on OrderItem {
   item {
@@ -5063,6 +5199,7 @@ export const ProjectFragmentDoc = gql`
   type
   shortDescription
   description
+  defaultGoalId
   balance
   createdAt
   updatedAt
@@ -5107,13 +5244,6 @@ export const ProjectFragmentDoc = gql`
     user {
       ...UserForAvatar
     }
-  }
-  milestones {
-    id
-    name
-    description
-    amount
-    reached
   }
   entries(input: $input) {
     ...EntryForProject
@@ -5950,6 +6080,113 @@ export function useFundingTxEmailUpdateMutation(baseOptions?: Apollo.MutationHoo
 export type FundingTxEmailUpdateMutationHookResult = ReturnType<typeof useFundingTxEmailUpdateMutation>;
 export type FundingTxEmailUpdateMutationResult = Apollo.MutationResult<FundingTxEmailUpdateMutation>;
 export type FundingTxEmailUpdateMutationOptions = Apollo.BaseMutationOptions<FundingTxEmailUpdateMutation, FundingTxEmailUpdateMutationVariables>;
+export const ProjectGoalCreateDocument = gql`
+    mutation ProjectGoalCreate($input: ProjectGoalCreateInput!) {
+  projectGoalCreate(input: $input) {
+    title
+    description
+    targetAmount
+    projectId
+    currency
+  }
+}
+    `;
+export type ProjectGoalCreateMutationFn = Apollo.MutationFunction<ProjectGoalCreateMutation, ProjectGoalCreateMutationVariables>;
+
+/**
+ * __useProjectGoalCreateMutation__
+ *
+ * To run a mutation, you first call `useProjectGoalCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectGoalCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectGoalCreateMutation, { data, loading, error }] = useProjectGoalCreateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectGoalCreateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectGoalCreateMutation, ProjectGoalCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectGoalCreateMutation, ProjectGoalCreateMutationVariables>(ProjectGoalCreateDocument, options);
+      }
+export type ProjectGoalCreateMutationHookResult = ReturnType<typeof useProjectGoalCreateMutation>;
+export type ProjectGoalCreateMutationResult = Apollo.MutationResult<ProjectGoalCreateMutation>;
+export type ProjectGoalCreateMutationOptions = Apollo.BaseMutationOptions<ProjectGoalCreateMutation, ProjectGoalCreateMutationVariables>;
+export const ProjectGoalUpdateDocument = gql`
+    mutation ProjectGoalUpdate($input: ProjectGoalUpdateInput!) {
+  projectGoalUpdate(input: $input) {
+    title
+    targetAmount
+    projectId
+    description
+    currency
+  }
+}
+    `;
+export type ProjectGoalUpdateMutationFn = Apollo.MutationFunction<ProjectGoalUpdateMutation, ProjectGoalUpdateMutationVariables>;
+
+/**
+ * __useProjectGoalUpdateMutation__
+ *
+ * To run a mutation, you first call `useProjectGoalUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectGoalUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectGoalUpdateMutation, { data, loading, error }] = useProjectGoalUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectGoalUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectGoalUpdateMutation, ProjectGoalUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectGoalUpdateMutation, ProjectGoalUpdateMutationVariables>(ProjectGoalUpdateDocument, options);
+      }
+export type ProjectGoalUpdateMutationHookResult = ReturnType<typeof useProjectGoalUpdateMutation>;
+export type ProjectGoalUpdateMutationResult = Apollo.MutationResult<ProjectGoalUpdateMutation>;
+export type ProjectGoalUpdateMutationOptions = Apollo.BaseMutationOptions<ProjectGoalUpdateMutation, ProjectGoalUpdateMutationVariables>;
+export const ProjectGoalDeleteDocument = gql`
+    mutation ProjectGoalDelete($projectGoalId: BigInt!) {
+  projectGoalDelete(projectGoalId: $projectGoalId) {
+    success
+  }
+}
+    `;
+export type ProjectGoalDeleteMutationFn = Apollo.MutationFunction<ProjectGoalDeleteMutation, ProjectGoalDeleteMutationVariables>;
+
+/**
+ * __useProjectGoalDeleteMutation__
+ *
+ * To run a mutation, you first call `useProjectGoalDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectGoalDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectGoalDeleteMutation, { data, loading, error }] = useProjectGoalDeleteMutation({
+ *   variables: {
+ *      projectGoalId: // value for 'projectGoalId'
+ *   },
+ * });
+ */
+export function useProjectGoalDeleteMutation(baseOptions?: Apollo.MutationHookOptions<ProjectGoalDeleteMutation, ProjectGoalDeleteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectGoalDeleteMutation, ProjectGoalDeleteMutationVariables>(ProjectGoalDeleteDocument, options);
+      }
+export type ProjectGoalDeleteMutationHookResult = ReturnType<typeof useProjectGoalDeleteMutation>;
+export type ProjectGoalDeleteMutationResult = Apollo.MutationResult<ProjectGoalDeleteMutation>;
+export type ProjectGoalDeleteMutationOptions = Apollo.BaseMutationOptions<ProjectGoalDeleteMutation, ProjectGoalDeleteMutationVariables>;
 export const GrantApplyDocument = gql`
     mutation GrantApply($input: GrantApplyInput) {
   grantApply(input: $input) {
@@ -6317,109 +6554,6 @@ export function useProjectRewardDeleteMutation(baseOptions?: Apollo.MutationHook
 export type ProjectRewardDeleteMutationHookResult = ReturnType<typeof useProjectRewardDeleteMutation>;
 export type ProjectRewardDeleteMutationResult = Apollo.MutationResult<ProjectRewardDeleteMutation>;
 export type ProjectRewardDeleteMutationOptions = Apollo.BaseMutationOptions<ProjectRewardDeleteMutation, ProjectRewardDeleteMutationVariables>;
-export const CreateProjectMilestoneDocument = gql`
-    mutation CreateProjectMilestone($input: CreateProjectMilestoneInput) {
-  createProjectMilestone(input: $input) {
-    id
-    name
-    description
-    amount
-  }
-}
-    `;
-export type CreateProjectMilestoneMutationFn = Apollo.MutationFunction<CreateProjectMilestoneMutation, CreateProjectMilestoneMutationVariables>;
-
-/**
- * __useCreateProjectMilestoneMutation__
- *
- * To run a mutation, you first call `useCreateProjectMilestoneMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateProjectMilestoneMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createProjectMilestoneMutation, { data, loading, error }] = useCreateProjectMilestoneMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateProjectMilestoneMutation(baseOptions?: Apollo.MutationHookOptions<CreateProjectMilestoneMutation, CreateProjectMilestoneMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateProjectMilestoneMutation, CreateProjectMilestoneMutationVariables>(CreateProjectMilestoneDocument, options);
-      }
-export type CreateProjectMilestoneMutationHookResult = ReturnType<typeof useCreateProjectMilestoneMutation>;
-export type CreateProjectMilestoneMutationResult = Apollo.MutationResult<CreateProjectMilestoneMutation>;
-export type CreateProjectMilestoneMutationOptions = Apollo.BaseMutationOptions<CreateProjectMilestoneMutation, CreateProjectMilestoneMutationVariables>;
-export const UpdateProjectMilestoneDocument = gql`
-    mutation UpdateProjectMilestone($input: UpdateProjectMilestoneInput) {
-  updateProjectMilestone(input: $input) {
-    id
-    name
-    description
-    amount
-  }
-}
-    `;
-export type UpdateProjectMilestoneMutationFn = Apollo.MutationFunction<UpdateProjectMilestoneMutation, UpdateProjectMilestoneMutationVariables>;
-
-/**
- * __useUpdateProjectMilestoneMutation__
- *
- * To run a mutation, you first call `useUpdateProjectMilestoneMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateProjectMilestoneMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateProjectMilestoneMutation, { data, loading, error }] = useUpdateProjectMilestoneMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateProjectMilestoneMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProjectMilestoneMutation, UpdateProjectMilestoneMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateProjectMilestoneMutation, UpdateProjectMilestoneMutationVariables>(UpdateProjectMilestoneDocument, options);
-      }
-export type UpdateProjectMilestoneMutationHookResult = ReturnType<typeof useUpdateProjectMilestoneMutation>;
-export type UpdateProjectMilestoneMutationResult = Apollo.MutationResult<UpdateProjectMilestoneMutation>;
-export type UpdateProjectMilestoneMutationOptions = Apollo.BaseMutationOptions<UpdateProjectMilestoneMutation, UpdateProjectMilestoneMutationVariables>;
-export const DeleteProjectMilestoneDocument = gql`
-    mutation DeleteProjectMilestone($projectMilestoneId: BigInt!) {
-  deleteProjectMilestone(projectMilestoneId: $projectMilestoneId)
-}
-    `;
-export type DeleteProjectMilestoneMutationFn = Apollo.MutationFunction<DeleteProjectMilestoneMutation, DeleteProjectMilestoneMutationVariables>;
-
-/**
- * __useDeleteProjectMilestoneMutation__
- *
- * To run a mutation, you first call `useDeleteProjectMilestoneMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteProjectMilestoneMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteProjectMilestoneMutation, { data, loading, error }] = useDeleteProjectMilestoneMutation({
- *   variables: {
- *      projectMilestoneId: // value for 'projectMilestoneId'
- *   },
- * });
- */
-export function useDeleteProjectMilestoneMutation(baseOptions?: Apollo.MutationHookOptions<DeleteProjectMilestoneMutation, DeleteProjectMilestoneMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteProjectMilestoneMutation, DeleteProjectMilestoneMutationVariables>(DeleteProjectMilestoneDocument, options);
-      }
-export type DeleteProjectMilestoneMutationHookResult = ReturnType<typeof useDeleteProjectMilestoneMutation>;
-export type DeleteProjectMilestoneMutationResult = Apollo.MutationResult<DeleteProjectMilestoneMutation>;
-export type DeleteProjectMilestoneMutationOptions = Apollo.BaseMutationOptions<DeleteProjectMilestoneMutation, DeleteProjectMilestoneMutationVariables>;
 export const ProjectFollowDocument = gql`
     mutation ProjectFollow($input: ProjectFollowMutationInput!) {
   projectFollow(input: $input)
@@ -7417,6 +7551,94 @@ export type FundingTxForDownloadInvoiceQueryHookResult = ReturnType<typeof useFu
 export type FundingTxForDownloadInvoiceLazyQueryHookResult = ReturnType<typeof useFundingTxForDownloadInvoiceLazyQuery>;
 export type FundingTxForDownloadInvoiceSuspenseQueryHookResult = ReturnType<typeof useFundingTxForDownloadInvoiceSuspenseQuery>;
 export type FundingTxForDownloadInvoiceQueryResult = Apollo.QueryResult<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables>;
+export const ProjectDefaultGoalDocument = gql`
+    query ProjectDefaultGoal($projectId: BigInt!) {
+  projectGoals(projectId: $projectId) {
+    inProgress {
+      ...ProjectDefaultGoal
+    }
+  }
+}
+    ${ProjectDefaultGoalFragmentDoc}`;
+
+/**
+ * __useProjectDefaultGoalQuery__
+ *
+ * To run a query within a React component, call `useProjectDefaultGoalQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectDefaultGoalQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectDefaultGoalQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useProjectDefaultGoalQuery(baseOptions: Apollo.QueryHookOptions<ProjectDefaultGoalQuery, ProjectDefaultGoalQueryVariables> & ({ variables: ProjectDefaultGoalQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectDefaultGoalQuery, ProjectDefaultGoalQueryVariables>(ProjectDefaultGoalDocument, options);
+      }
+export function useProjectDefaultGoalLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectDefaultGoalQuery, ProjectDefaultGoalQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectDefaultGoalQuery, ProjectDefaultGoalQueryVariables>(ProjectDefaultGoalDocument, options);
+        }
+export function useProjectDefaultGoalSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectDefaultGoalQuery, ProjectDefaultGoalQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectDefaultGoalQuery, ProjectDefaultGoalQueryVariables>(ProjectDefaultGoalDocument, options);
+        }
+export type ProjectDefaultGoalQueryHookResult = ReturnType<typeof useProjectDefaultGoalQuery>;
+export type ProjectDefaultGoalLazyQueryHookResult = ReturnType<typeof useProjectDefaultGoalLazyQuery>;
+export type ProjectDefaultGoalSuspenseQueryHookResult = ReturnType<typeof useProjectDefaultGoalSuspenseQuery>;
+export type ProjectDefaultGoalQueryResult = Apollo.QueryResult<ProjectDefaultGoalQuery, ProjectDefaultGoalQueryVariables>;
+export const ProjectGoalsDocument = gql`
+    query ProjectGoals($projectId: BigInt!) {
+  projectGoals(projectId: $projectId) {
+    inProgress {
+      ...ProjectGoal
+    }
+    completed {
+      ...ProjectGoal
+      completedAt
+    }
+  }
+}
+    ${ProjectGoalFragmentDoc}`;
+
+/**
+ * __useProjectGoalsQuery__
+ *
+ * To run a query within a React component, call `useProjectGoalsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectGoalsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectGoalsQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useProjectGoalsQuery(baseOptions: Apollo.QueryHookOptions<ProjectGoalsQuery, ProjectGoalsQueryVariables> & ({ variables: ProjectGoalsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectGoalsQuery, ProjectGoalsQueryVariables>(ProjectGoalsDocument, options);
+      }
+export function useProjectGoalsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectGoalsQuery, ProjectGoalsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectGoalsQuery, ProjectGoalsQueryVariables>(ProjectGoalsDocument, options);
+        }
+export function useProjectGoalsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectGoalsQuery, ProjectGoalsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectGoalsQuery, ProjectGoalsQueryVariables>(ProjectGoalsDocument, options);
+        }
+export type ProjectGoalsQueryHookResult = ReturnType<typeof useProjectGoalsQuery>;
+export type ProjectGoalsLazyQueryHookResult = ReturnType<typeof useProjectGoalsLazyQuery>;
+export type ProjectGoalsSuspenseQueryHookResult = ReturnType<typeof useProjectGoalsSuspenseQuery>;
+export type ProjectGoalsQueryResult = Apollo.QueryResult<ProjectGoalsQuery, ProjectGoalsQueryVariables>;
 export const GrantsDocument = gql`
     query Grants {
   grants {

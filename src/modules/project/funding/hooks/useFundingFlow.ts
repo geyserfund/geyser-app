@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState } from 'react'
 
 import { FundingInput, ProjectFragment, useFundingTxWithInvoiceStatusQuery, useFundMutation } from '../../../../types'
 import { toInt, useNotification } from '../../../../utils'
+import { useProjectContext } from '../../context'
 import { useParseResponseToSwapAtom, useSetKeyPairAtom } from '../state'
 import { fundingFlowErrorAtom, fundingRequestErrorAtom, weblnErrorAtom } from '../state/errorAtom'
 import { fundingStageAtomEffect, useFundingStage } from '../state/fundingStagesAtom'
@@ -44,6 +45,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const startWebLNFlow = useWebLNFlow()
   const resetFundingFlow = useResetFundingFlow()
   const setKeyPair = useSetKeyPairAtom()
+  const { projectGoalId } = useProjectContext()
 
   const [error, setError] = useAtom(fundingFlowErrorAtom)
   const [fundingRequestErrored, setFundingRequestErrored] = useAtom(fundingRequestErrorAtom)
@@ -161,12 +163,14 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       setNextFundingStage()
 
       input.swapPublicKey = keyPair.publicKey.toString('hex')
+      console.log('projectGoalId', projectGoalId)
+      input.projectGoalId = projectGoalId
 
       setFundingInput(input)
 
       await fundProject({ variables: { input } })
     },
-    [fundProject, setNextFundingStage, toast, setKeyPair],
+    [fundProject, setNextFundingStage, toast, setKeyPair, projectGoalId],
   )
 
   const retryFundingFlow = useCallback(() => {

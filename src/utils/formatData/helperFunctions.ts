@@ -87,3 +87,16 @@ export const numberWithCommas = (x: string | number) => {
 
   return value
 }
+
+export const centsToDollarsFormatted = (cents: number): string => {
+  const dollars = cents / 100
+  return dollars.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+
+export const dollarsToCents = (dollars: number): number => {
+  return Math.round(dollars * 100)
+}
+
+export const centsToDollars = (cents: number): number => {
+  return Math.round(cents / 100)
+}

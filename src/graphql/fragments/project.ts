@@ -124,6 +124,7 @@ export const FRAGMENT_PROJECT = gql`
     type
     shortDescription
     description
+    defaultGoalId
     balance
     createdAt
     updatedAt
@@ -169,13 +170,7 @@ export const FRAGMENT_PROJECT = gql`
         ...UserForAvatar
       }
     }
-    milestones {
-      id
-      name
-      description
-      amount
-      reached
-    }
+
     entries(input: $input) {
       ...EntryForProject
     }

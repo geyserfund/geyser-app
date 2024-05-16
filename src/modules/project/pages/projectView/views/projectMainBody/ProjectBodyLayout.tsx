@@ -54,7 +54,7 @@ export const ProjectBodyLayout = () => {
   const { mobileView, project } = useProjectContext()
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  const inView = [MobileViews.description, MobileViews.rewards, MobileViews.entries, MobileViews.milestones].includes(
+  const inView = [MobileViews.description, MobileViews.rewards, MobileViews.entries, MobileViews.goals].includes(
     mobileView,
   )
 
