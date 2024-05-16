@@ -31,10 +31,10 @@ export function ControlledGoalAmount(props: Props) {
   useEffect(() => {
     setFormattedValue(
       props.currency === ProjectGoalCurrency.Usdcent
-        ? centsToDollarsFormatted(unformattedValue)
-        : commaFormatted(unformattedValue),
+        ? centsToDollarsFormatted(field.value)
+        : commaFormatted(field.value),
     )
-  }, [unformattedValue, props.currency])
+  }, [unformattedValue, props.currency, field.value])
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     if (field?.onBlur) {
