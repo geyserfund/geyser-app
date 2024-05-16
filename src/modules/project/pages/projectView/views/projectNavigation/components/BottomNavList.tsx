@@ -9,6 +9,7 @@ import {
   LeaderboardNavIcon,
   RewardGiftIcon,
 } from '../../../../../../../components/icons'
+import { GoalIcon } from '../../../../../../../components/icons/svg'
 import { PathName } from '../../../../../../../constants'
 import { MobileViews } from '../../../../../context'
 
@@ -31,6 +32,15 @@ export const navigationItems: ProjectNavigationItem[] = [
     isCreator: true,
     isContributor: true,
   },
+  {
+    icon: GoalIcon,
+    pathName: PathName.projectGoals,
+    mobileView: MobileViews.goals,
+    name: 'Goals',
+    isCreator: true,
+    isContributor: true,
+  },
+
   {
     icon: AddIcon,
     name: 'Create',

@@ -18,7 +18,7 @@ export enum PathName {
   projectPost = 'posts',
   projectEntries = 'entries',
   projectRewards = 'rewards',
-  projectMilestones = 'milestones',
+  projectGoals = 'goals',
   projectManageRewards = 'manage-rewards',
   projectCreateReward = 'create-reward',
   projectEditReward = 'edit-reward',
@@ -93,7 +93,7 @@ const pathsMap = {
   projectContributors: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectContributors}`,
   projectEntries: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectEntries}`,
   projectRewards: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectRewards}`,
-  projectMilestones: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectMilestones}`,
+  projectGoals: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectGoals}`,
   projectManageRewards: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectManageRewards}`,
   projectCreateReward: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectManageRewards}/${PathName.projectCreateReward}`,

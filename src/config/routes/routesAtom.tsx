@@ -64,7 +64,7 @@ export const projectCreatorRoutes = [
 export const projectRoutes = [
   getPath('project', PathName.projectId),
   getPath('projectEntries', PathName.projectId),
-  getPath('projectMilestones', PathName.projectId),
+  getPath('projectGoals', PathName.projectId),
   getPath('projectRewards', PathName.projectId),
   ...projectCreatorRoutes,
 ]

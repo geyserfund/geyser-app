@@ -3,6 +3,7 @@ import { Box, IconButton, Stack, Text, useDisclosure } from '@chakra-ui/react'
 import { MouseEvent } from 'react'
 import { createUseStyles } from 'react-jss'
 
+import { ImageWithReload } from '../../../../../../../components/ui'
 import { AppTheme } from '../../../../../../../context'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../../../../types'
 import { useProjectContext } from '../../../../../context'
@@ -68,21 +69,17 @@ export const FundingFormRewardItem = ({
       pos={'relative'}
       width={'100%'}
     >
-      <Stack direction="row">
-        <Box borderRadius={12} overflow={'hidden'} width="70px">
-          <div style={{ display: 'block', position: 'relative', paddingTop: '100%', width: '100%' }}>
-            <div
-              style={{
-                display: 'block',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: `transparent url(${reward.image}) no-repeat center center / cover`,
-              }}
-            ></div>
-          </div>
+      <Stack direction="row" flexWrap={'wrap'}>
+        <Box
+          width="96px"
+          height="auto"
+          maxHeight="72px"
+          borderRadius={6}
+          overflow={'hidden'}
+          border="1px solid"
+          borderColor={'neutral.700'}
+        >
+          <ImageWithReload src={reward.image || ''} alt={reward.name} width="100%" height="100%" objectFit="contain" />
         </Box>
         <Stack direction="column" flex={1} pl={2} gap={0.25}>
           <Text fontWeight={700} fontSize={16} color="neutral.900">
