@@ -59,12 +59,11 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
   }
 
   return (
-    <VStack display="flex" alignItems="flex-start" width="100%" gap={1}>
+    <VStack display="flex" alignItems="flex-start" width="100%" gap={'5px'}>
       <HStack
         display="flex"
         alignItems={'center'}
         justifyContent={{ base: 'space-between', lg: 'flex-start' }}
-        minHeight="40px"
         width="100%"
       >
         <H3 fontSize="18px" fontWeight={600}>
@@ -91,7 +90,7 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
         flexDirection={{ base: 'column', lg: 'row' }}
         alignItems="center"
         width="100%"
-        gap={{ base: 2, lg: 10 }}
+        gap={{ base: 2, lg: 5 }}
       >
         <VStack width="100%">
           <GoalProgressBar
@@ -153,13 +152,13 @@ const GoalProgressBar = ({
   const isMobile = useMobileMode()
 
   return (
-    <HStack width="100%" justifyContent="flex-start">
-      <HStack width="100%" height="32px" justifyContent="flex-start" borderRadius="44px" bg="neutral.100">
+    <HStack width="100%" justifyContent="flex-start" py={'4px'}>
+      <HStack width="100%" height="24px" justifyContent="flex-start" borderRadius="44px" bg="neutral.100">
         <HStack
           p={'5px'}
           width={`${percentage}%`}
           minWidth="60px"
-          height="32px"
+          height="24px"
           bg={bg}
           borderRadius="44px"
           justifyContent={'flex-end'}

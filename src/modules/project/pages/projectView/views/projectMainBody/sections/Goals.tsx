@@ -123,26 +123,31 @@ export const Goals = () => {
 
   return (
     <>
-      <CardLayout flexDirection="column" width="100%" alignItems="flex-start" spacing="25px" mobileDense>
+      <CardLayout flexDirection="column" width="100%" alignItems="flex-start" gap={'30px'} mobileDense>
         {hasInProgressGoals && (
-          <>
-            <TitleDivider badge={inProgressGoals?.length} rightAction={renderRightAction()}>
-              {t('Goals')}
-            </TitleDivider>
-            <VStack alignItems="flex-start" gap={30} width="100%">
+          <Box display="flex" flexDirection="column" gap={'20px'} width="100%">
+            <Box width="100%" minHeight="50px" py={'10px'}>
+              <TitleDivider badge={inProgressGoals?.length} rightAction={renderRightAction()}>
+                {t('Goals')}
+              </TitleDivider>
+            </Box>
+
+            <VStack alignItems="flex-start" gap={'20px'} width="100%">
               {renderInProgressGoals()}
             </VStack>
-          </>
+          </Box>
         )}
         {hasCompletedGoals && (
-          <>
-            <TitleDivider badge={completedGoals?.length} rightAction={!hasInProgressGoals && renderRightAction()}>
-              {t('Completed Goals')}
-            </TitleDivider>
-            <VStack alignItems="flex-start" gap={30} width="100%">
+          <Box display="flex" flexDirection="column" gap={'20px'} width="100%">
+            <Box width="100%" minHeight="50px" py={'10px'}>
+              <TitleDivider badge={completedGoals?.length} rightAction={!hasInProgressGoals && renderRightAction()}>
+                {t('Completed Goals')}
+              </TitleDivider>
+            </Box>
+            <VStack alignItems="flex-start" gap={'20px'} width="100%">
               {renderCompletedGoals()}
             </VStack>
-          </>
+          </Box>
         )}
         {((isProjectOwner && editMode) || (!hasInProgressGoals && hasCompletedGoals && isProjectOwner)) && (
           <Box display="flex" alignItems="center" justifyContent="center" width="100%">

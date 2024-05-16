@@ -28,7 +28,7 @@ export const GoalCompleted = ({ goal, isEditing = false, onOpenGoalModal }: Prop
   }
 
   return (
-    <VStack display="flex" alignItems="flex-start" width="100%" gap={1}>
+    <VStack display="flex" alignItems="flex-start" width="100%" gap={'5px'}>
       <HStack display="flex" alignItems={'center'} justifyContent={'space-between'} minHeight="40px" width="100%">
         <H3>{goal.title}</H3>
         {isEditing && (

@@ -26,9 +26,9 @@ export const GoalContributeButton = ({ projectGoalId, ...props }: GoalContribute
   return (
     <Button
       variant="primary"
-      padding={'3px 15px'}
       size={'md'}
       width={{ base: '100%', lg: '192px' }}
+      height="32px"
       onClick={handleContributeClick}
       isDisabled={isFundingDisabled}
       {...props}
