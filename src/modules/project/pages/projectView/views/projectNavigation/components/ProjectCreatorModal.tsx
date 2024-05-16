@@ -27,6 +27,7 @@ export const ProjectCreatorModal = (props: UseModalReturn) => {
   const closeModal = () => {
     setIsGoalModalOpen(false)
     props.onClose()
+    window.location.reload()
   }
 
   const navigate = useNavigate()
