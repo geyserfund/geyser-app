@@ -25,10 +25,6 @@ export function ControlledGoalAmount(props: Props) {
   const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
 
   useEffect(() => {
-    setUnformattedValue('0')
-  }, [props.currency])
-
-  useEffect(() => {
     setFormattedValue(
       props.currency === ProjectGoalCurrency.Usdcent
         ? centsToDollarsFormatted(field.value)
