@@ -36,16 +36,17 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
 
   return (
     <Box w="100%" border="2px" borderColor="neutral.200" borderRadius={12} mt={2} p={3} pos={'relative'}>
-      <Stack direction="row">
+      <Stack direction="row" flexWrap={'wrap'}>
         <Box
-          width="70px"
-          height="70px"
+          width="96px"
+          height="auto"
+          maxHeight="72px"
           borderRadius={6}
           overflow={'hidden'}
           border="1px solid"
           borderColor={'neutral.700'}
         >
-          <ImageWithReload src={reward.image || ''} alt={reward.name} width="100%" height="100%" objectFit="cover" />
+          <ImageWithReload src={reward.image || ''} alt={reward.name} width="100%" height="auto" objectFit="contain" />
         </Box>
         <Stack direction="column" flex={1} pl={2} spacing="3px">
           <Body2 xBold color="neutral.900">
