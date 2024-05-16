@@ -163,7 +163,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       setNextFundingStage()
 
       input.swapPublicKey = keyPair.publicKey.toString('hex')
-      console.log('projectGoalId', projectGoalId)
       input.projectGoalId = projectGoalId
 
       setFundingInput(input)
