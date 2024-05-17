@@ -4,7 +4,6 @@ import { useCallback, useMemo, useState } from 'react'
 
 import { FundingInput, ProjectFragment, useFundingTxWithInvoiceStatusQuery, useFundMutation } from '../../../../types'
 import { toInt, useNotification } from '../../../../utils'
-import { useProjectContext } from '../../context'
 import { useParseResponseToSwapAtom, useSetKeyPairAtom } from '../state'
 import { fundingFlowErrorAtom, fundingRequestErrorAtom, weblnErrorAtom } from '../state/errorAtom'
 import { fundingStageAtomEffect, useFundingStage } from '../state/fundingStagesAtom'
