@@ -19,11 +19,13 @@ type FundingContextProps = {
   project?: Partial<ProjectFragment> | null // Partial Project context, for usage inside fundingFlow, Only useful when ProjctProvider is not used
   limits?: WalletLimitsFragment | null
   fundForm: UseFundingFormStateReturn
+  projectGoalId?: string | null
 }
 
 interface FundingProviderProps extends PropsWithChildren {
   project?: Partial<ProjectFragment> | null
   limits?: WalletLimitsFragment | null
+  projectGoalId?: string | null
 }
 
 export const FundingContext = createContext<FundingContextProps>({} as FundingContextProps)
@@ -31,8 +33,8 @@ export const FundingContext = createContext<FundingContextProps>({} as FundingCo
 export const useFundingContext = () => useContext(FundingContext)
 
 // Used if the project context is not available
-export const FundingProvider = ({ children, project, limits }: FundingProviderProps) => {
-  const fundingFlow = useFundingFlow({ project })
+export const FundingProvider = ({ children, project, limits, projectGoalId }: FundingProviderProps) => {
+  const fundingFlow = useFundingFlow({ project, projectGoalId })
 
   const fundForm = useFundingFormState({
     rewards: project ? project.rewards : undefined,
@@ -54,9 +56,9 @@ export const FundingProvider = ({ children, project, limits }: FundingProviderPr
 
 // Used if the project context is available
 export const FundingProviderWithProjectContext: React.FC<PropsWithChildren> = ({ children }) => {
-  const { project, walletLimits } = useProjectContext()
+  const { project, walletLimits, projectGoalId } = useProjectContext()
   return (
-    <FundingProvider project={project} limits={walletLimits}>
+    <FundingProvider project={project} limits={walletLimits} projectGoalId={projectGoalId}>
       {children}
     </FundingProvider>
   )

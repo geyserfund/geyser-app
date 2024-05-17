@@ -27,6 +27,7 @@ interface IFundingFlowOptions {
   hasBolt11?: boolean
   hasWebLN?: boolean
   project?: Partial<ProjectFragment> | null
+  projectGoalId?: string | null
 }
 
 export const useFundingFlow = (options?: IFundingFlowOptions) => {
@@ -34,6 +35,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     hasBolt11 = true,
     hasWebLN = true,
     project,
+    projectGoalId,
   } = options || {
     hasBolt11: true,
     hasWebLN: true,
@@ -45,7 +47,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const startWebLNFlow = useWebLNFlow()
   const resetFundingFlow = useResetFundingFlow()
   const setKeyPair = useSetKeyPairAtom()
-  const { projectGoalId } = useProjectContext()
 
   const [error, setError] = useAtom(fundingFlowErrorAtom)
   const [fundingRequestErrored, setFundingRequestErrored] = useAtom(fundingRequestErrorAtom)
