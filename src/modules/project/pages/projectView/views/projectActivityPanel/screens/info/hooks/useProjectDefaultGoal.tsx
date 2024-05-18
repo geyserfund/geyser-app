@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client'
 import { useCallback, useEffect, useState } from 'react'
 
 import { QUERY_PROJECT_DEFAULT_GOAL } from '../../../../../../../../../graphql/queries/goals'
-import { ProjectGoal, ProjectGoals } from '../../../../../../../../../types'
+import { ProjectGoal, ProjectGoalCurrency, ProjectGoals } from '../../../../../../../../../types'
 import { useProjectContext } from '../../../../../../../context'
 import { useCurrencyFormatter } from '../../../../../../projectView/hooks/useCurrencyFormatter'
 
@@ -17,7 +17,7 @@ export const useProjectDefaultGoal = () => {
     variables: { projectId: project?.id },
   })
 
-  const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
+  const { formatAmount, formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
 
   const projectGoals = data?.projectGoals
 
@@ -38,8 +38,8 @@ export const useProjectDefaultGoal = () => {
   }, [formatUsdAmount, priorityGoal?.amountContributed])
 
   const formattedTotalUsdAmount = useCallback(() => {
-    return formatUsdAmount(project?.balance ?? 0)
-  }, [formatUsdAmount, project?.balance])
+    return formatAmount(project?.balanceUsdCent ?? 0, ProjectGoalCurrency.Usdcent)
+  }, [formatAmount, project?.balanceUsdCent])
 
   const formattedSatsAmount = useCallback(() => {
     return formatSatsAmount(priorityGoal?.amountContributed ?? 0)

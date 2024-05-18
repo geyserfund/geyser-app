@@ -101,9 +101,7 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
           />
           <HStack display="flex" alignItems="flex-start" justifyContent="space-between" width="100%">
             <Body1 bold>
-              {goal.currency === ProjectGoalCurrency.Usdcent && '$'}
               {goal.amountContributed > 0 ? formattedAmountContributed : '0'}{' '}
-              {goal.currency === ProjectGoalCurrency.Btcsat && ' sats'}{' '}
               <Text as="span" color="neutral.600" fontWeight={500}>
                 {goal.currency === ProjectGoalCurrency.Btcsat ? `(${usdAmount})` : `(${satsAmount})`}
               </Text>
@@ -112,9 +110,7 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
               <Body1>
                 {' of '}
                 <Body1 as="span" bold>
-                  {goal.currency === ProjectGoalCurrency.Usdcent && '$'}
-                  {formattedTargetAmount}
-                  {goal.currency === ProjectGoalCurrency.Btcsat && ' sats'}{' '}
+                  {formattedTargetAmount}{' '}
                 </Body1>
                 <Text as="span" color="neutral.600" fontWeight={500}>
                   {goal.currency === ProjectGoalCurrency.Btcsat ? `(${targetUsdAmount})` : `(${targetSatsAmount})`}{' '}

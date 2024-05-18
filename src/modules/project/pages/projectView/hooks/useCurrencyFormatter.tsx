@@ -1,36 +1,45 @@
 import { useCallback } from 'react'
 
 import { useBTCConverter } from '../../../../../helpers'
-import { ProjectGoalCurrency, Satoshis, USDCents } from '../../../../../types'
+import { Satoshis, USDCents } from '../../../../../types'
 import { centsToDollars, commaFormatted } from '../../../../../utils'
 
 export const useCurrencyFormatter = () => {
-  const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
+  const { getUSDCentsAmount, getSatoshisFromUSDCents } = useBTCConverter()
 
-  const formatAmount = useCallback((amount: number, currency: ProjectGoalCurrency) => {
-    if (currency === ProjectGoalCurrency.Btcsat) {
-      return commaFormatted(amount)
-    }
+  type TCurrency = 'BTCSAT' | 'USDCENT'
+  const Currency = {
+    Btcsat: 'BTCSAT' as TCurrency,
+    Usdcent: 'USDCENT' as TCurrency,
+  }
 
-    return commaFormatted(centsToDollars(amount))
-  }, [])
+  const formatAmount = useCallback(
+    (amount: number, currency: TCurrency) => {
+      if (currency === Currency.Btcsat) {
+        return `${commaFormatted(amount)} sats`
+      }
+
+      const usdAmount = centsToDollars(amount)
+      if (usdAmount < 1) return '< $1'
+      return `$${commaFormatted(Math.round(usdAmount))}`
+    },
+    [Currency.Btcsat],
+  )
 
   const formatUsdAmount = useCallback(
     (amount: number) => {
-      const usdAmount = getUSDAmount(amount as Satoshis)
-      if (usdAmount < 1) return '$0'
-      return `$${commaFormatted(Math.round(usdAmount))}`
+      const usdCentsAmount = getUSDCentsAmount(amount as Satoshis)
+      return formatAmount(usdCentsAmount, Currency.Usdcent)
     },
-    [getUSDAmount],
+    [Currency.Usdcent, formatAmount, getUSDCentsAmount],
   )
 
   const formatSatsAmount = useCallback(
     (amount: number) => {
       const satsAmount = getSatoshisFromUSDCents(amount as USDCents)
-      if (satsAmount < 1) return '0 sats'
-      return `${commaFormatted(Math.round(satsAmount))} sats`
+      return formatAmount(satsAmount, Currency.Btcsat)
     },
-    [getSatoshisFromUSDCents],
+    [Currency.Btcsat, formatAmount, getSatoshisFromUSDCents],
   )
 
   return {

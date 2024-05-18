@@ -126,6 +126,7 @@ export const FRAGMENT_PROJECT = gql`
     description
     defaultGoalId
     balance
+    balanceUsdCent
     createdAt
     updatedAt
     image
