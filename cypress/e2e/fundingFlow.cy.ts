@@ -3,11 +3,7 @@ import { onChainRefundFlow, onChainSuccessFlow, testLightningSuccessFlow } from 
 
 describe('Testing Project with lightning node', () => {
   beforeEach(() => {
-    cy.visit(`${GEYSER_URL}/project/${LND_TEST_PROJECT_NAME}`, {
-      onBeforeLoad(win: Window): void {
-        cy.spy(win.navigator.clipboard, 'writeText').as('copy')
-      },
-    })
+    cy.visit(`${GEYSER_URL}/project/${LND_TEST_PROJECT_NAME}`)
   })
 
   testLightningSuccessFlow()
@@ -17,11 +13,7 @@ describe('Testing Project with lightning node', () => {
 
 describe('Testing Project with lightning wallet', () => {
   beforeEach(() => {
-    cy.visit(`${GEYSER_URL}/project/${LIGHTNING_TEST_PROJECT_NAME}`, {
-      onBeforeLoad(win: Window): void {
-        cy.spy(win.navigator.clipboard, 'writeText').as('copy')
-      },
-    })
+    cy.visit(`${GEYSER_URL}/project/${LIGHTNING_TEST_PROJECT_NAME}`)
   })
   testLightningSuccessFlow()
 })
