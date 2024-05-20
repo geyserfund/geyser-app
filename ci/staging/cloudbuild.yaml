@@ -1,4 +1,14 @@
 steps:
+  # Obtain cached images for Container Registry
+  # - id: "Caching (1/2) pull build image"
+  - id: 'Pull Cache: dependencies'
+    name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies || true \
+
   - id: 'Update Image: latest'
     name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
@@ -15,7 +25,6 @@ steps:
         --build-arg VITE_APP_GEYSER_NOSTR_PUBKEY=$$GEYSER_NOSTR_PUBKEY \
         --build-arg VITE_APP_ENV=${_VITE_APP_ENV} \
         --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies \
-        --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:build \
         --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest . \
         && \
         docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest \
