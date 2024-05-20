@@ -51,6 +51,7 @@ export const RewardCard = ({ reward, count, isLaunch = false, handleEdit, handle
             overflow={'hidden'}
             width="100%"
             height="auto"
+            maxHeight="255px"
           >
             <ImageWithReload
               src={reward.image || ''}
