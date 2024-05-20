@@ -4,7 +4,6 @@ import {
   Button,
   HStack,
   Image,
-  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -20,7 +19,7 @@ import { BsCheckLg } from 'react-icons/bs'
 
 import { CardLayout } from '../../../../components/layouts'
 import { Body1, Body2, H3 } from '../../../../components/typography'
-import { GrantApplicationDetailsUrl, LockedConnectAccountUrl } from '../../../../constants'
+import { LockedConnectAccountUrl } from '../../../../constants'
 import { useAuthContext } from '../../../../context'
 import { MUTATION_APPLY_GRANT } from '../../../../graphql/mutations'
 import { CreateAProjectButton } from '../../../../modules/profile/pages/profilePage/components'
@@ -43,15 +42,12 @@ export const GrantApply = ({ grant }: GrantProps) => {
         <Trans
           values={{ title: grant.title }}
           i18nKey={
-            'Apply to be part of the {{title}} grant. Find out more about how projects will be selected and how voting works <1>here.</1>'
+            'Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow'
           }
         >
           {
-            'Apply to be part of the {{title}} grant. Find out more about how projects will be selected and how voting works '
+            'Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow'
           }
-          <Link href={GrantApplicationDetailsUrl} isExternal>
-            here.
-          </Link>
         </Trans>
       </Body1>
       <ApplyGrant grant={grant} />

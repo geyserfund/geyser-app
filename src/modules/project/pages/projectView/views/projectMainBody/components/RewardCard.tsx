@@ -7,6 +7,7 @@ import { ProjectRewardAvailability } from '../../../../../../../components/molec
 import { ProjectRewardShippingEstimate } from '../../../../../../../components/molecules/projectDisplay/ProjectRewardShippingEstimate'
 import { Body1, Body2 } from '../../../../../../../components/typography'
 import { ICard, ImageWithReload } from '../../../../../../../components/ui'
+import { MarkdownField } from '../../../../../../../forms/markdown/MarkdownField'
 import { secondaryColors } from '../../../../../../../styles'
 import { ProjectStatus } from '../../../../../../../types'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../../../../types/generated/graphql'
@@ -42,16 +43,28 @@ export const RewardCard = ({ reward, count, isLaunch = false, handleEdit, handle
             </Body1>
           </HStack>
         </HStack>
-        <Box
-          borderRadius={8}
-          border="1px solid"
-          borderColor={'neutral.700'}
-          overflow={'hidden'}
-          width="100%"
-          height="160px"
-        >
-          <ImageWithReload src={reward.image || ''} alt={reward.name} width="100%" height="100%" objectFit="cover" />
-        </Box>
+        {reward.image && (
+          <Box
+            borderRadius={8}
+            border="1px solid"
+            borderColor={'neutral.700'}
+            overflow={'hidden'}
+            width="100%"
+            position="relative"
+            paddingTop="75%"
+          >
+            <ImageWithReload
+              src={reward.image || ''}
+              alt={reward.name}
+              width="100%"
+              height="100%"
+              objectFit="cover"
+              position="absolute"
+              top={0}
+              left={0}
+            />
+          </Box>
+        )}
         <HStack w="full" justifyContent="space-between" align="center" alignItems={'center'}>
           <Text fontWeight={400} fontSize="14px" color="neutral.900">
             <ProjectRewardAvailability reward={reward} />
@@ -64,9 +77,7 @@ export const RewardCard = ({ reward, count, isLaunch = false, handleEdit, handle
           )}
         </HStack>
         <ProjectRewardShippingEstimate w="full" reward={reward} />
-        <Text fontWeight={400} fontSize="14px" color="neutral.600" lineHeight={'1.4'}>
-          {reward.description}
-        </Text>
+        <MarkdownField preview content={reward.description || ''} />
       </VStack>
       <HStack>
         {!isLaunch ? (

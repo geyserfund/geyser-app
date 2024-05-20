@@ -21,13 +21,14 @@ import {
   InsightsNavIcon,
   RewardGiftIcon,
 } from '../../../../../../components/icons'
-import { MilestoneIcon } from '../../../../../../components/icons/svg'
+import { GoalIcon } from '../../../../../../components/icons/svg'
 import { GeyserLogoIcon } from '../../../../../../components/icons/svg/GeyserLogoIcon'
 import { SkeletonLayout } from '../../../../../../components/layouts'
 import { Body1, Caption } from '../../../../../../components/typography'
 import { getPath, PathName } from '../../../../../../constants'
 import { MobileViews, useProjectContext } from '../../../../context'
 import { standardProjectPageSideMargin } from '../../constants'
+import { useProjectGoals } from '../../hooks/useProjectGoals'
 import { useProjectDetails } from './hooks/useProjectDetails'
 import { useProjectSideNavAtom } from './sideNav'
 
@@ -39,7 +40,9 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
 
   const { isProjectOwner, onCreatorModalOpen, project, setMobileView, loading } = useProjectContext()
 
-  const { entriesLength, rewardsLength, milestonesLength } = useProjectDetails(project)
+  const { entriesLength, rewardsLength } = useProjectDetails(project)
+
+  const { hasGoals } = useProjectGoals()
 
   const ProjectNavigationButtons = useMemo(
     () => [
@@ -68,15 +71,15 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         render: Boolean(rewardsLength),
       },
       {
-        name: 'Milestones',
-        path: PathName.projectMilestones,
-        mobileView: MobileViews.milestones,
-        icon: MilestoneIcon,
+        name: 'Goals',
+        path: PathName.projectGoals,
+        mobileView: MobileViews.goals,
+        icon: GoalIcon,
         subViews: [],
-        render: Boolean(milestonesLength),
+        render: hasGoals,
       },
     ],
-    [entriesLength, rewardsLength, milestonesLength],
+    [entriesLength, rewardsLength, hasGoals],
   )
 
   const ProjectCreatorNavigationButtons = useMemo(

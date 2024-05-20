@@ -2,8 +2,11 @@ import { Box, Image } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { CardLayout } from '../../../../components/layouts'
-import { Body1, H1, H3 } from '../../../../components/typography'
+import { H1, H3 } from '../../../../components/typography'
 import { StatusLabel } from '../../../../components/ui/StatusLabel'
+import { VideoPlayer } from '../../../../components/ui/VideoPlayer'
+import { MarkdownField } from '../../../../forms/markdown/MarkdownField'
+import { validateImageUrl } from '../../../../forms/validations/image'
 import { Grant } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
 import { ContributionsWidget } from '../../components/ContributionsWidget'
@@ -14,14 +17,23 @@ import {
   GrantHasVoting,
 } from '../../constants'
 
+const CUSTOM_VIDEO_URL = 'https://youtu.be/7gO2YgJ75pw'
+
 export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHasVoting?: boolean }) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
 
   const votingEndDate = grant.statuses.find((s) => s.status === grant.status)?.endAt
-  return (
-    <CardLayout noborder={isMobile} padding={{ base: '10px', lg: 0 }}>
-      {grant.image ? (
+
+  const renderImageOrVideo = () => {
+    if (grant.name === 'grant-round-008') {
+      return <VideoPlayer url={CUSTOM_VIDEO_URL} />
+    }
+
+    const isImage = validateImageUrl(grant.image)
+
+    if (isImage) {
+      return (
         <Box width="100%">
           <Image
             width="100%"
@@ -30,10 +42,22 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
             borderTopLeftRadius="6px"
             borderTopRightRadius="6px"
             alt="grant header image"
-            src={grant.image}
+            src={grant.image || undefined}
           />
         </Box>
-      ) : null}
+      )
+    }
+
+    if (grant.image && !isImage) {
+      return <VideoPlayer url={grant.image} />
+    }
+
+    return null
+  }
+
+  return (
+    <CardLayout noborder={isMobile} padding={{ base: '10px', lg: 0 }}>
+      {renderImageOrVideo()}
       <Box px={{ base: 0, lg: 5 }}>
         <Box pb={2}>
           <StatusLabel textTransform="uppercase">{t(GRANT_STATUS_MAP[grant.status])}</StatusLabel>
@@ -46,9 +70,9 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
         </Box>
         <Box pt={4}>
           <H3 fontSize="18px">{t(grant.shortDescription)}</H3>
-          <Body1 fontSize="16px" pt={4}>
-            {t(grant.description || '')}
-          </Body1>
+          <Box pt={4}>
+            <MarkdownField preview content={grant.description || ''} />
+          </Box>
           <ContributionsWidget
             sponsors={grant.sponsors}
             endDateSubtitle={

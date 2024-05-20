@@ -15,7 +15,7 @@ export const GrantsLandingPage = () => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
 
-  const { grants, activeGrant, inactiveGrants } = useGrants()
+  const { grants, activeGrants, inactiveGrants } = useGrants()
 
   if (!grants || !grants.length) {
     return null
@@ -55,12 +55,21 @@ export const GrantsLandingPage = () => {
 
         <GrantsContributeCard />
 
-        {activeGrant && (
+        {activeGrants && activeGrants.length > 0 && (
           <VStack w="full" alignItems="start" spacing="10px">
             <Text fontWeight={'bold'} fontSize="19px" mb={1} fontFamily={fonts.interBlack}>
-              {t('Latest Grant')}
+              {t('Active Grants')}
             </Text>
-            <CustomGrantCard grant={activeGrant} to={getPath('grants', activeGrant.id)} showBanner />
+            {activeGrants.map((activeGrant) => {
+              return (
+                <CustomGrantCard
+                  key={activeGrant.id}
+                  grant={activeGrant}
+                  to={getPath('grants', activeGrant.id)}
+                  showBanner
+                />
+              )
+            })}
           </VStack>
         )}
         <VStack w="full" alignItems="start" spacing="10px">

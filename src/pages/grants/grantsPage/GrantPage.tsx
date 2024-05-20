@@ -12,7 +12,7 @@ import { useAuthContext } from '../../../context'
 import { GrantApplicant, GrantApplicantStatus, GrantStatusEnum, GrantType, Maybe } from '../../../types'
 import { useNotification } from '../../../utils'
 import { GrantWinnerAnnouncement, MobileDivider } from '../components'
-import { GrantAnnouncements, GrantHasVoting, GrantProjectNameMap } from '../constants'
+import { GrantAnnouncements, GrantHasVoting, GrantProjectNameMap, NoContributionInGrant } from '../constants'
 import { useGrant } from '../hooks/useGrant'
 import { GrantsRoundOne } from './GrantsRoundOne'
 import { GrantsRoundTwo } from './GrantsRoundTwo'
@@ -133,6 +133,7 @@ export const GrantPage = () => {
   const showCommunityVoting = grant.status !== GrantStatusEnum.ApplicationsOpen
   const showDistributionChart = grant.status !== GrantStatusEnum.ApplicationsOpen && grantHasVoting
   const showGrantApply = grant.status !== GrantStatusEnum.Closed
+  const showContributeToGrant = !isCompetitionVote && !NoContributionInGrant.includes(grant.name)
 
   const showBoardMembers = !GrantHasVoting[grant.name] && grant.boardMembers.length > 0
   const showApplicationPending =
@@ -197,7 +198,7 @@ export const GrantPage = () => {
           </>
         )}
 
-        {!isCompetitionVote && (
+        {showContributeToGrant && (
           <>
             <GrantContribute
               grantProjectName={GrantProjectNameMap[grant.name]}

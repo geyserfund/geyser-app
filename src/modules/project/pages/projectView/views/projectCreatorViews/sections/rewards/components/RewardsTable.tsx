@@ -1,10 +1,11 @@
 import { useMutation } from '@apollo/client'
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import { DeleteIcon, EditIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { Image, Stack, Text, useBreakpoint, useColorMode, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import SplashRewardIcon from '../../../../../../../../../assets/splash-reward.svg'
 import { DeleteConfirmModal } from '../../../../../../../../../components/molecules'
 import { PathName } from '../../../../../../../../../constants'
 import {
@@ -20,9 +21,6 @@ import {
 } from '../../../../../../../../../types/generated/graphql'
 import { useNotification } from '../../../../../../../../../utils'
 import { MobileViews, useProjectContext } from '../../../../../../../context'
-import DeleteIcon from '../icons/delete.svg'
-import EditIcon from '../icons/edit.svg'
-import SplashRewardIcon from '../icons/splash-reward.svg'
 import { TableImageAndTitle, TableText } from '.'
 
 export const RewardsTable = () => {
@@ -207,18 +205,19 @@ export const RewardsTable = () => {
                   />
                 </td>
                 <td style={{ paddingTop: '10px', verticalAlign: 'top' }}>
-                  <Stack direction="row">
-                    <Image
+                  <Stack direction="row" justify="center" align="center" gap={4}>
+                    <EditIcon
+                      color="neutral.900"
                       style={{ cursor: 'pointer' }}
-                      src={EditIcon}
                       onClick={() => {
                         setMobileView(MobileViews.editReward)
                         navigate(`${PathName.projectEditReward}/${row.id}`)
                       }}
                     />
-                    <Image
+
+                    <DeleteIcon
+                      color="neutral.900"
                       style={{ cursor: 'pointer' }}
-                      src={DeleteIcon}
                       onClick={isProjectOwner ? () => triggerRewardRemoval(row.id) : undefined}
                     />
                   </Stack>
@@ -260,18 +259,17 @@ export const RewardsTable = () => {
                   {`${t('Price')}: $${(row.cost / 100).toFixed(2)}`}
                 </Text>
               </Stack>
-              <Stack direction="row">
-                <Image
+              <Stack direction="row" justify="center" align="center" gap={4}>
+                <EditIcon
+                  color="neutral.900"
                   style={{ cursor: 'pointer' }}
-                  src={EditIcon}
                   onClick={() => {
                     setMobileView(MobileViews.editReward)
                     navigate(`${PathName.projectEditReward}/${row.id}`)
                   }}
                 />
-                <Image
+                <DeleteIcon
                   style={{ cursor: 'pointer' }}
-                  src={DeleteIcon}
                   onClick={isProjectOwner ? () => triggerRewardRemoval(row.id) : undefined}
                 />
               </Stack>

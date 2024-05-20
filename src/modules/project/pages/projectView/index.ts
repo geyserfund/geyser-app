@@ -9,7 +9,7 @@ import {
 import { ProjectCreatorInsights } from './views/projectCreatorViews/sections/insights'
 import {
   Entries as MainBodyEntries,
-  Milestones as MainBodyMilestones,
+  Goals as MainBodyGoals,
   ProjectBodyLayout,
   ProjectMainBody,
   Rewards as MainBodyRewards,
@@ -17,7 +17,7 @@ import {
 
 export {
   MainBodyEntries,
-  MainBodyMilestones,
+  MainBodyGoals,
   MainBodyRewards,
   ProjectBodyLayout,
   ProjectCreateReward,

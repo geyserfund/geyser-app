@@ -1,18 +1,15 @@
 import {
   Avatar,
-  Box,
   Button,
-  CircularProgress,
   HStack,
   SkeletonCircle,
   SkeletonText,
   StackProps,
   Text,
-  useDisclosure,
   useTheme,
   VStack,
 } from '@chakra-ui/react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEllipsis } from 'react-icons/ai'
 
@@ -23,12 +20,10 @@ import { useFollowedProjectsValue } from '../../../../../../../../../pages/auth/
 import { FunderWithUserFragment, OrderByOptions, useProjectFundersQuery } from '../../../../../../../../../types'
 import { removeProjectAmountException, toInt, useMobileMode, useNotification } from '../../../../../../../../../utils'
 import { useProjectContext } from '../../../../../../../context'
-import { useProjectMilestones } from '../../../../../../../pages/projectView/hooks/useProjectMilestones'
 import { ContributeButton, FollowButton, ShareButton } from '../../../../projectMainBody/components'
-import { BalanceDisplayButton, SubscribeButton } from '../components'
+import { SubscribeButton } from '../components'
+import { ProjectBalanceDisplay } from '../components/ProjectBalanceDisplay'
 import { ProjectFundersModal, useProjectFundersModal } from '../components/ProjectFundersModal'
-
-const TIME_AFTER_WHICH_TOOLTIP_SHOULD_CLOSE_MILLIS = 1500
 
 export const ActivityBrief = (props: StackProps) => {
   const { t } = useTranslation()
@@ -38,21 +33,8 @@ export const ActivityBrief = (props: StackProps) => {
   const { project } = useProjectContext()
   const followedProjects = useFollowedProjectsValue()
 
-  const { isOpen: isToolTipOpen, onOpen: onToolTipOpen, onClose: onToolTipClose } = useDisclosure()
-  const { isOpen: isUsd, onToggle: toggleUsd } = useDisclosure()
-
-  useEffect(() => {
-    if (isToolTipOpen) {
-      setTimeout(() => {
-        onToolTipClose()
-      }, TIME_AFTER_WHICH_TOOLTIP_SHOULD_CLOSE_MILLIS)
-    }
-  }, [isToolTipOpen, onToolTipClose])
-
   const [allFunders, setAllFunders] = useState<FunderWithUserFragment[]>([])
   const [socialFunders, setSocialFunders] = useState<FunderWithUserFragment[]>([])
-
-  const { currentMilestone, milestoneIndex, prevMilestone, balance } = useProjectMilestones()
 
   const { colors } = useTheme()
 
@@ -102,64 +84,9 @@ export const ActivityBrief = (props: StackProps) => {
     },
   })
 
-  const getColor = useCallback(() => {
-    switch (milestoneIndex % 4) {
-      case 1:
-        return 'primary.400'
-      case 2:
-        return 'primary.200'
-      case 3:
-        return 'primary.600'
-      case 0:
-        return 'primary.100'
-      default:
-        return 'primary.200'
-    }
-  }, [milestoneIndex])
-
-  const circularPercentage = useMemo(() => {
-    if (currentMilestone) {
-      return ((balance - prevMilestone) / (currentMilestone.amount - prevMilestone)) * 100
-    }
-  }, [balance, currentMilestone, prevMilestone])
-
-  const renderCircularProgress = useCallback(() => {
-    if (currentMilestone) {
-      return (
-        <CircularProgress
-          capIsRound
-          isIndeterminate={funderLoading}
-          value={circularPercentage}
-          size="116px"
-          thickness="16px"
-          color={getColor()}
-          trackColor="neutral.200"
-        />
-      )
-    }
-
-    return null
-  }, [circularPercentage, currentMilestone, funderLoading, getColor])
-
-  const getMilestoneValue = useCallback(() => {
-    if (currentMilestone) {
-      const percentage = Math.ceil(((balance - prevMilestone) / (currentMilestone.amount - prevMilestone)) * 100)
-      return (
-        <Box pl={2} color="neutral.600" w="100%">
-          <Text fontWeight={500} display="inline">
-            {`${percentage} % ${t('of Milestone')} ${milestoneIndex}:`}
-          </Text>{' '}
-          <Text display="inline">{currentMilestone.name}</Text>
-        </Box>
-      )
-    }
-
-    return null
-  }, [balance, currentMilestone, milestoneIndex, prevMilestone, t])
-
   const latestFunders = socialFunders.slice(0, 12)
 
-  const hideBalance = removeProjectAmountException(project?.name)
+  const removeBalance = removeProjectAmountException(project?.name) || project?.balance === 0
 
   if (!project) {
     return null
@@ -167,31 +94,7 @@ export const ActivityBrief = (props: StackProps) => {
 
   return (
     <VStack w="100%" {...props}>
-      <HStack
-        w="100%"
-        padding={3}
-        justifyContent="start"
-        onMouseEnter={onToolTipOpen}
-        onMouseLeave={onToolTipClose}
-        _hover={{ cursor: 'pointer' }}
-        onClick={toggleUsd}
-      >
-        {renderCircularProgress()}
-
-        <VStack
-          flex="1"
-          spacing={0}
-          width="100%"
-          px={2}
-          alignItems={circularPercentage === undefined ? 'center' : 'start'}
-        >
-          {!hideBalance && balance && (
-            <BalanceDisplayButton balance={balance} isToolTipOpen={isToolTipOpen} isUsd={isUsd} />
-          )}
-
-          {getMilestoneValue()}
-        </VStack>
-      </HStack>
+      {!removeBalance && <ProjectBalanceDisplay />}
 
       {!isMobile ? (
         <VStack w="full" spacing="10px" pb={3}>

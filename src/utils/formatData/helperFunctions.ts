@@ -32,28 +32,28 @@ export const getShortAmountLabel = (amount: number, decimal?: boolean) => {
   if (amount >= 1000 && amount < 1000000) {
     divisor = 1000
     symbol = 'K'
-    rest = ((amount % divisor) / divisor) * 100
+    rest = ((amount % divisor) / divisor) * 10
     result = Math.floor(amount / divisor)
   }
 
   if (amount >= 1000000 && amount < 1000000000) {
     divisor = 1000000
     symbol = 'M'
-    rest = ((amount % divisor) / divisor) * 100
+    rest = ((amount % divisor) / divisor) * 10
     result = Math.floor(amount / divisor)
   }
 
   if (amount >= 1000000000 && amount < 1000000000000) {
     divisor = 1000000000
     symbol = 'B'
-    rest = ((amount % divisor) / divisor) * 100
+    rest = ((amount % divisor) / divisor) * 10
     result = Math.floor(amount / divisor)
   }
 
   if (amount >= 1000000000000) {
     divisor = 1000000000000
     symbol = 'T'
-    rest = ((amount % divisor) / divisor) * 100
+    rest = ((amount % divisor) / divisor) * 10
     result = Math.floor(amount / divisor)
   }
 
@@ -86,4 +86,17 @@ export const numberWithCommas = (x: string | number) => {
   }
 
   return value
+}
+
+export const centsToDollarsFormatted = (cents: number): string => {
+  const dollars = cents / 100
+  return dollars.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
+
+export const dollarsToCents = (dollars: number): number => {
+  return Math.round(dollars * 100)
+}
+
+export const centsToDollars = (cents: number): number => {
+  return Math.round(cents / 100)
 }

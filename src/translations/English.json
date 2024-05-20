@@ -391,7 +391,7 @@
   "Active": "Active",
   "Countdown to grant going live": "Countdown to grant going live",
   "Time left to vote": "Time left to vote",
-  "Geyser grant": "Geyser grant",
+  "Grant amount": "Grant amount",
   "Worth of votes": "Worth of votes",
   "Sponsored by": "Sponsored by",
   "SPONSORS": "SPONSORS",
@@ -630,7 +630,6 @@
   "from": "from",
   "Coming soon": "Coming soon",
   "Grant funds will be distributed by principled bitcoin board members.": "Grant funds will be distributed by principled bitcoin board members.",
-  "Apply to be part of the {{title}} grant. Find out more about how projects will be selected and how voting works <1>here.</1>": "Apply to be part of the {{title}} grant. Find out more about how projects will be selected and how voting works <1>here.</1>",
   "Contribute directly to {{title}} Grant via QR code (lightning and onchain)": "Contribute directly to {{title}} Grant via QR code (lightning and onchain)",
   "Verify your email": "Verify your email",
   "Backup your Geyser account and project with your email. This will ensure that you can always access Geyser (in case of social media censorship) and can securely update your project information.": "Backup your Geyser account and project with your email. This will ensure that you can always access Geyser (in case of social media censorship) and can securely update your project information.",
@@ -1002,7 +1001,6 @@
    "The lightning address provided for the wallet might no longer be valid.":"The lightning address provided for the wallet might no longer be valid.",
    "The lightning node may be temporarily down.":"The lightning node may be temporarily down.",
    "This could be happening because Unfortunately, we're unable to reach the wallet to generate an invoice. This could be happening because":"This could be happening because Unfortunately, we're unable to reach the wallet to generate an invoice. This could be happening because",
-   "Receiver’s Wallet maximum limit Reached":"Receiver’s Wallet maximum limit Reached"
-
-
+   "Receiver’s Wallet maximum limit Reached":"Receiver’s Wallet maximum limit Reached",
+   "Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow":"Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow"
 }

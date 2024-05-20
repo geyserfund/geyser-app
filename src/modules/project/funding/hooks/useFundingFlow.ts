@@ -26,6 +26,7 @@ interface IFundingFlowOptions {
   hasBolt11?: boolean
   hasWebLN?: boolean
   project?: Partial<ProjectFragment> | null
+  projectGoalId?: string | null
 }
 
 export const useFundingFlow = (options?: IFundingFlowOptions) => {
@@ -33,6 +34,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     hasBolt11 = true,
     hasWebLN = true,
     project,
+    projectGoalId,
   } = options || {
     hasBolt11: true,
     hasWebLN: true,
@@ -161,12 +163,13 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       setNextFundingStage()
 
       input.swapPublicKey = keyPair.publicKey.toString('hex')
+      input.projectGoalId = projectGoalId
 
       setFundingInput(input)
 
       await fundProject({ variables: { input } })
     },
-    [fundProject, setNextFundingStage, toast, setKeyPair],
+    [fundProject, setNextFundingStage, toast, setKeyPair, projectGoalId],
   )
 
   const retryFundingFlow = useCallback(() => {

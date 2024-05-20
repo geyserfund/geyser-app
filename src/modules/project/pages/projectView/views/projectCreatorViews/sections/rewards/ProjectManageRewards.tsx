@@ -1,6 +1,7 @@
 import { VStack } from '@chakra-ui/react'
 
 import { CardLayout } from '../../../../../../../../components/layouts'
+import { standardPadding } from '../../../../../../../../styles'
 import { RewardsHeader, RewardsTable } from './components'
 
 export const ProjectManageRewards = () => {
@@ -14,7 +15,7 @@ export const ProjectManageRewards = () => {
       px={{ base: '10px', lg: '40px' }}
       spacing={{ base: '10px', lg: '20px' }}
     >
-      <CardLayout h="auto" padding="30px 30px" minWidth="100%">
+      <CardLayout h="auto" padding={standardPadding} minWidth="100%" noMobileBorder>
         <RewardsHeader />
         <RewardsTable />
       </CardLayout>

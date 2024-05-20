@@ -3,7 +3,7 @@ export const ProjectRewardValidations = {
     maxLength: 100,
   },
   description: {
-    maxLength: 250,
+    maxLength: 1200,
   },
   cost: {
     maxUSDCentsAmount: 1_000_000,
