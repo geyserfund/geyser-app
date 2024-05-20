@@ -72,14 +72,13 @@ export const FundingFormRewardItem = ({
       <Stack direction="row" flexWrap={'wrap'}>
         <Box
           width="96px"
-          height="auto"
-          maxHeight="72px"
+          height="72px"
           borderRadius={6}
           overflow={'hidden'}
           border="1px solid"
           borderColor={'neutral.700'}
         >
-          <ImageWithReload src={reward.image || ''} alt={reward.name} width="100%" height="100%" objectFit="contain" />
+          <ImageWithReload src={reward.image || ''} alt={reward.name} width="100%" height="100%" objectFit="cover" />
         </Box>
         <Stack direction="column" flex={1} pl={2} gap={0.25}>
           <Text fontWeight={700} fontSize={16} color="neutral.900">
