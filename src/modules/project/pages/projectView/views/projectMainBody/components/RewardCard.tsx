@@ -50,15 +50,18 @@ export const RewardCard = ({ reward, count, isLaunch = false, handleEdit, handle
             borderColor={'neutral.700'}
             overflow={'hidden'}
             width="100%"
-            height="auto"
-            maxHeight="255px"
+            position="relative"
+            paddingTop="75%"
           >
             <ImageWithReload
               src={reward.image || ''}
               alt={reward.name}
               width="100%"
               height="100%"
-              objectFit="contain"
+              objectFit="cover"
+              position="absolute"
+              top={0}
+              left={0}
             />
           </Box>
         )}
