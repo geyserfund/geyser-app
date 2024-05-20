@@ -18,7 +18,7 @@ import { UserAvatar } from '../../../../../../../../../components/ui/UserAvatar'
 import { ExternalAccountType } from '../../../../../../../../../pages/auth'
 import { useFollowedProjectsValue } from '../../../../../../../../../pages/auth/state'
 import { FunderWithUserFragment, OrderByOptions, useProjectFundersQuery } from '../../../../../../../../../types'
-import { toInt, useMobileMode, useNotification } from '../../../../../../../../../utils'
+import { removeProjectAmountException, toInt, useMobileMode, useNotification } from '../../../../../../../../../utils'
 import { useProjectContext } from '../../../../../../../context'
 import { ContributeButton, FollowButton, ShareButton } from '../../../../projectMainBody/components'
 import { SubscribeButton } from '../components'
@@ -86,13 +86,15 @@ export const ActivityBrief = (props: StackProps) => {
 
   const latestFunders = socialFunders.slice(0, 12)
 
+  const removeBalance = removeProjectAmountException(project?.name) || project?.balance === 0
+
   if (!project) {
     return null
   }
 
   return (
     <VStack w="100%" {...props}>
-      <ProjectBalanceDisplay />
+      {!removeBalance && <ProjectBalanceDisplay />}
 
       {!isMobile ? (
         <VStack w="full" spacing="10px" pb={3}>
