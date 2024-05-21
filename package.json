@@ -4,7 +4,6 @@
   "version": "0.10.0",
   "scripts": {
     "dev": "vite",
-    "dev:stage": "vite --mode staging",
     "build": "tsc && vite build",
     "preview": "vite preview --port 3000",
     "test:e2e": "yarn cypress run --e2e",

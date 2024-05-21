@@ -147,9 +147,8 @@ The app requires some environment variables to be set. We provide an `example.en
 cp .env.example .env
 ```
 
-From there, populate the new file with the correct values. You have three development environment options, detailed below. It is recommended to use the staging API for most development tasks.
+From there, populate the new file with the correct values. You have two development environment options, detailed below.
 
-Optionally create `.env.staging` file, that could be tried out for staging development
 
 <br />
 
@@ -157,7 +156,7 @@ Optionally create `.env.staging` file, that could be tried out for staging devel
 
 <br />
 
-#### Option 1 (DOCKER): use the staging API
+#### Option 1: use the staging API with Docker
 
 Make sure to complete the instructions described in [Hosts Configuration](#hosts-configuration), before proceeding using this method.
 
@@ -166,59 +165,35 @@ Currently, the staging API is the only way to get a functional authentication fl
 To use the staging API, fill in the following value in the `.env` file:
 
 ```shell
-[OPTION A: STAGING]
-REACT_APP_API_ENDPOINT=https://api.staging.geyser.fund
+VITE_APP_API_ENDPOINT=https://api.staging.geyser.fund
 ```
 
 Start the server:
 ```shell
-make dev-staging
+make dev
 ```
 
 <br />
 
-#### Option 2 (DOCKER): use the GraphQL-Faker config
+#### Option 2: use the staging API on host machine
 
-If you do not require a functional authentication flow for this task, you may use this option.
+Many at times we prefer using host machine intead of docker to run the server. In such cases we can use them directly.
 
+Install dependencies:
 ```shell
-[OPTION B: GRAPHQL_FAKER]
-REACT_APP_API_ENDPOINT=https://api.dev.geyser.fund
-APOLLO_KEY=<your Apollo Studio API key>
+yarn install
 ```
-
-if you don't have an `APOLLO_KEY` yet. Please <a href="#contact">Contact us</a>
-
-Start the server:
-```shell
-make dev-faker
-```
-
-<br />
-
-#### Option 3: use both local server and staging API interchangably
-
-Many at times we prefer using staging API while sometimes we prefer the local server. In such cases we can setup to use them interchangably.
-
-1. Create the normal `.env` file, which contains the values for local server. Refer to the `.env.example` and use `Configuration 3-A`
 
 Start the server:
 ```shell
 yarn dev
 ```
 
-2. Create a new file `.env.staging` this would have the values to use the staging API. Refer to the `.env.example` and use `Configuration 3-B`.
-
-Start the server:
-```shell
-yarn dev:stage
-```
-
 <br />
 
 #### Docker
 
-If you run into problems running the app through make command, you can run the app by running the following command in the project directory, as long as one of the docker configuration above ( Option 1 or 2) is satisfied.
+If you run into problems running the app through make command, you can run the app by running the following command in the project directory, as long as one of the docker configuration above is satisfied.
 
 ```shell
 docker compose up -d
@@ -287,7 +262,7 @@ This command will add the Caddy Local CA Certificate to your system's list of tr
 
 ### Opening in the Browser
 
-With Docker running, navigate to the URL that's appropriate for the development-environment configuration in your `.env` file:
+With Docker running, navigate to the staging URL provided below.
 
 <br />
 
@@ -297,17 +272,23 @@ With Docker running, navigate to the URL that's appropriate for the development-
 
 <br />
 
-#### GraphQL Faker
+### Testing
 
-<https://dev.geyser.fund/>
+We have end-to-end tests with Cypress. To run the tests locally, we'd need to create a `cypress.env.json` file in the root directory, with the following key values:
+```shell
+APP_URL,
+CONTRIBUTOR_LND_ENDPOINT,
+CONTRIBUTOR_LND_ADMIN_MACAROON_HEX,
+MINE_BLOCK_ADDRESS,
+BITCOIND_ENDPOINT,
+BITCOIND_AUTH
+```
 
-> Make sure to also browse to <https://api.dev.geyser.fund/> and accept the certificate there.
->
-> This will allow you to get around any `ERR_CERT_AUTHORITY_INVALID` errors that may be thrown in your browser.
+then
+```shell
+make test
+```
 
-> See [the docs on `GraphQL Faker Tips & Tricks`](./docs/faker/TipsAndTricks.md) for more useful tidbits of information on running/developing the app against Faker.
-
-<br />
 
 <!-- ROADMAP -->
 ## Roadmap

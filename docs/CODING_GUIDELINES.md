@@ -14,14 +14,13 @@ Codegen takes care of it all, generating easy to use pre-typed hooks for queries
 Following command helps you in creating types and react hooks for every document.
 
 ```bash
-  yarn graph:generate:[env]
+  yarn graph:generate staging
 ``` 
 
-For example, running the command as `yarn graph:generate:staging` indicates `staging` as environment.
+For example, running the command as `yarn graph:generate staging` indicates `staging` as environment.
 This would use `https://api.staging.geyser.fund/graphql` to validate and generate types for fragments, and functions for query, mutations and subscriptions.
 
 Note: This process generates types and hooks for all documents located at src/graphql into `src/types/generated`
-Note: For `development` the backend server is expected to be running at `http://localhost:4000`
 
 ### Leveraging Fragments
 
@@ -208,4 +207,19 @@ To facilitate this, we've provided functions in the utils folder: `toLargeImageU
 We use storybook for showcasing all of the components, starting out with the base UI components like buttons, inputs, to complex ones like activity panel.
 This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
 More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
+
+
+
+### Testing
+
+We use cypress end-to-end tests that run on the CI.
+All the tests related code are housed inside the `cypress` folder in the root.
+
+#### Structure
+`e2e` folder contain the definition of the tests.
+`actions` folder houses, all of the actions that the user takes through the test.
+`assertions` folder houses, all of the validations that we do based on what is rendered by the react app.
+`fixtures` folder contains, any raw data thta might be used during the tests.
+`utils` folder has common utility functions.
+`support` folder contains configuration for supporting packages that we use along with cypress for running tests.
 
