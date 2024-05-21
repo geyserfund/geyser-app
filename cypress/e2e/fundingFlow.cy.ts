@@ -18,6 +18,10 @@ describe('Testing Project with lightning node', () => {
 describe('Testing Project with lightning wallet', () => {
   beforeEach(() => {
     cy.visit(`${GEYSER_URL}/project/${LIGHTNING_TEST_PROJECT_NAME}`)
+
+    cy.window().then((win) => {
+      cy.spy(win.navigator.clipboard, 'writeText').as('copy')
+    })
   })
   testLightningSuccessFlow()
   onChainSuccessFlow()
