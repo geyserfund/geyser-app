@@ -17,6 +17,12 @@ export const enterCommentAndHitCheckout = (comment: string) => {
   cy.get('button').contains('Checkout').click()
 }
 
+export const enterCommentAddEmailAndHitCheckout = (comment: string) => {
+  cy.get('textarea[data-testid="funding-comment-input"]').type(comment)
+  cy.get('input[type="email"]').type('hello@geyser.fund')
+  cy.get('button').contains('Checkout').click()
+}
+
 export const clickOnchainQrTab = () => {
   cy.get('button').contains('Onchain').click()
   cy.get('button').contains('Download & Continue').click()

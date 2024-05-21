@@ -4,6 +4,7 @@ import {
   clickCopyOnChainButton,
   clickOnchainQrTab,
   enterAmountAndHitCheckout,
+  enterCommentAddEmailAndHitCheckout,
   enterCommentAndHitCheckout,
   enterRefundAddressAndClickRefund,
   selectRewardAndHitCheckout,
@@ -60,7 +61,7 @@ export const onChainSuccessFlowWithRewards = () => {
       selectRewardAndHitCheckout()
       commentScreenIsVisible()
 
-      enterCommentAndHitCheckout(FUNDING_COMMENT)
+      enterCommentAddEmailAndHitCheckout(FUNDING_COMMENT)
       lightningQrScreenIsVisible()
 
       clickOnchainQrTab()
