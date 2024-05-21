@@ -2,6 +2,11 @@ export const clickContribute = () => {
   cy.get('button').contains('Contribute').click()
 }
 
+export const selectRewardAndHitCheckout = () => {
+  cy.get('button').contains('Select item').click()
+  cy.get('button').contains('Checkout').click()
+}
+
 export const enterAmountAndHitCheckout = (amount: number) => {
   cy.get('input[data-testid="donation-input"]').type(amount.toString())
   cy.get('button').contains('Checkout').click()

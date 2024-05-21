@@ -1,5 +1,10 @@
 import { GEYSER_URL, LIGHTNING_TEST_PROJECT_NAME, LND_TEST_PROJECT_NAME } from '../contants'
-import { onChainRefundFlow, onChainSuccessFlow, testLightningSuccessFlow } from './funding'
+import {
+  onChainRefundFlow,
+  onChainSuccessFlowWithDonation,
+  onChainSuccessFlowWithRewards,
+  testLightningSuccessFlow,
+} from './funding'
 
 describe('Testing Project with lightning node', () => {
   beforeEach(() => {
@@ -11,7 +16,8 @@ describe('Testing Project with lightning node', () => {
   })
 
   testLightningSuccessFlow()
-  onChainSuccessFlow()
+  onChainSuccessFlowWithRewards()
+  onChainSuccessFlowWithDonation()
   onChainRefundFlow()
 })
 
@@ -24,6 +30,7 @@ describe('Testing Project with lightning wallet', () => {
     })
   })
   testLightningSuccessFlow()
-  onChainSuccessFlow()
+  onChainSuccessFlowWithRewards()
+  onChainSuccessFlowWithDonation()
   onChainRefundFlow()
 })

@@ -6,6 +6,7 @@ import {
   enterAmountAndHitCheckout,
   enterCommentAndHitCheckout,
   enterRefundAddressAndClickRefund,
+  selectRewardAndHitCheckout,
 } from '../actions/funding'
 import {
   commentScreenIsVisible,
@@ -50,8 +51,43 @@ export const testLightningSuccessFlow = () => {
   })
 }
 
-export const onChainSuccessFlow = () => {
-  context('When onchain amount paid is correct', () => {
+export const onChainSuccessFlowWithRewards = () => {
+  context('When reward is selected and onchain amount paid is correct', () => {
+    it('Should show onChain success screen', () => {
+      clickContribute()
+      fundingAmountScreenIsVisible()
+
+      selectRewardAndHitCheckout()
+      commentScreenIsVisible()
+
+      enterCommentAndHitCheckout(FUNDING_COMMENT)
+      lightningQrScreenIsVisible()
+
+      clickOnchainQrTab()
+      onChainQrScreenIsVisible()
+
+      clickCopyOnChainButton()
+
+      cy.get('@copy')
+        .its('lastCall.args.0')
+        .then((value) => {
+          const onChainAddress = value.split(':')[1].split('?')[0]
+          const payOnchain = payOnChainOptions(onChainAddress, ONCHAIN_FUNDING_AMOUNT)
+          cy.request(payOnchain).then((response) => {
+            onChainTransactionProcessingScreenIsVisible()
+
+            const mineBlock = mineBlockOptions()
+            cy.request(mineBlock).then(() => {
+              successScreenIsVisible()
+            })
+          })
+        })
+    })
+  })
+}
+
+export const onChainSuccessFlowWithDonation = () => {
+  context('When donation amount is added and onchain amount paid is correct', () => {
     it('Should show onChain success screen', () => {
       clickContribute()
       fundingAmountScreenIsVisible()
