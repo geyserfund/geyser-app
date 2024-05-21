@@ -62,15 +62,7 @@ describe('Login', () => {
     openConnectPopup()
   })
 
-  it('Should login with nostr', () => {
-    getDropdownButton().find('img').should('not.exist')
-
-    loginWithNostr()
-
-    getDropdownButton().find('img').should('exist')
-  })
-
-  it('Should login and logout', () => {
+  it('Should login with Nostr and logout', () => {
     loginWithNostr()
 
     getDropdownButton().find('img').should('exist')
