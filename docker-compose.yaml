@@ -1,4 +1,39 @@
+version: '3.9'
+
+networks:
+  caddy:
 services:
+  geyser-app:
+    container_name: geyser-app-standalone
+    build:
+      context: .
+      target: base
+    command: sh -c "RUN_DOCKER=true && yarn install && yarn dev"
+    depends_on:
+      - caddy
+    working_dir: /usr/app
+    image: geyser-app
+    env_file: .env
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/usr/app:cached
+    networks:
+      - caddy
+
+  caddy:
+    container_name: geyser-caddy-standalone
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - '443:443'
+      - '80:80'
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:cached
+      - ./caddy/config:/config
+    networks:
+      - caddy
+
   e2e:
     image: cypress/included:13.9.0
     build: /cypress
@@ -8,6 +43,6 @@ services:
       - CYPRESS_baseUrl=https://dev.geyser.fund
     working_dir: /cypress
     volumes:
-      - ./:/cypress
+      - ./:/cypress 
     network_mode: host
 
