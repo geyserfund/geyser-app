@@ -4,6 +4,10 @@ import { onChainRefundFlow, onChainSuccessFlow, testLightningSuccessFlow } from 
 describe('Testing Project with lightning node', () => {
   beforeEach(() => {
     cy.visit(`${GEYSER_URL}/project/${LND_TEST_PROJECT_NAME}`)
+
+    cy.window().then((win) => {
+      cy.spy(win.navigator.clipboard, 'writeText').as('copy')
+    })
   })
 
   testLightningSuccessFlow()

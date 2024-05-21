@@ -38,14 +38,14 @@ export const testLightningSuccessFlow = () => {
 
       clickCopyLightningInvoiceButton()
 
-      cy.window().then((win) => {
-        win.navigator.clipboard.readText().then((text) => {
-          const payLightningOptions = payLightningInvoice(text)
+      cy.get('@copy')
+        .its('lastCall.args.0')
+        .then((value) => {
+          const payLightningOptions = payLightningInvoice(value)
           cy.request(payLightningOptions).then(() => {
             successScreenIsVisible()
           })
         })
-      })
     })
   })
 }
@@ -67,9 +67,10 @@ export const onChainSuccessFlow = () => {
 
       clickCopyOnChainButton()
 
-      cy.window().then((win) => {
-        win.navigator.clipboard.readText().then((text) => {
-          const onChainAddress = text.split(':')[1].split('?')[0]
+      cy.get('@copy')
+        .its('lastCall.args.0')
+        .then((value) => {
+          const onChainAddress = value.split(':')[1].split('?')[0]
           const payOnchain = payOnChainOptions(onChainAddress, ONCHAIN_FUNDING_AMOUNT)
           cy.request(payOnchain).then((response) => {
             onChainTransactionProcessingScreenIsVisible()
@@ -80,7 +81,6 @@ export const onChainSuccessFlow = () => {
             })
           })
         })
-      })
     })
   })
 }
@@ -102,9 +102,10 @@ export const onChainRefundFlow = () => {
 
       clickCopyOnChainButton()
 
-      cy.window().then((win) => {
-        win.navigator.clipboard.readText().then((text) => {
-          const onChainAddress = text.split(':')[1].split('?')[0]
+      cy.get('@copy')
+        .its('lastCall.args.0')
+        .then((value) => {
+          const onChainAddress = value.split(':')[1].split('?')[0]
           const payOnchain = payOnChainOptions(onChainAddress, ONCHAIN_FUNDING_AMOUNT - 1000)
           cy.request(payOnchain).then((response) => {
             transactionFailedScreenIsVisible()
@@ -114,7 +115,6 @@ export const onChainRefundFlow = () => {
             refundInitiatedScreenIsVisible()
           })
         })
-      })
     })
   })
 }
