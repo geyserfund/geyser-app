@@ -6,6 +6,6 @@ export const ProjectNodeValidations = {
     length: 66,
   },
   invoiceMacaroon: {
-    maxLength: 280,
+    maxLength: 300,
   },
 }
