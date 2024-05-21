@@ -16,4 +16,6 @@ describe('Testing Project with lightning wallet', () => {
     cy.visit(`${GEYSER_URL}/project/${LIGHTNING_TEST_PROJECT_NAME}`)
   })
   testLightningSuccessFlow()
+  onChainSuccessFlow()
+  onChainRefundFlow()
 })
