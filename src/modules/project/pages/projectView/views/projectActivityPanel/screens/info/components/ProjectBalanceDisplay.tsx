@@ -1,6 +1,7 @@
 import { Box, Circle, CircularProgress, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSwipeable } from 'react-swipeable'
 
 import { H1 } from '../../../../../../../../../components/typography'
 import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../../../types'
@@ -22,6 +23,12 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
     defaultGoalId,
     balanceUsdCent,
     inProgressGoals,
+  })
+
+  const handlers = useSwipeable({
+    onSwiped() {
+      toggleTotalProject()
+    },
   })
 
   const [showTotalProject, setShowTotalProject] = useState(!defaultGoalId)
@@ -149,6 +156,7 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
         cursor: defaultGoalId ? 'pointer' : 'default',
       }}
       p={2}
+      {...handlers}
     >
       <HStack w="100%" justifyContent="start" minHeight={120}>
         {!showTotalProject ? renderCircularProgress() : null}
