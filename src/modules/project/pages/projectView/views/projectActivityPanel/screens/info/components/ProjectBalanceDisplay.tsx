@@ -163,7 +163,7 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
           {showTotalProject ? getProjectTotalValue() : getGoalValue()}
         </VStack>
       </HStack>
-      {priorityGoal ? <DotIndicator /> : <Skeleton height="20px" width="20px" />}
+      {priorityGoal && <DotIndicator />}
     </VStack>
   )
 }
