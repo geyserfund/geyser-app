@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FaUnlock } from 'react-icons/fa'
 import { MdAdd, MdModeEdit } from 'react-icons/md'
-import { v4 as uuidv4 } from 'uuid'
 
 import { CardLayout } from '../../../../../../../components/layouts'
 import { IconButtonComponent } from '../../../../../../../components/ui'
@@ -37,7 +36,7 @@ export const Goals = () => {
       return goals.inProgressGoals?.map((goal: ProjectGoal) => {
         if (goal) {
           return (
-            <GoalInProgress key={uuidv4()} goal={goal} isEditing={editMode} onOpenGoalModal={handleEditGoalModalOpen} />
+            <GoalInProgress key={goal.id} goal={goal} isEditing={editMode} onOpenGoalModal={handleEditGoalModalOpen} />
           )
         }
       })
@@ -51,7 +50,7 @@ export const Goals = () => {
       return goals.completedGoals?.map((goal: ProjectGoal) => {
         if (goal) {
           return (
-            <GoalCompleted key={uuidv4()} goal={goal} isEditing={editMode} onOpenGoalModal={handleEditGoalModalOpen} />
+            <GoalCompleted key={goal.id} goal={goal} isEditing={editMode} onOpenGoalModal={handleEditGoalModalOpen} />
           )
         }
       })
