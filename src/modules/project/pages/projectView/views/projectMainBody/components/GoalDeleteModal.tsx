@@ -25,10 +25,9 @@ type GoalDeleteModalProps = {
   onClose: () => void
   goal: ProjectGoal | null | undefined
   refetch: () => void
-  refetchProject: () => void
 }
 
-export const GoalDeleteModal = ({ isOpen, onClose, goal, refetch, refetchProject }: GoalDeleteModalProps) => {
+export const GoalDeleteModal = ({ isOpen, onClose, goal, refetch }: GoalDeleteModalProps) => {
   const { t } = useTranslation()
   const [inputValue, setInputValue] = useState('')
   const [error, setError] = useState('')
@@ -56,7 +55,6 @@ export const GoalDeleteModal = ({ isOpen, onClose, goal, refetch, refetchProject
       })
       refetch()
       setInputValue('')
-      refetchProject()
       onClose()
     } catch (error) {
       console.error('Error deleting project goal:', error)

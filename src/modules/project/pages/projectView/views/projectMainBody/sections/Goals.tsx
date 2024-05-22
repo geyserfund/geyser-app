@@ -9,63 +9,31 @@ import { IconButtonComponent } from '../../../../../../../components/ui'
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
 import { ProjectGoal } from '../../../../../../../types'
 import { useProjectContext } from '../../../../../context'
-import { useProjectGoals } from '../../../hooks/useProjectGoals'
 import { GoalCompleted, GoalInProgress } from '../components'
-import { GoalDeleteModal } from '../components/GoalDeleteModal'
-import { GoalModal } from '../components/GoalModal'
 
 export const Goals = () => {
   const { t } = useTranslation()
-  const { project, isProjectOwner, refetch: refetchProject } = useProjectContext()
+  const { isProjectOwner, goals } = useProjectContext()
   const [editMode, setEditMode] = useState(false)
 
-  const [isGoalModalOpen, setIsGoalModalOpen] = useState(false)
-  const [goalModalData, setGoalModalData] = useState<ProjectGoal | null>(null)
-  const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false)
-  const [goalToDelete, setGoalToDelete] = useState<ProjectGoal | null>(null)
-
-  const { inProgressGoals, completedGoals, refetch } = useProjectGoals()
-
-  const hasInProgressGoals = inProgressGoals && inProgressGoals.length > 0
-  const hasCompletedGoals = completedGoals && completedGoals.length > 0
-
-  if (!project) {
-    return null
-  }
-
   const handleCreateGoalModalOpen = () => {
-    setGoalModalData(null)
-    setIsGoalModalOpen(true)
+    goals.onGoalsModalOpen()
   }
 
-  const handleEditGoalModalOpen = (goal: ProjectGoal | null) => {
-    setGoalModalData(goal)
-    setIsGoalModalOpen(true)
+  const handleEditGoalModalOpen = (goal: ProjectGoal) => {
+    goals.onGoalsModalOpen(goal)
   }
 
-  const handleGoalModalClose = () => {
-    setGoalModalData(null)
-    setIsGoalModalOpen(false)
-  }
+  const hasInProgressGoals = goals.inProgressGoals && goals.inProgressGoals.length > 0
+  const hasCompletedGoals = goals.completedGoals && goals.completedGoals.length > 0
 
   const handleEditMode = () => {
     setEditMode(!editMode)
   }
 
-  const openDeleteModal = (goal: ProjectGoal) => {
-    setGoalToDelete(goal)
-    setIsConfirmDeleteOpen(true)
-    setIsGoalModalOpen(false)
-  }
-
-  const closeDeleteModal = () => {
-    setIsConfirmDeleteOpen(false)
-    setGoalToDelete(null)
-  }
-
   const renderInProgressGoals = () => {
     if (hasInProgressGoals) {
-      return inProgressGoals.map((goal: ProjectGoal) => {
+      return goals.inProgressGoals?.map((goal: ProjectGoal) => {
         if (goal) {
           return (
             <GoalInProgress key={goal.id} goal={goal} isEditing={editMode} onOpenGoalModal={handleEditGoalModalOpen} />
@@ -79,7 +47,7 @@ export const Goals = () => {
 
   const renderCompletedGoals = () => {
     if (hasCompletedGoals) {
-      return completedGoals.map((goal: ProjectGoal) => {
+      return goals.completedGoals?.map((goal: ProjectGoal) => {
         if (goal) {
           return (
             <GoalCompleted key={goal.id} goal={goal} isEditing={editMode} onOpenGoalModal={handleEditGoalModalOpen} />
@@ -127,7 +95,7 @@ export const Goals = () => {
         {hasInProgressGoals && (
           <Box display="flex" flexDirection="column" gap={'20px'} width="100%">
             <Box width="100%" minHeight="50px" py={'10px'}>
-              <TitleDivider badge={inProgressGoals?.length} rightAction={renderRightAction()}>
+              <TitleDivider badge={goals.inProgressGoals?.length} rightAction={renderRightAction()}>
                 {t('Goals')}
               </TitleDivider>
             </Box>
@@ -140,7 +108,10 @@ export const Goals = () => {
         {hasCompletedGoals && (
           <Box display="flex" flexDirection="column" gap={'20px'} width="100%">
             <Box width="100%" minHeight="50px" py={'10px'}>
-              <TitleDivider badge={completedGoals?.length} rightAction={!hasInProgressGoals && renderRightAction()}>
+              <TitleDivider
+                badge={goals.completedGoals?.length}
+                rightAction={!hasInProgressGoals && renderRightAction()}
+              >
                 {t('Completed Goals')}
               </TitleDivider>
             </Box>
@@ -167,23 +138,6 @@ export const Goals = () => {
           </Box>
         )}
       </CardLayout>
-
-      <GoalModal
-        isOpen={isGoalModalOpen}
-        onClose={handleGoalModalClose}
-        projectId={project?.id}
-        openDeleteModal={openDeleteModal}
-        goal={goalModalData || null}
-        refetch={refetch}
-      />
-
-      <GoalDeleteModal
-        isOpen={isConfirmDeleteOpen}
-        onClose={closeDeleteModal}
-        goal={goalToDelete}
-        refetch={refetch}
-        refetchProject={refetchProject}
-      />
     </>
   )
 }

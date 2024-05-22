@@ -16,10 +16,12 @@ export const useCurrencyFormatter = () => {
   const formatAmount = useCallback(
     (amount: number, currency: TCurrency) => {
       if (currency === Currency.Btcsat) {
+        if (amount === 0) return '0 sats'
         return `${commaFormatted(amount)} sats`
       }
 
       const usdAmount = centsToDollars(amount)
+      if (amount === 0) return '$0'
       if (usdAmount < 1) return '< $1'
       return `$${commaFormatted(Math.round(usdAmount))}`
     },

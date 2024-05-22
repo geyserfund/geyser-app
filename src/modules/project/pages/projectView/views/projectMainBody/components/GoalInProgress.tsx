@@ -101,7 +101,7 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
           />
           <HStack display="flex" alignItems="flex-start" justifyContent="space-between" width="100%">
             <Body1 bold>
-              {goal.amountContributed > 0 ? formattedAmountContributed : '0'}{' '}
+              {formattedAmountContributed}{' '}
               <Text as="span" color="neutral.600" fontWeight={500}>
                 {goal.currency === ProjectGoalCurrency.Btcsat ? `(${usdAmount})` : `(${satsAmount})`}
               </Text>
