@@ -117,7 +117,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
                 <ControlledTextArea
                   control={control}
                   name="description"
-                  placeholder="Enable your community to contribute toward one or more specific goals"
+                  placeholder="We will release this episode following the completion of this goal, this is a great one"
                   label={t('Description')}
                   isDisabled={Boolean(isCompleted)}
                   error={errors.description?.message}
