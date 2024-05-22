@@ -10,6 +10,9 @@ import { dollarsToCents } from '../../../../../utils'
 
 type FormValues = Record<string, string | number | ProjectGoalCurrency>
 
+const MIN_GOAL_TARGET_AMOUNT_US_DOLLARS = 10
+const MIN_GOAL_TARGET_AMOUNT_SATS = 10000
+
 const goalFormSchema = (amountContributed: number) =>
   yup
     .object({
@@ -29,11 +32,11 @@ const goalFormSchema = (amountContributed: number) =>
           function (value) {
             const { currency } = this.parent
             if (currency === ProjectGoalCurrency.Usdcent) {
-              return value >= 10
+              return value >= MIN_GOAL_TARGET_AMOUNT_US_DOLLARS
             }
 
             if (currency === ProjectGoalCurrency.Btcsat) {
-              return value >= 10000
+              return value >= MIN_GOAL_TARGET_AMOUNT_SATS
             }
 
             return true
