@@ -172,6 +172,7 @@ export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }
         </InputLeftElement>
         <Input
           ref={inputRef}
+          data-testid="donation-input"
           height={14}
           borderRadius="8px"
           value={satoshi > 0 ? (isSatoshi ? commaFormatted(satoshi) : commaFormatted(dollar)) : ''}

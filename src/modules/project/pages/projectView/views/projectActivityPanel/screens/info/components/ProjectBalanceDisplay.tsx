@@ -1,23 +1,40 @@
-import { Box, Circle, CircularProgress, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, Circle, CircularProgress, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSwipeable } from 'react-swipeable'
 
 import { H1 } from '../../../../../../../../../components/typography'
-import { ProjectGoalCurrency } from '../../../../../../../../../types'
+import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../../../types'
 import { numberWithCommas } from '../../../../../../../../../utils'
 import { centsToDollars } from '../../../../../../../../../utils'
 import { useProjectDefaultGoal } from '../hooks/useProjectDefaultGoal'
 
-export function ProjectBalanceDisplay() {
+type Props = {
+  defaultGoalId: string | null
+  balance: number | null
+  balanceUsdCent: number | null
+  inProgressGoals: ProjectGoal[] | null | undefined
+}
+
+export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, inProgressGoals }: Props) {
   const { t } = useTranslation()
 
-  const { priorityGoal, project, formattedUsdAmount, formattedTotalUsdAmount, formattedSatsAmount } =
-    useProjectDefaultGoal()
+  const { priorityGoal, formattedUsdAmount, formattedTotalUsdAmount, formattedSatsAmount } = useProjectDefaultGoal({
+    defaultGoalId,
+    balanceUsdCent,
+    inProgressGoals,
+  })
 
-  const [showTotalProject, setShowTotalProject] = useState(!project?.defaultGoalId)
+  const handlers = useSwipeable({
+    onSwiped() {
+      toggleTotalProject()
+    },
+  })
+
+  const [showTotalProject, setShowTotalProject] = useState(!defaultGoalId)
 
   const toggleTotalProject = () => {
-    if (project?.defaultGoalId) {
+    if (defaultGoalId) {
       setShowTotalProject(!showTotalProject)
     }
   }
@@ -29,6 +46,10 @@ export function ProjectBalanceDisplay() {
   }, [priorityGoal])
 
   const renderCircularProgress = useCallback(() => {
+    if (!priorityGoal) {
+      return <Skeleton borderRadius="50%" height="116px" width="116px" />
+    }
+
     if (priorityGoal) {
       return (
         <CircularProgress
@@ -46,8 +67,12 @@ export function ProjectBalanceDisplay() {
   }, [circularPercentage, priorityGoal])
 
   const getGoalValue = useCallback(() => {
+    if (!priorityGoal) {
+      return <Skeleton height="90px" width="100%" />
+    }
+
     if (priorityGoal) {
-      const percentage = Math.ceil((priorityGoal.amountContributed / priorityGoal.targetAmount) * 100)
+      const percentage = (priorityGoal.amountContributed / priorityGoal.targetAmount) * 100
       return (
         <>
           <HStack w="100%" display="flex" justifyContent="start" alignItems="center">
@@ -75,7 +100,7 @@ export function ProjectBalanceDisplay() {
                   ? `${formattedUsdAmount()}`
                   : `${formattedSatsAmount()}`}
               </Text>{' '}
-              {`(${percentage}%) ${t(' contributed towards goal ')}`}
+              {`(${percentage.toFixed(1)}%) ${t(' contributed towards goal ')}`}
               <Text as="span" color="neutral.900" fontWeight={500}>
                 {priorityGoal.title}
               </Text>
@@ -89,11 +114,15 @@ export function ProjectBalanceDisplay() {
   }, [priorityGoal, formattedUsdAmount, formattedSatsAmount, t])
 
   const getProjectTotalValue = useCallback(() => {
+    if (!balance) {
+      return <Skeleton height="90px" width="100%" />
+    }
+
     return (
       <VStack w="100%" display="flex" alignItems="center">
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
           <H1 fontSize="35px">
-            {numberWithCommas(project?.balance ?? 0)}
+            {numberWithCommas(balance ?? 0)}
             <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
               {' sats'}
             </Text>
@@ -108,7 +137,7 @@ export function ProjectBalanceDisplay() {
         </Box>
       </VStack>
     )
-  }, [project?.balance, formattedTotalUsdAmount, t])
+  }, [balance, formattedTotalUsdAmount, t])
 
   const DotIndicator = () => {
     return (
@@ -124,9 +153,10 @@ export function ProjectBalanceDisplay() {
       w="100%"
       onClick={toggleTotalProject}
       _hover={{
-        cursor: project?.defaultGoalId ? 'pointer' : 'default',
+        cursor: defaultGoalId ? 'pointer' : 'default',
       }}
       p={2}
+      {...handlers}
     >
       <HStack w="100%" justifyContent="start" minHeight={120}>
         {!showTotalProject ? renderCircularProgress() : null}

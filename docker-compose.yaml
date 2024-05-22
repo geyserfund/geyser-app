@@ -1,4 +1,7 @@
 version: '3.9'
+
+networks:
+  caddy:
 services:
   geyser-app:
     container_name: geyser-app-standalone
@@ -15,18 +18,8 @@ services:
       - '3000:3000'
     volumes:
       - .:/usr/app:cached
-
-  graphql-faker:
-    container_name: graphql-faker
-    working_dir: /workdir
-    build:
-      context: ./faker
-      args:
-        - APOLLO_KEY=$APOLLO_KEY
-    image: graphql-faker
-    env_file: .env
-    ports:
-      - '9002:9002'
+    networks:
+      - caddy
 
   caddy:
     container_name: geyser-caddy-standalone
@@ -38,3 +31,18 @@ services:
     volumes:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile:cached
       - ./caddy/config:/config
+    networks:
+      - caddy
+
+  e2e:
+    image: cypress/included:13.9.0
+    build: /cypress
+    container_name: cypress
+    environment:
+      - ENV=development
+      - CYPRESS_baseUrl=https://dev.geyser.fund
+    working_dir: /cypress
+    volumes:
+      - ./:/cypress 
+    network_mode: host
+

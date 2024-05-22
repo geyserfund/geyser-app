@@ -52,6 +52,7 @@ export const ProjectFundingFormCommentField = ({ comment, setTarget, setFormStat
           <TextArea
             ref={textAreaRef}
             pr={16}
+            data-testid="funding-comment-input"
             placeholder={t('Leave a public message here.')}
             fontSize="14px"
             resize="none"

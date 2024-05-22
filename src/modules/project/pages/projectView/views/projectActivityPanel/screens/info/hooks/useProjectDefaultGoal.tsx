@@ -1,45 +1,34 @@
-import { useQuery } from '@apollo/client'
 import { useCallback, useEffect, useState } from 'react'
 
-import { QUERY_PROJECT_DEFAULT_GOAL } from '../../../../../../../../../graphql/queries/goals'
-import { ProjectGoal, ProjectGoalCurrency, ProjectGoals } from '../../../../../../../../../types'
-import { useProjectContext } from '../../../../../../../context'
+import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../../../types'
 import { useCurrencyFormatter } from '../../../../../../projectView/hooks/useCurrencyFormatter'
 
-type ResponseData = {
-  projectGoals: ProjectGoals
+type Props = {
+  defaultGoalId: string | null
+  balanceUsdCent: number | null
+  inProgressGoals: ProjectGoal[] | null | undefined
 }
 
-export const useProjectDefaultGoal = () => {
-  const { project } = useProjectContext()
-
-  const { data } = useQuery<ResponseData>(QUERY_PROJECT_DEFAULT_GOAL, {
-    variables: { projectId: project?.id },
-  })
-
+export const useProjectDefaultGoal = ({ defaultGoalId, balanceUsdCent, inProgressGoals }: Props) => {
   const { formatAmount, formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
-
-  const projectGoals = data?.projectGoals
 
   const [priorityGoal, setPriorityGoal] = useState<ProjectGoal>()
 
   useEffect(() => {
-    if (!project || !project.defaultGoalId || !projectGoals?.inProgress) return
+    if (!defaultGoalId || !balanceUsdCent || !inProgressGoals) return
 
-    const inProgressGoals = projectGoals?.inProgress || []
-
-    const goalToDisplay = inProgressGoals.find((goal) => goal.id === project.defaultGoalId)
+    const goalToDisplay = inProgressGoals.find((goal) => goal.id === defaultGoalId)
 
     setPriorityGoal(goalToDisplay as ProjectGoal)
-  }, [project, projectGoals])
+  }, [defaultGoalId, balanceUsdCent, inProgressGoals])
 
   const formattedUsdAmount = useCallback(() => {
     return formatUsdAmount(priorityGoal?.amountContributed ?? 0)
   }, [formatUsdAmount, priorityGoal?.amountContributed])
 
   const formattedTotalUsdAmount = useCallback(() => {
-    return formatAmount(project?.balanceUsdCent ?? 0, ProjectGoalCurrency.Usdcent)
-  }, [formatAmount, project?.balanceUsdCent])
+    return formatAmount(balanceUsdCent ?? 0, ProjectGoalCurrency.Usdcent)
+  }, [formatAmount, balanceUsdCent])
 
   const formattedSatsAmount = useCallback(() => {
     return formatSatsAmount(priorityGoal?.amountContributed ?? 0)
@@ -47,7 +36,6 @@ export const useProjectDefaultGoal = () => {
 
   return {
     priorityGoal,
-    project,
     formattedUsdAmount,
     formattedTotalUsdAmount,
     formattedSatsAmount,

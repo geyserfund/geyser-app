@@ -17,6 +17,9 @@ We push the latest translation to staging branch, via poEditor console.
 
 ### Update app version and changelog.md
 
-Run `yarn version` to enter the new app version and update the `CHANGELOG.md` file.
+1. Update app version:
+    Run `yarn version [ minor | major | patch ]` to enter the new app version
+2. Update `CHANGELOG.md` file:
+    Run `Yarn changelog` to update automatically based on commit history from last release version.
 
 ### MERGE!!!

@@ -30,7 +30,7 @@ type Props = {
   goal?: ProjectGoal | null
   projectId: string
   refetch: () => void
-  openDeleteModal?: (goal: ProjectGoal) => void
+  openDeleteModal: (goal: ProjectGoal | null | undefined) => void
 }
 
 const denominationOptions = [
@@ -49,18 +49,17 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
   )
   const isCompleted = goal && goal.status === ProjectGoalStatus.Completed
 
+  const handleOpenDeleteModal = () => {
+    onClose()
+    openDeleteModal(goal)
+  }
+
   const renderActions = () => {
     return (
       <VStack width="100%">
         {goal && (
           <HStack width="100%">
-            <Button
-              flexGrow={1}
-              variant="primary"
-              bg="secondary.red"
-              color="neutral.0"
-              onClick={() => openDeleteModal && openDeleteModal(goal)}
-            >
+            <Button flexGrow={1} variant="primary" bg="secondary.red" color="neutral.0" onClick={handleOpenDeleteModal}>
               {t('Delete Goal')}
             </Button>
           </HStack>
@@ -118,7 +117,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
                 <ControlledTextArea
                   control={control}
                   name="description"
-                  placeholder="Enable your community to contribute toward one or more specific goals"
+                  placeholder="We will release this episode following the completion of this goal, this is a great one"
                   label={t('Description')}
                   isDisabled={Boolean(isCompleted)}
                   error={errors.description?.message}
@@ -127,7 +126,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
                   control={control}
                   name="targetAmount"
                   label={t('Goal Amount')}
-                  placeholder="210000000"
+                  placeholder="0"
                   currency={watch('currency') as ProjectGoalCurrency}
                   isDisabled={Boolean(isCompleted)}
                   error={errors.targetAmount?.message}

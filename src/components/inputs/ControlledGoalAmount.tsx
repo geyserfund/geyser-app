@@ -4,7 +4,7 @@ import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
 
 import { useCurrencyFormatter } from '../../modules/project/pages/projectView/hooks/useCurrencyFormatter'
 import { ProjectGoalCurrency } from '../../types'
-import { centsToDollarsFormatted, commaFormatted } from '../../utils'
+import { commaFormatted } from '../../utils'
 
 type Props = UseControllerProps<FieldValues> &
   Omit<InputProps, 'size'> & {
@@ -25,11 +25,7 @@ export function ControlledGoalAmount(props: Props) {
   const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
 
   useEffect(() => {
-    setFormattedValue(
-      props.currency === ProjectGoalCurrency.Usdcent
-        ? centsToDollarsFormatted(field.value)
-        : commaFormatted(field.value),
-    )
+    setFormattedValue(commaFormatted(field.value))
   }, [unformattedValue, props.currency, field.value])
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -60,7 +56,7 @@ export function ControlledGoalAmount(props: Props) {
   }
 
   const usdAmount = formatUsdAmount(field.value)
-  const satsAmount = formatSatsAmount(field.value)
+  const satsAmount = formatSatsAmount(field.value * 100)
 
   return (
     <VStack display="flex" alignItems="flex-start" width="100%">

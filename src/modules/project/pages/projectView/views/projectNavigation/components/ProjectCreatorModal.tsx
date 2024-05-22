@@ -1,5 +1,4 @@
 import { Box, HStack, VStack } from '@chakra-ui/react'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -10,25 +9,10 @@ import { Body2, H3 } from '../../../../../../../components/typography'
 import { getPath } from '../../../../../../../constants'
 import { UseModalReturn } from '../../../../../../../hooks/useModal'
 import { MobileViews, useProjectContext } from '../../../../../context'
-import { useProjectGoals } from '../../../hooks/useProjectGoals'
-import { GoalModal } from '../../projectMainBody/components/GoalModal'
 
 export const ProjectCreatorModal = (props: UseModalReturn) => {
   const { t } = useTranslation()
-  const { project, setMobileView } = useProjectContext()
-  const { refetch } = useProjectGoals()
-
-  const [isGoalModalOpen, setIsGoalModalOpen] = useState(false)
-
-  const toggleGoalModal = () => {
-    setIsGoalModalOpen(true)
-  }
-
-  const closeModal = () => {
-    setIsGoalModalOpen(false)
-    props.onClose()
-    window.location.reload()
-  }
+  const { project, setMobileView, goals } = useProjectContext()
 
   const navigate = useNavigate()
 
@@ -54,7 +38,12 @@ export const ProjectCreatorModal = (props: UseModalReturn) => {
               props.onClose()
             }}
           />
-          <Box onClick={toggleGoalModal}>
+          <Box
+            onClick={() => {
+              goals.onGoalsModalOpen()
+              props.onClose()
+            }}
+          >
             <CreationMenuItem
               icon={<GoalIcon fontSize="25px" />}
               title={t('Add goal')}
@@ -62,9 +51,6 @@ export const ProjectCreatorModal = (props: UseModalReturn) => {
             />
           </Box>
         </VStack>
-        {isGoalModalOpen && (
-          <GoalModal isOpen={isGoalModalOpen} onClose={closeModal} projectId={project?.id} refetch={refetch} />
-        )}
       </Modal>
     </>
   )

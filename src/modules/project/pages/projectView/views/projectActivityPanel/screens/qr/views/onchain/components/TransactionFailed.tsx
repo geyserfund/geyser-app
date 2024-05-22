@@ -9,7 +9,7 @@ import { standardPadding } from '../../../../../../../../../../../styles'
 export const TransactionFailed = ({ error }: { error?: Error | string }) => {
   const { t } = useTranslation()
   return (
-    <CardLayout padding={standardPadding} w="full">
+    <CardLayout id="transaction-failed-card" padding={standardPadding} w="full">
       <Image src={TransactionFailedImageUrl} height="160px" width="auto" objectFit={'contain'} />
       <VStack spacing="10px" alignItems="center">
         <H3 color="secondary.red">{t('Transaction has failed')}</H3>

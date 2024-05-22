@@ -56,9 +56,9 @@ export const FundingProvider = ({ children, project, limits, projectGoalId }: Fu
 
 // Used if the project context is available
 export const FundingProviderWithProjectContext: React.FC<PropsWithChildren> = ({ children }) => {
-  const { project, walletLimits, projectGoalId } = useProjectContext()
+  const { project, walletLimits, goals } = useProjectContext()
   return (
-    <FundingProvider project={project} limits={walletLimits} projectGoalId={projectGoalId}>
+    <FundingProvider project={project} limits={walletLimits} projectGoalId={goals.projectGoalId}>
       {children}
     </FundingProvider>
   )

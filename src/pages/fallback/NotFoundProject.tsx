@@ -26,7 +26,7 @@ export const NotFoundProject = () => {
           {t('This project does not exist')}
         </Text>
         <VStack
-          width={600}
+          width={{ base: '100%', lg: '600px' }}
           border="2px solid"
           borderColor="neutral.400"
           backgroundColor="neutral.50"

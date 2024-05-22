@@ -6,8 +6,12 @@ import * as yup from 'yup'
 
 import { MUTATION_CREATE_PROJECT_GOAL, MUTATION_UPDATE_PROJECT_GOAL } from '../../../../../graphql/mutations/goals'
 import { ProjectGoal, ProjectGoalCurrency } from '../../../../../types'
+import { dollarsToCents } from '../../../../../utils'
 
 type FormValues = Record<string, string | number | ProjectGoalCurrency>
+
+const MIN_GOAL_TARGET_AMOUNT_US_DOLLARS = 10
+const MIN_GOAL_TARGET_AMOUNT_SATS = 10000
 
 const goalFormSchema = (amountContributed: number) =>
   yup
@@ -16,6 +20,7 @@ const goalFormSchema = (amountContributed: number) =>
       description: yup.string().max(400, 'Description must be at most 400 characters long'),
       targetAmount: yup
         .number()
+        .typeError('Amount is required')
         .required('Amount is required')
         .min(
           amountContributed,
@@ -27,11 +32,11 @@ const goalFormSchema = (amountContributed: number) =>
           function (value) {
             const { currency } = this.parent
             if (currency === ProjectGoalCurrency.Usdcent) {
-              return value >= 1000
+              return value >= MIN_GOAL_TARGET_AMOUNT_US_DOLLARS
             }
 
             if (currency === ProjectGoalCurrency.Btcsat) {
-              return value >= 10000
+              return value >= MIN_GOAL_TARGET_AMOUNT_SATS
             }
 
             return true
@@ -52,7 +57,7 @@ export const useProjectGoalForm = (
     defaultValues: {
       title: '',
       description: '',
-      targetAmount: '',
+      targetAmount: 0,
       currency: ProjectGoalCurrency.Usdcent,
       projectId,
     },
@@ -71,7 +76,8 @@ export const useProjectGoalForm = (
       reset({
         title: goal.title || '',
         description: goal.description || '',
-        targetAmount: goal.targetAmount || 0,
+        targetAmount:
+          goal.currency === ProjectGoalCurrency.Btcsat ? goal.targetAmount || 0 : goal.targetAmount / 100 || 0,
         currency: goal.currency,
         projectId,
       })
@@ -93,6 +99,10 @@ export const useProjectGoalForm = (
   const onSubmit = async (formData: FormValues) => {
     try {
       const trimmedTitle = typeof formData.title === 'string' ? formData.title.trim() : ''
+      const targetAmount =
+        formData.currency === ProjectGoalCurrency.Usdcent
+          ? dollarsToCents(Number(formData.targetAmount))
+          : formData.targetAmount
 
       if (goal) {
         const { data } = await updateProjectGoal({
@@ -100,13 +110,14 @@ export const useProjectGoalForm = (
             input: {
               title: trimmedTitle,
               description: formData.description,
-              targetAmount: formData.targetAmount,
+              targetAmount,
               currency: formData.currency,
               projectGoalId: goal.id,
             },
           },
         })
         if (data) {
+          reset()
           refetch()
           onClose()
         }
@@ -116,13 +127,14 @@ export const useProjectGoalForm = (
             input: {
               title: trimmedTitle,
               description: formData.description,
-              targetAmount: formData.targetAmount,
+              targetAmount,
               currency: formData.currency,
               projectId: formData.projectId,
             },
           },
         })
         if (data) {
+          reset()
           refetch()
           onClose()
         }

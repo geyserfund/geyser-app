@@ -1,3 +1,4 @@
+import { GEYSER_URL } from '../contants'
 import { getDropdownButton, loginWithNostr, logoutUser, openConnectPopup } from '../utils/auth'
 import { aliasQuery, hasOperationName, interceptGraphql } from '../utils/graphql'
 
@@ -54,22 +55,14 @@ describe('Login', () => {
       },
     ).as('NostrAuthToken')
 
-    cy.visit('http://staging.geyser.fund')
+    cy.visit(GEYSER_URL)
   })
 
   it('Should open login popup on landing page', () => {
     openConnectPopup()
   })
 
-  it('Should login with nostr', () => {
-    getDropdownButton().find('img').should('not.exist')
-
-    loginWithNostr()
-
-    getDropdownButton().find('img').should('exist')
-  })
-
-  it('Should login and logout', () => {
+  it('Should login with Nostr and logout', () => {
     loginWithNostr()
 
     getDropdownButton().find('img').should('exist')
