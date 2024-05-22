@@ -31,9 +31,14 @@ export function ProjectBalanceDisplay({
     inProgressGoals,
   })
 
+  // Show total project balance if no default goal is set
   const [showTotalProject, setShowTotalProject] = useState(!defaultGoalId)
 
   const toggleTotalProject = () => {
+    if (removeBalance) {
+      return
+    }
+
     if (defaultGoalId) {
       setShowTotalProject(!showTotalProject)
     }
@@ -114,10 +119,6 @@ export function ProjectBalanceDisplay({
   }, [priorityGoal, formattedUsdAmount, formattedSatsAmount, t])
 
   const getProjectTotalValue = useCallback(() => {
-    if (!removeBalance) {
-      return null
-    }
-
     if (!balance) {
       return <Skeleton height="90px" width="100%" />
     }
@@ -141,7 +142,7 @@ export function ProjectBalanceDisplay({
         </Box>
       </VStack>
     )
-  }, [balance, formattedTotalUsdAmount, removeBalance, t])
+  }, [balance, formattedTotalUsdAmount, t])
 
   const DotIndicator = () => {
     return (
@@ -150,6 +151,11 @@ export function ProjectBalanceDisplay({
         <Circle size="12px" bg={showTotalProject ? 'neutral.600' : 'neutral.200'} />
       </HStack>
     )
+  }
+
+  // If the balance is removed, don't show the balance
+  if (showTotalProject && removeBalance) {
+    return null
   }
 
   return (
