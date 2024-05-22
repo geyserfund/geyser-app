@@ -31,6 +31,7 @@ export const useProjectGoals = (projectId: string | number | undefined) => {
 
   const { refetch } = useQuery<ResponseData>(QUERY_PROJECT_GOALS, {
     variables: { projectId },
+    skip: !projectId,
     notifyOnNetworkStatusChange: true,
     onCompleted(data) {
       const projectGoals = data?.projectGoals
