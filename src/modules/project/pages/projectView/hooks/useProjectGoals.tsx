@@ -3,21 +3,18 @@ import { useState } from 'react'
 
 import { QUERY_PROJECT_GOALS } from '../../../../../graphql/queries/goals'
 import { ProjectGoal, ProjectGoals } from '../../../../../types'
-import { useProjectContext } from '../../../context'
 
 type ResponseData = {
   projectGoals: ProjectGoals
 }
 
-export const useProjectGoals = () => {
-  const { project } = useProjectContext()
-
+export const useProjectGoals = (projectId: string | number | undefined) => {
   const [inProgressGoals, setInProgressGoals] = useState<ProjectGoal[]>()
   const [completedGoals, setCompletedGoals] = useState<ProjectGoal[]>()
   const [hasGoals, setHasGoals] = useState(false)
 
   const { refetch } = useQuery<ResponseData>(QUERY_PROJECT_GOALS, {
-    variables: { projectId: project?.id },
+    variables: { projectId },
     notifyOnNetworkStatusChange: true,
     onCompleted(data) {
       const projectGoals = data?.projectGoals

@@ -9,11 +9,15 @@ import { useProjectState } from '../../../hooks/graphqlState'
 import { useModal } from '../../../hooks/useModal'
 import {
   ProjectFragment,
+  ProjectGoal,
   useProjectUnplublishedEntriesQuery,
   UserMeFragment,
   useWalletLimitQuery,
   WalletLimitsFragment,
 } from '../../../types'
+import { useProjectGoals } from '../pages/projectView/hooks/useProjectGoals'
+import { GoalDeleteModal } from '../pages/projectView/views/projectMainBody/components/GoalDeleteModal'
+import { GoalModal } from '../pages/projectView/views/projectMainBody/components/GoalModal'
 import { ProjectCreatorModal } from '../pages/projectView/views/projectNavigation/components/ProjectCreatorModal'
 
 export enum MobileViews {
@@ -47,7 +51,12 @@ type ProjectContextProps = {
   isDirty?: boolean
   error: any
   onCreatorModalOpen(): void
+  onGoalsModalOpen(goal?: ProjectGoal | null): void
   refetch: any
+  goalsRefetch: any
+  inProgressGoals: ProjectGoal[] | undefined
+  completedGoals: ProjectGoal[] | undefined
+  hasGoals: boolean
   walletLimits: WalletLimitsFragment
   projectGoalId: string | null
   setProjectGoalId: (projectGoalId: string | null) => void
@@ -89,6 +98,21 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
   const { user } = useAuthContext()
 
   const creatorModal = useModal()
+  const goalsModal = useModal()
+  const goalDeleteModal = useModal()
+
+  const [currentGoal, setCurrentGoal] = useState<ProjectGoal | null>(null)
+
+  const onGoalsModalOpen = (goal?: ProjectGoal) => {
+    setCurrentGoal(goal || null)
+    goalsModal.onOpen()
+  }
+
+  const onGoalDeleteModalOpen = () => {
+    goalsModal.onClose()
+    goalDeleteModal.onOpen()
+  }
+
   const { error, project, loading, updateProject, saveProject, isDirty, saving, refetch } = useProjectState(projectId, {
     fetchPolicy: 'network-only',
     onError() {
@@ -125,6 +149,8 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
       })
     },
   })
+
+  const { refetch: goalsRefetch, inProgressGoals, completedGoals, hasGoals } = useProjectGoals(project?.id)
 
   const [walletLimits, setWalletLimits] = useState<WalletLimitsFragment>({} as WalletLimitsFragment)
 
@@ -193,15 +219,28 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
         error,
         loading,
         refetch,
+        goalsRefetch,
+        hasGoals,
         onCreatorModalOpen: creatorModal.onOpen,
+        onGoalsModalOpen,
         projectGoalId,
         setProjectGoalId,
+        inProgressGoals,
+        completedGoals,
       }}
     >
       {children}
       {project && isProjectOwner && (
         <>
           <ProjectCreatorModal {...creatorModal} />
+          <GoalModal
+            {...goalsModal}
+            goal={currentGoal}
+            projectId={project.id}
+            refetch={goalsRefetch}
+            openDeleteModal={onGoalDeleteModalOpen}
+          />
+          <GoalDeleteModal {...goalDeleteModal} goal={currentGoal} refetch={goalsRefetch} />
         </>
       )}
     </ProjectContext.Provider>

@@ -107,6 +107,7 @@ export const useProjectGoalForm = (
           },
         })
         if (data) {
+          reset()
           refetch()
           onClose()
         }
@@ -123,6 +124,7 @@ export const useProjectGoalForm = (
           },
         })
         if (data) {
+          reset()
           refetch()
           onClose()
         }

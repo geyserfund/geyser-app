@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ProjectStatus } from '../../../../../../types'
 import { useProjectContext } from '../../../../context'
-import { useProjectGoals } from '../../hooks/useProjectGoals'
 import { useProjectDetails } from '../projectNavigation/hooks/useProjectDetails'
 import {
   CreatorTools,
@@ -20,12 +19,12 @@ import {
 } from './sections'
 
 export const ProjectMainBody = () => {
-  const { project, loading } = useProjectContext()
+  const { project, loading, inProgressGoals, completedGoals } = useProjectContext()
 
   const location = useLocation()
   const navigate = useNavigate()
 
-  const { hasGoals } = useProjectGoals()
+  const hasGoals = (inProgressGoals && inProgressGoals.length > 0) || (completedGoals && completedGoals.length > 0)
 
   useEffect(() => {
     if (loading) return

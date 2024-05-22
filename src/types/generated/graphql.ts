@@ -941,15 +941,6 @@ export enum MfaAction {
   UserEmailVerification = 'USER_EMAIL_VERIFICATION',
 }
 
-export type Milestone = {
-  __typename?: 'Milestone'
-  amount: Scalars['Int']['output']
-  description: Scalars['String']['output']
-  id: Scalars['BigInt']['output']
-  name: Scalars['String']['output']
-  reached?: Maybe<Scalars['Boolean']['output']>
-}
-
 export type Mutation = {
   __typename?: 'Mutation'
   _?: Maybe<Scalars['Boolean']['output']>
@@ -1368,7 +1359,6 @@ export type Project = {
   ambassadors: Array<Ambassador>
   /** Total amount raised by the project, in satoshis. */
   balance: Scalars['Int']['output']
-  balanceUsdCent: Scalars['Int']['output']
   /** Boolean flag to indicate if the project can be deleted. */
   canDelete: Scalars['Boolean']['output']
   createdAt: Scalars['String']['output']
@@ -1393,8 +1383,6 @@ export type Project = {
   keys: ProjectKeys
   links: Array<Scalars['String']['output']>
   location?: Maybe<Location>
-  /** @deprecated milestones are deprecated, use the goals instead */
-  milestones: Array<Milestone>
   /** Unique name for the project. Used for the project URL and lightning address. */
   name: Scalars['String']['output']
   owners: Array<Owner>
@@ -2512,7 +2500,6 @@ export type ResolversTypes = {
   LndNodeType: LndNodeType
   Location: ResolverTypeWrapper<Location>
   MFAAction: MfaAction
-  Milestone: ResolverTypeWrapper<Milestone>
   Mutation: ResolverTypeWrapper<{}>
   MutationResponse: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['MutationResponse']>
   NostrKeys: ResolverTypeWrapper<NostrKeys>
@@ -2753,7 +2740,6 @@ export type ResolversParentTypes = {
   LndConnectionDetailsPublic: LndConnectionDetailsPublic
   LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput
   Location: Location
-  Milestone: Milestone
   Mutation: {}
   MutationResponse: ResolversInterfaceTypes<ResolversParentTypes>['MutationResponse']
   NostrKeys: NostrKeys
@@ -3377,18 +3363,6 @@ export type LocationResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
-export type MilestoneResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Milestone'] = ResolversParentTypes['Milestone'],
-> = {
-  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  reached?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
-}
-
 export type MutationResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation'],
@@ -3770,7 +3744,6 @@ export type ProjectResolvers<
 > = {
   ambassadors?: Resolver<Array<ResolversTypes['Ambassador']>, ParentType, ContextType>
   balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  balanceUsdCent?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   defaultGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>
@@ -3787,7 +3760,6 @@ export type ProjectResolvers<
   keys?: Resolver<ResolversTypes['ProjectKeys'], ParentType, ContextType>
   links?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>
   location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>
-  milestones?: Resolver<Array<ResolversTypes['Milestone']>, ParentType, ContextType>
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   owners?: Resolver<Array<ResolversTypes['Owner']>, ParentType, ContextType>
   rewardCurrency?: Resolver<Maybe<ResolversTypes['RewardCurrency']>, ParentType, ContextType>
@@ -4407,7 +4379,6 @@ export type Resolvers<ContextType = any> = {
   LndConnectionDetailsPrivate?: LndConnectionDetailsPrivateResolvers<ContextType>
   LndConnectionDetailsPublic?: LndConnectionDetailsPublicResolvers<ContextType>
   Location?: LocationResolvers<ContextType>
-  Milestone?: MilestoneResolvers<ContextType>
   Mutation?: MutationResolvers<ContextType>
   MutationResponse?: MutationResponseResolvers<ContextType>
   NostrKeys?: NostrKeysResolvers<ContextType>
@@ -4872,7 +4843,6 @@ export type ProjectFragment = {
   description?: string | null
   defaultGoalId?: any | null
   balance: number
-  balanceUsdCent: number
   createdAt: string
   updatedAt: string
   image?: string | null
@@ -6782,7 +6752,6 @@ export const ProjectFragmentDoc = gql`
     description
     defaultGoalId
     balance
-    balanceUsdCent
     createdAt
     updatedAt
     image

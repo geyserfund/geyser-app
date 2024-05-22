@@ -11,7 +11,6 @@ import { useIsProjectPage } from '../../../../../../../navigation/topNavBar/topN
 import { useEntryAtom } from '../../../../../../../pages/entry/entryAtom'
 import { isActive } from '../../../../../../../utils'
 import { MobileViews, useProjectContext } from '../../../../../context'
-import { useProjectGoals } from '../../../hooks/useProjectGoals'
 import { navigationItems } from './BottomNavList'
 
 export const ProjectMobileBottomNavigation = ({ fixed }: { fixed?: boolean }) => {
@@ -75,8 +74,7 @@ export const ProjectNavUI = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
-  const { mobileView, setMobileView, project, isProjectOwner, onCreatorModalOpen } = useProjectContext()
-  const { hasGoals } = useProjectGoals()
+  const { mobileView, setMobileView, project, isProjectOwner, onCreatorModalOpen, hasGoals } = useProjectContext()
   const [entry] = useEntryAtom()
 
   const className = useLayoutAnimation()
