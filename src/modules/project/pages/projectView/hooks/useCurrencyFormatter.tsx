@@ -16,6 +16,7 @@ export const useCurrencyFormatter = () => {
   const formatAmount = useCallback(
     (amount: number, currency: TCurrency) => {
       if (currency === Currency.Btcsat) {
+        if (amount === 0) return '0 sats'
         return `${commaFormatted(amount)} sats`
       }
 

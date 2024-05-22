@@ -55,7 +55,7 @@ export const GoalCompleted = ({ goal, isEditing = false, onOpenGoalModal }: Prop
         <VStack width="100%">
           <HStack display="flex" alignItems="flex-start" justifyContent="space-between" width="100%">
             <Body1 bold>
-              {goal.amountContributed > 0 ? formattedAmountContributed : '0'}{' '}
+              {formattedAmountContributed}{' '}
               <Text as="span" color="neutral.600" fontWeight={500}>
                 {goal.currency === ProjectGoalCurrency.Btcsat ? `(${usdAmount})` : `(${satsAmount})`}
               </Text>
