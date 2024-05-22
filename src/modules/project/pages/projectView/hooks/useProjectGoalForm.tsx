@@ -73,7 +73,8 @@ export const useProjectGoalForm = (
       reset({
         title: goal.title || '',
         description: goal.description || '',
-        targetAmount: goal.targetAmount || 0,
+        targetAmount:
+          goal.currency === ProjectGoalCurrency.Btcsat ? goal.targetAmount || 0 : goal.targetAmount / 100 || 0,
         currency: goal.currency,
         projectId,
       })
