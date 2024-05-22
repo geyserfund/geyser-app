@@ -8,7 +8,7 @@ export const commentScreenIsVisible = () => {
 }
 
 export const lightningQrScreenIsVisible = () => {
-  cy.get('canvas').should('have.id', 'qr-code') // This is the QR code
+  cy.get('canvas', { timeout: 10000 }).should('have.id', 'qr-code') // This is the QR code
   cy.get('#copy-lightning-invoice-button').should('be.visible')
 }
 

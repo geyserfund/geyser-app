@@ -19,7 +19,7 @@ export const enterCommentAndHitCheckout = (comment: string) => {
 
 export const enterCommentAddEmailAndHitCheckout = (comment: string) => {
   cy.get('textarea[data-testid="funding-comment-input"]').type(comment)
-  cy.get('input[type="email"]').type('hello@geyser.fund')
+  cy.get('input[type="email"]').type('pacafog448@neixos.com')
   cy.get('button').contains('Checkout').click()
 }
 
