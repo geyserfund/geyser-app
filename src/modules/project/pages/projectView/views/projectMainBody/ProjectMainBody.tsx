@@ -19,12 +19,10 @@ import {
 } from './sections'
 
 export const ProjectMainBody = () => {
-  const { project, loading, inProgressGoals, completedGoals } = useProjectContext()
+  const { project, loading, goals } = useProjectContext()
 
   const location = useLocation()
   const navigate = useNavigate()
-
-  const hasGoals = (inProgressGoals && inProgressGoals.length > 0) || (completedGoals && completedGoals.length > 0)
 
   useEffect(() => {
     if (loading) return
@@ -47,7 +45,7 @@ export const ProjectMainBody = () => {
       <ShareProject />
       <Rewards />
       {projectDetails.entriesLength ? <Entries /> : null}
-      {hasGoals ? <Goals /> : null}
+      {goals.hasGoals ? <Goals /> : null}
       <CreatorTools />
       <Details />
     </VStack>

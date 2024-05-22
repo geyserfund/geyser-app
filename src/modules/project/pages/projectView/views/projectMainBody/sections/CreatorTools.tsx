@@ -18,13 +18,14 @@ import { useProjectContext } from '../../../../../context'
 
 export const CreatorTools = () => {
   const { t } = useTranslation()
-  const { project, isProjectOwner, onGoalsModalOpen, inProgressGoals, completedGoals } = useProjectContext()
+  const { project, isProjectOwner, goals } = useProjectContext()
 
   if (!project || !isProjectOwner || project.status !== ProjectStatus.Active) return null
 
+  const hasGoals = goals.inProgressGoals?.length || goals.completedGoals?.length
+
   const projectHasRewards = project?.rewards?.length > 0
   const projectHasEntries = project?.entries?.length > 0
-  const hasGoals = inProgressGoals?.length || completedGoals?.length
 
   return (
     <Stack w="full" direction={{ base: 'column', lg: 'row' }} flexWrap={'wrap'}>
@@ -43,7 +44,7 @@ export const CreatorTools = () => {
           body={t('Use goals to inspire donors by showing them how your project is progressing.')}
           buttonLabel={t('Create Goal')}
           imageSrc={GoalsFlagUrl}
-          buttonProps={{ onClick: () => onGoalsModalOpen() }}
+          buttonProps={{ onClick: () => goals.onGoalsModalOpen() }}
           rightAction={<GoalTooltip />}
         />
       )}

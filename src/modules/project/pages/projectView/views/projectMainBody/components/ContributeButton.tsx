@@ -10,7 +10,7 @@ import { MobileViews, useProjectContext } from '../../../../../context'
 export const ContributeButton = (props: ButtonProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { project, setMobileView, setProjectGoalId } = useProjectContext()
+  const { project, setMobileView, goals } = useProjectContext()
   const isMobile = useMobileMode()
 
   if (!project) {
@@ -31,7 +31,7 @@ export const ContributeButton = (props: ButtonProps) => {
           navigate(PathName.projectRewards)
         }
 
-        setProjectGoalId(null)
+        goals.setProjectGoalId(null)
       }}
       isDisabled={isFundingDisabled}
       {...props}

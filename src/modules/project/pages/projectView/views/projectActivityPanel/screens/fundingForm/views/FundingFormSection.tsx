@@ -15,13 +15,13 @@ type Props = {
 export const FundingFormSection = ({ onBackClick }: Props) => {
   const { t } = useTranslation()
 
-  const { setProjectGoalId } = useProjectContext()
+  const { goals } = useProjectContext()
   const {
     fundForm: { setState },
   } = useFundingContext()
 
   const handleOnBackClick = (event: MouseEvent<HTMLButtonElement>) => {
-    setProjectGoalId(null)
+    goals.setProjectGoalId(null)
     onBackClick(event)
   }
 

@@ -14,19 +14,19 @@ import { GoalCompleted, GoalInProgress } from '../components'
 
 export const Goals = () => {
   const { t } = useTranslation()
-  const { isProjectOwner, onGoalsModalOpen, inProgressGoals, completedGoals } = useProjectContext()
+  const { isProjectOwner, goals } = useProjectContext()
   const [editMode, setEditMode] = useState(false)
 
   const handleCreateGoalModalOpen = () => {
-    onGoalsModalOpen()
+    goals.onGoalsModalOpen()
   }
 
   const handleEditGoalModalOpen = (goal: ProjectGoal) => {
-    onGoalsModalOpen(goal)
+    goals.onGoalsModalOpen(goal)
   }
 
-  const hasInProgressGoals = inProgressGoals && inProgressGoals.length > 0
-  const hasCompletedGoals = completedGoals && completedGoals.length > 0
+  const hasInProgressGoals = goals.inProgressGoals && goals.inProgressGoals.length > 0
+  const hasCompletedGoals = goals.completedGoals && goals.completedGoals.length > 0
 
   const handleEditMode = () => {
     setEditMode(!editMode)
@@ -34,7 +34,7 @@ export const Goals = () => {
 
   const renderInProgressGoals = () => {
     if (hasInProgressGoals) {
-      return inProgressGoals.map((goal: ProjectGoal) => {
+      return goals.inProgressGoals?.map((goal: ProjectGoal) => {
         if (goal) {
           return (
             <GoalInProgress key={uuidv4()} goal={goal} isEditing={editMode} onOpenGoalModal={handleEditGoalModalOpen} />
@@ -48,7 +48,7 @@ export const Goals = () => {
 
   const renderCompletedGoals = () => {
     if (hasCompletedGoals) {
-      return completedGoals.map((goal: ProjectGoal) => {
+      return goals.completedGoals?.map((goal: ProjectGoal) => {
         if (goal) {
           return (
             <GoalCompleted key={uuidv4()} goal={goal} isEditing={editMode} onOpenGoalModal={handleEditGoalModalOpen} />
@@ -96,7 +96,7 @@ export const Goals = () => {
         {hasInProgressGoals && (
           <Box display="flex" flexDirection="column" gap={'20px'} width="100%">
             <Box width="100%" minHeight="50px" py={'10px'}>
-              <TitleDivider badge={inProgressGoals?.length} rightAction={renderRightAction()}>
+              <TitleDivider badge={goals.inProgressGoals?.length} rightAction={renderRightAction()}>
                 {t('Goals')}
               </TitleDivider>
             </Box>
@@ -109,7 +109,10 @@ export const Goals = () => {
         {hasCompletedGoals && (
           <Box display="flex" flexDirection="column" gap={'20px'} width="100%">
             <Box width="100%" minHeight="50px" py={'10px'}>
-              <TitleDivider badge={completedGoals?.length} rightAction={!hasInProgressGoals && renderRightAction()}>
+              <TitleDivider
+                badge={goals.completedGoals?.length}
+                rightAction={!hasInProgressGoals && renderRightAction()}
+              >
                 {t('Completed Goals')}
               </TitleDivider>
             </Box>

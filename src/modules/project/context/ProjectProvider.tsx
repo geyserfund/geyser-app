@@ -51,15 +51,19 @@ type ProjectContextProps = {
   isDirty?: boolean
   error: any
   onCreatorModalOpen(): void
-  onGoalsModalOpen(goal?: ProjectGoal | null): void
   refetch: any
-  goalsRefetch: any
-  inProgressGoals: ProjectGoal[] | undefined
-  completedGoals: ProjectGoal[] | undefined
-  hasGoals: boolean
   walletLimits: WalletLimitsFragment
-  projectGoalId: string | null
-  setProjectGoalId: (projectGoalId: string | null) => void
+  goals: {
+    currentGoal: ProjectGoal | null
+    projectGoalId: string | null
+    setProjectGoalId: (projectGoalId: string | null) => void
+    inProgressGoals: ProjectGoal[] | undefined
+    completedGoals: ProjectGoal[] | undefined
+    onGoalsModalOpen(goal?: ProjectGoal | null): void
+    onGoalDeleteModalOpen: () => void
+    hasGoals: boolean
+    refetch: any
+  }
 }
 
 export const ProjectContext = createContext<ProjectContextProps | null>(null)
@@ -215,14 +219,18 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
         error,
         loading,
         refetch,
-        goalsRefetch,
-        hasGoals,
+        goals: {
+          currentGoal,
+          projectGoalId,
+          setProjectGoalId,
+          inProgressGoals,
+          completedGoals,
+          onGoalsModalOpen,
+          onGoalDeleteModalOpen,
+          hasGoals,
+          refetch: goalsRefetch,
+        },
         onCreatorModalOpen: creatorModal.onOpen,
-        onGoalsModalOpen,
-        projectGoalId,
-        setProjectGoalId,
-        inProgressGoals,
-        completedGoals,
       }}
     >
       {children}

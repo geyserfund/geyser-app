@@ -10,7 +10,7 @@ type GoalContributeButtonProps = ButtonProps & {
 
 export const GoalContributeButton = ({ projectGoalId, ...props }: GoalContributeButtonProps) => {
   const { t } = useTranslation()
-  const { project, setMobileView, setProjectGoalId } = useProjectContext()
+  const { project, setMobileView, goals } = useProjectContext()
 
   if (!project) {
     return null
@@ -20,7 +20,7 @@ export const GoalContributeButton = ({ projectGoalId, ...props }: GoalContribute
 
   const handleContributeClick = () => {
     setMobileView(MobileViews.funding)
-    setProjectGoalId(projectGoalId)
+    goals.setProjectGoalId(projectGoalId)
   }
 
   return (

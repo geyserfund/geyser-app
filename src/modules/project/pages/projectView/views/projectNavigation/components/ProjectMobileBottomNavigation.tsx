@@ -74,7 +74,7 @@ export const ProjectNavUI = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
-  const { mobileView, setMobileView, project, isProjectOwner, onCreatorModalOpen, hasGoals } = useProjectContext()
+  const { mobileView, setMobileView, project, isProjectOwner, onCreatorModalOpen, goals } = useProjectContext()
   const [entry] = useEntryAtom()
 
   const className = useLayoutAnimation()
@@ -120,7 +120,7 @@ export const ProjectNavUI = () => {
         if (!isProjectOwner && !item.isContributor) return null
 
         if (item.name === 'Rewards' && (!project.rewards || project.rewards.length === 0)) return null
-        if (item.name === 'Goals' && !hasGoals) return null
+        if (item.name === 'Goals' && !goals.hasGoals) return null
 
         const handleClick = () => {
           handleMobileViewClick(item.mobileView)

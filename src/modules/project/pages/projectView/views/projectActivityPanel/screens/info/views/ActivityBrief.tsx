@@ -30,7 +30,7 @@ export const ActivityBrief = (props: StackProps) => {
   const { toast } = useNotification()
   const isMobile = useMobileMode()
 
-  const { project, inProgressGoals } = useProjectContext()
+  const { project, goals } = useProjectContext()
   const followedProjects = useFollowedProjectsValue()
 
   const [allFunders, setAllFunders] = useState<FunderWithUserFragment[]>([])
@@ -99,7 +99,7 @@ export const ActivityBrief = (props: StackProps) => {
           defaultGoalId={project.defaultGoalId}
           balance={project.balance}
           balanceUsdCent={project.balanceUsdCent}
-          inProgressGoals={inProgressGoals}
+          inProgressGoals={goals.inProgressGoals}
         />
       )}
 

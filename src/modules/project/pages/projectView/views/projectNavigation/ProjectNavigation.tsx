@@ -37,12 +37,11 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
   const location = useLocation()
   const [_, changeProjectSideNavOpen] = useProjectSideNavAtom()
 
-  const { isProjectOwner, onCreatorModalOpen, project, setMobileView, loading, inProgressGoals, completedGoals } =
-    useProjectContext()
+  const { isProjectOwner, onCreatorModalOpen, project, setMobileView, loading, goals } = useProjectContext()
 
   const { entriesLength, rewardsLength } = useProjectDetails(project)
 
-  const hasGoals = inProgressGoals?.length || completedGoals?.length
+  const hasGoals = goals.inProgressGoals?.length || goals.completedGoals?.length
 
   const ProjectNavigationButtons = useMemo(
     () => [
