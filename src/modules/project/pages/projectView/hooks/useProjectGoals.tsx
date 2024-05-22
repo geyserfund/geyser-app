@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client'
 import { useState } from 'react'
 
 import { QUERY_PROJECT_GOALS } from '../../../../../graphql/queries/goals'
+import { useModal } from '../../../../../hooks'
 import { ProjectGoal, ProjectGoals } from '../../../../../types'
 
 type ResponseData = {
@@ -9,6 +10,21 @@ type ResponseData = {
 }
 
 export const useProjectGoals = (projectId: string | number | undefined) => {
+  const goalsModal = useModal()
+  const goalDeleteModal = useModal()
+
+  const [currentGoal, setCurrentGoal] = useState<ProjectGoal | null>(null)
+
+  const onGoalsModalOpen = (goal?: ProjectGoal) => {
+    setCurrentGoal(goal || null)
+    goalsModal.onOpen()
+  }
+
+  const onGoalDeleteModalOpen = () => {
+    goalsModal.onClose()
+    goalDeleteModal.onOpen()
+  }
+
   const [inProgressGoals, setInProgressGoals] = useState<ProjectGoal[]>()
   const [completedGoals, setCompletedGoals] = useState<ProjectGoal[]>()
   const [hasGoals, setHasGoals] = useState(false)
@@ -36,5 +52,10 @@ export const useProjectGoals = (projectId: string | number | undefined) => {
     inProgressGoals,
     completedGoals,
     refetch,
+    onGoalsModalOpen,
+    onGoalDeleteModalOpen,
+    goalsModal,
+    goalDeleteModal,
+    currentGoal,
   }
 }
