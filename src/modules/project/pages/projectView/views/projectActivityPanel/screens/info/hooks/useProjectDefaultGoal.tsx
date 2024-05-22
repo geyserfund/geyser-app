@@ -1,8 +1,6 @@
-import { useQuery } from '@apollo/client'
 import { useCallback, useEffect, useState } from 'react'
 
-import { QUERY_PROJECT_DEFAULT_GOAL } from '../../../../../../../../../graphql/queries/goals'
-import { Project, ProjectGoal, ProjectGoalCurrency, ProjectGoals } from '../../../../../../../../../types'
+import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../../../types'
 import { useCurrencyFormatter } from '../../../../../../projectView/hooks/useCurrencyFormatter'
 
 type Props = {
