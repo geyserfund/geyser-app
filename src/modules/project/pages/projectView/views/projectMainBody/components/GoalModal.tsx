@@ -126,7 +126,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
                   control={control}
                   name="targetAmount"
                   label={t('Goal Amount')}
-                  placeholder="210000000"
+                  placeholder={watch('currency') === ProjectGoalCurrency.Usdcent ? '10,000' : '21,000,000'}
                   currency={watch('currency') as ProjectGoalCurrency}
                   isDisabled={Boolean(isCompleted)}
                   error={errors.targetAmount?.message}

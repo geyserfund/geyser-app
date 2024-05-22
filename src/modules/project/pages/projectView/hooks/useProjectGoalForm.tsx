@@ -17,6 +17,7 @@ const goalFormSchema = (amountContributed: number) =>
       description: yup.string().max(400, 'Description must be at most 400 characters long'),
       targetAmount: yup
         .number()
+        .typeError('Amount is required')
         .required('Amount is required')
         .min(
           amountContributed,
@@ -53,7 +54,7 @@ export const useProjectGoalForm = (
     defaultValues: {
       title: '',
       description: '',
-      targetAmount: '',
+      targetAmount: 0,
       currency: ProjectGoalCurrency.Usdcent,
       projectId,
     },
