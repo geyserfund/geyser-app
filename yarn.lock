@@ -17810,6 +17810,7 @@ __metadata:
     react-router-dom: "npm:^6.11.0"
     react-select: "npm:^5.7.0"
     react-simple-pull-to-refresh: "npm:^1.3.3"
+    react-swipeable: "npm:^7.0.1"
     react-tweet-embed: "npm:^2.0.0"
     react-use-websocket: "npm:^4.8.1"
     recharts: "npm:^2.8.0"
@@ -23633,6 +23634,15 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 10c0/6d66f3bdb65e1ec79089f80314da97c9a005087a04ee034255a5de129a4c0d9fd0bf99fa7bf642781ac2dc745ca687aae3de082bd8afdd0d117bc953241e15ad
+  languageName: node
+  linkType: hard
+
+"react-swipeable@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "react-swipeable@npm:7.0.1"
+  peerDependencies:
+    react: ^16.8.3 || ^17 || ^18
+  checksum: 10c0/ebd34ac4cad0053db2a43a5113a1b1f2ecbe2badbf4b3aae14cf7292cf836991378637dc7b7da6cf5217215b92559b43dd43775ba3fea95e7e451dc76d029893
   languageName: node
   linkType: hard
 
