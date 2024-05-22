@@ -1,4 +1,4 @@
-import { Box, Circle, CircularProgress, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, Circle, CircularProgress, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -11,7 +11,7 @@ import { useProjectDefaultGoal } from '../hooks/useProjectDefaultGoal'
 export function ProjectBalanceDisplay() {
   const { t } = useTranslation()
 
-  const { priorityGoal, project, formattedUsdAmount, formattedTotalUsdAmount, formattedSatsAmount } =
+  const { priorityGoal, project, formattedUsdAmount, formattedTotalUsdAmount, formattedSatsAmount, loading } =
     useProjectDefaultGoal()
 
   const [showTotalProject, setShowTotalProject] = useState(!project?.defaultGoalId)
@@ -29,6 +29,10 @@ export function ProjectBalanceDisplay() {
   }, [priorityGoal])
 
   const renderCircularProgress = useCallback(() => {
+    if (loading) {
+      return <Skeleton borderRadius="50%" height="116px" width="116px" />
+    }
+
     if (priorityGoal) {
       return (
         <CircularProgress
@@ -43,9 +47,13 @@ export function ProjectBalanceDisplay() {
     }
 
     return null
-  }, [circularPercentage, priorityGoal])
+  }, [circularPercentage, priorityGoal, loading])
 
   const getGoalValue = useCallback(() => {
+    if (loading) {
+      return <Skeleton height="90px" width="100%" />
+    }
+
     if (priorityGoal) {
       const percentage = Math.ceil((priorityGoal.amountContributed / priorityGoal.targetAmount) * 100)
       return (
@@ -86,9 +94,13 @@ export function ProjectBalanceDisplay() {
     }
 
     return null
-  }, [priorityGoal, formattedUsdAmount, formattedSatsAmount, t])
+  }, [priorityGoal, formattedUsdAmount, formattedSatsAmount, t, loading])
 
   const getProjectTotalValue = useCallback(() => {
+    if (loading) {
+      return <Skeleton height="90px" width="100%" />
+    }
+
     return (
       <VStack w="100%" display="flex" alignItems="center">
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
@@ -108,9 +120,13 @@ export function ProjectBalanceDisplay() {
         </Box>
       </VStack>
     )
-  }, [project?.balance, formattedTotalUsdAmount, t])
+  }, [project?.balance, formattedTotalUsdAmount, t, loading])
 
   const DotIndicator = () => {
+    if (loading) {
+      return <Skeleton height="20px" width="20px" />
+    }
+
     return (
       <HStack width="100%" justifyContent="center" spacing={1} pb={2}>
         <Circle size="12px" bg={!showTotalProject ? 'neutral.600' : 'neutral.200'} />

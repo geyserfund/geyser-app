@@ -13,7 +13,7 @@ type ResponseData = {
 export const useProjectDefaultGoal = () => {
   const { project } = useProjectContext()
 
-  const { data } = useQuery<ResponseData>(QUERY_PROJECT_DEFAULT_GOAL, {
+  const { data, loading } = useQuery<ResponseData>(QUERY_PROJECT_DEFAULT_GOAL, {
     variables: { projectId: project?.id },
   })
 
@@ -47,6 +47,7 @@ export const useProjectDefaultGoal = () => {
 
   return {
     priorityGoal,
+    loading,
     project,
     formattedUsdAmount,
     formattedTotalUsdAmount,
