@@ -12,7 +12,7 @@ import { MobileViews, useProjectContext } from '../../../../../context'
 
 export const ProjectCreatorModal = (props: UseModalReturn) => {
   const { t } = useTranslation()
-  const { project, setMobileView, onGoalsModalOpen } = useProjectContext()
+  const { project, setMobileView, goals } = useProjectContext()
 
   const navigate = useNavigate()
 
@@ -40,7 +40,7 @@ export const ProjectCreatorModal = (props: UseModalReturn) => {
           />
           <Box
             onClick={() => {
-              onGoalsModalOpen()
+              goals.onGoalsModalOpen()
               props.onClose()
             }}
           >

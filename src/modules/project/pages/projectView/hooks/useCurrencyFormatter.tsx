@@ -21,6 +21,7 @@ export const useCurrencyFormatter = () => {
       }
 
       const usdAmount = centsToDollars(amount)
+      if (amount === 0) return '$0'
       if (usdAmount < 1) return '< $1'
       return `$${commaFormatted(Math.round(usdAmount))}`
     },
