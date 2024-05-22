@@ -13,9 +13,16 @@ type Props = {
   balance: number | null
   balanceUsdCent: number | null
   inProgressGoals: ProjectGoal[] | null | undefined
+  removeBalance?: boolean
 }
 
-export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, inProgressGoals }: Props) {
+export function ProjectBalanceDisplay({
+  defaultGoalId,
+  balance,
+  balanceUsdCent,
+  inProgressGoals,
+  removeBalance,
+}: Props) {
   const { t } = useTranslation()
 
   const { priorityGoal, formattedUsdAmount, formattedTotalUsdAmount, formattedSatsAmount } = useProjectDefaultGoal({
@@ -107,6 +114,10 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
   }, [priorityGoal, formattedUsdAmount, formattedSatsAmount, t])
 
   const getProjectTotalValue = useCallback(() => {
+    if (!removeBalance) {
+      return null
+    }
+
     if (!balance) {
       return <Skeleton height="90px" width="100%" />
     }
@@ -130,7 +141,7 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
         </Box>
       </VStack>
     )
-  }, [balance, formattedTotalUsdAmount, t])
+  }, [balance, formattedTotalUsdAmount, removeBalance, t])
 
   const DotIndicator = () => {
     return (
