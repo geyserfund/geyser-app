@@ -55,7 +55,7 @@ export function ProjectBalanceDisplay() {
     }
 
     if (priorityGoal) {
-      const percentage = Math.ceil((priorityGoal.amountContributed / priorityGoal.targetAmount) * 100)
+      const percentage = (priorityGoal.amountContributed / priorityGoal.targetAmount) * 100
       return (
         <>
           <HStack w="100%" display="flex" justifyContent="start" alignItems="center">
@@ -83,7 +83,7 @@ export function ProjectBalanceDisplay() {
                   ? `${formattedUsdAmount()}`
                   : `${formattedSatsAmount()}`}
               </Text>{' '}
-              {`(${percentage}%) ${t(' contributed towards goal ')}`}
+              {`(${percentage.toFixed(1)}%) ${t(' contributed towards goal ')}`}
               <Text as="span" color="neutral.900" fontWeight={500}>
                 {priorityGoal.title}
               </Text>
