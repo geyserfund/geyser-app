@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FaUnlock } from 'react-icons/fa'
 import { MdAdd, MdModeEdit } from 'react-icons/md'
+import { v4 as uuidv4 } from 'uuid'
 
 import { CardLayout } from '../../../../../../../components/layouts'
 import { IconButtonComponent } from '../../../../../../../components/ui'
@@ -13,7 +14,7 @@ import { GoalCompleted, GoalInProgress } from '../components'
 
 export const Goals = () => {
   const { t } = useTranslation()
-  const { project, isProjectOwner, onGoalsModalOpen, inProgressGoals, completedGoals } = useProjectContext()
+  const { isProjectOwner, onGoalsModalOpen, inProgressGoals, completedGoals } = useProjectContext()
   const [editMode, setEditMode] = useState(false)
 
   const handleCreateGoalModalOpen = () => {
@@ -27,10 +28,6 @@ export const Goals = () => {
   const hasInProgressGoals = inProgressGoals && inProgressGoals.length > 0
   const hasCompletedGoals = completedGoals && completedGoals.length > 0
 
-  if (!project) {
-    return null
-  }
-
   const handleEditMode = () => {
     setEditMode(!editMode)
   }
@@ -40,7 +37,7 @@ export const Goals = () => {
       return inProgressGoals.map((goal: ProjectGoal) => {
         if (goal) {
           return (
-            <GoalInProgress key={goal.id} goal={goal} isEditing={editMode} onOpenGoalModal={handleEditGoalModalOpen} />
+            <GoalInProgress key={uuidv4()} goal={goal} isEditing={editMode} onOpenGoalModal={handleEditGoalModalOpen} />
           )
         }
       })
@@ -54,7 +51,7 @@ export const Goals = () => {
       return completedGoals.map((goal: ProjectGoal) => {
         if (goal) {
           return (
-            <GoalCompleted key={goal.id} goal={goal} isEditing={editMode} onOpenGoalModal={handleEditGoalModalOpen} />
+            <GoalCompleted key={uuidv4()} goal={goal} isEditing={editMode} onOpenGoalModal={handleEditGoalModalOpen} />
           )
         }
       })

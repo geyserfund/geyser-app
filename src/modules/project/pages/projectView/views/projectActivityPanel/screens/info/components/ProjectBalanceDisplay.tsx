@@ -3,21 +3,31 @@ import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { H1 } from '../../../../../../../../../components/typography'
-import { ProjectGoalCurrency } from '../../../../../../../../../types'
+import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../../../types'
 import { numberWithCommas } from '../../../../../../../../../utils'
 import { centsToDollars } from '../../../../../../../../../utils'
 import { useProjectDefaultGoal } from '../hooks/useProjectDefaultGoal'
 
-export function ProjectBalanceDisplay() {
+type Props = {
+  defaultGoalId: string | null
+  balance: number | null
+  balanceUsdCent: number | null
+  inProgressGoals: ProjectGoal[] | null | undefined
+}
+
+export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, inProgressGoals }: Props) {
   const { t } = useTranslation()
 
-  const { priorityGoal, project, formattedUsdAmount, formattedTotalUsdAmount, formattedSatsAmount, loading } =
-    useProjectDefaultGoal()
+  const { priorityGoal, formattedUsdAmount, formattedTotalUsdAmount, formattedSatsAmount } = useProjectDefaultGoal({
+    defaultGoalId,
+    balanceUsdCent,
+    inProgressGoals,
+  })
 
-  const [showTotalProject, setShowTotalProject] = useState(!project?.defaultGoalId)
+  const [showTotalProject, setShowTotalProject] = useState(!defaultGoalId)
 
   const toggleTotalProject = () => {
-    if (project?.defaultGoalId) {
+    if (defaultGoalId) {
       setShowTotalProject(!showTotalProject)
     }
   }
@@ -29,7 +39,7 @@ export function ProjectBalanceDisplay() {
   }, [priorityGoal])
 
   const renderCircularProgress = useCallback(() => {
-    if (loading) {
+    if (!priorityGoal) {
       return <Skeleton borderRadius="50%" height="116px" width="116px" />
     }
 
@@ -47,10 +57,10 @@ export function ProjectBalanceDisplay() {
     }
 
     return null
-  }, [circularPercentage, priorityGoal, loading])
+  }, [circularPercentage, priorityGoal])
 
   const getGoalValue = useCallback(() => {
-    if (loading) {
+    if (!priorityGoal) {
       return <Skeleton height="90px" width="100%" />
     }
 
@@ -94,10 +104,10 @@ export function ProjectBalanceDisplay() {
     }
 
     return null
-  }, [priorityGoal, formattedUsdAmount, formattedSatsAmount, t, loading])
+  }, [priorityGoal, formattedUsdAmount, formattedSatsAmount, t])
 
   const getProjectTotalValue = useCallback(() => {
-    if (loading) {
+    if (!balance) {
       return <Skeleton height="90px" width="100%" />
     }
 
@@ -105,7 +115,7 @@ export function ProjectBalanceDisplay() {
       <VStack w="100%" display="flex" alignItems="center">
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
           <H1 fontSize="35px">
-            {numberWithCommas(project?.balance ?? 0)}
+            {numberWithCommas(balance ?? 0)}
             <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
               {' sats'}
             </Text>
@@ -120,13 +130,9 @@ export function ProjectBalanceDisplay() {
         </Box>
       </VStack>
     )
-  }, [project?.balance, formattedTotalUsdAmount, t, loading])
+  }, [balance, formattedTotalUsdAmount, t])
 
   const DotIndicator = () => {
-    if (loading) {
-      return <Skeleton height="20px" width="20px" />
-    }
-
     return (
       <HStack width="100%" justifyContent="center" spacing={1} pb={2}>
         <Circle size="12px" bg={!showTotalProject ? 'neutral.600' : 'neutral.200'} />
@@ -140,7 +146,7 @@ export function ProjectBalanceDisplay() {
       w="100%"
       onClick={toggleTotalProject}
       _hover={{
-        cursor: project?.defaultGoalId ? 'pointer' : 'default',
+        cursor: defaultGoalId ? 'pointer' : 'default',
       }}
       p={2}
     >
@@ -157,7 +163,7 @@ export function ProjectBalanceDisplay() {
           {showTotalProject ? getProjectTotalValue() : getGoalValue()}
         </VStack>
       </HStack>
-      {priorityGoal && <DotIndicator />}
+      {priorityGoal ? <DotIndicator /> : <Skeleton height="20px" width="20px" />}
     </VStack>
   )
 }

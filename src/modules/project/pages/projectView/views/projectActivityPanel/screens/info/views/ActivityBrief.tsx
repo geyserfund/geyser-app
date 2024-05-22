@@ -30,7 +30,7 @@ export const ActivityBrief = (props: StackProps) => {
   const { toast } = useNotification()
   const isMobile = useMobileMode()
 
-  const { project } = useProjectContext()
+  const { project, inProgressGoals } = useProjectContext()
   const followedProjects = useFollowedProjectsValue()
 
   const [allFunders, setAllFunders] = useState<FunderWithUserFragment[]>([])
@@ -94,7 +94,14 @@ export const ActivityBrief = (props: StackProps) => {
 
   return (
     <VStack w="100%" {...props}>
-      {!removeBalance && <ProjectBalanceDisplay />}
+      {!removeBalance && (
+        <ProjectBalanceDisplay
+          defaultGoalId={project.defaultGoalId}
+          balance={project.balance}
+          balanceUsdCent={project.balanceUsdCent}
+          inProgressGoals={inProgressGoals}
+        />
+      )}
 
       {!isMobile ? (
         <VStack w="full" spacing="10px" pb={3}>
