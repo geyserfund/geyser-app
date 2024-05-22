@@ -11,7 +11,7 @@ export const FundingMinLimit = ({ amount, creatorId }: { amount?: number; creato
   return (
     <ErrorLayout
       url={FundingErrorWalletMinUrl}
-      title={t('Receiver’s wallet Transaction Below Minimum Limit')}
+      title={t('Receiver’s Wallet Transaction Below Minimum Limit')}
       body={
         <Body1>
           <Trans

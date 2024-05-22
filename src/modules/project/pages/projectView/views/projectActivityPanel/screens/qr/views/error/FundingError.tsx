@@ -6,6 +6,7 @@ import { useFundingContext } from '../../../../../../../../context'
 import { ReachOutForHelpButton } from '../../components'
 import { FundingMaxLimit } from './components'
 import { FundingErrorOccured } from './components/FundingErrorOccured'
+import { FundingInactiveProject } from './components/FundingInactiveProject'
 import { FundingMinLimit } from './components/FundingMinLimit'
 import { FundingRewardsOutOfStock } from './components/FundingRewardsOutOfStock'
 import { FundingWalletUnreachable } from './components/FundingWalletUnreachable'
@@ -33,6 +34,8 @@ export const FundingError = ({ onCloseClick }: { onCloseClick: () => void }) => 
         return <FundingWalletUnreachable creatorId={creatorId} />
       case ApolloErrors.REWARD_OUT_OF_STOCK:
         return <FundingRewardsOutOfStock rewards={[]} creatorId={creatorId} projectName={project?.name || ''} />
+      case ApolloErrors.NON_ACTIVE_PROJECT:
+        return <FundingInactiveProject creatorId={creatorId} projectName={project?.name || ''} />
       default:
         return <FundingErrorOccured />
     }

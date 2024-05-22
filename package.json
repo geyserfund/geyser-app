@@ -4,7 +4,6 @@
   "version": "0.10.0",
   "scripts": {
     "dev": "vite",
-    "dev:stage": "vite --mode staging",
     "build": "tsc && vite build",
     "preview": "vite preview --port 3000",
     "test:e2e": "yarn cypress run --e2e",
@@ -154,7 +153,8 @@
     "@vitejs/plugin-react": "^3.0.0",
     "@vitejs/plugin-react-swc": "^3.0.1",
     "conventional-changelog-cli": "^2.2.2",
-    "cypress": "^12.17.0",
+    "cypress": "13.9.0",
+    "cypress-real-events": "^1.12.0",
     "ecpair": "^2.1.0",
     "eslint": ">=8.0.0",
     "eslint-config-prettier": "^8.6.0",

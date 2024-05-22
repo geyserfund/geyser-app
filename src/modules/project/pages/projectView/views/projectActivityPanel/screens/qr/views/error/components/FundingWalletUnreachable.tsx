@@ -11,7 +11,7 @@ export const FundingWalletUnreachable = ({ creatorId }: { creatorId: number }) =
   return (
     <ErrorLayout
       url={FundingErrorWalletUnreachableUrl}
-      title={t('Receiver’s wallet maximum limit Reached')}
+      title={t('Wallet Unreachable')}
       body={
         <>
           <Body1>

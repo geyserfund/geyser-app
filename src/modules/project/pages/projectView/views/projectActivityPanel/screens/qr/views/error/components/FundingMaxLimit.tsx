@@ -11,7 +11,7 @@ export const FundingMaxLimit = ({ amount, creatorId }: { amount?: number; creato
   return (
     <ErrorLayout
       url={FundingErrorWalletmaxUrl}
-      title={t('Receiver’s wallet maximum limit Reached')}
+      title={t('Receiver’s Wallet maximum limit Reached')}
       body={
         <Body1>
           <Trans

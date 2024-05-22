@@ -1,18 +1,3 @@
-{
-	# Optional staging lets encrypt for testing. Comment out for production.
-	acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
-}
-
-dev.geyser.fund {
-	tls internal
-	reverse_proxy geyser-app-standalone:3000
-}
-
-api.dev.geyser.fund {
-	tls internal
-	reverse_proxy graphql-faker:9002
-}
-
 # Local deployment with staging api
 staging.geyser.fund {
     tls internal

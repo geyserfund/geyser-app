@@ -11,9 +11,9 @@ export const RefundProcessing = (props: CardLayoutProps) => {
 
   return (
     <TransactionProcessing
+      id="refund-initiated-card"
       title={t('Your refund has been successfully intiated.')}
       subTitle={t('We apologize for any inconvenience caused.')}
-      //  buttonUrl={`${BLOCK_EXPLORER_BASE_URL}${transactionId}`}
       buttonUrl={refundedSwapData?.refundTx ? `${BLOCK_EXPLORER_BASE_URL}${refundedSwapData?.refundTx}` : undefined}
       {...props}
     />
