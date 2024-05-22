@@ -80,7 +80,7 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
         )}
       </HStack>
       <HStack display="flex" alignItems="flex-start" width="100%">
-        <Body1 fontSize="14px" fontWeight={400}>
+        <Body1 fontSize="14px" fontWeight={400} style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
           {goal.description}
         </Body1>
       </HStack>
