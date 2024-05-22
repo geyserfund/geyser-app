@@ -6,6 +6,7 @@ import * as yup from 'yup'
 
 import { MUTATION_CREATE_PROJECT_GOAL, MUTATION_UPDATE_PROJECT_GOAL } from '../../../../../graphql/mutations/goals'
 import { ProjectGoal, ProjectGoalCurrency } from '../../../../../types'
+import { dollarsToCents } from '../../../../../utils'
 
 type FormValues = Record<string, string | number | ProjectGoalCurrency>
 
@@ -27,7 +28,7 @@ const goalFormSchema = (amountContributed: number) =>
           function (value) {
             const { currency } = this.parent
             if (currency === ProjectGoalCurrency.Usdcent) {
-              return value >= 1000
+              return value >= 10
             }
 
             if (currency === ProjectGoalCurrency.Btcsat) {
@@ -93,6 +94,10 @@ export const useProjectGoalForm = (
   const onSubmit = async (formData: FormValues) => {
     try {
       const trimmedTitle = typeof formData.title === 'string' ? formData.title.trim() : ''
+      const targetAmount =
+        formData.currency === ProjectGoalCurrency.Usdcent
+          ? dollarsToCents(Number(formData.targetAmount))
+          : formData.targetAmount
 
       if (goal) {
         const { data } = await updateProjectGoal({
@@ -100,7 +105,7 @@ export const useProjectGoalForm = (
             input: {
               title: trimmedTitle,
               description: formData.description,
-              targetAmount: formData.targetAmount,
+              targetAmount,
               currency: formData.currency,
               projectGoalId: goal.id,
             },
@@ -117,7 +122,7 @@ export const useProjectGoalForm = (
             input: {
               title: trimmedTitle,
               description: formData.description,
-              targetAmount: formData.targetAmount,
+              targetAmount,
               currency: formData.currency,
               projectId: formData.projectId,
             },
