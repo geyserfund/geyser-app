@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 import react from '@vitejs/plugin-react-swc'
 import { defineConfig, loadEnv, PluginOption } from 'vite'
 import mkcert from 'vite-plugin-mkcert'
@@ -117,6 +118,20 @@ export default defineConfig(({ command, mode }) => {
   const plugins: PluginOption[] = [VitePWA(pwaOptions), react(), loadVersion(), wasm(), topLevelAwait()]
   if (mode !== 'production') {
     plugins.push(mkcert())
+  }
+
+  if (process.env.CI) {
+    plugins.push(
+      sentryVitePlugin({
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+        org: 'geyser',
+        project: 'geyser-app',
+        sourcemaps: {
+          assets: ['./dist/assets'],
+          filesToDeleteAfterUpload: ['./dist/**/*.js.map'],
+        },
+      }),
+    )
   }
 
   return {
