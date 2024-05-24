@@ -132,7 +132,7 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
             <Text as="span" color="neutral.900" fontWeight={500}>
               {formattedTotalUsdAmount()}
             </Text>
-            {t(' Contributed in total ')}
+            {t(' contributed in total ')}
           </Text>
         </Box>
       </VStack>
