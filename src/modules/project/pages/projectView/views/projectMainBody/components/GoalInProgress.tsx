@@ -160,6 +160,9 @@ const GoalProgressBar = ({
 }) => {
   const isMobile = useMobileMode()
 
+  const displayPercentage =
+    percentage === 0 ? '0%' : isMobile ? `${Math.round(percentage)}%` : `${percentage.toFixed(1)}%`
+
   return (
     <HStack width="100%" justifyContent="flex-start" py={'4px'}>
       <HStack width="100%" height="24px" justifyContent="flex-start" borderRadius="44px" bg="neutral.100">
@@ -174,7 +177,7 @@ const GoalProgressBar = ({
           alignItems="center"
         >
           <Caption fontSize={'14px'} bold color={captionColor}>
-            {isMobile ? Math.round(percentage) : percentage.toFixed(1)}%
+            {displayPercentage}
           </Caption>
         </HStack>
       </HStack>
