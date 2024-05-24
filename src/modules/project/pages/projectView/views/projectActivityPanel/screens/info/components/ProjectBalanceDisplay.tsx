@@ -1,5 +1,5 @@
 import { Box, Circle, CircularProgress, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSwipeable } from 'react-swipeable'
 
@@ -32,9 +32,16 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
   })
 
   const [showTotalProject, setShowTotalProject] = useState(!defaultGoalId)
+  const [isTotalBalanceAvailable, setIsTotalBalanceAvailable] = useState(Boolean(balance && balanceUsdCent))
+
+  useEffect(() => {
+    if (!balance || !balanceUsdCent) {
+      setIsTotalBalanceAvailable(false)
+    }
+  }, [balance, balanceUsdCent])
 
   const toggleTotalProject = () => {
-    if (defaultGoalId) {
+    if (defaultGoalId && isTotalBalanceAvailable) {
       setShowTotalProject(!showTotalProject)
     }
   }
@@ -148,12 +155,16 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
     )
   }
 
+  if (!isTotalBalanceAvailable && !defaultGoalId) {
+    return null
+  }
+
   return (
     <VStack
       w="100%"
       onClick={toggleTotalProject}
       _hover={{
-        cursor: defaultGoalId ? 'pointer' : 'default',
+        cursor: defaultGoalId && isTotalBalanceAvailable ? 'pointer' : 'default',
       }}
       p={2}
       {...handlers}
@@ -171,7 +182,7 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
           {showTotalProject ? getProjectTotalValue() : getGoalValue()}
         </VStack>
       </HStack>
-      {priorityGoal && <DotIndicator />}
+      {priorityGoal && isTotalBalanceAvailable && <DotIndicator />}
     </VStack>
   )
 }
