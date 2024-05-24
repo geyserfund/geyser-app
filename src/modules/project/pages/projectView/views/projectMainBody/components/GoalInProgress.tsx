@@ -5,6 +5,7 @@ import { MdModeEdit } from 'react-icons/md'
 import { DollarIconCircled, SatoshiIconCircled } from '../../../../../../../components/icons'
 import { Body1, Caption, H3 } from '../../../../../../../components/typography'
 import { IconButtonComponent } from '../../../../../../../components/ui'
+import { Tooltip } from '../../../../../../../components/ui/Tooltip'
 import { ProjectGoal, ProjectGoalCurrency, ProjectGoalStatus } from '../../../../../../../types'
 import { useMobileMode } from '../../../../../../../utils'
 import { useCurrencyFormatter } from '../../../hooks/useCurrencyFormatter'
@@ -117,7 +118,19 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
                   {'goal'}
                 </Text>
               </Body1>
-              {goal.currency === ProjectGoalCurrency.Btcsat ? <SatoshiIconCircled /> : <DollarIconCircled />}
+              {goal.currency === ProjectGoalCurrency.Btcsat ? (
+                <Tooltip px={4} py={1} content={<Text fontSize={12}>{t('This goal is denominated in Bitcoin')}</Text>}>
+                  <SatoshiIconCircled />
+                </Tooltip>
+              ) : (
+                <Tooltip
+                  px={4}
+                  py={1}
+                  content={<Text fontSize={12}>{t('This goal is denominated in US Dollars')}</Text>}
+                >
+                  <DollarIconCircled />
+                </Tooltip>
+              )}
             </HStack>
           </HStack>
         </VStack>
