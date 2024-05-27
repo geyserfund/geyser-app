@@ -120,10 +120,10 @@ export default defineConfig(({ command, mode }) => {
     plugins.push(mkcert())
   }
 
-  if (process.env.CI) {
+  if (env.CI) {
     plugins.push(
       sentryVitePlugin({
-        authToken: process.env.SENTRY_AUTH_TOKEN,
+        authToken: env.SENTRY_AUTH_TOKEN,
         org: 'geyser',
         project: 'geyser-app',
         sourcemaps: {
