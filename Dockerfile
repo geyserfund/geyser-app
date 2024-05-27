@@ -39,7 +39,7 @@ ARG VITE_APP_GEYSER_NOSTR_PUBKEY
 ARG VITE_APP_ENV
 ARG VITE_APP_AUTH_SERVICE_ENDPOINT
 ARG VITE_APP_BOLTZ_SWAP_DOMAIN
-RUN /bin/sh -c "printenv > .env && NODE_OPTIONS=--max-old-space-size=8192 yarn build"
+RUN /bin/sh -c "printenv > .env && NODE_OPTIONS=--max-old-space-size=8192 yarn build --sourcemaps true"
 RUN rm -rf ./src
 
 ###########################
