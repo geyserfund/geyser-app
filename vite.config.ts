@@ -127,7 +127,6 @@ export default defineConfig(({ command, mode }) => {
         org: 'geyser',
         project: 'geyser-app',
         sourcemaps: {
-          assets: ['./dist/assets'],
           filesToDeleteAfterUpload: ['./dist/**/*.js.map'],
         },
       }),
