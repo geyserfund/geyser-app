@@ -85,17 +85,21 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
           <HStack w="100%" display="flex" justifyContent="start" alignItems="center">
             <H1 fontSize="35px">
               {priorityGoal.currency === ProjectGoalCurrency.Usdcent && (
-                <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
-                  {'$'}
-                </Text>
+                <>
+                  <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
+                    {'$'}
+                  </Text>
+                  {numberWithCommas(centsToDollars(priorityGoal.amountContributed) ?? 0)}
+                </>
               )}
 
-              {numberWithCommas(centsToDollars(priorityGoal.amountContributed) ?? 0)}
-
               {priorityGoal.currency === ProjectGoalCurrency.Btcsat && (
-                <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
-                  {' sats'}
-                </Text>
+                <>
+                  {numberWithCommas(priorityGoal.amountContributed ?? 0)}
+                  <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
+                    {' sats'}
+                  </Text>
+                </>
               )}
             </H1>
           </HStack>
