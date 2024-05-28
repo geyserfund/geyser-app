@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { MdModeEdit } from 'react-icons/md'
 
 import { DollarIconCircled, SatoshiIconCircled } from '../../../../../../../components/icons'
+import { DragAndDropIcon } from '../../../../../../../components/icons/svg/DragAndDropIcon'
 import { Body1, Caption, H3 } from '../../../../../../../components/typography'
 import { IconButtonComponent } from '../../../../../../../components/ui'
 import { Tooltip } from '../../../../../../../components/ui/Tooltip'
@@ -15,9 +16,10 @@ type Props = {
   goal: ProjectGoal
   isEditing?: boolean
   onOpenGoalModal: (goal: ProjectGoal) => void
+  listeners: any
 }
 
-export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Props) => {
+export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, listeners }: Props) => {
   const { t } = useTranslation()
 
   const isMobile = useMobileMode()
@@ -60,64 +62,69 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
   }
 
   return (
-    <VStack display="flex" alignItems="flex-start" width="100%" gap={'5px'}>
-      <HStack
-        display="flex"
-        alignItems={'center'}
-        justifyContent={{ base: 'space-between', lg: 'flex-start' }}
-        width="100%"
-      >
-        <H3 fontSize="18px" fontWeight={600}>
-          {goal.title}
-        </H3>
-        {isEditing && isMobile && (
-          <IconButtonComponent
-            aria-label="is-editing-goal"
-            noBorder
-            variant="ghost"
-            onClick={handleEditGoal}
-            icon={<MdModeEdit fontSize="18px" />}
-          />
-        )}
-      </HStack>
-      <HStack display="flex" alignItems="flex-start" width="100%">
-        <Body1 fontSize="14px" fontWeight={400} style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-          {goal.description}
-        </Body1>
-      </HStack>
-      <HStack display="flex" alignItems="flex-start" width="100%"></HStack>
-      <Box
-        display="flex"
-        flexDirection={{ base: 'column', lg: 'row' }}
-        alignItems="center"
-        width="100%"
-        gap={{ base: 2, lg: 5 }}
-      >
-        <VStack width="100%">
-          <GoalProgressBar
-            width="100%"
-            bg={percentage > 0 ? 'neutral.900' : 'neutral.400'}
-            percentage={percentage}
-            captionColor={percentage > 0 ? 'neutral.0' : 'neutral.900'}
-          />
-          <HStack display="flex" alignItems="flex-start" justifyContent="space-between" width="100%">
-            <Body1 bold>
-              {formattedAmountContributed}{' '}
-              <Text as="span" color="neutral.600" fontWeight={500}>
-                {goal.currency === ProjectGoalCurrency.Btcsat ? `(${usdAmount})` : `(${satsAmount})`}
-              </Text>
-            </Body1>
-            <HStack display="flex" alignItems="center" justifyContent="flex-end" gap={2}>
-              <Body1>
-                {' of '}
-                <Body1 as="span" bold>
-                  {formattedTargetAmount}{' '}
-                </Body1>
+    <HStack width="100%" gap={'10px'}>
+      <VStack display="flex" height="100%" alignItems="center" justifyContent="flex-start">
+        <DragHandle listeners={listeners} />
+      </VStack>
+      <VStack display="flex" alignItems="flex-start" width="100%" height="100%" gap={'5px'}>
+        <HStack
+          display="flex"
+          alignItems={'center'}
+          justifyContent={{ base: 'space-between', lg: 'flex-start' }}
+          width="100%"
+        >
+          <H3 fontSize="18px" fontWeight={600}>
+            {goal.title}
+          </H3>
+          {isEditing && isMobile && (
+            <IconButtonComponent
+              aria-label="is-editing-goal"
+              noBorder
+              variant="ghost"
+              onClick={handleEditGoal}
+              icon={<MdModeEdit fontSize="18px" />}
+            />
+          )}
+        </HStack>
+        <HStack display="flex" alignItems="flex-start" width="100%">
+          <Body1 fontSize="14px" fontWeight={400} style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+            {goal.description}
+          </Body1>
+        </HStack>
+        <Box
+          display="flex"
+          flexDirection={{ base: 'column', lg: 'row' }}
+          alignItems="center"
+          width="100%"
+          gap={{ base: 2, lg: 5 }}
+        >
+          <VStack width="100%">
+            <GoalProgressBar
+              width="100%"
+              bg={percentage > 0 ? 'neutral.900' : 'neutral.400'}
+              percentage={percentage}
+              captionColor={percentage > 0 ? 'neutral.0' : 'neutral.900'}
+            />
+            <HStack display="flex" alignItems="flex-start" justifyContent="space-between" width="100%">
+              <Body1 bold>
+                {formattedAmountContributed}{' '}
                 <Text as="span" color="neutral.600" fontWeight={500}>
-                  {goal.currency === ProjectGoalCurrency.Btcsat ? `(${targetUsdAmount})` : `(${targetSatsAmount})`}{' '}
-                  {'goal'}
+                  {goal.currency === ProjectGoalCurrency.Btcsat ? `(${usdAmount})` : `(${satsAmount})`}
                 </Text>
               </Body1>
+              <HStack display="flex" alignItems="center" justifyContent="flex-end" gap={2}>
+                <Body1>
+                  {' of '}
+                  <Body1 as="span" bold>
+                    {formattedTargetAmount}{' '}
+                  </Body1>
+                  <Text as="span" color="neutral.600" fontWeight={500}>
+                    {goal.currency === ProjectGoalCurrency.Btcsat ? `(${targetUsdAmount})` : `(${targetSatsAmount})`}{' '}
+                    {'goal'}
+                  </Text>
+                </Body1>
+                {goal.currency === ProjectGoalCurrency.Btcsat ? <SatoshiIconCircled /> : <DollarIconCircled />}
+              </HStack>
               {goal.currency === ProjectGoalCurrency.Btcsat ? (
                 <Tooltip px={4} py={1} content={<Text fontSize={12}>{t('This goal is denominated in Bitcoin')}</Text>}>
                   <SatoshiIconCircled />
@@ -132,21 +139,21 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
                 </Tooltip>
               )}
             </HStack>
-          </HStack>
-        </VStack>
+          </VStack>
 
-        <Box
-          display="flex"
-          alignItems="start"
-          justifyContent={isEditing ? 'flex-end' : 'center'}
-          minWidth="100px"
-          height="100%"
-          width={{ base: '100%', lg: '192px' }}
-        >
-          {renderActionButton()}
+          <Box
+            display="flex"
+            alignItems="start"
+            justifyContent={isEditing ? 'flex-end' : 'center'}
+            minWidth="100px"
+            height="100%"
+            width={{ base: '100%', lg: '192px' }}
+          >
+            {renderActionButton()}
+          </Box>
         </Box>
-      </Box>
-    </VStack>
+      </VStack>
+    </HStack>
   )
 }
 
@@ -182,5 +189,34 @@ const GoalProgressBar = ({
         </HStack>
       </HStack>
     </HStack>
+  )
+}
+
+const DragHandle = ({ listeners }: { listeners: any }) => {
+  return (
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      width="40px"
+      height="40px"
+      bg="neutral.100"
+      borderRadius="8px"
+      cursor="grab"
+      transition="transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)"
+      _hover={{
+        transform: 'scale(1.05)',
+        '.drag-icon': {
+          transform: 'scale(1.2)',
+        },
+      }}
+      {...listeners}
+    >
+      <DragAndDropIcon
+        sx={{ transition: 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)' }}
+        className="drag-icon"
+        color="neutral.600"
+      />
+    </Box>
   )
 }

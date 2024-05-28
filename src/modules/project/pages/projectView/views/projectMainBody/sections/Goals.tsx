@@ -180,19 +180,25 @@ const SortableItem = ({
   editMode: boolean
   handleEditGoalModalOpen: (goal: ProjectGoal) => void
 }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: goal.id.toString() })
+  const { listeners, setNodeRef, transform, transition } = useSortable({ id: goal.id.toString() })
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
     display: 'flex',
-
     width: '100%',
+    cursor: 'default',
   }
 
   return (
-    <div key={key} ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <GoalInProgress key={goal.id} goal={goal} isEditing={editMode} onOpenGoalModal={handleEditGoalModalOpen} />
+    <div key={key} ref={setNodeRef} style={style}>
+      <GoalInProgress
+        key={goal.id}
+        goal={goal}
+        isEditing={editMode}
+        onOpenGoalModal={handleEditGoalModalOpen}
+        listeners={listeners}
+      />
     </div>
   )
 }
