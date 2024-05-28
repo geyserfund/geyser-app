@@ -17,7 +17,7 @@ import {
   GrantHasVoting,
 } from '../../constants'
 
-const CUSTOM_VIDEO_URL = 'https://youtu.be/0rN-qQT1sbI'
+const CUSTOM_VIDEO_URL = 'https://youtu.be/xemVDGbQwHs'
 
 export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHasVoting?: boolean }) => {
   const { t } = useTranslation()
