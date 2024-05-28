@@ -1,5 +1,9 @@
 import { Box, Button, Text, VStack } from '@chakra-ui/react'
-import { useState } from 'react'
+import { closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FaUnlock } from 'react-icons/fa'
 import { MdAdd, MdModeEdit } from 'react-icons/md'
@@ -15,6 +19,32 @@ export const Goals = () => {
   const { t } = useTranslation()
   const { isProjectOwner, goals } = useProjectContext()
   const [editMode, setEditMode] = useState(false)
+  const [items, setItems] = useState(goals.inProgressGoals)
+
+  useEffect(() => {
+    const x = window.scrollX
+    const y = window.scrollY
+    setItems(goals.inProgressGoals)
+
+    window.scrollTo(x, y)
+  }, [goals.inProgressGoals])
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  )
+
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event
+
+    if (active.id !== over.id) {
+      setItems((items) => {
+        const oldIndex = items?.findIndex((item: ProjectGoal) => item.id === active.id)
+        const newIndex = items?.findIndex((item: ProjectGoal) => item.id === over.id)
+        return arrayMove(items ?? [], oldIndex ?? 0, newIndex ?? 0)
+      })
+    }
+  }
 
   const handleCreateGoalModalOpen = () => {
     goals.onGoalsModalOpen()
@@ -29,20 +59,6 @@ export const Goals = () => {
 
   const handleEditMode = () => {
     setEditMode(!editMode)
-  }
-
-  const renderInProgressGoals = () => {
-    if (hasInProgressGoals) {
-      return goals.inProgressGoals?.map((goal: ProjectGoal) => {
-        if (goal) {
-          return (
-            <GoalInProgress key={goal.id} goal={goal} isEditing={editMode} onOpenGoalModal={handleEditGoalModalOpen} />
-          )
-        }
-      })
-    }
-
-    return <Text>There are no goals available.</Text>
   }
 
   const renderCompletedGoals = () => {
@@ -101,7 +117,18 @@ export const Goals = () => {
             </Box>
 
             <VStack alignItems="flex-start" gap={'20px'} width="100%">
-              {renderInProgressGoals()}
+              <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                <SortableContext items={items ?? []} strategy={verticalListSortingStrategy}>
+                  {items?.map((goal, index) => (
+                    <SortableItem
+                      key={goal.id}
+                      goal={goal}
+                      editMode={editMode}
+                      handleEditGoalModalOpen={handleEditGoalModalOpen}
+                    />
+                  ))}
+                </SortableContext>
+              </DndContext>
             </VStack>
           </Box>
         )}
@@ -139,5 +166,33 @@ export const Goals = () => {
         )}
       </CardLayout>
     </>
+  )
+}
+
+const SortableItem = ({
+  key,
+  goal,
+  editMode,
+  handleEditGoalModalOpen,
+}: {
+  key: string
+  goal: ProjectGoal
+  editMode: boolean
+  handleEditGoalModalOpen: (goal: ProjectGoal) => void
+}) => {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: goal.id.toString() })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    display: 'flex',
+
+    width: '100%',
+  }
+
+  return (
+    <div key={key} ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <GoalInProgress key={goal.id} goal={goal} isEditing={editMode} onOpenGoalModal={handleEditGoalModalOpen} />
+    </div>
   )
 }
