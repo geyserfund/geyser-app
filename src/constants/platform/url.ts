@@ -248,7 +248,7 @@ export const AlbyUrl = 'https://storage.googleapis.com/geyser-projects-media/pla
 export const BitnobUrl = 'https://storage.googleapis.com/geyser-projects-media/platform/bitnob.png'
 export const WalletOfSatoshiUrl = 'https://storage.googleapis.com/geyser-projects-media/platform/wallet-logo.svg'
 export const BlinkLogoUrl = 'https://storage.googleapis.com/geyser-projects-media/platform/blink.png'
-export const StrikeLogoUrl = 'https://storage.googleapis.com/geyser-projects-media/platform/strikeme.png'
+export const StrikeLogoUrl = 'https://storage.googleapis.com/geyser-projects-media/platform/strike.png'
 
 // ICONS
 
