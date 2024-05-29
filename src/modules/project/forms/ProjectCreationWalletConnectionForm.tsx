@@ -11,9 +11,9 @@ import {
   InputGroup,
   InputRightElement,
   Link,
+  Table,
   VStack,
 } from '@chakra-ui/react'
-import { Select } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 import { AiOutlineSetting } from 'react-icons/ai'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
