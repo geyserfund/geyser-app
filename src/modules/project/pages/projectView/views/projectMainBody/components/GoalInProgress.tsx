@@ -17,6 +17,7 @@ type Props = {
   isEditing?: boolean
   onOpenGoalModal: (goal: ProjectGoal) => void
   listeners: any
+  attributes: any
 }
 
 export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, listeners }: Props) => {
@@ -62,10 +63,12 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
   }
 
   return (
-    <HStack width="100%" gap={'10px'}>
-      <VStack display="flex" height="100%" alignItems="center" justifyContent="flex-start">
-        <DragHandle listeners={listeners} />
-      </VStack>
+    <HStack width="100%" gap={'10px'} bg="neutral.0">
+      {isEditing && (
+        <VStack display="flex" height="100%" alignItems="center" justifyContent="flex-start">
+          <DragHandle listeners={listeners} />
+        </VStack>
+      )}
       <VStack display="flex" alignItems="flex-start" width="100%" height="100%" gap={'5px'}>
         <HStack
           display="flex"

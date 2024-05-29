@@ -1,5 +1,14 @@
-import { Box, Button, Text, VStack } from '@chakra-ui/react'
-import { closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { Box, Button, Text, useTheme, VStack } from '@chakra-ui/react'
+import {
+  closestCenter,
+  DndContext,
+  DragOverlay,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
+import { restrictToParentElement, restrictToVerticalAxis, restrictToWindowEdges } from '@dnd-kit/modifiers'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
@@ -20,6 +29,7 @@ export const Goals = () => {
   const { isProjectOwner, goals } = useProjectContext()
   const [editMode, setEditMode] = useState(false)
   const [items, setItems] = useState(goals.inProgressGoals)
+  const [activeId, setActiveId] = useState(null)
 
   useEffect(() => {
     const x = window.scrollX
@@ -34,6 +44,10 @@ export const Goals = () => {
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   )
 
+  const handleDragStart = (event: any) => {
+    setActiveId(event.active.id)
+  }
+
   const handleDragEnd = (event: any) => {
     const { active, over } = event
 
@@ -44,6 +58,8 @@ export const Goals = () => {
         return arrayMove(items ?? [], oldIndex ?? 0, newIndex ?? 0)
       })
     }
+
+    setActiveId(null)
   }
 
   const handleCreateGoalModalOpen = () => {
@@ -117,9 +133,15 @@ export const Goals = () => {
             </Box>
 
             <VStack alignItems="flex-start" gap={'20px'} width="100%">
-              <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragStart={handleDragStart}
+                onDragEnd={handleDragEnd}
+                modifiers={[restrictToVerticalAxis, restrictToWindowEdges, restrictToParentElement]}
+              >
                 <SortableContext items={items ?? []} strategy={verticalListSortingStrategy}>
-                  {items?.map((goal, index) => (
+                  {items?.map((goal) => (
                     <SortableItem
                       key={goal.id}
                       goal={goal}
@@ -128,6 +150,11 @@ export const Goals = () => {
                     />
                   ))}
                 </SortableContext>
+                <DragOverlay>
+                  {activeId ? (
+                    <PresentationalGoalItem goal={items?.find((item) => item.id === activeId) ?? ({} as ProjectGoal)} />
+                  ) : null}
+                </DragOverlay>
               </DndContext>
             </VStack>
           </Box>
@@ -180,7 +207,9 @@ const SortableItem = ({
   editMode: boolean
   handleEditGoalModalOpen: (goal: ProjectGoal) => void
 }) => {
-  const { listeners, setNodeRef, transform, transition } = useSortable({ id: goal.id.toString() })
+  const { listeners, setNodeRef, transform, transition, attributes, isDragging } = useSortable({
+    id: goal.id.toString(),
+  })
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -188,17 +217,31 @@ const SortableItem = ({
     display: 'flex',
     width: '100%',
     cursor: 'default',
+    zIndex: isDragging ? 900 : 'auto',
+    backgroundColor: 'neutral.0',
+    opacity: isDragging ? 0 : 1,
   }
 
   return (
-    <div key={key} ref={setNodeRef} style={style}>
+    <Box key={key} ref={setNodeRef} sx={style} {...attributes}>
       <GoalInProgress
         key={goal.id}
         goal={goal}
         isEditing={editMode}
         onOpenGoalModal={handleEditGoalModalOpen}
         listeners={listeners}
+        attributes={attributes}
       />
-    </div>
+    </Box>
+  )
+}
+
+const PresentationalGoalItem = ({ goal }: { goal: ProjectGoal }) => {
+  const theme = useTheme()
+  const boxShadowColor = theme.colors.neutral[0]
+  return (
+    <Box display="flex" boxShadow={`0 -50px 30px -4px ${boxShadowColor}, 0 50px 30px -4px ${boxShadowColor}`}>
+      <GoalInProgress goal={goal} isEditing={true} onOpenGoalModal={() => {}} listeners={[]} attributes={{} as any} />
+    </Box>
   )
 }
