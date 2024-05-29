@@ -11,7 +11,6 @@ import {
   InputGroup,
   InputRightElement,
   Link,
-  Table,
   VStack,
 } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
