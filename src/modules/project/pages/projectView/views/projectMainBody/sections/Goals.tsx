@@ -26,10 +26,11 @@ import { GoalCompleted, GoalInProgress } from '../components'
 
 export const Goals = () => {
   const { t } = useTranslation()
-  const { isProjectOwner, goals } = useProjectContext()
+  const { isProjectOwner, project, goals } = useProjectContext()
   const [editMode, setEditMode] = useState(false)
   const [items, setItems] = useState(goals.inProgressGoals)
   const [activeId, setActiveId] = useState(null)
+  const [initialItemsOrder, setInitialItemsOrder] = useState<any[] | undefined>([])
 
   useEffect(() => {
     const x = window.scrollX
@@ -73,8 +74,26 @@ export const Goals = () => {
   const hasInProgressGoals = goals.inProgressGoals && goals.inProgressGoals.length > 0
   const hasCompletedGoals = goals.completedGoals && goals.completedGoals.length > 0
 
-  const handleEditMode = () => {
+  const handleEditMode = async () => {
+    if (editMode) {
+      const currentOrder = items?.map((item) => Number(item.id))
+
+      if (!compareProjectGoalOrder(initialItemsOrder, currentOrder)) {
+        await goals.handleUpdateProjectGoalOrdering(currentOrder ?? [], project?.id)
+      }
+    } else {
+      setInitialItemsOrder(items?.map((item) => Number(item.id)))
+    }
+
     setEditMode(!editMode)
+  }
+
+  const compareProjectGoalOrder = (initialOrder: any, currentOrder: any) => {
+    for (let i = 0; i < initialOrder.length; i++) {
+      if (initialOrder[i] !== currentOrder[i]) return false
+    }
+
+    return true
   }
 
   const renderCompletedGoals = () => {

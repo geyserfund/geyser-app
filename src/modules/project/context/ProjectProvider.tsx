@@ -63,6 +63,7 @@ type ProjectContextProps = {
     onGoalDeleteModalOpen: () => void
     hasGoals: boolean
     refetch: any
+    handleUpdateProjectGoalOrdering: (projectGoalIdsOrder: number[], projectId: string) => Promise<void>
   }
 }
 
@@ -150,6 +151,7 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
     goalsModal,
     goalDeleteModal,
     currentGoal,
+    handleUpdateProjectGoalOrdering,
   } = useProjectGoals(project?.id)
 
   const [walletLimits, setWalletLimits] = useState<WalletLimitsFragment>({} as WalletLimitsFragment)
@@ -229,6 +231,7 @@ export const ProjectProvider = ({ projectId, children }: { children: React.React
           onGoalDeleteModalOpen,
           hasGoals,
           refetch: goalsRefetch,
+          handleUpdateProjectGoalOrdering,
         },
         onCreatorModalOpen: creatorModal.onOpen,
       }}
