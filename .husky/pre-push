@@ -2,3 +2,8 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 yarn tsc
+
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+yarn tsc
