@@ -57,7 +57,7 @@ export const GrantsLandingPage = () => {
 
         {activeGrants && activeGrants.length > 0 && (
           <VStack w="full" alignItems="start" spacing="10px">
-            <Text fontWeight={'bold'} fontSize="19px" mb={1} fontFamily={fonts.interBlack}>
+            <Text fontWeight={'bold'} fontSize="19px" mb={1} fontFamily={fonts.brandBlack}>
               {t('Active Grants')}
             </Text>
             {activeGrants.map((activeGrant) => {
@@ -73,7 +73,7 @@ export const GrantsLandingPage = () => {
           </VStack>
         )}
         <VStack w="full" alignItems="start" spacing="10px">
-          <Text fontWeight={'bold'} fontSize="19px" fontFamily={fonts.interBlack}>
+          <Text fontWeight={'bold'} fontSize="19px" fontFamily={fonts.brandBlack}>
             {t('Previous Grants')}
           </Text>
           {inactiveGrants

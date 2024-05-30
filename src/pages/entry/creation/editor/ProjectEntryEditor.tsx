@@ -52,7 +52,7 @@ const useStyles = createUseStyles<Rules, StyleProps, AppTheme>(({ colors }) => (
     '& .ql-container': {
       width: '100%',
       border: 'none',
-      fontFamily: fonts.inter,
+      fontFamily: fonts.brand,
     },
     '& .ql-container.ql-snow': {
       border: 'none',
@@ -64,7 +64,7 @@ const useStyles = createUseStyles<Rules, StyleProps, AppTheme>(({ colors }) => (
       overflow: 'hidden',
       '&.ql-blank': {
         '&:before': {
-          fontFamily: fonts.inter,
+          fontFamily: fonts.brand,
           fontSize: '18px',
           lineHeight: 1.5,
           fontStyle: 'normal',
@@ -78,18 +78,18 @@ const useStyles = createUseStyles<Rules, StyleProps, AppTheme>(({ colors }) => (
     },
 
     '& p': {
-      fontFamily: fonts.inter,
+      fontFamily: fonts.brand,
       fontSize: '18px',
       lineHeight: 1.5,
     },
 
     '& h1': {
-      fontFamily: fonts.inter,
+      fontFamily: fonts.brand,
       fontSize: '22px',
       fontWeight: '500px',
     },
     '& h2': {
-      fontFamily: fonts.inter,
+      fontFamily: fonts.brand,
       fontSize: '28px',
       fontWeight: '500px',
     },

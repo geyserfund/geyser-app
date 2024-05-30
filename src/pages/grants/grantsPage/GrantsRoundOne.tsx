@@ -98,7 +98,7 @@ export const GrantsRoundOne = ({
           </Text>
           <Box display="flex" alignItems={'center'} justifyContent="center" gap={4}>
             <Text
-              fontFamily={fonts.interBlack}
+              fontFamily={fonts.brandBlack}
               fontSize={isMobile ? '30' : '35px'}
               fontWeight="700"
               textAlign="center"
@@ -154,7 +154,7 @@ export const GrantsRoundOne = ({
             margin="0 auto"
           >
             <VStack>
-              <Text fontFamily={fonts.interBlack} fontSize="24px" fontWeight={'bold'} textAlign="center" mt={8}>
+              <Text fontFamily={fonts.brandBlack} fontSize="24px" fontWeight={'bold'} textAlign="center" mt={8}>
                 {t('Round 1 Announcement')}
               </Text>
               <Text textAlign="justify" fontSize="sm">
@@ -206,7 +206,7 @@ export const GrantsRoundOne = ({
           ) : null}
 
           <Box my={8}>
-            <Text fontFamily={fonts.interBlack} fontSize="24px" fontWeight={'bold'}>
+            <Text fontFamily={fonts.brandBlack} fontSize="24px" fontWeight={'bold'}>
               {t('Principled Bitcoiners Board')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">
@@ -217,7 +217,7 @@ export const GrantsRoundOne = ({
             <Board />
           </Box>
           <Box my={8}>
-            <Text fontFamily={fonts.interBlack} fontSize="24px" fontWeight={'bold'}>
+            <Text fontFamily={fonts.brandBlack} fontSize="24px" fontWeight={'bold'}>
               {t('Made possible by sponsors')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">

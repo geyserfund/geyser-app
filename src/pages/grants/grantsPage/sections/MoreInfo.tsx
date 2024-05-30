@@ -13,7 +13,7 @@ export const MoreInfo = ({ titleProps }: MoreInfoProps) => {
   const { t } = useTranslation()
   return (
     <Box paddingX={'10px'}>
-      <Text fontWeight={'bold'} fontSize="19px" fontFamily={fonts.interBlack} {...titleProps}>
+      <Text fontWeight={'bold'} fontSize="19px" fontFamily={fonts.brandBlack} {...titleProps}>
         {t('More Information')}
       </Text>
       <Text mt="5px" color="neutral.600" fontSize={'14px'} textAlign="justify">
