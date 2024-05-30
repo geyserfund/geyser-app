@@ -1,7 +1,6 @@
 import { Box, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { fonts } from '../../../../styles'
 import { GrantBoardMember } from '../../../../types'
 import { BoardMembers } from '../../components/BoardMembers'
 

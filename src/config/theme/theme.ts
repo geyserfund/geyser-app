@@ -1,4 +1,4 @@
-import { extendTheme, StyleFunctionProps, Theme } from '@chakra-ui/react'
+import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
 
 import { fonts, lightModeColors } from '../../styles'
 import { alertTheme, drawerTheme, menuTheme, modalTheme, popOverTheme, selectTheme, switchTheme } from './components'

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 
 import { ShareIcon } from '../../../../assets'
 import { GrantsFAQUrl } from '../../../../constants'
-import { fonts } from '../../../../styles'
 
 interface MoreInfoProps {
   titleProps?: TextProps
