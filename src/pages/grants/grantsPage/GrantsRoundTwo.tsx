@@ -144,7 +144,7 @@ export const GrantsRoundTwo = ({
             </Text>
           </Box>
           <Box my={8}>
-            <Text fontFamily={fonts.brandBlack} fontSize="24px" fontWeight={'bold'}>
+            <Text fontSize="24px" fontWeight={'bold'}>
               {t('Principled Bitcoiners Board')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">
@@ -155,7 +155,7 @@ export const GrantsRoundTwo = ({
 
           <MoreInfo titleProps={{ fontSize: '24px' }} />
           <Box my={8}>
-            <Text fontFamily={fonts.brandBlack} fontSize="24px" fontWeight={'bold'}>
+            <Text fontFamily={fonts.brand} fontSize="24px" fontWeight={'bold'}>
               {t('Made possible by sponsors')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">

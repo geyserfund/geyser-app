@@ -10,7 +10,7 @@ export const CommonBoardMembers = ({ members }: { members: GrantBoardMember[] })
   return (
     <VStack w={'full'} alignItems={'start'} paddingX={'10px'}>
       <Box my={4}>
-        <Text fontFamily={fonts.brandBlack} fontSize="24px" fontWeight={'bold'}>
+        <Text fontSize="24px" fontWeight={'bold'}>
           {t('Principled Bitcoiners Board')}
         </Text>
         <Text color={'neutral.600'} fontWeight="600">

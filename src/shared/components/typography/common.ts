@@ -1,6 +1,3 @@
-import { Heading, HeadingProps } from '@chakra-ui/react'
-import React from 'react'
-
 interface TextWeightProps {
   /** Uses fontWeight: 300 */
   thin?: boolean
