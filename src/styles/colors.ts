@@ -1,12 +1,4 @@
-export const ColorsAppLight = {
-  light80: 'rgba(252, 252, 252, 0.8)',
-  dark50: 'rgba(20, 26, 25, 0.5)',
-}
-
-export const ColorsAppDark = {
-  light80: 'rgba(20, 26, 25, 0.8)',
-  dark50: 'rgba(20, 26, 25, 0.5)',
-}
+import { darkPalette, lightPalette } from './palette'
 
 export const neutralColorsLight = {
   0: '#FCFCFC',
@@ -127,7 +119,13 @@ export const lightModeColors = {
   nostr: nostrColorsLight,
   secondary: secondaryColors,
   social: socialColors,
-  app: ColorsAppLight,
+
+  primary1: lightPalette.geyser,
+  neutral1: lightPalette.sand,
+  error: lightPalette.red,
+  success: lightPalette.lime,
+  warning: lightPalette.amber,
+  info: lightPalette.sky,
 }
 
 export const darkModeColors = {
@@ -137,5 +135,11 @@ export const darkModeColors = {
   nostr: nostrColorsDark,
   secondary: secondaryColors,
   social: socialColorsDark,
-  app: ColorsAppDark,
+
+  primary1: darkPalette.geyser,
+  neutral1: darkPalette.sand,
+  error: darkPalette.red,
+  success: darkPalette.lime,
+  warning: darkPalette.amber,
+  info: darkPalette.sky,
 }

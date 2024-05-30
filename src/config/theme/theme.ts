@@ -1,6 +1,6 @@
-import { StyleFunctionProps } from '@chakra-ui/react'
+import { extendTheme, StyleFunctionProps, Theme } from '@chakra-ui/react'
 
-import { fonts } from '../../styles'
+import { fonts, lightModeColors } from '../../styles'
 import { alertTheme, drawerTheme, menuTheme, modalTheme, popOverTheme, selectTheme, switchTheme } from './components'
 import { buttonTheme } from './components/buttonTheme'
 
@@ -170,3 +170,9 @@ export const theme = {
     }),
   },
 }
+
+const finalTheme = {
+  ...theme,
+  colors: lightModeColors,
+}
+export default extendTheme(finalTheme)

@@ -96,9 +96,9 @@ export const ContributionActivityItem = ({ fundingTx, dateTime, count, showsProj
             )}
             {count && count > 1 && (
               <HStack backgroundColor="neutral.200" px="3px" borderRadius="sm" spacing="2px">
-                <Text fontFamily={fonts.inter} fontSize="12px" fontWeight={500}>{`${count}x`}</Text>
+                <Text fontFamily={fonts.brand} fontSize="12px" fontWeight={500}>{`${count}x`}</Text>
                 <LightningIcon height="15px" width="10px" />
-                <Text fontFamily={fonts.inter} fontSize="12px" fontWeight={500}>
+                <Text fontFamily={fonts.brand} fontSize="12px" fontWeight={500}>
                   {t('STREAMS')}
                 </Text>
               </HStack>

@@ -6,7 +6,7 @@ export const buttonTheme: ComponentStyleConfig = {
   // style object for base or default style
   baseStyle: {
     fontWeight: 500,
-    fontFamily: fonts.inter,
+    fontFamily: fonts.brand,
     boxShadow: 'none',
     outline: 'none',
     borderRadius: '8px',
