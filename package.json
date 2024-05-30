@@ -21,7 +21,8 @@
     "caddy:trust-ca": "bash ./scripts/trust-caddy-cert.sh",
     "changelog": "yarn conventional-changelog -p conventionalcommits -i CHANGELOG.md -s",
     "storybook": "storybook dev -p 6006",
-    "storybook:build": "storybook build"
+    "storybook:build": "storybook build",
+    "theme:types": "yarn chakra-cli tokens ./src/config/theme/theme.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.9.2",
