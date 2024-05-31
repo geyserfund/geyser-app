@@ -11,7 +11,6 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import EmojiPicker from 'emoji-picker-react'
-import { Categories } from 'emoji-picker-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IoMdCloseCircle } from 'react-icons/io'
@@ -45,7 +44,7 @@ const denominationOptions = [
 export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDeleteModal }: Props) => {
   const { t } = useTranslation()
 
-  const { control, handleSubmit, loading, watch, errors, enableSubmit, setValue } = useProjectGoalForm(
+  const { control, handleSubmit, loading, watch, errors, enableSubmit, setValue, trigger } = useProjectGoalForm(
     goal || null,
     projectId,
     onClose,
