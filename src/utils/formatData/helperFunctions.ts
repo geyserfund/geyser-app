@@ -78,16 +78,6 @@ export const validateFundingAmount = (amount: number, btcRate: number) => {
 
 export const randomIntFromInterval = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min)
 
-export const numberWithCommas = (x: string | number) => {
-  let value = `${x}`
-  const pattern = /(-?\d+)(\d{3})/
-  while (pattern.test(value)) {
-    value = value.replace(pattern, '$1,$2')
-  }
-
-  return value
-}
-
 export const dollarsToCents = (dollars: number): number => {
   return Math.round(dollars * 100)
 }

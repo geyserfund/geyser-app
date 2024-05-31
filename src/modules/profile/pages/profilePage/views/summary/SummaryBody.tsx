@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { CardLayout, SkeletonLayout } from '../../../../../../components/layouts'
 import { H2, H3 } from '../../../../../../components/typography'
 import { SatoshiAmount } from '../../../../../../components/ui'
-import { getShortAmountLabel, numberWithCommas } from '../../../../../../utils'
+import { commaFormatted, getShortAmountLabel } from '../../../../../../utils'
 
 interface SummaryBodyProps {
   totalFunded: number
@@ -63,7 +63,7 @@ export const SummaryBody = ({ totalFunded, projectsFunded, ranking, isLoading }:
             </H3>
             {renderSkeleton(
               <Text variant="satoshi" fontWeight="bold" fontSize="2xl">
-                #{numberWithCommas(ranking)}
+                #{commaFormatted(ranking)}
               </Text>,
             )}
           </VStack>

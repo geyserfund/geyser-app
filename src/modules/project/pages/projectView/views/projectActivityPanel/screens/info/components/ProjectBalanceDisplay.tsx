@@ -5,7 +5,7 @@ import { useSwipeable } from 'react-swipeable'
 
 import { H1 } from '../../../../../../../../../components/typography'
 import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../../../types'
-import { numberWithCommas } from '../../../../../../../../../utils'
+import { commaFormatted } from '../../../../../../../../../utils'
 import { centsToDollars } from '../../../../../../../../../utils'
 import { useProjectDefaultGoal } from '../hooks/useProjectDefaultGoal'
 
@@ -83,13 +83,13 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
                   <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
                     {'$'}
                   </Text>
-                  {numberWithCommas(centsToDollars(priorityGoal.amountContributed) ?? 0)}
+                  {commaFormatted(centsToDollars(priorityGoal.amountContributed) ?? 0)}
                 </>
               )}
 
               {priorityGoal.currency === ProjectGoalCurrency.Btcsat && (
                 <>
-                  {numberWithCommas(priorityGoal.amountContributed ?? 0)}
+                  {commaFormatted(priorityGoal.amountContributed ?? 0)}
                   <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
                     {' sats'}
                   </Text>
@@ -127,7 +127,7 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
       <VStack w="100%" display="flex" alignItems="center">
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
           <H1 fontSize="35px">
-            {numberWithCommas(balance ?? 0)}
+            {commaFormatted(balance ?? 0)}
             <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
               {' sats'}
             </Text>
