@@ -35,9 +35,11 @@ export function ControlledTextInput(props: Props) {
 
   return (
     <VStack display="flex" alignItems="flex-start" width="100%">
-      <Text fontSize="16px" fontWeight="500">
-        {props.label}
-      </Text>
+      {props.label && (
+        <Text fontSize="16px" fontWeight="500">
+          {props.label}
+        </Text>
+      )}
       {props.description && (
         <Text fontSize="14px" fontWeight="400">
           {props.description}
@@ -48,6 +50,9 @@ export function ControlledTextInput(props: Props) {
         {...props}
         variant="outline"
         colorScheme="primary.400"
+        borderColor="neutral.200"
+        borderRadius="8px"
+        borderWidth="2px"
         ref={props.inputRef}
         isDisabled={props.isDisabled}
         onBlur={handleBlur}

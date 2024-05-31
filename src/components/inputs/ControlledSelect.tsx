@@ -44,6 +44,9 @@ export function ControlledSelect(props: Props) {
           value={field.value || props.defaultValue}
           isDisabled={props.isDisabled}
           placeholder={props.defaultValue ? undefined : props.placeholder}
+          borderColor="neutral.200"
+          borderRadius="8px"
+          borderWidth="2px"
         >
           {props.options.map((option) => (
             <option key={option.value} value={option.value}>

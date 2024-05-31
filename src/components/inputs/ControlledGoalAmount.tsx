@@ -74,6 +74,9 @@ export function ControlledGoalAmount(props: Props) {
             {...props}
             variant="outline"
             colorScheme="primary.400"
+            borderColor="neutral.200"
+            borderRadius="8px"
+            borderWidth="2px"
             ref={props.inputRef}
             isDisabled={props.isDisabled}
             onBlur={handleBlur}
