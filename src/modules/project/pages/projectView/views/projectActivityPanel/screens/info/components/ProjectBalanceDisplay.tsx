@@ -1,5 +1,5 @@
 import { Box, Circle, CircularProgress, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSwipeable } from 'react-swipeable'
 
@@ -32,13 +32,7 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
   })
 
   const [showTotalProject, setShowTotalProject] = useState(!defaultGoalId)
-  const [isTotalBalanceAvailable, setIsTotalBalanceAvailable] = useState(Boolean(balance && balanceUsdCent))
-
-  useEffect(() => {
-    if (!balance || !balanceUsdCent) {
-      setIsTotalBalanceAvailable(false)
-    }
-  }, [balance, balanceUsdCent])
+  const isTotalBalanceAvailable = useMemo(() => Boolean(balance && balanceUsdCent), [balance, balanceUsdCent])
 
   const toggleTotalProject = () => {
     if (defaultGoalId && isTotalBalanceAvailable) {
