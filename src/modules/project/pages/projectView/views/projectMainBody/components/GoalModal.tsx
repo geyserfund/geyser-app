@@ -44,7 +44,7 @@ const denominationOptions = [
 export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDeleteModal }: Props) => {
   const { t } = useTranslation()
 
-  const { control, handleSubmit, loading, watch, errors, enableSubmit, setValue, trigger } = useProjectGoalForm(
+  const { control, handleSubmit, loading, watch, errors, enableSubmit, setValue } = useProjectGoalForm(
     goal || null,
     projectId,
     onClose,
@@ -180,7 +180,13 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
           </Box>
         </ModalContent>
       </Modal>
-      <Modal isCentered size="sm" isOpen={isEmojiPickerOpen} onClose={() => setIsEmojiPickerOpen(false)}>
+      <Modal
+        motionPreset="none"
+        isCentered
+        size="sm"
+        isOpen={isEmojiPickerOpen}
+        onClose={() => setIsEmojiPickerOpen(false)}
+      >
         <ModalOverlay />
         <ModalContent bg="transparent" boxShadow={0}>
           <ModalBody>

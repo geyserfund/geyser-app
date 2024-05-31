@@ -313,8 +313,6 @@ export type Funder = {
   fundingTxs: Array<FundingTx>
   id: Scalars['BigInt']['output']
   orders: Array<Order>
-  /** @deprecated Use 'orders' instead. */
-  rewards: Array<FunderReward>
   /** Number of (confirmed) times a Funder funded a particular project. */
   timesFunded?: Maybe<Scalars['Int']['output']>
   user?: Maybe<User>
@@ -323,12 +321,6 @@ export type Funder = {
 /** The Funder type contains a User's funding details over a particular project. */
 export type FunderFundingTxsArgs = {
   input?: InputMaybe<GetFunderFundingTxsInput>
-}
-
-export type FunderReward = {
-  __typename?: 'FunderReward'
-  projectReward: ProjectReward
-  quantity: Scalars['Int']['output']
 }
 
 export type FunderRewardGraphSum = GraphSumData & {
@@ -1486,6 +1478,7 @@ export type ProjectGoal = {
   createdAt: Scalars['Date']['output']
   currency: ProjectGoalCurrency
   description?: Maybe<Scalars['String']['output']>
+  emojiImageUrl?: Maybe<Scalars['String']['output']>
   hasReceivedContribution: Scalars['Boolean']['output']
   id: Scalars['BigInt']['output']
   projectId: Scalars['BigInt']['output']
@@ -1498,6 +1491,7 @@ export type ProjectGoal = {
 export type ProjectGoalCreateInput = {
   currency: ProjectGoalCurrency
   description?: InputMaybe<Scalars['String']['input']>
+  emojiImageUrl?: InputMaybe<Scalars['String']['input']>
   projectId: Scalars['BigInt']['input']
   targetAmount: Scalars['Int']['input']
   title: Scalars['String']['input']
@@ -1532,6 +1526,7 @@ export enum ProjectGoalStatusInCreate {
 export type ProjectGoalUpdateInput = {
   currency?: InputMaybe<ProjectGoalCurrency>
   description?: InputMaybe<Scalars['String']['input']>
+  emojiImageUrl?: InputMaybe<Scalars['String']['input']>
   projectGoalId: Scalars['BigInt']['input']
   targetAmount?: InputMaybe<Scalars['Int']['input']>
   title?: InputMaybe<Scalars['String']['input']>
@@ -2421,7 +2416,6 @@ export type ResolversTypes = {
   FileUploadInput: FileUploadInput
   Float: ResolverTypeWrapper<Scalars['Float']['output']>
   Funder: ResolverTypeWrapper<Funder>
-  FunderReward: ResolverTypeWrapper<FunderReward>
   FunderRewardGraphSum: ResolverTypeWrapper<FunderRewardGraphSum>
   FundingCancelInput: FundingCancelInput
   FundingCancelResponse: ResolverTypeWrapper<FundingCancelResponse>
@@ -2676,7 +2670,6 @@ export type ResolversParentTypes = {
   FileUploadInput: FileUploadInput
   Float: Scalars['Float']['output']
   Funder: Funder
-  FunderReward: FunderReward
   FunderRewardGraphSum: FunderRewardGraphSum
   FundingCancelInput: FundingCancelInput
   FundingCancelResponse: FundingCancelResponse
@@ -3036,18 +3029,8 @@ export type FunderResolvers<
   fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType, Partial<FunderFundingTxsArgs>>
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   orders?: Resolver<Array<ResolversTypes['Order']>, ParentType, ContextType>
-  rewards?: Resolver<Array<ResolversTypes['FunderReward']>, ParentType, ContextType>
   timesFunded?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
-}
-
-export type FunderRewardResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['FunderReward'] = ResolversParentTypes['FunderReward'],
-> = {
-  projectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType>
-  quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -3869,6 +3852,7 @@ export type ProjectGoalResolvers<
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
   currency?: Resolver<ResolversTypes['ProjectGoalCurrency'], ParentType, ContextType>
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  emojiImageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   hasReceivedContribution?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
@@ -4376,7 +4360,6 @@ export type Resolvers<ContextType = any> = {
   EntryPublishedSubscriptionResponse?: EntryPublishedSubscriptionResponseResolvers<ContextType>
   ExternalAccount?: ExternalAccountResolvers<ContextType>
   Funder?: FunderResolvers<ContextType>
-  FunderReward?: FunderRewardResolvers<ContextType>
   FunderRewardGraphSum?: FunderRewardGraphSumResolvers<ContextType>
   FundingCancelResponse?: FundingCancelResponseResolvers<ContextType>
   FundingConfirmResponse?: FundingConfirmResponseResolvers<ContextType>
@@ -6113,11 +6096,6 @@ export type ProjectDashboardFundersQuery = {
     timesFunded?: number | null
     user?: { __typename?: 'User'; id: any; username: string; imageUrl?: string | null } | null
     fundingTxs: Array<{ __typename?: 'FundingTx'; email?: string | null; amount: number; uuid?: string | null }>
-    rewards: Array<{
-      __typename?: 'FunderReward'
-      quantity: number
-      projectReward: { __typename?: 'ProjectReward'; id: any; name: string }
-    }>
   }>
 }
 
@@ -10532,13 +10510,6 @@ export const ProjectDashboardFundersDocument = gql`
         email
         amount
         uuid
-      }
-      rewards {
-        quantity
-        projectReward {
-          id
-          name
-        }
       }
       amountFunded
       confirmed

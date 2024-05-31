@@ -57,7 +57,7 @@ export const useProjectGoalForm = (
   onClose: () => void,
   refetch: () => void,
 ) => {
-  const { control, handleSubmit, reset, watch, formState, setValue, trigger, getValues } = useForm<FormValues>({
+  const { control, handleSubmit, reset, watch, formState, setValue, trigger } = useForm<FormValues>({
     resolver: yupResolver(goalFormSchema(goal?.amountContributed || 0)),
     defaultValues: {
       title: '',
@@ -79,6 +79,7 @@ export const useProjectGoalForm = (
 
   useEffect(() => {
     if (goal) {
+      console.log(goal)
       reset({
         title: goal.title || '',
         description: goal.description || '',
@@ -86,8 +87,7 @@ export const useProjectGoalForm = (
           goal.currency === ProjectGoalCurrency.Btcsat ? goal.targetAmount || 0 : goal.targetAmount / 100 || 0,
         currency: goal.currency,
         projectId,
-        // TODO: add emojiImageUrl from server
-        emojiImageUrl: '',
+        emojiImageUrl: goal.emojiImageUrl || '',
       })
     } else {
       reset({
@@ -123,6 +123,7 @@ export const useProjectGoalForm = (
               targetAmount,
               currency: formData.currency,
               projectGoalId: goal.id,
+              emojiImageUrl: formData.emojiImageUrl,
             },
           },
         })
@@ -140,6 +141,7 @@ export const useProjectGoalForm = (
               targetAmount,
               currency: formData.currency,
               projectId: formData.projectId,
+              emojiImageUrl: formData.emojiImageUrl,
             },
           },
         })
