@@ -11,6 +11,7 @@ import {
   InputGroup,
   InputRightElement,
   Link,
+  Text,
   VStack,
 } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
@@ -27,6 +28,7 @@ import {
   BitnobUrl,
   BlinkLogoUrl,
   BlinkUrl,
+  GeyserLightningWalletGuideLink,
   LIGHTNING_FEE_PERCENTAGE,
   StrikeLogoUrl,
   StrikeUrl,
@@ -152,7 +154,7 @@ export const ProjectCreationWalletConnectionForm = ({
                     '<0>Lightning Addresses</0> are like an email address, but for your Bitcoin. You’ll receive all on-chain and lightning transactions directly to your lightning wallet. Get your own lightning access using these recommended apps.'
                   }
                 >
-                  <Link textDecoration="underline" href="https://lightningaddress.com/" isExternal>
+                  <Link textDecoration="underline" href={GeyserLightningWalletGuideLink} isExternal>
                     Lightning Addresses
                   </Link>
                   {
@@ -170,6 +172,11 @@ export const ProjectCreationWalletConnectionForm = ({
                   <RenderSponsorImage url={BitNobURL} imageUrl={BitnobUrl} />
                   <RenderSponsorImage url={BlinkUrl} imageUrl={BlinkLogoUrl} />
                   <RenderSponsorImage url={AlbyLightningAddressURL} imageUrl={AlbyUrl} />
+                  <Link textDecoration="none" href={GeyserLightningWalletGuideLink} isExternal>
+                    <Text fontWeight="bold" color="neutral.900" fontSize="16px">
+                      {t('See more...')}
+                    </Text>
+                  </Link>
                 </HStack>
               )}
             </WalletConnectionOptionInfoBox>
