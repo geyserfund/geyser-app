@@ -63,7 +63,7 @@ type ProjectContextProps = {
     onGoalDeleteModalOpen: () => void
     hasGoals: boolean
     refetch: any
-    handleUpdateProjectGoalOrdering: (projectGoalIdsOrder: number[], projectId: string) => Promise<void>
+    handleUpdateProjectGoalOrdering: (projectGoalIdsOrder: number[], projectId: string) => void
   }
 }
 
