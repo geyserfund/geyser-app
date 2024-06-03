@@ -15,12 +15,12 @@ export const useProjectDefaultGoal = ({ defaultGoalId, balanceUsdCent, inProgres
   const [priorityGoal, setPriorityGoal] = useState<ProjectGoal>()
 
   useEffect(() => {
-    if (!defaultGoalId || !balanceUsdCent || !inProgressGoals) return
+    if (!defaultGoalId || !inProgressGoals) return
 
     const goalToDisplay = inProgressGoals.find((goal) => goal.id === defaultGoalId)
 
     setPriorityGoal(goalToDisplay as ProjectGoal)
-  }, [defaultGoalId, balanceUsdCent, inProgressGoals])
+  }, [defaultGoalId, inProgressGoals])
 
   const formattedUsdAmount = useCallback(() => {
     return formatUsdAmount(priorityGoal?.amountContributed ?? 0)

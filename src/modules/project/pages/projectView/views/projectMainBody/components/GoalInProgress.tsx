@@ -5,6 +5,7 @@ import { MdModeEdit } from 'react-icons/md'
 import { DollarIconCircled, SatoshiIconCircled } from '../../../../../../../components/icons'
 import { Body1, Caption, H3 } from '../../../../../../../components/typography'
 import { IconButtonComponent } from '../../../../../../../components/ui'
+import { Tooltip } from '../../../../../../../components/ui/Tooltip'
 import { ProjectGoal, ProjectGoalCurrency, ProjectGoalStatus } from '../../../../../../../types'
 import { useMobileMode } from '../../../../../../../utils'
 import { useCurrencyFormatter } from '../../../hooks/useCurrencyFormatter'
@@ -117,7 +118,19 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal }: Pro
                   {'goal'}
                 </Text>
               </Body1>
-              {goal.currency === ProjectGoalCurrency.Btcsat ? <SatoshiIconCircled /> : <DollarIconCircled />}
+              {goal.currency === ProjectGoalCurrency.Btcsat ? (
+                <Tooltip px={4} py={1} content={<Text fontSize={12}>{t('This goal is denominated in Bitcoin')}</Text>}>
+                  <SatoshiIconCircled />
+                </Tooltip>
+              ) : (
+                <Tooltip
+                  px={4}
+                  py={1}
+                  content={<Text fontSize={12}>{t('This goal is denominated in US Dollars')}</Text>}
+                >
+                  <DollarIconCircled />
+                </Tooltip>
+              )}
             </HStack>
           </HStack>
         </VStack>
@@ -147,21 +160,24 @@ const GoalProgressBar = ({
 }) => {
   const isMobile = useMobileMode()
 
+  const displayPercentage =
+    percentage === 0 ? '0%' : isMobile ? `${Math.round(percentage)}%` : `${percentage.toFixed(1)}%`
+
   return (
-    <HStack width="100%" justifyContent="flex-start" py={'4px'}>
-      <HStack width="100%" height="24px" justifyContent="flex-start" borderRadius="44px" bg="neutral.100">
+    <HStack width="100%" justifyContent="flex-start" py={'2px'}>
+      <HStack width="100%" height="28px" justifyContent="flex-start" borderRadius="44px" bg="neutral.100">
         <HStack
           p={'5px'}
           width={`${percentage}%`}
           minWidth="60px"
-          height="24px"
+          height="28px"
           bg={bg}
           borderRadius="44px"
           justifyContent={'flex-end'}
           alignItems="center"
         >
-          <Caption fontSize={'14px'} bold color={captionColor}>
-            {isMobile ? Math.round(percentage) : percentage.toFixed(1)}%
+          <Caption fontSize={'16px'} bold color={captionColor}>
+            {displayPercentage}
           </Caption>
         </HStack>
       </HStack>

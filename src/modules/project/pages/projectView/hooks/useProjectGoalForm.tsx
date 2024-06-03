@@ -12,6 +12,7 @@ type FormValues = Record<string, string | number | ProjectGoalCurrency>
 
 const MIN_GOAL_TARGET_AMOUNT_US_DOLLARS = 10
 const MIN_GOAL_TARGET_AMOUNT_SATS = 10000
+const MAX_GOAL_TARGET_AMOUNT = 2000000000
 
 const goalFormSchema = (amountContributed: number) =>
   yup
@@ -25,6 +26,10 @@ const goalFormSchema = (amountContributed: number) =>
         .min(
           amountContributed,
           'The Goal amount is lower than your funded amount. Please choose a Goal amount that is higher than the current Goal’s funded amount.',
+        )
+        .max(
+          MAX_GOAL_TARGET_AMOUNT,
+          'The target amount cannot exceed 2,000,000,000 USD or 2,000,000,000 Sats. Come on!',
         )
         .test(
           'currency-based-minimum',

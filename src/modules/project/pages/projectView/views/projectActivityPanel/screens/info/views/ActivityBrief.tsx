@@ -86,7 +86,7 @@ export const ActivityBrief = (props: StackProps) => {
 
   const latestFunders = socialFunders.slice(0, 12)
 
-  const removeBalance = removeProjectAmountException(project?.name) || project?.balance === 0
+  const removeBalance = removeProjectAmountException(project?.name)
 
   if (!project) {
     return null
