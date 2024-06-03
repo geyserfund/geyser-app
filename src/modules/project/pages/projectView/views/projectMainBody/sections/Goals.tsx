@@ -94,21 +94,6 @@ export const Goals = () => {
     setEditMode(!editMode)
   }
 
-  const renderInProgressGoals = () => {
-    if (hasInProgressGoals) {
-      return goals.inProgressGoals?.map((goal: ProjectGoal) => {
-        if (goal) {
-          return (
-            <GoalInProgress
-              key={goal.id}
-              goal={goal}
-              isEditing={editMode}
-              onOpenGoalModal={handleEditGoalModalOpen}
-              isPriorityGoal={goal.id === priorityGoal?.id}
-            />
-          )
-        }
-      })
   const compareProjectGoalOrder = (initialOrder: any, currentOrder: any) => {
     for (let i = 0; i < initialOrder.length; i++) {
       if (initialOrder[i] !== currentOrder[i]) return false
@@ -187,6 +172,7 @@ export const Goals = () => {
                       goal={goal}
                       editMode={editMode}
                       handleEditGoalModalOpen={handleEditGoalModalOpen}
+                      isPriorityGoal={goal.id === priorityGoal?.id}
                     />
                   ))}
                 </SortableContext>
@@ -241,11 +227,13 @@ const SortableItem = ({
   goal,
   editMode,
   handleEditGoalModalOpen,
+  isPriorityGoal,
 }: {
   key: string
   goal: ProjectGoal
   editMode: boolean
   handleEditGoalModalOpen: (goal: ProjectGoal) => void
+  isPriorityGoal: boolean
 }) => {
   const { listeners, setNodeRef, transform, transition, attributes, isDragging } = useSortable({
     id: goal.id.toString(),
@@ -270,7 +258,7 @@ const SortableItem = ({
         isEditing={editMode}
         onOpenGoalModal={handleEditGoalModalOpen}
         listeners={listeners}
-        attributes={attributes}
+        isPriorityGoal={isPriorityGoal}
       />
     </Box>
   )
@@ -281,7 +269,7 @@ const PresentationalGoalItem = ({ goal }: { goal: ProjectGoal }) => {
   const boxShadowColor = theme.colors.neutral[0]
   return (
     <Box display="flex" boxShadow={`0 -50px 30px -4px ${boxShadowColor}, 0 50px 30px -4px ${boxShadowColor}`}>
-      <GoalInProgress goal={goal} isEditing={true} onOpenGoalModal={() => {}} listeners={[]} attributes={{} as any} />
+      <GoalInProgress goal={goal} isEditing={true} onOpenGoalModal={() => {}} listeners={[]} />
     </Box>
   )
 }
