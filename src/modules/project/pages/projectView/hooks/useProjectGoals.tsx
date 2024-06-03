@@ -49,14 +49,15 @@ export const useProjectGoals = (projectId: string | number | undefined) => {
     },
   })
 
-  const [updateProjectGoalOrdering] = useMutation(MUTATION_UPDATE_PROJECT_GOAL_ORDERING)
+  const [updateProjectGoalOrdering] = useMutation(MUTATION_UPDATE_PROJECT_GOAL_ORDERING, {
+    onCompleted() {
+      refetch()
+    },
+  })
 
-  const handleUpdateProjectGoalOrdering = async (projectGoalIdsOrder: number[], projectId: string) => {
-    await updateProjectGoalOrdering({
+  const handleUpdateProjectGoalOrdering = (projectGoalIdsOrder: number[], projectId: string) => {
+    updateProjectGoalOrdering({
       variables: { input: { projectId, projectGoalIdsOrder } },
-      onCompleted() {
-        refetch()
-      },
     })
   }
 
