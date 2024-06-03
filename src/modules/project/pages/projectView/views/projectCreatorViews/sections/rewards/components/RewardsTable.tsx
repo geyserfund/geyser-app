@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client'
 import { DeleteIcon, EditIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { Image, Stack, Text, useBreakpoint, useColorMode, VStack } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -29,11 +29,18 @@ export const RewardsTable = () => {
   const { isProjectOwner, project, setMobileView, updateProject } = useProjectContext()
   const { toast } = useNotification()
   const navigate = useNavigate()
+  const [orderedRewards, setOrderedRewards] = useState<ProjectRewardForCreateUpdateFragment[]>([])
   const [selectedReward, setSelectedReward] = useState<ProjectRewardForCreateUpdateFragment>()
   const breakpoint = useBreakpoint({ ssr: false })
   const largeView = ['xl', '2xl'].includes(breakpoint)
 
   const { isOpen: isRewardDeleteOpen, onClose: onRewardDeleteClose, onOpen: openRewardDelete } = useModal()
+
+  useEffect(() => {
+    if (project) {
+      setOrderedRewards([...project.rewards].sort((a, b) => a.cost - b.cost))
+    }
+  }, [project])
 
   const [deleteRewardMutation] = useMutation<any, { input: { projectRewardId: Number } }>(
     MUTATION_DELETE_PROJECT_REWARD,
@@ -144,7 +151,7 @@ export const RewardsTable = () => {
             <th style={{ padding: '10px 0 10px 0' }}>{t('Overview')}</th>
             <th></th>
           </tr>
-          {project.rewards.map((row, index) => {
+          {orderedRewards?.map((row, index) => {
             return (
               <tr
                 key={index}
