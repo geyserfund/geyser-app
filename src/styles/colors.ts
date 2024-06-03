@@ -112,6 +112,29 @@ export const socialColorsDark = {
   lightning: '#FDB848',
 }
 
+export const utilColors = {
+  light: {
+    pbg: '#FFFFFF',
+    surface: '#FFFFFF',
+    primarySurface: 'rgba(0, 225, 180, 0.07)',
+    overlay: 'rgba(25, 21, 1, 0.29)',
+    primaryContrast: '#FFFFFF',
+    whiteContrast: '#FFFFFF',
+    blackContrast: '#1C2024',
+    text: '#21201C',
+  },
+  dark: {
+    pbg: '#111110',
+    surface: '#00000040',
+    primarySurface: 'rgba(0, 249, 203, 0.04)',
+    overlay: 'rgba(0, 0, 0, 0.75)',
+    primaryContrast: '#FFFFFF',
+    whiteContrast: '#FFFFFF',
+    blackContrast: '#1C2024',
+    text: '#FFFFFF',
+  },
+}
+
 export const lightModeColors = {
   primary: primaryColorsLight,
   neutral: neutralColorsLight,
@@ -121,11 +144,15 @@ export const lightModeColors = {
   social: socialColors,
 
   primary1: lightPalette.geyser,
+  primaryAlpha: lightPalette.geyserAlpha,
   neutral1: lightPalette.sand,
+  neutralAlpha: lightPalette.sandAlpha,
   error: lightPalette.red,
   success: lightPalette.lime,
   warning: lightPalette.amber,
   info: lightPalette.sky,
+
+  utils: utilColors.light,
 }
 
 export const darkModeColors = {
@@ -137,9 +164,13 @@ export const darkModeColors = {
   social: socialColorsDark,
 
   primary1: darkPalette.geyser,
+  primaryAlpha: darkPalette.geyserAlpha,
   neutral1: darkPalette.sand,
+  neutralAlpha: darkPalette.sandAlpha,
   error: darkPalette.red,
   success: darkPalette.lime,
   warning: darkPalette.amber,
   info: darkPalette.sky,
+
+  utils: utilColors.dark,
 }

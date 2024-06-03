@@ -1,10 +1,10 @@
 export const dimensions = {
   topNavBar: {
     desktop: {
-      height: 54,
+      height: 112, // 32 * 2 + 48,
     },
     mobile: {
-      height: 54,
+      height: 80, // 16 * 2 + 48
     },
   },
   bottomNavBar: {

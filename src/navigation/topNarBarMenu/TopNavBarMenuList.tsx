@@ -13,7 +13,7 @@ import { useMobileMode } from '../../utils'
 import { useRouteMatchesForTopNavBar } from '../topNavBar/topNavBarAtom'
 import { MenuItemLink, ModeChange, NavBarUserProfileMenuItem, NavBarUserProjectMenuItem } from './components'
 
-export const TopNavBarMenuList = ({ sideNav }: { sideNav?: boolean }) => {
+export const TopNavBarMenuList = () => {
   const { t } = useTranslation()
 
   const isMobile = useMobileMode()
