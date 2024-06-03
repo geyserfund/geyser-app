@@ -22,11 +22,17 @@ import { IconButtonComponent } from '../../../../../../../components/ui'
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
 import { ProjectGoal } from '../../../../../../../types'
 import { useProjectContext } from '../../../../../context'
+import { useProjectDefaultGoal } from '../../projectActivityPanel/screens/info/hooks/useProjectDefaultGoal'
 import { GoalCompleted, GoalInProgress } from '../components'
 
 export const Goals = () => {
   const { t } = useTranslation()
-  const { isProjectOwner, project, goals } = useProjectContext()
+  const { isProjectOwner, goals, project } = useProjectContext()
+  const { priorityGoal } = useProjectDefaultGoal({
+    defaultGoalId: project?.defaultGoalId,
+    balanceUsdCent: project?.balanceUsdCent ?? 0,
+    inProgressGoals: goals.inProgressGoals,
+  })
   const [editMode, setEditMode] = useState(false)
   const [items, setItems] = useState(goals.inProgressGoals)
   const [activeId, setActiveId] = useState(null)
@@ -88,6 +94,21 @@ export const Goals = () => {
     setEditMode(!editMode)
   }
 
+  const renderInProgressGoals = () => {
+    if (hasInProgressGoals) {
+      return goals.inProgressGoals?.map((goal: ProjectGoal) => {
+        if (goal) {
+          return (
+            <GoalInProgress
+              key={goal.id}
+              goal={goal}
+              isEditing={editMode}
+              onOpenGoalModal={handleEditGoalModalOpen}
+              isPriorityGoal={goal.id === priorityGoal?.id}
+            />
+          )
+        }
+      })
   const compareProjectGoalOrder = (initialOrder: any, currentOrder: any) => {
     for (let i = 0; i < initialOrder.length; i++) {
       if (initialOrder[i] !== currentOrder[i]) return false

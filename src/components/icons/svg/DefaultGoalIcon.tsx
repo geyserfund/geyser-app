@@ -6,7 +6,7 @@ export interface DefaultGoalIconProps extends IconProps {
 
 export const DefaultGoalIcon = ({ size = 'md', ...props }: DefaultGoalIconProps) => {
   return (
-    <Icon viewBox="0 0 16 16" width="4" height="4" {...props}>
+    <Icon viewBox="0 0 24 18" width="28px" height="28px" {...props}>
       <mask
         id="path-1-outside-1_28858_68624"
         maskUnits="userSpaceOnUse"

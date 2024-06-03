@@ -16,6 +16,7 @@ type Props = {
   goal: ProjectGoal
   isEditing?: boolean
   onOpenGoalModal: (goal: ProjectGoal) => void
+  isPriorityGoal?: boolean
   listeners: any
   attributes: any
 }
