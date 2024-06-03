@@ -1,5 +1,4 @@
 import { Box } from '@chakra-ui/layout'
-import { Fade } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import PullToRefresh from 'react-simple-pull-to-refresh'
@@ -9,9 +8,9 @@ import { useSetHistoryRoute } from './config'
 import { dimensions, ID } from './constants'
 import { useAuthContext } from './context'
 import { useLayoutAnimation } from './hooks'
+import { TopNavBar } from './modules/navigation/topNavBar/TopNavBar'
 import { LandingNavBar } from './navigation/bottomNav/LandingNavBar'
 import { ProfileSideNavigation } from './navigation/profileRightSideNav'
-import { TopNavBar } from './navigation/topNavBar/TopNavBar'
 import { LoadingPage } from './pages/loading'
 import { useMobileMode } from './utils'
 
@@ -41,25 +40,29 @@ export const AppLayout = () => {
         pullDownThreshold={dimensions.pullDownThreshold}
         isPullable={isMobile}
       >
-        <Fade in={true}>
-          <Box w="full" h={'100%'} position="relative" className={layoutAnimationClassName}>
-            <Box minHeight="100vh" height={isMobile ? '100%' : '100vh'} display="flex" flexDir="column">
-              <TopNavBar />
-              <ProfileSideNavigation />
-              <Box
-                id={ID.root}
-                maxHeight="100%"
-                flex="1"
-                paddingTop={`${dimensions.topNavBar.desktop.height}px`}
-                backgroundColor="neutral.0"
-                overflowY={isMobile ? 'initial' : 'auto'}
-              >
-                <Outlet />
-              </Box>
-              {isMobile && <LandingNavBar />}
+        <Box w="full" h={'100%'} position="relative" className={layoutAnimationClassName}>
+          <Box
+            minHeight="100vh"
+            height={{ base: '100%', lg: '100vh' }}
+            display="flex"
+            alignItems="center"
+            flexDir="column"
+          >
+            <TopNavBar />
+            <ProfileSideNavigation />
+            <Box
+              id={ID.root}
+              maxHeight="100%"
+              flex="1"
+              paddingTop={`${dimensions.topNavBar.desktop.height}px`}
+              backgroundColor="neutral.0"
+              overflowY={{ base: 'initial', lg: 'auto' }}
+            >
+              <Outlet />
             </Box>
+            {isMobile && <LandingNavBar />}
           </Box>
-        </Fade>
+        </Box>
       </PullToRefresh>
     </>
   )

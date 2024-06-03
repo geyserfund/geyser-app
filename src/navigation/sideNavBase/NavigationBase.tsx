@@ -10,9 +10,13 @@ export enum NavigationDirection {
 }
 
 type NavigationBaseProps = {
+  /** This is reffered as the Source of truth, for the state of the navigation at context. */
   isSideNavOpen: boolean
+  /** This should change the `isSideNavOpen` parameter. */
   changeSideNavOpen: (_: any) => void
+  /** This is the actual navigation Component that would be rendered inside the sidebar block */
   navigation: React.ReactNode
+  /** This is the direction in which the navigation should slide in */
   direction: NavigationDirection
 }
 

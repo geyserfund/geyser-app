@@ -1,6 +1,7 @@
 import { BellIcon } from '@chakra-ui/icons'
 import { Button as ChakraButton } from '@chakra-ui/react'
 import type { Meta, StoryObj } from '@storybook/react'
+import React from 'react'
 
 const meta = {
   title: 'Components/Input/Button',
@@ -19,8 +20,12 @@ const meta = {
         'secondary',
         'secondaryNeutral',
         'transparent',
+        'solid',
+        'soft',
+        'surface',
       ],
       control: { type: 'select' },
+      colorScheme: { type: 'input' },
     },
     size: {
       options: ['sm', 'md', 'lg'],

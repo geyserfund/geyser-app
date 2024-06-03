@@ -1,4 +1,4 @@
-interface TextWeightProps {
+export interface TextWeightProps {
   /** Uses fontWeight: 300 */
   thin?: boolean
   /** Uses fontWeight: 400 */
@@ -9,7 +9,7 @@ interface TextWeightProps {
   bold?: boolean
 }
 
-interface TextColorProps {
+export interface TextColorProps {
   /** Uses color: neutral.12 */
   dark?: boolean
   /** Uses color: neutral.11 */

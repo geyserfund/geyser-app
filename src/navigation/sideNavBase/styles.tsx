@@ -10,8 +10,8 @@ export const slideInRight = {
     '100%': { right: '0' },
   },
   slideInRight: {
-    webkitAnimation: '$slide-in-right .2s cubic-bezier(0.25,0.46,0.45,0.94) both',
-    animation: '$slide-in-right .2s cubic-bezier(0.25,0.46,0.45,0.94) both !important',
+    webkitAnimation: '$slide-in-right .1s cubic-bezier(0.25,0.46,0.45,0.94) both',
+    animation: '$slide-in-right .1s cubic-bezier(0.25,0.46,0.45,0.94) both !important',
   },
 }
 
@@ -26,8 +26,8 @@ export const slideOutLeft = {
   },
 
   slideOutLeft: {
-    webkitAnimation: '$slide-out-left .2s cubic-bezier(0.25,0.46,0.45,0.94) both',
-    animation: '$slide-out-left .2s cubic-bezier(0.25,0.46,0.45,0.94) both !important',
+    webkitAnimation: '$slide-out-left .1s cubic-bezier(0.25,0.46,0.45,0.94) both',
+    animation: '$slide-out-left .1s cubic-bezier(0.25,0.46,0.45,0.94) both !important',
   },
 }
 
@@ -41,8 +41,8 @@ export const slideInLeft = {
     '100%': { left: '0' },
   },
   slideInLeft: {
-    webkitAnimation: '$slide-in-left .2s cubic-bezier(0.25,0.46,0.45,0.94) both',
-    animation: '$slide-in-left .2s cubic-bezier(0.25,0.46,0.45,0.94) both !important',
+    webkitAnimation: '$slide-in-left .1s cubic-bezier(0.25,0.46,0.45,0.94) both',
+    animation: '$slide-in-left .1s cubic-bezier(0.25,0.46,0.45,0.94) both !important',
   },
 }
 
@@ -56,8 +56,8 @@ export const slideOutRight = {
     '100%': { right: '-210px' },
   },
   slideOutRight: {
-    webkitAnimation: '$slide-out-right .2s cubic-bezier(0.25,0.46,0.45,0.94) both',
-    animation: '$slide-out-right .2s cubic-bezier(0.25,0.46,0.45,0.94) both !important',
+    webkitAnimation: '$slide-out-right .1s cubic-bezier(0.25,0.46,0.45,0.94) both',
+    animation: '$slide-out-right .1s cubic-bezier(0.25,0.46,0.45,0.94) both !important',
   },
 }
 export const useNavAnimationStyles = createUseStyles({
