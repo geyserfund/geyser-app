@@ -16,6 +16,11 @@ type Props = {
   inProgressGoals: ProjectGoal[] | null | undefined
 }
 
+enum BalanceView {
+  Goal = 'goal',
+  Total = 'total',
+}
+
 export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, inProgressGoals }: Props) {
   const { t } = useTranslation()
 
@@ -31,13 +36,25 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
     },
   })
 
-  const [showTotalProject, setShowTotalProject] = useState(!defaultGoalId)
-  const isTotalBalanceAvailable = useMemo(() => Boolean(balance && balanceUsdCent), [balance, balanceUsdCent])
+  const hasGoal = Boolean(defaultGoalId)
+  const hasTotalBalance = Boolean(balance && balanceUsdCent)
+
+  const [currentView, setCurrentView] = useState<BalanceView>(hasGoal ? BalanceView.Goal : BalanceView.Total)
+
+  const isTotalView = currentView === BalanceView.Total
 
   const toggleTotalProject = () => {
-    if (defaultGoalId && isTotalBalanceAvailable) {
-      setShowTotalProject(!showTotalProject)
-    }
+    setCurrentView((current) => {
+      if (current === BalanceView.Goal && hasTotalBalance) {
+        return BalanceView.Total
+      }
+
+      if (current === BalanceView.Total && hasGoal) {
+        return BalanceView.Goal
+      }
+
+      return current
+    })
   }
 
   const circularPercentage = useMemo(() => {
@@ -147,13 +164,13 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
   const DotIndicator = () => {
     return (
       <HStack width="100%" justifyContent="center" spacing={1} pb={2}>
-        <Circle size="12px" bg={!showTotalProject ? 'neutral.600' : 'neutral.200'} />
-        <Circle size="12px" bg={showTotalProject ? 'neutral.600' : 'neutral.200'} />
+        <Circle size="12px" bg={!isTotalView ? 'neutral.600' : 'neutral.200'} />
+        <Circle size="12px" bg={isTotalView ? 'neutral.600' : 'neutral.200'} />
       </HStack>
     )
   }
 
-  if (!isTotalBalanceAvailable && !defaultGoalId) {
+  if (!hasGoal && !hasTotalBalance) {
     return null
   }
 
@@ -162,13 +179,13 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
       w="100%"
       onClick={toggleTotalProject}
       _hover={{
-        cursor: defaultGoalId && isTotalBalanceAvailable ? 'pointer' : 'default',
+        cursor: hasGoal && hasTotalBalance ? 'pointer' : 'default',
       }}
       p={2}
       {...handlers}
     >
       <HStack w="100%" justifyContent="start" minHeight={120}>
-        {!showTotalProject ? renderCircularProgress() : null}
+        {!isTotalView ? renderCircularProgress() : null}
 
         <VStack
           flex="1"
@@ -177,10 +194,10 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
           px={2}
           alignItems={circularPercentage === undefined ? 'center' : 'start'}
         >
-          {showTotalProject ? getProjectTotalValue() : getGoalValue()}
+          {isTotalView ? getProjectTotalValue() : getGoalValue()}
         </VStack>
       </HStack>
-      {priorityGoal && isTotalBalanceAvailable && <DotIndicator />}
+      {hasGoal && hasTotalBalance && <DotIndicator />}
     </VStack>
   )
 }
