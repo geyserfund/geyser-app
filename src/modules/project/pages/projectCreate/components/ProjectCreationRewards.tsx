@@ -32,7 +32,9 @@ export const ProjectCreationRewards = forwardRef<HTMLDivElement>((_, ref) => {
 
   useEffect(() => {
     if (project) {
-      setOrderedRewards([...project.rewards].sort((a, b) => a.cost - b.cost))
+      setOrderedRewards(
+        [...project.rewards].sort((a, b) => a.cost - b.cost).filter((reward) => reward.isHidden === false),
+      )
     }
   }, [project])
 
@@ -64,8 +66,6 @@ export const ProjectCreationRewards = forwardRef<HTMLDivElement>((_, ref) => {
   if (!project || !isActive || !project.rewards || project.rewards.length === 0) {
     return null
   }
-
-  const activeProjectRewards = project.rewards.filter((reward) => reward.isHidden === false)
 
   const handleClose = () => {
     setSelectedReward(undefined)
