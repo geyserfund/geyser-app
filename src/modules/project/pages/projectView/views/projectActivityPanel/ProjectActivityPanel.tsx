@@ -35,7 +35,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   const { btcRate } = useBtcContext()
   const isMobile = useMobileMode()
 
-  const { mobileView, setMobileView, project } = useProjectContext()
+  const { mobileView, setMobileView, project, goals } = useProjectContext()
   const { resetFundingFlow, requestFunding, fundForm } = useFundingContext()
 
   const { state: formState, setState: setFormState, resetForm, hasSelectedRewards } = fundForm
@@ -65,6 +65,12 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
       setFormState('anonymous', true)
     }
   }, [formState.anonymous, loginOnOpen, setFormState, user])
+
+  useEffect(() => {
+    if (fundingStage === FundingStages.completed) {
+      goals.refetch()
+    }
+  }, [fundingStage, goals])
 
   const handleCloseButton = () => {
     setMobileView(MobileViews.contribution)
