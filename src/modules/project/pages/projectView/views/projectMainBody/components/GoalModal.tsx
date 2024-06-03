@@ -11,6 +11,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import EmojiPicker from 'emoji-picker-react'
+import { Categories } from 'emoji-picker-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IoMdCloseCircle } from 'react-icons/io'
@@ -190,7 +191,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
         <ModalOverlay />
         <ModalContent bg="transparent" boxShadow={0}>
           <ModalBody>
-            <EmojiPicker onEmojiClick={handleEmojiClick} />
+            <EmojiPicker previewConfig={{ showPreview: false }} onEmojiClick={handleEmojiClick} />
           </ModalBody>
         </ModalContent>
       </Modal>
