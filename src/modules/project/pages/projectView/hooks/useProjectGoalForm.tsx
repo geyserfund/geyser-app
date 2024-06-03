@@ -79,7 +79,6 @@ export const useProjectGoalForm = (
 
   useEffect(() => {
     if (goal) {
-      console.log(goal)
       reset({
         title: goal.title || '',
         description: goal.description || '',
