@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { MdModeEdit } from 'react-icons/md'
 
 import { DollarIconCircled, SatoshiIconCircled } from '../../../../../../../components/icons'
+import { DefaultGoalIcon } from '../../../../../../../components/icons/svg/DefaultGoalIcon'
 import { DragAndDropIcon } from '../../../../../../../components/icons/svg/DragAndDropIcon'
 import { Body1, Caption, H3 } from '../../../../../../../components/typography'
 import { IconButtonComponent } from '../../../../../../../components/ui'
@@ -16,11 +17,11 @@ type Props = {
   goal: ProjectGoal
   isEditing?: boolean
   onOpenGoalModal: (goal: ProjectGoal) => void
+  isPriorityGoal?: boolean
   listeners: any
-  attributes: any
 }
 
-export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, listeners }: Props) => {
+export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, listeners, isPriorityGoal }: Props) => {
   const { t } = useTranslation()
 
   const isMobile = useMobileMode()
@@ -79,6 +80,22 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
           <H3 fontSize="18px" fontWeight={600}>
             {goal.title}
           </H3>
+
+          {isPriorityGoal && (
+            <Tooltip
+              px={4}
+              py={2}
+              content={
+                <Text fontSize={12}>
+                  {t(
+                    'This is your default goal. Contributions will be directed here unless contributors decide to fund another goal. Once this goal is completed, the next goal in line will automatically become the default goal.',
+                  )}
+                </Text>
+              }
+            >
+              <DefaultGoalIcon color="neutral.700" />
+            </Tooltip>
+          )}
           {isEditing && isMobile && (
             <IconButtonComponent
               aria-label="is-editing-goal"

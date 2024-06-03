@@ -22,11 +22,17 @@ import { IconButtonComponent } from '../../../../../../../components/ui'
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
 import { ProjectGoal } from '../../../../../../../types'
 import { useProjectContext } from '../../../../../context'
+import { useProjectDefaultGoal } from '../../projectActivityPanel/screens/info/hooks/useProjectDefaultGoal'
 import { GoalCompleted, GoalInProgress } from '../components'
 
 export const Goals = () => {
   const { t } = useTranslation()
-  const { isProjectOwner, project, goals } = useProjectContext()
+  const { isProjectOwner, goals, project } = useProjectContext()
+  const { priorityGoal } = useProjectDefaultGoal({
+    defaultGoalId: project?.defaultGoalId,
+    balanceUsdCent: project?.balanceUsdCent ?? 0,
+    inProgressGoals: goals.inProgressGoals,
+  })
   const [editMode, setEditMode] = useState(false)
   const [items, setItems] = useState(goals.inProgressGoals)
   const [activeId, setActiveId] = useState(null)
@@ -166,6 +172,7 @@ export const Goals = () => {
                       goal={goal}
                       editMode={editMode}
                       handleEditGoalModalOpen={handleEditGoalModalOpen}
+                      isPriorityGoal={goal.id === priorityGoal?.id}
                     />
                   ))}
                 </SortableContext>
@@ -220,11 +227,13 @@ const SortableItem = ({
   goal,
   editMode,
   handleEditGoalModalOpen,
+  isPriorityGoal,
 }: {
   key: string
   goal: ProjectGoal
   editMode: boolean
   handleEditGoalModalOpen: (goal: ProjectGoal) => void
+  isPriorityGoal: boolean
 }) => {
   const { listeners, setNodeRef, transform, transition, attributes, isDragging } = useSortable({
     id: goal.id.toString(),
@@ -249,7 +258,7 @@ const SortableItem = ({
         isEditing={editMode}
         onOpenGoalModal={handleEditGoalModalOpen}
         listeners={listeners}
-        attributes={attributes}
+        isPriorityGoal={isPriorityGoal}
       />
     </Box>
   )
@@ -260,7 +269,7 @@ const PresentationalGoalItem = ({ goal }: { goal: ProjectGoal }) => {
   const boxShadowColor = theme.colors.neutral[0]
   return (
     <Box display="flex" boxShadow={`0 -50px 30px -4px ${boxShadowColor}, 0 50px 30px -4px ${boxShadowColor}`}>
-      <GoalInProgress goal={goal} isEditing={true} onOpenGoalModal={() => {}} listeners={[]} attributes={{} as any} />
+      <GoalInProgress goal={goal} isEditing={true} onOpenGoalModal={() => {}} listeners={[]} />
     </Box>
   )
 }
