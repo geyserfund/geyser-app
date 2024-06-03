@@ -17,7 +17,7 @@ export const useProjectDefaultGoal = ({ defaultGoalId, balanceUsdCent, inProgres
   useEffect(() => {
     if (!defaultGoalId || !inProgressGoals) return
 
-    const goalToDisplay = inProgressGoals.find((goal) => goal.id === defaultGoalId)
+    const goalToDisplay = inProgressGoals[0]
 
     setPriorityGoal(goalToDisplay as ProjectGoal)
   }, [defaultGoalId, inProgressGoals])

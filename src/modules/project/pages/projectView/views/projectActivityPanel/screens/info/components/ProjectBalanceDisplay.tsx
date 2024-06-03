@@ -83,13 +83,13 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
                   <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
                     {'$'}
                   </Text>
-                  {commaFormatted(centsToDollars(priorityGoal.amountContributed) ?? 0)}
+                  {priorityGoal.amountContributed ? commaFormatted(centsToDollars(priorityGoal.amountContributed)) : 0}
                 </>
               )}
 
               {priorityGoal.currency === ProjectGoalCurrency.Btcsat && (
                 <>
-                  {commaFormatted(priorityGoal.amountContributed ?? 0)}
+                  {priorityGoal.amountContributed ? commaFormatted(priorityGoal.amountContributed) : 0}
                   <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
                     {' sats'}
                   </Text>
