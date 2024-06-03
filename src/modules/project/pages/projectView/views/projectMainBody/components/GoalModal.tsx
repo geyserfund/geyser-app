@@ -11,7 +11,6 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import EmojiPicker from 'emoji-picker-react'
-import { Categories } from 'emoji-picker-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IoMdCloseCircle } from 'react-icons/io'
