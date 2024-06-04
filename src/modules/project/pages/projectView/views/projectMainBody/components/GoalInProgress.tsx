@@ -1,4 +1,4 @@
-import { Box, BoxProps, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, HStack, Image, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { MdModeEdit } from 'react-icons/md'
 
@@ -77,9 +77,12 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
           justifyContent={{ base: 'space-between', lg: 'flex-start' }}
           width="100%"
         >
-          <H3 fontSize="18px" fontWeight={600}>
-            {goal.title}
-          </H3>
+          <HStack>
+            {goal.emojiImageUrl && <Image width="24px" height="24px" src={goal.emojiImageUrl} />}
+            <H3 fontSize="18px" fontWeight={600}>
+              {goal.title}
+            </H3>
+          </HStack>
 
           {isPriorityGoal && (
             <Tooltip
