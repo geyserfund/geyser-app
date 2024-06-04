@@ -12,18 +12,25 @@ import {
 import { forwardRef, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsArrowRight } from 'react-icons/bs'
+import { useNavigate } from 'react-router-dom'
 
 import { CardLayout, SkeletonLayout } from '../../../../../../../components/layouts'
 import { Body1 } from '../../../../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../../../../components/ui'
 import { VideoPlayer } from '../../../../../../../components/ui/VideoPlayer'
-import { FlashMembershipCountUrl, ID, projectFlashIds, projectsWithSubscription } from '../../../../../../../constants'
+import {
+  FlashMembershipCountUrl,
+  ID,
+  PathName,
+  projectFlashIds,
+  projectsWithSubscription,
+} from '../../../../../../../constants'
 import { validateImageUrl } from '../../../../../../../forms/validations/image'
 import { useFollowedProjectsValue } from '../../../../../../../pages/auth/state'
 import { ProjectStatus, WalletStatus } from '../../../../../../../types'
 import { toInt, useMobileMode } from '../../../../../../../utils'
 import { toLargeImageUrl } from '../../../../../../../utils/tools/imageSizes'
-import { useProjectContext } from '../../../../../context'
+import { MobileViews, useProjectContext } from '../../../../../context'
 import { SubscribeButton } from '../../projectActivityPanel/screens/info/components'
 import { ContributeButton, FollowButton, LightningAddress, ProjectFundingQR, ShareButton } from '../components'
 import { NpubDisplay } from '../components/NpubDisplay'
@@ -31,8 +38,9 @@ import { CreatorSocial } from './CreatorSocial'
 
 export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()
-  const { project } = useProjectContext()
+  const { project, setMobileView } = useProjectContext()
   const followedProjects = useFollowedProjectsValue()
+  const navigate = useNavigate()
   const isMobile = useMobileMode()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -142,7 +150,10 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             <ProjectFundingQR project={project} />
           </HStack>
           <HStack w="full" color="neutral.600" flexWrap={'wrap'}>
-            <Body1 semiBold>{`${project.fundersCount} ${t('contributors')}`}</Body1>
+            <Body1 semiBold onClick={() => (isMobile ? setMobileView(MobileViews.leaderboard) : null)}>{`${
+              project.fundersCount
+            } ${t('contributors')}`}</Body1>
+
             <Text paddingBottom="22px" lineHeight={0} fontSize="40px">
               .
             </Text>
