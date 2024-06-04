@@ -12,19 +12,12 @@ import {
 import { forwardRef, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsArrowRight } from 'react-icons/bs'
-import { useNavigate } from 'react-router-dom'
 
 import { CardLayout, SkeletonLayout } from '../../../../../../../components/layouts'
 import { Body1 } from '../../../../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../../../../components/ui'
 import { VideoPlayer } from '../../../../../../../components/ui/VideoPlayer'
-import {
-  FlashMembershipCountUrl,
-  ID,
-  PathName,
-  projectFlashIds,
-  projectsWithSubscription,
-} from '../../../../../../../constants'
+import { FlashMembershipCountUrl, ID, projectFlashIds, projectsWithSubscription } from '../../../../../../../constants'
 import { validateImageUrl } from '../../../../../../../forms/validations/image'
 import { useFollowedProjectsValue } from '../../../../../../../pages/auth/state'
 import { ProjectStatus, WalletStatus } from '../../../../../../../types'
@@ -40,7 +33,6 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()
   const { project, setMobileView } = useProjectContext()
   const followedProjects = useFollowedProjectsValue()
-  const navigate = useNavigate()
   const isMobile = useMobileMode()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
