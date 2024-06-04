@@ -18,13 +18,7 @@ import { CardLayout, SkeletonLayout } from '../../../../../../../components/layo
 import { Body1 } from '../../../../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../../../../components/ui'
 import { VideoPlayer } from '../../../../../../../components/ui/VideoPlayer'
-import {
-  FlashMembershipCountUrl,
-  ID,
-  PathName,
-  projectFlashIds,
-  projectsWithSubscription,
-} from '../../../../../../../constants'
+import { FlashMembershipCountUrl, ID, projectFlashIds, projectsWithSubscription } from '../../../../../../../constants'
 import { validateImageUrl } from '../../../../../../../forms/validations/image'
 import { useFollowedProjectsValue } from '../../../../../../../pages/auth/state'
 import { ProjectStatus, WalletStatus } from '../../../../../../../types'
@@ -40,7 +34,6 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()
   const { project, setMobileView } = useProjectContext()
   const followedProjects = useFollowedProjectsValue()
-  const navigate = useNavigate()
   const isMobile = useMobileMode()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
