@@ -87,9 +87,9 @@ const GoalTooltip = () => {
   const { t } = useTranslation()
 
   const tooltipText = (
-    <VStack align="flex-start" display="flex" gap="10px">
-      <Text>{t('We recently enhanced Milestones by transforming them into Goals.')}</Text>
-      <Text>
+    <VStack width={'100%'} display="flex" alignContent="center" justifyContent="center" gap="10px">
+      <Text align="start">{t('We recently enhanced Milestones by transforming them into Goals.')}</Text>
+      <Text align="start">
         {t(
           'To do so we needed to trash existing Milestones. If you have any questions or would like us to give you the list of old Milestones reach out to us at support@geyser.fund.',
         )}
