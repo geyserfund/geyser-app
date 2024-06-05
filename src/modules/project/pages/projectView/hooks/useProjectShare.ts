@@ -14,6 +14,7 @@ export enum CampaignContent {
   creatorCta = 'creator-share-project-cta',
   projectTitle = 'project-title',
   successScreen = 'success-screen',
+  contributionSummary = 'contribution-summary',
 }
 
 type getCampainParametersProps = {
@@ -33,7 +34,7 @@ export const getCampaignUrlSuffix = ({ creator, isLoggedIn, projectName, clicked
     { key: 'mtm_medium', value: 'geyser' },
     { key: 'mtm_content', value: clickedFrom },
   ]
-  return '&' + campaignParameters.map(({ key, value }) => `${key}=${value}`).join('&')
+  return '?' + campaignParameters.map(({ key, value }) => `${key}=${value}`).join('&')
 }
 
 export const useProjectShare = () => {
