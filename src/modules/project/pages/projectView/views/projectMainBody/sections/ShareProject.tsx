@@ -13,6 +13,7 @@ import { standardPadding } from '../../../../../../../styles'
 import { ProjectStatus } from '../../../../../../../types'
 import { hasTwitterAccount } from '../../../../../../../utils'
 import { useProjectContext } from '../../../../../context'
+import { CampaignContent, useProjectShare } from '../../../hooks/useProjectShare'
 import { shareOnTwitter } from '../utils'
 
 const SHARE_PROJECT_CLOSED_STORAGE_KEY = 'shareProjectClosed'
@@ -31,24 +32,14 @@ const tweetKeys = [
 export const ShareProject = () => {
   const { t } = useTranslation()
   const { project, isProjectOwner } = useProjectContext()
-
   const { user } = useAuthContext()
+  const { copyProjectLinkToClipboard, copied } = useProjectShare()
 
   const isTwitterAccount = hasTwitterAccount(user)
 
   const [shareClosed, setShareClosed] = useState(localStorage.getItem(SHARE_PROJECT_CLOSED_STORAGE_KEY) === 'true')
 
-  const [copied, setCopied] = useState(false)
-
   if (!project || !isProjectOwner || project.status !== ProjectStatus.Active) return null
-
-  const handleShareClick = () => {
-    navigator.clipboard.writeText(`${window.location.origin}/project/${project?.name}`)
-    setCopied(true)
-    setTimeout(() => {
-      setCopied(false)
-    }, 2000)
-  }
 
   const handleCloseClick = () => {
     setShareClosed(true)
@@ -107,7 +98,7 @@ export const ShareProject = () => {
             variant={copied ? 'secondary' : 'primary'}
             leftIcon={<PiLinkBold />}
             w="full"
-            onClick={handleShareClick}
+            onClick={() => copyProjectLinkToClipboard({ clickedFrom: CampaignContent.creatorCta })}
           >
             {copied ? t('Project link copied!') : t('Copy project link')}
           </Button>
