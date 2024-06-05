@@ -170,7 +170,7 @@ export const ProjectCreationWalletConnectionForm = ({
                   <RenderSponsorImage url={WalletOfSatoshiLightningAddressURL} imageUrl={WalletOfSatoshiUrl} />
                   <RenderSponsorImage url={BitNobURL} imageUrl={BitnobUrl} />
                   <RenderSponsorImage url={BlinkUrl} imageUrl={BlinkLogoUrl} />
-                  <RenderSponsorImage height="20px" url={StrikeUrl} imageUrl={StrikeLogoUrl} />
+                  <RenderSponsorImage url={StrikeUrl} imageUrl={StrikeLogoUrl} />
                   <RenderSponsorImage url={AlbyLightningAddressURL} imageUrl={AlbyUrl} />
                   <Link textDecoration="none" href={GeyserLightningWalletGuideLink} isExternal>
                     <Text fontWeight="bold" color="neutral.900" fontSize="16px">
