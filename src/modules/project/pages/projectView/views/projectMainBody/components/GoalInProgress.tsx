@@ -134,13 +134,16 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
               captionColor={percentage > 0 ? 'neutral.0' : 'neutral.900'}
             />
             <HStack display="flex" alignItems="flex-start" justifyContent="space-between" width="100%">
-              <Body1 bold>
-                {formattedAmountContributed}{' '}
-                <Text as="span" color="neutral.600" fontWeight={500}>
-                  {goal.currency === ProjectGoalCurrency.Btcsat ? `(${usdAmount})` : `(${satsAmount})`}
-                </Text>
-              </Body1>
-              <HStack display="flex" alignItems="center" justifyContent="flex-end" gap={2}>
+              <HStack display="flex" alignItems="center" justifyContent="flex-start" gap={2} width="50%">
+                <Body1 bold>
+                  {formattedAmountContributed}{' '}
+                  <Text as="span" color="neutral.600" fontWeight={500}>
+                    {goal.currency === ProjectGoalCurrency.Btcsat ? `(${usdAmount})` : `(${satsAmount})`}
+                  </Text>
+                </Body1>
+              </HStack>
+
+              <HStack display="flex" alignItems="center" justifyContent="flex-end" gap={2} width="100%">
                 <Body1>
                   {' of '}
                   <Body1 as="span" bold>
@@ -151,20 +154,24 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
                     {'goal'}
                   </Text>
                 </Body1>
+                {goal.currency === ProjectGoalCurrency.Btcsat ? (
+                  <Tooltip
+                    px={4}
+                    py={1}
+                    content={<Text fontSize={12}>{t('This goal is denominated in Bitcoin')}</Text>}
+                  >
+                    <SatoshiIconCircled />
+                  </Tooltip>
+                ) : (
+                  <Tooltip
+                    px={4}
+                    py={1}
+                    content={<Text fontSize={12}>{t('This goal is denominated in US Dollars')}</Text>}
+                  >
+                    <DollarIconCircled />
+                  </Tooltip>
+                )}
               </HStack>
-              {goal.currency === ProjectGoalCurrency.Btcsat ? (
-                <Tooltip px={4} py={1} content={<Text fontSize={12}>{t('This goal is denominated in Bitcoin')}</Text>}>
-                  <SatoshiIconCircled />
-                </Tooltip>
-              ) : (
-                <Tooltip
-                  px={4}
-                  py={1}
-                  content={<Text fontSize={12}>{t('This goal is denominated in US Dollars')}</Text>}
-                >
-                  <DollarIconCircled />
-                </Tooltip>
-              )}
             </HStack>
           </VStack>
 

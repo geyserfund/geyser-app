@@ -67,7 +67,7 @@ export const useProjectGoalForm = (
       projectId,
       emojiUnifiedCode: '',
     },
-    mode: 'onChange',
+    mode: 'onBlur',
   })
 
   const { errors, isDirty, isValid } = formState
