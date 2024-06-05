@@ -8,7 +8,7 @@ export const MUTATION_CREATE_PROJECT_GOAL = gql`
       targetAmount
       projectId
       currency
-      emojiImageUrl
+      emojiUnifiedCode
     }
   }
 `
@@ -21,7 +21,7 @@ export const MUTATION_UPDATE_PROJECT_GOAL = gql`
       projectId
       description
       currency
-      emojiImageUrl
+      emojiUnifiedCode
     }
   }
 `

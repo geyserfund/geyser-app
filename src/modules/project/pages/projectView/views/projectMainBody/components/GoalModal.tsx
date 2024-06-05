@@ -10,7 +10,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import EmojiPicker from 'emoji-picker-react'
+import EmojiPicker, { EmojiStyle } from 'emoji-picker-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IoMdCloseCircle } from 'react-icons/io'
@@ -64,7 +64,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
   }
 
   const handleEmojiClick = (emoji: any) => {
-    setValue('emojiImageUrl', emoji.imageUrl, { shouldDirty: true })
+    setValue('emojiUnifiedCode', emoji.unified, { shouldDirty: true })
     setIsEmojiPickerOpen(false)
   }
 
@@ -130,7 +130,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
                     <HStack width="100%" alignItems="center" justifyContent="flex-start">
                       <ControlledEmojiInput
                         control={control}
-                        name="emojiImageUrl"
+                        name="emojiUnifiedCode"
                         onOpenEmojiPicker={handleOpenEmojiPicker}
                         isDisabled={Boolean(isCompleted)}
                       />
@@ -191,7 +191,11 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
         <ModalOverlay />
         <ModalContent bg="transparent" boxShadow={0}>
           <ModalBody>
-            <EmojiPicker previewConfig={{ showPreview: false }} onEmojiClick={handleEmojiClick} />
+            <EmojiPicker
+              previewConfig={{ showPreview: false }}
+              onEmojiClick={handleEmojiClick}
+              emojiStyle={EmojiStyle.NATIVE}
+            />
           </ModalBody>
         </ModalContent>
       </Modal>

@@ -1,4 +1,5 @@
-import { Box, Image } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
+import { Emoji, EmojiStyle } from 'emoji-picker-react'
 import { Controller, FieldValues, UseControllerProps } from 'react-hook-form'
 
 import { AddEmojiIcon } from '../icons/svg/AddEmojiIcon'
@@ -22,7 +23,7 @@ export function ControlledEmojiInput({ control, name, onOpenEmojiPicker, isDisab
           borderColor="neutral.200"
           borderRadius="8px"
           cursor={isDisabled ? 'not-allowed' : 'pointer'}
-          p={2}
+          p={1}
           width="40px"
           height="40px"
           onClick={() => {
@@ -32,7 +33,9 @@ export function ControlledEmojiInput({ control, name, onOpenEmojiPicker, isDisab
           }}
         >
           {field.value ? (
-            <Image src={field.value} />
+            <Box>
+              <Emoji size={24} unified={field.value} emojiStyle={EmojiStyle.NATIVE} />
+            </Box>
           ) : (
             <AddEmojiIcon color={isDisabled ? 'neutral.200' : 'neutral.700'} />
           )}
