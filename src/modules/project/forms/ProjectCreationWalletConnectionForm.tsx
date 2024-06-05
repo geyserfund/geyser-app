@@ -167,10 +167,10 @@ export const ProjectCreationWalletConnectionForm = ({
                 <WalletLimitComponent limit={limits} />
               ) : (
                 <HStack width={'full'} justifyContent={'flex-start'} spacing={'10px'} flexWrap="wrap">
-                  <RenderSponsorImage url={StrikeUrl} imageUrl={StrikeLogoUrl} />
                   <RenderSponsorImage url={WalletOfSatoshiLightningAddressURL} imageUrl={WalletOfSatoshiUrl} />
                   <RenderSponsorImage url={BitNobURL} imageUrl={BitnobUrl} />
                   <RenderSponsorImage url={BlinkUrl} imageUrl={BlinkLogoUrl} />
+                  <RenderSponsorImage url={StrikeUrl} imageUrl={StrikeLogoUrl} />
                   <RenderSponsorImage url={AlbyLightningAddressURL} imageUrl={AlbyUrl} />
                   <Link textDecoration="none" href={GeyserLightningWalletGuideLink} isExternal>
                     <Text fontWeight="bold" color="neutral.900" fontSize="16px">
