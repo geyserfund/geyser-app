@@ -146,7 +146,6 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
                     {'goal'}
                   </Text>
                 </Body1>
-                {goal.currency === ProjectGoalCurrency.Btcsat ? <SatoshiIconCircled /> : <DollarIconCircled />}
               </HStack>
               {goal.currency === ProjectGoalCurrency.Btcsat ? (
                 <Tooltip px={4} py={1} content={<Text fontSize={12}>{t('This goal is denominated in Bitcoin')}</Text>}>
