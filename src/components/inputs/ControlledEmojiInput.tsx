@@ -21,6 +21,7 @@ export function ControlledEmojiInput({ control, name, onOpenEmojiPicker, isDisab
           border="2px solid"
           borderColor="neutral.200"
           borderRadius="8px"
+          cursor={isDisabled ? 'not-allowed' : 'pointer'}
           p={2}
           width="40px"
           height="40px"
