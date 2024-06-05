@@ -80,7 +80,7 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
         >
           <HStack>
             {goal.emojiUnifiedCode && (
-              <Box width="24px" height="40px">
+              <Box display="flex" justifyContent="center" width="24px" height="34px">
                 <Emoji size={24} unified={goal.emojiUnifiedCode} emojiStyle={EmojiStyle.NATIVE} />
               </Box>
             )}
