@@ -1,5 +1,6 @@
 import { CheckCircleIcon } from '@chakra-ui/icons'
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
+import { Emoji, EmojiStyle } from 'emoji-picker-react'
 import { useTranslation } from 'react-i18next'
 import { MdModeEdit } from 'react-icons/md'
 
@@ -32,7 +33,14 @@ export const GoalCompleted = ({ goal, isEditing = false, onOpenGoalModal }: Prop
   return (
     <VStack display="flex" alignItems="flex-start" width="100%" gap={'5px'}>
       <HStack display="flex" alignItems={'center'} justifyContent={'space-between'} minHeight="40px" width="100%">
-        <H3>{goal.title}</H3>
+        {goal.emojiUnifiedCode && (
+          <Box display="flex" justifyContent="center" width="24px" height="34px">
+            <Emoji size={24} unified={goal.emojiUnifiedCode} emojiStyle={EmojiStyle.NATIVE} />
+          </Box>
+        )}
+        <H3 fontSize="18px" fontWeight={600}>
+          {goal.title}
+        </H3>
         {isEditing && (
           <IconButtonComponent
             aria-label="is-editing-goal"

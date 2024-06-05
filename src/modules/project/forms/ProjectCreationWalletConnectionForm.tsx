@@ -174,7 +174,7 @@ export const ProjectCreationWalletConnectionForm = ({
                   <RenderSponsorImage url={AlbyLightningAddressURL} imageUrl={AlbyUrl} />
                   <Link textDecoration="none" href={GeyserLightningWalletGuideLink} isExternal>
                     <Text fontWeight="bold" color="neutral.900" fontSize="16px">
-                      {t('See more...')}
+                      {t('See more')}
                     </Text>
                   </Link>
                 </HStack>
@@ -253,11 +253,11 @@ export const ProjectCreationWalletConnectionForm = ({
   )
 }
 
-const RenderSponsorImage = ({ url, imageUrl }: { url: string; imageUrl: string }) => {
+const RenderSponsorImage = ({ url, imageUrl, height = '24px' }: { url: string; imageUrl: string; height?: string }) => {
   return (
     <Box backgroundColor={lightModeColors.neutral[100]} borderRadius={'8px'} px={2} py={1}>
       <Link isExternal href={url}>
-        <Image src={imageUrl} height="24px" />
+        <Image src={imageUrl} height={height} />
       </Link>
     </Box>
   )

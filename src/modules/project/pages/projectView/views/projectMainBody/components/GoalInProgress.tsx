@@ -1,4 +1,5 @@
-import { Box, BoxProps, HStack, Image, Text, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, HStack, Text, VStack } from '@chakra-ui/react'
+import { Emoji, EmojiStyle } from 'emoji-picker-react'
 import { useTranslation } from 'react-i18next'
 import { MdModeEdit } from 'react-icons/md'
 
@@ -78,7 +79,11 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
           width="100%"
         >
           <HStack>
-            {goal.emojiImageUrl && <Image width="24px" height="24px" src={goal.emojiImageUrl} />}
+            {goal.emojiUnifiedCode && (
+              <Box display="flex" justifyContent="center" width="24px" height="34px">
+                <Emoji size={24} unified={goal.emojiUnifiedCode} emojiStyle={EmojiStyle.NATIVE} />
+              </Box>
+            )}
             <H3 fontSize="18px" fontWeight={600}>
               {goal.title}
             </H3>
@@ -146,7 +151,6 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
                     {'goal'}
                   </Text>
                 </Body1>
-                {goal.currency === ProjectGoalCurrency.Btcsat ? <SatoshiIconCircled /> : <DollarIconCircled />}
               </HStack>
               {goal.currency === ProjectGoalCurrency.Btcsat ? (
                 <Tooltip px={4} py={1} content={<Text fontSize={12}>{t('This goal is denominated in Bitcoin')}</Text>}>

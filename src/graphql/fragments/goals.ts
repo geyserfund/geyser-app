@@ -23,6 +23,6 @@ export const FRAGMENT_PROJECT_GOAL = gql`
     createdAt
     updatedAt
     hasReceivedContribution
-    emojiImageUrl
+    emojiUnifiedCode
   }
 `
