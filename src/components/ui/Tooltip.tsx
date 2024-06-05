@@ -21,6 +21,8 @@ export const Tooltip: React.FC<CustomTooltipProps> = ({ content, children, ...pr
       fontSize="12px"
       fontWeight="600"
       padding={0}
+      px={4}
+      py={2}
       hasArrow
       shouldWrapChildren
       openDelay={isMobile ? 100 : 0}

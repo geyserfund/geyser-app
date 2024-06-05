@@ -65,7 +65,7 @@ export const useProjectGoalForm = (
       targetAmount: 0,
       currency: ProjectGoalCurrency.Usdcent,
       projectId,
-      emojiImageUrl: '',
+      emojiUnifiedCode: '',
     },
     mode: 'onChange',
   })
@@ -86,7 +86,7 @@ export const useProjectGoalForm = (
           goal.currency === ProjectGoalCurrency.Btcsat ? goal.targetAmount || 0 : goal.targetAmount / 100 || 0,
         currency: goal.currency,
         projectId,
-        emojiImageUrl: goal.emojiImageUrl || '',
+        emojiUnifiedCode: goal.emojiUnifiedCode || '',
       })
     } else {
       reset({
@@ -95,7 +95,7 @@ export const useProjectGoalForm = (
         targetAmount: '',
         currency: ProjectGoalCurrency.Usdcent,
         projectId,
-        emojiImageUrl: '',
+        emojiUnifiedCode: '',
       })
     }
   }, [goal, reset, projectId])
@@ -105,7 +105,6 @@ export const useProjectGoalForm = (
   }, [onClose, reset])
 
   const onSubmit = async (formData: FormValues) => {
-    console.log(formData)
     try {
       const trimmedTitle = typeof formData.title === 'string' ? formData.title.trim() : ''
       const targetAmount =
@@ -122,7 +121,7 @@ export const useProjectGoalForm = (
               targetAmount,
               currency: formData.currency,
               projectGoalId: goal.id,
-              emojiImageUrl: formData.emojiImageUrl,
+              emojiUnifiedCode: formData.emojiUnifiedCode,
             },
           },
         })
@@ -140,7 +139,7 @@ export const useProjectGoalForm = (
               targetAmount,
               currency: formData.currency,
               projectId: formData.projectId,
-              emojiImageUrl: formData.emojiImageUrl,
+              emojiUnifiedCode: formData.emojiUnifiedCode,
             },
           },
         })
