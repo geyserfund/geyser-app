@@ -1,17 +1,29 @@
 import { CopyIcon } from '@chakra-ui/icons'
 import { Button, Text, VStack } from '@chakra-ui/react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CampaignContent, useProjectShare } from '../../../../../hooks/useProjectShare'
+import { copyTextToClipboard } from '../../../../../../../../../utils'
 
 interface CopyProjectLinkProps {
   showCopy?: boolean
   projectName: string
 }
 
-export const CopyProjectLink = ({ showCopy }: CopyProjectLinkProps) => {
+export const CopyProjectLink = ({ showCopy, projectName }: CopyProjectLinkProps) => {
+  const [copy, setCopy] = useState(false)
+
   const { t } = useTranslation()
-  const { copied, copyProjectLinkToClipboard } = useProjectShare()
+
+  const handleCopyProjectLink = () => {
+    if (copy === false) {
+      copyTextToClipboard(`${window.location.origin}/project/${projectName}`)
+      setCopy(true)
+      setTimeout(() => {
+        setCopy(false)
+      }, 2000)
+    }
+  }
 
   if (!showCopy) return null
   return (
@@ -30,9 +42,9 @@ export const CopyProjectLink = ({ showCopy }: CopyProjectLinkProps) => {
         fontWeight={'medium'}
         fontSize={'16px'}
         width="100%"
-        onClick={() => copyProjectLinkToClipboard({ clickedFrom: CampaignContent.successScreen })}
+        onClick={handleCopyProjectLink}
       >
-        {copied ? t('Project link copied!') : t('Copy link')}
+        {t('Copy link')}
       </Button>
     </VStack>
   )

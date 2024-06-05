@@ -1,17 +1,21 @@
 import { Button, ButtonProps } from '@chakra-ui/react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useProjectContext } from '../../../../../context'
-import { CampaignContent, useProjectShare } from '../../../hooks/useProjectShare'
 
 export const ShareButton = (props: ButtonProps) => {
   const { project } = useProjectContext()
   const { t } = useTranslation()
 
-  const { copyProjectLinkToClipboard, copied } = useProjectShare()
+  const [copied, setCopied] = useState(false)
 
   const handleShareClick = () => {
-    copyProjectLinkToClipboard({ clickedFrom: CampaignContent.contributionSummary })
+    navigator.clipboard.writeText(`${window.location.origin}/project/${project?.name}`)
+    setCopied(true)
+    setTimeout(() => {
+      setCopied(false)
+    }, 2000)
   }
 
   if (!project) {
