@@ -4,10 +4,11 @@ import { Controller, FieldValues, UseControllerProps } from 'react-hook-form'
 import { AddEmojiIcon } from '../icons/svg/AddEmojiIcon'
 
 type Props = UseControllerProps<FieldValues> & {
+  isDisabled?: boolean
   onOpenEmojiPicker: () => void
 }
 
-export function ControlledEmojiInput({ control, name, onOpenEmojiPicker }: Props) {
+export function ControlledEmojiInput({ control, name, onOpenEmojiPicker, isDisabled }: Props) {
   return (
     <Controller
       name={name}
@@ -24,10 +25,16 @@ export function ControlledEmojiInput({ control, name, onOpenEmojiPicker }: Props
           width="40px"
           height="40px"
           onClick={() => {
-            onOpenEmojiPicker()
+            if (!isDisabled) {
+              onOpenEmojiPicker()
+            }
           }}
         >
-          {field.value ? <Image src={field.value} /> : <AddEmojiIcon fill="neutral.700" />}
+          {field.value ? (
+            <Image src={field.value} />
+          ) : (
+            <AddEmojiIcon color={isDisabled ? 'neutral.200' : 'neutral.700'} />
+          )}
         </Box>
       )}
     />

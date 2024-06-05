@@ -132,6 +132,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
                         control={control}
                         name="emojiImageUrl"
                         onOpenEmojiPicker={handleOpenEmojiPicker}
+                        isDisabled={Boolean(isCompleted)}
                       />
                       <ControlledTextInput
                         control={control}
