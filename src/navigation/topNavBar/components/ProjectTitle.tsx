@@ -3,17 +3,32 @@ import { Box, HStack, Text, Tooltip, useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useNavContext } from '../../../context'
+import { useAuthContext, useNavContext } from '../../../context'
+import {
+  CampaignContent,
+  getProjectShareUrlSuffix,
+} from '../../../modules/project/pages/projectView/hooks/useProjectShare'
+import { copyTextToClipboard } from '../../../utils'
 
 export const ProjectTitle = () => {
   const { navData } = useNavContext()
+  const { isLoggedIn, user } = useAuthContext()
   const { t } = useTranslation()
 
   const [copied, setCopied] = useState(false)
   const { isOpen, onClose, onOpen } = useDisclosure()
 
   const handleTitleClick = () => {
-    navigator.clipboard.writeText(`${window.location.origin}${navData.projectPath}`)
+    const campaignSuffix = getProjectShareUrlSuffix({
+      isLoggedIn,
+      creator: user ? navData.projectOwnerIDs.includes(user.id) : false,
+      projectName: navData.projectName,
+      clickedFrom: CampaignContent.projectTitle,
+    })
+    const projectShareUrl = `${window.location.origin}${navData.projectPath}${campaignSuffix}`
+
+    copyTextToClipboard(projectShareUrl)
+
     setCopied(true)
     onOpen()
     setTimeout(() => {
