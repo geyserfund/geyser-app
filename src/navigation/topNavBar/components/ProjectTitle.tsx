@@ -4,7 +4,10 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuthContext, useNavContext } from '../../../context'
-import { CampaignContent, getProjectShareUrlSuffix } from '../../../modules/project/pages/projectView/hooks/useProjectShare'
+import {
+  CampaignContent,
+  getProjectShareUrlSuffix,
+} from '../../../modules/project/pages/projectView/hooks/useProjectShare'
 import { copyTextToClipboard } from '../../../utils'
 
 export const ProjectTitle = () => {

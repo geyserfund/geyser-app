@@ -7,11 +7,11 @@ import { useProjectContext } from '../../../context'
 enum CampaignSource {
   /** For content shared by creator */
   creator = 'creator',
-  /** For content shared by creator */
+  /** For content shared by contributor */
   contributor = 'contributor',
-  /** For content shared by creator */
+  /** For content shared by user */
   user = 'user',
-  /** For content shared by creator */
+  /** For content shared by visitor */
   visitor = 'visitor',
 }
 
