@@ -34,7 +34,12 @@ type getCampainParametersProps = {
 }
 
 /** This function is for use outside of ProjectProvider Context */
-export const getCampaignUrlSuffix = ({ creator, isLoggedIn, projectName, clickedFrom }: getCampainParametersProps) => {
+export const getProjectShareUrlSuffix = ({
+  creator,
+  isLoggedIn,
+  projectName,
+  clickedFrom,
+}: getCampainParametersProps) => {
   const source = creator ? CampaignSource.creator : isLoggedIn ? CampaignSource.user : CampaignSource.visitor
 
   const campaignParameters = [
@@ -47,14 +52,14 @@ export const getCampaignUrlSuffix = ({ creator, isLoggedIn, projectName, clicked
   return '?' + campaignParameters.map(({ key, value }) => `${key}=${value}`).join('&')
 }
 
-/** This function must be used inside ProjectProvider Context to share project links */
+/** This hook must be used inside ProjectProvider Context to share project links */
 export const useProjectShare = () => {
   const { project, isProjectOwner } = useProjectContext()
   const { isLoggedIn } = useAuthContext()
   const [copied, setCopied] = useState(false)
 
   const getShareProjectUrl = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
-    const campaignUrlSuffix = getCampaignUrlSuffix({
+    const campaignUrlSuffix = getProjectShareUrlSuffix({
       creator: isProjectOwner,
       isLoggedIn,
       projectName: project?.name || '',

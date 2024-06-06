@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuthContext, useNavContext } from '../../../context'
-import { CampaignContent, getCampaignUrlSuffix } from '../../../modules/project/pages/projectView/hooks/useProjectShare'
+import { CampaignContent, getProjectShareUrlSuffix } from '../../../modules/project/pages/projectView/hooks/useProjectShare'
 import { copyTextToClipboard } from '../../../utils'
 
 export const ProjectTitle = () => {
@@ -16,7 +16,7 @@ export const ProjectTitle = () => {
   const { isOpen, onClose, onOpen } = useDisclosure()
 
   const handleTitleClick = () => {
-    const campaignSuffix = getCampaignUrlSuffix({
+    const campaignSuffix = getProjectShareUrlSuffix({
       isLoggedIn,
       creator: user ? navData.projectOwnerIDs.includes(user.id) : false,
       projectName: navData.projectName,
