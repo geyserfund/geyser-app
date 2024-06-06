@@ -5,7 +5,6 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { getPath, PathName } from '../../../constants'
 import { useAuthContext } from '../../../context/auth'
 import { useNavContext } from '../../../context/nav'
-import { useProjectState } from '../../../hooks/graphqlState'
 import { useModal } from '../../../hooks/useModal'
 import {
   ProjectFragment,
@@ -15,6 +14,7 @@ import {
   useWalletLimitQuery,
   WalletLimitsFragment,
 } from '../../../types'
+import { useProjectState } from '../hooks/useProjectState'
 import { useProjectGoals } from '../pages/projectView/hooks/useProjectGoals'
 import { GoalDeleteModal } from '../pages/projectView/views/projectMainBody/components/GoalDeleteModal'
 import { GoalModal } from '../pages/projectView/views/projectMainBody/components/GoalModal'

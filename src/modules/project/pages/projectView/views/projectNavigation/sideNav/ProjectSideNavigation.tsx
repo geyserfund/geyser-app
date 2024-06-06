@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react'
 
-import { NavigationBase, NavigationDirection } from '../../../../../../../navigation/sideNavBase/NavigationBase'
+import { NavigationBase, NavigationDirection } from '../../../../../../navigation/sideNavBase'
 import { ProjectNavigation } from '../ProjectNavigation'
 import { useProjectSideNavAtom } from './projectSideNavAtom'
 

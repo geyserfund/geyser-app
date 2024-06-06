@@ -8,8 +8,8 @@ import {
   UpdateProjectInput,
   useProjectByNameOrIdQuery,
   useUpdateProjectMutation,
-} from '../../types'
-import { getDiff, linkToHttps, toInt, useNotification } from '../../utils'
+} from '../../../types'
+import { getDiff, linkToHttps, toInt, useNotification } from '../../../utils'
 
 export const useProjectState = (
   projectId?: string | number,

@@ -10,7 +10,7 @@ export interface TextWeightProps {
 }
 
 export interface TextColorProps {
-  /** Uses color: neutral.12 */
+  /** Uses color: utils.text */
   dark?: boolean
   /** Uses color: neutral.11 */
   light?: boolean
@@ -18,7 +18,7 @@ export interface TextColorProps {
   muted?: boolean
 }
 
-export const getFontWeight = ({ thin, medium, bold, regular }: TextWeightProps) => {
+export const getFontWeight = ({ thin, medium, bold }: TextWeightProps) => {
   if (bold) return 700
   if (medium) return 500
   if (thin) return 300
@@ -26,7 +26,7 @@ export const getFontWeight = ({ thin, medium, bold, regular }: TextWeightProps) 
 }
 
 export const getFontColor = ({ light, muted }: TextColorProps) => {
-  if (light) return 'neutral.11'
-  if (muted) return 'neutral.9'
-  return 'neutral.12'
+  if (light) return 'neutral1.11'
+  if (muted) return 'neutral1.9'
+  return 'utils.text'
 }

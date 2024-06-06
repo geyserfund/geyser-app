@@ -1,7 +1,6 @@
 import { Image, VStack } from '@chakra-ui/react'
 
-import { LogoNameBrand, LogoNameNostr } from '../../constants'
-import { useNostrColor } from '../../context'
+import { LogoNameBrand } from '../../constants'
 import { neutralColorsDark, neutralColorsLight } from '../../styles'
 
 function useColor(light = neutralColorsLight[0], dark = neutralColorsDark[0]) {
@@ -9,8 +8,6 @@ function useColor(light = neutralColorsLight[0], dark = neutralColorsDark[0]) {
 }
 
 export const LoadingPage = () => {
-  const [isNostrColor] = useNostrColor()
-
   return (
     <VStack
       height="100vh"
@@ -23,12 +20,7 @@ export const LoadingPage = () => {
       position="fixed"
       backgroundColor={useColor()}
     >
-      <Image
-        height="75px"
-        src={isNostrColor ? LogoNameNostr : LogoNameBrand}
-        alt="geyser logo image"
-        objectFit="contain"
-      />
+      <Image height="75px" src={LogoNameBrand} alt="geyser logo image" objectFit="contain" />
       {/* <Box maxWidth="285px" width="100%">
 				<Progress size="xs" isIndeterminate colorScheme="teal" />
 			</Box> */}
