@@ -1,11 +1,12 @@
 import { QuestionIcon } from '@chakra-ui/icons'
-import { Button, Image, Stack, Text, Tooltip, VStack } from '@chakra-ui/react'
+import { Button, Image, Stack, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../../../../../components/layouts'
 import { Body2 } from '../../../../../../../components/typography'
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
+import { Tooltip } from '../../../../../../../components/ui/Tooltip'
 import {
   getPath,
   GoalsFlagUrl,
@@ -13,7 +14,6 @@ import {
   ProjectRewardsImageUrl,
 } from '../../../../../../../constants'
 import { ProjectStatus } from '../../../../../../../types'
-import { useMobileMode } from '../../../../../../../utils'
 import { useProjectContext } from '../../../../../context'
 
 export const CreatorTools = () => {
@@ -86,12 +86,10 @@ export const DisplayCard = ({ title, body, buttonLabel, imageSrc, buttonProps, r
 const GoalTooltip = () => {
   const { t } = useTranslation()
 
-  const isMobile = useMobileMode()
-
   const tooltipText = (
-    <VStack align="flex-start" display="flex" gap="10px">
-      <Text>{t('We recently enhanced Milestones by transforming them into Goals.')}</Text>
-      <Text>
+    <VStack width={'100%'} display="flex" alignContent="center" justifyContent="center" gap="10px">
+      <Text align="start">{t('We recently enhanced Milestones by transforming them into Goals.')}</Text>
+      <Text align="start">
         {t(
           'To do so we needed to trash existing Milestones. If you have any questions or would like us to give you the list of old Milestones reach out to us at support@geyser.fund.',
         )}
@@ -99,21 +97,7 @@ const GoalTooltip = () => {
     </VStack>
   )
   return (
-    <Tooltip
-      label={tooltipText}
-      bg={'neutral.900'}
-      color={'neutral.0'}
-      borderRadius={8}
-      placement="top-start"
-      fontSize={'12px'}
-      fontWeight={'600'}
-      padding={5}
-      hasArrow
-      shouldWrapChildren
-      openDelay={isMobile ? 100 : 0}
-      closeDelay={isMobile ? 100 : 0}
-      closeOnClick={isMobile}
-    >
+    <Tooltip content={tooltipText}>
       <QuestionIcon color={'primary.900'} cursor="pointer" />
     </Tooltip>
   )

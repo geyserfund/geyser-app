@@ -1,3 +1,4 @@
+export * from './ControlledEmojiInput'
 export * from './ControlledGoalAmount'
 export * from './ControlledSelect'
 export * from './ControlledTextArea'

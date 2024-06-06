@@ -40,8 +40,8 @@ export function ControlledGoalAmount(props: Props) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/[^0-9]/g, '')
-    if (value.length > 12) {
-      value = value.substring(0, 11)
+    if (value.length > 10) {
+      value = value.substring(0, 10)
     }
 
     setUnformattedValue(value)
@@ -74,6 +74,9 @@ export function ControlledGoalAmount(props: Props) {
             {...props}
             variant="outline"
             colorScheme="primary.400"
+            borderColor="neutral.200"
+            borderRadius="8px"
+            borderWidth="2px"
             ref={props.inputRef}
             isDisabled={props.isDisabled}
             onBlur={handleBlur}

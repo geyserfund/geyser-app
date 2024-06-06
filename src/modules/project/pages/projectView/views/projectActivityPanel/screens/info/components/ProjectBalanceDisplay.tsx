@@ -5,7 +5,7 @@ import { useSwipeable } from 'react-swipeable'
 
 import { H1 } from '../../../../../../../../../components/typography'
 import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../../../types'
-import { numberWithCommas } from '../../../../../../../../../utils'
+import { commaFormatted } from '../../../../../../../../../utils'
 import { centsToDollars } from '../../../../../../../../../utils'
 import { useProjectDefaultGoal } from '../hooks/useProjectDefaultGoal'
 
@@ -14,6 +14,11 @@ type Props = {
   balance: number | null
   balanceUsdCent: number | null
   inProgressGoals: ProjectGoal[] | null | undefined
+}
+
+enum BalanceView {
+  Goal = 'goal',
+  Total = 'total',
 }
 
 export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, inProgressGoals }: Props) {
@@ -31,12 +36,25 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
     },
   })
 
-  const [showTotalProject, setShowTotalProject] = useState(!defaultGoalId)
+  const hasGoal = Boolean(defaultGoalId)
+  const hasTotalBalance = Boolean(balance && balanceUsdCent)
+
+  const [currentView, setCurrentView] = useState<BalanceView>(hasGoal ? BalanceView.Goal : BalanceView.Total)
+
+  const isTotalView = currentView === BalanceView.Total
 
   const toggleTotalProject = () => {
-    if (defaultGoalId) {
-      setShowTotalProject(!showTotalProject)
-    }
+    setCurrentView((current) => {
+      if (current === BalanceView.Goal && hasTotalBalance) {
+        return BalanceView.Total
+      }
+
+      if (current === BalanceView.Total && hasGoal) {
+        return BalanceView.Goal
+      }
+
+      return current
+    })
   }
 
   const circularPercentage = useMemo(() => {
@@ -78,17 +96,21 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
           <HStack w="100%" display="flex" justifyContent="start" alignItems="center">
             <H1 fontSize="35px">
               {priorityGoal.currency === ProjectGoalCurrency.Usdcent && (
-                <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
-                  {'$'}
-                </Text>
+                <>
+                  <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
+                    {'$'}
+                  </Text>
+                  {priorityGoal.amountContributed ? commaFormatted(centsToDollars(priorityGoal.amountContributed)) : 0}
+                </>
               )}
 
-              {numberWithCommas(centsToDollars(priorityGoal.amountContributed) ?? 0)}
-
               {priorityGoal.currency === ProjectGoalCurrency.Btcsat && (
-                <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
-                  {' sats'}
-                </Text>
+                <>
+                  {priorityGoal.amountContributed ? commaFormatted(priorityGoal.amountContributed) : 0}
+                  <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
+                    {' sats'}
+                  </Text>
+                </>
               )}
             </H1>
           </HStack>
@@ -122,7 +144,7 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
       <VStack w="100%" display="flex" alignItems="center">
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
           <H1 fontSize="35px">
-            {numberWithCommas(balance ?? 0)}
+            {commaFormatted(balance ?? 0)}
             <Text as="span" color="neutral.600" fontWeight={500} fontSize="32px">
               {' sats'}
             </Text>
@@ -132,7 +154,7 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
             <Text as="span" color="neutral.900" fontWeight={500}>
               {formattedTotalUsdAmount()}
             </Text>
-            {t(' Contributed in total ')}
+            {t(' contributed in total ')}
           </Text>
         </Box>
       </VStack>
@@ -142,10 +164,14 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
   const DotIndicator = () => {
     return (
       <HStack width="100%" justifyContent="center" spacing={1} pb={2}>
-        <Circle size="12px" bg={!showTotalProject ? 'neutral.600' : 'neutral.200'} />
-        <Circle size="12px" bg={showTotalProject ? 'neutral.600' : 'neutral.200'} />
+        <Circle size="12px" bg={!isTotalView ? 'neutral.600' : 'neutral.200'} />
+        <Circle size="12px" bg={isTotalView ? 'neutral.600' : 'neutral.200'} />
       </HStack>
     )
+  }
+
+  if (!hasGoal && !hasTotalBalance) {
+    return null
   }
 
   return (
@@ -153,13 +179,13 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
       w="100%"
       onClick={toggleTotalProject}
       _hover={{
-        cursor: defaultGoalId ? 'pointer' : 'default',
+        cursor: hasGoal && hasTotalBalance ? 'pointer' : 'default',
       }}
       p={2}
       {...handlers}
     >
       <HStack w="100%" justifyContent="start" minHeight={120}>
-        {!showTotalProject ? renderCircularProgress() : null}
+        {!isTotalView ? renderCircularProgress() : null}
 
         <VStack
           flex="1"
@@ -168,10 +194,10 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
           px={2}
           alignItems={circularPercentage === undefined ? 'center' : 'start'}
         >
-          {showTotalProject ? getProjectTotalValue() : getGoalValue()}
+          {isTotalView ? getProjectTotalValue() : getGoalValue()}
         </VStack>
       </HStack>
-      {priorityGoal && <DotIndicator />}
+      {hasGoal && hasTotalBalance && <DotIndicator />}
     </VStack>
   )
 }
