@@ -10,7 +10,6 @@ import { useAuthContext } from './context'
 import { useLayoutAnimation } from './hooks'
 import { TopNavBar } from './modules/navigation/topNavBar/TopNavBar'
 import { LandingNavBar } from './navigation/bottomNav/LandingNavBar'
-import { ProfileSideNavigation } from './navigation/profileRightSideNav'
 import { LoadingPage } from './pages/loading'
 import { useMobileMode } from './utils'
 
@@ -49,7 +48,6 @@ export const AppLayout = () => {
             flexDir="column"
           >
             <TopNavBar />
-            <ProfileSideNavigation />
             <Box
               id={ID.root}
               maxHeight="100%"

@@ -9,31 +9,43 @@ export const buttonTheme: ComponentStyleConfig = {
     fontFamily: fonts.brand,
     boxShadow: 'none',
     outline: 'none',
+    minWidth: '20px',
   },
   // styles for different sizes ("sm", "md", "lg")
   sizes: {
+    xs: {
+      height: '20px',
+      minWidth: '20px',
+      paddingX: '6px',
+      borderRadius: '4px',
+      fontSize: '10px',
+    },
     sm: {
       height: '24px',
+      minWidth: '24px',
       paddingX: '8px',
-      borderRadius: '3px',
+      borderRadius: '6px',
       fontSize: '12px',
     },
     md: {
       height: '32px',
+      minWidth: '32px',
       paddingX: '12px',
-      borderRadius: '4px',
+      borderRadius: '8px',
       fontSize: '14px',
     },
     lg: {
       height: '40px',
+      minWidth: '40px',
       paddingX: '16px',
-      borderRadius: '6px',
+      borderRadius: '10px',
       fontSize: '16px',
     },
     xl: {
       height: '48px',
+      minWidth: '48px',
       paddingX: '24px',
-      borderRadius: '8px',
+      borderRadius: '12px',
       fontSize: '18px',
     },
   },
@@ -46,7 +58,8 @@ export const buttonTheme: ComponentStyleConfig = {
         backgroundColor: theme.colors[colorScheme][10],
       },
       _active: {
-        backgroundColor: theme.colors[colorScheme][11],
+        opacity: 0.92,
+        backgroundColor: theme.colors[colorScheme][10],
       },
       _disabled: {
         backgroundColor: theme.colors.neutral1[3],
@@ -81,12 +94,56 @@ export const buttonTheme: ComponentStyleConfig = {
       border: '1px solid',
       borderColor: theme.colors[colorScheme][7],
       _hover: {
-        backgroundColor: 'transparent',
+        backgroundColor: colorScheme === 'primary1' ? theme.colors.utils.primarySurface : 'transparent',
         borderColor: theme.colors[colorScheme][8],
       },
       _active: {
         backgroundColor: theme.colors[colorScheme][3],
         borderColor: theme.colors[colorScheme][8],
+      },
+      _disabled: {
+        backgroundColor: theme.colors.neutral1[3],
+        color: theme.colors.neutral1[8],
+        borderColor: theme.colors.neutral1[8],
+      },
+      _loading: {
+        backgroundColor: theme.colors.neutral1[3],
+        color: theme.colors.neutral1[8],
+        borderColor: theme.colors.neutral1[8],
+      },
+    }),
+    outline: ({ theme, colorScheme = 'primary1' }: StyleFunctionProps) => ({
+      backgroundColor: 'transparent',
+      color: theme.colors[colorScheme][11],
+      border: '1px solid',
+      borderColor: theme.colors[colorScheme][8],
+      _hover: {
+        backgroundColor: theme.colors[colorScheme][2],
+        borderColor: theme.colors[colorScheme][8],
+      },
+      _active: {
+        backgroundColor: theme.colors[colorScheme][3],
+        borderColor: theme.colors[colorScheme][8],
+      },
+      _disabled: {
+        backgroundColor: theme.colors.neutral1[3],
+        color: theme.colors.neutral1[8],
+        borderColor: theme.colors.neutral1[8],
+      },
+      _loading: {
+        backgroundColor: theme.colors.neutral1[3],
+        color: theme.colors.neutral1[8],
+        borderColor: theme.colors.neutral1[8],
+      },
+    }),
+    ghost: ({ theme, colorScheme = 'primary1' }: StyleFunctionProps) => ({
+      backgroundColor: 'transparent',
+      color: theme.colors[colorScheme][11],
+      _hover: {
+        backgroundColor: theme.colors[colorScheme][3],
+      },
+      _active: {
+        backgroundColor: theme.colors[colorScheme][4],
       },
       _disabled: {
         backgroundColor: theme.colors.neutral1[3],
@@ -97,8 +154,6 @@ export const buttonTheme: ComponentStyleConfig = {
         color: theme.colors.neutral1[8],
       },
     }),
-    outline: ({ theme }: StyleFunctionProps) => ({}),
-    ghost: ({ theme }: StyleFunctionProps) => ({}),
 
     primary: ({ theme }: StyleFunctionProps) => ({
       backgroundColor: theme.colors.primary[400],

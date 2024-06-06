@@ -1,7 +1,8 @@
 import { HStack, Modal, ModalContent, ModalOverlay } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
-import { useMobileMode } from '../../utils'
+import { dimensions } from '../../../constants'
+import { useMobileMode } from '../../../utils'
 import { useNavAnimationStyles } from './styles'
 
 export enum NavigationDirection {
@@ -107,7 +108,7 @@ export const NavigationBase = ({ isSideNavOpen, changeSideNavOpen, navigation, d
           borderRadius="0"
           className={classsForSideMenu[direction].bar}
           zIndex={11}
-          width="210px"
+          width={dimensions.sideNav.width}
           borderLeft={!isleft ? '2px solid' : 'none'}
           borderRight={isleft ? '2px solid' : 'none'}
           borderLeftColor="neutral.200"

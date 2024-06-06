@@ -1,11 +1,10 @@
-import { Box, Button, HStack, IconButton, Link, Text, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Link, Text, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { SatSymbolIcon } from '../../../components/icons'
-import { Modal } from '../../../components/layouts'
-import { languageFalgs, LanguageRequestUrl, languages } from '../../../constants'
-import { allTranslations } from '../../../translations'
-import { ColorModeSwitcher } from '../../../utils'
+import { Modal } from '../../../../components/layouts'
+import { languageFalgs, LanguageRequestUrl, languages } from '../../../../constants'
+import { allTranslations } from '../../../../translations'
+import { ColorModeSwitcher } from '../../../../utils'
 
 export const ModeChange = () => {
   const { i18n, t } = useTranslation()
@@ -26,34 +25,19 @@ export const ModeChange = () => {
 
   return (
     <>
-      <VStack bgColor="neutral.200" borderRadius={{ base: '8px', lg: '0px' }} mx={{ base: '10px', lg: 0 }} mt={2} p={3}>
-        <HStack width="full" spacing={3}>
-          <ColorModeSwitcher flex={1} />
-
-          <Tooltip label="currency">
-            <IconButton
-              size={{ base: 'sm', lg: 'md' }}
-              bgColor="neutral.0"
-              variant="primaryNeutral"
-              aria-label="currency-convert"
-              icon={<SatSymbolIcon fontSize={'20px'} color="neutral.600" />}
-              isDisabled
-              flex={1}
-            />
-          </Tooltip>
-        </HStack>
-
+      <HStack w="full" paddingX={4}>
+        <ColorModeSwitcher flex={1} />
         <Button
+          variant="soft"
+          colorScheme="neutral1"
           w="full"
           size={{ base: 'sm', lg: 'md' }}
-          bgColor="neutral.0"
-          color="neutral.600"
-          variant="primaryNeutral"
           onClick={onOpen}
+          flex={1}
         >
           <Text isTruncated>{languages[i18n.resolvedLanguage as keyof typeof languages]}</Text>
         </Button>
-      </VStack>
+      </HStack>
       <Modal
         isOpen={isOpen}
         onClose={onClose}
@@ -65,6 +49,8 @@ export const ModeChange = () => {
           {renderLanguages.map((lng) => (
             <Tooltip key={lng.key} label={lng.disabled ? t('Coming soon') : ''}>
               <Button
+                variant="solid"
+                colorScheme="neutral1"
                 style={{
                   fontWeight: i18n.resolvedLanguage === lng.key ? 'bold' : 'normal',
                 }}

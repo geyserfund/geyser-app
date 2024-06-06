@@ -5220,6 +5220,23 @@ export type FundingTxStatusUpdatedSubscription = { __typename?: 'Subscription', 
       & FundingTxFragment
     ) } };
 
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, image?: string | null, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, owners: Array<{ __typename?: 'Owner', id: any, user: (
+      { __typename?: 'User' }
+      & ProjectPageCreatorFragment
+    ) }> };
+
+export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }> };
+
+export type ProjectPageBodyQueryVariables = Exact<{
+  where: UniqueProjectQueryInput;
+}>;
+
+
+export type ProjectPageBodyQuery = { __typename?: 'Query', projectGet?: (
+    { __typename?: 'Project' }
+    & ProjectPageBodyFragment
+  ) | null };
+
 export const ProjectAffiliateLinkFragmentDoc = gql`
     fragment ProjectAffiliateLink on AffiliateLink {
   projectId
@@ -6330,6 +6347,42 @@ export const FundingTxForUserContributionFragmentDoc = gql`
   }
 }
     `;
+export const ProjectPageCreatorFragmentDoc = gql`
+    fragment ProjectPageCreator on User {
+  id
+  imageUrl
+  username
+  externalAccounts {
+    accountType
+    externalUsername
+    externalId
+    id
+    public
+  }
+}
+    `;
+export const ProjectPageBodyFragmentDoc = gql`
+    fragment ProjectPageBody on Project {
+  id
+  name
+  title
+  type
+  thumbnailImage
+  image
+  shortDescription
+  description
+  balance
+  balanceUsdCent
+  defaultGoalId
+  status
+  owners {
+    id
+    user {
+      ...ProjectPageCreator
+    }
+  }
+}
+    ${ProjectPageCreatorFragmentDoc}`;
 export const AffiliateLinkCreateDocument = gql`
     mutation AffiliateLinkCreate($input: AffiliateLinkCreateInput!) {
   affiliateLinkCreate(input: $input) {
@@ -10057,3 +10110,43 @@ export function useFundingTxStatusUpdatedSubscription(baseOptions?: Apollo.Subsc
       }
 export type FundingTxStatusUpdatedSubscriptionHookResult = ReturnType<typeof useFundingTxStatusUpdatedSubscription>;
 export type FundingTxStatusUpdatedSubscriptionResult = Apollo.SubscriptionResult<FundingTxStatusUpdatedSubscription>;
+export const ProjectPageBodyDocument = gql`
+    query ProjectPageBody($where: UniqueProjectQueryInput!) {
+  projectGet(where: $where) {
+    ...ProjectPageBody
+  }
+}
+    ${ProjectPageBodyFragmentDoc}`;
+
+/**
+ * __useProjectPageBodyQuery__
+ *
+ * To run a query within a React component, call `useProjectPageBodyQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectPageBodyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectPageBodyQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectPageBodyQuery(baseOptions: Apollo.QueryHookOptions<ProjectPageBodyQuery, ProjectPageBodyQueryVariables> & ({ variables: ProjectPageBodyQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectPageBodyQuery, ProjectPageBodyQueryVariables>(ProjectPageBodyDocument, options);
+      }
+export function useProjectPageBodyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectPageBodyQuery, ProjectPageBodyQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectPageBodyQuery, ProjectPageBodyQueryVariables>(ProjectPageBodyDocument, options);
+        }
+export function useProjectPageBodySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectPageBodyQuery, ProjectPageBodyQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectPageBodyQuery, ProjectPageBodyQueryVariables>(ProjectPageBodyDocument, options);
+        }
+export type ProjectPageBodyQueryHookResult = ReturnType<typeof useProjectPageBodyQuery>;
+export type ProjectPageBodyLazyQueryHookResult = ReturnType<typeof useProjectPageBodyLazyQuery>;
+export type ProjectPageBodySuspenseQueryHookResult = ReturnType<typeof useProjectPageBodySuspenseQuery>;
+export type ProjectPageBodyQueryResult = Apollo.QueryResult<ProjectPageBodyQuery, ProjectPageBodyQueryVariables>;

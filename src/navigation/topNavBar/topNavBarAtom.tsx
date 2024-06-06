@@ -10,8 +10,8 @@ import {
   routeMatchForAtom,
 } from '../../config/routes/routesAtom'
 import { getPath, PathName } from '../../constants'
+import { profileSideNavAtom } from '../../modules/navigation/profileNav/profileSideNavAtom'
 import { projectSideNavAtom } from '../../modules/project/pages/projectView/views/projectNavigation/sideNav'
-import { profileSideNavAtom } from '../profileRightSideNav'
 
 const routesForHidingTopNav = entryCreationRoutes
 const routesForHidingTopNavAtom = atom(routeMatchForAtom(routesForHidingTopNav))

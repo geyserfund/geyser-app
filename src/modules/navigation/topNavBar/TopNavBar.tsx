@@ -1,21 +1,22 @@
-import { Button, HStack, Image, useColorModeValue, useDisclosure } from '@chakra-ui/react'
+import { HStack, Image, useColorModeValue, useDisclosure } from '@chakra-ui/react'
 import { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
 
 import LogoDark from '../../../assets/logo-dark.svg'
 import LogoLight from '../../../assets/logo-light.svg'
 import { AuthModal } from '../../../components/molecules'
+import { dimensions } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { useAuthModal } from '../../../pages/auth/hooks'
-import { LoggedOutModal } from './LoggedOutModal'
-import { UserNav } from './UserNav'
+import { LoginButton } from '../components/LoginButton'
+import { ProfileNav } from '../profileNav/ProfileNav'
+import { LoggedOutModal } from './components/LoggedOutModal'
 
 export const TopNavBar = () => {
   const imagesrc = useColorModeValue(LogoDark, LogoLight)
-  const { user, isLoggedIn, logout, queryCurrentUser } = useAuthContext()
-  const { loginOnOpen, loginIsOpen, loginOnClose } = useAuthModal()
-  const { t } = useTranslation()
+  const { isLoggedIn, logout, queryCurrentUser } = useAuthContext()
+  const { loginIsOpen, loginOnClose } = useAuthModal()
+
   const navigate = useNavigate()
 
   const location: Location & {
@@ -50,18 +51,16 @@ export const TopNavBar = () => {
 
   return (
     <>
-      <HStack paddingY={{ base: 4, lg: 8 }} maxWidth="960px" width="100%" backgroundColor={'utils.pbg'}>
+      <HStack paddingY={{ base: 4, lg: 8 }} maxWidth={dimensions.maxWidth} width="100%" backgroundColor={'utils.pbg'}>
         <HStack w="100%" height={'48px'} justifyContent={'space-between'}>
           <Image src={imagesrc} height="100%" width="auto" objectFit="contain" />
-          {isLoggedIn ? (
-            <UserNav user={user} />
-          ) : (
-            <Button variant="soft" colorScheme="primary1" onClick={loginOnOpen}>
-              {t('Login')}
-            </Button>
-          )}
+          <HStack>
+            {!isLoggedIn && <LoginButton />}
+            <ProfileNav />
+          </HStack>
         </HStack>
       </HStack>
+
       <LoggedOutModal isOpen={isLoginAlertModalOpen} onClose={onLoginAlertModalClose} />
 
       <AuthModal
