@@ -12,20 +12,12 @@ const meta = {
   },
   argTypes: {
     variant: {
-      options: [
-        'primary',
-        'primaryNeutral',
-        'primaryLink',
-        'primaryGradient',
-        'secondary',
-        'secondaryNeutral',
-        'transparent',
-        'solid',
-        'soft',
-        'surface',
-      ],
+      options: ['solid', 'soft', 'surface', 'outline', 'ghost'],
       control: { type: 'select' },
-      colorScheme: { type: 'input' },
+    },
+    colorScheme: {
+      options: ['primary1', 'neutral1', 'error'],
+      control: { type: 'select' },
     },
     size: {
       options: ['sm', 'md', 'lg'],
