@@ -5,9 +5,14 @@ import { copyTextToClipboard } from '../../../../../utils'
 import { useProjectContext } from '../../../context'
 
 enum CampaignSource {
+  /** For content shared by creator */
   creator = 'creator',
-  member = 'member',
-  user = ' user',
+  /** For content shared by creator */
+  contributor = 'contributor',
+  /** For content shared by creator */
+  user = 'user',
+  /** For content shared by creator */
+  visitor = 'visitor',
 }
 
 export enum CampaignContent {
@@ -18,14 +23,19 @@ export enum CampaignContent {
 }
 
 type getCampainParametersProps = {
+  /** If the user is the creator of the project */
   creator?: boolean
+  /** If the user is logged in */
   isLoggedIn: boolean
+  /** The name of the project */
   projectName: string
-  clickedFrom: string
+  /** The page the user clicked from */
+  clickedFrom: CampaignContent
 }
 
+/** This function is for use outside of ProjectProvider Context */
 export const getCampaignUrlSuffix = ({ creator, isLoggedIn, projectName, clickedFrom }: getCampainParametersProps) => {
-  const source = creator ? CampaignSource.creator : isLoggedIn ? CampaignSource.member : CampaignSource.user
+  const source = creator ? CampaignSource.creator : isLoggedIn ? CampaignSource.user : CampaignSource.visitor
 
   const campaignParameters = [
     { key: 'mtm_campaign', value: 'project-share' },
@@ -37,12 +47,13 @@ export const getCampaignUrlSuffix = ({ creator, isLoggedIn, projectName, clicked
   return '?' + campaignParameters.map(({ key, value }) => `${key}=${value}`).join('&')
 }
 
+/** This function must be used inside ProjectProvider Context to share project links */
 export const useProjectShare = () => {
   const { project, isProjectOwner } = useProjectContext()
   const { isLoggedIn } = useAuthContext()
   const [copied, setCopied] = useState(false)
 
-  const getShareProjectUrl = ({ clickedFrom }: { clickedFrom: string }) => {
+  const getShareProjectUrl = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
     const campaignUrlSuffix = getCampaignUrlSuffix({
       creator: isProjectOwner,
       isLoggedIn,
@@ -52,7 +63,7 @@ export const useProjectShare = () => {
     return `${window.location.origin}/project/${project?.name}${campaignUrlSuffix}`
   }
 
-  const copyProjectLinkToClipboard = ({ clickedFrom }: { clickedFrom: string }) => {
+  const copyProjectLinkToClipboard = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
     const projectLink = getShareProjectUrl({ clickedFrom })
 
     copyTextToClipboard(projectLink)
