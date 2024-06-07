@@ -54,7 +54,7 @@ export const TopNavBar = () => {
       <HStack paddingY={{ base: 4, lg: 8 }} maxWidth={dimensions.maxWidth} width="100%" backgroundColor={'utils.pbg'}>
         <HStack w="100%" height={'48px'} justifyContent={'space-between'}>
           <Image src={imagesrc} height="100%" width="auto" objectFit="contain" />
-          <HStack>
+          <HStack position="relative">
             {!isLoggedIn && <LoginButton />}
             <ProfileNav />
           </HStack>

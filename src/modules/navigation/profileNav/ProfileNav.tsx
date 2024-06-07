@@ -1,5 +1,5 @@
 import { useMobileMode } from '../../../utils'
-import { ProfileNavPopOver } from './ProfileNavPopOver'
+import { ProfileNavMenu } from './ProfileNavMenu'
 import { ProfileNavSidebar } from './ProfileNavSidebar'
 
 export const ProfileNav = () => {
@@ -9,5 +9,5 @@ export const ProfileNav = () => {
     return <ProfileNavSidebar />
   }
 
-  return <ProfileNavPopOver />
+  return <ProfileNavMenu />
 }

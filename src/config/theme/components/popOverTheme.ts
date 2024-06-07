@@ -19,4 +19,12 @@ const baseStyle = definePartsStyle({
   },
 })
 
-export const popOverTheme = defineMultiStyleConfig({ baseStyle })
+const variants = {
+  dropDown: {
+    body: {},
+    content: {},
+    popper: {},
+  },
+}
+
+export const popOverTheme = defineMultiStyleConfig({ baseStyle, variants })
