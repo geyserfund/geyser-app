@@ -4477,6 +4477,13 @@ export type GrantStatisticsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GrantStatisticsQuery = { __typename?: 'Query', grantStatistics: { __typename?: 'GrantStatistics', grants?: { __typename?: 'GrantStatisticsGrant', amountFunded: number, amountGranted: number, count: number } | null, applicants?: { __typename?: 'GrantStatisticsApplicant', countFunded: number } | null } };
 
+export type GrantGetQueryVariables = Exact<{
+  input: GrantGetInput;
+}>;
+
+
+export type GrantGetQuery = { __typename?: 'Query', grant: { __typename?: 'Grant', applicants: Array<{ __typename?: 'GrantApplicant', project: { __typename?: 'Project', name: string, id: any } }> } };
+
 export type OrdersGetQueryVariables = Exact<{
   input: OrdersGetInput;
 }>;
@@ -4572,13 +4579,6 @@ export type ProjectFundersQuery = { __typename?: 'Query', fundersGet: Array<(
     { __typename?: 'Funder' }
     & FunderWithUserFragment
   )> };
-
-export type ProjectDashboardFundersQueryVariables = Exact<{
-  input?: InputMaybe<GetFundersInput>;
-}>;
-
-
-export type ProjectDashboardFundersQuery = { __typename?: 'Query', getDashboardFunders: Array<{ __typename?: 'Funder', id: any, amountFunded?: number | null, confirmed: boolean, confirmedAt?: any | null, timesFunded?: number | null, user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } | null, fundingTxs: Array<{ __typename?: 'FundingTx', email?: string | null, amount: number, uuid?: string | null }> }> };
 
 export type ProjectsMostFundedOfTheWeekGetQueryVariables = Exact<{
   input?: InputMaybe<GetProjectsMostFundedOfTheWeekInput>;
@@ -7910,6 +7910,51 @@ export type GrantStatisticsQueryHookResult = ReturnType<typeof useGrantStatistic
 export type GrantStatisticsLazyQueryHookResult = ReturnType<typeof useGrantStatisticsLazyQuery>;
 export type GrantStatisticsSuspenseQueryHookResult = ReturnType<typeof useGrantStatisticsSuspenseQuery>;
 export type GrantStatisticsQueryResult = Apollo.QueryResult<GrantStatisticsQuery, GrantStatisticsQueryVariables>;
+export const GrantGetDocument = gql`
+    query GrantGet($input: GrantGetInput!) {
+  grant(input: $input) {
+    applicants {
+      project {
+        name
+        id
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGrantGetQuery__
+ *
+ * To run a query within a React component, call `useGrantGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGrantGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGrantGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGrantGetQuery(baseOptions: Apollo.QueryHookOptions<GrantGetQuery, GrantGetQueryVariables> & ({ variables: GrantGetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GrantGetQuery, GrantGetQueryVariables>(GrantGetDocument, options);
+      }
+export function useGrantGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GrantGetQuery, GrantGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GrantGetQuery, GrantGetQueryVariables>(GrantGetDocument, options);
+        }
+export function useGrantGetSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GrantGetQuery, GrantGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GrantGetQuery, GrantGetQueryVariables>(GrantGetDocument, options);
+        }
+export type GrantGetQueryHookResult = ReturnType<typeof useGrantGetQuery>;
+export type GrantGetLazyQueryHookResult = ReturnType<typeof useGrantGetLazyQuery>;
+export type GrantGetSuspenseQueryHookResult = ReturnType<typeof useGrantGetSuspenseQuery>;
+export type GrantGetQueryResult = Apollo.QueryResult<GrantGetQuery, GrantGetQueryVariables>;
 export const OrdersGetDocument = gql`
     query OrdersGet($input: OrdersGetInput!) {
   ordersGet(input: $input) {
@@ -8375,60 +8420,6 @@ export type ProjectFundersQueryHookResult = ReturnType<typeof useProjectFundersQ
 export type ProjectFundersLazyQueryHookResult = ReturnType<typeof useProjectFundersLazyQuery>;
 export type ProjectFundersSuspenseQueryHookResult = ReturnType<typeof useProjectFundersSuspenseQuery>;
 export type ProjectFundersQueryResult = Apollo.QueryResult<ProjectFundersQuery, ProjectFundersQueryVariables>;
-export const ProjectDashboardFundersDocument = gql`
-    query ProjectDashboardFunders($input: GetFundersInput) {
-  getDashboardFunders(input: $input) {
-    id
-    user {
-      id
-      username
-      imageUrl
-    }
-    fundingTxs {
-      email
-      amount
-      uuid
-    }
-    amountFunded
-    confirmed
-    confirmedAt
-    timesFunded
-  }
-}
-    `;
-
-/**
- * __useProjectDashboardFundersQuery__
- *
- * To run a query within a React component, call `useProjectDashboardFundersQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectDashboardFundersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProjectDashboardFundersQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectDashboardFundersQuery(baseOptions?: Apollo.QueryHookOptions<ProjectDashboardFundersQuery, ProjectDashboardFundersQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProjectDashboardFundersQuery, ProjectDashboardFundersQueryVariables>(ProjectDashboardFundersDocument, options);
-      }
-export function useProjectDashboardFundersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectDashboardFundersQuery, ProjectDashboardFundersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProjectDashboardFundersQuery, ProjectDashboardFundersQueryVariables>(ProjectDashboardFundersDocument, options);
-        }
-export function useProjectDashboardFundersSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectDashboardFundersQuery, ProjectDashboardFundersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProjectDashboardFundersQuery, ProjectDashboardFundersQueryVariables>(ProjectDashboardFundersDocument, options);
-        }
-export type ProjectDashboardFundersQueryHookResult = ReturnType<typeof useProjectDashboardFundersQuery>;
-export type ProjectDashboardFundersLazyQueryHookResult = ReturnType<typeof useProjectDashboardFundersLazyQuery>;
-export type ProjectDashboardFundersSuspenseQueryHookResult = ReturnType<typeof useProjectDashboardFundersSuspenseQuery>;
-export type ProjectDashboardFundersQueryResult = Apollo.QueryResult<ProjectDashboardFundersQuery, ProjectDashboardFundersQueryVariables>;
 export const ProjectsMostFundedOfTheWeekGetDocument = gql`
     query ProjectsMostFundedOfTheWeekGet($input: GetProjectsMostFundedOfTheWeekInput) {
   projectsMostFundedOfTheWeekGet(input: $input) {

@@ -15,6 +15,7 @@ import {
 } from '../../../../../../../constants'
 import { ProjectStatus } from '../../../../../../../types'
 import { useProjectContext } from '../../../../../context'
+import { BeachGrantEntryTemplate } from '../components/BeachGrantEntryTemplate'
 
 export const CreatorTools = () => {
   const { t } = useTranslation()
@@ -55,7 +56,9 @@ export const CreatorTools = () => {
           buttonLabel={t('Add Entry')}
           imageSrc={ProjectNoTransactionImageUrl}
           buttonProps={{ as: Link, to: getPath('projectEntryCreation', project?.name) }}
-        />
+        >
+          <BeachGrantEntryTemplate />
+        </DisplayCard>
       )}
     </Stack>
   )
@@ -68,9 +71,18 @@ interface DisplayCardProps {
   buttonLabel: string
   buttonProps: any
   rightAction?: React.ReactNode
+  children?: React.ReactNode
 }
 
-export const DisplayCard = ({ title, body, buttonLabel, imageSrc, buttonProps, rightAction }: DisplayCardProps) => {
+export const DisplayCard = ({
+  title,
+  body,
+  buttonLabel,
+  imageSrc,
+  buttonProps,
+  rightAction,
+  children,
+}: DisplayCardProps) => {
   return (
     <CardLayout flex="1" flexDirection="column" alignItems="flex-start" spacing="20px" minWidth={'265px'}>
       <TitleDivider rightAction={rightAction}>{title}</TitleDivider>
@@ -79,6 +91,7 @@ export const DisplayCard = ({ title, body, buttonLabel, imageSrc, buttonProps, r
       <Button variant="primary" w="full" {...buttonProps}>
         {buttonLabel}
       </Button>
+      {children}
     </CardLayout>
   )
 }

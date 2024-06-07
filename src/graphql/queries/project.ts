@@ -119,35 +119,6 @@ export const QUERY_PROJECT_FUNDERS = gql`
   }
 `
 
-export const QUERY_PROJECT_DASHBOARD_FUNDERS = gql`
-  query ProjectDashboardFunders($input: GetFundersInput) {
-    getDashboardFunders(input: $input) {
-      id
-      user {
-        id
-        username
-        imageUrl
-      }
-      fundingTxs {
-        email
-        amount
-        uuid
-      }
-      rewards {
-        quantity
-        projectReward {
-          id
-          name
-        }
-      }
-      amountFunded
-      confirmed
-      confirmedAt
-      timesFunded
-    }
-  }
-`
-
 export const QUERY_PROJECTS_MOST_FUNDED_OF_THE_WEEK = gql`
   ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
   query ProjectsMostFundedOfTheWeekGet($input: GetProjectsMostFundedOfTheWeekInput) {
