@@ -135,6 +135,19 @@ export const utilColors = {
   },
 }
 
+export const panelColors = {
+  light: {
+    default: 'rgba(255, 255, 255, 0.8)',
+    solid: '#FFFFFF',
+    translucent: 'rgba(255, 255, 255, 0.8)',
+  },
+  dark: {
+    default: 'rgba(29, 29, 33, 0.7)',
+    solid: '#191918',
+    translucent: 'rgba(29, 29, 33, 0.7)',
+  },
+}
+
 export const lightModeColors = {
   primary: primaryColorsLight,
   neutral: neutralColorsLight,
@@ -153,6 +166,7 @@ export const lightModeColors = {
   info: lightPalette.sky,
 
   utils: utilColors.light,
+  panel: panelColors.light,
 }
 
 export const darkModeColors = {
@@ -173,4 +187,5 @@ export const darkModeColors = {
   info: darkPalette.sky,
 
   utils: utilColors.dark,
+  panel: panelColors.dark,
 }
