@@ -120,3 +120,16 @@ export const QUERY_GRANT_STATISTICS = gql`
     }
   }
 `
+
+export const QUERY_GRANT_GET = gql`
+  query GrantGet($input: GrantGetInput!) {
+    grant(input: $input) {
+      applicants {
+        project {
+          name
+          id
+        }
+      }
+    }
+  }
+`

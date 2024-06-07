@@ -39,11 +39,12 @@ export const useEntryState = (
   projectId: number,
   entryId?: number | string,
   options?: QueryHookOptions<TEntryData, TEntryVariables>,
+  entryTemplate: Entry = {} as Entry,
 ) => {
   const { toast } = useNotification()
 
-  const [entry, setEntry] = useState<Entry>({} as Entry)
-  const [baseEntry, setBaseEntry] = useState<Entry>({} as Entry)
+  const [entry, setEntry] = useState<Entry>(entryTemplate as Entry)
+  const [baseEntry, setBaseEntry] = useState<Entry>(entryTemplate as Entry)
 
   const [loading, setLoading] = useState(true)
 
