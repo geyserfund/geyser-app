@@ -8,6 +8,7 @@ import { CardLayout } from '../../../../components/layouts'
 import { Body1, Caption, H2, H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
+import { neutralColorsLight } from '../../../../styles'
 import { GrantApplicant } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 
@@ -74,7 +75,7 @@ export const PendingApplications = ({ applicants }: Props) => {
                   <HStack gap={2}>
                     <H2 fontSize="24px">{project.title}</H2>
                     <Tag bg="secondary.yellow">
-                      <Caption>{t('APPLICATION PENDING')}</Caption>
+                      <Caption color={neutralColorsLight[900]}>{t('APPLICATION PENDING')}</Caption>
                     </Tag>
                   </HStack>
                   <HStack display="flex" justifyContent="flex-start" alignItems="flex-start" height="100%">
