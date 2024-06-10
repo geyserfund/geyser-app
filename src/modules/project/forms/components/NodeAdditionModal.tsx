@@ -259,7 +259,7 @@ export const NodeAdditionModal = ({ isOpen, onClose, nodeInput, onSubmit }: Prop
               <TextArea
                 minHeight={'10em'}
                 name="invoiceMacaroon"
-                placeholder="cml0ZRoKCGbG5kAlgRChAGp+sQl/hVmpZQVWvphmk/EgEwGhYKB2FkZHJlc3MSBHJlYWWSBXdyaXRlGhcrudm9pY2VzEgRyZZFkEgV3PCgdvbmNoYWluEgRyZWFkAAAGIK8pI70yQT8GuVhykez0PMpNt5kEeYsmuvwdnLe4JfFMAgEE"
+                placeholder="AgEDbG5kAlgDChB/+6M8TzkN5U73JwYSTJTZEgEwGhYKB2FkZHJlc3MSBHJlYWQSBXdyaXRlGhcKCGludm9pY2VzEgRyZWFkEgV3cml0ZRoPCgdvbmNoYWluEgRyZWFkAAAGIHCi3WwLBhVswgO+Yiqbwn41AkMmi42RAflN3EOpDCjc"
                 onChange={handleTextChange}
                 value={form.invoiceMacaroon}
                 error={formError.invoiceMacaroon}
