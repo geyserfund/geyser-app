@@ -232,7 +232,7 @@ export const GrantApplicantCard = ({
     if (canVote && isLoggedIn && currentUser?.hasSocialAccount) {
       return (
         <Button
-          onClick={onOpen}
+          onClick={() => fundingModalProps.onOpen({ project })}
           height="40px"
           width="100%"
           size="md"
