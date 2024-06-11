@@ -1,10 +1,11 @@
-import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, ListItem, Text, UnorderedList, useDisclosure, VStack } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
+import { Modal } from '../../../../components/layouts'
 import { H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
@@ -60,6 +61,7 @@ export const GrantApplicantCard = ({
   const isMobile = useMobileMode()
   const classes = useStyles()
   const projectLink = getPath('project', project.name)
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const renderWidgetItem = (funding: GrantApplicantFunding, contributorsCount: number) => {
     return (
@@ -107,7 +109,7 @@ export const GrantApplicantCard = ({
     if (canVote) {
       return (
         <Button
-          onClick={() => fundingModalProps.onOpen({ project })}
+          onClick={onOpen}
           height="40px"
           width="100%"
           size="md"
@@ -201,6 +203,61 @@ export const GrantApplicantCard = ({
           {renderButton(project)}
         </VStack>
       )}
+      <Modal isOpen={isOpen} onClose={onClose} title={t('How voting works')}>
+        <VStack py={2} px={2} gap={4} w="full">
+          <VStack alignItems="flex-start" gap={2}>
+            <Text>
+              {t('This grant uses ')}
+              <Text as="i">{t('Incremental Voting')}</Text>
+              {t(', to ensure that all votes can make a difference. This means:')}
+            </Text>
+            <UnorderedList mt={4} spacing={2}>
+              <ListItem>
+                <Text>{t('You vote by sending sats')}</Text>
+              </ListItem>
+              <ListItem>
+                <Text>
+                  {t(
+                    'You can send to a project multiple times, but each user gets to send a maximum of 3 votes per project.',
+                  )}
+                </Text>
+              </ListItem>
+              <ListItem>
+                <Text>{t('You can send to multiple projects')}</Text>
+              </ListItem>
+              <ListItem>
+                <Text>
+                  {t('The amount of votes you cast on a project depends on the cumulative amount of you send to it:')}
+                </Text>
+                <UnorderedList mt={2} spacing={1} pl={4}>
+                  <ListItem>
+                    <Text>{t('From 1k to 10k sats = 1 vote')}</Text>
+                  </ListItem>
+                  <ListItem>
+                    <Text>{t('Up to 100k sats = 2 votes')}</Text>
+                  </ListItem>
+                  <ListItem>
+                    <Text>{t('Above 100k Sats = 3 votes')}</Text>
+                  </ListItem>
+                </UnorderedList>
+              </ListItem>
+            </UnorderedList>
+          </VStack>
+
+          <HStack w="full" justifyContent="center">
+            <Button
+              w="full"
+              variant="primary"
+              onClick={() => {
+                fundingModalProps.onOpen({ project })
+                onClose()
+              }}
+            >
+              {t("Let's vote!")}
+            </Button>
+          </HStack>
+        </VStack>
+      </Modal>
     </CardLayout>
   )
 }
