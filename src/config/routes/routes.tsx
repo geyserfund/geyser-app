@@ -453,10 +453,6 @@ export const platformRoutes: RouteObject[] = [
     Component: FailedAuth,
   },
   {
-    path: getPath('legalTerms'),
-    Component: TermsAndConditions,
-  },
-  {
     path: getPath('legalPrivacy'),
     Component: PrivacyPolicy,
   },

@@ -39,10 +39,9 @@ export const FilterFooter = () => {
             {t('guide')}
           </Caption>
         </Link>
-
-        <ReactLink to={getPath('legalTerms')} style={{ textDecoration: 'underline' }}>
+        <Link href={getPath('legalTerms')} isExternal style={{ textDecoration: 'underline' }}>
           <Caption bold>T&amp;C</Caption>
-        </ReactLink>
+        </Link>
 
         <ReactLink to={getPath('legalPrivacy')} style={{ textDecoration: 'underline' }}>
           <Caption bold>{t('Privacy')}</Caption>

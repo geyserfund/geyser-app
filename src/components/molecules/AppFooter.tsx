@@ -119,9 +119,9 @@ export const AppFooter = ({ wrapperClassName }: IFooter) => {
             <Text>{t('Privacy')}</Text>
           </ReactLink>
 
-          <ReactLink to={getPath('legalTerms')} style={{ textDecoration: 'underline' }}>
+          <Link href={getPath('legalTerms')} isExternal>
             <Text>T&amp;C</Text>
-          </ReactLink>
+          </Link>
 
           <Link href={AnalyticsUrl} isExternal>
             <Text>{t('Analytics')}</Text>
