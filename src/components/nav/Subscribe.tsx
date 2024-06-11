@@ -37,6 +37,8 @@ interface ISubscribe {
   titleSize?: string
 }
 
+const SUBSCRIBERS_SEGMENT_ID = '657d655a3d5e2300da54a743'
+
 export const Subscribe = ({ isOpen, onClose, style, interest, parentState, titleSize }: ISubscribe) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
@@ -74,6 +76,8 @@ export const Subscribe = ({ isOpen, onClose, style, interest, parentState, title
       } else {
         records = { email }
       }
+
+      records.segment_ids = [SUBSCRIBERS_SEGMENT_ID]
 
       await createSubscriber(records)
 
