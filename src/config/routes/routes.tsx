@@ -5,7 +5,6 @@ import { AppLayout } from '../../AppLayout'
 import { __production__, getPath, PathName } from '../../constants'
 import { ExternalAuthSuccess, FailedAuth } from '../../pages/auth'
 import { NotAuthorized, NotFoundPage, NotFoundProject } from '../../pages/fallback'
-import { PrivacyPolicy, TermsAndConditions } from '../../pages/legal'
 import { ErrorBoundary } from './ErrorBoundary'
 import { renderPrivateRoute } from './PrivateRoute'
 
@@ -19,7 +18,6 @@ const ProfilePage = () => import('../../modules/profile/pages/profilePage/Profil
 const ProfileSettingsPage = () => import('../../modules/profile/pages/profileSettings/ProfileSettings')
 const Badges = () => import('../../pages/badges/BadgesPage')
 const Landing = () => import('../../pages/landing')
-const AboutPage = () => import('../../pages/about/About')
 
 export const platformRoutes: RouteObject[] = [
   {
@@ -426,13 +424,6 @@ export const platformRoutes: RouteObject[] = [
     ],
   },
   {
-    path: getPath('about'),
-    async lazy() {
-      const About = await AboutPage().then((m) => m.About)
-      return { Component: About }
-    },
-  },
-  {
     path: '/auth/twitter',
     Component: ExternalAuthSuccess,
   },
@@ -451,14 +442,6 @@ export const platformRoutes: RouteObject[] = [
   {
     path: '/failed-authentication',
     Component: FailedAuth,
-  },
-  {
-    path: getPath('legalTerms'),
-    Component: TermsAndConditions,
-  },
-  {
-    path: getPath('legalPrivacy'),
-    Component: PrivacyPolicy,
   },
   {
     path: '*', // The default route if a random route is used
