@@ -23,8 +23,10 @@ interface GrantApplicantCardProps {
   isClosed: boolean
   isCompetitionVote: boolean
   canVote: boolean
-  modalProps: any
+  fundingModalProps: any
   grantStatus: GrantStatusEnum
+  isLoggedIn: boolean
+  onOpenLoginModal: () => void
 }
 
 const useStyles = createUseStyles({
@@ -49,8 +51,10 @@ export const GrantApplicantCard = ({
   isClosed,
   isCompetitionVote,
   canVote,
-  modalProps,
+  fundingModalProps,
   grantStatus,
+  isLoggedIn,
+  onOpenLoginModal,
 }: GrantApplicantCardProps) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
@@ -83,13 +87,30 @@ export const GrantApplicantCard = ({
   }
 
   const renderButton = (project: Project) => {
+    if (!isLoggedIn) {
+      return (
+        <Button
+          onClick={onOpenLoginModal}
+          height="40px"
+          width="100%"
+          size="md"
+          textTransform="uppercase"
+          fontFamily={fonts.livvic}
+          fontSize="16px"
+          variant="primary"
+        >
+          {t('Login to vote')}
+        </Button>
+      )
+    }
+
     if (canVote) {
       return (
         <Button
-          onClick={() => modalProps.onOpen({ project })}
-          height="51px"
+          onClick={() => fundingModalProps.onOpen({ project })}
+          height="40px"
           width="100%"
-          size="xl"
+          size="md"
           textTransform="uppercase"
           fontFamily={fonts.livvic}
           variant="primary"
@@ -144,9 +165,10 @@ export const GrantApplicantCard = ({
             flexDirection="column"
             justifyContent="center"
             alignItems="center"
+            gap={2}
           >
-            {renderButton(project)}
             {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
+            {renderButton(project)}
           </Box>
         )}
       </Box>
