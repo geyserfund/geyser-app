@@ -60,13 +60,15 @@ export enum PathName {
   entryId = ':entryId',
   grantId = ':grantId',
 
-  legalTerms = 'terms-and-conditions',
-  legalPrivacy = 'privacy-policy',
+  legalTerms = 'T&C',
+  legalPrivacy = 'Privacy',
 }
 
 // @TODO: These definitions are currently a WIP.
 // (Getting them started as part of the changes for
 // https://geyserteam.atlassian.net/browse/GT-207.)
+
+export const AboutGeyserOrigin = 'https://about.geyser.fund'
 
 const pathsMap = {
   index: () => '/',
@@ -154,9 +156,9 @@ const pathsMap = {
 
   badges: () => `/${PathName.badges}`,
 
-  about: () => `/${PathName.about}`,
-  legalTerms: () => `/${PathName.legalTerms}`,
-  legalPrivacy: () => `/${PathName.legalPrivacy}`,
+  about: () => `${AboutGeyserOrigin}`,
+  legalTerms: () => `${AboutGeyserOrigin}/${PathName.legalTerms}`,
+  legalPrivacy: () => `${AboutGeyserOrigin}/${PathName.legalPrivacy}`,
 }
 
 export type PathsMap = typeof pathsMap

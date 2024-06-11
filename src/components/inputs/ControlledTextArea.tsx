@@ -47,6 +47,9 @@ export function ControlledTextArea(props: Props) {
         {...field}
         {...props}
         ref={props.inputRef}
+        borderColor="neutral.200"
+        borderRadius="8px"
+        borderWidth="2px"
         onBlur={handleBlur}
         onChange={handleChange}
         width={props.width || '100%'}

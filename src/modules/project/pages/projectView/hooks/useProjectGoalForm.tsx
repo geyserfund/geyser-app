@@ -12,6 +12,7 @@ type FormValues = Record<string, string | number | ProjectGoalCurrency>
 
 const MIN_GOAL_TARGET_AMOUNT_US_DOLLARS = 10
 const MIN_GOAL_TARGET_AMOUNT_SATS = 10000
+const MAX_GOAL_TARGET_AMOUNT = 2000000000
 
 const goalFormSchema = (amountContributed: number) =>
   yup
@@ -25,6 +26,10 @@ const goalFormSchema = (amountContributed: number) =>
         .min(
           amountContributed,
           'The Goal amount is lower than your funded amount. Please choose a Goal amount that is higher than the current Goal’s funded amount.',
+        )
+        .max(
+          MAX_GOAL_TARGET_AMOUNT,
+          'The target amount cannot exceed 2,000,000,000 USD or 2,000,000,000 Sats. Come on!',
         )
         .test(
           'currency-based-minimum',
@@ -52,7 +57,7 @@ export const useProjectGoalForm = (
   onClose: () => void,
   refetch: () => void,
 ) => {
-  const { control, handleSubmit, reset, watch, formState } = useForm<FormValues>({
+  const { control, handleSubmit, reset, watch, formState, setValue, trigger } = useForm<FormValues>({
     resolver: yupResolver(goalFormSchema(goal?.amountContributed || 0)),
     defaultValues: {
       title: '',
@@ -60,8 +65,9 @@ export const useProjectGoalForm = (
       targetAmount: 0,
       currency: ProjectGoalCurrency.Usdcent,
       projectId,
+      emojiUnifiedCode: '',
     },
-    mode: 'onChange',
+    mode: 'onBlur',
   })
 
   const { errors, isDirty, isValid } = formState
@@ -80,6 +86,7 @@ export const useProjectGoalForm = (
           goal.currency === ProjectGoalCurrency.Btcsat ? goal.targetAmount || 0 : goal.targetAmount / 100 || 0,
         currency: goal.currency,
         projectId,
+        emojiUnifiedCode: goal.emojiUnifiedCode || '',
       })
     } else {
       reset({
@@ -88,6 +95,7 @@ export const useProjectGoalForm = (
         targetAmount: '',
         currency: ProjectGoalCurrency.Usdcent,
         projectId,
+        emojiUnifiedCode: '',
       })
     }
   }, [goal, reset, projectId])
@@ -113,6 +121,7 @@ export const useProjectGoalForm = (
               targetAmount,
               currency: formData.currency,
               projectGoalId: goal.id,
+              emojiUnifiedCode: formData.emojiUnifiedCode,
             },
           },
         })
@@ -130,6 +139,7 @@ export const useProjectGoalForm = (
               targetAmount,
               currency: formData.currency,
               projectId: formData.projectId,
+              emojiUnifiedCode: formData.emojiUnifiedCode,
             },
           },
         })
@@ -153,5 +163,7 @@ export const useProjectGoalForm = (
     errors,
     reset,
     enableSubmit,
+    setValue,
+    trigger,
   }
 }

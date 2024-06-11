@@ -1,6 +1,7 @@
-import { useQuery } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { useState } from 'react'
 
+import { MUTATION_UPDATE_PROJECT_GOAL_ORDERING } from '../../../../../graphql/mutations/project'
 import { QUERY_PROJECT_GOALS } from '../../../../../graphql/queries/goals'
 import { useModal } from '../../../../../hooks'
 import { ProjectGoal, ProjectGoals } from '../../../../../types'
@@ -48,6 +49,18 @@ export const useProjectGoals = (projectId: string | number | undefined) => {
     },
   })
 
+  const [updateProjectGoalOrdering] = useMutation(MUTATION_UPDATE_PROJECT_GOAL_ORDERING, {
+    onCompleted() {
+      refetch()
+    },
+  })
+
+  const handleUpdateProjectGoalOrdering = (projectGoalIdsOrder: number[], projectId: string) => {
+    updateProjectGoalOrdering({
+      variables: { input: { projectId, projectGoalIdsOrder } },
+    })
+  }
+
   return {
     hasGoals,
     inProgressGoals,
@@ -58,5 +71,6 @@ export const useProjectGoals = (projectId: string | number | undefined) => {
     goalsModal,
     goalDeleteModal,
     currentGoal,
+    handleUpdateProjectGoalOrdering,
   }
 }

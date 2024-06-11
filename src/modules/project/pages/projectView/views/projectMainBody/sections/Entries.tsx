@@ -13,6 +13,7 @@ import { EntryForProjectFragment } from '../../../../../../../types'
 import { isActive, isDraft, toInt, useMobileMode, useNotification } from '../../../../../../../utils'
 import { truthyFilter } from '../../../../../../../utils/array'
 import { useProjectContext } from '../../../../../context'
+import { BeachGrantEntryTemplate } from '../components/BeachGrantEntryTemplate'
 
 export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()
@@ -35,7 +36,7 @@ export const Entries = forwardRef<HTMLDivElement>((_, ref) => {
       </TitleDivider>
 
       <RenderEntries entries={project.entries} />
-
+      <BeachGrantEntryTemplate />
       {isProjectOwner && Boolean(canCreateEntries) === false && (
         <Center>
           <Text textColor={'neutral.600'} textAlign="center" paddingX={2}>

@@ -1002,5 +1002,8 @@
    "The lightning node may be temporarily down.":"The lightning node may be temporarily down.",
    "This could be happening because Unfortunately, we're unable to reach the wallet to generate an invoice. This could be happening because":"This could be happening because Unfortunately, we're unable to reach the wallet to generate an invoice. This could be happening because",
    "Receiver’s Wallet maximum limit Reached":"Receiver’s Wallet maximum limit Reached",
-   "Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow":"Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow"
+   "Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow":"Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow",
+   "For more, checkout our":"For more, checkout our",
+   "Terms and Conditions":"Terms and Conditions",
+   "Bitcoin Beach Grant Application Template":"Bitcoin Beach Grant Application Template"
 }

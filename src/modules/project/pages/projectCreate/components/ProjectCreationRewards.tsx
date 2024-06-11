@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { SimpleGrid, useBreakpoint } from '@chakra-ui/react'
-import { forwardRef, useState } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -26,7 +26,17 @@ export const ProjectCreationRewards = forwardRef<HTMLDivElement>((_, ref) => {
   const { project, updateProject, refetch } = useProjectContext()
 
   const [selectedReward, setSelectedReward] = useState<ProjectRewardForCreateUpdateFragment>()
+  const [orderedRewards, setOrderedRewards] = useState<ProjectRewardForCreateUpdateFragment[]>([])
+
   const { isOpen: isRewardDeleteOpen, onClose: onRewardDeleteClose, onOpen: openRewardDelete } = useModal()
+
+  useEffect(() => {
+    if (project) {
+      setOrderedRewards(
+        [...project.rewards].sort((a, b) => a.cost - b.cost).filter((reward) => reward.isHidden === false),
+      )
+    }
+  }, [project])
 
   const [deleteRewardMutation] = useMutation<any, { input: { projectRewardId: Number } }>(
     MUTATION_DELETE_PROJECT_REWARD,
@@ -56,8 +66,6 @@ export const ProjectCreationRewards = forwardRef<HTMLDivElement>((_, ref) => {
   if (!project || !isActive || !project.rewards || project.rewards.length === 0) {
     return null
   }
-
-  const activeProjectRewards = project.rewards.filter((reward) => reward.isHidden === false)
 
   const handleClose = () => {
     setSelectedReward(undefined)
@@ -97,8 +105,8 @@ export const ProjectCreationRewards = forwardRef<HTMLDivElement>((_, ref) => {
   }
 
   const renderRewards = () => {
-    if (activeProjectRewards.length > 0) {
-      return activeProjectRewards.filter(truthyFilter).map((reward) => {
+    if (orderedRewards.length > 0) {
+      return orderedRewards.filter(truthyFilter).map((reward) => {
         return (
           <RewardCard
             key={reward.id}
