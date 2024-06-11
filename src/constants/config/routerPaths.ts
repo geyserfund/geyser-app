@@ -61,7 +61,7 @@ export enum PathName {
   grantId = ':grantId',
 
   legalTerms = 'T&C',
-  legalPrivacy = 'privacy-policy',
+  legalPrivacy = 'Privacy',
 }
 
 // @TODO: These definitions are currently a WIP.
@@ -158,7 +158,7 @@ const pathsMap = {
 
   about: () => `${AboutGeyserOrigin}`,
   legalTerms: () => `${AboutGeyserOrigin}/${PathName.legalTerms}`,
-  legalPrivacy: () => `/${PathName.legalPrivacy}`,
+  legalPrivacy: () => `${AboutGeyserOrigin}/${PathName.legalPrivacy}`,
 }
 
 export type PathsMap = typeof pathsMap
