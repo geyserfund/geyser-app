@@ -115,7 +115,10 @@ export const GrantApplicantCard = ({
   const projectLink = getPath('project', project.name)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const currentUserContribution = contributors.find((contributor) => contributor.user?.id === currentUser?.id)
+  const currentUserContribution =
+    currentUser &&
+    currentUser.hasSocialAccount &&
+    contributors.find((contributor) => contributor.user?.id === currentUser?.id)
 
   const renderWidgetItem = (funding: GrantApplicantFunding, contributorsCount: number) => {
     return (
@@ -230,20 +233,22 @@ export const GrantApplicantCard = ({
       </Box>
       {contributors && contributors.length > 0 && (
         <Box pl={2} filter="opacity(0.4)">
-          <AvatarElement
-            key={currentUserContribution?.user?.id}
-            width="28px"
-            height="28px"
-            wrapperProps={{
-              display: 'inline-block',
-              marginLeft: '-5px',
-              marginTop: 2,
-            }}
-            avatarOnly
-            borderRadius="50%"
-            seed={currentUserContribution?.user?.id}
-            user={currentUserContribution?.user}
-          />
+          {currentUserContribution && (
+            <AvatarElement
+              key={currentUserContribution?.user?.id}
+              width="28px"
+              height="28px"
+              wrapperProps={{
+                display: 'inline-block',
+                marginLeft: '-5px',
+                marginTop: 2,
+              }}
+              avatarOnly
+              borderRadius="50%"
+              seed={currentUserContribution?.user?.id}
+              user={currentUserContribution?.user}
+            />
+          )}
           {contributors
             .filter((contributor) => contributor.user?.id !== currentUser?.id)
             .slice(0, 50)
