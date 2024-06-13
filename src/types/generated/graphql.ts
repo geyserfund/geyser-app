@@ -10459,6 +10459,14 @@ export const GrantGetDocument = gql`
         }
       }
     }
+    ... on CommunityVoteGrant {
+      applicants {
+        project {
+          name
+          id
+        }
+      }
+    }
   }
 `
 
