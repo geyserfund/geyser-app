@@ -73,6 +73,7 @@ export const CommunityVoting = ({
           description={t('You need to login to vote for this community voting grant. ')}
           isOpen={isOpen}
           onClose={onClose}
+          showLightning={false}
         />
       </CardLayout>
     </>
