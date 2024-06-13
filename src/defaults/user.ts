@@ -15,4 +15,5 @@ export const defaultUser: User = {
   projectFollows: [],
   badges: [],
   isEmailVerified: false,
+  hasSocialAccount: false,
 }

@@ -72,7 +72,7 @@ export const CommunityVoting = ({
               fundingModalProps={fundingModalProps}
               canVote={canVote || false}
               onOpenLoginModal={onOpen}
-              currentUserId={user?.id || null}
+              currentUser={user}
             />
           )
         })}
