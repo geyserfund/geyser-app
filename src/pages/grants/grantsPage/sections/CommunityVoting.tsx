@@ -40,13 +40,23 @@ export const CommunityVoting = ({
     return null
   }
 
+  let sortedApplicants = applicants
+
+  if (user) {
+    sortedApplicants = applicants.sort((a, b) => {
+      const aFundedByUser = a.contributors.some((contributor) => contributor.user?.id === user?.id) ? 1 : 0
+      const bFundedByUser = b.contributors.some((contributor) => contributor.user?.id === user?.id) ? 1 : 0
+      return bFundedByUser - aFundedByUser
+    })
+  }
+
   const canVote = grantHasVoting && grantStatus === GrantStatusEnum.FundingOpen
 
   return (
     <>
       <CardLayout noMobileBorder p={{ base: '10px', lg: '20px' }} spacing={{ base: '10px', lg: '20px' }} w="full">
         <H3 fontSize="18px">{t(title)}</H3>
-        {applicants.map(({ project, funding, contributors, contributorsCount }) => {
+        {sortedApplicants.map(({ project, funding, contributors, contributorsCount }) => {
           return (
             <GrantApplicantCard
               key={project.name}
