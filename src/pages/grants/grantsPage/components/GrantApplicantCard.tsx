@@ -28,6 +28,7 @@ interface GrantApplicantCardProps {
   grantStatus: GrantStatusEnum
   isLoggedIn: boolean
   onOpenLoginModal: () => void
+  currentUserId: number | null
 }
 
 const useStyles = createUseStyles({
@@ -43,6 +44,50 @@ const useStyles = createUseStyles({
   },
 })
 
+const UserContributionDetails = ({ amount, voteCount, user }: GrantApplicantContributor) => {
+  const isMobile = useMobileMode()
+
+  if (!amount || !voteCount || !user) return null
+
+  return (
+    <Box
+      mt={4}
+      p={2}
+      borderRadius="md"
+      border="2px solid"
+      borderColor={isMobile ? 'transparent' : 'neutral.200'}
+      bg={isMobile ? 'transparent' : 'neutral.100'}
+      display="flex"
+      alignItems="center"
+      justifyContent="space-between"
+    >
+      <HStack gap={2} alignItems="center" justifyContent="center">
+        <AvatarElement
+          key={user.id}
+          width="28px"
+          height="28px"
+          wrapperProps={{
+            display: 'inline-block',
+          }}
+          avatarOnly
+          borderRadius="50%"
+          seed={user.id}
+          user={user}
+        />
+        <Text fontWeight="bold" fontSize="16px">
+          {user.username}
+        </Text>
+      </HStack>
+      <Text fontWeight="bold" fontSize="16px">
+        {amount.toLocaleString()} sats
+      </Text>
+      <Text fontWeight="bold" fontSize="16px">
+        {voteCount} votes
+      </Text>
+    </Box>
+  )
+}
+
 export const GrantApplicantCard = ({
   project,
   funding,
@@ -56,12 +101,15 @@ export const GrantApplicantCard = ({
   grantStatus,
   isLoggedIn,
   onOpenLoginModal,
+  currentUserId,
 }: GrantApplicantCardProps) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
   const classes = useStyles()
   const projectLink = getPath('project', project.name)
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const currentUserContribution = contributors.find((contributor) => contributor.user?.id === currentUserId)
 
   const renderWidgetItem = (funding: GrantApplicantFunding, contributorsCount: number) => {
     return (
@@ -165,9 +213,9 @@ export const GrantApplicantCard = ({
             pr={4}
             display="flex"
             flexDirection="column"
-            justifyContent="center"
+            justifyContent="flex-end"
             alignItems="center"
-            gap={2}
+            gap={5}
           >
             {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
             {renderButton(project)}
@@ -176,33 +224,51 @@ export const GrantApplicantCard = ({
       </Box>
       {contributors && contributors.length > 0 && (
         <Box pl={2} filter="opacity(0.4)">
-          {contributors.map(
-            (contributor) =>
-              contributor && (
-                <AvatarElement
-                  key={contributor.user?.id}
-                  width="28px"
-                  height="28px"
-                  wrapperProps={{
-                    display: 'inline-block',
-                    marginLeft: '-5px',
-                    marginTop: 2,
-                  }}
-                  avatarOnly
-                  borderRadius="50%"
-                  seed={contributor?.user?.id}
-                  user={contributor?.user}
-                />
-              ),
-          )}
+          <AvatarElement
+            key={currentUserContribution?.user?.id}
+            width="28px"
+            height="28px"
+            wrapperProps={{
+              display: 'inline-block',
+              marginLeft: '-5px',
+              marginTop: 2,
+            }}
+            avatarOnly
+            borderRadius="50%"
+            seed={currentUserContribution?.user?.id}
+            user={currentUserContribution?.user}
+          />
+          {contributors
+            .filter((contributor) => contributor.user?.id !== currentUserId)
+            .slice(0, 50)
+            .map(
+              (contributor) =>
+                contributor && (
+                  <AvatarElement
+                    key={contributor.user?.id}
+                    width="28px"
+                    height="28px"
+                    wrapperProps={{
+                      display: 'inline-block',
+                      marginLeft: '-5px',
+                      marginTop: 2,
+                    }}
+                    avatarOnly
+                    borderRadius="50%"
+                    seed={contributor?.user?.id}
+                    user={contributor?.user}
+                  />
+                ),
+            )}
         </Box>
       )}
       {isMobile && (
         <VStack w="full">
-          {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
           {renderButton(project)}
+          {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
         </VStack>
       )}
+      {currentUserContribution && <UserContributionDetails {...currentUserContribution} />}
       <Modal isOpen={isOpen} onClose={onClose} title={t('How voting works')}>
         <VStack py={2} px={2} gap={4} w="full">
           <VStack alignItems="flex-start" gap={2}>
@@ -229,19 +295,22 @@ export const GrantApplicantCard = ({
                 <Text>
                   {t('The amount of votes you cast on a project depends on the cumulative amount of you send to it:')}
                 </Text>
-                <UnorderedList mt={2} spacing={1} pl={4}>
-                  <ListItem>
-                    <Text>{t('From 1k to 10k sats = 1 vote')}</Text>
-                  </ListItem>
-                  <ListItem>
-                    <Text>{t('Up to 100k sats = 2 votes')}</Text>
-                  </ListItem>
-                  <ListItem>
-                    <Text>{t('Above 100k Sats = 3 votes')}</Text>
-                  </ListItem>
-                </UnorderedList>
               </ListItem>
             </UnorderedList>
+            <VStack w="full" borderRadius={'4px'} bg={'neutral.500'} p={2}>
+              <HStack w="full" justifyContent="space-between">
+                <Text>{t('1 vote')}</Text>
+                <Text>{t('From 1k to 10k sats')}</Text>
+              </HStack>
+              <HStack w="full" justifyContent="space-between">
+                <Text>{t('2 votes')}</Text>
+                <Text>{t('Up to 100k sats')}</Text>
+              </HStack>
+              <HStack w="full" justifyContent="space-between">
+                <Text>{t('3 votes')}</Text>
+                <Text>{t('Above 100k sats')}</Text>
+              </HStack>
+            </VStack>
           </VStack>
 
           <HStack w="full" justifyContent="center">
