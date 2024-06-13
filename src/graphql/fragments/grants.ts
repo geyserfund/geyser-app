@@ -160,13 +160,15 @@ export const FRAGMENT_COMMUNITY_VOTE_GRANT = gql`
     }
     applicants {
       contributorsCount
-      contributors(input: { pagination: { take: 50 } }) {
+      contributors {
         user {
           id
           imageUrl
+          username
         }
         amount
         timesContributed
+        voteCount
       }
       project {
         id

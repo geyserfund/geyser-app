@@ -34,7 +34,7 @@ export const CommunityVoting = ({
   const { t } = useTranslation()
   const fundingModalProps = useProjectFundingModal()
   const { onOpen, onClose, isOpen } = useDisclosure()
-  const { isLoggedIn } = useAuthContext()
+  const { user, isLoggedIn } = useAuthContext()
 
   if (!applicants) {
     return null
@@ -62,6 +62,7 @@ export const CommunityVoting = ({
               fundingModalProps={fundingModalProps}
               canVote={canVote || false}
               onOpenLoginModal={onOpen}
+              currentUserId={user?.id || null}
             />
           )
         })}
