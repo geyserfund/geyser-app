@@ -4630,11 +4630,6 @@ export type GrantQuery = { __typename?: 'Query', grant: (
     & CommunityVoteGrantFragmentFragment
   ) };
 
-export type GrantStatisticsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GrantStatisticsQuery = { __typename?: 'Query', grantStatistics: { __typename?: 'GrantStatistics', grants?: { __typename?: 'GrantStatisticsGrant', amountFunded: number, amountGranted: number, count: number } | null, applicants?: { __typename?: 'GrantStatisticsApplicant', countFunded: number } | null } };
-
 export type GrantGetQueryVariables = Exact<{
   input: GrantGetInput;
 }>;
@@ -8155,52 +8150,6 @@ export type GrantQueryHookResult = ReturnType<typeof useGrantQuery>;
 export type GrantLazyQueryHookResult = ReturnType<typeof useGrantLazyQuery>;
 export type GrantSuspenseQueryHookResult = ReturnType<typeof useGrantSuspenseQuery>;
 export type GrantQueryResult = Apollo.QueryResult<GrantQuery, GrantQueryVariables>;
-export const GrantStatisticsDocument = gql`
-    query GrantStatistics {
-  grantStatistics {
-    grants {
-      amountFunded
-      amountGranted
-      count
-    }
-    applicants {
-      countFunded
-    }
-  }
-}
-    `;
-
-/**
- * __useGrantStatisticsQuery__
- *
- * To run a query within a React component, call `useGrantStatisticsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGrantStatisticsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGrantStatisticsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGrantStatisticsQuery(baseOptions?: Apollo.QueryHookOptions<GrantStatisticsQuery, GrantStatisticsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GrantStatisticsQuery, GrantStatisticsQueryVariables>(GrantStatisticsDocument, options);
-      }
-export function useGrantStatisticsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GrantStatisticsQuery, GrantStatisticsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GrantStatisticsQuery, GrantStatisticsQueryVariables>(GrantStatisticsDocument, options);
-        }
-export function useGrantStatisticsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GrantStatisticsQuery, GrantStatisticsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GrantStatisticsQuery, GrantStatisticsQueryVariables>(GrantStatisticsDocument, options);
-        }
-export type GrantStatisticsQueryHookResult = ReturnType<typeof useGrantStatisticsQuery>;
-export type GrantStatisticsLazyQueryHookResult = ReturnType<typeof useGrantStatisticsLazyQuery>;
-export type GrantStatisticsSuspenseQueryHookResult = ReturnType<typeof useGrantStatisticsSuspenseQuery>;
-export type GrantStatisticsQueryResult = Apollo.QueryResult<GrantStatisticsQuery, GrantStatisticsQueryVariables>;
 export const GrantGetDocument = gql`
     query GrantGet($input: GrantGetInput!) {
   grant(input: $input) {
