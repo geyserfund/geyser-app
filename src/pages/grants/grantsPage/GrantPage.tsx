@@ -9,7 +9,15 @@ import Loader from '../../../components/ui/Loader'
 import { Head } from '../../../config'
 import { getPath } from '../../../constants'
 import { useAuthContext } from '../../../context'
-import { GrantApplicant, GrantApplicantStatus, GrantStatusEnum, GrantType, Maybe } from '../../../types'
+import {
+  BoardVoteGrant,
+  Grant,
+  GrantApplicant,
+  GrantApplicantStatus,
+  GrantStatusEnum,
+  GrantType,
+  Maybe,
+} from '../../../types'
 import { useNotification } from '../../../utils'
 import { GrantWinnerAnnouncement, MobileDivider } from '../components'
 import { GrantAnnouncements, GrantHasVoting, GrantProjectNameMap, NoContributionInGrant } from '../constants'
@@ -92,7 +100,7 @@ export const GrantPage = () => {
         fundingOpenEndDate={fundingOpenStatus?.endAt}
         fundingOpenStartDate={fundingOpenStatus?.startAt}
         applicants={applicants}
-        isCompetitionVote={grant.type === GrantType.CompetitionVote}
+        isCompetitionVote={grant.type === GrantType.CommunityVote}
       />
     )
   }
@@ -103,7 +111,7 @@ export const GrantPage = () => {
         fundingOpenEndDate={fundingOpenStatus?.endAt}
         fundingOpenStartDate={fundingOpenStatus?.startAt}
         applicants={applicants}
-        isCompetitionVote={grant.type === GrantType.CompetitionVote}
+        isCompetitionVote={grant.type === GrantType.CommunityVote}
       />
     )
   }
@@ -128,14 +136,18 @@ export const GrantPage = () => {
     return defaultTitle
   }
 
+  const isBoardVoteGrant = (grant: Grant): grant is BoardVoteGrant => {
+    return grant.__typename === 'BoardVoteGrant'
+  }
+
   const grantHasVoting = GrantHasVoting[grant.name]
-  const isCompetitionVote = grant.type === GrantType.CompetitionVote
+  const isCompetitionVote = grant.type === GrantType.CommunityVote
   const showCommunityVoting = grant.status !== GrantStatusEnum.ApplicationsOpen && applicants.length > 0
   const showDistributionChart = grant.status !== GrantStatusEnum.ApplicationsOpen && grantHasVoting
   const showGrantApply = grant.status !== GrantStatusEnum.Closed
   const showContributeToGrant = !isCompetitionVote && !NoContributionInGrant.includes(grant.name)
 
-  const showBoardMembers = !GrantHasVoting[grant.name] && grant.boardMembers.length > 0
+  const showBoardMembers = isBoardVoteGrant(grant) && grant.boardMembers.length > 0
   const showApplicationPending =
     (GrantHasVoting[grant.name] || showBoardMembers) &&
     (grant.status === GrantStatusEnum.ApplicationsOpen || grant.status === GrantStatusEnum.FundingOpen)
