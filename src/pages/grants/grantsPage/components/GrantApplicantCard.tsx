@@ -11,7 +11,13 @@ import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
 import { fonts } from '../../../../styles'
-import { GrantApplicantContributor, GrantApplicantFunding, GrantStatusEnum, Project } from '../../../../types'
+import {
+  GrantApplicantContributor,
+  GrantApplicantFunding,
+  GrantStatusEnum,
+  Project,
+  UserMeFragment,
+} from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
 import { WidgetItem } from '../../components/WidgetItem'
 
@@ -28,7 +34,7 @@ interface GrantApplicantCardProps {
   grantStatus: GrantStatusEnum
   isLoggedIn: boolean
   onOpenLoginModal: () => void
-  currentUserId: number | null
+  currentUser: UserMeFragment | null
 }
 
 const useStyles = createUseStyles({
@@ -101,7 +107,7 @@ export const GrantApplicantCard = ({
   grantStatus,
   isLoggedIn,
   onOpenLoginModal,
-  currentUserId,
+  currentUser,
 }: GrantApplicantCardProps) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
@@ -109,7 +115,7 @@ export const GrantApplicantCard = ({
   const projectLink = getPath('project', project.name)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const currentUserContribution = contributors.find((contributor) => contributor.user?.id === currentUserId)
+  const currentUserContribution = contributors.find((contributor) => contributor.user?.id === currentUser?.id)
 
   const renderWidgetItem = (funding: GrantApplicantFunding, contributorsCount: number) => {
     return (
@@ -137,7 +143,7 @@ export const GrantApplicantCard = ({
   }
 
   const renderButton = (project: Project) => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn || !currentUser?.hasSocialAccount) {
       return (
         <Button
           onClick={onOpenLoginModal}
@@ -154,7 +160,7 @@ export const GrantApplicantCard = ({
       )
     }
 
-    if (canVote) {
+    if (canVote && isLoggedIn && currentUser?.hasSocialAccount) {
       return (
         <Button
           onClick={onOpen}
@@ -239,7 +245,7 @@ export const GrantApplicantCard = ({
             user={currentUserContribution?.user}
           />
           {contributors
-            .filter((contributor) => contributor.user?.id !== currentUserId)
+            .filter((contributor) => contributor.user?.id !== currentUser?.id)
             .slice(0, 50)
             .map(
               (contributor) =>
