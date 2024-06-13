@@ -297,18 +297,30 @@ export const GrantApplicantCard = ({
                 </Text>
               </ListItem>
             </UnorderedList>
-            <VStack w="full" borderRadius={'4px'} bg={'neutral.500'} p={2}>
-              <HStack w="full" justifyContent="space-between">
-                <Text>{t('1 vote')}</Text>
-                <Text>{t('From 1k to 10k sats')}</Text>
+            <VStack w="full" borderRadius={'4px'} bg={'neutral.800'} p={3}>
+              <HStack w="full" justifyContent="flex-start" gap={5}>
+                <Text width="60px" fontWeight="bold" color={'neutral.0'}>
+                  {t('1 vote')}
+                </Text>
+                <Text fontWeight="bold" color={'neutral.0'}>
+                  {t('From 1k to 10k sats')}
+                </Text>
               </HStack>
-              <HStack w="full" justifyContent="space-between">
-                <Text>{t('2 votes')}</Text>
-                <Text>{t('Up to 100k sats')}</Text>
+              <HStack w="full" justifyContent="flex-start" gap={5}>
+                <Text width="60px" fontWeight="bold" color={'neutral.0'}>
+                  {t('2 votes')}
+                </Text>
+                <Text fontWeight="bold" color={'neutral.0'}>
+                  {t('Up to 100k sats')}
+                </Text>
               </HStack>
-              <HStack w="full" justifyContent="space-between">
-                <Text>{t('3 votes')}</Text>
-                <Text>{t('Above 100k sats')}</Text>
+              <HStack w="full" justifyContent="flex-start" gap={5}>
+                <Text width="60px" fontWeight="bold" color={'neutral.0'}>
+                  {t('3 votes')}
+                </Text>
+                <Text fontWeight="bold" color={'neutral.0'}>
+                  {t('Above 100k sats')}
+                </Text>
               </HStack>
             </VStack>
           </VStack>
