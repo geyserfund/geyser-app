@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers'
-import { FunderWithUserFragment, Project, ProjectFragment } from '../../../types/generated/graphql'
+import { FunderWithUserFragment, ProjectFragment } from '../../../types/generated/graphql'
 import { LinkableAvatar } from '../../ui'
 import { renderFunderBadges } from './renderFunderBadges'
 
 type Props = HTMLChakraProps<'div'> & {
-  project: ProjectFragment | Project
+  project: ProjectFragment
   contributor: FunderWithUserFragment
 }
 
