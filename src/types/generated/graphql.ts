@@ -7387,23 +7387,6 @@ export const UserMeFragmentDoc = gql`
         ...ProjectCommunityVoteGrant
       }
     }
-    entries(input: $input) {
-      ...EntryForProject
-    }
-    wallets {
-      ...ProjectWallet
-    }
-    followers {
-      id
-      username
-    }
-    keys {
-      nostrKeys {
-        publicKey {
-          npub
-        }
-      }
-    }
   }
   ${ProjectOwnerUserFragmentDoc}
   ${ProjectRewardForCreateUpdateFragmentDoc}
