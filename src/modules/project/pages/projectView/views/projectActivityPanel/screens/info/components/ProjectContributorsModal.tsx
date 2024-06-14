@@ -3,6 +3,7 @@ import { createUseStyles } from 'react-jss'
 
 import { Modal } from '../../../../../../../../../components/layouts'
 import { useModal } from '../../../../../../../../../hooks'
+import { Project, ProjectFragment } from '../../../../../../../../../types'
 import { useProjectContext } from '../../../../../../../context'
 import { ProjectContributorsList } from './ProjectContributorsList'
 
@@ -10,7 +11,9 @@ export const useProjectContributorsModal = () => {
   return useModal()
 }
 
-type Props = ReturnType<typeof useProjectContributorsModal>
+type Props = ReturnType<typeof useProjectContributorsModal> & {
+  project?: ProjectFragment | Project
+}
 
 type Rules = string
 
@@ -36,10 +39,8 @@ export const useProjectLayoutStyles = createUseStyles<Rules, Styles>({
   },
 })
 
-export const ProjectContributorsModal = ({ ...props }: Props) => {
+export const ProjectContributorsModal = ({ project, ...props }: Props) => {
   const classes = useProjectLayoutStyles()
-
-  const { project } = useProjectContext()
 
   if (!project) {
     return null

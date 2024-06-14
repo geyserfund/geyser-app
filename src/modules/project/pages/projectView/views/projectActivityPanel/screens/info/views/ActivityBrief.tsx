@@ -192,7 +192,7 @@ export const ActivityBrief = (props: StackProps) => {
         </VStack>
       )}
       <ProjectFundersModal {...fundersModal} />
-      <ProjectContributorsModal {...contributorsModal} />
+      <ProjectContributorsModal project={project} {...contributorsModal} />
     </VStack>
   )
 }

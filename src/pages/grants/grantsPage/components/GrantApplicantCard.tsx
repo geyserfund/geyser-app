@@ -9,6 +9,10 @@ import { Modal } from '../../../../components/layouts'
 import { H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
+import {
+  ProjectContributorsModal,
+  useProjectContributorsModal,
+} from '../../../../modules/project/pages/projectView/views/projectActivityPanel/screens/info/components/ProjectContributorsModal'
 import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
 import { fonts } from '../../../../styles'
 import {
@@ -16,6 +20,7 @@ import {
   GrantApplicantFunding,
   GrantStatusEnum,
   Project,
+  ProjectFragment,
   UserMeFragment,
 } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
@@ -91,6 +96,68 @@ const UserContributionDetails = ({ amount, voteCount, user }: GrantApplicantCont
         {voteCount} votes
       </Text>
     </Box>
+  )
+}
+
+const ContributorsAvatarDisplay = ({
+  contributors,
+  currentContributor,
+  project,
+}: {
+  contributors: GrantApplicantContributor[]
+  currentContributor: GrantApplicantContributor | null | false
+  project: Project
+}) => {
+  const contributorsModal = useProjectContributorsModal()
+
+  if (!contributors) {
+    return null
+  }
+
+  return (
+    <>
+      <Box pl={2} filter="opacity(0.4)" _hover={{ cursor: 'pointer' }} onClick={contributorsModal.onOpen}>
+        {currentContributor && (
+          <AvatarElement
+            key={currentContributor?.user?.id}
+            width="28px"
+            height="28px"
+            wrapperProps={{
+              display: 'inline-block',
+              marginLeft: '-5px',
+              marginTop: 2,
+            }}
+            avatarOnly
+            borderRadius="50%"
+            seed={currentContributor?.user?.id}
+            user={currentContributor?.user}
+          />
+        )}
+        {contributors
+          .filter((contributor) => contributor.user?.id !== (currentContributor && currentContributor?.user?.id))
+          .slice(0, 50)
+          .map(
+            (contributor) =>
+              contributor && (
+                <AvatarElement
+                  key={contributor.user?.id}
+                  width="28px"
+                  height="28px"
+                  wrapperProps={{
+                    display: 'inline-block',
+                    marginLeft: '-5px',
+                    marginTop: 2,
+                  }}
+                  avatarOnly
+                  borderRadius="50%"
+                  seed={contributor?.user?.id}
+                  user={contributor?.user}
+                />
+              ),
+          )}
+      </Box>
+      <ProjectContributorsModal project={project} {...contributorsModal} />
+    </>
   )
 }
 
@@ -231,48 +298,11 @@ export const GrantApplicantCard = ({
           </Box>
         )}
       </Box>
-      {contributors && contributors.length > 0 && (
-        <Box pl={2} filter="opacity(0.4)">
-          {currentUserContribution && (
-            <AvatarElement
-              key={currentUserContribution?.user?.id}
-              width="28px"
-              height="28px"
-              wrapperProps={{
-                display: 'inline-block',
-                marginLeft: '-5px',
-                marginTop: 2,
-              }}
-              avatarOnly
-              borderRadius="50%"
-              seed={currentUserContribution?.user?.id}
-              user={currentUserContribution?.user}
-            />
-          )}
-          {contributors
-            .filter((contributor) => contributor.user?.id !== currentUser?.id)
-            .slice(0, 50)
-            .map(
-              (contributor) =>
-                contributor && (
-                  <AvatarElement
-                    key={contributor.user?.id}
-                    width="28px"
-                    height="28px"
-                    wrapperProps={{
-                      display: 'inline-block',
-                      marginLeft: '-5px',
-                      marginTop: 2,
-                    }}
-                    avatarOnly
-                    borderRadius="50%"
-                    seed={contributor?.user?.id}
-                    user={contributor?.user}
-                  />
-                ),
-            )}
-        </Box>
-      )}
+      <ContributorsAvatarDisplay
+        contributors={contributors}
+        currentContributor={currentUserContribution || false}
+        project={project}
+      />
       {isMobile && (
         <VStack w="full">
           {renderButton(project)}
