@@ -4,6 +4,13 @@ import { FRAGMENT_ENTRY_FOR_PROJECT } from './entries'
 import { FRAGMENT_PROJECT_OWNER_USER, FRAGMENT_USER_FOR_AVATAR, FRAGMENT_USER_ME } from './user'
 import { FRAGMENT_PROJECT_WALLET } from './wallet'
 
+export const FRAGMENT_PROJECT_FOR_COMMUNITY_VOTE_GRANT = gql`
+  fragment ProjectCommunityVoteGrant on CommunityVoteGrant {
+    id
+    grantStatus: status
+  }
+`
+
 export const FRAGMENT_PROJECT_NOSTR_KEYS = gql`
   fragment ProjectNostrKeys on Project {
     id
@@ -117,6 +124,7 @@ export const FRAGMENT_PROJECT = gql`
   ${FRAGMENT_PROJECT_OWNER_USER}
   ${FRAGMENT_USER_FOR_AVATAR}
   ${FRAGMENT_PROJECT_WALLET}
+  ${FRAGMENT_PROJECT_FOR_COMMUNITY_VOTE_GRANT}
   fragment Project on Project {
     id
     title
@@ -187,6 +195,13 @@ export const FRAGMENT_PROJECT = gql`
         publicKey {
           npub
         }
+      }
+    }
+    grantApplications {
+      id
+      status
+      grant {
+        ...ProjectCommunityVoteGrant
       }
     }
   }
