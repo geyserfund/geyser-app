@@ -20,6 +20,7 @@ import {
   GrantApplicantFunding,
   GrantStatusEnum,
   Project,
+  ProjectFragment,
   UserMeFragment,
 } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
