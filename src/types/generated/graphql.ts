@@ -5084,6 +5084,12 @@ export type PaginationFragment = {
   cursor?: { __typename?: 'PaginationCursor'; id?: any | null } | null
 }
 
+export type ProjectCommunityVoteGrantFragment = {
+  __typename?: 'CommunityVoteGrant'
+  id: any
+  grantStatus: GrantStatusEnum
+}
+
 export type ProjectNostrKeysFragment = {
   __typename?: 'Project'
   id: any
@@ -5213,6 +5219,14 @@ export type ProjectFragment = {
     __typename?: 'ProjectKeys'
     nostrKeys: { __typename?: 'NostrKeys'; publicKey: { __typename?: 'NostrPublicKey'; npub: string } }
   }
+  grantApplications: Array<{
+    __typename?: 'GrantApplicant'
+    id: any
+    status: GrantApplicantStatus
+    grant:
+      | { __typename?: 'BoardVoteGrant' }
+      | ({ __typename?: 'CommunityVoteGrant' } & ProjectCommunityVoteGrantFragment)
+  }>
 }
 
 export type ProjectFragment = { __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, defaultGoalId?: any | null, balance: number, balanceUsdCent: number, createdAt: string, updatedAt: string, image?: string | null, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, fundingTxsCount?: number | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, owners: Array<{ __typename?: 'Owner', id: any, user: (
@@ -7260,6 +7274,12 @@ export const ProjectWalletFragmentDoc = gql`
     }
   }
 `
+export const ProjectCommunityVoteGrantFragmentDoc = gql`
+  fragment ProjectCommunityVoteGrant on CommunityVoteGrant {
+    id
+    grantStatus: status
+  }
+`
 export const ProjectFragmentDoc = gql`
   fragment Project on Project {
     id
@@ -7360,12 +7380,20 @@ export const UserMeFragmentDoc = gql`
         }
       }
     }
+    grantApplications {
+      id
+      status
+      grant {
+        ...ProjectCommunityVoteGrant
+      }
+    }
   }
   ${ProjectOwnerUserFragmentDoc}
   ${ProjectRewardForCreateUpdateFragmentDoc}
   ${UserForAvatarFragmentDoc}
   ${EntryForProjectFragmentDoc}
   ${ProjectWalletFragmentDoc}
+  ${ProjectCommunityVoteGrantFragmentDoc}
 `
 export const UserMeFragmentDoc = gql`
   fragment UserMe on User {
