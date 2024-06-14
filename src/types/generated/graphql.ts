@@ -5096,6 +5096,12 @@ export type PaginationFragment = {
   cursor?: { __typename?: 'PaginationCursor'; id?: any | null } | null
 }
 
+export type ProjectCommunityVoteGrantFragment = {
+  __typename?: 'CommunityVoteGrant'
+  id: any
+  grantStatus: GrantStatusEnum
+}
+
 export type ProjectNostrKeysFragment = {
   __typename?: 'Project'
   id: any
@@ -5237,6 +5243,14 @@ export type ProjectFragment = {
     __typename?: 'ProjectKeys'
     nostrKeys: { __typename?: 'NostrKeys'; publicKey: { __typename?: 'NostrPublicKey'; npub: string } }
   }
+  grantApplications: Array<{
+    __typename?: 'GrantApplicant'
+    id: any
+    status: GrantApplicantStatus
+    grant:
+      | { __typename?: 'BoardVoteGrant' }
+      | ({ __typename?: 'CommunityVoteGrant' } & ProjectCommunityVoteGrantFragment)
+  }>
 }
 
 export type ProjectForSubscriptionFragment = {
@@ -7222,6 +7236,12 @@ export const ProjectWalletFragmentDoc = gql`
     }
   }
 `
+export const ProjectCommunityVoteGrantFragmentDoc = gql`
+  fragment ProjectCommunityVoteGrant on CommunityVoteGrant {
+    id
+    grantStatus: status
+  }
+`
 export const ProjectFragmentDoc = gql`
   fragment Project on Project {
     id
@@ -7294,12 +7314,20 @@ export const ProjectFragmentDoc = gql`
         }
       }
     }
+    grantApplications {
+      id
+      status
+      grant {
+        ...ProjectCommunityVoteGrant
+      }
+    }
   }
   ${ProjectOwnerUserFragmentDoc}
   ${ProjectRewardForCreateUpdateFragmentDoc}
   ${UserForAvatarFragmentDoc}
   ${EntryForProjectFragmentDoc}
   ${ProjectWalletFragmentDoc}
+  ${ProjectCommunityVoteGrantFragmentDoc}
 `
 export const UserMeFragmentDoc = gql`
   fragment UserMe on User {
