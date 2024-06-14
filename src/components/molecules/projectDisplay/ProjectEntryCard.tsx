@@ -44,7 +44,13 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
   }
 
   const handleClick = () => {
-    navigate(getPath('entry', `${entry.id}`))
+    if (isDraft) {
+      if (onEdit) {
+        onEdit()
+      }
+    } else {
+      navigate(getPath('entry', `${entry.id}`))
+    }
   }
 
   return (
