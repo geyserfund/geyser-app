@@ -23,6 +23,7 @@ import { useProjectContext } from '../../../../../../../context'
 import { ContributeButton, FollowButton, ShareButton } from '../../../../projectMainBody/components'
 import { SubscribeButton } from '../components'
 import { ProjectBalanceDisplay } from '../components/ProjectBalanceDisplay'
+import { ProjectContributorsModal, useProjectContributorsModal } from '../components/ProjectContributorsModal'
 import { ProjectFundersModal, useProjectFundersModal } from '../components/ProjectFundersModal'
 
 export const ActivityBrief = (props: StackProps) => {
@@ -39,6 +40,7 @@ export const ActivityBrief = (props: StackProps) => {
   const { colors } = useTheme()
 
   const fundersModal = useProjectFundersModal()
+  const contributorsModal = useProjectContributorsModal()
 
   const { loading: funderLoading } = useProjectFundersQuery({
     variables: {
@@ -129,7 +131,7 @@ export const ActivityBrief = (props: StackProps) => {
           spacing={1}
           as={Button}
           onClick={() =>
-            fundersModal.onOpen({
+            contributorsModal.onOpen({
               projectId: Number(project?.id),
             })
           }
@@ -190,6 +192,7 @@ export const ActivityBrief = (props: StackProps) => {
         </VStack>
       )}
       <ProjectFundersModal {...fundersModal} />
+      <ProjectContributorsModal {...contributorsModal} />
     </VStack>
   )
 }
