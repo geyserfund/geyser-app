@@ -7,13 +7,13 @@ import { ID } from '../../../../../../../../../constants'
 import { QUERY_PROJECT_FUNDERS } from '../../../../../../../../../graphql'
 import { ScrollInvoke } from '../../../../../../../../../helpers'
 import { useQueryWithPagination } from '../../../../../../../../../hooks'
-import { FunderWithUserFragment, ProjectFragment } from '../../../../../../../../../types'
+import { FunderWithUserFragment, Project, ProjectFragment } from '../../../../../../../../../types'
 import { useMobileMode, useNotification } from '../../../../../../../../../utils'
 
 interface ProjectContributorsListProps extends CardLayoutProps {
   id?: string
   isBounded?: boolean
-  project: ProjectFragment
+  project: ProjectFragment | Project
 }
 
 const CONTRIBUTORS_ITEM_LIMIT = 50
