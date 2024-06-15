@@ -169,6 +169,7 @@ export const EntryPreview = () => {
         saveText={updatePostLoading ? 'Saving...' : 'Saved'}
         onSave={onSave}
         onBack={onBack}
+        onPublish={!isEntryPublished && !isDraft(projectData?.projectGet?.status) ? handlePublish : undefined}
       />
       <CardLayout
         background={'neutral.0'}

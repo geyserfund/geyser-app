@@ -12,10 +12,11 @@ interface ICreateNavProps {
   onSave: () => void
   saveText?: string
   onPreview?: () => void
+  onPublish?: () => void
   onBack?: () => void
 }
 
-export const CreateNav = ({ isSaving, saveText, onSave, onPreview, onBack }: ICreateNavProps) => {
+export const CreateNav = ({ isSaving, saveText, onSave, onPreview, onBack, onPublish }: ICreateNavProps) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
 
@@ -59,6 +60,11 @@ export const CreateNav = ({ isSaving, saveText, onSave, onPreview, onBack }: ICr
             {onPreview && (
               <ButtonComponent primary onClick={onPreview}>
                 {t('Preview')}
+              </ButtonComponent>
+            )}
+            {onPublish && (
+              <ButtonComponent primary onClick={onPublish}>
+                {t('Publish')}
               </ButtonComponent>
             )}
           </HStack>
