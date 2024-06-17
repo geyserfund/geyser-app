@@ -7,6 +7,14 @@ export const dimensions = {
       height: 80, // 16 * 2 + 48
     },
   },
+  projectNavBar: {
+    desktop: {
+      height: 44,
+    },
+    mobile: {
+      height: 36,
+    },
+  },
   sideNav: {
     width: 256,
   },
