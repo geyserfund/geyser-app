@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { Box, Button, CloseButton, VStack } from '@chakra-ui/react'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import ReactConfetti from 'react-confetti'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -32,8 +32,14 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
 
   const {
     fundingTx,
+    refetchFundingFlow,
     fundForm: { needsShipping },
   } = useFundingContext()
+
+  useEffect(() => {
+    refetchFundingFlow()
+  }, [])
+
   const { user } = useAuthContext()
 
   const { data } = useQuery<{ userBadges: UserBadge[] }>(QUERY_USER_BADGES, {

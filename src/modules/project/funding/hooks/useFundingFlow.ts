@@ -188,6 +188,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     requestFunding,
     retryFundingFlow,
     resetFundingFlow,
+    refetchFundingFlow: refetch,
 
     fundingTx,
 

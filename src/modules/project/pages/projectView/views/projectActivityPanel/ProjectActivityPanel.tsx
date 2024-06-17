@@ -35,7 +35,12 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   const { btcRate } = useBtcContext()
   const isMobile = useMobileMode()
 
-  const { mobileView, setMobileView, project, goals } = useProjectContext()
+  const {
+    mobileView,
+    setMobileView,
+    project,
+    goals: { refetch },
+  } = useProjectContext()
   const { resetFundingFlow, requestFunding, fundForm } = useFundingContext()
 
   const { state: formState, setState: setFormState, resetForm, hasSelectedRewards } = fundForm
@@ -68,9 +73,9 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
 
   useEffect(() => {
     if (fundingStage === FundingStages.completed) {
-      goals.refetch()
+      refetch()
     }
-  }, [fundingStage, goals])
+  }, [fundingStage, refetch])
 
   const handleCloseButton = () => {
     setMobileView(MobileViews.contribution)
