@@ -169,8 +169,8 @@ export const GrantPage = () => {
         </Button>
         <GrantSummary grant={grant} grantHasVoting={grantHasVoting} />
         <MobileDivider />
-        <Tabs w="full">
-          <TabList>
+        <Tabs variant="unstyled" w="full">
+          <TabList gap="30px">
             <Tab>
               <Text fontSize={'16px'}>{t('Projects')}</Text>
             </Tab>
