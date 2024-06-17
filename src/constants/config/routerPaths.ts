@@ -5,7 +5,9 @@ export enum PathName {
   grants = 'grants',
   grantsRoundOne = 'roundone',
   grantsRoundTwo = 'roundtwo',
+
   entry = 'entry',
+
   notFound = 'not-found',
   notAuthorized = 'not-authorized',
   projectNotFound = 'project-not-found',
@@ -19,6 +21,7 @@ export enum PathName {
   projectEntries = 'entries',
   projectRewards = 'rewards',
   projectGoals = 'goals',
+  projectLeaderboard = 'leaderboard',
   projectManageRewards = 'manage-rewards',
   projectCreateReward = 'create-reward',
   projectEditReward = 'edit-reward',
@@ -55,6 +58,7 @@ export enum PathName {
   badges = 'badges',
   about = 'about',
   projectId = ':projectId',
+  projectName = ':projectName',
   rewardId = ':rewardId',
   userId = ':userId',
   entryId = ':entryId',
@@ -96,6 +100,7 @@ const pathsMap = {
   projectEntries: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectEntries}`,
   projectRewards: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectRewards}`,
   projectGoals: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectGoals}`,
+  projectLeaderboard: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectLeaderboard}`,
   projectManageRewards: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectManageRewards}`,
   projectCreateReward: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectManageRewards}/${PathName.projectCreateReward}`,
@@ -130,7 +135,7 @@ const pathsMap = {
   userProfile: (userID: string) => `/${PathName.userProfile}/${userID}`,
   userProfileSettings: (userID: string) => `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}`,
 
-  projectDashboard: (projectID: string) => `/${PathName.project}/${projectID}/${PathName.projectDashboard}`,
+  projectDashboard: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDashboard}`,
   dashboardDescription: (projectID: string) =>
     `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardDescription}`,
   dashboardContributors: (projectID: string) =>
