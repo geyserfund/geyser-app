@@ -21,6 +21,7 @@ import {
   GrantStatusEnum,
   Project,
   UserMeFragment,
+  VotingSystem,
 } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
 import { WidgetItem } from '../../components/WidgetItem'
@@ -39,6 +40,7 @@ interface GrantApplicantCardProps {
   isLoggedIn: boolean
   onOpenLoginModal: () => void
   currentUser: UserMeFragment | null
+  votingSystem?: VotingSystem
 }
 
 const useStyles = createUseStyles({
@@ -174,6 +176,7 @@ export const GrantApplicantCard = ({
   isLoggedIn,
   onOpenLoginModal,
   currentUser,
+  votingSystem,
 }: GrantApplicantCardProps) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
@@ -309,6 +312,34 @@ export const GrantApplicantCard = ({
         </VStack>
       )}
       {currentUserContribution && <UserContributionDetails {...currentUserContribution} />}
+      <HowVotingWorksModal
+        isOpen={isOpen}
+        onClose={onClose}
+        votingSystem={votingSystem}
+        fundingModalProps={fundingModalProps}
+        project={project}
+      />
+    </CardLayout>
+  )
+}
+
+const HowVotingWorksModal = ({
+  isOpen,
+  onClose,
+  votingSystem,
+  fundingModalProps,
+  project,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  votingSystem?: VotingSystem
+  fundingModalProps: { onOpen: ({ project }: { project: Project }) => void }
+  project: Project
+}) => {
+  const { t } = useTranslation()
+
+  if (votingSystem === VotingSystem.StepLog_10) {
+    return (
       <Modal isOpen={isOpen} onClose={onClose} title={t('How voting works')}>
         <VStack py={2} px={2} gap={4} w="full">
           <VStack alignItems="flex-start" gap={2}>
@@ -379,6 +410,44 @@ export const GrantApplicantCard = ({
           </HStack>
         </VStack>
       </Modal>
-    </CardLayout>
+    )
+  }
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title={t('How voting works')}>
+      <VStack py={2} px={2} gap={4} w="full">
+        <VStack alignItems="flex-start" gap={2}>
+          <Text>
+            {t('This grant uses ')}
+            <Text as="i">{t('Proportional Voting')}</Text>
+            {t(' to enable more funding to go towards projects. This means:')}
+          </Text>
+          <UnorderedList mt={4} spacing={2}>
+            <ListItem>
+              <Text>{t('1 Sat = 1 Vote. Each Sat is one Vote.')}</Text>
+            </ListItem>
+            <ListItem>
+              <Text>{t('You can send Sats to projects to multiple projects and multiple times')}</Text>
+            </ListItem>
+            <ListItem>
+              <Text>{t('You can send Sats anonymously')}</Text>
+            </ListItem>
+          </UnorderedList>
+        </VStack>
+
+        <HStack w="full" justifyContent="center">
+          <Button
+            w="full"
+            variant="primary"
+            onClick={() => {
+              fundingModalProps.onOpen({ project })
+              onClose()
+            }}
+          >
+            {t("Let's vote!")}
+          </Button>
+        </HStack>
+      </VStack>
+    </Modal>
   )
 }

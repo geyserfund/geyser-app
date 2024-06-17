@@ -204,6 +204,7 @@ export const GrantPage = () => {
                       fundingOpenStartDate={fundingOpenStatus?.startAt}
                       isClosed={grant.status === GrantStatusEnum.Closed}
                       isCompetitionVote={isCompetitionVote}
+                      votingSystem={grant.__typename === 'CommunityVoteGrant' ? grant.votingSystem : undefined}
                     />
                     <MobileDivider />
                   </>
