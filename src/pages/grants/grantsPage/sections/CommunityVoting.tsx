@@ -6,7 +6,7 @@ import { AuthModal } from '../../../../components/molecules'
 import { H3 } from '../../../../components/typography'
 import { useAuthContext } from '../../../../context'
 import { ProjectFundingModal } from '../../../../modules/project/pages/projectFunding/components/ProjectFundingModal'
-import { GrantApplicant, GrantStatusEnum } from '../../../../types'
+import { GrantApplicant, GrantStatusEnum, VotingSystem } from '../../../../types'
 import { GrantApplicantCard } from '../components/GrantApplicantCard'
 import { useProjectFundingModal } from '../components/useProjectFundingModal'
 
@@ -19,6 +19,7 @@ interface Props {
   fundingOpenStartDate: number
   fundingOpenEndDate: number
   isCompetitionVote: boolean
+  votingSystem?: VotingSystem
 }
 
 export const CommunityVoting = ({
@@ -30,6 +31,7 @@ export const CommunityVoting = ({
   title,
   isClosed,
   isCompetitionVote,
+  votingSystem,
 }: Props) => {
   const { t } = useTranslation()
   const fundingModalProps = useProjectFundingModal()
@@ -73,6 +75,7 @@ export const CommunityVoting = ({
               canVote={canVote || false}
               onOpenLoginModal={onOpen}
               currentUser={user}
+              votingSystem={votingSystem}
             />
           )
         })}
