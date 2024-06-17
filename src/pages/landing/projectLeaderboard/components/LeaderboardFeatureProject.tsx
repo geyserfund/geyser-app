@@ -1,11 +1,11 @@
 import { Box, StackProps } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
-import { CardLayout } from '../../../../components/layouts'
 import { Body1, Body2 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
+import { CardLayout } from '../../../../shared/components/layouts'
 import { ProjectForLandingPageFragment } from '../../../../types'
 import { LeaderboardFundingStats } from '.'
 

@@ -1,4 +1,4 @@
-import { VStack } from '@chakra-ui/react'
+import { Menu, MenuList } from '@chakra-ui/react'
 
 import { NavigationBase, NavigationDirection } from '../sideNavBase/NavigationBase'
 import { ProfileNavButton } from './components'
@@ -22,8 +22,10 @@ export const ProfileNavSidebar = () => {
 
 const ProfileNavSidebarContent = () => {
   return (
-    <VStack w="full" h="100%" paddingY={5}>
-      <ProfileNavContent />
-    </VStack>
+    <Menu isOpen={true} closeOnSelect={true}>
+      <MenuList w="full" h="100vh" padding={0} borderRadius={0} boxShadow="none">
+        <ProfileNavContent />
+      </MenuList>
+    </Menu>
   )
 }

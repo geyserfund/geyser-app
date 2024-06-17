@@ -1,8 +1,8 @@
 import { Button, ModalProps, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { Modal } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
+import { Modal } from '../../../shared/components/layouts'
 
 interface ProjectLaunchConfirmModalProps extends Omit<ModalProps, 'children'> {
   isLoading: boolean

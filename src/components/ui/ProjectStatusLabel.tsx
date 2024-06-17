@@ -9,7 +9,8 @@ import { isActive, isDraft, isInactive, isInReview } from '../../utils'
 import { InReviewIcon } from '../icons/svg/InReviewIcon'
 
 interface IProjectStatusLabel extends HTMLChakraProps<'div'> {
-  project: { status?: ProjectStatus | null; wallets: Pick<Wallet, 'state'>[] }
+  project: { status?: ProjectStatus | null }
+  wallet?: Pick<Wallet, 'state'> | null
   iconOnly?: boolean
   fontSize?: string
   iconSize?: string
@@ -57,6 +58,7 @@ export const ProjectStatusTooltip = {
 
 export const ProjectStatusLabel = ({
   project,
+  wallet,
   fontSize,
   fontFamily,
   iconSize = '16px',
@@ -79,18 +81,6 @@ export const ProjectStatusLabel = ({
     }
 
     const getStatus = () => {
-      if (project?.wallets[0] && project.wallets[0].state.status === WalletStatus.Inactive) {
-        return ProjectStatusLabels.INACTIVE_WALLET
-      }
-
-      if (project?.wallets[0] && project.wallets[0].state.status === WalletStatus.Unstable) {
-        return ProjectStatusLabels.UNSTABLE_WALLET
-      }
-
-      if (isActive(project.status)) {
-        return ProjectStatusLabels.RUNNING
-      }
-
       if (isDraft(project.status)) {
         return ProjectStatusLabels.DRAFT
       }
@@ -103,12 +93,24 @@ export const ProjectStatusLabel = ({
         return ProjectStatusLabels.IN_REVIEW
       }
 
+      if (wallet?.state.status === WalletStatus.Inactive) {
+        return ProjectStatusLabels.INACTIVE_WALLET
+      }
+
+      if (wallet?.state.status === WalletStatus.Unstable) {
+        return ProjectStatusLabels.UNSTABLE_WALLET
+      }
+
+      if (isActive(project.status)) {
+        return ProjectStatusLabels.RUNNING
+      }
+
       return null
     }
 
     const currentStatus = getStatus()
     setStatus(currentStatus)
-  }, [project])
+  }, [project, wallet])
 
   if (!status) {
     if (!iconOnly) {

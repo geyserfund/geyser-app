@@ -1,4 +1,4 @@
-import { CardLayout, SkeletonLayout } from '../../../../../../../components/layouts'
+import { CardLayout, SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { ProfileTabLayout } from '../../../components'
 import { ProfileProjectCardSkeleton } from './ProfileProjectCard'
 

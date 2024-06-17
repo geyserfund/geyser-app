@@ -1,8 +1,8 @@
 import { Box, BoxProps, HStack, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout } from '../../../../components/layouts'
 import { Caption, H3 } from '../../../../components/typography'
+import { CardLayout } from '../../../../shared/components/layouts'
 import { standardPadding } from '../../../../styles'
 import { GrantApplicant } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'

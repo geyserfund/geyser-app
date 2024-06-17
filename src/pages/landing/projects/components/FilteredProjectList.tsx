@@ -1,7 +1,7 @@
 import { GridItem, SimpleGrid } from '@chakra-ui/react'
 
 import { NoDataError } from '../../../../components/errors'
-import { CardLayout, LandingCardBaseSkeleton } from '../../../../components/layouts'
+import { CardLayout, LandingCardBaseSkeleton } from '../../../../shared/components/layouts'
 import { ProjectForLandingPageFragment } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { LandingProjectCard, NoSearchResults } from '../../components'

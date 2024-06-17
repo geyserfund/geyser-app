@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/client'
 import {
   Button,
   HStack,
@@ -15,58 +14,50 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IoMdCloseCircle } from 'react-icons/io'
 
-import { Body2 } from '../../../../../../../components/typography'
-import { IconButtonComponent } from '../../../../../../../components/ui'
-import { MUTATION_DELETE_PROJECT_GOAL } from '../../../../../../../graphql/mutations/goals'
-import { ProjectGoal } from '../../../../../../../types'
+import { Body2 } from '../../../../../components/typography'
+import { IconButtonComponent } from '../../../../../components/ui'
+import { useProjectGoalDeleteMutation } from '../../../../../types'
+import { useProjectContext } from '../../../context'
+import { useGoalsModal } from '../hooks/useGoalsModal'
 
-type GoalDeleteModalProps = {
-  isOpen: boolean
-  onClose: () => void
-  goal: ProjectGoal | null | undefined
-  refetch: () => void
-}
-
-export const GoalDeleteModal = ({ isOpen, onClose, goal, refetch }: GoalDeleteModalProps) => {
+export const GoalDeleteModal = () => {
   const { t } = useTranslation()
+
+  const { currentGoal, isGoalDeleteModalOpen, onGoalDeleteModalClose } = useGoalsModal()
+
   const [inputValue, setInputValue] = useState('')
   const [error, setError] = useState('')
+
+  const { refetchInProgressGoals } = useProjectContext()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value)
   }
 
   useEffect(() => {
-    if (inputValue !== goal?.title) {
+    if (inputValue !== currentGoal?.title) {
       setError(t('Title must match exactly'))
     } else {
       setError('')
     }
-  }, [inputValue, goal?.title, t])
+  }, [inputValue, currentGoal?.title, t])
 
-  const [deleteProjectGoal] = useMutation(MUTATION_DELETE_PROJECT_GOAL)
-
-  const handleDelete = async (projectGoalId: bigint) => {
-    try {
-      await deleteProjectGoal({
-        variables: {
-          projectGoalId,
-        },
-      })
-      refetch()
+  const [deleteProjectGoal] = useProjectGoalDeleteMutation({
+    onCompleted() {
+      refetchInProgressGoals()
       setInputValue('')
-      onClose()
-    } catch (error) {
-      console.error('Error deleting project goal:', error)
-    }
-  }
+      onGoalDeleteModalClose()
+    },
+  })
 
-  const { title } = goal || { title: '' }
+  const { title } = currentGoal || { title: '' }
 
   const isConfirmDisabled = inputValue !== title
 
+  if (!isGoalDeleteModalOpen) return null
+
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose}>
+    <Modal isCentered isOpen={isGoalDeleteModalOpen} onClose={onGoalDeleteModalClose}>
       <ModalOverlay />
       <ModalContent p={4}>
         <ModalHeader pb={2}>
@@ -76,7 +67,7 @@ export const GoalDeleteModal = ({ isOpen, onClose, goal, refetch }: GoalDeleteMo
             </Text>
             <IconButtonComponent
               icon={<IoMdCloseCircle color="neutral.700" fontSize={20} />}
-              onClick={onClose}
+              onClick={onGoalDeleteModalClose}
               variant="ghost"
               aria-label="Close"
             />
@@ -114,7 +105,7 @@ export const GoalDeleteModal = ({ isOpen, onClose, goal, refetch }: GoalDeleteMo
               )}
             </VStack>
             <HStack width="100%" justifyContent="space-between">
-              <Button flexGrow={1} variant="secondary" onClick={onClose}>
+              <Button flexGrow={1} variant="secondary" onClick={onGoalDeleteModalClose}>
                 {t('Cancel')}
               </Button>
               <Button
@@ -123,7 +114,7 @@ export const GoalDeleteModal = ({ isOpen, onClose, goal, refetch }: GoalDeleteMo
                 bg="secondary.red"
                 color="neutral.0"
                 _hover={{ bg: 'secondary.red', color: 'neutral.0' }}
-                onClick={() => handleDelete(goal?.id)}
+                onClick={() => deleteProjectGoal({ variables: { projectGoalId: currentGoal?.id } })}
                 isDisabled={isConfirmDisabled}
               >
                 {t('Confirm Delete')}

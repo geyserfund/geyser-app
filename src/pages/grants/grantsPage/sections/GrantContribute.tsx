@@ -1,7 +1,7 @@
 import { Trans, useTranslation } from 'react-i18next'
 
-import { CardLayout } from '../../../../components/layouts'
 import { Body1, H3 } from '../../../../components/typography'
+import { CardLayout } from '../../../../shared/components/layouts'
 import { GrantsContributeModal } from '../../components/GrantsContributeModal'
 
 export const GrantContribute = ({

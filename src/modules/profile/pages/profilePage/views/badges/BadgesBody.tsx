@@ -1,10 +1,10 @@
 import { HStack, Image, SkeletonText, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { SkeletonLayout } from '../../../../../../components/layouts'
 import { Body2 } from '../../../../../../components/typography'
 import { BadgesGroupUrl } from '../../../../../../constants'
 import { ExternalAccountType } from '../../../../../../pages/auth'
+import { SkeletonLayout } from '../../../../../../shared/components/layouts'
 import { UserBadge, UserForProfilePageFragment } from '../../../../../../types'
 import { NostrBadges } from './NostrBadges'
 

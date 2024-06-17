@@ -2,7 +2,7 @@ import { HStack, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { SkeletonLayout } from '../../../../../../../../../components/layouts'
+import { SkeletonLayout } from '../../../../../../../../../shared/components/layouts'
 import { useProjectStatsGetInsightLazyQuery } from '../../../../../../../../../types'
 import { useNotification } from '../../../../../../../../../utils'
 import { useProjectContext } from '../../../../../../../context'

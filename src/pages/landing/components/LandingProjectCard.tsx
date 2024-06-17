@@ -1,5 +1,5 @@
-import { CardLayoutProps, LandingCardBase } from '../../../components/layouts'
 import { getPath } from '../../../constants'
+import { CardLayoutProps, LandingCardBase } from '../../../shared/components/layouts'
 import { ProjectForLandingPageFragment } from '../../../types'
 
 interface LandingProjectCardProps extends Omit<CardLayoutProps, 'to'> {

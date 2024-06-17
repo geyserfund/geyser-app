@@ -1,4 +1,5 @@
 import { Box, Button, IconButton, Link, Tooltip } from '@chakra-ui/react'
+import { useSetAtom } from 'jotai'
 import { DateTime } from 'luxon'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -8,7 +9,8 @@ import { useAuthContext } from '../../context'
 import { useMeLazyQuery } from '../../types'
 import { useNotification } from '../../utils'
 import { SocialConfig } from './SocialConfig'
-import { ConnectWithButtonProps } from './type'
+import { loginMethodAtom } from './state'
+import { ConnectWithButtonProps, ExternalAccountType } from './type'
 import { useAuthToken, useCanLogin } from './useAuthToken'
 
 export const TWITTER_AUTH_ATTEMPT_KEY = 'twitterAuthAttempt'
@@ -22,6 +24,7 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
   useAuthToken()
 
   const canLogin = useCanLogin()
+  const setLoginMethod = useSetAtom(loginMethodAtom)
   const authServiceEndpoint = getAuthEndPoint()
 
   const { hasSocialAccount, icon, label } = SocialConfig[accountType]
@@ -39,6 +42,7 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
 
           stopPolling()
           login(data.me)
+          setLoginMethod(accountType)
         }
       }
     },

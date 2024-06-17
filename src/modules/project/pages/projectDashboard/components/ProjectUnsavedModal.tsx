@@ -1,9 +1,9 @@
 import { Button, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { Modal } from '../../../../../components/layouts/Modal'
 import { useUnsavedAlert } from '../../../../../hooks'
 import { useModal, UseModalReturn } from '../../../../../hooks/useModal'
+import { Modal } from '../../../../../shared/components/layouts/Modal'
 
 interface Props extends Omit<UseModalReturn<{ onLeave(): void }>, 'children'> {
   hasUnsaved: boolean

@@ -2,7 +2,7 @@ import { Button, ButtonProps } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { isActive } from '../../../../../../../utils'
-import { MobileViews, useProjectContext } from '../../../../../context'
+import { useProjectAtom } from '../../../../../pages1/projectView/hooks/useProjectAtom'
 
 type GoalContributeButtonProps = ButtonProps & {
   projectGoalId: string
@@ -10,7 +10,7 @@ type GoalContributeButtonProps = ButtonProps & {
 
 export const GoalContributeButton = ({ projectGoalId, ...props }: GoalContributeButtonProps) => {
   const { t } = useTranslation()
-  const { project, setMobileView, goals } = useProjectContext()
+  const { project } = useProjectAtom()
 
   if (!project) {
     return null
@@ -18,10 +18,7 @@ export const GoalContributeButton = ({ projectGoalId, ...props }: GoalContribute
 
   const isFundingDisabled = !isActive(project.status)
 
-  const handleContributeClick = () => {
-    setMobileView(MobileViews.funding)
-    goals.setProjectGoalId(projectGoalId)
-  }
+  const handleContributeClick = () => {}
 
   return (
     <Button

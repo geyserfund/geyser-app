@@ -1,8 +1,9 @@
 import { Box, Button, HStack, Link, Text, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { PiTranslate } from 'react-icons/pi'
 
-import { Modal } from '../../../../components/layouts'
 import { languageFalgs, LanguageRequestUrl, languages } from '../../../../constants'
+import { Modal } from '../../../../shared/components/layouts'
 import { allTranslations } from '../../../../translations'
 import { ColorModeSwitcher } from '../../../../utils'
 
@@ -25,17 +26,10 @@ export const ModeChange = () => {
 
   return (
     <>
-      <HStack w="full" paddingX={4}>
-        <ColorModeSwitcher flex={1} />
-        <Button
-          variant="soft"
-          colorScheme="neutral1"
-          w="full"
-          size={{ base: 'sm', lg: 'md' }}
-          onClick={onOpen}
-          flex={1}
-        >
-          <Text isTruncated>{languages[i18n.resolvedLanguage as keyof typeof languages]}</Text>
+      <HStack w="full">
+        <ColorModeSwitcher />
+        <Button variant="outline" colorScheme="neutral1" w="full" onClick={onOpen} flex={1} leftIcon={<PiTranslate />}>
+          <Text isTruncated>{t('Change language')}</Text>
         </Button>
       </HStack>
       <Modal

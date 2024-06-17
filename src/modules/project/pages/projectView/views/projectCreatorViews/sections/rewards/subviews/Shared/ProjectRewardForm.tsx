@@ -8,7 +8,6 @@ import { BiInfoCircle } from 'react-icons/bi'
 import { RiArrowLeftSLine } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
 
-import { CardLayout } from '../../../../../../../../../../components/layouts'
 import {
   CalendarButton,
   CreatorEmailButton,
@@ -22,6 +21,7 @@ import { FieldContainer } from '../../../../../../../../../../forms/components/F
 import { MUTATION_UPDATE_PROJECT_CURRENCY } from '../../../../../../../../../../graphql/mutations'
 import { useBTCConverter } from '../../../../../../../../../../helpers/useBTCConverter'
 import { useModal } from '../../../../../../../../../../hooks/useModal'
+import { CardLayout } from '../../../../../../../../../../shared/components/layouts'
 import { standardPadding } from '../../../../../../../../../../styles'
 import {
   CreateProjectRewardInput,

@@ -1,9 +1,9 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { SkeletonLayout } from '../../../../../../../../../../components/layouts'
 import { Body1, H2, H3 } from '../../../../../../../../../../components/typography'
 import { RewardStatusLabel } from '../../../../../../../../../../constants'
+import { SkeletonLayout } from '../../../../../../../../../../shared/components/layouts'
 import { standardPadding } from '../../../../../../../../../../styles'
 import { OrdersGetStatus } from '../../../../../../../../../../types'
 import { useNotification } from '../../../../../../../../../../utils'

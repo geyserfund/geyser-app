@@ -1,9 +1,9 @@
 import { Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout } from '../../../../../../../../../../../components/layouts'
 import { Body2, H3 } from '../../../../../../../../../../../components/typography'
 import { TransactionFailedImageUrl } from '../../../../../../../../../../../constants'
+import { CardLayout } from '../../../../../../../../../../../shared/components/layouts'
 import { standardPadding } from '../../../../../../../../../../../styles'
 
 export const TransactionFailed = ({ error }: { error?: Error | string }) => {

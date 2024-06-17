@@ -13,10 +13,10 @@ import {
 import { useTranslation } from 'react-i18next'
 
 import { CloseIconButton } from '../../../../components/buttons'
-import { CardLayout, CardLayoutProps } from '../../../../components/layouts'
 import { Body1 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
 import { useFilterContext } from '../../../../context'
+import { CardLayout, CardLayoutProps } from '../../../../shared/components/layouts'
 import { StatusTypeButton } from '.'
 import { StatusFilterBody } from './StatusFilterBody'
 

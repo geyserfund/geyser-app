@@ -28,6 +28,13 @@ export const H6 = (props: HeaderProps) => {
   return <BaseHeading as="h6" {...props} />
 }
 
-export const BaseHeading = ({ thin, medium, bold, light, muted, ...rest }: HeaderProps) => {
-  return <Heading fontWeight={getFontWeight({ thin, medium, bold })} color={getFontColor({ light, muted })} {...rest} />
+export const BaseHeading = ({ thin, medium, bold, light, muted, size = 'md', ...rest }: HeaderProps) => {
+  return (
+    <Heading
+      fontWeight={getFontWeight({ thin, medium, bold })}
+      color={getFontColor({ light, muted })}
+      fontSize={size}
+      {...rest}
+    />
+  )
 }

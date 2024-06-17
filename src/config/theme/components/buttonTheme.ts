@@ -16,9 +16,9 @@ export const buttonTheme: ComponentStyleConfig = {
     xs: {
       height: '20px',
       minWidth: '20px',
-      paddingX: '6px',
-      borderRadius: '4px',
-      fontSize: '10px',
+      paddingX: '4px',
+      borderRadius: '5px',
+      fontSize: '12px',
     },
     sm: {
       height: '24px',
@@ -51,107 +51,107 @@ export const buttonTheme: ComponentStyleConfig = {
   },
   // styles for different visual variants ("outline", "solid")
   variants: {
-    solid: ({ theme, colorScheme = 'primary1' }: StyleFunctionProps) => ({
-      backgroundColor: theme.colors[colorScheme][9],
-      color: colorScheme === 'primary1' ? theme.colors.utils.blackContrast : theme.colors.utils.whiteContrast,
+    solid: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
+      backgroundColor: `${colorScheme}.9`,
+      color: colorScheme === 'primary1' ? 'utils.blackContrast' : 'utils.whiteContrast',
       _hover: {
-        backgroundColor: theme.colors[colorScheme][10],
+        backgroundColor: `${colorScheme}.10`,
       },
       _active: {
         opacity: 0.92,
-        backgroundColor: theme.colors[colorScheme][10],
+        backgroundColor: `${colorScheme}.10`,
       },
       _disabled: {
-        backgroundColor: theme.colors.neutral1[3],
-        color: theme.colors.neutral1[8],
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.8',
       },
       _loading: {
-        backgroundColor: theme.colors.neutral1[3],
-        color: theme.colors.neutral1[8],
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.8',
       },
     }),
-    soft: ({ theme, colorScheme = 'primary1' }: StyleFunctionProps) => ({
-      backgroundColor: theme.colors[colorScheme][3],
-      color: theme.colors[colorScheme][11],
+    soft: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
+      backgroundColor: `${colorScheme}.3`,
+      color: `${colorScheme}.11`,
       _hover: {
-        backgroundColor: theme.colors[colorScheme][4],
+        backgroundColor: `${colorScheme}.4`,
       },
       _active: {
-        backgroundColor: theme.colors[colorScheme][5],
+        backgroundColor: `${colorScheme}.5`,
       },
       _disabled: {
-        backgroundColor: theme.colors.neutral1[3],
-        color: theme.colors.neutral1[8],
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.8',
       },
       _loading: {
-        backgroundColor: theme.colors.neutral1[3],
-        color: theme.colors.neutral1[8],
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.8',
       },
     }),
-    surface: ({ theme, colorScheme = 'primary1' }: StyleFunctionProps) => ({
-      backgroundColor: colorScheme === 'primary1' ? theme.colors.utils.primarySurface : 'transparent',
-      color: theme.colors[colorScheme][11],
+    surface: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
+      backgroundColor: colorScheme === 'primary1' ? 'utils.primarySurface' : 'transparent',
+      color: `${colorScheme}.11`,
       border: '1px solid',
-      borderColor: theme.colors[colorScheme][7],
+      borderColor: `${colorScheme}.7`,
       _hover: {
-        backgroundColor: colorScheme === 'primary1' ? theme.colors.utils.primarySurface : 'transparent',
-        borderColor: theme.colors[colorScheme][8],
+        backgroundColor: colorScheme === 'primary1' ? 'utils.primarySurface' : 'transparent',
+        borderColor: `${colorScheme}.8`,
       },
       _active: {
-        backgroundColor: theme.colors[colorScheme][3],
-        borderColor: theme.colors[colorScheme][8],
+        backgroundColor: `${colorScheme}.3`,
+        borderColor: `${colorScheme}.8`,
       },
       _disabled: {
-        backgroundColor: theme.colors.neutral1[3],
-        color: theme.colors.neutral1[8],
-        borderColor: theme.colors.neutral1[8],
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.8',
+        borderColor: 'neutral1.8',
       },
       _loading: {
-        backgroundColor: theme.colors.neutral1[3],
-        color: theme.colors.neutral1[8],
-        borderColor: theme.colors.neutral1[8],
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.8',
+        borderColor: 'neutral1.8',
       },
     }),
-    outline: ({ theme, colorScheme = 'primary1' }: StyleFunctionProps) => ({
+    outline: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
       backgroundColor: 'transparent',
-      color: theme.colors[colorScheme][11],
+      color: `${colorScheme}.11`,
       border: '1px solid',
-      borderColor: theme.colors[colorScheme][8],
+      borderColor: `${colorScheme}.8`,
       _hover: {
-        backgroundColor: theme.colors[colorScheme][2],
-        borderColor: theme.colors[colorScheme][8],
+        backgroundColor: `${colorScheme}.2`,
+        borderColor: `${colorScheme}.8`,
       },
       _active: {
-        backgroundColor: theme.colors[colorScheme][3],
-        borderColor: theme.colors[colorScheme][8],
+        backgroundColor: `${colorScheme}.3`,
+        borderColor: `${colorScheme}.8`,
       },
       _disabled: {
-        backgroundColor: theme.colors.neutral1[3],
-        color: theme.colors.neutral1[8],
-        borderColor: theme.colors.neutral1[8],
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.8',
+        borderColor: 'neutral1.8',
       },
       _loading: {
-        backgroundColor: theme.colors.neutral1[3],
-        color: theme.colors.neutral1[8],
-        borderColor: theme.colors.neutral1[8],
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.8',
+        borderColor: 'neutral1.8',
       },
     }),
-    ghost: ({ theme, colorScheme = 'primary1' }: StyleFunctionProps) => ({
+    ghost: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
       backgroundColor: 'transparent',
-      color: theme.colors[colorScheme][11],
+      color: `${colorScheme}.11`,
       _hover: {
-        backgroundColor: theme.colors[colorScheme][3],
+        backgroundColor: `${colorScheme}.3`,
       },
       _active: {
-        backgroundColor: theme.colors[colorScheme][4],
+        backgroundColor: `${colorScheme}.4`,
       },
       _disabled: {
-        backgroundColor: theme.colors.neutral1[3],
-        color: theme.colors.neutral1[8],
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.8',
       },
       _loading: {
-        backgroundColor: theme.colors.neutral1[3],
-        color: theme.colors.neutral1[8],
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.8',
       },
     }),
 
