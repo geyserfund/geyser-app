@@ -4086,7 +4086,7 @@ export type ProfileOrderFragment = { __typename?: 'Order', id: any, referenceCod
 
 export type PaginationFragment = { __typename?: 'CursorPaginationResponse', take?: number | null, count?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: any | null } | null };
 
-export type ProjectCommunityVoteGrantFragment = { __typename?: 'CommunityVoteGrant', id: any, grantStatus: GrantStatusEnum };
+export type ProjectCommunityVoteGrantFragment = { __typename?: 'CommunityVoteGrant', id: any, status: GrantStatusEnum };
 
 export type ProjectNostrKeysFragment = { __typename?: 'Project', id: any, name: string, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', privateKey?: { __typename?: 'NostrPrivateKey', nsec: string } | null, publicKey: { __typename?: 'NostrPublicKey', npub: string } } } };
 
@@ -5575,7 +5575,7 @@ export const ProjectWalletFragmentDoc = gql`
 export const ProjectCommunityVoteGrantFragmentDoc = gql`
     fragment ProjectCommunityVoteGrant on CommunityVoteGrant {
   id
-  grantStatus: status
+  status
 }
     `;
 export const ProjectFragmentDoc = gql`
