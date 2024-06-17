@@ -16,7 +16,7 @@ type Props = UseControllerProps<any, any> &
     error?: string
   }
 
-export function ControlledGoalAmount(props: Props) {
+export const ControlledGoalAmount = (props: Props) => {
   const { field } = useController(props)
 
   const [unformattedValue, setUnformattedValue] = useState(field.value || '')
