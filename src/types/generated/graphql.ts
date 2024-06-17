@@ -4996,16 +4996,6 @@ export type ProjectsSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ProjectsSummaryQuery = { __typename?: 'Query', projectsSummary: { __typename?: 'ProjectsSummary', fundedTotal?: any | null, fundersCount?: number | null, projectsCount?: number | null } };
 
-export type ProjectUnplublishedEntriesQueryVariables = Exact<{
-  where: UniqueProjectQueryInput;
-}>;
-
-
-export type ProjectUnplublishedEntriesQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', entries: Array<(
-      { __typename?: 'Entry' }
-      & EntryForProjectFragment
-    )> } | null };
-
 export type ProjectFundersQueryVariables = Exact<{
   input: GetFundersInput;
 }>;
@@ -5220,12 +5210,108 @@ export type FundingTxStatusUpdatedSubscription = { __typename?: 'Subscription', 
       & FundingTxFragment
     ) } };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, image?: string | null, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, owners: Array<{ __typename?: 'Owner', id: any, user: (
+export type ProjectEntryFragment = { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, type: EntryType, fundersCount: number, amountFunded: number, status: EntryStatus, createdAt: string, publishedAt?: string | null, creator: (
+    { __typename?: 'User' }
+    & ProjectPageCreatorFragment
+  ) };
+
+export type ProjectGoalsFragment = { __typename?: 'ProjectGoal', id: any, title: string, description?: string | null, targetAmount: number, currency: ProjectGoalCurrency, status: ProjectGoalStatus, projectId: any, amountContributed: number, createdAt: any, updatedAt: any, hasReceivedContribution: boolean, emojiUnifiedCode?: string | null };
+
+export type ProjectLocationFragment = { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null };
+
+export type ProjectKeysFragment = { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } };
+
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, image?: string | null, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, links: Array<string>, rewardCurrency?: RewardCurrency | null, location?: (
+    { __typename?: 'Location' }
+    & ProjectLocationFragment
+  ) | null, keys: (
+    { __typename?: 'ProjectKeys' }
+    & ProjectKeysFragment
+  ), owners: Array<{ __typename?: 'Owner', id: any, user: (
       { __typename?: 'User' }
       & ProjectPageCreatorFragment
     ) }> };
 
+export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null };
+
+export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, cost: number, image?: string | null, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null };
+
 export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }> };
+
+export type WalletContributionLimitsFragment = { __typename?: 'WalletContributionLimits', min?: number | null, max?: number | null, offChain?: { __typename?: 'WalletOffChainContributionLimits', min?: number | null, max?: number | null } | null, onChain?: { __typename?: 'WalletOnChainContributionLimits', min?: number | null, max?: number | null } | null };
+
+export type ProjectPageWalletFragment = { __typename?: 'Wallet', id: any, name?: string | null, feePercentage?: number | null, limits?: { __typename?: 'WalletLimits', contribution?: (
+      { __typename?: 'WalletContributionLimits' }
+      & WalletContributionLimitsFragment
+    ) | null } | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } };
+
+export type ProjectGoalCreateMutationVariables = Exact<{
+  input: ProjectGoalCreateInput;
+}>;
+
+
+export type ProjectGoalCreateMutation = { __typename?: 'Mutation', projectGoalCreate: Array<(
+    { __typename?: 'ProjectGoal' }
+    & ProjectGoalsFragment
+  )> };
+
+export type ProjectGoalUpdateMutationVariables = Exact<{
+  input: ProjectGoalUpdateInput;
+}>;
+
+
+export type ProjectGoalUpdateMutation = { __typename?: 'Mutation', projectGoalUpdate: (
+    { __typename?: 'ProjectGoal' }
+    & ProjectGoalsFragment
+  ) };
+
+export type ProjectGoalDeleteMutationVariables = Exact<{
+  projectGoalId: Scalars['BigInt']['input'];
+}>;
+
+
+export type ProjectGoalDeleteMutation = { __typename?: 'Mutation', projectGoalDelete: { __typename?: 'ProjectGoalDeleteResponse', success: boolean } };
+
+export type ProjectEntriesQueryVariables = Exact<{
+  where: UniqueProjectQueryInput;
+  input?: InputMaybe<ProjectEntriesGetInput>;
+}>;
+
+
+export type ProjectEntriesQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', entries: Array<(
+      { __typename?: 'Entry' }
+      & ProjectEntryFragment
+    )> } | null };
+
+export type ProjectUnplublishedEntriesQueryVariables = Exact<{
+  where: UniqueProjectQueryInput;
+}>;
+
+
+export type ProjectUnplublishedEntriesQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', entries: Array<(
+      { __typename?: 'Entry' }
+      & ProjectEntryFragment
+    )> } | null };
+
+export type ProjectInProgressGoalsQueryVariables = Exact<{
+  projectId: Scalars['BigInt']['input'];
+}>;
+
+
+export type ProjectInProgressGoalsQuery = { __typename?: 'Query', projectGoals: { __typename?: 'ProjectGoals', inProgress: Array<(
+      { __typename?: 'ProjectGoal' }
+      & ProjectGoalsFragment
+    )> } };
+
+export type ProjectCompletedGoalsQueryVariables = Exact<{
+  projectId: Scalars['BigInt']['input'];
+}>;
+
+
+export type ProjectCompletedGoalsQuery = { __typename?: 'Query', projectGoals: { __typename?: 'ProjectGoals', completed: Array<(
+      { __typename?: 'ProjectGoal' }
+      & ProjectGoalsFragment
+    )> } };
 
 export type ProjectPageBodyQueryVariables = Exact<{
   where: UniqueProjectQueryInput;
@@ -6361,6 +6447,58 @@ export const ProjectPageCreatorFragmentDoc = gql`
   }
 }
     `;
+export const ProjectEntryFragmentDoc = gql`
+    fragment ProjectEntry on Entry {
+  id
+  title
+  description
+  image
+  type
+  fundersCount
+  amountFunded
+  status
+  createdAt
+  publishedAt
+  creator {
+    ...ProjectPageCreator
+  }
+}
+    ${ProjectPageCreatorFragmentDoc}`;
+export const ProjectGoalsFragmentDoc = gql`
+    fragment ProjectGoals on ProjectGoal {
+  id
+  title
+  description
+  targetAmount
+  currency
+  status
+  projectId
+  amountContributed
+  createdAt
+  updatedAt
+  hasReceivedContribution
+  emojiUnifiedCode
+}
+    `;
+export const ProjectLocationFragmentDoc = gql`
+    fragment ProjectLocation on Location {
+  country {
+    code
+    name
+  }
+  region
+}
+    `;
+export const ProjectKeysFragmentDoc = gql`
+    fragment ProjectKeys on ProjectKeys {
+  nostrKeys {
+    publicKey {
+      hex
+      npub
+    }
+  }
+}
+    `;
 export const ProjectPageBodyFragmentDoc = gql`
     fragment ProjectPageBody on Project {
   id
@@ -6375,6 +6513,14 @@ export const ProjectPageBodyFragmentDoc = gql`
   balanceUsdCent
   defaultGoalId
   status
+  links
+  rewardCurrency
+  location {
+    ...ProjectLocation
+  }
+  keys {
+    ...ProjectKeys
+  }
   owners {
     id
     user {
@@ -9125,48 +9271,6 @@ export type ProjectsSummaryQueryHookResult = ReturnType<typeof useProjectsSummar
 export type ProjectsSummaryLazyQueryHookResult = ReturnType<typeof useProjectsSummaryLazyQuery>;
 export type ProjectsSummarySuspenseQueryHookResult = ReturnType<typeof useProjectsSummarySuspenseQuery>;
 export type ProjectsSummaryQueryResult = Apollo.QueryResult<ProjectsSummaryQuery, ProjectsSummaryQueryVariables>;
-export const ProjectUnplublishedEntriesDocument = gql`
-    query ProjectUnplublishedEntries($where: UniqueProjectQueryInput!) {
-  projectGet(where: $where) {
-    entries: entries(input: {where: {published: false}}) {
-      ...EntryForProject
-    }
-  }
-}
-    ${EntryForProjectFragmentDoc}`;
-
-/**
- * __useProjectUnplublishedEntriesQuery__
- *
- * To run a query within a React component, call `useProjectUnplublishedEntriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectUnplublishedEntriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProjectUnplublishedEntriesQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
-export function useProjectUnplublishedEntriesQuery(baseOptions: Apollo.QueryHookOptions<ProjectUnplublishedEntriesQuery, ProjectUnplublishedEntriesQueryVariables> & ({ variables: ProjectUnplublishedEntriesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProjectUnplublishedEntriesQuery, ProjectUnplublishedEntriesQueryVariables>(ProjectUnplublishedEntriesDocument, options);
-      }
-export function useProjectUnplublishedEntriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectUnplublishedEntriesQuery, ProjectUnplublishedEntriesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProjectUnplublishedEntriesQuery, ProjectUnplublishedEntriesQueryVariables>(ProjectUnplublishedEntriesDocument, options);
-        }
-export function useProjectUnplublishedEntriesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectUnplublishedEntriesQuery, ProjectUnplublishedEntriesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProjectUnplublishedEntriesQuery, ProjectUnplublishedEntriesQueryVariables>(ProjectUnplublishedEntriesDocument, options);
-        }
-export type ProjectUnplublishedEntriesQueryHookResult = ReturnType<typeof useProjectUnplublishedEntriesQuery>;
-export type ProjectUnplublishedEntriesLazyQueryHookResult = ReturnType<typeof useProjectUnplublishedEntriesLazyQuery>;
-export type ProjectUnplublishedEntriesSuspenseQueryHookResult = ReturnType<typeof useProjectUnplublishedEntriesSuspenseQuery>;
-export type ProjectUnplublishedEntriesQueryResult = Apollo.QueryResult<ProjectUnplublishedEntriesQuery, ProjectUnplublishedEntriesQueryVariables>;
 export const ProjectFundersDocument = gql`
     query ProjectFunders($input: GetFundersInput!) {
   fundersGet(input: $input) {
@@ -10110,6 +10214,274 @@ export function useFundingTxStatusUpdatedSubscription(baseOptions?: Apollo.Subsc
       }
 export type FundingTxStatusUpdatedSubscriptionHookResult = ReturnType<typeof useFundingTxStatusUpdatedSubscription>;
 export type FundingTxStatusUpdatedSubscriptionResult = Apollo.SubscriptionResult<FundingTxStatusUpdatedSubscription>;
+export const ProjectGoalCreateDocument = gql`
+    mutation ProjectGoalCreate($input: ProjectGoalCreateInput!) {
+  projectGoalCreate(input: $input) {
+    ...ProjectGoals
+  }
+}
+    ${ProjectGoalsFragmentDoc}`;
+export type ProjectGoalCreateMutationFn = Apollo.MutationFunction<ProjectGoalCreateMutation, ProjectGoalCreateMutationVariables>;
+
+/**
+ * __useProjectGoalCreateMutation__
+ *
+ * To run a mutation, you first call `useProjectGoalCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectGoalCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectGoalCreateMutation, { data, loading, error }] = useProjectGoalCreateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectGoalCreateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectGoalCreateMutation, ProjectGoalCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectGoalCreateMutation, ProjectGoalCreateMutationVariables>(ProjectGoalCreateDocument, options);
+      }
+export type ProjectGoalCreateMutationHookResult = ReturnType<typeof useProjectGoalCreateMutation>;
+export type ProjectGoalCreateMutationResult = Apollo.MutationResult<ProjectGoalCreateMutation>;
+export type ProjectGoalCreateMutationOptions = Apollo.BaseMutationOptions<ProjectGoalCreateMutation, ProjectGoalCreateMutationVariables>;
+export const ProjectGoalUpdateDocument = gql`
+    mutation ProjectGoalUpdate($input: ProjectGoalUpdateInput!) {
+  projectGoalUpdate(input: $input) {
+    ...ProjectGoals
+  }
+}
+    ${ProjectGoalsFragmentDoc}`;
+export type ProjectGoalUpdateMutationFn = Apollo.MutationFunction<ProjectGoalUpdateMutation, ProjectGoalUpdateMutationVariables>;
+
+/**
+ * __useProjectGoalUpdateMutation__
+ *
+ * To run a mutation, you first call `useProjectGoalUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectGoalUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectGoalUpdateMutation, { data, loading, error }] = useProjectGoalUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectGoalUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectGoalUpdateMutation, ProjectGoalUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectGoalUpdateMutation, ProjectGoalUpdateMutationVariables>(ProjectGoalUpdateDocument, options);
+      }
+export type ProjectGoalUpdateMutationHookResult = ReturnType<typeof useProjectGoalUpdateMutation>;
+export type ProjectGoalUpdateMutationResult = Apollo.MutationResult<ProjectGoalUpdateMutation>;
+export type ProjectGoalUpdateMutationOptions = Apollo.BaseMutationOptions<ProjectGoalUpdateMutation, ProjectGoalUpdateMutationVariables>;
+export const ProjectGoalDeleteDocument = gql`
+    mutation ProjectGoalDelete($projectGoalId: BigInt!) {
+  projectGoalDelete(projectGoalId: $projectGoalId) {
+    success
+  }
+}
+    `;
+export type ProjectGoalDeleteMutationFn = Apollo.MutationFunction<ProjectGoalDeleteMutation, ProjectGoalDeleteMutationVariables>;
+
+/**
+ * __useProjectGoalDeleteMutation__
+ *
+ * To run a mutation, you first call `useProjectGoalDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectGoalDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectGoalDeleteMutation, { data, loading, error }] = useProjectGoalDeleteMutation({
+ *   variables: {
+ *      projectGoalId: // value for 'projectGoalId'
+ *   },
+ * });
+ */
+export function useProjectGoalDeleteMutation(baseOptions?: Apollo.MutationHookOptions<ProjectGoalDeleteMutation, ProjectGoalDeleteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectGoalDeleteMutation, ProjectGoalDeleteMutationVariables>(ProjectGoalDeleteDocument, options);
+      }
+export type ProjectGoalDeleteMutationHookResult = ReturnType<typeof useProjectGoalDeleteMutation>;
+export type ProjectGoalDeleteMutationResult = Apollo.MutationResult<ProjectGoalDeleteMutation>;
+export type ProjectGoalDeleteMutationOptions = Apollo.BaseMutationOptions<ProjectGoalDeleteMutation, ProjectGoalDeleteMutationVariables>;
+export const ProjectEntriesDocument = gql`
+    query ProjectEntries($where: UniqueProjectQueryInput!, $input: ProjectEntriesGetInput) {
+  projectGet(where: $where) {
+    entries(input: $input) {
+      ...ProjectEntry
+    }
+  }
+}
+    ${ProjectEntryFragmentDoc}`;
+
+/**
+ * __useProjectEntriesQuery__
+ *
+ * To run a query within a React component, call `useProjectEntriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectEntriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectEntriesQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectEntriesQuery(baseOptions: Apollo.QueryHookOptions<ProjectEntriesQuery, ProjectEntriesQueryVariables> & ({ variables: ProjectEntriesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectEntriesQuery, ProjectEntriesQueryVariables>(ProjectEntriesDocument, options);
+      }
+export function useProjectEntriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectEntriesQuery, ProjectEntriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectEntriesQuery, ProjectEntriesQueryVariables>(ProjectEntriesDocument, options);
+        }
+export function useProjectEntriesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectEntriesQuery, ProjectEntriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectEntriesQuery, ProjectEntriesQueryVariables>(ProjectEntriesDocument, options);
+        }
+export type ProjectEntriesQueryHookResult = ReturnType<typeof useProjectEntriesQuery>;
+export type ProjectEntriesLazyQueryHookResult = ReturnType<typeof useProjectEntriesLazyQuery>;
+export type ProjectEntriesSuspenseQueryHookResult = ReturnType<typeof useProjectEntriesSuspenseQuery>;
+export type ProjectEntriesQueryResult = Apollo.QueryResult<ProjectEntriesQuery, ProjectEntriesQueryVariables>;
+export const ProjectUnplublishedEntriesDocument = gql`
+    query ProjectUnplublishedEntries($where: UniqueProjectQueryInput!) {
+  projectGet(where: $where) {
+    entries: entries(input: {where: {published: false}}) {
+      ...ProjectEntry
+    }
+  }
+}
+    ${ProjectEntryFragmentDoc}`;
+
+/**
+ * __useProjectUnplublishedEntriesQuery__
+ *
+ * To run a query within a React component, call `useProjectUnplublishedEntriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectUnplublishedEntriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectUnplublishedEntriesQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectUnplublishedEntriesQuery(baseOptions: Apollo.QueryHookOptions<ProjectUnplublishedEntriesQuery, ProjectUnplublishedEntriesQueryVariables> & ({ variables: ProjectUnplublishedEntriesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectUnplublishedEntriesQuery, ProjectUnplublishedEntriesQueryVariables>(ProjectUnplublishedEntriesDocument, options);
+      }
+export function useProjectUnplublishedEntriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectUnplublishedEntriesQuery, ProjectUnplublishedEntriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectUnplublishedEntriesQuery, ProjectUnplublishedEntriesQueryVariables>(ProjectUnplublishedEntriesDocument, options);
+        }
+export function useProjectUnplublishedEntriesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectUnplublishedEntriesQuery, ProjectUnplublishedEntriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectUnplublishedEntriesQuery, ProjectUnplublishedEntriesQueryVariables>(ProjectUnplublishedEntriesDocument, options);
+        }
+export type ProjectUnplublishedEntriesQueryHookResult = ReturnType<typeof useProjectUnplublishedEntriesQuery>;
+export type ProjectUnplublishedEntriesLazyQueryHookResult = ReturnType<typeof useProjectUnplublishedEntriesLazyQuery>;
+export type ProjectUnplublishedEntriesSuspenseQueryHookResult = ReturnType<typeof useProjectUnplublishedEntriesSuspenseQuery>;
+export type ProjectUnplublishedEntriesQueryResult = Apollo.QueryResult<ProjectUnplublishedEntriesQuery, ProjectUnplublishedEntriesQueryVariables>;
+export const ProjectInProgressGoalsDocument = gql`
+    query ProjectInProgressGoals($projectId: BigInt!) {
+  projectGoals(projectId: $projectId) {
+    inProgress {
+      ...ProjectGoals
+    }
+  }
+}
+    ${ProjectGoalsFragmentDoc}`;
+
+/**
+ * __useProjectInProgressGoalsQuery__
+ *
+ * To run a query within a React component, call `useProjectInProgressGoalsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectInProgressGoalsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectInProgressGoalsQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useProjectInProgressGoalsQuery(baseOptions: Apollo.QueryHookOptions<ProjectInProgressGoalsQuery, ProjectInProgressGoalsQueryVariables> & ({ variables: ProjectInProgressGoalsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectInProgressGoalsQuery, ProjectInProgressGoalsQueryVariables>(ProjectInProgressGoalsDocument, options);
+      }
+export function useProjectInProgressGoalsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectInProgressGoalsQuery, ProjectInProgressGoalsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectInProgressGoalsQuery, ProjectInProgressGoalsQueryVariables>(ProjectInProgressGoalsDocument, options);
+        }
+export function useProjectInProgressGoalsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectInProgressGoalsQuery, ProjectInProgressGoalsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectInProgressGoalsQuery, ProjectInProgressGoalsQueryVariables>(ProjectInProgressGoalsDocument, options);
+        }
+export type ProjectInProgressGoalsQueryHookResult = ReturnType<typeof useProjectInProgressGoalsQuery>;
+export type ProjectInProgressGoalsLazyQueryHookResult = ReturnType<typeof useProjectInProgressGoalsLazyQuery>;
+export type ProjectInProgressGoalsSuspenseQueryHookResult = ReturnType<typeof useProjectInProgressGoalsSuspenseQuery>;
+export type ProjectInProgressGoalsQueryResult = Apollo.QueryResult<ProjectInProgressGoalsQuery, ProjectInProgressGoalsQueryVariables>;
+export const ProjectCompletedGoalsDocument = gql`
+    query ProjectCompletedGoals($projectId: BigInt!) {
+  projectGoals(projectId: $projectId) {
+    completed {
+      ...ProjectGoals
+    }
+  }
+}
+    ${ProjectGoalsFragmentDoc}`;
+
+/**
+ * __useProjectCompletedGoalsQuery__
+ *
+ * To run a query within a React component, call `useProjectCompletedGoalsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectCompletedGoalsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectCompletedGoalsQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useProjectCompletedGoalsQuery(baseOptions: Apollo.QueryHookOptions<ProjectCompletedGoalsQuery, ProjectCompletedGoalsQueryVariables> & ({ variables: ProjectCompletedGoalsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectCompletedGoalsQuery, ProjectCompletedGoalsQueryVariables>(ProjectCompletedGoalsDocument, options);
+      }
+export function useProjectCompletedGoalsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectCompletedGoalsQuery, ProjectCompletedGoalsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectCompletedGoalsQuery, ProjectCompletedGoalsQueryVariables>(ProjectCompletedGoalsDocument, options);
+        }
+export function useProjectCompletedGoalsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectCompletedGoalsQuery, ProjectCompletedGoalsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectCompletedGoalsQuery, ProjectCompletedGoalsQueryVariables>(ProjectCompletedGoalsDocument, options);
+        }
+export type ProjectCompletedGoalsQueryHookResult = ReturnType<typeof useProjectCompletedGoalsQuery>;
+export type ProjectCompletedGoalsLazyQueryHookResult = ReturnType<typeof useProjectCompletedGoalsLazyQuery>;
+export type ProjectCompletedGoalsSuspenseQueryHookResult = ReturnType<typeof useProjectCompletedGoalsSuspenseQuery>;
+export type ProjectCompletedGoalsQueryResult = Apollo.QueryResult<ProjectCompletedGoalsQuery, ProjectCompletedGoalsQueryVariables>;
 export const ProjectPageBodyDocument = gql`
     query ProjectPageBody($where: UniqueProjectQueryInput!) {
   projectGet(where: $where) {
