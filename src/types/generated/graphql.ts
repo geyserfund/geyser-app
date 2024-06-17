@@ -5569,23 +5569,6 @@ export const ProjectWalletFragmentDoc = gql`
     ... on LndConnectionDetailsPublic {
       pubkey
     }
-    entries(input: $input) {
-      ...EntryForProject
-    }
-    wallets {
-      ...ProjectWallet
-    }
-    followers {
-      id
-      username
-    }
-    keys {
-      nostrKeys {
-        publicKey {
-          npub
-        }
-      }
-    }
   }
 }
     `;

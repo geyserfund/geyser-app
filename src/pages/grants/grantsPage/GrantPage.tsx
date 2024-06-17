@@ -1,5 +1,5 @@
 /* eslint-disable complexity */
-import { Button, Container, VStack } from '@chakra-ui/react'
+import { Button, Container, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack } from '@chakra-ui/react'
 import { PropsWithChildren, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FaArrowLeft } from 'react-icons/fa'
@@ -169,46 +169,67 @@ export const GrantPage = () => {
         </Button>
         <GrantSummary grant={grant} grantHasVoting={grantHasVoting} />
         <MobileDivider />
-        {showDistributionChart && (
-          <>
-            <DistributionChart applicants={applicants} isCompetitionVote={isCompetitionVote} />
-            <MobileDivider />
-          </>
-        )}
-        {winnerAnnouncement && (
-          <>
-            <GrantWinnerAnnouncement {...winnerAnnouncement} />
-            <MobileDivider />
-          </>
-        )}
-        {showCommunityVoting && (
-          <>
-            <CommunityVoting
-              title={getTitle()}
-              applicants={applicants}
-              grantHasVoting={grantHasVoting}
-              grantStatus={grant.status}
-              fundingOpenEndDate={fundingOpenStatus?.endAt}
-              fundingOpenStartDate={fundingOpenStatus?.startAt}
-              isClosed={grant.status === GrantStatusEnum.Closed}
-              isCompetitionVote={isCompetitionVote}
-            />
-            <MobileDivider />
-          </>
-        )}
-        {showGrantApply && !isCompetitionVote && (
-          <>
-            <GrantApply grant={grant} />
-            <MobileDivider />
-          </>
-        )}
+        <Tabs w="full">
+          <TabList>
+            <Tab>
+              <Text fontSize={'16px'}>{t('Projects')}</Text>
+            </Tab>
+            <Tab>
+              <Text fontSize={'16px'}>{t('Leaderboard (All)')}</Text>
+            </Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel p={'16px 0px 16px 0px'}>
+              <VStack w="full" spacing="15px" alignItems="start">
+                {showDistributionChart && (
+                  <>
+                    <DistributionChart applicants={applicants} isCompetitionVote={isCompetitionVote} showAll={false} />
+                    <MobileDivider />
+                  </>
+                )}
+                {winnerAnnouncement && (
+                  <>
+                    <GrantWinnerAnnouncement {...winnerAnnouncement} />
+                    <MobileDivider />
+                  </>
+                )}
+                {showCommunityVoting && (
+                  <>
+                    <CommunityVoting
+                      title={getTitle()}
+                      applicants={applicants}
+                      grantHasVoting={grantHasVoting}
+                      grantStatus={grant.status}
+                      fundingOpenEndDate={fundingOpenStatus?.endAt}
+                      fundingOpenStartDate={fundingOpenStatus?.startAt}
+                      isClosed={grant.status === GrantStatusEnum.Closed}
+                      isCompetitionVote={isCompetitionVote}
+                    />
+                    <MobileDivider />
+                  </>
+                )}
+                {showGrantApply && !isCompetitionVote && (
+                  <>
+                    <GrantApply grant={grant} />
+                    <MobileDivider />
+                  </>
+                )}
 
-        {showApplicationPending && pendingApplicants.length > 0 && !isCompetitionVote && (
-          <>
-            <PendingApplications applicants={pendingApplicants} />
-            <MobileDivider />
-          </>
-        )}
+                {showApplicationPending && pendingApplicants.length > 0 && !isCompetitionVote && (
+                  <>
+                    <PendingApplications applicants={pendingApplicants} />
+                    <MobileDivider />
+                  </>
+                )}
+              </VStack>
+            </TabPanel>
+            <TabPanel w="full" p={'16px 0px 16px 0px'}>
+              <VStack w="full" spacing="15px" alignItems="start">
+                <DistributionChart applicants={applicants} isCompetitionVote={isCompetitionVote} />
+              </VStack>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
 
         {showContributeToGrant && (
           <>
