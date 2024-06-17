@@ -130,17 +130,19 @@ export const theme = {
     Select: selectTheme,
     Switch: switchTheme,
     Tabs: {
-      baseStyle: {
-        tab: {
-          borderRadius: '8px',
-          border: '2px solid',
-          borderColor: 'neutral.200',
-          p: '10px 20px',
-          _selected: {
-            borderColor: 'primary.500',
-          },
-          _hover: {
-            borderColor: 'primary.500',
+      variants: {
+        secondary: {
+          tab: {
+            borderRadius: '8px',
+            border: '2px solid',
+            borderColor: 'neutral.200',
+            p: '10px 20px',
+            _selected: {
+              borderColor: 'primary.500',
+            },
+            _hover: {
+              borderColor: 'primary.500',
+            },
           },
         },
       },
