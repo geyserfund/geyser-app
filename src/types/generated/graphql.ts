@@ -4088,8 +4088,6 @@ export type PaginationFragment = { __typename?: 'CursorPaginationResponse', take
 
 export type ProjectCommunityVoteGrantFragment = { __typename?: 'CommunityVoteGrant', id: any, status: GrantStatusEnum };
 
-export type ProjectCommunityVoteGrantFragment = { __typename?: 'CommunityVoteGrant', id: any, grantStatus: GrantStatusEnum };
-
 export type ProjectNostrKeysFragment = { __typename?: 'Project', id: any, name: string, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', privateKey?: { __typename?: 'NostrPrivateKey', nsec: string } | null, publicKey: { __typename?: 'NostrPublicKey', npub: string } } } };
 
 export type ProjectForProfilePageFragment = {
