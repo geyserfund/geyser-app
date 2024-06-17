@@ -10,6 +10,7 @@ type FundingContextProps = {
   fundingRequestErrored: Error | boolean
   fundingRequestLoading: boolean
   requestFunding: (input: FundingInput) => Promise<void>
+  refetchFundingFlow: () => void
   retryFundingFlow: () => void
   resetFundingFlow: () => void
   fundingTx: Omit<FundingTxFragment, 'funder'>
