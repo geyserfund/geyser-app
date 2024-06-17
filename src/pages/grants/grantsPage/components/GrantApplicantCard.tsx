@@ -20,7 +20,6 @@ import {
   GrantApplicantFunding,
   GrantStatusEnum,
   Project,
-  ProjectFragment,
   UserMeFragment,
 } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
@@ -58,7 +57,7 @@ const useStyles = createUseStyles({
 const UserContributionDetails = ({ amount, voteCount, user }: GrantApplicantContributor) => {
   const isMobile = useMobileMode()
 
-  if (!amount || !voteCount || !user) return null
+  if (!amount || !user) return null
 
   return (
     <Box
