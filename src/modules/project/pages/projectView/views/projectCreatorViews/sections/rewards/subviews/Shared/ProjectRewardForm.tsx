@@ -16,6 +16,7 @@ import {
   UpdateCurrencyModal,
 } from '../../../../../../../../../../components/molecules'
 import { ImageCrop } from '../../../../../../../../../../components/molecules/ImageCropperModal'
+import { Body1, MonoBody1 } from '../../../../../../../../../../components/typography'
 import { TextArea, TextInputBox, UploadBox } from '../../../../../../../../../../components/ui'
 import { ProjectRewardValidations } from '../../../../../../../../../../constants'
 import { FieldContainer } from '../../../../../../../../../../forms/components/FieldContainer'
@@ -536,20 +537,16 @@ export const ProjectRewardForm = ({
         <VStack spacing={4} w="100%" align={'flex-start'}>
           <FieldContainer>
             <Checkbox w="100%" isChecked={reward.hasShipping} onChange={handleFormShippingChange}>
-              <Text>{t('Includes Shipping')}</Text>
+              <Body1 bold>{t('Ask for shipping address')}</Body1>
             </Checkbox>
             {reward.hasShipping ? (
               <VStack pl={2} spacing={2} borderLeft="2px solid" borderColor="primary.400" align={'flex-start'}>
-                <Text variant="body1" fontWeight={500}>
+                <MonoBody1 fontWeight={500}>
                   {t(
-                    'Funders will see the following message in the shipping section. Make sure your email is up to date.',
+                    'To maintain their privacy, we ask reward buyers to email you their shipping details directly to your email. Make sure your email is up to date):',
                   )}
-                </Text>
-                <Text fontWeight={500}>
-                  {t(
-                    "To receive the selected items, you will need to send your shipping details to the creator's email. Which will be revealed in the success screen.",
-                  )}
-                </Text>
+                </MonoBody1>
+
                 <CreatorEmailButton email={ownerEmail} />
               </VStack>
             ) : null}
