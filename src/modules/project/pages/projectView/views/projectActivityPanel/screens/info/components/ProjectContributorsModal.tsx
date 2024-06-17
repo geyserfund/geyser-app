@@ -4,7 +4,6 @@ import { createUseStyles } from 'react-jss'
 import { Modal } from '../../../../../../../../../components/layouts'
 import { useModal } from '../../../../../../../../../hooks'
 import { Project, ProjectFragment } from '../../../../../../../../../types'
-import { useProjectContext } from '../../../../../../../context'
 import { ProjectContributorsList } from './ProjectContributorsList'
 
 export const useProjectContributorsModal = () => {
