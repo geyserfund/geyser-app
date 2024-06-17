@@ -1,7 +1,7 @@
 import { Text, Textarea, TextareaProps, VStack } from '@chakra-ui/react'
-import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
+import { useController, UseControllerProps } from 'react-hook-form'
 
-type Props = UseControllerProps<FieldValues> &
+type Props = UseControllerProps<any, any> &
   Omit<TextareaProps, 'size'> & {
     width?: string | number
     inputRef?: React.Ref<HTMLInputElement>
