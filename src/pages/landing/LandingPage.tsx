@@ -1,9 +1,9 @@
 import { HStack, VStack } from '@chakra-ui/react'
 import { Outlet } from 'react-router-dom'
 
-import { StickToTop } from '../../components/layouts'
 import { dimensions, ID } from '../../constants'
 import { ActivitySubscriptionProvider, FilterProvider, useAuthContext } from '../../context'
+import { StickToTop } from '../../shared/components/layouts'
 import { useMobileMode } from '../../utils'
 import { GradientBanner, TabBar } from './components'
 import { Filters } from './filters'
@@ -17,7 +17,7 @@ export const LandingPage = () => {
     <FilterProvider isLoggedIn={isLoggedIn}>
       <ActivitySubscriptionProvider>
         <VStack
-          marginTop={`-${dimensions.topNavBar.desktop.height}px`}
+          // marginTop={`-${dimensions.topNavBar.desktop.height}px`}
           position="relative"
           width="100%"
           minHeight="100%"

@@ -1,9 +1,9 @@
 import { HStack, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout, SkeletonLayout } from '../../../../../../components/layouts'
 import { H2, H3 } from '../../../../../../components/typography'
 import { SatoshiAmount } from '../../../../../../components/ui'
+import { CardLayout, SkeletonLayout } from '../../../../../../shared/components/layouts'
 import { commaFormatted, getShortAmountLabel } from '../../../../../../utils'
 
 interface SummaryBodyProps {

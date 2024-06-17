@@ -22,11 +22,17 @@ export const theme = {
   },
   components: {
     Button: buttonTheme,
+    Heading: {
+      baseStyle: {
+        color: 'utils.text',
+      },
+    },
     Text: {
       baseStyle: {
         fontSize: '14px',
         lineHeight: 1.6,
         fontWeight: 400,
+        color: 'utils.text',
       },
       variants: {
         caption: () => ({
@@ -166,6 +172,7 @@ export const theme = {
     global: ({ theme }: StyleFunctionProps) => ({
       body: {
         bg: theme.colors.neutral[50],
+        color: theme.colors.utils.text,
       },
     }),
   },

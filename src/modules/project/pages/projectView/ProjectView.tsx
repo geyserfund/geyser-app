@@ -6,30 +6,29 @@ import { ProjectProvider } from '../../context'
 import { FundingProviderWithProjectContext } from '../../context/FundingProvider'
 import { ProjectContainer } from './ProjectContainer'
 import { addProjectAffiliateAtom } from './state/affiliateAtom'
-import { ProjectSideNavigation } from './views/projectNavigation/sideNav'
 
 export const ProjectView = () => {
-  const params = useParams<{ projectId: string }>()
+  const params = useParams<{ projectName: string }>()
+  const { projectName } = params
+
   const [searchParams] = useSearchParams()
-  const { projectId } = params
 
   const addRefferal = useSetAtom(addProjectAffiliateAtom)
 
   const affiliateId = searchParams.get('refId')
 
   useEffect(() => {
-    if (affiliateId && projectId) {
+    if (affiliateId && projectName) {
       addRefferal({
-        projectName: projectId,
+        projectName,
         refId: affiliateId,
       })
     }
-  }, [projectId, affiliateId, addRefferal])
+  }, [projectName, affiliateId, addRefferal])
 
   return (
-    <ProjectProvider projectId={projectId || ''}>
+    <ProjectProvider projectName={projectName}>
       <FundingProviderWithProjectContext>
-        <ProjectSideNavigation />
         <ProjectContainer />
       </FundingProviderWithProjectContext>
     </ProjectProvider>

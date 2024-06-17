@@ -1,9 +1,9 @@
 import { HStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout, StickToTop } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
 import { useAuthContext } from '../../../context'
+import { CardLayout, StickToTop } from '../../../shared/components/layouts'
 import { useMobileMode } from '../../../utils'
 import { MobileTopBar } from '../filters/mobile/MobileTopBar'
 import { ActivityFeed } from './ActivityFeed'

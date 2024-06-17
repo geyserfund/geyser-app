@@ -1,8 +1,8 @@
 import { Tab, TabList, TabPanel, TabPanels, TabProps, Tabs } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout, CardLayoutProps } from '../../../components/layouts'
 import { H3 } from '../../../components/typography'
+import { CardLayout, CardLayoutProps } from '../../../shared/components/layouts'
 import { LeaderboardAllTime, LeaderboardThisWeek } from './views'
 
 type ProjectLeaderboardProps = CardLayoutProps

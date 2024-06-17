@@ -3,7 +3,7 @@ import { useRef } from 'react'
 import { createUseStyles } from 'react-jss'
 import { Area, CartesianGrid, ComposedChart, Legend, Tooltip, XAxis, YAxis } from 'recharts'
 
-import { SkeletonLayout } from '../../../../../../../../../components/layouts'
+import { SkeletonLayout } from '../../../../../../../../../shared/components/layouts'
 import { getShortAmountLabel, useCustomTheme, useMobileMode } from '../../../../../../../../../utils'
 import { SatsTickComponent, TickComponent } from './ChartElements'
 

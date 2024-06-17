@@ -1,6 +1,6 @@
 import { Box, HStack, VStack } from '@chakra-ui/layout'
 
-import { SkeletonLayout } from '../../../../../../../../components/layouts'
+import { SkeletonLayout } from '../../../../../../../../shared/components/layouts'
 import { useMobileMode } from '../../../../../../../../utils'
 import { ActivityBriefSkeleton } from './views/ActivityBrief'
 

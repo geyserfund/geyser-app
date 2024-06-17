@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { FaArrowLeft } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
-import { CardLayout } from '../../components/layouts'
+import { CardLayout } from '../../shared/components/layouts'
 import BadgeItem from './BadgeItem'
 import BadgeList from './BadgeList'
 import { BadgesFAQ } from './BadgesFAQ'

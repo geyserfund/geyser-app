@@ -51,7 +51,15 @@ export const TopNavBar = () => {
 
   return (
     <>
-      <HStack paddingY={{ base: 4, lg: 8 }} maxWidth={dimensions.maxWidth} width="100%" backgroundColor={'utils.pbg'}>
+      <HStack
+        paddingY={{ base: 4, lg: 8 }}
+        paddingX={{ base: 3, lg: 5 }}
+        maxWidth={{ base: dimensions.maxWidth + 24, lg: dimensions.maxWidth + 40 }}
+        width="100%"
+        backgroundColor={'utils.pbg'}
+        position="fixed"
+        top={0}
+      >
         <HStack w="100%" height={'48px'} justifyContent={'space-between'}>
           <Image src={imagesrc} height="100%" width="auto" objectFit="contain" />
           <HStack position="relative">

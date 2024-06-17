@@ -1,8 +1,8 @@
 import { Button, Image, Link } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout, CardLayoutProps } from '../../../components/layouts'
 import { H3 } from '../../../components/typography'
+import { CardLayout, CardLayoutProps } from '../../../shared/components/layouts'
 
 interface GrantWinnerAnnouncementProps extends CardLayoutProps {
   imageUrl: string

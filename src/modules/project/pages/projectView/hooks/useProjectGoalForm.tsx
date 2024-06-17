@@ -1,14 +1,18 @@
-import { useMutation } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-import { MUTATION_CREATE_PROJECT_GOAL, MUTATION_UPDATE_PROJECT_GOAL } from '../../../../../graphql/mutations/goals'
-import { ProjectGoal, ProjectGoalCurrency } from '../../../../../types'
+import {
+  ProjectGoal,
+  ProjectGoalCreateInput,
+  ProjectGoalCurrency,
+  useProjectGoalCreateMutation,
+  useProjectGoalUpdateMutation,
+} from '../../../../../types'
 import { dollarsToCents, useNotification } from '../../../../../utils'
 
-type FormValues = Record<string, string | number | ProjectGoalCurrency>
+type FormValues = ProjectGoalCreateInput
 
 const MIN_GOAL_TARGET_AMOUNT_US_DOLLARS = 10
 const MIN_GOAL_TARGET_AMOUNT_SATS = 10000
@@ -75,9 +79,8 @@ export const useProjectGoalForm = (
   const enableSubmit = isDirty && isValid
 
   const { toast } = useNotification()
-
-  const [createProjectGoal, { loading: creating, error: createError }] = useMutation(MUTATION_CREATE_PROJECT_GOAL)
-  const [updateProjectGoal, { loading: updating, error: updateError }] = useMutation(MUTATION_UPDATE_PROJECT_GOAL)
+  const [createProjectGoal, { loading: creating, error: createError }] = useProjectGoalCreateMutation()
+  const [updateProjectGoal, { loading: updating, error: updateError }] = useProjectGoalUpdateMutation()
 
   useEffect(() => {
     if (goal) {
@@ -94,7 +97,7 @@ export const useProjectGoalForm = (
       reset({
         title: '',
         description: '',
-        targetAmount: '',
+        targetAmount: 0,
         currency: ProjectGoalCurrency.Usdcent,
         projectId,
         emojiUnifiedCode: '',

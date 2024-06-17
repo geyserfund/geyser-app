@@ -99,16 +99,6 @@ export const QUERY_PROJECTS_SUMMARY = gql`
     }
   }
 `
-export const QUERY_PROJECT_UNPUBLISHED_ENTRIES = gql`
-  ${FRAGMENT_ENTRY_FOR_PROJECT}
-  query ProjectUnplublishedEntries($where: UniqueProjectQueryInput!) {
-    projectGet(where: $where) {
-      entries: entries(input: { where: { published: false } }) {
-        ...EntryForProject
-      }
-    }
-  }
-`
 
 export const QUERY_PROJECT_FUNDERS = gql`
   ${FRAGMENT_FUNDER_WITH_USER}

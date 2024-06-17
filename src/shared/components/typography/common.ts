@@ -25,8 +25,9 @@ export const getFontWeight = ({ thin, medium, bold }: TextWeightProps) => {
   return 400
 }
 
-export const getFontColor = ({ light, muted }: TextColorProps) => {
+export const getFontColor = ({ light, muted, dark }: TextColorProps) => {
   if (light) return 'neutral1.11'
   if (muted) return 'neutral1.9'
-  return 'utils.text'
+  if (dark) return 'utils.text'
+  return 'inherit'
 }

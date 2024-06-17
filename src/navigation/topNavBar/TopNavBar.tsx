@@ -26,12 +26,11 @@ import { useSetMatchRoutes } from '../../config/routes/routesAtom'
 import { getPath, ID, PathName } from '../../constants'
 import { useAuthContext, useNavContext } from '../../context'
 import { useLayoutAnimation, useScrollDirection } from '../../hooks'
-import { useProjectSideNavAtom } from '../../modules/project/pages/projectView/views/projectNavigation/sideNav'
 import { EmailPromptModal } from '../../pages/auth/components/EmailPromptModal'
 import { useAuthModal } from '../../pages/auth/hooks'
 import { useEmailPromptModal } from '../../pages/auth/hooks/useEmailPromptModal'
 import { useMobileMode } from '../../utils'
-import { useProfileSideNavAtom } from '../profileRightSideNav'
+// import { useProfileSideNavAtom } from '../profileRightSideNav'
 import { TopNavBarMenu } from '../topNarBarMenu/TopNavBarMenu'
 import { ProjectTitle } from './components/ProjectTitle'
 import { useRouteMatchesForTopNavBar } from './topNavBarAtom'
@@ -75,7 +74,7 @@ export const TopNavBar = () => {
 
   const matchRoutesData = matchRoutes(platformRoutes, location)
   const setMatchRoutes = useSetMatchRoutes()
-  const changeProfileSideNavAtom = useProfileSideNavAtom()[1]
+  // const changeProfileSideNavAtom = useProfileSideNavAtom()[1]
 
   useEffect(() => {
     if (matchRoutesData) {
@@ -83,11 +82,11 @@ export const TopNavBar = () => {
     }
   }, [matchRoutesData, setMatchRoutes])
 
-  const [_, changeProjectSideNavOpen] = useProjectSideNavAtom()
+  // const [_, changeProjectSideNavOpen] = useProjectSideNavAtom()
 
   const currentPathName = location.pathname
 
-  const currentProjectRouteMatch = matchPath(`/${PathName.project}/:projectId/`, currentPathName)
+  const currentProjectRouteMatch = matchPath(`/${PathName.project}/${PathName.projectName}/`, currentPathName)
 
   const {
     isOpen: isLoginAlertModalOpen,
@@ -145,7 +144,7 @@ export const TopNavBar = () => {
   }
 
   const handleProjectButtonPress = () => {
-    const projectName = currentProjectRouteMatch?.params?.projectId || navData.projectName
+    const projectName = currentProjectRouteMatch?.params?.projectName || navData.projectName
     navigate(getPath('project', projectName))
   }
 
@@ -281,7 +280,7 @@ export const TopNavBar = () => {
             <IconButton
               aria-label="left-side-menu-button"
               icon={<SideNavIcon />}
-              onClick={changeProjectSideNavOpen}
+              // onClick={changeProjectSideNavOpen}
               size="sm"
               variant="ghost"
             />
@@ -385,7 +384,7 @@ export const TopNavBar = () => {
                   _hover={{ backgroundColor: 'neutral.100' }}
                   border={'1px'}
                   borderColor="neutral.200"
-                  onClick={changeProfileSideNavAtom}
+                  // onClick={changeProfileSideNavAtom}
                 >
                   {isLoggedIn ? (
                     <Avatar height="22px" width="22px" src={user.imageUrl || ''} />

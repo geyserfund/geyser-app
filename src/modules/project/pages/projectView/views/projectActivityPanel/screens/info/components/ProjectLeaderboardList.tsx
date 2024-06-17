@@ -1,12 +1,12 @@
 import { Divider, VStack } from '@chakra-ui/react'
 import { Fragment } from 'react'
 
-import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../../../../../components/layouts'
 import { ProjectFundingLeaderboardFeedItem } from '../../../../../../../../../components/molecules'
 import { ID } from '../../../../../../../../../constants/components'
 import { QUERY_PROJECT_FUNDERS } from '../../../../../../../../../graphql'
 import { ScrollInvoke } from '../../../../../../../../../helpers'
 import { useQueryWithPagination } from '../../../../../../../../../hooks'
+import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../../../../../shared/components/layouts'
 import { FunderWithUserFragment, ProjectFragment } from '../../../../../../../../../types/generated/graphql'
 import { useMobileMode, useNotification } from '../../../../../../../../../utils'
 

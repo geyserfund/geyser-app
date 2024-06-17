@@ -33,14 +33,15 @@ export const ProfileNavContent = () => {
       height="100%"
     >
       <VStack w="full" spacing={6}>
-        {user.id ? (
-          <ProfileNavUserInfo user={user} />
-        ) : (
-          <HStack w="full" justifyContent="center">
-            <LoginButton w="full" />
-          </HStack>
+        {user.id && (
+          <>
+            <MenuItem as={Link} to={getPath('userProfile', user.id)} _hover={{}} _active={{}}>
+              <ProfileNavUserInfo user={user} />
+            </MenuItem>
+
+            <Divider borderColor="neutral1.6" />
+          </>
         )}
-        <Divider borderColor="neutral1.6" />
         <VStack spacing={2} w="full">
           <MenuItem as={Link} to={getPath('landingPage')}>
             <HStack>
@@ -57,13 +58,13 @@ export const ProfileNavContent = () => {
           <MenuItem as={Link} to={getPath('grants')}>
             <HStack>
               <PiCertificate />
-              <Body>{t('Grants')}</Body>
+              <Body color="inherit">{t('Grants')}</Body>
             </HStack>
           </MenuItem>
         </VStack>
-        {user && (
+        <Divider borderColor="neutral1.6" />
+        {user.id ? (
           <>
-            <Divider borderColor="neutral1.6" />
             <VStack spacing={2} w="full">
               <MenuItem as={Link} to={getPath('userProfileSettings', user.id)}>
                 <Body>{t('Settings')}</Body>
@@ -73,6 +74,10 @@ export const ProfileNavContent = () => {
               </MenuItem>
             </VStack>
           </>
+        ) : (
+          <HStack w="full" justifyContent="center">
+            <LoginButton w="full" />
+          </HStack>
         )}
       </VStack>
 
@@ -92,27 +97,10 @@ export const ProfileNavContent = () => {
             {t('About')}
           </UserNavExternalButton>
         </HStack>
-
+        <Divider borderColor="neutral1.6" />
         <ModeChange />
       </VStack>
     </VStack>
-  )
-}
-
-const UserNavButton: ComponentWithAs<'button', ButtonProps> = (props) => {
-  return (
-    <Button
-      w="full"
-      variant="ghost"
-      colorScheme="neutral1"
-      size="lg"
-      justifyContent={'start'}
-      _hover={{
-        bg: 'primary1.9',
-        color: 'neutral1.1',
-      }}
-      {...props}
-    />
   )
 }
 

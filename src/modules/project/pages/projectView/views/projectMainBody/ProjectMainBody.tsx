@@ -18,7 +18,7 @@ import {
   Story,
 } from './sections'
 
-export const ProjectMainBody = () => {
+export const ProjectBody = () => {
   const { project, loading, goals } = useProjectContext()
 
   const location = useLocation()

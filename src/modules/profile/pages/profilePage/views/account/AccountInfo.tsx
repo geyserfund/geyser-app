@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next'
 import { BsGearFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 
-import { CardLayout, SkeletonLayout } from '../../../../../../components/layouts'
 import { Body1, H1 } from '../../../../../../components/typography'
 import { getPath } from '../../../../../../constants'
 import { ConnectAccounts } from '../../../../../../pages/auth'
+import { CardLayout, SkeletonLayout } from '../../../../../../shared/components/layouts'
 import { useUserProfileAtomValue, useViewingOwnProfileAtomValue } from '../../../../state'
 import { ExternalAccountDisplay } from './components/ExternalAccountDisplay'
 

@@ -4,10 +4,10 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Outlet, useMatch } from 'react-router-dom'
 
-import { CardLayout } from '../../../../components/layouts'
 import Loader from '../../../../components/ui/Loader'
 import { TitleDivider } from '../../../../components/ui/TitleDivider'
 import { dimensions, getPath, PathsMap } from '../../../../constants'
+import { CardLayout } from '../../../../shared/components/layouts'
 import { useMobileMode } from '../../../../utils'
 import { useProjectContext } from '../../context'
 import { DashboardNavigation } from './navigation/DashboardNavigation'
@@ -68,7 +68,7 @@ export const ProjectDashboard = () => {
   const isMobile = useMobileMode()
   const [isDrawerOpen, setDrawerOpen] = useState(false)
 
-  const { project } = useProjectContext({ ownerAccessOnly: true })
+  const { project } = useProjectContext()
 
   const match = useMatch(project ? `${getPath('projectDashboard', project?.name)}/:section` : '')
 

@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import { createUseStyles } from 'react-jss'
 import { Outlet } from 'react-router-dom'
 
-import { CardsStackLayout } from '../../../../../../components/layouts'
+import { CardsStackLayout } from '../../../../../../shared/components/layouts'
 import { FundingResourceType } from '../../../../../../types'
 import { useMobileMode } from '../../../../../../utils'
 import { MobileViews, useProjectContext } from '../../../../context'

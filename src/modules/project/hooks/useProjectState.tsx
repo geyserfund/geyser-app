@@ -1,15 +1,21 @@
 import { QueryHookOptions } from '@apollo/client'
-import { useMemo, useState } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import {
   ProjectByNameOrIdQuery,
   ProjectByNameOrIdQueryVariables,
-  ProjectFragment,
   UpdateProjectInput,
   useProjectByNameOrIdQuery,
   useUpdateProjectMutation,
 } from '../../../types'
-import { getDiff, linkToHttps, toInt, useNotification } from '../../../utils'
+import { linkToHttps, toInt, useNotification } from '../../../utils'
+import {
+  baseProjectAtom,
+  diffProjectAtom,
+  partialUpdateProjectAtom,
+  projectAtom,
+  syncProjectAtom,
+} from '../state/projectAtom'
 
 export const useProjectState = (
   projectId?: string | number,
@@ -18,11 +24,15 @@ export const useProjectState = (
 ) => {
   const { toast } = useNotification()
 
-  const [project, setProject] = useState<ProjectFragment | null>(null)
-  const [baseProject, setBaseProject] = useState<ProjectFragment>({} as ProjectFragment)
+  const project = useAtomValue(projectAtom)
+  const baseProject = useAtomValue(baseProjectAtom)
+
+  const updateProject = useSetAtom(partialUpdateProjectAtom)
+  const syncProject = useSetAtom(syncProjectAtom)
+
+  const [isDiff, diffKeys] = useAtomValue(diffProjectAtom)
 
   const idType = type === 'name' && typeof projectId === 'string' ? 'name' : 'id'
-
   const invalidId = idType === 'name' && String(projectId).length < 3
 
   const { loading, error, refetch } = useProjectByNameOrIdQuery({
@@ -58,33 +68,6 @@ export const useProjectState = (
       }
     },
   })
-
-  const syncProject = (project: ProjectFragment) => {
-    setProject(project)
-    setBaseProject(project)
-  }
-
-  const updateProject = (value: Partial<ProjectFragment>) => {
-    setProject((current) => (current ? { ...current, ...value } : (value as ProjectFragment)))
-  }
-
-  const [isDiff, diffKeys] = useMemo(
-    () =>
-      project
-        ? getDiff(project, baseProject, [
-            'location',
-            'description',
-            'image',
-            'rewardCurrency',
-            'shortDescription',
-            'status',
-            'thumbnailImage',
-            'title',
-            'links',
-          ])
-        : [],
-    [baseProject, project],
-  )
 
   const saveProject = async () => {
     if (!isDiff || !diffKeys || !project) {

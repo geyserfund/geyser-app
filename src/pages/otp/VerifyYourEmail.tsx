@@ -1,7 +1,7 @@
 import { Stack, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CustomModalProps, Modal } from '../../components/layouts'
+import { CustomModalProps, Modal } from '../../shared/components/layouts'
 import { MfaAction } from '../../types'
 import { VerifyYourEmailContent, VerifyYourEmailContentProps } from './VerifyYourEmailContent'
 

@@ -1,11 +1,11 @@
 import { useDisclosure } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout } from '../../../../components/layouts'
 import { AuthModal } from '../../../../components/molecules'
 import { H3 } from '../../../../components/typography'
 import { useAuthContext } from '../../../../context'
 import { ProjectFundingModal } from '../../../../modules/project/pages/projectFunding/components/ProjectFundingModal'
+import { CardLayout } from '../../../../shared/components/layouts'
 import { Grant, GrantApplicant, GrantStatusEnum, VotingSystem } from '../../../../types'
 import { GrantApplicantCard } from '../components/GrantApplicantCard'
 import { useProjectFundingModal } from '../components/useProjectFundingModal'
