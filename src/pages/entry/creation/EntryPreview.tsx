@@ -178,6 +178,7 @@ export const EntryPreview = () => {
         height="100%"
         alignItems="center"
         justifyContent="center"
+        overflowY="auto"
       >
         <VStack
           spacing="20px"
