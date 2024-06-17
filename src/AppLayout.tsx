@@ -41,19 +41,23 @@ export const AppLayout = () => {
       >
         <Box w="full" h={'100%'} position="relative" className={layoutAnimationClassName}>
           <Box
+            w="full"
             minHeight="100vh"
             height={{ base: '100%', lg: '100vh' }}
             display="flex"
             alignItems="center"
             flexDir="column"
+            backgroundColor="utils.pbg"
+            paddingX={{ base: 3, lg: 5 }}
           >
             <TopNavBar />
             <Box
               id={ID.root}
               maxHeight="100%"
+              width="100%"
+              maxWidth={dimensions.maxWidth}
               flex="1"
               paddingTop={`${dimensions.topNavBar.desktop.height}px`}
-              backgroundColor="neutral.0"
               overflowY={{ base: 'initial', lg: 'auto' }}
             >
               <Outlet />
