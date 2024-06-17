@@ -7,7 +7,7 @@ import { FRAGMENT_PROJECT_WALLET } from './wallet'
 export const FRAGMENT_PROJECT_FOR_COMMUNITY_VOTE_GRANT = gql`
   fragment ProjectCommunityVoteGrant on CommunityVoteGrant {
     id
-    grantStatus: status
+    status
   }
 `
 

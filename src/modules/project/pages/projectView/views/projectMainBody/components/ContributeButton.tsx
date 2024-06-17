@@ -29,7 +29,7 @@ export const ContributeButton = (props: ButtonProps) => {
     (application) =>
       application.status === GrantApplicantStatus.Accepted &&
       application.grant?.__typename === 'CommunityVoteGrant' &&
-      application.grant.grantStatus === GrantStatusEnum.FundingOpen,
+      application.grant.status === GrantStatusEnum.FundingOpen,
   )
 
   const handleContribute = () => {
