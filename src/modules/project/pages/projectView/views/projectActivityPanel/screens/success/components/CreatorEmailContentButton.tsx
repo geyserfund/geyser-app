@@ -1,8 +1,9 @@
 import { CopyIcon } from '@chakra-ui/icons'
-import { HStack, StackProps, Text, VStack } from '@chakra-ui/react'
+import { HStack, StackProps, VStack } from '@chakra-ui/react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { MonoBody2 } from '../../../../../../../../../components/typography'
 import { copyTextToClipboard } from '../../../../../../../../../utils'
 import { useProjectContext } from '../../../../../../../context'
 import { useFundingContext } from '../../../../../../../context/FundingProvider'
@@ -60,7 +61,7 @@ export const CreatorEmailContentButton = ({ ...props }: StackProps) => {
       {...props}
     >
       <VStack flexGrow={1} textAlign="left" alignItems="start">
-        <Text display="block" variant="caption">
+        <MonoBody2 display="block" variant="caption">
           {t('Hi,\nI just purchased the following items on Geyser:')}{' '}
           <b>
             {rewardEntries.map(([key, value], index) => {
@@ -75,25 +76,25 @@ export const CreatorEmailContentButton = ({ ...props }: StackProps) => {
               }
             })}
           </b>
-        </Text>
-        <Text display="block" variant="caption">
+        </MonoBody2>
+        <MonoBody2 display="block" variant="caption">
           {t('This is my reference code:')}
-        </Text>
-        <Text display="block" variant="caption" fontWeight="bold">
+        </MonoBody2>
+        <MonoBody2 display="block" variant="caption" fontWeight="bold">
           {fundingTx.uuid}
-        </Text>
-        <Text display="block" variant="caption">
-          {t('I’d like it to be shipped to the following address:')}
-        </Text>
-        <Text display="block" variant="caption" fontWeight="bold">
+        </MonoBody2>
+        <MonoBody2 display="block" variant="caption">
+          {t('Please send the goods to:')}
+        </MonoBody2>
+        <MonoBody2 display="block" variant="caption" fontWeight="bold">
           {'<'}
-          {t('ADD RECEIVING POSTAL ADDRESS')}
+          {t('INCLUDE ADDRESS')}
           {'>'}
-        </Text>
+        </MonoBody2>
 
-        <Text display="block" variant="caption">
+        <MonoBody2 display="block" variant="caption">
           {t('Cheers,')}
-        </Text>
+        </MonoBody2>
       </VStack>
       <CopyIcon />
     </HStack>

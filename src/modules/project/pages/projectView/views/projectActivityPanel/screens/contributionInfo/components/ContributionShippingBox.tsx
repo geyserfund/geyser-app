@@ -2,6 +2,7 @@ import { Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { CreatorEmailButton } from '../../../../../../../../../components/molecules'
+import { Body2 } from '../../../../../../../../../components/typography'
 import { useCustomTheme } from '../../../../../../../../../utils'
 import { CreatorEmailContentButton } from '../../success/components/CreatorEmailContentButton'
 
@@ -22,11 +23,9 @@ export const ContributionShippingBox = ({ creatorEmail }: { creatorEmail?: strin
       <Text fontSize={'16px'} fontWeight={'bold'} textColor={'neutral.900'}>
         {t('Send Email to Creator')}
       </Text>
-      <Text fontSize={'14px'} fontWeight={'normal'} textColor={'neutral.600'}>
-        {t(
-          "To receive the selected items, you need to send your shipping details to the creator's email. Geyser does not want to store your private information for security reasons.",
-        )}
-      </Text>
+      <Body2 textColor={'neutral.600'}>
+        {t('Send your shipping address to the creator’s email, so they can send out your rewards more quickly.')}
+      </Body2>
       <Text fontSize={'16px'} fontWeight={'semibold'} textColor={'neutral.900'}>
         {t('Creator email')}
       </Text>

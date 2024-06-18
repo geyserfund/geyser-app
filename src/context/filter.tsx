@@ -64,7 +64,6 @@ export const FilterProvider = ({ children, isLoggedIn }: { children: React.React
           newFilters = {
             ...currentFilters,
             recent: undefined,
-            sort: SortType.recent,
             ...value,
           }
         } else {

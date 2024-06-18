@@ -6,7 +6,7 @@ import * as yup from 'yup'
 
 import { MUTATION_CREATE_PROJECT_GOAL, MUTATION_UPDATE_PROJECT_GOAL } from '../../../../../graphql/mutations/goals'
 import { ProjectGoal, ProjectGoalCurrency } from '../../../../../types'
-import { dollarsToCents } from '../../../../../utils'
+import { dollarsToCents, useNotification } from '../../../../../utils'
 
 type FormValues = Record<string, string | number | ProjectGoalCurrency>
 
@@ -74,6 +74,8 @@ export const useProjectGoalForm = (
 
   const enableSubmit = isDirty && isValid
 
+  const { toast } = useNotification()
+
   const [createProjectGoal, { loading: creating, error: createError }] = useMutation(MUTATION_CREATE_PROJECT_GOAL)
   const [updateProjectGoal, { loading: updating, error: updateError }] = useMutation(MUTATION_UPDATE_PROJECT_GOAL)
 
@@ -124,6 +126,13 @@ export const useProjectGoalForm = (
               emojiUnifiedCode: formData.emojiUnifiedCode,
             },
           },
+          onError(error) {
+            toast({
+              title: 'Error updating project goal',
+              description: error.message,
+              status: 'error',
+            })
+          },
         })
         if (data) {
           reset()
@@ -141,6 +150,13 @@ export const useProjectGoalForm = (
               projectId: formData.projectId,
               emojiUnifiedCode: formData.emojiUnifiedCode,
             },
+          },
+          onError(error) {
+            toast({
+              title: 'Error creating project goal',
+              description: error.message,
+              status: 'error',
+            })
           },
         })
         if (data) {

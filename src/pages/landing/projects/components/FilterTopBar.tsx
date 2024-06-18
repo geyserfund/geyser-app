@@ -11,7 +11,6 @@ import { QUERY_COUNTRIES, QUERY_TAGS } from '../../../../graphql/queries'
 import { ProjectCountriesGetResult, TagsGetResult } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { getActivityButtonContent } from '../../filters/activity'
-import { SortMenu } from '../../filters/sort'
 import { getStatusTypeButtonContent } from '../../filters/status'
 import { TagComponent } from '../elements'
 
@@ -180,7 +179,6 @@ export const FilterTopBar = ({ noSort, ...rest }: FilterTopBarProps) => {
           {viewFilterTags}
           {viewFilterRegion}
         </Wrap>
-        {!isMobile && !noSort && <SortMenu />}
       </HStack>
     )
   }
