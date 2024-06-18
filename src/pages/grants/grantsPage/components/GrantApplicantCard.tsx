@@ -72,6 +72,8 @@ const UserContributionDetails = ({ amount, voteCount, user }: GrantApplicantCont
       display="flex"
       alignItems="center"
       justifyContent="space-between"
+      cursor="default"
+      zIndex={2}
     >
       <HStack gap={2} alignItems="center" justifyContent="center">
         <AvatarElement
@@ -117,7 +119,16 @@ const ContributorsAvatarDisplay = ({
 
   return (
     <>
-      <Box pl={2} filter="opacity(0.4)" _hover={{ cursor: 'pointer' }} onClick={contributorsModal.onOpen}>
+      <Box
+        pl={2}
+        filter="opacity(0.4)"
+        _hover={{ cursor: 'pointer' }}
+        onClick={(e) => {
+          e.stopPropagation()
+          contributorsModal.onOpen()
+        }}
+        zIndex={2}
+      >
         {currentContributor && (
           <AvatarElement
             key={currentContributor?.user?.id}
@@ -217,7 +228,19 @@ export const GrantApplicantCard = ({
   const renderButton = (project: Project) => {
     if (!isLoggedIn || !currentUser?.hasSocialAccount) {
       return (
-        <Button onClick={onOpenLoginModal} height="40px" width="100%" size="md" fontSize="16px" variant="primary">
+        <Button
+          onClick={(e) => {
+            e.stopPropagation()
+            onOpenLoginModal()
+          }}
+          height="40px"
+          width="100%"
+          size="md"
+          fontSize="16px"
+          variant="primary"
+          zIndex={2}
+          pointerEvents="auto"
+        >
           {t('Login to vote')}
         </Button>
       )
@@ -225,7 +248,18 @@ export const GrantApplicantCard = ({
 
     if (canVote && isLoggedIn && currentUser?.hasSocialAccount) {
       return (
-        <Button onClick={onOpen} height="40px" width="100%" size="md" variant="primary">
+        <Button
+          onClick={(e) => {
+            e.stopPropagation()
+            onOpen()
+          }}
+          height="40px"
+          width="100%"
+          size="md"
+          variant="primary"
+          zIndex={2}
+          pointerEvents="auto"
+        >
           {t('Vote')}
         </Button>
       )
@@ -233,76 +267,82 @@ export const GrantApplicantCard = ({
 
     if (grantStatus !== GrantStatusEnum.Closed) {
       return (
-        <Button as={Link} to={getPath('project', project.name)} size={'md'} variant={'primary'}>
+        <Button
+          as={Link}
+          to={getPath('project', project.name)}
+          size={'md'}
+          variant={'primary'}
+          zIndex={2}
+          pointerEvents="auto"
+        >
           {t('View project')}
         </Button>
       )
     }
   }
 
+  const handleCardClick = () => {
+    window.location.href = projectLink
+  }
+
   return (
-    <CardLayout p={2} key={project.id}>
-      <Box display="flex">
-        <Box mr={3} height={{ base: '90px', lg: '144px' }}>
-          <Link
-            to={projectLink}
-            className={classNames(classes.image, isMobile ? classes.mobileImage : classes.desktopImage)}
-          >
-            <ImageWithReload
-              objectFit="cover"
-              borderRadius="7px"
-              width={isMobile ? '90px' : '144px'}
-              height={isMobile ? '90px' : '144px'}
-              src={project.thumbnailImage || ''}
-              alt="project thumbnail"
-            />
-          </Link>
-        </Box>
-        <Box pr={2} flexGrow={1}>
-          <Link to={projectLink}>
+    <Box onClick={handleCardClick} position="relative">
+      <CardLayout as="div" p={2} key={project.id} position="relative" zIndex={1} cursor="pointer">
+        <Box display="flex">
+          <Box mr={3} height={{ base: '90px', lg: '144px' }}>
+            <Box className={classNames(classes.image, isMobile ? classes.mobileImage : classes.desktopImage)}>
+              <ImageWithReload
+                objectFit="cover"
+                borderRadius="7px"
+                width={isMobile ? '90px' : '144px'}
+                height={isMobile ? '90px' : '144px'}
+                src={project.thumbnailImage || ''}
+                alt="project thumbnail"
+              />
+            </Box>
+          </Box>
+          <Box pr={2} flexGrow={1}>
             <H3 fontSize="18px">{project.title}</H3>
-          </Link>
-          <Link to={projectLink}>
             <Text noOfLines={4} wordBreak="break-word">
               {project.shortDescription}
             </Text>
-          </Link>
+          </Box>
+          {!isMobile && (
+            <Box
+              minWidth="166px"
+              pr={4}
+              display="flex"
+              flexDirection="column"
+              justifyContent="flex-start"
+              alignItems="center"
+              gap={5}
+            >
+              {renderButton(project)}
+              {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
+            </Box>
+          )}
         </Box>
-        {!isMobile && (
-          <Box
-            minWidth="166px"
-            pr={4}
-            display="flex"
-            flexDirection="column"
-            justifyContent="flex-start"
-            alignItems="center"
-            gap={5}
-          >
+        <ContributorsAvatarDisplay
+          contributors={contributors}
+          currentContributor={currentUserContribution || false}
+          project={project}
+        />
+        {isMobile && (
+          <VStack w="full">
             {renderButton(project)}
             {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
-          </Box>
+          </VStack>
         )}
-      </Box>
-      <ContributorsAvatarDisplay
-        contributors={contributors}
-        currentContributor={currentUserContribution || false}
-        project={project}
-      />
-      {isMobile && (
-        <VStack w="full">
-          {renderButton(project)}
-          {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
-        </VStack>
-      )}
-      {currentUserContribution && <UserContributionDetails {...currentUserContribution} />}
-      <HowVotingWorksModal
-        isOpen={isOpen}
-        onClose={onClose}
-        votingSystem={votingSystem}
-        fundingModalProps={fundingModalProps}
-        project={project}
-      />
-    </CardLayout>
+        {currentUserContribution && <UserContributionDetails {...currentUserContribution} />}
+        <HowVotingWorksModal
+          isOpen={isOpen}
+          onClose={onClose}
+          votingSystem={votingSystem}
+          fundingModalProps={fundingModalProps}
+          project={project}
+        />
+      </CardLayout>
+    </Box>
   )
 }
 
