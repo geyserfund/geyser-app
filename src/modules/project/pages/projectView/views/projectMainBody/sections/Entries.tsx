@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client'
 import { Button, Center, Text, useDisclosure } from '@chakra-ui/react'
 import { forwardRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../../../../components/layouts'
 import { DeleteConfirmModal, ProjectEntryCard } from '../../../../../../../components/molecules'
@@ -134,6 +134,11 @@ export const RenderEntries = ({ entries }: { entries: EntryForProjectFragment[] 
       {!isShowAll && sortedEntries.length > 3 && (
         <Button w="full" variant="secondary" onClick={onShowAll}>
           {t('See all')}
+        </Button>
+      )}
+      {isProjectOwner && (
+        <Button as={Link} to={getPath('projectEntryCreation', project?.name || '')} w="full" variant="primary">
+          {t('Add Entry')}
         </Button>
       )}
       <DeleteConfirmModal
