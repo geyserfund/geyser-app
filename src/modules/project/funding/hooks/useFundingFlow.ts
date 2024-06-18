@@ -107,7 +107,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         }
 
         if (hasBolt11 && hasWebLN && webln) {
-          startWebLNFlow(data.fund.fundingTx)
+          startWebLNFlow({ fundingTx: data.fund.fundingTx, onSuccess: () => refetch() })
             .then((success) => {
               if (!success) {
                 startPollingAndSubscription()

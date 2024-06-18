@@ -1,20 +1,24 @@
-import { useAtom, useSetAtom } from 'jotai'
+import { useAtom } from 'jotai'
 import { useCallback } from 'react'
 import { RejectionError } from 'webln'
 
 import { FundingTxFragment } from '../../../../types'
 import { useNotification } from '../../../../utils'
 import { weblnErrorAtom } from '../state/errorAtom'
-import { setNextFundingStageAtom } from '../state/fundingStagesAtom'
 import { requestWebLNPayment, WEBLN_ENABLE_ERROR } from '../utils/requestWebLNPayment'
+
+type StartWebLNFlowProps = {
+  fundingTx: FundingTxFragment
+  onSuccess: () => void
+}
 
 export const useWebLNFlow = () => {
   const { toast } = useNotification()
-  const setNextFundingStage = useSetAtom(setNextFundingStageAtom)
+
   const [weblnErrored, setWebLNErrored] = useAtom(weblnErrorAtom)
 
   const startWebLNFlow = useCallback(
-    async (fundingTx: FundingTxFragment) => {
+    async ({ fundingTx, onSuccess }: StartWebLNFlowProps) => {
       if (weblnErrored) {
         return
       }
@@ -24,7 +28,7 @@ export const useWebLNFlow = () => {
 
         // Check preimage
         if (paymentHash === fundingTx.invoiceId) {
-          setNextFundingStage()
+          onSuccess()
           return true
         }
 
@@ -69,7 +73,7 @@ export const useWebLNFlow = () => {
         return false
       }
     },
-    [setNextFundingStage, toast, weblnErrored, setWebLNErrored],
+    [toast, weblnErrored, setWebLNErrored],
   )
   return startWebLNFlow
 }
