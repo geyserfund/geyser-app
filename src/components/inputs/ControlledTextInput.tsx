@@ -1,5 +1,5 @@
 import { Input, InputProps, Text, VStack } from '@chakra-ui/react'
-import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
+import { useController, UseControllerProps } from 'react-hook-form'
 
 type Props = UseControllerProps<any, any> &
   Omit<InputProps, 'size'> & {

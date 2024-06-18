@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_ENTRY_FOR_PROJECT } from '../fragments/entries'
 import {
   FRAGMENT_PROJECT,
   FRAGMENT_PROJECT_FOR_LANDING_PAGE,

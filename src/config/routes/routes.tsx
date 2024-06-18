@@ -12,7 +12,7 @@ import { renderPrivateRoute } from './PrivateRoute'
 // const Grants = () => import('../../pages/grants')
 const ProjectLaunch = () => import('../../modules/project/pages/projectCreate')
 // const Entry = () => import('../../pages/entry')
-const ProjectDashboard = () => import('../../modules/project/pages/projectDashboard')
+// const ProjectDashboard = () => import('../../modules/project/pages/projectDashboard')
 
 const ProjectDashboard1 = () => import('../../modules/project/pages1/projectDashboard')
 
