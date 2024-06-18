@@ -31,7 +31,7 @@ export const Story = () => {
               <IconButton
                 aria-label="go to edit story"
                 onClick={() => project && navigate(getPath('dashboardStory', project.name))}
-                variant="transparent"
+                variant="ghost"
               >
                 <MdModeEdit fontSize={16} />
               </IconButton>
