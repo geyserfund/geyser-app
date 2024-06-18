@@ -4090,24 +4090,7 @@ export type ProjectCommunityVoteGrantFragment = { __typename?: 'CommunityVoteGra
 
 export type ProjectNostrKeysFragment = { __typename?: 'Project', id: any, name: string, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', privateKey?: { __typename?: 'NostrPrivateKey', nsec: string } | null, publicKey: { __typename?: 'NostrPublicKey', npub: string } } } };
 
-export type ProjectForProfilePageFragment = {
-  __typename?: 'Project'
-  id: any
-  name: string
-  balance: number
-  fundersCount?: number | null
-  thumbnailImage?: string | null
-  title: string
-  shortDescription?: string | null
-  createdAt: string
-  status?: ProjectStatus | null
-  wallets: Array<{
-    __typename?: 'Wallet'
-    id: any
-    name?: string | null
-    state: { __typename?: 'WalletState'; status: WalletStatus; statusCode: WalletStatusCode }
-  }>
-}
+export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } }> };
 
 export type ProjectForProfilePageFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: string, status?: ProjectStatus | null, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }> };
 
@@ -8240,66 +8223,6 @@ export const GrantGetDocument = gql`
   }
 }
     `;
-
-/**
- * __useGrantStatisticsQuery__
- *
- * To run a query within a React component, call `useGrantStatisticsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGrantStatisticsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGrantStatisticsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGrantStatisticsQuery(
-  baseOptions?: Apollo.QueryHookOptions<GrantStatisticsQuery, GrantStatisticsQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GrantStatisticsQuery, GrantStatisticsQueryVariables>(GrantStatisticsDocument, options)
-}
-export function useGrantStatisticsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GrantStatisticsQuery, GrantStatisticsQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GrantStatisticsQuery, GrantStatisticsQueryVariables>(GrantStatisticsDocument, options)
-}
-export function useGrantStatisticsSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<GrantStatisticsQuery, GrantStatisticsQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useSuspenseQuery<GrantStatisticsQuery, GrantStatisticsQueryVariables>(GrantStatisticsDocument, options)
-}
-export type GrantStatisticsQueryHookResult = ReturnType<typeof useGrantStatisticsQuery>
-export type GrantStatisticsLazyQueryHookResult = ReturnType<typeof useGrantStatisticsLazyQuery>
-export type GrantStatisticsSuspenseQueryHookResult = ReturnType<typeof useGrantStatisticsSuspenseQuery>
-export type GrantStatisticsQueryResult = Apollo.QueryResult<GrantStatisticsQuery, GrantStatisticsQueryVariables>
-export const GrantGetDocument = gql`
-  query GrantGet($input: GrantGetInput!) {
-    grant(input: $input) {
-      ... on BoardVoteGrant {
-        applicants {
-          project {
-            name
-            id
-          }
-        }
-      }
-      ... on CommunityVoteGrant {
-        applicants {
-          project {
-            name
-            id
-          }
-        }
-      }
-    }
-  }
-`
 
 /**
  * __useGrantGetQuery__
