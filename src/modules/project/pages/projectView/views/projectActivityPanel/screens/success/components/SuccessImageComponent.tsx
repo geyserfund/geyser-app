@@ -8,7 +8,7 @@ import { Body2, H3 } from '../../../../../../../../../components/typography'
 import { useAuthContext } from '../../../../../../../../../context'
 import { Badge } from '../../../../../../../../../types'
 import { useCustomTheme, useNotification } from '../../../../../../../../../utils'
-import { useFundingContext, useProjectContext } from '../../../../../../../context'
+import { useProjectContext } from '../../../../../../../context'
 import { AvatarElement } from '../../../../projectMainBody/components'
 import ContributionIcon from './ContributionIcon.svg'
 
@@ -16,7 +16,6 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
   const { t } = useTranslation()
   const { toast } = useNotification()
   const [copied, setCopied] = useState(false)
-  const { fundingTx } = useFundingContext()
   const { user } = useAuthContext()
 
   const { project } = useProjectContext()
@@ -66,8 +65,6 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
 
     return ''
   }
-
-  const { comment } = fundingTx
 
   return (
     <>
@@ -119,30 +116,6 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
             </Button>
           </Tooltip>
         </HStack>
-      </VStack>
-      <VStack
-        padding={2}
-        width={'full'}
-        borderRadius="8px"
-        backgroundColor={colors.primary[50]}
-        spacing={0}
-        justify={'flex-start'}
-        alignItems="flex-start"
-      >
-        <HStack>
-          <Text fontSize={'16px'} fontWeight={'normal'} textColor={'neutral.900'}>
-            {t('By')}
-          </Text>
-          <AvatarElement borderRadius="50%" user={user} noLink textProps={{ color: 'neutral.700' }} avatarOnly={true} />
-          <Text fontSize={'16px'} fontWeight={'normal'} textColor={'neutral.900'}>
-            {user ? user.username : 'Anonymous'}
-          </Text>
-        </HStack>
-        {comment && (
-          <Body2 color={'neutral.700'} fontStyle="italic" mt={2}>
-            {comment}
-          </Body2>
-        )}
       </VStack>
     </>
   )
