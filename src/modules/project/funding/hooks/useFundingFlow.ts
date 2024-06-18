@@ -107,10 +107,15 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
         }
 
         if (hasBolt11 && hasWebLN && webln) {
-          startWebLNFlow({ fundingTx: data.fund.fundingTx, onSuccess: () => refetch() })
-            .then((success) => {
+          startWebLNFlow(data.fund.fundingTx)
+            .then(async (success) => {
               if (!success) {
                 startPollingAndSubscription()
+              }
+
+              const data = await refetch()
+              if (data?.data?.fundingTx) {
+                checkFundingStatus(data.data.fundingTx, ConfirmationMethod.Subscription)
               }
             })
             .catch(() => {
