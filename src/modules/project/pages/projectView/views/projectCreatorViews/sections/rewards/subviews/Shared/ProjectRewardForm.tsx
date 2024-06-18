@@ -363,7 +363,7 @@ export const ProjectRewardForm = ({
               <Text variant="body1" wordBreak="keep-all" fontWeight={'normal'}>
                 {t('Limited Edition (skip if no limit)')}
               </Text>
-              <Tooltip label={t('Limited Rewards cannot be edited after reward has been published.')}>
+              <Tooltip label={t('Limited Edition rewards cannot be edited after rewards have been purchased to ensure fairness for the first buyers. To change the amounts of Limited Edition rewards create a new reward.')}>
                 <span>
                   <BiInfoCircle />
                 </span>
