@@ -15,14 +15,6 @@ export const FRAGMENT_BOARD_VOTE_GRANTS = gql`
       endAt
       startAt
     }
-    applicants {
-      status
-      funding {
-        communityFunding
-        grantAmount
-        grantAmountDistributed
-      }
-    }
     sponsors {
       id
       name
@@ -48,14 +40,6 @@ export const FRAGMENT_COMMUNITY_VOTE_GRANTS = gql`
       status
       endAt
       startAt
-    }
-    applicants {
-      status
-      funding {
-        communityFunding
-        grantAmount
-        grantAmountDistributed
-      }
     }
     sponsors {
       id
