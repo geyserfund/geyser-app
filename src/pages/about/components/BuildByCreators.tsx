@@ -1,7 +1,6 @@
 import { Box, GridItem, Image, SimpleGrid, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout } from '../../../components/layouts'
 import { Body1, H1, H2, H3 } from '../../../components/typography'
 import {
   BitcoinPouch3DImageUrl,
@@ -15,6 +14,7 @@ import {
   TextMessage3DImageUrl,
 } from '../../../constants'
 import { LIGHTNING_FEE_PERCENTAGE } from '../../../constants/platform/wallet'
+import { CardLayout } from '../../../shared/components/layouts'
 import { LaunchYourProjectButton } from './LaunchYourProjectButton'
 
 const CardContents = [

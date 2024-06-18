@@ -35,8 +35,8 @@ import {
 } from 'remirror/extensions'
 import TurndownService from 'turndown'
 
-import { SkeletonLayout } from '../../components/layouts'
 import { useSignedUpload } from '../../hooks'
+import { SkeletonLayout } from '../../shared/components/layouts'
 import { useMobileMode } from '../../utils'
 import { ReactHookTextArea } from '../components/ReactHookTextArea'
 import { TableCellMenuComponent } from '../components/TableCellMenuComponent'

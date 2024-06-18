@@ -6,10 +6,12 @@ import { ProjectContainer } from './ProjectContainer'
 import { ProjectSideNavigation } from './views/projectNavigation/sideNav'
 
 export const ProjectView = () => {
-  const params = useParams<{ projectId: string }>()
-  const { projectId } = params
+  const params = useParams<{ projectName: string }>()
+  const { projectName } = params
+
+  console.log('checking projhect name', projectName)
   return (
-    <ProjectProvider projectId={projectId || ''}>
+    <ProjectProvider projectName={projectName}>
       <FundingProviderWithProjectContext>
         <ProjectSideNavigation />
         <ProjectContainer />

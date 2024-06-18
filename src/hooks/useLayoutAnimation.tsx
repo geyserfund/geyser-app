@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { useNavAnimationStyles } from '../navigation/sideNavBase'
+import { useNavAnimationStyles } from '../modules/navigation/sideNavBase'
 import { useTopNavBarAnimate } from '../navigation/topNavBar/topNavBarAtom'
 import { useMobileMode } from '../utils'
 

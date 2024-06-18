@@ -3,8 +3,8 @@ import { useCallback, useEffect, useState } from 'react'
 import Cropper, { Area } from 'react-easy-crop'
 import { useTranslation } from 'react-i18next'
 
+import { Modal } from '../../shared/components/layouts'
 import { blobToFile, createImage, fileToBase64, getRadianAngle, rotateSize } from '../../utils'
-import { Modal } from '../layouts'
 import { Body2 } from '../typography'
 
 export enum ImageCrop {

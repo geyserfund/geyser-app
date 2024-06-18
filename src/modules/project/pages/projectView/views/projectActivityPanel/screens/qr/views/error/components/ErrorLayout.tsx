@@ -1,7 +1,7 @@
 import { Image, VStack } from '@chakra-ui/react'
 
-import { CardLayout } from '../../../../../../../../../../../components/layouts'
 import { H2 } from '../../../../../../../../../../../components/typography'
+import { CardLayout } from '../../../../../../../../../../../shared/components/layouts'
 
 export const ErrorLayout = ({
   url,

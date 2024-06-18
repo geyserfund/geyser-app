@@ -4,7 +4,7 @@ import { useFundingFormState, UseFundingFormStateReturn } from '../../../hooks'
 import { FundingInput, FundingTxFragment, ProjectFragment, WalletLimitsFragment } from '../../../types'
 import { useFundingFlow } from '../funding/hooks/useFundingFlow'
 import { FundingFlowGraphQLError } from '../funding/state'
-import { useProjectContext } from './ProjectProvider'
+import { useProjectContext } from './ProjectProvider2'
 
 type FundingContextProps = {
   fundingRequestErrored: Error | boolean

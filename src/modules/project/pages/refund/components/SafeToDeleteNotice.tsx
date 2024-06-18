@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout, CardLayoutProps } from '../../../../../components/layouts'
 import { Body2 } from '../../../../../components/typography'
+import { CardLayout, CardLayoutProps } from '../../../../../shared/components/layouts'
 
 export const SafeToDeleteNotice = (props: CardLayoutProps) => {
   const { t } = useTranslation()

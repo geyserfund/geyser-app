@@ -19,7 +19,6 @@ import { Trans, useTranslation } from 'react-i18next'
 import { PiWarningCircleFill } from 'react-icons/pi'
 
 import { SubscribeIcon } from '../../../../../../../../../components/icons'
-import { CardLayout } from '../../../../../../../../../components/layouts'
 import { Body2 } from '../../../../../../../../../components/typography'
 import { BetaBox } from '../../../../../../../../../components/ui'
 import {
@@ -29,6 +28,7 @@ import {
   subscriptionFeedbackUrl,
 } from '../../../../../../../../../constants'
 import { useModal } from '../../../../../../../../../hooks'
+import { CardLayout } from '../../../../../../../../../shared/components/layouts'
 import { useCustomTheme } from '../../../../../../../../../utils'
 
 interface SubscribeButtonProps extends ButtonProps {

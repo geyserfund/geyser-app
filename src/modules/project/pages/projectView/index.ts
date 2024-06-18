@@ -10,8 +10,8 @@ import { ProjectCreatorInsights } from './views/projectCreatorViews/sections/ins
 import {
   Entries as MainBodyEntries,
   Goals as MainBodyGoals,
+  ProjectBody,
   ProjectBodyLayout,
-  ProjectMainBody,
   Rewards as MainBodyRewards,
 } from './views/projectMainBody'
 
@@ -19,13 +19,13 @@ export {
   MainBodyEntries,
   MainBodyGoals,
   MainBodyRewards,
+  ProjectBody,
   ProjectBodyLayout,
   ProjectCreateReward,
   ProjectCreatorContributors,
   ProjectCreatorInsights,
   ProjectCreatorViews,
   ProjectEditReward,
-  ProjectMainBody,
   ProjectManageRewards,
   ProjectView,
 }

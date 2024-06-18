@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { EntryEditIcon, GoalIcon, RewardGiftIcon } from '../../../../../../../components/icons'
-import { CardLayout, CardLayoutProps } from '../../../../../../../components/layouts'
-import { Modal } from '../../../../../../../components/layouts'
 import { Body2, H3 } from '../../../../../../../components/typography'
 import { getPath } from '../../../../../../../constants'
 import { UseModalReturn } from '../../../../../../../hooks/useModal'
-import { MobileViews, useProjectContext } from '../../../../../context'
+import { CardLayout, CardLayoutProps } from '../../../../../../../shared/components/layouts'
+import { Modal } from '../../../../../../../shared/components/layouts'
+import { useProjectContext } from '../../../../../context'
 
 export const ProjectCreatorModal = (props: UseModalReturn) => {
   const { t } = useTranslation()

@@ -1,12 +1,4 @@
-export const ColorsAppLight = {
-  light80: 'rgba(252, 252, 252, 0.8)',
-  dark50: 'rgba(20, 26, 25, 0.5)',
-}
-
-export const ColorsAppDark = {
-  light80: 'rgba(20, 26, 25, 0.8)',
-  dark50: 'rgba(20, 26, 25, 0.5)',
-}
+import { darkPalette, lightPalette } from './palette'
 
 export const neutralColorsLight = {
   0: '#FCFCFC',
@@ -120,6 +112,105 @@ export const socialColorsDark = {
   lightning: '#FDB848',
 }
 
+export const utilColors = {
+  light: {
+    pbg: '#FFFFFF',
+    surface: '#FFFFFF',
+    primarySurface: 'rgba(0, 225, 180, 0.07)',
+    overlay: 'rgba(25, 21, 1, 0.29)',
+    primaryContrast: '#FFFFFF',
+    whiteContrast: '#FFFFFF',
+    blackContrast: '#1C2024',
+    text: '#21201C',
+  },
+  dark: {
+    pbg: '#111110',
+    surface: '#00000040',
+    primarySurface: 'rgba(0, 249, 203, 0.04)',
+    overlay: 'rgba(0, 0, 0, 0.75)',
+    primaryContrast: '#FFFFFF',
+    whiteContrast: '#FFFFFF',
+    blackContrast: '#1C2024',
+    text: '#FFFFFF',
+  },
+}
+
+export const panelColors = {
+  light: {
+    default: 'rgba(255, 255, 255, 0.8)',
+    solid: '#FFFFFF',
+    translucent: 'rgba(255, 255, 255, 0.8)',
+  },
+  dark: {
+    default: 'rgba(29, 29, 33, 0.7)',
+    solid: '#191918',
+    translucent: 'rgba(29, 29, 33, 0.7)',
+  },
+}
+
+export const overlayColors = {
+  light: {
+    black: {
+      1: 'rgba(0, 0, 0, 0.05000000074505806)',
+      2: 'rgba(0, 0, 0, 0.10000000149011612)',
+      3: 'rgba(0, 0, 0, 0.15000000596046448)',
+      4: 'rgba(0, 0, 0, 0.20000000298023224)',
+      5: 'rgba(0, 0, 0, 0.30000001192092896)',
+      6: 'rgba(0, 0, 0, 0.4000000059604645)',
+      7: 'rgba(0, 0, 0, 0.5)',
+      8: 'rgba(0, 0, 0, 0.6000000238418579)',
+      9: 'rgba(0, 0, 0, 0.699999988079071)',
+      10: 'rgba(0, 0, 0, 0.800000011920929)',
+      11: 'rgba(0, 0, 0, 0.8999999761581421)',
+      12: 'rgba(0, 0, 0, 0.949999988079071)',
+    },
+    white: {
+      1: 'rgba(1,1,1,0.05000000074505806)',
+      2: 'rgba(1,1,1,0.10000000149011612)',
+      3: 'rgba(1,1,1,0.15000000596046448)',
+      4: 'rgba(1,1,1,0.20000000298023224)',
+      5: 'rgba(1,1,1,0.30000001192092896)',
+      6: 'rgba(1,1,1,0.4000000059604645)',
+      7: 'rgba(1,1,1,0.5)',
+      8: 'rgba(1,1,1,0.6000000238418579)',
+      9: 'rgba(1,1,1,0.699999988079071)',
+      10: 'rgba(1,1,1,0.800000011920929)',
+      11: 'rgba(1,1,1,0.8999999761581421)',
+      12: 'rgba(1,1,1,0.949999988079071)',
+    },
+  },
+  dark: {
+    black: {
+      1: 'rgba(0,0,0,0.05000000074505806)',
+      2: 'rgba(0,0,0,0.10000000149011612)',
+      3: 'rgba(0,0,0,0.15000000596046448)',
+      4: 'rgba(0,0,0,0.20000000298023224)',
+      5: 'rgba(0,0,0,0.30000001192092896)',
+      6: 'rgba(0,0,0,0.4000000059604645)',
+      7: 'rgba(0,0,0, 0.5)',
+      8: 'rgba(0,0,0,0.6000000238418579)',
+      9: 'rgba(0,0,0,0.699999988079071)',
+      10: 'rgba(0,0,0,0.800000011920929)',
+      11: 'rgba(0,0,0,0.8999999761581421)',
+      12: 'rgba(0,0,0,0.949999988079071)',
+    },
+    white: {
+      1: 'rgba(1,1,1,0.05000000074505806)',
+      2: 'rgba(1,1,1,0.10000000149011612)',
+      3: 'rgba(1,1,1,0.15000000596046448)',
+      4: 'rgba(1,1,1,0.20000000298023224)',
+      5: 'rgba(1,1,1,0.30000001192092896)',
+      6: 'rgba(1,1,1,0.4000000059604645)',
+      7: 'rgba(1,1,1,0.5)',
+      8: 'rgba(1,1,1,0.6000000238418579)',
+      9: 'rgba(1,1,1,0.699999988079071)',
+      10: 'rgba(1,1,1,0.800000011920929)',
+      11: 'rgba(1,1,1,0.8999999761581421)',
+      12: 'rgba(1,1,1,0.949999988079071)',
+    },
+  },
+}
+
 export const lightModeColors = {
   primary: primaryColorsLight,
   neutral: neutralColorsLight,
@@ -127,7 +218,18 @@ export const lightModeColors = {
   nostr: nostrColorsLight,
   secondary: secondaryColors,
   social: socialColors,
-  app: ColorsAppLight,
+
+  primary1: lightPalette.geyser,
+  primaryAlpha: lightPalette.geyserAlpha,
+  neutral1: lightPalette.sand,
+  neutralAlpha: lightPalette.sandAlpha,
+  error: lightPalette.red,
+  success: lightPalette.lime,
+  warning: lightPalette.amber,
+  info: lightPalette.sky,
+
+  utils: utilColors.light,
+  panel: panelColors.light,
 }
 
 export const darkModeColors = {
@@ -137,5 +239,16 @@ export const darkModeColors = {
   nostr: nostrColorsDark,
   secondary: secondaryColors,
   social: socialColorsDark,
-  app: ColorsAppDark,
+
+  primary1: darkPalette.geyser,
+  primaryAlpha: darkPalette.geyserAlpha,
+  neutral1: darkPalette.sand,
+  neutralAlpha: darkPalette.sandAlpha,
+  error: darkPalette.red,
+  success: darkPalette.lime,
+  warning: darkPalette.amber,
+  info: darkPalette.sky,
+
+  utils: utilColors.dark,
+  panel: panelColors.dark,
 }

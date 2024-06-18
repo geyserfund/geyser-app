@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next'
 import { MdModeEdit } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 
-import { CardLayout, SkeletonLayout } from '../../../../../../../components/layouts'
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
 import { getPath } from '../../../../../../../constants'
 import { MarkdownField } from '../../../../../../../forms/markdown/MarkdownField'
+import { CardLayout, SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { useProjectContext } from '../../../../../context'
 
 export const Story = () => {

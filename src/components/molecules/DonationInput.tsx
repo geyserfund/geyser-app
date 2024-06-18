@@ -31,7 +31,7 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
       borderColor: colors.primary[400],
       boxShadow: `0 0 0 1px ${colors.primary[500]}`,
     },
-    fontFamily: fonts.inter,
+    fontFamily: fonts.brand,
     fontWeight: 700,
     fontSize: '30px',
   },

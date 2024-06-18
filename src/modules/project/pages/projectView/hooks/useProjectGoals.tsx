@@ -4,7 +4,13 @@ import { useState } from 'react'
 import { MUTATION_UPDATE_PROJECT_GOAL_ORDERING } from '../../../../../graphql/mutations/project'
 import { QUERY_PROJECT_GOALS } from '../../../../../graphql/queries/goals'
 import { useModal } from '../../../../../hooks'
-import { ProjectGoal, ProjectGoals } from '../../../../../types'
+import {
+  ProjectGoal,
+  ProjectGoals,
+  ProjectGoalsQueryVariables,
+  useProjectGoalsLazyQuery,
+  useProjectGoalsQuery,
+} from '../../../../../types'
 
 type ResponseData = {
   projectGoals: ProjectGoals
@@ -30,7 +36,7 @@ export const useProjectGoals = (projectId: string | number | undefined) => {
   const [completedGoals, setCompletedGoals] = useState<ProjectGoal[]>()
   const [hasGoals, setHasGoals] = useState(false)
 
-  const { refetch } = useQuery<ResponseData>(QUERY_PROJECT_GOALS, {
+  useProjectGoalsQuery({
     variables: { projectId },
     skip: !projectId,
     notifyOnNetworkStatusChange: true,
@@ -47,6 +53,10 @@ export const useProjectGoals = (projectId: string | number | undefined) => {
         setHasGoals(true)
       }
     },
+  })
+
+  const { refetch } = useQuery<ResponseData, ProjectGoalsQueryVariables>(QUERY_PROJECT_GOALS, {
+    variables: { projectId },
   })
 
   const [updateProjectGoalOrdering] = useMutation(MUTATION_UPDATE_PROJECT_GOAL_ORDERING, {

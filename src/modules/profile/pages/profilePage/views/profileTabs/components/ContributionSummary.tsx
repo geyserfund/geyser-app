@@ -1,11 +1,11 @@
 import { Box, HStack, Image, VStack } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
-import { CardLayout } from '../../../../../../../components/layouts'
 import { SatsAmount, TransactionTime } from '../../../../../../../components/molecules'
 import { Body2, H3 } from '../../../../../../../components/typography'
 import { ImageWithReload } from '../../../../../../../components/ui'
 import { getPath } from '../../../../../../../constants'
+import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { toSmallImageUrl } from '../../../../../../../utils'
 import {
   FunderInsideUserContributionsFragment,

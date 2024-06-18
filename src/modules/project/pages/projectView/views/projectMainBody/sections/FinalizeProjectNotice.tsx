@@ -2,8 +2,8 @@ import { Button, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { CardLayout } from '../../../../../../../components/layouts'
 import { getPath } from '../../../../../../../constants'
+import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { useProjectContext } from '../../../../../context'
 
 export const FinalizeProjectNotice = () => {

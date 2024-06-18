@@ -2,8 +2,8 @@ import { Box } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 
-import { Modal } from '../../../../../../../../../components/layouts'
 import { useModal } from '../../../../../../../../../hooks/useModal'
+import { Modal } from '../../../../../../../../../shared/components/layouts'
 import { InfoScreenFeed } from '../views/InfoScreenFeed'
 
 export const useProjectFundersModal = () => {
@@ -45,9 +45,7 @@ export const ProjectFundersModal = ({ ...props }: Props) => {
 
   return (
     <Modal title={t(' ')} size={'lg'} {...props}>
-      <Box className={classes.detailsContainer}>
-        <InfoScreenFeed id={'modal'} isBounded />
-      </Box>
+      <Box className={classes.detailsContainer}>{/* <InfoScreenFeed id={'modal'} isBounded /> */}</Box>
     </Modal>
   )
 }

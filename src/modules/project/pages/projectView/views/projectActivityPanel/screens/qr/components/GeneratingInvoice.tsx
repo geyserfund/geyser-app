@@ -3,8 +3,8 @@ import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IoMdRefresh } from 'react-icons/io'
 
-import { SkeletonLayout } from '../../../../../../../../../components/layouts'
 import { Body2 } from '../../../../../../../../../components/typography'
+import { SkeletonLayout } from '../../../../../../../../../shared/components/layouts'
 import { QRCodeSizeMap } from './QRCodeComponent'
 
 const FUNDING_REQUEST_TIMEOUT = 45_000

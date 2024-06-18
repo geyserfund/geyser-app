@@ -1,10 +1,10 @@
 import { Box } from '@chakra-ui/react'
 import { Emoji, EmojiStyle } from 'emoji-picker-react'
-import { Controller, FieldValues, UseControllerProps } from 'react-hook-form'
+import { Controller, UseControllerProps } from 'react-hook-form'
 
 import { AddEmojiIcon } from '../icons/svg/AddEmojiIcon'
 
-type Props = UseControllerProps<FieldValues> & {
+type Props = UseControllerProps<any, any> & {
   isDisabled?: boolean
   onOpenEmojiPicker: () => void
 }

@@ -6,8 +6,8 @@ import { useState } from 'react'
 import DatePicker from 'react-datepicker'
 import { useTranslation } from 'react-i18next'
 
-import { Modal } from '../../../../../../../../../components/layouts'
 import { Body1 } from '../../../../../../../../../components/typography'
+import { Modal } from '../../../../../../../../../shared/components/layouts'
 import { getDownloadUrl } from './helpers'
 
 interface DateSelectModalProps {

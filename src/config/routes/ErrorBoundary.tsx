@@ -76,6 +76,6 @@ export const ErrorBoundary = () => {
       })
     }
   }, [e, updateServiceWorker])
-
+  console.log('checking error boundary error', e)
   return <NotFoundPage />
 }

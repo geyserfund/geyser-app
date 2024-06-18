@@ -2,9 +2,9 @@ import { Box, Button, HStack, Image, ModalProps, VStack } from '@chakra-ui/react
 import { useTranslation } from 'react-i18next'
 import { PiSealCheckBold } from 'react-icons/pi'
 
-import { Modal } from '../../../../../components/layouts/Modal'
 import { Body1 } from '../../../../../components/typography'
 import { ProjectLaunchedImageUrl } from '../../../../../constants'
+import { Modal } from '../../../../../shared/components/layouts/Modal'
 import { useCustomTheme } from '../../../../../utils'
 import { useProjectContext } from '../../../context'
 

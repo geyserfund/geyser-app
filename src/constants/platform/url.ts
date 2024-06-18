@@ -8,6 +8,7 @@ export const GrantsUrl = 'https://geyser.fund/grants'
 export const FAQUrl = 'https://geyser.notion.site/Geyser-FAQs-310e7900fa904732b9b64043831edec3'
 export const GuideUrl = 'https://guide.geyser.fund/'
 export const FeedbackUrl = 'https://geyser.steelsync.io/feedback'
+export const GeyserAboutUrl = 'https://geyser.fund/about'
 
 // Geyser footer Links
 

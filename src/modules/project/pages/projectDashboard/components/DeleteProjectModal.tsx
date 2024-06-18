@@ -2,8 +2,8 @@ import { Alert, AlertIcon, Button, Checkbox, Text, VStack } from '@chakra-ui/rea
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Modal } from '../../../../../components/layouts/Modal'
 import { UseModalReturn } from '../../../../../hooks/useModal'
+import { Modal } from '../../../../../shared/components/layouts/Modal'
 
 export const DeleteProjectModal = ({
   onConfirm,

@@ -2,10 +2,10 @@ import { Avatar, Box, ButtonProps, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useMatch, useNavigate } from 'react-router-dom'
 
-import { CardLayout, CardLayoutProps } from '../../../components/layouts'
 import { ButtonComponent } from '../../../components/ui'
 import { getPath } from '../../../constants'
 import { useActivitySubsciptionContext, useAuthContext, useFilterContext } from '../../../context'
+import { CardLayout, CardLayoutProps } from '../../../shared/components/layouts'
 
 type TabBarProps = CardLayoutProps
 

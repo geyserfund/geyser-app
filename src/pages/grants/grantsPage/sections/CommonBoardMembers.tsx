@@ -1,7 +1,6 @@
 import { Box, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { fonts } from '../../../../styles'
 import { GrantBoardMember } from '../../../../types'
 import { BoardMembers } from '../../components/BoardMembers'
 
@@ -10,7 +9,7 @@ export const CommonBoardMembers = ({ members }: { members: GrantBoardMember[] })
   return (
     <VStack w={'full'} alignItems={'start'} paddingX={'10px'}>
       <Box my={4}>
-        <Text fontFamily={fonts.interBlack} fontSize="24px" fontWeight={'bold'}>
+        <Text fontSize="24px" fontWeight={'bold'}>
           {t('Principled Bitcoiners Board')}
         </Text>
         <Text color={'neutral.600'} fontWeight="600">

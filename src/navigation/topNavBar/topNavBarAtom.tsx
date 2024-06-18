@@ -10,8 +10,7 @@ import {
   routeMatchForAtom,
 } from '../../config/routes/routesAtom'
 import { getPath, PathName } from '../../constants'
-import { projectSideNavAtom } from '../../modules/project/pages/projectView/views/projectNavigation/sideNav'
-import { profileSideNavAtom } from '../profileRightSideNav'
+import { profileSideNavAtom } from '../../modules/navigation/profileNav/profileSideNavAtom'
 
 const routesForHidingTopNav = entryCreationRoutes
 const routesForHidingTopNavAtom = atom(routeMatchForAtom(routesForHidingTopNav))
@@ -62,10 +61,11 @@ const routesToShowSignInButtonAtom = atom(routeMatchForAtom(routesToShowSignInBu
 
 const topNavBarAnimateAtom = atom((get) => {
   const profileSidebar = get(profileSideNavAtom)
-  const projectSidebar = get(projectSideNavAtom)
+  // const projectSidebar = get(projectSideNavAtom)
   return {
     right: profileSidebar.open,
-    left: projectSidebar.open,
+    left: false,
+    // left: projectSidebar.open,
   }
 })
 export const useTopNavBarAnimate = () => useAtomValue(topNavBarAnimateAtom)

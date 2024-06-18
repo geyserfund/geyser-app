@@ -1,9 +1,9 @@
 import { Avatar, Stack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout } from '../../../components/layouts'
 import { Body1, H1, H3 } from '../../../components/typography'
 import { bradUrl, joeNakamotoUrl, paulIIIUrl } from '../../../constants'
+import { CardLayout } from '../../../shared/components/layouts'
 import { LaunchYourProjectButton } from './LaunchYourProjectButton'
 
 const CardContent = [

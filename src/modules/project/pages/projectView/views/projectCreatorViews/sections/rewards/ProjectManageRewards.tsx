@@ -1,6 +1,6 @@
 import { VStack } from '@chakra-ui/react'
 
-import { CardLayout } from '../../../../../../../../components/layouts'
+import { CardLayout } from '../../../../../../../../shared/components/layouts'
 import { standardPadding } from '../../../../../../../../styles'
 import { RewardsHeader, RewardsTable } from './components'
 

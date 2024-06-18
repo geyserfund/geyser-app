@@ -1,7 +1,6 @@
 import { Button, Link, Stack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout, LandingCardBaseSkeleton } from '../../../../components/layouts'
 import { Body1, H3 } from '../../../../components/typography'
 import { BetaBox } from '../../../../components/ui'
 import {
@@ -9,6 +8,7 @@ import {
   projectsWithSubscriptionInLandingPageGeyserIds,
   subscriptionJoinUrl,
 } from '../../../../constants'
+import { CardLayout, LandingCardBaseSkeleton } from '../../../../shared/components/layouts'
 import { useProjectsForSubscriptionQuery } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { LandingSubscriptionCard } from '../../components'

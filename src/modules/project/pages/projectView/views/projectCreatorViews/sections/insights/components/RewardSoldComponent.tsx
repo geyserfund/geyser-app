@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout } from '../../../../../../../../../components/layouts'
 import { Body1, H3 } from '../../../../../../../../../components/typography'
+import { CardLayout } from '../../../../../../../../../shared/components/layouts'
 import { useProjectRewardSoldGraphStatsGetLazyQuery } from '../../../../../../../../../types'
 import { useNotification } from '../../../../../../../../../utils'
 import { useProjectContext } from '../../../../../../../context'

@@ -2,9 +2,9 @@ import { Box, Stack, Tab, TabList, TabPanel, TabPanels, TabProps, Tabs, Tooltip 
 import { useTranslation } from 'react-i18next'
 import { IoMdLock } from 'react-icons/io'
 
-import { SkeletonLayout, StickToTop } from '../../../../../../../components/layouts'
 import { dimensions, ID } from '../../../../../../../constants'
 import { MobileDivider } from '../../../../../../../pages/grants/components'
+import { SkeletonLayout, StickToTop } from '../../../../../../../shared/components/layouts'
 import { useCustomTheme, useMobileMode } from '../../../../../../../utils'
 
 interface TabComponentProps {

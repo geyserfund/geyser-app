@@ -6,12 +6,12 @@ import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 import { SingleValue } from 'react-select'
 
-import { SkeletonLayout } from '../../../components/layouts'
 import { Body1 } from '../../../components/typography'
 import { IconButtonComponent, SelectComponent } from '../../../components/ui'
 import { AppTheme } from '../../../context'
 import { FieldContainer } from '../../../forms/components/FieldContainer'
 import { QUERY_COUNTRIES, QUERY_REGION } from '../../../graphql/queries'
+import { SkeletonLayout } from '../../../shared/components/layouts'
 import {
   Country,
   Location,

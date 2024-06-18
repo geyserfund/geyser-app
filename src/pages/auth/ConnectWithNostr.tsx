@@ -1,4 +1,5 @@
 import { Box, Button, IconButton } from '@chakra-ui/react'
+import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -8,13 +9,16 @@ import { useNostrExtensonLogin } from '../../hooks/useNostrExtensionLogin'
 import { isAccountDuplicateError } from '../../utils'
 import { FailedToConnectAccount } from './components/FailedToConnectAccount'
 import { NostrHelpModal } from './components/NostrHelpModal'
-import { ConnectWithButtonProps } from './type'
+import { loginMethodAtom } from './state'
+import { ConnectWithButtonProps, ExternalAccountType } from './type'
 import { useAuthToken, useCanLogin } from './useAuthToken'
 
 export const ConnectWithNostr = ({ onClose, isIconOnly, ...rest }: Omit<ConnectWithButtonProps, 'accountType'>) => {
   useAuthToken()
 
   const canLogin = useCanLogin()
+
+  const setLoginMethod = useSetAtom(loginMethodAtom)
 
   const { connect, error, clearError } = useNostrExtensonLogin()
 
@@ -30,6 +34,7 @@ export const ConnectWithNostr = ({ onClose, isIconOnly, ...rest }: Omit<ConnectW
 
     try {
       await connect()
+      setLoginMethod(ExternalAccountType.nostr)
     } finally {
       onClose?.()
     }

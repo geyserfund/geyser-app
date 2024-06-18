@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_ENTRY_FOR_PROJECT } from '../fragments/entries'
 import {
   FRAGMENT_PROJECT,
   FRAGMENT_PROJECT_FOR_LANDING_PAGE,
@@ -96,16 +95,6 @@ export const QUERY_PROJECTS_SUMMARY = gql`
       fundedTotal
       fundersCount
       projectsCount
-    }
-  }
-`
-export const QUERY_PROJECT_UNPUBLISHED_ENTRIES = gql`
-  ${FRAGMENT_ENTRY_FOR_PROJECT}
-  query ProjectUnplublishedEntries($where: UniqueProjectQueryInput!) {
-    projectGet(where: $where) {
-      entries: entries(input: { where: { published: false } }) {
-        ...EntryForProject
-      }
     }
   }
 `

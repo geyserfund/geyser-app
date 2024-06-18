@@ -1,9 +1,9 @@
 import { Button, HStack, Input, SkeletonCircle, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { SkeletonLayout } from '../../../../../components/layouts'
 import { H3 } from '../../../../../components/typography'
 import { TextArea } from '../../../../../components/ui'
+import { SkeletonLayout } from '../../../../../shared/components/layouts'
 import { useNotification } from '../../../../../utils'
 import { useUserProfileAtomValue } from '../../../state'
 import { EditableAvatar } from '../../profilePage/components'

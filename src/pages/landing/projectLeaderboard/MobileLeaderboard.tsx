@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { CardLayout, StickToTop } from '../../../components/layouts'
 import { H2 } from '../../../components/typography'
 import { ButtonComponent } from '../../../components/ui'
 import { getPath, ID } from '../../../constants'
+import { CardLayout, StickToTop } from '../../../shared/components/layouts'
 import { LeaderboardAllTime, LeaderboardThisWeek } from './views'
 
 enum LeaderboardTabs {

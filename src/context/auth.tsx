@@ -1,10 +1,10 @@
 import { ApolloError } from '@apollo/client'
-import { useAtom, useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 
 import { getAuthEndPoint } from '../config/domain'
 import { defaultUser } from '../defaults'
-import { authUserAtom, followedProjectsAtom, useIsUserAProjectCreatorValue } from '../pages/auth/state/authAtom'
+import { authUserAtom, followedProjectsAtom, isUserAProjectCreatorAtom } from '../pages/auth/state/authAtom'
 import { useMeLazyQuery, useMeProjectFollowsLazyQuery, UserMeFragment } from '../types'
 
 const defaultContext: AuthContextProps = {
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [user, setUser] = useAtom(authUserAtom)
   const setFollowedProjects = useSetAtom(followedProjectsAtom)
-  const isUserAProjectCreator = useIsUserAProjectCreatorValue()
+  const isUserAProjectCreator = useAtomValue(isUserAProjectCreatorAtom)
 
   const authServiceEndPoint = getAuthEndPoint()
 

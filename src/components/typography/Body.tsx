@@ -14,7 +14,7 @@ export const Body1 = ({ children, bold, semiBold, xBold, ...rest }: BodyProps) =
     <Text
       fontSize={{ base: '14px', lg: '16px' }}
       fontWeight={xBold ? 700 : bold ? 600 : semiBold ? 500 : 'inherited'}
-      fontFamily={fonts.inter}
+      fontFamily={fonts.brand}
       {...rest}
     >
       {children}
@@ -27,7 +27,7 @@ export const Body2 = ({ children, bold, semiBold, xBold, ...rest }: BodyProps) =
     <Text
       fontSize={{ base: '12px', lg: '14px' }}
       fontWeight={xBold ? 700 : bold ? 600 : semiBold ? 500 : 'inherited'}
-      fontFamily={fonts.inter}
+      fontFamily={fonts.brand}
       {...rest}
     >
       {children}
@@ -40,7 +40,7 @@ export const Caption = ({ children, bold, semiBold, xBold, ...rest }: BodyProps)
     <Text
       fontSize="10px"
       fontWeight={xBold ? 700 : bold ? 600 : semiBold ? 500 : 'inherited'}
-      fontFamily={fonts.inter}
+      fontFamily={fonts.brand}
       {...rest}
     >
       {children}

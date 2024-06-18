@@ -14,6 +14,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
+import { useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { QRCode } from 'react-qrcode-logo'
@@ -29,7 +30,8 @@ import { defaultUser } from '../../defaults'
 import { lightModeColors } from '../../styles'
 import { User } from '../../types'
 import { copyTextToClipboard, useMobileMode, useNotification } from '../../utils'
-import { ConnectWithButtonProps } from './type'
+import { loginMethodAtom } from './state'
+import { ConnectWithButtonProps, ExternalAccountType } from './type'
 
 type LNURLResponse =
   | {
@@ -127,6 +129,7 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
   const { login } = useAuthContext()
 
   const authServiceEndPoint = getAuthEndPoint()
+  const setLoginMethod = useSetAtom(loginMethodAtom)
 
   const [qrContent, setQrContent] = useState('')
   const [copy, setcopy] = useState(false)
@@ -222,6 +225,7 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
 
           if (userData) {
             login({ ...defaultUser, ...userData.user })
+            setLoginMethod(ExternalAccountType.lightning)
             onClose()
           }
         })
