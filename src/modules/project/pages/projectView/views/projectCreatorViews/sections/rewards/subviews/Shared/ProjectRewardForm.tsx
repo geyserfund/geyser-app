@@ -16,7 +16,7 @@ import {
   UpdateCurrencyModal,
 } from '../../../../../../../../../../components/molecules'
 import { ImageCrop } from '../../../../../../../../../../components/molecules/ImageCropperModal'
-import { Body1, MonoBody1 } from '../../../../../../../../../../components/typography'
+import { Body1 } from '../../../../../../../../../../components/typography'
 import { TextArea, TextInputBox, UploadBox } from '../../../../../../../../../../components/ui'
 import { ProjectRewardValidations } from '../../../../../../../../../../constants'
 import { FieldContainer } from '../../../../../../../../../../forms/components/FieldContainer'
@@ -541,11 +541,11 @@ export const ProjectRewardForm = ({
             </Checkbox>
             {reward.hasShipping ? (
               <VStack pl={2} spacing={2} borderLeft="2px solid" borderColor="primary.400" align={'flex-start'}>
-                <MonoBody1 fontWeight={500}>
+                <Body1 fontWeight={500}>
                   {t(
                     'To maintain their privacy, we ask reward buyers to email you their shipping details directly to your email. Make sure your email is up to date):',
                   )}
-                </MonoBody1>
+                </Body1>
 
                 <CreatorEmailButton email={ownerEmail} />
               </VStack>
