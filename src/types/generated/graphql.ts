@@ -4088,6 +4088,11 @@ export type PaginationFragment = { __typename?: 'CursorPaginationResponse', take
 
 export type ProjectCommunityVoteGrantFragment = { __typename?: 'CommunityVoteGrant', id: any, status: GrantStatusEnum };
 
+export type ProjectGrantApplicationsFragment = { __typename?: 'Project', grantApplications: Array<{ __typename?: 'GrantApplicant', id: any, status: GrantApplicantStatus, grant: { __typename?: 'BoardVoteGrant' } | (
+      { __typename?: 'CommunityVoteGrant' }
+      & ProjectCommunityVoteGrantFragment
+    ) }> };
+
 export type ProjectNostrKeysFragment = { __typename?: 'Project', id: any, name: string, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', privateKey?: { __typename?: 'NostrPrivateKey', nsec: string } | null, publicKey: { __typename?: 'NostrPublicKey', npub: string } } } };
 
 export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } }> };
@@ -4098,7 +4103,8 @@ export type ProjectRewardForLandingPageFragment = { __typename?: 'ProjectReward'
 
 export type ProjectRewardForCreateUpdateFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, cost: number, image?: string | null, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null };
 
-export type ProjectFragment = { __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, defaultGoalId?: any | null, balance: number, balanceUsdCent: number, createdAt: string, updatedAt: string, image?: string | null, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, fundingTxsCount?: number | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, owners: Array<{ __typename?: 'Owner', id: any, user: (
+export type ProjectFragment = (
+  { __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, defaultGoalId?: any | null, balance: number, balanceUsdCent: number, createdAt: string, updatedAt: string, image?: string | null, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, fundingTxsCount?: number | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, owners: Array<{ __typename?: 'Owner', id: any, user: (
       { __typename?: 'User' }
       & ProjectOwnerUserFragment
     ) }>, rewards: Array<(
@@ -4116,10 +4122,9 @@ export type ProjectFragment = { __typename?: 'Project', id: any, title: string, 
   )>, wallets: Array<(
     { __typename?: 'Wallet' }
     & ProjectWalletFragment
-  )>, followers: Array<{ __typename?: 'User', id: any, username: string }>, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', npub: string } } }, grantApplications: Array<{ __typename?: 'GrantApplicant', id: any, status: GrantApplicantStatus, grant: { __typename?: 'BoardVoteGrant' } | (
-      { __typename?: 'CommunityVoteGrant' }
-      & ProjectCommunityVoteGrantFragment
-    ) }> };
+  )>, followers: Array<{ __typename?: 'User', id: any, username: string }>, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', npub: string } } } }
+  & ProjectGrantApplicationsFragment
+);
 
 export type ProjectForSubscriptionFragment = { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: (
       { __typename?: 'User' }
@@ -5562,6 +5567,17 @@ export const ProjectCommunityVoteGrantFragmentDoc = gql`
   status
 }
     `;
+export const ProjectGrantApplicationsFragmentDoc = gql`
+    fragment ProjectGrantApplications on Project {
+  grantApplications {
+    id
+    status
+    grant {
+      ...ProjectCommunityVoteGrant
+    }
+  }
+}
+    ${ProjectCommunityVoteGrantFragmentDoc}`;
 export const ProjectFragmentDoc = gql`
     fragment Project on Project {
   id
@@ -5634,20 +5650,14 @@ export const ProjectFragmentDoc = gql`
       }
     }
   }
-  grantApplications {
-    id
-    status
-    grant {
-      ...ProjectCommunityVoteGrant
-    }
-  }
+  ...ProjectGrantApplications
 }
     ${ProjectOwnerUserFragmentDoc}
 ${ProjectRewardForCreateUpdateFragmentDoc}
 ${UserForAvatarFragmentDoc}
 ${EntryForProjectFragmentDoc}
 ${ProjectWalletFragmentDoc}
-${ProjectCommunityVoteGrantFragmentDoc}`;
+${ProjectGrantApplicationsFragmentDoc}`;
 export const UserMeFragmentDoc = gql`
     fragment UserMe on User {
   id
