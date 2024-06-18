@@ -36,11 +36,15 @@ export const ProjectCreateRewards = () => {
     navigate(getPath('launchProjectStory', project?.id))
   }
 
+  const noRewards = project?.rewards?.length === 0
+
   return (
     <ProjectProvider projectId={project?.name || ''}>
       <ProjectCreateLayout
         title={<TitleWithProgressBar title={t('Add Rewards')} subtitle={t('Create a project')} index={4} length={5} />}
-        continueButton={!isCreatingOrEditing && <FormContinueButton flexGrow={1} onClick={handleNext} />}
+        continueButton={
+          !isCreatingOrEditing && <FormContinueButton isSkip={noRewards} flexGrow={1} onClick={handleNext} />
+        }
         isNestedProcess={Boolean(isCreatingOrEditing)}
         onBackClick={handleBack}
         maxW="3xl"
