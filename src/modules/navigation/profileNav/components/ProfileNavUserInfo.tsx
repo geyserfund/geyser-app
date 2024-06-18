@@ -1,9 +1,7 @@
 import { Avatar, Button, HStack, VStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
 
-import { getPath } from '../../../../constants'
 import { ExternalAccountType } from '../../../../pages/auth'
 import { loginMethodAtom } from '../../../../pages/auth/state'
 import { Body } from '../../../../shared/components/typography'

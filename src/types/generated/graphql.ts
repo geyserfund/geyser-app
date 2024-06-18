@@ -5155,10 +5155,7 @@ export type WalletLimitQueryVariables = Exact<{
 }>;
 
 
-export type WalletLimitQuery = { __typename?: 'Query', getWallet: { __typename?: 'Wallet', limits?: (
-      { __typename?: 'WalletLimits' }
-      & WalletLimitsFragment
-    ) | null } };
+export type WalletLimitQuery = { __typename?: 'Query', getWallet: { __typename?: 'Wallet', limits?: { __typename?: 'WalletLimits', contribution?: { __typename?: 'WalletContributionLimits', max?: number | null, min?: number | null } | null } | null } };
 
 export type ActivityCreatedSubscriptionVariables = Exact<{
   input?: InputMaybe<ActivityCreatedSubscriptionInput>;
@@ -10058,11 +10055,14 @@ export const WalletLimitDocument = gql`
     query WalletLimit($getWalletId: BigInt!) {
   getWallet(id: $getWalletId) {
     limits {
-      ...WalletLimits
+      contribution {
+        max
+        min
+      }
     }
   }
 }
-    ${WalletLimitsFragmentDoc}`;
+    `;
 
 /**
  * __useWalletLimitQuery__

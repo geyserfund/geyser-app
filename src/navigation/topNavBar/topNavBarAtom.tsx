@@ -64,6 +64,7 @@ const topNavBarAnimateAtom = atom((get) => {
   // const projectSidebar = get(projectSideNavAtom)
   return {
     right: profileSidebar.open,
+    left: false,
     // left: projectSidebar.open,
   }
 })
