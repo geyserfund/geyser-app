@@ -45,11 +45,20 @@ export const CommunityVoting = ({
   let sortedApplicants = applicants
 
   if (user) {
-    sortedApplicants = applicants.sort((a, b) => {
-      const aFundedByUser = a.contributors.some((contributor) => contributor.user?.id === user?.id) ? 1 : 0
-      const bFundedByUser = b.contributors.some((contributor) => contributor.user?.id === user?.id) ? 1 : 0
-      return bFundedByUser - aFundedByUser
+    const userId = user.id
+    const contributedApplicants: Array<GrantApplicant> = []
+    const nonContributedApplicants: Array<GrantApplicant> = []
+
+    applicants.forEach((applicant) => {
+      const hasUserContributed = applicant.contributors.some((contributor) => contributor.user?.id === userId)
+      if (hasUserContributed) {
+        contributedApplicants.push(applicant)
+      } else {
+        nonContributedApplicants.push(applicant)
+      }
     })
+
+    sortedApplicants = [...contributedApplicants, ...nonContributedApplicants]
   }
 
   const canVote = grantHasVoting && grantStatus === GrantStatusEnum.FundingOpen
