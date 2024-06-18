@@ -1,6 +1,6 @@
 import { IconButton, SkeletonText } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { BiPencil } from 'react-icons/bi'
+import { MdModeEdit } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
@@ -33,7 +33,7 @@ export const Story = () => {
                 onClick={() => project && navigate(getPath('dashboardStory', project.name))}
                 variant="transparent"
               >
-                <BiPencil />
+                <MdModeEdit fontSize={16} />
               </IconButton>
             ) : undefined
           }

@@ -1,7 +1,7 @@
 import { GridItem, IconButton, SimpleGrid, Text, useBreakpoint } from '@chakra-ui/react'
 import { forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BsPencilFill } from 'react-icons/bs'
+import { MdModeEdit } from 'react-icons/md'
 import { Link, useLocation } from 'react-router-dom'
 
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
@@ -76,7 +76,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
       as={Link}
       to={getPath('projectManageRewards', project.name)}
       variant="ghost"
-      icon={<BsPencilFill />}
+      icon={<MdModeEdit fontSize={16} />}
     />
   ) : undefined
 

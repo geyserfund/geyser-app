@@ -22,6 +22,7 @@ export const FRAGMENT_PROJECT_OWNER_USER = gql`
     externalAccounts {
       ...ExternalAccount
     }
+    hasSocialAccount
   }
 `
 
@@ -34,6 +35,7 @@ export const FRAGMENT_USER_ME = gql`
     email
     ranking
     isEmailVerified
+    hasSocialAccount
     externalAccounts {
       ...ExternalAccount
     }
@@ -84,6 +86,7 @@ export const FRAGMENT_FUNDER_WITH_USER = gql`
     user {
       id
       username
+      hasSocialAccount
       externalAccounts {
         externalId
         externalUsername

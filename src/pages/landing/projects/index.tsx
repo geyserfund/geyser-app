@@ -1,13 +1,13 @@
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { SortType, useFilterContext } from '../../../context'
+import { useFilterContext } from '../../../context'
 import { StickToTop } from '../../../shared/components/layouts'
 import { useMobileMode } from '../../../utils'
 import { checkIfRenderFilter } from '../../../utils/helpers'
 import { FilterBySearch } from '../filters/FilterBySearch'
 import { MobileTopBar } from '../filters/mobile/MobileTopBar'
-import { DefaultView, PaginatedView, TrendingView } from './views'
+import { DefaultView, PaginatedView } from './views'
 
 export const LandingPageProjects = () => {
   const { t } = useTranslation()
@@ -17,10 +17,6 @@ export const LandingPageProjects = () => {
 
   const renderView = useCallback(() => {
     if (checkIfRenderFilter(filters)) {
-      if (filters.sort === SortType.recent) {
-        return <TrendingView />
-      }
-
       return <PaginatedView />
     }
 

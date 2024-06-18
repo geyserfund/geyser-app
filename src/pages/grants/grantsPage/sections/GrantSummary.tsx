@@ -1,13 +1,14 @@
-import { Box, Image } from '@chakra-ui/react'
+import { Box, Image, ListItem, Tag, Text, UnorderedList, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { H1, H3 } from '../../../../components/typography'
 import { StatusLabel } from '../../../../components/ui/StatusLabel'
+import { Tooltip } from '../../../../components/ui/Tooltip'
 import { MarkdownField } from '../../../../forms/markdown/MarkdownField'
 import { validateImageUrl } from '../../../../forms/validations/image'
 import { VideoPlayer } from '../../../../modules/project/pages1/projectView/views/body/sections/header/components/VideoPlayer'
 import { CardLayout } from '../../../../shared/components/layouts'
-import { Grant } from '../../../../types'
+import { DistributionSystem, Grant, GrantType, VotingSystem } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
 import { ContributionsWidget } from '../../components/ContributionsWidget'
 import {
@@ -18,6 +19,16 @@ import {
 } from '../../constants'
 
 const CUSTOM_VIDEO_URL = 'https://youtu.be/xemVDGbQwHs'
+
+const GRANT_TYPE = {
+  [GrantType.BoardVote]: 'Board-voting grant',
+  [GrantType.CommunityVote]: 'Community-voting grant',
+}
+
+const GRANT_DISTRIBUTION_SYSTEM = {
+  [DistributionSystem.Proportional]: 'Proportional',
+  [DistributionSystem.WinnerTakeAll]: 'Winner-take-all',
+}
 
 export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHasVoting?: boolean }) => {
   const { t } = useTranslation()
@@ -55,6 +66,83 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
     return null
   }
 
+  const votingSystemTooltipContent = () => {
+    if (grant.type === GrantType.BoardVote) {
+      return null
+    }
+
+    if (grant?.__typename === 'CommunityVoteGrant' && grant.votingSystem === VotingSystem.OneToOne) {
+      return (
+        <VStack px={2} py={4} alignItems="flex-start" gap={2}>
+          <Text>
+            {t('This grant uses ')}
+            <Text as="i">{t('Proportional Voting')}</Text>
+            {t(', where your vote’s impact is proportional to the amount of sats you send. This means:')}
+          </Text>
+          <UnorderedList mt={4} spacing={2}>
+            <ListItem>
+              <Text>{t('Each sat you send counts as a vote for the project.')}</Text>
+            </ListItem>
+            <ListItem>
+              <Text>{t('The more sats you send, the more influence you have on the project’s success.')}</Text>
+            </ListItem>
+            <ListItem>
+              <Text>{t('You can support multiple projects with your sats.')}</Text>
+            </ListItem>
+            <ListItem>
+              <Text>
+                {t('The total votes a project receives determines its funding proportionally to other projects.')}
+              </Text>
+            </ListItem>
+          </UnorderedList>
+        </VStack>
+      )
+    }
+
+    if (grant?.__typename === 'CommunityVoteGrant' && grant.votingSystem === VotingSystem.StepLog_10) {
+      return (
+        <VStack px={2} py={4} alignItems="flex-start" gap={2}>
+          <Text>
+            {t('This grant uses ')}
+            <Text as="i">{t('Incremental Voting')}</Text>
+            {t(', to ensure that all votes can make a difference. This means:')}
+          </Text>
+          <UnorderedList mt={4} spacing={2}>
+            <ListItem>
+              <Text>{t('You vote by sending sats')}</Text>
+            </ListItem>
+            <ListItem>
+              <Text>
+                {t(
+                  'You can send to a project multiple times, but each user gets to send a maximum of 3 votes per project.',
+                )}
+              </Text>
+            </ListItem>
+            <ListItem>
+              <Text>{t('You can send to multiple projects')}</Text>
+            </ListItem>
+            <ListItem>
+              <Text>
+                {t('The amount of votes you cast on a project depends on the cumulative amount of you send to it:')}
+              </Text>
+              <UnorderedList>
+                <ListItem>
+                  <Text> {t('From 1k to 10k sats = 1 vote')}</Text>
+                </ListItem>
+                <ListItem>
+                  <Text> {t('From 10k to 100k sats = 2 votes')}</Text>
+                </ListItem>
+                <ListItem>
+                  <Text> {t('Above 100k sats = 3 votes')}</Text>
+                </ListItem>
+              </UnorderedList>
+            </ListItem>
+          </UnorderedList>
+        </VStack>
+      )
+    }
+  }
+
   return (
     <CardLayout noborder={isMobile} padding={{ base: '10px', lg: 0 }}>
       {renderImageOrVideo()}
@@ -72,6 +160,19 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
           <H3 fontSize="18px">{t(grant.shortDescription)}</H3>
           <Box pt={4}>
             <MarkdownField preview content={grant.description || ''} />
+          </Box>
+          <Box display="flex" gap={5} pt={4}>
+            <Tooltip content={votingSystemTooltipContent()}>
+              <Tag border="1px solid" borderColor="neutral.200" bg="neutral.50">
+                {t(GRANT_TYPE[grant.type])}
+              </Tag>
+            </Tooltip>
+
+            {grant?.__typename === 'CommunityVoteGrant' && (
+              <Tag border="1px solid" borderColor="neutral.200" bg="neutral.50">
+                {t(GRANT_DISTRIBUTION_SYSTEM[grant.distributionSystem])}
+              </Tag>
+            )}
           </Box>
           <ContributionsWidget
             sponsors={grant.sponsors}

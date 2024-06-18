@@ -6,7 +6,6 @@ import { checkIfRenderFilter } from '../../../../utils/helpers'
 import { disableSortByTrending, getCurrentSelection } from './sortSelection'
 
 export enum SortOptions {
-  mostFundedThisWeek = 'Most funded this week',
   mostFundedAllTime = 'Most funded all time',
 }
 
@@ -49,7 +48,7 @@ export const SortBody = ({ isMobile }: { isMobile?: boolean }) => {
     }
   }
 
-  const sortList = [SortOptions.mostFundedThisWeek, SortOptions.mostFundedAllTime]
+  const sortList = [SortOptions.mostFundedAllTime]
 
   const renderButtons = disableSortByTrending(filters) ? sortList.slice(1) : sortList
 

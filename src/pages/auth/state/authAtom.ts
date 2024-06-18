@@ -12,6 +12,7 @@ export const defaultUser: UserMeFragment = {
   isEmailVerified: false,
   externalAccounts: [],
   ownerOf: [],
+  hasSocialAccount: false,
 }
 
 /** Primary user that is logged in */

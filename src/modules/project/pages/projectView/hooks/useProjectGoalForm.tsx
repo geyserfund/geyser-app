@@ -10,7 +10,7 @@ import {
   useProjectGoalCreateMutation,
   useProjectGoalUpdateMutation,
 } from '../../../../../types'
-import { dollarsToCents } from '../../../../../utils'
+import { dollarsToCents, useNotification } from '../../../../../utils'
 
 type FormValues = ProjectGoalCreateInput
 
@@ -78,6 +78,7 @@ export const useProjectGoalForm = (
 
   const enableSubmit = isDirty && isValid
 
+  const { toast } = useNotification()
   const [createProjectGoal, { loading: creating, error: createError }] = useProjectGoalCreateMutation()
   const [updateProjectGoal, { loading: updating, error: updateError }] = useProjectGoalUpdateMutation()
 
@@ -128,6 +129,13 @@ export const useProjectGoalForm = (
               emojiUnifiedCode: formData.emojiUnifiedCode,
             },
           },
+          onError(error) {
+            toast({
+              title: 'Error updating project goal',
+              description: error.message,
+              status: 'error',
+            })
+          },
         })
         if (data) {
           reset()
@@ -145,6 +153,13 @@ export const useProjectGoalForm = (
               projectId: formData.projectId,
               emojiUnifiedCode: formData.emojiUnifiedCode,
             },
+          },
+          onError(error) {
+            toast({
+              title: 'Error creating project goal',
+              description: error.message,
+              status: 'error',
+            })
           },
         })
         if (data) {

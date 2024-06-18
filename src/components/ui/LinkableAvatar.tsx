@@ -18,6 +18,7 @@ type Props = {
   fontSize?: number | string
   imageSize?: number | string
   showFullUsername?: boolean
+  underlineUsername?: boolean
 }
 
 export const LinkableAvatar = ({
@@ -30,6 +31,7 @@ export const LinkableAvatar = ({
   fontSize,
   imageSize = '30px',
   showFullUsername,
+  underlineUsername = true,
 }: Props) => {
   const isMedium = useMediumScreen()
   const isMobile = useMobileMode()
@@ -102,7 +104,7 @@ export const LinkableAvatar = ({
           icon={<FaUserCircle fontSize="25px" size={'1em'} />}
         />
 
-        <Body2 fontSize={fontSize} semiBold _hover={{ textDecoration: 'underline' }}>
+        <Body2 fontSize={fontSize} semiBold _hover={{ textDecoration: underlineUsername ? 'underline' : 'none' }}>
           {' '}
           {getFormattedUsername()}
         </Body2>
