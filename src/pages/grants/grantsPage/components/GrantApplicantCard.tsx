@@ -217,16 +217,7 @@ export const GrantApplicantCard = ({
   const renderButton = (project: Project) => {
     if (!isLoggedIn || !currentUser?.hasSocialAccount) {
       return (
-        <Button
-          onClick={onOpenLoginModal}
-          height="40px"
-          width="100%"
-          size="md"
-          textTransform="uppercase"
-          fontFamily={fonts.livvic}
-          fontSize="16px"
-          variant="primary"
-        >
+        <Button onClick={onOpenLoginModal} height="40px" width="100%" size="md" fontSize="16px" variant="primary">
           {t('Login to vote')}
         </Button>
       )
@@ -234,15 +225,7 @@ export const GrantApplicantCard = ({
 
     if (canVote && isLoggedIn && currentUser?.hasSocialAccount) {
       return (
-        <Button
-          onClick={onOpen}
-          height="40px"
-          width="100%"
-          size="md"
-          textTransform="uppercase"
-          fontFamily={fonts.livvic}
-          variant="primary"
-        >
+        <Button onClick={onOpen} height="40px" width="100%" size="md" variant="primary">
           {t('Vote')}
         </Button>
       )
@@ -250,7 +233,7 @@ export const GrantApplicantCard = ({
 
     if (grantStatus !== GrantStatusEnum.Closed) {
       return (
-        <Button as={Link} to={getPath('project', project.name)} size={'sm'} variant={'primary'}>
+        <Button as={Link} to={getPath('project', project.name)} size={'md'} variant={'primary'}>
           {t('View project')}
         </Button>
       )
@@ -291,12 +274,12 @@ export const GrantApplicantCard = ({
             pr={4}
             display="flex"
             flexDirection="column"
-            justifyContent="flex-end"
+            justifyContent="flex-start"
             alignItems="center"
             gap={5}
           >
-            {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
             {renderButton(project)}
+            {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
           </Box>
         )}
       </Box>
