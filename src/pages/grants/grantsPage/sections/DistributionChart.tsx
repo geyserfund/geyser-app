@@ -1,8 +1,10 @@
 import { Box, BoxProps, HStack, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 import { CardLayout } from '../../../../components/layouts'
 import { Caption, H3 } from '../../../../components/typography'
+import { getPath } from '../../../../constants'
 import { standardPadding } from '../../../../styles'
 import { GrantApplicant } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
@@ -12,9 +14,10 @@ const CHART_BAR_COLORS = ['primary.900', 'primary.700', 'primary.500', 'primary.
 interface Props {
   applicants: Array<GrantApplicant>
   isCompetitionVote: boolean
+  showAll?: boolean
 }
 
-export const DistributionChart = ({ applicants, isCompetitionVote }: Props) => {
+export const DistributionChart = ({ applicants, isCompetitionVote, showAll = true }: Props) => {
   const { t } = useTranslation()
 
   const total = applicants.reduce((prev, curr) => {
@@ -30,29 +33,29 @@ export const DistributionChart = ({ applicants, isCompetitionVote }: Props) => {
     communityFundingAmount: applicant.funding.communityFunding,
   }))
 
-  const maxPercentage = Math.max(...percentages.map((p) => p.percentage))
+  const sortedPercentages = percentages.sort((a, b) => b.percentage - a.percentage)
+  const displayedPercentages = showAll ? sortedPercentages : sortedPercentages.slice(0, 5)
+
+  const maxPercentage = Math.max(...displayedPercentages.map((p) => p.percentage))
 
   return (
     <CardLayout noMobileBorder p={standardPadding} w="full">
       <H3 fontSize={'18px'}>{t('Leaderboard')}</H3>
       {percentages.length > 0 && (
         <Box py={2}>
-          {percentages
-            .sort((a, b) => {
-              return a.percentage < b.percentage ? 1 : -1
-            })
-            .map(({ project, percentage, numberOfContributors, communityFundingAmount }, i) => (
-              <Item
-                key={project.id}
-                bg={CHART_BAR_COLORS[i] || CHART_BAR_COLORS[4]}
-                title={project.title}
-                percentage={percentage}
-                width={Math.trunc((percentage * 100) / maxPercentage)}
-                numberOfContributors={numberOfContributors}
-                isCompetitionVote={isCompetitionVote}
-                communityFundingAmount={communityFundingAmount}
-              />
-            ))}
+          {displayedPercentages.map(({ project, percentage, numberOfContributors, communityFundingAmount }, i) => (
+            <Item
+              key={project.id}
+              bg={CHART_BAR_COLORS[i] || CHART_BAR_COLORS[4]}
+              title={project.title}
+              percentage={percentage}
+              width={Math.trunc((percentage * 100) / maxPercentage)}
+              numberOfContributors={numberOfContributors}
+              isCompetitionVote={isCompetitionVote}
+              communityFundingAmount={communityFundingAmount}
+              to={showAll ? getPath('project', project.name) : undefined}
+            />
+          ))}
         </Box>
       )}
     </CardLayout>
@@ -63,6 +66,7 @@ const Item = ({
   bg,
   title,
   width,
+  to,
   ...rest
 }: {
   bg?: string
@@ -72,19 +76,24 @@ const Item = ({
   numberOfContributors: number
   isCompetitionVote: boolean
   communityFundingAmount: number
+  to?: string | undefined
 }) => {
-  return (
-    <HStack pt={2} alignItems="center" justifyContent="start" spacing="10px">
-      <HStack pr={1} width="120px">
-        <Text isTruncated={true} whiteSpace="nowrap" fontWeight={500}>
-          {title}
-        </Text>
+  const itemContent = () => {
+    return (
+      <HStack pt={2} alignItems="center" justifyContent="start" spacing="10px">
+        <HStack pr={1} width="120px">
+          <Text isTruncated={true} whiteSpace="nowrap" fontWeight={500}>
+            {title}
+          </Text>
+        </HStack>
+        <Box display="flex" alignItems="center" justifyContent="start" flexGrow={1}>
+          <ChartBar bg={bg} width={`${width}%`} {...rest} />
+        </Box>
       </HStack>
-      <Box display="flex" alignItems="center" justifyContent="start" flexGrow={1}>
-        <ChartBar bg={bg} width={`${width}%`} {...rest} />
-      </Box>
-    </HStack>
-  )
+    )
+  }
+
+  return to ? <Link to={to}>{itemContent()}</Link> : itemContent()
 }
 
 const ChartBar = ({

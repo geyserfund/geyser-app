@@ -10,6 +10,7 @@ export const defaultUser: UserMeFragment = {
   isEmailVerified: false,
   externalAccounts: [],
   ownerOf: [],
+  hasSocialAccount: false,
 }
 
 export const authUserAtom = atom<UserMeFragment>(defaultUser)

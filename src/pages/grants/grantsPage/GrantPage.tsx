@@ -1,5 +1,5 @@
 /* eslint-disable complexity */
-import { Button, Container, VStack } from '@chakra-ui/react'
+import { Button, Container, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack } from '@chakra-ui/react'
 import { PropsWithChildren, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FaArrowLeft } from 'react-icons/fa'
@@ -9,7 +9,15 @@ import Loader from '../../../components/ui/Loader'
 import { Head } from '../../../config'
 import { getPath } from '../../../constants'
 import { useAuthContext } from '../../../context'
-import { GrantApplicant, GrantApplicantStatus, GrantStatusEnum, GrantType, Maybe } from '../../../types'
+import {
+  BoardVoteGrant,
+  Grant,
+  GrantApplicant,
+  GrantApplicantStatus,
+  GrantStatusEnum,
+  GrantType,
+  Maybe,
+} from '../../../types'
 import { useNotification } from '../../../utils'
 import { GrantWinnerAnnouncement, MobileDivider } from '../components'
 import { GrantAnnouncements, GrantHasVoting, GrantProjectNameMap, NoContributionInGrant } from '../constants'
@@ -92,7 +100,7 @@ export const GrantPage = () => {
         fundingOpenEndDate={fundingOpenStatus?.endAt}
         fundingOpenStartDate={fundingOpenStatus?.startAt}
         applicants={applicants}
-        isCompetitionVote={grant.type === GrantType.CompetitionVote}
+        isCompetitionVote={grant.type === GrantType.CommunityVote}
       />
     )
   }
@@ -103,7 +111,7 @@ export const GrantPage = () => {
         fundingOpenEndDate={fundingOpenStatus?.endAt}
         fundingOpenStartDate={fundingOpenStatus?.startAt}
         applicants={applicants}
-        isCompetitionVote={grant.type === GrantType.CompetitionVote}
+        isCompetitionVote={grant.type === GrantType.CommunityVote}
       />
     )
   }
@@ -128,14 +136,18 @@ export const GrantPage = () => {
     return defaultTitle
   }
 
+  const isBoardVoteGrant = (grant: Grant): grant is BoardVoteGrant => {
+    return grant.__typename === 'BoardVoteGrant'
+  }
+
   const grantHasVoting = GrantHasVoting[grant.name]
-  const isCompetitionVote = grant.type === GrantType.CompetitionVote
+  const isCompetitionVote = grant.type === GrantType.CommunityVote
   const showCommunityVoting = grant.status !== GrantStatusEnum.ApplicationsOpen && applicants.length > 0
   const showDistributionChart = grant.status !== GrantStatusEnum.ApplicationsOpen && grantHasVoting
   const showGrantApply = grant.status !== GrantStatusEnum.Closed
   const showContributeToGrant = !isCompetitionVote && !NoContributionInGrant.includes(grant.name)
 
-  const showBoardMembers = !GrantHasVoting[grant.name] && grant.boardMembers.length > 0
+  const showBoardMembers = isBoardVoteGrant(grant) && grant.boardMembers.length > 0
   const showApplicationPending =
     (GrantHasVoting[grant.name] || showBoardMembers) &&
     (grant.status === GrantStatusEnum.ApplicationsOpen || grant.status === GrantStatusEnum.FundingOpen)
@@ -157,46 +169,68 @@ export const GrantPage = () => {
         </Button>
         <GrantSummary grant={grant} grantHasVoting={grantHasVoting} />
         <MobileDivider />
-        {showDistributionChart && (
-          <>
-            <DistributionChart applicants={applicants} isCompetitionVote={isCompetitionVote} />
-            <MobileDivider />
-          </>
-        )}
-        {winnerAnnouncement && (
-          <>
-            <GrantWinnerAnnouncement {...winnerAnnouncement} />
-            <MobileDivider />
-          </>
-        )}
-        {showCommunityVoting && (
-          <>
-            <CommunityVoting
-              title={getTitle()}
-              applicants={applicants}
-              grantHasVoting={grantHasVoting}
-              grantStatus={grant.status}
-              fundingOpenEndDate={fundingOpenStatus?.endAt}
-              fundingOpenStartDate={fundingOpenStatus?.startAt}
-              isClosed={grant.status === GrantStatusEnum.Closed}
-              isCompetitionVote={isCompetitionVote}
-            />
-            <MobileDivider />
-          </>
-        )}
-        {showGrantApply && !isCompetitionVote && (
-          <>
-            <GrantApply grant={grant} />
-            <MobileDivider />
-          </>
-        )}
+        <Tabs variant="secondary" w="full">
+          <TabList gap="30px">
+            <Tab>
+              <Text fontSize={'16px'}>{t('Projects')}</Text>
+            </Tab>
+            <Tab>
+              <Text fontSize={'16px'}>{t('Leaderboard (All)')}</Text>
+            </Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel p={'16px 0px 16px 0px'}>
+              <VStack w="full" spacing="15px" alignItems="start">
+                {showDistributionChart && (
+                  <>
+                    <DistributionChart applicants={applicants} isCompetitionVote={isCompetitionVote} showAll={false} />
+                    <MobileDivider />
+                  </>
+                )}
+                {winnerAnnouncement && (
+                  <>
+                    <GrantWinnerAnnouncement {...winnerAnnouncement} />
+                    <MobileDivider />
+                  </>
+                )}
+                {showCommunityVoting && (
+                  <>
+                    <CommunityVoting
+                      title={getTitle()}
+                      applicants={applicants}
+                      grantHasVoting={grantHasVoting}
+                      grantStatus={grant.status}
+                      fundingOpenEndDate={fundingOpenStatus?.endAt}
+                      fundingOpenStartDate={fundingOpenStatus?.startAt}
+                      isClosed={grant.status === GrantStatusEnum.Closed}
+                      isCompetitionVote={isCompetitionVote}
+                      votingSystem={grant.__typename === 'CommunityVoteGrant' ? grant.votingSystem : undefined}
+                    />
+                    <MobileDivider />
+                  </>
+                )}
+                {showGrantApply && !isCompetitionVote && (
+                  <>
+                    <GrantApply grant={grant} />
+                    <MobileDivider />
+                  </>
+                )}
 
-        {showApplicationPending && pendingApplicants.length > 0 && !isCompetitionVote && (
-          <>
-            <PendingApplications applicants={pendingApplicants} />
-            <MobileDivider />
-          </>
-        )}
+                {showApplicationPending && pendingApplicants.length > 0 && !isCompetitionVote && (
+                  <>
+                    <PendingApplications applicants={pendingApplicants} />
+                    <MobileDivider />
+                  </>
+                )}
+              </VStack>
+            </TabPanel>
+            <TabPanel w="full" p={'16px 0px 16px 0px'}>
+              <VStack w="full" spacing="15px" alignItems="start">
+                <DistributionChart applicants={applicants} isCompetitionVote={isCompetitionVote} />
+              </VStack>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
 
         {showContributeToGrant && (
           <>
