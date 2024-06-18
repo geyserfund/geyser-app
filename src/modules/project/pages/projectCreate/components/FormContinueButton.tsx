@@ -3,13 +3,14 @@ import { useTranslation } from 'react-i18next'
 
 interface Props extends ButtonProps {
   isEdit?: boolean
+  isSkip?: boolean
 }
 
-export const FormContinueButton = ({ isEdit, ...rest }: Props) => {
+export const FormContinueButton = ({ isEdit, isSkip, ...rest }: Props) => {
   const { t } = useTranslation()
   return (
     <Button variant="primary" {...rest}>
-      {isEdit ? t('Save') : t('Continue')}
+      {isSkip ? t('Skip') : isEdit ? t('Save') : t('Continue')}
     </Button>
   )
 }
