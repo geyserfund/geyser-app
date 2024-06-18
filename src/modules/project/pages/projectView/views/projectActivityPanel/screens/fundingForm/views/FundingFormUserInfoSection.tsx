@@ -31,9 +31,9 @@ export const FundingFormUserInfoSection = ({ onBackClick }: Props) => {
         <>
           {needsShipping ? (
             <FieldContainer
-              title={t('Delivery Address')}
+              title={t('Shipping details')}
               subtitle={t(
-                "To receive the selected items, you will need to send your shipping details to the creator's email. Which will be revealed in the success screen.",
+                'To receive the selected rewards, please send your shipping details to the creator’s email, which will be revealed in the success screen.',
               )}
               boldTitle={true}
             />
