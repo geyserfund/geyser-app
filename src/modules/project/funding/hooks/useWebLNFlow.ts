@@ -7,18 +7,13 @@ import { useNotification } from '../../../../utils'
 import { weblnErrorAtom } from '../state/errorAtom'
 import { requestWebLNPayment, WEBLN_ENABLE_ERROR } from '../utils/requestWebLNPayment'
 
-type StartWebLNFlowProps = {
-  fundingTx: FundingTxFragment
-  onSuccess: () => void
-}
-
 export const useWebLNFlow = () => {
   const { toast } = useNotification()
 
   const [weblnErrored, setWebLNErrored] = useAtom(weblnErrorAtom)
 
   const startWebLNFlow = useCallback(
-    async ({ fundingTx, onSuccess }: StartWebLNFlowProps) => {
+    async (fundingTx: FundingTxFragment) => {
       if (weblnErrored) {
         return
       }
@@ -28,7 +23,6 @@ export const useWebLNFlow = () => {
 
         // Check preimage
         if (paymentHash === fundingTx.invoiceId) {
-          onSuccess()
           return true
         }
 
