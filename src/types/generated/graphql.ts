@@ -5674,13 +5674,6 @@ export const ProjectFragmentDoc = gql`
       ...ProjectCommunityVoteGrant
     }
   }
-  grantApplications {
-    id
-    status
-    grant {
-      ...ProjectCommunityVoteGrant
-    }
-  }
 }
     ${ProjectOwnerUserFragmentDoc}
 ${ProjectRewardForCreateUpdateFragmentDoc}
