@@ -77,22 +77,17 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
           <Text>
             {t('This grant uses ')}
             <Text as="i">{t('Proportional Voting')}</Text>
-            {t(', where your vote’s impact is proportional to the amount of sats you send. This means:')}
+            {t(' to enable more funding to go towards projects. This means:')}
           </Text>
           <UnorderedList mt={4} spacing={2}>
             <ListItem>
-              <Text>{t('Each sat you send counts as a vote for the project.')}</Text>
+              <Text>{t('1 Sat = 1 Vote. Each Sat is one Vote.')}</Text>
             </ListItem>
             <ListItem>
-              <Text>{t('The more sats you send, the more influence you have on the project’s success.')}</Text>
+              <Text>{t('You can send Sats to projects to multiple projects and multiple times')}</Text>
             </ListItem>
             <ListItem>
-              <Text>{t('You can support multiple projects with your sats.')}</Text>
-            </ListItem>
-            <ListItem>
-              <Text>
-                {t('The total votes a project receives determines its funding proportionally to other projects.')}
-              </Text>
+              <Text>{t('You can send Sats anonymously')}</Text>
             </ListItem>
           </UnorderedList>
         </VStack>
@@ -127,10 +122,10 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
               </Text>
               <UnorderedList>
                 <ListItem>
-                  <Text> {t('From 1k to 10k sats = 1 vote')}</Text>
+                  <Text> {t('From 1,000 to 9,999 sats = 1 vote')}</Text>
                 </ListItem>
                 <ListItem>
-                  <Text> {t('From 10k to 100k sats = 2 votes')}</Text>
+                  <Text> {t('From 10,000 to 99,999 sats = 2 votes')}</Text>
                 </ListItem>
                 <ListItem>
                   <Text> {t('Above 100k sats = 3 votes')}</Text>
