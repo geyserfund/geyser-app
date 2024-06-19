@@ -19,7 +19,7 @@ export const LoginToVoteModal = ({ isOpen, onClose, onContribute, grantName }: L
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} title={t('Login for your vote to count')}>
-        <VStack p={1} gap={10} w="full">
+        <VStack gap={10} w="full">
           <Box w="full">
             <Text>
               {t('This project is part of the ')}
