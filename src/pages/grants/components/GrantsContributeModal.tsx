@@ -235,13 +235,12 @@ export const GrantsContributeModalContent = ({ grantsData }: Props) => {
         </Box>
         <Text fontSize={'14px'}>
           <Trans
-            i18nKey={'Your <1>{{amount}}</1> contribution to Geyser Grants was successful!'}
+            i18nKey={'Your <1>{{amount}}</1> contribution was successful!'}
             values={{
-              amount: `${getSatoshisFromUSDCents((state.amount * 100) as USDCents)} sats`,
+              amount: ` ${getSatoshisFromUSDCents((state.amount * 100) as USDCents)} sats`,
             }}
           >
-            Your <span style={{ fontWeight: 'bold' }}>{'{{amount}}'}</span> contribution to Geyser Grants Round 2 was
-            successful!
+            Your <span style={{ fontWeight: 'bold' }}>{'{{amount}}'}</span> contribution was successful!
           </Trans>
         </Text>
         <Text fontSize={'14px'}>
