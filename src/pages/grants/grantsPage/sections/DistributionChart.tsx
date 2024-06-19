@@ -27,8 +27,6 @@ export const DistributionChart = ({ applicants, isCompetitionVote, showAll = tru
     }
 
     if (votingSystem === VotingSystem.StepLog_10) {
-      console.log('curr', curr)
-      console.log('prev', prev)
       return prev + (curr?.voteCount || 0)
     }
 

@@ -32,7 +32,7 @@ export const ContributeButton = (props: ButtonProps) => {
   )
 
   const isProjectAcceptedInOpenCommunityVoteGrant = Boolean(acceptedApplication)
-  const grantName =
+  const grantTitle =
     acceptedApplication?.grant?.__typename === 'CommunityVoteGrant' ? acceptedApplication.grant.title : ''
 
   const handleContribute = () => {
@@ -54,7 +54,7 @@ export const ContributeButton = (props: ButtonProps) => {
 
   return (
     <>
-      <LoginToVoteModal isOpen={isOpen} onClose={onClose} onContribute={handleContribute} grantName={grantName} />
+      <LoginToVoteModal isOpen={isOpen} onClose={onClose} onContribute={handleContribute} grantTitle={grantTitle} />
       <Button
         variant="primary"
         leftIcon={<BoltIcon />}
