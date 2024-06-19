@@ -4087,7 +4087,7 @@ export type ProfileOrderFragment = { __typename?: 'Order', id: any, referenceCod
 
 export type PaginationFragment = { __typename?: 'CursorPaginationResponse', take?: number | null, count?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: any | null } | null };
 
-export type ProjectCommunityVoteGrantFragment = { __typename?: 'CommunityVoteGrant', id: any, status: GrantStatusEnum };
+export type ProjectCommunityVoteGrantFragment = { __typename?: 'CommunityVoteGrant', id: any, status: GrantStatusEnum, title: string };
 
 export type ProjectGrantApplicationsFragment = { __typename?: 'Project', grantApplications: Array<{ __typename?: 'GrantApplicant', id: any, status: GrantApplicantStatus, grant: { __typename?: 'BoardVoteGrant' } | (
       { __typename?: 'CommunityVoteGrant' }
@@ -5566,6 +5566,7 @@ export const ProjectCommunityVoteGrantFragmentDoc = gql`
     fragment ProjectCommunityVoteGrant on CommunityVoteGrant {
   id
   status
+  title
 }
     `;
 export const ProjectGrantApplicationsFragmentDoc = gql`

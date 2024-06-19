@@ -1011,5 +1011,7 @@
    "Sats sent":"Sats sent",
    "votes":"votes",
    "voters":"voters",
-   "sats sent":"sats sent"
+   "sats sent":"sats sent",
+   "This project is part of the ": "This project is part of the ",
+   "community voting grant. Make sure to login before contributing otherwise your contribution won't be counted as votes in the grant.":"community voting grant. Make sure to login before contributing otherwise your contribution won't be counted as votes in the grant."
 }

@@ -24,13 +24,16 @@ export const ContributeButton = (props: ButtonProps) => {
   const isFundingDisabled = !isActive(project.status)
 
   const isInProjectPage = location.pathname.includes(PathName.project) && project?.rewards?.length > 0
-
-  const isProjectAcceptedInOpenCommunityVoteGrant = project.grantApplications.some(
+  const acceptedApplication = project.grantApplications.find(
     (application) =>
       application.status === GrantApplicantStatus.Accepted &&
       application.grant?.__typename === 'CommunityVoteGrant' &&
       application.grant.status === GrantStatusEnum.FundingOpen,
   )
+
+  const isProjectAcceptedInOpenCommunityVoteGrant = Boolean(acceptedApplication)
+  const grantName =
+    acceptedApplication?.grant?.__typename === 'CommunityVoteGrant' ? acceptedApplication.grant.title : ''
 
   const handleContribute = () => {
     setMobileView(MobileViews.funding)
@@ -51,7 +54,7 @@ export const ContributeButton = (props: ButtonProps) => {
 
   return (
     <>
-      <LoginToVoteModal isOpen={isOpen} onClose={onClose} onContribute={handleContribute} />
+      <LoginToVoteModal isOpen={isOpen} onClose={onClose} onContribute={handleContribute} grantName={grantName} />
       <Button
         variant="primary"
         leftIcon={<BoltIcon />}
