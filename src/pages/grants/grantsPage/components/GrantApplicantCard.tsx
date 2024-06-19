@@ -397,7 +397,7 @@ const HowVotingWorksModal = ({
                   {t('1 vote')}
                 </Text>
                 <Text fontWeight="bold" color={'neutral.0'}>
-                  {t('From 1k to 10k sats')}
+                  {t('From 1,000 to 9,999 sats')}
                 </Text>
               </HStack>
               <HStack w="full" justifyContent="flex-start" gap={5}>
@@ -405,7 +405,7 @@ const HowVotingWorksModal = ({
                   {t('2 votes')}
                 </Text>
                 <Text fontWeight="bold" color={'neutral.0'}>
-                  {t('Up to 100k sats')}
+                  {t('From 10,000 to 99,999 sats')}
                 </Text>
               </HStack>
               <HStack w="full" justifyContent="flex-start" gap={5}>
