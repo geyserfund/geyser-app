@@ -183,7 +183,12 @@ export const GrantPage = () => {
               <VStack w="full" spacing="15px" alignItems="start">
                 {showDistributionChart && (
                   <>
-                    <DistributionChart applicants={applicants} isCompetitionVote={isCompetitionVote} showAll={false} />
+                    <DistributionChart
+                      applicants={applicants}
+                      isCompetitionVote={isCompetitionVote}
+                      showAll={false}
+                      votingSystem={grant.__typename === 'CommunityVoteGrant' ? grant.votingSystem : undefined}
+                    />
                     <MobileDivider />
                   </>
                 )}
@@ -226,7 +231,11 @@ export const GrantPage = () => {
             </TabPanel>
             <TabPanel w="full" p={'16px 0px 16px 0px'}>
               <VStack w="full" spacing="15px" alignItems="start">
-                <DistributionChart applicants={applicants} isCompetitionVote={isCompetitionVote} />
+                <DistributionChart
+                  applicants={applicants}
+                  isCompetitionVote={isCompetitionVote}
+                  votingSystem={grant.__typename === 'CommunityVoteGrant' ? grant.votingSystem : undefined}
+                />
               </VStack>
             </TabPanel>
           </TabPanels>

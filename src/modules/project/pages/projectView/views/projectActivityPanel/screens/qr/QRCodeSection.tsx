@@ -25,7 +25,13 @@ enum QRDisplayState {
   FUNDING_CANCELED = 'FUNDING_CANCELED',
 }
 
-export const QRCodeSection = ({ onCloseClick }: { onCloseClick: () => void }) => {
+export const QRCodeSection = ({
+  onCloseClick,
+  openedFromGrant,
+}: {
+  onCloseClick: () => void
+  openedFromGrant?: boolean
+}) => {
   const { t } = useTranslation()
   const [refundedSwapData] = useRefundedSwapData()
   const { invoiceRefreshErrored, invoiceRefreshLoading, refreshFundingInvoice } = useRefreshInvoice()
@@ -70,7 +76,7 @@ export const QRCodeSection = ({ onCloseClick }: { onCloseClick: () => void }) =>
   const renderQRCodeSection = () => {
     switch (qrDisplayState) {
       case QRDisplayState.AWAITING_PAYMENT:
-        return <QRCodeImage />
+        return <QRCodeImage openedFromGrant={openedFromGrant} />
 
       case QRDisplayState.REFUND_INITIALIZED:
         return <RefundInitiated />

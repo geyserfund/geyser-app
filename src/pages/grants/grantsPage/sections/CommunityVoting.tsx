@@ -88,7 +88,7 @@ export const CommunityVoting = ({
             />
           )
         })}
-        {fundingModalProps.isOpen && <ProjectFundingModal {...fundingModalProps} />}
+        {fundingModalProps.isOpen && <ProjectFundingModal {...fundingModalProps} openedFromGrant={true} />}
 
         <AuthModal
           title={t('Login to vote')}

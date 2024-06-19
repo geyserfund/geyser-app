@@ -77,22 +77,17 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
           <Text>
             {t('This grant uses ')}
             <Text as="i">{t('Proportional Voting')}</Text>
-            {t(', where your vote’s impact is proportional to the amount of sats you send. This means:')}
+            {t(' to enable more funding to go towards projects. This means:')}
           </Text>
           <UnorderedList mt={4} spacing={2}>
             <ListItem>
-              <Text>{t('Each sat you send counts as a vote for the project.')}</Text>
+              <Text>{t('1 Sat = 1 Vote. Each Sat is one Vote.')}</Text>
             </ListItem>
             <ListItem>
-              <Text>{t('The more sats you send, the more influence you have on the project’s success.')}</Text>
+              <Text>{t('You can send Sats to projects to multiple projects and multiple times')}</Text>
             </ListItem>
             <ListItem>
-              <Text>{t('You can support multiple projects with your sats.')}</Text>
-            </ListItem>
-            <ListItem>
-              <Text>
-                {t('The total votes a project receives determines its funding proportionally to other projects.')}
-              </Text>
+              <Text>{t('You can send Sats anonymously')}</Text>
             </ListItem>
           </UnorderedList>
         </VStack>
@@ -127,10 +122,10 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
               </Text>
               <UnorderedList>
                 <ListItem>
-                  <Text> {t('From 1k to 10k sats = 1 vote')}</Text>
+                  <Text> {t('From 1,000 to 9,999 sats = 1 vote')}</Text>
                 </ListItem>
                 <ListItem>
-                  <Text> {t('From 10k to 100k sats = 2 votes')}</Text>
+                  <Text> {t('From 10,000 to 99,999 sats = 2 votes')}</Text>
                 </ListItem>
                 <ListItem>
                   <Text> {t('Above 100k sats = 3 votes')}</Text>
@@ -141,6 +136,17 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
         </VStack>
       )
     }
+  }
+
+  const contributions = () => {
+    if (grant?.__typename === 'CommunityVoteGrant' && grant.votingSystem === VotingSystem.OneToOne) {
+      return getShortAmountLabel(
+        grant.applicants.reduce((prev, curr) => prev + (curr?.funding.communityFunding || 0), 0) || 0,
+        true,
+      )
+    }
+
+    return (grant.applicants.reduce((prev, curr) => prev + (curr?.voteCount || 0), 0) || 0).toString()
   }
 
   return (
@@ -168,7 +174,7 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
               </Tag>
             </Tooltip>
 
-            {grant?.__typename === 'CommunityVoteGrant' && (
+            {grant?.__typename === 'CommunityVoteGrant' && grant.distributionSystem !== DistributionSystem.None && (
               <Tag border="1px solid" borderColor="neutral.200" bg="neutral.50">
                 {t(GRANT_DISTRIBUTION_SYSTEM[grant.distributionSystem])}
               </Tag>
@@ -184,10 +190,11 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
             endDateTimestamp={votingEndDate}
             balance={getShortAmountLabel(grant.balance || 0, true)}
             hasVoting={GrantHasVoting[grant.name]}
-            contributions={getShortAmountLabel(
-              grant.applicants.reduce((prev, curr) => prev + (curr?.funding.communityFunding || 0), 0) || 0,
-              true,
-            )}
+            contributions={contributions()}
+            distributionSystem={
+              grant?.__typename === 'CommunityVoteGrant' ? grant.distributionSystem : DistributionSystem.None
+            }
+            votingSystem={grant?.__typename === 'CommunityVoteGrant' ? grant.votingSystem : VotingSystem.OneToOne}
           />
         </Box>
       </Box>

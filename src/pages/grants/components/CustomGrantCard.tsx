@@ -2,7 +2,7 @@ import { Box, Image, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { Grant, GrantApplicantStatus, GrantStatusEnum } from '../../../types'
+import { DistributionSystem, Grant, GrantApplicantStatus, GrantStatusEnum } from '../../../types'
 import { getFormattedDate, getShortAmountLabel, useMobileMode } from '../../../utils'
 import { ListText } from './ListText'
 import { SponsorList } from './SponsorList'
@@ -92,25 +92,25 @@ export const CustomGrantCard = ({ grant, to, showBanner }: Props) => {
               {getFormattedDate(grant.statuses.find((status) => status.status === GrantStatusEnum.Closed)?.startAt)}
             </Text>
           </Box>
-          <Box mt={isMobile ? 4 : 1} px={6}>
-            {isActive ? (
-              <Box display="flex" alignItems="center" justifyContent="space-around">
-                {renderApplicants(GrantValues[grant.name]?.applicants)}
-                <ListText mx={4} subtitle={t('GRANT')} isSatLogo={true}>
-                  {getShortAmountLabel(GrantValues[grant.name]?.applicants || grant.balance || 0, true)}
-                </ListText>
-              </Box>
-            ) : (
-              <Box mt={2} display="flex" alignItems="center" justifyContent="space-around">
-                {renderApplicants(GrantValues[grant.name]?.applicants)}
-                {
+          {grant.__typename === 'CommunityVoteGrant' && grant.distributionSystem === DistributionSystem.None ? null : (
+            <Box mt={isMobile ? 4 : 1} px={6}>
+              {isActive ? (
+                <Box display="flex" alignItems="center" justifyContent="space-around">
+                  {renderApplicants(GrantValues[grant.name]?.applicants)}
+                  <ListText mx={4} subtitle={t('GRANT')} isSatLogo={true}>
+                    {getShortAmountLabel(GrantValues[grant.name]?.applicants || grant.balance || 0, true)}
+                  </ListText>
+                </Box>
+              ) : (
+                <Box mt={2} display="flex" alignItems="center" justifyContent="space-around">
+                  {renderApplicants(GrantValues[grant.name]?.applicants)}
                   <ListText mx={4} subtitle={t('GRANT')} isSatLogo={true}>
                     {getShortAmountLabel(GrantValues[grant.name]?.amount || grant.balance || 0, true)}
                   </ListText>
-                }
-              </Box>
-            )}
-          </Box>
+                </Box>
+              )}
+            </Box>
+          )}
         </Box>
         {!isMobile && <SponsorList justifyContent="start" sponsors={grant.sponsors} />}
       </Box>

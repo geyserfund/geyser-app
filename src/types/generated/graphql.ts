@@ -284,6 +284,7 @@ export type DeleteUserResponse = MutationResponse & {
 };
 
 export enum DistributionSystem {
+  None = 'NONE',
   Proportional = 'PROPORTIONAL',
   WinnerTakeAll = 'WINNER_TAKE_ALL'
 }
@@ -4060,7 +4061,7 @@ export type CommunityVoteGrantsFragmentFragment = { __typename?: 'CommunityVoteG
 
 export type BoardVoteGrantFragmentFragment = { __typename?: 'BoardVoteGrant', id: any, title: string, name: string, shortDescription: string, description?: string | null, balance: number, status: GrantStatusEnum, image?: string | null, type: GrantType, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, applicants: Array<{ __typename?: 'GrantApplicant', contributorsCount: number, status: GrantApplicantStatus, contributors: Array<{ __typename?: 'GrantApplicantContributor', amount: number, timesContributed: number, user?: { __typename?: 'User', id: any, imageUrl?: string | null } | null }>, project: { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, wallets: Array<{ __typename?: 'Wallet', id: any }> }, funding: { __typename?: 'GrantApplicantFunding', communityFunding: number, grantAmount: number, grantAmountDistributed: number } }>, sponsors: Array<{ __typename?: 'Sponsor', id: any, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }>, boardMembers: Array<{ __typename?: 'GrantBoardMember', user: { __typename?: 'User', username: string, imageUrl?: string | null, id: any, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalId: string, externalUsername: string, id: any, public: boolean }> } }> };
 
-export type CommunityVoteGrantFragmentFragment = { __typename?: 'CommunityVoteGrant', id: any, title: string, name: string, shortDescription: string, description?: string | null, balance: number, status: GrantStatusEnum, image?: string | null, type: GrantType, votingSystem: VotingSystem, distributionSystem: DistributionSystem, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, applicants: Array<{ __typename?: 'GrantApplicant', contributorsCount: number, status: GrantApplicantStatus, contributors: Array<{ __typename?: 'GrantApplicantContributor', amount: number, timesContributed: number, voteCount: number, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string } | null }>, project: { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, wallets: Array<{ __typename?: 'Wallet', id: any }> }, funding: { __typename?: 'GrantApplicantFunding', communityFunding: number, grantAmount: number, grantAmountDistributed: number } }>, sponsors: Array<{ __typename?: 'Sponsor', id: any, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }>, votes: { __typename?: 'CompetitionVoteGrantVoteSummary', voteCount: number, voterCount: number } };
+export type CommunityVoteGrantFragmentFragment = { __typename?: 'CommunityVoteGrant', id: any, title: string, name: string, shortDescription: string, description?: string | null, balance: number, status: GrantStatusEnum, image?: string | null, type: GrantType, votingSystem: VotingSystem, distributionSystem: DistributionSystem, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, applicants: Array<{ __typename?: 'GrantApplicant', contributorsCount: number, status: GrantApplicantStatus, voteCount: number, contributors: Array<{ __typename?: 'GrantApplicantContributor', amount: number, timesContributed: number, voteCount: number, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string } | null }>, project: { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, wallets: Array<{ __typename?: 'Wallet', id: any }> }, funding: { __typename?: 'GrantApplicantFunding', communityFunding: number, grantAmount: number, grantAmountDistributed: number } }>, sponsors: Array<{ __typename?: 'Sponsor', id: any, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }>, votes: { __typename?: 'CompetitionVoteGrantVoteSummary', voteCount: number, voterCount: number } };
 
 export type OrderItemFragment = { __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', id: any, name: string, cost: number, rewardCurrency: RewardCurrency, category?: string | null } };
 
@@ -4086,7 +4087,7 @@ export type ProfileOrderFragment = { __typename?: 'Order', id: any, referenceCod
 
 export type PaginationFragment = { __typename?: 'CursorPaginationResponse', take?: number | null, count?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: any | null } | null };
 
-export type ProjectCommunityVoteGrantFragment = { __typename?: 'CommunityVoteGrant', id: any, status: GrantStatusEnum };
+export type ProjectCommunityVoteGrantFragment = { __typename?: 'CommunityVoteGrant', id: any, status: GrantStatusEnum, title: string };
 
 export type ProjectGrantApplicationsFragment = { __typename?: 'Project', grantApplications: Array<{ __typename?: 'GrantApplicant', id: any, status: GrantApplicantStatus, grant: { __typename?: 'BoardVoteGrant' } | (
       { __typename?: 'CommunityVoteGrant' }
@@ -5267,6 +5268,7 @@ export const CommunityVoteGrantFragmentFragmentDoc = gql`
       grantAmount
       grantAmountDistributed
     }
+    voteCount
   }
   sponsors {
     id
@@ -5565,6 +5567,7 @@ export const ProjectCommunityVoteGrantFragmentDoc = gql`
     fragment ProjectCommunityVoteGrant on CommunityVoteGrant {
   id
   status
+  title
 }
     `;
 export const ProjectGrantApplicationsFragmentDoc = gql`

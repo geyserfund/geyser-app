@@ -25,14 +25,11 @@ export const ProjectFundingContributorsItem = ({ contributor, project, ...rest }
       as={Link}
       to={contributor?.user?.id ? getPath('userProfile', contributor.user.id) : '/'}
       style={{ textDecoration: 'none', width: '100%' }}
-      px={6}
+      px={1}
       py={3}
       width="100%"
       borderRadius="12px"
-      transition="transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)"
-      willChange="transform"
       _hover={{
-        transform: 'scale(1.08)',
         bg: 'neutral.200',
       }}
       {...rest}
