@@ -1,4 +1,5 @@
 import { Box } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 
 import { Modal } from '../../../../../../../../../components/layouts'
@@ -30,7 +31,6 @@ export const useProjectLayoutStyles = createUseStyles<Rules, Styles>({
     display: 'flex',
     flexDirection: 'column',
     maxWidth: '100%',
-    marginTop: '30px',
     overflowX: 'none',
     '&::-webkit-scrollbar': {
       display: 'none',
@@ -40,13 +40,14 @@ export const useProjectLayoutStyles = createUseStyles<Rules, Styles>({
 
 export const ProjectContributorsModal = ({ project, ...props }: Props) => {
   const classes = useProjectLayoutStyles()
+  const { t } = useTranslation()
 
   if (!project) {
     return null
   }
 
   return (
-    <Modal title={''} size={'sm'} {...props}>
+    <Modal title={t('Logged in Contributors')} size={'sm'} {...props}>
       <Box className={classes.detailsContainer}>
         <ProjectContributorsList project={project} />
       </Box>
