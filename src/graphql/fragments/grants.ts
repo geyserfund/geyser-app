@@ -171,6 +171,7 @@ export const FRAGMENT_COMMUNITY_VOTE_GRANT = gql`
         grantAmount
         grantAmountDistributed
       }
+      voteCount
     }
     sponsors {
       id
