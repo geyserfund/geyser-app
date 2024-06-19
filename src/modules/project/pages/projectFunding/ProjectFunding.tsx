@@ -13,11 +13,12 @@ interface Props {
   project: Project | undefined
   user: UserMeFragment
   onTitleChange?(title: string | null): void
+  openedFromGrant?: boolean
 }
 
 const noop = () => {}
 
-export const ProjectFundingContent = ({ project, user, onTitleChange = noop }: Props) => {
+export const ProjectFundingContent = ({ project, user, onTitleChange = noop, openedFromGrant = false }: Props) => {
   const [title, setTitle] = useState<string | null>(null)
 
   useEffect(() => {
@@ -59,7 +60,7 @@ export const ProjectFundingContent = ({ project, user, onTitleChange = noop }: P
 
   switch (fundingStage) {
     case FundingStages.started:
-      return <QRCodeSection onCloseClick={handleClose} />
+      return <QRCodeSection onCloseClick={handleClose} openedFromGrant={openedFromGrant} />
     case FundingStages.completed:
       return <FundingComplete formState={formState} />
     default:

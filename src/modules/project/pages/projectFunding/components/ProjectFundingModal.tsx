@@ -5,7 +5,7 @@ import { useAuthContext } from '../../../../../context'
 import { ProjectFundingModalProps } from '../../../../../pages/grants/grantsPage/components/useProjectFundingModal'
 import { ProjectFunding } from '../ProjectFunding'
 
-export const ProjectFundingModal = ({ isOpen, onClose, props }: ProjectFundingModalProps) => {
+export const ProjectFundingModal = ({ isOpen, onClose, props, openedFromGrant = false }: ProjectFundingModalProps) => {
   const [title, setTitle] = useState<string | null>(null)
   const { user } = useAuthContext()
 
@@ -23,7 +23,14 @@ export const ProjectFundingModal = ({ isOpen, onClose, props }: ProjectFundingMo
           <ModalHeader pb={2}>{title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {isOpen && <ProjectFunding project={props?.project} user={user} onTitleChange={setTitle} />}
+            {isOpen && (
+              <ProjectFunding
+                project={props?.project}
+                user={user}
+                onTitleChange={setTitle}
+                openedFromGrant={openedFromGrant}
+              />
+            )}
           </ModalBody>
         </Box>
       </ModalContent>
