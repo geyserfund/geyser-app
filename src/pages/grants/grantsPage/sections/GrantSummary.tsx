@@ -143,6 +143,17 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
     }
   }
 
+  const contributions = () => {
+    if (grant?.__typename === 'CommunityVoteGrant' && grant.votingSystem === VotingSystem.OneToOne) {
+      return getShortAmountLabel(
+        grant.applicants.reduce((prev, curr) => prev + (curr?.funding.communityFunding || 0), 0) || 0,
+        true,
+      )
+    }
+
+    return (grant.applicants.reduce((prev, curr) => prev + (curr?.voteCount || 0), 0) || 0).toString()
+  }
+
   return (
     <CardLayout noborder={isMobile} padding={{ base: '10px', lg: 0 }}>
       {renderImageOrVideo()}
@@ -184,13 +195,11 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
             endDateTimestamp={votingEndDate}
             balance={getShortAmountLabel(grant.balance || 0, true)}
             hasVoting={GrantHasVoting[grant.name]}
-            contributions={getShortAmountLabel(
-              grant.applicants.reduce((prev, curr) => prev + (curr?.funding.communityFunding || 0), 0) || 0,
-              true,
-            )}
+            contributions={contributions()}
             distributionSystem={
               grant?.__typename === 'CommunityVoteGrant' ? grant.distributionSystem : DistributionSystem.None
             }
+            votingSystem={grant?.__typename === 'CommunityVoteGrant' ? grant.votingSystem : VotingSystem.OneToOne}
           />
         </Box>
       </Box>
