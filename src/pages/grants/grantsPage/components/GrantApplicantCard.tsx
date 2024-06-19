@@ -226,7 +226,7 @@ export const GrantApplicantCard = ({
   }
 
   const renderButton = (project: Project) => {
-    if (!isLoggedIn || !currentUser?.hasSocialAccount) {
+    if ((!isLoggedIn || !currentUser?.hasSocialAccount) && votingSystem !== VotingSystem.OneToOne) {
       return (
         <Button
           onClick={(e) => {
@@ -246,7 +246,7 @@ export const GrantApplicantCard = ({
       )
     }
 
-    if (canVote && isLoggedIn && currentUser?.hasSocialAccount) {
+    if ((canVote && isLoggedIn && currentUser?.hasSocialAccount) || votingSystem === VotingSystem.OneToOne) {
       return (
         <Button
           onClick={(e) => {
