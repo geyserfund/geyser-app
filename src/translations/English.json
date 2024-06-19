@@ -1008,5 +1008,8 @@
    "Leaderboard (All)":"Leaderboard (All)",
    "Error creating project goal":"Error creating project goal",
    "Email sent to :":"Email sent to :",
-   "Sats sent":"Sats sent"
+   "Sats sent":"Sats sent",
+   "votes":"votes",
+   "voters":"voters",
+   "sats sent":"sats sent"
 }

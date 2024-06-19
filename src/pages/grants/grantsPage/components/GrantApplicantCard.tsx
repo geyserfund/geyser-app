@@ -212,11 +212,11 @@ export const GrantApplicantCard = ({
             </Box>
 
             <Text fontWeight={'400'} fontSize="10px" fontStyle="normal" color="neutral.900">
-              {t('voters')}
+              {votingSystem === VotingSystem.OneToOne ? t('voters') : t('votes')}
             </Text>
           </Box>
         )}
-        <WidgetItem subtitle={!isClosed ? t('worth of votes') : t('distributed')}>
+        <WidgetItem subtitle={!isClosed ? t('sats sent') : t('distributed')}>
           {getShortAmountLabel(
             !isClosed ? funding.communityFunding : funding.grantAmount + funding.communityFunding || 0,
           )}
