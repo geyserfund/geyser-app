@@ -168,7 +168,7 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
               </Tag>
             </Tooltip>
 
-            {grant?.__typename === 'CommunityVoteGrant' && (
+            {grant?.__typename === 'CommunityVoteGrant' && grant.distributionSystem !== DistributionSystem.None && (
               <Tag border="1px solid" borderColor="neutral.200" bg="neutral.50">
                 {t(GRANT_DISTRIBUTION_SYSTEM[grant.distributionSystem])}
               </Tag>
@@ -188,6 +188,9 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
               grant.applicants.reduce((prev, curr) => prev + (curr?.funding.communityFunding || 0), 0) || 0,
               true,
             )}
+            distributionSystem={
+              grant?.__typename === 'CommunityVoteGrant' ? grant.distributionSystem : DistributionSystem.None
+            }
           />
         </Box>
       </Box>

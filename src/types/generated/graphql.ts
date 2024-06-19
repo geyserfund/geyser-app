@@ -284,6 +284,7 @@ export type DeleteUserResponse = MutationResponse & {
 };
 
 export enum DistributionSystem {
+  None = 'NONE',
   Proportional = 'PROPORTIONAL',
   WinnerTakeAll = 'WINNER_TAKE_ALL'
 }
