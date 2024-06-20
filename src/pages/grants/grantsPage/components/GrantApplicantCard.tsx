@@ -111,24 +111,13 @@ const ContributorsAvatarDisplay = ({
   currentContributor: GrantApplicantContributor | null | false
   project: Project
 }) => {
-  const contributorsModal = useProjectContributorsModal()
-
   if (!contributors) {
     return null
   }
 
   return (
     <>
-      <Box
-        pl={2}
-        filter="opacity(0.4)"
-        _hover={{ cursor: 'pointer' }}
-        onClick={(e) => {
-          e.stopPropagation()
-          contributorsModal.onOpen()
-        }}
-        zIndex={2}
-      >
+      <Box pl={2} filter="opacity(0.4)" _hover={{ cursor: 'pointer' }} zIndex={2}>
         {currentContributor && (
           <AvatarElement
             key={currentContributor?.user?.id}
@@ -168,7 +157,6 @@ const ContributorsAvatarDisplay = ({
               ),
           )}
       </Box>
-      <ProjectContributorsModal project={project} {...contributorsModal} />
     </>
   )
 }
