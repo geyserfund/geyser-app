@@ -55,9 +55,6 @@ export const ProjectFundingContent = ({ project, user, onTitleChange = noop, gra
   }
 
   const handleFundingCompleteClose = () => {
-    setFundingStage(FundingStages.form)
-    setTitle(null)
-    resetFundingFlow()
     window.location.reload()
   }
 
