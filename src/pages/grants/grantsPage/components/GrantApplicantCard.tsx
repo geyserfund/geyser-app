@@ -9,10 +9,6 @@ import { Modal } from '../../../../components/layouts'
 import { H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
-import {
-  ProjectContributorsModal,
-  useProjectContributorsModal,
-} from '../../../../modules/project/pages/projectView/views/projectActivityPanel/screens/info/components/ProjectContributorsModal'
 import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
 import { fonts } from '../../../../styles'
 import {
