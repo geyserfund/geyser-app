@@ -9,10 +9,8 @@ import { Modal } from '../../../../components/layouts'
 import { H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
-import {
-  ProjectContributorsModal,
-  useProjectContributorsModal,
-} from '../../../../modules/project/pages/projectView/views/projectActivityPanel/screens/info/components/ProjectContributorsModal'
+import { useProjectContributorsModal } from '../../../../modules/project/pages/projectView/views/projectActivityPanel/screens/info/components/ProjectContributorsModal'
+import { ProjectGrantApplicantContributorsModal } from '../../../../modules/project/pages/projectView/views/projectActivityPanel/screens/info/components/ProjectGrantApplicantContributorsModal'
 import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
 import { fonts } from '../../../../styles'
 import {
@@ -105,7 +103,6 @@ const UserContributionDetails = ({ amount, voteCount, user }: GrantApplicantCont
 const ContributorsAvatarDisplay = ({
   contributors,
   currentContributor,
-  project,
 }: {
   contributors: GrantApplicantContributor[]
   currentContributor: GrantApplicantContributor | null | false
@@ -168,7 +165,7 @@ const ContributorsAvatarDisplay = ({
               ),
           )}
       </Box>
-      <ProjectContributorsModal project={project} {...contributorsModal} />
+      <ProjectGrantApplicantContributorsModal grantApplicantContributors={contributors} {...contributorsModal} />
     </>
   )
 }
