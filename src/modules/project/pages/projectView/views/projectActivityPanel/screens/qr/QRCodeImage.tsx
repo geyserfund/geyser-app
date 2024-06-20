@@ -32,7 +32,7 @@ export const QRCodeImage = ({ openedFromGrant }: { openedFromGrant?: boolean }) 
   }, [fundingTx, fundingTx.paymentRequest, fundingTx.address])
 
   return (
-    <>
+    <VStack gap={2}>
       <VStack flexWrap="wrap" width="100%">
         <PaymentMethodSelection />
         {isLightning ? (
@@ -48,6 +48,6 @@ export const QRCodeImage = ({ openedFromGrant }: { openedFromGrant?: boolean }) 
       />
       <ReachOutForHelpButton />
       <FundingDisclaimer />
-    </>
+    </VStack>
   )
 }

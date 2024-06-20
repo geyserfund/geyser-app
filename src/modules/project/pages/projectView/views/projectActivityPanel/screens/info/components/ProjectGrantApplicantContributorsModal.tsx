@@ -4,15 +4,14 @@ import { createUseStyles } from 'react-jss'
 
 import { Modal } from '../../../../../../../../../components/layouts'
 import { useModal } from '../../../../../../../../../hooks'
-import { GrantApplicantContributor, Project, ProjectFragment } from '../../../../../../../../../types'
-import { ProjectContributorsList } from './ProjectContributorsList'
+import { GrantApplicantContributor } from '../../../../../../../../../types'
+import { ProjectGrantApplicantContributorsList } from './ProjectGrantApplicantContributorsList'
 
-export const useProjectContributorsModal = () => {
+export const useProjectGrantApplicantContributorsModal = () => {
   return useModal()
 }
 
-type Props = ReturnType<typeof useProjectContributorsModal> & {
-  project?: ProjectFragment | Project
+type Props = ReturnType<typeof useProjectGrantApplicantContributorsModal> & {
   grantApplicantContributors?: GrantApplicantContributor[]
 }
 
@@ -39,18 +38,18 @@ export const useProjectLayoutStyles = createUseStyles<Rules, Styles>({
   },
 })
 
-export const ProjectContributorsModal = ({ project, grantApplicantContributors, ...props }: Props) => {
+export const ProjectGrantApplicantContributorsModal = ({ grantApplicantContributors, ...props }: Props) => {
   const classes = useProjectLayoutStyles()
   const { t } = useTranslation()
 
-  if (!project) {
+  if (!grantApplicantContributors) {
     return null
   }
 
   return (
     <Modal title={t('Logged in Contributors')} size={'sm'} {...props}>
       <Box className={classes.detailsContainer}>
-        <ProjectContributorsList project={project} />
+        <ProjectGrantApplicantContributorsList grantApplicantContributors={grantApplicantContributors} />
       </Box>
     </Modal>
   )

@@ -10,9 +10,9 @@ import { H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
 import {
-  ProjectContributorsModal,
-  useProjectContributorsModal,
-} from '../../../../modules/project/pages/projectView/views/projectActivityPanel/screens/info/components/ProjectContributorsModal'
+  ProjectGrantApplicantContributorsModal,
+  useProjectGrantApplicantContributorsModal,
+} from '../../../../modules/project/pages/projectView/views/projectActivityPanel/screens/info/components/ProjectGrantApplicantContributorsModal'
 import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
 import { fonts } from '../../../../styles'
 import {
@@ -105,13 +105,11 @@ const UserContributionDetails = ({ amount, voteCount, user }: GrantApplicantCont
 const ContributorsAvatarDisplay = ({
   contributors,
   currentContributor,
-  project,
 }: {
   contributors: GrantApplicantContributor[]
   currentContributor: GrantApplicantContributor | null | false
-  project: Project
 }) => {
-  const contributorsModal = useProjectContributorsModal()
+  const grantApplicantContributorsModal = useProjectGrantApplicantContributorsModal()
 
   if (!contributors) {
     return null
@@ -123,11 +121,11 @@ const ContributorsAvatarDisplay = ({
         pl={2}
         filter="opacity(0.4)"
         _hover={{ cursor: 'pointer' }}
+        zIndex={2}
         onClick={(e) => {
           e.stopPropagation()
-          contributorsModal.onOpen()
+          grantApplicantContributorsModal.onOpen()
         }}
-        zIndex={2}
       >
         {currentContributor && (
           <AvatarElement
@@ -168,7 +166,10 @@ const ContributorsAvatarDisplay = ({
               ),
           )}
       </Box>
-      <ProjectContributorsModal project={project} {...contributorsModal} />
+      <ProjectGrantApplicantContributorsModal
+        grantApplicantContributors={contributors}
+        {...grantApplicantContributorsModal}
+      />
     </>
   )
 }
@@ -322,11 +323,12 @@ export const GrantApplicantCard = ({
             </Box>
           )}
         </Box>
-        <ContributorsAvatarDisplay
-          contributors={contributors}
-          currentContributor={currentUserContribution || false}
-          project={project}
-        />
+        {contributors.length > 0 && (
+          <ContributorsAvatarDisplay
+            contributors={contributors}
+            currentContributor={currentUserContribution || false}
+          />
+        )}
         {isMobile && (
           <VStack w="full">
             {renderButton(project)}
