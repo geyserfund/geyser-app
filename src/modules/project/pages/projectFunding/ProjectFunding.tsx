@@ -7,7 +7,7 @@ import { QRCodeSection } from '../projectView/views/projectActivityPanel/screens
 import { FundingComplete } from './views/FundingComplete'
 import { FundingForm, ProjectFundingFormState } from './views/FundingForm'
 
-const SUCCESS_TITLE = 'Contribution Successfull'
+const SUCCESS_TITLE = 'Contribution successfull'
 
 interface Props {
   project: Project | undefined

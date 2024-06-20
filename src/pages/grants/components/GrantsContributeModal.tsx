@@ -85,7 +85,7 @@ export const GrantsContributeModalContent = ({ grantsData }: Props) => {
 
   useEffect(() => {
     if (fundingStage === FundingStages.completed) {
-      setModalHeader('Contribution Successful')
+      setModalHeader('Contribution successful')
     }
   }, [fundingStage])
 
