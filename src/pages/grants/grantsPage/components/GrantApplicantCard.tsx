@@ -322,11 +322,13 @@ export const GrantApplicantCard = ({
             </Box>
           )}
         </Box>
-        <ContributorsAvatarDisplay
-          contributors={contributors}
-          currentContributor={currentUserContribution || false}
-          project={project}
-        />
+        {contributors.length > 0 && (
+          <ContributorsAvatarDisplay
+            contributors={contributors}
+            currentContributor={currentUserContribution || false}
+            project={project}
+          />
+        )}
         {isMobile && (
           <VStack w="full">
             {renderButton(project)}

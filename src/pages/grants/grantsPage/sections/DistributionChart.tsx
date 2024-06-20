@@ -131,6 +131,27 @@ const ChartBar = ({
   const { t } = useTranslation()
   const isMobile = useMobileMode()
 
+  const renderSats = ({ withParentheses }: { withParentheses: boolean }) => {
+    return (
+      <Caption fontSize={'12px'} bold color="neutral.9000">
+        {withParentheses ? '(' : ''}
+        {`${getShortAmountLabel(communityFundingAmount, true)} sats`}
+        {withParentheses ? ')' : ''}
+      </Caption>
+    )
+  }
+
+  const renderVotesOrVoters = ({ withParentheses }: { withParentheses: boolean }) => {
+    return (
+      <Caption fontSize={'12px'} bold color="neutral.600" isTruncated>
+        {withParentheses ? '(' : ''}
+        {getShortAmountLabel(numberOfContributors, true)}{' '}
+        {isCompetitionVote ? (votingSystem === VotingSystem.OneToOne ? t('voters') : t('votes')) : t('contributors')}
+        {withParentheses ? ')' : ''}
+      </Caption>
+    )
+  }
+
   return (
     <HStack width="100%" alignItems="center">
       <HStack
@@ -152,15 +173,12 @@ const ChartBar = ({
         </Caption>
       </HStack>
       <HStack minWidth="150px">
-        <Caption fontSize={'12px'} bold color="neutral.9000">
-          {getShortAmountLabel(communityFundingAmount, true)}
-        </Caption>
-        <Caption fontSize={'12px'} bold color="neutral.600" isTruncated>
-          {'('}
-          {getShortAmountLabel(numberOfContributors, true)}{' '}
-          {isCompetitionVote ? (votingSystem === VotingSystem.OneToOne ? t('voters') : t('votes')) : t('contributors')}
-          {')'}
-        </Caption>
+        {votingSystem === VotingSystem.OneToOne
+          ? renderSats({ withParentheses: false })
+          : renderVotesOrVoters({ withParentheses: false })}
+        {votingSystem === VotingSystem.OneToOne
+          ? renderVotesOrVoters({ withParentheses: true })
+          : renderSats({ withParentheses: true })}
       </HStack>
     </HStack>
   )
