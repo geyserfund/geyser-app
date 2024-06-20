@@ -3,6 +3,7 @@ import { DeleteIcon, EditIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { Image, Stack, Text, useBreakpoint, useColorMode, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { MdModeEdit } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 
 import SplashRewardIcon from '../../../../../../../../../assets/splash-reward.svg'
@@ -213,7 +214,7 @@ export const RewardsTable = () => {
                 </td>
                 <td style={{ paddingTop: '10px', verticalAlign: 'top' }}>
                   <Stack direction="row" justify="center" align="center" gap={4}>
-                    <EditIcon
+                    <MdModeEdit
                       color="neutral.900"
                       style={{ cursor: 'pointer' }}
                       onClick={() => {
