@@ -266,7 +266,11 @@ export const EntryPreview = () => {
           )}
           {isEntryPublished ? (
             <VStack width="100%">
-              <Button variant={'secondary'} w="full" onClick={handleTwitterShareButtonTapped}>
+              <Button
+                variant={hasCopiedSharingLink ? 'primary' : 'secondary'}
+                w="full"
+                onClick={handleTwitterShareButtonTapped}
+              >
                 {hasCopiedSharingLink ? 'Copied Link!' : 'Share on Twitter'}
               </Button>
 
