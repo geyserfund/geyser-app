@@ -19,7 +19,11 @@ export const FundingComplete = ({ formState, project, grant, onClose }: Props) =
     navigator.clipboard.writeText(window.location.href)
   }
 
-  const voteCount = Math.floor(Math.log10(formState?.donationAmount || 0)) - 2
+  let voteCount = 0
+
+  if (grant && grant.__typename === 'CommunityVoteGrant' && grant.votingSystem === VotingSystem.StepLog_10) {
+    voteCount = Math.floor(Math.log10(formState?.donationAmount || 0)) - 2
+  }
 
   return (
     <VStack justify={'center'} spacing={5}>
