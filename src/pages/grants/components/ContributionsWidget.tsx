@@ -1,9 +1,10 @@
 import { Box, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { LiaVoteYeaSolid } from 'react-icons/lia'
 
 import { BadgeIcon, ContributionsIcon, TimerIcon } from '../../../components/icons'
 import { Countdown } from '../../../components/ui/Countdown'
-import { fonts } from '../../../styles'
+import { fonts, primaryColorsLight } from '../../../styles'
 import { DistributionSystem, Maybe, Sponsor, VotingSystem } from '../../../types'
 import { SponsorList } from './SponsorList'
 import { WidgetItem } from './WidgetItem'
@@ -74,13 +75,18 @@ export const ContributionsWidget = ({
         )}
         {hasVoting && (
           <Box px={2} display="flex" alignItems="start" my={2}>
-            <ContributionsIcon mt={1} mr={2} width="36px" height="100%" color="primary.500" />
             {votingSystem === VotingSystem.OneToOne ? (
-              <WidgetItem subtitle={t('Sats sent')}>{contributions}</WidgetItem>
+              <>
+                <ContributionsIcon mt={1} mr={2} width="36px" height="100%" color="primary.500" />
+                <WidgetItem subtitle={t('Sats sent')}>{contributions}</WidgetItem>
+              </>
             ) : (
-              <WidgetItem isSatLogo={false} subtitle={t('Votes sent')}>
-                {contributions}
-              </WidgetItem>
+              <>
+                <LiaVoteYeaSolid style={{ marginTop: 4, marginRight: 2 }} size={36} color={primaryColorsLight[500]} />
+                <WidgetItem isSatLogo={false} subtitle={t('Votes sent')}>
+                  {contributions}
+                </WidgetItem>
+              </>
             )}
           </Box>
         )}
