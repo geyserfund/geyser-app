@@ -62,7 +62,7 @@ export const ProjectFundingContent = ({ project, user, onTitleChange = noop, ope
     case FundingStages.started:
       return <QRCodeSection onCloseClick={handleClose} openedFromGrant={openedFromGrant} />
     case FundingStages.completed:
-      return <FundingComplete formState={formState} />
+      return <FundingComplete project={project} formState={formState} />
     default:
       return <FundingForm project={project} user={user} onFundingRequested={setFormState} />
   }
