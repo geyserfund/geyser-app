@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { Project, UserMeFragment, useWalletLimitQuery } from '../../../../types'
+import { Grant, Project, UserMeFragment, useWalletLimitQuery } from '../../../../types'
 import { FundingProvider, useFundingContext } from '../../context/FundingProvider'
 import { FundingStages, useFundingStage } from '../../funding/state'
 import { QRCodeSection } from '../projectView/views/projectActivityPanel/screens'
@@ -13,12 +13,12 @@ interface Props {
   project: Project | undefined
   user: UserMeFragment
   onTitleChange?(title: string | null): void
-  openedFromGrant?: boolean
+  grant?: Grant
 }
 
 const noop = () => {}
 
-export const ProjectFundingContent = ({ project, user, onTitleChange = noop, openedFromGrant = false }: Props) => {
+export const ProjectFundingContent = ({ project, user, onTitleChange = noop, grant }: Props) => {
   const [title, setTitle] = useState<string | null>(null)
 
   useEffect(() => {
@@ -58,11 +58,13 @@ export const ProjectFundingContent = ({ project, user, onTitleChange = noop, ope
     return null
   }
 
+  console.log('grant', grant)
+
   switch (fundingStage) {
     case FundingStages.started:
-      return <QRCodeSection onCloseClick={handleClose} openedFromGrant={openedFromGrant} />
+      return <QRCodeSection onCloseClick={handleClose} openedFromGrant={Boolean(grant)} />
     case FundingStages.completed:
-      return <FundingComplete project={project} formState={formState} />
+      return <FundingComplete project={project} formState={formState} grant={grant} />
     default:
       return <FundingForm project={project} user={user} onFundingRequested={setFormState} />
   }
