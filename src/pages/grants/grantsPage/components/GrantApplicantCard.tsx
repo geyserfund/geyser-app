@@ -117,7 +117,16 @@ const ContributorsAvatarDisplay = ({
 
   return (
     <>
-      <Box pl={2} filter="opacity(0.4)" _hover={{ cursor: 'pointer' }} zIndex={2}>
+      <Box
+        pl={2}
+        filter="opacity(0.4)"
+        _hover={{ cursor: 'pointer' }}
+        zIndex={2}
+        onClick={(e) => {
+          e.stopPropagation()
+          grantApplicantContributorsModal.onOpen()
+        }}
+      >
         {currentContributor && (
           <AvatarElement
             key={currentContributor?.user?.id}
