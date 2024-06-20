@@ -227,7 +227,7 @@ export const GrantApplicantCard = ({
   }
 
   const renderButton = (project: Project) => {
-    if ((!isLoggedIn || !currentUser?.hasSocialAccount) && votingSystem !== VotingSystem.OneToOne) {
+    if ((!isLoggedIn || !currentUser?.hasSocialAccount) && votingSystem !== VotingSystem.OneToOne && grantHasVoting) {
       return (
         <Button
           onClick={(e) => {
@@ -247,7 +247,10 @@ export const GrantApplicantCard = ({
       )
     }
 
-    if ((canVote && isLoggedIn && currentUser?.hasSocialAccount) || votingSystem === VotingSystem.OneToOne) {
+    if (
+      ((canVote && isLoggedIn && currentUser?.hasSocialAccount) || votingSystem === VotingSystem.OneToOne) &&
+      grantHasVoting
+    ) {
       return (
         <Button
           onClick={(e) => {
@@ -323,7 +326,7 @@ export const GrantApplicantCard = ({
             </Box>
           )}
         </Box>
-        {contributors.length > 0 && (
+        {contributors.length > 0 && grantHasVoting && (
           <ContributorsAvatarDisplay
             contributors={contributors}
             currentContributor={currentUserContribution || false}
@@ -335,7 +338,7 @@ export const GrantApplicantCard = ({
             {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
           </VStack>
         )}
-        {currentUserContribution && <UserContributionDetails {...currentUserContribution} />}
+        {currentUserContribution && grantHasVoting && <UserContributionDetails {...currentUserContribution} />}
         <HowVotingWorksModal
           isOpen={isOpen}
           onClose={onClose}
