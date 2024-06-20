@@ -107,6 +107,58 @@ export type BitcoinQuote = {
   quoteCurrency: QuoteCurrency;
 };
 
+export type BoardVoteGrant = {
+  __typename?: 'BoardVoteGrant';
+  applicants: Array<GrantApplicant>;
+  balance: Scalars['Int']['output'];
+  boardMembers: Array<GrantBoardMember>;
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['BigInt']['output'];
+  image?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  shortDescription: Scalars['String']['output'];
+  sponsors: Array<Sponsor>;
+  status: GrantStatusEnum;
+  statuses: Array<GrantStatus>;
+  title: Scalars['String']['output'];
+  type: GrantType;
+};
+
+
+export type BoardVoteGrantApplicantsArgs = {
+  input?: InputMaybe<GrantApplicantsGetInput>;
+};
+
+export type CommunityVoteGrant = {
+  __typename?: 'CommunityVoteGrant';
+  applicants: Array<GrantApplicant>;
+  balance: Scalars['Int']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  distributionSystem: DistributionSystem;
+  id: Scalars['BigInt']['output'];
+  image?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  shortDescription: Scalars['String']['output'];
+  sponsors: Array<Sponsor>;
+  status: GrantStatusEnum;
+  statuses: Array<GrantStatus>;
+  title: Scalars['String']['output'];
+  type: GrantType;
+  votes: CompetitionVoteGrantVoteSummary;
+  votingSystem: VotingSystem;
+};
+
+
+export type CommunityVoteGrantApplicantsArgs = {
+  input?: InputMaybe<GrantApplicantsGetInput>;
+};
+
+export type CompetitionVoteGrantVoteSummary = {
+  __typename?: 'CompetitionVoteGrantVoteSummary';
+  voteCount: Scalars['Int']['output'];
+  voterCount: Scalars['Int']['output'];
+};
+
 export type ConnectionDetails = LightningAddressConnectionDetails | LndConnectionDetailsPrivate | LndConnectionDetailsPublic;
 
 export type Country = {
@@ -230,6 +282,12 @@ export type DeleteUserResponse = MutationResponse & {
   message?: Maybe<Scalars['String']['output']>;
   success: Scalars['Boolean']['output'];
 };
+
+export enum DistributionSystem {
+  None = 'NONE',
+  Proportional = 'PROPORTIONAL',
+  WinnerTakeAll = 'WINNER_TAKE_ALL'
+}
 
 export type EmailVerifyInput = {
   otp: Scalars['Int']['input'];
@@ -666,41 +724,23 @@ export type GetProjectsMostFundedOfTheWeekInput = {
   take?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type Grant = {
-  __typename?: 'Grant';
-  applicants: Array<GrantApplicant>;
-  balance: Scalars['Int']['output'];
-  boardMembers: Array<GrantBoardMember>;
-  description?: Maybe<Scalars['String']['output']>;
-  id: Scalars['BigInt']['output'];
-  image?: Maybe<Scalars['String']['output']>;
-  name: Scalars['String']['output'];
-  shortDescription: Scalars['String']['output'];
-  sponsors: Array<Sponsor>;
-  status: GrantStatusEnum;
-  statuses: Array<GrantStatus>;
-  title: Scalars['String']['output'];
-  type: GrantType;
-};
-
-
-export type GrantApplicantsArgs = {
-  input?: InputMaybe<GrantApplicantGetInput>;
-};
+export type Grant = BoardVoteGrant | CommunityVoteGrant;
 
 export type GrantApplicant = {
   __typename?: 'GrantApplicant';
-  contributors?: Maybe<Array<GrantApplicantContributor>>;
+  contributors: Array<GrantApplicantContributor>;
   contributorsCount: Scalars['Int']['output'];
   funding: GrantApplicantFunding;
   grant: Grant;
+  id: Scalars['BigInt']['output'];
   project: Project;
   status: GrantApplicantStatus;
+  voteCount: Scalars['Int']['output'];
 };
 
 
 export type GrantApplicantContributorsArgs = {
-  input?: InputMaybe<GrantApplicantContributorsInput>;
+  input?: InputMaybe<GrantApplicantContributorInput>;
 };
 
 export type GrantApplicantContributor = {
@@ -708,10 +748,16 @@ export type GrantApplicantContributor = {
   amount: Scalars['Int']['output'];
   timesContributed: Scalars['Int']['output'];
   user?: Maybe<User>;
+  voteCount: Scalars['Int']['output'];
 };
 
-export type GrantApplicantContributorsInput = {
+export type GrantApplicantContributorInput = {
   pagination?: InputMaybe<PaginationInput>;
+  where?: InputMaybe<GrantApplicantContributorWhereInput>;
+};
+
+export type GrantApplicantContributorWhereInput = {
+  userId: Scalars['BigInt']['input'];
 };
 
 export type GrantApplicantFunding = {
@@ -727,14 +773,6 @@ export type GrantApplicantFunding = {
   grantAmountDistributed: Scalars['Int']['output'];
 };
 
-export type GrantApplicantGetInput = {
-  where: GrantApplicantGetWhereInput;
-};
-
-export type GrantApplicantGetWhereInput = {
-  satus?: InputMaybe<GrantApplicantStatusFilter>;
-};
-
 export enum GrantApplicantStatus {
   Accepted = 'ACCEPTED',
   Canceled = 'CANCELED',
@@ -746,6 +784,25 @@ export enum GrantApplicantStatus {
 export enum GrantApplicantStatusFilter {
   Accepted = 'ACCEPTED',
   Funded = 'FUNDED'
+}
+
+export type GrantApplicantsGetInput = {
+  orderBy?: InputMaybe<Array<GrantApplicantsGetOrderByInput>>;
+  pagination?: InputMaybe<PaginationInput>;
+  where: GrantApplicantsGetWhereInput;
+};
+
+export type GrantApplicantsGetOrderByInput = {
+  direction: OrderByDirection;
+  field: GrantApplicantsOrderByField;
+};
+
+export type GrantApplicantsGetWhereInput = {
+  status?: InputMaybe<GrantApplicantStatusFilter>;
+};
+
+export enum GrantApplicantsOrderByField {
+  VoteCount = 'voteCount'
 }
 
 export type GrantApplyInput = {
@@ -805,8 +862,7 @@ export enum GrantStatusEnum {
 
 export enum GrantType {
   BoardVote = 'BOARD_VOTE',
-  CommunityVote = 'COMMUNITY_VOTE',
-  CompetitionVote = 'COMPETITION_VOTE'
+  CommunityVote = 'COMMUNITY_VOTE'
 }
 
 export type GraphSumData = {
@@ -1419,7 +1475,7 @@ export type Project = {
   fundingTxs: Array<FundingTx>;
   fundingTxsCount?: Maybe<Scalars['Int']['output']>;
   /** Returns the project's grant applications. */
-  grants: Array<GrantApplicant>;
+  grantApplications: Array<GrantApplicant>;
   id: Scalars['BigInt']['output'];
   image?: Maybe<Scalars['String']['output']>;
   keys: ProjectKeys;
@@ -1453,6 +1509,11 @@ export type Project = {
 
 export type ProjectEntriesArgs = {
   input?: InputMaybe<ProjectEntriesGetInput>;
+};
+
+
+export type ProjectGrantApplicationsArgs = {
+  input?: InputMaybe<ProjectGrantApplicationsInput>;
 };
 
 export type ProjectActivatedSubscriptionResponse = {
@@ -1578,6 +1639,18 @@ export type ProjectGoals = {
   completed: Array<ProjectGoal>;
   inProgress: Array<ProjectGoal>;
 };
+
+export type ProjectGrantApplicationsInput = {
+  where: ProjectGrantApplicationsWhereInput;
+};
+
+export type ProjectGrantApplicationsWhereInput = {
+  grantStatus: ProjectGrantApplicationsWhereInputEnum;
+};
+
+export enum ProjectGrantApplicationsWhereInputEnum {
+  FundingOpen = 'FUNDING_OPEN'
+}
 
 export type ProjectKeys = {
   __typename?: 'ProjectKeys';
@@ -2172,6 +2245,7 @@ export type User = {
   externalAccounts: Array<ExternalAccount>;
   /** Returns a user's funding transactions accross all projects. */
   fundingTxs: Array<FundingTx>;
+  hasSocialAccount: Scalars['Boolean']['output'];
   id: Scalars['BigInt']['output'];
   imageUrl?: Maybe<Scalars['String']['output']>;
   isEmailVerified: Scalars['Boolean']['output'];
@@ -2260,6 +2334,11 @@ export type UserProjectsGetInput = {
 export type UserProjectsGetWhereInput = {
   status?: InputMaybe<ProjectStatus>;
 };
+
+export enum VotingSystem {
+  OneToOne = 'ONE_TO_ONE',
+  StepLog_10 = 'STEP_LOG_10'
+}
 
 export type Wallet = {
   __typename?: 'Wallet';
@@ -2424,6 +2503,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
   ActivityResource: ( Entry ) | ( Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<RefType['SourceResource']> } ) | ( Project ) | ( ProjectReward );
   ConnectionDetails: ( LightningAddressConnectionDetails ) | ( LndConnectionDetailsPrivate ) | ( LndConnectionDetailsPublic );
+  Grant: ( BoardVoteGrant ) | ( CommunityVoteGrant );
   SourceResource: ( Entry ) | ( Project );
 };
 
@@ -2451,7 +2531,10 @@ export type ResolversTypes = {
   BaseCurrency: BaseCurrency;
   BigInt: ResolverTypeWrapper<Scalars['BigInt']['output']>;
   BitcoinQuote: ResolverTypeWrapper<BitcoinQuote>;
+  BoardVoteGrant: ResolverTypeWrapper<BoardVoteGrant>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  CommunityVoteGrant: ResolverTypeWrapper<CommunityVoteGrant>;
+  CompetitionVoteGrantVoteSummary: ResolverTypeWrapper<CompetitionVoteGrantVoteSummary>;
   ConnectionDetails: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['ConnectionDetails']>;
   Country: ResolverTypeWrapper<Country>;
   CreateEntryInput: CreateEntryInput;
@@ -2470,6 +2553,7 @@ export type ResolversTypes = {
   DeleteProjectInput: DeleteProjectInput;
   DeleteProjectRewardInput: DeleteProjectRewardInput;
   DeleteUserResponse: ResolverTypeWrapper<DeleteUserResponse>;
+  DistributionSystem: DistributionSystem;
   EmailVerifyInput: EmailVerifyInput;
   Entry: ResolverTypeWrapper<Entry>;
   EntryPublishedSubscriptionResponse: ResolverTypeWrapper<EntryPublishedSubscriptionResponse>;
@@ -2532,15 +2616,18 @@ export type ResolversTypes = {
   GetProjectStatsInput: GetProjectStatsInput;
   GetProjectStatsWhereInput: GetProjectStatsWhereInput;
   GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput;
-  Grant: ResolverTypeWrapper<Grant>;
-  GrantApplicant: ResolverTypeWrapper<GrantApplicant>;
+  Grant: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['Grant']>;
+  GrantApplicant: ResolverTypeWrapper<Omit<GrantApplicant, 'grant'> & { grant: ResolversTypes['Grant'] }>;
   GrantApplicantContributor: ResolverTypeWrapper<GrantApplicantContributor>;
-  GrantApplicantContributorsInput: GrantApplicantContributorsInput;
+  GrantApplicantContributorInput: GrantApplicantContributorInput;
+  GrantApplicantContributorWhereInput: GrantApplicantContributorWhereInput;
   GrantApplicantFunding: ResolverTypeWrapper<GrantApplicantFunding>;
-  GrantApplicantGetInput: GrantApplicantGetInput;
-  GrantApplicantGetWhereInput: GrantApplicantGetWhereInput;
   GrantApplicantStatus: GrantApplicantStatus;
   GrantApplicantStatusFilter: GrantApplicantStatusFilter;
+  GrantApplicantsGetInput: GrantApplicantsGetInput;
+  GrantApplicantsGetOrderByInput: GrantApplicantsGetOrderByInput;
+  GrantApplicantsGetWhereInput: GrantApplicantsGetWhereInput;
+  GrantApplicantsOrderByField: GrantApplicantsOrderByField;
   GrantApplyInput: GrantApplyInput;
   GrantBoardMember: ResolverTypeWrapper<GrantBoardMember>;
   GrantGetInput: GrantGetInput;
@@ -2617,6 +2704,9 @@ export type ResolversTypes = {
   ProjectGoalStatusInCreate: ProjectGoalStatusInCreate;
   ProjectGoalUpdateInput: ProjectGoalUpdateInput;
   ProjectGoals: ResolverTypeWrapper<ProjectGoals>;
+  ProjectGrantApplicationsInput: ProjectGrantApplicationsInput;
+  ProjectGrantApplicationsWhereInput: ProjectGrantApplicationsWhereInput;
+  ProjectGrantApplicationsWhereInputEnum: ProjectGrantApplicationsWhereInputEnum;
   ProjectKeys: ResolverTypeWrapper<ProjectKeys>;
   ProjectLinkMutationInput: ProjectLinkMutationInput;
   ProjectPublishMutationInput: ProjectPublishMutationInput;
@@ -2676,6 +2766,7 @@ export type ResolversTypes = {
   UserProjectContribution: ResolverTypeWrapper<UserProjectContribution>;
   UserProjectsGetInput: UserProjectsGetInput;
   UserProjectsGetWhereInput: UserProjectsGetWhereInput;
+  VotingSystem: VotingSystem;
   Wallet: ResolverTypeWrapper<Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversTypes['ConnectionDetails'] }>;
   WalletContributionLimits: ResolverTypeWrapper<WalletContributionLimits>;
   WalletLimits: ResolverTypeWrapper<WalletLimits>;
@@ -2704,7 +2795,10 @@ export type ResolversParentTypes = {
   BadgesGetWhereInput: BadgesGetWhereInput;
   BigInt: Scalars['BigInt']['output'];
   BitcoinQuote: BitcoinQuote;
+  BoardVoteGrant: BoardVoteGrant;
   Boolean: Scalars['Boolean']['output'];
+  CommunityVoteGrant: CommunityVoteGrant;
+  CompetitionVoteGrantVoteSummary: CompetitionVoteGrantVoteSummary;
   ConnectionDetails: ResolversUnionTypes<ResolversParentTypes>['ConnectionDetails'];
   Country: Country;
   CreateEntryInput: CreateEntryInput;
@@ -2777,13 +2871,15 @@ export type ResolversParentTypes = {
   GetProjectStatsInput: GetProjectStatsInput;
   GetProjectStatsWhereInput: GetProjectStatsWhereInput;
   GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput;
-  Grant: Grant;
-  GrantApplicant: GrantApplicant;
+  Grant: ResolversUnionTypes<ResolversParentTypes>['Grant'];
+  GrantApplicant: Omit<GrantApplicant, 'grant'> & { grant: ResolversParentTypes['Grant'] };
   GrantApplicantContributor: GrantApplicantContributor;
-  GrantApplicantContributorsInput: GrantApplicantContributorsInput;
+  GrantApplicantContributorInput: GrantApplicantContributorInput;
+  GrantApplicantContributorWhereInput: GrantApplicantContributorWhereInput;
   GrantApplicantFunding: GrantApplicantFunding;
-  GrantApplicantGetInput: GrantApplicantGetInput;
-  GrantApplicantGetWhereInput: GrantApplicantGetWhereInput;
+  GrantApplicantsGetInput: GrantApplicantsGetInput;
+  GrantApplicantsGetOrderByInput: GrantApplicantsGetOrderByInput;
+  GrantApplicantsGetWhereInput: GrantApplicantsGetWhereInput;
   GrantApplyInput: GrantApplyInput;
   GrantBoardMember: GrantBoardMember;
   GrantGetInput: GrantGetInput;
@@ -2847,6 +2943,8 @@ export type ResolversParentTypes = {
   ProjectGoalOrderingUpdateInput: ProjectGoalOrderingUpdateInput;
   ProjectGoalUpdateInput: ProjectGoalUpdateInput;
   ProjectGoals: ProjectGoals;
+  ProjectGrantApplicationsInput: ProjectGrantApplicationsInput;
+  ProjectGrantApplicationsWhereInput: ProjectGrantApplicationsWhereInput;
   ProjectKeys: ProjectKeys;
   ProjectLinkMutationInput: ProjectLinkMutationInput;
   ProjectPublishMutationInput: ProjectPublishMutationInput;
@@ -2952,6 +3050,48 @@ export interface BigIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 export type BitcoinQuoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['BitcoinQuote'] = ResolversParentTypes['BitcoinQuote']> = {
   quote?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   quoteCurrency?: Resolver<ResolversTypes['QuoteCurrency'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type BoardVoteGrantResolvers<ContextType = any, ParentType extends ResolversParentTypes['BoardVoteGrant'] = ResolversParentTypes['BoardVoteGrant']> = {
+  applicants?: Resolver<Array<ResolversTypes['GrantApplicant']>, ParentType, ContextType, Partial<BoardVoteGrantApplicantsArgs>>;
+  balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  boardMembers?: Resolver<Array<ResolversTypes['GrantBoardMember']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  shortDescription?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  sponsors?: Resolver<Array<ResolversTypes['Sponsor']>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['GrantStatusEnum'], ParentType, ContextType>;
+  statuses?: Resolver<Array<ResolversTypes['GrantStatus']>, ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['GrantType'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CommunityVoteGrantResolvers<ContextType = any, ParentType extends ResolversParentTypes['CommunityVoteGrant'] = ResolversParentTypes['CommunityVoteGrant']> = {
+  applicants?: Resolver<Array<ResolversTypes['GrantApplicant']>, ParentType, ContextType, Partial<CommunityVoteGrantApplicantsArgs>>;
+  balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  distributionSystem?: Resolver<ResolversTypes['DistributionSystem'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  shortDescription?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  sponsors?: Resolver<Array<ResolversTypes['Sponsor']>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['GrantStatusEnum'], ParentType, ContextType>;
+  statuses?: Resolver<Array<ResolversTypes['GrantStatus']>, ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['GrantType'], ParentType, ContextType>;
+  votes?: Resolver<ResolversTypes['CompetitionVoteGrantVoteSummary'], ParentType, ContextType>;
+  votingSystem?: Resolver<ResolversTypes['VotingSystem'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CompetitionVoteGrantVoteSummaryResolvers<ContextType = any, ParentType extends ResolversParentTypes['CompetitionVoteGrantVoteSummary'] = ResolversParentTypes['CompetitionVoteGrantVoteSummary']> = {
+  voteCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  voterCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3148,29 +3288,18 @@ export type FundinginvoiceCancelResolvers<ContextType = any, ParentType extends 
 };
 
 export type GrantResolvers<ContextType = any, ParentType extends ResolversParentTypes['Grant'] = ResolversParentTypes['Grant']> = {
-  applicants?: Resolver<Array<ResolversTypes['GrantApplicant']>, ParentType, ContextType, Partial<GrantApplicantsArgs>>;
-  balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  boardMembers?: Resolver<Array<ResolversTypes['GrantBoardMember']>, ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  shortDescription?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  sponsors?: Resolver<Array<ResolversTypes['Sponsor']>, ParentType, ContextType>;
-  status?: Resolver<ResolversTypes['GrantStatusEnum'], ParentType, ContextType>;
-  statuses?: Resolver<Array<ResolversTypes['GrantStatus']>, ParentType, ContextType>;
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['GrantType'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'BoardVoteGrant' | 'CommunityVoteGrant', ParentType, ContextType>;
 };
 
 export type GrantApplicantResolvers<ContextType = any, ParentType extends ResolversParentTypes['GrantApplicant'] = ResolversParentTypes['GrantApplicant']> = {
-  contributors?: Resolver<Maybe<Array<ResolversTypes['GrantApplicantContributor']>>, ParentType, ContextType, Partial<GrantApplicantContributorsArgs>>;
+  contributors?: Resolver<Array<ResolversTypes['GrantApplicantContributor']>, ParentType, ContextType, Partial<GrantApplicantContributorsArgs>>;
   contributorsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   funding?: Resolver<ResolversTypes['GrantApplicantFunding'], ParentType, ContextType>;
   grant?: Resolver<ResolversTypes['Grant'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['GrantApplicantStatus'], ParentType, ContextType>;
+  voteCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3178,6 +3307,7 @@ export type GrantApplicantContributorResolvers<ContextType = any, ParentType ext
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   timesContributed?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  voteCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3427,7 +3557,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   fundersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType>;
   fundingTxsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  grants?: Resolver<Array<ResolversTypes['GrantApplicant']>, ParentType, ContextType>;
+  grantApplications?: Resolver<Array<ResolversTypes['GrantApplicant']>, ParentType, ContextType, Partial<ProjectGrantApplicationsArgs>>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   keys?: Resolver<ResolversTypes['ProjectKeys'], ParentType, ContextType>;
@@ -3703,6 +3833,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   entries?: Resolver<Array<ResolversTypes['Entry']>, ParentType, ContextType, Partial<UserEntriesArgs>>;
   externalAccounts?: Resolver<Array<ResolversTypes['ExternalAccount']>, ParentType, ContextType>;
   fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType>;
+  hasSocialAccount?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   isEmailVerified?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -3794,6 +3925,9 @@ export type Resolvers<ContextType = any> = {
   Badge?: BadgeResolvers<ContextType>;
   BigInt?: GraphQLScalarType;
   BitcoinQuote?: BitcoinQuoteResolvers<ContextType>;
+  BoardVoteGrant?: BoardVoteGrantResolvers<ContextType>;
+  CommunityVoteGrant?: CommunityVoteGrantResolvers<ContextType>;
+  CompetitionVoteGrantVoteSummary?: CompetitionVoteGrantVoteSummaryResolvers<ContextType>;
   ConnectionDetails?: ConnectionDetailsResolvers<ContextType>;
   Country?: CountryResolvers<ContextType>;
   CurrencyQuoteGetResponse?: CurrencyQuoteGetResponseResolvers<ContextType>;
@@ -3921,6 +4055,14 @@ export type ProjectDefaultGoalFragment = { __typename?: 'ProjectGoal', id: any, 
 
 export type ProjectGoalFragment = { __typename?: 'ProjectGoal', id: any, title: string, description?: string | null, targetAmount: number, currency: ProjectGoalCurrency, status: ProjectGoalStatus, projectId: any, amountContributed: number, createdAt: any, updatedAt: any, hasReceivedContribution: boolean, emojiUnifiedCode?: string | null };
 
+export type BoardVoteGrantsFragmentFragment = { __typename?: 'BoardVoteGrant', id: any, title: string, name: string, shortDescription: string, description?: string | null, balance: number, status: GrantStatusEnum, type: GrantType, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, sponsors: Array<{ __typename?: 'Sponsor', id: any, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }> };
+
+export type CommunityVoteGrantsFragmentFragment = { __typename?: 'CommunityVoteGrant', id: any, title: string, name: string, shortDescription: string, description?: string | null, balance: number, status: GrantStatusEnum, type: GrantType, votingSystem: VotingSystem, distributionSystem: DistributionSystem, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, sponsors: Array<{ __typename?: 'Sponsor', id: any, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }>, votes: { __typename?: 'CompetitionVoteGrantVoteSummary', voteCount: number, voterCount: number } };
+
+export type BoardVoteGrantFragmentFragment = { __typename?: 'BoardVoteGrant', id: any, title: string, name: string, shortDescription: string, description?: string | null, balance: number, status: GrantStatusEnum, image?: string | null, type: GrantType, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, applicants: Array<{ __typename?: 'GrantApplicant', contributorsCount: number, status: GrantApplicantStatus, contributors: Array<{ __typename?: 'GrantApplicantContributor', amount: number, timesContributed: number, user?: { __typename?: 'User', id: any, imageUrl?: string | null } | null }>, project: { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, wallets: Array<{ __typename?: 'Wallet', id: any }> }, funding: { __typename?: 'GrantApplicantFunding', communityFunding: number, grantAmount: number, grantAmountDistributed: number } }>, sponsors: Array<{ __typename?: 'Sponsor', id: any, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }>, boardMembers: Array<{ __typename?: 'GrantBoardMember', user: { __typename?: 'User', username: string, imageUrl?: string | null, id: any, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalId: string, externalUsername: string, id: any, public: boolean }> } }> };
+
+export type CommunityVoteGrantFragmentFragment = { __typename?: 'CommunityVoteGrant', id: any, title: string, name: string, shortDescription: string, description?: string | null, balance: number, status: GrantStatusEnum, image?: string | null, type: GrantType, votingSystem: VotingSystem, distributionSystem: DistributionSystem, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, applicants: Array<{ __typename?: 'GrantApplicant', contributorsCount: number, status: GrantApplicantStatus, voteCount: number, contributors: Array<{ __typename?: 'GrantApplicantContributor', amount: number, timesContributed: number, voteCount: number, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string } | null }>, project: { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, wallets: Array<{ __typename?: 'Wallet', id: any }> }, funding: { __typename?: 'GrantApplicantFunding', communityFunding: number, grantAmount: number, grantAmountDistributed: number } }>, sponsors: Array<{ __typename?: 'Sponsor', id: any, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }>, votes: { __typename?: 'CompetitionVoteGrantVoteSummary', voteCount: number, voterCount: number } };
+
 export type OrderItemFragment = { __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', id: any, name: string, cost: number, rewardCurrency: RewardCurrency, category?: string | null } };
 
 export type OrderFragment = { __typename?: 'Order', confirmedAt?: any | null, createdAt: any, deliveredAt?: any | null, id: any, shippedAt?: any | null, status: string, totalInSats: number, updatedAt: any, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null } | null, items: Array<(
@@ -3945,6 +4087,13 @@ export type ProfileOrderFragment = { __typename?: 'Order', id: any, referenceCod
 
 export type PaginationFragment = { __typename?: 'CursorPaginationResponse', take?: number | null, count?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: any | null } | null };
 
+export type ProjectCommunityVoteGrantFragment = { __typename?: 'CommunityVoteGrant', id: any, status: GrantStatusEnum, title: string };
+
+export type ProjectGrantApplicationsFragment = { __typename?: 'Project', grantApplications: Array<{ __typename?: 'GrantApplicant', id: any, status: GrantApplicantStatus, grant: { __typename?: 'BoardVoteGrant' } | (
+      { __typename?: 'CommunityVoteGrant' }
+      & ProjectCommunityVoteGrantFragment
+    ) }> };
+
 export type ProjectNostrKeysFragment = { __typename?: 'Project', id: any, name: string, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', privateKey?: { __typename?: 'NostrPrivateKey', nsec: string } | null, publicKey: { __typename?: 'NostrPublicKey', npub: string } } } };
 
 export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } }> };
@@ -3955,7 +4104,8 @@ export type ProjectRewardForLandingPageFragment = { __typename?: 'ProjectReward'
 
 export type ProjectRewardForCreateUpdateFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, cost: number, image?: string | null, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null };
 
-export type ProjectFragment = { __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, defaultGoalId?: any | null, balance: number, balanceUsdCent: number, createdAt: string, updatedAt: string, image?: string | null, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, fundingTxsCount?: number | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, owners: Array<{ __typename?: 'Owner', id: any, user: (
+export type ProjectFragment = (
+  { __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, defaultGoalId?: any | null, balance: number, balanceUsdCent: number, createdAt: string, updatedAt: string, image?: string | null, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, fundingTxsCount?: number | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, owners: Array<{ __typename?: 'Owner', id: any, user: (
       { __typename?: 'User' }
       & ProjectOwnerUserFragment
     ) }>, rewards: Array<(
@@ -3973,7 +4123,9 @@ export type ProjectFragment = { __typename?: 'Project', id: any, title: string, 
   )>, wallets: Array<(
     { __typename?: 'Wallet' }
     & ProjectWalletFragment
-  )>, followers: Array<{ __typename?: 'User', id: any, username: string }>, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', npub: string } } } };
+  )>, followers: Array<{ __typename?: 'User', id: any, username: string }>, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', npub: string } } } }
+  & ProjectGrantApplicationsFragment
+);
 
 export type ProjectForSubscriptionFragment = { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: (
       { __typename?: 'User' }
@@ -3992,12 +4144,12 @@ export type ProjectFundingMethodStatsFragment = { __typename?: 'ProjectStats', c
 
 export type ExternalAccountFragment = { __typename?: 'ExternalAccount', id: any, accountType: string, externalUsername: string, externalId: string, public: boolean };
 
-export type ProjectOwnerUserFragment = { __typename?: 'User', id: any, username: string, imageUrl?: string | null, email?: string | null, ranking?: any | null, isEmailVerified: boolean, externalAccounts: Array<(
+export type ProjectOwnerUserFragment = { __typename?: 'User', id: any, username: string, imageUrl?: string | null, email?: string | null, ranking?: any | null, isEmailVerified: boolean, hasSocialAccount: boolean, externalAccounts: Array<(
     { __typename?: 'ExternalAccount' }
     & ExternalAccountFragment
   )> };
 
-export type UserMeFragment = { __typename?: 'User', id: any, username: string, imageUrl?: string | null, email?: string | null, ranking?: any | null, isEmailVerified: boolean, externalAccounts: Array<(
+export type UserMeFragment = { __typename?: 'User', id: any, username: string, imageUrl?: string | null, email?: string | null, ranking?: any | null, isEmailVerified: boolean, hasSocialAccount: boolean, externalAccounts: Array<(
     { __typename?: 'ExternalAccount' }
     & ExternalAccountFragment
   )>, ownerOf: Array<{ __typename?: 'OwnerOf', project?: { __typename?: 'Project', id: any, name: string, image?: string | null, thumbnailImage?: string | null, title: string, status?: ProjectStatus | null } | null }> };
@@ -4009,7 +4161,7 @@ export type UserForProfilePageFragment = { __typename?: 'User', id: any, bio?: s
 
 export type UserForAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, email?: string | null, username: string };
 
-export type FunderWithUserFragment = { __typename?: 'Funder', amountFunded?: number | null, confirmed: boolean, id: any, confirmedAt?: any | null, timesFunded?: number | null, user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', externalId: string, externalUsername: string, id: any, accountType: string }> } | null };
+export type FunderWithUserFragment = { __typename?: 'Funder', amountFunded?: number | null, confirmed: boolean, id: any, confirmedAt?: any | null, timesFunded?: number | null, user?: { __typename?: 'User', id: any, username: string, hasSocialAccount: boolean, imageUrl?: string | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', externalId: string, externalUsername: string, id: any, accountType: string }> } | null };
 
 export type UserProjectContributionsFragment = { __typename?: 'UserProjectContribution', project: (
     { __typename?: 'Project' }
@@ -4463,14 +4615,26 @@ export type ProjectGoalsQuery = { __typename?: 'Query', projectGoals: { __typena
 export type GrantsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GrantsQuery = { __typename?: 'Query', grants: Array<{ __typename?: 'Grant', id: any, title: string, name: string, shortDescription: string, description?: string | null, status: GrantStatusEnum, image?: string | null, balance: number, type: GrantType, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, applicants: Array<{ __typename?: 'GrantApplicant', status: GrantApplicantStatus, funding: { __typename?: 'GrantApplicantFunding', communityFunding: number, grantAmount: number, grantAmountDistributed: number } }>, sponsors: Array<{ __typename?: 'Sponsor', id: any, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }> }> };
+export type GrantsQuery = { __typename?: 'Query', grants: Array<(
+    { __typename?: 'BoardVoteGrant' }
+    & BoardVoteGrantsFragmentFragment
+  ) | (
+    { __typename?: 'CommunityVoteGrant' }
+    & CommunityVoteGrantsFragmentFragment
+  )> };
 
 export type GrantQueryVariables = Exact<{
   input: GrantGetInput;
 }>;
 
 
-export type GrantQuery = { __typename?: 'Query', grant: { __typename?: 'Grant', id: any, title: string, name: string, shortDescription: string, description?: string | null, balance: number, status: GrantStatusEnum, image?: string | null, type: GrantType, statuses: Array<{ __typename?: 'GrantStatus', status: GrantStatusEnum, endAt?: any | null, startAt: any }>, boardMembers: Array<{ __typename?: 'GrantBoardMember', user: { __typename?: 'User', username: string, imageUrl?: string | null, id: any, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalId: string, externalUsername: string, id: any, public: boolean }> } }>, applicants: Array<{ __typename?: 'GrantApplicant', contributorsCount: number, status: GrantApplicantStatus, contributors?: Array<{ __typename?: 'GrantApplicantContributor', user?: { __typename?: 'User', id: any, imageUrl?: string | null } | null }> | null, project: { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null, description?: string | null, wallets: Array<{ __typename?: 'Wallet', id: any }> }, funding: { __typename?: 'GrantApplicantFunding', communityFunding: number, grantAmount: number, grantAmountDistributed: number } }>, sponsors: Array<{ __typename?: 'Sponsor', id: any, name: string, url?: string | null, image?: string | null, status: SponsorStatus, createdAt: any }> } };
+export type GrantQuery = { __typename?: 'Query', grant: (
+    { __typename?: 'BoardVoteGrant' }
+    & BoardVoteGrantFragmentFragment
+  ) | (
+    { __typename?: 'CommunityVoteGrant' }
+    & CommunityVoteGrantFragmentFragment
+  ) };
 
 export type GrantStatisticsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -4482,7 +4646,7 @@ export type GrantGetQueryVariables = Exact<{
 }>;
 
 
-export type GrantGetQuery = { __typename?: 'Query', grant: { __typename?: 'Grant', applicants: Array<{ __typename?: 'GrantApplicant', project: { __typename?: 'Project', name: string, id: any } }> } };
+export type GrantGetQuery = { __typename?: 'Query', grant: { __typename?: 'BoardVoteGrant', applicants: Array<{ __typename?: 'GrantApplicant', project: { __typename?: 'Project', name: string, id: any } }> } | { __typename?: 'CommunityVoteGrant', applicants: Array<{ __typename?: 'GrantApplicant', project: { __typename?: 'Project', name: string, id: any } }> } };
 
 export type OrdersGetQueryVariables = Exact<{
   input: OrdersGetInput;
@@ -4935,6 +5099,193 @@ export const ProjectGoalFragmentDoc = gql`
   emojiUnifiedCode
 }
     `;
+export const BoardVoteGrantsFragmentFragmentDoc = gql`
+    fragment BoardVoteGrantsFragment on BoardVoteGrant {
+  id
+  title
+  name
+  shortDescription
+  description
+  balance
+  status
+  type
+  statuses {
+    status
+    endAt
+    startAt
+  }
+  sponsors {
+    id
+    name
+    url
+    image
+    status
+    createdAt
+  }
+}
+    `;
+export const CommunityVoteGrantsFragmentFragmentDoc = gql`
+    fragment CommunityVoteGrantsFragment on CommunityVoteGrant {
+  id
+  title
+  name
+  shortDescription
+  description
+  balance
+  status
+  type
+  statuses {
+    status
+    endAt
+    startAt
+  }
+  sponsors {
+    id
+    name
+    url
+    image
+    status
+    createdAt
+  }
+  votes {
+    voteCount
+    voterCount
+  }
+  votingSystem
+  distributionSystem
+}
+    `;
+export const BoardVoteGrantFragmentFragmentDoc = gql`
+    fragment BoardVoteGrantFragment on BoardVoteGrant {
+  id
+  title
+  name
+  shortDescription
+  description
+  balance
+  status
+  image
+  type
+  statuses {
+    status
+    endAt
+    startAt
+  }
+  applicants {
+    contributorsCount
+    contributors(input: {pagination: {take: 50}}) {
+      user {
+        id
+        imageUrl
+      }
+      amount
+      timesContributed
+    }
+    project {
+      id
+      name
+      title
+      thumbnailImage
+      shortDescription
+      description
+      wallets {
+        id
+      }
+    }
+    status
+    funding {
+      communityFunding
+      grantAmount
+      grantAmountDistributed
+    }
+  }
+  sponsors {
+    id
+    name
+    url
+    image
+    status
+    createdAt
+  }
+  boardMembers {
+    user {
+      username
+      imageUrl
+      id
+      externalAccounts {
+        accountType
+        externalId
+        externalUsername
+        id
+        public
+      }
+    }
+  }
+}
+    `;
+export const CommunityVoteGrantFragmentFragmentDoc = gql`
+    fragment CommunityVoteGrantFragment on CommunityVoteGrant {
+  id
+  title
+  name
+  shortDescription
+  description
+  balance
+  status
+  image
+  type
+  statuses {
+    status
+    endAt
+    startAt
+  }
+  applicants {
+    contributorsCount
+    contributors {
+      user {
+        id
+        imageUrl
+        username
+      }
+      amount
+      timesContributed
+      voteCount
+    }
+    project {
+      id
+      name
+      title
+      thumbnailImage
+      shortDescription
+      description
+      wallets {
+        id
+      }
+    }
+    status
+    funding {
+      communityFunding
+      grantAmount
+      grantAmountDistributed
+    }
+    voteCount
+  }
+  sponsors {
+    id
+    name
+    url
+    image
+    status
+    createdAt
+  }
+  votes {
+    voteCount
+    voterCount
+  }
+  votingSystem
+  distributionSystem
+}
+    `;
 export const OrderItemFragmentDoc = gql`
     fragment OrderItem on OrderItem {
   item {
@@ -5145,6 +5496,7 @@ export const ProjectOwnerUserFragmentDoc = gql`
   externalAccounts {
     ...ExternalAccount
   }
+  hasSocialAccount
 }
     ${ExternalAccountFragmentDoc}`;
 export const ProjectRewardForCreateUpdateFragmentDoc = gql`
@@ -5211,6 +5563,24 @@ export const ProjectWalletFragmentDoc = gql`
   }
 }
     `;
+export const ProjectCommunityVoteGrantFragmentDoc = gql`
+    fragment ProjectCommunityVoteGrant on CommunityVoteGrant {
+  id
+  status
+  title
+}
+    `;
+export const ProjectGrantApplicationsFragmentDoc = gql`
+    fragment ProjectGrantApplications on Project {
+  grantApplications {
+    id
+    status
+    grant {
+      ...ProjectCommunityVoteGrant
+    }
+  }
+}
+    ${ProjectCommunityVoteGrantFragmentDoc}`;
 export const ProjectFragmentDoc = gql`
     fragment Project on Project {
   id
@@ -5283,12 +5653,14 @@ export const ProjectFragmentDoc = gql`
       }
     }
   }
+  ...ProjectGrantApplications
 }
     ${ProjectOwnerUserFragmentDoc}
 ${ProjectRewardForCreateUpdateFragmentDoc}
 ${UserForAvatarFragmentDoc}
 ${EntryForProjectFragmentDoc}
-${ProjectWalletFragmentDoc}`;
+${ProjectWalletFragmentDoc}
+${ProjectGrantApplicationsFragmentDoc}`;
 export const UserMeFragmentDoc = gql`
     fragment UserMe on User {
   id
@@ -5297,6 +5669,7 @@ export const UserMeFragmentDoc = gql`
   email
   ranking
   isEmailVerified
+  hasSocialAccount
   externalAccounts {
     ...ExternalAccount
   }
@@ -5440,6 +5813,7 @@ export const FunderWithUserFragmentDoc = gql`
   user {
     id
     username
+    hasSocialAccount
     externalAccounts {
       externalId
       externalUsername
@@ -7698,39 +8072,12 @@ export type ProjectGoalsQueryResult = Apollo.QueryResult<ProjectGoalsQuery, Proj
 export const GrantsDocument = gql`
     query Grants {
   grants {
-    id
-    title
-    name
-    shortDescription
-    description
-    status
-    image
-    balance
-    type
-    statuses {
-      status
-      endAt
-      startAt
-    }
-    applicants {
-      status
-      funding {
-        communityFunding
-        grantAmount
-        grantAmountDistributed
-      }
-    }
-    sponsors {
-      id
-      name
-      url
-      image
-      status
-      createdAt
-    }
+    ...BoardVoteGrantsFragment
+    ...CommunityVoteGrantsFragment
   }
 }
-    `;
+    ${BoardVoteGrantsFragmentFragmentDoc}
+${CommunityVoteGrantsFragmentFragmentDoc}`;
 
 /**
  * __useGrantsQuery__
@@ -7766,71 +8113,12 @@ export type GrantsQueryResult = Apollo.QueryResult<GrantsQuery, GrantsQueryVaria
 export const GrantDocument = gql`
     query Grant($input: GrantGetInput!) {
   grant(input: $input) {
-    id
-    title
-    name
-    shortDescription
-    description
-    balance
-    status
-    image
-    type
-    statuses {
-      status
-      endAt
-      startAt
-    }
-    boardMembers {
-      user {
-        username
-        imageUrl
-        id
-        externalAccounts {
-          accountType
-          externalId
-          externalUsername
-          id
-          public
-        }
-      }
-    }
-    applicants {
-      contributorsCount
-      contributors(input: {pagination: {take: 50}}) {
-        user {
-          id
-          imageUrl
-        }
-      }
-      project {
-        id
-        name
-        title
-        thumbnailImage
-        shortDescription
-        description
-        wallets {
-          id
-        }
-      }
-      status
-      funding {
-        communityFunding
-        grantAmount
-        grantAmountDistributed
-      }
-    }
-    sponsors {
-      id
-      name
-      url
-      image
-      status
-      createdAt
-    }
+    ...BoardVoteGrantFragment
+    ...CommunityVoteGrantFragment
   }
 }
-    `;
+    ${BoardVoteGrantFragmentFragmentDoc}
+${CommunityVoteGrantFragmentFragmentDoc}`;
 
 /**
  * __useGrantQuery__
@@ -7913,10 +8201,20 @@ export type GrantStatisticsQueryResult = Apollo.QueryResult<GrantStatisticsQuery
 export const GrantGetDocument = gql`
     query GrantGet($input: GrantGetInput!) {
   grant(input: $input) {
-    applicants {
-      project {
-        name
-        id
+    ... on BoardVoteGrant {
+      applicants {
+        project {
+          name
+          id
+        }
+      }
+    }
+    ... on CommunityVoteGrant {
+      applicants {
+        project {
+          name
+          id
+        }
       }
     }
   }

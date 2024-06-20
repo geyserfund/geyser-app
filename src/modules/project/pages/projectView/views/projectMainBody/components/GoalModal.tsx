@@ -96,7 +96,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
 
   return (
     <>
-      <Modal isCentered isOpen={isOpen} onClose={onClose}>
+      <Modal isCentered isOpen={isOpen} onClose={onClose} blockScrollOnMount={false}>
         <ModalOverlay />
         <ModalContent bg="transparent" boxShadow={0}>
           <Box borderRadius="8px" bg="neutral.0" pb={3}>
@@ -127,7 +127,7 @@ export const GoalModal = ({ isOpen, onClose, goal, projectId, refetch, openDelet
                         {t('Goal Title')}
                       </Text>
                     </HStack>
-                    <HStack width="100%" alignItems="center" justifyContent="flex-start">
+                    <HStack width="100%" alignItems="flex-start" justifyContent="flex-start">
                       <ControlledEmojiInput
                         control={control}
                         name="emojiUnifiedCode"

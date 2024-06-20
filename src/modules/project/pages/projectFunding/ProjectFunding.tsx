@@ -1,23 +1,24 @@
 import { useEffect, useState } from 'react'
 
-import { Project, UserMeFragment, useWalletLimitQuery } from '../../../../types'
+import { Grant, Project, UserMeFragment, useWalletLimitQuery } from '../../../../types'
 import { FundingProvider, useFundingContext } from '../../context/FundingProvider'
 import { FundingStages, useFundingStage } from '../../funding/state'
 import { QRCodeSection } from '../projectView/views/projectActivityPanel/screens'
 import { FundingComplete } from './views/FundingComplete'
 import { FundingForm, ProjectFundingFormState } from './views/FundingForm'
 
-const SUCCESS_TITLE = 'Contribution Successfull'
+const SUCCESS_TITLE = 'Contribution successfull'
 
 interface Props {
   project: Project | undefined
   user: UserMeFragment
   onTitleChange?(title: string | null): void
+  grant?: Grant
 }
 
 const noop = () => {}
 
-export const ProjectFundingContent = ({ project, user, onTitleChange = noop }: Props) => {
+export const ProjectFundingContent = ({ project, user, onTitleChange = noop, grant }: Props) => {
   const [title, setTitle] = useState<string | null>(null)
 
   useEffect(() => {
@@ -53,15 +54,21 @@ export const ProjectFundingContent = ({ project, user, onTitleChange = noop }: P
     resetFundingFlow()
   }
 
+  const handleFundingCompleteClose = () => {
+    window.location.reload()
+  }
+
   if (!project) {
     return null
   }
 
   switch (fundingStage) {
     case FundingStages.started:
-      return <QRCodeSection onCloseClick={handleClose} />
+      return <QRCodeSection onCloseClick={handleClose} openedFromGrant={Boolean(grant)} />
     case FundingStages.completed:
-      return <FundingComplete formState={formState} />
+      return (
+        <FundingComplete onClose={handleFundingCompleteClose} project={project} formState={formState} grant={grant} />
+      )
     default:
       return <FundingForm project={project} user={user} onFundingRequested={setFormState} />
   }

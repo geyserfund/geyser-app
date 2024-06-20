@@ -2,8 +2,8 @@ import { CloseIcon } from '@chakra-ui/icons'
 import { Box, HStack, Image, Spacer, Stack, Text } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useMemo } from 'react'
-import { BiPencil } from 'react-icons/bi'
 import { BsHeartFill } from 'react-icons/bs'
+import { MdModeEdit } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../constants'
@@ -44,7 +44,13 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
   }
 
   const handleClick = () => {
-    navigate(getPath('entry', `${entry.id}`))
+    if (isDraft) {
+      if (onEdit) {
+        onEdit()
+      }
+    } else {
+      navigate(getPath('entry', `${entry.id}`))
+    }
   }
 
   return (
@@ -117,7 +123,7 @@ export const ProjectEntryCard = ({ entry, onEdit, onDelete }: Props) => {
                 aria-label="edit-entry"
                 size="sm"
                 borderWidth="0"
-                icon={<BiPencil fontSize="16px" />}
+                icon={<MdModeEdit fontSize="16px" />}
                 onClick={handleEdit}
               />
             )}

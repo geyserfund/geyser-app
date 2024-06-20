@@ -75,7 +75,7 @@ export const FundingForm = ({ project, user, onFundingRequested = () => {} }: Pr
     <Box>
       <Text fontWeight={'500'} mb={2} fontSize="16px">
         {t(
-          'Vote for this project by funding towards it below! 1 Sat = 1 Vote. To receive a project reward contribute from the project page.',
+          'Vote for this project by funding towards it below! To receive a project reward contribute from the project page.',
         )}
       </Text>
       <Box mb={3}>

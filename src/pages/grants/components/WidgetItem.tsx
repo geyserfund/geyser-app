@@ -6,12 +6,14 @@ import { ListText } from './ListText'
 export const WidgetItem = ({
   subtitle,
   children,
+  isSatLogo = true,
 }: PropsWithChildren<{
   subtitle: ReactNode
+  isSatLogo?: boolean
 }>) => {
   return (
     <ListText
-      isSatLogo
+      isSatLogo={isSatLogo}
       subtitle={subtitle}
       titleProps={{
         color: 'primary.500',

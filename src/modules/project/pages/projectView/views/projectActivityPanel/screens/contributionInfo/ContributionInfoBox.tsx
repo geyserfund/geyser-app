@@ -22,6 +22,7 @@ export enum ContributionInfoBoxVersion {
 type Props = HTMLChakraProps<'div'> & {
   showGeyserFee: boolean
   version: ContributionInfoBoxVersion
+  openedFromGrant?: boolean
 }
 
 const ContributionInfoBoxDivider = ({ version }: { version: ContributionInfoBoxVersion }) => {
@@ -32,7 +33,7 @@ const ContributionInfoBoxDivider = ({ version }: { version: ContributionInfoBoxV
   return <Divider />
 }
 
-export const ContributionInfoBox = ({ showGeyserFee, version, ...rest }: Props) => {
+export const ContributionInfoBox = ({ showGeyserFee, version, openedFromGrant, ...rest }: Props) => {
   const { t } = useTranslation()
 
   const {
@@ -245,7 +246,7 @@ export const ContributionInfoBox = ({ showGeyserFee, version, ...rest }: Props) 
           </Text>
         </HStack>
       </HStack>
-      <CopyProjectLink showCopy={isPaid} projectName={project.name} />
+      {!openedFromGrant && <CopyProjectLink showCopy={isPaid} projectName={project.name} />}
     </VStack>
   )
 }

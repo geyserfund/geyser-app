@@ -1,6 +1,6 @@
 import { IconButton, SkeletonText } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { BiPencil } from 'react-icons/bi'
+import { MdModeEdit } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 
 import { CardLayout, SkeletonLayout } from '../../../../../../../components/layouts'
@@ -31,9 +31,9 @@ export const Story = () => {
               <IconButton
                 aria-label="go to edit story"
                 onClick={() => project && navigate(getPath('dashboardStory', project.name))}
-                variant="transparent"
+                variant="ghost"
               >
-                <BiPencil />
+                <MdModeEdit fontSize={16} />
               </IconButton>
             ) : undefined
           }

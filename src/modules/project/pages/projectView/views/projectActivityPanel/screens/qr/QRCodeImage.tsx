@@ -10,7 +10,7 @@ import { useIsLightingMethodAtom } from './states/paymentMethodAtom'
 import { LightningQR } from './views/lightning/LightningQR'
 import { OnchainBoltz } from './views/onchain/OnChainBoltz'
 
-export const QRCodeImage = () => {
+export const QRCodeImage = ({ openedFromGrant }: { openedFromGrant?: boolean }) => {
   const [lightningInvoice, setLightningInvoice] = useState<string>('')
   const [onChainAddress, setOnChainAddress] = useState<string>('')
 
@@ -32,7 +32,7 @@ export const QRCodeImage = () => {
   }, [fundingTx, fundingTx.paymentRequest, fundingTx.address])
 
   return (
-    <>
+    <VStack gap={2}>
       <VStack flexWrap="wrap" width="100%">
         <PaymentMethodSelection />
         {isLightning ? (
@@ -41,9 +41,13 @@ export const QRCodeImage = () => {
           <OnchainBoltz onChainAddress={onChainAddress} />
         )}
       </VStack>
-      <ContributionInfoBox version={ContributionInfoBoxVersion.NEUTRAL} showGeyserFee={false} />
+      <ContributionInfoBox
+        version={ContributionInfoBoxVersion.NEUTRAL}
+        showGeyserFee={false}
+        openedFromGrant={openedFromGrant}
+      />
       <ReachOutForHelpButton />
       <FundingDisclaimer />
-    </>
+    </VStack>
   )
 }

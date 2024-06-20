@@ -5,8 +5,6 @@ import { SortOptions } from './SortBody'
 
 export const getCurrentSelection = (sort?: SortType) => {
   switch (sort) {
-    case SortType.recent:
-      return SortOptions.mostFundedThisWeek
     default:
       return SortOptions.mostFundedAllTime
   }

@@ -3,9 +3,14 @@ import { useEffect, useState } from 'react'
 
 import { useAuthContext } from '../../../../../context'
 import { ProjectFundingModalProps } from '../../../../../pages/grants/grantsPage/components/useProjectFundingModal'
+import { Grant } from '../../../../../types'
 import { ProjectFunding } from '../ProjectFunding'
 
-export const ProjectFundingModal = ({ isOpen, onClose, props }: ProjectFundingModalProps) => {
+interface Props extends ProjectFundingModalProps {
+  grant?: Grant
+}
+
+export const ProjectFundingModal = ({ isOpen, onClose, props, grant }: Props) => {
   const [title, setTitle] = useState<string | null>(null)
   const { user } = useAuthContext()
 
@@ -23,7 +28,7 @@ export const ProjectFundingModal = ({ isOpen, onClose, props }: ProjectFundingMo
           <ModalHeader pb={2}>{title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {isOpen && <ProjectFunding project={props?.project} user={user} onTitleChange={setTitle} />}
+            {isOpen && <ProjectFunding project={props?.project} user={user} onTitleChange={setTitle} grant={grant} />}
           </ModalBody>
         </Box>
       </ModalContent>
