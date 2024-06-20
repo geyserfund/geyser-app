@@ -9,14 +9,11 @@ interface Props {
   formState: ProjectFundingFormState | undefined
   project: ProjectFragment
   grant?: Grant
+  onClose: () => void
 }
 
-export const FundingComplete = ({ formState, project, grant }: Props) => {
+export const FundingComplete = ({ formState, project, grant, onClose }: Props) => {
   const { t } = useTranslation()
-
-  const handleClose = () => {
-    window.location.reload()
-  }
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href)
@@ -84,7 +81,7 @@ export const FundingComplete = ({ formState, project, grant }: Props) => {
         <Button w={'100%'} variant={'secondary'} onClick={handleCopyLink}>
           {t('Copy Grant Link')}
         </Button>
-        <Button w={'100%'} variant={'primary'} onClick={handleClose}>
+        <Button w={'100%'} variant={'primary'} onClick={onClose}>
           {t('Close')}
         </Button>
       </VStack>
