@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
+import { Navigate, RouteObject } from 'react-router-dom'
 
 import { App } from '../../App'
 import { AppLayout } from '../../AppLayout'
@@ -449,7 +449,7 @@ export const platformRoutes: RouteObject[] = [
   },
 ]
 
-export const router = createBrowserRouter([
+export const routes: RouteObject[] = [
   {
     path: '/',
     Component: App,
@@ -463,4 +463,4 @@ export const router = createBrowserRouter([
       },
     ],
   },
-])
+]
