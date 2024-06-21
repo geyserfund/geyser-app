@@ -1,11 +1,11 @@
-import { HStack, Text, VStack } from '@chakra-ui/react'
+import { HStack, Stack, Text, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '../../../../../../shared/components/layouts'
 import { ProjectStatus } from '../../../../../../types'
 import { useProjectAtom } from '../../hooks/useProjectAtom'
-import { FinalizeProjectNotice, Header, LaunchProjectNotice } from './sections'
+import { FinalizeProjectNotice, Header, LaunchProjectNotice, Story } from './sections'
 
 export const ProjectBody = () => {
   const { project, loading } = useProjectAtom()
@@ -25,13 +25,14 @@ export const ProjectBody = () => {
   // const projectDetails = useProjectDetails(project)
 
   return (
-    <HStack w="full" overflow="visible" spacing={4}>
-      <VStack flex={8} w="full">
+    <Stack w="full" overflow="visible" spacing={4} direction={{ base: 'column', lg: 'row' }}>
+      <VStack flex={8} w="full" spacing={6}>
         <FinalizeProjectNotice />
         <LaunchProjectNotice />
         <Header />
+        <Story />
       </VStack>
-      <VStack w="full" flex={5} justifyContent="start">
+      <VStack display={{ base: 'none', lg: 'flex' }} w="full" flex={5} justifyContent="start">
         <CardLayout w="full">
           <Text>Project Contribution Summary</Text>
         </CardLayout>
@@ -44,6 +45,6 @@ export const ProjectBody = () => {
       {goals.hasGoals ? <Goals /> : null} */}
       {/* <CreatorTools />
       <Details /> */}
-    </HStack>
+    </Stack>
   )
 }

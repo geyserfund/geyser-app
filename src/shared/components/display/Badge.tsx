@@ -1,3 +1,3 @@
-export const Badge = (props) => {
+export const Badge = () => {
   return <div>Badge</div>
 }

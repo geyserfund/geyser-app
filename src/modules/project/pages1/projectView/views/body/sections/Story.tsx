@@ -1,20 +1,18 @@
-import { IconButton, SkeletonText } from '@chakra-ui/react'
+import { SkeletonText } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { BiPencil } from 'react-icons/bi'
-import { useNavigate } from 'react-router-dom'
 
-import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
-import { getPath } from '../../../../../../../constants'
 import { MarkdownField } from '../../../../../../../forms/markdown/MarkdownField'
-import { CardLayout, SkeletonLayout } from '../../../../../../../shared/components/layouts'
-import { useProjectContext } from '../../../../../context'
+import { CardLayout } from '../../../../../../../shared/components/layouts'
+import { Body } from '../../../../../../../shared/components/typography'
+import { useProjectAtom } from '../../../hooks/useProjectAtom'
+import { BodySectionLayout } from '../components'
 
 export const Story = () => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
-  const { project, isProjectOwner } = useProjectContext()
 
-  if (!project) {
+  const { project, loading } = useProjectAtom()
+
+  if (loading) {
     return <StorySkeleton />
   }
 
@@ -23,38 +21,24 @@ export const Story = () => {
   }
 
   return (
-    <CardLayout w="full" mobileDense>
-      <article>
-        <TitleDivider
-          rightAction={
-            isProjectOwner ? (
-              <IconButton
-                aria-label="go to edit story"
-                onClick={() => project && navigate(getPath('dashboardStory', project.name))}
-                variant="transparent"
-              >
-                <BiPencil />
-              </IconButton>
-            ) : undefined
-          }
-        >
-          {t('Story')}
-        </TitleDivider>
-        <MarkdownField preview content={project?.description} />
-      </article>
-    </CardLayout>
+    <BodySectionLayout title={t('Story')}>
+      <CardLayout w="full" mobileDense direction="column" spacing={5}>
+        <Body bold>{project.shortDescription}</Body>
+        <article>
+          <MarkdownField preview content={project?.description} />
+        </article>
+      </CardLayout>
+    </BodySectionLayout>
   )
 }
 
 export const StorySkeleton = () => {
+  const { t } = useTranslation()
   return (
-    <CardLayout w="full" mobileDense>
-      <article>
-        <TitleDivider>
-          <SkeletonLayout w="100px" h="30px" />
-        </TitleDivider>
+    <BodySectionLayout title={t('Story')}>
+      <CardLayout w="full" mobileDense>
         <SkeletonText noOfLines={10} spacing="4" />
-      </article>
-    </CardLayout>
+      </CardLayout>
+    </BodySectionLayout>
   )
 }

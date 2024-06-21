@@ -40,17 +40,18 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem }: Anima
       maxHeight={{ base: dimensions.projectNavBar.mobile.height, lg: dimensions.projectNavBar.desktop.height }}
       background="neutral1.2"
       borderRadius={{ base: '8px', lg: '10px' }}
+      position="relative"
     >
       <motion.div
         style={{
-          position: 'fixed',
-          top: buttonRef?.current?.getBoundingClientRect().top,
+          position: 'absolute',
+          top: '2px',
           height: buttonRef?.current?.offsetHeight,
           backgroundColor: colors.neutral1[11],
           zIndex: 1,
           borderRadius: isMobileMode ? '8px' : '10px',
         }}
-        animate={{ left: buttonRef?.current?.getBoundingClientRect().left, width: buttonRef?.current?.offsetWidth }}
+        animate={{ left: buttonRef?.current?.offsetLeft, width: buttonRef?.current?.offsetWidth }}
         transition={{ type: 'spring', damping: 20, stiffness: 200 }}
       />
       {items.map((item, index) => {

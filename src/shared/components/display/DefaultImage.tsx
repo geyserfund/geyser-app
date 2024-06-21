@@ -1,6 +1,6 @@
 import { Box, BoxProps, Image, ImageProps } from '@chakra-ui/react'
 
-import { ProjectEntryThumbnailPlaceholderUrl } from '../../constants'
+import { ProjectEntryThumbnailPlaceholderUrl } from '../../../constants'
 
 export const DefaultImage = ({ grey, ...rest }: { grey?: boolean } & BoxProps & ImageProps) => {
   if (grey) {

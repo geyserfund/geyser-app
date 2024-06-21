@@ -48,14 +48,13 @@ export const AppLayout = () => {
             alignItems="center"
             flexDir="column"
             backgroundColor="utils.pbg"
-            paddingX={{ base: 3, lg: 5 }}
+            overflowY={'auto'}
           >
             <TopNavBar />
             <Box
               id={ID.root}
               maxHeight="100%"
               width="100%"
-              maxWidth={dimensions.maxWidth}
               flex="1"
               paddingTop={`${dimensions.topNavBar.desktop.height}px`}
               overflowY={{ base: 'initial', lg: 'auto' }}

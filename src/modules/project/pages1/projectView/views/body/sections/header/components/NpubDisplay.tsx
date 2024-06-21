@@ -1,11 +1,9 @@
-import { Button, ButtonProps, HStack, Tooltip, useDisclosure } from '@chakra-ui/react'
+import { Button, ButtonProps, Tooltip, useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { NostrSvgIcon } from '../../../../../../../components/icons'
-import { Body1 } from '../../../../../../../components/typography'
-import { Body } from '../../../../../../../shared/components/typography'
-import { copyTextToClipboard } from '../../../../../../../utils'
+import { NostrSvgIcon } from '../../../../../../../../../components/icons'
+import { copyTextToClipboard } from '../../../../../../../../../utils'
 
 interface NpubDisplayProps extends ButtonProps {
   npub: string
@@ -34,24 +32,15 @@ export const NpubDisplay = ({ npub, iconOnly, ...rest }: NpubDisplayProps) => {
     <Tooltip label={copy ? t('Copied!') : t('Copy')} placement="top-start" closeOnClick={false} isOpen={isOpen}>
       <Button
         size="xs"
-        variant="outline"
-        colorScheme="neutral1"
-        bgColor={copy ? 'primary1.9' : 'transparent'}
-        display="flex"
-        justifyContent="space-between"
+        variant="surface"
+        colorScheme="primary1"
+        bgColor={copy ? 'primary1.5' : undefined}
         onMouseEnter={onOpen}
         onMouseLeave={onClose}
         _hover={{ bgColor: copy ? 'primary1.9' : undefined }}
         {...rest}
       >
-        <HStack spacing="10px">
-          {<NostrSvgIcon height="12px" width="12px" onClick={handleOnCopy} color={'social.nostr'} />}
-          {!iconOnly && (
-            <Body size="xs" medium light onClick={handleOnCopy} width="auto">
-              {`npub`}
-            </Body>
-          )}
-        </HStack>
+        {<NostrSvgIcon height="12px" width="12px" onClick={handleOnCopy} />}
       </Button>
     </Tooltip>
   )

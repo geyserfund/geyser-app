@@ -1,4 +1,5 @@
 export * from './AvatarElement'
+export { BodySectionLayout } from './BodySectionLayout'
 export * from './ContributeButton'
 export * from './FollowButton'
 export * from './FundingFormRewardItem'
