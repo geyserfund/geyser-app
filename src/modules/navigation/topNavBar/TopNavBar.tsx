@@ -1,11 +1,11 @@
-import { HStack, Image, useColorModeValue, useDisclosure } from '@chakra-ui/react'
+import { Box, HStack, Image, useColorModeValue, useDisclosure } from '@chakra-ui/react'
 import { useEffect } from 'react'
-import { Location, useLocation, useNavigate } from 'react-router-dom'
+import { Link, Location, useLocation, useNavigate } from 'react-router-dom'
 
 import LogoDark from '../../../assets/logo-dark.svg'
 import LogoLight from '../../../assets/logo-light.svg'
 import { AuthModal } from '../../../components/molecules'
-import { dimensions } from '../../../constants'
+import { dimensions, getPath } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { useAuthModal } from '../../../pages/auth/hooks'
 import { LoginButton } from '../components/LoginButton'
@@ -59,9 +59,12 @@ export const TopNavBar = () => {
         backgroundColor={'utils.pbg'}
         position="fixed"
         top={0}
+        zIndex={1}
       >
         <HStack w="100%" height={'48px'} justifyContent={'space-between'}>
-          <Image src={imagesrc} height="100%" width="auto" objectFit="contain" />
+          <Box as={Link} to={getPath('landingPage')} h="100%">
+            <Image src={imagesrc} height="100%" width="auto" objectFit="contain" />
+          </Box>
           <HStack position="relative">
             {!isLoggedIn && <LoginButton />}
             <ProfileNav />

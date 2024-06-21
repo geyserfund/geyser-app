@@ -15,8 +15,6 @@ import { forwardRef, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCaretDoubleDown, PiShareFat } from 'react-icons/pi'
 
-import { Body1 } from '../../../../../../../../components/typography'
-import { ImageWithReload, ProjectStatusLabel } from '../../../../../../../../components/ui'
 import {
   FlashMembershipCountUrl,
   ID,
@@ -24,14 +22,17 @@ import {
   projectsWithSubscription,
 } from '../../../../../../../../constants'
 import { validateImageUrl } from '../../../../../../../../forms/validations/image'
+import { ImageWithReload } from '../../../../../../../../shared/components/display/ImageWithReload'
 import { CardLayout, SkeletonLayout } from '../../../../../../../../shared/components/layouts'
 import { Body, H1 } from '../../../../../../../../shared/components/typography'
+import { ProjectStatusLabel } from '../../../../../../../../shared/molecules/ProjectStatusLabel'
 import { ProjectStatus, useProjectPageHeaderSummaryQuery, WalletStatus } from '../../../../../../../../types'
 import { toInt, useMobileMode } from '../../../../../../../../utils'
 import { toLargeImageUrl } from '../../../../../../../../utils/tools/imageSizes'
 import { useProjectAtom, useWalletAtom } from '../../../../hooks/useProjectAtom'
 import { CreatorSocial } from './components/CreatorSocial'
 import { LightningAddress } from './components/LightningAddress'
+import { NpubDisplay } from './components/NpubDisplay'
 import { VideoPlayer } from './components/VideoPlayer'
 
 export const Header = forwardRef<HTMLDivElement>((_, ref) => {
@@ -159,8 +160,8 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             </H1>
 
             <HStack w="full">
-              {/* <NpubDisplay npub={project?.keys?.nostrKeys.publicKey.npub} /> */}
               <LightningAddress name={`${project.name}`} isGeyser />
+              <NpubDisplay npub={project?.keys?.nostrKeys.publicKey.npub} />
               <CreatorSocial />
             </HStack>
 
@@ -175,7 +176,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
                   {`${t('Followers')}: ${project.followersCount}`}
                 </Body>
 
-                {subscribers && <Body1 semiBold>{`${subscribers || 0} ${t('subscribers')}`}</Body1>}
+                {subscribers && <Body size="xs" medium light>{`${subscribers || 0} ${t('subscribers')}`}</Body>}
               </HStack>
             )}
 

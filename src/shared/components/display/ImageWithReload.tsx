@@ -1,7 +1,7 @@
 import { Image, ImageProps, Skeleton } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
 
-import { useNotification } from '../../utils'
+import { useNotification } from '../../../utils'
 import { DefaultImage } from './DefaultImage'
 
 interface IImageWithReload extends ImageProps {

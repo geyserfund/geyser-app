@@ -1,29 +1,33 @@
-import { HStack } from '@chakra-ui/react'
+import { HStack, StackProps } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
 import { PiBag, PiFlagBannerFold, PiGear, PiMedalMilitary, PiNewspaper, PiSparkle } from 'react-icons/pi'
 import { useLocation } from 'react-router-dom'
 
-import { PathName } from '../../../../../constants'
+import { dimensions, PathName } from '../../../../../constants'
 import { AnimatedNavBar, NavBarItems } from '../../../../../shared/components/navigation/AnimatedNavBar'
+import { standardPadding } from '../../../../../styles'
 import { useMobileMode } from '../../../../../utils'
 import { hasEntriesAtom } from '../../../state/entriesAtom'
 import { hasGoalsAtom } from '../../../state/goalsAtom'
-import { isProjectOwnerAtom } from '../../../state/projectAtom'
 import { hasRewardsAtom } from '../../../state/rewardsAtom'
-export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
+import { useProjectAtom } from '../hooks/useProjectAtom'
+export const ProjectNavigation = () => {
   const location = useLocation()
 
   const isMobile = useMobileMode()
 
+  const { isProjectOwner, loading } = useProjectAtom()
+
   const hasEntries = useAtomValue(hasEntriesAtom)
   const hasRewards = useAtomValue(hasRewardsAtom)
   const hasGoals = useAtomValue(hasGoalsAtom)
-  const isProjectOwner = useAtomValue(isProjectOwnerAtom)
 
   console.log('checking goals', hasGoals)
 
   const ProjectNavigationButtons = useMemo(() => {
+    if (loading) return []
+
     const buttonList = [
       {
         name: 'Project',
@@ -72,7 +76,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
     }
 
     return buttonList
-  }, [hasEntries, hasGoals, hasRewards, isProjectOwner])
+  }, [hasEntries, hasGoals, hasRewards, isProjectOwner, loading])
 
   const activeButtonIndex = useMemo(() => {
     let activeIndex = 0
@@ -85,7 +89,15 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
   }, [location.pathname, ProjectNavigationButtons])
 
   return (
-    <HStack w="full" position="absolute" top="0">
+    <HStack
+      maxWidth={{ base: dimensions.maxWidth + 24, lg: dimensions.maxWidth + 40 }}
+      w="full"
+      position="fixed"
+      top={{ base: dimensions.topNavBar.mobile.height, lg: dimensions.topNavBar.desktop.height }}
+      paddingX={standardPadding}
+      background={'utils.pbg'}
+      zIndex={1}
+    >
       <AnimatedNavBar
         items={ProjectNavigationButtons}
         activeItem={activeButtonIndex}

@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 
+import { InReviewIcon } from '../../components/icons/svg/InReviewIcon'
 import { ProjectStatus, Wallet, WalletStatus } from '../../types/generated/graphql'
 import { isActive, isDraft, isInactive, isInReview } from '../../utils'
-import { InReviewIcon } from '../icons/svg/InReviewIcon'
 
 interface IProjectStatusLabel extends HTMLChakraProps<'div'> {
   project: { status?: ProjectStatus | null }
