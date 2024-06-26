@@ -8,6 +8,7 @@ import { useAuthContext } from '../../../../../../../context'
 import { useFollowProject } from '../../../../../../../hooks/graphqlState'
 import { EmailPromptModal } from '../../../../../../../pages/auth/components/EmailPromptModal'
 import { useAuthModal } from '../../../../../../../pages/auth/hooks'
+import { useEmailPrompt } from '../../../../../../../pages/auth/hooks/useEmailPrompt'
 import { Project } from '../../../../../../../types'
 
 interface FollowButtonProps extends ButtonProps {
@@ -22,6 +23,8 @@ export const FollowButton = ({ project, hasIcon, ...rest }: FollowButtonProps) =
   const emailModalProps = useDisclosure()
   const { isFollowed, handleFollow, handleUnFollow, followLoading, unfollowLoading } = useFollowProject(project)
 
+  const { shouldPrompt } = useEmailPrompt()
+
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
     event.stopPropagation()
@@ -31,14 +34,19 @@ export const FollowButton = ({ project, hasIcon, ...rest }: FollowButtonProps) =
       return
     }
 
-    if (isFollowed) {
-      handleUnFollow()
-    } else {
-      handleFollow()
+    if (shouldPrompt) {
+      emailModalProps.onOpen()
+      return
     }
+
+    handleFollowUnfollow()
   }
 
-  const handleEmailUpdated = () => {
+  const onEmailUpdated = () => {
+    handleFollowUnfollow()
+  }
+
+  const handleFollowUnfollow = () => {
     if (isFollowed) {
       handleUnFollow()
     } else {
@@ -63,7 +71,7 @@ export const FollowButton = ({ project, hasIcon, ...rest }: FollowButtonProps) =
       >
         {isFollowed ? t('Followed') : t('Follow')}
       </Button>
-      <EmailPromptModal onEmailUpdated={handleEmailUpdated} {...emailModalProps} />
+      <EmailPromptModal onEmailUpdated={onEmailUpdated} {...emailModalProps} />
     </>
   )
 }

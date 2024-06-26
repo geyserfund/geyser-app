@@ -10,7 +10,15 @@ import { MUTATION_UPDATE_USER_EMAIL } from '../../../graphql/mutations/email'
 type FormValues = Record<string, any>
 
 const emailSchema = yup.object().shape({
-  email: yup.string().email('Invalid email').required('Email is required'),
+  dontAskAgain: yup.boolean(),
+  email: yup
+    .string()
+    .email('Invalid email')
+    .when('dontAskAgain', {
+      is: false,
+      then: (schema) => schema.required('Email is required'),
+      otherwise: (schema) => schema.optional(),
+    }),
 })
 
 export const useEmailPrompt = () => {
@@ -20,7 +28,7 @@ export const useEmailPrompt = () => {
 
   useEffect(() => {
     const dontAskAgain = localStorage.getItem('dontAskAgain')
-    if (!user.email && !user.hasSocialAccount && !dontAskAgain) {
+    if (!user.email && !dontAskAgain) {
       setShouldPrompt(true)
     }
   }, [user])
@@ -28,19 +36,32 @@ export const useEmailPrompt = () => {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isValid, isDirty },
   } = useForm<FormValues>({
     resolver: yupResolver(emailSchema),
+    defaultValues: {
+      email: user.email,
+      dontAskAgain: false,
+    },
   })
 
   const onSubmit = async (data: FormValues) => {
-    const response = await updateUserEmail({ variables: { input: { email: data.email } } })
-    if (response.data.userEmailUpdate) {
-      setUser({ ...user, email: data.email })
-      setShouldPrompt(false)
+    if (data.email) {
+      const response = await updateUserEmail({ variables: { input: { email: data.email } } })
+      if (response.data.userEmailUpdate) {
+        setUser({ ...user, email: data.email })
+        setShouldPrompt(false)
+      }
+
+      return
+    }
+
+    if (data.dontAskAgain) {
       localStorage.setItem('dontAskAgain', 'true')
     }
   }
 
-  return { shouldPrompt, setShouldPrompt, handleSubmit, control, errors, onSubmit }
+  const enableSave = isValid && isDirty
+
+  return { shouldPrompt, setShouldPrompt, handleSubmit, control, errors, onSubmit, enableSave }
 }
