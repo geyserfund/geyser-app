@@ -1,5 +1,5 @@
 import { AddIcon } from '@chakra-ui/icons'
-import { Button, ButtonProps, useDisclosure } from '@chakra-ui/react'
+import { Button, ButtonProps } from '@chakra-ui/react'
 import { MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsFillHeartFill } from 'react-icons/bs'
@@ -9,6 +9,7 @@ import { useFollowProject } from '../../../../../../../hooks/graphqlState'
 import { EmailPromptModal } from '../../../../../../../pages/auth/components/EmailPromptModal'
 import { useAuthModal } from '../../../../../../../pages/auth/hooks'
 import { useEmailPrompt } from '../../../../../../../pages/auth/hooks/useEmailPrompt'
+import { useEmailPromptModal } from '../../../../../../../pages/auth/hooks/useEmailPromptModal'
 import { Project } from '../../../../../../../types'
 
 interface FollowButtonProps extends ButtonProps {
@@ -20,7 +21,8 @@ export const FollowButton = ({ project, hasIcon, ...rest }: FollowButtonProps) =
   const { t } = useTranslation()
   const { isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
-  const emailModalProps = useDisclosure()
+  const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose } = useEmailPromptModal()
+
   const { isFollowed, handleFollow, handleUnFollow, followLoading, unfollowLoading } = useFollowProject(project)
 
   const { shouldPrompt } = useEmailPrompt()
@@ -35,14 +37,10 @@ export const FollowButton = ({ project, hasIcon, ...rest }: FollowButtonProps) =
     }
 
     if (shouldPrompt) {
-      emailModalProps.onOpen()
+      emailPromptOnOpen()
       return
     }
 
-    handleFollowUnfollow()
-  }
-
-  const onEmailUpdated = () => {
     handleFollowUnfollow()
   }
 
@@ -71,7 +69,7 @@ export const FollowButton = ({ project, hasIcon, ...rest }: FollowButtonProps) =
       >
         {isFollowed ? t('Followed') : t('Follow')}
       </Button>
-      <EmailPromptModal onEmailUpdated={onEmailUpdated} {...emailModalProps} />
+      <EmailPromptModal isOpen={emailPromptIsOpen} onClose={emailPromptOnClose} onCloseAction={handleFollowUnfollow} />
     </>
   )
 }

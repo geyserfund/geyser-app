@@ -1,4 +1,5 @@
-import { Box, Button, Image, Text, UseModalProps, VStack } from '@chakra-ui/react'
+import { Box, Button, Image, Text, VStack } from '@chakra-ui/react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ControlledTextInput } from '../../../components/inputs'
@@ -7,24 +8,32 @@ import { Modal } from '../../../components/layouts'
 import { EmailPromptModalUrl } from '../../../constants'
 import { useEmailPrompt } from '../hooks/useEmailPrompt'
 
-export const EmailPromptModal = ({ onEmailUpdated, ...modalProps }: UseModalProps & { onEmailUpdated: () => void }) => {
+type EmailPromptModalProps = {
+  onCloseAction: () => void
+  onClose: () => void
+  isOpen: boolean
+}
+
+export const EmailPromptModal = ({ onCloseAction, onClose, isOpen }: EmailPromptModalProps) => {
   const { t } = useTranslation()
 
-  const { control, handleSubmit, onSubmit, enableSave } = useEmailPrompt()
+  const { control, handleSubmit, onSubmit, enableSave, reset } = useEmailPrompt()
+
+  useEffect(() => {
+    if (isOpen) {
+      reset()
+    }
+  }, [isOpen, reset])
 
   const handleEmailPrompSubmit = (data: any) => {
     onSubmit(data)
-
-    if (data.email) {
-      onEmailUpdated()
-    }
-
-    modalProps.onClose()
+    onCloseAction()
+    onClose()
   }
 
   return (
     <>
-      <Modal {...modalProps} title={t('Email')} size="lg">
+      <Modal isOpen={isOpen} onClose={onClose} title={t('Email')} size="lg">
         <form onSubmit={handleSubmit(handleEmailPrompSubmit)}>
           <VStack display="flex" justifyContent="flex-start" alignItems="flex-start" w="100%" gap={4}>
             <Box w="100%" height="200px" display="flex" justifyContent="center" alignItems="center">
