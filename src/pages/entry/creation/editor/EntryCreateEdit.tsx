@@ -303,6 +303,7 @@ export const EntryCreateEdit = () => {
                 handleChange={handleContentUpdate}
                 value={entry.content as string}
                 focusFlag={focusFlag}
+                placeholder={t('The body of this entry')}
               />
             </Box>
           </VStack>
