@@ -365,7 +365,7 @@ const HowVotingWorksModal = ({
 
   if (votingSystem === VotingSystem.StepLog_10) {
     return (
-      <Modal isOpen={isOpen} onClose={onClose} title={t('How voting works')}>
+      <Modal isOpen={isOpen} onClose={onClose} title={t('How voting works')} size="md">
         <VStack py={2} px={2} gap={4} w="full">
           <VStack alignItems="flex-start" gap={2}>
             <Text>
@@ -439,7 +439,7 @@ const HowVotingWorksModal = ({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={t('How voting works')}>
+    <Modal isOpen={isOpen} onClose={onClose} title={t('How voting works')} size="md">
       <VStack py={2} px={2} gap={4} w="full">
         <VStack alignItems="flex-start" gap={2}>
           <Text>
