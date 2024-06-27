@@ -9,7 +9,7 @@ import { EmailPromptModalUrl } from '../../../constants'
 import { useEmailPrompt } from '../hooks/useEmailPrompt'
 
 type EmailPromptModalProps = {
-  onCloseAction: () => void
+  onCloseAction?: () => void
   onClose: () => void
   isOpen: boolean
 }
@@ -17,7 +17,7 @@ type EmailPromptModalProps = {
 export const EmailPromptModal = ({ onCloseAction, onClose, isOpen }: EmailPromptModalProps) => {
   const { t } = useTranslation()
 
-  const { control, handleSubmit, onSubmit, enableSave, reset } = useEmailPrompt()
+  const { control, handleSubmit, onSubmit, enableSave, reset, shouldPrompt } = useEmailPrompt()
 
   useEffect(() => {
     if (isOpen) {
@@ -27,13 +27,13 @@ export const EmailPromptModal = ({ onCloseAction, onClose, isOpen }: EmailPrompt
 
   const handleEmailPrompSubmit = (data: any) => {
     onSubmit(data)
-    onCloseAction()
+    onCloseAction?.()
     onClose()
   }
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} title={t('Email')} size="lg">
+      <Modal isOpen={isOpen && shouldPrompt} onClose={onClose} title={t('Email')} size="lg">
         <form onSubmit={handleSubmit(handleEmailPrompSubmit)}>
           <VStack display="flex" justifyContent="flex-start" alignItems="flex-start" w="100%" gap={4}>
             <Box w="100%" height="200px" display="flex" justifyContent="center" alignItems="center">

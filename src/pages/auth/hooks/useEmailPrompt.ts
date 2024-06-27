@@ -22,17 +22,18 @@ const emailSchema = yup.object().shape({
 })
 
 export const useEmailPrompt = () => {
-  const { user, setUser } = useAuthContext()
+  const { user, setUser, isLoggedIn } = useAuthContext()
   const [shouldPrompt, setShouldPrompt] = useState(false)
   const [enableSave, setEnableSave] = useState(false)
   const [updateUserEmail] = useMutation(MUTATION_UPDATE_USER_EMAIL)
 
   useEffect(() => {
     const dontAskAgain = localStorage.getItem('dontAskAgain')
-    if (!user.email && !dontAskAgain) {
+
+    if (isLoggedIn && !user.email && !dontAskAgain) {
       setShouldPrompt(true)
     }
-  }, [user])
+  }, [user, isLoggedIn])
 
   const {
     handleSubmit,
@@ -51,19 +52,24 @@ export const useEmailPrompt = () => {
     setEnableSave(isValid && isDirty)
   }, [isValid, isDirty])
 
+  const setDontAskAgain = () => {
+    localStorage.setItem('dontAskAgain', 'true')
+  }
+
   const onSubmit = async (data: FormValues) => {
     if (data.email) {
       const response = await updateUserEmail({ variables: { input: { email: data.email } } })
       if (response.data.userEmailUpdate) {
         setUser({ ...user, email: data.email })
         setShouldPrompt(false)
+        setDontAskAgain()
       }
 
       return
     }
 
     if (data.dontAskAgain) {
-      localStorage.setItem('dontAskAgain', 'true')
+      setDontAskAgain()
     }
   }
 
