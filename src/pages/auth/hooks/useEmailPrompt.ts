@@ -17,13 +17,14 @@ const emailSchema = yup.object().shape({
     .when('dontAskAgain', {
       is: false,
       then: (schema) => schema.required('Email is required'),
-      otherwise: (schema) => schema.optional(),
+      otherwise: (schema) => schema.notRequired(),
     }),
 })
 
 export const useEmailPrompt = () => {
   const { user, setUser } = useAuthContext()
   const [shouldPrompt, setShouldPrompt] = useState(false)
+  const [enableSave, setEnableSave] = useState(false)
   const [updateUserEmail] = useMutation(MUTATION_UPDATE_USER_EMAIL)
 
   useEffect(() => {
@@ -37,6 +38,7 @@ export const useEmailPrompt = () => {
     handleSubmit,
     control,
     formState: { errors, isValid, isDirty },
+    reset,
   } = useForm<FormValues>({
     resolver: yupResolver(emailSchema),
     defaultValues: {
@@ -44,6 +46,10 @@ export const useEmailPrompt = () => {
       dontAskAgain: false,
     },
   })
+
+  useEffect(() => {
+    setEnableSave(isValid && isDirty)
+  }, [isValid, isDirty])
 
   const onSubmit = async (data: FormValues) => {
     if (data.email) {
@@ -61,7 +67,5 @@ export const useEmailPrompt = () => {
     }
   }
 
-  const enableSave = isValid && isDirty
-
-  return { shouldPrompt, setShouldPrompt, handleSubmit, control, errors, onSubmit, enableSave }
+  return { shouldPrompt, setShouldPrompt, handleSubmit, control, errors, onSubmit, enableSave, reset }
 }
