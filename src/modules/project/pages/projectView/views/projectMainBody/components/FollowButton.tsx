@@ -6,7 +6,10 @@ import { BsFillHeartFill } from 'react-icons/bs'
 
 import { useAuthContext } from '../../../../../../../context'
 import { useFollowProject } from '../../../../../../../hooks/graphqlState'
+import { EmailPromptModal } from '../../../../../../../pages/auth/components/EmailPromptModal'
 import { useAuthModal } from '../../../../../../../pages/auth/hooks'
+import { useEmailPrompt } from '../../../../../../../pages/auth/hooks/useEmailPrompt'
+import { useEmailPromptModal } from '../../../../../../../pages/auth/hooks/useEmailPromptModal'
 import { Project } from '../../../../../../../types'
 
 interface FollowButtonProps extends ButtonProps {
@@ -18,7 +21,11 @@ export const FollowButton = ({ project, hasIcon, ...rest }: FollowButtonProps) =
   const { t } = useTranslation()
   const { isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
+  const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose } = useEmailPromptModal()
+
   const { isFollowed, handleFollow, handleUnFollow, followLoading, unfollowLoading } = useFollowProject(project)
+
+  const { shouldPrompt } = useEmailPrompt()
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -29,6 +36,15 @@ export const FollowButton = ({ project, hasIcon, ...rest }: FollowButtonProps) =
       return
     }
 
+    if (shouldPrompt) {
+      emailPromptOnOpen()
+      return
+    }
+
+    handleFollowUnfollow()
+  }
+
+  const handleFollowUnfollow = () => {
     if (isFollowed) {
       handleUnFollow()
     } else {
@@ -37,20 +53,23 @@ export const FollowButton = ({ project, hasIcon, ...rest }: FollowButtonProps) =
   }
 
   return (
-    <Button
-      variant={isFollowed ? 'secondary' : 'primary'}
-      size="sm"
-      onClick={handleClick}
-      isLoading={followLoading || unfollowLoading}
-      flexShrink={0}
-      {...(hasIcon
-        ? {
-            leftIcon: isFollowed ? <BsFillHeartFill fontSize="14px" /> : <AddIcon />,
-          }
-        : {})}
-      {...rest}
-    >
-      {isFollowed ? t('Followed') : t('Follow')}
-    </Button>
+    <>
+      <Button
+        variant={isFollowed ? 'secondary' : 'primary'}
+        size="sm"
+        onClick={handleClick}
+        isLoading={followLoading || unfollowLoading}
+        flexShrink={0}
+        {...(hasIcon
+          ? {
+              leftIcon: isFollowed ? <BsFillHeartFill fontSize="14px" /> : <AddIcon />,
+            }
+          : {})}
+        {...rest}
+      >
+        {isFollowed ? t('Followed') : t('Follow')}
+      </Button>
+      <EmailPromptModal isOpen={emailPromptIsOpen} onClose={emailPromptOnClose} onCloseAction={handleFollowUnfollow} />
+    </>
   )
 }
