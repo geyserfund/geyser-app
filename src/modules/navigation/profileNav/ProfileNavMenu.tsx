@@ -7,10 +7,10 @@ export const ProfileNavMenu = () => {
   return (
     <Menu placement="bottom-end" closeOnSelect={true} strategy="fixed">
       <MenuButton>
-        <ProfileNavButton />
+        <ProfileNavButton as="div" />
       </MenuButton>
       <Portal>
-        <MenuList p={0} zIndex="99">
+        <MenuList p={0} zIndex="99" shadow="md">
           <ProfileNavContent />
         </MenuList>
       </Portal>

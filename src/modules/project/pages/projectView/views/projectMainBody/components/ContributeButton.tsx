@@ -18,7 +18,7 @@ import {
 import {
   // useGoalsAtom,
   useProjectAtom,
-} from '../../../../../pages1/projectView/hooks/useProjectAtom'
+} from '../../../../../hooks/useProjectAtom'
 // import { LoginToVoteModal } from './LoginToVoteModal'
 
 export const ContributeButton = (props: ButtonProps) => {

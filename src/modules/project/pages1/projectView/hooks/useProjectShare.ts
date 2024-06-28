@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { useAuthContext } from '../../../../../context'
 import { copyTextToClipboard } from '../../../../../utils'
-import { useProjectAtom } from './useProjectAtom'
+import { useProjectAtom } from '../../../hooks/useProjectAtom'
 
 enum CampaignSource {
   /** For content shared by creator */

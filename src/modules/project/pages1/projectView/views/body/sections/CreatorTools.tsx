@@ -1,5 +1,6 @@
 import { QuestionIcon } from '@chakra-ui/icons'
 import { Button, Image, Stack, Text, VStack } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -15,17 +16,21 @@ import {
 import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { ProjectStatus } from '../../../../../../../types'
 import { useProjectContext } from '../../../../../context'
+import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
+import { hasGoalsAtom } from '../../../../../state/goalsAtom'
+import { hasRewardsAtom } from '../../../../../state/rewardsAtom'
+import { useGoalsModal } from '../../../hooks'
 import { BeachGrantEntryTemplate } from '../components/BeachGrantEntryTemplate'
 
 export const CreatorTools = () => {
   const { t } = useTranslation()
-  const { project, isProjectOwner, goals } = useProjectContext()
+  const { project, isProjectOwner } = useProjectAtom()
+  const hasGoals = useAtomValue(hasGoalsAtom)
+  const projectHasRewards = useAtomValue(hasRewardsAtom)
+  const { onGoalModalOpen } = useGoalsModal()
 
   if (!project || !isProjectOwner || project.status !== ProjectStatus.Active) return null
 
-  const hasGoals = goals.inProgressGoals?.length || goals.completedGoals?.length
-
-  const projectHasRewards = project?.rewards?.length > 0
   const projectHasEntries = project?.entries?.length > 0
 
   return (
@@ -45,7 +50,7 @@ export const CreatorTools = () => {
           body={t('Use goals to inspire donors by showing them how your project is progressing.')}
           buttonLabel={t('Create Goal')}
           imageSrc={GoalsFlagUrl}
-          buttonProps={{ onClick: () => goals.onGoalsModalOpen() }}
+          buttonProps={{ onClick: () => onGoalModalOpen() }}
           rightAction={<GoalTooltip />}
         />
       )}
@@ -56,9 +61,7 @@ export const CreatorTools = () => {
           buttonLabel={t('Add Entry')}
           imageSrc={ProjectNoTransactionImageUrl}
           buttonProps={{ as: Link, to: getPath('projectEntryCreation', project?.name) }}
-        >
-          <BeachGrantEntryTemplate />
-        </DisplayCard>
+        />
       )}
     </Stack>
   )

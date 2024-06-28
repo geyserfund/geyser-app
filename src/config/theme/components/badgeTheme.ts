@@ -2,22 +2,25 @@ import { ComponentStyleConfig, StyleFunctionProps } from '@chakra-ui/react'
 
 const contrastColorThemes = ['primary1', 'success', 'warning', 'info']
 
-export const buttonTheme: ComponentStyleConfig = {
+export const badgeTheme: ComponentStyleConfig = {
   baseStyle: {
     fontWeight: 500,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   sizes: {
     sm: {
       borderRadius: '5px',
       fontSize: '12px',
       height: '20px',
-      paddingX: '2px 6px',
+      padding: '2px 6px',
     },
     md: {
       borderRadius: '6px',
       fontSize: '12px',
       height: '24px',
-      paddingX: '4px 8px',
+      padding: '4px 8px',
     },
     lg: {
       borderRadius: '8px',

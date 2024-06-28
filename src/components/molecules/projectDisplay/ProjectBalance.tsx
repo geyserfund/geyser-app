@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { BsCurrencyBitcoin } from 'react-icons/bs'
 
 import { useCustomTheme } from '../../../utils'
-import { commaFormatted } from '../../../utils/formatData/helperFunctions'
+import { commaFormatted } from '../../../shared/utils/formatData/helperFunctions'
 import { SatoshiIconTilted } from '../../icons'
 
 interface IProjectBalance {

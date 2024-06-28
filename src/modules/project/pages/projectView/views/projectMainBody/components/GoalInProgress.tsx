@@ -3,15 +3,17 @@ import { Emoji, EmojiStyle } from 'emoji-picker-react'
 import { useTranslation } from 'react-i18next'
 import { MdModeEdit } from 'react-icons/md'
 
+import { Body } from '@/shared/components/typography'
+
 import { DollarIconCircled, SatoshiIconCircled } from '../../../../../../../components/icons'
 import { DefaultGoalIcon } from '../../../../../../../components/icons/svg/DefaultGoalIcon'
 import { DragAndDropIcon } from '../../../../../../../components/icons/svg/DragAndDropIcon'
 import { Body1, Caption, H3 } from '../../../../../../../components/typography'
 import { IconButtonComponent } from '../../../../../../../components/ui'
 import { Tooltip } from '../../../../../../../components/ui/Tooltip'
+import { useCurrencyFormatter } from '../../../../../../../shared/utils/hooks/useCurrencyFormatter'
 import { ProjectGoal, ProjectGoalCurrency, ProjectGoalStatus } from '../../../../../../../types'
 import { useMobileMode } from '../../../../../../../utils'
-import { useCurrencyFormatter } from '../../../hooks/useCurrencyFormatter'
 import { GoalContributeButton } from './GoalContributeButton'
 
 type Props = {
@@ -143,7 +145,14 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
                 </Body1>
               </HStack>
 
-              <HStack display="flex" alignItems="center" justifyContent="flex-end" gap={2} width="100%">
+              <HStack
+                display="flex"
+                flexDirection={row}
+                alignItems="center"
+                justifyContent="flex-end"
+                gap={2}
+                width="100%"
+              >
                 <Body1>
                   {' of '}
                   <Body1 as="span" bold>

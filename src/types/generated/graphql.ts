@@ -4820,7 +4820,7 @@ export type MeQuery = { __typename?: 'Query', me?: (
 export type MeProjectFollowsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeProjectFollowsQuery = { __typename?: 'Query', me?: { __typename?: 'User', projectFollows: Array<{ __typename?: 'Project', id: any, title: string, name: string }> } | null };
+export type MeProjectFollowsQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: any, projectFollows: Array<{ __typename?: 'Project', id: any, title: string, name: string }> } | null };
 
 export type UserForProfilePageQueryVariables = Exact<{
   where: UserGetInput;
@@ -4884,10 +4884,7 @@ export type WalletLimitQueryVariables = Exact<{
 }>;
 
 
-export type WalletLimitQuery = { __typename?: 'Query', getWallet: { __typename?: 'Wallet', limits?: (
-      { __typename?: 'WalletLimits' }
-      & WalletLimitsFragment
-    ) | null } };
+export type WalletLimitQuery = { __typename?: 'Query', getWallet: { __typename?: 'Wallet', limits?: { __typename?: 'WalletLimits', contribution?: { __typename?: 'WalletContributionLimits', max?: number | null, min?: number | null } | null } | null } };
 
 export type ActivityCreatedSubscriptionVariables = Exact<{
   input?: InputMaybe<ActivityCreatedSubscriptionInput>;
@@ -4923,16 +4920,20 @@ export type ProjectEntryFragment = { __typename?: 'Entry', id: any, title: strin
     & ProjectPageCreatorFragment
   ) };
 
-export type ProjectGoalsFragment = { __typename?: 'ProjectGoal', id: any, title: string, description?: string | null, targetAmount: number, currency: ProjectGoalCurrency, status: ProjectGoalStatus, projectId: any, amountContributed: number, createdAt: any, updatedAt: any, hasReceivedContribution: boolean, emojiUnifiedCode?: string | null };
+export type ProjectFunderFragment = { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string } | null };
+
+export type ProjectFundingTxFragment = { __typename?: 'FundingTx', id: any, amountPaid: number, media?: string | null, comment?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, funder: { __typename?: 'Funder', id: any, user?: (
+      { __typename?: 'User' }
+      & UserAvatarFragment
+    ) | null } };
+
+export type ProjectGoalsFragment = { __typename?: 'ProjectGoal', id: any, title: string, description?: string | null, targetAmount: number, currency: ProjectGoalCurrency, status: ProjectGoalStatus, projectId: any, amountContributed: number, createdAt: any, updatedAt: any, completedAt?: any | null, hasReceivedContribution: boolean, emojiUnifiedCode?: string | null };
 
 export type ProjectLocationFragment = { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null };
 
 export type ProjectKeysFragment = { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, image?: string | null, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, links: Array<string>, rewardCurrency?: RewardCurrency | null, location?: (
-    { __typename?: 'Location' }
-    & ProjectLocationFragment
-  ) | null, keys: (
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, image?: string | null, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: string, keys: (
     { __typename?: 'ProjectKeys' }
     & ProjectKeysFragment
   ), owners: Array<{ __typename?: 'Owner', id: any, user: (
@@ -4940,11 +4941,18 @@ export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: s
       & ProjectPageCreatorFragment
     ) }> };
 
+export type ProjectPageDetailsFragment = { __typename?: 'Project', id: any, name: string, links: Array<string>, location?: (
+    { __typename?: 'Location' }
+    & ProjectLocationFragment
+  ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }> };
+
 export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null };
 
 export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, cost: number, image?: string | null, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null };
 
 export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }> };
+
+export type UserAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string };
 
 export type WalletContributionLimitsFragment = { __typename?: 'WalletContributionLimits', min?: number | null, max?: number | null, offChain?: { __typename?: 'WalletOffChainContributionLimits', min?: number | null, max?: number | null } | null, onChain?: { __typename?: 'WalletOnChainContributionLimits', min?: number | null, max?: number | null } | null };
 
@@ -4986,7 +4994,7 @@ export type ProjectEntriesQueryVariables = Exact<{
 }>;
 
 
-export type ProjectEntriesQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', entries: Array<(
+export type ProjectEntriesQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: any, entries: Array<(
       { __typename?: 'Entry' }
       & ProjectEntryFragment
     )> } | null };
@@ -4996,9 +5004,29 @@ export type ProjectUnplublishedEntriesQueryVariables = Exact<{
 }>;
 
 
-export type ProjectUnplublishedEntriesQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', entries: Array<(
+export type ProjectUnplublishedEntriesQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: any, entries: Array<(
       { __typename?: 'Entry' }
       & ProjectEntryFragment
+    )> } | null };
+
+export type ProjectPageFundersQueryVariables = Exact<{
+  input: GetFundersInput;
+}>;
+
+
+export type ProjectPageFundersQuery = { __typename?: 'Query', fundersGet: Array<(
+    { __typename?: 'Funder' }
+    & ProjectFunderFragment
+  )> };
+
+export type ProjectPageFundingTxQueryVariables = Exact<{
+  input?: InputMaybe<GetFundingTxsInput>;
+}>;
+
+
+export type ProjectPageFundingTxQuery = { __typename?: 'Query', fundingTxsGet?: { __typename?: 'FundingTxsGetResponse', fundingTxs: Array<(
+      { __typename?: 'FundingTx' }
+      & ProjectFundingTxFragment
     )> } | null };
 
 export type ProjectInProgressGoalsQueryVariables = Exact<{
@@ -5029,6 +5057,16 @@ export type ProjectPageBodyQueryVariables = Exact<{
 export type ProjectPageBodyQuery = { __typename?: 'Query', projectGet?: (
     { __typename?: 'Project' }
     & ProjectPageBodyFragment
+  ) | null };
+
+export type ProjectPageDetailsQueryVariables = Exact<{
+  where: UniqueProjectQueryInput;
+}>;
+
+
+export type ProjectPageDetailsQuery = { __typename?: 'Query', projectGet?: (
+    { __typename?: 'Project' }
+    & ProjectPageDetailsFragment
   ) | null };
 
 export type ProjectPageHeaderSummaryQueryVariables = Exact<{
@@ -6176,6 +6214,43 @@ export const ProjectEntryFragmentDoc = gql`
   }
 }
     ${ProjectPageCreatorFragmentDoc}`;
+export const ProjectFunderFragmentDoc = gql`
+    fragment ProjectFunder on Funder {
+  id
+  amountFunded
+  timesFunded
+  user {
+    id
+    imageUrl
+    username
+  }
+}
+    `;
+export const UserAvatarFragmentDoc = gql`
+    fragment UserAvatar on User {
+  id
+  imageUrl
+  username
+}
+    `;
+export const ProjectFundingTxFragmentDoc = gql`
+    fragment ProjectFundingTx on FundingTx {
+  id
+  amountPaid
+  media
+  comment
+  bitcoinQuote {
+    quote
+    quoteCurrency
+  }
+  funder {
+    id
+    user {
+      ...UserAvatar
+    }
+  }
+}
+    ${UserAvatarFragmentDoc}`;
 export const ProjectGoalsFragmentDoc = gql`
     fragment ProjectGoals on ProjectGoal {
   id
@@ -6188,17 +6263,9 @@ export const ProjectGoalsFragmentDoc = gql`
   amountContributed
   createdAt
   updatedAt
+  completedAt
   hasReceivedContribution
   emojiUnifiedCode
-}
-    `;
-export const ProjectLocationFragmentDoc = gql`
-    fragment ProjectLocation on Location {
-  country {
-    code
-    name
-  }
-  region
 }
     `;
 export const ProjectKeysFragmentDoc = gql`
@@ -6225,11 +6292,8 @@ export const ProjectPageBodyFragmentDoc = gql`
   balanceUsdCent
   defaultGoalId
   status
-  links
   rewardCurrency
-  location {
-    ...ProjectLocation
-  }
+  createdAt
   keys {
     ...ProjectKeys
   }
@@ -6240,9 +6304,31 @@ export const ProjectPageBodyFragmentDoc = gql`
     }
   }
 }
-    ${ProjectLocationFragmentDoc}
-${ProjectKeysFragmentDoc}
+    ${ProjectKeysFragmentDoc}
 ${ProjectPageCreatorFragmentDoc}`;
+export const ProjectLocationFragmentDoc = gql`
+    fragment ProjectLocation on Location {
+  country {
+    code
+    name
+  }
+  region
+}
+    `;
+export const ProjectPageDetailsFragmentDoc = gql`
+    fragment ProjectPageDetails on Project {
+  id
+  name
+  links
+  location {
+    ...ProjectLocation
+  }
+  tags {
+    id
+    label
+  }
+}
+    ${ProjectLocationFragmentDoc}`;
 export const ProjectHeaderSummaryFragmentDoc = gql`
     fragment ProjectHeaderSummary on Project {
   followersCount
@@ -9322,6 +9408,7 @@ export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const MeProjectFollowsDocument = gql`
     query MeProjectFollows {
   me {
+    id
     projectFollows {
       id
       title
@@ -9621,11 +9708,14 @@ export const WalletLimitDocument = gql`
     query WalletLimit($getWalletId: BigInt!) {
   getWallet(id: $getWalletId) {
     limits {
-      ...WalletLimits
+      contribution {
+        max
+        min
+      }
     }
   }
 }
-    ${WalletLimitsFragmentDoc}`;
+    `;
 
 /**
  * __useWalletLimitQuery__
@@ -9837,6 +9927,7 @@ export type ProjectGoalDeleteMutationOptions = Apollo.BaseMutationOptions<Projec
 export const ProjectEntriesDocument = gql`
     query ProjectEntries($where: UniqueProjectQueryInput!, $input: ProjectEntriesGetInput) {
   projectGet(where: $where) {
+    id
     entries(input: $input) {
       ...ProjectEntry
     }
@@ -9880,6 +9971,7 @@ export type ProjectEntriesQueryResult = Apollo.QueryResult<ProjectEntriesQuery, 
 export const ProjectUnplublishedEntriesDocument = gql`
     query ProjectUnplublishedEntries($where: UniqueProjectQueryInput!) {
   projectGet(where: $where) {
+    id
     entries: entries(input: {where: {published: false}}) {
       ...ProjectEntry
     }
@@ -9919,6 +10011,88 @@ export type ProjectUnplublishedEntriesQueryHookResult = ReturnType<typeof usePro
 export type ProjectUnplublishedEntriesLazyQueryHookResult = ReturnType<typeof useProjectUnplublishedEntriesLazyQuery>;
 export type ProjectUnplublishedEntriesSuspenseQueryHookResult = ReturnType<typeof useProjectUnplublishedEntriesSuspenseQuery>;
 export type ProjectUnplublishedEntriesQueryResult = Apollo.QueryResult<ProjectUnplublishedEntriesQuery, ProjectUnplublishedEntriesQueryVariables>;
+export const ProjectPageFundersDocument = gql`
+    query ProjectPageFunders($input: GetFundersInput!) {
+  fundersGet(input: $input) {
+    ...ProjectFunder
+  }
+}
+    ${ProjectFunderFragmentDoc}`;
+
+/**
+ * __useProjectPageFundersQuery__
+ *
+ * To run a query within a React component, call `useProjectPageFundersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectPageFundersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectPageFundersQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectPageFundersQuery(baseOptions: Apollo.QueryHookOptions<ProjectPageFundersQuery, ProjectPageFundersQueryVariables> & ({ variables: ProjectPageFundersQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectPageFundersQuery, ProjectPageFundersQueryVariables>(ProjectPageFundersDocument, options);
+      }
+export function useProjectPageFundersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectPageFundersQuery, ProjectPageFundersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectPageFundersQuery, ProjectPageFundersQueryVariables>(ProjectPageFundersDocument, options);
+        }
+export function useProjectPageFundersSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectPageFundersQuery, ProjectPageFundersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectPageFundersQuery, ProjectPageFundersQueryVariables>(ProjectPageFundersDocument, options);
+        }
+export type ProjectPageFundersQueryHookResult = ReturnType<typeof useProjectPageFundersQuery>;
+export type ProjectPageFundersLazyQueryHookResult = ReturnType<typeof useProjectPageFundersLazyQuery>;
+export type ProjectPageFundersSuspenseQueryHookResult = ReturnType<typeof useProjectPageFundersSuspenseQuery>;
+export type ProjectPageFundersQueryResult = Apollo.QueryResult<ProjectPageFundersQuery, ProjectPageFundersQueryVariables>;
+export const ProjectPageFundingTxDocument = gql`
+    query ProjectPageFundingTx($input: GetFundingTxsInput) {
+  fundingTxsGet(input: $input) {
+    fundingTxs {
+      ...ProjectFundingTx
+    }
+  }
+}
+    ${ProjectFundingTxFragmentDoc}`;
+
+/**
+ * __useProjectPageFundingTxQuery__
+ *
+ * To run a query within a React component, call `useProjectPageFundingTxQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectPageFundingTxQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectPageFundingTxQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectPageFundingTxQuery(baseOptions?: Apollo.QueryHookOptions<ProjectPageFundingTxQuery, ProjectPageFundingTxQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectPageFundingTxQuery, ProjectPageFundingTxQueryVariables>(ProjectPageFundingTxDocument, options);
+      }
+export function useProjectPageFundingTxLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectPageFundingTxQuery, ProjectPageFundingTxQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectPageFundingTxQuery, ProjectPageFundingTxQueryVariables>(ProjectPageFundingTxDocument, options);
+        }
+export function useProjectPageFundingTxSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectPageFundingTxQuery, ProjectPageFundingTxQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectPageFundingTxQuery, ProjectPageFundingTxQueryVariables>(ProjectPageFundingTxDocument, options);
+        }
+export type ProjectPageFundingTxQueryHookResult = ReturnType<typeof useProjectPageFundingTxQuery>;
+export type ProjectPageFundingTxLazyQueryHookResult = ReturnType<typeof useProjectPageFundingTxLazyQuery>;
+export type ProjectPageFundingTxSuspenseQueryHookResult = ReturnType<typeof useProjectPageFundingTxSuspenseQuery>;
+export type ProjectPageFundingTxQueryResult = Apollo.QueryResult<ProjectPageFundingTxQuery, ProjectPageFundingTxQueryVariables>;
 export const ProjectInProgressGoalsDocument = gql`
     query ProjectInProgressGoals($projectId: BigInt!) {
   projectGoals(projectId: $projectId) {
@@ -10043,6 +10217,46 @@ export type ProjectPageBodyQueryHookResult = ReturnType<typeof useProjectPageBod
 export type ProjectPageBodyLazyQueryHookResult = ReturnType<typeof useProjectPageBodyLazyQuery>;
 export type ProjectPageBodySuspenseQueryHookResult = ReturnType<typeof useProjectPageBodySuspenseQuery>;
 export type ProjectPageBodyQueryResult = Apollo.QueryResult<ProjectPageBodyQuery, ProjectPageBodyQueryVariables>;
+export const ProjectPageDetailsDocument = gql`
+    query ProjectPageDetails($where: UniqueProjectQueryInput!) {
+  projectGet(where: $where) {
+    ...ProjectPageDetails
+  }
+}
+    ${ProjectPageDetailsFragmentDoc}`;
+
+/**
+ * __useProjectPageDetailsQuery__
+ *
+ * To run a query within a React component, call `useProjectPageDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectPageDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectPageDetailsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectPageDetailsQuery(baseOptions: Apollo.QueryHookOptions<ProjectPageDetailsQuery, ProjectPageDetailsQueryVariables> & ({ variables: ProjectPageDetailsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectPageDetailsQuery, ProjectPageDetailsQueryVariables>(ProjectPageDetailsDocument, options);
+      }
+export function useProjectPageDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectPageDetailsQuery, ProjectPageDetailsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectPageDetailsQuery, ProjectPageDetailsQueryVariables>(ProjectPageDetailsDocument, options);
+        }
+export function useProjectPageDetailsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectPageDetailsQuery, ProjectPageDetailsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectPageDetailsQuery, ProjectPageDetailsQueryVariables>(ProjectPageDetailsDocument, options);
+        }
+export type ProjectPageDetailsQueryHookResult = ReturnType<typeof useProjectPageDetailsQuery>;
+export type ProjectPageDetailsLazyQueryHookResult = ReturnType<typeof useProjectPageDetailsLazyQuery>;
+export type ProjectPageDetailsSuspenseQueryHookResult = ReturnType<typeof useProjectPageDetailsSuspenseQuery>;
+export type ProjectPageDetailsQueryResult = Apollo.QueryResult<ProjectPageDetailsQuery, ProjectPageDetailsQueryVariables>;
 export const ProjectPageHeaderSummaryDocument = gql`
     query ProjectPageHeaderSummary($where: UniqueProjectQueryInput!) {
   projectGet(where: $where) {

@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
 
-import { App } from '../../App'
-import { AppLayout } from '../../AppLayout'
+import App from '../../App'
+import AppLayout from '../../AppLayout'
 import { __production__, getPath, PathName } from '../../constants'
 // import { ProjectView } from '../../modules/project/pages1/projectView'
 import { ExternalAuthSuccess, FailedAuth } from '../../pages/auth'
@@ -478,3 +478,5 @@ export const router = createBrowserRouter([
     ],
   },
 ])
+
+export default router

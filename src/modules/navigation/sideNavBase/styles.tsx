@@ -3,10 +3,6 @@ import { createUseStyles } from 'react-jss'
 import { dimensions } from '../../../constants'
 
 export const slideInRight = {
-  '@-webkit-keyframes slide-in-right': {
-    '0%': { right: `-${dimensions.sideNav.width}px` },
-    '100%': { right: '0' },
-  },
   '@keyframes slide-in-right': {
     '0%': { right: `-${dimensions.sideNav.width}px` },
     '100%': { right: '0' },
@@ -18,10 +14,6 @@ export const slideInRight = {
 }
 
 export const slideOutLeft = {
-  '@-webkit-keyframes slide-out-left': {
-    '0%': { left: '0' },
-    '100%': { left: `-${dimensions.sideNav.width}px` },
-  },
   '@keyframes slide-out-left': {
     '0%': { left: '0' },
     '100%': { left: `-${dimensions.sideNav.width}px` },
@@ -34,10 +26,6 @@ export const slideOutLeft = {
 }
 
 export const slideInLeft = {
-  '@-webkit-keyframes slide-in-left': {
-    '0%': { left: `-${dimensions.sideNav.width}px` },
-    '100%': { left: '0' },
-  },
   '@keyframes slide-in-left': {
     '0%': { left: `-${dimensions.sideNav.width}px` },
     '100%': { left: '0' },
@@ -49,10 +37,6 @@ export const slideInLeft = {
 }
 
 export const slideOutRight = {
-  '@-webkit-keyframes slide-out-right': {
-    '0%': { right: '0' },
-    '100%': { right: `-${dimensions.sideNav.width}px` },
-  },
   '@keyframes slide-out-right': {
     '0%': { right: '0' },
     '100%': { right: `-${dimensions.sideNav.width}px` },

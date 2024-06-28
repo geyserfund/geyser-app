@@ -3,7 +3,6 @@ import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { ProjectRewardAvailability } from '../../../../../../../components/molecules/projectDisplay/ProjectRewardAvailability'
-import { ProjectRewardShippingEstimate } from '../../../../../../../components/molecules/projectDisplay/ProjectRewardShippingEstimate'
 import { Body1, Body2 } from '../../../../../../../components/typography'
 import { ICard, ImageWithReload } from '../../../../../../../components/ui'
 import { MarkdownField } from '../../../../../../../forms/markdown/MarkdownField'
@@ -12,6 +11,7 @@ import { secondaryColors } from '../../../../../../../styles'
 import { ProjectStatus } from '../../../../../../../types'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../../../../types/generated/graphql'
 import { useProjectContext } from '../../../../../context'
+import { ProjectRewardShippingEstimate } from '../../../../../pages1/projectView/views/body/sections/rewards/components/ProjectRewardShippingEstimate'
 
 type Props = ICard & {
   reward: ProjectRewardForCreateUpdateFragment

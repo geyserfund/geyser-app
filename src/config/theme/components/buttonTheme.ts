@@ -23,6 +23,7 @@ export const buttonTheme: ComponentStyleConfig = {
     sm: {
       height: '24px',
       minWidth: '24px',
+      minW: '24px',
       paddingX: '8px',
       borderRadius: '6px',
       fontSize: '12px',
@@ -30,6 +31,7 @@ export const buttonTheme: ComponentStyleConfig = {
     md: {
       height: '32px',
       minWidth: '32px',
+      minW: '32px',
       paddingX: '12px',
       borderRadius: '8px',
       fontSize: '14px',
@@ -37,6 +39,7 @@ export const buttonTheme: ComponentStyleConfig = {
     lg: {
       height: '40px',
       minWidth: '40px',
+      minW: '40px',
       paddingX: '16px',
       borderRadius: '10px',
       fontSize: '16px',
@@ -44,6 +47,7 @@ export const buttonTheme: ComponentStyleConfig = {
     xl: {
       height: '48px',
       minWidth: '48px',
+      minW: '48px',
       paddingX: '24px',
       borderRadius: '12px',
       fontSize: '18px',

@@ -8,6 +8,7 @@
     "source.fixAll": "explicit"
   },
   "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.preferences.importModuleSpecifier": "shortest",
   "cSpell.words": [
     "ecpair",
     "secp"

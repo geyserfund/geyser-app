@@ -10,7 +10,7 @@ import { configMatomo } from './config/matomo'
 import { AuthProvider, ChakraThemeProvider, NavProvider, ServiceWorkerProvider } from './context'
 import { BtcProvider } from './context/btc'
 
-export const App = () => {
+const App = () => {
   useEffect(() => {
     configMatomo()
   }, [])
@@ -36,3 +36,5 @@ export const App = () => {
     </Provider>
   )
 }
+
+export default App

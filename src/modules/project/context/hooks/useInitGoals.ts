@@ -1,14 +1,20 @@
-import { ApolloQueryResult } from '@apollo/client'
+import { LazyQueryExecFunction } from '@apollo/client'
 import { useSetAtom } from 'jotai'
+import { useEffect } from 'react'
 
 import {
   Exact,
   ProjectCompletedGoalsQuery,
   ProjectInProgressGoalsQuery,
-  useProjectCompletedGoalsQuery,
+  useProjectCompletedGoalsLazyQuery,
+  useProjectInProgressGoalsLazyQuery,
 } from '../../../../types'
-import { useProjectInProgressGoalsQuery } from '../../../../types'
-import { completedGoalsAtom, inProgressGoalsAtom } from '../../state/goalsAtom'
+import {
+  completedGoalsAtom,
+  completedGoalsLoadingAtom,
+  inProgressGoalsAtom,
+  inProgressGoalsLoadingAtom,
+} from '../../state/goalsAtom'
 
 type UseInitGoalsProps = {
   /** The id of the project */
@@ -18,61 +24,68 @@ type UseInitGoalsProps = {
 }
 
 export type UseInitGoalsReturn = {
-  /** Refetch in progress goals for the Project in context */
-  refetchInProgressGoals: (
-    variables?:
-      | Partial<
-          Exact<{
-            projectId: any
-          }>
-        >
-      | undefined,
-  ) => Promise<ApolloQueryResult<ProjectInProgressGoalsQuery>>
-  /** Refetch completed goals for the Project in context */
-  refetchCompletedGoals: (
-    variables?:
-      | Partial<
-          Exact<{
-            projectId: any
-          }>
-        >
-      | undefined,
-  ) => Promise<ApolloQueryResult<ProjectCompletedGoalsQuery>>
+  /** Query in progress goals for the Project in context */
+  queryInProgressGoals: LazyQueryExecFunction<
+    ProjectInProgressGoalsQuery,
+    Exact<{
+      projectId: any
+    }>
+  >
+  /** Query completed goals for the Project in context */
+  queryCompletedGoals: LazyQueryExecFunction<
+    ProjectCompletedGoalsQuery,
+    Exact<{
+      projectId: any
+    }>
+  >
 }
 
 /** Fetch project goals for project context */
 export const useInitGoals = ({ projectId, skip }: UseInitGoalsProps): UseInitGoalsReturn => {
   const setInProgressGoals = useSetAtom(inProgressGoalsAtom)
   const setCompletedGoals = useSetAtom(completedGoalsAtom)
+  const setInProgressGoalsLoading = useSetAtom(inProgressGoalsLoadingAtom)
+  const setCompletedGoalsLoading = useSetAtom(completedGoalsLoadingAtom)
 
-  const { refetch: refetchInProgressGoals } = useProjectInProgressGoalsQuery({
+  const [queryInProgressGoals] = useProjectInProgressGoalsLazyQuery({
     fetchPolicy: 'network-only',
-    skip: !projectId || skip,
-    notifyOnNetworkStatusChange: true,
     variables: {
       projectId,
     },
+    onError(error) {
+      setInProgressGoalsLoading(false)
+    },
     onCompleted(data) {
+      setInProgressGoalsLoading(false)
       const inProgressGoals = data?.projectGoals.inProgress || []
       setInProgressGoals(inProgressGoals)
     },
   })
 
-  const { refetch: refetchCompletedGoals } = useProjectCompletedGoalsQuery({
+  const [queryCompletedGoals] = useProjectCompletedGoalsLazyQuery({
     fetchPolicy: 'cache-first',
-    skip: !projectId || skip,
-    notifyOnNetworkStatusChange: true,
     variables: {
       projectId,
     },
+    onError(error) {
+      setCompletedGoalsLoading(false)
+    },
     onCompleted(data) {
+      setCompletedGoalsLoading(false)
       const completedGoals = data?.projectGoals.completed || []
       setCompletedGoals(completedGoals)
     },
   })
 
+  useEffect(() => {
+    if (projectId && !skip) {
+      queryInProgressGoals()
+      queryCompletedGoals()
+    }
+  }, [projectId, skip, queryCompletedGoals, queryInProgressGoals])
+
   return {
-    refetchInProgressGoals,
-    refetchCompletedGoals,
+    queryInProgressGoals,
+    queryCompletedGoals,
   }
 }

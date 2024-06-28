@@ -121,6 +121,11 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     plugins,
+    resolve: {
+      alias: {
+        '@': '/src',
+      },
+    },
     server,
     define: {
       'process.env': env,

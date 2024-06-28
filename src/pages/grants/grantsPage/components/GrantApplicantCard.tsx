@@ -9,11 +9,11 @@ import { Modal } from '../../../../components/layouts'
 import { H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
+import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
 import {
   ProjectContributorsModal,
   useProjectContributorsModal,
-} from '../../../../modules/project/pages/projectView/views/projectActivityPanel/screens/info/components/ProjectContributorsModal'
-import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
+} from '../../../../modules/project/pages1/projectView/views/body/sections/contributionSummary/components/ProjectContributorsModal'
 import { fonts } from '../../../../styles'
 import {
   GrantApplicantContributor,

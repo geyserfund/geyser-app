@@ -27,7 +27,7 @@ export const ProjectLinks = ({ links }: { links: string[] }) => {
           return (
             <IconButtonComponent
               size="sm"
-              variant="ghost"
+              variant="outline"
               aria-label="link-icon"
               key={link}
               as={Link}

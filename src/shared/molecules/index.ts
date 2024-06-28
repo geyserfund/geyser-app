@@ -1,3 +1,4 @@
+export { CloseButton } from './CloseButton'
 export {
   ProjectStatusColors,
   ProjectStatusIcons,

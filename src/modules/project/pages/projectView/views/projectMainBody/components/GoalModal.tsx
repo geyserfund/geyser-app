@@ -21,7 +21,7 @@ import {
   ControlledSelect,
   ControlledTextArea,
   ControlledTextInput,
-} from '../../../../../../../components/inputs'
+} from '../../../../../../../shared/components/controlledInput'
 import { Body2 } from '../../../../../../../components/typography'
 import { IconButtonComponent } from '../../../../../../../components/ui'
 import { ProjectGoal, ProjectGoalCurrency, ProjectGoalStatus } from '../../../../../../../types'

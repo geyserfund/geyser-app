@@ -1,19 +1,20 @@
 import { Divider, VStack } from '@chakra-ui/react'
 import { Fragment } from 'react'
 
-import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../../../../../components/layouts'
 import { ProjectFundingContributorsItem } from '../../../../../../../../../components/molecules/projectActivity/ProjectFundingContributorsItem'
 import { ID } from '../../../../../../../../../constants'
 import { QUERY_PROJECT_FUNDERS } from '../../../../../../../../../graphql'
 import { ScrollInvoke } from '../../../../../../../../../helpers'
 import { useQueryWithPagination } from '../../../../../../../../../hooks'
-import { FunderWithUserFragment, Project, ProjectFragment } from '../../../../../../../../../types'
+import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../../../../../shared/components/layouts'
+import { FunderWithUserFragment } from '../../../../../../../../../types'
 import { useMobileMode, useNotification } from '../../../../../../../../../utils'
+import { ProjectState } from '../../../../../../../state/projectAtom'
 
 interface ProjectContributorsListProps extends CardLayoutProps {
   id?: string
   isBounded?: boolean
-  project: ProjectFragment | Project
+  project: ProjectState
 }
 
 const CONTRIBUTORS_ITEM_LIMIT = 50

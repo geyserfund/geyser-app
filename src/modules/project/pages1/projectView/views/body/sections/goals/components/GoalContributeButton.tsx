@@ -2,13 +2,14 @@ import { Button, ButtonProps } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { isActive } from '../../../../../../../../../utils'
-import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
+import { useProjectAtom } from '../../../../../../../hooks/useProjectAtom'
 
 type GoalContributeButtonProps = ButtonProps & {
   projectGoalId: string
+  isPriorityGoal?: boolean
 }
 
-export const GoalContributeButton = ({ projectGoalId, ...props }: GoalContributeButtonProps) => {
+export const GoalContributeButton = ({ projectGoalId, isPriorityGoal, ...props }: GoalContributeButtonProps) => {
   const { t } = useTranslation()
   const { project } = useProjectAtom()
 
@@ -22,10 +23,10 @@ export const GoalContributeButton = ({ projectGoalId, ...props }: GoalContribute
 
   return (
     <Button
-      variant="primary"
-      size={'md'}
+      variant={isPriorityGoal ? 'solid' : 'outline'}
+      colorScheme={isPriorityGoal ? 'primary1' : 'neutral1'}
+      size={'sm'}
       width={{ base: '100%', lg: '192px' }}
-      height="32px"
       onClick={handleContributeClick}
       isDisabled={isFundingDisabled}
       {...props}

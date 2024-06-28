@@ -4,8 +4,8 @@ import { Outlet } from 'react-router-dom'
 import { Head } from '../../../../config'
 import { dimensions } from '../../../../constants'
 import { standardPadding } from '../../../../styles'
+import { useProjectAtom } from '../../hooks/useProjectAtom'
 import { GoalDeleteModal, GoalModal, ProjectCreateModal } from './components'
-import { useProjectAtom } from './hooks/useProjectAtom'
 import { ProjectNavigation } from './navigation/ProjectNavigation'
 
 export const ProjectContainer = () => {
@@ -38,7 +38,7 @@ export const ProjectContainer = () => {
         paddingX={standardPadding}
         alignItems="center"
       >
-        <Box w="100%" paddingTop={4} maxWidth={dimensions.maxWidth}>
+        <Box w="100%" pb={24} maxWidth={dimensions.maxWidth}>
           <Outlet />
         </Box>
       </VStack>

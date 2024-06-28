@@ -1,12 +1,12 @@
-import { Box, Button, HStack, Image, ModalProps, VStack } from '@chakra-ui/react'
+import { Button, HStack, Image, ModalProps, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiSealCheckBold } from 'react-icons/pi'
 
-import { Body1 } from '../../../../../components/typography'
 import { ProjectLaunchedImageUrl } from '../../../../../constants'
 import { Modal } from '../../../../../shared/components/layouts/Modal'
+import { Body } from '../../../../../shared/components/typography'
 import { useCustomTheme } from '../../../../../utils'
-import { useProjectAtom } from '../hooks/useProjectAtom'
+import { useProjectAtom } from '../../../hooks/useProjectAtom'
 
 export const ProjectCreateLaunchedModal = (props: Omit<ModalProps, 'children'>) => {
   const { t } = useTranslation()
@@ -20,20 +20,20 @@ export const ProjectCreateLaunchedModal = (props: Omit<ModalProps, 'children'>) 
 
         <HStack spacing="10px" p="10px 16px" bgColor="neutral.100" borderRadius={8}>
           <PiSealCheckBold color={colors.primary[600]} />
-          <Body1 color="neutral.800">
+          <Body dark>
             {' '}
             {project?.name}
-            <Box as="span" fontWeight="700">
+            <Body as="span" dark bold>
               @geyser.fund
-            </Box>{' '}
-          </Body1>
+            </Body>{' '}
+          </Body>
         </HStack>
 
-        <Body1 color="primary.1000" semiBold>
+        <Body medium color="primary1.11">
           {t('Follow us and tag us on social media at @geyserfund so we can amplify your content.')}
-        </Body1>
+        </Body>
         <VStack spacing="10px" w="full">
-          <Button w="100%" variant="secondary" onClick={props.onClose}>
+          <Button w="100%" variant="outline" colorScheme={'neutral1'} onClick={props.onClose}>
             {t('Go to project')}
           </Button>
         </VStack>

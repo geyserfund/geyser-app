@@ -2,7 +2,7 @@ import { Button, ButtonProps, Tooltip, useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { NostrSvgIcon } from '../../../../../../../../../components/icons'
+import { NostrIcon } from '../../../../../../../../../shared/components/icons'
 import { copyTextToClipboard } from '../../../../../../../../../utils'
 
 interface NpubDisplayProps extends ButtonProps {
@@ -33,6 +33,7 @@ export const NpubDisplay = ({ npub, iconOnly, ...rest }: NpubDisplayProps) => {
       <Button
         size="xs"
         variant="surface"
+        minWidth={'20px'}
         colorScheme="primary1"
         bgColor={copy ? 'primary1.5' : undefined}
         onMouseEnter={onOpen}
@@ -40,7 +41,7 @@ export const NpubDisplay = ({ npub, iconOnly, ...rest }: NpubDisplayProps) => {
         _hover={{ bgColor: copy ? 'primary1.9' : undefined }}
         {...rest}
       >
-        {<NostrSvgIcon height="12px" width="12px" onClick={handleOnCopy} />}
+        {<NostrIcon height="12px" width="12px" onClick={handleOnCopy} />}
       </Button>
     </Tooltip>
   )

@@ -2,7 +2,7 @@ import { Global } from '@emotion/react'
 
 import { darkModeColors, lightModeColors } from '../styles'
 
-export const GlobalStyles = () => (
+const GlobalStyles = () => (
   <Global
     styles={`
         @import url('https://fonts.googleapis.com/css2?family=Solway:wght@300;400;500&display=swap');
@@ -63,3 +63,5 @@ export const GlobalStyles = () => (
       `}
   />
 )
+
+export default GlobalStyles

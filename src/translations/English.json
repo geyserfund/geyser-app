@@ -1008,5 +1008,33 @@
    "Confirm Delete":"Confirm Delete",
    "Leaderboard (All)":"Leaderboard (All)",
    "Error creating project goal":"Error creating project goal",
-   "Email sent to :":"Email sent to :"
+   "Email sent to :":"Email sent to :",
+   "Sold":"Sold",
+   "Buy":"Buy",
+   "Followers":"Followers",
+   "Ready for delivery":"Ready for delivery",
+   "Available on":"Available on",
+   "Preorder":"Preorder",
+   "Goals":"Goals",
+   "weeks":"weeks",
+   "Change language":"Change language",
+   "Discover":"Discover",
+   "Completed":"Completed",
+   "This is your default goal. Contributions will be directed here unless contributors decide to fund another goal. Once this goal is completed, the next goal in line will automatically become the default goal.":"This is your default goal. Contributions will be directed here unless contributors decide to fund another goal. Once this goal is completed, the next goal in line will automatically become the default goal.",
+   "This goal is denominated in US Dollars":"This goal is denominated in US Dollars",
+   "contributed towards goal":"contributed towards goal",
+   "Location":"Location",
+   "of":"of",
+   "Posts":"Posts",
+   "Delivery in":"Delivery in",
+   "contributed in total":"contributed in total",
+   "Title must match exactly":"Title must match exactly",
+   "Sign Up & Login":"Sign Up & Login",
+   "Github":"Github",
+   "No contributions have been made to this project so far.":"No contributions have been made to this project so far.",
+   "Project details":"Project details",
+   "Anonymous":"Anonymous"
+   
+
+
 }

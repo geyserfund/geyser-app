@@ -6,7 +6,6 @@ const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpe
 const baseStyle = definePartsStyle({
   list: {
     backgroundColor: 'panel.solid',
-    boxShadow: '0px 12px 32px -16px rgba(251, 251, 235, 0.14), 0px 12px 60px 0px rgba(0, 0, 0, 0.15);',
     border: '1px solid',
     borderColor: 'neutral1.3',
     outline: 'none',

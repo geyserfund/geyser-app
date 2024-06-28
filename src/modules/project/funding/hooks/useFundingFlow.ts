@@ -1,13 +1,14 @@
 import { ApolloError } from '@apollo/client'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { useCallback, useMemo, useState } from 'react'
 
-import { FundingInput, ProjectFragment, useFundingTxWithInvoiceStatusQuery, useFundMutation } from '../../../../types'
+import { FundingInput, useFundingTxWithInvoiceStatusQuery, useFundMutation } from '../../../../types'
 import { toInt, useNotification } from '../../../../utils'
+import { ProjectState } from '../../state/projectAtom'
 import { useParseResponseToSwapAtom, useSetKeyPairAtom } from '../state'
 import { fundingFlowErrorAtom, fundingRequestErrorAtom, weblnErrorAtom } from '../state/errorAtom'
 import { fundingStageAtomEffect, useFundingStage } from '../state/fundingStagesAtom'
-import { useCheckFundingStatus, useFundingTx } from '../state/fundingTxAtom'
+import { selectedGoalIdAtom, useCheckFundingStatus, useFundingTx } from '../state/fundingTxAtom'
 import { useFundPollingAndSubscription } from '../state/pollingFundingTx'
 import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/helpers'
 import { webln } from '../utils/requestWebLNPayment'
@@ -25,8 +26,7 @@ export type UseFundingFlowReturn = ReturnType<typeof useFundingFlow>
 interface IFundingFlowOptions {
   hasBolt11?: boolean
   hasWebLN?: boolean
-  project?: Partial<ProjectFragment> | null
-  projectGoalId?: string | null
+  project?: Partial<ProjectState> | null
 }
 
 export const useFundingFlow = (options?: IFundingFlowOptions) => {
@@ -34,7 +34,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     hasBolt11 = true,
     hasWebLN = true,
     project,
-    projectGoalId,
   } = options || {
     hasBolt11: true,
     hasWebLN: true,
@@ -46,6 +45,8 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const startWebLNFlow = useWebLNFlow()
   const resetFundingFlow = useResetFundingFlow()
   const setKeyPair = useSetKeyPairAtom()
+
+  const selectedGoalId = useAtomValue(selectedGoalIdAtom)
 
   const [error, setError] = useAtom(fundingFlowErrorAtom)
   const [fundingRequestErrored, setFundingRequestErrored] = useAtom(fundingRequestErrorAtom)
@@ -168,13 +169,13 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
       setNextFundingStage()
 
       input.swapPublicKey = keyPair.publicKey.toString('hex')
-      input.projectGoalId = projectGoalId
+      input.projectGoalId = selectedGoalId
 
       setFundingInput(input)
 
       await fundProject({ variables: { input } })
     },
-    [fundProject, setNextFundingStage, toast, setKeyPair, projectGoalId],
+    [fundProject, setNextFundingStage, toast, setKeyPair, selectedGoalId],
   )
 
   const retryFundingFlow = useCallback(() => {

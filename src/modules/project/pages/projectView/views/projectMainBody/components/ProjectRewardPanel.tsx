@@ -3,15 +3,15 @@ import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { ProjectRewardAvailability } from '../../../../../../../components/molecules/projectDisplay/ProjectRewardAvailability'
-import { ProjectRewardShippingEstimate } from '../../../../../../../components/molecules/projectDisplay/ProjectRewardShippingEstimate'
 import { Body2 } from '../../../../../../../components/typography'
 import { ImageWithReload } from '../../../../../../../components/ui'
 import { PathName } from '../../../../../../../constants'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../../../../types'
 import { ProjectStatus } from '../../../../../../../types'
 import { isActive, toInt } from '../../../../../../../utils'
-import { useFundingContext, useProjectContext } from '../../../../../context'
-import { useProjectAtom } from '../../../../../pages1/projectView/hooks/useProjectAtom'
+import { useFundingContext } from '../../../../../context'
+import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
+import { ProjectRewardShippingEstimate } from '../../../../../pages1/projectView/views/body/sections/rewards/components/ProjectRewardShippingEstimate'
 
 type Props = {
   reward: ProjectRewardForCreateUpdateFragment
@@ -31,7 +31,7 @@ export const ProjectRewardPanel = ({ reward }: Props) => {
 
   const isInProjectPage = location.pathname.includes(PathName.project)
 
-  if (!project || !isActive) {
+  if (!project || !isActive(project.status)) {
     return <></>
   }
 

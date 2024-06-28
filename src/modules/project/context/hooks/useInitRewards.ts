@@ -1,7 +1,8 @@
-import { ApolloQueryResult } from '@apollo/client'
+import { LazyQueryExecFunction } from '@apollo/client'
 import { useSetAtom } from 'jotai'
+import { useEffect } from 'react'
 
-import { Exact, GetProjectRewardInput, ProjectRewardsQuery, useProjectRewardsQuery } from '../../../../types'
+import { Exact, GetProjectRewardInput, ProjectRewardsQuery, useProjectRewardsLazyQuery } from '../../../../types'
 import { rewardsAtom } from '../../state/rewardsAtom'
 
 type UseInitRewardsProps = {
@@ -12,25 +13,22 @@ type UseInitRewardsProps = {
 }
 
 export type UseInitRewardsReturn = {
-  /** Refetch Rewards for the Project in context */
-  refetchProjectRewards: (
-    variables?:
-      | Partial<
-          Exact<{
-            input: GetProjectRewardInput
-          }>
-        >
-      | undefined,
-  ) => Promise<ApolloQueryResult<ProjectRewardsQuery>>
+  /** Query Rewards for the Project in context */
+  queryProjectRewards: LazyQueryExecFunction<
+    ProjectRewardsQuery,
+    Exact<{
+      input: GetProjectRewardInput
+    }>
+  >
 }
 
 /** Fetch project rewards for project context */
 export const useInitRewards = ({ projectId, skip }: UseInitRewardsProps): UseInitRewardsReturn => {
   const setRewards = useSetAtom(rewardsAtom)
 
-  const { refetch: refetchProjectRewards } = useProjectRewardsQuery({
+  const [queryProjectRewards] = useProjectRewardsLazyQuery({
     fetchPolicy: 'cache-first',
-    skip: !projectId || skip,
+
     notifyOnNetworkStatusChange: true,
     variables: {
       input: {
@@ -46,7 +44,13 @@ export const useInitRewards = ({ projectId, skip }: UseInitRewardsProps): UseIni
     },
   })
 
+  useEffect(() => {
+    if (projectId && !skip) {
+      queryProjectRewards()
+    }
+  }, [projectId, skip, queryProjectRewards])
+
   return {
-    refetchProjectRewards,
+    queryProjectRewards,
   }
 }

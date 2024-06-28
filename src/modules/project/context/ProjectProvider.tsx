@@ -1,13 +1,8 @@
 import { createContext, PropsWithChildren, useContext } from 'react'
 
-import { useInitProject, UseInitProjectReturn } from './hooks/useInitProject'
+import { useInitProject, UseInitProjectProps, UseInitProjectReturn } from './hooks/useInitProject'
 
-type ProjectState = {
-  /** Don't use together with projectName prop */
-  projectId?: number
-  /** Don't use together with projectId prop */
-  projectName?: string
-}
+type ProjectState = UseInitProjectProps
 
 type ProjectContextProps = UseInitProjectReturn
 
@@ -23,23 +18,31 @@ export const useProjectContext = () => {
   return context
 }
 
-export const ProjectProvider = ({ projectId, projectName, children }: PropsWithChildren<ProjectState>) => {
-  const { refetchProject, refetchCompletedGoals, refetchInProgressGoals, refetchProjectWallet, refetchProjectRewards } =
-    useInitProject({
-      projectId,
-      projectName,
-      initializeGoals: true,
-      initializeWallet: true,
-    })
+export const ProjectProvider = ({ children, ...props }: PropsWithChildren<ProjectState>) => {
+  const {
+    queryProject,
+    queryCompletedGoals,
+    queryInProgressGoals,
+    queryProjectWallet,
+    queryProjectRewards,
+    queryProjectEntries,
+    queryUnpublishedProjectEntries,
+    queryProjectDetails,
+  } = useInitProject({
+    ...props,
+  })
 
   return (
     <ProjectContext.Provider
       value={{
-        refetchProject,
-        refetchCompletedGoals,
-        refetchInProgressGoals,
-        refetchProjectWallet,
-        refetchProjectRewards,
+        queryProject,
+        queryCompletedGoals,
+        queryInProgressGoals,
+        queryProjectWallet,
+        queryProjectRewards,
+        queryProjectEntries,
+        queryUnpublishedProjectEntries,
+        queryProjectDetails,
       }}
     >
       {children}

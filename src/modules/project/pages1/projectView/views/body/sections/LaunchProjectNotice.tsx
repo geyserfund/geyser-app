@@ -10,12 +10,12 @@ import { ProjectStatus, useProjectPublishMutation } from '../../../../../../../t
 import { useNotification } from '../../../../../../../utils'
 import { ProjectLaunchConfirmModal } from '../../../../../components/ProjectLaunchConfirmModal'
 import { useProjectContext } from '../../../../../context'
-import { useProjectAtom, useWalletAtom } from '../../../hooks/useProjectAtom'
+import { useProjectAtom, useWalletAtom } from '../../../../../hooks/useProjectAtom'
 
 export const LaunchProjectNotice = () => {
   const { t } = useTranslation()
 
-  const { refetchProject } = useProjectContext()
+  const { queryProject } = useProjectContext()
   const { project, isProjectOwner } = useProjectAtom()
   const { wallet } = useWalletAtom()
   const confirmModal = useModal()
@@ -27,7 +27,7 @@ export const LaunchProjectNotice = () => {
 
   const [publishProject, { loading: isUpdateStatusLoading }] = useProjectPublishMutation({
     onCompleted() {
-      refetchProject()
+      queryProject()
       queryCurrentUser()
     },
   })

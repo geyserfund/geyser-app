@@ -13,18 +13,24 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEllipsis } from 'react-icons/ai'
 
-import { UserAvatar } from '../../../../../../../../../components/ui/UserAvatar'
 import { ExternalAccountType } from '../../../../../../../../../pages/auth'
 import { useFollowedProjectsValue } from '../../../../../../../../../pages/auth/state'
+import { UserAvatar } from '../../../../../../../../../shared/components/display/UserAvatar'
 import { SkeletonLayout } from '../../../../../../../../../shared/components/layouts'
 import { FunderWithUserFragment, OrderByOptions, useProjectFundersQuery } from '../../../../../../../../../types'
 import { removeProjectAmountException, toInt, useMobileMode, useNotification } from '../../../../../../../../../utils'
 import { useProjectContext } from '../../../../../../../context'
+import { ProjectBalanceDisplay } from '../../../../../../../pages1/projectView/views/body/sections/contributionSummary/components/ProjectBalanceDisplay'
+import {
+  ProjectContributorsModal,
+  useProjectContributorsModal,
+} from '../../../../../../../pages1/projectView/views/body/sections/contributionSummary/components/ProjectContributorsModal'
+import {
+  ProjectFundersModal,
+  useProjectFundersModal,
+} from '../../../../../../../pages1/projectView/views/body/sections/contributionSummary/components/ProjectFundersModal'
 import { ContributeButton, FollowButton, ShareButton } from '../../../../projectMainBody/components'
 import { SubscribeButton } from '../components'
-import { ProjectBalanceDisplay } from '../components/ProjectBalanceDisplay'
-import { ProjectContributorsModal, useProjectContributorsModal } from '../components/ProjectContributorsModal'
-import { ProjectFundersModal, useProjectFundersModal } from '../components/ProjectFundersModal'
 
 export const ActivityBrief = (props: StackProps) => {
   const { t } = useTranslation()

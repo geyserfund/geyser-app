@@ -122,6 +122,7 @@ export const utilColors = {
     whiteContrast: '#FFFFFF',
     blackContrast: '#1C2024',
     text: '#21201C',
+    invertText: '#FFFFFF',
   },
   dark: {
     pbg: '#111110',
@@ -132,6 +133,7 @@ export const utilColors = {
     whiteContrast: '#FFFFFF',
     blackContrast: '#1C2024',
     text: '#FFFFFF',
+    invertText: '#21201C',
   },
 }
 
@@ -230,6 +232,8 @@ export const lightModeColors = {
 
   utils: utilColors.light,
   panel: panelColors.light,
+
+  ...lightPalette,
 }
 
 export const darkModeColors = {
@@ -251,4 +255,6 @@ export const darkModeColors = {
 
   utils: utilColors.dark,
   panel: panelColors.dark,
+
+  ...darkPalette,
 }

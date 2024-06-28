@@ -2,18 +2,18 @@ import {
   Box,
   Button,
   HStack,
+  IconButton,
   Modal,
   ModalBody,
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Text,
   VStack,
 } from '@chakra-ui/react'
 import EmojiPicker, { EmojiStyle } from 'emoji-picker-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { IoMdCloseCircle } from 'react-icons/io'
+import { PiXCircle } from 'react-icons/pi'
 
 import {
   ControlledEmojiInput,
@@ -21,12 +21,12 @@ import {
   ControlledSelect,
   ControlledTextArea,
   ControlledTextInput,
-} from '../../../../../components/inputs'
-import { Body2 } from '../../../../../components/typography'
-import { IconButtonComponent } from '../../../../../components/ui'
+} from '../../../../../shared/components/controlledInput'
+import { Body } from '../../../../../shared/components/typography'
+import { CloseButton } from '../../../../../shared/molecules'
 import { ProjectGoalCurrency, ProjectGoalStatus } from '../../../../../types'
+import { useProjectAtom } from '../../../hooks/useProjectAtom'
 import { useGoalsModal } from '../hooks/useGoalsModal'
-import { useProjectAtom } from '../hooks/useProjectAtom'
 import { useProjectGoalForm } from '../hooks/useProjectGoalForm'
 
 const denominationOptions = [
@@ -69,17 +69,24 @@ export const GoalModal = () => {
       <VStack width="100%">
         {currentGoal && (
           <HStack width="100%">
-            <Button flexGrow={1} variant="primary" bg="secondary.red" color="neutral.0" onClick={handleOpenDeleteModal}>
+            <Button flexGrow={1} variant="solid" colorScheme="error" onClick={handleOpenDeleteModal}>
               {t('Delete Goal')}
             </Button>
           </HStack>
         )}
         {!currentGoal || currentGoal.status === ProjectGoalStatus.InProgress ? (
           <HStack width="100%">
-            <Button flexGrow={1} variant="secondary" onClick={onGoalModalClose}>
+            <Button flexGrow={1} variant="outline" colorScheme="netural1" onClick={onGoalModalClose}>
               {t('Back')}
             </Button>{' '}
-            <Button flexGrow={1} variant="primary" isLoading={loading} type="submit" isDisabled={!enableSubmit}>
+            <Button
+              flexGrow={1}
+              variant="solid"
+              colorScheme="primary1"
+              isLoading={loading}
+              type="submit"
+              isDisabled={!enableSubmit}
+            >
               {t('Confirm')}
             </Button>
           </HStack>
@@ -99,23 +106,18 @@ export const GoalModal = () => {
       <Modal isCentered isOpen={isGoalModalOpen} onClose={onGoalModalClose}>
         <ModalOverlay />
         <ModalContent bg="transparent" boxShadow={0}>
-          <Box borderRadius="8px" bg="neutral.0" pb={3}>
+          <Box borderRadius="8px" bg="utils.pbg" pb={3}>
             <ModalHeader pb={2}>
               <HStack width="100%" alignItems={'center'} justifyContent="space-between">
-                <Text color="neutral.700" fontWeight={700} fontSize={16}>
+                <Body bold dark>
                   {currentGoal ? t('Edit goal') : t('Create goal')}
-                </Text>
-                <IconButtonComponent
-                  icon={<IoMdCloseCircle color="neutral.700" fontSize={20} />}
-                  onClick={onGoalModalClose}
-                  variant="ghost"
-                  aria-label="Close"
-                />
+                </Body>
+                <CloseButton aria-label="goal-add-edit-close" onClick={onGoalModalClose} />
               </HStack>
 
-              <Body2 color="neutral.700" fontSize={14} fontWeight={400}>
+              <Body size="sm" light>
                 {t('Inspire your followers to contribute to specific objectives.')}
-              </Body2>
+              </Body>
             </ModalHeader>
 
             <ModalBody>
@@ -123,11 +125,11 @@ export const GoalModal = () => {
                 <VStack width="100%" alignItems="flex-start" gap={5}>
                   <VStack width="100%" alignItems="flex-start">
                     <HStack width="100%" alignItems="center" justifyContent="flex-start">
-                      <Text fontSize="16px" fontWeight="500">
+                      <Body size="md" medium dark>
                         {t('Goal Title')}
-                      </Text>
+                      </Body>
                     </HStack>
-                    <HStack width="100%" alignItems="center" justifyContent="flex-start">
+                    <HStack width="100%" alignItems="start" justifyContent="flex-start">
                       <ControlledEmojiInput
                         control={control}
                         name="emojiUnifiedCode"
