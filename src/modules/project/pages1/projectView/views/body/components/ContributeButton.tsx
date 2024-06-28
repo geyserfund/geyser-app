@@ -2,10 +2,8 @@ import { Button, ButtonProps } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { BoltIcon } from '../../../../../../../components/icons'
-import { PathName } from '../../../../../../../constants'
 import { isActive, useMobileMode } from '../../../../../../../utils'
-import { useProjectAtom } from '../../../../../pages1/projectView/hooks/useProjectAtom'
+import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
 
 export const ContributeButton = (props: ButtonProps) => {
   const { t } = useTranslation()
@@ -21,8 +19,9 @@ export const ContributeButton = (props: ButtonProps) => {
 
   return (
     <Button
-      variant="primary"
-      leftIcon={<BoltIcon />}
+      size="lg"
+      variant="solid"
+      colorScheme="primary1"
       onClick={() => {
         // setMobileView(MobileViews.funding)
         // if (isInProjectPage && !isMobile) {

@@ -21,7 +21,7 @@ import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
 import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { ProjectGoal } from '../../../../../../../types'
 import { useProjectContext } from '../../../../../context'
-import { useProjectDefaultGoal } from '../../projectActivityPanel/screens/info/hooks/useProjectDefaultGoal'
+import { useProjectDefaultGoal } from '../../../../../pages1/projectView/views/body/hooks/useProjectDefaultGoal'
 import { GoalCompleted, GoalInProgress } from '../components'
 
 export const Goals = () => {

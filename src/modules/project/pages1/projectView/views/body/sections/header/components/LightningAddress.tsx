@@ -3,10 +3,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiLightning } from 'react-icons/pi'
 
-import { BoltIcon } from '../../../../../../../../../components/icons'
-import { Body1 } from '../../../../../../../../../components/typography'
 import { Body } from '../../../../../../../../../shared/components/typography'
-import { nostrColorsLight, primaryColorsLight, secondaryColors } from '../../../../../../../../../styles'
 import { copyTextToClipboard } from '../../../../../../../../../utils'
 
 interface ILightningQR extends ButtonProps {

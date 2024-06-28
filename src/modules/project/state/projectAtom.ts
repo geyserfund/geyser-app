@@ -1,10 +1,10 @@
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { atom } from 'jotai'
 
 import { authUserAtom } from '../../../pages/auth/state'
-import { ProjectHeaderSummaryFragment, ProjectPageBodyFragment } from '../../../types'
+import { ProjectHeaderSummaryFragment, ProjectPageBodyFragment, ProjectPageDetailsFragment } from '../../../types'
 import { getDiff } from '../../../utils'
 
-export type ProjectState = ProjectPageBodyFragment & ProjectHeaderSummaryFragment
+export type ProjectState = ProjectPageBodyFragment & ProjectHeaderSummaryFragment & ProjectPageDetailsFragment
 
 /** Project atom is the root project store */
 export const projectAtom = atom<ProjectState>({} as ProjectState)
@@ -44,6 +44,9 @@ export const diffProjectAtom = atom((get) => {
 
 /** Defaults to true when intialized, Set to false after project is loaded. */
 export const projectLoadingAtom = atom(true)
+
+/** Defaults to true when intialized, set to false after project details are loaded */
+export const projectDetailsLoadingAtom = atom(true)
 
 /** True for creator visiting their own project */
 export const isProjectOwnerAtom = atom((get) => {

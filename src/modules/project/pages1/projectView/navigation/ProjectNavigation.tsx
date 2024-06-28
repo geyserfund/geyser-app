@@ -8,10 +8,9 @@ import { dimensions, PathName } from '../../../../../constants'
 import { AnimatedNavBar, NavBarItems } from '../../../../../shared/components/navigation/AnimatedNavBar'
 import { standardPadding } from '../../../../../styles'
 import { useMobileMode } from '../../../../../utils'
+import { useGoalsAtom, useProjectAtom } from '../../../hooks/useProjectAtom'
 import { hasEntriesAtom } from '../../../state/entriesAtom'
-import { hasGoalsAtom } from '../../../state/goalsAtom'
 import { hasRewardsAtom } from '../../../state/rewardsAtom'
-import { useProjectAtom } from '../hooks/useProjectAtom'
 export const ProjectNavigation = () => {
   const location = useLocation()
 
@@ -21,13 +20,10 @@ export const ProjectNavigation = () => {
 
   const hasEntries = useAtomValue(hasEntriesAtom)
   const hasRewards = useAtomValue(hasRewardsAtom)
-  const hasGoals = useAtomValue(hasGoalsAtom)
-
-  console.log('checking goals', hasGoals)
+  const { hasGoals } = useGoalsAtom()
 
   const ProjectNavigationButtons = useMemo(() => {
-    if (loading) return []
-
+    console.log('checking hasGoals', hasGoals)
     const buttonList = [
       {
         name: 'Project',
@@ -76,7 +72,7 @@ export const ProjectNavigation = () => {
     }
 
     return buttonList
-  }, [hasEntries, hasGoals, hasRewards, isProjectOwner, loading])
+  }, [hasEntries, hasGoals, hasRewards, isProjectOwner])
 
   const activeButtonIndex = useMemo(() => {
     let activeIndex = 0
@@ -93,8 +89,9 @@ export const ProjectNavigation = () => {
       maxWidth={{ base: dimensions.maxWidth + 24, lg: dimensions.maxWidth + 40 }}
       w="full"
       position="fixed"
-      top={{ base: dimensions.topNavBar.mobile.height, lg: dimensions.topNavBar.desktop.height }}
+      top={{ base: `${dimensions.topNavBar.mobile.height}px`, lg: `${dimensions.topNavBar.desktop.height}px` }}
       paddingX={standardPadding}
+      paddingBottom={{ base: 3, lg: 4 }}
       background={'utils.pbg'}
       zIndex={1}
     >

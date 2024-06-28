@@ -1,5 +1,5 @@
+// export { useGoalsAtom, useProjectAtom, useRewardsAtom, useWalletAtom } from '../../../hooks/useProjectAtom'
 export { useCurrencyFormatter } from './useCurrencyFormatter'
 export { useGoalsModal } from './useGoalsModal'
-export { useGoalsAtom, useProjectAtom, useRewardsAtom, useWalletAtom } from './useProjectAtom'
 export { useProjectGoalForm } from './useProjectGoalForm'
 export { CampaignContent, getProjectShareUrlSuffix, useProjectShare } from './useProjectShare'

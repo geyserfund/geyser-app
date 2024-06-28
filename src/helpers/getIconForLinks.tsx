@@ -1,27 +1,27 @@
 /* eslint-disable complexity */
 import { IconType } from 'react-icons'
 import {
-  BsBehance,
-  BsDiscord,
-  BsDribbble,
-  BsFacebook,
-  BsGithub,
-  BsGlobe,
-  BsInstagram,
-  BsLinkedin,
-  BsMastodon,
-  BsMedium,
-  BsPinterest,
-  BsReddit,
-  BsSkype,
-  BsSlack,
-  BsSnapchat,
-  BsTelegram,
-  BsTwitch,
-  BsYoutube,
-} from 'react-icons/bs'
-import { FaTiktok } from 'react-icons/fa'
-import { RiTwitterXLine } from 'react-icons/ri'
+  PiBehanceLogo,
+  PiDiscordLogo,
+  PiDribbbleLogo,
+  PiFacebookLogo,
+  PiGithubLogo,
+  PiGlobeLight,
+  PiInstagramLogo,
+  PiLinkedinLogo,
+  PiMastodonLogo,
+  PiMediumLogo,
+  PiPinterestLogo,
+  PiRedditLogo,
+  PiSkypeLogo,
+  PiSlackLogo,
+  PiSnapchatLogo,
+  PiTelegramLogo,
+  PiTiktokLogo,
+  PiTwitchLogo,
+  PiXLogo,
+  PiYoutubeLogo,
+} from 'react-icons/pi'
 
 import { AmbossIcon } from '../components/icons'
 import { WavlakeIcon } from '../components/icons/svg'
@@ -29,87 +29,83 @@ import { Maybe } from '../types'
 
 export const getIconForLink = (value: Maybe<string>) => {
   if (!value) {
-    return BsGlobe
+    return PiGlobeLight
   }
 
   if (value?.toLowerCase().includes('twitter')) {
-    return RiTwitterXLine
+    return PiXLogo
   }
 
   if (value?.toLowerCase().includes('linkedin')) {
-    return BsLinkedin
+    return PiLinkedinLogo
   }
 
   if (value?.toLowerCase().includes('medium')) {
-    return BsMedium
-  }
-
-  if (value?.toLowerCase().includes('linkedin')) {
-    return BsMedium
+    return PiMediumLogo
   }
 
   if (value?.toLowerCase().includes('facebook')) {
-    return BsFacebook
+    return PiFacebookLogo
   }
 
   if (value?.toLowerCase().includes('reddit')) {
-    return BsReddit
+    return PiRedditLogo
   }
 
   if (value?.toLowerCase().includes('slack')) {
-    return BsSlack
+    return PiSlackLogo
   }
 
   if (value?.toLowerCase().includes('skype')) {
-    return BsSkype
+    return PiSkypeLogo
   }
 
   if (value?.toLowerCase().includes('pinterest')) {
-    return BsPinterest
+    return PiPinterestLogo
   }
 
   if (value?.toLowerCase().includes('github')) {
-    return BsGithub
+    return PiGithubLogo
   }
 
   if (value?.toLowerCase().includes('discord')) {
-    return BsDiscord
+    return PiDiscordLogo
   }
 
   if (value?.toLowerCase().includes('instagram')) {
-    return BsInstagram
+    return PiInstagramLogo
   }
 
   if (value?.toLowerCase().includes('youtube') || value?.toLowerCase().includes('youtu.be')) {
-    return BsYoutube
+    return PiYoutubeLogo
   }
 
   if (value?.toLowerCase().includes('behance')) {
-    return BsBehance
+    return PiBehanceLogo
   }
 
   if (value?.toLowerCase().includes('mastodon')) {
-    return BsMastodon
+    return PiMastodonLogo
   }
 
   if (value?.toLowerCase().includes('t.me')) {
-    return BsTelegram
+    return PiTelegramLogo
   }
 
   if (value?.toLowerCase().includes('twitch')) {
-    return BsTwitch
+    return PiTwitchLogo
   }
 
   if (value?.toLowerCase().includes('tiktok')) {
-    return FaTiktok
+    return PiTiktokLogo
   }
 
   if (value?.toLowerCase().includes('dribble')) {
-    return BsDribbble
+    return PiDribbbleLogo
   }
 
   if (value?.toLowerCase().includes('snapchat')) {
-    return BsSnapchat
+    return PiSnapchatLogo
   }
 
   if (value?.toLowerCase().includes('amboss')) {
@@ -120,5 +116,5 @@ export const getIconForLink = (value: Maybe<string>) => {
     return WavlakeIcon as IconType
   }
 
-  return BsGlobe
+  return PiGlobeLight
 }

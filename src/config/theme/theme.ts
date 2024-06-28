@@ -2,6 +2,7 @@ import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
 
 import { fonts, lightModeColors } from '../../styles'
 import { alertTheme, drawerTheme, menuTheme, modalTheme, popOverTheme, selectTheme, switchTheme } from './components'
+import { badgeTheme } from './components/badgeTheme'
 import { buttonTheme } from './components/buttonTheme'
 
 export const theme = {
@@ -135,6 +136,7 @@ export const theme = {
     Popover: popOverTheme,
     Select: selectTheme,
     Switch: switchTheme,
+    Badge: badgeTheme,
     Tabs: {
       variants: {
         secondary: {

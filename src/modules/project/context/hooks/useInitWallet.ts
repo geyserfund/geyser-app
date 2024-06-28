@@ -1,8 +1,14 @@
-import { ApolloQueryResult } from '@apollo/client'
+import { LazyQueryExecFunction } from '@apollo/client'
 import { captureException } from '@sentry/react'
 import { useSetAtom } from 'jotai'
+import { useEffect } from 'react'
 
-import { Exact, ProjectPageWalletsQuery, UniqueProjectQueryInput, useProjectPageWalletsQuery } from '../../../../types'
+import {
+  Exact,
+  ProjectPageWalletsQuery,
+  UniqueProjectQueryInput,
+  useProjectPageWalletsLazyQuery,
+} from '../../../../types'
 import { walletAtom, walletLoadingAtom } from '../../state/walletAtom'
 
 type UseInitWalletProps = {
@@ -13,16 +19,13 @@ type UseInitWalletProps = {
 }
 
 export type UseInitWalletReturn = {
-  /** Refetch wallet for the Project in context */
-  refetchProjectWallet: (
-    variables?:
-      | Partial<
-          Exact<{
-            where: UniqueProjectQueryInput
-          }>
-        >
-      | undefined,
-  ) => Promise<ApolloQueryResult<ProjectPageWalletsQuery>>
+  /** Query wallet for the Project in context */
+  queryProjectWallet: LazyQueryExecFunction<
+    ProjectPageWalletsQuery,
+    Exact<{
+      where: UniqueProjectQueryInput
+    }>
+  >
 }
 
 /** Fetch project wallet for project context */
@@ -30,9 +33,8 @@ export const useInitWallet = ({ projectId, skip }: UseInitWalletProps): UseInitW
   const setWallet = useSetAtom(walletAtom)
   const setWalletLoading = useSetAtom(walletLoadingAtom)
 
-  const { refetch: refetchProjectWallet } = useProjectPageWalletsQuery({
+  const [queryProjectWallet] = useProjectPageWalletsLazyQuery({
     fetchPolicy: 'network-only',
-    skip: !projectId || skip,
     notifyOnNetworkStatusChange: true,
     variables: {
       where: {
@@ -51,7 +53,13 @@ export const useInitWallet = ({ projectId, skip }: UseInitWalletProps): UseInitW
     },
   })
 
+  useEffect(() => {
+    if (projectId && !skip) {
+      queryProjectWallet()
+    }
+  }, [projectId, skip, queryProjectWallet])
+
   return {
-    refetchProjectWallet,
+    queryProjectWallet,
   }
 }

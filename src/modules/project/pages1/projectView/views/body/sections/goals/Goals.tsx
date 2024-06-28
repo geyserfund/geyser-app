@@ -1,4 +1,4 @@
-import { Box, Button, Text, useTheme, VStack } from '@chakra-ui/react'
+import { Box, Button, Divider, HStack, IconButton, Text, useTheme, VStack } from '@chakra-ui/react'
 import {
   closestCenter,
   DndContext,
@@ -14,26 +14,23 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { FaUnlock } from 'react-icons/fa'
-import { MdAdd, MdModeEdit } from 'react-icons/md'
+import { MdAdd } from 'react-icons/md'
+import { PiLockKeyOpen, PiNotePencil } from 'react-icons/pi'
 
-import { IconButtonComponent } from '../../../../../../../../components/ui'
-import { TitleDivider } from '../../../../../../../../components/ui/TitleDivider'
 import { CardLayout } from '../../../../../../../../shared/components/layouts'
 import { ProjectGoal, useProjectGoalOrderingUpdateMutation } from '../../../../../../../../types'
 import { useProjectContext } from '../../../../../../context'
-import { useProjectDefaultGoal } from '../../../../../../pages/projectView/views/projectActivityPanel/screens/info/hooks/useProjectDefaultGoal'
+import { useGoalsAtom, useProjectAtom } from '../../../../../../hooks/useProjectAtom'
 import { useGoalsModal } from '../../../../hooks/useGoalsModal'
-import { useGoalsAtom, useProjectAtom } from '../../../../hooks/useProjectAtom'
+import { BodySectionLayout } from '../../components'
+import { useProjectDefaultGoal } from '../../hooks/useProjectDefaultGoal'
 import { GoalCompleted, GoalInProgress } from './components'
 
 export const Goals = () => {
   const { t } = useTranslation()
-  const { refetchInProgressGoals } = useProjectContext()
+  const { queryInProgressGoals } = useProjectContext()
   const { isProjectOwner, project } = useProjectAtom()
-
   const { inProgressGoals, completedGoals } = useGoalsAtom()
-
   const { onGoalModalOpen } = useGoalsModal()
 
   const { priorityGoal } = useProjectDefaultGoal({
@@ -44,7 +41,7 @@ export const Goals = () => {
 
   const [updateProjectGoalOrdering] = useProjectGoalOrderingUpdateMutation({
     onCompleted() {
-      refetchInProgressGoals()
+      queryInProgressGoals()
     },
   })
 
@@ -115,9 +112,7 @@ export const Goals = () => {
     if (hasCompletedGoals) {
       return completedGoals?.map((goal: ProjectGoal) => {
         if (goal) {
-          return (
-            <GoalCompleted key={goal.id} goal={goal} isEditing={editMode} onOpenGoalModal={handleEditGoalModalOpen} />
-          )
+          return <GoalCompleted key={goal.id} goal={goal} />
         }
       })
     }
@@ -128,24 +123,26 @@ export const Goals = () => {
   const renderRightAction = () => {
     if (isProjectOwner && editMode) {
       return (
-        <IconButtonComponent
+        <IconButton
           aria-label="is-editing-goal"
-          noBorder
           variant="solid"
+          colorScheme="neutral1"
+          size="sm"
           onClick={handleEditMode}
-          icon={<FaUnlock fontSize="16px" />}
+          icon={<PiLockKeyOpen />}
         />
       )
     }
 
     if (isProjectOwner) {
       return (
-        <IconButtonComponent
+        <IconButton
           aria-label="edit-goal"
-          noBorder
-          variant="ghost"
+          variant="solid"
+          colorScheme="neutral1"
+          size="sm"
           onClick={handleEditMode}
-          icon={<MdModeEdit fontSize="16px" />}
+          icon={<PiNotePencil />}
         />
       )
     }
@@ -157,16 +154,16 @@ export const Goals = () => {
 
   return (
     <>
-      <CardLayout flexDirection="column" width="100%" alignItems="flex-start" gap={'30px'} mobileDense>
-        {hasInProgressGoals && (
-          <Box display="flex" flexDirection="column" gap={'20px'} width="100%">
-            <Box width="100%" minHeight="50px" py={'10px'}>
-              <TitleDivider badge={inProgressGoals?.length} rightAction={renderRightAction()}>
-                {t('Goals')}
-              </TitleDivider>
-            </Box>
-
-            <VStack alignItems="flex-start" gap={'20px'} width="100%">
+      <BodySectionLayout title={t('Goals')}>
+        <CardLayout
+          flexDirection="column"
+          width="100%"
+          alignItems="flex-start"
+          spacing={6}
+          topRightComponent={renderRightAction()}
+        >
+          {hasInProgressGoals && (
+            <VStack alignItems="flex-start" spacing={4} width="100%">
               <DndContext
                 sensors={sensors}
                 collisionDetection={closestCenter}
@@ -192,50 +189,39 @@ export const Goals = () => {
                 </DragOverlay>
               </DndContext>
             </VStack>
-          </Box>
-        )}
-        {hasCompletedGoals && (
-          <Box display="flex" flexDirection="column" gap={'20px'} width="100%">
-            <Box width="100%" minHeight="50px" py={'10px'}>
-              <TitleDivider badge={completedGoals?.length} rightAction={!hasInProgressGoals && renderRightAction()}>
-                {t('Completed Goals')}
-              </TitleDivider>
-            </Box>
+          )}
+          {hasCompletedGoals && hasInProgressGoals && <Divider borderColor="neutral1.6" />}
+          {hasCompletedGoals && (
             <VStack alignItems="flex-start" gap={'20px'} width="100%">
               {renderCompletedGoals()}
             </VStack>
-          </Box>
-        )}
-        {((isProjectOwner && editMode) || (!hasInProgressGoals && hasCompletedGoals && isProjectOwner)) && (
-          <Box display="flex" alignItems="center" justifyContent="center" width="100%">
-            <Button
-              variant="primary"
-              padding="8px 10px"
-              width={{ base: '100%', lg: '192px' }}
-              size="md"
-              borderRadius="8px"
-              mt={5}
-              mb={5}
-              rightIcon={<MdAdd fontSize="18px" />}
-              onClick={handleCreateGoalModalOpen}
-            >
-              {t('Add Goal')}
-            </Button>
-          </Box>
-        )}
-      </CardLayout>
+          )}
+          {((isProjectOwner && editMode) || (!hasInProgressGoals && hasCompletedGoals && isProjectOwner)) && (
+            <Box display="flex" alignItems="center" justifyContent="center" width="100%">
+              <Button
+                variant="solid"
+                colorScheme="primary1"
+                size="sm"
+                width={{ base: '100%', lg: '192px' }}
+                rightIcon={<MdAdd fontSize="18px" />}
+                onClick={handleCreateGoalModalOpen}
+              >
+                {t('Add Goal')}
+              </Button>
+            </Box>
+          )}
+        </CardLayout>
+      </BodySectionLayout>
     </>
   )
 }
 
 const SortableItem = ({
-  key,
   goal,
   editMode,
   handleEditGoalModalOpen,
   isPriorityGoal,
 }: {
-  key: string
   goal: ProjectGoal
   editMode: boolean
   handleEditGoalModalOpen: (goal: ProjectGoal) => void
@@ -252,12 +238,11 @@ const SortableItem = ({
     width: '100%',
     cursor: 'default',
     zIndex: isDragging ? 900 : 'auto',
-    backgroundColor: 'neutral.0',
     opacity: isDragging ? 0 : 1,
   }
 
   return (
-    <Box key={key} ref={setNodeRef} sx={style} {...attributes}>
+    <Box ref={setNodeRef} sx={style} {...attributes}>
       <GoalInProgress
         key={goal.id}
         goal={goal}

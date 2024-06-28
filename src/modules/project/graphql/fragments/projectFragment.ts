@@ -40,11 +40,8 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     balanceUsdCent
     defaultGoalId
     status
-    links
     rewardCurrency
-    location {
-      ...ProjectLocation
-    }
+    createdAt
     keys {
       ...ProjectKeys
     }
@@ -53,6 +50,21 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
       user {
         ...ProjectPageCreator
       }
+    }
+  }
+`
+
+export const FRAGMENT_PROJECT_PAGE_DETAILS = gql`
+  fragment ProjectPageDetails on Project {
+    id
+    name
+    links
+    location {
+      ...ProjectLocation
+    }
+    tags {
+      id
+      label
     }
   }
 `

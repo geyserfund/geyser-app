@@ -63,8 +63,11 @@ type UseProjectGoalFormProps = {
 }
 
 export const useProjectGoalForm = ({ goal, projectId, onClose }: UseProjectGoalFormProps) => {
+  const isBTC = goal?.currency === ProjectGoalCurrency.Btcsat
+  const amountContributed = isBTC ? goal?.amountContributed || 0 : (goal?.amountContributed || 0) / 100
+
   const { control, handleSubmit, reset, watch, formState, setValue, trigger } = useForm<FormValues>({
-    resolver: yupResolver(goalFormSchema(goal?.amountContributed || 0)),
+    resolver: yupResolver(goalFormSchema(amountContributed)),
     defaultValues: {
       title: '',
       description: '',
@@ -80,18 +83,18 @@ export const useProjectGoalForm = ({ goal, projectId, onClose }: UseProjectGoalF
 
   const enableSubmit = isDirty && isValid
 
-  const { refetchInProgressGoals } = useProjectContext()
+  const { queryInProgressGoals } = useProjectContext()
 
   const [createProjectGoal, { loading: createLoading, error: createError }] = useProjectGoalCreateMutation({
     onCompleted() {
-      refetchInProgressGoals()
+      queryInProgressGoals()
       reset()
       onClose()
     },
   })
   const [updateProjectGoal, { loading: updateLoading, error: updateError }] = useProjectGoalUpdateMutation({
     onCompleted() {
-      refetchInProgressGoals()
+      queryInProgressGoals()
       reset()
       onClose()
     },
@@ -102,8 +105,7 @@ export const useProjectGoalForm = ({ goal, projectId, onClose }: UseProjectGoalF
       reset({
         title: goal.title || '',
         description: goal.description || '',
-        targetAmount:
-          goal.currency === ProjectGoalCurrency.Btcsat ? goal.targetAmount || 0 : goal.targetAmount / 100 || 0,
+        targetAmount: isBTC ? goal.targetAmount || 0 : goal.targetAmount / 100 || 0,
         currency: goal.currency,
         projectId,
         emojiUnifiedCode: goal.emojiUnifiedCode || '',
@@ -118,15 +120,12 @@ export const useProjectGoalForm = ({ goal, projectId, onClose }: UseProjectGoalF
         emojiUnifiedCode: '',
       })
     }
-  }, [goal, reset, projectId])
+  }, [goal, reset, projectId, isBTC])
 
   const onSubmit = async (formData: FormValues) => {
     try {
       const trimmedTitle = typeof formData.title === 'string' ? formData.title.trim() : ''
-      const targetAmount =
-        formData.currency === ProjectGoalCurrency.Usdcent
-          ? dollarsToCents(Number(formData.targetAmount))
-          : formData.targetAmount
+      const targetAmount = isBTC ? formData.targetAmount : dollarsToCents(Number(formData.targetAmount))
 
       if (goal) {
         updateProjectGoal({

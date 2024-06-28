@@ -212,6 +212,8 @@ export const NotAuthorizedImageUrl = 'https://storage.googleapis.com/geyser-proj
 export const TransactionFailedImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/emails/transactionFailed.png'
 
+export const NoLeaderboardDataImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/no-leaderboard.png'
+
 // FUNDING FLOW ERRORS
 
 export const FundingErrorUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/errors/error.png'

@@ -12,6 +12,7 @@ export const FRAGMENT_PROJECT_GOALS = gql`
     amountContributed
     createdAt
     updatedAt
+    completedAt
     hasReceivedContribution
     emojiUnifiedCode
   }

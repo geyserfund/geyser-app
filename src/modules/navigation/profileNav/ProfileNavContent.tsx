@@ -35,7 +35,7 @@ export const ProfileNavContent = () => {
       <VStack w="full" spacing={6}>
         {user.id && (
           <>
-            <MenuItem as={Link} to={getPath('userProfile', user.id)} _hover={{}} _active={{}}>
+            <MenuItem as={Link} to={getPath('userProfile', user.id)} p={0} _hover={{}} _active={{}}>
               <ProfileNavUserInfo user={user} />
             </MenuItem>
 

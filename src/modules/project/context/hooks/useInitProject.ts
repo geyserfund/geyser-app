@@ -1,16 +1,19 @@
-import { ApolloQueryResult } from '@apollo/client'
+import { LazyQueryExecFunction } from '@apollo/client'
 import { captureException } from '@sentry/react'
 import { useAtom, useSetAtom } from 'jotai'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../../constants'
-import { Exact, ProjectPageBodyQuery, UniqueProjectQueryInput, useProjectPageBodyQuery } from '../../../../types'
-import { projectAtom, projectLoadingAtom } from '../../state/projectAtom'
+import { Exact, ProjectPageBodyQuery, UniqueProjectQueryInput, useProjectPageBodyLazyQuery } from '../../../../types'
+import { projectAtom, projectLoadingAtom, ProjectState } from '../../state/projectAtom'
+import { useInitEntries, UseInitEntriesReturn } from './useInitEntries'
 import { useInitGoals, UseInitGoalsReturn } from './useInitGoals'
+import { useInitProjectDetails, UseInitProjectDetailsReturn } from './useInitProjectDetails'
 import { useInitRewards, UseInitRewardsReturn } from './useInitRewards'
 import { useInitWallet, UseInitWalletReturn } from './useInitWallet'
 
-type UseInitProjectProps = {
+export type UseInitProjectProps = {
   /** Don't use together with projectName prop */
   projectId?: number
   /** Don't use together with projectId prop */
@@ -21,22 +24,25 @@ type UseInitProjectProps = {
   initializeWallet?: boolean
   /** Pass true, if we want rewards to be initialized */
   initializeRewards?: boolean
+  /** Pass true, if we want posts to be initialized */
+  initializeEntries?: boolean
+  /** Pass true, if we want project details to be initialized */
+  initializeDetails?: boolean
 }
 
 export type UseInitProjectReturn = {
-  /** Refetch Project Data for the Project in context */
-  refetchProject: (
-    variables?:
-      | Partial<
-          Exact<{
-            where: UniqueProjectQueryInput
-          }>
-        >
-      | undefined,
-  ) => Promise<ApolloQueryResult<ProjectPageBodyQuery>>
+  /** Query Project Data for the Project in context */
+  queryProject: LazyQueryExecFunction<
+    ProjectPageBodyQuery,
+    Exact<{
+      where: UniqueProjectQueryInput
+    }>
+  >
 } & UseInitGoalsReturn &
   UseInitWalletReturn &
-  UseInitRewardsReturn
+  UseInitRewardsReturn &
+  UseInitEntriesReturn &
+  UseInitProjectDetailsReturn
 
 /**  Must be initialized before using project context */
 export const useInitProject = ({
@@ -45,16 +51,17 @@ export const useInitProject = ({
   initializeGoals,
   initializeWallet,
   initializeRewards,
+  initializeEntries,
+  initializeDetails,
 }: UseInitProjectProps): UseInitProjectReturn => {
   const navigate = useNavigate()
   const [project, setProject] = useAtom(projectAtom)
   const setProjectLoading = useSetAtom(projectLoadingAtom)
 
-  const { refetch: refetchProject } = useProjectPageBodyQuery({
+  const [queryProject] = useProjectPageBodyLazyQuery({
     variables: {
       where: { name: projectName, id: projectId },
     },
-
     fetchPolicy: 'cache-first',
     onError(error) {
       setProjectLoading(false)
@@ -81,30 +88,49 @@ export const useInitProject = ({
       }
 
       const { projectGet: project } = data
-      setProject(project)
+      setProject(project as ProjectState)
     },
   })
 
-  const { refetchCompletedGoals, refetchInProgressGoals } = useInitGoals({
+  useEffect(() => {
+    if (projectId || projectName) {
+      queryProject()
+    }
+  }, [projectId, projectName, queryProject])
+
+  const { queryCompletedGoals, queryInProgressGoals } = useInitGoals({
     projectId: project.id,
     skip: !initializeGoals,
   })
 
-  const { refetchProjectWallet } = useInitWallet({
+  const { queryProjectWallet } = useInitWallet({
     projectId: project.id,
     skip: !initializeWallet,
   })
 
-  const { refetchProjectRewards } = useInitRewards({
+  const { queryProjectRewards } = useInitRewards({
     projectId: project.id,
     skip: !initializeRewards,
   })
 
+  const { queryProjectEntries, queryUnpublishedProjectEntries } = useInitEntries({
+    projectId: project.id,
+    skip: !initializeEntries,
+  })
+
+  const { queryProjectDetails } = useInitProjectDetails({
+    projectId: project.id,
+    skip: !initializeDetails,
+  })
+
   return {
-    refetchProject,
-    refetchInProgressGoals,
-    refetchCompletedGoals,
-    refetchProjectWallet,
-    refetchProjectRewards,
+    queryProject,
+    queryInProgressGoals,
+    queryCompletedGoals,
+    queryProjectWallet,
+    queryProjectRewards,
+    queryProjectEntries,
+    queryUnpublishedProjectEntries,
+    queryProjectDetails,
   }
 }

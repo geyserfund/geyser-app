@@ -14,3 +14,11 @@ export const FRAGMENT_PROJECT_PAGE_CREATOR = gql`
     }
   }
 `
+
+export const FRAGMENT_USER_AVATAR = gql`
+  fragment UserAvatar on User {
+    id
+    imageUrl
+    username
+  }
+`

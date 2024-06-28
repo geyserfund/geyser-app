@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../../../../../constants'
 import { CardLayout } from '../../../../../../../shared/components/layouts'
-import { useProjectAtom, useWalletAtom } from '../../../hooks/useProjectAtom'
+import { useProjectAtom, useWalletAtom } from '../../../../../hooks/useProjectAtom'
 
 export const FinalizeProjectNotice = () => {
   const { t } = useTranslation()

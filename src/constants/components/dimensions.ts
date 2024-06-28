@@ -9,10 +9,10 @@ export const dimensions = {
   },
   projectNavBar: {
     desktop: {
-      height: 44,
+      height: 44 + 16,
     },
     mobile: {
-      height: 36,
+      height: 36 + 12,
     },
   },
   sideNav: {

@@ -1,10 +1,20 @@
+import { useAtomValue } from 'jotai'
 import React, { createContext, PropsWithChildren, useContext, useEffect } from 'react'
 
 import { useFundingFormState, UseFundingFormStateReturn } from '../../../hooks'
-import { FundingInput, FundingTxFragment, ProjectFragment, WalletLimitsFragment } from '../../../types'
+import {
+  FundingInput,
+  FundingTxFragment,
+  ProjectFragment,
+  ProjectRewardFragment,
+  WalletLimitsFragment,
+} from '../../../types'
 import { useFundingFlow } from '../funding/hooks/useFundingFlow'
 import { FundingFlowGraphQLError } from '../funding/state'
-import { useProjectContext } from './ProjectProvider2'
+import { useGoalsAtom, useProjectAtom, useWalletAtom } from '../hooks/useProjectAtom'
+import { projectAtom, ProjectState } from '../state/projectAtom'
+import { rewardsAtom } from '../state/rewardsAtom'
+import { walletAtom } from '../state/walletAtom'
 
 type FundingContextProps = {
   fundingRequestErrored: Error | boolean
@@ -17,28 +27,28 @@ type FundingContextProps = {
   error?: FundingFlowGraphQLError
   weblnErrored: boolean
   hasWebLN: boolean
-  project?: Partial<ProjectFragment> | null // Partial Project context, for usage inside fundingFlow, Only useful when ProjctProvider is not used
+  project?: Partial<ProjectState> | null // Partial Project context, for usage inside fundingFlow, Only useful when ProjctProvider is not used
   limits?: WalletLimitsFragment | null
   fundForm: UseFundingFormStateReturn
   projectGoalId?: string | null
 }
 
 interface FundingProviderProps extends PropsWithChildren {
-  project?: Partial<ProjectFragment> | null
+  project?: Partial<ProjectState> | null
   limits?: WalletLimitsFragment | null
-  projectGoalId?: string | null
+  rewards?: ProjectRewardFragment[] | null
 }
 
 export const FundingContext = createContext<FundingContextProps>({} as FundingContextProps)
 
 export const useFundingContext = () => useContext(FundingContext)
 
-/** Used if the project context is not available */
-export const FundingProvider = ({ children, project, limits, projectGoalId }: FundingProviderProps) => {
-  const fundingFlow = useFundingFlow({ project, projectGoalId })
+// Used if the project context is not available
+export const FundingProvider = ({ children, project, limits, rewards }: FundingProviderProps) => {
+  const fundingFlow = useFundingFlow({ project })
 
   const fundForm = useFundingFormState({
-    rewards: project ? project.rewards : undefined,
+    rewards: rewards || undefined,
     rewardCurrency: project && project.rewardCurrency ? project.rewardCurrency : undefined,
     walletLimits: limits?.contribution || ({} as any),
   })
@@ -57,9 +67,12 @@ export const FundingProvider = ({ children, project, limits, projectGoalId }: Fu
 
 /** Used if the project context is available */
 export const FundingProviderWithProjectContext: React.FC<PropsWithChildren> = ({ children }) => {
-  const { project, walletLimits, goals } = useProjectContext()
+  const project = useAtomValue(projectAtom)
+  const wallet = useAtomValue(walletAtom)
+  const rewards = useAtomValue(rewardsAtom)
+
   return (
-    <FundingProvider project={project} limits={walletLimits} projectGoalId={goals.projectGoalId}>
+    <FundingProvider project={project} limits={wallet?.limits} rewards={rewards}>
       {children}
     </FundingProvider>
   )

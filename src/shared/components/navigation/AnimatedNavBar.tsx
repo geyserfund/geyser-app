@@ -1,6 +1,6 @@
-import { Box, Button, ButtonProps, ComponentWithAs, HStack } from '@chakra-ui/react'
+import { Button, ButtonProps, ComponentWithAs, HStack } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
-import { RefObject, useEffect, useRef, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconType } from 'react-icons'
 import { Link } from 'react-router-dom'
@@ -12,7 +12,7 @@ export type NavBarItems = {
   name: string
   path?: string
   onClick?: () => {}
-  icon: IconType | React.FC
+  icon?: IconType | React.FC
   showIconAlways?: boolean
   isBordered?: boolean
 }
@@ -31,13 +31,12 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem }: Anima
 
   const isMobileMode = useMobileMode()
 
-  const [buttonRef, setButtonRef] = useState<RefObject<HTMLButtonElement> | null>(null)
+  const [buttonProps, setButtonprops] = useState<{ left: number; width: number }>({ left: 0, width: 0 })
 
   return (
     <HStack
       w="full"
       padding={'2px'}
-      maxHeight={{ base: dimensions.projectNavBar.mobile.height, lg: dimensions.projectNavBar.desktop.height }}
       background="neutral1.2"
       borderRadius={{ base: '8px', lg: '10px' }}
       position="relative"
@@ -46,12 +45,14 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem }: Anima
         style={{
           position: 'absolute',
           top: '2px',
-          height: buttonRef?.current?.offsetHeight,
-          backgroundColor: colors.neutral1[11],
+          height: 'calc(100% - 4px)',
+          backgroundColor: colors.utils.pbg,
           zIndex: 1,
           borderRadius: isMobileMode ? '8px' : '10px',
+          border: '1px solid',
+          borderColor: colors.utils.text,
         }}
-        animate={{ left: buttonRef?.current?.offsetLeft, width: buttonRef?.current?.offsetWidth }}
+        animate={buttonProps}
         transition={{ type: 'spring', damping: 20, stiffness: 200 }}
       />
       {items.map((item, index) => {
@@ -59,9 +60,10 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem }: Anima
         const Icon = item.icon
         return (
           <ProjectNavigationButton
-            setRef={setButtonRef}
+            setButtonprops={setButtonprops}
             isActive={isActive}
             key={item.name}
+            length={items.length}
             {...(item.onClick
               ? {
                   onClick: item.onClick,
@@ -71,7 +73,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem }: Anima
                   to: item.path,
                 })}
             backgroundColor={'transparent'}
-            color={isActive ? 'neutral1.1' : 'neutral1.12'}
+            color={'neutral1.12'}
             _hover={isActive ? {} : undefined}
             {...(item.isBordered
               ? {
@@ -80,8 +82,17 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem }: Anima
                 }
               : {})}
           >
-            <HStack w="full" h="full" zIndex={2} p={0} spacing={2} justifyContent="center" alignItems="center">
-              {(showIcon || item.showIconAlways) && <Icon />}
+            <HStack
+              w="full"
+              h="full"
+              zIndex={4}
+              p={0}
+              spacing={2}
+              justifyContent="center"
+              alignItems="center"
+              fontWeight={isActive ? 700 : 500}
+            >
+              {(showIcon || item.showIconAlways) && Icon ? <Icon /> : null}
               {showLabel && <span>{t(item.name)}</span>}
             </HStack>
           </ProjectNavigationButton>
@@ -93,19 +104,23 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem }: Anima
 
 const ProjectNavigationButton: ComponentWithAs<
   'button',
-  ButtonProps & { to?: string; setRef: Function; isActive: boolean }
-> = ({ setRef, isActive, ...props }) => {
-  const ref = useRef<HTMLButtonElement>(null)
-
-  useEffect(() => {
-    if (isActive && setRef) {
-      setRef(ref)
-    }
-  }, [isActive, setRef, ref])
+  ButtonProps & { to?: string; setButtonprops: Function; isActive: boolean; length: number }
+> = ({ setButtonprops, isActive, length, ...props }) => {
+  const measuredRef = useCallback(
+    (node: HTMLButtonElement) => {
+      if (node !== null && isActive && length > 0) {
+        setButtonprops({
+          left: node.offsetLeft,
+          width: node.offsetWidth,
+        })
+      }
+    },
+    [isActive, setButtonprops, length],
+  )
 
   return (
     <Button
-      ref={ref}
+      ref={measuredRef}
       flex="1"
       size={{ base: 'md', lg: 'lg' }}
       variant="ghost"

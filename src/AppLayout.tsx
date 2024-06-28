@@ -13,7 +13,7 @@ import { LandingNavBar } from './navigation/bottomNav/LandingNavBar'
 import { LoadingPage } from './pages/loading'
 import { useMobileMode } from './utils'
 
-export const AppLayout = () => {
+const AppLayout = () => {
   const { loading } = useAuthContext()
 
   const isMobile = useMobileMode()
@@ -56,7 +56,10 @@ export const AppLayout = () => {
               maxHeight="100%"
               width="100%"
               flex="1"
-              paddingTop={`${dimensions.topNavBar.desktop.height}px`}
+              paddingTop={{
+                base: `${dimensions.topNavBar.mobile.height}px`,
+                lg: `${dimensions.topNavBar.desktop.height}px`,
+              }}
               overflowY={{ base: 'initial', lg: 'auto' }}
             >
               <Outlet />
@@ -68,3 +71,5 @@ export const AppLayout = () => {
     </>
   )
 }
+
+export default AppLayout

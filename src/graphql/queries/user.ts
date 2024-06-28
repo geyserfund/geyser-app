@@ -16,6 +16,7 @@ export const QUERY_ME = gql`
 export const QUERY_ME_PROJECT_FOLLOWS = gql`
   query MeProjectFollows {
     me {
+      id
       projectFollows {
         id
         title

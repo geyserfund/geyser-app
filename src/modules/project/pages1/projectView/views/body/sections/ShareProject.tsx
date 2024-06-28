@@ -1,18 +1,17 @@
 import { CloseIcon } from '@chakra-ui/icons'
-import { Box, Button, HStack, IconButton, Image, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, IconButton, Image, Link, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiLinkBold } from 'react-icons/pi'
-import { RiTwitterXLine } from 'react-icons/ri'
+import { PiLinkBold, PiXLogo } from 'react-icons/pi'
 
-import { Body2, H3 } from '../../../../../../../components/typography'
 import { MegaphoneUrl } from '../../../../../../../constants'
 import { useAuthContext } from '../../../../../../../context'
 import { CardLayout } from '../../../../../../../shared/components/layouts'
+import { Body, H3 } from '../../../../../../../shared/components/typography'
 import { standardPadding } from '../../../../../../../styles'
 import { ProjectStatus } from '../../../../../../../types'
 import { hasTwitterAccount } from '../../../../../../../utils'
-import { useProjectContext } from '../../../../../context'
+import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
 import { CampaignContent, useProjectShare } from '../../../hooks/useProjectShare'
 import { shareOnTwitter } from '../utils'
 
@@ -31,7 +30,7 @@ const tweetKeys = [
 
 export const ShareProject = () => {
   const { t } = useTranslation()
-  const { project, isProjectOwner } = useProjectContext()
+  const { project, isProjectOwner } = useProjectAtom()
   const { user } = useAuthContext()
   const { copyProjectLinkToClipboard, copied } = useProjectShare()
 
@@ -77,25 +76,30 @@ export const ShareProject = () => {
         <Image h="100%" src={MegaphoneUrl} aria-label="share-project-megaphone" objectFit="contain" />
       </Box>
       <VStack w="full" alignItems={'start'}>
-        <H3>{t('Share your project')}</H3>
-        <Body2>{t('Sharing on social media helps you reach more people and get closer to achieving your goals')}</Body2>
+        <H3 size="lg">{t('Share your project')}</H3>
+        <Body size="sm">
+          {t('Sharing on social media helps you reach more people and get closer to achieving your goals')}
+        </Body>
         <HStack w="full" alignItems="start">
           {isTwitterAccount && (
-            <a href={handleTwitterShareClick()} target="_blank" rel="noopener noreferrer" style={{ width: '100%' }}>
-              <Button
-                as="div"
-                w="full"
-                backgroundColor="neutral.1000"
-                color="neutral.0"
-                leftIcon={<RiTwitterXLine />}
-                _hover={{ backgroundColor: 'neutral.300', color: 'neutral.1000' }}
-              >
-                {t('Post')}
-              </Button>
-            </a>
+            <Button
+              as={Link}
+              href={handleTwitterShareClick()}
+              isExternal
+              w="full"
+              leftIcon={<PiXLogo />}
+              variant="solid"
+              colorScheme="neutral1"
+              textDecoration={'none'}
+              display="flex"
+              alignItems="center"
+            >
+              {t('Post')}
+            </Button>
           )}
           <Button
-            variant={copied ? 'secondary' : 'primary'}
+            variant="solid"
+            colorScheme={copied ? 'neutral1' : 'primary1'}
             leftIcon={<PiLinkBold />}
             w="full"
             onClick={() => copyProjectLinkToClipboard({ clickedFrom: CampaignContent.creatorCta })}

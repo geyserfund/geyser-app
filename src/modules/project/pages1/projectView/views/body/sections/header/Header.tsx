@@ -29,7 +29,7 @@ import { ProjectStatusLabel } from '../../../../../../../../shared/molecules/Pro
 import { ProjectStatus, useProjectPageHeaderSummaryQuery, WalletStatus } from '../../../../../../../../types'
 import { toInt, useMobileMode } from '../../../../../../../../utils'
 import { toLargeImageUrl } from '../../../../../../../../utils/tools/imageSizes'
-import { useProjectAtom, useWalletAtom } from '../../../../hooks/useProjectAtom'
+import { useProjectAtom, useWalletAtom } from '../../../../../../hooks/useProjectAtom'
 import { CreatorSocial } from './components/CreatorSocial'
 import { LightningAddress } from './components/LightningAddress'
 import { NpubDisplay } from './components/NpubDisplay'

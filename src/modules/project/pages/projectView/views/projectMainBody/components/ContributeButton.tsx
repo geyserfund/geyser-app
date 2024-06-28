@@ -2,8 +2,19 @@ import { Button, ButtonProps } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { BoltIcon } from '../../../../../../../components/icons'
-import { isActive } from '../../../../../../../utils'
-import { useProjectAtom } from '../../../../../pages1/projectView/hooks/useProjectAtom'
+// import { PathName } from '../../../../../../../constants'
+// import { useAuthContext } from '../../../../../../../context'
+// import { GrantApplicantStatus, GrantStatusEnum } from '../../../../../../../types'
+import {
+  isActive,
+  // useMobileMode
+} from '../../../../../../../utils'
+// import { MobileViews, useProjectContext } from '../../../../../context'
+import {
+  // useGoalsAtom,
+  useProjectAtom,
+} from '../../../../../hooks/useProjectAtom'
+// import { LoginToVoteModal } from './LoginToVoteModal'
 
 export const ContributeButton = (props: ButtonProps) => {
   const { t } = useTranslation()

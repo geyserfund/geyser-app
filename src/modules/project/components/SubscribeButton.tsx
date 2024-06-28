@@ -19,7 +19,6 @@ import { Trans, useTranslation } from 'react-i18next'
 import { PiWarningCircleFill } from 'react-icons/pi'
 
 import { SubscribeIcon } from '../../../components/icons'
-import { Body2 } from '../../../components/typography'
 import { BetaBox } from '../../../components/ui'
 import {
   FlashsubscribeUrl,
@@ -29,6 +28,7 @@ import {
 } from '../../../constants'
 import { useModal } from '../../../hooks'
 import { CardLayout } from '../../../shared/components/layouts'
+import { Body } from '../../../shared/components/typography'
 import { useCustomTheme } from '../../../utils'
 
 interface SubscribeButtonProps extends ButtonProps {
@@ -65,8 +65,8 @@ export const SubscribeButton = ({ projectName, projectTitle, noIcon, ...props }:
   return (
     <>
       <Button
-        variant="primary"
-        backgroundColor={'secondary.orangeLight'}
+        variant="solid"
+        colorScheme={'orange'}
         leftIcon={!noIcon ? <SubscribeIcon /> : undefined}
         onClick={handleSubscribeClick}
         {...props}
@@ -96,7 +96,7 @@ export const SubscribeButton = ({ projectName, projectTitle, noIcon, ...props }:
                   <CardLayout p="10px 20px" direction="row">
                     <PiWarningCircleFill color={colors.primary[500]} size="30px" />
                     <VStack flex="1" alignItems={'start'}>
-                      <Body2>{t('This feature is in beta')}:</Body2>
+                      <Body size="sm">{t('This feature is in beta')}:</Body>
                       <UnorderedList fontSize={'14px'}>
                         <ListItem>{t('You need to signup with Flash')}</ListItem>
                         <ListItem>
@@ -115,7 +115,7 @@ export const SubscribeButton = ({ projectName, projectTitle, noIcon, ...props }:
                       </UnorderedList>
                     </VStack>
                   </CardLayout>
-                  <Body2>
+                  <Body size="sm">
                     <Trans
                       i18nKey="Subscribe to the <1>{{PROJECT_NAME}}</1> with recurring payments to ensure your continuous support for the project. By choosing a subscription model, you'll automatically contribute to the project on a regular basis."
                       values={{ PROJECT_NAME: projectTitle }}
@@ -126,12 +126,12 @@ export const SubscribeButton = ({ projectName, projectTitle, noIcon, ...props }:
                         " with recurring payments to ensure your continuous support for the project. By choosing a subscription model, you'll automatically contribute to the project on a regular basis."
                       }
                     </Trans>
-                  </Body2>
+                  </Body>
                   <HStack w="full">
-                    <Button flex={1} variant="primaryNeutral" onClick={handleClose}>
+                    <Button flex={1} colorScheme="neutral1" onClick={handleClose}>
                       {t('Cancel')}
                     </Button>
-                    <Button flex={1} variant="primary" onClick={() => setRenderIframe(true)}>
+                    <Button flex={1} colorScheme="primary1" onClick={() => setRenderIframe(true)}>
                       {t('Continue')}
                     </Button>
                   </HStack>

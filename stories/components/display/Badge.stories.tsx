@@ -1,11 +1,11 @@
 import { BellIcon } from '@chakra-ui/icons'
-import { Button as ChakraButton } from '@chakra-ui/react'
+import { Badge } from '@chakra-ui/react'
 import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
 const meta = {
   title: 'Components/Display/Badge',
-  component: ChakraButton,
+  component: Badge,
   tags: ['autodocs'],
   args: {
     children: 'Badge',
@@ -24,7 +24,7 @@ const meta = {
       control: { type: 'radio' },
     },
   },
-} satisfies Meta<typeof ChakraButton>
+} satisfies Meta<typeof Badge>
 
 export default meta
 type Story = StoryObj<typeof meta>

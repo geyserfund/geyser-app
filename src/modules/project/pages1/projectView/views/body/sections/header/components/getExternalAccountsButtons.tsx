@@ -2,8 +2,8 @@ import { Link } from '@chakra-ui/react'
 import { nip19 } from 'nostr-tools'
 import { PiGithubLogo, PiXLogo } from 'react-icons/pi'
 
-import { NostrSvgIcon } from '../../../../../../../../../components/icons'
 import { ExternalAccountType } from '../../../../../../../../../pages/auth'
+import { NostrIcon } from '../../../../../../../../../shared/components/icons'
 import { ExternalAccount } from '../../../../../../../../../types'
 
 interface GetExternalAccountsProps {
@@ -32,7 +32,7 @@ export const getExternalAccountsButtons = ({ accounts }: GetExternalAccountsProp
         const npub = nip19.npubEncode(account.externalId)
         return {
           key: 'nostr',
-          icon: <NostrSvgIcon height="12px" width="12px" />,
+          icon: <NostrIcon height="12px" width="12px" />,
           username: npub,
           props: {
             as: Link,

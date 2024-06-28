@@ -10,7 +10,7 @@ import { IconButtonComponent } from '../../../../../../../components/ui'
 import { Tooltip } from '../../../../../../../components/ui/Tooltip'
 import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../types'
 import { getFormattedDate } from '../../../../../../../utils'
-import { useCurrencyFormatter } from '../../../hooks/useCurrencyFormatter'
+import { useCurrencyFormatter } from '../../../../../../../shared/utils/hooks/useCurrencyFormatter'
 
 type Props = {
   goal: ProjectGoal

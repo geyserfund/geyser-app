@@ -16,8 +16,6 @@ import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
 
-import { CardLayout } from '../../../../components/layouts'
-import { Modal } from '../../../../components/layouts'
 import { H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { getPath } from '../../../../constants'
@@ -26,6 +24,7 @@ import {
   useProjectGrantApplicantContributorsModal,
 } from '../../../../modules/project/pages/projectView/views/projectActivityPanel/screens/info/components/ProjectGrantApplicantContributorsModal'
 import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
+import { CardLayout, Modal } from '../../../../shared/components/layouts'
 import { fonts } from '../../../../styles'
 import {
   GrantApplicantContributor,
