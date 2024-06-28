@@ -2,8 +2,8 @@ import { Box, Text } from '@chakra-ui/layout'
 import { useState } from 'react'
 import { BsCurrencyBitcoin } from 'react-icons/bs'
 
-import { useCustomTheme } from '../../../utils'
 import { commaFormatted } from '../../../shared/utils/formatData/helperFunctions'
+import { useCustomTheme } from '../../../utils'
 import { SatoshiIconTilted } from '../../icons'
 
 interface IProjectBalance {

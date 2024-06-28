@@ -15,6 +15,8 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IoMdCloseCircle } from 'react-icons/io'
 
+import { Body2 } from '../../../../../../../components/typography'
+import { IconButtonComponent } from '../../../../../../../components/ui'
 import {
   ControlledEmojiInput,
   ControlledGoalAmount,
@@ -22,8 +24,6 @@ import {
   ControlledTextArea,
   ControlledTextInput,
 } from '../../../../../../../shared/components/controlledInput'
-import { Body2 } from '../../../../../../../components/typography'
-import { IconButtonComponent } from '../../../../../../../components/ui'
 import { ProjectGoal, ProjectGoalCurrency, ProjectGoalStatus } from '../../../../../../../types'
 import { useProjectGoalForm } from '../../../../projectView/hooks/useProjectGoalForm'
 
