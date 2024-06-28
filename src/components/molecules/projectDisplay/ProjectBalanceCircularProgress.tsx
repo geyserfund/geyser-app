@@ -6,8 +6,8 @@ import { IconBaseProps } from 'react-icons'
 import { BsCurrencyBitcoin } from 'react-icons/bs'
 import { createUseStyles } from 'react-jss'
 
-import { useDarkMode } from '../../../utils'
 import { commaFormatted } from '../../../shared/utils/formatData/helperFunctions'
+import { useDarkMode } from '../../../utils'
 import { SatoshiIconTilted } from '../../icons'
 
 interface IProjectBalanceCircularProgress {

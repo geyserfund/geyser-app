@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../types'
 import { useCurrencyFormatter } from '../../../../../../../shared/utils/hooks/useCurrencyFormatter'
+import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../types'
 
 type Props = {
   defaultGoalId: string | null

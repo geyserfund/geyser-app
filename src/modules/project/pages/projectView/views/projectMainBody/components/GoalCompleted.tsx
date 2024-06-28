@@ -8,9 +8,9 @@ import { DollarIconCircled, SatoshiIconCircled } from '../../../../../../../comp
 import { Body1, H3 } from '../../../../../../../components/typography'
 import { IconButtonComponent } from '../../../../../../../components/ui'
 import { Tooltip } from '../../../../../../../components/ui/Tooltip'
+import { useCurrencyFormatter } from '../../../../../../../shared/utils/hooks/useCurrencyFormatter'
 import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../types'
 import { getFormattedDate } from '../../../../../../../utils'
-import { useCurrencyFormatter } from '../../../../../../../shared/utils/hooks/useCurrencyFormatter'
 
 type Props = {
   goal: ProjectGoal
