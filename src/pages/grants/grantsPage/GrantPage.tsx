@@ -217,7 +217,7 @@ export const GrantPage = () => {
                 )}
                 {showGrantApply && !isCompetitionVote && (
                   <>
-                    <GrantApply grant={grant} />
+                    <GrantApply grant={grant} pendingApplicants={pendingApplicants} />
                     <MobileDivider />
                   </>
                 )}
