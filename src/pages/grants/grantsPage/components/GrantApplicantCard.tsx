@@ -452,7 +452,7 @@ const HowVotingWorksModal = ({
               <Text>{t('1 Sat = 1 Vote. Each Sat is one Vote.')}</Text>
             </ListItem>
             <ListItem>
-              <Text>{t('You can send Sats to projects to multiple projects and multiple times')}</Text>
+              <Text>{t('You can send Sats to multiple projects and multiple times')}</Text>
             </ListItem>
             <ListItem>
               <Text>{t('You can send Sats anonymously')}</Text>
