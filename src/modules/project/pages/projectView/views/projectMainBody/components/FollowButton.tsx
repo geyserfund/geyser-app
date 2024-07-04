@@ -9,8 +9,8 @@ import { IconButtonComponent } from '../../../../../../../components/ui'
 import { useAuthContext } from '../../../../../../../context'
 import { useFollowProject } from '../../../../../../../hooks/graphqlState'
 import { useAuthModal } from '../../../../../../../pages/auth/hooks'
-import { shouldPromptAtom } from '../../../../../../../pages/auth/hooks/useEmailPrompt'
 import { useEmailPromptModal } from '../../../../../../../pages/auth/hooks/useEmailPromptModal'
+import { shouldPromptAtom } from '../../../../../../../pages/auth/state/emailPromptAtom'
 import { Project } from '../../../../../../../types'
 
 interface FollowComponentProps {
