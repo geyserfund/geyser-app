@@ -35,17 +35,17 @@ export const EmailPromptModal = ({ onCloseAction, onClose, isOpen }: EmailPrompt
     <>
       <Modal isOpen={isOpen && shouldPrompt} onClose={onClose} title={t('Email')} size="lg">
         <form onSubmit={handleSubmit(handleEmailPrompSubmit)}>
-          <VStack display="flex" justifyContent="flex-start" alignItems="flex-start" w="100%" gap={4}>
+          <VStack justifyContent="flex-start" alignItems="flex-start" w="100%" gap={4}>
             <Box w="100%" height="200px" display="flex" justifyContent="center" alignItems="center">
               <Image height="100%" src={EmailPromptModalUrl} alt="Email illustration" objectFit="contain" />
             </Box>
-            <VStack display="flex" justifyContent="flex-start" alignItems="flex-start" w="100%" gap={1}>
+            <VStack justifyContent="flex-start" alignItems="flex-start" w="100%" gap={1}>
               <Text fontSize="14px" color="neutral.700" fontWeight="medium">
                 {t('Receive email notifications for projects you follow')}
               </Text>
               <Text fontSize="14px" color="neutral.600">
                 {t(
-                  'Stay up to date with projects you follow by receiving recurring project updates. Drop email below, and unsubscribe at any time.',
+                  'Stay up to date with projects you follow by receiving recurring project updates and Geyser product announcements. Drop email below, and unsubscribe anytime.',
                 )}
               </Text>
             </VStack>
