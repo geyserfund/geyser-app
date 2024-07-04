@@ -1,11 +1,13 @@
-import { useMutation } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { atom, useAtomValue, useSetAtom } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
 import { useAuthContext } from '../../../context'
-import { MUTATION_UPDATE_USER_EMAIL } from '../../../graphql/mutations/email'
+import { useUserEmailUpdateMutation } from '../../../types'
+import { authUserAtom } from '../state'
 
 type FormValues = Record<string, any>
 
@@ -21,19 +23,27 @@ const emailSchema = yup.object().shape({
     }),
 })
 
+export const dontAskAgainAtom = atomWithStorage('dontAskAgain', false)
+
+export const shouldPromptAtom = atom((get) => {
+  const user = get(authUserAtom)
+  const dontAskAgain = get(dontAskAgainAtom)
+  return user.id && !user.email && !dontAskAgain
+})
+
 export const useEmailPrompt = () => {
-  const { user, setUser, isLoggedIn } = useAuthContext()
-  const [shouldPrompt, setShouldPrompt] = useState(false)
+  const { user, setUser } = useAuthContext()
   const [enableSave, setEnableSave] = useState(false)
-  const [updateUserEmail] = useMutation(MUTATION_UPDATE_USER_EMAIL)
-
-  useEffect(() => {
-    const dontAskAgain = localStorage.getItem('dontAskAgain')
-
-    if (isLoggedIn && !user.email && !dontAskAgain) {
-      setShouldPrompt(true)
-    }
-  }, [user, isLoggedIn])
+  const setDontAskAgain = useSetAtom(dontAskAgainAtom)
+  const shouldPrompt = useAtomValue(shouldPromptAtom)
+  const [updateUserEmail] = useUserEmailUpdateMutation({
+    onCompleted(data) {
+      if (data?.userEmailUpdate) {
+        setUser({ ...user, email: data.userEmailUpdate.email })
+        setDontAskAgain(true)
+      }
+    },
+  })
 
   const {
     handleSubmit,
@@ -52,26 +62,16 @@ export const useEmailPrompt = () => {
     setEnableSave(isValid && isDirty)
   }, [isValid, isDirty])
 
-  const setDontAskAgain = () => {
-    localStorage.setItem('dontAskAgain', 'true')
-  }
-
-  const onSubmit = async (data: FormValues) => {
+  const onSubmit = (data: FormValues) => {
     if (data.email) {
-      const response = await updateUserEmail({ variables: { input: { email: data.email } } })
-      if (response.data.userEmailUpdate) {
-        setUser({ ...user, email: data.email })
-        setShouldPrompt(false)
-        setDontAskAgain()
-      }
-
+      updateUserEmail({ variables: { input: { email: data.email } } })
       return
     }
 
     if (data.dontAskAgain) {
-      setDontAskAgain()
+      setDontAskAgain(true)
     }
   }
 
-  return { shouldPrompt, setShouldPrompt, handleSubmit, control, errors, onSubmit, enableSave, reset }
+  return { shouldPrompt, handleSubmit, control, errors, onSubmit, enableSave, reset }
 }

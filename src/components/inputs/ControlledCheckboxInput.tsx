@@ -21,7 +21,7 @@ export function ControlledCheckboxInput(props: Props) {
   }
 
   return (
-    <VStack display="flex" alignItems="flex-start" width="100%">
+    <VStack alignItems="flex-start" width="100%">
       <Checkbox {...field} {...props} onChange={handleChange}>
         <Text fontSize="14px" color="neutral.700">
           {props.label}
