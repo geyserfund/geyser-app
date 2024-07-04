@@ -16,6 +16,8 @@ import { Project } from '../../../../../../../types'
 interface FollowComponentProps {
   project: Pick<Project, 'id' | 'name' | 'title'>
   hasIcon?: boolean
+  variant?: 'primary' | 'secondary'
+  size?: 'sm' | 'md' | 'lg'
   type?: 'button' | 'icon'
 }
 
