@@ -1,8 +1,10 @@
-import { atom } from 'jotai'
+import { atom, useAtom, useSetAtom } from 'jotai'
+import { atomEffect } from 'jotai-effect'
 
 import { authUserAtom } from '../../../pages/auth/state'
 import { ProjectHeaderSummaryFragment, ProjectPageBodyFragment, ProjectPageDetailsFragment } from '../../../types'
 import { getDiff } from '../../../utils'
+import { initialGoalsLoadAtom } from './goalsAtom'
 
 export type ProjectState = ProjectPageBodyFragment & ProjectHeaderSummaryFragment & ProjectPageDetailsFragment
 
@@ -45,9 +47,6 @@ export const diffProjectAtom = atom((get) => {
 /** Defaults to true when intialized, Set to false after project is loaded. */
 export const projectLoadingAtom = atom(true)
 
-/** Defaults to true when intialized, set to false after project details are loaded */
-export const projectDetailsLoadingAtom = atom(true)
-
 /** True for creator visiting their own project */
 export const isProjectOwnerAtom = atom((get) => {
   const project = get(projectAtom)
@@ -70,3 +69,14 @@ export const projectOwnerAtom = atom((get) => {
 
   return undefined
 })
+/** Initial load for project details, set to true after loaded */
+export const initialProjectDetailsLoadAtom = atom(false)
+
+/** Reset the project state */
+const projectResetAtom = atom(null, (get, set) => {
+  set(projectLoadingAtom, true)
+  set(initialProjectDetailsLoadAtom, false)
+  set(initialGoalsLoadAtom, false)
+  set(initialGoalsLoadAtom, false)
+})
+export const useProjectReset = () => useSetAtom(projectResetAtom)

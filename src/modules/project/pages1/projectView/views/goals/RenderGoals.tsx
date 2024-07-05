@@ -1,4 +1,4 @@
-import { Box, Button, Divider, HStack, IconButton, Text, useTheme, VStack } from '@chakra-ui/react'
+import { Box, Button, Divider, HStack, Text, useTheme, VStack } from '@chakra-ui/react'
 import {
   closestCenter,
   DndContext,
@@ -14,22 +14,24 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { MdAdd } from 'react-icons/md'
-import { PiLockKeyOpen, PiNotePencil } from 'react-icons/pi'
+import { PiPlus } from 'react-icons/pi'
 
-import { CardLayout } from '../../../../../../../../shared/components/layouts'
-import { ProjectGoal, useProjectGoalOrderingUpdateMutation } from '../../../../../../../../types'
-import { useProjectContext } from '../../../../../../context'
-import { useGoalsAtom, useProjectAtom } from '../../../../../../hooks/useProjectAtom'
-import { useGoalsModal } from '../../../../hooks/useGoalsModal'
-import { BodySectionLayout } from '../../components'
-import { useProjectDefaultGoal } from '../../hooks/useProjectDefaultGoal'
+import { useInitGoals } from '@/modules/project/hooks/useInitGoals'
+
+import { CardLayout, SkeletonLayout } from '../../../../../../shared/components/layouts'
+import { ProjectGoal, useProjectGoalOrderingUpdateMutation } from '../../../../../../types'
+import { useGoalsAtom, useProjectAtom } from '../../../../hooks/useProjectAtom'
+import { useGoalsModal } from '../../hooks/useGoalsModal'
+import { useProjectDefaultGoal } from '../body/hooks/useProjectDefaultGoal'
 import { GoalCompleted, GoalInProgress } from './components'
 
-export const Goals = () => {
+export const RenderGoals = () => {
   const { t } = useTranslation()
-  const { queryInProgressGoals } = useProjectContext()
+
   const { isProjectOwner, project } = useProjectAtom()
+
+  const { queryInProgressGoals, inProgressGoalsLoading } = useInitGoals(true)
+
   const { inProgressGoals, completedGoals } = useGoalsAtom()
   const { onGoalModalOpen } = useGoalsModal()
 
@@ -120,32 +122,27 @@ export const Goals = () => {
     return <Text>There are no goals available.</Text>
   }
 
-  const renderRightAction = () => {
-    if (isProjectOwner && editMode) {
-      return (
-        <IconButton
-          aria-label="is-editing-goal"
-          variant="solid"
-          colorScheme="neutral1"
-          size="sm"
-          onClick={handleEditMode}
-          icon={<PiLockKeyOpen />}
-        />
-      )
+  const renderEditButton = () => {
+    if (!isProjectOwner) {
+      return null
     }
 
-    if (isProjectOwner) {
-      return (
-        <IconButton
-          aria-label="edit-goal"
-          variant="solid"
-          colorScheme="neutral1"
-          size="sm"
-          onClick={handleEditMode}
-          icon={<PiNotePencil />}
-        />
-      )
-    }
+    return (
+      <Button
+        aria-label="is-editing-goal"
+        variant="outline"
+        colorScheme="neutral1"
+        size="sm"
+        onClick={handleEditMode}
+        minWidth={'54px'}
+      >
+        {editMode ? t('Finish Editing') : t('Edit')}
+      </Button>
+    )
+  }
+
+  if (inProgressGoalsLoading) {
+    return <RenderGoalsSkeleton />
   }
 
   if (!hasInProgressGoals && !hasCompletedGoals) {
@@ -153,66 +150,57 @@ export const Goals = () => {
   }
 
   return (
-    <>
-      <BodySectionLayout title={t('Goals')}>
-        <CardLayout
-          flexDirection="column"
-          width="100%"
-          alignItems="flex-start"
-          spacing={6}
-          topRightComponent={renderRightAction()}
-        >
-          {hasInProgressGoals && (
-            <VStack alignItems="flex-start" spacing={4} width="100%">
-              <DndContext
-                sensors={sensors}
-                collisionDetection={closestCenter}
-                onDragStart={handleDragStart}
-                onDragEnd={handleDragEnd}
-                modifiers={[restrictToVerticalAxis, restrictToWindowEdges, restrictToParentElement]}
-              >
-                <SortableContext items={items ?? []} strategy={verticalListSortingStrategy}>
-                  {items?.map((goal) => (
-                    <SortableItem
-                      key={goal.id}
-                      goal={goal}
-                      editMode={editMode}
-                      handleEditGoalModalOpen={handleEditGoalModalOpen}
-                      isPriorityGoal={goal.id === priorityGoal?.id}
-                    />
-                  ))}
-                </SortableContext>
-                <DragOverlay>
-                  {activeId ? (
-                    <PresentationalGoalItem goal={items?.find((item) => item.id === activeId) ?? ({} as ProjectGoal)} />
-                  ) : null}
-                </DragOverlay>
-              </DndContext>
-            </VStack>
-          )}
-          {hasCompletedGoals && hasInProgressGoals && <Divider borderColor="neutral1.6" />}
-          {hasCompletedGoals && (
-            <VStack alignItems="flex-start" gap={'20px'} width="100%">
-              {renderCompletedGoals()}
-            </VStack>
-          )}
-          {((isProjectOwner && editMode) || (!hasInProgressGoals && hasCompletedGoals && isProjectOwner)) && (
-            <Box display="flex" alignItems="center" justifyContent="center" width="100%">
-              <Button
-                variant="solid"
-                colorScheme="primary1"
-                size="sm"
-                width={{ base: '100%', lg: '192px' }}
-                rightIcon={<MdAdd fontSize="18px" />}
-                onClick={handleCreateGoalModalOpen}
-              >
-                {t('Add Goal')}
-              </Button>
-            </Box>
-          )}
-        </CardLayout>
-      </BodySectionLayout>
-    </>
+    <CardLayout flexDirection="column" width="100%" alignItems="flex-start" spacing={6}>
+      {hasInProgressGoals && (
+        <VStack alignItems="flex-start" spacing={4} width="100%">
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+            modifiers={[restrictToVerticalAxis, restrictToWindowEdges, restrictToParentElement]}
+          >
+            <SortableContext items={items ?? []} strategy={verticalListSortingStrategy}>
+              {items?.map((goal) => (
+                <SortableItem
+                  key={goal.id}
+                  goal={goal}
+                  editMode={editMode}
+                  handleEditGoalModalOpen={handleEditGoalModalOpen}
+                  isPriorityGoal={goal.id === priorityGoal?.id}
+                />
+              ))}
+            </SortableContext>
+            <DragOverlay>
+              {activeId ? (
+                <PresentationalGoalItem goal={items?.find((item) => item.id === activeId) ?? ({} as ProjectGoal)} />
+              ) : null}
+            </DragOverlay>
+          </DndContext>
+        </VStack>
+      )}
+      {hasCompletedGoals && hasInProgressGoals && <Divider borderColor="neutral1.6" />}
+      {hasCompletedGoals && (
+        <VStack alignItems="flex-start" gap={'20px'} width="100%">
+          {renderCompletedGoals()}
+        </VStack>
+      )}
+      <HStack w="full" justifyContent={'end'}>
+        {((isProjectOwner && editMode) || (!hasInProgressGoals && hasCompletedGoals && isProjectOwner)) && (
+          <Button
+            variant="solid"
+            colorScheme="primary1"
+            size="sm"
+            width={{ base: '100%', lg: '192px' }}
+            rightIcon={<PiPlus fontSize="18px" />}
+            onClick={handleCreateGoalModalOpen}
+          >
+            {t('Add Goal')}
+          </Button>
+        )}
+        {renderEditButton()}
+      </HStack>
+    </CardLayout>
   )
 }
 
@@ -270,5 +258,49 @@ const PresentationalGoalItem = ({ goal }: { goal: ProjectGoal }) => {
     <Box display="flex" boxShadow={`0 -50px 30px -4px ${boxShadowColor}, 0 50px 30px -4px ${boxShadowColor}`}>
       <GoalInProgress goal={goal} isEditing={true} onOpenGoalModal={() => {}} listeners={[]} />
     </Box>
+  )
+}
+
+export const RenderGoalsSkeleton = () => {
+  return (
+    <CardLayout flexDirection="column" width="100%" alignItems="flex-start" spacing={6}>
+      <VStack alignItems="flex-start" spacing={4} width="100%">
+        {[1, 2].map((i) => {
+          return (
+            <VStack w="full" key={i} alignItems="start" spacing={1}>
+              <SkeletonLayout height="32px" width="400px" />
+              <SkeletonLayout height="30px" width="200px" />
+              <HStack width="100%" alignItems="start">
+                <VStack flex={1} spacing={1}>
+                  <SkeletonLayout height="24px" width="100%" />
+                  <HStack w="100%" justifyContent="space-between">
+                    <SkeletonLayout height="16px" width="90px" />
+                    <SkeletonLayout height="16px" width="150px" />
+                  </HStack>
+                </VStack>
+                <SkeletonLayout height="24px" width="155px" />
+              </HStack>
+            </VStack>
+          )
+        })}
+      </VStack>
+
+      <Divider borderColor="neutral1.6" />
+
+      <VStack alignItems="flex-start" gap={'20px'} width="100%">
+        {[1, 2].map((i) => {
+          return (
+            <VStack w="full" key={i} alignItems="start" spacing={1}>
+              <SkeletonLayout height="32px" width="400px" />
+              <SkeletonLayout height="30px" width="200px" />
+              <HStack w="100%" justifyContent="space-between">
+                <SkeletonLayout height="16px" width="90px" />
+                <SkeletonLayout height="16px" width="150px" />
+              </HStack>
+            </VStack>
+          )
+        })}
+      </VStack>
+    </CardLayout>
   )
 }

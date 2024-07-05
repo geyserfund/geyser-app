@@ -1,8 +1,8 @@
 import { Button, ButtonProps } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { isActive } from '../../../../../../../../../utils'
-import { useProjectAtom } from '../../../../../../../hooks/useProjectAtom'
+import { isActive } from '../../../../../../../utils'
+import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
 
 type GoalContributeButtonProps = ButtonProps & {
   projectGoalId: string

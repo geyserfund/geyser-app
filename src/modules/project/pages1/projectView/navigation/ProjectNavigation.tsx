@@ -16,14 +16,9 @@ export const ProjectNavigation = () => {
 
   const isMobile = useMobileMode()
 
-  const { isProjectOwner, loading } = useProjectAtom()
-
-  const hasEntries = useAtomValue(hasEntriesAtom)
-  const hasRewards = useAtomValue(hasRewardsAtom)
-  const { hasGoals } = useGoalsAtom()
+  const { isProjectOwner, loading, project } = useProjectAtom()
 
   const ProjectNavigationButtons = useMemo(() => {
-    console.log('checking hasGoals', hasGoals)
     const buttonList = [
       {
         name: 'Project',
@@ -32,7 +27,7 @@ export const ProjectNavigation = () => {
       },
     ] as NavBarItems[]
 
-    if (hasRewards) {
+    if (project.hasRewards) {
       buttonList.push({
         name: 'Rewards',
         path: PathName.projectRewards,
@@ -40,7 +35,7 @@ export const ProjectNavigation = () => {
       })
     }
 
-    if (hasEntries) {
+    if (project.hasEntries) {
       buttonList.push({
         name: 'Posts',
         path: PathName.projectEntries,
@@ -48,7 +43,7 @@ export const ProjectNavigation = () => {
       })
     }
 
-    if (hasGoals) {
+    if (project.hasGoals) {
       buttonList.push({
         name: 'Goals',
         path: PathName.projectGoals,
@@ -72,7 +67,7 @@ export const ProjectNavigation = () => {
     }
 
     return buttonList
-  }, [hasEntries, hasGoals, hasRewards, isProjectOwner])
+  }, [project, isProjectOwner])
 
   const activeButtonIndex = useMemo(() => {
     let activeIndex = 0
@@ -100,6 +95,7 @@ export const ProjectNavigation = () => {
         activeItem={activeButtonIndex}
         showIcon={isMobile}
         showLabel={!isMobile}
+        loading={loading}
       />
     </HStack>
   )

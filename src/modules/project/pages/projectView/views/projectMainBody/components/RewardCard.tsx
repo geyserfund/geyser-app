@@ -11,7 +11,7 @@ import { secondaryColors } from '../../../../../../../styles'
 import { ProjectStatus } from '../../../../../../../types'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../../../../types/generated/graphql'
 import { useProjectContext } from '../../../../../context'
-import { ProjectRewardShippingEstimate } from '../../../../../pages1/projectView/views/body/sections/rewards/components/ProjectRewardShippingEstimate'
+import { ProjectRewardShippingEstimate } from '../../../../../pages1/projectView/views/rewards/components/ProjectRewardShippingEstimate'
 
 type Props = ICard & {
   reward: ProjectRewardForCreateUpdateFragment

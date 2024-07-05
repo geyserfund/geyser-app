@@ -1,11 +1,10 @@
-import { Button, ButtonProps, ComponentWithAs, HStack } from '@chakra-ui/react'
+import { Button, ButtonProps, ComponentWithAs, HStack, Skeleton } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconType } from 'react-icons'
 import { Link } from 'react-router-dom'
 
-import { dimensions } from '../../../constants'
 import { useCustomTheme, useMobileMode } from '../../../utils'
 
 export type NavBarItems = {
@@ -22,9 +21,10 @@ type AnimatedNavBarProps = {
   activeItem: number
   showLabel?: boolean
   showIcon?: boolean
+  loading?: boolean
 }
 
-export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem }: AnimatedNavBarProps) => {
+export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem, loading }: AnimatedNavBarProps) => {
   const { t } = useTranslation()
 
   const { colors } = useCustomTheme()
@@ -32,6 +32,10 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem }: Anima
   const isMobileMode = useMobileMode()
 
   const [buttonProps, setButtonprops] = useState<{ left: number; width: number }>({ left: 0, width: 0 })
+
+  if (loading) {
+    return <Skeleton borderRadius={{ base: '8px', lg: '10px' }} height={{ base: '36px', lg: '44px' }} width="100%" />
+  }
 
   return (
     <HStack
@@ -53,7 +57,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem }: Anima
           borderColor: colors.utils.text,
         }}
         animate={buttonProps}
-        transition={{ type: 'spring', damping: 20, stiffness: 200 }}
+        transition={{ type: 'spring', damping: 22, stiffness: 250 }}
       />
       {items.map((item, index) => {
         const isActive = activeItem === index
@@ -90,7 +94,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem }: Anima
               spacing={2}
               justifyContent="center"
               alignItems="center"
-              fontWeight={isActive ? 700 : 500}
+              fontWeight={isActive ? 500 : 400}
             >
               {(showIcon || item.showIconAlways) && Icon ? <Icon /> : null}
               {showLabel && <span>{t(item.name)}</span>}

@@ -137,30 +137,29 @@ const pathsMap = {
   userProfileSettings: (userID: string) => `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}`,
 
   projectDashboard: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDashboard}`,
-  dashboardDescription: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardDescription}`,
-  dashboardContributors: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardContributors}`,
-  dashboardDetails: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardDetails}`,
-  dashboardWallet: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardWallet}`,
-  dashboardStats: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardStats}`,
-  dashboardSettings: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardSettings}`,
-  dashboardStory: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardStory}`,
-  dashboardStatus: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardStatus}`,
-  dashboardRewards: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardRewards}`,
-  dashboardShop: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardShop}`,
-  dashboardNostr: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardNostr}`,
-  dashboardAffiliate: (projectID: string) =>
-    `/${PathName.project}/${projectID}/${PathName.projectDashboard}/${PathName.dashboardAffiliate}`,
+  dashboardDescription: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardDescription}`,
+  dashboardContributors: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardContributors}`,
+  dashboardDetails: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardDetails}`,
+  dashboardWallet: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardWallet}`,
+  dashboardStats: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardStats}`,
+  dashboardSettings: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardSettings}`,
+  dashboardStory: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardStory}`,
+  dashboardStatus: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardStatus}`,
+  dashboardRewards: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardRewards}`,
+  dashboardShop: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardShop}`,
+  dashboardNostr: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardNostr}`,
+
   badges: () => `/${PathName.badges}`,
 
   about: () => `${AboutGeyserOrigin}`,

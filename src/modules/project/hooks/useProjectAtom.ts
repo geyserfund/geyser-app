@@ -1,14 +1,7 @@
-import { use } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
 
-import { entriesAtom, entriesLoadingAtom, hasEntriesAtom, unpublishedEntriesAtom } from '../state/entriesAtom'
-import {
-  completedGoalsAtom,
-  completedGoalsLoadingAtom,
-  hasGoalsAtom,
-  inProgressGoalsAtom,
-  inProgressGoalsLoadingAtom,
-} from '../state/goalsAtom'
+import { entriesAtom, unpublishedEntriesAtom } from '../state/entriesAtom'
+import { completedGoalsAtom, initialGoalsLoadAtom, inProgressGoalsAtom } from '../state/goalsAtom'
 import {
   isProjectOwnerAtom,
   partialUpdateProjectAtom,
@@ -16,7 +9,7 @@ import {
   projectLoadingAtom,
   projectOwnerAtom,
 } from '../state/projectAtom'
-import { hasRewardsAtom, rewardsAtom } from '../state/rewardsAtom'
+import { rewardsAtom } from '../state/rewardsAtom'
 import { walletAtom, walletLoadingAtom } from '../state/walletAtom'
 
 export const useProjectAtom = () => {
@@ -38,25 +31,19 @@ export const useWalletAtom = () => {
 export const useGoalsAtom = () => {
   const inProgressGoals = useAtomValue(inProgressGoalsAtom)
   const completedGoals = useAtomValue(completedGoalsAtom)
-  const inProgressGoalsLoading = useAtomValue(inProgressGoalsLoadingAtom)
-  const completedGoalsLoading = useAtomValue(completedGoalsLoadingAtom)
+  const initialGoalsLoad = useAtomValue(initialGoalsLoadAtom)
 
-  const hasGoals = useAtomValue(hasGoalsAtom)
-  const goalsLoading = inProgressGoalsLoading || completedGoalsLoading
-
-  return { inProgressGoals, completedGoals, hasGoals, goalsLoading }
+  return { inProgressGoals, completedGoals, initialGoalsLoad }
 }
 
 export const useRewardsAtom = () => {
-  const hasRewards = useAtomValue(hasRewardsAtom)
   const rewards = useAtomValue(rewardsAtom)
-  return { hasRewards, rewards }
+  return { rewards }
 }
 
 export const useEntriesAtom = () => {
   const entries = useAtomValue(entriesAtom)
   const unpublishedEntries = useAtomValue(unpublishedEntriesAtom)
-  const hasEntries = useAtomValue(hasEntriesAtom)
-  const entriesLoading = useAtomValue(entriesLoadingAtom)
-  return { entries, unpublishedEntries, hasEntries, entriesLoading }
+
+  return { entries, unpublishedEntries }
 }

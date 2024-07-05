@@ -1,5 +1,5 @@
 import { LazyQueryExecFunction } from '@apollo/client'
-import { useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 
 import {
@@ -8,20 +8,10 @@ import {
   ProjectInProgressGoalsQuery,
   useProjectCompletedGoalsLazyQuery,
   useProjectInProgressGoalsLazyQuery,
-} from '../../../../types'
-import {
-  completedGoalsAtom,
-  completedGoalsLoadingAtom,
-  inProgressGoalsAtom,
-  inProgressGoalsLoadingAtom,
-} from '../../state/goalsAtom'
+} from '@/types'
 
-type UseInitGoalsProps = {
-  /** The id of the project */
-  projectId: string | number | undefined
-  /** If true, the query will not be executed */
-  skip?: boolean
-}
+import { completedGoalsAtom, initialGoalsLoadAtom, inProgressGoalsAtom } from '../state/goalsAtom'
+import { projectAtom } from '../state/projectAtom'
 
 export type UseInitGoalsReturn = {
   /** Query in progress goals for the Project in context */
@@ -38,54 +28,54 @@ export type UseInitGoalsReturn = {
       projectId: any
     }>
   >
+  /** If the in Progress goals query is loading */
+  inProgressGoalsLoading: boolean
+  /** If the completed goals query is loading */
+  completedGoalsLoading: boolean
 }
 
-/** Fetch project goals for project context */
-export const useInitGoals = ({ projectId, skip }: UseInitGoalsProps): UseInitGoalsReturn => {
+/** Fetch project goals for project context, pass true to fetch on render */
+export const useInitGoals = (load?: boolean): UseInitGoalsReturn => {
   const setInProgressGoals = useSetAtom(inProgressGoalsAtom)
   const setCompletedGoals = useSetAtom(completedGoalsAtom)
-  const setInProgressGoalsLoading = useSetAtom(inProgressGoalsLoadingAtom)
-  const setCompletedGoalsLoading = useSetAtom(completedGoalsLoadingAtom)
+  const [initialGoalsLoad, setInitialGoalsLoad] = useAtom(initialGoalsLoadAtom)
 
-  const [queryInProgressGoals] = useProjectInProgressGoalsLazyQuery({
+  const { id: projectId } = useAtomValue(projectAtom)
+
+  const [queryInProgressGoals, { loading: inProgressGoalsLoading }] = useProjectInProgressGoalsLazyQuery({
     fetchPolicy: 'network-only',
     variables: {
       projectId,
     },
-    onError(error) {
-      setInProgressGoalsLoading(false)
-    },
     onCompleted(data) {
-      setInProgressGoalsLoading(false)
       const inProgressGoals = data?.projectGoals.inProgress || []
       setInProgressGoals(inProgressGoals)
+      setInitialGoalsLoad(true)
     },
   })
 
-  const [queryCompletedGoals] = useProjectCompletedGoalsLazyQuery({
+  const [queryCompletedGoals, { loading: completedGoalsLoading }] = useProjectCompletedGoalsLazyQuery({
     fetchPolicy: 'cache-first',
     variables: {
       projectId,
     },
-    onError(error) {
-      setCompletedGoalsLoading(false)
-    },
     onCompleted(data) {
-      setCompletedGoalsLoading(false)
       const completedGoals = data?.projectGoals.completed || []
       setCompletedGoals(completedGoals)
     },
   })
 
   useEffect(() => {
-    if (projectId && !skip) {
+    if (projectId && load && !initialGoalsLoad) {
       queryInProgressGoals()
       queryCompletedGoals()
     }
-  }, [projectId, skip, queryCompletedGoals, queryInProgressGoals])
+  }, [projectId, load, queryCompletedGoals, initialGoalsLoad, queryInProgressGoals])
 
   return {
     queryInProgressGoals,
     queryCompletedGoals,
+    inProgressGoalsLoading,
+    completedGoalsLoading,
   }
 }

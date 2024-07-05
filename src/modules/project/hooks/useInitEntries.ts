@@ -1,5 +1,5 @@
 import { LazyQueryExecFunction } from '@apollo/client'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 
 import {
@@ -11,16 +11,10 @@ import {
   UniqueProjectQueryInput,
   useProjectEntriesLazyQuery,
   useProjectUnplublishedEntriesLazyQuery,
-} from '../../../../types'
-import { entriesAtom, entriesLoadingAtom, unpublishedEntriesAtom } from '../../state/entriesAtom'
-import { isProjectOwnerAtom } from '../../state/projectAtom'
+} from '@/types'
 
-type UseInitEntriesProps = {
-  /** The id of the project */
-  projectId: string | number | undefined
-  /** If true, the query will not be executed */
-  skip?: boolean
-}
+import { entriesAtom, initialEntriesLoadAtom, unpublishedEntriesAtom } from '../state/entriesAtom'
+import { isProjectOwnerAtom, projectAtom } from '../state/projectAtom'
 
 export type UseInitEntriesReturn = {
   /** Query in progress entries for the Project in context */
@@ -38,35 +32,36 @@ export type UseInitEntriesReturn = {
       where: UniqueProjectQueryInput
     }>
   >
+  /** If the entries query is loading */
+  entriesLoading?: boolean
 }
 
-/** Fetch project entries for project context */
-export const useInitEntries = ({ projectId, skip }: UseInitEntriesProps): UseInitEntriesReturn => {
+/** Fetch project entries for project context, pass true to load on render */
+export const useInitEntries = (load?: boolean): UseInitEntriesReturn => {
   const isProjectOwner = useAtomValue(isProjectOwnerAtom)
+
+  const { id: projectId } = useAtomValue(projectAtom)
 
   const setentries = useSetAtom(entriesAtom)
   const setunpublishedEntries = useSetAtom(unpublishedEntriesAtom)
-  const setentriesLoading = useSetAtom(entriesLoadingAtom)
+  const [initialEntriesLoad, setInitialEntriesLoad] = useAtom(initialEntriesLoadAtom)
 
-  const [queryProjectEntries] = useProjectEntriesLazyQuery({
+  const [queryProjectEntries, { loading: entriesLoading }] = useProjectEntriesLazyQuery({
     fetchPolicy: 'cache-first',
     variables: {
       where: {
         id: projectId,
       },
     },
-    onError(error) {
-      setentriesLoading(false)
-    },
     onCompleted(data) {
-      setentriesLoading(false)
       const entries = data?.projectGet?.entries || []
       setentries(entries)
+      setInitialEntriesLoad(true)
     },
   })
 
   const [queryUnpublishedProjectEntries] = useProjectUnplublishedEntriesLazyQuery({
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-first',
     variables: {
       where: {
         id: projectId,
@@ -79,16 +74,17 @@ export const useInitEntries = ({ projectId, skip }: UseInitEntriesProps): UseIni
   })
 
   useEffect(() => {
-    if (projectId && !skip) {
+    if (projectId && load && !initialEntriesLoad) {
       queryProjectEntries()
       if (isProjectOwner) {
         queryUnpublishedProjectEntries()
       }
     }
-  }, [projectId, skip, queryUnpublishedProjectEntries, queryProjectEntries, isProjectOwner])
+  }, [projectId, load, initialEntriesLoad, queryUnpublishedProjectEntries, queryProjectEntries, isProjectOwner])
 
   return {
     queryProjectEntries,
     queryUnpublishedProjectEntries,
+    entriesLoading,
   }
 }

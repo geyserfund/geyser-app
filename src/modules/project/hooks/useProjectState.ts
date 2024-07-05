@@ -46,7 +46,7 @@ export const useProjectState = (
     onCompleted(data) {
       const { projectGet } = data
       if (projectGet) {
-        syncProject(projectGet)
+        syncProject(projectGet as any)
       }
 
       if (options?.onCompleted) {

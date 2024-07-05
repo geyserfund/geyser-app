@@ -1,21 +1,29 @@
-import { Box, HStack, Image, useColorModeValue, useDisclosure } from '@chakra-ui/react'
+import { HStack, useDisclosure } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
-import { Link, Location, useLocation, useNavigate } from 'react-router-dom'
+import { Location, useLocation, useNavigate } from 'react-router-dom'
 
-import LogoDark from '../../../assets/logo-dark.svg'
-import LogoLight from '../../../assets/logo-light.svg'
 import { AuthModal } from '../../../components/molecules'
-import { dimensions, getPath } from '../../../constants'
+import { dimensions } from '../../../constants'
 import { useAuthContext } from '../../../context'
 import { useAuthModal } from '../../../pages/auth/hooks'
 import { LoginButton } from '../components/LoginButton'
+import { useMatchRoutes } from '../hooks/useMatchRoutes'
 import { ProfileNav } from '../profileNav/ProfileNav'
+import { BrandLogo } from './components/BrandLogo'
 import { LoggedOutModal } from './components/LoggedOutModal'
+import { ProjectLogo } from './components/ProjectLogo'
+import { ProjectSelectMenu } from './components/ProjectSelectMenu'
+import { shouldShowProjectLogoAtom } from './topNavBarAtom'
 
 export const TopNavBar = () => {
-  const imagesrc = useColorModeValue(LogoDark, LogoLight)
   const { isLoggedIn, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose } = useAuthModal()
+
+  useMatchRoutes()
+
+  const shouldShowProjectLogo = useAtomValue(shouldShowProjectLogoAtom)
+  console.log('checking shouldShowProjectLogo', shouldShowProjectLogo)
 
   const navigate = useNavigate()
 
@@ -61,12 +69,11 @@ export const TopNavBar = () => {
         top={0}
         zIndex={1}
       >
-        <HStack w="100%" height={'48px'} justifyContent={'space-between'}>
-          <Box as={Link} to={getPath('landingPage')} h="100%">
-            <Image src={imagesrc} height="100%" width="auto" objectFit="contain" />
-          </Box>
+        <HStack w="100%" height={{ base: '40px', lg: '48px' }} justifyContent={'space-between'}>
+          {shouldShowProjectLogo ? <ProjectLogo /> : <BrandLogo />}
+
           <HStack position="relative">
-            {!isLoggedIn && <LoginButton />}
+            {!isLoggedIn ? <LoginButton /> : <ProjectSelectMenu />}
             <ProfileNav />
           </HStack>
         </HStack>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { useNavAnimationStyles } from '../modules/navigation/sideNavBase'
-import { useTopNavBarAnimate } from '../navigation/topNavBar/topNavBarAtom'
+import { useTopNavBarAnimate } from '../modules/navigation/topNavBar/topNavBarAtom'
 import { useMobileMode } from '../utils'
 
 export const useLayoutAnimation = () => {

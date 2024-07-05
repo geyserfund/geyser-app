@@ -23,10 +23,10 @@ export const CreatorSocial = () => {
       <Button
         as={NavLink}
         to={getPath('userProfile', user.id)}
-        size="xs"
-        variant="outline"
+        size="sm"
+        variant="soft"
         colorScheme="neutral1"
-        leftIcon={<Avatar p={0} h="14px" w="14px" src={user.imageUrl || ''} />}
+        leftIcon={<Avatar p={0} h="16px" w="16px" src={user.imageUrl || ''} />}
       >
         {user.username}
       </Button>
@@ -40,11 +40,11 @@ export const CreatorSocial = () => {
           <Button
             key={key}
             aria-label={`user-external-account-link-${key}`}
-            size={'xs'}
-            minWidth="20px"
-            variant="outline"
+            size={'sm'}
+            variant="soft"
             colorScheme="neutral1"
             p={'0'}
+            fontSize="16px"
             {...props}
           >
             {icon}

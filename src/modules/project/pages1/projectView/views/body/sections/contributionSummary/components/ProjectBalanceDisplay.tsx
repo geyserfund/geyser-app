@@ -21,7 +21,7 @@ export function ProjectBalanceDisplay() {
   const { t } = useTranslation()
 
   const { project, loading } = useProjectAtom()
-  const { inProgressGoals, goalsLoading } = useGoalsAtom()
+  const { inProgressGoals } = useGoalsAtom()
 
   const { defaultGoalId, balanceUsdCent, balance } = project
 
@@ -45,10 +45,10 @@ export function ProjectBalanceDisplay() {
   const isTotalView = currentView === BalanceView.Total
 
   useEffect(() => {
-    if (!loading && !goalsLoading) {
+    if (!loading) {
       setCurrentView(hasGoal ? BalanceView.Goal : BalanceView.Total)
     }
-  }, [loading, goalsLoading, hasGoal])
+  }, [loading, hasGoal])
 
   const toggleTotalProject = () => {
     setCurrentView((current) => {
@@ -173,7 +173,7 @@ export function ProjectBalanceDisplay() {
 
   const removeBalance = removeProjectAmountException(project?.name)
 
-  if (loading || goalsLoading) {
+  if (loading) {
     return <SkeletonLayout height="90px" width="100%" />
   }
 

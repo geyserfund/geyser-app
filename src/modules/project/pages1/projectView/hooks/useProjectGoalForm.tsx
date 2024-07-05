@@ -3,6 +3,8 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
+import { useInitGoals } from '@/modules/project/hooks/useInitGoals'
+
 import {
   ProjectGoal,
   ProjectGoalCreateInput,
@@ -83,7 +85,7 @@ export const useProjectGoalForm = ({ goal, projectId, onClose }: UseProjectGoalF
 
   const enableSubmit = isDirty && isValid
 
-  const { queryInProgressGoals } = useProjectContext()
+  const { queryInProgressGoals } = useInitGoals()
 
   const [createProjectGoal, { loading: createLoading, error: createError }] = useProjectGoalCreateMutation({
     onCompleted() {

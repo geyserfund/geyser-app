@@ -9,14 +9,7 @@ export const ProjectView = () => {
   const params = useParams<{ projectName: string }>()
   const { projectName } = params
   return (
-    <ProjectProvider
-      projectName={projectName || ''}
-      initializeGoals
-      initializeWallet
-      initializeRewards
-      initializeEntries
-      initializeDetails
-    >
+    <ProjectProvider projectName={projectName || ''} initializeWallet>
       <FundingProviderWithProjectContext>
         <ProjectContainer />
       </FundingProviderWithProjectContext>

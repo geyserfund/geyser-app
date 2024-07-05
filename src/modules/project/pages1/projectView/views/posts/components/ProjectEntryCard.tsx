@@ -7,13 +7,13 @@ import { MdModeEdit } from 'react-icons/md'
 import { PiShareFat } from 'react-icons/pi'
 import { useNavigate } from 'react-router-dom'
 
-import { ProjectEntryCardThumbnailPlaceholder } from '../../../../../../../../../components/molecules/projectDisplay/ProjectEntryCardThumbnailPlaceholder'
-import { ICard } from '../../../../../../../../../components/ui'
-import { getPath } from '../../../../../../../../../constants'
-import { CardLayout } from '../../../../../../../../../shared/components/layouts'
-import { Body } from '../../../../../../../../../shared/components/typography'
-import { EntryForProjectFragment, EntryStatus } from '../../../../../../../../../types/generated/graphql'
-import { toInt } from '../../../../../../../../../utils'
+import { ProjectEntryCardThumbnailPlaceholder } from '@/components/molecules'
+import { ICard } from '@/components/ui'
+import { getPath } from '@/constants'
+import { CardLayout } from '@/shared/components/layouts'
+import { Body } from '@/shared/components/typography'
+import { EntryForProjectFragment, EntryStatus } from '@/types'
+import { toInt } from '@/utils'
 
 type Props = ICard & {
   entry: EntryForProjectFragment

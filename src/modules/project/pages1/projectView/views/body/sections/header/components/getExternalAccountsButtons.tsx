@@ -32,7 +32,7 @@ export const getExternalAccountsButtons = ({ accounts }: GetExternalAccountsProp
         const npub = nip19.npubEncode(account.externalId)
         return {
           key: 'nostr',
-          icon: <NostrIcon height="12px" width="12px" />,
+          icon: <NostrIcon height="16px" width="16px" />,
           username: npub,
           props: {
             as: Link,

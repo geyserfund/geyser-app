@@ -13,9 +13,10 @@ import {
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useInitGoals } from '@/modules/project/hooks/useInitGoals'
+
 import { Body } from '../../../../../shared/components/typography'
 import { useProjectGoalDeleteMutation } from '../../../../../types'
-import { useProjectContext } from '../../../context'
 import { useGoalsModal } from '../hooks/useGoalsModal'
 
 export const GoalDeleteModal = () => {
@@ -26,7 +27,7 @@ export const GoalDeleteModal = () => {
   const [inputValue, setInputValue] = useState('')
   const [error, setError] = useState('')
 
-  const { queryInProgressGoals } = useProjectContext()
+  const { queryInProgressGoals } = useInitGoals()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value)

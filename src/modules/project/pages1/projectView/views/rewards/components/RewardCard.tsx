@@ -1,19 +1,16 @@
 import { DeleteIcon } from '@chakra-ui/icons'
-import { Badge, Box, Button, HStack, IconButton, Text, VStack } from '@chakra-ui/react'
+import { Badge, Box, Button, HStack, IconButton, Skeleton, SkeletonText, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiNotePencil } from 'react-icons/pi'
 
-import { ICard, ImageWithReload } from '../../../../../../../../../components/ui'
-import { MarkdownField } from '../../../../../../../../../forms/markdown/MarkdownField'
-import { CardLayout } from '../../../../../../../../../shared/components/layouts'
-import { Body } from '../../../../../../../../../shared/components/typography'
-import { secondaryColors } from '../../../../../../../../../styles'
-import { ProjectStatus } from '../../../../../../../../../types'
-import {
-  ProjectRewardForCreateUpdateFragment,
-  RewardCurrency,
-} from '../../../../../../../../../types/generated/graphql'
-import { useProjectAtom } from '../../../../../../../hooks/useProjectAtom'
+import { ICard, ImageWithReload } from '../../../../../../../components/ui'
+import { MarkdownField } from '../../../../../../../forms/markdown/MarkdownField'
+import { CardLayout, SkeletonLayout } from '../../../../../../../shared/components/layouts'
+import { Body } from '../../../../../../../shared/components/typography'
+import { secondaryColors } from '../../../../../../../styles'
+import { ProjectStatus } from '../../../../../../../types'
+import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../../../../types/generated/graphql'
+import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
 import { ProjectRewardShippingEstimate } from './ProjectRewardShippingEstimate'
 
 type Props = ICard & {
@@ -93,7 +90,7 @@ export const RewardCard = ({ reward, count, isLaunch = false, handleEdit, handle
               {`${reward.cost.toLocaleString()}`}
               <Box as="span" color={'neutral1.9'}>
                 {' '}
-                Sats
+                sats
               </Box>
             </Body>
           )}
@@ -101,8 +98,8 @@ export const RewardCard = ({ reward, count, isLaunch = false, handleEdit, handle
           {!isLaunch ? (
             <Button
               size="sm"
-              variant="solid"
-              colorScheme="neutral1"
+              variant="surface"
+              colorScheme="primary1"
               minWidth="80px"
               onClick={(e) => {
                 onRewardClick?.(e)
@@ -135,6 +132,30 @@ export const RewardCard = ({ reward, count, isLaunch = false, handleEdit, handle
               </Button>
             </Box>
           )}
+        </HStack>
+      </VStack>
+    </CardLayout>
+  )
+}
+
+export const RewardCardSkeleton = () => {
+  return (
+    <CardLayout p={0} w="full" overflow={'hidden'} spacing={0}>
+      <Skeleton height="230px" width="100%" />
+      <VStack padding={4} alignItems="start" flex={1}>
+        <SkeletonLayout height="25px" width="100px" />
+        <HStack w="full" justifyContent="start" spacing={3}>
+          <SkeletonLayout height="20px" width="40px" />
+          <SkeletonLayout height="20px" width="80px" />
+        </HStack>
+        <HStack>
+          <SkeletonLayout height="20px" width="45px" />
+          <SkeletonLayout height="20px" width="120px" />
+        </HStack>
+        <SkeletonText width="100%" height="150px" noOfLines={9} />
+        <HStack w="full" justifyContent={'space-between'} justifySelf={'end'}>
+          <SkeletonLayout height="24px" width="90px" />
+          <SkeletonLayout height="24px" width="80px" />
         </HStack>
       </VStack>
     </CardLayout>

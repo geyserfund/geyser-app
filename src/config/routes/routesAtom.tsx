@@ -38,34 +38,34 @@ export const projectCreationRoutes = [
 ]
 
 export const entryCreationRoutes = [
-  getPath('projectEntryCreation', PathName.projectId),
-  getPath('projectEntryDetails', PathName.projectId, PathName.entryId),
-  getPath('projectEntryPreview', PathName.projectId, PathName.entryId),
+  getPath('projectEntryCreation', PathName.projectName),
+  getPath('projectEntryDetails', PathName.projectName, PathName.entryId),
+  getPath('projectEntryPreview', PathName.projectName, PathName.entryId),
 ]
 
 export const projectDashboardRoutes = [
-  getPath('projectDashboard', PathName.projectId),
-  getPath('dashboardContributors', PathName.projectId),
-  getPath('dashboardDetails', PathName.projectId),
-  getPath('dashboardWallet', PathName.projectId),
-  getPath('dashboardSettings', PathName.projectId),
-  getPath('dashboardStats', PathName.projectId),
-  getPath('dashboardStory', PathName.projectId),
+  getPath('projectDashboard', PathName.projectName),
+  getPath('dashboardContributors', PathName.projectName),
+  getPath('dashboardDetails', PathName.projectName),
+  getPath('dashboardWallet', PathName.projectName),
+  getPath('dashboardSettings', PathName.projectName),
+  getPath('dashboardStats', PathName.projectName),
+  getPath('dashboardStory', PathName.projectName),
 ]
 
 export const projectCreatorRoutes = [
-  getPath('projectContributors', PathName.projectId),
-  getPath('projectInsights', PathName.projectId),
+  getPath('projectContributors', PathName.projectName),
+  getPath('projectInsights', PathName.projectName),
   getPath('projectManageRewards', PathName.projectManageRewards),
   getPath('projectCreateReward', PathName.projectCreateReward),
   getPath('projectEditReward', PathName.projectEditReward, PathName.rewardId),
 ]
 
 export const projectRoutes = [
-  getPath('project', PathName.projectId),
-  getPath('projectEntries', PathName.projectId),
-  getPath('projectGoals', PathName.projectId),
-  getPath('projectRewards', PathName.projectId),
+  getPath('project', PathName.projectName),
+  getPath('projectEntries', PathName.projectName),
+  getPath('projectGoals', PathName.projectName),
+  getPath('projectRewards', PathName.projectName),
   ...projectCreatorRoutes,
 ]
 

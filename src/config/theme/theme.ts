@@ -1,9 +1,18 @@
 import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
 
 import { fonts, lightModeColors } from '../../styles'
-import { alertTheme, drawerTheme, menuTheme, modalTheme, popOverTheme, selectTheme, switchTheme } from './components'
-import { badgeTheme } from './components/badgeTheme'
-import { buttonTheme } from './components/buttonTheme'
+import {
+  alertTheme,
+  badgeTheme,
+  buttonTheme,
+  drawerTheme,
+  menuTheme,
+  modalTheme,
+  popOverTheme,
+  selectTheme,
+  switchTheme,
+  tooltipTheme,
+} from './components'
 
 export const theme = {
   initialColorMode: 'system',
@@ -137,6 +146,7 @@ export const theme = {
     Select: selectTheme,
     Switch: switchTheme,
     Badge: badgeTheme,
+    Tooltip: tooltipTheme,
     Tabs: {
       variants: {
         secondary: {

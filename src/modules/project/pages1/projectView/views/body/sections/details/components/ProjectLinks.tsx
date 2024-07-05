@@ -8,16 +8,8 @@ export const ProjectLinks = ({ links }: { links: string[] }) => {
       {links.map((link) => {
         const Icon = getIconForLink(link)
         return (
-          <IconButton
-            size="xs"
-            variant="outline"
-            aria-label="link-icon"
-            key={link}
-            as={Link}
-            href={link || ''}
-            isExternal
-          >
-            <Icon fontSize="12px" />
+          <IconButton size="sm" variant="soft" aria-label="link-icon" key={link} as={Link} href={link || ''} isExternal>
+            <Icon fontSize="16px" />
           </IconButton>
         )
       })}
