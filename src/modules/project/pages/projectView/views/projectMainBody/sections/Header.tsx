@@ -181,7 +181,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
               {followedProjects.some((followedProject) => followedProject?.id === project?.id) ? (
                 <ShareButton w="full" />
               ) : (
-                <FollowButton size="md" w="full" project={project} />
+                <FollowButton size="md" project={project} />
               )}
             </VStack>
           )}
