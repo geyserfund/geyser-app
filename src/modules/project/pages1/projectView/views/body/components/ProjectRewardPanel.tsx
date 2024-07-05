@@ -11,7 +11,7 @@ import { ProjectStatus } from '../../../../../../../types'
 import { isActive, toInt } from '../../../../../../../utils'
 import { useFundingContext, useProjectContext } from '../../../../../context'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
-import { ProjectRewardShippingEstimate } from '../sections/rewards/components/ProjectRewardShippingEstimate'
+import { ProjectRewardShippingEstimate } from '../../rewards/components/ProjectRewardShippingEstimate'
 
 type Props = {
   reward: ProjectRewardForCreateUpdateFragment

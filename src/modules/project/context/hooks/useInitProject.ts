@@ -1,16 +1,13 @@
 import { LazyQueryExecFunction } from '@apollo/client'
 import { captureException } from '@sentry/react'
 import { useAtom, useSetAtom } from 'jotai'
+import { useResetAtom } from 'jotai/utils'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../../constants'
 import { Exact, ProjectPageBodyQuery, UniqueProjectQueryInput, useProjectPageBodyLazyQuery } from '../../../../types'
-import { projectAtom, projectLoadingAtom, ProjectState } from '../../state/projectAtom'
-import { useInitEntries, UseInitEntriesReturn } from './useInitEntries'
-import { useInitGoals, UseInitGoalsReturn } from './useInitGoals'
-import { useInitProjectDetails, UseInitProjectDetailsReturn } from './useInitProjectDetails'
-import { useInitRewards, UseInitRewardsReturn } from './useInitRewards'
+import { projectAtom, projectLoadingAtom, ProjectState, useProjectReset } from '../../state/projectAtom'
 import { useInitWallet, UseInitWalletReturn } from './useInitWallet'
 
 export type UseInitProjectProps = {
@@ -18,16 +15,8 @@ export type UseInitProjectProps = {
   projectId?: number
   /** Don't use together with projectId prop */
   projectName?: string
-  /** Pass true, if we want goals project goals to be initialized */
-  initializeGoals?: boolean
   /** Pass true, if we want wallet to be initialized */
   initializeWallet?: boolean
-  /** Pass true, if we want rewards to be initialized */
-  initializeRewards?: boolean
-  /** Pass true, if we want posts to be initialized */
-  initializeEntries?: boolean
-  /** Pass true, if we want project details to be initialized */
-  initializeDetails?: boolean
 }
 
 export type UseInitProjectReturn = {
@@ -38,25 +27,19 @@ export type UseInitProjectReturn = {
       where: UniqueProjectQueryInput
     }>
   >
-} & UseInitGoalsReturn &
-  UseInitWalletReturn &
-  UseInitRewardsReturn &
-  UseInitEntriesReturn &
-  UseInitProjectDetailsReturn
+} & UseInitWalletReturn
 
 /**  Must be initialized before using project context */
 export const useInitProject = ({
   projectId,
   projectName,
-  initializeGoals,
   initializeWallet,
-  initializeRewards,
-  initializeEntries,
-  initializeDetails,
 }: UseInitProjectProps): UseInitProjectReturn => {
   const navigate = useNavigate()
   const [project, setProject] = useAtom(projectAtom)
   const setProjectLoading = useSetAtom(projectLoadingAtom)
+
+  const resetProject = useProjectReset()
 
   const [queryProject] = useProjectPageBodyLazyQuery({
     variables: {
@@ -94,43 +77,18 @@ export const useInitProject = ({
 
   useEffect(() => {
     if (projectId || projectName) {
+      resetProject()
       queryProject()
     }
-  }, [projectId, projectName, queryProject])
-
-  const { queryCompletedGoals, queryInProgressGoals } = useInitGoals({
-    projectId: project.id,
-    skip: !initializeGoals,
-  })
+  }, [projectId, projectName, queryProject, resetProject])
 
   const { queryProjectWallet } = useInitWallet({
     projectId: project.id,
     skip: !initializeWallet,
   })
 
-  const { queryProjectRewards } = useInitRewards({
-    projectId: project.id,
-    skip: !initializeRewards,
-  })
-
-  const { queryProjectEntries, queryUnpublishedProjectEntries } = useInitEntries({
-    projectId: project.id,
-    skip: !initializeEntries,
-  })
-
-  const { queryProjectDetails } = useInitProjectDetails({
-    projectId: project.id,
-    skip: !initializeDetails,
-  })
-
   return {
     queryProject,
-    queryInProgressGoals,
-    queryCompletedGoals,
     queryProjectWallet,
-    queryProjectRewards,
-    queryProjectEntries,
-    queryUnpublishedProjectEntries,
-    queryProjectDetails,
   }
 }

@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   HStack,
-  IconButton,
   Modal,
   ModalBody,
   ModalContent,
@@ -13,7 +12,6 @@ import {
 import EmojiPicker, { EmojiStyle } from 'emoji-picker-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiXCircle } from 'react-icons/pi'
 
 import {
   ControlledEmojiInput,

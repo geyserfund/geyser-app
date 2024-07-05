@@ -7,10 +7,10 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { FeedbackUrl, getPath, GeyserGithubUrl, GeyserTelegramUrl, GuideUrl, PathName } from '../../constants'
 import { useAuthContext, useNavContext, useServiceWorkerUpdate } from '../../context'
+import { useRouteMatchesForTopNavBar } from '../../modules/navigation/topNavBar/topNavBarAtom'
 import { useAuthModal } from '../../pages/auth/hooks'
 import { MobileDivider } from '../../pages/grants/components'
 import { useMobileMode } from '../../utils'
-import { useRouteMatchesForTopNavBar } from '../topNavBar/topNavBarAtom'
 import { MenuItemLink, ModeChange, NavBarUserProfileMenuItem, NavBarUserProjectMenuItem } from './components'
 
 export const TopNavBarMenuList = () => {

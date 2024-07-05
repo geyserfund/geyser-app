@@ -42,8 +42,8 @@ export const LightningAddress = ({ name, isGeyser, ...rest }: ILightningQR) => {
       >
         <Button
           id="lightning-address"
-          size="xs"
-          variant="surface"
+          size="sm"
+          variant="soft"
           colorScheme="primary1"
           leftIcon={<PiLightning />}
           onClick={handleAddressCopy}
@@ -51,7 +51,7 @@ export const LightningAddress = ({ name, isGeyser, ...rest }: ILightningQR) => {
           onMouseLeave={onClose}
           {...rest}
         >
-          <Body size="xs" medium isTruncated flex={1}>
+          <Body size="sm" medium isTruncated flex={1}>
             {name}
           </Body>
           {isGeyser && (

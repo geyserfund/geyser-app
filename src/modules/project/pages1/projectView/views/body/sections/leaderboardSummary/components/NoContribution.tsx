@@ -8,7 +8,7 @@ export const NoContribution = () => {
   const { t } = useTranslation()
   return (
     <VStack w="full" justifyContent="center" flex={1} padding={6}>
-      <Image src={NoLeaderboardDataImageUrl} height="120px" width="120px" />
+      <Image src={NoLeaderboardDataImageUrl} height="222px" width="150px" />
       <Body size="md" medium muted>
         {t('No contributions have been made to this project so far.')}
       </Body>

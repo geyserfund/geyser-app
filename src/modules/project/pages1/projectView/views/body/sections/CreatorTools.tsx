@@ -1,6 +1,5 @@
 import { QuestionIcon } from '@chakra-ui/icons'
 import { Button, Image, Stack, Text, VStack } from '@chakra-ui/react'
-import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -15,27 +14,21 @@ import {
 } from '../../../../../../../constants'
 import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { ProjectStatus } from '../../../../../../../types'
-import { useProjectContext } from '../../../../../context'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
-import { hasGoalsAtom } from '../../../../../state/goalsAtom'
-import { hasRewardsAtom } from '../../../../../state/rewardsAtom'
 import { useGoalsModal } from '../../../hooks'
-import { BeachGrantEntryTemplate } from '../components/BeachGrantEntryTemplate'
 
 export const CreatorTools = () => {
   const { t } = useTranslation()
   const { project, isProjectOwner } = useProjectAtom()
-  const hasGoals = useAtomValue(hasGoalsAtom)
-  const projectHasRewards = useAtomValue(hasRewardsAtom)
+  const { hasGoals, hasRewards, hasEntries } = project
+
   const { onGoalModalOpen } = useGoalsModal()
 
   if (!project || !isProjectOwner || project.status !== ProjectStatus.Active) return null
 
-  const projectHasEntries = project?.entries?.length > 0
-
   return (
     <Stack w="full" direction={{ base: 'column', lg: 'row' }} flexWrap={'wrap'}>
-      {!projectHasRewards && (
+      {!hasRewards && (
         <DisplayCard
           title={t('Rewards')}
           body={t('Projects that offer Rewards raise an average of 3.3 times more funds than those that don’t')}
@@ -54,7 +47,7 @@ export const CreatorTools = () => {
           rightAction={<GoalTooltip />}
         />
       )}
-      {!projectHasEntries && (
+      {!hasEntries && (
         <DisplayCard
           title={t('Entries')}
           body={t('Use Entries to share updates and engage with your community in your own way')}

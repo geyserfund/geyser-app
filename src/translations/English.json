@@ -1029,11 +1029,12 @@
    "Delivery in":"Delivery in",
    "contributed in total":"contributed in total",
    "Title must match exactly":"Title must match exactly",
-   "Sign Up & Login":"Sign Up & Login",
    "Github":"Github",
    "No contributions have been made to this project so far.":"No contributions have been made to this project so far.",
    "Project details":"Project details",
-   "Anonymous":"Anonymous"
+   "Anonymous":"Anonymous",
+   "Select project":"Select project",
+   "Logged in with":"Logged in with"
    
 
 

@@ -42,6 +42,9 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     status
     rewardCurrency
     createdAt
+    hasGoals
+    hasRewards
+    hasEntries
     keys {
       ...ProjectKeys
     }

@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useNotification } from '../../../utils'
 import { DefaultImage } from './DefaultImage'
 
-interface IImageWithReload extends ImageProps {
+interface IImageWithReload extends Omit<ImageProps, 'src'> {
+  src?: string | null
   noCacheId?: string
   defaultImage?: string
   empty?: boolean
@@ -17,7 +18,7 @@ const BACKOFF = 1.2
 const MILLISECONDS = 1_000
 
 export const ImageWithReload = ({
-  src,
+  src = '',
   showError,
   defaultImage,
   empty,
@@ -79,7 +80,7 @@ export const ImageWithReload = ({
     return (
       <Image
         display={loading || !hasValidSource ? 'none' : undefined}
-        src={src}
+        src={src || ''}
         maxHeight="500px"
         objectFit="cover"
         onError={handleError}

@@ -26,13 +26,13 @@ import { useSetMatchRoutes } from '../../config/routes/routesAtom'
 import { getPath, ID, PathName } from '../../constants'
 import { useAuthContext, useNavContext } from '../../context'
 import { useLayoutAnimation, useScrollDirection } from '../../hooks'
+import { useRouteMatchesForTopNavBar } from '../../modules/navigation/topNavBar/topNavBarAtom'
 // import { useProjectSideNavAtom } from '../../modules/project/pages/projectView/views/projectNavigation/sideNav'
 import { useAuthModal } from '../../pages/auth/hooks'
 import { useMobileMode } from '../../utils'
 // import { useProfileSideNavAtom } from '../profileRightSideNav'
 import { TopNavBarMenu } from '../topNarBarMenu/TopNavBarMenu'
 import { ProjectTitle } from './components/ProjectTitle'
-import { useRouteMatchesForTopNavBar } from './topNavBarAtom'
 
 const navItems = [
   {
@@ -73,7 +73,6 @@ export const TopNavBar = () => {
 
   const matchRoutesData = matchRoutes(platformRoutes, location)
   const setMatchRoutes = useSetMatchRoutes()
-  // const changeProfileSideNavAtom = useProfileSideNavAtom()[1]
 
   useEffect(() => {
     if (matchRoutesData) {

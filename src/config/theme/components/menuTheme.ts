@@ -9,6 +9,8 @@ const baseStyle = definePartsStyle({
     border: '1px solid',
     borderColor: 'neutral1.3',
     outline: 'none',
+    padding: '16px',
+    zIndex: '99',
   },
 })
 

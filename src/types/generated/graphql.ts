@@ -284,6 +284,7 @@ export type DeleteUserResponse = MutationResponse & {
 };
 
 export enum DistributionSystem {
+  None = 'NONE',
   Proportional = 'PROPORTIONAL',
   WinnerTakeAll = 'WINNER_TAKE_ALL'
 }
@@ -1476,6 +1477,9 @@ export type Project = {
   fundingTxsCount?: Maybe<Scalars['Int']['output']>;
   /** Returns the project's grant applications. */
   grantApplications: Array<GrantApplicant>;
+  hasEntries?: Maybe<Scalars['Boolean']['output']>;
+  hasGoals?: Maybe<Scalars['Boolean']['output']>;
+  hasRewards?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['BigInt']['output'];
   image?: Maybe<Scalars['String']['output']>;
   keys: ProjectKeys;
@@ -3559,6 +3563,9 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType>;
   fundingTxsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   grantApplications?: Resolver<Array<ResolversTypes['GrantApplicant']>, ParentType, ContextType, Partial<ProjectGrantApplicationsArgs>>;
+  hasEntries?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  hasGoals?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  hasRewards?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   keys?: Resolver<ResolversTypes['ProjectKeys'], ParentType, ContextType>;
@@ -4933,7 +4940,7 @@ export type ProjectLocationFragment = { __typename?: 'Location', region?: string
 
 export type ProjectKeysFragment = { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, image?: string | null, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: string, keys: (
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, image?: string | null, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: string, hasGoals?: boolean | null, hasRewards?: boolean | null, hasEntries?: boolean | null, keys: (
     { __typename?: 'ProjectKeys' }
     & ProjectKeysFragment
   ), owners: Array<{ __typename?: 'Owner', id: any, user: (
@@ -6294,6 +6301,9 @@ export const ProjectPageBodyFragmentDoc = gql`
   status
   rewardCurrency
   createdAt
+  hasGoals
+  hasRewards
+  hasEntries
   keys {
     ...ProjectKeys
   }

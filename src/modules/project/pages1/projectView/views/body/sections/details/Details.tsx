@@ -1,12 +1,11 @@
 import { Badge, Button, HStack, Wrap } from '@chakra-ui/react'
-import { useAtomValue } from 'jotai'
 import { DateTime } from 'luxon'
 import { PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import { useInitProjectDetails } from '@/modules/project/hooks/useInitProjectDetails'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { projectDetailsLoadingAtom } from '@/modules/project/state/projectAtom'
 import { Body } from '@/shared/components/typography'
 
 import { getPath, ID } from '../../../../../../../../constants'
@@ -19,7 +18,8 @@ import { ProjectLinks } from './components/ProjectLinks'
 export const Details = () => {
   const { t } = useTranslation()
   const { loading, project } = useProjectAtom()
-  const projectDetailsLoading = useAtomValue(projectDetailsLoadingAtom)
+
+  const { projectDetailsLoading } = useInitProjectDetails(true)
 
   if (loading || projectDetailsLoading) {
     return null
@@ -31,73 +31,80 @@ export const Details = () => {
         <DetailLine title={t('Creator')}>
           <CreatorSocial />
         </DetailLine>
-        <DetailLine title={t('Project links')} empty={!project.links.length}>
-          <ProjectLinks links={project.links} />
-        </DetailLine>
 
-        <DetailLine title={t('Tags')} empty={!project.tags.length}>
-          <Wrap>
-            {project.tags.map((tag) => {
-              return (
-                <Link
-                  key={tag.id}
+        {project.links && (
+          <DetailLine title={t('Project links')} empty={!project?.links?.length}>
+            <ProjectLinks links={project.links} />
+          </DetailLine>
+        )}
+
+        {project.tags && (
+          <DetailLine title={t('Tags')} empty={!project.tags.length}>
+            <Wrap>
+              {project.tags.map((tag) => {
+                return (
+                  <Link
+                    key={tag.id}
+                    to={getPath('landingPage')}
+                    state={{
+                      filter: { tagIds: [tag.id], sort: SortType.balance },
+                    }}
+                  >
+                    <Badge size="md" variant="surface" colorScheme={tagColorScheme(tag.id)}>
+                      {tag.label}
+                    </Badge>
+                  </Link>
+                )
+              })}
+            </Wrap>
+          </DetailLine>
+        )}
+
+        {project?.location && (project.location.country || project.location.region) && (
+          <DetailLine title={t('Location')} empty={!project?.location?.country?.name && !project?.location?.region}>
+            <Wrap spacing="5px">
+              {project?.location?.country?.name && project.location.country.name !== 'Online' && (
+                <Button
+                  as={Link}
                   to={getPath('landingPage')}
                   state={{
-                    filter: { tagIds: [tag.id], sort: SortType.balance },
+                    filter: {
+                      countryCode: project?.location?.country?.code,
+                      sort: SortType.balance,
+                    },
                   }}
+                  size="sm"
+                  variant="outline"
+                  colorScheme="neutral1"
                 >
-                  <Badge size="sm" variant="surface" colorScheme={tagColorScheme(tag.id)}>
-                    {tag.label}
-                  </Badge>
-                </Link>
-              )
-            })}
-          </Wrap>
-        </DetailLine>
+                  {project?.location?.country?.name}
+                </Button>
+              )}
+              {project?.location?.region && (
+                <Button
+                  as={Link}
+                  to={getPath('landingPage')}
+                  state={{
+                    filter: {
+                      region: project?.location?.region,
+                      sort: SortType.balance,
+                    },
+                  }}
+                  size="sm"
+                  variant="outline"
+                  colorScheme="neutral1"
+                >
+                  {project?.location?.region}
+                </Button>
+              )}
+            </Wrap>
+          </DetailLine>
+        )}
 
-        <DetailLine title={t('Location')} empty={!project?.location?.country?.name && !project?.location?.region}>
-          <Wrap spacing="5px">
-            {project?.location?.country?.name && project.location.country.name !== 'Online' && (
-              <Button
-                as={Link}
-                to={getPath('landingPage')}
-                state={{
-                  filter: {
-                    countryCode: project?.location?.country?.code,
-                    sort: SortType.balance,
-                  },
-                }}
-                size="xs"
-                variant="outline"
-                colorScheme="neutral1"
-              >
-                {project?.location?.country?.name}
-              </Button>
-            )}
-            {project?.location?.region && (
-              <Button
-                as={Link}
-                to={getPath('landingPage')}
-                state={{
-                  filter: {
-                    region: project?.location?.region,
-                    sort: SortType.balance,
-                  },
-                }}
-                size="xs"
-                variant="outline"
-                colorScheme="neutral1"
-              >
-                {project?.location?.region}
-              </Button>
-            )}
-          </Wrap>
-        </DetailLine>
-
-        <DetailLine title={t('Location')}>
-          <Body size="xs" medium dark>{`${t('Launched')} ${DateTime.fromMillis(Number(project.createdAt)).toFormat(
-            'dd LLL yyyy',
-          )}`}</Body>
+        <DetailLine title={t('Launched')}>
+          <Body size="sm" medium dark>
+            {DateTime.fromMillis(Number(project.createdAt)).toFormat('dd LLL yyyy')}
+          </Body>
         </DetailLine>
       </CardLayout>
     </BodySectionLayout>

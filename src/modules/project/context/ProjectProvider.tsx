@@ -19,16 +19,7 @@ export const useProjectContext = () => {
 }
 
 export const ProjectProvider = ({ children, ...props }: PropsWithChildren<ProjectState>) => {
-  const {
-    queryProject,
-    queryCompletedGoals,
-    queryInProgressGoals,
-    queryProjectWallet,
-    queryProjectRewards,
-    queryProjectEntries,
-    queryUnpublishedProjectEntries,
-    queryProjectDetails,
-  } = useInitProject({
+  const { queryProject, queryProjectWallet } = useInitProject({
     ...props,
   })
 
@@ -36,13 +27,7 @@ export const ProjectProvider = ({ children, ...props }: PropsWithChildren<Projec
     <ProjectContext.Provider
       value={{
         queryProject,
-        queryCompletedGoals,
-        queryInProgressGoals,
         queryProjectWallet,
-        queryProjectRewards,
-        queryProjectEntries,
-        queryUnpublishedProjectEntries,
-        queryProjectDetails,
       }}
     >
       {children}

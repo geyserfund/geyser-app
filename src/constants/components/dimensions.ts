@@ -4,7 +4,7 @@ export const dimensions = {
       height: 112, // 32 * 2 + 48,
     },
     mobile: {
-      height: 80, // 16 * 2 + 48
+      height: 72, // 16 * 2 + 40
     },
   },
   projectNavBar: {

@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Tooltip, useDisclosure } from '@chakra-ui/react'
+import { ButtonProps, IconButton, Tooltip, useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -30,19 +30,20 @@ export const NpubDisplay = ({ npub, iconOnly, ...rest }: NpubDisplayProps) => {
 
   return (
     <Tooltip label={copy ? t('Copied!') : t('Copy')} placement="top-start" closeOnClick={false} isOpen={isOpen}>
-      <Button
-        size="xs"
-        variant="surface"
-        minWidth={'20px'}
+      <IconButton
+        size="sm"
+        aria-label="nostr-icon"
+        variant="soft"
         colorScheme="primary1"
-        bgColor={copy ? 'primary1.5' : undefined}
         onMouseEnter={onOpen}
         onMouseLeave={onClose}
         _hover={{ bgColor: copy ? 'primary1.9' : undefined }}
+        icon={<NostrIcon height="16px" width="16px" />}
+        onClick={handleOnCopy}
         {...rest}
       >
-        {<NostrIcon height="12px" width="12px" onClick={handleOnCopy} />}
-      </Button>
+        {}
+      </IconButton>
     </Tooltip>
   )
 }

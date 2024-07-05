@@ -1,8 +1,6 @@
-import { AddIcon } from '@chakra-ui/icons'
-import { Button, ButtonProps } from '@chakra-ui/react'
+import { ButtonProps, IconButton } from '@chakra-ui/react'
 import { MouseEvent } from 'react'
-import { useTranslation } from 'react-i18next'
-import { BsFillHeartFill } from 'react-icons/bs'
+import { PiBell } from 'react-icons/pi'
 
 import { useAuthContext } from '../../../../../../../context'
 import { useFollowProject } from '../../../../../../../hooks/graphqlState'
@@ -11,11 +9,9 @@ import { Project } from '../../../../../../../types'
 
 interface FollowButtonProps extends ButtonProps {
   project: Pick<Project, 'id' | 'name' | 'title'>
-  hasIcon?: boolean
 }
 
-export const FollowButton = ({ project, hasIcon, ...rest }: FollowButtonProps) => {
-  const { t } = useTranslation()
+export const FollowButton = ({ project, ...rest }: FollowButtonProps) => {
   const { isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
   const { isFollowed, handleFollow, handleUnFollow, followLoading, unfollowLoading } = useFollowProject(project)
@@ -37,20 +33,15 @@ export const FollowButton = ({ project, hasIcon, ...rest }: FollowButtonProps) =
   }
 
   return (
-    <Button
-      variant={isFollowed ? 'secondary' : 'primary'}
+    <IconButton
+      aria-label="follow-button"
       size="sm"
+      variant="soft"
+      colorScheme={isFollowed ? 'primary1' : 'neutral1'}
       onClick={handleClick}
       isLoading={followLoading || unfollowLoading}
-      flexShrink={0}
-      {...(hasIcon
-        ? {
-            leftIcon: isFollowed ? <BsFillHeartFill fontSize="14px" /> : <AddIcon />,
-          }
-        : {})}
+      icon={<PiBell />}
       {...rest}
-    >
-      {isFollowed ? t('Followed') : t('Follow')}
-    </Button>
+    />
   )
 }

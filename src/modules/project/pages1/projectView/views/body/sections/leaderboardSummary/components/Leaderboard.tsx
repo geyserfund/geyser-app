@@ -11,12 +11,13 @@ import { Body } from '@/shared/components/typography'
 import { OrderByOptions, useProjectPageFundersQuery } from '@/types'
 
 import { LeaderboardItem, LeaderboardItemSkeleton } from './LeaderboardItem'
+import { NoContribution } from './NoContribution'
 
 export const Leaderboard = () => {
   const { t } = useTranslation()
 
   const { isLoggedIn } = useAuthContext()
-  const { project } = useProjectAtom()
+  const { project, loading: projectLoading } = useProjectAtom()
 
   const [funders, setFunders] = useAtom(fundersAtom)
 
@@ -34,27 +35,24 @@ export const Leaderboard = () => {
         },
       },
     },
+    skip: !project.id,
     onCompleted(data) {
       if (data && data.fundersGet) {
+        console.log('checking funders inside oncompleted', data.fundersGet)
         setFunders(data.fundersGet)
       }
     },
   })
 
-  if (loading) {
+  if (projectLoading || loading) {
     return <LeaderboardSkeleton />
   }
 
   if (funders.length === 0) {
-    return (
-      <VStack w="full" justifyContent="center" flex={1} padding={6}>
-        <Image src={NoLeaderboardDataImageUrl} height="120px" width="120px" />
-        <Body size="md" medium muted>
-          {t('No contributions have been made to this project so far.')}
-        </Body>
-      </VStack>
-    )
+    return <NoContribution />
   }
+
+  console.log('checking funders', funders)
 
   return (
     <VStack spacing={0} w="full" flex={1} justifyContent={'space-between'}>

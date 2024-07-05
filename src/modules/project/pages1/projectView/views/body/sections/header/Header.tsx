@@ -30,6 +30,7 @@ import { ProjectStatus, useProjectPageHeaderSummaryQuery, WalletStatus } from '.
 import { toInt, useMobileMode } from '../../../../../../../../utils'
 import { toLargeImageUrl } from '../../../../../../../../utils/tools/imageSizes'
 import { useProjectAtom, useWalletAtom } from '../../../../../../hooks/useProjectAtom'
+import { FollowButton } from '../../components'
 import { CreatorSocial } from './components/CreatorSocial'
 import { LightningAddress } from './components/LightningAddress'
 import { NpubDisplay } from './components/NpubDisplay'
@@ -160,15 +161,17 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             </H1>
 
             <HStack w="full">
-              <LightningAddress name={`${project.name}`} isGeyser />
-              <NpubDisplay npub={project?.keys?.nostrKeys.publicKey.npub} />
+              <HStack spacing={0.5}>
+                <LightningAddress name={`${project.name}`} isGeyser />
+                <NpubDisplay npub={project?.keys?.nostrKeys.publicKey.npub} />
+              </HStack>
               <CreatorSocial />
             </HStack>
 
             {summaryLoading ? (
               <SkeletonLayout height="20px" w="250px" />
             ) : (
-              <HStack w="full" flexWrap={'wrap'}>
+              <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
                 <Body size="xs" medium light>
                   {`${t('Contributors')}: ${project.fundersCount}`}
                 </Body>
@@ -183,13 +186,14 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
             <HStack w="full" paddingTop={1}>
               <IconButton
                 aria-label="Go to project details"
+                size="sm"
                 icon={<PiCaretDoubleDown />}
-                minWidth="32px"
                 variant="soft"
                 colorScheme="neutral1"
                 onClick={handleClickDetails}
               />
-              <Button variant="soft" colorScheme="neutral1" rightIcon={<PiShareFat />}>
+              <FollowButton project={project} />
+              <Button size="sm" variant="soft" colorScheme="neutral1" rightIcon={<PiShareFat />}>
                 {t('Share')}
               </Button>
             </HStack>

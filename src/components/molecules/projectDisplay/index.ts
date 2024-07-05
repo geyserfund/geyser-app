@@ -1,4 +1,3 @@
-export * from '../../../modules/project/pages1/projectView/views/body/sections/entries/components/ProjectEntryCard'
 export * from './ProjectBalance'
 export * from './ProjectBalanceCircularProgress'
 export * from './ProjectContributionCard'

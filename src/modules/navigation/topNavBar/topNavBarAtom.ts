@@ -8,9 +8,9 @@ import {
   projectDashboardRoutes,
   projectRoutes,
   routeMatchForAtom,
-} from '../../config/routes/routesAtom'
-import { getPath, PathName } from '../../constants'
-import { profileSideNavAtom } from '../../modules/navigation/profileNav/profileSideNavAtom'
+} from '../../../config/routes/routesAtom'
+import { getPath, PathName } from '../../../constants'
+import { profileSideNavAtom } from '../profileNav/profileSideNavAtom'
 
 const routesForHidingTopNav = entryCreationRoutes
 const routesForHidingTopNavAtom = atom(routeMatchForAtom(routesForHidingTopNav))
@@ -58,6 +58,35 @@ const routesToShowSignInButton = [
   `/${PathName.entry}/:entryId`,
 ]
 const routesToShowSignInButtonAtom = atom(routeMatchForAtom(routesToShowSignInButton))
+
+const isProjectRoutesAtom = atom(routeMatchForAtom([...projectRoutes, ...projectDashboardRoutes]))
+const isProjectMainPageAtom = atom(routeMatchForAtom([getPath('project', PathName.projectName)]))
+
+const mainProjectPageScrolledPassThresholdAtom = atom(false)
+
+export const shouldShowProjectLogoAtom = atom((get) => {
+  const isProjectPage = get(isProjectRoutesAtom)
+
+  console.log('checking isProjectPage', isProjectPage)
+  if (!isProjectPage) {
+    return false
+  }
+
+  const isProjectMainPage = get(isProjectMainPageAtom)
+  const mainProjectPageScrolledPassThreshold = get(mainProjectPageScrolledPassThresholdAtom)
+  console.log('checking isProjectMainPage', isProjectMainPage)
+  console.log('checking mainProjectPageScrolledPassThreshold', mainProjectPageScrolledPassThreshold)
+
+  if (!isProjectMainPage) {
+    return true
+  }
+
+  if (mainProjectPageScrolledPassThreshold) {
+    return true
+  }
+
+  return false
+})
 
 const topNavBarAnimateAtom = atom((get) => {
   const profileSidebar = get(profileSideNavAtom)

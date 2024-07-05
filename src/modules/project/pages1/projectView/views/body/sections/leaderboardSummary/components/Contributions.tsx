@@ -15,7 +15,7 @@ export const Contributions = () => {
   const { t } = useTranslation()
 
   const { isLoggedIn } = useAuthContext()
-  const { project } = useProjectAtom()
+  const { project, loading: projectLoading } = useProjectAtom()
 
   const [contributions, setContributions] = useAtom(contributionsAtom)
 
@@ -40,7 +40,7 @@ export const Contributions = () => {
     },
   })
 
-  if (loading) {
+  if (loading || projectLoading) {
     return <ContributionsSkeleton />
   }
 

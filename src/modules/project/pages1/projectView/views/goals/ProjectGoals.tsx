@@ -1,3 +1,5 @@
+import { RenderGoals } from './RenderGoals'
+
 export const ProjectGoals = () => {
-  return <div>This is ProjectGoals</div>
+  return <RenderGoals />
 }

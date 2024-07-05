@@ -7,8 +7,8 @@ export const LoginButton = (props: ButtonProps) => {
   const { loginOnOpen } = useAuthModal()
   const { t } = useTranslation()
   return (
-    <Button size="lg" variant="solid" colorScheme="primary1" onClick={loginOnOpen} {...props}>
-      {t('Sign Up & Login')}
+    <Button size={{ base: 'md', lg: 'lg' }} variant="outline" colorScheme="primary1" onClick={loginOnOpen} {...props}>
+      {t('Login')}
     </Button>
   )
 }
