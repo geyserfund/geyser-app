@@ -1,5 +1,5 @@
 import { AddIcon } from '@chakra-ui/icons'
-import { Button, IconButton, Tooltip } from '@chakra-ui/react'
+import { Button, ButtonProps, IconButton, Tooltip } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,15 +13,13 @@ import { useEmailPromptModal } from '../../../../../../../pages/auth/hooks/useEm
 import { shouldPromptAtom } from '../../../../../../../pages/auth/state/emailPromptAtom'
 import { Project } from '../../../../../../../types'
 
-interface FollowComponentProps {
+interface FollowComponentProps extends ButtonProps {
   project: Pick<Project, 'id' | 'name' | 'title'>
   hasIcon?: boolean
-  variant?: 'primary' | 'secondary'
-  size?: 'sm' | 'md' | 'lg'
-  type?: 'button' | 'icon'
+  useCase?: 'button' | 'icon'
 }
 
-export const FollowButton = ({ project, hasIcon, type = 'button', ...rest }: FollowComponentProps) => {
+export const FollowButton = ({ project, hasIcon, useCase = 'button' }: FollowComponentProps) => {
   const { t } = useTranslation()
   const { isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
@@ -57,7 +55,7 @@ export const FollowButton = ({ project, hasIcon, type = 'button', ...rest }: Fol
     }
   }
 
-  if (type === 'icon') {
+  if (useCase === 'icon') {
     return (
       <>
         {!isFollowed ? (
@@ -76,7 +74,6 @@ export const FollowButton = ({ project, hasIcon, type = 'button', ...rest }: Fol
                   borderColor: 'primary.600',
                   color: 'primary.600',
                 }}
-                {...rest}
               />
             </Tooltip>
           </>
@@ -106,22 +103,18 @@ export const FollowButton = ({ project, hasIcon, type = 'button', ...rest }: Fol
   }
 
   return (
-    <>
-      <Button
-        variant={isFollowed ? 'secondary' : 'primary'}
-        size="sm"
-        onClick={handleClick}
-        isLoading={followLoading || unfollowLoading}
-        flexShrink={0}
-        {...(hasIcon
-          ? {
-              leftIcon: isFollowed ? <BsFillHeartFill fontSize="14px" /> : <AddIcon />,
-            }
-          : {})}
-        {...rest}
-      >
-        {isFollowed ? t('Followed') : t('Follow')}
-      </Button>
-    </>
+    <Button
+      variant={'secondary'}
+      onClick={handleClick}
+      isLoading={followLoading || unfollowLoading}
+      w="full"
+      {...(hasIcon
+        ? {
+            leftIcon: isFollowed ? <BsFillHeartFill fontSize="14px" /> : <AddIcon />,
+          }
+        : {})}
+    >
+      {isFollowed ? t('Followed') : t('Follow')}
+    </Button>
   )
 }

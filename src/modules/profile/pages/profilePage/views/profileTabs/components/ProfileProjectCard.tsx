@@ -58,7 +58,7 @@ export const ProfileProjectCard = ({
             {project.title}
           </Body1>
           {showStatus && <ProjectStatusLabel iconOnly project={project} />}
-          {showFollow && <FollowButton project={project} />}
+          {showFollow && <FollowButton useCase="icon" project={project} />}
         </HStack>
         <Body1 color="neutral.600" lineHeight={1.2}>
           {project.shortDescription}
