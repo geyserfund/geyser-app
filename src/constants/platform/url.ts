@@ -275,6 +275,8 @@ export const subscriptionJoinUrl = 'https://airtable.com/appyM7XlNIWVypuP5/shrEb
 
 // ABOUT PAGE
 
+export const GeyserShareImageUrl =
+  'https://framerusercontent.com/images/60pVO3vJDrZ2y9pUyeCmtTpwCo.jpg?scale-down-to=2048'
 export const GeyserAboutProjectsBannerImage =
   'https://storage.googleapis.com/geyser-projects-media/images/geyser-about-projects-banner-image.png'
 export const BitcoinPouch3DImageUrl = 'https://storage.googleapis.com/geyser-projects-media/images/bitcoin-pouch-3d.png'

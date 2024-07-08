@@ -1,8 +1,11 @@
 import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
 
+import ProjectView from '@/modules/project/pages1/projectView/ProjectView'
+
 import App from '../../App'
 import AppLayout from '../../AppLayout'
 import { __production__, getPath, PathName } from '../../constants'
+import { ProjectBody } from '../../modules/project/pages1/projectView'
 // import { ProjectView } from '../../modules/project/pages1/projectView'
 import { ExternalAuthSuccess, FailedAuth } from '../../pages/auth'
 import { NotAuthorized, NotFoundPage, NotFoundProject } from '../../pages/fallback'
@@ -233,18 +236,19 @@ export const platformRoutes: RouteObject[] = [
   // },
   {
     path: getPath('project', PathName.projectName),
-
-    async lazy() {
-      const ProjectView = await Project1().then((m) => m.ProjectView)
-      return { Component: ProjectView }
-    },
+    element: <ProjectView />,
+    // async lazy() {
+    //   const ProjectView = await Project1().then((m) => m.ProjectView)
+    //   return { Component: ProjectView }
+    // },
     children: [
       {
         index: true,
-        async lazy() {
-          const ProjectBody = await Project1().then((m) => m.ProjectBody)
-          return { Component: ProjectBody }
-        },
+        element: <ProjectBody />,
+        // async lazy() {
+        //   const ProjectBody = await Project1().then((m) => m.ProjectBody)
+        //   return { Component: ProjectBody }
+        // },
       },
       {
         path: getPath('projectDraft', PathName.projectName),

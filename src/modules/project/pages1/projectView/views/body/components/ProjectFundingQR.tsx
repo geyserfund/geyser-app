@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { QrIcon } from '../../../../../../../components/icons'
 import { ProjectFragment } from '../../../../../../../types/generated/graphql'
-import { ProjectFundingQRModal } from './ProjectFundingQRModal'
+import { ProjectFundingQRModal } from '../sections/share/ProjectFundingQRModal'
 
 interface ProjectFundingQRProps {
   project: Pick<ProjectFragment, 'name' | 'id' | 'title'>
