@@ -34,6 +34,7 @@ import { FollowButton } from '../../components'
 import { CreatorSocial } from './components/CreatorSocial'
 import { LightningAddress } from './components/LightningAddress'
 import { NpubDisplay } from './components/NpubDisplay'
+import { ShareProjectButton } from './components/ShareProjectButton'
 import { VideoPlayer } from './components/VideoPlayer'
 
 export const Header = forwardRef<HTMLDivElement>((_, ref) => {
@@ -193,9 +194,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
                 onClick={handleClickDetails}
               />
               <FollowButton project={project} />
-              <Button size="sm" variant="soft" colorScheme="neutral1" rightIcon={<PiShareFat />}>
-                {t('Share')}
-              </Button>
+              <ShareProjectButton />
             </HStack>
           </VStack>
         </HStack>

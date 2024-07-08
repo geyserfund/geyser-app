@@ -10,10 +10,12 @@ import { useCustomTheme, useMobileMode } from '../../../utils'
 export type NavBarItems = {
   name: string
   path?: string
-  onClick?: () => {}
+  onClick?: () => void
   icon?: IconType | React.FC
   showIconAlways?: boolean
   isBordered?: boolean
+  key?: string
+  render?: React.JSXElement
 }
 
 type AnimatedNavBarProps = {
