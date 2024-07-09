@@ -1,7 +1,7 @@
 import { Checkbox, CheckboxProps, Text, VStack } from '@chakra-ui/react'
-import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
+import { useController, UseControllerProps } from 'react-hook-form'
 
-type Props = UseControllerProps<FieldValues> &
+type Props = UseControllerProps<any, any> &
   Omit<CheckboxProps, 'size'> & {
     label: string
     error?: string

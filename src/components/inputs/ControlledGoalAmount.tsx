@@ -1,12 +1,12 @@
 import { Box, Input, InputGroup, InputProps, InputRightElement, Text, VStack } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
+import { useController, UseControllerProps } from 'react-hook-form'
 
 import { useCurrencyFormatter } from '../../modules/project/pages/projectView/hooks/useCurrencyFormatter'
 import { ProjectGoalCurrency } from '../../types'
 import { commaFormatted } from '../../utils'
 
-type Props = UseControllerProps<FieldValues> &
+type Props = UseControllerProps<any, any> &
   Omit<InputProps, 'size'> & {
     width?: string | number
     inputRef?: React.Ref<HTMLInputElement>

@@ -50,6 +50,11 @@ export const projectSections: Record<string, DashboardSection> = {
     label: 'Nostr settings',
     path: 'dashboardNostr',
   },
+  affiliate: {
+    label: 'Affiliate settings',
+    path: 'dashboardAffiliate',
+    semiFullWidth: true,
+  },
   settings: {
     label: 'Project settings',
     path: 'dashboardSettings',
@@ -123,7 +128,7 @@ export const ProjectDashboard = () => {
           py={{ base: 4, lg: 10 }}
           pl={{
             base: 4,
-            xl: activeSection?.fullWidth ? '18em' : undefined,
+            xl: activeSection?.fullWidth ? '18em' : activeSection?.semiFullWidth ? '6em' : undefined,
           }}
           maxWidth={{
             base: '100%',
