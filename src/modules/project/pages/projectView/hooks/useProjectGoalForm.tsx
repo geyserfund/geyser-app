@@ -18,7 +18,7 @@ const MIN_GOAL_TARGET_AMOUNT_US_DOLLARS = 10
 const MIN_GOAL_TARGET_AMOUNT_SATS = 10000
 const MAX_GOAL_TARGET_AMOUNT = 2000000000
 
-const goalFormSchema = (amountContributed: number) =>
+const goalFormSchema = (amountContributed: number, currency: ProjectGoalCurrency) =>
   yup
     .object({
       title: yup.string().required('Title is required').max(50, 'Title must be at most 50 characters long'),
@@ -28,7 +28,7 @@ const goalFormSchema = (amountContributed: number) =>
         .typeError('Amount is required')
         .required('Amount is required')
         .min(
-          amountContributed,
+          currency === ProjectGoalCurrency.Usdcent ? amountContributed / 100 : amountContributed,
           'The Goal amount is lower than your funded amount. Please choose a Goal amount that is higher than the current Goal’s funded amount.',
         )
         .max(
@@ -62,7 +62,7 @@ export const useProjectGoalForm = (
   refetch: () => void,
 ) => {
   const { control, handleSubmit, reset, watch, formState, setValue, trigger } = useForm<FormValues>({
-    resolver: yupResolver(goalFormSchema(goal?.amountContributed || 0)),
+    resolver: yupResolver(goalFormSchema(goal?.amountContributed || 0, goal?.currency || ProjectGoalCurrency.Usdcent)),
     defaultValues: {
       title: '',
       description: '',

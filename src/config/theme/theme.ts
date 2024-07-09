@@ -151,15 +151,19 @@ export const theme = {
       variants: {
         secondary: {
           tab: {
+            bg: 'neutral.0',
+            variant: 'outline',
             borderRadius: '8px',
             border: '2px solid',
             borderColor: 'neutral.200',
             p: '10px 20px',
             _selected: {
-              borderColor: 'primary.500',
+              bg: 'neutral.0',
+              borderColor: 'neutral.400',
             },
             _hover: {
-              borderColor: 'primary.500',
+              bg: 'neutral.50',
+              borderColor: 'neutral.400',
             },
           },
         },

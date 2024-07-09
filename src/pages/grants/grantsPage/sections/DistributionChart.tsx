@@ -6,7 +6,7 @@ import { Caption, H3 } from '../../../../components/typography'
 import { getPath } from '../../../../constants'
 import { CardLayout } from '../../../../shared/components/layouts'
 import { standardPadding } from '../../../../styles'
-import { GrantApplicant } from '../../../../types'
+import { GrantApplicant, VotingSystem } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
 
 const CHART_BAR_COLORS = ['primary.900', 'primary.700', 'primary.500', 'primary.400', 'primary.100']
@@ -15,23 +15,37 @@ interface Props {
   applicants: Array<GrantApplicant>
   isCompetitionVote: boolean
   showAll?: boolean
+  votingSystem?: VotingSystem
 }
 
-export const DistributionChart = ({ applicants, isCompetitionVote, showAll = true }: Props) => {
+export const DistributionChart = ({ applicants, isCompetitionVote, showAll = true, votingSystem }: Props) => {
   const { t } = useTranslation()
 
   const total = applicants.reduce((prev, curr) => {
-    return prev + (curr?.funding.communityFunding || 0)
+    if (votingSystem === VotingSystem.OneToOne) {
+      return prev + (curr?.funding.communityFunding || 0)
+    }
+
+    if (votingSystem === VotingSystem.StepLog_10) {
+      return prev + (curr?.voteCount || 0)
+    }
+
+    return prev
   }, 0)
 
   const percentages: Array<
-    GrantApplicant & { percentage: number; numberOfContributors: number; communityFundingAmount: number }
-  > = applicants.map((applicant) => ({
-    ...applicant,
-    percentage: ((applicant.funding?.communityFunding || 0) * 100) / (total || 1),
-    numberOfContributors: applicant.contributorsCount,
-    communityFundingAmount: applicant.funding.communityFunding,
-  }))
+    GrantApplicant & { percentage: number; numberOfContributors: number; communityFundingAmount: number; votes: number }
+  > = applicants.map((applicant) => {
+    const value =
+      votingSystem === VotingSystem.OneToOne ? applicant.funding?.communityFunding || 0 : applicant.voteCount || 0
+    return {
+      ...applicant,
+      percentage: (value * 100) / (total || 1),
+      numberOfContributors: applicant.contributorsCount,
+      communityFundingAmount: applicant.funding.communityFunding,
+      votes: applicant.voteCount,
+    }
+  })
 
   const sortedPercentages = percentages.sort((a, b) => b.percentage - a.percentage)
   const displayedPercentages = showAll ? sortedPercentages : sortedPercentages.slice(0, 5)
@@ -54,6 +68,7 @@ export const DistributionChart = ({ applicants, isCompetitionVote, showAll = tru
               isCompetitionVote={isCompetitionVote}
               communityFundingAmount={communityFundingAmount}
               to={showAll ? getPath('project', project.name) : undefined}
+              votingSystem={votingSystem}
             />
           ))}
         </Box>
@@ -67,6 +82,7 @@ const Item = ({
   title,
   width,
   to,
+  votingSystem,
   ...rest
 }: {
   bg?: string
@@ -77,6 +93,7 @@ const Item = ({
   isCompetitionVote: boolean
   communityFundingAmount: number
   to?: string | undefined
+  votingSystem?: VotingSystem
 }) => {
   const itemContent = () => {
     return (
@@ -87,7 +104,7 @@ const Item = ({
           </Text>
         </HStack>
         <Box display="flex" alignItems="center" justifyContent="start" flexGrow={1}>
-          <ChartBar bg={bg} width={`${width}%`} {...rest} />
+          <ChartBar bg={bg} width={`${width}%`} {...rest} votingSystem={votingSystem} />
         </Box>
       </HStack>
     )
@@ -103,14 +120,37 @@ const ChartBar = ({
   numberOfContributors,
   isCompetitionVote,
   communityFundingAmount,
+  votingSystem,
 }: Pick<BoxProps, 'width' | 'bg'> & {
   percentage: number
   numberOfContributors: number
   isCompetitionVote: boolean
   communityFundingAmount: number
+  votingSystem?: VotingSystem
 }) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
+
+  const renderSats = ({ withParentheses }: { withParentheses: boolean }) => {
+    return (
+      <Caption fontSize={'12px'} bold color="neutral.9000">
+        {withParentheses ? '(' : ''}
+        {`${getShortAmountLabel(communityFundingAmount, true)} sats`}
+        {withParentheses ? ')' : ''}
+      </Caption>
+    )
+  }
+
+  const renderVotesOrVoters = ({ withParentheses }: { withParentheses: boolean }) => {
+    return (
+      <Caption fontSize={'12px'} bold color="neutral.600" isTruncated>
+        {withParentheses ? '(' : ''}
+        {getShortAmountLabel(numberOfContributors, true)}{' '}
+        {isCompetitionVote ? (votingSystem === VotingSystem.OneToOne ? t('voters') : t('votes')) : t('contributors')}
+        {withParentheses ? ')' : ''}
+      </Caption>
+    )
+  }
 
   return (
     <HStack width="100%" alignItems="center">
@@ -133,14 +173,12 @@ const ChartBar = ({
         </Caption>
       </HStack>
       <HStack minWidth="150px">
-        <Caption fontSize={'12px'} bold color="neutral.9000">
-          {getShortAmountLabel(communityFundingAmount, true)}
-        </Caption>
-        <Caption fontSize={'12px'} bold color="neutral.600" isTruncated>
-          {'('}
-          {getShortAmountLabel(numberOfContributors, true)} {isCompetitionVote ? t('voters') : t('contributors')}
-          {')'}
-        </Caption>
+        {votingSystem === VotingSystem.OneToOne
+          ? renderSats({ withParentheses: false })
+          : renderVotesOrVoters({ withParentheses: false })}
+        {votingSystem === VotingSystem.OneToOne
+          ? renderVotesOrVoters({ withParentheses: true })
+          : renderSats({ withParentheses: true })}
       </HStack>
     </HStack>
   )

@@ -8,6 +8,7 @@ export const FRAGMENT_PROJECT_FOR_COMMUNITY_VOTE_GRANT = gql`
   fragment ProjectCommunityVoteGrant on CommunityVoteGrant {
     id
     status
+    title
   }
 `
 

@@ -326,3 +326,7 @@ export const ArtworkImageUrl = 'https://storage.googleapis.com/geyser-projects-m
 export const PhysicalProductImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/reward-templates/physical-product.png'
 export const ExperienceImageUrl = 'https://storage.googleapis.com/geyser-projects-media/reward-templates/experience.png'
+
+// Helpers
+export const EmailPromptModalUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/enter-email-illustration.png'

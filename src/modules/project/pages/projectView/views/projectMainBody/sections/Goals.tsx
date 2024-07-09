@@ -1,4 +1,4 @@
-import { Box, Button, Text, useTheme, VStack } from '@chakra-ui/react'
+import { Box, Button, IconButton, Text, useTheme, VStack } from '@chakra-ui/react'
 import {
   closestCenter,
   DndContext,
@@ -17,7 +17,6 @@ import { useTranslation } from 'react-i18next'
 import { FaUnlock } from 'react-icons/fa'
 import { MdAdd, MdModeEdit } from 'react-icons/md'
 
-import { IconButtonComponent } from '../../../../../../../components/ui'
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
 import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { ProjectGoal } from '../../../../../../../types'
@@ -119,10 +118,9 @@ export const Goals = () => {
   const renderRightAction = () => {
     if (isProjectOwner && editMode) {
       return (
-        <IconButtonComponent
+        <IconButton
           aria-label="is-editing-goal"
-          noBorder
-          variant="solid"
+          variant="ghost"
           onClick={handleEditMode}
           icon={<FaUnlock fontSize="16px" />}
         />
@@ -131,9 +129,8 @@ export const Goals = () => {
 
     if (isProjectOwner) {
       return (
-        <IconButtonComponent
+        <IconButton
           aria-label="edit-goal"
-          noBorder
           variant="ghost"
           onClick={handleEditMode}
           icon={<MdModeEdit fontSize="16px" />}

@@ -1,8 +1,10 @@
 import { Box } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 
 import { useModal } from '../../../../../../../../../hooks'
 import { Modal } from '../../../../../../../../../shared/components/layouts'
+import { GrantApplicantContributor } from '../../../../../../../../../types'
 import { ProjectContributorsList } from '../../../../../../../pages/projectView/views/projectActivityPanel/screens/info/components/ProjectContributorsList'
 import { ProjectState } from '../../../../../../../state/projectAtom'
 
@@ -11,6 +13,7 @@ export const useProjectContributorsModal = () => {
 }
 
 type Props = ReturnType<typeof useProjectContributorsModal> & {
+  grantApplicantContributors?: GrantApplicantContributor[]
   project?: ProjectState
 }
 
@@ -30,7 +33,6 @@ export const useProjectLayoutStyles = createUseStyles<Rules, Styles>({
     display: 'flex',
     flexDirection: 'column',
     maxWidth: '100%',
-    marginTop: '30px',
     overflowX: 'none',
     '&::-webkit-scrollbar': {
       display: 'none',
@@ -38,15 +40,16 @@ export const useProjectLayoutStyles = createUseStyles<Rules, Styles>({
   },
 })
 
-export const ProjectContributorsModal = ({ project, ...props }: Props) => {
+export const ProjectContributorsModal = ({ project, grantApplicantContributors, ...props }: Props) => {
   const classes = useProjectLayoutStyles()
+  const { t } = useTranslation()
 
   if (!project) {
     return null
   }
 
   return (
-    <Modal title={''} size={'sm'} {...props}>
+    <Modal title={t('Logged in Contributors')} size={'sm'} {...props}>
       <Box className={classes.detailsContainer}>
         <ProjectContributorsList project={project} />
       </Box>

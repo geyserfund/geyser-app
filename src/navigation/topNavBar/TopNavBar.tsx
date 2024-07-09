@@ -27,8 +27,10 @@ import { getPath, ID, PathName } from '../../constants'
 import { useAuthContext, useNavContext } from '../../context'
 import { useLayoutAnimation, useScrollDirection } from '../../hooks'
 import { useRouteMatchesForTopNavBar } from '../../modules/navigation/topNavBar/topNavBarAtom'
+import { EmailPromptModal } from '../../pages/auth/components/EmailPromptModal'
 // import { useProjectSideNavAtom } from '../../modules/project/pages/projectView/views/projectNavigation/sideNav'
 import { useAuthModal } from '../../pages/auth/hooks'
+import { useEmailPromptModal } from '../../pages/auth/hooks/useEmailPromptModal'
 import { useMobileMode } from '../../utils'
 // import { useProfileSideNavAtom } from '../profileRightSideNav'
 import { TopNavBarMenu } from '../topNarBarMenu/TopNavBarMenu'
@@ -97,6 +99,8 @@ export const TopNavBar = () => {
   const { user, isLoggedIn, queryCurrentUser, logout, isUserAProjectCreator } = useAuthContext()
 
   const { loginIsOpen, loginOnOpen, loginOnClose } = useAuthModal()
+
+  const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose } = useEmailPromptModal()
 
   const {
     hideTopNavBar,
@@ -422,8 +426,11 @@ export const TopNavBar = () => {
         onClose={() => {
           loginOnClose()
           onLoginAlertModalClose()
+          emailPromptOnOpen()
         }}
       />
+
+      <EmailPromptModal isOpen={emailPromptIsOpen} onClose={emailPromptOnClose} />
     </>
   )
 }

@@ -6,7 +6,7 @@ import { H3 } from '../../../../components/typography'
 import { useAuthContext } from '../../../../context'
 import { ProjectFundingModal } from '../../../../modules/project/pages/projectFunding/components/ProjectFundingModal'
 import { CardLayout } from '../../../../shared/components/layouts'
-import { GrantApplicant, GrantStatusEnum, VotingSystem } from '../../../../types'
+import { Grant, GrantApplicant, GrantStatusEnum, VotingSystem } from '../../../../types'
 import { GrantApplicantCard } from '../components/GrantApplicantCard'
 import { useProjectFundingModal } from '../components/useProjectFundingModal'
 
@@ -20,6 +20,7 @@ interface Props {
   fundingOpenEndDate: number
   isCompetitionVote: boolean
   votingSystem?: VotingSystem
+  grant?: Grant
 }
 
 export const CommunityVoting = ({
@@ -32,6 +33,7 @@ export const CommunityVoting = ({
   isClosed,
   isCompetitionVote,
   votingSystem,
+  grant,
 }: Props) => {
   const { t } = useTranslation()
   const fundingModalProps = useProjectFundingModal()
@@ -88,7 +90,7 @@ export const CommunityVoting = ({
             />
           )
         })}
-        {fundingModalProps.isOpen && <ProjectFundingModal {...fundingModalProps} />}
+        {fundingModalProps.isOpen && <ProjectFundingModal {...fundingModalProps} grant={grant} />}
 
         <AuthModal
           title={t('Login to vote')}

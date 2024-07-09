@@ -55,18 +55,10 @@ export const ProjectContributorsList = ({
       overflow="auto"
       height={isMobile ? 'calc(100% - 44px)' : '100%'}
       py="0px"
-      px={{ base: '10px', lg: '20px' }}
+      px={5}
       {...props}
     >
-      <VStack
-        marginTop="20px"
-        spacing={'15px'}
-        width="100%"
-        alignItems="start"
-        paddingRight="10px"
-        paddingBottom={'20px'}
-        gap={2}
-      >
+      <VStack spacing={'15px'} width="100%" alignItems="start" paddingBottom={'20px'} gap={2}>
         {contributors.isLoading ? (
           <ContributorsListSkeleton />
         ) : (

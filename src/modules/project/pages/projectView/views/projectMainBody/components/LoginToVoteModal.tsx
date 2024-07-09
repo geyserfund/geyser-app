@@ -8,9 +8,10 @@ type LoginToVoteModalProps = {
   isOpen: boolean
   onClose: () => void
   onContribute: () => void
+  grantTitle: string
 }
 
-export const LoginToVoteModal = ({ isOpen, onClose, onContribute }: LoginToVoteModalProps) => {
+export const LoginToVoteModal = ({ isOpen, onClose, onContribute, grantTitle }: LoginToVoteModalProps) => {
   const { t } = useTranslation()
 
   const { isOpen: isAuthModalOpen, onOpen: onAuthModalOpen, onClose: onAuthModalClose } = useDisclosure()
@@ -18,11 +19,15 @@ export const LoginToVoteModal = ({ isOpen, onClose, onContribute }: LoginToVoteM
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} title={t('Login for your vote to count')}>
-        <VStack py={4} px={4} gap={10} w="full">
+        <VStack gap={10} w="full">
           <Box w="full">
             <Text>
+              {t('This project is part of the ')}
+              <Text as="span" fontWeight="bold">
+                {grantTitle}
+              </Text>
               {t(
-                "Make sure to login before contributing otherwise your contribution won't be counted as votes in the grant.",
+                " community voting grant. Make sure to login before contributing otherwise your contribution won't be counted as votes in the grant.",
               )}
             </Text>
           </Box>

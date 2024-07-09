@@ -1,21 +1,21 @@
 import { VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 
-import { getListOfTags } from '../../../../constants'
+import { getFeaturedProject, getListOfTags } from '../../../../constants'
 import { CardLayout } from '../../../../shared/components/layouts'
 import { useMobileMode } from '../../../../utils'
 import { MobileDivider } from '../../../grants/components'
-import { useGrants } from '../../../grants/hooks/useGrants'
+// import { useGrants } from '../../../grants/hooks/useGrants'
 import { ProjectsDisplayMostFundedThisWeek } from '../components'
 import {
-  FeaturedGrantCard,
-  // FeaturedProjectCard,
+  // FeaturedGrantCard,
+  FeaturedProjectCard,
 } from '../elements'
 
 export const DefaultView = () => {
   const isMobile = useMobileMode()
 
-  const { featuredGrant, loading } = useGrants()
+  // const { featuredGrant, loading } = useGrants()
 
   const allTags = useMemo(() => getListOfTags(), [])
 
@@ -31,8 +31,8 @@ export const DefaultView = () => {
       </CardLayout> */}
 
       <CardLayout noborder={isMobile} w="full" spacing={{ base: '15px', lg: '50px' }} padding={{ base: 0, lg: '20px' }}>
-        {/* <FeaturedProjectCard projectName={getFeaturedProject()} /> */}
-        <FeaturedGrantCard grant={featuredGrant} loading={loading} />
+        <FeaturedProjectCard projectName={getFeaturedProject()} />
+        {/* <FeaturedGrantCard grant={featuredGrant} loading={loading} /> */}
         <MobileDivider mt={2} />
         {firstThreeTags.map((tag) => (
           <ProjectsDisplayMostFundedThisWeek key={tag.id} tag={tag} hasMobileDivider />

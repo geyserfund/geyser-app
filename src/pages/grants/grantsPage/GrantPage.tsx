@@ -144,7 +144,7 @@ export const GrantPage = () => {
   const isCompetitionVote = grant.type === GrantType.CommunityVote
   const showCommunityVoting = grant.status !== GrantStatusEnum.ApplicationsOpen && applicants.length > 0
   const showDistributionChart = grant.status !== GrantStatusEnum.ApplicationsOpen && grantHasVoting
-  const showGrantApply = grant.status !== GrantStatusEnum.Closed
+  const showGrantApply = grant.status === GrantStatusEnum.ApplicationsOpen
   const showContributeToGrant = !isCompetitionVote && !NoContributionInGrant.includes(grant.name)
 
   const showBoardMembers = isBoardVoteGrant(grant) && grant.boardMembers.length > 0
@@ -171,19 +171,29 @@ export const GrantPage = () => {
         <MobileDivider />
         <Tabs variant="secondary" w="full">
           <TabList gap="30px">
-            <Tab>
-              <Text fontSize={'16px'}>{t('Projects')}</Text>
-            </Tab>
-            <Tab>
-              <Text fontSize={'16px'}>{t('Leaderboard (All)')}</Text>
-            </Tab>
+            {grantHasVoting && (
+              <>
+                <Tab>
+                  <Text fontSize={'16px'}>{t('Projects')}</Text>
+                </Tab>
+
+                <Tab>
+                  <Text fontSize={'16px'}>{t('Leaderboard (All)')}</Text>
+                </Tab>
+              </>
+            )}
           </TabList>
           <TabPanels>
             <TabPanel p={'16px 0px 16px 0px'}>
               <VStack w="full" spacing="15px" alignItems="start">
                 {showDistributionChart && (
                   <>
-                    <DistributionChart applicants={applicants} isCompetitionVote={isCompetitionVote} showAll={false} />
+                    <DistributionChart
+                      applicants={applicants}
+                      isCompetitionVote={isCompetitionVote}
+                      showAll={false}
+                      votingSystem={grant.__typename === 'CommunityVoteGrant' ? grant.votingSystem : undefined}
+                    />
                     <MobileDivider />
                   </>
                 )}
@@ -205,6 +215,7 @@ export const GrantPage = () => {
                       isClosed={grant.status === GrantStatusEnum.Closed}
                       isCompetitionVote={isCompetitionVote}
                       votingSystem={grant.__typename === 'CommunityVoteGrant' ? grant.votingSystem : undefined}
+                      grant={grant}
                     />
                     <MobileDivider />
                   </>
@@ -226,7 +237,11 @@ export const GrantPage = () => {
             </TabPanel>
             <TabPanel w="full" p={'16px 0px 16px 0px'}>
               <VStack w="full" spacing="15px" alignItems="start">
-                <DistributionChart applicants={applicants} isCompetitionVote={isCompetitionVote} />
+                <DistributionChart
+                  applicants={applicants}
+                  isCompetitionVote={isCompetitionVote}
+                  votingSystem={grant.__typename === 'CommunityVoteGrant' ? grant.votingSystem : undefined}
+                />
               </VStack>
             </TabPanel>
           </TabPanels>

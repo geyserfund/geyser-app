@@ -225,6 +225,13 @@ export const platformRoutes: RouteObject[] = [
   //         return { Component: ProjectNostrSettings }
   //       },
   //     },
+  // {
+  //   path: getPath('dashboardAffiliate', PathName.projectId),
+  //   async lazy() {
+  //     const ProjectAffiliate = await ProjectDashboard().then((m) => m.ProjectAffiliate)
+  //     return { Component: ProjectAffiliate }
+  //   },
+  // },
   //     {
   //       path: getPath('dashboardShop', PathName.projectId),
   //       async lazy() {

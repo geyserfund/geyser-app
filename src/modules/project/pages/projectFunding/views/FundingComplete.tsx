@@ -1,17 +1,30 @@
-import { Box, Link as ChakraLink, Text, VStack } from '@chakra-ui/react'
-import { Trans, useTranslation } from 'react-i18next'
+import { Box, Button, Text, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 import { FaCheck } from 'react-icons/fa'
 
-import { useFundingContext } from '../../../context/FundingProvider'
+import { Grant, ProjectFragment, VotingSystem } from '../../../../../types'
 import { ProjectFundingFormState } from './FundingForm'
 
 interface Props {
   formState: ProjectFundingFormState | undefined
+  project: ProjectFragment
+  grant?: Grant
+  onClose: () => void
 }
 
-export const FundingComplete = ({ formState }: Props) => {
+export const FundingComplete = ({ formState, project, grant, onClose }: Props) => {
   const { t } = useTranslation()
-  const { fundingTx } = useFundingContext()
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href)
+  }
+
+  let voteCount = 0
+
+  if (grant && grant.__typename === 'CommunityVoteGrant' && grant.votingSystem === VotingSystem.StepLog_10) {
+    voteCount = Math.floor(Math.log10(formState?.donationAmount || 0)) - 2
+  }
+
   return (
     <VStack justify={'center'} spacing={5}>
       <Box display="flex" justifyContent={'center'} my={4}>
@@ -27,32 +40,40 @@ export const FundingComplete = ({ formState }: Props) => {
           <FaCheck />
         </Box>
       </Box>
-      {formState && (
-        <Text fontSize={'14px'}>
-          <Trans
-            i18nKey="Your <1>{{amount}}</1>> contribution to Geyser Grants Round 2 was successful!"
-            values={{ amount: `${formState.donationAmount} sats` }}
-          >
-            Your
-            <span style={{ fontWeight: 'bold' }}>{'{{amount}}'}</span> contribution to Geyser Grants Round 2 was
-            successful!
-          </Trans>
-        </Text>
-      )}
-      <Text fontSize={'14px'}>
-        {t('Your donation will help accelerate bitcoin adoption by recognizing and pushing forward bitcoin projects.')}
-      </Text>
-      <Text fontSize={'14px'}>{t('Donations are non-refundable and not tax deductible.')}</Text>
-      {fundingTx.onChain && (
-        <Text mt={4} fontSize={'14px'}>
-          {t('Check out')}{' '}
-          <ChakraLink href={`https://mempool.space/address/${fundingTx.address}`}>
-            <Box as="span" fontWeight="bold" borderBottom="1px solid" borderColor="neutral.1000">
-              {t('the block explorer')}
-            </Box>
-          </ChakraLink>
-        </Text>
-      )}
+      <VStack alignItems={'flex-start'} w={'100%'}>
+        {formState && (
+          <Text fontSize={'14px'}>
+            {t('You sent')} <Text as="span" fontWeight="bold">{`${formState.donationAmount} sats`}</Text>
+            {grant &&
+              grant.__typename === 'CommunityVoteGrant' &&
+              grant.votingSystem === VotingSystem.StepLog_10 &&
+              voteCount > 0 && (
+                <>
+                  {', equivalent to '}
+                  <Text as="span" fontWeight="bold">
+                    {`${voteCount} votes, `}
+                  </Text>
+                </>
+              )}
+            {t('to')}{' '}
+            <Text as="span" fontWeight="bold">
+              {project.title}
+            </Text>
+            !
+          </Text>
+        )}
+        <Text fontSize={'14px'}>{t('Thank you for contributing to Bitcoin projects.')}</Text>
+
+        <Text fontSize={'14px'}>{t('Share the grant on social media to get more votes and contributions!')}</Text>
+      </VStack>
+      <VStack w={'100%'}>
+        <Button w={'100%'} variant={'secondary'} onClick={handleCopyLink}>
+          {t('Copy Grant Link')}
+        </Button>
+        <Button w={'100%'} variant={'primary'} onClick={onClose}>
+          {t('Close')}
+        </Button>
+      </VStack>
     </VStack>
   )
 }

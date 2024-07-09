@@ -50,6 +50,15 @@ export const ContributeButton = (props: ButtonProps) => {
   //   if (isInProjectPage && !isMobile) {
   //     navigate(PathName.projectRewards)
   //   }
+  // const isProjectAcceptedInOpenCommunityVoteGrant = Boolean(acceptedApplication)
+  // const grantTitle =
+  //   acceptedApplication?.grant?.__typename === 'CommunityVoteGrant' ? acceptedApplication.grant.title : ''
+
+  // const handleContribute = () => {
+  //   setMobileView(MobileViews.funding)
+  //   if (isInProjectPage && !isMobile) {
+  //     navigate(PathName.projectRewards)
+  //   }
 
   //   goals.setProjectGoalId(null)
   // }
@@ -64,7 +73,7 @@ export const ContributeButton = (props: ButtonProps) => {
 
   return (
     <>
-      {/* <LoginToVoteModal isOpen={isOpen} onClose={onClose} onContribute={handleContribute} /> */}
+      {/* <LoginToVoteModal isOpen={isOpen} onClose={onClose} onContribute={handleContribute} grantTitle={grantTitle} /> */}
       <Button
         variant="primary"
         leftIcon={<BoltIcon />}
