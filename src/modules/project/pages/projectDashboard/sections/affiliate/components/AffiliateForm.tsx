@@ -30,7 +30,7 @@ const schema = yup.object({
   email: yup.string().required('Email is required').email('Must be a valid email'),
   affiliateId: yup.string().required('Refferal ID is required'),
   affiliateFeePercentage: yup
-    .string()
+    .number()
     .required('Percentage is required')
     .min(0, 'Percentage must be at least 0')
     .max(100, 'Percentage must be at most 100'),
@@ -54,7 +54,7 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
 
   const addNewAffiliateLink = useSetAtom(addAffiliateLinkAtom)
 
-  const { control, handleSubmit, reset, setError } = useForm<AffiliateInputVariables>({
+  const { control, handleSubmit, reset, setError, formState } = useForm<AffiliateInputVariables>({
     resolver: yupResolver(schema),
     defaultValues: useMemo(() => {
       if (isEdit && affiliate) {
@@ -112,14 +112,8 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
 
   const onSubmit = async (values: AffiliateInputVariables) => {
     try {
-      const { data } = await evaluateLightningAddress({
-        variables: {
-          lightningAddress: values.lightningAddress,
-        },
-      })
-
-      if (data?.lightningAddressVerify.valid) {
-        if (isEdit) {
+      if (isEdit) {
+        if (formState.isDirty) {
           updateAffiliateLink({
             variables: {
               affiliateLinkId: affiliate?.id,
@@ -127,16 +121,31 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
             },
           })
         } else {
-          createAffilateLink({
-            variables: {
-              input: {
-                ...values,
-                affiliateFeePercentage: Number(values.affiliateFeePercentage),
-                projectId: project?.id,
-              },
-            },
+          toast({
+            title: 'No any updates to save',
+            status: 'info',
           })
         }
+
+        return
+      }
+
+      const { data } = await evaluateLightningAddress({
+        variables: {
+          lightningAddress: values.lightningAddress,
+        },
+      })
+
+      if (data?.lightningAddressVerify.valid) {
+        createAffilateLink({
+          variables: {
+            input: {
+              ...values,
+              affiliateFeePercentage: Number(values.affiliateFeePercentage),
+              projectId: project?.id,
+            },
+          },
+        })
       }
     } catch (error) {
       errorToast()
@@ -192,7 +201,7 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
 
         <HStack w="full" py="20px">
           <Button w="full" variant="primary" type="submit" isLoading={validationLoading || createLoading}>
-            {t('Submit')}
+            {isEdit ? t('Save') : t('Create')}
           </Button>
         </HStack>
       </VStack>
