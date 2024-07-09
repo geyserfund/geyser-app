@@ -1,4 +1,4 @@
-import { Input, InputProps, Text, VStack } from '@chakra-ui/react'
+import { Input, InputGroup, InputProps, InputRightAddon, Text, VStack } from '@chakra-ui/react'
 import { useController, UseControllerProps } from 'react-hook-form'
 
 type Props = UseControllerProps<any, any> &
@@ -8,6 +8,7 @@ type Props = UseControllerProps<any, any> &
     description?: string
     label?: string
     error?: string
+    rightAddon?: React.ReactNode
   }
 
 export function ControlledTextInput(props: Props) {
@@ -32,7 +33,11 @@ export function ControlledTextInput(props: Props) {
     }
   }
 
-  const error = formState.errors[props.name]?.message ? `${formState.errors[props.name]?.message}` : ''
+  const error = formState.errors[props.name]?.message
+    ? `${formState.errors[props.name]?.message}`
+    : props.error
+    ? props.error
+    : ''
 
   return (
     <VStack display="flex" alignItems="flex-start" width="100%" spacing={0}>
@@ -46,26 +51,29 @@ export function ControlledTextInput(props: Props) {
           {props.description}
         </Text>
       )}
-      <Input
-        {...field}
-        {...props}
-        variant="outline"
-        colorScheme="primary.400"
-        borderColor="neutral.200"
-        borderRadius="8px"
-        borderWidth="2px"
-        ref={props.inputRef}
-        isDisabled={props.isDisabled}
-        onBlur={handleBlur}
-        onChange={handleChange}
-        width={props.width || '100%'}
-        value={field?.value || props.value || ''}
-      />
-      {(props.error || error) && (
-        <Text fontSize="14px" fontWeight="400" color="secondary.red">
-          {props.error || error}
-        </Text>
-      )}
+      <InputGroup>
+        <Input
+          {...field}
+          {...props}
+          variant="outline"
+          colorScheme="primary.400"
+          borderColor="neutral.200"
+          borderRadius="8px"
+          borderWidth="2px"
+          ref={props.inputRef}
+          isDisabled={props.isDisabled}
+          onBlur={handleBlur}
+          onChange={handleChange}
+          width={props.width || '100%'}
+          value={field?.value || props.value || ''}
+          isInvalid={Boolean(error)}
+        />
+        {props.rightAddon && <InputRightAddon>{props.rightAddon}</InputRightAddon>}
+      </InputGroup>
+
+      <Text fontSize="14px" fontWeight="400" color="secondary.red">
+        {error}
+      </Text>
     </VStack>
   )
 }

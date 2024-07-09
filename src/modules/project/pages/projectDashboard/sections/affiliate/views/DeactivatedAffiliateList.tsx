@@ -5,15 +5,17 @@ import { useTranslation } from 'react-i18next'
 import { Body1 } from '../../../../../../../components/typography'
 import { useProjectContext } from '../../../../../context'
 import { deactivatedAffiliateLinksAtom } from '../affiliateAtom'
-import { AffiliateTable } from '../components/AffiliateTable'
+import { AffiliateTable, AffiliateTableSkeleton } from '../components/AffiliateTable'
 
-export const DeactivatedAffiliateList = () => {
+export const DeactivatedAffiliateList = ({ loading }: { loading?: boolean }) => {
   const { t } = useTranslation()
   const { project } = useProjectContext()
 
   const deactivatedAffiliateList = useAtomValue(deactivatedAffiliateLinksAtom)
 
   if (!project) return null
+
+  if (loading) return <AffiliateTableSkeleton />
 
   if (!deactivatedAffiliateList.length) {
     return <Body1>{t('No affiliates link yet, Please create one')}</Body1>
@@ -25,22 +27,3 @@ export const DeactivatedAffiliateList = () => {
     </VStack>
   )
 }
-
-// export const PaymentsAndAccoutningListSkeleton = () => {
-//   return (
-//     <VStack width="100%" flexGrow={1} pt={'30px'} spacing="10px">
-//       <VStack w="full" spacing="10px">
-//         <SkeletonLayout borderRadius={0} height="30px" />
-//         <VStack w="full" spacing="60px">
-//           <SkeletonLayout borderRadius={0} height="60px" />
-//           <SkeletonLayout borderRadius={0} height="60px" />
-//           <SkeletonLayout borderRadius={0} height="60px" />
-//           <SkeletonLayout borderRadius={0} height="60px" />
-//         </VStack>
-//       </VStack>
-//       <HStack w="full" px={standardPadding}>
-//         <SkeletonLayout height="40px" />
-//       </HStack>
-//     </VStack>
-//   )
-// }

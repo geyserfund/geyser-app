@@ -40,12 +40,10 @@ export const ProjectAffiliate = () => {
 
   if (!project) return null
 
-  if (loading) return <div>Loading...</div>
-
   return (
     <>
       <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1} position="relative">
-        <HStack w="100%" justifyContent="space-between">
+        <HStack w="100%" justifyContent="space-between" spacing="20px">
           <Body1 flex={1}>
             {t(
               'Create and manage affiliate links. Each link can be created only once and cannot be updated except for its label.',
@@ -65,10 +63,10 @@ export const ProjectAffiliate = () => {
 
           <TabPanels>
             <TabPanel padding={0}>
-              <ActiveAffiliateList />
+              <ActiveAffiliateList loading={loading} />
             </TabPanel>
-            <TabPanel>
-              <DeactivatedAffiliateList />
+            <TabPanel padding={0}>
+              <DeactivatedAffiliateList loading={loading} />
             </TabPanel>
           </TabPanels>
         </Tabs>

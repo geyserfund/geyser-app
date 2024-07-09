@@ -1,4 +1,4 @@
-import { Button, VStack } from '@chakra-ui/react'
+import { Button, HStack, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useSetAtom } from 'jotai'
 import { useMemo } from 'react'
@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next'
 import * as yup from 'yup'
 
 import { ControlledTextInput } from '../../../../../../../components/inputs'
-import { FieldContainer } from '../../../../../../../forms/components/FieldContainer'
 import {
   ProjectAffiliateLinkFragment,
   useAffiliateLinkCreateMutation,
@@ -16,7 +15,7 @@ import {
 } from '../../../../../../../types'
 import { useNotification } from '../../../../../../../utils'
 import { useProjectContext } from '../../../../../context'
-import { addAffiliateLinkAtom, affiliateLinksAtom } from '../affiliateAtom'
+import { addAffiliateLinkAtom } from '../affiliateAtom'
 
 export type AffiliateInputVariables = {
   label: string
@@ -64,7 +63,7 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
           email: affiliate.email || '',
           affiliateId: affiliate.affiliateId || '',
           affiliateFeePercentage: affiliate.affiliateFeePercentage || 0,
-          lightningAddress: '',
+          lightningAddress: affiliate.lightningAddress || '',
         }
       }
 
@@ -100,7 +99,16 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
     },
   })
 
-  const [updateAffiliateLink, { loading: validationLoading }] = useAffiliateLinkLabelUpdateMutation()
+  const [updateAffiliateLink, { loading: validationLoading }] = useAffiliateLinkLabelUpdateMutation({
+    onCompleted(data) {
+      if (!data || !data.affiliateLinkLabelUpdate) return
+      reset()
+      addNewAffiliateLink(data.affiliateLinkLabelUpdate)
+      if (onCompleted) {
+        onCompleted()
+      }
+    },
+  })
 
   const onSubmit = async (values: AffiliateInputVariables) => {
     try {
@@ -145,25 +153,48 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <VStack spacing="10px">
-        <FieldContainer title={t('Title')}>
-          <ControlledTextInput name="label" control={control} />
-        </FieldContainer>
-        <FieldContainer title={t('Email')}>
-          <ControlledTextInput name="email" control={control} isDisabled={isEdit} />
-        </FieldContainer>
-        <FieldContainer title={t('Refferal Code')}>
-          <ControlledTextInput name="affiliateId" control={control} isDisabled={isEdit} />
-        </FieldContainer>
-        <FieldContainer title={t('Percentage')}>
-          <ControlledTextInput type="number" name="affiliateFeePercentage" control={control} isDisabled={isEdit} />
-        </FieldContainer>
-        <FieldContainer title={t('Lightning Address')}>
-          <ControlledTextInput name="lightningAddress" control={control} isDisabled={isEdit} />
-        </FieldContainer>
-        <Button w="full" variant="primary" type="submit" isLoading={validationLoading || createLoading}>
-          {t('Submit')}
-        </Button>
+      <VStack spacing="20px">
+        <ControlledTextInput label={t('Title')} name="label" placeholder="Joe Rogan" control={control} />
+
+        <ControlledTextInput
+          label={t('Email')}
+          name="email"
+          placeholder="joe@rogan.com"
+          control={control}
+          isDisabled={isEdit}
+        />
+
+        <ControlledTextInput
+          label={t('Refferal Code')}
+          name="affiliateId"
+          placeholder="jrogan"
+          control={control}
+          isDisabled={isEdit}
+        />
+
+        <ControlledTextInput
+          type="number"
+          name="affiliateFeePercentage"
+          label={t('Percentage')}
+          placeholder={'10'}
+          control={control}
+          isDisabled={isEdit}
+          rightAddon="%"
+        />
+
+        <ControlledTextInput
+          label={t('Lightning Address')}
+          name="lightningAddress"
+          placeholder="jrogan@walletofsatoshi.com"
+          control={control}
+          isDisabled={isEdit}
+        />
+
+        <HStack w="full" py="20px">
+          <Button w="full" variant="primary" type="submit" isLoading={validationLoading || createLoading}>
+            {t('Submit')}
+          </Button>
+        </HStack>
       </VStack>
     </form>
   )

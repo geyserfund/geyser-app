@@ -10,6 +10,7 @@ export const FRAGMENT_PROJECT_AFFILIATE_LINK = gql`
     createdAt
     disabled
     affiliateId
+    lightningAddress
     affiliateFeePercentage
   }
 `

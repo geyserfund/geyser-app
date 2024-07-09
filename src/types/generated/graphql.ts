@@ -4191,7 +4191,7 @@ export type Resolvers<ContextType = any> = {
 };
 
 
-export type ProjectAffiliateLinkFragment = { __typename?: 'AffiliateLink', projectId: any, label?: string | null, id: any, email: string, disabledAt?: any | null, createdAt: any, disabled?: boolean | null, affiliateId?: string | null, affiliateFeePercentage: number };
+export type ProjectAffiliateLinkFragment = { __typename?: 'AffiliateLink', projectId: any, label?: string | null, id: any, email: string, disabledAt?: any | null, createdAt: any, disabled?: boolean | null, affiliateId?: string | null, lightningAddress: string, affiliateFeePercentage: number };
 
 export type EmailUpdateUserFragment = { __typename?: 'User', email?: string | null, isEmailVerified: boolean, id: any };
 
@@ -5165,6 +5165,7 @@ export const ProjectAffiliateLinkFragmentDoc = gql`
   createdAt
   disabled
   affiliateId
+  lightningAddress
   affiliateFeePercentage
 }
     `;

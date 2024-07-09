@@ -3,15 +3,17 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Modal } from '../../../../../../../components/layouts'
 import { DeleteConfirmModal } from '../../../../../../../components/molecules'
 import { Body1 } from '../../../../../../../components/typography'
 import { useModal } from '../../../../../../../hooks'
-import { useAffiliateLinkDisableMutation } from '../../../../../../../types'
+import { ProjectAffiliateLinkFragment, useAffiliateLinkDisableMutation } from '../../../../../../../types'
 import { useProjectContext } from '../../../../../context'
 import { activeAffiliateLinksAtom, disableAffiliateLinkAtom } from '../affiliateAtom'
-import { AffiliateTable } from '../components/AffiliateTable'
+import { AffiliateForm } from '../components/AffiliateForm'
+import { AffiliateTable, AffiliateTableSkeleton } from '../components/AffiliateTable'
 
-export const ActiveAffiliateList = () => {
+export const ActiveAffiliateList = ({ loading }: { loading?: boolean }) => {
   const { t } = useTranslation()
 
   const { project } = useProjectContext()
@@ -20,25 +22,34 @@ export const ActiveAffiliateList = () => {
 
   const disableAffiliateLink = useSetAtom(disableAffiliateLinkAtom)
 
-  const [selectedAffiliateLinkId, setSelectedAffiliateLinkId] = useState<number | null>(null)
+  const [selectedAffiliateLink, setSelectedAffiliateLink] = useState<ProjectAffiliateLinkFragment>()
 
   const deleteConfirmModal = useModal()
+  const editAffiliateLinkModal = useModal()
 
   const [disableAffiliateLinkMutation] = useAffiliateLinkDisableMutation({
     onCompleted(data) {
       if (data.affiliateLinkDisable.id) {
         disableAffiliateLink(data.affiliateLinkDisable.id)
+        setSelectedAffiliateLink(undefined)
         deleteConfirmModal.onClose()
       }
     },
   })
 
-  const handleDisableAffiliateLink = (id: number) => {
-    setSelectedAffiliateLinkId(id)
+  const handleDisableAffiliateLink = (val: ProjectAffiliateLinkFragment) => {
+    setSelectedAffiliateLink(val)
     deleteConfirmModal.onOpen()
   }
 
+  const handleEditAffiliateLink = (val: ProjectAffiliateLinkFragment) => {
+    setSelectedAffiliateLink(val)
+    editAffiliateLinkModal.onOpen()
+  }
+
   if (!project) return null
+
+  if (loading) return <AffiliateTableSkeleton />
 
   if (!activeAffiliateList.length) {
     return <Body1>{t('No affiliates link yet, Please create one')}</Body1>
@@ -46,7 +57,12 @@ export const ActiveAffiliateList = () => {
 
   return (
     <VStack width="100%" flexGrow={1} pt={'10px'} spacing="10px" alignItems="center">
-      <AffiliateTable data={activeAffiliateList} onDelete={handleDisableAffiliateLink} projectName={project.name} />
+      <AffiliateTable
+        data={activeAffiliateList}
+        onDelete={handleDisableAffiliateLink}
+        onEdit={handleEditAffiliateLink}
+        projectName={project.name}
+      />
       <DeleteConfirmModal
         title={t('Are you sure you want to disable this affiliate link?')}
         description={t('Disabling an affiliate link is permanent and cannot be reversed. ')}
@@ -54,30 +70,14 @@ export const ActiveAffiliateList = () => {
         confirm={() =>
           disableAffiliateLinkMutation({
             variables: {
-              affiliateLinkId: selectedAffiliateLinkId,
+              affiliateLinkId: selectedAffiliateLink?.id,
             },
           })
         }
       />
+      <Modal title={t('Edit Affiliate')} {...editAffiliateLinkModal}>
+        <AffiliateForm onCompleted={editAffiliateLinkModal.onClose} isEdit affiliate={selectedAffiliateLink} />
+      </Modal>
     </VStack>
   )
 }
-
-// export const PaymentsAndAccoutningListSkeleton = () => {
-//   return (
-//     <VStack width="100%" flexGrow={1} pt={'30px'} spacing="10px">
-//       <VStack w="full" spacing="10px">
-//         <SkeletonLayout borderRadius={0} height="30px" />
-//         <VStack w="full" spacing="60px">
-//           <SkeletonLayout borderRadius={0} height="60px" />
-//           <SkeletonLayout borderRadius={0} height="60px" />
-//           <SkeletonLayout borderRadius={0} height="60px" />
-//           <SkeletonLayout borderRadius={0} height="60px" />
-//         </VStack>
-//       </VStack>
-//       <HStack w="full" px={standardPadding}>
-//         <SkeletonLayout height="40px" />
-//       </HStack>
-//     </VStack>
-//   )
-// }

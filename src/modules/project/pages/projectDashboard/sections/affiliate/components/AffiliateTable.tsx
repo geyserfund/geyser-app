@@ -1,10 +1,11 @@
-import { Button, HStack } from '@chakra-ui/react'
-import { table } from 'console'
+import { Button, HStack, IconButton, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { BsPencil } from 'react-icons/bs'
 
-import { Body1, Body2 } from '../../../../../../../components/typography'
+import { SkeletonLayout } from '../../../../../../../components/layouts'
+import { Body2 } from '../../../../../../../components/typography'
 import { ProjectAffiliateLinkFragment } from '../../../../../../../types'
 import {
   TableData,
@@ -15,11 +16,13 @@ export const AffiliateTable = ({
   projectName,
   data,
   onDelete,
+  onEdit,
   isDisabled,
 }: {
   projectName: string
   data: ProjectAffiliateLinkFragment[]
-  onDelete?: (id: number) => void
+  onDelete?: (id: ProjectAffiliateLinkFragment) => void
+  onEdit?: (id: ProjectAffiliateLinkFragment) => void
   isDisabled?: boolean
 }) => {
   const { t } = useTranslation()
@@ -49,24 +52,8 @@ export const AffiliateTable = ({
         key: 'email',
         colSpan: 2,
       },
-      {
-        header: t('Affiliate link'),
-        key: 'email',
-        colSpan: 2,
-        isAccordion: true,
-        render(val: ProjectAffiliateLinkFragment) {
-          return (
-            <HStack>
-              <Body2 bold color="neutral1.9">
-                {t('Affiliate Project Link:')}
-              </Body2>
-              <Body2>{`${window.location.origin}/${projectName}?refferalId=${val.affiliateId}`}</Body2>
-            </HStack>
-          )
-        },
-      },
     ],
-    [t, projectName],
+    [t],
   )
 
   const ActiveTableExtraColumns = useMemo(() => {
@@ -92,7 +79,7 @@ export const AffiliateTable = ({
       })
     }
 
-    if (onDelete) {
+    if (onDelete || onEdit) {
       data.push({
         header: 'Actions',
         key: 'actions',
@@ -101,9 +88,20 @@ export const AffiliateTable = ({
         render(val: ProjectAffiliateLinkFragment) {
           return (
             <HStack>
-              <Button variant="danger" size="sm" onClick={() => onDelete(val.id)}>
-                {t('Disable')}
-              </Button>
+              {onEdit && (
+                <IconButton
+                  aria-label="edit-affilite-link"
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => onEdit(val)}
+                  icon={<BsPencil />}
+                />
+              )}
+              {onDelete && (
+                <Button variant="solid" colorScheme="red" size="sm" onClick={() => onDelete(val)}>
+                  {t('Disable')}
+                </Button>
+              )}
             </HStack>
           )
         },
@@ -111,7 +109,7 @@ export const AffiliateTable = ({
     }
 
     return data
-  }, [onDelete, isDisabled, t])
+  }, [onDelete, onEdit, isDisabled, t])
 
   const dropDown = {
     header: '',
@@ -122,5 +120,47 @@ export const AffiliateTable = ({
 
   const tableSchema = [...tableData, ...ActiveTableExtraColumns, dropDown]
 
-  return <TableWithAccordion<ProjectAffiliateLinkFragment> items={data} schema={tableSchema} />
+  const renderAccordionContent = useCallback(
+    (val: ProjectAffiliateLinkFragment) => {
+      return (
+        <VStack w="full" spacing={2} alignItems={'end'}>
+          <HStack>
+            <Body2 bold color="neutral1.9">
+              {t('Lightning Address:')}
+            </Body2>
+            <Body2>{val.lightningAddress}</Body2>
+          </HStack>
+          <HStack>
+            <Body2 bold color="neutral1.9">
+              {t('Affiliate Project Link:')}
+            </Body2>
+            <Body2>{`${window.location.origin}/${projectName}?refId=${val.affiliateId}`}</Body2>
+          </HStack>
+        </VStack>
+      )
+    },
+    [projectName, t],
+  )
+
+  return (
+    <TableWithAccordion<ProjectAffiliateLinkFragment>
+      items={data}
+      schema={tableSchema}
+      accordionContent={renderAccordionContent}
+    />
+  )
+}
+
+export const AffiliateTableSkeleton = () => {
+  return (
+    <VStack width="100%" flexGrow={1} spacing="10px" pt="10px">
+      <SkeletonLayout borderRadius={0} height="30px" />
+      <VStack w="full" spacing="60px">
+        <SkeletonLayout borderRadius={0} height="60px" />
+        <SkeletonLayout borderRadius={0} height="60px" />
+        <SkeletonLayout borderRadius={0} height="60px" />
+        <SkeletonLayout borderRadius={0} height="60px" />
+      </VStack>
+    </VStack>
+  )
 }

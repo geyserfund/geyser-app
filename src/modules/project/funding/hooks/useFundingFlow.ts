@@ -12,6 +12,7 @@ import { useFundPollingAndSubscription } from '../state/pollingFundingTx'
 import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/helpers'
 import { webln } from '../utils/requestWebLNPayment'
 import { useFundSubscription } from './useFundSubscription'
+import { useRefferalWithProjectName } from './useRefferalWithProjectName'
 import { useResetFundingFlow } from './useResetFundingFlow'
 import { useWebLNFlow } from './useWebLNFlow'
 
@@ -46,6 +47,8 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const startWebLNFlow = useWebLNFlow()
   const resetFundingFlow = useResetFundingFlow()
   const setKeyPair = useSetKeyPairAtom()
+
+  const refferalId = useRefferalWithProjectName(project?.name)
 
   const [error, setError] = useAtom(fundingFlowErrorAtom)
   const [fundingRequestErrored, setFundingRequestErrored] = useAtom(fundingRequestErrorAtom)
@@ -169,12 +172,13 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
       input.swapPublicKey = keyPair.publicKey.toString('hex')
       input.projectGoalId = projectGoalId
+      input.affiliateId = refferalId
 
       setFundingInput(input)
 
       await fundProject({ variables: { input } })
     },
-    [fundProject, setNextFundingStage, toast, setKeyPair, projectGoalId],
+    [fundProject, setNextFundingStage, toast, setKeyPair, projectGoalId, refferalId],
   )
 
   const retryFundingFlow = useCallback(() => {
