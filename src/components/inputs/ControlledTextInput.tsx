@@ -1,18 +1,17 @@
 import { Input, InputProps, Text, VStack } from '@chakra-ui/react'
-import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
+import { useController, UseControllerProps } from 'react-hook-form'
 
-type Props = UseControllerProps<FieldValues> &
+type Props = UseControllerProps<any, any> &
   Omit<InputProps, 'size'> & {
     width?: string | number
     inputRef?: React.Ref<HTMLInputElement>
     description?: string
-    label: string
+    label?: string
     error?: string
   }
 
 export function ControlledTextInput(props: Props) {
-  const { field } = useController(props)
-
+  const { field, formState } = useController(props)
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     if (field?.onBlur) {
       field.onBlur()
@@ -33,8 +32,10 @@ export function ControlledTextInput(props: Props) {
     }
   }
 
+  const error = formState.errors[props.name]?.message ? `${formState.errors[props.name]?.message}` : ''
+
   return (
-    <VStack display="flex" alignItems="flex-start" width="100%">
+    <VStack display="flex" alignItems="flex-start" width="100%" spacing={0}>
       {props.label && (
         <Text fontSize="16px" fontWeight="500">
           {props.label}
@@ -60,9 +61,9 @@ export function ControlledTextInput(props: Props) {
         width={props.width || '100%'}
         value={field?.value || props.value || ''}
       />
-      {props.error && (
+      {(props.error || error) && (
         <Text fontSize="14px" fontWeight="400" color="secondary.red">
-          {props.error}
+          {props.error || error}
         </Text>
       )}
     </VStack>

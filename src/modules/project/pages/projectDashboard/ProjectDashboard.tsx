@@ -50,6 +50,11 @@ export const projectSections: Record<string, DashboardSection> = {
     label: 'Nostr settings',
     path: 'dashboardNostr',
   },
+  affiliate: {
+    label: 'Affiliate settings',
+    path: 'dashboardAffiliate',
+    semiFullWidth: true,
+  },
   settings: {
     label: 'Project settings',
     path: 'dashboardSettings',
