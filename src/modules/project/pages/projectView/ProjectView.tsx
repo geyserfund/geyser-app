@@ -5,7 +5,7 @@ import { useParams, useSearchParams } from 'react-router-dom'
 import { ProjectProvider } from '../../context'
 import { FundingProviderWithProjectContext } from '../../context/FundingProvider'
 import { ProjectContainer } from './ProjectContainer'
-import { addRefferalAtom } from './state/affiliateAtom'
+import { addProjectAffiliateAtom } from './state/affiliateAtom'
 import { ProjectSideNavigation } from './views/projectNavigation/sideNav'
 
 export const ProjectView = () => {
@@ -13,7 +13,7 @@ export const ProjectView = () => {
   const [searchParams] = useSearchParams()
   const { projectId } = params
 
-  const addRefferal = useSetAtom(addRefferalAtom)
+  const addRefferal = useSetAtom(addProjectAffiliateAtom)
 
   const affiliateId = searchParams.get('refId')
 

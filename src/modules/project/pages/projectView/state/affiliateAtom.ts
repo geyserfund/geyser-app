@@ -2,35 +2,35 @@ import { atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { DateTime } from 'luxon'
 
-export type RefferalAtomType = {
+export type ProjectAffiliateAtomType = {
   dateTime: number
   projectName: string
   refId: string
 }
 
-export const refferalAtom = atomWithStorage<RefferalAtomType[]>('affiliateId', [])
+export const projectAffiliateAtom = atomWithStorage<ProjectAffiliateAtomType[]>('affiliateId', [])
 
-export const addRefferalAtom = atom(null, (get, set, affiliate: Omit<RefferalAtomType, 'dateTime'>) => {
-  const allRefferals = get(refferalAtom)
+export const addProjectAffiliateAtom = atom(null, (get, set, affiliate: Omit<ProjectAffiliateAtomType, 'dateTime'>) => {
+  const allProjectAffiliates = get(projectAffiliateAtom)
 
-  const isExist = allRefferals.some((r) => r.projectName === affiliate.projectName)
+  const isExist = allProjectAffiliates.some((r) => r.projectName === affiliate.projectName)
   const dateTime = DateTime.now().toMillis()
 
-  const currentRefferal = { ...affiliate, dateTime }
+  const currentProjectAffiliate = { ...affiliate, dateTime }
 
-  let newRefferals = [] as RefferalAtomType[]
+  let newProjectAffiliate = [] as ProjectAffiliateAtomType[]
 
   if (isExist) {
-    newRefferals = allRefferals.map((r) => {
+    newProjectAffiliate = allProjectAffiliates.map((r) => {
       if (r.projectName === affiliate.projectName) {
-        return currentRefferal
+        return currentProjectAffiliate
       }
 
       return r
     })
   } else {
-    newRefferals = [...allRefferals, currentRefferal]
+    newProjectAffiliate = [...allProjectAffiliates, currentProjectAffiliate]
   }
 
-  set(refferalAtom, newRefferals)
+  set(projectAffiliateAtom, newProjectAffiliate)
 })

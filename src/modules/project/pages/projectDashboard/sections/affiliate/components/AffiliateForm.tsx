@@ -112,32 +112,32 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
 
   const onSubmit = async (values: AffiliateInputVariables) => {
     try {
-      // const { data } = await evaluateLightningAddress({
-      //   variables: {
-      //     lightningAddress: values.lightningAddress,
-      //   },
-      // })
+      const { data } = await evaluateLightningAddress({
+        variables: {
+          lightningAddress: values.lightningAddress,
+        },
+      })
 
-      // if (data?.lightningAddressVerify.valid) {
-      if (isEdit) {
-        updateAffiliateLink({
-          variables: {
-            affiliateLinkId: affiliate?.id,
-            label: values.label,
-          },
-        })
-      } else {
-        createAffilateLink({
-          variables: {
-            input: {
-              ...values,
-              affiliateFeePercentage: Number(values.affiliateFeePercentage),
-              projectId: project?.id,
+      if (data?.lightningAddressVerify.valid) {
+        if (isEdit) {
+          updateAffiliateLink({
+            variables: {
+              affiliateLinkId: affiliate?.id,
+              label: values.label,
             },
-          },
-        })
+          })
+        } else {
+          createAffilateLink({
+            variables: {
+              input: {
+                ...values,
+                affiliateFeePercentage: Number(values.affiliateFeePercentage),
+                projectId: project?.id,
+              },
+            },
+          })
+        }
       }
-      // }
     } catch (error) {
       errorToast()
     }

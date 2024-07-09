@@ -12,7 +12,7 @@ import { useFundPollingAndSubscription } from '../state/pollingFundingTx'
 import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/helpers'
 import { webln } from '../utils/requestWebLNPayment'
 import { useFundSubscription } from './useFundSubscription'
-import { useRefferalWithProjectName } from './useRefferalWithProjectName'
+import { useProjectAffiliateWithProjectName } from './useProjectAffiliateWithProjectName'
 import { useResetFundingFlow } from './useResetFundingFlow'
 import { useWebLNFlow } from './useWebLNFlow'
 
@@ -48,7 +48,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   const resetFundingFlow = useResetFundingFlow()
   const setKeyPair = useSetKeyPairAtom()
 
-  const refferalId = useRefferalWithProjectName(project?.name)
+  const refferalId = useProjectAffiliateWithProjectName(project?.name)
 
   const [error, setError] = useAtom(fundingFlowErrorAtom)
   const [fundingRequestErrored, setFundingRequestErrored] = useAtom(fundingRequestErrorAtom)
