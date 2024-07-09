@@ -1,8 +1,9 @@
-import { VStack } from '@chakra-ui/react'
+import { Image, VStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
 import { Body1 } from '../../../../../../../components/typography'
+import { ProjectNoTransactionImageUrl } from '../../../../../../../constants'
 import { useProjectContext } from '../../../../../context'
 import { deactivatedAffiliateLinksAtom } from '../affiliateAtom'
 import { AffiliateTable, AffiliateTableSkeleton } from '../components/AffiliateTable'
@@ -18,7 +19,12 @@ export const DeactivatedAffiliateList = ({ loading }: { loading?: boolean }) => 
   if (loading) return <AffiliateTableSkeleton />
 
   if (!deactivatedAffiliateList.length) {
-    return <Body1>{t('No affiliates link yet, Please create one')}</Body1>
+    return (
+      <VStack w="full" alignItems="center" pt="40px" spacing="20px">
+        <Image src={ProjectNoTransactionImageUrl} maxHeight="200px" objectFit={'cover'} />
+        <Body1>{t('No disabled affiliates link yet.')}</Body1>
+      </VStack>
+    )
   }
 
   return (

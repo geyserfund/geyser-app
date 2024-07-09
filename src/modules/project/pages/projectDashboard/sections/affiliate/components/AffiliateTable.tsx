@@ -1,4 +1,4 @@
-import { Button, HStack, IconButton, VStack } from '@chakra-ui/react'
+import { Button, HStack, IconButton, Tooltip, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -7,6 +7,7 @@ import { BsPencil } from 'react-icons/bs'
 import { SkeletonLayout } from '../../../../../../../components/layouts'
 import { Body2 } from '../../../../../../../components/typography'
 import { ProjectAffiliateLinkFragment } from '../../../../../../../types'
+import { copyTextToClipboard } from '../../../../../../../utils'
 import {
   TableData,
   TableWithAccordion,
@@ -122,6 +123,8 @@ export const AffiliateTable = ({
 
   const renderAccordionContent = useCallback(
     (val: ProjectAffiliateLinkFragment) => {
+      const affiliateLink = `${window.location.origin}/project/${projectName}?refId=${val.affiliateId}`
+
       return (
         <VStack w="full" spacing={2} alignItems={'end'}>
           <HStack>
@@ -134,7 +137,11 @@ export const AffiliateTable = ({
             <Body2 bold color="neutral1.9">
               {t('Affiliate Project Link:')}
             </Body2>
-            <Body2>{`${window.location.origin}/${projectName}?refId=${val.affiliateId}`}</Body2>
+            <Tooltip label={t('Copy to clipboard')}>
+              <Button variant="ghost" size="sm" onClick={() => copyTextToClipboard(affiliateLink)}>
+                {affiliateLink}
+              </Button>
+            </Tooltip>
           </HStack>
         </VStack>
       )
