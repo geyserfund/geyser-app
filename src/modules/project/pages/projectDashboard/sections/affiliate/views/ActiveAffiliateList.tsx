@@ -7,11 +7,14 @@ import { DeleteConfirmModal } from '../../../../../../../components/molecules'
 import { Body1 } from '../../../../../../../components/typography'
 import { useModal } from '../../../../../../../hooks'
 import { useAffiliateLinkDisableMutation } from '../../../../../../../types'
+import { useProjectContext } from '../../../../../context'
 import { activeAffiliateLinksAtom, disableAffiliateLinkAtom } from '../affiliateAtom'
 import { AffiliateTable } from '../components/AffiliateTable'
 
 export const ActiveAffiliateList = () => {
   const { t } = useTranslation()
+
+  const { project } = useProjectContext()
 
   const activeAffiliateList = useAtomValue(activeAffiliateLinksAtom)
 
@@ -35,16 +38,18 @@ export const ActiveAffiliateList = () => {
     deleteConfirmModal.onOpen()
   }
 
+  if (!project) return null
+
   if (!activeAffiliateList.length) {
     return <Body1>{t('No affiliates link yet, Please create one')}</Body1>
   }
 
   return (
     <VStack width="100%" flexGrow={1} pt={'10px'} spacing="10px" alignItems="center">
-      <AffiliateTable data={activeAffiliateList} onDelete={handleDisableAffiliateLink} />
+      <AffiliateTable data={activeAffiliateList} onDelete={handleDisableAffiliateLink} projectName={project.name} />
       <DeleteConfirmModal
         title={t('Are you sure you want to disable this affiliate link?')}
-        description={t('Deactivating an affiliate link is permanent and cannot be reversed. ')}
+        description={t('Disabling an affiliate link is permanent and cannot be reversed. ')}
         {...deleteConfirmModal}
         confirm={() =>
           disableAffiliateLinkMutation({

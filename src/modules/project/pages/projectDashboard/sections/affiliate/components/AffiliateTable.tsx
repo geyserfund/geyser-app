@@ -4,6 +4,7 @@ import { DateTime } from 'luxon'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Body1, Body2 } from '../../../../../../../components/typography'
 import { ProjectAffiliateLinkFragment } from '../../../../../../../types'
 import {
   TableData,
@@ -11,10 +12,12 @@ import {
 } from '../../../../projectView/views/projectCreatorViews/sections/contributors/components'
 
 export const AffiliateTable = ({
+  projectName,
   data,
   onDelete,
   isDisabled,
 }: {
+  projectName: string
   data: ProjectAffiliateLinkFragment[]
   onDelete?: (id: number) => void
   isDisabled?: boolean
@@ -46,8 +49,24 @@ export const AffiliateTable = ({
         key: 'email',
         colSpan: 2,
       },
+      {
+        header: t('Affiliate link'),
+        key: 'email',
+        colSpan: 2,
+        isAccordion: true,
+        render(val: ProjectAffiliateLinkFragment) {
+          return (
+            <HStack>
+              <Body2 bold color="neutral1.9">
+                {t('Affiliate Project Link:')}
+              </Body2>
+              <Body2>{`${window.location.origin}/${projectName}?refferalId=${val.affiliateId}`}</Body2>
+            </HStack>
+          )
+        },
+      },
     ],
-    [t],
+    [t, projectName],
   )
 
   const ActiveTableExtraColumns = useMemo(() => {
@@ -83,7 +102,7 @@ export const AffiliateTable = ({
           return (
             <HStack>
               <Button variant="danger" size="sm" onClick={() => onDelete(val.id)}>
-                {t('Delete')}
+                {t('Disable')}
               </Button>
             </HStack>
           )
@@ -94,7 +113,14 @@ export const AffiliateTable = ({
     return data
   }, [onDelete, isDisabled, t])
 
-  const tableSchema = [...tableData, ...ActiveTableExtraColumns]
+  const dropDown = {
+    header: '',
+    key: 'dropdown',
+    colSpan: 1,
+    isMobile: true,
+  }
+
+  const tableSchema = [...tableData, ...ActiveTableExtraColumns, dropDown]
 
   return <TableWithAccordion<ProjectAffiliateLinkFragment> items={data} schema={tableSchema} />
 }

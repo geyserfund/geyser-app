@@ -3,13 +3,17 @@ import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
 import { Body1 } from '../../../../../../../components/typography'
+import { useProjectContext } from '../../../../../context'
 import { deactivatedAffiliateLinksAtom } from '../affiliateAtom'
 import { AffiliateTable } from '../components/AffiliateTable'
 
 export const DeactivatedAffiliateList = () => {
   const { t } = useTranslation()
+  const { project } = useProjectContext()
 
   const deactivatedAffiliateList = useAtomValue(deactivatedAffiliateLinksAtom)
+
+  if (!project) return null
 
   if (!deactivatedAffiliateList.length) {
     return <Body1>{t('No affiliates link yet, Please create one')}</Body1>
@@ -17,7 +21,7 @@ export const DeactivatedAffiliateList = () => {
 
   return (
     <VStack width="100%" flexGrow={1} pt={'10px'} spacing="10px" alignItems="center">
-      <AffiliateTable data={deactivatedAffiliateList} isDisabled />
+      <AffiliateTable data={deactivatedAffiliateList} isDisabled projectName={project.name} />
     </VStack>
   )
 }

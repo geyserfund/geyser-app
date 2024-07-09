@@ -60,7 +60,7 @@ export const ProjectAffiliate = () => {
         <Tabs colorScheme="teal" w="full">
           <TabList>
             <Tab>Active links</Tab>
-            <Tab>Deactivated links</Tab>
+            <Tab>Disabled links</Tab>
           </TabList>
 
           <TabPanels>
