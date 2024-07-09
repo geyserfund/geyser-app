@@ -74,9 +74,10 @@ export type AffiliateLinkCreateInput = {
   projectId: Scalars['BigInt']['input'];
 };
 
-export type AffiliatePaymentRequest = {
-  __typename?: 'AffiliatePaymentRequest';
-  paymentRequest: Scalars['String']['output'];
+export type AffiliatePaymentConfirmResponse = {
+  __typename?: 'AffiliatePaymentConfirmResponse';
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
 };
 
 export enum AffiliateStatus {
@@ -657,6 +658,17 @@ export type FundinginvoiceCancel = {
   success: Scalars['Boolean']['output'];
 };
 
+export type GenerateAffiliatePaymentRequestResponse = {
+  __typename?: 'GenerateAffiliatePaymentRequestResponse';
+  affiliatePaymentId: Scalars['BigInt']['output'];
+  paymentRequest: Scalars['String']['output'];
+};
+
+export type GenerateAffiliatePaymentRequestsInput = {
+  /** The invoice ID of the Hodl invoice for the associated funding tx. */
+  invoiceId: Scalars['String']['input'];
+};
+
 export type GetActivitiesInput = {
   pagination?: InputMaybe<GetActivityPaginationInput>;
   where?: InputMaybe<GetActivityWhereInput>;
@@ -686,11 +698,6 @@ export type GetAffiliateLinksInput = {
 
 export type GetAffiliateLinksWhereInput = {
   projectId: Scalars['BigInt']['input'];
-};
-
-export type GetAffiliatePaymentRequestsInput = {
-  /** The invoice ID of the Hodl invoice for the associated funding tx. */
-  invoiceId: Scalars['String']['input'];
 };
 
 export type GetDashboardFundersWhereInput = {
@@ -1063,6 +1070,8 @@ export type Mutation = {
   affiliateLinkCreate: AffiliateLink;
   affiliateLinkDisable: AffiliateLink;
   affiliateLinkLabelUpdate: AffiliateLink;
+  affiliatePaymentConfirm: AffiliatePaymentConfirmResponse;
+  affiliatePaymentRequestGenerate: GenerateAffiliatePaymentRequestResponse;
   claimBadge: UserBadge;
   createEntry: Entry;
   createProject: Project;
@@ -1132,6 +1141,16 @@ export type MutationAffiliateLinkDisableArgs = {
 export type MutationAffiliateLinkLabelUpdateArgs = {
   affiliateLinkId: Scalars['BigInt']['input'];
   label: Scalars['String']['input'];
+};
+
+
+export type MutationAffiliatePaymentConfirmArgs = {
+  affiliatePaymentId: Scalars['BigInt']['input'];
+};
+
+
+export type MutationAffiliatePaymentRequestGenerateArgs = {
+  input: GenerateAffiliatePaymentRequestsInput;
 };
 
 
@@ -1946,8 +1965,6 @@ export type Query = {
   _?: Maybe<Scalars['Boolean']['output']>;
   /** Returns all affiliate links of a project. */
   affiliateLinksGet: Array<AffiliateLink>;
-  affiliatePaymentRequestGet: AffiliatePaymentRequest;
-  affiliatePaymentStatusUpdate: AffiliatePaymentRequest;
   badges: Array<Badge>;
   currencyQuoteGet: CurrencyQuoteGetResponse;
   entry?: Maybe<Entry>;
@@ -1994,17 +2011,6 @@ export type Query = {
 
 export type QueryAffiliateLinksGetArgs = {
   input: GetAffiliateLinksInput;
-};
-
-
-export type QueryAffiliatePaymentRequestGetArgs = {
-  input: GetAffiliatePaymentRequestsInput;
-};
-
-
-export type QueryAffiliatePaymentStatusUpdateArgs = {
-  invoiceId: Scalars['String']['input'];
-  status?: InputMaybe<AffiliateStatus>;
 };
 
 
@@ -2634,7 +2640,7 @@ export type ResolversTypes = {
   ActivityResourceType: ActivityResourceType;
   AffiliateLink: ResolverTypeWrapper<AffiliateLink>;
   AffiliateLinkCreateInput: AffiliateLinkCreateInput;
-  AffiliatePaymentRequest: ResolverTypeWrapper<AffiliatePaymentRequest>;
+  AffiliatePaymentConfirmResponse: ResolverTypeWrapper<AffiliatePaymentConfirmResponse>;
   AffiliateStatus: AffiliateStatus;
   Ambassador: ResolverTypeWrapper<Ambassador>;
   AmountSummary: ResolverTypeWrapper<AmountSummary>;
@@ -2713,13 +2719,14 @@ export type ResolversTypes = {
   FundingTxsWhereFundingStatus: FundingTxsWhereFundingStatus;
   FundingType: FundingType;
   FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>;
+  GenerateAffiliatePaymentRequestResponse: ResolverTypeWrapper<GenerateAffiliatePaymentRequestResponse>;
+  GenerateAffiliatePaymentRequestsInput: GenerateAffiliatePaymentRequestsInput;
   GetActivitiesInput: GetActivitiesInput;
   GetActivityOrderByInput: GetActivityOrderByInput;
   GetActivityPaginationInput: GetActivityPaginationInput;
   GetActivityWhereInput: GetActivityWhereInput;
   GetAffiliateLinksInput: GetAffiliateLinksInput;
   GetAffiliateLinksWhereInput: GetAffiliateLinksWhereInput;
-  GetAffiliatePaymentRequestsInput: GetAffiliatePaymentRequestsInput;
   GetDashboardFundersWhereInput: GetDashboardFundersWhereInput;
   GetEntriesInput: GetEntriesInput;
   GetEntriesOrderByInput: GetEntriesOrderByInput;
@@ -2910,7 +2917,7 @@ export type ResolversParentTypes = {
   ActivityResource: ResolversUnionTypes<ResolversParentTypes>['ActivityResource'];
   AffiliateLink: AffiliateLink;
   AffiliateLinkCreateInput: AffiliateLinkCreateInput;
-  AffiliatePaymentRequest: AffiliatePaymentRequest;
+  AffiliatePaymentConfirmResponse: AffiliatePaymentConfirmResponse;
   Ambassador: Ambassador;
   AmountSummary: AmountSummary;
   Badge: Badge;
@@ -2976,13 +2983,14 @@ export type ResolversParentTypes = {
   FundingTxStatusUpdatedSubscriptionResponse: FundingTxStatusUpdatedSubscriptionResponse;
   FundingTxsGetResponse: FundingTxsGetResponse;
   FundinginvoiceCancel: FundinginvoiceCancel;
+  GenerateAffiliatePaymentRequestResponse: GenerateAffiliatePaymentRequestResponse;
+  GenerateAffiliatePaymentRequestsInput: GenerateAffiliatePaymentRequestsInput;
   GetActivitiesInput: GetActivitiesInput;
   GetActivityOrderByInput: GetActivityOrderByInput;
   GetActivityPaginationInput: GetActivityPaginationInput;
   GetActivityWhereInput: GetActivityWhereInput;
   GetAffiliateLinksInput: GetAffiliateLinksInput;
   GetAffiliateLinksWhereInput: GetAffiliateLinksWhereInput;
-  GetAffiliatePaymentRequestsInput: GetAffiliatePaymentRequestsInput;
   GetDashboardFundersWhereInput: GetDashboardFundersWhereInput;
   GetEntriesInput: GetEntriesInput;
   GetEntriesOrderByInput: GetEntriesOrderByInput;
@@ -3160,8 +3168,9 @@ export type AffiliateLinkResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type AffiliatePaymentRequestResolvers<ContextType = any, ParentType extends ResolversParentTypes['AffiliatePaymentRequest'] = ResolversParentTypes['AffiliatePaymentRequest']> = {
-  paymentRequest?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+export type AffiliatePaymentConfirmResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AffiliatePaymentConfirmResponse'] = ResolversParentTypes['AffiliatePaymentConfirmResponse']> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3441,6 +3450,12 @@ export type FundinginvoiceCancelResolvers<ContextType = any, ParentType extends 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GenerateAffiliatePaymentRequestResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['GenerateAffiliatePaymentRequestResponse'] = ResolversParentTypes['GenerateAffiliatePaymentRequestResponse']> = {
+  affiliatePaymentId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  paymentRequest?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GrantResolvers<ContextType = any, ParentType extends ResolversParentTypes['Grant'] = ResolversParentTypes['Grant']> = {
   __resolveType: TypeResolveFn<'BoardVoteGrant' | 'CommunityVoteGrant', ParentType, ContextType>;
 };
@@ -3570,6 +3585,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   affiliateLinkCreate?: Resolver<ResolversTypes['AffiliateLink'], ParentType, ContextType, RequireFields<MutationAffiliateLinkCreateArgs, 'input'>>;
   affiliateLinkDisable?: Resolver<ResolversTypes['AffiliateLink'], ParentType, ContextType, RequireFields<MutationAffiliateLinkDisableArgs, 'affiliateLinkId'>>;
   affiliateLinkLabelUpdate?: Resolver<ResolversTypes['AffiliateLink'], ParentType, ContextType, RequireFields<MutationAffiliateLinkLabelUpdateArgs, 'affiliateLinkId' | 'label'>>;
+  affiliatePaymentConfirm?: Resolver<ResolversTypes['AffiliatePaymentConfirmResponse'], ParentType, ContextType, RequireFields<MutationAffiliatePaymentConfirmArgs, 'affiliatePaymentId'>>;
+  affiliatePaymentRequestGenerate?: Resolver<ResolversTypes['GenerateAffiliatePaymentRequestResponse'], ParentType, ContextType, RequireFields<MutationAffiliatePaymentRequestGenerateArgs, 'input'>>;
   claimBadge?: Resolver<ResolversTypes['UserBadge'], ParentType, ContextType, RequireFields<MutationClaimBadgeArgs, 'input'>>;
   createEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationCreateEntryArgs, 'input'>>;
   createProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationCreateProjectArgs, 'input'>>;
@@ -3901,8 +3918,6 @@ export type ProjectsSummaryResolvers<ContextType = any, ParentType extends Resol
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   affiliateLinksGet?: Resolver<Array<ResolversTypes['AffiliateLink']>, ParentType, ContextType, RequireFields<QueryAffiliateLinksGetArgs, 'input'>>;
-  affiliatePaymentRequestGet?: Resolver<ResolversTypes['AffiliatePaymentRequest'], ParentType, ContextType, RequireFields<QueryAffiliatePaymentRequestGetArgs, 'input'>>;
-  affiliatePaymentStatusUpdate?: Resolver<ResolversTypes['AffiliatePaymentRequest'], ParentType, ContextType, RequireFields<QueryAffiliatePaymentStatusUpdateArgs, 'invoiceId'>>;
   badges?: Resolver<Array<ResolversTypes['Badge']>, ParentType, ContextType>;
   currencyQuoteGet?: Resolver<ResolversTypes['CurrencyQuoteGetResponse'], ParentType, ContextType, RequireFields<QueryCurrencyQuoteGetArgs, 'input'>>;
   entry?: Resolver<Maybe<ResolversTypes['Entry']>, ParentType, ContextType, RequireFields<QueryEntryArgs, 'id'>>;
@@ -4085,7 +4100,7 @@ export type Resolvers<ContextType = any> = {
   Activity?: ActivityResolvers<ContextType>;
   ActivityResource?: ActivityResourceResolvers<ContextType>;
   AffiliateLink?: AffiliateLinkResolvers<ContextType>;
-  AffiliatePaymentRequest?: AffiliatePaymentRequestResolvers<ContextType>;
+  AffiliatePaymentConfirmResponse?: AffiliatePaymentConfirmResponseResolvers<ContextType>;
   Ambassador?: AmbassadorResolvers<ContextType>;
   AmountSummary?: AmountSummaryResolvers<ContextType>;
   Badge?: BadgeResolvers<ContextType>;
@@ -4119,6 +4134,7 @@ export type Resolvers<ContextType = any> = {
   FundingTxStatusUpdatedSubscriptionResponse?: FundingTxStatusUpdatedSubscriptionResponseResolvers<ContextType>;
   FundingTxsGetResponse?: FundingTxsGetResponseResolvers<ContextType>;
   FundinginvoiceCancel?: FundinginvoiceCancelResolvers<ContextType>;
+  GenerateAffiliatePaymentRequestResponse?: GenerateAffiliatePaymentRequestResponseResolvers<ContextType>;
   Grant?: GrantResolvers<ContextType>;
   GrantApplicant?: GrantApplicantResolvers<ContextType>;
   GrantApplicantContributor?: GrantApplicantContributorResolvers<ContextType>;
