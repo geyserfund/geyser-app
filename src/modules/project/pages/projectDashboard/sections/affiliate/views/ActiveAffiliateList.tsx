@@ -1,4 +1,4 @@
-import { VStack } from '@chakra-ui/react'
+import { HStack, Image, VStack } from '@chakra-ui/react'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Modal } from '../../../../../../../components/layouts'
 import { DeleteConfirmModal } from '../../../../../../../components/molecules'
 import { Body1 } from '../../../../../../../components/typography'
+import { ProjectNoTransactionImageUrl } from '../../../../../../../constants'
 import { useModal } from '../../../../../../../hooks'
 import { ProjectAffiliateLinkFragment, useAffiliateLinkDisableMutation } from '../../../../../../../types'
 import { useProjectContext } from '../../../../../context'
@@ -52,7 +53,12 @@ export const ActiveAffiliateList = ({ loading }: { loading?: boolean }) => {
   if (loading) return <AffiliateTableSkeleton />
 
   if (!activeAffiliateList.length) {
-    return <Body1>{t('No affiliates link yet, Please create one')}</Body1>
+    return (
+      <VStack w="full" alignItems="center" pt="40px" spacing="20px">
+        <Image src={ProjectNoTransactionImageUrl} maxHeight="200px" objectFit={'cover'} />
+        <Body1>{t('No affiliates link yet, Please create one')}</Body1>
+      </VStack>
+    )
   }
 
   return (
