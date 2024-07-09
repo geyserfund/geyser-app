@@ -1,4 +1,4 @@
-import { HStack, Image, VStack } from '@chakra-ui/react'
+import { Image, VStack } from '@chakra-ui/react'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
