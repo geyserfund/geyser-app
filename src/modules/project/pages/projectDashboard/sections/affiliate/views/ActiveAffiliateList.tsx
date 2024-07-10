@@ -71,7 +71,7 @@ export const ActiveAffiliateList = ({ loading }: { loading?: boolean }) => {
       />
       <DeleteConfirmModal
         title={t('Are you sure you want to disable this affiliate link?')}
-        description={t('Disabling an affiliate link is permanent and cannot be reversed. ')}
+        description={t('Disabling an affiliate link is permanent and cannot be reversed.')}
         {...deleteConfirmModal}
         confirm={() =>
           disableAffiliateLinkMutation({

@@ -63,6 +63,7 @@ export type AffiliateLink = {
   label?: Maybe<Scalars['String']['output']>;
   lightningAddress: Scalars['String']['output'];
   projectId: Scalars['BigInt']['output'];
+  stats?: Maybe<AffiliateStats>;
 };
 
 export type AffiliateLinkCreateInput = {
@@ -78,6 +79,24 @@ export type AffiliatePaymentConfirmResponse = {
   __typename?: 'AffiliatePaymentConfirmResponse';
   message?: Maybe<Scalars['String']['output']>;
   success: Scalars['Boolean']['output'];
+};
+
+export type AffiliatePayoutsStats = {
+  __typename?: 'AffiliatePayoutsStats';
+  count: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
+};
+
+export type AffiliateSalesStats = {
+  __typename?: 'AffiliateSalesStats';
+  count: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
+};
+
+export type AffiliateStats = {
+  __typename?: 'AffiliateStats';
+  payouts: AffiliatePayoutsStats;
+  sales: AffiliateSalesStats;
 };
 
 export enum AffiliateStatus {
@@ -2641,6 +2660,9 @@ export type ResolversTypes = {
   AffiliateLink: ResolverTypeWrapper<AffiliateLink>;
   AffiliateLinkCreateInput: AffiliateLinkCreateInput;
   AffiliatePaymentConfirmResponse: ResolverTypeWrapper<AffiliatePaymentConfirmResponse>;
+  AffiliatePayoutsStats: ResolverTypeWrapper<AffiliatePayoutsStats>;
+  AffiliateSalesStats: ResolverTypeWrapper<AffiliateSalesStats>;
+  AffiliateStats: ResolverTypeWrapper<AffiliateStats>;
   AffiliateStatus: AffiliateStatus;
   Ambassador: ResolverTypeWrapper<Ambassador>;
   AmountSummary: ResolverTypeWrapper<AmountSummary>;
@@ -2918,6 +2940,9 @@ export type ResolversParentTypes = {
   AffiliateLink: AffiliateLink;
   AffiliateLinkCreateInput: AffiliateLinkCreateInput;
   AffiliatePaymentConfirmResponse: AffiliatePaymentConfirmResponse;
+  AffiliatePayoutsStats: AffiliatePayoutsStats;
+  AffiliateSalesStats: AffiliateSalesStats;
+  AffiliateStats: AffiliateStats;
   Ambassador: Ambassador;
   AmountSummary: AmountSummary;
   Badge: Badge;
@@ -3165,12 +3190,31 @@ export type AffiliateLinkResolvers<ContextType = any, ParentType extends Resolve
   label?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   lightningAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  stats?: Resolver<Maybe<ResolversTypes['AffiliateStats']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type AffiliatePaymentConfirmResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AffiliatePaymentConfirmResponse'] = ResolversParentTypes['AffiliatePaymentConfirmResponse']> = {
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AffiliatePayoutsStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AffiliatePayoutsStats'] = ResolversParentTypes['AffiliatePayoutsStats']> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AffiliateSalesStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AffiliateSalesStats'] = ResolversParentTypes['AffiliateSalesStats']> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AffiliateStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AffiliateStats'] = ResolversParentTypes['AffiliateStats']> = {
+  payouts?: Resolver<ResolversTypes['AffiliatePayoutsStats'], ParentType, ContextType>;
+  sales?: Resolver<ResolversTypes['AffiliateSalesStats'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4101,6 +4145,9 @@ export type Resolvers<ContextType = any> = {
   ActivityResource?: ActivityResourceResolvers<ContextType>;
   AffiliateLink?: AffiliateLinkResolvers<ContextType>;
   AffiliatePaymentConfirmResponse?: AffiliatePaymentConfirmResponseResolvers<ContextType>;
+  AffiliatePayoutsStats?: AffiliatePayoutsStatsResolvers<ContextType>;
+  AffiliateSalesStats?: AffiliateSalesStatsResolvers<ContextType>;
+  AffiliateStats?: AffiliateStatsResolvers<ContextType>;
   Ambassador?: AmbassadorResolvers<ContextType>;
   AmountSummary?: AmountSummaryResolvers<ContextType>;
   Badge?: BadgeResolvers<ContextType>;
@@ -4207,7 +4254,7 @@ export type Resolvers<ContextType = any> = {
 };
 
 
-export type ProjectAffiliateLinkFragment = { __typename?: 'AffiliateLink', projectId: any, label?: string | null, id: any, email: string, disabledAt?: any | null, createdAt: any, disabled?: boolean | null, affiliateId?: string | null, lightningAddress: string, affiliateFeePercentage: number };
+export type ProjectAffiliateLinkFragment = { __typename?: 'AffiliateLink', projectId: any, label?: string | null, id: any, email: string, disabledAt?: any | null, createdAt: any, disabled?: boolean | null, affiliateId?: string | null, lightningAddress: string, affiliateFeePercentage: number, stats?: { __typename?: 'AffiliateStats', sales: { __typename?: 'AffiliateSalesStats', total: number, count: number } } | null };
 
 export type EmailUpdateUserFragment = { __typename?: 'User', email?: string | null, isEmailVerified: boolean, id: any };
 
@@ -4255,7 +4302,7 @@ export type OrderFragment = { __typename?: 'Order', confirmedAt?: any | null, cr
     & OrderItemFragment
   )>, fundingTx: { __typename?: 'FundingTx', id: any, amount: number, amountPaid: number, donationAmount: number, address?: string | null, email?: string | null, fundingType: FundingType, invoiceStatus: InvoiceStatus, isAnonymous: boolean, status: FundingStatus, uuid?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null } };
 
-export type FundingTxOrderFragment = { __typename?: 'FundingTx', id: any, invoiceStatus: InvoiceStatus, donationAmount: number, amountPaid: number, amount: number, email?: string | null, paidAt?: any | null, status: FundingStatus, invoiceId?: string | null, uuid?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, externalAccounts: Array<{ __typename?: 'ExternalAccount', id: any, externalUsername: string, externalId: string, accountType: string, public: boolean }> } | null }, order?: { __typename?: 'Order', id: any, referenceCode: string, totalInSats: number, items: Array<(
+export type FundingTxOrderFragment = { __typename?: 'FundingTx', id: any, invoiceStatus: InvoiceStatus, donationAmount: number, amountPaid: number, amount: number, email?: string | null, paidAt?: any | null, status: FundingStatus, invoiceId?: string | null, uuid?: string | null, affiliateFeeInSats?: number | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, externalAccounts: Array<{ __typename?: 'ExternalAccount', id: any, externalUsername: string, externalId: string, accountType: string, public: boolean }> } | null }, order?: { __typename?: 'Order', id: any, referenceCode: string, totalInSats: number, items: Array<(
       { __typename?: 'OrderItem' }
       & OrderItemFragment
     )> } | null };
@@ -5149,6 +5196,12 @@ export const ProjectAffiliateLinkFragmentDoc = gql`
   affiliateId
   lightningAddress
   affiliateFeePercentage
+  stats {
+    sales {
+      total
+      count
+    }
+  }
 }
     `;
 export const EmailUpdateUserFragmentDoc = gql`
@@ -5552,6 +5605,7 @@ export const FundingTxOrderFragmentDoc = gql`
   status
   invoiceId
   uuid
+  affiliateFeeInSats
   bitcoinQuote {
     quoteCurrency
     quote

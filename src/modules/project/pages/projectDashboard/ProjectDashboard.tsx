@@ -47,17 +47,17 @@ export const projectSections: Record<string, DashboardSection> = {
     path: 'dashboardWallet',
   },
   nostr: {
-    label: 'Nostr settings',
+    label: 'Nostr',
     path: 'dashboardNostr',
   },
+  settings: {
+    label: 'Project',
+    path: 'dashboardSettings',
+  },
   affiliate: {
-    label: 'Affiliate settings',
+    label: 'Affiliates',
     path: 'dashboardAffiliate',
     semiFullWidth: true,
-  },
-  settings: {
-    label: 'Project settings',
-    path: 'dashboardSettings',
   },
 }
 

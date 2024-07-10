@@ -34,9 +34,11 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
     if (!loading) {
       if (isAnonymous) {
         onOpen()
+      } else {
+        onClose()
       }
     }
-  }, [loading, onOpen, isAnonymous])
+  }, [loading, onOpen, onClose, isAnonymous])
 
   const modalTitle = 'The page you are trying to access required authorization.'
 
