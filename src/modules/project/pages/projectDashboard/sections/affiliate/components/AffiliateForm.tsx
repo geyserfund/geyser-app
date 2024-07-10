@@ -223,7 +223,7 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
           name="affiliateFeePercentage"
           label={`${t('Affiliate fee')}  (%)`}
           description={t(
-            'This percentage will be removed from your incoming revenues. E.g. a 10% fee for a $100 contribution or reward sold will mean the affiliate will receive $10 and you will receive $90.',
+            'This percentage will be removed from your incoming revenues. E.g. a 10% fee for a $100 contribution or reward sold will mean the affiliate will receive $10 from the incoming $100.',
           )}
           placeholder={'10'}
           control={control}
@@ -234,7 +234,7 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
         <ControlledTextInput
           label={t('Lightning Address')}
           name="lightningAddress"
-          description={t('All affiliate fees will be automatically forwarded over to this lightning address.')}
+          description={t('All affiliate payouts will be automatically forwarded over to this lightning address.')}
           placeholder="jrogan@walletofsatoshi.com"
           control={control}
           isDisabled={isEdit}
