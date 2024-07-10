@@ -1,5 +1,4 @@
-import { AddIcon } from '@chakra-ui/icons'
-import { Button, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, VStack } from '@chakra-ui/react'
+import { Button, HStack, Stack, useDisclosure, VStack } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
@@ -17,6 +16,8 @@ export const ProjectAffiliate = () => {
   const { t } = useTranslation()
 
   const { project } = useProjectContext()
+
+  const { isOpen: isDisabledView, onOpen: openDisabledView, onClose: openActiveView } = useDisclosure()
 
   const affiliateCreateFormModal = useModal()
 
@@ -46,33 +47,46 @@ export const ProjectAffiliate = () => {
         <HStack w="100%" justifyContent="space-between" spacing="20px">
           <Body1 flex={1}>
             {t(
-              'Create and manage affiliate links. Each link can be created only once and cannot be updated except for its label.',
+              "Enhance your project's growth and sales with affiliate partners and maintain full control over affiliate terms on this dashboard. Each link can be created only once and cannot be updated except for its label.",
             )}
           </Body1>
-
-          <Button variant="primary" leftIcon={<AddIcon />} onClick={affiliateCreateFormModal.onOpen}>
-            {t('Create new affiliate')}
-          </Button>
         </HStack>
+        <Stack direction={{ base: 'column-reverse', lg: 'row' }} w="full" justifyContent="space-between" spacing="20px">
+          <HStack w={{ base: 'full', lg: 'auto' }}>
+            <Button
+              variant="secondary"
+              borderColor={!isDisabledView ? 'primary.400' : undefined}
+              onClick={openActiveView}
+              minWidth="200px"
+              flex={1}
+            >
+              {t('Active')}
+            </Button>
+            <Button
+              variant="secondary"
+              borderColor={isDisabledView ? 'primary.400' : undefined}
+              onClick={openDisabledView}
+              minWidth="200px"
+              flex={1}
+            >
+              {t('Disabled')}
+            </Button>
+          </HStack>
 
-        <Tabs colorScheme="teal" w="full">
-          <TabList>
-            <Tab>Active links</Tab>
-            <Tab>Disabled links</Tab>
-          </TabList>
+          <Button
+            paddingX="20px"
+            width={{ base: 'full', lg: 'auto' }}
+            variant="primary"
+            onClick={affiliateCreateFormModal.onOpen}
+          >
+            {t('Add affiliate')}
+          </Button>
+        </Stack>
 
-          <TabPanels>
-            <TabPanel padding={0}>
-              <ActiveAffiliateList loading={loading} />
-            </TabPanel>
-            <TabPanel padding={0}>
-              <DeactivatedAffiliateList loading={loading} />
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
+        {!isDisabledView ? <ActiveAffiliateList loading={loading} /> : <DeactivatedAffiliateList loading={loading} />}
       </VStack>
 
-      <Modal title={'Create new Affiliate'} {...affiliateCreateFormModal}>
+      <Modal title={t('Add affiliate')} {...affiliateCreateFormModal} size="lg">
         <AffiliateForm onCompleted={affiliateCreateFormModal.onClose} />
       </Modal>
     </>

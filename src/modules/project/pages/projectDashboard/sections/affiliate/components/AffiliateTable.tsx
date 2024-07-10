@@ -3,11 +3,12 @@ import { DateTime } from 'luxon'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsPencil } from 'react-icons/bs'
+import { PiCopy } from 'react-icons/pi'
 
 import { SkeletonLayout } from '../../../../../../../components/layouts'
 import { Body2 } from '../../../../../../../components/typography'
 import { ProjectAffiliateLinkFragment } from '../../../../../../../types'
-import { copyTextToClipboard } from '../../../../../../../utils'
+import { commaFormatted, copyTextToClipboard } from '../../../../../../../utils'
 import {
   TableData,
   TableWithAccordion,
@@ -37,48 +38,54 @@ export const AffiliateTable = ({
         isMobile: true,
       },
       {
+        header: t('Link'),
+        key: 'affiliateLink',
+        colSpan: 1,
+        isMobile: true,
+        render(val: ProjectAffiliateLinkFragment) {
+          const affiliateLink = `${window.location.origin}/project/${projectName}?refId=${val.affiliateId}`
+          return (
+            <Tooltip label={t('Copy to clipboard')}>
+              <IconButton
+                aria-label="copy-link"
+                variant="ghost"
+                size="sm"
+                icon={<PiCopy />}
+                onClick={() => copyTextToClipboard(affiliateLink)}
+                _pressed={{ backgroundColor: 'primary.400', color: 'black' }}
+              >
+                {val.affiliateId}
+                {val.stats?.sales.total}
+              </IconButton>
+            </Tooltip>
+          )
+        },
+      },
+      {
         header: t('%'),
         key: 'affiliateFeePercentage',
         colSpan: 1,
         isMobile: true,
+        value: (val: ProjectAffiliateLinkFragment) => `${val.affiliateFeePercentage}%`,
       },
       {
-        header: t('Refferal Code'),
-        key: 'affiliateId',
+        header: `${t('Sales')} (sats)`,
+        key: 'val.stats.sales.total',
         colSpan: 2,
-        isMobile: true,
+        value: (val: ProjectAffiliateLinkFragment) => `${commaFormatted(val.stats?.sales.total || 0)}`,
       },
       {
-        header: t('email'),
-        key: 'email',
+        header: `${t('Sales')} (count)`,
+        key: 'val.stats.sales.count',
         colSpan: 2,
+        value: (val: ProjectAffiliateLinkFragment) => `${commaFormatted(val.stats?.sales.count || 0)}`,
       },
     ],
-    [t],
+    [t, projectName],
   )
 
   const ActiveTableExtraColumns = useMemo(() => {
     const data = [] as TableData<ProjectAffiliateLinkFragment>[]
-
-    if (!isDisabled) {
-      data.push({
-        header: t('Created At'),
-        key: 'createdAt',
-        value(val: ProjectAffiliateLinkFragment) {
-          return DateTime.fromMillis(val.createdAt).toFormat('LLL dd, yyyy')
-        },
-        colSpan: 2,
-      })
-    } else {
-      data.push({
-        header: t('Disabled At'),
-        key: 'disabledAt',
-        value(val: ProjectAffiliateLinkFragment) {
-          return DateTime.fromMillis(val.disabledAt).toFormat('LLL dd, yyyy')
-        },
-        colSpan: 2,
-      })
-    }
 
     if (onDelete || onEdit) {
       data.push({
@@ -110,7 +117,7 @@ export const AffiliateTable = ({
     }
 
     return data
-  }, [onDelete, onEdit, isDisabled, t])
+  }, [onDelete, onEdit, t])
 
   const dropDown = {
     header: '',
@@ -127,15 +134,36 @@ export const AffiliateTable = ({
 
       return (
         <VStack w="full" spacing={2} alignItems={'end'}>
+          {!isDisabled ? (
+            <HStack>
+              <Body2 bold color="neutral1.9">
+                {t('Created At')}:
+              </Body2>
+              <Body2>{DateTime.fromMillis(val.createdAt).toFormat('LLL dd, yyyy')}</Body2>
+            </HStack>
+          ) : (
+            <HStack>
+              <Body2 bold color="neutral1.9">
+                {t('Disabled At')}:
+              </Body2>
+              <Body2>{DateTime.fromMillis(val.disabledAt).toFormat('LLL dd, yyyy')}</Body2>
+            </HStack>
+          )}
           <HStack>
             <Body2 bold color="neutral1.9">
-              {t('Lightning Address:')}
+              {t('Email')}:
+            </Body2>
+            <Body2>{val.email}</Body2>
+          </HStack>
+          <HStack>
+            <Body2 bold color="neutral1.9">
+              {t('Lightning Address')}:
             </Body2>
             <Body2>{val.lightningAddress}</Body2>
           </HStack>
           <HStack>
             <Body2 bold color="neutral1.9">
-              {t('Affiliate Project Link:')}
+              {t('Affiliate Project Link')}:
             </Body2>
             <Tooltip label={t('Copy to clipboard')}>
               <Button variant="ghost" size="sm" onClick={() => copyTextToClipboard(affiliateLink)}>
@@ -146,7 +174,7 @@ export const AffiliateTable = ({
         </VStack>
       )
     },
-    [projectName, t],
+    [projectName, t, isDisabled],
   )
 
   return (

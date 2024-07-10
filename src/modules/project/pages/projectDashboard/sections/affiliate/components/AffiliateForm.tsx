@@ -1,12 +1,17 @@
-import { Button, HStack, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useSetAtom } from 'jotai'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 import * as yup from 'yup'
 
 import { ControlledTextInput } from '../../../../../../../components/inputs'
+import { Body2 } from '../../../../../../../components/typography'
+import Loader from '../../../../../../../components/ui/Loader'
+import { useDebounce } from '../../../../../../../hooks'
+import { lightModeColors } from '../../../../../../../styles'
 import {
   ProjectAffiliateLinkFragment,
   useAffiliateLinkCreateMutation,
@@ -54,7 +59,7 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
 
   const addNewAffiliateLink = useSetAtom(addAffiliateLinkAtom)
 
-  const { control, handleSubmit, reset, setError, formState } = useForm<AffiliateInputVariables>({
+  const { control, handleSubmit, reset, setError, clearErrors, formState, watch } = useForm<AffiliateInputVariables>({
     resolver: yupResolver(schema),
     defaultValues: useMemo(() => {
       if (isEdit && affiliate) {
@@ -79,14 +84,30 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
     mode: 'onBlur',
   })
 
-  const [evaluateLightningAddress] = useLightningAddressVerifyLazyQuery({
+  const lightningAddress = watch('lightningAddress')
+  const debouncedLightningAddress = useDebounce(lightningAddress, 500)
+
+  const [evaluateLightningAddress, { loading: lightningAddressVerifyLoading }] = useLightningAddressVerifyLazyQuery({
     onCompleted(data) {
       if (!data || !data.lightningAddressVerify) return
-      if (!data.lightningAddressVerify.valid) {
-        setError('lightningAddress', { type: 'custom', message: "Couldn't verify lightning address" })
+
+      if (data.lightningAddressVerify.valid) {
+        clearErrors('root.validation')
+      } else {
+        setError('root.validation', { type: 'custom', message: "Couldn't verify lightning address" })
       }
     },
   })
+
+  useEffect(() => {
+    if (debouncedLightningAddress) {
+      evaluateLightningAddress({
+        variables: {
+          lightningAddress: debouncedLightningAddress,
+        },
+      })
+    }
+  }, [debouncedLightningAddress, clearErrors, evaluateLightningAddress])
 
   const [createAffilateLink, { loading: createLoading }] = useAffiliateLinkCreateMutation({
     onCompleted(data) {
@@ -96,6 +117,13 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
       if (onCompleted) {
         onCompleted()
       }
+    },
+    onError(error, clientOptions) {
+      toast({
+        title: 'Failed to add affiliate',
+        description: error.message,
+        status: 'error',
+      })
     },
   })
 
@@ -111,80 +139,92 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
   })
 
   const onSubmit = async (values: AffiliateInputVariables) => {
-    try {
-      if (isEdit) {
-        if (formState.isDirty) {
-          updateAffiliateLink({
-            variables: {
-              affiliateLinkId: affiliate?.id,
-              label: values.label,
-            },
-          })
-        } else {
-          toast({
-            title: 'No any updates to save',
-            status: 'info',
-          })
-        }
-
-        return
-      }
-
-      const { data } = await evaluateLightningAddress({
-        variables: {
-          lightningAddress: values.lightningAddress,
-        },
-      })
-
-      if (data?.lightningAddressVerify.valid) {
-        createAffilateLink({
+    if (isEdit) {
+      if (formState.isDirty) {
+        updateAffiliateLink({
           variables: {
-            input: {
-              ...values,
-              affiliateFeePercentage: Number(values.affiliateFeePercentage),
-              projectId: project?.id,
-            },
+            affiliateLinkId: affiliate?.id,
+            label: values.label,
           },
         })
+      } else {
+        toast({
+          title: 'No any updates to save',
+          status: 'info',
+        })
       }
-    } catch (error) {
-      errorToast()
+
+      return
+    }
+
+    createAffilateLink({
+      variables: {
+        input: {
+          ...values,
+          affiliateFeePercentage: Number(values.affiliateFeePercentage),
+          projectId: project?.id,
+        },
+      },
+    })
+  }
+
+  const renderRightElementContent = () => {
+    if (lightningAddressVerifyLoading) {
+      return <Loader size="md" />
+    }
+
+    if (lightningAddress) {
+      if (!formState.errors.root?.validation) {
+        return <BsFillCheckCircleFill fill={lightModeColors.primary[500]} size="24px" />
+      }
+
+      return <BsFillXCircleFill fill={lightModeColors.secondary.red} size="24px" />
     }
   }
 
-  const errorToast = (reason?: string | null) => {
-    toast({
-      title: 'Failed to validate lightning address',
-      description: reason || 'Please provide a valid Lightning Address',
-      status: 'error',
-    })
-  }
+  console.log('formstate errors', formState.errors.lightningAddress)
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <VStack spacing="20px">
-        <ControlledTextInput label={t('Title')} name="label" placeholder="Joe Rogan" control={control} />
+        <ControlledTextInput label={t('Name')} name="label" placeholder="Joe Rogan" control={control} />
 
-        <ControlledTextInput
-          label={t('Email')}
-          name="email"
-          placeholder="joe@rogan.com"
-          control={control}
-          isDisabled={isEdit}
-        />
-
-        <ControlledTextInput
-          label={t('Refferal Code')}
-          name="affiliateId"
-          placeholder="jrogan"
-          control={control}
-          isDisabled={isEdit}
-        />
+        <VStack w="full" spacing={1}>
+          <ControlledTextInput
+            label={t('Affiliate ID')}
+            description={t('The affiliate ID will be shown in the url.')}
+            name="affiliateId"
+            placeholder="jrogan"
+            control={control}
+            isDisabled={isEdit}
+          />
+          <HStack
+            w="full"
+            border="1px solid"
+            borderColor="neutral.300"
+            backgroundColor="neutral.100"
+            p={'10px'}
+            borderRadius="8px"
+          >
+            <Body2 fontSize="12px">
+              <Box as="span" fontWeight="bold">
+                {t('Affiliate URL')}:
+              </Box>
+              {` ${window.location.origin}/project/${project?.name}?refId=`}
+              <Box as="span" fontWeight="bold">
+                {`${watch('affiliateId')}`}
+              </Box>
+            </Body2>
+          </HStack>
+        </VStack>
 
         <ControlledTextInput
           type="number"
           name="affiliateFeePercentage"
-          label={t('Percentage')}
+          label={`${t('Affiliate fee')}  (%)`}
+          description={t(
+            'This percentage will be removed from your incoming revenues. E.g. a 10% fee for a $100 contribution or reward sold will mean the affiliate will receive $10 and you will receive $90.',
+          )}
           placeholder={'10'}
           control={control}
           isDisabled={isEdit}
@@ -194,13 +234,30 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
         <ControlledTextInput
           label={t('Lightning Address')}
           name="lightningAddress"
+          description={t('All affiliate fees will be automatically forwarded over to this lightning address.')}
           placeholder="jrogan@walletofsatoshi.com"
+          control={control}
+          isDisabled={isEdit}
+          error={formState.errors.root?.validation?.message}
+          rightAddon={renderRightElementContent()}
+        />
+
+        <ControlledTextInput
+          label={t('Email')}
+          name="email"
+          placeholder="joe@rogan.com"
           control={control}
           isDisabled={isEdit}
         />
 
         <HStack w="full" py="20px">
-          <Button w="full" variant="primary" type="submit" isLoading={validationLoading || createLoading}>
+          <Button
+            w="full"
+            variant="primary"
+            type="submit"
+            isLoading={validationLoading || createLoading}
+            isDisabled={!formState.isValid}
+          >
             {isEdit ? t('Save') : t('Create')}
           </Button>
         </HStack>

@@ -12,5 +12,11 @@ export const FRAGMENT_PROJECT_AFFILIATE_LINK = gql`
     affiliateId
     lightningAddress
     affiliateFeePercentage
+    stats {
+      sales {
+        total
+        count
+      }
+    }
   }
 `
