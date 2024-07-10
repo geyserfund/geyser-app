@@ -133,7 +133,7 @@ export const AffiliateTable = ({
       const affiliateLink = `${window.location.origin}/project/${projectName}?refId=${val.affiliateId}`
 
       return (
-        <VStack w="full" spacing={2} alignItems={'end'}>
+        <VStack w="full" spacing={2} alignItems={'start'}>
           {!isDisabled ? (
             <HStack>
               <Body2 bold color="neutral1.9">

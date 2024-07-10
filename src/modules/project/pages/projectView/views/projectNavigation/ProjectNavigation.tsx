@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { PropsWithChildren, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { PiShareNetwork } from 'react-icons/pi'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import {
@@ -104,8 +105,13 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
         subViews: [],
         icon: ContributorsNavIcon,
       },
+      {
+        name: 'Affiliates',
+        path: getPath('dashboardAffiliate', project?.name || ''),
+        icon: () => <PiShareNetwork fontSize="1.9em" width="1.7em" />,
+      },
     ],
-    [],
+    [project?.name],
   )
 
   const currentActiveButton = useMemo(() => {
@@ -226,7 +232,10 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
 
                 {ProjectCreatorNavigationButtons.map((creatorNavigationButtons) => {
                   const handleProjectNavigationButtonClick = () => {
-                    setMobileView(creatorNavigationButtons.mobileView)
+                    if (creatorNavigationButtons.mobileView) {
+                      setMobileView(creatorNavigationButtons.mobileView)
+                    }
+
                     navigate(creatorNavigationButtons.path)
                   }
 
@@ -307,11 +316,13 @@ export const ProjectNavigationButton = ({
 
   const color = props.isActive ? 'neutral.900' : 'neutral.700'
 
+  const iconProps = { fontSize: '1.5em', width: '1.3em' }
+
   if (hideLabel && !showLabel) {
     return (
       <Tooltip label={children} placement="right">
         <IconButton variant="transparent" {...props}>
-          <NavigationIcon color={color} fontSize="1.5em" width="1.3em" />
+          <NavigationIcon color={color} {...iconProps} />
         </IconButton>
       </Tooltip>
     )
@@ -322,7 +333,7 @@ export const ProjectNavigationButton = ({
       variant="transparent"
       justifyContent="start"
       width="100%"
-      leftIcon={<NavigationIcon color={color} fontSize="1.5em" width="1.3em" />}
+      leftIcon={<NavigationIcon color={color} {...iconProps} />}
       _active={{ backgroundColor: 'neutral.100' }}
       {...props}
     >
