@@ -1,4 +1,5 @@
 import { atom } from 'jotai'
+import { DateTime } from 'luxon'
 
 import { ProjectAffiliateLinkFragment } from '../../../../../../types'
 
@@ -32,7 +33,7 @@ export const disableAffiliateLinkAtom = atom(null, (get, set, id: number) => {
   set(affiliateLinksAtom, (prev) =>
     prev.map((link) => {
       if (link.id === id) {
-        return { ...link, disabled: true }
+        return { ...link, disabled: true, disabledAt: DateTime.now().toMillis() }
       }
 
       return link

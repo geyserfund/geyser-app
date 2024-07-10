@@ -97,6 +97,15 @@ export const PaymentsAndAccountingTable = ({
         isMobile: true,
       },
       {
+        header: t('Affiliate fee'),
+        key: 'affiliateFeeInSats',
+        value(val: FundingTxOrderFragment) {
+          return `${val.affiliateFeeInSats} Sats`
+        },
+        colSpan: 2,
+        isMobile: true,
+      },
+      {
         header: '',
         key: 'dropdown',
         colSpan: 1,
