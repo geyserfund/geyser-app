@@ -55,7 +55,6 @@ export const AffiliateTable = ({
                 _pressed={{ backgroundColor: 'primary.400', color: 'black' }}
               >
                 {val.affiliateId}
-                {val.stats?.sales.total}
               </IconButton>
             </Tooltip>
           )
@@ -72,13 +71,13 @@ export const AffiliateTable = ({
         header: `${t('Sales')} (sats)`,
         key: 'val.stats.sales.total',
         colSpan: 2,
-        value: (val: ProjectAffiliateLinkFragment) => `${commaFormatted(val.stats?.sales.total || 0)}`,
+        value: (val: ProjectAffiliateLinkFragment) => `${commaFormatted(val.stats?.sales.total) || 0}`,
       },
       {
         header: `${t('Sales')} (count)`,
         key: 'val.stats.sales.count',
         colSpan: 2,
-        value: (val: ProjectAffiliateLinkFragment) => `${commaFormatted(val.stats?.sales.count || 0)}`,
+        value: (val: ProjectAffiliateLinkFragment) => `${commaFormatted(val.stats?.sales.count) || 0}`,
       },
     ],
     [t, projectName],
