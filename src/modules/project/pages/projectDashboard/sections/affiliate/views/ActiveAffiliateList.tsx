@@ -56,7 +56,7 @@ export const ActiveAffiliateList = ({ loading }: { loading?: boolean }) => {
     return (
       <VStack w="full" alignItems="center" pt="40px" spacing="20px">
         <Image src={ProjectNoTransactionImageUrl} maxHeight="200px" objectFit={'cover'} />
-        <Body1>{t('No affiliates link yet, Please create one')}</Body1>
+        <Body1>{t('No affiliates link yet, please create one.')}</Body1>
       </VStack>
     )
   }
