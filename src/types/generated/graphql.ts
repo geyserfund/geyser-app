@@ -51,6 +51,59 @@ export enum ActivityResourceType {
   ProjectReward = 'project_reward'
 }
 
+export type AffiliateLink = {
+  __typename?: 'AffiliateLink';
+  affiliateFeePercentage: Scalars['Int']['output'];
+  affiliateId?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['Date']['output'];
+  disabled?: Maybe<Scalars['Boolean']['output']>;
+  disabledAt?: Maybe<Scalars['Date']['output']>;
+  email: Scalars['String']['output'];
+  id: Scalars['BigInt']['output'];
+  label?: Maybe<Scalars['String']['output']>;
+  lightningAddress: Scalars['String']['output'];
+  projectId: Scalars['BigInt']['output'];
+  stats?: Maybe<AffiliateStats>;
+};
+
+export type AffiliateLinkCreateInput = {
+  affiliateFeePercentage: Scalars['Int']['input'];
+  affiliateId?: InputMaybe<Scalars['String']['input']>;
+  email: Scalars['String']['input'];
+  label: Scalars['String']['input'];
+  lightningAddress: Scalars['String']['input'];
+  projectId: Scalars['BigInt']['input'];
+};
+
+export type AffiliatePaymentConfirmResponse = {
+  __typename?: 'AffiliatePaymentConfirmResponse';
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
+};
+
+export type AffiliatePayoutsStats = {
+  __typename?: 'AffiliatePayoutsStats';
+  count: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
+};
+
+export type AffiliateSalesStats = {
+  __typename?: 'AffiliateSalesStats';
+  count: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
+};
+
+export type AffiliateStats = {
+  __typename?: 'AffiliateStats';
+  payouts: AffiliatePayoutsStats;
+  sales: AffiliateSalesStats;
+};
+
+export enum AffiliateStatus {
+  Paid = 'PAID',
+  Unpaid = 'UNPAID'
+}
+
 export type Ambassador = {
   __typename?: 'Ambassador';
   confirmed: Scalars['Boolean']['output'];
@@ -437,6 +490,7 @@ export type FundingCreateFromPodcastKeysendInput = {
 };
 
 export type FundingInput = {
+  affiliateId?: InputMaybe<Scalars['String']['input']>;
   /** Set to true if the funder wishes to remain anonymous. The user will still be associated to the funding transaction. */
   anonymous: Scalars['Boolean']['input'];
   /** The donation amount, in satoshis. */
@@ -520,6 +574,7 @@ export enum FundingStatus {
 export type FundingTx = {
   __typename?: 'FundingTx';
   address?: Maybe<Scalars['String']['output']>;
+  affiliateFeeInSats?: Maybe<Scalars['Int']['output']>;
   amount: Scalars['Int']['output'];
   amountPaid: Scalars['Int']['output'];
   bitcoinQuote?: Maybe<BitcoinQuote>;
@@ -560,6 +615,21 @@ export type FundingTxAmountGraph = GraphSumData & {
 export type FundingTxEmailUpdateInput = {
   email: Scalars['String']['input'];
   fundingTxId: Scalars['BigInt']['input'];
+};
+
+export enum FundingTxInvoiceSanctionCheckStatus {
+  Failed = 'FAILED',
+  Passed = 'PASSED',
+  Pending = 'PENDING'
+}
+
+export type FundingTxInvoiceSanctionCheckStatusGetInput = {
+  invoiceId: Scalars['String']['input'];
+};
+
+export type FundingTxInvoiceSanctionCheckStatusResponse = {
+  __typename?: 'FundingTxInvoiceSanctionCheckStatusResponse';
+  status: FundingTxInvoiceSanctionCheckStatus;
 };
 
 export type FundingTxMethodCount = {
@@ -607,6 +677,17 @@ export type FundinginvoiceCancel = {
   success: Scalars['Boolean']['output'];
 };
 
+export type GenerateAffiliatePaymentRequestResponse = {
+  __typename?: 'GenerateAffiliatePaymentRequestResponse';
+  affiliatePaymentId: Scalars['BigInt']['output'];
+  paymentRequest: Scalars['String']['output'];
+};
+
+export type GenerateAffiliatePaymentRequestsInput = {
+  /** The invoice ID of the Hodl invoice for the associated funding tx. */
+  invoiceId: Scalars['String']['input'];
+};
+
 export type GetActivitiesInput = {
   pagination?: InputMaybe<GetActivityPaginationInput>;
   where?: InputMaybe<GetActivityWhereInput>;
@@ -628,6 +709,14 @@ export type GetActivityWhereInput = {
   resourceType?: InputMaybe<ActivityResourceType>;
   tagIds?: InputMaybe<Array<Scalars['Int']['input']>>;
   userIds?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+};
+
+export type GetAffiliateLinksInput = {
+  where: GetAffiliateLinksWhereInput;
+};
+
+export type GetAffiliateLinksWhereInput = {
+  projectId: Scalars['BigInt']['input'];
 };
 
 export type GetDashboardFundersWhereInput = {
@@ -997,6 +1086,11 @@ export type Milestone = {
 export type Mutation = {
   __typename?: 'Mutation';
   _?: Maybe<Scalars['Boolean']['output']>;
+  affiliateLinkCreate: AffiliateLink;
+  affiliateLinkDisable: AffiliateLink;
+  affiliateLinkLabelUpdate: AffiliateLink;
+  affiliatePaymentConfirm: AffiliatePaymentConfirmResponse;
+  affiliatePaymentRequestGenerate: GenerateAffiliatePaymentRequestResponse;
   claimBadge: UserBadge;
   createEntry: Entry;
   createProject: Project;
@@ -1050,6 +1144,32 @@ export type Mutation = {
   walletDelete: Scalars['Boolean']['output'];
   /** This operation is currently not supported. */
   walletUpdate: Wallet;
+};
+
+
+export type MutationAffiliateLinkCreateArgs = {
+  input: AffiliateLinkCreateInput;
+};
+
+
+export type MutationAffiliateLinkDisableArgs = {
+  affiliateLinkId: Scalars['BigInt']['input'];
+};
+
+
+export type MutationAffiliateLinkLabelUpdateArgs = {
+  affiliateLinkId: Scalars['BigInt']['input'];
+  label: Scalars['String']['input'];
+};
+
+
+export type MutationAffiliatePaymentConfirmArgs = {
+  affiliatePaymentId: Scalars['BigInt']['input'];
+};
+
+
+export type MutationAffiliatePaymentRequestGenerateArgs = {
+  input: GenerateAffiliatePaymentRequestsInput;
 };
 
 
@@ -1476,6 +1596,9 @@ export type Project = {
   fundingTxsCount?: Maybe<Scalars['Int']['output']>;
   /** Returns the project's grant applications. */
   grantApplications: Array<GrantApplicant>;
+  hasEntries?: Maybe<Scalars['Boolean']['output']>;
+  hasGoals?: Maybe<Scalars['Boolean']['output']>;
+  hasRewards?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['BigInt']['output'];
   image?: Maybe<Scalars['String']['output']>;
   keys: ProjectKeys;
@@ -1859,11 +1982,14 @@ export type ProjectsSummary = {
 export type Query = {
   __typename?: 'Query';
   _?: Maybe<Scalars['Boolean']['output']>;
+  /** Returns all affiliate links of a project. */
+  affiliateLinksGet: Array<AffiliateLink>;
   badges: Array<Badge>;
   currencyQuoteGet: CurrencyQuoteGetResponse;
   entry?: Maybe<Entry>;
   fundersGet: Array<Funder>;
   fundingTx: FundingTx;
+  fundingTxInvoiceSanctionCheckStatusGet: FundingTxInvoiceSanctionCheckStatusResponse;
   fundingTxsGet?: Maybe<FundingTxsGetResponse>;
   /** Returns all activities. */
   getActivities: Array<Activity>;
@@ -1902,6 +2028,11 @@ export type Query = {
 };
 
 
+export type QueryAffiliateLinksGetArgs = {
+  input: GetAffiliateLinksInput;
+};
+
+
 export type QueryCurrencyQuoteGetArgs = {
   input: CurrencyQuoteGetInput;
 };
@@ -1920,6 +2051,11 @@ export type QueryFundersGetArgs = {
 export type QueryFundingTxArgs = {
   id?: InputMaybe<Scalars['BigInt']['input']>;
   swapId?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryFundingTxInvoiceSanctionCheckStatusGetArgs = {
+  input: FundingTxInvoiceSanctionCheckStatusGetInput;
 };
 
 
@@ -2521,6 +2657,13 @@ export type ResolversTypes = {
   ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
   ActivityResource: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['ActivityResource']>;
   ActivityResourceType: ActivityResourceType;
+  AffiliateLink: ResolverTypeWrapper<AffiliateLink>;
+  AffiliateLinkCreateInput: AffiliateLinkCreateInput;
+  AffiliatePaymentConfirmResponse: ResolverTypeWrapper<AffiliatePaymentConfirmResponse>;
+  AffiliatePayoutsStats: ResolverTypeWrapper<AffiliatePayoutsStats>;
+  AffiliateSalesStats: ResolverTypeWrapper<AffiliateSalesStats>;
+  AffiliateStats: ResolverTypeWrapper<AffiliateStats>;
+  AffiliateStatus: AffiliateStatus;
   Ambassador: ResolverTypeWrapper<Ambassador>;
   AmountSummary: ResolverTypeWrapper<AmountSummary>;
   AnalyticsGroupByInterval: AnalyticsGroupByInterval;
@@ -2587,6 +2730,9 @@ export type ResolversTypes = {
   FundingTx: ResolverTypeWrapper<Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversTypes['SourceResource']> }>;
   FundingTxAmountGraph: ResolverTypeWrapper<FundingTxAmountGraph>;
   FundingTxEmailUpdateInput: FundingTxEmailUpdateInput;
+  FundingTxInvoiceSanctionCheckStatus: FundingTxInvoiceSanctionCheckStatus;
+  FundingTxInvoiceSanctionCheckStatusGetInput: FundingTxInvoiceSanctionCheckStatusGetInput;
+  FundingTxInvoiceSanctionCheckStatusResponse: ResolverTypeWrapper<FundingTxInvoiceSanctionCheckStatusResponse>;
   FundingTxMethodCount: ResolverTypeWrapper<FundingTxMethodCount>;
   FundingTxMethodSum: ResolverTypeWrapper<FundingTxMethodSum>;
   FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput;
@@ -2595,10 +2741,14 @@ export type ResolversTypes = {
   FundingTxsWhereFundingStatus: FundingTxsWhereFundingStatus;
   FundingType: FundingType;
   FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>;
+  GenerateAffiliatePaymentRequestResponse: ResolverTypeWrapper<GenerateAffiliatePaymentRequestResponse>;
+  GenerateAffiliatePaymentRequestsInput: GenerateAffiliatePaymentRequestsInput;
   GetActivitiesInput: GetActivitiesInput;
   GetActivityOrderByInput: GetActivityOrderByInput;
   GetActivityPaginationInput: GetActivityPaginationInput;
   GetActivityWhereInput: GetActivityWhereInput;
+  GetAffiliateLinksInput: GetAffiliateLinksInput;
+  GetAffiliateLinksWhereInput: GetAffiliateLinksWhereInput;
   GetDashboardFundersWhereInput: GetDashboardFundersWhereInput;
   GetEntriesInput: GetEntriesInput;
   GetEntriesOrderByInput: GetEntriesOrderByInput;
@@ -2787,6 +2937,12 @@ export type ResolversParentTypes = {
   ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput;
   ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
   ActivityResource: ResolversUnionTypes<ResolversParentTypes>['ActivityResource'];
+  AffiliateLink: AffiliateLink;
+  AffiliateLinkCreateInput: AffiliateLinkCreateInput;
+  AffiliatePaymentConfirmResponse: AffiliatePaymentConfirmResponse;
+  AffiliatePayoutsStats: AffiliatePayoutsStats;
+  AffiliateSalesStats: AffiliateSalesStats;
+  AffiliateStats: AffiliateStats;
   Ambassador: Ambassador;
   AmountSummary: AmountSummary;
   Badge: Badge;
@@ -2844,16 +3000,22 @@ export type ResolversParentTypes = {
   FundingTx: Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversParentTypes['SourceResource']> };
   FundingTxAmountGraph: FundingTxAmountGraph;
   FundingTxEmailUpdateInput: FundingTxEmailUpdateInput;
+  FundingTxInvoiceSanctionCheckStatusGetInput: FundingTxInvoiceSanctionCheckStatusGetInput;
+  FundingTxInvoiceSanctionCheckStatusResponse: FundingTxInvoiceSanctionCheckStatusResponse;
   FundingTxMethodCount: FundingTxMethodCount;
   FundingTxMethodSum: FundingTxMethodSum;
   FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput;
   FundingTxStatusUpdatedSubscriptionResponse: FundingTxStatusUpdatedSubscriptionResponse;
   FundingTxsGetResponse: FundingTxsGetResponse;
   FundinginvoiceCancel: FundinginvoiceCancel;
+  GenerateAffiliatePaymentRequestResponse: GenerateAffiliatePaymentRequestResponse;
+  GenerateAffiliatePaymentRequestsInput: GenerateAffiliatePaymentRequestsInput;
   GetActivitiesInput: GetActivitiesInput;
   GetActivityOrderByInput: GetActivityOrderByInput;
   GetActivityPaginationInput: GetActivityPaginationInput;
   GetActivityWhereInput: GetActivityWhereInput;
+  GetAffiliateLinksInput: GetAffiliateLinksInput;
+  GetAffiliateLinksWhereInput: GetAffiliateLinksWhereInput;
   GetDashboardFundersWhereInput: GetDashboardFundersWhereInput;
   GetEntriesInput: GetEntriesInput;
   GetEntriesOrderByInput: GetEntriesOrderByInput;
@@ -3015,6 +3177,45 @@ export type ActivityResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type ActivityResourceResolvers<ContextType = any, ParentType extends ResolversParentTypes['ActivityResource'] = ResolversParentTypes['ActivityResource']> = {
   __resolveType: TypeResolveFn<'Entry' | 'FundingTx' | 'Project' | 'ProjectReward', ParentType, ContextType>;
+};
+
+export type AffiliateLinkResolvers<ContextType = any, ParentType extends ResolversParentTypes['AffiliateLink'] = ResolversParentTypes['AffiliateLink']> = {
+  affiliateFeePercentage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  affiliateId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  disabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  disabledAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  label?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  lightningAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  stats?: Resolver<Maybe<ResolversTypes['AffiliateStats']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AffiliatePaymentConfirmResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AffiliatePaymentConfirmResponse'] = ResolversParentTypes['AffiliatePaymentConfirmResponse']> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AffiliatePayoutsStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AffiliatePayoutsStats'] = ResolversParentTypes['AffiliatePayoutsStats']> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AffiliateSalesStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AffiliateSalesStats'] = ResolversParentTypes['AffiliateSalesStats']> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AffiliateStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AffiliateStats'] = ResolversParentTypes['AffiliateStats']> = {
+  payouts?: Resolver<ResolversTypes['AffiliatePayoutsStats'], ParentType, ContextType>;
+  sales?: Resolver<ResolversTypes['AffiliateSalesStats'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type AmbassadorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Ambassador'] = ResolversParentTypes['Ambassador']> = {
@@ -3223,6 +3424,7 @@ export type FundingQueryResponseResolvers<ContextType = any, ParentType extends 
 
 export type FundingTxResolvers<ContextType = any, ParentType extends ResolversParentTypes['FundingTx'] = ResolversParentTypes['FundingTx']> = {
   address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  affiliateFeeInSats?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   amountPaid?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   bitcoinQuote?: Resolver<Maybe<ResolversTypes['BitcoinQuote']>, ParentType, ContextType>;
@@ -3258,6 +3460,11 @@ export type FundingTxAmountGraphResolvers<ContextType = any, ParentType extends 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type FundingTxInvoiceSanctionCheckStatusResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['FundingTxInvoiceSanctionCheckStatusResponse'] = ResolversParentTypes['FundingTxInvoiceSanctionCheckStatusResponse']> = {
+  status?: Resolver<ResolversTypes['FundingTxInvoiceSanctionCheckStatus'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type FundingTxMethodCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['FundingTxMethodCount'] = ResolversParentTypes['FundingTxMethodCount']> = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   method?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -3284,6 +3491,12 @@ export type FundingTxsGetResponseResolvers<ContextType = any, ParentType extends
 export type FundinginvoiceCancelResolvers<ContextType = any, ParentType extends ResolversParentTypes['FundinginvoiceCancel'] = ResolversParentTypes['FundinginvoiceCancel']> = {
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GenerateAffiliatePaymentRequestResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['GenerateAffiliatePaymentRequestResponse'] = ResolversParentTypes['GenerateAffiliatePaymentRequestResponse']> = {
+  affiliatePaymentId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  paymentRequest?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3413,6 +3626,11 @@ export type MilestoneResolvers<ContextType = any, ParentType extends ResolversPa
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  affiliateLinkCreate?: Resolver<ResolversTypes['AffiliateLink'], ParentType, ContextType, RequireFields<MutationAffiliateLinkCreateArgs, 'input'>>;
+  affiliateLinkDisable?: Resolver<ResolversTypes['AffiliateLink'], ParentType, ContextType, RequireFields<MutationAffiliateLinkDisableArgs, 'affiliateLinkId'>>;
+  affiliateLinkLabelUpdate?: Resolver<ResolversTypes['AffiliateLink'], ParentType, ContextType, RequireFields<MutationAffiliateLinkLabelUpdateArgs, 'affiliateLinkId' | 'label'>>;
+  affiliatePaymentConfirm?: Resolver<ResolversTypes['AffiliatePaymentConfirmResponse'], ParentType, ContextType, RequireFields<MutationAffiliatePaymentConfirmArgs, 'affiliatePaymentId'>>;
+  affiliatePaymentRequestGenerate?: Resolver<ResolversTypes['GenerateAffiliatePaymentRequestResponse'], ParentType, ContextType, RequireFields<MutationAffiliatePaymentRequestGenerateArgs, 'input'>>;
   claimBadge?: Resolver<ResolversTypes['UserBadge'], ParentType, ContextType, RequireFields<MutationClaimBadgeArgs, 'input'>>;
   createEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationCreateEntryArgs, 'input'>>;
   createProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationCreateProjectArgs, 'input'>>;
@@ -3558,6 +3776,9 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType>;
   fundingTxsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   grantApplications?: Resolver<Array<ResolversTypes['GrantApplicant']>, ParentType, ContextType, Partial<ProjectGrantApplicationsArgs>>;
+  hasEntries?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  hasGoals?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  hasRewards?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   keys?: Resolver<ResolversTypes['ProjectKeys'], ParentType, ContextType>;
@@ -3740,11 +3961,13 @@ export type ProjectsSummaryResolvers<ContextType = any, ParentType extends Resol
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  affiliateLinksGet?: Resolver<Array<ResolversTypes['AffiliateLink']>, ParentType, ContextType, RequireFields<QueryAffiliateLinksGetArgs, 'input'>>;
   badges?: Resolver<Array<ResolversTypes['Badge']>, ParentType, ContextType>;
   currencyQuoteGet?: Resolver<ResolversTypes['CurrencyQuoteGetResponse'], ParentType, ContextType, RequireFields<QueryCurrencyQuoteGetArgs, 'input'>>;
   entry?: Resolver<Maybe<ResolversTypes['Entry']>, ParentType, ContextType, RequireFields<QueryEntryArgs, 'id'>>;
   fundersGet?: Resolver<Array<ResolversTypes['Funder']>, ParentType, ContextType, RequireFields<QueryFundersGetArgs, 'input'>>;
   fundingTx?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType, Partial<QueryFundingTxArgs>>;
+  fundingTxInvoiceSanctionCheckStatusGet?: Resolver<ResolversTypes['FundingTxInvoiceSanctionCheckStatusResponse'], ParentType, ContextType, RequireFields<QueryFundingTxInvoiceSanctionCheckStatusGetArgs, 'input'>>;
   fundingTxsGet?: Resolver<Maybe<ResolversTypes['FundingTxsGetResponse']>, ParentType, ContextType, Partial<QueryFundingTxsGetArgs>>;
   getActivities?: Resolver<Array<ResolversTypes['Activity']>, ParentType, ContextType, Partial<QueryGetActivitiesArgs>>;
   getDashboardFunders?: Resolver<Array<ResolversTypes['Funder']>, ParentType, ContextType, Partial<QueryGetDashboardFundersArgs>>;
@@ -3920,6 +4143,11 @@ export type ProjectsMostFundedOfTheWeekGetResolvers<ContextType = any, ParentTyp
 export type Resolvers<ContextType = any> = {
   Activity?: ActivityResolvers<ContextType>;
   ActivityResource?: ActivityResourceResolvers<ContextType>;
+  AffiliateLink?: AffiliateLinkResolvers<ContextType>;
+  AffiliatePaymentConfirmResponse?: AffiliatePaymentConfirmResponseResolvers<ContextType>;
+  AffiliatePayoutsStats?: AffiliatePayoutsStatsResolvers<ContextType>;
+  AffiliateSalesStats?: AffiliateSalesStatsResolvers<ContextType>;
+  AffiliateStats?: AffiliateStatsResolvers<ContextType>;
   Ambassador?: AmbassadorResolvers<ContextType>;
   AmountSummary?: AmountSummaryResolvers<ContextType>;
   Badge?: BadgeResolvers<ContextType>;
@@ -3947,11 +4175,13 @@ export type Resolvers<ContextType = any> = {
   FundingQueryResponse?: FundingQueryResponseResolvers<ContextType>;
   FundingTx?: FundingTxResolvers<ContextType>;
   FundingTxAmountGraph?: FundingTxAmountGraphResolvers<ContextType>;
+  FundingTxInvoiceSanctionCheckStatusResponse?: FundingTxInvoiceSanctionCheckStatusResponseResolvers<ContextType>;
   FundingTxMethodCount?: FundingTxMethodCountResolvers<ContextType>;
   FundingTxMethodSum?: FundingTxMethodSumResolvers<ContextType>;
   FundingTxStatusUpdatedSubscriptionResponse?: FundingTxStatusUpdatedSubscriptionResponseResolvers<ContextType>;
   FundingTxsGetResponse?: FundingTxsGetResponseResolvers<ContextType>;
   FundinginvoiceCancel?: FundinginvoiceCancelResolvers<ContextType>;
+  GenerateAffiliatePaymentRequestResponse?: GenerateAffiliatePaymentRequestResponseResolvers<ContextType>;
   Grant?: GrantResolvers<ContextType>;
   GrantApplicant?: GrantApplicantResolvers<ContextType>;
   GrantApplicantContributor?: GrantApplicantContributorResolvers<ContextType>;
@@ -4024,6 +4254,8 @@ export type Resolvers<ContextType = any> = {
 };
 
 
+export type ProjectAffiliateLinkFragment = { __typename?: 'AffiliateLink', projectId: any, label?: string | null, id: any, email: string, disabledAt?: any | null, createdAt: any, disabled?: boolean | null, affiliateId?: string | null, lightningAddress: string, affiliateFeePercentage: number, stats?: { __typename?: 'AffiliateStats', sales: { __typename?: 'AffiliateSalesStats', total: number, count: number } } | null };
+
 export type EmailUpdateUserFragment = { __typename?: 'User', email?: string | null, isEmailVerified: boolean, id: any };
 
 export type OtpResponseFragment = { __typename?: 'OTPResponse', otpVerificationToken: string, expiresAt: any };
@@ -4070,7 +4302,7 @@ export type OrderFragment = { __typename?: 'Order', confirmedAt?: any | null, cr
     & OrderItemFragment
   )>, fundingTx: { __typename?: 'FundingTx', id: any, amount: number, amountPaid: number, donationAmount: number, address?: string | null, email?: string | null, fundingType: FundingType, invoiceStatus: InvoiceStatus, isAnonymous: boolean, status: FundingStatus, uuid?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null } };
 
-export type FundingTxOrderFragment = { __typename?: 'FundingTx', id: any, invoiceStatus: InvoiceStatus, donationAmount: number, amountPaid: number, amount: number, email?: string | null, paidAt?: any | null, status: FundingStatus, invoiceId?: string | null, uuid?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, externalAccounts: Array<{ __typename?: 'ExternalAccount', id: any, externalUsername: string, externalId: string, accountType: string, public: boolean }> } | null }, order?: { __typename?: 'Order', id: any, referenceCode: string, totalInSats: number, items: Array<(
+export type FundingTxOrderFragment = { __typename?: 'FundingTx', id: any, invoiceStatus: InvoiceStatus, donationAmount: number, amountPaid: number, amount: number, email?: string | null, paidAt?: any | null, status: FundingStatus, invoiceId?: string | null, uuid?: string | null, affiliateFeeInSats?: number | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, externalAccounts: Array<{ __typename?: 'ExternalAccount', id: any, externalUsername: string, externalId: string, accountType: string, public: boolean }> } | null }, order?: { __typename?: 'Order', id: any, referenceCode: string, totalInSats: number, items: Array<(
       { __typename?: 'OrderItem' }
       & OrderItemFragment
     )> } | null };
@@ -4171,6 +4403,34 @@ export type UserProjectContributionsFragment = { __typename?: 'UserProjectContri
 export type ProjectWalletFragment = { __typename?: 'Wallet', id: any, name?: string | null, feePercentage?: number | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode }, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'LndConnectionDetailsPrivate', macaroon: string, tlsCertificate?: string | null, hostname: string, grpcPort: number, lndNodeType: LndNodeType, pubkey?: string | null } | { __typename?: 'LndConnectionDetailsPublic', pubkey?: string | null } };
 
 export type WalletLimitsFragment = { __typename?: 'WalletLimits', contribution?: { __typename?: 'WalletContributionLimits', min?: number | null, max?: number | null, offChain?: { __typename?: 'WalletOffChainContributionLimits', min?: number | null, max?: number | null } | null, onChain?: { __typename?: 'WalletOnChainContributionLimits', min?: number | null, max?: number | null } | null } | null };
+
+export type AffiliateLinkCreateMutationVariables = Exact<{
+  input: AffiliateLinkCreateInput;
+}>;
+
+
+export type AffiliateLinkCreateMutation = { __typename?: 'Mutation', affiliateLinkCreate: (
+    { __typename?: 'AffiliateLink' }
+    & ProjectAffiliateLinkFragment
+  ) };
+
+export type AffiliateLinkLabelUpdateMutationVariables = Exact<{
+  affiliateLinkId: Scalars['BigInt']['input'];
+  label: Scalars['String']['input'];
+}>;
+
+
+export type AffiliateLinkLabelUpdateMutation = { __typename?: 'Mutation', affiliateLinkLabelUpdate: (
+    { __typename?: 'AffiliateLink' }
+    & ProjectAffiliateLinkFragment
+  ) };
+
+export type AffiliateLinkDisableMutationVariables = Exact<{
+  affiliateLinkId: Scalars['BigInt']['input'];
+}>;
+
+
+export type AffiliateLinkDisableMutation = { __typename?: 'Mutation', affiliateLinkDisable: { __typename?: 'AffiliateLink', id: any } };
 
 export type UserBadgeAwardMutationVariables = Exact<{
   userBadgeId: Scalars['BigInt']['input'];
@@ -4482,6 +4742,16 @@ export type ActivitiesForLandingPageQueryVariables = Exact<{
 export type ActivitiesForLandingPageQuery = { __typename?: 'Query', getActivities: Array<(
     { __typename?: 'Activity' }
     & ActivityForLandingPageFragment
+  )> };
+
+export type AffiliateLinksGetQueryVariables = Exact<{
+  input: GetAffiliateLinksInput;
+}>;
+
+
+export type AffiliateLinksGetQuery = { __typename?: 'Query', affiliateLinksGet: Array<(
+    { __typename?: 'AffiliateLink' }
+    & ProjectAffiliateLinkFragment
   )> };
 
 export type BadgesQueryVariables = Exact<{ [key: string]: never; }>;
@@ -4948,6 +5218,26 @@ export type FundingTxStatusUpdatedSubscription = { __typename?: 'Subscription', 
       & FundingTxFragment
     ) } };
 
+export const ProjectAffiliateLinkFragmentDoc = gql`
+    fragment ProjectAffiliateLink on AffiliateLink {
+  projectId
+  label
+  id
+  email
+  disabledAt
+  createdAt
+  disabled
+  affiliateId
+  lightningAddress
+  affiliateFeePercentage
+  stats {
+    sales {
+      total
+      count
+    }
+  }
+}
+    `;
 export const EmailUpdateUserFragmentDoc = gql`
     fragment EmailUpdateUser on User {
   email
@@ -5349,6 +5639,7 @@ export const FundingTxOrderFragmentDoc = gql`
   status
   invoiceId
   uuid
+  affiliateFeeInSats
   bitcoinQuote {
     quoteCurrency
     quote
@@ -6034,6 +6325,106 @@ export const FundingTxForUserContributionFragmentDoc = gql`
   }
 }
     `;
+export const AffiliateLinkCreateDocument = gql`
+    mutation AffiliateLinkCreate($input: AffiliateLinkCreateInput!) {
+  affiliateLinkCreate(input: $input) {
+    ...ProjectAffiliateLink
+  }
+}
+    ${ProjectAffiliateLinkFragmentDoc}`;
+export type AffiliateLinkCreateMutationFn = Apollo.MutationFunction<AffiliateLinkCreateMutation, AffiliateLinkCreateMutationVariables>;
+
+/**
+ * __useAffiliateLinkCreateMutation__
+ *
+ * To run a mutation, you first call `useAffiliateLinkCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAffiliateLinkCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [affiliateLinkCreateMutation, { data, loading, error }] = useAffiliateLinkCreateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAffiliateLinkCreateMutation(baseOptions?: Apollo.MutationHookOptions<AffiliateLinkCreateMutation, AffiliateLinkCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AffiliateLinkCreateMutation, AffiliateLinkCreateMutationVariables>(AffiliateLinkCreateDocument, options);
+      }
+export type AffiliateLinkCreateMutationHookResult = ReturnType<typeof useAffiliateLinkCreateMutation>;
+export type AffiliateLinkCreateMutationResult = Apollo.MutationResult<AffiliateLinkCreateMutation>;
+export type AffiliateLinkCreateMutationOptions = Apollo.BaseMutationOptions<AffiliateLinkCreateMutation, AffiliateLinkCreateMutationVariables>;
+export const AffiliateLinkLabelUpdateDocument = gql`
+    mutation AffiliateLinkLabelUpdate($affiliateLinkId: BigInt!, $label: String!) {
+  affiliateLinkLabelUpdate(affiliateLinkId: $affiliateLinkId, label: $label) {
+    ...ProjectAffiliateLink
+  }
+}
+    ${ProjectAffiliateLinkFragmentDoc}`;
+export type AffiliateLinkLabelUpdateMutationFn = Apollo.MutationFunction<AffiliateLinkLabelUpdateMutation, AffiliateLinkLabelUpdateMutationVariables>;
+
+/**
+ * __useAffiliateLinkLabelUpdateMutation__
+ *
+ * To run a mutation, you first call `useAffiliateLinkLabelUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAffiliateLinkLabelUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [affiliateLinkLabelUpdateMutation, { data, loading, error }] = useAffiliateLinkLabelUpdateMutation({
+ *   variables: {
+ *      affiliateLinkId: // value for 'affiliateLinkId'
+ *      label: // value for 'label'
+ *   },
+ * });
+ */
+export function useAffiliateLinkLabelUpdateMutation(baseOptions?: Apollo.MutationHookOptions<AffiliateLinkLabelUpdateMutation, AffiliateLinkLabelUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AffiliateLinkLabelUpdateMutation, AffiliateLinkLabelUpdateMutationVariables>(AffiliateLinkLabelUpdateDocument, options);
+      }
+export type AffiliateLinkLabelUpdateMutationHookResult = ReturnType<typeof useAffiliateLinkLabelUpdateMutation>;
+export type AffiliateLinkLabelUpdateMutationResult = Apollo.MutationResult<AffiliateLinkLabelUpdateMutation>;
+export type AffiliateLinkLabelUpdateMutationOptions = Apollo.BaseMutationOptions<AffiliateLinkLabelUpdateMutation, AffiliateLinkLabelUpdateMutationVariables>;
+export const AffiliateLinkDisableDocument = gql`
+    mutation AffiliateLinkDisable($affiliateLinkId: BigInt!) {
+  affiliateLinkDisable(affiliateLinkId: $affiliateLinkId) {
+    id
+  }
+}
+    `;
+export type AffiliateLinkDisableMutationFn = Apollo.MutationFunction<AffiliateLinkDisableMutation, AffiliateLinkDisableMutationVariables>;
+
+/**
+ * __useAffiliateLinkDisableMutation__
+ *
+ * To run a mutation, you first call `useAffiliateLinkDisableMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAffiliateLinkDisableMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [affiliateLinkDisableMutation, { data, loading, error }] = useAffiliateLinkDisableMutation({
+ *   variables: {
+ *      affiliateLinkId: // value for 'affiliateLinkId'
+ *   },
+ * });
+ */
+export function useAffiliateLinkDisableMutation(baseOptions?: Apollo.MutationHookOptions<AffiliateLinkDisableMutation, AffiliateLinkDisableMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AffiliateLinkDisableMutation, AffiliateLinkDisableMutationVariables>(AffiliateLinkDisableDocument, options);
+      }
+export type AffiliateLinkDisableMutationHookResult = ReturnType<typeof useAffiliateLinkDisableMutation>;
+export type AffiliateLinkDisableMutationResult = Apollo.MutationResult<AffiliateLinkDisableMutation>;
+export type AffiliateLinkDisableMutationOptions = Apollo.BaseMutationOptions<AffiliateLinkDisableMutation, AffiliateLinkDisableMutationVariables>;
 export const UserBadgeAwardDocument = gql`
     mutation UserBadgeAward($userBadgeId: BigInt!) {
   userBadgeAward(userBadgeId: $userBadgeId) {
@@ -7440,6 +7831,46 @@ export type ActivitiesForLandingPageQueryHookResult = ReturnType<typeof useActiv
 export type ActivitiesForLandingPageLazyQueryHookResult = ReturnType<typeof useActivitiesForLandingPageLazyQuery>;
 export type ActivitiesForLandingPageSuspenseQueryHookResult = ReturnType<typeof useActivitiesForLandingPageSuspenseQuery>;
 export type ActivitiesForLandingPageQueryResult = Apollo.QueryResult<ActivitiesForLandingPageQuery, ActivitiesForLandingPageQueryVariables>;
+export const AffiliateLinksGetDocument = gql`
+    query AffiliateLinksGet($input: GetAffiliateLinksInput!) {
+  affiliateLinksGet(input: $input) {
+    ...ProjectAffiliateLink
+  }
+}
+    ${ProjectAffiliateLinkFragmentDoc}`;
+
+/**
+ * __useAffiliateLinksGetQuery__
+ *
+ * To run a query within a React component, call `useAffiliateLinksGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAffiliateLinksGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAffiliateLinksGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAffiliateLinksGetQuery(baseOptions: Apollo.QueryHookOptions<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables> & ({ variables: AffiliateLinksGetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>(AffiliateLinksGetDocument, options);
+      }
+export function useAffiliateLinksGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>(AffiliateLinksGetDocument, options);
+        }
+export function useAffiliateLinksGetSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>(AffiliateLinksGetDocument, options);
+        }
+export type AffiliateLinksGetQueryHookResult = ReturnType<typeof useAffiliateLinksGetQuery>;
+export type AffiliateLinksGetLazyQueryHookResult = ReturnType<typeof useAffiliateLinksGetLazyQuery>;
+export type AffiliateLinksGetSuspenseQueryHookResult = ReturnType<typeof useAffiliateLinksGetSuspenseQuery>;
+export type AffiliateLinksGetQueryResult = Apollo.QueryResult<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>;
 export const BadgesDocument = gql`
     query Badges {
   badges {

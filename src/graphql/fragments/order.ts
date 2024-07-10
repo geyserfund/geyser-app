@@ -69,6 +69,7 @@ export const FRAGMENT_TRANSACTION_ORDER = gql`
     status
     invoiceId
     uuid
+    affiliateFeeInSats
     bitcoinQuote {
       quoteCurrency
       quote
