@@ -36,7 +36,7 @@ export const setNextFundingStageAtom = atom(null, (get, set) => {
   set(fundingStageAtom, nextState)
 })
 
-// This effect is used to reset the subscriptionActiveAtom, pollingFundingTxAtom, paymentMethodAtom, and onChainStatusAtom
+/** This effect is used to reset the subscriptionActiveAtom, pollingFundingTxAtom, paymentMethodAtom, and onChainStatusAtom */
 export const fundingStageAtomEffect = atomEffect((get, set) => {
   const currentState = get(fundingStageAtom)
 

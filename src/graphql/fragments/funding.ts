@@ -110,6 +110,7 @@ export const FRAGMENT_FUNDING_TX_DOWNLOAD_INVOICE = gql`
     }
     projectId
     paidAt
+    createdAt
     order {
       items {
         item {

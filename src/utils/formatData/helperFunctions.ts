@@ -1,6 +1,8 @@
 import { Maybe } from 'yup'
 
-export const commaFormatted = (amount?: Maybe<number>) =>
+import { Satoshis, USDCents, USDollars } from '../../types'
+
+export const commaFormatted = (amount?: Maybe<number | USDollars | Satoshis | USDCents>) =>
   amount ? amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''
 
 export const getBitcoinAmount = (amount: number, decimal?: boolean) => {

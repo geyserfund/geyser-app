@@ -8,6 +8,7 @@ const USD_QUOTE_KEY = 'usdQuote'
 
 const defaultContext = {
   btcRate: 0,
+  usdRate: 0,
 }
 
 interface IBtcContext {
@@ -19,6 +20,8 @@ interface IBtcContext {
    * (See: https://github.com/geyserfund/geyser-app/pull/361#discussion_r999694992)
    */
   btcRate: number
+  /** value of 1 bitcoin in USD */
+  usdRate: number
 }
 
 const A_MINUTE_IN_MILIS = 1000 * 60
@@ -28,6 +31,7 @@ export const BtcContext = createContext<IBtcContext>(defaultContext)
 
 export const BtcProvider = ({ children }: { children: React.ReactNode }) => {
   const [btcRate, setBtcRate] = useState(0)
+  const [usdRate, setUsdRate] = useState(0)
 
   const getRateFromLocalStorage = () => {
     const values = localStorage.getItem(USD_QUOTE_KEY)?.split('::')
@@ -67,6 +71,7 @@ export const BtcProvider = ({ children }: { children: React.ReactNode }) => {
         if (localValues.usdRate) {
           const satoshirate = localValues.usdRate * BTC_IN_SATOSHI
           setBtcRate(satoshirate)
+          setUsdRate(localValues.usdRate)
         }
 
         if ((localValues.isOld && retries < maxRetires) || !localValues.usdRate) {
@@ -78,6 +83,7 @@ export const BtcProvider = ({ children }: { children: React.ReactNode }) => {
       } else {
         const satoshirate = usdRate * BTC_IN_SATOSHI
         setBtcRate(satoshirate)
+        setUsdRate(usdRate)
         storeRateToLocalStorage(usdRate)
       }
     }
@@ -85,7 +91,7 @@ export const BtcProvider = ({ children }: { children: React.ReactNode }) => {
     getBitcoinRates()
   }, [])
 
-  return <BtcContext.Provider value={{ btcRate }}>{children}</BtcContext.Provider>
+  return <BtcContext.Provider value={{ btcRate, usdRate }}>{children}</BtcContext.Provider>
 }
 
 export const useBtcContext = () => useContext(BtcContext)
