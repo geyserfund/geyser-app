@@ -1,18 +1,22 @@
-import { useLazyQuery, useQuery } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 import { DownloadIcon } from '@chakra-ui/icons'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { useEffect, useState } from 'react'
 
-import { QUERY_FUNDING_TX_FOR_DOWNLOAD_INVOICE, QUERY_PROJECT_BY_NAME_OR_ID } from '../../../../../../../../../graphql'
-import { FundingTx, Project } from '../../../../../../../../../types'
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../../../../../../../graphql'
+import {
+  FundingTxForDownloadInvoiceFragment,
+  Project,
+  useFundingTxForDownloadInvoiceQuery,
+} from '../../../../../../../../../types'
 import { toInt } from '../../../../../../../../../utils'
 import { DownloadInvoicePDF } from '../../success/components/DownloadInvoicePDF'
 
 export const DownloadInvoice = ({ fundingTxId, showFee }: { fundingTxId: BigInt; showFee?: false }) => {
-  const [invoiceData, setInvoiceData] = useState<FundingTx | null>(null)
+  const [invoiceData, setInvoiceData] = useState<FundingTxForDownloadInvoiceFragment | null>(null)
   const [projectData, setProjectData] = useState<Project | null>(null)
 
-  const transactionQuery = useQuery<{ fundingTx: FundingTx }>(QUERY_FUNDING_TX_FOR_DOWNLOAD_INVOICE, {
+  const transactionQuery = useFundingTxForDownloadInvoiceQuery({
     variables: { fundingTxId: toInt(fundingTxId) },
     onCompleted(data) {
       setInvoiceData(data.fundingTx)

@@ -2,18 +2,17 @@ import { HStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { Body1 } from '../../../../../../../../../components/typography'
-import { useFundCalc } from '../../../../../../../../../helpers'
+import { useBTCConverter } from '../../../../../../../../../helpers'
+import { Satoshis } from '../../../../../../../../../types'
+import { commaFormatted } from '../../../../../../../../../utils'
 import { useFundingContext } from '../../../../../../../context'
 
+/** Only to be used inside the funding context, after the fund mutation is initiated */
 export const TotalAmountToPay = () => {
   const { t } = useTranslation()
+  const { getUSDAmount } = useBTCConverter()
 
-  const {
-    fundForm: { state: formState },
-    project,
-  } = useFundingContext()
-
-  const { getTotalAmount } = useFundCalc(formState)
+  const { project, fundingTx } = useFundingContext()
 
   if (!project || !project.name) return null
 
@@ -25,9 +24,11 @@ export const TotalAmountToPay = () => {
       </Body1>
       <HStack>
         <Body1 color="neutral.900" xBold>
-          {`${getTotalAmount('sats', project.name).toLocaleString()} sats`}
+          {`${commaFormatted(fundingTx.amount)} sats`}
         </Body1>
-        <Body1 color="neutral.700">{`($${getTotalAmount('dollar', project.name)})`}</Body1>
+        <Body1 color="neutral.700">{`($${commaFormatted(
+          parseFloat(getUSDAmount(fundingTx.amount as Satoshis).toFixed(2)),
+        )})`}</Body1>
       </HStack>
     </HStack>
   )
