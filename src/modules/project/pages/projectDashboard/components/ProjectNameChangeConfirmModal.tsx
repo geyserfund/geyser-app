@@ -26,6 +26,7 @@ export const ProjectNameChangeConfirmModal = ({
         <Body1>
           {t("You've changed your project identifier which also changes your Geyser URL and Lightning address.")}
           <br />
+          <br />
           {t('This also breaks all Affiliate refferal links.')}
         </Body1>
         <Body1>{t('Are you sure you want to save these changes?')}</Body1>
