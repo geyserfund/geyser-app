@@ -10,6 +10,7 @@ import { centsToDollars } from '../../../../../../../../../utils'
 import { useProjectDefaultGoal } from '../hooks/useProjectDefaultGoal'
 
 type Props = {
+  removeBalance?: boolean
   defaultGoalId: string | null
   balance: number | null
   balanceUsdCent: number | null
@@ -21,7 +22,13 @@ enum BalanceView {
   Total = 'total',
 }
 
-export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, inProgressGoals }: Props) {
+export function ProjectBalanceDisplay({
+  removeBalance,
+  defaultGoalId,
+  balance,
+  balanceUsdCent,
+  inProgressGoals,
+}: Props) {
   const { t } = useTranslation()
 
   const { priorityGoal, formattedUsdAmount, formattedTotalUsdAmount, formattedSatsAmount } = useProjectDefaultGoal({
@@ -37,7 +44,7 @@ export function ProjectBalanceDisplay({ defaultGoalId, balance, balanceUsdCent, 
   })
 
   const hasGoal = Boolean(defaultGoalId)
-  const hasTotalBalance = Boolean(balance && balanceUsdCent)
+  const hasTotalBalance = Boolean(balance && balanceUsdCent && !removeBalance)
 
   const [currentView, setCurrentView] = useState<BalanceView>(hasGoal ? BalanceView.Goal : BalanceView.Total)
 
