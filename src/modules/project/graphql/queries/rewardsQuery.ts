@@ -10,3 +10,12 @@ export const QUERY_PROJECT_REWARDS = gql`
     }
   }
 `
+
+export const QUERY_PROJECT_REWARD = gql`
+  ${FRAGMENT_PROJECT_REWARD}
+  query ProjectReward($getProjectRewardId: BigInt!) {
+    getProjectReward(id: $getProjectRewardId) {
+      ...ProjectReward
+    }
+  }
+`

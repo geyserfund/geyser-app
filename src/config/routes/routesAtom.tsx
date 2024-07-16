@@ -23,11 +23,17 @@ const currentRouteAtom = atom((get) => {
 
 export const useSetMatchRoutes = () => useSetAtom(matchRoutesAtom)
 
-export const routeMatchForAtom = (routes: string[]) => (get: Getter) => {
-  const matchRoute = get(currentRouteAtom)
-  if (!matchRoute) return false
-  return routes.some((route) => route === matchRoute.path)
-}
+/** Get the functions you can pass into a derived atom definition */
+export const routeMatchForAtom =
+  (
+    /** arrray of route patterns you'd like to match with the current route */
+    routes: string[],
+  ) =>
+  (get: Getter) => {
+    const matchRoute = get(currentRouteAtom)
+    if (!matchRoute) return false
+    return routes.some((route) => route === matchRoute.path)
+  }
 
 export const projectCreationRoutes = [
   getPath('privateProjectLaunch'),
@@ -54,11 +60,8 @@ export const projectDashboardRoutes = [
 ]
 
 export const projectCreatorRoutes = [
-  getPath('projectContributors', PathName.projectName),
-  getPath('projectInsights', PathName.projectName),
-  getPath('projectManageRewards', PathName.projectManageRewards),
-  getPath('projectCreateReward', PathName.projectCreateReward),
-  getPath('projectEditReward', PathName.projectEditReward, PathName.rewardId),
+  getPath('projectRewardCreate', PathName.projectName),
+  getPath('projectRewardEdit', PathName.projectName, PathName.rewardId),
 ]
 
 export const projectRoutes = [
@@ -67,6 +70,15 @@ export const projectRoutes = [
   getPath('projectGoals', PathName.projectName),
   getPath('projectRewards', PathName.projectName),
   ...projectCreatorRoutes,
+]
+
+export const ProjectPageRoutesWithNavBar = [
+  getPath('project', PathName.projectName),
+  getPath('projectEntries', PathName.projectName),
+  getPath('projectGoals', PathName.projectName),
+  getPath('projectRewards', PathName.projectName),
+  getPath('projectLeaderboard', PathName.projectName),
+  ...projectDashboardRoutes,
 ]
 
 export const grantRoutes = [getPath('grants'), getPath('grants', PathName.grantId)]

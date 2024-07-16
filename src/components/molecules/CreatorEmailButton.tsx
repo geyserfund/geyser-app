@@ -22,7 +22,8 @@ export const CreatorEmailButton = ({ email, ...props }: { email: string } & Butt
       justifyContent="start"
       isActive={isEmailCopied}
       onClick={handleCopyEmail}
-      variant="secondary"
+      variant="outline"
+      colorScheme="primary1"
       rightIcon={<CopyIcon />}
       {...props}
     >

@@ -21,7 +21,11 @@ export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) =>
       alignItems={'center'}
       {...props}
     >
-      {user.id ? <Avatar src={user.imageUrl || ''} /> : <PiList fontSize={'24px'} />}
+      {user.id ? (
+        <Avatar src={user.imageUrl || ''} height={{ base: '40px', lg: '48px' }} width={{ base: '40px', lg: '48px' }} />
+      ) : (
+        <PiList fontSize={'24px'} />
+      )}
     </HStack>
   )
 })

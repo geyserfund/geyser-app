@@ -4,7 +4,7 @@ import { PiShareFat } from 'react-icons/pi'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 
-import { ProjectFundingQRModal } from '../../../components'
+import { ProjectShareModal } from '../shareModal'
 
 export const ShareProjectButton = () => {
   const { t } = useTranslation()
@@ -18,7 +18,7 @@ export const ShareProjectButton = () => {
       <Button size="sm" variant="soft" colorScheme="neutral1" rightIcon={<PiShareFat />} onClick={onOpen}>
         {t('Share')}
       </Button>
-      <ProjectFundingQRModal
+      <ProjectShareModal
         isOpen={isOpen}
         onClose={onClose}
         name={project.name}

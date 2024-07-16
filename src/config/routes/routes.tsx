@@ -21,6 +21,8 @@ const ProjectDashboard1 = () => import('../../modules/project/pages1/projectDash
 
 const Project1 = () => import('../../modules/project/pages1/projectView')
 
+const CreatorReward = () => import('../../modules/project/pages1/projectView/views/rewards/creatorViews')
+
 const Refund = () => import('../../modules/project/pages/refund')
 const ProfilePage = () => import('../../modules/profile/pages/profilePage/Profile')
 const ProfileSettingsPage = () => import('../../modules/profile/pages/profileSettings/ProfileSettings')
@@ -269,6 +271,31 @@ export const platformRoutes: RouteObject[] = [
         async lazy() {
           const ProjectRewards = await Project1().then((m) => m.ProjectRewards)
           return { Component: ProjectRewards }
+        },
+      },
+      {
+        path: getPath('projectRewardView', PathName.projectName, PathName.rewardId),
+        async lazy() {
+          const RewardView = await Project1().then((m) => m.RewardView)
+          return { Component: RewardView }
+        },
+      },
+      {
+        path: getPath('projectRewardCreate', PathName.projectName),
+        async lazy() {
+          const CreateReward = await CreatorReward().then((m) => m.CreateReward)
+          return {
+            element: renderPrivateRoute(CreateReward),
+          }
+        },
+      },
+      {
+        path: getPath('projectRewardEdit', PathName.projectName, PathName.rewardId),
+        async lazy() {
+          const EditReward = await CreatorReward().then((m) => m.EditReward)
+          return {
+            element: renderPrivateRoute(EditReward),
+          }
         },
       },
       // TODO:  Need to change routes to posts

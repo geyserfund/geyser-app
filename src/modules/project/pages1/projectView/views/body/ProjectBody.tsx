@@ -7,6 +7,7 @@ import { ProjectStatus } from '../../../../../../types'
 import { useProjectAtom } from '../../../../hooks/useProjectAtom'
 import {
   ContributionSummary,
+  CreatorTools,
   Details,
   Entries,
   FinalizeProjectNotice,
@@ -15,7 +16,6 @@ import {
   LaunchProjectNotice,
   LeaderboardSummary,
   Rewards,
-  ShareProject,
   Story,
 } from './sections'
 
@@ -42,8 +42,9 @@ export const ProjectBody = () => {
         <FinalizeProjectNotice />
         <LaunchProjectNotice />
         <Header />
+        <CreatorTools />
         <Story />
-        <ShareProject />
+
         {project.hasRewards && <Rewards />}
         {project.hasEntries && <Entries />}
         {project.hasGoals && <Goals />}

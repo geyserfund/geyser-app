@@ -14,9 +14,11 @@ import {
 import { forwardRef, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCaretDoubleDown, PiShareFat } from 'react-icons/pi'
+import { Link } from 'react-router-dom'
 
 import {
   FlashMembershipCountUrl,
+  getPath,
   ID,
   projectFlashIds,
   projectsWithSubscription,
@@ -31,6 +33,7 @@ import { toInt, useMobileMode } from '../../../../../../../../utils'
 import { toLargeImageUrl } from '../../../../../../../../utils/tools/imageSizes'
 import { useProjectAtom, useWalletAtom } from '../../../../../../hooks/useProjectAtom'
 import { FollowButton } from '../../components'
+import { CreatorEditButton } from '../../components/CreatorEditButton'
 import { CreatorSocial } from './components/CreatorSocial'
 import { LightningAddress } from './components/LightningAddress'
 import { NpubDisplay } from './components/NpubDisplay'
@@ -131,7 +134,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       </Modal>
       {/* {statusContent()} */}
 
-      <CardLayout w="full" ref={ref} mobileDense padding={0} spacing={0}>
+      <CardLayout w="full" ref={ref} padding={0} spacing={0}>
         <Box>{renderImageOrVideo()}</Box>
         <HStack
           spacing={4}
@@ -184,17 +187,21 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
               </HStack>
             )}
 
-            <HStack w="full" paddingTop={1}>
-              <IconButton
-                aria-label="Go to project details"
-                size="sm"
-                icon={<PiCaretDoubleDown />}
-                variant="soft"
-                colorScheme="neutral1"
-                onClick={handleClickDetails}
-              />
-              <FollowButton project={project} />
-              <ShareProjectButton />
+            <HStack w="full" paddingTop={1} justifyContent="space-between" flexWrap={'wrap'}>
+              <HStack>
+                <IconButton
+                  aria-label="Go to project details"
+                  size="sm"
+                  icon={<PiCaretDoubleDown />}
+                  variant="soft"
+                  colorScheme="neutral1"
+                  onClick={handleClickDetails}
+                />
+                <FollowButton project={project} />
+                <ShareProjectButton />
+              </HStack>
+
+              <CreatorEditButton as={Link} to={getPath('dashboardDescription', project.name)} />
             </HStack>
           </VStack>
         </HStack>
@@ -207,7 +214,7 @@ export const HeaderSkeleton = () => {
   return (
     <CardLayout w="full" mobileDense padding={0} spacing={0}>
       <Box w="full">
-        <Skeleton borderRadius="8px 8px 0px 0px" width="100%" height="330px" />
+        <Skeleton borderRadius="8px 8px 0px 0px" width="100%" height="220px" />
       </Box>
       <HStack
         spacing={4}
@@ -242,8 +249,9 @@ export const HeaderSkeleton = () => {
           <SkeletonText noOfLines={2} w="40%" />
 
           <HStack w="full" paddingTop={1}>
-            <SkeletonLayout width="32px" height="32px" />
-            <SkeletonLayout width="150px" height="32px" />
+            <SkeletonLayout width="24px" height="24px" />
+            <SkeletonLayout width="24px" height="24px" />
+            <SkeletonLayout width="150px" height="24px" />
           </HStack>
         </VStack>
       </HStack>

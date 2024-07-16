@@ -1,12 +1,13 @@
 import { Box, VStack } from '@chakra-ui/react'
 import { Outlet } from 'react-router-dom'
 
+import { standardPadding } from '@/styles'
+
 import { Head } from '../../../../config'
 import { dimensions } from '../../../../constants'
-import { standardPadding } from '../../../../styles'
 import { useProjectAtom } from '../../hooks/useProjectAtom'
+import { ProjectNavigation } from '../../navigation/ProjectNavigation'
 import { GoalDeleteModal, GoalModal, ProjectCreateModal } from './components'
-import { ProjectNavigation } from './navigation/ProjectNavigation'
 
 export const ProjectContainer = () => {
   const { project } = useProjectAtom()

@@ -1,11 +1,14 @@
-import { SkeletonText } from '@chakra-ui/react'
+import { HStack, SkeletonText } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
+
+import { getPath } from '@/constants'
 
 import { MarkdownField } from '../../../../../../../forms/markdown/MarkdownField'
 import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { Body } from '../../../../../../../shared/components/typography'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
-import { BodySectionLayout } from '../components'
+import { BodySectionLayout, CreatorEditButton } from '../components'
 
 export const Story = () => {
   const { t } = useTranslation()
@@ -27,6 +30,9 @@ export const Story = () => {
         <article>
           <MarkdownField preview content={project?.description} />
         </article>
+        <HStack w="full" justifyContent={'end'}>
+          <CreatorEditButton as={Link} to={getPath('dashboardStory', project.name)} />
+        </HStack>
       </CardLayout>
     </BodySectionLayout>
   )

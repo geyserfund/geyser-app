@@ -1,35 +1,60 @@
-import { DeleteIcon } from '@chakra-ui/icons'
-import { Badge, Box, Button, HStack, IconButton, Skeleton, SkeletonText, Text, VStack } from '@chakra-ui/react'
+import { Badge, Box, Button, HStack, Skeleton, SkeletonText, VStack } from '@chakra-ui/react'
+import { MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiNotePencil } from 'react-icons/pi'
+import { Link } from 'react-router-dom'
 
-import { ICard, ImageWithReload } from '../../../../../../../components/ui'
-import { MarkdownField } from '../../../../../../../forms/markdown/MarkdownField'
-import { CardLayout, SkeletonLayout } from '../../../../../../../shared/components/layouts'
-import { Body } from '../../../../../../../shared/components/typography'
-import { secondaryColors } from '../../../../../../../styles'
-import { ProjectStatus } from '../../../../../../../types'
-import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../../../../types/generated/graphql'
-import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
+import { ImageWithReload } from '@/components/ui'
+import { getPath } from '@/constants'
+import { MarkdownField } from '@/forms/markdown/MarkdownField'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { CardLayout, CardLayoutProps, SkeletonLayout } from '@/shared/components/layouts'
+import { Body } from '@/shared/components/typography'
+import { ProjectRewardForCreateUpdateFragment, ProjectStatus, RewardCurrency } from '@/types'
+
+import { useRewardBuy } from '../../../hooks'
 import { ProjectRewardShippingEstimate } from './ProjectRewardShippingEstimate'
+import { RewardEditMenu } from './RewardEditMenu'
 
-type Props = ICard & {
+type Props = {
   reward: ProjectRewardForCreateUpdateFragment
-  count: number
-  handleEdit?: any
-  handleRemove?: any
-  onRewardClick?: Function
-  isLaunch?: boolean
-}
+  hidden?: boolean
+} & CardLayoutProps
 
-export const RewardCard = ({ reward, count, isLaunch = false, handleEdit, handleRemove, onRewardClick }: Props) => {
+export const RewardCard = ({ reward, hidden, ...rest }: Props) => {
   const { t } = useTranslation()
-  const { project } = useProjectAtom()
+  const { project, isProjectOwner } = useProjectAtom()
+
+  const { buyReward, count } = useRewardBuy(reward)
 
   const isRewardAvailable = reward.maxClaimable ? reward.maxClaimable - reward.sold > count : true
 
+  const onBuyClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e?.stopPropagation()
+    e.preventDefault()
+    buyReward()
+  }
+
   return (
-    <CardLayout p={0} w="full" overflow={'hidden'} spacing={0}>
+    <CardLayout
+      as={Link}
+      to={getPath('projectRewardView', project?.name, reward.id)}
+      p={0}
+      w="full"
+      overflow={'hidden'}
+      spacing={0}
+      position="relative"
+      {...rest}
+    >
+      {hidden && (
+        <Box
+          backgroundColor={'neutralAlpha.9'}
+          zIndex="1"
+          pointerEvents={'none'}
+          position="absolute"
+          width="100%"
+          height="100%"
+        />
+      )}
       {reward.image && (
         <Box borderColor={'neutral.700'} overflow={'hidden'} width="100%" position="relative" paddingTop="75%">
           <ImageWithReload
@@ -82,7 +107,7 @@ export const RewardCard = ({ reward, count, isLaunch = false, handleEdit, handle
         >
           <MarkdownField preview content={reward.description || ''} />
         </Box>
-        <HStack w="full" justifyContent={'space-between'}>
+        <HStack w="full" justifyContent={'space-between'} alignItems="center">
           {project && project.rewardCurrency === RewardCurrency.Usdcent ? (
             <Body bold dark>{`$${reward.cost / 100}`}</Body>
           ) : (
@@ -95,42 +120,19 @@ export const RewardCard = ({ reward, count, isLaunch = false, handleEdit, handle
             </Body>
           )}
 
-          {!isLaunch ? (
+          {!isProjectOwner ? (
             <Button
               size="sm"
               variant="surface"
               colorScheme="primary1"
               minWidth="80px"
-              onClick={(e) => {
-                onRewardClick?.(e)
-              }}
+              onClick={onBuyClick}
               isDisabled={!isRewardAvailable || project?.status === ProjectStatus.Inactive}
             >
               {t('Buy')}
             </Button>
           ) : (
-            <Box>
-              <IconButton
-                aria-label="edit-reward"
-                flexGrow={1}
-                variant="solid"
-                colorScheme="neutral1"
-                size="sm"
-                minWidth={'24px'}
-                onClick={(e) => {
-                  handleEdit?.(e)
-                }}
-                icon={<PiNotePencil />}
-              />
-              <Button
-                bg={secondaryColors.red}
-                color="neutral.0"
-                _hover={{ color: 'neutral.900', bg: 'neutral.400' }}
-                onClick={(e) => handleRemove?.(e)}
-              >
-                <DeleteIcon />
-              </Button>
-            </Box>
+            <RewardEditMenu reward={reward} />
           )}
         </HStack>
       </VStack>

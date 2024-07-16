@@ -99,7 +99,14 @@ const pathsMap = {
   projectInsights: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectInsights}`,
   projectContributors: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectContributors}`,
   projectEntries: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectEntries}`,
+
+  projectRewardCreate: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectRewards}/create`,
+  projectRewardEdit: (projectName: string, rewardId: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectRewards}/edit/${rewardId}`,
+  projectRewardView: (projectName: string, rewardId: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectRewards}/view/${rewardId}`,
   projectRewards: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectRewards}`,
+
   projectGoals: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectGoals}`,
   projectLeaderboard: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectLeaderboard}`,
   projectManageRewards: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectManageRewards}`,

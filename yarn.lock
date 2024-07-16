@@ -18000,7 +18000,7 @@ __metadata:
     react-jss: "npm:^10.9.2"
     react-player: "npm:^2.12.0"
     react-qr-code: "npm:^2.0.11"
-    react-qrcode-logo: "npm:^2.8.0"
+    react-qrcode-logo: "npm:^3.0.0"
     react-quill: "npm:^2.0.0"
     react-router: "npm:^6.16.0"
     react-router-dom: "npm:^6.11.0"
@@ -22939,7 +22939,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qrcode-generator@npm:^1.4.1":
+"qrcode-generator@npm:^1.4.4":
   version: 1.4.4
   resolution: "qrcode-generator@npm:1.4.4"
   checksum: 10c0/3249fcff98cb9fa17c21329d3dfd895e294a2d6ea48161f7b377010779d41f0cd88668b7fb3478a659725061bb0a770b40a227c2f4853e8c4a6b947a9e8bf17a
@@ -23503,16 +23503,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-qrcode-logo@npm:^2.8.0":
-  version: 2.9.0
-  resolution: "react-qrcode-logo@npm:2.9.0"
+"react-qrcode-logo@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "react-qrcode-logo@npm:3.0.0"
   dependencies:
     lodash.isequal: "npm:^4.5.0"
-    qrcode-generator: "npm:^1.4.1"
+    qrcode-generator: "npm:^1.4.4"
   peerDependencies:
-    react: ">=16.4.1"
-    react-dom: ">=16.4.1"
-  checksum: 10c0/d6411069e04f6f9a8433eda3a5f3538682906151858fe53a06d3d26ed05f29a72e88a307d4f37f8419dcf4def63a88fd8340bb56a06ad8b47f5d9c379eaed2d2
+    react: ">=18.0.0"
+    react-dom: ">=18.0.0"
+  checksum: 10c0/5f179762e8354bd8325d4c274cf731466b908a0e297541b7d9a7ebf94ac7cc86872364924402f6dea096d396b4cb70436cd2b496fe6af6bef5d1872d1c07bdd3
   languageName: node
   linkType: hard
 
