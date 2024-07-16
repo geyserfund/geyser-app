@@ -4,8 +4,8 @@ import { useContext, useEffect } from 'react'
 
 import { AuthContext } from '../../../../../../context'
 import { useBtcContext } from '../../../../../../context/btc'
-import { IFundForm } from '../../../../../../shared/hooks'
 import { useAuthModal } from '../../../../../../pages/auth/hooks'
+import { IFundForm } from '../../../../../../shared/hooks'
 import {
   FundingInput,
   FundingResourceType,

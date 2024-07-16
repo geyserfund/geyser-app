@@ -5,12 +5,12 @@ import { PiArrowLeft } from 'react-icons/pi'
 import { Link, useNavigate } from 'react-router-dom'
 
 import Loader from '@/components/ui/Loader'
-import { getPath } from '@/shared/constants'
 import { defaultProjectReward } from '@/defaults'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
 import { addUpdateRewardAtom } from '@/modules/project/state/rewardsAtom'
 import { CardLayout } from '@/shared/components/layouts'
+import { getPath } from '@/shared/constants'
 import { useProjectRewardCreateMutation } from '@/types'
 import { useNotification } from '@/utils'
 

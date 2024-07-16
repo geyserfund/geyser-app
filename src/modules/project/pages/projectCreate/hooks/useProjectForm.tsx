@@ -3,8 +3,8 @@ import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-import { ProjectValidations } from '../../../../../shared/constants'
 import { useAuthContext } from '../../../../../context'
+import { ProjectValidations } from '../../../../../shared/constants'
 import { ProjectFragment } from '../../../../../types'
 import { ProjectCreationVariables } from '../types'
 

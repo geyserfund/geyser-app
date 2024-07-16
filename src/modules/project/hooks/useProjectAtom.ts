@@ -1,7 +1,7 @@
 import { useAtomValue, useSetAtom } from 'jotai'
 
-import { completedGoalsAtom, initialGoalsLoadAtom, inProgressGoalsAtom } from '../state/goalsAtom'
 import { entriesAtom, unpublishedEntriesAtom } from '../state/entriesAtom'
+import { completedGoalsAtom, initialGoalsLoadAtom, inProgressGoalsAtom } from '../state/goalsAtom'
 import {
   isProjectOwnerAtom,
   partialUpdateProjectAtom,

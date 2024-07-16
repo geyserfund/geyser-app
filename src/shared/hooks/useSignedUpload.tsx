@@ -2,9 +2,9 @@ import { useLazyQuery } from '@apollo/client'
 import { useCallback, useState } from 'react'
 
 import { getAppEndPoint } from '../../config/domain'
-import { GeyserAssetDomainUrl } from '../constants'
 import { QUERY_SIGNED_UPLOAD_URL } from '../../graphql/queries/entries'
 import { testImage, useNotification } from '../../utils'
+import { GeyserAssetDomainUrl } from '../constants'
 
 type FileUploadURL = string
 type FileUploadFile = any

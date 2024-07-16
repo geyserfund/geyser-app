@@ -2,8 +2,8 @@ import { Box, Button, HStack, IconButton, Link, Text, Tooltip, useDisclosure, VS
 import { useTranslation } from 'react-i18next'
 
 import { SatSymbolIcon } from '../../../components/icons'
-import { languageFalgs, LanguageRequestUrl, languages } from '../../../shared/constants'
 import { Modal } from '../../../shared/components/layouts'
+import { languageFalgs, LanguageRequestUrl, languages } from '../../../shared/constants'
 import { allTranslations } from '../../../translations'
 import { ColorModeSwitcher } from '../../../utils'
 

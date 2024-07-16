@@ -8,8 +8,8 @@ import { useInitProjectDetails } from '@/modules/project/hooks/useInitProjectDet
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body } from '@/shared/components/typography'
 
-import { getPath, ID } from '../../../../../../../shared/constants'
 import { CardLayout } from '../../../../../../../shared/components/layouts'
+import { getPath, ID } from '../../../../../../../shared/constants'
 import { BodySectionLayout, ProjectLinks } from '../components'
 import { CreatorSocial } from './header/components/CreatorSocial'
 

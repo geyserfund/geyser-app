@@ -8,12 +8,12 @@ import { components, MenuProps, MultiValue } from 'react-select'
 
 import { Body1 } from '../../../components/typography'
 import { ButtonComponent, IconButtonComponent, SelectComponent } from '../../../components/ui'
-import { getListOfTags } from '../../../shared/constants'
 import { AppTheme } from '../../../context'
 import { FieldContainer } from '../../../forms/components/FieldContainer'
 import { MUTATION_TAG_CREATE } from '../../../graphql/mutations'
 import { QUERY_TAGS } from '../../../graphql/queries/tags'
 import { Modal, SkeletonLayout } from '../../../shared/components/layouts'
+import { getListOfTags } from '../../../shared/constants'
 import { Tag, TagCreateInput, TagsGetResult } from '../../../types'
 import { useNotification } from '../../../utils'
 

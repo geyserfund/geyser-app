@@ -20,14 +20,14 @@ import { Trans, useTranslation } from 'react-i18next'
 import { FaCheck } from 'react-icons/fa'
 
 import { Body2, Caption } from '../../../components/typography'
-import { MAX_FUNDING_AMOUNT_USD } from '../../../shared/constants'
 import { useAuthContext } from '../../../context'
 import { useBTCConverter } from '../../../helpers'
-import { useFormState } from '../../../shared/hooks'
 import { FormStateError } from '../../../interfaces'
 import { FundingProvider, useFundingContext } from '../../../modules/project/context/FundingProvider'
 import { FundingStages, useFundingStage } from '../../../modules/project/funding/state'
 import { QRCodeSection } from '../../../modules/project/pages/projectView/views/projectActivityPanel/screens'
+import { MAX_FUNDING_AMOUNT_USD } from '../../../shared/constants'
+import { useFormState } from '../../../shared/hooks'
 import {
   FundingInput,
   FundingResourceType,

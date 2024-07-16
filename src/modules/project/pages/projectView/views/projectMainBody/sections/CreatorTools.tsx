@@ -6,13 +6,13 @@ import { Link } from 'react-router-dom'
 import { Body2 } from '../../../../../../../components/typography'
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
 import { Tooltip } from '../../../../../../../components/ui/Tooltip'
+import { CardLayout } from '../../../../../../../shared/components/layouts'
 import {
   getPath,
   GoalsFlagUrl,
   ProjectNoTransactionImageUrl,
   ProjectRewardsImageUrl,
 } from '../../../../../../../shared/constants'
-import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { ProjectStatus } from '../../../../../../../types'
 import { useProjectContext } from '../../../../../context'
 import { BeachGrantEntryTemplate } from '../components/BeachGrantEntryTemplate'

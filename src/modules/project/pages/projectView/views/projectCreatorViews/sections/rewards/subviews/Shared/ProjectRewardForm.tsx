@@ -14,15 +14,15 @@ import {
   FileUpload,
   UpdateCurrencyModal,
 } from '../../../../../../../../../../components/molecules'
-import { ImageCrop } from '../../../../../../../../../../shared/molecules/ImageCropperModal'
 import { Body1 } from '../../../../../../../../../../components/typography'
 import { TextArea, TextInputBox, UploadBox } from '../../../../../../../../../../components/ui'
-import { ProjectRewardValidations } from '../../../../../../../../../../shared/constants'
 import { FieldContainer } from '../../../../../../../../../../forms/components/FieldContainer'
 import { MUTATION_UPDATE_PROJECT_CURRENCY } from '../../../../../../../../../../graphql/mutations'
 import { useBTCConverter } from '../../../../../../../../../../helpers/useBTCConverter'
-import { useModal } from '../../../../../../../../../../shared/hooks/useModal'
 import { CardLayout } from '../../../../../../../../../../shared/components/layouts'
+import { ProjectRewardValidations } from '../../../../../../../../../../shared/constants'
+import { useModal } from '../../../../../../../../../../shared/hooks/useModal'
+import { ImageCrop } from '../../../../../../../../../../shared/molecules/ImageCropperModal'
 import { standardPadding } from '../../../../../../../../../../styles'
 import {
   CreateProjectRewardInput,

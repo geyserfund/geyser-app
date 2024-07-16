@@ -1,7 +1,7 @@
-import { ID } from '../../../../shared/constants'
 import { useFilterContext } from '../../../../context'
 import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../../../graphql'
 import { ScrollInvoke } from '../../../../helpers'
+import { ID } from '../../../../shared/constants'
 import { useQueryWithPagination } from '../../../../shared/hooks'
 import { OrderByOptions, ProjectForLandingPageFragment, ProjectStatus } from '../../../../types'
 import { useMobileMode } from '../../../../utils'

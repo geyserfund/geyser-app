@@ -1,5 +1,5 @@
-import { __production__ } from '../shared/constants'
 import { useBtcContext } from '../context/btc'
+import { __production__ } from '../shared/constants'
 import { IFundForm } from '../shared/hooks'
 import { Satoshis, USDCents } from '../types'
 import { RewardCurrency } from '../types/generated/graphql'

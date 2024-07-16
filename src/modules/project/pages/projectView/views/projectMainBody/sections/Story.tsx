@@ -4,9 +4,9 @@ import { MdModeEdit } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
-import { getPath } from '../../../../../../../shared/constants'
 import { MarkdownField } from '../../../../../../../forms/markdown/MarkdownField'
 import { CardLayout, SkeletonLayout } from '../../../../../../../shared/components/layouts'
+import { getPath } from '../../../../../../../shared/constants'
 import { useProjectContext } from '../../../../../context'
 
 export const Story = () => {

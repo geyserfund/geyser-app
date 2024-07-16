@@ -3,8 +3,8 @@ import { MouseEvent } from 'react'
 import { PiBell } from 'react-icons/pi'
 
 import { useAuthContext } from '../../../../../../../context'
-import { useFollowProject } from '../../../../../../../shared/hooks/graphqlState'
 import { useAuthModal } from '../../../../../../../pages/auth/hooks'
+import { useFollowProject } from '../../../../../../../shared/hooks/graphqlState'
 import { Project } from '../../../../../../../types'
 
 interface FollowButtonProps extends ButtonProps {

@@ -2,12 +2,12 @@ import { Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { useAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
-import { NoLeaderboardDataImageUrl } from '@/shared/constants'
 import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { fundersAtom } from '@/modules/project/state/fundersAtom'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
+import { NoLeaderboardDataImageUrl } from '@/shared/constants'
 import { OrderByOptions, useProjectPageFundersQuery } from '@/types'
 
 import { LeaderboardItem, LeaderboardItemSkeleton } from './LeaderboardItem'

@@ -21,6 +21,7 @@ import { PiWarningCircleFill } from 'react-icons/pi'
 import { SubscribeIcon } from '../../../../../../../../../components/icons'
 import { Body2 } from '../../../../../../../../../components/typography'
 import { BetaBox } from '../../../../../../../../../components/ui'
+import { CardLayout } from '../../../../../../../../../shared/components/layouts'
 import {
   FlashsubscribeUrl,
   projectFlashIds,
@@ -28,7 +29,6 @@ import {
   subscriptionFeedbackUrl,
 } from '../../../../../../../../../shared/constants'
 import { useModal } from '../../../../../../../../../shared/hooks'
-import { CardLayout } from '../../../../../../../../../shared/components/layouts'
 import { useCustomTheme } from '../../../../../../../../../utils'
 
 interface SubscribeButtonProps extends ButtonProps {

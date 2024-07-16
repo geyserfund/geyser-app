@@ -4,9 +4,9 @@ import { Trans, useTranslation } from 'react-i18next'
 import { Link as ReactLink, useNavigate } from 'react-router-dom'
 
 import { Body2 } from '../../../../../components/typography'
-import { getPath, GeyserEmailVerificationDocUrl, PathName, WalletConnectDetails } from '../../../../../shared/constants'
 import { useAuthContext } from '../../../../../context'
 import { VerifyYourEmail } from '../../../../../pages/otp'
+import { getPath, GeyserEmailVerificationDocUrl, PathName, WalletConnectDetails } from '../../../../../shared/constants'
 import {
   MfaAction,
   OtpResponseFragment,

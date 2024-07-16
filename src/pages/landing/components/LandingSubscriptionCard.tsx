@@ -1,5 +1,5 @@
-import { getPath } from '../../../shared/constants'
 import { LandingCardBase } from '../../../shared/components/layouts'
+import { getPath } from '../../../shared/constants'
 import { ProjectForSubscriptionFragment } from '../../../types'
 
 export const LandingSubscriptionCard = ({ project }: { project: ProjectForSubscriptionFragment }) => {

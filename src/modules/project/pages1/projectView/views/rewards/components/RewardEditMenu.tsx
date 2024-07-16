@@ -5,10 +5,10 @@ import { PiEyeSlash, PiNotePencil, PiTrash } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { DeleteConfirmModal } from '@/components/molecules'
-import { getPath } from '@/shared/constants'
-import { useModal } from '@/shared/hooks'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { addUpdateRewardAtom, deleteRewardAtom } from '@/modules/project/state/rewardsAtom'
+import { getPath } from '@/shared/constants'
+import { useModal } from '@/shared/hooks'
 import { ProjectRewardFragment, useRewardDeleteMutation, useRewardUpdateMutation } from '@/types'
 import { useNotification } from '@/utils'
 

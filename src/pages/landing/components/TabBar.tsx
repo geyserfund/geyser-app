@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { useMatch, useNavigate } from 'react-router-dom'
 
 import { ButtonComponent } from '../../../components/ui'
-import { getPath } from '../../../shared/constants'
 import { useActivitySubsciptionContext, useAuthContext, useFilterContext } from '../../../context'
 import { CardLayout, CardLayoutProps } from '../../../shared/components/layouts'
+import { getPath } from '../../../shared/constants'
 
 type TabBarProps = CardLayoutProps
 
