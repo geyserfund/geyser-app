@@ -16,8 +16,8 @@ import { BsArrowLeft } from 'react-icons/bs'
 
 import { Body1 } from '../../../components/typography'
 import { ButtonComponent } from '../../../components/ui'
-import { CannotConnectAccountUrl, GeyserTelegramUrl } from '../../../constants'
-import { useModal } from '../../../hooks/useModal'
+import { CannotConnectAccountUrl, GeyserTelegramUrl } from '../../../shared/constants'
+import { useModal } from '../../../shared/hooks/useModal'
 
 interface FailedToConnectAccountProps extends ReturnType<typeof useModal> {
   title?: string

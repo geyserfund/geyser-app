@@ -7,7 +7,7 @@ import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProje
 import { Body } from '@/shared/components/typography'
 
 import { CreatorRewardPageBottomBar, CreatorRewardPageTopBar } from './components/CreatorRewardPageBar'
-import { RewardCard, RewardCardSkeleton } from './components/RewardCard'
+import { RewardCard, RewardCardSkeleton } from './shared/RewardCard'
 
 export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
   const { isProjectOwner, loading: projectLoading } = useProjectAtom()

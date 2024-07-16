@@ -4489,13 +4489,6 @@ export type PublishEntryMutationVariables = Exact<{
 
 export type PublishEntryMutation = { __typename?: 'Mutation', publishEntry: { __typename?: 'Entry', id: any, status: EntryStatus, createdAt: string, type: EntryType, title: string, description: string, image?: string | null, content?: string | null, publishedAt?: string | null, project?: { __typename?: 'Project', id: any, title: string, name: string } | null } };
 
-export type DeleteEntryMutationVariables = Exact<{
-  deleteEntryId: Scalars['BigInt']['input'];
-}>;
-
-
-export type DeleteEntryMutation = { __typename?: 'Mutation', deleteEntry: { __typename?: 'Entry', id: any, title: string } };
-
 export type FundMutationVariables = Exact<{
   input: FundingInput;
 }>;
@@ -5201,6 +5194,13 @@ export type ProjectPageWalletFragment = { __typename?: 'Wallet', id: any, name?:
       { __typename?: 'WalletContributionLimits' }
       & WalletContributionLimitsFragment
     ) | null } | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } };
+
+export type DeleteEntryMutationVariables = Exact<{
+  deleteEntryId: Scalars['BigInt']['input'];
+}>;
+
+
+export type DeleteEntryMutation = { __typename?: 'Mutation', deleteEntry: { __typename?: 'Entry', id: any, title: string } };
 
 export type ProjectGoalCreateMutationVariables = Exact<{
   input: ProjectGoalCreateInput;
@@ -7068,40 +7068,6 @@ export function usePublishEntryMutation(baseOptions?: Apollo.MutationHookOptions
 export type PublishEntryMutationHookResult = ReturnType<typeof usePublishEntryMutation>;
 export type PublishEntryMutationResult = Apollo.MutationResult<PublishEntryMutation>;
 export type PublishEntryMutationOptions = Apollo.BaseMutationOptions<PublishEntryMutation, PublishEntryMutationVariables>;
-export const DeleteEntryDocument = gql`
-    mutation DeleteEntry($deleteEntryId: BigInt!) {
-  deleteEntry(id: $deleteEntryId) {
-    id
-    title
-  }
-}
-    `;
-export type DeleteEntryMutationFn = Apollo.MutationFunction<DeleteEntryMutation, DeleteEntryMutationVariables>;
-
-/**
- * __useDeleteEntryMutation__
- *
- * To run a mutation, you first call `useDeleteEntryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteEntryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteEntryMutation, { data, loading, error }] = useDeleteEntryMutation({
- *   variables: {
- *      deleteEntryId: // value for 'deleteEntryId'
- *   },
- * });
- */
-export function useDeleteEntryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEntryMutation, DeleteEntryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteEntryMutation, DeleteEntryMutationVariables>(DeleteEntryDocument, options);
-      }
-export type DeleteEntryMutationHookResult = ReturnType<typeof useDeleteEntryMutation>;
-export type DeleteEntryMutationResult = Apollo.MutationResult<DeleteEntryMutation>;
-export type DeleteEntryMutationOptions = Apollo.BaseMutationOptions<DeleteEntryMutation, DeleteEntryMutationVariables>;
 export const FundDocument = gql`
     mutation Fund($input: FundingInput!) {
   fund(input: $input) {
@@ -10181,6 +10147,40 @@ export function useFundingTxStatusUpdatedSubscription(baseOptions?: Apollo.Subsc
       }
 export type FundingTxStatusUpdatedSubscriptionHookResult = ReturnType<typeof useFundingTxStatusUpdatedSubscription>;
 export type FundingTxStatusUpdatedSubscriptionResult = Apollo.SubscriptionResult<FundingTxStatusUpdatedSubscription>;
+export const DeleteEntryDocument = gql`
+    mutation DeleteEntry($deleteEntryId: BigInt!) {
+  deleteEntry(id: $deleteEntryId) {
+    id
+    title
+  }
+}
+    `;
+export type DeleteEntryMutationFn = Apollo.MutationFunction<DeleteEntryMutation, DeleteEntryMutationVariables>;
+
+/**
+ * __useDeleteEntryMutation__
+ *
+ * To run a mutation, you first call `useDeleteEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteEntryMutation, { data, loading, error }] = useDeleteEntryMutation({
+ *   variables: {
+ *      deleteEntryId: // value for 'deleteEntryId'
+ *   },
+ * });
+ */
+export function useDeleteEntryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEntryMutation, DeleteEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteEntryMutation, DeleteEntryMutationVariables>(DeleteEntryDocument, options);
+      }
+export type DeleteEntryMutationHookResult = ReturnType<typeof useDeleteEntryMutation>;
+export type DeleteEntryMutationResult = Apollo.MutationResult<DeleteEntryMutation>;
+export type DeleteEntryMutationOptions = Apollo.BaseMutationOptions<DeleteEntryMutation, DeleteEntryMutationVariables>;
 export const ProjectGoalCreateDocument = gql`
     mutation ProjectGoalCreate($input: ProjectGoalCreateInput!) {
   projectGoalCreate(input: $input) {

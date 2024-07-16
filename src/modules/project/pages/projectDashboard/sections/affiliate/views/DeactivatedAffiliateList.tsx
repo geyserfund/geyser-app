@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
 import { Body1 } from '../../../../../../../components/typography'
-import { ProjectNoTransactionImageUrl } from '../../../../../../../constants'
+import { ProjectNoTransactionImageUrl } from '../../../../../../../shared/constants'
 import { useProjectContext } from '../../../../../context'
 import { deactivatedAffiliateLinksAtom } from '../affiliateAtom'
 import { AffiliateTable, AffiliateTableSkeleton } from '../components/AffiliateTable'

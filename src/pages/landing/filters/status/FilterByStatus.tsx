@@ -1,7 +1,7 @@
 import { IconProps } from '@chakra-ui/react'
 
 import { ProjectNavIcon, RewardGiftIcon } from '../../../../components/icons'
-import { projectTypes } from '../../../../constants'
+import { projectTypes } from '../../../../shared/constants'
 import { useFilterContext } from '../../../../context'
 import { ProjectStatus, ProjectType } from '../../../../types'
 import { DesktopStatusFilter } from './DesktopStatusFilter'

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { H2, H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
-import { getPath } from '../../../../constants'
+import { getPath } from '../../../../shared/constants'
 import { Grant } from '../../../../types'
 import { FeaturedCardSkeleton } from './FeaturedSkeleton'
 import { ProjectRowLayout } from './ProjectRowLayout'

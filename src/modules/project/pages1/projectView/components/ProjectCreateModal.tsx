@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { useModal } from '../../../../../hooks'
+import { useModal } from '../../../../../shared/hooks'
 import { ProjectCreateDraftModal } from './ProjectCreateDraftModal'
 import { ProjectCreateLaunchedModal } from './ProjectCreateLaunchedModal'
 

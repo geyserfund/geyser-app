@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 import { H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
-import { getPath } from '../../../../constants'
+import { getPath } from '../../../../shared/constants'
 import {
   ProjectGrantApplicantContributorsModal,
   useProjectGrantApplicantContributorsModal,

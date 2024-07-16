@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 import { Body1, Caption, H2, H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
-import { getPath } from '../../../../constants'
+import { getPath } from '../../../../shared/constants'
 import { CardLayout } from '../../../../shared/components/layouts'
 import { neutralColorsLight } from '../../../../styles'
 import { GrantApplicant } from '../../../../types'

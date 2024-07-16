@@ -1,7 +1,7 @@
 import { HStack, VStack } from '@chakra-ui/react'
 import { Outlet } from 'react-router-dom'
 
-import { dimensions, ID } from '../../constants'
+import { dimensions, ID } from '../../shared/constants'
 import { ActivitySubscriptionProvider, FilterProvider, useAuthContext } from '../../context'
 import { StickToTop } from '../../shared/components/layouts'
 import { useMobileMode } from '../../utils'

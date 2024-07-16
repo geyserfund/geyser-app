@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom'
 import { standardPadding } from '@/styles'
 
 import { Head } from '../../../../config'
-import { dimensions } from '../../../../constants'
+import { dimensions } from '../../../../shared/constants'
 import { useProjectAtom } from '../../hooks/useProjectAtom'
 import { ProjectNavigation } from '../../navigation/ProjectNavigation'
 import { GoalDeleteModal, GoalModal, ProjectCreateModal } from './components'

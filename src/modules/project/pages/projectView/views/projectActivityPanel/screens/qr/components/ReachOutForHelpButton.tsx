@@ -2,7 +2,7 @@ import { Button, ButtonProps, Link } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { FaTelegramPlane } from 'react-icons/fa'
 
-import { GeyserTelegramUrl } from '../../../../../../../../../constants'
+import { GeyserTelegramUrl } from '../../../../../../../../../shared/constants'
 
 export const ReachOutForHelpButton = (props: ButtonProps) => {
   const { t } = useTranslation()

@@ -2,7 +2,7 @@ import { Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { Body2, H3 } from '../../../../../../../../../../../components/typography'
-import { TransactionFailedImageUrl } from '../../../../../../../../../../../constants'
+import { TransactionFailedImageUrl } from '../../../../../../../../../../../shared/constants'
 import { CardLayout } from '../../../../../../../../../../../shared/components/layouts'
 import { standardPadding } from '../../../../../../../../../../../styles'
 

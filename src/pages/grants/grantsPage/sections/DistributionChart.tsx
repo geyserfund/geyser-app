@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { Caption, H3 } from '../../../../components/typography'
-import { getPath } from '../../../../constants'
+import { getPath } from '../../../../shared/constants'
 import { CardLayout } from '../../../../shared/components/layouts'
 import { standardPadding } from '../../../../styles'
 import { GrantApplicant, VotingSystem } from '../../../../types'

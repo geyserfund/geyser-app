@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PiRocketLaunch } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
-import { getPath } from '@/constants'
+import { getPath } from '@/shared/constants'
 
 export const CreateProjectButton = () => {
   const { t } = useTranslation()

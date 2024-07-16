@@ -1,5 +1,5 @@
-import { useProjectTagsState } from '../../../../../hooks/graphqlState/useProjectTagsState'
-import { useProjectLinksValidation } from '../../../../../hooks/validations'
+import { useProjectTagsState } from '../../../../../shared/hooks/graphqlState/useProjectTagsState'
+import { useProjectLinksValidation } from '../../../../../shared/hooks/validations'
 import { useNotification } from '../../../../../utils'
 import { useProjectState } from '../../../hooks/useProjectState'
 

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { BsThreeDots } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 
-import { getPath } from '../../../../../../../constants'
+import { getPath } from '../../../../../../../shared/constants'
 
 export const ProjectMenu = ({ projectName }: { projectName: string }) => {
   const { t } = useTranslation()

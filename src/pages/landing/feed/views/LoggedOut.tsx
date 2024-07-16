@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Body1 } from '../../../../components/typography'
 import { ButtonComponent } from '../../../../components/ui'
-import { FeedLoggedOutUrl } from '../../../../constants'
+import { FeedLoggedOutUrl } from '../../../../shared/constants'
 import { useAuthModal } from '../../../auth/hooks'
 
 export const LoggedOut = () => {

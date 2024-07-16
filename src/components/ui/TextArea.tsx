@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 
 import { AppTheme } from '../../context'
-import { useListenerState } from '../../hooks'
+import { useListenerState } from '../../shared/hooks'
 import { toInt } from '../../utils'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Body1 } from '../../components/typography'
 import { Head } from '../../config'
-import { NotFoundPageImageUrl } from '../../constants/platform/url'
+import { NotFoundPageImageUrl } from '../../shared/constants/platform/url'
 
 export const NotFoundProject = () => {
   const { t } = useTranslation()

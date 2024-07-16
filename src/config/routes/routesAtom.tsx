@@ -1,7 +1,7 @@
 import { atom, Getter, useSetAtom } from 'jotai'
 import { RouteMatch, RouteObject } from 'react-router-dom'
 
-import { getPath, PathName } from '../../constants'
+import { getPath, PathName } from '../../shared/constants'
 
 const matchRoutesAtom = atom<RouteMatch<string, RouteObject>[] | null>([])
 const currentRouteAtom = atom((get) => {

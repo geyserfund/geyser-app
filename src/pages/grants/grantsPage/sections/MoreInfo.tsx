@@ -2,7 +2,7 @@ import { Box, Link, Text, TextProps } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { ShareIcon } from '../../../../assets'
-import { GrantsFAQUrl } from '../../../../constants'
+import { GrantsFAQUrl } from '../../../../shared/constants'
 
 interface MoreInfoProps {
   titleProps?: TextProps

@@ -2,7 +2,7 @@ import { Box, HStack } from '@chakra-ui/layout'
 import { HTMLChakraProps } from '@chakra-ui/system'
 import { Link } from 'react-router-dom'
 
-import { getPath } from '../../../constants'
+import { getPath } from '../../../shared/constants'
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers'
 import { ProjectState } from '../../../modules/project/state/projectAtom'
 import { FunderWithUserFragment } from '../../../types/generated/graphql'

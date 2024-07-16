@@ -5,7 +5,7 @@ import { Outlet, useNavigate, useParams } from 'react-router-dom'
 
 import Loader from '../../components/ui/Loader'
 import { Head } from '../../config'
-import { getPath, ProjectEntryThumbnailPlaceholderUrl } from '../../constants'
+import { getPath, ProjectEntryThumbnailPlaceholderUrl } from '../../shared/constants'
 import { ProjectProvider, useProjectContext } from '../../modules/project/context'
 import { FundingProviderWithProjectContext } from '../../modules/project/context/FundingProvider'
 import { FundingStages, useFundingStage } from '../../modules/project/funding/state/fundingStagesAtom'

@@ -13,7 +13,7 @@ import { PiCertificate, PiMagnifyingGlass } from 'react-icons/pi'
 import { RiHomeLine } from 'react-icons/ri'
 import { Link } from 'react-router-dom'
 
-import { dimensions, FeedbackUrl, getPath, GeyserAboutUrl, GeyserGithubUrl, GuideUrl } from '../../../constants'
+import { dimensions, FeedbackUrl, getPath, GeyserAboutUrl, GeyserGithubUrl, GuideUrl } from '../../../shared/constants'
 import { useAuthContext } from '../../../context'
 import { Body } from '../../../shared/components/typography'
 import { LoginButton } from '../components/LoginButton'

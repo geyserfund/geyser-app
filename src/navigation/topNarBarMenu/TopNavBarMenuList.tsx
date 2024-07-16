@@ -5,7 +5,7 @@ import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { FeedbackUrl, getPath, GeyserGithubUrl, GeyserTelegramUrl, GuideUrl, PathName } from '../../constants'
+import { FeedbackUrl, getPath, GeyserGithubUrl, GeyserTelegramUrl, GuideUrl, PathName } from '../../shared/constants'
 import { useAuthContext, useNavContext, useServiceWorkerUpdate } from '../../context'
 import { useRouteMatchesForTopNavBar } from '../../modules/navigation/topNavBar/topNavBarAtom'
 import { useAuthModal } from '../../pages/auth/hooks'

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { H1, H3 } from '../../../components/typography'
-import { getPath, GeyserAboutProjectsBannerImage } from '../../../constants'
+import { getPath, GeyserAboutProjectsBannerImage } from '../../../shared/constants'
 
 export const WhereGreatIdeas = () => {
   const { t } = useTranslation()

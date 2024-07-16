@@ -1,7 +1,7 @@
 import { Transaction } from 'bitcoinjs-lib'
 import { Musig } from 'boltz-core'
 
-import { BOLTZ_DOMAIN } from '../../../../../../../../../../../constants'
+import { BOLTZ_DOMAIN } from '../../../../../../../../../../../shared/constants'
 
 const swapServiceEndpoint = `https://${BOLTZ_DOMAIN}/v2`
 

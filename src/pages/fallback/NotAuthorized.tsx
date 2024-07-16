@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { Head } from '../../config'
-import { NotAuthorizedImageUrl } from '../../constants/platform/url'
+import { NotAuthorizedImageUrl } from '../../shared/constants/platform/url'
 import { useServiceWorkerUpdate } from '../../context'
 import { CommonFeedbackMessage } from './CommonFeedbackMessage'
 

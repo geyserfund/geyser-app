@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
 
 import { AuthModal } from '../../../components/molecules'
-import { dimensions } from '../../../constants'
+import { dimensions } from '../../../shared/constants'
 import { useAuthContext } from '../../../context'
 import { useAuthModal } from '../../../pages/auth/hooks'
 import { LoginButton } from '../components/LoginButton'

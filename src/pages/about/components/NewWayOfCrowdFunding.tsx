@@ -2,7 +2,7 @@ import { Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { H1, H2, H3 } from '../../../components/typography'
-import { CoinGlobe3DImageUrl, CoinLightning3DImageUrl, NewbieBag3DImageUrl } from '../../../constants'
+import { CoinGlobe3DImageUrl, CoinLightning3DImageUrl, NewbieBag3DImageUrl } from '../../../shared/constants'
 import { CardLayout } from '../../../shared/components/layouts'
 import { LaunchYourProjectButton } from './LaunchYourProjectButton'
 

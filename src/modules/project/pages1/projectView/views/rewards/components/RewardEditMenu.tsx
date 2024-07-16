@@ -5,11 +5,11 @@ import { PiEyeSlash, PiNotePencil, PiTrash } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { DeleteConfirmModal } from '@/components/molecules'
-import { getPath } from '@/constants'
-import { useModal } from '@/hooks'
+import { getPath } from '@/shared/constants'
+import { useModal } from '@/shared/hooks'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { addUpdateRewardAtom } from '@/modules/project/state/rewardsAtom'
-import { ProjectRewardFragment, useRewardUpdateMutation } from '@/types'
+import { addUpdateRewardAtom, deleteRewardAtom } from '@/modules/project/state/rewardsAtom'
+import { ProjectRewardFragment, useRewardDeleteMutation, useRewardUpdateMutation } from '@/types'
 import { useNotification } from '@/utils'
 
 import { CreatorEditButton } from '../../body/components'
@@ -27,6 +27,7 @@ export const RewardEditMenu = ({ reward, ...props }: RewardEditMenuProps) => {
   const { project } = useProjectAtom()
 
   const addUpdateReward = useSetAtom(addUpdateRewardAtom)
+  const deleteReward = useSetAtom(deleteRewardAtom)
 
   const deleteRewardModal = useModal()
 
@@ -47,18 +48,17 @@ export const RewardEditMenu = ({ reward, ...props }: RewardEditMenuProps) => {
     },
   })
 
-  const [deleteRewardMutation, { loading: deleteRewardLoading }] = useRewardUpdateMutation({
+  const [deleteRewardMutation, { loading: deleteRewardLoading }] = useRewardDeleteMutation({
     onCompleted(data) {
-      if (!data.projectRewardUpdate) return
-      addUpdateReward(data.projectRewardUpdate)
       toast.success({
-        title: 'Successfully updated!',
-        description: `${t('Reward')} ${data.projectRewardUpdate?.name} ${t('was successfully updated')}`,
+        title: 'Successfully !',
+        description: `${t('Reward')} ${reward.name} ${t('was successfully deleted')}`,
       })
+      deleteReward(reward.id)
     },
     onError(error) {
       toast.error({
-        title: 'Failed to update reward',
+        title: 'Failed to delete reward',
         description: `${error}`,
       })
     },

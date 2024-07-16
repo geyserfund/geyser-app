@@ -6,9 +6,9 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom'
 
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
 import Loader from '../../../../../components/ui/Loader'
-import { getPath } from '../../../../../constants'
+import { getPath } from '../../../../../shared/constants'
 import { useAuthContext } from '../../../../../context'
-import { useModal } from '../../../../../hooks'
+import { useModal } from '../../../../../shared/hooks'
 import {
   CreateWalletInput,
   ProjectFragment,

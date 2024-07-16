@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { BsInfoCircle } from 'react-icons/bs'
 
 import { AnonymousAvatar, SatoshiAmount } from '../../../../../../../../components/ui'
-import { GEYSER_FEE_DISCLAIMER, LIGHTNING_FEE_PERCENTAGE, noFeeProjects } from '../../../../../../../../constants'
+import { GEYSER_FEE_DISCLAIMER, LIGHTNING_FEE_PERCENTAGE, noFeeProjects } from '../../../../../../../../shared/constants'
 import { useFundCalc } from '../../../../../../../../helpers'
 import { FundingStatus, InvoiceStatus, ProjectReward, Satoshis } from '../../../../../../../../types'
 import { hasOwnNode } from '../../../../../../../../utils/helpers'

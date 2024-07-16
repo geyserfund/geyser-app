@@ -2,7 +2,7 @@ import { VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { Body1 } from '../../../../../../../../../../components/typography'
-import { ProjectRewardsImageUrl } from '../../../../../../../../../../constants'
+import { ProjectRewardsImageUrl } from '../../../../../../../../../../shared/constants'
 import { standardPadding } from '../../../../../../../../../../styles'
 import { OrdersGetStatus } from '../../../../../../../../../../types'
 import { EmptyContainer } from '../../components'

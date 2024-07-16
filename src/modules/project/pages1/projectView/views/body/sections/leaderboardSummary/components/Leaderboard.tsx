@@ -2,7 +2,7 @@ import { Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { useAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
-import { NoLeaderboardDataImageUrl } from '@/constants'
+import { NoLeaderboardDataImageUrl } from '@/shared/constants'
 import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { fundersAtom } from '@/modules/project/state/fundersAtom'

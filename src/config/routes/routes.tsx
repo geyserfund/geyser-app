@@ -1,14 +1,15 @@
+import { Path } from '@react-pdf/renderer'
 import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
 
 import ProjectView from '@/modules/project/pages1/projectView/ProjectView'
 
 import App from '../../App'
 import AppLayout from '../../AppLayout'
-import { __production__, getPath, PathName } from '../../constants'
 import { ProjectBody } from '../../modules/project/pages1/projectView'
 // import { ProjectView } from '../../modules/project/pages1/projectView'
 import { ExternalAuthSuccess, FailedAuth } from '../../pages/auth'
 import { NotAuthorized, NotFoundPage, NotFoundProject } from '../../pages/fallback'
+import { __production__, getPath, PathName } from '../../shared/constants'
 import { ErrorBoundary } from './ErrorBoundary'
 import { renderPrivateRoute } from './PrivateRoute'
 
@@ -21,7 +22,7 @@ const ProjectDashboard1 = () => import('../../modules/project/pages1/projectDash
 
 const Project1 = () => import('../../modules/project/pages1/projectView')
 
-const CreatorReward = () => import('../../modules/project/pages1/projectView/views/rewards/creatorViews')
+const CreatorReward = () => import('../../modules/project/pages1/projectView/views/rewards/views')
 
 const Refund = () => import('../../modules/project/pages/refund')
 const ProfilePage = () => import('../../modules/profile/pages/profilePage/Profile')
@@ -300,10 +301,17 @@ export const platformRoutes: RouteObject[] = [
       },
       // TODO:  Need to change routes to posts
       {
-        path: getPath('projectEntries', PathName.projectName),
+        path: getPath('projectPosts', PathName.projectName),
         async lazy() {
           const ProjectPosts = await Project1().then((m) => m.ProjectPosts)
           return { Component: ProjectPosts }
+        },
+      },
+      {
+        path: getPath('projectPostView', PathName.projectName, PathName.postId),
+        async lazy() {
+          const ProjectPostView = await Project1().then((m) => m.ProjectPostView)
+          return { Component: ProjectPostView }
         },
       },
 

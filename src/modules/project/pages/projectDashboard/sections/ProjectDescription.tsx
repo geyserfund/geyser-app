@@ -2,7 +2,7 @@ import { Button, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { useModal } from '../../../../../hooks'
+import { useModal } from '../../../../../shared/hooks'
 import { useUpdateProjectMutation } from '../../../../../types'
 import { useNotification } from '../../../../../utils'
 import { useProjectContext } from '../../../context'

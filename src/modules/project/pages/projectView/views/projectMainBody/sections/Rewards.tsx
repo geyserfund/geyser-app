@@ -5,7 +5,7 @@ import { MdModeEdit } from 'react-icons/md'
 import { Link, useLocation } from 'react-router-dom'
 
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
-import { getPath, ID } from '../../../../../../../constants'
+import { getPath, ID } from '../../../../../../../shared/constants'
 import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { isActive, toInt, useMobileMode, useNotification } from '../../../../../../../utils'
 import { truthyFilter } from '../../../../../../../utils/array'

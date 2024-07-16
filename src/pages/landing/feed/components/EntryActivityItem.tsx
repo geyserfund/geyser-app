@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Body2 } from '../../../../components/typography'
 import { LinkableAvatar } from '../../../../components/ui'
-import { getPath } from '../../../../constants'
+import { getPath } from '../../../../shared/constants'
 import { EntryForLandingPageFragment } from '../../../../types'
 import { LandingEntryCard, TimeAgo } from '../../components'
 

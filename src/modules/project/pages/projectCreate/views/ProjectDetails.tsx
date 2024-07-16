@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
-import { getPath } from '../../../../../constants'
+import { getPath } from '../../../../../shared/constants'
 import { useNotification } from '../../../../../utils'
 import { ProjectLinks } from '../../../forms/ProjectLinks'
 import { ProjectRegion } from '../../../forms/ProjectRegion'

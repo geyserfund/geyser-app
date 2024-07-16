@@ -1,6 +1,6 @@
 import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 
-import { LIGHTNING_FEE_PERCENTAGE } from '../../../../../../../../../constants'
+import { LIGHTNING_FEE_PERCENTAGE } from '../../../../../../../../../shared/constants'
 import { neutralColorsLight, primaryColorsLight } from '../../../../../../../../../styles'
 import { FundingTx, Project } from '../../../../../../../../../types'
 

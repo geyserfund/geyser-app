@@ -7,7 +7,7 @@ import { PiCopy } from 'react-icons/pi'
 
 import { LightningIcon } from '@/assets'
 import { getAppEndPoint } from '@/config/domain'
-import { GeyserShareImageUrl } from '@/constants'
+import { GeyserShareImageUrl } from '@/shared/constants'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { encodeLNURL, useNotification } from '@/utils'
 

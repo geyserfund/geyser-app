@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
-import { getPath } from '../../../../../../../../../../constants'
+import { getPath } from '../../../../../../../../../../shared/constants'
 import { ProjectReward, useProjectRewardUpdateMutation } from '../../../../../../../../../../types/generated/graphql'
 import { useNotification } from '../../../../../../../../../../utils'
 import { useProjectContext } from '../../../../../../../../context'

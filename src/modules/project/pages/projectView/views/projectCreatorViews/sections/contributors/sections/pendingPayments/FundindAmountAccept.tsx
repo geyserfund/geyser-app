@@ -4,7 +4,7 @@ import { DateTime } from 'luxon'
 import { PiWarningCircleFill } from 'react-icons/pi'
 
 import { Body1 } from '../../../../../../../../../../components/typography'
-import { useModal } from '../../../../../../../../../../hooks'
+import { useModal } from '../../../../../../../../../../shared/hooks'
 import { Modal } from '../../../../../../../../../../shared/components/layouts'
 import { FundingConfirmInput, FundingTxOrderFragment } from '../../../../../../../../../../types'
 import { useCustomTheme } from '../../../../../../../../../../utils'

@@ -18,7 +18,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { BsCheckLg } from 'react-icons/bs'
 
 import { Body1, Body2, H3 } from '../../../../components/typography'
-import { LockedConnectAccountUrl } from '../../../../constants'
+import { LockedConnectAccountUrl } from '../../../../shared/constants'
 import { useAuthContext } from '../../../../context'
 import { MUTATION_APPLY_GRANT } from '../../../../graphql/mutations'
 import { CreateAProjectButton } from '../../../../modules/profile/pages/profilePage/components'

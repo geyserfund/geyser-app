@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/layout'
 import { useCallback, useEffect, useState } from 'react'
 
-import { dimensions, ID } from '../../../../../../../../../constants'
+import { dimensions, ID } from '../../../../../../../../../shared/constants'
 import { StickToTop } from '../../../../../../../../../shared/components/layouts'
 import { useMobileMode } from '../../../../../../../../../utils'
 import { MobileViews, useProjectContext } from '../../../../../../../context'

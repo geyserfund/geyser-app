@@ -2,7 +2,7 @@ import { Link } from '@chakra-ui/react'
 import { Trans } from 'react-i18next'
 
 import { Body2 } from '../../../../../../../../../components/typography'
-import { GeyserOnChainFeesGuideUrl } from '../../../../../../../../../constants'
+import { GeyserOnChainFeesGuideUrl } from '../../../../../../../../../shared/constants'
 
 export const RefundPolicyNote = () => {
   return (

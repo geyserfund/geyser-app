@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Body1, Body2, Caption } from '../../../../../../../components/typography'
 import { ImageWithReload } from '../../../../../../../components/ui'
-import { RewardStatusLabel } from '../../../../../../../constants'
+import { RewardStatusLabel } from '../../../../../../../shared/constants'
 import { getRewardShippingStatusBackgroundColor } from '../../../../../../../helpers/getProjectShippingStatusBackgroundColor'
 import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { OrdersGetStatus, ProfileOrderFragment, ProjectAvatarFragment } from '../../../../../../../types'

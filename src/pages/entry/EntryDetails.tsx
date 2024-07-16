@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { ProjectFundersCountIndicator } from '../../components/molecules'
 import { ButtonComponent, EntryStatusLabel } from '../../components/ui'
-import { getPath } from '../../constants'
+import { getPath } from '../../shared/constants'
 import { EntryFragment, EntryStatus } from '../../types'
 import { ProjectEntryEditor } from './creation/editor'
 

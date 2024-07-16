@@ -4,7 +4,7 @@ import { ReactElement } from 'react'
 import { FaUserCircle } from 'react-icons/fa'
 import { Link as ReactRouterLink } from 'react-router-dom'
 
-import { getPath } from '../../constants'
+import { getPath } from '../../shared/constants'
 import { useMediumScreen, useMobileMode } from '../../utils'
 import { Body2 } from '../typography'
 

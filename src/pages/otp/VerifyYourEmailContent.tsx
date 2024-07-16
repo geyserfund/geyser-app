@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { BsArrowLeft } from 'react-icons/bs'
 
 import { Body1 } from '../../components/typography'
-import { VerifyEmailImageUrl } from '../../constants'
+import { VerifyEmailImageUrl } from '../../shared/constants'
 import { useAuthContext } from '../../context'
 import { MfaAction, OtpResponseFragment, useSendOtpByEmailMutation } from '../../types'
 import { useNotification } from '../../utils'

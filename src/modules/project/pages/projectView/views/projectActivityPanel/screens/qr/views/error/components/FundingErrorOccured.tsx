@@ -2,7 +2,7 @@ import { ListItem, UnorderedList, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { Body1, H3 } from '../../../../../../../../../../../components/typography'
-import { FundingErrorUrl } from '../../../../../../../../../../../constants'
+import { FundingErrorUrl } from '../../../../../../../../../../../shared/constants'
 import { ErrorLayout } from './ErrorLayout'
 
 export const FundingErrorOccured = () => {

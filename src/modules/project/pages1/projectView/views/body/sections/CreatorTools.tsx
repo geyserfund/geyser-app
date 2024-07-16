@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PiBag, PiFlagBannerFold, PiNewspaper } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
-import { getPath } from '../../../../../../../constants'
+import { getPath } from '../../../../../../../shared/constants'
 import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { ProjectStatus } from '../../../../../../../types'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'

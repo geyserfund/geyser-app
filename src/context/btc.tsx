@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { createContext, useContext, useEffect, useState } from 'react'
 
 import { fetchBitcoinRates } from '../api'
-import { BTC_IN_SATOSHI } from '../constants'
+import { BTC_IN_SATOSHI } from '../shared/constants'
 
 const USD_QUOTE_KEY = 'usdQuote'
 

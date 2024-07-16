@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { getPath } from '../../constants'
+import { getPath } from '../../shared/constants'
 import { MobileViews, useProjectContext } from '../../modules/project/context'
 import { Rewards } from '../../modules/project/pages/projectView/views/projectMainBody'
 import { useMobileMode } from '../../utils'

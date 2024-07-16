@@ -10,7 +10,7 @@ import * as yup from 'yup'
 import { ControlledTextInput } from '../../../../../../../components/inputs'
 import { Body2 } from '../../../../../../../components/typography'
 import Loader from '../../../../../../../components/ui/Loader'
-import { useDebounce } from '../../../../../../../hooks'
+import { useDebounce } from '../../../../../../../shared/hooks'
 import { lightModeColors } from '../../../../../../../styles'
 import {
   ProjectAffiliateLinkFragment,

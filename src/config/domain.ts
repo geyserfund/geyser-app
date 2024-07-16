@@ -1,5 +1,5 @@
-import { __production__, API_SERVICE_ENDPOINT } from '../constants'
-import { GEYSER_TOR_ONION_ADDRESS, GEYSER_TOR_ONION_DOMAIN } from '../constants/config/domain'
+import { __production__, API_SERVICE_ENDPOINT } from '../shared/constants'
+import { GEYSER_TOR_ONION_ADDRESS, GEYSER_TOR_ONION_DOMAIN } from '../shared/constants/config/domain'
 
 export const getAppEndPoint = () => {
   if (window.location.hostname === GEYSER_TOR_ONION_DOMAIN) {

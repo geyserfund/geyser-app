@@ -2,7 +2,7 @@ import { captureException } from '@sentry/react'
 import { useCallback, useEffect } from 'react'
 import useWebSocket from 'react-use-websocket'
 
-import { __production__, BOLTZ_DOMAIN } from '../../../../../../../../../../../constants'
+import { __production__, BOLTZ_DOMAIN } from '../../../../../../../../../../../shared/constants'
 import { OnChainErrorStatuses } from '../states'
 
 const swapServiceWsEndpoint = `wss://${BOLTZ_DOMAIN}/v2/ws`

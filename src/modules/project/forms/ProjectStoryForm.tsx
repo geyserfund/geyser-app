@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { FormProvider, UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { ProjectValidations } from '../../../constants'
+import { ProjectValidations } from '../../../shared/constants'
 import { FieldContainer } from '../../../forms/components/FieldContainer'
 import { MarkdownField, MarkdownFieldSkeleton } from '../../../forms/markdown/MarkdownField'
 import { useMobileMode } from '../../../utils'

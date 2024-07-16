@@ -3,7 +3,7 @@ import { MouseEvent } from 'react'
 import { PiBell } from 'react-icons/pi'
 
 import { useAuthContext } from '../../../../../../../context'
-import { useFollowProject } from '../../../../../../../hooks/graphqlState'
+import { useFollowProject } from '../../../../../../../shared/hooks/graphqlState'
 import { useAuthModal } from '../../../../../../../pages/auth/hooks'
 import { Project } from '../../../../../../../types'
 

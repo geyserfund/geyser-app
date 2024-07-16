@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Outlet, useMatch, useNavigate, useParams } from 'react-router-dom'
 
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
-import { getPath } from '../../../../../constants'
+import { getPath } from '../../../../../shared/constants'
 import { useProjectByNameOrIdQuery } from '../../../../../types'
 import { ProjectProvider } from '../../../context'
 import { FormContinueButton } from '../components/FormContinueButton'

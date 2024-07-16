@@ -1,7 +1,7 @@
 import { Link, Text } from '@chakra-ui/react'
 import { Trans } from 'react-i18next'
 
-import { FeedbackUrl } from '../../constants'
+import { FeedbackUrl } from '../../shared/constants'
 
 export const CommonFeedbackMessage = ({ prefix }: { prefix?: string }) => {
   return (

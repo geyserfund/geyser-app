@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 
 import { CardLayout, CardLayoutProps } from '../../../../../../../../../components/layouts'
 import { ProjectFundingGrantApplicantContributorsItem } from '../../../../../../../../../components/molecules/projectActivity/ProjectFundingGrantApplicantContributorsItem'
-import { ID } from '../../../../../../../../../constants'
+import { ID } from '../../../../../../../../../shared/constants'
 import { GrantApplicantContributor } from '../../../../../../../../../types'
 import { useMobileMode } from '../../../../../../../../../utils'
 

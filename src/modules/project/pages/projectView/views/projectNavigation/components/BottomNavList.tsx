@@ -10,7 +10,7 @@ import {
   RewardGiftIcon,
 } from '../../../../../../../components/icons'
 import { GoalIcon } from '../../../../../../../components/icons/svg'
-import { PathName } from '../../../../../../../constants'
+import { PathName } from '../../../../../../../shared/constants'
 import { MobileViews } from '../../../../../context'
 
 export type ProjectNavigationItem = {

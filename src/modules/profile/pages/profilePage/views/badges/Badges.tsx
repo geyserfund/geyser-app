@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { BsBoxArrowUpRight } from 'react-icons/bs'
 
 import { Body2, H2 } from '../../../../../../components/typography'
-import { getPath } from '../../../../../../constants'
+import { getPath } from '../../../../../../shared/constants'
 import { CardLayout } from '../../../../../../shared/components/layouts'
 import { useUserBadgesLazyQuery } from '../../../../../../types'
 import { toInt, useNotification } from '../../../../../../utils'

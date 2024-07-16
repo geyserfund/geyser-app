@@ -6,7 +6,7 @@ import { Outlet, useMatch } from 'react-router-dom'
 
 import Loader from '../../../../components/ui/Loader'
 import { TitleDivider } from '../../../../components/ui/TitleDivider'
-import { dimensions, getPath, PathsMap } from '../../../../constants'
+import { dimensions, getPath, PathsMap } from '../../../../shared/constants'
 import { CardLayout } from '../../../../shared/components/layouts'
 import { useMobileMode } from '../../../../utils'
 import { useProjectContext } from '../../context'

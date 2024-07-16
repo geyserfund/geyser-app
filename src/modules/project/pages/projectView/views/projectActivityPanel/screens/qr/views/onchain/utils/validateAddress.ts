@@ -1,6 +1,6 @@
 import { Network, validate } from 'bitcoin-address-validation'
 
-import { __production__, __staging__ } from '../../../../../../../../../../../constants'
+import { __production__, __staging__ } from '../../../../../../../../../../../shared/constants'
 
 export const validateBitcoinAddress = (address: string) => {
   if (__production__) {

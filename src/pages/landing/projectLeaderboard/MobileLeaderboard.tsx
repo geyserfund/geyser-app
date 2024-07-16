@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { H2 } from '../../../components/typography'
 import { ButtonComponent } from '../../../components/ui'
-import { getPath, ID } from '../../../constants'
+import { getPath, ID } from '../../../shared/constants'
 import { CardLayout, StickToTop } from '../../../shared/components/layouts'
 import { LeaderboardAllTime, LeaderboardThisWeek } from './views'
 

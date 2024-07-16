@@ -7,7 +7,7 @@ import { ExternalAccountLinkIcon, TransactionTime } from '../../../../components
 import { renderFunderBadges } from '../../../../components/molecules/projectActivity/renderFunderBadges'
 import { MonoBody1 } from '../../../../components/typography'
 import { AnonymousAvatar, AvatarLink, LinkableAvatar } from '../../../../components/ui'
-import { getPath } from '../../../../constants'
+import { getPath } from '../../../../shared/constants'
 import { computeFunderBadges, getAvatarMetadata } from '../../../../helpers'
 import { SkeletonLayout } from '../../../../shared/components/layouts'
 import { fonts } from '../../../../styles'
