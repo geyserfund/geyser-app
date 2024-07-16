@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
-import { getPath } from '../../../constants'
+import { getPath } from '../../../shared/constants'
 import { CardLayoutProps, LandingCardBase } from '../../../shared/components/layouts'
 import { EntryForLandingPageFragment } from '../../../types'
 import { toSmallImageUrl } from '../../../utils'

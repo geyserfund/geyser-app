@@ -1,5 +1,5 @@
 import { useFilterContext } from '../../../../context'
-import { useMostFundedOfTheWeekProjectsState } from '../../../../hooks/graphqlState'
+import { useMostFundedOfTheWeekProjectsState } from '../../../../shared/hooks/graphqlState'
 import { FilteredProjectList } from '../components/FilteredProjectList'
 
 const NO_OF_PROJECT_TO_LOAD_FILTER_VIEW = 20

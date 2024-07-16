@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Modal } from '../../../../../../components/layouts'
 import { Body1 } from '../../../../../../components/typography'
-import { useModal } from '../../../../../../hooks'
+import { useModal } from '../../../../../../shared/hooks'
 import { useAffiliateLinksGetQuery } from '../../../../../../types'
 import { useProjectContext } from '../../../../context'
 import { affiliateLinksAtom } from './affiliateAtom'

@@ -17,8 +17,8 @@ import { Grid } from '@giphy/react-components'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { VITE_APP_GIPHY_API_KEY } from '../../../../../../../constants'
-import { useDebounce } from '../../../../../../../hooks'
+import { VITE_APP_GIPHY_API_KEY } from '../../../../../../../shared/constants'
+import { useDebounce } from '../../../../../../../shared/hooks'
 import { useMobileMode } from '../../../../../../../utils'
 
 const giphy = new GiphyFetch(VITE_APP_GIPHY_API_KEY)

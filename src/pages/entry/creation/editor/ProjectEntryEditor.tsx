@@ -8,9 +8,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 import { Quill } from 'react-quill'
 
-import { ID } from '../../../../constants'
+import { ID } from '../../../../shared/constants'
 import { AppTheme } from '../../../../context'
-import { getSignedUploadAPI } from '../../../../hooks'
+import { getSignedUploadAPI } from '../../../../shared/hooks'
 import { fonts } from '../../../../styles'
 import { useCustomTheme, useMobileMode, useNotification } from '../../../../utils'
 

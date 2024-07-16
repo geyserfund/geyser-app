@@ -2,8 +2,8 @@ import { Button, HStack, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ProjectNoTransactionImageUrl } from '../../../../../../../../../../constants'
-import { usePaginationHook } from '../../../../../../../../../../hooks/usePaginationHook'
+import { ProjectNoTransactionImageUrl } from '../../../../../../../../../../shared/constants'
+import { usePaginationHook } from '../../../../../../../../../../shared/hooks/usePaginationHook'
 import { SkeletonLayout } from '../../../../../../../../../../shared/components/layouts'
 import { standardPadding } from '../../../../../../../../../../styles'
 import {

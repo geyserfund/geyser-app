@@ -3,7 +3,7 @@ import { Button, ButtonProps } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { getPath } from '../../../../../constants'
+import { getPath } from '../../../../../shared/constants'
 
 export const CreateAProjectButton = (props: ButtonProps) => {
   const { t } = useTranslation()

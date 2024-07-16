@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { BsArrowDownSquare } from 'react-icons/bs'
 import { components, OptionProps } from 'react-select'
 
-import { useModal } from '../../../../../../../../../hooks'
+import { useModal } from '../../../../../../../../../shared/hooks'
 import { useProjectContext } from '../../../../../../../context'
 import { DateSelectModal } from './DateSelectModal'
 import { getDownloadUrl } from './helpers'

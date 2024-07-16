@@ -10,7 +10,7 @@ import {
   LeaderboardNavIcon,
   RewardGiftIcon,
 } from '@/components/icons'
-import { PathName } from '@/constants'
+import { PathName } from '@/shared/constants'
 
 export type ProjectNavigationItem = {
   icon: IconType | React.FC<IconProps>

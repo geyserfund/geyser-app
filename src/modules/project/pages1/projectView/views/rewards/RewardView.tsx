@@ -5,7 +5,6 @@ import { Link, useParams } from 'react-router-dom'
 import { Text } from 'recharts'
 
 import { ImageWithReload } from '@/components/ui'
-import { getPath } from '@/constants'
 import { MarkdownField } from '@/forms/markdown/MarkdownField'
 import { useBTCConverter } from '@/helpers'
 import { BottomNavBarContainer } from '@/modules/navigation/bottomNav'
@@ -13,6 +12,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
+import { getPath } from '@/shared/constants'
 import { RewardCurrency, Satoshis, USDCents, useProjectRewardQuery } from '@/types'
 
 import { useRewardBuy } from '../../hooks'
@@ -84,14 +84,7 @@ export const RewardView = () => {
         </Button>
       </ProjectNavContainer>
 
-      <CardLayout
-        w="full"
-        direction="row"
-        justifyContent="center"
-        paddingX={{ base: 3, lg: 6 }}
-        backgroundColor="neutral1.1"
-        paddingY={{ base: 6, lg: 12 }}
-      >
+      <CardLayout w="full" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }}>
         <VStack maxWidth="538px" w="full" spacing={6}>
           <VStack w="full" spacing={3}>
             <HStack w="full" alignItems="start" justifyContent="space-between">

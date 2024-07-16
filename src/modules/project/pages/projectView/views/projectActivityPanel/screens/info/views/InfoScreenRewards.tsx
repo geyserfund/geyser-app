@@ -2,7 +2,7 @@ import { Badge, Box, Link, Stack, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { dimensions, ID, PathName } from '../../../../../../../../../constants'
+import { dimensions, ID, PathName } from '../../../../../../../../../shared/constants'
 import { StickToTop } from '../../../../../../../../../shared/components/layouts'
 import { standardPadding } from '../../../../../../../../../styles'
 import { useMobileMode } from '../../../../../../../../../utils'

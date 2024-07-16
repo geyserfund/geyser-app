@@ -8,7 +8,7 @@ import { components, MenuProps, MultiValue } from 'react-select'
 
 import { Body1 } from '../../../components/typography'
 import { ButtonComponent, IconButtonComponent, SelectComponent } from '../../../components/ui'
-import { getListOfTags } from '../../../constants'
+import { getListOfTags } from '../../../shared/constants'
 import { AppTheme } from '../../../context'
 import { FieldContainer } from '../../../forms/components/FieldContainer'
 import { MUTATION_TAG_CREATE } from '../../../graphql/mutations'

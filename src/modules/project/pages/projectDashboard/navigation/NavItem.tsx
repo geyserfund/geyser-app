@@ -3,7 +3,7 @@ import { Box, Divider } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 
-import { getPath } from '../../../../../constants'
+import { getPath } from '../../../../../shared/constants'
 import { DashboardSection } from '../ProjectDashboard'
 import { MobileNavButton, NavButton } from './NavButton'
 

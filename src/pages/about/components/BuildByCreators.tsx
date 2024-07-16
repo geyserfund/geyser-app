@@ -12,8 +12,8 @@ import {
   Lightning3DImageUrl,
   Search3DImageUrl,
   TextMessage3DImageUrl,
-} from '../../../constants'
-import { LIGHTNING_FEE_PERCENTAGE } from '../../../constants/platform/wallet'
+} from '../../../shared/constants'
+import { LIGHTNING_FEE_PERCENTAGE } from '../../../shared/constants/platform/wallet'
 import { CardLayout } from '../../../shared/components/layouts'
 import { LaunchYourProjectButton } from './LaunchYourProjectButton'
 

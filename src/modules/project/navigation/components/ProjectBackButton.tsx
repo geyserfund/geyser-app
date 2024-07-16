@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { BsArrowLeft } from 'react-icons/bs'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { getPath } from '@/constants'
+import { getPath } from '@/shared/constants'
 
 export const ProjectBackButton = (props: ButtonProps) => {
   const { t } = useTranslation()

@@ -2,7 +2,7 @@ import { StackProps } from '@chakra-ui/react'
 import { HStack } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 
-import { dimensions } from '@/constants'
+import { dimensions } from '@/shared/constants'
 import { standardPadding } from '@/styles'
 
 /** Wrap any top nav bar with this, to have it placed at the top, same palce as project navbar */

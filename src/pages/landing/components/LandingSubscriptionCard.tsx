@@ -1,4 +1,4 @@
-import { getPath } from '../../../constants'
+import { getPath } from '../../../shared/constants'
 import { LandingCardBase } from '../../../shared/components/layouts'
 import { ProjectForSubscriptionFragment } from '../../../types'
 

@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { useMatch } from 'react-router-dom'
 
 import { Head } from '../../config'
-import { getPath } from '../../constants'
-import { NotFoundPageImageUrl } from '../../constants/platform/url'
+import { getPath } from '../../shared/constants'
+import { NotFoundPageImageUrl } from '../../shared/constants/platform/url'
 import { useServiceWorkerUpdate } from '../../context'
 import { CommonFeedbackMessage } from './CommonFeedbackMessage'
 

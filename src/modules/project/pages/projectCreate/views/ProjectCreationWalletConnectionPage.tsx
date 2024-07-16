@@ -5,7 +5,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom'
 
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
 import { Body1, Body2 } from '../../../../../components/typography'
-import { getPath } from '../../../../../constants'
+import { getPath } from '../../../../../shared/constants'
 import { CreateWalletInput, useCreateWalletMutation, useProjectByNameOrIdQuery } from '../../../../../types'
 import { toInt, useNotification } from '../../../../../utils'
 import { ProjectCreationWalletConnectionForm } from '..'

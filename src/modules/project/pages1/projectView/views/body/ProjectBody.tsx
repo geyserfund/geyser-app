@@ -2,19 +2,19 @@ import { Stack, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { dimensions } from '../../../../../../constants'
+import { dimensions } from '../../../../../../shared/constants'
 import { ProjectStatus } from '../../../../../../types'
 import { useProjectAtom } from '../../../../hooks/useProjectAtom'
 import {
   ContributionSummary,
   CreatorTools,
   Details,
-  Entries,
   FinalizeProjectNotice,
   Goals,
   Header,
   LaunchProjectNotice,
   LeaderboardSummary,
+  Posts,
   Rewards,
   Story,
 } from './sections'
@@ -46,7 +46,7 @@ export const ProjectBody = () => {
         <Story />
 
         {project.hasRewards && <Rewards />}
-        {project.hasEntries && <Entries />}
+        {project.hasEntries && <Posts />}
         {project.hasGoals && <Goals />}
         <Details />
       </VStack>

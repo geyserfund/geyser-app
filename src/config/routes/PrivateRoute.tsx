@@ -3,7 +3,7 @@ import { ComponentType, useEffect, useMemo } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 
 import { AuthModal } from '../../components/molecules'
-import { getPath } from '../../constants'
+import { getPath } from '../../shared/constants'
 import { useAuthContext } from '../../context'
 import { ExternalAccountType } from '../../pages/auth'
 import { LoadingPage } from '../../pages/loading'

@@ -1,6 +1,6 @@
 import { Box, Wrap } from '@chakra-ui/react'
 
-import { tachiraUrl, umarUrl } from '../../../constants'
+import { tachiraUrl, umarUrl } from '../../../shared/constants'
 import { useMobileMode } from '../../../utils'
 import { BitcoinerCard } from './BitcoinerCard'
 

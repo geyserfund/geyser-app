@@ -5,7 +5,7 @@ import { captureException } from '@sentry/react'
 import { useEffect, useMemo } from 'react'
 import { RemirrorThemeType } from 'remirror'
 
-import { ID } from '../../../constants'
+import { ID } from '../../../shared/constants'
 import { useCustomTheme } from '../../../utils'
 import { tableCellStyles } from './typeMaps'
 

@@ -4,7 +4,7 @@ import { constructRefundTransaction, RefundDetails, targetFee } from 'boltz-core
 // import { init } from 'boltz-core/dist/lib/liquid'
 import { ECPairInterface } from 'ecpair'
 
-import { __production__, __staging__ } from '../../../../../../../../../../../constants'
+import { __production__, __staging__ } from '../../../../../../../../../../../shared/constants'
 import { ECPair } from './ecpair'
 
 export let secp: Secp256k1ZKP

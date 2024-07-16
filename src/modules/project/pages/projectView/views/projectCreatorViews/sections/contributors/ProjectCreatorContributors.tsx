@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { YellowWarningIcon } from '../../../../../../../../components/icons'
 import { H2 } from '../../../../../../../../components/typography'
-import { dimensions } from '../../../../../../../../constants'
+import { dimensions } from '../../../../../../../../shared/constants'
 import { CardLayout, SkeletonLayout } from '../../../../../../../../shared/components/layouts'
 import { lightModeColors } from '../../../../../../../../styles'
 import { FundingTxsWhereFundingStatus, useFundingTxsOrderCountGetQuery } from '../../../../../../../../types'

@@ -2,7 +2,7 @@ import { Box, HStack, Link, Text, useBreakpointValue } from '@chakra-ui/react'
 import { NavLink } from 'react-router-dom'
 
 import { Body1 } from '../../../../../../../components/typography'
-import { getPath } from '../../../../../../../constants'
+import { getPath } from '../../../../../../../shared/constants'
 import { UserAvatarWithLink } from '../../../../../../../shared/components/display/UserAvatar'
 import { useProjectContext } from '../../../../../context'
 import { useExternalAccountsButtons } from '../../../../../pages1/projectView/views/body/sections/header/components/getExternalAccountsButtons'

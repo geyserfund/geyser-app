@@ -1,6 +1,6 @@
 import { BoxProps, HStack, Text, TextProps } from '@chakra-ui/react'
 
-import { useCountdown } from '../../hooks/useCountdown'
+import { useCountdown } from '../../shared/hooks/useCountdown'
 
 interface Props {
   endDate?: number

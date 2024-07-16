@@ -6,7 +6,7 @@ import { FaFileAlt } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
 import { Body1, Body2, H2 } from '../../../../components/typography'
-import { getPath } from '../../../../constants'
+import { getPath } from '../../../../shared/constants'
 import { CardLayout } from '../../../../shared/components/layouts'
 import { commaFormatted } from '../../../../utils'
 import { currentSwapIdAtom, swapAtom, SwapContributionInfo, useRefundFileValue } from '../../funding/state'

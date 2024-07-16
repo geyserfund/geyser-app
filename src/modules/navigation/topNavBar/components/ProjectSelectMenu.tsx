@@ -4,7 +4,7 @@ import { PiRocketLaunch } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
-import { getPath } from '@/constants'
+import { getPath } from '@/shared/constants'
 import { useAuthContext } from '@/context'
 
 import { CreateProjectButton } from './CreateProjectButton'

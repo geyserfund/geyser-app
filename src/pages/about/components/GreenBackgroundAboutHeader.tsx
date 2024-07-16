@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { H1, H3 } from '../../../components/typography'
-import { getPath } from '../../../constants'
+import { getPath } from '../../../shared/constants'
 import { lightModeColors } from '../../../styles'
 import { BannerBackground } from '../../landing/components/BannerBackground'
 import { LaunchYourProjectButton } from './LaunchYourProjectButton'

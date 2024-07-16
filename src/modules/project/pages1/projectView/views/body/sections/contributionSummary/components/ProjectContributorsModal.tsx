@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 
-import { useModal } from '../../../../../../../../../hooks'
+import { useModal } from '../../../../../../../../../shared/hooks'
 import { Modal } from '../../../../../../../../../shared/components/layouts'
 import { GrantApplicantContributor } from '../../../../../../../../../types'
 import { ProjectContributorsList } from '../../../../../../../pages/projectView/views/projectActivityPanel/screens/info/components/ProjectContributorsList'

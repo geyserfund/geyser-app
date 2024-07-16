@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { Body2 } from '../../../../../../../../components/typography'
-import { getPath } from '../../../../../../../../constants'
+import { getPath } from '../../../../../../../../shared/constants'
 import { useAuthContext } from '../../../../../../../../context'
 import { QUERY_USER_BADGES } from '../../../../../../../../graphql/queries/badges'
 import { lightModeColors, standardPadding } from '../../../../../../../../styles'

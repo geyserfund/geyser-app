@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { LetTheSatsFlowIcon } from '../../../components/icons'
 import { Body2, H3, MonoBody1 } from '../../../components/typography'
-import { dimensions } from '../../../constants'
+import { dimensions } from '../../../shared/constants'
 import { QUERY_PROJECTS_SUMMARY } from '../../../graphql'
 import { SkeletonLayout } from '../../../shared/components/layouts'
 import { fonts } from '../../../styles'

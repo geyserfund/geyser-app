@@ -2,10 +2,10 @@ import { captureException } from '@sentry/react'
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { getPath, PathName } from '../../../constants'
+import { getPath, PathName } from '../../../shared/constants'
 import { useAuthContext } from '../../../context/auth'
 import { useNavContext } from '../../../context/nav'
-import { useModal } from '../../../hooks/useModal'
+import { useModal } from '../../../shared/hooks/useModal'
 import {
   ProjectFragment,
   ProjectGoal,

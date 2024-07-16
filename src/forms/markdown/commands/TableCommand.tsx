@@ -14,7 +14,7 @@ import { useState } from 'react'
 import { BsTable } from 'react-icons/bs'
 
 import { MonoBody2 } from '../../../components/typography'
-import { useDebounce } from '../../../hooks'
+import { useDebounce } from '../../../shared/hooks'
 import { ToolbarCommandButton } from './ToolbarCommandButton'
 
 interface TableCommandProps {

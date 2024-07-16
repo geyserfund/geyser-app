@@ -4,7 +4,7 @@ import { BiRightArrow } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 
 import { Body1 } from '../../../../components/typography'
-import { FollowAProjectUrl } from '../../../../constants'
+import { FollowAProjectUrl } from '../../../../shared/constants'
 import { useCustomTheme } from '../../../../utils'
 
 export const NoFollowedProjects = () => {

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAuthContext } from '../../../../../context'
 import { TextField } from '../../../../../forms/components/TextField'
-import { useModal } from '../../../../../hooks/useModal'
+import { useModal } from '../../../../../shared/hooks/useModal'
 import { useProjectDeleteMutation } from '../../../../../types'
 import { useNotification } from '../../../../../utils'
 import { useProjectContext } from '../../../context'

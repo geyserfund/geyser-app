@@ -8,13 +8,14 @@ export interface CardLayoutProps extends StackProps, Partial<Pick<LinkProps, 'to
   noborder?: boolean
   noMobileBorder?: boolean
   mobileDense?: boolean
+  dense?: boolean
   hover?: boolean
   click?: boolean
   topRightComponent?: React.ReactNode
 }
 
 export const CardLayout = forwardRef<HTMLDivElement, CardLayoutProps>(
-  ({ noMobileBorder, mobileDense, children, noborder, click, hover, topRightComponent, ...rest }, ref) => {
+  ({ noMobileBorder, mobileDense, dense, children, noborder, click, hover, topRightComponent, ...rest }, ref) => {
     const isMobile = useMobileMode()
     const props: StackProps = {
       spacing: 3,
@@ -35,17 +36,14 @@ export const CardLayout = forwardRef<HTMLDivElement, CardLayoutProps>(
 
     if (mobileDense && isMobile) {
       return (
-        <Stack ref={ref} p={3} width="100%" {...props} border="none">
+        <Stack ref={ref} padding={0} width="100%" {...props} border="none">
           {children}
         </Stack>
       )
     }
 
     return (
-      <Stack ref={ref} p={5} borderRadius="8px" {...props}>
-        <Box position="absolute" top="8px" right="8px">
-          {topRightComponent}
-        </Box>
+      <Stack ref={ref} padding={dense ? 0 : { base: 3, lg: 6 }} borderRadius="8px" {...props}>
         {children}
       </Stack>
     )

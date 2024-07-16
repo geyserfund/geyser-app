@@ -1,7 +1,7 @@
 import { Link, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { getPath } from '../../../../../../../../../constants'
+import { getPath } from '../../../../../../../../../shared/constants'
 
 export const FundingDisclaimer = () => {
   const { t } = useTranslation()

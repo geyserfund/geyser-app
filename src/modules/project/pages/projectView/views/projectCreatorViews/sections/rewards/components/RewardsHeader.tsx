@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { H2 } from '../../../../../../../../../components/typography'
-import { PathName } from '../../../../../../../../../constants'
+import { PathName } from '../../../../../../../../../shared/constants'
 import { MobileViews, useProjectContext } from '../../../../../../../context'
 
 export const RewardsHeader = () => {

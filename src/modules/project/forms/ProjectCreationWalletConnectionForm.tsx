@@ -36,7 +36,7 @@ import {
   VoltageUrl,
   WalletOfSatoshiLightningAddressURL,
   WalletOfSatoshiUrl,
-} from '../../../constants'
+} from '../../../shared/constants'
 import { lightModeColors } from '../../../styles'
 import { LndNodeType } from '../../../types'
 import { ProjectFeeSelection } from '../components/ProjectFeeSelection'

@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 
-import { getPath } from '../../../../../constants'
+import { getPath } from '../../../../../shared/constants'
 import { CardLayout } from '../../../../../shared/components/layouts'
 import { ProjectFragment } from '../../../../../types'
 import { useMobileMode } from '../../../../../utils'

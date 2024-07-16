@@ -6,7 +6,7 @@ import { useInitRewards } from '@/modules/project/hooks/useInitRewards'
 
 import { isActive } from '../../../../../../../utils'
 import { useProjectAtom, useRewardsAtom } from '../../../../../hooks/useProjectAtom'
-import { RewardCard, RewardCardSkeleton } from '../../rewards/components'
+import { RewardCard, RewardCardSkeleton } from '../../rewards/shared'
 import { BodySectionLayout } from '../components'
 
 export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {

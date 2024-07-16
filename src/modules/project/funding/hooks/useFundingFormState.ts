@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
 import { AuthContext } from '../../../../context'
 import { useFundCalc } from '../../../../helpers'
-import { useDebounce } from '../../../../hooks/useDebounce'
+import { useDebounce } from '../../../../shared/hooks/useDebounce'
 import { IRewardCount } from '../../../../interfaces'
 import {
   ProjectRewardForCreateUpdateFragment,

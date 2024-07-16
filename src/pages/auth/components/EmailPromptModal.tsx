@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { ControlledTextInput } from '../../../components/inputs'
 import { ControlledCheckboxInput } from '../../../components/inputs/ControlledCheckboxInput'
 import { Modal } from '../../../components/layouts'
-import { EmailPromptModalUrl } from '../../../constants'
+import { EmailPromptModalUrl } from '../../../shared/constants'
 import { useEmailPrompt } from '../hooks/useEmailPrompt'
 
 type EmailPromptModalProps = {

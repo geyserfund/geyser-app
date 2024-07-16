@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { TiPlus } from 'react-icons/ti'
 
 import { Body2 } from '../../../../../../../components/typography'
-import { useModal } from '../../../../../../../hooks/useModal'
+import { useModal } from '../../../../../../../shared/hooks/useModal'
 import { ConnectWithLightning } from '../../../../../../../pages/auth/ConnectWithLightning'
 import { ConnectWithNostr } from '../../../../../../../pages/auth/ConnectWithNostr'
 import { ConnectWithSocial } from '../../../../../../../pages/auth/ConnectWithSocial'

@@ -15,7 +15,7 @@ import { BsArrowRight } from 'react-icons/bs'
 
 import { Body1 } from '../../../../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../../../../components/ui'
-import { FlashMembershipCountUrl, ID, projectFlashIds, projectsWithSubscription } from '../../../../../../../constants'
+import { FlashMembershipCountUrl, ID, projectFlashIds, projectsWithSubscription } from '../../../../../../../shared/constants'
 import { validateImageUrl } from '../../../../../../../forms/validations/image'
 import { useFollowedProjectsValue } from '../../../../../../../pages/auth/state'
 import { CardLayout, SkeletonLayout } from '../../../../../../../shared/components/layouts'

@@ -6,7 +6,7 @@ import { PiLinkBold } from 'react-icons/pi'
 import { RiTwitterXLine } from 'react-icons/ri'
 
 import { Body2, H3 } from '../../../../../../../components/typography'
-import { MegaphoneUrl } from '../../../../../../../constants'
+import { MegaphoneUrl } from '../../../../../../../shared/constants'
 import { useAuthContext } from '../../../../../../../context'
 import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { standardPadding } from '../../../../../../../styles'

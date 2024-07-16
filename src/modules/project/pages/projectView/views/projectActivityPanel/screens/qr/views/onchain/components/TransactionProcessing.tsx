@@ -2,7 +2,7 @@ import { Button, Image, Link, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { Body2, H3 } from '../../../../../../../../../../../components/typography'
-import { TransactionProcessingUrl } from '../../../../../../../../../../../constants'
+import { TransactionProcessingUrl } from '../../../../../../../../../../../shared/constants'
 import { CardLayout, CardLayoutProps } from '../../../../../../../../../../../shared/components/layouts'
 
 interface TransactionProcessingProps extends CardLayoutProps {

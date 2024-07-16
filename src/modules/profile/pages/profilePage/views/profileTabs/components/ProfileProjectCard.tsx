@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import { Body1, Body2 } from '../../../../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../../../../components/ui'
-import { getPath } from '../../../../../../../constants'
+import { getPath } from '../../../../../../../shared/constants'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { ProjectForProfilePageFragment } from '../../../../../../../types'
 import { commaFormatted, toSmallImageUrl } from '../../../../../../../utils'

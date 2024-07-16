@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BiLeftArrowAlt } from 'react-icons/bi'
 
-import { dimensions } from '../../../../../constants'
+import { dimensions } from '../../../../../shared/constants'
 import { CardLayout } from '../../../../../shared/components/layouts'
 import { useMobileMode } from '../../../../../utils'
 

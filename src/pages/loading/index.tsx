@@ -1,6 +1,6 @@
 import { Image, VStack } from '@chakra-ui/react'
 
-import { LogoNameBrand } from '../../constants'
+import { LogoNameBrand } from '../../shared/constants'
 import { neutralColorsDark, neutralColorsLight } from '../../styles'
 
 function useColor(light = neutralColorsLight[0], dark = neutralColorsDark[0]) {

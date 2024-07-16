@@ -12,7 +12,7 @@ import {
   GeyserPodcastUrl,
   GeyserTelegramUrl,
   GeyserTwitterUrl,
-} from '../../constants'
+} from '../../shared/constants'
 import { useMobileMode } from '../../utils'
 import { Subscribe } from '../nav/Subscribe'
 import { ButtonComponent } from '../ui'

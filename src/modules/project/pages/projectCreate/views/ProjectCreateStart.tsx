@@ -12,7 +12,7 @@ import {
   LaunchProjectKeyUrl,
   LaunchProjectWorldUrl,
   LIGHTNING_FEE_PERCENTAGE,
-} from '../../../../../constants'
+} from '../../../../../shared/constants'
 import { useAuthContext } from '../../../../../context'
 import { ExternalAccountType, SocialAccountType } from '../../../../../pages/auth'
 import { ConnectWithNostr } from '../../../../../pages/auth/ConnectWithNostr'

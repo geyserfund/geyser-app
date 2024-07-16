@@ -14,7 +14,7 @@ import {
   RopeUrl,
   StarUrl,
   TrophyUrl,
-} from '../../constants'
+} from '../../shared/constants'
 
 export const StarIcon = (props: ImageProps) => (
   <Box padding="3px 0px">

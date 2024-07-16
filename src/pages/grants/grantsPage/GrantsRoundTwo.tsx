@@ -11,7 +11,7 @@ import {
   Grant2AnnouncementTwitterUrl,
   GrantsRound2Url,
   WalletOfSatoshiUrl,
-} from '../../../constants'
+} from '../../../shared/constants'
 import { fonts } from '../../../styles'
 import { GrantApplicant, GrantStatusEnum } from '../../../types'
 import { useMobileMode } from '../../../utils'

@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { useLocation, useMatch, useNavigate, useSearchParams } from 'react-router-dom'
 
-import { getPath } from '../constants'
+import { getPath } from '../shared/constants'
 import { disableSortByTrending } from '../pages/landing/filters/sort'
 import { ActivityResourceType, ProjectStatus, ProjectType } from '../types'
 import { toInt } from '../utils'

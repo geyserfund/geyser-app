@@ -2,7 +2,7 @@ import { Button, Link } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { Body1, Body2 } from '../../../../../../../../../../../components/typography'
-import { GeyserOnChainGuideUrl } from '../../../../../../../../../../../constants'
+import { GeyserOnChainGuideUrl } from '../../../../../../../../../../../shared/constants'
 import { useMobileMode } from '../../../../../../../../../../../utils'
 import { FeedbackCard } from '../components/FeedbackCard'
 import { useDownloadRefund } from '../hooks/useDownloadRefund'

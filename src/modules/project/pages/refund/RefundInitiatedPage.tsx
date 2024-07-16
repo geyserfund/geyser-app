@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { H2 } from '../../../../components/typography'
-import { getPath } from '../../../../constants'
+import { getPath } from '../../../../shared/constants'
 import { CardLayout } from '../../../../shared/components/layouts'
 import { standardPadding } from '../../../../styles'
 import { useRefundedSwapData } from '../../funding/state'

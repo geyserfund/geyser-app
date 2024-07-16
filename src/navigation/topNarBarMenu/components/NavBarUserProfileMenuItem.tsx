@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 
 import { Body2 } from '../../../components/typography'
-import { getPath } from '../../../constants'
+import { getPath } from '../../../shared/constants'
 import { AuthContext } from '../../../context'
 
 export const NavBarUserProfileMenuItem = () => {

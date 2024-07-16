@@ -1,7 +1,7 @@
 import { Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { NoLeaderboardDataImageUrl } from '@/constants'
+import { NoLeaderboardDataImageUrl } from '@/shared/constants'
 import { Body } from '@/shared/components/typography'
 
 export const NoContribution = () => {

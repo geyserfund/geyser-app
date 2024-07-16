@@ -1,4 +1,4 @@
-import { BreezLogoUrl, FountainLogoUrl } from '../constants'
+import { BreezLogoUrl, FountainLogoUrl } from '../shared/constants'
 import { Funder, FundingTxForLandingPageFragment, FundingTxFragment } from '../types/generated/graphql'
 import { getRandomOrb } from '../utils'
 

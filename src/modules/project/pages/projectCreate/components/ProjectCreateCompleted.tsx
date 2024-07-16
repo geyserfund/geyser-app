@@ -3,7 +3,7 @@ import { PropsWithChildren } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Link as ReactLink } from 'react-router-dom'
 
-import { getPath } from '../../../../../constants'
+import { getPath } from '../../../../../shared/constants'
 
 export const ProjectCreateCompleted = ({ children }: PropsWithChildren) => {
   const { t } = useTranslation()

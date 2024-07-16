@@ -11,7 +11,7 @@ import {
   GoalsFlagUrl,
   ProjectNoTransactionImageUrl,
   ProjectRewardsImageUrl,
-} from '../../../../../../../constants'
+} from '../../../../../../../shared/constants'
 import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { ProjectStatus } from '../../../../../../../types'
 import { useProjectContext } from '../../../../../context'

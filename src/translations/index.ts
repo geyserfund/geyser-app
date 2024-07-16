@@ -1,4 +1,4 @@
-import { lng } from '../constants'
+import { lng } from '../shared/constants'
 import ArabicTranslations from './Arabic.json'
 import ChineseTranslations from './Chinese.json'
 import NigerianTranslations from './Czech.json'

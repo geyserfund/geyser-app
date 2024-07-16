@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { Body1, H3 } from '../../../../../../../../../../../components/typography'
-import { FundingErrorWalletmaxUrl, getPath } from '../../../../../../../../../../../constants'
+import { FundingErrorWalletmaxUrl, getPath } from '../../../../../../../../../../../shared/constants'
 import { ErrorLayout } from './ErrorLayout'
 
 export const FundingMaxLimit = ({ amount, creatorId }: { amount?: number; creatorId: number }) => {

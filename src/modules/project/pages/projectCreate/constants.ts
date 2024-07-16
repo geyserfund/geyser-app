@@ -16,7 +16,7 @@ import {
   ShoutoutImageUrl,
   SponsorshipImageUrl,
   TicketImageUrl,
-} from '../../../../constants/platform/url'
+} from '../../../../shared/constants/platform/url'
 import { RewardTemplateType } from './types'
 
 export enum RewardCategory {

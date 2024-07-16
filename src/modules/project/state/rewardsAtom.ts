@@ -27,3 +27,13 @@ export const addUpdateRewardAtom = atom(null, (get, set, currentReward: ProjectR
     })
   }
 })
+
+/** delete a reward */
+export const deleteRewardAtom = atom(null, (get, set, rewardId: string) => {
+  const allRewards = get(rewardsAtom)
+
+  set(
+    rewardsAtom,
+    allRewards.filter((reward) => reward.id !== rewardId),
+  )
+})

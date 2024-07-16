@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { DonationInput } from '../../../../../components/molecules'
-import { MAX_FUNDING_AMOUNT_USD } from '../../../../../constants'
+import { MAX_FUNDING_AMOUNT_USD } from '../../../../../shared/constants'
 import { FormStateError } from '../../../../../interfaces'
 import { FundingInput, FundingResourceType, Project, UserMeFragment } from '../../../../../types'
 import { useNotification } from '../../../../../utils'

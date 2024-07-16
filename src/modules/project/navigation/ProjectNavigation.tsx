@@ -3,8 +3,8 @@ import { useMemo } from 'react'
 import { PiBag, PiFlagBannerFold, PiGear, PiMedalMilitary, PiNewspaper, PiSparkle } from 'react-icons/pi'
 import { useLocation } from 'react-router-dom'
 
-import { PathName } from '@/constants'
 import { AnimatedNavBar, NavBarItems } from '@/shared/components/navigation/AnimatedNavBar'
+import { PathName } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
 import { useProjectAtom } from '../hooks/useProjectAtom'

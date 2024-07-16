@@ -6,7 +6,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import { DeleteConfirmModal, ProjectEntryCard } from '../../../../../../../components/molecules'
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
-import { getPath } from '../../../../../../../constants'
+import { getPath } from '../../../../../../../shared/constants'
 import { MUTATION_DELETE_ENTRY } from '../../../../../../../graphql/mutations'
 import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { EntryForProjectFragment } from '../../../../../../../types'

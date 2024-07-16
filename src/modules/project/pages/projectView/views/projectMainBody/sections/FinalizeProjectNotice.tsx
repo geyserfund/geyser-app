@@ -2,7 +2,7 @@ import { Button, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { getPath } from '../../../../../../../constants'
+import { getPath } from '../../../../../../../shared/constants'
 import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { useProjectContext } from '../../../../../context'
 

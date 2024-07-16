@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import LogoDark from '@/assets/logo-dark.svg'
 import LogoLight from '@/assets/logo-light.svg'
-import { getPath } from '@/constants'
+import { getPath } from '@/shared/constants'
 
 export const BrandLogo = () => {
   const imagesrc = useColorModeValue(LogoDark, LogoLight)

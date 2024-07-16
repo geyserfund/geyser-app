@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { AppFooter } from '../../../components/molecules'
 import { H2, H3 } from '../../../components/typography'
-import { getPath } from '../../../constants'
+import { getPath } from '../../../shared/constants'
 import { fonts } from '../../../styles'
 import { useMobileMode } from '../../../utils'
 import { CustomGrantCard } from '../components/CustomGrantCard'

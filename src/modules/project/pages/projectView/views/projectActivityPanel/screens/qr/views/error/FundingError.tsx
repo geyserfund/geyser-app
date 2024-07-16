@@ -1,7 +1,7 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { ApolloErrors } from '../../../../../../../../../../constants'
+import { ApolloErrors } from '../../../../../../../../../../shared/constants'
 import { useFundingContext } from '../../../../../../../../context'
 import { ReachOutForHelpButton } from '../../components'
 import { FundingMaxLimit } from './components'

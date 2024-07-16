@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 import { MUTATION_UPDATE_PROJECT_GOAL_ORDERING } from '../../../../../graphql/mutations/project'
 import { QUERY_PROJECT_GOALS } from '../../../../../graphql/queries/goals'
-import { useModal } from '../../../../../hooks'
+import { useModal } from '../../../../../shared/hooks'
 import {
   ProjectGoal,
   ProjectGoals,

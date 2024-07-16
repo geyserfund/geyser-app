@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import { Body2 } from '../../../../components/typography'
 import { LinkableAvatar } from '../../../../components/ui'
-import { getPath } from '../../../../constants'
+import { getPath } from '../../../../shared/constants'
 import { ProjectRewardForLandingPageFragment, RewardCurrency } from '../../../../types'
 import { TimeAgo } from '../../components'
 

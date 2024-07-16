@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-import { ProjectValidations } from '../../../../../constants'
+import { ProjectValidations } from '../../../../../shared/constants'
 import { ProjectFragment } from '../../../../../types'
 
 const schema = yup.object({

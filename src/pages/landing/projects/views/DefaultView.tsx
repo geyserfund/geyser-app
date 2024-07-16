@@ -1,8 +1,8 @@
 import { VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 
-import { getListOfTags } from '../../../../constants'
 import { CardLayout } from '../../../../shared/components/layouts'
+import { getListOfTags } from '../../../../shared/constants'
 import { useMobileMode } from '../../../../utils'
 import { MobileDivider } from '../../../grants/components'
 import { useGrants } from '../../../grants/hooks/useGrants'

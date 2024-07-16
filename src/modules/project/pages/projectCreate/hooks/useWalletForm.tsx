@@ -1,8 +1,8 @@
 import { useDisclosure } from '@chakra-ui/react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { WalletConnectDetails } from '../../../../../constants'
-import { useDebounce } from '../../../../../hooks'
+import { WalletConnectDetails } from '../../../../../shared/constants'
+import { useDebounce } from '../../../../../shared/hooks'
 import {
   CreateWalletInput,
   LightningAddressContributionLimits,

@@ -16,17 +16,17 @@ import { useTranslation } from 'react-i18next'
 import { PiCaretDoubleDown, PiShareFat } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
+import { validateImageUrl } from '../../../../../../../../forms/validations/image'
+import { ImageWithReload } from '../../../../../../../../shared/components/display/ImageWithReload'
+import { CardLayout, SkeletonLayout } from '../../../../../../../../shared/components/layouts'
+import { Body, H1 } from '../../../../../../../../shared/components/typography'
 import {
   FlashMembershipCountUrl,
   getPath,
   ID,
   projectFlashIds,
   projectsWithSubscription,
-} from '../../../../../../../../constants'
-import { validateImageUrl } from '../../../../../../../../forms/validations/image'
-import { ImageWithReload } from '../../../../../../../../shared/components/display/ImageWithReload'
-import { CardLayout, SkeletonLayout } from '../../../../../../../../shared/components/layouts'
-import { Body, H1 } from '../../../../../../../../shared/components/typography'
+} from '../../../../../../../../shared/constants'
 import { ProjectStatusLabel } from '../../../../../../../../shared/molecules/ProjectStatusLabel'
 import { ProjectStatus, useProjectPageHeaderSummaryQuery, WalletStatus } from '../../../../../../../../types'
 import { toInt, useMobileMode } from '../../../../../../../../utils'
@@ -134,7 +134,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       </Modal>
       {/* {statusContent()} */}
 
-      <CardLayout w="full" ref={ref} padding={0} spacing={0}>
+      <CardLayout w="full" ref={ref} dense spacing={0}>
         <Box>{renderImageOrVideo()}</Box>
         <HStack
           spacing={4}

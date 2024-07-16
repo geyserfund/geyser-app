@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
-import { dimensions, getPath } from '../../../../../constants'
+import { dimensions, getPath } from '../../../../../shared/constants'
 import { useProjectByNameOrIdQuery, useUpdateProjectMutation } from '../../../../../types'
 import { useNotification } from '../../../../../utils'
 import { ProjectStoryForm } from '../../../forms/ProjectStoryForm'

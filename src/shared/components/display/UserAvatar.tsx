@@ -1,7 +1,7 @@
 import { Avatar, AvatarProps, Button, ButtonProps, Text } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 
-import { getPath } from '../../../constants'
+import { getPath } from '../../constants'
 import { User } from '../../../types'
 
 type Props = {

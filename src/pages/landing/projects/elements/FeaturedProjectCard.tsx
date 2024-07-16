@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { H2, H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
-import { getPath } from '../../../../constants'
+import { getPath } from '../../../../shared/constants'
 import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
 import { useFeaturedProjectForLandingPageQuery } from '../../../../types'
 import { FundingStatWithFollow } from '../../components/FundingStatWithFollow'

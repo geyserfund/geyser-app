@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { ExternalAccountType } from '../../../../pages/auth'
 import { loginMethodAtom } from '../../../../pages/auth/state'
 import { Body } from '../../../../shared/components/typography'
-import { externalAccountIconMap } from '../../../../shared/constants/externalAccountIcons'
+import { externalAccountIconMap } from '../../../../shared/constants/platform/externalAccountIcons'
 import { UserMeFragment } from '../../../../types'
 
 export const ProfileNavUserInfo = ({ user }: { user: UserMeFragment }) => {

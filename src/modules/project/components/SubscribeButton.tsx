@@ -25,8 +25,8 @@ import {
   projectFlashIds,
   projectsWithSubscription,
   subscriptionFeedbackUrl,
-} from '../../../constants'
-import { useModal } from '../../../hooks'
+} from '../../../shared/constants'
+import { useModal } from '../../../shared/hooks'
 import { CardLayout } from '../../../shared/components/layouts'
 import { Body } from '../../../shared/components/typography'
 import { useCustomTheme } from '../../../utils'

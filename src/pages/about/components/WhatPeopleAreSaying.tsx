@@ -2,7 +2,7 @@ import { Avatar, Stack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { Body1, H1, H3 } from '../../../components/typography'
-import { bradUrl, joeNakamotoUrl, paulIIIUrl } from '../../../constants'
+import { bradUrl, joeNakamotoUrl, paulIIIUrl } from '../../../shared/constants'
 import { CardLayout } from '../../../shared/components/layouts'
 import { LaunchYourProjectButton } from './LaunchYourProjectButton'
 

@@ -3,7 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-import { useModal, UseModalReturn } from '../../../hooks/useModal'
+import { useModal, UseModalReturn } from '../../../shared/hooks/useModal'
 import { Modal } from '../../../shared/components/layouts/Modal'
 import { ImageField } from '../../components/ImageField'
 import { TextField } from '../../components/TextField'

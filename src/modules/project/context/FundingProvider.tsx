@@ -1,7 +1,7 @@
 import { useAtomValue } from 'jotai'
 import React, { createContext, PropsWithChildren, useContext, useEffect } from 'react'
 
-import { useFundingFormState, UseFundingFormStateReturn } from '../../../hooks'
+import { useFundingFormState, UseFundingFormStateReturn } from '../../../shared/hooks'
 import { FundingInput, FundingTxFragment, ProjectRewardFragment, WalletLimitsFragment } from '../../../types'
 import { useFundingFlow } from '../funding/hooks/useFundingFlow'
 import { FundingFlowGraphQLError } from '../funding/state'
