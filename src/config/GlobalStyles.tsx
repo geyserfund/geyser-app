@@ -42,6 +42,10 @@ const GlobalStyles = () => (
         body {
             overflow: overlay;
         }
+
+        a {
+            text-decoration: none;
+          }
         
         .chakra-ui-dark {
             background: ${darkModeColors.neutral[0]}

@@ -5,6 +5,7 @@ export const FRAGMENT_PROJECT_PAGE_CREATOR = gql`
     id
     imageUrl
     username
+    email
     externalAccounts {
       accountType
       externalUsername

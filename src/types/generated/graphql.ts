@@ -4572,36 +4572,6 @@ export type UpdateProjectMutationVariables = Exact<{
 
 export type UpdateProjectMutation = { __typename?: 'Mutation', updateProject: { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, image?: string | null, thumbnailImage?: string | null, status?: ProjectStatus | null, links: Array<string>, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null } };
 
-export type ProjectRewardCurrencyUpdateMutationVariables = Exact<{
-  input: ProjectRewardCurrencyUpdate;
-}>;
-
-
-export type ProjectRewardCurrencyUpdateMutation = { __typename?: 'Mutation', projectRewardCurrencyUpdate: Array<(
-    { __typename?: 'ProjectReward' }
-    & ProjectRewardForCreateUpdateFragment
-  )> };
-
-export type ProjectRewardCreateMutationVariables = Exact<{
-  input: CreateProjectRewardInput;
-}>;
-
-
-export type ProjectRewardCreateMutation = { __typename?: 'Mutation', projectRewardCreate: (
-    { __typename?: 'ProjectReward' }
-    & ProjectRewardForCreateUpdateFragment
-  ) };
-
-export type ProjectRewardUpdateMutationVariables = Exact<{
-  input: UpdateProjectRewardInput;
-}>;
-
-
-export type ProjectRewardUpdateMutation = { __typename?: 'Mutation', projectRewardUpdate: (
-    { __typename?: 'ProjectReward' }
-    & ProjectRewardForCreateUpdateFragment
-  ) };
-
 export type ProjectRewardDeleteMutationVariables = Exact<{
   input: DeleteProjectRewardInput;
 }>;
@@ -5221,7 +5191,7 @@ export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCo
 
 export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, cost: number, image?: string | null, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null };
 
-export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }> };
+export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }> };
 
 export type UserAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string };
 
@@ -5258,6 +5228,43 @@ export type ProjectGoalDeleteMutationVariables = Exact<{
 
 
 export type ProjectGoalDeleteMutation = { __typename?: 'Mutation', projectGoalDelete: { __typename?: 'ProjectGoalDeleteResponse', success: boolean } };
+
+export type ProjectRewardCurrencyUpdateMutationVariables = Exact<{
+  input: ProjectRewardCurrencyUpdate;
+}>;
+
+
+export type ProjectRewardCurrencyUpdateMutation = { __typename?: 'Mutation', projectRewardCurrencyUpdate: Array<(
+    { __typename?: 'ProjectReward' }
+    & ProjectRewardFragment
+  )> };
+
+export type RewardUpdateMutationVariables = Exact<{
+  input: UpdateProjectRewardInput;
+}>;
+
+
+export type RewardUpdateMutation = { __typename?: 'Mutation', projectRewardUpdate: (
+    { __typename?: 'ProjectReward' }
+    & ProjectRewardFragment
+  ) };
+
+export type RewardDeleteMutationVariables = Exact<{
+  input: DeleteProjectRewardInput;
+}>;
+
+
+export type RewardDeleteMutation = { __typename?: 'Mutation', projectRewardDelete: boolean };
+
+export type ProjectRewardCreateMutationVariables = Exact<{
+  input: CreateProjectRewardInput;
+}>;
+
+
+export type ProjectRewardCreateMutation = { __typename?: 'Mutation', projectRewardCreate: (
+    { __typename?: 'ProjectReward' }
+    & ProjectRewardFragment
+  ) };
 
 export type ProjectEntriesQueryVariables = Exact<{
   where: UniqueProjectQueryInput;
@@ -5369,6 +5376,16 @@ export type ProjectRewardsQuery = { __typename?: 'Query', projectRewardsGet: Arr
     { __typename?: 'ProjectReward' }
     & ProjectRewardFragment
   )> };
+
+export type ProjectRewardQueryVariables = Exact<{
+  getProjectRewardId: Scalars['BigInt']['input'];
+}>;
+
+
+export type ProjectRewardQuery = { __typename?: 'Query', getProjectReward: (
+    { __typename?: 'ProjectReward' }
+    & ProjectRewardFragment
+  ) };
 
 export const ProjectAffiliateLinkFragmentDoc = gql`
     fragment ProjectAffiliateLink on AffiliateLink {
@@ -6485,6 +6502,7 @@ export const ProjectPageCreatorFragmentDoc = gql`
   id
   imageUrl
   username
+  email
   externalAccounts {
     accountType
     externalUsername
@@ -7463,105 +7481,6 @@ export function useUpdateProjectMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateProjectMutationHookResult = ReturnType<typeof useUpdateProjectMutation>;
 export type UpdateProjectMutationResult = Apollo.MutationResult<UpdateProjectMutation>;
 export type UpdateProjectMutationOptions = Apollo.BaseMutationOptions<UpdateProjectMutation, UpdateProjectMutationVariables>;
-export const ProjectRewardCurrencyUpdateDocument = gql`
-    mutation ProjectRewardCurrencyUpdate($input: ProjectRewardCurrencyUpdate!) {
-  projectRewardCurrencyUpdate(input: $input) {
-    ...ProjectRewardForCreateUpdate
-  }
-}
-    ${ProjectRewardForCreateUpdateFragmentDoc}`;
-export type ProjectRewardCurrencyUpdateMutationFn = Apollo.MutationFunction<ProjectRewardCurrencyUpdateMutation, ProjectRewardCurrencyUpdateMutationVariables>;
-
-/**
- * __useProjectRewardCurrencyUpdateMutation__
- *
- * To run a mutation, you first call `useProjectRewardCurrencyUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useProjectRewardCurrencyUpdateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [projectRewardCurrencyUpdateMutation, { data, loading, error }] = useProjectRewardCurrencyUpdateMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectRewardCurrencyUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectRewardCurrencyUpdateMutation, ProjectRewardCurrencyUpdateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ProjectRewardCurrencyUpdateMutation, ProjectRewardCurrencyUpdateMutationVariables>(ProjectRewardCurrencyUpdateDocument, options);
-      }
-export type ProjectRewardCurrencyUpdateMutationHookResult = ReturnType<typeof useProjectRewardCurrencyUpdateMutation>;
-export type ProjectRewardCurrencyUpdateMutationResult = Apollo.MutationResult<ProjectRewardCurrencyUpdateMutation>;
-export type ProjectRewardCurrencyUpdateMutationOptions = Apollo.BaseMutationOptions<ProjectRewardCurrencyUpdateMutation, ProjectRewardCurrencyUpdateMutationVariables>;
-export const ProjectRewardCreateDocument = gql`
-    mutation ProjectRewardCreate($input: CreateProjectRewardInput!) {
-  projectRewardCreate(input: $input) {
-    ...ProjectRewardForCreateUpdate
-  }
-}
-    ${ProjectRewardForCreateUpdateFragmentDoc}`;
-export type ProjectRewardCreateMutationFn = Apollo.MutationFunction<ProjectRewardCreateMutation, ProjectRewardCreateMutationVariables>;
-
-/**
- * __useProjectRewardCreateMutation__
- *
- * To run a mutation, you first call `useProjectRewardCreateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useProjectRewardCreateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [projectRewardCreateMutation, { data, loading, error }] = useProjectRewardCreateMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectRewardCreateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectRewardCreateMutation, ProjectRewardCreateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ProjectRewardCreateMutation, ProjectRewardCreateMutationVariables>(ProjectRewardCreateDocument, options);
-      }
-export type ProjectRewardCreateMutationHookResult = ReturnType<typeof useProjectRewardCreateMutation>;
-export type ProjectRewardCreateMutationResult = Apollo.MutationResult<ProjectRewardCreateMutation>;
-export type ProjectRewardCreateMutationOptions = Apollo.BaseMutationOptions<ProjectRewardCreateMutation, ProjectRewardCreateMutationVariables>;
-export const ProjectRewardUpdateDocument = gql`
-    mutation ProjectRewardUpdate($input: UpdateProjectRewardInput!) {
-  projectRewardUpdate(input: $input) {
-    ...ProjectRewardForCreateUpdate
-  }
-}
-    ${ProjectRewardForCreateUpdateFragmentDoc}`;
-export type ProjectRewardUpdateMutationFn = Apollo.MutationFunction<ProjectRewardUpdateMutation, ProjectRewardUpdateMutationVariables>;
-
-/**
- * __useProjectRewardUpdateMutation__
- *
- * To run a mutation, you first call `useProjectRewardUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useProjectRewardUpdateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [projectRewardUpdateMutation, { data, loading, error }] = useProjectRewardUpdateMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectRewardUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectRewardUpdateMutation, ProjectRewardUpdateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ProjectRewardUpdateMutation, ProjectRewardUpdateMutationVariables>(ProjectRewardUpdateDocument, options);
-      }
-export type ProjectRewardUpdateMutationHookResult = ReturnType<typeof useProjectRewardUpdateMutation>;
-export type ProjectRewardUpdateMutationResult = Apollo.MutationResult<ProjectRewardUpdateMutation>;
-export type ProjectRewardUpdateMutationOptions = Apollo.BaseMutationOptions<ProjectRewardUpdateMutation, ProjectRewardUpdateMutationVariables>;
 export const ProjectRewardDeleteDocument = gql`
     mutation ProjectRewardDelete($input: DeleteProjectRewardInput!) {
   projectRewardDelete(input: $input)
@@ -10364,6 +10283,136 @@ export function useProjectGoalDeleteMutation(baseOptions?: Apollo.MutationHookOp
 export type ProjectGoalDeleteMutationHookResult = ReturnType<typeof useProjectGoalDeleteMutation>;
 export type ProjectGoalDeleteMutationResult = Apollo.MutationResult<ProjectGoalDeleteMutation>;
 export type ProjectGoalDeleteMutationOptions = Apollo.BaseMutationOptions<ProjectGoalDeleteMutation, ProjectGoalDeleteMutationVariables>;
+export const ProjectRewardCurrencyUpdateDocument = gql`
+    mutation ProjectRewardCurrencyUpdate($input: ProjectRewardCurrencyUpdate!) {
+  projectRewardCurrencyUpdate(input: $input) {
+    ...ProjectReward
+  }
+}
+    ${ProjectRewardFragmentDoc}`;
+export type ProjectRewardCurrencyUpdateMutationFn = Apollo.MutationFunction<ProjectRewardCurrencyUpdateMutation, ProjectRewardCurrencyUpdateMutationVariables>;
+
+/**
+ * __useProjectRewardCurrencyUpdateMutation__
+ *
+ * To run a mutation, you first call `useProjectRewardCurrencyUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectRewardCurrencyUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectRewardCurrencyUpdateMutation, { data, loading, error }] = useProjectRewardCurrencyUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectRewardCurrencyUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectRewardCurrencyUpdateMutation, ProjectRewardCurrencyUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectRewardCurrencyUpdateMutation, ProjectRewardCurrencyUpdateMutationVariables>(ProjectRewardCurrencyUpdateDocument, options);
+      }
+export type ProjectRewardCurrencyUpdateMutationHookResult = ReturnType<typeof useProjectRewardCurrencyUpdateMutation>;
+export type ProjectRewardCurrencyUpdateMutationResult = Apollo.MutationResult<ProjectRewardCurrencyUpdateMutation>;
+export type ProjectRewardCurrencyUpdateMutationOptions = Apollo.BaseMutationOptions<ProjectRewardCurrencyUpdateMutation, ProjectRewardCurrencyUpdateMutationVariables>;
+export const RewardUpdateDocument = gql`
+    mutation RewardUpdate($input: UpdateProjectRewardInput!) {
+  projectRewardUpdate(input: $input) {
+    ...ProjectReward
+  }
+}
+    ${ProjectRewardFragmentDoc}`;
+export type RewardUpdateMutationFn = Apollo.MutationFunction<RewardUpdateMutation, RewardUpdateMutationVariables>;
+
+/**
+ * __useRewardUpdateMutation__
+ *
+ * To run a mutation, you first call `useRewardUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRewardUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [rewardUpdateMutation, { data, loading, error }] = useRewardUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRewardUpdateMutation(baseOptions?: Apollo.MutationHookOptions<RewardUpdateMutation, RewardUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RewardUpdateMutation, RewardUpdateMutationVariables>(RewardUpdateDocument, options);
+      }
+export type RewardUpdateMutationHookResult = ReturnType<typeof useRewardUpdateMutation>;
+export type RewardUpdateMutationResult = Apollo.MutationResult<RewardUpdateMutation>;
+export type RewardUpdateMutationOptions = Apollo.BaseMutationOptions<RewardUpdateMutation, RewardUpdateMutationVariables>;
+export const RewardDeleteDocument = gql`
+    mutation RewardDelete($input: DeleteProjectRewardInput!) {
+  projectRewardDelete(input: $input)
+}
+    `;
+export type RewardDeleteMutationFn = Apollo.MutationFunction<RewardDeleteMutation, RewardDeleteMutationVariables>;
+
+/**
+ * __useRewardDeleteMutation__
+ *
+ * To run a mutation, you first call `useRewardDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRewardDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [rewardDeleteMutation, { data, loading, error }] = useRewardDeleteMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRewardDeleteMutation(baseOptions?: Apollo.MutationHookOptions<RewardDeleteMutation, RewardDeleteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RewardDeleteMutation, RewardDeleteMutationVariables>(RewardDeleteDocument, options);
+      }
+export type RewardDeleteMutationHookResult = ReturnType<typeof useRewardDeleteMutation>;
+export type RewardDeleteMutationResult = Apollo.MutationResult<RewardDeleteMutation>;
+export type RewardDeleteMutationOptions = Apollo.BaseMutationOptions<RewardDeleteMutation, RewardDeleteMutationVariables>;
+export const ProjectRewardCreateDocument = gql`
+    mutation ProjectRewardCreate($input: CreateProjectRewardInput!) {
+  projectRewardCreate(input: $input) {
+    ...ProjectReward
+  }
+}
+    ${ProjectRewardFragmentDoc}`;
+export type ProjectRewardCreateMutationFn = Apollo.MutationFunction<ProjectRewardCreateMutation, ProjectRewardCreateMutationVariables>;
+
+/**
+ * __useProjectRewardCreateMutation__
+ *
+ * To run a mutation, you first call `useProjectRewardCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectRewardCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectRewardCreateMutation, { data, loading, error }] = useProjectRewardCreateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectRewardCreateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectRewardCreateMutation, ProjectRewardCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectRewardCreateMutation, ProjectRewardCreateMutationVariables>(ProjectRewardCreateDocument, options);
+      }
+export type ProjectRewardCreateMutationHookResult = ReturnType<typeof useProjectRewardCreateMutation>;
+export type ProjectRewardCreateMutationResult = Apollo.MutationResult<ProjectRewardCreateMutation>;
+export type ProjectRewardCreateMutationOptions = Apollo.BaseMutationOptions<ProjectRewardCreateMutation, ProjectRewardCreateMutationVariables>;
 export const ProjectEntriesDocument = gql`
     query ProjectEntries($where: UniqueProjectQueryInput!, $input: ProjectEntriesGetInput) {
   projectGet(where: $where) {
@@ -10819,3 +10868,43 @@ export type ProjectRewardsQueryHookResult = ReturnType<typeof useProjectRewardsQ
 export type ProjectRewardsLazyQueryHookResult = ReturnType<typeof useProjectRewardsLazyQuery>;
 export type ProjectRewardsSuspenseQueryHookResult = ReturnType<typeof useProjectRewardsSuspenseQuery>;
 export type ProjectRewardsQueryResult = Apollo.QueryResult<ProjectRewardsQuery, ProjectRewardsQueryVariables>;
+export const ProjectRewardDocument = gql`
+    query ProjectReward($getProjectRewardId: BigInt!) {
+  getProjectReward(id: $getProjectRewardId) {
+    ...ProjectReward
+  }
+}
+    ${ProjectRewardFragmentDoc}`;
+
+/**
+ * __useProjectRewardQuery__
+ *
+ * To run a query within a React component, call `useProjectRewardQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectRewardQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectRewardQuery({
+ *   variables: {
+ *      getProjectRewardId: // value for 'getProjectRewardId'
+ *   },
+ * });
+ */
+export function useProjectRewardQuery(baseOptions: Apollo.QueryHookOptions<ProjectRewardQuery, ProjectRewardQueryVariables> & ({ variables: ProjectRewardQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectRewardQuery, ProjectRewardQueryVariables>(ProjectRewardDocument, options);
+      }
+export function useProjectRewardLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectRewardQuery, ProjectRewardQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectRewardQuery, ProjectRewardQueryVariables>(ProjectRewardDocument, options);
+        }
+export function useProjectRewardSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectRewardQuery, ProjectRewardQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectRewardQuery, ProjectRewardQueryVariables>(ProjectRewardDocument, options);
+        }
+export type ProjectRewardQueryHookResult = ReturnType<typeof useProjectRewardQuery>;
+export type ProjectRewardLazyQueryHookResult = ReturnType<typeof useProjectRewardLazyQuery>;
+export type ProjectRewardSuspenseQueryHookResult = ReturnType<typeof useProjectRewardSuspenseQuery>;
+export type ProjectRewardQueryResult = Apollo.QueryResult<ProjectRewardQuery, ProjectRewardQueryVariables>;

@@ -3,6 +3,8 @@ import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 // "subtle" | "solid" | "left-accent" | "top-accent"
 
+type IndividualToastProps = { title: string; description?: string }
+
 export const useNotification = (options?: UseToastOptions | undefined) => {
   const { t } = useTranslation()
 
@@ -18,21 +20,51 @@ export const useNotification = (options?: UseToastOptions | undefined) => {
     ...options,
   })
 
+  const invokeToast = useCallback(
+    (input: UseToastOptions & { description?: string; title: string }) => {
+      toast({
+        ...input,
+        description: t(input.description || ''),
+        title: t(input.title),
+      })
+    },
+    [toast, t],
+  )
   const unexpected = useCallback(() => {
     invokeToast({
       status: 'error',
       title: 'Something went wrong.',
       description: 'Please try again',
     })
-  }, [toast])
+  }, [invokeToast])
 
-  const invokeToast = (input: UseToastOptions & { description?: string; title: string }) => {
-    toast({
-      ...input,
-      description: t(input.description || ''),
-      title: t(input.title),
+  const success = (props: IndividualToastProps) => {
+    invokeToast({
+      status: 'success',
+      ...props,
     })
   }
 
-  return { toast: invokeToast, unexpected }
+  const error = (props: IndividualToastProps) => {
+    invokeToast({
+      status: 'error',
+      ...props,
+    })
+  }
+
+  const warning = (props: IndividualToastProps) => {
+    invokeToast({
+      status: 'warning',
+      ...props,
+    })
+  }
+
+  const info = (props: IndividualToastProps) => {
+    invokeToast({
+      status: 'info',
+      ...props,
+    })
+  }
+
+  return { toast: invokeToast, unexpected, success, error, warning, info }
 }

@@ -6,8 +6,7 @@ import { useInitRewards } from '@/modules/project/hooks/useInitRewards'
 
 import { isActive } from '../../../../../../../utils'
 import { useProjectAtom, useRewardsAtom } from '../../../../../hooks/useProjectAtom'
-import { RewardCardSkeleton } from '../../rewards/components/RewardCard'
-import { RenderRewards } from '../../rewards/RenderRewards'
+import { RewardCard, RewardCardSkeleton } from '../../rewards/components'
 import { BodySectionLayout } from '../components'
 
 export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
@@ -43,7 +42,9 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <BodySectionLayout ref={ref} title={t('Rewards')}>
       <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4} width={'100%'}>
-        <RenderRewards rewards={activeProjectRewards} />
+        {rewards.map((reward) => {
+          return <RewardCard key={reward.id} width="100%" reward={reward} />
+        })}
       </SimpleGrid>
     </BodySectionLayout>
   )

@@ -1,0 +1,1 @@
+export { BottomNavBarContainer } from './BottomNavContainer'
