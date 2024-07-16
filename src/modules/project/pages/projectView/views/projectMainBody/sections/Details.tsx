@@ -7,9 +7,9 @@ import { SlLocationPin } from 'react-icons/sl'
 import { Link } from 'react-router-dom'
 
 import { TitleDivider } from '../../../../../../../components/ui/TitleDivider'
-import { getPath, ID } from '../../../../../../../shared/constants'
 import { SortType } from '../../../../../../../context'
 import { CardLayout } from '../../../../../../../shared/components/layouts'
+import { getPath, ID } from '../../../../../../../shared/constants'
 import { useProjectContext } from '../../../../../context'
 import { ProjectLinks, SummaryInfoLine, TagBox } from '../components'
 

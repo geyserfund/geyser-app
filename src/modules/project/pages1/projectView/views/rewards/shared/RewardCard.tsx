@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
-import { getPath } from '@/shared/constants'
 import { MarkdownField } from '@/forms/markdown/MarkdownField'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
+import { getPath } from '@/shared/constants'
 import { ProjectRewardForCreateUpdateFragment, ProjectStatus, RewardCurrency } from '@/types'
 
 import { useRewardBuy } from '../../../hooks'

@@ -8,11 +8,11 @@ import { useNavigate } from 'react-router-dom'
 
 import SplashRewardIcon from '../../../../../../../../../assets/splash-reward.svg'
 import { DeleteConfirmModal } from '../../../../../../../../../components/molecules'
-import { PathName } from '../../../../../../../../../shared/constants'
 import {
   MUTATION_DELETE_PROJECT_REWARD,
   MUTATION_UPDATE_PROJECT_REWARD,
 } from '../../../../../../../../../graphql/mutations'
+import { PathName } from '../../../../../../../../../shared/constants'
 import { useModal } from '../../../../../../../../../shared/hooks/useModal'
 import { neutralColorsLight } from '../../../../../../../../../styles'
 import {

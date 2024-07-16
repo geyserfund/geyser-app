@@ -4,8 +4,8 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import * as yup from 'yup'
 
-import { useModal, UseModalReturn } from '../../../shared/hooks/useModal'
 import { Modal } from '../../../shared/components/layouts/Modal'
+import { useModal, UseModalReturn } from '../../../shared/hooks/useModal'
 import { TextField } from '../../components/TextField'
 import { validateYouTubeUrl } from '../../validations/youtube'
 

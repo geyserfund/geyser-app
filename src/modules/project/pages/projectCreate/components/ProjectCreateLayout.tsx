@@ -3,8 +3,8 @@ import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BiLeftArrowAlt } from 'react-icons/bi'
 
-import { dimensions } from '../../../../../shared/constants'
 import { CardLayout } from '../../../../../shared/components/layouts'
+import { dimensions } from '../../../../../shared/constants'
 import { useMobileMode } from '../../../../../utils'
 
 interface ProjectCreateLayoutProps extends Omit<ContainerProps, 'children' | 'title'> {

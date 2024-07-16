@@ -1,12 +1,12 @@
 import { Divider, VStack } from '@chakra-ui/react'
 import { Fragment, useEffect, useState } from 'react'
 
-import { ID } from '../../../../../../../../../shared/constants/components'
 import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../../../../../../../graphql'
 import { ScrollInvoke } from '../../../../../../../../../helpers'
-import { useQueryWithPagination } from '../../../../../../../../../shared/hooks'
 import { ContributionActivityItem } from '../../../../../../../../../pages/landing/feed/components'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../../../../../shared/components/layouts'
+import { ID } from '../../../../../../../../../shared/constants/components'
+import { useQueryWithPagination } from '../../../../../../../../../shared/hooks'
 import { FundingTxFragment, ProjectFragment } from '../../../../../../../../../types'
 import {
   aggregateTransactions,

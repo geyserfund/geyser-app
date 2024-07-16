@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 
 import { ProjectListItemImage } from '../../../components/molecules'
 import { Body2 } from '../../../components/typography'
-import { getPath } from '../../../shared/constants'
 import { useAuthContext } from '../../../context'
+import { getPath } from '../../../shared/constants'
 import { ProjectStatus } from '../../../types/generated/graphql'
 
 export const NavBarUserProjectMenuItem = () => {

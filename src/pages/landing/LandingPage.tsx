@@ -1,9 +1,9 @@
 import { HStack, VStack } from '@chakra-ui/react'
 import { Outlet } from 'react-router-dom'
 
-import { dimensions, ID } from '../../shared/constants'
 import { ActivitySubscriptionProvider, FilterProvider, useAuthContext } from '../../context'
 import { StickToTop } from '../../shared/components/layouts'
+import { dimensions, ID } from '../../shared/constants'
 import { useMobileMode } from '../../utils'
 import { GradientBanner, TabBar } from './components'
 import { Filters } from './filters'

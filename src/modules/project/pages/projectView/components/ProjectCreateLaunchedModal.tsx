@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { PiSealCheckBold } from 'react-icons/pi'
 
 import { Body1 } from '../../../../../components/typography'
-import { ProjectLaunchedImageUrl } from '../../../../../shared/constants'
 import { Modal } from '../../../../../shared/components/layouts/Modal'
+import { ProjectLaunchedImageUrl } from '../../../../../shared/constants'
 import { useCustomTheme } from '../../../../../utils'
 import { useProjectContext } from '../../../context'
 

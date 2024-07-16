@@ -7,8 +7,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import Loader from '../../../components/ui/Loader'
 import { Head } from '../../../config'
-import { getPath } from '../../../shared/constants'
 import { useAuthContext } from '../../../context'
+import { getPath } from '../../../shared/constants'
 import {
   BoardVoteGrant,
   Grant,

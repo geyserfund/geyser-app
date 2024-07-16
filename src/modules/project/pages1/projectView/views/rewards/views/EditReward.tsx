@@ -5,10 +5,10 @@ import { PiArrowLeft } from 'react-icons/pi'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import Loader from '@/components/ui/Loader'
-import { getPath } from '@/shared/constants'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
 import { addUpdateRewardAtom } from '@/modules/project/state/rewardsAtom'
+import { getPath } from '@/shared/constants'
 import { useProjectRewardQuery, useRewardUpdateMutation } from '@/types'
 import { useNotification } from '@/utils'
 

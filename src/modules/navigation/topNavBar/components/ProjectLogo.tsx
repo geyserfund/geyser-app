@@ -4,8 +4,8 @@ import { useAtomValue } from 'jotai'
 import { Link } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
-import { getPath } from '@/shared/constants'
 import { projectAtom } from '@/modules/project/state/projectAtom'
+import { getPath } from '@/shared/constants'
 
 export const ProjectLogo = () => {
   const project = useAtomValue(projectAtom)

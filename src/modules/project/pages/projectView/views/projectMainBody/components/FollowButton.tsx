@@ -7,10 +7,10 @@ import { BsFillHeartFill } from 'react-icons/bs'
 
 import { IconButtonComponent } from '../../../../../../../components/ui'
 import { useAuthContext } from '../../../../../../../context'
-import { useFollowProject } from '../../../../../../../shared/hooks/graphqlState'
 import { useAuthModal } from '../../../../../../../pages/auth/hooks'
 import { useEmailPromptModal } from '../../../../../../../pages/auth/hooks/useEmailPromptModal'
 import { shouldPromptAtom } from '../../../../../../../pages/auth/state/emailPromptAtom'
+import { useFollowProject } from '../../../../../../../shared/hooks/graphqlState'
 import { Project } from '../../../../../../../types'
 
 interface FollowComponentProps extends ButtonProps {

@@ -3,6 +3,11 @@ import { PropsWithChildren, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
+import { useAuthContext } from '../../../../../context'
+import { ExternalAccountType, SocialAccountType } from '../../../../../pages/auth'
+import { ConnectWithNostr } from '../../../../../pages/auth/ConnectWithNostr'
+import { ConnectWithSocial } from '../../../../../pages/auth/ConnectWithSocial'
+import { useRefreshAuthToken } from '../../../../../pages/auth/useAuthToken'
 import {
   getPath,
   LaunchProjectCoinsUrl,
@@ -13,11 +18,6 @@ import {
   LaunchProjectWorldUrl,
   LIGHTNING_FEE_PERCENTAGE,
 } from '../../../../../shared/constants'
-import { useAuthContext } from '../../../../../context'
-import { ExternalAccountType, SocialAccountType } from '../../../../../pages/auth'
-import { ConnectWithNostr } from '../../../../../pages/auth/ConnectWithNostr'
-import { ConnectWithSocial } from '../../../../../pages/auth/ConnectWithSocial'
-import { useRefreshAuthToken } from '../../../../../pages/auth/useAuthToken'
 import { useMobileMode } from '../../../../../utils'
 import { FormContinueButton } from '../components/FormContinueButton'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout'

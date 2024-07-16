@@ -4,9 +4,9 @@ import { BsGearFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 
 import { Body1, H1 } from '../../../../../../components/typography'
-import { getPath } from '../../../../../../shared/constants'
 import { ConnectAccounts } from '../../../../../../pages/auth'
 import { CardLayout, SkeletonLayout } from '../../../../../../shared/components/layouts'
+import { getPath } from '../../../../../../shared/constants'
 import { useUserProfileAtomValue, useViewingOwnProfileAtomValue } from '../../../../state'
 import { ExternalAccountDisplay } from './components/ExternalAccountDisplay'
 

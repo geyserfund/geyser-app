@@ -5,11 +5,11 @@ import { getEventHash, Relay, relayInit } from 'nostr-tools'
 import { Event } from 'nostr-tools'
 import { useEffect, useState } from 'react'
 
-import { VITE_APP_GEYSER_NOSTR_PUBKEY } from '../constants'
 import { MUTATION_USER_BADGE_AWARD } from '../../graphql/mutations'
 import { MutationUserBadgeAwardArgs, UserBadge } from '../../types'
 import { useNotification } from '../../utils'
 import { signEventToBeDeprecated } from '../../utils/nostr/nip07'
+import { VITE_APP_GEYSER_NOSTR_PUBKEY } from '../constants'
 
 const relayUri = 'wss://relay.damus.io'
 

@@ -2,8 +2,8 @@ import { Box, Button, HStack, Link, Text, Tooltip, useDisclosure, VStack } from 
 import { useTranslation } from 'react-i18next'
 import { PiTranslate } from 'react-icons/pi'
 
-import { languageFalgs, LanguageRequestUrl, languages } from '../../../../shared/constants'
 import { Modal } from '../../../../shared/components/layouts'
+import { languageFalgs, LanguageRequestUrl, languages } from '../../../../shared/constants'
 import { allTranslations } from '../../../../translations'
 import { ColorModeSwitcher } from '../../../../utils'
 

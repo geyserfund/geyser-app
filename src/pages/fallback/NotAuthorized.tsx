@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { Head } from '../../config'
-import { NotAuthorizedImageUrl } from '../../shared/constants/platform/url'
 import { useServiceWorkerUpdate } from '../../context'
+import { NotAuthorizedImageUrl } from '../../shared/constants/platform/url'
 import { CommonFeedbackMessage } from './CommonFeedbackMessage'
 
 export const NotAuthorized = () => {

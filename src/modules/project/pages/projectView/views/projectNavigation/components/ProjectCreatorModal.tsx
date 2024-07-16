@@ -4,10 +4,10 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { EntryEditIcon, GoalIcon, RewardGiftIcon } from '../../../../../../../components/icons'
 import { Body2, H3 } from '../../../../../../../components/typography'
-import { getPath } from '../../../../../../../shared/constants'
-import { UseModalReturn } from '../../../../../../../shared/hooks/useModal'
 import { CardLayout, CardLayoutProps } from '../../../../../../../shared/components/layouts'
 import { Modal } from '../../../../../../../shared/components/layouts'
+import { getPath } from '../../../../../../../shared/constants'
+import { UseModalReturn } from '../../../../../../../shared/hooks/useModal'
 import { useProjectContext } from '../../../../../context'
 
 export const ProjectCreatorModal = (props: UseModalReturn) => {

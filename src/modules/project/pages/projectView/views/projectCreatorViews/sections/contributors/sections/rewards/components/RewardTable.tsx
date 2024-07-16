@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next'
 
 import { Body2 } from '../../../../../../../../../../../components/typography'
 import { AnonymousAvatar, LinkableAvatar } from '../../../../../../../../../../../components/ui'
-import { RewardStatusOptions } from '../../../../../../../../../../../shared/constants'
 import { getRewardShippingStatusBackgroundColor } from '../../../../../../../../../../../helpers/getProjectShippingStatusBackgroundColor'
+import { RewardStatusOptions } from '../../../../../../../../../../../shared/constants'
 import {
   OrderByDirection,
   OrderFragment,

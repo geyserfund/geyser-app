@@ -7,8 +7,8 @@ import { PiCopy } from 'react-icons/pi'
 
 import { LogoDark } from '@/assets'
 import { getAppEndPoint } from '@/config/domain'
-import { GeyserShareImageUrl } from '@/shared/constants'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { GeyserShareImageUrl } from '@/shared/constants'
 import { useNotification } from '@/utils'
 
 import { ProjectShareBanner } from '../components/ProjectShareBanner'

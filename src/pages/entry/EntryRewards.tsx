@@ -2,9 +2,9 @@ import { Box } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { getPath } from '../../shared/constants'
 import { MobileViews, useProjectContext } from '../../modules/project/context'
 import { Rewards } from '../../modules/project/pages/projectView/views/projectMainBody'
+import { getPath } from '../../shared/constants'
 import { useMobileMode } from '../../utils'
 
 export const EntryRewards = () => {
