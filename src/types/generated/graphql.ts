@@ -4468,27 +4468,6 @@ export type UserEmailVerifyMutationVariables = Exact<{
 
 export type UserEmailVerifyMutation = { __typename?: 'Mutation', userEmailVerify: boolean };
 
-export type CreateEntryMutationVariables = Exact<{
-  input: CreateEntryInput;
-}>;
-
-
-export type CreateEntryMutation = { __typename?: 'Mutation', createEntry: { __typename?: 'Entry', id: any, status: EntryStatus, createdAt: string, type: EntryType, title: string, description: string, image?: string | null, content?: string | null, publishedAt?: string | null, project?: { __typename?: 'Project', id: any, title: string, name: string } | null } };
-
-export type UpdateEntryMutationVariables = Exact<{
-  input: UpdateEntryInput;
-}>;
-
-
-export type UpdateEntryMutation = { __typename?: 'Mutation', updateEntry: { __typename?: 'Entry', id: any, status: EntryStatus, createdAt: string, type: EntryType, title: string, description: string, image?: string | null, content?: string | null, publishedAt?: string | null, project?: { __typename?: 'Project', id: any, title: string, name: string } | null } };
-
-export type PublishEntryMutationVariables = Exact<{
-  id: Scalars['BigInt']['input'];
-}>;
-
-
-export type PublishEntryMutation = { __typename?: 'Mutation', publishEntry: { __typename?: 'Entry', id: any, status: EntryStatus, createdAt: string, type: EntryType, title: string, description: string, image?: string | null, content?: string | null, publishedAt?: string | null, project?: { __typename?: 'Project', id: any, title: string, name: string } | null } };
-
 export type FundMutationVariables = Exact<{
   input: FundingInput;
 }>;
@@ -5154,6 +5133,8 @@ export type ProjectEntryFragment = { __typename?: 'Entry', id: any, title: strin
     & ProjectPageCreatorFragment
   ) };
 
+export type ProjectEntryViewFragment = { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, type: EntryType, fundersCount: number, amountFunded: number, status: EntryStatus, createdAt: string, publishedAt?: string | null, content?: string | null };
+
 export type ProjectFunderFragment = { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string } | null };
 
 export type ProjectFundingTxFragment = { __typename?: 'FundingTx', id: any, amountPaid: number, media?: string | null, comment?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, funder: { __typename?: 'Funder', id: any, user?: (
@@ -5201,6 +5182,36 @@ export type DeleteEntryMutationVariables = Exact<{
 
 
 export type DeleteEntryMutation = { __typename?: 'Mutation', deleteEntry: { __typename?: 'Entry', id: any, title: string } };
+
+export type CreateEntryMutationVariables = Exact<{
+  input: CreateEntryInput;
+}>;
+
+
+export type CreateEntryMutation = { __typename?: 'Mutation', createEntry: (
+    { __typename?: 'Entry' }
+    & ProjectEntryViewFragment
+  ) };
+
+export type UpdateEntryMutationVariables = Exact<{
+  input: UpdateEntryInput;
+}>;
+
+
+export type UpdateEntryMutation = { __typename?: 'Mutation', updateEntry: (
+    { __typename?: 'Entry' }
+    & ProjectEntryViewFragment
+  ) };
+
+export type PublishEntryMutationVariables = Exact<{
+  id: Scalars['BigInt']['input'];
+}>;
+
+
+export type PublishEntryMutation = { __typename?: 'Mutation', publishEntry: (
+    { __typename?: 'Entry' }
+    & ProjectEntryViewFragment
+  ) };
 
 export type ProjectGoalCreateMutationVariables = Exact<{
   input: ProjectGoalCreateInput;
@@ -5286,6 +5297,16 @@ export type ProjectUnplublishedEntriesQuery = { __typename?: 'Query', projectGet
       { __typename?: 'Entry' }
       & ProjectEntryFragment
     )> } | null };
+
+export type ProjectEntryQueryVariables = Exact<{
+  entryId: Scalars['BigInt']['input'];
+}>;
+
+
+export type ProjectEntryQuery = { __typename?: 'Query', entry?: (
+    { __typename?: 'Entry' }
+    & ProjectEntryViewFragment
+  ) | null };
 
 export type ProjectPageFundersQueryVariables = Exact<{
   input: GetFundersInput;
@@ -6526,6 +6547,21 @@ export const ProjectEntryFragmentDoc = gql`
   }
 }
     ${ProjectPageCreatorFragmentDoc}`;
+export const ProjectEntryViewFragmentDoc = gql`
+    fragment ProjectEntryView on Entry {
+  id
+  title
+  description
+  image
+  type
+  fundersCount
+  amountFunded
+  status
+  createdAt
+  publishedAt
+  content
+}
+    `;
 export const ProjectFunderFragmentDoc = gql`
     fragment ProjectFunder on Funder {
   id
@@ -6930,144 +6966,6 @@ export function useUserEmailVerifyMutation(baseOptions?: Apollo.MutationHookOpti
 export type UserEmailVerifyMutationHookResult = ReturnType<typeof useUserEmailVerifyMutation>;
 export type UserEmailVerifyMutationResult = Apollo.MutationResult<UserEmailVerifyMutation>;
 export type UserEmailVerifyMutationOptions = Apollo.BaseMutationOptions<UserEmailVerifyMutation, UserEmailVerifyMutationVariables>;
-export const CreateEntryDocument = gql`
-    mutation CreateEntry($input: CreateEntryInput!) {
-  createEntry(input: $input) {
-    id
-    status
-    createdAt
-    type
-    title
-    description
-    image
-    content
-    publishedAt
-    project {
-      id
-      title
-      name
-    }
-  }
-}
-    `;
-export type CreateEntryMutationFn = Apollo.MutationFunction<CreateEntryMutation, CreateEntryMutationVariables>;
-
-/**
- * __useCreateEntryMutation__
- *
- * To run a mutation, you first call `useCreateEntryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateEntryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createEntryMutation, { data, loading, error }] = useCreateEntryMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateEntryMutation(baseOptions?: Apollo.MutationHookOptions<CreateEntryMutation, CreateEntryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateEntryMutation, CreateEntryMutationVariables>(CreateEntryDocument, options);
-      }
-export type CreateEntryMutationHookResult = ReturnType<typeof useCreateEntryMutation>;
-export type CreateEntryMutationResult = Apollo.MutationResult<CreateEntryMutation>;
-export type CreateEntryMutationOptions = Apollo.BaseMutationOptions<CreateEntryMutation, CreateEntryMutationVariables>;
-export const UpdateEntryDocument = gql`
-    mutation UpdateEntry($input: UpdateEntryInput!) {
-  updateEntry(input: $input) {
-    id
-    status
-    createdAt
-    type
-    title
-    description
-    image
-    content
-    publishedAt
-    project {
-      id
-      title
-      name
-    }
-  }
-}
-    `;
-export type UpdateEntryMutationFn = Apollo.MutationFunction<UpdateEntryMutation, UpdateEntryMutationVariables>;
-
-/**
- * __useUpdateEntryMutation__
- *
- * To run a mutation, you first call `useUpdateEntryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateEntryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateEntryMutation, { data, loading, error }] = useUpdateEntryMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateEntryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEntryMutation, UpdateEntryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateEntryMutation, UpdateEntryMutationVariables>(UpdateEntryDocument, options);
-      }
-export type UpdateEntryMutationHookResult = ReturnType<typeof useUpdateEntryMutation>;
-export type UpdateEntryMutationResult = Apollo.MutationResult<UpdateEntryMutation>;
-export type UpdateEntryMutationOptions = Apollo.BaseMutationOptions<UpdateEntryMutation, UpdateEntryMutationVariables>;
-export const PublishEntryDocument = gql`
-    mutation PublishEntry($id: BigInt!) {
-  publishEntry(id: $id) {
-    id
-    status
-    createdAt
-    type
-    title
-    description
-    image
-    content
-    publishedAt
-    project {
-      id
-      title
-      name
-    }
-  }
-}
-    `;
-export type PublishEntryMutationFn = Apollo.MutationFunction<PublishEntryMutation, PublishEntryMutationVariables>;
-
-/**
- * __usePublishEntryMutation__
- *
- * To run a mutation, you first call `usePublishEntryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `usePublishEntryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [publishEntryMutation, { data, loading, error }] = usePublishEntryMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function usePublishEntryMutation(baseOptions?: Apollo.MutationHookOptions<PublishEntryMutation, PublishEntryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<PublishEntryMutation, PublishEntryMutationVariables>(PublishEntryDocument, options);
-      }
-export type PublishEntryMutationHookResult = ReturnType<typeof usePublishEntryMutation>;
-export type PublishEntryMutationResult = Apollo.MutationResult<PublishEntryMutation>;
-export type PublishEntryMutationOptions = Apollo.BaseMutationOptions<PublishEntryMutation, PublishEntryMutationVariables>;
 export const FundDocument = gql`
     mutation Fund($input: FundingInput!) {
   fund(input: $input) {
@@ -10181,6 +10079,105 @@ export function useDeleteEntryMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeleteEntryMutationHookResult = ReturnType<typeof useDeleteEntryMutation>;
 export type DeleteEntryMutationResult = Apollo.MutationResult<DeleteEntryMutation>;
 export type DeleteEntryMutationOptions = Apollo.BaseMutationOptions<DeleteEntryMutation, DeleteEntryMutationVariables>;
+export const CreateEntryDocument = gql`
+    mutation CreateEntry($input: CreateEntryInput!) {
+  createEntry(input: $input) {
+    ...ProjectEntryView
+  }
+}
+    ${ProjectEntryViewFragmentDoc}`;
+export type CreateEntryMutationFn = Apollo.MutationFunction<CreateEntryMutation, CreateEntryMutationVariables>;
+
+/**
+ * __useCreateEntryMutation__
+ *
+ * To run a mutation, you first call `useCreateEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createEntryMutation, { data, loading, error }] = useCreateEntryMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateEntryMutation(baseOptions?: Apollo.MutationHookOptions<CreateEntryMutation, CreateEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateEntryMutation, CreateEntryMutationVariables>(CreateEntryDocument, options);
+      }
+export type CreateEntryMutationHookResult = ReturnType<typeof useCreateEntryMutation>;
+export type CreateEntryMutationResult = Apollo.MutationResult<CreateEntryMutation>;
+export type CreateEntryMutationOptions = Apollo.BaseMutationOptions<CreateEntryMutation, CreateEntryMutationVariables>;
+export const UpdateEntryDocument = gql`
+    mutation UpdateEntry($input: UpdateEntryInput!) {
+  updateEntry(input: $input) {
+    ...ProjectEntryView
+  }
+}
+    ${ProjectEntryViewFragmentDoc}`;
+export type UpdateEntryMutationFn = Apollo.MutationFunction<UpdateEntryMutation, UpdateEntryMutationVariables>;
+
+/**
+ * __useUpdateEntryMutation__
+ *
+ * To run a mutation, you first call `useUpdateEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateEntryMutation, { data, loading, error }] = useUpdateEntryMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateEntryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEntryMutation, UpdateEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateEntryMutation, UpdateEntryMutationVariables>(UpdateEntryDocument, options);
+      }
+export type UpdateEntryMutationHookResult = ReturnType<typeof useUpdateEntryMutation>;
+export type UpdateEntryMutationResult = Apollo.MutationResult<UpdateEntryMutation>;
+export type UpdateEntryMutationOptions = Apollo.BaseMutationOptions<UpdateEntryMutation, UpdateEntryMutationVariables>;
+export const PublishEntryDocument = gql`
+    mutation PublishEntry($id: BigInt!) {
+  publishEntry(id: $id) {
+    ...ProjectEntryView
+  }
+}
+    ${ProjectEntryViewFragmentDoc}`;
+export type PublishEntryMutationFn = Apollo.MutationFunction<PublishEntryMutation, PublishEntryMutationVariables>;
+
+/**
+ * __usePublishEntryMutation__
+ *
+ * To run a mutation, you first call `usePublishEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePublishEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [publishEntryMutation, { data, loading, error }] = usePublishEntryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function usePublishEntryMutation(baseOptions?: Apollo.MutationHookOptions<PublishEntryMutation, PublishEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PublishEntryMutation, PublishEntryMutationVariables>(PublishEntryDocument, options);
+      }
+export type PublishEntryMutationHookResult = ReturnType<typeof usePublishEntryMutation>;
+export type PublishEntryMutationResult = Apollo.MutationResult<PublishEntryMutation>;
+export type PublishEntryMutationOptions = Apollo.BaseMutationOptions<PublishEntryMutation, PublishEntryMutationVariables>;
 export const ProjectGoalCreateDocument = gql`
     mutation ProjectGoalCreate($input: ProjectGoalCreateInput!) {
   projectGoalCreate(input: $input) {
@@ -10497,6 +10494,46 @@ export type ProjectUnplublishedEntriesQueryHookResult = ReturnType<typeof usePro
 export type ProjectUnplublishedEntriesLazyQueryHookResult = ReturnType<typeof useProjectUnplublishedEntriesLazyQuery>;
 export type ProjectUnplublishedEntriesSuspenseQueryHookResult = ReturnType<typeof useProjectUnplublishedEntriesSuspenseQuery>;
 export type ProjectUnplublishedEntriesQueryResult = Apollo.QueryResult<ProjectUnplublishedEntriesQuery, ProjectUnplublishedEntriesQueryVariables>;
+export const ProjectEntryDocument = gql`
+    query ProjectEntry($entryId: BigInt!) {
+  entry(id: $entryId) {
+    ...ProjectEntryView
+  }
+}
+    ${ProjectEntryViewFragmentDoc}`;
+
+/**
+ * __useProjectEntryQuery__
+ *
+ * To run a query within a React component, call `useProjectEntryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectEntryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectEntryQuery({
+ *   variables: {
+ *      entryId: // value for 'entryId'
+ *   },
+ * });
+ */
+export function useProjectEntryQuery(baseOptions: Apollo.QueryHookOptions<ProjectEntryQuery, ProjectEntryQueryVariables> & ({ variables: ProjectEntryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectEntryQuery, ProjectEntryQueryVariables>(ProjectEntryDocument, options);
+      }
+export function useProjectEntryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectEntryQuery, ProjectEntryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectEntryQuery, ProjectEntryQueryVariables>(ProjectEntryDocument, options);
+        }
+export function useProjectEntrySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectEntryQuery, ProjectEntryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectEntryQuery, ProjectEntryQueryVariables>(ProjectEntryDocument, options);
+        }
+export type ProjectEntryQueryHookResult = ReturnType<typeof useProjectEntryQuery>;
+export type ProjectEntryLazyQueryHookResult = ReturnType<typeof useProjectEntryLazyQuery>;
+export type ProjectEntrySuspenseQueryHookResult = ReturnType<typeof useProjectEntrySuspenseQuery>;
+export type ProjectEntryQueryResult = Apollo.QueryResult<ProjectEntryQuery, ProjectEntryQueryVariables>;
 export const ProjectPageFundersDocument = gql`
     query ProjectPageFunders($input: GetFundersInput!) {
   fundersGet(input: $input) {

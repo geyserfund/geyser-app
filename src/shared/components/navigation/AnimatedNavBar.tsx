@@ -46,6 +46,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem, loading
       background="neutral1.2"
       borderRadius={{ base: '8px', lg: '10px' }}
       position="relative"
+      zIndex={2}
     >
       <motion.div
         style={{
@@ -53,7 +54,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem, loading
           top: '2px',
           height: 'calc(100% - 4px)',
           backgroundColor: colors.utils.pbg,
-          zIndex: 1,
+          zIndex: 3,
           borderRadius: isMobileMode ? '8px' : '10px',
           border: '1px solid',
           borderColor: colors.utils.text,

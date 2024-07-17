@@ -1,4 +1,4 @@
-import { Box, Button, Divider, HStack, Text, useTheme, VStack } from '@chakra-ui/react'
+import { Box, Divider, HStack, Text, useTheme, VStack } from '@chakra-ui/react'
 import {
   closestCenter,
   DndContext,
@@ -13,27 +13,23 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSo
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { PiPlus } from 'react-icons/pi'
 
 import { useInitGoals } from '@/modules/project/hooks/useInitGoals'
 
-import { CardLayout, SkeletonLayout } from '../../../../../../shared/components/layouts'
-import { ProjectGoal, useProjectGoalOrderingUpdateMutation } from '../../../../../../types'
-import { useGoalsAtom, useProjectAtom } from '../../../../hooks/useProjectAtom'
-import { useGoalsModal } from '../../hooks/useGoalsModal'
-import { useProjectDefaultGoal } from '../body/hooks/useProjectDefaultGoal'
-import { GoalCompleted, GoalInProgress } from './components'
+import { CardLayout, SkeletonLayout } from '../../../../../../../shared/components/layouts'
+import { ProjectGoal, useProjectGoalOrderingUpdateMutation } from '../../../../../../../types'
+import { useGoalsAtom, useProjectAtom } from '../../../../../hooks/useProjectAtom'
+import { useGoalsModal } from '../../../hooks/useGoalsModal'
+import { useProjectDefaultGoal } from '../../body/hooks/useProjectDefaultGoal'
+import { GoalCompleted, GoalInProgress } from '../components'
 
 export const RenderGoals = () => {
-  const { t } = useTranslation()
-
-  const { isProjectOwner, project } = useProjectAtom()
+  const { project } = useProjectAtom()
 
   const { queryInProgressGoals, inProgressGoalsLoading } = useInitGoals(true)
 
   const { inProgressGoals, completedGoals } = useGoalsAtom()
-  const { onGoalModalOpen } = useGoalsModal()
+  const { onGoalModalOpen, isGoalinEditMode } = useGoalsModal()
 
   const { priorityGoal } = useProjectDefaultGoal({
     defaultGoalId: project?.defaultGoalId,
@@ -47,7 +43,6 @@ export const RenderGoals = () => {
     },
   })
 
-  const [editMode, setEditMode] = useState(false)
   const [items, setItems] = useState(inProgressGoals)
   const [activeId, setActiveId] = useState(null)
   const [initialItemsOrder, setInitialItemsOrder] = useState<any[] | undefined>([])
@@ -83,10 +78,6 @@ export const RenderGoals = () => {
     setActiveId(null)
   }
 
-  const handleCreateGoalModalOpen = () => {
-    onGoalModalOpen()
-  }
-
   const handleEditGoalModalOpen = (goal: ProjectGoal) => {
     onGoalModalOpen(goal)
   }
@@ -94,8 +85,8 @@ export const RenderGoals = () => {
   const hasInProgressGoals = inProgressGoals && inProgressGoals.length > 0
   const hasCompletedGoals = completedGoals && completedGoals.length > 0
 
-  const handleEditMode = async () => {
-    if (editMode) {
+  useEffect(() => {
+    if (isGoalinEditMode) {
       const projectGoalIdsOrder = items?.map((item) => Number(item.id))
 
       if (!compareProjectGoalOrder(initialItemsOrder, projectGoalIdsOrder)) {
@@ -106,9 +97,7 @@ export const RenderGoals = () => {
     } else {
       setInitialItemsOrder(items?.map((item) => Number(item.id)))
     }
-
-    setEditMode(!editMode)
-  }
+  }, [isGoalinEditMode, items, project, initialItemsOrder, updateProjectGoalOrdering])
 
   const renderCompletedGoals = () => {
     if (hasCompletedGoals) {
@@ -122,25 +111,6 @@ export const RenderGoals = () => {
     return <Text>There are no goals available.</Text>
   }
 
-  const renderEditButton = () => {
-    if (!isProjectOwner) {
-      return null
-    }
-
-    return (
-      <Button
-        aria-label="is-editing-goal"
-        variant="outline"
-        colorScheme="neutral1"
-        size="sm"
-        onClick={handleEditMode}
-        minWidth={'54px'}
-      >
-        {editMode ? t('Finish Editing') : t('Edit')}
-      </Button>
-    )
-  }
-
   if (inProgressGoalsLoading) {
     return <RenderGoalsSkeleton />
   }
@@ -150,7 +120,7 @@ export const RenderGoals = () => {
   }
 
   return (
-    <CardLayout flexDirection="column" width="100%" alignItems="flex-start" spacing={6}>
+    <VStack width="100%" alignItems="flex-start" spacing={6}>
       {hasInProgressGoals && (
         <VStack alignItems="flex-start" spacing={4} width="100%">
           <DndContext
@@ -165,7 +135,7 @@ export const RenderGoals = () => {
                 <SortableItem
                   key={goal.id}
                   goal={goal}
-                  editMode={editMode}
+                  editMode={isGoalinEditMode}
                   handleEditGoalModalOpen={handleEditGoalModalOpen}
                   isPriorityGoal={goal.id === priorityGoal?.id}
                 />
@@ -185,22 +155,7 @@ export const RenderGoals = () => {
           {renderCompletedGoals()}
         </VStack>
       )}
-      <HStack w="full" justifyContent={'end'}>
-        {((isProjectOwner && editMode) || (!hasInProgressGoals && hasCompletedGoals && isProjectOwner)) && (
-          <Button
-            variant="solid"
-            colorScheme="primary1"
-            size="sm"
-            width={{ base: '100%', lg: '192px' }}
-            rightIcon={<PiPlus fontSize="18px" />}
-            onClick={handleCreateGoalModalOpen}
-          >
-            {t('Add Goal')}
-          </Button>
-        )}
-        {renderEditButton()}
-      </HStack>
-    </CardLayout>
+    </VStack>
   )
 }
 

@@ -40,7 +40,7 @@ export const ProjectNavigation = () => {
     if (project.hasEntries) {
       buttonList.push({
         name: 'Posts',
-        path: PathName.projectEntries,
+        path: PathName.projectPosts,
         icon: PiNewspaper,
       })
     }

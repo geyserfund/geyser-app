@@ -20,3 +20,19 @@ export const FRAGMENT_PROJECT_ENTRY = gql`
     }
   }
 `
+
+export const FRAGMENT_PROJECT_ENTRY_VIEW = gql`
+  fragment ProjectEntryView on Entry {
+    id
+    title
+    description
+    image
+    type
+    fundersCount
+    amountFunded
+    status
+    createdAt
+    publishedAt
+    content
+  }
+`

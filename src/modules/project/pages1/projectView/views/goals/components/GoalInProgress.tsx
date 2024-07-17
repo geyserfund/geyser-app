@@ -1,7 +1,7 @@
 import { Box, BoxProps, Button, HStack, IconButton, Stack, Tooltip, VStack } from '@chakra-ui/react'
 import { Emoji, EmojiStyle } from 'emoji-picker-react'
 import { useTranslation } from 'react-i18next'
-import { PiNotePencil, PiStarFill } from 'react-icons/pi'
+import { PiDotsSix, PiNotePencil, PiStarFill } from 'react-icons/pi'
 
 import { DragAndDropIcon } from '../../../../../../../components/icons/svg/DragAndDropIcon'
 import { Body } from '../../../../../../../shared/components/typography'
@@ -79,7 +79,7 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
           justifyContent={{ base: 'space-between', lg: 'flex-start' }}
           width="100%"
         >
-          <HStack w="full" justifyContent={'start'}>
+          <HStack w="full" justifyContent={'start'} alignItems="start">
             {goal.emojiUnifiedCode && (
               <Box display="flex" justifyContent="center" width="24px" height="34px">
                 <Emoji size={24} unified={goal.emojiUnifiedCode} emojiStyle={EmojiStyle.NATIVE} />
@@ -206,8 +206,8 @@ const DragHandle = ({ listeners }: { listeners: any }) => {
       }}
       {...listeners}
     >
-      <DragAndDropIcon
-        sx={{ transition: 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)' }}
+      <PiDotsSix
+        style={{ transition: 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)' }}
         className="drag-icon"
         color="neutral1.9"
       />

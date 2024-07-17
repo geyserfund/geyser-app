@@ -6,9 +6,9 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { ProjectFundersCountIndicator } from '../../components/molecules'
 import { ButtonComponent, EntryStatusLabel } from '../../components/ui'
+import { ProjectEntryEditor } from '../../modules/project/pages1/projectView/views/posts/editor'
 import { getPath } from '../../shared/constants'
 import { EntryFragment, EntryStatus } from '../../types'
-import { ProjectEntryEditor } from './creation/editor'
 
 type Props = {
   entry: EntryFragment

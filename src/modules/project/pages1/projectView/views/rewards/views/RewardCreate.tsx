@@ -9,14 +9,13 @@ import { defaultProjectReward } from '@/defaults'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
 import { addUpdateRewardAtom } from '@/modules/project/state/rewardsAtom'
-import { CardLayout } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
 import { useProjectRewardCreateMutation } from '@/types'
 import { useNotification } from '@/utils'
 
 import { ProjectRewardForm } from '../shared/ProjectRewardForm'
 
-export const CreateReward = () => {
+export const RewardCreate = () => {
   const navigate = useNavigate()
 
   const { project, loading } = useProjectAtom()

@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_PROJECT_ENTRY } from '../fragments/entryFragment'
+import { FRAGMENT_PROJECT_ENTRY, FRAGMENT_PROJECT_ENTRY_VIEW } from '../fragments/entryFragment'
 
 export const QUERY_PROJECT_ENTRIES = gql`
   ${FRAGMENT_PROJECT_ENTRY}
@@ -22,6 +22,15 @@ export const QUERY_PROJECT_UNPUBLISHED_ENTRIES = gql`
       entries: entries(input: { where: { published: false } }) {
         ...ProjectEntry
       }
+    }
+  }
+`
+
+export const QUERY_ENTRY = gql`
+  ${FRAGMENT_PROJECT_ENTRY_VIEW}
+  query ProjectEntry($entryId: BigInt!) {
+    entry(id: $entryId) {
+      ...ProjectEntryView
     }
   }
 `

@@ -14,7 +14,7 @@ import { useNotification } from '@/utils'
 
 import { ProjectRewardForm } from '../shared/ProjectRewardForm'
 
-export const EditReward = () => {
+export const RewardEdit = () => {
   const navigate = useNavigate()
 
   const { project, loading } = useProjectAtom()

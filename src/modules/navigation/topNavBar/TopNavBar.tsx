@@ -67,7 +67,7 @@ export const TopNavBar = () => {
         backgroundColor={'utils.pbg'}
         position="fixed"
         top={0}
-        zIndex={1}
+        zIndex={2}
       >
         <HStack w="100%" height={{ base: '40px', lg: '48px' }} justifyContent={'space-between'}>
           {shouldShowProjectLogo ? <ProjectLogo /> : <BrandLogo />}
