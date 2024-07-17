@@ -1,50 +1,34 @@
-import { QueryHookOptions, useLazyQuery, useMutation } from '@apollo/client'
+import { LazyQueryHookOptions } from '@apollo/client'
 import { useCallback, useEffect, useState } from 'react'
 
-import { QUERY_ENTRY_WITH_OWNERS } from '../../../graphql'
-import { MUTATION_CREATE_ENTRY, MUTATION_UPDATE_ENTRY } from '../../../graphql/mutations'
-import { CreateEntryInput, Entry, EntryType, UpdateEntryInput } from '../../../types'
-import { checkDiff, checkKeyValueExists, toInt, useNotification } from '../../../utils'
-import { useListenerState } from '../useListenerState'
-import { useUnsavedAlert } from '../useUnsavedAlert'
+import { useListenerState } from '../../../../../../../shared/hooks/useListenerState'
+import { useUnsavedAlert } from '../../../../../../../shared/hooks/useUnsavedAlert'
+import {
+  CreateEntryInput,
+  EntryType,
+  ProjectEntryQuery,
+  ProjectEntryQueryVariables,
+  ProjectEntryViewFragment,
+  UpdateEntryInput,
+  useCreateEntryMutation,
+  useProjectEntryLazyQuery,
+  usePublishEntryMutation,
+  useUpdateEntryMutation,
+} from '../../../../../../../types'
+import { checkDiff, checkKeyValueExists, toInt, useNotification } from '../../../../../../../utils'
 
-type TEntryVariables = {
-  id?: Number
-  name?: string
-}
-
-type TEntryUpdateVariables = {
-  input: UpdateEntryInput
-}
-
-type TEntryCreateVariables = {
-  input: CreateEntryInput
-}
-
-type TEntryData = {
-  entry: Entry
-}
-
-type TEntryCreateData = {
-  createEntry: Entry
-}
-
-type TEntryUpdateData = {
-  updateEntry: Entry
-}
-
-const entryEditKeyList: (keyof Entry)[] = ['content', 'description', 'image', 'title']
+const entryEditKeyList: (keyof ProjectEntryViewFragment)[] = ['content', 'description', 'image', 'title']
 
 export const useEntryState = (
   projectId: number,
   entryId?: number | string,
-  options?: QueryHookOptions<TEntryData, TEntryVariables>,
-  entryTemplate: Entry = {} as Entry,
+  options?: LazyQueryHookOptions<ProjectEntryQuery, ProjectEntryQueryVariables>,
+  entryTemplate: ProjectEntryViewFragment = {} as ProjectEntryViewFragment,
 ) => {
-  const { toast } = useNotification()
+  const toast = useNotification()
 
-  const [entry, setEntry] = useState<Entry>(entryTemplate as Entry)
-  const [baseEntry, setBaseEntry] = useState<Entry>(entryTemplate as Entry)
+  const [entry, setEntry] = useState<ProjectEntryViewFragment>(entryTemplate as ProjectEntryViewFragment)
+  const [baseEntry, setBaseEntry] = useState<ProjectEntryViewFragment>(entryTemplate as ProjectEntryViewFragment)
 
   const [loading, setLoading] = useState(true)
 
@@ -54,13 +38,12 @@ export const useEntryState = (
 
   useUnsavedAlert(hasDiff)
 
-  const [createEntryMutation] = useMutation<TEntryCreateData, TEntryCreateVariables>(MUTATION_CREATE_ENTRY, {
+  const [createEntryMutation] = useCreateEntryMutation({
     onError() {
       setSaving(false)
-      toast({
+      toast.error({
         title: 'Entry creation failed',
         description: 'Please try again later',
-        status: 'error',
       })
     },
     onCompleted(data) {
@@ -71,13 +54,12 @@ export const useEntryState = (
     },
   })
 
-  const [updateEntryMutation] = useMutation<TEntryUpdateData, TEntryUpdateVariables>(MUTATION_UPDATE_ENTRY, {
+  const [updateEntryMutation] = useUpdateEntryMutation({
     onError() {
       setSaving(false)
-      toast({
+      toast.error({
         title: 'Entry update failed',
         description: 'Please try again later',
-        status: 'error',
       })
     },
     onCompleted(data) {
@@ -88,9 +70,25 @@ export const useEntryState = (
     },
   })
 
-  const [getEntryQuery] = useLazyQuery<TEntryData, TEntryVariables>(QUERY_ENTRY_WITH_OWNERS, {
+  const [publishEntryMutation, { loading: publishing }] = usePublishEntryMutation({
+    onCompleted(data) {
+      sync(data.publishEntry)
+      toast.success({
+        title: 'Entry published',
+        description: 'Your entry is now live',
+      })
+    },
+    onError() {
+      toast.error({
+        title: 'Entry publish failed',
+        description: 'Please try again later',
+      })
+    },
+  })
+
+  const [getEntryQuery] = useProjectEntryLazyQuery({
     variables: {
-      id: toInt(entryId),
+      entryId: toInt(entryId),
     },
     ...options,
     onCompleted(data) {
@@ -127,16 +125,16 @@ export const useEntryState = (
     setHasDiff(isDiff)
   }, [entry, baseEntry])
 
-  const sync = (value: Entry) => {
+  const sync = (value: ProjectEntryViewFragment) => {
     setBaseEntry(value)
     setEntry(value)
   }
 
-  const updateEntry = (value: Partial<Entry>) => {
+  const updateEntry = (value: Partial<ProjectEntryViewFragment>) => {
     setEntry({ ...entry, ...value })
   }
 
-  const saveEntry = useCallback(() => {
+  const saveEntry = useCallback(async () => {
     if (saving.current) {
       return
     }
@@ -159,7 +157,7 @@ export const useEntryState = (
         image: entry.image,
         title: entry.title,
       }
-      updateEntryMutation({ variables: { input } })
+      await updateEntryMutation({ variables: { input } })
     } else {
       const input: CreateEntryInput = {
         projectId: toInt(projectId),
@@ -169,9 +167,35 @@ export const useEntryState = (
         title: entry.title || '',
         type: EntryType.Article,
       }
-      createEntryMutation({ variables: { input } })
+      await createEntryMutation({ variables: { input } })
     }
   }, [saving, entry, baseEntry, entryId, projectId, createEntryMutation, updateEntryMutation, setSaving])
+
+  const publishEntry = async () => {
+    if (!entry.id) {
+      toast.info({
+        title: 'Cannot publish',
+        description: 'Please edit your content before preview',
+      })
+      return
+    }
+
+    try {
+      if (hasDiff) {
+        await saveEntry()
+      }
+
+      const entryId = toInt(entry.id)
+      if (entryId) {
+        publishEntryMutation({ variables: { id: entryId } })
+      }
+    } catch (error) {
+      toast.error({
+        title: 'Entry publish failed',
+        description: 'Please try again later',
+      })
+    }
+  }
 
   return {
     loading,
@@ -180,5 +204,7 @@ export const useEntryState = (
     hasDiff,
     updateEntry,
     saveEntry,
+    publishEntry,
+    publishing,
   }
 }

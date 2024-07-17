@@ -38,7 +38,7 @@ export const RewardCard = ({ reward, hidden, ...rest }: Props) => {
     <CardLayout
       as={Link}
       to={getPath('projectRewardView', project?.name, reward.id)}
-      p={0}
+      dense
       w="full"
       overflow={'hidden'}
       spacing={0}

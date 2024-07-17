@@ -15,6 +15,18 @@ export const dimensions = {
       height: 36 + 12,
     },
   },
+  project: {
+    rewards: {
+      view: {
+        maxWidth: 538,
+      },
+    },
+    posts: {
+      view: {
+        maxWidth: 586,
+      },
+    },
+  },
   sideNav: {
     width: 256,
   },

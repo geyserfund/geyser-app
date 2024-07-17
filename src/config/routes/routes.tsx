@@ -23,6 +23,7 @@ const ProjectDashboard1 = () => import('../../modules/project/pages1/projectDash
 const Project1 = () => import('../../modules/project/pages1/projectView')
 
 const CreatorReward = () => import('../../modules/project/pages1/projectView/views/rewards/views')
+const CreatorPost = () => import('../../modules/project/pages1/projectView/views/posts/views')
 
 const Refund = () => import('../../modules/project/pages/refund')
 const ProfilePage = () => import('../../modules/profile/pages/profilePage/Profile')
@@ -277,7 +278,7 @@ export const platformRoutes: RouteObject[] = [
       {
         path: getPath('projectRewardCreate', PathName.projectName),
         async lazy() {
-          const CreateReward = await CreatorReward().then((m) => m.CreateReward)
+          const CreateReward = await CreatorReward().then((m) => m.RewardCreate)
           return {
             element: renderPrivateRoute(CreateReward),
           }
@@ -286,7 +287,7 @@ export const platformRoutes: RouteObject[] = [
       {
         path: getPath('projectRewardEdit', PathName.projectName, PathName.rewardId),
         async lazy() {
-          const EditReward = await CreatorReward().then((m) => m.EditReward)
+          const EditReward = await CreatorReward().then((m) => m.RewardEdit)
           return {
             element: renderPrivateRoute(EditReward),
           }
@@ -303,8 +304,26 @@ export const platformRoutes: RouteObject[] = [
       {
         path: getPath('projectPostView', PathName.projectName, PathName.postId),
         async lazy() {
-          const ProjectPostView = await Project1().then((m) => m.ProjectPostView)
-          return { Component: ProjectPostView }
+          const PostView = await Project1().then((m) => m.PostView)
+          return { Component: PostView }
+        },
+      },
+      {
+        path: getPath('projectPostCreate', PathName.projectName),
+        async lazy() {
+          const PostCreateEdit = await CreatorPost().then((m) => m.PostCreateEdit)
+          return {
+            element: renderPrivateRoute(PostCreateEdit),
+          }
+        },
+      },
+      {
+        path: getPath('projectPostEdit', PathName.projectName, PathName.postId),
+        async lazy() {
+          const PostCreateEdit = await CreatorPost().then((m) => m.PostCreateEdit)
+          return {
+            element: renderPrivateRoute(PostCreateEdit),
+          }
         },
       },
 

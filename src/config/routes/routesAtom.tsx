@@ -66,7 +66,7 @@ export const projectCreatorRoutes = [
 
 export const projectRoutes = [
   getPath('project', PathName.projectName),
-  getPath('projectEntries', PathName.projectName),
+  getPath('projectPosts', PathName.projectName),
   getPath('projectGoals', PathName.projectName),
   getPath('projectRewards', PathName.projectName),
   ...projectCreatorRoutes,
@@ -74,7 +74,7 @@ export const projectRoutes = [
 
 export const ProjectPageRoutesWithNavBar = [
   getPath('project', PathName.projectName),
-  getPath('projectEntries', PathName.projectName),
+  getPath('projectPosts', PathName.projectName),
   getPath('projectGoals', PathName.projectName),
   getPath('projectRewards', PathName.projectName),
   getPath('projectLeaderboard', PathName.projectName),

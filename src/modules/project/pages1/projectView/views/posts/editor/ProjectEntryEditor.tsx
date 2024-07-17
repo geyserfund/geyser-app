@@ -8,11 +8,11 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 import { Quill } from 'react-quill'
 
-import { AppTheme } from '../../../../context'
-import { ID } from '../../../../shared/constants'
-import { getSignedUploadAPI } from '../../../../shared/hooks'
-import { fonts } from '../../../../styles'
-import { useCustomTheme, useMobileMode, useNotification } from '../../../../utils'
+import { AppTheme } from '../../../../../../../context'
+import { ID } from '../../../../../../../shared/constants'
+import { getSignedUploadAPI } from '../../../../../../../shared/hooks'
+import { fonts } from '../../../../../../../styles'
+import { useCustomTheme, useMobileMode, useNotification } from '../../../../../../../utils'
 
 type Rules = string
 
@@ -37,8 +37,9 @@ const useStyles = createUseStyles<Rules, StyleProps, AppTheme>(({ colors }) => (
       zIndex: 99,
       background: colors.neutral[0],
       borderRadius: '4px',
-      borderWidth: '0px',
-      boxShadow: '0px 3px 12px rgba(0, 0, 0, 0.1)',
+      border: '1px solid',
+      borderColor: colors.neutral1[6],
+
       flexDirection: 'row',
       justifyContent: 'center',
       maxWidth: '100%',
@@ -61,36 +62,37 @@ const useStyles = createUseStyles<Rules, StyleProps, AppTheme>(({ colors }) => (
       paddingBottom: '70px !important',
       paddingLeft: noPadding ? '0px !important' : undefined,
       paddingRight: noPadding ? '0px !important' : undefined,
+      paddingTop: '0px !important',
       overflow: 'hidden',
       '&.ql-blank': {
         '&:before': {
           fontFamily: fonts.brand,
-          fontSize: '18px',
+          fontSize: '16px',
           lineHeight: 1.5,
           fontStyle: 'normal',
-          color: colors.neutral[500],
+          color: colors.neutral1[6],
         },
       },
     },
 
     '& .ql-editor li': {
-      fontSize: '18px',
+      fontSize: '16px',
     },
 
     '& p': {
       fontFamily: fonts.brand,
-      fontSize: '18px',
+      fontSize: '16px',
       lineHeight: 1.5,
     },
 
     '& h1': {
       fontFamily: fonts.brand,
-      fontSize: '22px',
+      fontSize: '28px',
       fontWeight: '500px',
     },
     '& h2': {
       fontFamily: fonts.brand,
-      fontSize: '28px',
+      fontSize: '22px',
       fontWeight: '500px',
     },
     '& img': {

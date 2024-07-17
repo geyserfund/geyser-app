@@ -14,17 +14,17 @@ import { useNotification } from '@/utils'
 
 import { CreatorEditButton } from '../../body/components'
 
-type EntryEditMenuProps = {
-  entry: ProjectEntryFragment
+type PostEditMenuProps = {
+  entry: Pick<ProjectEntryFragment, 'id'>
 } & ButtonProps
 
-export const EntryEditMenu = ({ entry, ...props }: EntryEditMenuProps) => {
+export const PostEditMenu = ({ entry, ...props }: PostEditMenuProps) => {
   const { t } = useTranslation()
   const toast = useNotification()
 
   const menu = useDisclosure()
 
-  const { project } = useProjectAtom()
+  const { project, isProjectOwner } = useProjectAtom()
 
   const deleteEntry = useSetAtom(deleteEntryAtom)
 
@@ -45,6 +45,10 @@ export const EntryEditMenu = ({ entry, ...props }: EntryEditMenuProps) => {
     },
   })
 
+  if (!isProjectOwner) {
+    return null
+  }
+
   return (
     <>
       <Menu isOpen={menu.isOpen} onClose={menu.onClose} placement="bottom-end" closeOnSelect={true} strategy="fixed">
@@ -62,7 +66,7 @@ export const EntryEditMenu = ({ entry, ...props }: EntryEditMenuProps) => {
           <MenuList p={2} zIndex="99" shadow="md">
             <MenuItem
               as={Link}
-              to={getPath('pojectPostEdit', project.name, entry.id)}
+              to={getPath('projectPostEdit', project.name, entry.id)}
               icon={<PiNotePencil fontSize={'16px'} />}
             >
               {t('Edit')}

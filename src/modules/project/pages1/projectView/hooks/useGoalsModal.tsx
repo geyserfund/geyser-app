@@ -1,12 +1,18 @@
 import { useAtom } from 'jotai'
 
 import { ProjectGoal } from '../../../../../types'
-import { currentGoalAtom, isGoalDeleteModalOpenAtom, isGoalModalOpenAtom } from '../state/goalModalAtom'
+import {
+  currentGoalAtom,
+  isGoalDeleteModalOpenAtom,
+  isGoalinEditModeAtom,
+  isGoalModalOpenAtom,
+} from '../state/goalModalAtom'
 
 /** Trigger goals modal from differnt places within Project Context */
 export const useGoalsModal = () => {
   const [isGoalModalOpen, setIsGoalModalOpen] = useAtom(isGoalModalOpenAtom)
   const [isGoalDeleteModalOpen, setIsGoalDeleteModalOpen] = useAtom(isGoalDeleteModalOpenAtom)
+  const [isGoalinEditMode, setGoalInEditMode] = useAtom(isGoalinEditModeAtom)
 
   const [currentGoal, setCurrentGoal] = useAtom(currentGoalAtom)
 
@@ -28,5 +34,7 @@ export const useGoalsModal = () => {
     currentGoal,
     onGoalModalClose: () => setIsGoalModalOpen(false),
     onGoalDeleteModalClose: () => setIsGoalDeleteModalOpen(false),
+    isGoalinEditMode,
+    setGoalInEditMode,
   }
 }

@@ -1,4 +1,4 @@
-import { CreateReward } from './CreateReward'
-import { EditReward } from './EditReward'
+import { RewardCreate } from './RewardCreate'
+import { RewardEdit } from './RewardEdit'
 
-export { CreateReward, EditReward }
+export { RewardCreate, RewardEdit }

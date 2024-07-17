@@ -23,7 +23,7 @@ export const LeaderboardSummary = () => {
   const activeItem = isContribution ? 1 : 0
 
   return (
-    <CardLayout w="full" flex={1} px={0} py={6}>
+    <CardLayout w="full" flex={1} dense py={6}>
       <HStack w="full" px={6}>
         <AnimatedNavBar items={items} activeItem={activeItem} showLabel />
       </HStack>

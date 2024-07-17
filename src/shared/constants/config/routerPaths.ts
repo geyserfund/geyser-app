@@ -109,7 +109,7 @@ const pathsMap = {
   projectRewards: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectRewards}`,
 
   projectPostCreate: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectPosts}/create`,
-  pojectPostEdit: (projectName: string, postId: string) =>
+  projectPostEdit: (projectName: string, postId: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectPosts}/edit/${postId}`,
   projectPostView: (projectName: string, postId: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectPosts}/view/${postId}`,
