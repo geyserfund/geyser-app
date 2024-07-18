@@ -74,7 +74,7 @@ export const ProjectShareModal = ({ isOpen, onClose, name }: IQRModal) => {
 
         <ModalBody as={VStack} spacing={3} padding={0}>
           <AnimatedNavBar {...animatedNavBarProps} showLabel />
-          {render()}
+          {render && render()}
           <ShareBlock projectName={name} paddingTop={1} />
         </ModalBody>
       </ModalContent>
