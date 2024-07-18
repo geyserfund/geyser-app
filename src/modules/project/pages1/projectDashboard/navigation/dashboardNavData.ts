@@ -47,7 +47,6 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     type: DashboardType.analytics,
     icon: PiInvoice,
   },
-
   {
     label: 'Project Info',
     path: 'dashboardInfo',

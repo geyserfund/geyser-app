@@ -23,6 +23,7 @@ const ProjectDashboard1 = () => import('../../modules/project/pages1/projectDash
 const Project1 = () => import('../../modules/project/pages1/projectView')
 
 const CreatorReward = () => import('../../modules/project/pages1/projectView/views/rewards/views')
+
 const CreatorPost = () => import('../../modules/project/pages1/projectView/views/posts/views')
 
 const Refund = () => import('../../modules/project/pages/refund')
@@ -100,29 +101,29 @@ export const platformRoutes: RouteObject[] = [
         element: renderPrivateRoute(ProjectCreateRewards),
       }
     },
-    children: [
-      {
-        index: true,
-        async lazy() {
-          const ProjectCreateRewardMain = await ProjectLaunch().then((m) => m.ProjectCreateRewardMain)
-          return { element: renderPrivateRoute(ProjectCreateRewardMain) }
-        },
-      },
-      {
-        path: 'new',
-        async lazy() {
-          const ProjectCreationCreateReward = await ProjectLaunch().then((m) => m.ProjectCreationCreateReward)
-          return { element: renderPrivateRoute(ProjectCreationCreateReward) }
-        },
-      },
-      {
-        path: 'edit/:rewardId',
-        async lazy() {
-          const ProjectCreationEditReward = await ProjectLaunch().then((m) => m.ProjectCreationEditReward)
-          return { element: renderPrivateRoute(ProjectCreationEditReward) }
-        },
-      },
-    ],
+    // children: [
+    //   {
+    //     index: true,
+    //     async lazy() {
+    //       const ProjectCreateRewardMain = await ProjectLaunch().then((m) => m.ProjectCreateRewardMain)
+    //       return { element: renderPrivateRoute(ProjectCreateRewardMain) }
+    //     },
+    //   },
+    //   {
+    //     path: 'new',
+    //     async lazy() {
+    //       const ProjectCreationCreateReward = await ProjectLaunch().then((m) => m.ProjectCreationCreateReward)
+    //       return { element: renderPrivateRoute(ProjectCreationCreateReward) }
+    //     },
+    //   },
+    //   {
+    //     path: 'edit/:rewardId',
+    //     async lazy() {
+    //       const ProjectCreationEditReward = await ProjectLaunch().then((m) => m.ProjectCreationEditReward)
+    //       return { element: renderPrivateRoute(ProjectCreationEditReward) }
+    //     },
+    //   },
+    // ],
   },
   {
     path: getPath('privateProjectLaunch'),

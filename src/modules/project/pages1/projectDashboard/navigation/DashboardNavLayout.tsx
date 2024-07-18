@@ -1,46 +1,54 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { PropsWithChildren } from 'react'
 import { PiArrowLeft } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
-import { useCurrentRouteMatchAtom } from '@/config'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
 import { H1 } from '@/shared/components/typography'
-import { getPath, PathName } from '@/shared/constants'
+import { getPath } from '@/shared/constants'
+import { useMobileMode } from '@/utils'
 
-import { projectDashboardItems } from './dashboardNavData'
+import { currentDashboardItemAtom, isDashboardMainRouteAtom } from './dashboardAtom'
 
 export const DashboardNavLayout = ({ children }: PropsWithChildren) => {
   const { project } = useProjectAtom()
 
-  const currentRouteMatch = useCurrentRouteMatchAtom()
+  const isMobileMode = useMobileMode()
 
-  const isDashboardMainRoute = currentRouteMatch?.path === getPath('projectDashboard', PathName.projectName)
+  const currentDashboardItem = useAtomValue(currentDashboardItemAtom)
+  const isDashboardMainRoute = useAtomValue(isDashboardMainRouteAtom)
 
-  const currentDashboardItem = projectDashboardItems.find(
-    (item) => currentRouteMatch?.path === getPath(item.path, PathName.projectName),
-  )
+  console.log('checking if isDashboardMainRoute', isDashboardMainRoute)
+
+  const showTopNavBar = isMobileMode && !isDashboardMainRoute
+
+  if (!currentDashboardItem && !isDashboardMainRoute) {
+    return null
+  }
 
   return (
     <VStack w="full" height="100%" paddingBottom="120px">
-      <ProjectNavContainer display={{ base: isDashboardMainRoute ? 'none' : undefined, lg: 'none' }}>
-        <Button
-          as={Link}
-          to={getPath('projectDashboard', project?.name)}
-          size={{ base: 'md', lg: 'lg' }}
-          variant="ghost"
-          colorScheme="neutral1"
-          leftIcon={<PiArrowLeft />}
-          _pressed={{}}
-        >
-          {t('Dashboard')}
-        </Button>
-      </ProjectNavContainer>
+      {showTopNavBar && (
+        <ProjectNavContainer>
+          <Button
+            as={Link}
+            to={getPath('projectDashboard', project?.name)}
+            size={{ base: 'md', lg: 'lg' }}
+            variant="ghost"
+            colorScheme="neutral1"
+            leftIcon={<PiArrowLeft />}
+            _pressed={{}}
+          >
+            {t('Dashboard')}
+          </Button>
+        </ProjectNavContainer>
+      )}
       <VStack w="full" height="100%" spacing={4} paddingY={3}>
         {currentDashboardItem && (
-          <HStack w="full" justifyContent={'start'} spacing={2} display={{ base: 'flex', lg: 'none' }}>
+          <HStack w="full" h="32px" justifyContent={'start'} spacing={2} display={{ base: 'flex', lg: 'none' }}>
             <currentDashboardItem.icon size={24} />
             <H1 size="2xl" dark bold>
               {t(currentDashboardItem.label)}
@@ -49,7 +57,6 @@ export const DashboardNavLayout = ({ children }: PropsWithChildren) => {
         )}
         {children}
       </VStack>
-      )
     </VStack>
   )
 }

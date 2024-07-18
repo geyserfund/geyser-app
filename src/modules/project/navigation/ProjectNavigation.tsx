@@ -83,15 +83,12 @@ export const ProjectNavigation = () => {
     return activeIndex
   }, [location.pathname, ProjectNavigationButtons])
 
-  console.log('showProjectNavBarForDesktop', showProjectNavBarForDesktop)
+  if ((isMobile && !showProjectNavBarForMobile) || (!isMobile && !showProjectNavBarForDesktop)) {
+    return null
+  }
 
   return (
-    <TopNavContainer
-      display={{
-        base: showProjectNavBarForMobile ? 'flex' : 'none',
-        lg: showProjectNavBarForDesktop ? 'flex' : 'none',
-      }}
-    >
+    <TopNavContainer>
       <AnimatedNavBar
         items={ProjectNavigationButtons}
         activeItem={activeButtonIndex}

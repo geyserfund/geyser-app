@@ -1,12 +1,13 @@
 import { Button, ButtonProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { Link } from 'react-router-dom'
 
-import { useCurrentRouteMatchAtom } from '@/config'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { getPath, PathName } from '@/shared/constants'
+import { getPath } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
+import { currentDashboardItemAtom } from './dashboardAtom'
 import { projectDashboardItems } from './dashboardNavData'
 
 export const DashboardMenuMobile = () => {
@@ -30,14 +31,12 @@ const DashboardMenuContent = (props: ButtonProps) => {
 
   const isMobile = useMobileMode()
 
-  const currentRouteMatch = useCurrentRouteMatchAtom()
-
-  console.log('checking current route match', currentRouteMatch?.path)
+  const currentDashboardItem = useAtomValue(currentDashboardItemAtom)
 
   return (
     <>
       {projectDashboardItems.map((item) => {
-        const isActive = isMobile ? false : currentRouteMatch?.path === getPath(item.path, PathName.projectName)
+        const isActive = isMobile ? false : currentDashboardItem?.path === item.path
 
         return (
           <Button
