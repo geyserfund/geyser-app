@@ -1,3 +1,5 @@
+import { Path } from '@react-pdf/renderer'
+
 export enum PathName {
   projectDiscovery = 'discover',
   landingFeed = 'feed',
@@ -34,7 +36,6 @@ export enum PathName {
   userProfile = 'profile',
   userProfileSettings = 'settings',
 
-  projectDashboard = 'dashboard',
   preview = 'preview',
   launchProjectDetails = 'details',
   launchProjectStory = 'story',
@@ -43,18 +44,19 @@ export enum PathName {
   launchProjectRewardsEdit = 'rewards/edit',
   node = 'node',
   discover = 'discover',
-  dashboardDescription = 'description',
-  dashboardContributors = 'contributors',
+
+  projectDashboard = 'dashboard',
+  dashboardAnalytics = 'analytics',
+  dashboardSales = 'sales',
+  dashboardAccounting = 'accounting',
+  dashboardInfo = 'description',
   dashboardDetails = 'details',
   dashboardWallet = 'wallet',
-  dashboardStats = 'stats',
   dashboardSettings = 'settings',
   dashboardStory = 'story',
   dashboardStatus = 'status',
-  dashboardRewards = 'rewards',
-  dashboardShop = 'shop',
   dashboardNostr = 'nostr',
-  dashboardAffiliate = 'affiliate',
+  dashboardAffiliates = 'affiliate',
 
   badges = 'badges',
   about = 'about',
@@ -152,30 +154,27 @@ const pathsMap = {
   userProfileSettings: (userID: string) => `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}`,
 
   projectDashboard: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDashboard}`,
-  dashboardDescription: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardDescription}`,
-  dashboardContributors: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardContributors}`,
+
+  dashboardAnalytics: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardAnalytics}`,
+  dashboardSales: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardSales}`,
+  dashboardAccounting: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardAccounting}`,
+  dashboardInfo: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardInfo}`,
   dashboardDetails: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardDetails}`,
-  dashboardWallet: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardWallet}`,
-  dashboardStats: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardStats}`,
-  dashboardSettings: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardSettings}`,
   dashboardStory: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardStory}`,
-  dashboardStatus: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardStatus}`,
-  dashboardRewards: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardRewards}`,
-  dashboardShop: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardShop}`,
+  dashboardWallet: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardWallet}`,
   dashboardNostr: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardNostr}`,
-  dashboardAffiliate: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardAffiliate}`,
+  dashboardSettings: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardSettings}`,
+  dashboardAffiliates: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardAffiliates}`,
 
   badges: () => `/${PathName.badges}`,
 

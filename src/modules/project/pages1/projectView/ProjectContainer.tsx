@@ -39,7 +39,7 @@ export const ProjectContainer = () => {
         paddingX={standardPadding}
         alignItems="center"
       >
-        <Box w="100%" maxWidth={dimensions.maxWidth}>
+        <Box w="100%" height="100%" maxWidth={dimensions.maxWidth}>
           <Outlet />
         </Box>
       </VStack>

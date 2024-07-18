@@ -1,4 +1,4 @@
-import { atom, Getter, useSetAtom } from 'jotai'
+import { atom, Getter, useAtomValue, useSetAtom } from 'jotai'
 import { RouteMatch, RouteObject } from 'react-router-dom'
 
 import { getPath, PathName } from '../../shared/constants'
@@ -22,6 +22,8 @@ const currentRouteAtom = atom((get) => {
 })
 
 export const useSetMatchRoutes = () => useSetAtom(matchRoutesAtom)
+
+export const useCurrentRouteMatchAtom = () => useAtomValue(currentRouteAtom)
 
 /** Get the functions you can pass into a derived atom definition */
 export const routeMatchForAtom =
@@ -49,19 +51,20 @@ export const entryCreationRoutes = [
   getPath('projectEntryPreview', PathName.projectName, PathName.entryId),
 ]
 
+export const ProjectPageDashboardInternalRoutes = []
+
 export const projectDashboardRoutes = [
   getPath('projectDashboard', PathName.projectName),
-  getPath('dashboardContributors', PathName.projectName),
+  getPath('dashboardAnalytics', PathName.projectName),
+  getPath('dashboardSales', PathName.projectName),
+  getPath('dashboardAccounting', PathName.projectName),
+  getPath('dashboardInfo', PathName.projectName),
   getPath('dashboardDetails', PathName.projectName),
-  getPath('dashboardWallet', PathName.projectName),
-  getPath('dashboardSettings', PathName.projectName),
-  getPath('dashboardStats', PathName.projectName),
   getPath('dashboardStory', PathName.projectName),
-]
-
-export const projectCreatorRoutes = [
-  getPath('projectRewardCreate', PathName.projectName),
-  getPath('projectRewardEdit', PathName.projectName, PathName.rewardId),
+  getPath('dashboardWallet', PathName.projectName),
+  getPath('dashboardNostr', PathName.projectName),
+  getPath('dashboardSettings', PathName.projectName),
+  getPath('dashboardAffiliates', PathName.projectName),
 ]
 
 export const projectRoutes = [
@@ -69,16 +72,30 @@ export const projectRoutes = [
   getPath('projectPosts', PathName.projectName),
   getPath('projectGoals', PathName.projectName),
   getPath('projectRewards', PathName.projectName),
-  ...projectCreatorRoutes,
+  getPath('projectLeaderboard', PathName.projectName),
 ]
 
-export const ProjectPageRoutesWithNavBar = [
-  getPath('project', PathName.projectName),
-  getPath('projectPosts', PathName.projectName),
-  getPath('projectGoals', PathName.projectName),
-  getPath('projectRewards', PathName.projectName),
-  getPath('projectLeaderboard', PathName.projectName),
+export const projectRewardCreatorRoutes = [
+  getPath('projectRewardCreate', PathName.projectName),
+  getPath('projectRewardEdit', PathName.projectName, PathName.rewardId),
+]
+
+export const projectPostCreatorRoutes = [
+  getPath('projectPostCreate', PathName.projectName),
+  getPath('projectPostEdit', PathName.projectName, PathName.postId),
+]
+
+export const ProjectPageRoutesWithNavBarForDesktop = [...projectRoutes, ...projectDashboardRoutes]
+
+export const ProjectPageRoutesWithNavBarForMobile = [
+  ...projectRoutes,
+  getPath('projectDashboard', PathName.projectName),
+]
+
+export const projectCreatorRoutes = [
   ...projectDashboardRoutes,
+  ...projectRewardCreatorRoutes,
+  ...projectPostCreatorRoutes,
 ]
 
 export const grantRoutes = [getPath('grants'), getPath('grants', PathName.grantId)]

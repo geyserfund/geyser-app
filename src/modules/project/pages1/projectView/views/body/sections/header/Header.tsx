@@ -201,7 +201,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
                 <ShareProjectButton />
               </HStack>
 
-              <CreatorEditButton as={Link} to={getPath('dashboardDescription', project.name)} />
+              <CreatorEditButton as={Link} to={getPath('dashboardInfo', project.name)} />
             </HStack>
           </VStack>
         </HStack>

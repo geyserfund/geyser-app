@@ -9,7 +9,7 @@ import { useMobileMode } from '@/utils'
 
 import { useProjectAtom } from '../hooks/useProjectAtom'
 import { TopNavContainer } from './components/TopNavContainer'
-import { showProjectNavBarAtom } from './projectNavigationAtom'
+import { showProjectNavBarForDesktopAtom, showProjectNavBarForMobileAtom } from './projectNavigationAtom'
 
 export const ProjectNavigation = () => {
   const location = useLocation()
@@ -18,7 +18,9 @@ export const ProjectNavigation = () => {
 
   const { isProjectOwner, loading, project } = useProjectAtom()
 
-  const showProjectNavBar = useAtomValue(showProjectNavBarAtom)
+  const showProjectNavBarForMobile = useAtomValue(showProjectNavBarForMobileAtom)
+
+  const showProjectNavBarForDesktop = useAtomValue(showProjectNavBarForDesktopAtom)
 
   const ProjectNavigationButtons = useMemo(() => {
     const buttonList = [
@@ -81,12 +83,15 @@ export const ProjectNavigation = () => {
     return activeIndex
   }, [location.pathname, ProjectNavigationButtons])
 
-  if (!showProjectNavBar) {
-    return null
-  }
+  console.log('showProjectNavBarForDesktop', showProjectNavBarForDesktop)
 
   return (
-    <TopNavContainer>
+    <TopNavContainer
+      display={{
+        base: showProjectNavBarForMobile ? 'flex' : 'none',
+        lg: showProjectNavBarForDesktop ? 'flex' : 'none',
+      }}
+    >
       <AnimatedNavBar
         items={ProjectNavigationButtons}
         activeItem={activeButtonIndex}

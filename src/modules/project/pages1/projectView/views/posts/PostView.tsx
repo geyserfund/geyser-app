@@ -152,11 +152,11 @@ export const EntryViewSkeleton = () => {
         backgroundColor="neutral1.1"
         paddingY={{ base: 6, lg: 12 }}
       >
-        <VStack maxWidth="538px" spacing={6}>
-          <VStack w="full" spacing={3}>
+        <VStack maxWidth="538px" w="full" spacing={6}>
+          <VStack w="full" spacing={3} alignItems="start">
             <HStack w="full" alignItems="start" justifyContent="space-between">
-              <SkeletonLayout height="28px" flex={1} />
-              <SkeletonLayout height="28px" width="160px" display={{ base: 'none', lg: undefined }} />
+              <SkeletonLayout height="28px" width="220px" />
+              <SkeletonLayout height="28px" width="160px" />
             </HStack>
 
             <SkeletonLayout height="20px" width="180px" />
