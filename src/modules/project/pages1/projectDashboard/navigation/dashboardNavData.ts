@@ -11,7 +11,7 @@ import {
   PiWallet,
 } from 'react-icons/pi'
 
-enum DashboardType {
+export enum DashboardType {
   settings = 'settings',
   analytics = 'analytics',
   features = 'features',
