@@ -229,6 +229,13 @@ export const platformRoutes: RouteObject[] = [
   //         return { Component: ProjectNostrSettings }
   //       },
   //     },
+  // {
+  //   path: getPath('dashboardAffiliates', PathName.projectId),
+  //   async lazy() {
+  //     const ProjectAffiliate = await ProjectDashboard().then((m) => m.ProjectAffiliate)
+  //     return { Component: ProjectAffiliate }
+  //   },
+  // },
   //     {
   //       path: getPath('dashboardShop', PathName.projectId),
   //       async lazy() {
@@ -346,8 +353,87 @@ export const platformRoutes: RouteObject[] = [
         path: getPath('projectDashboard', PathName.projectName),
         async lazy() {
           const ProjectDashboard = await ProjectDashboard1().then((m) => m.ProjectDashboard)
-          return { Component: ProjectDashboard }
+          return { element: renderPrivateRoute(ProjectDashboard) }
         },
+        children: [
+          {
+            index: true,
+            async lazy() {
+              const ProjectDashboardMain = await ProjectDashboard1().then((m) => m.ProjectDashboardMain)
+              return { Component: ProjectDashboardMain }
+            },
+          },
+          {
+            path: getPath('dashboardAccounting', PathName.projectName),
+            async lazy() {
+              const ProjectDashboardAccounting = await ProjectDashboard1().then((m) => m.ProjectDashboardAccounting)
+              return { Component: ProjectDashboardAccounting }
+            },
+          },
+          {
+            path: getPath('dashboardAnalytics', PathName.projectName),
+            async lazy() {
+              const ProjectDashboardAnalytics = await ProjectDashboard1().then((m) => m.ProjectDashboardAnalytics)
+              return { Component: ProjectDashboardAnalytics }
+            },
+          },
+          {
+            path: getPath('dashboardSales', PathName.projectName),
+            async lazy() {
+              const ProjectDashboardSales = await ProjectDashboard1().then((m) => m.ProjectDashboardSales)
+              return { Component: ProjectDashboardSales }
+            },
+          },
+          {
+            path: getPath('dashboardInfo', PathName.projectName),
+            async lazy() {
+              const ProjectDashboardInfo = await ProjectDashboard1().then((m) => m.ProjectDashboardInfo)
+              return { Component: ProjectDashboardInfo }
+            },
+          },
+          {
+            path: getPath('dashboardDetails', PathName.projectName),
+            async lazy() {
+              const ProjectDashboardDetails = await ProjectDashboard1().then((m) => m.ProjectDashboardDetails)
+              return { Component: ProjectDashboardDetails }
+            },
+          },
+          {
+            path: getPath('dashboardStory', PathName.projectName),
+            async lazy() {
+              const ProjectDashboardStory = await ProjectDashboard1().then((m) => m.ProjectDashboardStory)
+              return { Component: ProjectDashboardStory }
+            },
+          },
+          {
+            path: getPath('dashboardWallet', PathName.projectName),
+            async lazy() {
+              const ProjectDashboardWallet = await ProjectDashboard1().then((m) => m.ProjectDashboardWallet)
+              return { Component: ProjectDashboardWallet }
+            },
+          },
+          {
+            path: getPath('dashboardNostr', PathName.projectName),
+            async lazy() {
+              const ProjectDashboardNostr = await ProjectDashboard1().then((m) => m.ProjectDashboardNostr)
+              return { Component: ProjectDashboardNostr }
+            },
+          },
+          {
+            path: getPath('dashboardSettings', PathName.projectName),
+            async lazy() {
+              const ProjectDashboardSettings = await ProjectDashboard1().then((m) => m.ProjectDashboardSettings)
+              return { Component: ProjectDashboardSettings }
+            },
+          },
+          {
+            path: getPath('dashboardAffiliates', PathName.projectName),
+            async lazy() {
+              const ProjectDashboardAffiliates = await ProjectDashboard1().then((m) => m.ProjectDashboardAffiliates)
+              return { Component: ProjectDashboardAffiliates }
+            },
+          },
+        ],
       },
 
       // {

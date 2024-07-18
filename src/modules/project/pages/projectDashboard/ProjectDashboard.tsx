@@ -6,8 +6,7 @@ import { Outlet, useMatch } from 'react-router-dom'
 
 import Loader from '../../../../components/ui/Loader'
 import { TitleDivider } from '../../../../components/ui/TitleDivider'
-import { CardLayout } from '../../../../shared/components/layouts'
-import { dimensions, getPath, PathsMap } from '../../../../shared/constants'
+import { CardLayout } from '../../../../shared/constants'
 import { useMobileMode } from '../../../../utils'
 import { useProjectContext } from '../../context'
 import { DashboardNavigation } from './navigation/DashboardNavigation'
@@ -56,7 +55,7 @@ export const projectSections: Record<string, DashboardSection> = {
   },
   affiliate: {
     label: 'Affiliates',
-    path: 'dashboardAffiliate',
+    path: 'dashboardAffiliates',
     semiFullWidth: true,
   },
 }

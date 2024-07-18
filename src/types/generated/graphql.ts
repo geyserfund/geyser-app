@@ -5128,10 +5128,7 @@ export type FundingTxStatusUpdatedSubscription = { __typename?: 'Subscription', 
       & FundingTxFragment
     ) } };
 
-export type ProjectEntryFragment = { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, type: EntryType, fundersCount: number, amountFunded: number, status: EntryStatus, createdAt: string, publishedAt?: string | null, creator: (
-    { __typename?: 'User' }
-    & ProjectPageCreatorFragment
-  ) };
+export type ProjectEntryFragment = { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, type: EntryType, fundersCount: number, amountFunded: number, status: EntryStatus, createdAt: string, publishedAt?: string | null };
 
 export type ProjectEntryViewFragment = { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, type: EntryType, fundersCount: number, amountFunded: number, status: EntryStatus, createdAt: string, publishedAt?: string | null, content?: string | null };
 
@@ -6518,21 +6515,6 @@ export const FundingTxForUserContributionFragmentDoc = gql`
   }
 }
     `;
-export const ProjectPageCreatorFragmentDoc = gql`
-    fragment ProjectPageCreator on User {
-  id
-  imageUrl
-  username
-  email
-  externalAccounts {
-    accountType
-    externalUsername
-    externalId
-    id
-    public
-  }
-}
-    `;
 export const ProjectEntryFragmentDoc = gql`
     fragment ProjectEntry on Entry {
   id
@@ -6545,11 +6527,8 @@ export const ProjectEntryFragmentDoc = gql`
   status
   createdAt
   publishedAt
-  creator {
-    ...ProjectPageCreator
-  }
 }
-    ${ProjectPageCreatorFragmentDoc}`;
+    `;
 export const ProjectEntryViewFragmentDoc = gql`
     fragment ProjectEntryView on Entry {
   id
@@ -6626,6 +6605,21 @@ export const ProjectKeysFragmentDoc = gql`
       hex
       npub
     }
+  }
+}
+    `;
+export const ProjectPageCreatorFragmentDoc = gql`
+    fragment ProjectPageCreator on User {
+  id
+  imageUrl
+  username
+  email
+  externalAccounts {
+    accountType
+    externalUsername
+    externalId
+    id
+    public
   }
 }
     `;

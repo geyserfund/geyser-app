@@ -15,9 +15,6 @@ export const FRAGMENT_PROJECT_ENTRY = gql`
     status
     createdAt
     publishedAt
-    creator {
-      ...ProjectPageCreator
-    }
   }
 `
 

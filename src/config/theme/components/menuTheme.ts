@@ -40,8 +40,6 @@ const variants = {
   },
   light: {
     item: {
-      height: '32px',
-      fontSize: '14px',
       bg: 'panel.solid',
       borderRadius: '8px',
       opacity: 1,
@@ -66,8 +64,6 @@ const variants = {
   },
   error: {
     item: {
-      height: '32px',
-      fontSize: '14px',
       bg: 'panel.solid',
       borderRadius: '8px',
       opacity: 1,
@@ -92,8 +88,6 @@ const variants = {
   },
   errorLight: {
     item: {
-      height: '32px',
-      fontSize: '14px',
       bg: 'panel.solid',
       borderRadius: '8px',
       opacity: 1,

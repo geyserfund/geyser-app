@@ -1,5 +1,8 @@
 import { LazyQueryHookOptions } from '@apollo/client'
+import { useSetAtom } from 'jotai'
 import { useCallback, useEffect, useState } from 'react'
+
+import { addUpdateEntryAtom } from '@/modules/project/state/entriesAtom'
 
 import { useListenerState } from '../../../../../../../shared/hooks/useListenerState'
 import { useUnsavedAlert } from '../../../../../../../shared/hooks/useUnsavedAlert'
@@ -27,6 +30,8 @@ export const useEntryState = (
 ) => {
   const toast = useNotification()
 
+  const addUpdateEntry = useSetAtom(addUpdateEntryAtom)
+
   const [entry, setEntry] = useState<ProjectEntryViewFragment>(entryTemplate as ProjectEntryViewFragment)
   const [baseEntry, setBaseEntry] = useState<ProjectEntryViewFragment>(entryTemplate as ProjectEntryViewFragment)
 
@@ -50,6 +55,7 @@ export const useEntryState = (
       setSaving(false)
       if (data.createEntry) {
         sync(data.createEntry)
+        addUpdateEntry(data.createEntry)
       }
     },
   })
@@ -66,6 +72,7 @@ export const useEntryState = (
       setSaving(false)
       if (data.updateEntry) {
         setBaseEntry({ ...baseEntry, ...data.updateEntry })
+        addUpdateEntry(data.updateEntry)
       }
     },
   })
@@ -73,6 +80,7 @@ export const useEntryState = (
   const [publishEntryMutation, { loading: publishing }] = usePublishEntryMutation({
     onCompleted(data) {
       sync(data.publishEntry)
+      addUpdateEntry(data.publishEntry)
       toast.success({
         title: 'Entry published',
         description: 'Your entry is now live',
