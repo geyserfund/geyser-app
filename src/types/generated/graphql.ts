@@ -4572,13 +4572,6 @@ export type ProjectDeleteMutationVariables = Exact<{
 
 export type ProjectDeleteMutation = { __typename?: 'Mutation', projectDelete: { __typename?: 'ProjectDeleteResponse', message?: string | null, success: boolean } };
 
-export type ProjectGoalOrderingUpdateMutationVariables = Exact<{
-  input: ProjectGoalOrderingUpdateInput;
-}>;
-
-
-export type ProjectGoalOrderingUpdateMutation = { __typename?: 'Mutation', projectGoalOrderingUpdate: Array<{ __typename?: 'ProjectGoal', id: any }> };
-
 export type ProjectTagAddMutationVariables = Exact<{
   input: ProjectTagMutationInput;
 }>;
@@ -5209,6 +5202,16 @@ export type PublishEntryMutation = { __typename?: 'Mutation', publishEntry: (
     { __typename?: 'Entry' }
     & ProjectEntryViewFragment
   ) };
+
+export type ProjectGoalOrderingUpdateMutationVariables = Exact<{
+  input: ProjectGoalOrderingUpdateInput;
+}>;
+
+
+export type ProjectGoalOrderingUpdateMutation = { __typename?: 'Mutation', projectGoalOrderingUpdate: Array<(
+    { __typename?: 'ProjectGoal' }
+    & ProjectGoalsFragment
+  )> };
 
 export type ProjectGoalCreateMutationVariables = Exact<{
   input: ProjectGoalCreateInput;
@@ -7463,39 +7466,6 @@ export function useProjectDeleteMutation(baseOptions?: Apollo.MutationHookOption
 export type ProjectDeleteMutationHookResult = ReturnType<typeof useProjectDeleteMutation>;
 export type ProjectDeleteMutationResult = Apollo.MutationResult<ProjectDeleteMutation>;
 export type ProjectDeleteMutationOptions = Apollo.BaseMutationOptions<ProjectDeleteMutation, ProjectDeleteMutationVariables>;
-export const ProjectGoalOrderingUpdateDocument = gql`
-    mutation ProjectGoalOrderingUpdate($input: ProjectGoalOrderingUpdateInput!) {
-  projectGoalOrderingUpdate(input: $input) {
-    id
-  }
-}
-    `;
-export type ProjectGoalOrderingUpdateMutationFn = Apollo.MutationFunction<ProjectGoalOrderingUpdateMutation, ProjectGoalOrderingUpdateMutationVariables>;
-
-/**
- * __useProjectGoalOrderingUpdateMutation__
- *
- * To run a mutation, you first call `useProjectGoalOrderingUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useProjectGoalOrderingUpdateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [projectGoalOrderingUpdateMutation, { data, loading, error }] = useProjectGoalOrderingUpdateMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectGoalOrderingUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectGoalOrderingUpdateMutation, ProjectGoalOrderingUpdateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ProjectGoalOrderingUpdateMutation, ProjectGoalOrderingUpdateMutationVariables>(ProjectGoalOrderingUpdateDocument, options);
-      }
-export type ProjectGoalOrderingUpdateMutationHookResult = ReturnType<typeof useProjectGoalOrderingUpdateMutation>;
-export type ProjectGoalOrderingUpdateMutationResult = Apollo.MutationResult<ProjectGoalOrderingUpdateMutation>;
-export type ProjectGoalOrderingUpdateMutationOptions = Apollo.BaseMutationOptions<ProjectGoalOrderingUpdateMutation, ProjectGoalOrderingUpdateMutationVariables>;
 export const ProjectTagAddDocument = gql`
     mutation ProjectTagAdd($input: ProjectTagMutationInput!) {
   projectTagAdd(input: $input) {
@@ -10172,6 +10142,39 @@ export function usePublishEntryMutation(baseOptions?: Apollo.MutationHookOptions
 export type PublishEntryMutationHookResult = ReturnType<typeof usePublishEntryMutation>;
 export type PublishEntryMutationResult = Apollo.MutationResult<PublishEntryMutation>;
 export type PublishEntryMutationOptions = Apollo.BaseMutationOptions<PublishEntryMutation, PublishEntryMutationVariables>;
+export const ProjectGoalOrderingUpdateDocument = gql`
+    mutation ProjectGoalOrderingUpdate($input: ProjectGoalOrderingUpdateInput!) {
+  projectGoalOrderingUpdate(input: $input) {
+    ...ProjectGoals
+  }
+}
+    ${ProjectGoalsFragmentDoc}`;
+export type ProjectGoalOrderingUpdateMutationFn = Apollo.MutationFunction<ProjectGoalOrderingUpdateMutation, ProjectGoalOrderingUpdateMutationVariables>;
+
+/**
+ * __useProjectGoalOrderingUpdateMutation__
+ *
+ * To run a mutation, you first call `useProjectGoalOrderingUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectGoalOrderingUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectGoalOrderingUpdateMutation, { data, loading, error }] = useProjectGoalOrderingUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectGoalOrderingUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectGoalOrderingUpdateMutation, ProjectGoalOrderingUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectGoalOrderingUpdateMutation, ProjectGoalOrderingUpdateMutationVariables>(ProjectGoalOrderingUpdateDocument, options);
+      }
+export type ProjectGoalOrderingUpdateMutationHookResult = ReturnType<typeof useProjectGoalOrderingUpdateMutation>;
+export type ProjectGoalOrderingUpdateMutationResult = Apollo.MutationResult<ProjectGoalOrderingUpdateMutation>;
+export type ProjectGoalOrderingUpdateMutationOptions = Apollo.BaseMutationOptions<ProjectGoalOrderingUpdateMutation, ProjectGoalOrderingUpdateMutationVariables>;
 export const ProjectGoalCreateDocument = gql`
     mutation ProjectGoalCreate($input: ProjectGoalCreateInput!) {
   projectGoalCreate(input: $input) {

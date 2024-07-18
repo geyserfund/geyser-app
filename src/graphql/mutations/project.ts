@@ -86,11 +86,3 @@ export const MUTATION_DELETE_PROJECT = gql`
     }
   }
 `
-
-export const MUTATION_UPDATE_PROJECT_GOAL_ORDERING = gql`
-  mutation ProjectGoalOrderingUpdate($input: ProjectGoalOrderingUpdateInput!) {
-    projectGoalOrderingUpdate(input: $input) {
-      id
-    }
-  }
-`

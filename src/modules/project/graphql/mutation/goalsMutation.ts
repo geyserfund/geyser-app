@@ -3,9 +3,10 @@ import { gql } from '@apollo/client'
 import { FRAGMENT_PROJECT_GOALS } from '../fragments/goalsFragment'
 
 export const MUTATION_UPDATE_PROJECT_GOAL_ORDERING = gql`
+  ${FRAGMENT_PROJECT_GOALS}
   mutation ProjectGoalOrderingUpdate($input: ProjectGoalOrderingUpdateInput!) {
     projectGoalOrderingUpdate(input: $input) {
-      id
+      ...ProjectGoals
     }
   }
 `
