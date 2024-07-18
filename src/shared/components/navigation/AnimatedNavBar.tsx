@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconType } from 'react-icons'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { useCustomTheme, useMobileMode } from '../../../utils'
 
@@ -15,7 +15,7 @@ export type NavBarItems = {
   showIconAlways?: boolean
   isBordered?: boolean
   key?: string
-  render?: React.JSXElement
+  render?: () => React.ReactNode
 }
 
 type AnimatedNavBarProps = {
@@ -29,11 +29,26 @@ type AnimatedNavBarProps = {
 export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem, loading }: AnimatedNavBarProps) => {
   const { t } = useTranslation()
 
+  const navigate = useNavigate()
+
   const { colors } = useCustomTheme()
 
   const isMobileMode = useMobileMode()
 
   const [buttonProps, setButtonprops] = useState<{ left: number; width: number }>({ left: 0, width: 0 })
+
+  const [activeIndex, setActiveIndex] = useState(activeItem)
+
+  const handleClick = (item: NavBarItems, index: number) => {
+    setActiveIndex(index)
+
+    if (item.onClick) {
+      item.onClick()
+      return
+    }
+
+    navigate(item.path || '')
+  }
 
   if (loading) {
     return <Skeleton borderRadius={{ base: '8px', lg: '10px' }} height={{ base: '36px', lg: '44px' }} width="100%" />
@@ -63,7 +78,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem, loading
         transition={{ type: 'spring', damping: 22, stiffness: 250 }}
       />
       {items.map((item, index) => {
-        const isActive = activeItem === index
+        const isActive = activeIndex === index
         const Icon = item.icon
         return (
           <ProjectNavigationButton
@@ -71,14 +86,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem, loading
             isActive={isActive}
             key={item.name}
             length={items.length}
-            {...(item.onClick
-              ? {
-                  onClick: item.onClick,
-                }
-              : {
-                  as: Link,
-                  to: item.path,
-                })}
+            onClick={() => handleClick(item, index)}
             backgroundColor={'transparent'}
             color={'neutral1.12'}
             _hover={isActive ? {} : undefined}

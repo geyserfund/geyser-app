@@ -15,6 +15,9 @@ export const useAnimatedNavBar = ({ items, defaultView }: useAnimatedNavBarProps
       ...item,
       onClick() {
         setView(item.key)
+        if (item.onClick) {
+          item.onClick()
+        }
       },
     }
   })

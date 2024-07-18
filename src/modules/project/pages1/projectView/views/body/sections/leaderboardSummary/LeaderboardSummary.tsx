@@ -1,33 +1,34 @@
-import { HStack, useDisclosure } from '@chakra-ui/react'
+import { HStack } from '@chakra-ui/react'
 
 import { CardLayout } from '@/shared/components/layouts'
 import { AnimatedNavBar, NavBarItems } from '@/shared/components/navigation/AnimatedNavBar'
+import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 
 import { Contributions } from './components/Contributions'
 import { Leaderboard } from './components/Leaderboard'
 
 export const LeaderboardSummary = () => {
-  const { isOpen: isContribution, onOpen: goToContributions, onClose: goToLeaderboard } = useDisclosure()
-
   const items = [
     {
       name: 'Leaderboard',
-      onClick: goToLeaderboard,
+      key: 'leaderboard',
+      render: () => <Leaderboard />,
     },
     {
       name: 'Contributions',
-      onClick: goToContributions,
+      key: 'contributions',
+      render: () => <Contributions />,
     },
   ] as NavBarItems[]
 
-  const activeItem = isContribution ? 1 : 0
+  const { render, ...animatedNavbarProps } = useAnimatedNavBar({ items, defaultView: 'leaderboard' })
 
   return (
     <CardLayout w="full" flex={1} dense py={6}>
       <HStack w="full" px={6}>
-        <AnimatedNavBar items={items} activeItem={activeItem} showLabel />
+        <AnimatedNavBar {...animatedNavbarProps} showLabel />
       </HStack>
-      {isContribution ? <Contributions /> : <Leaderboard />}
+      {render && render()}
     </CardLayout>
   )
 }
