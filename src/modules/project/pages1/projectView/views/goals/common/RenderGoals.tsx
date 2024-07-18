@@ -12,9 +12,11 @@ import { restrictToParentElement, restrictToVerticalAxis, restrictToWindowEdges 
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 
 import { useInitGoals } from '@/modules/project/hooks/useInitGoals'
+import { inProgressGoalsAtom } from '@/modules/project/state/goalsAtom'
 
 import { CardLayout, SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { ProjectGoal, useProjectGoalOrderingUpdateMutation } from '../../../../../../../types'
@@ -26,10 +28,12 @@ import { GoalCompleted, GoalInProgress } from '../components'
 export const RenderGoals = () => {
   const { project } = useProjectAtom()
 
-  const { queryInProgressGoals, inProgressGoalsLoading } = useInitGoals(true)
+  const { inProgressGoalsLoading } = useInitGoals(true)
 
   const { inProgressGoals, completedGoals } = useGoalsAtom()
   const { onGoalModalOpen, isGoalinEditMode } = useGoalsModal()
+
+  const setInProgressGoals = useSetAtom(inProgressGoalsAtom)
 
   const { priorityGoal } = useProjectDefaultGoal({
     defaultGoalId: project?.defaultGoalId,
@@ -38,14 +42,15 @@ export const RenderGoals = () => {
   })
 
   const [updateProjectGoalOrdering] = useProjectGoalOrderingUpdateMutation({
-    onCompleted() {
-      queryInProgressGoals()
+    onCompleted(data) {
+      if (data.projectGoalOrderingUpdate) {
+        setInProgressGoals(data.projectGoalOrderingUpdate)
+      }
     },
   })
 
   const [items, setItems] = useState(inProgressGoals)
   const [activeId, setActiveId] = useState(null)
-  const [initialItemsOrder, setInitialItemsOrder] = useState<any[] | undefined>([])
 
   useEffect(() => {
     const x = window.scrollX
@@ -64,15 +69,26 @@ export const RenderGoals = () => {
     setActiveId(event.active.id)
   }
 
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = async (event: any) => {
     const { active, over } = event
 
     if (active.id !== over.id) {
-      setItems((items) => {
-        const oldIndex = items?.findIndex((item: ProjectGoal) => item.id === active.id)
-        const newIndex = items?.findIndex((item: ProjectGoal) => item.id === over.id)
-        return arrayMove(items ?? [], oldIndex ?? 0, newIndex ?? 0)
-      })
+      const oldIndex = items?.findIndex((item: ProjectGoal) => item.id === active.id)
+      const newIndex = items?.findIndex((item: ProjectGoal) => item.id === over.id)
+
+      const newItems = arrayMove(items ?? [], oldIndex ?? 0, newIndex ?? 0)
+
+      const initialGoalsOrder = items?.map((item) => Number(item.id))
+      const newGoalsOrder = newItems?.map((item) => Number(item.id))
+
+      if (!compareProjectGoalOrder(initialGoalsOrder, newGoalsOrder)) {
+        setItems(newItems)
+
+        updateProjectGoalOrdering({
+          variables: { input: { projectId: project.id, projectGoalIdsOrder: newGoalsOrder } },
+          onError: () => setItems(items),
+        })
+      }
     }
 
     setActiveId(null)
@@ -84,20 +100,6 @@ export const RenderGoals = () => {
 
   const hasInProgressGoals = inProgressGoals && inProgressGoals.length > 0
   const hasCompletedGoals = completedGoals && completedGoals.length > 0
-
-  useEffect(() => {
-    if (isGoalinEditMode) {
-      const projectGoalIdsOrder = items?.map((item) => Number(item.id))
-
-      if (!compareProjectGoalOrder(initialItemsOrder, projectGoalIdsOrder)) {
-        updateProjectGoalOrdering({
-          variables: { input: { projectId: project.id, projectGoalIdsOrder } },
-        })
-      }
-    } else {
-      setInitialItemsOrder(items?.map((item) => Number(item.id)))
-    }
-  }, [isGoalinEditMode, items, project, initialItemsOrder, updateProjectGoalOrdering])
 
   const renderCompletedGoals = () => {
     if (hasCompletedGoals) {
