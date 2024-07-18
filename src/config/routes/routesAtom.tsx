@@ -4,13 +4,14 @@ import { RouteMatch, RouteObject } from 'react-router-dom'
 import { getPath, PathName } from '../../shared/constants'
 
 const matchRoutesAtom = atom<RouteMatch<string, RouteObject>[] | null>([])
-const currentRouteAtom = atom((get) => {
+export const currentRouteAtom = atom((get) => {
   const matchRoutes = get(matchRoutesAtom)
   const matchLength = matchRoutes?.length || 0
 
   let matchRoute: RouteObject | undefined
 
   if (matchLength > 0 && matchRoutes) {
+    /** This is because for index routes, it generates an extra match with only '/' extra at the end */
     if (matchLength > 1 && matchRoutes?.[matchLength - 1]?.route.index === true) {
       matchRoute = matchRoutes?.[matchLength - 2]?.route
     } else {
@@ -51,10 +52,7 @@ export const entryCreationRoutes = [
   getPath('projectEntryPreview', PathName.projectName, PathName.entryId),
 ]
 
-export const ProjectPageDashboardInternalRoutes = []
-
-export const projectDashboardRoutes = [
-  getPath('projectDashboard', PathName.projectName),
+export const ProjectPageDashboardInternalRoutes = [
   getPath('dashboardAnalytics', PathName.projectName),
   getPath('dashboardSales', PathName.projectName),
   getPath('dashboardAccounting', PathName.projectName),
@@ -65,6 +63,11 @@ export const projectDashboardRoutes = [
   getPath('dashboardNostr', PathName.projectName),
   getPath('dashboardSettings', PathName.projectName),
   getPath('dashboardAffiliates', PathName.projectName),
+]
+
+export const projectDashboardRoutes = [
+  getPath('projectDashboard', PathName.projectName),
+  ...ProjectPageDashboardInternalRoutes,
 ]
 
 export const projectRoutes = [
