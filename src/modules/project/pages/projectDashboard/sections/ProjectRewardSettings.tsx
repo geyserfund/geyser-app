@@ -1,16 +1,17 @@
-import { useMutation } from '@apollo/client'
 import { Button, Select, Text, VStack } from '@chakra-ui/react'
+import { useSetAtom } from 'jotai'
 import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { rewardsAtom } from '@/modules/project/state/rewardsAtom'
+
 import { UpdateCurrencyModal } from '../../../../../components/molecules'
 import { FieldContainer } from '../../../../../forms/components/FieldContainer'
-import { MUTATION_UPDATE_PROJECT_CURRENCY } from '../../../../../graphql/mutations'
 import { useModal } from '../../../../../shared/hooks/useModal'
-import { ProjectReward, RewardCurrency } from '../../../../../types'
+import { RewardCurrency, useProjectRewardCurrencyUpdateMutation } from '../../../../../types'
 import { useNotification } from '../../../../../utils'
-import { useProjectContext } from '../../../context'
 import { ProjectUnsavedModal, useProjectUnsavedModal } from '../components/ProjectUnsavedModal'
 import { BackToProjectMobile } from '../navigation/BackToProjectMobile'
 
@@ -22,7 +23,9 @@ export const ProjectRewardSettings = () => {
   const { t } = useTranslation()
   const { toast } = useNotification()
 
-  const { project, updateProject } = useProjectContext()
+  const { project, partialUpdateProject } = useProjectAtom()
+
+  const setRewards = useSetAtom(rewardsAtom)
 
   const {
     isOpen: isCurrencyChangeModalOpen,
@@ -45,15 +48,13 @@ export const ProjectRewardSettings = () => {
     hasUnsaved: formState.isDirty,
   })
 
-  const [updateProjectCurrencyMutation, { loading: updateLoading }] = useMutation<{
-    projectRewardCurrencyUpdate: { id: number; cost: number }[]
-  }>(MUTATION_UPDATE_PROJECT_CURRENCY, {
+  const [updateProjectCurrencyMutation, { loading: updateLoading }] = useProjectRewardCurrencyUpdateMutation({
     onCompleted(data) {
       const newCurrency = watch('rewardCurrency')
-      updateProject({
+      partialUpdateProject({
         rewardCurrency: newCurrency,
-        rewards: data.projectRewardCurrencyUpdate as ProjectReward[],
       })
+      setRewards(data.projectRewardCurrencyUpdate)
       closeCurrencyChangeModal()
       toast({
         title: 'Project updated successfully!',
