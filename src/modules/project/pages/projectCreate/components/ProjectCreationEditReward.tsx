@@ -3,35 +3,39 @@ import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
-import { ProjectReward, useProjectRewardUpdateMutation } from '../../../../../types/generated/graphql'
+import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
+import { ProjectRewardForm } from '@/modules/project/pages1/projectView/views/rewards/shared'
+
+import { ProjectReward, useRewardUpdateMutation } from '../../../../../types/generated/graphql'
 import { useNotification } from '../../../../../utils'
-import { useProjectContext } from '../../../context'
-import { ProjectRewardForm } from '../../projectView/views/projectCreatorViews/sections/rewards/subviews/Shared/ProjectRewardForm'
 
 export const ProjectCreationEditReward = () => {
   const { t } = useTranslation()
   const { toast } = useNotification()
-  const { project, updateProject, isProjectOwner, refetch } = useProjectContext()
+
+  const { project, isProjectOwner } = useProjectAtom()
+  const { rewards } = useRewardsAtom()
+
   const params = useParams<{ rewardId: string; projectId: string }>()
   const navigate = useNavigate()
 
-  const [updateReward, { loading: updateRewardLoading }] = useProjectRewardUpdateMutation({
+  const [updateReward, { loading: updateRewardLoading }] = useRewardUpdateMutation({
     onCompleted(data) {
-      const newRewards = project?.rewards?.map((pr) => {
+      const newRewards = rewards?.map((pr) => {
         if (pr.id === params.rewardId) {
           return data.projectRewardUpdate
         }
 
         return pr
       })
-      updateProject({ rewards: newRewards })
+      // updateProject({ rewards: newRewards })
       toast({
         title: 'Successfully updated!',
         description: `Reward ${data.projectRewardUpdate.name} was successfully updated`,
         status: 'success',
       })
       navigate(-1)
-      refetch()
+      // refetch()
     },
     onError(error) {
       toast({
