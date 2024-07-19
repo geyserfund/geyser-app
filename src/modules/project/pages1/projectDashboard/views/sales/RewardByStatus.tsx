@@ -58,7 +58,7 @@ export const RewardByStatus = ({ status }: { status: OrdersGetStatus }) => {
   }
 
   return (
-    <VStack width="100%" flexGrow={1} pt={'10px'} spacing="10px">
+    <VStack width="100%" flexGrow={1} pt={'10px'} spacing={0}>
       <HStack w="full" px={standardPadding}>
         <H2 size="xl" dark>
           {t(RewardStatusLabel[status])}
@@ -98,7 +98,7 @@ export const RewardByStatus = ({ status }: { status: OrdersGetStatus }) => {
 
 export const RewardByStatusSkeleton = () => {
   return (
-    <VStack width="100%" flexGrow={1} pt={'20px'} spacing="10px">
+    <VStack width="100%" flexGrow={1} spacing="10px">
       <HStack w="full" px={standardPadding}>
         <SkeletonLayout width="200px" height="25px" />
       </HStack>

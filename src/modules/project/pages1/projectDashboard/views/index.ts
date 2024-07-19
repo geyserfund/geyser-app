@@ -1,5 +1,5 @@
+export { ProjectDashboardAccounting } from './accounting'
 export { ProjectDashboardAnalytics } from './analytics'
-export { ProjectDashboardAccounting } from './ProjectDashboardAccounting'
 export { ProjectDashboardAffiliates } from './ProjectDashboardAffiliates'
 export { ProjectDashboardDetails } from './ProjectDashboardDetails'
 export { ProjectDashboardInfo } from './ProjectDashboardInfo'

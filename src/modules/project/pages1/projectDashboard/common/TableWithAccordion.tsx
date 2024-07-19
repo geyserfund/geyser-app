@@ -209,7 +209,7 @@ export function TableItemWithAccordion<TItem>({
                   {accordionContent ? accordionContent(item) : null}
 
                   {isMobile && (
-                    <VStack w="full" pb="20px" spacing="10px">
+                    <VStack w="full" spacing="10px">
                       {tableSchema.map((row) => {
                         if (!isMobile || row.isMobile) {
                           return null

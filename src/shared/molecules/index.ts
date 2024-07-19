@@ -3,6 +3,7 @@ export { CloseButton } from './CloseButton'
 export { CreatorEmailButton } from './CreatorEmailButton'
 export { FileUpload } from './FileUpload'
 export { getCroppedImg, ImageCrop, ImageCropperModal } from './ImageCropperModal'
+export { LinkableAvatar } from './LinkableAvatar'
 export {} from './MobileDivider'
 export {
   ProjectStatusColors,

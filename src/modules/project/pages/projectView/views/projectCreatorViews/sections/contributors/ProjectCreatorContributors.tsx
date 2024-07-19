@@ -11,11 +11,11 @@ import { lightModeColors } from '../../../../../../../../styles'
 import { FundingTxsWhereFundingStatus, useFundingTxsOrderCountGetQuery } from '../../../../../../../../types'
 import { useMobileMode } from '../../../../../../../../utils'
 import { useProjectContext } from '../../../../../../context'
+import { Rewards } from '../../../../../../pages1/projectDashboard/views/sales'
 import { ContributionView, contributionViewAtom } from './atoms'
 import { ExportComponent } from './components'
-import { PaymentsAndAccounting } from './sections/paymentsAndAccounting'
+import { PaymentsAndAccounting } from '../../../../../../pages1/projectDashboard/views/paymentsAndAccounting'
 import { PendingPayments } from './sections/pendingPayments'
-import { Rewards } from '../../../../../../pages1/projectDashboard/views/sales'
 
 export const ProjectCreatorContributors = () => {
   const { t } = useTranslation()

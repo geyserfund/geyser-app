@@ -17,7 +17,7 @@ export const ProjectDashboardSales = () => {
   }
 
   return (
-    <VStack w="full" alignItems="flex-start">
+    <VStack w="full" alignItems="flex-start" spacing="4">
       <RewardByStatus status={OrdersGetStatus.Confirmed} />
       <RewardByStatus status={OrdersGetStatus.Shipped} />
       <RewardByStatus status={OrdersGetStatus.Delivered} />

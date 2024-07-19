@@ -2,10 +2,10 @@ import { DateTime } from 'luxon'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AnonymousAvatar, LinkableAvatar } from '../../../../../../../../../../components/ui'
-import { FundingTxOrderFragment, GetFundingTxsOrderByInput, OrderByOptions } from '../../../../../../../../../../types'
-import { OrderAmounts, OrderItems } from '../../components'
-import { TableData, TableWithAccordion } from '../../../../../../../../pages1/projectDashboard/common/TableWithAccordion'
+import { AnonymousAvatar, LinkableAvatar } from '../../../../../../components/ui'
+import { FundingTxOrderFragment, GetFundingTxsOrderByInput, OrderByOptions } from '../../../../../../types'
+import { AccordionListItem, OrderAmounts, OrderItems } from '../../common'
+import { TableData, TableWithAccordion } from '../../common/TableWithAccordion'
 
 export const PaymentsAndAccountingTable = ({
   data,
@@ -37,13 +37,13 @@ export const PaymentsAndAccountingTable = ({
             />
           )
         },
-        colSpan: 2,
+        colSpan: 3,
         isMobile: true,
       },
       {
         header: t('Email'),
         key: 'email',
-        colSpan: 2,
+        colSpan: 3,
       },
       {
         header: t('Date'),
@@ -70,6 +70,10 @@ export const PaymentsAndAccountingTable = ({
         header: t('Reference'),
         key: 'uuid',
         colSpan: 2,
+        isAccordion: true,
+        render(val: FundingTxOrderFragment) {
+          return <AccordionListItem items={[{ label: t('Reference'), value: val.uuid }]} />
+        },
       },
       {
         header: t('Type'),
@@ -97,15 +101,6 @@ export const PaymentsAndAccountingTable = ({
         isMobile: true,
       },
       {
-        header: t('Affiliate fee'),
-        key: 'affiliateFeeInSats',
-        value(val: FundingTxOrderFragment) {
-          return `${val.affiliateFeeInSats} Sats`
-        },
-        colSpan: 2,
-        isMobile: true,
-      },
-      {
         header: '',
         key: 'dropdown',
         colSpan: 1,
@@ -124,7 +119,13 @@ export const PaymentsAndAccountingTable = ({
         key: 'total',
         isAccordion: true,
         render(fundingTx: FundingTxOrderFragment) {
-          return <OrderAmounts amount={fundingTx.amount} quote={fundingTx.bitcoinQuote?.quote} />
+          return (
+            <OrderAmounts
+              affiliateFee={fundingTx.affiliateFeeInSats}
+              amount={fundingTx.amount}
+              quote={fundingTx.bitcoinQuote?.quote}
+            />
+          )
         },
       },
     ],
