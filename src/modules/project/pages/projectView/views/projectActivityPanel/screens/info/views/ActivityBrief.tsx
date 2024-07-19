@@ -115,7 +115,7 @@ export const ActivityBrief = (props: StackProps) => {
           {followedProjects.some((followedProject) => followedProject?.id === project?.id) ? (
             <ShareButton w="full" />
           ) : (
-            <FollowButton hasIcon variant="secondary" size="md" w="full" project={project} />
+            <FollowButton hasIcon project={project} w="full" />
           )}
         </VStack>
       ) : null}

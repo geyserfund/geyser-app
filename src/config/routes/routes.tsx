@@ -218,6 +218,13 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
+        path: getPath('dashboardAffiliate', PathName.projectId),
+        async lazy() {
+          const ProjectAffiliate = await ProjectDashboard().then((m) => m.ProjectAffiliate)
+          return { Component: ProjectAffiliate }
+        },
+      },
+      {
         path: getPath('dashboardShop', PathName.projectId),
         async lazy() {
           const ProjectSettings = await ProjectDashboard().then((m) => m.ProjectSettings)

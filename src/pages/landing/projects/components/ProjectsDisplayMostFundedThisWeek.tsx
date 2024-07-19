@@ -25,7 +25,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({ tag, hasMobileDivider }: Pro
 
   const onSeeAllClick = () => {
     if (tag) {
-      updateFilter({ tagIds: [tag.id], sort: SortType.recent })
+      updateFilter({ tagIds: [tag.id] })
     } else {
       updateFilter({ sort: SortType.recent, recent: true })
     }

@@ -171,12 +171,17 @@ export const GrantPage = () => {
         <MobileDivider />
         <Tabs variant="secondary" w="full">
           <TabList gap="30px">
-            <Tab>
-              <Text fontSize={'16px'}>{t('Projects')}</Text>
-            </Tab>
-            <Tab>
-              <Text fontSize={'16px'}>{t('Leaderboard (All)')}</Text>
-            </Tab>
+            {grantHasVoting && (
+              <>
+                <Tab>
+                  <Text fontSize={'16px'}>{t('Projects')}</Text>
+                </Tab>
+
+                <Tab>
+                  <Text fontSize={'16px'}>{t('Leaderboard (All)')}</Text>
+                </Tab>
+              </>
+            )}
           </TabList>
           <TabPanels>
             <TabPanel p={'16px 0px 16px 0px'}>

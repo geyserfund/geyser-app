@@ -33,7 +33,7 @@ export const FundingContext = createContext<FundingContextProps>({} as FundingCo
 
 export const useFundingContext = () => useContext(FundingContext)
 
-// Used if the project context is not available
+/** Used if the project context is not available */
 export const FundingProvider = ({ children, project, limits, projectGoalId }: FundingProviderProps) => {
   const fundingFlow = useFundingFlow({ project, projectGoalId })
 
@@ -55,7 +55,7 @@ export const FundingProvider = ({ children, project, limits, projectGoalId }: Fu
   )
 }
 
-// Used if the project context is available
+/** Used if the project context is available */
 export const FundingProviderWithProjectContext: React.FC<PropsWithChildren> = ({ children }) => {
   const { project, walletLimits, goals } = useProjectContext()
   return (

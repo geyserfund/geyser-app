@@ -1,7 +1,7 @@
 import { InputGroup, Select, Text, VStack } from '@chakra-ui/react'
-import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
+import { useController, UseControllerProps } from 'react-hook-form'
 
-type Props = UseControllerProps<FieldValues> & {
+type Props = UseControllerProps<any, any> & {
   width?: string | number
   label: string
   options: { value: string; label: string }[]

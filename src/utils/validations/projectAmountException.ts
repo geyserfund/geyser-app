@@ -3,5 +3,5 @@ export const isProjectAnException = (name: string) => {
 }
 
 export const removeProjectAmountException = (name = '') => {
-  return ['citadel'].includes(name)
+  return ['citadel', 'dirtycointhecontroversybehindbitcoinmining'].includes(name)
 }

@@ -11,6 +11,7 @@ import {
   ProjectStatusIcons,
   ProjectStatusLabels,
   ProjectStatusTooltip,
+  ProjectStatusTooltipRoles,
 } from '../ui'
 import { CardLayout, CardLayoutProps } from '.'
 
@@ -44,7 +45,13 @@ export const LandingCardBase = ({
   }
 
   const StatusIcon = projectStatus && ProjectStatusIcons[projectStatus]
-  const StatusTooltip = projectStatus && ProjectStatusTooltip[projectStatus]
+  const StatusTooltip =
+    projectStatus === ProjectStatusLabels.IN_REVIEW
+      ? ProjectStatusTooltip[projectStatus][
+          user ? ProjectStatusTooltipRoles.CREATOR : ProjectStatusTooltipRoles.CONTRIBUTOR
+        ]
+      : projectStatus && ProjectStatusTooltip[projectStatus]
+
   const StatusColor = projectStatus && ProjectStatusColors[projectStatus]
 
   return (

@@ -4,6 +4,8 @@ import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { ProjectStatusLabels, ProjectStatusTooltip, ProjectStatusTooltipRoles } from '../../../../../components/ui'
+import { Tooltip } from '../../../../../components/ui/Tooltip'
 import { MUTATION_UPDATE_PROJECT } from '../../../../../graphql/mutations'
 import { Project, ProjectStatus } from '../../../../../types'
 import { isActive, useNotification } from '../../../../../utils'
@@ -21,6 +23,9 @@ export const ProjectStatusSection = () => {
   const { toast } = useNotification()
 
   const { project, updateProject } = useProjectContext()
+  const isProjectInReview = project?.status === ProjectStatus.InReview
+  const isProjectInReviewTooltip =
+    ProjectStatusTooltip[ProjectStatusLabels.IN_REVIEW][ProjectStatusTooltipRoles.CREATOR]
 
   const form = useForm<ProjectStatusVariables>({
     values: useMemo(
@@ -94,7 +99,14 @@ export const ProjectStatusSection = () => {
               <Text variant="body2" flexGrow={1}>
                 {t('Active')}
               </Text>
-              <Switch defaultChecked={!watch('deactivate')} onChange={handleDeactivate} colorScheme="primary" />
+              <Tooltip content={isProjectInReview ? t(isProjectInReviewTooltip) : ''}>
+                <Switch
+                  defaultChecked={!watch('deactivate')}
+                  onChange={handleDeactivate}
+                  colorScheme="primary"
+                  isDisabled={isProjectInReview}
+                />
+              </Tooltip>
             </HStack>
             <Text color="neutral.600">
               {t(
@@ -105,7 +117,7 @@ export const ProjectStatusSection = () => {
         )}
 
         <VStack w="100%" flexGrow={1} justifyContent="end">
-          <Button isLoading={updateLoading} variant="primary" w="full" type="submit">
+          <Button isLoading={updateLoading} variant="primary" w="full" type="submit" isDisabled={isProjectInReview}>
             {t('Save')}
           </Button>
           <BackToProjectMobile project={project} />
