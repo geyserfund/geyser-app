@@ -15,7 +15,7 @@ import { ContributionView, contributionViewAtom } from './atoms'
 import { ExportComponent } from './components'
 import { PaymentsAndAccounting } from './sections/paymentsAndAccounting'
 import { PendingPayments } from './sections/pendingPayments'
-import { Rewards } from './sections/rewards'
+import { Rewards } from '../../../../../../pages1/projectDashboard/views/sales'
 
 export const ProjectCreatorContributors = () => {
   const { t } = useTranslation()

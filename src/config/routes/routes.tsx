@@ -1,4 +1,3 @@
-import { Path } from '@react-pdf/renderer'
 import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
 
 import ProjectView from '@/modules/project/pages1/projectView/ProjectView'

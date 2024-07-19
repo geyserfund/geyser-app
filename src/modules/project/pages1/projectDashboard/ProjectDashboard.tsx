@@ -10,8 +10,8 @@ export const ProjectDashboard = () => {
   const isMobile = useMobileMode()
 
   return (
-    <VStack w={'full'} h="full" paddingBottom="80px">
-      <CardLayout dense noborder={isMobile} w="full" direction="row" height="100%">
+    <VStack w={'full'} h="full" paddingBottom={8}>
+      <CardLayout dense noborder={isMobile} w="full" direction="row" spacing={0} height="100%">
         {!isMobile && <DashboardMenuDesktop />}
         <DashboardNavLayout>
           <Outlet />

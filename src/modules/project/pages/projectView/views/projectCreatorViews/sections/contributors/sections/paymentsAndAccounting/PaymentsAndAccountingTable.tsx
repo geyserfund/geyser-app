@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { AnonymousAvatar, LinkableAvatar } from '../../../../../../../../../../components/ui'
 import { FundingTxOrderFragment, GetFundingTxsOrderByInput, OrderByOptions } from '../../../../../../../../../../types'
 import { OrderAmounts, OrderItems } from '../../components'
-import { TableData, TableWithAccordion } from '../../components/TableWithAccordion'
+import { TableData, TableWithAccordion } from '../../../../../../../../pages1/projectDashboard/common/TableWithAccordion'
 
 export const PaymentsAndAccountingTable = ({
   data,

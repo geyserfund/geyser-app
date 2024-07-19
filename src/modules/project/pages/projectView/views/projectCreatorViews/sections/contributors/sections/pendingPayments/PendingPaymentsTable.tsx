@@ -18,8 +18,8 @@ import {
   OrderByOptions,
 } from '../../../../../../../../../../types'
 import { getUSD, OrderItems } from '../../components'
-import { AccordionListItem } from '../../components/AccordionListItem'
-import { TableData, TableWithAccordion } from '../../components/TableWithAccordion'
+import { AccordionListItem } from '../../../../../../../../pages1/projectDashboard/common/AccordionListItem'
+import { TableData, TableWithAccordion } from '../../../../../../../../pages1/projectDashboard/common/TableWithAccordion'
 import { FundingAmountAccept } from './FundindAmountAccept'
 
 export const PendingPaymentsTable = ({
