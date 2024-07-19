@@ -17,9 +17,12 @@ import {
   GetFundingTxsOrderByInput,
   OrderByOptions,
 } from '../../../../../../../../../../types'
-import { getUSD, OrderItems } from '../../components'
 import { AccordionListItem } from '../../../../../../../../pages1/projectDashboard/common/AccordionListItem'
-import { TableData, TableWithAccordion } from '../../../../../../../../pages1/projectDashboard/common/TableWithAccordion'
+import {
+  TableData,
+  TableWithAccordion,
+} from '../../../../../../../../pages1/projectDashboard/common/TableWithAccordion'
+import { getUSD, OrderItems } from '../../components'
 import { FundingAmountAccept } from './FundindAmountAccept'
 
 export const PendingPaymentsTable = ({

@@ -26,6 +26,11 @@ export const dimensions = {
         maxWidth: 586,
       },
     },
+    dashboard: {
+      menu: {
+        width: 148,
+      },
+    },
   },
   sideNav: {
     width: 256,

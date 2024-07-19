@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
 import { H1 } from '@/shared/components/typography'
-import { getPath } from '@/shared/constants'
+import { dimensions, getPath } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
 import { currentDashboardItemAtom, isDashboardMainRouteAtom } from './dashboardAtom'
@@ -30,7 +30,10 @@ export const DashboardNavLayout = ({ children }: PropsWithChildren) => {
   }
 
   return (
-    <VStack flex="1" height="100%">
+    <VStack
+      height="100%"
+      width={{ base: '100%', lg: `calc(100% - ${dimensions.project.dashboard.menu.width + 24 * 2 + 1}px)` }}
+    >
       {showTopNavBar && (
         <ProjectNavContainer>
           <Button
@@ -46,7 +49,7 @@ export const DashboardNavLayout = ({ children }: PropsWithChildren) => {
           </Button>
         </ProjectNavContainer>
       )}
-      <VStack w="full" height="100%" overflowY="auto" spacing={4} paddingY={3}>
+      <VStack w="full" height="100%" overflowY="auto" spacing={4} paddingY={{ base: 3, lg: 6 }}>
         {currentDashboardItem && (
           <HStack w="full" h="32px" justifyContent={'start'} spacing={2} display={{ base: 'flex', lg: 'none' }}>
             <currentDashboardItem.icon size={24} />

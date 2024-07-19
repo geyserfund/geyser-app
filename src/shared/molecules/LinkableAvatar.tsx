@@ -4,9 +4,9 @@ import { ReactElement } from 'react'
 import { FaUserCircle } from 'react-icons/fa'
 import { Link as ReactRouterLink } from 'react-router-dom'
 
-import { getPath } from '../../shared/constants'
 import { useMediumScreen, useMobileMode } from '../../utils'
-import { Body2 } from '../typography'
+import { Body } from '../components/typography'
+import { getPath } from '../constants'
 
 type Props = {
   avatarUsername: string
@@ -29,7 +29,7 @@ export const LinkableAvatar = ({
   badgeNames,
   badgeElements,
   fontSize,
-  imageSize = '30px',
+  imageSize = '20px',
   showFullUsername,
   underlineUsername = true,
 }: Props) => {
@@ -92,7 +92,6 @@ export const LinkableAvatar = ({
         <Avatar
           width={imageSize}
           height={imageSize}
-          scale={0.8}
           backgroundColor="neutral.200"
           src={imageSrc}
           sx={{
@@ -100,14 +99,13 @@ export const LinkableAvatar = ({
               lineHeight: `${imageSize}`,
             },
           }}
-          color="neutral.600"
-          icon={<FaUserCircle fontSize="25px" size={'1em'} />}
+          color="neutral1.7"
+          icon={<FaUserCircle fontSize="20px" size={'1em'} />}
         />
 
-        <Body2 fontSize={fontSize} semiBold _hover={{ textDecoration: underlineUsername ? 'underline' : 'none' }}>
-          {' '}
+        <Body fontSize={fontSize || '12px'} _hover={{ textDecoration: underlineUsername ? 'underline' : 'none' }}>
           {getFormattedUsername()}
-        </Body2>
+        </Body>
 
         {badgeElements}
       </HStack>

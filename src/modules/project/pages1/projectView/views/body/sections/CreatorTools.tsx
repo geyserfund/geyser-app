@@ -43,7 +43,7 @@ export const CreatorTools = () => {
       <Button
         size="lg"
         as={Link}
-        to={getPath('projectEntryCreation', project?.name)}
+        to={getPath('projectPostCreate', project?.name)}
         flex={1}
         variant="solid"
         colorScheme="primary1"

@@ -58,8 +58,8 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem, loading
     <HStack
       w="full"
       padding={'2px'}
-      background="neutral1.2"
-      borderRadius={{ base: '8px', lg: '10px' }}
+      background="neutral1.3"
+      borderRadius={{ base: '10px', lg: '12px' }}
       position="relative"
       zIndex={2}
     >

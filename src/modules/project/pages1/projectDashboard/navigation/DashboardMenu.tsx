@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectState } from '@/modules/project/state/projectAtom'
-import { getPath } from '@/shared/constants'
+import { dimensions, getPath } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
 import { currentDashboardItemAtom } from './dashboardAtom'
@@ -90,7 +90,7 @@ const DashboardMenuButton = ({ item, currentDashboardItem, isMobile, project, ..
     <Button
       variant="menu"
       colorScheme="primary1"
-      width={'200px'}
+      width={`${dimensions.project.dashboard.menu.width}px`}
       backgroundColor={'neutral1.1'}
       key={item.label}
       leftIcon={<item.icon />}

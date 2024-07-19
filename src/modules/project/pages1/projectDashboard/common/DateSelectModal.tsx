@@ -6,7 +6,8 @@ import { useState } from 'react'
 import DatePicker from 'react-datepicker'
 import { useTranslation } from 'react-i18next'
 
-import { Body1 } from '../../../../../components/typography'
+import { Body } from '@/shared/components/typography'
+
 import { Modal } from '../../../../../shared/components/layouts'
 import { getDownloadUrl } from './helpers'
 
@@ -39,7 +40,7 @@ export const DateSelectModal = ({ projectId, ...rest }: DateSelectModalProps) =>
       <VStack w="full" spacing="30px">
         <HStack w="full">
           <VStack flex="1" alignItems={'flex-start'} spacing="10px">
-            <Body1>{t('From')}</Body1>
+            <Body>{t('From')}</Body>
             <DatePicker
               onChange={handleFromDate}
               maxDate={maxDate}
@@ -53,7 +54,7 @@ export const DateSelectModal = ({ projectId, ...rest }: DateSelectModalProps) =>
             />
           </VStack>
           <VStack flex="1" alignItems={'flex-start'} spacing="10px">
-            <Body1>{t('To')}</Body1>
+            <Body>{t('To')}</Body>
             <DatePicker
               onChange={handleToDate}
               maxDate={maxDate}
@@ -68,13 +69,14 @@ export const DateSelectModal = ({ projectId, ...rest }: DateSelectModalProps) =>
           </VStack>
         </HStack>
         <VStack w="full" spacing="10px">
-          <Button w="full" variant="secondary" onClick={rest.onClose}>
+          <Button w="full" variant="soft" colorScheme="neutral1" onClick={rest.onClose}>
             {t('Cancel')}
           </Button>
           <Button
             as={Link}
             w="full"
-            variant="primary"
+            variant="solid"
+            colorScheme="primary1"
             href={getDownloadUrl({ projectId, from, to })}
             textDecoration={'none'}
             isExternal

@@ -34,9 +34,9 @@ export function SelectComponent<T, S extends boolean>({
           boxShadow: 'none',
           backgroundColor,
           borderRadius: '8px',
-          borderWidth: '2px',
+          borderWidth: '1px',
           '&:hover': {
-            borderColor: colors.neutral[400],
+            borderColor: colors.neutral1[7],
             cursor: 'pointer',
           },
           ...(props.menuIsOpen
@@ -45,23 +45,23 @@ export function SelectComponent<T, S extends boolean>({
                   borderBottomRightRadius: 0,
                   borderBottomLeftRadius: 0,
                   borderBottomColor: 'transparent !important',
-                  borderColor: colors.neutral[500],
+                  borderColor: colors.neutral1[6],
                 }
               : {
                   borderTopRightRadius: 0,
                   borderTopLeftRadius: 0,
                   borderTopColor: 'transparent !important',
-                  borderColor: colors.neutral[500],
+                  borderColor: colors.neutral1[6],
                 }
             : {
-                borderColor: colors.neutral[200],
+                borderColor: colors.neutral1[6],
               }),
         }
       },
       placeholder(base, props) {
         return {
           ...base,
-          color: colors.neutral[900],
+          color: colors.neutral1[11],
         }
       },
       valueContainer: (provided: any, state: any) => ({
@@ -78,7 +78,7 @@ export function SelectComponent<T, S extends boolean>({
       singleValue(base, props) {
         return {
           ...base,
-          color: colors.neutral[900],
+          color: colors.neutral1[11],
         }
       },
       menu(base, props) {
@@ -86,10 +86,10 @@ export function SelectComponent<T, S extends boolean>({
         return {
           ...base,
           borderRadius: '8px',
-          border: '2px solid',
-          borderColor: colors.neutral[500],
+          border: '1px solid',
+          borderColor: colors.neutral1[7],
           boxShadow: 'none',
-          backgroundColor: colors.neutral[50],
+          backgroundColor: colors.utils.pbg,
           overflow: 'hidden',
           zIndex: 999,
           ...(props.placement === 'bottom'
@@ -119,15 +119,15 @@ export function SelectComponent<T, S extends boolean>({
       option(base, props) {
         return {
           ...base,
-          backgroundColor: props.isSelected ? colors.neutral[0] : undefined,
-          color: props.isSelected ? colors.neutral[600] : undefined,
+          backgroundColor: props.isSelected ? colors.neutral1[1] : undefined,
+          color: props.isSelected ? colors.neutral1[7] : undefined,
           fontSize: '14px',
           '&:hover': {
-            backgroundColor: colors.neutral[400],
+            backgroundColor: colors.neutral1[4],
             cursor: 'pointer',
           },
           '&:focused': {
-            backgroundColor: colors.neutral[400],
+            backgroundColor: colors.neutral1[4],
             cursor: 'pointer',
           },
         }

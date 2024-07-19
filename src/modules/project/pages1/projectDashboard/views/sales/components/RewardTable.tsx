@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import { getRewardShippingStatusBackgroundColor } from '@/helpers'
 import { Body } from '@/shared/components/typography'
 
-import { Body2 } from '../../../../../../../components/typography'
 import { AnonymousAvatar, LinkableAvatar } from '../../../../../../../components/ui'
 import { RewardStatusOptions } from '../../../../../../../shared/constants'
 import {
@@ -98,7 +97,7 @@ export const RewardTable = ({
             />
           )
         },
-        colSpan: 2,
+        colSpan: 3,
         isMobile: true,
       },
       {

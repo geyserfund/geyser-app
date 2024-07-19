@@ -2,10 +2,12 @@ import { Button, HStack, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { SkeletonLayout } from '../../../../../../../../../../shared/components/layouts'
-import { ProjectNoTransactionImageUrl } from '../../../../../../../../../../shared/constants'
-import { usePaginationHook } from '../../../../../../../../../../shared/hooks/usePaginationHook'
-import { standardPadding } from '../../../../../../../../../../styles'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+
+import { SkeletonLayout } from '../../../../../../shared/components/layouts'
+import { ProjectNoTransactionImageUrl } from '../../../../../../shared/constants'
+import { usePaginationHook } from '../../../../../../shared/hooks/usePaginationHook'
+import { standardPadding } from '../../../../../../styles'
 import {
   FundingTxOrderFragment,
   FundingTxsWhereFundingStatus,
@@ -13,17 +15,16 @@ import {
   GetFundingTxsWhereInput,
   OrderByOptions,
   useFundingTxsOrderGetQuery,
-} from '../../../../../../../../../../types'
-import { useNotification } from '../../../../../../../../../../utils'
-import { useProjectContext } from '../../../../../../../../context'
-import { EmptyContainer } from '../../components'
+} from '../../../../../../types'
+import { useNotification } from '../../../../../../utils'
+import { EmptyContainer, ExportComponent } from '../../common'
 import { PaymentsAndAccountingTable } from './PaymentsAndAccountingTable'
 
 const MAXIMUM_ACCOUNTING_ITEMS = 15
 
-export const PaymentsAndAccoutningList = () => {
+export const ProjectDashboardAccounting = () => {
   const { t } = useTranslation()
-  const { project } = useProjectContext()
+  const { project } = useProjectAtom()
   const { toast } = useNotification()
 
   const [isLoading, setIsLoading] = useState(true)
@@ -76,10 +77,13 @@ export const PaymentsAndAccoutningList = () => {
     orderBy,
   })
 
-  if (isLoading) return <PaymentsAndAccoutningListSkeleton />
+  if (isLoading) return <ProjectDashboardAccountingSkeleton />
 
   return (
-    <VStack width="100%" flexGrow={1} pt={'10px'} spacing="10px" alignItems="center">
+    <VStack width="100%" flexGrow={1} spacing="10px" alignItems="center">
+      <HStack w="full" justifyContent={'end'} px={{ base: 3, lg: 6 }}>
+        <ExportComponent />
+      </HStack>
       {ordersData.length === 0 ? (
         <EmptyContainer image={ProjectNoTransactionImageUrl} text={t('No payments received yet')} />
       ) : (
@@ -96,21 +100,21 @@ export const PaymentsAndAccoutningList = () => {
   )
 }
 
-export const PaymentsAndAccoutningListSkeleton = () => {
+export const ProjectDashboardAccountingSkeleton = () => {
   return (
-    <VStack width="100%" flexGrow={1} pt={'30px'} spacing="10px">
+    <VStack width="100%" flexGrow={1} spacing="10px">
+      <HStack w="full" justifyContent={'end'} px={{ base: 3, lg: 6 }}>
+        <SkeletonLayout width="140px" height="30px" />
+      </HStack>
       <VStack w="full" spacing="10px">
         <SkeletonLayout borderRadius={0} height="30px" />
-        <VStack w="full" spacing="60px">
-          <SkeletonLayout borderRadius={0} height="60px" />
-          <SkeletonLayout borderRadius={0} height="60px" />
-          <SkeletonLayout borderRadius={0} height="60px" />
-          <SkeletonLayout borderRadius={0} height="60px" />
+        <VStack w="full" spacing="24px">
+          <SkeletonLayout borderRadius={0} height="24px" />
+          <SkeletonLayout borderRadius={0} height="24px" />
+          <SkeletonLayout borderRadius={0} height="24px" />
+          <SkeletonLayout borderRadius={0} height="24px" />
         </VStack>
       </VStack>
-      <HStack w="full" px={standardPadding}>
-        <SkeletonLayout height="40px" />
-      </HStack>
     </VStack>
   )
 }

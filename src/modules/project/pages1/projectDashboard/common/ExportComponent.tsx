@@ -2,11 +2,12 @@ import { Box, Link } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BsArrowDownSquare } from 'react-icons/bs'
+import { PiDownload, PiDownloadSimple } from 'react-icons/pi'
 import { components, OptionProps } from 'react-select'
 
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+
 import { useModal } from '../../../../../shared/hooks'
-import { useProjectContext } from '../../../context'
 import { DateSelectModal } from './DateSelectModal'
 import { getDownloadUrl } from './helpers'
 import { SelectComponent } from './SelectComponent'
@@ -20,7 +21,7 @@ enum ExportOptions {
 
 export function ExportComponent() {
   const { t } = useTranslation()
-  const { project } = useProjectContext()
+  const { project } = useProjectAtom()
   const dateModal = useModal()
 
   const options = [
@@ -68,7 +69,7 @@ export function ExportComponent() {
   )
 
   const DropdownIndicator = ({ innerRef, innerProps }: any) => {
-    return <BsArrowDownSquare ref={innerRef} {...innerProps} fontSize={'16px'} />
+    return <PiDownloadSimple ref={innerRef} {...innerProps} fontSize={'16px'} />
   }
 
   const Option = useCallback(
@@ -114,13 +115,13 @@ export function ExportComponent() {
   return (
     <>
       <SelectComponent
-        placeholder={t('Export')}
+        placeholder={t('Export CSV')}
         components={{
           DropdownIndicator,
           Option,
         }}
         options={options}
-        value={{ label: t('Export'), value: '' }}
+        value={{ label: t('Export CSV'), value: '' }}
       />
 
       <DateSelectModal projectId={project?.id} {...dateModal} />
