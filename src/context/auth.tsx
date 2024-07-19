@@ -121,7 +121,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     <AuthContext.Provider
       value={{
         user,
-        isAnonymous: !user || !user.id,
+        isAnonymous: !isLoggedIn,
         queryCurrentUser,
         setUser,
         loading,

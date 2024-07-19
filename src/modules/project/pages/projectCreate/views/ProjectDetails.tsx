@@ -30,6 +30,7 @@ export const ProjectDetails = () => {
     linkError,
     tagsLoading,
     projectLoading,
+    isDirty,
   } = useProjectDetailsForm({ projectId: params.projectId })
 
   const onSubmit = async () => {
@@ -73,7 +74,7 @@ export const ProjectDetails = () => {
   return (
     <>
       <ProjectCreateLayout
-        continueButton={<FormContinueButton flexGrow={1} {...nextProps} />}
+        continueButton={<FormContinueButton isSkip={!isDirty} flexGrow={1} {...nextProps} />}
         onBackClick={onBackClick}
         title={<TitleWithProgressBar title={t('Links & tags')} subtitle={t('Create a project')} index={2} length={5} />}
       >

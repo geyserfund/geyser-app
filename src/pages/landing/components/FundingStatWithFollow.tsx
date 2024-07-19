@@ -1,13 +1,9 @@
-import { AddIcon } from '@chakra-ui/icons'
-import { HStack, StackProps, Text, Tooltip, VStack } from '@chakra-ui/react'
+import { HStack, StackProps, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { BsFillHeartFill } from 'react-icons/bs'
 
 import { SatSymbolIcon } from '../../../components/icons'
 import { MonoBody1 } from '../../../components/typography'
-import { IconButtonComponent } from '../../../components/ui'
-import { useAuthContext } from '../../../context'
-import { useFollowProject } from '../../../hooks/graphqlState'
+import { FollowButton } from '../../../modules/project/pages/projectView/views/projectMainBody/components'
 import { fonts } from '../../../styles'
 import { Project } from '../../../types'
 import { getShortAmountLabel, removeProjectAmountException } from '../../../utils'
@@ -27,9 +23,7 @@ export const FundingStatWithFollow = ({
   ...rest
 }: FundingStatWithFollowProps) => {
   const { t } = useTranslation()
-  const { isLoggedIn } = useAuthContext()
 
-  const { isFollowed, handleFollow, handleUnFollow, followLoading, unfollowLoading } = useFollowProject(project)
   const isRemoveAmountException = removeProjectAmountException(project.name)
   return (
     <HStack direction={'row'} spacing="20px" {...rest}>
@@ -52,44 +46,7 @@ export const FundingStatWithFollow = ({
           </Text>
         </VStack>
       )}
-      {!isFollowed ? (
-        <Tooltip label={isLoggedIn ? t('follow project') : t('login to follow project')} placement="top">
-          <IconButtonComponent
-            size="sm"
-            aria-label="project-follow-icon"
-            isLoading={followLoading}
-            icon={<AddIcon />}
-            borderRadius="8px"
-            onClick={handleFollow}
-            isDisabled={!isLoggedIn}
-            _hover={{
-              border: `2px solid`,
-              borderColor: 'primary.600',
-              color: 'primary.600',
-            }}
-          />
-        </Tooltip>
-      ) : (
-        <Tooltip label={'unfollow project'} placement="top">
-          <IconButtonComponent
-            size="sm"
-            aria-label="project-unfollow-icon"
-            isLoading={unfollowLoading}
-            icon={<BsFillHeartFill fontSize="14px" />}
-            borderRadius="8px"
-            onClick={handleUnFollow}
-            boxShadow="none !important"
-            color="primary.500"
-            border={`1px solid`}
-            borderColor="primary.500"
-            _hover={{
-              border: `2px solid`,
-              borderColor: 'secondary.red',
-              color: 'secondary.red',
-            }}
-          />
-        </Tooltip>
-      )}
+      <FollowButton useCase="icon" project={project} />
     </HStack>
   )
 }
