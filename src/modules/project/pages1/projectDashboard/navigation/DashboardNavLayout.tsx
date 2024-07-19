@@ -30,7 +30,7 @@ export const DashboardNavLayout = ({ children }: PropsWithChildren) => {
   }
 
   return (
-    <VStack w="full" height="100%" paddingBottom="120px">
+    <VStack flex="1" height="100%">
       {showTopNavBar && (
         <ProjectNavContainer>
           <Button
@@ -46,7 +46,7 @@ export const DashboardNavLayout = ({ children }: PropsWithChildren) => {
           </Button>
         </ProjectNavContainer>
       )}
-      <VStack w="full" height="100%" spacing={4} paddingY={3}>
+      <VStack w="full" height="100%" overflowY="auto" spacing={4} paddingY={3}>
         {currentDashboardItem && (
           <HStack w="full" h="32px" justifyContent={'start'} spacing={2} display={{ base: 'flex', lg: 'none' }}>
             <currentDashboardItem.icon size={24} />

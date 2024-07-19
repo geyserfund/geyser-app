@@ -8,7 +8,7 @@ import { Modal } from '../../../../../../../../../../shared/components/layouts'
 import { useModal } from '../../../../../../../../../../shared/hooks'
 import { FundingConfirmInput, FundingTxOrderFragment } from '../../../../../../../../../../types'
 import { useCustomTheme } from '../../../../../../../../../../utils'
-import { getUSD } from '../../components/helpers'
+import { getUSD } from '../../../../../../../../pages1/projectDashboard/common/helpers'
 
 export const FundingAmountAccept = ({
   fundingTx,
