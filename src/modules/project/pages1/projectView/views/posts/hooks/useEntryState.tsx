@@ -19,6 +19,7 @@ import {
   useUpdateEntryMutation,
 } from '../../../../../../../types'
 import { checkDiff, checkKeyValueExists, toInt, useNotification } from '../../../../../../../utils'
+import { updatePostCache, updateProjectPostsCache } from '../utils/cacheHandlers'
 
 const entryEditKeyList: (keyof ProjectEntryViewFragment)[] = ['content', 'description', 'image', 'title']
 
@@ -58,6 +59,12 @@ export const useEntryState = (
         addUpdateEntry(data.createEntry)
       }
     },
+    update(cache, { data }) {
+      if (data?.createEntry) {
+        updatePostCache(cache, data.createEntry)
+        updateProjectPostsCache(cache, data.createEntry)
+      }
+    },
   })
 
   const [updateEntryMutation] = useUpdateEntryMutation({
@@ -73,6 +80,12 @@ export const useEntryState = (
       if (data.updateEntry) {
         setBaseEntry({ ...baseEntry, ...data.updateEntry })
         addUpdateEntry(data.updateEntry)
+      }
+    },
+    update(cache, { data }) {
+      if (data?.updateEntry) {
+        updatePostCache(cache, data.updateEntry)
+        updateProjectPostsCache(cache, data.updateEntry)
       }
     },
   })
@@ -92,12 +105,19 @@ export const useEntryState = (
         description: 'Please try again later',
       })
     },
+    update(cache, { data }) {
+      if (data?.publishEntry) {
+        updatePostCache(cache, data.publishEntry)
+        updateProjectPostsCache(cache, data.publishEntry)
+      }
+    },
   })
 
   const [getEntryQuery] = useProjectEntryLazyQuery({
     variables: {
       entryId: toInt(entryId),
     },
+    fetchPolicy: 'network-only',
     ...options,
     onCompleted(data) {
       if (data.entry) {

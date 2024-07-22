@@ -7,7 +7,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import Loader from '@/components/ui/Loader'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
-import { addUpdateRewardAtom } from '@/modules/project/state/rewardsAtom'
+import { addUpdateRewardsAtom } from '@/modules/project/state/rewardsAtom'
 import { getPath } from '@/shared/constants'
 import { useProjectRewardQuery, useRewardUpdateMutation } from '@/types'
 import { useNotification } from '@/utils'
@@ -19,7 +19,7 @@ export const RewardEdit = () => {
 
   const { project, loading } = useProjectAtom()
 
-  const updateRewards = useSetAtom(addUpdateRewardAtom)
+  const updateRewards = useSetAtom(addUpdateRewardsAtom)
 
   const toast = useNotification()
 

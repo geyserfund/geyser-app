@@ -93,7 +93,7 @@ export const ProjectShareView = () => {
     >
       <ProjectShareBanner
         ref={ref}
-        bannerImage={project.image || GeyserShareImageUrl}
+        bannerImage={project.image || project.thumbnailImage || GeyserShareImageUrl}
         qrCodeValue={projectUrl}
         qrCodeText={t('View project')}
         centerLogo={LogoDark}

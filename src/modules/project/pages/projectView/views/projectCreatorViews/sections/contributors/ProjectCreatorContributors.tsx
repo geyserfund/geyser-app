@@ -11,10 +11,10 @@ import { lightModeColors } from '../../../../../../../../styles'
 import { FundingTxsWhereFundingStatus, useFundingTxsOrderCountGetQuery } from '../../../../../../../../types'
 import { useMobileMode } from '../../../../../../../../utils'
 import { useProjectContext } from '../../../../../../context'
+import { PaymentsAndAccounting } from '../../../../../../pages1/projectDashboard/views/paymentsAndAccounting'
 import { Rewards } from '../../../../../../pages1/projectDashboard/views/sales'
 import { ContributionView, contributionViewAtom } from './atoms'
 import { ExportComponent } from './components'
-import { PaymentsAndAccounting } from '../../../../../../pages1/projectDashboard/views/paymentsAndAccounting'
 import { PendingPayments } from './sections/pendingPayments'
 
 export const ProjectCreatorContributors = () => {

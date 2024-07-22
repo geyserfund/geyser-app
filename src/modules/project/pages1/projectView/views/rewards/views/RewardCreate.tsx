@@ -1,14 +1,13 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useSetAtom } from 'jotai'
 import { PiArrowLeft } from 'react-icons/pi'
 import { Link, useNavigate } from 'react-router-dom'
 
 import Loader from '@/components/ui/Loader'
 import { defaultProjectReward } from '@/defaults'
+import { QUERY_PROJECT_REWARDS } from '@/modules/project/graphql/queries/rewardsQuery'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
-import { addUpdateRewardAtom } from '@/modules/project/state/rewardsAtom'
 import { getPath } from '@/shared/constants'
 import { useProjectRewardCreateMutation } from '@/types'
 import { useNotification } from '@/utils'
@@ -20,13 +19,11 @@ export const RewardCreate = () => {
 
   const { project, loading } = useProjectAtom()
 
-  const updateRewards = useSetAtom(addUpdateRewardAtom)
-
   const toast = useNotification()
+  console.log('checking query ', QUERY_PROJECT_REWARDS)
 
   const [createReward, { loading: createRewardLoading }] = useProjectRewardCreateMutation({
     onCompleted(data) {
-      updateRewards(data.projectRewardCreate)
       toast.success({
         title: 'Successfully created reward!',
       })

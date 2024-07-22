@@ -41,16 +41,18 @@ export const ProjectEntryCard = ({ entry }: Props) => {
         spacing={0}
         w="100%"
       >
-        <Box w="full" maxHeight="330px" overflow="hidden">
-          <Image
-            objectFit="cover"
-            boxSize="100%"
-            borderRadius={'md'}
-            src={entry.image || ''}
-            alt={entry.title}
-            fallback={<ProjectEntryCardThumbnailPlaceholder />}
-          />
-        </Box>
+        {entry.image && (
+          <Box w="full" maxHeight="330px" overflow="hidden">
+            <Image
+              objectFit="cover"
+              boxSize="100%"
+              borderRadius={'md'}
+              src={entry.image || ''}
+              alt={entry.title}
+              fallback={<ProjectEntryCardThumbnailPlaceholder />}
+            />
+          </Box>
+        )}
         <VStack w="full" p={{ base: 3, lg: 6 }} spacing={4} alignItems="start">
           <VStack w="full" spacing={2} alignItems="start">
             <Body size="xl" medium dark>

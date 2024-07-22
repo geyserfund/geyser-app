@@ -22,7 +22,7 @@ export const CreatorTools = () => {
       <Button
         size="lg"
         as={Link}
-        to={getPath('projectCreateReward', project?.name)}
+        to={getPath('projectRewardCreate', project?.name)}
         flex={1}
         variant="outline"
         colorScheme="neutral1"

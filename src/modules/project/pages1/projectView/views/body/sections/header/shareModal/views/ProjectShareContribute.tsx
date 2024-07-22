@@ -93,7 +93,7 @@ export const ProjectShareContribute = () => {
     >
       <ProjectShareBanner
         ref={ref}
-        bannerImage={project.image || GeyserShareImageUrl}
+        bannerImage={project.image || project.thumbnailImage || GeyserShareImageUrl}
         qrCodeValue={lnurlPayUrl}
         qrCodeText={t('Contribute with lightning')}
         centerLogo={LightningIcon}

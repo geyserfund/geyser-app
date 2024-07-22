@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 import { DeleteConfirmModal } from '@/components/molecules'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { addUpdateRewardAtom, deleteRewardAtom } from '@/modules/project/state/rewardsAtom'
+import { addUpdateRewardsAtom, deleteRewardAtom } from '@/modules/project/state/rewardsAtom'
 import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import { ProjectRewardFragment, useRewardDeleteMutation, useRewardUpdateMutation } from '@/types'
@@ -26,7 +26,7 @@ export const RewardEditMenu = ({ reward, ...props }: RewardEditMenuProps) => {
 
   const { project } = useProjectAtom()
 
-  const addUpdateReward = useSetAtom(addUpdateRewardAtom)
+  const addUpdateReward = useSetAtom(addUpdateRewardsAtom)
   const deleteReward = useSetAtom(deleteRewardAtom)
 
   const deleteRewardModal = useModal()
@@ -54,12 +54,22 @@ export const RewardEditMenu = ({ reward, ...props }: RewardEditMenuProps) => {
         title: 'Successfully !',
         description: `${t('Reward')} ${reward.name} ${t('was successfully deleted')}`,
       })
+      deleteRewardModal.onClose()
       deleteReward(reward.id)
     },
     onError(error) {
       toast.error({
         title: 'Failed to delete reward',
         description: `${error}`,
+      })
+    },
+    update(cache) {
+      cache.modify({
+        fields: {
+          projectRewardsGet(existingRewards = [], { readField }) {
+            return existingRewards.filter((val: ProjectRewardFragment) => readField('id', val) !== reward.id)
+          },
+        },
       })
     },
   })
