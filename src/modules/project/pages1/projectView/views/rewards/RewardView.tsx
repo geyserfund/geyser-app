@@ -2,7 +2,6 @@ import { Badge, Box, Button, HStack, SkeletonText, VStack } from '@chakra-ui/rea
 import { t } from 'i18next'
 import { PiArrowLeft, PiShareFat } from 'react-icons/pi'
 import { Link, useParams } from 'react-router-dom'
-import { Text } from 'recharts'
 
 import { ImageWithReload } from '@/components/ui'
 import { MarkdownField } from '@/forms/markdown/MarkdownField'
@@ -26,6 +25,7 @@ export const RewardView = () => {
 
   const { loading, data } = useProjectRewardQuery({
     skip: !rewardId,
+    fetchPolicy: 'network-only',
     variables: {
       getProjectRewardId: rewardId,
     },
@@ -144,7 +144,9 @@ export const RewardView = () => {
               />
             </Box>
           )}
-          <Box
+          <HStack
+            w="full"
+            justifyContent="start"
             fontSize="16px"
             color="utils.text"
             sx={{
@@ -155,7 +157,7 @@ export const RewardView = () => {
             flex={1}
           >
             <MarkdownField preview content={reward.description || ''} />
-          </Box>
+          </HStack>
         </VStack>
       </CardLayout>
       <BottomNavBarContainer direction="column">

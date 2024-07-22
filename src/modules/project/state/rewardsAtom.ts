@@ -6,7 +6,7 @@ import { ProjectRewardFragment } from '../../../types'
 export const rewardsAtom = atom<ProjectRewardFragment[]>([])
 
 /** add or update a reward */
-export const addUpdateRewardAtom = atom(null, (get, set, currentReward: ProjectRewardFragment) => {
+export const addUpdateRewardsAtom = atom(null, (get, set, currentReward: ProjectRewardFragment) => {
   const allRewards = get(rewardsAtom)
 
   const isExist = allRewards.some((reward) => reward.id === currentReward.id)
@@ -23,7 +23,7 @@ export const addUpdateRewardAtom = atom(null, (get, set, currentReward: ProjectR
     })
   } else {
     set(rewardsAtom, (rewards) => {
-      return [...rewards, currentReward]
+      return [currentReward, ...rewards]
     })
   }
 })

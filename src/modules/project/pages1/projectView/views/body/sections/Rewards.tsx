@@ -1,8 +1,10 @@
-import { SimpleGrid } from '@chakra-ui/react'
+import { Button, HStack, SimpleGrid } from '@chakra-ui/react'
 import { forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 import { useInitRewards } from '@/modules/project/hooks/useInitRewards'
+import { getPath } from '@/shared/constants'
 
 import { isActive } from '../../../../../../../utils'
 import { useProjectAtom, useRewardsAtom } from '../../../../../hooks/useProjectAtom'
@@ -33,7 +35,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
     return null
   }
 
-  const activeProjectRewards = rewards.filter((reward) => reward && reward.isHidden === false)
+  const activeProjectRewards = rewards.filter((reward) => reward && reward.isHidden === false).slice(0, 4)
 
   if (!activeProjectRewards.length) {
     return null
@@ -42,10 +44,21 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <BodySectionLayout ref={ref} title={t('Rewards')}>
       <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4} width={'100%'}>
-        {rewards.map((reward) => {
+        {activeProjectRewards.map((reward) => {
           return <RewardCard key={reward.id} width="100%" reward={reward} />
         })}
       </SimpleGrid>
+      <HStack w="full" justifyContent="center">
+        <Button
+          as={Link}
+          to={getPath('projectRewards', project.name)}
+          size="sm"
+          variant="outline"
+          colorScheme="neutral1"
+        >
+          {t('See all')}
+        </Button>
+      </HStack>
     </BodySectionLayout>
   )
 })

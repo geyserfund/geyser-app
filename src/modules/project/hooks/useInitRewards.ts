@@ -25,9 +25,7 @@ export const useInitRewards = (load?: boolean): UseInitRewardsReturn => {
   const { id: projectId } = useAtomValue(projectAtom)
 
   const [queryProjectRewards, { loading: rewardsLoading }] = useProjectRewardsLazyQuery({
-    fetchPolicy: 'cache-first',
-
-    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'network-only',
     variables: {
       input: {
         where: {

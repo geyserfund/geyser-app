@@ -16,8 +16,9 @@ import { useDebounce } from '@/shared/hooks'
 import { Entry, EntryStatus } from '@/types'
 import { isActive } from '@/utils'
 
-import { entryTemplateForGrantApplicants, ProjectEntryEditor } from '../editor'
 import { useEntryState } from '../hooks/useEntryState'
+import { ProjectEntryEditor } from '../shared'
+import { entryTemplateForGrantApplicants } from '../utils/entryTemplate'
 
 export const PostCreateEdit = () => {
   const navigate = useNavigate()
@@ -122,6 +123,13 @@ export const PostCreateEdit = () => {
     return 'Save draft'
   }
 
+  const handlePublishEntry = async () => {
+    try {
+      await publishEntry()
+      navigate(getPath('projectPostView', project.name, entry.id))
+    } catch {}
+  }
+
   if (loading || projectLoading) {
     return <Loader />
   }
@@ -151,7 +159,7 @@ export const PostCreateEdit = () => {
                 size={{ base: 'md', lg: 'lg' }}
                 variant="solid"
                 colorScheme="primary1"
-                onClick={publishEntry}
+                onClick={handlePublishEntry}
                 isDisabled={!isActive(project.status)}
                 isLoading={publishing}
               >

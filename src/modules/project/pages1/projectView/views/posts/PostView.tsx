@@ -8,7 +8,6 @@ import { ImageWithReload } from '@/components/ui'
 import { BottomNavBarContainer } from '@/modules/navigation/bottomNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
-import { ProjectEntryEditor } from '@/modules/project/pages1/projectView/views/posts/editor'
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
 import { dimensions, getPath } from '@/shared/constants'
@@ -16,6 +15,7 @@ import { useProjectEntryQuery } from '@/types'
 import { toInt } from '@/utils'
 
 import { PostEditMenu } from './components'
+import { ProjectEntryEditor } from './shared'
 
 export const PostView = () => {
   const { project, isProjectOwner } = useProjectAtom()
@@ -23,6 +23,7 @@ export const PostView = () => {
 
   const { loading, data } = useProjectEntryQuery({
     skip: !postId,
+    fetchPolicy: 'cache-first',
     variables: {
       entryId: postId,
     },

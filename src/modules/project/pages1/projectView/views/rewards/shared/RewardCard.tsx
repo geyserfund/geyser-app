@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
-import { MarkdownField } from '@/forms/markdown/MarkdownField'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
@@ -20,6 +19,8 @@ type Props = {
   hidden?: boolean
 } & CardLayoutProps
 
+const MAX_REWARD_DESCRIPTION_LENGTH_FOR_CARD = 160
+
 export const RewardCard = ({ reward, hidden, ...rest }: Props) => {
   const { t } = useTranslation()
   const { project, isProjectOwner } = useProjectAtom()
@@ -34,6 +35,12 @@ export const RewardCard = ({ reward, hidden, ...rest }: Props) => {
     buyReward()
   }
 
+  const description = reward?.description
+    ? reward?.description?.length > MAX_REWARD_DESCRIPTION_LENGTH_FOR_CARD
+      ? `${reward.description.slice(0, MAX_REWARD_DESCRIPTION_LENGTH_FOR_CARD)}...`
+      : reward.description
+    : ''
+
   return (
     <CardLayout
       as={Link}
@@ -47,7 +54,7 @@ export const RewardCard = ({ reward, hidden, ...rest }: Props) => {
     >
       {hidden && (
         <Box
-          backgroundColor={'neutralAlpha.9'}
+          backgroundColor={'neutralAlpha.6'}
           zIndex="1"
           pointerEvents={'none'}
           position="absolute"
@@ -55,20 +62,20 @@ export const RewardCard = ({ reward, hidden, ...rest }: Props) => {
           height="100%"
         />
       )}
-      {reward.image && (
-        <Box borderColor={'neutral.700'} overflow={'hidden'} width="100%" position="relative" paddingTop="75%">
-          <ImageWithReload
-            src={reward.image || ''}
-            alt={reward.name}
-            width="100%"
-            height="100%"
-            objectFit="cover"
-            position="absolute"
-            top={0}
-            left={0}
-          />
-        </Box>
-      )}
+
+      <Box borderColor={'neutral.700'} overflow={'hidden'} width="100%" position="relative" paddingTop="75%">
+        <ImageWithReload
+          src={reward.image || ''}
+          alt={reward.name}
+          width="100%"
+          height="100%"
+          objectFit="cover"
+          position="absolute"
+          top={0}
+          left={0}
+        />
+      </Box>
+
       <VStack padding={4} alignItems="start" flex={1}>
         <Body size="md" medium>
           {reward.name}
@@ -105,7 +112,10 @@ export const RewardCard = ({ reward, hidden, ...rest }: Props) => {
           }}
           flex={1}
         >
-          <MarkdownField preview content={reward.description || ''} />
+          <Body size="sm" light>
+            {description}
+          </Body>
+          {/* <MarkdownField preview content={description} /> */}
         </Box>
         <HStack w="full" justifyContent={'space-between'} alignItems="center">
           {project && project.rewardCurrency === RewardCurrency.Usdcent ? (

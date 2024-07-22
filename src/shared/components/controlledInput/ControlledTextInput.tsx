@@ -41,18 +41,20 @@ export function ControlledTextInput(props: Props) {
 
   return (
     <VStack alignItems="flex-start" width="100%" spacing={1}>
-      <VStack spacing={0} alignItems="flex-start">
-        {props.label && (
-          <Text fontSize="16px" fontWeight="500">
-            {props.label}
-          </Text>
-        )}
-        {props.description && (
-          <Text fontSize="12px" fontWeight="400">
-            {props.description}
-          </Text>
-        )}
-      </VStack>
+      {(props.label || props.description) && (
+        <VStack spacing={0} alignItems="flex-start">
+          {props.label && (
+            <Text fontSize="16px" fontWeight="500">
+              {props.label}
+            </Text>
+          )}
+          {props.description && (
+            <Text fontSize="12px" fontWeight="400">
+              {props.description}
+            </Text>
+          )}
+        </VStack>
+      )}
       <InputGroup>
         <Input
           {...field}

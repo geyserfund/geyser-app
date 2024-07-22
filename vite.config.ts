@@ -6,6 +6,7 @@ import loadVersion from 'vite-plugin-package-version'
 import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
 import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 const pwaOptions: Partial<VitePWAOptions> = {
   base: '/',
@@ -114,7 +115,14 @@ export default defineConfig(({ command, mode }) => {
   }
 
   pwaOptions.mode = env.APP_ENV === 'development' ? 'development' : 'production'
-  const plugins: PluginOption[] = [VitePWA(pwaOptions), react(), loadVersion(), wasm(), topLevelAwait()]
+  const plugins: PluginOption[] = [
+    VitePWA(pwaOptions),
+    react(),
+    tsconfigPaths(),
+    loadVersion(),
+    wasm(),
+    topLevelAwait(),
+  ]
   if (mode !== 'production') {
     plugins.push(mkcert())
   }
