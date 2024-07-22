@@ -118,7 +118,7 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
             </ListItem>
             <ListItem>
               <Text>
-                {t('The amount of votes you cast on a project depends on the cumulative amount of you send to it:')}
+                {t('The amount of votes you cast on a project depends on the cumulative amount you send to it:')}
               </Text>
               <UnorderedList>
                 <ListItem>
