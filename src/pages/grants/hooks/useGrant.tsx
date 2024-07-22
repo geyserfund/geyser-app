@@ -15,6 +15,10 @@ export const useGrant = (id?: string | number) => {
       return { variables: { input: { where: { id: 8 } } } }
     }
 
+    if (id === 'bitcoin2024') {
+      return { variables: { input: { where: { id: 10 } } } }
+    }
+
     return { variables: { input: { where: { id } } } }
   }, [id])
 
