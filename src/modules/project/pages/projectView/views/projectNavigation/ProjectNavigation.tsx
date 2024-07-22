@@ -131,6 +131,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
   const handleProjectDashboardButtonPress = () => {
     if (project?.name) {
       navigate(getPath('projectDashboard', project?.name))
+      changeProjectSideNavOpen(false)
     }
   }
 
@@ -237,6 +238,7 @@ export const ProjectNavigation = ({ showLabel }: { showLabel?: boolean }) => {
                     }
 
                     navigate(creatorNavigationButtons.path)
+                    changeProjectSideNavOpen(false)
                   }
 
                   return (
