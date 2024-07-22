@@ -107,7 +107,7 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
               <Text>{t('You can vote by sending Sats')}</Text>
             </ListItem>
             <ListItem>
-              <Text>{t('You can vote multiple times and towards multiple projects.')}</Text>
+              <Text>{t('You can vote multiple times and towards multiple projects')}</Text>
             </ListItem>
             <ListItem>
               <Text>
