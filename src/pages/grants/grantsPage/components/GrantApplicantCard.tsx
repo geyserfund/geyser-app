@@ -30,6 +30,7 @@ interface GrantApplicantCardProps {
   project: Project
   funding: GrantApplicantFunding
   contributorsCount: number
+  voteCount: number
   contributors: GrantApplicantContributor[]
   grantHasVoting: boolean
   isClosed: boolean
@@ -178,6 +179,7 @@ export const GrantApplicantCard = ({
   project,
   funding,
   contributorsCount,
+  voteCount,
   contributors,
   grantHasVoting,
   isClosed,
@@ -201,14 +203,14 @@ export const GrantApplicantCard = ({
     currentUser.hasSocialAccount &&
     contributors.find((contributor) => contributor.user?.id === currentUser?.id)
 
-  const renderWidgetItem = (funding: GrantApplicantFunding, contributorsCount: number) => {
+  const renderWidgetItem = (funding: GrantApplicantFunding, contributorsCount: number, voteCount: number) => {
     return (
       <HStack gap={5}>
         {isCompetitionVote && (
           <Box display={'flex'} alignItems="center" flexDirection={'column'}>
             <Box display={'flex'} alignItems="center">
               <Text fontWeight={'700'} fontSize={'26px'} fontFamily={fonts.livvic} color="primary.500">
-                {contributorsCount || 0}
+                {grantHasVoting ? voteCount : contributorsCount || 0}
               </Text>
             </Box>
 
@@ -322,7 +324,7 @@ export const GrantApplicantCard = ({
               gap={5}
             >
               {renderButton(project)}
-              {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
+              {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount, voteCount)}
             </Box>
           )}
         </Box>
@@ -335,7 +337,7 @@ export const GrantApplicantCard = ({
         {isMobile && (
           <VStack w="full">
             {renderButton(project)}
-            {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
+            {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount, voteCount)}
           </VStack>
         )}
         {currentUserContribution && grantHasVoting && <UserContributionDetails {...currentUserContribution} />}

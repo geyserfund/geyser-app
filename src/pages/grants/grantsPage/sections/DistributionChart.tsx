@@ -16,25 +16,35 @@ interface Props {
   isCompetitionVote: boolean
   showAll?: boolean
   votingSystem?: VotingSystem
+  totalVotes?: number
 }
 
-export const DistributionChart = ({ applicants, isCompetitionVote, showAll = true, votingSystem }: Props) => {
+export const DistributionChart = ({
+  applicants,
+  isCompetitionVote,
+  showAll = true,
+  votingSystem,
+  totalVotes,
+}: Props) => {
   const { t } = useTranslation()
 
-  const total = applicants.reduce((prev, curr) => {
-    if (votingSystem === VotingSystem.OneToOne) {
+  let total: number
+
+  if (totalVotes) {
+    total = totalVotes
+  } else {
+    total = applicants.reduce((prev, curr) => {
       return prev + (curr?.funding.communityFunding || 0)
-    }
-
-    if (votingSystem === VotingSystem.StepLog_10) {
-      return prev + (curr?.voteCount || 0)
-    }
-
-    return prev
-  }, 0)
+    }, 0)
+  }
 
   const percentages: Array<
-    GrantApplicant & { percentage: number; numberOfContributors: number; communityFundingAmount: number; votes: number }
+    GrantApplicant & {
+      percentage: number
+      numberOfContributors: number
+      communityFundingAmount: number
+      votes: number
+    }
   > = applicants.map((applicant) => {
     const value =
       votingSystem === VotingSystem.OneToOne ? applicant.funding?.communityFunding || 0 : applicant.voteCount || 0

@@ -69,7 +69,7 @@ export const CommunityVoting = ({
     <>
       <CardLayout noMobileBorder p={{ base: '10px', lg: '20px' }} spacing={{ base: '10px', lg: '20px' }} w="full">
         <H3 fontSize="18px">{t(title)}</H3>
-        {sortedApplicants.map(({ project, funding, contributors, contributorsCount }) => {
+        {sortedApplicants.map(({ project, funding, contributors, contributorsCount, voteCount }) => {
           return (
             <GrantApplicantCard
               key={project.name}
@@ -77,6 +77,7 @@ export const CommunityVoting = ({
               funding={funding}
               contributorsCount={contributorsCount}
               contributors={contributors || []}
+              voteCount={voteCount}
               grantHasVoting={grantHasVoting || false}
               grantStatus={grantStatus as GrantStatusEnum}
               isLoggedIn={isLoggedIn}
