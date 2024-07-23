@@ -242,6 +242,7 @@ export const GrantPage = () => {
                   applicants={applicants}
                   isCompetitionVote={isCompetitionVote}
                   votingSystem={grant.__typename === 'CommunityVoteGrant' ? grant.votingSystem : undefined}
+                  totalVotes={grant.__typename === 'CommunityVoteGrant' ? grant.votes?.voteCount : undefined}
                 />
               </VStack>
             </TabPanel>
