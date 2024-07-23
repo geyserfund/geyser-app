@@ -290,9 +290,9 @@ export const GrantApplicantCard = ({
   }
 
   return (
-    <Box onClick={handleCardClick} position="relative">
+    <Box position="relative">
       <CardLayout as="div" p={2} key={project.id} position="relative" zIndex={1} cursor="pointer">
-        <Box display="flex">
+        <Box onClick={handleCardClick} display="flex">
           <Box mr={3} height={{ base: '90px', lg: '144px' }}>
             <Box className={classNames(classes.image, isMobile ? classes.mobileImage : classes.desktopImage)}>
               <ImageWithReload
