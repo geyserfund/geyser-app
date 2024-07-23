@@ -9,7 +9,7 @@ type ResponseData = {
   grants: Grant[]
 }
 
-const CurrentFeaturedGrant = 'grant-round-008'
+const CurrentFeaturedGrant = 'grant-round-009'
 
 export const useGrants = () => {
   const { data, error, loading, refetch } = useQuery<ResponseData>(QUERY_GRANTS)
