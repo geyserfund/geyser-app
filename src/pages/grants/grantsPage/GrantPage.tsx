@@ -193,6 +193,7 @@ export const GrantPage = () => {
                       isCompetitionVote={isCompetitionVote}
                       showAll={false}
                       votingSystem={grant.__typename === 'CommunityVoteGrant' ? grant.votingSystem : undefined}
+                      totalVotes={grant.__typename === 'CommunityVoteGrant' ? grant.votes?.voteCount : undefined}
                     />
                     <MobileDivider />
                   </>

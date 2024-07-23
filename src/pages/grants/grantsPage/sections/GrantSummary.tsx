@@ -139,7 +139,9 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
       )
     }
 
-    return (grant.applicants.reduce((prev, curr) => prev + (curr?.voteCount || 0), 0) || 0).toString()
+    if (grant?.__typename === 'CommunityVoteGrant' && grant.votingSystem === VotingSystem.StepLog_10) {
+      return getShortAmountLabel(grant.votes?.voteCount || 0, true)
+    }
   }
 
   return (
