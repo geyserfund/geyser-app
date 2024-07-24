@@ -16,25 +16,35 @@ interface Props {
   isCompetitionVote: boolean
   showAll?: boolean
   votingSystem?: VotingSystem
+  totalVotes?: number
 }
 
-export const DistributionChart = ({ applicants, isCompetitionVote, showAll = true, votingSystem }: Props) => {
+export const DistributionChart = ({
+  applicants,
+  isCompetitionVote,
+  showAll = true,
+  votingSystem,
+  totalVotes,
+}: Props) => {
   const { t } = useTranslation()
 
-  const total = applicants.reduce((prev, curr) => {
-    if (votingSystem === VotingSystem.OneToOne) {
+  let total: number
+
+  if (totalVotes) {
+    total = totalVotes
+  } else {
+    total = applicants.reduce((prev, curr) => {
       return prev + (curr?.funding.communityFunding || 0)
-    }
-
-    if (votingSystem === VotingSystem.StepLog_10) {
-      return prev + (curr?.voteCount || 0)
-    }
-
-    return prev
-  }, 0)
+    }, 0)
+  }
 
   const percentages: Array<
-    GrantApplicant & { percentage: number; numberOfContributors: number; communityFundingAmount: number; votes: number }
+    GrantApplicant & {
+      percentage: number
+      numberOfContributors: number
+      communityFundingAmount: number
+      votes: number
+    }
   > = applicants.map((applicant) => {
     const value =
       votingSystem === VotingSystem.OneToOne ? applicant.funding?.communityFunding || 0 : applicant.voteCount || 0
@@ -57,20 +67,23 @@ export const DistributionChart = ({ applicants, isCompetitionVote, showAll = tru
       <H3 fontSize={'18px'}>{t('Leaderboard')}</H3>
       {percentages.length > 0 && (
         <Box py={2}>
-          {displayedPercentages.map(({ project, percentage, numberOfContributors, communityFundingAmount }, i) => (
-            <Item
-              key={project.id}
-              bg={CHART_BAR_COLORS[i] || CHART_BAR_COLORS[4]}
-              title={project.title}
-              percentage={percentage}
-              width={Math.trunc((percentage * 100) / maxPercentage)}
-              numberOfContributors={numberOfContributors}
-              isCompetitionVote={isCompetitionVote}
-              communityFundingAmount={communityFundingAmount}
-              to={showAll ? getPath('project', project.name) : undefined}
-              votingSystem={votingSystem}
-            />
-          ))}
+          {displayedPercentages.map(
+            ({ project, percentage, numberOfContributors, communityFundingAmount, votes }, i) => (
+              <Item
+                key={project.id}
+                bg={CHART_BAR_COLORS[i] || CHART_BAR_COLORS[4]}
+                title={project.title}
+                percentage={percentage}
+                width={Math.trunc((percentage * 100) / maxPercentage)}
+                numberOfContributors={numberOfContributors}
+                isCompetitionVote={isCompetitionVote}
+                communityFundingAmount={communityFundingAmount}
+                to={showAll ? getPath('project', project.name) : undefined}
+                votingSystem={votingSystem}
+                votes={votes}
+              />
+            ),
+          )}
         </Box>
       )}
     </CardLayout>
@@ -83,6 +96,7 @@ const Item = ({
   width,
   to,
   votingSystem,
+  votes,
   ...rest
 }: {
   bg?: string
@@ -94,6 +108,7 @@ const Item = ({
   communityFundingAmount: number
   to?: string | undefined
   votingSystem?: VotingSystem
+  votes?: number
 }) => {
   const itemContent = () => {
     return (
@@ -104,7 +119,7 @@ const Item = ({
           </Text>
         </HStack>
         <Box display="flex" alignItems="center" justifyContent="start" flexGrow={1}>
-          <ChartBar bg={bg} width={`${width}%`} {...rest} votingSystem={votingSystem} />
+          <ChartBar bg={bg} width={`${width}%`} {...rest} votingSystem={votingSystem} votes={votes} />
         </Box>
       </HStack>
     )
@@ -121,12 +136,14 @@ const ChartBar = ({
   isCompetitionVote,
   communityFundingAmount,
   votingSystem,
+  votes,
 }: Pick<BoxProps, 'width' | 'bg'> & {
   percentage: number
   numberOfContributors: number
   isCompetitionVote: boolean
   communityFundingAmount: number
   votingSystem?: VotingSystem
+  votes?: number
 }) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
@@ -141,11 +158,13 @@ const ChartBar = ({
     )
   }
 
+  const votesOrVoters = votingSystem === VotingSystem.OneToOne ? numberOfContributors : votes
+
   const renderVotesOrVoters = ({ withParentheses }: { withParentheses: boolean }) => {
     return (
       <Caption fontSize={'12px'} bold color="neutral.600" isTruncated>
         {withParentheses ? '(' : ''}
-        {getShortAmountLabel(numberOfContributors, true)}{' '}
+        {votesOrVoters}{' '}
         {isCompetitionVote ? (votingSystem === VotingSystem.OneToOne ? t('voters') : t('votes')) : t('contributors')}
         {withParentheses ? ')' : ''}
       </Caption>

@@ -5,6 +5,7 @@ export const FRAGMENT_BOARD_VOTE_GRANTS = gql`
     id
     title
     name
+    image
     shortDescription
     description
     balance
@@ -31,6 +32,7 @@ export const FRAGMENT_COMMUNITY_VOTE_GRANTS = gql`
     id
     title
     name
+    image
     shortDescription
     description
     balance

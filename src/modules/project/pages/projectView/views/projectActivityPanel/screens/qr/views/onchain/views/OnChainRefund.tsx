@@ -23,8 +23,15 @@ export const OnChainRefund = ({ refundFile }: { refundFile?: SwapData }) => {
     switch (onChainError.status) {
       case 'transaction.lockupFailed': {
         const values = extractValuesFromError(onChainError.failureReason || '')
+
         if (values.locked && values.expected) {
-          return `Amount received ${commaFormatted(values.locked)} sats was less than expected ${commaFormatted(
+          if (values.locked < values.expected) {
+            return `Amount received ${commaFormatted(values.locked)} sats was less than expected ${commaFormatted(
+              values.expected,
+            )} sats`
+          }
+
+          return `Amount received ${commaFormatted(values.locked)} sats was more than expected ${commaFormatted(
             values.expected,
           )} sats`
         }

@@ -96,14 +96,13 @@ export const ActivityBrief = (props: StackProps) => {
 
   return (
     <VStack w="100%" {...props}>
-      {!removeBalance && (
-        <ProjectBalanceDisplay
-          defaultGoalId={project.defaultGoalId}
-          balance={project.balance}
-          balanceUsdCent={project.balanceUsdCent}
-          inProgressGoals={goals.inProgressGoals}
-        />
-      )}
+      <ProjectBalanceDisplay
+        removeBalance={removeBalance}
+        defaultGoalId={project.defaultGoalId}
+        balance={project.balance}
+        balanceUsdCent={project.balanceUsdCent}
+        inProgressGoals={goals.inProgressGoals}
+      />
 
       {!isMobile ? (
         <VStack w="full" spacing="10px" pb={3}>

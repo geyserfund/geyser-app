@@ -42,6 +42,7 @@ interface GrantApplicantCardProps {
   project: Project
   funding: GrantApplicantFunding
   contributorsCount: number
+  voteCount: number
   contributors: GrantApplicantContributor[]
   grantHasVoting: boolean
   isClosed: boolean
@@ -203,6 +204,7 @@ export const GrantApplicantCard = ({
   project,
   funding,
   contributorsCount,
+  voteCount,
   contributors,
   grantHasVoting,
   isClosed,
@@ -226,14 +228,14 @@ export const GrantApplicantCard = ({
     currentUser.hasSocialAccount &&
     contributors.find((contributor) => contributor.user?.id === currentUser?.id)
 
-  const renderWidgetItem = (funding: GrantApplicantFunding, contributorsCount: number) => {
+  const renderWidgetItem = (funding: GrantApplicantFunding, contributorsCount: number, voteCount: number) => {
     return (
       <HStack gap={5}>
         {isCompetitionVote && (
           <Box display={'flex'} alignItems="center" flexDirection={'column'}>
             <Box display={'flex'} alignItems="center">
               <Text fontWeight={'700'} fontSize={'26px'} fontFamily={fonts.livvic} color="primary.500">
-                {contributorsCount || 0}
+                {grantHasVoting ? voteCount : contributorsCount || 0}
               </Text>
             </Box>
 
@@ -315,9 +317,9 @@ export const GrantApplicantCard = ({
   }
 
   return (
-    <Box onClick={handleCardClick} position="relative">
+    <Box position="relative">
       <CardLayout as="div" p={2} key={project.id} position="relative" zIndex={1} cursor="pointer">
-        <Box display="flex">
+        <Box onClick={handleCardClick} display="flex">
           <Box mr={3} height={{ base: '90px', lg: '144px' }}>
             <Box className={classNames(classes.image, isMobile ? classes.mobileImage : classes.desktopImage)}>
               <ImageWithReload
@@ -347,7 +349,7 @@ export const GrantApplicantCard = ({
               gap={5}
             >
               {renderButton(project)}
-              {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
+              {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount, voteCount)}
             </Box>
           )}
         </Box>
@@ -360,7 +362,7 @@ export const GrantApplicantCard = ({
         {isMobile && (
           <VStack w="full">
             {renderButton(project)}
-            {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
+            {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount, voteCount)}
           </VStack>
         )}
         {currentUserContribution && grantHasVoting && <UserContributionDetails {...currentUserContribution} />}
@@ -399,25 +401,18 @@ const HowVotingWorksModal = ({
             <Text>
               {t('This grant uses ')}
               <Text as="i">{t('Incremental Voting')}</Text>
-              {t(', to ensure that all votes can make a difference. This means:')}
+              {t(', to ensure that all votes can have an impact. It works like this:')}
             </Text>
             <UnorderedList mt={4} spacing={2}>
               <ListItem>
-                <Text>{t('You vote by sending sats')}</Text>
+                <Text>{t('You can vote by sending Sats')}</Text>
+              </ListItem>
+              <ListItem>
+                <Text>{t('You can vote multiple times and towards multiple projects')}</Text>
               </ListItem>
               <ListItem>
                 <Text>
-                  {t(
-                    'You can send to a project multiple times, but each user gets to send a maximum of 3 votes per project.',
-                  )}
-                </Text>
-              </ListItem>
-              <ListItem>
-                <Text>{t('You can send to multiple projects')}</Text>
-              </ListItem>
-              <ListItem>
-                <Text>
-                  {t('The amount of votes you cast on a project depends on the cumulative amount of you send to it:')}
+                  {t('You can cast up to 3 votes per project based on the cumulative amounts sent to each project:')}
                 </Text>
               </ListItem>
             </UnorderedList>
