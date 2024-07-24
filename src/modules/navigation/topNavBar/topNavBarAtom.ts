@@ -6,6 +6,8 @@ import {
   grantRoutes,
   landingRoutes,
   projectDashboardRoutes,
+  projectPostCreatorRoutes,
+  projectRewardCreatorRoutes,
   projectRoutes,
   routeMatchForAtom,
 } from '../../../config/routes/routesAtom'
@@ -59,7 +61,14 @@ const routesToShowSignInButton = [
 ]
 const routesToShowSignInButtonAtom = atom(routeMatchForAtom(routesToShowSignInButton))
 
-const isProjectRoutesAtom = atom(routeMatchForAtom([...projectRoutes, ...projectDashboardRoutes]))
+const isProjectRoutesAtom = atom(
+  routeMatchForAtom([
+    ...projectRoutes,
+    ...projectDashboardRoutes,
+    ...projectPostCreatorRoutes,
+    ...projectRewardCreatorRoutes,
+  ]),
+)
 const isProjectMainPageAtom = atom(routeMatchForAtom([getPath('project', PathName.projectName)]))
 
 const mainProjectPageScrolledPassThresholdAtom = atom(false)

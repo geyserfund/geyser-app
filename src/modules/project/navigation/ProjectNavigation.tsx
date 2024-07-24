@@ -88,13 +88,14 @@ export const ProjectNavigation = () => {
   }
 
   return (
-    <TopNavContainer>
+    <TopNavContainer zIndex={9}>
       <AnimatedNavBar
         items={ProjectNavigationButtons}
         activeItem={activeButtonIndex}
         showIcon={isMobile}
         showLabel={!isMobile}
         loading={loading}
+        zIndex={9}
       />
     </TopNavContainer>
   )

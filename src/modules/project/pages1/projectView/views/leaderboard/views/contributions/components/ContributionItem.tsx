@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { BitcoinQuote, ProjectFundingTxFragment } from '@/types'
-import { commaFormatted } from '@/utils'
+import { commaFormatted, GetDaysAgo } from '@/utils'
 
-import { UserAvatar } from './UserAvatar'
+import { UserAvatar } from '../../../../../components/UserAvatar'
 
 export const ContributionItem = ({ contribution }: { contribution: ProjectFundingTxFragment }) => {
   const { t } = useTranslation()
@@ -15,9 +15,15 @@ export const ContributionItem = ({ contribution }: { contribution: ProjectFundin
     <HStack w="full" alignItems={'start'} spacing={1} key={contribution.id} paddingX={6} paddingY={2}>
       <UserAvatar user={contribution.funder.user} id={contribution.funder.id} />
       <VStack flex={1} alignItems={'start'} justifyContent={'center'} spacing={0}>
-        <Body size="sm" bold dark>
-          {contribution.funder.user?.username || t('Anonymous')}
-        </Body>
+        <HStack>
+          <Body size="sm" bold dark>
+            {contribution.funder.user?.username || t('Anonymous')}
+          </Body>
+          <Body size="xs" muted>
+            {GetDaysAgo(contribution.paidAt)}
+          </Body>
+        </HStack>
+
         <HStack spacing={2}>
           <Body size="xs">
             {commaFormatted(contribution.amountPaid)}{' '}
@@ -57,7 +63,7 @@ const usdFromSats = ({ sats, bitcoinQuote }: { sats: number; bitcoinQuote?: Bitc
   return ''
 }
 
-export const ContributionItemkeleton = () => {
+export const ContributionItemSkeleton = () => {
   return (
     <HStack w="full" spacing={1} paddingX={6} paddingY={2}>
       <SkeletonCircle size="40px" />

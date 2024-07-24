@@ -15,6 +15,12 @@ export const dimensions = {
       height: 36 + 12,
     },
   },
+  animatedNavBar: {
+    height: {
+      base: '48px',
+      lg: '60px',
+    },
+  },
   project: {
     rewards: {
       view: {

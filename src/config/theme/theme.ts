@@ -11,6 +11,7 @@ import {
   popOverTheme,
   selectTheme,
   switchTheme,
+  tabTheme,
   tooltipTheme,
 } from './components'
 
@@ -147,28 +148,7 @@ export const theme = {
     Switch: switchTheme,
     Badge: badgeTheme,
     Tooltip: tooltipTheme,
-    Tabs: {
-      variants: {
-        secondary: {
-          tab: {
-            bg: 'neutral.0',
-            variant: 'outline',
-            borderRadius: '8px',
-            border: '2px solid',
-            borderColor: 'neutral.200',
-            p: '10px 20px',
-            _selected: {
-              bg: 'neutral.0',
-              borderColor: 'neutral.400',
-            },
-            _hover: {
-              bg: 'neutral.50',
-              borderColor: 'neutral.400',
-            },
-          },
-        },
-      },
-    },
+    Tabs: tabTheme,
     Input: {
       defaultProps: {
         focusBorderColor: 'primary.500',

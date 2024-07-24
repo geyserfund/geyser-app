@@ -7,7 +7,7 @@ import { Body } from '@/shared/components/typography'
 import { ProjectFunderFragment } from '@/types'
 import { commaFormatted } from '@/utils'
 
-import { UserAvatar } from './UserAvatar'
+import { UserAvatar } from '../../../../../components/UserAvatar'
 
 export const LeaderboardItem = ({ funder, rank }: { funder: ProjectFunderFragment; rank: number }) => {
   const { t } = useTranslation()

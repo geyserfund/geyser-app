@@ -73,8 +73,10 @@ export const projectDashboardRoutes = [
 export const projectRoutes = [
   getPath('project', PathName.projectName),
   getPath('projectPosts', PathName.projectName),
+  getPath('projectPostView', PathName.projectName, PathName.postId),
   getPath('projectGoals', PathName.projectName),
   getPath('projectRewards', PathName.projectName),
+  getPath('projectRewardView', PathName.projectName, PathName.rewardId),
   getPath('projectLeaderboard', PathName.projectName),
 ]
 
