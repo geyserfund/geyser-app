@@ -1,4 +1,16 @@
-import { Box, Button, HStack, ListItem, Text, UnorderedList, useDisclosure, VStack } from '@chakra-ui/react'
+import {
+  Avatar,
+  AvatarGroup,
+  Box,
+  Button,
+  HStack,
+  ListItem,
+  Text,
+  UnorderedList,
+  useDisclosure,
+  useTheme,
+  VStack,
+} from '@chakra-ui/react'
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
@@ -57,6 +69,11 @@ const useStyles = createUseStyles({
   },
 })
 
+const MAX_AVATARS = {
+  desktop: 35,
+  mobile: 15,
+}
+
 const UserContributionDetails = ({ amount, voteCount, user }: GrantApplicantContributor) => {
   const isMobile = useMobileMode()
 
@@ -112,6 +129,12 @@ const ContributorsAvatarDisplay = ({
 }) => {
   const grantApplicantContributorsModal = useProjectGrantApplicantContributorsModal()
 
+  const { colors } = useTheme()
+
+  const isMobile = useMobileMode()
+
+  const maxAvatars = isMobile ? MAX_AVATARS.mobile : MAX_AVATARS.desktop
+
   if (!contributors) {
     return null
   }
@@ -120,7 +143,7 @@ const ContributorsAvatarDisplay = ({
     <>
       <Box
         pl={2}
-        filter="opacity(0.4)"
+        filter="opacity(0.8)"
         _hover={{ cursor: 'pointer' }}
         zIndex={2}
         onClick={(e) => {
@@ -128,44 +151,46 @@ const ContributorsAvatarDisplay = ({
           grantApplicantContributorsModal.onOpen()
         }}
       >
-        {currentContributor && (
-          <AvatarElement
-            key={currentContributor?.user?.id}
-            width="28px"
-            height="28px"
-            wrapperProps={{
-              display: 'inline-block',
-              marginLeft: '-5px',
-              marginTop: 2,
-            }}
-            avatarOnly
-            borderRadius="50%"
-            seed={currentContributor?.user?.id}
-            user={currentContributor?.user}
-          />
-        )}
-        {contributors
-          .filter((contributor) => contributor.user?.id !== (currentContributor && currentContributor?.user?.id))
-          .slice(0, 50)
-          .map(
-            (contributor) =>
-              contributor && (
-                <AvatarElement
-                  key={contributor.user?.id}
-                  width="28px"
-                  height="28px"
-                  wrapperProps={{
-                    display: 'inline-block',
-                    marginLeft: '-5px',
-                    marginTop: 2,
-                  }}
-                  avatarOnly
-                  borderRadius="50%"
-                  seed={contributor?.user?.id}
-                  user={contributor?.user}
-                />
-              ),
+        <AvatarGroup size="sm">
+          {currentContributor && (
+            <AvatarElement
+              key={currentContributor?.user?.id}
+              avatarOnly
+              borderRadius="50%"
+              seed={currentContributor?.user?.id}
+              user={currentContributor?.user}
+            />
           )}
+          {contributors
+            .filter((contributor) => contributor.user?.id !== (currentContributor && currentContributor?.user?.id))
+            .slice(0, maxAvatars)
+            .map(
+              (contributor) =>
+                contributor && (
+                  <AvatarElement
+                    key={contributor.user?.id}
+                    avatarOnly
+                    borderRadius="50%"
+                    seed={contributor?.user?.id}
+                    user={contributor?.user}
+                  />
+                ),
+            )}
+          {contributors.length > maxAvatars && (
+            <>
+              <Avatar
+                size="sm"
+                name={' '}
+                border={`2px solid ${colors.neutral[400]}`}
+                bg="neutral.100"
+                color="neutral.900"
+                ml={2}
+              >
+                <Text fontSize="10px">{`+${contributors.length - maxAvatars}`}</Text>
+              </Avatar>
+            </>
+          )}
+        </AvatarGroup>
       </Box>
       <ProjectGrantApplicantContributorsModal
         grantApplicantContributors={contributors}
@@ -370,7 +395,7 @@ const HowVotingWorksModal = ({
 
   if (votingSystem === VotingSystem.StepLog_10) {
     return (
-      <Modal isOpen={isOpen} onClose={onClose} title={t('How voting works')}>
+      <Modal isOpen={isOpen} onClose={onClose} title={t('How voting works')} size="md">
         <VStack py={2} px={2} gap={4} w="full">
           <VStack alignItems="flex-start" gap={2}>
             <Text>
@@ -437,7 +462,7 @@ const HowVotingWorksModal = ({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={t('How voting works')}>
+    <Modal isOpen={isOpen} onClose={onClose} title={t('How voting works')} size="md">
       <VStack py={2} px={2} gap={4} w="full">
         <VStack alignItems="flex-start" gap={2}>
           <Text>
@@ -450,7 +475,7 @@ const HowVotingWorksModal = ({
               <Text>{t('1 Sat = 1 Vote. Each Sat is one Vote.')}</Text>
             </ListItem>
             <ListItem>
-              <Text>{t('You can send Sats to projects to multiple projects and multiple times')}</Text>
+              <Text>{t('You can send Sats to multiple projects and multiple times')}</Text>
             </ListItem>
             <ListItem>
               <Text>{t('You can send Sats anonymously')}</Text>
