@@ -1,3 +1,38 @@
+## [0.11.1](https://github.com/geyserfund/geyser-app/compare/v0.11.0...v0.11.1) (2024-07-24)
+
+
+### Features
+
+* additional contributor avatar ([9a34bc1](https://github.com/geyserfund/geyser-app/commit/9a34bc190bd8d60dff696511dd13aaef7dbe6e4d))
+* show pending in the select project apply ([096eb92](https://github.com/geyserfund/geyser-app/commit/096eb92fa59d70fff24fd54b1d42b807d461615f))
+
+
+### Bug Fixes
+
+* add image to grants query ([9c5b8e0](https://github.com/geyserfund/geyser-app/commit/9c5b8e0a03cd0da4f4703258a6464d17d2694a1f))
+* add placeholder for entry ([dd2f1b7](https://github.com/geyserfund/geyser-app/commit/dd2f1b7f2037fd07d0f8bd252d46222e8cdbbb49))
+* add url shorthand for btc2024 grant ([ac718c4](https://github.com/geyserfund/geyser-app/commit/ac718c40b3fc6dad24b2911e42724497ca07228e))
+* boltz swap over funding error ([e3cee73](https://github.com/geyserfund/geyser-app/commit/e3cee73ed1e402a790f927be2a33cdffdc4c29d7))
+* copy change ([d9586b8](https://github.com/geyserfund/geyser-app/commit/d9586b83104bc0b481a31849e117e5f45f77cd82))
+* copy fix ([20a8340](https://github.com/geyserfund/geyser-app/commit/20a834084e86b800707a2751d116a9f246271e49))
+* different display amount for rewards ([273aba7](https://github.com/geyserfund/geyser-app/commit/273aba7fac1d073f7a24d7b8e25ca30be13819fd))
+* edit project and affiliates failing to realign layout ([55b78b4](https://github.com/geyserfund/geyser-app/commit/55b78b445e2a674c5b4df7990d191d02503d9286))
+* follow button formatting ([8e1136c](https://github.com/geyserfund/geyser-app/commit/8e1136c76ef9f0cfdfbca90221173bc5d447bf26))
+* grant payment model failure ([1591727](https://github.com/geyserfund/geyser-app/commit/1591727788d9a9aeda72d50248f60ac79bee6c1f))
+* grant vote counts ([76bf3f3](https://github.com/geyserfund/geyser-app/commit/76bf3f38f4ff746367e02030b4489ad97ec214ef))
+* in review status ([64dc8df](https://github.com/geyserfund/geyser-app/commit/64dc8dfa01372ac8d21d238efbb2f911022ce10c))
+* invoice dates ([ed420ad](https://github.com/geyserfund/geyser-app/commit/ed420ad2a193ba7ce264b7b87f107c13bad2f2b8))
+* proportional voting typo ([38d6671](https://github.com/geyserfund/geyser-app/commit/38d66711d02a8c956c93e459e1895ad5d878db91))
+* redirect ([198ca50](https://github.com/geyserfund/geyser-app/commit/198ca50bc02653256d3744719d3e71cb58be85a9))
+* same size grant modals ([cea63dc](https://github.com/geyserfund/geyser-app/commit/cea63dcd7b9b203a7f1077c2a91c8b31a8137cee))
+* show goals for project amount exception projects ([e2d4b1c](https://github.com/geyserfund/geyser-app/commit/e2d4b1cb7327a559b5913a13c970b9f8f8c303c8))
+* show skip when for untouched ([fb057e9](https://github.com/geyserfund/geyser-app/commit/fb057e914a02e3e10162b5aceee65b55de3b8521))
+* typo ([c49c9af](https://github.com/geyserfund/geyser-app/commit/c49c9afb28dbdd768f938a23db01c21397a35783))
+* update affiliate form validation ([60142a9](https://github.com/geyserfund/geyser-app/commit/60142a9b819bd61aa755d279d8f2b592e3f0c25c))
+* update message when creator tries to change project identifier ([6cbdf9c](https://github.com/geyserfund/geyser-app/commit/6cbdf9c22cd0b9b7f0b0eab9c8eeb3c69c060aa2))
+* use correct transaction id for block explorer ([71e70e6](https://github.com/geyserfund/geyser-app/commit/71e70e6d71c50569283a60495d7ec01e1249fc08))
+* votes leaderboard ([c964517](https://github.com/geyserfund/geyser-app/commit/c96451745cdb8c2c2279ff10e3c22f3ff44fef65))
+
 ## [0.11.0](https://github.com/geyserfund/geyser-app/compare/v0.8.0...v0.11.0) (2024-07-10)
 
 
