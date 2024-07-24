@@ -1,11 +1,12 @@
-import { Button, ButtonProps, ComponentWithAs, HStack, Skeleton } from '@chakra-ui/react'
+import { Button, ButtonProps, ComponentWithAs, HStack, Skeleton, StackProps } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconType } from 'react-icons'
 import { useNavigate } from 'react-router-dom'
 
-import { useCustomTheme, useMobileMode } from '../../../utils'
+import { toInt, useCustomTheme, useMobileMode } from '../../../utils'
+import { SkeletonLayout } from '../layouts'
 
 export type NavBarItems = {
   name: string
@@ -24,9 +25,9 @@ type AnimatedNavBarProps = {
   showLabel?: boolean
   showIcon?: boolean
   loading?: boolean
-}
+} & StackProps
 
-export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem, loading }: AnimatedNavBarProps) => {
+export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem, loading, ...props }: AnimatedNavBarProps) => {
   const { t } = useTranslation()
 
   const navigate = useNavigate()
@@ -50,6 +51,10 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem, loading
     navigate(item.path || '')
   }
 
+  useEffect(() => {
+    setActiveIndex(activeItem)
+  }, [activeItem])
+
   if (loading) {
     return <Skeleton borderRadius={{ base: '8px', lg: '10px' }} height={{ base: '36px', lg: '44px' }} width="100%" />
   }
@@ -62,6 +67,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem, loading
       borderRadius={{ base: '10px', lg: '12px' }}
       position="relative"
       zIndex={2}
+      {...props}
     >
       <motion.div
         style={{
@@ -69,7 +75,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem, loading
           top: '2px',
           height: 'calc(100% - 4px)',
           backgroundColor: colors.utils.pbg,
-          zIndex: 3,
+          zIndex: props.zIndex ? toInt(`${props.zIndex}`) + 1 : 3,
           borderRadius: isMobileMode ? '8px' : '10px',
           border: '1px solid',
           borderColor: colors.utils.text,
@@ -100,7 +106,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem, loading
             <HStack
               w="full"
               h="full"
-              zIndex={4}
+              zIndex={props.zIndex ? toInt(`${props.zIndex}`) + 2 : 4}
               p={0}
               spacing={2}
               justifyContent="center"
@@ -142,5 +148,11 @@ const ProjectNavigationButton: ComponentWithAs<
       _hover={{ backgroundColor: 'neutral1.4' }}
       {...props}
     />
+  )
+}
+
+export const AnimatedNavBarSkeleton = () => {
+  return (
+    <SkeletonLayout borderRadius={{ base: '10px', lg: '12px' }} height={{ base: '36px', lg: '44px' }} width="100%" />
   )
 }

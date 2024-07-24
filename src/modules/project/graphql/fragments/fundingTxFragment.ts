@@ -9,6 +9,7 @@ export const FRAGMENT_PROJECT_FUNDING_TX = gql`
     amountPaid
     media
     comment
+    paidAt
     bitcoinQuote {
       quote
       quoteCurrency

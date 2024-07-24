@@ -8,7 +8,10 @@ import { contributionsAtom } from '@/modules/project/state/contributionsAtom'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { OrderByOptions, useProjectPageFundingTxQuery } from '@/types'
 
-import { ContributionItem, ContributionItemkeleton } from './ContributionItem'
+import {
+  ContributionItem,
+  ContributionItemSkeleton,
+} from '../../../../leaderboard/views/contributions/components/ContributionItem'
 import { NoContribution } from './NoContribution'
 
 export const Contributions = () => {
@@ -70,7 +73,7 @@ const ContributionsSkeleton = () => {
     <VStack spacing={0} w="full" flex={1} justifyContent={'space-between'}>
       <VStack spacing={0} w="full">
         {[1, 2, 3, 4, 5, 6].map((item) => {
-          return <ContributionItemkeleton key={item} />
+          return <ContributionItemSkeleton key={item} />
         })}
       </VStack>
 
