@@ -21,6 +21,8 @@ interface Props {
   votingSystem: VotingSystem
 }
 
+const NASHVILLE_GRANT_END_DATE = 1722018600000
+
 export const ContributionsWidget = ({
   grantId,
   sponsors,
@@ -33,16 +35,6 @@ export const ContributionsWidget = ({
   votingSystem,
 }: Props) => {
   const { t } = useTranslation()
-
-  const tomorrow = new Date()
-  tomorrow.setDate(tomorrow.getDate() + 1)
-  tomorrow.setHours(15, 30, 0, 0) // 15 is 3 PM in 24-hour format
-
-  // Adjust to Central Time (CT)
-  const centralTime = new Date(tomorrow.toLocaleString('en-US', { timeZone: 'America/Chicago' }))
-
-  // Get timestamp in milliseconds
-  const tomorrowTimestamp = centralTime.getTime()
 
   return (
     <Box borderRadius="8px" backgroundColor="neutral.100" pb={4} pt={2} my={4}>
@@ -64,7 +56,7 @@ export const ContributionsWidget = ({
           <TimerIcon mt={1} mr={2} width="36px" height="100%" color="primary.500" />
           <WidgetItem isSatLogo={false} subtitle={endDateSubtitle}>
             <Countdown
-              endDate={grantId === '10' ? tomorrowTimestamp : endDateTimestamp}
+              endDate={grantId === '10' ? NASHVILLE_GRANT_END_DATE : endDateTimestamp}
               sectionProps={{
                 color: 'primary.500',
                 fontSize: '22px',
