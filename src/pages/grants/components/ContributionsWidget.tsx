@@ -10,7 +10,6 @@ import { SponsorList } from './SponsorList'
 import { WidgetItem } from './WidgetItem'
 
 interface Props {
-  grantId?: string
   sponsors?: Maybe<Sponsor>[]
   balance?: string
   contributions?: string
@@ -21,10 +20,7 @@ interface Props {
   votingSystem: VotingSystem
 }
 
-const NASHVILLE_GRANT_END_DATE = 1722017700000
-
 export const ContributionsWidget = ({
-  grantId,
   sponsors,
   balance,
   contributions,
@@ -56,7 +52,7 @@ export const ContributionsWidget = ({
           <TimerIcon mt={1} mr={2} width="36px" height="100%" color="primary.500" />
           <WidgetItem isSatLogo={false} subtitle={endDateSubtitle}>
             <Countdown
-              endDate={grantId === '10' ? NASHVILLE_GRANT_END_DATE : endDateTimestamp}
+              endDate={endDateTimestamp}
               sectionProps={{
                 color: 'primary.500',
                 fontSize: '22px',
