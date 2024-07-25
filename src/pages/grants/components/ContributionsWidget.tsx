@@ -21,7 +21,7 @@ interface Props {
   votingSystem: VotingSystem
 }
 
-const NASHVILLE_GRANT_END_DATE = 1722018600000
+const NASHVILLE_GRANT_END_DATE = 1722017700000
 
 export const ContributionsWidget = ({
   grantId,
