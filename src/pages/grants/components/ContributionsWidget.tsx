@@ -56,7 +56,7 @@ export const ContributionsWidget = ({
           <TimerIcon mt={1} mr={2} width="36px" height="100%" color="primary.500" />
           <WidgetItem isSatLogo={false} subtitle={endDateSubtitle}>
             <Countdown
-              endDate={grantId === '1' ? NASHVILLE_GRANT_END_DATE : endDateTimestamp}
+              endDate={grantId === '10' ? NASHVILLE_GRANT_END_DATE : endDateTimestamp}
               sectionProps={{
                 color: 'primary.500',
                 fontSize: '22px',
