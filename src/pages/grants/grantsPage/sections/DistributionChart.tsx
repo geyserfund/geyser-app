@@ -74,7 +74,11 @@ export const DistributionChart = ({
                 bg={CHART_BAR_COLORS[i] || CHART_BAR_COLORS[4]}
                 title={project.title}
                 percentage={percentage}
-                width={Math.trunc((percentage * 100) / maxPercentage)}
+                width={
+                  votingSystem === VotingSystem.OneToOne
+                    ? Math.trunc((percentage * 100) / maxPercentage)
+                    : Math.trunc(percentage)
+                }
                 numberOfContributors={numberOfContributors}
                 isCompetitionVote={isCompetitionVote}
                 communityFundingAmount={communityFundingAmount}
@@ -175,7 +179,7 @@ const ChartBar = ({
     <HStack width="100%" alignItems="center">
       <HStack
         p={'5px'}
-        width={percentage > 0 ? `calc(${width} - 150px)` : `calc(${width} - 190px)`}
+        width={percentage > 0 ? `calc(${width})` : `calc(${width} - 190px)`}
         minWidth="40px"
         height="20px"
         bg={bg}
