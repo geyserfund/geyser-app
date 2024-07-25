@@ -176,6 +176,7 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
             )}
           </Box>
           <ContributionsWidget
+            grantId={grant.id}
             sponsors={grant.sponsors}
             endDateSubtitle={
               grantHasVoting
