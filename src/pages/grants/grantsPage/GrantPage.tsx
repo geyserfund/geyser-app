@@ -74,7 +74,7 @@ export const GrantPage = () => {
           .filter((applicant) =>
             Boolean(
               applicant &&
-                (grant.status === GrantStatusEnum.Closed
+                (grant.status === GrantStatusEnum.Closed && grant.type === GrantType.BoardVote
                   ? applicant.status === GrantApplicantStatus.Funded
                   : applicant.status === GrantApplicantStatus.Accepted ||
                     applicant.status === GrantApplicantStatus.Funded),
