@@ -1,8 +1,9 @@
 import { useState } from 'react'
 
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+
 import { useAuthContext } from '../../../../../context'
 import { copyTextToClipboard } from '../../../../../utils'
-import { useProjectContext } from '../../../context'
 
 enum CampaignSource {
   /** For content shared by creator */
@@ -54,7 +55,7 @@ export const getProjectShareUrlSuffix = ({
 
 /** This hook must be used inside ProjectProvider Context to share project links */
 export const useProjectShare = () => {
-  const { project, isProjectOwner } = useProjectContext()
+  const { project, isProjectOwner } = useProjectAtom()
   const { isLoggedIn } = useAuthContext()
   const [copied, setCopied] = useState(false)
 

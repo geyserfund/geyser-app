@@ -8,7 +8,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { rewardsAtom } from '@/modules/project/state/rewardsAtom'
 
 import { UpdateCurrencyModal } from '../../../../../components/molecules'
-import { FieldContainer } from '../../../../../forms/components/FieldContainer'
+import { FieldContainer } from '../../../../../shared/components/form/FieldContainer'
 import { useModal } from '../../../../../shared/hooks/useModal'
 import { RewardCurrency, useProjectRewardCurrencyUpdateMutation } from '../../../../../types'
 import { useNotification } from '../../../../../utils'

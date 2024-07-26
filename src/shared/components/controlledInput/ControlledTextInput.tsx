@@ -1,5 +1,8 @@
 import { Input, InputGroup, InputProps, InputRightAddon, Text, VStack } from '@chakra-ui/react'
+import React from 'react'
 import { useController, UseControllerProps } from 'react-hook-form'
+
+import { FieldContainer } from '../form'
 
 type Props = UseControllerProps<any, any> &
   Omit<InputProps, 'size'> & {
@@ -7,7 +10,7 @@ type Props = UseControllerProps<any, any> &
     inputRef?: React.Ref<HTMLInputElement>
     description?: string
     label?: string
-    error?: string
+    error?: React.ReactNode
     rightAddon?: React.ReactNode
   }
 
@@ -40,21 +43,7 @@ export function ControlledTextInput(props: Props) {
     : ''
 
   return (
-    <VStack alignItems="flex-start" width="100%" spacing={1}>
-      {(props.label || props.description) && (
-        <VStack spacing={0} alignItems="flex-start">
-          {props.label && (
-            <Text fontSize="16px" fontWeight="500">
-              {props.label}
-            </Text>
-          )}
-          {props.description && (
-            <Text fontSize="12px" fontWeight="400">
-              {props.description}
-            </Text>
-          )}
-        </VStack>
-      )}
+    <FieldContainer title={props.label} subtitle={props.description} error={props.error}>
       <InputGroup>
         <Input
           {...field}
@@ -74,10 +63,6 @@ export function ControlledTextInput(props: Props) {
         />
         {props.rightAddon && <InputRightAddon>{props.rightAddon}</InputRightAddon>}
       </InputGroup>
-
-      <Text fontSize="14px" fontWeight="400" color="secondary.red">
-        {error}
-      </Text>
-    </VStack>
+    </FieldContainer>
   )
 }

@@ -3,12 +3,12 @@ import { forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { useInitRewards } from '@/modules/project/hooks/useInitRewards'
+import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
 import { getPath } from '@/shared/constants'
 
 import { isActive } from '../../../../../../../utils'
 import { useProjectAtom, useRewardsAtom } from '../../../../../hooks/useProjectAtom'
-import { RewardCard, RewardCardSkeleton } from '../../rewards/shared'
+import { RewardCardSkeleton, RewardCardWithBuy } from '../../rewards/shared'
 import { BodySectionLayout } from '../components'
 
 export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
@@ -17,9 +17,9 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   const { project, loading: projectLoading } = useProjectAtom()
   const { rewards } = useRewardsAtom()
 
-  const { rewardsLoading } = useInitRewards(true)
+  const { queryProjectRewards } = useProjectRewardsAPI(true)
 
-  const loading = projectLoading || rewardsLoading
+  const loading = projectLoading || queryProjectRewards.loading
 
   if (loading) {
     return (
@@ -45,7 +45,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
     <BodySectionLayout ref={ref} title={t('Rewards')}>
       <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4} width={'100%'}>
         {activeProjectRewards.map((reward) => {
-          return <RewardCard key={reward.id} width="100%" reward={reward} />
+          return <RewardCardWithBuy key={reward.id} width="100%" reward={reward} />
         })}
       </SimpleGrid>
       <HStack w="full" justifyContent="center">

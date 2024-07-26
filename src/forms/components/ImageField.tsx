@@ -3,7 +3,7 @@ import { Control, Controller, FieldValue } from 'react-hook-form'
 
 import { FileUpload } from '../../components/molecules'
 import { UploadBox } from '../../components/ui'
-import { FieldContainer } from './FieldContainer'
+import { FieldContainer } from '../../shared/components/form/FieldContainer'
 
 export type ImageFieldProps = {
   name: string

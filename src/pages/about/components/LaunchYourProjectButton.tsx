@@ -10,7 +10,7 @@ export const LaunchYourProjectButton = (props: ButtonProps) => {
 
   const { isLoggedIn } = useAuthContext()
   return (
-    <Button as={Link} to={isLoggedIn ? getPath('privateProjectLaunch') : getPath('publicProjectLaunch')} {...props}>
+    <Button as={Link} to={isLoggedIn ? getPath('launch') : getPath('launchStart')} {...props}>
       {t('Launch your project')}
     </Button>
   )

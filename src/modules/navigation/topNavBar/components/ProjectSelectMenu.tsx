@@ -24,7 +24,7 @@ export const ProjectSelectMenu = () => {
         {t('Select project')}
       </MenuButton>
       <Portal>
-        <MenuList minWidth="260px">
+        <MenuList minWidth="260px" maxHeight="500px" overflowY="auto">
           <VStack w="full" spacing={2}>
             {user.ownerOf.map((owner) => {
               if (!owner.project) return null
@@ -48,7 +48,7 @@ export const ProjectSelectMenu = () => {
             })}
             <MenuItem
               as={Link}
-              to={getPath('publicProjectLaunch')}
+              to={getPath('launchStart')}
               icon={<PiRocketLaunch fontSize={'20px'} />}
               border="1px solid"
               borderColor="primary1.11"

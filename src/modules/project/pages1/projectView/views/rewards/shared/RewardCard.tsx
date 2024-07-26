@@ -10,29 +10,33 @@ import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { ProjectRewardForCreateUpdateFragment, ProjectStatus, RewardCurrency } from '@/types'
 
-import { useRewardBuy } from '../../../hooks'
 import { ProjectRewardShippingEstimate } from '../components/ProjectRewardShippingEstimate'
 import { RewardEditMenu } from '../components/RewardEditMenu'
 
-type Props = {
+export type RewardCardProps = {
   reward: ProjectRewardForCreateUpdateFragment
   hidden?: boolean
+  buyReward?: () => void
+  count?: number
+  noLink?: boolean
+  isLaunch?: boolean
 } & CardLayoutProps
 
 const MAX_REWARD_DESCRIPTION_LENGTH_FOR_CARD = 160
 
-export const RewardCard = ({ reward, hidden, ...rest }: Props) => {
+export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count = 0, ...rest }: RewardCardProps) => {
   const { t } = useTranslation()
   const { project, isProjectOwner } = useProjectAtom()
-
-  const { buyReward, count } = useRewardBuy(reward)
 
   const isRewardAvailable = reward.maxClaimable ? reward.maxClaimable - reward.sold > count : true
 
   const onBuyClick = (e: MouseEvent<HTMLButtonElement>) => {
     e?.stopPropagation()
     e.preventDefault()
-    buyReward()
+
+    if (buyReward) {
+      buyReward()
+    }
   }
 
   const description = reward?.description
@@ -41,18 +45,13 @@ export const RewardCard = ({ reward, hidden, ...rest }: Props) => {
       : reward.description
     : ''
 
+  const linkProps = noLink ? {} : { as: Link, to: getPath('projectRewardView', project?.name, reward.id) }
+
+  const isHidden = hidden || reward.isHidden
+
   return (
-    <CardLayout
-      as={Link}
-      to={getPath('projectRewardView', project?.name, reward.id)}
-      dense
-      w="full"
-      overflow={'hidden'}
-      spacing={0}
-      position="relative"
-      {...rest}
-    >
-      {hidden && (
+    <CardLayout {...linkProps} dense w="full" overflow={'hidden'} spacing={0} position="relative" {...rest}>
+      {isHidden && (
         <Box
           backgroundColor={'neutralAlpha.6'}
           zIndex="1"
@@ -97,9 +96,11 @@ export const RewardCard = ({ reward, hidden, ...rest }: Props) => {
           )}
         </HStack>
         <HStack>
-          <Badge variant="soft" colorScheme="neutral1" size="sm" textTransform={'capitalize'}>
-            {reward.category}
-          </Badge>
+          {reward.category && (
+            <Badge variant="soft" colorScheme="neutral1" size="sm" textTransform={'capitalize'}>
+              {reward.category}
+            </Badge>
+          )}
           <ProjectRewardShippingEstimate reward={reward} />
         </HStack>
         <Box
@@ -131,18 +132,20 @@ export const RewardCard = ({ reward, hidden, ...rest }: Props) => {
           )}
 
           {!isProjectOwner ? (
-            <Button
-              size="sm"
-              variant="surface"
-              colorScheme="primary1"
-              minWidth="80px"
-              onClick={onBuyClick}
-              isDisabled={!isRewardAvailable || project?.status === ProjectStatus.Inactive}
-            >
-              {t('Buy')}
-            </Button>
+            buyReward && (
+              <Button
+                size="sm"
+                variant="surface"
+                colorScheme="primary1"
+                minWidth="80px"
+                onClick={onBuyClick}
+                isDisabled={!isRewardAvailable || project?.status === ProjectStatus.Inactive}
+              >
+                {t('Buy')}
+              </Button>
+            )
           ) : (
-            <RewardEditMenu reward={reward} />
+            <RewardEditMenu reward={reward} isLaunch={isLaunch} />
           )}
         </HStack>
       </VStack>

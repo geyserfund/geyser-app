@@ -18,7 +18,7 @@ import {
 } from '../../../../../types'
 import { useNotification } from '../../../../../utils'
 import { useProjectContext } from '../../../context'
-import { ProjectCreationWalletConnectionForm } from '../../projectCreate'
+import { ProjectCreationWalletConnectionForm } from '../../../pages1/projectCreation'
 import { ConnectionOption, useWalletForm } from '../../projectCreate/hooks/useWalletForm'
 
 export const ProjectWallet = () => {

@@ -104,17 +104,15 @@ export const ConnectWithLightning = ({ onClose, isIconOnly, ...rest }: Omit<Conn
     <>
       <ButtonComponent
         aria-label="Connect with Lightning"
-        variant="login"
+        size="lg"
+        variant="outline"
+        colorScheme="neutral1"
         color={'social.lightning'}
         onClick={onModalOpen}
         {...buttonProps}
         {...rest}
       >
-        {!isIconOnly && (
-          <Box as="span" color="neutral.900">
-            {t('Continue with Lightning')}
-          </Box>
-        )}
+        {!isIconOnly && t('Continue with Lightning')}
       </ButtonComponent>
       {/* To make sure the polling gets stopped, the component is demounted. */}
       {isModalOpen && <ConnectWithLightningModal isOpen={isModalOpen} onClose={handleClose} />}

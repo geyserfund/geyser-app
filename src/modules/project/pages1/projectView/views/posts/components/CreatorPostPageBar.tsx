@@ -9,6 +9,11 @@ import { CardLayout } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
 
 export const CreatorPostPageTopBar = () => {
+  const { isProjectOwner } = useProjectAtom()
+  if (!isProjectOwner) {
+    return null
+  }
+
   return (
     <CardLayout dense noborder w="full" direction="row" display={{ base: 'none', lg: 'flex' }}>
       <CreatePostButtons />
@@ -17,6 +22,11 @@ export const CreatorPostPageTopBar = () => {
 }
 
 export const CreatorPostPageBottomBar = () => {
+  const { isProjectOwner } = useProjectAtom()
+  if (!isProjectOwner) {
+    return null
+  }
+
   return (
     <BottomNavBarContainer>
       <CreatePostButtons />

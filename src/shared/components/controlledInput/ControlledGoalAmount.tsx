@@ -1,10 +1,11 @@
-import { Box, Input, InputGroup, InputProps, InputRightElement, VStack } from '@chakra-ui/react'
+import { Box, Input, InputGroup, InputProps, InputRightElement } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useController, UseControllerProps } from 'react-hook-form'
 
 import { ProjectGoalCurrency } from '../../../types'
 import { commaFormatted } from '../../utils/formatData'
 import { useCurrencyFormatter } from '../../utils/hooks'
+import { FieldContainer } from '../form'
 import { Body } from '../typography'
 
 type Props = UseControllerProps<any, any> &
@@ -60,11 +61,7 @@ export const ControlledGoalAmount = (props: Props) => {
   const satsAmount = formatSatsAmount(field.value * 100)
 
   return (
-    <VStack display="flex" alignItems="flex-start" width="100%">
-      <Body size="md" medium>
-        {props.label}
-      </Body>
-      {props.description && <Body size="sm">{props.description}</Body>}
+    <FieldContainer title={props.label} subtitle={props.description} error={props.error}>
       <InputGroup width={props.width || '100%'}>
         <Box position="relative" width="100%">
           <Input
@@ -102,11 +99,6 @@ export const ControlledGoalAmount = (props: Props) => {
           </Body>
         </InputRightElement>
       </InputGroup>
-      {props.error && (
-        <Body size="sm" color="error.9">
-          {props.error}
-        </Body>
-      )}
-    </VStack>
+    </FieldContainer>
   )
 }

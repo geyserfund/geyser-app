@@ -2,6 +2,7 @@ import { Button, HStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiPlus } from 'react-icons/pi'
 
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
 
 import { useGoalsModal } from '../../../hooks'
@@ -11,33 +12,37 @@ import { BodySectionLayout } from '../components'
 export const Goals = () => {
   const { t } = useTranslation()
 
+  const { isProjectOwner } = useProjectAtom()
+
   const { onGoalModalOpen, isGoalinEditMode, setGoalInEditMode } = useGoalsModal()
 
   return (
     <BodySectionLayout title={t('Goals')}>
       <CardLayout w="full">
         <RenderGoals />
-        <HStack w="full" justifyContent="end">
-          {isGoalinEditMode && (
+        {isProjectOwner && (
+          <HStack w="full" justifyContent="end">
+            {isGoalinEditMode && (
+              <Button
+                size="sm"
+                variant="solid"
+                colorScheme="primary1"
+                leftIcon={<PiPlus />}
+                onClick={() => onGoalModalOpen()}
+              >
+                {t('Add goal')}
+              </Button>
+            )}
             <Button
               size="sm"
-              variant="solid"
-              colorScheme="primary1"
-              leftIcon={<PiPlus />}
-              onClick={() => onGoalModalOpen()}
+              variant="outline"
+              colorScheme="neutral1"
+              onClick={() => setGoalInEditMode(!isGoalinEditMode)}
             >
-              {t('Add goal')}
+              {isGoalinEditMode ? t('Finish Editing') : t('Edit')}
             </Button>
-          )}
-          <Button
-            size="sm"
-            variant="outline"
-            colorScheme="neutral1"
-            onClick={() => setGoalInEditMode(!isGoalinEditMode)}
-          >
-            {isGoalinEditMode ? t('Finish Editing') : t('Edit')}
-          </Button>
-        </HStack>
+          </HStack>
+        )}
       </CardLayout>
     </BodySectionLayout>
   )

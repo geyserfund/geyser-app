@@ -10,6 +10,7 @@ import { usePaginationAtomHook } from '@/shared/hooks'
 import { OrderByOptions, ProjectFunderFragment, useProjectPageFundersQuery } from '@/types'
 import { useMobileMode } from '@/utils'
 
+import { NoContribution } from '../../../body/sections/leaderboardSummary/components/NoContribution'
 import { LeaderboardItem, LeaderboardItemSkeleton } from './components/LeaderboardItem'
 
 export const MAXIMUM_LEADERBOARD_ITEMS = 30
@@ -83,6 +84,10 @@ export const LeaderboardList = ({ period, dateTime, ...props }: LeaderboardListP
 
   if (isLoading) {
     return <LeaderboardListSkeleton />
+  }
+
+  if (funders.length === 0) {
+    return <NoContribution />
   }
 
   return (

@@ -15,7 +15,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 
-import { useInitGoals } from '@/modules/project/hooks/useInitGoals'
+import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
 import { inProgressGoalsAtom } from '@/modules/project/state/goalsAtom'
 
 import { CardLayout, SkeletonLayout } from '../../../../../../../shared/components/layouts'
@@ -28,7 +28,7 @@ import { GoalCompleted, GoalInProgress } from '../components'
 export const RenderGoals = () => {
   const { project } = useProjectAtom()
 
-  const { inProgressGoalsLoading } = useInitGoals(true)
+  const { queryInProgressGoals } = useProjectGoalsAPI(true)
 
   const { inProgressGoals, completedGoals } = useGoalsAtom()
   const { onGoalModalOpen, isGoalinEditMode } = useGoalsModal()
@@ -113,7 +113,7 @@ export const RenderGoals = () => {
     return <Text>There are no goals available.</Text>
   }
 
-  if (inProgressGoalsLoading) {
+  if (queryInProgressGoals.loading) {
     return <RenderGoalsSkeleton />
   }
 

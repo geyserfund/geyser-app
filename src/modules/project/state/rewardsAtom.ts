@@ -37,3 +37,12 @@ export const deleteRewardAtom = atom(null, (get, set, rewardId: string) => {
     allRewards.filter((reward) => reward.id !== rewardId),
   )
 })
+
+/** Initial rewards load, set to false by default */
+export const initialRewardsLoadAtom = atom(false)
+
+/** Reset all real-atoms in this file to it's initial State */
+export const rewardsAtomReset = atom(null, (get, set) => {
+  set(rewardsAtom, [])
+  set(initialRewardsLoadAtom, false)
+})

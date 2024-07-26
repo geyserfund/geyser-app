@@ -3,8 +3,10 @@ import { useEffect, useState } from 'react'
 import { FormProvider, UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { FieldContainer } from '../../../forms/components/FieldContainer'
+import { Body } from '@/shared/components/typography'
+
 import { MarkdownField, MarkdownFieldSkeleton } from '../../../forms/markdown/MarkdownField'
+import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { ProjectValidations } from '../../../shared/constants'
 import { useMobileMode } from '../../../utils'
 
@@ -59,13 +61,13 @@ export const ProjectStoryForm = ({ autoFocus, form, isLoading, toolbarTop }: Pro
             )}
             <HStack pt={1} width="100%">
               {form.formState.isValid ? null : (
-                <Text pt={1} color="secondary.red">
+                <Body size="xs" pt={1} color="error.9">
                   {t(form.getFieldState('description').error?.message || '')}
-                </Text>
+                </Body>
               )}
-              <Text fontSize="12px" color="neutral.700" flexGrow={1} textAlign="right">
+              <Body size="xs" light flexGrow={1} textAlign="right">
                 <span>{form.watch('description').length}</span>/<span>{ProjectValidations.description.maxLength}</span>
-              </Text>
+              </Body>
             </HStack>
           </Box>
         </FieldContainer>

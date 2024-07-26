@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Button,
   Checkbox,
   Link,
   Modal,
@@ -8,22 +9,23 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Text,
   VStack,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BsExclamation, BsQuestion } from 'react-icons/bs'
+import { PiExclamationMark, PiQuestion } from 'react-icons/pi'
+
+import { Body } from '@/shared/components/typography'
 
 import { DescriptionLinkWithIconComponent } from '../../../../components/molecules'
-import { ButtonComponent, TextArea, TextInputBox } from '../../../../components/ui'
+import { TextArea, TextInputBox } from '../../../../components/ui'
 import { VoltageNodeConnectionDemoURL, WalletCreationFindOutMoreUrl } from '../../../../shared/constants'
 import { ProjectNodeValidations } from '../../../../shared/constants/validations'
 import { useMobileMode } from '../../../../utils'
 import { checkMacaroonPermissions } from '../../../../utils/validations/checkMacaroonPermissions'
 import { isSecp256k1Compressed } from '../../../../utils/validations/isSecp256k1Compressed'
 import { isTorV3Address } from '../../../../utils/validations/isTorV3Address'
-import { TNodeInput } from '../../pages/projectCreate/types'
+import { TNodeInput } from '../../pages1/projectCreation/types'
 
 type Props = {
   isOpen: boolean
@@ -168,7 +170,7 @@ export const NodeAdditionModal = ({ isOpen, onClose, nodeInput, onSubmit }: Prop
       <ModalOverlay />
 
       <ModalContent
-        bg="neutral.0"
+        bg="utils.pbg"
         display="flex"
         alignItems="flex-start"
         paddingY="20px"
@@ -177,13 +179,13 @@ export const NodeAdditionModal = ({ isOpen, onClose, nodeInput, onSubmit }: Prop
       >
         <ModalHeader paddingX="20px">
           <VStack spacing={2} alignItems="flex-start">
-            <Text fontSize="18px" fontWeight={600}>
+            <Body size="lg" bold>
               {t('Add a Node')}
-            </Text>
+            </Body>
 
-            <Text fontSize={'14px'} fontWeight="medium" color="neutral.600">
+            <Body size="sm" medium light>
               {t('We currently support LND and clearnet nodes. So Tor nodes will not work at this time.')}
-            </Text>
+            </Body>
             <DescriptionLinkWithIconComponent
               title={
                 <>
@@ -194,7 +196,7 @@ export const NodeAdditionModal = ({ isOpen, onClose, nodeInput, onSubmit }: Prop
                   .
                 </>
               }
-              icon={<Avatar bgColor="neutral.300" color="neutral.900" icon={<BsExclamation fontSize="36px" />} />}
+              icon={<Avatar bgColor="neutral1.3" color="neutral1.9" icon={<PiExclamationMark fontSize="36px" />} />}
             />
           </VStack>
         </ModalHeader>
@@ -212,26 +214,26 @@ export const NodeAdditionModal = ({ isOpen, onClose, nodeInput, onSubmit }: Prop
             paddingX="20px"
           >
             <VStack width="100%" alignItems="flex-start">
-              <Text>{t('Node Name')}</Text>
+              <Body size="sm">{t('Node Name')}</Body>
               <TextInputBox name="name" onChange={handleTextChange} value={form.name} error={formError.name} />
             </VStack>
 
             <VStack width="100%" alignItems="flex-start">
               <Checkbox size="lg" colorScheme="green" isChecked={isVoltage} onChange={handleVoltageNodeToggled}>
-                <Text>{t('This is a Voltage Node')}</Text>
+                <Body size="sm">{t('This is a Voltage Node')}</Body>
               </Checkbox>
 
               {isVoltage ? (
                 <DescriptionLinkWithIconComponent
                   title={t('Find our demo here on how to load a Voltage node.')}
                   link={VoltageNodeConnectionDemoURL}
-                  icon={<Avatar bgColor="neutral.300" color="neutral.900" icon={<BsQuestion fontSize="36px" />} />}
+                  icon={<Avatar bgColor="neutral1.3" color="neutral1.9" icon={<PiQuestion fontSize="36px" />} />}
                 />
               ) : null}
             </VStack>
 
             <VStack width="100%" alignItems="flex-start">
-              <Text>{`${t('Hostname or IP address')} (${t('API endpoint')})`}</Text>
+              <Body size="sm">{`${t('Hostname or IP address')} (${t('API endpoint')})`}</Body>
 
               <TextInputBox
                 name="hostname"
@@ -243,7 +245,7 @@ export const NodeAdditionModal = ({ isOpen, onClose, nodeInput, onSubmit }: Prop
             </VStack>
 
             <VStack width="100%" alignItems="flex-start">
-              <Text>{`${t('Public key')} (${t('Identity Pubkey')})`}</Text>
+              <Body size="sm">{`${t('Public key')} (${t('Identity Pubkey')})`}</Body>
               <TextArea
                 minHeight={'6em'}
                 name="publicKey"
@@ -255,7 +257,7 @@ export const NodeAdditionModal = ({ isOpen, onClose, nodeInput, onSubmit }: Prop
             </VStack>
 
             <VStack width="100%" alignItems="flex-start">
-              <Text>{`${t('Invoice Macaroon')} (base64)`}</Text>
+              <Body size="sm">{`${t('Invoice Macaroon')} (base64)`}</Body>
               <TextArea
                 minHeight={'10em'}
                 name="invoiceMacaroon"
@@ -269,7 +271,7 @@ export const NodeAdditionModal = ({ isOpen, onClose, nodeInput, onSubmit }: Prop
             {isVoltage === false ? (
               <>
                 <VStack width="100%" alignItems="flex-start">
-                  <Text>{`${t('TLS certificate')} (base64)`}</Text>
+                  <Body size="sm">{`${t('TLS certificate')} (base64)`}</Body>
                   <TextArea
                     minHeight={'6em'}
                     name="tlsCert"
@@ -280,7 +282,7 @@ export const NodeAdditionModal = ({ isOpen, onClose, nodeInput, onSubmit }: Prop
                   />
                 </VStack>
                 <VStack width="100%" alignItems="flex-start">
-                  <Text>{t('gRPC port')}</Text>
+                  <Body size="sm">{t('gRPC port')}</Body>
                   <TextInputBox
                     name="grpc"
                     type="number"
@@ -295,9 +297,9 @@ export const NodeAdditionModal = ({ isOpen, onClose, nodeInput, onSubmit }: Prop
           </VStack>
 
           <VStack spacing="10px" paddingX="20px">
-            <ButtonComponent w="full" primary onClick={handleSubmit}>
+            <Button variant="solid" color="primary1" w="full" onClick={handleSubmit}>
               {t('Confirm')}
-            </ButtonComponent>
+            </Button>
           </VStack>
         </ModalBody>
       </ModalContent>

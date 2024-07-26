@@ -78,3 +78,24 @@ export const FRAGMENT_PROJECT_HEADER_SUMMARY = gql`
     fundersCount
   }
 `
+
+export const FRAGMENT_PROJECT_UPDATE = gql`
+  fragment ProjectUpdate on Project {
+    id
+    title
+    name
+    shortDescription
+    description
+    image
+    thumbnailImage
+    location {
+      country {
+        name
+        code
+      }
+      region
+    }
+    status
+    links
+  }
+`

@@ -2,8 +2,8 @@ import { atom, useAtomValue } from 'jotai'
 
 import { getPath, PathName } from '../../shared/constants'
 import {
+  creatorProjectCreationRoutes as routesForPrivateProjectLaunch,
   entryCreationRoutes as routesForEntryCreation,
-  projectCreationRoutes as routesForPrivateProjectLaunch,
   projectCreatorRoutes as routesForProjectCreator,
   routeMatchForAtom,
 } from './routesAtom'

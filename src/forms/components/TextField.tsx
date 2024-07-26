@@ -1,7 +1,7 @@
 import { FormControl, Input, InputProps } from '@chakra-ui/react'
 import { Control, Controller, FieldValue } from 'react-hook-form'
 
-import { FieldContainer } from './FieldContainer'
+import { FieldContainer } from '../../shared/components/form/FieldContainer'
 
 export type TextFieldProps = InputProps & {
   name: string

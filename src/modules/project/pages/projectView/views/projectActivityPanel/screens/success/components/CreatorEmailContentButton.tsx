@@ -3,9 +3,10 @@ import { HStack, StackProps, VStack } from '@chakra-ui/react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
+
 import { MonoBody2 } from '../../../../../../../../../components/typography'
 import { copyTextToClipboard } from '../../../../../../../../../utils'
-import { useProjectContext } from '../../../../../../../context'
 import { useFundingContext } from '../../../../../../../context/FundingProvider'
 
 export const CreatorEmailContentButton = ({ ...props }: StackProps) => {
@@ -14,7 +15,7 @@ export const CreatorEmailContentButton = ({ ...props }: StackProps) => {
 
   const ref = useRef<HTMLDivElement>(null)
 
-  const { project } = useProjectContext()
+  const { rewards } = useRewardsAtom()
 
   const {
     fundingTx,
@@ -32,8 +33,6 @@ export const CreatorEmailContentButton = ({ ...props }: StackProps) => {
       }, 1000)
     }
   }
-
-  const rewards = project ? project.rewards : []
 
   const rewardEntries = state.rewardsByIDAndCount ? Object.entries(state.rewardsByIDAndCount) : []
 

@@ -1,13 +1,19 @@
 import { Button } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiBag, PiNotePencil, PiPlus } from 'react-icons/pi'
+import { PiNotePencil, PiPlus } from 'react-icons/pi'
 
 import { BottomNavBarContainer } from '@/modules/navigation/bottomNav'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
 
 import { useGoalsModal } from '../../../hooks'
 
 export const CreatorGoalPageTopBar = () => {
+  const { isProjectOwner } = useProjectAtom()
+  if (!isProjectOwner) {
+    return null
+  }
+
   return (
     <CardLayout w="full" direction="row" display={{ base: 'none', lg: 'flex' }}>
       <CreateGoalButtons />
@@ -16,6 +22,11 @@ export const CreatorGoalPageTopBar = () => {
 }
 
 export const CreatorGoalPageBottomBar = () => {
+  const { isProjectOwner } = useProjectAtom()
+  if (!isProjectOwner) {
+    return null
+  }
+
   return (
     <BottomNavBarContainer>
       <CreateGoalButtons />

@@ -9,7 +9,7 @@ import { standardPadding } from '@/styles'
 export const TopNavContainer = ({ children, ...props }: PropsWithChildren<StackProps>) => {
   return (
     <HStack
-      maxWidth={{ base: dimensions.maxWidth + 24, lg: dimensions.maxWidth + 40 }}
+      maxWidth={{ base: dimensions.maxWidth + 24, lg: dimensions.maxWidth + 48 }}
       w="full"
       position="fixed"
       top={{ base: `${dimensions.topNavBar.mobile.height}px`, lg: `${dimensions.topNavBar.desktop.height}px` }}

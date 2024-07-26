@@ -38,12 +38,16 @@ export const routeMatchForAtom =
     return routes.some((route) => route === matchRoute.path)
   }
 
-export const projectCreationRoutes = [
-  getPath('privateProjectLaunch'),
+export const creatorProjectCreationRoutes = [
+  getPath('launch'),
   getPath('launchProject', PathName.projectId),
+  getPath('launchStartProject', PathName.projectId),
   getPath('launchProjectDetails', PathName.projectId),
   getPath('launchProjectStory', PathName.projectId),
-  getPath('launchProjectWithNode', PathName.projectId),
+  getPath('launchProjectRewards', PathName.projectId),
+  getPath('launchProjectRewardsCreate', PathName.projectId),
+  getPath('launchProjectRewardsEdit', PathName.projectId, PathName.rewardId),
+  getPath('launchProjectWallet', PathName.projectId),
 ]
 
 export const entryCreationRoutes = [
@@ -70,14 +74,18 @@ export const projectDashboardRoutes = [
   ...ProjectPageDashboardInternalRoutes,
 ]
 
-export const projectRoutes = [
+export const projectBaseRoutes = [
   getPath('project', PathName.projectName),
   getPath('projectPosts', PathName.projectName),
-  getPath('projectPostView', PathName.projectName, PathName.postId),
   getPath('projectGoals', PathName.projectName),
   getPath('projectRewards', PathName.projectName),
-  getPath('projectRewardView', PathName.projectName, PathName.rewardId),
   getPath('projectLeaderboard', PathName.projectName),
+]
+
+export const projectRoutes = [
+  ...projectBaseRoutes,
+  getPath('projectPostView', PathName.projectName, PathName.postId),
+  getPath('projectRewardView', PathName.projectName, PathName.rewardId),
 ]
 
 export const projectRewardCreatorRoutes = [
@@ -90,10 +98,10 @@ export const projectPostCreatorRoutes = [
   getPath('projectPostEdit', PathName.projectName, PathName.postId),
 ]
 
-export const ProjectPageRoutesWithNavBarForDesktop = [...projectRoutes, ...projectDashboardRoutes]
+export const ProjectPageRoutesWithNavBarForDesktop = [...projectBaseRoutes, ...projectDashboardRoutes]
 
 export const ProjectPageRoutesWithNavBarForMobile = [
-  ...projectRoutes,
+  ...projectBaseRoutes,
   getPath('projectDashboard', PathName.projectName),
 ]
 

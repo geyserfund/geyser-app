@@ -2,20 +2,20 @@ import { SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { forwardRef } from 'react'
 
-import { useInitRewards } from '@/modules/project/hooks/useInitRewards'
+import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
 import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body } from '@/shared/components/typography'
 
 import { CreatorRewardPageBottomBar, CreatorRewardPageTopBar } from './components/CreatorRewardPageBar'
-import { RewardCard, RewardCardSkeleton } from './shared/RewardCard'
+import { RewardCardSkeleton, RewardCardWithBuy } from './shared'
 
 export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
   const { isProjectOwner, loading: projectLoading } = useProjectAtom()
   const { rewards } = useRewardsAtom()
 
-  const { rewardsLoading } = useInitRewards(true)
+  const { queryProjectRewards } = useProjectRewardsAPI(true)
 
-  const loading = projectLoading || rewardsLoading
+  const loading = projectLoading || queryProjectRewards.loading
 
   if (loading) {
     return (
@@ -40,7 +40,7 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
       <CreatorRewardPageTopBar />
       <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={4} width={'100%'} pb={'96px'}>
         {activeProjectRewards.map((reward) => {
-          return <RewardCard key={reward.id} width="100%" reward={reward} />
+          return <RewardCardWithBuy key={reward.id} width="100%" reward={reward} />
         })}
       </SimpleGrid>
       {isProjectOwner && hiddenProjectRewards.length > 0 && (
@@ -50,7 +50,7 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
           </Body>
           <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={4} width={'100%'} pb={'96px'}>
             {hiddenProjectRewards.map((reward) => {
-              return <RewardCard hidden key={reward.id} width="100%" reward={reward} />
+              return <RewardCardWithBuy hidden key={reward.id} width="100%" reward={reward} />
             })}
           </SimpleGrid>
         </VStack>

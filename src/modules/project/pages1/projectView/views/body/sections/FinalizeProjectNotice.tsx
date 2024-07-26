@@ -16,7 +16,7 @@ export const FinalizeProjectNotice = () => {
   if (!project || !isProjectOwner) return null
 
   const handleConnectNodeClick = () => {
-    const nodeConfigurationPath = getPath('launchProjectWithNode', project.id)
+    const nodeConfigurationPath = getPath('launchProjectWallet', project.id)
     navigate(nodeConfigurationPath)
   }
 

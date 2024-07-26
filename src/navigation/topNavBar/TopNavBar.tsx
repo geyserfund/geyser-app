@@ -131,7 +131,7 @@ export const TopNavBar = () => {
   }, [state])
 
   const handleProjectLaunchButtonPress = () => {
-    navigate(getPath('publicProjectLaunch'))
+    navigate(getPath('launchStart'))
   }
 
   const handleMyProjectsButtonPress = () => {

@@ -1,73 +1,28 @@
-import { QueryHookOptions } from '@apollo/client'
 import { useAtomValue, useSetAtom } from 'jotai'
+import { useEffect } from 'react'
 
-import {
-  ProjectByNameOrIdQuery,
-  ProjectByNameOrIdQueryVariables,
-  UpdateProjectInput,
-  useProjectByNameOrIdQuery,
-  useUpdateProjectMutation,
-} from '../../../types'
+import { UpdateProjectInput } from '../../../types'
 import { linkToHttps, toInt, useNotification } from '../../../utils'
-import {
-  baseProjectAtom,
-  diffProjectAtom,
-  partialUpdateProjectAtom,
-  projectAtom,
-  syncProjectAtom,
-} from '../state/projectAtom'
+import { useProjectAPI } from '../API/useProjectAPI'
+import { projectAtom } from '../state/projectAtom'
+import { diffProjectAtom, formProjectAtom, partialUpdateFormProjectAtom } from '../state/projectFormAtom'
 
-export const useProjectState = (
-  projectId?: string | number,
-  options?: QueryHookOptions<ProjectByNameOrIdQuery, ProjectByNameOrIdQueryVariables>,
-  type: 'name' | 'id' = 'name',
-) => {
-  const { toast } = useNotification()
+export const useProjectState = () => {
+  const baseProject = useAtomValue(projectAtom)
+  const project = useAtomValue(formProjectAtom)
+  const toast = useNotification()
 
-  const project = useAtomValue(projectAtom)
-  const baseProject = useAtomValue(baseProjectAtom)
-
-  const updateProject = useSetAtom(partialUpdateProjectAtom)
-  const syncProject = useSetAtom(syncProjectAtom)
+  const updateFormProject = useSetAtom(partialUpdateFormProjectAtom)
 
   const [isDiff, diffKeys] = useAtomValue(diffProjectAtom)
 
-  const idType = type === 'name' && typeof projectId === 'string' ? 'name' : 'id'
-  const invalidId = idType === 'name' && String(projectId).length < 3
+  useEffect(() => {
+    if (baseProject) {
+      updateFormProject(baseProject)
+    }
+  }, [baseProject, updateFormProject])
 
-  const { loading, error, refetch } = useProjectByNameOrIdQuery({
-    variables: {
-      where: {
-        [idType]: type === 'name' ? projectId : toInt(projectId),
-      },
-    },
-    skip: !projectId || invalidId,
-    ...options,
-    onCompleted(data) {
-      const { projectGet } = data
-      if (projectGet) {
-        syncProject(projectGet as any)
-      }
-
-      if (options?.onCompleted) {
-        options?.onCompleted(data)
-      }
-    },
-  })
-
-  const [updateProjectMutation, { loading: saving }] = useUpdateProjectMutation({
-    onError() {
-      toast({
-        status: 'error',
-        title: 'failed to update project',
-      })
-    },
-    onCompleted(data) {
-      if (data.updateProject) {
-        syncProject({ ...baseProject, ...data.updateProject })
-      }
-    },
-  })
+  const { updateProject } = useProjectAPI()
 
   const saveProject = async () => {
     if (!isDiff || !diffKeys || !project) {
@@ -92,17 +47,22 @@ export const useProjectState = (
     })
     input.projectId = toInt(project.id)
 
-    await updateProjectMutation({ variables: { input } })
+    await updateProject.execute({
+      variables: { input },
+      onError(error) {
+        toast.error({
+          title: 'failed to update project',
+          description: `${error}`,
+        })
+      },
+    })
   }
 
   return {
-    loading,
-    error,
-    saving,
+    saving: updateProject.loading,
     project,
-    updateProject,
+    updateProject: updateFormProject,
     saveProject,
-    refetch,
     isDirty: isDiff,
   }
 }

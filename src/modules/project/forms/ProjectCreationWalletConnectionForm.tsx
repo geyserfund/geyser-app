@@ -15,8 +15,8 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
-import { AiOutlineSetting } from 'react-icons/ai'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
+import { PiGear } from 'react-icons/pi'
 
 import { BoltIcon, NodeIcon } from '../../../components/icons'
 import { TextInputBox } from '../../../components/ui'
@@ -40,7 +40,9 @@ import {
 import { lightModeColors } from '../../../styles'
 import { LndNodeType } from '../../../types'
 import { ProjectFeeSelection } from '../components/ProjectFeeSelection'
-import { WalletConnectionOptionInfoBox } from '../pages/projectCreate/components/WalletConnectionOptionInfoBox'
+import { WalletConnectionDetails } from '../components/WalletConnectionDetails'
+import { WalletLimitComponent } from '../pages/projectDashboard/components/WalletLimitComponent'
+import { WalletConnectionOptionInfoBox } from '../pages1/projectCreation/components/WalletConnectionOptionInfoBox'
 import {
   ConnectionOption,
   LightingWalletForm,
@@ -48,9 +50,7 @@ import {
   LNAddressEvaluationState,
   NodeWalletForm,
   WalletForm,
-} from '../pages/projectCreate/hooks/useWalletForm'
-import { WalletConnectionDetails } from '../pages/projectDashboard/components'
-import { WalletLimitComponent } from '../pages/projectDashboard/components/WalletLimitComponent'
+} from '../pages1/projectCreation/hooks/useWalletForm'
 import { NodeAdditionModal } from './components/NodeAdditionModal'
 
 type Props = {
@@ -118,7 +118,7 @@ export const ProjectCreationWalletConnectionForm = ({
               <Box as="span" flex="1" textAlign="left">
                 {t('Lightning Address')}
               </Box>
-              <BoltIcon boxSize="20px" />
+              <BoltIcon boxSize="30px" />
             </AccordionButton>
           </h2>
           <AccordionPanel p={0}>
@@ -198,9 +198,10 @@ export const ProjectCreationWalletConnectionForm = ({
               primaryNode={
                 <>
                   <Button
-                    leftIcon={<AiOutlineSetting fontSize="20px" />}
+                    leftIcon={<PiGear fontSize="20px" />}
                     w="full"
-                    variant="secondary"
+                    variant="outline"
+                    colorScheme="neutral1"
                     onClick={node.onOpen}
                     isDisabled={readOnly}
                   >
@@ -265,16 +266,16 @@ const RenderSponsorImage = ({ url, imageUrl, height = '24px' }: { url: string; i
 
 const accordionButtonStyles: AccordionButtonProps = {
   py: '10px',
-  backgroundColor: 'neutral.100',
+  backgroundColor: 'neutral1.3',
   borderRadius: '8px',
   _hover: {
-    backgroundColor: 'neutral.200',
+    backgroundColor: 'neutral1.6',
   },
   _expanded: {
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0,
     _hover: {
-      backgroundColor: 'neutral.100',
+      backgroundColor: 'neutral1.3',
     },
   },
 }

@@ -1,8 +1,7 @@
 import { LazyQueryHookOptions } from '@apollo/client'
-import { useSetAtom } from 'jotai'
 import { useCallback, useEffect, useState } from 'react'
 
-import { addUpdateEntryAtom } from '@/modules/project/state/entriesAtom'
+import { useProjectEntriesAPI } from '@/modules/project/API/useProjectEntriesAPI'
 
 import { useListenerState } from '../../../../../../../shared/hooks/useListenerState'
 import { useUnsavedAlert } from '../../../../../../../shared/hooks/useUnsavedAlert'
@@ -13,13 +12,9 @@ import {
   ProjectEntryQueryVariables,
   ProjectEntryViewFragment,
   UpdateEntryInput,
-  useCreateEntryMutation,
   useProjectEntryLazyQuery,
-  usePublishEntryMutation,
-  useUpdateEntryMutation,
 } from '../../../../../../../types'
 import { checkDiff, checkKeyValueExists, toInt, useNotification } from '../../../../../../../utils'
-import { updatePostCache, updateProjectPostsCache } from '../utils/cacheHandlers'
 
 const entryEditKeyList: (keyof ProjectEntryViewFragment)[] = ['content', 'description', 'image', 'title']
 
@@ -31,7 +26,7 @@ export const useEntryState = (
 ) => {
   const toast = useNotification()
 
-  const addUpdateEntry = useSetAtom(addUpdateEntryAtom)
+  const { createEntry, updateEntry, publishEntry } = useProjectEntriesAPI()
 
   const [entry, setEntry] = useState<ProjectEntryViewFragment>(entryTemplate as ProjectEntryViewFragment)
   const [baseEntry, setBaseEntry] = useState<ProjectEntryViewFragment>(entryTemplate as ProjectEntryViewFragment)
@@ -43,75 +38,6 @@ export const useEntryState = (
   const [saving, setSaving] = useListenerState(false)
 
   useUnsavedAlert(hasDiff)
-
-  const [createEntryMutation] = useCreateEntryMutation({
-    onError() {
-      setSaving(false)
-      toast.error({
-        title: 'Entry creation failed',
-        description: 'Please try again later',
-      })
-    },
-    onCompleted(data) {
-      setSaving(false)
-      if (data.createEntry) {
-        sync(data.createEntry)
-        addUpdateEntry(data.createEntry)
-      }
-    },
-    update(cache, { data }) {
-      if (data?.createEntry) {
-        updatePostCache(cache, data.createEntry)
-        updateProjectPostsCache(cache, data.createEntry)
-      }
-    },
-  })
-
-  const [updateEntryMutation] = useUpdateEntryMutation({
-    onError() {
-      setSaving(false)
-      toast.error({
-        title: 'Entry update failed',
-        description: 'Please try again later',
-      })
-    },
-    onCompleted(data) {
-      setSaving(false)
-      if (data.updateEntry) {
-        setBaseEntry({ ...baseEntry, ...data.updateEntry })
-        addUpdateEntry(data.updateEntry)
-      }
-    },
-    update(cache, { data }) {
-      if (data?.updateEntry) {
-        updatePostCache(cache, data.updateEntry)
-        updateProjectPostsCache(cache, data.updateEntry)
-      }
-    },
-  })
-
-  const [publishEntryMutation, { loading: publishing }] = usePublishEntryMutation({
-    onCompleted(data) {
-      sync(data.publishEntry)
-      addUpdateEntry(data.publishEntry)
-      toast.success({
-        title: 'Entry published',
-        description: 'Your entry is now live',
-      })
-    },
-    onError() {
-      toast.error({
-        title: 'Entry publish failed',
-        description: 'Please try again later',
-      })
-    },
-    update(cache, { data }) {
-      if (data?.publishEntry) {
-        updatePostCache(cache, data.publishEntry)
-        updateProjectPostsCache(cache, data.publishEntry)
-      }
-    },
-  })
 
   const [getEntryQuery] = useProjectEntryLazyQuery({
     variables: {
@@ -158,7 +84,7 @@ export const useEntryState = (
     setEntry(value)
   }
 
-  const updateEntry = (value: Partial<ProjectEntryViewFragment>) => {
+  const updateEntryForm = (value: Partial<ProjectEntryViewFragment>) => {
     setEntry({ ...entry, ...value })
   }
 
@@ -185,7 +111,22 @@ export const useEntryState = (
         image: entry.image,
         title: entry.title,
       }
-      await updateEntryMutation({ variables: { input } })
+      await updateEntry.execute({
+        variables: { input },
+        onError() {
+          setSaving(false)
+          toast.error({
+            title: 'Entry update failed',
+            description: 'Please try again later',
+          })
+        },
+        onCompleted(data) {
+          setSaving(false)
+          if (data.updateEntry) {
+            setBaseEntry({ ...baseEntry, ...data.updateEntry })
+          }
+        },
+      })
     } else {
       const input: CreateEntryInput = {
         projectId: toInt(projectId),
@@ -195,11 +136,26 @@ export const useEntryState = (
         title: entry.title || '',
         type: EntryType.Article,
       }
-      await createEntryMutation({ variables: { input } })
+      await createEntry.execute({
+        variables: { input },
+        onError() {
+          setSaving(false)
+          toast.error({
+            title: 'Entry creation failed',
+            description: 'Please try again later',
+          })
+        },
+        onCompleted(data) {
+          setSaving(false)
+          if (data.createEntry) {
+            sync(data.createEntry)
+          }
+        },
+      })
     }
-  }, [saving, entry, baseEntry, entryId, projectId, createEntryMutation, updateEntryMutation, setSaving])
+  }, [saving, entry, baseEntry, entryId, projectId, createEntry, toast, updateEntry, setSaving])
 
-  const publishEntry = async () => {
+  const publishEntryAfterValidation = async () => {
     if (!entry.id) {
       toast.info({
         title: 'Cannot publish',
@@ -215,7 +171,23 @@ export const useEntryState = (
 
       const entryId = toInt(entry.id)
       if (entryId) {
-        publishEntryMutation({ variables: { id: entryId } })
+        publishEntry.execute({
+          variables: { id: entryId },
+
+          onCompleted(data) {
+            sync(data.publishEntry)
+            toast.success({
+              title: 'Entry published',
+              description: 'Your entry is now live',
+            })
+          },
+          onError() {
+            toast.error({
+              title: 'Entry publish failed',
+              description: 'Please try again later',
+            })
+          },
+        })
       }
     } catch (error) {
       toast.error({
@@ -230,9 +202,9 @@ export const useEntryState = (
     saving: saving.current,
     entry,
     hasDiff,
-    updateEntry,
+    updateEntry: updateEntryForm,
     saveEntry,
-    publishEntry,
-    publishing,
+    publishEntry: publishEntryAfterValidation,
+    publishing: publishEntry.loading,
   }
 }

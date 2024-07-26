@@ -1,49 +1,23 @@
-import { createContext, PropsWithChildren, useContext } from 'react'
+import { PropsWithChildren, useEffect } from 'react'
 
-import { useInitProject, UseInitProjectProps, UseInitProjectReturn } from './hooks/useInitProject'
+import { UseInitProjectProps, useProjectAPI } from '../API/useProjectAPI'
+import { useProjectReset } from '../state/projectAtom'
 
 type ProjectState = UseInitProjectProps
 
-type ProjectContextProps = UseInitProjectReturn
-
-export const ProjectContext = createContext<ProjectContextProps | null>(null)
-
-export const useProjectContext = () => {
-  const context = useContext(ProjectContext)
-
-  if (!context) {
-    throw new Error('useProjectContext must be usd inside ProjectProvider')
-  }
-
-  return context
-}
-
 export const ProjectProvider = ({ children, ...props }: PropsWithChildren<ProjectState>) => {
-  const { queryProject, queryProjectWallet } = useInitProject({
+  const resetProject = useProjectReset()
+
+  useProjectAPI({
+    load: true,
     ...props,
   })
 
-  return (
-    <ProjectContext.Provider
-      value={{
-        queryProject,
-        queryProjectWallet,
-      }}
-    >
-      {children}
-      {/* {project && isProjectOwner && (
-        <>
-          <ProjectCreatorModal {...creatorModal} />
-          <GoalModal
-            {...goalsModal}
-            goal={currentGoal}
-            projectId={project.id}
-            refetch={goalsRefetch}
-            openDeleteModal={onGoalDeleteModalOpen}
-          />
-          <GoalDeleteModal {...goalDeleteModal} goal={currentGoal} refetch={goalsRefetch} />
-        </>
-      )} */}
-    </ProjectContext.Provider>
-  )
+  useEffect(() => {
+    return () => {
+      resetProject()
+    }
+  }, [props.projectId, props.projectName, resetProject])
+
+  return <>{children}</>
 }

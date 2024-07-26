@@ -1,5 +1,3 @@
-import { Path } from '@react-pdf/renderer'
-
 export enum PathName {
   projectDiscovery = 'discover',
   landingFeed = 'feed',
@@ -31,17 +29,19 @@ export enum PathName {
   refund = 'refund',
   refundInitiated = 'initiated',
 
+  launchStart = 'start',
   launchProject = 'launch',
-
-  userProfile = 'profile',
-  userProfileSettings = 'settings',
-
-  preview = 'preview',
   launchProjectDetails = 'details',
   launchProjectStory = 'story',
   launchProjectRewards = 'rewards',
   launchProjectRewardsNew = 'rewards/new',
   launchProjectRewardsEdit = 'rewards/edit',
+
+  userProfile = 'profile',
+  userProfileSettings = 'settings',
+
+  preview = 'preview',
+
   node = 'node',
   discover = 'discover',
 
@@ -133,22 +133,24 @@ const pathsMap = {
   projectEntryPreview: (projectName: string, entryID: string) =>
     `/${PathName.project}/${projectName}/${PathName.entry}/${entryID}/preview`,
 
-  publicProjectLaunch: () => `/${PathName.launchProject}/start`,
-  privateProjectLaunch: () => `/${PathName.launchProject}`,
-  projectLaunch: (projectName: string, state: 'draft' | 'launch' = 'launch') =>
-    `/${PathName.project}/${projectName}/?${state}`,
+  launchStart: () => `/${PathName.launchProject}/${PathName.launchStart}`,
+  launch: () => `/${PathName.launchProject}`,
 
+  launchStartProject: (projectID: string) => `/${PathName.launchProject}/${PathName.launchStart}/${projectID}`,
   launchProject: (projectID: string) => `/${PathName.launchProject}/${projectID}`,
-  launchProjectWithNode: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.node}`,
   launchProjectDetails: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectDetails}`,
   launchProjectStory: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchProjectStory}`,
   launchProjectRewards: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}`,
-  launchProjectRewardsNew: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/new`,
+  launchProjectRewardsCreate: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/create`,
   launchProjectRewardsEdit: (projectID: string, rewardID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/edit/${rewardID}`,
+  launchProjectWallet: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.node}`,
+
+  projectLaunch: (projectName: string, state: 'draft' | 'launch' = 'launch') =>
+    `/${PathName.project}/${projectName}/?${state}`,
 
   userProfile: (userID: string) => `/${PathName.userProfile}/${userID}`,
   userProfileSettings: (userID: string) => `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}`,

@@ -17,7 +17,8 @@ import {
   UpdatableOrderStatus,
 } from '../../../../../../../types'
 import { useCustomTheme } from '../../../../../../../utils'
-import { OrderAmounts, OrderItems, TableData, TableWithAccordion } from '../../../common'
+import { TableData, TableWithAccordion } from '../../../common'
+import { OrderAmounts, OrderItems } from '../../../components'
 import { ShippingStatusSelect } from './ShippingStatusSelect'
 
 export const RewardTable = ({

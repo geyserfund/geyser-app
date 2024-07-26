@@ -2,7 +2,7 @@ import { Input, VStack } from '@chakra-ui/react'
 import { MouseEventHandler } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FieldContainer } from '../../../../../../../../../forms/components/FieldContainer'
+import { FieldContainer } from '../../../../../../../../../shared/components/form/FieldContainer'
 import { useFundingContext } from '../../../../../../../context'
 import { SectionTitleBlock } from '../../../components/SectionTitleBlock'
 import { ProjectFundingFormCommentField } from '../components/ProjectFundingFormCommentField'

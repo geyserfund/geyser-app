@@ -11,6 +11,7 @@ import { standardPadding } from '@/styles'
 import { OrderByOptions, ProjectFundingTxFragment, useProjectPageFundingTxQuery } from '@/types'
 import { useMobileMode } from '@/utils'
 
+import { NoContribution } from '../../../body/sections/leaderboardSummary/components/NoContribution'
 import { ContributionItem, ContributionItemSkeleton } from './components/ContributionItem'
 
 const MAXIMUM_CONTRIBUTIONS_ITEMS = 30
@@ -71,9 +72,13 @@ export const Contributions = () => {
   return (
     <CardLayout w="full" h="full" dense>
       <VStack h="full" id={id} overflowY={{ base: undefined, lg: 'auto' }} paddingTop={standardPadding}>
-        {contributions.map((contribution, index) => {
-          return <ContributionItem key={contribution.id} contribution={contribution} />
-        })}
+        {contributions.length === 0 ? (
+          <NoContribution />
+        ) : (
+          contributions.map((contribution, index) => {
+            return <ContributionItem key={contribution.id} contribution={contribution} />
+          })
+        )}
         <ScrollInvoke
           elementId={!isMobile ? id : undefined}
           onScrollEnd={fetchNext}
