@@ -11,12 +11,11 @@ import { Body } from '@/shared/components/typography'
 
 import { SelectComponent } from '../../../components/ui'
 import { AppTheme } from '../../../context'
-import { MUTATION_TAG_CREATE } from '../../../graphql/mutations'
 import { QUERY_TAGS } from '../../../graphql/queries/tags'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { Modal, SkeletonLayout } from '../../../shared/components/layouts'
 import { getListOfTags } from '../../../shared/constants'
-import { Tag, TagCreateInput, TagsGetResult } from '../../../types'
+import { Tag, TagCreateInput, TagsGetResult, useProjectTagCreateMutation } from '../../../types'
 import { useNotification } from '../../../utils'
 
 const MAX_TAGS_ALLOWED = 4
@@ -66,24 +65,21 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
     },
   })
 
-  const [createTag, { loading: createLoading }] = useMutation<{ tagCreate: Tag }, { input: TagCreateInput }>(
-    MUTATION_TAG_CREATE,
-    {
-      onError() {
-        toast({
-          status: 'error',
-          title: 'failed to create new tag',
-        })
-      },
-      onCompleted(data) {
-        if (data.tagCreate) {
-          updateTags((current) => [...current, data.tagCreate])
-          setInputValue('')
-          onClose()
-        }
-      },
+  const [createTag, { loading: createLoading }] = useProjectTagCreateMutation({
+    onError() {
+      toast({
+        status: 'error',
+        title: 'failed to create new tag',
+      })
     },
-  )
+    onCompleted(data) {
+      if (data.tagCreate) {
+        updateTags((current) => [...current, data.tagCreate])
+        setInputValue('')
+        onClose()
+      }
+    },
+  })
 
   const handleChange = (value: MultiValue<TagsGetResult>) => {
     if (!value[0]) {
