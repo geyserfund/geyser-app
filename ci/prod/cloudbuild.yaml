@@ -39,13 +39,15 @@ steps:
         --build-arg VITE_APP_GIPHY_API_KEY=$$GIPHY_API_KEY \
         --build-arg VITE_APP_GEYSER_NOSTR_PUBKEY=$$GEYSER_NOSTR_PUBKEY \
         --build-arg VITE_APP_ENV=${_VITE_APP_ENV} \
+        --build-arg SENTRY_AUTH_TOKEN=$$SENTRY_AUTH_TOKEN \
+        --build-arg CI=${_CI} \
         --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies \
         --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest . \
         && \
         docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest \
         && \
         docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA
-    secretEnv: ['FLODESK_API_KEY', 'GIPHY_API_KEY', 'GEYSER_NOSTR_PUBKEY']
+    secretEnv: ['FLODESK_API_KEY', 'GIPHY_API_KEY', 'GEYSER_NOSTR_PUBKEY', 'SENTRY_AUTH_TOKEN']
   # Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
@@ -73,4 +75,6 @@ availableSecrets:
       env: 'GIPHY_API_KEY'
     - versionName: projects/$PROJECT_ID/secrets/geyser-nostr-pubkey/versions/1
       env: 'GEYSER_NOSTR_PUBKEY'
+    - versionName: projects/$PROJECT_ID/secrets/sentry-auth-token/versions/1
+      env: 'SENTRY_AUTH_TOKEN'
 timeout: 1800s
