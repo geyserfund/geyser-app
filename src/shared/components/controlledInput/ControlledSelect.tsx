@@ -1,5 +1,7 @@
-import { InputGroup, Select, Text, VStack } from '@chakra-ui/react'
+import { InputGroup, Select } from '@chakra-ui/react'
 import { useController, UseControllerProps } from 'react-hook-form'
+
+import { FieldContainer } from '../form'
 
 type Props = UseControllerProps<any, any> & {
   width?: string | number
@@ -10,6 +12,7 @@ type Props = UseControllerProps<any, any> & {
   isDisabled?: boolean
   description?: string
   placeholder?: string
+  error?: React.ReactNode
   defaultValue?: string | null
 }
 
@@ -17,15 +20,7 @@ export function ControlledSelect(props: Props) {
   const { field } = useController(props)
 
   return (
-    <VStack display="flex" alignItems="flex-start" width="100%">
-      <Text fontSize="16px" fontWeight="500">
-        {props.label}
-      </Text>
-      {props.description && (
-        <Text fontSize="14px" fontWeight="400">
-          {props.description}
-        </Text>
-      )}
+    <FieldContainer title={props.label} subtitle={props.description} error={props.error}>
       <InputGroup width={props.width || '100%'}>
         <Select
           {...field}
@@ -55,6 +50,6 @@ export function ControlledSelect(props: Props) {
           ))}
         </Select>
       </InputGroup>
-    </VStack>
+    </FieldContainer>
   )
 }

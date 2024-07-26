@@ -1,11 +1,13 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { useAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { contributionsAtom } from '@/modules/project/state/contributionsAtom'
 import { SkeletonLayout } from '@/shared/components/layouts'
+import { getPath } from '@/shared/constants'
 import { OrderByOptions, useProjectPageFundingTxQuery } from '@/types'
 
 import {
@@ -32,7 +34,7 @@ export const Contributions = () => {
           createdAt: OrderByOptions.Desc,
         },
         pagination: {
-          take: isLoggedIn ? 7 : 8,
+          take: isLoggedIn ? 5 : 6,
         },
       },
     },
@@ -52,7 +54,7 @@ export const Contributions = () => {
   }
 
   return (
-    <VStack spacing={0} w="full" flex={1} justifyContent={'space-between'}>
+    <VStack spacing={0} w="full" flex={1} overflowY={'auto'} justifyContent={'space-between'}>
       <VStack spacing={0} w="full">
         {contributions.map((contribution) => {
           return <ContributionItem contribution={contribution} key={contribution.id} />
@@ -60,7 +62,14 @@ export const Contributions = () => {
       </VStack>
 
       <HStack w="full" justifyContent={'center'} spacing={1} paddingX={6} paddingY={2}>
-        <Button variant="soft" size="sm" minW={24} colorScheme="neutral1">
+        <Button
+          as={Link}
+          to={getPath('projectLeaderboard', project.name)}
+          variant="soft"
+          size="sm"
+          minW={20}
+          colorScheme="neutral1"
+        >
           {t('See all')}
         </Button>
       </HStack>

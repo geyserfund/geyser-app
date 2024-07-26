@@ -17,7 +17,7 @@ export const FinalizeProjectNotice = () => {
   const hasWallet = project.wallets.length > 0
 
   const handleConnectNodeClick = () => {
-    const nodeConfigurationPath = getPath('launchProjectWithNode', project.id)
+    const nodeConfigurationPath = getPath('launchProjectWallet', project.id)
     navigate(nodeConfigurationPath)
   }
 

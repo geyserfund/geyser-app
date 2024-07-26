@@ -16,9 +16,10 @@ import { CreatorEditButton } from '../../body/components'
 
 type RewardEditMenuProps = {
   reward: ProjectRewardFragment
+  isLaunch?: boolean
 } & ButtonProps
 
-export const RewardEditMenu = ({ reward, ...props }: RewardEditMenuProps) => {
+export const RewardEditMenu = ({ reward, isLaunch, ...props }: RewardEditMenuProps) => {
   const { t } = useTranslation()
   const toast = useNotification()
 
@@ -113,7 +114,11 @@ export const RewardEditMenu = ({ reward, ...props }: RewardEditMenuProps) => {
             </MenuItem>
             <MenuItem
               as={Link}
-              to={getPath('projectRewardEdit', project.name, reward.id)}
+              to={
+                isLaunch
+                  ? getPath('launchProjectRewardsEdit', project.id, reward.id)
+                  : getPath('projectRewardEdit', project.name, reward.id)
+              }
               icon={<PiNotePencil fontSize={'16px'} />}
             >
               {t('Edit')}

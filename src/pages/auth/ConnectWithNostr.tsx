@@ -1,12 +1,13 @@
-import { Box, Button, IconButton } from '@chakra-ui/react'
+import { Button, IconButton } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { colors } from 'react-select/dist/declarations/src/theme'
 
 import { NostrSvgIcon } from '../../components/icons'
 import { useModal } from '../../shared/hooks/useModal'
 import { useNostrExtensonLogin } from '../../shared/hooks/useNostrExtensionLogin'
-import { isAccountDuplicateError } from '../../utils'
+import { isAccountDuplicateError, useCustomTheme } from '../../utils'
 import { FailedToConnectAccount } from './components/FailedToConnectAccount'
 import { NostrHelpModal } from './components/NostrHelpModal'
 import { loginMethodAtom } from './state'
@@ -17,6 +18,8 @@ export const ConnectWithNostr = ({ onClose, isIconOnly, ...rest }: Omit<ConnectW
   useAuthToken()
 
   const canLogin = useCanLogin()
+
+  const { colors } = useCustomTheme()
 
   const setLoginMethod = useSetAtom(loginMethodAtom)
 
@@ -54,28 +57,25 @@ export const ConnectWithNostr = ({ onClose, isIconOnly, ...rest }: Omit<ConnectW
 
   const buttonProps = isIconOnly
     ? {
-        icon: <NostrSvgIcon boxSize={'16px'} />,
+        icon: <NostrSvgIcon color={colors.social.nostr} boxSize={'16px'} />,
       }
     : {
-        leftIcon: <NostrSvgIcon boxSize={'16px'} />,
+        leftIcon: <NostrSvgIcon color={colors.social.nostr} boxSize={'16px'} />,
       }
 
   return (
     <>
       <ButtonComponent
         aria-label="Connect with Nostr"
-        variant="login"
-        color={'social.nostr'}
+        size="lg"
+        variant="outline"
+        colorScheme="neutral1"
         onClick={handleClick}
         isDisabled={!canLogin}
         {...buttonProps}
         {...rest}
       >
-        {!isIconOnly && (
-          <Box as="span" color="neutral.900">
-            {t('Continue with Nostr')}
-          </Box>
-        )}
+        {!isIconOnly && t('Continue with Nostr')}
       </ButtonComponent>
       <NostrHelpModal {...nostrHelpModal} />
       <FailedToConnectAccount {...failedModal} />

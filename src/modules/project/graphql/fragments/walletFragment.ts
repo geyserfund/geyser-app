@@ -32,3 +32,25 @@ export const FRAGMENT_PROJECT_PAGE_WALLET = gql`
     }
   }
 `
+
+export const FRAGMENT_PROJECT_WALLET_CONNECTION_DETAILS = gql`
+  fragment ProjectWalletConnectionDetails on Wallet {
+    id
+    connectionDetails {
+      ... on LightningAddressConnectionDetails {
+        lightningAddress
+      }
+      ... on LndConnectionDetailsPublic {
+        pubkey
+      }
+      ... on LndConnectionDetailsPrivate {
+        tlsCertificate
+        pubkey
+        macaroon
+        lndNodeType
+        hostname
+        grpcPort
+      }
+    }
+  }
+`

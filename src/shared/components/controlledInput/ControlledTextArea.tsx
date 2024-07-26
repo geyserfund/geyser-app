@@ -1,5 +1,8 @@
-import { Text, Textarea, TextareaProps, VStack } from '@chakra-ui/react'
+import { Textarea, TextareaProps } from '@chakra-ui/react'
+import React from 'react'
 import { useController, UseControllerProps } from 'react-hook-form'
+
+import { FieldContainer } from '../form'
 
 type Props = UseControllerProps<any, any> &
   Omit<TextareaProps, 'size'> & {
@@ -7,7 +10,7 @@ type Props = UseControllerProps<any, any> &
     inputRef?: React.Ref<HTMLInputElement>
     label: string
     description?: string
-    error?: string
+    error?: React.ReactNode
   }
 
 export function ControlledTextArea(props: Props) {
@@ -34,15 +37,7 @@ export function ControlledTextArea(props: Props) {
   }
 
   return (
-    <VStack display="flex" alignItems="flex-start" width="100%">
-      <Text fontSize="16px" fontWeight="500">
-        {props.label}
-      </Text>
-      {props.description && (
-        <Text fontSize="14px" fontWeight="400">
-          {props.description}
-        </Text>
-      )}
+    <FieldContainer title={props.label} subtitle={props.description} error={props.error}>
       <Textarea
         {...field}
         {...props}
@@ -57,11 +52,6 @@ export function ControlledTextArea(props: Props) {
         rows={props.rows || 3}
         resize="none"
       />
-      {props.error && (
-        <Text fontSize="14px" fontWeight="400" color="secondary.red">
-          {props.error}
-        </Text>
-      )}
-    </VStack>
+    </FieldContainer>
   )
 }

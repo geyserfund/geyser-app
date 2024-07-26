@@ -10,6 +10,10 @@ export const buttonTheme: ComponentStyleConfig = {
     boxShadow: 'none',
     outline: 'none',
     minWidth: '20px',
+    textDecoration: 'none',
+    _hover: {
+      textDecoration: 'none',
+    },
   },
   // styles for different sizes ("sm", "md", "lg")
   sizes: {

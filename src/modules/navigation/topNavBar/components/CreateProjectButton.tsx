@@ -10,7 +10,7 @@ export const CreateProjectButton = () => {
   return (
     <Button
       as={Link}
-      to={getPath('publicProjectLaunch')}
+      to={getPath('launchStart')}
       size="lg"
       variant="outline"
       colorScheme="primary1"

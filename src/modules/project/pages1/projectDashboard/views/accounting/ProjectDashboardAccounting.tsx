@@ -17,7 +17,8 @@ import {
   useFundingTxsOrderGetQuery,
 } from '../../../../../../types'
 import { useNotification } from '../../../../../../utils'
-import { EmptyContainer, ExportComponent } from '../../common'
+import { ExportComponent } from '../../common'
+import { EmptyContainer } from '../../components'
 import { PaymentsAndAccountingTable } from './PaymentsAndAccountingTable'
 
 const MAXIMUM_ACCOUNTING_ITEMS = 15

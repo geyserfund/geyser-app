@@ -15,7 +15,7 @@ export const ContributionItem = ({ contribution }: { contribution: ProjectFundin
     <HStack w="full" alignItems={'start'} spacing={1} key={contribution.id} paddingX={6} paddingY={2}>
       <UserAvatar user={contribution.funder.user} id={contribution.funder.id} />
       <VStack flex={1} alignItems={'start'} justifyContent={'center'} spacing={0}>
-        <HStack>
+        <HStack w="full" justifyContent={'space-between'}>
           <Body size="sm" bold dark>
             {contribution.funder.user?.username || t('Anonymous')}
           </Body>

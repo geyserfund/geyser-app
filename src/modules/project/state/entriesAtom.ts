@@ -68,3 +68,10 @@ export const addUpdateEntryAtom = atom(null, (get, set, entry: ProjectEntryFragm
   const newUnpublishedEntries = [entry, ...allUnpublishedEntries]
   set(unpublishedEntriesAtom, newUnpublishedEntries)
 })
+
+/** Reset all real-atoms in this file to it's initial State */
+export const entriesAtomReset = atom(null, (get, set) => {
+  set(entriesAtom, [])
+  set(unpublishedEntriesAtom, [])
+  set(initialEntriesLoadAtom, false)
+})

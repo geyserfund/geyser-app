@@ -1,12 +1,13 @@
 import { useState } from 'react'
 
-import { ProjectFragment } from '../../../types'
+import { ProjectState } from '@/modules/project/state/projectAtom'
+
 import { validUrl } from '../../../utils'
 
 export const useProjectLinksValidation = ({
   updateProject,
 }: {
-  updateProject: (project: Partial<ProjectFragment>) => void
+  updateProject: (project: Partial<ProjectState>) => void
 }) => {
   const [linkError, setLinkError] = useState<boolean[]>([false])
 

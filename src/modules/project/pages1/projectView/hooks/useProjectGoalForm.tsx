@@ -3,17 +3,10 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-import { useInitGoals } from '@/modules/project/hooks/useInitGoals'
+import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
 
-import {
-  ProjectGoal,
-  ProjectGoalCreateInput,
-  ProjectGoalCurrency,
-  useProjectGoalCreateMutation,
-  useProjectGoalUpdateMutation,
-} from '../../../../../types'
+import { ProjectGoal, ProjectGoalCreateInput, ProjectGoalCurrency } from '../../../../../types'
 import { dollarsToCents } from '../../../../../utils'
-import { useProjectContext } from '../../../context'
 
 type FormValues = ProjectGoalCreateInput
 
@@ -85,22 +78,7 @@ export const useProjectGoalForm = ({ goal, projectId, onClose }: UseProjectGoalF
 
   const enableSubmit = isDirty && isValid
 
-  const { queryInProgressGoals } = useInitGoals()
-
-  const [createProjectGoal, { loading: createLoading, error: createError }] = useProjectGoalCreateMutation({
-    onCompleted() {
-      queryInProgressGoals()
-      reset()
-      onClose()
-    },
-  })
-  const [updateProjectGoal, { loading: updateLoading, error: updateError }] = useProjectGoalUpdateMutation({
-    onCompleted() {
-      queryInProgressGoals()
-      reset()
-      onClose()
-    },
-  })
+  const { createProjectGoal, updateProjectGoal } = useProjectGoalsAPI()
 
   useEffect(() => {
     if (goal) {
@@ -124,13 +102,13 @@ export const useProjectGoalForm = ({ goal, projectId, onClose }: UseProjectGoalF
     }
   }, [goal, reset, projectId, isBTC])
 
-  const onSubmit = async (formData: FormValues) => {
+  const onSubmit = (formData: FormValues) => {
     try {
       const trimmedTitle = typeof formData.title === 'string' ? formData.title.trim() : ''
       const targetAmount = isBTC ? formData.targetAmount : dollarsToCents(Number(formData.targetAmount))
 
       if (goal) {
-        updateProjectGoal({
+        updateProjectGoal.execute({
           variables: {
             input: {
               title: trimmedTitle,
@@ -141,9 +119,13 @@ export const useProjectGoalForm = ({ goal, projectId, onClose }: UseProjectGoalF
               emojiUnifiedCode: formData.emojiUnifiedCode,
             },
           },
+          onCompleted() {
+            reset()
+            onClose()
+          },
         })
       } else {
-        await createProjectGoal({
+        createProjectGoal.execute({
           variables: {
             input: {
               title: trimmedTitle,
@@ -153,6 +135,11 @@ export const useProjectGoalForm = ({ goal, projectId, onClose }: UseProjectGoalF
               projectId: formData.projectId,
               emojiUnifiedCode: formData.emojiUnifiedCode,
             },
+          },
+          onCompleted() {
+            console.log('first createProjectGoal onCompleted')
+            reset()
+            onClose()
           },
         })
       }
@@ -164,8 +151,8 @@ export const useProjectGoalForm = ({ goal, projectId, onClose }: UseProjectGoalF
   return {
     control,
     handleSubmit: handleSubmit(onSubmit),
-    loading: createLoading || updateLoading,
-    error: createError || updateError,
+    loading: createProjectGoal.loading || updateProjectGoal.loading,
+    error: createProjectGoal.error || updateProjectGoal.error,
     watch,
     errors,
     reset,

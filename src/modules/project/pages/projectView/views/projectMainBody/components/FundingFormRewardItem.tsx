@@ -3,10 +3,11 @@ import { Box, IconButton, Stack, Text, useDisclosure } from '@chakra-ui/react'
 import { MouseEvent } from 'react'
 import { createUseStyles } from 'react-jss'
 
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+
 import { ImageWithReload } from '../../../../../../../components/ui'
 import { AppTheme } from '../../../../../../../context'
 import { ProjectRewardForCreateUpdateFragment, RewardCurrency } from '../../../../../../../types'
-import { useProjectContext } from '../../../../../context'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   focused: {
@@ -54,7 +55,7 @@ export const FundingFormRewardItem = ({
 }: IRewardItemProps) => {
   const classes = useStyles()
 
-  const { project } = useProjectContext()
+  const { project } = useProjectAtom()
   const { onOpen: setFocus, onClose: setBlur } = useDisclosure()
   const isRewardAvailable = reward.maxClaimable ? reward.maxClaimable - reward.sold > (count || 0) : true
 

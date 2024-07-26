@@ -2,15 +2,15 @@ import { Box, Link } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiDownload, PiDownloadSimple } from 'react-icons/pi'
+import { PiDownloadSimple } from 'react-icons/pi'
 import { components, OptionProps } from 'react-select'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 
 import { useModal } from '../../../../../shared/hooks'
+import { SelectComponent } from '../components/SelectComponent'
 import { DateSelectModal } from './DateSelectModal'
 import { getDownloadUrl } from './helpers'
-import { SelectComponent } from './SelectComponent'
 
 enum ExportOptions {
   all = 'all',

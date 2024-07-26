@@ -1,6 +1,6 @@
 import { VStack } from '@chakra-ui/react'
 
-import { useInitEntries } from '@/modules/project/hooks/useInitEntries'
+import { useProjectEntriesAPI } from '@/modules/project/API/useProjectEntriesAPI'
 import { useEntriesAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
 import { dimensions } from '@/shared/constants'
@@ -12,7 +12,7 @@ import { ProjectEntryCard } from './shared'
 export const ProjectPosts = () => {
   const { loading } = useProjectAtom()
 
-  const { entriesLoading } = useInitEntries(true)
+  const { queryProjectEntries, queryUnpublishedProjectEntries } = useProjectEntriesAPI(true)
 
   const { entries: publishedEntries, unpublishedEntries } = useEntriesAtom()
 
@@ -21,7 +21,7 @@ export const ProjectPosts = () => {
   const sortedEntries =
     entries && entries.filter(truthyFilter).sort((a, b) => Number(b.createdAt || '') - Number(a.createdAt || ''))
 
-  if (loading || entriesLoading) {
+  if (loading || queryProjectEntries.loading || queryUnpublishedProjectEntries.loading) {
     return null
   }
 

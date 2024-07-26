@@ -4,7 +4,7 @@ import { PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { useInitProjectDetails } from '@/modules/project/hooks/useInitProjectDetails'
+import { useProjectDetailsAPI } from '@/modules/project/API/useProjectDetailsAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body } from '@/shared/components/typography'
 
@@ -17,9 +17,9 @@ export const Details = () => {
   const { t } = useTranslation()
   const { loading, project } = useProjectAtom()
 
-  const { projectDetailsLoading } = useInitProjectDetails(true)
+  const { queryProjectDetails } = useProjectDetailsAPI(true)
 
-  if (loading || projectDetailsLoading) {
+  if (loading || queryProjectDetails.loading) {
     return null
   }
 

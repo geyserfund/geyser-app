@@ -1,10 +1,14 @@
-import { atom, useAtom, useSetAtom } from 'jotai'
-import { atomEffect } from 'jotai-effect'
+import { atom, useSetAtom } from 'jotai'
+import { useCallback } from 'react'
 
 import { authUserAtom } from '../../../pages/auth/state'
 import { ProjectHeaderSummaryFragment, ProjectPageBodyFragment, ProjectPageDetailsFragment } from '../../../types'
-import { getDiff } from '../../../utils'
-import { initialGoalsLoadAtom } from './goalsAtom'
+import { contributionAtomReset } from './contributionsAtom'
+import { entriesAtomReset } from './entriesAtom'
+import { goalsAtomReset } from './goalsAtom'
+import { projectFormAtomReset } from './projectFormAtom'
+import { rewardsAtomReset } from './rewardsAtom'
+import { walletAtomReset } from './walletAtom'
 
 export type ProjectState = ProjectPageBodyFragment & ProjectHeaderSummaryFragment & ProjectPageDetailsFragment
 
@@ -15,33 +19,6 @@ export const projectAtom = atom<ProjectState>({} as ProjectState)
 export const partialUpdateProjectAtom = atom(null, (get, set, updateProject: Partial<ProjectState>) => {
   const projectData = get(projectAtom)
   set(projectAtom, { ...projectData, ...updateProject })
-})
-
-/** Base project is the project that is fetched from the server */
-export const baseProjectAtom = atom<ProjectState>({} as ProjectState)
-
-/** Sync base project and the edited project */
-export const syncProjectAtom = atom(null, (_, set, project: ProjectState) => {
-  set(projectAtom, project)
-  set(baseProjectAtom, project)
-})
-
-/** Get the diff between the current project and the base project */
-export const diffProjectAtom = atom((get) => {
-  const project = get(projectAtom)
-  const baseProject = get(baseProjectAtom)
-
-  return getDiff(project, baseProject, [
-    'location',
-    'description',
-    'image',
-    'rewardCurrency',
-    'shortDescription',
-    'status',
-    'thumbnailImage',
-    'title',
-    'links',
-  ])
 })
 
 /** Defaults to true when intialized, Set to false after project is loaded. */
@@ -72,11 +49,35 @@ export const projectOwnerAtom = atom((get) => {
 /** Initial load for project details, set to true after loaded */
 export const initialProjectDetailsLoadAtom = atom(false)
 
-/** Reset the project state */
-const projectResetAtom = atom(null, (get, set) => {
+/** Reset all real-atoms in this file to it's initial State */
+export const projectAtomReset = atom(null, (get, set) => {
+  set(projectAtom, {} as ProjectState)
   set(projectLoadingAtom, true)
   set(initialProjectDetailsLoadAtom, false)
-  set(initialGoalsLoadAtom, false)
-  set(initialGoalsLoadAtom, false)
 })
-export const useProjectReset = () => useSetAtom(projectResetAtom)
+
+export const useProjectReset = () => {
+  const projectReset = useSetAtom(projectAtomReset)
+  const contributionsReset = useSetAtom(contributionAtomReset)
+  const entriesReset = useSetAtom(entriesAtomReset)
+  const goalsReset = useSetAtom(goalsAtomReset)
+  const projectFormReset = useSetAtom(projectFormAtomReset)
+  const rewardsReset = useSetAtom(rewardsAtomReset)
+  const walletReset = useSetAtom(walletAtomReset)
+
+  const resetProject = useCallback(() => {
+    console.log('=================================')
+    console.log('=========RESET IS CALLED=========')
+    console.log('=================================')
+
+    projectReset()
+    contributionsReset()
+    entriesReset()
+    goalsReset()
+    projectFormReset()
+    rewardsReset()
+    walletReset()
+  }, [contributionsReset, entriesReset, goalsReset, projectFormReset, projectReset, rewardsReset, walletReset])
+
+  return resetProject
+}

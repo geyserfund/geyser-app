@@ -1,7 +1,7 @@
 import { FormControl, FormControlProps, Textarea, TextareaProps } from '@chakra-ui/react'
 import { Control, Controller, FieldValue } from 'react-hook-form'
 
-import { FieldContainer, FieldContainerProps } from './FieldContainer'
+import { FieldContainer, FieldContainerProps } from '../../shared/components/form/FieldContainer'
 
 export type ReactHookTextAreaProps = TextareaProps & {
   name: string

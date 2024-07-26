@@ -1,4 +1,4 @@
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 
 import { entriesAtom, unpublishedEntriesAtom } from '../state/entriesAtom'
 import { completedGoalsAtom, initialGoalsLoadAtom, inProgressGoalsAtom } from '../state/goalsAtom'
@@ -10,7 +10,7 @@ import {
   projectOwnerAtom,
 } from '../state/projectAtom'
 import { rewardsAtom } from '../state/rewardsAtom'
-import { walletAtom, walletLoadingAtom } from '../state/walletAtom'
+import { walletAtom, walletConnectionDetailsAtom, walletLoadingAtom } from '../state/walletAtom'
 
 export const useProjectAtom = () => {
   const loading = useAtomValue(projectLoadingAtom)
@@ -25,7 +25,8 @@ export const useProjectAtom = () => {
 export const useWalletAtom = () => {
   const loading = useAtomValue(walletLoadingAtom)
   const wallet = useAtomValue(walletAtom)
-  return { loading, wallet }
+  const walletConnectiondetails = useAtomValue(walletConnectionDetailsAtom)
+  return { loading, wallet, walletConnectiondetails }
 }
 
 export const useGoalsAtom = () => {

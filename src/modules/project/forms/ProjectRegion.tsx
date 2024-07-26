@@ -1,26 +1,22 @@
 import { useQuery } from '@apollo/client'
 import { CloseIcon } from '@chakra-ui/icons'
-import { HStack, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
+import { HStack, IconButton, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { PiX } from 'react-icons/pi'
 import { createUseStyles } from 'react-jss'
 import { SingleValue } from 'react-select'
+
+import { Body } from '@/shared/components/typography'
 
 import { Body1 } from '../../../components/typography'
 import { IconButtonComponent, SelectComponent } from '../../../components/ui'
 import { AppTheme } from '../../../context'
-import { FieldContainer } from '../../../forms/components/FieldContainer'
 import { QUERY_COUNTRIES, QUERY_REGION } from '../../../graphql/queries'
+import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { SkeletonLayout } from '../../../shared/components/layouts'
-import {
-  Country,
-  Location,
-  Maybe,
-  Project,
-  ProjectCountriesGetResult,
-  ProjectFragment,
-  ProjectRegionsGetResult,
-} from '../../../types'
+import { Country, Location, Maybe, Project, ProjectCountriesGetResult, ProjectRegionsGetResult } from '../../../types'
+import { ProjectState } from '../state/projectAtom'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   container: {
@@ -31,9 +27,9 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
 
   tagContainer: {
     width: '100%',
-    backgroundColor: colors.neutral[0],
+    backgroundColor: colors.utils.pbg,
     border: '1px solid',
-    borderColor: colors.neutral[400],
+    borderColor: colors.neutral1[6],
     borderRadius: '8px',
     padding: '12px',
   },
@@ -50,7 +46,7 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
 
 interface ProjectRegionProps extends StackProps {
   location?: Maybe<Location>
-  updateProject: (project: Partial<ProjectFragment>) => void
+  updateProject: (project: Partial<ProjectState>) => void
 }
 
 export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegionProps) => {
@@ -149,15 +145,15 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
         )}
         <HStack width="100%" spacing="10px">
           {displayLocation && (
-            <HStack borderRadius="4px" paddingLeft="8px" backgroundColor="neutral.100">
-              <Body1 semiBold>{displayLocation}</Body1>
-              <IconButtonComponent
-                noBorder
+            <HStack borderRadius="4px" paddingLeft="8px" backgroundColor="neutral1.2">
+              <Body medium>{displayLocation}</Body>
+              <IconButton
+                variant="ghost"
                 size="xs"
                 borderRadius="8px"
-                aria-label="remove-tag-close-icon"
+                aria-label="remove-region-close-icon"
                 onClick={removeRegion}
-                icon={<CloseIcon />}
+                icon={<PiX />}
               />
             </HStack>
           )}

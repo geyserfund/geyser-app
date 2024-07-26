@@ -6,7 +6,7 @@ import { useDropzone } from 'react-dropzone'
 import { useTranslation } from 'react-i18next'
 
 import { UploadBox } from '../../../../../../../../../../../components/ui'
-import { FieldContainer } from '../../../../../../../../../../../forms/components/FieldContainer'
+import { FieldContainer } from '../../../../../../../../../../../shared/components/form/FieldContainer'
 import { currentSwapIdAtom, useRefundFileAdd } from '../../../../../../../../../funding/state'
 
 export type ImageFieldProps = {

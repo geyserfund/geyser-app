@@ -13,7 +13,7 @@ export const CreateAProjectButton = (props: ButtonProps) => {
       marginTop="20px"
       px="10px"
       as={Link}
-      to={getPath('publicProjectLaunch')}
+      to={getPath('launchStart')}
       {...props}
       leftIcon={<AddIcon fontSize={'12px'} />}
     >

@@ -10,10 +10,10 @@ import { RiArrowLeftSLine } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
 
 import { TextArea, TextInputBox, UploadBox } from '@/components/ui'
-import { FieldContainer } from '@/forms/components/FieldContainer'
 import { useBTCConverter } from '@/helpers'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { rewardsAtom } from '@/modules/project/state/rewardsAtom'
+import { FieldContainer } from '@/shared/components/form'
 import { CardLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { ProjectRewardValidations } from '@/shared/constants'
@@ -56,7 +56,7 @@ export const ProjectRewardForm = ({
 }: Props) => {
   const { t } = useTranslation()
 
-  const { project, partialUpdateProject } = useProjectAtom()
+  const { project, partialUpdateProject, projectOwner } = useProjectAtom()
   const setRewards = useSetAtom(rewardsAtom)
 
   const navigate = useNavigate()
@@ -71,7 +71,7 @@ export const ProjectRewardForm = ({
 
   const projectCurrency = project?.rewardCurrency || RewardCurrency.Usdcent
   const [rewardCurrency, setRewardCurrency] = useState<RewardCurrency>(projectCurrency)
-  const ownerEmail = project?.owners[0]?.user.email || ''
+  const ownerEmail = projectOwner?.user?.email || ''
 
   const [reward, setReward] = useState<ProjectRewardFragment>(rewardData)
   const [originalReward, setOriginalReward] = useState<ProjectRewardFragment>(rewardData)
@@ -333,7 +333,7 @@ export const ProjectRewardForm = ({
     <>
       <CardLayout
         minWidth="100%"
-        {...(isLaunch ? { border: 'none', h: '100%' } : { padding: standardPadding })}
+        {...(isLaunch ? { border: 'none', h: '100%', padding: 0 } : { padding: standardPadding })}
         noMobileBorder
       >
         <Stack direction={'row'} align={'center'}>

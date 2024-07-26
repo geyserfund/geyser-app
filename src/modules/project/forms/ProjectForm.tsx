@@ -1,21 +1,22 @@
-import { Box, FormErrorIcon, HStack, Input, Stack, Text, Tooltip, VStack } from '@chakra-ui/react'
+import { Box, FormErrorIcon, HStack, Input, Stack, Tooltip, VStack } from '@chakra-ui/react'
 import { ChangeEventHandler, useCallback, useEffect } from 'react'
 import { Controller, UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { MdInfo } from 'react-icons/md'
+import { PiInfo } from 'react-icons/pi'
+
+import { Body } from '@/shared/components/typography'
 
 import { FileUpload } from '../../../components/molecules'
-import { Body1 } from '../../../components/typography'
 import { TextArea, TextInputBox, UploadBox } from '../../../components/ui'
 import { useAuthContext } from '../../../context'
-import { FieldContainer } from '../../../forms/components/FieldContainer'
 import { validateImageUrl } from '../../../forms/validations/image'
+import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { ProjectValidations } from '../../../shared/constants'
 import { useDebounce } from '../../../shared/hooks'
 import { ImageCrop } from '../../../shared/molecules/ImageCropperModal'
 import { useProjectByNameOrIdLazyQuery } from '../../../types'
 import { toMediumImageUrl, validLightningAddress } from '../../../utils'
-import { ProjectCreationVariables } from '../pages/projectCreate/types'
+import { ProjectCreationVariables } from '../pages1/projectCreation/types'
 
 const MIN_LENGTH_TO_QUERY_PROJECT = 3
 
@@ -161,32 +162,32 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
             p="10px"
             spacing={2}
           >
-            <Body1 color="neutral.600">
+            <Body color="neutral1.9">
               {`${t('Project URL')}: `}
-              <Box as="span" color="neutral.900">
+              <Box as="span" color="neutral1.11">
                 geyser.fund/project/
               </Box>
-              <Box as="span" color="primary.600">
+              <Box as="span" color="primary1.11">
                 {watch('name')}
               </Box>
-            </Body1>
+            </Body>
             <HStack w="full" justifyContent="space-between">
-              <Body1 color="neutral.600">
+              <Body color="neutral1.9">
                 {`${t('Lightning Address')}: `}
-                <Box as="span" color="primary.600">
+                <Box as="span" color="primary1.11">
                   {watch('name')}
                 </Box>
-                <Box as="span" color="neutral.900">
+                <Box as="span" color="neutral1.11">
                   {'@geyser.fund'}
                 </Box>
-              </Body1>
+              </Body>
               <Tooltip
                 label={t(
                   `Lightning address is a simple way for others to send you funds. When someone sends money to this address, it's instantly routed to your private wallet. This ensures you have full custody and immediate access to your funds.`,
                 )}
               >
                 <span>
-                  <MdInfo color="neutral.900" fontSize="20px" />
+                  <PiInfo color="neutral1.11" fontSize="20px" />
                 </span>
               </Tooltip>
             </HStack>
@@ -218,10 +219,10 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
         />
         {!formState.errors.shortDescription && (
           <HStack width="100%" justifyContent="space-between">
-            <Text fontSize="12px" color="neutral.700" />
-            <Text fontSize="12px" color="neutral.700">{`${
-              watch('shortDescription') ? watch('shortDescription').length : 0
-            }/${ProjectValidations.shortDescription.maxLength}`}</Text>
+            <Body size="xs" muted />
+            <Body size="xs" muted>{`${watch('shortDescription') ? watch('shortDescription').length : 0}/${
+              ProjectValidations.shortDescription.maxLength
+            }`}</Body>
           </HStack>
         )}
       </FieldContainer>

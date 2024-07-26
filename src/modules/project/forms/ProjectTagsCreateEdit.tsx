@@ -1,17 +1,19 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { AddIcon, CloseIcon } from '@chakra-ui/icons'
-import { Button, HStack, StackProps, useDisclosure, VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { AddIcon } from '@chakra-ui/icons'
+import { Button, HStack, IconButton, StackProps, useDisclosure, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
+import { PiX } from 'react-icons/pi'
 import { createUseStyles } from 'react-jss'
 import { components, MenuProps, MultiValue } from 'react-select'
 
-import { Body1 } from '../../../components/typography'
-import { ButtonComponent, IconButtonComponent, SelectComponent } from '../../../components/ui'
+import { Body } from '@/shared/components/typography'
+
+import { SelectComponent } from '../../../components/ui'
 import { AppTheme } from '../../../context'
-import { FieldContainer } from '../../../forms/components/FieldContainer'
 import { MUTATION_TAG_CREATE } from '../../../graphql/mutations'
 import { QUERY_TAGS } from '../../../graphql/queries/tags'
+import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { Modal, SkeletonLayout } from '../../../shared/components/layouts'
 import { getListOfTags } from '../../../shared/constants'
 import { Tag, TagCreateInput, TagsGetResult } from '../../../types'
@@ -22,9 +24,9 @@ const MAX_TAGS_ALLOWED = 4
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   tagContainer: {
     width: '100%',
-    backgroundColor: colors.neutral[0],
+    backgroundColor: colors.utils.pbg,
     border: '1px solid',
-    borderColor: colors.neutral[400],
+    borderColor: colors.neutral1[6],
     borderRadius: '8px',
     padding: '12px',
   },
@@ -140,14 +142,9 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
         {props.children}
         {showAddTag && (
           <HStack padding="5px">
-            <ButtonComponent
-              variant="ghost"
-              isDisabled={disableShowAddTag}
-              leftIcon={<AddIcon />}
-              onClick={handleCreateTag}
-            >
+            <Button variant="ghost" isDisabled={disableShowAddTag} leftIcon={<AddIcon />} onClick={handleCreateTag}>
               {t('add tag')}
-            </ButtonComponent>
+            </Button>
           </HStack>
         )}
       </components.Menu>
@@ -207,15 +204,15 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
           <HStack width="100%" spacing="10px">
             {tags.map((tag) => {
               return (
-                <HStack key={tag.id} borderRadius="4px" paddingLeft="8px" backgroundColor="neutral.100">
-                  <Body1 semiBold>{tag.label}</Body1>
-                  <IconButtonComponent
-                    noBorder
+                <HStack key={tag.id} borderRadius="4px" paddingLeft="8px" backgroundColor="neutral1.2">
+                  <Body medium>{tag.label}</Body>
+                  <IconButton
+                    variant="ghost"
                     size="xs"
                     borderRadius="8px"
                     aria-label="remove-tag-close-icon"
                     onClick={() => removeTag(tag.id)}
-                    icon={<CloseIcon />}
+                    icon={<PiX />}
                   />
                 </HStack>
               )
@@ -232,16 +229,16 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
         title={t('Trending page tags')}
       >
         <VStack w="full">
-          <Body1 color="neutral.600" semiBold>
+          <Body light medium>
             {t('The trending page showcases the following list of general tags')}
-          </Body1>
+          </Body>
           <Wrap>
             {getListOfTags().map((tag) => {
               return (
-                <WrapItem key={tag.label} background="neutral.100" borderRadius={'8px'} px="8px" py="3px">
-                  <Body1 color="neutral.900" semiBold>
+                <WrapItem key={tag.label} backgroundColor="neutral1.2" borderRadius={'8px'} px="8px" py="3px">
+                  <Body medium dark>
                     {tag.label}
-                  </Body1>
+                  </Body>
                 </WrapItem>
               )
             })}

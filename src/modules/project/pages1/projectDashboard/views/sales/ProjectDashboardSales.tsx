@@ -1,10 +1,9 @@
 import { VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { EmptyContainer } from '@/modules/project/pages1/projectDashboard/common'
-
 import { ProjectRewardsImageUrl } from '../../../../../../shared/constants'
 import { OrdersGetStatus } from '../../../../../../types'
+import { EmptyContainer } from '../../components'
 import { RewardByStatus } from './RewardByStatus'
 import { useRewardEmptyAtom } from './state/rewardsAtom'
 

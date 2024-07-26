@@ -55,7 +55,7 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
   }
 
   if (isPrivateProjectLaunchRoute && !isUserCreatorEnabled) {
-    return <Navigate to={getPath('publicProjectLaunch')} />
+    return <Navigate to={getPath('launchStart')} />
   }
 
   if (isProjectCreatorRoute && Boolean(isUserViewingTheirOwnProject) === false && params?.projectId) {

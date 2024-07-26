@@ -118,7 +118,7 @@ export const useProjectGoalForm = (
           : formData.targetAmount
 
       if (goal) {
-        const { data } = await updateProjectGoal({
+        updateProjectGoal({
           variables: {
             input: {
               title: trimmedTitle,
@@ -129,6 +129,11 @@ export const useProjectGoalForm = (
               emojiUnifiedCode: formData.emojiUnifiedCode,
             },
           },
+          onCompleted(data) {
+            refetch()
+            reset()
+            onClose()
+          },
           onError(error) {
             toast({
               title: 'Error updating project goal',
@@ -137,13 +142,8 @@ export const useProjectGoalForm = (
             })
           },
         })
-        if (data) {
-          reset()
-          refetch()
-          onClose()
-        }
       } else {
-        const { data } = await createProjectGoal({
+        createProjectGoal({
           variables: {
             input: {
               title: trimmedTitle,
@@ -154,6 +154,11 @@ export const useProjectGoalForm = (
               emojiUnifiedCode: formData.emojiUnifiedCode,
             },
           },
+          onCompleted() {
+            refetch()
+            reset()
+            onClose()
+          },
           onError(error) {
             toast({
               title: 'Error creating project goal',
@@ -162,11 +167,6 @@ export const useProjectGoalForm = (
             })
           },
         })
-        if (data) {
-          reset()
-          refetch()
-          onClose()
-        }
       }
     } catch (error) {
       console.error('Error submitting project goal:', error)

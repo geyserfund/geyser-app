@@ -5,7 +5,7 @@ import {
   FRAGMENT_PROJECT_PAGE_BODY,
   FRAGMENT_PROJECT_PAGE_DETAILS,
 } from '../fragments/projectFragment'
-import { FRAGMENT_PROJECT_PAGE_WALLET } from '../fragments/walletFragment'
+import { FRAGMENT_PROJECT_PAGE_WALLET, FRAGMENT_PROJECT_WALLET_CONNECTION_DETAILS } from '../fragments/walletFragment'
 
 export const QUERY_PROJECT_PAGE_BODY = gql`
   ${FRAGMENT_PROJECT_PAGE_BODY}
@@ -40,6 +40,17 @@ export const QUERY_PROJECT_PAGE_WALLETS = gql`
     projectGet(where: $where) {
       wallets {
         ...ProjectPageWallet
+      }
+    }
+  }
+`
+
+export const QUERY_PROJECT_WALLET_CONNECTION_DETAILS = gql`
+  ${FRAGMENT_PROJECT_WALLET_CONNECTION_DETAILS}
+  query ProjectWalletConnectionDetails($where: UniqueProjectQueryInput!) {
+    projectGet(where: $where) {
+      wallets {
+        ...ProjectWalletConnectionDetails
       }
     }
   }

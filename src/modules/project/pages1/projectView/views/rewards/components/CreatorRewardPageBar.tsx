@@ -9,6 +9,12 @@ import { CardLayout } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
 
 export const CreatorRewardPageTopBar = () => {
+  const { isProjectOwner } = useProjectAtom()
+
+  if (!isProjectOwner) {
+    return null
+  }
+
   return (
     <CardLayout w="full" direction="row" display={{ base: 'none', lg: 'flex' }}>
       <CreateRewardButtons />
@@ -17,6 +23,11 @@ export const CreatorRewardPageTopBar = () => {
 }
 
 export const CreatorRewardPageBottomBar = () => {
+  const { isProjectOwner } = useProjectAtom()
+  if (!isProjectOwner) {
+    return null
+  }
+
   return (
     <BottomNavBarContainer>
       <CreateRewardButtons />

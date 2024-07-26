@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next'
 
 import { AnonymousAvatar, LinkableAvatar } from '../../../../../../components/ui'
 import { FundingTxOrderFragment, GetFundingTxsOrderByInput, OrderByOptions } from '../../../../../../types'
-import { AccordionListItem, OrderAmounts, OrderItems } from '../../common'
 import { TableData, TableWithAccordion } from '../../common/TableWithAccordion'
+import { AccordionListItem, OrderAmounts, OrderItems } from '../../components'
 
 export const PaymentsAndAccountingTable = ({
   data,
