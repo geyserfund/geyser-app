@@ -36,7 +36,7 @@ import { CreatorSocial } from './CreatorSocial'
 
 export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()
-  const { project, setMobileView } = useProjectContext()
+  const { project, isProjectOwner, setMobileView } = useProjectContext()
   const followedProjects = useFollowedProjectsValue()
   const isMobile = useMobileMode()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -69,7 +69,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
 
     return (
       <HStack w="full" justifyContent="center" pt={{ base: '10px', lg: '0px' }}>
-        <ProjectStatusLabel project={project} />
+        <ProjectStatusLabel project={project} isProjectOwner={isProjectOwner} />
       </HStack>
     )
   }

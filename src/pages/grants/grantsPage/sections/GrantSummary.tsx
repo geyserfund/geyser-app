@@ -100,25 +100,18 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
           <Text>
             {t('This grant uses ')}
             <Text as="i">{t('Incremental Voting')}</Text>
-            {t(', to ensure that all votes can make a difference. This means:')}
+            {t(', to ensure that all votes can have an impact. It works like this:')}
           </Text>
           <UnorderedList mt={4} spacing={2}>
             <ListItem>
-              <Text>{t('You vote by sending sats')}</Text>
+              <Text>{t('You can vote by sending Sats')}</Text>
+            </ListItem>
+            <ListItem>
+              <Text>{t('You can vote multiple times and towards multiple projects')}</Text>
             </ListItem>
             <ListItem>
               <Text>
-                {t(
-                  'You can send to a project multiple times, but each user gets to send a maximum of 3 votes per project.',
-                )}
-              </Text>
-            </ListItem>
-            <ListItem>
-              <Text>{t('You can send to multiple projects')}</Text>
-            </ListItem>
-            <ListItem>
-              <Text>
-                {t('The amount of votes you cast on a project depends on the cumulative amount of you send to it:')}
+                {t('You can cast up to 3 votes per project based on the cumulative amounts sent to each project:')}
               </Text>
               <UnorderedList>
                 <ListItem>
@@ -146,7 +139,9 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
       )
     }
 
-    return (grant.applicants.reduce((prev, curr) => prev + (curr?.voteCount || 0), 0) || 0).toString()
+    if (grant?.__typename === 'CommunityVoteGrant' && grant.votingSystem === VotingSystem.StepLog_10) {
+      return getShortAmountLabel(grant.votes?.voteCount || 0, true)
+    }
   }
 
   return (

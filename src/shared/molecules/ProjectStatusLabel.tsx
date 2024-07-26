@@ -16,6 +16,7 @@ interface IProjectStatusLabel extends HTMLChakraProps<'div'> {
   iconSize?: string
   fontFamily?: string
   direction?: StackDirection
+  isProjectOwner?: boolean
 }
 
 export enum ProjectStatusLabels {
@@ -25,6 +26,11 @@ export enum ProjectStatusLabels {
   DRAFT = 'DRAFT',
   INACTIVE = 'INACTIVE',
   IN_REVIEW = 'IN REVIEW',
+}
+
+export enum ProjectStatusTooltipRoles {
+  CONTRIBUTOR = 'contributor',
+  CREATOR = 'creator',
 }
 
 export const ProjectStatusColors = {
@@ -53,7 +59,11 @@ export const ProjectStatusTooltip = {
   [ProjectStatusLabels.RUNNING]: 'This project is live and wallet running smoothly.',
   [ProjectStatusLabels.DRAFT]: 'This project has not been launched yet and is only visible to the project creator.',
   [ProjectStatusLabels.INACTIVE]: 'This project has been deactivated by the project creator.',
-  [ProjectStatusLabels.IN_REVIEW]: 'This project is in review.',
+  [ProjectStatusLabels.IN_REVIEW]: {
+    [ProjectStatusTooltipRoles.CONTRIBUTOR]: 'This project is in review.',
+    [ProjectStatusTooltipRoles.CREATOR]:
+      'You project has been flagged for violating our Terms & Conditions. You should have received an email with further detail on how to proceed. Your project is currently not visible to the public.',
+  },
 }
 
 export const ProjectStatusLabel = ({
@@ -64,6 +74,7 @@ export const ProjectStatusLabel = ({
   iconSize = '16px',
   direction = 'row',
   iconOnly,
+  isProjectOwner = false,
 }: IProjectStatusLabel) => {
   const { t } = useTranslation()
 
@@ -126,7 +137,12 @@ export const ProjectStatusLabel = ({
 
   const CurrentIcon = ProjectStatusIcons[status]
   const color = ProjectStatusColors[status]
-  const tooltip = ProjectStatusTooltip[status]
+  const tooltip =
+    status === ProjectStatusLabels.IN_REVIEW
+      ? ProjectStatusTooltip[status][
+          isProjectOwner ? ProjectStatusTooltipRoles.CREATOR : ProjectStatusTooltipRoles.CONTRIBUTOR
+        ]
+      : ProjectStatusTooltip[status]
 
   return (
     <Tooltip label={t(tooltip)} placement="top" size="sm">

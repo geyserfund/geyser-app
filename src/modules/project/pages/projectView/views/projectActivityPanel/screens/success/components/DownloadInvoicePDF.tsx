@@ -1,8 +1,9 @@
 import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
+import { DateTime } from 'luxon'
 
 import { LIGHTNING_FEE_PERCENTAGE } from '../../../../../../../../../shared/constants'
 import { neutralColorsLight, primaryColorsLight } from '../../../../../../../../../styles'
-import { FundingTx, Project } from '../../../../../../../../../types'
+import { FundingTxForDownloadInvoiceFragment, Project } from '../../../../../../../../../types'
 
 const styles = StyleSheet.create({
   page: {
@@ -125,13 +126,12 @@ export const DownloadInvoicePDF = ({
   projectData,
   showFee,
 }: {
-  invoiceData: FundingTx
+  invoiceData: FundingTxForDownloadInvoiceFragment
   projectData: Project
   showFee?: false
 }) => {
-  const datePaid = new Date(invoiceData.paidAt)
-  const datePaidMonth = datePaid.toLocaleString('default', { month: 'long' })
-  const datePaidDay = datePaid.getDate().toString().padStart(2, '0')
+  const datePaid = invoiceData.paidAt ? DateTime.fromMillis(invoiceData.paidAt).toFormat('LLLL d') : ''
+  const dateCreated = invoiceData.createdAt ? DateTime.fromMillis(invoiceData.createdAt).toFormat('LLLL d') : ''
   const totalAmountInSats = invoiceData.donationAmount + (invoiceData.order ? invoiceData.order.totalInSats : 0)
   const bitcoinQuote = invoiceData?.bitcoinQuote?.quote || 0
 
@@ -145,10 +145,12 @@ export const DownloadInvoicePDF = ({
             <Text style={styles.rowContent}>{invoiceData.uuid}</Text>
           </View>
         )}
-        <View style={styles.row}>
-          <Text style={styles.rowTitle}>Date:</Text>
-          <Text style={styles.rowContent}>{`${datePaidMonth} ${datePaidDay}`}</Text>
-        </View>
+        {(datePaid || dateCreated) && (
+          <View style={styles.row}>
+            <Text style={styles.rowTitle}>Date:</Text>
+            <Text style={styles.rowContent}>{`${datePaid || dateCreated}`}</Text>
+          </View>
+        )}
         <View style={styles.row}>
           <Text style={styles.rowTitle}>Project Funded:</Text>
           <Text style={styles.rowContent}>{projectData.title}</Text>

@@ -46,7 +46,7 @@ export const FundingStatWithFollow = ({
           </Text>
         </VStack>
       )}
-      <FollowButton type="icon" project={project} />
+      <FollowButton useCase="icon" project={project} />
     </HStack>
   )
 }

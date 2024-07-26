@@ -58,7 +58,7 @@ export const FundingProvider = ({ children, project, limits, rewards }: FundingP
   )
 }
 
-// Used if the project context is available
+/** Used if the project context is available */
 export const FundingProviderWithProjectContext: React.FC<PropsWithChildren> = ({ children }) => {
   const project = useAtomValue(projectAtom)
   const wallet = useAtomValue(walletAtom)

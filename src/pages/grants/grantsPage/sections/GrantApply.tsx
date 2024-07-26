@@ -10,6 +10,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Tag,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
@@ -17,13 +18,14 @@ import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { BsCheckLg } from 'react-icons/bs'
 
-import { Body1, Body2, H3 } from '../../../../components/typography'
+import { Body1, Body2, Caption, H3 } from '../../../../components/typography'
 import { useAuthContext } from '../../../../context'
 import { MUTATION_APPLY_GRANT } from '../../../../graphql/mutations'
 import { CreateAProjectButton } from '../../../../modules/profile/pages/profilePage/components'
 import { CardLayout } from '../../../../shared/components/layouts'
 import { LockedConnectAccountUrl } from '../../../../shared/constants'
-import { Grant, GrantApplicantStatus, GrantApplyInput, Project } from '../../../../types'
+import { neutralColorsLight } from '../../../../styles'
+import { Grant, GrantApplicant, GrantApplicantStatus, GrantApplyInput, Project } from '../../../../types'
 import { toInt, useCustomTheme, useNotification } from '../../../../utils'
 import { SocialAccountType } from '../../../auth'
 import { ConnectWithNostr } from '../../../auth/ConnectWithNostr'
@@ -31,9 +33,10 @@ import { ConnectWithSocial } from '../../../auth/ConnectWithSocial'
 
 interface GrantProps {
   grant: Grant
+  pendingApplicants?: GrantApplicant[]
 }
 
-export const GrantApply = ({ grant }: GrantProps) => {
+export const GrantApply = ({ grant, pendingApplicants }: GrantProps) => {
   const { t } = useTranslation()
   return (
     <CardLayout noMobileBorder w="full" p={{ base: '10px', lg: '20px' }} alignItems="center">
@@ -50,12 +53,12 @@ export const GrantApply = ({ grant }: GrantProps) => {
           }
         </Trans>
       </Body1>
-      <ApplyGrant grant={grant} />
+      <ApplyGrant grant={grant} pendingApplicants={pendingApplicants} />
     </CardLayout>
   )
 }
 
-export const ApplyGrant = ({ grant }: GrantProps) => {
+export const ApplyGrant = ({ grant, pendingApplicants }: GrantProps) => {
   const { t } = useTranslation()
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
@@ -63,7 +66,7 @@ export const ApplyGrant = ({ grant }: GrantProps) => {
       <Button variant="primary" onClick={onOpen} textTransform="uppercase">
         {t('Apply')}
       </Button>
-      <ApplyGrantModal {...{ isOpen, onOpen, onClose, grant }} />
+      <ApplyGrantModal {...{ isOpen, onOpen, onClose, grant, pendingApplicants }} />
     </>
   )
 }
@@ -72,9 +75,10 @@ interface ApplyGrantModalProps {
   grant: Grant
   isOpen: boolean
   onClose: () => void
+  pendingApplicants?: GrantApplicant[]
 }
 
-export const ApplyGrantModal = ({ grant, isOpen, onClose }: ApplyGrantModalProps) => {
+export const ApplyGrantModal = ({ grant, isOpen, onClose, pendingApplicants }: ApplyGrantModalProps) => {
   const { t } = useTranslation()
   const { isLoggedIn, user } = useAuthContext()
 
@@ -117,6 +121,7 @@ export const ApplyGrantModal = ({ grant, isOpen, onClose }: ApplyGrantModalProps
         grantId={grant.id}
         onSuccess={() => setIsSuccessfull(true)}
         projects={user.ownerOf.map((owner) => owner?.project as Project)}
+        pendingApplicants={pendingApplicants}
       />
     )
   }
@@ -196,13 +201,18 @@ interface SelectAProjectProps {
   grantId: number
   projects: Project[]
   onSuccess: () => void
+  pendingApplicants?: GrantApplicant[]
 }
 
-export const SelectAProject = ({ grantId, projects, onSuccess }: SelectAProjectProps) => {
+export const SelectAProject = ({ grantId, projects, onSuccess, pendingApplicants }: SelectAProjectProps) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
 
   const [selectedProjectId, setSelectedProjectId] = useState<number>(0)
+
+  const isProjectPending = (projectId: number) => {
+    return pendingApplicants?.some((applicant) => applicant.project.id === projectId)
+  }
 
   const [applyGrantMutation, { loading }] = useMutation<
     { grantApply: { status: GrantApplicantStatus } },
@@ -247,6 +257,8 @@ export const SelectAProject = ({ grantId, projects, onSuccess }: SelectAProjectP
       <VStack w="full">
         {projects.map((project) => {
           const isSelected = selectedProjectId === project.id
+          const isPending = isProjectPending(project.id)
+
           return (
             <CardLayout
               hover
@@ -266,6 +278,11 @@ export const SelectAProject = ({ grantId, projects, onSuccess }: SelectAProjectP
             >
               <Image h="100%" width="135px" src={project.thumbnailImage || ''} objectFit="cover" />
               <Body1 bold>{project.title}</Body1>
+              {isPending && (
+                <Tag bg="secondary.yellow">
+                  <Caption color={neutralColorsLight[900]}>{t('APPLICATION PENDING')}</Caption>
+                </Tag>
+              )}
             </CardLayout>
           )
         })}

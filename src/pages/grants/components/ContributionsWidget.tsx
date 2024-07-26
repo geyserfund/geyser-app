@@ -31,6 +31,7 @@ export const ContributionsWidget = ({
   votingSystem,
 }: Props) => {
   const { t } = useTranslation()
+
   return (
     <Box borderRadius="8px" backgroundColor="neutral.100" pb={4} pt={2} my={4}>
       <Box

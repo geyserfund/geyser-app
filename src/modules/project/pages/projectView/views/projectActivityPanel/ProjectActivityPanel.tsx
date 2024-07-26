@@ -32,7 +32,7 @@ type Props = {
 export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   const { user } = useContext(AuthContext)
   const { colors } = useCustomTheme()
-  const { btcRate } = useBtcContext()
+  const { usdRate } = useBtcContext()
   const isMobile = useMobileMode()
 
   const {
@@ -111,7 +111,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
       },
       orderInput: {
         bitcoinQuote: {
-          quote: btcRate,
+          quote: usdRate,
           quoteCurrency: QuoteCurrency.Usd,
         },
         items: orderItemInputs,

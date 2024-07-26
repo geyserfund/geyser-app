@@ -1,4 +1,16 @@
-import { Box, Button, HStack, ListItem, Text, UnorderedList, useDisclosure, VStack } from '@chakra-ui/react'
+import {
+  Avatar,
+  AvatarGroup,
+  Box,
+  Button,
+  HStack,
+  ListItem,
+  Text,
+  UnorderedList,
+  useDisclosure,
+  useTheme,
+  VStack,
+} from '@chakra-ui/react'
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
@@ -29,6 +41,7 @@ interface GrantApplicantCardProps {
   project: Project
   funding: GrantApplicantFunding
   contributorsCount: number
+  voteCount: number
   contributors: GrantApplicantContributor[]
   grantHasVoting: boolean
   isClosed: boolean
@@ -54,6 +67,11 @@ const useStyles = createUseStyles({
     height: '101px',
   },
 })
+
+const MAX_AVATARS = {
+  desktop: 35,
+  mobile: 15,
+}
 
 const UserContributionDetails = ({ amount, voteCount, user }: GrantApplicantContributor) => {
   const isMobile = useMobileMode()
@@ -110,6 +128,12 @@ const ContributorsAvatarDisplay = ({
 }) => {
   const grantApplicantContributorsModal = useProjectGrantApplicantContributorsModal()
 
+  const { colors } = useTheme()
+
+  const isMobile = useMobileMode()
+
+  const maxAvatars = isMobile ? MAX_AVATARS.mobile : MAX_AVATARS.desktop
+
   if (!contributors) {
     return null
   }
@@ -118,7 +142,7 @@ const ContributorsAvatarDisplay = ({
     <>
       <Box
         pl={2}
-        filter="opacity(0.4)"
+        filter="opacity(0.8)"
         _hover={{ cursor: 'pointer' }}
         zIndex={2}
         onClick={(e) => {
@@ -126,44 +150,46 @@ const ContributorsAvatarDisplay = ({
           grantApplicantContributorsModal.onOpen()
         }}
       >
-        {currentContributor && (
-          <AvatarElement
-            key={currentContributor?.user?.id}
-            width="28px"
-            height="28px"
-            wrapperProps={{
-              display: 'inline-block',
-              marginLeft: '-5px',
-              marginTop: 2,
-            }}
-            avatarOnly
-            borderRadius="50%"
-            seed={currentContributor?.user?.id}
-            user={currentContributor?.user}
-          />
-        )}
-        {contributors
-          .filter((contributor) => contributor.user?.id !== (currentContributor && currentContributor?.user?.id))
-          .slice(0, 50)
-          .map(
-            (contributor) =>
-              contributor && (
-                <AvatarElement
-                  key={contributor.user?.id}
-                  width="28px"
-                  height="28px"
-                  wrapperProps={{
-                    display: 'inline-block',
-                    marginLeft: '-5px',
-                    marginTop: 2,
-                  }}
-                  avatarOnly
-                  borderRadius="50%"
-                  seed={contributor?.user?.id}
-                  user={contributor?.user}
-                />
-              ),
+        <AvatarGroup size="sm">
+          {currentContributor && (
+            <AvatarElement
+              key={currentContributor?.user?.id}
+              avatarOnly
+              borderRadius="50%"
+              seed={currentContributor?.user?.id}
+              user={currentContributor?.user}
+            />
           )}
+          {contributors
+            .filter((contributor) => contributor.user?.id !== (currentContributor && currentContributor?.user?.id))
+            .slice(0, maxAvatars)
+            .map(
+              (contributor) =>
+                contributor && (
+                  <AvatarElement
+                    key={contributor.user?.id}
+                    avatarOnly
+                    borderRadius="50%"
+                    seed={contributor?.user?.id}
+                    user={contributor?.user}
+                  />
+                ),
+            )}
+          {contributors.length > maxAvatars && (
+            <>
+              <Avatar
+                size="sm"
+                name={' '}
+                border={`2px solid ${colors.neutral[400]}`}
+                bg="neutral.100"
+                color="neutral.900"
+                ml={2}
+              >
+                <Text fontSize="10px">{`+${contributors.length - maxAvatars}`}</Text>
+              </Avatar>
+            </>
+          )}
+        </AvatarGroup>
       </Box>
       <ProjectGrantApplicantContributorsModal
         grantApplicantContributors={contributors}
@@ -177,6 +203,7 @@ export const GrantApplicantCard = ({
   project,
   funding,
   contributorsCount,
+  voteCount,
   contributors,
   grantHasVoting,
   isClosed,
@@ -200,14 +227,14 @@ export const GrantApplicantCard = ({
     currentUser.hasSocialAccount &&
     contributors.find((contributor) => contributor.user?.id === currentUser?.id)
 
-  const renderWidgetItem = (funding: GrantApplicantFunding, contributorsCount: number) => {
+  const renderWidgetItem = (funding: GrantApplicantFunding, contributorsCount: number, voteCount: number) => {
     return (
       <HStack gap={5}>
         {isCompetitionVote && (
           <Box display={'flex'} alignItems="center" flexDirection={'column'}>
             <Box display={'flex'} alignItems="center">
               <Text fontWeight={'700'} fontSize={'26px'} fontFamily={fonts.livvic} color="primary.500">
-                {contributorsCount || 0}
+                {grantHasVoting ? voteCount : contributorsCount || 0}
               </Text>
             </Box>
 
@@ -289,9 +316,9 @@ export const GrantApplicantCard = ({
   }
 
   return (
-    <Box onClick={handleCardClick} position="relative">
+    <Box position="relative">
       <CardLayout as="div" p={2} key={project.id} position="relative" zIndex={1} cursor="pointer">
-        <Box display="flex">
+        <Box onClick={handleCardClick} display="flex">
           <Box mr={3} height={{ base: '90px', lg: '144px' }}>
             <Box className={classNames(classes.image, isMobile ? classes.mobileImage : classes.desktopImage)}>
               <ImageWithReload
@@ -321,7 +348,7 @@ export const GrantApplicantCard = ({
               gap={5}
             >
               {renderButton(project)}
-              {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
+              {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount, voteCount)}
             </Box>
           )}
         </Box>
@@ -334,7 +361,7 @@ export const GrantApplicantCard = ({
         {isMobile && (
           <VStack w="full">
             {renderButton(project)}
-            {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount)}
+            {(grantHasVoting || isClosed) && renderWidgetItem(funding, contributorsCount, voteCount)}
           </VStack>
         )}
         {currentUserContribution && grantHasVoting && <UserContributionDetails {...currentUserContribution} />}
@@ -367,31 +394,24 @@ const HowVotingWorksModal = ({
 
   if (votingSystem === VotingSystem.StepLog_10) {
     return (
-      <Modal isOpen={isOpen} onClose={onClose} title={t('How voting works')}>
+      <Modal isOpen={isOpen} onClose={onClose} title={t('How voting works')} size="md">
         <VStack py={2} px={2} gap={4} w="full">
           <VStack alignItems="flex-start" gap={2}>
             <Text>
               {t('This grant uses ')}
               <Text as="i">{t('Incremental Voting')}</Text>
-              {t(', to ensure that all votes can make a difference. This means:')}
+              {t(', to ensure that all votes can have an impact. It works like this:')}
             </Text>
             <UnorderedList mt={4} spacing={2}>
               <ListItem>
-                <Text>{t('You vote by sending sats')}</Text>
+                <Text>{t('You can vote by sending Sats')}</Text>
+              </ListItem>
+              <ListItem>
+                <Text>{t('You can vote multiple times and towards multiple projects')}</Text>
               </ListItem>
               <ListItem>
                 <Text>
-                  {t(
-                    'You can send to a project multiple times, but each user gets to send a maximum of 3 votes per project.',
-                  )}
-                </Text>
-              </ListItem>
-              <ListItem>
-                <Text>{t('You can send to multiple projects')}</Text>
-              </ListItem>
-              <ListItem>
-                <Text>
-                  {t('The amount of votes you cast on a project depends on the cumulative amount of you send to it:')}
+                  {t('You can cast up to 3 votes per project based on the cumulative amounts sent to each project:')}
                 </Text>
               </ListItem>
             </UnorderedList>
@@ -441,7 +461,7 @@ const HowVotingWorksModal = ({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={t('How voting works')}>
+    <Modal isOpen={isOpen} onClose={onClose} title={t('How voting works')} size="md">
       <VStack py={2} px={2} gap={4} w="full">
         <VStack alignItems="flex-start" gap={2}>
           <Text>
@@ -454,7 +474,7 @@ const HowVotingWorksModal = ({
               <Text>{t('1 Sat = 1 Vote. Each Sat is one Vote.')}</Text>
             </ListItem>
             <ListItem>
-              <Text>{t('You can send Sats to projects to multiple projects and multiple times')}</Text>
+              <Text>{t('You can send Sats to multiple projects and multiple times')}</Text>
             </ListItem>
             <ListItem>
               <Text>{t('You can send Sats anonymously')}</Text>

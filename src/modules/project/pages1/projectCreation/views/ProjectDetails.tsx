@@ -22,7 +22,7 @@ export const ProjectDetails = () => {
 
   const { queryProjectDetails } = useProjectDetailsAPI(true)
 
-  const { updateProject, saveProject, saveTags, setLinks, setTags, project, tags, linkError, tagsLoading } =
+  const { updateProject, saveProject, saveTags, setLinks, setTags, project, tags, linkError, tagsLoading, isDirty } =
     useProjectDetailsForm()
 
   const onSubmit = async () => {
@@ -66,7 +66,7 @@ export const ProjectDetails = () => {
   return (
     <>
       <ProjectCreateLayout
-        continueButton={<FormContinueButton flexGrow={1} {...nextProps} />}
+        continueButton={<FormContinueButton isSkip={!isDirty} flexGrow={1} {...nextProps} />}
         onBackClick={onBackClick}
         title={<TitleWithProgressBar title={t('Links & tags')} subtitle={t('Create a project')} index={2} length={5} />}
       >

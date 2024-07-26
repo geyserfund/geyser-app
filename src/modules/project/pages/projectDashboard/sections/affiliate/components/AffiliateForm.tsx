@@ -33,12 +33,15 @@ export type AffiliateInputVariables = {
 const schema = yup.object({
   label: yup.string().required('Name is required').max(50, 'Name must be at most 50 characters long'),
   email: yup.string().required('Email is required').email('Must be a valid email'),
-  affiliateId: yup.string().required('Refferal ID is required'),
+  affiliateId: yup
+    .string()
+    .required('Affiliate ID is required')
+    .matches(/^\S+$/, 'Affiliate ID must not contain spaces'),
   affiliateFeePercentage: yup
     .number()
     .required('Percentage is required')
-    .min(0, 'Percentage must be at least 0')
-    .max(100, 'Percentage must be at most 100'),
+    .min(1, 'Percentage must be at least 1')
+    .max(50, 'Percentage can be at most 50'),
   lightningAddress: yup
     .string()
     .required('Lightning address is required')
