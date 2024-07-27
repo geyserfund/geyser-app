@@ -1,17 +1,22 @@
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useAtom, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 
-import { useProjectRewardCreateMutation, useProjectRewardsLazyQuery, useRewardUpdateMutation } from '@/types'
+import {
+  useProjectRewardCreateMutation,
+  useProjectRewardsLazyQuery,
+  useRewardDeleteMutation,
+  useRewardUpdateMutation,
+} from '@/types'
 
 import { useProjectAtom } from '../hooks/useProjectAtom'
-import { projectAtom } from '../state/projectAtom'
-import { addUpdateRewardsAtom, initialRewardsLoadAtom, rewardsAtom } from '../state/rewardsAtom'
+import { addUpdateRewardsAtom, deleteRewardAtom, initialRewardsLoadAtom, rewardsAtom } from '../state/rewardsAtom'
 import { useCustomMutation } from './custom/useCustomMutation'
 
 /** Fetch project rewards for project context, pass true to fetch on render */
 export const useProjectRewardsAPI = (load?: boolean) => {
   const setRewards = useSetAtom(rewardsAtom)
   const addUpdateRewards = useSetAtom(addUpdateRewardsAtom)
+  const removeReward = useSetAtom(deleteRewardAtom)
 
   const [initialRewardsLoad, setInitialRewardsLoad] = useAtom(initialRewardsLoadAtom)
 
@@ -46,6 +51,14 @@ export const useProjectRewardsAPI = (load?: boolean) => {
     },
   })
 
+  const [deleteReward, deleteRewardOptions] = useCustomMutation(useRewardDeleteMutation, {
+    onCompleted(_, clientOptions) {
+      if (clientOptions?.variables?.projectRewardId) {
+        removeReward(clientOptions?.variables?.projectRewardId)
+      }
+    },
+  })
+
   useEffect(() => {
     if (project.id && !loading && load && !initialRewardsLoad) {
       queryProjectRewards()
@@ -64,6 +77,10 @@ export const useProjectRewardsAPI = (load?: boolean) => {
     updateReward: {
       execute: updateReward,
       ...updateRewardOptions,
+    },
+    deleteReward: {
+      execute: deleteReward,
+      ...deleteRewardOptions,
     },
   }
 }

@@ -1,15 +1,15 @@
 import { ButtonProps, Menu, MenuButton, MenuItem, MenuList, Portal, useDisclosure } from '@chakra-ui/react'
-import { useSetAtom } from 'jotai'
+import { MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiEyeSlash, PiNotePencil, PiTrash } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { DeleteConfirmModal } from '@/components/molecules'
+import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { addUpdateRewardsAtom, deleteRewardAtom } from '@/modules/project/state/rewardsAtom'
 import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
-import { ProjectRewardFragment, useRewardDeleteMutation, useRewardUpdateMutation } from '@/types'
+import { ProjectRewardFragment } from '@/types'
 import { useNotification } from '@/utils'
 
 import { CreatorEditButton } from '../../body/components'
@@ -27,61 +27,51 @@ export const RewardEditMenu = ({ reward, isLaunch, ...props }: RewardEditMenuPro
 
   const { project } = useProjectAtom()
 
-  const addUpdateReward = useSetAtom(addUpdateRewardsAtom)
-  const deleteReward = useSetAtom(deleteRewardAtom)
-
   const deleteRewardModal = useModal()
 
-  const [updateRewardVisibilityMutation, { loading: updateRewardVisibilityLoading }] = useRewardUpdateMutation({
-    onCompleted(data) {
-      if (!data.projectRewardUpdate) return
-      addUpdateReward(data.projectRewardUpdate)
-      toast.success({
-        title: 'Successfully updated!',
-        description: `${t('Reward')} ${data.projectRewardUpdate?.name} ${t('was successfully updated')}`,
-      })
-    },
-    onError(error) {
-      toast.error({
-        title: 'Failed to update reward',
-        description: `${error}`,
-      })
-    },
-  })
+  const { deleteReward, updateReward } = useProjectRewardsAPI()
 
-  const [deleteRewardMutation, { loading: deleteRewardLoading }] = useRewardDeleteMutation({
-    onCompleted(data) {
-      toast.success({
-        title: 'Successfully !',
-        description: `${t('Reward')} ${reward.name} ${t('was successfully deleted')}`,
-      })
-      deleteRewardModal.onClose()
-      deleteReward(reward.id)
-    },
-    onError(error) {
-      toast.error({
-        title: 'Failed to delete reward',
-        description: `${error}`,
-      })
-    },
-    update(cache) {
-      cache.modify({
-        fields: {
-          projectRewardsGet(existingRewards = [], { readField }) {
-            return existingRewards.filter((val: ProjectRewardFragment) => readField('id', val) !== reward.id)
-          },
-        },
-      })
-    },
-  })
-
-  const handleRewardHide = () => {
-    updateRewardVisibilityMutation({
+  const handleRewardVisibility = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    updateReward.execute({
       variables: {
         input: {
           projectRewardId: reward.id,
           isHidden: !reward.isHidden,
         },
+      },
+      onCompleted(data) {
+        if (!data.projectRewardUpdate) return
+        toast.success({
+          title: 'Successfully updated!',
+          description: `${t('Reward')} ${data.projectRewardUpdate?.name} ${t('was successfully updated')}`,
+        })
+      },
+      onError(error) {
+        toast.error({
+          title: 'Failed to update reward',
+          description: `${error}`,
+        })
+      },
+    })
+  }
+
+  const handleDeleteReward = () => {
+    deleteReward.execute({
+      variables: { input: { projectRewardId: reward.id } },
+      onCompleted(data) {
+        toast.success({
+          title: 'Successfully !',
+          description: `${t('Reward')} ${reward.name} ${t('was successfully deleted')}`,
+        })
+        deleteRewardModal.onClose()
+      },
+      onError(error) {
+        toast.error({
+          title: 'Failed to delete reward',
+          description: `${error}`,
+        })
       },
     })
   }
@@ -103,12 +93,8 @@ export const RewardEditMenu = ({ reward, isLaunch, ...props }: RewardEditMenuPro
           <MenuList p={2} zIndex="99" shadow="md">
             <MenuItem
               icon={<PiEyeSlash fontSize={'16px'} />}
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                handleRewardHide()
-              }}
-              isDisabled={updateRewardVisibilityLoading}
+              onClick={handleRewardVisibility}
+              isDisabled={updateReward.loading}
             >
               {reward.isHidden ? t('Unhide') : t('Hide')}
             </MenuItem>
@@ -130,7 +116,7 @@ export const RewardEditMenu = ({ reward, isLaunch, ...props }: RewardEditMenuPro
                 e.stopPropagation()
                 deleteRewardModal.onOpen()
               }}
-              isDisabled={deleteRewardLoading}
+              isDisabled={deleteReward.loading}
               color="error.11"
             >
               {t('Delete')}
@@ -142,7 +128,7 @@ export const RewardEditMenu = ({ reward, isLaunch, ...props }: RewardEditMenuPro
         {...deleteRewardModal}
         title="Delete reward"
         description="Are you sure you want to remove the reward?"
-        confirm={() => deleteRewardMutation({ variables: { input: { projectRewardId: reward.id } } })}
+        confirm={handleDeleteReward}
       />
     </>
   )
