@@ -2,15 +2,16 @@ import { Image, VStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+
 import { Body1 } from '../../../../../../../components/typography'
 import { ProjectNoTransactionImageUrl } from '../../../../../../../shared/constants'
-import { useProjectContext } from '../../../../../context'
-import { deactivatedAffiliateLinksAtom } from '../affiliateAtom'
+import { deactivatedAffiliateLinksAtom } from '../../../../../state/affiliateAtom'
 import { AffiliateTable, AffiliateTableSkeleton } from '../components/AffiliateTable'
 
 export const DeactivatedAffiliateList = ({ loading }: { loading?: boolean }) => {
   const { t } = useTranslation()
-  const { project } = useProjectContext()
+  const { project } = useProjectAtom()
 
   const deactivatedAffiliateList = useAtomValue(deactivatedAffiliateLinksAtom)
 

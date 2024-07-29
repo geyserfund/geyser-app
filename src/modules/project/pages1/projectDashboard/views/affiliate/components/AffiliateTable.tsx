@@ -5,14 +5,12 @@ import { useTranslation } from 'react-i18next'
 import { BsPencil } from 'react-icons/bs'
 import { PiCopy } from 'react-icons/pi'
 
-import { SkeletonLayout } from '../../../../../../../components/layouts'
-import { Body2 } from '../../../../../../../components/typography'
+import { SkeletonLayout } from '@/shared/components/layouts'
+import { Body } from '@/shared/components/typography'
+
 import { ProjectAffiliateLinkFragment } from '../../../../../../../types'
 import { commaFormatted, copyTextToClipboard } from '../../../../../../../utils'
-import {
-  TableData,
-  TableWithAccordion,
-} from '../../../../projectView/views/projectCreatorViews/sections/contributors/components'
+import { TableData, TableWithAccordion } from '../../../common'
 
 export const AffiliateTable = ({
   projectName,
@@ -49,10 +47,10 @@ export const AffiliateTable = ({
               <IconButton
                 aria-label="copy-link"
                 variant="ghost"
+                colorScheme="primary1"
                 size="sm"
                 icon={<PiCopy />}
                 onClick={() => copyTextToClipboard(affiliateLink)}
-                _pressed={{ backgroundColor: 'primary.400', color: 'black' }}
               >
                 {val.affiliateId}
               </IconButton>
@@ -98,14 +96,15 @@ export const AffiliateTable = ({
               {onEdit && (
                 <IconButton
                   aria-label="edit-affilite-link"
-                  variant="secondary"
+                  variant="outline"
+                  colorScheme="neutral1"
                   size="sm"
                   onClick={() => onEdit(val)}
                   icon={<BsPencil />}
                 />
               )}
               {onDelete && (
-                <Button variant="solid" colorScheme="red" size="sm" onClick={() => onDelete(val)}>
+                <Button variant="solid" colorScheme="error" size="sm" onClick={() => onDelete(val)}>
                   {t('Disable')}
                 </Button>
               )}
@@ -135,37 +134,45 @@ export const AffiliateTable = ({
         <VStack w="full" spacing={2} alignItems={'start'}>
           {!isDisabled ? (
             <HStack>
-              <Body2 bold color="neutral1.9">
+              <Body size="xs" bold light>
                 {t('Created At')}:
-              </Body2>
-              <Body2>{DateTime.fromMillis(val.createdAt).toFormat('LLL dd, yyyy')}</Body2>
+              </Body>
+              <Body size="xs" dark>
+                {DateTime.fromMillis(val.createdAt).toFormat('LLL dd, yyyy')}
+              </Body>
             </HStack>
           ) : (
             <HStack>
-              <Body2 bold color="neutral1.9">
+              <Body size="xs" bold light>
                 {t('Disabled At')}:
-              </Body2>
-              <Body2>{DateTime.fromMillis(val.disabledAt).toFormat('LLL dd, yyyy')}</Body2>
+              </Body>
+              <Body size="xs" dark>
+                {DateTime.fromMillis(val.disabledAt).toFormat('LLL dd, yyyy')}
+              </Body>
             </HStack>
           )}
           <HStack>
-            <Body2 bold color="neutral1.9">
+            <Body size="xs" bold light>
               {t('Email')}:
-            </Body2>
-            <Body2>{val.email}</Body2>
+            </Body>
+            <Body size="xs" dark>
+              {val.email}
+            </Body>
           </HStack>
           <HStack>
-            <Body2 bold color="neutral1.9">
+            <Body size="xs" bold light>
               {t('Lightning Address')}:
-            </Body2>
-            <Body2>{val.lightningAddress}</Body2>
+            </Body>
+            <Body size="xs" dark>
+              {val.lightningAddress}
+            </Body>
           </HStack>
           <HStack>
-            <Body2 bold color="neutral1.9">
+            <Body size="xs" bold light>
               {t('Affiliate Project Link')}:
-            </Body2>
+            </Body>
             <Tooltip label={t('Copy to clipboard')}>
-              <Button variant="ghost" size="sm" onClick={() => copyTextToClipboard(affiliateLink)}>
+              <Button variant="ghost" size="sm" color="utils.text" onClick={() => copyTextToClipboard(affiliateLink)}>
                 {affiliateLink}
               </Button>
             </Tooltip>

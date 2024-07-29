@@ -1,42 +1,34 @@
 import { Image, VStack } from '@chakra-ui/react'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Modal } from '../../../../../../../components/layouts'
+import { useProjectAffiliateAPI } from '@/modules/project/API/useProjectAffiliateAPI'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { Modal } from '@/shared/components/layouts'
+
 import { DeleteConfirmModal } from '../../../../../../../components/molecules'
 import { Body1 } from '../../../../../../../components/typography'
 import { ProjectNoTransactionImageUrl } from '../../../../../../../shared/constants'
 import { useModal } from '../../../../../../../shared/hooks'
-import { ProjectAffiliateLinkFragment, useAffiliateLinkDisableMutation } from '../../../../../../../types'
-import { useProjectContext } from '../../../../../context'
-import { activeAffiliateLinksAtom, disableAffiliateLinkAtom } from '../affiliateAtom'
+import { ProjectAffiliateLinkFragment } from '../../../../../../../types'
+import { activeAffiliateLinksAtom } from '../../../../../state/affiliateAtom'
 import { AffiliateForm } from '../components/AffiliateForm'
 import { AffiliateTable, AffiliateTableSkeleton } from '../components/AffiliateTable'
 
 export const ActiveAffiliateList = ({ loading }: { loading?: boolean }) => {
   const { t } = useTranslation()
 
-  const { project } = useProjectContext()
+  const { project } = useProjectAtom()
 
   const activeAffiliateList = useAtomValue(activeAffiliateLinksAtom)
 
-  const disableAffiliateLink = useSetAtom(disableAffiliateLinkAtom)
+  const { disableAffiliateLink } = useProjectAffiliateAPI()
 
   const [selectedAffiliateLink, setSelectedAffiliateLink] = useState<ProjectAffiliateLinkFragment>()
 
   const deleteConfirmModal = useModal()
   const editAffiliateLinkModal = useModal()
-
-  const [disableAffiliateLinkMutation] = useAffiliateLinkDisableMutation({
-    onCompleted(data) {
-      if (data.affiliateLinkDisable.id) {
-        disableAffiliateLink(data.affiliateLinkDisable.id)
-        setSelectedAffiliateLink(undefined)
-        deleteConfirmModal.onClose()
-      }
-    },
-  })
 
   const handleDisableAffiliateLink = (val: ProjectAffiliateLinkFragment) => {
     setSelectedAffiliateLink(val)
@@ -46,6 +38,20 @@ export const ActiveAffiliateList = ({ loading }: { loading?: boolean }) => {
   const handleEditAffiliateLink = (val: ProjectAffiliateLinkFragment) => {
     setSelectedAffiliateLink(val)
     editAffiliateLinkModal.onOpen()
+  }
+
+  const handleDeleteConfirmation = () => {
+    disableAffiliateLink.execute({
+      variables: {
+        affiliateLinkId: selectedAffiliateLink?.id,
+      },
+      onCompleted(data) {
+        if (data.affiliateLinkDisable.id) {
+          setSelectedAffiliateLink(undefined)
+          deleteConfirmModal.onClose()
+        }
+      },
+    })
   }
 
   if (!project) return null
@@ -73,13 +79,7 @@ export const ActiveAffiliateList = ({ loading }: { loading?: boolean }) => {
         title={t('Are you sure you want to disable this affiliate link?')}
         description={t('Disabling an affiliate link is permanent and cannot be reversed.')}
         {...deleteConfirmModal}
-        confirm={() =>
-          disableAffiliateLinkMutation({
-            variables: {
-              affiliateLinkId: selectedAffiliateLink?.id,
-            },
-          })
-        }
+        confirm={handleDeleteConfirmation}
       />
       <Modal title={t('Edit Affiliate')} {...editAffiliateLinkModal}>
         <AffiliateForm onCompleted={editAffiliateLinkModal.onClose} isEdit affiliate={selectedAffiliateLink} />

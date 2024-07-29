@@ -1,14 +1,18 @@
 import { atom } from 'jotai'
 import { DateTime } from 'luxon'
 
-import { ProjectAffiliateLinkFragment } from '../../../../../../types'
+import { ProjectAffiliateLinkFragment } from '../../../types'
 
+/** project affiliate links for the project in context  */
 export const affiliateLinksAtom = atom<ProjectAffiliateLinkFragment[]>([])
 
+/** active affiliate links for the project in context  */
 export const activeAffiliateLinksAtom = atom((get) => get(affiliateLinksAtom).filter((link) => !link.disabled))
+/** deactivated affiliate links for the project in context  */
 export const deactivatedAffiliateLinksAtom = atom((get) => get(affiliateLinksAtom).filter((link) => link.disabled))
 
-export const addAffiliateLinkAtom = atom(null, (get, set, link: ProjectAffiliateLinkFragment) => {
+/** add or update affilaite links */
+export const addUpdateAffiliateLinkAtom = atom(null, (get, set, link: ProjectAffiliateLinkFragment) => {
   const allLinks = get(affiliateLinksAtom)
   const isExist = allLinks.some((l) => l.id === link.id)
 
@@ -29,6 +33,7 @@ export const addAffiliateLinkAtom = atom(null, (get, set, link: ProjectAffiliate
   set(affiliateLinksAtom, newLinks)
 })
 
+/** disable an affiliate link */
 export const disableAffiliateLinkAtom = atom(null, (get, set, id: number) => {
   set(affiliateLinksAtom, (prev) =>
     prev.map((link) => {
@@ -39,4 +44,9 @@ export const disableAffiliateLinkAtom = atom(null, (get, set, id: number) => {
       return link
     }),
   )
+})
+
+/** Reset all real-atoms in this file to it's initial State */
+export const affiliateAtomReset = atom(null, (get, set) => {
+  set(affiliateLinksAtom, [])
 })

@@ -3,7 +3,7 @@ import { VStack } from '@chakra-ui/react'
 import { DashboardLayout } from '../../common'
 import { ProjectDeleteUpdate } from './views/ProjectDeleteUpdate'
 import { ProjectEmailUpdate } from './views/ProjectEmailUpdate'
-import { ProjectRewardDenominationUpdate } from './views/ProjectRewardDenominationUpdate'
+import { ProjectRewardDenominationUpdate } from './views/ProjectGoalDenominationUpdate'
 import { ProjectStatusUpdate } from './views/ProjectStatusUpdate'
 
 export const ProjectDashboardSettings = () => {

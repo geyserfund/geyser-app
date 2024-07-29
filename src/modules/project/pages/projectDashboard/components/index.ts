@@ -1,5 +1,0 @@
-export * from '../../../components/WalletConnectionDetails'
-export * from '../../../pages1/projectDashboard/common/DeleteProjectModal'
-export * from '../../../pages1/projectDashboard/common/ExportNostrKeysPDF'
-export * from '../../../pages1/projectDashboard/components/ProjectFundingSettingsLightningAddressView'
-export * from '../../../pages1/projectDashboard/components/ProjectNameChangeConfirmModal'

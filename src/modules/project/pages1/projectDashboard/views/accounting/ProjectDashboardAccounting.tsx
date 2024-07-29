@@ -105,19 +105,21 @@ export const ProjectDashboardAccounting = () => {
 
 export const ProjectDashboardAccountingSkeleton = () => {
   return (
-    <VStack width="100%" flexGrow={1} spacing="10px">
-      <HStack w="full" justifyContent={'end'} px={{ base: 3, lg: 6 }}>
-        <SkeletonLayout width="140px" height="30px" />
-      </HStack>
-      <VStack w="full" spacing="10px">
-        <SkeletonLayout borderRadius={0} height="30px" />
-        <VStack w="full" spacing="24px">
-          <SkeletonLayout borderRadius={0} height="24px" />
-          <SkeletonLayout borderRadius={0} height="24px" />
-          <SkeletonLayout borderRadius={0} height="24px" />
-          <SkeletonLayout borderRadius={0} height="24px" />
+    <DashboardLayout>
+      <VStack width="100%" flexGrow={1} spacing="10px">
+        <HStack w="full" justifyContent={'end'} px={{ base: 3, lg: 6 }}>
+          <SkeletonLayout width="140px" height="30px" />
+        </HStack>
+        <VStack w="full" spacing="10px">
+          <SkeletonLayout borderRadius={0} height="30px" />
+          <VStack w="full" spacing="24px">
+            <SkeletonLayout borderRadius={0} height="24px" />
+            <SkeletonLayout borderRadius={0} height="24px" />
+            <SkeletonLayout borderRadius={0} height="24px" />
+            <SkeletonLayout borderRadius={0} height="24px" />
+          </VStack>
         </VStack>
       </VStack>
-    </VStack>
+    </DashboardLayout>
   )
 }

@@ -7,20 +7,17 @@ import { useTranslation } from 'react-i18next'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 import * as yup from 'yup'
 
-import { ControlledTextInput } from '../../../../../../../components/inputs'
-import { Body2 } from '../../../../../../../components/typography'
+import { useProjectAffiliateAPI } from '@/modules/project/API/useProjectAffiliateAPI'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { ControlledTextInput } from '@/shared/components/controlledInput'
+import { Body } from '@/shared/components/typography'
+
 import Loader from '../../../../../../../components/ui/Loader'
 import { useDebounce } from '../../../../../../../shared/hooks'
 import { lightModeColors } from '../../../../../../../styles'
-import {
-  ProjectAffiliateLinkFragment,
-  useAffiliateLinkCreateMutation,
-  useAffiliateLinkLabelUpdateMutation,
-  useLightningAddressVerifyLazyQuery,
-} from '../../../../../../../types'
+import { ProjectAffiliateLinkFragment, useLightningAddressVerifyLazyQuery } from '../../../../../../../types'
 import { useNotification } from '../../../../../../../utils'
-import { useProjectContext } from '../../../../../context'
-import { addAffiliateLinkAtom } from '../affiliateAtom'
+import { addUpdateAffiliateLinkAtom } from '../../../../../state/affiliateAtom'
 
 export type AffiliateInputVariables = {
   label: string
@@ -58,9 +55,11 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
   const { t } = useTranslation()
 
   const { toast } = useNotification()
-  const { project } = useProjectContext()
+  const { project } = useProjectAtom()
 
-  const addNewAffiliateLink = useSetAtom(addAffiliateLinkAtom)
+  const addNewAffiliateLink = useSetAtom(addUpdateAffiliateLinkAtom)
+
+  const { createAffilateLink, updateAffiliateLink } = useProjectAffiliateAPI()
 
   const { control, handleSubmit, reset, setError, clearErrors, formState, watch } = useForm<AffiliateInputVariables>({
     resolver: yupResolver(schema),
@@ -112,42 +111,19 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
     }
   }, [debouncedLightningAddress, clearErrors, evaluateLightningAddress])
 
-  const [createAffilateLink, { loading: createLoading }] = useAffiliateLinkCreateMutation({
-    onCompleted(data) {
-      if (!data || !data.affiliateLinkCreate) return
-      reset()
-      addNewAffiliateLink(data.affiliateLinkCreate)
-      if (onCompleted) {
-        onCompleted()
-      }
-    },
-    onError(error, clientOptions) {
-      toast({
-        title: 'Failed to add affiliate',
-        description: error.message,
-        status: 'error',
-      })
-    },
-  })
-
-  const [updateAffiliateLink, { loading: validationLoading }] = useAffiliateLinkLabelUpdateMutation({
-    onCompleted(data) {
-      if (!data || !data.affiliateLinkLabelUpdate) return
-      reset()
-      addNewAffiliateLink(data.affiliateLinkLabelUpdate)
-      if (onCompleted) {
-        onCompleted()
-      }
-    },
-  })
-
   const onSubmit = async (values: AffiliateInputVariables) => {
     if (isEdit) {
       if (formState.isDirty) {
-        updateAffiliateLink({
+        updateAffiliateLink.execute({
           variables: {
             affiliateLinkId: affiliate?.id,
             label: values.label,
+          },
+          onCompleted(data) {
+            reset()
+            if (onCompleted) {
+              onCompleted()
+            }
           },
         })
       } else {
@@ -160,13 +136,27 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
       return
     }
 
-    createAffilateLink({
+    createAffilateLink.execute({
       variables: {
         input: {
           ...values,
           affiliateFeePercentage: Number(values.affiliateFeePercentage),
           projectId: project?.id,
         },
+      },
+      onCompleted(data) {
+        reset()
+        addNewAffiliateLink(data.affiliateLinkCreate)
+        if (onCompleted) {
+          onCompleted()
+        }
+      },
+      onError(error) {
+        toast({
+          title: 'Failed to add affiliate',
+          description: error.message,
+          status: 'error',
+        })
       },
     })
   }
@@ -209,7 +199,7 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
             p={'10px'}
             borderRadius="8px"
           >
-            <Body2 fontSize="12px">
+            <Body size="xs">
               <Box as="span" fontWeight="bold">
                 {t('Affiliate URL')}:
               </Box>
@@ -217,7 +207,7 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
               <Box as="span" fontWeight="bold">
                 {`${watch('affiliateId')}`}
               </Box>
-            </Body2>
+            </Body>
           </HStack>
         </VStack>
 
@@ -256,9 +246,10 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
         <HStack w="full" py="20px">
           <Button
             w="full"
-            variant="primary"
+            variant="solid"
+            colorScheme="primary1"
             type="submit"
-            isLoading={validationLoading || createLoading}
+            isLoading={updateAffiliateLink.loading || createAffilateLink.loading}
             isDisabled={!formState.isValid}
           >
             {isEdit ? t('Save') : t('Create')}

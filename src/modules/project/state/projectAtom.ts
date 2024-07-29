@@ -3,6 +3,7 @@ import { useCallback } from 'react'
 
 import { authUserAtom } from '../../../pages/auth/state'
 import { ProjectHeaderSummaryFragment, ProjectPageBodyFragment, ProjectPageDetailsFragment } from '../../../types'
+import { affiliateAtomReset } from './affiliateAtom'
 import { contributionAtomReset } from './contributionsAtom'
 import { entriesAtomReset } from './entriesAtom'
 import { goalsAtomReset } from './goalsAtom'
@@ -64,6 +65,7 @@ export const useProjectReset = () => {
   const projectFormReset = useSetAtom(projectFormAtomReset)
   const rewardsReset = useSetAtom(rewardsAtomReset)
   const walletReset = useSetAtom(walletAtomReset)
+  const affiliateReset = useSetAtom(affiliateAtomReset)
 
   const resetProject = useCallback(() => {
     console.log('=================================')
@@ -77,7 +79,17 @@ export const useProjectReset = () => {
     projectFormReset()
     rewardsReset()
     walletReset()
-  }, [contributionsReset, entriesReset, goalsReset, projectFormReset, projectReset, rewardsReset, walletReset])
+    affiliateReset()
+  }, [
+    contributionsReset,
+    entriesReset,
+    goalsReset,
+    projectFormReset,
+    projectReset,
+    rewardsReset,
+    walletReset,
+    affiliateReset,
+  ])
 
   return resetProject
 }

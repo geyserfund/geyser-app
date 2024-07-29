@@ -66,8 +66,8 @@ export function TableWithAccordion<TItem>({ items, schema, accordionContent, foo
                   colSpan={item.colSpan || 1}
                   key={item.header}
                   fontSize="12px"
-                  color="neutral.700"
-                  fontWeight={500}
+                  color="neutral1.11"
+                  fontWeight={700}
                   isTruncated
                   textTransform={'capitalize'}
                   px={halfStandardPadding}

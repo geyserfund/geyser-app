@@ -7,7 +7,6 @@ import { UpdateCurrencyModal } from '@/components/molecules'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { FieldContainer } from '@/shared/components/form'
-import { Body } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks'
 import { RewardCurrency } from '@/types'
 import { useNotification } from '@/utils'
@@ -78,7 +77,12 @@ export const ProjectRewardDenominationUpdate = () => {
 
   return (
     <form>
-      <FieldContainer title={t('Reward currency denominnation')}>
+      <FieldContainer
+        title={t('Reward currency denominnation')}
+        subtitle={t(
+          'Switch between USD and Bitcoin (Sats) for reward prices. This allows you to view and manage rewards in the currency that suits your preference.',
+        )}
+      >
         <Select
           value={project.rewardCurrency || undefined}
           onChange={(event) => {
@@ -89,11 +93,6 @@ export const ProjectRewardDenominationUpdate = () => {
           <option value={RewardCurrency.Btcsat}>{t('BTC (sats)')}</option>
           <option value={RewardCurrency.Usdcent}>{t('USD ($)')}</option>
         </Select>
-        <Body size="xs">
-          {t(
-            'Switch between USD and Bitcoin (Sats) for reward prices. This allows you to view and manage rewards in the currency that suits your preference.',
-          )}
-        </Body>
       </FieldContainer>
 
       <UpdateCurrencyModal

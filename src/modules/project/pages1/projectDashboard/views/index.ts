@@ -1,7 +1,7 @@
 export { ProjectDashboardAccounting } from './accounting'
+export { ProjectDashboardAffiliates } from './affiliate/ProjectDashboardAffiliates'
 export { ProjectDashboardAnalytics } from './analytics'
 export { ProjectDashboardNostr } from './nostr/ProjectDashboardNostr'
-export { ProjectDashboardAffiliates } from './ProjectDashboardAffiliates'
 export { ProjectDashboardDetails } from './ProjectDashboardDetails'
 export { ProjectDashboardInfo } from './ProjectDashboardInfo'
 export { ProjectDashboardStory } from './ProjectDashboardStory'

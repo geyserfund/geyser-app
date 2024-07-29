@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_PROJECT_AFFILIATE_LINK } from '../fragments/affiliate'
+import { FRAGMENT_PROJECT_AFFILIATE_LINK } from '../fragments/affiliateFragment'
 
 export const MUTATION_PROJECT_AFFILIATE_CREATE = gql`
   ${FRAGMENT_PROJECT_AFFILIATE_LINK}
