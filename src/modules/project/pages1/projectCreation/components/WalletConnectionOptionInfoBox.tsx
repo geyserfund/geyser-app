@@ -11,15 +11,18 @@ type Props = HTMLChakraProps<'div'> & {
 export const WalletConnectionOptionInfoBox = ({ primaryNode, promoText, secondaryText, children, ...rest }: Props) => {
   return (
     <VStack
-      backgroundColor={'neutral1.3'}
+      backgroundColor={'utils.pbg'}
       textColor={'utils.text'}
       spacing={2}
       p={4}
       alignItems="start"
       fontSize={'10px'}
       borderRadius={'md'}
+      border="1px solid"
+      borderColor="neutral1.6"
       borderTopRightRadius={0}
       borderTopLeftRadius={0}
+      borderTop={'none'}
       {...rest}
     >
       {primaryNode}

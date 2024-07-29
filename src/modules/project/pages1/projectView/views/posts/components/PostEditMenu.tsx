@@ -1,15 +1,14 @@
 import { ButtonProps, Menu, MenuButton, MenuItem, MenuList, Portal, useDisclosure } from '@chakra-ui/react'
-import { useSetAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { PiNotePencil, PiTrash } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { DeleteConfirmModal } from '@/components/molecules'
+import { useProjectEntriesAPI } from '@/modules/project/API/useProjectEntriesAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { deleteEntryAtom } from '@/modules/project/state/entriesAtom'
 import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
-import { ProjectEntryFragment, useDeleteEntryMutation } from '@/types'
+import { ProjectEntryFragment } from '@/types'
 import { useNotification } from '@/utils'
 
 import { CreatorEditButton } from '../../body/components'
@@ -26,24 +25,26 @@ export const PostEditMenu = ({ entry, ...props }: PostEditMenuProps) => {
 
   const { project, isProjectOwner } = useProjectAtom()
 
-  const deleteEntry = useSetAtom(deleteEntryAtom)
-
   const deleteEntryModal = useModal()
 
-  const [deleteEntryMutation, { loading: deleteEntryLoading }] = useDeleteEntryMutation({
-    onCompleted(data) {
-      toast.success({
-        title: 'Successfully deleted entry!',
-      })
-      deleteEntry(entry.id)
-    },
-    onError(error) {
-      toast.error({
-        title: 'Failed to delete entry',
-        description: `${error}`,
-      })
-    },
-  })
+  const { deleteEntry } = useProjectEntriesAPI()
+
+  const handleDeleteEntry = () => {
+    deleteEntry.execute({
+      variables: { deleteEntryId: entry.id },
+      onCompleted() {
+        toast.success({
+          title: 'Successfully deleted entry!',
+        })
+      },
+      onError(error) {
+        toast.error({
+          title: 'Failed to delete entry',
+          description: `${error}`,
+        })
+      },
+    })
+  }
 
   if (!isProjectOwner) {
     return null
@@ -78,7 +79,7 @@ export const PostEditMenu = ({ entry, ...props }: PostEditMenuProps) => {
                 e.stopPropagation()
                 deleteEntryModal.onOpen()
               }}
-              isDisabled={deleteEntryLoading}
+              isDisabled={deleteEntry.loading}
               color="error.11"
             >
               {t('Delete')}
@@ -90,7 +91,7 @@ export const PostEditMenu = ({ entry, ...props }: PostEditMenuProps) => {
         {...deleteEntryModal}
         title="Delete post"
         description="Are you sure you want to remove the post?"
-        confirm={() => deleteEntryMutation({ variables: { deleteEntryId: entry.id } })}
+        confirm={() => handleDeleteEntry}
       />
     </>
   )

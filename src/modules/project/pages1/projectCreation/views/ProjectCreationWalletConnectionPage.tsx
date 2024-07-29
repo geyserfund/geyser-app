@@ -59,7 +59,6 @@ export const ProjectCreationWalletConnectionPage = () => {
     createWalletInput,
     isLightningAddressInValid,
   } = useWalletForm({
-    defaultConnectionOption: ConnectionOption.LIGHTNING_ADDRESS,
     onSubmit: handleNext,
   })
 

@@ -26,7 +26,7 @@ export const ProjectLogo = () => {
           src={project?.thumbnailImage}
           alt={project?.name}
         />
-        <Heading size="md">{project?.name}</Heading>
+        <Heading size="md">{project?.title}</Heading>
       </HStack>
     </Link>
   )

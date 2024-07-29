@@ -8,9 +8,12 @@ import { useNotification } from '../../../../../utils'
 import { useProjectContext } from '../../../context'
 import { ProjectForm } from '../../../forms/ProjectForm'
 import { ProjectCreationVariables } from '../../../pages1/projectCreation/types'
+import {
+  ProjectUnsavedModal,
+  useProjectUnsavedModal,
+} from '../../../pages1/projectDashboard/common/ProjectUnsavedModal'
 import { useProjectForm } from '../../projectCreate/hooks/useProjectForm'
 import { ProjectNameChangeConfirmModal } from '../components'
-import { ProjectUnsavedModal, useProjectUnsavedModal } from '../components/ProjectUnsavedModal'
 
 export const ProjectDescription = () => {
   const { t } = useTranslation()

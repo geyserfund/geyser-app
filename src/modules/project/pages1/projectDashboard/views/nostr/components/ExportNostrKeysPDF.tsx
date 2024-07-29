@@ -2,15 +2,15 @@ import { Document, Image, Page, StyleSheet, Text, View } from '@react-pdf/render
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
 
-import { neutralColorsLight, primaryColorsLight } from '../../../../../styles'
-import { ProjectFragment } from '../../../../../types'
+import { ProjectState } from '@/modules/project/state/projectAtom'
+import { lightModeColors } from '@/styles'
 
 const styles = StyleSheet.create({
   page: {
     width: '600px',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: neutralColorsLight[0],
+    backgroundColor: lightModeColors.utils.pbg,
     padding: 20,
     gap: '20px',
   },
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     borderRadius: '8px',
-    backgroundColor: primaryColorsLight[400],
+    backgroundColor: lightModeColors.primary1[9],
     alignItems: 'center',
     padding: '10px',
     gap: '10px',
@@ -34,18 +34,18 @@ const styles = StyleSheet.create({
   },
   exportDate: {
     fontSize: '14px',
-    color: primaryColorsLight[600],
+    color: lightModeColors.primary1[11],
     fontWeight: 500,
     textAlign: 'center',
   },
   title: {
     fontSize: '18px',
-    color: neutralColorsLight[900],
+    color: lightModeColors.utils.text,
     fontWeight: 600,
   },
   normalText: {
     fontSize: '14px',
-    color: neutralColorsLight[700],
+    color: lightModeColors.neutral1[11],
     fontWeight: 500,
   },
   noteContainer: {
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   noteInnerContainer: { display: 'flex', gap: '2px', flexDirection: 'row' },
   infoHeaderContainer: {
     width: '100%',
-    backgroundColor: neutralColorsLight[200],
+    backgroundColor: lightModeColors.neutral1[6],
     display: 'flex',
     flexDirection: 'row',
     borderTopRightRadius: '8px',
@@ -66,13 +66,13 @@ const styles = StyleSheet.create({
   },
   infoBox: {
     width: '100%',
-    border: `2px solid ${neutralColorsLight[200]}`,
+    border: `2px solid ${lightModeColors.neutral1[6]}`,
     padding: '10px',
     gap: '5px',
   },
   infoBoxLast: {
     width: '100%',
-    border: `2px solid ${neutralColorsLight[200]}`,
+    border: `2px solid ${lightModeColors.neutral1[6]}`,
     padding: '10px',
     gap: '5px',
     borderBottomRightRadius: '8px',
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: '16px',
-    color: neutralColorsLight[900],
+    color: lightModeColors.utils.text,
     fontWeight: 700,
   },
 })
@@ -90,7 +90,7 @@ export const ExportNostrKeysPDF = ({
   publicKey,
   privateKey,
 }: {
-  projectTitle: ProjectFragment['title']
+  projectTitle: ProjectState['title']
   publicKey: string
   privateKey: string
 }) => {

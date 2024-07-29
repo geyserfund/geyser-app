@@ -10,8 +10,8 @@ import { useModal } from '../../../../../shared/hooks/useModal'
 import { useProjectDeleteMutation } from '../../../../../types'
 import { useNotification } from '../../../../../utils'
 import { useProjectContext } from '../../../context'
-import { DeleteProjectModal } from '../components/DeleteProjectModal'
-import { ProjectUnsavedModal, useProjectUnsavedModal } from '../components/ProjectUnsavedModal'
+import { DeleteProjectModal } from '../../../pages1/projectDashboard/common/DeleteProjectModal'
+import { ProjectUnsavedModal, useProjectUnsavedModal } from '../../../pages1/projectDashboard/common/ProjectUnsavedModal'
 import { BackToProjectMobile } from '../navigation/BackToProjectMobile'
 
 export type ProjectSettingsVariables = {

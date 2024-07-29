@@ -29,7 +29,7 @@ export const isProjectOwnerAtom = atom((get) => {
   const project = get(projectAtom)
   const user = get(authUserAtom)
 
-  if (project.id && user.id && project.owners[0]?.user.id === user.id) {
+  if (project.id && user.id && project.owners && project.owners.length > 0 && project.owners[0]?.user.id === user.id) {
     return true
   }
 

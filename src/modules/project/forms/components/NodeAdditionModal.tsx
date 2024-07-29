@@ -297,7 +297,7 @@ export const NodeAdditionModal = ({ isOpen, onClose, nodeInput, onSubmit }: Prop
           </VStack>
 
           <VStack spacing="10px" paddingX="20px">
-            <Button variant="solid" color="primary1" w="full" onClick={handleSubmit}>
+            <Button variant="solid" colorScheme="primary1" w="full" onClick={handleSubmit}>
               {t('Confirm')}
             </Button>
           </VStack>

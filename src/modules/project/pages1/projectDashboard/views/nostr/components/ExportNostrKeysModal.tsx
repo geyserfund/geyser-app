@@ -2,13 +2,14 @@ import { Button, Checkbox, HStack, useDisclosure, VStack } from '@chakra-ui/reac
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { ChangeEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BiErrorCircle } from 'react-icons/bi'
+import { PiDownloadSimple, PiWarningCircle } from 'react-icons/pi'
 
-import { Body2, Caption } from '../../../../../components/typography'
-import { Modal } from '../../../../../shared/components/layouts'
-import { ProjectFragment, useProjectNostrKeysQuery } from '../../../../../types'
-import { useCustomTheme } from '../../../../../utils'
-import { ExportNostrKeysPDF } from '.'
+import { Modal } from '@/shared/components/layouts'
+import { Body } from '@/shared/components/typography'
+import { ProjectFragment, useProjectNostrKeysQuery } from '@/types'
+import { useCustomTheme } from '@/utils'
+
+import { ExportNostrKeysPDF } from './ExportNostrKeysPDF'
 
 interface ExportNostrKeysModalProps {
   projectId: ProjectFragment['id']
@@ -35,20 +36,27 @@ export const ExportNostrKeysModal = ({ projectId, projectTitle }: ExportNostrKey
 
   return (
     <>
-      <Button width="full" variant="secondary" onClick={onOpen}>
-        {' '}
-        {t('Export Private key (nsec)')}
-      </Button>
+      <HStack w="full" justifyContent="end">
+        <Button
+          width={{ base: 'full', lg: 'auto' }}
+          variant="outline"
+          colorScheme="neutral1"
+          onClick={onOpen}
+          rightIcon={<PiDownloadSimple />}
+        >
+          {t('Export Private key (nsec)')}
+        </Button>
+      </HStack>
       <Modal size="sm" title={t('Export Private Key (nsec)')} isOpen={isOpen} onClose={onClose}>
         <VStack spacing="20px">
-          <Body2 semiBold color="neutral.600">
+          <Body size="sm" medium light>
             {t('Are you sure you want to export your private keys?')}
-          </Body2>
+          </Body>
           <HStack padding="6px 12px" backgroundColor="rgba(223, 54, 52, 0.10)" borderRadius="8px">
-            <BiErrorCircle color={colors.secondary.red} fontSize="30px" />
-            <Caption color="secondary.red" xBold>
+            <PiWarningCircle color={colors.error[9]} fontSize="30px" />
+            <Body size="xs" color="error.9" bold>
               {t('Warning: your project risks being compromised if you leak your private key.')}
-            </Caption>
+            </Body>
           </HStack>
 
           <Checkbox colorScheme="teal" isChecked={isChecked} onChange={handleCheckBox}>
@@ -66,7 +74,7 @@ export const ExportNostrKeysModal = ({ projectId, projectTitle }: ExportNostrKey
               }
               style={{
                 padding: '6px',
-                backgroundColor: colors.primary[400],
+                backgroundColor: colors.primary1[9],
                 width: '100%',
                 borderRadius: '8px',
                 display: 'flex',
@@ -78,7 +86,7 @@ export const ExportNostrKeysModal = ({ projectId, projectTitle }: ExportNostrKey
               {t('Export Private key (nsec)')}
             </PDFDownloadLink>
           ) : (
-            <Button width="full" variant="secondary" isLoading={loading} isDisabled>
+            <Button width="full" variant="outline" colorScheme="neutral1" isLoading={loading} isDisabled>
               {t('Export Private key (nsec)')}
             </Button>
           )}

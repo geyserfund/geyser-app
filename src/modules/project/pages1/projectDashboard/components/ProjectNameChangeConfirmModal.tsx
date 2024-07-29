@@ -1,7 +1,8 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { Body1 } from '../../../../../components/typography'
+import { Body } from '@/shared/components/typography'
+
 import { Modal } from '../../../../../shared/components/layouts'
 
 export const ProjectNameChangeConfirmModal = ({
@@ -23,18 +24,18 @@ export const ProjectNameChangeConfirmModal = ({
   return (
     <Modal title={t('Are you sure?')} isOpen={isOpen} onClose={onClose}>
       <VStack w="full" spacing="20px">
-        <Body1>
+        <Body>
           {t("You've changed your project identifier which also changes your Geyser URL and Lightning address.")}
           <br />
           <br />
           {t('This also breaks all Affiliate refferal links.')}
-        </Body1>
-        <Body1>{t('Are you sure you want to save these changes?')}</Body1>
+        </Body>
+        <Body>{t('Are you sure you want to save these changes?')}</Body>
         <VStack w="full" spacing="10px">
-          <Button w="full" variant="primaryNeutral" onClick={onClose}>
+          <Button w="full" variant="soft" colorScheme="neutral1" onClick={onClose}>
             {t('Cancel')}
           </Button>
-          <Button w="full" variant="primary" onClick={handleSave}>
+          <Button w="full" variant="solid" colorScheme="primary1" onClick={handleSave}>
             {t('Save Changes')}
           </Button>
         </VStack>

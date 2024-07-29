@@ -2,19 +2,22 @@ import { CopyIcon } from '@chakra-ui/icons'
 import { HStack, IconButton, Input, InputGroup, InputRightElement, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { PiInfo, PiWarningCircle } from 'react-icons/pi'
 import { TbWorld } from 'react-icons/tb'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { DashboardLayout } from '@/modules/project/pages1/projectDashboard/common'
+import { Body } from '@/shared/components/typography'
 
-import { Body1, Body2 } from '../../../../../components/typography'
-import { SkeletonLayout } from '../../../../../shared/components/layouts'
-import { useNotification } from '../../../../../utils'
-import { ExportNostrKeysModal } from '../../../pages1/projectDashboard/common/ExportNostrKeysModal'
+import { CardLayout, SkeletonLayout } from '../../../../../../shared/components/layouts'
+import { useCustomTheme, useNotification } from '../../../../../../utils'
+import { DashboardLayout } from '../../common'
+import { ExportNostrKeysModal } from './components/ExportNostrKeysModal'
 
-export const ProjectNostrSettings = () => {
+export const ProjectDashboardNostr = () => {
   const { t } = useTranslation()
   const { toast } = useNotification()
+
+  const { colors } = useCustomTheme()
 
   const { project } = useProjectAtom()
 
@@ -38,26 +41,29 @@ export const ProjectNostrSettings = () => {
   if (!project) return null
 
   return (
-    <DashboardLayout>
+    <DashboardLayout desktopTitle={t('Nostr settings')}>
       <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1} paddingX={{ base: 0, lg: 6 }}>
         <VStack width="full" alignItems="flex-start">
-          <Body2>
+          <Body size="sm">
             {t(
               'Nostr is a simple, open protocol that enables global, decentralized, and censorship-resistant broadcasting of information. Geyser provides each project with its own npub. This means that you are able to access your project from other Nostr clients, and that your activity on Geyser will be viewable and accessible cross-platform.',
             )}
-          </Body2>
-          <Body2>{t('Below you can find the information you need to access your public and private keys.')}</Body2>
+          </Body>
+          <Body size="sm">
+            {t('Below you can find the information you need to access your public and private keys.')}
+          </Body>
         </VStack>
 
         <VStack width="full" alignItems="flex-start">
-          <Body1 semiBold>{t('Your Nostr Public Key (npub)')}</Body1>
+          <Body medium>{t('Your Nostr Public Key (npub)')}</Body>
           {!project?.keys.nostrKeys.publicKey.npub ? (
             <SkeletonLayout height="40px" width="full" />
           ) : (
             <InputGroup size="md">
               <Input
                 value={project?.keys.nostrKeys.publicKey.npub}
-                backgroundColor={copied ? 'primary.400' : 'initial'}
+                backgroundColor={copied ? 'primary1.9' : 'initial'}
+                borderRadius="8px"
               />
               <InputRightElement>
                 <IconButton aria-label="copy-nostr-npub" size="sm" onClick={handleCopyNPub} icon={<CopyIcon />} />
@@ -67,23 +73,30 @@ export const ProjectNostrSettings = () => {
         </VStack>
 
         <VStack width="full" alignItems="flex-start">
-          <Body1 semiBold>{t('Your Nostr Private Key Kit (nsec)')}</Body1>
-          <VStack
-            padding={{ base: '10px', lg: '20px' }}
-            bgColor="neutral.100"
-            width="full"
-            borderRadius={'8px'}
-            alignItems="flex-start"
-          >
-            <Body2 color="secondary.red">
-              {t('Warning: Before exporting your private keys, make sure to read the following message.')}
-            </Body2>
+          <Body medium>{t('Your Nostr Private Key Kit (nsec)')}</Body>
+          <CardLayout>
+            <HStack
+              padding={4}
+              backgroundColor="warning.2"
+              spacing={3}
+              w="full"
+              borderRadius="12px"
+              alignItems={'center'}
+              justifyContent="start"
+              border="1px solid"
+              borderColor="warning.6"
+            >
+              <PiInfo color={colors.amber[11]} size="20px" />
+              <Body size="sm" color="warning.11">
+                {t('Warning: Before exporting your private keys, make sure to read the following message.')}
+              </Body>
+            </HStack>
 
-            <Body2>
+            <Body size="sm">
               {t(
                 'You can export your Geyser project private keys to access it from another Nostr client. However, keep in mind of the following:',
               )}
-              <ul>
+              <ul style={{ paddingLeft: '15px' }}>
                 <li>
                   {t(
                     "Handle the key with a lot of care. Anyone holding the private key can post on the project's behalf. If you leak your private key, the project risks being compromised, and there is nothing Geyser can do to prevent it.",
@@ -105,29 +118,23 @@ export const ProjectNostrSettings = () => {
                   )}
                 </li>
               </ul>
-            </Body2>
+            </Body>
             <ExportNostrKeysModal projectTitle={project?.title} projectId={project?.id} />
-          </VStack>
+          </CardLayout>
         </VStack>
 
         <VStack w="full" alignItems="flex-start">
-          <Body1 semiBold>{t('The Relays')}</Body1>
+          <Body medium>{t('The Relays')}</Body>
 
-          <Body2>{t('These are the relays that we publish to.')}</Body2>
+          <Body size="sm">{t('These are the relays that we publish to.')}</Body>
 
-          <VStack
-            padding={{ base: '10px', lg: '20px' }}
-            bgColor="neutral.100"
-            width="full"
-            borderRadius={'8px'}
-            alignItems="flex-start"
-          >
+          <CardLayout width="full" borderRadius={'12px'} alignItems="flex-start" spacing={2}>
             <RelayDisplayComponent relayLink="wss://relay.geyser.fund" />
             <RelayDisplayComponent relayLink="wss://relay.damus.io" />
             <RelayDisplayComponent relayLink="wss://relay.snort.social" />
             <RelayDisplayComponent relayLink="wss://nos.lol" />
             <RelayDisplayComponent relayLink="wss://relay.primal.net" />
-          </VStack>
+          </CardLayout>
         </VStack>
       </VStack>
     </DashboardLayout>
@@ -136,9 +143,18 @@ export const ProjectNostrSettings = () => {
 
 export const RelayDisplayComponent = ({ relayLink }: { relayLink: string }) => {
   return (
-    <HStack w="full" justifyContent={'start'}>
+    <HStack
+      w="full"
+      justifyContent={'start'}
+      padding={1}
+      paddingX={2}
+      backgroundColor="neutral1.3"
+      border="1px solid"
+      borderColor="neutral1.6"
+      borderRadius="8px"
+    >
       <TbWorld />
-      <Body1>{relayLink}</Body1>
+      <Body>{relayLink}</Body>
     </HStack>
   )
 }

@@ -1,4 +1,4 @@
-import { Box, Stack, StackProps } from '@chakra-ui/react'
+import { Stack, StackProps } from '@chakra-ui/react'
 import { forwardRef } from 'react'
 import { Link, LinkProps } from 'react-router-dom'
 

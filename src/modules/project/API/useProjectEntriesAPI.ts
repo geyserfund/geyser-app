@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 
 import {
   useCreateEntryMutation,
+  useDeleteEntryMutation,
   useProjectEntriesLazyQuery,
   useProjectUnplublishedEntriesLazyQuery,
   usePublishEntryMutation,
@@ -10,7 +11,13 @@ import {
 } from '@/types'
 
 import { useProjectAtom } from '../hooks/useProjectAtom'
-import { addUpdateEntryAtom, entriesAtom, initialEntriesLoadAtom, unpublishedEntriesAtom } from '../state/entriesAtom'
+import {
+  addUpdateEntryAtom,
+  deleteEntryAtom,
+  entriesAtom,
+  initialEntriesLoadAtom,
+  unpublishedEntriesAtom,
+} from '../state/entriesAtom'
 import { isProjectOwnerAtom, projectAtom } from '../state/projectAtom'
 import { updateEntryCache, updateProjectEntriesCache } from './cache/projectEntryCache'
 import { useCustomMutation } from './custom/useCustomMutation'
@@ -25,6 +32,7 @@ export const useProjectEntriesAPI = (load?: boolean) => {
   const setunpublishedEntries = useSetAtom(unpublishedEntriesAtom)
   const [initialEntriesLoad, setInitialEntriesLoad] = useAtom(initialEntriesLoadAtom)
   const addUpdateEntry = useSetAtom(addUpdateEntryAtom)
+  const removeEntry = useSetAtom(deleteEntryAtom)
 
   const [queryProjectEntries, queryProjectEntriesOptions] = useProjectEntriesLazyQuery({
     fetchPolicy: 'cache-first',
@@ -111,6 +119,12 @@ export const useProjectEntriesAPI = (load?: boolean) => {
     },
   })
 
+  const [deleteEntry, deleteEntryOptions] = useCustomMutation(useDeleteEntryMutation, {
+    onCompleted(data) {
+      removeEntry(data.deleteEntry.id)
+    },
+  })
+
   return {
     queryProjectEntries: {
       execute: queryProjectEntries,
@@ -131,6 +145,10 @@ export const useProjectEntriesAPI = (load?: boolean) => {
     publishEntry: {
       execute: publishEntry,
       ...publishEntryOptions,
+    },
+    deleteEntry: {
+      execute: deleteEntry,
+      ...deleteEntryOptions,
     },
   }
 }

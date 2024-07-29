@@ -4,10 +4,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import {
-  ProjectUnsavedModal,
-  useProjectUnsavedModal,
-} from '@/modules/project/pages/projectDashboard/components/ProjectUnsavedModal'
 import { useNotification } from '@/utils'
 
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
@@ -15,6 +11,7 @@ import { useAuthContext } from '../../../../../context'
 import { getPath } from '../../../../../shared/constants'
 import { useModal } from '../../../../../shared/hooks'
 import { ProjectForm } from '../../../forms/ProjectForm'
+import { ProjectUnsavedModal, useProjectUnsavedModal } from '../../projectDashboard/common/ProjectUnsavedModal'
 import { FormContinueButton } from '../components/FormContinueButton'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout'
 import { ProjectExitConfirmModal } from '../components/ProjectExitConfirmModal'

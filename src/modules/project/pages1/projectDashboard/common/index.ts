@@ -1,3 +1,4 @@
+export { DashboardLayout } from './DashboardLayout'
 export { DateSelectModal } from './DateSelectModal'
 export { ExportComponent } from './ExportComponent'
 export type { GetDownloadUrlProps } from './helpers'

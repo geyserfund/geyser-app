@@ -110,7 +110,7 @@
     "react-swipeable": "^7.0.1",
     "react-tweet-embed": "^2.0.0",
     "react-use-websocket": "^4.8.1",
-    "recharts": "^2.8.0",
+    "recharts": "^2.12.7",
     "remirror": "^2.0.31",
     "serve": "^14.2.0",
     "serve-handler": "^6.1.5",

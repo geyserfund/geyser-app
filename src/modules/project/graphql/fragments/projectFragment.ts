@@ -97,5 +97,6 @@ export const FRAGMENT_PROJECT_UPDATE = gql`
     }
     status
     links
+    rewardCurrency
   }
 `

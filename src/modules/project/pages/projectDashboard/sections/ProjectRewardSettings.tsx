@@ -12,7 +12,10 @@ import { FieldContainer } from '../../../../../shared/components/form/FieldConta
 import { useModal } from '../../../../../shared/hooks/useModal'
 import { RewardCurrency, useProjectRewardCurrencyUpdateMutation } from '../../../../../types'
 import { useNotification } from '../../../../../utils'
-import { ProjectUnsavedModal, useProjectUnsavedModal } from '../components/ProjectUnsavedModal'
+import {
+  ProjectUnsavedModal,
+  useProjectUnsavedModal,
+} from '../../../pages1/projectDashboard/common/ProjectUnsavedModal'
 import { BackToProjectMobile } from '../navigation/BackToProjectMobile'
 
 export type ProjectCurrencyVariables = {

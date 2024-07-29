@@ -6,7 +6,7 @@ import { useNotification } from '../../../../../utils'
 import { useProjectContext } from '../../../context'
 import { ProjectStoryForm } from '../../../forms/ProjectStoryForm'
 import { useProjectStoryForm } from '../../projectCreate/hooks/useProjectStoryForm'
-import { ProjectUnsavedModal, useProjectUnsavedModal } from '../components/ProjectUnsavedModal'
+import { ProjectUnsavedModal, useProjectUnsavedModal } from '../../../pages1/projectDashboard/common/ProjectUnsavedModal'
 import { BackToProjectMobile } from '../navigation/BackToProjectMobile'
 
 export const ProjectStory = () => {

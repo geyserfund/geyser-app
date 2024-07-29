@@ -6,7 +6,7 @@ import { Body } from '@/shared/components/typography'
 import { useCustomTheme } from '@/utils'
 
 import { LightningAddressConnectionDetails, LndConnectionDetailsPrivate, Wallet } from '../../../types'
-import { ProjectFundingSettingsLightningAddressView } from '../pages/projectDashboard/components/ProjectFundingSettingsLightningAddressView'
+import { ProjectFundingSettingsLightningAddressView } from '../pages1/projectDashboard/components/ProjectFundingSettingsLightningAddressView'
 
 export const WalletConnectionDetails = ({ projectWallet }: { projectWallet: Partial<Wallet> }) => {
   const { t } = useTranslation()

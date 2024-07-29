@@ -17,7 +17,7 @@ import {
   useFundingTxsOrderGetQuery,
 } from '../../../../../../types'
 import { useNotification } from '../../../../../../utils'
-import { ExportComponent } from '../../common'
+import { DashboardLayout, ExportComponent } from '../../common'
 import { EmptyContainer } from '../../components'
 import { PaymentsAndAccountingTable } from './PaymentsAndAccountingTable'
 
@@ -81,23 +81,25 @@ export const ProjectDashboardAccounting = () => {
   if (isLoading) return <ProjectDashboardAccountingSkeleton />
 
   return (
-    <VStack width="100%" flexGrow={1} spacing="10px" alignItems="center">
-      <HStack w="full" justifyContent={'end'} px={{ base: 3, lg: 6 }}>
-        <ExportComponent />
-      </HStack>
-      {ordersData.length === 0 ? (
-        <EmptyContainer image={ProjectNoTransactionImageUrl} text={t('No payments received yet')} />
-      ) : (
-        <PaymentsAndAccountingTable data={ordersData} setOrderBy={setOrderBy} orderBy={orderBy} />
-      )}
-      {!noMoreItems.current && (
-        <HStack w="full" px={standardPadding}>
-          <Button width="100%" variant="secondary" isLoading={isLoadingMore.current} onClick={() => fetchNext()}>
-            {t('Show more')}...
-          </Button>
+    <DashboardLayout>
+      <VStack width="100%" flexGrow={1} spacing="10px" alignItems="center">
+        <HStack w="full" justifyContent={'end'} px={{ base: 3, lg: 6 }}>
+          <ExportComponent />
         </HStack>
-      )}
-    </VStack>
+        {ordersData.length === 0 ? (
+          <EmptyContainer image={ProjectNoTransactionImageUrl} text={t('No payments received yet')} />
+        ) : (
+          <PaymentsAndAccountingTable data={ordersData} setOrderBy={setOrderBy} orderBy={orderBy} />
+        )}
+        {!noMoreItems.current && (
+          <HStack w="full" px={standardPadding}>
+            <Button width="100%" variant="secondary" isLoading={isLoadingMore.current} onClick={() => fetchNext()}>
+              {t('Show more')}...
+            </Button>
+          </HStack>
+        )}
+      </VStack>
+    </DashboardLayout>
   )
 }
 

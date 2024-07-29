@@ -282,22 +282,24 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
         />
       </FieldContainer>
 
-      <FieldContainer
-        title={t('Email')}
-        subtitle={t(
-          'Project notifications will be sent to your profile email, which you can edit in Profile Settings. Make sure to verify your email to keep your wallet secure.',
-        )}
-      >
-        <TextInputBox
-          name="email"
-          value={watch('email')}
-          onChange={handleEmail}
-          placeholder="creator@gmail.com"
-          error={formState.errors.email?.message}
-          onBlur={() => form.trigger('email')}
-          isDisabled={Boolean(user.email)}
-        />
-      </FieldContainer>
+      {!isEdit && (
+        <FieldContainer
+          title={t('Email')}
+          subtitle={t(
+            'Project notifications will be sent to your profile email, which you can edit in Profile Settings. Make sure to verify your email to keep your wallet secure.',
+          )}
+        >
+          <TextInputBox
+            name="email"
+            value={watch('email')}
+            onChange={handleEmail}
+            placeholder="creator@gmail.com"
+            error={formState.errors.email?.message}
+            onBlur={() => form.trigger('email')}
+            isDisabled={Boolean(user.email)}
+          />
+        </FieldContainer>
+      )}
     </VStack>
   )
 }

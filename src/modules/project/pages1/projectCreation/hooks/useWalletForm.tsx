@@ -20,8 +20,7 @@ import { toInt, useNotification, validateEmail } from '../../../../../utils'
 import { TNodeInput } from '../types'
 
 interface useWalletFormProps {
-  defaultConnectionOption?: ConnectionOption
-  walletLimits?: WalletLimitsFragment
+  walletLimits?: WalletLimitsFragment | null
   onSubmit: (createWalletInput: CreateWalletInput | null) => void
   isEdit?: boolean
 }
@@ -79,11 +78,7 @@ export type WalletForm = {
 const DEFAULT_FEE_PERCENTAGE = 0.04
 const DEFAULT_LIGHTNING_FEE_PERCENTAGE = 0.04
 
-export const useWalletForm = ({
-  defaultConnectionOption = ConnectionOption.LIGHTNING_ADDRESS,
-  onSubmit,
-  isEdit,
-}: useWalletFormProps): WalletForm => {
+export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletForm => {
   const { toast } = useNotification()
 
   const { project } = useProjectAtom()
@@ -102,7 +97,20 @@ export const useWalletForm = ({
     LNAddressEvaluationState.IDLE,
   )
 
-  const [connectionOption, setConnectionOption] = useState<ConnectionOption>(defaultConnectionOption)
+  const [connectionOption, setConnectionOption] = useState<ConnectionOption>(ConnectionOption.LIGHTNING_ADDRESS)
+
+  useEffect(() => {
+    if (walletConnectiondetails) {
+      if (
+        walletConnectiondetails.connectionDetails.__typename === WalletConnectDetails.LndConnectionDetailsPrivate ||
+        walletConnectiondetails.connectionDetails.__typename === WalletConnectDetails.LndConnectionDetailsPublic
+      ) {
+        setConnectionOption(ConnectionOption.PERSONAL_NODE)
+      } else {
+        setConnectionOption(ConnectionOption.LIGHTNING_ADDRESS)
+      }
+    }
+  }, [walletConnectiondetails])
 
   const [limits, setLimits] = useState<
     LightningAddressContributionLimits | WalletOffChainContributionLimits | WalletOnChainContributionLimits

@@ -6,6 +6,7 @@ import {
   useCreateWalletMutation,
   useProjectPageWalletsLazyQuery,
   useProjectWalletConnectionDetailsLazyQuery,
+  useUpdateWalletMutation,
 } from '../../../types'
 import { useProjectAtom } from '../hooks/useProjectAtom'
 import { projectAtom } from '../state/projectAtom'
@@ -54,7 +55,21 @@ export const useProjectWalletAPI = (load?: boolean) => {
       },
     })
 
-  const [createWallet, createWalletOptions] = useCustomMutation(useCreateWalletMutation)
+  const [createWallet, createWalletOptions] = useCustomMutation(useCreateWalletMutation, {
+    onCompleted(data) {
+      if (data.walletCreate) {
+        setWalletConnectionDetails(data.walletCreate)
+      }
+    },
+  })
+
+  const [updateWallet, updateWalletOptions] = useUpdateWalletMutation({
+    onCompleted(data) {
+      if (data.walletUpdate) {
+        setWalletConnectionDetails(data.walletUpdate)
+      }
+    },
+  })
 
   useEffect(() => {
     if (project.id && !loading && load) {
@@ -74,6 +89,10 @@ export const useProjectWalletAPI = (load?: boolean) => {
     createWallet: {
       execute: createWallet,
       ...createWalletOptions,
+    },
+    updateWallet: {
+      execute: updateWallet,
+      ...updateWalletOptions,
     },
   }
 }

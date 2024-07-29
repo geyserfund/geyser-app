@@ -3,7 +3,7 @@ import { useProjectState } from '../../../hooks/useProjectState'
 import { useProjectTagsState } from './useProjectTagsState'
 
 export const useProjectDetailsForm = () => {
-  const { project, isDirty, updateProject, saveProject } = useProjectState()
+  const { project, isDirty, updateProject, saveProject, saving } = useProjectState()
 
   const { setLinks, linkError } = useProjectLinksValidation({
     updateProject,
@@ -22,5 +22,6 @@ export const useProjectDetailsForm = () => {
     isDirty: Boolean(areTagsDirty || isDirty),
     setLinks,
     linkError,
+    saving,
   }
 }
