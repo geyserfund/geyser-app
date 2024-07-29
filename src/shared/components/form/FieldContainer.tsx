@@ -11,12 +11,14 @@ export interface FieldContainerProps extends Omit<StackProps, 'title'> {
   error?: ReactNode
   children?: ReactNode
   boldTitle?: boolean
+  required?: boolean
 }
 
 export const FieldContainer = ({
   title,
   subtitle,
   children,
+  required,
   info,
   error = null,
   boldTitle = false,
@@ -27,6 +29,7 @@ export const FieldContainer = ({
       {title && (
         <Body wordBreak="keep-all" fontWeight={boldTitle ? 700 : 500}>
           {title}
+          {required && '*'}
         </Body>
       )}
       {subtitle && (

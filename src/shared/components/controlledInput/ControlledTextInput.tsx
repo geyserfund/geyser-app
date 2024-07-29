@@ -12,6 +12,7 @@ type Props = UseControllerProps<any, any> &
     label?: string
     error?: React.ReactNode
     rightAddon?: React.ReactNode
+    required?: boolean
   }
 
 export function ControlledTextInput(props: Props) {
@@ -43,7 +44,7 @@ export function ControlledTextInput(props: Props) {
     : ''
 
   return (
-    <FieldContainer title={props.label} subtitle={props.description} error={props.error}>
+    <FieldContainer required={props.required} title={props.label} subtitle={props.description} error={props.error}>
       <InputGroup>
         <Input
           {...field}
