@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { RiTwitterXLine } from 'react-icons/ri'
 
 import { useDarkMode, useNotification } from '../../../utils'
-import { TwitterRegex } from '../validations/twitter'
 import { InsertTwitterModal, MarkdownTwitter, useInsertTwitterModal } from '../modals/InsertTwitterModal'
+import { TwitterRegex } from '../validations/twitter'
 import { ToolbarCommandButton } from './ToolbarCommandButton'
 
 export const TweetCommand = ({ isDisabled }: { isDisabled?: boolean }) => {

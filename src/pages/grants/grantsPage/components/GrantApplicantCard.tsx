@@ -18,11 +18,11 @@ import { Link } from 'react-router-dom'
 
 import { H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
+import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectActivityPanel/components'
 import {
   ProjectGrantApplicantContributorsModal,
   useProjectGrantApplicantContributorsModal,
 } from '../../../../modules/project/pages/projectView/views/projectActivityPanel/screens/info/components/ProjectGrantApplicantContributorsModal'
-import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectActivityPanel/components'
 import { CardLayout, Modal } from '../../../../shared/components/layouts'
 import { getPath } from '../../../../shared/constants'
 import { fonts } from '../../../../styles'

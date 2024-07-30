@@ -8,8 +8,8 @@ import {
   ProjectStatusLabels,
   ProjectStatusTooltip,
 } from '../../../components/ui'
-import { SubscribeButton } from '../../../modules/project/pages/projectView/views/projectActivityPanel/screens/info/components'
 import { AvatarElement } from '../../../modules/project/pages/projectView/views/projectActivityPanel/components'
+import { SubscribeButton } from '../../../modules/project/pages/projectView/views/projectActivityPanel/screens/info/components'
 import {
   FundingStatWithFollow,
   FundingStatWithFollowProps,
