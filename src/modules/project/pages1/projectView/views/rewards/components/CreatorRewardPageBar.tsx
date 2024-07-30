@@ -39,7 +39,15 @@ export const CreateRewardButtons = () => {
   const { project } = useProjectAtom()
   return (
     <>
-      <Button flex={1} size={{ base: 'md', lg: 'lg' }} variant="outline" colorScheme="neutral1" leftIcon={<PiBag />}>
+      <Button
+        as={Link}
+        to={getPath('dashboardSales', project.name)}
+        flex={1}
+        size={{ base: 'md', lg: 'lg' }}
+        variant="outline"
+        colorScheme="neutral1"
+        leftIcon={<PiBag />}
+      >
         {t('Manage reward sales')}
       </Button>
       <Button

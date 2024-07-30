@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { dimensions } from '../../../../../../shared/constants'
 import { ProjectStatus } from '../../../../../../types'
 import { useProjectAtom } from '../../../../hooks/useProjectAtom'
+import { BodySectionPageBottomBar } from './components/BodySectionPageBottomBar'
 import {
   ContributionSummary,
   CreatorTools,
@@ -73,6 +74,7 @@ export const ProjectBody = () => {
       {goals.hasGoals ? <Goals /> : null} */}
       {/* <CreatorTools />
       <Details /> */}
+      <BodySectionPageBottomBar />
     </Stack>
   )
 }

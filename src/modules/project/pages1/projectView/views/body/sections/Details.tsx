@@ -113,7 +113,7 @@ export const DetailLine = ({ title, empty, children }: PropsWithChildren<{ title
   }
 
   return (
-    <HStack w="full">
+    <HStack w="full" alignItems={'start'}>
       <Body size="xs" medium light>
         {`${title}: `}
       </Body>

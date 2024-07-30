@@ -7,7 +7,7 @@ import { CreatorGoalPageBottomBar, CreatorGoalPageTopBar } from './components'
 
 export const ProjectGoals = () => {
   return (
-    <VStack w="full" spacing={8}>
+    <VStack w="full" spacing={8} paddingBottom={'120px'}>
       <CreatorGoalPageTopBar />
       <CardLayout w="full">
         <RenderGoals />

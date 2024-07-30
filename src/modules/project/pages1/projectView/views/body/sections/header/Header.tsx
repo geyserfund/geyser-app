@@ -138,7 +138,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
         <HStack
           spacing={4}
           w="full"
-          paddingX={{ base: 4, lg: 6 }}
+          paddingX={{ base: 3, lg: 6 }}
           paddingY={{ base: 5, lg: 6 }}
           position="relative"
           alignItems="start"
@@ -163,7 +163,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
               {project.title}
             </H1>
 
-            <HStack w="full">
+            <HStack w="full" flexWrap={'wrap'}>
               <HStack spacing={0.5}>
                 <LightningAddress name={`${project.name}`} isGeyser />
                 <NpubDisplay npub={project?.keys?.nostrKeys.publicKey.npub} />

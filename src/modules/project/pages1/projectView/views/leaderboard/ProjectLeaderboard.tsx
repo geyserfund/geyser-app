@@ -58,7 +58,7 @@ const ProjectLeaderboardMobile = () => {
   const { render, ...animatedNavBarProps } = useAnimatedNavBar({ items, defaultView: LeaderboardView.Leaderboard })
 
   return (
-    <CardLayout dense w="full" h="100%" paddingTop={standardPadding}>
+    <CardLayout dense w="full" h="100%" paddingTop={standardPadding} marginBottom="120px">
       <HStack w="full" position="absolute" top={standardPadding} paddingX={standardPadding}>
         <AnimatedNavBar {...animatedNavBarProps} showLabel />
       </HStack>

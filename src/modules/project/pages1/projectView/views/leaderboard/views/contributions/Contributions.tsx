@@ -70,7 +70,7 @@ export const Contributions = () => {
   }
 
   return (
-    <CardLayout w="full" h="full" dense>
+    <CardLayout w="full" h="full" dense noMobileBorder>
       <VStack h="full" id={id} overflowY={{ base: undefined, lg: 'auto' }} paddingTop={standardPadding}>
         {contributions.length === 0 ? (
           <NoContribution />
