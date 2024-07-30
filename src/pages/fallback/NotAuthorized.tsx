@@ -2,7 +2,8 @@ import { Button, Image, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { Head } from '../../config'
+import { Head } from '@/config/Head'
+
 import { useServiceWorkerUpdate } from '../../context'
 import { NotAuthorizedImageUrl } from '../../shared/constants/platform/url'
 import { CommonFeedbackMessage } from './CommonFeedbackMessage'

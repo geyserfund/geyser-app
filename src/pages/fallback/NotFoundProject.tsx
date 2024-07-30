@@ -1,8 +1,9 @@
 import { Box, Image, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { Head } from '@/config/Head'
+
 import { Body1 } from '../../components/typography'
-import { Head } from '../../config'
 import { NotFoundPageImageUrl } from '../../shared/constants/platform/url'
 
 export const NotFoundProject = () => {

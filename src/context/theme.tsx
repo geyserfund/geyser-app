@@ -2,10 +2,12 @@ import { extendTheme, ThemeProvider, ThemeProviderProps, useColorMode } from '@c
 import { useEffect } from 'react'
 import { ThemeProvider as ReactJSSThemeProvider } from 'react-jss'
 
-import { theme } from '../config'
+import { theme } from '@/config/theme'
+
 import { darkModeColors, lightModeColors } from '../styles'
 import { UserSetColorMode } from '../utils'
 import { useThemeDetector } from '../utils/hooks'
+
 export type AppTheme = typeof theme & {
   colors: typeof lightModeColors
   isNostrColor: boolean

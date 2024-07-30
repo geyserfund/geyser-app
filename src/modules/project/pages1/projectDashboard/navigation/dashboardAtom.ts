@@ -1,6 +1,7 @@
 import { atom } from 'jotai'
 
-import { currentRouteAtom, routeMatchForAtom } from '@/config'
+import { currentRouteAtom } from '@/config/routes'
+import { routeMatchForAtom } from '@/config/routes/routeGroups'
 import { getPath, PathName } from '@/shared/constants'
 
 import { projectDashboardItems } from './dashboardNavData'

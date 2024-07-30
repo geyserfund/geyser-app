@@ -5,8 +5,8 @@ import {
   creatorProjectCreationRoutes as routesForPrivateProjectLaunch,
   entryCreationRoutes as routesForEntryCreation,
   projectCreatorRoutes as routesForProjectCreator,
+  routeMatchForAtom,
 } from '../routeGroups'
-import { routeMatchForAtom } from './routesAtom'
 
 const routesForPrivateProjectLaunchAtom = atom(routeMatchForAtom(routesForPrivateProjectLaunch))
 

@@ -1,5 +1,9 @@
-export * from './components/PrivateRoute'
-export * from './routes'
-export * from './state/historyRouteAtom'
-export * from './state/privateRoutesAtom'
-export * from './state/routesAtom'
+export { PrivateRoute, renderPrivateRoute } from './components/PrivateRoute'
+export { platformRoutes, router } from './routes'
+export { historyRouteAtom, historyRouteSetAtom } from './state/historyRouteAtom'
+export {
+  routeMatchForProjectPageAtom,
+  routesForProjectCreatorAtom,
+  useRouteMatchesForPrivateRoute,
+} from './state/privateRoutesAtom'
+export { currentRouteAtom, matchRoutesAtom } from './state/routesAtom'

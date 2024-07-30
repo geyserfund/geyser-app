@@ -1,4 +1,20 @@
+import { Getter } from 'jotai'
+
 import { getPath, PathName } from '@/shared/constants'
+
+import { currentRouteAtom } from './state/routesAtom'
+
+/** Get the functions you can pass into a derived atom definition */
+export const routeMatchForAtom =
+  (
+    /** arrray of route patterns you'd like to match with the current route */
+    routes: string[],
+  ) =>
+  (get: Getter) => {
+    const matchRoute = get(currentRouteAtom)
+    if (!matchRoute) return false
+    return routes.some((route) => route === matchRoute.path)
+  }
 
 export const creatorProjectCreationRoutes = [
   getPath('launch'),

@@ -174,4 +174,5 @@ const finalTheme = {
   ...theme,
   colors: lightModeColors,
 }
+/** This is only used for chakra types generation process */
 export default extendTheme(finalTheme)

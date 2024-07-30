@@ -4,7 +4,7 @@ import { Provider } from 'jotai'
 import { useEffect } from 'react'
 import { Outlet, ScrollRestoration } from 'react-router-dom'
 
-import { client } from './config'
+import { client } from './config/apollo-client'
 import { Head } from './config/Head'
 import { configMatomo } from './config/matomo'
 import { AuthProvider, ChakraThemeProvider, NavProvider, ServiceWorkerProvider } from './context'

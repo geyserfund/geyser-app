@@ -2,7 +2,8 @@ import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 import { matchRoutes, useLocation } from 'react-router-dom'
 
-import { matchRoutesAtom, platformRoutes } from '@/config'
+import { platformRoutes } from '../routes'
+import { matchRoutesAtom } from '../state/routesAtom'
 
 /**
  * Keeps track of which defined route the user is currently on
