@@ -19,5 +19,5 @@ export { getNestedValue, useQueryWithPagination } from './useQueryWithPagination
 export { useScrollDirection } from './useScrollDirection'
 export { getSignedUploadAPI, useSignedUpload } from './useSignedUpload'
 export { useUnsavedAlert } from './useUnsavedAlert'
-export type { PaginatedListType, usePaginationAtomHookProps } from './utils'
-export { usePaginationAtomHook } from './utils'
+export type { PaginatedListType, usePaginationAtomHookProps } from './utils/usePaginationAtomHook'
+export { usePaginationAtomHook } from './utils/usePaginationAtomHook'
