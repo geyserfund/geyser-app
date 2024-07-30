@@ -1,8 +1,6 @@
-import { Box, Button, HStack, Image, VStack } from '@chakra-ui/react'
+import { Box, HStack, Image, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
-import { PiShareFat } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { ProjectEntryCardThumbnailPlaceholder } from '@/components/molecules'
@@ -13,6 +11,7 @@ import { getPath } from '@/shared/constants'
 import { EntryStatus, ProjectEntryFragment } from '@/types'
 import { toInt } from '@/utils'
 
+import { PostShare } from '../components'
 import { PostEditMenu } from '../components/PostEditMenu'
 
 type Props = {
@@ -20,8 +19,6 @@ type Props = {
 }
 
 export const ProjectEntryCard = ({ entry }: Props) => {
-  const { t } = useTranslation()
-
   const { project } = useProjectAtom()
 
   const isDraft = useMemo(() => {
@@ -31,6 +28,7 @@ export const ProjectEntryCard = ({ entry }: Props) => {
   return (
     <>
       <CardLayout
+        hover
         as={Link}
         to={
           isDraft
@@ -69,9 +67,8 @@ export const ProjectEntryCard = ({ entry }: Props) => {
           </Body>
           <HStack w="full" justifyContent={'end'}>
             <PostEditMenu entry={entry} />
-            <Button size="sm" variant="soft" colorScheme="neutral1" rightIcon={<PiShareFat />}>
-              {t('Share')}
-            </Button>
+
+            <PostShare size="sm" entry={entry} />
           </HStack>
         </VStack>
       </CardLayout>

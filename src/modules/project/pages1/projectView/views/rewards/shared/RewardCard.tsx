@@ -50,7 +50,7 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
   const isHidden = hidden || reward.isHidden
 
   return (
-    <CardLayout {...linkProps} dense w="full" overflow={'hidden'} spacing={0} position="relative" {...rest}>
+    <CardLayout hover {...linkProps} dense w="full" overflow={'hidden'} spacing={0} position="relative" {...rest}>
       {isHidden && (
         <Box
           backgroundColor={'neutralAlpha.6'}

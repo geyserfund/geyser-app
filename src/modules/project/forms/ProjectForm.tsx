@@ -13,7 +13,7 @@ import { useAuthContext } from '../../../context'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { ProjectValidations } from '../../../shared/constants'
 import { useDebounce } from '../../../shared/hooks'
-import { ImageCrop } from '../../../shared/molecules/ImageCropperModal'
+import { ImageCropAspectRatio } from '../../../shared/molecules/ImageCropperModal'
 import { useProjectByNameOrIdLazyQuery } from '../../../types'
 import { toMediumImageUrl, validLightningAddress } from '../../../utils'
 import { ProjectCreationVariables } from '../pages1/projectCreation/types'
@@ -239,7 +239,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           onUploadComplete={handleImageUpload}
           onDeleteClick={handleDeleteThumbnail}
           childrenOnLoading={<UploadBox loading h={10} />}
-          imageCrop={ImageCrop.Square}
+          imageCrop={ImageCropAspectRatio.Square}
         >
           <UploadBox h={10} title={watch('thumbnailImage') ? t('Change image') : undefined} />
         </FileUpload>
@@ -272,7 +272,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
                   onUploadComplete={handleHeaderImageUpload}
                   onDeleteClick={handleDeleteImage}
                   childrenOnLoading={<UploadBox loading h={10} />}
-                  imageCrop={ImageCrop.Rectangle}
+                  imageCrop={ImageCropAspectRatio.Rectangle}
                 >
                   <UploadBox h={10} flex={1} title={field.value ? t('Change header') : undefined} />
                 </FileUpload>

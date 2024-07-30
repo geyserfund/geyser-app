@@ -1,13 +1,12 @@
-/* eslint-disable no-async-promise-executor */
 import { Button, HStack, VStack } from '@chakra-ui/react'
-import { toPng } from 'html-to-image'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCopy } from 'react-icons/pi'
 
 import { LogoDark } from '@/assets'
 import { getAppEndPoint } from '@/config/domain'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useCreateAndCopyImage } from '@/modules/project/pages1/projectView/hooks'
 import { GeyserShareImageUrl } from '@/shared/constants'
 import { useNotification } from '@/utils'
 
@@ -18,65 +17,30 @@ export const ProjectShareView = () => {
 
   const { project } = useProjectAtom()
 
-  const { toast } = useNotification()
-
-  const [copying, setCopying] = useState(false)
+  const toast = useNotification()
 
   const endPoint = getAppEndPoint()
 
   const ref = useRef<HTMLDivElement>(null)
 
+  const { handleGenerateAndCopy, copying } = useCreateAndCopyImage()
+
   const handleCopy = async () => {
-    setCopying(true)
-    try {
-      const getBlob = async () => {
-        const dataUrl = await getDataUrl()
-
-        const base64Response = await fetch(dataUrl)
-
-        return base64Response.blob()
-      }
-
-      const clipboardItem = new ClipboardItem({
-        'image/png': getBlob().then((result) => {
-          if (!result) {
-            return new Promise(async (resolve) => {
-              resolve('')
-            })
-          }
-
-          return new Promise(async (resolve) => {
-            resolve(result)
-          })
-        }),
-      })
-
-      await navigator.clipboard.write([clipboardItem])
-      toast({
-        status: 'success',
-        title: 'Copied!',
-        description: 'Ready to paste into Social media posts',
-      })
-    } catch (error) {
-      console.log('checking error', error)
-      toast({
-        status: 'error',
-        title: 'Failed to download image',
-        description: 'Please try again',
-      })
-    }
-
-    setCopying(false)
-  }
-
-  const getDataUrl = async () => {
-    const element = ref.current
-    if (element) {
-      const dataUrl = await toPng(element)
-      return dataUrl
-    }
-
-    return ''
+    await handleGenerateAndCopy({
+      element: ref.current,
+      onSuccess() {
+        toast.success({
+          title: 'Copied!',
+          description: 'Ready to paste into Social media posts',
+        })
+      },
+      onError() {
+        toast.error({
+          title: 'Failed to download image',
+          description: 'Please try again',
+        })
+      },
+    })
   }
 
   const projectUrl = `${endPoint}/project/${project.name}`

@@ -26,7 +26,15 @@ export const CardLayout = forwardRef<HTMLDivElement, CardLayoutProps>(
       transition: 'border-color 0.5s',
       boxShadow: 'none',
       as: rest.to ? Link : undefined,
-      _hover: hover ? { cursor: 'pointer', borderColor: 'neutral1.8' } : {},
+      _hover: hover
+        ? {
+            cursor: 'pointer',
+            borderColor: 'neutral1.8',
+            outlineColor: 'neutral1.8',
+            outlineWidth: 1,
+            outlineStyle: 'solid',
+          }
+        : {},
       _active: click ? { borderColor: 'primary1.9' } : {},
       _focus: click ? { borderColor: 'primary1.9' } : {},
       ...rest,

@@ -5,7 +5,7 @@ import { useDropzone } from 'react-dropzone'
 
 import { ImageWithReload } from '../../components/ui'
 import { useModal, useSignedUpload } from '../hooks'
-import { ImageCrop, ImageCropperModal } from './ImageCropperModal'
+import { ImageCropAspectRatio, ImageCropperModal } from './ImageCropperModal'
 
 type URL = string
 
@@ -21,7 +21,7 @@ interface IFileUpload {
   onDeleteClick?: () => void
   onLoading?: (isLoading: boolean) => void
   onUploadComplete: (_: URL) => void
-  imageCrop?: ImageCrop
+  imageCrop?: ImageCropAspectRatio
 }
 
 const noop = () => {}

@@ -1,6 +1,6 @@
 import { Badge, Box, Button, HStack, SkeletonText, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiArrowLeft, PiShareFat } from 'react-icons/pi'
+import { PiArrowLeft } from 'react-icons/pi'
 import { Link, useParams } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
@@ -16,6 +16,7 @@ import { RewardCurrency, Satoshis, USDCents, useProjectRewardQuery } from '@/typ
 
 import { useRewardBuy } from '../../hooks'
 import { ProjectRewardShippingEstimate, RewardEditMenu } from './components'
+import { RewardShare } from './components/RewardShare'
 
 export const RewardView = () => {
   const { project, isProjectOwner } = useProjectAtom()
@@ -79,9 +80,7 @@ export const RewardView = () => {
         >
           {t('All rewards')}
         </Button>
-        <Button size={{ base: 'md', lg: 'lg' }} variant="soft" colorScheme="neutral1" rightIcon={<PiShareFat />}>
-          {t('Share')}
-        </Button>
+        <RewardShare reward={reward} />
       </ProjectNavContainer>
 
       <CardLayout w="full" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }}>
@@ -92,7 +91,7 @@ export const RewardView = () => {
                 {reward.name}
               </H2>
               {isProjectOwner ? (
-                <RewardEditMenu display={{ base: 'none', lg: 'undefined' }} reward={reward} />
+                <RewardEditMenu size="md" display={{ base: 'none', lg: 'undefined' }} reward={reward} />
               ) : (
                 <Button
                   variant="solid"

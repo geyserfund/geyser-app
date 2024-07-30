@@ -1,9 +1,13 @@
-export const generateTwitterShareUrl = (tweetTemplate: string, projectLink: string): string => {
+export const generateTwitterShareUrl = (text: string) => {
+  return `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`
+}
+
+export const generateProjectTwitterShareUrl = (tweetTemplate: string, projectLink: string): string => {
   const tweet = tweetTemplate.replace('{{projectLink}}', projectLink)
   return `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}`
 }
 
-const tweetTemplates = [
+const projectTweetTemplates = [
   'Check out my project in geyser: {{projectLink}}',
   "We're on a mission to change the game and we need your help. Dive into our project on @geyserfund and let's make a difference. Are you in? {{projectLink}}",
   "Dream with us! We're launching something incredible on @geyserfund and you're invited to be part of the journey. Join us! {{projectLink}}",
@@ -17,7 +21,7 @@ const tweetTemplates = [
 export const shareOnTwitter = (projectName: string, t: any) => {
   const projectLink = `${window.location.origin}/project/${projectName}`
 
-  const randomKey = tweetTemplates[Math.floor(Math.random() * tweetTemplates.length)] || ''
+  const randomKey = projectTweetTemplates[Math.floor(Math.random() * projectTweetTemplates.length)] || ''
   const tweetTemplate = t(randomKey)
-  return generateTwitterShareUrl(tweetTemplate, projectLink)
+  return generateProjectTwitterShareUrl(tweetTemplate, projectLink)
 }

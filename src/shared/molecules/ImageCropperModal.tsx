@@ -7,7 +7,7 @@ import { Body2 } from '../../components/typography'
 import { blobToFile, createImage, fileToBase64, getRadianAngle, rotateSize } from '../../utils'
 import { Modal } from '../components/layouts'
 
-export enum ImageCrop {
+export enum ImageCropAspectRatio {
   Square = 1,
   Rectangle = 3,
   Reward = 4 / 3,

@@ -1,7 +1,7 @@
 import { Box, Button, HStack, SkeletonText, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
-import { PiArrowLeft, PiShareFat } from 'react-icons/pi'
+import { PiArrowLeft } from 'react-icons/pi'
 import { Link, useParams } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
@@ -14,7 +14,7 @@ import { dimensions, getPath } from '@/shared/constants'
 import { useProjectEntryQuery } from '@/types'
 import { toInt } from '@/utils'
 
-import { PostEditMenu } from './components'
+import { PostEditMenu, PostShare } from './components'
 import { ProjectEntryEditor } from './shared'
 
 export const PostView = () => {
@@ -52,9 +52,7 @@ export const PostView = () => {
         >
           {t('All posts')}
         </Button>
-        <Button size={{ base: 'md', lg: 'lg' }} variant="soft" colorScheme="neutral1" rightIcon={<PiShareFat />}>
-          {t('Share')}
-        </Button>
+        <PostShare entry={entry} />
       </ProjectNavContainer>
 
       <CardLayout w="full" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }}>

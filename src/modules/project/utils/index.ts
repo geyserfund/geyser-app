@@ -1,1 +1,1 @@
-export { generateTwitterShareUrl, shareOnTwitter } from './twitterShareTemplate'
+export { generateProjectTwitterShareUrl, generateTwitterShareUrl, shareOnTwitter } from './twitterShareTemplate'
