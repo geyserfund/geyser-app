@@ -19,6 +19,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { FaCheck } from 'react-icons/fa'
 
+import { ProjectState } from '@/modules/project/state/projectAtom'
+
 import { Body2, Caption } from '../../../components/typography'
 import { useAuthContext } from '../../../context'
 import { useBTCConverter } from '../../../helpers'
@@ -335,7 +337,7 @@ export const GrantsContributeModal = ({ grantProjectName }: { grantProjectName?:
   const limits = data?.getWallet.limits
 
   return (
-    <FundingProvider project={grantsData?.projectGet} limits={limits}>
+    <FundingProvider project={grantsData?.projectGet as ProjectState} limits={limits}>
       <GrantsContributeModalContent grantsData={grantsData} />
     </FundingProvider>
   )

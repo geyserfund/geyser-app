@@ -1,4 +1,4 @@
-import { Input, InputGroup, InputProps, InputRightAddon, Text, VStack } from '@chakra-ui/react'
+import { Input, InputGroup, InputProps, InputRightAddon } from '@chakra-ui/react'
 import React from 'react'
 import { useController, UseControllerProps } from 'react-hook-form'
 

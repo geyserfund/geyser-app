@@ -2,7 +2,7 @@ import { HStack } from '@chakra-ui/react'
 import { BsArrowDown, BsArrowUp } from 'react-icons/bs'
 
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts'
-import { Body, H2 } from '@/shared/components/typography'
+import { Body } from '@/shared/components/typography'
 import { commaFormatted, useCustomTheme } from '@/utils'
 
 interface StatsBlockProps extends CardLayoutProps {

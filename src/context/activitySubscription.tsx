@@ -2,7 +2,7 @@ import { useSubscription } from '@apollo/client'
 import { DateTime } from 'luxon'
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 
-import { ACTIVITY_CREATION_SUBSCRIPTION } from '../graphql/subscriptions'
+import { ACTIVITY_CREATION_SUBSCRIPTION } from '../graphqlBase/subscriptions'
 import { useFollowedProjectsValue } from '../pages/auth/state'
 import { ActivityCreatedSubscription, ActivityCreatedSubscriptionInput, ActivityForLandingPageFragment } from '../types'
 import { toInt } from '../utils'

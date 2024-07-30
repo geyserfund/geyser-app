@@ -1,10 +1,12 @@
 import { Box, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
+
 import { ProjectRewardForCreateUpdateFragment } from '../../../../../../../../types'
 import { useMobileMode, useNotification } from '../../../../../../../../utils'
 import { useIsProjectPage } from '../../../../../../../navigation/topNavBar/topNavBarAtom'
-import { useFundingContext, useProjectContext } from '../../../../../../context'
+import { useFundingContext } from '../../../../../../context'
 import { FundingFormRewardItem } from '../../components'
 import { SectionTitle } from '../../components/SectionTitle'
 
@@ -15,12 +17,13 @@ type Props = {
 
 export const FundingFormRewards = ({ readOnly, onRewardClick }: Props) => {
   const { t } = useTranslation()
-  const { project } = useProjectContext()
+
+  const { rewards } = useRewardsAtom()
   const {
     fundForm: { state, updateReward },
   } = useFundingContext()
   const isMobile = useMobileMode()
-  const rewards = project?.rewards || []
+
   const { toast } = useNotification()
 
   const hasRewards = rewards && rewards.length

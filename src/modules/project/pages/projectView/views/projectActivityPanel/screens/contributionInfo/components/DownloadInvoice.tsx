@@ -3,7 +3,7 @@ import { DownloadIcon } from '@chakra-ui/icons'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { useEffect, useState } from 'react'
 
-import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../../../../../../../graphql'
+import { QUERY_PROJECT_BY_NAME_OR_ID } from '../../../../../../../../../graphqlBase'
 import {
   FundingTxForDownloadInvoiceFragment,
   Project,

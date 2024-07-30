@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Body2, H1, MonoBody1 } from '../../../components/typography'
-import { QUERY_PROJECTS_SUMMARY } from '../../../graphql'
+import { QUERY_PROJECTS_SUMMARY } from '../../../graphqlBase'
 import { getBitcoinAmount, getShortAmountLabel, toInt, useNotification } from '../../../utils'
 import { SummarySkeleton } from '../../landing/components'
 

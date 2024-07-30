@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client'
 
+import { FRAGMENT_PROJECT_KEYS } from '@/modules/project/graphql/fragments/projectFragment'
+
 import { FRAGMENT_ENTRY_FOR_PROJECT } from './entries'
 import { FRAGMENT_PROJECT_OWNER_USER, FRAGMENT_USER_FOR_AVATAR, FRAGMENT_USER_ME } from './user'
 import { FRAGMENT_PROJECT_WALLET } from './wallet'
@@ -139,6 +141,7 @@ export const FRAGMENT_PROJECT = gql`
   ${FRAGMENT_USER_FOR_AVATAR}
   ${FRAGMENT_PROJECT_WALLET}
   ${FRAGMENT_PROJECT_GRANT_APPLICATIONS}
+  ${FRAGMENT_PROJECT_KEYS}
   fragment Project on Project {
     id
     title
@@ -158,6 +161,9 @@ export const FRAGMENT_PROJECT = gql`
     rewardCurrency
     fundersCount
     fundingTxsCount
+    keys {
+      ...ProjectKeys
+    }
     location {
       country {
         name

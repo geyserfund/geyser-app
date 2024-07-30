@@ -1,13 +1,15 @@
 import { Divider, VStack } from '@chakra-ui/react'
 import { Fragment } from 'react'
 
+import { ProjectState } from '@/modules/project/state/projectAtom'
+
 import { ProjectFundingLeaderboardFeedItem } from '../../../../../../../../../components/molecules'
-import { QUERY_PROJECT_FUNDERS } from '../../../../../../../../../graphql'
+import { QUERY_PROJECT_FUNDERS } from '../../../../../../../../../graphqlBase'
 import { ScrollInvoke } from '../../../../../../../../../helpers'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../../../../../shared/components/layouts'
 import { ID } from '../../../../../../../../../shared/constants/components'
 import { useQueryWithPagination } from '../../../../../../../../../shared/hooks'
-import { FunderWithUserFragment, ProjectFragment } from '../../../../../../../../../types/generated/graphql'
+import { FunderWithUserFragment } from '../../../../../../../../../types/generated/graphql'
 import { useMobileMode, useNotification } from '../../../../../../../../../utils'
 
 const LEADERBOARD_ITEM_LIMIT = 50
@@ -15,7 +17,7 @@ const LEADERBOARD_ITEM_LIMIT = 50
 interface ProjectLeaderboardListProps extends CardLayoutProps {
   id?: string
   isBounded?: boolean
-  project: ProjectFragment
+  project: ProjectState
 }
 
 export const ProjectLeaderboardList = ({

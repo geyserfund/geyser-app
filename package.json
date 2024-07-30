@@ -26,7 +26,7 @@
     "theme:types": "yarn chakra-cli tokens ./src/config/theme/theme.ts"
   },
   "dependencies": {
-    "@apollo/client": "^3.9.2",
+    "@apollo/client": "^3.11.1",
     "@bitcoinerlab/secp256k1": "^1.1.1",
     "@chakra-ui/icons": "^2.1.1",
     "@chakra-ui/media-query": "^3.3.0",
@@ -67,8 +67,8 @@
     "file-saver": "^2.0.5",
     "framer-motion": "^11.2.6",
     "get-video-id": "^4.1.5",
-    "graphql": "^16.6.0",
-    "graphql-ws": "^5.12.1",
+    "graphql": "^16.9.0",
+    "graphql-ws": "^5.16.0",
     "html-to-image": "^1.11.11",
     "i18next": "^23.1.0",
     "i18next-browser-languagedetector": "^7.0.2",

@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client'
 import { Box, Link, Stack, Text, Tooltip } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { QUERY_GRANT_STATISTICS } from '../../../graphql/queries/grant'
+import { QUERY_GRANT_STATISTICS } from '../../../graphqlBase/queries/grant'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../shared/components/layouts'
 import { useAnimatedClipboard } from '../../../shared/hooks/useAnimatedClipboard'
 import { GrantStatistics } from '../../../types'

@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   HStack,
   IconButton,
   Modal,
@@ -13,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { forwardRef, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiCaretDoubleDown, PiShareFat } from 'react-icons/pi'
+import { PiCaretDoubleDown } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { validateImageUrl } from '@/shared/markdown/validations/image'
@@ -28,11 +27,10 @@ import {
   projectFlashIds,
   projectsWithSubscription,
 } from '../../../../../../../../shared/constants'
-import { ProjectStatusLabel } from '../../../../../../../../shared/molecules/ProjectStatusLabel'
-import { ProjectStatus, useProjectPageHeaderSummaryQuery, WalletStatus } from '../../../../../../../../types'
+import { useProjectPageHeaderSummaryQuery } from '../../../../../../../../types'
 import { toInt, useMobileMode } from '../../../../../../../../utils'
 import { toLargeImageUrl } from '../../../../../../../../utils/tools/imageSizes'
-import { useProjectAtom, useWalletAtom } from '../../../../../../hooks/useProjectAtom'
+import { useProjectAtom } from '../../../../../../hooks/useProjectAtom'
 import { FollowButton } from '../../components'
 import { CreatorEditButton } from '../../components/CreatorEditButton'
 import { CreatorSocial } from './components/CreatorSocial'
@@ -44,7 +42,7 @@ import { VideoPlayer } from './components/VideoPlayer'
 export const Header = forwardRef<HTMLDivElement>((_, ref) => {
   const { t } = useTranslation()
   const { project, loading, partialUpdateProject } = useProjectAtom()
-  const { wallet } = useWalletAtom()
+  // const { wallet } = useWalletAtom()
 
   const isMobile = useMobileMode()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -80,17 +78,17 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
     setSubscribers(toInt(`${value.membership_count}`))
   }
 
-  const statusContent = () => {
-    if (project.status === ProjectStatus.Active && wallet?.state.status === WalletStatus.Ok) {
-      return null
-    }
+  // const statusContent = () => {
+  //   if (project.status === ProjectStatus.Active && wallet?.state.status === WalletStatus.Ok) {
+  //     return null
+  //   }
 
-    return (
-      <HStack w="full" justifyContent="center" pt={{ base: '10px', lg: '0px' }}>
-        <ProjectStatusLabel project={project} wallet={wallet} />
-      </HStack>
-    )
-  }
+  //   return (
+  //     <HStack w="full" justifyContent="center" pt={{ base: '10px', lg: '0px' }}>
+  //       <ProjectStatusLabel project={project} wallet={wallet} />
+  //     </HStack>
+  //   )
+  // }
 
   const handleClickDetails = () => {
     const element = document.getElementById(ID.project.details.container)

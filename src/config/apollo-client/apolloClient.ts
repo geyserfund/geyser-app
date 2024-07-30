@@ -4,8 +4,6 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { createClient } from 'graphql-ws'
 
-import { QUERY_PROJECT_REWARD } from '@/modules/project/graphql/queries/rewardsQuery'
-
 import { __development__ } from '../../shared/constants'
 import { toInt } from '../../utils'
 import { getAppEndPoint } from '../domain'

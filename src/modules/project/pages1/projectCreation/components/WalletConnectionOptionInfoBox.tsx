@@ -1,4 +1,4 @@
-import { HTMLChakraProps, Text, VStack } from '@chakra-ui/react'
+import { HTMLChakraProps, VStack } from '@chakra-ui/react'
 
 import { Body } from '@/shared/components/typography'
 

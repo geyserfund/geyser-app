@@ -2,7 +2,6 @@ import { Button, IconButton } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { colors } from 'react-select/dist/declarations/src/theme'
 
 import { NostrSvgIcon } from '../../components/icons'
 import { useModal } from '../../shared/hooks/useModal'

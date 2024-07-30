@@ -1,5 +1,5 @@
 import { captureException } from '@sentry/react'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 
 import {
@@ -9,7 +9,6 @@ import {
   useUpdateWalletMutation,
 } from '../../../types'
 import { useProjectAtom } from '../hooks/useProjectAtom'
-import { projectAtom } from '../state/projectAtom'
 import { walletAtom, walletConnectionDetailsAtom, walletLoadingAtom } from '../state/walletAtom'
 import { useCustomMutation } from './custom/useCustomMutation'
 

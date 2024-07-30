@@ -2,7 +2,7 @@ import { CopyIcon } from '@chakra-ui/icons'
 import { HStack, IconButton, Input, InputGroup, InputRightElement, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiInfo, PiWarningCircle } from 'react-icons/pi'
+import { PiInfo } from 'react-icons/pi'
 import { TbWorld } from 'react-icons/tb'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'

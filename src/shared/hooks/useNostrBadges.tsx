@@ -5,7 +5,7 @@ import { getEventHash, Relay, relayInit } from 'nostr-tools'
 import { Event } from 'nostr-tools'
 import { useEffect, useState } from 'react'
 
-import { MUTATION_USER_BADGE_AWARD } from '../../graphql/mutations'
+import { MUTATION_USER_BADGE_AWARD } from '../../graphqlBase/mutations'
 import { MutationUserBadgeAwardArgs, UserBadge } from '../../types'
 import { useNotification } from '../../utils'
 import { signEventToBeDeprecated } from '../../utils/nostr/nip07'

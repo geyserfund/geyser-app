@@ -1,5 +1,4 @@
 import { useQuery } from '@apollo/client'
-import { CloseIcon } from '@chakra-ui/icons'
 import { HStack, IconButton, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -9,10 +8,9 @@ import { SingleValue } from 'react-select'
 
 import { Body } from '@/shared/components/typography'
 
-import { Body1 } from '../../../components/typography'
-import { IconButtonComponent, SelectComponent } from '../../../components/ui'
+import { SelectComponent } from '../../../components/ui'
 import { AppTheme } from '../../../context'
-import { QUERY_COUNTRIES, QUERY_REGION } from '../../../graphql/queries'
+import { QUERY_COUNTRIES, QUERY_REGION } from '../../../graphqlBase/queries'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { SkeletonLayout } from '../../../shared/components/layouts'
 import { Country, Location, Maybe, Project, ProjectCountriesGetResult, ProjectRegionsGetResult } from '../../../types'

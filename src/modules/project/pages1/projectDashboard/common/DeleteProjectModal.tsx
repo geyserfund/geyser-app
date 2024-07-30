@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, Button, Checkbox, Text, VStack } from '@chakra-ui/react'
+import { Alert, AlertIcon, Button, Checkbox, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

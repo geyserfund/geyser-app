@@ -58,7 +58,8 @@ export const ContributionInfoBox = ({ showGeyserFee, version, openedFromGrant, .
 
   if (!project || !project.name) return null
 
-  const rewards = project.rewards?.filter((reward) => reward !== null) as ProjectReward[]
+  // const rewards = project.rewards?.filter((reward) => reward !== null) as ProjectReward[]
+  const rewards = [] as ProjectReward[]
   const hasRewards = rewards && rewards.length > 0
   const hasSelectedRewards = formState.rewardsByIDAndCount && Object.entries(formState.rewardsByIDAndCount).length > 0
   const isNoFees = noFeeProjects.includes(project.name) || hasOwnNode(project)

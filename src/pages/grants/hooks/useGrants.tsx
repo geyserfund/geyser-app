@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { useMemo } from 'react'
 
-import { QUERY_GRANTS } from '../../../graphql/queries/grant'
+import { QUERY_GRANTS } from '../../../graphqlBase/queries/grant'
 import { Grant, GrantStatusEnum } from '../../../types'
 import { toInt } from '../../../utils'
 

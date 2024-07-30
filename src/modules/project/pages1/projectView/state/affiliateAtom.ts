@@ -8,8 +8,10 @@ export type ProjectAffiliateAtomType = {
   refId: string
 }
 
+/** Affiliate Ids for the project */
 export const projectAffiliateAtom = atomWithStorage<ProjectAffiliateAtomType[]>('affiliateId', [])
 
+/** Add affiliate to the project */
 export const addProjectAffiliateAtom = atom(null, (get, set, affiliate: Omit<ProjectAffiliateAtomType, 'dateTime'>) => {
   const allProjectAffiliates = get(projectAffiliateAtom)
 

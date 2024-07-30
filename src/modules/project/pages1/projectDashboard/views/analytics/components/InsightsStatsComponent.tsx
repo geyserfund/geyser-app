@@ -1,4 +1,4 @@
-import { HStack, Stack, VStack } from '@chakra-ui/react'
+import { Stack, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 

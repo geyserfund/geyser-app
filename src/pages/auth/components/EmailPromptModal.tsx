@@ -2,9 +2,10 @@ import { Box, Button, Image, Text, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ControlledTextInput } from '../../../components/inputs'
-import { ControlledCheckboxInput } from '../../../components/inputs/ControlledCheckboxInput'
-import { Modal } from '../../../components/layouts'
+import { ControlledTextInput } from '@/shared/components/controlledInput'
+import { ControlledCheckboxInput } from '@/shared/components/controlledInput/ControlledCheckboxInput'
+import { Modal } from '@/shared/components/layouts'
+
 import { EmailPromptModalUrl } from '../../../shared/constants'
 import { useEmailPrompt } from '../hooks/useEmailPrompt'
 

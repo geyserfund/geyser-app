@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { AddIcon } from '@chakra-ui/icons'
 import { Button, HStack, IconButton, StackProps, useDisclosure, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { Dispatch, SetStateAction, useState } from 'react'
@@ -11,11 +11,11 @@ import { Body } from '@/shared/components/typography'
 
 import { SelectComponent } from '../../../components/ui'
 import { AppTheme } from '../../../context'
-import { QUERY_TAGS } from '../../../graphql/queries/tags'
+import { QUERY_TAGS } from '../../../graphqlBase/queries/tags'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { Modal, SkeletonLayout } from '../../../shared/components/layouts'
 import { getListOfTags } from '../../../shared/constants'
-import { Tag, TagCreateInput, TagsGetResult, useProjectTagCreateMutation } from '../../../types'
+import { Tag, TagsGetResult, useProjectTagCreateMutation } from '../../../types'
 import { useNotification } from '../../../utils'
 
 const MAX_TAGS_ALLOWED = 4

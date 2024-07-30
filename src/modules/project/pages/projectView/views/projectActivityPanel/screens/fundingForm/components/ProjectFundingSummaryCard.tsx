@@ -2,11 +2,13 @@ import { Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { FormEventHandler, forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+
 import { BoltIcon } from '../../../../../../../../../components/icons'
 import { useFundCalc } from '../../../../../../../../../helpers'
 import { standardPadding } from '../../../../../../../../../styles'
 import { toInt } from '../../../../../../../../../utils'
-import { useFundingContext, useProjectContext } from '../../../../../../../context'
+import { useFundingContext } from '../../../../../../../context'
 import { Badge } from './Badge'
 
 type Props = {
@@ -15,7 +17,7 @@ type Props = {
 
 export const ProjectFundingSummaryCard = forwardRef<HTMLDivElement, Props>(({ onSubmit }, ref) => {
   const { t } = useTranslation()
-  const { project } = useProjectContext()
+  const { project } = useProjectAtom()
   const { fundForm } = useFundingContext()
 
   const { state: formState, hasSelectedRewards } = fundForm

@@ -14,19 +14,8 @@ export const ProjectDashboardDetails = () => {
   const { t } = useTranslation()
   const toast = useNotification()
 
-  const {
-    project,
-    isDirty,
-    linkError,
-    saveProject,
-    saving,
-    saveTags,
-    setLinks,
-    setTags,
-    tags,
-    tagsLoading,
-    updateProject,
-  } = useProjectDetailsForm()
+  const { project, isDirty, linkError, saveProject, saving, saveTags, setLinks, setTags, tags, updateProject } =
+    useProjectDetailsForm()
 
   const unsavedModal = useProjectUnsavedModal({
     hasUnsaved: isDirty,

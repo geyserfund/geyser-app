@@ -1,6 +1,6 @@
 import { Maybe } from 'yup'
 
-import { Satoshis, USDCents, USDollars } from '../../types'
+import { Satoshis, USDCents, USDollars } from '@/types'
 
 export const commaFormatted = (amount?: Maybe<number | USDollars | Satoshis | USDCents>) =>
   amount ? amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''

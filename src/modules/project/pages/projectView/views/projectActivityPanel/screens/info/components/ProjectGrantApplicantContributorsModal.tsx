@@ -2,7 +2,8 @@ import { Box } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 
-import { Modal } from '../../../../../../../../../components/layouts'
+import { Modal } from '@/shared/components/layouts'
+
 import { useModal } from '../../../../../../../../../shared/hooks'
 import { GrantApplicantContributor } from '../../../../../../../../../types'
 import { ProjectGrantApplicantContributorsList } from './ProjectGrantApplicantContributorsList'

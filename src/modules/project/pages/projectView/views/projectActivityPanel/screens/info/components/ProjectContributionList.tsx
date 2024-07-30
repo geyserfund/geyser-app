@@ -1,13 +1,15 @@
 import { Divider, VStack } from '@chakra-ui/react'
 import { Fragment, useEffect, useState } from 'react'
 
-import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../../../../../../../graphql'
+import { ProjectState } from '@/modules/project/state/projectAtom'
+
+import { QUERY_GET_FUNDING_TXS_LANDING } from '../../../../../../../../../graphqlBase'
 import { ScrollInvoke } from '../../../../../../../../../helpers'
 import { ContributionActivityItem } from '../../../../../../../../../pages/landing/feed/components'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../../../../../shared/components/layouts'
 import { ID } from '../../../../../../../../../shared/constants/components'
 import { useQueryWithPagination } from '../../../../../../../../../shared/hooks'
-import { FundingTxFragment, ProjectFragment } from '../../../../../../../../../types'
+import { FundingTxFragment } from '../../../../../../../../../types'
 import {
   aggregateTransactions,
   FundingTxWithCount,
@@ -21,7 +23,7 @@ const CONTRIBUTION_ITEM_LIMIT = 50
 interface ProjectContributionListProps extends CardLayoutProps {
   id?: string
   isBounded?: boolean
-  project: ProjectFragment
+  project: ProjectState
 }
 
 export const ProjectContributionList = ({

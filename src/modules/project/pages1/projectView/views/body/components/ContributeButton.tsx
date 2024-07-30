@@ -1,15 +1,15 @@
 import { Button, ButtonProps } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
-import { isActive, useMobileMode } from '../../../../../../../utils'
+// import { useNavigate } from 'react-router-dom'
+import { isActive } from '../../../../../../../utils'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
 
 export const ContributeButton = (props: ButtonProps) => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const { project } = useProjectAtom()
-  const isMobile = useMobileMode()
+  // const isMobile = useMobileMode()
 
   if (!project) {
     return null

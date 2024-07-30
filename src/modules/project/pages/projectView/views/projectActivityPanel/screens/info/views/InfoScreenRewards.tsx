@@ -2,20 +2,22 @@ import { Badge, Box, Link, Stack, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
+
 import { StickToTop } from '../../../../../../../../../shared/components/layouts'
 import { dimensions, ID, PathName } from '../../../../../../../../../shared/constants'
 import { standardPadding } from '../../../../../../../../../styles'
 import { useMobileMode } from '../../../../../../../../../utils'
-import { MobileViews, useProjectContext } from '../../../../../../../context'
 import { ProjectRewardPanel } from '../../../components'
 
 export const InfoScreenRewards = () => {
   const isMobile = useMobileMode()
-  const { setMobileView, project } = useProjectContext()
+  const { project } = useProjectAtom()
+  const { rewards } = useRewardsAtom()
   const navigate = useNavigate()
 
   const handleAllRewardsButtonClick = () => {
-    setMobileView(MobileViews.rewards)
+    // setMobileView(MobileViews.rewards)
     navigate(PathName.projectRewards)
   }
 
@@ -23,7 +25,7 @@ export const InfoScreenRewards = () => {
     return null
   }
 
-  const activeProjectRewards = project.rewards?.filter((reward) => reward.isHidden === false)
+  const activeProjectRewards = rewards?.filter((reward) => reward.isHidden === false)
   if (activeProjectRewards.length === 0) {
     return null
   }

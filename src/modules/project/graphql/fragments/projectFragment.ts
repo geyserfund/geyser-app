@@ -76,6 +76,7 @@ export const FRAGMENT_PROJECT_HEADER_SUMMARY = gql`
   fragment ProjectHeaderSummary on Project {
     followersCount
     fundersCount
+    fundingTxsCount
   }
 `
 

@@ -2,7 +2,7 @@ import { StackProps } from '@chakra-ui/react'
 
 import { NoDataError } from '../../../../components/errors'
 import Loader from '../../../../components/ui/Loader'
-import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../../../graphql'
+import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../../../graphqlBase'
 import { useQueryWithPagination } from '../../../../shared/hooks'
 import { OrderByOptions, Project, ProjectStatus } from '../../../../types'
 import { LeaderboardBody } from '../components'

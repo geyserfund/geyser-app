@@ -18,7 +18,7 @@ import {
   initialEntriesLoadAtom,
   unpublishedEntriesAtom,
 } from '../state/entriesAtom'
-import { isProjectOwnerAtom, projectAtom } from '../state/projectAtom'
+import { isProjectOwnerAtom } from '../state/projectAtom'
 import { updateEntryCache, updateProjectEntriesCache } from './cache/projectEntryCache'
 import { useCustomMutation } from './custom/useCustomMutation'
 

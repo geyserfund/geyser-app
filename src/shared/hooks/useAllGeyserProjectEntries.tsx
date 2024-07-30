@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 
-import { QUERY_ALL_GEYSER_PROJECT_ENTRIES } from '../../graphql'
+import { QUERY_ALL_GEYSER_PROJECT_ENTRIES } from '../../graphqlBase'
 import {
   Entry,
   GetEntriesInput,

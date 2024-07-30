@@ -2,6 +2,8 @@ import { Box } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { useContext, useEffect } from 'react'
 
+import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
+
 import { AuthContext } from '../../../../../../context'
 import { useBtcContext } from '../../../../../../context/btc'
 import { useAuthModal } from '../../../../../../pages/auth/hooks'
@@ -16,7 +18,6 @@ import {
   QuoteCurrency,
 } from '../../../../../../types'
 import { toInt, useCustomTheme, useMobileMode } from '../../../../../../utils'
-import { MobileViews, useProjectContext } from '../../../../context'
 import { useFundingContext } from '../../../../context/FundingProvider'
 import { FundingStages, useFundingStage } from '../../../../funding/state'
 import { standardProjectPageSideMargin } from '../../constants'
@@ -36,28 +37,33 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   const isMobile = useMobileMode()
 
   const {
-    mobileView,
-    setMobileView,
+    // mobileView,
+
     project,
-    goals: { refetch },
-  } = useProjectContext()
+  } = useProjectAtom()
+
+  const { rewards } = useRewardsAtom()
+
   const { resetFundingFlow, requestFunding, fundForm } = useFundingContext()
 
   const { state: formState, setState: setFormState, resetForm, hasSelectedRewards } = fundForm
 
-  const { fundingStage, setFundingStage } = useFundingStage()
+  const {
+    fundingStage,
+    // setFundingStage
+  } = useFundingStage()
 
   const { loginOnOpen } = useAuthModal()
 
-  const inView = [MobileViews.contribution, MobileViews.leaderboard, MobileViews.funding].includes(mobileView)
+  // const inView = [MobileViews.contribution, MobileViews.leaderboard, MobileViews.funding].includes(mobileView)
 
-  const classes = useStyles({ isMobile, inView })
+  const classes = useStyles({ isMobile })
 
-  useEffect(() => {
-    if (mobileView === MobileViews.funding) {
-      setFundingStage(FundingStages.form)
-    }
-  }, [mobileView, resetForm, resetFundingFlow, setFundingStage])
+  // useEffect(() => {
+  //   if (mobileView === MobileViews.funding) {
+  //     setFundingStage(FundingStages.form)
+  //   }
+  // }, [mobileView, resetForm, resetFundingFlow, setFundingStage])
 
   useEffect(() => {
     if (user && user.id) {
@@ -71,14 +77,14 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
     }
   }, [formState.anonymous, loginOnOpen, setFormState, user])
 
-  useEffect(() => {
-    if (fundingStage === FundingStages.completed) {
-      refetch()
-    }
-  }, [fundingStage, refetch])
+  // useEffect(() => {
+  //   if (fundingStage === FundingStages.completed) {
+  //     refetch()
+  //   }
+  // }, [fundingStage, refetch])
 
   const handleCloseButton = () => {
-    setMobileView(MobileViews.contribution)
+    // setMobileView(MobileViews.contribution)
     resetFundingFlow()
     resetForm()
   }
@@ -143,7 +149,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
           <FundingFormScreen
             handleCloseButton={handleCloseButton}
             handleFund={handleFund}
-            rewards={project.rewards}
+            rewards={rewards}
             name={project.name}
           />
         )

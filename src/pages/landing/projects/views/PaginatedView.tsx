@@ -1,5 +1,5 @@
 import { useFilterContext } from '../../../../context'
-import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../../../graphql'
+import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '../../../../graphqlBase'
 import { ScrollInvoke } from '../../../../helpers'
 import { ID } from '../../../../shared/constants'
 import { useQueryWithPagination } from '../../../../shared/hooks'

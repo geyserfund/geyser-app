@@ -20,7 +20,7 @@ import { BsCheckLg } from 'react-icons/bs'
 
 import { Body1, Body2, Caption, H3 } from '../../../../components/typography'
 import { useAuthContext } from '../../../../context'
-import { MUTATION_APPLY_GRANT } from '../../../../graphql/mutations'
+import { MUTATION_APPLY_GRANT } from '../../../../graphqlBase/mutations'
 import { CreateAProjectButton } from '../../../../modules/profile/pages/profilePage/components'
 import { CardLayout } from '../../../../shared/components/layouts'
 import { LockedConnectAccountUrl } from '../../../../shared/constants'

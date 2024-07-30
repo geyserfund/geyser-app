@@ -80,7 +80,7 @@ export const LandingCardBase = ({
             {title}
           </H3>
           {StatusIcon && (
-            <Tooltip label={StatusTooltip}>
+            <Tooltip label={`${StatusTooltip}`}>
               <span>
                 <Icon as={StatusIcon} color={StatusColor} />
               </span>

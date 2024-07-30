@@ -2,15 +2,17 @@ import { VStack } from '@chakra-ui/layout'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { ProjectState } from '@/modules/project/state/projectAtom'
+
 import { standardPadding } from '../../../../../../../../styles'
-import { ProjectFragment, useFundingInvoiceCancelMutation } from '../../../../../../../../types'
+import { useFundingInvoiceCancelMutation } from '../../../../../../../../types'
 import { useFundingContext } from '../../../../../../context/FundingProvider'
 import { FundingStages, useFundingStage } from '../../../../../../funding/state'
 import { SectionTitleBlock } from '../../components/SectionTitleBlock'
 import { QRCodeSection } from './QRCodeSection'
 
 type Props = {
-  project: ProjectFragment
+  project: ProjectState
   onCloseClick: () => void
 }
 

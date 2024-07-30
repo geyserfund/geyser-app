@@ -36,9 +36,9 @@ export function ProjectBalanceDisplay() {
       toggleTotalProject()
     },
   })
-
+  const removeBalance = removeProjectAmountException(project?.name)
   const hasGoal = Boolean(defaultGoalId)
-  const hasTotalBalance = Boolean(balance && balanceUsdCent)
+  const hasTotalBalance = Boolean(balance && balanceUsdCent) && !removeBalance
 
   const [currentView, setCurrentView] = useState<BalanceView>(hasGoal ? BalanceView.Goal : BalanceView.Total)
 
@@ -171,13 +171,11 @@ export function ProjectBalanceDisplay() {
     )
   }
 
-  const removeBalance = removeProjectAmountException(project?.name)
-
   if (loading) {
     return <SkeletonLayout height="90px" width="100%" />
   }
 
-  if ((!hasGoal && !hasTotalBalance) || removeBalance) {
+  if (!hasGoal && !hasTotalBalance) {
     return null
   }
 

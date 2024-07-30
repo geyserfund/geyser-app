@@ -5,13 +5,14 @@ import ReactConfetti from 'react-confetti'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+
 import { Body2 } from '../../../../../../../../components/typography'
 import { useAuthContext } from '../../../../../../../../context'
-import { QUERY_USER_BADGES } from '../../../../../../../../graphql/queries/badges'
+import { QUERY_USER_BADGES } from '../../../../../../../../graphqlBase/queries/badges'
 import { getPath } from '../../../../../../../../shared/constants'
 import { lightModeColors, standardPadding } from '../../../../../../../../styles'
 import { UserBadge } from '../../../../../../../../types'
-import { useProjectContext } from '../../../../../../context'
 import { useFundingContext } from '../../../../../../context/FundingProvider'
 import {} from '../../components'
 import { ContributionInfoBox, ContributionInfoBoxVersion, ContributionShippingBox } from '../contributionInfo'
@@ -26,7 +27,7 @@ export const SuccessScreen = ({ onCloseClick }: Props) => {
   const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const { project } = useProjectContext()
+  const { project } = useProjectAtom()
 
   const isLightning = useIsLightingMethodAtom()
 

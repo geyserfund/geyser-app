@@ -9,6 +9,8 @@ export type PaginatedListType<TEntity, TTransformed = TEntity> = TTransformed ex
   ? TEntity[]
   : TTransformed[]
 
+type SetAtom<Args extends unknown[], Result> = (...args: Args) => Result
+
 export type usePaginationAtomHookProps<TEntity, TTransformed = TEntity> = {
   fetchMore: any
   queryName: string | string[]

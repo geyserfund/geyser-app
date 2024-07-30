@@ -4256,8 +4256,6 @@ export type Resolvers<ContextType = any> = {
 };
 
 
-export type ProjectAffiliateLinkFragment = { __typename?: 'AffiliateLink', projectId: any, label?: string | null, id: any, email: string, disabledAt?: any | null, createdAt: any, disabled?: boolean | null, affiliateId?: string | null, lightningAddress: string, affiliateFeePercentage: number, stats?: { __typename?: 'AffiliateStats', sales: { __typename?: 'AffiliateSalesStats', total: number, count: number } } | null };
-
 export type EmailUpdateUserFragment = { __typename?: 'User', email?: string | null, isEmailVerified: boolean, id: any };
 
 export type OtpResponseFragment = { __typename?: 'OTPResponse', otpVerificationToken: string, expiresAt: any };
@@ -4339,7 +4337,10 @@ export type ProjectRewardForLandingPageFragment = { __typename?: 'ProjectReward'
 export type ProjectRewardForCreateUpdateFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, cost: number, image?: string | null, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null };
 
 export type ProjectFragment = (
-  { __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, defaultGoalId?: any | null, balance: number, balanceUsdCent: number, createdAt: string, updatedAt: string, image?: string | null, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, fundingTxsCount?: number | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, owners: Array<{ __typename?: 'Owner', id: any, user: (
+  { __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, defaultGoalId?: any | null, balance: number, balanceUsdCent: number, createdAt: string, updatedAt: string, image?: string | null, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, fundingTxsCount?: number | null, keys: (
+    { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', npub: string } } }
+    & ProjectKeysFragment
+  ), location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, owners: Array<{ __typename?: 'Owner', id: any, user: (
       { __typename?: 'User' }
       & ProjectOwnerUserFragment
     ) }>, rewards: Array<(
@@ -4357,7 +4358,7 @@ export type ProjectFragment = (
   )>, wallets: Array<(
     { __typename?: 'Wallet' }
     & ProjectWalletFragment
-  )>, followers: Array<{ __typename?: 'User', id: any, username: string }>, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', npub: string } } } }
+  )>, followers: Array<{ __typename?: 'User', id: any, username: string }> }
   & ProjectGrantApplicationsFragment
 );
 
@@ -4397,34 +4398,6 @@ export type UserProjectContributionsFragment = { __typename?: 'UserProjectContri
 export type ProjectWalletFragment = { __typename?: 'Wallet', id: any, name?: string | null, feePercentage?: number | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode }, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'LndConnectionDetailsPrivate', macaroon: string, tlsCertificate?: string | null, hostname: string, grpcPort: number, lndNodeType: LndNodeType, pubkey?: string | null } | { __typename?: 'LndConnectionDetailsPublic', pubkey?: string | null } };
 
 export type WalletLimitsFragment = { __typename?: 'WalletLimits', contribution?: { __typename?: 'WalletContributionLimits', min?: number | null, max?: number | null, offChain?: { __typename?: 'WalletOffChainContributionLimits', min?: number | null, max?: number | null } | null, onChain?: { __typename?: 'WalletOnChainContributionLimits', min?: number | null, max?: number | null } | null } | null };
-
-export type AffiliateLinkCreateMutationVariables = Exact<{
-  input: AffiliateLinkCreateInput;
-}>;
-
-
-export type AffiliateLinkCreateMutation = { __typename?: 'Mutation', affiliateLinkCreate: (
-    { __typename?: 'AffiliateLink' }
-    & ProjectAffiliateLinkFragment
-  ) };
-
-export type AffiliateLinkLabelUpdateMutationVariables = Exact<{
-  affiliateLinkId: Scalars['BigInt']['input'];
-  label: Scalars['String']['input'];
-}>;
-
-
-export type AffiliateLinkLabelUpdateMutation = { __typename?: 'Mutation', affiliateLinkLabelUpdate: (
-    { __typename?: 'AffiliateLink' }
-    & ProjectAffiliateLinkFragment
-  ) };
-
-export type AffiliateLinkDisableMutationVariables = Exact<{
-  affiliateLinkId: Scalars['BigInt']['input'];
-}>;
-
-
-export type AffiliateLinkDisableMutation = { __typename?: 'Mutation', affiliateLinkDisable: { __typename?: 'AffiliateLink', id: any } };
 
 export type UserBadgeAwardMutationVariables = Exact<{
   userBadgeId: Scalars['BigInt']['input'];
@@ -4558,16 +4531,6 @@ export type ActivitiesForLandingPageQuery = { __typename?: 'Query', getActivitie
     & ActivityForLandingPageFragment
   )> };
 
-export type AffiliateLinksGetQueryVariables = Exact<{
-  input: GetAffiliateLinksInput;
-}>;
-
-
-export type AffiliateLinksGetQuery = { __typename?: 'Query', affiliateLinksGet: Array<(
-    { __typename?: 'AffiliateLink' }
-    & ProjectAffiliateLinkFragment
-  )> };
-
 export type BadgesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -4579,16 +4542,6 @@ export type UserBadgesQueryVariables = Exact<{
 
 
 export type UserBadgesQuery = { __typename?: 'Query', userBadges: Array<{ __typename?: 'UserBadge', userId: any, updatedAt: any, status?: UserBadgeStatus | null, id: any, fundingTxId?: any | null, createdAt: any, badgeAwardEventId?: string | null, badge: { __typename?: 'Badge', name: string, thumb: string, uniqueName: string, image: string, id: string, description: string, createdAt: any } }> };
-
-export type EntryQueryVariables = Exact<{
-  id: Scalars['BigInt']['input'];
-}>;
-
-
-export type EntryQuery = { __typename?: 'Query', entry?: (
-    { __typename?: 'Entry' }
-    & EntryFragment
-  ) | null };
 
 export type EntryForLandingPageQueryVariables = Exact<{
   entryID: Scalars['BigInt']['input'];
@@ -4979,6 +4932,8 @@ export type FundingTxStatusUpdatedSubscription = { __typename?: 'Subscription', 
       & FundingTxFragment
     ) } };
 
+export type ProjectAffiliateLinkFragment = { __typename?: 'AffiliateLink', projectId: any, label?: string | null, id: any, email: string, disabledAt?: any | null, createdAt: any, disabled?: boolean | null, affiliateId?: string | null, lightningAddress: string, affiliateFeePercentage: number, stats?: { __typename?: 'AffiliateStats', sales: { __typename?: 'AffiliateSalesStats', total: number, count: number } } | null };
+
 export type ProjectEntryFragment = { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, type: EntryType, fundersCount: number, amountFunded: number, status: EntryStatus, createdAt: string, publishedAt?: string | null };
 
 export type ProjectEntryViewFragment = { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, type: EntryType, fundersCount: number, amountFunded: number, status: EntryStatus, createdAt: string, publishedAt?: string | null, content?: string | null };
@@ -5009,9 +4964,9 @@ export type ProjectPageDetailsFragment = { __typename?: 'Project', id: any, name
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }> };
 
-export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null };
+export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null, fundingTxsCount?: number | null };
 
-export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, image?: string | null, thumbnailImage?: string | null, status?: ProjectStatus | null, links: Array<string>, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null };
+export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, image?: string | null, thumbnailImage?: string | null, status?: ProjectStatus | null, links: Array<string>, rewardCurrency?: RewardCurrency | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null };
 
 export type ProjectStatsForInsightsPageFragment = { __typename?: 'ProjectStats', current?: { __typename?: 'ProjectStatsBase', projectViews?: { __typename?: 'ProjectViewStats', viewCount: number, visitorCount: number, referrers: Array<{ __typename?: 'ProjectViewBaseStats', value: string, viewCount: number, visitorCount: number }>, regions: Array<{ __typename?: 'ProjectViewBaseStats', value: string, viewCount: number, visitorCount: number }> } | null, projectFunderRewards?: { __typename?: 'ProjectFunderRewardStats', quantitySum: number } | null, projectFunders?: { __typename?: 'ProjectFunderStats', count: number } | null, projectFundingTxs?: { __typename?: 'ProjectFundingTxStats', amountSum?: number | null, count: number } | null } | null, prevTimeRange?: { __typename?: 'ProjectStatsBase', projectViews?: { __typename?: 'ProjectViewStats', viewCount: number, visitorCount: number } | null, projectFunderRewards?: { __typename?: 'ProjectFunderRewardStats', quantitySum: number } | null, projectFunders?: { __typename?: 'ProjectFunderStats', count: number } | null, projectFundingTxs?: { __typename?: 'ProjectFundingTxStats', amountSum?: number | null, count: number } | null } | null };
 
@@ -5035,6 +4990,34 @@ export type ProjectPageWalletFragment = { __typename?: 'Wallet', id: any, name?:
     ) | null } | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } };
 
 export type ProjectWalletConnectionDetailsFragment = { __typename?: 'Wallet', id: any, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'LndConnectionDetailsPrivate', tlsCertificate?: string | null, pubkey?: string | null, macaroon: string, lndNodeType: LndNodeType, hostname: string, grpcPort: number } | { __typename?: 'LndConnectionDetailsPublic', pubkey?: string | null } };
+
+export type AffiliateLinkCreateMutationVariables = Exact<{
+  input: AffiliateLinkCreateInput;
+}>;
+
+
+export type AffiliateLinkCreateMutation = { __typename?: 'Mutation', affiliateLinkCreate: (
+    { __typename?: 'AffiliateLink' }
+    & ProjectAffiliateLinkFragment
+  ) };
+
+export type AffiliateLinkLabelUpdateMutationVariables = Exact<{
+  affiliateLinkId: Scalars['BigInt']['input'];
+  label: Scalars['String']['input'];
+}>;
+
+
+export type AffiliateLinkLabelUpdateMutation = { __typename?: 'Mutation', affiliateLinkLabelUpdate: (
+    { __typename?: 'AffiliateLink' }
+    & ProjectAffiliateLinkFragment
+  ) };
+
+export type AffiliateLinkDisableMutationVariables = Exact<{
+  affiliateLinkId: Scalars['BigInt']['input'];
+}>;
+
+
+export type AffiliateLinkDisableMutation = { __typename?: 'Mutation', affiliateLinkDisable: { __typename?: 'AffiliateLink', id: any } };
 
 export type DeleteEntryMutationVariables = Exact<{
   deleteEntryId: Scalars['BigInt']['input'];
@@ -5236,6 +5219,16 @@ export type UpdateWalletMutation = { __typename?: 'Mutation', walletUpdate: (
     & ProjectWalletConnectionDetailsFragment
   ) };
 
+export type AffiliateLinksGetQueryVariables = Exact<{
+  input: GetAffiliateLinksInput;
+}>;
+
+
+export type AffiliateLinksGetQuery = { __typename?: 'Query', affiliateLinksGet: Array<(
+    { __typename?: 'AffiliateLink' }
+    & ProjectAffiliateLinkFragment
+  )> };
+
 export type ProjectEntriesQueryVariables = Exact<{
   where: UniqueProjectQueryInput;
   input?: InputMaybe<ProjectEntriesGetInput>;
@@ -5417,26 +5410,6 @@ export type ProjectRewardQuery = { __typename?: 'Query', getProjectReward: (
     & ProjectRewardFragment
   ) };
 
-export const ProjectAffiliateLinkFragmentDoc = gql`
-    fragment ProjectAffiliateLink on AffiliateLink {
-  projectId
-  label
-  id
-  email
-  disabledAt
-  createdAt
-  disabled
-  affiliateId
-  lightningAddress
-  affiliateFeePercentage
-  stats {
-    sales {
-      total
-      count
-    }
-  }
-}
-    `;
 export const EmailUpdateUserFragmentDoc = gql`
     fragment EmailUpdateUser on User {
   email
@@ -5969,6 +5942,16 @@ export const ProjectForProfilePageFragmentDoc = gql`
   }
 }
     `;
+export const ProjectKeysFragmentDoc = gql`
+    fragment ProjectKeys on ProjectKeys {
+  nostrKeys {
+    publicKey {
+      hex
+      npub
+    }
+  }
+}
+    `;
 export const ExternalAccountFragmentDoc = gql`
     fragment ExternalAccount on ExternalAccount {
   id
@@ -6094,6 +6077,9 @@ export const ProjectFragmentDoc = gql`
   rewardCurrency
   fundersCount
   fundingTxsCount
+  keys {
+    ...ProjectKeys
+  }
   location {
     country {
       name
@@ -6148,7 +6134,8 @@ export const ProjectFragmentDoc = gql`
   }
   ...ProjectGrantApplications
 }
-    ${ProjectOwnerUserFragmentDoc}
+    ${ProjectKeysFragmentDoc}
+${ProjectOwnerUserFragmentDoc}
 ${ProjectRewardForCreateUpdateFragmentDoc}
 ${UserForAvatarFragmentDoc}
 ${EntryForProjectFragmentDoc}
@@ -6436,6 +6423,26 @@ export const FundingTxForUserContributionFragmentDoc = gql`
   }
 }
     `;
+export const ProjectAffiliateLinkFragmentDoc = gql`
+    fragment ProjectAffiliateLink on AffiliateLink {
+  projectId
+  label
+  id
+  email
+  disabledAt
+  createdAt
+  disabled
+  affiliateId
+  lightningAddress
+  affiliateFeePercentage
+  stats {
+    sales {
+      total
+      count
+    }
+  }
+}
+    `;
 export const ProjectEntryFragmentDoc = gql`
     fragment ProjectEntry on Entry {
   id
@@ -6520,16 +6527,6 @@ export const ProjectGoalsFragmentDoc = gql`
   emojiUnifiedCode
 }
     `;
-export const ProjectKeysFragmentDoc = gql`
-    fragment ProjectKeys on ProjectKeys {
-  nostrKeys {
-    publicKey {
-      hex
-      npub
-    }
-  }
-}
-    `;
 export const ProjectPageCreatorFragmentDoc = gql`
     fragment ProjectPageCreator on User {
   id
@@ -6603,6 +6600,7 @@ export const ProjectHeaderSummaryFragmentDoc = gql`
     fragment ProjectHeaderSummary on Project {
   followersCount
   fundersCount
+  fundingTxsCount
 }
     `;
 export const ProjectUpdateFragmentDoc = gql`
@@ -6623,6 +6621,7 @@ export const ProjectUpdateFragmentDoc = gql`
   }
   status
   links
+  rewardCurrency
 }
     `;
 export const ProjectStatsForInsightsPageFragmentDoc = gql`
@@ -6787,106 +6786,6 @@ export const ProjectWalletConnectionDetailsFragmentDoc = gql`
   }
 }
     `;
-export const AffiliateLinkCreateDocument = gql`
-    mutation AffiliateLinkCreate($input: AffiliateLinkCreateInput!) {
-  affiliateLinkCreate(input: $input) {
-    ...ProjectAffiliateLink
-  }
-}
-    ${ProjectAffiliateLinkFragmentDoc}`;
-export type AffiliateLinkCreateMutationFn = Apollo.MutationFunction<AffiliateLinkCreateMutation, AffiliateLinkCreateMutationVariables>;
-
-/**
- * __useAffiliateLinkCreateMutation__
- *
- * To run a mutation, you first call `useAffiliateLinkCreateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAffiliateLinkCreateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [affiliateLinkCreateMutation, { data, loading, error }] = useAffiliateLinkCreateMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useAffiliateLinkCreateMutation(baseOptions?: Apollo.MutationHookOptions<AffiliateLinkCreateMutation, AffiliateLinkCreateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AffiliateLinkCreateMutation, AffiliateLinkCreateMutationVariables>(AffiliateLinkCreateDocument, options);
-      }
-export type AffiliateLinkCreateMutationHookResult = ReturnType<typeof useAffiliateLinkCreateMutation>;
-export type AffiliateLinkCreateMutationResult = Apollo.MutationResult<AffiliateLinkCreateMutation>;
-export type AffiliateLinkCreateMutationOptions = Apollo.BaseMutationOptions<AffiliateLinkCreateMutation, AffiliateLinkCreateMutationVariables>;
-export const AffiliateLinkLabelUpdateDocument = gql`
-    mutation AffiliateLinkLabelUpdate($affiliateLinkId: BigInt!, $label: String!) {
-  affiliateLinkLabelUpdate(affiliateLinkId: $affiliateLinkId, label: $label) {
-    ...ProjectAffiliateLink
-  }
-}
-    ${ProjectAffiliateLinkFragmentDoc}`;
-export type AffiliateLinkLabelUpdateMutationFn = Apollo.MutationFunction<AffiliateLinkLabelUpdateMutation, AffiliateLinkLabelUpdateMutationVariables>;
-
-/**
- * __useAffiliateLinkLabelUpdateMutation__
- *
- * To run a mutation, you first call `useAffiliateLinkLabelUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAffiliateLinkLabelUpdateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [affiliateLinkLabelUpdateMutation, { data, loading, error }] = useAffiliateLinkLabelUpdateMutation({
- *   variables: {
- *      affiliateLinkId: // value for 'affiliateLinkId'
- *      label: // value for 'label'
- *   },
- * });
- */
-export function useAffiliateLinkLabelUpdateMutation(baseOptions?: Apollo.MutationHookOptions<AffiliateLinkLabelUpdateMutation, AffiliateLinkLabelUpdateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AffiliateLinkLabelUpdateMutation, AffiliateLinkLabelUpdateMutationVariables>(AffiliateLinkLabelUpdateDocument, options);
-      }
-export type AffiliateLinkLabelUpdateMutationHookResult = ReturnType<typeof useAffiliateLinkLabelUpdateMutation>;
-export type AffiliateLinkLabelUpdateMutationResult = Apollo.MutationResult<AffiliateLinkLabelUpdateMutation>;
-export type AffiliateLinkLabelUpdateMutationOptions = Apollo.BaseMutationOptions<AffiliateLinkLabelUpdateMutation, AffiliateLinkLabelUpdateMutationVariables>;
-export const AffiliateLinkDisableDocument = gql`
-    mutation AffiliateLinkDisable($affiliateLinkId: BigInt!) {
-  affiliateLinkDisable(affiliateLinkId: $affiliateLinkId) {
-    id
-  }
-}
-    `;
-export type AffiliateLinkDisableMutationFn = Apollo.MutationFunction<AffiliateLinkDisableMutation, AffiliateLinkDisableMutationVariables>;
-
-/**
- * __useAffiliateLinkDisableMutation__
- *
- * To run a mutation, you first call `useAffiliateLinkDisableMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAffiliateLinkDisableMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [affiliateLinkDisableMutation, { data, loading, error }] = useAffiliateLinkDisableMutation({
- *   variables: {
- *      affiliateLinkId: // value for 'affiliateLinkId'
- *   },
- * });
- */
-export function useAffiliateLinkDisableMutation(baseOptions?: Apollo.MutationHookOptions<AffiliateLinkDisableMutation, AffiliateLinkDisableMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AffiliateLinkDisableMutation, AffiliateLinkDisableMutationVariables>(AffiliateLinkDisableDocument, options);
-      }
-export type AffiliateLinkDisableMutationHookResult = ReturnType<typeof useAffiliateLinkDisableMutation>;
-export type AffiliateLinkDisableMutationResult = Apollo.MutationResult<AffiliateLinkDisableMutation>;
-export type AffiliateLinkDisableMutationOptions = Apollo.BaseMutationOptions<AffiliateLinkDisableMutation, AffiliateLinkDisableMutationVariables>;
 export const UserBadgeAwardDocument = gql`
     mutation UserBadgeAward($userBadgeId: BigInt!) {
   userBadgeAward(userBadgeId: $userBadgeId) {
@@ -7419,46 +7318,6 @@ export type ActivitiesForLandingPageQueryHookResult = ReturnType<typeof useActiv
 export type ActivitiesForLandingPageLazyQueryHookResult = ReturnType<typeof useActivitiesForLandingPageLazyQuery>;
 export type ActivitiesForLandingPageSuspenseQueryHookResult = ReturnType<typeof useActivitiesForLandingPageSuspenseQuery>;
 export type ActivitiesForLandingPageQueryResult = Apollo.QueryResult<ActivitiesForLandingPageQuery, ActivitiesForLandingPageQueryVariables>;
-export const AffiliateLinksGetDocument = gql`
-    query AffiliateLinksGet($input: GetAffiliateLinksInput!) {
-  affiliateLinksGet(input: $input) {
-    ...ProjectAffiliateLink
-  }
-}
-    ${ProjectAffiliateLinkFragmentDoc}`;
-
-/**
- * __useAffiliateLinksGetQuery__
- *
- * To run a query within a React component, call `useAffiliateLinksGetQuery` and pass it any options that fit your needs.
- * When your component renders, `useAffiliateLinksGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAffiliateLinksGetQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useAffiliateLinksGetQuery(baseOptions: Apollo.QueryHookOptions<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables> & ({ variables: AffiliateLinksGetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>(AffiliateLinksGetDocument, options);
-      }
-export function useAffiliateLinksGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>(AffiliateLinksGetDocument, options);
-        }
-export function useAffiliateLinksGetSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>(AffiliateLinksGetDocument, options);
-        }
-export type AffiliateLinksGetQueryHookResult = ReturnType<typeof useAffiliateLinksGetQuery>;
-export type AffiliateLinksGetLazyQueryHookResult = ReturnType<typeof useAffiliateLinksGetLazyQuery>;
-export type AffiliateLinksGetSuspenseQueryHookResult = ReturnType<typeof useAffiliateLinksGetSuspenseQuery>;
-export type AffiliateLinksGetQueryResult = Apollo.QueryResult<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>;
 export const BadgesDocument = gql`
     query Badges {
   badges {
@@ -7559,46 +7418,6 @@ export type UserBadgesQueryHookResult = ReturnType<typeof useUserBadgesQuery>;
 export type UserBadgesLazyQueryHookResult = ReturnType<typeof useUserBadgesLazyQuery>;
 export type UserBadgesSuspenseQueryHookResult = ReturnType<typeof useUserBadgesSuspenseQuery>;
 export type UserBadgesQueryResult = Apollo.QueryResult<UserBadgesQuery, UserBadgesQueryVariables>;
-export const EntryDocument = gql`
-    query Entry($id: BigInt!) {
-  entry(id: $id) {
-    ...Entry
-  }
-}
-    ${EntryFragmentDoc}`;
-
-/**
- * __useEntryQuery__
- *
- * To run a query within a React component, call `useEntryQuery` and pass it any options that fit your needs.
- * When your component renders, `useEntryQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useEntryQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useEntryQuery(baseOptions: Apollo.QueryHookOptions<EntryQuery, EntryQueryVariables> & ({ variables: EntryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<EntryQuery, EntryQueryVariables>(EntryDocument, options);
-      }
-export function useEntryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EntryQuery, EntryQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<EntryQuery, EntryQueryVariables>(EntryDocument, options);
-        }
-export function useEntrySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EntryQuery, EntryQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<EntryQuery, EntryQueryVariables>(EntryDocument, options);
-        }
-export type EntryQueryHookResult = ReturnType<typeof useEntryQuery>;
-export type EntryLazyQueryHookResult = ReturnType<typeof useEntryLazyQuery>;
-export type EntrySuspenseQueryHookResult = ReturnType<typeof useEntrySuspenseQuery>;
-export type EntryQueryResult = Apollo.QueryResult<EntryQuery, EntryQueryVariables>;
 export const EntryForLandingPageDocument = gql`
     query EntryForLandingPage($entryID: BigInt!) {
   entry(id: $entryID) {
@@ -9442,6 +9261,106 @@ export function useFundingTxStatusUpdatedSubscription(baseOptions?: Apollo.Subsc
       }
 export type FundingTxStatusUpdatedSubscriptionHookResult = ReturnType<typeof useFundingTxStatusUpdatedSubscription>;
 export type FundingTxStatusUpdatedSubscriptionResult = Apollo.SubscriptionResult<FundingTxStatusUpdatedSubscription>;
+export const AffiliateLinkCreateDocument = gql`
+    mutation AffiliateLinkCreate($input: AffiliateLinkCreateInput!) {
+  affiliateLinkCreate(input: $input) {
+    ...ProjectAffiliateLink
+  }
+}
+    ${ProjectAffiliateLinkFragmentDoc}`;
+export type AffiliateLinkCreateMutationFn = Apollo.MutationFunction<AffiliateLinkCreateMutation, AffiliateLinkCreateMutationVariables>;
+
+/**
+ * __useAffiliateLinkCreateMutation__
+ *
+ * To run a mutation, you first call `useAffiliateLinkCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAffiliateLinkCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [affiliateLinkCreateMutation, { data, loading, error }] = useAffiliateLinkCreateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAffiliateLinkCreateMutation(baseOptions?: Apollo.MutationHookOptions<AffiliateLinkCreateMutation, AffiliateLinkCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AffiliateLinkCreateMutation, AffiliateLinkCreateMutationVariables>(AffiliateLinkCreateDocument, options);
+      }
+export type AffiliateLinkCreateMutationHookResult = ReturnType<typeof useAffiliateLinkCreateMutation>;
+export type AffiliateLinkCreateMutationResult = Apollo.MutationResult<AffiliateLinkCreateMutation>;
+export type AffiliateLinkCreateMutationOptions = Apollo.BaseMutationOptions<AffiliateLinkCreateMutation, AffiliateLinkCreateMutationVariables>;
+export const AffiliateLinkLabelUpdateDocument = gql`
+    mutation AffiliateLinkLabelUpdate($affiliateLinkId: BigInt!, $label: String!) {
+  affiliateLinkLabelUpdate(affiliateLinkId: $affiliateLinkId, label: $label) {
+    ...ProjectAffiliateLink
+  }
+}
+    ${ProjectAffiliateLinkFragmentDoc}`;
+export type AffiliateLinkLabelUpdateMutationFn = Apollo.MutationFunction<AffiliateLinkLabelUpdateMutation, AffiliateLinkLabelUpdateMutationVariables>;
+
+/**
+ * __useAffiliateLinkLabelUpdateMutation__
+ *
+ * To run a mutation, you first call `useAffiliateLinkLabelUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAffiliateLinkLabelUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [affiliateLinkLabelUpdateMutation, { data, loading, error }] = useAffiliateLinkLabelUpdateMutation({
+ *   variables: {
+ *      affiliateLinkId: // value for 'affiliateLinkId'
+ *      label: // value for 'label'
+ *   },
+ * });
+ */
+export function useAffiliateLinkLabelUpdateMutation(baseOptions?: Apollo.MutationHookOptions<AffiliateLinkLabelUpdateMutation, AffiliateLinkLabelUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AffiliateLinkLabelUpdateMutation, AffiliateLinkLabelUpdateMutationVariables>(AffiliateLinkLabelUpdateDocument, options);
+      }
+export type AffiliateLinkLabelUpdateMutationHookResult = ReturnType<typeof useAffiliateLinkLabelUpdateMutation>;
+export type AffiliateLinkLabelUpdateMutationResult = Apollo.MutationResult<AffiliateLinkLabelUpdateMutation>;
+export type AffiliateLinkLabelUpdateMutationOptions = Apollo.BaseMutationOptions<AffiliateLinkLabelUpdateMutation, AffiliateLinkLabelUpdateMutationVariables>;
+export const AffiliateLinkDisableDocument = gql`
+    mutation AffiliateLinkDisable($affiliateLinkId: BigInt!) {
+  affiliateLinkDisable(affiliateLinkId: $affiliateLinkId) {
+    id
+  }
+}
+    `;
+export type AffiliateLinkDisableMutationFn = Apollo.MutationFunction<AffiliateLinkDisableMutation, AffiliateLinkDisableMutationVariables>;
+
+/**
+ * __useAffiliateLinkDisableMutation__
+ *
+ * To run a mutation, you first call `useAffiliateLinkDisableMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAffiliateLinkDisableMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [affiliateLinkDisableMutation, { data, loading, error }] = useAffiliateLinkDisableMutation({
+ *   variables: {
+ *      affiliateLinkId: // value for 'affiliateLinkId'
+ *   },
+ * });
+ */
+export function useAffiliateLinkDisableMutation(baseOptions?: Apollo.MutationHookOptions<AffiliateLinkDisableMutation, AffiliateLinkDisableMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AffiliateLinkDisableMutation, AffiliateLinkDisableMutationVariables>(AffiliateLinkDisableDocument, options);
+      }
+export type AffiliateLinkDisableMutationHookResult = ReturnType<typeof useAffiliateLinkDisableMutation>;
+export type AffiliateLinkDisableMutationResult = Apollo.MutationResult<AffiliateLinkDisableMutation>;
+export type AffiliateLinkDisableMutationOptions = Apollo.BaseMutationOptions<AffiliateLinkDisableMutation, AffiliateLinkDisableMutationVariables>;
 export const DeleteEntryDocument = gql`
     mutation DeleteEntry($deleteEntryId: BigInt!) {
   deleteEntry(id: $deleteEntryId) {
@@ -10201,6 +10120,46 @@ export function useUpdateWalletMutation(baseOptions?: Apollo.MutationHookOptions
 export type UpdateWalletMutationHookResult = ReturnType<typeof useUpdateWalletMutation>;
 export type UpdateWalletMutationResult = Apollo.MutationResult<UpdateWalletMutation>;
 export type UpdateWalletMutationOptions = Apollo.BaseMutationOptions<UpdateWalletMutation, UpdateWalletMutationVariables>;
+export const AffiliateLinksGetDocument = gql`
+    query AffiliateLinksGet($input: GetAffiliateLinksInput!) {
+  affiliateLinksGet(input: $input) {
+    ...ProjectAffiliateLink
+  }
+}
+    ${ProjectAffiliateLinkFragmentDoc}`;
+
+/**
+ * __useAffiliateLinksGetQuery__
+ *
+ * To run a query within a React component, call `useAffiliateLinksGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAffiliateLinksGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAffiliateLinksGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAffiliateLinksGetQuery(baseOptions: Apollo.QueryHookOptions<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables> & ({ variables: AffiliateLinksGetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>(AffiliateLinksGetDocument, options);
+      }
+export function useAffiliateLinksGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>(AffiliateLinksGetDocument, options);
+        }
+export function useAffiliateLinksGetSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>(AffiliateLinksGetDocument, options);
+        }
+export type AffiliateLinksGetQueryHookResult = ReturnType<typeof useAffiliateLinksGetQuery>;
+export type AffiliateLinksGetLazyQueryHookResult = ReturnType<typeof useAffiliateLinksGetLazyQuery>;
+export type AffiliateLinksGetSuspenseQueryHookResult = ReturnType<typeof useAffiliateLinksGetSuspenseQuery>;
+export type AffiliateLinksGetQueryResult = Apollo.QueryResult<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>;
 export const ProjectEntriesDocument = gql`
     query ProjectEntries($where: UniqueProjectQueryInput!, $input: ProjectEntriesGetInput) {
   projectGet(where: $where) {

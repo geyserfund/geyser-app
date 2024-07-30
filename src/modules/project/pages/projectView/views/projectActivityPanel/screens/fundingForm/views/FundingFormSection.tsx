@@ -3,7 +3,7 @@ import { MouseEvent, MouseEventHandler } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { DonationInput } from '../../../../../../../../../components/molecules'
-import { useFundingContext, useProjectContext } from '../../../../../../../context'
+import { useFundingContext } from '../../../../../../../context'
 import { SectionTitle } from '../../../components/SectionTitle'
 import { SectionTitleBlock } from '../../../components/SectionTitleBlock'
 import { FundingFormRewards } from '../../rewardSelection/FundingFormRewards'
@@ -15,13 +15,13 @@ type Props = {
 export const FundingFormSection = ({ onBackClick }: Props) => {
   const { t } = useTranslation()
 
-  const { goals } = useProjectContext()
+  // const { goals } = useProjectContext()
   const {
     fundForm: { setState },
   } = useFundingContext()
 
   const handleOnBackClick = (event: MouseEvent<HTMLButtonElement>) => {
-    goals.setProjectGoalId(null)
+    // goals.setProjectGoalId(null)
     onBackClick(event)
   }
 

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 
 import { AlertBox } from '../../../components/ui'
 import { useActivitySubsciptionContext, useFilterContext } from '../../../context'
-import { QUERY_ACTIVITIES_FOR_LANDING_PAGE } from '../../../graphql/queries/activities'
+import { QUERY_ACTIVITIES_FOR_LANDING_PAGE } from '../../../graphqlBase/queries/activities'
 import { ScrollInvoke } from '../../../helpers'
 import { ID } from '../../../shared/constants'
 import { useQueryWithPagination } from '../../../shared/hooks'

@@ -5,7 +5,7 @@ import {
   FRAGMENT_PROJECT_HISTORY_STATS,
   FRAGMENT_PROJECT_STATS_INSIGHTS_PAGE,
   FRAGMENT_REWARDS_SOLD_GRAPH_STATS,
-} from '../../../../graphql/fragments'
+} from '../fragments/projectStatsFragment'
 
 export const QUERY_PROJECT_STATS_INSIGHT = gql`
   ${FRAGMENT_PROJECT_STATS_INSIGHTS_PAGE}

@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai'
 
-import { projectAffiliateAtom } from '../../pages/projectView/state/affiliateAtom'
+import { projectAffiliateAtom } from '../../pages1/projectView/state/affiliateAtom'
 
 export const useProjectAffiliateWithProjectName = (projectName?: string) => {
   const projectAffiliates = useAtomValue(projectAffiliateAtom)

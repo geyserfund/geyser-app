@@ -1,7 +1,8 @@
 import { ApolloCache } from '@apollo/client'
 
-import { QUERY_ENTRY } from '@/graphql'
 import { ProjectEntryViewFragment } from '@/types'
+
+import { QUERY_ENTRY } from '../../graphql/queries/entriesQuery'
 
 export const updateEntryCache = (cache: ApolloCache<any>, entry: ProjectEntryViewFragment) => {
   cache.writeQuery({

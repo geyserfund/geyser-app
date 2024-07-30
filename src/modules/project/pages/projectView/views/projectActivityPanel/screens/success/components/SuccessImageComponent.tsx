@@ -4,11 +4,12 @@ import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BiCopy } from 'react-icons/bi'
 
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+
 import { Body2, H3 } from '../../../../../../../../../components/typography'
 import { useAuthContext } from '../../../../../../../../../context'
 import { Badge } from '../../../../../../../../../types'
 import { useCustomTheme, useNotification } from '../../../../../../../../../utils'
-import { useProjectContext } from '../../../../../../../context'
 import { AvatarElement } from '../../../components'
 import ContributionIcon from './ContributionIcon.svg'
 
@@ -18,7 +19,7 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
   const [copied, setCopied] = useState(false)
   const { user } = useAuthContext()
 
-  const { project } = useProjectContext()
+  const { project } = useProjectAtom()
 
   const { colors } = useCustomTheme()
 

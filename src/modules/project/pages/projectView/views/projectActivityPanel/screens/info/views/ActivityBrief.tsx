@@ -13,31 +13,32 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEllipsis } from 'react-icons/ai'
 
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+
 import { ExternalAccountType } from '../../../../../../../../../pages/auth'
 import { useFollowedProjectsValue } from '../../../../../../../../../pages/auth/state'
 import { UserAvatar } from '../../../../../../../../../shared/components/display/UserAvatar'
 import { SkeletonLayout } from '../../../../../../../../../shared/components/layouts'
 import { FunderWithUserFragment, OrderByOptions, useProjectFundersQuery } from '../../../../../../../../../types'
-import { removeProjectAmountException, toInt, useMobileMode, useNotification } from '../../../../../../../../../utils'
-import { useProjectContext } from '../../../../../../../context'
+import { toInt, useMobileMode, useNotification } from '../../../../../../../../../utils'
 import { ProjectBalanceDisplay } from '../../../../../../../pages1/projectView/views/body/sections/contributionSummary/components/ProjectBalanceDisplay'
 import {
   ProjectContributorsModal,
   useProjectContributorsModal,
 } from '../../../../../../../pages1/projectView/views/body/sections/contributionSummary/components/ProjectContributorsModal'
-import {
-  ProjectFundersModal,
-  useProjectFundersModal,
-} from '../../../../../../../pages1/projectView/views/body/sections/contributionSummary/components/ProjectFundersModal'
 import { ContributeButton, FollowButton, ShareButton } from '../../../components'
 import { SubscribeButton } from '../components'
+import { ProjectFundersModal, useProjectFundersModal } from '../components/ProjectFundersModal'
 
 export const ActivityBrief = (props: StackProps) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
   const isMobile = useMobileMode()
 
-  const { project, goals } = useProjectContext()
+  const {
+    project,
+    //  goals
+  } = useProjectAtom()
   const followedProjects = useFollowedProjectsValue()
 
   const [allFunders, setAllFunders] = useState<FunderWithUserFragment[]>([])
@@ -94,21 +95,13 @@ export const ActivityBrief = (props: StackProps) => {
 
   const latestFunders = socialFunders.slice(0, 12)
 
-  const removeBalance = removeProjectAmountException(project?.name)
-
   if (!project) {
     return null
   }
 
   return (
     <VStack w="100%" {...props}>
-      <ProjectBalanceDisplay
-        removeBalance={removeBalance}
-        defaultGoalId={project.defaultGoalId}
-        balance={project.balance}
-        balanceUsdCent={project.balanceUsdCent}
-        inProgressGoals={goals.inProgressGoals}
-      />
+      <ProjectBalanceDisplay />
 
       {!isMobile ? (
         <VStack w="full" spacing="10px" pb={3}>

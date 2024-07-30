@@ -1,10 +1,10 @@
 import { Box } from '@chakra-ui/layout'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
+
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 
 import { StickToTop } from '../../../../../../../../../shared/components/layouts'
 import { dimensions, ID } from '../../../../../../../../../shared/constants'
-import { useMobileMode } from '../../../../../../../../../utils'
-import { MobileViews, useProjectContext } from '../../../../../../../context'
 import { InfoScreenFeedTabs, ProjectContributionList } from '../components'
 import { ProjectLeaderboardList } from '../components/ProjectLeaderboardList'
 
@@ -12,33 +12,32 @@ let visitedContribution = false
 let visitedLeaderboard = false
 
 export const InfoScreenFeed = ({ id, isBounded }: { id?: string; isBounded?: boolean }) => {
-  const isMobile = useMobileMode()
-  const { mobileView, project } = useProjectContext()
+  const { project } = useProjectAtom()
 
-  const [tab, setTab] = useState<MobileViews>(MobileViews.leaderboard)
+  const [tab, _] = useState()
 
-  useEffect(() => {
-    if (mobileView === MobileViews.contribution) {
-      setTab(MobileViews.contribution)
-    } else if (mobileView === MobileViews.leaderboard) {
-      setTab(MobileViews.leaderboard)
-    }
+  // useEffect(() => {
+  //   if (mobileView === MobileViews.contribution) {
+  //     setTab(MobileViews.contribution)
+  //   } else if (mobileView === MobileViews.leaderboard) {
+  //     setTab(MobileViews.leaderboard)
+  //   }
 
-    return () => {
-      visitedContribution = false
-      visitedLeaderboard = false
-    }
-  }, [mobileView])
+  //   return () => {
+  //     visitedContribution = false
+  //     visitedLeaderboard = false
+  //   }
+  // }, [mobileView])
 
-  const stickToTopEnable =
-    (mobileView === MobileViews.contribution || mobileView === MobileViews.leaderboard) && isMobile
+  // const stickToTopEnable =
+  //   (mobileView === MobileViews.contribution || mobileView === MobileViews.leaderboard) && isMobile
 
   const renderActivityList = useCallback(() => {
     if (!project) {
       return null
     }
 
-    const isActivity = tab === MobileViews.contribution
+    const isActivity = tab === 'MobileViews.contribution'
 
     if (isActivity) {
       visitedContribution = true
@@ -89,9 +88,9 @@ export const InfoScreenFeed = ({ id, isBounded }: { id?: string; isBounded?: boo
         offset={dimensions.topNavBar.desktop.height}
         bias={10}
         buffer={10}
-        disable={!stickToTopEnable}
+        // disable={!stickToTopEnable}
       >
-        <InfoScreenFeedTabs {...{ project, tab, setTab }} />
+        <InfoScreenFeedTabs {...{ project }} />
       </StickToTop>
       {renderActivityList()}
     </Box>

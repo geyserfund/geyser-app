@@ -2,7 +2,7 @@ import { Divider, VStack } from '@chakra-ui/react'
 import { Fragment } from 'react'
 
 import { ProjectFundingContributorsItem } from '../../../../../../../../../components/molecules/projectActivity/ProjectFundingContributorsItem'
-import { QUERY_PROJECT_FUNDERS } from '../../../../../../../../../graphql'
+import { QUERY_PROJECT_FUNDERS } from '../../../../../../../../../graphqlBase'
 import { ScrollInvoke } from '../../../../../../../../../helpers'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../../../../../shared/components/layouts'
 import { ID } from '../../../../../../../../../shared/constants'
