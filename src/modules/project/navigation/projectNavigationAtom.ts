@@ -1,10 +1,10 @@
 import { atom } from 'jotai'
 
+import { routeMatchForAtom } from '@/config'
 import {
   ProjectPageRoutesWithNavBarForDesktop,
   ProjectPageRoutesWithNavBarForMobile,
-  routeMatchForAtom,
-} from '@/config'
+} from '@/config/routes/routeGroups'
 
 export const showProjectNavBarForMobileAtom = atom(routeMatchForAtom(ProjectPageRoutesWithNavBarForMobile))
 

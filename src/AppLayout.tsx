@@ -1,10 +1,10 @@
 import { Box } from '@chakra-ui/layout'
-import { useEffect } from 'react'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 
 import { PullingDownContent } from './components/ui'
-import { useSetHistoryRoute } from './config'
+import { useHistoryRoutes } from './config/routes/hooks/useHistoryRoutes'
+import { useMatchRoutes } from './config/routes/hooks/useMatchRoutes'
 import { useAuthContext } from './context'
 import { TopNavBar } from './modules/navigation/topNavBar/TopNavBar'
 import { LandingNavBar } from './navigation/bottomNav/LandingNavBar'
@@ -18,11 +18,8 @@ const AppLayout = () => {
 
   const isMobile = useMobileMode()
 
-  const location = useLocation()
-  const setHistoryRoute = useSetHistoryRoute()
-  useEffect(() => {
-    setHistoryRoute(location.pathname)
-  }, [location.pathname, setHistoryRoute])
+  useMatchRoutes()
+  useHistoryRoutes()
 
   const layoutAnimationClassName = useLayoutAnimation()
 

@@ -6,8 +6,8 @@ import AppLayout from '../../AppLayout'
 import { ExternalAuthSuccess, FailedAuth } from '../../pages/auth'
 import { NotAuthorized, NotFoundPage, NotFoundProject } from '../../pages/fallback'
 import { __production__, getPath, PathName } from '../../shared/constants'
-import { ErrorBoundary } from './ErrorBoundary'
-import { renderPrivateRoute } from './PrivateRoute'
+import { ErrorBoundary } from './components/ErrorBoundary'
+import { renderPrivateRoute } from './components/PrivateRoute'
 
 // const Grants = () => import('../../pages/grants')
 const ProjectLaunch = () => import('../../modules/project/pages1/projectCreation')

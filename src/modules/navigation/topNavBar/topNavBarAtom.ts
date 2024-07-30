@@ -1,5 +1,7 @@
 import { atom, useAtomValue } from 'jotai'
 
+import { routeMatchForAtom } from '@/config'
+
 import {
   entryCreationRoutes,
   fallBackRoutes,
@@ -9,8 +11,7 @@ import {
   projectPostCreatorRoutes,
   projectRewardCreatorRoutes,
   projectRoutes,
-  routeMatchForAtom,
-} from '../../../config/routes/routesAtom'
+} from '../../../config/routes/routeGroups'
 import { getPath, PathName } from '../../../shared/constants'
 import { profileSideNavAtom } from '../profileNav/profileSideNavAtom'
 

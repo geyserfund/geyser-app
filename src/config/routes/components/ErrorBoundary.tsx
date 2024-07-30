@@ -3,8 +3,8 @@ import { DateTime } from 'luxon'
 import { useEffect } from 'react'
 import { useRouteError } from 'react-router-dom'
 
-import { useServiceWorkerUpdate } from '../../context'
-import { NotFoundPage } from '../../pages/fallback'
+import { useServiceWorkerUpdate } from '../../../context'
+import { NotFoundPage } from '../../../pages/fallback'
 
 const FAILED_FETCH_ERROR = [
   'Failed to fetch dynamically imported module',

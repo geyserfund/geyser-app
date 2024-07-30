@@ -2,12 +2,12 @@ import { useDisclosure } from '@chakra-ui/react'
 import { ComponentType, useEffect, useMemo } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 
-import { AuthModal } from '../../components/molecules'
-import { useAuthContext } from '../../context'
-import { ExternalAccountType } from '../../pages/auth'
-import { LoadingPage } from '../../pages/loading'
-import { getPath } from '../../shared/constants'
-import { useRouteMatchesForPrivateRoute } from './privateRoutesAtom'
+import { AuthModal } from '../../../components/molecules'
+import { useAuthContext } from '../../../context'
+import { ExternalAccountType } from '../../../pages/auth'
+import { LoadingPage } from '../../../pages/loading'
+import { getPath } from '../../../shared/constants'
+import { useRouteMatchesForPrivateRoute } from '../state/privateRoutesAtom'
 
 interface IPrivateRoute {
   children: React.ReactNode

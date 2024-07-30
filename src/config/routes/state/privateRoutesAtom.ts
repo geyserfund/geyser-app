@@ -1,12 +1,12 @@
 import { atom, useAtomValue } from 'jotai'
 
-import { getPath, PathName } from '../../shared/constants'
+import { getPath, PathName } from '../../../shared/constants'
 import {
   creatorProjectCreationRoutes as routesForPrivateProjectLaunch,
   entryCreationRoutes as routesForEntryCreation,
   projectCreatorRoutes as routesForProjectCreator,
-  routeMatchForAtom,
-} from './routesAtom'
+} from '../routeGroups'
+import { routeMatchForAtom } from './routesAtom'
 
 const routesForPrivateProjectLaunchAtom = atom(routeMatchForAtom(routesForPrivateProjectLaunch))
 

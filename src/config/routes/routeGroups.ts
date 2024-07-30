@@ -1,42 +1,4 @@
-import { atom, Getter, useAtomValue, useSetAtom } from 'jotai'
-import { RouteMatch, RouteObject } from 'react-router-dom'
-
-import { getPath, PathName } from '../../shared/constants'
-
-const matchRoutesAtom = atom<RouteMatch<string, RouteObject>[] | null>([])
-export const currentRouteAtom = atom((get) => {
-  const matchRoutes = get(matchRoutesAtom)
-  const matchLength = matchRoutes?.length || 0
-
-  let matchRoute: RouteObject | undefined
-
-  if (matchLength > 0 && matchRoutes) {
-    /** This is because for index routes, it generates an extra match with only '/' extra at the end */
-    if (matchLength > 1 && matchRoutes?.[matchLength - 1]?.route.index === true) {
-      matchRoute = matchRoutes?.[matchLength - 2]?.route
-    } else {
-      matchRoute = matchRoutes?.[matchLength - 1]?.route
-    }
-  }
-
-  return matchRoute
-})
-
-export const useSetMatchRoutes = () => useSetAtom(matchRoutesAtom)
-
-export const useCurrentRouteMatchAtom = () => useAtomValue(currentRouteAtom)
-
-/** Get the functions you can pass into a derived atom definition */
-export const routeMatchForAtom =
-  (
-    /** arrray of route patterns you'd like to match with the current route */
-    routes: string[],
-  ) =>
-  (get: Getter) => {
-    const matchRoute = get(currentRouteAtom)
-    if (!matchRoute) return false
-    return routes.some((route) => route === matchRoute.path)
-  }
+import { getPath, PathName } from '@/shared/constants'
 
 export const creatorProjectCreationRoutes = [
   getPath('launch'),

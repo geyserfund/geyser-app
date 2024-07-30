@@ -3,12 +3,14 @@ import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
 
+import { EmailPromptModal } from '@/pages/auth/components/EmailPromptModal'
+import { useEmailPromptModal } from '@/pages/auth/hooks/useEmailPromptModal'
+
 import { AuthModal } from '../../../components/molecules'
 import { useAuthContext } from '../../../context'
 import { useAuthModal } from '../../../pages/auth/hooks'
 import { dimensions } from '../../../shared/constants'
 import { LoginButton } from '../components/LoginButton'
-import { useMatchRoutes } from '../hooks/useMatchRoutes'
 import { ProfileNav } from '../profileNav/ProfileNav'
 import { BrandLogo } from './components/BrandLogo'
 import { LoggedOutModal } from './components/LoggedOutModal'
@@ -20,10 +22,9 @@ export const TopNavBar = () => {
   const { isLoggedIn, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose } = useAuthModal()
 
-  useMatchRoutes()
-
   const shouldShowProjectLogo = useAtomValue(shouldShowProjectLogoAtom)
-  console.log('checking shouldShowProjectLogo', shouldShowProjectLogo)
+
+  const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose } = useEmailPromptModal()
 
   const navigate = useNavigate()
 
@@ -86,8 +87,10 @@ export const TopNavBar = () => {
         onClose={() => {
           loginOnClose()
           onLoginAlertModalClose()
+          emailPromptOnOpen()
         }}
       />
+      <EmailPromptModal isOpen={emailPromptIsOpen} onClose={emailPromptOnClose} />
     </>
   )
 }
