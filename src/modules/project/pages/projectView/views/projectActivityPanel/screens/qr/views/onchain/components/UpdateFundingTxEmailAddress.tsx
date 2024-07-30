@@ -7,8 +7,9 @@ import { Trans } from 'react-i18next'
 import { TbMailFilled } from 'react-icons/tb'
 import * as yup from 'yup'
 
+import { TextField } from '@/shared/markdown/components/TextField'
+
 import { Body2 } from '../../../../../../../../../../../components/typography'
-import { TextField } from '../../../../../../../../../../../forms/components/TextField'
 import { useFundingTxEmailUpdateMutation } from '../../../../../../../../../../../types'
 import { useCustomTheme, useNotification } from '../../../../../../../../../../../utils'
 import { useFundingContext } from '../../../../../../../../../context'

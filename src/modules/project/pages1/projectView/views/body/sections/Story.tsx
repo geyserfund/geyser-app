@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { getPath } from '@/shared/constants'
+import { MarkdownField } from '@/shared/markdown/MarkdownField'
 
-import { MarkdownField } from '../../../../../../../forms/markdown/MarkdownField'
 import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { Body } from '../../../../../../../shared/components/typography'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'

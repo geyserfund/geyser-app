@@ -9,7 +9,7 @@ import {
   ProjectStatusTooltip,
 } from '../../../components/ui'
 import { SubscribeButton } from '../../../modules/project/pages/projectView/views/projectActivityPanel/screens/info/components'
-import { AvatarElement } from '../../../modules/project/pages/projectView/views/projectMainBody/components'
+import { AvatarElement } from '../../../modules/project/pages/projectView/views/projectActivityPanel/components'
 import {
   FundingStatWithFollow,
   FundingStatWithFollowProps,

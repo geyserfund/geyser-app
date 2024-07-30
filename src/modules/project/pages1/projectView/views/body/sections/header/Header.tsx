@@ -16,7 +16,8 @@ import { useTranslation } from 'react-i18next'
 import { PiCaretDoubleDown, PiShareFat } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
-import { validateImageUrl } from '../../../../../../../../forms/validations/image'
+import { validateImageUrl } from '@/shared/markdown/validations/image'
+
 import { ImageWithReload } from '../../../../../../../../shared/components/display/ImageWithReload'
 import { CardLayout, SkeletonLayout } from '../../../../../../../../shared/components/layouts'
 import { Body, H1 } from '../../../../../../../../shared/components/typography'

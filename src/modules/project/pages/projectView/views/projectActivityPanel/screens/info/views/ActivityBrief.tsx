@@ -29,7 +29,7 @@ import {
   ProjectFundersModal,
   useProjectFundersModal,
 } from '../../../../../../../pages1/projectView/views/body/sections/contributionSummary/components/ProjectFundersModal'
-import { ContributeButton, FollowButton, ShareButton } from '../../../../projectMainBody/components'
+import { ContributeButton, FollowButton, ShareButton } from '../../../components'
 import { SubscribeButton } from '../components'
 
 export const ActivityBrief = (props: StackProps) => {

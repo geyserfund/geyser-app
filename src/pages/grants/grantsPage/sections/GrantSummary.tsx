@@ -1,11 +1,12 @@
 import { Box, Image, ListItem, Tag, Text, UnorderedList, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { MarkdownField } from '@/shared/markdown/MarkdownField'
+import { validateImageUrl } from '@/shared/markdown/validations/image'
+
 import { H1, H3 } from '../../../../components/typography'
 import { StatusLabel } from '../../../../components/ui/StatusLabel'
 import { Tooltip } from '../../../../components/ui/Tooltip'
-import { MarkdownField } from '../../../../forms/markdown/MarkdownField'
-import { validateImageUrl } from '../../../../forms/validations/image'
 import { VideoPlayer } from '../../../../modules/project/pages1/projectView/views/body/sections/header/components/VideoPlayer'
 import { CardLayout } from '../../../../shared/components/layouts'
 import { DistributionSystem, Grant, GrantType, VotingSystem } from '../../../../types'

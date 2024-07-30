@@ -10,8 +10,8 @@ import { useAuthContext } from '../../../../../../../../../context'
 import { LogoutConfirmationModal } from '../../../../../../../../../pages/auth/components/LogoutConfirmationModal'
 import { useAuthModal } from '../../../../../../../../../pages/auth/hooks'
 import { useModal } from '../../../../../../../../../shared/hooks/useModal'
-import { AvatarElement } from '../../../../projectMainBody/components/AvatarElement'
-import { GifModal } from '../../../../projectMainBody/components/GifModal'
+import { AvatarElement } from '../../../../../../../../../shared/molecules/AvatarElement'
+import { GifModal } from '../../../components/GifModal'
 
 type Props = HTMLChakraProps<'div'> & {
   comment: string

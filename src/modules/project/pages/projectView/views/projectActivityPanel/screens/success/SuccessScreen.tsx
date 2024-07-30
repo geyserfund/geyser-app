@@ -13,7 +13,7 @@ import { lightModeColors, standardPadding } from '../../../../../../../../styles
 import { UserBadge } from '../../../../../../../../types'
 import { useProjectContext } from '../../../../../../context'
 import { useFundingContext } from '../../../../../../context/FundingProvider'
-import {} from '../../../projectMainBody/components'
+import {} from '../../components'
 import { ContributionInfoBox, ContributionInfoBoxVersion, ContributionShippingBox } from '../contributionInfo'
 import { useIsLightingMethodAtom } from '../qr/states/paymentMethodAtom'
 import { SuccessImageComponent } from './components'

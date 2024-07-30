@@ -4,7 +4,6 @@ import { PiArrowLeft, PiShareFat } from 'react-icons/pi'
 import { Link, useParams } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
-import { MarkdownField } from '@/forms/markdown/MarkdownField'
 import { useBTCConverter } from '@/helpers'
 import { BottomNavBarContainer } from '@/modules/navigation/bottomNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
@@ -12,6 +11,7 @@ import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavCont
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
 import { dimensions, getPath } from '@/shared/constants'
+import { MarkdownField } from '@/shared/markdown/MarkdownField'
 import { RewardCurrency, Satoshis, USDCents, useProjectRewardQuery } from '@/types'
 
 import { useRewardBuy } from '../../hooks'

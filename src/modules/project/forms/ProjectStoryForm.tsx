@@ -1,11 +1,11 @@
-import { Box, HStack, Text, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, HStack, useDisclosure, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { FormProvider, UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { Body } from '@/shared/components/typography'
+import { MarkdownField, MarkdownFieldSkeleton } from '@/shared/markdown/MarkdownField'
 
-import { MarkdownField, MarkdownFieldSkeleton } from '../../../forms/markdown/MarkdownField'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { ProjectValidations } from '../../../shared/constants'
 import { useMobileMode } from '../../../utils'

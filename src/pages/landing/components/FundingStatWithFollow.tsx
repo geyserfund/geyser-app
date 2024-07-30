@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { SatSymbolIcon } from '../../../components/icons'
 import { MonoBody1 } from '../../../components/typography'
-import { FollowButton } from '../../../modules/project/pages/projectView/views/projectMainBody/components'
+import { FollowButton } from '../../../modules/project/pages/projectView/views/projectActivityPanel/components'
 import { fonts } from '../../../styles'
 import { Project } from '../../../types'
 import { getShortAmountLabel, removeProjectAmountException } from '../../../utils'

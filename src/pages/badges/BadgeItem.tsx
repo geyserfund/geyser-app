@@ -1,7 +1,7 @@
 import { HStack, Image, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { AvatarCircle, AvatarElement } from '../../modules/project/pages/projectView/views/projectMainBody/components'
+import { AvatarCircle, AvatarElement } from '../../modules/project/pages/projectView/views/projectActivityPanel/components'
 import { User } from '../../types'
 
 interface BadgeItemProps {

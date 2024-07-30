@@ -7,7 +7,7 @@ import { dimensions, ID, PathName } from '../../../../../../../../../shared/cons
 import { standardPadding } from '../../../../../../../../../styles'
 import { useMobileMode } from '../../../../../../../../../utils'
 import { MobileViews, useProjectContext } from '../../../../../../../context'
-import { ProjectRewardPanel } from '../../../../projectMainBody/components'
+import { ProjectRewardPanel } from '../../../components'
 
 export const InfoScreenRewards = () => {
   const isMobile = useMobileMode()

@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next'
 import { PiInfo } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography'
+import { validateImageUrl } from '@/shared/markdown/validations/image'
 
 import { FileUpload } from '../../../components/molecules'
 import { TextArea, TextInputBox, UploadBox } from '../../../components/ui'
 import { useAuthContext } from '../../../context'
-import { validateImageUrl } from '../../../forms/validations/image'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { ProjectValidations } from '../../../shared/constants'
 import { useDebounce } from '../../../shared/hooks'

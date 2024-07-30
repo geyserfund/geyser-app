@@ -5,7 +5,7 @@ import { ProjectRewardForCreateUpdateFragment } from '../../../../../../../../ty
 import { useMobileMode, useNotification } from '../../../../../../../../utils'
 import { useIsProjectPage } from '../../../../../../../navigation/topNavBar/topNavBarAtom'
 import { useFundingContext, useProjectContext } from '../../../../../../context'
-import { FundingFormRewardItem } from '../../../projectMainBody/components'
+import { FundingFormRewardItem } from '../../components'
 import { SectionTitle } from '../../components/SectionTitle'
 
 type Props = {

@@ -9,7 +9,7 @@ import { useAuthContext } from '../../../../../../../../../context'
 import { Badge } from '../../../../../../../../../types'
 import { useCustomTheme, useNotification } from '../../../../../../../../../utils'
 import { useProjectContext } from '../../../../../../../context'
-import { AvatarElement } from '../../../../projectMainBody/components'
+import { AvatarElement } from '../../../components'
 import ContributionIcon from './ContributionIcon.svg'
 
 export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }) => {

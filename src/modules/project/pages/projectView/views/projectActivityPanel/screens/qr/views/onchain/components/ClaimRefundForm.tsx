@@ -6,8 +6,9 @@ import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
+import { TextField } from '@/shared/markdown/components/TextField'
+
 import { Body2 } from '../../../../../../../../../../../components/typography'
-import { TextField } from '../../../../../../../../../../../forms/components/TextField'
 import { useNotification } from '../../../../../../../../../../../utils'
 import { getBitcoinAddress } from '../../../../../../../../../../../utils/lightning/bip21'
 import { currentSwapIdAtom, SwapData } from '../../../../../../../../../funding/state'
