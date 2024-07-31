@@ -46,9 +46,9 @@ export const ProjectBody = () => {
         <CreatorTools />
         <Story />
 
-        {project.hasRewards && <Rewards />}
-        {project.hasEntries && <Posts />}
-        {project.hasGoals && <Goals />}
+        {project.rewardsCount && <Rewards />}
+        {project.entriesCount && <Posts />}
+        {project.goalsCount && <Goals />}
         <Details />
       </VStack>
       <VStack

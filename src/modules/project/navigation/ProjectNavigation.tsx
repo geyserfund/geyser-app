@@ -31,7 +31,7 @@ export const ProjectNavigation = () => {
       },
     ] as NavBarItems[]
 
-    if (project.hasRewards) {
+    if (project.rewardsCount) {
       buttonList.push({
         name: 'Rewards',
         path: PathName.projectRewards,
@@ -39,7 +39,7 @@ export const ProjectNavigation = () => {
       })
     }
 
-    if (project.hasEntries) {
+    if (project.entriesCount) {
       buttonList.push({
         name: 'Posts',
         path: PathName.projectPosts,
@@ -47,7 +47,7 @@ export const ProjectNavigation = () => {
       })
     }
 
-    if (project.hasGoals) {
+    if (project.goalsCount) {
       buttonList.push({
         name: 'Goals',
         path: PathName.projectGoals,
