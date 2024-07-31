@@ -17,8 +17,8 @@ export const ProfileNavUserInfo = ({ user }: { user: UserMeFragment }) => {
   return (
     <HStack spacing={2} w="full" justifyContent={'start'} _hover={{ cursor: 'pointer' }}>
       <Avatar src={user.imageUrl || ''} />
-      <VStack flex={1} spacing={0} alignItems={'start'}>
-        <Body fontSize="xl" bold>
+      <VStack flex={1} spacing={0} alignItems={'start'} overflowX={'hidden'}>
+        <Body w="full" fontSize="xl" bold isTruncated>
           {user.username}
         </Body>
         {loginMethod && (

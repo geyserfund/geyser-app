@@ -8,34 +8,66 @@ import {
   MenuItem,
   VStack,
 } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
-import { PiCertificate, PiMagnifyingGlass } from 'react-icons/pi'
-import { RiHomeLine } from 'react-icons/ri'
+import { t } from 'i18next'
+import { PiCompass, PiRanking, PiSparkle, PiTrophy, PiWaveform } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { useAuthContext } from '../../../context'
 import { Body } from '../../../shared/components/typography'
 import { dimensions, FeedbackUrl, getPath, GeyserAboutUrl, GeyserGithubUrl, GuideUrl } from '../../../shared/constants'
-import { LoginButton } from '../components/LoginButton'
 import { ProfileNavUserInfo } from './components'
 import { ModeChange } from './components/ModeChange'
 
+const ProfileNavPlatformButtons = [
+  {
+    label: t('Discover'),
+    icon: PiCompass,
+    path: getPath('platformLanding'),
+  },
+  {
+    label: t('Leaderboard'),
+    icon: PiRanking,
+    path: getPath('platformLeaderboard'),
+  },
+  {
+    label: t('My Projects'),
+    icon: PiSparkle,
+    path: getPath('platformMyProjects'),
+  },
+  {
+    label: t('Activity'),
+    icon: PiWaveform,
+    path: getPath('platformActivity'),
+  },
+  {
+    label: t('Grants'),
+    icon: PiTrophy,
+    path: getPath('platformGrants'),
+  },
+]
+
 export const ProfileNavContent = () => {
-  const { t } = useTranslation()
   const { logout, user } = useAuthContext()
   return (
     <VStack
       padding={4}
       width={dimensions.sideNav.width}
-      spacing={6}
+      spacing={4}
       alignItems={'start'}
       justifyContent={{ base: 'space-between', lg: 'start' }}
       height="100%"
     >
-      <VStack w="full" spacing={6}>
+      <VStack w="full" spacing={4}>
         {user.id && (
           <>
-            <MenuItem as={Link} to={getPath('userProfile', user.id)} p={0} _hover={{}} _active={{}}>
+            <MenuItem
+              as={Link}
+              height="fit-content"
+              to={getPath('userProfile', user.id)}
+              p={0}
+              _hover={{}}
+              _active={{}}
+            >
               <ProfileNavUserInfo user={user} />
             </MenuItem>
 
@@ -43,28 +75,21 @@ export const ProfileNavContent = () => {
           </>
         )}
         <VStack spacing={2} w="full">
-          <MenuItem as={Link} to={getPath('landingPage')}>
-            <HStack>
-              <RiHomeLine />
-              <Body>{t('Home')}</Body>
-            </HStack>
-          </MenuItem>
-          <MenuItem as={Link} to={getPath('projectDiscovery')}>
-            <HStack>
-              <PiMagnifyingGlass />
-              <Body>{t('Discover')}</Body>
-            </HStack>
-          </MenuItem>
-          <MenuItem as={Link} to={getPath('grants')}>
-            <HStack>
-              <PiCertificate />
-              <Body color="inherit">{t('Grants')}</Body>
-            </HStack>
-          </MenuItem>
+          {ProfileNavPlatformButtons.map((platformNav) => {
+            return (
+              <MenuItem key={platformNav.label} as={Link} to={platformNav.path}>
+                <HStack>
+                  <platformNav.icon />
+                  <Body>{platformNav.label}</Body>
+                </HStack>
+              </MenuItem>
+            )
+          })}
         </VStack>
-        <Divider borderColor="neutral1.6" />
         {user.id ? (
           <>
+            <Divider borderColor="neutral1.6" />
+
             <VStack spacing={2} w="full">
               <MenuItem as={Link} to={getPath('userProfileSettings', user.id)}>
                 <Body>{t('Settings')}</Body>
@@ -74,14 +99,10 @@ export const ProfileNavContent = () => {
               </MenuItem>
             </VStack>
           </>
-        ) : (
-          <HStack w="full" justifyContent="center">
-            <LoginButton w="full" />
-          </HStack>
-        )}
+        ) : null}
       </VStack>
 
-      <VStack w="full" spacing={6}>
+      <VStack w="full" spacing={4}>
         <Divider borderColor="neutral1.6" />
         <HStack w="full" paddingX={4} spacing={0} justifyContent="space-between">
           <UserNavExternalButton as={ChakraLink} isExternal href={GuideUrl}>
