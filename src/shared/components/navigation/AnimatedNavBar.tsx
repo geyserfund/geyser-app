@@ -95,7 +95,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem, loading
             onClick={() => handleClick(item, index)}
             backgroundColor={'transparent'}
             color={'neutral1.12'}
-            _hover={isActive ? {} : undefined}
+            _hover={isActive ? {} : { backgroundColor: 'neutral1.5' }}
             {...(item.isBordered
               ? {
                   border: '1px solid',
@@ -139,16 +139,7 @@ const ProjectNavigationButton: ComponentWithAs<
     [isActive, setButtonprops, length],
   )
 
-  return (
-    <Button
-      ref={measuredRef}
-      flex="1"
-      size={{ base: 'md', lg: 'lg' }}
-      variant="ghost"
-      _hover={{ backgroundColor: 'neutral1.4' }}
-      {...props}
-    />
-  )
+  return <Button ref={measuredRef} flex="1" size={{ base: 'md', lg: 'lg' }} variant="ghost" {...props} />
 }
 
 export const AnimatedNavBarSkeleton = () => {

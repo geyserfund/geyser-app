@@ -15,9 +15,10 @@ import { CreatorEditButton } from '../../body/components'
 
 type PostEditMenuProps = {
   entry: Pick<ProjectEntryFragment, 'id'>
+  onDeleteComplete?: () => void
 } & ButtonProps
 
-export const PostEditMenu = ({ entry, ...props }: PostEditMenuProps) => {
+export const PostEditMenu = ({ entry, onDeleteComplete, ...props }: PostEditMenuProps) => {
   const { t } = useTranslation()
   const toast = useNotification()
 
@@ -33,6 +34,10 @@ export const PostEditMenu = ({ entry, ...props }: PostEditMenuProps) => {
     deleteEntry.execute({
       variables: { deleteEntryId: entry.id },
       onCompleted() {
+        if (onDeleteComplete) {
+          onDeleteComplete()
+        }
+
         toast.success({
           title: 'Successfully deleted entry!',
         })
@@ -59,10 +64,10 @@ export const PostEditMenu = ({ entry, ...props }: PostEditMenuProps) => {
             e.stopPropagation()
             menu.onToggle()
           }}
+          as={CreatorEditButton}
+          isMenu
           {...props}
-        >
-          <CreatorEditButton as={'div'} isMenu {...props} />
-        </MenuButton>
+        />
         <Portal>
           <MenuList p={2} zIndex="99" shadow="md">
             <MenuItem
@@ -91,7 +96,7 @@ export const PostEditMenu = ({ entry, ...props }: PostEditMenuProps) => {
         {...deleteEntryModal}
         title="Delete post"
         description="Are you sure you want to remove the post?"
-        confirm={() => handleDeleteEntry}
+        confirm={handleDeleteEntry}
       />
     </>
   )

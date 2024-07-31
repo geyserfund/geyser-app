@@ -6,9 +6,7 @@ import { ProfileNavContent } from './ProfileNavContent'
 export const ProfileNavMenu = () => {
   return (
     <Menu placement="bottom-end" closeOnSelect={true} strategy="fixed">
-      <MenuButton>
-        <ProfileNavButton as="div" />
-      </MenuButton>
+      <MenuButton as={ProfileNavButton} />
       <Portal>
         <MenuList p={0} zIndex="99" shadow="md">
           <ProfileNavContent />

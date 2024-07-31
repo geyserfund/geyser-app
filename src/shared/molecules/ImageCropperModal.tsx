@@ -11,6 +11,7 @@ export enum ImageCropAspectRatio {
   Square = 1,
   Rectangle = 3,
   Reward = 4 / 3,
+  Post = 16 / 9,
 }
 
 interface ImageCropperModalProps {

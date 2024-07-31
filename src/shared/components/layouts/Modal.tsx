@@ -40,7 +40,7 @@ export const Modal = ({ children, title, contentProps, bodyProps, noClose, ...pr
                 as="div"
                 icon={<PiX />}
                 variant="outline"
-                colorScheme="neutral"
+                colorScheme="neutral1"
               />
             </ModalCloseButton>
           )}

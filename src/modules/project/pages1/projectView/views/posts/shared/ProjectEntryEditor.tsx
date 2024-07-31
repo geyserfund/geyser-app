@@ -22,20 +22,19 @@ type StyleProps = {
   isMobile?: boolean
 }
 
-const useStyles = createUseStyles<Rules, StyleProps, AppTheme>(({ colors }) => ({
+const useStyles = createUseStyles<Rules, StyleProps, AppTheme>(({ colors, colorMode }) => ({
   container: ({ isReadOnly, noPadding, isMobile }: StyleProps) => ({
     width: '100%',
     position: 'relative',
     display: 'flex',
     justifyContent: 'center',
-    minHeight: '350px',
     '& .ql-toolbar': {
       position: 'fixed',
       display: isReadOnly ? 'none' : 'flex',
       bottom: '20px',
       float: 'center',
       zIndex: 99,
-      background: colors.neutral[0],
+      background: colors.utils.pbg,
       borderRadius: '4px',
       border: '1px solid',
       borderColor: colors.neutral1[6],
@@ -70,7 +69,7 @@ const useStyles = createUseStyles<Rules, StyleProps, AppTheme>(({ colors }) => (
           fontSize: '16px',
           lineHeight: 1.5,
           fontStyle: 'normal',
-          color: colors.neutral1[6],
+          color: colorMode === 'light' ? 'var(--chakra-colors-gray-500)' : 'var(--chakra-colors-whiteAlpha-400)',
         },
       },
     },
@@ -104,8 +103,8 @@ const useStyles = createUseStyles<Rules, StyleProps, AppTheme>(({ colors }) => (
       display: 'block',
     },
     '& .ql-syntax': {
-      backgroundColor: `${colors.neutral[100]} !important`,
-      color: `${colors.neutral[600]} !important`,
+      backgroundColor: `${colors.neutral1[2]} !important`,
+      color: `${colors.neutral1[8]} !important`,
     },
     '& .ql-video': {
       width: '100%',
@@ -113,13 +112,13 @@ const useStyles = createUseStyles<Rules, StyleProps, AppTheme>(({ colors }) => (
       maxHeight: '500px',
     },
     '& button.ql-active': {
-      color: `${colors.primary[400]} !important`,
+      color: `${colors.primary1[9]} !important`,
     },
     '& button.ql-active .ql-stroke': {
-      stroke: `${colors.primary[400]} !important`,
+      stroke: `${colors.primary1[9]} !important`,
     },
     '& button.ql-active .ql-fill': {
-      fill: `${colors.primary[400]} !important`,
+      fill: `${colors.primary1[9]} !important`,
     },
   }),
 }))
@@ -157,7 +156,7 @@ export const ProjectEntryEditor = ({
     _setQuillObj(value)
   }
 
-  const { toast } = useNotification()
+  const toast = useNotification()
   const classes = useStyles({ isReadOnly, noPadding, isMobile })
   const { colors } = useCustomTheme()
 
@@ -176,10 +175,9 @@ export const ProjectEntryEditor = ({
           const response = await getSignedUploadAPI(file)
           return response
         } catch {
-          toast({
+          toast.error({
             title: 'Something went wrong',
             description: 'Image upload failed, please try again.',
-            status: 'error',
           })
           return false
         }
@@ -189,8 +187,8 @@ export const ProjectEntryEditor = ({
       modules: ['Resize', 'DisplaySize'],
       overlayStyles: {
         border: '2px solid',
-        borderColor: colors.primary[400],
-        boxShadow: `0px 0px 0px 2px ${colors.primary[400]}`,
+        borderColor: colors.primary1[9],
+        boxShadow: `0px 0px 0px 2px ${colors.primary1[9]}`,
         borderRadius: '4px',
       },
       handleStyles: {

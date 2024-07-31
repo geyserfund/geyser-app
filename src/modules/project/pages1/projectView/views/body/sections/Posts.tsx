@@ -16,9 +16,9 @@ export const Posts = forwardRef<HTMLDivElement>((_, ref) => {
 
   const { queryProjectEntries, queryUnpublishedProjectEntries } = useProjectEntriesAPI(true)
 
-  const { entries: publishedEntries, unpublishedEntries } = useEntriesAtom()
+  const { entries: publishedEntries } = useEntriesAtom()
 
-  const entries = [...publishedEntries, ...unpublishedEntries]
+  const entries = [...publishedEntries]
 
   const sortedEntries =
     entries && entries.filter(truthyFilter).sort((a, b) => Number(b.createdAt || '') - Number(a.createdAt || ''))

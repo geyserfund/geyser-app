@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Input, Textarea, Tooltip, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Input, Spinner, StackProps, Textarea, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { PiArrowLeft, PiImages } from 'react-icons/pi'
@@ -9,12 +9,13 @@ import { ImageWithReload } from '@/components/ui'
 import Loader from '@/components/ui/Loader'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H1 } from '@/shared/components/typography'
 import { dimensions, getPath, ProjectEntryValidations } from '@/shared/constants'
 import { useDebounce } from '@/shared/hooks'
+import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { Entry, EntryStatus } from '@/types'
-import { isActive } from '@/utils'
+import { isActive, useCustomTheme } from '@/utils'
 
 import { useEntryState } from '../hooks/useEntryState'
 import { ProjectEntryEditor } from '../shared'
@@ -123,11 +124,12 @@ export const PostCreateEdit = () => {
     return 'Save draft'
   }
 
-  const handlePublishEntry = async () => {
-    try {
-      await publishEntry()
-      navigate(getPath('projectPostView', project.name, entry.id))
-    } catch {}
+  const handlePublishEntry = () => {
+    publishEntry({
+      onCompleted() {
+        navigate(getPath('projectPostView', project.name, entry.id))
+      },
+    })
   }
 
   if (loading || projectLoading) {
@@ -137,7 +139,7 @@ export const PostCreateEdit = () => {
   const isEntryPublished = entry.status === EntryStatus.Published
 
   return (
-    <VStack w="full" paddingBottom="120px">
+    <VStack w="full" minHeight="full" paddingBottom={20}>
       <ProjectNavContainer>
         <Button
           as={Link}
@@ -170,19 +172,12 @@ export const PostCreateEdit = () => {
         </HStack>
       </ProjectNavContainer>
 
-      <CardLayout noborder w="full" spacing={3} mobileDense alignItems="center">
-        <VStack
-          width={{
-            base: dimensions.project.posts.view.maxWidth + 24 * 2,
-            lg: dimensions.project.posts.view.maxWidth + 24 * 2,
-          }}
-          alignItems="start"
-          paddingBottom="80px"
-        >
+      <CardLayout noborder w="full" flex={1} spacing={3} dense alignItems="center" paddingTop={8}>
+        <VStack width="full" flex={1} maxWidth={dimensions.project.posts.view.maxWidth + 24 * 2 + 2} alignItems="start">
           <H1 size="2xl" bold>
             {t('Write a post')}
           </H1>
-          <CardLayout padding={{ base: 0, lg: '9px' }} w="full" backgroundColor={'utils.surface'}>
+          <CardLayout padding={{ base: 0, lg: '9px' }} w="full" flex={1} backgroundColor={'utils.surface'}>
             <VStack
               spacing={3}
               width="100%"
@@ -193,37 +188,33 @@ export const PostCreateEdit = () => {
               alignItems="flex-start"
             >
               <Box marginTop="20px" width="100%" paddingX="15px">
-                <FileUpload onUploadComplete={onImageUpload}>
+                <FileUpload
+                  onUploadComplete={onImageUpload}
+                  childrenOnLoading={<SkeletonLayout height="330px" width="100%" />}
+                  imageCrop={ImageCropAspectRatio.Post}
+                >
                   <>
                     {entry.image ? (
                       <HStack
                         width={'100%'}
                         justifyContent="center"
                         maxHeight="400px"
-                        borderRadius="12px"
+                        borderRadius="8px"
                         overflow="hidden"
+                        position="relative"
                       >
+                        <ImageUploadUi
+                          position="absolute"
+                          left={0}
+                          top={0}
+                          opacity={0}
+                          _hover={{ opacity: 0.9 }}
+                          height="100%"
+                        />
                         <ImageWithReload width="100%" objectFit="cover" src={entry.image} />
                       </HStack>
                     ) : (
-                      <HStack
-                        width="100%"
-                        minHeight="65px"
-                        borderRadius="12px"
-                        backgroundColor="neutral1.3"
-                        justifyContent="center"
-                        transition="background-color 0.5s ease"
-                        _hover={{
-                          cursor: 'pointer',
-                          backgroundColor: 'neutral.400',
-                          transition: 'background-color 0.5s ease',
-                        }}
-                      >
-                        <Body size="lg" light medium>
-                          {t('Upload header image')}
-                        </Body>
-                        <PiImages />
-                      </HStack>
+                      <ImageUploadUi />
                     )}
                   </>
                 </FileUpload>
@@ -256,7 +247,9 @@ export const PostCreateEdit = () => {
                   fontSize={'18px'}
                   fontWeight={600}
                   paddingX={'15px'}
+                  paddingY={0}
                   name="description"
+                  minHeight={12}
                   value={entry.description}
                   onChange={handleInput}
                   onKeyDown={handleKeyDown}
@@ -277,5 +270,34 @@ export const PostCreateEdit = () => {
         </VStack>
       </CardLayout>
     </VStack>
+  )
+}
+
+type ImageUploadUiProps = {
+  isLoading?: boolean
+} & StackProps
+
+const ImageUploadUi = ({ isLoading, ...props }: ImageUploadUiProps) => {
+  const { colors } = useCustomTheme()
+  return (
+    <HStack
+      width="100%"
+      height="330px"
+      borderRadius="8px"
+      backgroundColor="neutral1.3"
+      justifyContent="center"
+      transition="background-color 0.5s ease"
+      _hover={{
+        cursor: 'pointer',
+        backgroundColor: 'neutral1.6',
+        transition: 'background-color 0.5s ease',
+      }}
+      {...props}
+    >
+      <Body size="lg" light medium>
+        {isLoading ? t('uploading...') : t('Upload header image')}
+      </Body>
+      {isLoading ? <Spinner color="primary1.9" /> : <PiImages fontSize={'20px'} color={colors.neutral1[11]} />}
+    </HStack>
   )
 }

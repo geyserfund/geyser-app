@@ -1,8 +1,9 @@
 import { Box, Button, HStack, SkeletonText, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
+import { useEffect, useState } from 'react'
 import { PiArrowLeft } from 'react-icons/pi'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
 import { BottomNavBarContainer } from '@/modules/navigation/bottomNav'
@@ -11,8 +12,8 @@ import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavCont
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
 import { dimensions, getPath } from '@/shared/constants'
-import { useProjectEntryQuery } from '@/types'
-import { toInt } from '@/utils'
+import { useProjectEntryLazyQuery } from '@/types'
+import { toInt, useNotification } from '@/utils'
 
 import { PostEditMenu, PostShare } from './components'
 import { ProjectEntryEditor } from './shared'
@@ -20,14 +21,39 @@ import { ProjectEntryEditor } from './shared'
 export const PostView = () => {
   const { project, isProjectOwner } = useProjectAtom()
   const { postId } = useParams<{ postId: string }>()
+  const navigate = useNavigate()
 
-  const { loading, data } = useProjectEntryQuery({
-    skip: !postId,
+  const toast = useNotification()
+
+  const [loading, setLoading] = useState(false)
+
+  const [queryEntry, { data }] = useProjectEntryLazyQuery({
     fetchPolicy: 'cache-first',
     variables: {
       entryId: postId,
     },
   })
+
+  useEffect(() => {
+    if (postId) {
+      const handleEntryQuery = async () => {
+        setLoading(true)
+
+        try {
+          await queryEntry()
+        } catch {
+          toast.error({
+            title: t('Something went wrong'),
+            description: t('Failed to fetch the post, please try again.'),
+          })
+        }
+
+        setLoading(false)
+      }
+
+      handleEntryQuery()
+    }
+  }, [postId])
 
   const entry = data?.entry
 
@@ -40,7 +66,7 @@ export const PostView = () => {
   }
 
   return (
-    <VStack w="full" paddingBottom="120px">
+    <VStack w="full" paddingBottom="80px">
       <ProjectNavContainer>
         <Button
           as={Link}
@@ -63,14 +89,18 @@ export const PostView = () => {
                 {entry.title}
               </H2>
               {isProjectOwner ? (
-                <PostEditMenu display={{ base: 'none', lg: 'undefined' }} entry={entry} />
+                <PostEditMenu
+                  size="md"
+                  display={{ base: 'none', lg: 'undefined' }}
+                  entry={entry}
+                  onDeleteComplete={() => navigate(getPath('projectPosts', project?.name))}
+                />
               ) : (
                 <Button
                   variant="solid"
                   colorScheme="primary1"
                   width="160px"
                   display={{ base: 'none', lg: 'undefined' }}
-                  //   onClick={}
                 >
                   {t('Contribute')}
                 </Button>

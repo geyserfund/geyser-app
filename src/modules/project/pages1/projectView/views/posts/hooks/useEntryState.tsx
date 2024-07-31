@@ -155,7 +155,7 @@ export const useEntryState = (
     }
   }, [saving, entry, baseEntry, entryId, projectId, createEntry, toast, updateEntry, setSaving])
 
-  const publishEntryAfterValidation = async () => {
+  const publishEntryAfterValidation = async ({ onCompleted }: { onCompleted?: Function }) => {
     if (!entry.id) {
       toast.info({
         title: 'Cannot publish',
@@ -176,6 +176,10 @@ export const useEntryState = (
 
           onCompleted(data) {
             sync(data.publishEntry)
+            if (onCompleted) {
+              onCompleted()
+            }
+
             toast.success({
               title: 'Entry published',
               description: 'Your entry is now live',

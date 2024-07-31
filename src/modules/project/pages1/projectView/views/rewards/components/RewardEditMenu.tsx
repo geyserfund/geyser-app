@@ -85,10 +85,10 @@ export const RewardEditMenu = ({ reward, isLaunch, ...props }: RewardEditMenuPro
             e.stopPropagation()
             menu.onToggle()
           }}
+          as={CreatorEditButton}
+          isMenu
           {...props}
-        >
-          <CreatorEditButton as={'div'} isMenu {...props} />
-        </MenuButton>
+        />
         <Portal>
           <MenuList p={2} zIndex="99" shadow="md">
             <MenuItem

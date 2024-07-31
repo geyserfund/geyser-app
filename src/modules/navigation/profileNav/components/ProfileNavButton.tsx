@@ -12,9 +12,12 @@ export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) =>
       width={{ base: '40px', lg: '48px' }}
       variant="outline"
       border="1px solid"
-      borderColor="neutral1.8"
-      colorScheme="neutral1"
-      _hover={{ backgroundColor: 'neutral1.3' }}
+      borderColor="neutral1.6"
+      _hover={{
+        backgroundColor: 'neutral1.3',
+        cursor: 'pointer',
+        opacity: user.id ? 0.7 : 1,
+      }}
       paddingX={'0'}
       borderRadius={'50%'}
       justifyContent={'center'}
