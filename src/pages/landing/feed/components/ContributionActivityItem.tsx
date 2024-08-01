@@ -57,7 +57,7 @@ export const ContributionActivityItem = ({ fundingTx, dateTime, count, showsProj
         return (
           <AvatarLink
             title={resource.title}
-            path={getPath('entry', resource.id)}
+            path={getPath('projectPostView', fundingTx.projectId, resource.id)}
             imageSrc={toSmallImageUrl(`${resource.image}`)}
           />
         )

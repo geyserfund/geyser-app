@@ -28,12 +28,6 @@ export const creatorProjectCreationRoutes = [
   getPath('launchProjectWallet', PathName.projectId),
 ]
 
-export const entryCreationRoutes = [
-  getPath('projectEntryCreation', PathName.projectName),
-  getPath('projectEntryDetails', PathName.projectName, PathName.entryId),
-  getPath('projectEntryPreview', PathName.projectName, PathName.entryId),
-]
-
 export const ProjectPageDashboardInternalRoutes = [
   getPath('dashboardAnalytics', PathName.projectName),
   getPath('dashboardSales', PathName.projectName),

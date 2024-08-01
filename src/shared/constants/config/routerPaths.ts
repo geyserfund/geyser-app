@@ -60,6 +60,17 @@ export enum PathName {
   dashboardNostr = 'nostr',
   dashboardAffiliates = 'affiliate',
 
+  projectFunding = 'funding',
+  fundingDetails = 'details',
+  fundingPayment = 'payment',
+  fundingPaymentLightning = 'lightning',
+  fundingPaymentOnchain = 'onchain',
+  fundingPaymentOnchainProcessing = 'processing',
+  fundingPaymentOnchainRefund = 'refund',
+  fundingPaymentOnchainRefundInitiated = 'initiated',
+  fundingSuccess = 'success',
+  fundingFailed = 'failed',
+
   badges = 'badges',
   about = 'about',
   projectId = ':projectId',
@@ -102,68 +113,33 @@ const pathsMap = {
   projectNotFound: () => `/${PathName.projectNotFound}`,
   _deprecatedPathForProject: (projectName: string) => `/${PathName._deprecatedPathNameForProject}/${projectName}`,
 
-  refundInitiated: () => `/${PathName.refund}/${PathName.refundInitiated}`,
-  refund: () => `/${PathName.refund}`,
+  /** Project base routes */
 
   project: (projectName: string) => `/${PathName.project}/${projectName}`,
   projectDraft: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDraft}`,
-  projectInsights: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectInsights}`,
-  projectContributors: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectContributors}`,
-  projectEntries: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectEntries}`,
+  projectGoals: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectGoals}`,
+  projectRewards: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectRewards}`,
+  projectPosts: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectPosts}`,
+  projectLeaderboard: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectLeaderboard}`,
+  projectDashboard: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDashboard}`,
+
+  /** Project Rewards internal routes */
 
   projectRewardCreate: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectRewards}/create`,
   projectRewardEdit: (projectName: string, rewardId: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectRewards}/edit/${rewardId}`,
   projectRewardView: (projectName: string, rewardId: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectRewards}/view/${rewardId}`,
-  projectRewards: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectRewards}`,
+
+  /** Project Post internal  routes */
 
   projectPostCreate: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectPosts}/create`,
   projectPostEdit: (projectName: string, postId: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectPosts}/edit/${postId}`,
   projectPostView: (projectName: string, postId: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectPosts}/view/${postId}`,
-  projectPosts: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectPosts}`,
 
-  projectGoals: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectGoals}`,
-  projectLeaderboard: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectLeaderboard}`,
-  projectManageRewards: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectManageRewards}`,
-  projectCreateReward: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectManageRewards}/${PathName.projectCreateReward}`,
-  projectEditReward: (projectName: string, rewardId: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectManageRewards}/${PathName.projectEditReward}/${rewardId}`,
-
-  entry: (entryID: string) => `/${PathName.entry}/${entryID}`,
-  entryRewards: (entryID: string) => `/${PathName.entry}/${entryID}/${PathName.projectRewards}`,
-  projectEntryCreation: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.entry}`,
-  projectEntryDetails: (projectName: string, entryID: string) =>
-    `/${PathName.project}/${projectName}/${PathName.entry}/${entryID}`,
-  projectEntryPreview: (projectName: string, entryID: string) =>
-    `/${PathName.project}/${projectName}/${PathName.entry}/${entryID}/preview`,
-
-  launchStart: () => `/${PathName.launchProject}/${PathName.launchStart}`,
-  launch: () => `/${PathName.launchProject}`,
-
-  launchStartProject: (projectID: string) => `/${PathName.launchProject}/${PathName.launchStart}/${projectID}`,
-  launchProject: (projectID: string) => `/${PathName.launchProject}/${projectID}`,
-  launchProjectDetails: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectDetails}`,
-  launchProjectStory: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchProjectStory}`,
-  launchProjectRewards: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}`,
-  launchProjectRewardsCreate: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/create`,
-  launchProjectRewardsEdit: (projectID: string, rewardID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/edit/${rewardID}`,
-  launchProjectWallet: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.node}`,
-
-  projectLaunch: (projectName: string, state: 'draft' | 'launch' = 'launch') =>
-    `/${PathName.project}/${projectName}/?${state}`,
-
-  userProfile: (userID: string) => `/${PathName.userProfile}/${userID}`,
-  userProfileSettings: (userID: string) => `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}`,
-
-  projectDashboard: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDashboard}`,
+  /** Project Dasboard internal routes */
 
   dashboardAnalytics: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardAnalytics}`,
@@ -185,6 +161,66 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardSettings}`,
   dashboardAffiliates: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardAffiliates}`,
+
+  /** Project Funding Routes */
+
+  projectFunding: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectFunding}`,
+  fundingDetails: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingDetails}`,
+  fundingPayment: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}`,
+  fundingPaymentLightning: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentLightning}`,
+  fundingPaymentOnchain: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}`,
+  fundingPaymentOnchainProcessing: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}/${PathName.fundingPaymentOnchainProcessing}`,
+  fundingPaymentOnchainRefund: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}/${PathName.fundingPaymentOnchainRefund}`,
+  fundingPaymentOnchainRefundInitiated: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}/${PathName.fundingPaymentOnchainRefund}/${PathName.fundingPaymentOnchainRefundInitiated}`,
+  fundingSuccess: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingSuccess}`,
+  fundingFailed: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingFailed}`,
+
+  /** Refund Routes */
+
+  refund: () => `/${PathName.refund}`,
+  refundInitiated: () => `/${PathName.refund}/${PathName.refundInitiated}`,
+
+  entry: (entryID: string) => `/${PathName.entry}/${entryID}`,
+  entryRewards: (entryID: string) => `/${PathName.entry}/${entryID}/${PathName.projectRewards}`,
+  projectEntryCreation: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.entry}`,
+  projectEntryDetails: (projectName: string, entryID: string) =>
+    `/${PathName.project}/${projectName}/${PathName.entry}/${entryID}`,
+  projectEntryPreview: (projectName: string, entryID: string) =>
+    `/${PathName.project}/${projectName}/${PathName.entry}/${entryID}/preview`,
+
+  /** Project creation Routes */
+
+  launchStart: () => `/${PathName.launchProject}/${PathName.launchStart}`,
+  launch: () => `/${PathName.launchProject}`,
+  launchStartProject: (projectID: string) => `/${PathName.launchProject}/${PathName.launchStart}/${projectID}`,
+  launchProject: (projectID: string) => `/${PathName.launchProject}/${projectID}`,
+  launchProjectDetails: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectDetails}`,
+  launchProjectStory: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchProjectStory}`,
+  launchProjectRewards: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}`,
+  launchProjectRewardsCreate: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/create`,
+  launchProjectRewardsEdit: (projectID: string, rewardID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/edit/${rewardID}`,
+  launchProjectWallet: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.node}`,
+
+  projectLaunch: (projectName: string, state: 'draft' | 'launch' = 'launch') =>
+    `/${PathName.project}/${projectName}/?${state}`,
+
+  /** User Profile Routes */
+
+  userProfile: (userID: string) => `/${PathName.userProfile}/${userID}`,
+  userProfileSettings: (userID: string) => `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}`,
 
   badges: () => `/${PathName.badges}`,
 

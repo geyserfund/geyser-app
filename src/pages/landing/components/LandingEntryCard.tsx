@@ -13,6 +13,8 @@ interface LandingEntryCardProps extends CardLayoutProps {
 export const LandingEntryCard = ({ entry, isMobile, ...rest }: LandingEntryCardProps) => {
   const navigate = useNavigate()
 
+  const projectName = entry.project?.name
+
   if (!entry.project) {
     return null
   }
@@ -20,7 +22,7 @@ export const LandingEntryCard = ({ entry, isMobile, ...rest }: LandingEntryCardP
   return (
     <LandingCardBase
       isMobile={isMobile}
-      onClick={() => navigate(getPath('entry', entry.id))}
+      onClick={() => projectName && navigate(getPath('projectPostView', projectName, entry.id))}
       imageSrc={toSmallImageUrl(`${entry.image}`)}
       title={entry.title}
       user={entry.creator}
