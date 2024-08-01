@@ -17,7 +17,10 @@ import {
 } from '../state/goalsAtom'
 import { useCustomMutation } from './custom/useCustomMutation'
 
-/** Fetch project goals for project context, pass true to fetch on render */
+/**
+ * Query, Create, Update, Delete project gaols for current Project context
+ * @param load - Load goals on mount
+ */
 export const useProjectGoalsAPI = (load?: boolean) => {
   const setInProgressGoals = useSetAtom(inProgressGoalsAtom)
   const setCompletedGoals = useSetAtom(completedGoalsAtom)

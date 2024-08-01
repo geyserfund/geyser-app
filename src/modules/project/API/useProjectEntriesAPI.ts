@@ -22,7 +22,10 @@ import { isProjectOwnerAtom } from '../state/projectAtom'
 import { updateEntryCache, updateProjectEntriesCache } from './cache/projectEntryCache'
 import { useCustomMutation } from './custom/useCustomMutation'
 
-/** Fetch project entries for project context, pass true to load on render */
+/**
+ * Query, Create, Update, Delete, Publish project entries for current Project context
+ * @param load - Load entries on mount
+ */
 export const useProjectEntriesAPI = (load?: boolean) => {
   const isProjectOwner = useAtomValue(isProjectOwnerAtom)
 

@@ -25,7 +25,10 @@ export type UseInitProjectProps = {
   initializeWallet?: boolean
 }
 
-/**  Must be initialized before using project context */
+/**
+ * Query, create, update, delete project for current Project context
+ * @param load - Load project on mount
+ */
 export const useProjectAPI = (props?: UseInitProjectProps) => {
   const navigate = useNavigate()
 

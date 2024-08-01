@@ -11,7 +11,10 @@ import { useProjectAtom } from '../hooks/useProjectAtom'
 import { addUpdateAffiliateLinkAtom, affiliateLinksAtom, disableAffiliateLinkAtom } from '../state/affiliateAtom'
 import { useCustomMutation } from './custom/useCustomMutation'
 
-/** Fetch project affiliate links for project context */
+/**
+ * Fetch, Create, Update, Disabled project affiliate links for project context
+ * @param load - Load affiliate links on mount
+ */
 export const useProjectAffiliateAPI = (load?: boolean) => {
   const setAffiliateLinks = useSetAtom(affiliateLinksAtom)
   const addUpdateAffiliatelink = useSetAtom(addUpdateAffiliateLinkAtom)

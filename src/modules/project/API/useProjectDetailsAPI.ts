@@ -5,7 +5,10 @@ import { useProjectPageDetailsLazyQuery } from '../../../types'
 import { useProjectAtom } from '../hooks/useProjectAtom'
 import { initialProjectDetailsLoadAtom, partialUpdateProjectAtom } from '../state/projectAtom'
 
-/**  /** Fetch project details for project context */
+/**
+ * Query project details for project context
+ * @param load - Load project details on mount
+ */
 export const useProjectDetailsAPI = (load?: boolean) => {
   const partialUpdateProject = useSetAtom(partialUpdateProjectAtom)
   const [initialProjectDetailsLoad, setInitialProjectDetailsLoad] = useAtom(initialProjectDetailsLoadAtom)
