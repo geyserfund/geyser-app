@@ -10,7 +10,7 @@ export const NoContribution = () => {
     <VStack w="full" justifyContent="center" flex={1} padding={6}>
       <Image src={NoLeaderboardDataImageUrl} height="222px" width="150px" />
       <Body size="md" medium muted>
-        {t('No contributions have been made to this project so far.')}
+        {t('No contributions have been made to this project')}
       </Body>
     </VStack>
   )
