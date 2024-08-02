@@ -146,7 +146,6 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
       },
       onCompleted(data) {
         reset()
-        addNewAffiliateLink(data.affiliateLinkCreate)
         if (onCompleted) {
           onCompleted()
         }

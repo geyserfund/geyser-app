@@ -7,75 +7,26 @@ import {
   InputLeftElement,
   InputProps,
   InputRightElement,
-  Text,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { BiDollar } from 'react-icons/bi'
-import { createUseStyles } from 'react-jss'
 
-import { AppTheme } from '../../context'
-import { useBtcContext } from '../../context/btc'
-import { fonts } from '../../styles'
-import { commaFormatted } from '../../utils'
-import { CrownIcon, MedalIcon, SatoshiIconTilted, StarIcon, TrophyIcon } from '../icons'
-import { SatSymbolIcon } from '../icons/svg'
-import { MonoBody1 } from '../typography'
+import { CrownIcon, MedalIcon, SatoshiIconTilted, StarIcon, TrophyIcon } from '../../../../../../../components/icons'
+import { SatSymbolIcon } from '../../../../../../../components/icons/svg'
+import { MonoBody1 } from '../../../../../../../components/typography'
+import { useBtcContext } from '../../../../../../../context/btc'
+import { commaFormatted } from '../../../../../../../utils'
 
-const useStyles = createUseStyles(({ colors }: AppTheme) => ({
-  inputElement: {
-    borderWidth: '2px',
-    '&:focus': {
-      borderColor: colors.primary[400],
-      boxShadow: `0 0 0 1px ${colors.primary[500]}`,
-    },
-    fontFamily: fonts.brand,
-    fontWeight: 700,
-    fontSize: '30px',
-  },
-  switchButtton: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 0,
-    background: colors.neutral[0],
-    color: colors.neutral[600],
-    position: 'relative',
-    '&:hover': {
-      background: colors.neutral[100],
-    },
-    '&:active': {
-      background: colors.primary[400],
-    },
-  },
-  switchIcon: {
-    fontSize: '35px',
-  },
-  defaultAmountButtons: {
-    flex: 1,
-    padding: '5px',
-    borderWidth: '2px',
-    backgroundColor: 'transparent',
-    boxShadow: 'none',
-    overflow: 'hidden',
-    '&:focus': {
-      borderColor: colors.neutral[500],
-    },
-  },
-}))
-
-interface IDonationInputProps extends InputProps {
+interface IDonationInputProps extends Omit<InputProps, 'onChange'> {
   name: string
-  onChange: any
+  onChange: (name: string, value: number) => void
   inputGroup?: InputGroupProps
 }
 
 export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }: IDonationInputProps) => {
-  const classes = useStyles()
-
   const { btcRate } = useBtcContext()
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -106,11 +57,7 @@ export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }
   }
 
   useEffect(() => {
-    if (!satoshi) {
-      onChange(name, 0)
-    } else {
-      onChange(name, satoshi)
-    }
+    onChange(name, satoshi)
   }, [satoshi, name, onChange])
 
   const handleDefaultAmountButtonClick = (val: number) => {
@@ -124,45 +71,40 @@ export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }
     }
   }
 
-  const fontSize = { base: 'sm', md: 'md', lg: 'sm', xl: 'md' }
   return (
     <VStack>
-      <HStack width="100%" justifyContent="space-around" mt="5px">
+      <HStack width="100%" justifyContent="start" mt="5px">
         <Button
-          className={classes.defaultAmountButtons}
+          variant="outline"
+          colorScheme="neutral1"
           onClick={() => handleDefaultAmountButtonClick(10)}
           leftIcon={<MedalIcon />}
         >
-          <Text fontSize={fontSize} isTruncated>
-            $10
-          </Text>
+          $10
         </Button>
         <Button
-          className={classes.defaultAmountButtons}
+          variant="outline"
+          colorScheme="neutral1"
           onClick={() => handleDefaultAmountButtonClick(50)}
           leftIcon={<TrophyIcon />}
         >
-          <Text fontSize={fontSize} isTruncated>
-            $50
-          </Text>
+          $50
         </Button>
         <Button
-          className={classes.defaultAmountButtons}
+          variant="outline"
+          colorScheme="neutral1"
           onClick={() => handleDefaultAmountButtonClick(100)}
           leftIcon={<CrownIcon />}
         >
-          <Text fontSize={fontSize} isTruncated>
-            $100
-          </Text>
+          $100
         </Button>
         <Button
-          className={classes.defaultAmountButtons}
+          variant="outline"
+          colorScheme="neutral1"
           onClick={() => handleDefaultAmountButtonClick(1000)}
           leftIcon={<StarIcon />}
         >
-          <Text fontSize={fontSize} isTruncated>
-            $1000
-          </Text>
+          $1000
         </Button>
       </HStack>
 
@@ -174,10 +116,9 @@ export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }
           ref={inputRef}
           data-testid="donation-input"
           height={14}
-          borderRadius="8px"
+          borderRadius="12px"
           value={satoshi > 0 ? (isSatoshi ? commaFormatted(satoshi) : commaFormatted(dollar)) : ''}
           type="text"
-          className={classNames(classes.inputElement, className)}
           onChange={handleInput}
           onKeyDown={handleKeyDown}
           pl={10}
@@ -189,7 +130,7 @@ export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }
           placeholder="0"
         />
         <InputRightElement pt={1} pr={'10px'} height={14} w="fit-content" minWidth="100px" maxWidth="150px">
-          <Button w="100%" className={classes.switchButtton} onClick={onToggle} variant="ghost">
+          <Button w="100%" variant="soft" colorScheme="neutral1" onClick={onToggle}>
             {isSatoshi ? (
               <>
                 <MonoBody1 isTruncated>
@@ -198,7 +139,7 @@ export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }
               </>
             ) : (
               <>
-                <SatoshiIconTilted scale={0.7} style={{ paddingBottom: '3px' }} />
+                <SatSymbolIcon fontSize="16px" style={{ paddingBottom: '3px' }} />
                 <MonoBody1 isTruncated>{commaFormatted(satoshi) || 0}</MonoBody1>
               </>
             )}

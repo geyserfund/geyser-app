@@ -56,11 +56,10 @@ export const useProjectGoalsAPI = (load?: boolean) => {
 
   const [createProjectGoal, createProjectGoalOptions] = useCustomMutation(useProjectGoalCreateMutation, {
     onCompleted(data) {
-      console.log('second createProjectGoal onCompleted')
-
       setInProgressGoals(data.projectGoalCreate)
     },
   })
+
   const [updateProjectGoal, updateProjectGoalOptions] = useCustomMutation(useProjectGoalUpdateMutation, {
     onCompleted(data) {
       addUpdateInProgressGoals(data.projectGoalUpdate)

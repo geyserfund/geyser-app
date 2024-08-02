@@ -37,10 +37,14 @@ export const dimensions = {
         width: 148,
       },
     },
+    rightSideNav: {
+      width: '358px',
+    },
   },
   sideNav: {
     width: 256,
   },
+
   bottomNavBar: {
     desktopHeight: 60,
   },

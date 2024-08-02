@@ -25,13 +25,13 @@ export const ProjectLeaderboard = () => {
 
   return (
     <HStack w="full" h="full" alignItems="start" spacing={4} pb={6}>
-      <VStack h="full" flex={8} alignItems="start">
+      <VStack h="full" flex={1} alignItems="start">
         <H1 size="2xl" bold dark>
           {t('Leaderboard')}
         </H1>
         <Leaderboard />
       </VStack>
-      <VStack h="full" flex={5} alignItems="start">
+      <VStack h="full" width="full" maxWidth={dimensions.project.rightSideNav.width} alignItems="start">
         <H1 size="2xl" bold dark>
           {t('Contributions')}
         </H1>
