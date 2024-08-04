@@ -205,10 +205,10 @@ export const useFundingFormState = ({ rewards, rewardCurrency, walletLimits }: U
   )
 
   const validateInputAmount = useCallback(
-    (name: string) => {
-      const isException = isProjectAnException(name)
+    (projectName: string) => {
+      const isException = isProjectAnException(projectName)
 
-      if (!isException && walletLimits?.max && getTotalAmount('sats', name) >= walletLimits.max) {
+      if (!isException && walletLimits?.max && getTotalAmount('sats', projectName) >= walletLimits.max) {
         return {
           title: `Amount above the project wallet limit: ${commaFormatted(walletLimits.max)} sats.`,
           description: 'Please update the amount, or contact us for donating a higher amount.',
@@ -216,7 +216,7 @@ export const useFundingFormState = ({ rewards, rewardCurrency, walletLimits }: U
         }
       }
 
-      if (walletLimits?.min && getTotalAmount('sats', name) < walletLimits.min) {
+      if (walletLimits?.min && getTotalAmount('sats', projectName) < walletLimits.min) {
         return {
           title: `The payment minimum is ${walletLimits.min} satoshi.`,
           description: 'Please update the amount.',

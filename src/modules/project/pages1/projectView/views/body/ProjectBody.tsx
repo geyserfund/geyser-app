@@ -40,7 +40,7 @@ export const ProjectBody = () => {
   // const projectDetails = useProjectDetails(project)
 
   return (
-    <Stack w="full" spacing={4} direction={{ base: 'column', lg: 'row' }}>
+    <Stack w="full" spacing={dimensions.project.rightSideNav.gap} direction={{ base: 'column', lg: 'row' }}>
       <VStack flex={1} w="full" spacing={6} paddingBottom={24}>
         <FinalizeProjectNotice />
         <LaunchProjectNotice />

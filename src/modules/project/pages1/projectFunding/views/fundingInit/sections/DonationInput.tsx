@@ -1,5 +1,6 @@
 import {
   Button,
+  ButtonProps,
   HStack,
   Input,
   InputGroup,
@@ -10,11 +11,13 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import classNames from 'classnames'
+import { t } from 'i18next'
 import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { BiDollar } from 'react-icons/bi'
 
-import { CrownIcon, MedalIcon, SatoshiIconTilted, StarIcon, TrophyIcon } from '../../../../../../../components/icons'
+import { H1 } from '@/shared/components/typography'
+
+import { CrownIcon, MedalIcon, StarIcon, TrophyIcon } from '../../../../../../../components/icons'
 import { SatSymbolIcon } from '../../../../../../../components/icons/svg'
 import { MonoBody1 } from '../../../../../../../components/typography'
 import { useBtcContext } from '../../../../../../../context/btc'
@@ -72,50 +75,46 @@ export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }
   }
 
   return (
-    <VStack>
-      <HStack width="100%" justifyContent="start" mt="5px">
-        <Button
-          variant="outline"
-          colorScheme="neutral1"
-          onClick={() => handleDefaultAmountButtonClick(10)}
-          leftIcon={<MedalIcon />}
-        >
-          $10
-        </Button>
-        <Button
-          variant="outline"
-          colorScheme="neutral1"
-          onClick={() => handleDefaultAmountButtonClick(50)}
-          leftIcon={<TrophyIcon />}
-        >
-          $50
-        </Button>
-        <Button
-          variant="outline"
-          colorScheme="neutral1"
-          onClick={() => handleDefaultAmountButtonClick(100)}
-          leftIcon={<CrownIcon />}
-        >
-          $100
-        </Button>
-        <Button
-          variant="outline"
-          colorScheme="neutral1"
-          onClick={() => handleDefaultAmountButtonClick(1000)}
-          leftIcon={<StarIcon />}
-        >
-          $1000
-        </Button>
+    <VStack spacing={3}>
+      <HStack w="full" justifyContent="space-between" flexWrap={'wrap'}>
+        <H1 size="2xl" bold>
+          {t('Make a donation')}
+        </H1>
+        <HStack justifyContent="start">
+          <DonationInputIconButton
+            onClick={() => handleDefaultAmountButtonClick(10)}
+            leftIcon={<MedalIcon height="16px" width="16px" />}
+          >
+            $10
+          </DonationInputIconButton>
+          <DonationInputIconButton
+            onClick={() => handleDefaultAmountButtonClick(50)}
+            leftIcon={<TrophyIcon height="16px" width="16px" />}
+          >
+            $50
+          </DonationInputIconButton>
+          <DonationInputIconButton
+            onClick={() => handleDefaultAmountButtonClick(100)}
+            leftIcon={<CrownIcon height="16px" width="16px" />}
+          >
+            $100
+          </DonationInputIconButton>
+          <DonationInputIconButton
+            onClick={() => handleDefaultAmountButtonClick(1000)}
+            leftIcon={<StarIcon height="16px" width="16px" />}
+          >
+            $1000
+          </DonationInputIconButton>
+        </HStack>
       </HStack>
 
       <InputGroup {...inputGroup}>
-        <InputLeftElement pt={1} pl={4} height={14}>
+        <InputLeftElement pt={1} pl={4}>
           {isSatoshi ? <SatSymbolIcon fontSize="24px" /> : <BiDollar fontSize="24px" />}
         </InputLeftElement>
         <Input
           ref={inputRef}
           data-testid="donation-input"
-          height={14}
           borderRadius="12px"
           value={satoshi > 0 ? (isSatoshi ? commaFormatted(satoshi) : commaFormatted(dollar)) : ''}
           type="text"
@@ -129,8 +128,8 @@ export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }
           color="neutral.1000"
           placeholder="0"
         />
-        <InputRightElement pt={1} pr={'10px'} height={14} w="fit-content" minWidth="100px" maxWidth="150px">
-          <Button w="100%" variant="soft" colorScheme="neutral1" onClick={onToggle}>
+        <InputRightElement pr={'10px'} w="fit-content" minWidth="100px" maxWidth="150px">
+          <Button w="100%" size="sm" variant="soft" colorScheme="neutral1" onClick={onToggle}>
             {isSatoshi ? (
               <>
                 <MonoBody1 isTruncated>
@@ -148,4 +147,8 @@ export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }
       </InputGroup>
     </VStack>
   )
+}
+
+const DonationInputIconButton = (props: ButtonProps) => {
+  return <Button size="sm" variant="outline" colorScheme="neutral1" {...props} />
 }

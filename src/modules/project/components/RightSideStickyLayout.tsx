@@ -16,7 +16,7 @@ export const RightSideStickyLayout = ({ children, ...props }: PropsWithChildren<
       width="full"
       maxWidth={dimensions.project.rightSideNav.width}
       justifyContent="start"
-      paddingBottom={4}
+      paddingBottom={10}
       {...props}
     >
       {children}

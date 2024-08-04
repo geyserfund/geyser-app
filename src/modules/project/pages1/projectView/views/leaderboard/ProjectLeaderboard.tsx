@@ -24,7 +24,7 @@ export const ProjectLeaderboard = () => {
   }
 
   return (
-    <HStack w="full" h="full" alignItems="start" spacing={4} pb={6}>
+    <HStack w="full" h="full" alignItems="start" spacing={dimensions.project.rightSideNav.gap} pb={6}>
       <VStack h="full" flex={1} alignItems="start">
         <H1 size="2xl" bold dark>
           {t('Leaderboard')}

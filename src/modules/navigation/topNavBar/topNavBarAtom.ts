@@ -2,6 +2,7 @@ import { atom, useAtomValue } from 'jotai'
 
 import {
   projectDashboardRoutes,
+  projectFundingRoutes,
   projectPostCreatorRoutes,
   projectRewardCreatorRoutes,
   projectRoutes,
@@ -18,6 +19,7 @@ const isProjectRoutesAtom = atom(
     ...projectDashboardRoutes,
     ...projectPostCreatorRoutes,
     ...projectRewardCreatorRoutes,
+    ...projectFundingRoutes,
   ]),
 )
 const isProjectMainPageAtom = atom(routeMatchForAtom([getPath('project', PathName.projectName)]))
@@ -34,8 +36,6 @@ export const shouldShowProjectLogoAtom = atom((get) => {
 
   const isProjectMainPage = get(isProjectMainPageAtom)
   const mainProjectPageScrolledPassThreshold = get(mainProjectPageScrolledPassThresholdAtom)
-  console.log('checking isProjectMainPage', isProjectMainPage)
-  console.log('checking mainProjectPageScrolledPassThreshold', mainProjectPageScrolledPassThreshold)
 
   if (!isProjectMainPage) {
     return true

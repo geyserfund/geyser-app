@@ -6,15 +6,19 @@ import { Link } from 'react-router-dom'
 
 import { RightSideStickyLayout } from '@/modules/project/components/RightSideStickyLayout'
 import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
+import { dimensions } from '@/shared/constants'
 
 type FundingLayoutProps = {
   backPath?: string
+  containerProps?: StackProps
+  /** render component on the right side of the top nav bar */
   topNavBarRightContent?: React.ReactNode
   /** render component on the right side, only on desktop */
   sideContent?: React.ReactNode
-  containerProps?: StackProps
   sideContainerProps?: StackProps
-  noMobileSideContent?: boolean
+  /** render component on the bottom, only on mobile */
+  bottomContent?: React.ReactNode
+  bottomContainerProps?: StackProps
 }
 
 export const FundingLayout = ({
@@ -23,8 +27,9 @@ export const FundingLayout = ({
   sideContent,
   containerProps,
   sideContainerProps,
+  bottomContent,
+  bottomContainerProps,
   children,
-  noMobileSideContent,
 }: PropsWithChildren<FundingLayoutProps>) => {
   return (
     <VStack w="full">
@@ -45,12 +50,27 @@ export const FundingLayout = ({
         </HStack>
         {topNavBarRightContent}
       </ProjectNavContainer>
-      <HStack w="full" alignItems="start" spacing={4}>
-        <VStack flex={1} marginBottom={20} {...containerProps}>
+      <HStack w="full" alignItems="start" spacing={dimensions.project.rightSideNav.gap}>
+        <VStack maxWidth="full" flex={1} paddingBottom={{ base: 40, lg: 20 }} {...containerProps}>
           {children}
         </VStack>
         {sideContent && <RightSideStickyLayout {...sideContainerProps}>{sideContent}</RightSideStickyLayout>}
       </HStack>
+      {bottomContent && (
+        <HStack
+          w="full"
+          position="fixed"
+          bottom={0}
+          display={{ base: 'flex', lg: 'none' }}
+          borderTop="1px solid"
+          borderColor="neutral1.6"
+          backgroundColor="utils.pbg"
+          padding={3}
+          {...bottomContainerProps}
+        >
+          {bottomContent}
+        </HStack>
+      )}
     </VStack>
   )
 }

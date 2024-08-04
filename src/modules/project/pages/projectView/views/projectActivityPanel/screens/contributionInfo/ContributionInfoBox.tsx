@@ -13,7 +13,7 @@ import {
 import { FundingStatus, InvoiceStatus, ProjectReward, Satoshis } from '../../../../../../../../types'
 import { hasOwnNode } from '../../../../../../../../utils/helpers'
 import { useFundingContext } from '../../../../../../context'
-import { Badge } from '../fundingForm/components/Badge'
+import { Badge } from '../../../../../../pages1/projectFunding/components/Badge'
 import { CopyProjectLink } from './components'
 import { DownloadInvoice } from './components/DownloadInvoice'
 

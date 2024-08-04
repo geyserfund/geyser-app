@@ -71,6 +71,19 @@ export const projectPostCreatorRoutes = [
   getPath('projectPostEdit', PathName.projectName, PathName.postId),
 ]
 
+export const projectFundingRoutes = [
+  getPath('projectFunding', PathName.projectName),
+  getPath('fundingDetails', PathName.projectName),
+  getPath('fundingPayment', PathName.projectName),
+  getPath('fundingPaymentLightning', PathName.projectName),
+  getPath('fundingPaymentOnchain', PathName.projectName),
+  getPath('fundingPaymentOnchainProcessing', PathName.projectName),
+  getPath('fundingPaymentOnchainRefund', PathName.projectName),
+  getPath('fundingPaymentOnchainRefundInitiated', PathName.projectName),
+  getPath('fundingSuccess', PathName.projectName),
+  getPath('fundingFailed', PathName.projectName),
+]
+
 export const ProjectPageRoutesWithNavBarForDesktop = [...projectBaseRoutes, ...projectDashboardRoutes]
 
 export const ProjectPageRoutesWithNavBarForMobile = [

@@ -1,1 +1,1 @@
-export * from './FundingFormRewards'
+export * from '../../../../../../pages1/projectFunding/views/fundingInit/sections/FundingInitRewards'

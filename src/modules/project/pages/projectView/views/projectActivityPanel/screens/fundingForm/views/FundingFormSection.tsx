@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next'
 
 import { DonationInput } from '../../../../../../../../../components/molecules'
 import { useFundingContext } from '../../../../../../../context'
+import { FundingInitRewards } from '../../../../../../../pages1/projectFunding/views/fundingInit/sections/FundingInitRewards'
 import { SectionTitle } from '../../../components/SectionTitle'
 import { SectionTitleBlock } from '../../../components/SectionTitleBlock'
-import { FundingFormRewards } from '../../rewardSelection/FundingFormRewards'
 
 type Props = {
   onBackClick: MouseEventHandler<HTMLButtonElement>
@@ -34,7 +34,7 @@ export const FundingFormSection = ({ onBackClick }: Props) => {
         <DonationInput inputGroup={{ padding: '2px' }} name="donationAmount" onChange={setState} />
       </Box>
 
-      <FundingFormRewards />
+      <FundingInitRewards />
     </VStack>
   )
 }

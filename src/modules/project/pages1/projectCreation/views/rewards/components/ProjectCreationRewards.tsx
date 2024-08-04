@@ -1,5 +1,4 @@
 import { SimpleGrid } from '@chakra-ui/react'
-import { forwardRef } from 'react'
 
 import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 
@@ -8,7 +7,7 @@ import { ID } from '../../../../../../../shared/constants'
 import { isActive } from '../../../../../../../utils'
 import { RewardCard } from '../../../../projectView/views/rewards/shared'
 
-export const ProjectCreationRewards = forwardRef<HTMLDivElement>((_, ref) => {
+export const ProjectCreationRewards = () => {
   const { project } = useProjectAtom()
   const { rewards } = useRewardsAtom()
   console.log('did if get till here', rewards)
@@ -30,7 +29,6 @@ export const ProjectCreationRewards = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <>
       <CardLayout
-        ref={ref}
         id={ID.project.rewards.container}
         width="100%"
         flexDirection="column"
@@ -46,4 +44,4 @@ export const ProjectCreationRewards = forwardRef<HTMLDivElement>((_, ref) => {
       </CardLayout>
     </>
   )
-})
+}

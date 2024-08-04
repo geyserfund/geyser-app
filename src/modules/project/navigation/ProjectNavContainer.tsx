@@ -10,7 +10,7 @@ export const ProjectNavContainer = ({ children, ...props }: PropsWithChildren<St
       <HStack
         padding="2px"
         borderRadius={{ base: '10px', lg: '12px' }}
-        backgroundColor="neutral1.2"
+        backgroundColor="neutral1.3"
         w="full"
         justifyContent="space-between"
       >

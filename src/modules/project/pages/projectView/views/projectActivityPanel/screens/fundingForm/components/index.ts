@@ -1,2 +1,2 @@
-export * from './Badge'
-export * from './ProjectFundingSummaryCard'
+export * from '../../../../../../../pages1/projectFunding/components/Badge'
+export * from '../../../../../../../pages1/projectFunding/components/ProjectFundingSummary'

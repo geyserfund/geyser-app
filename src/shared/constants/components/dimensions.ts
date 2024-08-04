@@ -38,7 +38,8 @@ export const dimensions = {
       },
     },
     rightSideNav: {
-      width: '358px',
+      width: '400px',
+      gap: '20px',
     },
   },
   sideNav: {
@@ -49,5 +50,5 @@ export const dimensions = {
     desktopHeight: 60,
   },
   pullDownThreshold: 70,
-  maxWidth: 960,
+  maxWidth: 1080,
 }

@@ -13,6 +13,24 @@ export const useFundCalc = (state: IFundForm) => {
   const { btcRate } = useBtcContext()
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
 
+  const getRewardsAmount = (type: 'sats' | 'dollar') => {
+    if (type === 'sats') {
+      const rewardsCost =
+        state.rewardCurrency === RewardCurrency.Usdcent
+          ? getSatoshisFromUSDCents(state.rewardsCost as USDCents)
+          : state.rewardsCost
+
+      return rewardsCost
+    }
+
+    const rewardsDollarCost =
+      state.rewardCurrency === RewardCurrency.Usdcent
+        ? state.rewardsCost / 100
+        : getUSDAmount(state.rewardsCost as Satoshis)
+
+    return parseFloat(Number(rewardsDollarCost).toFixed(2))
+  }
+
   const getTotalAmount = (type: 'sats' | 'dollar', projectName = '') => {
     const shippingAmount = hasShipping(projectName) ? getShippingCost() : 0
 
@@ -54,6 +72,7 @@ export const useFundCalc = (state: IFundForm) => {
   return {
     getTotalAmount,
     getShippingCost,
+    getRewardsAmount,
     getRewardsQuantity,
     btcRate,
   }
