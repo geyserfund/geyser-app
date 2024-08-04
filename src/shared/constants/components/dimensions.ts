@@ -38,6 +38,13 @@ export const dimensions = {
       },
     },
   },
+  profile: {
+    settings: {
+      menu: {
+        width: 148,
+      },
+    },
+  },
   sideNav: {
     width: 256,
   },
