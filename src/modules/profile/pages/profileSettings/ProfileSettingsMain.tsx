@@ -14,7 +14,7 @@ export const ProfileSettingsMain = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!isMobile) {
+    if (!isMobile && user?.id) {
       navigate(getPath('userProfileSettingsGeneral', user?.id))
     }
   }, [isMobile, navigate, user])
