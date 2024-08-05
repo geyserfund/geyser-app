@@ -351,7 +351,7 @@ export const platformRoutes: RouteObject[] = [
           {
             path: getPath('dashboardNotifications', PathName.projectName),
             async lazy() {
-              const ProjectDashboardNotifications = await ProjectDashboard1().then(
+              const ProjectDashboardNotifications = await ProjectDashboard().then(
                 (m) => m.ProjectDashboardNotifications,
               )
               return { Component: ProjectDashboardNotifications }

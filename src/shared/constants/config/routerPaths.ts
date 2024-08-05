@@ -160,6 +160,8 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardWallet}`,
   dashboardNostr: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardNostr}`,
+  dashboardNotifications: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardNotifications}`,
   dashboardSettings: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardSettings}`,
   dashboardAffiliates: (projectName: string) =>
