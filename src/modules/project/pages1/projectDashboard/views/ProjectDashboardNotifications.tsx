@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { HStack, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 
 import { QUERY_PROJECT_NOTIFICATIONS_SETTINGS } from '@/modules/profile/graphql/queries/projectNotificationSettingsQuery'
