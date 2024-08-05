@@ -1,47 +1,31 @@
-import { useMutation, useQuery } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { FormControl, FormLabel, HStack, Select, Switch, VStack } from '@chakra-ui/react'
-import { useState } from 'react'
-import { useParams } from 'react-router'
+import { useEffect, useState } from 'react'
 
 import { MUTATION_UPDATE_USER_NOTIFICATIONS_SETTINGS } from '@/modules/profile/graphql/mutations/userNotificationsMutation'
-import { QUERY_USER_NOTIFICATIONS_SETTINGS } from '@/modules/profile/graphql/queries/userNotificationSettingsQuery'
 import { Body } from '@/shared/components/typography'
+import { UserNotificationSettings } from '@/types'
 
-type NotificationConfiguration = {
-  id: string
-  name: string
-  value: string
-  type: string
-  options?: string[]
-}
+export const ProjectNotifications = ({
+  userNotificationSettings,
+}: {
+  userNotificationSettings: UserNotificationSettings
+}) => {
+  const [settings, setSettings] = useState<UserNotificationSettings>(userNotificationSettings)
 
-type NotificationSettings = {
-  notificationType: string
-  isEnabled: boolean
-  configurations: NotificationConfiguration[]
-}
-
-export const ProjectNotifications = () => {
-  const { userId } = useParams()
-
-  const [notificationSettings, setNotificationSettings] = useState<NotificationSettings[]>([])
-
-  useQuery(QUERY_USER_NOTIFICATIONS_SETTINGS, {
-    variables: { userId },
-    onCompleted(data) {
-      setNotificationSettings(data?.settingsNotificationsUserGet.notificationSettings || [])
-    },
-  })
+  useEffect(() => {
+    setSettings(userNotificationSettings)
+  }, [userNotificationSettings])
 
   const [updateNotificationSetting] = useMutation(MUTATION_UPDATE_USER_NOTIFICATIONS_SETTINGS)
 
   const getConfigValue = (type: string, name: string) => {
-    const setting = notificationSettings.find((s) => s.notificationType === type)
+    const setting = settings.notificationSettings.find((s) => s.notificationType === type)
     return setting?.configurations.find((c) => c.name === name)?.value
   }
 
   const getConfigId = (type: string, name: string) => {
-    const setting = notificationSettings.find((s) => s.notificationType === type)
+    const setting = settings.notificationSettings.find((s) => s.notificationType === type)
     return setting?.configurations.find((c) => c.name === name)?.id
   }
 
@@ -57,18 +41,17 @@ export const ProjectNotifications = () => {
         },
       })
 
-      setNotificationSettings((prevSettings) =>
-        prevSettings.map((setting) =>
-          setting.notificationType === type
+      setSettings((prevSettings) => ({
+        ...prevSettings,
+        notificationSettings: prevSettings.notificationSettings.map((s) =>
+          s.notificationType === type
             ? {
-                ...setting,
-                configurations: setting.configurations.map((config) =>
-                  config.name === name ? { ...config, value } : config,
-                ),
+                ...s,
+                configurations: s.configurations.map((c) => (c.name === name ? { ...c, value } : c)),
               }
-            : setting,
+            : s,
         ),
-      )
+      }))
     } catch (error) {
       console.error('Failed to update notification setting:', error)
     }

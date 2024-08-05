@@ -283,6 +283,7 @@ export type CreateWalletInput = {
 export type CreationNotificationSettingsProject = {
   __typename?: 'CreationNotificationSettingsProject'
   id: Scalars['BigInt']['output']
+  image?: Maybe<Scalars['String']['output']>
   title: Scalars['String']['output']
 }
 
@@ -799,6 +800,7 @@ export type GetFundingTxsWhereInput = {
   NOT?: InputMaybe<GetFundingTxsWhereInput>
   OR?: InputMaybe<Array<InputMaybe<GetFundingTxsWhereInput>>>
   dateRange?: InputMaybe<DateRangeInput>
+  funderId?: InputMaybe<Scalars['BigInt']['input']>
   method?: InputMaybe<Scalars['String']['input']>
   projectId?: InputMaybe<Scalars['BigInt']['input']>
   sourceResourceInput?: InputMaybe<ResourceInput>
@@ -828,6 +830,26 @@ export type GetProjectStatsWhereInput = {
 export type GetProjectsMostFundedOfTheWeekInput = {
   tagIds?: InputMaybe<Array<Scalars['Int']['input']>>
   take?: InputMaybe<Scalars['Int']['input']>
+}
+
+export type GlobalContributorLeaderboardRow = {
+  __typename?: 'GlobalContributorLeaderboardRow'
+  contributionsCount: Scalars['Int']['output']
+  contributionsTotal: Scalars['Int']['output']
+  contributionsTotalUsd: Scalars['Float']['output']
+  projectsContributedCount: Scalars['Int']['output']
+  userId: Scalars['BigInt']['output']
+  username: Scalars['String']['output']
+}
+
+export type GlobalProjectLeaderboardRow = {
+  __typename?: 'GlobalProjectLeaderboardRow'
+  contributionsCount: Scalars['Int']['output']
+  contributionsTotal: Scalars['Int']['output']
+  contributionsTotalUsd: Scalars['Float']['output']
+  contributorsCount: Scalars['Int']['output']
+  projectName: Scalars['String']['output']
+  projectTitle: Scalars['String']['output']
 }
 
 export type Grant = BoardVoteGrant | CommunityVoteGrant
@@ -979,6 +1001,25 @@ export enum InvoiceStatus {
   Canceled = 'canceled',
   Paid = 'paid',
   Unpaid = 'unpaid',
+}
+
+export type LeaderboardGlobalContributorsGetInput = {
+  /** The period to return the leaderboard for. */
+  period: LeaderboardPeriod
+  /** The number of top contributors to return. */
+  top: Scalars['Int']['input']
+}
+
+export type LeaderboardGlobalProjectsGetInput = {
+  /** The period to return the leaderboard for. */
+  period: LeaderboardPeriod
+  /** The number of top projects to return. */
+  top: Scalars['Int']['input']
+}
+
+export enum LeaderboardPeriod {
+  AllTime = 'ALL_TIME',
+  Month = 'MONTH',
 }
 
 export type LightningAddressConnectionDetails = {
@@ -1577,6 +1618,12 @@ export type PaginationInput = {
   take?: InputMaybe<Scalars['Int']['input']>
 }
 
+export type ProfileNotificationSettings = {
+  __typename?: 'ProfileNotificationSettings'
+  creatorSettings: Array<CreatorNotificationSettings>
+  userSettings: UserNotificationSettings
+}
+
 export type Project = {
   __typename?: 'Project'
   /** @deprecated Field no longer supported */
@@ -1791,6 +1838,28 @@ export enum ProjectGrantApplicationsWhereInputEnum {
 export type ProjectKeys = {
   __typename?: 'ProjectKeys'
   nostrKeys: NostrKeys
+}
+
+export type ProjectLeaderboardContributorsGetInput = {
+  period: ProjectLeaderboardPeriod
+  projectId: Scalars['BigInt']['input']
+  top: Scalars['Int']['input']
+}
+
+export type ProjectLeaderboardContributorsRow = {
+  __typename?: 'ProjectLeaderboardContributorsRow'
+  commentsCount: Scalars['Int']['output']
+  contributionsCount: Scalars['Int']['output']
+  contributionsTotal: Scalars['Int']['output']
+  contributionsTotalUsd: Scalars['Float']['output']
+  funderId: Scalars['BigInt']['output']
+  user?: Maybe<User>
+}
+
+export enum ProjectLeaderboardPeriod {
+  AllTime = 'ALL_TIME',
+  Month = 'MONTH',
+  Week = 'WEEK',
 }
 
 export type ProjectLinkMutationInput = {
@@ -2018,6 +2087,8 @@ export type Query = {
   grant: Grant
   grantStatistics: GrantStatistics
   grants: Array<Grant>
+  leaderboardGlobalContributorsGet: Array<GlobalContributorLeaderboardRow>
+  leaderboardGlobalProjectsGet: Array<GlobalProjectLeaderboardRow>
   lightningAddressVerify: LightningAddressVerifyResponse
   me?: Maybe<User>
   orderGet?: Maybe<Order>
@@ -2025,6 +2096,8 @@ export type Query = {
   projectCountriesGet: Array<ProjectCountriesGetResult>
   projectGet?: Maybe<Project>
   projectGoals: ProjectGoals
+  projectLeaderboardContributorsGet: Array<ProjectLeaderboardContributorsRow>
+  projectNotificationSettingsGet: CreatorNotificationSettings
   projectRegionsGet: Array<ProjectRegionsGetResult>
   projectRewardCategoriesGet: Array<Scalars['String']['output']>
   projectRewardsGet: Array<ProjectReward>
@@ -2034,13 +2107,12 @@ export type Query = {
   projectsMostFundedOfTheWeekGet: Array<ProjectsMostFundedOfTheWeekGet>
   /** Returns summary statistics of all projects, both current and past. */
   projectsSummary: ProjectsSummary
-  settingsNotificationsCreatorGet: CreatorNotificationSettings
-  settingsNotificationsUserGet: UserNotificationSettings
   statusCheck: Scalars['Boolean']['output']
   tagsGet: Array<TagsGetResult>
   user: User
   userBadge?: Maybe<UserBadge>
   userBadges: Array<UserBadge>
+  userNotificationSettingsGet: ProfileNotificationSettings
 }
 
 export type QueryAffiliateLinksGetArgs = {
@@ -2104,6 +2176,14 @@ export type QueryGrantArgs = {
   input: GrantGetInput
 }
 
+export type QueryLeaderboardGlobalContributorsGetArgs = {
+  input: LeaderboardGlobalContributorsGetInput
+}
+
+export type QueryLeaderboardGlobalProjectsGetArgs = {
+  input: LeaderboardGlobalProjectsGetInput
+}
+
 export type QueryLightningAddressVerifyArgs = {
   lightningAddress?: InputMaybe<Scalars['String']['input']>
 }
@@ -2124,6 +2204,14 @@ export type QueryProjectGoalsArgs = {
   projectId: Scalars['BigInt']['input']
 }
 
+export type QueryProjectLeaderboardContributorsGetArgs = {
+  input: ProjectLeaderboardContributorsGetInput
+}
+
+export type QueryProjectNotificationSettingsGetArgs = {
+  projectId: Scalars['BigInt']['input']
+}
+
 export type QueryProjectRewardsGetArgs = {
   input: GetProjectRewardInput
 }
@@ -2140,14 +2228,6 @@ export type QueryProjectsMostFundedOfTheWeekGetArgs = {
   input?: InputMaybe<GetProjectsMostFundedOfTheWeekInput>
 }
 
-export type QuerySettingsNotificationsCreatorGetArgs = {
-  userId: Scalars['BigInt']['input']
-}
-
-export type QuerySettingsNotificationsUserGetArgs = {
-  userId: Scalars['BigInt']['input']
-}
-
 export type QueryUserArgs = {
   where: UserGetInput
 }
@@ -2158,6 +2238,10 @@ export type QueryUserBadgeArgs = {
 
 export type QueryUserBadgesArgs = {
   input: BadgesGetInput
+}
+
+export type QueryUserNotificationSettingsGetArgs = {
+  userId: Scalars['BigInt']['input']
 }
 
 export enum QuoteCurrency {
@@ -2783,6 +2867,8 @@ export type ResolversTypes = {
   GetProjectStatsInput: GetProjectStatsInput
   GetProjectStatsWhereInput: GetProjectStatsWhereInput
   GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput
+  GlobalContributorLeaderboardRow: ResolverTypeWrapper<GlobalContributorLeaderboardRow>
+  GlobalProjectLeaderboardRow: ResolverTypeWrapper<GlobalProjectLeaderboardRow>
   Grant: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['Grant']>
   GrantApplicant: ResolverTypeWrapper<Omit<GrantApplicant, 'grant'> & { grant: ResolversTypes['Grant'] }>
   GrantApplicantContributor: ResolverTypeWrapper<GrantApplicantContributor>
@@ -2808,6 +2894,9 @@ export type ResolversTypes = {
   GraphSumData: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['GraphSumData']>
   Int: ResolverTypeWrapper<Scalars['Int']['output']>
   InvoiceStatus: InvoiceStatus
+  LeaderboardGlobalContributorsGetInput: LeaderboardGlobalContributorsGetInput
+  LeaderboardGlobalProjectsGetInput: LeaderboardGlobalProjectsGetInput
+  LeaderboardPeriod: LeaderboardPeriod
   LightningAddressConnectionDetails: ResolverTypeWrapper<LightningAddressConnectionDetails>
   LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput
   LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput
@@ -2855,6 +2944,7 @@ export type ResolversTypes = {
   PageViewCountGraph: ResolverTypeWrapper<PageViewCountGraph>
   PaginationCursor: ResolverTypeWrapper<PaginationCursor>
   PaginationInput: PaginationInput
+  ProfileNotificationSettings: ResolverTypeWrapper<ProfileNotificationSettings>
   Project: ResolverTypeWrapper<Project>
   ProjectActivatedSubscriptionResponse: ResolverTypeWrapper<ProjectActivatedSubscriptionResponse>
   ProjectCountriesGetResult: ResolverTypeWrapper<ProjectCountriesGetResult>
@@ -2879,6 +2969,9 @@ export type ResolversTypes = {
   ProjectGrantApplicationsWhereInput: ProjectGrantApplicationsWhereInput
   ProjectGrantApplicationsWhereInputEnum: ProjectGrantApplicationsWhereInputEnum
   ProjectKeys: ResolverTypeWrapper<ProjectKeys>
+  ProjectLeaderboardContributorsGetInput: ProjectLeaderboardContributorsGetInput
+  ProjectLeaderboardContributorsRow: ResolverTypeWrapper<ProjectLeaderboardContributorsRow>
+  ProjectLeaderboardPeriod: ProjectLeaderboardPeriod
   ProjectLinkMutationInput: ProjectLinkMutationInput
   ProjectPublishMutationInput: ProjectPublishMutationInput
   ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>
@@ -3060,6 +3153,8 @@ export type ResolversParentTypes = {
   GetProjectStatsInput: GetProjectStatsInput
   GetProjectStatsWhereInput: GetProjectStatsWhereInput
   GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput
+  GlobalContributorLeaderboardRow: GlobalContributorLeaderboardRow
+  GlobalProjectLeaderboardRow: GlobalProjectLeaderboardRow
   Grant: ResolversUnionTypes<ResolversParentTypes>['Grant']
   GrantApplicant: Omit<GrantApplicant, 'grant'> & { grant: ResolversParentTypes['Grant'] }
   GrantApplicantContributor: GrantApplicantContributor
@@ -3079,6 +3174,8 @@ export type ResolversParentTypes = {
   GrantStatus: GrantStatus
   GraphSumData: ResolversInterfaceTypes<ResolversParentTypes>['GraphSumData']
   Int: Scalars['Int']['output']
+  LeaderboardGlobalContributorsGetInput: LeaderboardGlobalContributorsGetInput
+  LeaderboardGlobalProjectsGetInput: LeaderboardGlobalProjectsGetInput
   LightningAddressConnectionDetails: LightningAddressConnectionDetails
   LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput
   LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput
@@ -3118,6 +3215,7 @@ export type ResolversParentTypes = {
   PageViewCountGraph: PageViewCountGraph
   PaginationCursor: PaginationCursor
   PaginationInput: PaginationInput
+  ProfileNotificationSettings: ProfileNotificationSettings
   Project: Project
   ProjectActivatedSubscriptionResponse: ProjectActivatedSubscriptionResponse
   ProjectCountriesGetResult: ProjectCountriesGetResult
@@ -3138,6 +3236,8 @@ export type ResolversParentTypes = {
   ProjectGrantApplicationsInput: ProjectGrantApplicationsInput
   ProjectGrantApplicationsWhereInput: ProjectGrantApplicationsWhereInput
   ProjectKeys: ProjectKeys
+  ProjectLeaderboardContributorsGetInput: ProjectLeaderboardContributorsGetInput
+  ProjectLeaderboardContributorsRow: ProjectLeaderboardContributorsRow
   ProjectLinkMutationInput: ProjectLinkMutationInput
   ProjectPublishMutationInput: ProjectPublishMutationInput
   ProjectRegionsGetResult: ProjectRegionsGetResult
@@ -3404,6 +3504,7 @@ export type CreationNotificationSettingsProjectResolvers<
   ParentType extends ResolversParentTypes['CreationNotificationSettingsProject'] = ResolversParentTypes['CreationNotificationSettingsProject'],
 > = {
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
@@ -3678,6 +3779,32 @@ export type GenerateAffiliatePaymentRequestResponseResolvers<
 > = {
   affiliatePaymentId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   paymentRequest?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type GlobalContributorLeaderboardRowResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['GlobalContributorLeaderboardRow'] = ResolversParentTypes['GlobalContributorLeaderboardRow'],
+> = {
+  contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
+  projectsContributedCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  userId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type GlobalProjectLeaderboardRowResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['GlobalProjectLeaderboardRow'] = ResolversParentTypes['GlobalProjectLeaderboardRow'],
+> = {
+  contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
+  contributorsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  projectName?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  projectTitle?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -4314,6 +4441,15 @@ export type PaginationCursorResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
+export type ProfileNotificationSettingsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProfileNotificationSettings'] = ResolversParentTypes['ProfileNotificationSettings'],
+> = {
+  creatorSettings?: Resolver<Array<ResolversTypes['CreatorNotificationSettings']>, ParentType, ContextType>
+  userSettings?: Resolver<ResolversTypes['UserNotificationSettings'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type ProjectResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project'],
@@ -4471,6 +4607,19 @@ export type ProjectKeysResolvers<
   ParentType extends ResolversParentTypes['ProjectKeys'] = ResolversParentTypes['ProjectKeys'],
 > = {
   nostrKeys?: Resolver<ResolversTypes['NostrKeys'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type ProjectLeaderboardContributorsRowResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectLeaderboardContributorsRow'] = ResolversParentTypes['ProjectLeaderboardContributorsRow'],
+> = {
+  commentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
+  funderId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -4656,6 +4805,18 @@ export type QueryResolvers<
   grant?: Resolver<ResolversTypes['Grant'], ParentType, ContextType, RequireFields<QueryGrantArgs, 'input'>>
   grantStatistics?: Resolver<ResolversTypes['GrantStatistics'], ParentType, ContextType>
   grants?: Resolver<Array<ResolversTypes['Grant']>, ParentType, ContextType>
+  leaderboardGlobalContributorsGet?: Resolver<
+    Array<ResolversTypes['GlobalContributorLeaderboardRow']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryLeaderboardGlobalContributorsGetArgs, 'input'>
+  >
+  leaderboardGlobalProjectsGet?: Resolver<
+    Array<ResolversTypes['GlobalProjectLeaderboardRow']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryLeaderboardGlobalProjectsGetArgs, 'input'>
+  >
   lightningAddressVerify?: Resolver<
     ResolversTypes['LightningAddressVerifyResponse'],
     ParentType,
@@ -4688,6 +4849,18 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryProjectGoalsArgs, 'projectId'>
   >
+  projectLeaderboardContributorsGet?: Resolver<
+    Array<ResolversTypes['ProjectLeaderboardContributorsRow']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryProjectLeaderboardContributorsGetArgs, 'input'>
+  >
+  projectNotificationSettingsGet?: Resolver<
+    ResolversTypes['CreatorNotificationSettings'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryProjectNotificationSettingsGetArgs, 'projectId'>
+  >
   projectRegionsGet?: Resolver<Array<ResolversTypes['ProjectRegionsGetResult']>, ParentType, ContextType>
   projectRewardCategoriesGet?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>
   projectRewardsGet?: Resolver<
@@ -4710,18 +4883,6 @@ export type QueryResolvers<
     Partial<QueryProjectsMostFundedOfTheWeekGetArgs>
   >
   projectsSummary?: Resolver<ResolversTypes['ProjectsSummary'], ParentType, ContextType>
-  settingsNotificationsCreatorGet?: Resolver<
-    ResolversTypes['CreatorNotificationSettings'],
-    ParentType,
-    ContextType,
-    RequireFields<QuerySettingsNotificationsCreatorGetArgs, 'userId'>
-  >
-  settingsNotificationsUserGet?: Resolver<
-    ResolversTypes['UserNotificationSettings'],
-    ParentType,
-    ContextType,
-    RequireFields<QuerySettingsNotificationsUserGetArgs, 'userId'>
-  >
   statusCheck?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   tagsGet?: Resolver<Array<ResolversTypes['TagsGetResult']>, ParentType, ContextType>
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'where'>>
@@ -4736,6 +4897,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryUserBadgesArgs, 'input'>
+  >
+  userNotificationSettingsGet?: Resolver<
+    ResolversTypes['ProfileNotificationSettings'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryUserNotificationSettingsGetArgs, 'userId'>
   >
 }
 
@@ -5005,6 +5172,8 @@ export type Resolvers<ContextType = any> = {
   FundingTxsGetResponse?: FundingTxsGetResponseResolvers<ContextType>
   FundinginvoiceCancel?: FundinginvoiceCancelResolvers<ContextType>
   GenerateAffiliatePaymentRequestResponse?: GenerateAffiliatePaymentRequestResponseResolvers<ContextType>
+  GlobalContributorLeaderboardRow?: GlobalContributorLeaderboardRowResolvers<ContextType>
+  GlobalProjectLeaderboardRow?: GlobalProjectLeaderboardRowResolvers<ContextType>
   Grant?: GrantResolvers<ContextType>
   GrantApplicant?: GrantApplicantResolvers<ContextType>
   GrantApplicantContributor?: GrantApplicantContributorResolvers<ContextType>
@@ -5038,6 +5207,7 @@ export type Resolvers<ContextType = any> = {
   OwnerOf?: OwnerOfResolvers<ContextType>
   PageViewCountGraph?: PageViewCountGraphResolvers<ContextType>
   PaginationCursor?: PaginationCursorResolvers<ContextType>
+  ProfileNotificationSettings?: ProfileNotificationSettingsResolvers<ContextType>
   Project?: ProjectResolvers<ContextType>
   ProjectActivatedSubscriptionResponse?: ProjectActivatedSubscriptionResponseResolvers<ContextType>
   ProjectCountriesGetResult?: ProjectCountriesGetResultResolvers<ContextType>
@@ -5050,6 +5220,7 @@ export type Resolvers<ContextType = any> = {
   ProjectGoalDeleteResponse?: ProjectGoalDeleteResponseResolvers<ContextType>
   ProjectGoals?: ProjectGoalsResolvers<ContextType>
   ProjectKeys?: ProjectKeysResolvers<ContextType>
+  ProjectLeaderboardContributorsRow?: ProjectLeaderboardContributorsRowResolvers<ContextType>
   ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>
   ProjectReward?: ProjectRewardResolvers<ContextType>
   ProjectStatistics?: ProjectStatisticsResolvers<ContextType>
@@ -6664,10 +6835,9 @@ export type FundingTxStatusUpdatedSubscription = {
   }
 }
 
-export type CreatorNotificationsSettingsFragment = {
-  __typename?: 'CreatorNotificationSettings'
+export type UserNotificationsSettingsFragment = {
+  __typename?: 'UserNotificationSettings'
   userId: any
-  project: { __typename?: 'CreationNotificationSettingsProject'; id: any; title: string }
   notificationSettings: Array<{
     __typename?: 'NotificationSettings'
     notificationType: string
@@ -6682,6 +6852,26 @@ export type CreatorNotificationsSettingsFragment = {
       options: Array<string>
     }>
   }>
+}
+
+export type CreatorNotificationsSettingsUpdateMutationVariables = Exact<{
+  creatorNotificationConfigurationId: Scalars['BigInt']['input']
+  value: Scalars['String']['input']
+}>
+
+export type CreatorNotificationsSettingsUpdateMutation = {
+  __typename?: 'Mutation'
+  creatorNotificationConfigurationValueUpdate?: boolean | null
+}
+
+export type UserNotificationsSettingsUpdateMutationVariables = Exact<{
+  userNotificationConfigurationId: Scalars['BigInt']['input']
+  value: Scalars['String']['input']
+}>
+
+export type UserNotificationsSettingsUpdateMutation = {
+  __typename?: 'Mutation'
+  userNotificationConfigurationValueUpdate?: boolean | null
 }
 
 export type ProjectAffiliateLinkFragment = {
@@ -8425,13 +8615,9 @@ export const FundingTxForUserContributionFragmentDoc = gql`
     }
   }
 `
-export const CreatorNotificationsSettingsFragmentDoc = gql`
-  fragment CreatorNotificationsSettings on CreatorNotificationSettings {
+export const UserNotificationsSettingsFragmentDoc = gql`
+  fragment UserNotificationsSettings on UserNotificationSettings {
     userId
-    project {
-      id
-      title
-    }
     notificationSettings {
       notificationType
       isEnabled
@@ -11977,6 +12163,110 @@ export function useFundingTxStatusUpdatedSubscription(
 }
 export type FundingTxStatusUpdatedSubscriptionHookResult = ReturnType<typeof useFundingTxStatusUpdatedSubscription>
 export type FundingTxStatusUpdatedSubscriptionResult = Apollo.SubscriptionResult<FundingTxStatusUpdatedSubscription>
+export const CreatorNotificationsSettingsUpdateDocument = gql`
+  mutation CreatorNotificationsSettingsUpdate($creatorNotificationConfigurationId: BigInt!, $value: String!) {
+    creatorNotificationConfigurationValueUpdate(
+      creatorNotificationConfigurationId: $creatorNotificationConfigurationId
+      value: $value
+    )
+  }
+`
+export type CreatorNotificationsSettingsUpdateMutationFn = Apollo.MutationFunction<
+  CreatorNotificationsSettingsUpdateMutation,
+  CreatorNotificationsSettingsUpdateMutationVariables
+>
+
+/**
+ * __useCreatorNotificationsSettingsUpdateMutation__
+ *
+ * To run a mutation, you first call `useCreatorNotificationsSettingsUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatorNotificationsSettingsUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [creatorNotificationsSettingsUpdateMutation, { data, loading, error }] = useCreatorNotificationsSettingsUpdateMutation({
+ *   variables: {
+ *      creatorNotificationConfigurationId: // value for 'creatorNotificationConfigurationId'
+ *      value: // value for 'value'
+ *   },
+ * });
+ */
+export function useCreatorNotificationsSettingsUpdateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreatorNotificationsSettingsUpdateMutation,
+    CreatorNotificationsSettingsUpdateMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    CreatorNotificationsSettingsUpdateMutation,
+    CreatorNotificationsSettingsUpdateMutationVariables
+  >(CreatorNotificationsSettingsUpdateDocument, options)
+}
+export type CreatorNotificationsSettingsUpdateMutationHookResult = ReturnType<
+  typeof useCreatorNotificationsSettingsUpdateMutation
+>
+export type CreatorNotificationsSettingsUpdateMutationResult =
+  Apollo.MutationResult<CreatorNotificationsSettingsUpdateMutation>
+export type CreatorNotificationsSettingsUpdateMutationOptions = Apollo.BaseMutationOptions<
+  CreatorNotificationsSettingsUpdateMutation,
+  CreatorNotificationsSettingsUpdateMutationVariables
+>
+export const UserNotificationsSettingsUpdateDocument = gql`
+  mutation UserNotificationsSettingsUpdate($userNotificationConfigurationId: BigInt!, $value: String!) {
+    userNotificationConfigurationValueUpdate(
+      userNotificationConfigurationId: $userNotificationConfigurationId
+      value: $value
+    )
+  }
+`
+export type UserNotificationsSettingsUpdateMutationFn = Apollo.MutationFunction<
+  UserNotificationsSettingsUpdateMutation,
+  UserNotificationsSettingsUpdateMutationVariables
+>
+
+/**
+ * __useUserNotificationsSettingsUpdateMutation__
+ *
+ * To run a mutation, you first call `useUserNotificationsSettingsUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUserNotificationsSettingsUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [userNotificationsSettingsUpdateMutation, { data, loading, error }] = useUserNotificationsSettingsUpdateMutation({
+ *   variables: {
+ *      userNotificationConfigurationId: // value for 'userNotificationConfigurationId'
+ *      value: // value for 'value'
+ *   },
+ * });
+ */
+export function useUserNotificationsSettingsUpdateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UserNotificationsSettingsUpdateMutation,
+    UserNotificationsSettingsUpdateMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<UserNotificationsSettingsUpdateMutation, UserNotificationsSettingsUpdateMutationVariables>(
+    UserNotificationsSettingsUpdateDocument,
+    options,
+  )
+}
+export type UserNotificationsSettingsUpdateMutationHookResult = ReturnType<
+  typeof useUserNotificationsSettingsUpdateMutation
+>
+export type UserNotificationsSettingsUpdateMutationResult =
+  Apollo.MutationResult<UserNotificationsSettingsUpdateMutation>
+export type UserNotificationsSettingsUpdateMutationOptions = Apollo.BaseMutationOptions<
+  UserNotificationsSettingsUpdateMutation,
+  UserNotificationsSettingsUpdateMutationVariables
+>
 export const AffiliateLinkCreateDocument = gql`
   mutation AffiliateLinkCreate($input: AffiliateLinkCreateInput!) {
     affiliateLinkCreate(input: $input) {
