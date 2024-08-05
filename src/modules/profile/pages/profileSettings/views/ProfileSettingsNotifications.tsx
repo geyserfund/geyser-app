@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { Button, Divider, HStack, VStack } from '@chakra-ui/react'
+import { Divider, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useParams } from 'react-router'
 
@@ -31,12 +31,7 @@ export const ProfileSettingsNotifications = () => {
           <Body size="lg" bold>
             Notifications
           </Body>
-          <HStack w="100%" justifyContent="space-between">
-            <Body>Customize your profile and project notifications.</Body>
-            <Button variant="outline" colorScheme="neutral1">
-              <Body>Set to default</Body>
-            </Button>
-          </HStack>
+          <Body>Customize your profile and project notifications.</Body>
         </VStack>
         <CreatorNotifications creatorNotificationSettings={creatorNotificationSettings} />
         <Divider />

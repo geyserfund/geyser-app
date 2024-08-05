@@ -29,9 +29,7 @@ export const ProjectDashboardNotifications = () => {
           <Body size="lg" bold>
             Notifications
           </Body>
-          <HStack w="100%" justifyContent="space-between">
-            <Body>Customize your profile and project notifications.</Body>
-          </HStack>
+          <Body>Customize your profile and project notifications.</Body>
         </VStack>
         {creatorNotificationSetting && (
           <CreatorNotifications creatorNotificationSettings={[creatorNotificationSetting]} />

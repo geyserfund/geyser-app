@@ -34,7 +34,6 @@ export const ProfileSettings = () => {
         lg: `${dimensions.projectNavBar.desktop.height}px`,
       }}
       paddingX={standardPadding}
-      // TODO: adapt paddingBottom
       paddingBottom={10}
       alignItems="center"
     >
