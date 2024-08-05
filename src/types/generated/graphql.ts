@@ -1188,7 +1188,6 @@ export type Mutation = {
    * a request made by the client.
    */
   sendOTPByEmail: OtpResponse
-  subscribeUserToProductNewsletter?: Maybe<Scalars['Boolean']['output']>
   tagCreate: Tag
   unlinkExternalAccount: User
   updateEntry: Entry
@@ -1358,11 +1357,6 @@ export type MutationPublishEntryArgs = {
 
 export type MutationSendOtpByEmailArgs = {
   input: SendOtpByEmailInput
-}
-
-export type MutationSubscribeUserToProductNewsletterArgs = {
-  email: Scalars['String']['input']
-  username: Scalars['String']['input']
 }
 
 export type MutationTagCreateArgs = {
@@ -4217,12 +4211,6 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationSendOtpByEmailArgs, 'input'>
   >
-  subscribeUserToProductNewsletter?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationSubscribeUserToProductNewsletterArgs, 'email' | 'username'>
-  >
   tagCreate?: Resolver<ResolversTypes['Tag'], ParentType, ContextType, RequireFields<MutationTagCreateArgs, 'input'>>
   unlinkExternalAccount?: Resolver<
     ResolversTypes['User'],
@@ -6835,9 +6823,42 @@ export type FundingTxStatusUpdatedSubscription = {
   }
 }
 
-export type UserNotificationsSettingsFragment = {
-  __typename?: 'UserNotificationSettings'
+export type NotificationConfigurationFragment = {
+  __typename?: 'NotificationConfiguration'
+  id: any
+  name: string
+  description?: string | null
+  value: string
+  type?: SettingValueType | null
+  options: Array<string>
+}
+
+export type NotificationSettingsFragment = {
+  __typename?: 'NotificationSettings'
+  notificationType: string
+  isEnabled: boolean
+  configurations: Array<{ __typename?: 'NotificationConfiguration' } & NotificationConfigurationFragment>
+}
+
+export type ProfileNotificationsSettingsFragment = {
+  __typename?: 'ProfileNotificationSettings'
+  userSettings: {
+    __typename?: 'UserNotificationSettings'
+    userId: any
+    notificationSettings: Array<{ __typename?: 'NotificationSettings' } & NotificationSettingsFragment>
+  }
+  creatorSettings: Array<{
+    __typename?: 'CreatorNotificationSettings'
+    userId: any
+    project: { __typename?: 'CreationNotificationSettingsProject'; id: any; title: string; image?: string | null }
+    notificationSettings: Array<{ __typename?: 'NotificationSettings' } & NotificationSettingsFragment>
+  }>
+}
+
+export type ProjectNotificationSettingsFragment = {
+  __typename?: 'CreatorNotificationSettings'
   userId: any
+  project: { __typename?: 'CreationNotificationSettingsProject'; id: any; title: string; image?: string | null }
   notificationSettings: Array<{
     __typename?: 'NotificationSettings'
     notificationType: string
@@ -6872,6 +6893,24 @@ export type UserNotificationsSettingsUpdateMutationVariables = Exact<{
 export type UserNotificationsSettingsUpdateMutation = {
   __typename?: 'Mutation'
   userNotificationConfigurationValueUpdate?: boolean | null
+}
+
+export type ProfileNotificationsSettingsQueryVariables = Exact<{
+  userId: Scalars['BigInt']['input']
+}>
+
+export type ProfileNotificationsSettingsQuery = {
+  __typename?: 'Query'
+  userNotificationSettingsGet: { __typename?: 'ProfileNotificationSettings' } & ProfileNotificationsSettingsFragment
+}
+
+export type ProjectNotificationSettingsQueryVariables = Exact<{
+  projectId: Scalars['BigInt']['input']
+}>
+
+export type ProjectNotificationSettingsQuery = {
+  __typename?: 'Query'
+  projectNotificationSettingsGet: { __typename?: 'CreatorNotificationSettings' } & ProjectNotificationSettingsFragment
 }
 
 export type ProjectAffiliateLinkFragment = {
@@ -8615,9 +8654,56 @@ export const FundingTxForUserContributionFragmentDoc = gql`
     }
   }
 `
-export const UserNotificationsSettingsFragmentDoc = gql`
-  fragment UserNotificationsSettings on UserNotificationSettings {
+export const NotificationConfigurationFragmentDoc = gql`
+  fragment NotificationConfiguration on NotificationConfiguration {
+    id
+    name
+    description
+    value
+    type
+    options
+  }
+`
+export const NotificationSettingsFragmentDoc = gql`
+  fragment NotificationSettings on NotificationSettings {
+    notificationType
+    isEnabled
+    configurations {
+      ...NotificationConfiguration
+    }
+  }
+  ${NotificationConfigurationFragmentDoc}
+`
+export const ProfileNotificationsSettingsFragmentDoc = gql`
+  fragment ProfileNotificationsSettings on ProfileNotificationSettings {
+    userSettings {
+      userId
+      notificationSettings {
+        ...NotificationSettings
+      }
+    }
+    creatorSettings {
+      userId
+      project {
+        id
+        title
+        image
+      }
+      notificationSettings {
+        ...NotificationSettings
+      }
+    }
+  }
+  ${NotificationSettingsFragmentDoc}
+`
+export const ProjectNotificationSettingsFragmentDoc = gql`
+  fragment ProjectNotificationSettings on CreatorNotificationSettings {
     userId
+    project {
+      id
+      title
+      image
+    }
     notificationSettings {
       notificationType
       isEnabled
@@ -12266,6 +12352,144 @@ export type UserNotificationsSettingsUpdateMutationResult =
 export type UserNotificationsSettingsUpdateMutationOptions = Apollo.BaseMutationOptions<
   UserNotificationsSettingsUpdateMutation,
   UserNotificationsSettingsUpdateMutationVariables
+>
+export const ProfileNotificationsSettingsDocument = gql`
+  query ProfileNotificationsSettings($userId: BigInt!) {
+    userNotificationSettingsGet(userId: $userId) {
+      ...ProfileNotificationsSettings
+    }
+  }
+  ${ProfileNotificationsSettingsFragmentDoc}
+`
+
+/**
+ * __useProfileNotificationsSettingsQuery__
+ *
+ * To run a query within a React component, call `useProfileNotificationsSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProfileNotificationsSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProfileNotificationsSettingsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useProfileNotificationsSettingsQuery(
+  baseOptions: Apollo.QueryHookOptions<ProfileNotificationsSettingsQuery, ProfileNotificationsSettingsQueryVariables> &
+    ({ variables: ProfileNotificationsSettingsQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ProfileNotificationsSettingsQuery, ProfileNotificationsSettingsQueryVariables>(
+    ProfileNotificationsSettingsDocument,
+    options,
+  )
+}
+export function useProfileNotificationsSettingsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ProfileNotificationsSettingsQuery,
+    ProfileNotificationsSettingsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<ProfileNotificationsSettingsQuery, ProfileNotificationsSettingsQueryVariables>(
+    ProfileNotificationsSettingsDocument,
+    options,
+  )
+}
+export function useProfileNotificationsSettingsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ProfileNotificationsSettingsQuery,
+    ProfileNotificationsSettingsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<ProfileNotificationsSettingsQuery, ProfileNotificationsSettingsQueryVariables>(
+    ProfileNotificationsSettingsDocument,
+    options,
+  )
+}
+export type ProfileNotificationsSettingsQueryHookResult = ReturnType<typeof useProfileNotificationsSettingsQuery>
+export type ProfileNotificationsSettingsLazyQueryHookResult = ReturnType<
+  typeof useProfileNotificationsSettingsLazyQuery
+>
+export type ProfileNotificationsSettingsSuspenseQueryHookResult = ReturnType<
+  typeof useProfileNotificationsSettingsSuspenseQuery
+>
+export type ProfileNotificationsSettingsQueryResult = Apollo.QueryResult<
+  ProfileNotificationsSettingsQuery,
+  ProfileNotificationsSettingsQueryVariables
+>
+export const ProjectNotificationSettingsDocument = gql`
+  query ProjectNotificationSettings($projectId: BigInt!) {
+    projectNotificationSettingsGet(projectId: $projectId) {
+      ...ProjectNotificationSettings
+    }
+  }
+  ${ProjectNotificationSettingsFragmentDoc}
+`
+
+/**
+ * __useProjectNotificationSettingsQuery__
+ *
+ * To run a query within a React component, call `useProjectNotificationSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectNotificationSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectNotificationSettingsQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useProjectNotificationSettingsQuery(
+  baseOptions: Apollo.QueryHookOptions<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables> &
+    ({ variables: ProjectNotificationSettingsQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables>(
+    ProjectNotificationSettingsDocument,
+    options,
+  )
+}
+export function useProjectNotificationSettingsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ProjectNotificationSettingsQuery,
+    ProjectNotificationSettingsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables>(
+    ProjectNotificationSettingsDocument,
+    options,
+  )
+}
+export function useProjectNotificationSettingsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ProjectNotificationSettingsQuery,
+    ProjectNotificationSettingsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables>(
+    ProjectNotificationSettingsDocument,
+    options,
+  )
+}
+export type ProjectNotificationSettingsQueryHookResult = ReturnType<typeof useProjectNotificationSettingsQuery>
+export type ProjectNotificationSettingsLazyQueryHookResult = ReturnType<typeof useProjectNotificationSettingsLazyQuery>
+export type ProjectNotificationSettingsSuspenseQueryHookResult = ReturnType<
+  typeof useProjectNotificationSettingsSuspenseQuery
+>
+export type ProjectNotificationSettingsQueryResult = Apollo.QueryResult<
+  ProjectNotificationSettingsQuery,
+  ProjectNotificationSettingsQueryVariables
 >
 export const AffiliateLinkCreateDocument = gql`
   mutation AffiliateLinkCreate($input: AffiliateLinkCreateInput!) {

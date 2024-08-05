@@ -1,8 +1,13 @@
 import { gql } from '@apollo/client'
 
-export const FRAGMENT_USER_NOTIFICATIONS_SETTINGS = gql`
-  fragment UserNotificationsSettings on UserNotificationSettings {
+export const FRAGMENT_PROJECT_NOTIFICATIONS_SETTINGS = gql`
+  fragment ProjectNotificationSettings on CreatorNotificationSettings {
     userId
+    project {
+      id
+      title
+      image
+    }
     notificationSettings {
       notificationType
       isEnabled
