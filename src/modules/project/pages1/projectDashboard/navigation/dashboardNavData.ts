@@ -1,5 +1,6 @@
 import {
   PiBag,
+  PiBell,
   PiBookOpenText,
   PiGear,
   PiInvoice,
@@ -76,6 +77,12 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     path: 'dashboardNostr',
     type: DashboardType.settings,
     icon: PiPlugs,
+  },
+  {
+    label: 'Notifications',
+    path: 'dashboardNotifications',
+    type: DashboardType.settings,
+    icon: PiBell,
   },
   {
     label: 'Settings',

@@ -346,6 +346,15 @@ export const platformRoutes: RouteObject[] = [
             },
           },
           {
+            path: getPath('dashboardNotifications', PathName.projectName),
+            async lazy() {
+              const ProjectDashboardNotifications = await ProjectDashboard1().then(
+                (m) => m.ProjectDashboardNotifications,
+              )
+              return { Component: ProjectDashboardNotifications }
+            },
+          },
+          {
             path: getPath('dashboardSettings', PathName.projectName),
             async lazy() {
               const ProjectDashboardSettings = await ProjectDashboard1().then((m) => m.ProjectDashboardSettings)
