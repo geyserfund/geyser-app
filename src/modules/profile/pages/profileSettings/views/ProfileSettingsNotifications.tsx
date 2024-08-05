@@ -4,6 +4,7 @@ import { Body } from '@/shared/components/typography'
 
 import { ProfileSettingsLayout } from '../common/ProfileSettingsLayout'
 import { CreatorNotifications } from '../components/CreatorNotifications'
+import { ProjectNotifications } from '../components/ProjectNotifications'
 
 export const ProfileSettingsNotifications = () => {
   return (
@@ -22,6 +23,7 @@ export const ProfileSettingsNotifications = () => {
         </VStack>
         <CreatorNotifications />
         <Divider />
+        <ProjectNotifications />
       </VStack>
     </ProfileSettingsLayout>
   )

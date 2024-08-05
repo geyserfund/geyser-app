@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { Avatar, FormControl, FormLabel, HStack, Select, Switch, VStack } from '@chakra-ui/react'
+import { Avatar, FormControl, FormLabel, HStack, Switch, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Controller, useForm } from 'react-hook-form'
 import { useParams } from 'react-router'
@@ -43,7 +43,7 @@ export const CreatorNotifications = () => {
   const settings = data?.settingsNotificationsCreatorGet
   const project = settings?.project
 
-  const { control, handleSubmit, getValues } = useForm({
+  const { control, handleSubmit } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       project: {
@@ -72,11 +72,8 @@ export const CreatorNotifications = () => {
     },
   })
 
-  console.log(getValues())
-
   const onSubmit = (data: any) => {
     console.log(data)
-    console.log(getValues())
     // Handle form submission
   }
 
@@ -95,13 +92,14 @@ export const CreatorNotifications = () => {
 
             <FormControl display="flex" alignItems="center" justifyContent="space-between">
               <FormLabel htmlFor={`creator-summary-${project.id}`} mb="0">
-                Creator summary email
+                <Body size="lg">Creator summary email</Body>
               </FormLabel>
               <HStack>
                 <ControlledSelect
                   name={`project.creatorSummaryFrequency`}
                   control={control}
                   label=""
+                  size="sm"
                   options={[
                     { value: 'weekly', label: 'Weekly' },
                     { value: 'monthly', label: 'Monthly' },
@@ -118,10 +116,21 @@ export const CreatorNotifications = () => {
                 />
               </HStack>
             </FormControl>
+            <Body size="sm">
+              Receive a monthly email about your project summary: stats, goal progress and, hot rewards..
+            </Body>
+
+            <Body size="lg" bold>
+              Event alerts
+            </Body>
+            <Body size="sm">
+              Get notified with an email as soon as important events takes place in your project, from making a reward
+              sale, to receiving a contribution above a certain amount, and reaching a goal.
+            </Body>
 
             <FormControl display="flex" alignItems="center" justifyContent="space-between">
               <FormLabel htmlFor={`goal-reached-${project.id}`} mb="0">
-                Goal Reached Email
+                <Body size="lg">Goal Reached Email</Body>
               </FormLabel>
               <Controller
                 name={`project.goalReached`}
@@ -134,7 +143,7 @@ export const CreatorNotifications = () => {
 
             <FormControl display="flex" alignItems="center" justifyContent="space-between">
               <FormLabel htmlFor={`sale-made-${project.id}`} mb="0">
-                Sale Made
+                <Body size="lg">Sale Made</Body>
               </FormLabel>
               <Controller
                 name={`project.saleMade`}
@@ -147,13 +156,14 @@ export const CreatorNotifications = () => {
 
             <FormControl display="flex" alignItems="center" justifyContent="space-between">
               <FormLabel htmlFor={`contribution-received-${project.id}`} mb="0">
-                Contribution received
+                <Body size="lg">Contribution received</Body>
               </FormLabel>
               <HStack>
                 <ControlledSelect
                   name={`project.contributionThreshold`}
                   control={control}
                   label=""
+                  size="sm"
                   options={[
                     { value: '10000', label: '> 10,000' },
                     { value: '50000', label: '> 50,000' },
