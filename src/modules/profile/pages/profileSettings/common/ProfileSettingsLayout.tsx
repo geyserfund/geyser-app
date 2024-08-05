@@ -1,10 +1,15 @@
-import { HStack, StackProps, VStack } from '@chakra-ui/react'
+import { Button, HStack, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { PropsWithChildren } from 'react'
+import { PiArrowLeft } from 'react-icons/pi'
+import { Link } from 'react-router-dom'
 
+import { useAuthContext } from '@/context'
+import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
 import { H1 } from '@/shared/components/typography'
-import { dimensions } from '@/shared/constants'
+import { dimensions, getPath } from '@/shared/constants'
+import { useMobileMode } from '@/utils'
 
 import { currentProfileSettingsItemAtom, isProfileSettingsMainRouteAtom } from '../navigation/profileSettingsAtom'
 
@@ -22,8 +27,14 @@ export const ProfileSettingsLayout = ({
   desktopTitle,
   ...props
 }: PropsWithChildren<ProfileSettingsLayoutProps>) => {
+  const { user } = useAuthContext()
+
+  const isMobileMode = useMobileMode()
+
   const currentProfileSettingsItem = useAtomValue(currentProfileSettingsItemAtom)
   const isProfileSettingsMainRoute = useAtomValue(isProfileSettingsMainRouteAtom)
+
+  const showTopNavBar = isMobileMode && !isProfileSettingsMainRoute
 
   if (!currentProfileSettingsItem && !isProfileSettingsMainRoute) {
     return null
@@ -36,6 +47,21 @@ export const ProfileSettingsLayout = ({
       position="relative"
       {...props}
     >
+      {showTopNavBar && (
+        <ProjectNavContainer>
+          <Button
+            as={Link}
+            to={getPath('userProfileSettings', user?.id)}
+            size={{ base: 'md', lg: 'lg' }}
+            variant="ghost"
+            colorScheme="neutral1"
+            leftIcon={<PiArrowLeft />}
+            _pressed={{}}
+          >
+            {t('Profile Settings')}
+          </Button>
+        </ProjectNavContainer>
+      )}
       <VStack
         w="full"
         height="100%"
