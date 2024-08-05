@@ -6,6 +6,19 @@ import { MUTATION_UPDATE_CREATOR_NOTIFICATIONS_SETTINGS } from '@/modules/profil
 import { Body } from '@/shared/components/typography'
 import { CreatorNotificationSettings } from '@/types'
 
+enum NotificationType {
+  PROJECT_SUMMARY = 'creator.projectSummary',
+  GOAL_REACHED = 'creator.goalReached',
+  SALE_MADE = 'creator.saleMade',
+  CONTRIBUTION_RECEIVED = 'creator.contributionReceived',
+}
+
+enum ConfigName {
+  FREQUENCY = 'frequency',
+  IS_ENABLED = 'is_enabled',
+  THRESHOLD = 'threshold',
+}
+
 export const CreatorNotifications = ({
   creatorNotificationSettings,
 }: {
@@ -19,20 +32,28 @@ export const CreatorNotifications = ({
 
   const [updateNotificationSetting] = useMutation(MUTATION_UPDATE_CREATOR_NOTIFICATIONS_SETTINGS)
 
-  const getConfigValue = (creatorNotificationSettings: CreatorNotificationSettings, type: string, name: string) => {
+  const getConfigValue = (
+    creatorNotificationSettings: CreatorNotificationSettings,
+    type: NotificationType,
+    name: ConfigName,
+  ) => {
     const setting = creatorNotificationSettings.notificationSettings.find((s) => s.notificationType === type)
     return setting?.configurations.find((c) => c.name === name)?.value
   }
 
-  const getConfigId = (creatorNotificationSettings: CreatorNotificationSettings, type: string, name: string) => {
+  const getConfigId = (
+    creatorNotificationSettings: CreatorNotificationSettings,
+    type: NotificationType,
+    name: ConfigName,
+  ) => {
     const setting = creatorNotificationSettings.notificationSettings.find((s) => s.notificationType === type)
     return setting?.configurations.find((c) => c.name === name)?.id
   }
 
   const updateConfigValue = async (
     creatorNotificationSettings: CreatorNotificationSettings,
-    type: string,
-    name: string,
+    type: NotificationType,
+    name: ConfigName,
     value: string,
   ) => {
     const configId = getConfigId(creatorNotificationSettings, type, name)
@@ -92,8 +113,10 @@ export const CreatorNotifications = ({
             </FormLabel>
             <HStack spacing={4}>
               <Select
-                value={getConfigValue(setting, 'creator.projectSummary', 'frequency') || ''}
-                onChange={(e) => updateConfigValue(setting, 'creator.projectSummary', 'frequency', e.target.value)}
+                value={getConfigValue(setting, NotificationType.PROJECT_SUMMARY, ConfigName.FREQUENCY) || ''}
+                onChange={(e) =>
+                  updateConfigValue(setting, NotificationType.PROJECT_SUMMARY, ConfigName.FREQUENCY, e.target.value)
+                }
                 size="sm"
                 placeholder="Select frequency"
                 width="auto"
@@ -103,12 +126,12 @@ export const CreatorNotifications = ({
               </Select>
               <Switch
                 id="creator-summary"
-                isChecked={getConfigValue(setting, 'creator.projectSummary', 'is_enabled') === 'true'}
+                isChecked={getConfigValue(setting, NotificationType.PROJECT_SUMMARY, ConfigName.IS_ENABLED) === 'true'}
                 onChange={(e) =>
                   updateConfigValue(
                     setting,
-                    'creator.projectSummary',
-                    'is_enabled',
+                    NotificationType.PROJECT_SUMMARY,
+                    ConfigName.IS_ENABLED,
                     e.target.checked ? 'true' : 'false',
                   )
                 }
@@ -133,9 +156,14 @@ export const CreatorNotifications = ({
             </FormLabel>
             <Switch
               id="goal-reached"
-              isChecked={getConfigValue(setting, 'creator.goalReached', 'is_enabled') === 'true'}
+              isChecked={getConfigValue(setting, NotificationType.GOAL_REACHED, ConfigName.IS_ENABLED) === 'true'}
               onChange={(e) =>
-                updateConfigValue(setting, 'creator.goalReached', 'is_enabled', e.target.checked ? 'true' : 'false')
+                updateConfigValue(
+                  setting,
+                  NotificationType.GOAL_REACHED,
+                  ConfigName.IS_ENABLED,
+                  e.target.checked ? 'true' : 'false',
+                )
               }
             />
           </FormControl>
@@ -146,9 +174,14 @@ export const CreatorNotifications = ({
             </FormLabel>
             <Switch
               id="sale-made"
-              isChecked={getConfigValue(setting, 'creator.saleMade', 'is_enabled') === 'true'}
+              isChecked={getConfigValue(setting, NotificationType.SALE_MADE, ConfigName.IS_ENABLED) === 'true'}
               onChange={(e) =>
-                updateConfigValue(setting, 'creator.saleMade', 'is_enabled', e.target.checked ? 'true' : 'false')
+                updateConfigValue(
+                  setting,
+                  NotificationType.SALE_MADE,
+                  ConfigName.IS_ENABLED,
+                  e.target.checked ? 'true' : 'false',
+                )
               }
             />
           </FormControl>
@@ -159,9 +192,14 @@ export const CreatorNotifications = ({
             </FormLabel>
             <HStack spacing={4}>
               <Select
-                value={getConfigValue(setting, 'creator.contributionReceived', 'threshold') || ''}
+                value={getConfigValue(setting, NotificationType.CONTRIBUTION_RECEIVED, ConfigName.THRESHOLD) || ''}
                 onChange={(e) =>
-                  updateConfigValue(setting, 'creator.contributionReceived', 'threshold', e.target.value)
+                  updateConfigValue(
+                    setting,
+                    NotificationType.CONTRIBUTION_RECEIVED,
+                    ConfigName.THRESHOLD,
+                    e.target.value,
+                  )
                 }
                 size="sm"
                 placeholder="Select threshold"
@@ -174,12 +212,14 @@ export const CreatorNotifications = ({
               </Select>
               <Switch
                 id="contribution-received"
-                isChecked={getConfigValue(setting, 'creator.contributionReceived', 'is_enabled') === 'true'}
+                isChecked={
+                  getConfigValue(setting, NotificationType.CONTRIBUTION_RECEIVED, ConfigName.IS_ENABLED) === 'true'
+                }
                 onChange={(e) =>
                   updateConfigValue(
                     setting,
-                    'creator.contributionReceived',
-                    'is_enabled',
+                    NotificationType.CONTRIBUTION_RECEIVED,
+                    ConfigName.IS_ENABLED,
                     e.target.checked ? 'true' : 'false',
                   )
                 }

@@ -6,6 +6,16 @@ import { MUTATION_UPDATE_USER_NOTIFICATIONS_SETTINGS } from '@/modules/profile/g
 import { Body } from '@/shared/components/typography'
 import { UserNotificationSettings } from '@/types'
 
+enum NotificationType {
+  PROJECT_SUMMARY = 'user.projectUpdatesSummary',
+  PRODUCT_UPDATES = 'user.productUpdates',
+}
+
+enum ConfigName {
+  FREQUENCY = 'frequency',
+  IS_ENABLED = 'is_enabled',
+}
+
 export const ProjectNotifications = ({
   userNotificationSettings,
 }: {
@@ -19,17 +29,17 @@ export const ProjectNotifications = ({
 
   const [updateNotificationSetting] = useMutation(MUTATION_UPDATE_USER_NOTIFICATIONS_SETTINGS)
 
-  const getConfigValue = (type: string, name: string) => {
+  const getConfigValue = (type: NotificationType, name: ConfigName) => {
     const setting = settings.notificationSettings.find((s) => s.notificationType === type)
     return setting?.configurations.find((c) => c.name === name)?.value
   }
 
-  const getConfigId = (type: string, name: string) => {
+  const getConfigId = (type: NotificationType, name: ConfigName) => {
     const setting = settings.notificationSettings.find((s) => s.notificationType === type)
     return setting?.configurations.find((c) => c.name === name)?.id
   }
 
-  const updateConfigValue = async (type: string, name: string, value: string) => {
+  const updateConfigValue = async (type: NotificationType, name: ConfigName, value: string) => {
     const configId = getConfigId(type, name)
     if (!configId) return
 
@@ -69,8 +79,10 @@ export const ProjectNotifications = ({
           </FormLabel>
           <HStack spacing={4}>
             <Select
-              value={getConfigValue('user.projectUpdatesSummary', 'frequency') || ''}
-              onChange={(e) => updateConfigValue('user.projectUpdatesSummary', 'frequency', e.target.value)}
+              value={getConfigValue(NotificationType.PROJECT_SUMMARY, ConfigName.FREQUENCY) || ''}
+              onChange={(e) =>
+                updateConfigValue(NotificationType.PROJECT_SUMMARY, ConfigName.FREQUENCY, e.target.value)
+              }
               size="sm"
               placeholder="Select frequency"
               width="auto"
@@ -80,9 +92,13 @@ export const ProjectNotifications = ({
             </Select>
             <Switch
               id="project-updates"
-              isChecked={getConfigValue('user.projectUpdatesSummary', 'is_enabled') === 'true'}
+              isChecked={getConfigValue(NotificationType.PROJECT_SUMMARY, ConfigName.IS_ENABLED) === 'true'}
               onChange={(e) =>
-                updateConfigValue('user.projectUpdatesSummary', 'is_enabled', e.target.checked ? 'true' : 'false')
+                updateConfigValue(
+                  NotificationType.PROJECT_SUMMARY,
+                  ConfigName.IS_ENABLED,
+                  e.target.checked ? 'true' : 'false',
+                )
               }
             />
           </HStack>
@@ -94,9 +110,13 @@ export const ProjectNotifications = ({
           </FormLabel>
           <Switch
             id="geyser-product-updates"
-            isChecked={getConfigValue('user.productUpdates', 'is_enabled') === 'true'}
+            isChecked={getConfigValue(NotificationType.PRODUCT_UPDATES, ConfigName.IS_ENABLED) === 'true'}
             onChange={(e) =>
-              updateConfigValue('user.productUpdates', 'is_enabled', e.target.checked ? 'true' : 'false')
+              updateConfigValue(
+                NotificationType.PRODUCT_UPDATES,
+                ConfigName.IS_ENABLED,
+                e.target.checked ? 'true' : 'false',
+              )
             }
           />
         </FormControl>
