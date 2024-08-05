@@ -37,6 +37,10 @@ export const dimensions = {
         width: 148,
       },
     },
+    rightSideNav: {
+      width: '400px',
+      gap: '20px',
+    },
   },
   profile: {
     settings: {
@@ -48,9 +52,10 @@ export const dimensions = {
   sideNav: {
     width: 256,
   },
+
   bottomNavBar: {
     desktopHeight: 60,
   },
   pullDownThreshold: 70,
-  maxWidth: 960,
+  maxWidth: 1080,
 }

@@ -12,7 +12,7 @@ import { GeyserRewardsGuideLink } from '../../../../../../../shared/constants/pl
 import { RewardTemplate } from '../../../components/RewardTemplate'
 import useProjectRewardTemplates from '../../../hooks/useProjectRewardTemplates'
 import { RewardCategory } from '../../../types'
-import { ProjectCreationRewards as Rewards } from '../components/ProjectCreationRewards'
+import { ProjectCreationRewards } from '../components/ProjectCreationRewards'
 
 export const ProjectCreateRewardMain = () => {
   const { t } = useTranslation()
@@ -82,7 +82,7 @@ export const ProjectCreateRewardMain = () => {
       {hasRewards && (
         <Box width="100%" display={'flex'} flexDirection={'column'} gap={2} pb={10}>
           <Body medium>{t('Rewards')}</Body>
-          <Rewards />
+          <ProjectCreationRewards />
         </Box>
       )}
     </VStack>

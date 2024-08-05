@@ -12,7 +12,10 @@ import { useProjectAtom } from '../hooks/useProjectAtom'
 import { addUpdateRewardsAtom, deleteRewardAtom, initialRewardsLoadAtom, rewardsAtom } from '../state/rewardsAtom'
 import { useCustomMutation } from './custom/useCustomMutation'
 
-/** Fetch project rewards for project context, pass true to fetch on render */
+/**
+ * Query, Create, Update, Delete project rewards for current Project context
+ * @param load - Load rewards on mount
+ */
 export const useProjectRewardsAPI = (load?: boolean) => {
   const setRewards = useSetAtom(rewardsAtom)
   const addUpdateRewards = useSetAtom(addUpdateRewardsAtom)

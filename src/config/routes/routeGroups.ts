@@ -28,12 +28,6 @@ export const creatorProjectCreationRoutes = [
   getPath('launchProjectWallet', PathName.projectId),
 ]
 
-export const entryCreationRoutes = [
-  getPath('projectEntryCreation', PathName.projectName),
-  getPath('projectEntryDetails', PathName.projectName, PathName.entryId),
-  getPath('projectEntryPreview', PathName.projectName, PathName.entryId),
-]
-
 export const ProjectPageDashboardInternalRoutes = [
   getPath('dashboardAnalytics', PathName.projectName),
   getPath('dashboardSales', PathName.projectName),
@@ -76,6 +70,19 @@ export const projectRewardCreatorRoutes = [
 export const projectPostCreatorRoutes = [
   getPath('projectPostCreate', PathName.projectName),
   getPath('projectPostEdit', PathName.projectName, PathName.postId),
+]
+
+export const projectFundingRoutes = [
+  getPath('projectFunding', PathName.projectName),
+  getPath('fundingDetails', PathName.projectName),
+  getPath('fundingPayment', PathName.projectName),
+  getPath('fundingPaymentLightning', PathName.projectName),
+  getPath('fundingPaymentOnchain', PathName.projectName),
+  getPath('fundingPaymentOnchainProcessing', PathName.projectName),
+  getPath('fundingPaymentOnchainRefund', PathName.projectName),
+  getPath('fundingPaymentOnchainRefundInitiated', PathName.projectName),
+  getPath('fundingSuccess', PathName.projectName),
+  getPath('fundingFailed', PathName.projectName),
 ]
 
 export const ProjectPageRoutesWithNavBarForDesktop = [...projectBaseRoutes, ...projectDashboardRoutes]

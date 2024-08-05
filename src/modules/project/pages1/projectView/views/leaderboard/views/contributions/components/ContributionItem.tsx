@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next'
 
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
-import { BitcoinQuote, ProjectFundingTxFragment } from '@/types'
-import { commaFormatted, GetDaysAgo } from '@/utils'
+import { TimeAgo } from '@/shared/molecules/TimeAgo'
+import { ProjectFundingTxFragment } from '@/types'
+import { commaFormatted, convertSatsToUsd } from '@/utils'
 
 import { UserAvatar } from '../../../../../components/UserAvatar'
 
@@ -19,16 +20,14 @@ export const ContributionItem = ({ contribution }: { contribution: ProjectFundin
           <Body size="sm" bold dark>
             {contribution.funder.user?.username || t('Anonymous')}
           </Body>
-          <Body size="xs" muted>
-            {GetDaysAgo(contribution.paidAt)}
-          </Body>
+          <TimeAgo date={contribution.paidAt} />
         </HStack>
 
         <HStack spacing={2}>
           <Body size="xs">
             {commaFormatted(contribution.amountPaid)}{' '}
             <Body as="span" size="sm" muted>
-              sats {usdFromSats({ sats: contribution.amountPaid, bitcoinQuote: contribution.bitcoinQuote })}
+              sats {convertSatsToUsd({ sats: contribution.amountPaid, bitcoinQuote: contribution.bitcoinQuote })}
             </Body>
           </Body>
         </HStack>
@@ -52,15 +51,6 @@ export const ContributionItem = ({ contribution }: { contribution: ProjectFundin
       </VStack>
     </HStack>
   )
-}
-
-const usdFromSats = ({ sats, bitcoinQuote }: { sats: number; bitcoinQuote?: BitcoinQuote | null }) => {
-  if (bitcoinQuote && bitcoinQuote.quote) {
-    const dollars = sats / bitcoinQuote.quote
-    return `( $${dollars.toFixed(1)} )`
-  }
-
-  return ''
 }
 
 export const ContributionItemSkeleton = () => {

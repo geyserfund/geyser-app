@@ -1,8 +1,9 @@
-import { Button, Image, Text, VStack } from '@chakra-ui/react'
+import { Button, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useMatch } from 'react-router-dom'
 
 import { Head } from '@/config/Head'
+import { H2 } from '@/shared/components/typography'
 
 import { useServiceWorkerUpdate } from '../../context'
 import { getPath } from '../../shared/constants'
@@ -37,11 +38,11 @@ export const NotFoundPage = () => {
         spacing="20px"
       >
         <Image width={308} height={278} src={NotFoundPageImageUrl} />
-        <Text textAlign="center" variant="h2">
+        <H2 size="2xl" bold textAlign="center">
           {t('Oops, looks like this page got lost in space')}
-        </Text>
-        <Button variant="primary" width={'400px'} onClick={handleActionButton}>
-          <Text variant="body1">{t('Refresh Page')}</Text>
+        </H2>
+        <Button variant="solid" colorScheme="primary1" width={'400px'} onClick={handleActionButton}>
+          {t('Refresh Page')}
         </Button>
         <CommonFeedbackMessage
           prefix={t(

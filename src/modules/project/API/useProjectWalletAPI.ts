@@ -13,6 +13,10 @@ import { walletAtom, walletConnectionDetailsAtom, walletLoadingAtom } from '../s
 import { useCustomMutation } from './custom/useCustomMutation'
 
 /** Fetch project wallet for project context */
+/**
+ * Query, Create, Update project wallet for current Project context
+ * @param load - Load wallet on mount
+ */
 export const useProjectWalletAPI = (load?: boolean) => {
   const setWallet = useSetAtom(walletAtom)
   const setWalletLoading = useSetAtom(walletLoadingAtom)

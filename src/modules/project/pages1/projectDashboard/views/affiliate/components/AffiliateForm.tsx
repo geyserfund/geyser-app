@@ -1,6 +1,5 @@
 import { Box, Button, HStack, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useSetAtom } from 'jotai'
 import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -17,7 +16,6 @@ import { useDebounce } from '../../../../../../../shared/hooks'
 import { lightModeColors } from '../../../../../../../styles'
 import { ProjectAffiliateLinkFragment, useLightningAddressVerifyLazyQuery } from '../../../../../../../types'
 import { useNotification } from '../../../../../../../utils'
-import { addUpdateAffiliateLinkAtom } from '../../../../../state/affiliateAtom'
 
 export type AffiliateInputVariables = {
   label: string
@@ -56,8 +54,6 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
 
   const { toast } = useNotification()
   const { project } = useProjectAtom()
-
-  const addNewAffiliateLink = useSetAtom(addUpdateAffiliateLinkAtom)
 
   const { createAffilateLink, updateAffiliateLink } = useProjectAffiliateAPI()
 
@@ -146,7 +142,6 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
       },
       onCompleted(data) {
         reset()
-        addNewAffiliateLink(data.affiliateLinkCreate)
         if (onCompleted) {
           onCompleted()
         }

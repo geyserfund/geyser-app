@@ -3,6 +3,7 @@ import React, { createContext, PropsWithChildren, useContext, useEffect } from '
 
 import { useFundingFormState, UseFundingFormStateReturn } from '../../../shared/hooks'
 import { FundingInput, FundingTxFragment, ProjectRewardFragment, WalletLimitsFragment } from '../../../types'
+import { useProjectRewardsAPI } from '../API/useProjectRewardsAPI'
 import { useFundingFlow } from '../funding/hooks/useFundingFlow'
 import { FundingFlowGraphQLError } from '../funding/state'
 import { projectAtom, ProjectState } from '../state/projectAtom'
@@ -60,6 +61,9 @@ export const FundingProvider = ({ children, project, limits, rewards }: FundingP
 
 /** Used if the project context is available */
 export const FundingProviderWithProjectContext: React.FC<PropsWithChildren> = ({ children }) => {
+  /** Initialize rewards if they have not been initialized yet */
+  useProjectRewardsAPI(true)
+
   const project = useAtomValue(projectAtom)
   const wallet = useAtomValue(walletAtom)
   const rewards = useAtomValue(rewardsAtom)

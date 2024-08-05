@@ -2,6 +2,8 @@ import { Stack, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
+import { RightSideStickyLayout } from '@/modules/project/components/RightSideStickyLayout'
+
 import { dimensions } from '../../../../../../shared/constants'
 import { ProjectStatus } from '../../../../../../types'
 import { useProjectAtom } from '../../../../hooks/useProjectAtom'
@@ -38,8 +40,8 @@ export const ProjectBody = () => {
   // const projectDetails = useProjectDetails(project)
 
   return (
-    <Stack w="full" spacing={4} direction={{ base: 'column', lg: 'row' }}>
-      <VStack flex={8} w="full" spacing={6} paddingBottom={24}>
+    <Stack w="full" spacing={dimensions.project.rightSideNav.gap} direction={{ base: 'column', lg: 'row' }}>
+      <VStack flex={1} w="full" spacing={6} paddingBottom={24}>
         <FinalizeProjectNotice />
         <LaunchProjectNotice />
         <Header />
@@ -51,22 +53,10 @@ export const ProjectBody = () => {
         {project.goalsCount && <Goals />}
         <Details />
       </VStack>
-      <VStack
-        position="sticky"
-        top={{
-          base: `${dimensions.projectNavBar.mobile.height}px`,
-          lg: `${dimensions.projectNavBar.desktop.height}px`,
-        }}
-        display={{ base: 'none', lg: 'flex' }}
-        w="full"
-        height={`calc(100vh - ${dimensions.topNavBar.desktop.height + dimensions.projectNavBar.desktop.height}px)`}
-        flex={5}
-        justifyContent="start"
-        paddingBottom={4}
-      >
+      <RightSideStickyLayout>
         <ContributionSummary />
         <LeaderboardSummary />
-      </VStack>
+      </RightSideStickyLayout>
 
       {/* <Story />
       <Rewards /> */}

@@ -10,7 +10,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { forwardRef, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCaretDoubleDown } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
@@ -39,7 +39,7 @@ import { NpubDisplay } from './components/NpubDisplay'
 import { ShareProjectButton } from './components/ShareProjectButton'
 import { VideoPlayer } from './components/VideoPlayer'
 
-export const Header = forwardRef<HTMLDivElement>((_, ref) => {
+export const Header = () => {
   const { t } = useTranslation()
   const { project, loading, partialUpdateProject } = useProjectAtom()
   // const { wallet } = useWalletAtom()
@@ -133,7 +133,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       </Modal>
       {/* {statusContent()} */}
 
-      <CardLayout w="full" ref={ref} dense spacing={0}>
+      <CardLayout id={'HEADER_ITEM'} w="full" dense spacing={0}>
         <Box>{renderImageOrVideo()}</Box>
         <HStack
           spacing={4}
@@ -207,7 +207,7 @@ export const Header = forwardRef<HTMLDivElement>((_, ref) => {
       </CardLayout>
     </>
   )
-})
+}
 
 export const HeaderSkeleton = () => {
   return (

@@ -62,8 +62,8 @@ export const TopNavBar = () => {
     <>
       <HStack
         paddingY={{ base: 4, lg: 8 }}
-        paddingX={{ base: 3, lg: 5 }}
-        maxWidth={{ base: dimensions.maxWidth + 24, lg: dimensions.maxWidth + 40 }}
+        paddingX={{ base: 3, lg: 6 }}
+        maxWidth={{ base: dimensions.maxWidth + 24, lg: dimensions.maxWidth + 48 }}
         width="100%"
         backgroundColor={'utils.pbg'}
         position="fixed"
