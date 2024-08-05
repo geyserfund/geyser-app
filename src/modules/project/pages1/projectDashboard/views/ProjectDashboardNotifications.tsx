@@ -17,7 +17,7 @@ export const ProjectDashboardNotifications = () => {
             <Body>Customize your profile and project notifications.</Body>
           </HStack>
         </VStack>
-        <CreatorNotifications />
+        <CreatorNotifications creatorNotificationSettings={[]} />
       </VStack>
     </DashboardLayout>
   )
