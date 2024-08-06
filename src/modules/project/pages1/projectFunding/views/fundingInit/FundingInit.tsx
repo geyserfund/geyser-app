@@ -1,5 +1,4 @@
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
 
@@ -9,9 +8,7 @@ import { FundingInitRewards } from './sections/FundingInitRewards'
 import { FundingInitBottomContent, FundingInitSideContent } from './sections/FundingInitSideContent'
 
 export const FundingInit = () => {
-  const { project } = useProjectAtom()
-
-  const { setState } = useFundingFormAtom()
+  const { setState, project } = useFundingFormAtom()
 
   return (
     <FundingLayout

@@ -2,7 +2,7 @@ import { Badge, Box, Button, HStack, IconButton, VStack } from '@chakra-ui/react
 import { t } from 'i18next'
 import { PiMinus, PiPlus } from 'react-icons/pi'
 
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { useRewardBuy } from '@/modules/project/pages1/projectView/hooks'
 import { ProjectRewardShippingEstimate } from '@/modules/project/pages1/projectView/views/rewards/components'
 import { CardLayout } from '@/shared/components/layouts'
@@ -21,7 +21,7 @@ interface IRewardItemProps {
 export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, readOnly }: IRewardItemProps) => {
   const { count, isAvailable, addRewardToBasket, removeRewardFromBasket } = useRewardBuy(reward)
 
-  const { project } = useProjectAtom()
+  const { project } = useFundingFormAtom()
 
   if ((count > 0 && showOnSelected) || (showOnEmpty && count === 0)) {
     return (

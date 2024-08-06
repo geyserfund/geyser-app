@@ -25,10 +25,9 @@ export const FundingInitSideContent = () => {
 
 export const FundingInitSummary = () => {
   const navigate = useNavigate()
-  const { project } = useProjectAtom()
   const toast = useNotification()
 
-  const { isFundingInputAmountValid } = useFundingFormAtom()
+  const { isFundingInputAmountValid, project } = useFundingFormAtom()
 
   const handleCheckoutButtonPressed = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()

@@ -11,11 +11,11 @@ import { useNotification } from '@/utils'
 
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
 
-export const FundingDetailsBottomContent = () => {
+export const FundingPaymentBottomContent = () => {
   return <FundingPaymentsSummary />
 }
 
-export const FundingDetailsSideContent = () => {
+export const FundingPaymentSideContent = () => {
   return (
     <CardLayout w="full" h="full">
       <FundingPaymentsSummary />

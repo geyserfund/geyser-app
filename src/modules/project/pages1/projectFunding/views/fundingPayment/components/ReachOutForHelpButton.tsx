@@ -1,8 +1,8 @@
 import { Button, ButtonProps, Link } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { FaTelegramPlane } from 'react-icons/fa'
+import { PiChatCircle } from 'react-icons/pi'
 
-import { GeyserTelegramUrl } from '../../../../../../../../../shared/constants'
+import { GeyserTelegramUrl } from '../../../../../../../shared/constants'
 
 export const ReachOutForHelpButton = (props: ButtonProps) => {
   const { t } = useTranslation()
@@ -11,10 +11,12 @@ export const ReachOutForHelpButton = (props: ButtonProps) => {
       as={Link}
       href={GeyserTelegramUrl}
       target="_blank"
-      variant="outline"
+      variant="ghost"
+      colorScheme="neutral1"
       width="100%"
-      leftIcon={<FaTelegramPlane aria-label="telegram" fontSize="20px" />}
+      leftIcon={<PiChatCircle aria-label="telegram" fontSize="20px" />}
       textDecoration="none"
+      size="lg"
       {...props}
     >
       {t('Reach out for help')}

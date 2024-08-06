@@ -2,7 +2,7 @@ import { HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
 import { CardLayout } from '@/shared/components/layouts'
-import { AnimatedNavBar, NavBarItems } from '@/shared/components/navigation/AnimatedNavBar'
+import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { H1 } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants'
@@ -42,7 +42,7 @@ export const ProjectLeaderboard = () => {
 }
 
 const ProjectLeaderboardMobile = () => {
-  const items: NavBarItems[] = [
+  const items: AnimatedNavBarItem[] = [
     {
       name: t('Leaderboard'),
       key: LeaderboardView.Leaderboard,

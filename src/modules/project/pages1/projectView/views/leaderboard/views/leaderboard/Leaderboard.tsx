@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 
 import { LeaderboardPeriod } from '@/modules/project/state/fundersAtom'
 import { CardLayout } from '@/shared/components/layouts'
-import { AnimatedNavBar, NavBarItems } from '@/shared/components/navigation/AnimatedNavBar'
+import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { dimensions } from '@/shared/constants'
 import { standardPadding } from '@/styles'
@@ -20,7 +20,7 @@ export const Leaderboard = () => {
 
   const currentDateTime = DateTime.now()
 
-  const items: NavBarItems[] = useMemo(
+  const items: AnimatedNavBarItem[] = useMemo(
     () => [
       {
         name: t('All time'),

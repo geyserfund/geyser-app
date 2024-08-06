@@ -3,27 +3,30 @@ import { useTranslation } from 'react-i18next'
 
 import { useFundingContext } from '../../../../../../../context'
 import { useRefundFileValue } from '../../../../../../../funding/state'
-import { PaymentMethods, usePaymentMethodAtom } from '../states/paymentMethodAtom'
+// import {
+//   PaymentMethods,
+//   usePaymentMethodAtom,
+// } from '../../../../../../../pages1/projectFunding/views/fundingPayment/state/paymentMethodAtom'
 
 export const PaymentMethodSelection = () => {
   const { t } = useTranslation()
-  const [paymentMethod, setPaymentMethod] = usePaymentMethodAtom()
+  // const [paymentMethod, setPaymentMethod] = usePaymentMethodAtom()
 
   const {
     fundForm: { amountWarning },
   } = useFundingContext()
   const refundFile = useRefundFileValue()
 
-  const isLightning = paymentMethod === PaymentMethods.lightning
+  // const isLightning = paymentMethod === PaymentMethods.lightning
 
   return (
     <HStack w="full">
       <Button
         flex={1}
         variant={'secondary'}
-        borderColor={isLightning ? 'primary.400' : undefined}
-        color={isLightning ? 'primary.400' : undefined}
-        onClick={() => setPaymentMethod(PaymentMethods.lightning)}
+        // borderColor={isLightning ? 'primary.400' : undefined}
+        // color={isLightning ? 'primary.400' : undefined}
+        // onClick={() => setPaymentMethod(PaymentMethods.lightning)}
       >
         {t('Lightning')}
       </Button>
@@ -31,9 +34,9 @@ export const PaymentMethodSelection = () => {
         <Button
           flex={1}
           variant={'secondary'}
-          borderColor={!isLightning ? 'primary.400' : undefined}
-          color={!isLightning ? 'primary.400' : undefined}
-          onClick={() => setPaymentMethod(PaymentMethods.onChain)}
+          // borderColor={!isLightning ? 'primary.400' : undefined}
+          // color={!isLightning ? 'primary.400' : undefined}
+          // onClick={() => setPaymentMethod(PaymentMethods.onChain)}
           isDisabled={!refundFile}
         >
           {t('Onchain')}

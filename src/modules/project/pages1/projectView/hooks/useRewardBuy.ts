@@ -2,7 +2,6 @@ import { useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { getPath } from '@/shared/constants'
 import { ProjectRewardFragment } from '@/types'
 import { toInt, useNotification } from '@/utils'
@@ -10,9 +9,7 @@ import { toInt, useNotification } from '@/utils'
 export const useRewardBuy = (reward?: Pick<ProjectRewardFragment, 'id' | 'maxClaimable' | 'sold'>) => {
   const toast = useNotification()
 
-  const { project } = useProjectAtom()
-
-  const { formState, updateReward } = useFundingFormAtom()
+  const { formState, updateReward, project } = useFundingFormAtom()
 
   const navigate = useNavigate()
 

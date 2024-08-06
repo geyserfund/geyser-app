@@ -3,7 +3,10 @@ import { atomEffect } from 'jotai-effect'
 
 import { fundingStageAtom, FundingStages, refundedSwapDataAtom } from '../../../../../../../../../funding/state'
 import { pollingFundingTxAtom, subscriptionActiveAtom } from '../../../../../../../../../funding/state/pollingFundingTx'
-import { paymentMethodAtom, PaymentMethods } from '../../../states/paymentMethodAtom'
+import {
+  paymentMethodAtom,
+  PaymentMethods,
+} from '../../../../../../../../../pages1/projectFunding/views/fundingPayment/state/paymentMethodAtom'
 
 export enum OnChainStatus {
   prompt = 'PROMPT',

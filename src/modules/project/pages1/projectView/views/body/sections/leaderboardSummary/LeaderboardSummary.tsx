@@ -1,7 +1,7 @@
 import { HStack } from '@chakra-ui/react'
 
 import { CardLayout } from '@/shared/components/layouts'
-import { AnimatedNavBar, NavBarItems } from '@/shared/components/navigation/AnimatedNavBar'
+import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 
 import { Contributions } from './components/Contributions'
@@ -19,7 +19,7 @@ export const LeaderboardSummary = () => {
       key: 'contributions',
       render: () => <Contributions />,
     },
-  ] as NavBarItems[]
+  ] as AnimatedNavBarItem[]
 
   const { render, ...animatedNavbarProps } = useAnimatedNavBar({ items, defaultView: 'leaderboard' })
 

@@ -18,7 +18,7 @@ export const PaymentLoading = () => {
         navigate(getPath('fundingPaymentLightning', project.name))
       })
     }
-  }, [isFundingInputAmountValid, isFundingUserInfoValid, requestFundingFromContext, navigate, project.name])
+  }, [isFundingInputAmountValid, isFundingUserInfoValid, navigate, project.name])
 
   useEffect(() => {
     if (requestFundingOptions.error) {

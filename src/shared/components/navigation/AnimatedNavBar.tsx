@@ -1,4 +1,4 @@
-import { Button, ButtonProps, ComponentWithAs, HStack, Skeleton, StackProps } from '@chakra-ui/react'
+import { Button, ButtonProps, ComponentWithAs, HStack, Skeleton, StackProps, Tooltip } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { toInt, useCustomTheme, useMobileMode } from '../../../utils'
 import { SkeletonLayout } from '../layouts'
 
-export type NavBarItems = {
+export type AnimatedNavBarItem = {
   name: string
   path?: string
   onClick?: () => void
@@ -17,17 +17,19 @@ export type NavBarItems = {
   isBordered?: boolean
   key?: string
   render?: () => React.ReactNode
+  isDisabled?: boolean
+  tooltipLabel?: string
 }
 
 type AnimatedNavBarProps = {
-  items: NavBarItems[]
-  activeItem: number
+  items: AnimatedNavBarItem[]
+  activeIndex: number
   showLabel?: boolean
   showIcon?: boolean
   loading?: boolean
 } & StackProps
 
-export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem, loading, ...props }: AnimatedNavBarProps) => {
+export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loading, ...props }: AnimatedNavBarProps) => {
   const { t } = useTranslation()
 
   const navigate = useNavigate()
@@ -38,10 +40,10 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem, loading
 
   const [buttonProps, setButtonprops] = useState<{ left: number; width: number }>({ left: 0, width: 0 })
 
-  const [activeIndex, setActiveIndex] = useState(activeItem)
+  const [currentActiveIndex, setCurrentActiveIndex] = useState(activeIndex)
 
-  const handleClick = (item: NavBarItems, index: number) => {
-    setActiveIndex(index)
+  const handleClick = (item: AnimatedNavBarItem, index: number) => {
+    setCurrentActiveIndex(index)
 
     if (item.onClick) {
       item.onClick()
@@ -52,8 +54,10 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem, loading
   }
 
   useEffect(() => {
-    setActiveIndex(activeItem)
-  }, [activeItem])
+    setCurrentActiveIndex(activeIndex)
+  }, [activeIndex])
+
+  const currentActiveItem = items[currentActiveIndex]
 
   if (loading) {
     return <Skeleton borderRadius={{ base: '8px', lg: '10px' }} height={{ base: '36px', lg: '44px' }} width="100%" />
@@ -79,44 +83,45 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeItem, loading
           borderRadius: isMobileMode ? '8px' : '10px',
           border: '1px solid',
           borderColor: colors.utils.text,
+          display: currentActiveItem?.isDisabled ? 'none' : undefined,
         }}
         animate={buttonProps}
         transition={{ type: 'spring', damping: 22, stiffness: 250 }}
       />
       {items.map((item, index) => {
-        const isActive = activeIndex === index
+        const isActive = currentActiveIndex === index
         const Icon = item.icon
         return (
-          <ProjectNavigationButton
-            setButtonprops={setButtonprops}
-            isActive={isActive}
-            key={item.name}
-            length={items.length}
-            onClick={() => handleClick(item, index)}
-            backgroundColor={'transparent'}
-            color={'neutral1.12'}
-            _hover={isActive ? {} : { backgroundColor: 'neutral1.5' }}
-            {...(item.isBordered
-              ? {
-                  border: '1px solid',
-                  borderColor: 'neutral1.7',
-                }
-              : {})}
-          >
-            <HStack
-              w="full"
-              h="full"
-              zIndex={props.zIndex ? toInt(`${props.zIndex}`) + 2 : 4}
-              p={0}
-              spacing={2}
-              justifyContent="center"
-              alignItems="center"
-              fontWeight={isActive ? 500 : 400}
+          <Tooltip key={item.name} label={item.tooltipLabel}>
+            <ProjectNavigationButton
+              setButtonprops={setButtonprops}
+              isActive={isActive}
+              length={items.length}
+              onClick={() => handleClick(item, index)}
+              _hover={isActive ? {} : { backgroundColor: 'neutral1.5' }}
+              {...(item.isBordered
+                ? {
+                    border: '1px solid',
+                    borderColor: 'neutral1.7',
+                  }
+                : {})}
+              isDisabled={item.isDisabled}
             >
-              {(showIcon || item.showIconAlways) && Icon ? <Icon /> : null}
-              {showLabel && <span>{t(item.name)}</span>}
-            </HStack>
-          </ProjectNavigationButton>
+              <HStack
+                w="full"
+                h="full"
+                zIndex={props.zIndex ? toInt(`${props.zIndex}`) + 2 : 4}
+                p={0}
+                spacing={2}
+                justifyContent="center"
+                alignItems="center"
+                fontWeight={isActive ? 500 : 400}
+              >
+                {(showIcon || item.showIconAlways) && Icon ? <Icon /> : null}
+                {showLabel && <span>{t(item.name)}</span>}
+              </HStack>
+            </ProjectNavigationButton>
+          </Tooltip>
         )
       })}
     </HStack>
@@ -139,7 +144,18 @@ const ProjectNavigationButton: ComponentWithAs<
     [isActive, setButtonprops, length],
   )
 
-  return <Button ref={measuredRef} flex="1" size={{ base: 'md', lg: 'lg' }} variant="ghost" {...props} />
+  return (
+    <Button
+      ref={measuredRef}
+      flex="1"
+      size={{ base: 'md', lg: 'lg' }}
+      variant="ghost"
+      backgroundColor={'transparent'}
+      color={'neutral1.12'}
+      _disabled={{ color: 'neutral1.9' }}
+      {...props}
+    />
+  )
 }
 
 export const AnimatedNavBarSkeleton = () => {

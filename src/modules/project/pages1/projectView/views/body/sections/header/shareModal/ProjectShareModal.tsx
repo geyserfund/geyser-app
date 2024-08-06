@@ -2,7 +2,7 @@ import { VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { Modal } from '@/shared/components/layouts'
-import { AnimatedNavBar, NavBarItems } from '@/shared/components/navigation/AnimatedNavBar'
+import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { Body } from '@/shared/components/typography'
 
@@ -38,7 +38,7 @@ export const ProjectShareModal = ({ isOpen, onClose, name }: IQRModal) => {
       key: ProjectShareModalView.contribute,
       render: () => <ProjectShareContribute />,
     },
-  ] as NavBarItems[]
+  ] as AnimatedNavBarItem[]
 
   const { render, ...animatedNavBarProps } = useAnimatedNavBar({ items, defaultView: ProjectShareModalView.share })
 

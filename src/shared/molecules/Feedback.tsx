@@ -15,7 +15,9 @@ export enum FeedBackVariant {
 
 type FeedbackProps = {
   variant: FeedBackVariant
-  text: string
+  text?: string
+  children?: React.ReactNode
+  icon?: React.ReactNode
 } & StackProps
 
 const icons = {
@@ -25,7 +27,7 @@ const icons = {
   [FeedBackVariant.SUCCESS]: PiCheckCircle,
 }
 
-export const Feedback = ({ variant, text, ...props }: FeedbackProps) => {
+export const Feedback = ({ variant, text, children, icon, ...props }: FeedbackProps) => {
   const { colors } = useCustomTheme()
 
   const feedbackColors = useMemo(
@@ -46,9 +48,9 @@ export const Feedback = ({ variant, text, ...props }: FeedbackProps) => {
         color: colors.error[11],
       },
       [FeedBackVariant.SUCCESS]: {
-        bg: colors.success[2],
-        border: colors.success[6],
-        color: colors.success[11],
+        bg: colors.primary1[2],
+        border: colors.primary1[6],
+        color: colors.primary1[11],
       },
     }),
     [colors],
@@ -69,12 +71,17 @@ export const Feedback = ({ variant, text, ...props }: FeedbackProps) => {
       justifyContent="start"
       border="1px solid"
       borderColor={feedbackColor.border}
+      color={feedbackColor.color}
       {...props}
     >
-      <Icon color={feedbackColor.color} fontSize="30px" />
-      <Body size="sm" color={feedbackColor.color}>
-        {text}
-      </Body>
+      {icon ? icon : <Icon color={feedbackColor.color} fontSize="30px" />}
+      {children ? (
+        children
+      ) : (
+        <Body size="sm" color={feedbackColor.color}>
+          {text}
+        </Body>
+      )}
     </HStack>
   )
 }

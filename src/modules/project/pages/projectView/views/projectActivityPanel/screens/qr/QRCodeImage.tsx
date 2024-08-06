@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react'
 
 import { getBip21Invoice } from '../../../../../../../../utils/lightning/bip21'
 import { useFundingContext } from '../../../../../../context'
+import { useIsLightingMethodAtom } from '../../../../../../pages1/projectFunding/views/fundingPayment/state/paymentMethodAtom'
 import { ContributionInfoBox, ContributionInfoBoxVersion } from '../contributionInfo'
 import { FundingDisclaimer, ReachOutForHelpButton } from './components'
 import { PaymentMethodSelection } from './components/PaymentMethodSelection'
-import { useIsLightingMethodAtom } from './states/paymentMethodAtom'
 import { LightningQR } from './views/lightning/LightningQR'
 import { OnchainBoltz } from './views/onchain/OnChainBoltz'
 

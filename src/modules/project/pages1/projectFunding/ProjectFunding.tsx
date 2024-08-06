@@ -1,11 +1,12 @@
 import { Outlet } from 'react-router-dom'
 
+import { useFundingFormAtom } from '../../funding/hooks/useFundingFormAtom'
 import { useProjectAtom } from '../../hooks/useProjectAtom'
 
 export const ProjectFunding = () => {
-  const { loading } = useProjectAtom()
+  const { project } = useFundingFormAtom()
 
-  if (loading) {
+  if (!project || !project.name) {
     return null
   }
 

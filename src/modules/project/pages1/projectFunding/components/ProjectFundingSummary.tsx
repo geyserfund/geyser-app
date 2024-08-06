@@ -62,7 +62,7 @@ export const ProjectFundingSummary = () => {
         alignItems: 'flex-start',
         display: 'flex',
         flexDirection: 'column',
-        gap: isMobileMode ? 1 : 3,
+        gap: isMobileMode ? '4px' : '12px',
       }}
       transition={{ type: 'spring', stiffness: 900, damping: 40 }}
     >

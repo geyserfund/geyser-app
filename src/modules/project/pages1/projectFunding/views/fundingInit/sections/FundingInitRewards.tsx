@@ -2,10 +2,9 @@ import { Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { H2 } from '@/shared/components/typography'
 
-import { FundingFormRewardItem } from '../../../../../pages/projectView/views/projectActivityPanel/components'
+import { FundingFormRewardItem } from '../components/FundingFormRewardItem'
 
 type Props = {
   readOnly?: boolean
@@ -14,9 +13,9 @@ type Props = {
 export const FundingInitRewards = ({ readOnly }: Props) => {
   const { t } = useTranslation()
 
-  const { rewards } = useRewardsAtom()
+  const { formState, project } = useFundingFormAtom()
 
-  const { formState } = useFundingFormAtom()
+  const { rewards } = project
 
   const hasRewards = rewards && rewards.length
 

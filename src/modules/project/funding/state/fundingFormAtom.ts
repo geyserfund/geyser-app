@@ -20,7 +20,7 @@ import { ProjectState } from '../../state/projectAtom'
 import { getRefIdFromProjectAffiliates } from '../hooks/useProjectAffiliateWithProjectName'
 import { selectedGoalIdAtom } from './fundingTxAtom'
 
-export type FundingProject = Pick<ProjectState, 'id' | 'name' | 'rewardCurrency' | 'title'>
+export type FundingProject = Pick<ProjectState, 'id' | 'name' | 'rewardCurrency' | 'title' | 'owners'>
 
 export type FundingProjectState = FundingProject & {
   wallet?: ProjectPageWalletFragment

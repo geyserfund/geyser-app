@@ -14,9 +14,9 @@ import { getPath } from '../../../../../../../../shared/constants'
 import { lightModeColors, standardPadding } from '../../../../../../../../styles'
 import { UserBadge } from '../../../../../../../../types'
 import { useFundingContext } from '../../../../../../context/FundingProvider2'
+import { useIsLightingMethodAtom } from '../../../../../../pages1/projectFunding/views/fundingPayment/state/paymentMethodAtom'
 import {} from '../../components'
 import { ContributionInfoBox, ContributionInfoBoxVersion, ContributionShippingBox } from '../contributionInfo'
-import { useIsLightingMethodAtom } from '../qr/states/paymentMethodAtom'
 import { SuccessImageComponent } from './components'
 
 type Props = {

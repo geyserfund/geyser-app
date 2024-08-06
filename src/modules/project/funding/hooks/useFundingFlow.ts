@@ -60,7 +60,8 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
   const { fundingTx, updateFundingTx } = useFundingTxAtom()
 
-  const { pollingFundingTx, startPollingAndSubscription, clearPollingAndSubscription } = useFundPollingAndSubscriptionAtom()
+  const { pollingFundingTx, startPollingAndSubscription, clearPollingAndSubscription } =
+    useFundPollingAndSubscriptionAtom()
 
   useAtom(fundingStageAtomEffect)
 

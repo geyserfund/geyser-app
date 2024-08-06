@@ -1,4 +1,7 @@
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router'
+
+import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { getPath } from '@/shared/constants'
 
 import { FundingLayout } from '../../layouts/FundingLayout'
@@ -7,7 +10,15 @@ import { FundingDetailsUserComment } from './sections/FundingDetailsUserComment'
 import { FundingDetailsUserEmail } from './sections/FundingDetailsUserEmail'
 
 export const FundingDetails = () => {
-  const { project } = useProjectAtom()
+  const { project, isFundingInputAmountValid } = useFundingFormAtom()
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!isFundingInputAmountValid.valid) {
+      navigate(getPath('projectFunding', project.name))
+    }
+  }, [isFundingInputAmountValid, project.name, navigate])
 
   return (
     <FundingLayout

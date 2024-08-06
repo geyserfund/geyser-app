@@ -52,3 +52,9 @@ export const dimensions = {
   pullDownThreshold: 70,
   maxWidth: 1080,
 }
+
+export const derivedDimensions = {
+  heightAfterTopNavBar: `calc(100vh - ${
+    dimensions.topNavBar.desktop.height + dimensions.projectNavBar.desktop.height
+  }px)`,
+}
