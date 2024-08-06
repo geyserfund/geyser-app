@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client'
-import { Avatar, HStack, Select, Switch, VStack } from '@chakra-ui/react'
+import { HStack, Select, Switch, VStack } from '@chakra-ui/react'
+import { useToast } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { PiStar } from 'react-icons/pi'
 
@@ -36,6 +37,7 @@ export const CreatorNotifications = ({
   }, [creatorNotificationSettings])
 
   const [updateNotificationSetting] = useMutation(MUTATION_UPDATE_CREATOR_NOTIFICATIONS_SETTINGS)
+  const toast = useToast()
 
   const getConfigValue = (
     creatorNotificationSettings: CreatorNotificationSettings,
@@ -55,6 +57,36 @@ export const CreatorNotifications = ({
     return setting?.configurations.find((c) => c.name === name)?.id
   }
 
+  const updateSettingsMap = (
+    prevSettings: CreatorNotificationSettings[],
+    projectId: string,
+    type: NotificationType,
+    name: ConfigName,
+    newValue: string,
+  ) => {
+    return prevSettings.map((setting) => {
+      if (setting.project.id === projectId) {
+        return {
+          ...setting,
+          notificationSettings: setting.notificationSettings.map((notifSetting) => {
+            if (notifSetting.notificationType === type) {
+              return {
+                ...notifSetting,
+                configurations: notifSetting.configurations.map((config) =>
+                  config.name === name ? { ...config, value: newValue } : config,
+                ),
+              }
+            }
+
+            return notifSetting
+          }),
+        }
+      }
+
+      return setting
+    })
+  }
+
   const updateConfigValue = async (
     creatorNotificationSettings: CreatorNotificationSettings,
     type: NotificationType,
@@ -64,6 +96,11 @@ export const CreatorNotifications = ({
     const configId = getConfigId(creatorNotificationSettings, type, name)
     if (!configId) return
 
+    // Optimistically update the UI
+    setSettings((prevSettings) =>
+      updateSettingsMap(prevSettings, creatorNotificationSettings.project.id, type, name, value),
+    )
+
     try {
       await updateNotificationSetting({
         variables: {
@@ -72,31 +109,34 @@ export const CreatorNotifications = ({
         },
       })
 
-      setSettings((prevSettings) =>
-        prevSettings.map((setting) => {
-          if (setting.project.id === creatorNotificationSettings.project.id) {
-            return {
-              ...setting,
-              notificationSettings: setting.notificationSettings.map((notifSetting) => {
-                if (notifSetting.notificationType === type) {
-                  return {
-                    ...notifSetting,
-                    configurations: notifSetting.configurations.map((config) =>
-                      config.name === name ? { ...config, value } : config,
-                    ),
-                  }
-                }
-
-                return notifSetting
-              }),
-            }
-          }
-
-          return setting
-        }),
-      )
+      // Show success toast
+      toast({
+        title: 'Update successful',
+        description: 'Notification setting has been updated.',
+        status: 'success',
+        duration: 3000,
+        position: 'top-right',
+      })
     } catch (error) {
-      console.error('Failed to update notification setting:', error)
+      // Revert the optimistic update
+      setSettings((prevSettings) =>
+        updateSettingsMap(
+          prevSettings,
+          creatorNotificationSettings.project.id,
+          type,
+          name,
+          getConfigValue(creatorNotificationSettings, type, name) || '',
+        ),
+      )
+
+      // Show error toast
+      toast({
+        title: 'Update failed',
+        description: 'Failed to update notification setting. Please try again.',
+        status: 'error',
+        duration: 5000,
+        position: 'top-right',
+      })
     }
   }
 
@@ -154,7 +194,7 @@ export const CreatorNotifications = ({
               />
             </HorizontalFormField>
             <Body size="sm" regular color="neutral1.10">
-              Receive a monthly email about your project summary: stats, goal progress and, hot rewards..
+              Receive a monthly email about your project summary: stats, goal progress and, hot rewards.
             </Body>
 
             <HorizontalFormField label="Goal Reached Email" htmlFor="goal-reached">

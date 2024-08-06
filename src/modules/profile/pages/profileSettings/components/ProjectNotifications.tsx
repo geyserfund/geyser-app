@@ -72,7 +72,7 @@ export const ProjectNotifications = ({
   return (
     <VStack spacing={6} align="stretch" width="100%">
       <Body size="lg" bold>
-        Project notifications
+        Notifications for Projects I follow
       </Body>
       <VStack spacing={4} align="stretch" p={4}>
         <HorizontalFormField label="Project Updates" htmlFor="project-updates">

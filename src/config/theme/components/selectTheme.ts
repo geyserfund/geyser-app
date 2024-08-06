@@ -11,6 +11,9 @@ const commonActiveStyle = {
 
 const baseStyle = definePartsStyle({
   field: {
+    // border: '1px solid',
+    // borderColor: 'neutralAplha.7',
+    // borderRadius: '12px',
     _hover: commonActiveStyle,
     _active: commonActiveStyle,
     _focus: commonActiveStyle,
