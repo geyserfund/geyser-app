@@ -41,8 +41,8 @@ export enum PathName {
 
   userProfile = 'profile',
   userProfileSettings = 'settings',
-  userProfileSettingsGeneral = 'settings/general',
-  userProfileSettingsNotifications = 'settings/notifications',
+  userProfileSettingsGeneral = 'general',
+  userProfileSettingsNotifications = 'notifications',
 
   preview = 'preview',
 
@@ -227,9 +227,9 @@ const pathsMap = {
   userProfile: (userID: string) => `/${PathName.userProfile}/${userID}`,
   userProfileSettings: (userID: string) => `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}`,
   userProfileSettingsGeneral: (userID: string) =>
-    `/${PathName.userProfile}/${userID}/${PathName.userProfileSettingsGeneral}`,
+    `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}/${PathName.userProfileSettingsGeneral}`,
   userProfileSettingsNotifications: (userID: string) =>
-    `/${PathName.userProfile}/${userID}/${PathName.userProfileSettingsNotifications}`,
+    `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}/${PathName.userProfileSettingsNotifications}`,
 
   badges: () => `/${PathName.badges}`,
 
