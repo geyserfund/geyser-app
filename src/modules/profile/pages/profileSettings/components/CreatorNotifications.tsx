@@ -1,10 +1,12 @@
 import { useMutation } from '@apollo/client'
-import { Avatar, FormControl, FormLabel, HStack, Select, Switch, VStack } from '@chakra-ui/react'
+import { Avatar, FormLabel, HStack, Select, Switch, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
 import { MUTATION_UPDATE_CREATOR_NOTIFICATIONS_SETTINGS } from '@/modules/profile/graphql/mutations/creatorNotificationMutation'
 import { Body } from '@/shared/components/typography'
 import { CreatorNotificationSettings } from '@/types'
+
+import { HorizontalFormField } from '../common/HorizontalFormField'
 
 enum NotificationType {
   PROJECT_SUMMARY = 'creator.projectSummary',
@@ -107,37 +109,32 @@ export const CreatorNotifications = ({
             <Body bold>{setting.project.title}</Body>
           </HStack>
 
-          <FormControl display="flex" alignItems="center" justifyContent="space-between">
-            <FormLabel htmlFor="creator-summary" mb="0">
-              <Body size="lg">Creator summary email</Body>
-            </FormLabel>
-            <HStack spacing={4}>
-              <Select
-                value={getConfigValue(setting, NotificationType.PROJECT_SUMMARY, ConfigName.FREQUENCY) || ''}
-                onChange={(e) =>
-                  updateConfigValue(setting, NotificationType.PROJECT_SUMMARY, ConfigName.FREQUENCY, e.target.value)
-                }
-                size="sm"
-                placeholder="Select frequency"
-                width="auto"
-              >
-                <option value="weekly">Weekly</option>
-                <option value="monthly">Monthly</option>
-              </Select>
-              <Switch
-                id="creator-summary"
-                isChecked={getConfigValue(setting, NotificationType.PROJECT_SUMMARY, ConfigName.IS_ENABLED) === 'true'}
-                onChange={(e) =>
-                  updateConfigValue(
-                    setting,
-                    NotificationType.PROJECT_SUMMARY,
-                    ConfigName.IS_ENABLED,
-                    e.target.checked ? 'true' : 'false',
-                  )
-                }
-              />
-            </HStack>
-          </FormControl>
+          <HorizontalFormField label="Creator summary email" htmlFor="creator-summary">
+            <Select
+              value={getConfigValue(setting, NotificationType.PROJECT_SUMMARY, ConfigName.FREQUENCY) || ''}
+              onChange={(e) =>
+                updateConfigValue(setting, NotificationType.PROJECT_SUMMARY, ConfigName.FREQUENCY, e.target.value)
+              }
+              size="sm"
+              placeholder="Select frequency"
+              width="auto"
+            >
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+            </Select>
+            <Switch
+              id="creator-summary"
+              isChecked={getConfigValue(setting, NotificationType.PROJECT_SUMMARY, ConfigName.IS_ENABLED) === 'true'}
+              onChange={(e) =>
+                updateConfigValue(
+                  setting,
+                  NotificationType.PROJECT_SUMMARY,
+                  ConfigName.IS_ENABLED,
+                  e.target.checked ? 'true' : 'false',
+                )
+              }
+            />
+          </HorizontalFormField>
           <Body size="sm">
             Receive a monthly email about your project summary: stats, goal progress and, hot rewards..
           </Body>
@@ -150,10 +147,7 @@ export const CreatorNotifications = ({
             sale, to receiving a contribution above a certain amount, and reaching a goal.
           </Body>
 
-          <FormControl display="flex" alignItems="center" justifyContent="space-between">
-            <FormLabel htmlFor="goal-reached" mb="0">
-              <Body size="lg">Goal Reached Email</Body>
-            </FormLabel>
+          <HorizontalFormField label="Goal Reached Email" htmlFor="goal-reached">
             <Switch
               id="goal-reached"
               isChecked={getConfigValue(setting, NotificationType.GOAL_REACHED, ConfigName.IS_ENABLED) === 'true'}
@@ -166,9 +160,9 @@ export const CreatorNotifications = ({
                 )
               }
             />
-          </FormControl>
+          </HorizontalFormField>
 
-          <FormControl display="flex" alignItems="center" justifyContent="space-between">
+          <HorizontalFormField label="Sale Made" htmlFor="sale-made">
             <FormLabel htmlFor="sale-made" mb="0">
               <Body size="lg">Sale Made</Body>
             </FormLabel>
@@ -184,48 +178,38 @@ export const CreatorNotifications = ({
                 )
               }
             />
-          </FormControl>
+          </HorizontalFormField>
 
-          <FormControl display="flex" alignItems="center" justifyContent="space-between">
-            <FormLabel htmlFor="contribution-received" mb="0">
-              <Body size="lg">Contribution received</Body>
-            </FormLabel>
-            <HStack spacing={4}>
-              <Select
-                value={getConfigValue(setting, NotificationType.CONTRIBUTION_RECEIVED, ConfigName.THRESHOLD) || ''}
-                onChange={(e) =>
-                  updateConfigValue(
-                    setting,
-                    NotificationType.CONTRIBUTION_RECEIVED,
-                    ConfigName.THRESHOLD,
-                    e.target.value,
-                  )
-                }
-                size="sm"
-                placeholder="Select threshold"
-                width="auto"
-              >
-                <option value="1"> {'> 1 USD'} </option>
-                <option value="100"> {'> 100 USD'} </option>
-                <option value="1000"> {'> 1 000 USD'} </option>
-                <option value="10000"> {'> 10 000 USD'} </option>
-              </Select>
-              <Switch
-                id="contribution-received"
-                isChecked={
-                  getConfigValue(setting, NotificationType.CONTRIBUTION_RECEIVED, ConfigName.IS_ENABLED) === 'true'
-                }
-                onChange={(e) =>
-                  updateConfigValue(
-                    setting,
-                    NotificationType.CONTRIBUTION_RECEIVED,
-                    ConfigName.IS_ENABLED,
-                    e.target.checked ? 'true' : 'false',
-                  )
-                }
-              />
-            </HStack>
-          </FormControl>
+          <HorizontalFormField label="Contribution received" htmlFor="contribution-received">
+            <Select
+              value={getConfigValue(setting, NotificationType.CONTRIBUTION_RECEIVED, ConfigName.THRESHOLD) || ''}
+              onChange={(e) =>
+                updateConfigValue(setting, NotificationType.CONTRIBUTION_RECEIVED, ConfigName.THRESHOLD, e.target.value)
+              }
+              size="sm"
+              placeholder="Select threshold"
+              width="auto"
+            >
+              <option value="1"> {'> 1 USD'} </option>
+              <option value="100"> {'> 100 USD'} </option>
+              <option value="1000"> {'> 1 000 USD'} </option>
+              <option value="10000"> {'> 10 000 USD'} </option>
+            </Select>
+            <Switch
+              id="contribution-received"
+              isChecked={
+                getConfigValue(setting, NotificationType.CONTRIBUTION_RECEIVED, ConfigName.IS_ENABLED) === 'true'
+              }
+              onChange={(e) =>
+                updateConfigValue(
+                  setting,
+                  NotificationType.CONTRIBUTION_RECEIVED,
+                  ConfigName.IS_ENABLED,
+                  e.target.checked ? 'true' : 'false',
+                )
+              }
+            />
+          </HorizontalFormField>
         </VStack>
       ))}
     </VStack>

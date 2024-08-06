@@ -1,10 +1,12 @@
 import { useMutation } from '@apollo/client'
-import { FormControl, FormLabel, HStack, Select, Switch, VStack } from '@chakra-ui/react'
+import { Select, Switch, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
 import { MUTATION_UPDATE_USER_NOTIFICATIONS_SETTINGS } from '@/modules/profile/graphql/mutations/userNotificationsMutation'
 import { Body } from '@/shared/components/typography'
 import { UserNotificationSettings } from '@/types'
+
+import { HorizontalFormField } from '../common/HorizontalFormField'
 
 enum NotificationType {
   PROJECT_SUMMARY = 'user.projectUpdatesSummary',
@@ -73,41 +75,31 @@ export const ProjectNotifications = ({
         Project notifications
       </Body>
       <VStack spacing={4} align="stretch" p={4}>
-        <FormControl display="flex" alignItems="center" justifyContent="space-between">
-          <FormLabel htmlFor="project-updates" mb="0">
-            <Body size="lg">Project Updates</Body>
-          </FormLabel>
-          <HStack spacing={4}>
-            <Select
-              value={getConfigValue(NotificationType.PROJECT_SUMMARY, ConfigName.FREQUENCY) || ''}
-              onChange={(e) =>
-                updateConfigValue(NotificationType.PROJECT_SUMMARY, ConfigName.FREQUENCY, e.target.value)
-              }
-              size="sm"
-              placeholder="Select frequency"
-              width="auto"
-            >
-              <option value="weekly">Weekly</option>
-              <option value="monthly">Monthly</option>
-            </Select>
-            <Switch
-              id="project-updates"
-              isChecked={getConfigValue(NotificationType.PROJECT_SUMMARY, ConfigName.IS_ENABLED) === 'true'}
-              onChange={(e) =>
-                updateConfigValue(
-                  NotificationType.PROJECT_SUMMARY,
-                  ConfigName.IS_ENABLED,
-                  e.target.checked ? 'true' : 'false',
-                )
-              }
-            />
-          </HStack>
-        </FormControl>
+        <HorizontalFormField label="Project Updates" htmlFor="project-updates">
+          <Select
+            value={getConfigValue(NotificationType.PROJECT_SUMMARY, ConfigName.FREQUENCY) || ''}
+            onChange={(e) => updateConfigValue(NotificationType.PROJECT_SUMMARY, ConfigName.FREQUENCY, e.target.value)}
+            size="sm"
+            placeholder="Select frequency"
+            width="auto"
+          >
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+          </Select>
+          <Switch
+            id="project-updates"
+            isChecked={getConfigValue(NotificationType.PROJECT_SUMMARY, ConfigName.IS_ENABLED) === 'true'}
+            onChange={(e) =>
+              updateConfigValue(
+                NotificationType.PROJECT_SUMMARY,
+                ConfigName.IS_ENABLED,
+                e.target.checked ? 'true' : 'false',
+              )
+            }
+          />
+        </HorizontalFormField>
 
-        <FormControl display="flex" alignItems="center" justifyContent="space-between">
-          <FormLabel htmlFor="geyser-product-updates" mb="0">
-            <Body size="lg">Geyser product updates</Body>
-          </FormLabel>
+        <HorizontalFormField label="Geyser product updates" htmlFor="geyser-product-updates">
           <Switch
             id="geyser-product-updates"
             isChecked={getConfigValue(NotificationType.PRODUCT_UPDATES, ConfigName.IS_ENABLED) === 'true'}
@@ -119,7 +111,7 @@ export const ProjectNotifications = ({
               )
             }
           />
-        </FormControl>
+        </HorizontalFormField>
       </VStack>
     </VStack>
   )
