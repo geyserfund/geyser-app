@@ -7,7 +7,7 @@ import { Outlet, ScrollRestoration } from 'react-router-dom'
 import { client } from './config/apollo-client'
 import { Head } from './config/Head'
 import { configMatomo } from './config/matomo'
-import { AuthProvider, ChakraThemeProvider, NavProvider, ServiceWorkerProvider } from './context'
+import { AuthProvider, ChakraThemeProvider, ServiceWorkerProvider } from './context'
 import { BtcProvider } from './context/btc'
 
 const App = () => {
@@ -23,12 +23,10 @@ const App = () => {
           <ServiceWorkerProvider>
             <ApolloProvider client={client}>
               <AuthProvider>
-                <NavProvider>
-                  <BtcProvider>
-                    <Head />
-                    <Outlet />
-                  </BtcProvider>
-                </NavProvider>
+                <BtcProvider>
+                  <Head />
+                  <Outlet />
+                </BtcProvider>
               </AuthProvider>
             </ApolloProvider>
           </ServiceWorkerProvider>
