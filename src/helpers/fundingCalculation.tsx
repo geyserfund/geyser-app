@@ -9,7 +9,12 @@ import { useBTCConverter } from './useBTCConverter'
 const nationalShippingCost = __production__ ? 15 : 0.015
 const internationalShippingCost = __production__ ? 60 : 0.06
 
-export const useFundCalc = (state: IFundForm) => {
+export const useFundCalc = (
+  state: Pick<
+    IFundForm,
+    'rewardCurrency' | 'rewardsCost' | 'donationAmount' | 'shippingDestination' | 'rewardsByIDAndCount'
+  >,
+) => {
   const { btcRate } = useBtcContext()
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
 

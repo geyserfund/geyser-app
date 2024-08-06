@@ -11,31 +11,33 @@ import { useNotification } from '@/utils'
 
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
 
-export const FundingInitBottomContent = () => {
-  return <FundingInitSummary />
+export const FundingDetailsBottomContent = () => {
+  return <FundingDetailsSummary />
 }
 
-export const FundingInitSideContent = () => {
+export const FundingDetailsSideContent = () => {
   return (
     <CardLayout w="full" h="full">
-      <FundingInitSummary />
+      <FundingDetailsSummary />
     </CardLayout>
   )
 }
 
-export const FundingInitSummary = () => {
+export const FundingDetailsSummary = () => {
   const navigate = useNavigate()
-  const { project } = useProjectAtom()
   const toast = useNotification()
 
-  const { isFundingInputAmountValid } = useFundingFormAtom()
+  const { project } = useProjectAtom()
+
+  const { isFundingUserInfoValid } = useFundingFormAtom()
 
   const handleCheckoutButtonPressed = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     e.stopPropagation()
-    const { valid, title, description } = isFundingInputAmountValid
+    const { title, description, valid } = isFundingUserInfoValid
+
     if (valid) {
-      navigate(getPath('fundingDetails', project.name))
+      navigate(getPath('fundingPayment', project.name))
     } else {
       toast.error({
         title,

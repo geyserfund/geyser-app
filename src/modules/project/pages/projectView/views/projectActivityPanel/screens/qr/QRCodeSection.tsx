@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import Loader from '../../../../../../../../components/ui/Loader'
 import { FundingStatus, InvoiceStatus } from '../../../../../../../../types/generated/graphql'
-import { useFundingContext } from '../../../../../../context/FundingProvider'
+import { useFundingContext } from '../../../../../../context/FundingProvider2'
 import { useRefreshInvoice } from '../../../../../../funding/hooks/useRefreshInvoice'
 import { useRefundedSwapData } from '../../../../../../funding/state'
 import { GeneratingInvoice, InvoiceErrorView, QRCodeImage } from './components'

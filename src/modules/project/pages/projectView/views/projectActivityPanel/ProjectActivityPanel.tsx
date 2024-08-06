@@ -18,7 +18,7 @@ import {
   QuoteCurrency,
 } from '../../../../../../types'
 import { toInt, useCustomTheme, useMobileMode } from '../../../../../../utils'
-import { useFundingContext } from '../../../../context/FundingProvider'
+import { useFundingContext } from '../../../../context/FundingProvider2'
 import { FundingStages, useFundingStage } from '../../../../funding/state'
 import { standardProjectPageSideMargin } from '../../constants'
 import { FundingFormScreen, InfoScreen, InfoScreenSkeleton, QRScreen, SuccessScreen } from './screens'

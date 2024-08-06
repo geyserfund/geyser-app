@@ -25,7 +25,7 @@ const clearPollingAndSubscriptionAtom = atom(null, (get, set) => {
   set(subscriptionActiveAtom, false)
 })
 
-export const useFundPollingAndSubscription = () => {
+export const useFundPollingAndSubscriptionAtom = () => {
   const pollingFundingTx = useAtomValue(pollingFundingTxAtom)
   const subscriptionActive = useAtomValue(subscriptionActiveAtom)
 

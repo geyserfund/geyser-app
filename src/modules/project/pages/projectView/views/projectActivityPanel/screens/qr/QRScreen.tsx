@@ -6,7 +6,7 @@ import { ProjectState } from '@/modules/project/state/projectAtom'
 
 import { standardPadding } from '../../../../../../../../styles'
 import { useFundingInvoiceCancelMutation } from '../../../../../../../../types'
-import { useFundingContext } from '../../../../../../context/FundingProvider'
+import { useFundingContext } from '../../../../../../context/FundingProvider2'
 import { FundingStages, useFundingStage } from '../../../../../../funding/state'
 import { SectionTitleBlock } from '../../components/SectionTitleBlock'
 import { QRCodeSection } from './QRCodeSection'

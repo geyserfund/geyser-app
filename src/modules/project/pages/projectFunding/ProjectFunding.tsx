@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { Grant, Project, UserMeFragment, useWalletLimitQuery } from '../../../../types'
-import { FundingProvider, useFundingContext } from '../../context/FundingProvider'
+import { FundingProvider, useFundingContext } from '../../context/FundingProvider2'
 import { FundingStages, useFundingStage } from '../../funding/state'
 import { QRCodeSection } from '../projectView/views/projectActivityPanel/screens'
 import { FundingComplete } from './views/FundingComplete'

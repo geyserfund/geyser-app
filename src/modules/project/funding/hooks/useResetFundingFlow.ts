@@ -8,13 +8,13 @@ import {
   invoiceRefreshErrorAtom,
   useClearRefundedSwapData,
   useFundingStage,
-  useFundingTx,
+  useFundingTxAtom,
   weblnErrorAtom,
 } from '../state'
 
 export const useResetFundingFlow = () => {
   const { resetFundingStage } = useFundingStage()
-  const { resetFundingTx } = useFundingTx()
+  const { resetFundingTx } = useFundingTxAtom()
 
   const setFundingRequestErrored = useSetAtom(fundingRequestErrorAtom)
   const setInvoiceRefreshErrored = useSetAtom(invoiceRefreshErrorAtom)

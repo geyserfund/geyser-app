@@ -1,17 +1,18 @@
 import { useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router'
 
-import { useFundingContext } from '@/modules/project/context'
+import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { getPath } from '@/shared/constants'
 import { ProjectRewardFragment } from '@/types'
 import { toInt, useNotification } from '@/utils'
 
 export const useRewardBuy = (reward?: Pick<ProjectRewardFragment, 'id' | 'maxClaimable' | 'sold'>) => {
   const toast = useNotification()
-  const {
-    fundForm: { state: fundFormState, updateReward },
-    project,
-  } = useFundingContext()
+
+  const { project } = useProjectAtom()
+
+  const { formState, updateReward } = useFundingFormAtom()
 
   const navigate = useNavigate()
 
@@ -19,8 +20,8 @@ export const useRewardBuy = (reward?: Pick<ProjectRewardFragment, 'id' | 'maxCla
   const count = useMemo(() => {
     if (!reward) return 0
 
-    return (fundFormState.rewardsByIDAndCount && fundFormState.rewardsByIDAndCount[`${reward.id}`]) || 0
-  }, [fundFormState.rewardsByIDAndCount, reward])
+    return (formState.rewardsByIDAndCount && formState.rewardsByIDAndCount[`${reward.id}`]) || 0
+  }, [formState.rewardsByIDAndCount, reward])
 
   /** Checks if the reward is available to buy */
   const isAvailable = useMemo(() => {
@@ -39,7 +40,7 @@ export const useRewardBuy = (reward?: Pick<ProjectRewardFragment, 'id' | 'maxCla
         return
       }
 
-      const count = (fundFormState.rewardsByIDAndCount && fundFormState.rewardsByIDAndCount[`${reward.id}`]) || 0
+      const count = (formState.rewardsByIDAndCount && formState.rewardsByIDAndCount[`${reward.id}`]) || 0
 
       if (isAvailable || !reward.maxClaimable) {
         updateReward({ id: toInt(reward.id), count: count + 1 })
@@ -53,7 +54,7 @@ export const useRewardBuy = (reward?: Pick<ProjectRewardFragment, 'id' | 'maxCla
         })
       }
     },
-    [fundFormState.rewardsByIDAndCount, toast, updateReward, reward, isAvailable],
+    [formState.rewardsByIDAndCount, toast, updateReward, reward, isAvailable],
   )
 
   /** Adds reward item to the funding basket */

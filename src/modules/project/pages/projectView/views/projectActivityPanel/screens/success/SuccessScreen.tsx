@@ -13,7 +13,7 @@ import { QUERY_USER_BADGES } from '../../../../../../../../graphqlBase/queries/b
 import { getPath } from '../../../../../../../../shared/constants'
 import { lightModeColors, standardPadding } from '../../../../../../../../styles'
 import { UserBadge } from '../../../../../../../../types'
-import { useFundingContext } from '../../../../../../context/FundingProvider'
+import { useFundingContext } from '../../../../../../context/FundingProvider2'
 import {} from '../../components'
 import { ContributionInfoBox, ContributionInfoBoxVersion, ContributionShippingBox } from '../contributionInfo'
 import { useIsLightingMethodAtom } from '../qr/states/paymentMethodAtom'

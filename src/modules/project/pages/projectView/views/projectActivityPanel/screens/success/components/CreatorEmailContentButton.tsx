@@ -7,7 +7,7 @@ import { useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 
 import { MonoBody2 } from '../../../../../../../../../components/typography'
 import { copyTextToClipboard } from '../../../../../../../../../utils'
-import { useFundingContext } from '../../../../../../../context/FundingProvider'
+import { useFundingContext } from '../../../../../../../context/FundingProvider2'
 
 export const CreatorEmailContentButton = ({ ...props }: StackProps) => {
   const { t } = useTranslation()

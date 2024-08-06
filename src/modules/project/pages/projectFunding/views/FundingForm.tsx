@@ -7,7 +7,7 @@ import { FormStateError } from '../../../../../interfaces'
 import { MAX_FUNDING_AMOUNT_USD } from '../../../../../shared/constants'
 import { FundingInput, FundingResourceType, Project, UserMeFragment } from '../../../../../types'
 import { useNotification } from '../../../../../utils'
-import { useFundingContext } from '../../../context/FundingProvider'
+import { useFundingContext } from '../../../context/FundingProvider2'
 
 export type ProjectFundingFormState = {
   donationAmount: number
