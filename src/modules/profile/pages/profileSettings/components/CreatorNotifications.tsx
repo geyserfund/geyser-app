@@ -3,6 +3,7 @@ import { Avatar, HStack, Select, Switch, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { PiStar } from 'react-icons/pi'
 
+import { ImageWithReload } from '@/components/ui'
 import { MUTATION_UPDATE_CREATOR_NOTIFICATIONS_SETTINGS } from '@/modules/profile/graphql/mutations/creatorNotificationMutation'
 import { CardLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
@@ -110,7 +111,17 @@ export const CreatorNotifications = ({
         <CardLayout key={index} spacing={5}>
           <VStack align="stretch">
             <HStack>
-              {setting.project.image && <Avatar src={setting.project.image} name={setting.project.title} size="sm" />}
+              {setting.project.image && (
+                <ImageWithReload
+                  src={setting.project.image}
+                  width={'28px'}
+                  height={'28px'}
+                  maxHeight="28px"
+                  alignSelf={'start'}
+                  borderRadius="6px"
+                  objectFit="cover"
+                />
+              )}
               <Body size="md" medium>
                 {setting.project.title}
               </Body>
