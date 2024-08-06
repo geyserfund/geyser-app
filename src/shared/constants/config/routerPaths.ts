@@ -63,13 +63,13 @@ export enum PathName {
   projectFunding = 'funding',
   fundingDetails = 'details',
   fundingPayment = 'payment',
+  fundingPaymentFailed = 'failed',
   fundingPaymentLightning = 'lightning',
   fundingPaymentOnchain = 'onchain',
   fundingPaymentOnchainProcessing = 'processing',
   fundingPaymentOnchainRefund = 'refund',
   fundingPaymentOnchainRefundInitiated = 'initiated',
   fundingSuccess = 'success',
-  fundingFailed = 'failed',
 
   badges = 'badges',
   about = 'about',
@@ -169,6 +169,8 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingDetails}`,
   fundingPayment: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}`,
+  fundingPaymentFailed: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentFailed} `,
   fundingPaymentLightning: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentLightning}`,
   fundingPaymentOnchain: (projectName: string) =>
@@ -181,8 +183,6 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}/${PathName.fundingPaymentOnchainRefund}/${PathName.fundingPaymentOnchainRefundInitiated}`,
   fundingSuccess: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingSuccess}`,
-  fundingFailed: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingFailed}`,
 
   /** Refund Routes */
 
