@@ -79,7 +79,7 @@ export const FundingForm = ({ project, user, onFundingRequested = () => {} }: Pr
         )}
       </Text>
       <Box mb={3}>
-        <DonationInput inputGroup={{ padding: '2px' }} name="donationAmount" onChange={setState} />
+        <DonationInput />
 
         {formError?.donationAmount && (
           <Text color="secondary.red" fontSize="12px">

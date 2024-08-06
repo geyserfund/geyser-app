@@ -1,12 +1,5 @@
 export type { UseFundingFlowReturn } from '../../modules/project/funding/hooks/useFundingFlow'
 export { ConfirmationMethod, useFundingFlow } from '../../modules/project/funding/hooks/useFundingFlow'
-export type {
-  IFundForm,
-  IFundFormState,
-  UpdateReward,
-  UseFundingFormStateReturn,
-} from '../../modules/project/funding/hooks/useFundingFormState'
-export { useFundingFormState } from '../../modules/project/funding/hooks/useFundingFormState'
 export { useAllGeyserProjectEntries } from './useAllGeyserProjectEntries'
 export { useDebounce } from './useDebounce'
 export { useFormState } from './useFormState'

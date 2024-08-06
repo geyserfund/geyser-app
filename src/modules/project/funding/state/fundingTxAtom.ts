@@ -87,7 +87,7 @@ const fundingStatusCheckAtom = atom(
   },
 )
 
-export const useFundingTx = () => {
+export const useFundingTxAtom = () => {
   const fundingTx = useAtomValue(fundingTxAtom)
   const updateFundingTx = useSetAtom(fundingTxPartialUpdateAtom)
   const resetFundingTx = useSetAtom(resetFundingTxAtom)
@@ -99,7 +99,7 @@ export const useFundingTx = () => {
   }
 }
 
-export const useCheckFundingStatus = () => {
+export const useCheckFundingStatusAtom = () => {
   const _checkFundingStatus = useSetAtom(fundingStatusCheckAtom)
 
   const checkFundingStatus = useCallback(

@@ -1,6 +1,4 @@
-import { useFundingContext } from '@/modules/project/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { CardLayout } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
 
 import { FundingLayout } from '../../layouts/FundingLayout'
@@ -11,10 +9,6 @@ import { FundingInitBottomContent, FundingInitSideContent } from './sections/Fun
 export const FundingInit = () => {
   const { project } = useProjectAtom()
 
-  const {
-    fundForm: { setState },
-  } = useFundingContext()
-
   return (
     <FundingLayout
       backPath={getPath('project', project.name)}
@@ -22,9 +16,7 @@ export const FundingInit = () => {
       bottomContent={<FundingInitBottomContent />}
       containerProps={{ spacing: 6 }}
     >
-      <CardLayout w="full" spacing={1}>
-        <DonationInput name="donationAmount" onChange={setState} />
-      </CardLayout>
+      <DonationInput />
       <FundingInitRewards />
     </FundingLayout>
   )

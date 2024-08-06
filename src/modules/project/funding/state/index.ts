@@ -14,8 +14,8 @@ export {
   ConfirmationMethod,
   fundingTxAtom,
   selectedGoalIdAtom,
-  useCheckFundingStatus,
-  useFundingTx,
+  useCheckFundingStatusAtom,
+  useFundingTxAtom,
 } from './fundingTxAtom'
 export { invoiceRefreshErrorAtom, invoiceRefreshLoadingAtom } from './invoiceRefreshAtom'
 export { keyPairAtom, useKeyPairAtomValue, useSetKeyPairAtom } from './keyPairAtom'

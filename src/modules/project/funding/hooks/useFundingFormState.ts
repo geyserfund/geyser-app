@@ -11,23 +11,7 @@ import {
   WalletContributionLimits,
 } from '../../../../types/generated/graphql'
 import { commaFormatted, isProjectAnException } from '../../../../utils'
-
-export interface IFundForm {
-  donationAmount: number
-  rewardsCost: number
-  comment: string
-  anonymous: boolean
-  shippingDestination: ShippingDestination
-  shippingCost: number
-  email: string
-  media: string
-  funderUsername: string
-  funderAvatarURL: string
-  rewardsByIDAndCount?: { [key: string]: number } | undefined
-  rewardCurrency: RewardCurrency
-  totalAmount?: number
-  step: 'contribution' | 'info'
-}
+import { FundFormType } from '../state/fundingFormAtom'
 
 type UseFundStateProps = {
   rewards?: ProjectRewardForCreateUpdateFragment[]
@@ -38,7 +22,7 @@ type UseFundStateProps = {
 export type UpdateReward = (_: IRewardCount) => void
 
 export interface IFundFormState {
-  state: IFundForm
+  state: FundFormType
   setTarget: (event: any) => void
   setState: (name: string, value: any) => void
   updateReward: UpdateReward
@@ -54,26 +38,28 @@ export const useFundingFormState = ({ rewards, rewardCurrency, walletLimits }: U
 
   const [amountWarning, setAmountWarning] = useState('')
 
-  const initialState: IFundForm = useMemo(
+  const initialState: FundFormType = useMemo(
     () => ({
       donationAmount: 0,
       rewardsCost: 0,
-      comment: '',
+      totalAmount: 0,
       shippingDestination: ShippingDestination.National,
       shippingCost: 0,
       anonymous: isAnonymous, // The default user has id 0
       funderAvatarURL: user.imageUrl || '',
       funderUsername: user.username,
       email: '',
+      comment: '',
       media: '',
       rewardsByIDAndCount: undefined,
       rewardCurrency: rewardCurrency || RewardCurrency.Usdcent,
+      needsShipping: false,
       step: 'contribution',
     }),
     [isAnonymous, user.imageUrl, user.username, rewardCurrency],
   )
 
-  const [state, _setState] = useState<IFundForm>(initialState)
+  const [state, _setState] = useState<FundFormType>(initialState)
   const debouncedTotalAmount = useDebounce(state.totalAmount, 200)
   const { getTotalAmount } = useFundCalc(state)
 

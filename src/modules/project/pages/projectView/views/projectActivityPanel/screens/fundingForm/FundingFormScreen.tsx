@@ -6,10 +6,7 @@ import {
   useMobileMode,
   //  useNotification, validateEmail
 } from '../../../../../../../../utils'
-import { useFundingContext } from '../../../../../../context'
 import { ProjectFundingSummary } from '../../../../../../pages1/projectFunding/components/ProjectFundingSummary'
-import { FundingFormSection } from './views/FundingFormSection'
-import { FundingFormUserInfoSection } from './views/FundingFormUserInfoSection'
 
 type Props = {
   handleCloseButton: () => void
@@ -20,17 +17,6 @@ type Props = {
 
 export const FundingFormScreen = ({ handleCloseButton, handleFund, rewards, name }: Props) => {
   const isMobile = useMobileMode()
-
-  const {
-    fundForm: {
-      state: formState,
-      // hasSelectedRewards,
-      setState,
-      // validateInputAmount
-    },
-  } = useFundingContext()
-
-  // const { toast } = useNotification()
 
   // const handleSubmit = {
   //   contribution() {
@@ -85,11 +71,11 @@ export const FundingFormScreen = ({ handleCloseButton, handleFund, rewards, name
       spacing={0}
     >
       <Box width="100%" overflowY="auto" flex={1} px={{ base: '10px', lg: '20px' }} pt={standardPadding}>
-        {formState.step === 'contribution' ? (
+        {/* {formState.step === 'contribution' ? (
           <FundingFormSection onBackClick={handleCloseButton} />
         ) : (
-          <FundingFormUserInfoSection onBackClick={() => setState('step', 'contribution')} />
-        )}
+          <FundingDetailsUserEmail onBackClick={() => setState('step', 'contribution')} />
+        )} */}
       </Box>
       <VStack
         backgroundColor="neutral.50"

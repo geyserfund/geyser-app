@@ -1,11 +1,19 @@
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import React, { createContext, PropsWithChildren, useContext, useEffect } from 'react'
 
-import { FundingInput, FundingTxFragment, ProjectRewardFragment, WalletLimitsFragment } from '../../../types'
+import {
+  FundingInput,
+  FundingTxFragment,
+  ProjectPageWalletFragment,
+  ProjectRewardFragment,
+  WalletLimitsFragment,
+} from '../../../types'
 import { useProjectRewardsAPI } from '../API/useProjectRewardsAPI'
-import { useFundingFlow } from '../funding/hooks/useFundingFlow'
-import { useFundingFormState, UseFundingFormStateReturn } from '../funding/hooks/useFundingFormState'
+import { useFundPolling } from '../funding/hooks/useFundPolling'
+import { useFundSubscription } from '../funding/hooks/useFundSubscription'
+import { useResetFundingFlow } from '../funding/hooks/useResetFundingFlow'
 import { FundingFlowGraphQLError } from '../funding/state'
+import { FundingProject, fundingProjectAtom, resetFundingFormAtom } from '../funding/state/fundingFormAtom'
 import { projectAtom, ProjectState } from '../state/projectAtom'
 import { rewardsAtom } from '../state/rewardsAtom'
 import { walletAtom } from '../state/walletAtom'
@@ -23,14 +31,13 @@ type FundingContextProps = {
   hasWebLN: boolean
   project?: Partial<ProjectState> | null // Partial Project context, for usage inside fundingFlow, Only useful when ProjctProvider is not used
   limits?: WalletLimitsFragment | null
-  fundForm: UseFundingFormStateReturn
   projectGoalId?: string | null
 }
 
 interface FundingProviderProps extends PropsWithChildren {
-  project?: Partial<ProjectState> | null
-  limits?: WalletLimitsFragment | null
-  rewards?: ProjectRewardFragment[] | null
+  project: FundingProject
+  wallet?: ProjectPageWalletFragment
+  rewards: ProjectRewardFragment[]
 }
 
 export const FundingContext = createContext<FundingContextProps>({} as FundingContextProps)
@@ -38,25 +45,23 @@ export const FundingContext = createContext<FundingContextProps>({} as FundingCo
 export const useFundingContext = () => useContext(FundingContext)
 
 // Used if the project context is not available
-export const FundingProvider = ({ children, project, limits, rewards }: FundingProviderProps) => {
-  const fundingFlow = useFundingFlow({ project })
+export const FundingProvider = ({ children, project, wallet, rewards }: FundingProviderProps) => {
+  const resetFundingForm = useSetAtom(resetFundingFormAtom)
+  const resetFundingFlow = useResetFundingFlow()
+  const setFundingProject = useSetAtom(fundingProjectAtom)
 
-  const fundForm = useFundingFormState({
-    rewards: rewards || undefined,
-    rewardCurrency: project && project.rewardCurrency ? project.rewardCurrency : undefined,
-    walletLimits: limits?.contribution || ({} as any),
-  })
+  const { refetch } = useFundPolling()
+  useFundSubscription({ onComplete: () => refetch() })
 
   useEffect(() => {
+    setFundingProject({ ...project, wallet, rewards })
     return () => {
-      fundingFlow.resetFundingFlow()
-      fundForm.resetForm()
+      resetFundingFlow()
+      resetFundingForm()
     }
-  }, [])
+  }, [project, wallet, rewards, resetFundingFlow, resetFundingForm, setFundingProject])
 
-  return (
-    <FundingContext.Provider value={{ ...fundingFlow, project, limits, fundForm }}>{children}</FundingContext.Provider>
-  )
+  return <>{children}</>
 }
 
 /** Used if the project context is available */
@@ -69,7 +74,7 @@ export const FundingProviderWithProjectContext: React.FC<PropsWithChildren> = ({
   const rewards = useAtomValue(rewardsAtom)
 
   return (
-    <FundingProvider project={project} limits={wallet?.limits} rewards={rewards}>
+    <FundingProvider project={project} wallet={wallet} rewards={rewards}>
       {children}
     </FundingProvider>
   )

@@ -11,9 +11,12 @@ import { LandingNavBar } from './navigation/bottomNav/LandingNavBar'
 import { LoadingPage } from './pages/loading'
 import { dimensions, ID } from './shared/constants'
 import { useLayoutAnimation } from './shared/hooks'
+import { useInitBtcRate } from './shared/hooks/platform/useInitBtcRate'
 import { useMobileMode } from './utils'
 
 const AppLayout = () => {
+  // useInitBtcRate()
+
   const { loading } = useAuthContext()
 
   const isMobile = useMobileMode()

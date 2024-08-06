@@ -3,7 +3,7 @@ import { MouseEvent, MouseEventHandler } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { DonationInput } from '../../../../../../../../../components/molecules'
-import { useFundingContext } from '../../../../../../../context'
+// import { useFundingContext } from '../../../../../../../context'
 import { FundingInitRewards } from '../../../../../../../pages1/projectFunding/views/fundingInit/sections/FundingInitRewards'
 import { SectionTitle } from '../../../components/SectionTitle'
 import { SectionTitleBlock } from '../../../components/SectionTitleBlock'
@@ -16,9 +16,9 @@ export const FundingFormSection = ({ onBackClick }: Props) => {
   const { t } = useTranslation()
 
   // const { goals } = useProjectContext()
-  const {
-    fundForm: { setState },
-  } = useFundingContext()
+  // const {
+  //   fundForm: { setState },
+  // } = useFundingContext()
 
   const handleOnBackClick = (event: MouseEvent<HTMLButtonElement>) => {
     // goals.setProjectGoalId(null)
@@ -31,7 +31,7 @@ export const FundingFormSection = ({ onBackClick }: Props) => {
         <SectionTitleBlock title={t('Contribute')} onBackClick={handleOnBackClick} />
 
         <SectionTitle paddingTop="20px">{t('Make a donation')}</SectionTitle>
-        <DonationInput inputGroup={{ padding: '2px' }} name="donationAmount" onChange={setState} />
+        <DonationInput />
       </Box>
 
       <FundingInitRewards />

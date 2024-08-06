@@ -370,6 +370,20 @@ export const platformRoutes: RouteObject[] = [
             },
             children: [
               {
+                index: true,
+                async lazy() {
+                  const PaymentLoading = await ProjectFunding().then((m) => m.PaymentLoading)
+                  return { Component: PaymentLoading }
+                },
+              },
+              {
+                path: getPath('fundingPaymentFailed', PathName.projectName),
+                async lazy() {
+                  const FundingFailed = await ProjectFunding().then((m) => m.PaymentFailed)
+                  return { Component: FundingFailed }
+                },
+              },
+              {
                 path: getPath('fundingPaymentLightning', PathName.projectName),
                 async lazy() {
                   const PaymentLightning = await ProjectFunding().then((m) => m.PaymentLightning)
@@ -422,13 +436,6 @@ export const platformRoutes: RouteObject[] = [
             async lazy() {
               const FundingSuccess = await ProjectFunding().then((m) => m.FundingSuccess)
               return { Component: FundingSuccess }
-            },
-          },
-          {
-            path: getPath('fundingFailed', PathName.projectName),
-            async lazy() {
-              const FundingFailed = await ProjectFunding().then((m) => m.FundingFailed)
-              return { Component: FundingFailed }
             },
           },
         ],

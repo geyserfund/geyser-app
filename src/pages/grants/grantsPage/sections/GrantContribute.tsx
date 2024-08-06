@@ -2,7 +2,7 @@ import { Trans, useTranslation } from 'react-i18next'
 
 import { Body1, H3 } from '../../../../components/typography'
 import { CardLayout } from '../../../../shared/components/layouts'
-import { GrantsContributeModal } from '../../components/GrantsContributeModal'
+// import { GrantsContributeModal } from '../../components/GrantsContributeModal'
 
 export const GrantContribute = ({
   grantProjectName,
@@ -29,7 +29,7 @@ export const GrantContribute = ({
           ? t('Grant funds will be distributed based on community votes.')
           : t('Grant funds will be distributed by principled bitcoin board members.')}
       </Body1>
-      <GrantsContributeModal grantProjectName={grantProjectName} />
+      {/* <GrantsContributeModal grantProjectName={grantProjectName} /> */}
     </CardLayout>
   )
 }

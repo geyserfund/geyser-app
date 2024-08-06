@@ -3,6 +3,8 @@ import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsInfoCircle } from 'react-icons/bs'
 
+import { useAuthContext } from '@/context'
+
 import { AnonymousAvatar, SatoshiAmount } from '../../../../../../../../components/ui'
 import { useFundCalc } from '../../../../../../../../helpers'
 import {
@@ -46,6 +48,8 @@ export const ContributionInfoBox = ({ showGeyserFee, version, openedFromGrant, .
     project,
   } = useFundingContext()
 
+  const { user } = useAuthContext()
+
   const { getTotalAmount } = useFundCalc(formState)
 
   const [isFeeTooltipOpen, setFeeTooltipOpen] = useState(false)
@@ -66,7 +70,7 @@ export const ContributionInfoBox = ({ showGeyserFee, version, openedFromGrant, .
   const contributionAmount = getTotalAmount('sats', project.name) as Satoshis
   const { id: fundingTxId, invoiceStatus, status } = fundingTx
 
-  const { funderUsername, funderAvatarURL, anonymous: isFunderAnonymous, email: funderEmail } = formState
+  const { email: funderEmail } = formState
 
   const isPaid = invoiceStatus === InvoiceStatus.Paid || status === FundingStatus.Pending
 
@@ -116,7 +120,7 @@ export const ContributionInfoBox = ({ showGeyserFee, version, openedFromGrant, .
           <Text fontSize={'14px'} fontWeight={'medium'} textColor={'neutral.900'}>
             {t('Funding as')}:
           </Text>
-          {isFunderAnonymous ? (
+          {user.id ? (
             <HStack>
               <AnonymousAvatar seed={0} imageSize={'20px'} />
               <Text fontSize={'14px'} fontWeight={'normal'} color="neutral.700">
@@ -125,9 +129,9 @@ export const ContributionInfoBox = ({ showGeyserFee, version, openedFromGrant, .
             </HStack>
           ) : (
             <HStack>
-              <Avatar width={'20px'} height={'20px'} src={funderAvatarURL} />
+              <Avatar width={'20px'} height={'20px'} src={user.imageUrl || ''} />
               <Text fontSize={'14px'} fontWeight={'normal'} color="neutral.700">
-                {funderUsername}
+                {user.username}
               </Text>
             </HStack>
           )}

@@ -3,22 +3,23 @@ import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { PiCaretDown, PiCaretUp } from 'react-icons/pi'
 
+import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body, H2 } from '@/shared/components/typography'
 
 import { useFundCalc } from '../../../../../helpers'
-import { toInt } from '../../../../../utils'
-import { useFundingContext } from '../../../context'
+import { toInt, useMobileMode } from '../../../../../utils'
 import { Badge } from './Badge'
 
 export const ProjectFundingSummary = () => {
   const { t } = useTranslation()
   const { project } = useProjectAtom()
-  const { fundForm } = useFundingContext()
+
+  const isMobileMode = useMobileMode()
 
   const { rewards } = useRewardsAtom()
 
-  const { state: formState, hasSelectedRewards } = fundForm
+  const { formState, hasSelectedRewards } = useFundingFormAtom()
 
   const { getTotalAmount, getRewardsAmount } = useFundCalc(formState)
 
@@ -48,19 +49,22 @@ export const ProjectFundingSummary = () => {
     .filter(Boolean)
     .join(', ')
 
-  const hasDetails = formState.donationAmount > 0 || numberOfRewardsSelected > 0
+  const hasDetails = formState.donationAmount > 0 || numberOfRewardsSelected > 0 || getTotalAmount('dollar', name) >= 10
 
   const mobileDisplayStyle = { base: hasDetails && isMobileDetailsOpen ? 'flex' : 'none', lg: 'flex' }
 
   return (
-    <VStack
-      as={motion.div}
+    <motion.div
       layout
-      color={'neutral.700'}
-      fontWeight={'medium'}
-      width={'full'}
-      alignItems="flex-start"
-      spacing={{ base: 1, lg: 3 }}
+      style={{
+        width: '100%',
+        overflow: 'hidden',
+        alignItems: 'flex-start',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: isMobileMode ? 1 : 3,
+      }}
+      transition={{ type: 'spring', stiffness: 900, damping: 40 }}
     >
       <HStack as={motion.div} layout w="full" justifyContent={'space-between'}>
         <H2 size={{ base: 'lg', lg: '2xl' }} medium>
@@ -108,9 +112,22 @@ export const ProjectFundingSummary = () => {
             <Body size={{ base: 'sm', lg: 'md' }}>{items}</Body>
           </HStack>
         )}
+        {getTotalAmount('dollar', name) >= 10 && (
+          <HStack display={mobileDisplayStyle}>
+            <Body size={{ base: 'sm', lg: 'md' }}>{`${t('You will Receive')}: `}</Body>
+            <HStack>
+              <Badge
+                donationAmountInDollars={getTotalAmount('dollar', name)}
+                height={{ base: '16px', lg: '20px' }}
+                width={{ base: '16px', lg: '20px' }}
+              />
+              <Body size={{ base: 'sm', lg: 'md' }}>{t('Badge')}</Body>
+            </HStack>
+          </HStack>
+        )}
       </VStack>
 
-      <HStack as={motion.div} layout>
+      <HStack>
         <Body size={{ base: 'md', lg: 'xl' }} light>
           {`${t('Total')}: `}
         </Body>
@@ -124,20 +141,6 @@ export const ProjectFundingSummary = () => {
           {`($${getTotalAmount('dollar', name)})`}
         </Body>
       </HStack>
-
-      {getTotalAmount('dollar', name) >= 10 && (
-        <HStack display={mobileDisplayStyle}>
-          <Body size={{ base: 'sm', lg: 'md' }}>{`${t('You will Receive')}: `}</Body>
-          <HStack>
-            <Badge
-              donationAmountInDollars={getTotalAmount('dollar', name)}
-              height={{ base: '16px', lg: '20px' }}
-              width={{ base: '16px', lg: '20px' }}
-            />
-            <Body size={{ base: 'sm', lg: 'md' }}>{t('Badge')}</Body>
-          </HStack>
-        </HStack>
-      )}
-    </VStack>
+    </motion.div>
   )
 }

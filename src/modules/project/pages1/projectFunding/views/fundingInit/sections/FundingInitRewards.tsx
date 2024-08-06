@@ -1,10 +1,10 @@
 import { Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { H2 } from '@/shared/components/typography'
 
-import { useFundingContext } from '../../../../../context'
 import { FundingFormRewardItem } from '../../../../../pages/projectView/views/projectActivityPanel/components'
 
 type Props = {
@@ -15,9 +15,8 @@ export const FundingInitRewards = ({ readOnly }: Props) => {
   const { t } = useTranslation()
 
   const { rewards } = useRewardsAtom()
-  const {
-    fundForm: { state },
-  } = useFundingContext()
+
+  const { formState } = useFundingFormAtom()
 
   const hasRewards = rewards && rewards.length
 
@@ -25,7 +24,7 @@ export const FundingInitRewards = ({ readOnly }: Props) => {
     return null
   }
 
-  const rewardsById = state.rewardsByIDAndCount || {}
+  const rewardsById = formState.rewardsByIDAndCount || {}
 
   const hasSelectedRewards = Boolean(Object.keys(rewardsById).reduce((prev, key) => prev + (rewardsById[key] || 0), 0))
 

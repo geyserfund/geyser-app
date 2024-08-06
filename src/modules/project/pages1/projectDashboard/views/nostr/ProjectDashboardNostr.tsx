@@ -2,22 +2,20 @@ import { CopyIcon } from '@chakra-ui/icons'
 import { HStack, IconButton, Input, InputGroup, InputRightElement, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiInfo } from 'react-icons/pi'
 import { TbWorld } from 'react-icons/tb'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body } from '@/shared/components/typography'
+import { Feedback, FeedBackVariant } from '@/shared/molecules'
 
 import { CardLayout, SkeletonLayout } from '../../../../../../shared/components/layouts'
-import { useCustomTheme, useNotification } from '../../../../../../utils'
+import { useNotification } from '../../../../../../utils'
 import { DashboardLayout } from '../../common'
 import { ExportNostrKeysModal } from './components/ExportNostrKeysModal'
 
 export const ProjectDashboardNostr = () => {
   const { t } = useTranslation()
   const { toast } = useNotification()
-
-  const { colors } = useCustomTheme()
 
   const { project } = useProjectAtom()
 
@@ -75,22 +73,10 @@ export const ProjectDashboardNostr = () => {
         <VStack width="full" alignItems="flex-start">
           <Body medium>{t('Your Nostr Private Key Kit (nsec)')}</Body>
           <CardLayout>
-            <HStack
-              padding={4}
-              backgroundColor="warning.2"
-              spacing={3}
-              w="full"
-              borderRadius="12px"
-              alignItems={'center'}
-              justifyContent="start"
-              border="1px solid"
-              borderColor="warning.6"
-            >
-              <PiInfo color={colors.amber[11]} size="20px" />
-              <Body size="sm" color="warning.11">
-                {t('Warning: Before exporting your private keys, make sure to read the following message.')}
-              </Body>
-            </HStack>
+            <Feedback
+              variant={FeedBackVariant.WARNING}
+              text={t('Warning: Before exporting your private keys, make sure to read the following message.')}
+            />
 
             <Body size="sm">
               {t(

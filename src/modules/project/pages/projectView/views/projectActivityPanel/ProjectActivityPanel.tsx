@@ -2,12 +2,12 @@ import { Box } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { useContext, useEffect } from 'react'
 
+import { FundFormType } from '@/modules/project/funding/state/fundingFormAtom'
 import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 
 import { AuthContext } from '../../../../../../context'
 import { useBtcContext } from '../../../../../../context/btc'
 import { useAuthModal } from '../../../../../../pages/auth/hooks'
-import { IFundForm } from '../../../../../../shared/hooks'
 import {
   FundingInput,
   FundingResourceType,
@@ -72,10 +72,10 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
   }, [setFormState, user])
 
   useEffect(() => {
-    if (!formState.anonymous && (!user || !user.id)) {
+    if (!user || !user.id) {
       setFormState('anonymous', true)
     }
-  }, [formState.anonymous, loginOnOpen, setFormState, user])
+  }, [loginOnOpen, setFormState, user])
 
   // useEffect(() => {
   //   if (fundingStage === FundingStages.completed) {
@@ -89,8 +89,8 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
     resetForm()
   }
 
-  const formatFundingInput = (state: IFundForm) => {
-    const { donationAmount, rewardsByIDAndCount, email, anonymous, comment, media } = state
+  const formatFundingInput = (state: FundFormType) => {
+    const { donationAmount, rewardsByIDAndCount, email, comment, media } = state
 
     const orderItemInputs: OrderItemInput[] = []
     if (hasSelectedRewards && rewardsByIDAndCount) {
@@ -108,7 +108,7 @@ export const ProjectActivityPanel = ({ resourceType, resourceId }: Props) => {
 
     const input: FundingInput = {
       projectId: toInt(project?.id),
-      anonymous,
+      anonymous: !user || !user.id,
       donationAmount: toInt(donationAmount),
       metadataInput: {
         ...(email && { email }),
