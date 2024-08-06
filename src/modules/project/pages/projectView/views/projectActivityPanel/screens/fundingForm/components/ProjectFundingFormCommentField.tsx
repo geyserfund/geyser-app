@@ -1,7 +1,7 @@
 import { CloseIcon } from '@chakra-ui/icons'
 import { Box, Button, HStack, HTMLChakraProps, Image, Text, Tooltip, useBoolean, useDisclosure } from '@chakra-ui/react'
 import { IGif } from '@giphy/js-types'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { GifIcon } from '../../../../../../../../../components/icons'
@@ -24,14 +24,11 @@ export const ProjectFundingFormCommentField = ({ comment, setTarget, setFormStat
   const { isAnonymous, user } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
 
-  const textAreaRef = useRef<HTMLTextAreaElement>(null)
-
   const logoutConfirmationModal = useModal()
 
   const { isOpen: isGIFModalOpen, onOpen: onGIFModalOpened, onClose: onGIFModalClosed } = useDisclosure()
 
   const onGIFModalOpenClick = () => {
-    textAreaRef.current?.blur()
     onGIFModalOpened()
   }
 
@@ -50,7 +47,6 @@ export const ProjectFundingFormCommentField = ({ comment, setTarget, setFormStat
       <HStack width="100%" position="relative">
         <Box width="100%">
           <TextArea
-            ref={textAreaRef}
             pr={16}
             data-testid="funding-comment-input"
             placeholder={t('Leave a public message here.')}

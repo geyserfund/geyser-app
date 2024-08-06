@@ -1,11 +1,11 @@
-import { Box, Button, HStack, Input, Spinner, StackProps, Textarea, Tooltip, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Input, Spinner, StackProps, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { PiArrowLeft, PiImages } from 'react-icons/pi'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { FileUpload } from '@/components/molecules'
-import { ImageWithReload } from '@/components/ui'
+import { ImageWithReload, TextArea } from '@/components/ui'
 import Loader from '@/components/ui/Loader'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
@@ -237,7 +237,7 @@ export const PostCreateEdit = () => {
                   onKeyDown={handleKeyDown}
                 />
 
-                <Textarea
+                <TextArea
                   id={'entry-description-input'}
                   border="none"
                   _focus={{ border: 'none' }}
@@ -249,7 +249,7 @@ export const PostCreateEdit = () => {
                   paddingX={'15px'}
                   paddingY={0}
                   name="description"
-                  minHeight={12}
+                  minHeight={7}
                   value={entry.description}
                   onChange={handleInput}
                   onKeyDown={handleKeyDown}
