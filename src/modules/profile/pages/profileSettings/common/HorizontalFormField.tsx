@@ -6,14 +6,20 @@ import { Body } from '@/shared/components/typography'
 interface HorizontalFormFieldProps {
   label: string
   htmlFor: string
+  icon?: ReactNode
   children: ReactNode
 }
 
-export const HorizontalFormField = ({ label, htmlFor, children }: HorizontalFormFieldProps) => {
+export const HorizontalFormField = ({ label, htmlFor, icon, children }: HorizontalFormFieldProps) => {
   return (
     <FormControl display="flex" alignItems="center" justifyContent="space-between">
       <FormLabel htmlFor={htmlFor} mb="0">
-        <Body size="lg">{label}</Body>
+        <HStack spacing={1}>
+          {icon}
+          <Body size="sm" color="neutralAlpha.12" medium>
+            {label}
+          </Body>
+        </HStack>
       </FormLabel>
       <HStack spacing={4}>{children}</HStack>
     </FormControl>

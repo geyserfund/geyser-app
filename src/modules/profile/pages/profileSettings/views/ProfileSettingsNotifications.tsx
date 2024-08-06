@@ -28,10 +28,12 @@ export const ProfileSettingsNotifications = () => {
     <ProfileSettingsLayout>
       <VStack w="100%" spacing={6} flexGrow={1} px={{ base: 0, lg: 6 }}>
         <VStack w="100%" alignItems="flex-start">
-          <Body size="lg" bold>
+          <Body fontSize={'24px'} medium>
             Notifications
           </Body>
-          <Body>Customize your profile and project notifications.</Body>
+          <Body size="xs" color="neutralAlpha.11" regular>
+            Customize your profile and project notifications.
+          </Body>
         </VStack>
         <CreatorNotifications creatorNotificationSettings={creatorNotificationSettings} />
         <Divider />
