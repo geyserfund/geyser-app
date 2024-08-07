@@ -1,6 +1,5 @@
 import { useMutation } from '@apollo/client'
 import { HStack, Select, Switch, VStack } from '@chakra-ui/react'
-import { useToast } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { PiStar } from 'react-icons/pi'
 
@@ -9,6 +8,7 @@ import { MUTATION_UPDATE_CREATOR_NOTIFICATIONS_SETTINGS } from '@/modules/profil
 import { CardLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { CreatorNotificationSettings } from '@/types'
+import { useNotification } from '@/utils'
 
 import { HorizontalFormField } from '../common/HorizontalFormField'
 
@@ -37,7 +37,7 @@ export const CreatorNotifications = ({
   }, [creatorNotificationSettings])
 
   const [updateNotificationSetting] = useMutation(MUTATION_UPDATE_CREATOR_NOTIFICATIONS_SETTINGS)
-  const toast = useToast()
+  const toast = useNotification()
 
   const getConfigValue = (
     creatorNotificationSettings: CreatorNotificationSettings,
@@ -110,12 +110,9 @@ export const CreatorNotifications = ({
       })
 
       // Show success toast
-      toast({
+      toast.success({
         title: 'Update successful',
         description: 'Notification setting has been updated.',
-        status: 'success',
-        duration: 3000,
-        position: 'top-right',
       })
     } catch (error) {
       // Revert the optimistic update
@@ -130,12 +127,9 @@ export const CreatorNotifications = ({
       )
 
       // Show error toast
-      toast({
+      toast.error({
         title: 'Update failed',
         description: 'Failed to update notification setting. Please try again.',
-        status: 'error',
-        duration: 5000,
-        position: 'top-right',
       })
     }
   }
