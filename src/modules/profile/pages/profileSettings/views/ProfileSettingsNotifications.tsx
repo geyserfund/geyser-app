@@ -9,7 +9,7 @@ import { CreatorNotificationSettings, UserNotificationSettings } from '@/types'
 
 import { ProfileSettingsLayout } from '../common/ProfileSettingsLayout'
 import { CreatorNotifications } from '../components/CreatorNotifications'
-import { ProjectNotifications } from '../components/ProjectNotifications'
+import { UserNotifications } from '../components/UserNotifications'
 
 export const ProfileSettingsNotifications = () => {
   const { userId } = useParams()
@@ -37,7 +37,7 @@ export const ProfileSettingsNotifications = () => {
         </VStack>
         <CreatorNotifications creatorNotificationSettings={creatorNotificationSettings} />
         <Divider />
-        {userNotificationSettings && <ProjectNotifications userNotificationSettings={userNotificationSettings} />}
+        {userNotificationSettings && <UserNotifications userNotificationSettings={userNotificationSettings} />}
       </VStack>
     </ProfileSettingsLayout>
   )

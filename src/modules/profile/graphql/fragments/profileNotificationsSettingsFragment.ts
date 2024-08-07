@@ -46,3 +46,16 @@ export const FRAGMENT_PROFILE_NOTIFICATIONS_SETTINGS = gql`
     }
   }
 `
+
+export const FRAGMENT_USER_NOTIFICATION_SETTINGS = gql`
+  ${FRAGMENT_NOTIFICATION_SETTINGS}
+
+  fragment UserNotificationsSettings on ProfileNotificationSettings {
+    userSettings {
+      userId
+      notificationSettings {
+        ...NotificationSettings
+      }
+    }
+  }
+`

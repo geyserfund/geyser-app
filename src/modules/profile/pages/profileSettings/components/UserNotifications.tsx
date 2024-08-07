@@ -19,7 +19,7 @@ enum ConfigName {
   IS_ENABLED = 'is_enabled',
 }
 
-export const ProjectNotifications = ({
+export const UserNotifications = ({
   userNotificationSettings,
 }: {
   userNotificationSettings: UserNotificationSettings
