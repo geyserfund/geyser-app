@@ -38,6 +38,7 @@ export const ProjectPageDashboardInternalRoutes = [
   getPath('dashboardWallet', PathName.projectName),
   getPath('dashboardNostr', PathName.projectName),
   getPath('dashboardSettings', PathName.projectName),
+  getPath('dashboardNotifications', PathName.projectName),
   getPath('dashboardAffiliates', PathName.projectName),
 ]
 
