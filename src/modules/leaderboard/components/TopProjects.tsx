@@ -2,7 +2,7 @@ import { HStack, Image, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { GlobalProjectLeaderboardRow, LeaderboardPeriod } from '@/types'
-import { commaFormatted, useMobileMode } from '@/utils'
+import { commaFormatted } from '@/utils'
 
 import { useTopProjects } from '../hooks'
 import { ScrollableList } from './ScrollableList'
