@@ -2,7 +2,8 @@ import { Button, VStack } from '@chakra-ui/react'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Body1 } from '../../../components/typography'
+import { Body } from '@/shared/components/typography'
+
 import { TextInputBox } from '../../../components/ui'
 import { useAuthContext } from '../../../context'
 import { MfaAction, OtpResponseFragment, useUserEmailVerifyMutation } from '../../../types'
@@ -106,7 +107,7 @@ export const VerifyOneTimePassword = ({
     <>
       <VStack spacing="10px">
         <VStack spacing="10px" w="full">
-          <Body1 semiBold>{t('OTP input')}</Body1>
+          <Body medium>{t('OTP input')}</Body>
           <TextInputBox
             size="lg"
             placeholder="12123"
@@ -120,13 +121,20 @@ export const VerifyOneTimePassword = ({
         </VStack>
 
         <VStack w="full" spacing="10px">
-          <Button w="full" variant="secondary" onClick={handleSendCodeAgain} isDisabled={!user.email || timeLeft > 0}>
+          <Button
+            w="full"
+            variant="outline"
+            colorScheme="neutral1"
+            onClick={handleSendCodeAgain}
+            isDisabled={!user.email || timeLeft > 0}
+          >
             {t('Send code again')}
             {timeLeft > 0 && `( ${timeLeft}s )`}
           </Button>
           <Button
             w="full"
-            variant="primary"
+            variant="solid"
+            colorScheme="primary1"
             onClick={handleConfirm}
             isLoading={loading}
             isDisabled={!otpCode || otpCode.length !== 6}

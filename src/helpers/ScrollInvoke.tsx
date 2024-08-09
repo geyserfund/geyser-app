@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { useListenerState } from '../hooks'
+import { useListenerState } from '../shared/hooks'
 
 interface ScrollInvokeProps {
   elementId?: string

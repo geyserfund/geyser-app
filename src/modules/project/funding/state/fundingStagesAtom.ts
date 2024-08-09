@@ -2,13 +2,9 @@ import { atom, useAtom, useSetAtom } from 'jotai'
 import { atomEffect } from 'jotai-effect'
 
 import {
-  paymentMethodAtom,
-  PaymentMethods,
-} from '../../pages/projectView/views/projectActivityPanel/screens/qr/states/paymentMethodAtom'
-import {
   OnChainStatus,
   onChainStatusAtom,
-} from '../../pages/projectView/views/projectActivityPanel/screens/qr/views/onchain/states/onChainStatus'
+} from '../../pages1/projectFunding/views/fundingPayment/views/paymentOnchain/states'
 import { findNextFundingStage, generatePrivatePublicKeyPair } from '../utils/helpers'
 import { keyPairAtom } from './keyPairAtom'
 import { pollingFundingTxAtom, subscriptionActiveAtom } from './pollingFundingTx'
@@ -46,7 +42,6 @@ export const fundingStageAtomEffect = atomEffect((get, set) => {
     set(pollingFundingTxAtom, 0)
 
     // reset subscription method
-    set(paymentMethodAtom, PaymentMethods.lightning)
     set(onChainStatusAtom, OnChainStatus.prompt)
 
     // reset key pair

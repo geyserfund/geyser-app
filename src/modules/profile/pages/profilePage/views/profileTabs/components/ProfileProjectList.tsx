@@ -1,4 +1,4 @@
-import { CardLayout } from '../../../../../../../components/layouts'
+import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { ProjectForProfilePageFragment } from '../../../../../../../types'
 import { ProfileProjectCard } from './ProfileProjectCard'
 

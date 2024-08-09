@@ -16,16 +16,12 @@ import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
 
-import { CardLayout } from '../../../../components/layouts'
-import { Modal } from '../../../../components/layouts'
+import { AvatarElement } from '@/shared/molecules/AvatarElement'
+
 import { H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
-import { getPath } from '../../../../constants'
-import {
-  ProjectGrantApplicantContributorsModal,
-  useProjectGrantApplicantContributorsModal,
-} from '../../../../modules/project/pages/projectView/views/projectActivityPanel/screens/info/components/ProjectGrantApplicantContributorsModal'
-import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
+import { CardLayout, Modal } from '../../../../shared/components/layouts'
+import { getPath } from '../../../../shared/constants'
 import { fonts } from '../../../../styles'
 import {
   GrantApplicantContributor,
@@ -127,8 +123,6 @@ const ContributorsAvatarDisplay = ({
   contributors: GrantApplicantContributor[]
   currentContributor: GrantApplicantContributor | null | false
 }) => {
-  const grantApplicantContributorsModal = useProjectGrantApplicantContributorsModal()
-
   const { colors } = useTheme()
 
   const isMobile = useMobileMode()
@@ -148,7 +142,6 @@ const ContributorsAvatarDisplay = ({
         zIndex={2}
         onClick={(e) => {
           e.stopPropagation()
-          grantApplicantContributorsModal.onOpen()
         }}
       >
         <AvatarGroup size="sm">
@@ -192,10 +185,6 @@ const ContributorsAvatarDisplay = ({
           )}
         </AvatarGroup>
       </Box>
-      <ProjectGrantApplicantContributorsModal
-        grantApplicantContributors={contributors}
-        {...grantApplicantContributorsModal}
-      />
     </>
   )
 }

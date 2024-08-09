@@ -1,7 +1,7 @@
 import { Avatar, HStack, Link, Text } from '@chakra-ui/react'
 import { Link as ReactRouterLink } from 'react-router-dom'
 
-import { getPath } from '../../constants'
+import { getPath } from '../../shared/constants'
 import { Project } from '../../types/generated/graphql'
 import { toSmallImageUrl } from '../../utils'
 

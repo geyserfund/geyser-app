@@ -11,7 +11,7 @@ import {
   lucasUrl,
   pacoUrl,
   zuccoUrl,
-} from '../../../constants'
+} from '../../../shared/constants'
 import { GrantBoardMember } from '../../../types'
 import { useMobileMode } from '../../../utils'
 import { BitcoinerCard } from './BitcoinerCard'

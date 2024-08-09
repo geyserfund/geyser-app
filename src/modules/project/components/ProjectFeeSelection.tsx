@@ -1,6 +1,8 @@
-import { Box, HStack, Text, useRadio, useRadioGroup, VStack } from '@chakra-ui/react'
+import { Box, HStack, useRadio, useRadioGroup, VStack } from '@chakra-ui/react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { Body } from '@/shared/components/typography'
 
 import { neutralColorsLight } from '../../../styles/colors'
 
@@ -39,33 +41,34 @@ export const ProjectFeeSelection: React.FC<ProjectFeeSelectionProps> = ({ readOn
 
   return (
     <VStack
-      border="2px solid"
-      borderColor="neutral.200"
-      backgroundColor="primary.50"
+      border="1px solid"
+      borderColor="neutral1.6"
+      backgroundColor="primary1.3"
       borderRadius="8px"
       alignItems="flex-start"
       padding="20px"
-      spacing="20px"
     >
-      <Text variant="body1" fontWeight="500">
+      <Body size="md" medium>
         {t('Support Geyser')}
-      </Text>
+      </Body>
 
-      <Text>
+      <Body size="sm">
         {t(
           'Geyser provides you with a platform to showcase and amplify your project. Consider giving some value back to us so we can keep improving our product.',
         )}
-      </Text>
+      </Body>
       <VStack width="100%" alignItems="flex-start" spacing="5px">
-        <Text fontWeight="500">{t('Choose Geyser split per transaction:')}</Text>
+        <Body size="sm" medium>
+          {t('Choose Geyser split per transaction:')}
+        </Body>
         <HStack {...group} spacing={4}>
           {options.map((option) => {
             const radio = getRadioProps({ value: option.value })
             return (
               <RadioCard key={option.value} {...radio} isDisabled={readOnly}>
-                <Text variant="body1" fontWeight="700">
+                <Body size="xs" bold>
                   {option.label}
-                </Text>
+                </Body>
               </RadioCard>
             )
           })}

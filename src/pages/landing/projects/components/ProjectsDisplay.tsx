@@ -1,8 +1,8 @@
 import { HStack, Skeleton, Stack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { LandingCardBaseSkeleton } from '../../../../components/layouts'
 import { SortType, useFilterContext } from '../../../../context'
+import { LandingCardBaseSkeleton } from '../../../../shared/components/layouts'
 import {
   OrderByDirection,
   Project,

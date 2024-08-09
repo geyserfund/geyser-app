@@ -3,13 +3,13 @@ import { HTMLChakraProps } from '@chakra-ui/system'
 import { useTranslation } from 'react-i18next'
 
 import { LightningIcon, SatoshiIconTilted } from '../../../../components/icons'
-import { SkeletonLayout } from '../../../../components/layouts'
 import { ExternalAccountLinkIcon, TransactionTime } from '../../../../components/molecules'
 import { renderFunderBadges } from '../../../../components/molecules/projectActivity/renderFunderBadges'
 import { MonoBody1 } from '../../../../components/typography'
 import { AnonymousAvatar, AvatarLink, LinkableAvatar } from '../../../../components/ui'
-import { getPath } from '../../../../constants'
 import { computeFunderBadges, getAvatarMetadata } from '../../../../helpers'
+import { SkeletonLayout } from '../../../../shared/components/layouts'
+import { getPath } from '../../../../shared/constants'
 import { fonts } from '../../../../styles'
 import { FundingTxForLandingPageFragment, FundingTxFragment } from '../../../../types'
 import { commaFormatted, getRandomOrb, toSmallImageUrl } from '../../../../utils'
@@ -57,7 +57,7 @@ export const ContributionActivityItem = ({ fundingTx, dateTime, count, showsProj
         return (
           <AvatarLink
             title={resource.title}
-            path={getPath('entry', resource.id)}
+            path={getPath('projectPostView', fundingTx.projectId, resource.id)}
             imageSrc={toSmallImageUrl(`${resource.image}`)}
           />
         )
@@ -96,9 +96,9 @@ export const ContributionActivityItem = ({ fundingTx, dateTime, count, showsProj
             )}
             {count && count > 1 && (
               <HStack backgroundColor="neutral.200" px="3px" borderRadius="sm" spacing="2px">
-                <Text fontFamily={fonts.inter} fontSize="12px" fontWeight={500}>{`${count}x`}</Text>
+                <Text fontFamily={fonts.brand} fontSize="12px" fontWeight={500}>{`${count}x`}</Text>
                 <LightningIcon height="15px" width="10px" />
-                <Text fontFamily={fonts.inter} fontSize="12px" fontWeight={500}>
+                <Text fontFamily={fonts.brand} fontSize="12px" fontWeight={500}>
                   {t('STREAMS')}
                 </Text>
               </HStack>

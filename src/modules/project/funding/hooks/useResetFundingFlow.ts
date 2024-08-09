@@ -8,13 +8,14 @@ import {
   invoiceRefreshErrorAtom,
   useClearRefundedSwapData,
   useFundingStage,
-  useFundingTx,
+  useFundingTxAtom,
   weblnErrorAtom,
 } from '../state'
+import { useFundPollingAndSubscriptionAtom } from '../state/pollingFundingTx'
 
 export const useResetFundingFlow = () => {
   const { resetFundingStage } = useFundingStage()
-  const { resetFundingTx } = useFundingTx()
+  const { resetFundingTx } = useFundingTxAtom()
 
   const setFundingRequestErrored = useSetAtom(fundingRequestErrorAtom)
   const setInvoiceRefreshErrored = useSetAtom(invoiceRefreshErrorAtom)
@@ -24,6 +25,8 @@ export const useResetFundingFlow = () => {
 
   const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
   const setRefundedSwapData = useClearRefundedSwapData()
+
+  const { clearPollingAndSubscription } = useFundPollingAndSubscriptionAtom()
 
   const resetFundingFlow = useCallback(() => {
     resetFundingStage()
@@ -36,6 +39,7 @@ export const useResetFundingFlow = () => {
     setCurrentSwapId('')
 
     setRefundedSwapData()
+    clearPollingAndSubscription()
   }, [
     resetFundingStage,
     setFundingRequestErrored,
@@ -44,8 +48,8 @@ export const useResetFundingFlow = () => {
     setWebLNErrored,
     resetFundingTx,
     setCurrentSwapId,
-
     setRefundedSwapData,
+    clearPollingAndSubscription,
   ])
 
   return resetFundingFlow

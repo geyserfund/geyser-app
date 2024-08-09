@@ -1,9 +1,9 @@
 import { Button, HStack, Input, SkeletonCircle, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { SkeletonLayout } from '../../../../../components/layouts'
 import { H3 } from '../../../../../components/typography'
 import { TextArea } from '../../../../../components/ui'
+import { SkeletonLayout } from '../../../../../shared/components/layouts'
 import { useNotification } from '../../../../../utils'
 import { useUserProfileAtomValue } from '../../../state'
 import { EditableAvatar } from '../../profilePage/components'
@@ -49,7 +49,7 @@ export const ProfileForm = ({ isLoading }: { isLoading?: boolean }) => {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
+      <form style={{ width: '100%' }} onSubmit={onSubmit}>
         <VStack spacing="30px" w="full">
           <VStack w="full" align="start" gap={3}>
             <H3>{t('Profile information')}</H3>

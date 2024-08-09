@@ -9,7 +9,7 @@ import {
   DefaultMetaTwitterCard,
   DefaultMetaTwitterSite,
   DefaultMetaType,
-} from '../constants'
+} from '../shared/constants'
 type HeadProps = {
   title?: string
   description?: string

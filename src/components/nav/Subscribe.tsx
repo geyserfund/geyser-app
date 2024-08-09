@@ -24,7 +24,7 @@ import { FaTelegramPlane } from 'react-icons/fa'
 import { RiTwitterXLine } from 'react-icons/ri'
 
 import { createSubscriber } from '../../api'
-import { GeyserTelegramUrl, GeyserTwitterUrl } from '../../constants'
+import { GeyserTelegramUrl, GeyserTwitterUrl } from '../../shared/constants'
 import { useMobileMode, useNotification, validateEmail } from '../../utils'
 import { ButtonComponent, TextInputBox } from '../ui'
 

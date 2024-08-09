@@ -2,10 +2,11 @@ import { Box, Stack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import { AvatarElement } from '@/shared/molecules/AvatarElement'
+
 import { H2, H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
-import { getPath } from '../../../../constants'
-import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
+import { getPath } from '../../../../shared/constants'
 import { useFeaturedProjectForLandingPageQuery } from '../../../../types'
 import { FundingStatWithFollow } from '../../components/FundingStatWithFollow'
 import { FeaturedCardSkeleton } from './FeaturedSkeleton'

@@ -31,7 +31,7 @@ export function SelectComponent<T, S extends boolean>({
           minHeight: '40px',
           boxShadow: 'none',
           borderRadius: '8px',
-          borderWidth: '2px',
+          borderWidth: '1px',
           backgroundColor: colors.neutral[50],
           '&:hover': {
             borderColor: colors.neutral[400],
@@ -90,7 +90,7 @@ export function SelectComponent<T, S extends boolean>({
         return {
           ...base,
           borderRadius: '8px',
-          border: '2px solid',
+          border: '1px solid',
           borderColor: colors.neutral[500],
           boxShadow: 'none',
           backgroundColor: colors.neutral[50],
@@ -101,14 +101,14 @@ export function SelectComponent<T, S extends boolean>({
                 borderTopRightRadius: 0,
                 borderTopLeftRadius: 0,
                 borderTopWidth: 0,
-                marginTop: '-3px',
+                marginTop: '-2px',
                 paddingTop: '0px',
               }
             : {
                 borderBottomRightRadius: 0,
                 borderBottomLeftRadius: 0,
                 borderBottomWidth: 0,
-                marginBottom: '-3px',
+                marginBottom: '-2px',
                 paddingBottom: '0px',
               }),
         }

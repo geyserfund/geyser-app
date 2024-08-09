@@ -1,6 +1,6 @@
 import { Avatar, Box, Link, Text } from '@chakra-ui/react'
 
-import { bradUrl, conorUrl, cryptoUrl, desUrl, lucasUrl, princeUrl, zuccoUrl } from '../../../constants'
+import { bradUrl, conorUrl, cryptoUrl, desUrl, lucasUrl, princeUrl, zuccoUrl } from '../../../shared/constants'
 
 interface BoardMemberProps {
   image: string

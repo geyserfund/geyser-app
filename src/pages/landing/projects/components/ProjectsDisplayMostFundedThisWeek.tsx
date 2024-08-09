@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
 import { SortType, useFilterContext } from '../../../../context'
-import { useMostFundedOfTheWeekProjectsState } from '../../../../hooks/graphqlState'
+import { useMostFundedOfTheWeekProjectsState } from '../../../../shared/hooks/graphqlState'
 import { Tag } from '../../../../types'
 import { MobileDivider } from '../../../grants/components'
 import { ProjectDisplayBody } from '../elements'

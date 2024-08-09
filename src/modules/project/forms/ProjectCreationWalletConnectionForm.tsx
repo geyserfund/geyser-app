@@ -15,8 +15,10 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
-import { AiOutlineSetting } from 'react-icons/ai'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
+import { PiGear } from 'react-icons/pi'
+
+import { useCustomTheme } from '@/utils'
 
 import { BoltIcon, NodeIcon } from '../../../components/icons'
 import { TextInputBox } from '../../../components/ui'
@@ -36,11 +38,12 @@ import {
   VoltageUrl,
   WalletOfSatoshiLightningAddressURL,
   WalletOfSatoshiUrl,
-} from '../../../constants'
+} from '../../../shared/constants'
 import { lightModeColors } from '../../../styles'
 import { LndNodeType } from '../../../types'
 import { ProjectFeeSelection } from '../components/ProjectFeeSelection'
-import { WalletConnectionOptionInfoBox } from '../pages/projectCreate/components/WalletConnectionOptionInfoBox'
+import { WalletConnectionDetails } from '../components/WalletConnectionDetails'
+import { WalletConnectionOptionInfoBox } from '../pages1/projectCreation/components/WalletConnectionOptionInfoBox'
 import {
   ConnectionOption,
   LightingWalletForm,
@@ -48,9 +51,8 @@ import {
   LNAddressEvaluationState,
   NodeWalletForm,
   WalletForm,
-} from '../pages/projectCreate/hooks/useWalletForm'
-import { WalletConnectionDetails } from '../pages/projectDashboard/components'
-import { WalletLimitComponent } from '../pages/projectDashboard/components/WalletLimitComponent'
+} from '../pages1/projectCreation/hooks/useWalletForm'
+import { WalletLimitComponent } from '../pages1/projectDashboard/components/WalletLimitComponent'
 import { NodeAdditionModal } from './components/NodeAdditionModal'
 
 type Props = {
@@ -62,6 +64,7 @@ type Props = {
   setConnectionOption: (connectionOption: ConnectionOption) => void
   fee: WalletForm['fee']
   limits: Limits
+  currentWallet?: ConnectionOption
 }
 
 export const ProjectCreationWalletConnectionForm = ({
@@ -73,8 +76,10 @@ export const ProjectCreationWalletConnectionForm = ({
   setConnectionOption,
   fee,
   limits,
+  currentWallet,
 }: Props) => {
   const { t } = useTranslation()
+  const { colors } = useCustomTheme()
 
   const renderRightElementContent = () => {
     if (lightningAddress.evaluating) {
@@ -118,7 +123,10 @@ export const ProjectCreationWalletConnectionForm = ({
               <Box as="span" flex="1" textAlign="left">
                 {t('Lightning Address')}
               </Box>
-              <BoltIcon boxSize="20px" />
+              <BoltIcon
+                boxSize="30px"
+                color={currentWallet === ConnectionOption.LIGHTNING_ADDRESS ? colors.primary1[9] : colors.utils.text}
+              />
             </AccordionButton>
           </h2>
           <AccordionPanel p={0}>
@@ -189,7 +197,9 @@ export const ProjectCreationWalletConnectionForm = ({
               <Box as="span" flex="1" textAlign="left">
                 {t('Lightning Node')}
               </Box>
-              <NodeIcon />
+              <NodeIcon
+                color={currentWallet === ConnectionOption.PERSONAL_NODE ? colors.primary1[9] : colors.utils.text}
+              />
             </AccordionButton>
           </h2>
           <AccordionPanel p={0}>
@@ -198,9 +208,10 @@ export const ProjectCreationWalletConnectionForm = ({
               primaryNode={
                 <>
                   <Button
-                    leftIcon={<AiOutlineSetting fontSize="20px" />}
+                    leftIcon={<PiGear fontSize="20px" />}
                     w="full"
-                    variant="secondary"
+                    variant="outline"
+                    colorScheme="neutral1"
                     onClick={node.onOpen}
                     isDisabled={readOnly}
                   >
@@ -265,16 +276,20 @@ const RenderSponsorImage = ({ url, imageUrl, height = '24px' }: { url: string; i
 
 const accordionButtonStyles: AccordionButtonProps = {
   py: '10px',
-  backgroundColor: 'neutral.100',
+  backgroundColor: 'utils.pbg',
   borderRadius: '8px',
+  border: '1px solid',
+  borderColor: 'neutral1.6',
   _hover: {
-    backgroundColor: 'neutral.200',
+    borderColor: 'neutral1.8',
+    backgroundColor: 'utils.pbg',
   },
   _expanded: {
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0,
+    borderBottom: 'none',
     _hover: {
-      backgroundColor: 'neutral.100',
+      borderColor: 'neutral1.6',
     },
   },
 }

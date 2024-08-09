@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { StickToTop } from '../../../components/layouts'
 import { useFilterContext } from '../../../context'
+import { StickToTop } from '../../../shared/components/layouts'
 import { useMobileMode } from '../../../utils'
 import { checkIfRenderFilter } from '../../../utils/helpers'
 import { FilterBySearch } from '../filters/FilterBySearch'

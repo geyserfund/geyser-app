@@ -1,4 +1,4 @@
-import { WalletConnectDetails } from '../../constants'
+import { WalletConnectDetails } from '../../shared/constants'
 import { ProjectFragment } from '../../types'
 
 type PickProject = Pick<ProjectFragment, 'name' | 'balance' | 'wallets'>

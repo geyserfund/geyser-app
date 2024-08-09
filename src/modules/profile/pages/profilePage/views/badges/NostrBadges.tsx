@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Body2 } from '../../../../../../components/typography'
-import { useNostrBadges } from '../../../../../../hooks/useNostrBadges'
+import { useNostrBadges } from '../../../../../../shared/hooks/useNostrBadges'
 import { UserBadge } from '../../../../../../types'
 import { BadgeItem } from './BadgeItem'
 import { BadgesBodySkeleton } from './BadgesBody'

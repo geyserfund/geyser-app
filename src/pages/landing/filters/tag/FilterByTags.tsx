@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client'
 import { useState } from 'react'
 
 import { useFilterContext } from '../../../../context'
-import { QUERY_TAGS } from '../../../../graphql/queries'
+import { QUERY_TAGS } from '../../../../graphqlBase/queries'
 import { TagsGetResult } from '../../../../types'
 import { useNotification } from '../../../../utils'
 import { DesktopFilterLayoutSkeleton, DesktopTagsFilter } from './DesktopTagsFilter'

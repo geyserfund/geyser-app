@@ -1,2 +1,2 @@
-export * from './BTCConversionUtils'
-export * from './typeConversion'
+export { convertSatsToUsd, convertToBTC } from './BTCConversionUtils'
+export { toInt } from './typeConversion'

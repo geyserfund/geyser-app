@@ -12,7 +12,7 @@ import {
   GrantsBitcoinEducation,
   GrantsHero,
   WalletOfSatoshiUrl,
-} from '../../../constants'
+} from '../../../shared/constants'
 import { fonts } from '../../../styles'
 import { GrantApplicant, GrantStatusEnum } from '../../../types'
 import { useMediumScreen, useMobileMode } from '../../../utils'
@@ -97,13 +97,7 @@ export const GrantsRoundOne = ({
             {t('Geyser Grants')}
           </Text>
           <Box display="flex" alignItems={'center'} justifyContent="center" gap={4}>
-            <Text
-              fontFamily={fonts.interBlack}
-              fontSize={isMobile ? '30' : '35px'}
-              fontWeight="700"
-              textAlign="center"
-              justifyContent="center"
-            >
+            <Text fontSize={isMobile ? '30' : '35px'} fontWeight="700" textAlign="center" justifyContent="center">
               {t('Round 1')}
             </Text>
           </Box>
@@ -154,7 +148,7 @@ export const GrantsRoundOne = ({
             margin="0 auto"
           >
             <VStack>
-              <Text fontFamily={fonts.interBlack} fontSize="24px" fontWeight={'bold'} textAlign="center" mt={8}>
+              <Text fontSize="24px" fontWeight={'bold'} textAlign="center" mt={8}>
                 {t('Round 1 Announcement')}
               </Text>
               <Text textAlign="justify" fontSize="sm">
@@ -206,7 +200,7 @@ export const GrantsRoundOne = ({
           ) : null}
 
           <Box my={8}>
-            <Text fontFamily={fonts.interBlack} fontSize="24px" fontWeight={'bold'}>
+            <Text fontSize="24px" fontWeight={'bold'}>
               {t('Principled Bitcoiners Board')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">
@@ -217,7 +211,7 @@ export const GrantsRoundOne = ({
             <Board />
           </Box>
           <Box my={8}>
-            <Text fontFamily={fonts.interBlack} fontSize="24px" fontWeight={'bold'}>
+            <Text fontSize="24px" fontWeight={'bold'}>
               {t('Made possible by sponsors')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { Body1 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
-import { getPath } from '../../../../constants'
+import { getPath } from '../../../../shared/constants'
 import { ProjectForLandingPageFragment } from '../../../../types'
 import { toSmallImageUrl } from '../../../../utils'
 import { LeaderboardFundingStats } from '.'

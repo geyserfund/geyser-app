@@ -1,4 +1,4 @@
-import { useModal } from '../../../../../../../hooks/useModal'
+import { useModal } from '../../../../../../../shared/hooks/useModal'
 import { UserForProfilePageFragment } from '../../../../../../../types'
 
 export type EditProfileModalProps = ReturnType<typeof useEditProfileModal>

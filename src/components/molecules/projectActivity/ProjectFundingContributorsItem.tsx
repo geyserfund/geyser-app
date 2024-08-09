@@ -2,14 +2,15 @@ import { Box, HStack } from '@chakra-ui/layout'
 import { HTMLChakraProps } from '@chakra-ui/system'
 import { Link } from 'react-router-dom'
 
-import { getPath } from '../../../constants'
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers'
-import { FunderWithUserFragment, Project, ProjectFragment } from '../../../types/generated/graphql'
+import { ProjectState } from '../../../modules/project/state/projectAtom'
+import { getPath } from '../../../shared/constants'
+import { FunderWithUserFragment } from '../../../types/generated/graphql'
 import { LinkableAvatar } from '../../ui'
 import { renderFunderBadges } from './renderFunderBadges'
 
 type Props = HTMLChakraProps<'div'> & {
-  project: ProjectFragment | Project
+  project: ProjectState
   contributor: FunderWithUserFragment
 }
 

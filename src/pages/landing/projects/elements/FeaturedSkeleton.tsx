@@ -1,6 +1,6 @@
 import { HStack, Skeleton, SkeletonText, VStack } from '@chakra-ui/react'
 
-import { CardLayout } from '../../../../components/layouts'
+import { CardLayout } from '../../../../shared/components/layouts'
 import { ProjectRowLayout } from './ProjectRowLayout'
 
 interface Props {

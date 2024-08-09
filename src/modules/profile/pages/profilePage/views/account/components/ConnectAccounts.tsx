@@ -2,14 +2,14 @@ import { Button, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { TiPlus } from 'react-icons/ti'
 
-import { Modal } from '../../../../../../../components/layouts/Modal'
 import { Body2 } from '../../../../../../../components/typography'
-import { useModal } from '../../../../../../../hooks/useModal'
 import { ConnectWithLightning } from '../../../../../../../pages/auth/ConnectWithLightning'
 import { ConnectWithNostr } from '../../../../../../../pages/auth/ConnectWithNostr'
 import { ConnectWithSocial } from '../../../../../../../pages/auth/ConnectWithSocial'
 import { SocialAccountType } from '../../../../../../../pages/auth/type'
 import { useRefreshAuthToken } from '../../../../../../../pages/auth/useAuthToken'
+import { Modal } from '../../../../../../../shared/components/layouts/Modal'
+import { useModal } from '../../../../../../../shared/hooks/useModal'
 import { UserForProfilePageFragment } from '../../../../../../../types'
 import {
   hasFacebookAccount,

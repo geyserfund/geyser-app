@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFilterContext } from '../../../../context'
-import { QUERY_COUNTRIES, QUERY_REGION } from '../../../../graphql/queries'
+import { QUERY_COUNTRIES, QUERY_REGION } from '../../../../graphqlBase/queries'
 import { Country, ProjectCountriesGetResult, ProjectRegionsGetResult } from '../../../../types'
 import { DesktopRegionFilter } from './DesktopRegionFilter'
 import { MobileRegionFilter } from './MobileRegionFilter'

@@ -8,7 +8,7 @@ export const H1 = ({ children, ...rest }: HeadingProps) => {
       as="h1"
       fontSize={{ base: '25px', lg: '35px' }}
       fontWeight={700}
-      fontFamily={fonts.inter}
+      fontFamily={fonts.brand}
       color={'neutral.900'}
       {...rest}
     >
@@ -23,7 +23,7 @@ export const H2 = ({ children, ...rest }: HeadingProps) => {
       as="h2"
       fontSize={{ base: '20px', lg: '24px' }}
       fontWeight={700}
-      fontFamily={fonts.inter}
+      fontFamily={fonts.brand}
       color={'neutral.900'}
       {...rest}
     >
@@ -38,7 +38,7 @@ export const H3 = ({ children, ...rest }: HeadingProps) => {
       as="h3"
       fontSize={{ base: '15px', lg: '18px' }}
       fontWeight={600}
-      fontFamily={fonts.inter}
+      fontFamily={fonts.brand}
       color={'neutral.900'}
       {...rest}
     >

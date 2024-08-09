@@ -4,7 +4,7 @@ import { BsArrowDownSquare } from 'react-icons/bs'
 
 import { Body2 } from '../../../../../../../components/typography'
 import { getAppEndPoint } from '../../../../../../../config/domain'
-import { NoContributionImageUrl } from '../../../../../../../constants'
+import { NoContributionImageUrl } from '../../../../../../../shared/constants'
 import { UserProjectContributionsFragment } from '../../../../../../../types'
 import { useViewingOwnProfileAtomValue } from '../../../../../state'
 import { ProfileTabLayout } from '../../../components'

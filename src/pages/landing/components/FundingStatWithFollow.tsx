@@ -1,9 +1,10 @@
 import { HStack, StackProps, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { FollowButton } from '@/modules/project/pages1/projectView/views/body/components'
+
 import { SatSymbolIcon } from '../../../components/icons'
 import { MonoBody1 } from '../../../components/typography'
-import { FollowButton } from '../../../modules/project/pages/projectView/views/projectMainBody/components'
 import { fonts } from '../../../styles'
 import { Project } from '../../../types'
 import { getShortAmountLabel, removeProjectAmountException } from '../../../utils'
@@ -46,7 +47,7 @@ export const FundingStatWithFollow = ({
           </Text>
         </VStack>
       )}
-      <FollowButton useCase="icon" project={project} />
+      <FollowButton project={project} />
     </HStack>
   )
 }

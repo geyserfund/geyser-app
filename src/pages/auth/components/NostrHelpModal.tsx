@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
 import { Body1 } from '../../../components/typography'
-import { useModal } from '../../../hooks/useModal'
+import { useModal } from '../../../shared/hooks/useModal'
 import { FailedToConnectAccount } from './FailedToConnectAccount'
 
 export const NostrHelpModal = (props: ReturnType<typeof useModal>) => {

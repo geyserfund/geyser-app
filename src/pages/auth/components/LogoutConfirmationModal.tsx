@@ -1,8 +1,8 @@
 import { Button, Text, UseModalProps, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { Modal } from '../../../components/layouts'
 import { useAuthContext } from '../../../context'
+import { Modal } from '../../../shared/components/layouts'
 
 export const LogoutConfirmationModal = ({ ...modalProps }: UseModalProps) => {
   const { t } = useTranslation()

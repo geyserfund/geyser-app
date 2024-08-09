@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout, CardLayoutProps } from '../../../../../../../components/layouts'
 import { Body2, H2 } from '../../../../../../../components/typography'
+import { CardLayout, CardLayoutProps } from '../../../../../../../shared/components/layouts'
 import { CreateAProjectButton } from '../../../components'
 
 export const CreateProject = (props: CardLayoutProps) => {

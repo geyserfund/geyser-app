@@ -1,12 +1,16 @@
-import { CheckCircleIcon } from '@chakra-ui/icons'
-import { HStack, Text, VStack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { PiCheckCircleFill } from 'react-icons/pi'
+
+import { Body } from '@/shared/components/typography'
+import { useCustomTheme } from '@/utils'
 
 import { LightningAddressConnectionDetails, LndConnectionDetailsPrivate, Wallet } from '../../../types'
-import { ProjectFundingSettingsLightningAddressView } from '../pages/projectDashboard/components/ProjectFundingSettingsLightningAddressView'
+import { ProjectFundingSettingsLightningAddressView } from '../pages1/projectDashboard/components/ProjectFundingSettingsLightningAddressView'
 
 export const WalletConnectionDetails = ({ projectWallet }: { projectWallet: Partial<Wallet> }) => {
   const { t } = useTranslation()
+  const { colors } = useCustomTheme()
   const { connectionDetails } = projectWallet || {}
 
   if (!connectionDetails) {
@@ -37,64 +41,64 @@ export const WalletConnectionDetails = ({ projectWallet }: { projectWallet: Part
         spacing="10px"
       >
         <HStack width="100%" justifyContent="space-between">
-          <Text fontWeight={500}>{projectWallet?.name}</Text>
+          <Body size="sm" medium>
+            {projectWallet?.name}
+          </Body>
         </HStack>
         <HStack width="100%">
-          <CheckCircleIcon color="primary.800" fontSize="12px" />
-          <Text color="primary.800" fontSize="12px">
+          <PiCheckCircleFill color={colors.primary1[11]} fontSize="12px" />
+          <Body size="xs" color="primary.800">
             {t('RUNNING')}
-          </Text>
+          </Body>
         </HStack>
 
-        <VStack width="100%" spacing="4px" alignItems="flex-start">
-          <Text color="neutral.700" fontSize="10px">
+        <VStack width="100%" spacing={0} alignItems="flex-start">
+          <Body size="xs" light>
             {t('Hostname or IP address')}
-          </Text>
-          <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
+          </Body>
+          <Body size="sm" wordBreak="break-all">
             {lndConnectionDetails.hostname}
-          </Text>
+          </Body>
         </VStack>
 
-        <VStack width="100%" spacing="4px" alignItems="flex-start">
-          <Text color="neutral.700" fontSize="10px">
+        <VStack width="100%" spacing={0} alignItems="flex-start">
+          <Body size="xs" light>
             {t('Public key')}
-          </Text>
-          <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
+          </Body>
+          <Body size="sm" wordBreak="break-all">
             {lndConnectionDetails.pubkey}
-          </Text>
+          </Body>
         </VStack>
-        <VStack width="100%" spacing="4px" alignItems="flex-start" flexWrap="wrap">
-          <Text color="neutral.700" fontSize="10px">
+        <VStack width="100%" spacing={0} alignItems="flex-start" flexWrap="wrap">
+          <Body size="xs" light>
             {t('Invoice Macaroon')}
-          </Text>
-          <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
+          </Body>
+
+          <Body size="sm" wordBreak="break-all">
             {lndConnectionDetails.macaroon}
-          </Text>
+          </Body>
         </VStack>
         {lndConnectionDetails.tlsCertificate && (
-          <VStack width="100%" spacing="4px" alignItems="flex-start">
-            <Text color="neutral.700" fontSize="10px">
+          <VStack width="100%" spacing={0} alignItems="flex-start">
+            <Body size="xs" light>
               {t('TLS certificate')}
-            </Text>
-            <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
+            </Body>
+
+            <Body size="sm" wordBreak="break-all">
               {lndConnectionDetails.tlsCertificate}
-            </Text>
+            </Body>
           </VStack>
         )}
-        <VStack width="100%" spacing="4px" alignItems="flex-start">
-          <Text color="neutral.700" fontSize="10px">
+        <VStack width="100%" spacing={0} alignItems="flex-start">
+          <Body size="xs" light>
             {t('gRPC port')}
-          </Text>
-          <Text wordBreak="break-all" color="neutral.900" fontSize="14px">
+          </Body>
+
+          <Body size="sm" wordBreak="break-all">
             {lndConnectionDetails.grpcPort}
-          </Text>
+          </Body>
         </VStack>
       </VStack>
-      <Text color="neutral.700" fontSize="10px">
-        {t(
-          'If you want to change how you receive your funds reach out to hello@geyser.fund. We are not currently enabling editing of this information for security reasons.',
-        )}
-      </Text>
     </>
   )
 }

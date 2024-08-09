@@ -18,7 +18,7 @@ import {
   GeyserTelegramUrl,
   GeyserTwitterUrl,
   GuideUrl,
-} from '../../../constants'
+} from '../../../shared/constants'
 
 export const FilterFooter = () => {
   const { t } = useTranslation()

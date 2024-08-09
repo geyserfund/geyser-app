@@ -3,7 +3,7 @@ import { FormEvent, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { useAuthContext } from '../../../../../context'
-import { useModal } from '../../../../../hooks/useModal'
+import { useModal } from '../../../../../shared/hooks/useModal'
 import {
   MfaAction,
   OtpResponseFragment,

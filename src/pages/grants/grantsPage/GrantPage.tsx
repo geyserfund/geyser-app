@@ -5,10 +5,11 @@ import { useTranslation } from 'react-i18next'
 import { FaArrowLeft } from 'react-icons/fa'
 import { useNavigate, useParams } from 'react-router-dom'
 
+import { Head } from '@/config/Head'
+
 import Loader from '../../../components/ui/Loader'
-import { Head } from '../../../config'
-import { getPath } from '../../../constants'
 import { useAuthContext } from '../../../context'
+import { getPath } from '../../../shared/constants'
 import {
   BoardVoteGrant,
   Grant,

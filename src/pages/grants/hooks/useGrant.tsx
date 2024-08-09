@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { useMemo } from 'react'
 
-import { QUERY_GRANT } from '../../../graphql/queries/grant'
+import { QUERY_GRANT } from '../../../graphqlBase/queries/grant'
 import { Grant } from '../../../types'
 
 type ResponseData = {

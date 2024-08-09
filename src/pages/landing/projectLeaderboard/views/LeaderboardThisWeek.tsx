@@ -1,7 +1,7 @@
 import { StackProps } from '@chakra-ui/react'
 
 import { NoDataError } from '../../../../components/errors'
-import { useMostFundedOfTheWeekProjectsState } from '../../../../hooks/graphqlState'
+import { useMostFundedOfTheWeekProjectsState } from '../../../../shared/hooks/graphqlState'
 import { LeaderboardBody, LeaderboardBodySkeleton } from '../components'
 
 interface LeaderboardThisWeekProps extends StackProps {

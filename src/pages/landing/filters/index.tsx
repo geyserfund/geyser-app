@@ -1,7 +1,7 @@
 import { StackProps, VStack } from '@chakra-ui/react'
 import { useMatch } from 'react-router-dom'
 
-import { getPath } from '../../../constants'
+import { getPath } from '../../../shared/constants'
 import { FilterByActivity } from './activity'
 import { FilterBySearch } from './FilterBySearch'
 import { FilterFooter } from './FilterFooter'

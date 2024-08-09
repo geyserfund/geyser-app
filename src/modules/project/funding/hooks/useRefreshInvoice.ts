@@ -2,17 +2,17 @@ import { useAtom } from 'jotai'
 import { useCallback } from 'react'
 
 import { InvoiceStatus, useRefreshFundingInvoiceMutation } from '../../../../types'
-import { useFundingTx } from '../state/fundingTxAtom'
+import { useFundingTxAtom } from '../state/fundingTxAtom'
 import { invoiceRefreshErrorAtom, invoiceRefreshLoadingAtom } from '../state/invoiceRefreshAtom'
-import { useFundPollingAndSubscription } from '../state/pollingFundingTx'
+import { useFundPollingAndSubscriptionAtom } from '../state/pollingFundingTx'
 
 export const useRefreshInvoice = () => {
-  const { fundingTx, updateFundingTx } = useFundingTx()
+  const { fundingTx, updateFundingTx } = useFundingTxAtom()
 
   const [invoiceRefreshLoading, setRefreshingInvoice] = useAtom(invoiceRefreshLoadingAtom)
   const [invoiceRefreshErrored, setInvoiceRefreshErrored] = useAtom(invoiceRefreshErrorAtom)
 
-  const { clearPollingAndSubscription } = useFundPollingAndSubscription()
+  const { clearPollingAndSubscription } = useFundPollingAndSubscriptionAtom()
 
   const [refreshInvoice] = useRefreshFundingInvoiceMutation({
     variables: {

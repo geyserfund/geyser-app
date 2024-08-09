@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ButtonComponent } from '../../../../../../components/ui'
-import { ClaimABadgeProps } from '../../../../../../hooks/useNostrBadges'
+import { ClaimABadgeProps } from '../../../../../../shared/hooks/useNostrBadges'
 import { UserBadge } from '../../../../../../types'
 
 interface BadgeItemProps {

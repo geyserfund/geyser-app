@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useMatch } from 'react-router-dom'
 
 import { Body1 } from '../../../../components/typography'
-import { getPath } from '../../../../constants'
+import { getPath } from '../../../../shared/constants'
 import { FilterTopBar } from '../../projects/components'
 import { FilterByActivity } from '../activity'
 import { FilterByRegion } from '../region'

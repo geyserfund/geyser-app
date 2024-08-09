@@ -7,7 +7,7 @@ import { SlLocationPin } from 'react-icons/sl'
 
 import { H3 } from '../../../../components/typography'
 import { SortType, useFilterContext } from '../../../../context'
-import { QUERY_COUNTRIES, QUERY_TAGS } from '../../../../graphql/queries'
+import { QUERY_COUNTRIES, QUERY_TAGS } from '../../../../graphqlBase/queries'
 import { ProjectCountriesGetResult, TagsGetResult } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 import { getActivityButtonContent } from '../../filters/activity'

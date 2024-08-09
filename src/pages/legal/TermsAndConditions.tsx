@@ -1,7 +1,7 @@
 import { ListItem, OrderedList, UnorderedList, VStack } from '@chakra-ui/react'
 
 import { AppFooter } from '../../components/molecules'
-import { LIGHTNING_FEE_PERCENTAGE } from '../../constants/platform/wallet'
+import { LIGHTNING_FEE_PERCENTAGE } from '../../shared/constants/platform/wallet'
 
 export const TermsAndConditions = () => {
   return (

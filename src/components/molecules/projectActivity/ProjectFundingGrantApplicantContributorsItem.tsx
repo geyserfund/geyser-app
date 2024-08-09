@@ -2,7 +2,7 @@ import { Box, HStack } from '@chakra-ui/layout'
 import { HTMLChakraProps } from '@chakra-ui/system'
 import { Link } from 'react-router-dom'
 
-import { getPath } from '../../../constants'
+import { getPath } from '../../../shared/constants'
 import { GrantApplicantContributor } from '../../../types/generated/graphql'
 import { LinkableAvatar } from '../../ui'
 

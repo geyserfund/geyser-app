@@ -1,8 +1,19 @@
-import { StyleFunctionProps } from '@chakra-ui/react'
+import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
 
-import { fonts } from '../../styles'
-import { alertTheme, drawerTheme, menuTheme, modalTheme, popOverTheme, selectTheme, switchTheme } from './components'
-import { buttonTheme } from './components/buttonTheme'
+import { fonts, lightModeColors } from '../../styles'
+import {
+  alertTheme,
+  badgeTheme,
+  buttonTheme,
+  drawerTheme,
+  menuTheme,
+  modalTheme,
+  popOverTheme,
+  selectTheme,
+  switchTheme,
+  tabTheme,
+  tooltipTheme,
+} from './components'
 
 export const theme = {
   initialColorMode: 'system',
@@ -22,11 +33,17 @@ export const theme = {
   },
   components: {
     Button: buttonTheme,
+    Heading: {
+      baseStyle: {
+        color: 'utils.text',
+      },
+    },
     Text: {
       baseStyle: {
         fontSize: '14px',
         lineHeight: 1.6,
         fontWeight: 400,
+        color: 'utils.text',
       },
       variants: {
         caption: () => ({
@@ -129,28 +146,9 @@ export const theme = {
     Popover: popOverTheme,
     Select: selectTheme,
     Switch: switchTheme,
-    Tabs: {
-      variants: {
-        secondary: {
-          tab: {
-            bg: 'neutral.0',
-            variant: 'outline',
-            borderRadius: '8px',
-            border: '2px solid',
-            borderColor: 'neutral.200',
-            p: '10px 20px',
-            _selected: {
-              bg: 'neutral.0',
-              borderColor: 'neutral.400',
-            },
-            _hover: {
-              bg: 'neutral.50',
-              borderColor: 'neutral.400',
-            },
-          },
-        },
-      },
-    },
+    Badge: badgeTheme,
+    Tooltip: tooltipTheme,
+    Tabs: tabTheme,
     Input: {
       defaultProps: {
         focusBorderColor: 'primary.500',
@@ -166,7 +164,15 @@ export const theme = {
     global: ({ theme }: StyleFunctionProps) => ({
       body: {
         bg: theme.colors.neutral[50],
+        color: theme.colors.utils.text,
       },
     }),
   },
 }
+
+const finalTheme = {
+  ...theme,
+  colors: lightModeColors,
+}
+/** This is only used for chakra types generation process */
+export default extendTheme(finalTheme)

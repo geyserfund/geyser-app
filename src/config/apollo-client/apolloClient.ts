@@ -4,10 +4,10 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { createClient } from 'graphql-ws'
 
-import { __development__ } from '../../constants'
+import { __development__ } from '../../shared/constants'
 import { toInt } from '../../utils'
 import { getAppEndPoint } from '../domain'
-import { cache } from './apollo-client-cache'
+import { cache } from './apolloClientCache'
 
 const retryLink = new RetryLink({
   attempts(count, _, error) {
@@ -107,6 +107,29 @@ const splitLink = split(
 const clientConfig: ApolloClientOptions<NormalizedCacheObject> = {
   link: from([retryLink, splitLink]),
   cache,
+  // resolvers: {
+  //   Mutation: {
+  //     ProjectRewardCreate(_, data, { cache }) {
+  //       const reward = data?.projectRewardCreate
+
+  //       cache.writeQuery({
+  //         query: QUERY_PROJECT_REWARD,
+  //         data: {
+  //           __typename: 'ProjectReward',
+  //           getProjectReward: reward,
+  //         },
+  //       })
+
+  //       cache.modify({
+  //         fields: {
+  //           projectRewardsGet(existingRewards = []) {
+  //             return [reward, ...existingRewards]
+  //           },
+  //         },
+  //       })
+  //     },
+  //   },
+  // },
 }
 
 export const client = new ApolloClient(clientConfig)

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { AppFooter } from '../../../components/molecules'
 import { H2, H3 } from '../../../components/typography'
-import { getPath } from '../../../constants'
+import { getPath } from '../../../shared/constants'
 import { fonts } from '../../../styles'
 import { useMobileMode } from '../../../utils'
 import { CustomGrantCard } from '../components/CustomGrantCard'
@@ -57,7 +57,7 @@ export const GrantsLandingPage = () => {
 
         {activeGrants && activeGrants.length > 0 && (
           <VStack w="full" alignItems="start" spacing="10px">
-            <Text fontWeight={'bold'} fontSize="19px" mb={1} fontFamily={fonts.interBlack}>
+            <Text fontWeight={'bold'} fontSize="19px" mb={1}>
               {t('Active Grants')}
             </Text>
             {activeGrants.map((activeGrant) => {
@@ -73,7 +73,7 @@ export const GrantsLandingPage = () => {
           </VStack>
         )}
         <VStack w="full" alignItems="start" spacing="10px">
-          <Text fontWeight={'bold'} fontSize="19px" fontFamily={fonts.interBlack}>
+          <Text fontWeight={'bold'} fontSize="19px">
             {t('Previous Grants')}
           </Text>
           {inactiveGrants

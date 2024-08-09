@@ -1,7 +1,7 @@
 import { Box, Image, VStack } from '@chakra-ui/react'
 
 import { Body1 } from '../../../components/typography'
-import { NoResultsSearchUrl } from '../../../constants'
+import { NoResultsSearchUrl } from '../../../shared/constants'
 
 export const NoSearchResults = () => {
   return (
