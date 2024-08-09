@@ -1,27 +1,24 @@
-import { AddIcon } from '@chakra-ui/icons'
-import { Button, ButtonProps, IconButton, Tooltip } from '@chakra-ui/react'
+import { ButtonProps, IconButton } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { MouseEvent } from 'react'
-import { useTranslation } from 'react-i18next'
-import { BsFillHeartFill } from 'react-icons/bs'
+import { PiBell } from 'react-icons/pi'
 
-import { useAuthContext } from '@/context'
-import { ProjectState } from '@/modules/project/state/projectAtom'
-import { useAuthModal } from '@/pages/auth/hooks'
 import { useEmailPromptModal } from '@/pages/auth/hooks/useEmailPromptModal'
 import { shouldPromptAtom } from '@/pages/auth/state/emailPromptAtom'
-import { useFollowProject } from '@/shared/hooks/graphqlState'
 
-interface FollowComponentProps extends ButtonProps {
-  project: Pick<ProjectState, 'id' | 'name' | 'title'>
-  hasIcon?: boolean
-  useCase?: 'button' | 'icon'
+import { useAuthContext } from '../../../../../../../context'
+import { useAuthModal } from '../../../../../../../pages/auth/hooks'
+import { useFollowProject } from '../../../../../../../shared/hooks/graphqlState'
+import { Project } from '../../../../../../../types'
+
+interface FollowButtonProps extends ButtonProps {
+  project: Pick<Project, 'id' | 'name' | 'title'>
 }
 
-export const FollowButton = ({ project, hasIcon, useCase = 'button' }: FollowComponentProps) => {
-  const { t } = useTranslation()
+export const FollowButton = ({ project, ...rest }: FollowButtonProps) => {
   const { isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
+
   const { emailPromptOnOpen, setEmailPromptOnCloseAction } = useEmailPromptModal()
 
   const { isFollowed, handleFollow, handleUnFollow, followLoading, unfollowLoading } = useFollowProject(project)
@@ -54,66 +51,16 @@ export const FollowButton = ({ project, hasIcon, useCase = 'button' }: FollowCom
     }
   }
 
-  if (useCase === 'icon') {
-    return (
-      <>
-        {!isFollowed ? (
-          <>
-            <Tooltip label={isLoggedIn ? t('Follow project') : t('Login to follow project')} placement="top">
-              <IconButton
-                size="sm"
-                aria-label="project-follow-icon"
-                isLoading={followLoading}
-                icon={<AddIcon />}
-                borderRadius="8px"
-                onClick={handleClick}
-                isDisabled={!isLoggedIn}
-                _hover={{
-                  border: `2px solid`,
-                  borderColor: 'primary.600',
-                  color: 'primary.600',
-                }}
-              />
-            </Tooltip>
-          </>
-        ) : (
-          <Tooltip label={t('Unfollow project')} placement="top">
-            <IconButton
-              size="sm"
-              aria-label="project-unfollow-icon"
-              isLoading={unfollowLoading}
-              icon={<BsFillHeartFill fontSize="14px" />}
-              borderRadius="8px"
-              onClick={handleUnFollow}
-              boxShadow="none !important"
-              color="primary.500"
-              border={`1px solid`}
-              borderColor="primary.500"
-              _hover={{
-                border: `2px solid`,
-                borderColor: 'secondary.red',
-                color: 'secondary.red',
-              }}
-            />
-          </Tooltip>
-        )}
-      </>
-    )
-  }
-
   return (
-    <Button
-      variant={'secondary'}
+    <IconButton
+      aria-label="follow-button"
+      size="sm"
+      variant="soft"
+      colorScheme={isFollowed ? 'primary1' : 'neutral1'}
       onClick={handleClick}
       isLoading={followLoading || unfollowLoading}
-      w="full"
-      {...(hasIcon
-        ? {
-            leftIcon: isFollowed ? <BsFillHeartFill fontSize="14px" /> : <AddIcon />,
-          }
-        : {})}
-    >
-      {isFollowed ? t('Followed') : t('Follow')}
-    </Button>
+      icon={<PiBell />}
+      {...rest}
+    />
   )
 }

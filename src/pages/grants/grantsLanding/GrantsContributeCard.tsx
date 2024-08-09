@@ -7,7 +7,6 @@ import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../shared/com
 import { useAnimatedClipboard } from '../../../shared/hooks/useAnimatedClipboard'
 import { GrantStatistics } from '../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../utils'
-
 import { ListText } from '../components/ListText'
 import { CONTRIBUTION_ADDRESS } from '../constants'
 
