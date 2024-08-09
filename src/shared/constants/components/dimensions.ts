@@ -42,6 +42,13 @@ export const dimensions = {
       gap: '20px',
     },
   },
+  profile: {
+    settings: {
+      menu: {
+        width: 148,
+      },
+    },
+  },
   sideNav: {
     width: 256,
   },

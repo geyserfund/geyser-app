@@ -26,7 +26,7 @@ const CreatorPost = () => import('../../modules/project/pages1/projectView/views
 
 const Refund = () => import('../../modules/project/pages1/projectFunding/views/refund')
 const ProfilePage = () => import('../../modules/profile/pages/profilePage/Profile')
-const ProfileSettingsPage = () => import('../../modules/profile/pages/profileSettings/ProfileSettings')
+const ProfileSettingsIndex = () => import('../../modules/profile/pages/profileSettings')
 const Badges = () => import('../../pages/badges/BadgesPage')
 const Landing = () => import('../../pages/landing')
 
@@ -143,9 +143,32 @@ export const platformRoutes: RouteObject[] = [
   {
     path: getPath('userProfileSettings', PathName.userId),
     async lazy() {
-      const ProfileSettings = await ProfileSettingsPage().then((m) => m.ProfileSettings)
+      const ProfileSettings = await ProfileSettingsIndex().then((m) => m.ProfileSettings)
       return { element: renderPrivateRoute(ProfileSettings) }
     },
+    children: [
+      {
+        index: true,
+        async lazy() {
+          const ProfileSettingsMain = await ProfileSettingsIndex().then((m) => m.ProfileSettingsMain)
+          return { Component: ProfileSettingsMain }
+        },
+      },
+      {
+        path: getPath('userProfileSettingsGeneral', PathName.userId),
+        async lazy() {
+          const ProfileSettingsGeneral = await ProfileSettingsIndex().then((m) => m.ProfileSettingsGeneral)
+          return { Component: ProfileSettingsGeneral }
+        },
+      },
+      {
+        path: getPath('userProfileSettingsNotifications', PathName.userId),
+        async lazy() {
+          const ProfileSettingsNotifications = await ProfileSettingsIndex().then((m) => m.ProfileSettingsNotifications)
+          return { Component: ProfileSettingsNotifications }
+        },
+      },
+    ],
   },
   {
     path: getPath('userProfile', PathName.userId),
@@ -323,6 +346,15 @@ export const platformRoutes: RouteObject[] = [
             async lazy() {
               const ProjectDashboardNostr = await ProjectDashboard().then((m) => m.ProjectDashboardNostr)
               return { Component: ProjectDashboardNostr }
+            },
+          },
+          {
+            path: getPath('dashboardNotifications', PathName.projectName),
+            async lazy() {
+              const ProjectDashboardNotifications = await ProjectDashboard().then(
+                (m) => m.ProjectDashboardNotifications,
+              )
+              return { Component: ProjectDashboardNotifications }
             },
           },
           {

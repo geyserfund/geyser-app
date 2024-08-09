@@ -14,6 +14,7 @@ type Props = UseControllerProps<any, any> & {
   placeholder?: string
   error?: React.ReactNode
   defaultValue?: string | null
+  size?: 'sm' | 'md' | 'lg'
 }
 
 export function ControlledSelect(props: Props) {
@@ -24,6 +25,7 @@ export function ControlledSelect(props: Props) {
       <InputGroup width={props.width || '100%'}>
         <Select
           {...field}
+          size={props.size}
           onChange={(e) => {
             field.onChange(e.target.value)
             if (props.onChange) {

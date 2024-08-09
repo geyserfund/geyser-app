@@ -41,6 +41,8 @@ export enum PathName {
 
   userProfile = 'profile',
   userProfileSettings = 'settings',
+  userProfileSettingsGeneral = 'general',
+  userProfileSettingsNotifications = 'notifications',
 
   preview = 'preview',
 
@@ -54,6 +56,7 @@ export enum PathName {
   dashboardInfo = 'description',
   dashboardDetails = 'details',
   dashboardWallet = 'wallet',
+  dashboardNotifications = 'notifications',
   dashboardSettings = 'settings',
   dashboardStory = 'story',
   dashboardStatus = 'status',
@@ -158,6 +161,8 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardWallet}`,
   dashboardNostr: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardNostr}`,
+  dashboardNotifications: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardNotifications}`,
   dashboardSettings: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardSettings}`,
   dashboardAffiliates: (projectName: string) =>
@@ -224,6 +229,10 @@ const pathsMap = {
 
   userProfile: (userID: string) => `/${PathName.userProfile}/${userID}`,
   userProfileSettings: (userID: string) => `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}`,
+  userProfileSettingsGeneral: (userID: string) =>
+    `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}/${PathName.userProfileSettingsGeneral}`,
+  userProfileSettingsNotifications: (userID: string) =>
+    `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}/${PathName.userProfileSettingsNotifications}`,
 
   badges: () => `/${PathName.badges}`,
 

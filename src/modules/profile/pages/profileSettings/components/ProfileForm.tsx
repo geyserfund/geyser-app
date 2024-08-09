@@ -49,7 +49,7 @@ export const ProfileForm = ({ isLoading }: { isLoading?: boolean }) => {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
+      <form style={{ width: '100%' }} onSubmit={onSubmit}>
         <VStack spacing="30px" w="full">
           <VStack w="full" align="start" gap={3}>
             <H3>{t('Profile information')}</H3>
