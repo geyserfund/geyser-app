@@ -20,6 +20,8 @@ const ProjectDashboard = () => import('../../modules/project/pages1/projectDashb
 
 const ProjectFunding = () => import('../../modules/project/pages1/projectFunding')
 
+const Leaderboard = () => import('../../modules/leaderboard/pages/Leaderboard')
+
 const CreatorReward = () => import('../../modules/project/pages1/projectView/views/rewards/views')
 
 const CreatorPost = () => import('../../modules/project/pages1/projectView/views/posts/views')
@@ -489,8 +491,8 @@ export const platformRoutes: RouteObject[] = [
   {
     path: getPath('leaderboard'),
     async lazy() {
-      const MobileLeaderboard = await Landing().then((m) => m.MobileLeaderboard)
-      return { Component: MobileLeaderboard }
+      const LeaderboardPage = await Leaderboard().then((m) => m.Leaderboard)
+      return { Component: LeaderboardPage }
     },
   },
   {
