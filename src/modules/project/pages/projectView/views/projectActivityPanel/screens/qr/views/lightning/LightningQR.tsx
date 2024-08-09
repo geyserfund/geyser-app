@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { FaCopy } from 'react-icons/fa'
 import { RiLinkUnlink } from 'react-icons/ri'
 
+import { QRCodeComponent } from '../../../../../../../../pages1/projectFunding/views/fundingPayment/components/QRCodeComponent'
 import { TotalAmountToPay, WaitingForPayment } from '../../components'
-import { QRCodeComponent } from '../../components/QRCodeComponent'
 import { useCopyToClipboard } from '../../hooks/useCopyButton'
 
 interface LightningQRProps {

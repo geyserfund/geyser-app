@@ -13,7 +13,6 @@ export const ReachOutForHelpButton = (props: ButtonProps) => {
       target="_blank"
       variant="ghost"
       colorScheme="neutral1"
-      width="100%"
       leftIcon={<PiChatCircle aria-label="telegram" fontSize="20px" />}
       textDecoration="none"
       size="lg"

@@ -73,14 +73,19 @@ export const projectPostCreatorRoutes = [
 
 export const projectFundingPaymentLightingRoutes = [getPath('fundingPaymentLightning', PathName.projectName)]
 
-export const projectFundingPaymentOnchainStartedRoutes = [
-  getPath('fundingPaymentOnchainProcessing', PathName.projectName),
+export const projectFundingOnchainRefundRoutes = [
   getPath('fundingPaymentOnchainRefund', PathName.projectName),
   getPath('fundingPaymentOnchainRefundInitiated', PathName.projectName),
 ]
 
+export const projectFundingPaymentOnchainStartedRoutes = [
+  getPath('fundingPaymentOnchainProcessing', PathName.projectName),
+  ...projectFundingOnchainRefundRoutes,
+]
+
 export const projectFundingPaymentOnchainRoutes = [
   getPath('fundingPaymentOnchain', PathName.projectName),
+  getPath('fundingPaymentOnchainQR', PathName.projectName),
   ...projectFundingPaymentOnchainStartedRoutes,
 ]
 

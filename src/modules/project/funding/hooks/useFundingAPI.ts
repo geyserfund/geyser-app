@@ -2,14 +2,24 @@ import { ApolloError } from '@apollo/client'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
-import { FundingInput, useFundingTxWithInvoiceStatusQuery, useFundMutation } from '@/types'
-import { toInt, useNotification } from '@/utils'
+import {
+  FundingInput,
+  // useFundingTxWithInvoiceStatusQuery,
+  useFundMutation,
+} from '@/types'
+import {
+  // toInt,
+  useNotification,
+} from '@/utils'
 
 import { useCustomMutation } from '../../API/custom/useCustomMutation'
 import { fundingFlowErrorAtom, fundingRequestErrorAtom, useParseResponseToSwapAtom, useSetKeyPairAtom } from '../state'
 import { formattedFundingInputAtom, fundingInputWithSwapKeysAtom } from '../state/fundingFormAtom'
-import { ConfirmationMethod, useCheckFundingStatusAtom, useFundingTxAtom } from '../state/fundingTxAtom'
-import { useFundPollingAndSubscriptionAtom } from '../state/pollingFundingTx'
+import {
+  // ConfirmationMethod, useCheckFundingStatusAtom,
+  useFundingTxAtom,
+} from '../state/fundingTxAtom'
+// import { useFundPollingAndSubscriptionAtom } from '../state/pollingFundingTx'
 import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/helpers'
 import { webln } from '../utils/requestWebLNPayment'
 import { useFundingFormAtom } from './useFundingFormAtom'
@@ -33,33 +43,36 @@ export const useFundingAPI = () => {
   const setError = useSetAtom(fundingFlowErrorAtom)
   const setFundingRequestErrored = useSetAtom(fundingRequestErrorAtom)
 
-  const { fundingTx, updateFundingTx } = useFundingTxAtom()
+  const {
+    //  fundingTx,
+    updateFundingTx,
+  } = useFundingTxAtom()
 
   const parseResponseToSwap = useParseResponseToSwapAtom()
 
   const startWebLNFlow = useWebLNFlow()
 
-  const { pollingFundingTx, startPollingAndSubscription, clearPollingAndSubscription } =
-    useFundPollingAndSubscriptionAtom()
+  // const { pollingFundingTx, startPollingAndSubscription, clearPollingAndSubscription } =
+  //   useFundPollingAndSubscriptionAtom()
 
-  const checkFundingStatus = useCheckFundingStatusAtom()
+  // const checkFundingStatus = useCheckFundingStatusAtom()
 
   const setKeyPair = useSetKeyPairAtom()
 
-  const { refetch } = useFundingTxWithInvoiceStatusQuery({
-    variables: {
-      fundingTxID: toInt(fundingTx.id),
-    },
-    notifyOnNetworkStatusChange: true,
-    skip: pollingFundingTx === 0,
-    onCompleted(data) {
-      if (data && data.fundingTx) {
-        checkFundingStatus(data.fundingTx, ConfirmationMethod.Polling)
-      }
-    },
-    pollInterval: pollingFundingTx,
-    fetchPolicy: 'network-only',
-  })
+  // const { refetch } = useFundingTxWithInvoiceStatusQuery({
+  //   variables: {
+  //     fundingTxID: toInt(fundingTx.id),
+  //   },
+  //   notifyOnNetworkStatusChange: true,
+  //   skip: pollingFundingTx === 0,
+  //   onCompleted(data) {
+  //     if (data && data.fundingTx) {
+  //       checkFundingStatus(data.fundingTx)
+  //     }
+  //   },
+  //   pollInterval: pollingFundingTx,
+  //   fetchPolicy: 'network-only',
+  // })
 
   const [fundProject, requestFundingOptions] = useCustomMutation(useFundMutation, {
     onCompleted(data) {
@@ -83,20 +96,25 @@ export const useFundingAPI = () => {
 
         if (hasBolt11 && hasWebLN && webln) {
           startWebLNFlow(data.fund.fundingTx)
-            .then((success) => {
-              if (!success) {
-                startPollingAndSubscription()
-              }
-            })
+            // .then((success) => {
+            //   if (!success) {
+            //     // startPollingAndSubscription()
+            //   }
+            // })
             .catch(() => {
-              startPollingAndSubscription()
+              toast.error({
+                title: 'Something went wrong',
+                description: 'Please refresh the page and try again',
+              })
+              // startPollingAndSubscription()
             })
-        } else {
-          startPollingAndSubscription()
         }
+        // else {
+        //   startPollingAndSubscription()
+        // }
       } catch (e) {
         setFundingRequestErrored(true)
-        clearPollingAndSubscription()
+        // clearPollingAndSubscription()
         toast.error({
           title: 'Something went wrong',
           description: 'Please refresh the page and try again',
@@ -109,7 +127,7 @@ export const useFundingAPI = () => {
       }
 
       setFundingRequestErrored(true)
-      clearPollingAndSubscription()
+      // clearPollingAndSubscription()
 
       toast.error({
         title: 'Something went wrong',
@@ -161,6 +179,6 @@ export const useFundingAPI = () => {
     requestFunding,
     requestFundingFromContext,
     retryFundingRequest,
-    refetchFundingTx: refetch,
+    // refetchFundingTx: refetch,
   }
 }

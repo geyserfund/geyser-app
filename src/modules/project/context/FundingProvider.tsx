@@ -51,6 +51,9 @@ export const FundingProvider = ({ children, project, wallet, rewards }: FundingP
   useEffect(() => {
     setFundingProject({ ...project, wallet, rewards })
     return () => {
+      console.log('==================================')
+      console.log('========FUNDING FLOW RESET===========')
+      console.log('==================================')
       resetFundingFlow()
       resetFundingForm()
     }

@@ -24,7 +24,7 @@ const CreatorReward = () => import('../../modules/project/pages1/projectView/vie
 
 const CreatorPost = () => import('../../modules/project/pages1/projectView/views/posts/views')
 
-const Refund = () => import('../../modules/project/pages/refund')
+const Refund = () => import('../../modules/project/pages1/projectFunding/views/refund')
 const ProfilePage = () => import('../../modules/profile/pages/profilePage/Profile')
 const ProfileSettingsPage = () => import('../../modules/profile/pages/profileSettings/ProfileSettings')
 const Badges = () => import('../../pages/badges/BadgesPage')
@@ -400,8 +400,15 @@ export const platformRoutes: RouteObject[] = [
                   {
                     index: true,
                     async lazy() {
-                      const PaymentOnchainInit = await ProjectFunding().then((m) => m.PaymentOnchainInit)
-                      return { Component: PaymentOnchainInit }
+                      const PaymentOnchainPrompt = await ProjectFunding().then((m) => m.PaymentOnchainPrompt)
+                      return { Component: PaymentOnchainPrompt }
+                    },
+                  },
+                  {
+                    path: getPath('fundingPaymentOnchainQR', PathName.projectName),
+                    async lazy() {
+                      const PaymentOnchainQR = await ProjectFunding().then((m) => m.PaymentOnchainQR)
+                      return { Component: PaymentOnchainQR }
                     },
                   },
                   {

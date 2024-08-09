@@ -19,6 +19,7 @@ export type AnimatedNavBarItem = {
   render?: () => React.ReactNode
   isDisabled?: boolean
   tooltipLabel?: string
+  disableClick?: boolean
 }
 
 type AnimatedNavBarProps = {
@@ -43,6 +44,10 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
   const [currentActiveIndex, setCurrentActiveIndex] = useState(activeIndex)
 
   const handleClick = (item: AnimatedNavBarItem, index: number) => {
+    if (item.disableClick) {
+      return
+    }
+
     setCurrentActiveIndex(index)
 
     if (item.onClick) {
@@ -83,30 +88,32 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
           borderRadius: isMobileMode ? '8px' : '10px',
           border: '1px solid',
           borderColor: colors.utils.text,
-          display: currentActiveItem?.isDisabled ? 'none' : undefined,
+          opacity: currentActiveItem?.isDisabled ? 0 : 1,
         }}
         animate={buttonProps}
         transition={{ type: 'spring', damping: 22, stiffness: 250 }}
       />
       {items.map((item, index) => {
         const isActive = currentActiveIndex === index
+
         const Icon = item.icon
         return (
-          <Tooltip key={item.name} label={item.tooltipLabel}>
-            <ProjectNavigationButton
-              setButtonprops={setButtonprops}
-              isActive={isActive}
-              length={items.length}
-              onClick={() => handleClick(item, index)}
-              _hover={isActive ? {} : { backgroundColor: 'neutral1.5' }}
-              {...(item.isBordered
-                ? {
-                    border: '1px solid',
-                    borderColor: 'neutral1.7',
-                  }
-                : {})}
-              isDisabled={item.isDisabled}
-            >
+          <ProjectNavigationButton
+            setButtonprops={setButtonprops}
+            key={item.name}
+            isActive={isActive}
+            length={items.length}
+            onClick={() => handleClick(item, index)}
+            _hover={isActive ? {} : { backgroundColor: 'neutral1.5' }}
+            {...(item.isBordered
+              ? {
+                  border: '1px solid',
+                  borderColor: 'neutral1.7',
+                }
+              : {})}
+            isDisabled={item.isDisabled}
+          >
+            <Tooltip label={item.tooltipLabel}>
               <HStack
                 w="full"
                 h="full"
@@ -120,8 +127,8 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
                 {(showIcon || item.showIconAlways) && Icon ? <Icon /> : null}
                 {showLabel && <span>{t(item.name)}</span>}
               </HStack>
-            </ProjectNavigationButton>
-          </Tooltip>
+            </Tooltip>
+          </ProjectNavigationButton>
         )
       })}
     </HStack>

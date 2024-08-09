@@ -18,7 +18,7 @@ import { commaFormatted, isProjectAnException, toInt, validateEmail } from '@/ut
 import { projectAffiliateAtom } from '../../pages1/projectView/state/affiliateAtom'
 import { ProjectState } from '../../state/projectAtom'
 import { getRefIdFromProjectAffiliates } from '../hooks/useProjectAffiliateWithProjectName'
-import { selectedGoalIdAtom } from './fundingTxAtom'
+import { fundingTxAtom, selectedGoalIdAtom } from './fundingTxAtom'
 
 export type FundingProject = Pick<ProjectState, 'id' | 'name' | 'rewardCurrency' | 'title' | 'owners'>
 
@@ -163,9 +163,14 @@ export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: 
 export const fundingOnchainAmountWarningAtom = atom((get) => {
   const formState = get(fundingFormStateAtom)
   const fundingProjectState = get(fundingProjectAtom)
+  const fundingTx = get(fundingTxAtom)
 
   const { totalAmount } = formState
   const walletLimits = fundingProjectState.wallet?.limits?.contribution
+
+  if (!fundingTx.address) {
+    return `Something went wrong with the onChain payment, please try using Lightning or try again`
+  }
 
   if (totalAmount && walletLimits) {
     const { onChain } = walletLimits
@@ -199,6 +204,14 @@ export const isFundingInputAmountValidAtom = atom((get) => {
   const walletLimits = fundingProjectState.wallet?.limits?.contribution
 
   const isException = isProjectAnException(fundingProjectState.name)
+
+  if (totalAmount === 0) {
+    return {
+      title: `The payment minimum is 1 satoshi.`,
+      description: 'Please update the amount.',
+      valid: false,
+    }
+  }
 
   if (!isException && walletLimits?.max && totalAmount >= walletLimits.max) {
     return {

@@ -1,4 +1,4 @@
-import { atom, useAtom, useAtomValue } from 'jotai'
+import { atom, useAtomValue } from 'jotai'
 
 import {
   projectFundingPaymentLightingRoutes,
@@ -17,15 +17,15 @@ export const paymentMethodAtom = atom((get) => {
     return PaymentMethods.lightning
   }
 
-  if (get(isonChainMethodAtom)) {
+  if (get(isOnchainMethodAtom)) {
     return PaymentMethods.onChain
   }
 
   return undefined
 })
 
-const isLightingMethodAtom = atom(routeMatchForAtom(projectFundingPaymentLightingRoutes))
-const isonChainMethodAtom = atom(routeMatchForAtom(projectFundingPaymentOnchainRoutes))
+export const isLightingMethodAtom = atom(routeMatchForAtom(projectFundingPaymentLightingRoutes))
+export const isOnchainMethodAtom = atom(routeMatchForAtom(projectFundingPaymentOnchainRoutes))
 
 export const isOnchainMethodStartedAtom = atom(routeMatchForAtom(projectFundingPaymentOnchainStartedRoutes))
 

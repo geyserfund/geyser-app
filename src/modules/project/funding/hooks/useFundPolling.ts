@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai'
 import { useFundingTxWithInvoiceStatusQuery } from '@/types'
 import { toInt } from '@/utils'
 
-import { ConfirmationMethod, useCheckFundingStatusAtom, useFundingTxAtom } from '../state'
+import { useCheckFundingStatusAtom, useFundingTxAtom } from '../state'
 import { pollingFundingTxAtom } from '../state/pollingFundingTx'
 
 export const useFundPolling = () => {
@@ -23,7 +23,7 @@ export const useFundPolling = () => {
     skip: skipPolling,
     onCompleted(data) {
       if (data && data.fundingTx) {
-        checkFundingStatus(data.fundingTx, ConfirmationMethod.Polling)
+        checkFundingStatus(data.fundingTx)
       }
     },
     pollInterval: pollingFundingTx,

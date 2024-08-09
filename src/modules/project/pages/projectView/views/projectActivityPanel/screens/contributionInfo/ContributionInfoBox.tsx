@@ -14,8 +14,8 @@ import { FundingStatus, InvoiceStatus, ProjectReward, Satoshis } from '../../../
 import { hasOwnNode } from '../../../../../../../../utils/helpers'
 import { useFundingContext } from '../../../../../../context'
 import { Badge } from '../../../../../../pages1/projectFunding/components/Badge'
+import { DownloadInvoice } from '../../../../../../pages1/projectFunding/views/fundingSuccess/components/DownloadInvoice'
 import { CopyProjectLink } from './components'
-import { DownloadInvoice } from './components/DownloadInvoice'
 
 export enum ContributionInfoBoxVersion {
   NEUTRAL = 'neutral',

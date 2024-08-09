@@ -6,8 +6,9 @@ import { PaymentFailed } from './views/fundingPayment/views/paymentFailed/Paymen
 import { PaymentLightning } from './views/fundingPayment/views/PaymentLightning'
 import { PaymentLoading } from './views/fundingPayment/views/PaymentLoading'
 import { PaymentOnchain } from './views/fundingPayment/views/paymentOnchain/PaymentOnchain'
-import { PaymentOnchainInit } from './views/fundingPayment/views/paymentOnchain/views/PaymentOnchainInit'
 import { PaymentOnchainProcessing } from './views/fundingPayment/views/paymentOnchain/views/PaymentOnchainProcessing'
+import { PaymentOnchainPrompt } from './views/fundingPayment/views/paymentOnchain/views/PaymentOnchainPrompt'
+import { PaymentOnchainQR } from './views/fundingPayment/views/paymentOnchain/views/PaymentOnchainQR'
 import { PaymentOnChainRefund } from './views/fundingPayment/views/paymentOnchain/views/PaymentOnChainRefund'
 import { PaymentOnChainRefundInitiated } from './views/fundingPayment/views/paymentOnchain/views/PaymentOnChainRefundInitiated'
 import { FundingSuccess } from './views/fundingSuccess/FundingSuccess'
@@ -21,8 +22,9 @@ export {
   PaymentLightning,
   PaymentLoading,
   PaymentOnchain,
-  PaymentOnchainInit,
   PaymentOnchainProcessing,
+  PaymentOnchainPrompt,
+  PaymentOnchainQR,
   PaymentOnChainRefund,
   PaymentOnChainRefundInitiated,
   ProjectFunding,

@@ -1,14 +1,10 @@
 import { atom, useAtomValue, useSetAtom } from 'jotai'
-import { useCallback } from 'react'
 
 import { FundingStatus, FundingTxFragment, FundingTxWithInvoiceStatusFragment, InvoiceStatus } from '../../../../types'
 import {
   OnChainStatus,
   onChainStatusAtom,
-} from '../../pages/projectView/views/projectActivityPanel/screens/qr/views/onchain/states'
-import { findNextFundingStage } from '../utils/helpers'
-import { fundingStageAtom } from './fundingStagesAtom'
-import { pollingFundingTxAtom, subscriptionActiveAtom } from './pollingFundingTx'
+} from '../../pages1/projectFunding/views/fundingPayment/views/paymentOnchain/states'
 
 const initialFunding: Omit<FundingTxFragment, 'funder'> = {
   id: 0,
@@ -43,49 +39,42 @@ const resetFundingTxAtom = atom(null, (get, set) => {
   set(fundingTxAtom, initialFunding)
 })
 
-const fundingStatusCheckAtom = atom(
-  null,
-  (get, set, { fundingTx, method }: { fundingTx: FundingTxWithInvoiceStatusFragment; method: ConfirmationMethod }) => {
-    if (![FundingStatus.Paid, FundingStatus.Pending].includes(fundingTx.status)) {
-      return
-    }
+const fundingStatusCheckAtom = atom(null, (get, set, fundingTx: FundingTxWithInvoiceStatusFragment) => {
+  if (![FundingStatus.Paid, FundingStatus.Pending].includes(fundingTx.status)) {
+    return
+  }
 
-    const currentFundingTx = get(fundingTxAtom)
+  const currentFundingTx = get(fundingTxAtom)
 
-    if (
-      (fundingTx.invoiceStatus !== currentFundingTx.invoiceStatus || fundingTx.status !== currentFundingTx.status) &&
-      fundingTx.invoiceId === currentFundingTx.invoiceId
-    ) {
-      if (fundingTx.onChain && fundingTx.status === FundingStatus.Pending) {
-        const currentOnChainStatus = get(onChainStatusAtom)
-        if (currentOnChainStatus === OnChainStatus.awaiting) {
-          set(onChainStatusAtom, OnChainStatus.processing)
-        }
-
-        // Resetting the polling and subscription after status check shows transaction completed.
-        set(pollingFundingTxAtom, 0)
-        set(subscriptionActiveAtom, false)
+  if (
+    (fundingTx.invoiceStatus !== currentFundingTx.invoiceStatus || fundingTx.status !== currentFundingTx.status) &&
+    fundingTx.invoiceId === currentFundingTx.invoiceId
+  ) {
+    if (fundingTx.onChain && fundingTx.status === FundingStatus.Pending) {
+      const currentOnChainStatus = get(onChainStatusAtom)
+      if (currentOnChainStatus === OnChainStatus.awaiting) {
+        set(onChainStatusAtom, OnChainStatus.processing)
       }
 
-      if (fundingTx.status === FundingStatus.Paid) {
-        const currentState = get(fundingStageAtom)
-        const nextState = findNextFundingStage(currentState)
-        set(fundingStageAtom, nextState)
-
-        // Resetting the polling and subscription after status check shows transaction completed.
-        set(pollingFundingTxAtom, 0)
-        set(subscriptionActiveAtom, false)
-      }
-
-      set(fundingTxAtom, {
-        ...currentFundingTx,
-        ...fundingTx,
-        paymentRequest: fundingTx.paymentRequest || currentFundingTx.paymentRequest,
-        uuid: fundingTx.uuid || currentFundingTx.uuid,
-      })
+      // Resetting the polling and subscription after status check shows transaction completed.
+      // set(pollingFundingTxAtom, 0)
+      // set(subscriptionActiveAtom, false)
     }
-  },
-)
+
+    if (fundingTx.status === FundingStatus.Paid) {
+      // Resetting the polling and subscription after status check shows transaction completed.
+      // set(pollingFundingTxAtom, 0)
+      // set(subscriptionActiveAtom, false)
+    }
+
+    set(fundingTxAtom, {
+      ...currentFundingTx,
+      ...fundingTx,
+      paymentRequest: fundingTx.paymentRequest || currentFundingTx.paymentRequest,
+      uuid: fundingTx.uuid || currentFundingTx.uuid,
+    })
+  }
+})
 
 export const useFundingTxAtom = () => {
   const fundingTx = useAtomValue(fundingTxAtom)
@@ -99,18 +88,7 @@ export const useFundingTxAtom = () => {
   }
 }
 
-export const useCheckFundingStatusAtom = () => {
-  const _checkFundingStatus = useSetAtom(fundingStatusCheckAtom)
-
-  const checkFundingStatus = useCallback(
-    (fundingTx: FundingTxWithInvoiceStatusFragment, method: ConfirmationMethod) => {
-      _checkFundingStatus({ fundingTx, method })
-    },
-    [_checkFundingStatus],
-  )
-
-  return checkFundingStatus
-}
+export const useCheckFundingStatusAtom = () => useSetAtom(fundingStatusCheckAtom)
 
 /** Current Selected goal for Funding in context */
 export const selectedGoalIdAtom = atom<string | null>(null)

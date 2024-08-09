@@ -36,10 +36,13 @@ export type SwapData = {
 
 type SwapDataStructure = { [key: string]: SwapData }
 
+/** Hold the swap Id for the Funding Tx in progress */
 export const currentSwapIdAtom = atom<string>('')
 
+/** Holds all of the swap refund files */
 export const swapAtom = atomWithStorage<SwapDataStructure>('swapArray', {})
 
+/** Parses swap json received with FundingTx and stores it in swapAtom, also sets currentSwapId */
 const swapParseAtom = atom(null, (get, set, swap: { json: string }, contributionInfo?: SwapContributionInfo) => {
   const keys = get(keyPairAtom)
   const swapData = get(swapAtom)
@@ -52,6 +55,7 @@ const swapParseAtom = atom(null, (get, set, swap: { json: string }, contribution
   set(swapAtom, { [refundFile.id]: refundFile, ...swapData })
 })
 
+/** Gets and sets an entry in swap atom based on currentSwapId */
 const currentSwapAtom = atom(
   (get) => {
     const currentSwapId = get(currentSwapIdAtom)
@@ -69,12 +73,14 @@ const currentSwapAtom = atom(
   },
 )
 
+/** Add swap data refund file to swapAtom */
 const addSwapAtom = atom(null, (get, set, data: SwapData) => {
   const swapData = get(swapAtom)
   swapData[data.id] = data
   set(swapAtom, swapData)
 })
 
+/** Remove swap data from swapAtom */
 const removeRefundedSwapAtom = atom(null, (get, set, swapId: string) => {
   const swapData = get(swapAtom)
   const newSwapData = {} as SwapDataStructure

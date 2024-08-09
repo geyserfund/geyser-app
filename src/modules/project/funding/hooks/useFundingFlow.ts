@@ -66,8 +66,6 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
   useAtom(fundingStageAtomEffect)
 
   useFundSubscription({
-    projectId: fundingTx.projectId,
-    fundingTxId: fundingTx.id,
     onComplete() {
       refetch()
     },
@@ -83,7 +81,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
     skip: pollingFundingTx === 0,
     onCompleted(data) {
       if (data && data.fundingTx) {
-        checkFundingStatus(data.fundingTx, ConfirmationMethod.Polling)
+        checkFundingStatus(data.fundingTx)
       }
     },
     pollInterval: pollingFundingTx,
@@ -119,7 +117,7 @@ export const useFundingFlow = (options?: IFundingFlowOptions) => {
 
               const data = await refetch()
               if (data?.data?.fundingTx) {
-                checkFundingStatus(data.data.fundingTx, ConfirmationMethod.Subscription)
+                checkFundingStatus(data.data.fundingTx)
               }
             })
             .catch(() => {

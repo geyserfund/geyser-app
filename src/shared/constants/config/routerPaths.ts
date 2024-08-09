@@ -66,6 +66,7 @@ export enum PathName {
   fundingPaymentFailed = 'failed',
   fundingPaymentLightning = 'lightning',
   fundingPaymentOnchain = 'onchain',
+  fundingPaymentOnchainQR = 'qr',
   fundingPaymentOnchainProcessing = 'processing',
   fundingPaymentOnchainRefund = 'refund',
   fundingPaymentOnchainRefundInitiated = 'initiated',
@@ -175,6 +176,8 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentLightning}`,
   fundingPaymentOnchain: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}`,
+  fundingPaymentOnchainQR: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}/${PathName.fundingPaymentOnchainQR}`,
   fundingPaymentOnchainProcessing: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}/${PathName.fundingPaymentOnchainProcessing}`,
   fundingPaymentOnchainRefund: (projectName: string) =>

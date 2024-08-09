@@ -5,7 +5,7 @@ import { IoMdRefresh } from 'react-icons/io'
 
 import { Body2 } from '../../../../../../../../../components/typography'
 import { SkeletonLayout } from '../../../../../../../../../shared/components/layouts'
-import { QRCodeSizeMap } from './QRCodeComponent'
+import { QRCodeSizeMap } from '../../../../../../../pages1/projectFunding/views/fundingPayment/components/QRCodeComponent'
 
 const FUNDING_REQUEST_TIMEOUT = 45_000
 

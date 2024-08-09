@@ -44,7 +44,7 @@ export function ControlledTextInput(props: Props) {
     : ''
 
   return (
-    <FieldContainer required={props.required} title={props.label} subtitle={props.description} error={props.error}>
+    <FieldContainer required={props.required} title={props.label} subtitle={props.description} error={error}>
       <InputGroup>
         <Input
           {...field}

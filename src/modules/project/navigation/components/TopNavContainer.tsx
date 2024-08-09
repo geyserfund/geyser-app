@@ -16,7 +16,7 @@ export const TopNavContainer = ({ children, ...props }: PropsWithChildren<StackP
       paddingX={standardPadding}
       paddingBottom={{ base: 3, lg: 4 }}
       background={'utils.pbg'}
-      zIndex={1}
+      zIndex={3}
       {...props}
     >
       {children}

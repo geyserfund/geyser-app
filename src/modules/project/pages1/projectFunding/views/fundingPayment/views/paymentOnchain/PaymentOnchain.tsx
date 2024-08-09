@@ -1,3 +1,5 @@
+import { Outlet } from 'react-router'
+
 export const PaymentOnchain = () => {
-  return <div>PaymentOnchain</div>
+  return <Outlet />
 }
