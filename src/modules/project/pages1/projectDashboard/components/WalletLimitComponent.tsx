@@ -2,11 +2,11 @@ import { HStack, Link, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { Limits } from '@/modules/project/pages1/projectCreation/hooks/useWalletForm'
+import { FeedbackCard } from '@/shared/molecules/FeedbackCard'
 
 import { Body1, Body2 } from '../../../../../components/typography'
 import { GeyserLightningWalletGuideLink } from '../../../../../shared/constants'
 import { commaFormatted } from '../../../../../utils'
-import { FeedbackCard } from '../../../pages/projectView/views/projectActivityPanel/screens/qr/views/onchain/components'
 
 export const WalletLimitComponent = ({ limit }: { limit: Limits }) => {
   const { t } = useTranslation()

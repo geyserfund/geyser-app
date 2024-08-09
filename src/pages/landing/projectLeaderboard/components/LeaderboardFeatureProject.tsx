@@ -1,9 +1,10 @@
 import { Box, StackProps } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
+import { AvatarElement } from '@/shared/molecules/AvatarElement'
+
 import { Body1, Body2 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
-import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectActivityPanel/components'
 import { CardLayout } from '../../../../shared/components/layouts'
 import { getPath } from '../../../../shared/constants'
 import { ProjectForLandingPageFragment } from '../../../../types'

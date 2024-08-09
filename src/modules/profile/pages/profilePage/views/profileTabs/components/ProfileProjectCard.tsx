@@ -2,13 +2,14 @@ import { Box, HStack, SkeletonText, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import { FollowButton } from '@/modules/project/pages1/projectView/views/body/components'
+
 import { Body1, Body2 } from '../../../../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../../../../components/ui'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { getPath } from '../../../../../../../shared/constants'
 import { ProjectForProfilePageFragment } from '../../../../../../../types'
 import { commaFormatted, toSmallImageUrl } from '../../../../../../../utils'
-import { FollowButton } from '../../../../../../project/pages/projectView/views/projectActivityPanel/components'
 
 interface ProfileProjectCardProps extends Omit<CardLayoutProps, 'to'> {
   project: ProjectForProfilePageFragment

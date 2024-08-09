@@ -4,7 +4,7 @@ import { PiCopy } from 'react-icons/pi'
 
 import { useListenFundingSuccess } from '@/modules/project/funding/hooks/useListenFundingSuccess'
 import { useFundingTxAtom } from '@/modules/project/funding/state'
-import { useCopyToClipboard } from '@/modules/project/pages/projectView/views/projectActivityPanel/screens/qr/hooks/useCopyButton'
+import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
 
 import { QRCodeComponent } from '../components/QRCodeComponent'
 import { TotalAmountToPay } from '../components/TotalAmountToPay'

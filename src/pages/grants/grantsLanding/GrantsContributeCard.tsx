@@ -7,7 +7,7 @@ import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../shared/com
 import { useAnimatedClipboard } from '../../../shared/hooks/useAnimatedClipboard'
 import { GrantStatistics } from '../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../utils'
-import { GrantsContributeModal } from '../components/GrantsContributeModal'
+
 import { ListText } from '../components/ListText'
 import { CONTRIBUTION_ADDRESS } from '../constants'
 
@@ -49,7 +49,6 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
         </ListText>
       </Box>
       <Stack display="flex" mt="6" direction={{ base: 'column', lg: 'row' }} justify="center">
-        <GrantsContributeModal />
         {isMobile ? (
           <Text fontSize={'14px'} fontWeight="500" mt={3} color="neutral.600">
             {t(

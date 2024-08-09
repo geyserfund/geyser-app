@@ -3,8 +3,8 @@ import { t } from 'i18next'
 import { PiCopy } from 'react-icons/pi'
 
 import { useFundingTxAtom } from '@/modules/project/funding/state'
-import { useCopyToClipboard } from '@/modules/project/pages/projectView/views/projectActivityPanel/screens/qr/hooks/useCopyButton'
 import { Body } from '@/shared/components/typography'
+import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
 
 export const SendEmailToCreator = () => {
   const { fundingTx } = useFundingTxAtom()

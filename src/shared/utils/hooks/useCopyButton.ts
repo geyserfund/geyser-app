@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 
-import { copyTextToClipboard } from '../../../../../../../../../utils'
+import { copyTextToClipboard } from '@/utils'
 
 export const useCopyToClipboard = (content: string) => {
   const [hasCopied, setHadCopied] = useState(false)

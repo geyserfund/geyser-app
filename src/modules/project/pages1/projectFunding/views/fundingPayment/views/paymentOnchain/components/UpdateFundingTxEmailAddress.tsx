@@ -1,4 +1,4 @@
-import { Button, HStack, Stack, VStack } from '@chakra-ui/react'
+import { Button, Stack, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useState } from 'react'

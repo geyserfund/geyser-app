@@ -4,7 +4,6 @@ import { FormEvent } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
 import { useNotification } from '@/utils'

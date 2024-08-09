@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { AuthModal } from '../../../../components/molecules'
 import { H3 } from '../../../../components/typography'
 import { useAuthContext } from '../../../../context'
-import { ProjectFundingModal } from '../../../../modules/project/pages/projectFunding/components/ProjectFundingModal'
 import { CardLayout } from '../../../../shared/components/layouts'
 import { Grant, GrantApplicant, GrantStatusEnum, VotingSystem } from '../../../../types'
 import { GrantApplicantCard } from '../components/GrantApplicantCard'
@@ -91,7 +90,6 @@ export const CommunityVoting = ({
             />
           )
         })}
-        {fundingModalProps.isOpen && <ProjectFundingModal {...fundingModalProps} grant={grant} />}
 
         <AuthModal
           title={t('Login to vote')}

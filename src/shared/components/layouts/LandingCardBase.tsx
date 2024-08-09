@@ -1,5 +1,8 @@
 import { Box, HStack, Icon, Skeleton, SkeletonCircle, SkeletonText, Tooltip, VStack } from '@chakra-ui/react'
 
+import { SubscribeButton } from '@/modules/project/components/SubscribeButton'
+import { AvatarElement } from '@/shared/molecules/AvatarElement'
+
 import { H3 } from '../../../components/typography'
 import {
   ImageWithReload,
@@ -8,8 +11,6 @@ import {
   ProjectStatusLabels,
   ProjectStatusTooltip,
 } from '../../../components/ui'
-import { AvatarElement } from '../../../modules/project/pages/projectView/views/projectActivityPanel/components'
-import { SubscribeButton } from '../../../modules/project/pages/projectView/views/projectActivityPanel/screens/info/components'
 import {
   FundingStatWithFollow,
   FundingStatWithFollowProps,

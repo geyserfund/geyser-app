@@ -1,7 +1,7 @@
 import { BottomNavBarContainer } from '@/modules/navigation/bottomNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { ContributeButton } from '@/modules/project/pages/projectView/views/projectActivityPanel/ContributeButton'
 
+import { ContributeButton } from './ContributeButton'
 import { CreatorButtons } from './CreatorButtons'
 
 export const BodySectionPageBottomBar = () => {

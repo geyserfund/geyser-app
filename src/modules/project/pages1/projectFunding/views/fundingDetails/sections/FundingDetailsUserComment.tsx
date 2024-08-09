@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { GifModal } from '@/modules/project/pages1/projectView/views/body/components'
 import { CardLayout } from '@/shared/components/layouts'
 import { Body, H1 } from '@/shared/components/typography'
 
@@ -15,7 +16,6 @@ import { LogoutConfirmationModal } from '../../../../../../../pages/auth/compone
 import { useAuthModal } from '../../../../../../../pages/auth/hooks'
 import { useModal } from '../../../../../../../shared/hooks/useModal'
 import { AvatarElement } from '../../../../../../../shared/molecules/AvatarElement'
-import { GifModal } from '../../../../../pages/projectView/views/projectActivityPanel/components/GifModal'
 
 export const FundingDetailsUserComment = () => {
   const { t } = useTranslation()

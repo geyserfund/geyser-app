@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { PiCopy, PiLink } from 'react-icons/pi'
 
 import { useFundingTxAtom } from '@/modules/project/funding/state'
-import { useCopyToClipboard } from '@/modules/project/pages/projectView/views/projectActivityPanel/screens/qr/hooks/useCopyButton'
+import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
 import { getBip21Invoice } from '@/utils/lightning/bip21'
 
 import { QRCodeComponent } from '../../../components/QRCodeComponent'
