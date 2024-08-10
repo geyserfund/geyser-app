@@ -24,7 +24,6 @@ export const SummaryBanner = () => {
       bgGradient="linear(to-r, #B2FAEC, #F1FAFD)"
       p={4}
       borderRadius="md"
-      x
       height="130px"
       maxHeight="130px"
     >
