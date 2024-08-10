@@ -3,8 +3,6 @@ import { useEffect } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 
 import { FundingProviderWithProjectContext } from '../../context/FundingProvider'
-// import { FundingProviderWithProjectContext } from '../../context'
-// import { FundingProviderWithProjectContext } from '../../context/FundingProvider'
 import { ProjectProvider } from '../../context/ProjectProvider'
 import { ProjectContainer } from './ProjectContainer'
 import { addProjectAffiliateAtom } from './state/affiliateAtom'

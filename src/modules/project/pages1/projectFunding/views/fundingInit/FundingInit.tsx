@@ -8,7 +8,7 @@ import { FundingInitRewards } from './sections/FundingInitRewards'
 import { FundingInitBottomContent, FundingInitSideContent } from './sections/FundingInitSideContent'
 
 export const FundingInit = () => {
-  const { setState, project } = useFundingFormAtom()
+  const { project } = useFundingFormAtom()
 
   return (
     <FundingLayout
@@ -18,7 +18,7 @@ export const FundingInit = () => {
       containerProps={{ spacing: 6 }}
     >
       <CardLayout w="full" spacing={1}>
-        <DonationInput name="donationAmount" onChange={setState} />
+        <DonationInput />
       </CardLayout>
       <FundingInitRewards />
     </FundingLayout>

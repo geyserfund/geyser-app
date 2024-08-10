@@ -125,7 +125,7 @@ export const ProjectFundingSummary = () => {
 
         {getTotalAmount('dollar', name) >= 10 && (
           <HStack display={mobileDisplayStyle}>
-            <Body size={{ base: 'sm', lg: 'md' }}>{`${t('You will Receive')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('You will Receive')}: `}</Body>
             <HStack>
               <Badge
                 donationAmountInDollars={getTotalAmount('dollar', name)}

@@ -26,7 +26,7 @@ export const FundingPayment = () => {
 
   return (
     <FundingLayout
-      backPath={getPath('projectFunding', project.name)}
+      backPath={'..'}
       sideContent={<FundingPaymentSideContent />}
       bottomContent={<FundingPaymentBottomContent />}
       containerProps={{

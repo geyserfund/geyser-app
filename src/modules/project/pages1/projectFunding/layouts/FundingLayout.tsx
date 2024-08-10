@@ -35,7 +35,7 @@ export const FundingLayout = ({
     <VStack w="full">
       <ProjectNavContainer>
         <HStack>
-          {backPath && (
+          {backPath !== undefined && (
             <Button
               as={Link}
               to={backPath}

@@ -4,17 +4,16 @@ import {
   HStack,
   Input,
   InputGroup,
-  InputGroupProps,
   InputLeftElement,
-  InputProps,
   InputRightElement,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { KeyboardEvent, useEffect, useRef, useState } from 'react'
+import { KeyboardEvent, useRef, useState } from 'react'
 import { BiDollar } from 'react-icons/bi'
 
+import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { H1 } from '@/shared/components/typography'
 
 import { CrownIcon, MedalIcon, StarIcon, TrophyIcon } from '../../../../../../../components/icons'
@@ -23,22 +22,25 @@ import { MonoBody1 } from '../../../../../../../components/typography'
 import { useBtcContext } from '../../../../../../../context/btc'
 import { commaFormatted } from '../../../../../../../utils'
 
-interface IDonationInputProps extends Omit<InputProps, 'onChange'> {
-  name: string
-  onChange: (name: string, value: number) => void
-  inputGroup?: InputGroupProps
-}
-
-export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }: IDonationInputProps) => {
+export const DonationInput = () => {
   const { btcRate } = useBtcContext()
 
   const inputRef = useRef<HTMLInputElement>(null)
 
+  const {
+    formState: { donationAmount },
+    setState,
+  } = useFundingFormAtom()
+
+  const satoshi = donationAmount
+  const setSatoshi = (val: number) => {
+    setState('donationAmount', val)
+  }
+
   const { isOpen: isSatoshi, onToggle } = useDisclosure({ defaultIsOpen: true })
   const isDollar = !isSatoshi
 
-  const [satoshi, setSatoshi] = useState(0)
-  const [dollar, setDollar] = useState(0.0)
+  const [dollar, setDollar] = useState(Math.round(satoshi * btcRate))
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.replaceAll(',', '')
@@ -58,10 +60,6 @@ export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }
       setDollar(Math.round(val * btcRate))
     }
   }
-
-  useEffect(() => {
-    onChange(name, satoshi)
-  }, [satoshi, name, onChange])
 
   const handleDefaultAmountButtonClick = (val: number) => {
     setDollar(val)
@@ -108,7 +106,7 @@ export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }
         </HStack>
       </HStack>
 
-      <InputGroup {...inputGroup}>
+      <InputGroup>
         <InputLeftElement pt={1} pl={4}>
           {isSatoshi ? <SatSymbolIcon fontSize="24px" /> : <BiDollar fontSize="24px" />}
         </InputLeftElement>
@@ -121,11 +119,10 @@ export const DonationInput = ({ className, onChange, name, inputGroup, ...rest }
           onChange={handleInput}
           onKeyDown={handleKeyDown}
           pl={10}
-          {...rest}
           _placeholder={{
-            color: 'neutral.1000',
+            color: 'neutral1.11',
           }}
-          color="neutral.1000"
+          color="neutral1.11"
           placeholder="0"
         />
         <InputRightElement pr={'10px'} w="fit-content" minWidth="100px" maxWidth="150px">

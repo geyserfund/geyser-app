@@ -2,9 +2,9 @@ import { useTranslation } from 'react-i18next'
 
 import { Body } from '@/shared/components/typography'
 
+import { FeedbackCard } from '../../../../../../../../../shared/components/layouts/FeedbackCard'
 import { RefundPolicyNote } from '../../../components/RefundPolicyNote'
 import { DownloadRefundButton } from './DownloadRefundButton'
-import { FeedbackCard } from './FeedbackCard'
 
 export const DownloadRefund = () => {
   const { t } = useTranslation()

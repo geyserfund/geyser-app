@@ -2,7 +2,7 @@ import { HStack, Link, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { Limits } from '@/modules/project/pages1/projectCreation/hooks/useWalletForm'
-import { FeedbackCard } from '@/shared/molecules/FeedbackCard'
+import { FeedbackCard } from '@/shared/components/layouts/FeedbackCard'
 
 import { Body1, Body2 } from '../../../../../components/typography'
 import { GeyserLightningWalletGuideLink } from '../../../../../shared/constants'
