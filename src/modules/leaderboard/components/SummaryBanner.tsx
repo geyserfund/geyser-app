@@ -1,9 +1,9 @@
-import { Box, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, Skeleton, VStack } from '@chakra-ui/react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Body } from '@/shared/components/typography'
-import { convertToBTC, getBitcoinAmount, getShortAmountLabel, useMobileMode } from '@/utils'
+import { getBitcoinAmount, getShortAmountLabel, useMobileMode } from '@/utils'
 
 import { useSummaryBannerStats } from '../hooks'
 
@@ -24,6 +24,7 @@ export const SummaryBanner = () => {
       bgGradient="linear(to-r, #B2FAEC, #F1FAFD)"
       p={4}
       borderRadius="md"
+      x
       height="130px"
       maxHeight="130px"
     >
