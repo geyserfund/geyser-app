@@ -1,9 +1,9 @@
 import { useQuery } from '@apollo/client'
 
-import { QUERY_SUMMARY_BANNER } from '../graphql/queries/summaryBannerQuery'
+import { QUERY_PROJECTS_SUMMARY } from '@/graphqlBase'
 
 export const useSummaryBannerStats = () => {
-  const { data, loading, error } = useQuery(QUERY_SUMMARY_BANNER)
+  const { data, loading, error } = useQuery(QUERY_PROJECTS_SUMMARY)
 
   const stats = {
     projectsCount: data?.projectsSummary?.projectsCount || 0,

@@ -265,6 +265,9 @@ export const RopeUrl = 'https://storage.googleapis.com/geyser-projects-media/ico
 export const StarUrl = 'https://storage.googleapis.com/geyser-projects-media/icons/star.png'
 export const TrophyUrl = 'https://storage.googleapis.com/geyser-projects-media/icons/trophy.png'
 export const LightningUrl = 'https://storage.googleapis.com/geyser-projects-media/icons/lightning.png'
+export const GoldMedalUrl = 'https://storage.googleapis.com/geyser-projects-media/icons/GoldMedal.png'
+export const SilverMedalUrl = 'https://storage.googleapis.com/geyser-projects-media/icons/SilverMedal.png'
+export const BronzeMedalUrl = 'https://storage.googleapis.com/geyser-projects-media/icons/BronzeMedal.png'
 
 // AIRTABLE LINKS
 export const LanguageRequestUrl = 'https://airtable.com/shrEs5AsmkC07tWcX'

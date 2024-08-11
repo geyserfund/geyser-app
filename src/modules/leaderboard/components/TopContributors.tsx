@@ -1,8 +1,12 @@
-import { HStack, Image, Text, VStack } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
+import { Box, HStack, Image, VStack } from '@chakra-ui/react'
 
+import { ContributionsIcon1 } from '@/components/icons/svg/ContributionsIcon1'
+import { ContributorsIcon1 } from '@/components/icons/svg/ContributorsIcon1'
+import { ImageWithReload } from '@/components/ui'
+import { Body } from '@/shared/components/typography'
+import { BronzeMedalUrl, GoldMedalUrl, SilverMedalUrl } from '@/shared/constants/platform/url'
+import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { GlobalContributorLeaderboardRow, LeaderboardPeriod } from '@/types'
-import { commaFormatted } from '@/utils'
 
 import { useTopContributors } from '../hooks'
 import { ScrollableList } from './ScrollableList'
@@ -11,15 +15,21 @@ interface TopContributorsProps {
   period: LeaderboardPeriod
 }
 
+const MAX_CONTRIBUTORS = 100
+
 export const TopContributors = ({ period }: TopContributorsProps) => {
-  const { t } = useTranslation()
-  const { contributors } = useTopContributors(period)
+  const { contributors } = useTopContributors(period, MAX_CONTRIBUTORS)
 
   return (
-    <VStack width="full" alignItems="flex-start" spacing={4}>
-      <Text fontSize="2xl" fontWeight="bold">
-        {t('Top Contributors')}
-      </Text>
+    <VStack
+      width="100%"
+      alignItems="flex-start"
+      backgroundColor="neutralAlpha.1"
+      borderRadius="8px"
+      border="1px solid"
+      borderColor="neutralAlpha.6"
+      p={4}
+    >
       <ScrollableList
         data={contributors}
         renderItem={(contributor, index) => (
@@ -31,25 +41,40 @@ export const TopContributors = ({ period }: TopContributorsProps) => {
 }
 
 const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributorLeaderboardRow; rank: number }) => {
-  const { t } = useTranslation()
+  const { formatAmount } = useCurrencyFormatter()
+
+  const formattedAmountContributed = formatAmount(contributor.contributionsCount, 'BTCSAT')
+
+  const truncateText = (text: string, maxLength: number) => {
+    return text.length > maxLength ? text.slice(0, maxLength) + '...' : text
+  }
 
   return (
-    <HStack width="full" spacing={4} p={2} borderBottom="1px" borderColor="gray.200">
-      <Text fontWeight="bold" minWidth="30px">
-        {rank <= 3 ? <RankMedal rank={rank} /> : `#${rank}`}
-      </Text>
-      <VStack alignItems="flex-start" flex={1}>
-        <Text fontWeight="bold">{contributor.username}</Text>
-        <Text fontSize="sm">{commaFormatted(contributor.contributionsTotal)} sats</Text>
-        <Text fontSize="sm">
-          {t('{{count}} projects contributed', { count: contributor.projectsContributedCount })}
-        </Text>
+    <HStack width="full" spacing={4} padding={'8px, 16px, 8px, 16px'}>
+      <Box justifyContent="center" minWidth="30px">
+        {rank <= 3 ? (
+          <RankMedal rank={rank} />
+        ) : (
+          <Body align={'center'} fontSize="14px" bold color={'neutralAlpha.9'}>
+            {rank}
+          </Body>
+        )}
+      </Box>
+      <ImageWithReload src={contributor.userImageUrl} alt={contributor.username} boxSize="40px" borderRadius="16px" />
+      <VStack maxHeight="38px" alignItems="flex-start" flex={1} spacing={0}>
+        <Body fontSize={'14px'} bold isTruncated>
+          {truncateText(contributor.username, 35)}
+        </Body>
+        <Body size="xs" dark>
+          {formattedAmountContributed} <ContributionsIcon1 /> {contributor.projectsContributedCount}{' '}
+          <ContributorsIcon1 />
+        </Body>
       </VStack>
     </HStack>
   )
 }
 
 const RankMedal = ({ rank }: { rank: number }) => {
-  const medalColors = ['gold', 'silver', 'bronze']
-  return <Image src={`/images/medals/${medalColors[rank - 1]}.svg`} alt={`Rank ${rank}`} boxSize="24px" />
+  const medalUrl = [GoldMedalUrl, SilverMedalUrl, BronzeMedalUrl]
+  return <Image src={medalUrl[rank - 1]} alt={`Rank ${rank}`} boxSize="32px" />
 }
