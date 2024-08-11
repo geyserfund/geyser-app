@@ -842,14 +842,15 @@ export type GetProjectsMostFundedOfTheWeekInput = {
 }
 
 export type GlobalContributorLeaderboardRow = {
-  __typename?: 'GlobalContributorLeaderboardRow';
-  contributionsCount: Scalars['Int']['output'];
-  contributionsTotal: Scalars['Int']['output'];
-  contributionsTotalUsd: Scalars['Float']['output'];
-  projectsContributedCount: Scalars['Int']['output'];
-  userId: Scalars['BigInt']['output'];
-  username: Scalars['String']['output'];
-};
+  __typename?: 'GlobalContributorLeaderboardRow'
+  contributionsCount: Scalars['Int']['output']
+  contributionsTotal: Scalars['Int']['output']
+  contributionsTotalUsd: Scalars['Float']['output']
+  projectsContributedCount: Scalars['Int']['output']
+  userId: Scalars['BigInt']['output']
+  userImageUrl: Scalars['String']['output']
+  username: Scalars['String']['output']
+}
 
 export type GlobalProjectLeaderboardRow = {
   __typename?: 'GlobalProjectLeaderboardRow';
@@ -870,6 +871,7 @@ export type GlobalProjectLeaderboardRow = {
   contributionsTotalUsd: Scalars['Float']['output']
   contributorsCount: Scalars['Int']['output']
   projectName: Scalars['String']['output']
+  projectThumbnailUrl: Scalars['String']['output']
   projectTitle: Scalars['String']['output']
 }
 
@@ -3831,15 +3833,19 @@ export type GenerateAffiliatePaymentRequestResponseResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
-export type GlobalContributorLeaderboardRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['GlobalContributorLeaderboardRow'] = ResolversParentTypes['GlobalContributorLeaderboardRow']> = {
-  contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  projectsContributedCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  userId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type GlobalContributorLeaderboardRowResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['GlobalContributorLeaderboardRow'] = ResolversParentTypes['GlobalContributorLeaderboardRow'],
+> = {
+  contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
+  projectsContributedCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  userId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  userImageUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type GlobalProjectLeaderboardRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['GlobalProjectLeaderboardRow'] = ResolversParentTypes['GlobalProjectLeaderboardRow']> = {
   contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -3864,6 +3870,7 @@ export type GlobalProjectLeaderboardRowResolvers<
   contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
   contributorsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   projectName?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  projectThumbnailUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   projectTitle?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
@@ -6949,7 +6956,72 @@ export type FundingTxStatusUpdatedSubscription = {
   }
 }
 
-export type CreatorNotificationsSettingsUpdateMutation = { __typename?: 'Mutation', creatorNotificationConfigurationValueUpdate?: boolean | null };
+export type SummaryBannerFragmentFragment = {
+  __typename?: 'ProjectsSummary'
+  fundedTotal?: any | null
+  fundersCount?: number | null
+  projectsCount?: number | null
+}
+
+export type TopContributorsFragmentFragment = {
+  __typename?: 'GlobalContributorLeaderboardRow'
+  contributionsCount: number
+  contributionsTotal: number
+  contributionsTotalUsd: number
+  projectsContributedCount: number
+  userId: any
+  username: string
+  userImageUrl: string
+}
+
+export type TopProjectsFragmentFragment = {
+  __typename?: 'GlobalProjectLeaderboardRow'
+  projectName: string
+  projectTitle: string
+  projectThumbnailUrl: string
+  contributionsTotal: number
+  contributionsTotalUsd: number
+  contributionsCount: number
+  contributorsCount: number
+}
+
+export type LeaderboardGlobalContributorsQueryVariables = Exact<{
+  input: LeaderboardGlobalContributorsGetInput
+}>
+
+export type LeaderboardGlobalContributorsQuery = {
+  __typename?: 'Query'
+  leaderboardGlobalContributorsGet: Array<
+    { __typename?: 'GlobalContributorLeaderboardRow' } & TopContributorsFragmentFragment
+  >
+}
+
+export type LeaderboardGlobalProjectsQueryVariables = Exact<{
+  input: LeaderboardGlobalProjectsGetInput
+}>
+
+export type LeaderboardGlobalProjectsQuery = {
+  __typename?: 'Query'
+  leaderboardGlobalProjectsGet: Array<{ __typename?: 'GlobalProjectLeaderboardRow' } & TopProjectsFragmentFragment>
+}
+
+export type ProjectAffiliateLinkFragment = {
+  __typename?: 'AffiliateLink'
+  projectId: any
+  label?: string | null
+  id: any
+  email: string
+  disabledAt?: any | null
+  createdAt: any
+  disabled?: boolean | null
+  affiliateId?: string | null
+  lightningAddress: string
+  affiliateFeePercentage: number
+  stats?: {
+    __typename?: 'AffiliateStats'
+    sales: { __typename?: 'AffiliateSalesStats'; total: number; count: number }
+  } | null
+}
 
 export type UserNotificationsSettingsUpdateMutationVariables = Exact<{
   userNotificationConfigurationId: Scalars['BigInt']['input'];
@@ -8706,80 +8778,36 @@ export const FundingTxForUserContributionFragmentDoc = gql`
       }
     }
   }
-}
-    `;
-export const NotificationConfigurationFragmentDoc = gql`
-    fragment NotificationConfiguration on NotificationConfiguration {
-  id
-  name
-  description
-  value
-  type
-  options
-}
-    `;
-export const NotificationSettingsFragmentDoc = gql`
-    fragment NotificationSettings on NotificationSettings {
-  notificationType
-  isEnabled
-  configurations {
-    ...NotificationConfiguration
+`
+export const SummaryBannerFragmentFragmentDoc = gql`
+  fragment SummaryBannerFragment on ProjectsSummary {
+    fundedTotal
+    fundersCount
+    projectsCount
   }
-}
-    ${NotificationConfigurationFragmentDoc}`;
-export const ProfileNotificationsSettingsFragmentDoc = gql`
-    fragment ProfileNotificationsSettings on ProfileNotificationSettings {
-  userSettings {
+`
+export const TopContributorsFragmentFragmentDoc = gql`
+  fragment TopContributorsFragment on GlobalContributorLeaderboardRow {
+    contributionsCount
+    contributionsTotal
+    contributionsTotalUsd
+    projectsContributedCount
     userId
-    notificationSettings {
-      ...NotificationSettings
-    }
+    username
+    userImageUrl
   }
-  creatorSettings {
-    userId
-    project {
-      id
-      title
-      image
-    }
-    notificationSettings {
-      ...NotificationSettings
-    }
+`
+export const TopProjectsFragmentFragmentDoc = gql`
+  fragment TopProjectsFragment on GlobalProjectLeaderboardRow {
+    projectName
+    projectTitle
+    projectThumbnailUrl
+    contributionsTotal
+    contributionsTotalUsd
+    contributionsCount
+    contributorsCount
   }
-}
-    ${NotificationSettingsFragmentDoc}`;
-export const UserNotificationsSettingsFragmentDoc = gql`
-    fragment UserNotificationsSettings on ProfileNotificationSettings {
-  userSettings {
-    userId
-    notificationSettings {
-      ...NotificationSettings
-    }
-  }
-}
-    ${NotificationSettingsFragmentDoc}`;
-export const ProjectNotificationSettingsFragmentDoc = gql`
-    fragment ProjectNotificationSettings on CreatorNotificationSettings {
-  userId
-  project {
-    id
-    title
-    image
-  }
-  notificationSettings {
-    notificationType
-    isEnabled
-    configurations {
-      id
-      name
-      description
-      value
-      type
-      options
-    }
-  }
-}
-    `;
+`
 export const ProjectAffiliateLinkFragmentDoc = gql`
   fragment ProjectAffiliateLink on AffiliateLink {
     projectId
@@ -12112,80 +12140,146 @@ export const UserNotificationsSettingsDocument = gql`
     ...UserNotificationsSettings
   }
 }
-    ${UserNotificationsSettingsFragmentDoc}`;
-
-/**
- * __useUserNotificationsSettingsQuery__
- *
- * To run a query within a React component, call `useUserNotificationsSettingsQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserNotificationsSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUserNotificationsSettingsQuery({
- *   variables: {
- *      userId: // value for 'userId'
- *   },
- * });
- */
-export function useUserNotificationsSettingsQuery(baseOptions: Apollo.QueryHookOptions<UserNotificationsSettingsQuery, UserNotificationsSettingsQueryVariables> & ({ variables: UserNotificationsSettingsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserNotificationsSettingsQuery, UserNotificationsSettingsQueryVariables>(UserNotificationsSettingsDocument, options);
-      }
-export function useUserNotificationsSettingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserNotificationsSettingsQuery, UserNotificationsSettingsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserNotificationsSettingsQuery, UserNotificationsSettingsQueryVariables>(UserNotificationsSettingsDocument, options);
-        }
-export function useUserNotificationsSettingsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UserNotificationsSettingsQuery, UserNotificationsSettingsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<UserNotificationsSettingsQuery, UserNotificationsSettingsQueryVariables>(UserNotificationsSettingsDocument, options);
-        }
-export type UserNotificationsSettingsQueryHookResult = ReturnType<typeof useUserNotificationsSettingsQuery>;
-export type UserNotificationsSettingsLazyQueryHookResult = ReturnType<typeof useUserNotificationsSettingsLazyQuery>;
-export type UserNotificationsSettingsSuspenseQueryHookResult = ReturnType<typeof useUserNotificationsSettingsSuspenseQuery>;
-export type UserNotificationsSettingsQueryResult = Apollo.QueryResult<UserNotificationsSettingsQuery, UserNotificationsSettingsQueryVariables>;
-export const ProjectNotificationSettingsDocument = gql`
-    query ProjectNotificationSettings($projectId: BigInt!) {
-  projectNotificationSettingsGet(projectId: $projectId) {
-    ...ProjectNotificationSettings
+export type FundingTxStatusUpdatedSubscriptionHookResult = ReturnType<typeof useFundingTxStatusUpdatedSubscription>
+export type FundingTxStatusUpdatedSubscriptionResult = Apollo.SubscriptionResult<FundingTxStatusUpdatedSubscription>
+export const LeaderboardGlobalContributorsDocument = gql`
+  query LeaderboardGlobalContributors($input: LeaderboardGlobalContributorsGetInput!) {
+    leaderboardGlobalContributorsGet(input: $input) {
+      ...TopContributorsFragment
+    }
   }
-}
-    ${ProjectNotificationSettingsFragmentDoc}`;
+  ${TopContributorsFragmentFragmentDoc}
+`
 
 /**
- * __useProjectNotificationSettingsQuery__
+ * __useLeaderboardGlobalContributorsQuery__
  *
- * To run a query within a React component, call `useProjectNotificationSettingsQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectNotificationSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useLeaderboardGlobalContributorsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLeaderboardGlobalContributorsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useProjectNotificationSettingsQuery({
+ * const { data, loading, error } = useLeaderboardGlobalContributorsQuery({
  *   variables: {
- *      projectId: // value for 'projectId'
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useProjectNotificationSettingsQuery(baseOptions: Apollo.QueryHookOptions<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables> & ({ variables: ProjectNotificationSettingsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables>(ProjectNotificationSettingsDocument, options);
-      }
-export function useProjectNotificationSettingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables>(ProjectNotificationSettingsDocument, options);
-        }
-export function useProjectNotificationSettingsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables>(ProjectNotificationSettingsDocument, options);
-        }
-export type ProjectNotificationSettingsQueryHookResult = ReturnType<typeof useProjectNotificationSettingsQuery>;
-export type ProjectNotificationSettingsLazyQueryHookResult = ReturnType<typeof useProjectNotificationSettingsLazyQuery>;
-export type ProjectNotificationSettingsSuspenseQueryHookResult = ReturnType<typeof useProjectNotificationSettingsSuspenseQuery>;
-export type ProjectNotificationSettingsQueryResult = Apollo.QueryResult<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables>;
+export function useLeaderboardGlobalContributorsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    LeaderboardGlobalContributorsQuery,
+    LeaderboardGlobalContributorsQueryVariables
+  > &
+    ({ variables: LeaderboardGlobalContributorsQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<LeaderboardGlobalContributorsQuery, LeaderboardGlobalContributorsQueryVariables>(
+    LeaderboardGlobalContributorsDocument,
+    options,
+  )
+}
+export function useLeaderboardGlobalContributorsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    LeaderboardGlobalContributorsQuery,
+    LeaderboardGlobalContributorsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<LeaderboardGlobalContributorsQuery, LeaderboardGlobalContributorsQueryVariables>(
+    LeaderboardGlobalContributorsDocument,
+    options,
+  )
+}
+export function useLeaderboardGlobalContributorsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    LeaderboardGlobalContributorsQuery,
+    LeaderboardGlobalContributorsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<LeaderboardGlobalContributorsQuery, LeaderboardGlobalContributorsQueryVariables>(
+    LeaderboardGlobalContributorsDocument,
+    options,
+  )
+}
+export type LeaderboardGlobalContributorsQueryHookResult = ReturnType<typeof useLeaderboardGlobalContributorsQuery>
+export type LeaderboardGlobalContributorsLazyQueryHookResult = ReturnType<
+  typeof useLeaderboardGlobalContributorsLazyQuery
+>
+export type LeaderboardGlobalContributorsSuspenseQueryHookResult = ReturnType<
+  typeof useLeaderboardGlobalContributorsSuspenseQuery
+>
+export type LeaderboardGlobalContributorsQueryResult = Apollo.QueryResult<
+  LeaderboardGlobalContributorsQuery,
+  LeaderboardGlobalContributorsQueryVariables
+>
+export const LeaderboardGlobalProjectsDocument = gql`
+  query LeaderboardGlobalProjects($input: LeaderboardGlobalProjectsGetInput!) {
+    leaderboardGlobalProjectsGet(input: $input) {
+      ...TopProjectsFragment
+    }
+  }
+  ${TopProjectsFragmentFragmentDoc}
+`
+
+/**
+ * __useLeaderboardGlobalProjectsQuery__
+ *
+ * To run a query within a React component, call `useLeaderboardGlobalProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLeaderboardGlobalProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLeaderboardGlobalProjectsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useLeaderboardGlobalProjectsQuery(
+  baseOptions: Apollo.QueryHookOptions<LeaderboardGlobalProjectsQuery, LeaderboardGlobalProjectsQueryVariables> &
+    ({ variables: LeaderboardGlobalProjectsQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<LeaderboardGlobalProjectsQuery, LeaderboardGlobalProjectsQueryVariables>(
+    LeaderboardGlobalProjectsDocument,
+    options,
+  )
+}
+export function useLeaderboardGlobalProjectsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<LeaderboardGlobalProjectsQuery, LeaderboardGlobalProjectsQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<LeaderboardGlobalProjectsQuery, LeaderboardGlobalProjectsQueryVariables>(
+    LeaderboardGlobalProjectsDocument,
+    options,
+  )
+}
+export function useLeaderboardGlobalProjectsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    LeaderboardGlobalProjectsQuery,
+    LeaderboardGlobalProjectsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<LeaderboardGlobalProjectsQuery, LeaderboardGlobalProjectsQueryVariables>(
+    LeaderboardGlobalProjectsDocument,
+    options,
+  )
+}
+export type LeaderboardGlobalProjectsQueryHookResult = ReturnType<typeof useLeaderboardGlobalProjectsQuery>
+export type LeaderboardGlobalProjectsLazyQueryHookResult = ReturnType<typeof useLeaderboardGlobalProjectsLazyQuery>
+export type LeaderboardGlobalProjectsSuspenseQueryHookResult = ReturnType<
+  typeof useLeaderboardGlobalProjectsSuspenseQuery
+>
+export type LeaderboardGlobalProjectsQueryResult = Apollo.QueryResult<
+  LeaderboardGlobalProjectsQuery,
+  LeaderboardGlobalProjectsQueryVariables
+>
 export const AffiliateLinkCreateDocument = gql`
   mutation AffiliateLinkCreate($input: AffiliateLinkCreateInput!) {
     affiliateLinkCreate(input: $input) {

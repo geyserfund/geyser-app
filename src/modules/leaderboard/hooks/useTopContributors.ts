@@ -5,10 +5,10 @@ import { GlobalContributorLeaderboardRow, LeaderboardPeriod } from '@/types'
 
 import { QUERY_LEADERBOARD_GLOBAL_CONTRIBUTORS } from '../graphql/queries/topContributorsQuery'
 
-export const useTopContributors = (period: LeaderboardPeriod) => {
+export const useTopContributors = (period: LeaderboardPeriod, top: number) => {
   const [contributors, setContributors] = useState<GlobalContributorLeaderboardRow[]>([])
   useQuery(QUERY_LEADERBOARD_GLOBAL_CONTRIBUTORS, {
-    variables: { input: { period, top: 20 } },
+    variables: { input: { period, top } },
     onCompleted(data) {
       setContributors(data.leaderboardGlobalContributorsGet)
     },

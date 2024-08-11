@@ -2,6 +2,9 @@ import { Box, Button, HStack, Select, VStack } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { AnimatedNavBar, NavBarItems } from '@/shared/components/navigation/AnimatedNavBar'
+import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
+import { Body } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants'
 import { standardPadding } from '@/styles'
 import { LeaderboardPeriod } from '@/types'
@@ -19,15 +22,7 @@ export const Leaderboard = () => {
   }
 
   return (
-    <Box
-      w="full"
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      height="100%"
-      position="relative"
-      bg="utils.pbg"
-    >
+    <Box w="full" display="flex" justifyContent="center" alignItems="center" height="120%" bg="utils.pbg">
       <VStack
         width="100%"
         height="100%"
@@ -40,13 +35,19 @@ export const Leaderboard = () => {
       >
         <Box w="100%" height="100%" maxWidth={dimensions.maxWidth}>
           <VStack spacing={6} width="full">
-            <HStack width="full" justifyContent="flex-end">
-              <Select value={period} onChange={handlePeriodChange} width="200px">
+            <SummaryBanner />
+            <HStack width="full" justifyContent="space-between">
+              {!isMobile && (
+                <Body fontSize="24px" bold>
+                  {t('Top Projects and Contributors')}
+                </Body>
+              )}
+              <Select w={isMobile ? '100%' : 'auto'} value={period} onChange={handlePeriodChange}>
                 <option value={LeaderboardPeriod.Month}>{t('Past month')}</option>
                 <option value={LeaderboardPeriod.AllTime}>{t('All time')}</option>
               </Select>
             </HStack>
-            <SummaryBanner />
+
             {isMobile ? (
               <MobileLeaderboard period={period} />
             ) : (
@@ -55,7 +56,7 @@ export const Leaderboard = () => {
                 <TopContributors period={period} />
               </HStack>
             )}
-          </VStack>{' '}
+          </VStack>
         </Box>
       </VStack>
     </Box>
@@ -63,23 +64,27 @@ export const Leaderboard = () => {
 }
 
 const MobileLeaderboard = ({ period }: { period: LeaderboardPeriod }) => {
-  const [activeTab, setActiveTab] = useState<'projects' | 'contributors'>('projects')
   const { t } = useTranslation()
+
+  const items: NavBarItems[] = [
+    {
+      name: t('Projects'),
+      key: 'projects',
+      render: () => <TopProjects period={period} />,
+    },
+    {
+      name: t('Contributors'),
+      key: 'contributors',
+      render: () => <TopContributors period={period} />,
+    },
+  ]
+
+  const { render, ...animatedNavBarProps } = useAnimatedNavBar({ items, defaultView: 'projects' })
 
   return (
     <VStack width="full" spacing={4}>
-      <HStack width="full" justifyContent="center">
-        <Button onClick={() => setActiveTab('projects')} variant={activeTab === 'projects' ? 'solid' : 'outline'}>
-          {t('Projects')}
-        </Button>
-        <Button
-          onClick={() => setActiveTab('contributors')}
-          variant={activeTab === 'contributors' ? 'solid' : 'outline'}
-        >
-          {t('Contributors')}
-        </Button>
-      </HStack>
-      {activeTab === 'projects' ? <TopProjects period={period} /> : <TopContributors period={period} />}
+      <AnimatedNavBar {...animatedNavBarProps} showLabel />
+      {render && render()}
     </VStack>
   )
 }

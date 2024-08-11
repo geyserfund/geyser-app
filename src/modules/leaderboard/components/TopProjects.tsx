@@ -1,8 +1,16 @@
-import { HStack, Image, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
+import { ContributionsIcon1 } from '@/components/icons/svg/ContributionsIcon1'
+import { ContributorsIcon1 } from '@/components/icons/svg/ContributorsIcon1'
+import { ImageWithReload } from '@/components/ui'
+import { Body } from '@/shared/components/typography'
+import { getPath } from '@/shared/constants'
+import { BronzeMedalUrl, GoldMedalUrl, SilverMedalUrl } from '@/shared/constants/platform/url'
+import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { GlobalProjectLeaderboardRow, LeaderboardPeriod } from '@/types'
-import { commaFormatted } from '@/utils'
+import { useMobileMode } from '@/utils'
 
 import { useTopProjects } from '../hooks'
 import { ScrollableList } from './ScrollableList'
@@ -11,23 +19,27 @@ interface TopProjectsProps {
   period: LeaderboardPeriod
 }
 
-export const TopProjects = ({ period }: TopProjectsProps) => {
-  const { t } = useTranslation()
-  const { projects } = useTopProjects(period, 20)
+const MAX_PROJECTS = 100
 
-  const id = 'top-projects-scroll-container'
+export const TopProjects = ({ period }: TopProjectsProps) => {
+  const { projects } = useTopProjects(period, MAX_PROJECTS)
+
+  const isMobile = useMobileMode()
 
   return (
-    <VStack width="full" alignItems="flex-start" spacing={4}>
-      <Text fontSize="2xl" fontWeight="bold">
-        {t('Top Projects')}
-      </Text>
-      <VStack width="full" spacing={2} maxHeight="600px" overflowY="auto" id={id}>
-        <ScrollableList
-          data={projects}
-          renderItem={(project, index) => <ProjectItem key={project.projectName} project={project} rank={index + 1} />}
-        />
-      </VStack>
+    <VStack
+      width={isMobile ? '100%' : '150%'}
+      alignItems="flex-start"
+      backgroundColor="neutralAlpha.1"
+      borderRadius="8px"
+      border="1px solid"
+      borderColor="neutralAlpha.6"
+      p={4}
+    >
+      <ScrollableList
+        data={projects}
+        renderItem={(project, index) => <ProjectItem key={project.projectName} project={project} rank={index + 1} />}
+      />
     </VStack>
   )
 }
@@ -35,22 +47,83 @@ export const TopProjects = ({ period }: TopProjectsProps) => {
 const ProjectItem = ({ project, rank }: { project: GlobalProjectLeaderboardRow; rank: number }) => {
   const { t } = useTranslation()
 
+  const navigate = useNavigate()
+
+  const { formatAmount, formatUsdAmount } = useCurrencyFormatter()
+
+  const formattedAmountContributed = formatAmount(project.contributionsTotal, 'BTCSAT')
+  const formattedUsdAmount = formatUsdAmount(project.contributionsTotal)
+
+  const isMobile = useMobileMode()
+
+  const maxLength = isMobile ? 35 : 60
+
+  const projectUrl = getPath('project', project.projectName)
+
+  const truncateText = (text: string, maxLength: number) => {
+    return text.length > maxLength ? text.slice(0, maxLength) + '...' : text
+  }
+
+  const handleClick = () => {
+    navigate(projectUrl)
+  }
+
   return (
-    <HStack width="full" spacing={4} p={2} borderBottom="1px" borderColor="gray.200">
-      <Text fontWeight="bold" minWidth="30px">
-        {rank <= 3 ? <RankMedal rank={rank} /> : `#${rank}`}
-      </Text>
-      <VStack alignItems="flex-start" flex={1}>
-        <Text fontWeight="bold">{project.projectTitle}</Text>
-        <Text fontSize="sm">{commaFormatted(project.contributionsTotal)} sats</Text>
-        <Text fontSize="sm">{t('{{count}} contributions', { count: project.contributionsCount })}</Text>
-        <Text fontSize="sm">{t('{{count}} contributors', { count: project.contributorsCount })}</Text>
-      </VStack>
+    <HStack
+      width="full"
+      spacing={4}
+      padding={'8px, 24px, 8px, 24px'}
+      onClick={handleClick}
+      _hover={{ cursor: 'pointer' }}
+    >
+      <Box justifyContent="center" minWidth="30px">
+        {rank <= 3 ? (
+          <RankMedal rank={rank} />
+        ) : (
+          <Body align={'center'} fontSize="14px" bold color={'neutralAlpha.9'}>
+            {rank}
+          </Body>
+        )}
+      </Box>
+      <ImageWithReload
+        src={project?.projectThumbnailUrl || ''}
+        alt={project.projectTitle}
+        boxSize="64px"
+        borderRadius="16px"
+      />
+      <HStack maxHeight="60px" alignItems="center" justifyContent="flex-start" flex={1}>
+        <VStack alignItems="flex-start" flex={1} spacing={1}>
+          <Body fontSize={'14px'} bold isTruncated>
+            {truncateText(project.projectTitle, maxLength)}
+          </Body>
+
+          <VStack alignItems="flex-start" spacing={0}>
+            <Body size="xs" dark>
+              {formattedAmountContributed}{' '}
+              <Body as="span" size="xs" muted>
+                {`(${formattedUsdAmount})`}
+              </Body>
+            </Body>
+
+            <Body size="xs" muted>
+              {t('through')}{' '}
+              <Body as="span" size="xs" dark>
+                {project.contributionsCount}
+              </Body>{' '}
+              <ContributionsIcon1 /> {t('from')}{' '}
+              <Body as="span" size="xs" dark>
+                {project.contributorsCount}
+              </Body>{' '}
+              <ContributorsIcon1 />
+            </Body>
+          </VStack>
+        </VStack>
+      </HStack>
     </HStack>
   )
 }
 
 const RankMedal = ({ rank }: { rank: number }) => {
-  const medalColors = ['gold', 'silver', 'bronze']
-  return <Image src={`/images/medals/${medalColors[rank - 1]}.svg`} alt={`Rank ${rank}`} boxSize="24px" />
+  const medalUrl = [GoldMedalUrl, SilverMedalUrl, BronzeMedalUrl]
+  return <Image src={medalUrl[rank - 1]} alt={`Rank ${rank}`} boxSize="32px" />
 }
