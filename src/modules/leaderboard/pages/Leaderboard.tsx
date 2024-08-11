@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Select, VStack } from '@chakra-ui/react'
+import { Box, HStack, Select, VStack } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
