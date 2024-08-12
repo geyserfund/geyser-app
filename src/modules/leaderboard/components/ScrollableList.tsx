@@ -1,17 +1,20 @@
 import { StackProps, VStack } from '@chakra-ui/react'
 import React from 'react'
 
+import { useMobileMode } from '@/utils'
+
 interface ScrollableListProps<T> extends StackProps {
   data: T[]
   renderItem: (item: T, index: number) => React.ReactNode
 }
 
 export function ScrollableList<T>({ data, renderItem, ...props }: ScrollableListProps<T>) {
+  const isMobile = useMobileMode()
   return (
     <VStack
       width="full"
       spacing={2}
-      maxHeight="600px"
+      maxHeight="715px"
       overflowY="auto"
       overflowX="hidden"
       sx={{
@@ -29,6 +32,7 @@ export function ScrollableList<T>({ data, renderItem, ...props }: ScrollableList
             background: 'neutralAlpha.9',
           },
         },
+        scrollbarWidth: isMobile ? 'none' : '4px',
       }}
       {...props}
     >

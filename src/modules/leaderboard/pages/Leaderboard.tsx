@@ -1,6 +1,7 @@
 import { Box, HStack, Select, VStack } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { PiCalendarDots } from 'react-icons/pi'
 
 import { AnimatedNavBar, NavBarItems } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
@@ -42,7 +43,12 @@ export const Leaderboard = () => {
                   {t('Top Projects and Contributors')}
                 </Body>
               )}
-              <Select w={isMobile ? '100%' : 'auto'} value={period} onChange={handlePeriodChange}>
+              <Select
+                icon={<PiCalendarDots />}
+                w={isMobile ? '100%' : 'auto'}
+                value={period}
+                onChange={handlePeriodChange}
+              >
                 <option value={LeaderboardPeriod.Month}>{t('Past month')}</option>
                 <option value={LeaderboardPeriod.AllTime}>{t('All time')}</option>
               </Select>
@@ -82,7 +88,7 @@ const MobileLeaderboard = ({ period }: { period: LeaderboardPeriod }) => {
   const { render, ...animatedNavBarProps } = useAnimatedNavBar({ items, defaultView: 'projects' })
 
   return (
-    <VStack width="full" spacing={4}>
+    <VStack width="full" spacing={4} border={'1px solid'} borderColor={'neutralAlpha.6'} borderRadius={'8px'} p={4}>
       <AnimatedNavBar {...animatedNavBarProps} showLabel />
       {render && render()}
     </VStack>
