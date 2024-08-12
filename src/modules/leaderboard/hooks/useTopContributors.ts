@@ -7,12 +7,12 @@ import { QUERY_LEADERBOARD_GLOBAL_CONTRIBUTORS } from '../graphql/queries/topCon
 
 export const useTopContributors = (period: LeaderboardPeriod, top: number) => {
   const [contributors, setContributors] = useState<GlobalContributorLeaderboardRow[]>([])
-  useQuery(QUERY_LEADERBOARD_GLOBAL_CONTRIBUTORS, {
+  const { loading } = useQuery(QUERY_LEADERBOARD_GLOBAL_CONTRIBUTORS, {
     variables: { input: { period, top } },
     onCompleted(data) {
       setContributors(data.leaderboardGlobalContributorsGet)
     },
   })
 
-  return { contributors }
+  return { contributors, loading }
 }
