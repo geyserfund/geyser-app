@@ -27,7 +27,15 @@ export const PaymentLightning = () => {
       <TotalAmountToPay />
       <VStack w="full" spacing={6} pt={4}>
         <WaitingForPayment />
-        <Button width="310px" size="lg" variant="solid" colorScheme="primary1" onClick={onCopy} rightIcon={<PiCopy />}>
+        <Button
+          id={'copy-lightning-invoice-button'}
+          width="310px"
+          size="lg"
+          variant="solid"
+          colorScheme="primary1"
+          onClick={onCopy}
+          rightIcon={<PiCopy />}
+        >
           {t('Copy invoice')}
         </Button>
       </VStack>

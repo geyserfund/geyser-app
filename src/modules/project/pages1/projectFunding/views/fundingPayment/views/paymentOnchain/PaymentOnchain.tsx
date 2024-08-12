@@ -12,7 +12,7 @@ export const PaymentOnchain = () => {
   const { fundingTx } = useFundingTxAtom()
 
   useEffect(() => {
-    if (fundingTx.address && project.name) {
+    if (!fundingTx.address || !project.name) {
       navigate(getPath('projectFunding', project.name))
     }
   }, [fundingTx.address, project.name, navigate])
