@@ -1,6 +1,6 @@
 import { Button, ButtonProps } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '@/shared/constants'
 
@@ -10,6 +10,8 @@ import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
 
 export const ContributeButton = (props: ButtonProps) => {
   const { t } = useTranslation()
+
+  const navigate = useNavigate()
 
   const { project } = useProjectAtom()
 
@@ -25,8 +27,7 @@ export const ContributeButton = (props: ButtonProps) => {
       variant="solid"
       colorScheme="primary1"
       isDisabled={isFundingDisabled}
-      as={Link}
-      to={getPath('projectFunding', project.name)}
+      onClick={() => navigate(getPath('projectFunding', project.name))}
       {...props}
     >
       {t('Contribute')}
