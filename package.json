@@ -57,6 +57,7 @@
     "bitcoinjs-lib": "^6.1.5",
     "boltz-core": "^2.1.2",
     "buffer": "^6.0.3",
+    "chakra-react-select": "^4.9.1",
     "classnames": "^2.3.2",
     "cors": "^2.8.5",
     "dompurify": "^3.0.5",
