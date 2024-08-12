@@ -163,7 +163,7 @@
     "@vitejs/plugin-react": "^3.0.0",
     "@vitejs/plugin-react-swc": "^3.0.1",
     "conventional-changelog-cli": "^2.2.2",
-    "cypress": "13.9.0",
+    "cypress": "13.13.2",
     "cypress-real-events": "^1.12.0",
     "ecpair": "^2.1.0",
     "eslint": ">=8.0.0",
