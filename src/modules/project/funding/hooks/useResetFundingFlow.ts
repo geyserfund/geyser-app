@@ -1,21 +1,22 @@
 import { useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
+import { onChainRefundDownloadedAtom } from '../../pages1/projectFunding/views/fundingPayment/views/paymentOnchain/states'
 import {
   currentSwapIdAtom,
   fundingFlowErrorAtom,
   fundingRequestErrorAtom,
   invoiceRefreshErrorAtom,
   useClearRefundedSwapData,
-  useFundingStage,
   useFundingTxAtom,
   weblnErrorAtom,
 } from '../state'
 import { useFundPollingAndSubscriptionAtom } from '../state/pollingFundingTx'
 
 export const useResetFundingFlow = () => {
-  const { resetFundingStage } = useFundingStage()
   const { resetFundingTx } = useFundingTxAtom()
+
+  const setOnChainDownloaded = useSetAtom(onChainRefundDownloadedAtom)
 
   const setFundingRequestErrored = useSetAtom(fundingRequestErrorAtom)
   const setInvoiceRefreshErrored = useSetAtom(invoiceRefreshErrorAtom)
@@ -24,31 +25,33 @@ export const useResetFundingFlow = () => {
   const setWebLNErrored = useSetAtom(weblnErrorAtom)
 
   const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
-  const setRefundedSwapData = useClearRefundedSwapData()
+  const clearRefundedSwapData = useClearRefundedSwapData()
 
   const { clearPollingAndSubscription } = useFundPollingAndSubscriptionAtom()
 
   const resetFundingFlow = useCallback(() => {
-    resetFundingStage()
     setFundingRequestErrored(false)
     setInvoiceRefreshErrored(false)
     setError(undefined)
     setWebLNErrored(false)
+
+    setOnChainDownloaded(false)
+
     resetFundingTx()
 
     setCurrentSwapId('')
 
-    setRefundedSwapData()
+    clearRefundedSwapData()
     clearPollingAndSubscription()
   }, [
-    resetFundingStage,
     setFundingRequestErrored,
     setInvoiceRefreshErrored,
     setError,
     setWebLNErrored,
+    setOnChainDownloaded,
     resetFundingTx,
     setCurrentSwapId,
-    setRefundedSwapData,
+    clearRefundedSwapData,
     clearPollingAndSubscription,
   ])
 

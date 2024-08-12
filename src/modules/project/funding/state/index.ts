@@ -1,16 +1,6 @@
 export type { FundingFlowGraphQLError } from './errorAtom'
 export { fundingFlowErrorAtom, fundingRequestErrorAtom, swapError, weblnErrorAtom } from './errorAtom'
 export {
-  fundingStageAtom,
-  fundingStageAtomEffect,
-  fundingStageAtomInitialValue,
-  FundingStages,
-  resetFundingStageAtom,
-  setNextFundingStageAtom,
-  stageList,
-  useFundingStage,
-} from './fundingStagesAtom'
-export {
   ConfirmationMethod,
   fundingTxAtom,
   selectedGoalIdAtom,
