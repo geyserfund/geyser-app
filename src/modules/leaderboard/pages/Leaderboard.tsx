@@ -1,8 +1,9 @@
-import { Box, HStack, Select, VStack } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import { Box, HStack, VStack } from '@chakra-ui/react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCalendarDots } from 'react-icons/pi'
 
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import { AnimatedNavBar, NavBarItems } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { Body } from '@/shared/components/typography'
@@ -13,13 +14,24 @@ import { useMobileMode } from '@/utils'
 
 import { SummaryBanner, TopContributors, TopProjects } from '../components'
 
+interface PeriodOption {
+  value: LeaderboardPeriod
+  label: string
+}
 export const Leaderboard = () => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
   const [period, setPeriod] = useState<LeaderboardPeriod>(LeaderboardPeriod.AllTime)
 
-  const handlePeriodChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setPeriod(event.target.value as LeaderboardPeriod)
+  const periodOptions: PeriodOption[] = [
+    { value: LeaderboardPeriod.Month, label: t('Past month') },
+    { value: LeaderboardPeriod.AllTime, label: t('All time') },
+  ]
+
+  const handlePeriodChange = (selectedOption: PeriodOption | null) => {
+    if (selectedOption) {
+      setPeriod(selectedOption.value)
+    }
   }
 
   return (
@@ -37,21 +49,20 @@ export const Leaderboard = () => {
         <Box w="100%" height="100%" maxWidth={dimensions.maxWidth}>
           <VStack spacing={6} width="full">
             <SummaryBanner />
-            <HStack width="full" justifyContent="space-between">
+            <HStack width="100%" justifyContent="space-between">
               {!isMobile && (
                 <Body fontSize="24px" bold>
                   {t('Top Projects and Contributors')}
                 </Body>
               )}
-              <Select
-                icon={<PiCalendarDots />}
-                w={isMobile ? '100%' : 'auto'}
-                value={period}
+              <CustomSelect
+                isSearchable={false}
+                options={periodOptions}
+                value={periodOptions.find((option) => option.value === period)}
                 onChange={handlePeriodChange}
-              >
-                <option value={LeaderboardPeriod.Month}>{t('Past month')}</option>
-                <option value={LeaderboardPeriod.AllTime}>{t('All time')}</option>
-              </Select>
+                placeholder={t('Select period...')}
+                dropdownIndicator={<PiCalendarDots />}
+              />
             </HStack>
 
             {isMobile ? (
