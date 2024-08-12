@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { VStack } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { QUERY_PROJECT_NOTIFICATIONS_SETTINGS } from '@/modules/profile/graphql/queries/projectNotificationSettingsQuery'
 import { CreatorNotifications } from '@/modules/profile/pages/profileSettings/components/CreatorNotifications'
@@ -15,12 +15,16 @@ export const ProjectDashboardNotifications = () => {
 
   const [creatorNotificationSetting, setCreatorNotificationSetting] = useState<CreatorNotificationSettings>()
 
-  useQuery(QUERY_PROJECT_NOTIFICATIONS_SETTINGS, {
+  const { refetch } = useQuery(QUERY_PROJECT_NOTIFICATIONS_SETTINGS, {
     variables: { projectId: project.id },
     onCompleted(data) {
       setCreatorNotificationSetting(data?.projectNotificationSettingsGet || null)
     },
   })
+
+  useEffect(() => {
+    refetch()
+  }, [refetch])
 
   return (
     <DashboardLayout width="full">
