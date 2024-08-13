@@ -1,5 +1,8 @@
-import { Text, VStack } from '@chakra-ui/react'
+import { Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+
+import { Banner } from '@/components/ui/Banner'
+import PlatformLayout from '@/components/ui/PlatformLayout'
 
 import { AppFooter } from '../../../components/molecules'
 import { H2, H3 } from '../../../components/typography'
@@ -22,76 +25,76 @@ export const GrantsLandingPage = () => {
   }
 
   return (
-    <VStack paddingTop={{ base: '10px', lg: '20px' }} bg="neutral.0" minHeight="100%" width="100%" alignItems="center">
-      <VStack
-        my={{ base: 0, lg: 5 }}
-        px={{ base: '10px', lg: '0px' }}
-        spacing="20px"
-        width={isMobile ? '100%' : '909px'}
-      >
-        <VStack spacing="10px">
-          <Text fontSize={isMobile ? '4xl' : '44px'} fontWeight="medium" textAlign="center">
-            🥳
-          </Text>
-          <Text
-            fontSize={'25px'}
-            fontWeight="bold"
-            textAlign="center"
-            fontFamily={fonts.header}
-            textShadow={' 0px 0px 25.7663px rgba(22, 232, 194, 0.11)'}
-            color={'primary.500'}
-            textTransform="uppercase"
-          >
-            {t('Geyser Grants')}
-          </Text>
-          <H2 textAlign="center" paddingY="5px" fontSize="44px" fontWeight="700">
-            {t('Empowering bitcoin creators')}
-          </H2>
-          <H3 textAlign="center" color={'neutral.600'}>
-            {t('Funding educators, creatives and builders doing Bitcoin-only projects on Geyser.')} <br />{' '}
-            {t('Funded by bitcoiners who want to change the world.')}
-          </H3>
-        </VStack>
-
-        <GrantsContributeCard />
-
-        {activeGrants && activeGrants.length > 0 && (
-          <VStack w="full" alignItems="start" spacing="10px">
-            <Text fontWeight={'bold'} fontSize="19px" mb={1}>
-              {t('Active Grants')}
-            </Text>
-            {activeGrants.map((activeGrant) => {
-              return (
-                <CustomGrantCard
-                  key={activeGrant.id}
-                  grant={activeGrant}
-                  to={getPath('grants', activeGrant.id)}
-                  showBanner
-                />
-              )
-            })}
-          </VStack>
-        )}
-        <VStack w="full" alignItems="start" spacing="10px">
-          <Text fontWeight={'bold'} fontSize="19px">
-            {t('Previous Grants')}
-          </Text>
-          {inactiveGrants
-            .sort((a, b) => {
-              const grantASplit = a.name.split('-')
-              const grantBSplit = b.name.split('-')
-              const grantA = grantASplit[grantASplit.length - 1]
-              const grantB = grantBSplit[grantBSplit.length - 1]
-              return Number(grantB) - Number(grantA)
-            })
-            .map((grant) => (
-              <CustomGrantCard key={grant.id} to={getPath('grants', grant.id)} showBanner={false} grant={grant} />
-            ))}
-        </VStack>
-        <MoreInfo />
+    <PlatformLayout>
+      <VStack>
+        <Banner title={t('Geyser Grants - empowering bitcoin creators!')} items={[]} loading={false} />
+        <HStack border="1px solid" borderColor="primaryAlpha.6" borderRadius="md" p={2}>
+          <Button w="100%">Donate</Button>
+          <Button w="100%">Create a grant</Button>
+        </HStack>
       </VStack>
+      <VStack spacing="10px">
+        <Text fontSize={isMobile ? '4xl' : '44px'} fontWeight="medium" textAlign="center">
+          🥳
+        </Text>
+        <Text
+          fontSize={'25px'}
+          fontWeight="bold"
+          textAlign="center"
+          fontFamily={fonts.header}
+          textShadow={' 0px 0px 25.7663px rgba(22, 232, 194, 0.11)'}
+          color={'primary.500'}
+          textTransform="uppercase"
+        >
+          {t('Geyser Grants')}
+        </Text>
+        <H2 textAlign="center" paddingY="5px" fontSize="44px" fontWeight="700">
+          {t('Empowering bitcoin creators')}
+        </H2>
+        <H3 textAlign="center" color={'neutral.600'}>
+          {t('Funding educators, creatives and builders doing Bitcoin-only projects on Geyser.')} <br />{' '}
+          {t('Funded by bitcoiners who want to change the world.')}
+        </H3>
+      </VStack>
+
+      <GrantsContributeCard />
+
+      {activeGrants && activeGrants.length > 0 && (
+        <VStack w="full" alignItems="start" spacing="10px">
+          <Text fontWeight={'bold'} fontSize="19px" mb={1}>
+            {t('Active Grants')}
+          </Text>
+          {activeGrants.map((activeGrant) => {
+            return (
+              <CustomGrantCard
+                key={activeGrant.id}
+                grant={activeGrant}
+                to={getPath('grants', activeGrant.id)}
+                showBanner
+              />
+            )
+          })}
+        </VStack>
+      )}
+      <VStack w="full" alignItems="start" spacing="10px">
+        <Text fontWeight={'bold'} fontSize="19px">
+          {t('Previous Grants')}
+        </Text>
+        {inactiveGrants
+          .sort((a, b) => {
+            const grantASplit = a.name.split('-')
+            const grantBSplit = b.name.split('-')
+            const grantA = grantASplit[grantASplit.length - 1]
+            const grantB = grantBSplit[grantBSplit.length - 1]
+            return Number(grantB) - Number(grantA)
+          })
+          .map((grant) => (
+            <CustomGrantCard key={grant.id} to={getPath('grants', grant.id)} showBanner={false} grant={grant} />
+          ))}
+      </VStack>
+      <MoreInfo />
       <AppFooter />
-    </VStack>
+    </PlatformLayout>
   )
 }
 

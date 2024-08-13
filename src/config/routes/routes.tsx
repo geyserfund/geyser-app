@@ -10,6 +10,7 @@ import { ErrorBoundary } from './components/ErrorBoundary'
 import { renderPrivateRoute } from './components/PrivateRoute'
 
 const Grants = () => import('../../pages/grants')
+const Grants1 = () => import('modules/grants/pages/Grants')
 const ProjectLaunch = () => import('../../modules/project/pages1/projectCreation')
 // const Entry = () => import('../../pages/entry')
 // const ProjectDashboard = () => import('../../modules/project/pages/projectDashboard')
@@ -38,6 +39,13 @@ export const platformRoutes: RouteObject[] = [
     async lazy() {
       const GrantsLandingPage = await Grants().then((m) => m.GrantsLandingPage)
       return { Component: GrantsLandingPage }
+    },
+  },
+  {
+    path: '/grants1',
+    async lazy() {
+      const GrantsPage = await Grants1().then((m) => m.Grants)
+      return { Component: GrantsPage }
     },
   },
   {

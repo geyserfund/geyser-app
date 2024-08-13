@@ -6,11 +6,12 @@ import { useMobileMode } from '@/utils'
 
 type BannerProps = {
   title: string
-  items: { label: string; value: string }[]
+  items?: { label: string; value: string; suffix?: string }[]
   loading: boolean
+  reverse?: boolean
 }
 
-export const Banner = ({ title, items, loading }: BannerProps) => {
+export const Banner = ({ title, items, loading, reverse = false }: BannerProps) => {
   const isMobile = useMobileMode()
 
   const Direction = isMobile ? HStack : VStack
@@ -33,22 +34,61 @@ export const Banner = ({ title, items, loading }: BannerProps) => {
           {title}
         </Body>
       </Box>
-      <Column
-        w={{ base: '100%', lg: 'auto' }}
-        spacing={{ base: 2, lg: 6 }}
-        alignItems={{ base: 'flex-end', lg: 'center' }}
-      >
-        {items.map((item, index) => (
-          <BannerItem key={index} label={item.label} value={item.value} loading={loading} />
-        ))}
-      </Column>
+      {items && (
+        <Column
+          w={{ base: '100%', lg: 'auto' }}
+          spacing={{ base: 2, lg: 6 }}
+          alignItems={{ base: 'flex-end', lg: 'center' }}
+        >
+          {items.map((item, index) => (
+            <BannerItem
+              key={index}
+              label={item.label}
+              value={item.value}
+              suffix={item.suffix}
+              loading={loading}
+              reverse={reverse}
+            />
+          ))}
+        </Column>
+      )}
     </Direction>
   )
 }
 
-const BannerItem = ({ label, value, loading }: { label: string; value: string; loading: boolean }) => {
+const BannerItem = ({
+  label,
+  value,
+  loading,
+  reverse,
+  suffix,
+}: {
+  label: string
+  value: string
+  loading: boolean
+  reverse?: boolean
+  suffix?: string
+}) => {
   if (loading) {
     return <Skeleton height="20px" width="60px" />
+  }
+
+  if (reverse) {
+    return (
+      <HStack>
+        <Body fontSize={{ base: '16px', lg: '24px' }} color="neutral1.12" bold>
+          {label}:
+        </Body>
+        <Body fontSize={{ base: '16px', lg: '24px' }} color="neutral1.12" bold>
+          {value}
+        </Body>
+        {suffix && (
+          <Body fontSize={{ base: '16px', lg: '24px' }} color="neutral1.12" bold>
+            {suffix}
+          </Body>
+        )}
+      </HStack>
+    )
   }
 
   return (
