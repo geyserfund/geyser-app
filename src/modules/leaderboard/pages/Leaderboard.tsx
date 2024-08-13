@@ -5,12 +5,12 @@ import { PiCalendarDots } from 'react-icons/pi'
 
 import { Banner } from '@/components/ui/Banner'
 import { CustomSelect } from '@/components/ui/CustomSelect'
+import PlatformLayout from '@/components/ui/PlatformLayout'
 import { StickToTop } from '@/shared/components/layouts'
 import { AnimatedNavBar, NavBarItems } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { Body } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants'
-import { standardPadding } from '@/styles'
 import { LeaderboardPeriod } from '@/types'
 import { getBitcoinAmount, getShortAmountLabel, useMobileMode } from '@/utils'
 
@@ -46,52 +46,35 @@ export const Leaderboard = () => {
   }
 
   return (
-    <Box w="full" display="flex" justifyContent="center" alignItems="center" height="120%" bg="utils.pbg">
-      <VStack
-        width="100%"
-        height="100%"
-        paddingTop={{
-          base: `${dimensions.projectNavBar.mobile.height - 20}px`,
-          lg: `${dimensions.projectNavBar.desktop.height}px`,
-        }}
-        paddingX={standardPadding}
-        alignItems="center"
-      >
-        <Box w="100%" height="100%" maxWidth={dimensions.maxWidth}>
-          <VStack spacing={4} width="full">
-            <Banner
-              title={t('The leaders making world-changing ideas possible')}
-              items={bannerItems}
-              loading={loading}
-            />
-            <HStack width="100%" justifyContent="space-between">
-              {!isMobile && (
-                <Body fontSize="24px" bold>
-                  {t('Top Projects and Contributors')}
-                </Body>
-              )}
-              <CustomSelect
-                isSearchable={false}
-                options={periodOptions}
-                value={periodOptions.find((option) => option.value === period)}
-                onChange={handlePeriodChange}
-                placeholder={t('Select period...')}
-                dropdownIndicator={<PiCalendarDots />}
-              />
-            </HStack>
+    <PlatformLayout>
+      <VStack spacing={4} width="full">
+        <Banner title={t('The leaders making world-changing ideas possible')} items={bannerItems} loading={loading} />
+        <HStack width="100%" justifyContent="space-between">
+          {!isMobile && (
+            <Body fontSize="24px" bold>
+              {t('Top Projects and Contributors')}
+            </Body>
+          )}
+          <CustomSelect
+            isSearchable={false}
+            options={periodOptions}
+            value={periodOptions.find((option) => option.value === period)}
+            onChange={handlePeriodChange}
+            placeholder={t('Select period...')}
+            dropdownIndicator={<PiCalendarDots />}
+          />
+        </HStack>
 
-            {isMobile ? (
-              <MobileLeaderboard period={period} />
-            ) : (
-              <HStack width="full" alignItems="flex-start" spacing={6}>
-                <TopProjects period={period} />
-                <TopContributors period={period} />
-              </HStack>
-            )}
-          </VStack>
-        </Box>
+        {isMobile ? (
+          <MobileLeaderboard period={period} />
+        ) : (
+          <HStack width="full" alignItems="flex-start" spacing={6}>
+            <TopProjects period={period} />
+            <TopContributors period={period} />
+          </HStack>
+        )}
       </VStack>
-    </Box>
+    </PlatformLayout>
   )
 }
 
