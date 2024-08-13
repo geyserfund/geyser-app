@@ -14,7 +14,7 @@ export function ScrollableList<T>({ data, renderItem, ...props }: ScrollableList
     <VStack
       width="full"
       spacing={2}
-      maxHeight="715px"
+      maxHeight={{ base: '100%', lg: '715px' }}
       overflowY="auto"
       overflowX="hidden"
       sx={{
