@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCalendarDots } from 'react-icons/pi'
 
+import { Banner } from '@/components/ui/Banner'
 import { CustomSelect } from '@/components/ui/CustomSelect'
 import { StickToTop } from '@/shared/components/layouts'
 import { AnimatedNavBar, NavBarItems } from '@/shared/components/navigation/AnimatedNavBar'
@@ -11,9 +12,10 @@ import { Body } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants'
 import { standardPadding } from '@/styles'
 import { LeaderboardPeriod } from '@/types'
-import { useMobileMode } from '@/utils'
+import { getBitcoinAmount, getShortAmountLabel, useMobileMode } from '@/utils'
 
-import { SummaryBanner, TopContributors, TopProjects } from '../components'
+import { TopContributors, TopProjects } from '../components'
+import { useSummaryBannerStats } from '../hooks'
 
 interface PeriodOption {
   value: LeaderboardPeriod
@@ -23,6 +25,14 @@ export const Leaderboard = () => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
   const [period, setPeriod] = useState<LeaderboardPeriod>(LeaderboardPeriod.AllTime)
+
+  const { projectsCount, bitcoinsRaised, contributorsCount, loading } = useSummaryBannerStats()
+
+  const bannerItems = [
+    { label: 'Projects', value: getShortAmountLabel(projectsCount) },
+    { label: 'Bitcoin raised', value: getBitcoinAmount(bitcoinsRaised, true) },
+    { label: 'Contributors', value: getShortAmountLabel(contributorsCount) },
+  ]
 
   const periodOptions: PeriodOption[] = [
     { value: LeaderboardPeriod.Month, label: t('Past month') },
@@ -49,7 +59,11 @@ export const Leaderboard = () => {
       >
         <Box w="100%" height="100%" maxWidth={dimensions.maxWidth}>
           <VStack spacing={4} width="full">
-            <SummaryBanner />
+            <Banner
+              title={t('The leaders making world-changing ideas possible')}
+              items={bannerItems}
+              loading={loading}
+            />
             <HStack width="100%" justifyContent="space-between">
               {!isMobile && (
                 <Body fontSize="24px" bold>

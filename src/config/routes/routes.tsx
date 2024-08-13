@@ -9,7 +9,7 @@ import { __production__, getPath, PathName } from '../../shared/constants'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { renderPrivateRoute } from './components/PrivateRoute'
 
-// const Grants = () => import('../../pages/grants')
+const Grants = () => import('../../pages/grants')
 const ProjectLaunch = () => import('../../modules/project/pages1/projectCreation')
 // const Entry = () => import('../../pages/entry')
 // const ProjectDashboard = () => import('../../modules/project/pages/projectDashboard')
@@ -33,20 +33,20 @@ const Badges = () => import('../../pages/badges/BadgesPage')
 const Landing = () => import('../../pages/landing')
 
 export const platformRoutes: RouteObject[] = [
-  // {
-  //   path: '/grants',
-  //   async lazy() {
-  //     const GrantsLandingPage = await Grants().then((m) => m.GrantsLandingPage)
-  //     return { Component: GrantsLandingPage }
-  //   },
-  // },
-  // {
-  //   path: '/grants/:grantId',
-  //   async lazy() {
-  //     const GrantPage = await Grants().then((m) => m.GrantPage)
-  //     return { Component: GrantPage }
-  //   },
-  // },
+  {
+    path: '/grants',
+    async lazy() {
+      const GrantsLandingPage = await Grants().then((m) => m.GrantsLandingPage)
+      return { Component: GrantsLandingPage }
+    },
+  },
+  {
+    path: '/grants/:grantId',
+    async lazy() {
+      const GrantPage = await Grants().then((m) => m.GrantPage)
+      return { Component: GrantPage }
+    },
+  },
 
   {
     path: getPath('launchStart'),
