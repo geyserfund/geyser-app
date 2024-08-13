@@ -2,7 +2,7 @@ import { Box, HStack, Image, Skeleton, SkeletonCircle, VStack } from '@chakra-ui
 import { useNavigate } from 'react-router-dom'
 
 import { ContributionsIcon1 } from '@/components/icons/svg/ContributionsIcon1'
-import { ContributorsIcon1 } from '@/components/icons/svg/ContributorsIcon1'
+import { RocketLaunchIcon } from '@/components/icons/svg/RocketLaunch'
 import { ImageWithReload } from '@/components/ui'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
@@ -87,7 +87,7 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
         </Body>
         <Body size="xs" dark>
           {formattedAmountContributed} <ContributionsIcon1 /> {contributor.projectsContributedCount}{' '}
-          <ContributorsIcon1 />
+          <RocketLaunchIcon />
         </Body>
       </VStack>
     </HStack>
