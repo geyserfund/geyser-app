@@ -1,11 +1,9 @@
-import { useQuery } from '@apollo/client'
 import { Divider, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useParams } from 'react-router'
 
-import { QUERY_PROFILE_NOTIFICATIONS_SETTINGS } from '@/modules/profile/graphql/queries/profileNotificationSettingsQuery'
 import { Body } from '@/shared/components/typography'
-import { CreatorNotificationSettings, UserNotificationSettings } from '@/types'
+import { CreatorNotificationSettings, useProfileNotificationsSettingsQuery, UserNotificationSettings } from '@/types'
 
 import { ProfileSettingsLayout } from '../common/ProfileSettingsLayout'
 import { CreatorNotifications } from '../components/CreatorNotifications'
@@ -16,7 +14,7 @@ export const ProfileSettingsNotifications = () => {
   const [creatorNotificationSettings, setCreatorNotificationSettings] = useState<CreatorNotificationSettings[]>([])
   const [userNotificationSettings, setUserNotificationSettings] = useState<UserNotificationSettings>()
 
-  useQuery(QUERY_PROFILE_NOTIFICATIONS_SETTINGS, {
+  useProfileNotificationsSettingsQuery({
     variables: { userId },
     onCompleted(data) {
       setCreatorNotificationSettings(data?.userNotificationSettingsGet.creatorSettings || [])
