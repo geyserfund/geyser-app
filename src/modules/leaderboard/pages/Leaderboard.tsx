@@ -1,4 +1,4 @@
-import { Box, HStack, VStack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCalendarDots } from 'react-icons/pi'
