@@ -17978,7 +17978,7 @@ __metadata:
     react-dropzone: "npm:^14.2.3"
     react-easy-crop: "npm:^5.0.4"
     react-helmet: "npm:^6.1.0"
-    react-hook-form: "npm:^7.43.9"
+    react-hook-form: "npm:^7.52.2"
     react-i18next: "npm:^13.0.0"
     react-icons: "npm:^5.2.1"
     react-jss: "npm:^10.9.2"
@@ -23332,12 +23332,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.43.9":
-  version: 7.43.9
-  resolution: "react-hook-form@npm:7.43.9"
+"react-hook-form@npm:^7.52.2":
+  version: 7.52.2
+  resolution: "react-hook-form@npm:7.52.2"
   peerDependencies:
-    react: ^16.8.0 || ^17 || ^18
-  checksum: 10c0/5aab031ae15b32daffb45abe32e00c9d66c511348b68589d4faa6c2309db54b9d2f738b400319b0c2ea87dfd5d85f3760393feafe2bf7a97d608aa736934151f
+    react: ^16.8.0 || ^17 || ^18 || ^19
+  checksum: 10c0/2b8d37239d40f4326a24609c1bf5b4ba2cf66bc4a988213ccd7eb92a254dd5bf9c4b94caa353bce4b1d6d8a9ecd2ea3103e25c6d2d72d53f7be26f09053a8b2f
   languageName: node
   linkType: hard
 

@@ -126,7 +126,7 @@ const useStyles = createUseStyles<Rules, StyleProps, AppTheme>(({ colors, colorM
 type Props = {
   name: string
   value: string
-  handleChange?: (name: string, content: string) => void
+  handleChange?: (name: any, content: string) => void
   isReadOnly?: boolean
   focusFlag?: string
   noPadding?: boolean

@@ -57,7 +57,7 @@ export const PostView = () => {
 
       handleEntryQuery()
     }
-  }, [postId, toast])
+  }, [postId])
 
   const entry = data?.entry
 

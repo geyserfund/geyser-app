@@ -1,6 +1,6 @@
 import { Box, Button, HStack, Input, Spinner, StackProps, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { PiArrowLeft, PiImages } from 'react-icons/pi'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 
@@ -12,12 +12,11 @@ import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavCont
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H1 } from '@/shared/components/typography'
 import { dimensions, getPath, ProjectEntryValidations } from '@/shared/constants'
-import { useDebounce } from '@/shared/hooks'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { Entry, EntryStatus } from '@/types'
 import { isActive, useCustomTheme } from '@/utils'
 
-import { useEntryState } from '../hooks/useEntryState'
+import { useEntryForm } from '../hooks/useEntryForm'
 import { ProjectEntryEditor } from '../shared'
 import { entryTemplateForGrantApplicants } from '../utils/entryTemplate'
 
@@ -32,10 +31,9 @@ export const PostCreateEdit = () => {
   const { state } = location as { state: { grantId: number } }
   const entryTemplate = state?.grantId ? (entryTemplateForGrantApplicants as Entry) : undefined
 
-  const [isEdit, setIsEdit] = useState(false)
   const [focusFlag, setFocusFlag] = useState('')
 
-  const { loading, saving, updateEntry, hasDiff, entry, saveEntry, publishEntry, publishing } = useEntryState(
+  const { loading, saveEntry, saving, publishEntry, publishing, isDirty, setValue, watch } = useEntryForm(
     project.id,
     postId,
     {
@@ -51,23 +49,26 @@ export const PostCreateEdit = () => {
     },
     entryTemplate,
   )
-  const debouncedUpdateEntry = useDebounce(entry, entry.id ? 500 : 1000)
+
+  const entryForm = watch()
 
   useEffect(() => {
-    if (debouncedUpdateEntry && debouncedUpdateEntry.status !== EntryStatus.Published) {
-      saveEntry()
+    let number: any
+    if (isDirty && entryForm.status !== EntryStatus.Published) {
+      number = setInterval(() => {
+        saveEntry()
+      }, 2000)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedUpdateEntry])
 
-  useEffect(() => {
-    if (entry.id) {
-      setIsEdit(true)
+    if (entryForm.status === EntryStatus.Published) {
+      clearInterval(number)
     }
-  }, [entry])
 
-  const handleContentUpdate = (name: string, value: string) => {
-    updateEntry({ [name]: value })
+    return () => clearInterval(number)
+  }, [entryForm, isDirty, saveEntry])
+
+  const handleContentUpdate = (name: any, value: string) => {
+    setValue(name, value, { shouldDirty: true })
   }
 
   const handleInput = (event: any) => {
@@ -82,13 +83,13 @@ export const PostCreateEdit = () => {
     }
 
     if (name) {
-      updateEntry({ [name]: value })
+      setValue(name, value, { shouldDirty: true })
     }
   }
 
-  const onImageUpload = (url: string) => updateEntry({ image: url })
+  const onImageUpload = (url: string) => setValue('image', url)
 
-  const handleKeyDown = (event: any) => {
+  const handleKeyDown = useCallback((event: any) => {
     if (event) {
       if (event.target.name === 'title') {
         if (event.key === 'ArrowDown' || event.key === 'Enter') {
@@ -106,15 +107,15 @@ export const PostCreateEdit = () => {
         }
       }
     }
-  }
+  }, [])
 
   const getSaveButtonText = () => {
     if (saving) {
       return 'Saving'
     }
 
-    if (isEdit) {
-      if (hasDiff) {
+    if (entryForm.id) {
+      if (isDirty) {
         return 'Save'
       }
 
@@ -127,7 +128,7 @@ export const PostCreateEdit = () => {
   const handlePublishEntry = () => {
     publishEntry({
       onCompleted() {
-        navigate(getPath('projectPostView', project.name, entry.id), { state: { justPublished: true } })
+        navigate(getPath('projectPostView', project.name, entryForm?.id), { state: { justPublished: true } })
       },
     })
   }
@@ -136,7 +137,7 @@ export const PostCreateEdit = () => {
     return <Loader />
   }
 
-  const isEntryPublished = entry.status === EntryStatus.Published
+  const isEntryPublished = entryForm?.status === EntryStatus.Published
 
   return (
     <VStack w="full" minHeight="full" paddingBottom={20}>
@@ -194,7 +195,7 @@ export const PostCreateEdit = () => {
                   imageCrop={ImageCropAspectRatio.Post}
                 >
                   <>
-                    {entry.image ? (
+                    {entryForm.image ? (
                       <HStack
                         width={'100%'}
                         justifyContent="center"
@@ -211,7 +212,7 @@ export const PostCreateEdit = () => {
                           _hover={{ opacity: 0.9 }}
                           height="100%"
                         />
-                        <ImageWithReload width="100%" objectFit="cover" src={entry.image} />
+                        <ImageWithReload width="100%" objectFit="cover" src={entryForm.image} />
                       </HStack>
                     ) : (
                       <ImageUploadUi />
@@ -232,7 +233,7 @@ export const PostCreateEdit = () => {
                   fontWeight={700}
                   paddingX={'15px'}
                   name="title"
-                  value={entry.title}
+                  value={entryForm.title}
                   onChange={handleInput}
                   onKeyDown={handleKeyDown}
                 />
@@ -250,7 +251,7 @@ export const PostCreateEdit = () => {
                   paddingY={0}
                   name="description"
                   minHeight={7}
-                  value={entry.description}
+                  value={entryForm.description}
                   onChange={handleInput}
                   onKeyDown={handleKeyDown}
                 />
@@ -260,7 +261,7 @@ export const PostCreateEdit = () => {
                 <ProjectEntryEditor
                   name="content"
                   handleChange={handleContentUpdate}
-                  value={entry.content as string}
+                  value={entryForm.content as string}
                   focusFlag={focusFlag}
                   placeholder="The content of the post"
                 />
