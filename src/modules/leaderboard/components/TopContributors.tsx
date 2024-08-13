@@ -26,7 +26,7 @@ export const TopContributors = ({ period }: TopContributorsProps) => {
     <VStack
       width="100%"
       alignItems="flex-start"
-      maxHeight="750px"
+      maxHeight={{ base: '100%', lg: '750px' }}
       backgroundColor="neutralAlpha.1"
       borderRadius={{ base: 'none', lg: '8px' }}
       border={{ base: 'none', lg: '1px solid' }}

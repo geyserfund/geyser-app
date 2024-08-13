@@ -27,7 +27,7 @@ export const TopProjects = ({ period }: TopProjectsProps) => {
   return (
     <VStack
       width={{ base: '100%', lg: '150%' }}
-      maxHeight="750px"
+      maxHeight={{ base: '100%', lg: '750px' }}
       alignItems="flex-start"
       backgroundColor="neutralAlpha.1"
       borderRadius={{ base: 'none', lg: '8px' }}
