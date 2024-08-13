@@ -51,7 +51,7 @@ export const ProjectEntryCard = ({ entry }: Props) => {
             />
           </Box>
         )}
-        <VStack w="full" p={{ base: 3, lg: 6 }} spacing={4} alignItems="start">
+        <VStack w="full" p={{ base: 3, lg: 6 }} spacing={3} alignItems="start">
           <VStack w="full" spacing={2} alignItems="start">
             <Body size="xl" medium dark>
               {entry.title}
@@ -62,13 +62,13 @@ export const ProjectEntryCard = ({ entry }: Props) => {
               </Body>
             )}
           </VStack>
-          <Body size="xs" medium dark>
+          <Body medium dark>
             {entry.description}
           </Body>
           <HStack w="full" justifyContent={'end'}>
             <PostEditMenu entry={entry} />
 
-            <PostShare size="sm" entry={entry} />
+            <PostShare size="md" entry={entry} />
           </HStack>
         </VStack>
       </CardLayout>

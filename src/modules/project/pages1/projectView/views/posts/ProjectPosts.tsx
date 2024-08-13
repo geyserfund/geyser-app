@@ -27,7 +27,7 @@ export const ProjectPosts = () => {
 
   return (
     <VStack w="full" spacing={8} paddingBottom={'80px'}>
-      <CardLayout w="full" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }} mobileDense>
+      <CardLayout w="full" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }} mobileDense noborder>
         <VStack maxWidth={dimensions.project.posts.view.maxWidth} w="full" spacing={6}>
           <CreatorPostPageTopBar />
           {sortedEntries.map((entry, index) => {

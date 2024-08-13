@@ -127,7 +127,7 @@ export const PostCreateEdit = () => {
   const handlePublishEntry = () => {
     publishEntry({
       onCompleted() {
-        navigate(getPath('projectPostView', project.name, entry.id))
+        navigate(getPath('projectPostView', project.name, entry.id), { state: { justPublished: true } })
       },
     })
   }
@@ -152,7 +152,7 @@ export const PostCreateEdit = () => {
           {t('Back to posts')}
         </Button>
         <HStack>
-          <Button size={{ base: 'md', lg: 'lg' }} variant="soft" colorScheme="neutral1">
+          <Button size={{ base: 'md', lg: 'lg' }} variant="soft" colorScheme="neutral1" onClick={saveEntry}>
             {t(getSaveButtonText())}
           </Button>
           {!isEntryPublished && (
@@ -173,7 +173,7 @@ export const PostCreateEdit = () => {
       </ProjectNavContainer>
 
       <CardLayout noborder w="full" flex={1} spacing={3} dense alignItems="center" paddingTop={8}>
-        <VStack width="full" flex={1} maxWidth={dimensions.project.posts.view.maxWidth + 24 * 2 + 2} alignItems="start">
+        <VStack width="full" flex={1} maxWidth={dimensions.project.posts.view.maxWidth} alignItems="start">
           <H1 size="2xl" bold>
             {t('Write a post')}
           </H1>

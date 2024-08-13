@@ -2,7 +2,7 @@ import { ApolloProvider } from '@apollo/client'
 import { ChakraProvider } from '@chakra-ui/react'
 import { Provider } from 'jotai'
 import { useEffect } from 'react'
-import { Outlet, ScrollRestoration } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 
 import { client } from './config/apollo-client'
 import { Head } from './config/Head'
@@ -17,7 +17,6 @@ const App = () => {
 
   return (
     <Provider>
-      <ScrollRestoration />
       <ChakraProvider>
         <ChakraThemeProvider>
           <ServiceWorkerProvider>

@@ -19,7 +19,6 @@ export const CreatorEditButton: ComponentWithAs<'button', CreatorEditButtonProps
     return (
       <Button
         ref={ref}
-        size="sm"
         variant="outline"
         colorScheme="neutral1"
         justifySelf="end"

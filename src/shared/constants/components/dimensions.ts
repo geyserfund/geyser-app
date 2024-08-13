@@ -29,7 +29,7 @@ export const dimensions = {
     },
     posts: {
       view: {
-        maxWidth: 586,
+        maxWidth: 636,
       },
     },
     dashboard: {

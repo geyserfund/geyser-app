@@ -5,13 +5,19 @@ import { useTranslation } from 'react-i18next'
 import { Modal } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 
+type LinkButtonProps = {
+  to?: string
+  href?: string
+  isExternal?: boolean
+}
+
 type AlertDialogueProps = {
   title: string
   description?: string
   hasCancel?: boolean
-  neutralButtonProps?: ButtonProps
-  positiveButtonProps?: ButtonProps
-  negativeButtonProps?: ButtonProps
+  neutralButtonProps?: ButtonProps & LinkButtonProps
+  positiveButtonProps?: ButtonProps & LinkButtonProps
+  negativeButtonProps?: ButtonProps & LinkButtonProps
 } & Omit<ModalProps, 'children'>
 
 export const AlertDialogue = ({
