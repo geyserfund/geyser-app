@@ -87,7 +87,7 @@ export const PostCreateEdit = () => {
     }
   }
 
-  const onImageUpload = (url: string) => setValue('image', url)
+  const onImageUpload = (url: string) => setValue('image', url, { shouldDirty: true })
 
   const handleKeyDown = useCallback((event: any) => {
     if (event) {
