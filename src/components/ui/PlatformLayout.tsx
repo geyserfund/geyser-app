@@ -3,7 +3,12 @@ import { Box, VStack } from '@chakra-ui/react'
 import { dimensions } from '@/shared/constants'
 import { standardPadding } from '@/styles'
 
-const PlatformLayout = ({ children }: { children: React.ReactNode }) => {
+type PlatformLayoutProps = {
+  children: React.ReactNode
+  [key: string]: any
+}
+
+const PlatformLayout = ({ children }: PlatformLayoutProps) => {
   return (
     <Box w="full" display="flex" justifyContent="center" alignItems="center" height="120%" bg="utils.pbg">
       <VStack

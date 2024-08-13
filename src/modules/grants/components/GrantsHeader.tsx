@@ -32,7 +32,7 @@ const GrantsHeader = () => {
   const Direction = isMobile ? VStack : HStack
 
   return (
-    <VStack spacing={4}>
+    <VStack spacing={4} w="100%" alignItems="center">
       <Banner title={t('Geyser Grants - empowering bitcoin creators!')} items={items} loading={loading} reverse />
       <Direction
         justifyContent="space-between"

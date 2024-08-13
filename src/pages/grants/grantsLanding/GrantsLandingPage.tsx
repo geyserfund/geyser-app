@@ -26,13 +26,6 @@ export const GrantsLandingPage = () => {
 
   return (
     <PlatformLayout>
-      <VStack>
-        <Banner title={t('Geyser Grants - empowering bitcoin creators!')} items={[]} loading={false} />
-        <HStack border="1px solid" borderColor="primaryAlpha.6" borderRadius="md" p={2}>
-          <Button w="100%">Donate</Button>
-          <Button w="100%">Create a grant</Button>
-        </HStack>
-      </VStack>
       <VStack spacing="10px">
         <Text fontSize={isMobile ? '4xl' : '44px'} fontWeight="medium" textAlign="center">
           🥳
