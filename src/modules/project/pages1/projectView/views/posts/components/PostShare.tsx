@@ -56,7 +56,11 @@ export const PostShare = ({ entry, ...props }: PostShareProps) => {
         <Body size="sm" dark>
           {t('Share the post page to spread the word across the internet and social media.')}
         </Body>
-        <ShareBanner aspectRatio={ImageCropAspectRatio.Reward} bannerImage={entry.image} bannerText={entry.title} />
+        <ShareBanner
+          aspectRatio={ImageCropAspectRatio.Post}
+          bannerImage={entry.image || project.thumbnailImage}
+          bannerText={entry.title}
+        />
         <HStack w="full" spacing={3}>
           <Button
             flex={1}

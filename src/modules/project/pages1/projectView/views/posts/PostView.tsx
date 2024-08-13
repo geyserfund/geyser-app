@@ -7,6 +7,7 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { AlertDialogue } from '@/components/molecules/AlertDialogue'
 import { ImageWithReload } from '@/components/ui'
+import { Head } from '@/config/Head'
 import { BottomNavBarContainer } from '@/modules/navigation/bottomNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
@@ -71,6 +72,13 @@ export const PostView = () => {
 
   return (
     <>
+      <Head
+        title={entry?.title || ''}
+        description={entry?.description || ''}
+        image={entry?.image || project.thumbnailImage || ''}
+        type="article"
+      />
+
       <VStack w="full" paddingBottom="80px">
         <ProjectNavContainer>
           <Button
@@ -88,6 +96,20 @@ export const PostView = () => {
 
         <CardLayout w="full" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }} mobileDense>
           <VStack maxWidth={dimensions.project.posts.view.maxWidth} w="full" alignItems="start" spacing={6}>
+            {entry.image && (
+              <Box overflow={'hidden'} width="100%" position="relative" paddingTop="75%" borderRadius={'8px'}>
+                <ImageWithReload
+                  src={entry.image || ''}
+                  alt={entry.title}
+                  width="100%"
+                  height="100%"
+                  objectFit="cover"
+                  position="absolute"
+                  top={0}
+                  left={0}
+                />
+              </Box>
+            )}
             <VStack w="full" spacing={3} alignItems="start">
               <HStack w="full" alignItems="start" justifyContent="space-between">
                 <H2 flex={1} size="2xl" bold>
@@ -121,20 +143,6 @@ export const PostView = () => {
               {entry.description}
             </Body>
 
-            {entry.image && (
-              <Box overflow={'hidden'} width="100%" position="relative" paddingTop="75%" borderRadius={'8px'}>
-                <ImageWithReload
-                  src={entry.image || ''}
-                  alt={entry.title}
-                  width="100%"
-                  height="100%"
-                  objectFit="cover"
-                  position="absolute"
-                  top={0}
-                  left={0}
-                />
-              </Box>
-            )}
             {entry.content && (
               <Box
                 fontSize="16px"
@@ -241,7 +249,7 @@ const PostJustPublishedModal = () => {
         as: ChakraLink,
         href: generateTwitterShareUrl(entryLink),
         isExternal: true,
-        children: t('Share project'),
+        children: t('Post on X'),
         onClick: modalProps.onClose,
         rightIcon: <PiShareFat />,
       }}
