@@ -1,7 +1,6 @@
-import { Button, HStack, Text, VStack } from '@chakra-ui/react'
+import { Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { Banner } from '@/components/ui/Banner'
 import PlatformLayout from '@/components/ui/PlatformLayout'
 
 import { AppFooter } from '../../../components/molecules'
