@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import { ImageWithReload } from '@/components/ui'
 import { useAuthContext } from '@/context'
 import { getPath } from '@/shared/constants'
+import { toInt } from '@/utils'
 
 import { CreateProjectButton } from './CreateProjectButton'
 
@@ -18,6 +19,10 @@ export const ProjectSelectMenu = () => {
     return <CreateProjectButton />
   }
 
+  const projectListByOrder = user.ownerOf
+    .map((owner) => owner.project)
+    .sort((a, b) => toInt(b?.createdAt) - toInt(a?.createdAt))
+
   return (
     <Menu size={'md'} closeOnSelect placement="bottom-end">
       <MenuButton as={Button} size={{ base: 'md', lg: 'lg' }} variant="outline" colorScheme="neutral1">
@@ -26,23 +31,18 @@ export const ProjectSelectMenu = () => {
       <Portal>
         <MenuList minWidth="260px" maxHeight="500px" overflowY="auto">
           <VStack w="full" spacing={2}>
-            {user.ownerOf.map((owner) => {
-              if (!owner.project) return null
+            {projectListByOrder.map((project) => {
+              if (!project) return null
               return (
                 <MenuItem
                   as={Link}
-                  to={getPath('project', owner.project.name)}
-                  key={owner.project.id}
+                  to={getPath('project', project.name)}
+                  key={project.id}
                   icon={
-                    <ImageWithReload
-                      src={owner.project.thumbnailImage}
-                      height="20px"
-                      width="20px"
-                      borderRadius={'6px'}
-                    />
+                    <ImageWithReload src={project.thumbnailImage} height="20px" width="20px" borderRadius={'6px'} />
                   }
                 >
-                  {owner.project?.title}
+                  {project?.title}
                 </MenuItem>
               )
             })}

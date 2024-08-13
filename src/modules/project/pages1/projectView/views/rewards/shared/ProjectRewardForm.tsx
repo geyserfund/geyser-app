@@ -6,7 +6,7 @@ import { useSetAtom } from 'jotai'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BiInfoCircle } from 'react-icons/bi'
-import { RiArrowLeftSLine } from 'react-icons/ri'
+import { PiCaretLeft } from 'react-icons/pi'
 import { useNavigate } from 'react-router-dom'
 
 import { TextArea, TextInputBox, UploadBox } from '@/components/ui'
@@ -340,9 +340,10 @@ export const ProjectRewardForm = ({
           {!hideBackbutton && (
             <IconButton
               size="sm"
-              background={'none'}
-              aria-label="twitter"
-              icon={<RiArrowLeftSLine fontSize="20px" />}
+              variant="outline"
+              colorScheme="neutral1"
+              aria-label="back-to-creation-rewards"
+              icon={<PiCaretLeft />}
               color={'neutral.700'}
               onClick={() => {
                 navigate(-1)
@@ -575,14 +576,15 @@ export const ProjectRewardForm = ({
             : {})}
         >
           {isLaunch && (
-            <Button variant="secondary" flexGrow={1} onClick={() => navigate(-1)}>
+            <Button variant="outline" colorScheme="neutral1" flexGrow={1} onClick={() => navigate(-1)}>
               {t('Cancel')}
             </Button>
           )}
           <Button
             {...(isLaunch ? { flexGrow: 1 } : {})}
             display={{ base: 'block' }}
-            variant="primary"
+            variant="solid"
+            colorScheme="primary1"
             onClick={handleConfirmReward}
             isLoading={rewardSaving}
           >

@@ -1,4 +1,4 @@
-import { HTMLChakraProps, VStack } from '@chakra-ui/react'
+import { Badge, HTMLChakraProps, VStack } from '@chakra-ui/react'
 
 import { Body } from '@/shared/components/typography'
 
@@ -27,9 +27,9 @@ export const WalletConnectionOptionInfoBox = ({ primaryNode, promoText, secondar
     >
       {primaryNode}
       {promoText && (
-        <Body size="sm" pt={1} medium color="primary1.11">
+        <Badge variant="soft" pt={1} colorScheme="primary1" size="sm">
           {promoText}
-        </Body>
+        </Badge>
       )}
       <Body size="sm" light>
         {secondaryText}
