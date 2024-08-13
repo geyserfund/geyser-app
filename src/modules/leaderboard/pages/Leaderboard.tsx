@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { PiCalendarDots } from 'react-icons/pi'
 
 import { CustomSelect } from '@/components/ui/CustomSelect'
+import { StickToTop } from '@/shared/components/layouts'
 import { AnimatedNavBar, NavBarItems } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { Body } from '@/shared/components/typography'
@@ -40,14 +41,14 @@ export const Leaderboard = () => {
         width="100%"
         height="100%"
         paddingTop={{
-          base: `${dimensions.projectNavBar.mobile.height}px`,
+          base: `${dimensions.projectNavBar.mobile.height - 20}px`,
           lg: `${dimensions.projectNavBar.desktop.height}px`,
         }}
         paddingX={standardPadding}
         alignItems="center"
       >
         <Box w="100%" height="100%" maxWidth={dimensions.maxWidth}>
-          <VStack spacing={6} width="full">
+          <VStack spacing={4} width="full">
             <SummaryBanner />
             <HStack width="100%" justifyContent="space-between">
               {!isMobile && (
@@ -99,8 +100,16 @@ const MobileLeaderboard = ({ period }: { period: LeaderboardPeriod }) => {
   const { render, ...animatedNavBarProps } = useAnimatedNavBar({ items, defaultView: 'projects' })
 
   return (
-    <VStack width="full" spacing={4} border={'1px solid'} borderColor={'neutralAlpha.6'} borderRadius={'8px'} p={4}>
-      <AnimatedNavBar {...animatedNavBarProps} showLabel />
+    <VStack id="leaderboard-mobile-wrapper" width="full" height="120%" spacing={4}>
+      <StickToTop
+        width={'100%'}
+        id="leaderboard-mobile"
+        wrapperId="leaderboard-mobile-wrapper"
+        offset={dimensions.projectNavBar.mobile.height + 20}
+        _onStick={{ width: '100%', px: '4' }}
+      >
+        <AnimatedNavBar {...animatedNavBarProps} showLabel />
+      </StickToTop>
       {render && render()}
     </VStack>
   )
