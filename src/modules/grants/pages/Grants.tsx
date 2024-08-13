@@ -1,5 +1,3 @@
-import { VStack } from '@chakra-ui/react'
-
 import PlatformLayout from '@/components/ui/PlatformLayout'
 
 import GrantsHeader from '../components/GrantsHeader'
