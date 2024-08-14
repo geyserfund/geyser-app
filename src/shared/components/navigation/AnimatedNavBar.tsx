@@ -50,10 +50,18 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
 
   const [buttonPropsArray, setButtonPropsArray] = useState<{ left: number; width: number }[]>([])
 
+  const [initialButtonProps, setInitialButtonProps] = useState<{ left: number; width: number }>()
+
   const [currentActiveIndex, setCurrentActiveIndex] = useState(activeIndex)
   useEffect(() => {
     setCurrentActiveIndex(activeIndex)
   }, [activeIndex])
+
+  useEffect(() => {
+    if (!initialButtonProps && buttonPropsArray.length > 0 && buttonPropsArray[currentActiveIndex]) {
+      setInitialButtonProps(buttonPropsArray[currentActiveIndex])
+    }
+  }, [buttonPropsArray, items, currentActiveIndex, initialButtonProps])
 
   const handleClick = (item: AnimatedNavBarItem, index: number) => {
     if (item.disableClick) {
@@ -98,21 +106,26 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
       zIndex={2}
       {...props}
     >
-      <motion.div
-        style={{
-          position: 'absolute',
-          top: '2px',
-          height: 'calc(100% - 4px)',
-          backgroundColor: colors.utils.pbg,
-          zIndex: props.zIndex ? toInt(`${props.zIndex}`) + 1 : 3,
-          borderRadius: isMobileMode ? '8px' : '10px',
-          border: '1px solid',
-          borderColor: colors.utils.text,
-          opacity: currentActiveItem?.isDisabled ? 0 : 1,
-        }}
-        animate={buttonPropsArray[currentActiveIndex]}
-        transition={{ type: 'spring', damping: 22, stiffness: 250 }}
-      />
+      {initialButtonProps && (
+        <motion.div
+          style={{
+            position: 'absolute',
+            top: '2px',
+            height: 'calc(100% - 4px)',
+            backgroundColor: colors.utils.pbg,
+            zIndex: props.zIndex ? toInt(`${props.zIndex}`) + 1 : 3,
+            borderRadius: isMobileMode ? '8px' : '10px',
+            border: '1px solid',
+            borderColor: colors.utils.text,
+            opacity: currentActiveItem?.isDisabled ? 0 : 1,
+            left: initialButtonProps.left,
+            width: initialButtonProps.width,
+          }}
+          initial={false}
+          animate={buttonPropsArray[currentActiveIndex]}
+          transition={{ type: 'spring', damping: 22, stiffness: 250 }}
+        />
+      )}
       {items.map((item, index) => {
         const isActive = currentActiveIndex === index
 

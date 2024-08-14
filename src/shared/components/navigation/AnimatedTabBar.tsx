@@ -21,11 +21,19 @@ export const AnimatedTabBar = ({ items, activeIndex, ...props }: AnimatedTabBarP
 
   const navigate = useNavigate()
 
+  const [buttonPropsArray, setButtonPropsArray] = useState<{ left: number; width: number }[]>([])
+
+  const [initialButtonProps, setInitialButtonProps] = useState<{ left: number; width: number }>()
+
   useEffect(() => {
     setCurrentActiveIndex(activeIndex)
   }, [activeIndex])
 
-  const [buttonPropsArray, setButtonPropsArray] = useState<{ left: number; width: number }[]>([])
+  useEffect(() => {
+    if (!initialButtonProps && buttonPropsArray.length > 0 && buttonPropsArray[currentActiveIndex]) {
+      setInitialButtonProps(buttonPropsArray[currentActiveIndex])
+    }
+  }, [buttonPropsArray, items, currentActiveIndex, initialButtonProps])
 
   const measuredRef = useCallback((node: HTMLDivElement | null, index: number) => {
     if (node !== null) {

@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { PiBag, PiFlagBannerFold, PiGear, PiMedalMilitary, PiNewspaper, PiSparkle } from 'react-icons/pi'
 import { useLocation } from 'react-router-dom'
 
+import { useAuthContext } from '@/context'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { PathName } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
@@ -16,6 +17,7 @@ export const ProjectNavigation = () => {
 
   const isMobile = useMobileMode()
 
+  const { loading: userLoading } = useAuthContext()
   const { isProjectOwner, loading, project } = useProjectAtom()
   const { activeRewards, rewards } = useRewardsAtom()
 
@@ -97,7 +99,7 @@ export const ProjectNavigation = () => {
         activeIndex={activeButtonIndex}
         showIcon={isMobile}
         showLabel={!isMobile}
-        loading={loading}
+        loading={loading || userLoading}
         zIndex={9}
       />
     </TopNavContainer>
