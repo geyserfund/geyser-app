@@ -1,5 +1,10 @@
 import { Button, ButtonProps } from '@chakra-ui/react'
+import { useSetAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router'
+
+import { selectedGoalIdAtom } from '@/modules/project/funding/state'
+import { getPath } from '@/shared/constants'
 
 import { isActive } from '../../../../../../../utils'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
@@ -11,7 +16,10 @@ type GoalContributeButtonProps = ButtonProps & {
 
 export const GoalContributeButton = ({ projectGoalId, isPriorityGoal, ...props }: GoalContributeButtonProps) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+
   const { project } = useProjectAtom()
+  const setSelectedGoalId = useSetAtom(selectedGoalIdAtom)
 
   if (!project) {
     return null
@@ -19,7 +27,15 @@ export const GoalContributeButton = ({ projectGoalId, isPriorityGoal, ...props }
 
   const isFundingDisabled = !isActive(project.status)
 
-  const handleContributeClick = () => {}
+  const handleContributeClick = () => {
+    if (isPriorityGoal) {
+      setSelectedGoalId(null)
+    } else {
+      setSelectedGoalId(projectGoalId)
+    }
+
+    navigate(getPath('projectFunding', project.name))
+  }
 
   return (
     <Button

@@ -9,13 +9,7 @@ export const ToolbarCommandButton = forwardRef<
 >(({ name, label, ...props }, ref) => {
   return (
     <Tooltip openDelay={300} isDisabled={!label} label={label}>
-      <IconButton
-        ref={ref}
-        size={{ base: 'xs', md: 'md' }}
-        variant="secondary"
-        aria-label={`editor ${name} command`}
-        {...props}
-      >
+      <IconButton ref={ref} variant="outline" colorScheme="neutral1" aria-label={`editor ${name} command`} {...props}>
         {props.children}
       </IconButton>
     </Tooltip>

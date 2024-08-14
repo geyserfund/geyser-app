@@ -7,6 +7,7 @@ import {
   fundingFlowErrorAtom,
   fundingRequestErrorAtom,
   invoiceRefreshErrorAtom,
+  selectedGoalIdAtom,
   useClearRefundedSwapData,
   useFundingTxAtom,
   weblnErrorAtom,
@@ -15,6 +16,8 @@ import { useFundPollingAndSubscriptionAtom } from '../state/pollingFundingTx'
 
 export const useResetFundingFlow = () => {
   const { resetFundingTx } = useFundingTxAtom()
+
+  const setProjectGoalId = useSetAtom(selectedGoalIdAtom)
 
   const setOnChainDownloaded = useSetAtom(onChainRefundDownloadedAtom)
 
@@ -43,6 +46,8 @@ export const useResetFundingFlow = () => {
 
     clearRefundedSwapData()
     clearPollingAndSubscription()
+
+    setProjectGoalId(null)
   }, [
     setFundingRequestErrored,
     setInvoiceRefreshErrored,
@@ -53,6 +58,7 @@ export const useResetFundingFlow = () => {
     setCurrentSwapId,
     clearRefundedSwapData,
     clearPollingAndSubscription,
+    setProjectGoalId,
   ])
 
   return resetFundingFlow

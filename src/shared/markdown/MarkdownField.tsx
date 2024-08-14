@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, IconButton, VStack } from '@chakra-ui/react'
 import { EditorComponent, Remirror, TableComponents, useCommands, useKeymap, useRemirror } from '@remirror/react'
 import { ForwardedRef, useCallback } from 'react'
 import { Control } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { BsGear } from 'react-icons/bs'
+import { PiMarkdownLogo } from 'react-icons/pi'
 import {
   AnyExtension,
   ExtensionPriority,
@@ -75,8 +74,8 @@ export const MarkdownField = ({
   isEditorMode,
   toggleEditorMode,
 }: Props) => {
-  const { t } = useTranslation()
   const isMobile = useMobileMode()
+
   const onError: InvalidContentHandler = useCallback(({ json, invalidContent, transformers }) => {
     // Automatically remove all invalid nodes and marks.
     return transformers.remove(json, invalidContent)
@@ -212,49 +211,59 @@ export const MarkdownField = ({
         'Traveling to 15 LATAM & CARICOM countries using Bitcoin, this journey aims to showcase the widespread adoption of Bitcoin through engaging travel vlogs. The main objectives include organizing Bitcoin meetups to raise awareness and demonstrate the benevolence of humanity.'
       }
     >
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="start"
-        mb={2}
-        sx={
-          stickyToolbar !== undefined && stickyToolbar !== false
-            ? {
-                position: 'sticky',
-                top: stickyToolbar || 0,
-                backgroundColor: 'neutral.50',
-                borderBottom: { base: '1px solid', lg: 'none' },
-                borderTop: { base: '1px solid', lg: 'none' },
-                borderColor: 'neutral.200',
-                zIndex: 11,
-              }
-            : {}
-        }
-      >
-        <MarkdownToolbar isDisabled={isEditorMode} />
-        <HStack mt={1} justifyContent={'center'}>
-          <Button
-            my={1}
-            size={{ base: 'xs', md: 'md' }}
-            variant={'secondary'}
-            isActive={isEditorMode}
-            onClick={toggleEditorMode}
-          >
-            {<BsGear />} {!isMobile && <Text paddingLeft="5px">{t('Edit')}</Text>}
-          </Button>
-        </HStack>
-      </Box>
+      <VStack w="full" id="markdown-toolbar-wrapper">
+        <Box
+          width="full"
+          display="flex"
+          justifyContent="space-between"
+          alignItems="start"
+          mb={2}
+          {...(isMobile && {
+            borderTop: '1px solid',
+            position: 'fixed',
+            background: 'utils.pbg',
+            zIndex: 2,
+            bottom: 0,
+            mb: 0,
+            padding: 3,
+          })}
+        >
+          <MarkdownToolbar isDisabled={isEditorMode} />
+          <HStack mt={1} justifyContent={'center'}>
+            <IconButton
+              aria-label="Edit-markdown"
+              my={1}
+              variant={'surface'}
+              colorScheme={isEditorMode ? 'primary1' : 'neutral1'}
+              icon={<PiMarkdownLogo fontSize="25px" />}
+              onClick={toggleEditorMode}
+              padding="1"
+            />
+          </HStack>
+        </Box>
+      </VStack>
+
       {isEditorMode && control && (
         <ReactHookTextArea
           name="description"
           control={control}
           value={content}
           height="100%"
+          minHeight="350px"
           formControlProps={{ height: '100%' }}
-          fieldContainerProps={{ height: '100%' }}
+          fieldContainerProps={{ height: '100%', paddingBottom: { base: '120px', lg: '40px' } }}
         />
       )}
-      <StyleProvider flex={flex} flexGrow={1} display={isEditorMode ? 'none' : undefined} minHeight={'40vh'}>
+      <StyleProvider
+        flex={flex}
+        flexGrow={1}
+        display={isEditorMode ? 'none' : undefined}
+        minHeight={'40vh'}
+        paddingBottom={{
+          base: '120px',
+          lg: '40px',
+        }}
+      >
         <EditorComponent />
         <TableComponents tableCellMenuProps={{ Component: TableCellMenuComponent }} />
       </StyleProvider>

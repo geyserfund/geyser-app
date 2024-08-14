@@ -98,6 +98,7 @@ export const DashboardLayout = ({
           justifyContent={'center'}
           display={{ base: 'none', lg: 'flex' }}
           p={4}
+          zIndex={2}
         >
           {deskTopBottomComponent}
         </HStack>
