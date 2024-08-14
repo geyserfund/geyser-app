@@ -222,9 +222,8 @@ const pathsMap = {
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/edit/${rewardID}`,
   launchProjectWallet: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.node}`,
 
-  projectLaunch: (projectName: string, state: 'draft' | 'launch' = 'launch') =>
-    `/${PathName.project}/${projectName}/?${state}`,
-
+  projectLaunch: (projectName: string) => `/${PathName.project}/${projectName}/?launch`,
+  projectLaunchDraft: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDraft}/?draft`,
   /** User Profile Routes */
 
   userProfile: (userID: string) => `/${PathName.userProfile}/${userID}`,

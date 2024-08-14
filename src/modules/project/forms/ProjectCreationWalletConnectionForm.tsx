@@ -110,6 +110,10 @@ export const ProjectCreationWalletConnectionForm = ({
     }
   }
 
+  if (!connectionOption) {
+    return null
+  }
+
   return (
     <VStack width="100%" alignItems="flex-start" spacing="40px">
       <Accordion
@@ -117,7 +121,7 @@ export const ProjectCreationWalletConnectionForm = ({
         onChange={handleSelection}
         index={connectionOption === ConnectionOption.LIGHTNING_ADDRESS ? 0 : 1}
       >
-        <AccordionItem mb="30px" border="none">
+        <AccordionItem mb="30px" border="none" tabIndex={0}>
           <h2>
             <AccordionButton {...accordionButtonStyles}>
               <Box as="span" flex="1" textAlign="left">
@@ -191,7 +195,7 @@ export const ProjectCreationWalletConnectionForm = ({
           </AccordionPanel>
         </AccordionItem>
 
-        <AccordionItem border="none">
+        <AccordionItem border="none" tabIndex={1}>
           <h2>
             <AccordionButton {...accordionButtonStyles}>
               <Box as="span" flex="1" textAlign="left">

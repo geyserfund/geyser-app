@@ -1,7 +1,7 @@
 import { captureException } from '@sentry/react'
 import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { getPath } from '../../../shared/constants'
 import {
@@ -32,6 +32,11 @@ export type UseInitProjectProps = {
 export const useProjectAPI = (props?: UseInitProjectProps) => {
   const navigate = useNavigate()
 
+  const location = useLocation()
+
+  const launchModalShouldOpen = location.search.includes('launch')
+  const draftModalShouldOpen = location.search.includes('draft')
+
   const setProject = useSetAtom(projectAtom)
   const setProjectLoading = useSetAtom(projectLoadingAtom)
   const partialUpdateProject = useSetAtom(partialUpdateProjectAtom)
@@ -42,7 +47,7 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
     variables: {
       where: { name: projectName, id: projectId },
     },
-    fetchPolicy: 'cache-first',
+    fetchPolicy: launchModalShouldOpen || draftModalShouldOpen ? 'network-only' : 'cache-first',
     onError(error) {
       setProjectLoading(false)
       captureException(error, {
@@ -51,6 +56,7 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
           'error.on': 'query error',
         },
       })
+
       navigate(getPath('projectNotFound'))
     },
     onCompleted(data) {
