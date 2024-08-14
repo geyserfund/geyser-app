@@ -27,6 +27,8 @@ export const AnalyticsUrl = 'https://simpleanalytics.com/geyser.fund'
 export const anonymousProfileUrl = 'https://storage.googleapis.com/geyser-projects-media/project/common/anonymous.jpeg'
 export const anonymousOrbBaseUrl = 'https://storage.googleapis.com/geyser-projects-media/orbs/ellipse_'
 
+export const AnonymousAvatarBaseUrl = 'https://storage.googleapis.com/geyser-projects-media/anonymous/avatar'
+
 export const AmbassadorUrl = 'https://airtable.com/shreTVU3ZjqJ3PIq8'
 export const AddSponsorUrl = 'https://airtable.com/shrmnAbkAupDx8GPo'
 
