@@ -13,6 +13,7 @@ interface Props {
   userId: number
 }
 
+/** DEPRECATED DONT USE USE ONLY THE USERAVATAR */
 export const EditableAvatar = ({ onUploadImage, imageUrl, userId }: Props) => {
   const [isImageLoading, setImageLoading] = useState(false)
 

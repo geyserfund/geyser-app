@@ -25,3 +25,9 @@ export const shareOnTwitter = (projectName: string, t: any) => {
   const tweetTemplate = t(randomKey)
   return generateProjectTwitterShareUrl(tweetTemplate, projectLink)
 }
+
+export const shareOnTwitterWithLink = (projectLink: string, t: any) => {
+  const randomKey = projectTweetTemplates[Math.floor(Math.random() * projectTweetTemplates.length)] || ''
+  const tweetTemplate = t(randomKey)
+  return generateProjectTwitterShareUrl(tweetTemplate, projectLink)
+}

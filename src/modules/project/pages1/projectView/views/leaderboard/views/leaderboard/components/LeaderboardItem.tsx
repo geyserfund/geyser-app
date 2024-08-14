@@ -9,7 +9,7 @@ import { useModal } from '@/shared/hooks'
 import { ProjectLeaderboardContributorsFragment } from '@/types'
 import { commaFormatted } from '@/utils'
 
-import { UserAvatar } from '../../../../../components/UserAvatar'
+import { UserAvatar } from '../../../../../../../../../shared/molecules/UserAvatar'
 import { FunderContributionModal } from '../../../shared/FunderContributionModal'
 
 type LeaderboardItemProps = {

@@ -16,7 +16,7 @@ import {
   useProjectPageFundingTxQuery,
 } from '@/types'
 
-import { UserAvatar } from '../../../components/UserAvatar'
+import { UserAvatar } from '../../../../../../../shared/molecules/UserAvatar'
 import { FundersContributionItem, FundersContributionItemSkeleton } from './FundersContributionItem'
 
 type FunderContributionModalProps = {

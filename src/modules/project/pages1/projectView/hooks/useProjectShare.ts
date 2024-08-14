@@ -20,6 +20,8 @@ export enum CampaignContent {
   projectTitle = 'project-title',
   successScreen = 'success-screen',
   contributionSummary = 'contribution-summary',
+  projectShareModal = 'project-share-Modal',
+  projectShareQrBanner = 'project-share-qr-banner',
 }
 
 type getCampainParametersProps = {

@@ -9,7 +9,7 @@ import { TimeAgo } from '@/shared/molecules/TimeAgo'
 import { ProjectFundingTxFragment } from '@/types'
 import { commaFormatted, convertSatsToUsd } from '@/utils'
 
-import { UserAvatar } from '../../../../../components/UserAvatar'
+import { UserAvatar } from '../../../../../../../../../shared/molecules/UserAvatar'
 
 type ContributionItemProps = {
   contribution: ProjectFundingTxFragment

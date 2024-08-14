@@ -14,6 +14,7 @@ interface IAvatarElement extends AvatarProps {
   textProps?: BodyProps
 }
 
+/** DEPRECATED DONT USE, USE ONLY THE USER-AVATAR */
 export const AvatarElement = ({
   avatarOnly = false,
   user,
