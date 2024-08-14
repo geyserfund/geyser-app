@@ -32,7 +32,7 @@ export const useEntryForm = (
 ) => {
   const toast = useNotification()
 
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(Boolean(entryId))
 
   const { createEntry, updateEntry, publishEntry } = useProjectEntriesAPI()
 
