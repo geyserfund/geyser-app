@@ -2162,6 +2162,7 @@ export type Query = {
   projectsSummary: ProjectsSummary;
   statusCheck: Scalars['Boolean']['output'];
   tagsGet: Array<TagsGetResult>;
+  tagsMostFundedGet: Array<TagsMostFundedGetResult>;
   user: User;
   userBadge?: Maybe<UserBadge>;
   userBadges: Array<UserBadge>;
@@ -2430,6 +2431,12 @@ export type TagCreateInput = {
 export type TagsGetResult = {
   __typename?: 'TagsGetResult';
   count: Scalars['Int']['output'];
+  id: Scalars['Int']['output'];
+  label: Scalars['String']['output'];
+};
+
+export type TagsMostFundedGetResult = {
+  __typename?: 'TagsMostFundedGetResult';
   id: Scalars['Int']['output'];
   label: Scalars['String']['output'];
 };
@@ -3092,6 +3099,7 @@ export type ResolversTypes = {
   Tag: ResolverTypeWrapper<Tag>;
   TagCreateInput: TagCreateInput;
   TagsGetResult: ResolverTypeWrapper<TagsGetResult>;
+  TagsMostFundedGetResult: ResolverTypeWrapper<TagsMostFundedGetResult>;
   TwoFAInput: TwoFaInput;
   UniqueOrderInput: UniqueOrderInput;
   UniqueProjectQueryInput: UniqueProjectQueryInput;
@@ -3348,6 +3356,7 @@ export type ResolversParentTypes = {
   Tag: Tag;
   TagCreateInput: TagCreateInput;
   TagsGetResult: TagsGetResult;
+  TagsMostFundedGetResult: TagsMostFundedGetResult;
   TwoFAInput: TwoFaInput;
   UniqueOrderInput: UniqueOrderInput;
   UniqueProjectQueryInput: UniqueProjectQueryInput;
@@ -4288,6 +4297,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   projectsSummary?: Resolver<ResolversTypes['ProjectsSummary'], ParentType, ContextType>;
   statusCheck?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   tagsGet?: Resolver<Array<ResolversTypes['TagsGetResult']>, ParentType, ContextType>;
+  tagsMostFundedGet?: Resolver<Array<ResolversTypes['TagsMostFundedGetResult']>, ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'where'>>;
   userBadge?: Resolver<Maybe<ResolversTypes['UserBadge']>, ParentType, ContextType, RequireFields<QueryUserBadgeArgs, 'userBadgeId'>>;
   userBadges?: Resolver<Array<ResolversTypes['UserBadge']>, ParentType, ContextType, RequireFields<QueryUserBadgesArgs, 'input'>>;
@@ -4336,6 +4346,12 @@ export type TagResolvers<ContextType = any, ParentType extends ResolversParentTy
 
 export type TagsGetResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['TagsGetResult'] = ResolversParentTypes['TagsGetResult']> = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TagsMostFundedGetResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['TagsMostFundedGetResult'] = ResolversParentTypes['TagsMostFundedGetResult']> = {
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -4550,6 +4566,7 @@ export type Resolvers<ContextType = any> = {
   Swap?: SwapResolvers<ContextType>;
   Tag?: TagResolvers<ContextType>;
   TagsGetResult?: TagsGetResultResolvers<ContextType>;
+  TagsMostFundedGetResult?: TagsMostFundedGetResultResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserBadge?: UserBadgeResolvers<ContextType>;
   UserNotificationSettings?: UserNotificationSettingsResolvers<ContextType>;
@@ -5236,6 +5253,8 @@ export type ProjectEntryViewFragment = { __typename?: 'Entry', id: any, title: s
 
 export type ProjectFunderFragment = { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string } | null };
 
+export type ProjectLeaderboardContributorsFragment = { __typename?: 'ProjectLeaderboardContributorsRow', funderId: any, contributionsTotalUsd: number, contributionsTotal: number, contributionsCount: number, commentsCount: number, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string } | null };
+
 export type ProjectFundingTxFragment = { __typename?: 'FundingTx', id: any, amountPaid: number, media?: string | null, comment?: string | null, paidAt?: any | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, funder: { __typename?: 'Funder', id: any, user?: (
       { __typename?: 'User' }
       & UserAvatarFragment
@@ -5604,6 +5623,16 @@ export type ProjectPageFundersQueryVariables = Exact<{
 export type ProjectPageFundersQuery = { __typename?: 'Query', fundersGet: Array<(
     { __typename?: 'Funder' }
     & ProjectFunderFragment
+  )> };
+
+export type ProjectLeaderboardContributorsGetQueryVariables = Exact<{
+  input: ProjectLeaderboardContributorsGetInput;
+}>;
+
+
+export type ProjectLeaderboardContributorsGetQuery = { __typename?: 'Query', projectLeaderboardContributorsGet: Array<(
+    { __typename?: 'ProjectLeaderboardContributorsRow' }
+    & ProjectLeaderboardContributorsFragment
   )> };
 
 export type ProjectPageFundingTxQueryVariables = Exact<{
@@ -6836,6 +6865,20 @@ export const ProjectFunderFragmentDoc = gql`
   id
   amountFunded
   timesFunded
+  user {
+    id
+    imageUrl
+    username
+  }
+}
+    `;
+export const ProjectLeaderboardContributorsFragmentDoc = gql`
+    fragment ProjectLeaderboardContributors on ProjectLeaderboardContributorsRow {
+  funderId
+  contributionsTotalUsd
+  contributionsTotal
+  contributionsCount
+  commentsCount
   user {
     id
     imageUrl
@@ -10804,6 +10847,46 @@ export type ProjectPageFundersQueryHookResult = ReturnType<typeof useProjectPage
 export type ProjectPageFundersLazyQueryHookResult = ReturnType<typeof useProjectPageFundersLazyQuery>;
 export type ProjectPageFundersSuspenseQueryHookResult = ReturnType<typeof useProjectPageFundersSuspenseQuery>;
 export type ProjectPageFundersQueryResult = Apollo.QueryResult<ProjectPageFundersQuery, ProjectPageFundersQueryVariables>;
+export const ProjectLeaderboardContributorsGetDocument = gql`
+    query ProjectLeaderboardContributorsGet($input: ProjectLeaderboardContributorsGetInput!) {
+  projectLeaderboardContributorsGet(input: $input) {
+    ...ProjectLeaderboardContributors
+  }
+}
+    ${ProjectLeaderboardContributorsFragmentDoc}`;
+
+/**
+ * __useProjectLeaderboardContributorsGetQuery__
+ *
+ * To run a query within a React component, call `useProjectLeaderboardContributorsGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectLeaderboardContributorsGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectLeaderboardContributorsGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectLeaderboardContributorsGetQuery(baseOptions: Apollo.QueryHookOptions<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables> & ({ variables: ProjectLeaderboardContributorsGetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>(ProjectLeaderboardContributorsGetDocument, options);
+      }
+export function useProjectLeaderboardContributorsGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>(ProjectLeaderboardContributorsGetDocument, options);
+        }
+export function useProjectLeaderboardContributorsGetSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>(ProjectLeaderboardContributorsGetDocument, options);
+        }
+export type ProjectLeaderboardContributorsGetQueryHookResult = ReturnType<typeof useProjectLeaderboardContributorsGetQuery>;
+export type ProjectLeaderboardContributorsGetLazyQueryHookResult = ReturnType<typeof useProjectLeaderboardContributorsGetLazyQuery>;
+export type ProjectLeaderboardContributorsGetSuspenseQueryHookResult = ReturnType<typeof useProjectLeaderboardContributorsGetSuspenseQuery>;
+export type ProjectLeaderboardContributorsGetQueryResult = Apollo.QueryResult<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>;
 export const ProjectPageFundingTxDocument = gql`
     query ProjectPageFundingTx($input: GetFundingTxsInput) {
   fundingTxsGet(input: $input) {

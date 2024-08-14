@@ -76,7 +76,7 @@ export const Contributions = () => {
           <NoContribution />
         ) : (
           contributions.map((contribution, index) => {
-            return <ContributionItem key={contribution.id} contribution={contribution} />
+            return <ContributionItem key={contribution.id} contribution={contribution} paddingX={{ base: 0, lg: 6 }} />
           })
         )}
         <ScrollInvoke
@@ -92,7 +92,7 @@ export const Contributions = () => {
 
 const ContributionsSkeleton = () => {
   return (
-    <CardLayout w="full" h="full" dense>
+    <CardLayout w="full" h="full" dense noMobileBorder>
       <VStack h="full" overflowY={{ base: undefined, lg: 'auto' }} paddingTop={standardPadding}>
         {[1, 2, 3, 4, 5, 6].map((item) => {
           return <ContributionItemSkeleton key={item} />

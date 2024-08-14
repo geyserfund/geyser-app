@@ -1,106 +1,69 @@
 import { StackProps, VStack } from '@chakra-ui/react'
-import { useAtom } from 'jotai'
 import { DateTime } from 'luxon'
-import { useState } from 'react'
+import { useEffect } from 'react'
 
-import { ScrollInvoke } from '@/helpers'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { fundersFamily, LeaderboardPeriod } from '@/modules/project/state/fundersAtom'
-import { usePaginationAtomHook } from '@/shared/hooks'
-import { OrderByOptions, ProjectFunderFragment, useProjectPageFundersQuery } from '@/types'
-import { useMobileMode } from '@/utils'
+import { ProjectLeaderboardPeriod, useProjectLeaderboardContributorsGetQuery } from '@/types'
 
 import { NoContribution } from '../../../body/sections/leaderboardSummary/components/NoContribution'
 import { LeaderboardItem, LeaderboardItemSkeleton } from './components/LeaderboardItem'
 
-export const MAXIMUM_LEADERBOARD_ITEMS = 30
+export const MAXIMUM_LEADERBOARD_ITEMS = 100
 
 type LeaderboardListProps = {
-  period: LeaderboardPeriod
+  period: ProjectLeaderboardPeriod
   dateTime: DateTime
 } & StackProps
 
 export const LeaderboardList = ({ period, dateTime, ...props }: LeaderboardListProps) => {
-  const isMobile = useMobileMode()
-
   const { project } = useProjectAtom()
 
-  const [funders, setFunders] = useAtom(fundersFamily({ period }))
-
-  const [isLoading, setIsLoading] = useState(true)
-
-  const current = dateTime.toMillis()
-  const aWeekAgo = dateTime.minus({ days: 7 }).toMillis()
-  const aMonthAgo = dateTime.minus({ days: 30 }).toMillis()
-
-  const dateRange =
-    period === LeaderboardPeriod.lastWeek
-      ? { startDateTime: aWeekAgo, endDateTime: current }
-      : period === LeaderboardPeriod.lastMonth
-      ? { startDateTime: aMonthAgo, endDateTime: current }
-      : undefined
-
-  const where = {
-    projectId: project.id,
-    confirmed: true,
-    dateRange,
-  }
-
-  const orderBy = {
-    amountFunded: OrderByOptions.Desc,
-  }
-
-  const { fetchMore } = useProjectPageFundersQuery({
+  const { data, loading } = useProjectLeaderboardContributorsGetQuery({
     skip: !project.id,
-    fetchPolicy: 'network-only',
     variables: {
       input: {
-        where,
-        orderBy,
-        pagination: {
-          take: MAXIMUM_LEADERBOARD_ITEMS,
-        },
+        period,
+        projectId: project.id,
+        top: MAXIMUM_LEADERBOARD_ITEMS,
       },
     },
-    onCompleted(data) {
-      handleDataUpdate(data.fundersGet || [])
-      setIsLoading(false)
-    },
-    onError(error) {
-      setIsLoading(false)
-    },
   })
 
-  const { handleDataUpdate, isLoadingMore, noMoreItems, fetchNext } = usePaginationAtomHook<ProjectFunderFragment>({
-    fetchMore,
-    queryName: ['fundersGet'],
-    itemLimit: MAXIMUM_LEADERBOARD_ITEMS,
-    where,
-    orderBy,
-    setData: setFunders,
-  })
+  const funders = data?.projectLeaderboardContributorsGet
 
   const id = 'leaderboard-scroll-container'
+  const firstElementId = 'first-element-id'
 
-  if (isLoading) {
+  useEffect(() => {
+    setTimeout(() => {
+      const element = document.getElementById(firstElementId)
+      if (element) {
+        element.scrollIntoView()
+      }
+    }, 50)
+  }, [period])
+
+  if (loading) {
     return <LeaderboardListSkeleton />
   }
 
-  if (funders.length === 0) {
+  if (!funders || funders?.length === 0) {
     return <NoContribution />
   }
 
   return (
     <VStack w="full" h="full" id={id} overflowY={{ base: undefined, lg: 'auto' }} {...props}>
       {funders.map((funder, index) => {
-        return <LeaderboardItem key={funder.id} funder={funder} rank={index + 1} />
+        return (
+          <LeaderboardItem
+            id={index === 0 ? firstElementId : undefined}
+            key={funder.funderId}
+            funder={funder}
+            rank={index + 1}
+            paddingX={{ base: 0, lg: 6 }}
+          />
+        )
       })}
-      <ScrollInvoke
-        elementId={!isMobile ? id : undefined}
-        onScrollEnd={fetchNext}
-        isLoading={isLoadingMore}
-        noMoreItems={noMoreItems}
-      />
     </VStack>
   )
 }

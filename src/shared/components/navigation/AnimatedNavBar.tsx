@@ -1,4 +1,13 @@
-import { Button, ButtonProps, ComponentWithAs, HStack, Skeleton, StackProps, Tooltip } from '@chakra-ui/react'
+import {
+  Button,
+  ButtonProps,
+  ComponentWithAs,
+  forwardRef,
+  HStack,
+  Skeleton,
+  StackProps,
+  Tooltip,
+} from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -39,9 +48,12 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
 
   const isMobileMode = useMobileMode()
 
-  const [buttonProps, setButtonprops] = useState<{ left: number; width: number }>({ left: 0, width: 0 })
+  const [buttonPropsArray, setButtonPropsArray] = useState<{ left: number; width: number }[]>([])
 
   const [currentActiveIndex, setCurrentActiveIndex] = useState(activeIndex)
+  useEffect(() => {
+    setCurrentActiveIndex(activeIndex)
+  }, [activeIndex])
 
   const handleClick = (item: AnimatedNavBarItem, index: number) => {
     if (item.disableClick) {
@@ -58,9 +70,17 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
     navigate(item.path || '')
   }
 
-  useEffect(() => {
-    setCurrentActiveIndex(activeIndex)
-  }, [activeIndex])
+  const measuredRef = useCallback((node: HTMLButtonElement | null, index: number) => {
+    if (node !== null) {
+      setButtonPropsArray((current) => {
+        current[index] = {
+          left: node.offsetLeft,
+          width: node.offsetWidth,
+        }
+        return current
+      })
+    }
+  }, [])
 
   const currentActiveItem = items[currentActiveIndex]
 
@@ -90,7 +110,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
           borderColor: colors.utils.text,
           opacity: currentActiveItem?.isDisabled ? 0 : 1,
         }}
-        animate={buttonProps}
+        animate={buttonPropsArray[currentActiveIndex]}
         transition={{ type: 'spring', damping: 22, stiffness: 250 }}
       />
       {items.map((item, index) => {
@@ -99,7 +119,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
         const Icon = item.icon
         return (
           <ProjectNavigationButton
-            setButtonprops={setButtonprops}
+            ref={(node) => measuredRef(node, index)}
             key={item.name}
             isActive={isActive}
             length={items.length}
@@ -137,23 +157,11 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
 
 const ProjectNavigationButton: ComponentWithAs<
   'button',
-  ButtonProps & { to?: string; setButtonprops: Function; isActive: boolean; length: number }
-> = ({ setButtonprops, isActive, length, ...props }) => {
-  const measuredRef = useCallback(
-    (node: HTMLButtonElement) => {
-      if (node !== null && isActive && length > 0) {
-        setButtonprops({
-          left: node.offsetLeft,
-          width: node.offsetWidth,
-        })
-      }
-    },
-    [isActive, setButtonprops, length],
-  )
-
+  ButtonProps & { to?: string; isActive: boolean; length: number }
+> = forwardRef(({ isActive, length, ...props }, ref) => {
   return (
     <Button
-      ref={measuredRef}
+      ref={ref}
       flex="1"
       size={{ base: 'md', lg: 'lg' }}
       variant="ghost"
@@ -163,7 +171,7 @@ const ProjectNavigationButton: ComponentWithAs<
       {...props}
     />
   )
-}
+})
 
 export const AnimatedNavBarSkeleton = () => {
   return (

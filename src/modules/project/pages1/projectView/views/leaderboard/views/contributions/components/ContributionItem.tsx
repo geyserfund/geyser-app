@@ -1,19 +1,40 @@
-import { Box, HStack, Image, SkeletonCircle, SkeletonText, VStack } from '@chakra-ui/react'
+import { Box, HStack, Image, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
+import { getPath } from '@/shared/constants'
 import { TimeAgo } from '@/shared/molecules/TimeAgo'
 import { ProjectFundingTxFragment } from '@/types'
 import { commaFormatted, convertSatsToUsd } from '@/utils'
 
 import { UserAvatar } from '../../../../../components/UserAvatar'
 
-export const ContributionItem = ({ contribution }: { contribution: ProjectFundingTxFragment }) => {
+type ContributionItemProps = {
+  contribution: ProjectFundingTxFragment
+} & StackProps
+
+export const ContributionItem = ({ contribution, ...props }: ContributionItemProps) => {
   const { t } = useTranslation()
 
   return (
-    <HStack w="full" alignItems={'start'} spacing={1} key={contribution.id} paddingX={6} paddingY={2}>
+    <HStack
+      w="full"
+      alignItems={'start'}
+      spacing={1}
+      key={contribution.id}
+      paddingX={6}
+      paddingY={2}
+      {...(contribution.funder.user && {
+        as: Link,
+        to: getPath('userProfile', contribution.funder.user.id),
+        _hover: {
+          backgroundColor: 'neutral1.3',
+        },
+      })}
+      {...props}
+    >
       <UserAvatar user={contribution.funder.user} id={contribution.funder.id} />
       <VStack flex={1} alignItems={'start'} justifyContent={'center'} spacing={0}>
         <HStack w="full" justifyContent={'space-between'}>
