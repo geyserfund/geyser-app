@@ -40,7 +40,7 @@ export const LeaderboardItem = ({ funder, rank, ...props }: LeaderboardItemProps
             {funder.user?.username || t('Anonymous')}
           </Body>
           <HStack spacing={2}>
-            <Body size="xs">
+            <Body size="sm">
               {commaFormatted(funder.contributionsTotal)}{' '}
               <Body as="span" size="sm" muted>
                 Sats
@@ -50,7 +50,7 @@ export const LeaderboardItem = ({ funder, rank, ...props }: LeaderboardItemProps
             {funder.contributionsCount && funder.contributionsCount > 1 && (
               <HStack spacing={0}>
                 <PiLightning fontSize={'12px'} />
-                <Body size="xs" dark>
+                <Body size="sm" dark>
                   {funder.contributionsCount}
                 </Body>
               </HStack>
@@ -59,7 +59,7 @@ export const LeaderboardItem = ({ funder, rank, ...props }: LeaderboardItemProps
             {funder.commentsCount && funder.commentsCount > 0 && (
               <HStack spacing={0}>
                 <PiChatCircle fontSize={'12px'} />
-                <Body size="xs" dark>
+                <Body size="sm" dark>
                   {funder.commentsCount}
                 </Body>
               </HStack>

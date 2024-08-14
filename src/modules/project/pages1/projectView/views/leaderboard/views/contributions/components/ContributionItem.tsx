@@ -45,7 +45,7 @@ export const ContributionItem = ({ contribution, ...props }: ContributionItemPro
         </HStack>
 
         <HStack spacing={2}>
-          <Body size="xs">
+          <Body size="sm">
             {commaFormatted(contribution.amountPaid)}{' '}
             <Body as="span" size="sm" muted>
               sats {convertSatsToUsd({ sats: contribution.amountPaid, bitcoinQuote: contribution.bitcoinQuote })}
@@ -53,7 +53,7 @@ export const ContributionItem = ({ contribution, ...props }: ContributionItemPro
           </Body>
         </HStack>
         {contribution.comment && (
-          <Body size="xs" dark>
+          <Body size="sm" dark>
             {contribution.comment}
           </Body>
         )}
