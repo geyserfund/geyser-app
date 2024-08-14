@@ -112,18 +112,20 @@ export const RewardView = () => {
                     {reward.sold}
                   </Box>
                 </Body>
-                {reward.stock && (
+                {reward.maxClaimable && (
                   <Body size="xs" medium muted>
                     {t('Available')}:{' '}
                     <Box as="span" color="utils.text" fontWeight={700}>
-                      {reward.stock - reward.sold - count}
+                      {reward.maxClaimable - reward.sold - count}
                     </Box>
                   </Body>
                 )}
 
-                <Badge variant="soft" colorScheme="neutral1" size="sm" textTransform={'capitalize'}>
-                  {reward.category}
-                </Badge>
+                {reward.category && (
+                  <Badge variant="soft" colorScheme="neutral1" size="sm" textTransform={'capitalize'}>
+                    {reward.category}
+                  </Badge>
+                )}
                 <ProjectRewardShippingEstimate reward={reward} />
               </HStack>
               <HStack display={{ base: 'none', lg: 'flex' }}>{renderAmountComponent()}</HStack>
@@ -189,7 +191,7 @@ export const RewardViewSkeleton = () => {
         backgroundColor="neutral1.1"
         paddingY={{ base: 6, lg: 12 }}
       >
-        <VStack maxWidth="538px" spacing={6}>
+        <VStack maxWidth={dimensions.project.rewards.view.maxWidth} spacing={6}>
           <VStack w="full" spacing={3}>
             <HStack w="full" alignItems="start" justifyContent="space-between">
               <SkeletonLayout height="28px" flex={1} />
@@ -209,7 +211,7 @@ export const RewardViewSkeleton = () => {
             </HStack>
           </VStack>
           <SkeletonLayout height="330px" width="100%" />
-          <SkeletonText noOfLines={40} width="100%" />
+          <SkeletonText noOfLines={10} width="100%" />
         </VStack>
       </CardLayout>
       <BottomNavBarContainer direction="column">

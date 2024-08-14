@@ -1,20 +1,32 @@
 import { atom } from 'jotai'
 
+import { toInt } from '@/utils'
+
 import { ProjectRewardFragment } from '../../../types'
 
 /** Rewards for the Project in context */
 export const rewardsAtom = atom<ProjectRewardFragment[]>([])
 
+/** Active rewards for the Project in context */
+export const activeRewardsAtom = atom((get) => {
+  const rewards = get(rewardsAtom)
+  return rewards.filter((reward) => !reward.isHidden)
+})
+
+/** Hidden rewards for the Project in context */
+export const hiddenRewardsAtom = atom((get) => {
+  const rewards = get(rewardsAtom)
+  return rewards.filter((reward) => reward.isHidden)
+})
 /** add or update a reward */
 export const addUpdateRewardsAtom = atom(null, (get, set, currentReward: ProjectRewardFragment) => {
   const allRewards = get(rewardsAtom)
-
-  const isExist = allRewards.some((reward) => reward.id === currentReward.id)
+  const isExist = allRewards.some((reward) => toInt(reward.id) === toInt(currentReward.id))
 
   if (isExist) {
     set(rewardsAtom, (rewards) => {
       return rewards.map((reward) => {
-        if (reward.id === currentReward.id) {
+        if (toInt(reward.id) === toInt(currentReward.id)) {
           return currentReward
         }
 

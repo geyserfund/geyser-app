@@ -49,8 +49,9 @@ export const useProjectRewardsAPI = (load?: boolean) => {
   })
 
   const [updateReward, updateRewardOptions] = useCustomMutation(useRewardUpdateMutation, {
-    onCompleted(data) {
+    onCompleted(data, clientOptions) {
       addUpdateRewards(data.projectRewardUpdate)
+      removeReward(clientOptions?.variables?.input?.projectRewardId)
     },
   })
 

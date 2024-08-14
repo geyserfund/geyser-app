@@ -9,7 +9,7 @@ import {
   projectLoadingAtom,
   projectOwnerAtom,
 } from '../state/projectAtom'
-import { rewardsAtom } from '../state/rewardsAtom'
+import { activeRewardsAtom, hiddenRewardsAtom, rewardsAtom } from '../state/rewardsAtom'
 import { walletAtom, walletConnectionDetailsAtom, walletLoadingAtom } from '../state/walletAtom'
 
 export const useProjectAtom = () => {
@@ -39,7 +39,9 @@ export const useGoalsAtom = () => {
 
 export const useRewardsAtom = () => {
   const rewards = useAtomValue(rewardsAtom)
-  return { rewards }
+  const activeRewards = useAtomValue(activeRewardsAtom)
+  const hiddenRewards = useAtomValue(hiddenRewardsAtom)
+  return { rewards, activeRewards, hiddenRewards }
 }
 
 export const useEntriesAtom = () => {

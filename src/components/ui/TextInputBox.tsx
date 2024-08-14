@@ -44,7 +44,7 @@ export const TextInputBox = forwardRef<HTMLInputElement, TextInputBoxProps>(
           >
             {children}
           </Input>
-          {rightIcon && <InputRightElement pointerEvents="none">{rightIcon}</InputRightElement>}
+          {rightIcon && <InputRightElement>{rightIcon}</InputRightElement>}
         </InputGroup>
         {error ? (
           typeof error === 'object' ? (

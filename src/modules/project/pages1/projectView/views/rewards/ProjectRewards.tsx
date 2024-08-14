@@ -31,18 +31,20 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
 
   const hiddenProjectRewards = rewards.filter((reward) => reward && reward.isHidden === true)
 
-  if (!activeProjectRewards.length && (isProjectOwner || hiddenProjectRewards.length === 0)) {
+  if (!activeProjectRewards.length && (isProjectOwner ? hiddenProjectRewards.length === 0 : false)) {
     return null
   }
 
   return (
     <VStack w="full" spacing={8}>
       <CreatorRewardPageTopBar />
-      <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={4} width={'100%'} pb={'96px'}>
-        {activeProjectRewards.map((reward) => {
-          return <RewardCardWithBuy key={reward.id} width="100%" reward={reward} />
-        })}
-      </SimpleGrid>
+      {activeProjectRewards.length > 0 && (
+        <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={4} width={'100%'} pb={'96px'}>
+          {activeProjectRewards.map((reward) => {
+            return <RewardCardWithBuy key={reward.id} width="100%" reward={reward} />
+          })}
+        </SimpleGrid>
+      )}
       {isProjectOwner && hiddenProjectRewards.length > 0 && (
         <VStack w="full" alignItems={'start'}>
           <Body size="2xl" bold>

@@ -86,11 +86,11 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
               {reward.sold}
             </Box>
           </Body>
-          {reward.stock && (
+          {reward.maxClaimable && (
             <Body size="xs" medium muted>
               {t('Available')}:{' '}
               <Box as="span" color="utils.text" fontWeight={700}>
-                {reward.stock - reward.sold - count}
+                {reward.maxClaimable - reward.sold - count}
               </Box>
             </Body>
           )}
@@ -134,8 +134,7 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
           {!isProjectOwner ? (
             buyReward && (
               <Button
-                size="sm"
-                variant="surface"
+                variant="solid"
                 colorScheme="primary1"
                 minWidth="80px"
                 onClick={onBuyClick}
