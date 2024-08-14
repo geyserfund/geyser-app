@@ -178,7 +178,13 @@ export const PostCreateEdit = () => {
           <H1 size="2xl" bold>
             {t('Write a post')}
           </H1>
-          <CardLayout padding={{ base: 0, lg: '9px' }} w="full" flex={1} backgroundColor={'utils.surface'}>
+          <CardLayout
+            padding={{ base: 0, lg: '9px' }}
+            w="full"
+            flex={1}
+            backgroundColor={'utils.surface'}
+            overflow="visible"
+          >
             <VStack
               spacing={3}
               width="100%"

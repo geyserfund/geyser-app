@@ -47,6 +47,14 @@ const useStyles = createUseStyles<Rules, StyleProps, AppTheme>(({ colors, colorM
         display: 'flex',
         margin: isMobile ? '0px' : '0px 10px',
       },
+      '& .ql-formats button:hover': {
+        '& .ql-stroke': {
+          stroke: colors.primary1[9],
+        },
+        '& .ql-fill': {
+          fill: colors.primary1[9],
+        },
+      },
     },
 
     '& .ql-container': {
