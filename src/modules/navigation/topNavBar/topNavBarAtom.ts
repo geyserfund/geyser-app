@@ -22,7 +22,9 @@ const isProjectRoutesAtom = atom(
     ...projectFundingRoutes,
   ]),
 )
-const isProjectMainPageAtom = atom(routeMatchForAtom([getPath('project', PathName.projectName)]))
+const isProjectMainPageAtom = atom(
+  routeMatchForAtom([getPath('project', PathName.projectName), getPath('projectDraft', PathName.projectName)]),
+)
 
 const mainProjectPageScrolledPassThresholdAtom = atom(false)
 

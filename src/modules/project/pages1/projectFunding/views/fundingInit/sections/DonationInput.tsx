@@ -107,13 +107,15 @@ export const DonationInput = () => {
       </HStack>
 
       <InputGroup>
-        <InputLeftElement pt={1} pl={4}>
+        <InputLeftElement width="50px" height="100%" display="flex" justifyContent={'center'} alignItems={'center'}>
           {isSatoshi ? <SatSymbolIcon fontSize="24px" /> : <BiDollar fontSize="24px" />}
         </InputLeftElement>
         <Input
           ref={inputRef}
           data-testid="donation-input"
           borderRadius="12px"
+          size="lg"
+          fontWeight={500}
           value={satoshi > 0 ? (isSatoshi ? commaFormatted(satoshi) : commaFormatted(dollar)) : ''}
           type="text"
           onChange={handleInput}
@@ -125,8 +127,16 @@ export const DonationInput = () => {
           color="neutral1.11"
           placeholder="0"
         />
-        <InputRightElement pr={'10px'} w="fit-content" minWidth="100px" maxWidth="150px">
-          <Button w="100%" size="sm" variant="soft" colorScheme="neutral1" onClick={onToggle}>
+        <InputRightElement
+          w="fit-content"
+          minWidth="100px"
+          maxWidth="150px"
+          height="100%"
+          display="flex"
+          alignItems={'center'}
+          paddingRight={2}
+        >
+          <Button w="100%" variant="soft" colorScheme="neutral1" onClick={onToggle}>
             {isSatoshi ? (
               <>
                 <MonoBody1 isTruncated>

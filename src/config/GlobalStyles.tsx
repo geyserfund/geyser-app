@@ -18,27 +18,29 @@ const GlobalStyles = () => (
             font-display: swap;
         }
 
-
         ::-webkit-scrollbar {
-            width: 8px;
-            height: 5px;
-          }
+          width: 4px;
+        }
 
-          ::-webkit-scrollbar-thumb {
-            background: rgba(90, 90, 90,0.2);
-          }
+        ::-webkit-scrollbar-track {
+          background: ${lightModeColors.neutral1[3]};
+          border-radius: 4px;
+        }
 
-          ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1);
-          }
+        ::-webkit-scrollbar-thumb {
+          background: ${lightModeColors.neutral1[8]};
+          border-radius: 4px;
+        }
+
+         ::-webkit-scrollbar-thumb:hover {
+          background: ${lightModeColors.neutral1[9]};
+        }
+
 
         button:focus {
             box-shadow: none !important;
         }
-
-        ::-webkit-scrollbar-thumb:hover {
-        background-color: #a8bbbf;
-        }
+        
         body {
             overflow: overlay;
         }

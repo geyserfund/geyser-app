@@ -29,7 +29,7 @@ export const ProjectCreateLaunchedModal = (props: Omit<ModalProps, 'children'>) 
           </Body>
         </HStack>
 
-        <Body medium color="primary1.11">
+        <Body medium dark>
           {t('Follow us and tag us on social media at @geyserfund so we can amplify your content.')}
         </Body>
         <VStack spacing="10px" w="full">

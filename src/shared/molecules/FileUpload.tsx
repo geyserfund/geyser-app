@@ -108,7 +108,7 @@ export const FileUpload = ({
             </HStack>
           ) : null}
           <Box flexGrow={1} {...getRootProps()} _hover={{ cursor: 'pointer' }}>
-            <input {...getInputProps()} />
+            <input multiple={false} {...getInputProps()} />
             {isLoading && childrenOnLoading ? childrenOnLoading : children}
           </Box>
         </HStack>

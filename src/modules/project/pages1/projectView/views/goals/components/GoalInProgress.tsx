@@ -65,7 +65,7 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
   }
 
   return (
-    <HStack width="100%" gap={'10px'}>
+    <HStack width="100%" gap={'10px'} background="utils.pbg">
       {isEditing && (
         <VStack display="flex" height="100%" alignItems="center" justifyContent="flex-start" pt={1}>
           <DragHandle listeners={listeners} />

@@ -54,7 +54,6 @@ export const FollowButton = ({ project, ...rest }: FollowButtonProps) => {
   return (
     <IconButton
       aria-label="follow-button"
-      size="sm"
       variant="soft"
       colorScheme={isFollowed ? 'primary1' : 'neutral1'}
       onClick={handleClick}

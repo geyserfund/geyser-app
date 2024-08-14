@@ -204,6 +204,9 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
                   <Body medium>{tag.label}</Body>
                   <IconButton
                     variant="ghost"
+                    _hover={{}}
+                    _pressed={{}}
+                    _active={{}}
                     size="xs"
                     borderRadius="8px"
                     aria-label="remove-tag-close-icon"

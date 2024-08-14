@@ -1,12 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router'
 import * as yup from 'yup'
 
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
+import { PathName } from '@/shared/constants'
 
 import { ProjectGoal, ProjectGoalCreateInput, ProjectGoalCurrency } from '../../../../../types'
-import { dollarsToCents } from '../../../../../utils'
+import { dollarsToCents, useNotification } from '../../../../../utils'
 
 type FormValues = ProjectGoalCreateInput
 
@@ -58,6 +60,9 @@ type UseProjectGoalFormProps = {
 }
 
 export const useProjectGoalForm = ({ goal, projectId, onClose }: UseProjectGoalFormProps) => {
+  const navigate = useNavigate()
+  const toast = useNotification()
+
   const isBTC = goal?.currency === ProjectGoalCurrency.Btcsat
   const amountContributed = isBTC ? goal?.amountContributed || 0 : (goal?.amountContributed || 0) / 100
 
@@ -137,9 +142,12 @@ export const useProjectGoalForm = ({ goal, projectId, onClose }: UseProjectGoalF
             },
           },
           onCompleted() {
-            console.log('first createProjectGoal onCompleted')
             reset()
             onClose()
+            toast.success({
+              title: 'Successfully created project goal!',
+            })
+            navigate(PathName.projectGoals)
           },
         })
       }

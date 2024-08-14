@@ -7,6 +7,7 @@ import {
   ModalOverlay,
   Skeleton,
   SkeletonText,
+  Stack,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
@@ -135,7 +136,8 @@ export const Header = () => {
 
       <CardLayout id={'HEADER_ITEM'} w="full" dense spacing={0}>
         <Box>{renderImageOrVideo()}</Box>
-        <HStack
+        <Stack
+          direction={{ base: 'column', lg: 'row' }}
           spacing={4}
           w="full"
           paddingX={{ base: 3, lg: 6 }}
@@ -143,7 +145,7 @@ export const Header = () => {
           position="relative"
           alignItems="start"
         >
-          <Box position={{ base: 'absolute', lg: 'unset' }} top={'-48px'} left={'16px'}>
+          <Box position={{ base: project.image ? 'absolute' : 'unset', lg: 'unset' }} top={'-48px'} left={'16px'}>
             <ImageWithReload
               border="2px solid"
               borderColor="neutral1.1"
@@ -190,7 +192,6 @@ export const Header = () => {
               <HStack>
                 <IconButton
                   aria-label="Go to project details"
-                  size="sm"
                   icon={<PiCaretDoubleDown />}
                   variant="soft"
                   colorScheme="neutral1"
@@ -203,7 +204,7 @@ export const Header = () => {
               <CreatorEditButton as={Link} to={getPath('dashboardInfo', project.name)} />
             </HStack>
           </VStack>
-        </HStack>
+        </Stack>
       </CardLayout>
     </>
   )

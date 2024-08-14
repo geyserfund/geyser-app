@@ -1,8 +1,10 @@
 import { VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 
 import { useProjectEntriesAPI } from '@/modules/project/API/useProjectEntriesAPI'
 import { useEntriesAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
+import { H2 } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants'
 import { truthyFilter } from '@/utils/array'
 
@@ -27,12 +29,17 @@ export const ProjectPosts = () => {
 
   return (
     <VStack w="full" spacing={8} paddingBottom={'80px'}>
-      <CardLayout w="full" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }} mobileDense noborder>
+      <CardLayout w="full" direction="row" justifyContent="center" mobileDense noborder>
         <VStack maxWidth={dimensions.project.posts.view.maxWidth} w="full" spacing={6}>
           <CreatorPostPageTopBar />
-          {sortedEntries.map((entry, index) => {
-            return <ProjectEntryCard entry={entry} key={entry.id} />
-          })}
+          <VStack w="full" spacing={4} alignItems={'start'}>
+            <H2 bold size="2xl" display={{ base: 'unset', lg: 'none' }}>
+              {t('Posts')}
+            </H2>
+            {sortedEntries.map((entry, index) => {
+              return <ProjectEntryCard entry={entry} key={entry.id} />
+            })}
+          </VStack>
         </VStack>
       </CardLayout>
       <CreatorPostPageBottomBar />

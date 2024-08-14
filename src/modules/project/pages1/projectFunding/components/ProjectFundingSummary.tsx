@@ -125,15 +125,12 @@ export const ProjectFundingSummary = () => {
 
         {getTotalAmount('dollar', name) >= 10 && (
           <HStack display={mobileDisplayStyle}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('You will Receive')}: `}</Body>
-            <HStack>
-              <Badge
-                donationAmountInDollars={getTotalAmount('dollar', name)}
-                height={{ base: '16px', lg: '20px' }}
-                width={{ base: '16px', lg: '20px' }}
-              />
-              <Body size={{ base: 'sm', lg: 'md' }}>{t('Badge')}</Body>
-            </HStack>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Badge')}: `}</Body>
+            <Badge
+              donationAmountInDollars={getTotalAmount('dollar', name)}
+              height={{ base: '16px', lg: '20px' }}
+              width={{ base: '16px', lg: '20px' }}
+            />
           </HStack>
         )}
       </VStack>

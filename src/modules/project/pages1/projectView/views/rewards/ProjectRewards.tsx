@@ -4,7 +4,7 @@ import { forwardRef } from 'react'
 
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
 import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
-import { Body } from '@/shared/components/typography'
+import { Body, H1 } from '@/shared/components/typography'
 
 import { CreatorRewardPageBottomBar, CreatorRewardPageTopBar } from './components/CreatorRewardPageBar'
 import { RewardCardSkeleton, RewardCardWithBuy } from './shared'
@@ -36,14 +36,20 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
   }
 
   return (
-    <VStack w="full" spacing={8}>
+    <VStack w="full" spacing={8} alignItems="start">
       <CreatorRewardPageTopBar />
+
       {activeProjectRewards.length > 0 && (
-        <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={4} width={'100%'} pb={'96px'}>
-          {activeProjectRewards.map((reward) => {
-            return <RewardCardWithBuy key={reward.id} width="100%" reward={reward} />
-          })}
-        </SimpleGrid>
+        <VStack w="full" alignItems={'start'}>
+          <H1 size="2xl" bold display={{ base: 'unset', lg: 'none' }}>
+            {t('Rewards')}
+          </H1>
+          <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={4} width={'100%'} pb={'96px'}>
+            {activeProjectRewards.map((reward) => {
+              return <RewardCardWithBuy key={reward.id} width="100%" reward={reward} />
+            })}
+          </SimpleGrid>
+        </VStack>
       )}
       {isProjectOwner && hiddenProjectRewards.length > 0 && (
         <VStack w="full" alignItems={'start'}>
