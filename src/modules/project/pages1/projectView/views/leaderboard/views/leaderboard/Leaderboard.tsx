@@ -50,7 +50,7 @@ export const Leaderboard = () => {
         <HStack
           width="calc(100% - 24px)"
           position="fixed"
-          top={`${dimensions.topNavBar.mobile.height + dimensions.projectNavBar.mobile.height * 2 - 4}px`}
+          top={`${dimensions.topNavBar.mobile.height + dimensions.projectNavBar.mobile.height * 2 - 5}px`}
           backgroundColor={'utils.pbg'}
           zIndex={1}
           paddingTop={2}

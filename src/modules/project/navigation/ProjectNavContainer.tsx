@@ -7,13 +7,7 @@ import { TopNavContainer } from './components/TopNavContainer'
 export const ProjectNavContainer = ({ children, ...props }: PropsWithChildren<StackProps>) => {
   return (
     <TopNavContainer {...props}>
-      <HStack
-        padding="2px"
-        borderRadius={{ base: '10px', lg: '12px' }}
-        backgroundColor="neutral1.3"
-        w="full"
-        justifyContent="space-between"
-      >
+      <HStack padding="2px" borderRadius={'12px'} backgroundColor="neutral1.3" w="full" justifyContent="space-between">
         {children}
       </HStack>
     </TopNavContainer>

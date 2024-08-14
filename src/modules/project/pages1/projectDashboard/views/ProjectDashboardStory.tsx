@@ -49,7 +49,14 @@ export const ProjectDashboardStory = () => {
 
   const SaveButton = (props: ButtonProps) => {
     return (
-      <Button variant="solid" colorScheme="primary1" type="submit" isLoading={updateProject.loading} {...props}>
+      <Button
+        size="lg"
+        variant="solid"
+        colorScheme="primary1"
+        type="submit"
+        isLoading={updateProject.loading}
+        {...props}
+      >
         {t('Save')}
       </Button>
     )

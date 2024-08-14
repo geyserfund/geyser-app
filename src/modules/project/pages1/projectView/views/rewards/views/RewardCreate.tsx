@@ -53,7 +53,7 @@ export const RewardCreate = () => {
         <Button
           as={Link}
           to={hasRewards ? getPath('projectRewards', project?.name) : getPath('project', project?.name)}
-          size={{ base: 'md', lg: 'lg' }}
+          size="lg"
           variant="ghost"
           colorScheme="neutral1"
           leftIcon={<PiArrowLeft />}

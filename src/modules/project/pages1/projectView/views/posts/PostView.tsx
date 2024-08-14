@@ -84,7 +84,7 @@ export const PostView = () => {
           <Button
             as={Link}
             to={getPath('projectPosts', project?.name)}
-            size={{ base: 'md', lg: 'lg' }}
+            size="lg"
             variant="ghost"
             colorScheme="neutral1"
             leftIcon={<PiArrowLeft />}

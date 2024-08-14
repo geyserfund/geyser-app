@@ -94,17 +94,22 @@ export const AnimatedTabBar = ({ items, activeIndex, ...props }: AnimatedTabBarP
           </HStack>
         )
       })}
-      <motion.div
-        style={{
-          position: 'absolute',
-          bottom: '0px',
-          height: '2px',
-          zIndex: props.zIndex ? toInt(`${props.zIndex}`) + 1 : 3,
-          backgroundColor: colors.primary1[10],
-        }}
-        animate={buttonPropsArray[currentActiveIndex]}
-        transition={{ type: 'spring', damping: 22, stiffness: 250 }}
-      />
+      {initialButtonProps && (
+        <motion.div
+          style={{
+            position: 'absolute',
+            bottom: '0px',
+            height: '2px',
+            zIndex: props.zIndex ? toInt(`${props.zIndex}`) + 1 : 3,
+            backgroundColor: colors.primary1[10],
+            left: initialButtonProps.left,
+            width: initialButtonProps.width,
+          }}
+          initial={false}
+          animate={buttonPropsArray[currentActiveIndex]}
+          transition={{ type: 'spring', damping: 22, stiffness: 250 }}
+        />
+      )}
     </HStack>
   )
 }

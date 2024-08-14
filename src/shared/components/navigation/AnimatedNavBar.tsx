@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { IconType } from 'react-icons'
 import { useNavigate } from 'react-router-dom'
 
-import { toInt, useCustomTheme, useMobileMode } from '../../../utils'
+import { toInt, useCustomTheme } from '../../../utils'
 import { SkeletonLayout } from '../layouts'
 
 export type AnimatedNavBarItem = {
@@ -22,6 +22,7 @@ export type AnimatedNavBarItem = {
   path?: string
   onClick?: () => void
   icon?: IconType | React.FC
+  activeIcon?: IconType | React.FC
   showIconAlways?: boolean
   isBordered?: boolean
   key?: string
@@ -45,8 +46,6 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
   const navigate = useNavigate()
 
   const { colors } = useCustomTheme()
-
-  const isMobileMode = useMobileMode()
 
   const [buttonPropsArray, setButtonPropsArray] = useState<{ left: number; width: number }[]>([])
 
@@ -93,7 +92,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
   const currentActiveItem = items[currentActiveIndex]
 
   if (loading) {
-    return <Skeleton borderRadius={{ base: '8px', lg: '10px' }} height={{ base: '36px', lg: '44px' }} width="100%" />
+    return <Skeleton borderRadius={'10px'} height={'44px'} width="100%" />
   }
 
   return (
@@ -101,7 +100,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
       w="full"
       padding={'2px'}
       background="neutral1.3"
-      borderRadius={{ base: '10px', lg: '12px' }}
+      borderRadius={'12px'}
       position="relative"
       zIndex={2}
       {...props}
@@ -114,7 +113,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
             height: 'calc(100% - 4px)',
             backgroundColor: colors.utils.pbg,
             zIndex: props.zIndex ? toInt(`${props.zIndex}`) + 1 : 3,
-            borderRadius: isMobileMode ? '8px' : '10px',
+            borderRadius: '10px',
             border: '1px solid',
             borderColor: colors.utils.text,
             opacity: currentActiveItem?.isDisabled ? 0 : 1,
@@ -130,6 +129,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
         const isActive = currentActiveIndex === index
 
         const Icon = item.icon
+        const ActiveIcon = item.activeIcon
         return (
           <ProjectNavigationButton
             ref={(node) => measuredRef(node, index)}
@@ -157,7 +157,8 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
                 alignItems="center"
                 fontWeight={isActive ? 500 : 400}
               >
-                {(showIcon || item.showIconAlways) && Icon ? <Icon /> : null}
+                {(showIcon || item.showIconAlways) &&
+                  (isActive && ActiveIcon ? <ActiveIcon fontSize="18px" /> : Icon ? <Icon fontSize="18px" /> : null)}
                 {showLabel && <span>{t(item.name)}</span>}
               </HStack>
             </Tooltip>
@@ -176,18 +177,17 @@ const ProjectNavigationButton: ComponentWithAs<
     <Button
       ref={ref}
       flex="1"
-      size={{ base: 'md', lg: 'lg' }}
+      size={'lg'}
       variant="ghost"
       backgroundColor={'transparent'}
       color={'neutral1.12'}
       _disabled={{ color: 'neutral1.9' }}
+      padding={0}
       {...props}
     />
   )
 })
 
 export const AnimatedNavBarSkeleton = () => {
-  return (
-    <SkeletonLayout borderRadius={{ base: '10px', lg: '12px' }} height={{ base: '36px', lg: '44px' }} width="100%" />
-  )
+  return <SkeletonLayout borderRadius={'12px'} height={'44px'} width="100%" />
 }

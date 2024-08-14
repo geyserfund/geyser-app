@@ -145,7 +145,7 @@ export const PostCreateEdit = () => {
         <Button
           as={Link}
           to={getPath('projectPosts', project?.name)}
-          size={{ base: 'md', lg: 'lg' }}
+          size="lg"
           variant="ghost"
           colorScheme="neutral1"
           leftIcon={<PiArrowLeft />}
@@ -153,13 +153,13 @@ export const PostCreateEdit = () => {
           {t('Back to posts')}
         </Button>
         <HStack>
-          <Button size={{ base: 'md', lg: 'lg' }} variant="soft" colorScheme="neutral1" onClick={saveEntry}>
+          <Button size="lg" variant="soft" colorScheme="neutral1" onClick={saveEntry}>
             {t(getSaveButtonText())}
           </Button>
           {!isEntryPublished && (
             <Tooltip label={!isActive(project.status) ? t('Cannot publish entry for inActive project') : ''}>
               <Button
-                size={{ base: 'md', lg: 'lg' }}
+                size="lg"
                 variant="solid"
                 colorScheme="primary1"
                 onClick={handlePublishEntry}

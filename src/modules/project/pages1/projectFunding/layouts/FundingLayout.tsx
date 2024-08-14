@@ -36,14 +36,7 @@ export const FundingLayout = ({
       <ProjectNavContainer>
         <HStack>
           {backPath !== undefined && (
-            <Button
-              as={Link}
-              to={backPath}
-              size={{ base: 'md', lg: 'lg' }}
-              variant="ghost"
-              colorScheme="neutral1"
-              leftIcon={<PiArrowLeft />}
-            >
+            <Button as={Link} to={backPath} size="lg" variant="ghost" colorScheme="neutral1" leftIcon={<PiArrowLeft />}>
               {t('Go back')}
             </Button>
           )}

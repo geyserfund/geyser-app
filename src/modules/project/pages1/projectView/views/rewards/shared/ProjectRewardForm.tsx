@@ -587,12 +587,13 @@ export const ProjectRewardForm = ({
           zIndex={4}
         >
           {isLaunch && (
-            <Button variant="outline" colorScheme="neutral1" flexGrow={1} onClick={() => navigate(-1)}>
+            <Button size="lg" variant="outline" colorScheme="neutral1" flexGrow={1} onClick={() => navigate(-1)}>
               {t('Cancel')}
             </Button>
           )}
           <Button
             {...(isLaunch ? { flexGrow: 1 } : {})}
+            size="lg"
             display={{ base: 'block' }}
             variant="solid"
             colorScheme="primary1"

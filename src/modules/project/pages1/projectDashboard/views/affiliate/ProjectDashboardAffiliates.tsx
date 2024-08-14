@@ -48,7 +48,7 @@ export const ProjectDashboardAffiliates = () => {
 
   const AddAffiliateButton = (props: ButtonProps) => {
     return (
-      <Button variant="solid" colorScheme="primary1" onClick={affiliateCreateFormModal.onOpen} {...props}>
+      <Button size="lg" variant="solid" colorScheme="primary1" onClick={affiliateCreateFormModal.onOpen} {...props}>
         {t('Add affiliate')}
       </Button>
     )

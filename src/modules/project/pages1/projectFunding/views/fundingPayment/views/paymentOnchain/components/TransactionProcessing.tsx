@@ -30,8 +30,7 @@ export const TransactionProcessing = ({ title, subTitle, transactionId, ...rest 
       {
         <Button
           size="lg"
-          as={Link}
-          href={`${BLOCK_EXPLORER_BASE_URL}${transactionId}`}
+          {...(transactionId && { as: Link, href: `${BLOCK_EXPLORER_BASE_URL}${transactionId}` })}
           isExternal
           variant="outline"
           colorScheme="neutral1"

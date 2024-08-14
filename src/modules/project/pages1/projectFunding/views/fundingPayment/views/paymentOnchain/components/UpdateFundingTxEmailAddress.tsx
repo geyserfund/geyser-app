@@ -105,6 +105,7 @@ export const UpdateFundingTxEmailAddress = () => {
               </VStack>
               <Button
                 type="submit"
+                size="lg"
                 w={{ base: 'full', lg: 'auto' }}
                 variant="solid"
                 colorScheme="primary1"

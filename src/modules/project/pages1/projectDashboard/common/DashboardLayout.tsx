@@ -52,7 +52,7 @@ export const DashboardLayout = ({
           <Button
             as={Link}
             to={getPath('projectDashboard', project?.name)}
-            size={{ base: 'md', lg: 'lg' }}
+            size={'lg'}
             variant="ghost"
             colorScheme="neutral1"
             leftIcon={<PiArrowLeft />}

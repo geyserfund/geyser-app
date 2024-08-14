@@ -137,6 +137,7 @@ export const ProjectDashboardWallet = () => {
   const SaveButton = (props: ButtonProps) => {
     return (
       <Button
+        size="lg"
         variant="solid"
         colorScheme="primary1"
         isLoading={updateWallet.loading || createWallet.loading}
