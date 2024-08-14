@@ -7,7 +7,7 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { FileUpload } from '@/components/molecules'
 import { ImageWithReload, TextArea } from '@/components/ui'
 import Loader from '@/components/ui/Loader'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useEntriesAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H1 } from '@/shared/components/typography'
@@ -24,6 +24,8 @@ export const PostCreateEdit = () => {
   const navigate = useNavigate()
 
   const { project, loading: projectLoading } = useProjectAtom()
+
+  const { hasEntries } = useEntriesAtom()
 
   const { postId } = useParams<{ postId: string }>()
 
@@ -144,13 +146,13 @@ export const PostCreateEdit = () => {
       <ProjectNavContainer>
         <Button
           as={Link}
-          to={getPath('projectPosts', project?.name)}
+          to={hasEntries ? getPath('projectPosts', project?.name) : getPath('project', project?.name)}
           size="lg"
           variant="ghost"
           colorScheme="neutral1"
           leftIcon={<PiArrowLeft />}
         >
-          {t('Back to posts')}
+          {hasEntries ? t('Back to posts') : t('Back to project')}
         </Button>
         <HStack>
           <Button size="lg" variant="soft" colorScheme="neutral1" onClick={saveEntry}>

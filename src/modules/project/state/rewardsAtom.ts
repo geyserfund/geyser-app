@@ -3,6 +3,7 @@ import { atom } from 'jotai'
 import { toInt } from '@/utils'
 
 import { ProjectRewardFragment } from '../../../types'
+import { isProjectOwnerAtom } from './projectAtom'
 
 /** Rewards for the Project in context */
 export const rewardsAtom = atom<ProjectRewardFragment[]>([])
@@ -17,6 +18,14 @@ export const activeRewardsAtom = atom((get) => {
 export const hiddenRewardsAtom = atom((get) => {
   const rewards = get(rewardsAtom)
   return rewards.filter((reward) => reward.isHidden)
+})
+
+/** Boolean to see if rewards exists */
+export const hasRewardsAtom = atom((get) => {
+  const activeRewards = get(activeRewardsAtom)
+  const hiddenRewards = get(hiddenRewardsAtom)
+  const isProjectOwner = get(isProjectOwnerAtom)
+  return activeRewards.length > 0 || (isProjectOwner && hiddenRewards.length > 0)
 })
 /** add or update a reward */
 export const addUpdateRewardsAtom = atom(null, (get, set, currentReward: ProjectRewardFragment) => {

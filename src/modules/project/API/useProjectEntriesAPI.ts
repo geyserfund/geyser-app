@@ -66,8 +66,11 @@ export const useProjectEntriesAPI = (load?: boolean) => {
     })
 
   useEffect(() => {
-    if (project.id && !loading && load && !initialEntriesLoad) {
-      queryProjectEntries()
+    if (project.id && !loading && load) {
+      if (!initialEntriesLoad) {
+        queryProjectEntries()
+      }
+
       if (isProjectOwner) {
         queryUnpublishedProjectEntries()
       }
