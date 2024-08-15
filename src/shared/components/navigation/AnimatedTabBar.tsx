@@ -11,10 +11,11 @@ import { AnimatedNavBarItem } from './AnimatedNavBar'
 type AnimatedTabBarProps = {
   items: AnimatedNavBarItem[]
   activeIndex: number
+  activeTabColor?: string
 } & StackProps
 
 /** Works same way as AnimatedNavBar */
-export const AnimatedTabBar = ({ items, activeIndex, ...props }: AnimatedTabBarProps) => {
+export const AnimatedTabBar = ({ items, activeIndex, activeTabColor, ...props }: AnimatedTabBarProps) => {
   const [currentActiveIndex, setCurrentActiveIndex] = useState(activeIndex)
 
   const { colors } = useCustomTheme()
@@ -101,7 +102,7 @@ export const AnimatedTabBar = ({ items, activeIndex, ...props }: AnimatedTabBarP
             bottom: '0px',
             height: '2px',
             zIndex: props.zIndex ? toInt(`${props.zIndex}`) + 1 : 3,
-            backgroundColor: colors.primary1[10],
+            backgroundColor: activeTabColor || colors.primary1[10],
             left: initialButtonProps.left,
             width: initialButtonProps.width,
           }}

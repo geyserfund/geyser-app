@@ -10,7 +10,7 @@ import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNav
 import { dimensions } from '@/shared/constants'
 import { standardPadding } from '@/styles'
 import { ProjectLeaderboardPeriod } from '@/types'
-import { useMobileMode } from '@/utils'
+import { useCustomTheme, useMobileMode } from '@/utils'
 
 import { LeaderboardList } from './LeaderboardList'
 
@@ -18,6 +18,7 @@ export const MAXIMUM_LEADERBOARD_ITEMS = 30
 
 export const Leaderboard = () => {
   const isMobile = useMobileMode()
+  const { colors } = useCustomTheme()
 
   const currentDateTime = DateTime.now()
 
@@ -55,7 +56,7 @@ export const Leaderboard = () => {
           zIndex={1}
           paddingTop={2}
         >
-          <AnimatedTabBar {...animatedNavBarProps} />
+          <AnimatedTabBar {...animatedNavBarProps} activeTabColor={colors.utils.text} />
         </HStack>
         <VStack w="full" h="full" pt={dimensions.animatedNavBar.height}>
           {render && render()}
