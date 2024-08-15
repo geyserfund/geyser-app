@@ -50,20 +50,20 @@ const GlobalStyles = () => (
           }
         
         .chakra-ui-dark {
-            background: ${darkModeColors.neutral[0]}
+            background: ${darkModeColors.utils.pbg}
           }
   
           .chakra-ui-light {
-            background: ${lightModeColors.neutral[0]}
+            background: ${lightModeColors.utils.pbg}
           }
         
         @media (min-width: 57em) {
           .chakra-ui-dark {
-            background: ${darkModeColors.neutral[50]}
+            background: ${darkModeColors.neutral1[1]}
           }
   
           .chakra-ui-light {
-            background: ${lightModeColors.neutral[50]}
+            background: ${lightModeColors.neutral1[1]}
           }
         }
       `}

@@ -48,8 +48,6 @@ const AppLayout = () => {
             display="flex"
             alignItems="center"
             flexDir="column"
-            backgroundColor="utils.pbg"
-            overflowY={'auto'}
           >
             <TopNavBar />
             <Box
