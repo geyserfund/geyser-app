@@ -14,7 +14,7 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
-import { Navigate } from 'react-router'
+import { useNavigate } from 'react-router'
 
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
 import { inProgressGoalsAtom } from '@/modules/project/state/goalsAtom'
@@ -28,9 +28,11 @@ import { useProjectDefaultGoal } from '../../body/hooks/useProjectDefaultGoal'
 import { GoalCompleted, GoalInProgress } from '../components'
 
 export const RenderGoals = () => {
-  const { project } = useProjectAtom()
+  const { project, loading: projectLoading } = useProjectAtom()
 
-  const { queryInProgressGoals } = useProjectGoalsAPI(true)
+  const navigate = useNavigate()
+
+  const { queryInProgressGoals, queryCompletedGoals } = useProjectGoalsAPI(true)
 
   const { inProgressGoals, completedGoals } = useGoalsAtom()
   const { onGoalModalOpen, isGoalinEditMode } = useGoalsModal()
@@ -100,6 +102,7 @@ export const RenderGoals = () => {
     onGoalModalOpen(goal)
   }
 
+  const loading = projectLoading || queryInProgressGoals.loading || queryCompletedGoals.loading
   const hasInProgressGoals = inProgressGoals && inProgressGoals.length > 0
   const hasCompletedGoals = completedGoals && completedGoals.length > 0
 
@@ -115,12 +118,22 @@ export const RenderGoals = () => {
     return <Text>There are no goals available.</Text>
   }
 
-  if (queryInProgressGoals.loading) {
-    return <RenderGoalsSkeleton />
-  }
+  useEffect(() => {
+    let number: any
 
-  if (!hasInProgressGoals && !hasCompletedGoals) {
-    return <Navigate to={getPath('project', project.name)} />
+    if (!loading && !hasInProgressGoals && !hasCompletedGoals) {
+      number = setInterval(() => {
+        navigate(getPath('project', project.name))
+      }, 500)
+    }
+
+    return () => {
+      clearInterval(number)
+    }
+  }, [loading, hasInProgressGoals, hasCompletedGoals, navigate, project])
+
+  if (loading) {
+    return <RenderGoalsSkeleton />
   }
 
   return (
@@ -222,7 +235,7 @@ const PresentationalGoalItem = ({ goal }: { goal: ProjectGoal }) => {
 
 export const RenderGoalsSkeleton = () => {
   return (
-    <CardLayout flexDirection="column" width="100%" alignItems="flex-start" spacing={6}>
+    <CardLayout dense noborder flexDirection="column" width="100%" alignItems="flex-start" spacing={6}>
       <VStack alignItems="flex-start" spacing={4} width="100%">
         {[1, 2].map((i) => {
           return (

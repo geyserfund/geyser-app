@@ -383,8 +383,8 @@ export const ProjectRewardForm = ({
               onChange={handleFormTextChange}
               onBlur={handleMaxClaimableAmountBlur}
               error={formError.maxClaimable}
-              isDisabled={Boolean(createOrUpdate === 'update' && originalReward.maxClaimable)}
-              isReadOnly={Boolean(createOrUpdate === 'update' && originalReward.maxClaimable)}
+              isDisabled={reward.sold > 0 && Boolean(createOrUpdate === 'update' && originalReward.maxClaimable)}
+              isReadOnly={reward.sold > 0 && Boolean(createOrUpdate === 'update' && originalReward.maxClaimable)}
             />
           </VStack>
         </Stack>
