@@ -14,7 +14,7 @@ const OpenGrants = ({ openGrants }: { openGrants: Grant[] }) => {
         {t('Open Grants')}
       </Body>
       {openGrants.map((grant) => (
-        <LargeGrantCard key={grant.id} grant={grant} to={`/grants/${grant.id}`} showBanner />
+        <LargeGrantCard key={grant.id} grant={grant} showBanner />
       ))}
     </VStack>
   )
