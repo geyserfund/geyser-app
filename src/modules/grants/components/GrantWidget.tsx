@@ -5,7 +5,7 @@ import { useCountdown } from '@/shared/hooks/useCountdown'
 import { Grant, GrantStatusEnum } from '@/types'
 import { getFormattedDate, getShortAmountLabel } from '@/utils'
 
-const GrantWidget = ({ grant }: { grant: Grant }) => {
+const GrantWidget = ({ grant, compact = false }: { grant: Grant; compact?: boolean }) => {
   const votingStartDate = grant.statuses.find((s) => s.status === grant.status)?.startAt
   const isUpcomingGrant = votingStartDate > Date.now()
   const isClosedGrant = grant.status === GrantStatusEnum.Closed
@@ -22,9 +22,12 @@ const GrantWidget = ({ grant }: { grant: Grant }) => {
         <GrantInfo
           label="Lasted"
           value={`${getFormattedDate(votingStartDate || 0)} - ${getFormattedDate(votingEndDate || 0)}`}
+          compact={compact}
         />
-        <GrantInfo label={'Applicants'} value={grant?.applicants?.length || 0} />
-        {grant.balance > 0 && <GrantInfo label={'Grant pool'} value={`${getShortAmountLabel(grant.balance)} Sats`} />}
+        {!compact && <GrantInfo label={'Applicants'} value={grant?.applicants?.length || 0} compact={compact} />}
+        {grant.balance > 0 && (
+          <GrantInfo label={'Grant pool'} value={`${getShortAmountLabel(grant.balance)} Sats`} compact={compact} />
+        )}
       </>
     )
   }
@@ -40,16 +43,39 @@ const GrantWidget = ({ grant }: { grant: Grant }) => {
 
 export default GrantWidget
 
-const GrantInfo = ({ label, value, endDate = 0 }: { label: string; value?: string | number; endDate?: number }) => {
+const GrantInfo = ({
+  label,
+  value,
+  endDate = 0,
+  compact = false,
+}: {
+  label: string
+  value?: string | number
+  endDate?: number
+  compact?: boolean
+}) => {
+  if (compact) {
+    return (
+      <HStack alignItems="flex-start" spacing={1}>
+        <Body fontSize={'12px'} color="neutralAlpha.9" medium>
+          {label}:
+        </Body>
+        <Body fontSize={'12px'} bold>
+          {value}
+        </Body>
+      </HStack>
+    )
+  }
+
   return (
     <VStack alignItems="flex-start" spacing={0}>
-      <Body fontSize="14px" color="neutralAlpha.11" medium>
+      <Body fontSize={{ base: '12px', lg: '14px' }} color="neutralAlpha.11" medium>
         {label}
       </Body>
       {endDate ? (
         <LargeGrantCountdown endDate={endDate} />
       ) : (
-        <Body fontSize="20px" medium>
+        <Body fontSize={{ base: '18px', lg: '20px' }} medium>
           {value}
         </Body>
       )}
@@ -62,15 +88,15 @@ export const LargeGrantCountdown = ({ endDate = 0 }: { endDate: number }) => {
 
   return (
     <HStack spacing={1} alignItems="flex-start">
-      <Body fontSize="20px" medium>
+      <Body fontSize={{ base: '18px', lg: '20px' }} medium>
         <span>{days}</span>
         <span>d</span>
       </Body>
-      <Body fontSize="20px" medium>
+      <Body fontSize={{ base: '18px', lg: '20px' }} medium>
         <span>{hours}</span>
         <span>h</span>{' '}
       </Body>
-      <Body fontSize="20px" medium>
+      <Body fontSize={{ base: '18px', lg: '20px' }} medium>
         <span>{minutes}</span>
         <span>m</span>
       </Body>

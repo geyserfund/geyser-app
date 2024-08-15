@@ -6,7 +6,7 @@ import { getPath } from '@/shared/constants'
 
 import { Grant } from '../../../types'
 import { useMobileMode } from '../../../utils'
-import { GrantStatusBadge } from './GrantStatusBadge'
+import { GrantStatus } from './GrantStatusBadge'
 import GrantWidget from './GrantWidget'
 import { Sponsors } from './Sponsors'
 
@@ -35,12 +35,14 @@ export const SmallGrantCard = ({ grant, showBanner }: Props) => {
 
   const navigate = useNavigate()
 
+  const Direction = isMobile ? VStack : HStack
+
   return (
     <HStack
       mt={3}
       onClick={() => navigate(to)}
       minWidth={'100%'}
-      maxHeight={{ base: '228px', lg: '228px' }}
+      maxHeight={{ base: '98px', lg: '230px' }}
       cursor="pointer"
       border={`1px solid`}
       borderColor="neutralAlpha.6"
@@ -49,27 +51,46 @@ export const SmallGrantCard = ({ grant, showBanner }: Props) => {
       spacing={0}
     >
       {showBanner && grant.image ? (
-        <Box borderTopRightRadius="8px" borderTopLeftRadius="12px" width="228px" height="228px">
+        <Box
+          position="relative"
+          borderTopLeftRadius="8px"
+          borderBottomLeftRadius="8px"
+          width={{ base: '96px', lg: '228px' }}
+          height={{ base: '96px', lg: '228px' }}
+        >
           <Image
-            objectFit="fill"
+            objectFit="cover"
             src={grant.image}
             borderTopLeftRadius="8px"
             borderBottomLeftRadius="8px"
-            w="228px"
-            h="228px"
+            w={{ base: '96px', lg: '228px' }}
+            h={{ base: '96px', lg: '228px' }}
           />
+          {
+            isMobile && (
+              <Box position="absolute" top={0.5} left={1} zIndex={2} p={1} borderRadius="md">
+                <GrantStatus status={grant.status} startDate={grant?.statuses[0]?.startAt || 0} />
+              </Box>
+            )
+          }
         </Box>
       ) : null}
-      <VStack flex={1} height="228px" p={6} spacing={3} justifyContent="flex-start">
+      <VStack
+        flex={1}
+        height={{ base: '98px', lg: '228px' }}
+        p={{ base: 2, lg: 6 }}
+        spacing={{ base: 2, lg: 3 }}
+        justifyContent="flex-start"
+      >
         <HStack w="100%" justifyContent="space-between">
-          <Body fontSize="20px" medium>
+          <Body fontSize={{ base: '16px', lg: '20px' }} medium>
             {grant.title}
           </Body>
-          <GrantStatusBadge status={grant.status} startDate={grant?.statuses[0]?.startAt || 0} />
+          {!isMobile && <GrantStatus status={grant.status} startDate={grant?.statuses[0]?.startAt || 0} />}
         </HStack>
-        <HStack w="100%" justifyContent="flex-start" spacing={6}>
-          <GrantWidget grant={grant} />
-        </HStack>
+        <Direction w="100%" justifyContent="flex-start" alignItems="flex-start" spacing={{ base: 0, lg: 6 }}>
+          <GrantWidget grant={grant} compact={isMobile} />
+        </Direction>
         {!isMobile && <Sponsors w="100%" justifyContent="start" sponsors={grant.sponsors} />}
       </VStack>
     </HStack>
