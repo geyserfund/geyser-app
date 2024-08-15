@@ -7,7 +7,7 @@ import { Banner } from '@/components/ui/Banner'
 import { CustomSelect } from '@/components/ui/CustomSelect'
 import PlatformLayout from '@/components/ui/PlatformLayout'
 import { StickToTop } from '@/shared/components/layouts'
-import { AnimatedNavBar, NavBarItems } from '@/shared/components/navigation/AnimatedNavBar'
+import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { Body } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants'
@@ -81,7 +81,7 @@ export const Leaderboard = () => {
 const MobileLeaderboard = ({ period }: { period: LeaderboardPeriod }) => {
   const { t } = useTranslation()
 
-  const items: NavBarItems[] = [
+  const items: AnimatedNavBarItem[] = [
     {
       name: t('Projects'),
       key: 'projects',
