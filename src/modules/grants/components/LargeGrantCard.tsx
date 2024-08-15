@@ -40,7 +40,7 @@ export const LargeGrantCard = ({ grant, showBanner }: Props) => {
       mt={3}
       onClick={() => navigate(to)}
       minWidth={'100%'}
-      height={{ base: '320px', lg: '496px' }}
+      maxHeight={{ base: '320px', lg: '496px' }}
       cursor="pointer"
       border={`1px solid`}
       borderColor="neutralAlpha.6"
@@ -53,7 +53,7 @@ export const LargeGrantCard = ({ grant, showBanner }: Props) => {
           <Image objectFit="cover" src={grant.image} minWidth={'100%'} />
         </Box>
       ) : null}
-      <VStack height="179px" w="100%" p={4} spacing={3}>
+      <VStack maxHeight="179px" w="100%" p={4} spacing={3}>
         <HStack w="100%" justifyContent="space-between">
           <Body fontSize="20px" medium>
             {grant.title}
