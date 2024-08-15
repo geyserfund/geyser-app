@@ -13,8 +13,7 @@ import { getShortAmountLabel, useMobileMode } from '@/utils'
 
 // TODO: change this to the Geyser project name in prod
 const GEYSER_PROJECT_NAME = 'geyser2'
-// TODO: change this to the correct URL in prod
-const AIRTABLE_CREATE_GRANT_URL = 'https://airtable.com/app1234567890/shrtj567890'
+const AIRTABLE_CREATE_GRANT_URL = 'https://airtable.com/appyM7XlNIWVypuP5/pagLMhHSSQVlKe0Dw/form'
 
 const GrantsHeader = () => {
   const { t } = useTranslation()

@@ -89,7 +89,9 @@ export const SmallGrantCard = ({ grant, showBanner }: Props) => {
         <Direction w="100%" justifyContent="flex-start" alignItems="flex-start" spacing={{ base: 0, lg: 6 }}>
           <GrantWidget grant={grant} compact={isMobile} />
         </Direction>
-        {!isMobile && <Sponsors w="100%" justifyContent="start" sponsors={grant.sponsors} />}
+        {!isMobile && (
+          <Sponsors w="100%" height={'100%'} justifyContent="start" alignItems="flex-end" sponsors={grant.sponsors} />
+        )}
       </VStack>
     </HStack>
   )

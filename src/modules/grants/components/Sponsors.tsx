@@ -23,7 +23,7 @@ export const Sponsors = ({ sponsors = [], titleProps, children, ...props }: Prop
           item && item.image ? (
             <WrapItem display="flex" key={item.id} background={'white'} borderRadius={'20px'} alignItems={'center'}>
               <Link target="_blank" href={item.url || '#'}>
-                <Image src={item.image} alt="sponsor logo" height="15px" />
+                <Image src={item.image} alt="sponsor logo" height="24px" />
               </Link>
             </WrapItem>
           ) : null,
