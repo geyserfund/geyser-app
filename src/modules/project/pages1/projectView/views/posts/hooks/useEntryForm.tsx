@@ -83,57 +83,63 @@ export const useEntryForm = (
 
   useUnsavedAlert(isDirty)
 
-  const saveEntry = useCallback(async () => {
-    if (!isDirty) {
-      return
-    }
-
-    const entry = getValues()
-
-    if (entryId || Boolean(entry?.id)) {
-      const input: UpdateEntryInput = {
-        content: entry.content,
-        description: entry.description,
-        entryId: entryId || toInt(entry?.id),
-        image: entry.image,
-        title: entry.title,
+  const saveEntry = useCallback(
+    async (props?: { onCompleted?: Function }) => {
+      if (!isDirty) {
+        return
       }
-      await updateEntry.execute({
-        variables: { input },
-        onError() {
-          toast.error({
-            title: 'Entry update failed',
-            description: 'Please try again later',
-          })
-        },
-        onCompleted(data) {
-          resetForm(data.updateEntry)
-        },
-      })
-    } else {
-      const input: CreateEntryInput = {
-        projectId: toInt(projectId),
-        content: entry.content,
-        description: entry.description || '',
-        image: entry.image,
-        title: entry.title || '',
-        type: EntryType.Article,
+
+      const entry = getValues()
+
+      if (entryId || Boolean(entry?.id)) {
+        const input: UpdateEntryInput = {
+          content: entry.content,
+          description: entry.description,
+          entryId: entryId || toInt(entry?.id),
+          image: entry.image,
+          title: entry.title,
+        }
+        await updateEntry.execute({
+          variables: { input },
+          onError() {
+            toast.error({
+              title: 'Entry update failed',
+              description: 'Please try again later',
+            })
+          },
+          onCompleted(data) {
+            resetForm(data.updateEntry)
+            if (props?.onCompleted) {
+              props.onCompleted()
+            }
+          },
+        })
+      } else {
+        const input: CreateEntryInput = {
+          projectId: toInt(projectId),
+          content: entry.content,
+          description: entry.description || '',
+          image: entry.image,
+          title: entry.title || '',
+          type: EntryType.Article,
+        }
+        await createEntry.execute({
+          variables: { input },
+          onError() {
+            toast.error({
+              title: 'Entry creation failed',
+              description: 'Please try again later',
+            })
+          },
+          onCompleted(data) {
+            resetForm(data.createEntry)
+          },
+        })
       }
-      await createEntry.execute({
-        variables: { input },
-        onError() {
-          toast.error({
-            title: 'Entry creation failed',
-            description: 'Please try again later',
-          })
-        },
-        onCompleted(data) {
-          resetForm(data.createEntry)
-        },
-      })
-    }
-    /** Don't add apollo query or mutation to useEffect dependency */
-  }, [entryId, projectId, toast, resetForm, getValues, isDirty])
+      /** Don't add apollo query or mutation to useEffect dependency */
+    },
+    [entryId, projectId, toast, resetForm, getValues, isDirty],
+  )
 
   const publishEntryAfterValidation = useCallback(
     async ({ onCompleted }: { onCompleted?: Function }) => {

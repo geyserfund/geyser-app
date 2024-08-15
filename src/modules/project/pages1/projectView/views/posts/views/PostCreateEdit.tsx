@@ -5,6 +5,7 @@ import { PiArrowLeft, PiImages } from 'react-icons/pi'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { FileUpload } from '@/components/molecules'
+import { AlertDialogue } from '@/components/molecules/AlertDialogue'
 import { ImageWithReload, TextArea } from '@/components/ui'
 import Loader from '@/components/ui/Loader'
 import { useEntriesAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
@@ -12,9 +13,10 @@ import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavCont
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H1 } from '@/shared/components/typography'
 import { dimensions, getPath, ProjectEntryValidations } from '@/shared/constants'
+import { useModal } from '@/shared/hooks'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { Entry, EntryStatus } from '@/types'
-import { isActive, useCustomTheme } from '@/utils'
+import { isActive, useCustomTheme, useNotification } from '@/utils'
 
 import { useEntryForm } from '../hooks/useEntryForm'
 import { ProjectEntryEditor } from '../shared'
@@ -22,6 +24,9 @@ import { entryTemplateForGrantApplicants } from '../utils/entryTemplate'
 
 export const PostCreateEdit = () => {
   const navigate = useNavigate()
+  const toast = useNotification()
+
+  const confirmViewPostModal = useModal()
 
   const { project, loading: projectLoading } = useProjectAtom()
 
@@ -68,6 +73,16 @@ export const PostCreateEdit = () => {
 
     return () => clearInterval(number)
   }, [entryForm, isDirty, saveEntry])
+
+  const handleSaveButtonClick = () => {
+    saveEntry({
+      onCompleted() {
+        toast.success({
+          title: 'Post saved successfully!',
+        })
+      },
+    })
+  }
 
   const handleContentUpdate = (name: any, value: string) => {
     setValue(name, value, { shouldDirty: true })
@@ -141,144 +156,176 @@ export const PostCreateEdit = () => {
 
   const isEntryPublished = entryForm?.status === EntryStatus.Published
 
+  const postUrl = postId ? getPath('projectPostView', project.name, postId) : ''
+
+  const handleBackClick = () => {
+    console.log('checking if isDirty', isDirty)
+    if (isDirty) {
+      confirmViewPostModal.onOpen({ path: getPath('projectPosts', project?.name) })
+      return
+    }
+
+    if (hasEntries) {
+      navigate(getPath('projectPosts', project?.name))
+      return
+    }
+
+    navigate(getPath('project', project?.name))
+  }
+
   return (
-    <VStack w="full" minHeight="full" paddingBottom={20}>
-      <ProjectNavContainer>
-        <Button
-          as={Link}
-          to={hasEntries ? getPath('projectPosts', project?.name) : getPath('project', project?.name)}
-          size="lg"
-          variant="ghost"
-          colorScheme="neutral1"
-          leftIcon={<PiArrowLeft />}
-        >
-          {hasEntries ? t('Back to posts') : t('Back to project')}
-        </Button>
-        <HStack>
-          <Button size="lg" variant="soft" colorScheme="neutral1" onClick={saveEntry}>
-            {t(getSaveButtonText())}
+    <>
+      <VStack w="full" minHeight="full" paddingBottom={20}>
+        <ProjectNavContainer>
+          <Button size="lg" variant="ghost" colorScheme="neutral1" onClick={handleBackClick} leftIcon={<PiArrowLeft />}>
+            {hasEntries ? t('Back to posts') : t('Back to project')}
           </Button>
-          {!isEntryPublished && (
-            <Tooltip label={!isActive(project.status) ? t('Cannot publish entry for inActive project') : ''}>
+          <HStack>
+            <Button size="lg" variant="soft" colorScheme="neutral1" onClick={handleSaveButtonClick}>
+              {t(getSaveButtonText())}
+            </Button>
+            {!isEntryPublished ? (
+              <Tooltip label={!isActive(project.status) ? t('Cannot publish entry for inActive project') : ''}>
+                <Button
+                  size="lg"
+                  variant="solid"
+                  colorScheme="primary1"
+                  onClick={handlePublishEntry}
+                  isDisabled={!isActive(project.status)}
+                  isLoading={publishing}
+                >
+                  {t('Publish')}
+                </Button>
+              </Tooltip>
+            ) : (
               <Button
                 size="lg"
-                variant="solid"
+                variant="outline"
                 colorScheme="primary1"
-                onClick={handlePublishEntry}
-                isDisabled={!isActive(project.status)}
-                isLoading={publishing}
+                onClick={isDirty ? () => confirmViewPostModal.onOpen({ path: postUrl }) : () => navigate(postUrl)}
               >
-                {t('Publish')}
+                {t('View Post')}
               </Button>
-            </Tooltip>
-          )}
-        </HStack>
-      </ProjectNavContainer>
+            )}
+          </HStack>
+        </ProjectNavContainer>
 
-      <CardLayout noborder w="full" flex={1} spacing={3} dense alignItems="center" paddingTop={8}>
-        <VStack width="full" flex={1} maxWidth={dimensions.project.posts.view.maxWidth} alignItems="start">
-          <H1 size="2xl" bold>
-            {t('Write a post')}
-          </H1>
-          <CardLayout
-            padding={{ base: 0, lg: '9px' }}
-            w="full"
-            flex={1}
-            backgroundColor={'utils.surface'}
-            overflow="visible"
-          >
-            <VStack
-              spacing={3}
-              width="100%"
-              height="100%"
-              maxWidth="1080px"
-              display="flex"
-              flexDirection="column"
-              alignItems="flex-start"
+        <CardLayout noborder w="full" flex={1} spacing={3} dense alignItems="center" paddingTop={8}>
+          <VStack width="full" flex={1} maxWidth={dimensions.project.posts.view.maxWidth} alignItems="start">
+            <H1 size="2xl" bold>
+              {t('Write a post')}
+            </H1>
+            <CardLayout
+              padding={{ base: 0, lg: '9px' }}
+              w="full"
+              flex={1}
+              backgroundColor={'utils.surface'}
+              overflow="visible"
             >
-              <Box marginTop="20px" width="100%" paddingX="15px">
-                <FileUpload
-                  onUploadComplete={onImageUpload}
-                  childrenOnLoading={<SkeletonLayout height="330px" width="100%" />}
-                  imageCrop={ImageCropAspectRatio.Post}
-                >
-                  <>
-                    {entryForm.image ? (
-                      <HStack
-                        width={'100%'}
-                        justifyContent="center"
-                        maxHeight="400px"
-                        borderRadius="8px"
-                        overflow="hidden"
-                        position="relative"
-                      >
-                        <ImageUploadUi
-                          position="absolute"
-                          left={0}
-                          top={0}
-                          opacity={0}
-                          _hover={{ opacity: 0.9 }}
-                          height="100%"
-                        />
-                        <ImageWithReload width="100%" objectFit="cover" src={entryForm.image} />
-                      </HStack>
-                    ) : (
-                      <ImageUploadUi />
-                    )}
-                  </>
-                </FileUpload>
-              </Box>
+              <VStack
+                spacing={3}
+                width="100%"
+                height="100%"
+                maxWidth="1080px"
+                display="flex"
+                flexDirection="column"
+                alignItems="flex-start"
+              >
+                <Box marginTop="20px" width="100%" paddingX="15px">
+                  <FileUpload
+                    onUploadComplete={onImageUpload}
+                    childrenOnLoading={<SkeletonLayout height="330px" width="100%" />}
+                    imageCrop={ImageCropAspectRatio.Post}
+                  >
+                    <>
+                      {entryForm.image ? (
+                        <HStack
+                          width={'100%'}
+                          justifyContent="center"
+                          maxHeight="400px"
+                          borderRadius="8px"
+                          overflow="hidden"
+                          position="relative"
+                        >
+                          <ImageUploadUi
+                            position="absolute"
+                            left={0}
+                            top={0}
+                            opacity={0}
+                            _hover={{ opacity: 0.9 }}
+                            height="100%"
+                          />
+                          <ImageWithReload width="100%" objectFit="cover" src={entryForm.image} />
+                        </HStack>
+                      ) : (
+                        <ImageUploadUi />
+                      )}
+                    </>
+                  </FileUpload>
+                </Box>
 
-              <VStack width="100%">
-                <Input
-                  id={'entry-title-input'}
-                  border="none"
-                  _focus={{ border: 'none' }}
-                  _focusVisible={{}}
-                  placeholder={t('Post Title')}
-                  color="neutral.700"
-                  fontSize={'20px'}
-                  fontWeight={700}
-                  paddingX={'15px'}
-                  name="title"
-                  value={entryForm.title}
-                  onChange={handleInput}
-                  onKeyDown={handleKeyDown}
-                />
+                <VStack width="100%">
+                  <Input
+                    id={'entry-title-input'}
+                    border="none"
+                    _focus={{ border: 'none' }}
+                    _focusVisible={{}}
+                    placeholder={t('Post Title')}
+                    color="neutral.700"
+                    fontSize={'20px'}
+                    fontWeight={700}
+                    paddingX={'15px'}
+                    name="title"
+                    value={entryForm.title}
+                    onChange={handleInput}
+                    onKeyDown={handleKeyDown}
+                  />
 
-                <TextArea
-                  id={'entry-description-input'}
-                  border="none"
-                  _focus={{ border: 'none' }}
-                  _focusVisible={{}}
-                  placeholder={t('The summary of the post')}
-                  color="neutral.700"
-                  fontSize={'18px'}
-                  fontWeight={600}
-                  paddingX={'15px'}
-                  paddingY={0}
-                  name="description"
-                  minHeight={7}
-                  value={entryForm.description}
-                  onChange={handleInput}
-                  onKeyDown={handleKeyDown}
-                />
+                  <TextArea
+                    id={'entry-description-input'}
+                    border="none"
+                    _focus={{ border: 'none' }}
+                    _focusVisible={{}}
+                    placeholder={t('The summary of the post')}
+                    color="neutral.700"
+                    fontSize={'18px'}
+                    fontWeight={600}
+                    paddingX={'15px'}
+                    paddingY={0}
+                    name="description"
+                    minHeight={7}
+                    value={entryForm.description}
+                    onChange={handleInput}
+                    onKeyDown={handleKeyDown}
+                  />
+                </VStack>
+
+                <Box flex={1} width="100%">
+                  <ProjectEntryEditor
+                    name="content"
+                    handleChange={handleContentUpdate}
+                    value={entryForm.content as string}
+                    focusFlag={focusFlag}
+                    placeholder="The content of the post"
+                  />
+                </Box>
               </VStack>
-
-              <Box flex={1} width="100%">
-                <ProjectEntryEditor
-                  name="content"
-                  handleChange={handleContentUpdate}
-                  value={entryForm.content as string}
-                  focusFlag={focusFlag}
-                  placeholder="The content of the post"
-                />
-              </Box>
-            </VStack>
-          </CardLayout>
-        </VStack>
-      </CardLayout>
-    </VStack>
+            </CardLayout>
+          </VStack>
+        </CardLayout>
+      </VStack>
+      <AlertDialogue
+        {...confirmViewPostModal}
+        title={t('Unsaved changed will be lost !')}
+        description={t('Are you sure you want to leave this screen?')}
+        hasCancel
+        positiveButtonProps={{
+          children: t('Continue'),
+          as: Link,
+          to: confirmViewPostModal.props.path,
+        }}
+      />
+    </>
   )
 }
 
