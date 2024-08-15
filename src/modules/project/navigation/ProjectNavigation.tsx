@@ -21,7 +21,7 @@ import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigati
 import { PathName } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
-import { useEntriesAtom, useProjectAtom, useRewardsAtom } from '../hooks/useProjectAtom'
+import { useProjectAtom } from '../hooks/useProjectAtom'
 import { TopNavContainer } from './components/TopNavContainer'
 import { showProjectNavBarForDesktopAtom, showProjectNavBarForMobileAtom } from './projectNavigationAtom'
 
@@ -32,8 +32,6 @@ export const ProjectNavigation = () => {
 
   const { loading: userLoading } = useAuthContext()
   const { isProjectOwner, loading, project } = useProjectAtom()
-  const { hasRewards } = useRewardsAtom()
-  const { hasEntries } = useEntriesAtom()
 
   const showProjectNavBarForMobile = useAtomValue(showProjectNavBarForMobileAtom)
 
@@ -49,7 +47,7 @@ export const ProjectNavigation = () => {
       },
     ] as AnimatedNavBarItem[]
 
-    if (hasRewards) {
+    if (project.rewardsCount) {
       buttonList.push({
         name: 'Rewards',
         path: PathName.projectRewards,
@@ -58,7 +56,7 @@ export const ProjectNavigation = () => {
       })
     }
 
-    if (hasEntries) {
+    if (project.entriesCount) {
       buttonList.push({
         name: 'Posts',
         path: PathName.projectPosts,
@@ -94,7 +92,7 @@ export const ProjectNavigation = () => {
     }
 
     return buttonList
-  }, [project, isProjectOwner, hasRewards, hasEntries])
+  }, [project, isProjectOwner])
 
   const activeButtonIndex = useMemo(() => {
     let activeIndex = 0

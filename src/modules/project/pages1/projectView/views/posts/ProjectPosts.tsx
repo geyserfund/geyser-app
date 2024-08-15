@@ -1,18 +1,19 @@
 import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { Navigate } from 'react-router'
 
 import { useProjectEntriesAPI } from '@/modules/project/API/useProjectEntriesAPI'
 import { useEntriesAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
 import { H2 } from '@/shared/components/typography'
-import { dimensions } from '@/shared/constants'
+import { dimensions, getPath } from '@/shared/constants'
 import { truthyFilter } from '@/utils/array'
 
 import { CreatorPostPageBottomBar, CreatorPostPageTopBar } from './components'
 import { ProjectEntryCard } from './shared'
 
 export const ProjectPosts = () => {
-  const { loading } = useProjectAtom()
+  const { loading, project, isProjectOwner } = useProjectAtom()
 
   const { queryProjectEntries, queryUnpublishedProjectEntries } = useProjectEntriesAPI(true)
 
@@ -25,6 +26,10 @@ export const ProjectPosts = () => {
 
   if (loading || queryProjectEntries.loading || queryUnpublishedProjectEntries.loading) {
     return null
+  }
+
+  if (publishedEntries.length === 0 && (isProjectOwner ? unpublishedEntries.length === 0 : true)) {
+    return <Navigate to={getPath('project', project.name)} />
   }
 
   return (

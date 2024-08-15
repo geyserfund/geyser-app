@@ -1,6 +1,8 @@
 import { atom, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
+import { toInt } from '@/utils'
+
 import { authUserAtom } from '../../../pages/auth/state'
 import { ProjectHeaderSummaryFragment, ProjectPageBodyFragment, ProjectPageDetailsFragment } from '../../../types'
 import { affiliateAtomReset } from './affiliateAtom'
@@ -21,6 +23,34 @@ export const partialUpdateProjectAtom = atom(null, (get, set, updateProject: Par
   const projectData = get(projectAtom)
   set(projectAtom, { ...projectData, ...updateProject })
 })
+
+/** Update count of rewards, posts and entries */
+export const updateProjectItemCountsAtom = atom(
+  null,
+  (
+    get,
+    set,
+    props: {
+      addReward?: boolean
+      removeReward?: boolean
+      addPost?: boolean
+      removePost?: boolean
+      addGoal?: boolean
+      removeGoal?: boolean
+    },
+  ) => {
+    const projectData = get(projectAtom)
+    set(projectAtom, {
+      ...projectData,
+      ...(props.addReward && { rewardsCount: toInt(projectData.rewardsCount) + 1 }),
+      ...(props.removeReward && { rewardsCount: toInt(projectData.rewardsCount) - 1 }),
+      ...(props.addPost && { entriesCount: toInt(projectData.entriesCount) + 1 }),
+      ...(props.removePost && { entriesCount: toInt(projectData.entriesCount) - 1 }),
+      ...(props.addGoal && { goalsCount: toInt(projectData.goalsCount) + 1 }),
+      ...(props.removeGoal && { goalsCount: toInt(projectData.goalsCount) - 1 }),
+    })
+  },
+)
 
 /** Defaults to true when intialized, Set to false after project is loaded. */
 export const projectLoadingAtom = atom(true)

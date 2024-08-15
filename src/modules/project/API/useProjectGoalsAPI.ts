@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import {
   useProjectCompletedGoalsLazyQuery,
   useProjectGoalCreateMutation,
+  useProjectGoalDeleteMutation,
   useProjectGoalUpdateMutation,
   useProjectInProgressGoalsLazyQuery,
 } from '@/types'
@@ -14,7 +15,10 @@ import {
   completedGoalsAtom,
   initialGoalsLoadAtom,
   inProgressGoalsAtom,
+  removeGoalsAtom,
 } from '../state/goalsAtom'
+import { updateProjectItemCountsAtom } from '../state/projectAtom'
+import { updateProjectBodyCache } from './cache/projectBodyCache'
 import { useCustomMutation } from './custom/useCustomMutation'
 
 /**
@@ -25,7 +29,10 @@ export const useProjectGoalsAPI = (load?: boolean) => {
   const setInProgressGoals = useSetAtom(inProgressGoalsAtom)
   const setCompletedGoals = useSetAtom(completedGoalsAtom)
 
+  const removeInprogressGoals = useSetAtom(removeGoalsAtom)
   const addUpdateInProgressGoals = useSetAtom(addUpdateInProgressGoalsAtom)
+
+  const updateProjectItemCounts = useSetAtom(updateProjectItemCountsAtom)
 
   const [initialGoalsLoad, setInitialGoalsLoad] = useAtom(initialGoalsLoadAtom)
 
@@ -57,12 +64,38 @@ export const useProjectGoalsAPI = (load?: boolean) => {
   const [createProjectGoal, createProjectGoalOptions] = useCustomMutation(useProjectGoalCreateMutation, {
     onCompleted(data) {
       setInProgressGoals(data.projectGoalCreate)
+      updateProjectItemCounts({ addGoal: true })
+    },
+    update(cache, { data }) {
+      if (data?.projectGoalCreate) {
+        updateProjectBodyCache(cache, {
+          projectName: project.name,
+          addGoal: true,
+        })
+      }
     },
   })
 
   const [updateProjectGoal, updateProjectGoalOptions] = useCustomMutation(useProjectGoalUpdateMutation, {
     onCompleted(data) {
       addUpdateInProgressGoals(data.projectGoalUpdate)
+    },
+  })
+
+  const [deleteProjectGoal, deleteProjectGoalOptions] = useCustomMutation(useProjectGoalDeleteMutation, {
+    onCompleted(_, clientOptions) {
+      if (clientOptions?.variables?.projectGoalId) {
+        removeInprogressGoals(clientOptions?.variables?.projectGoalId)
+        updateProjectItemCounts({ removeGoal: true })
+      }
+    },
+    update(cache, { data }) {
+      if (data?.projectGoalDelete) {
+        updateProjectBodyCache(cache, {
+          projectName: project.name,
+          removeGoal: true,
+        })
+      }
     },
   })
 
@@ -89,6 +122,10 @@ export const useProjectGoalsAPI = (load?: boolean) => {
     updateProjectGoal: {
       execute: updateProjectGoal,
       ...updateProjectGoalOptions,
+    },
+    deleteProjectGoal: {
+      execute: deleteProjectGoal,
+      ...deleteProjectGoalOptions,
     },
   }
 }

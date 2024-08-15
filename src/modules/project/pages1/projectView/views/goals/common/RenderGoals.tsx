@@ -14,9 +14,11 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
+import { Navigate } from 'react-router'
 
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
 import { inProgressGoalsAtom } from '@/modules/project/state/goalsAtom'
+import { getPath } from '@/shared/constants'
 
 import { CardLayout, SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { ProjectGoal, useProjectGoalOrderingUpdateMutation } from '../../../../../../../types'
@@ -118,7 +120,7 @@ export const RenderGoals = () => {
   }
 
   if (!hasInProgressGoals && !hasCompletedGoals) {
-    return null
+    return <Navigate to={getPath('project', project.name)} />
   }
 
   return (

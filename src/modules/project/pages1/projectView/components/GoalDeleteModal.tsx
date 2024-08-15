@@ -4,20 +4,21 @@ import { useTranslation } from 'react-i18next'
 
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
 import { Modal } from '@/shared/components/layouts'
+import { useNotification } from '@/utils'
 
 import { Body } from '../../../../../shared/components/typography'
-import { useProjectGoalDeleteMutation } from '../../../../../types'
 import { useGoalsModal } from '../hooks/useGoalsModal'
 
 export const GoalDeleteModal = () => {
   const { t } = useTranslation()
+  const toast = useNotification()
 
   const { currentGoal, isGoalDeleteModalOpen, onGoalDeleteModalClose } = useGoalsModal()
 
   const [inputValue, setInputValue] = useState('')
   const [error, setError] = useState('')
 
-  const { queryInProgressGoals } = useProjectGoalsAPI()
+  const { deleteProjectGoal } = useProjectGoalsAPI()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value)
@@ -31,13 +32,18 @@ export const GoalDeleteModal = () => {
     }
   }, [inputValue, currentGoal?.title, t])
 
-  const [deleteProjectGoal] = useProjectGoalDeleteMutation({
-    onCompleted() {
-      queryInProgressGoals.execute()
-      setInputValue('')
-      onGoalDeleteModalClose()
-    },
-  })
+  const handleGoalDelete = () => [
+    deleteProjectGoal.execute({
+      variables: { projectGoalId: currentGoal?.id },
+      onCompleted() {
+        toast.success({
+          title: 'Successfully deleted goal',
+        })
+        setInputValue('')
+        onGoalDeleteModalClose()
+      },
+    }),
+  ]
 
   const { title } = currentGoal || { title: '' }
 
@@ -82,7 +88,7 @@ export const GoalDeleteModal = () => {
             flexGrow={1}
             variant="solid"
             colorScheme="error"
-            onClick={() => deleteProjectGoal({ variables: { projectGoalId: currentGoal?.id } })}
+            onClick={handleGoalDelete}
             isDisabled={isConfirmDisabled}
           >
             {t('Confirm Delete')}
