@@ -26,7 +26,7 @@ export const Leaderboard = () => {
       input: {
         period: ProjectLeaderboardPeriod.AllTime,
         projectId: project.id,
-        top: isLoggedIn ? 7 : 8,
+        top: isLoggedIn ? 6 : 7,
       },
     },
   })
