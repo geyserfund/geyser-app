@@ -1,16 +1,25 @@
 import { useQuery } from '@apollo/client'
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router'
 
 import { DonateIcon } from '@/components/icons/svg/DonateIcon'
 import { TrophyIcon } from '@/components/icons/svg/TrophyIcon'
 import { Banner } from '@/components/ui/Banner'
 import { QUERY_GRANT_STATISTICS } from '@/graphqlBase/queries/grant'
+import { getPath } from '@/shared/constants'
 import { GrantStatistics } from '@/types'
 import { getShortAmountLabel, useMobileMode } from '@/utils'
 
+// TODO: change this to the Geyser project name in prod
+const GEYSER_PROJECT_NAME = 'geyser2'
+// TODO: change this to the correct URL in prod
+const AIRTABLE_CREATE_GRANT_URL = 'https://airtable.com/app1234567890/shrtj567890'
+
 const GrantsHeader = () => {
   const { t } = useTranslation()
+
+  const navigate = useNavigate()
 
   const isMobile = useMobileMode()
 
@@ -29,6 +38,14 @@ const GrantsHeader = () => {
     },
   ]
 
+  const handleDonateToGeyser = () => {
+    navigate(getPath('projectFunding', GEYSER_PROJECT_NAME))
+  }
+
+  const handleCreateGrant = () => {
+    window.open(AIRTABLE_CREATE_GRANT_URL, '_blank')
+  }
+
   const Direction = isMobile ? VStack : HStack
 
   return (
@@ -42,10 +59,17 @@ const GrantsHeader = () => {
         borderRadius="md"
         p={6}
       >
-        <Button w="100%" size="lg" variant="primary" rightIcon={<DonateIcon />}>
+        <Button w="100%" size="lg" variant="primary" rightIcon={<DonateIcon />} onClick={handleDonateToGeyser}>
           {t('Donate to Geyser Grant')}
         </Button>
-        <Button w="100%" size="lg" variant="primary" bg="yellow.9" rightIcon={<TrophyIcon />}>
+        <Button
+          w="100%"
+          size="lg"
+          variant="primary"
+          bg="yellow.9"
+          rightIcon={<TrophyIcon />}
+          onClick={handleCreateGrant}
+        >
           {t('Create a grant')}
         </Button>
       </Direction>
