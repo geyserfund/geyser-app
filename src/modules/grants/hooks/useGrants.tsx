@@ -19,6 +19,16 @@ export const useGrants = () => {
     [data],
   )
 
+  const fundingOpenGrants = useMemo(
+    () => (data ? (data.grants.filter((grant) => grant.status === GrantStatusEnum.FundingOpen) as Grant[]) : []),
+    [data],
+  )
+
+  const applicationOpenGrants = useMemo(
+    () => (data ? (data.grants.filter((grant) => grant.status === GrantStatusEnum.ApplicationsOpen) as Grant[]) : []),
+    [data],
+  )
+
   const latestGrant = useMemo(() => {
     if (data) {
       const grantsCopy = [...data.grants]
@@ -59,6 +69,8 @@ export const useGrants = () => {
     loading,
     refetch,
     openGrants,
+    fundingOpenGrants,
+    applicationOpenGrants,
     inactiveGrants,
     latestGrant,
     featuredGrant,

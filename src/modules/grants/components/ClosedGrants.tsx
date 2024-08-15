@@ -4,25 +4,25 @@ import { useTranslation } from 'react-i18next'
 import { Body } from '@/shared/components/typography'
 import { Grant } from '@/types'
 
-import { LargeGrantCard } from './LargeGrantCard'
+import { SmallGrantCard } from './SmallGrantCard'
 
-const OpenGrants = ({ openGrants }: { openGrants: Grant[] }) => {
+const ClosedGrants = ({ closedGrants }: { closedGrants: Grant[] }) => {
   const { t } = useTranslation()
 
-  if (openGrants.length === 0) {
+  if (closedGrants.length === 0) {
     return null
   }
 
   return (
     <VStack mt={10} w="100%" alignItems="flex-start">
       <Body fontSize={'24px'} bold>
-        {t('Open Grants')}
+        {t('Past Grants')}
       </Body>
-      {openGrants.map((grant) => (
-        <LargeGrantCard key={grant.id} grant={grant} showBanner />
+      {closedGrants.map((grant) => (
+        <SmallGrantCard key={grant.id} grant={grant} showBanner />
       ))}
     </VStack>
   )
 }
 
-export default OpenGrants
+export default ClosedGrants
