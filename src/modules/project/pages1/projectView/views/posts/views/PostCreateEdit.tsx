@@ -160,17 +160,19 @@ export const PostCreateEdit = () => {
 
   const handleBackClick = () => {
     console.log('checking if isDirty', isDirty)
+
+    const pathToGo = isEntryPublished
+      ? postUrl
+      : hasEntries
+      ? getPath('projectPosts', project?.name)
+      : getPath('project', project?.name)
+
     if (isDirty) {
-      confirmViewPostModal.onOpen({ path: getPath('projectPosts', project?.name) })
+      confirmViewPostModal.onOpen({ path: pathToGo })
       return
     }
 
-    if (hasEntries) {
-      navigate(getPath('projectPosts', project?.name))
-      return
-    }
-
-    navigate(getPath('project', project?.name))
+    navigate(pathToGo)
   }
 
   return (
@@ -178,13 +180,13 @@ export const PostCreateEdit = () => {
       <VStack w="full" minHeight="full" paddingBottom={20}>
         <ProjectNavContainer>
           <Button size="lg" variant="ghost" colorScheme="neutral1" onClick={handleBackClick} leftIcon={<PiArrowLeft />}>
-            {hasEntries ? t('Back to posts') : t('Back to project')}
+            {isEntryPublished ? t('Back to post') : hasEntries ? t('Back to posts') : t('Back to project')}
           </Button>
           <HStack>
             <Button size="lg" variant="soft" colorScheme="neutral1" onClick={handleSaveButtonClick}>
               {t(getSaveButtonText())}
             </Button>
-            {!isEntryPublished ? (
+            {!isEntryPublished && (
               <Tooltip label={!isActive(project.status) ? t('Cannot publish entry for inActive project') : ''}>
                 <Button
                   size="lg"
@@ -197,15 +199,6 @@ export const PostCreateEdit = () => {
                   {t('Publish')}
                 </Button>
               </Tooltip>
-            ) : (
-              <Button
-                size="lg"
-                variant="outline"
-                colorScheme="primary1"
-                onClick={isDirty ? () => confirmViewPostModal.onOpen({ path: postUrl }) : () => navigate(postUrl)}
-              >
-                {t('View Post')}
-              </Button>
             )}
           </HStack>
         </ProjectNavContainer>

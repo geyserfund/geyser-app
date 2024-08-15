@@ -9,7 +9,7 @@ import { CreatorGoalPageBottomBar, CreatorGoalPageTopBar } from './components'
 
 export const ProjectGoals = () => {
   return (
-    <VStack w="full" spacing={8} paddingBottom={'120px'}>
+    <VStack w="full" spacing={8} paddingBottom={28}>
       <CreatorGoalPageTopBar />
       <VStack w="full" alignItems={'start'}>
         <H1 size="2xl" bold>

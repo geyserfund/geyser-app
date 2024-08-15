@@ -22,7 +22,7 @@ export const CreatorButtons = () => {
   return (
     <>
       <Button
-        size={{ base: 'md', lg: 'lg' }}
+        size={'lg'}
         as={Link}
         to={getPath('projectRewardCreate', project?.name)}
         flex={1}
@@ -33,7 +33,7 @@ export const CreatorButtons = () => {
         {isMobile ? t('Reward') : t('Sell reward')}
       </Button>
       <Button
-        size={{ base: 'md', lg: 'lg' }}
+        size={'lg'}
         onClick={() => onGoalModalOpen()}
         flex={1}
         variant="outline"
@@ -43,7 +43,7 @@ export const CreatorButtons = () => {
         {isMobile ? t('Goal') : t('Create goal')}
       </Button>
       <Button
-        size={{ base: 'md', lg: 'lg' }}
+        size={'lg'}
         as={Link}
         to={getPath('projectPostCreate', project?.name)}
         flex={1}

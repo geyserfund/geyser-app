@@ -48,7 +48,7 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
   }
 
   return (
-    <VStack w="full" spacing={8} alignItems="start">
+    <VStack w="full" spacing={8} alignItems="start" pb={28}>
       <CreatorRewardPageTopBar />
 
       {activeRewards.length > 0 && (
@@ -56,7 +56,7 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
           <H1 size="2xl" bold display={{ base: 'unset', lg: 'none' }}>
             {t('Rewards')}
           </H1>
-          <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={4} width={'100%'} pb={'96px'}>
+          <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={4} width={'100%'} pb={10}>
             {activeRewards.map((reward) => {
               return <RewardCardWithBuy key={reward.id} width="100%" reward={reward} />
             })}
@@ -68,7 +68,7 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
           <Body size="2xl" bold>
             {t('Hidden rewards')}
           </Body>
-          <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={4} width={'100%'} pb={'96px'}>
+          <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={4} width={'100%'}>
             {hiddenRewards.map((reward) => {
               return <RewardCardWithBuy hidden key={reward.id} width="100%" reward={reward} />
             })}

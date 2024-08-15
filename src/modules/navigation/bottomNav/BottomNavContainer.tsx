@@ -8,6 +8,7 @@ export const BottomNavBarContainer = ({ children, ...props }: PropsWithChildren<
       direction="row"
       padding={3}
       spaicng={2}
+      paddingBottom={5}
       display={{ base: 'flex', lg: 'none' }}
       position="fixed"
       bottom="0"

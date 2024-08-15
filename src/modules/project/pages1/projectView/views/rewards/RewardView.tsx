@@ -164,9 +164,9 @@ export const RewardView = () => {
       <BottomNavBarContainer direction="column">
         {renderAmountComponent()}
         {isProjectOwner ? (
-          <RewardEditMenu w="full" reward={reward} />
+          <RewardEditMenu size="lg" w="full" reward={reward} />
         ) : (
-          <Button variant="solid" colorScheme="primary1" width="full" onClick={buyReward}>
+          <Button size="lg" variant="solid" colorScheme="primary1" width="full" onClick={buyReward}>
             {t('Buy')}
           </Button>
         )}

@@ -167,9 +167,9 @@ export const PostView = () => {
         </CardLayout>
         <BottomNavBarContainer direction="column">
           {isProjectOwner ? (
-            <PostEditMenu w="full" entry={entry} />
+            <PostEditMenu size="lg" w="full" entry={entry} />
           ) : (
-            <Button variant="solid" colorScheme="primary1" width="full">
+            <Button size="lg" variant="solid" colorScheme="primary1" width="full">
               {t('Contribute')}
             </Button>
           )}

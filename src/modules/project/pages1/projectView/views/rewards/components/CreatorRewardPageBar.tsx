@@ -43,7 +43,7 @@ export const CreateRewardButtons = () => {
         as={Link}
         to={getPath('dashboardSales', project.name)}
         flex={1}
-        size={{ base: 'md', lg: 'lg' }}
+        size={'lg'}
         variant="outline"
         colorScheme="neutral1"
         leftIcon={<PiBag />}
@@ -54,7 +54,7 @@ export const CreateRewardButtons = () => {
         as={Link}
         to={getPath('projectRewardCreate', project.name)}
         flex={1}
-        size={{ base: 'md', lg: 'lg' }}
+        size={'lg'}
         variant="solid"
         colorScheme="primary1"
         leftIcon={<PiPlus />}

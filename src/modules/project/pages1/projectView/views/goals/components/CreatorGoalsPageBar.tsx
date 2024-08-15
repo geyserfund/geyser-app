@@ -48,7 +48,7 @@ export const CreateGoalButtons = () => {
     <>
       <Button
         flex={1}
-        size={{ base: 'md', lg: 'lg' }}
+        size="lg"
         variant="outline"
         colorScheme="neutral1"
         leftIcon={<PiNotePencil />}
@@ -58,7 +58,7 @@ export const CreateGoalButtons = () => {
       </Button>
       <Button
         flex={1}
-        size={{ base: 'md', lg: 'lg' }}
+        size="lg"
         variant="solid"
         colorScheme="primary1"
         leftIcon={<PiPlus />}
