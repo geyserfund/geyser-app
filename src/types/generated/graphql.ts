@@ -25,12 +25,12 @@ export type Scalars = {
 }
 
 export type Activity = {
-  __typename?: 'Activity';
-  activityType: Scalars['String']['output'];
-  createdAt: Scalars['Date']['output'];
-  id: Scalars['String']['output'];
-  resource: ActivityResource;
-};
+  __typename?: 'Activity'
+  activityType: Scalars['String']['output']
+  createdAt: Scalars['Date']['output']
+  id: Scalars['String']['output']
+  resource: ActivityResource
+}
 
 export type ActivityCreatedSubscriptionInput = {
   where?: InputMaybe<ActivityCreatedSubscriptionWhereInput>
@@ -48,17 +48,17 @@ export type ActivityCreatedSubscriptionWhereInput = {
 export enum ActivityFeedName {
   FollowedProjects = 'FOLLOWED_PROJECTS',
   GlobalProjects = 'GLOBAL_PROJECTS',
-  MyProjects = 'MY_PROJECTS'
+  MyProjects = 'MY_PROJECTS',
 }
 
-export type ActivityResource = Entry | FundingTx | Project | ProjectGoal | ProjectReward;
+export type ActivityResource = Entry | FundingTx | Project | ProjectGoal | ProjectReward
 
 export enum ActivityResourceType {
   Entry = 'entry',
   FundingTx = 'funding_tx',
   Project = 'project',
   ProjectGoal = 'project_goal',
-  ProjectReward = 'project_reward'
+  ProjectReward = 'project_reward',
 }
 
 export type AffiliateLink = {
@@ -289,18 +289,18 @@ export type CreateWalletInput = {
 }
 
 export type CreatorNotificationSettings = {
-  __typename?: 'CreatorNotificationSettings';
-  notificationSettings: Array<NotificationSettings>;
-  project: CreatorNotificationSettingsProject;
-  userId: Scalars['BigInt']['output'];
-};
+  __typename?: 'CreatorNotificationSettings'
+  notificationSettings: Array<NotificationSettings>
+  project: CreatorNotificationSettingsProject
+  userId: Scalars['BigInt']['output']
+}
 
 export type CreatorNotificationSettingsProject = {
-  __typename?: 'CreatorNotificationSettingsProject';
-  id: Scalars['BigInt']['output'];
-  image?: Maybe<Scalars['String']['output']>;
-  title: Scalars['String']['output'];
-};
+  __typename?: 'CreatorNotificationSettingsProject'
+  id: Scalars['BigInt']['output']
+  image?: Maybe<Scalars['String']['output']>
+  title: Scalars['String']['output']
+}
 
 export enum Currency {
   Usdcent = 'USDCENT',
@@ -727,14 +727,14 @@ export type GetActivityPaginationInput = {
 }
 
 export type GetActivityWhereInput = {
-  countryCode?: InputMaybe<Scalars['String']['input']>;
-  feed?: InputMaybe<ActivityFeedName>;
-  projectIds?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  region?: InputMaybe<Scalars['String']['input']>;
-  resourceType?: InputMaybe<ActivityResourceType>;
-  tagIds?: InputMaybe<Array<Scalars['Int']['input']>>;
-  userIds?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-};
+  countryCode?: InputMaybe<Scalars['String']['input']>
+  feed?: InputMaybe<ActivityFeedName>
+  projectIds?: InputMaybe<Array<Scalars['BigInt']['input']>>
+  region?: InputMaybe<Scalars['String']['input']>
+  resourceType?: InputMaybe<ActivityResourceType>
+  tagIds?: InputMaybe<Array<Scalars['Int']['input']>>
+  userIds?: InputMaybe<Array<Scalars['BigInt']['input']>>
+}
 
 export type GetAffiliateLinksInput = {
   where: GetAffiliateLinksWhereInput
@@ -806,15 +806,15 @@ export type GetFundingTxsOrderByInput = {
 }
 
 export type GetFundingTxsWhereInput = {
-  NOT?: InputMaybe<GetFundingTxsWhereInput>;
-  OR?: InputMaybe<Array<InputMaybe<GetFundingTxsWhereInput>>>;
-  dateRange?: InputMaybe<DateRangeInput>;
-  funderId?: InputMaybe<Scalars['BigInt']['input']>;
-  method?: InputMaybe<Scalars['String']['input']>;
-  projectId?: InputMaybe<Scalars['BigInt']['input']>;
-  sourceResourceInput?: InputMaybe<ResourceInput>;
-  status?: InputMaybe<FundingTxsWhereFundingStatus>;
-};
+  NOT?: InputMaybe<GetFundingTxsWhereInput>
+  OR?: InputMaybe<Array<InputMaybe<GetFundingTxsWhereInput>>>
+  dateRange?: InputMaybe<DateRangeInput>
+  funderId?: InputMaybe<Scalars['BigInt']['input']>
+  method?: InputMaybe<Scalars['String']['input']>
+  projectId?: InputMaybe<Scalars['BigInt']['input']>
+  sourceResourceInput?: InputMaybe<ResourceInput>
+  status?: InputMaybe<FundingTxsWhereFundingStatus>
+}
 
 export type GetProjectRewardInput = {
   where: GetProjectRewardWhereInput
@@ -851,18 +851,6 @@ export type GlobalContributorLeaderboardRow = {
   userImageUrl: Scalars['String']['output']
   username: Scalars['String']['output']
 }
-
-export type GlobalProjectLeaderboardRow = {
-  __typename?: 'GlobalProjectLeaderboardRow';
-  contributionsCount: Scalars['Int']['output'];
-  contributionsTotal: Scalars['Int']['output'];
-  contributionsTotalUsd: Scalars['Float']['output'];
-  contributorsCount: Scalars['Int']['output'];
-  projectName: Scalars['String']['output'];
-  projectTitle: Scalars['String']['output'];
-};
-
-export type Grant = BoardVoteGrant | CommunityVoteGrant;
 
 export type GlobalProjectLeaderboardRow = {
   __typename?: 'GlobalProjectLeaderboardRow'
@@ -1028,17 +1016,31 @@ export enum InvoiceStatus {
 
 export type LeaderboardGlobalContributorsGetInput = {
   /** The period to return the leaderboard for. */
-  period: LeaderboardPeriod;
+  period: LeaderboardPeriod
   /** The number of top contributors to return. */
-  top: Scalars['Int']['input'];
-};
+  top: Scalars['Int']['input']
+}
 
 export type LeaderboardGlobalProjectsGetInput = {
   /** The period to return the leaderboard for. */
-  period: LeaderboardPeriod;
+  period: LeaderboardPeriod
   /** The number of top projects to return. */
-  top: Scalars['Int']['input'];
-};
+  top: Scalars['Int']['input']
+}
+
+export enum LeaderboardPeriod {
+  AllTime = 'ALL_TIME',
+  Month = 'MONTH',
+}
+
+export type LightningAddressConnectionDetails = {
+  __typename?: 'LightningAddressConnectionDetails'
+  lightningAddress: Scalars['String']['output']
+}
+
+export type LightningAddressConnectionDetailsCreateInput = {
+  lightningAddress: Scalars['String']['input']
+}
 
 export enum LeaderboardPeriod {
   AllTime = 'ALL_TIME',
@@ -1164,33 +1166,33 @@ export type Milestone = {
 }
 
 export type Mutation = {
-  __typename?: 'Mutation';
-  _?: Maybe<Scalars['Boolean']['output']>;
-  affiliateLinkCreate: AffiliateLink;
-  affiliateLinkDisable: AffiliateLink;
-  affiliateLinkLabelUpdate: AffiliateLink;
-  affiliatePaymentConfirm: AffiliatePaymentConfirmResponse;
-  affiliatePaymentRequestGenerate: GenerateAffiliatePaymentRequestResponse;
-  claimBadge: UserBadge;
-  createEntry: Entry;
-  createProject: Project;
-  creatorNotificationConfigurationValueUpdate?: Maybe<Scalars['Boolean']['output']>;
-  deleteEntry: Entry;
-  fund: FundingMutationResponse;
-  fundingCancel: FundingCancelResponse;
-  fundingClaimAnonymous: FundingMutationResponse;
-  fundingConfirm: FundingConfirmResponse;
-  fundingCreateFromPodcastKeysend: FundingTx;
-  fundingInvoiceCancel: FundinginvoiceCancel;
-  fundingInvoiceRefresh: FundingTx;
-  fundingPend: FundingPendingResponse;
-  fundingTxEmailUpdate: FundingTx;
-  grantApply: GrantApplicant;
-  orderStatusUpdate?: Maybe<Order>;
-  projectDelete: ProjectDeleteResponse;
-  projectFollow: Scalars['Boolean']['output'];
-  projectGoalCreate: Array<ProjectGoal>;
-  projectGoalDelete: ProjectGoalDeleteResponse;
+  __typename?: 'Mutation'
+  _?: Maybe<Scalars['Boolean']['output']>
+  affiliateLinkCreate: AffiliateLink
+  affiliateLinkDisable: AffiliateLink
+  affiliateLinkLabelUpdate: AffiliateLink
+  affiliatePaymentConfirm: AffiliatePaymentConfirmResponse
+  affiliatePaymentRequestGenerate: GenerateAffiliatePaymentRequestResponse
+  claimBadge: UserBadge
+  createEntry: Entry
+  createProject: Project
+  creatorNotificationConfigurationValueUpdate?: Maybe<Scalars['Boolean']['output']>
+  deleteEntry: Entry
+  fund: FundingMutationResponse
+  fundingCancel: FundingCancelResponse
+  fundingClaimAnonymous: FundingMutationResponse
+  fundingConfirm: FundingConfirmResponse
+  fundingCreateFromPodcastKeysend: FundingTx
+  fundingInvoiceCancel: FundinginvoiceCancel
+  fundingInvoiceRefresh: FundingTx
+  fundingPend: FundingPendingResponse
+  fundingTxEmailUpdate: FundingTx
+  grantApply: GrantApplicant
+  orderStatusUpdate?: Maybe<Order>
+  projectDelete: ProjectDeleteResponse
+  projectFollow: Scalars['Boolean']['output']
+  projectGoalCreate: Array<ProjectGoal>
+  projectGoalDelete: ProjectGoalDeleteResponse
   /** Only returns ProjectGoals that are in progress */
   projectGoalOrderingUpdate: Array<ProjectGoal>
   projectGoalUpdate: ProjectGoal
@@ -1210,20 +1212,20 @@ export type Mutation = {
    * Sends an OTP to the user's email address and responds with a token that can be used, together with the OTP, to two-factor authenticate
    * a request made by the client.
    */
-  sendOTPByEmail: OtpResponse;
-  tagCreate: Tag;
-  unlinkExternalAccount: User;
-  updateEntry: Entry;
-  updateProject: Project;
-  updateUser: User;
-  updateWalletState: Wallet;
-  userBadgeAward: UserBadge;
-  userDelete: DeleteUserResponse;
-  userEmailUpdate: User;
-  userEmailVerify: Scalars['Boolean']['output'];
-  userNotificationConfigurationValueUpdate?: Maybe<Scalars['Boolean']['output']>;
-  walletCreate: Wallet;
-  walletDelete: Scalars['Boolean']['output'];
+  sendOTPByEmail: OtpResponse
+  tagCreate: Tag
+  unlinkExternalAccount: User
+  updateEntry: Entry
+  updateProject: Project
+  updateUser: User
+  updateWalletState: Wallet
+  userBadgeAward: UserBadge
+  userDelete: DeleteUserResponse
+  userEmailUpdate: User
+  userEmailVerify: Scalars['Boolean']['output']
+  userNotificationConfigurationValueUpdate?: Maybe<Scalars['Boolean']['output']>
+  walletCreate: Wallet
+  walletDelete: Scalars['Boolean']['output']
   /** This operation is currently not supported. */
   walletUpdate: Wallet
 }
@@ -1265,12 +1267,6 @@ export type MutationCreatorNotificationConfigurationValueUpdateArgs = {
   creatorNotificationConfigurationId: Scalars['BigInt']['input']
   value: Scalars['String']['input']
 }
-
-export type MutationCreatorNotificationConfigurationValueUpdateArgs = {
-  creatorNotificationConfigurationId: Scalars['BigInt']['input'];
-  value: Scalars['String']['input'];
-};
-
 
 export type MutationDeleteEntryArgs = {
   id: Scalars['BigInt']['input']
@@ -1429,12 +1425,6 @@ export type MutationUserNotificationConfigurationValueUpdateArgs = {
   value: Scalars['String']['input']
 }
 
-export type MutationUserNotificationConfigurationValueUpdateArgs = {
-  userNotificationConfigurationId: Scalars['BigInt']['input'];
-  value: Scalars['String']['input'];
-};
-
-
 export type MutationWalletCreateArgs = {
   input: CreateWalletInput
 }
@@ -1471,26 +1461,31 @@ export type NostrPublicKey = {
 }
 
 export enum NotificationChannel {
-  Email = 'EMAIL'
+  Email = 'EMAIL',
 }
 
 export type NotificationConfiguration = {
-  __typename?: 'NotificationConfiguration';
-  description?: Maybe<Scalars['String']['output']>;
-  id: Scalars['BigInt']['output'];
-  name: Scalars['String']['output'];
-  options: Array<Scalars['String']['output']>;
-  type?: Maybe<SettingValueType>;
-  value: Scalars['String']['output'];
-};
+  __typename?: 'NotificationConfiguration'
+  description?: Maybe<Scalars['String']['output']>
+  id: Scalars['BigInt']['output']
+  name: Scalars['String']['output']
+  options: Array<Scalars['String']['output']>
+  type?: Maybe<SettingValueType>
+  value: Scalars['String']['output']
+}
 
 export type NotificationSettings = {
-  __typename?: 'NotificationSettings';
-  channel?: Maybe<NotificationChannel>;
-  configurations: Array<NotificationConfiguration>;
-  isEnabled: Scalars['Boolean']['output'];
-  notificationType: Scalars['String']['output'];
-};
+  __typename?: 'NotificationSettings'
+  channel?: Maybe<NotificationChannel>
+  configurations: Array<NotificationConfiguration>
+  isEnabled: Scalars['Boolean']['output']
+  notificationType: Scalars['String']['output']
+}
+
+export type OtpInput = {
+  otp: Scalars['Int']['input']
+  otpVerificationToken: Scalars['String']['input']
+}
 
 export type OtpInput = {
   otp: Scalars['Int']['input']
@@ -1648,10 +1643,10 @@ export type PaginationInput = {
 }
 
 export type ProfileNotificationSettings = {
-  __typename?: 'ProfileNotificationSettings';
-  creatorSettings: Array<CreatorNotificationSettings>;
-  userSettings: UserNotificationSettings;
-};
+  __typename?: 'ProfileNotificationSettings'
+  creatorSettings: Array<CreatorNotificationSettings>
+  userSettings: UserNotificationSettings
+}
 
 export type Project = {
   __typename?: 'Project'
@@ -1751,9 +1746,9 @@ export type ProjectFollowMutationInput = {
 }
 
 export type ProjectFollowerStats = {
-  __typename?: 'ProjectFollowerStats';
-  count: Scalars['Int']['output'];
-};
+  __typename?: 'ProjectFollowerStats'
+  count: Scalars['Int']['output']
+}
 
 export type ProjectFunderRewardStats = {
   __typename?: 'ProjectFunderRewardStats'
@@ -1774,9 +1769,9 @@ export type ProjectFundingTxStats = {
   /** Project contribution over the given datetime range grouped by day, or month. */
   amountGraph?: Maybe<Array<Maybe<FundingTxAmountGraph>>>
   /** Project contribution amount in the given datetime range. */
-  amountSum?: Maybe<Scalars['Int']['output']>;
+  amountSum?: Maybe<Scalars['Int']['output']>
   /** Project contribution amount in USD in the given datetime range. */
-  amountSumUsd?: Maybe<Scalars['Float']['output']>;
+  amountSumUsd?: Maybe<Scalars['Float']['output']>
   /** Project contribution count in the given datetime range. */
   count: Scalars['Int']['output']
   /** Project contribution count of each Funding Method in the given datetime range. */
@@ -1870,20 +1865,35 @@ export type ProjectKeys = {
 }
 
 export type ProjectLeaderboardContributorsGetInput = {
-  period: ProjectLeaderboardPeriod;
-  projectId: Scalars['BigInt']['input'];
-  top: Scalars['Int']['input'];
-};
+  period: ProjectLeaderboardPeriod
+  projectId: Scalars['BigInt']['input']
+  top: Scalars['Int']['input']
+}
 
 export type ProjectLeaderboardContributorsRow = {
-  __typename?: 'ProjectLeaderboardContributorsRow';
-  commentsCount: Scalars['Int']['output'];
-  contributionsCount: Scalars['Int']['output'];
-  contributionsTotal: Scalars['Int']['output'];
-  contributionsTotalUsd: Scalars['Float']['output'];
-  funderId: Scalars['BigInt']['output'];
-  user?: Maybe<User>;
-};
+  __typename?: 'ProjectLeaderboardContributorsRow'
+  commentsCount: Scalars['Int']['output']
+  contributionsCount: Scalars['Int']['output']
+  contributionsTotal: Scalars['Int']['output']
+  contributionsTotalUsd: Scalars['Float']['output']
+  funderId: Scalars['BigInt']['output']
+  user?: Maybe<User>
+}
+
+export enum ProjectLeaderboardPeriod {
+  AllTime = 'ALL_TIME',
+  Month = 'MONTH',
+  Week = 'WEEK',
+}
+
+export type ProjectLinkMutationInput = {
+  link: Scalars['String']['input']
+  projectId: Scalars['BigInt']['input']
+}
+
+export type ProjectPublishMutationInput = {
+  projectId: Scalars['BigInt']['input']
+}
 
 export enum ProjectLeaderboardPeriod {
   AllTime = 'ALL_TIME',
@@ -1987,13 +1997,13 @@ export type ProjectStats = {
 }
 
 export type ProjectStatsBase = {
-  __typename?: 'ProjectStatsBase';
-  projectFollowers?: Maybe<ProjectFollowerStats>;
-  projectFunderRewards?: Maybe<ProjectFunderRewardStats>;
-  projectFunders?: Maybe<ProjectFunderStats>;
-  projectFundingTxs?: Maybe<ProjectFundingTxStats>;
-  projectViews?: Maybe<ProjectViewStats>;
-};
+  __typename?: 'ProjectStatsBase'
+  projectFollowers?: Maybe<ProjectFollowerStats>
+  projectFunderRewards?: Maybe<ProjectFunderRewardStats>
+  projectFunders?: Maybe<ProjectFunderStats>
+  projectFundingTxs?: Maybe<ProjectFundingTxStats>
+  projectViews?: Maybe<ProjectViewStats>
+}
 
 export enum ProjectStatus {
   Active = 'active',
@@ -2109,41 +2119,41 @@ export type Query = {
   /** Returns all published entries. */
   getEntries: Array<Entry>
   /** Returns the public key of the Lightning node linked to a project, if there is one. */
-  getProjectPubkey?: Maybe<Scalars['String']['output']>;
-  getProjectReward: ProjectReward;
-  getSignedUploadUrl: SignedUploadUrl;
-  getWallet: Wallet;
-  grant: Grant;
-  grantStatistics: GrantStatistics;
-  grants: Array<Grant>;
-  leaderboardGlobalContributorsGet: Array<GlobalContributorLeaderboardRow>;
-  leaderboardGlobalProjectsGet: Array<GlobalProjectLeaderboardRow>;
-  lightningAddressVerify: LightningAddressVerifyResponse;
-  me?: Maybe<User>;
-  orderGet?: Maybe<Order>;
-  ordersGet?: Maybe<OrdersGetResponse>;
-  projectCountriesGet: Array<ProjectCountriesGetResult>;
-  projectGet?: Maybe<Project>;
-  projectGoals: ProjectGoals;
-  projectLeaderboardContributorsGet: Array<ProjectLeaderboardContributorsRow>;
-  projectNotificationSettingsGet: CreatorNotificationSettings;
-  projectRegionsGet: Array<ProjectRegionsGetResult>;
-  projectRewardCategoriesGet: Array<Scalars['String']['output']>;
-  projectRewardsGet: Array<ProjectReward>;
-  projectStatsGet: ProjectStats;
+  getProjectPubkey?: Maybe<Scalars['String']['output']>
+  getProjectReward: ProjectReward
+  getSignedUploadUrl: SignedUploadUrl
+  getWallet: Wallet
+  grant: Grant
+  grantStatistics: GrantStatistics
+  grants: Array<Grant>
+  leaderboardGlobalContributorsGet: Array<GlobalContributorLeaderboardRow>
+  leaderboardGlobalProjectsGet: Array<GlobalProjectLeaderboardRow>
+  lightningAddressVerify: LightningAddressVerifyResponse
+  me?: Maybe<User>
+  orderGet?: Maybe<Order>
+  ordersGet?: Maybe<OrdersGetResponse>
+  projectCountriesGet: Array<ProjectCountriesGetResult>
+  projectGet?: Maybe<Project>
+  projectGoals: ProjectGoals
+  projectLeaderboardContributorsGet: Array<ProjectLeaderboardContributorsRow>
+  projectNotificationSettingsGet: CreatorNotificationSettings
+  projectRegionsGet: Array<ProjectRegionsGetResult>
+  projectRewardCategoriesGet: Array<Scalars['String']['output']>
+  projectRewardsGet: Array<ProjectReward>
+  projectStatsGet: ProjectStats
   /** By default, returns a list of all active projects. */
   projectsGet: ProjectsResponse
   projectsMostFundedOfTheWeekGet: Array<ProjectsMostFundedOfTheWeekGet>
   /** Returns summary statistics of all projects, both current and past. */
-  projectsSummary: ProjectsSummary;
-  statusCheck: Scalars['Boolean']['output'];
-  tagsGet: Array<TagsGetResult>;
-  tagsMostFundedGet: Array<TagsMostFundedGetResult>;
-  user: User;
-  userBadge?: Maybe<UserBadge>;
-  userBadges: Array<UserBadge>;
-  userNotificationSettingsGet: ProfileNotificationSettings;
-};
+  projectsSummary: ProjectsSummary
+  statusCheck: Scalars['Boolean']['output']
+  tagsGet: Array<TagsGetResult>
+  tagsMostFundedGet: Array<TagsMostFundedGetResult>
+  user: User
+  userBadge?: Maybe<UserBadge>
+  userBadges: Array<UserBadge>
+  userNotificationSettingsGet: ProfileNotificationSettings
+}
 
 export type QueryAffiliateLinksGetArgs = {
   input: GetAffiliateLinksInput
@@ -2210,15 +2220,9 @@ export type QueryLeaderboardGlobalContributorsGetArgs = {
   input: LeaderboardGlobalContributorsGetInput
 }
 
-export type QueryLeaderboardGlobalContributorsGetArgs = {
-  input: LeaderboardGlobalContributorsGetInput;
-};
-
-
 export type QueryLeaderboardGlobalProjectsGetArgs = {
-  input: LeaderboardGlobalProjectsGetInput;
-};
-
+  input: LeaderboardGlobalProjectsGetInput
+}
 
 export type QueryLightningAddressVerifyArgs = {
   lightningAddress?: InputMaybe<Scalars['String']['input']>
@@ -2244,15 +2248,9 @@ export type QueryProjectLeaderboardContributorsGetArgs = {
   input: ProjectLeaderboardContributorsGetInput
 }
 
-export type QueryProjectLeaderboardContributorsGetArgs = {
-  input: ProjectLeaderboardContributorsGetInput;
-};
-
-
 export type QueryProjectNotificationSettingsGetArgs = {
-  projectId: Scalars['BigInt']['input'];
-};
-
+  projectId: Scalars['BigInt']['input']
+}
 
 export type QueryProjectRewardsGetArgs = {
   input: GetProjectRewardInput
@@ -2282,10 +2280,9 @@ export type QueryUserBadgesArgs = {
   input: BadgesGetInput
 }
 
-
 export type QueryUserNotificationSettingsGetArgs = {
-  userId: Scalars['BigInt']['input'];
-};
+  userId: Scalars['BigInt']['input']
+}
 
 export enum QuoteCurrency {
   Usd = 'USD',
@@ -2310,7 +2307,7 @@ export enum SettingValueType {
   Boolean = 'BOOLEAN',
   Enum = 'ENUM',
   Integer = 'INTEGER',
-  String = 'STRING'
+  String = 'STRING',
 }
 
 export enum ShippingDestination {
@@ -2391,10 +2388,10 @@ export type TagsGetResult = {
 }
 
 export type TagsMostFundedGetResult = {
-  __typename?: 'TagsMostFundedGetResult';
-  id: Scalars['Int']['output'];
-  label: Scalars['String']['output'];
-};
+  __typename?: 'TagsMostFundedGetResult'
+  id: Scalars['Int']['output']
+  label: Scalars['String']['output']
+}
 
 export type TwoFaInput = {
   OTP?: InputMaybe<OtpInput>
@@ -2577,10 +2574,10 @@ export type UserGetInput = {
 }
 
 export type UserNotificationSettings = {
-  __typename?: 'UserNotificationSettings';
-  notificationSettings: Array<NotificationSettings>;
-  userId: Scalars['BigInt']['output'];
-};
+  __typename?: 'UserNotificationSettings'
+  notificationSettings: Array<NotificationSettings>
+  userId: Scalars['BigInt']['output']
+}
 
 export type UserProjectContribution = {
   __typename?: 'UserProjectContribution'
@@ -2779,11 +2776,16 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping of union types */
 export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
-  ActivityResource: ( Entry ) | ( Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<RefType['SourceResource']> } ) | ( Project ) | ( ProjectGoal ) | ( ProjectReward );
-  ConnectionDetails: ( LightningAddressConnectionDetails ) | ( LndConnectionDetailsPrivate ) | ( LndConnectionDetailsPublic );
-  Grant: ( BoardVoteGrant ) | ( CommunityVoteGrant );
-  SourceResource: ( Entry ) | ( Project );
-};
+  ActivityResource:
+    | Entry
+    | (Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<RefType['SourceResource']> })
+    | Project
+    | ProjectGoal
+    | ProjectReward
+  ConnectionDetails: LightningAddressConnectionDetails | LndConnectionDetailsPrivate | LndConnectionDetailsPublic
+  Grant: BoardVoteGrant | CommunityVoteGrant
+  SourceResource: Entry | Project
+}
 
 /** Mapping of interface types */
 export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
@@ -2794,566 +2796,580 @@ export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Activity: ResolverTypeWrapper<Omit<Activity, 'resource'> & { resource: ResolversTypes['ActivityResource'] }>;
-  ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput;
-  ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
-  ActivityFeedName: ActivityFeedName;
-  ActivityResource: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['ActivityResource']>;
-  ActivityResourceType: ActivityResourceType;
-  AffiliateLink: ResolverTypeWrapper<AffiliateLink>;
-  AffiliateLinkCreateInput: AffiliateLinkCreateInput;
-  AffiliatePaymentConfirmResponse: ResolverTypeWrapper<AffiliatePaymentConfirmResponse>;
-  AffiliatePayoutsStats: ResolverTypeWrapper<AffiliatePayoutsStats>;
-  AffiliateSalesStats: ResolverTypeWrapper<AffiliateSalesStats>;
-  AffiliateStats: ResolverTypeWrapper<AffiliateStats>;
-  AffiliateStatus: AffiliateStatus;
-  Ambassador: ResolverTypeWrapper<Ambassador>;
-  AmountSummary: ResolverTypeWrapper<AmountSummary>;
-  AnalyticsGroupByInterval: AnalyticsGroupByInterval;
-  Badge: ResolverTypeWrapper<Badge>;
-  BadgeClaimInput: BadgeClaimInput;
-  BadgesGetInput: BadgesGetInput;
-  BadgesGetWhereInput: BadgesGetWhereInput;
-  BaseCurrency: BaseCurrency;
-  BigInt: ResolverTypeWrapper<Scalars['BigInt']['output']>;
-  BitcoinQuote: ResolverTypeWrapper<BitcoinQuote>;
-  BoardVoteGrant: ResolverTypeWrapper<BoardVoteGrant>;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
-  CommunityVoteGrant: ResolverTypeWrapper<CommunityVoteGrant>;
-  CompetitionVoteGrantVoteSummary: ResolverTypeWrapper<CompetitionVoteGrantVoteSummary>;
-  ConnectionDetails: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['ConnectionDetails']>;
-  Country: ResolverTypeWrapper<Country>;
-  CreateEntryInput: CreateEntryInput;
-  CreateProjectInput: CreateProjectInput;
-  CreateProjectRewardInput: CreateProjectRewardInput;
-  CreateWalletInput: CreateWalletInput;
-  CreatorNotificationSettings: ResolverTypeWrapper<CreatorNotificationSettings>;
-  CreatorNotificationSettingsProject: ResolverTypeWrapper<CreatorNotificationSettingsProject>;
-  Currency: Currency;
-  CurrencyQuoteGetInput: CurrencyQuoteGetInput;
-  CurrencyQuoteGetResponse: ResolverTypeWrapper<CurrencyQuoteGetResponse>;
-  CursorInput: CursorInput;
-  CursorInputString: CursorInputString;
-  CursorPaginationResponse: ResolverTypeWrapper<CursorPaginationResponse>;
-  Date: ResolverTypeWrapper<Scalars['Date']['output']>;
-  DateRangeInput: DateRangeInput;
-  DatetimeRange: ResolverTypeWrapper<DatetimeRange>;
-  DeleteProjectInput: DeleteProjectInput;
-  DeleteProjectRewardInput: DeleteProjectRewardInput;
-  DeleteUserResponse: ResolverTypeWrapper<DeleteUserResponse>;
-  DistributionSystem: DistributionSystem;
-  EmailVerifyInput: EmailVerifyInput;
-  Entry: ResolverTypeWrapper<Entry>;
-  EntryPublishedSubscriptionResponse: ResolverTypeWrapper<EntryPublishedSubscriptionResponse>;
-  EntryStatus: EntryStatus;
-  EntryType: EntryType;
-  ExternalAccount: ResolverTypeWrapper<ExternalAccount>;
-  FileUploadInput: FileUploadInput;
-  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
-  Funder: ResolverTypeWrapper<Funder>;
-  FunderRewardGraphSum: ResolverTypeWrapper<FunderRewardGraphSum>;
-  FundingCancelInput: FundingCancelInput;
-  FundingCancelResponse: ResolverTypeWrapper<FundingCancelResponse>;
-  FundingConfirmInput: FundingConfirmInput;
-  FundingConfirmOffChainBolt11Input: FundingConfirmOffChainBolt11Input;
-  FundingConfirmOffChainInput: FundingConfirmOffChainInput;
-  FundingConfirmOnChainInput: FundingConfirmOnChainInput;
-  FundingConfirmResponse: ResolverTypeWrapper<FundingConfirmResponse>;
-  FundingCreateFromPodcastKeysendInput: FundingCreateFromPodcastKeysendInput;
-  FundingInput: FundingInput;
-  FundingMetadataInput: FundingMetadataInput;
-  FundingMethod: FundingMethod;
-  FundingMutationResponse: ResolverTypeWrapper<FundingMutationResponse>;
-  FundingPendingInput: FundingPendingInput;
-  FundingPendingOffChainBolt11Input: FundingPendingOffChainBolt11Input;
-  FundingPendingOffChainInput: FundingPendingOffChainInput;
-  FundingPendingOnChainInput: FundingPendingOnChainInput;
-  FundingPendingResponse: ResolverTypeWrapper<FundingPendingResponse>;
-  FundingQueryResponse: ResolverTypeWrapper<FundingQueryResponse>;
-  FundingResourceType: FundingResourceType;
-  FundingStatus: FundingStatus;
-  FundingTx: ResolverTypeWrapper<Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversTypes['SourceResource']> }>;
-  FundingTxAmountGraph: ResolverTypeWrapper<FundingTxAmountGraph>;
-  FundingTxEmailUpdateInput: FundingTxEmailUpdateInput;
-  FundingTxInvoiceSanctionCheckStatus: FundingTxInvoiceSanctionCheckStatus;
-  FundingTxInvoiceSanctionCheckStatusGetInput: FundingTxInvoiceSanctionCheckStatusGetInput;
-  FundingTxInvoiceSanctionCheckStatusResponse: ResolverTypeWrapper<FundingTxInvoiceSanctionCheckStatusResponse>;
-  FundingTxMethodCount: ResolverTypeWrapper<FundingTxMethodCount>;
-  FundingTxMethodSum: ResolverTypeWrapper<FundingTxMethodSum>;
-  FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput;
-  FundingTxStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<FundingTxStatusUpdatedSubscriptionResponse>;
-  FundingTxsGetResponse: ResolverTypeWrapper<FundingTxsGetResponse>;
-  FundingTxsWhereFundingStatus: FundingTxsWhereFundingStatus;
-  FundingType: FundingType;
-  FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>;
-  GenerateAffiliatePaymentRequestResponse: ResolverTypeWrapper<GenerateAffiliatePaymentRequestResponse>;
-  GenerateAffiliatePaymentRequestsInput: GenerateAffiliatePaymentRequestsInput;
-  GetActivitiesInput: GetActivitiesInput;
-  GetActivityOrderByInput: GetActivityOrderByInput;
-  GetActivityPaginationInput: GetActivityPaginationInput;
-  GetActivityWhereInput: GetActivityWhereInput;
-  GetAffiliateLinksInput: GetAffiliateLinksInput;
-  GetAffiliateLinksWhereInput: GetAffiliateLinksWhereInput;
-  GetDashboardFundersWhereInput: GetDashboardFundersWhereInput;
-  GetEntriesInput: GetEntriesInput;
-  GetEntriesOrderByInput: GetEntriesOrderByInput;
-  GetEntriesWhereInput: GetEntriesWhereInput;
-  GetFunderFundingTxsInput: GetFunderFundingTxsInput;
-  GetFunderFundingTxsWhereInput: GetFunderFundingTxsWhereInput;
-  GetFunderWhereInput: GetFunderWhereInput;
-  GetFundersInput: GetFundersInput;
-  GetFundersOrderByInput: GetFundersOrderByInput;
-  GetFundingTxsInput: GetFundingTxsInput;
-  GetFundingTxsOrderByInput: GetFundingTxsOrderByInput;
-  GetFundingTxsWhereInput: GetFundingTxsWhereInput;
-  GetProjectRewardInput: GetProjectRewardInput;
-  GetProjectRewardWhereInput: GetProjectRewardWhereInput;
-  GetProjectStatsInput: GetProjectStatsInput;
-  GetProjectStatsWhereInput: GetProjectStatsWhereInput;
-  GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput;
-  GlobalContributorLeaderboardRow: ResolverTypeWrapper<GlobalContributorLeaderboardRow>;
-  GlobalProjectLeaderboardRow: ResolverTypeWrapper<GlobalProjectLeaderboardRow>;
-  Grant: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['Grant']>;
-  GrantApplicant: ResolverTypeWrapper<Omit<GrantApplicant, 'grant'> & { grant: ResolversTypes['Grant'] }>;
-  GrantApplicantContributor: ResolverTypeWrapper<GrantApplicantContributor>;
-  GrantApplicantContributorInput: GrantApplicantContributorInput;
-  GrantApplicantContributorWhereInput: GrantApplicantContributorWhereInput;
-  GrantApplicantFunding: ResolverTypeWrapper<GrantApplicantFunding>;
-  GrantApplicantStatus: GrantApplicantStatus;
-  GrantApplicantStatusFilter: GrantApplicantStatusFilter;
-  GrantApplicantsGetInput: GrantApplicantsGetInput;
-  GrantApplicantsGetOrderByInput: GrantApplicantsGetOrderByInput;
-  GrantApplicantsGetWhereInput: GrantApplicantsGetWhereInput;
-  GrantApplicantsOrderByField: GrantApplicantsOrderByField;
-  GrantApplyInput: GrantApplyInput;
-  GrantBoardMember: ResolverTypeWrapper<GrantBoardMember>;
-  GrantGetInput: GrantGetInput;
-  GrantGetWhereInput: GrantGetWhereInput;
-  GrantStatistics: ResolverTypeWrapper<GrantStatistics>;
-  GrantStatisticsApplicant: ResolverTypeWrapper<GrantStatisticsApplicant>;
-  GrantStatisticsGrant: ResolverTypeWrapper<GrantStatisticsGrant>;
-  GrantStatus: ResolverTypeWrapper<GrantStatus>;
-  GrantStatusEnum: GrantStatusEnum;
-  GrantType: GrantType;
-  GraphSumData: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['GraphSumData']>;
-  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
-  InvoiceStatus: InvoiceStatus;
-  LeaderboardGlobalContributorsGetInput: LeaderboardGlobalContributorsGetInput;
-  LeaderboardGlobalProjectsGetInput: LeaderboardGlobalProjectsGetInput;
-  LeaderboardPeriod: LeaderboardPeriod;
-  LightningAddressConnectionDetails: ResolverTypeWrapper<LightningAddressConnectionDetails>;
-  LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput;
-  LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput;
-  LightningAddressContributionLimits: ResolverTypeWrapper<LightningAddressContributionLimits>;
-  LightningAddressVerifyResponse: ResolverTypeWrapper<LightningAddressVerifyResponse>;
-  LndConnectionDetails: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['LndConnectionDetails']>;
-  LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput;
-  LndConnectionDetailsPrivate: ResolverTypeWrapper<LndConnectionDetailsPrivate>;
-  LndConnectionDetailsPublic: ResolverTypeWrapper<LndConnectionDetailsPublic>;
-  LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput;
-  LndNodeType: LndNodeType;
-  Location: ResolverTypeWrapper<Location>;
-  MFAAction: MfaAction;
-  Milestone: ResolverTypeWrapper<Milestone>;
-  Mutation: ResolverTypeWrapper<{}>;
-  MutationResponse: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['MutationResponse']>;
-  NostrKeys: ResolverTypeWrapper<NostrKeys>;
-  NostrPrivateKey: ResolverTypeWrapper<NostrPrivateKey>;
-  NostrPublicKey: ResolverTypeWrapper<NostrPublicKey>;
-  NotificationChannel: NotificationChannel;
-  NotificationConfiguration: ResolverTypeWrapper<NotificationConfiguration>;
-  NotificationSettings: ResolverTypeWrapper<NotificationSettings>;
-  OTPInput: OtpInput;
-  OTPLoginInput: OtpLoginInput;
-  OTPResponse: ResolverTypeWrapper<OtpResponse>;
-  OffsetBasedPaginationInput: OffsetBasedPaginationInput;
-  OnChainTxInput: OnChainTxInput;
-  Order: ResolverTypeWrapper<Order>;
-  OrderBitcoinQuoteInput: OrderBitcoinQuoteInput;
-  OrderByDirection: OrderByDirection;
-  OrderByOptions: OrderByOptions;
-  OrderFundingInput: OrderFundingInput;
-  OrderItem: ResolverTypeWrapper<OrderItem>;
-  OrderItemInput: OrderItemInput;
-  OrderItemType: OrderItemType;
-  OrderStatusUpdateInput: OrderStatusUpdateInput;
-  OrdersGetInput: OrdersGetInput;
-  OrdersGetOrderByField: OrdersGetOrderByField;
-  OrdersGetOrderByInput: OrdersGetOrderByInput;
-  OrdersGetResponse: ResolverTypeWrapper<OrdersGetResponse>;
-  OrdersGetStatus: OrdersGetStatus;
-  OrdersGetWhereInput: OrdersGetWhereInput;
-  Owner: ResolverTypeWrapper<Owner>;
-  OwnerOf: ResolverTypeWrapper<OwnerOf>;
-  PageViewCountGraph: ResolverTypeWrapper<PageViewCountGraph>;
-  PaginationCursor: ResolverTypeWrapper<PaginationCursor>;
-  PaginationInput: PaginationInput;
-  ProfileNotificationSettings: ResolverTypeWrapper<ProfileNotificationSettings>;
-  Project: ResolverTypeWrapper<Project>;
-  ProjectActivatedSubscriptionResponse: ResolverTypeWrapper<ProjectActivatedSubscriptionResponse>;
-  ProjectCountriesGetResult: ResolverTypeWrapper<ProjectCountriesGetResult>;
-  ProjectDeleteResponse: ResolverTypeWrapper<ProjectDeleteResponse>;
-  ProjectEntriesGetInput: ProjectEntriesGetInput;
-  ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput;
-  ProjectFollowMutationInput: ProjectFollowMutationInput;
-  ProjectFollowerStats: ResolverTypeWrapper<ProjectFollowerStats>;
-  ProjectFunderRewardStats: ResolverTypeWrapper<ProjectFunderRewardStats>;
-  ProjectFunderStats: ResolverTypeWrapper<ProjectFunderStats>;
-  ProjectFundingTxStats: ResolverTypeWrapper<ProjectFundingTxStats>;
-  ProjectGoal: ResolverTypeWrapper<ProjectGoal>;
-  ProjectGoalCreateInput: ProjectGoalCreateInput;
-  ProjectGoalCurrency: ProjectGoalCurrency;
-  ProjectGoalDeleteResponse: ResolverTypeWrapper<ProjectGoalDeleteResponse>;
-  ProjectGoalOrderingUpdateInput: ProjectGoalOrderingUpdateInput;
-  ProjectGoalStatus: ProjectGoalStatus;
-  ProjectGoalStatusInCreate: ProjectGoalStatusInCreate;
-  ProjectGoalUpdateInput: ProjectGoalUpdateInput;
-  ProjectGoals: ResolverTypeWrapper<ProjectGoals>;
-  ProjectGrantApplicationsInput: ProjectGrantApplicationsInput;
-  ProjectGrantApplicationsWhereInput: ProjectGrantApplicationsWhereInput;
-  ProjectGrantApplicationsWhereInputEnum: ProjectGrantApplicationsWhereInputEnum;
-  ProjectKeys: ResolverTypeWrapper<ProjectKeys>;
-  ProjectLeaderboardContributorsGetInput: ProjectLeaderboardContributorsGetInput;
-  ProjectLeaderboardContributorsRow: ResolverTypeWrapper<ProjectLeaderboardContributorsRow>;
-  ProjectLeaderboardPeriod: ProjectLeaderboardPeriod;
-  ProjectLinkMutationInput: ProjectLinkMutationInput;
-  ProjectPublishMutationInput: ProjectPublishMutationInput;
-  ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>;
-  ProjectReward: ResolverTypeWrapper<ProjectReward>;
-  ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate;
-  ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput;
-  ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>;
-  ProjectStats: ResolverTypeWrapper<ProjectStats>;
-  ProjectStatsBase: ResolverTypeWrapper<ProjectStatsBase>;
-  ProjectStatus: ProjectStatus;
-  ProjectStatusUpdate: ProjectStatusUpdate;
-  ProjectTagMutationInput: ProjectTagMutationInput;
-  ProjectType: ProjectType;
-  ProjectViewBaseStats: ResolverTypeWrapper<ProjectViewBaseStats>;
-  ProjectViewStats: ResolverTypeWrapper<ProjectViewStats>;
-  ProjectsGetQueryInput: ProjectsGetQueryInput;
-  ProjectsGetWhereInput: ProjectsGetWhereInput;
-  ProjectsOrderByField: ProjectsOrderByField;
-  ProjectsOrderByInput: ProjectsOrderByInput;
-  ProjectsResponse: ResolverTypeWrapper<ProjectsResponse>;
-  ProjectsSummary: ResolverTypeWrapper<ProjectsSummary>;
-  Query: ResolverTypeWrapper<{}>;
-  QuoteCurrency: QuoteCurrency;
-  ResourceInput: ResourceInput;
-  RewardCurrency: RewardCurrency;
-  SendOtpByEmailInput: SendOtpByEmailInput;
-  SettingValueType: SettingValueType;
-  ShippingDestination: ShippingDestination;
-  SignedUploadUrl: ResolverTypeWrapper<SignedUploadUrl>;
-  SourceResource: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['SourceResource']>;
-  Sponsor: ResolverTypeWrapper<Sponsor>;
-  SponsorStatus: SponsorStatus;
-  String: ResolverTypeWrapper<Scalars['String']['output']>;
-  Subscription: ResolverTypeWrapper<{}>;
-  Swap: ResolverTypeWrapper<Swap>;
-  TOTPInput: TotpInput;
-  Tag: ResolverTypeWrapper<Tag>;
-  TagCreateInput: TagCreateInput;
-  TagsGetResult: ResolverTypeWrapper<TagsGetResult>;
-  TagsMostFundedGetResult: ResolverTypeWrapper<TagsMostFundedGetResult>;
-  TwoFAInput: TwoFaInput;
-  UniqueOrderInput: UniqueOrderInput;
-  UniqueProjectQueryInput: UniqueProjectQueryInput;
-  UpdatableOrderStatus: UpdatableOrderStatus;
-  UpdateEntryInput: UpdateEntryInput;
-  UpdateProjectInput: UpdateProjectInput;
-  UpdateProjectRewardInput: UpdateProjectRewardInput;
-  UpdateUserInput: UpdateUserInput;
-  UpdateWalletInput: UpdateWalletInput;
-  UpdateWalletStateInput: UpdateWalletStateInput;
-  User: ResolverTypeWrapper<User>;
-  UserBadge: ResolverTypeWrapper<UserBadge>;
-  UserBadgeStatus: UserBadgeStatus;
-  UserEmailUpdateInput: UserEmailUpdateInput;
-  UserEntriesGetInput: UserEntriesGetInput;
-  UserEntriesGetWhereInput: UserEntriesGetWhereInput;
-  UserGetInput: UserGetInput;
-  UserNotificationSettings: ResolverTypeWrapper<UserNotificationSettings>;
-  UserProjectContribution: ResolverTypeWrapper<UserProjectContribution>;
-  UserProjectsGetInput: UserProjectsGetInput;
-  UserProjectsGetWhereInput: UserProjectsGetWhereInput;
-  VotingSystem: VotingSystem;
-  Wallet: ResolverTypeWrapper<Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversTypes['ConnectionDetails'] }>;
-  WalletContributionLimits: ResolverTypeWrapper<WalletContributionLimits>;
-  WalletLimits: ResolverTypeWrapper<WalletLimits>;
-  WalletOffChainContributionLimits: ResolverTypeWrapper<WalletOffChainContributionLimits>;
-  WalletOnChainContributionLimits: ResolverTypeWrapper<WalletOnChainContributionLimits>;
-  WalletResourceInput: WalletResourceInput;
-  WalletResourceType: WalletResourceType;
-  WalletState: ResolverTypeWrapper<WalletState>;
-  WalletStatus: WalletStatus;
-  WalletStatusCode: WalletStatusCode;
-  dashboardFundersGetInput: DashboardFundersGetInput;
-  projectsMostFundedOfTheWeekGet: ResolverTypeWrapper<ProjectsMostFundedOfTheWeekGet>;
-};
+  Activity: ResolverTypeWrapper<Omit<Activity, 'resource'> & { resource: ResolversTypes['ActivityResource'] }>
+  ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput
+  ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput
+  ActivityFeedName: ActivityFeedName
+  ActivityResource: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['ActivityResource']>
+  ActivityResourceType: ActivityResourceType
+  AffiliateLink: ResolverTypeWrapper<AffiliateLink>
+  AffiliateLinkCreateInput: AffiliateLinkCreateInput
+  AffiliatePaymentConfirmResponse: ResolverTypeWrapper<AffiliatePaymentConfirmResponse>
+  AffiliatePayoutsStats: ResolverTypeWrapper<AffiliatePayoutsStats>
+  AffiliateSalesStats: ResolverTypeWrapper<AffiliateSalesStats>
+  AffiliateStats: ResolverTypeWrapper<AffiliateStats>
+  AffiliateStatus: AffiliateStatus
+  Ambassador: ResolverTypeWrapper<Ambassador>
+  AmountSummary: ResolverTypeWrapper<AmountSummary>
+  AnalyticsGroupByInterval: AnalyticsGroupByInterval
+  Badge: ResolverTypeWrapper<Badge>
+  BadgeClaimInput: BadgeClaimInput
+  BadgesGetInput: BadgesGetInput
+  BadgesGetWhereInput: BadgesGetWhereInput
+  BaseCurrency: BaseCurrency
+  BigInt: ResolverTypeWrapper<Scalars['BigInt']['output']>
+  BitcoinQuote: ResolverTypeWrapper<BitcoinQuote>
+  BoardVoteGrant: ResolverTypeWrapper<BoardVoteGrant>
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>
+  CommunityVoteGrant: ResolverTypeWrapper<CommunityVoteGrant>
+  CompetitionVoteGrantVoteSummary: ResolverTypeWrapper<CompetitionVoteGrantVoteSummary>
+  ConnectionDetails: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['ConnectionDetails']>
+  Country: ResolverTypeWrapper<Country>
+  CreateEntryInput: CreateEntryInput
+  CreateProjectInput: CreateProjectInput
+  CreateProjectRewardInput: CreateProjectRewardInput
+  CreateWalletInput: CreateWalletInput
+  CreatorNotificationSettings: ResolverTypeWrapper<CreatorNotificationSettings>
+  CreatorNotificationSettingsProject: ResolverTypeWrapper<CreatorNotificationSettingsProject>
+  Currency: Currency
+  CurrencyQuoteGetInput: CurrencyQuoteGetInput
+  CurrencyQuoteGetResponse: ResolverTypeWrapper<CurrencyQuoteGetResponse>
+  CursorInput: CursorInput
+  CursorInputString: CursorInputString
+  CursorPaginationResponse: ResolverTypeWrapper<CursorPaginationResponse>
+  Date: ResolverTypeWrapper<Scalars['Date']['output']>
+  DateRangeInput: DateRangeInput
+  DatetimeRange: ResolverTypeWrapper<DatetimeRange>
+  DeleteProjectInput: DeleteProjectInput
+  DeleteProjectRewardInput: DeleteProjectRewardInput
+  DeleteUserResponse: ResolverTypeWrapper<DeleteUserResponse>
+  DistributionSystem: DistributionSystem
+  EmailVerifyInput: EmailVerifyInput
+  Entry: ResolverTypeWrapper<Entry>
+  EntryPublishedSubscriptionResponse: ResolverTypeWrapper<EntryPublishedSubscriptionResponse>
+  EntryStatus: EntryStatus
+  EntryType: EntryType
+  ExternalAccount: ResolverTypeWrapper<ExternalAccount>
+  FileUploadInput: FileUploadInput
+  Float: ResolverTypeWrapper<Scalars['Float']['output']>
+  Funder: ResolverTypeWrapper<Funder>
+  FunderRewardGraphSum: ResolverTypeWrapper<FunderRewardGraphSum>
+  FundingCancelInput: FundingCancelInput
+  FundingCancelResponse: ResolverTypeWrapper<FundingCancelResponse>
+  FundingConfirmInput: FundingConfirmInput
+  FundingConfirmOffChainBolt11Input: FundingConfirmOffChainBolt11Input
+  FundingConfirmOffChainInput: FundingConfirmOffChainInput
+  FundingConfirmOnChainInput: FundingConfirmOnChainInput
+  FundingConfirmResponse: ResolverTypeWrapper<FundingConfirmResponse>
+  FundingCreateFromPodcastKeysendInput: FundingCreateFromPodcastKeysendInput
+  FundingInput: FundingInput
+  FundingMetadataInput: FundingMetadataInput
+  FundingMethod: FundingMethod
+  FundingMutationResponse: ResolverTypeWrapper<FundingMutationResponse>
+  FundingPendingInput: FundingPendingInput
+  FundingPendingOffChainBolt11Input: FundingPendingOffChainBolt11Input
+  FundingPendingOffChainInput: FundingPendingOffChainInput
+  FundingPendingOnChainInput: FundingPendingOnChainInput
+  FundingPendingResponse: ResolverTypeWrapper<FundingPendingResponse>
+  FundingQueryResponse: ResolverTypeWrapper<FundingQueryResponse>
+  FundingResourceType: FundingResourceType
+  FundingStatus: FundingStatus
+  FundingTx: ResolverTypeWrapper<
+    Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversTypes['SourceResource']> }
+  >
+  FundingTxAmountGraph: ResolverTypeWrapper<FundingTxAmountGraph>
+  FundingTxEmailUpdateInput: FundingTxEmailUpdateInput
+  FundingTxInvoiceSanctionCheckStatus: FundingTxInvoiceSanctionCheckStatus
+  FundingTxInvoiceSanctionCheckStatusGetInput: FundingTxInvoiceSanctionCheckStatusGetInput
+  FundingTxInvoiceSanctionCheckStatusResponse: ResolverTypeWrapper<FundingTxInvoiceSanctionCheckStatusResponse>
+  FundingTxMethodCount: ResolverTypeWrapper<FundingTxMethodCount>
+  FundingTxMethodSum: ResolverTypeWrapper<FundingTxMethodSum>
+  FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
+  FundingTxStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<FundingTxStatusUpdatedSubscriptionResponse>
+  FundingTxsGetResponse: ResolverTypeWrapper<FundingTxsGetResponse>
+  FundingTxsWhereFundingStatus: FundingTxsWhereFundingStatus
+  FundingType: FundingType
+  FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>
+  GenerateAffiliatePaymentRequestResponse: ResolverTypeWrapper<GenerateAffiliatePaymentRequestResponse>
+  GenerateAffiliatePaymentRequestsInput: GenerateAffiliatePaymentRequestsInput
+  GetActivitiesInput: GetActivitiesInput
+  GetActivityOrderByInput: GetActivityOrderByInput
+  GetActivityPaginationInput: GetActivityPaginationInput
+  GetActivityWhereInput: GetActivityWhereInput
+  GetAffiliateLinksInput: GetAffiliateLinksInput
+  GetAffiliateLinksWhereInput: GetAffiliateLinksWhereInput
+  GetDashboardFundersWhereInput: GetDashboardFundersWhereInput
+  GetEntriesInput: GetEntriesInput
+  GetEntriesOrderByInput: GetEntriesOrderByInput
+  GetEntriesWhereInput: GetEntriesWhereInput
+  GetFunderFundingTxsInput: GetFunderFundingTxsInput
+  GetFunderFundingTxsWhereInput: GetFunderFundingTxsWhereInput
+  GetFunderWhereInput: GetFunderWhereInput
+  GetFundersInput: GetFundersInput
+  GetFundersOrderByInput: GetFundersOrderByInput
+  GetFundingTxsInput: GetFundingTxsInput
+  GetFundingTxsOrderByInput: GetFundingTxsOrderByInput
+  GetFundingTxsWhereInput: GetFundingTxsWhereInput
+  GetProjectRewardInput: GetProjectRewardInput
+  GetProjectRewardWhereInput: GetProjectRewardWhereInput
+  GetProjectStatsInput: GetProjectStatsInput
+  GetProjectStatsWhereInput: GetProjectStatsWhereInput
+  GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput
+  GlobalContributorLeaderboardRow: ResolverTypeWrapper<GlobalContributorLeaderboardRow>
+  GlobalProjectLeaderboardRow: ResolverTypeWrapper<GlobalProjectLeaderboardRow>
+  Grant: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['Grant']>
+  GrantApplicant: ResolverTypeWrapper<Omit<GrantApplicant, 'grant'> & { grant: ResolversTypes['Grant'] }>
+  GrantApplicantContributor: ResolverTypeWrapper<GrantApplicantContributor>
+  GrantApplicantContributorInput: GrantApplicantContributorInput
+  GrantApplicantContributorWhereInput: GrantApplicantContributorWhereInput
+  GrantApplicantFunding: ResolverTypeWrapper<GrantApplicantFunding>
+  GrantApplicantStatus: GrantApplicantStatus
+  GrantApplicantStatusFilter: GrantApplicantStatusFilter
+  GrantApplicantsGetInput: GrantApplicantsGetInput
+  GrantApplicantsGetOrderByInput: GrantApplicantsGetOrderByInput
+  GrantApplicantsGetWhereInput: GrantApplicantsGetWhereInput
+  GrantApplicantsOrderByField: GrantApplicantsOrderByField
+  GrantApplyInput: GrantApplyInput
+  GrantBoardMember: ResolverTypeWrapper<GrantBoardMember>
+  GrantGetInput: GrantGetInput
+  GrantGetWhereInput: GrantGetWhereInput
+  GrantStatistics: ResolverTypeWrapper<GrantStatistics>
+  GrantStatisticsApplicant: ResolverTypeWrapper<GrantStatisticsApplicant>
+  GrantStatisticsGrant: ResolverTypeWrapper<GrantStatisticsGrant>
+  GrantStatus: ResolverTypeWrapper<GrantStatus>
+  GrantStatusEnum: GrantStatusEnum
+  GrantType: GrantType
+  GraphSumData: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['GraphSumData']>
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>
+  InvoiceStatus: InvoiceStatus
+  LeaderboardGlobalContributorsGetInput: LeaderboardGlobalContributorsGetInput
+  LeaderboardGlobalProjectsGetInput: LeaderboardGlobalProjectsGetInput
+  LeaderboardPeriod: LeaderboardPeriod
+  LightningAddressConnectionDetails: ResolverTypeWrapper<LightningAddressConnectionDetails>
+  LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput
+  LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput
+  LightningAddressContributionLimits: ResolverTypeWrapper<LightningAddressContributionLimits>
+  LightningAddressVerifyResponse: ResolverTypeWrapper<LightningAddressVerifyResponse>
+  LndConnectionDetails: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['LndConnectionDetails']>
+  LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput
+  LndConnectionDetailsPrivate: ResolverTypeWrapper<LndConnectionDetailsPrivate>
+  LndConnectionDetailsPublic: ResolverTypeWrapper<LndConnectionDetailsPublic>
+  LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput
+  LndNodeType: LndNodeType
+  Location: ResolverTypeWrapper<Location>
+  MFAAction: MfaAction
+  Milestone: ResolverTypeWrapper<Milestone>
+  Mutation: ResolverTypeWrapper<{}>
+  MutationResponse: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['MutationResponse']>
+  NostrKeys: ResolverTypeWrapper<NostrKeys>
+  NostrPrivateKey: ResolverTypeWrapper<NostrPrivateKey>
+  NostrPublicKey: ResolverTypeWrapper<NostrPublicKey>
+  NotificationChannel: NotificationChannel
+  NotificationConfiguration: ResolverTypeWrapper<NotificationConfiguration>
+  NotificationSettings: ResolverTypeWrapper<NotificationSettings>
+  OTPInput: OtpInput
+  OTPLoginInput: OtpLoginInput
+  OTPResponse: ResolverTypeWrapper<OtpResponse>
+  OffsetBasedPaginationInput: OffsetBasedPaginationInput
+  OnChainTxInput: OnChainTxInput
+  Order: ResolverTypeWrapper<Order>
+  OrderBitcoinQuoteInput: OrderBitcoinQuoteInput
+  OrderByDirection: OrderByDirection
+  OrderByOptions: OrderByOptions
+  OrderFundingInput: OrderFundingInput
+  OrderItem: ResolverTypeWrapper<OrderItem>
+  OrderItemInput: OrderItemInput
+  OrderItemType: OrderItemType
+  OrderStatusUpdateInput: OrderStatusUpdateInput
+  OrdersGetInput: OrdersGetInput
+  OrdersGetOrderByField: OrdersGetOrderByField
+  OrdersGetOrderByInput: OrdersGetOrderByInput
+  OrdersGetResponse: ResolverTypeWrapper<OrdersGetResponse>
+  OrdersGetStatus: OrdersGetStatus
+  OrdersGetWhereInput: OrdersGetWhereInput
+  Owner: ResolverTypeWrapper<Owner>
+  OwnerOf: ResolverTypeWrapper<OwnerOf>
+  PageViewCountGraph: ResolverTypeWrapper<PageViewCountGraph>
+  PaginationCursor: ResolverTypeWrapper<PaginationCursor>
+  PaginationInput: PaginationInput
+  ProfileNotificationSettings: ResolverTypeWrapper<ProfileNotificationSettings>
+  Project: ResolverTypeWrapper<Project>
+  ProjectActivatedSubscriptionResponse: ResolverTypeWrapper<ProjectActivatedSubscriptionResponse>
+  ProjectCountriesGetResult: ResolverTypeWrapper<ProjectCountriesGetResult>
+  ProjectDeleteResponse: ResolverTypeWrapper<ProjectDeleteResponse>
+  ProjectEntriesGetInput: ProjectEntriesGetInput
+  ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput
+  ProjectFollowMutationInput: ProjectFollowMutationInput
+  ProjectFollowerStats: ResolverTypeWrapper<ProjectFollowerStats>
+  ProjectFunderRewardStats: ResolverTypeWrapper<ProjectFunderRewardStats>
+  ProjectFunderStats: ResolverTypeWrapper<ProjectFunderStats>
+  ProjectFundingTxStats: ResolverTypeWrapper<ProjectFundingTxStats>
+  ProjectGoal: ResolverTypeWrapper<ProjectGoal>
+  ProjectGoalCreateInput: ProjectGoalCreateInput
+  ProjectGoalCurrency: ProjectGoalCurrency
+  ProjectGoalDeleteResponse: ResolverTypeWrapper<ProjectGoalDeleteResponse>
+  ProjectGoalOrderingUpdateInput: ProjectGoalOrderingUpdateInput
+  ProjectGoalStatus: ProjectGoalStatus
+  ProjectGoalStatusInCreate: ProjectGoalStatusInCreate
+  ProjectGoalUpdateInput: ProjectGoalUpdateInput
+  ProjectGoals: ResolverTypeWrapper<ProjectGoals>
+  ProjectGrantApplicationsInput: ProjectGrantApplicationsInput
+  ProjectGrantApplicationsWhereInput: ProjectGrantApplicationsWhereInput
+  ProjectGrantApplicationsWhereInputEnum: ProjectGrantApplicationsWhereInputEnum
+  ProjectKeys: ResolverTypeWrapper<ProjectKeys>
+  ProjectLeaderboardContributorsGetInput: ProjectLeaderboardContributorsGetInput
+  ProjectLeaderboardContributorsRow: ResolverTypeWrapper<ProjectLeaderboardContributorsRow>
+  ProjectLeaderboardPeriod: ProjectLeaderboardPeriod
+  ProjectLinkMutationInput: ProjectLinkMutationInput
+  ProjectPublishMutationInput: ProjectPublishMutationInput
+  ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>
+  ProjectReward: ResolverTypeWrapper<ProjectReward>
+  ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate
+  ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput
+  ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>
+  ProjectStats: ResolverTypeWrapper<ProjectStats>
+  ProjectStatsBase: ResolverTypeWrapper<ProjectStatsBase>
+  ProjectStatus: ProjectStatus
+  ProjectStatusUpdate: ProjectStatusUpdate
+  ProjectTagMutationInput: ProjectTagMutationInput
+  ProjectType: ProjectType
+  ProjectViewBaseStats: ResolverTypeWrapper<ProjectViewBaseStats>
+  ProjectViewStats: ResolverTypeWrapper<ProjectViewStats>
+  ProjectsGetQueryInput: ProjectsGetQueryInput
+  ProjectsGetWhereInput: ProjectsGetWhereInput
+  ProjectsOrderByField: ProjectsOrderByField
+  ProjectsOrderByInput: ProjectsOrderByInput
+  ProjectsResponse: ResolverTypeWrapper<ProjectsResponse>
+  ProjectsSummary: ResolverTypeWrapper<ProjectsSummary>
+  Query: ResolverTypeWrapper<{}>
+  QuoteCurrency: QuoteCurrency
+  ResourceInput: ResourceInput
+  RewardCurrency: RewardCurrency
+  SendOtpByEmailInput: SendOtpByEmailInput
+  SettingValueType: SettingValueType
+  ShippingDestination: ShippingDestination
+  SignedUploadUrl: ResolverTypeWrapper<SignedUploadUrl>
+  SourceResource: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['SourceResource']>
+  Sponsor: ResolverTypeWrapper<Sponsor>
+  SponsorStatus: SponsorStatus
+  String: ResolverTypeWrapper<Scalars['String']['output']>
+  Subscription: ResolverTypeWrapper<{}>
+  Swap: ResolverTypeWrapper<Swap>
+  TOTPInput: TotpInput
+  Tag: ResolverTypeWrapper<Tag>
+  TagCreateInput: TagCreateInput
+  TagsGetResult: ResolverTypeWrapper<TagsGetResult>
+  TagsMostFundedGetResult: ResolverTypeWrapper<TagsMostFundedGetResult>
+  TwoFAInput: TwoFaInput
+  UniqueOrderInput: UniqueOrderInput
+  UniqueProjectQueryInput: UniqueProjectQueryInput
+  UpdatableOrderStatus: UpdatableOrderStatus
+  UpdateEntryInput: UpdateEntryInput
+  UpdateProjectInput: UpdateProjectInput
+  UpdateProjectRewardInput: UpdateProjectRewardInput
+  UpdateUserInput: UpdateUserInput
+  UpdateWalletInput: UpdateWalletInput
+  UpdateWalletStateInput: UpdateWalletStateInput
+  User: ResolverTypeWrapper<User>
+  UserBadge: ResolverTypeWrapper<UserBadge>
+  UserBadgeStatus: UserBadgeStatus
+  UserEmailUpdateInput: UserEmailUpdateInput
+  UserEntriesGetInput: UserEntriesGetInput
+  UserEntriesGetWhereInput: UserEntriesGetWhereInput
+  UserGetInput: UserGetInput
+  UserNotificationSettings: ResolverTypeWrapper<UserNotificationSettings>
+  UserProjectContribution: ResolverTypeWrapper<UserProjectContribution>
+  UserProjectsGetInput: UserProjectsGetInput
+  UserProjectsGetWhereInput: UserProjectsGetWhereInput
+  VotingSystem: VotingSystem
+  Wallet: ResolverTypeWrapper<
+    Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversTypes['ConnectionDetails'] }
+  >
+  WalletContributionLimits: ResolverTypeWrapper<WalletContributionLimits>
+  WalletLimits: ResolverTypeWrapper<WalletLimits>
+  WalletOffChainContributionLimits: ResolverTypeWrapper<WalletOffChainContributionLimits>
+  WalletOnChainContributionLimits: ResolverTypeWrapper<WalletOnChainContributionLimits>
+  WalletResourceInput: WalletResourceInput
+  WalletResourceType: WalletResourceType
+  WalletState: ResolverTypeWrapper<WalletState>
+  WalletStatus: WalletStatus
+  WalletStatusCode: WalletStatusCode
+  dashboardFundersGetInput: DashboardFundersGetInput
+  projectsMostFundedOfTheWeekGet: ResolverTypeWrapper<ProjectsMostFundedOfTheWeekGet>
+}
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Activity: Omit<Activity, 'resource'> & { resource: ResolversParentTypes['ActivityResource'] };
-  ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput;
-  ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
-  ActivityResource: ResolversUnionTypes<ResolversParentTypes>['ActivityResource'];
-  AffiliateLink: AffiliateLink;
-  AffiliateLinkCreateInput: AffiliateLinkCreateInput;
-  AffiliatePaymentConfirmResponse: AffiliatePaymentConfirmResponse;
-  AffiliatePayoutsStats: AffiliatePayoutsStats;
-  AffiliateSalesStats: AffiliateSalesStats;
-  AffiliateStats: AffiliateStats;
-  Ambassador: Ambassador;
-  AmountSummary: AmountSummary;
-  Badge: Badge;
-  BadgeClaimInput: BadgeClaimInput;
-  BadgesGetInput: BadgesGetInput;
-  BadgesGetWhereInput: BadgesGetWhereInput;
-  BigInt: Scalars['BigInt']['output'];
-  BitcoinQuote: BitcoinQuote;
-  BoardVoteGrant: BoardVoteGrant;
-  Boolean: Scalars['Boolean']['output'];
-  CommunityVoteGrant: CommunityVoteGrant;
-  CompetitionVoteGrantVoteSummary: CompetitionVoteGrantVoteSummary;
-  ConnectionDetails: ResolversUnionTypes<ResolversParentTypes>['ConnectionDetails'];
-  Country: Country;
-  CreateEntryInput: CreateEntryInput;
-  CreateProjectInput: CreateProjectInput;
-  CreateProjectRewardInput: CreateProjectRewardInput;
-  CreateWalletInput: CreateWalletInput;
-  CreatorNotificationSettings: CreatorNotificationSettings;
-  CreatorNotificationSettingsProject: CreatorNotificationSettingsProject;
-  CurrencyQuoteGetInput: CurrencyQuoteGetInput;
-  CurrencyQuoteGetResponse: CurrencyQuoteGetResponse;
-  CursorInput: CursorInput;
-  CursorInputString: CursorInputString;
-  CursorPaginationResponse: CursorPaginationResponse;
-  Date: Scalars['Date']['output'];
-  DateRangeInput: DateRangeInput;
-  DatetimeRange: DatetimeRange;
-  DeleteProjectInput: DeleteProjectInput;
-  DeleteProjectRewardInput: DeleteProjectRewardInput;
-  DeleteUserResponse: DeleteUserResponse;
-  EmailVerifyInput: EmailVerifyInput;
-  Entry: Entry;
-  EntryPublishedSubscriptionResponse: EntryPublishedSubscriptionResponse;
-  ExternalAccount: ExternalAccount;
-  FileUploadInput: FileUploadInput;
-  Float: Scalars['Float']['output'];
-  Funder: Funder;
-  FunderRewardGraphSum: FunderRewardGraphSum;
-  FundingCancelInput: FundingCancelInput;
-  FundingCancelResponse: FundingCancelResponse;
-  FundingConfirmInput: FundingConfirmInput;
-  FundingConfirmOffChainBolt11Input: FundingConfirmOffChainBolt11Input;
-  FundingConfirmOffChainInput: FundingConfirmOffChainInput;
-  FundingConfirmOnChainInput: FundingConfirmOnChainInput;
-  FundingConfirmResponse: FundingConfirmResponse;
-  FundingCreateFromPodcastKeysendInput: FundingCreateFromPodcastKeysendInput;
-  FundingInput: FundingInput;
-  FundingMetadataInput: FundingMetadataInput;
-  FundingMutationResponse: FundingMutationResponse;
-  FundingPendingInput: FundingPendingInput;
-  FundingPendingOffChainBolt11Input: FundingPendingOffChainBolt11Input;
-  FundingPendingOffChainInput: FundingPendingOffChainInput;
-  FundingPendingOnChainInput: FundingPendingOnChainInput;
-  FundingPendingResponse: FundingPendingResponse;
-  FundingQueryResponse: FundingQueryResponse;
-  FundingTx: Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversParentTypes['SourceResource']> };
-  FundingTxAmountGraph: FundingTxAmountGraph;
-  FundingTxEmailUpdateInput: FundingTxEmailUpdateInput;
-  FundingTxInvoiceSanctionCheckStatusGetInput: FundingTxInvoiceSanctionCheckStatusGetInput;
-  FundingTxInvoiceSanctionCheckStatusResponse: FundingTxInvoiceSanctionCheckStatusResponse;
-  FundingTxMethodCount: FundingTxMethodCount;
-  FundingTxMethodSum: FundingTxMethodSum;
-  FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput;
-  FundingTxStatusUpdatedSubscriptionResponse: FundingTxStatusUpdatedSubscriptionResponse;
-  FundingTxsGetResponse: FundingTxsGetResponse;
-  FundinginvoiceCancel: FundinginvoiceCancel;
-  GenerateAffiliatePaymentRequestResponse: GenerateAffiliatePaymentRequestResponse;
-  GenerateAffiliatePaymentRequestsInput: GenerateAffiliatePaymentRequestsInput;
-  GetActivitiesInput: GetActivitiesInput;
-  GetActivityOrderByInput: GetActivityOrderByInput;
-  GetActivityPaginationInput: GetActivityPaginationInput;
-  GetActivityWhereInput: GetActivityWhereInput;
-  GetAffiliateLinksInput: GetAffiliateLinksInput;
-  GetAffiliateLinksWhereInput: GetAffiliateLinksWhereInput;
-  GetDashboardFundersWhereInput: GetDashboardFundersWhereInput;
-  GetEntriesInput: GetEntriesInput;
-  GetEntriesOrderByInput: GetEntriesOrderByInput;
-  GetEntriesWhereInput: GetEntriesWhereInput;
-  GetFunderFundingTxsInput: GetFunderFundingTxsInput;
-  GetFunderFundingTxsWhereInput: GetFunderFundingTxsWhereInput;
-  GetFunderWhereInput: GetFunderWhereInput;
-  GetFundersInput: GetFundersInput;
-  GetFundersOrderByInput: GetFundersOrderByInput;
-  GetFundingTxsInput: GetFundingTxsInput;
-  GetFundingTxsOrderByInput: GetFundingTxsOrderByInput;
-  GetFundingTxsWhereInput: GetFundingTxsWhereInput;
-  GetProjectRewardInput: GetProjectRewardInput;
-  GetProjectRewardWhereInput: GetProjectRewardWhereInput;
-  GetProjectStatsInput: GetProjectStatsInput;
-  GetProjectStatsWhereInput: GetProjectStatsWhereInput;
-  GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput;
-  GlobalContributorLeaderboardRow: GlobalContributorLeaderboardRow;
-  GlobalProjectLeaderboardRow: GlobalProjectLeaderboardRow;
-  Grant: ResolversUnionTypes<ResolversParentTypes>['Grant'];
-  GrantApplicant: Omit<GrantApplicant, 'grant'> & { grant: ResolversParentTypes['Grant'] };
-  GrantApplicantContributor: GrantApplicantContributor;
-  GrantApplicantContributorInput: GrantApplicantContributorInput;
-  GrantApplicantContributorWhereInput: GrantApplicantContributorWhereInput;
-  GrantApplicantFunding: GrantApplicantFunding;
-  GrantApplicantsGetInput: GrantApplicantsGetInput;
-  GrantApplicantsGetOrderByInput: GrantApplicantsGetOrderByInput;
-  GrantApplicantsGetWhereInput: GrantApplicantsGetWhereInput;
-  GrantApplyInput: GrantApplyInput;
-  GrantBoardMember: GrantBoardMember;
-  GrantGetInput: GrantGetInput;
-  GrantGetWhereInput: GrantGetWhereInput;
-  GrantStatistics: GrantStatistics;
-  GrantStatisticsApplicant: GrantStatisticsApplicant;
-  GrantStatisticsGrant: GrantStatisticsGrant;
-  GrantStatus: GrantStatus;
-  GraphSumData: ResolversInterfaceTypes<ResolversParentTypes>['GraphSumData'];
-  Int: Scalars['Int']['output'];
-  LeaderboardGlobalContributorsGetInput: LeaderboardGlobalContributorsGetInput;
-  LeaderboardGlobalProjectsGetInput: LeaderboardGlobalProjectsGetInput;
-  LightningAddressConnectionDetails: LightningAddressConnectionDetails;
-  LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput;
-  LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput;
-  LightningAddressContributionLimits: LightningAddressContributionLimits;
-  LightningAddressVerifyResponse: LightningAddressVerifyResponse;
-  LndConnectionDetails: ResolversInterfaceTypes<ResolversParentTypes>['LndConnectionDetails'];
-  LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput;
-  LndConnectionDetailsPrivate: LndConnectionDetailsPrivate;
-  LndConnectionDetailsPublic: LndConnectionDetailsPublic;
-  LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput;
-  Location: Location;
-  Milestone: Milestone;
-  Mutation: {};
-  MutationResponse: ResolversInterfaceTypes<ResolversParentTypes>['MutationResponse'];
-  NostrKeys: NostrKeys;
-  NostrPrivateKey: NostrPrivateKey;
-  NostrPublicKey: NostrPublicKey;
-  NotificationConfiguration: NotificationConfiguration;
-  NotificationSettings: NotificationSettings;
-  OTPInput: OtpInput;
-  OTPLoginInput: OtpLoginInput;
-  OTPResponse: OtpResponse;
-  OffsetBasedPaginationInput: OffsetBasedPaginationInput;
-  OnChainTxInput: OnChainTxInput;
-  Order: Order;
-  OrderBitcoinQuoteInput: OrderBitcoinQuoteInput;
-  OrderFundingInput: OrderFundingInput;
-  OrderItem: OrderItem;
-  OrderItemInput: OrderItemInput;
-  OrderStatusUpdateInput: OrderStatusUpdateInput;
-  OrdersGetInput: OrdersGetInput;
-  OrdersGetOrderByInput: OrdersGetOrderByInput;
-  OrdersGetResponse: OrdersGetResponse;
-  OrdersGetWhereInput: OrdersGetWhereInput;
-  Owner: Owner;
-  OwnerOf: OwnerOf;
-  PageViewCountGraph: PageViewCountGraph;
-  PaginationCursor: PaginationCursor;
-  PaginationInput: PaginationInput;
-  ProfileNotificationSettings: ProfileNotificationSettings;
-  Project: Project;
-  ProjectActivatedSubscriptionResponse: ProjectActivatedSubscriptionResponse;
-  ProjectCountriesGetResult: ProjectCountriesGetResult;
-  ProjectDeleteResponse: ProjectDeleteResponse;
-  ProjectEntriesGetInput: ProjectEntriesGetInput;
-  ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput;
-  ProjectFollowMutationInput: ProjectFollowMutationInput;
-  ProjectFollowerStats: ProjectFollowerStats;
-  ProjectFunderRewardStats: ProjectFunderRewardStats;
-  ProjectFunderStats: ProjectFunderStats;
-  ProjectFundingTxStats: ProjectFundingTxStats;
-  ProjectGoal: ProjectGoal;
-  ProjectGoalCreateInput: ProjectGoalCreateInput;
-  ProjectGoalDeleteResponse: ProjectGoalDeleteResponse;
-  ProjectGoalOrderingUpdateInput: ProjectGoalOrderingUpdateInput;
-  ProjectGoalUpdateInput: ProjectGoalUpdateInput;
-  ProjectGoals: ProjectGoals;
-  ProjectGrantApplicationsInput: ProjectGrantApplicationsInput;
-  ProjectGrantApplicationsWhereInput: ProjectGrantApplicationsWhereInput;
-  ProjectKeys: ProjectKeys;
-  ProjectLeaderboardContributorsGetInput: ProjectLeaderboardContributorsGetInput;
-  ProjectLeaderboardContributorsRow: ProjectLeaderboardContributorsRow;
-  ProjectLinkMutationInput: ProjectLinkMutationInput;
-  ProjectPublishMutationInput: ProjectPublishMutationInput;
-  ProjectRegionsGetResult: ProjectRegionsGetResult;
-  ProjectReward: ProjectReward;
-  ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate;
-  ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput;
-  ProjectStatistics: ProjectStatistics;
-  ProjectStats: ProjectStats;
-  ProjectStatsBase: ProjectStatsBase;
-  ProjectStatusUpdate: ProjectStatusUpdate;
-  ProjectTagMutationInput: ProjectTagMutationInput;
-  ProjectViewBaseStats: ProjectViewBaseStats;
-  ProjectViewStats: ProjectViewStats;
-  ProjectsGetQueryInput: ProjectsGetQueryInput;
-  ProjectsGetWhereInput: ProjectsGetWhereInput;
-  ProjectsOrderByInput: ProjectsOrderByInput;
-  ProjectsResponse: ProjectsResponse;
-  ProjectsSummary: ProjectsSummary;
-  Query: {};
-  ResourceInput: ResourceInput;
-  SendOtpByEmailInput: SendOtpByEmailInput;
-  SignedUploadUrl: SignedUploadUrl;
-  SourceResource: ResolversUnionTypes<ResolversParentTypes>['SourceResource'];
-  Sponsor: Sponsor;
-  String: Scalars['String']['output'];
-  Subscription: {};
-  Swap: Swap;
-  TOTPInput: TotpInput;
-  Tag: Tag;
-  TagCreateInput: TagCreateInput;
-  TagsGetResult: TagsGetResult;
-  TagsMostFundedGetResult: TagsMostFundedGetResult;
-  TwoFAInput: TwoFaInput;
-  UniqueOrderInput: UniqueOrderInput;
-  UniqueProjectQueryInput: UniqueProjectQueryInput;
-  UpdateEntryInput: UpdateEntryInput;
-  UpdateProjectInput: UpdateProjectInput;
-  UpdateProjectRewardInput: UpdateProjectRewardInput;
-  UpdateUserInput: UpdateUserInput;
-  UpdateWalletInput: UpdateWalletInput;
-  UpdateWalletStateInput: UpdateWalletStateInput;
-  User: User;
-  UserBadge: UserBadge;
-  UserEmailUpdateInput: UserEmailUpdateInput;
-  UserEntriesGetInput: UserEntriesGetInput;
-  UserEntriesGetWhereInput: UserEntriesGetWhereInput;
-  UserGetInput: UserGetInput;
-  UserNotificationSettings: UserNotificationSettings;
-  UserProjectContribution: UserProjectContribution;
-  UserProjectsGetInput: UserProjectsGetInput;
-  UserProjectsGetWhereInput: UserProjectsGetWhereInput;
-  Wallet: Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversParentTypes['ConnectionDetails'] };
-  WalletContributionLimits: WalletContributionLimits;
-  WalletLimits: WalletLimits;
-  WalletOffChainContributionLimits: WalletOffChainContributionLimits;
-  WalletOnChainContributionLimits: WalletOnChainContributionLimits;
-  WalletResourceInput: WalletResourceInput;
-  WalletState: WalletState;
-  dashboardFundersGetInput: DashboardFundersGetInput;
-  projectsMostFundedOfTheWeekGet: ProjectsMostFundedOfTheWeekGet;
-};
+  Activity: Omit<Activity, 'resource'> & { resource: ResolversParentTypes['ActivityResource'] }
+  ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput
+  ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput
+  ActivityResource: ResolversUnionTypes<ResolversParentTypes>['ActivityResource']
+  AffiliateLink: AffiliateLink
+  AffiliateLinkCreateInput: AffiliateLinkCreateInput
+  AffiliatePaymentConfirmResponse: AffiliatePaymentConfirmResponse
+  AffiliatePayoutsStats: AffiliatePayoutsStats
+  AffiliateSalesStats: AffiliateSalesStats
+  AffiliateStats: AffiliateStats
+  Ambassador: Ambassador
+  AmountSummary: AmountSummary
+  Badge: Badge
+  BadgeClaimInput: BadgeClaimInput
+  BadgesGetInput: BadgesGetInput
+  BadgesGetWhereInput: BadgesGetWhereInput
+  BigInt: Scalars['BigInt']['output']
+  BitcoinQuote: BitcoinQuote
+  BoardVoteGrant: BoardVoteGrant
+  Boolean: Scalars['Boolean']['output']
+  CommunityVoteGrant: CommunityVoteGrant
+  CompetitionVoteGrantVoteSummary: CompetitionVoteGrantVoteSummary
+  ConnectionDetails: ResolversUnionTypes<ResolversParentTypes>['ConnectionDetails']
+  Country: Country
+  CreateEntryInput: CreateEntryInput
+  CreateProjectInput: CreateProjectInput
+  CreateProjectRewardInput: CreateProjectRewardInput
+  CreateWalletInput: CreateWalletInput
+  CreatorNotificationSettings: CreatorNotificationSettings
+  CreatorNotificationSettingsProject: CreatorNotificationSettingsProject
+  CurrencyQuoteGetInput: CurrencyQuoteGetInput
+  CurrencyQuoteGetResponse: CurrencyQuoteGetResponse
+  CursorInput: CursorInput
+  CursorInputString: CursorInputString
+  CursorPaginationResponse: CursorPaginationResponse
+  Date: Scalars['Date']['output']
+  DateRangeInput: DateRangeInput
+  DatetimeRange: DatetimeRange
+  DeleteProjectInput: DeleteProjectInput
+  DeleteProjectRewardInput: DeleteProjectRewardInput
+  DeleteUserResponse: DeleteUserResponse
+  EmailVerifyInput: EmailVerifyInput
+  Entry: Entry
+  EntryPublishedSubscriptionResponse: EntryPublishedSubscriptionResponse
+  ExternalAccount: ExternalAccount
+  FileUploadInput: FileUploadInput
+  Float: Scalars['Float']['output']
+  Funder: Funder
+  FunderRewardGraphSum: FunderRewardGraphSum
+  FundingCancelInput: FundingCancelInput
+  FundingCancelResponse: FundingCancelResponse
+  FundingConfirmInput: FundingConfirmInput
+  FundingConfirmOffChainBolt11Input: FundingConfirmOffChainBolt11Input
+  FundingConfirmOffChainInput: FundingConfirmOffChainInput
+  FundingConfirmOnChainInput: FundingConfirmOnChainInput
+  FundingConfirmResponse: FundingConfirmResponse
+  FundingCreateFromPodcastKeysendInput: FundingCreateFromPodcastKeysendInput
+  FundingInput: FundingInput
+  FundingMetadataInput: FundingMetadataInput
+  FundingMutationResponse: FundingMutationResponse
+  FundingPendingInput: FundingPendingInput
+  FundingPendingOffChainBolt11Input: FundingPendingOffChainBolt11Input
+  FundingPendingOffChainInput: FundingPendingOffChainInput
+  FundingPendingOnChainInput: FundingPendingOnChainInput
+  FundingPendingResponse: FundingPendingResponse
+  FundingQueryResponse: FundingQueryResponse
+  FundingTx: Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversParentTypes['SourceResource']> }
+  FundingTxAmountGraph: FundingTxAmountGraph
+  FundingTxEmailUpdateInput: FundingTxEmailUpdateInput
+  FundingTxInvoiceSanctionCheckStatusGetInput: FundingTxInvoiceSanctionCheckStatusGetInput
+  FundingTxInvoiceSanctionCheckStatusResponse: FundingTxInvoiceSanctionCheckStatusResponse
+  FundingTxMethodCount: FundingTxMethodCount
+  FundingTxMethodSum: FundingTxMethodSum
+  FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
+  FundingTxStatusUpdatedSubscriptionResponse: FundingTxStatusUpdatedSubscriptionResponse
+  FundingTxsGetResponse: FundingTxsGetResponse
+  FundinginvoiceCancel: FundinginvoiceCancel
+  GenerateAffiliatePaymentRequestResponse: GenerateAffiliatePaymentRequestResponse
+  GenerateAffiliatePaymentRequestsInput: GenerateAffiliatePaymentRequestsInput
+  GetActivitiesInput: GetActivitiesInput
+  GetActivityOrderByInput: GetActivityOrderByInput
+  GetActivityPaginationInput: GetActivityPaginationInput
+  GetActivityWhereInput: GetActivityWhereInput
+  GetAffiliateLinksInput: GetAffiliateLinksInput
+  GetAffiliateLinksWhereInput: GetAffiliateLinksWhereInput
+  GetDashboardFundersWhereInput: GetDashboardFundersWhereInput
+  GetEntriesInput: GetEntriesInput
+  GetEntriesOrderByInput: GetEntriesOrderByInput
+  GetEntriesWhereInput: GetEntriesWhereInput
+  GetFunderFundingTxsInput: GetFunderFundingTxsInput
+  GetFunderFundingTxsWhereInput: GetFunderFundingTxsWhereInput
+  GetFunderWhereInput: GetFunderWhereInput
+  GetFundersInput: GetFundersInput
+  GetFundersOrderByInput: GetFundersOrderByInput
+  GetFundingTxsInput: GetFundingTxsInput
+  GetFundingTxsOrderByInput: GetFundingTxsOrderByInput
+  GetFundingTxsWhereInput: GetFundingTxsWhereInput
+  GetProjectRewardInput: GetProjectRewardInput
+  GetProjectRewardWhereInput: GetProjectRewardWhereInput
+  GetProjectStatsInput: GetProjectStatsInput
+  GetProjectStatsWhereInput: GetProjectStatsWhereInput
+  GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput
+  GlobalContributorLeaderboardRow: GlobalContributorLeaderboardRow
+  GlobalProjectLeaderboardRow: GlobalProjectLeaderboardRow
+  Grant: ResolversUnionTypes<ResolversParentTypes>['Grant']
+  GrantApplicant: Omit<GrantApplicant, 'grant'> & { grant: ResolversParentTypes['Grant'] }
+  GrantApplicantContributor: GrantApplicantContributor
+  GrantApplicantContributorInput: GrantApplicantContributorInput
+  GrantApplicantContributorWhereInput: GrantApplicantContributorWhereInput
+  GrantApplicantFunding: GrantApplicantFunding
+  GrantApplicantsGetInput: GrantApplicantsGetInput
+  GrantApplicantsGetOrderByInput: GrantApplicantsGetOrderByInput
+  GrantApplicantsGetWhereInput: GrantApplicantsGetWhereInput
+  GrantApplyInput: GrantApplyInput
+  GrantBoardMember: GrantBoardMember
+  GrantGetInput: GrantGetInput
+  GrantGetWhereInput: GrantGetWhereInput
+  GrantStatistics: GrantStatistics
+  GrantStatisticsApplicant: GrantStatisticsApplicant
+  GrantStatisticsGrant: GrantStatisticsGrant
+  GrantStatus: GrantStatus
+  GraphSumData: ResolversInterfaceTypes<ResolversParentTypes>['GraphSumData']
+  Int: Scalars['Int']['output']
+  LeaderboardGlobalContributorsGetInput: LeaderboardGlobalContributorsGetInput
+  LeaderboardGlobalProjectsGetInput: LeaderboardGlobalProjectsGetInput
+  LightningAddressConnectionDetails: LightningAddressConnectionDetails
+  LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput
+  LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput
+  LightningAddressContributionLimits: LightningAddressContributionLimits
+  LightningAddressVerifyResponse: LightningAddressVerifyResponse
+  LndConnectionDetails: ResolversInterfaceTypes<ResolversParentTypes>['LndConnectionDetails']
+  LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput
+  LndConnectionDetailsPrivate: LndConnectionDetailsPrivate
+  LndConnectionDetailsPublic: LndConnectionDetailsPublic
+  LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput
+  Location: Location
+  Milestone: Milestone
+  Mutation: {}
+  MutationResponse: ResolversInterfaceTypes<ResolversParentTypes>['MutationResponse']
+  NostrKeys: NostrKeys
+  NostrPrivateKey: NostrPrivateKey
+  NostrPublicKey: NostrPublicKey
+  NotificationConfiguration: NotificationConfiguration
+  NotificationSettings: NotificationSettings
+  OTPInput: OtpInput
+  OTPLoginInput: OtpLoginInput
+  OTPResponse: OtpResponse
+  OffsetBasedPaginationInput: OffsetBasedPaginationInput
+  OnChainTxInput: OnChainTxInput
+  Order: Order
+  OrderBitcoinQuoteInput: OrderBitcoinQuoteInput
+  OrderFundingInput: OrderFundingInput
+  OrderItem: OrderItem
+  OrderItemInput: OrderItemInput
+  OrderStatusUpdateInput: OrderStatusUpdateInput
+  OrdersGetInput: OrdersGetInput
+  OrdersGetOrderByInput: OrdersGetOrderByInput
+  OrdersGetResponse: OrdersGetResponse
+  OrdersGetWhereInput: OrdersGetWhereInput
+  Owner: Owner
+  OwnerOf: OwnerOf
+  PageViewCountGraph: PageViewCountGraph
+  PaginationCursor: PaginationCursor
+  PaginationInput: PaginationInput
+  ProfileNotificationSettings: ProfileNotificationSettings
+  Project: Project
+  ProjectActivatedSubscriptionResponse: ProjectActivatedSubscriptionResponse
+  ProjectCountriesGetResult: ProjectCountriesGetResult
+  ProjectDeleteResponse: ProjectDeleteResponse
+  ProjectEntriesGetInput: ProjectEntriesGetInput
+  ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput
+  ProjectFollowMutationInput: ProjectFollowMutationInput
+  ProjectFollowerStats: ProjectFollowerStats
+  ProjectFunderRewardStats: ProjectFunderRewardStats
+  ProjectFunderStats: ProjectFunderStats
+  ProjectFundingTxStats: ProjectFundingTxStats
+  ProjectGoal: ProjectGoal
+  ProjectGoalCreateInput: ProjectGoalCreateInput
+  ProjectGoalDeleteResponse: ProjectGoalDeleteResponse
+  ProjectGoalOrderingUpdateInput: ProjectGoalOrderingUpdateInput
+  ProjectGoalUpdateInput: ProjectGoalUpdateInput
+  ProjectGoals: ProjectGoals
+  ProjectGrantApplicationsInput: ProjectGrantApplicationsInput
+  ProjectGrantApplicationsWhereInput: ProjectGrantApplicationsWhereInput
+  ProjectKeys: ProjectKeys
+  ProjectLeaderboardContributorsGetInput: ProjectLeaderboardContributorsGetInput
+  ProjectLeaderboardContributorsRow: ProjectLeaderboardContributorsRow
+  ProjectLinkMutationInput: ProjectLinkMutationInput
+  ProjectPublishMutationInput: ProjectPublishMutationInput
+  ProjectRegionsGetResult: ProjectRegionsGetResult
+  ProjectReward: ProjectReward
+  ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate
+  ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput
+  ProjectStatistics: ProjectStatistics
+  ProjectStats: ProjectStats
+  ProjectStatsBase: ProjectStatsBase
+  ProjectStatusUpdate: ProjectStatusUpdate
+  ProjectTagMutationInput: ProjectTagMutationInput
+  ProjectViewBaseStats: ProjectViewBaseStats
+  ProjectViewStats: ProjectViewStats
+  ProjectsGetQueryInput: ProjectsGetQueryInput
+  ProjectsGetWhereInput: ProjectsGetWhereInput
+  ProjectsOrderByInput: ProjectsOrderByInput
+  ProjectsResponse: ProjectsResponse
+  ProjectsSummary: ProjectsSummary
+  Query: {}
+  ResourceInput: ResourceInput
+  SendOtpByEmailInput: SendOtpByEmailInput
+  SignedUploadUrl: SignedUploadUrl
+  SourceResource: ResolversUnionTypes<ResolversParentTypes>['SourceResource']
+  Sponsor: Sponsor
+  String: Scalars['String']['output']
+  Subscription: {}
+  Swap: Swap
+  TOTPInput: TotpInput
+  Tag: Tag
+  TagCreateInput: TagCreateInput
+  TagsGetResult: TagsGetResult
+  TagsMostFundedGetResult: TagsMostFundedGetResult
+  TwoFAInput: TwoFaInput
+  UniqueOrderInput: UniqueOrderInput
+  UniqueProjectQueryInput: UniqueProjectQueryInput
+  UpdateEntryInput: UpdateEntryInput
+  UpdateProjectInput: UpdateProjectInput
+  UpdateProjectRewardInput: UpdateProjectRewardInput
+  UpdateUserInput: UpdateUserInput
+  UpdateWalletInput: UpdateWalletInput
+  UpdateWalletStateInput: UpdateWalletStateInput
+  User: User
+  UserBadge: UserBadge
+  UserEmailUpdateInput: UserEmailUpdateInput
+  UserEntriesGetInput: UserEntriesGetInput
+  UserEntriesGetWhereInput: UserEntriesGetWhereInput
+  UserGetInput: UserGetInput
+  UserNotificationSettings: UserNotificationSettings
+  UserProjectContribution: UserProjectContribution
+  UserProjectsGetInput: UserProjectsGetInput
+  UserProjectsGetWhereInput: UserProjectsGetWhereInput
+  Wallet: Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversParentTypes['ConnectionDetails'] }
+  WalletContributionLimits: WalletContributionLimits
+  WalletLimits: WalletLimits
+  WalletOffChainContributionLimits: WalletOffChainContributionLimits
+  WalletOnChainContributionLimits: WalletOnChainContributionLimits
+  WalletResourceInput: WalletResourceInput
+  WalletState: WalletState
+  dashboardFundersGetInput: DashboardFundersGetInput
+  projectsMostFundedOfTheWeekGet: ProjectsMostFundedOfTheWeekGet
+}
 
-export type ActivityResolvers<ContextType = any, ParentType extends ResolversParentTypes['Activity'] = ResolversParentTypes['Activity']> = {
-  activityType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  resource?: Resolver<ResolversTypes['ActivityResource'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type ActivityResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Activity'] = ResolversParentTypes['Activity'],
+> = {
+  activityType?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  resource?: Resolver<ResolversTypes['ActivityResource'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
-export type ActivityResourceResolvers<ContextType = any, ParentType extends ResolversParentTypes['ActivityResource'] = ResolversParentTypes['ActivityResource']> = {
-  __resolveType: TypeResolveFn<'Entry' | 'FundingTx' | 'Project' | 'ProjectGoal' | 'ProjectReward', ParentType, ContextType>;
-};
+export type ActivityResourceResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ActivityResource'] = ResolversParentTypes['ActivityResource'],
+> = {
+  __resolveType: TypeResolveFn<
+    'Entry' | 'FundingTx' | 'Project' | 'ProjectGoal' | 'ProjectReward',
+    ParentType,
+    ContextType
+  >
+}
 
 export type AffiliateLinkResolvers<
   ContextType = any,
@@ -3538,27 +3554,15 @@ export type CountryResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
-export type CreatorNotificationSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreatorNotificationSettings'] = ResolversParentTypes['CreatorNotificationSettings']> = {
-  notificationSettings?: Resolver<Array<ResolversTypes['NotificationSettings']>, ParentType, ContextType>;
-  project?: Resolver<ResolversTypes['CreatorNotificationSettingsProject'], ParentType, ContextType>;
-  userId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CreatorNotificationSettingsProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreatorNotificationSettingsProject'] = ResolversParentTypes['CreatorNotificationSettingsProject']> = {
-  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CurrencyQuoteGetResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['CurrencyQuoteGetResponse'] = ResolversParentTypes['CurrencyQuoteGetResponse']> = {
-  baseCurrency?: Resolver<ResolversTypes['BaseCurrency'], ParentType, ContextType>;
-  quote?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  quoteCurrency?: Resolver<ResolversTypes['QuoteCurrency'], ParentType, ContextType>;
-  timestamp?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type CreatorNotificationSettingsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['CreatorNotificationSettings'] = ResolversParentTypes['CreatorNotificationSettings'],
+> = {
+  notificationSettings?: Resolver<Array<ResolversTypes['NotificationSettings']>, ParentType, ContextType>
+  project?: Resolver<ResolversTypes['CreatorNotificationSettingsProject'], ParentType, ContextType>
+  userId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type CreatorNotificationSettingsProjectResolvers<
   ContextType = any,
@@ -3847,20 +3851,6 @@ export type GlobalContributorLeaderboardRowResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
-export type GlobalProjectLeaderboardRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['GlobalProjectLeaderboardRow'] = ResolversParentTypes['GlobalProjectLeaderboardRow']> = {
-  contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  contributorsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  projectName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  projectTitle?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GrantResolvers<ContextType = any, ParentType extends ResolversParentTypes['Grant'] = ResolversParentTypes['Grant']> = {
-  __resolveType: TypeResolveFn<'BoardVoteGrant' | 'CommunityVoteGrant', ParentType, ContextType>;
-};
-
 export type GlobalProjectLeaderboardRowResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['GlobalProjectLeaderboardRow'] = ResolversParentTypes['GlobalProjectLeaderboardRow'],
@@ -4037,61 +4027,14 @@ export type LndConnectionDetailsPublicResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
-export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  affiliateLinkCreate?: Resolver<ResolversTypes['AffiliateLink'], ParentType, ContextType, RequireFields<MutationAffiliateLinkCreateArgs, 'input'>>;
-  affiliateLinkDisable?: Resolver<ResolversTypes['AffiliateLink'], ParentType, ContextType, RequireFields<MutationAffiliateLinkDisableArgs, 'affiliateLinkId'>>;
-  affiliateLinkLabelUpdate?: Resolver<ResolversTypes['AffiliateLink'], ParentType, ContextType, RequireFields<MutationAffiliateLinkLabelUpdateArgs, 'affiliateLinkId' | 'label'>>;
-  affiliatePaymentConfirm?: Resolver<ResolversTypes['AffiliatePaymentConfirmResponse'], ParentType, ContextType, RequireFields<MutationAffiliatePaymentConfirmArgs, 'affiliatePaymentId'>>;
-  affiliatePaymentRequestGenerate?: Resolver<ResolversTypes['GenerateAffiliatePaymentRequestResponse'], ParentType, ContextType, RequireFields<MutationAffiliatePaymentRequestGenerateArgs, 'input'>>;
-  claimBadge?: Resolver<ResolversTypes['UserBadge'], ParentType, ContextType, RequireFields<MutationClaimBadgeArgs, 'input'>>;
-  createEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationCreateEntryArgs, 'input'>>;
-  createProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationCreateProjectArgs, 'input'>>;
-  creatorNotificationConfigurationValueUpdate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCreatorNotificationConfigurationValueUpdateArgs, 'creatorNotificationConfigurationId' | 'value'>>;
-  deleteEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationDeleteEntryArgs, 'id'>>;
-  fund?: Resolver<ResolversTypes['FundingMutationResponse'], ParentType, ContextType, RequireFields<MutationFundArgs, 'input'>>;
-  fundingCancel?: Resolver<ResolversTypes['FundingCancelResponse'], ParentType, ContextType, RequireFields<MutationFundingCancelArgs, 'input'>>;
-  fundingClaimAnonymous?: Resolver<ResolversTypes['FundingMutationResponse'], ParentType, ContextType, RequireFields<MutationFundingClaimAnonymousArgs, 'uuid'>>;
-  fundingConfirm?: Resolver<ResolversTypes['FundingConfirmResponse'], ParentType, ContextType, RequireFields<MutationFundingConfirmArgs, 'input'>>;
-  fundingCreateFromPodcastKeysend?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType, Partial<MutationFundingCreateFromPodcastKeysendArgs>>;
-  fundingInvoiceCancel?: Resolver<ResolversTypes['FundinginvoiceCancel'], ParentType, ContextType, RequireFields<MutationFundingInvoiceCancelArgs, 'invoiceId'>>;
-  fundingInvoiceRefresh?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType, RequireFields<MutationFundingInvoiceRefreshArgs, 'fundingTxId'>>;
-  fundingPend?: Resolver<ResolversTypes['FundingPendingResponse'], ParentType, ContextType, RequireFields<MutationFundingPendArgs, 'input'>>;
-  fundingTxEmailUpdate?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType, Partial<MutationFundingTxEmailUpdateArgs>>;
-  grantApply?: Resolver<ResolversTypes['GrantApplicant'], ParentType, ContextType, Partial<MutationGrantApplyArgs>>;
-  orderStatusUpdate?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<MutationOrderStatusUpdateArgs, 'input'>>;
-  projectDelete?: Resolver<ResolversTypes['ProjectDeleteResponse'], ParentType, ContextType, RequireFields<MutationProjectDeleteArgs, 'input'>>;
-  projectFollow?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectFollowArgs, 'input'>>;
-  projectGoalCreate?: Resolver<Array<ResolversTypes['ProjectGoal']>, ParentType, ContextType, RequireFields<MutationProjectGoalCreateArgs, 'input'>>;
-  projectGoalDelete?: Resolver<ResolversTypes['ProjectGoalDeleteResponse'], ParentType, ContextType, RequireFields<MutationProjectGoalDeleteArgs, 'projectGoalId'>>;
-  projectGoalOrderingUpdate?: Resolver<Array<ResolversTypes['ProjectGoal']>, ParentType, ContextType, RequireFields<MutationProjectGoalOrderingUpdateArgs, 'input'>>;
-  projectGoalUpdate?: Resolver<ResolversTypes['ProjectGoal'], ParentType, ContextType, RequireFields<MutationProjectGoalUpdateArgs, 'input'>>;
-  projectPublish?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectPublishArgs, 'input'>>;
-  projectRewardCreate?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<MutationProjectRewardCreateArgs, 'input'>>;
-  projectRewardCurrencyUpdate?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType, RequireFields<MutationProjectRewardCurrencyUpdateArgs, 'input'>>;
-  projectRewardDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectRewardDeleteArgs, 'input'>>;
-  projectRewardUpdate?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<MutationProjectRewardUpdateArgs, 'input'>>;
-  projectStatusUpdate?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectStatusUpdateArgs, 'input'>>;
-  projectTagAdd?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType, RequireFields<MutationProjectTagAddArgs, 'input'>>;
-  projectTagRemove?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType, RequireFields<MutationProjectTagRemoveArgs, 'input'>>;
-  projectUnfollow?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectUnfollowArgs, 'input'>>;
-  publishEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationPublishEntryArgs, 'id'>>;
-  sendOTPByEmail?: Resolver<ResolversTypes['OTPResponse'], ParentType, ContextType, RequireFields<MutationSendOtpByEmailArgs, 'input'>>;
-  tagCreate?: Resolver<ResolversTypes['Tag'], ParentType, ContextType, RequireFields<MutationTagCreateArgs, 'input'>>;
-  unlinkExternalAccount?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUnlinkExternalAccountArgs, 'id'>>;
-  updateEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationUpdateEntryArgs, 'input'>>;
-  updateProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationUpdateProjectArgs, 'input'>>;
-  updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
-  updateWalletState?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationUpdateWalletStateArgs, 'input'>>;
-  userBadgeAward?: Resolver<ResolversTypes['UserBadge'], ParentType, ContextType, RequireFields<MutationUserBadgeAwardArgs, 'userBadgeId'>>;
-  userDelete?: Resolver<ResolversTypes['DeleteUserResponse'], ParentType, ContextType>;
-  userEmailUpdate?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUserEmailUpdateArgs, 'input'>>;
-  userEmailVerify?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUserEmailVerifyArgs, 'input'>>;
-  userNotificationConfigurationValueUpdate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUserNotificationConfigurationValueUpdateArgs, 'userNotificationConfigurationId' | 'value'>>;
-  walletCreate?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationWalletCreateArgs, 'input'>>;
-  walletDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationWalletDeleteArgs, 'id'>>;
-  walletUpdate?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationWalletUpdateArgs, 'input'>>;
-};
+export type LocationResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Location'] = ResolversParentTypes['Location'],
+> = {
+  country?: Resolver<Maybe<ResolversTypes['Country']>, ParentType, ContextType>
+  region?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type MilestoneResolvers<
   ContextType = any,
@@ -4424,29 +4367,14 @@ export type NostrKeysResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
-export type NotificationConfigurationResolvers<ContextType = any, ParentType extends ResolversParentTypes['NotificationConfiguration'] = ResolversParentTypes['NotificationConfiguration']> = {
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  options?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  type?: Resolver<Maybe<ResolversTypes['SettingValueType']>, ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type NotificationSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['NotificationSettings'] = ResolversParentTypes['NotificationSettings']> = {
-  channel?: Resolver<Maybe<ResolversTypes['NotificationChannel']>, ParentType, ContextType>;
-  configurations?: Resolver<Array<ResolversTypes['NotificationConfiguration']>, ParentType, ContextType>;
-  isEnabled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  notificationType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type OtpResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['OTPResponse'] = ResolversParentTypes['OTPResponse']> = {
-  expiresAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  otpVerificationToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type NostrPrivateKeyResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['NostrPrivateKey'] = ResolversParentTypes['NostrPrivateKey'],
+> = {
+  hex?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  nsec?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type NostrPublicKeyResolvers<
   ContextType = any,
@@ -4528,53 +4456,14 @@ export type OrdersGetResponseResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
-export type ProfileNotificationSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProfileNotificationSettings'] = ResolversParentTypes['ProfileNotificationSettings']> = {
-  creatorSettings?: Resolver<Array<ResolversTypes['CreatorNotificationSettings']>, ParentType, ContextType>;
-  userSettings?: Resolver<ResolversTypes['UserNotificationSettings'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
-  ambassadors?: Resolver<Array<ResolversTypes['Ambassador']>, ParentType, ContextType>;
-  balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  balanceUsdCent?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  defaultGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  entries?: Resolver<Array<ResolversTypes['Entry']>, ParentType, ContextType, Partial<ProjectEntriesArgs>>;
-  entriesCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  followers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
-  followersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  funders?: Resolver<Array<ResolversTypes['Funder']>, ParentType, ContextType>;
-  fundersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType>;
-  fundingTxsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  goalsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  grantApplications?: Resolver<Array<ResolversTypes['GrantApplicant']>, ParentType, ContextType, Partial<ProjectGrantApplicationsArgs>>;
-  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  keys?: Resolver<ResolversTypes['ProjectKeys'], ParentType, ContextType>;
-  links?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
-  milestones?: Resolver<Array<ResolversTypes['Milestone']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  owners?: Resolver<Array<ResolversTypes['Owner']>, ParentType, ContextType>;
-  rewardCurrency?: Resolver<Maybe<ResolversTypes['RewardCurrency']>, ParentType, ContextType>;
-  rewards?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType>;
-  rewardsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  shortDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  sponsors?: Resolver<Array<ResolversTypes['Sponsor']>, ParentType, ContextType>;
-  statistics?: Resolver<Maybe<ResolversTypes['ProjectStatistics']>, ParentType, ContextType>;
-  status?: Resolver<Maybe<ResolversTypes['ProjectStatus']>, ParentType, ContextType>;
-  tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>;
-  thumbnailImage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  wallets?: Resolver<Array<ResolversTypes['Wallet']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type OwnerResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Owner'] = ResolversParentTypes['Owner'],
+> = {
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type OwnerOfResolvers<
   ContextType = any,
@@ -4603,16 +4492,14 @@ export type PaginationCursorResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
-export type ProjectFollowerStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectFollowerStats'] = ResolversParentTypes['ProjectFollowerStats']> = {
-  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ProjectFunderRewardStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectFunderRewardStats'] = ResolversParentTypes['ProjectFunderRewardStats']> = {
-  quantityGraph?: Resolver<Maybe<Array<Maybe<ResolversTypes['FunderRewardGraphSum']>>>, ParentType, ContextType>;
-  quantitySum?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type ProfileNotificationSettingsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProfileNotificationSettings'] = ResolversParentTypes['ProfileNotificationSettings'],
+> = {
+  creatorSettings?: Resolver<Array<ResolversTypes['CreatorNotificationSettings']>, ParentType, ContextType>
+  userSettings?: Resolver<ResolversTypes['UserNotificationSettings'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type ProjectResolvers<
   ContextType = any,
@@ -4664,15 +4551,13 @@ export type ProjectResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
-export type ProjectFundingTxStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectFundingTxStats'] = ResolversParentTypes['ProjectFundingTxStats']> = {
-  amountGraph?: Resolver<Maybe<Array<Maybe<ResolversTypes['FundingTxAmountGraph']>>>, ParentType, ContextType>;
-  amountSum?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  amountSumUsd?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  methodCount?: Resolver<Maybe<Array<Maybe<ResolversTypes['FundingTxMethodCount']>>>, ParentType, ContextType>;
-  methodSum?: Resolver<Maybe<Array<Maybe<ResolversTypes['FundingTxMethodSum']>>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type ProjectActivatedSubscriptionResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectActivatedSubscriptionResponse'] = ResolversParentTypes['ProjectActivatedSubscriptionResponse'],
+> = {
+  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type ProjectCountriesGetResultResolvers<
   ContextType = any,
@@ -4709,21 +4594,13 @@ export type ProjectFunderRewardStatsResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
-export type ProjectLeaderboardContributorsRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectLeaderboardContributorsRow'] = ResolversParentTypes['ProjectLeaderboardContributorsRow']> = {
-  commentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  funderId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ProjectRegionsGetResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRegionsGetResult'] = ResolversParentTypes['ProjectRegionsGetResult']> = {
-  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  region?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type ProjectFunderStatsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectFunderStats'] = ResolversParentTypes['ProjectFunderStats'],
+> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type ProjectFundingTxStatsResolvers<
   ContextType = any,
@@ -4767,14 +4644,14 @@ export type ProjectGoalDeleteResponseResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
-export type ProjectStatsBaseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectStatsBase'] = ResolversParentTypes['ProjectStatsBase']> = {
-  projectFollowers?: Resolver<Maybe<ResolversTypes['ProjectFollowerStats']>, ParentType, ContextType>;
-  projectFunderRewards?: Resolver<Maybe<ResolversTypes['ProjectFunderRewardStats']>, ParentType, ContextType>;
-  projectFunders?: Resolver<Maybe<ResolversTypes['ProjectFunderStats']>, ParentType, ContextType>;
-  projectFundingTxs?: Resolver<Maybe<ResolversTypes['ProjectFundingTxStats']>, ParentType, ContextType>;
-  projectViews?: Resolver<Maybe<ResolversTypes['ProjectViewStats']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type ProjectGoalsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectGoals'] = ResolversParentTypes['ProjectGoals'],
+> = {
+  completed?: Resolver<Array<ResolversTypes['ProjectGoal']>, ParentType, ContextType>
+  inProgress?: Resolver<Array<ResolversTypes['ProjectGoal']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type ProjectKeysResolvers<
   ContextType = any,
@@ -4838,52 +4715,14 @@ export type ProjectRewardResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  affiliateLinksGet?: Resolver<Array<ResolversTypes['AffiliateLink']>, ParentType, ContextType, RequireFields<QueryAffiliateLinksGetArgs, 'input'>>;
-  badges?: Resolver<Array<ResolversTypes['Badge']>, ParentType, ContextType>;
-  currencyQuoteGet?: Resolver<ResolversTypes['CurrencyQuoteGetResponse'], ParentType, ContextType, RequireFields<QueryCurrencyQuoteGetArgs, 'input'>>;
-  entry?: Resolver<Maybe<ResolversTypes['Entry']>, ParentType, ContextType, RequireFields<QueryEntryArgs, 'id'>>;
-  fundersGet?: Resolver<Array<ResolversTypes['Funder']>, ParentType, ContextType, RequireFields<QueryFundersGetArgs, 'input'>>;
-  fundingTx?: Resolver<ResolversTypes['FundingTx'], ParentType, ContextType, Partial<QueryFundingTxArgs>>;
-  fundingTxInvoiceSanctionCheckStatusGet?: Resolver<ResolversTypes['FundingTxInvoiceSanctionCheckStatusResponse'], ParentType, ContextType, RequireFields<QueryFundingTxInvoiceSanctionCheckStatusGetArgs, 'input'>>;
-  fundingTxsGet?: Resolver<Maybe<ResolversTypes['FundingTxsGetResponse']>, ParentType, ContextType, Partial<QueryFundingTxsGetArgs>>;
-  getActivities?: Resolver<Array<ResolversTypes['Activity']>, ParentType, ContextType, Partial<QueryGetActivitiesArgs>>;
-  getDashboardFunders?: Resolver<Array<ResolversTypes['Funder']>, ParentType, ContextType, Partial<QueryGetDashboardFundersArgs>>;
-  getEntries?: Resolver<Array<ResolversTypes['Entry']>, ParentType, ContextType, Partial<QueryGetEntriesArgs>>;
-  getProjectPubkey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<QueryGetProjectPubkeyArgs, 'projectId'>>;
-  getProjectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<QueryGetProjectRewardArgs, 'id'>>;
-  getSignedUploadUrl?: Resolver<ResolversTypes['SignedUploadUrl'], ParentType, ContextType, RequireFields<QueryGetSignedUploadUrlArgs, 'input'>>;
-  getWallet?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<QueryGetWalletArgs, 'id'>>;
-  grant?: Resolver<ResolversTypes['Grant'], ParentType, ContextType, RequireFields<QueryGrantArgs, 'input'>>;
-  grantStatistics?: Resolver<ResolversTypes['GrantStatistics'], ParentType, ContextType>;
-  grants?: Resolver<Array<ResolversTypes['Grant']>, ParentType, ContextType>;
-  leaderboardGlobalContributorsGet?: Resolver<Array<ResolversTypes['GlobalContributorLeaderboardRow']>, ParentType, ContextType, RequireFields<QueryLeaderboardGlobalContributorsGetArgs, 'input'>>;
-  leaderboardGlobalProjectsGet?: Resolver<Array<ResolversTypes['GlobalProjectLeaderboardRow']>, ParentType, ContextType, RequireFields<QueryLeaderboardGlobalProjectsGetArgs, 'input'>>;
-  lightningAddressVerify?: Resolver<ResolversTypes['LightningAddressVerifyResponse'], ParentType, ContextType, Partial<QueryLightningAddressVerifyArgs>>;
-  me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  orderGet?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<QueryOrderGetArgs, 'where'>>;
-  ordersGet?: Resolver<Maybe<ResolversTypes['OrdersGetResponse']>, ParentType, ContextType, RequireFields<QueryOrdersGetArgs, 'input'>>;
-  projectCountriesGet?: Resolver<Array<ResolversTypes['ProjectCountriesGetResult']>, ParentType, ContextType>;
-  projectGet?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryProjectGetArgs, 'where'>>;
-  projectGoals?: Resolver<ResolversTypes['ProjectGoals'], ParentType, ContextType, RequireFields<QueryProjectGoalsArgs, 'projectId'>>;
-  projectLeaderboardContributorsGet?: Resolver<Array<ResolversTypes['ProjectLeaderboardContributorsRow']>, ParentType, ContextType, RequireFields<QueryProjectLeaderboardContributorsGetArgs, 'input'>>;
-  projectNotificationSettingsGet?: Resolver<ResolversTypes['CreatorNotificationSettings'], ParentType, ContextType, RequireFields<QueryProjectNotificationSettingsGetArgs, 'projectId'>>;
-  projectRegionsGet?: Resolver<Array<ResolversTypes['ProjectRegionsGetResult']>, ParentType, ContextType>;
-  projectRewardCategoriesGet?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  projectRewardsGet?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType, RequireFields<QueryProjectRewardsGetArgs, 'input'>>;
-  projectStatsGet?: Resolver<ResolversTypes['ProjectStats'], ParentType, ContextType, RequireFields<QueryProjectStatsGetArgs, 'input'>>;
-  projectsGet?: Resolver<ResolversTypes['ProjectsResponse'], ParentType, ContextType, Partial<QueryProjectsGetArgs>>;
-  projectsMostFundedOfTheWeekGet?: Resolver<Array<ResolversTypes['projectsMostFundedOfTheWeekGet']>, ParentType, ContextType, Partial<QueryProjectsMostFundedOfTheWeekGetArgs>>;
-  projectsSummary?: Resolver<ResolversTypes['ProjectsSummary'], ParentType, ContextType>;
-  statusCheck?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  tagsGet?: Resolver<Array<ResolversTypes['TagsGetResult']>, ParentType, ContextType>;
-  tagsMostFundedGet?: Resolver<Array<ResolversTypes['TagsMostFundedGetResult']>, ParentType, ContextType>;
-  user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'where'>>;
-  userBadge?: Resolver<Maybe<ResolversTypes['UserBadge']>, ParentType, ContextType, RequireFields<QueryUserBadgeArgs, 'userBadgeId'>>;
-  userBadges?: Resolver<Array<ResolversTypes['UserBadge']>, ParentType, ContextType, RequireFields<QueryUserBadgesArgs, 'input'>>;
-  userNotificationSettingsGet?: Resolver<ResolversTypes['ProfileNotificationSettings'], ParentType, ContextType, RequireFields<QueryUserNotificationSettingsGetArgs, 'userId'>>;
-};
+export type ProjectStatisticsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectStatistics'] = ResolversParentTypes['ProjectStatistics'],
+> = {
+  totalPageviews?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  totalVisitors?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type ProjectStatsResolvers<
   ContextType = any,
@@ -5119,34 +4958,14 @@ export type QueryResolvers<
   >
 }
 
-export type TagsMostFundedGetResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['TagsMostFundedGetResult'] = ResolversParentTypes['TagsMostFundedGetResult']> = {
-  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
-  badges?: Resolver<Array<ResolversTypes['UserBadge']>, ParentType, ContextType>;
-  bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  contributions?: Resolver<Array<ResolversTypes['UserProjectContribution']>, ParentType, ContextType>;
-  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  emailVerifiedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  entries?: Resolver<Array<ResolversTypes['Entry']>, ParentType, ContextType, Partial<UserEntriesArgs>>;
-  externalAccounts?: Resolver<Array<ResolversTypes['ExternalAccount']>, ParentType, ContextType>;
-  fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType>;
-  hasSocialAccount?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  isEmailVerified?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  orders?: Resolver<Maybe<Array<ResolversTypes['Order']>>, ParentType, ContextType>;
-  ownerOf?: Resolver<Array<ResolversTypes['OwnerOf']>, ParentType, ContextType>;
-  projectFollows?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType>;
-  projects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType, Partial<UserProjectsArgs>>;
-  ranking?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  wallet?: Resolver<Maybe<ResolversTypes['Wallet']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type SignedUploadUrlResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['SignedUploadUrl'] = ResolversParentTypes['SignedUploadUrl'],
+> = {
+  distributionUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  uploadUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type SourceResourceResolvers<
   ContextType = any,
@@ -5155,20 +4974,19 @@ export type SourceResourceResolvers<
   __resolveType: TypeResolveFn<'Entry' | 'Project', ParentType, ContextType>
 }
 
-export type UserNotificationSettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserNotificationSettings'] = ResolversParentTypes['UserNotificationSettings']> = {
-  notificationSettings?: Resolver<Array<ResolversTypes['NotificationSettings']>, ParentType, ContextType>;
-  userId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type UserProjectContributionResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserProjectContribution'] = ResolversParentTypes['UserProjectContribution']> = {
-  funder?: Resolver<Maybe<ResolversTypes['Funder']>, ParentType, ContextType>;
-  isAmbassador?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  isFunder?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  isSponsor?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type SponsorResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Sponsor'] = ResolversParentTypes['Sponsor'],
+> = {
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  status?: Resolver<ResolversTypes['SponsorStatus'], ParentType, ContextType>
+  url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type SubscriptionResolvers<
   ContextType = any,
@@ -5372,128 +5190,128 @@ export type ProjectsMostFundedOfTheWeekGetResolvers<
 }
 
 export type Resolvers<ContextType = any> = {
-  Activity?: ActivityResolvers<ContextType>;
-  ActivityResource?: ActivityResourceResolvers<ContextType>;
-  AffiliateLink?: AffiliateLinkResolvers<ContextType>;
-  AffiliatePaymentConfirmResponse?: AffiliatePaymentConfirmResponseResolvers<ContextType>;
-  AffiliatePayoutsStats?: AffiliatePayoutsStatsResolvers<ContextType>;
-  AffiliateSalesStats?: AffiliateSalesStatsResolvers<ContextType>;
-  AffiliateStats?: AffiliateStatsResolvers<ContextType>;
-  Ambassador?: AmbassadorResolvers<ContextType>;
-  AmountSummary?: AmountSummaryResolvers<ContextType>;
-  Badge?: BadgeResolvers<ContextType>;
-  BigInt?: GraphQLScalarType;
-  BitcoinQuote?: BitcoinQuoteResolvers<ContextType>;
-  BoardVoteGrant?: BoardVoteGrantResolvers<ContextType>;
-  CommunityVoteGrant?: CommunityVoteGrantResolvers<ContextType>;
-  CompetitionVoteGrantVoteSummary?: CompetitionVoteGrantVoteSummaryResolvers<ContextType>;
-  ConnectionDetails?: ConnectionDetailsResolvers<ContextType>;
-  Country?: CountryResolvers<ContextType>;
-  CreatorNotificationSettings?: CreatorNotificationSettingsResolvers<ContextType>;
-  CreatorNotificationSettingsProject?: CreatorNotificationSettingsProjectResolvers<ContextType>;
-  CurrencyQuoteGetResponse?: CurrencyQuoteGetResponseResolvers<ContextType>;
-  CursorPaginationResponse?: CursorPaginationResponseResolvers<ContextType>;
-  Date?: GraphQLScalarType;
-  DatetimeRange?: DatetimeRangeResolvers<ContextType>;
-  DeleteUserResponse?: DeleteUserResponseResolvers<ContextType>;
-  Entry?: EntryResolvers<ContextType>;
-  EntryPublishedSubscriptionResponse?: EntryPublishedSubscriptionResponseResolvers<ContextType>;
-  ExternalAccount?: ExternalAccountResolvers<ContextType>;
-  Funder?: FunderResolvers<ContextType>;
-  FunderRewardGraphSum?: FunderRewardGraphSumResolvers<ContextType>;
-  FundingCancelResponse?: FundingCancelResponseResolvers<ContextType>;
-  FundingConfirmResponse?: FundingConfirmResponseResolvers<ContextType>;
-  FundingMutationResponse?: FundingMutationResponseResolvers<ContextType>;
-  FundingPendingResponse?: FundingPendingResponseResolvers<ContextType>;
-  FundingQueryResponse?: FundingQueryResponseResolvers<ContextType>;
-  FundingTx?: FundingTxResolvers<ContextType>;
-  FundingTxAmountGraph?: FundingTxAmountGraphResolvers<ContextType>;
-  FundingTxInvoiceSanctionCheckStatusResponse?: FundingTxInvoiceSanctionCheckStatusResponseResolvers<ContextType>;
-  FundingTxMethodCount?: FundingTxMethodCountResolvers<ContextType>;
-  FundingTxMethodSum?: FundingTxMethodSumResolvers<ContextType>;
-  FundingTxStatusUpdatedSubscriptionResponse?: FundingTxStatusUpdatedSubscriptionResponseResolvers<ContextType>;
-  FundingTxsGetResponse?: FundingTxsGetResponseResolvers<ContextType>;
-  FundinginvoiceCancel?: FundinginvoiceCancelResolvers<ContextType>;
-  GenerateAffiliatePaymentRequestResponse?: GenerateAffiliatePaymentRequestResponseResolvers<ContextType>;
-  GlobalContributorLeaderboardRow?: GlobalContributorLeaderboardRowResolvers<ContextType>;
-  GlobalProjectLeaderboardRow?: GlobalProjectLeaderboardRowResolvers<ContextType>;
-  Grant?: GrantResolvers<ContextType>;
-  GrantApplicant?: GrantApplicantResolvers<ContextType>;
-  GrantApplicantContributor?: GrantApplicantContributorResolvers<ContextType>;
-  GrantApplicantFunding?: GrantApplicantFundingResolvers<ContextType>;
-  GrantBoardMember?: GrantBoardMemberResolvers<ContextType>;
-  GrantStatistics?: GrantStatisticsResolvers<ContextType>;
-  GrantStatisticsApplicant?: GrantStatisticsApplicantResolvers<ContextType>;
-  GrantStatisticsGrant?: GrantStatisticsGrantResolvers<ContextType>;
-  GrantStatus?: GrantStatusResolvers<ContextType>;
-  GraphSumData?: GraphSumDataResolvers<ContextType>;
-  LightningAddressConnectionDetails?: LightningAddressConnectionDetailsResolvers<ContextType>;
-  LightningAddressContributionLimits?: LightningAddressContributionLimitsResolvers<ContextType>;
-  LightningAddressVerifyResponse?: LightningAddressVerifyResponseResolvers<ContextType>;
-  LndConnectionDetails?: LndConnectionDetailsResolvers<ContextType>;
-  LndConnectionDetailsPrivate?: LndConnectionDetailsPrivateResolvers<ContextType>;
-  LndConnectionDetailsPublic?: LndConnectionDetailsPublicResolvers<ContextType>;
-  Location?: LocationResolvers<ContextType>;
-  Milestone?: MilestoneResolvers<ContextType>;
-  Mutation?: MutationResolvers<ContextType>;
-  MutationResponse?: MutationResponseResolvers<ContextType>;
-  NostrKeys?: NostrKeysResolvers<ContextType>;
-  NostrPrivateKey?: NostrPrivateKeyResolvers<ContextType>;
-  NostrPublicKey?: NostrPublicKeyResolvers<ContextType>;
-  NotificationConfiguration?: NotificationConfigurationResolvers<ContextType>;
-  NotificationSettings?: NotificationSettingsResolvers<ContextType>;
-  OTPResponse?: OtpResponseResolvers<ContextType>;
-  Order?: OrderResolvers<ContextType>;
-  OrderItem?: OrderItemResolvers<ContextType>;
-  OrdersGetResponse?: OrdersGetResponseResolvers<ContextType>;
-  Owner?: OwnerResolvers<ContextType>;
-  OwnerOf?: OwnerOfResolvers<ContextType>;
-  PageViewCountGraph?: PageViewCountGraphResolvers<ContextType>;
-  PaginationCursor?: PaginationCursorResolvers<ContextType>;
-  ProfileNotificationSettings?: ProfileNotificationSettingsResolvers<ContextType>;
-  Project?: ProjectResolvers<ContextType>;
-  ProjectActivatedSubscriptionResponse?: ProjectActivatedSubscriptionResponseResolvers<ContextType>;
-  ProjectCountriesGetResult?: ProjectCountriesGetResultResolvers<ContextType>;
-  ProjectDeleteResponse?: ProjectDeleteResponseResolvers<ContextType>;
-  ProjectFollowerStats?: ProjectFollowerStatsResolvers<ContextType>;
-  ProjectFunderRewardStats?: ProjectFunderRewardStatsResolvers<ContextType>;
-  ProjectFunderStats?: ProjectFunderStatsResolvers<ContextType>;
-  ProjectFundingTxStats?: ProjectFundingTxStatsResolvers<ContextType>;
-  ProjectGoal?: ProjectGoalResolvers<ContextType>;
-  ProjectGoalDeleteResponse?: ProjectGoalDeleteResponseResolvers<ContextType>;
-  ProjectGoals?: ProjectGoalsResolvers<ContextType>;
-  ProjectKeys?: ProjectKeysResolvers<ContextType>;
-  ProjectLeaderboardContributorsRow?: ProjectLeaderboardContributorsRowResolvers<ContextType>;
-  ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>;
-  ProjectReward?: ProjectRewardResolvers<ContextType>;
-  ProjectStatistics?: ProjectStatisticsResolvers<ContextType>;
-  ProjectStats?: ProjectStatsResolvers<ContextType>;
-  ProjectStatsBase?: ProjectStatsBaseResolvers<ContextType>;
-  ProjectViewBaseStats?: ProjectViewBaseStatsResolvers<ContextType>;
-  ProjectViewStats?: ProjectViewStatsResolvers<ContextType>;
-  ProjectsResponse?: ProjectsResponseResolvers<ContextType>;
-  ProjectsSummary?: ProjectsSummaryResolvers<ContextType>;
-  Query?: QueryResolvers<ContextType>;
-  SignedUploadUrl?: SignedUploadUrlResolvers<ContextType>;
-  SourceResource?: SourceResourceResolvers<ContextType>;
-  Sponsor?: SponsorResolvers<ContextType>;
-  Subscription?: SubscriptionResolvers<ContextType>;
-  Swap?: SwapResolvers<ContextType>;
-  Tag?: TagResolvers<ContextType>;
-  TagsGetResult?: TagsGetResultResolvers<ContextType>;
-  TagsMostFundedGetResult?: TagsMostFundedGetResultResolvers<ContextType>;
-  User?: UserResolvers<ContextType>;
-  UserBadge?: UserBadgeResolvers<ContextType>;
-  UserNotificationSettings?: UserNotificationSettingsResolvers<ContextType>;
-  UserProjectContribution?: UserProjectContributionResolvers<ContextType>;
-  Wallet?: WalletResolvers<ContextType>;
-  WalletContributionLimits?: WalletContributionLimitsResolvers<ContextType>;
-  WalletLimits?: WalletLimitsResolvers<ContextType>;
-  WalletOffChainContributionLimits?: WalletOffChainContributionLimitsResolvers<ContextType>;
-  WalletOnChainContributionLimits?: WalletOnChainContributionLimitsResolvers<ContextType>;
-  WalletState?: WalletStateResolvers<ContextType>;
-  projectsMostFundedOfTheWeekGet?: ProjectsMostFundedOfTheWeekGetResolvers<ContextType>;
-};
+  Activity?: ActivityResolvers<ContextType>
+  ActivityResource?: ActivityResourceResolvers<ContextType>
+  AffiliateLink?: AffiliateLinkResolvers<ContextType>
+  AffiliatePaymentConfirmResponse?: AffiliatePaymentConfirmResponseResolvers<ContextType>
+  AffiliatePayoutsStats?: AffiliatePayoutsStatsResolvers<ContextType>
+  AffiliateSalesStats?: AffiliateSalesStatsResolvers<ContextType>
+  AffiliateStats?: AffiliateStatsResolvers<ContextType>
+  Ambassador?: AmbassadorResolvers<ContextType>
+  AmountSummary?: AmountSummaryResolvers<ContextType>
+  Badge?: BadgeResolvers<ContextType>
+  BigInt?: GraphQLScalarType
+  BitcoinQuote?: BitcoinQuoteResolvers<ContextType>
+  BoardVoteGrant?: BoardVoteGrantResolvers<ContextType>
+  CommunityVoteGrant?: CommunityVoteGrantResolvers<ContextType>
+  CompetitionVoteGrantVoteSummary?: CompetitionVoteGrantVoteSummaryResolvers<ContextType>
+  ConnectionDetails?: ConnectionDetailsResolvers<ContextType>
+  Country?: CountryResolvers<ContextType>
+  CreatorNotificationSettings?: CreatorNotificationSettingsResolvers<ContextType>
+  CreatorNotificationSettingsProject?: CreatorNotificationSettingsProjectResolvers<ContextType>
+  CurrencyQuoteGetResponse?: CurrencyQuoteGetResponseResolvers<ContextType>
+  CursorPaginationResponse?: CursorPaginationResponseResolvers<ContextType>
+  Date?: GraphQLScalarType
+  DatetimeRange?: DatetimeRangeResolvers<ContextType>
+  DeleteUserResponse?: DeleteUserResponseResolvers<ContextType>
+  Entry?: EntryResolvers<ContextType>
+  EntryPublishedSubscriptionResponse?: EntryPublishedSubscriptionResponseResolvers<ContextType>
+  ExternalAccount?: ExternalAccountResolvers<ContextType>
+  Funder?: FunderResolvers<ContextType>
+  FunderRewardGraphSum?: FunderRewardGraphSumResolvers<ContextType>
+  FundingCancelResponse?: FundingCancelResponseResolvers<ContextType>
+  FundingConfirmResponse?: FundingConfirmResponseResolvers<ContextType>
+  FundingMutationResponse?: FundingMutationResponseResolvers<ContextType>
+  FundingPendingResponse?: FundingPendingResponseResolvers<ContextType>
+  FundingQueryResponse?: FundingQueryResponseResolvers<ContextType>
+  FundingTx?: FundingTxResolvers<ContextType>
+  FundingTxAmountGraph?: FundingTxAmountGraphResolvers<ContextType>
+  FundingTxInvoiceSanctionCheckStatusResponse?: FundingTxInvoiceSanctionCheckStatusResponseResolvers<ContextType>
+  FundingTxMethodCount?: FundingTxMethodCountResolvers<ContextType>
+  FundingTxMethodSum?: FundingTxMethodSumResolvers<ContextType>
+  FundingTxStatusUpdatedSubscriptionResponse?: FundingTxStatusUpdatedSubscriptionResponseResolvers<ContextType>
+  FundingTxsGetResponse?: FundingTxsGetResponseResolvers<ContextType>
+  FundinginvoiceCancel?: FundinginvoiceCancelResolvers<ContextType>
+  GenerateAffiliatePaymentRequestResponse?: GenerateAffiliatePaymentRequestResponseResolvers<ContextType>
+  GlobalContributorLeaderboardRow?: GlobalContributorLeaderboardRowResolvers<ContextType>
+  GlobalProjectLeaderboardRow?: GlobalProjectLeaderboardRowResolvers<ContextType>
+  Grant?: GrantResolvers<ContextType>
+  GrantApplicant?: GrantApplicantResolvers<ContextType>
+  GrantApplicantContributor?: GrantApplicantContributorResolvers<ContextType>
+  GrantApplicantFunding?: GrantApplicantFundingResolvers<ContextType>
+  GrantBoardMember?: GrantBoardMemberResolvers<ContextType>
+  GrantStatistics?: GrantStatisticsResolvers<ContextType>
+  GrantStatisticsApplicant?: GrantStatisticsApplicantResolvers<ContextType>
+  GrantStatisticsGrant?: GrantStatisticsGrantResolvers<ContextType>
+  GrantStatus?: GrantStatusResolvers<ContextType>
+  GraphSumData?: GraphSumDataResolvers<ContextType>
+  LightningAddressConnectionDetails?: LightningAddressConnectionDetailsResolvers<ContextType>
+  LightningAddressContributionLimits?: LightningAddressContributionLimitsResolvers<ContextType>
+  LightningAddressVerifyResponse?: LightningAddressVerifyResponseResolvers<ContextType>
+  LndConnectionDetails?: LndConnectionDetailsResolvers<ContextType>
+  LndConnectionDetailsPrivate?: LndConnectionDetailsPrivateResolvers<ContextType>
+  LndConnectionDetailsPublic?: LndConnectionDetailsPublicResolvers<ContextType>
+  Location?: LocationResolvers<ContextType>
+  Milestone?: MilestoneResolvers<ContextType>
+  Mutation?: MutationResolvers<ContextType>
+  MutationResponse?: MutationResponseResolvers<ContextType>
+  NostrKeys?: NostrKeysResolvers<ContextType>
+  NostrPrivateKey?: NostrPrivateKeyResolvers<ContextType>
+  NostrPublicKey?: NostrPublicKeyResolvers<ContextType>
+  NotificationConfiguration?: NotificationConfigurationResolvers<ContextType>
+  NotificationSettings?: NotificationSettingsResolvers<ContextType>
+  OTPResponse?: OtpResponseResolvers<ContextType>
+  Order?: OrderResolvers<ContextType>
+  OrderItem?: OrderItemResolvers<ContextType>
+  OrdersGetResponse?: OrdersGetResponseResolvers<ContextType>
+  Owner?: OwnerResolvers<ContextType>
+  OwnerOf?: OwnerOfResolvers<ContextType>
+  PageViewCountGraph?: PageViewCountGraphResolvers<ContextType>
+  PaginationCursor?: PaginationCursorResolvers<ContextType>
+  ProfileNotificationSettings?: ProfileNotificationSettingsResolvers<ContextType>
+  Project?: ProjectResolvers<ContextType>
+  ProjectActivatedSubscriptionResponse?: ProjectActivatedSubscriptionResponseResolvers<ContextType>
+  ProjectCountriesGetResult?: ProjectCountriesGetResultResolvers<ContextType>
+  ProjectDeleteResponse?: ProjectDeleteResponseResolvers<ContextType>
+  ProjectFollowerStats?: ProjectFollowerStatsResolvers<ContextType>
+  ProjectFunderRewardStats?: ProjectFunderRewardStatsResolvers<ContextType>
+  ProjectFunderStats?: ProjectFunderStatsResolvers<ContextType>
+  ProjectFundingTxStats?: ProjectFundingTxStatsResolvers<ContextType>
+  ProjectGoal?: ProjectGoalResolvers<ContextType>
+  ProjectGoalDeleteResponse?: ProjectGoalDeleteResponseResolvers<ContextType>
+  ProjectGoals?: ProjectGoalsResolvers<ContextType>
+  ProjectKeys?: ProjectKeysResolvers<ContextType>
+  ProjectLeaderboardContributorsRow?: ProjectLeaderboardContributorsRowResolvers<ContextType>
+  ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>
+  ProjectReward?: ProjectRewardResolvers<ContextType>
+  ProjectStatistics?: ProjectStatisticsResolvers<ContextType>
+  ProjectStats?: ProjectStatsResolvers<ContextType>
+  ProjectStatsBase?: ProjectStatsBaseResolvers<ContextType>
+  ProjectViewBaseStats?: ProjectViewBaseStatsResolvers<ContextType>
+  ProjectViewStats?: ProjectViewStatsResolvers<ContextType>
+  ProjectsResponse?: ProjectsResponseResolvers<ContextType>
+  ProjectsSummary?: ProjectsSummaryResolvers<ContextType>
+  Query?: QueryResolvers<ContextType>
+  SignedUploadUrl?: SignedUploadUrlResolvers<ContextType>
+  SourceResource?: SourceResourceResolvers<ContextType>
+  Sponsor?: SponsorResolvers<ContextType>
+  Subscription?: SubscriptionResolvers<ContextType>
+  Swap?: SwapResolvers<ContextType>
+  Tag?: TagResolvers<ContextType>
+  TagsGetResult?: TagsGetResultResolvers<ContextType>
+  TagsMostFundedGetResult?: TagsMostFundedGetResultResolvers<ContextType>
+  User?: UserResolvers<ContextType>
+  UserBadge?: UserBadgeResolvers<ContextType>
+  UserNotificationSettings?: UserNotificationSettingsResolvers<ContextType>
+  UserProjectContribution?: UserProjectContributionResolvers<ContextType>
+  Wallet?: WalletResolvers<ContextType>
+  WalletContributionLimits?: WalletContributionLimitsResolvers<ContextType>
+  WalletLimits?: WalletLimitsResolvers<ContextType>
+  WalletOffChainContributionLimits?: WalletOffChainContributionLimitsResolvers<ContextType>
+  WalletOnChainContributionLimits?: WalletOnChainContributionLimitsResolvers<ContextType>
+  WalletState?: WalletStateResolvers<ContextType>
+  projectsMostFundedOfTheWeekGet?: ProjectsMostFundedOfTheWeekGetResolvers<ContextType>
+}
 
 export type EmailUpdateUserFragment = { __typename?: 'User'; email?: string | null; isEmailVerified: boolean; id: any }
 
@@ -5600,7 +5418,84 @@ export type FundingTxWithInvoiceStatusFragment = {
   creatorEmail?: string | null
 }
 
-export type ProjectDefaultGoalFragment = { __typename?: 'ProjectGoal', id: any, title: string, targetAmount: number, currency: ProjectGoalCurrency, amountContributed: number };
+export type FundingTxFragment = {
+  __typename?: 'FundingTx'
+  id: any
+  uuid?: string | null
+  invoiceId?: string | null
+  paymentRequest?: string | null
+  amount: number
+  status: FundingStatus
+  invoiceStatus: InvoiceStatus
+  comment?: string | null
+  media?: string | null
+  paidAt?: any | null
+  onChain: boolean
+  address?: string | null
+  source: string
+  method?: FundingMethod | null
+  projectId: any
+  creatorEmail?: string | null
+  createdAt?: any | null
+  bitcoinQuote?: { __typename?: 'BitcoinQuote'; quote: number; quoteCurrency: QuoteCurrency } | null
+  funder: {
+    __typename?: 'Funder'
+    id: any
+    amountFunded?: number | null
+    timesFunded?: number | null
+    confirmedAt?: any | null
+    user?: { __typename?: 'User'; id: any; username: string; imageUrl?: string | null } | null
+  }
+}
+
+export type FundingTxForDownloadInvoiceFragment = {
+  __typename?: 'FundingTx'
+  id: any
+  donationAmount: number
+  amountPaid: number
+  uuid?: string | null
+  projectId: any
+  paidAt?: any | null
+  createdAt?: any | null
+  status: FundingStatus
+  funder: { __typename?: 'Funder'; user?: { __typename?: 'User'; username: string } | null }
+  order?: {
+    __typename?: 'Order'
+    totalInSats: number
+    items: Array<{
+      __typename?: 'OrderItem'
+      quantity: number
+      unitPriceInSats: number
+      item: { __typename?: 'ProjectReward'; name: string }
+    }>
+  } | null
+  bitcoinQuote?: { __typename?: 'BitcoinQuote'; quote: number; quoteCurrency: QuoteCurrency } | null
+}
+
+export type ProjectDefaultGoalFragment = {
+  __typename?: 'ProjectGoal'
+  id: any
+  title: string
+  targetAmount: number
+  currency: ProjectGoalCurrency
+  amountContributed: number
+}
+
+export type ProjectGoalFragment = {
+  __typename?: 'ProjectGoal'
+  id: any
+  title: string
+  description?: string | null
+  targetAmount: number
+  currency: ProjectGoalCurrency
+  status: ProjectGoalStatus
+  projectId: any
+  amountContributed: number
+  createdAt: any
+  updatedAt: any
+  hasReceivedContribution: boolean
+  emojiUnifiedCode?: string | null
+}
 
 export type BoardVoteGrantsFragmentFragment = {
   __typename?: 'BoardVoteGrant'
@@ -6124,10 +6019,16 @@ export type UserMeFragment = {
   }>
 }
 
-export type UserMeFragment = { __typename?: 'User', id: any, username: string, imageUrl?: string | null, email?: string | null, ranking?: any | null, isEmailVerified: boolean, hasSocialAccount: boolean, externalAccounts: Array<(
-    { __typename?: 'ExternalAccount' }
-    & ExternalAccountFragment
-  )>, ownerOf: Array<{ __typename?: 'OwnerOf', project?: { __typename?: 'Project', id: any, name: string, image?: string | null, thumbnailImage?: string | null, title: string, status?: ProjectStatus | null, createdAt: string } | null }> };
+export type UserForProfilePageFragment = {
+  __typename?: 'User'
+  id: any
+  bio?: string | null
+  username: string
+  imageUrl?: string | null
+  ranking?: any | null
+  isEmailVerified: boolean
+  externalAccounts: Array<{ __typename?: 'ExternalAccount' } & ExternalAccountFragment>
+}
 
 export type UserForAvatarFragment = {
   __typename?: 'User'
@@ -6244,7 +6145,45 @@ export type UserEmailVerifyMutationVariables = Exact<{
 
 export type UserEmailVerifyMutation = { __typename?: 'Mutation'; userEmailVerify: boolean }
 
-export type UserEmailVerifyMutation = { __typename?: 'Mutation', userEmailVerify: boolean };
+export type FundMutationVariables = Exact<{
+  input: FundingInput
+}>
+
+export type FundMutation = {
+  __typename?: 'Mutation'
+  fund: {
+    __typename?: 'FundingMutationResponse'
+    fundingTx?: ({ __typename?: 'FundingTx' } & FundingTxFragment) | null
+    swap?: { __typename?: 'Swap'; json: string } | null
+  }
+}
+
+export type RefreshFundingInvoiceMutationVariables = Exact<{
+  fundingTxID: Scalars['BigInt']['input']
+}>
+
+export type RefreshFundingInvoiceMutation = {
+  __typename?: 'Mutation'
+  fundingInvoiceRefresh: { __typename?: 'FundingTx' } & FundingTxWithInvoiceStatusFragment
+}
+
+export type FundingInvoiceCancelMutationVariables = Exact<{
+  invoiceId: Scalars['String']['input']
+}>
+
+export type FundingInvoiceCancelMutation = {
+  __typename?: 'Mutation'
+  fundingInvoiceCancel: { __typename?: 'FundinginvoiceCancel'; id: any; success: boolean }
+}
+
+export type FundingTxEmailUpdateMutationVariables = Exact<{
+  input?: InputMaybe<FundingTxEmailUpdateInput>
+}>
+
+export type FundingTxEmailUpdateMutation = {
+  __typename?: 'Mutation'
+  fundingTxEmailUpdate: { __typename?: 'FundingTx'; id: any; email?: string | null }
+}
 
 export type GrantApplyMutationVariables = Exact<{
   input?: InputMaybe<GrantApplyInput>
@@ -6342,22 +6281,6 @@ export type ActivityForLandingPageFragment = {
     | { __typename?: 'ProjectGoal' }
     | ({ __typename?: 'ProjectReward' } & ProjectRewardForLandingPageFragment)
 }
-
-export type UserDeleteMutation = { __typename?: 'Mutation', userDelete: { __typename?: 'DeleteUserResponse', message?: string | null, success: boolean } };
-
-export type ActivityForLandingPageFragment = { __typename?: 'Activity', id: string, createdAt: any, resource: (
-    { __typename?: 'Entry' }
-    & EntryForLandingPageFragment
-  ) | (
-    { __typename?: 'FundingTx' }
-    & FundingTxForLandingPageFragment
-  ) | (
-    { __typename?: 'Project' }
-    & ProjectForLandingPageFragment
-  ) | { __typename?: 'ProjectGoal' } | (
-    { __typename?: 'ProjectReward' }
-    & ProjectRewardForLandingPageFragment
-  ) };
 
 export type ActivitiesForLandingPageQueryVariables = Exact<{
   input?: InputMaybe<GetActivitiesInput>
@@ -6480,9 +6403,62 @@ export type SignedUploadUrlQuery = {
   getSignedUploadUrl: { __typename?: 'SignedUploadUrl'; uploadUrl: string; distributionUrl: string }
 }
 
-export type SignedUploadUrlQuery = { __typename?: 'Query', getSignedUploadUrl: { __typename?: 'SignedUploadUrl', uploadUrl: string, distributionUrl: string } };
+export type GetFundingTxQueryVariables = Exact<{
+  id: Scalars['BigInt']['input']
+}>
 
-export type FundingTxForUserContributionFragment = { __typename?: 'FundingTx', id: any, comment?: string | null, amount: number, paidAt?: any | null, onChain: boolean, media?: string | null, source: string, method?: FundingMethod | null, projectId: any, funder: { __typename?: 'Funder', id: any, user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', id: any, externalUsername: string, public: boolean, accountType: string }> } | null }, sourceResource?: { __typename?: 'Entry', id: any, createdAt: string, image?: string | null } | { __typename?: 'Project', id: any, createdAt: string, name: string, title: string, thumbnailImage?: string | null, image?: string | null } | null };
+export type GetFundingTxQuery = { __typename?: 'Query'; fundingTx: { __typename?: 'FundingTx' } & FundingTxFragment }
+
+export type FundingTxForUserContributionFragment = {
+  __typename?: 'FundingTx'
+  id: any
+  comment?: string | null
+  amount: number
+  paidAt?: any | null
+  onChain: boolean
+  media?: string | null
+  source: string
+  method?: FundingMethod | null
+  projectId: any
+  funder: {
+    __typename?: 'Funder'
+    id: any
+    user?: {
+      __typename?: 'User'
+      id: any
+      username: string
+      imageUrl?: string | null
+      externalAccounts: Array<{
+        __typename?: 'ExternalAccount'
+        id: any
+        externalUsername: string
+        public: boolean
+        accountType: string
+      }>
+    } | null
+  }
+  sourceResource?:
+    | { __typename?: 'Entry'; id: any; createdAt: string; image?: string | null }
+    | {
+        __typename?: 'Project'
+        id: any
+        createdAt: string
+        name: string
+        title: string
+        thumbnailImage?: string | null
+        image?: string | null
+      }
+    | null
+}
+
+export type FundingTxWithInvoiceStatusQueryVariables = Exact<{
+  fundingTxID: Scalars['BigInt']['input']
+}>
+
+export type FundingTxWithInvoiceStatusQuery = {
+  __typename?: 'Query'
+  fundingTx: { __typename?: 'FundingTx' } & FundingTxWithInvoiceStatusFragment
+}
 
 export type FundingTxsForLandingPageQueryVariables = Exact<{
   input?: InputMaybe<GetFundingTxsInput>
@@ -6505,10 +6481,14 @@ export type FundingTxForUserContributionQuery = {
   fundingTx: { __typename?: 'FundingTx' } & FundingTxForUserContributionFragment
 }
 
-export type FundingTxForUserContributionQuery = { __typename?: 'Query', fundingTx: (
-    { __typename?: 'FundingTx' }
-    & FundingTxForUserContributionFragment
-  ) };
+export type FundingTxForDownloadInvoiceQueryVariables = Exact<{
+  fundingTxId: Scalars['BigInt']['input']
+}>
+
+export type FundingTxForDownloadInvoiceQuery = {
+  __typename?: 'Query'
+  fundingTx: { __typename?: 'FundingTx' } & FundingTxForDownloadInvoiceFragment
+}
 
 export type ProjectDefaultGoalQueryVariables = Exact<{
   projectId: Scalars['BigInt']['input']
@@ -6907,46 +6887,9 @@ export type ActivityCreatedSubscription = {
     | ({ __typename?: 'ProjectReward' } & ProjectRewardForLandingPageFragment)
 }
 
-export type ActivityCreatedSubscription = { __typename?: 'Subscription', activityCreated: (
-    { __typename?: 'Entry' }
-    & EntryForLandingPageFragment
-  ) | (
-    { __typename?: 'FundingTx' }
-    & FundingTxForLandingPageFragment
-  ) | (
-    { __typename?: 'Project' }
-    & ProjectForLandingPageFragment
-  ) | { __typename?: 'ProjectGoal' } | (
-    { __typename?: 'ProjectReward' }
-    & ProjectRewardForLandingPageFragment
-  ) };
-
-export type NotificationConfigurationFragment = { __typename?: 'NotificationConfiguration', id: any, name: string, description?: string | null, value: string, type?: SettingValueType | null, options: Array<string> };
-
-export type NotificationSettingsFragment = { __typename?: 'NotificationSettings', notificationType: string, isEnabled: boolean, configurations: Array<(
-    { __typename?: 'NotificationConfiguration' }
-    & NotificationConfigurationFragment
-  )> };
-
-export type ProfileNotificationsSettingsFragment = { __typename?: 'ProfileNotificationSettings', userSettings: { __typename?: 'UserNotificationSettings', userId: any, notificationSettings: Array<(
-      { __typename?: 'NotificationSettings' }
-      & NotificationSettingsFragment
-    )> }, creatorSettings: Array<{ __typename?: 'CreatorNotificationSettings', userId: any, project: { __typename?: 'CreatorNotificationSettingsProject', id: any, title: string, image?: string | null }, notificationSettings: Array<(
-      { __typename?: 'NotificationSettings' }
-      & NotificationSettingsFragment
-    )> }> };
-
-export type UserNotificationsSettingsFragment = { __typename?: 'ProfileNotificationSettings', userSettings: { __typename?: 'UserNotificationSettings', userId: any, notificationSettings: Array<(
-      { __typename?: 'NotificationSettings' }
-      & NotificationSettingsFragment
-    )> } };
-
-export type ProjectNotificationSettingsFragment = { __typename?: 'CreatorNotificationSettings', userId: any, project: { __typename?: 'CreatorNotificationSettingsProject', id: any, title: string, image?: string | null }, notificationSettings: Array<{ __typename?: 'NotificationSettings', notificationType: string, isEnabled: boolean, configurations: Array<{ __typename?: 'NotificationConfiguration', id: any, name: string, description?: string | null, value: string, type?: SettingValueType | null, options: Array<string> }> }> };
-
-export type CreatorNotificationsSettingsUpdateMutationVariables = Exact<{
-  creatorNotificationConfigurationId: Scalars['BigInt']['input'];
-  value: Scalars['String']['input'];
-}>;
+export type FundingTxStatusUpdatedSubscriptionVariables = Exact<{
+  input?: InputMaybe<FundingTxStatusUpdatedInput>
+}>
 
 export type FundingTxStatusUpdatedSubscription = {
   __typename?: 'Subscription'
@@ -7023,45 +6966,19 @@ export type ProjectAffiliateLinkFragment = {
   } | null
 }
 
-export type UserNotificationsSettingsUpdateMutationVariables = Exact<{
-  userNotificationConfigurationId: Scalars['BigInt']['input'];
-  value: Scalars['String']['input'];
-}>;
-
-
-export type UserNotificationsSettingsUpdateMutation = { __typename?: 'Mutation', userNotificationConfigurationValueUpdate?: boolean | null };
-
-export type ProfileNotificationsSettingsQueryVariables = Exact<{
-  userId: Scalars['BigInt']['input'];
-}>;
-
-
-export type ProfileNotificationsSettingsQuery = { __typename?: 'Query', userNotificationSettingsGet: (
-    { __typename?: 'ProfileNotificationSettings' }
-    & ProfileNotificationsSettingsFragment
-  ) };
-
-export type UserNotificationsSettingsQueryVariables = Exact<{
-  userId: Scalars['BigInt']['input'];
-}>;
-
-
-export type UserNotificationsSettingsQuery = { __typename?: 'Query', userNotificationSettingsGet: (
-    { __typename?: 'ProfileNotificationSettings' }
-    & UserNotificationsSettingsFragment
-  ) };
-
-export type ProjectNotificationSettingsQueryVariables = Exact<{
-  projectId: Scalars['BigInt']['input'];
-}>;
-
-
-export type ProjectNotificationSettingsQuery = { __typename?: 'Query', projectNotificationSettingsGet: (
-    { __typename?: 'CreatorNotificationSettings' }
-    & ProjectNotificationSettingsFragment
-  ) };
-
-export type ProjectAffiliateLinkFragment = { __typename?: 'AffiliateLink', projectId: any, label?: string | null, id: any, email: string, disabledAt?: any | null, createdAt: any, disabled?: boolean | null, affiliateId?: string | null, lightningAddress: string, affiliateFeePercentage: number, stats?: { __typename?: 'AffiliateStats', sales: { __typename?: 'AffiliateSalesStats', total: number, count: number } } | null };
+export type ProjectEntryFragment = {
+  __typename?: 'Entry'
+  id: any
+  title: string
+  description: string
+  image?: string | null
+  type: EntryType
+  fundersCount: number
+  amountFunded: number
+  status: EntryStatus
+  createdAt: string
+  publishedAt?: string | null
+}
 
 export type ProjectEntryViewFragment = {
   __typename?: 'Entry'
@@ -7097,20 +7014,28 @@ export type ProjectFundingTxFragment = {
   funder: { __typename?: 'Funder'; id: any; user?: ({ __typename?: 'User' } & UserAvatarFragment) | null }
 }
 
-export type ProjectLeaderboardContributorsFragment = { __typename?: 'ProjectLeaderboardContributorsRow', funderId: any, contributionsTotalUsd: number, contributionsTotal: number, contributionsCount: number, commentsCount: number, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string } | null };
+export type ProjectGoalsFragment = {
+  __typename?: 'ProjectGoal'
+  id: any
+  title: string
+  description?: string | null
+  targetAmount: number
+  currency: ProjectGoalCurrency
+  status: ProjectGoalStatus
+  projectId: any
+  amountContributed: number
+  createdAt: any
+  updatedAt: any
+  completedAt?: any | null
+  hasReceivedContribution: boolean
+  emojiUnifiedCode?: string | null
+}
 
-export type ProjectFundingTxFragment = { __typename?: 'FundingTx', id: any, amountPaid: number, media?: string | null, comment?: string | null, paidAt?: any | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, funder: { __typename?: 'Funder', id: any, user?: (
-      { __typename?: 'User' }
-      & UserAvatarFragment
-    ) | null } };
-
-export type FundingTxFragment = { __typename?: 'FundingTx', id: any, uuid?: string | null, invoiceId?: string | null, paymentRequest?: string | null, amount: number, status: FundingStatus, invoiceStatus: InvoiceStatus, comment?: string | null, media?: string | null, paidAt?: any | null, onChain: boolean, address?: string | null, source: string, method?: FundingMethod | null, projectId: any, creatorEmail?: string | null, createdAt?: any | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, funder: { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, confirmedAt?: any | null, user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } | null } };
-
-export type FundingTxWithInvoiceStatusFragment = { __typename?: 'FundingTx', id: any, uuid?: string | null, invoiceId?: string | null, status: FundingStatus, onChain: boolean, invoiceStatus: InvoiceStatus, paymentRequest?: string | null, creatorEmail?: string | null };
-
-export type FundingTxForDownloadInvoiceFragment = { __typename?: 'FundingTx', id: any, donationAmount: number, amountPaid: number, uuid?: string | null, projectId: any, paidAt?: any | null, createdAt?: any | null, status: FundingStatus, funder: { __typename?: 'Funder', user?: { __typename?: 'User', username: string } | null }, order?: { __typename?: 'Order', totalInSats: number, items: Array<{ __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', name: string } }> } | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null };
-
-export type ProjectGoalsFragment = { __typename?: 'ProjectGoal', id: any, title: string, description?: string | null, targetAmount: number, currency: ProjectGoalCurrency, status: ProjectGoalStatus, projectId: any, amountContributed: number, createdAt: any, updatedAt: any, completedAt?: any | null, hasReceivedContribution: boolean, emojiUnifiedCode?: string | null };
+export type ProjectLocationFragment = {
+  __typename?: 'Location'
+  region?: string | null
+  country?: { __typename?: 'Country'; code: string; name: string } | null
+}
 
 export type ProjectKeysFragment = {
   __typename?: 'ProjectKeys'
@@ -7386,45 +7311,6 @@ export type PublishEntryMutation = {
   publishEntry: { __typename?: 'Entry' } & ProjectEntryViewFragment
 }
 
-export type PublishEntryMutation = { __typename?: 'Mutation', publishEntry: (
-    { __typename?: 'Entry' }
-    & ProjectEntryViewFragment
-  ) };
-
-export type FundMutationVariables = Exact<{
-  input: FundingInput;
-}>;
-
-
-export type FundMutation = { __typename?: 'Mutation', fund: { __typename?: 'FundingMutationResponse', fundingTx?: (
-      { __typename?: 'FundingTx' }
-      & FundingTxFragment
-    ) | null, swap?: { __typename?: 'Swap', json: string } | null } };
-
-export type RefreshFundingInvoiceMutationVariables = Exact<{
-  fundingTxID: Scalars['BigInt']['input'];
-}>;
-
-
-export type RefreshFundingInvoiceMutation = { __typename?: 'Mutation', fundingInvoiceRefresh: (
-    { __typename?: 'FundingTx' }
-    & FundingTxWithInvoiceStatusFragment
-  ) };
-
-export type FundingInvoiceCancelMutationVariables = Exact<{
-  invoiceId: Scalars['String']['input'];
-}>;
-
-
-export type FundingInvoiceCancelMutation = { __typename?: 'Mutation', fundingInvoiceCancel: { __typename?: 'FundinginvoiceCancel', id: any, success: boolean } };
-
-export type FundingTxEmailUpdateMutationVariables = Exact<{
-  input?: InputMaybe<FundingTxEmailUpdateInput>;
-}>;
-
-
-export type FundingTxEmailUpdateMutation = { __typename?: 'Mutation', fundingTxEmailUpdate: { __typename?: 'FundingTx', id: any, email?: string | null } };
-
 export type ProjectGoalOrderingUpdateMutationVariables = Exact<{
   input: ProjectGoalOrderingUpdateInput
 }>
@@ -7641,21 +7527,6 @@ export type ProjectPageFundersQuery = {
   fundersGet: Array<{ __typename?: 'Funder' } & ProjectFunderFragment>
 }
 
-export type ProjectPageFundersQuery = { __typename?: 'Query', fundersGet: Array<(
-    { __typename?: 'Funder' }
-    & ProjectFunderFragment
-  )> };
-
-export type ProjectLeaderboardContributorsGetQueryVariables = Exact<{
-  input: ProjectLeaderboardContributorsGetInput;
-}>;
-
-
-export type ProjectLeaderboardContributorsGetQuery = { __typename?: 'Query', projectLeaderboardContributorsGet: Array<(
-    { __typename?: 'ProjectLeaderboardContributorsRow' }
-    & ProjectLeaderboardContributorsFragment
-  )> };
-
 export type ProjectPageFundingTxQueryVariables = Exact<{
   input?: InputMaybe<GetFundingTxsInput>
 }>
@@ -7667,31 +7538,6 @@ export type ProjectPageFundingTxQuery = {
     fundingTxs: Array<{ __typename?: 'FundingTx' } & ProjectFundingTxFragment>
   } | null
 }
-
-export type ProjectPageFundingTxQuery = { __typename?: 'Query', fundingTxsGet?: { __typename?: 'FundingTxsGetResponse', fundingTxs: Array<(
-      { __typename?: 'FundingTx' }
-      & ProjectFundingTxFragment
-    )> } | null };
-
-export type FundingTxWithInvoiceStatusQueryVariables = Exact<{
-  fundingTxID: Scalars['BigInt']['input'];
-}>;
-
-
-export type FundingTxWithInvoiceStatusQuery = { __typename?: 'Query', fundingTx: (
-    { __typename?: 'FundingTx' }
-    & FundingTxWithInvoiceStatusFragment
-  ) };
-
-export type FundingTxForDownloadInvoiceQueryVariables = Exact<{
-  fundingTxId: Scalars['BigInt']['input'];
-}>;
-
-
-export type FundingTxForDownloadInvoiceQuery = { __typename?: 'Query', fundingTx: (
-    { __typename?: 'FundingTx' }
-    & FundingTxForDownloadInvoiceFragment
-  ) };
 
 export type ProjectInProgressGoalsQueryVariables = Exact<{
   projectId: Scalars['BigInt']['input']
@@ -7816,21 +7662,6 @@ export type ProjectRewardQuery = {
   getProjectReward: { __typename?: 'ProjectReward' } & ProjectRewardFragment
 }
 
-export type ProjectRewardQuery = { __typename?: 'Query', getProjectReward: (
-    { __typename?: 'ProjectReward' }
-    & ProjectRewardFragment
-  ) };
-
-export type FundingTxStatusUpdatedSubscriptionVariables = Exact<{
-  input?: InputMaybe<FundingTxStatusUpdatedInput>;
-}>;
-
-
-export type FundingTxStatusUpdatedSubscription = { __typename?: 'Subscription', fundingTxStatusUpdated: { __typename?: 'FundingTxStatusUpdatedSubscriptionResponse', fundingTx: (
-      { __typename?: 'FundingTx' }
-      & FundingTxFragment
-    ) } };
-
 export const EmailUpdateUserFragmentDoc = gql`
   fragment EmailUpdateUser on User {
     email
@@ -7877,17 +7708,97 @@ export const EntryFragmentDoc = gql`
       image
     }
   }
-}
-    ${UserForAvatarFragmentDoc}`;
+  ${UserForAvatarFragmentDoc}
+`
+export const FundingTxWithInvoiceStatusFragmentDoc = gql`
+  fragment FundingTxWithInvoiceStatus on FundingTx {
+    id
+    uuid
+    invoiceId
+    status
+    onChain
+    invoiceStatus
+    invoiceStatus
+    paymentRequest
+    creatorEmail
+  }
+`
+export const FundingTxFragmentDoc = gql`
+  fragment FundingTx on FundingTx {
+    id
+    uuid
+    invoiceId
+    paymentRequest
+    amount
+    status
+    invoiceStatus
+    comment
+    media
+    paidAt
+    onChain
+    address
+    source
+    method
+    projectId
+    creatorEmail
+    createdAt
+    bitcoinQuote {
+      quote
+      quoteCurrency
+    }
+    funder {
+      id
+      amountFunded
+      timesFunded
+      confirmedAt
+      user {
+        id
+        username
+        imageUrl
+      }
+    }
+  }
+`
+export const FundingTxForDownloadInvoiceFragmentDoc = gql`
+  fragment FundingTxForDownloadInvoice on FundingTx {
+    id
+    donationAmount
+    amountPaid
+    uuid
+    funder {
+      user {
+        username
+      }
+    }
+    projectId
+    paidAt
+    createdAt
+    order {
+      items {
+        item {
+          name
+        }
+        quantity
+        unitPriceInSats
+      }
+      totalInSats
+    }
+    status
+    bitcoinQuote {
+      quote
+      quoteCurrency
+    }
+  }
+`
 export const ProjectDefaultGoalFragmentDoc = gql`
-    fragment ProjectDefaultGoal on ProjectGoal {
-  id
-  title
-  targetAmount
-  currency
-  amountContributed
-}
-    `;
+  fragment ProjectDefaultGoal on ProjectGoal {
+    id
+    title
+    targetAmount
+    currency
+    amountContributed
+  }
+`
 export const ProjectGoalFragmentDoc = gql`
   fragment ProjectGoal on ProjectGoal {
     id
@@ -8459,10 +8370,9 @@ export const ProjectFragmentDoc = gql`
       id
       url
       image
-      thumbnailImage
-      title
-      status
-      createdAt
+      user {
+        ...UserForAvatar
+      }
     }
     entries(input: $input) {
       ...EntryForProject
@@ -8875,29 +8785,7 @@ export const UserAvatarFragmentDoc = gql`
     imageUrl
     username
   }
-}
-    `;
-export const ProjectLeaderboardContributorsFragmentDoc = gql`
-    fragment ProjectLeaderboardContributors on ProjectLeaderboardContributorsRow {
-  funderId
-  contributionsTotalUsd
-  contributionsTotal
-  contributionsCount
-  commentsCount
-  user {
-    id
-    imageUrl
-    username
-  }
-}
-    `;
-export const UserAvatarFragmentDoc = gql`
-    fragment UserAvatar on User {
-  id
-  imageUrl
-  username
-}
-    `;
+`
 export const ProjectFundingTxFragmentDoc = gql`
   fragment ProjectFundingTx on FundingTx {
     id
@@ -8916,88 +8804,8 @@ export const ProjectFundingTxFragmentDoc = gql`
       }
     }
   }
-}
-    ${UserAvatarFragmentDoc}`;
-export const FundingTxFragmentDoc = gql`
-    fragment FundingTx on FundingTx {
-  id
-  uuid
-  invoiceId
-  paymentRequest
-  amount
-  status
-  invoiceStatus
-  comment
-  media
-  paidAt
-  onChain
-  address
-  source
-  method
-  projectId
-  creatorEmail
-  createdAt
-  bitcoinQuote {
-    quote
-    quoteCurrency
-  }
-  funder {
-    id
-    amountFunded
-    timesFunded
-    confirmedAt
-    user {
-      id
-      username
-      imageUrl
-    }
-  }
-}
-    `;
-export const FundingTxWithInvoiceStatusFragmentDoc = gql`
-    fragment FundingTxWithInvoiceStatus on FundingTx {
-  id
-  uuid
-  invoiceId
-  status
-  onChain
-  invoiceStatus
-  invoiceStatus
-  paymentRequest
-  creatorEmail
-}
-    `;
-export const FundingTxForDownloadInvoiceFragmentDoc = gql`
-    fragment FundingTxForDownloadInvoice on FundingTx {
-  id
-  donationAmount
-  amountPaid
-  uuid
-  funder {
-    user {
-      username
-    }
-  }
-  projectId
-  paidAt
-  createdAt
-  order {
-    items {
-      item {
-        name
-      }
-      quantity
-      unitPriceInSats
-    }
-    totalInSats
-  }
-  status
-  bitcoinQuote {
-    quote
-    quoteCurrency
-  }
-}
-    `;
+  ${UserAvatarFragmentDoc}
+`
 export const ProjectGoalsFragmentDoc = gql`
   fragment ProjectGoals on ProjectGoal {
     id
@@ -9441,9 +9249,174 @@ export const FundDocument = gql`
       fundingTx {
         ...FundingTx
       }
-export type UserEmailVerifyMutationHookResult = ReturnType<typeof useUserEmailVerifyMutation>;
-export type UserEmailVerifyMutationResult = Apollo.MutationResult<UserEmailVerifyMutation>;
-export type UserEmailVerifyMutationOptions = Apollo.BaseMutationOptions<UserEmailVerifyMutation, UserEmailVerifyMutationVariables>;
+      swap {
+        json
+      }
+    }
+  }
+  ${FundingTxFragmentDoc}
+`
+export type FundMutationFn = Apollo.MutationFunction<FundMutation, FundMutationVariables>
+
+/**
+ * __useFundMutation__
+ *
+ * To run a mutation, you first call `useFundMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFundMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [fundMutation, { data, loading, error }] = useFundMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFundMutation(baseOptions?: Apollo.MutationHookOptions<FundMutation, FundMutationVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<FundMutation, FundMutationVariables>(FundDocument, options)
+}
+export type FundMutationHookResult = ReturnType<typeof useFundMutation>
+export type FundMutationResult = Apollo.MutationResult<FundMutation>
+export type FundMutationOptions = Apollo.BaseMutationOptions<FundMutation, FundMutationVariables>
+export const RefreshFundingInvoiceDocument = gql`
+  mutation RefreshFundingInvoice($fundingTxID: BigInt!) {
+    fundingInvoiceRefresh(fundingTxId: $fundingTxID) {
+      ...FundingTxWithInvoiceStatus
+    }
+  }
+  ${FundingTxWithInvoiceStatusFragmentDoc}
+`
+export type RefreshFundingInvoiceMutationFn = Apollo.MutationFunction<
+  RefreshFundingInvoiceMutation,
+  RefreshFundingInvoiceMutationVariables
+>
+
+/**
+ * __useRefreshFundingInvoiceMutation__
+ *
+ * To run a mutation, you first call `useRefreshFundingInvoiceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRefreshFundingInvoiceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [refreshFundingInvoiceMutation, { data, loading, error }] = useRefreshFundingInvoiceMutation({
+ *   variables: {
+ *      fundingTxID: // value for 'fundingTxID'
+ *   },
+ * });
+ */
+export function useRefreshFundingInvoiceMutation(
+  baseOptions?: Apollo.MutationHookOptions<RefreshFundingInvoiceMutation, RefreshFundingInvoiceMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<RefreshFundingInvoiceMutation, RefreshFundingInvoiceMutationVariables>(
+    RefreshFundingInvoiceDocument,
+    options,
+  )
+}
+export type RefreshFundingInvoiceMutationHookResult = ReturnType<typeof useRefreshFundingInvoiceMutation>
+export type RefreshFundingInvoiceMutationResult = Apollo.MutationResult<RefreshFundingInvoiceMutation>
+export type RefreshFundingInvoiceMutationOptions = Apollo.BaseMutationOptions<
+  RefreshFundingInvoiceMutation,
+  RefreshFundingInvoiceMutationVariables
+>
+export const FundingInvoiceCancelDocument = gql`
+  mutation FundingInvoiceCancel($invoiceId: String!) {
+    fundingInvoiceCancel(invoiceId: $invoiceId) {
+      id
+      success
+    }
+  }
+`
+export type FundingInvoiceCancelMutationFn = Apollo.MutationFunction<
+  FundingInvoiceCancelMutation,
+  FundingInvoiceCancelMutationVariables
+>
+
+/**
+ * __useFundingInvoiceCancelMutation__
+ *
+ * To run a mutation, you first call `useFundingInvoiceCancelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFundingInvoiceCancelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [fundingInvoiceCancelMutation, { data, loading, error }] = useFundingInvoiceCancelMutation({
+ *   variables: {
+ *      invoiceId: // value for 'invoiceId'
+ *   },
+ * });
+ */
+export function useFundingInvoiceCancelMutation(
+  baseOptions?: Apollo.MutationHookOptions<FundingInvoiceCancelMutation, FundingInvoiceCancelMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<FundingInvoiceCancelMutation, FundingInvoiceCancelMutationVariables>(
+    FundingInvoiceCancelDocument,
+    options,
+  )
+}
+export type FundingInvoiceCancelMutationHookResult = ReturnType<typeof useFundingInvoiceCancelMutation>
+export type FundingInvoiceCancelMutationResult = Apollo.MutationResult<FundingInvoiceCancelMutation>
+export type FundingInvoiceCancelMutationOptions = Apollo.BaseMutationOptions<
+  FundingInvoiceCancelMutation,
+  FundingInvoiceCancelMutationVariables
+>
+export const FundingTxEmailUpdateDocument = gql`
+  mutation FundingTxEmailUpdate($input: FundingTxEmailUpdateInput) {
+    fundingTxEmailUpdate(input: $input) {
+      id
+      email
+    }
+  }
+`
+export type FundingTxEmailUpdateMutationFn = Apollo.MutationFunction<
+  FundingTxEmailUpdateMutation,
+  FundingTxEmailUpdateMutationVariables
+>
+
+/**
+ * __useFundingTxEmailUpdateMutation__
+ *
+ * To run a mutation, you first call `useFundingTxEmailUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFundingTxEmailUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [fundingTxEmailUpdateMutation, { data, loading, error }] = useFundingTxEmailUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFundingTxEmailUpdateMutation(
+  baseOptions?: Apollo.MutationHookOptions<FundingTxEmailUpdateMutation, FundingTxEmailUpdateMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<FundingTxEmailUpdateMutation, FundingTxEmailUpdateMutationVariables>(
+    FundingTxEmailUpdateDocument,
+    options,
+  )
+}
+export type FundingTxEmailUpdateMutationHookResult = ReturnType<typeof useFundingTxEmailUpdateMutation>
+export type FundingTxEmailUpdateMutationResult = Apollo.MutationResult<FundingTxEmailUpdateMutation>
+export type FundingTxEmailUpdateMutationOptions = Apollo.BaseMutationOptions<
+  FundingTxEmailUpdateMutation,
+  FundingTxEmailUpdateMutationVariables
+>
 export const GrantApplyDocument = gql`
   mutation GrantApply($input: GrantApplyInput) {
     grantApply(input: $input) {
@@ -10085,27 +10058,148 @@ export const SignedUploadUrlDocument = gql`
  *   },
  * });
  */
-export function useSignedUploadUrlQuery(baseOptions: Apollo.QueryHookOptions<SignedUploadUrlQuery, SignedUploadUrlQueryVariables> & ({ variables: SignedUploadUrlQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SignedUploadUrlQuery, SignedUploadUrlQueryVariables>(SignedUploadUrlDocument, options);
-      }
-export function useSignedUploadUrlLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SignedUploadUrlQuery, SignedUploadUrlQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SignedUploadUrlQuery, SignedUploadUrlQueryVariables>(SignedUploadUrlDocument, options);
-        }
-export function useSignedUploadUrlSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SignedUploadUrlQuery, SignedUploadUrlQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<SignedUploadUrlQuery, SignedUploadUrlQueryVariables>(SignedUploadUrlDocument, options);
-        }
-export type SignedUploadUrlQueryHookResult = ReturnType<typeof useSignedUploadUrlQuery>;
-export type SignedUploadUrlLazyQueryHookResult = ReturnType<typeof useSignedUploadUrlLazyQuery>;
-export type SignedUploadUrlSuspenseQueryHookResult = ReturnType<typeof useSignedUploadUrlSuspenseQuery>;
-export type SignedUploadUrlQueryResult = Apollo.QueryResult<SignedUploadUrlQuery, SignedUploadUrlQueryVariables>;
+export function useSignedUploadUrlQuery(
+  baseOptions: Apollo.QueryHookOptions<SignedUploadUrlQuery, SignedUploadUrlQueryVariables> &
+    ({ variables: SignedUploadUrlQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<SignedUploadUrlQuery, SignedUploadUrlQueryVariables>(SignedUploadUrlDocument, options)
+}
+export function useSignedUploadUrlLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SignedUploadUrlQuery, SignedUploadUrlQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<SignedUploadUrlQuery, SignedUploadUrlQueryVariables>(SignedUploadUrlDocument, options)
+}
+export function useSignedUploadUrlSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<SignedUploadUrlQuery, SignedUploadUrlQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<SignedUploadUrlQuery, SignedUploadUrlQueryVariables>(SignedUploadUrlDocument, options)
+}
+export type SignedUploadUrlQueryHookResult = ReturnType<typeof useSignedUploadUrlQuery>
+export type SignedUploadUrlLazyQueryHookResult = ReturnType<typeof useSignedUploadUrlLazyQuery>
+export type SignedUploadUrlSuspenseQueryHookResult = ReturnType<typeof useSignedUploadUrlSuspenseQuery>
+export type SignedUploadUrlQueryResult = Apollo.QueryResult<SignedUploadUrlQuery, SignedUploadUrlQueryVariables>
+export const GetFundingTxDocument = gql`
+  query GetFundingTx($id: BigInt!) {
+    fundingTx(id: $id) {
+      ...FundingTx
+    }
+  }
+  ${FundingTxFragmentDoc}
+`
+
+/**
+ * __useGetFundingTxQuery__
+ *
+ * To run a query within a React component, call `useGetFundingTxQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFundingTxQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFundingTxQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetFundingTxQuery(
+  baseOptions: Apollo.QueryHookOptions<GetFundingTxQuery, GetFundingTxQueryVariables> &
+    ({ variables: GetFundingTxQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetFundingTxQuery, GetFundingTxQueryVariables>(GetFundingTxDocument, options)
+}
+export function useGetFundingTxLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetFundingTxQuery, GetFundingTxQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetFundingTxQuery, GetFundingTxQueryVariables>(GetFundingTxDocument, options)
+}
+export function useGetFundingTxSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GetFundingTxQuery, GetFundingTxQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<GetFundingTxQuery, GetFundingTxQueryVariables>(GetFundingTxDocument, options)
+}
+export type GetFundingTxQueryHookResult = ReturnType<typeof useGetFundingTxQuery>
+export type GetFundingTxLazyQueryHookResult = ReturnType<typeof useGetFundingTxLazyQuery>
+export type GetFundingTxSuspenseQueryHookResult = ReturnType<typeof useGetFundingTxSuspenseQuery>
+export type GetFundingTxQueryResult = Apollo.QueryResult<GetFundingTxQuery, GetFundingTxQueryVariables>
+export const FundingTxWithInvoiceStatusDocument = gql`
+  query FundingTxWithInvoiceStatus($fundingTxID: BigInt!) {
+    fundingTx(id: $fundingTxID) {
+      ...FundingTxWithInvoiceStatus
+    }
+  }
+  ${FundingTxWithInvoiceStatusFragmentDoc}
+`
+
+/**
+ * __useFundingTxWithInvoiceStatusQuery__
+ *
+ * To run a query within a React component, call `useFundingTxWithInvoiceStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFundingTxWithInvoiceStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFundingTxWithInvoiceStatusQuery({
+ *   variables: {
+ *      fundingTxID: // value for 'fundingTxID'
+ *   },
+ * });
+ */
+export function useFundingTxWithInvoiceStatusQuery(
+  baseOptions: Apollo.QueryHookOptions<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables> &
+    ({ variables: FundingTxWithInvoiceStatusQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>(
+    FundingTxWithInvoiceStatusDocument,
+    options,
+  )
+}
+export function useFundingTxWithInvoiceStatusLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>(
+    FundingTxWithInvoiceStatusDocument,
+    options,
+  )
+}
+export function useFundingTxWithInvoiceStatusSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    FundingTxWithInvoiceStatusQuery,
+    FundingTxWithInvoiceStatusQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>(
+    FundingTxWithInvoiceStatusDocument,
+    options,
+  )
+}
+export type FundingTxWithInvoiceStatusQueryHookResult = ReturnType<typeof useFundingTxWithInvoiceStatusQuery>
+export type FundingTxWithInvoiceStatusLazyQueryHookResult = ReturnType<typeof useFundingTxWithInvoiceStatusLazyQuery>
+export type FundingTxWithInvoiceStatusSuspenseQueryHookResult = ReturnType<
+  typeof useFundingTxWithInvoiceStatusSuspenseQuery
+>
+export type FundingTxWithInvoiceStatusQueryResult = Apollo.QueryResult<
+  FundingTxWithInvoiceStatusQuery,
+  FundingTxWithInvoiceStatusQueryVariables
+>
 export const FundingTxsForLandingPageDocument = gql`
-    query FundingTxsForLandingPage($input: GetFundingTxsInput) {
-  fundingTxsGet(input: $input) {
-    fundingTxs {
-      ...FundingTxForLandingPage
+  query FundingTxsForLandingPage($input: GetFundingTxsInput) {
+    fundingTxsGet(input: $input) {
+      fundingTxs {
+        ...FundingTxForLandingPage
+      }
     }
   }
   ${FundingTxForLandingPageFragmentDoc}
@@ -10188,27 +10282,125 @@ export const FundingTxForUserContributionDocument = gql`
  *   },
  * });
  */
-export function useFundingTxForUserContributionQuery(baseOptions: Apollo.QueryHookOptions<FundingTxForUserContributionQuery, FundingTxForUserContributionQueryVariables> & ({ variables: FundingTxForUserContributionQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<FundingTxForUserContributionQuery, FundingTxForUserContributionQueryVariables>(FundingTxForUserContributionDocument, options);
-      }
-export function useFundingTxForUserContributionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FundingTxForUserContributionQuery, FundingTxForUserContributionQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<FundingTxForUserContributionQuery, FundingTxForUserContributionQueryVariables>(FundingTxForUserContributionDocument, options);
-        }
-export function useFundingTxForUserContributionSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FundingTxForUserContributionQuery, FundingTxForUserContributionQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<FundingTxForUserContributionQuery, FundingTxForUserContributionQueryVariables>(FundingTxForUserContributionDocument, options);
-        }
-export type FundingTxForUserContributionQueryHookResult = ReturnType<typeof useFundingTxForUserContributionQuery>;
-export type FundingTxForUserContributionLazyQueryHookResult = ReturnType<typeof useFundingTxForUserContributionLazyQuery>;
-export type FundingTxForUserContributionSuspenseQueryHookResult = ReturnType<typeof useFundingTxForUserContributionSuspenseQuery>;
-export type FundingTxForUserContributionQueryResult = Apollo.QueryResult<FundingTxForUserContributionQuery, FundingTxForUserContributionQueryVariables>;
+export function useFundingTxForUserContributionQuery(
+  baseOptions: Apollo.QueryHookOptions<FundingTxForUserContributionQuery, FundingTxForUserContributionQueryVariables> &
+    ({ variables: FundingTxForUserContributionQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<FundingTxForUserContributionQuery, FundingTxForUserContributionQueryVariables>(
+    FundingTxForUserContributionDocument,
+    options,
+  )
+}
+export function useFundingTxForUserContributionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FundingTxForUserContributionQuery,
+    FundingTxForUserContributionQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<FundingTxForUserContributionQuery, FundingTxForUserContributionQueryVariables>(
+    FundingTxForUserContributionDocument,
+    options,
+  )
+}
+export function useFundingTxForUserContributionSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    FundingTxForUserContributionQuery,
+    FundingTxForUserContributionQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<FundingTxForUserContributionQuery, FundingTxForUserContributionQueryVariables>(
+    FundingTxForUserContributionDocument,
+    options,
+  )
+}
+export type FundingTxForUserContributionQueryHookResult = ReturnType<typeof useFundingTxForUserContributionQuery>
+export type FundingTxForUserContributionLazyQueryHookResult = ReturnType<
+  typeof useFundingTxForUserContributionLazyQuery
+>
+export type FundingTxForUserContributionSuspenseQueryHookResult = ReturnType<
+  typeof useFundingTxForUserContributionSuspenseQuery
+>
+export type FundingTxForUserContributionQueryResult = Apollo.QueryResult<
+  FundingTxForUserContributionQuery,
+  FundingTxForUserContributionQueryVariables
+>
+export const FundingTxForDownloadInvoiceDocument = gql`
+  query FundingTxForDownloadInvoice($fundingTxId: BigInt!) {
+    fundingTx(id: $fundingTxId) {
+      ...FundingTxForDownloadInvoice
+    }
+  }
+  ${FundingTxForDownloadInvoiceFragmentDoc}
+`
+
+/**
+ * __useFundingTxForDownloadInvoiceQuery__
+ *
+ * To run a query within a React component, call `useFundingTxForDownloadInvoiceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFundingTxForDownloadInvoiceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFundingTxForDownloadInvoiceQuery({
+ *   variables: {
+ *      fundingTxId: // value for 'fundingTxId'
+ *   },
+ * });
+ */
+export function useFundingTxForDownloadInvoiceQuery(
+  baseOptions: Apollo.QueryHookOptions<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables> &
+    ({ variables: FundingTxForDownloadInvoiceQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables>(
+    FundingTxForDownloadInvoiceDocument,
+    options,
+  )
+}
+export function useFundingTxForDownloadInvoiceLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FundingTxForDownloadInvoiceQuery,
+    FundingTxForDownloadInvoiceQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables>(
+    FundingTxForDownloadInvoiceDocument,
+    options,
+  )
+}
+export function useFundingTxForDownloadInvoiceSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    FundingTxForDownloadInvoiceQuery,
+    FundingTxForDownloadInvoiceQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables>(
+    FundingTxForDownloadInvoiceDocument,
+    options,
+  )
+}
+export type FundingTxForDownloadInvoiceQueryHookResult = ReturnType<typeof useFundingTxForDownloadInvoiceQuery>
+export type FundingTxForDownloadInvoiceLazyQueryHookResult = ReturnType<typeof useFundingTxForDownloadInvoiceLazyQuery>
+export type FundingTxForDownloadInvoiceSuspenseQueryHookResult = ReturnType<
+  typeof useFundingTxForDownloadInvoiceSuspenseQuery
+>
+export type FundingTxForDownloadInvoiceQueryResult = Apollo.QueryResult<
+  FundingTxForDownloadInvoiceQuery,
+  FundingTxForDownloadInvoiceQueryVariables
+>
 export const ProjectDefaultGoalDocument = gql`
-    query ProjectDefaultGoal($projectId: BigInt!) {
-  projectGoals(projectId: $projectId) {
-    inProgress {
-      ...ProjectDefaultGoal
+  query ProjectDefaultGoal($projectId: BigInt!) {
+    projectGoals(projectId: $projectId) {
+      inProgress {
+        ...ProjectDefaultGoal
+      }
     }
   }
   ${ProjectDefaultGoalFragmentDoc}
@@ -12022,85 +12214,10 @@ export const FundingTxStatusUpdatedDocument = gql`
       fundingTx {
         ...FundingTx
       }
-export type ActivityCreatedSubscriptionHookResult = ReturnType<typeof useActivityCreatedSubscription>;
-export type ActivityCreatedSubscriptionResult = Apollo.SubscriptionResult<ActivityCreatedSubscription>;
-export const CreatorNotificationsSettingsUpdateDocument = gql`
-    mutation CreatorNotificationsSettingsUpdate($creatorNotificationConfigurationId: BigInt!, $value: String!) {
-  creatorNotificationConfigurationValueUpdate(
-    creatorNotificationConfigurationId: $creatorNotificationConfigurationId
-    value: $value
-  )
-}
-    `;
-export type CreatorNotificationsSettingsUpdateMutationFn = Apollo.MutationFunction<CreatorNotificationsSettingsUpdateMutation, CreatorNotificationsSettingsUpdateMutationVariables>;
-
-/**
- * __useCreatorNotificationsSettingsUpdateMutation__
- *
- * To run a mutation, you first call `useCreatorNotificationsSettingsUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreatorNotificationsSettingsUpdateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [creatorNotificationsSettingsUpdateMutation, { data, loading, error }] = useCreatorNotificationsSettingsUpdateMutation({
- *   variables: {
- *      creatorNotificationConfigurationId: // value for 'creatorNotificationConfigurationId'
- *      value: // value for 'value'
- *   },
- * });
- */
-export function useCreatorNotificationsSettingsUpdateMutation(baseOptions?: Apollo.MutationHookOptions<CreatorNotificationsSettingsUpdateMutation, CreatorNotificationsSettingsUpdateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreatorNotificationsSettingsUpdateMutation, CreatorNotificationsSettingsUpdateMutationVariables>(CreatorNotificationsSettingsUpdateDocument, options);
-      }
-export type CreatorNotificationsSettingsUpdateMutationHookResult = ReturnType<typeof useCreatorNotificationsSettingsUpdateMutation>;
-export type CreatorNotificationsSettingsUpdateMutationResult = Apollo.MutationResult<CreatorNotificationsSettingsUpdateMutation>;
-export type CreatorNotificationsSettingsUpdateMutationOptions = Apollo.BaseMutationOptions<CreatorNotificationsSettingsUpdateMutation, CreatorNotificationsSettingsUpdateMutationVariables>;
-export const UserNotificationsSettingsUpdateDocument = gql`
-    mutation UserNotificationsSettingsUpdate($userNotificationConfigurationId: BigInt!, $value: String!) {
-  userNotificationConfigurationValueUpdate(
-    userNotificationConfigurationId: $userNotificationConfigurationId
-    value: $value
-  )
-}
-    `;
-export type UserNotificationsSettingsUpdateMutationFn = Apollo.MutationFunction<UserNotificationsSettingsUpdateMutation, UserNotificationsSettingsUpdateMutationVariables>;
-
-/**
- * __useUserNotificationsSettingsUpdateMutation__
- *
- * To run a mutation, you first call `useUserNotificationsSettingsUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUserNotificationsSettingsUpdateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [userNotificationsSettingsUpdateMutation, { data, loading, error }] = useUserNotificationsSettingsUpdateMutation({
- *   variables: {
- *      userNotificationConfigurationId: // value for 'userNotificationConfigurationId'
- *      value: // value for 'value'
- *   },
- * });
- */
-export function useUserNotificationsSettingsUpdateMutation(baseOptions?: Apollo.MutationHookOptions<UserNotificationsSettingsUpdateMutation, UserNotificationsSettingsUpdateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UserNotificationsSettingsUpdateMutation, UserNotificationsSettingsUpdateMutationVariables>(UserNotificationsSettingsUpdateDocument, options);
-      }
-export type UserNotificationsSettingsUpdateMutationHookResult = ReturnType<typeof useUserNotificationsSettingsUpdateMutation>;
-export type UserNotificationsSettingsUpdateMutationResult = Apollo.MutationResult<UserNotificationsSettingsUpdateMutation>;
-export type UserNotificationsSettingsUpdateMutationOptions = Apollo.BaseMutationOptions<UserNotificationsSettingsUpdateMutation, UserNotificationsSettingsUpdateMutationVariables>;
-export const ProfileNotificationsSettingsDocument = gql`
-    query ProfileNotificationsSettings($userId: BigInt!) {
-  userNotificationSettingsGet(userId: $userId) {
-    ...ProfileNotificationsSettings
+    }
   }
-}
-    ${ProfileNotificationsSettingsFragmentDoc}`;
+  ${FundingTxFragmentDoc}
+`
 
 /**
  * __useProfileNotificationsSettingsQuery__
@@ -12118,27 +12235,17 @@ export const ProfileNotificationsSettingsDocument = gql`
  *   },
  * });
  */
-export function useProfileNotificationsSettingsQuery(baseOptions: Apollo.QueryHookOptions<ProfileNotificationsSettingsQuery, ProfileNotificationsSettingsQueryVariables> & ({ variables: ProfileNotificationsSettingsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProfileNotificationsSettingsQuery, ProfileNotificationsSettingsQueryVariables>(ProfileNotificationsSettingsDocument, options);
-      }
-export function useProfileNotificationsSettingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProfileNotificationsSettingsQuery, ProfileNotificationsSettingsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProfileNotificationsSettingsQuery, ProfileNotificationsSettingsQueryVariables>(ProfileNotificationsSettingsDocument, options);
-        }
-export function useProfileNotificationsSettingsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProfileNotificationsSettingsQuery, ProfileNotificationsSettingsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProfileNotificationsSettingsQuery, ProfileNotificationsSettingsQueryVariables>(ProfileNotificationsSettingsDocument, options);
-        }
-export type ProfileNotificationsSettingsQueryHookResult = ReturnType<typeof useProfileNotificationsSettingsQuery>;
-export type ProfileNotificationsSettingsLazyQueryHookResult = ReturnType<typeof useProfileNotificationsSettingsLazyQuery>;
-export type ProfileNotificationsSettingsSuspenseQueryHookResult = ReturnType<typeof useProfileNotificationsSettingsSuspenseQuery>;
-export type ProfileNotificationsSettingsQueryResult = Apollo.QueryResult<ProfileNotificationsSettingsQuery, ProfileNotificationsSettingsQueryVariables>;
-export const UserNotificationsSettingsDocument = gql`
-    query UserNotificationsSettings($userId: BigInt!) {
-  userNotificationSettingsGet(userId: $userId) {
-    ...UserNotificationsSettings
-  }
+export function useFundingTxStatusUpdatedSubscription(
+  baseOptions?: Apollo.SubscriptionHookOptions<
+    FundingTxStatusUpdatedSubscription,
+    FundingTxStatusUpdatedSubscriptionVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSubscription<FundingTxStatusUpdatedSubscription, FundingTxStatusUpdatedSubscriptionVariables>(
+    FundingTxStatusUpdatedDocument,
+    options,
+  )
 }
 export type FundingTxStatusUpdatedSubscriptionHookResult = ReturnType<typeof useFundingTxStatusUpdatedSubscription>
 export type FundingTxStatusUpdatedSubscriptionResult = Apollo.SubscriptionResult<FundingTxStatusUpdatedSubscription>
@@ -12550,26 +12657,30 @@ export type PublishEntryMutationFn = Apollo.MutationFunction<PublishEntryMutatio
  *   },
  * });
  */
-export function usePublishEntryMutation(baseOptions?: Apollo.MutationHookOptions<PublishEntryMutation, PublishEntryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<PublishEntryMutation, PublishEntryMutationVariables>(PublishEntryDocument, options);
-      }
-export type PublishEntryMutationHookResult = ReturnType<typeof usePublishEntryMutation>;
-export type PublishEntryMutationResult = Apollo.MutationResult<PublishEntryMutation>;
-export type PublishEntryMutationOptions = Apollo.BaseMutationOptions<PublishEntryMutation, PublishEntryMutationVariables>;
-export const FundDocument = gql`
-    mutation Fund($input: FundingInput!) {
-  fund(input: $input) {
-    fundingTx {
-      ...FundingTx
-    }
-    swap {
-      json
+export function usePublishEntryMutation(
+  baseOptions?: Apollo.MutationHookOptions<PublishEntryMutation, PublishEntryMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<PublishEntryMutation, PublishEntryMutationVariables>(PublishEntryDocument, options)
+}
+export type PublishEntryMutationHookResult = ReturnType<typeof usePublishEntryMutation>
+export type PublishEntryMutationResult = Apollo.MutationResult<PublishEntryMutation>
+export type PublishEntryMutationOptions = Apollo.BaseMutationOptions<
+  PublishEntryMutation,
+  PublishEntryMutationVariables
+>
+export const ProjectGoalOrderingUpdateDocument = gql`
+  mutation ProjectGoalOrderingUpdate($input: ProjectGoalOrderingUpdateInput!) {
+    projectGoalOrderingUpdate(input: $input) {
+      ...ProjectGoals
     }
   }
-}
-    ${FundingTxFragmentDoc}`;
-export type FundMutationFn = Apollo.MutationFunction<FundMutation, FundMutationVariables>;
+  ${ProjectGoalsFragmentDoc}
+`
+export type ProjectGoalOrderingUpdateMutationFn = Apollo.MutationFunction<
+  ProjectGoalOrderingUpdateMutation,
+  ProjectGoalOrderingUpdateMutationVariables
+>
 
 /**
  * __useFundMutation__
@@ -13769,63 +13880,6 @@ export const ProjectPageFundingTxDocument = gql`
       fundingTxs {
         ...ProjectFundingTx
       }
-export function useProjectPageFundersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectPageFundersQuery, ProjectPageFundersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProjectPageFundersQuery, ProjectPageFundersQueryVariables>(ProjectPageFundersDocument, options);
-        }
-export function useProjectPageFundersSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectPageFundersQuery, ProjectPageFundersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProjectPageFundersQuery, ProjectPageFundersQueryVariables>(ProjectPageFundersDocument, options);
-        }
-export type ProjectPageFundersQueryHookResult = ReturnType<typeof useProjectPageFundersQuery>;
-export type ProjectPageFundersLazyQueryHookResult = ReturnType<typeof useProjectPageFundersLazyQuery>;
-export type ProjectPageFundersSuspenseQueryHookResult = ReturnType<typeof useProjectPageFundersSuspenseQuery>;
-export type ProjectPageFundersQueryResult = Apollo.QueryResult<ProjectPageFundersQuery, ProjectPageFundersQueryVariables>;
-export const ProjectLeaderboardContributorsGetDocument = gql`
-    query ProjectLeaderboardContributorsGet($input: ProjectLeaderboardContributorsGetInput!) {
-  projectLeaderboardContributorsGet(input: $input) {
-    ...ProjectLeaderboardContributors
-  }
-}
-    ${ProjectLeaderboardContributorsFragmentDoc}`;
-
-/**
- * __useProjectLeaderboardContributorsGetQuery__
- *
- * To run a query within a React component, call `useProjectLeaderboardContributorsGetQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectLeaderboardContributorsGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProjectLeaderboardContributorsGetQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectLeaderboardContributorsGetQuery(baseOptions: Apollo.QueryHookOptions<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables> & ({ variables: ProjectLeaderboardContributorsGetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>(ProjectLeaderboardContributorsGetDocument, options);
-      }
-export function useProjectLeaderboardContributorsGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>(ProjectLeaderboardContributorsGetDocument, options);
-        }
-export function useProjectLeaderboardContributorsGetSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>(ProjectLeaderboardContributorsGetDocument, options);
-        }
-export type ProjectLeaderboardContributorsGetQueryHookResult = ReturnType<typeof useProjectLeaderboardContributorsGetQuery>;
-export type ProjectLeaderboardContributorsGetLazyQueryHookResult = ReturnType<typeof useProjectLeaderboardContributorsGetLazyQuery>;
-export type ProjectLeaderboardContributorsGetSuspenseQueryHookResult = ReturnType<typeof useProjectLeaderboardContributorsGetSuspenseQuery>;
-export type ProjectLeaderboardContributorsGetQueryResult = Apollo.QueryResult<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>;
-export const ProjectPageFundingTxDocument = gql`
-    query ProjectPageFundingTx($input: GetFundingTxsInput) {
-  fundingTxsGet(input: $input) {
-    fundingTxs {
-      ...ProjectFundingTx
     }
   }
   ${ProjectFundingTxFragmentDoc}
@@ -13887,103 +13941,6 @@ export const ProjectInProgressGoalsDocument = gql`
       inProgress {
         ...ProjectGoals
       }
-export function useProjectPageFundingTxLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectPageFundingTxQuery, ProjectPageFundingTxQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProjectPageFundingTxQuery, ProjectPageFundingTxQueryVariables>(ProjectPageFundingTxDocument, options);
-        }
-export function useProjectPageFundingTxSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectPageFundingTxQuery, ProjectPageFundingTxQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProjectPageFundingTxQuery, ProjectPageFundingTxQueryVariables>(ProjectPageFundingTxDocument, options);
-        }
-export type ProjectPageFundingTxQueryHookResult = ReturnType<typeof useProjectPageFundingTxQuery>;
-export type ProjectPageFundingTxLazyQueryHookResult = ReturnType<typeof useProjectPageFundingTxLazyQuery>;
-export type ProjectPageFundingTxSuspenseQueryHookResult = ReturnType<typeof useProjectPageFundingTxSuspenseQuery>;
-export type ProjectPageFundingTxQueryResult = Apollo.QueryResult<ProjectPageFundingTxQuery, ProjectPageFundingTxQueryVariables>;
-export const FundingTxWithInvoiceStatusDocument = gql`
-    query FundingTxWithInvoiceStatus($fundingTxID: BigInt!) {
-  fundingTx(id: $fundingTxID) {
-    ...FundingTxWithInvoiceStatus
-  }
-}
-    ${FundingTxWithInvoiceStatusFragmentDoc}`;
-
-/**
- * __useFundingTxWithInvoiceStatusQuery__
- *
- * To run a query within a React component, call `useFundingTxWithInvoiceStatusQuery` and pass it any options that fit your needs.
- * When your component renders, `useFundingTxWithInvoiceStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFundingTxWithInvoiceStatusQuery({
- *   variables: {
- *      fundingTxID: // value for 'fundingTxID'
- *   },
- * });
- */
-export function useFundingTxWithInvoiceStatusQuery(baseOptions: Apollo.QueryHookOptions<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables> & ({ variables: FundingTxWithInvoiceStatusQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>(FundingTxWithInvoiceStatusDocument, options);
-      }
-export function useFundingTxWithInvoiceStatusLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>(FundingTxWithInvoiceStatusDocument, options);
-        }
-export function useFundingTxWithInvoiceStatusSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>(FundingTxWithInvoiceStatusDocument, options);
-        }
-export type FundingTxWithInvoiceStatusQueryHookResult = ReturnType<typeof useFundingTxWithInvoiceStatusQuery>;
-export type FundingTxWithInvoiceStatusLazyQueryHookResult = ReturnType<typeof useFundingTxWithInvoiceStatusLazyQuery>;
-export type FundingTxWithInvoiceStatusSuspenseQueryHookResult = ReturnType<typeof useFundingTxWithInvoiceStatusSuspenseQuery>;
-export type FundingTxWithInvoiceStatusQueryResult = Apollo.QueryResult<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>;
-export const FundingTxForDownloadInvoiceDocument = gql`
-    query FundingTxForDownloadInvoice($fundingTxId: BigInt!) {
-  fundingTx(id: $fundingTxId) {
-    ...FundingTxForDownloadInvoice
-  }
-}
-    ${FundingTxForDownloadInvoiceFragmentDoc}`;
-
-/**
- * __useFundingTxForDownloadInvoiceQuery__
- *
- * To run a query within a React component, call `useFundingTxForDownloadInvoiceQuery` and pass it any options that fit your needs.
- * When your component renders, `useFundingTxForDownloadInvoiceQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFundingTxForDownloadInvoiceQuery({
- *   variables: {
- *      fundingTxId: // value for 'fundingTxId'
- *   },
- * });
- */
-export function useFundingTxForDownloadInvoiceQuery(baseOptions: Apollo.QueryHookOptions<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables> & ({ variables: FundingTxForDownloadInvoiceQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables>(FundingTxForDownloadInvoiceDocument, options);
-      }
-export function useFundingTxForDownloadInvoiceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables>(FundingTxForDownloadInvoiceDocument, options);
-        }
-export function useFundingTxForDownloadInvoiceSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables>(FundingTxForDownloadInvoiceDocument, options);
-        }
-export type FundingTxForDownloadInvoiceQueryHookResult = ReturnType<typeof useFundingTxForDownloadInvoiceQuery>;
-export type FundingTxForDownloadInvoiceLazyQueryHookResult = ReturnType<typeof useFundingTxForDownloadInvoiceLazyQuery>;
-export type FundingTxForDownloadInvoiceSuspenseQueryHookResult = ReturnType<typeof useFundingTxForDownloadInvoiceSuspenseQuery>;
-export type FundingTxForDownloadInvoiceQueryResult = Apollo.QueryResult<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables>;
-export const ProjectInProgressGoalsDocument = gql`
-    query ProjectInProgressGoals($projectId: BigInt!) {
-  projectGoals(projectId: $projectId) {
-    inProgress {
-      ...ProjectGoals
     }
   }
   ${ProjectGoalsFragmentDoc}
@@ -14739,51 +14696,26 @@ export const ProjectRewardDocument = gql`
  *   },
  * });
  */
-export function useProjectRewardQuery(baseOptions: Apollo.QueryHookOptions<ProjectRewardQuery, ProjectRewardQueryVariables> & ({ variables: ProjectRewardQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProjectRewardQuery, ProjectRewardQueryVariables>(ProjectRewardDocument, options);
-      }
-export function useProjectRewardLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectRewardQuery, ProjectRewardQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProjectRewardQuery, ProjectRewardQueryVariables>(ProjectRewardDocument, options);
-        }
-export function useProjectRewardSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectRewardQuery, ProjectRewardQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProjectRewardQuery, ProjectRewardQueryVariables>(ProjectRewardDocument, options);
-        }
-export type ProjectRewardQueryHookResult = ReturnType<typeof useProjectRewardQuery>;
-export type ProjectRewardLazyQueryHookResult = ReturnType<typeof useProjectRewardLazyQuery>;
-export type ProjectRewardSuspenseQueryHookResult = ReturnType<typeof useProjectRewardSuspenseQuery>;
-export type ProjectRewardQueryResult = Apollo.QueryResult<ProjectRewardQuery, ProjectRewardQueryVariables>;
-export const FundingTxStatusUpdatedDocument = gql`
-    subscription FundingTxStatusUpdated($input: FundingTxStatusUpdatedInput) {
-  fundingTxStatusUpdated(input: $input) {
-    fundingTx {
-      ...FundingTx
-    }
-  }
+export function useProjectRewardQuery(
+  baseOptions: Apollo.QueryHookOptions<ProjectRewardQuery, ProjectRewardQueryVariables> &
+    ({ variables: ProjectRewardQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ProjectRewardQuery, ProjectRewardQueryVariables>(ProjectRewardDocument, options)
 }
-    ${FundingTxFragmentDoc}`;
-
-/**
- * __useFundingTxStatusUpdatedSubscription__
- *
- * To run a query within a React component, call `useFundingTxStatusUpdatedSubscription` and pass it any options that fit your needs.
- * When your component renders, `useFundingTxStatusUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFundingTxStatusUpdatedSubscription({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useFundingTxStatusUpdatedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<FundingTxStatusUpdatedSubscription, FundingTxStatusUpdatedSubscriptionVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<FundingTxStatusUpdatedSubscription, FundingTxStatusUpdatedSubscriptionVariables>(FundingTxStatusUpdatedDocument, options);
-      }
-export type FundingTxStatusUpdatedSubscriptionHookResult = ReturnType<typeof useFundingTxStatusUpdatedSubscription>;
-export type FundingTxStatusUpdatedSubscriptionResult = Apollo.SubscriptionResult<FundingTxStatusUpdatedSubscription>;
+export function useProjectRewardLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ProjectRewardQuery, ProjectRewardQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<ProjectRewardQuery, ProjectRewardQueryVariables>(ProjectRewardDocument, options)
+}
+export function useProjectRewardSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectRewardQuery, ProjectRewardQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<ProjectRewardQuery, ProjectRewardQueryVariables>(ProjectRewardDocument, options)
+}
+export type ProjectRewardQueryHookResult = ReturnType<typeof useProjectRewardQuery>
+export type ProjectRewardLazyQueryHookResult = ReturnType<typeof useProjectRewardLazyQuery>
+export type ProjectRewardSuspenseQueryHookResult = ReturnType<typeof useProjectRewardSuspenseQuery>
+export type ProjectRewardQueryResult = Apollo.QueryResult<ProjectRewardQuery, ProjectRewardQueryVariables>
