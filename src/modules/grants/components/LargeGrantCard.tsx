@@ -6,7 +6,7 @@ import { getPath } from '@/shared/constants'
 
 import { Grant } from '../../../types'
 import { useMobileMode } from '../../../utils'
-import { GrantStatusBadge } from './GrantStatusBadge'
+import { GrantStatus } from './GrantStatusBadge'
 import GrantWidget from './GrantWidget'
 import { Sponsors } from './Sponsors'
 
@@ -40,7 +40,7 @@ export const LargeGrantCard = ({ grant, showBanner }: Props) => {
       mt={3}
       onClick={() => navigate(to)}
       minWidth={'100%'}
-      maxHeight={{ base: '320px', lg: '496px' }}
+      maxHeight={{ base: '296px', lg: '496px' }}
       cursor="pointer"
       border={`1px solid`}
       borderColor="neutralAlpha.6"
@@ -49,16 +49,33 @@ export const LargeGrantCard = ({ grant, showBanner }: Props) => {
       spacing={0}
     >
       {showBanner && grant.image ? (
-        <Box borderTopRightRadius="12px" borderTopLeftRadius="12px" overflow="hidden" height="320px">
-          <Image objectFit="cover" src={grant.image} minWidth={'100%'} />
+        <Box
+          position="relative"
+          borderTopRightRadius="8px"
+          borderTopLeftRadius="8px"
+          overflow="hidden"
+          height={{ base: '296px', lg: '320px' }}
+        >
+          <Image
+            objectFit="cover"
+            borderTopLeftRadius="8px"
+            borderTopRightRadius="8px"
+            src={grant.image}
+            minWidth={'100%'}
+          />
+          {isMobile && (
+            <Box position="absolute" top={2} right={1} zIndex={2} p={1} borderRadius="md">
+              <GrantStatus status={grant.status} startDate={grant?.statuses[0]?.startAt || 0} />
+            </Box>
+          )}
         </Box>
       ) : null}
-      <VStack maxHeight="179px" w="100%" p={4} spacing={3}>
+      <VStack maxHeight={{ base: '138px', lg: '179px' }} w="100%" p={{ base: 2, lg: 4 }} spacing={{ base: 2, lg: 3 }}>
         <HStack w="100%" justifyContent="space-between">
-          <Body fontSize="20px" medium>
+          <Body fontSize={{ base: '16px', lg: '20px' }} medium>
             {grant.title}
           </Body>
-          <GrantStatusBadge status={grant.status} startDate={grant?.statuses[0]?.startAt || 0} />
+          {!isMobile && <GrantStatus status={grant.status} startDate={grant?.statuses[0]?.startAt || 0} />}
         </HStack>
         <HStack w="100%" justifyContent="flex-start" spacing={6}>
           <GrantWidget grant={grant} />
