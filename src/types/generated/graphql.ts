@@ -848,7 +848,7 @@ export type GlobalContributorLeaderboardRow = {
   contributionsTotalUsd: Scalars['Float']['output']
   projectsContributedCount: Scalars['Int']['output']
   userId: Scalars['BigInt']['output']
-  userImageUrl: Scalars['String']['output']
+  userImageUrl?: Maybe<Scalars['String']['output']>
   username: Scalars['String']['output']
 }
 
@@ -859,7 +859,7 @@ export type GlobalProjectLeaderboardRow = {
   contributionsTotalUsd: Scalars['Float']['output']
   contributorsCount: Scalars['Int']['output']
   projectName: Scalars['String']['output']
-  projectThumbnailUrl: Scalars['String']['output']
+  projectThumbnailUrl?: Maybe<Scalars['String']['output']>
   projectTitle: Scalars['String']['output']
 }
 
@@ -1031,20 +1031,6 @@ export type LeaderboardGlobalProjectsGetInput = {
 export enum LeaderboardPeriod {
   AllTime = 'ALL_TIME',
   Month = 'MONTH',
-}
-
-export type LightningAddressConnectionDetails = {
-  __typename?: 'LightningAddressConnectionDetails'
-  lightningAddress: Scalars['String']['output']
-}
-
-export type LightningAddressConnectionDetailsCreateInput = {
-  lightningAddress: Scalars['String']['input']
-}
-
-export enum LeaderboardPeriod {
-  AllTime = 'ALL_TIME',
-  Month = 'MONTH'
 }
 
 export type LightningAddressConnectionDetails = {
@@ -1487,11 +1473,6 @@ export type OtpInput = {
   otpVerificationToken: Scalars['String']['input']
 }
 
-export type OtpInput = {
-  otp: Scalars['Int']['input']
-  otpVerificationToken: Scalars['String']['input']
-}
-
 export type OtpLoginInput = {
   otp: Scalars['Int']['input']
   otpVerificationToken: Scalars['String']['input']
@@ -1884,21 +1865,6 @@ export enum ProjectLeaderboardPeriod {
   AllTime = 'ALL_TIME',
   Month = 'MONTH',
   Week = 'WEEK',
-}
-
-export type ProjectLinkMutationInput = {
-  link: Scalars['String']['input']
-  projectId: Scalars['BigInt']['input']
-}
-
-export type ProjectPublishMutationInput = {
-  projectId: Scalars['BigInt']['input']
-}
-
-export enum ProjectLeaderboardPeriod {
-  AllTime = 'ALL_TIME',
-  Month = 'MONTH',
-  Week = 'WEEK'
 }
 
 export type ProjectLinkMutationInput = {
@@ -3846,7 +3812,7 @@ export type GlobalContributorLeaderboardRowResolvers<
   contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
   projectsContributedCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   userId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
-  userImageUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  userImageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
@@ -3860,7 +3826,7 @@ export type GlobalProjectLeaderboardRowResolvers<
   contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
   contributorsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   projectName?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  projectThumbnailUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  projectThumbnailUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   projectTitle?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
@@ -5406,72 +5372,6 @@ export type FundingTxForLandingPageFragment = {
     | null
 }
 
-export type FundingTxWithInvoiceStatusFragment = {
-  __typename?: 'FundingTx'
-  id: any
-  uuid?: string | null
-  invoiceId?: string | null
-  status: FundingStatus
-  onChain: boolean
-  invoiceStatus: InvoiceStatus
-  paymentRequest?: string | null
-  creatorEmail?: string | null
-}
-
-export type FundingTxFragment = {
-  __typename?: 'FundingTx'
-  id: any
-  uuid?: string | null
-  invoiceId?: string | null
-  paymentRequest?: string | null
-  amount: number
-  status: FundingStatus
-  invoiceStatus: InvoiceStatus
-  comment?: string | null
-  media?: string | null
-  paidAt?: any | null
-  onChain: boolean
-  address?: string | null
-  source: string
-  method?: FundingMethod | null
-  projectId: any
-  creatorEmail?: string | null
-  createdAt?: any | null
-  bitcoinQuote?: { __typename?: 'BitcoinQuote'; quote: number; quoteCurrency: QuoteCurrency } | null
-  funder: {
-    __typename?: 'Funder'
-    id: any
-    amountFunded?: number | null
-    timesFunded?: number | null
-    confirmedAt?: any | null
-    user?: { __typename?: 'User'; id: any; username: string; imageUrl?: string | null } | null
-  }
-}
-
-export type FundingTxForDownloadInvoiceFragment = {
-  __typename?: 'FundingTx'
-  id: any
-  donationAmount: number
-  amountPaid: number
-  uuid?: string | null
-  projectId: any
-  paidAt?: any | null
-  createdAt?: any | null
-  status: FundingStatus
-  funder: { __typename?: 'Funder'; user?: { __typename?: 'User'; username: string } | null }
-  order?: {
-    __typename?: 'Order'
-    totalInSats: number
-    items: Array<{
-      __typename?: 'OrderItem'
-      quantity: number
-      unitPriceInSats: number
-      item: { __typename?: 'ProjectReward'; name: string }
-    }>
-  } | null
-  bitcoinQuote?: { __typename?: 'BitcoinQuote'; quote: number; quoteCurrency: QuoteCurrency } | null
-}
-
 export type ProjectDefaultGoalFragment = {
   __typename?: 'ProjectGoal'
   id: any
@@ -6015,6 +5915,7 @@ export type UserMeFragment = {
       thumbnailImage?: string | null
       title: string
       status?: ProjectStatus | null
+      createdAt: string
     } | null
   }>
 }
@@ -6144,46 +6045,6 @@ export type UserEmailVerifyMutationVariables = Exact<{
 }>
 
 export type UserEmailVerifyMutation = { __typename?: 'Mutation'; userEmailVerify: boolean }
-
-export type FundMutationVariables = Exact<{
-  input: FundingInput
-}>
-
-export type FundMutation = {
-  __typename?: 'Mutation'
-  fund: {
-    __typename?: 'FundingMutationResponse'
-    fundingTx?: ({ __typename?: 'FundingTx' } & FundingTxFragment) | null
-    swap?: { __typename?: 'Swap'; json: string } | null
-  }
-}
-
-export type RefreshFundingInvoiceMutationVariables = Exact<{
-  fundingTxID: Scalars['BigInt']['input']
-}>
-
-export type RefreshFundingInvoiceMutation = {
-  __typename?: 'Mutation'
-  fundingInvoiceRefresh: { __typename?: 'FundingTx' } & FundingTxWithInvoiceStatusFragment
-}
-
-export type FundingInvoiceCancelMutationVariables = Exact<{
-  invoiceId: Scalars['String']['input']
-}>
-
-export type FundingInvoiceCancelMutation = {
-  __typename?: 'Mutation'
-  fundingInvoiceCancel: { __typename?: 'FundinginvoiceCancel'; id: any; success: boolean }
-}
-
-export type FundingTxEmailUpdateMutationVariables = Exact<{
-  input?: InputMaybe<FundingTxEmailUpdateInput>
-}>
-
-export type FundingTxEmailUpdateMutation = {
-  __typename?: 'Mutation'
-  fundingTxEmailUpdate: { __typename?: 'FundingTx'; id: any; email?: string | null }
-}
 
 export type GrantApplyMutationVariables = Exact<{
   input?: InputMaybe<GrantApplyInput>
@@ -6403,12 +6264,6 @@ export type SignedUploadUrlQuery = {
   getSignedUploadUrl: { __typename?: 'SignedUploadUrl'; uploadUrl: string; distributionUrl: string }
 }
 
-export type GetFundingTxQueryVariables = Exact<{
-  id: Scalars['BigInt']['input']
-}>
-
-export type GetFundingTxQuery = { __typename?: 'Query'; fundingTx: { __typename?: 'FundingTx' } & FundingTxFragment }
-
 export type FundingTxForUserContributionFragment = {
   __typename?: 'FundingTx'
   id: any
@@ -6451,15 +6306,6 @@ export type FundingTxForUserContributionFragment = {
     | null
 }
 
-export type FundingTxWithInvoiceStatusQueryVariables = Exact<{
-  fundingTxID: Scalars['BigInt']['input']
-}>
-
-export type FundingTxWithInvoiceStatusQuery = {
-  __typename?: 'Query'
-  fundingTx: { __typename?: 'FundingTx' } & FundingTxWithInvoiceStatusFragment
-}
-
 export type FundingTxsForLandingPageQueryVariables = Exact<{
   input?: InputMaybe<GetFundingTxsInput>
 }>
@@ -6479,15 +6325,6 @@ export type FundingTxForUserContributionQueryVariables = Exact<{
 export type FundingTxForUserContributionQuery = {
   __typename?: 'Query'
   fundingTx: { __typename?: 'FundingTx' } & FundingTxForUserContributionFragment
-}
-
-export type FundingTxForDownloadInvoiceQueryVariables = Exact<{
-  fundingTxId: Scalars['BigInt']['input']
-}>
-
-export type FundingTxForDownloadInvoiceQuery = {
-  __typename?: 'Query'
-  fundingTx: { __typename?: 'FundingTx' } & FundingTxForDownloadInvoiceFragment
 }
 
 export type ProjectDefaultGoalQueryVariables = Exact<{
@@ -6887,18 +6724,6 @@ export type ActivityCreatedSubscription = {
     | ({ __typename?: 'ProjectReward' } & ProjectRewardForLandingPageFragment)
 }
 
-export type FundingTxStatusUpdatedSubscriptionVariables = Exact<{
-  input?: InputMaybe<FundingTxStatusUpdatedInput>
-}>
-
-export type FundingTxStatusUpdatedSubscription = {
-  __typename?: 'Subscription'
-  fundingTxStatusUpdated: {
-    __typename?: 'FundingTxStatusUpdatedSubscriptionResponse'
-    fundingTx: { __typename?: 'FundingTx' } & FundingTxFragment
-  }
-}
-
 export type SummaryBannerFragmentFragment = {
   __typename?: 'ProjectsSummary'
   fundedTotal?: any | null
@@ -6914,14 +6739,14 @@ export type TopContributorsFragmentFragment = {
   projectsContributedCount: number
   userId: any
   username: string
-  userImageUrl: string
+  userImageUrl?: string | null
 }
 
 export type TopProjectsFragmentFragment = {
   __typename?: 'GlobalProjectLeaderboardRow'
   projectName: string
   projectTitle: string
-  projectThumbnailUrl: string
+  projectThumbnailUrl?: string | null
   contributionsTotal: number
   contributionsTotalUsd: number
   contributionsCount: number
@@ -6946,6 +6771,114 @@ export type LeaderboardGlobalProjectsQueryVariables = Exact<{
 export type LeaderboardGlobalProjectsQuery = {
   __typename?: 'Query'
   leaderboardGlobalProjectsGet: Array<{ __typename?: 'GlobalProjectLeaderboardRow' } & TopProjectsFragmentFragment>
+}
+
+export type NotificationConfigurationFragment = {
+  __typename?: 'NotificationConfiguration'
+  id: any
+  name: string
+  description?: string | null
+  value: string
+  type?: SettingValueType | null
+  options: Array<string>
+}
+
+export type NotificationSettingsFragment = {
+  __typename?: 'NotificationSettings'
+  notificationType: string
+  isEnabled: boolean
+  configurations: Array<{ __typename?: 'NotificationConfiguration' } & NotificationConfigurationFragment>
+}
+
+export type ProfileNotificationsSettingsFragment = {
+  __typename?: 'ProfileNotificationSettings'
+  userSettings: {
+    __typename?: 'UserNotificationSettings'
+    userId: any
+    notificationSettings: Array<{ __typename?: 'NotificationSettings' } & NotificationSettingsFragment>
+  }
+  creatorSettings: Array<{
+    __typename?: 'CreatorNotificationSettings'
+    userId: any
+    project: { __typename?: 'CreatorNotificationSettingsProject'; id: any; title: string; image?: string | null }
+    notificationSettings: Array<{ __typename?: 'NotificationSettings' } & NotificationSettingsFragment>
+  }>
+}
+
+export type UserNotificationsSettingsFragment = {
+  __typename?: 'ProfileNotificationSettings'
+  userSettings: {
+    __typename?: 'UserNotificationSettings'
+    userId: any
+    notificationSettings: Array<{ __typename?: 'NotificationSettings' } & NotificationSettingsFragment>
+  }
+}
+
+export type ProjectNotificationSettingsFragment = {
+  __typename?: 'CreatorNotificationSettings'
+  userId: any
+  project: { __typename?: 'CreatorNotificationSettingsProject'; id: any; title: string; image?: string | null }
+  notificationSettings: Array<{
+    __typename?: 'NotificationSettings'
+    notificationType: string
+    isEnabled: boolean
+    configurations: Array<{
+      __typename?: 'NotificationConfiguration'
+      id: any
+      name: string
+      description?: string | null
+      value: string
+      type?: SettingValueType | null
+      options: Array<string>
+    }>
+  }>
+}
+
+export type CreatorNotificationsSettingsUpdateMutationVariables = Exact<{
+  creatorNotificationConfigurationId: Scalars['BigInt']['input']
+  value: Scalars['String']['input']
+}>
+
+export type CreatorNotificationsSettingsUpdateMutation = {
+  __typename?: 'Mutation'
+  creatorNotificationConfigurationValueUpdate?: boolean | null
+}
+
+export type UserNotificationsSettingsUpdateMutationVariables = Exact<{
+  userNotificationConfigurationId: Scalars['BigInt']['input']
+  value: Scalars['String']['input']
+}>
+
+export type UserNotificationsSettingsUpdateMutation = {
+  __typename?: 'Mutation'
+  userNotificationConfigurationValueUpdate?: boolean | null
+}
+
+export type ProfileNotificationsSettingsQueryVariables = Exact<{
+  userId: Scalars['BigInt']['input']
+}>
+
+export type ProfileNotificationsSettingsQuery = {
+  __typename?: 'Query'
+  userNotificationSettingsGet: { __typename?: 'ProfileNotificationSettings' } & ProfileNotificationsSettingsFragment
+}
+
+export type UserNotificationsSettingsQueryVariables = Exact<{
+  userId: Scalars['BigInt']['input']
+}>
+
+export type UserNotificationsSettingsQuery = {
+  __typename?: 'Query'
+  userNotificationSettingsGet: { __typename?: 'ProfileNotificationSettings' } & UserNotificationsSettingsFragment
+}
+
+export type ProjectNotificationSettingsQueryVariables = Exact<{
+  projectId: Scalars['BigInt']['input']
+}>
+
+export type ProjectNotificationSettingsQuery = {
+  __typename?: 'Query'
+  projectNotificationSettingsGet: { __typename?: 'CreatorNotificationSettings' } & ProjectNotificationSettingsFragment
 }
 
 export type ProjectAffiliateLinkFragment = {
@@ -7003,6 +6936,16 @@ export type ProjectFunderFragment = {
   user?: { __typename?: 'User'; id: any; imageUrl?: string | null; username: string } | null
 }
 
+export type ProjectLeaderboardContributorsFragment = {
+  __typename?: 'ProjectLeaderboardContributorsRow'
+  funderId: any
+  contributionsTotalUsd: number
+  contributionsTotal: number
+  contributionsCount: number
+  commentsCount: number
+  user?: { __typename?: 'User'; id: any; imageUrl?: string | null; username: string } | null
+}
+
 export type ProjectFundingTxFragment = {
   __typename?: 'FundingTx'
   id: any
@@ -7012,6 +6955,72 @@ export type ProjectFundingTxFragment = {
   paidAt?: any | null
   bitcoinQuote?: { __typename?: 'BitcoinQuote'; quote: number; quoteCurrency: QuoteCurrency } | null
   funder: { __typename?: 'Funder'; id: any; user?: ({ __typename?: 'User' } & UserAvatarFragment) | null }
+}
+
+export type FundingTxFragment = {
+  __typename?: 'FundingTx'
+  id: any
+  uuid?: string | null
+  invoiceId?: string | null
+  paymentRequest?: string | null
+  amount: number
+  status: FundingStatus
+  invoiceStatus: InvoiceStatus
+  comment?: string | null
+  media?: string | null
+  paidAt?: any | null
+  onChain: boolean
+  address?: string | null
+  source: string
+  method?: FundingMethod | null
+  projectId: any
+  creatorEmail?: string | null
+  createdAt?: any | null
+  bitcoinQuote?: { __typename?: 'BitcoinQuote'; quote: number; quoteCurrency: QuoteCurrency } | null
+  funder: {
+    __typename?: 'Funder'
+    id: any
+    amountFunded?: number | null
+    timesFunded?: number | null
+    confirmedAt?: any | null
+    user?: { __typename?: 'User'; id: any; username: string; imageUrl?: string | null } | null
+  }
+}
+
+export type FundingTxWithInvoiceStatusFragment = {
+  __typename?: 'FundingTx'
+  id: any
+  uuid?: string | null
+  invoiceId?: string | null
+  status: FundingStatus
+  onChain: boolean
+  invoiceStatus: InvoiceStatus
+  paymentRequest?: string | null
+  creatorEmail?: string | null
+}
+
+export type FundingTxForDownloadInvoiceFragment = {
+  __typename?: 'FundingTx'
+  id: any
+  donationAmount: number
+  amountPaid: number
+  uuid?: string | null
+  projectId: any
+  paidAt?: any | null
+  createdAt?: any | null
+  status: FundingStatus
+  funder: { __typename?: 'Funder'; user?: { __typename?: 'User'; username: string } | null }
+  order?: {
+    __typename?: 'Order'
+    totalInSats: number
+    items: Array<{
+      __typename?: 'OrderItem'
+      quantity: number
+      unitPriceInSats: number
+      item: { __typename?: 'ProjectReward'; name: string }
+    }>
+  } | null
+  bitcoinQuote?: { __typename?: 'BitcoinQuote'; quote: number; quoteCurrency: QuoteCurrency } | null
 }
 
 export type ProjectGoalsFragment = {
@@ -7311,6 +7320,46 @@ export type PublishEntryMutation = {
   publishEntry: { __typename?: 'Entry' } & ProjectEntryViewFragment
 }
 
+export type FundMutationVariables = Exact<{
+  input: FundingInput
+}>
+
+export type FundMutation = {
+  __typename?: 'Mutation'
+  fund: {
+    __typename?: 'FundingMutationResponse'
+    fundingTx?: ({ __typename?: 'FundingTx' } & FundingTxFragment) | null
+    swap?: { __typename?: 'Swap'; json: string } | null
+  }
+}
+
+export type RefreshFundingInvoiceMutationVariables = Exact<{
+  fundingTxID: Scalars['BigInt']['input']
+}>
+
+export type RefreshFundingInvoiceMutation = {
+  __typename?: 'Mutation'
+  fundingInvoiceRefresh: { __typename?: 'FundingTx' } & FundingTxWithInvoiceStatusFragment
+}
+
+export type FundingInvoiceCancelMutationVariables = Exact<{
+  invoiceId: Scalars['String']['input']
+}>
+
+export type FundingInvoiceCancelMutation = {
+  __typename?: 'Mutation'
+  fundingInvoiceCancel: { __typename?: 'FundinginvoiceCancel'; id: any; success: boolean }
+}
+
+export type FundingTxEmailUpdateMutationVariables = Exact<{
+  input?: InputMaybe<FundingTxEmailUpdateInput>
+}>
+
+export type FundingTxEmailUpdateMutation = {
+  __typename?: 'Mutation'
+  fundingTxEmailUpdate: { __typename?: 'FundingTx'; id: any; email?: string | null }
+}
+
 export type ProjectGoalOrderingUpdateMutationVariables = Exact<{
   input: ProjectGoalOrderingUpdateInput
 }>
@@ -7527,6 +7576,17 @@ export type ProjectPageFundersQuery = {
   fundersGet: Array<{ __typename?: 'Funder' } & ProjectFunderFragment>
 }
 
+export type ProjectLeaderboardContributorsGetQueryVariables = Exact<{
+  input: ProjectLeaderboardContributorsGetInput
+}>
+
+export type ProjectLeaderboardContributorsGetQuery = {
+  __typename?: 'Query'
+  projectLeaderboardContributorsGet: Array<
+    { __typename?: 'ProjectLeaderboardContributorsRow' } & ProjectLeaderboardContributorsFragment
+  >
+}
+
 export type ProjectPageFundingTxQueryVariables = Exact<{
   input?: InputMaybe<GetFundingTxsInput>
 }>
@@ -7537,6 +7597,24 @@ export type ProjectPageFundingTxQuery = {
     __typename?: 'FundingTxsGetResponse'
     fundingTxs: Array<{ __typename?: 'FundingTx' } & ProjectFundingTxFragment>
   } | null
+}
+
+export type FundingTxWithInvoiceStatusQueryVariables = Exact<{
+  fundingTxID: Scalars['BigInt']['input']
+}>
+
+export type FundingTxWithInvoiceStatusQuery = {
+  __typename?: 'Query'
+  fundingTx: { __typename?: 'FundingTx' } & FundingTxWithInvoiceStatusFragment
+}
+
+export type FundingTxForDownloadInvoiceQueryVariables = Exact<{
+  fundingTxId: Scalars['BigInt']['input']
+}>
+
+export type FundingTxForDownloadInvoiceQuery = {
+  __typename?: 'Query'
+  fundingTx: { __typename?: 'FundingTx' } & FundingTxForDownloadInvoiceFragment
 }
 
 export type ProjectInProgressGoalsQueryVariables = Exact<{
@@ -7662,6 +7740,18 @@ export type ProjectRewardQuery = {
   getProjectReward: { __typename?: 'ProjectReward' } & ProjectRewardFragment
 }
 
+export type FundingTxStatusUpdatedSubscriptionVariables = Exact<{
+  input?: InputMaybe<FundingTxStatusUpdatedInput>
+}>
+
+export type FundingTxStatusUpdatedSubscription = {
+  __typename?: 'Subscription'
+  fundingTxStatusUpdated: {
+    __typename?: 'FundingTxStatusUpdatedSubscriptionResponse'
+    fundingTx: { __typename?: 'FundingTx' } & FundingTxFragment
+  }
+}
+
 export const EmailUpdateUserFragmentDoc = gql`
   fragment EmailUpdateUser on User {
     email
@@ -7709,86 +7799,6 @@ export const EntryFragmentDoc = gql`
     }
   }
   ${UserForAvatarFragmentDoc}
-`
-export const FundingTxWithInvoiceStatusFragmentDoc = gql`
-  fragment FundingTxWithInvoiceStatus on FundingTx {
-    id
-    uuid
-    invoiceId
-    status
-    onChain
-    invoiceStatus
-    invoiceStatus
-    paymentRequest
-    creatorEmail
-  }
-`
-export const FundingTxFragmentDoc = gql`
-  fragment FundingTx on FundingTx {
-    id
-    uuid
-    invoiceId
-    paymentRequest
-    amount
-    status
-    invoiceStatus
-    comment
-    media
-    paidAt
-    onChain
-    address
-    source
-    method
-    projectId
-    creatorEmail
-    createdAt
-    bitcoinQuote {
-      quote
-      quoteCurrency
-    }
-    funder {
-      id
-      amountFunded
-      timesFunded
-      confirmedAt
-      user {
-        id
-        username
-        imageUrl
-      }
-    }
-  }
-`
-export const FundingTxForDownloadInvoiceFragmentDoc = gql`
-  fragment FundingTxForDownloadInvoice on FundingTx {
-    id
-    donationAmount
-    amountPaid
-    uuid
-    funder {
-      user {
-        username
-      }
-    }
-    projectId
-    paidAt
-    createdAt
-    order {
-      items {
-        item {
-          name
-        }
-        quantity
-        unitPriceInSats
-      }
-      totalInSats
-    }
-    status
-    bitcoinQuote {
-      quote
-      quoteCurrency
-    }
-  }
 `
 export const ProjectDefaultGoalFragmentDoc = gql`
   fragment ProjectDefaultGoal on ProjectGoal {
@@ -8421,6 +8431,7 @@ export const UserMeFragmentDoc = gql`
         thumbnailImage
         title
         status
+        createdAt
       }
     }
   }
@@ -8718,6 +8729,81 @@ export const TopProjectsFragmentFragmentDoc = gql`
     contributorsCount
   }
 `
+export const NotificationConfigurationFragmentDoc = gql`
+  fragment NotificationConfiguration on NotificationConfiguration {
+    id
+    name
+    description
+    value
+    type
+    options
+  }
+`
+export const NotificationSettingsFragmentDoc = gql`
+  fragment NotificationSettings on NotificationSettings {
+    notificationType
+    isEnabled
+    configurations {
+      ...NotificationConfiguration
+    }
+  }
+  ${NotificationConfigurationFragmentDoc}
+`
+export const ProfileNotificationsSettingsFragmentDoc = gql`
+  fragment ProfileNotificationsSettings on ProfileNotificationSettings {
+    userSettings {
+      userId
+      notificationSettings {
+        ...NotificationSettings
+      }
+    }
+    creatorSettings {
+      userId
+      project {
+        id
+        title
+        image
+      }
+      notificationSettings {
+        ...NotificationSettings
+      }
+    }
+  }
+  ${NotificationSettingsFragmentDoc}
+`
+export const UserNotificationsSettingsFragmentDoc = gql`
+  fragment UserNotificationsSettings on ProfileNotificationSettings {
+    userSettings {
+      userId
+      notificationSettings {
+        ...NotificationSettings
+      }
+    }
+  }
+  ${NotificationSettingsFragmentDoc}
+`
+export const ProjectNotificationSettingsFragmentDoc = gql`
+  fragment ProjectNotificationSettings on CreatorNotificationSettings {
+    userId
+    project {
+      id
+      title
+      image
+    }
+    notificationSettings {
+      notificationType
+      isEnabled
+      configurations {
+        id
+        name
+        description
+        value
+        type
+        options
+      }
+    }
+  }
+`
 export const ProjectAffiliateLinkFragmentDoc = gql`
   fragment ProjectAffiliateLink on AffiliateLink {
     projectId
@@ -8779,6 +8865,20 @@ export const ProjectFunderFragmentDoc = gql`
     }
   }
 `
+export const ProjectLeaderboardContributorsFragmentDoc = gql`
+  fragment ProjectLeaderboardContributors on ProjectLeaderboardContributorsRow {
+    funderId
+    contributionsTotalUsd
+    contributionsTotal
+    contributionsCount
+    commentsCount
+    user {
+      id
+      imageUrl
+      username
+    }
+  }
+`
 export const UserAvatarFragmentDoc = gql`
   fragment UserAvatar on User {
     id
@@ -8805,6 +8905,86 @@ export const ProjectFundingTxFragmentDoc = gql`
     }
   }
   ${UserAvatarFragmentDoc}
+`
+export const FundingTxFragmentDoc = gql`
+  fragment FundingTx on FundingTx {
+    id
+    uuid
+    invoiceId
+    paymentRequest
+    amount
+    status
+    invoiceStatus
+    comment
+    media
+    paidAt
+    onChain
+    address
+    source
+    method
+    projectId
+    creatorEmail
+    createdAt
+    bitcoinQuote {
+      quote
+      quoteCurrency
+    }
+    funder {
+      id
+      amountFunded
+      timesFunded
+      confirmedAt
+      user {
+        id
+        username
+        imageUrl
+      }
+    }
+  }
+`
+export const FundingTxWithInvoiceStatusFragmentDoc = gql`
+  fragment FundingTxWithInvoiceStatus on FundingTx {
+    id
+    uuid
+    invoiceId
+    status
+    onChain
+    invoiceStatus
+    invoiceStatus
+    paymentRequest
+    creatorEmail
+  }
+`
+export const FundingTxForDownloadInvoiceFragmentDoc = gql`
+  fragment FundingTxForDownloadInvoice on FundingTx {
+    id
+    donationAmount
+    amountPaid
+    uuid
+    funder {
+      user {
+        username
+      }
+    }
+    projectId
+    paidAt
+    createdAt
+    order {
+      items {
+        item {
+          name
+        }
+        quantity
+        unitPriceInSats
+      }
+      totalInSats
+    }
+    status
+    bitcoinQuote {
+      quote
+      quoteCurrency
+    }
+  }
 `
 export const ProjectGoalsFragmentDoc = gql`
   fragment ProjectGoals on ProjectGoal {
@@ -9242,180 +9422,6 @@ export type UserEmailVerifyMutationResult = Apollo.MutationResult<UserEmailVerif
 export type UserEmailVerifyMutationOptions = Apollo.BaseMutationOptions<
   UserEmailVerifyMutation,
   UserEmailVerifyMutationVariables
->
-export const FundDocument = gql`
-  mutation Fund($input: FundingInput!) {
-    fund(input: $input) {
-      fundingTx {
-        ...FundingTx
-      }
-      swap {
-        json
-      }
-    }
-  }
-  ${FundingTxFragmentDoc}
-`
-export type FundMutationFn = Apollo.MutationFunction<FundMutation, FundMutationVariables>
-
-/**
- * __useFundMutation__
- *
- * To run a mutation, you first call `useFundMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useFundMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [fundMutation, { data, loading, error }] = useFundMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useFundMutation(baseOptions?: Apollo.MutationHookOptions<FundMutation, FundMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<FundMutation, FundMutationVariables>(FundDocument, options)
-}
-export type FundMutationHookResult = ReturnType<typeof useFundMutation>
-export type FundMutationResult = Apollo.MutationResult<FundMutation>
-export type FundMutationOptions = Apollo.BaseMutationOptions<FundMutation, FundMutationVariables>
-export const RefreshFundingInvoiceDocument = gql`
-  mutation RefreshFundingInvoice($fundingTxID: BigInt!) {
-    fundingInvoiceRefresh(fundingTxId: $fundingTxID) {
-      ...FundingTxWithInvoiceStatus
-    }
-  }
-  ${FundingTxWithInvoiceStatusFragmentDoc}
-`
-export type RefreshFundingInvoiceMutationFn = Apollo.MutationFunction<
-  RefreshFundingInvoiceMutation,
-  RefreshFundingInvoiceMutationVariables
->
-
-/**
- * __useRefreshFundingInvoiceMutation__
- *
- * To run a mutation, you first call `useRefreshFundingInvoiceMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRefreshFundingInvoiceMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [refreshFundingInvoiceMutation, { data, loading, error }] = useRefreshFundingInvoiceMutation({
- *   variables: {
- *      fundingTxID: // value for 'fundingTxID'
- *   },
- * });
- */
-export function useRefreshFundingInvoiceMutation(
-  baseOptions?: Apollo.MutationHookOptions<RefreshFundingInvoiceMutation, RefreshFundingInvoiceMutationVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<RefreshFundingInvoiceMutation, RefreshFundingInvoiceMutationVariables>(
-    RefreshFundingInvoiceDocument,
-    options,
-  )
-}
-export type RefreshFundingInvoiceMutationHookResult = ReturnType<typeof useRefreshFundingInvoiceMutation>
-export type RefreshFundingInvoiceMutationResult = Apollo.MutationResult<RefreshFundingInvoiceMutation>
-export type RefreshFundingInvoiceMutationOptions = Apollo.BaseMutationOptions<
-  RefreshFundingInvoiceMutation,
-  RefreshFundingInvoiceMutationVariables
->
-export const FundingInvoiceCancelDocument = gql`
-  mutation FundingInvoiceCancel($invoiceId: String!) {
-    fundingInvoiceCancel(invoiceId: $invoiceId) {
-      id
-      success
-    }
-  }
-`
-export type FundingInvoiceCancelMutationFn = Apollo.MutationFunction<
-  FundingInvoiceCancelMutation,
-  FundingInvoiceCancelMutationVariables
->
-
-/**
- * __useFundingInvoiceCancelMutation__
- *
- * To run a mutation, you first call `useFundingInvoiceCancelMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useFundingInvoiceCancelMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [fundingInvoiceCancelMutation, { data, loading, error }] = useFundingInvoiceCancelMutation({
- *   variables: {
- *      invoiceId: // value for 'invoiceId'
- *   },
- * });
- */
-export function useFundingInvoiceCancelMutation(
-  baseOptions?: Apollo.MutationHookOptions<FundingInvoiceCancelMutation, FundingInvoiceCancelMutationVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<FundingInvoiceCancelMutation, FundingInvoiceCancelMutationVariables>(
-    FundingInvoiceCancelDocument,
-    options,
-  )
-}
-export type FundingInvoiceCancelMutationHookResult = ReturnType<typeof useFundingInvoiceCancelMutation>
-export type FundingInvoiceCancelMutationResult = Apollo.MutationResult<FundingInvoiceCancelMutation>
-export type FundingInvoiceCancelMutationOptions = Apollo.BaseMutationOptions<
-  FundingInvoiceCancelMutation,
-  FundingInvoiceCancelMutationVariables
->
-export const FundingTxEmailUpdateDocument = gql`
-  mutation FundingTxEmailUpdate($input: FundingTxEmailUpdateInput) {
-    fundingTxEmailUpdate(input: $input) {
-      id
-      email
-    }
-  }
-`
-export type FundingTxEmailUpdateMutationFn = Apollo.MutationFunction<
-  FundingTxEmailUpdateMutation,
-  FundingTxEmailUpdateMutationVariables
->
-
-/**
- * __useFundingTxEmailUpdateMutation__
- *
- * To run a mutation, you first call `useFundingTxEmailUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useFundingTxEmailUpdateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [fundingTxEmailUpdateMutation, { data, loading, error }] = useFundingTxEmailUpdateMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useFundingTxEmailUpdateMutation(
-  baseOptions?: Apollo.MutationHookOptions<FundingTxEmailUpdateMutation, FundingTxEmailUpdateMutationVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<FundingTxEmailUpdateMutation, FundingTxEmailUpdateMutationVariables>(
-    FundingTxEmailUpdateDocument,
-    options,
-  )
-}
-export type FundingTxEmailUpdateMutationHookResult = ReturnType<typeof useFundingTxEmailUpdateMutation>
-export type FundingTxEmailUpdateMutationResult = Apollo.MutationResult<FundingTxEmailUpdateMutation>
-export type FundingTxEmailUpdateMutationOptions = Apollo.BaseMutationOptions<
-  FundingTxEmailUpdateMutation,
-  FundingTxEmailUpdateMutationVariables
 >
 export const GrantApplyDocument = gql`
   mutation GrantApply($input: GrantApplyInput) {
@@ -10081,119 +10087,6 @@ export type SignedUploadUrlQueryHookResult = ReturnType<typeof useSignedUploadUr
 export type SignedUploadUrlLazyQueryHookResult = ReturnType<typeof useSignedUploadUrlLazyQuery>
 export type SignedUploadUrlSuspenseQueryHookResult = ReturnType<typeof useSignedUploadUrlSuspenseQuery>
 export type SignedUploadUrlQueryResult = Apollo.QueryResult<SignedUploadUrlQuery, SignedUploadUrlQueryVariables>
-export const GetFundingTxDocument = gql`
-  query GetFundingTx($id: BigInt!) {
-    fundingTx(id: $id) {
-      ...FundingTx
-    }
-  }
-  ${FundingTxFragmentDoc}
-`
-
-/**
- * __useGetFundingTxQuery__
- *
- * To run a query within a React component, call `useGetFundingTxQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetFundingTxQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetFundingTxQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetFundingTxQuery(
-  baseOptions: Apollo.QueryHookOptions<GetFundingTxQuery, GetFundingTxQueryVariables> &
-    ({ variables: GetFundingTxQueryVariables; skip?: boolean } | { skip: boolean }),
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetFundingTxQuery, GetFundingTxQueryVariables>(GetFundingTxDocument, options)
-}
-export function useGetFundingTxLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetFundingTxQuery, GetFundingTxQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetFundingTxQuery, GetFundingTxQueryVariables>(GetFundingTxDocument, options)
-}
-export function useGetFundingTxSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<GetFundingTxQuery, GetFundingTxQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useSuspenseQuery<GetFundingTxQuery, GetFundingTxQueryVariables>(GetFundingTxDocument, options)
-}
-export type GetFundingTxQueryHookResult = ReturnType<typeof useGetFundingTxQuery>
-export type GetFundingTxLazyQueryHookResult = ReturnType<typeof useGetFundingTxLazyQuery>
-export type GetFundingTxSuspenseQueryHookResult = ReturnType<typeof useGetFundingTxSuspenseQuery>
-export type GetFundingTxQueryResult = Apollo.QueryResult<GetFundingTxQuery, GetFundingTxQueryVariables>
-export const FundingTxWithInvoiceStatusDocument = gql`
-  query FundingTxWithInvoiceStatus($fundingTxID: BigInt!) {
-    fundingTx(id: $fundingTxID) {
-      ...FundingTxWithInvoiceStatus
-    }
-  }
-  ${FundingTxWithInvoiceStatusFragmentDoc}
-`
-
-/**
- * __useFundingTxWithInvoiceStatusQuery__
- *
- * To run a query within a React component, call `useFundingTxWithInvoiceStatusQuery` and pass it any options that fit your needs.
- * When your component renders, `useFundingTxWithInvoiceStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFundingTxWithInvoiceStatusQuery({
- *   variables: {
- *      fundingTxID: // value for 'fundingTxID'
- *   },
- * });
- */
-export function useFundingTxWithInvoiceStatusQuery(
-  baseOptions: Apollo.QueryHookOptions<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables> &
-    ({ variables: FundingTxWithInvoiceStatusQueryVariables; skip?: boolean } | { skip: boolean }),
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>(
-    FundingTxWithInvoiceStatusDocument,
-    options,
-  )
-}
-export function useFundingTxWithInvoiceStatusLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>(
-    FundingTxWithInvoiceStatusDocument,
-    options,
-  )
-}
-export function useFundingTxWithInvoiceStatusSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    FundingTxWithInvoiceStatusQuery,
-    FundingTxWithInvoiceStatusQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useSuspenseQuery<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>(
-    FundingTxWithInvoiceStatusDocument,
-    options,
-  )
-}
-export type FundingTxWithInvoiceStatusQueryHookResult = ReturnType<typeof useFundingTxWithInvoiceStatusQuery>
-export type FundingTxWithInvoiceStatusLazyQueryHookResult = ReturnType<typeof useFundingTxWithInvoiceStatusLazyQuery>
-export type FundingTxWithInvoiceStatusSuspenseQueryHookResult = ReturnType<
-  typeof useFundingTxWithInvoiceStatusSuspenseQuery
->
-export type FundingTxWithInvoiceStatusQueryResult = Apollo.QueryResult<
-  FundingTxWithInvoiceStatusQuery,
-  FundingTxWithInvoiceStatusQueryVariables
->
 export const FundingTxsForLandingPageDocument = gql`
   query FundingTxsForLandingPage($input: GetFundingTxsInput) {
     fundingTxsGet(input: $input) {
@@ -10326,74 +10219,6 @@ export type FundingTxForUserContributionSuspenseQueryHookResult = ReturnType<
 export type FundingTxForUserContributionQueryResult = Apollo.QueryResult<
   FundingTxForUserContributionQuery,
   FundingTxForUserContributionQueryVariables
->
-export const FundingTxForDownloadInvoiceDocument = gql`
-  query FundingTxForDownloadInvoice($fundingTxId: BigInt!) {
-    fundingTx(id: $fundingTxId) {
-      ...FundingTxForDownloadInvoice
-    }
-  }
-  ${FundingTxForDownloadInvoiceFragmentDoc}
-`
-
-/**
- * __useFundingTxForDownloadInvoiceQuery__
- *
- * To run a query within a React component, call `useFundingTxForDownloadInvoiceQuery` and pass it any options that fit your needs.
- * When your component renders, `useFundingTxForDownloadInvoiceQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFundingTxForDownloadInvoiceQuery({
- *   variables: {
- *      fundingTxId: // value for 'fundingTxId'
- *   },
- * });
- */
-export function useFundingTxForDownloadInvoiceQuery(
-  baseOptions: Apollo.QueryHookOptions<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables> &
-    ({ variables: FundingTxForDownloadInvoiceQueryVariables; skip?: boolean } | { skip: boolean }),
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables>(
-    FundingTxForDownloadInvoiceDocument,
-    options,
-  )
-}
-export function useFundingTxForDownloadInvoiceLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FundingTxForDownloadInvoiceQuery,
-    FundingTxForDownloadInvoiceQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables>(
-    FundingTxForDownloadInvoiceDocument,
-    options,
-  )
-}
-export function useFundingTxForDownloadInvoiceSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    FundingTxForDownloadInvoiceQuery,
-    FundingTxForDownloadInvoiceQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useSuspenseQuery<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables>(
-    FundingTxForDownloadInvoiceDocument,
-    options,
-  )
-}
-export type FundingTxForDownloadInvoiceQueryHookResult = ReturnType<typeof useFundingTxForDownloadInvoiceQuery>
-export type FundingTxForDownloadInvoiceLazyQueryHookResult = ReturnType<typeof useFundingTxForDownloadInvoiceLazyQuery>
-export type FundingTxForDownloadInvoiceSuspenseQueryHookResult = ReturnType<
-  typeof useFundingTxForDownloadInvoiceSuspenseQuery
->
-export type FundingTxForDownloadInvoiceQueryResult = Apollo.QueryResult<
-  FundingTxForDownloadInvoiceQuery,
-  FundingTxForDownloadInvoiceQueryVariables
 >
 export const ProjectDefaultGoalDocument = gql`
   query ProjectDefaultGoal($projectId: BigInt!) {
@@ -12208,47 +12033,6 @@ export function useActivityCreatedSubscription(
 }
 export type ActivityCreatedSubscriptionHookResult = ReturnType<typeof useActivityCreatedSubscription>
 export type ActivityCreatedSubscriptionResult = Apollo.SubscriptionResult<ActivityCreatedSubscription>
-export const FundingTxStatusUpdatedDocument = gql`
-  subscription FundingTxStatusUpdated($input: FundingTxStatusUpdatedInput) {
-    fundingTxStatusUpdated(input: $input) {
-      fundingTx {
-        ...FundingTx
-      }
-    }
-  }
-  ${FundingTxFragmentDoc}
-`
-
-/**
- * __useProfileNotificationsSettingsQuery__
- *
- * To run a query within a React component, call `useProfileNotificationsSettingsQuery` and pass it any options that fit your needs.
- * When your component renders, `useProfileNotificationsSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProfileNotificationsSettingsQuery({
- *   variables: {
- *      userId: // value for 'userId'
- *   },
- * });
- */
-export function useFundingTxStatusUpdatedSubscription(
-  baseOptions?: Apollo.SubscriptionHookOptions<
-    FundingTxStatusUpdatedSubscription,
-    FundingTxStatusUpdatedSubscriptionVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useSubscription<FundingTxStatusUpdatedSubscription, FundingTxStatusUpdatedSubscriptionVariables>(
-    FundingTxStatusUpdatedDocument,
-    options,
-  )
-}
-export type FundingTxStatusUpdatedSubscriptionHookResult = ReturnType<typeof useFundingTxStatusUpdatedSubscription>
-export type FundingTxStatusUpdatedSubscriptionResult = Apollo.SubscriptionResult<FundingTxStatusUpdatedSubscription>
 export const LeaderboardGlobalContributorsDocument = gql`
   query LeaderboardGlobalContributors($input: LeaderboardGlobalContributorsGetInput!) {
     leaderboardGlobalContributorsGet(input: $input) {
@@ -12386,6 +12170,313 @@ export type LeaderboardGlobalProjectsSuspenseQueryHookResult = ReturnType<
 export type LeaderboardGlobalProjectsQueryResult = Apollo.QueryResult<
   LeaderboardGlobalProjectsQuery,
   LeaderboardGlobalProjectsQueryVariables
+>
+export const CreatorNotificationsSettingsUpdateDocument = gql`
+  mutation CreatorNotificationsSettingsUpdate($creatorNotificationConfigurationId: BigInt!, $value: String!) {
+    creatorNotificationConfigurationValueUpdate(
+      creatorNotificationConfigurationId: $creatorNotificationConfigurationId
+      value: $value
+    )
+  }
+`
+export type CreatorNotificationsSettingsUpdateMutationFn = Apollo.MutationFunction<
+  CreatorNotificationsSettingsUpdateMutation,
+  CreatorNotificationsSettingsUpdateMutationVariables
+>
+
+/**
+ * __useCreatorNotificationsSettingsUpdateMutation__
+ *
+ * To run a mutation, you first call `useCreatorNotificationsSettingsUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatorNotificationsSettingsUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [creatorNotificationsSettingsUpdateMutation, { data, loading, error }] = useCreatorNotificationsSettingsUpdateMutation({
+ *   variables: {
+ *      creatorNotificationConfigurationId: // value for 'creatorNotificationConfigurationId'
+ *      value: // value for 'value'
+ *   },
+ * });
+ */
+export function useCreatorNotificationsSettingsUpdateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreatorNotificationsSettingsUpdateMutation,
+    CreatorNotificationsSettingsUpdateMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    CreatorNotificationsSettingsUpdateMutation,
+    CreatorNotificationsSettingsUpdateMutationVariables
+  >(CreatorNotificationsSettingsUpdateDocument, options)
+}
+export type CreatorNotificationsSettingsUpdateMutationHookResult = ReturnType<
+  typeof useCreatorNotificationsSettingsUpdateMutation
+>
+export type CreatorNotificationsSettingsUpdateMutationResult =
+  Apollo.MutationResult<CreatorNotificationsSettingsUpdateMutation>
+export type CreatorNotificationsSettingsUpdateMutationOptions = Apollo.BaseMutationOptions<
+  CreatorNotificationsSettingsUpdateMutation,
+  CreatorNotificationsSettingsUpdateMutationVariables
+>
+export const UserNotificationsSettingsUpdateDocument = gql`
+  mutation UserNotificationsSettingsUpdate($userNotificationConfigurationId: BigInt!, $value: String!) {
+    userNotificationConfigurationValueUpdate(
+      userNotificationConfigurationId: $userNotificationConfigurationId
+      value: $value
+    )
+  }
+`
+export type UserNotificationsSettingsUpdateMutationFn = Apollo.MutationFunction<
+  UserNotificationsSettingsUpdateMutation,
+  UserNotificationsSettingsUpdateMutationVariables
+>
+
+/**
+ * __useUserNotificationsSettingsUpdateMutation__
+ *
+ * To run a mutation, you first call `useUserNotificationsSettingsUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUserNotificationsSettingsUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [userNotificationsSettingsUpdateMutation, { data, loading, error }] = useUserNotificationsSettingsUpdateMutation({
+ *   variables: {
+ *      userNotificationConfigurationId: // value for 'userNotificationConfigurationId'
+ *      value: // value for 'value'
+ *   },
+ * });
+ */
+export function useUserNotificationsSettingsUpdateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UserNotificationsSettingsUpdateMutation,
+    UserNotificationsSettingsUpdateMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<UserNotificationsSettingsUpdateMutation, UserNotificationsSettingsUpdateMutationVariables>(
+    UserNotificationsSettingsUpdateDocument,
+    options,
+  )
+}
+export type UserNotificationsSettingsUpdateMutationHookResult = ReturnType<
+  typeof useUserNotificationsSettingsUpdateMutation
+>
+export type UserNotificationsSettingsUpdateMutationResult =
+  Apollo.MutationResult<UserNotificationsSettingsUpdateMutation>
+export type UserNotificationsSettingsUpdateMutationOptions = Apollo.BaseMutationOptions<
+  UserNotificationsSettingsUpdateMutation,
+  UserNotificationsSettingsUpdateMutationVariables
+>
+export const ProfileNotificationsSettingsDocument = gql`
+  query ProfileNotificationsSettings($userId: BigInt!) {
+    userNotificationSettingsGet(userId: $userId) {
+      ...ProfileNotificationsSettings
+    }
+  }
+  ${ProfileNotificationsSettingsFragmentDoc}
+`
+
+/**
+ * __useProfileNotificationsSettingsQuery__
+ *
+ * To run a query within a React component, call `useProfileNotificationsSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProfileNotificationsSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProfileNotificationsSettingsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useProfileNotificationsSettingsQuery(
+  baseOptions: Apollo.QueryHookOptions<ProfileNotificationsSettingsQuery, ProfileNotificationsSettingsQueryVariables> &
+    ({ variables: ProfileNotificationsSettingsQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ProfileNotificationsSettingsQuery, ProfileNotificationsSettingsQueryVariables>(
+    ProfileNotificationsSettingsDocument,
+    options,
+  )
+}
+export function useProfileNotificationsSettingsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ProfileNotificationsSettingsQuery,
+    ProfileNotificationsSettingsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<ProfileNotificationsSettingsQuery, ProfileNotificationsSettingsQueryVariables>(
+    ProfileNotificationsSettingsDocument,
+    options,
+  )
+}
+export function useProfileNotificationsSettingsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ProfileNotificationsSettingsQuery,
+    ProfileNotificationsSettingsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<ProfileNotificationsSettingsQuery, ProfileNotificationsSettingsQueryVariables>(
+    ProfileNotificationsSettingsDocument,
+    options,
+  )
+}
+export type ProfileNotificationsSettingsQueryHookResult = ReturnType<typeof useProfileNotificationsSettingsQuery>
+export type ProfileNotificationsSettingsLazyQueryHookResult = ReturnType<
+  typeof useProfileNotificationsSettingsLazyQuery
+>
+export type ProfileNotificationsSettingsSuspenseQueryHookResult = ReturnType<
+  typeof useProfileNotificationsSettingsSuspenseQuery
+>
+export type ProfileNotificationsSettingsQueryResult = Apollo.QueryResult<
+  ProfileNotificationsSettingsQuery,
+  ProfileNotificationsSettingsQueryVariables
+>
+export const UserNotificationsSettingsDocument = gql`
+  query UserNotificationsSettings($userId: BigInt!) {
+    userNotificationSettingsGet(userId: $userId) {
+      ...UserNotificationsSettings
+    }
+  }
+  ${UserNotificationsSettingsFragmentDoc}
+`
+
+/**
+ * __useUserNotificationsSettingsQuery__
+ *
+ * To run a query within a React component, call `useUserNotificationsSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserNotificationsSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserNotificationsSettingsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useUserNotificationsSettingsQuery(
+  baseOptions: Apollo.QueryHookOptions<UserNotificationsSettingsQuery, UserNotificationsSettingsQueryVariables> &
+    ({ variables: UserNotificationsSettingsQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<UserNotificationsSettingsQuery, UserNotificationsSettingsQueryVariables>(
+    UserNotificationsSettingsDocument,
+    options,
+  )
+}
+export function useUserNotificationsSettingsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UserNotificationsSettingsQuery, UserNotificationsSettingsQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<UserNotificationsSettingsQuery, UserNotificationsSettingsQueryVariables>(
+    UserNotificationsSettingsDocument,
+    options,
+  )
+}
+export function useUserNotificationsSettingsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    UserNotificationsSettingsQuery,
+    UserNotificationsSettingsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<UserNotificationsSettingsQuery, UserNotificationsSettingsQueryVariables>(
+    UserNotificationsSettingsDocument,
+    options,
+  )
+}
+export type UserNotificationsSettingsQueryHookResult = ReturnType<typeof useUserNotificationsSettingsQuery>
+export type UserNotificationsSettingsLazyQueryHookResult = ReturnType<typeof useUserNotificationsSettingsLazyQuery>
+export type UserNotificationsSettingsSuspenseQueryHookResult = ReturnType<
+  typeof useUserNotificationsSettingsSuspenseQuery
+>
+export type UserNotificationsSettingsQueryResult = Apollo.QueryResult<
+  UserNotificationsSettingsQuery,
+  UserNotificationsSettingsQueryVariables
+>
+export const ProjectNotificationSettingsDocument = gql`
+  query ProjectNotificationSettings($projectId: BigInt!) {
+    projectNotificationSettingsGet(projectId: $projectId) {
+      ...ProjectNotificationSettings
+    }
+  }
+  ${ProjectNotificationSettingsFragmentDoc}
+`
+
+/**
+ * __useProjectNotificationSettingsQuery__
+ *
+ * To run a query within a React component, call `useProjectNotificationSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectNotificationSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectNotificationSettingsQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useProjectNotificationSettingsQuery(
+  baseOptions: Apollo.QueryHookOptions<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables> &
+    ({ variables: ProjectNotificationSettingsQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables>(
+    ProjectNotificationSettingsDocument,
+    options,
+  )
+}
+export function useProjectNotificationSettingsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ProjectNotificationSettingsQuery,
+    ProjectNotificationSettingsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables>(
+    ProjectNotificationSettingsDocument,
+    options,
+  )
+}
+export function useProjectNotificationSettingsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ProjectNotificationSettingsQuery,
+    ProjectNotificationSettingsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables>(
+    ProjectNotificationSettingsDocument,
+    options,
+  )
+}
+export type ProjectNotificationSettingsQueryHookResult = ReturnType<typeof useProjectNotificationSettingsQuery>
+export type ProjectNotificationSettingsLazyQueryHookResult = ReturnType<typeof useProjectNotificationSettingsLazyQuery>
+export type ProjectNotificationSettingsSuspenseQueryHookResult = ReturnType<
+  typeof useProjectNotificationSettingsSuspenseQuery
+>
+export type ProjectNotificationSettingsQueryResult = Apollo.QueryResult<
+  ProjectNotificationSettingsQuery,
+  ProjectNotificationSettingsQueryVariables
 >
 export const AffiliateLinkCreateDocument = gql`
   mutation AffiliateLinkCreate($input: AffiliateLinkCreateInput!) {
@@ -12669,18 +12760,20 @@ export type PublishEntryMutationOptions = Apollo.BaseMutationOptions<
   PublishEntryMutation,
   PublishEntryMutationVariables
 >
-export const ProjectGoalOrderingUpdateDocument = gql`
-  mutation ProjectGoalOrderingUpdate($input: ProjectGoalOrderingUpdateInput!) {
-    projectGoalOrderingUpdate(input: $input) {
-      ...ProjectGoals
+export const FundDocument = gql`
+  mutation Fund($input: FundingInput!) {
+    fund(input: $input) {
+      fundingTx {
+        ...FundingTx
+      }
+      swap {
+        json
+      }
     }
   }
-  ${ProjectGoalsFragmentDoc}
+  ${FundingTxFragmentDoc}
 `
-export type ProjectGoalOrderingUpdateMutationFn = Apollo.MutationFunction<
-  ProjectGoalOrderingUpdateMutation,
-  ProjectGoalOrderingUpdateMutationVariables
->
+export type FundMutationFn = Apollo.MutationFunction<FundMutation, FundMutationVariables>
 
 /**
  * __useFundMutation__
@@ -12700,20 +12793,24 @@ export type ProjectGoalOrderingUpdateMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useFundMutation(baseOptions?: Apollo.MutationHookOptions<FundMutation, FundMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<FundMutation, FundMutationVariables>(FundDocument, options);
-      }
-export type FundMutationHookResult = ReturnType<typeof useFundMutation>;
-export type FundMutationResult = Apollo.MutationResult<FundMutation>;
-export type FundMutationOptions = Apollo.BaseMutationOptions<FundMutation, FundMutationVariables>;
-export const RefreshFundingInvoiceDocument = gql`
-    mutation RefreshFundingInvoice($fundingTxID: BigInt!) {
-  fundingInvoiceRefresh(fundingTxId: $fundingTxID) {
-    ...FundingTxWithInvoiceStatus
-  }
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<FundMutation, FundMutationVariables>(FundDocument, options)
 }
-    ${FundingTxWithInvoiceStatusFragmentDoc}`;
-export type RefreshFundingInvoiceMutationFn = Apollo.MutationFunction<RefreshFundingInvoiceMutation, RefreshFundingInvoiceMutationVariables>;
+export type FundMutationHookResult = ReturnType<typeof useFundMutation>
+export type FundMutationResult = Apollo.MutationResult<FundMutation>
+export type FundMutationOptions = Apollo.BaseMutationOptions<FundMutation, FundMutationVariables>
+export const RefreshFundingInvoiceDocument = gql`
+  mutation RefreshFundingInvoice($fundingTxID: BigInt!) {
+    fundingInvoiceRefresh(fundingTxId: $fundingTxID) {
+      ...FundingTxWithInvoiceStatus
+    }
+  }
+  ${FundingTxWithInvoiceStatusFragmentDoc}
+`
+export type RefreshFundingInvoiceMutationFn = Apollo.MutationFunction<
+  RefreshFundingInvoiceMutation,
+  RefreshFundingInvoiceMutationVariables
+>
 
 /**
  * __useRefreshFundingInvoiceMutation__
@@ -12732,22 +12829,33 @@ export type RefreshFundingInvoiceMutationFn = Apollo.MutationFunction<RefreshFun
  *   },
  * });
  */
-export function useRefreshFundingInvoiceMutation(baseOptions?: Apollo.MutationHookOptions<RefreshFundingInvoiceMutation, RefreshFundingInvoiceMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RefreshFundingInvoiceMutation, RefreshFundingInvoiceMutationVariables>(RefreshFundingInvoiceDocument, options);
-      }
-export type RefreshFundingInvoiceMutationHookResult = ReturnType<typeof useRefreshFundingInvoiceMutation>;
-export type RefreshFundingInvoiceMutationResult = Apollo.MutationResult<RefreshFundingInvoiceMutation>;
-export type RefreshFundingInvoiceMutationOptions = Apollo.BaseMutationOptions<RefreshFundingInvoiceMutation, RefreshFundingInvoiceMutationVariables>;
-export const FundingInvoiceCancelDocument = gql`
-    mutation FundingInvoiceCancel($invoiceId: String!) {
-  fundingInvoiceCancel(invoiceId: $invoiceId) {
-    id
-    success
-  }
+export function useRefreshFundingInvoiceMutation(
+  baseOptions?: Apollo.MutationHookOptions<RefreshFundingInvoiceMutation, RefreshFundingInvoiceMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<RefreshFundingInvoiceMutation, RefreshFundingInvoiceMutationVariables>(
+    RefreshFundingInvoiceDocument,
+    options,
+  )
 }
-    `;
-export type FundingInvoiceCancelMutationFn = Apollo.MutationFunction<FundingInvoiceCancelMutation, FundingInvoiceCancelMutationVariables>;
+export type RefreshFundingInvoiceMutationHookResult = ReturnType<typeof useRefreshFundingInvoiceMutation>
+export type RefreshFundingInvoiceMutationResult = Apollo.MutationResult<RefreshFundingInvoiceMutation>
+export type RefreshFundingInvoiceMutationOptions = Apollo.BaseMutationOptions<
+  RefreshFundingInvoiceMutation,
+  RefreshFundingInvoiceMutationVariables
+>
+export const FundingInvoiceCancelDocument = gql`
+  mutation FundingInvoiceCancel($invoiceId: String!) {
+    fundingInvoiceCancel(invoiceId: $invoiceId) {
+      id
+      success
+    }
+  }
+`
+export type FundingInvoiceCancelMutationFn = Apollo.MutationFunction<
+  FundingInvoiceCancelMutation,
+  FundingInvoiceCancelMutationVariables
+>
 
 /**
  * __useFundingInvoiceCancelMutation__
@@ -12766,22 +12874,33 @@ export type FundingInvoiceCancelMutationFn = Apollo.MutationFunction<FundingInvo
  *   },
  * });
  */
-export function useFundingInvoiceCancelMutation(baseOptions?: Apollo.MutationHookOptions<FundingInvoiceCancelMutation, FundingInvoiceCancelMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<FundingInvoiceCancelMutation, FundingInvoiceCancelMutationVariables>(FundingInvoiceCancelDocument, options);
-      }
-export type FundingInvoiceCancelMutationHookResult = ReturnType<typeof useFundingInvoiceCancelMutation>;
-export type FundingInvoiceCancelMutationResult = Apollo.MutationResult<FundingInvoiceCancelMutation>;
-export type FundingInvoiceCancelMutationOptions = Apollo.BaseMutationOptions<FundingInvoiceCancelMutation, FundingInvoiceCancelMutationVariables>;
-export const FundingTxEmailUpdateDocument = gql`
-    mutation FundingTxEmailUpdate($input: FundingTxEmailUpdateInput) {
-  fundingTxEmailUpdate(input: $input) {
-    id
-    email
-  }
+export function useFundingInvoiceCancelMutation(
+  baseOptions?: Apollo.MutationHookOptions<FundingInvoiceCancelMutation, FundingInvoiceCancelMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<FundingInvoiceCancelMutation, FundingInvoiceCancelMutationVariables>(
+    FundingInvoiceCancelDocument,
+    options,
+  )
 }
-    `;
-export type FundingTxEmailUpdateMutationFn = Apollo.MutationFunction<FundingTxEmailUpdateMutation, FundingTxEmailUpdateMutationVariables>;
+export type FundingInvoiceCancelMutationHookResult = ReturnType<typeof useFundingInvoiceCancelMutation>
+export type FundingInvoiceCancelMutationResult = Apollo.MutationResult<FundingInvoiceCancelMutation>
+export type FundingInvoiceCancelMutationOptions = Apollo.BaseMutationOptions<
+  FundingInvoiceCancelMutation,
+  FundingInvoiceCancelMutationVariables
+>
+export const FundingTxEmailUpdateDocument = gql`
+  mutation FundingTxEmailUpdate($input: FundingTxEmailUpdateInput) {
+    fundingTxEmailUpdate(input: $input) {
+      id
+      email
+    }
+  }
+`
+export type FundingTxEmailUpdateMutationFn = Apollo.MutationFunction<
+  FundingTxEmailUpdateMutation,
+  FundingTxEmailUpdateMutationVariables
+>
 
 /**
  * __useFundingTxEmailUpdateMutation__
@@ -12800,13 +12919,21 @@ export type FundingTxEmailUpdateMutationFn = Apollo.MutationFunction<FundingTxEm
  *   },
  * });
  */
-export function useFundingTxEmailUpdateMutation(baseOptions?: Apollo.MutationHookOptions<FundingTxEmailUpdateMutation, FundingTxEmailUpdateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<FundingTxEmailUpdateMutation, FundingTxEmailUpdateMutationVariables>(FundingTxEmailUpdateDocument, options);
-      }
-export type FundingTxEmailUpdateMutationHookResult = ReturnType<typeof useFundingTxEmailUpdateMutation>;
-export type FundingTxEmailUpdateMutationResult = Apollo.MutationResult<FundingTxEmailUpdateMutation>;
-export type FundingTxEmailUpdateMutationOptions = Apollo.BaseMutationOptions<FundingTxEmailUpdateMutation, FundingTxEmailUpdateMutationVariables>;
+export function useFundingTxEmailUpdateMutation(
+  baseOptions?: Apollo.MutationHookOptions<FundingTxEmailUpdateMutation, FundingTxEmailUpdateMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<FundingTxEmailUpdateMutation, FundingTxEmailUpdateMutationVariables>(
+    FundingTxEmailUpdateDocument,
+    options,
+  )
+}
+export type FundingTxEmailUpdateMutationHookResult = ReturnType<typeof useFundingTxEmailUpdateMutation>
+export type FundingTxEmailUpdateMutationResult = Apollo.MutationResult<FundingTxEmailUpdateMutation>
+export type FundingTxEmailUpdateMutationOptions = Apollo.BaseMutationOptions<
+  FundingTxEmailUpdateMutation,
+  FundingTxEmailUpdateMutationVariables
+>
 export const ProjectGoalOrderingUpdateDocument = gql`
   mutation ProjectGoalOrderingUpdate($input: ProjectGoalOrderingUpdateInput!) {
     projectGoalOrderingUpdate(input: $input) {
@@ -13874,6 +14001,81 @@ export type ProjectPageFundersQueryResult = Apollo.QueryResult<
   ProjectPageFundersQuery,
   ProjectPageFundersQueryVariables
 >
+export const ProjectLeaderboardContributorsGetDocument = gql`
+  query ProjectLeaderboardContributorsGet($input: ProjectLeaderboardContributorsGetInput!) {
+    projectLeaderboardContributorsGet(input: $input) {
+      ...ProjectLeaderboardContributors
+    }
+  }
+  ${ProjectLeaderboardContributorsFragmentDoc}
+`
+
+/**
+ * __useProjectLeaderboardContributorsGetQuery__
+ *
+ * To run a query within a React component, call `useProjectLeaderboardContributorsGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectLeaderboardContributorsGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectLeaderboardContributorsGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectLeaderboardContributorsGetQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ProjectLeaderboardContributorsGetQuery,
+    ProjectLeaderboardContributorsGetQueryVariables
+  > &
+    ({ variables: ProjectLeaderboardContributorsGetQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>(
+    ProjectLeaderboardContributorsGetDocument,
+    options,
+  )
+}
+export function useProjectLeaderboardContributorsGetLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ProjectLeaderboardContributorsGetQuery,
+    ProjectLeaderboardContributorsGetQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>(
+    ProjectLeaderboardContributorsGetDocument,
+    options,
+  )
+}
+export function useProjectLeaderboardContributorsGetSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ProjectLeaderboardContributorsGetQuery,
+    ProjectLeaderboardContributorsGetQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<
+    ProjectLeaderboardContributorsGetQuery,
+    ProjectLeaderboardContributorsGetQueryVariables
+  >(ProjectLeaderboardContributorsGetDocument, options)
+}
+export type ProjectLeaderboardContributorsGetQueryHookResult = ReturnType<
+  typeof useProjectLeaderboardContributorsGetQuery
+>
+export type ProjectLeaderboardContributorsGetLazyQueryHookResult = ReturnType<
+  typeof useProjectLeaderboardContributorsGetLazyQuery
+>
+export type ProjectLeaderboardContributorsGetSuspenseQueryHookResult = ReturnType<
+  typeof useProjectLeaderboardContributorsGetSuspenseQuery
+>
+export type ProjectLeaderboardContributorsGetQueryResult = Apollo.QueryResult<
+  ProjectLeaderboardContributorsGetQuery,
+  ProjectLeaderboardContributorsGetQueryVariables
+>
 export const ProjectPageFundingTxDocument = gql`
   query ProjectPageFundingTx($input: GetFundingTxsInput) {
     fundingTxsGet(input: $input) {
@@ -13934,6 +14136,139 @@ export type ProjectPageFundingTxSuspenseQueryHookResult = ReturnType<typeof useP
 export type ProjectPageFundingTxQueryResult = Apollo.QueryResult<
   ProjectPageFundingTxQuery,
   ProjectPageFundingTxQueryVariables
+>
+export const FundingTxWithInvoiceStatusDocument = gql`
+  query FundingTxWithInvoiceStatus($fundingTxID: BigInt!) {
+    fundingTx(id: $fundingTxID) {
+      ...FundingTxWithInvoiceStatus
+    }
+  }
+  ${FundingTxWithInvoiceStatusFragmentDoc}
+`
+
+/**
+ * __useFundingTxWithInvoiceStatusQuery__
+ *
+ * To run a query within a React component, call `useFundingTxWithInvoiceStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFundingTxWithInvoiceStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFundingTxWithInvoiceStatusQuery({
+ *   variables: {
+ *      fundingTxID: // value for 'fundingTxID'
+ *   },
+ * });
+ */
+export function useFundingTxWithInvoiceStatusQuery(
+  baseOptions: Apollo.QueryHookOptions<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables> &
+    ({ variables: FundingTxWithInvoiceStatusQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>(
+    FundingTxWithInvoiceStatusDocument,
+    options,
+  )
+}
+export function useFundingTxWithInvoiceStatusLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>(
+    FundingTxWithInvoiceStatusDocument,
+    options,
+  )
+}
+export function useFundingTxWithInvoiceStatusSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    FundingTxWithInvoiceStatusQuery,
+    FundingTxWithInvoiceStatusQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>(
+    FundingTxWithInvoiceStatusDocument,
+    options,
+  )
+}
+export type FundingTxWithInvoiceStatusQueryHookResult = ReturnType<typeof useFundingTxWithInvoiceStatusQuery>
+export type FundingTxWithInvoiceStatusLazyQueryHookResult = ReturnType<typeof useFundingTxWithInvoiceStatusLazyQuery>
+export type FundingTxWithInvoiceStatusSuspenseQueryHookResult = ReturnType<
+  typeof useFundingTxWithInvoiceStatusSuspenseQuery
+>
+export type FundingTxWithInvoiceStatusQueryResult = Apollo.QueryResult<
+  FundingTxWithInvoiceStatusQuery,
+  FundingTxWithInvoiceStatusQueryVariables
+>
+export const FundingTxForDownloadInvoiceDocument = gql`
+  query FundingTxForDownloadInvoice($fundingTxId: BigInt!) {
+    fundingTx(id: $fundingTxId) {
+      ...FundingTxForDownloadInvoice
+    }
+  }
+  ${FundingTxForDownloadInvoiceFragmentDoc}
+`
+
+/**
+ * __useFundingTxForDownloadInvoiceQuery__
+ *
+ * To run a query within a React component, call `useFundingTxForDownloadInvoiceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFundingTxForDownloadInvoiceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFundingTxForDownloadInvoiceQuery({
+ *   variables: {
+ *      fundingTxId: // value for 'fundingTxId'
+ *   },
+ * });
+ */
+export function useFundingTxForDownloadInvoiceQuery(
+  baseOptions: Apollo.QueryHookOptions<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables> &
+    ({ variables: FundingTxForDownloadInvoiceQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables>(
+    FundingTxForDownloadInvoiceDocument,
+    options,
+  )
+}
+export function useFundingTxForDownloadInvoiceLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FundingTxForDownloadInvoiceQuery,
+    FundingTxForDownloadInvoiceQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables>(
+    FundingTxForDownloadInvoiceDocument,
+    options,
+  )
+}
+export function useFundingTxForDownloadInvoiceSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    FundingTxForDownloadInvoiceQuery,
+    FundingTxForDownloadInvoiceQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables>(
+    FundingTxForDownloadInvoiceDocument,
+    options,
+  )
+}
+export type FundingTxForDownloadInvoiceQueryHookResult = ReturnType<typeof useFundingTxForDownloadInvoiceQuery>
+export type FundingTxForDownloadInvoiceLazyQueryHookResult = ReturnType<typeof useFundingTxForDownloadInvoiceLazyQuery>
+export type FundingTxForDownloadInvoiceSuspenseQueryHookResult = ReturnType<
+  typeof useFundingTxForDownloadInvoiceSuspenseQuery
+>
+export type FundingTxForDownloadInvoiceQueryResult = Apollo.QueryResult<
+  FundingTxForDownloadInvoiceQuery,
+  FundingTxForDownloadInvoiceQueryVariables
 >
 export const ProjectInProgressGoalsDocument = gql`
   query ProjectInProgressGoals($projectId: BigInt!) {
@@ -14719,3 +15054,44 @@ export type ProjectRewardQueryHookResult = ReturnType<typeof useProjectRewardQue
 export type ProjectRewardLazyQueryHookResult = ReturnType<typeof useProjectRewardLazyQuery>
 export type ProjectRewardSuspenseQueryHookResult = ReturnType<typeof useProjectRewardSuspenseQuery>
 export type ProjectRewardQueryResult = Apollo.QueryResult<ProjectRewardQuery, ProjectRewardQueryVariables>
+export const FundingTxStatusUpdatedDocument = gql`
+  subscription FundingTxStatusUpdated($input: FundingTxStatusUpdatedInput) {
+    fundingTxStatusUpdated(input: $input) {
+      fundingTx {
+        ...FundingTx
+      }
+    }
+  }
+  ${FundingTxFragmentDoc}
+`
+
+/**
+ * __useFundingTxStatusUpdatedSubscription__
+ *
+ * To run a query within a React component, call `useFundingTxStatusUpdatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useFundingTxStatusUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFundingTxStatusUpdatedSubscription({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFundingTxStatusUpdatedSubscription(
+  baseOptions?: Apollo.SubscriptionHookOptions<
+    FundingTxStatusUpdatedSubscription,
+    FundingTxStatusUpdatedSubscriptionVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSubscription<FundingTxStatusUpdatedSubscription, FundingTxStatusUpdatedSubscriptionVariables>(
+    FundingTxStatusUpdatedDocument,
+    options,
+  )
+}
+export type FundingTxStatusUpdatedSubscriptionHookResult = ReturnType<typeof useFundingTxStatusUpdatedSubscription>
+export type FundingTxStatusUpdatedSubscriptionResult = Apollo.SubscriptionResult<FundingTxStatusUpdatedSubscription>
