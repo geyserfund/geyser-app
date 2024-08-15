@@ -35,11 +35,11 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
     return null
   }
 
-  const activeProjectRewards = rewards.filter((reward) => reward && reward.isHidden === false).slice(0, 4)
+  const activeProjectRewards = rewards.filter((reward) => reward && reward.isHidden === false)
 
-  const hasMoreRewards = activeProjectRewards.length > 3
+  const hasMoreRewards = activeProjectRewards.length > 4
 
-  const rewardsToRender = hasMoreRewards ? activeProjectRewards.slice(0, 3) : activeProjectRewards
+  const rewardsToRender = hasMoreRewards ? activeProjectRewards.slice(0, 4) : activeProjectRewards
 
   if (!rewardsToRender.length) {
     return null

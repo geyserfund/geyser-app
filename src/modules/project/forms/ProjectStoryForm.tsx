@@ -14,10 +14,10 @@ interface Props {
   autoFocus?: boolean
   form: UseFormReturn<{ description: string }>
   isLoading?: boolean
-  toolbarTop?: string
+  toolBarBottom?: string
 }
 
-export const ProjectStoryForm = ({ autoFocus, form, isLoading, toolbarTop }: Props) => {
+export const ProjectStoryForm = ({ autoFocus, form, isLoading, toolBarBottom }: Props) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
 
@@ -37,11 +37,12 @@ export const ProjectStoryForm = ({ autoFocus, form, isLoading, toolbarTop }: Pro
 
   return (
     <FormProvider {...form}>
-      <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1}>
+      <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1} paddingBottom={{ base: 28, lg: 'unset' }}>
         <FieldContainer
           width="100%"
           flexGrow={1}
           subtitle={t('Write a more in-depth description of the project. You can also add images and videos.')}
+          paddingBottom={{ base: 28, lg: 10 }}
         >
           <Box width="100%" pt={3} flexGrow={1} display="flex" flexDirection="column">
             {isStoryLoading ? (
@@ -54,7 +55,7 @@ export const ProjectStoryForm = ({ autoFocus, form, isLoading, toolbarTop }: Pro
                 name="description"
                 flex
                 control={form.control}
-                stickyToolbar={isMobile ? toolbarTop : undefined}
+                stickyToolbar={isMobile ? toolBarBottom : undefined}
                 isEditorMode={isEditorMode}
                 toggleEditorMode={handleToggleEditorMode}
               />

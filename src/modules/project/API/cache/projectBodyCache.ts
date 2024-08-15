@@ -28,15 +28,17 @@ export const updateProjectBodyCache = (
       },
     },
     (data) => ({
-      projectGet: {
-        ...data.projectGet,
-        ...(addReward && { rewardsCount: toInt(data.projectGet.rewardsCount) + 1 }),
-        ...(removeReward && { rewardsCount: toInt(data.projectGet.rewardsCount) - 1 }),
-        ...(addPost && { entriesCount: toInt(data.projectGet.entriesCount) + 1 }),
-        ...(removePost && { entriesCount: toInt(data.projectGet.entriesCount) - 1 }),
-        ...(addGoal && { goalsCount: toInt(data.projectGet.goalsCount) + 1 }),
-        ...(removeGoal && { goalsCount: toInt(data.projectGet.goalsCount) - 1 }),
-      },
+      projectGet: data?.projectGet
+        ? {
+            ...data.projectGet,
+            ...(addReward && { rewardsCount: toInt(data.projectGet.rewardsCount) + 1 }),
+            ...(removeReward && { rewardsCount: toInt(data.projectGet.rewardsCount) - 1 }),
+            ...(addPost && { entriesCount: toInt(data.projectGet.entriesCount) + 1 }),
+            ...(removePost && { entriesCount: toInt(data.projectGet.entriesCount) - 1 }),
+            ...(addGoal && { goalsCount: toInt(data.projectGet.goalsCount) + 1 }),
+            ...(removeGoal && { goalsCount: toInt(data.projectGet.goalsCount) - 1 }),
+          }
+        : data?.projectGet,
     }),
   )
 }

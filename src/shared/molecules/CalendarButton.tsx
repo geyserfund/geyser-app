@@ -18,6 +18,9 @@ const useStyles = createUseStyles({
   dateTimeWrapper: {
     width: '100%',
   },
+  dateTimePopper: {
+    zIndex: 5,
+  },
 })
 
 const renderDateValue = (value: Date | null | undefined) => {
@@ -63,6 +66,7 @@ export const CalendarButton = ({
     <Box {...containerProps}>
       <DatePicker
         wrapperClassName={classes.dateTimeWrapper}
+        popperClassName={classes.dateTimePopper}
         selected={value}
         onChange={onChange}
         showMonthYearPicker={showMonthYearPicker}
