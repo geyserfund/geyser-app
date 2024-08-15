@@ -53,7 +53,8 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
     <CardLayout hover {...linkProps} dense w="full" overflow={'hidden'} spacing={0} position="relative" {...rest}>
       {isHidden && (
         <Box
-          backgroundColor={'neutralAlpha.6'}
+          backgroundColor={'utils.pbg'}
+          opacity={0.5}
           zIndex="1"
           pointerEvents={'none'}
           position="absolute"
@@ -144,7 +145,7 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
               </Button>
             )
           ) : (
-            <RewardEditMenu reward={reward} isLaunch={isLaunch} />
+            <RewardEditMenu reward={reward} isLaunch={isLaunch} zIndex={2} />
           )}
         </HStack>
       </VStack>

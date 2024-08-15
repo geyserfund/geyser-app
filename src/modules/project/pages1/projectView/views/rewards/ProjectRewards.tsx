@@ -1,8 +1,9 @@
 import { SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { forwardRef } from 'react'
-import { Navigate } from 'react-router'
+import { forwardRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
+import { useAuthContext } from '@/context'
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
 import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body, H1 } from '@/shared/components/typography'
@@ -12,12 +13,29 @@ import { CreatorRewardPageBottomBar, CreatorRewardPageTopBar } from './component
 import { RewardCardSkeleton, RewardCardWithBuy } from './shared'
 
 export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
+  const { loading: userLoading } = useAuthContext()
   const { project, isProjectOwner, loading: projectLoading } = useProjectAtom()
-  const { activeRewards, hiddenRewards } = useRewardsAtom()
+  const { activeRewards, hiddenRewards, hasRewards } = useRewardsAtom()
+
+  const navigate = useNavigate()
 
   const { queryProjectRewards } = useProjectRewardsAPI(true)
 
-  const loading = projectLoading || queryProjectRewards.loading
+  const loading = projectLoading || queryProjectRewards.loading || userLoading
+
+  useEffect(() => {
+    let number: any
+
+    if (!loading && !hasRewards) {
+      number = setInterval(() => {
+        navigate(getPath('project', project.name))
+      }, 500)
+    }
+
+    return () => {
+      clearInterval(number)
+    }
+  }, [hasRewards, navigate, project, loading])
 
   if (loading) {
     return (
@@ -27,10 +45,6 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
         })}
       </SimpleGrid>
     )
-  }
-
-  if (!activeRewards.length && (isProjectOwner ? hiddenRewards.length === 0 : false)) {
-    return <Navigate to={getPath('project', project.name)} />
   }
 
   return (

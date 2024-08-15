@@ -1,7 +1,9 @@
 import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { Navigate } from 'react-router'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router'
 
+import { useAuthContext } from '@/context'
 import { useProjectEntriesAPI } from '@/modules/project/API/useProjectEntriesAPI'
 import { useEntriesAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
@@ -13,24 +15,34 @@ import { CreatorPostPageBottomBar, CreatorPostPageTopBar } from './components'
 import { ProjectEntryCard } from './shared'
 
 export const ProjectPosts = () => {
-  const { loading, project, isProjectOwner } = useProjectAtom()
+  const { loading: userLoading } = useAuthContext()
+  const { loading: projectLoading, project } = useProjectAtom()
+  const navigate = useNavigate()
 
   const { queryProjectEntries, queryUnpublishedProjectEntries } = useProjectEntriesAPI(true)
 
-  const { entries: publishedEntries, unpublishedEntries } = useEntriesAtom()
+  const { entries: publishedEntries, unpublishedEntries, hasEntries } = useEntriesAtom()
 
   const entries = [...publishedEntries, ...unpublishedEntries]
 
   const sortedEntries =
     entries && entries.filter(truthyFilter).sort((a, b) => Number(b.createdAt || '') - Number(a.createdAt || ''))
 
-  if (loading || queryProjectEntries.loading || queryUnpublishedProjectEntries.loading) {
-    return null
-  }
+  const loading = userLoading || projectLoading || queryProjectEntries.loading || queryUnpublishedProjectEntries.loading
 
-  if (publishedEntries.length === 0 && (isProjectOwner ? unpublishedEntries.length === 0 : true)) {
-    return <Navigate to={getPath('project', project.name)} />
-  }
+  useEffect(() => {
+    let number: any
+
+    if (!loading && !hasEntries) {
+      number = setInterval(() => {
+        navigate(getPath('project', project.name))
+      }, 500)
+    }
+
+    return () => {
+      clearInterval(number)
+    }
+  }, [loading, hasEntries, navigate, project])
 
   return (
     <VStack w="full" spacing={8} paddingBottom={'80px'}>

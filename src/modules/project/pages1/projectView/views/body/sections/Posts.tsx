@@ -27,7 +27,12 @@ export const Posts = forwardRef<HTMLDivElement>((_, ref) => {
 
   const entriesToRender = hasMoreEntries ? sortedEntries.slice(0, 3) : sortedEntries
 
-  if (loading || queryProjectEntries.loading || queryUnpublishedProjectEntries.loading) {
+  if (
+    loading ||
+    queryProjectEntries.loading ||
+    queryUnpublishedProjectEntries.loading ||
+    entriesToRender.length === 0
+  ) {
     return null
   }
 
@@ -36,11 +41,19 @@ export const Posts = forwardRef<HTMLDivElement>((_, ref) => {
       {entriesToRender.map((entry) => {
         return <ProjectEntryCard entry={entry} key={entry.id} />
       })}
-      <HStack w="full" justifyContent="center">
-        <Button size="sm" variant="outline" colorScheme="neutral1" as={Link} to={getPath('projectPosts', project.name)}>
-          {t('See all')}
-        </Button>
-      </HStack>
+      {hasMoreEntries && (
+        <HStack w="full" justifyContent="center">
+          <Button
+            size="sm"
+            variant="outline"
+            colorScheme="neutral1"
+            as={Link}
+            to={getPath('projectPosts', project.name)}
+          >
+            {t('See all')}
+          </Button>
+        </HStack>
+      )}
     </BodySectionLayout>
   )
 })
