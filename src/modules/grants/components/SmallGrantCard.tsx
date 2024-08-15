@@ -66,13 +66,11 @@ export const SmallGrantCard = ({ grant, showBanner }: Props) => {
             w={{ base: '96px', lg: '228px' }}
             h={{ base: '96px', lg: '228px' }}
           />
-          {
-            isMobile && (
-              <Box position="absolute" top={0.5} left={1} zIndex={2} p={1} borderRadius="md">
-                <GrantStatus status={grant.status} startDate={grant?.statuses[0]?.startAt || 0} />
-              </Box>
-            )
-          }
+          {isMobile && (
+            <Box position="absolute" top={0.5} left={1} zIndex={2} p={1} borderRadius="md">
+              <GrantStatus status={grant.status} startDate={grant?.statuses[0]?.startAt || 0} />
+            </Box>
+          )}
         </Box>
       ) : null}
       <VStack
