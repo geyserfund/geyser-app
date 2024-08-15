@@ -1,5 +1,5 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCopy } from 'react-icons/pi'
 
@@ -22,6 +22,14 @@ export const ProjectShareContribute = () => {
   const endPoint = getAppEndPoint()
 
   const ref = useRef<HTMLDivElement>(null)
+
+  const [generating, setGenerating] = useState(true)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setGenerating(false)
+    }, 5000)
+  }, [])
 
   const { handleGenerateAndCopy, copying } = useCreateAndCopyImage()
 
@@ -71,7 +79,8 @@ export const ProjectShareContribute = () => {
           w="full"
           rightIcon={<PiCopy />}
           onClick={handleCopy}
-          isLoading={copying}
+          isLoading={copying || generating}
+          loadingText={generating ? t('Generating banner...') : t('Copying')}
         >
           {t('Copy image')}
         </Button>

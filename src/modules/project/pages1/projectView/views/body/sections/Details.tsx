@@ -48,7 +48,7 @@ export const Details = () => {
                       filter: { tagIds: [tag.id] },
                     }}
                   >
-                    <Badge size="md" variant="surface" colorScheme={tagColorScheme(tag.id)}>
+                    <Badge size="md" variant="soft" colorScheme={tagColorScheme(tag.id)}>
                       {tag.label}
                     </Badge>
                   </Link>

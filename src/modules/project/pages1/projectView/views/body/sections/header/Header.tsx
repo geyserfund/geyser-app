@@ -177,14 +177,14 @@ export const Header = () => {
               <SkeletonLayout height="20px" w="250px" />
             ) : (
               <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
-                <Body size="xs" medium light>
+                <Body size="md" medium light>
                   {`${t('Contributors')}: ${project.fundersCount}`}
                 </Body>
-                <Body size="xs" medium light>
+                <Body size="md" medium light>
                   {`${t('Followers')}: ${project.followersCount}`}
                 </Body>
 
-                {subscribers && <Body size="xs" medium light>{`${subscribers || 0} ${t('subscribers')}`}</Body>}
+                {subscribers && <Body size="md" medium light>{`${subscribers || 0} ${t('subscribers')}`}</Body>}
               </HStack>
             )}
 

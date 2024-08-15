@@ -119,7 +119,7 @@ export function ProjectBalanceDisplay() {
               </Body>
             </Body>
           )}
-          <Body size="sm" dark display="inline">
+          <Body size="md" dark display="inline">
             {priorityGoal.currency === ProjectGoalCurrency.Btcsat
               ? `${formattedUsdAmount()}`
               : `${formattedSatsAmount()}`}
@@ -151,7 +151,7 @@ export function ProjectBalanceDisplay() {
             </Body>
           </Body>
 
-          <Body light display="inline">
+          <Body size="md" light display="inline">
             <Body as="span" dark medium>
               {formattedTotalUsdAmount()}
             </Body>

@@ -1,5 +1,4 @@
 import { Box, Image, useColorModeValue } from '@chakra-ui/react'
-import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 
 import LogoDark from '@/assets/logo-dark.svg'
@@ -11,7 +10,7 @@ export const BrandLogo = () => {
 
   return (
     <Link to={getPath('landingPage')} style={{ height: '100%' }}>
-      <Box h="100%" as={motion.div} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      <Box h="100%">
         <Image src={imagesrc} height="100%" width="auto" objectFit="contain" />
       </Box>
     </Link>
