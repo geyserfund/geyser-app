@@ -6,23 +6,23 @@ import { Grant } from '@/types'
 
 import { LargeGrantCard } from './LargeGrantCard'
 
-const OpenGrants = ({ openGrants }: { openGrants: Grant[] }) => {
+const UpcomingGrants = ({ upcomingGrants }: { upcomingGrants: Grant[] }) => {
   const { t } = useTranslation()
 
-  if (openGrants.length === 0) {
+  if (upcomingGrants.length === 0) {
     return null
   }
 
   return (
     <VStack mt={10} w="100%" alignItems="flex-start">
       <Body fontSize={'24px'} bold>
-        {t('Open Grants')}
+        {t('Upcoming Grants')}
       </Body>
-      {openGrants.map((grant) => (
+      {upcomingGrants.map((grant) => (
         <LargeGrantCard key={grant.id} grant={grant} showBanner />
       ))}
     </VStack>
   )
 }
 
-export default OpenGrants
+export default UpcomingGrants

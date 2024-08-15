@@ -24,7 +24,7 @@ export const GrantStatusBadge = ({ status, startDate }: { status: GrantStatusEnu
     case GrantStatusEnum.Closed:
       return (
         <HStack bgColor="neutral1.9" borderRadius="8px" px={3} py={0.5} spacing={1}>
-          <TrophyIcon color="neutral1.1" />
+          <TrophyIcon viewBox="0 1 18 18" color="white" />
           <Body color="neutral1.1" fontSize="14px" medium>
             {t('Awarded')}
           </Body>

@@ -2,17 +2,31 @@ import { HStack, VStack } from '@chakra-ui/react'
 
 import { Body } from '@/shared/components/typography'
 import { useCountdown } from '@/shared/hooks/useCountdown'
-import { Grant } from '@/types'
-import { getShortAmountLabel } from '@/utils'
+import { Grant, GrantStatusEnum } from '@/types'
+import { getFormattedDate, getShortAmountLabel } from '@/utils'
 
 const GrantWidget = ({ grant }: { grant: Grant }) => {
   const votingStartDate = grant.statuses.find((s) => s.status === grant.status)?.startAt
   const isUpcomingGrant = votingStartDate > Date.now()
+  const isClosedGrant = grant.status === GrantStatusEnum.Closed
 
   const votingEndDate = grant.statuses.find((s) => s.status === grant.status)?.endAt
 
   if (isUpcomingGrant) {
-    return <GrantInfo label="Starts on" value={new Date(votingStartDate || 0).toLocaleDateString()} />
+    return <GrantInfo label="Starts on" value={getFormattedDate(votingStartDate || 0)} />
+  }
+
+  if (isClosedGrant) {
+    return (
+      <>
+        <GrantInfo
+          label="Lasted"
+          value={`${getFormattedDate(votingStartDate || 0)} - ${getFormattedDate(votingEndDate || 0)}`}
+        />
+        <GrantInfo label={'Applicants'} value={grant?.applicants?.length || 0} />
+        {grant.balance > 0 && <GrantInfo label={'Grant pool'} value={`${getShortAmountLabel(grant.balance)} Sats`} />}
+      </>
+    )
   }
 
   return (
