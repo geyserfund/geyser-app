@@ -14,7 +14,7 @@ import {
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { AvatarElement } from '@/shared/molecules/AvatarElement'
 
@@ -381,6 +381,7 @@ const HowVotingWorksModal = ({
   project: Project
 }) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   if (votingSystem === VotingSystem.StepLog_10) {
     return (
@@ -438,8 +439,7 @@ const HowVotingWorksModal = ({
               w="full"
               variant="primary"
               onClick={() => {
-                fundingModalProps.onOpen({ project })
-                onClose()
+                navigate(getPath('projectFunding', project.name))
               }}
             >
               {t("Let's vote!")}
@@ -477,8 +477,7 @@ const HowVotingWorksModal = ({
             w="full"
             variant="primary"
             onClick={() => {
-              fundingModalProps.onOpen({ project })
-              onClose()
+              navigate(getPath('projectFunding', project.name))
             }}
           >
             {t("Let's vote!")}
