@@ -1,4 +1,4 @@
-import { Button, HStack, VStack } from '@chakra-ui/react'
+import { Button, HStack, Spinner, VStack } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCopy } from 'react-icons/pi'
@@ -73,17 +73,22 @@ export const ProjectShareContribute = () => {
       />
 
       <HStack padding={3} width="100%">
-        <Button
-          variant="solid"
-          colorScheme="primary1"
-          w="full"
-          rightIcon={<PiCopy />}
-          onClick={handleCopy}
-          isLoading={copying || generating}
-          loadingText={generating ? t('Generating banner...') : t('Copying')}
-        >
-          {t('Copy image')}
-        </Button>
+        {generating ? (
+          <Button variant="solid" colorScheme="neutral1" w="full" leftIcon={<Spinner size="sm" />}>
+            {t('Generating banner...')}
+          </Button>
+        ) : (
+          <Button
+            variant="solid"
+            colorScheme="primary1"
+            w="full"
+            rightIcon={<PiCopy />}
+            isLoading={copying}
+            onClick={handleCopy}
+          >
+            {t('Copy image')}
+          </Button>
+        )}
       </HStack>
     </VStack>
   )

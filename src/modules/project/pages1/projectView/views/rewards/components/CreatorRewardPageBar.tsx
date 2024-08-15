@@ -48,7 +48,7 @@ export const CreateRewardButtons = () => {
         colorScheme="neutral1"
         leftIcon={<PiBag />}
       >
-        {t('Manage reward sales')}
+        {t('View Sales')}
       </Button>
       <Button
         as={Link}

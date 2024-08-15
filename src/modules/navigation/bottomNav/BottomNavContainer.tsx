@@ -16,6 +16,7 @@ export const BottomNavBarContainer = ({ children, ...props }: PropsWithChildren<
       borderTop="1px solid"
       borderColor={'neutral1.6'}
       marginX={'-12px'}
+      zIndex={3}
       {...props}
     >
       {children}
