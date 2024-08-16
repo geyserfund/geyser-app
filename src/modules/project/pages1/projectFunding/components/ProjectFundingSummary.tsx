@@ -135,19 +135,21 @@ export const ProjectFundingSummary = () => {
         )}
       </VStack>
 
-      <HStack as={motion.div} layout>
+      <HStack as={motion.div} layout alignItems="start">
         <Body size={{ base: 'md', lg: 'xl' }} light>
           {`${t('Total')}: `}
         </Body>
-        <Body size={{ base: 'md', lg: 'xl' }} medium>
-          {`${getTotalAmount('sats', name).toLocaleString()} `}
-          <Body as="span" light>
+        <HStack flex={1} flexWrap={'wrap'}>
+          <Body size={{ base: 'md', lg: 'xl' }} medium wordBreak={'break-all'}>
+            {`${getTotalAmount('sats', name).toLocaleString()} `}
+          </Body>
+          <Body as="span" size={{ base: 'md', lg: 'xl' }} light>
             sats
           </Body>
-        </Body>
-        <Body size={{ base: 'md', lg: 'xl' }} medium light>
-          {`($${getTotalAmount('dollar', name)})`}
-        </Body>
+          <Body as="span" size={{ base: 'md', lg: 'xl' }} medium light wordBreak={'break-all'}>
+            {`($${getTotalAmount('dollar', name)})`}
+          </Body>
+        </HStack>
       </HStack>
     </motion.div>
   )

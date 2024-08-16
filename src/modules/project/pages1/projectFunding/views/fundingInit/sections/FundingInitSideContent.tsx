@@ -47,7 +47,7 @@ export const FundingInitSummary = () => {
       <VStack width={'100%'} borderRadius={'md'} spacing={4} alignItems="start">
         <ProjectFundingSummary />
 
-        <Button size={{ base: 'md', lg: 'lg' }} w="full" variant="solid" colorScheme="primary1" type="submit">
+        <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="submit">
           {t('Checkout')}
         </Button>
       </VStack>

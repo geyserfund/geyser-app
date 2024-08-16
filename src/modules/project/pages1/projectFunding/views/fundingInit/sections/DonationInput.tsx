@@ -4,23 +4,22 @@ import {
   HStack,
   Input,
   InputGroup,
-  InputLeftElement,
   InputRightElement,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { KeyboardEvent, useRef, useState } from 'react'
-import { BiDollar } from 'react-icons/bi'
+import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { H1 } from '@/shared/components/typography'
+import { Body, H1 } from '@/shared/components/typography'
 
 import { CrownIcon, MedalIcon, StarIcon, TrophyIcon } from '../../../../../../../components/icons'
-import { SatSymbolIcon } from '../../../../../../../components/icons/svg'
 import { MonoBody1 } from '../../../../../../../components/typography'
 import { useBtcContext } from '../../../../../../../context/btc'
 import { commaFormatted } from '../../../../../../../utils'
+
+const MIN_WIDTH_AFTER_START = 50
 
 export const DonationInput = () => {
   const { btcRate } = useBtcContext()
@@ -72,6 +71,21 @@ export const DonationInput = () => {
     }
   }
 
+  const [satsPosition, setSatsPosition] = useState(MIN_WIDTH_AFTER_START)
+
+  useEffect(() => {
+    if (satoshi) {
+      const currentText = commaFormatted(satoshi)
+      const commaCount = (currentText.match(/,/g) || []).length
+      const restCount = currentText.length - commaCount
+      const textWidth = restCount * 9 + commaCount * 5
+
+      setSatsPosition(textWidth + MIN_WIDTH_AFTER_START)
+    } else {
+      setSatsPosition(MIN_WIDTH_AFTER_START)
+    }
+  }, [satoshi])
+
   return (
     <VStack spacing={3}>
       <HStack w="full" justifyContent="space-between" flexWrap={'wrap'}>
@@ -106,52 +120,64 @@ export const DonationInput = () => {
         </HStack>
       </HStack>
 
-      <InputGroup>
-        <InputLeftElement width="50px" height="100%" display="flex" justifyContent={'center'} alignItems={'center'}>
-          {isSatoshi ? <SatSymbolIcon fontSize="24px" /> : <BiDollar fontSize="24px" />}
-        </InputLeftElement>
-        <Input
-          ref={inputRef}
-          data-testid="donation-input"
-          borderRadius="12px"
-          size="lg"
-          fontWeight={500}
-          value={satoshi > 0 ? (isSatoshi ? commaFormatted(satoshi) : commaFormatted(dollar)) : ''}
-          type="text"
-          onChange={handleInput}
-          onKeyDown={handleKeyDown}
-          pl={10}
-          _placeholder={{
-            color: 'neutral1.11',
-          }}
-          color="neutral1.11"
-          placeholder="0"
-        />
-        <InputRightElement
-          w="fit-content"
-          minWidth="100px"
-          maxWidth="150px"
-          height="100%"
-          display="flex"
-          alignItems={'center'}
-          paddingRight={2}
+      <HStack w="full" position="relative">
+        <InputGroup>
+          <Input
+            ref={inputRef}
+            data-testid="donation-input"
+            borderRadius="12px"
+            size="lg"
+            fontWeight={500}
+            value={satoshi > 0 ? (isSatoshi ? commaFormatted(satoshi) : commaFormatted(dollar)) : ''}
+            type="text"
+            onChange={handleInput}
+            onKeyDown={handleKeyDown}
+            pl={7}
+            _placeholder={{
+              color: 'neutral1.11',
+            }}
+            color="neutral1.11"
+            placeholder="0"
+          />
+          <InputRightElement
+            w="fit-content"
+            minWidth="100px"
+            maxWidth="150px"
+            height="100%"
+            display="flex"
+            alignItems={'center'}
+            paddingRight={2}
+          >
+            <Button w="100%" variant="soft" colorScheme="neutral1" onClick={onToggle}>
+              {isSatoshi ? (
+                <>
+                  <MonoBody1 isTruncated>
+                    {dollar > 0 ? `$${commaFormatted(dollar)}` : satoshi > 0 ? '< $1' : '$0'}
+                  </MonoBody1>
+                </>
+              ) : (
+                <>
+                  <MonoBody1 isTruncated>{commaFormatted(satoshi) || 0}</MonoBody1>
+                  <MonoBody1 pl={0.5}>{'sats'}</MonoBody1>
+                </>
+              )}
+            </Button>
+          </InputRightElement>
+        </InputGroup>
+
+        <Body
+          size="xl"
+          position="absolute"
+          top="49%"
+          left={isSatoshi ? `${satsPosition}px` : '14px'}
+          transform="translateY(-50%)"
+          pointerEvents="none"
+          transition="left 0.05s"
+          muted
         >
-          <Button w="100%" variant="soft" colorScheme="neutral1" onClick={onToggle}>
-            {isSatoshi ? (
-              <>
-                <MonoBody1 isTruncated>
-                  {dollar > 0 ? `$${commaFormatted(dollar)}` : satoshi > 0 ? '< $1' : '$0'}
-                </MonoBody1>
-              </>
-            ) : (
-              <>
-                <SatSymbolIcon fontSize="16px" style={{ paddingBottom: '3px' }} />
-                <MonoBody1 isTruncated>{commaFormatted(satoshi) || 0}</MonoBody1>
-              </>
-            )}
-          </Button>
-        </InputRightElement>
-      </InputGroup>
+          {isSatoshi ? 'sats' : '$'}
+        </Body>
+      </HStack>
     </VStack>
   )
 }

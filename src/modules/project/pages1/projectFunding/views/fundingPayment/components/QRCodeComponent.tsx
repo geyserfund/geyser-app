@@ -26,7 +26,7 @@ export const QRCodeComponent = ({ value, isColored, onClick }: QRCodeComponentPr
   return (
     <Box
       borderRadius={'12px'}
-      borderWidth={'20px'}
+      borderWidth={'5px'}
       padding={'2px'}
       borderColor={isColored ? 'primary.400' : 'neutral.1000'}
     >

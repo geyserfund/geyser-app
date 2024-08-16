@@ -2,16 +2,18 @@ import { Button, IconButton, Input, InputGroup, InputRightElement, Stack, VStack
 import { t } from 'i18next'
 import { PiCopy } from 'react-icons/pi'
 
+import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { useFundingTxAtom } from '@/modules/project/funding/state'
 import { Body } from '@/shared/components/typography'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
 
 export const SendEmailToCreator = () => {
   const { fundingTx } = useFundingTxAtom()
+  const { hasSelectedRewards } = useFundingFormAtom()
 
   const { hasCopied, onCopy } = useCopyToClipboard(fundingTx.creatorEmail || '')
 
-  if (!fundingTx.creatorEmail) {
+  if (!fundingTx.creatorEmail || !hasSelectedRewards) {
     return null
   }
 

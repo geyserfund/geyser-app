@@ -59,6 +59,7 @@ export const FundingLayout = ({
           borderColor="neutral1.6"
           backgroundColor="utils.pbg"
           padding={3}
+          paddingBottom={5}
           {...bottomContainerProps}
         >
           {bottomContent}

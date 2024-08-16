@@ -91,15 +91,7 @@ export const Header = () => {
     const isImage = validateImageUrl(project.image)
 
     if (isImage) {
-      return (
-        <ImageWithReload
-          width="100%"
-          maxHeight="330px"
-          objectFit="cover"
-          borderRadius="8px 8px 0px 0px"
-          src={project.image || undefined}
-        />
-      )
+      return <ImageWithReload width="100%" maxHeight="330px" objectFit="cover" src={project.image || undefined} />
     }
 
     if (project.image && !isImage) {
