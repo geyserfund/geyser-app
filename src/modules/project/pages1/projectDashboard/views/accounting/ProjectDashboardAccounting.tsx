@@ -106,7 +106,7 @@ export const ProjectDashboardAccounting = () => {
 export const ProjectDashboardAccountingSkeleton = () => {
   return (
     <DashboardLayout>
-      <VStack width="100%" flexGrow={1} spacing="10px">
+      <VStack width="100%" flexGrow={1} spacing="10px" paddingX={6}>
         <HStack w="full" justifyContent={'end'} px={{ base: 3, lg: 6 }}>
           <SkeletonLayout width="140px" height="30px" />
         </HStack>

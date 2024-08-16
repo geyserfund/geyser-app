@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
 import { ProjectForm } from '@/modules/project/forms/ProjectForm'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import { useNotification } from '@/utils'
 
@@ -42,11 +43,14 @@ export const ProjectDashboardInfo = () => {
       onCompleted(data) {
         toast.success({
           title: 'Project updated successfully!',
+          description: 'Please wait while we redirect you to the new Project URL.',
         })
+
         if (form.formState.dirtyFields.name) {
-          navigate(`/project/${data.updateProject.name}/dashboard`, {
-            replace: true,
-          })
+          setTimeout(() => {
+            navigate(getPath('dashboardInfo', data.updateProject.name))
+            navigate(0)
+          }, 500)
           form.resetField('name', {
             defaultValue: data.updateProject.name,
             keepError: false,

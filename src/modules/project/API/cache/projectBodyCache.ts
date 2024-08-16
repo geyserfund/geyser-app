@@ -14,7 +14,7 @@ type ProjectBodyCacheUpdateInput = {
   removeGoal?: boolean
 }
 
-export const updateProjectBodyCache = (
+export const updateProjectItemCountCache = (
   cache: ApolloCache<any>,
   { projectName, addReward, removeReward, addPost, removePost, addGoal, removeGoal }: ProjectBodyCacheUpdateInput,
 ) => {

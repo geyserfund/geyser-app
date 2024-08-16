@@ -11,7 +11,7 @@ import {
 import { useProjectAtom } from '../hooks/useProjectAtom'
 import { updateProjectItemCountsAtom } from '../state/projectAtom'
 import { addUpdateRewardsAtom, deleteRewardAtom, initialRewardsLoadAtom, rewardsAtom } from '../state/rewardsAtom'
-import { updateProjectBodyCache } from './cache/projectBodyCache'
+import { updateProjectItemCountCache } from './cache/projectBodyCache'
 import { useCustomMutation } from './custom/useCustomMutation'
 
 /**
@@ -53,7 +53,7 @@ export const useProjectRewardsAPI = (load?: boolean) => {
     },
     update(cache, { data }) {
       if (data?.projectRewardCreate) {
-        updateProjectBodyCache(cache, {
+        updateProjectItemCountCache(cache, {
           projectName: project.name,
           addReward: true,
         })
@@ -79,7 +79,7 @@ export const useProjectRewardsAPI = (load?: boolean) => {
     },
     update(cache, { data }) {
       if (data?.projectRewardDelete) {
-        updateProjectBodyCache(cache, {
+        updateProjectItemCountCache(cache, {
           projectName: project.name,
           removeReward: true,
         })

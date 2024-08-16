@@ -19,7 +19,7 @@ import {
   unpublishedEntriesAtom,
 } from '../state/entriesAtom'
 import { isProjectOwnerAtom, updateProjectItemCountsAtom } from '../state/projectAtom'
-import { updateProjectBodyCache } from './cache/projectBodyCache'
+import { updateProjectItemCountCache } from './cache/projectBodyCache'
 import { removeProjectEntriesCache, updateEntryCache, updateProjectEntriesCache } from './cache/projectEntryCache'
 import { useCustomMutation } from './custom/useCustomMutation'
 
@@ -99,7 +99,7 @@ export const useProjectEntriesAPI = (load?: boolean) => {
       if (data?.createEntry) {
         updateEntryCache(cache, data.createEntry)
         updateProjectEntriesCache(cache, data.createEntry)
-        updateProjectBodyCache(cache, {
+        updateProjectItemCountCache(cache, {
           projectName: project.name,
           addPost: true,
         })
@@ -141,7 +141,7 @@ export const useProjectEntriesAPI = (load?: boolean) => {
     update(cache, { data }) {
       if (data?.deleteEntry) {
         removeProjectEntriesCache(cache, data?.deleteEntry.id)
-        updateProjectBodyCache(cache, {
+        updateProjectItemCountCache(cache, {
           projectName: project.name,
           removePost: true,
         })
