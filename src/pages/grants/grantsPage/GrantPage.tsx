@@ -228,7 +228,7 @@ export const GrantPage = () => {
                   </>
                 )}
 
-                {showApplicationPending && pendingApplicants.length > 0 && (
+                {showApplicationPending && pendingApplicants.length > 0 && showGrantApply && (
                   <>
                     <PendingApplications applicants={pendingApplicants} />
                     <MobileDivider />
