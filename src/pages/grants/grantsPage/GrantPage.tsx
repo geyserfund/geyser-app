@@ -171,7 +171,7 @@ export const GrantPage = () => {
         <MobileDivider />
         <Tabs variant="secondary" w="full">
           <TabList gap="30px">
-            {grantHasVoting && (
+            {grantHasVoting && !showGrantApply && (
               <>
                 <Tab>
                   <Text fontSize={'16px'}>{t('Projects')}</Text>
@@ -221,14 +221,14 @@ export const GrantPage = () => {
                     <MobileDivider />
                   </>
                 )}
-                {showGrantApply && !isCompetitionVote && (
+                {showGrantApply && (
                   <>
                     <GrantApply grant={grant} pendingApplicants={pendingApplicants} />
                     <MobileDivider />
                   </>
                 )}
 
-                {showApplicationPending && pendingApplicants.length > 0 && !isCompetitionVote && (
+                {showApplicationPending && pendingApplicants.length > 0 && (
                   <>
                     <PendingApplications applicants={pendingApplicants} />
                     <MobileDivider />
