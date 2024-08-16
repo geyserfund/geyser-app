@@ -30,6 +30,7 @@ export const EmailPromptModal = ({ onCloseAction, onClose, isOpen }: EmailPrompt
   const [productUpdatesNotificationSetting, setProductUpdatesNotificationSetting] = useState<NotificationSettings>()
 
   useUserNotificationsSettingsQuery({
+    skip: !user?.id,
     variables: {
       userId: user?.id,
     },

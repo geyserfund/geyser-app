@@ -1,6 +1,9 @@
-import { Box, Button, HStack, Link, Text, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, HStack, Link, Text, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiTranslate } from 'react-icons/pi'
+import { useNavigate } from 'react-router'
+
+import { Body } from '@/shared/components/typography'
 
 import { Modal } from '../../../../shared/components/layouts'
 import { languageFalgs, LanguageRequestUrl, languages } from '../../../../shared/constants'
@@ -9,6 +12,7 @@ import { ColorModeSwitcher } from '../../../../utils'
 
 export const ModeChange = () => {
   const { i18n, t } = useTranslation()
+  const navigate = useNavigate()
 
   const { isOpen, onClose, onOpen } = useDisclosure()
 
@@ -43,7 +47,7 @@ export const ModeChange = () => {
           {renderLanguages.map((lng) => (
             <Tooltip key={lng.key} label={lng.disabled ? t('Coming soon') : ''}>
               <Button
-                variant="solid"
+                variant="surface"
                 colorScheme="neutral1"
                 style={{
                   fontWeight: i18n.resolvedLanguage === lng.key ? 'bold' : 'normal',
@@ -51,18 +55,18 @@ export const ModeChange = () => {
                 type="submit"
                 onClick={() => {
                   i18n.changeLanguage(lng.key)
+                  navigate(0)
                   onClose()
                 }}
                 w={200}
                 textAlign={'start'}
                 isDisabled={lng.disabled}
               >
-                <Box w="100%">
-                  <Box as={'span'} w="100%" paddingRight={2}>
-                    {languageFalgs[lng.key]}
-                  </Box>
-                  {languages[lng.key]}
-                </Box>
+                <HStack w="100%" alignItems="center">
+                  <Body pt={0.5}>{languageFalgs[lng.key]}</Body>
+
+                  <Body>{languages[lng.key]}</Body>
+                </HStack>
               </Button>
             </Tooltip>
           ))}

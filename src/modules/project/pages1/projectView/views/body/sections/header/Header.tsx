@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { PiCaretDoubleDown } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
+import { ProjectStatusBar } from '@/components/ui'
 import { validateImageUrl } from '@/shared/markdown/validations/image'
 
 import { ImageWithReload } from '../../../../../../../../shared/components/display/ImageWithReload'
@@ -79,18 +80,6 @@ export const Header = () => {
     setSubscribers(toInt(`${value.membership_count}`))
   }
 
-  // const statusContent = () => {
-  //   if (project.status === ProjectStatus.Active && wallet?.state.status === WalletStatus.Ok) {
-  //     return null
-  //   }
-
-  //   return (
-  //     <HStack w="full" justifyContent="center" pt={{ base: '10px', lg: '0px' }}>
-  //       <ProjectStatusLabel project={project} wallet={wallet} />
-  //     </HStack>
-  //   )
-  // }
-
   const handleClickDetails = () => {
     const element = document.getElementById(ID.project.details.container)
     if (element) {
@@ -134,7 +123,8 @@ export const Header = () => {
       </Modal>
       {/* {statusContent()} */}
 
-      <CardLayout id={'HEADER_ITEM'} w="full" dense spacing={0}>
+      <CardLayout id={'HEADER_ITEM'} w="full" dense spacing={0} position="relative">
+        <ProjectStatusBar />
         <Box>{renderImageOrVideo()}</Box>
         <Stack
           direction={{ base: 'column', lg: 'row' }}
