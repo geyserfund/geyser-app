@@ -276,7 +276,8 @@ export const GrantApplicantCard = ({
 
     if (
       ((canVote && isLoggedIn && currentUser?.hasSocialAccount) || votingSystem === VotingSystem.OneToOne) &&
-      grantHasVoting
+      grantHasVoting &&
+      grantStatus !== GrantStatusEnum.Closed
     ) {
       return (
         <Button
@@ -296,7 +297,7 @@ export const GrantApplicantCard = ({
       )
     }
 
-    if (grantStatus !== GrantStatusEnum.Closed) {
+    if (grantStatus === GrantStatusEnum.Closed) {
       return (
         <Button
           as={Link}
