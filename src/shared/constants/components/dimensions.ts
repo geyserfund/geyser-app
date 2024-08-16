@@ -34,7 +34,7 @@ export const dimensions = {
     },
     dashboard: {
       menu: {
-        width: 148,
+        width: 165,
       },
     },
     rightSideNav: {

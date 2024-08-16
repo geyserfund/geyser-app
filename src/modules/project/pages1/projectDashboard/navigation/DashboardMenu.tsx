@@ -51,7 +51,7 @@ const DashboardMenuContent = (props: ButtonProps) => {
         />
       ))}
       <Divider />
-      {dashboardSettingsItems.map((item) => (
+      {dashboardFeaturesItems.map((item) => (
         <DashboardMenuButton
           key={item.label}
           item={item}
@@ -62,7 +62,7 @@ const DashboardMenuContent = (props: ButtonProps) => {
         />
       ))}
       <Divider />
-      {dashboardFeaturesItems.map((item) => (
+      {dashboardSettingsItems.map((item) => (
         <DashboardMenuButton
           key={item.label}
           item={item}

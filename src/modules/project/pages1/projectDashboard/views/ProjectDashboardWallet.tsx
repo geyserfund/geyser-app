@@ -156,8 +156,8 @@ export const ProjectDashboardWallet = () => {
       mobileTopNavRightComponent={<SaveButton />}
       deskTopBottomComponent={<SaveButton w="full" />}
     >
-      <VStack flexGrow={1} spacing="20px" paddingX={{ base: 0, lg: 6 }}>
-        <Body size="xs" light>
+      <VStack spacing="20px" paddingX={{ base: 0, lg: 6 }} alignItems={'start'}>
+        <Body size="sm" light>
           <Trans
             i18nKey={
               'To edit your wallet, you must verify your email address for security reasons. You can do this in your <0> profile settings </0> <1>  Learn more in the Guide. </1> '

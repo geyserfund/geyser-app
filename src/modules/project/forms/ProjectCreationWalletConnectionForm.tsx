@@ -296,7 +296,7 @@ const RenderSponsorImage = ({
   const image = useColorModeValue(imageUrl, imageUrlDark || imageUrl)
 
   return (
-    <Box backgroundColor={backgroundColor || lightModeColors.neutral[100]} borderRadius={'8px'}>
+    <Box backgroundColor={backgroundColor || 'utils.pbg'} borderRadius={'8px'}>
       <Link isExternal href={url}>
         <Image src={image} height={height} />
       </Link>
@@ -317,7 +317,7 @@ const accordionButtonStyles: AccordionButtonProps = {
   _expanded: {
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0,
-    borderBottom: 'none',
+    borderBottomWidth: '0px',
     _hover: {
       borderColor: 'neutral1.6',
     },

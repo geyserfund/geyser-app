@@ -1,4 +1,5 @@
 import { Stack, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 
 import { DashboardLayout } from '../../common'
 import { HistoricalComponent, InsightsHeader, InsightsStatsComponent, TransactionMethodComponent } from './components'
@@ -7,14 +8,14 @@ import { TransactionRegionComponent } from './components/TransactionRegionCompon
 
 export const ProjectDashboardAnalytics = () => {
   return (
-    <DashboardLayout>
+    <DashboardLayout desktopTitle={t('Analytics')}>
       <VStack
         direction={{ base: 'column', lg: 'row' }}
         w="full"
-        pt={{ base: '10px', lg: '20px' }}
         pb={{ base: '80px', lg: '60px' }}
         px={{ base: 0, lg: 6 }}
         spacing={6}
+        marginTop="-48px"
       >
         <InsightsHeader />
         <InsightsStatsComponent />

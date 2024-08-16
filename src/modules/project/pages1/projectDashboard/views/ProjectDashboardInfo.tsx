@@ -96,6 +96,7 @@ export const ProjectDashboardInfo = () => {
       <DashboardLayout
         mobileTopNavRightComponent={<SaveButton />}
         deskTopBottomComponent={<SaveButton w="full" />}
+        desktopTitle={t('Project info')}
         width="full"
       >
         <VStack width="100%" alignItems="flex-start" spacing="24px" px={{ base: 0, lg: 6 }}>

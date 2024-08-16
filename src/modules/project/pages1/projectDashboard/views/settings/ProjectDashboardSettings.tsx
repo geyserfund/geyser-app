@@ -8,7 +8,7 @@ import { ProjectStatusUpdate } from './views/ProjectStatusUpdate'
 
 export const ProjectDashboardSettings = () => {
   return (
-    <DashboardLayout>
+    <DashboardLayout desktopTitle="Settings">
       <VStack flexGrow={1} spacing={6} paddingX={{ base: 0, lg: 6 }}>
         <ProjectStatusUpdate />
         <ProjectRewardDenominationUpdate />

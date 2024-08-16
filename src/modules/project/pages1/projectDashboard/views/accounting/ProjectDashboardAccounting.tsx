@@ -81,9 +81,9 @@ export const ProjectDashboardAccounting = () => {
   if (isLoading) return <ProjectDashboardAccountingSkeleton />
 
   return (
-    <DashboardLayout>
-      <VStack width="100%" flexGrow={1} spacing="10px" alignItems="center">
-        <HStack w="full" justifyContent={'end'} px={{ base: 3, lg: 6 }}>
+    <DashboardLayout desktopTitle={t('Accounting')} position="relative">
+      <VStack width="100%" flexGrow={1} spacing="10px" alignItems="center" marginTop={'-48px'}>
+        <HStack w="full" justifyContent={'end'} px={{ base: 3, lg: 6 }} top={6}>
           <ExportComponent />
         </HStack>
         {ordersData.length === 0 ? (

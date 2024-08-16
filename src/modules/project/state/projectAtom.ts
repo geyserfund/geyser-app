@@ -5,6 +5,7 @@ import { toInt } from '@/utils'
 
 import { authUserAtom } from '../../../pages/auth/state'
 import { ProjectHeaderSummaryFragment, ProjectPageBodyFragment, ProjectPageDetailsFragment } from '../../../types'
+import { resetRewardsAtom } from '../pages1/projectDashboard/views/sales/state/rewardsAtom'
 import { affiliateAtomReset } from './affiliateAtom'
 import { contributionAtomReset } from './contributionsAtom'
 import { entriesAtomReset } from './entriesAtom'
@@ -96,6 +97,7 @@ export const useProjectReset = () => {
   const rewardsReset = useSetAtom(rewardsAtomReset)
   const walletReset = useSetAtom(walletAtomReset)
   const affiliateReset = useSetAtom(affiliateAtomReset)
+  const rewardReset = useSetAtom(resetRewardsAtom)
 
   const resetProject = useCallback(() => {
     console.log('=================================')
@@ -110,6 +112,7 @@ export const useProjectReset = () => {
     rewardsReset()
     walletReset()
     affiliateReset()
+    rewardReset()
   }, [
     contributionsReset,
     entriesReset,
@@ -119,6 +122,7 @@ export const useProjectReset = () => {
     rewardsReset,
     walletReset,
     affiliateReset,
+    rewardReset,
   ])
 
   return resetProject

@@ -29,10 +29,11 @@ export const ProjectDashboardNotifications = () => {
           <Body fontSize={'24px'} medium>
             Notifications
           </Body>
-          <Body size="xs" color="neutralAlpha.11" regular>
+          <Body size="sm" light>
             Customize your project notifications.
           </Body>
         </VStack>
+
         {creatorNotificationSetting && (
           <CreatorNotifications creatorNotificationSettings={[creatorNotificationSetting]} />
         )}
