@@ -32,8 +32,10 @@ export const FRAGMENT_ACTIVITY_FOR_LANDING_PAGE = gql`
 export const QUERY_ACTIVITIES_FOR_LANDING_PAGE = gql`
   ${FRAGMENT_ACTIVITY_FOR_LANDING_PAGE}
   query ActivitiesForLandingPage($input: GetActivitiesInput) {
-    getActivities(input: $input) {
-      ...ActivityForLandingPage
+    activitiesGet(input: $input) {
+      activities {
+        ...ActivityForLandingPage
+      }
     }
   }
 `
