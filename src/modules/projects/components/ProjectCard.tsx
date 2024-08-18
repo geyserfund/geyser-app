@@ -15,8 +15,9 @@ interface ProjectCardProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const { t } = useTranslation()
+
   return (
-    <Box p={4}>
+    <Box py={4}>
       <HStack spacing={4} alignItems="center" justifyContent="space-between">
         <HStack>
           {project.thumbnailImage && (
