@@ -1,10 +1,13 @@
-import { Box, BoxProps, Divider, HStack, Image, Skeleton, Stack, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, Button, Divider, HStack, Image, Skeleton, Stack, VStack } from '@chakra-ui/react'
 import { Emoji, EmojiStyle } from 'emoji-picker-react'
 import { useTranslation } from 'react-i18next'
+import { PiFlagBannerFold } from 'react-icons/pi'
+import { useNavigate } from 'react-router'
 
 import { DonateIcon } from '@/components/icons/svg/DonateIcon'
+import { useGoalsModal } from '@/modules/project/pages1/projectView/hooks'
 import { Body } from '@/shared/components/typography'
-import { NoContributionsReceivedUrl } from '@/shared/constants'
+import { getPath, NoContributionsReceivedUrl } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { ProjectGoal, ProjectGoalCurrency } from '@/types'
 import { commaFormatted } from '@/utils'
@@ -14,22 +17,55 @@ import { useProjectStats } from '../hooks/useProjectStats'
 
 interface ContributionsProps {
   projectId: string
+  projectName: string
 }
 
-const Contributions = ({ projectId }: ContributionsProps) => {
+const Contributions = ({ projectId, projectName }: ContributionsProps) => {
+  const { t } = useTranslation()
+  const navigate = useNavigate()
   const { stats, isLoading, error } = useProjectStats(projectId)
   const { goals, isLoading: goalsLoading, error: goalsError } = useProjectGoals(projectId)
+  const { onGoalModalOpen } = useGoalsModal()
 
   if (isLoading || goalsLoading) return <ContributionsSkeleton />
   if (error || goalsError) return <Box>Error: {error?.message || goalsError?.message}</Box>
 
-  const noContributionsReceived = !stats?.total || stats.total === 0
-
   const { total, totalUsd } = stats || {}
+
+  const noContributionsReceived = !total || total === 0
+  const noGoals = goals.length === 0
+
+  if (noGoals && !noContributionsReceived) {
+    return (
+      <VStack
+        minHeight="269px"
+        borderWidth={1}
+        justifyContent="center"
+        alignItems="center"
+        borderRadius="lg"
+        p={4}
+        flex={1}
+      >
+        <Header total={total} totalUsd={totalUsd} noContributionsReceived={noContributionsReceived} noGoals={noGoals} />
+        <Button
+          variant="solid"
+          bg="primary1.9"
+          color="accent"
+          leftIcon={<PiFlagBannerFold />}
+          onClick={() => {
+            onGoalModalOpen()
+            navigate(getPath('project', projectName))
+          }}
+        >
+          {t('Create Goal')}
+        </Button>
+      </VStack>
+    )
+  }
 
   return (
     <Box borderWidth={1} borderRadius="lg" p={4} flex={1}>
-      <Header total={total} totalUsd={totalUsd} noContributionsReceived={noContributionsReceived} />
+      <Header total={total} totalUsd={totalUsd} noContributionsReceived={noContributionsReceived} noGoals={noGoals} />
       <Divider my={4} />
       <Goals goals={goals} noContributionsReceived={noContributionsReceived} />
     </Box>
@@ -42,12 +78,16 @@ const Header = ({
   total,
   totalUsd,
   noContributionsReceived,
+  noGoals,
 }: {
   total: number | undefined
   totalUsd: number | undefined
   noContributionsReceived: boolean
+  noGoals: boolean
 }) => {
   const { t } = useTranslation()
+
+  const fontSize = noGoals ? '24px' : '20px'
 
   return (
     <VStack w="100%" align="stretch" spacing={0.5}>
@@ -60,15 +100,15 @@ const Header = ({
 
       {noContributionsReceived ? (
         <HStack w="100%" justifyContent="center">
-          <Body fontSize={'20px'} bold>
+          <Body fontSize={fontSize} bold>
             {t('No contributions received')}
           </Body>
         </HStack>
       ) : (
         <HStack w="100%" justifyContent="center">
-          <Body fontSize={'20px'} bold>
+          <Body fontSize={noGoals ? '24px' : '20px'} bold>
             {commaFormatted(total)}{' '}
-            <Body as="span" fontSize={'20px'} color={'neutralAplha.11'}>
+            <Body as="span" fontSize={fontSize} color={'neutralAlpha.11'} bold>
               Sats (${commaFormatted(totalUsd)})
             </Body>
           </Body>

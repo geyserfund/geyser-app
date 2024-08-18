@@ -45,8 +45,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         </Button>
       </HStack>
       <HStack mt={4} spacing={4}>
-        <Contributions projectId={project.id} />
-        <Contributions projectId={project.id} />
+        <Contributions projectId={project.id} projectName={project.name} />
+        <Contributions projectId={project.id} projectName={project.name} />
       </HStack>
     </Box>
   )
