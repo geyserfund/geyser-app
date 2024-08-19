@@ -1,4 +1,4 @@
-import { HStack, useDisclosure } from '@chakra-ui/react'
+import { Box, HStack, useDisclosure } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
@@ -16,13 +16,14 @@ import { BrandLogo } from './components/BrandLogo'
 import { LoggedOutModal } from './components/LoggedOutModal'
 import { ProjectLogo } from './components/ProjectLogo'
 import { ProjectSelectMenu } from './components/ProjectSelectMenu'
-import { shouldShowProjectLogoAtom } from './topNavBarAtom'
+import { isProjectRoutesAtom, shouldShowProjectLogoAtom } from './topNavBarAtom'
 
 export const TopNavBar = () => {
   const { isLoggedIn, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose } = useAuthModal()
 
   const shouldShowProjectLogo = useAtomValue(shouldShowProjectLogoAtom)
+  const isProjectPage = useAtomValue(isProjectRoutesAtom)
 
   const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose } = useEmailPromptModal()
 
@@ -59,19 +60,30 @@ export const TopNavBar = () => {
   }, [state])
 
   return (
-    <>
+    <HStack
+      w="full"
+      position="fixed"
+      top={0}
+      {...(!isProjectPage && {
+        paddingLeft: {
+          base: 0,
+          lg: dimensions.platform.sideNav.tablet.width,
+          '2xl': dimensions.platform.sideNav.desktop.width,
+        },
+      })}
+      justifyContent={'center'}
+      zIndex={9}
+    >
       <HStack
         paddingY={{ base: 5, lg: 8 }}
         paddingX={{ base: 3, lg: 6 }}
         maxWidth={{ base: dimensions.maxWidth + 24, lg: dimensions.maxWidth + 48 }}
         width="100%"
         backgroundColor={'utils.pbg'}
-        position="fixed"
-        top={0}
-        zIndex={9}
+        justifySelf={'center'}
       >
         <HStack w="100%" height={{ base: '40px', lg: '48px' }} justifyContent={'space-between'}>
-          {shouldShowProjectLogo ? <ProjectLogo /> : <BrandLogo />}
+          {isProjectPage ? <BrandLogo /> : shouldShowProjectLogo ? <ProjectLogo /> : <Box />}
 
           <HStack position="relative">
             {!isLoggedIn ? <LoginButton /> : <ProjectSelectMenu />}
@@ -91,6 +103,6 @@ export const TopNavBar = () => {
         }}
       />
       <EmailPromptModal isOpen={emailPromptIsOpen} onClose={emailPromptOnClose} />
-    </>
+    </HStack>
   )
 }

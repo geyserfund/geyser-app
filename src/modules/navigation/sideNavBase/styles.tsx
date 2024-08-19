@@ -4,7 +4,7 @@ import { dimensions } from '../../../shared/constants'
 
 export const slideInRight = {
   '@keyframes slide-in-right': {
-    '0%': { right: `-${dimensions.sideNav.width}px` },
+    '0%': { right: `-${dimensions.mobileSideNav.width}px` },
     '100%': { right: '0' },
   },
   slideInRight: {
@@ -16,7 +16,7 @@ export const slideInRight = {
 export const slideOutLeft = {
   '@keyframes slide-out-left': {
     '0%': { left: '0' },
-    '100%': { left: `-${dimensions.sideNav.width}px` },
+    '100%': { left: `-${dimensions.mobileSideNav.width}px` },
   },
 
   slideOutLeft: {
@@ -27,7 +27,7 @@ export const slideOutLeft = {
 
 export const slideInLeft = {
   '@keyframes slide-in-left': {
-    '0%': { left: `-${dimensions.sideNav.width}px` },
+    '0%': { left: `-${dimensions.mobileSideNav.width}px` },
     '100%': { left: '0' },
   },
   slideInLeft: {
@@ -39,7 +39,7 @@ export const slideInLeft = {
 export const slideOutRight = {
   '@keyframes slide-out-right': {
     '0%': { right: '0' },
-    '100%': { right: `-${dimensions.sideNav.width}px` },
+    '100%': { right: `-${dimensions.mobileSideNav.width}px` },
   },
   slideOutRight: {
     webkitAnimation: '$slide-out-right .1s cubic-bezier(0.25,0.46,0.45,0.94) both',
