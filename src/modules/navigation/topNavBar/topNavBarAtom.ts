@@ -13,7 +13,7 @@ import { profileSideNavAtom } from '../profileNav/profileSideNavAtom'
 
 const routesForProjectPage = atom(routeMatchForAtom(projectRoutes))
 
-const isProjectRoutesAtom = atom(
+export const isProjectRoutesAtom = atom(
   routeMatchForAtom([
     ...projectRoutes,
     ...projectDashboardRoutes,
@@ -31,7 +31,6 @@ const mainProjectPageScrolledPassThresholdAtom = atom(false)
 export const shouldShowProjectLogoAtom = atom((get) => {
   const isProjectPage = get(isProjectRoutesAtom)
 
-  console.log('checking isProjectPage', isProjectPage)
   if (!isProjectPage) {
     return false
   }

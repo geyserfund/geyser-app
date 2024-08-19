@@ -7,7 +7,6 @@ import { useHistoryRoutes } from './config/routes/hooks/useHistoryRoutes'
 import { useMatchRoutes } from './config/routes/hooks/useMatchRoutes'
 import { useAuthContext } from './context'
 import { TopNavBar } from './modules/navigation/topNavBar/TopNavBar'
-import { LandingNavBar } from './navigation/bottomNav/LandingNavBar'
 import { LoadingPage } from './pages/loading'
 import { dimensions, ID } from './shared/constants'
 import { useLayoutAnimation } from './shared/hooks'
@@ -48,6 +47,7 @@ const AppLayout = () => {
             display="flex"
             alignItems="center"
             flexDir="column"
+            backgroundColor="utils.pbg"
           >
             <TopNavBar />
             <Box
@@ -63,7 +63,6 @@ const AppLayout = () => {
             >
               <Outlet />
             </Box>
-            {isMobile && <LandingNavBar />}
           </Box>
         </Box>
       </PullToRefresh>
