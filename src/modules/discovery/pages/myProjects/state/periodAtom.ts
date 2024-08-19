@@ -4,4 +4,4 @@ export enum TimePeriod {
   Week = 'week',
   Month = 'month',
 }
-export const periodAtom = atom<TimePeriod>(TimePeriod.Month)
+export const periodAtom = atom<TimePeriod>(TimePeriod.Week)

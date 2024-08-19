@@ -26,10 +26,7 @@ export const MyProjects = () => {
 
   const hasNoProjects = projects.length === 0
 
-  const timePeriodOptions: { value: TimePeriod; label: string }[] = [
-    { value: TimePeriod.Month, label: t('Past month') },
-    { value: TimePeriod.Week, label: t('Past week') },
-  ]
+  const timePeriodOptions: { value: TimePeriod; label: string }[] = [{ value: TimePeriod.Week, label: t('Past week') }]
 
   const handleTimePeriodChange = (selectedOption: { value: TimePeriod; label: string } | null) => {
     if (selectedOption) {
