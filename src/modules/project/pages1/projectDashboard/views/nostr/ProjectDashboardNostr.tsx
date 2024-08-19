@@ -42,12 +42,12 @@ export const ProjectDashboardNostr = () => {
     <DashboardLayout desktopTitle={t('Nostr settings')}>
       <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1} paddingX={{ base: 0, lg: 6 }}>
         <VStack width="full" alignItems="flex-start">
-          <Body size="sm">
+          <Body size="sm" light>
             {t(
               'Nostr is a simple, open protocol that enables global, decentralized, and censorship-resistant broadcasting of information. Geyser provides each project with its own npub. This means that you are able to access your project from other Nostr clients, and that your activity on Geyser will be viewable and accessible cross-platform.',
             )}
           </Body>
-          <Body size="sm">
+          <Body size="sm" light>
             {t('Below you can find the information you need to access your public and private keys.')}
           </Body>
         </VStack>

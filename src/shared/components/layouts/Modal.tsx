@@ -14,6 +14,8 @@ import {
 import { ReactNode } from 'react'
 import { PiX } from 'react-icons/pi'
 
+import { standardPadding } from '@/styles'
+
 export interface CustomModalProps extends ModalProps {
   title?: ReactNode
   contentProps?: ModalContentProps
@@ -28,12 +30,12 @@ export const Modal = ({ children, title, contentProps, bodyProps, noClose, ...pr
       <ModalContent bg="transparent" boxShadow={0} {...contentProps}>
         <Box borderRadius="12px" bg="utils.pbg" paddingY={6}>
           {title && (
-            <ModalHeader pt={0} pb={3}>
+            <ModalHeader pt={0} pb={3} px={standardPadding}>
               {title}
             </ModalHeader>
           )}
           {!noClose && (
-            <ModalCloseButton padding="0" size="sm" top={6} right={6}>
+            <ModalCloseButton padding="0" size="sm" top={6} right={{ base: 3, lg: 6 }}>
               <IconButton
                 size="sm"
                 aria-label="modal-close-icon"
@@ -44,7 +46,7 @@ export const Modal = ({ children, title, contentProps, bodyProps, noClose, ...pr
               />
             </ModalCloseButton>
           )}
-          <ModalBody paddingY={0} {...bodyProps}>
+          <ModalBody paddingY={0} paddingX={standardPadding} {...bodyProps}>
             {children}
           </ModalBody>
         </Box>

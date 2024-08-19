@@ -9,8 +9,7 @@ import { __production__, getPath, PathName } from '../../shared/constants'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { renderPrivateRoute } from './components/PrivateRoute'
 
-const Grants = () => import('../../pages/grants')
-const Grants1 = () => import('modules/grants/pages/Grants')
+const GrantsOld = () => import('../../pages/grants')
 const ProjectLaunch = () => import('../../modules/project/pages1/projectCreation')
 const MyProjects = () => import('../../modules/projects/pages/MyProjects')
 // const Entry = () => import('../../pages/entry')
@@ -28,31 +27,27 @@ const CreatorReward = () => import('../../modules/project/pages1/projectView/vie
 
 const CreatorPost = () => import('../../modules/project/pages1/projectView/views/posts/views')
 
+const Platform = () => import('../../modules/platform')
+
+const Grants = () => import('../../modules/grants/pages/Grants')
+
 const Refund = () => import('../../modules/project/pages1/projectFunding/views/refund')
 const ProfilePage = () => import('../../modules/profile/pages/profilePage/Profile')
 const ProfileSettingsIndex = () => import('../../modules/profile/pages/profileSettings')
 const Badges = () => import('../../pages/badges/BadgesPage')
-const Landing = () => import('../../pages/landing')
 
 export const platformRoutes: RouteObject[] = [
   {
     path: '/grants',
     async lazy() {
-      const GrantsLandingPage = await Grants().then((m) => m.GrantsLandingPage)
-      return { Component: GrantsLandingPage }
-    },
-  },
-  {
-    path: '/grants1',
-    async lazy() {
-      const GrantsPage = await Grants1().then((m) => m.Grants)
+      const GrantsPage = await Grants().then((m) => m.Grants)
       return { Component: GrantsPage }
     },
   },
   {
     path: '/grants/:grantId',
     async lazy() {
-      const GrantPage = await Grants().then((m) => m.GrantPage)
+      const GrantPage = await GrantsOld().then((m) => m.GrantPage)
       return { Component: GrantPage }
     },
   },
@@ -566,30 +561,52 @@ export const platformRoutes: RouteObject[] = [
       return { Component: BadgesPage }
     },
   },
+
   {
-    path: getPath('landingPage'),
+    path: getPath('platformLanding'),
     async lazy() {
-      const LandingPage = await Landing().then((m) => m.LandingPage)
-      return { Component: LandingPage }
+      const PlatformLanding = await Platform().then((m) => m.Platform)
+      return { Component: PlatformLanding }
     },
     children: [
       {
-        path: getPath('landingPage'),
-        async lazy() {
-          const LandingPageProjects = await Landing().then((m) => m.LandingPageProjects)
-          return { Component: LandingPageProjects }
-        },
         index: true,
+        async lazy() {
+          const Discovery = await Platform().then((m) => m.Discovery)
+          return { Component: Discovery }
+        },
       },
       {
-        path: getPath('landingFeed'),
+        path: getPath('platformMyProjects'),
         async lazy() {
-          const LandingFeed = await Landing().then((m) => m.LandingFeed)
-          return { Component: LandingFeed }
+          const MyProjects = await Platform().then((m) => m.MyProjects)
+          return { Component: MyProjects }
+        },
+      },
+      {
+        path: getPath('platformActivity'),
+        async lazy() {
+          const Activity = await Platform().then((m) => m.Activity)
+          return { Component: Activity }
+        },
+      },
+      {
+        path: getPath('platformLeaderboard'),
+        async lazy() {
+          const Leaderboard = await Platform().then((m) => m.Leaderboard)
+          return { Component: Leaderboard }
+        },
+      },
+      {
+        path: getPath('platformGrants'),
+        async lazy() {
+          const GrantsLanding = await Grants().then((m) => m.Grants)
+          return { Component: GrantsLanding }
         },
       },
     ],
   },
+
   {
     path: '/auth/twitter',
     Component: ExternalAuthSuccess,

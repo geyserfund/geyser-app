@@ -67,7 +67,7 @@ export const LeaderboardItem = ({ funder, rank, ...props }: LeaderboardItemProps
           </HStack>
         </VStack>
       </HStack>
-      <FunderContributionModal funder={funder} {...funderContributionModal} />
+      {funderContributionModal.isOpen && <FunderContributionModal funder={funder} {...funderContributionModal} />}
     </>
   )
 }

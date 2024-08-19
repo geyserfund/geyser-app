@@ -55,7 +55,7 @@ interface Props {
   name?: string
   control?: Control<any, any>
   flex?: boolean
-  stickyToolbar?: string | number | boolean // top value if string or number (Ex: "48px")
+  stickyToolbar?: string | number
   isEditorMode?: boolean
   toggleEditorMode?: () => void
 }
@@ -223,7 +223,9 @@ export const MarkdownField = ({
             position: 'fixed',
             background: 'utils.pbg',
             zIndex: 2,
-            bottom: 0,
+            bottom: stickyToolbar || 0,
+            borderBottom: stickyToolbar ? '1px solid' : undefined,
+            borderColor: 'neutral1.6',
             mb: 0,
             padding: 3,
           })}
@@ -251,7 +253,7 @@ export const MarkdownField = ({
           height="100%"
           minHeight="350px"
           formControlProps={{ height: '100%' }}
-          fieldContainerProps={{ height: '100%', paddingBottom: { base: '120px', lg: '40px' } }}
+          fieldContainerProps={{ height: '100%' }}
         />
       )}
       <StyleProvider
@@ -259,10 +261,7 @@ export const MarkdownField = ({
         flexGrow={1}
         display={isEditorMode ? 'none' : undefined}
         minHeight={'40vh'}
-        paddingBottom={{
-          base: '120px',
-          lg: '40px',
-        }}
+        paddingBottom={0}
       >
         <EditorComponent />
         <TableComponents tableCellMenuProps={{ Component: TableCellMenuComponent }} />

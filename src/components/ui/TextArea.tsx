@@ -18,7 +18,7 @@ export const TextArea = ({ children, error, value, ...rest }: TextBoxProps) => {
 
   return (
     <Box width="100%">
-      <Textarea ref={ownRef} isInvalid={Boolean(error)} value={value} borderRadius="8px" borderWidth="1px" {...rest}>
+      <Textarea ref={ownRef} isInvalid={Boolean(error)} value={value} {...rest}>
         {children}
       </Textarea>
       {error ? (

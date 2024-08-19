@@ -1,5 +1,5 @@
 import { Divider, VStack } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 
 import { Body } from '@/shared/components/typography'
@@ -14,13 +14,17 @@ export const ProfileSettingsNotifications = () => {
   const [creatorNotificationSettings, setCreatorNotificationSettings] = useState<CreatorNotificationSettings[]>([])
   const [userNotificationSettings, setUserNotificationSettings] = useState<UserNotificationSettings>()
 
-  useProfileNotificationsSettingsQuery({
+  const { refetch } = useProfileNotificationsSettingsQuery({
     variables: { userId },
     onCompleted(data) {
       setCreatorNotificationSettings(data?.userNotificationSettingsGet.creatorSettings || [])
       setUserNotificationSettings(data?.userNotificationSettingsGet.userSettings || null)
     },
   })
+
+  useEffect(() => {
+    refetch()
+  }, [refetch])
 
   return (
     <ProfileSettingsLayout>

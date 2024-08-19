@@ -11,33 +11,24 @@ import {
   InputGroup,
   InputRightElement,
   Link,
-  Text,
+  useColorModeValue,
   VStack,
 } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 import { PiGear } from 'react-icons/pi'
 
+import { Body } from '@/shared/components/typography'
 import { useCustomTheme } from '@/utils'
 
 import { BoltIcon, NodeIcon } from '../../../components/icons'
 import { TextInputBox } from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
 import {
-  AlbyLightningAddressURL,
-  AlbyUrl,
-  BitNobURL,
-  BitnobUrl,
-  BlinkLogoUrl,
-  BlinkUrl,
   GeyserLightningWalletGuideLink,
   LIGHTNING_FEE_PERCENTAGE,
-  StrikeLogoUrl,
-  StrikeUrl,
   VoltageExplainerPageForGeyserURL,
   VoltageUrl,
-  WalletOfSatoshiLightningAddressURL,
-  WalletOfSatoshiUrl,
 } from '../../../shared/constants'
 import { lightModeColors } from '../../../styles'
 import { LndNodeType } from '../../../types'
@@ -66,6 +57,16 @@ type Props = {
   limits: Limits
   currentWallet?: ConnectionOption
 }
+
+const FeaturedWalletList = [
+  {
+    name: 'Wallet of Satoshi',
+    imageUrl: 'https://storage.googleapis.com/geyser-projects-media/platform/walletOfSatoshiLogoLight.png',
+    imageUrlDark: 'https://storage.googleapis.com/geyser-projects-media/platform/walletOfSatoshiLogoDark.png',
+    url: 'https://tinyurl.com/walletofsatoshi',
+    backgroundColor: 'transparent',
+  },
+]
 
 export const ProjectCreationWalletConnectionForm = ({
   readOnly,
@@ -137,60 +138,71 @@ export const ProjectCreationWalletConnectionForm = ({
             <WalletConnectionOptionInfoBox
               pt={0}
               primaryNode={
-                <InputGroup w="full" size={'md'}>
-                  <TextInputBox
-                    w="full"
-                    name="lightning-address"
-                    type={'email'}
-                    placeholder={'runwithbitcoin@getalby.com'}
-                    value={lightningAddress.value}
-                    onChange={(event) => {
-                      lightningAddress.setValue(event.target.value)
-                    }}
-                    onBlur={lightningAddress.validate}
-                    isInvalid={Boolean(lightningAddress.error)}
-                    focusBorderColor={'neutral.200'}
-                    _valid={{
-                      focusBorderColor: 'primary.500',
-                    }}
-                    error={lightningAddress.error}
-                    isDisabled={readOnly}
-                  />
-                  <InputRightElement>{renderRightElementContent()}</InputRightElement>
-                </InputGroup>
+                <>
+                  <InputGroup w="full" size={'md'}>
+                    <TextInputBox
+                      w="full"
+                      name="lightning-address"
+                      type={'email'}
+                      placeholder={'runwithbitcoin@getalby.com'}
+                      value={lightningAddress.value}
+                      onChange={(event) => {
+                        lightningAddress.setValue(event.target.value)
+                      }}
+                      onBlur={lightningAddress.validate}
+                      isInvalid={Boolean(lightningAddress.error)}
+                      focusBorderColor={'neutral.200'}
+                      _valid={{
+                        focusBorderColor: 'primary.500',
+                      }}
+                      error={lightningAddress.error}
+                      isDisabled={readOnly}
+                    />
+                    <InputRightElement>{renderRightElementContent()}</InputRightElement>
+                  </InputGroup>
+
+                  {lightningAddress.value && lightningAddress.state === LNAddressEvaluationState.SUCCEEDED ? (
+                    <WalletLimitComponent limit={limits} />
+                  ) : null}
+                </>
               }
               promoText={t(`${LIGHTNING_FEE_PERCENTAGE}% Geyser fee per transaction`)}
               secondaryText={
                 <Trans
                   i18nKey={
-                    '<0>Lightning Addresses</0> are like an email address, but for your Bitcoin. You’ll receive all on-chain and lightning transactions directly to your lightning wallet. Get your own lightning access using these recommended apps.'
+                    '<0>Lightning Addresses</0> are like an email address, but for your Bitcoin. You’ll receive all on-chain and lightning transactions directly to your lightning wallet. Get your own by looking at our featured and other <2>recommended wallets.</2>'
                   }
                 >
                   <Link textDecoration="underline" href={GeyserLightningWalletGuideLink} isExternal>
                     Lightning Addresses
                   </Link>
                   {
-                    ' are like an email address, but for your Bitcoin. You’ll receive all on-chain and lightning transactions directly to your lightning wallet. Get your own lightning access using these recommended apps.'
+                    ' are like an email address, but for your Bitcoin. You’ll receive all on-chain and lightning transactions directly to your lightning wallet. Get your own by looking at our featured and other '
                   }
+                  <Link textDecoration="underline" href={GeyserLightningWalletGuideLink} isExternal color="primary1.11">
+                    recommended wallets.
+                  </Link>
                 </Trans>
               }
             >
-              {lightningAddress.value && lightningAddress.state === LNAddressEvaluationState.SUCCEEDED ? (
-                <WalletLimitComponent limit={limits} />
-              ) : (
+              <VStack w="full" alignItems={'start'} spacing={1}>
+                <Body size="sm" medium>
+                  {t('Featured Wallets')}
+                </Body>
                 <HStack width={'full'} justifyContent={'flex-start'} spacing={'10px'} flexWrap="wrap">
-                  <RenderSponsorImage url={WalletOfSatoshiLightningAddressURL} imageUrl={WalletOfSatoshiUrl} />
-                  <RenderSponsorImage url={BitNobURL} imageUrl={BitnobUrl} />
-                  <RenderSponsorImage url={BlinkUrl} imageUrl={BlinkLogoUrl} />
-                  <RenderSponsorImage url={StrikeUrl} imageUrl={StrikeLogoUrl} />
-                  <RenderSponsorImage url={AlbyLightningAddressURL} imageUrl={AlbyUrl} />
-                  <Link textDecoration="none" href={GeyserLightningWalletGuideLink} isExternal>
-                    <Text fontWeight="bold" color="neutral.900" fontSize="16px">
-                      {t('See more')}
-                    </Text>
-                  </Link>
+                  {FeaturedWalletList.map((wallet) => {
+                    return (
+                      <RenderSponsorImage
+                        key={wallet.name}
+                        url={wallet.url}
+                        imageUrl={wallet.imageUrl}
+                        imageUrlDark={wallet.imageUrlDark}
+                        backgroundColor={wallet.backgroundColor}
+                      />
+                    )
+                  })}
                 </HStack>
-              )}
+              </VStack>
             </WalletConnectionOptionInfoBox>
           </AccordionPanel>
         </AccordionItem>
@@ -268,11 +280,25 @@ export const ProjectCreationWalletConnectionForm = ({
   )
 }
 
-const RenderSponsorImage = ({ url, imageUrl, height = '24px' }: { url: string; imageUrl: string; height?: string }) => {
+const RenderSponsorImage = ({
+  url,
+  imageUrl,
+  imageUrlDark,
+  height = '40px',
+  backgroundColor,
+}: {
+  url: string
+  imageUrl: string
+  imageUrlDark?: string
+  height?: string
+  backgroundColor?: string
+}) => {
+  const image = useColorModeValue(imageUrl, imageUrlDark || imageUrl)
+
   return (
-    <Box backgroundColor={lightModeColors.neutral[100]} borderRadius={'8px'} px={2} py={1}>
+    <Box backgroundColor={backgroundColor || 'utils.pbg'} borderRadius={'8px'}>
       <Link isExternal href={url}>
-        <Image src={imageUrl} height={height} />
+        <Image src={image} height={height} />
       </Link>
     </Box>
   )
@@ -291,7 +317,7 @@ const accordionButtonStyles: AccordionButtonProps = {
   _expanded: {
     borderBottomRightRadius: 0,
     borderBottomLeftRadius: 0,
-    borderBottom: 'none',
+    borderBottomWidth: '0px',
     _hover: {
       borderColor: 'neutral1.6',
     },

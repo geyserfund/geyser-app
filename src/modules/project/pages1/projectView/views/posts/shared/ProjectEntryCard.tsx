@@ -44,7 +44,6 @@ export const ProjectEntryCard = ({ entry }: Props) => {
             <Image
               objectFit="cover"
               boxSize="100%"
-              borderRadius={'md'}
               src={entry.image || ''}
               alt={entry.title}
               fallback={<ProjectEntryCardThumbnailPlaceholder />}

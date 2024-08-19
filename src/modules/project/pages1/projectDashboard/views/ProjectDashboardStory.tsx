@@ -67,10 +67,11 @@ export const ProjectDashboardStory = () => {
       <DashboardLayout
         mobileTopNavRightComponent={<SaveButton />}
         deskTopBottomComponent={<SaveButton w="full" />}
+        desktopTitle={t('Story')}
         width="full"
       >
         <VStack width="100%" alignItems="flex-start" px={{ base: 0, lg: 6 }}>
-          <ProjectStoryForm form={form} isLoading={loading} toolbarTop="5.9em" />
+          <ProjectStoryForm form={form} isLoading={loading} />
         </VStack>
       </DashboardLayout>
 

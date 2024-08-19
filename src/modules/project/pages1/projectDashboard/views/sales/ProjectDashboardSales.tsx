@@ -12,17 +12,17 @@ export const ProjectDashboardSales = () => {
   const { t } = useTranslation()
   const isRewardEmpty = useRewardEmptyAtom()
 
-  if (isRewardEmpty) {
-    return <EmptyContainer image={ProjectRewardsImageUrl} text={t('No rewards sold yet')} />
-  }
-
   return (
-    <DashboardLayout>
-      <VStack w="full" alignItems="flex-start" spacing="4">
-        <RewardByStatus status={OrdersGetStatus.Confirmed} />
-        <RewardByStatus status={OrdersGetStatus.Shipped} />
-        <RewardByStatus status={OrdersGetStatus.Delivered} />
-      </VStack>
+    <DashboardLayout desktopTitle={t('Sales')}>
+      {isRewardEmpty ? (
+        <EmptyContainer image={ProjectRewardsImageUrl} text={t('No rewards sold yet')} />
+      ) : (
+        <VStack w="full" alignItems="flex-start" spacing="4">
+          <RewardByStatus status={OrdersGetStatus.Confirmed} />
+          <RewardByStatus status={OrdersGetStatus.Shipped} />
+          <RewardByStatus status={OrdersGetStatus.Delivered} />
+        </VStack>
+      )}
     </DashboardLayout>
   )
 }

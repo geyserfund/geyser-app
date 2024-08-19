@@ -12,15 +12,13 @@ export const ProjectLogo = () => {
   return (
     <Link to={getPath('project', project.name)}>
       <HStack>
-        {project.thumbnailImage && (
-          <ImageWithReload
-            height={{ base: '40px', lg: '48px' }}
-            width={{ base: '40px', lg: '48px' }}
-            borderRadius={'50%'}
-            src={project?.thumbnailImage}
-            alt={project?.name}
-          />
-        )}
+        <ImageWithReload
+          height={{ base: '40px', lg: '48px' }}
+          width={{ base: '40px', lg: '48px' }}
+          borderRadius={'50%'}
+          src={project?.thumbnailImage}
+          alt={project?.name}
+        />
         <Heading size="md" display={{ base: 'none', lg: 'unset' }}>
           {project?.title}
         </Heading>

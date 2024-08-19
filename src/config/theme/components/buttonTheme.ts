@@ -75,7 +75,7 @@ export const buttonTheme: ComponentStyleConfig = {
       },
       _loading: {
         backgroundColor: 'neutral1.3',
-        color: 'neutral1.8',
+        color: 'neutral1.11',
       },
     }),
     soft: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
@@ -93,7 +93,7 @@ export const buttonTheme: ComponentStyleConfig = {
       },
       _loading: {
         backgroundColor: 'neutral1.3',
-        color: 'neutral1.8',
+        color: 'neutral1.11',
       },
     }),
     surface: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
@@ -116,7 +116,7 @@ export const buttonTheme: ComponentStyleConfig = {
       },
       _loading: {
         backgroundColor: 'neutral1.3',
-        color: 'neutral1.8',
+        color: 'neutral1.11',
         borderColor: 'neutral1.8',
       },
     }),
@@ -140,7 +140,7 @@ export const buttonTheme: ComponentStyleConfig = {
       },
       _loading: {
         backgroundColor: 'neutral1.3',
-        color: 'neutral1.8',
+        color: 'neutral1.11',
         borderColor: 'neutral1.8',
       },
     }),
@@ -159,7 +159,7 @@ export const buttonTheme: ComponentStyleConfig = {
       },
       _loading: {
         backgroundColor: 'neutral1.3',
-        color: 'neutral1.8',
+        color: 'neutral1.11',
       },
     }),
 

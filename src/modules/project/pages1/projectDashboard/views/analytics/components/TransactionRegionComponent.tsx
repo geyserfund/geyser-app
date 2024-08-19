@@ -14,7 +14,7 @@ export const TransactionRegionComponent = (props: CardLayoutProps) => {
 
   return (
     <VStack w="full" alignItems={'start'}>
-      <H3 size="xl" bold>
+      <H3 size="xl" medium>
         {t('Funding by region')}
       </H3>
       <CardLayout padding={{ base: 3, lg: 6 }} w="full" {...props}>

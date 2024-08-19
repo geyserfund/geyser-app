@@ -2,7 +2,7 @@ import { HStack, Switch, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { AlertDialogue } from '@/components/molecules/AlertDialogue'
-import { ProjectStatusLabels, ProjectStatusTooltip, ProjectStatusTooltipRoles } from '@/components/ui'
+import { ProjectStatusLabels, ProjectStatusTooltip } from '@/components/ui'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
@@ -24,8 +24,7 @@ export const ProjectStatusUpdate = () => {
   const { updateProject } = useProjectAPI()
 
   const isProjectInReview = project?.status === ProjectStatus.InReview
-  const isProjectInReviewTooltip =
-    ProjectStatusTooltip[ProjectStatusLabels.IN_REVIEW][ProjectStatusTooltipRoles.CREATOR]
+  const isProjectInReviewTooltip = ProjectStatusTooltip[ProjectStatusLabels.IN_REVIEW]
 
   const statusConfirmModal = useModal()
 

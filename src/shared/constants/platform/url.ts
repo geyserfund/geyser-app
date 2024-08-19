@@ -147,6 +147,7 @@ export const LetTheSatsFlowNoNameEdition =
 export const LogoNameBrand = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-brand.svg'
 export const LogoNameDark = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-dark.svg'
 export const LogoNameNostr = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-nostr.svg'
+export const LogoNameLight = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-light.svg'
 
 // Geyser Guide Links
 

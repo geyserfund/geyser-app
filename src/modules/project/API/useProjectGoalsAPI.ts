@@ -18,7 +18,7 @@ import {
   removeGoalsAtom,
 } from '../state/goalsAtom'
 import { updateProjectItemCountsAtom } from '../state/projectAtom'
-import { updateProjectBodyCache } from './cache/projectBodyCache'
+import { updateProjectItemCountCache } from './cache/projectBodyCache'
 import { useCustomMutation } from './custom/useCustomMutation'
 
 /**
@@ -72,7 +72,7 @@ export const useProjectGoalsAPI = (load?: boolean) => {
     },
     update(cache, { data }) {
       if (data?.projectGoalCreate) {
-        updateProjectBodyCache(cache, {
+        updateProjectItemCountCache(cache, {
           projectName: project.name,
           addGoal: true,
         })
@@ -95,7 +95,7 @@ export const useProjectGoalsAPI = (load?: boolean) => {
     },
     update(cache, { data }) {
       if (data?.projectGoalDelete) {
-        updateProjectBodyCache(cache, {
+        updateProjectItemCountCache(cache, {
           projectName: project.name,
           removeGoal: true,
         })

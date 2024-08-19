@@ -1,12 +1,17 @@
-import { Icon, SkeletonText, Stack, StackDirection, Text, Tooltip } from '@chakra-ui/react'
+import { HStack, Icon, SkeletonText, Stack, StackDirection, StackProps, Text, Tooltip } from '@chakra-ui/react'
 import { HTMLChakraProps } from '@chakra-ui/system'
+import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
+import { BsExclamationTriangle, BsFillCheckCircleFill } from 'react-icons/bs'
+import { PiEyeglasses, PiMinusCircle, PiNoteBlank, PiXCircle } from 'react-icons/pi'
 
-import { InReviewIcon } from '../../components/icons/svg/InReviewIcon'
+import { projectStatusAtom } from '@/modules/project/state/projectAtom'
+
 import { ProjectStatus, Wallet, WalletStatus } from '../../types/generated/graphql'
 import { isActive, isDraft, isInactive, isInReview } from '../../utils'
+import { Body } from '../components/typography'
 
 interface IProjectStatusLabel extends HTMLChakraProps<'div'> {
   project: { status?: ProjectStatus | null }
@@ -20,12 +25,12 @@ interface IProjectStatusLabel extends HTMLChakraProps<'div'> {
 }
 
 export enum ProjectStatusLabels {
-  UNSTABLE_WALLET = 'UNSTABLE WALLET',
-  INACTIVE_WALLET = 'INACTIVE WALLET',
-  RUNNING = 'RUNNING',
-  DRAFT = 'DRAFT',
-  INACTIVE = 'INACTIVE',
-  IN_REVIEW = 'IN REVIEW',
+  UNSTABLE_WALLET = 'Unstable Wallet',
+  INACTIVE_WALLET = 'Inactive Wallet',
+  RUNNING = 'Running',
+  DRAFT = 'Draft',
+  INACTIVE = 'Inactive Project',
+  IN_REVIEW = 'In Review',
 }
 
 export enum ProjectStatusTooltipRoles {
@@ -42,28 +47,76 @@ export const ProjectStatusColors = {
   [ProjectStatusLabels.IN_REVIEW]: 'neutral.500',
 }
 
+export const ProjectStatusBackgroundColors = {
+  [ProjectStatusLabels.UNSTABLE_WALLET]: 'warning.9',
+  [ProjectStatusLabels.INACTIVE_WALLET]: 'error.9',
+  [ProjectStatusLabels.RUNNING]: 'primary1.9',
+  [ProjectStatusLabels.DRAFT]: 'neutral1.12',
+  [ProjectStatusLabels.INACTIVE]: 'neutral1.9',
+  [ProjectStatusLabels.IN_REVIEW]: 'error.9',
+}
+
+export const ProjectStatusTextColors = {
+  [ProjectStatusLabels.UNSTABLE_WALLET]: 'utils.blackContrast',
+  [ProjectStatusLabels.INACTIVE_WALLET]: 'utils.whiteContrast',
+  [ProjectStatusLabels.RUNNING]: 'utils.blackContrast',
+  [ProjectStatusLabels.DRAFT]: 'utils.whiteContrast',
+  [ProjectStatusLabels.INACTIVE]: 'utils.whiteContrast',
+  [ProjectStatusLabels.IN_REVIEW]: 'utils.whiteContrast',
+}
+
 export const ProjectStatusIcons = {
-  [ProjectStatusLabels.UNSTABLE_WALLET]: BsFillXCircleFill,
-  [ProjectStatusLabels.INACTIVE_WALLET]: BsFillXCircleFill,
+  [ProjectStatusLabels.UNSTABLE_WALLET]: BsExclamationTriangle,
+  [ProjectStatusLabels.INACTIVE_WALLET]: PiMinusCircle,
   [ProjectStatusLabels.RUNNING]: BsFillCheckCircleFill,
-  [ProjectStatusLabels.DRAFT]: BsFillXCircleFill,
-  [ProjectStatusLabels.INACTIVE]: BsFillXCircleFill,
-  [ProjectStatusLabels.IN_REVIEW]: InReviewIcon,
+  [ProjectStatusLabels.DRAFT]: PiNoteBlank,
+  [ProjectStatusLabels.INACTIVE]: PiXCircle,
+  [ProjectStatusLabels.IN_REVIEW]: PiEyeglasses,
 }
 
 export const ProjectStatusTooltip = {
-  [ProjectStatusLabels.UNSTABLE_WALLET]:
+  [ProjectStatusLabels.UNSTABLE_WALLET]: t(
     'The last time someone tried to send funds to this wallet, there was a liquidity issue.',
-  [ProjectStatusLabels.INACTIVE_WALLET]:
+  ),
+  [ProjectStatusLabels.INACTIVE_WALLET]: t(
     'The last time someone tried to make a transaction to this project, the invoice generation failed.',
-  [ProjectStatusLabels.RUNNING]: 'This project is live and wallet running smoothly.',
-  [ProjectStatusLabels.DRAFT]: 'This project has not been launched yet and is only visible to the project creator.',
-  [ProjectStatusLabels.INACTIVE]: 'This project has been deactivated by the project creator.',
-  [ProjectStatusLabels.IN_REVIEW]: {
-    [ProjectStatusTooltipRoles.CONTRIBUTOR]: 'This project is in review.',
-    [ProjectStatusTooltipRoles.CREATOR]:
-      'You project has been flagged for violating our Terms & Conditions. You should have received an email with further detail on how to proceed. Your project is currently not visible to the public.',
-  },
+  ),
+  [ProjectStatusLabels.RUNNING]: t('This project is live and wallet running smoothly.'),
+  [ProjectStatusLabels.DRAFT]: t('This project has not been launched yet and is only visible to the project creator.'),
+  [ProjectStatusLabels.INACTIVE]: t('This project has been deactivated by the project creator.'),
+  [ProjectStatusLabels.IN_REVIEW]: t(
+    'You project has been flagged for violating our Terms & Conditions. You should have received an email with further detail on how to proceed. Your project is currently not visible to the public.',
+  ),
+}
+
+export const ProjectStatusBar = (props: StackProps) => {
+  const projectStatus = useAtomValue(projectStatusAtom)
+
+  const backgroundColor = ProjectStatusBackgroundColors[projectStatus]
+
+  const statusIcon = ProjectStatusIcons[projectStatus]
+
+  const tooltipLabel = ProjectStatusTooltip[projectStatus]
+
+  const textColor = ProjectStatusTextColors[projectStatus]
+
+  if (projectStatus === ProjectStatusLabels.RUNNING) {
+    return null
+  }
+
+  return (
+    <HStack w="full" spacing={2} paddingY={3} justifyContent="center" backgroundColor={backgroundColor} {...props}>
+      <Tooltip label={tooltipLabel} placement="top" size="sm">
+        <HStack alignItems="center">
+          <Icon as={statusIcon} fontSize={'18px '} color={textColor} />
+
+          <Body size="sm" color={textColor} medium>
+            {t(projectStatus)}
+          </Body>
+        </HStack>
+      </Tooltip>
+    </HStack>
+  )
 }
 
 export const ProjectStatusLabel = ({
@@ -137,12 +190,7 @@ export const ProjectStatusLabel = ({
 
   const CurrentIcon = ProjectStatusIcons[status]
   const color = ProjectStatusColors[status]
-  const tooltip =
-    status === ProjectStatusLabels.IN_REVIEW
-      ? ProjectStatusTooltip[status][
-          isProjectOwner ? ProjectStatusTooltipRoles.CREATOR : ProjectStatusTooltipRoles.CONTRIBUTOR
-        ]
-      : ProjectStatusTooltip[status]
+  const tooltip = ProjectStatusLabels.IN_REVIEW
 
   return (
     <Tooltip label={t(tooltip)} placement="top" size="sm">

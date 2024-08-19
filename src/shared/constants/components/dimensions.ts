@@ -34,7 +34,7 @@ export const dimensions = {
     },
     dashboard: {
       menu: {
-        width: 148,
+        width: 165,
       },
     },
     rightSideNav: {
@@ -49,13 +49,24 @@ export const dimensions = {
       },
     },
   },
-  sideNav: {
+  mobileSideNav: {
     width: 256,
   },
 
   bottomNavBar: {
     desktopHeight: 60,
   },
+  platform: {
+    sideNav: {
+      tablet: {
+        width: 82,
+      },
+      desktop: {
+        width: 224,
+      },
+    },
+  },
+
   pullDownThreshold: 70,
   maxWidth: 1080,
 }
