@@ -24,7 +24,7 @@ export const MyProjects = () => {
   const { user } = useAuthContext()
   const { projects } = useMyProjects(user?.id)
 
-  const hasNoProjects = true
+  const hasNoProjects = projects.length === 0
 
   const timePeriodOptions: { value: TimePeriod; label: string }[] = [
     { value: TimePeriod.Month, label: t('Past month') },
