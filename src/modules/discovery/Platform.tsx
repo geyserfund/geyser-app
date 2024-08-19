@@ -26,7 +26,7 @@ export const Platform = () => {
           maxWidth={`${dimensions.maxWidth + 24 * 2}`}
           position="relative"
           paddingX={standardPadding}
-          paddingBottom={{ base: 28, lg: 100 }}
+          paddingBottom={{ base: 28, lg: 10 }}
         >
           <Outlet />
         </Box>
