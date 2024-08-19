@@ -5,14 +5,13 @@ import { useNavigate } from 'react-router'
 
 import { DonateIcon } from '@/components/icons/svg/DonateIcon'
 import { TrophyIcon } from '@/components/icons/svg/TrophyIcon'
-import { Banner } from '@/components/ui/Banner'
 import { QUERY_GRANT_STATISTICS } from '@/graphqlBase/queries/grant'
+import { Banner } from '@/shared/components/display/Banner'
 import { getPath } from '@/shared/constants'
 import { GrantStatistics } from '@/types'
 import { getShortAmountLabel, useMobileMode } from '@/utils'
 
-// TODO: change this to the Geyser project name in prod
-const GEYSER_PROJECT_NAME = 'geyser2'
+const GEYSER_PROJECT_NAME = 'geyser'
 const AIRTABLE_CREATE_GRANT_URL = 'https://airtable.com/appyM7XlNIWVypuP5/pagLMhHSSQVlKe0Dw/form'
 
 const GrantsHeader = () => {
