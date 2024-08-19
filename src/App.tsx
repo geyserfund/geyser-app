@@ -9,6 +9,7 @@ import { Head } from './config/Head'
 import { configMatomo } from './config/matomo'
 import { AuthProvider, ChakraThemeProvider, ServiceWorkerProvider } from './context'
 import { BtcProvider } from './context/btc'
+import { FilterProvider } from './context/filter'
 
 const App = () => {
   useEffect(() => {
@@ -23,8 +24,10 @@ const App = () => {
             <ApolloProvider client={client}>
               <AuthProvider>
                 <BtcProvider>
-                  <Head />
-                  <Outlet />
+                  <FilterProvider>
+                    <Head />
+                    <Outlet />
+                  </FilterProvider>
                 </BtcProvider>
               </AuthProvider>
             </ApolloProvider>

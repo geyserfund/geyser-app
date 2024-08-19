@@ -102,11 +102,11 @@ const pathsMap = {
   leaderboard: () => `/${PathName.leaderboard}`,
   projectDiscovery: () => `/${PathName.projectDiscovery}`,
 
-  platformLanding: () => '/',
-  platformLeaderboard: () => `/${PathName.leaderboard}`,
-  platformMyProjects: () => `/${PathName.myProjects}`,
-  platformActivity: () => `/${PathName.activiy}`,
-  platformGrants: () => `/${PathName.grants}`,
+  discoveryLanding: () => '/',
+  discoveryLeaderboard: () => `/${PathName.leaderboard}`,
+  discoveryMyProjects: () => `/${PathName.myProjects}`,
+  discoveryActivity: () => `/${PathName.activiy}`,
+  discoveryGrants: () => `/${PathName.grants}`,
 
   grants: (grantId?: string) => (grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`),
   grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,

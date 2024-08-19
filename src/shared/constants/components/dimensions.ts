@@ -56,13 +56,13 @@ export const dimensions = {
   bottomNavBar: {
     desktopHeight: 60,
   },
-  platform: {
+  discovery: {
     sideNav: {
       tablet: {
-        width: 82,
+        width: 83,
       },
       desktop: {
-        width: 224,
+        width: 225,
       },
     },
   },

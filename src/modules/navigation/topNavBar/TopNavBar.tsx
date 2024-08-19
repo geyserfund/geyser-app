@@ -3,6 +3,7 @@ import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
 
+import { FilterComponent } from '@/modules/discovery/filters/FilterComponent'
 import { EmailPromptModal } from '@/pages/auth/components/EmailPromptModal'
 import { useEmailPromptModal } from '@/pages/auth/hooks/useEmailPromptModal'
 
@@ -16,7 +17,7 @@ import { BrandLogo } from './components/BrandLogo'
 import { LoggedOutModal } from './components/LoggedOutModal'
 import { ProjectLogo } from './components/ProjectLogo'
 import { ProjectSelectMenu } from './components/ProjectSelectMenu'
-import { isProjectRoutesAtom, shouldShowProjectLogoAtom } from './topNavBarAtom'
+import { isDiscoveryRoutesAtom, isProjectRoutesAtom, shouldShowProjectLogoAtom } from './topNavBarAtom'
 
 export const TopNavBar = () => {
   const { isLoggedIn, logout, queryCurrentUser } = useAuthContext()
@@ -24,6 +25,7 @@ export const TopNavBar = () => {
 
   const shouldShowProjectLogo = useAtomValue(shouldShowProjectLogoAtom)
   const isProjectPage = useAtomValue(isProjectRoutesAtom)
+  const isPlatformRoutes = useAtomValue(isDiscoveryRoutesAtom)
 
   const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose } = useEmailPromptModal()
 
@@ -59,6 +61,22 @@ export const TopNavBar = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
 
+  const renderLeftSide = () => {
+    if (isPlatformRoutes) {
+      return <FilterComponent />
+    }
+
+    if (shouldShowProjectLogo) {
+      return <ProjectLogo />
+    }
+
+    if (isProjectPage) {
+      return <BrandLogo />
+    }
+
+    return <Box />
+  }
+
   return (
     <HStack
       w="full"
@@ -67,8 +85,8 @@ export const TopNavBar = () => {
       {...(!isProjectPage && {
         paddingLeft: {
           base: 0,
-          lg: dimensions.platform.sideNav.tablet.width,
-          '2xl': dimensions.platform.sideNav.desktop.width,
+          lg: dimensions.discovery.sideNav.tablet.width,
+          '2xl': dimensions.discovery.sideNav.desktop.width,
         },
       })}
       justifyContent={'center'}
@@ -83,7 +101,7 @@ export const TopNavBar = () => {
         justifySelf={'center'}
       >
         <HStack w="100%" height={{ base: '40px', lg: '48px' }} justifyContent={'space-between'}>
-          {isProjectPage ? <BrandLogo /> : shouldShowProjectLogo ? <ProjectLogo /> : <Box />}
+          {renderLeftSide()}
 
           <HStack position="relative">
             {!isLoggedIn ? <LoginButton /> : <ProjectSelectMenu />}

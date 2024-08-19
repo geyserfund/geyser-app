@@ -5,27 +5,27 @@ import { Link } from 'react-router-dom'
 import { getPath } from '@/shared/constants'
 
 import { BottomNavBarContainer } from '../bottomNav'
-import { currentPlatformNavItemAtom } from './platformNavAtom'
-import { PlatformNavItem, platformNavItems } from './platformNavData'
+import { currentPlatformNavItemAtom } from './discoveryNavAtom'
+import { DiscoveryNavItem, discoveryNavItems } from './discoveryNavData'
 
-export const PlatformBottomNav = () => {
+export const DiscoveryBottomNav = () => {
   const currentNavItem = useAtomValue(currentPlatformNavItemAtom)
 
   return (
     <BottomNavBarContainer spacing={0} w="full" marginX={0}>
-      {platformNavItems.map((item) => (
-        <PlatformBottomNavButton key={item.label} item={item} currentNavItem={currentNavItem} />
+      {discoveryNavItems.map((item) => (
+        <DiscoveryBottomNavButton key={item.label} item={item} currentNavItem={currentNavItem} />
       ))}
     </BottomNavBarContainer>
   )
 }
 
-type PlatformBottomNavButtonProps = {
-  item: PlatformNavItem
-  currentNavItem?: PlatformNavItem
+type DiscoveryBottomNavButtonProps = {
+  item: DiscoveryNavItem
+  currentNavItem?: DiscoveryNavItem
 } & ButtonProps
 
-const PlatformBottomNavButton = ({ item, currentNavItem, ...rest }: PlatformBottomNavButtonProps) => {
+const DiscoveryBottomNavButton = ({ item, currentNavItem, ...rest }: DiscoveryBottomNavButtonProps) => {
   const isActive = currentNavItem?.path === item.path
 
   return (

@@ -3,36 +3,36 @@ import { PiCompass, PiRanking, PiRocketLaunch, PiTrophy, PiWaveform } from 'reac
 
 import { PathsMap } from '@/shared/constants'
 
-export type PlatformNavItem = {
+export type DiscoveryNavItem = {
   label: string
   path: keyof PathsMap
   icon: IconType
 }
 
-export const platformNavItems: PlatformNavItem[] = [
+export const discoveryNavItems: DiscoveryNavItem[] = [
   {
     label: 'Discover',
-    path: 'platformLanding',
+    path: 'discoveryLanding',
     icon: PiCompass,
   },
   {
     label: 'My Projects',
-    path: 'platformMyProjects',
+    path: 'discoveryMyProjects',
     icon: PiRocketLaunch,
   },
   {
     label: 'Activity',
-    path: 'platformActivity',
+    path: 'discoveryActivity',
     icon: PiWaveform,
   },
   {
     label: 'Leaderboard',
-    path: 'platformLeaderboard',
+    path: 'discoveryLeaderboard',
     icon: PiRanking,
   },
   {
     label: 'Grants',
-    path: 'platformGrants',
+    path: 'discoveryGrants',
     icon: PiTrophy,
   },
 ]
