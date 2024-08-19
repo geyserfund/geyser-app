@@ -339,3 +339,5 @@ export const EmailPromptModalUrl =
 // My Projects
 export const NoContributionsReceivedUrl =
   'https://storage.googleapis.com/geyser-projects-media/images/NoContributionsReceived.png'
+
+export const NoRewardsSoldUrl = 'https://storage.googleapis.com/geyser-projects-media/images/no-reward-sold.png'

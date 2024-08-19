@@ -8,6 +8,7 @@ import { getPath } from '@/shared/constants'
 import { ProjectForProfilePageFragment } from '@/types'
 
 import Contributions from './Contributions'
+import Rewards from './Rewards'
 
 interface ProjectCardProps {
   project: ProjectForProfilePageFragment
@@ -17,7 +18,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const { t } = useTranslation()
 
   return (
-    <Box py={4}>
+    <Box width="100%" py={4}>
       <HStack spacing={4} alignItems="center" justifyContent="space-between">
         <HStack>
           {project.thumbnailImage && (
@@ -44,9 +45,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           {t('Dashboard')}
         </Button>
       </HStack>
-      <HStack mt={4} spacing={4}>
+      <HStack minHeight="269px" mt={4} spacing={4} alignItems="stretch">
         <Contributions projectId={project.id} projectName={project.name} />
-        <Contributions projectId={project.id} projectName={project.name} />
+        <Rewards projectId={project.id} />
       </HStack>
     </Box>
   )

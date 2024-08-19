@@ -37,12 +37,14 @@ const Contributions = ({ projectId, projectName }: ContributionsProps) => {
 
   if (noGoals && !noContributionsReceived) {
     return (
-      <VStack
-        minHeight="269px"
-        borderWidth={1}
+      <Box
+        display="flex"
+        flexDirection="column"
         justifyContent="center"
         alignItems="center"
+        borderWidth={1}
         borderRadius="lg"
+        gap={2}
         p={4}
         flex={1}
       >
@@ -59,7 +61,7 @@ const Contributions = ({ projectId, projectName }: ContributionsProps) => {
         >
           {t('Create Goal')}
         </Button>
-      </VStack>
+      </Box>
     )
   }
 

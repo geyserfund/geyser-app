@@ -7025,30 +7025,6 @@ export type LeaderboardGlobalProjectsQuery = {
   leaderboardGlobalProjectsGet: Array<{ __typename?: 'GlobalProjectLeaderboardRow' } & TopProjectsFragmentFragment>
 }
 
-export type ProjectContributionsStatsFragment = {
-  __typename?: 'ProjectContributionsStatsBase'
-  contributions: { __typename?: 'ProjectContributionsStats'; total: number; totalUsd: number }
-}
-
-export type ProjectStatsFragment = {
-  __typename?: 'ProjectStats'
-  current?: {
-    __typename?: 'ProjectStatsBase'
-    projectContributionsStats?:
-      | ({ __typename?: 'ProjectContributionsStatsBase' } & ProjectContributionsStatsFragment)
-      | null
-  } | null
-}
-
-export type ProjectStatsGetQueryVariables = Exact<{
-  input: GetProjectStatsInput
-}>
-
-export type ProjectStatsGetQuery = {
-  __typename?: 'Query'
-  projectStatsGet: { __typename?: 'ProjectStats' } & ProjectStatsFragment
-}
-
 export type NotificationConfigurationFragment = {
   __typename?: 'NotificationConfiguration'
   id: any
@@ -8028,6 +8004,49 @@ export type FundingTxStatusUpdatedSubscription = {
   }
 }
 
+export type OrdersStatsFragmentFragment = {
+  __typename?: 'OrdersStatsBase'
+  projectRewards: { __typename?: 'ProjectRewardsStats'; count: number }
+  projectRewardsGroupedByProjectRewardId: Array<{
+    __typename?: 'ProjectRewardsGroupedByRewardIdStats'
+    count: number
+    projectReward: { __typename?: 'ProjectReward'; id: any; name: string; image?: string | null }
+  }>
+}
+
+export type ProjectContributionsStatsFragment = {
+  __typename?: 'ProjectContributionsStatsBase'
+  contributions: { __typename?: 'ProjectContributionsStats'; total: number; totalUsd: number }
+}
+
+export type ProjectStatsFragment = {
+  __typename?: 'ProjectStats'
+  current?: {
+    __typename?: 'ProjectStatsBase'
+    projectContributionsStats?:
+      | ({ __typename?: 'ProjectContributionsStatsBase' } & ProjectContributionsStatsFragment)
+      | null
+  } | null
+}
+
+export type OrdersStatsGetQueryVariables = Exact<{
+  input: GetProjectOrdersStatsInput
+}>
+
+export type OrdersStatsGetQuery = {
+  __typename?: 'Query'
+  ordersStatsGet: { __typename?: 'OrdersStatsBase' } & OrdersStatsFragmentFragment
+}
+
+export type ProjectStatsGetQueryVariables = Exact<{
+  input: GetProjectStatsInput
+}>
+
+export type ProjectStatsGetQuery = {
+  __typename?: 'Query'
+  projectStatsGet: { __typename?: 'ProjectStats' } & ProjectStatsFragment
+}
+
 export const EmailUpdateUserFragmentDoc = gql`
   fragment EmailUpdateUser on User {
     email
@@ -9005,24 +9024,6 @@ export const TopProjectsFragmentFragmentDoc = gql`
     contributorsCount
   }
 `
-export const ProjectContributionsStatsFragmentDoc = gql`
-  fragment ProjectContributionsStats on ProjectContributionsStatsBase {
-    contributions {
-      total
-      totalUsd
-    }
-  }
-`
-export const ProjectStatsFragmentDoc = gql`
-  fragment ProjectStats on ProjectStats {
-    current {
-      projectContributionsStats {
-        ...ProjectContributionsStats
-      }
-    }
-  }
-  ${ProjectContributionsStatsFragmentDoc}
-`
 export const NotificationConfigurationFragmentDoc = gql`
   fragment NotificationConfiguration on NotificationConfiguration {
     id
@@ -9558,6 +9559,39 @@ export const ProjectWalletConnectionDetailsFragmentDoc = gql`
       }
     }
   }
+`
+export const OrdersStatsFragmentFragmentDoc = gql`
+  fragment OrdersStatsFragment on OrdersStatsBase {
+    projectRewards {
+      count
+    }
+    projectRewardsGroupedByProjectRewardId {
+      count
+      projectReward {
+        id
+        name
+        image
+      }
+    }
+  }
+`
+export const ProjectContributionsStatsFragmentDoc = gql`
+  fragment ProjectContributionsStats on ProjectContributionsStatsBase {
+    contributions {
+      total
+      totalUsd
+    }
+  }
+`
+export const ProjectStatsFragmentDoc = gql`
+  fragment ProjectStats on ProjectStats {
+    current {
+      projectContributionsStats {
+        ...ProjectContributionsStats
+      }
+    }
+  }
+  ${ProjectContributionsStatsFragmentDoc}
 `
 export const UserBadgeAwardDocument = gql`
   mutation UserBadgeAward($userBadgeId: BigInt!) {
@@ -12467,54 +12501,6 @@ export type LeaderboardGlobalProjectsQueryResult = Apollo.QueryResult<
   LeaderboardGlobalProjectsQuery,
   LeaderboardGlobalProjectsQueryVariables
 >
-export const ProjectStatsGetDocument = gql`
-  query ProjectStatsGet($input: GetProjectStatsInput!) {
-    projectStatsGet(input: $input) {
-      ...ProjectStats
-    }
-  }
-  ${ProjectStatsFragmentDoc}
-`
-
-/**
- * __useProjectStatsGetQuery__
- *
- * To run a query within a React component, call `useProjectStatsGetQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectStatsGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProjectStatsGetQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectStatsGetQuery(
-  baseOptions: Apollo.QueryHookOptions<ProjectStatsGetQuery, ProjectStatsGetQueryVariables> &
-    ({ variables: ProjectStatsGetQueryVariables; skip?: boolean } | { skip: boolean }),
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<ProjectStatsGetQuery, ProjectStatsGetQueryVariables>(ProjectStatsGetDocument, options)
-}
-export function useProjectStatsGetLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ProjectStatsGetQuery, ProjectStatsGetQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<ProjectStatsGetQuery, ProjectStatsGetQueryVariables>(ProjectStatsGetDocument, options)
-}
-export function useProjectStatsGetSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectStatsGetQuery, ProjectStatsGetQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useSuspenseQuery<ProjectStatsGetQuery, ProjectStatsGetQueryVariables>(ProjectStatsGetDocument, options)
-}
-export type ProjectStatsGetQueryHookResult = ReturnType<typeof useProjectStatsGetQuery>
-export type ProjectStatsGetLazyQueryHookResult = ReturnType<typeof useProjectStatsGetLazyQuery>
-export type ProjectStatsGetSuspenseQueryHookResult = ReturnType<typeof useProjectStatsGetSuspenseQuery>
-export type ProjectStatsGetQueryResult = Apollo.QueryResult<ProjectStatsGetQuery, ProjectStatsGetQueryVariables>
 export const CreatorNotificationsSettingsUpdateDocument = gql`
   mutation CreatorNotificationsSettingsUpdate($creatorNotificationConfigurationId: BigInt!, $value: String!) {
     creatorNotificationConfigurationValueUpdate(
@@ -15439,3 +15425,99 @@ export function useFundingTxStatusUpdatedSubscription(
 }
 export type FundingTxStatusUpdatedSubscriptionHookResult = ReturnType<typeof useFundingTxStatusUpdatedSubscription>
 export type FundingTxStatusUpdatedSubscriptionResult = Apollo.SubscriptionResult<FundingTxStatusUpdatedSubscription>
+export const OrdersStatsGetDocument = gql`
+  query OrdersStatsGet($input: GetProjectOrdersStatsInput!) {
+    ordersStatsGet(input: $input) {
+      ...OrdersStatsFragment
+    }
+  }
+  ${OrdersStatsFragmentFragmentDoc}
+`
+
+/**
+ * __useOrdersStatsGetQuery__
+ *
+ * To run a query within a React component, call `useOrdersStatsGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrdersStatsGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrdersStatsGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useOrdersStatsGetQuery(
+  baseOptions: Apollo.QueryHookOptions<OrdersStatsGetQuery, OrdersStatsGetQueryVariables> &
+    ({ variables: OrdersStatsGetQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<OrdersStatsGetQuery, OrdersStatsGetQueryVariables>(OrdersStatsGetDocument, options)
+}
+export function useOrdersStatsGetLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<OrdersStatsGetQuery, OrdersStatsGetQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<OrdersStatsGetQuery, OrdersStatsGetQueryVariables>(OrdersStatsGetDocument, options)
+}
+export function useOrdersStatsGetSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<OrdersStatsGetQuery, OrdersStatsGetQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<OrdersStatsGetQuery, OrdersStatsGetQueryVariables>(OrdersStatsGetDocument, options)
+}
+export type OrdersStatsGetQueryHookResult = ReturnType<typeof useOrdersStatsGetQuery>
+export type OrdersStatsGetLazyQueryHookResult = ReturnType<typeof useOrdersStatsGetLazyQuery>
+export type OrdersStatsGetSuspenseQueryHookResult = ReturnType<typeof useOrdersStatsGetSuspenseQuery>
+export type OrdersStatsGetQueryResult = Apollo.QueryResult<OrdersStatsGetQuery, OrdersStatsGetQueryVariables>
+export const ProjectStatsGetDocument = gql`
+  query ProjectStatsGet($input: GetProjectStatsInput!) {
+    projectStatsGet(input: $input) {
+      ...ProjectStats
+    }
+  }
+  ${ProjectStatsFragmentDoc}
+`
+
+/**
+ * __useProjectStatsGetQuery__
+ *
+ * To run a query within a React component, call `useProjectStatsGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectStatsGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectStatsGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectStatsGetQuery(
+  baseOptions: Apollo.QueryHookOptions<ProjectStatsGetQuery, ProjectStatsGetQueryVariables> &
+    ({ variables: ProjectStatsGetQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ProjectStatsGetQuery, ProjectStatsGetQueryVariables>(ProjectStatsGetDocument, options)
+}
+export function useProjectStatsGetLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ProjectStatsGetQuery, ProjectStatsGetQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<ProjectStatsGetQuery, ProjectStatsGetQueryVariables>(ProjectStatsGetDocument, options)
+}
+export function useProjectStatsGetSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectStatsGetQuery, ProjectStatsGetQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<ProjectStatsGetQuery, ProjectStatsGetQueryVariables>(ProjectStatsGetDocument, options)
+}
+export type ProjectStatsGetQueryHookResult = ReturnType<typeof useProjectStatsGetQuery>
+export type ProjectStatsGetLazyQueryHookResult = ReturnType<typeof useProjectStatsGetLazyQuery>
+export type ProjectStatsGetSuspenseQueryHookResult = ReturnType<typeof useProjectStatsGetSuspenseQuery>
+export type ProjectStatsGetQueryResult = Apollo.QueryResult<ProjectStatsGetQuery, ProjectStatsGetQueryVariables>
