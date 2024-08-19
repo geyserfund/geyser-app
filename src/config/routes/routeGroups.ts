@@ -117,4 +117,12 @@ export const grantRoutes = [getPath('grants'), getPath('grants', PathName.grantI
 
 export const landingRoutes = [getPath('index'), getPath('landingPage'), getPath('landingFeed')]
 
+export const discoveryRoutes = [
+  getPath('discoveryLanding'),
+  getPath('discoveryMyProjects'),
+  getPath('discoveryActivity'),
+  getPath('discoveryLeaderboard'),
+  getPath('discoveryGrants'),
+]
+
 export const fallBackRoutes = [getPath('notFound'), getPath('notAuthorized')]

@@ -7,10 +7,10 @@ import { LogoDark, LogoLight } from '@/assets'
 import { dimensions, getPath, LogoNameDark, LogoNameLight } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
-import { currentPlatformNavItemAtom } from './platformNavAtom'
-import { PlatformNavItem, platformNavItems } from './platformNavData'
+import { currentPlatformNavItemAtom } from './discoveryNavAtom'
+import { DiscoveryNavItem, discoveryNavItems } from './discoveryNavData'
 
-export const PlatformSideNav = () => {
+export const DiscoverySideNav = () => {
   const isMobile = useMobileMode()
   const isTabletSize = useBreakpointValue({ '2xl': false, lg: true })
 
@@ -31,28 +31,28 @@ export const PlatformSideNav = () => {
       top={0}
       height="100%"
       display={{ base: 'none', lg: 'flex' }}
-      width={{ lg: dimensions.platform.sideNav.tablet.width, '2xl': dimensions.platform.sideNav.desktop.width }}
+      width={{ lg: dimensions.discovery.sideNav.tablet.width, '2xl': dimensions.discovery.sideNav.desktop.width }}
       borderRight="1px solid"
       borderColor="neutral1.6"
       backgroundColor="utils.pbg"
       zIndex={10}
     >
       <Image src={isTabletSize ? tabletImage : imageUrl} height="48px" width="auto" />
-      <VStack>
-        {platformNavItems.map((item) => (
-          <PlatformSideNavButton key={item.label} item={item} currentNavItem={currentNavItem} />
+      <VStack w="full" padding={0}>
+        {discoveryNavItems.map((item) => (
+          <DiscoverySideNavButton key={item.label} item={item} currentNavItem={currentNavItem} />
         ))}
       </VStack>
     </VStack>
   )
 }
 
-type PlatformSideNavButtonProps = {
-  item: PlatformNavItem
-  currentNavItem?: PlatformNavItem
+type DiscoverySideNavButtonProps = {
+  item: DiscoveryNavItem
+  currentNavItem?: DiscoveryNavItem
 } & ButtonProps
 
-const PlatformSideNavButton = ({ item, currentNavItem, ...rest }: PlatformSideNavButtonProps) => {
+const DiscoverySideNavButton = ({ item, currentNavItem, ...rest }: DiscoverySideNavButtonProps) => {
   const isActive = currentNavItem?.path === item.path
 
   const isTabletSize = useBreakpointValue({ '2xl': false, lg: true })

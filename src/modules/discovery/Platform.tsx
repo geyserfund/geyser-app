@@ -4,20 +4,20 @@ import { Outlet } from 'react-router'
 import { dimensions } from '@/shared/constants'
 import { standardPadding } from '@/styles'
 
-import { PlatformBottomNav } from '../navigation/platformNav/PlatformBottomNav'
-import { PlatformSideNav } from '../navigation/platformNav/PlatformSideNav'
+import { DiscoveryBottomNav } from '../navigation/discoveryNav/DiscoveryBottomNav'
+import { DiscoverySideNav } from '../navigation/discoveryNav/DiscoverySideNav'
 
 export const Platform = () => {
   return (
     <>
-      <PlatformSideNav />
+      <DiscoverySideNav />
       <VStack
         w="full"
         h="full"
         paddingLeft={{
           base: 0,
-          lg: dimensions.platform.sideNav.tablet.width,
-          '2xl': dimensions.platform.sideNav.desktop.width,
+          lg: dimensions.discovery.sideNav.tablet.width,
+          '2xl': dimensions.discovery.sideNav.desktop.width,
         }}
       >
         <Box
@@ -26,11 +26,12 @@ export const Platform = () => {
           maxWidth={`${dimensions.maxWidth + 24 * 2}`}
           position="relative"
           paddingX={standardPadding}
+          paddingBottom={{ base: 28, lg: 10 }}
         >
           <Outlet />
         </Box>
       </VStack>
-      <PlatformBottomNav />
+      <DiscoveryBottomNav />
     </>
   )
 }
