@@ -18,31 +18,31 @@ import { dimensions, FeedbackUrl, getPath, GeyserAboutUrl, GeyserGithubUrl, Guid
 import { ProfileNavUserInfo } from './components'
 import { ModeChange } from './components/ModeChange'
 
-const ProfileNavPlatformButtons = [
+const ProfileNavDiscoveryButtons = [
   {
     label: t('Discover'),
     icon: PiCompass,
-    path: getPath('platformLanding'),
+    path: getPath('discoveryLanding'),
   },
   {
     label: t('Leaderboard'),
     icon: PiRanking,
-    path: getPath('platformLeaderboard'),
+    path: getPath('discoveryLeaderboard'),
   },
   {
     label: t('My Projects'),
     icon: PiSparkle,
-    path: getPath('platformMyProjects'),
+    path: getPath('discoveryMyProjects'),
   },
   {
     label: t('Activity'),
     icon: PiWaveform,
-    path: getPath('platformActivity'),
+    path: getPath('discoveryActivity'),
   },
   {
     label: t('Grants'),
     icon: PiTrophy,
-    path: getPath('platformGrants'),
+    path: getPath('discoveryGrants'),
   },
 ]
 
@@ -75,12 +75,12 @@ export const ProfileNavContent = () => {
           </>
         )}
         <VStack spacing={2} w="full">
-          {ProfileNavPlatformButtons.map((platformNav) => {
+          {ProfileNavDiscoveryButtons.map((discoveryNav) => {
             return (
-              <MenuItem key={platformNav.label} as={Link} to={platformNav.path}>
+              <MenuItem key={discoveryNav.label} as={Link} to={discoveryNav.path}>
                 <HStack>
-                  <platformNav.icon />
-                  <Body>{platformNav.label}</Body>
+                  <discoveryNav.icon />
+                  <Body>{discoveryNav.label}</Body>
                 </HStack>
               </MenuItem>
             )

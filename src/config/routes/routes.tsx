@@ -24,7 +24,7 @@ const CreatorReward = () => import('../../modules/project/pages1/projectView/vie
 
 const CreatorPost = () => import('../../modules/project/pages1/projectView/views/posts/views')
 
-const Platform = () => import('../../modules/platform')
+const Discovery = () => import('../../modules/discovery')
 
 const Grants = () => import('../../modules/grants/Grants')
 
@@ -544,42 +544,42 @@ export const platformRoutes: RouteObject[] = [
   },
 
   {
-    path: getPath('platformLanding'),
+    path: getPath('discoveryLanding'),
     async lazy() {
-      const PlatformLanding = await Platform().then((m) => m.Platform)
-      return { Component: PlatformLanding }
+      const Platform = await Discovery().then((m) => m.Platform)
+      return { Component: Platform }
     },
     children: [
       {
         index: true,
         async lazy() {
-          const Discovery = await Platform().then((m) => m.Discovery)
-          return { Component: Discovery }
+          const Landing = await Discovery().then((m) => m.Landing)
+          return { Component: Landing }
         },
       },
       {
-        path: getPath('platformMyProjects'),
+        path: getPath('discoveryMyProjects'),
         async lazy() {
-          const MyProjects = await Platform().then((m) => m.MyProjects)
+          const MyProjects = await Discovery().then((m) => m.MyProjects)
           return { Component: MyProjects }
         },
       },
       {
-        path: getPath('platformActivity'),
+        path: getPath('discoveryActivity'),
         async lazy() {
-          const Activity = await Platform().then((m) => m.Activity)
+          const Activity = await Discovery().then((m) => m.Activity)
           return { Component: Activity }
         },
       },
       {
-        path: getPath('platformLeaderboard'),
+        path: getPath('discoveryLeaderboard'),
         async lazy() {
-          const Leaderboard = await Platform().then((m) => m.Leaderboard)
+          const Leaderboard = await Discovery().then((m) => m.Leaderboard)
           return { Component: Leaderboard }
         },
       },
       {
-        path: getPath('platformGrants'),
+        path: getPath('discoveryGrants'),
         async lazy() {
           const GrantsLanding = await Grants().then((m) => m.Grants)
           return { Component: GrantsLanding }

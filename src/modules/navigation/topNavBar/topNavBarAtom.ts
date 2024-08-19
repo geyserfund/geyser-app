@@ -1,6 +1,7 @@
 import { atom, useAtomValue } from 'jotai'
 
 import {
+  discoveryRoutes,
   projectDashboardRoutes,
   projectFundingRoutes,
   projectPostCreatorRoutes,
@@ -48,6 +49,9 @@ export const shouldShowProjectLogoAtom = atom((get) => {
 
   return false
 })
+
+/** True if current route is one of the platform routes */
+export const isDiscoveryRoutesAtom = atom(routeMatchForAtom(discoveryRoutes))
 
 const topNavBarAnimateAtom = atom((get) => {
   const profileSidebar = get(profileSideNavAtom)
