@@ -1,5 +1,6 @@
 import { Button } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useEffect } from 'react'
 import { PiNotePencil, PiPlus } from 'react-icons/pi'
 
 import { BottomNavBarContainer } from '@/modules/navigation/bottomNav'
@@ -36,11 +37,18 @@ export const CreatorGoalPageBottomBar = () => {
 
 export const CreateGoalButtons = () => {
   const { onGoalModalOpen, isGoalinEditMode, setGoalInEditMode } = useGoalsModal()
+
+  useEffect(() => {
+    return () => {
+      setGoalInEditMode(false)
+    }
+  }, [setGoalInEditMode])
+
   return (
     <>
       <Button
         flex={1}
-        size={{ base: 'md', lg: 'lg' }}
+        size="lg"
         variant="outline"
         colorScheme="neutral1"
         leftIcon={<PiNotePencil />}
@@ -50,7 +58,7 @@ export const CreateGoalButtons = () => {
       </Button>
       <Button
         flex={1}
-        size={{ base: 'md', lg: 'lg' }}
+        size="lg"
         variant="solid"
         colorScheme="primary1"
         leftIcon={<PiPlus />}

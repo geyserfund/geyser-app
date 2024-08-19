@@ -11,7 +11,15 @@ export const ProjectDashboard = () => {
 
   return (
     <VStack w={'full'} h="full" paddingBottom={8}>
-      <CardLayout dense noborder={isMobile} w="full" direction="row" spacing={0} height="100%">
+      <CardLayout
+        dense
+        noborder={isMobile}
+        w="full"
+        direction="row"
+        spacing={0}
+        height="100%"
+        backgroundColor="utils.pbg"
+      >
         {!isMobile && <DashboardMenuDesktop />}
         <Outlet />
       </CardLayout>

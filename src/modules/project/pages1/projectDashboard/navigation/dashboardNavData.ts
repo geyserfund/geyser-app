@@ -55,16 +55,16 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     icon: PiPlanet,
   },
   {
-    label: 'Links & tags',
-    path: 'dashboardDetails',
-    type: DashboardType.settings,
-    icon: PiShapes,
-  },
-  {
     label: 'Story',
     path: 'dashboardStory',
     type: DashboardType.settings,
     icon: PiBookOpenText,
+  },
+  {
+    label: 'Links & tags',
+    path: 'dashboardDetails',
+    type: DashboardType.settings,
+    icon: PiShapes,
   },
   {
     label: 'Connect wallet',

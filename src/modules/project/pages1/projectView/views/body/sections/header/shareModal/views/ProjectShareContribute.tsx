@@ -1,5 +1,5 @@
-import { Button, HStack, VStack } from '@chakra-ui/react'
-import { useRef } from 'react'
+import { Button, HStack, Spinner, VStack } from '@chakra-ui/react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCopy } from 'react-icons/pi'
 
@@ -22,6 +22,14 @@ export const ProjectShareContribute = () => {
   const endPoint = getAppEndPoint()
 
   const ref = useRef<HTMLDivElement>(null)
+
+  const [generating, setGenerating] = useState(true)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setGenerating(false)
+    }, 5000)
+  }, [])
 
   const { handleGenerateAndCopy, copying } = useCreateAndCopyImage()
 
@@ -65,16 +73,22 @@ export const ProjectShareContribute = () => {
       />
 
       <HStack padding={3} width="100%">
-        <Button
-          variant="solid"
-          colorScheme="primary1"
-          w="full"
-          rightIcon={<PiCopy />}
-          onClick={handleCopy}
-          isLoading={copying}
-        >
-          {t('Copy image')}
-        </Button>
+        {generating ? (
+          <Button variant="solid" colorScheme="neutral1" w="full" leftIcon={<Spinner size="sm" />}>
+            {t('Generating banner...')}
+          </Button>
+        ) : (
+          <Button
+            variant="solid"
+            colorScheme="primary1"
+            w="full"
+            rightIcon={<PiCopy />}
+            isLoading={copying}
+            onClick={handleCopy}
+          >
+            {t('Copy image')}
+          </Button>
+        )}
       </HStack>
     </VStack>
   )

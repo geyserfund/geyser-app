@@ -63,7 +63,14 @@ export const ProjectLinks = ({ links = [], setLinks, linkError = [] }: ProjectLi
               />
             )
           })}
-        <Button variant="outline" colorScheme="neutral1" w="full" onClick={addNewLink} isDisabled={links.length >= 7}>
+        <Button
+          size="lg"
+          variant="outline"
+          colorScheme="neutral1"
+          w="full"
+          onClick={addNewLink}
+          isDisabled={links.length >= 7}
+        >
           {t('Add Project Link')}
         </Button>
       </VStack>

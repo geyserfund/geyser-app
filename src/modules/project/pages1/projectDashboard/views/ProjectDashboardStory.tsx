@@ -49,7 +49,14 @@ export const ProjectDashboardStory = () => {
 
   const SaveButton = (props: ButtonProps) => {
     return (
-      <Button variant="solid" colorScheme="primary1" type="submit" isLoading={updateProject.loading} {...props}>
+      <Button
+        size="lg"
+        variant="solid"
+        colorScheme="primary1"
+        type="submit"
+        isLoading={updateProject.loading}
+        {...props}
+      >
         {t('Save')}
       </Button>
     )
@@ -60,10 +67,11 @@ export const ProjectDashboardStory = () => {
       <DashboardLayout
         mobileTopNavRightComponent={<SaveButton />}
         deskTopBottomComponent={<SaveButton w="full" />}
+        desktopTitle={t('Story')}
         width="full"
       >
         <VStack width="100%" alignItems="flex-start" px={{ base: 0, lg: 6 }}>
-          <ProjectStoryForm form={form} isLoading={loading} toolbarTop="5.9em" />
+          <ProjectStoryForm form={form} isLoading={loading} />
         </VStack>
       </DashboardLayout>
 

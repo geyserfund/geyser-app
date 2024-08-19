@@ -1,2 +1,2 @@
-export * from './FundingProvider2'
-export * from './ProjectProvider'
+export { FundingProvider } from './FundingProvider'
+export { ProjectProvider } from './ProjectProvider'

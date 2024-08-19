@@ -1,10 +1,6 @@
 import { atom, useAtomValue, useSetAtom } from 'jotai'
 
 import { FundingStatus, FundingTxFragment, FundingTxWithInvoiceStatusFragment, InvoiceStatus } from '../../../../types'
-import {
-  OnChainStatus,
-  onChainStatusAtom,
-} from '../../pages1/projectFunding/views/fundingPayment/views/paymentOnchain/states'
 
 const initialFunding: Omit<FundingTxFragment, 'funder'> = {
   id: 0,
@@ -50,23 +46,6 @@ const fundingStatusCheckAtom = atom(null, (get, set, fundingTx: FundingTxWithInv
     (fundingTx.invoiceStatus !== currentFundingTx.invoiceStatus || fundingTx.status !== currentFundingTx.status) &&
     fundingTx.invoiceId === currentFundingTx.invoiceId
   ) {
-    if (fundingTx.onChain && fundingTx.status === FundingStatus.Pending) {
-      const currentOnChainStatus = get(onChainStatusAtom)
-      if (currentOnChainStatus === OnChainStatus.awaiting) {
-        set(onChainStatusAtom, OnChainStatus.processing)
-      }
-
-      // Resetting the polling and subscription after status check shows transaction completed.
-      // set(pollingFundingTxAtom, 0)
-      // set(subscriptionActiveAtom, false)
-    }
-
-    if (fundingTx.status === FundingStatus.Paid) {
-      // Resetting the polling and subscription after status check shows transaction completed.
-      // set(pollingFundingTxAtom, 0)
-      // set(subscriptionActiveAtom, false)
-    }
-
     set(fundingTxAtom, {
       ...currentFundingTx,
       ...fundingTx,

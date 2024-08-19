@@ -8,6 +8,7 @@ export const badgeTheme: ComponentStyleConfig = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    textTransform: 'none',
   },
   sizes: {
     sm: {

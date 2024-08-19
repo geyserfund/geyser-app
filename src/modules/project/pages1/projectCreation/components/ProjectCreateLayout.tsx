@@ -74,10 +74,11 @@ export const ProjectCreateLayout = ({
         >
           <Button
             flexGrow={1}
+            size="lg"
             variant="outline"
             colorScheme="neutral1"
             onClick={onBackClick}
-            leftIcon={<PiArrowLeft fontSize="25px" />}
+            leftIcon={<PiArrowLeft fontSize="18px" />}
           >
             {t('Back')}
           </Button>

@@ -1,15 +1,16 @@
-import { HStack, Tab, TabList, TabPanel, TabPanels, Tabs, VStack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 import { useMemo } from 'react'
 
-import { LeaderboardPeriod } from '@/modules/project/state/fundersAtom'
 import { CardLayout } from '@/shared/components/layouts'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
+import { AnimatedTabBar } from '@/shared/components/navigation/AnimatedTabBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { dimensions } from '@/shared/constants'
 import { standardPadding } from '@/styles'
-import { useMobileMode } from '@/utils'
+import { ProjectLeaderboardPeriod } from '@/types'
+import { useCustomTheme, useMobileMode } from '@/utils'
 
 import { LeaderboardList } from './LeaderboardList'
 
@@ -17,6 +18,7 @@ export const MAXIMUM_LEADERBOARD_ITEMS = 30
 
 export const Leaderboard = () => {
   const isMobile = useMobileMode()
+  const { colors } = useCustomTheme()
 
   const currentDateTime = DateTime.now()
 
@@ -24,44 +26,42 @@ export const Leaderboard = () => {
     () => [
       {
         name: t('All time'),
-        key: LeaderboardPeriod.allTime,
-        render: () => <LeaderboardList period={LeaderboardPeriod.allTime} dateTime={currentDateTime} />,
+        key: ProjectLeaderboardPeriod.AllTime,
+        render: () => <LeaderboardList period={ProjectLeaderboardPeriod.AllTime} dateTime={currentDateTime} />,
       },
       {
         name: t('Last month'),
-        key: LeaderboardPeriod.lastMonth,
-        render: () => <LeaderboardList period={LeaderboardPeriod.lastMonth} dateTime={currentDateTime} />,
+        key: ProjectLeaderboardPeriod.Month,
+        render: () => <LeaderboardList period={ProjectLeaderboardPeriod.Month} dateTime={currentDateTime} />,
       },
       {
         name: t('Last week'),
-        key: LeaderboardPeriod.lastWeek,
-        render: () => <LeaderboardList period={LeaderboardPeriod.lastWeek} dateTime={currentDateTime} />,
+        key: ProjectLeaderboardPeriod.Week,
+        render: () => <LeaderboardList period={ProjectLeaderboardPeriod.Week} dateTime={currentDateTime} />,
       },
     ],
     [currentDateTime],
   )
 
-  const { render, ...animatedNavBarProps } = useAnimatedNavBar({ items, defaultView: LeaderboardPeriod.allTime })
+  const { render, ...animatedNavBarProps } = useAnimatedNavBar({ items, defaultView: ProjectLeaderboardPeriod.AllTime })
 
   if (isMobile) {
     return (
-      <Tabs w="full" paddingX={standardPadding}>
-        <TabList w="full">
-          {items.map((item) => (
-            <Tab key={item.key} flex={1}>
-              {item.name}
-            </Tab>
-          ))}
-        </TabList>
-
-        <TabPanels paddingX={0}>
-          {items.map((item) => (
-            <TabPanel key={item.key} paddingX={0}>
-              {item.render && item.render()}
-            </TabPanel>
-          ))}
-        </TabPanels>
-      </Tabs>
+      <VStack w="full">
+        <HStack
+          width="calc(100% - 24px)"
+          position="fixed"
+          top={`${dimensions.topNavBar.mobile.height + dimensions.projectNavBar.mobile.height * 2 - 5}px`}
+          backgroundColor={'utils.pbg'}
+          zIndex={1}
+          paddingTop={2}
+        >
+          <AnimatedTabBar {...animatedNavBarProps} activeTabColor={colors.utils.text} />
+        </HStack>
+        <VStack w="full" h="full" pt={dimensions.animatedNavBar.height}>
+          {render && render()}
+        </VStack>
+      </VStack>
     )
   }
 

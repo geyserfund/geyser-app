@@ -22,7 +22,12 @@ export const ProfileNavUserInfo = ({ user }: { user: UserMeFragment }) => {
           {user.username}
         </Body>
         {loginMethod && (
-          <Button size="xs" variant="outline" colorScheme="neutral1" rightIcon={loginMethod ? <Icon /> : undefined}>
+          <Button
+            size="xs"
+            variant="outline"
+            colorScheme="neutral1"
+            rightIcon={loginMethod ? <Icon height="16px" width="16px" /> : undefined}
+          >
             {t('Logged in with')}
           </Button>
         )}

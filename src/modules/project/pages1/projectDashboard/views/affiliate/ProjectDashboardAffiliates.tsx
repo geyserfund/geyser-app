@@ -48,7 +48,7 @@ export const ProjectDashboardAffiliates = () => {
 
   const AddAffiliateButton = (props: ButtonProps) => {
     return (
-      <Button variant="solid" colorScheme="primary1" onClick={affiliateCreateFormModal.onOpen} {...props}>
+      <Button size="lg" variant="solid" colorScheme="primary1" onClick={affiliateCreateFormModal.onOpen} {...props}>
         {t('Add affiliate')}
       </Button>
     )
@@ -58,10 +58,11 @@ export const ProjectDashboardAffiliates = () => {
     <DashboardLayout
       mobileTopNavRightComponent={<AddAffiliateButton />}
       deskTopBottomComponent={<AddAffiliateButton w="full" />}
+      desktopTitle={t('Affiliates')}
     >
       <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1} position="relative">
         <HStack w="100%" justifyContent="space-between" spacing="20px" paddingX={{ base: 0, lg: 6 }}>
-          <Body flex={1}>
+          <Body flex={1} size="sm" light>
             {t(
               "Enhance your project's growth and sales with affiliate partners and maintain full control over affiliate terms on this dashboard. Each link can be created only once and cannot be updated except for its label.",
             )}

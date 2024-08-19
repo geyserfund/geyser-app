@@ -12,3 +12,18 @@ export const FRAGMENT_PROJECT_FUNDER = gql`
     }
   }
 `
+
+export const FRAGMENT_PROJECT_LEADERBOARD_CONTRIBUTORS = gql`
+  fragment ProjectLeaderboardContributors on ProjectLeaderboardContributorsRow {
+    funderId
+    contributionsTotalUsd
+    contributionsTotal
+    contributionsCount
+    commentsCount
+    user {
+      id
+      imageUrl
+      username
+    }
+  }
+`

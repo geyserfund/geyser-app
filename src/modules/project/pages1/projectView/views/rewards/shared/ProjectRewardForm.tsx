@@ -1,12 +1,12 @@
 /* eslint-disable complexity */
 import { gql, useQuery } from '@apollo/client'
-import { CloseIcon } from '@chakra-ui/icons'
 import { Button, Checkbox, HStack, IconButton, Select, Stack, Switch, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
+import { DateTime } from 'luxon'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BiInfoCircle } from 'react-icons/bi'
-import { RiArrowLeftSLine } from 'react-icons/ri'
+import { PiCaretDown, PiCaretLeft, PiX } from 'react-icons/pi'
 import { useNavigate } from 'react-router-dom'
 
 import { TextArea, TextInputBox, UploadBox } from '@/components/ui'
@@ -16,10 +16,9 @@ import { rewardsAtom } from '@/modules/project/state/rewardsAtom'
 import { FieldContainer } from '@/shared/components/form'
 import { CardLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
-import { ProjectRewardValidations } from '@/shared/constants'
+import { dimensions, ProjectRewardValidations } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import { CalendarButton, CreatorEmailButton, FileUpload, ImageCrop } from '@/shared/molecules'
-import { standardPadding } from '@/styles'
 import {
   CreateProjectRewardInput,
   ProjectRewardFragment,
@@ -29,7 +28,7 @@ import {
   USDCents,
   useProjectRewardCurrencyUpdateMutation,
 } from '@/types'
-import { commaFormatted, isProjectAnException, toInt, useNotification } from '@/utils'
+import { commaFormatted, isProjectAnException, toInt, useMobileMode, useNotification } from '@/utils'
 
 import { UpdateCurrencyModal } from '../components'
 
@@ -55,6 +54,7 @@ export const ProjectRewardForm = ({
   hideBackbutton = false,
 }: Props) => {
   const { t } = useTranslation()
+  const isMobile = useMobileMode()
 
   const { project, partialUpdateProject, projectOwner } = useProjectAtom()
   const setRewards = useSetAtom(rewardsAtom)
@@ -331,18 +331,15 @@ export const ProjectRewardForm = ({
 
   return (
     <>
-      <CardLayout
-        minWidth="100%"
-        {...(isLaunch ? { border: 'none', h: '100%', padding: 0 } : { padding: standardPadding })}
-        noMobileBorder
-      >
+      <CardLayout minWidth="100%" {...(isLaunch ? { border: 'none', h: '100%', padding: 0 } : {})} mobileDense>
         <Stack direction={'row'} align={'center'}>
           {!hideBackbutton && (
             <IconButton
               size="sm"
-              background={'none'}
-              aria-label="twitter"
-              icon={<RiArrowLeftSLine fontSize="20px" />}
+              variant="outline"
+              colorScheme="neutral1"
+              aria-label="back-to-creation-rewards"
+              icon={<PiCaretLeft />}
               color={'neutral.700'}
               onClick={() => {
                 navigate(-1)
@@ -386,8 +383,8 @@ export const ProjectRewardForm = ({
               onChange={handleFormTextChange}
               onBlur={handleMaxClaimableAmountBlur}
               error={formError.maxClaimable}
-              isDisabled={Boolean(createOrUpdate === 'update' && originalReward.maxClaimable)}
-              isReadOnly={Boolean(createOrUpdate === 'update' && originalReward.maxClaimable)}
+              isDisabled={reward.sold > 0 && Boolean(createOrUpdate === 'update' && originalReward.maxClaimable)}
+              isReadOnly={reward.sold > 0 && Boolean(createOrUpdate === 'update' && originalReward.maxClaimable)}
             />
           </VStack>
         </Stack>
@@ -466,7 +463,7 @@ export const ProjectRewardForm = ({
           </FieldContainer>
         </Stack>
         <Stack direction={{ base: 'column', lg: 'row' }} my={4} gap={1}>
-          <VStack>
+          <VStack flex={1} alignItems={'start'}>
             <HStack w={'100%'}>
               <Text variant="body1" wordBreak="keep-all" fontWeight={500}>
                 {t('Pre-Order')}
@@ -487,7 +484,7 @@ export const ProjectRewardForm = ({
             </Text>
           </VStack>
           {reward.preOrder ? (
-            <FieldContainer title={t('Expected Availability Date')} boldTitle={true}>
+            <FieldContainer title={t('Expected Availability Date')} boldTitle={true} flex={1}>
               <div style={{ position: 'relative', width: '100%' }}>
                 <CalendarButton
                   onChange={handleFormCalendarChange}
@@ -496,22 +493,33 @@ export const ProjectRewardForm = ({
                   showMonthYearPicker={true}
                 >
                   <TextInputBox
-                    style={{ border: 0, background: 'none', width: '100%' }}
-                    value={reward.estimatedAvailabilityDate}
+                    width="full"
+                    border="none"
+                    backgroundColor="transparent"
+                    value={
+                      reward.estimatedAvailabilityDate
+                        ? DateTime.fromJSDate(reward.estimatedAvailabilityDate).toFormat('yyyy LLL')
+                        : 'Select date'
+                    }
+                    rightIcon={
+                      reward.estimatedAvailabilityDate ? (
+                        <IconButton
+                          aria-label="clear-date"
+                          icon={<PiX />}
+                          variant="ghost"
+                          onClick={() => {
+                            setReward((current) => ({
+                              ...current,
+                              estimatedAvailabilityDate: undefined,
+                            }))
+                          }}
+                        />
+                      ) : (
+                        <PiCaretDown />
+                      )
+                    }
                   />
                 </CalendarButton>
-                {reward.estimatedAvailabilityDate && (
-                  <div style={{ position: 'absolute', top: '5px', right: '10px' }}>
-                    <CloseIcon
-                      onClick={() => {
-                        setReward((current) => ({
-                          ...current,
-                          estimatedAvailabilityDate: undefined,
-                        }))
-                      }}
-                    ></CloseIcon>
-                  </div>
-                )}
               </div>
               <Text variant="body1" fontWeight={400}>
                 {t("Use “Expected Availability Date' to set when your reward will be developed and available.")}
@@ -573,16 +581,22 @@ export const ProjectRewardForm = ({
                 alignItems: 'flex-end',
               }
             : {})}
+          {...(isMobile && !isLaunch
+            ? { position: 'fixed', top: `${dimensions.topNavBar.mobile.height + 2}px`, right: `${12 + 2}px` }
+            : {})}
+          zIndex={4}
         >
           {isLaunch && (
-            <Button variant="secondary" flexGrow={1} onClick={() => navigate(-1)}>
+            <Button size="lg" variant="outline" colorScheme="neutral1" flexGrow={1} onClick={() => navigate(-1)}>
               {t('Cancel')}
             </Button>
           )}
           <Button
             {...(isLaunch ? { flexGrow: 1 } : {})}
+            size="lg"
             display={{ base: 'block' }}
-            variant="primary"
+            variant="solid"
+            colorScheme="primary1"
             onClick={handleConfirmReward}
             isLoading={rewardSaving}
           >

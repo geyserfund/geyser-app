@@ -67,7 +67,7 @@ export const ProjectShareBanner = forwardRef<HTMLDivElement, Props>(
             </HStack>
 
             <QRCode
-              qrStyle="squares"
+              qrStyle="dots"
               id={lightModeColors.neutral[1000]}
               size={QR_SIZE}
               bgColor={lightModeColors.neutral[0]}

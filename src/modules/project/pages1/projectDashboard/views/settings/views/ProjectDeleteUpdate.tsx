@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PiTrash } from 'react-icons/pi'
 import { useNavigate } from 'react-router-dom'
 
+import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
@@ -21,6 +22,8 @@ export const ProjectDeleteUpdate = () => {
 
   const toast = useNotification()
   const navigate = useNavigate()
+
+  const { queryCurrentUser } = useAuthContext()
 
   const { project } = useProjectAtom()
 
@@ -43,8 +46,9 @@ export const ProjectDeleteUpdate = () => {
 
             description: 'you will be redirected shortly...',
           })
+          queryCurrentUser()
           deleteProjectModal.onClose()
-          setTimeout(() => navigate('/'), 2500)
+          setTimeout(() => navigate('/'), 1500)
         })
         .catch(() => toast.error({ title: 'failed to delete project' }))
     }

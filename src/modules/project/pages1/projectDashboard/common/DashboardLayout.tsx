@@ -5,10 +5,9 @@ import { PropsWithChildren } from 'react'
 import { PiArrowLeft } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
 import { H1 } from '@/shared/components/typography'
-import { dimensions, getPath } from '@/shared/constants'
+import { dimensions } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
 import { currentDashboardItemAtom, isDashboardMainRouteAtom } from '../navigation/dashboardAtom'
@@ -27,8 +26,6 @@ export const DashboardLayout = ({
   desktopTitle,
   ...props
 }: PropsWithChildren<DashboardLayoutProps>) => {
-  const { project } = useProjectAtom()
-
   const isMobileMode = useMobileMode()
 
   const currentDashboardItem = useAtomValue(currentDashboardItemAtom)
@@ -51,8 +48,8 @@ export const DashboardLayout = ({
         <ProjectNavContainer>
           <Button
             as={Link}
-            to={getPath('projectDashboard', project?.name)}
-            size={{ base: 'md', lg: 'lg' }}
+            to={'..'}
+            size={'lg'}
             variant="ghost"
             colorScheme="neutral1"
             leftIcon={<PiArrowLeft />}
@@ -98,6 +95,7 @@ export const DashboardLayout = ({
           justifyContent={'center'}
           display={{ base: 'none', lg: 'flex' }}
           p={4}
+          zIndex={2}
         >
           {deskTopBottomComponent}
         </HStack>

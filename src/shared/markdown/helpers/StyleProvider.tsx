@@ -44,19 +44,19 @@ export const StyleProvider = ({ children, flex, display, ...rest }: { flex?: boo
   const remirrorTheme: RemirrorThemeType = useMemo(
     () => ({
       color: {
-        text: colors.neutral[900],
+        text: colors.utils.text,
         background: colors.neutral[0],
-        foreground: colors.neutral[900],
-        primary: colors.primary[400],
-        primaryText: colors.neutral[900],
+        foreground: colors.utils.text,
+        primary: colors.primary1[9],
+        primaryText: colors.utils.text,
         hover: {
-          background: colors.neutral[100],
-          primary: colors.primary[400],
+          background: colors.neutral1[3],
+          primary: colors.primary1[9],
         },
-        secondary: colors.primary[400],
-        secondaryText: colors.neutral[900],
-        border: colors.neutral[200],
-        outline: colors.primary[400],
+        secondary: colors.primary1[9],
+        secondaryText: colors.utils.text,
+        border: colors.neutral1[6],
+        outline: colors.primary1[9],
       },
     }),
     [colors],
@@ -75,6 +75,7 @@ export const StyleProvider = ({ children, flex, display, ...rest }: { flex?: boo
   return (
     <Container
       id={ID.project.story.markdown.container}
+      paddingBottom="0px !important"
       sx={
         flex
           ? {

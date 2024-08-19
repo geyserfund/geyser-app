@@ -16,7 +16,7 @@ export const QUERY_PROFILE_NOTIFICATIONS_SETTINGS = gql`
 
 export const QUERY_USER_NOTIFICATION_SETTINGS = gql`
   ${FRAGMENT_USER_NOTIFICATION_SETTINGS}
-  query ProfileNotificationsSettings($userId: BigInt!) {
+  query UserNotificationsSettings($userId: BigInt!) {
     userNotificationSettingsGet(userId: $userId) {
       ...UserNotificationsSettings
     }

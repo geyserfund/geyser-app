@@ -1,8 +1,22 @@
 import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
-import { PiBag, PiFlagBannerFold, PiGear, PiMedalMilitary, PiNewspaper, PiSparkle } from 'react-icons/pi'
+import {
+  PiBag,
+  PiBagBold,
+  PiFlagBannerFold,
+  PiFlagBannerFoldBold,
+  PiGear,
+  PiGearBold,
+  PiMedalMilitary,
+  PiMedalMilitaryBold,
+  PiNewspaper,
+  PiNewspaperBold,
+  PiRocketLaunch,
+  PiRocketLaunchBold,
+} from 'react-icons/pi'
 import { useLocation } from 'react-router-dom'
 
+import { useAuthContext } from '@/context'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { PathName } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
@@ -16,6 +30,7 @@ export const ProjectNavigation = () => {
 
   const isMobile = useMobileMode()
 
+  const { loading: userLoading } = useAuthContext()
   const { isProjectOwner, loading, project } = useProjectAtom()
 
   const showProjectNavBarForMobile = useAtomValue(showProjectNavBarForMobileAtom)
@@ -27,7 +42,8 @@ export const ProjectNavigation = () => {
       {
         name: 'Project',
         path: '',
-        icon: PiSparkle,
+        icon: PiRocketLaunch,
+        activeIcon: PiRocketLaunchBold,
       },
     ] as AnimatedNavBarItem[]
 
@@ -36,6 +52,7 @@ export const ProjectNavigation = () => {
         name: 'Rewards',
         path: PathName.projectRewards,
         icon: PiBag,
+        activeIcon: PiBagBold,
       })
     }
 
@@ -44,6 +61,7 @@ export const ProjectNavigation = () => {
         name: 'Posts',
         path: PathName.projectPosts,
         icon: PiNewspaper,
+        activeIcon: PiNewspaperBold,
       })
     }
 
@@ -52,6 +70,7 @@ export const ProjectNavigation = () => {
         name: 'Goals',
         path: PathName.projectGoals,
         icon: PiFlagBannerFold,
+        activeIcon: PiFlagBannerFoldBold,
       })
     }
 
@@ -59,12 +78,14 @@ export const ProjectNavigation = () => {
       name: 'Leaderboard',
       path: PathName.projectLeaderboard,
       icon: PiMedalMilitary,
+      activeIcon: PiMedalMilitaryBold,
     })
     if (isProjectOwner) {
       buttonList.push({
         name: 'Dashboard',
         path: PathName.projectDashboard,
         icon: PiGear,
+        activeIcon: PiGearBold,
         showIconAlways: true,
         isBordered: true,
       })
@@ -94,7 +115,7 @@ export const ProjectNavigation = () => {
         activeIndex={activeButtonIndex}
         showIcon={isMobile}
         showLabel={!isMobile}
-        loading={loading}
+        loading={loading || userLoading}
         zIndex={9}
       />
     </TopNavContainer>

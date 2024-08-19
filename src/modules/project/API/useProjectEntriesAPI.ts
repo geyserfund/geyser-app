@@ -18,8 +18,9 @@ import {
   initialEntriesLoadAtom,
   unpublishedEntriesAtom,
 } from '../state/entriesAtom'
-import { isProjectOwnerAtom } from '../state/projectAtom'
-import { updateEntryCache, updateProjectEntriesCache } from './cache/projectEntryCache'
+import { isProjectOwnerAtom, updateProjectItemCountsAtom } from '../state/projectAtom'
+import { updateProjectItemCountCache } from './cache/projectBodyCache'
+import { removeProjectEntriesCache, updateEntryCache, updateProjectEntriesCache } from './cache/projectEntryCache'
 import { useCustomMutation } from './custom/useCustomMutation'
 
 /**
@@ -36,6 +37,8 @@ export const useProjectEntriesAPI = (load?: boolean) => {
   const [initialEntriesLoad, setInitialEntriesLoad] = useAtom(initialEntriesLoadAtom)
   const addUpdateEntry = useSetAtom(addUpdateEntryAtom)
   const removeEntry = useSetAtom(deleteEntryAtom)
+
+  const updateProjectItemCounts = useSetAtom(updateProjectItemCountsAtom)
 
   const [queryProjectEntries, queryProjectEntriesOptions] = useProjectEntriesLazyQuery({
     fetchPolicy: 'cache-first',
@@ -66,8 +69,11 @@ export const useProjectEntriesAPI = (load?: boolean) => {
     })
 
   useEffect(() => {
-    if (project.id && !loading && load && !initialEntriesLoad) {
-      queryProjectEntries()
+    if (project.id && !loading && load) {
+      if (!initialEntriesLoad) {
+        queryProjectEntries()
+      }
+
       if (isProjectOwner) {
         queryUnpublishedProjectEntries()
       }
@@ -86,12 +92,17 @@ export const useProjectEntriesAPI = (load?: boolean) => {
     onCompleted(data) {
       if (data.createEntry) {
         addUpdateEntry(data.createEntry)
+        updateProjectItemCounts({ addPost: true })
       }
     },
     update(cache, { data }) {
       if (data?.createEntry) {
         updateEntryCache(cache, data.createEntry)
         updateProjectEntriesCache(cache, data.createEntry)
+        updateProjectItemCountCache(cache, {
+          projectName: project.name,
+          addPost: true,
+        })
       }
     },
   })
@@ -125,6 +136,16 @@ export const useProjectEntriesAPI = (load?: boolean) => {
   const [deleteEntry, deleteEntryOptions] = useCustomMutation(useDeleteEntryMutation, {
     onCompleted(data) {
       removeEntry(data.deleteEntry.id)
+      updateProjectItemCounts({ removePost: true })
+    },
+    update(cache, { data }) {
+      if (data?.deleteEntry) {
+        removeProjectEntriesCache(cache, data?.deleteEntry.id)
+        updateProjectItemCountCache(cache, {
+          projectName: project.name,
+          removePost: true,
+        })
+      }
     },
   })
 

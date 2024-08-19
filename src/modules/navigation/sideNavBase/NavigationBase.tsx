@@ -111,12 +111,13 @@ export const NavigationBase = ({ isSideNavOpen, changeSideNavOpen, navigation, d
           width={dimensions.sideNav.width}
           borderLeft={!isleft ? '2px solid' : 'none'}
           borderRight={isleft ? '2px solid' : 'none'}
-          borderLeftColor="neutral.200"
-          borderRightColor="neutral.200"
+          borderLeftColor="neutral1.6"
+          borderRightColor="neutral1.6"
           height={`100%`}
           shadow="none"
+          overflowX={'hidden'}
         >
-          <HStack backgroundColor={'neutral.0'} alignItems="start" overflow="hidden" height="100%" w="full">
+          <HStack backgroundColor={'utils.pbg'} alignItems="start" overflow="hidden" height="100%" w="full">
             {navigation}
           </HStack>
         </ModalContent>

@@ -8,6 +8,7 @@ import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { Body, H3 } from '@/shared/components/typography'
+import { lightModeColors } from '@/styles'
 import { Badge } from '@/types'
 import { useNotification } from '@/utils'
 
@@ -77,7 +78,7 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
         justifyContent="center"
         borderRadius="15px"
         border="2px solid"
-        borderColor="primary1.11"
+        borderColor={lightModeColors.primary1[11]}
         aspectRatio={2.16}
       >
         <Image src={ContributionIcon} height="100%"></Image>
@@ -89,21 +90,23 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
                 height={{ base: '30px', md: '50px', lg: '60px' }}
                 width={{ base: '30px', md: '50px', lg: '60px' }}
               />
-              <Body size={{ base: 'xl', md: '2xl', lg: '3xl' }} color="primary1.1">
+              <Body size={{ base: 'xl', md: '2xl', lg: '3xl' }} color="utils.whiteContrast">
                 {user.username}
               </Body>
             </HStack>
           )}
-          <H3 size={{ base: 'xl', md: '3xl', lg: '4xl' }} color="primary1.11">
+          <H3 size={{ base: 'xl', md: '3xl', lg: '4xl' }} color={lightModeColors.primary1[11]}>
             {t('Successfully contributed to')}
           </H3>
-          <H3 size={{ base: '2xl', md: '4xl', lg: '5xl' }} color="primary1.12" bold>
+          <H3 size={{ base: '2xl', md: '4xl', lg: '5xl' }} color={lightModeColors.primary1[12]} bold>
             {project.title}
           </H3>
           {currentBadge && (
             <VStack w="full" spacing="0px">
               <Image src={currentBadge.image} width="125px" />
-              <Body light>{t('You won a Nostr badge!')}</Body>
+              <Body color="utils.whiteContrast" light>
+                {t('You won a Nostr badge!')}
+              </Body>
             </VStack>
           )}
         </VStack>

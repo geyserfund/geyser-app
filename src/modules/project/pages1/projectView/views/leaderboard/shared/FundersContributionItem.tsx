@@ -11,7 +11,7 @@ export const FundersContributionItem = ({ contribution }: { contribution: Projec
     <HStack w="full" alignItems={'start'} spacing={1} key={contribution.id} paddingX={6} paddingY={2}>
       <VStack flex={1} alignItems={'start'} justifyContent={'center'} spacing={0}>
         <HStack w="full" justifyContent={'space-between'}>
-          <Body size="xs">
+          <Body size="sm">
             {commaFormatted(contribution.amountPaid)}{' '}
             <Body as="span" size="sm" muted>
               sats {convertSatsToUsd({ sats: contribution.amountPaid, bitcoinQuote: contribution.bitcoinQuote })}
@@ -21,7 +21,7 @@ export const FundersContributionItem = ({ contribution }: { contribution: Projec
         </HStack>
 
         {contribution.comment && (
-          <Body size="xs" dark>
+          <Body size="sm" dark>
             {contribution.comment}
           </Body>
         )}

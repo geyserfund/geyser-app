@@ -9,7 +9,7 @@ interface Props extends ButtonProps {
 export const FormContinueButton = ({ isEdit, isSkip, ...rest }: Props) => {
   const { t } = useTranslation()
   return (
-    <Button variant="solid" colorScheme="primary1" {...rest}>
+    <Button size="lg" variant="solid" colorScheme="primary1" {...rest}>
       {isSkip ? t('Skip') : isEdit ? t('Save') : t('Continue')}
     </Button>
   )

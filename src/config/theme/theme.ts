@@ -6,12 +6,14 @@ import {
   badgeTheme,
   buttonTheme,
   drawerTheme,
+  inputTheme,
   menuTheme,
   modalTheme,
   popOverTheme,
   selectTheme,
   switchTheme,
   tabTheme,
+  textareaTheme,
   tooltipTheme,
 } from './components'
 
@@ -149,16 +151,8 @@ export const theme = {
     Badge: badgeTheme,
     Tooltip: tooltipTheme,
     Tabs: tabTheme,
-    Input: {
-      defaultProps: {
-        focusBorderColor: 'primary.500',
-      },
-    },
-    Textarea: {
-      defaultProps: {
-        focusBorderColor: 'primary.500',
-      },
-    },
+    Input: inputTheme,
+    Textarea: textareaTheme,
   },
   styles: {
     global: ({ theme }: StyleFunctionProps) => ({

@@ -7,6 +7,7 @@ import {
   ModalOverlay,
   Skeleton,
   SkeletonText,
+  Stack,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
@@ -15,6 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { PiCaretDoubleDown } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
+import { ProjectStatusBar } from '@/components/ui'
 import { validateImageUrl } from '@/shared/markdown/validations/image'
 
 import { ImageWithReload } from '../../../../../../../../shared/components/display/ImageWithReload'
@@ -78,18 +80,6 @@ export const Header = () => {
     setSubscribers(toInt(`${value.membership_count}`))
   }
 
-  // const statusContent = () => {
-  //   if (project.status === ProjectStatus.Active && wallet?.state.status === WalletStatus.Ok) {
-  //     return null
-  //   }
-
-  //   return (
-  //     <HStack w="full" justifyContent="center" pt={{ base: '10px', lg: '0px' }}>
-  //       <ProjectStatusLabel project={project} wallet={wallet} />
-  //     </HStack>
-  //   )
-  // }
-
   const handleClickDetails = () => {
     const element = document.getElementById(ID.project.details.container)
     if (element) {
@@ -101,15 +91,7 @@ export const Header = () => {
     const isImage = validateImageUrl(project.image)
 
     if (isImage) {
-      return (
-        <ImageWithReload
-          width="100%"
-          maxHeight="330px"
-          objectFit="cover"
-          borderRadius="8px 8px 0px 0px"
-          src={project.image || undefined}
-        />
-      )
+      return <ImageWithReload width="100%" maxHeight="330px" objectFit="cover" src={project.image || undefined} />
     }
 
     if (project.image && !isImage) {
@@ -133,9 +115,11 @@ export const Header = () => {
       </Modal>
       {/* {statusContent()} */}
 
-      <CardLayout id={'HEADER_ITEM'} w="full" dense spacing={0}>
+      <CardLayout id={'HEADER_ITEM'} w="full" dense spacing={0} position="relative">
+        <ProjectStatusBar />
         <Box>{renderImageOrVideo()}</Box>
-        <HStack
+        <Stack
+          direction={{ base: 'column', lg: 'row' }}
           spacing={4}
           w="full"
           paddingX={{ base: 3, lg: 6 }}
@@ -143,7 +127,7 @@ export const Header = () => {
           position="relative"
           alignItems="start"
         >
-          <Box position={{ base: 'absolute', lg: 'unset' }} top={'-48px'} left={'16px'}>
+          <Box position={{ base: project.image ? 'absolute' : 'unset', lg: 'unset' }} top={'-48px'} left={'16px'}>
             <ImageWithReload
               border="2px solid"
               borderColor="neutral1.1"
@@ -175,14 +159,14 @@ export const Header = () => {
               <SkeletonLayout height="20px" w="250px" />
             ) : (
               <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
-                <Body size="xs" medium light>
+                <Body size="md" medium light>
                   {`${t('Contributors')}: ${project.fundersCount}`}
                 </Body>
-                <Body size="xs" medium light>
+                <Body size="md" medium light>
                   {`${t('Followers')}: ${project.followersCount}`}
                 </Body>
 
-                {subscribers && <Body size="xs" medium light>{`${subscribers || 0} ${t('subscribers')}`}</Body>}
+                {subscribers && <Body size="md" medium light>{`${subscribers || 0} ${t('subscribers')}`}</Body>}
               </HStack>
             )}
 
@@ -190,7 +174,6 @@ export const Header = () => {
               <HStack>
                 <IconButton
                   aria-label="Go to project details"
-                  size="sm"
                   icon={<PiCaretDoubleDown />}
                   variant="soft"
                   colorScheme="neutral1"
@@ -203,7 +186,7 @@ export const Header = () => {
               <CreatorEditButton as={Link} to={getPath('dashboardInfo', project.name)} />
             </HStack>
           </VStack>
-        </HStack>
+        </Stack>
       </CardLayout>
     </>
   )

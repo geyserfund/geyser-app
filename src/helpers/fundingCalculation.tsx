@@ -1,6 +1,7 @@
+import { FundFormType } from '@/modules/project/funding/state/fundingFormAtom'
+
 import { useBtcContext } from '../context/btc'
 import { __production__ } from '../shared/constants'
-import { IFundForm } from '../shared/hooks'
 import { Satoshis, USDCents } from '../types'
 import { RewardCurrency } from '../types/generated/graphql'
 import { hasShipping } from '../utils'
@@ -11,7 +12,7 @@ const internationalShippingCost = __production__ ? 60 : 0.06
 
 export const useFundCalc = (
   state: Pick<
-    IFundForm,
+    FundFormType,
     'rewardCurrency' | 'rewardsCost' | 'donationAmount' | 'shippingDestination' | 'rewardsByIDAndCount'
   >,
 ) => {

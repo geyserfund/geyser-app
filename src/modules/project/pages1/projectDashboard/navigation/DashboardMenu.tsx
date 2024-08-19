@@ -51,7 +51,7 @@ const DashboardMenuContent = (props: ButtonProps) => {
         />
       ))}
       <Divider />
-      {dashboardSettingsItems.map((item) => (
+      {dashboardFeaturesItems.map((item) => (
         <DashboardMenuButton
           key={item.label}
           item={item}
@@ -62,7 +62,7 @@ const DashboardMenuContent = (props: ButtonProps) => {
         />
       ))}
       <Divider />
-      {dashboardFeaturesItems.map((item) => (
+      {dashboardSettingsItems.map((item) => (
         <DashboardMenuButton
           key={item.label}
           item={item}
@@ -90,10 +90,11 @@ const DashboardMenuButton = ({ item, currentDashboardItem, isMobile, project, ..
     <Button
       variant="menu"
       colorScheme="primary1"
+      size="lg"
       width={`${dimensions.project.dashboard.menu.width}px`}
       backgroundColor={'neutral1.1'}
       key={item.label}
-      leftIcon={<item.icon />}
+      leftIcon={<item.icon fontSize="18px" />}
       as={Link}
       to={getPath(item.path, project.name)}
       isActive={isActive}

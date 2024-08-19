@@ -2,11 +2,11 @@ name: Test
 on:
   pull_request:
     branches:
-      - 'main'
+      - 'staging'
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
-    name: E2E on Chrome
+    name: E2E on Electron
     env:
       CYPRESS_APP_URL: ${{ secrets.APP_URL }}
       CYPRESS_CONTRIBUTOR_LND_ENDPOINT: ${{ secrets.CONTRIBUTOR_LND_ENDPOINT }}

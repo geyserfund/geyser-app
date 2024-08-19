@@ -42,7 +42,7 @@ export const CreatePostButtons = () => {
         as={Link}
         to={getPath('projectPostCreate', project.name)}
         flex={1}
-        size={{ base: 'md', lg: 'lg' }}
+        size={'lg'}
         variant="solid"
         colorScheme="primary1"
         rightIcon={<PiPlus />}

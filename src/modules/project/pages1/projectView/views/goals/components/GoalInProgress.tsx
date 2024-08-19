@@ -65,7 +65,7 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
   }
 
   return (
-    <HStack width="100%" gap={'10px'}>
+    <HStack width="100%" gap={'10px'} background="utils.pbg">
       {isEditing && (
         <VStack display="flex" height="100%" alignItems="center" justifyContent="flex-start" pt={1}>
           <DragHandle listeners={listeners} />
@@ -92,7 +92,7 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
                 px={4}
                 py={2}
                 label={t(
-                  'This is your default goal. Contributions will be directed here unless contributors decide to fund another goal. Once this goal is completed, the next goal in line will automatically become the default goal.',
+                  'This is the default goal. Contributions will be directed here unless contributors decide to fund another goal. Once this goal is completed, the next goal in line will automatically become the default goal.',
                 )}
               >
                 <HStack

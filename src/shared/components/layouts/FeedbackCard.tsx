@@ -2,8 +2,8 @@ import { Divider, HStack } from '@chakra-ui/react'
 import React from 'react'
 import { BsExclamationSquareFill } from 'react-icons/bs'
 
-import { CardLayout, CardLayoutProps } from '../components/layouts'
-import { H3 } from '../components/typography'
+import { CardLayout, CardLayoutProps } from '@/shared/components/layouts'
+import { H3 } from '@/shared/components/typography'
 
 type FeedbackCardVariants = 'primary' | 'warning' | 'neutral' | 'danger'
 
@@ -15,10 +15,10 @@ interface FeedbackCardProps extends CardLayoutProps {
 }
 
 const feedbackCardVariantColors: { [key in FeedbackCardVariants]: string } = {
-  primary: 'primary.400',
-  warning: 'secondary.orange',
-  neutral: 'neutral.900',
-  danger: 'secondary.red',
+  primary: 'primary1.9',
+  warning: 'warning.9',
+  neutral: 'neutral1.9',
+  danger: 'error.9',
 }
 
 export const FeedbackCard: React.FC<FeedbackCardProps> = ({
@@ -35,7 +35,7 @@ export const FeedbackCard: React.FC<FeedbackCardProps> = ({
         {noIcon ? null : icon ? icon : <BsExclamationSquareFill size="24" />}
         <H3>{title}</H3>
       </HStack>
-      <Divider borderBottomWidth="2px" borderColor="neutral.400" />
+      <Divider borderBottomWidth="2px" borderColor="neutral1." />
       {children}
     </CardLayout>
   )

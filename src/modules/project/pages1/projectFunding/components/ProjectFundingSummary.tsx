@@ -125,32 +125,31 @@ export const ProjectFundingSummary = () => {
 
         {getTotalAmount('dollar', name) >= 10 && (
           <HStack display={mobileDisplayStyle}>
-            <Body size={{ base: 'sm', lg: 'md' }}>{`${t('You will Receive')}: `}</Body>
-            <HStack>
-              <Badge
-                donationAmountInDollars={getTotalAmount('dollar', name)}
-                height={{ base: '16px', lg: '20px' }}
-                width={{ base: '16px', lg: '20px' }}
-              />
-              <Body size={{ base: 'sm', lg: 'md' }}>{t('Badge')}</Body>
-            </HStack>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Badge')}: `}</Body>
+            <Badge
+              donationAmountInDollars={getTotalAmount('dollar', name)}
+              height={{ base: '16px', lg: '20px' }}
+              width={{ base: '16px', lg: '20px' }}
+            />
           </HStack>
         )}
       </VStack>
 
-      <HStack as={motion.div} layout>
+      <HStack as={motion.div} layout alignItems="start">
         <Body size={{ base: 'md', lg: 'xl' }} light>
           {`${t('Total')}: `}
         </Body>
-        <Body size={{ base: 'md', lg: 'xl' }} medium>
-          {`${getTotalAmount('sats', name).toLocaleString()} `}
-          <Body as="span" light>
+        <HStack flex={1} flexWrap={'wrap'}>
+          <Body size={{ base: 'md', lg: 'xl' }} medium wordBreak={'break-all'}>
+            {`${getTotalAmount('sats', name).toLocaleString()} `}
+          </Body>
+          <Body as="span" size={{ base: 'md', lg: 'xl' }} light>
             sats
           </Body>
-        </Body>
-        <Body size={{ base: 'md', lg: 'xl' }} medium light>
-          {`($${getTotalAmount('dollar', name)})`}
-        </Body>
+          <Body as="span" size={{ base: 'md', lg: 'xl' }} medium light wordBreak={'break-all'}>
+            {`($${getTotalAmount('dollar', name)})`}
+          </Body>
+        </HStack>
       </HStack>
     </motion.div>
   )

@@ -1,19 +1,26 @@
 import { HStack, ModalProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import { ScrollInvoke } from '@/helpers'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Modal } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
+import { getPath } from '@/shared/constants'
 import { usePaginationAtomHook } from '@/shared/hooks'
-import { OrderByOptions, ProjectFunderFragment, ProjectFundingTxFragment, useProjectPageFundingTxQuery } from '@/types'
+import {
+  OrderByOptions,
+  ProjectFundingTxFragment,
+  ProjectLeaderboardContributorsFragment,
+  useProjectPageFundingTxQuery,
+} from '@/types'
 
-import { UserAvatar } from '../../../components/UserAvatar'
+import { UserAvatar } from '../../../../../../../shared/molecules/UserAvatar'
 import { FundersContributionItem, FundersContributionItemSkeleton } from './FundersContributionItem'
 
 type FunderContributionModalProps = {
-  funder: ProjectFunderFragment
+  funder: ProjectLeaderboardContributorsFragment
 } & Omit<ModalProps, 'children'>
 
 const MAXIMUM_USER_CONTRIBUTION_ITEMS = 20
@@ -27,7 +34,7 @@ export const FunderContributionModal = ({ funder, ...props }: FunderContribution
 
   const where = {
     projectId: project.id,
-    funderId: funder.id,
+    funderId: funder.funderId,
   }
 
   const orderBy = {
@@ -35,7 +42,7 @@ export const FunderContributionModal = ({ funder, ...props }: FunderContribution
   }
 
   const { fetchMore } = useProjectPageFundingTxQuery({
-    skip: !project.id || !funder.id,
+    skip: !project.id || !funder.funderId,
     fetchPolicy: 'network-only',
     variables: {
       input: {
@@ -81,8 +88,15 @@ export const FunderContributionModal = ({ funder, ...props }: FunderContribution
         overflowY: 'auto',
       }}
     >
-      <HStack spacing={1} paddingX={6}>
-        <UserAvatar user={funder.user} id={funder.id} />
+      <HStack
+        spacing={1}
+        paddingX={6}
+        {...(funder.user && {
+          as: Link,
+          to: getPath('userProfile', funder.user.id),
+        })}
+      >
+        <UserAvatar user={funder.user} id={funder.funderId} />
         <Body size="sm" bold dark>
           {funder.user?.username || t('Anonymous')}
         </Body>

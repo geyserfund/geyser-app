@@ -181,6 +181,7 @@ export const GoalModal = () => {
           </Box>
         </ModalContent>
       </Modal>
+
       <Modal
         motionPreset="none"
         isCentered

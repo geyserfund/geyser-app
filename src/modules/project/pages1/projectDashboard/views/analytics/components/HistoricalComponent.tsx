@@ -115,7 +115,7 @@ export const HistoricalComponent = () => {
 
   return (
     <VStack w="full" alignItems={'start'}>
-      <H3 size="xl" bold>
+      <H3 size="xl" medium>
         {t('Historical')}
       </H3>
       <CardLayout direction="column" padding={1} w="full" alignItems="start" spacing="10px">

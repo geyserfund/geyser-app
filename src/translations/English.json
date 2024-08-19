@@ -1085,7 +1085,7 @@
    "Change language":"Change language",
    "Discover":"Discover",
    "Completed":"Completed",
-   "This is your default goal. Contributions will be directed here unless contributors decide to fund another goal. Once this goal is completed, the next goal in line will automatically become the default goal.":"This is your default goal. Contributions will be directed here unless contributors decide to fund another goal. Once this goal is completed, the next goal in line will automatically become the default goal.",
+   "This is the default goal. Contributions will be directed here unless contributors decide to fund another goal. Once this goal is completed, the next goal in line will automatically become the default goal.":"This is the default goal. Contributions will be directed here unless contributors decide to fund another goal. Once this goal is completed, the next goal in line will automatically become the default goal.",
    "This goal is denominated in US Dollars":"This goal is denominated in US Dollars",
    "contributed towards goal":"contributed towards goal",
    "Location":"Location",

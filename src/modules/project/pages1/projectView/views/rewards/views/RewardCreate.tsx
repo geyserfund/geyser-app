@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Loader from '@/components/ui/Loader'
 import { defaultProjectReward } from '@/defaults'
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
 import { getPath } from '@/shared/constants'
 import { useNotification } from '@/utils'
@@ -18,6 +18,8 @@ export const RewardCreate = () => {
   const toast = useNotification()
 
   const { project, loading } = useProjectAtom()
+
+  const { rewards } = useRewardsAtom()
 
   const { createReward } = useProjectRewardsAPI()
 
@@ -43,22 +45,21 @@ export const RewardCreate = () => {
     return <Loader />
   }
 
+  const hasRewards = rewards.length > 0
+
   return (
     <VStack w="full" paddingBottom="120px">
       <ProjectNavContainer>
         <Button
           as={Link}
-          to={getPath('projectRewards', project?.name)}
-          size={{ base: 'md', lg: 'lg' }}
+          to={hasRewards ? getPath('projectRewards', project?.name) : getPath('project', project?.name)}
+          size="lg"
           variant="ghost"
           colorScheme="neutral1"
           leftIcon={<PiArrowLeft />}
         >
-          {t('Back to rewards')}
+          {hasRewards ? t('Back to rewards') : t('Back to project')}
         </Button>
-        {/* <Button size={{ base: 'md', lg: 'lg' }} variant="solid" colorScheme="primary1">
-          {t('Publish')}
-        </Button> */}
       </ProjectNavContainer>
 
       <ProjectRewardForm

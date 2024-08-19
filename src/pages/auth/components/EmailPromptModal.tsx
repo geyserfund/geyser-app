@@ -1,16 +1,15 @@
-import { useMutation, useQuery } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { Box, Button, Image, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuthContext } from '@/context'
 import { MUTATION_UPDATE_USER_NOTIFICATIONS_SETTINGS } from '@/modules/profile/graphql/mutations/userNotificationsMutation'
-import { QUERY_USER_NOTIFICATION_SETTINGS } from '@/modules/profile/graphql/queries/profileNotificationSettingsQuery'
 import { ControlledTextInput } from '@/shared/components/controlledInput'
 import { ControlledCheckboxInput } from '@/shared/components/controlledInput/ControlledCheckboxInput'
 import { Modal } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
-import { NotificationSettings } from '@/types'
+import { NotificationSettings, useUserNotificationsSettingsQuery } from '@/types'
 import { useNotification } from '@/utils'
 
 import { EmailPromptModalUrl } from '../../../shared/constants'
@@ -30,7 +29,8 @@ export const EmailPromptModal = ({ onCloseAction, onClose, isOpen }: EmailPrompt
   const { control, handleSubmit, onSubmit, enableSave, reset, shouldPrompt } = useEmailPrompt()
   const [productUpdatesNotificationSetting, setProductUpdatesNotificationSetting] = useState<NotificationSettings>()
 
-  useQuery(QUERY_USER_NOTIFICATION_SETTINGS, {
+  useUserNotificationsSettingsQuery({
+    skip: !user?.id,
     variables: {
       userId: user?.id,
     },

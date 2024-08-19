@@ -1,10 +1,8 @@
-import { Box, HStack, useRadio, useRadioGroup, VStack } from '@chakra-ui/react'
+import { Button, HStack, VStack } from '@chakra-ui/react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Body } from '@/shared/components/typography'
-
-import { neutralColorsLight } from '../../../styles/colors'
 
 type ProjectFeeSelectionProps = {
   readOnly?: boolean
@@ -13,11 +11,11 @@ type ProjectFeeSelectionProps = {
 }
 
 enum FeeValues {
-  ZeroPercent = '0.0',
-  TwoPercent = '0.02',
-  FourPercent = '0.04',
-  SixPercent = '0.06',
-  EightPercent = '0.08',
+  ZeroPercent = 0.0,
+  TwoPercent = 0.02,
+  FourPercent = 0.04,
+  SixPercent = 0.06,
+  EightPercent = 0.08,
 }
 
 const options = [
@@ -31,23 +29,8 @@ const options = [
 export const ProjectFeeSelection: React.FC<ProjectFeeSelectionProps> = ({ readOnly, value, onChange }) => {
   const { t } = useTranslation()
 
-  const { getRootProps, getRadioProps } = useRadioGroup({
-    name: 'transactionFee',
-    defaultValue: String(value),
-    onChange: (value) => onChange(Number(value)),
-  })
-
-  const group = getRootProps()
-
   return (
-    <VStack
-      border="1px solid"
-      borderColor="neutral1.6"
-      backgroundColor="primary1.3"
-      borderRadius="8px"
-      alignItems="flex-start"
-      padding="20px"
-    >
+    <VStack alignItems="flex-start" paddingTop={6}>
       <Body size="md" medium>
         {t('Support Geyser')}
       </Body>
@@ -61,47 +44,23 @@ export const ProjectFeeSelection: React.FC<ProjectFeeSelectionProps> = ({ readOn
         <Body size="sm" medium>
           {t('Choose Geyser split per transaction:')}
         </Body>
-        <HStack {...group} spacing={4}>
+        <HStack spacing={4}>
           {options.map((option) => {
-            const radio = getRadioProps({ value: option.value })
+            const isActive = value === option.value
             return (
-              <RadioCard key={option.value} {...radio} isDisabled={readOnly}>
-                <Body size="xs" bold>
-                  {option.label}
-                </Body>
-              </RadioCard>
+              <Button
+                key={option.value}
+                variant={isActive ? 'surface' : 'soft'}
+                colorScheme={isActive ? 'primary1' : 'neutral1'}
+                onClick={() => onChange(option.value)}
+                disabled={readOnly}
+              >
+                {option.label}
+              </Button>
             )
           })}
         </HStack>
       </VStack>
     </VStack>
-  )
-}
-
-const RadioCard: React.FC<any> = ({ children, isDisabled, ...props }) => {
-  const { getInputProps, getRadioProps } = useRadio(props)
-
-  return (
-    <Box as="label">
-      <input {...getInputProps()} disabled={isDisabled} />
-      <Box
-        {...getRadioProps()}
-        cursor="pointer"
-        border="2px solid"
-        color={neutralColorsLight[900]}
-        borderRadius="8px"
-        borderColor="neutral.200"
-        backgroundColor="white"
-        _checked={{
-          bg: 'primary.400',
-          color: neutralColorsLight[900],
-          borderColor: 'primary.600',
-        }}
-        px={2}
-        py={1}
-      >
-        {children}
-      </Box>
-    </Box>
   )
 }

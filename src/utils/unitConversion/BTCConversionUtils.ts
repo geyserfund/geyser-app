@@ -11,7 +11,7 @@ export function convertToBTC(satoshis: Satoshis): number {
 export const convertSatsToUsd = ({ sats, bitcoinQuote }: { sats: number; bitcoinQuote?: BitcoinQuote | null }) => {
   if (bitcoinQuote && bitcoinQuote.quote) {
     const dollars = sats / bitcoinQuote.quote
-    return `( $${dollars.toFixed(1)} )`
+    return `($${dollars.toFixed(1)})`
   }
 
   return ''

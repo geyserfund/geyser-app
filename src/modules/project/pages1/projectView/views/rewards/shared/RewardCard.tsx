@@ -53,7 +53,8 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
     <CardLayout hover {...linkProps} dense w="full" overflow={'hidden'} spacing={0} position="relative" {...rest}>
       {isHidden && (
         <Box
-          backgroundColor={'neutralAlpha.6'}
+          backgroundColor={'utils.pbg'}
+          opacity={0.5}
           zIndex="1"
           pointerEvents={'none'}
           position="absolute"
@@ -86,11 +87,11 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
               {reward.sold}
             </Box>
           </Body>
-          {reward.stock && (
+          {reward.maxClaimable && (
             <Body size="xs" medium muted>
               {t('Available')}:{' '}
               <Box as="span" color="utils.text" fontWeight={700}>
-                {reward.stock - reward.sold - count}
+                {reward.maxClaimable - reward.sold - count}
               </Box>
             </Body>
           )}
@@ -134,8 +135,7 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
           {!isProjectOwner ? (
             buyReward && (
               <Button
-                size="sm"
-                variant="surface"
+                variant="solid"
                 colorScheme="primary1"
                 minWidth="80px"
                 onClick={onBuyClick}
@@ -145,7 +145,7 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
               </Button>
             )
           ) : (
-            <RewardEditMenu reward={reward} isLaunch={isLaunch} />
+            <RewardEditMenu reward={reward} isLaunch={isLaunch} zIndex={2} />
           )}
         </HStack>
       </VStack>

@@ -61,7 +61,7 @@ export const RewardEdit = () => {
         <Button
           as={Link}
           to={getPath('projectRewards', project?.name)}
-          size={{ base: 'md', lg: 'lg' }}
+          size="lg"
           variant="ghost"
           colorScheme="neutral1"
           leftIcon={<PiArrowLeft />}

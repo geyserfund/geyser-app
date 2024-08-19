@@ -1,5 +1,4 @@
-import { Box, HStack, Text } from '@chakra-ui/react'
-import { t } from 'i18next'
+import { HStack } from '@chakra-ui/react'
 
 import { InsightsOptionsSelect } from '../elements'
 
@@ -11,19 +10,8 @@ export enum InsightsOptions {
 
 export const InsightsHeader = () => {
   return (
-    <HStack w="full" justifyContent="space-between">
+    <HStack w="full" justifyContent="flex-end">
       <InsightsOptionsSelect />
-
-      <Box
-        px={'10px'}
-        py={'3px'}
-        borderRadius="8px"
-        backgroundColor="primary.400"
-        border="2px solid"
-        borderColor="neutral.1000"
-      >
-        <Text color="black">{t('BETA')}</Text>
-      </Box>
     </HStack>
   )
 }

@@ -147,6 +147,9 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
               <Body medium>{displayLocation}</Body>
               <IconButton
                 variant="ghost"
+                _hover={{}}
+                _pressed={{}}
+                _active={{}}
                 size="xs"
                 borderRadius="8px"
                 aria-label="remove-region-close-icon"

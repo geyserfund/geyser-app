@@ -26,6 +26,11 @@ export const addUpdateInProgressGoalsAtom = atom(null, (get, set, payload: Proje
   }
 })
 
+/** Remove a goal from inprogress goals */
+export const removeGoalsAtom = atom(null, (_, set, goalId: number) => {
+  set(inProgressGoalsAtom, (current) => current.filter((goal) => goal.id !== goalId))
+})
+
 /** Completed goals for Project in context */
 export const completedGoalsAtom = atom<ProjectGoalsFragment[]>([])
 

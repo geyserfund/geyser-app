@@ -37,7 +37,7 @@ export const RewardShare = ({ reward, ...props }: RewardShareProps) => {
   return (
     <>
       <Button
-        size={{ base: 'md', lg: 'lg' }}
+        size={'lg'}
         variant="soft"
         colorScheme="neutral1"
         rightIcon={<PiShareFat />}

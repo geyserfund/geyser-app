@@ -16,7 +16,7 @@ export enum FeedBackVariant {
 
 type FeedbackProps = {
   variant: FeedBackVariant
-  text?: string
+  text?: string | React.ReactNode
   children?: React.ReactNode
   icon?: React.ReactNode
 } & StackProps

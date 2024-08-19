@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/layout'
-import { Outlet } from 'react-router-dom'
+import { Outlet, ScrollRestoration } from 'react-router-dom'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 
 import { PullingDownContent } from './components/ui'
@@ -32,6 +32,7 @@ const AppLayout = () => {
 
   return (
     <>
+      <ScrollRestoration />
       {loading && <LoadingPage />}
       <PullToRefresh
         onRefresh={handleFunction}
@@ -47,8 +48,6 @@ const AppLayout = () => {
             display="flex"
             alignItems="center"
             flexDir="column"
-            backgroundColor="utils.pbg"
-            overflowY={'auto'}
           >
             <TopNavBar />
             <Box

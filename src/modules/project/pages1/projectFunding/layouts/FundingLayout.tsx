@@ -35,15 +35,8 @@ export const FundingLayout = ({
     <VStack w="full">
       <ProjectNavContainer>
         <HStack>
-          {backPath && (
-            <Button
-              as={Link}
-              to={backPath}
-              size={{ base: 'md', lg: 'lg' }}
-              variant="ghost"
-              colorScheme="neutral1"
-              leftIcon={<PiArrowLeft />}
-            >
+          {backPath !== undefined && (
+            <Button as={Link} to={backPath} size="lg" variant="ghost" colorScheme="neutral1" leftIcon={<PiArrowLeft />}>
               {t('Go back')}
             </Button>
           )}
@@ -66,6 +59,7 @@ export const FundingLayout = ({
           borderColor="neutral1.6"
           backgroundColor="utils.pbg"
           padding={3}
+          paddingBottom={5}
           {...bottomContainerProps}
         >
           {bottomContent}

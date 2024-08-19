@@ -48,7 +48,7 @@ export const Details = () => {
                       filter: { tagIds: [tag.id] },
                     }}
                   >
-                    <Badge size="md" variant="surface" colorScheme={tagColorScheme(tag.id)}>
+                    <Badge size="md" variant="soft" colorScheme={tagColorScheme(tag.id)}>
                       {tag.label}
                     </Badge>
                   </Link>
@@ -114,7 +114,7 @@ export const DetailLine = ({ title, empty, children }: PropsWithChildren<{ title
 
   return (
     <HStack w="full" alignItems={'start'}>
-      <Body size="xs" medium light>
+      <Body size="sm" medium light>
         {`${title}: `}
       </Body>
       {children}

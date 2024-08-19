@@ -71,3 +71,10 @@ const rewardEmptyAtom = atom((get) => {
   return false
 })
 export const useRewardEmptyAtom = () => useAtomValue(rewardEmptyAtom)
+
+export const resetRewardsAtom = atom(null, (get, set) => {
+  set(rewardsCountAtom, {})
+  set(rewardsFamily({ status: OrdersGetStatus.Confirmed }), [])
+  set(rewardsFamily({ status: OrdersGetStatus.Shipped }), [])
+  set(rewardsFamily({ status: OrdersGetStatus.Delivered }), [])
+})

@@ -1,6 +1,7 @@
 import { atom } from 'jotai'
 
 import { EntryStatus, ProjectEntryFragment, ProjectEntryViewFragment } from '../../../types'
+import { isProjectOwnerAtom } from './projectAtom'
 
 /** Published Entries for Project in context */
 export const entriesAtom = atom<ProjectEntryFragment[]>([])
@@ -10,6 +11,14 @@ export const unpublishedEntriesAtom = atom<ProjectEntryFragment[]>([])
 
 /** Initial load for entries, set to true after loaded */
 export const initialEntriesLoadAtom = atom(false)
+
+/** Boolen to see if entries exist */
+export const hasEntriesAtom = atom((get) => {
+  const entries = get(entriesAtom)
+  const unpublishedEntries = get(unpublishedEntriesAtom)
+  const isProjectOwner = get(isProjectOwnerAtom)
+  return entries.length > 0 || (isProjectOwner && unpublishedEntries.length > 0)
+})
 
 /** Delete entry by id */
 export const deleteEntryAtom = atom(null, (get, set, entryId: string) => {

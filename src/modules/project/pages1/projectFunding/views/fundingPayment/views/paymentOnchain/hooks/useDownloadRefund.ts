@@ -1,9 +1,11 @@
+import { useSetAtom } from 'jotai'
 import QRCode from 'qrcode'
 import { useTranslation } from 'react-i18next'
 
 import { useRefundFileValue } from '@/modules/project/funding/state'
 import { useNotification } from '@/utils'
 
+import { onChainRefundDownloadedAtom } from '../states'
 import { download, downloadJson, isIos } from '../utils/download'
 
 const REFUND_QR_FILE_NAME = 'refundFile'
@@ -12,6 +14,8 @@ export const useDownloadRefund = () => {
   const refundFile = useRefundFileValue()
   const toast = useNotification()
   const { t } = useTranslation()
+
+  const setRefundFileDownloaded = useSetAtom(onChainRefundDownloadedAtom)
 
   const downloadRefundQr = () => {
     QRCode.toDataURL(JSON.stringify(refundFile), { width: 400 })
@@ -30,6 +34,8 @@ export const useDownloadRefund = () => {
         } else {
           download(`${REFUND_QR_FILE_NAME}.png`, url)
         }
+
+        setRefundFileDownloaded(true)
       })
       .catch((err: Error) => {
         toast.error({
@@ -39,7 +45,10 @@ export const useDownloadRefund = () => {
       })
   }
 
-  const downloadRefundJson = () => downloadJson(REFUND_QR_FILE_NAME, refundFile)
+  const downloadRefundJson = () => {
+    downloadJson(REFUND_QR_FILE_NAME, refundFile)
+    setRefundFileDownloaded(true)
+  }
 
   return {
     downloadRefundQr,

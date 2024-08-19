@@ -27,6 +27,8 @@ export const AnalyticsUrl = 'https://simpleanalytics.com/geyser.fund'
 export const anonymousProfileUrl = 'https://storage.googleapis.com/geyser-projects-media/project/common/anonymous.jpeg'
 export const anonymousOrbBaseUrl = 'https://storage.googleapis.com/geyser-projects-media/orbs/ellipse_'
 
+export const AnonymousAvatarBaseUrl = 'https://storage.googleapis.com/geyser-projects-media/anonymous/avatar'
+
 export const AmbassadorUrl = 'https://airtable.com/shreTVU3ZjqJ3PIq8'
 export const AddSponsorUrl = 'https://airtable.com/shrmnAbkAupDx8GPo'
 
@@ -265,6 +267,9 @@ export const RopeUrl = 'https://storage.googleapis.com/geyser-projects-media/ico
 export const StarUrl = 'https://storage.googleapis.com/geyser-projects-media/icons/star.png'
 export const TrophyUrl = 'https://storage.googleapis.com/geyser-projects-media/icons/trophy.png'
 export const LightningUrl = 'https://storage.googleapis.com/geyser-projects-media/icons/lightning.png'
+export const GoldMedalUrl = 'https://storage.googleapis.com/geyser-projects-media/icons/GoldMedal.png'
+export const SilverMedalUrl = 'https://storage.googleapis.com/geyser-projects-media/icons/SilverMedal.png'
+export const BronzeMedalUrl = 'https://storage.googleapis.com/geyser-projects-media/icons/BronzeMedal.png'
 
 // AIRTABLE LINKS
 export const LanguageRequestUrl = 'https://airtable.com/shrEs5AsmkC07tWcX'

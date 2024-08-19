@@ -18,6 +18,9 @@ const useStyles = createUseStyles({
   dateTimeWrapper: {
     width: '100%',
   },
+  dateTimePopper: {
+    zIndex: 5,
+  },
 })
 
 const renderDateValue = (value: Date | null | undefined) => {
@@ -32,8 +35,17 @@ const ButtonDateInput = forwardRef<
   HTMLButtonElement,
   Pick<ButtonProps, 'onClick'> & Pick<ICalendarButton, 'value' | 'children' | 'showMonthYearPicker'>
 >(({ value, onClick, children, showMonthYearPicker, ...props }, ref) => (
-  <Button variant="secondary" width="100%" ref={ref} onClick={onClick} {...props}>
-    <Text>{showMonthYearPicker ? renderDateValue(value) : value?.toString() || children}</Text>
+  <Button
+    variant="outline"
+    overflow={'hidden'}
+    colorScheme="neutral1"
+    width="100%"
+    ref={ref}
+    onClick={onClick}
+    paddingX={0}
+    {...props}
+  >
+    {children ? children : <Text paddingX={3}>{showMonthYearPicker ? renderDateValue(value) : value?.toString()}</Text>}
   </Button>
 ))
 ButtonDateInput.displayName = 'ButtonDateInput'
@@ -54,9 +66,11 @@ export const CalendarButton = ({
     <Box {...containerProps}>
       <DatePicker
         wrapperClassName={classes.dateTimeWrapper}
+        popperClassName={classes.dateTimePopper}
         selected={value}
         onChange={onChange}
         showMonthYearPicker={showMonthYearPicker}
+        showPopperArrow={false}
         customInput={
           <ButtonDateInput {...buttonProps} showMonthYearPicker={showMonthYearPicker} value={value}>
             {children}

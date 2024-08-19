@@ -4,7 +4,7 @@ export const dimensions = {
       height: 112, // 32 * 2 + 48,
     },
     mobile: {
-      height: 72, // 16 * 2 + 40
+      height: 80, // 20 * 2 + 40
     },
   },
   projectNavBar: {
@@ -12,12 +12,12 @@ export const dimensions = {
       height: 44 + 16,
     },
     mobile: {
-      height: 36 + 12,
+      height: 44 + 16,
     },
   },
   animatedNavBar: {
     height: {
-      base: '48px',
+      base: '60px',
       lg: '60px',
     },
   },
@@ -29,12 +29,12 @@ export const dimensions = {
     },
     posts: {
       view: {
-        maxWidth: 586,
+        maxWidth: 636,
       },
     },
     dashboard: {
       menu: {
-        width: 148,
+        width: 165,
       },
     },
     rightSideNav: {

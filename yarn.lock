@@ -5043,7 +5043,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cypress/request@npm:^3.0.0":
+"@cypress/request@npm:^3.0.1":
   version: 3.0.1
   resolution: "@cypress/request@npm:3.0.1"
   dependencies:
@@ -15094,11 +15094,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:13.9.0":
-  version: 13.9.0
-  resolution: "cypress@npm:13.9.0"
+"cypress@npm:13.13.2":
+  version: 13.13.2
+  resolution: "cypress@npm:13.13.2"
   dependencies:
-    "@cypress/request": "npm:^3.0.0"
+    "@cypress/request": "npm:^3.0.1"
     "@cypress/xvfb": "npm:^1.2.4"
     "@types/sinonjs__fake-timers": "npm:8.1.1"
     "@types/sizzle": "npm:^2.3.2"
@@ -15137,12 +15137,12 @@ __metadata:
     request-progress: "npm:^3.0.0"
     semver: "npm:^7.5.3"
     supports-color: "npm:^8.1.1"
-    tmp: "npm:~0.2.1"
+    tmp: "npm:~0.2.3"
     untildify: "npm:^4.0.0"
     yauzl: "npm:^2.10.0"
   bin:
     cypress: bin/cypress
-  checksum: 10c0/1254609d8186c438f59c3f5bbef77fd22309260c1204228c39d07a9c9a555a823f24a69cbe9169d1e79af0d93f9cc9fee5e74b85cd0aa265e0add471cba86f32
+  checksum: 10c0/7a38851aac96ff36414a2a4665312cc6778b9863913d5328685c4b13339aa3159506574d63d60d974ccc4a88b4d26db2b3a9c8c5a9921d351dc41ebdae446bae
   languageName: node
   linkType: hard
 
@@ -17925,7 +17925,7 @@ __metadata:
     classnames: "npm:^2.3.2"
     conventional-changelog-cli: "npm:^2.2.2"
     cors: "npm:^2.8.5"
-    cypress: "npm:13.9.0"
+    cypress: "npm:13.13.2"
     cypress-real-events: "npm:^1.12.0"
     dompurify: "npm:^3.0.5"
     dotenv: "npm:^16.0.3"
@@ -17978,7 +17978,7 @@ __metadata:
     react-dropzone: "npm:^14.2.3"
     react-easy-crop: "npm:^5.0.4"
     react-helmet: "npm:^6.1.0"
-    react-hook-form: "npm:^7.43.9"
+    react-hook-form: "npm:^7.52.2"
     react-i18next: "npm:^13.0.0"
     react-icons: "npm:^5.2.1"
     react-jss: "npm:^10.9.2"
@@ -23332,12 +23332,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.43.9":
-  version: 7.43.9
-  resolution: "react-hook-form@npm:7.43.9"
+"react-hook-form@npm:^7.52.2":
+  version: 7.52.2
+  resolution: "react-hook-form@npm:7.52.2"
   peerDependencies:
-    react: ^16.8.0 || ^17 || ^18
-  checksum: 10c0/5aab031ae15b32daffb45abe32e00c9d66c511348b68589d4faa6c2309db54b9d2f738b400319b0c2ea87dfd5d85f3760393feafe2bf7a97d608aa736934151f
+    react: ^16.8.0 || ^17 || ^18 || ^19
+  checksum: 10c0/2b8d37239d40f4326a24609c1bf5b4ba2cf66bc4a988213ccd7eb92a254dd5bf9c4b94caa353bce4b1d6d8a9ecd2ea3103e25c6d2d72d53f7be26f09053a8b2f
   languageName: node
   linkType: hard
 
@@ -24363,7 +24363,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rimraf@npm:^3.0.0, rimraf@npm:^3.0.2":
+"rimraf@npm:^3.0.2":
   version: 3.0.2
   resolution: "rimraf@npm:3.0.2"
   dependencies:
@@ -25922,12 +25922,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tmp@npm:~0.2.1":
-  version: 0.2.1
-  resolution: "tmp@npm:0.2.1"
-  dependencies:
-    rimraf: "npm:^3.0.0"
-  checksum: 10c0/67607aa012059c9ce697bee820ee51bc0f39b29a8766def4f92d3f764d67c7cf9205d537d24e0cb1ce9685c40d4c628ead010910118ea18348666b5c46ed9123
+"tmp@npm:~0.2.3":
+  version: 0.2.3
+  resolution: "tmp@npm:0.2.3"
+  checksum: 10c0/3e809d9c2f46817475b452725c2aaa5d11985cf18d32a7a970ff25b568438e2c076c2e8609224feef3b7923fa9749b74428e3e634f6b8e520c534eef2fd24125
   languageName: node
   linkType: hard
 

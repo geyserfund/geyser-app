@@ -47,6 +47,7 @@ export const FRAGMENT_USER_ME = gql`
         thumbnailImage
         title
         status
+        createdAt
       }
     }
   }

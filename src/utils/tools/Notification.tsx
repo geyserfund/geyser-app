@@ -15,7 +15,7 @@ export const useNotification = (options?: UseToastOptions | undefined) => {
     variant: 'solid',
     containerStyle: {
       marginTop: 65,
-      marginRight: 10,
+      marginRight: { base: 3, lg: 10 },
     },
     ...options,
   })

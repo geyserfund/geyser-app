@@ -1,14 +1,12 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
-import { useAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { fundersAtom } from '@/modules/project/state/fundersAtom'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
-import { OrderByOptions, useProjectPageFundersQuery } from '@/types'
+import { ProjectLeaderboardPeriod, useProjectLeaderboardContributorsGetQuery } from '@/types'
 
 import {
   LeaderboardItem,
@@ -22,36 +20,24 @@ export const Leaderboard = () => {
   const { isLoggedIn } = useAuthContext()
   const { project, loading: projectLoading } = useProjectAtom()
 
-  const [funders, setFunders] = useAtom(fundersAtom)
-
-  const { loading } = useProjectPageFundersQuery({
+  const { data, loading } = useProjectLeaderboardContributorsGetQuery({
+    skip: !project.id,
     variables: {
       input: {
-        where: {
-          projectId: project.id,
-        },
-        orderBy: {
-          amountFunded: OrderByOptions.Desc,
-        },
-        pagination: {
-          take: isLoggedIn ? 7 : 8,
-        },
+        period: ProjectLeaderboardPeriod.AllTime,
+        projectId: project.id,
+        top: isLoggedIn ? 9 : 10,
       },
     },
-    skip: !project.id,
-    onCompleted(data) {
-      if (data && data.fundersGet) {
-        console.log('checking funders inside oncompleted', data.fundersGet)
-        setFunders(data.fundersGet)
-      }
-    },
   })
+
+  const funders = data?.projectLeaderboardContributorsGet
 
   if (projectLoading || loading) {
     return <LeaderboardSkeleton />
   }
 
-  if (funders.length === 0) {
+  if (!funders || funders.length === 0) {
     return <NoContribution />
   }
 
@@ -61,7 +47,7 @@ export const Leaderboard = () => {
     <VStack spacing={0} w="full" flex={1} overflowY={'auto'} justifyContent={'space-between'}>
       <VStack spacing={0} w="full">
         {funders.map((funder, index) => {
-          return <LeaderboardItem funder={funder} rank={index + 1} key={funder.id} />
+          return <LeaderboardItem funder={funder} rank={index + 1} key={funder.funderId} />
         })}
       </VStack>
 
