@@ -1,12 +1,16 @@
 import { useQuery } from '@apollo/client'
+import { Box, IconButton, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useState } from 'react'
+import { PiX } from 'react-icons/pi'
 
-import { useFilterContext } from '../../../../context'
+import { useFilterContext } from '@/context/filter'
+import { standardPadding } from '@/styles'
+
 import { QUERY_TAGS } from '../../../../graphqlBase/queries'
 import { TagsGetResult } from '../../../../types'
 import { useNotification } from '../../../../utils'
-import { DesktopFilterLayoutSkeleton, DesktopTagsFilter } from './DesktopTagsFilter'
-import { MobileTagsFilter } from './MobileTagsFilter'
+import { TagsFilterBody } from './TagsFilterBody'
 
 interface FilterByTagsProps {
   mobile?: boolean
@@ -16,10 +20,10 @@ export const FilterByTags = ({ mobile }: FilterByTagsProps) => {
   const { toast } = useNotification()
 
   const { filters, updateFilter } = useFilterContext()
-
   const { tagIds = [] } = filters
-
   const isDisabled = tagIds.length >= 3
+
+  const [searchCode, setSearchCode] = useState('')
 
   const [allTags, setAllTags] = useState<TagsGetResult[]>([])
 
@@ -49,12 +53,28 @@ export const FilterByTags = ({ mobile }: FilterByTagsProps) => {
   }
 
   if (loading) {
-    return <DesktopFilterLayoutSkeleton />
+    return null
   }
 
-  if (mobile) {
-    return <MobileTagsFilter {...{ handleTagsClick, allTags }} />
-  }
-
-  return <DesktopTagsFilter {...{ handleTagsClick, allTags }} />
+  return (
+    <>
+      <Box width="100%" paddingX={standardPadding}>
+        <InputGroup>
+          <Input placeholder={t('Search tags')} value={searchCode} onChange={(e) => setSearchCode(e.target.value)} />
+          {searchCode && (
+            <InputRightElement>
+              <IconButton
+                aria-label="clear-region-search"
+                variant="ghost"
+                colorScheme="neutral"
+                icon={<PiX />}
+                onClick={() => setSearchCode('')}
+              />
+            </InputRightElement>
+          )}
+        </InputGroup>
+      </Box>
+      <TagsFilterBody searchCode={searchCode} allTags={allTags} handleTagsClick={handleTagsClick} />
+    </>
+  )
 }

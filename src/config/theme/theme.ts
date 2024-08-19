@@ -99,46 +99,53 @@ export const theme = {
     },
     Checkbox: {
       variants: {
-        primary: ({ colorScheme = 'primary' }: StyleFunctionProps) => ({
-          color: `${colorScheme}.400`,
+        primary: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
           control: {
             _checked: {
-              color: `${colorScheme}.400`,
+              color: `utils.blackContrast`,
+              backgroundColor: `${colorScheme}.9`,
+              borderColor: `${colorScheme}.9`,
+            },
+            _focus: {
+              ring: 1,
+              ringColor: `${colorScheme}.9`,
+              borderColor: `${colorScheme}.9`,
             },
           },
         }),
       },
       defaultProps: {
         variant: 'primary',
-        colorScheme: 'primary',
+        colorScheme: 'primary1',
       },
     },
     Radio: {
       variants: {
-        primary: ({ colorScheme = 'primary' }: StyleFunctionProps) => ({
-          color: `${colorScheme}.400`,
+        primary: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
           control: {
             _checked: {
-              color: `${colorScheme}.400`,
+              borderColor: `${colorScheme}.9`,
+              backgroundColor: `${colorScheme}.9`,
+              color: `utils.blackContrast`,
               _before: {
-                width: '90%',
-                height: '90%',
+                width: '50%',
+                height: '50%',
               },
             },
             _before: {
-              width: '90%',
-              height: '90%',
+              width: '50%',
+              height: '50%',
             },
             _focus: {
-              ring: 2,
-              ringColor: `${colorScheme}.500`,
+              ring: 1,
+              ringColor: `${colorScheme}.9`,
             },
           },
         }),
       },
       defaultProps: {
         variant: 'primary',
-        colorScheme: 'primary',
+        colorScheme: 'primary1',
       },
     },
     Alert: alertTheme,

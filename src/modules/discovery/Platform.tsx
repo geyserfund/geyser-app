@@ -17,7 +17,7 @@ export const Platform = () => {
         paddingLeft={{
           base: 0,
           lg: dimensions.discovery.sideNav.tablet.width,
-          '2xl': dimensions.discovery.sideNav.desktop.width,
+          xl: dimensions.discovery.sideNav.desktop.width,
         }}
       >
         <Box

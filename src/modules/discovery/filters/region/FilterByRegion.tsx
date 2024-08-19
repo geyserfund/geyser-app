@@ -1,24 +1,23 @@
 import { useQuery } from '@apollo/client'
 import { Skeleton } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Box, IconButton, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
+import { t } from 'i18next'
+import { useState } from 'react'
+import { PiX } from 'react-icons/pi'
 
-import { useFilterContext } from '../../../../context'
+import { standardPadding } from '@/styles'
+
 import { QUERY_COUNTRIES, QUERY_REGION } from '../../../../graphqlBase/queries'
-import { Country, ProjectCountriesGetResult, ProjectRegionsGetResult } from '../../../../types'
-import { DesktopRegionFilter } from './DesktopRegionFilter'
-import { MobileRegionFilter } from './MobileRegionFilter'
+import { ProjectCountriesGetResult, ProjectRegionsGetResult } from '../../../../types'
+import { RegionFilterBody } from './RegionFilterBody'
 
 interface FilterByRegionProps {
-  mobile?: boolean
+  onClose?: () => void
 }
 
-export const FilterByRegion = ({ mobile }: FilterByRegionProps) => {
-  const { t } = useTranslation()
-  const { filters } = useFilterContext()
-  const { countryCode, region } = filters
+export const FilterByRegion = ({ onClose }: FilterByRegionProps) => {
+  const [searchCode, setSearchCode] = useState('')
 
-  const [options, setOptions] = useState<Country[]>([])
   const [countries, setCountries] = useState<ProjectCountriesGetResult[]>([])
   const [regions, setRegions] = useState<ProjectRegionsGetResult[]>([])
 
@@ -44,40 +43,33 @@ export const FilterByRegion = ({ mobile }: FilterByRegionProps) => {
     },
   })
 
-  useEffect(() => {
-    if (!countries || !regions) {
-      return
-    }
-
-    const countryOptions = countries.map((val) => val.country)
-
-    const regionOptions = regions.map((val) => ({
-      name: val.region,
-      code: val.region,
-    }))
-
-    setOptions([...countryOptions, ...regionOptions])
-  }, [countries, regions])
-
-  const getCurrentButtonName = () => {
-    if (region) {
-      return region
-    }
-
-    if (countryCode) {
-      return countries.find((country) => country.country.code === countryCode)?.country.name || ''
-    }
-
-    return t('Everywhere')
-  }
-
   if (countriesLoading || regionsLoading) {
     return <Skeleton borderRadius="8px" w="full" height="40px" />
   }
 
-  if (mobile) {
-    return <MobileRegionFilter {...{ options, countries, regions, label: getCurrentButtonName() }} />
-  }
-
-  return <DesktopRegionFilter {...{ options, countries, regions, label: getCurrentButtonName() }} />
+  return (
+    <>
+      <Box width="100%" paddingX={standardPadding}>
+        <InputGroup>
+          <Input
+            placeholder={t('Search country or region')}
+            value={searchCode}
+            onChange={(e) => setSearchCode(e.target.value)}
+          />
+          {searchCode && (
+            <InputRightElement>
+              <IconButton
+                aria-label="clear-region-search"
+                variant="ghost"
+                colorScheme="neutral"
+                icon={<PiX />}
+                onClick={() => setSearchCode('')}
+              />
+            </InputRightElement>
+          )}
+        </InputGroup>
+      </Box>
+      <RegionFilterBody {...{ countries, regions, searchCode, onClose }} />
+    </>
+  )
 }
