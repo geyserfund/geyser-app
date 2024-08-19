@@ -12,6 +12,7 @@ import { renderPrivateRoute } from './components/PrivateRoute'
 const Grants = () => import('../../pages/grants')
 const Grants1 = () => import('modules/grants/pages/Grants')
 const ProjectLaunch = () => import('../../modules/project/pages1/projectCreation')
+const MyProjects = () => import('../../modules/projects/pages/MyProjects')
 // const Entry = () => import('../../pages/entry')
 // const ProjectDashboard = () => import('../../modules/project/pages/projectDashboard')
 
@@ -56,6 +57,15 @@ export const platformRoutes: RouteObject[] = [
     },
   },
 
+  {
+    path: '/my-projects',
+    async lazy() {
+      const MyProjectsPage = await MyProjects().then((m) => m.MyProjects)
+      return {
+        element: renderPrivateRoute(MyProjectsPage),
+      }
+    },
+  },
   {
     path: getPath('launchStart'),
     async lazy() {

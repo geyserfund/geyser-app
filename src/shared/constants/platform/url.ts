@@ -335,3 +335,10 @@ export const ExperienceImageUrl = 'https://storage.googleapis.com/geyser-project
 // Helpers
 export const EmailPromptModalUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/enter-email-illustration.png'
+
+// My Projects
+export const NoContributionsReceivedUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/NoContributionsReceived.png'
+
+export const NoRewardsSoldUrl = 'https://storage.googleapis.com/geyser-projects-media/images/no-reward-sold.png'
+export const DiamondUrl = 'https://storage.googleapis.com/geyser-projects-media/images/diamond.png'

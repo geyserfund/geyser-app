@@ -45,7 +45,7 @@ export const ActivityFeed = () => {
     fetchNext,
   } = useQueryWithPagination<ActivityForLandingPageFragment>({
     itemLimit,
-    queryName: 'getActivities',
+    queryName: 'activitiesGet',
     query: QUERY_ACTIVITIES_FOR_LANDING_PAGE,
     where: {
       countryCode,
