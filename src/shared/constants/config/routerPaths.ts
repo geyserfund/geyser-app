@@ -3,7 +3,6 @@ export enum PathName {
   landingFeed = 'feed',
   leaderboard = 'leaderboard',
   grants = 'grants',
-  grants1 = 'grants1',
   grantsRoundOne = 'roundone',
   grantsRoundTwo = 'roundtwo',
   myProjects = 'my-projects',
@@ -107,10 +106,9 @@ const pathsMap = {
   discoveryLeaderboard: () => `/${PathName.leaderboard}`,
   discoveryMyProjects: () => `/${PathName.myProjects}`,
   discoveryActivity: () => `/${PathName.activiy}`,
-  discoveryGrants: () => `/${PathName.grants}`,
+  discoveryGrants: (grantId?: string) => (grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`),
 
   grants: (grantId?: string) => (grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`),
-  grants1: () => `/${PathName.grants}`,
   grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,
   grantsRoundTwo: () => `/${PathName.grants}/${PathName.grantsRoundTwo}`,
 
