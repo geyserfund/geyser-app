@@ -1,8 +1,6 @@
 import { Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import PlatformLayout from '@/components/ui/PlatformLayout'
-
 import { AppFooter } from '../../../components/molecules'
 import { H2, H3 } from '../../../components/typography'
 import { getPath } from '../../../shared/constants'
@@ -24,7 +22,7 @@ export const GrantsLandingPage = () => {
   }
 
   return (
-    <PlatformLayout>
+    <>
       <VStack spacing="10px">
         <Text fontSize={isMobile ? '4xl' : '44px'} fontWeight="medium" textAlign="center">
           🥳
@@ -86,7 +84,7 @@ export const GrantsLandingPage = () => {
       </VStack>
       <MoreInfo />
       <AppFooter />
-    </PlatformLayout>
+    </>
   )
 }
 

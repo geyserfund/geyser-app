@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router'
 
 import { RocketLaunchIcon } from '@/components/icons/svg/RocketLaunch'
 import { CustomSelect } from '@/components/ui/CustomSelect'
-import PlatformLayout from '@/components/ui/PlatformLayout'
 import { useAuthContext } from '@/context'
 import { Body } from '@/shared/components/typography'
 import { DiamondUrl, getPath } from '@/shared/constants'
@@ -35,27 +34,25 @@ export const MyProjects = () => {
   }
 
   return (
-    <PlatformLayout>
-      <VStack spacing={6} align="stretch">
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Body fontSize="24px" bold width={{ base: '100%', lg: 'auto' }}>
-            {t('My Projects')}
-          </Body>
-          {!hasNoProjects && (
-            <CustomSelect
-              value={timePeriodOptions.find((option) => option.value === timePeriod)}
-              options={timePeriodOptions}
-              isSearchable={false}
-              onChange={handleTimePeriodChange}
-              dropdownIndicator={<PiCalendarDots />}
-              size="md"
-            />
-          )}
-        </Box>
-        {hasNoProjects && !isLoading && <LaunchNewProjectBanner />}
-        {projects && projects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
-      </VStack>
-    </PlatformLayout>
+    <VStack spacing={6} align="stretch">
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Body fontSize="24px" bold width={{ base: '100%', lg: 'auto' }}>
+          {t('My Projects')}
+        </Body>
+        {!hasNoProjects && (
+          <CustomSelect
+            value={timePeriodOptions.find((option) => option.value === timePeriod)}
+            options={timePeriodOptions}
+            isSearchable={false}
+            onChange={handleTimePeriodChange}
+            dropdownIndicator={<PiCalendarDots />}
+            size="md"
+          />
+        )}
+      </Box>
+      {hasNoProjects && !isLoading && <LaunchNewProjectBanner />}
+      {projects && projects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
+    </VStack>
   )
 }
 
