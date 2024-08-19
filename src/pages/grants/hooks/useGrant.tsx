@@ -8,15 +8,22 @@ type ResponseData = {
   grant: Grant
 }
 
+const GRANT_CUSTOM_URL_TO_ID_MAP = {
+  bcegrants: 8,
+  bitcoin2024: 10,
+  thailandbitcoinconference: 11,
+} as {
+  [key: string]: number
+}
+
 export const useGrant = (id?: string | number) => {
   const variables = useMemo(() => {
     if (!id) return undefined
-    if (id === 'bcegrants') {
-      return { variables: { input: { where: { id: 8 } } } }
-    }
 
-    if (id === 'bitcoin2024') {
-      return { variables: { input: { where: { id: 10 } } } }
+    const customUrlToIdMap = GRANT_CUSTOM_URL_TO_ID_MAP[`${id}`]
+
+    if (customUrlToIdMap) {
+      return { variables: { input: { where: { id: customUrlToIdMap } } } }
     }
 
     return { variables: { input: { where: { id } } } }
