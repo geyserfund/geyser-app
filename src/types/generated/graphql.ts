@@ -6004,6 +6004,7 @@ export type ProjectForProfilePageFragment = {
   shortDescription?: string | null
   createdAt: string
   status?: ProjectStatus | null
+  rewardsCount?: number | null
   wallets: Array<{
     __typename?: 'Wallet'
     id: any
@@ -8493,6 +8494,7 @@ export const ProjectForProfilePageFragmentDoc = gql`
     shortDescription
     createdAt
     status
+    rewardsCount
     wallets {
       id
       name

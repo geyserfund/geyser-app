@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Image } from '@chakra-ui/react'
+import { Box, Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { BsArrowUpRight } from 'react-icons/bs'
 import { Link as RouterLink } from 'react-router-dom'
@@ -6,6 +6,7 @@ import { Link as RouterLink } from 'react-router-dom'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { ProjectForProfilePageFragment } from '@/types'
+import { useMobileMode } from '@/utils'
 
 import Contributions from './Contributions'
 import Rewards from './Rewards'
@@ -14,8 +15,14 @@ interface ProjectCardProps {
   project: ProjectForProfilePageFragment
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
+const ProjectCard = ({ project }: ProjectCardProps) => {
   const { t } = useTranslation()
+
+  const isMobile = useMobileMode()
+
+  const hasRewards = project.rewardsCount && project.rewardsCount > 0
+
+  const Direction = isMobile ? VStack : HStack
 
   return (
     <Box width="100%" py={4}>
@@ -40,15 +47,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           as={RouterLink}
           to={getPath('project', project.name)}
           size="md"
-          rightIcon={<BsArrowUpRight size={12} />}
+          rightIcon={isMobile ? undefined : <BsArrowUpRight size={12} />}
         >
-          {t('Dashboard')}
+          {isMobile ? <BsArrowUpRight size={12} /> : t('Dashboard')}
         </Button>
       </HStack>
-      <HStack minHeight="269px" mt={4} spacing={4} alignItems="stretch">
+      <Direction minHeight="269px" mt={4} spacing={4} alignItems="stretch">
         <Contributions projectId={project.id} projectName={project.name} />
-        <Rewards projectId={project.id} />
-      </HStack>
+        {hasRewards && <Rewards projectId={project.id} />}
+      </Direction>
     </Box>
   )
 }

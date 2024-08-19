@@ -341,3 +341,4 @@ export const NoContributionsReceivedUrl =
   'https://storage.googleapis.com/geyser-projects-media/images/NoContributionsReceived.png'
 
 export const NoRewardsSoldUrl = 'https://storage.googleapis.com/geyser-projects-media/images/no-reward-sold.png'
+export const DiamondUrl = 'https://storage.googleapis.com/geyser-projects-media/images/diamond.png'

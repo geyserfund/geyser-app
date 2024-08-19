@@ -12,13 +12,12 @@ interface RewardsProps {
 }
 
 const Rewards = ({ projectId }: RewardsProps) => {
-  const { rewards, totalRewardsCount, isLoading, error } = useRewards(projectId)
+  const { rewards, totalRewardsCount, isLoading } = useRewards(projectId)
 
   if (isLoading) return <RewardsSkeleton />
-  if (error) return <Box>Error: {error.message}</Box>
 
   return (
-    <Box borderWidth={1} borderRadius="lg" p={4} flex={1}>
+    <Box minHeight="269px" borderWidth={1} borderRadius="lg" p={4} flex={1}>
       <Header rewardsSold={totalRewardsCount} />
       <Divider my={4} />
       <RewardsList rewards={rewards} />

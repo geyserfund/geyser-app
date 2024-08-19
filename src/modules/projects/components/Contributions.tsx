@@ -44,6 +44,7 @@ const Contributions = ({ projectId, projectName }: ContributionsProps) => {
         alignItems="center"
         borderWidth={1}
         borderRadius="lg"
+        minHeight="269px"
         gap={2}
         p={4}
         flex={1}
@@ -66,7 +67,7 @@ const Contributions = ({ projectId, projectName }: ContributionsProps) => {
   }
 
   return (
-    <Box borderWidth={1} borderRadius="lg" p={4} flex={1}>
+    <Box minHeight="269px" borderWidth={1} borderRadius="lg" p={4} flex={1}>
       <Header total={total} totalUsd={totalUsd} noContributionsReceived={noContributionsReceived} noGoals={noGoals} />
       <Divider my={4} />
       <Goals goals={goals} noContributionsReceived={noContributionsReceived} />
