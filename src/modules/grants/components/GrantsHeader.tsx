@@ -87,7 +87,7 @@ const Callout = ({ onClose }: { onClose: () => void }) => {
   const { t } = useTranslation()
 
   return (
-    <Box position="relative" w="100%" borderRadius="6px">
+    <Box position="relative" w="100%">
       <Image
         src={GrantsPageBannerNoiseGifUrl}
         position="absolute"
@@ -98,16 +98,16 @@ const Callout = ({ onClose }: { onClose: () => void }) => {
         w="100%"
         h="100%"
         objectFit="cover"
-        opacity={0.2}
+        opacity={0.25}
         zIndex={1}
-        borderRadius="12px"
+        borderRadius="8px"
       />
       <VStack
         w="100%"
         spacing={0}
         border="1px solid"
         borderColor="neutralAlpha.6"
-        borderRadius="12px"
+        borderRadius="8px"
         bg={'primaryAlpha.10'}
         p={4}
       >

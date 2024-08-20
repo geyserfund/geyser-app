@@ -1,6 +1,7 @@
-import { Box, HStack, Skeleton, VStack } from '@chakra-ui/react'
+import { Box, HStack, Image, Skeleton, VStack } from '@chakra-ui/react'
 
 import { Body } from '@/shared/components/typography'
+import { GrantsPageBannerNoiseGifUrl } from '@/shared/constants'
 import { primaryColorsLight } from '@/styles/colors'
 import { useMobileMode } from '@/utils'
 
@@ -18,41 +19,63 @@ export const Banner = ({ title, items, loading, reverse = false }: BannerProps) 
   const Column = isMobile ? VStack : HStack
 
   return (
-    <Direction
-      width="full"
-      border="1px solid"
-      justifyContent="center"
-      borderColor="primaryAlpha.6"
-      bgGradient={`linear(to-r, ${primaryColorsLight[200]}, ${primaryColorsLight[50]})`}
-      p={4}
-      borderRadius="md"
-      height="130px"
-      maxHeight="130px"
-    >
-      <Box>
-        <Body fontSize={{ base: '16px', lg: '20px' }} color="primary1.12">
+    <Box position="relative" w="100%">
+      <Image
+        src={GrantsPageBannerNoiseGifUrl}
+        position="absolute"
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
+        w="100%"
+        h="100%"
+        objectFit="cover"
+        opacity={0.25}
+        zIndex={1}
+        borderRadius="8px"
+      />
+      <Direction
+        width="full"
+        border="1px solid"
+        justifyContent="center"
+        borderColor="primaryAlpha.6"
+        bgGradient={`linear(to-r, ${primaryColorsLight[200]}, ${primaryColorsLight[50]})`}
+        p={4}
+        borderRadius="8px"
+        height="130px"
+        maxHeight="130px"
+      >
+        <Body
+          fontSize={{ base: '18px', lg: '20px' }}
+          textAlign={{ base: 'left', lg: 'center' }}
+          color="primary1.12"
+          width="100%"
+        >
           {title}
         </Body>
-      </Box>
-      {items && (
-        <Column
-          w={{ base: '100%', lg: 'auto' }}
-          spacing={{ base: 2, lg: 6 }}
-          alignItems={{ base: 'flex-end', lg: 'center' }}
-        >
-          {items.map((item, index) => (
-            <BannerItem
-              key={index}
-              label={item.label}
-              value={item.value}
-              suffix={item.suffix}
-              loading={loading}
-              reverse={reverse}
-            />
-          ))}
-        </Column>
-      )}
-    </Direction>
+        <Box width="100%" justifyContent="center">
+          {items && (
+            <Column
+              w={{ base: '100%', lg: 'auto' }}
+              spacing={{ base: 2, lg: 6 }}
+              alignItems={{ base: 'flex-end', lg: 'center' }}
+              justifyContent="center"
+            >
+              {items.map((item, index) => (
+                <BannerItem
+                  key={index}
+                  label={item.label}
+                  value={item.value}
+                  suffix={item.suffix}
+                  loading={loading}
+                  reverse={reverse}
+                />
+              ))}
+            </Column>
+          )}
+        </Box>
+      </Direction>
+    </Box>
   )
 }
 
