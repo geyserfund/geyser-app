@@ -142,7 +142,7 @@ export const GrantPage = () => {
 
   const grantHasVoting = GrantHasVoting[grant.name]
   const isCompetitionVote = grant.type === GrantType.CommunityVote
-  const showCommunityVoting = grant.status !== GrantStatusEnum.ApplicationsOpen && applicants.length > 0
+  const showCommunityVoting = applicants.length > 0
   const showDistributionChart = grant.status !== GrantStatusEnum.ApplicationsOpen && grantHasVoting
   const showGrantApply = grant.status === GrantStatusEnum.ApplicationsOpen
   const showContributeToGrant = !isCompetitionVote && !NoContributionInGrant.includes(grant.name)
