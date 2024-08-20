@@ -5,7 +5,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
 import { RewardStatusLabel } from '@/shared/constants'
-import { standardPadding } from '@/styles'
+import { standardPadding } from '@/shared/styles'
 import { OrdersGetStatus } from '@/types'
 import { useNotification } from '@/utils'
 

@@ -6,7 +6,7 @@ import { PiQuestion } from 'react-icons/pi'
 import { Modal } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
-import { standardPadding } from '@/styles'
+import { standardPadding } from '@/shared/styles'
 
 import { DescriptionLinkWithIconComponent } from '../../../../components/molecules'
 import { TextArea, TextInputBox } from '../../../../components/ui'

@@ -23,7 +23,7 @@ import { PiCaretDown, PiCaretUp } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography'
 
-import { halfStandardPadding, standardPadding } from '../../../../../styles'
+import { halfStandardPadding, standardPadding } from '../../../../../shared/styles'
 import { OrderByDirection, OrderByOptions } from '../../../../../types'
 import { useMobileMode } from '../../../../../utils'
 

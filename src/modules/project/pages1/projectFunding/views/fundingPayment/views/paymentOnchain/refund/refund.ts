@@ -30,8 +30,6 @@ const refundTaproot = async (
   const tweakedKey = TaprootUtils.tweakMusig(musig, tree.tree)
   const swapOutput = detectSwap(tweakedKey, lockupTx)
 
-  console.log('checking swap output', lockupTx)
-
   const details = [
     {
       ...swapOutput,

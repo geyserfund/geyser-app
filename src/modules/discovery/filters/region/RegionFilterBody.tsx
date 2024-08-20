@@ -1,47 +1,23 @@
-import { Box, Divider, useDisclosure, VStack } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
-import { SingleValue } from 'react-select'
+import { Box, Divider, Radio, RadioGroup, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
+import { useMemo } from 'react'
 
-import { SelectComponent } from '../../../../components/ui'
-import { useFilterContext } from '../../../../context'
-import { Country, ProjectCountriesGetResult, ProjectRegionsGetResult } from '../../../../types'
-import { RenderCountries, RenderRegions } from '../components'
+import { useFilterContext } from '@/context/filter'
+import { Body } from '@/shared/components/typography'
+import { standardPadding } from '@/shared/styles'
+
+import { ProjectCountriesGetResult, ProjectRegionsGetResult } from '../../../../types'
 
 interface RegionFilterBodyProps {
   regions: ProjectRegionsGetResult[]
   countries: ProjectCountriesGetResult[]
-  options: Country[]
-  onClose: () => void
+  onClose?: () => void
+  searchCode?: string
 }
 
-export const RegionFilterBody = ({ regions, countries, options, onClose }: RegionFilterBodyProps) => {
-  const { t } = useTranslation()
+export const RegionFilterBody = ({ regions, countries, searchCode, onClose }: RegionFilterBodyProps) => {
   const { filters, updateFilter } = useFilterContext()
   const { countryCode, region } = filters
-
-  const { isOpen: selectMenuOpen, onOpen: onSelectMenuOpen, onClose: onSelectMenuClose } = useDisclosure()
-
-  const handleRegionSelect = (option: SingleValue<Country>) => {
-    if (!option) {
-      return
-    }
-
-    if (option.code === option.name) {
-      updateFilter({ countryCode: undefined, region: option.code })
-    } else {
-      updateFilter({ countryCode: option.code, region: undefined })
-    }
-
-    onClose()
-  }
-
-  const handleInputChange = (newValue: string) => {
-    if (newValue?.length >= 1) {
-      onSelectMenuOpen()
-    } else {
-      onSelectMenuClose()
-    }
-  }
 
   const handleRegionClick = (selectedRegion: string) => {
     if (selectedRegion === region) {
@@ -50,7 +26,9 @@ export const RegionFilterBody = ({ regions, countries, options, onClose }: Regio
       updateFilter({ countryCode: undefined, region: selectedRegion })
     }
 
-    onClose()
+    if (onClose) {
+      onClose()
+    }
   }
 
   const handleCountryClick = (selectedCountryCode: string) => {
@@ -60,39 +38,84 @@ export const RegionFilterBody = ({ regions, countries, options, onClose }: Regio
       updateFilter({ countryCode: selectedCountryCode, region: undefined })
     }
 
-    onClose()
+    if (onClose) {
+      onClose()
+    }
   }
 
-  const currentCountry = countries.find((country) => country.country.code === countryCode)
+  const value = countryCode ? countryCode : region
 
-  const value = currentCountry
-    ? currentCountry.country
-    : region
-    ? ({ name: region, code: region } as Country)
-    : undefined
+  const handleClick = (value: string) => {
+    if (value.length === 2) {
+      handleCountryClick(value)
+    } else {
+      handleRegionClick(value)
+    }
+  }
+
+  const countriesToRender = useMemo(() => {
+    const usedCountries = countries.filter((country) => country.count > 0)
+    if (searchCode) {
+      return usedCountries.filter(
+        (country) =>
+          country.country.name.toLowerCase().includes(searchCode.toLowerCase()) || countryCode === country.country.code,
+      )
+    }
+
+    return usedCountries
+  }, [countries, countryCode, searchCode])
+
+  const regionsToRender = useMemo(() => {
+    const usedRegions = regions.filter((reg) => reg.count > 0)
+    if (searchCode) {
+      return usedRegions.filter(
+        (reg) => reg.region.toLowerCase().includes(searchCode.toLowerCase()) || region === reg.region,
+      )
+    }
+
+    return usedRegions
+  }, [regions, region, searchCode])
 
   return (
-    <>
-      <Box width="100%" paddingX="24px">
-        <SelectComponent<Country, false>
-          menuIsOpen={selectMenuOpen}
-          onBlur={onSelectMenuClose}
-          options={options}
-          value={value}
-          getOptionLabel={(option) => option.name}
-          onChange={handleRegionSelect}
-          onInputChange={handleInputChange}
-          placeholder={t('Find country or region')}
-        />
-      </Box>
+    <Box width="100%" overflowY="auto" paddingX={standardPadding}>
+      <RadioGroup onChange={handleClick} value={value}>
+        <VStack w="full" alignItems="start">
+          <Radio value={''}>
+            <Body>{t('Worldwide')}</Body>
+          </Radio>
+          {regionsToRender.map((reg) => {
+            return (
+              <Radio key={reg.region} value={reg.region}>
+                <Body>
+                  {`${reg.region} `}
+                  <Body as="span" size="sm" light>
+                    {`(x${reg.count})`}
+                  </Body>
+                </Body>
+              </Radio>
+            )
+          })}
 
-      <Box width="100%" overflowY="auto">
-        <VStack width="100%" alignItems="start" spacing="5px" paddingX="24px">
-          <RenderRegions region={region} regions={regions} handleClick={handleRegionClick} />
-          <Divider />
-          <RenderCountries countries={countries} countryCode={countryCode} handleClick={handleCountryClick} />
+          {countriesToRender.length > 0 && regionsToRender.length > 0 && <Divider />}
+
+          {countriesToRender.map((country) => {
+            const {
+              count,
+              country: { code, name },
+            } = country
+            return (
+              <Radio key={code} value={code}>
+                <Body>
+                  {`${name} `}
+                  <Body as="span" size="sm" light>
+                    {`(x${count})`}
+                  </Body>
+                </Body>
+              </Radio>
+            )
+          })}
         </VStack>
-      </Box>
-    </>
+      </RadioGroup>
+    </Box>
   )
 }

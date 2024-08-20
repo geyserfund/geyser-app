@@ -6,6 +6,7 @@ import { Location, useLocation, useNavigate } from 'react-router-dom'
 import { FilterComponent } from '@/modules/discovery/filters/FilterComponent'
 import { EmailPromptModal } from '@/pages/auth/components/EmailPromptModal'
 import { useEmailPromptModal } from '@/pages/auth/hooks/useEmailPromptModal'
+import { discoveryPageCommonLayoutStyles } from '@/shared/styles/discoveryPageLayout'
 
 import { AuthModal } from '../../../components/molecules'
 import { useAuthContext } from '../../../context'
@@ -82,13 +83,7 @@ export const TopNavBar = () => {
       w="full"
       position="fixed"
       top={0}
-      {...(!isProjectPage && {
-        paddingLeft: {
-          base: 0,
-          lg: dimensions.discovery.sideNav.tablet.width,
-          '2xl': dimensions.discovery.sideNav.desktop.width,
-        },
-      })}
+      {...(!isProjectPage && discoveryPageCommonLayoutStyles)}
       justifyContent={'center'}
       zIndex={9}
     >

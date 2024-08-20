@@ -1,6 +1,6 @@
 import { PropsWithChildren, ReactNode } from 'react'
 
-import { fonts } from '../../../styles'
+import { fonts } from '../../../shared/styles'
 import { ListText } from './ListText'
 
 export const WidgetItem = ({

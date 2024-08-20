@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { Caption, H3 } from '../../../../components/typography'
 import { CardLayout } from '../../../../shared/components/layouts'
 import { getPath } from '../../../../shared/constants'
-import { standardPadding } from '../../../../styles'
+import { standardPadding } from '../../../../shared/styles'
 import { GrantApplicant, VotingSystem } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
 

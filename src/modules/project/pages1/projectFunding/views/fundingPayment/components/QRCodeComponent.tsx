@@ -2,7 +2,7 @@ import { Box, useBreakpointValue } from '@chakra-ui/react'
 import { QRCode } from 'react-qrcode-logo'
 
 import { LogoDark } from '../../../../../../../assets'
-import { lightModeColors } from '../../../../../../../styles'
+import { lightModeColors } from '../../../../../../../shared/styles'
 
 type QRCodeComponentProps = {
   value: string

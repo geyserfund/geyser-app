@@ -11,7 +11,7 @@ import { Quill } from 'react-quill'
 import { AppTheme } from '../../../../../../../context'
 import { ID } from '../../../../../../../shared/constants'
 import { getSignedUploadAPI } from '../../../../../../../shared/hooks'
-import { fonts } from '../../../../../../../styles'
+import { fonts } from '../../../../../../../shared/styles'
 import { useCustomTheme, useMobileMode, useNotification } from '../../../../../../../utils'
 
 type Rules = string

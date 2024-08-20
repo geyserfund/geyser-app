@@ -3,7 +3,7 @@ import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
 
 import { ProjectState } from '@/modules/project/state/projectAtom'
-import { lightModeColors } from '@/styles'
+import { lightModeColors } from '@/shared/styles'
 
 const styles = StyleSheet.create({
   page: {

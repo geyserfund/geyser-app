@@ -6,7 +6,7 @@ import { useRegisterSW } from 'virtual:pwa-register/react'
 
 import { Body1 } from '../components/typography'
 import { __production__ } from '../shared/constants'
-import { lightModeColors } from '../styles'
+import { lightModeColors } from '../shared/styles'
 
 const defaultContext: ServiceWorkerUpdateProps = {
   needRefresh: false,

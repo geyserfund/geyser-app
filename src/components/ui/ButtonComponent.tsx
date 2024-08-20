@@ -5,8 +5,8 @@ import { forwardRef } from 'react'
 import { createUseStyles } from 'react-jss'
 
 import { AppTheme } from '../../context'
-import { lightModeColors } from '../../styles'
-import { buttonCommon } from '../../styles/common'
+import { lightModeColors } from '../../shared/styles'
+import { buttonCommon } from '../../shared/styles/common'
 
 interface IButtonComponentP extends ButtonProps {
   className?: string

@@ -1,11 +1,11 @@
 import { IconProps } from '@chakra-ui/react'
 
+import { useFilterContext } from '@/context/filter'
+
 import { ProjectNavIcon, RewardGiftIcon } from '../../../../components/icons'
-import { useFilterContext } from '../../../../context'
 import { projectTypes } from '../../../../shared/constants'
 import { ProjectStatus, ProjectType } from '../../../../types'
-import { DesktopStatusFilter } from './DesktopStatusFilter'
-import { MobileStatusFilter } from './MobileStatusFilter'
+import { StatusFilterBody } from './StatusFilterBody'
 
 interface FilterByStatusProps {
   mobile?: boolean
@@ -23,13 +23,9 @@ export const FilterByStatus = ({ mobile }: FilterByStatusProps) => {
     type: filters.type,
   })
 
-  if (mobile) {
-    return <MobileStatusFilter {...{ button }} />
-  }
-
   return (
     <>
-      <DesktopStatusFilter {...{ button }} />
+      <StatusFilterBody button={button} />
     </>
   )
 }
@@ -45,7 +41,7 @@ export const getStatusTypeButtonContent = ({ status, type }: StatusAndType): Sta
     return {
       icon: RewardGiftIcon,
       text: 'Projects with perks',
-      color: 'neutral.900',
+      color: 'neutral1.11',
     }
   }
 
@@ -54,13 +50,13 @@ export const getStatusTypeButtonContent = ({ status, type }: StatusAndType): Sta
       return {
         icon: ProjectNavIcon,
         text: 'Inactive Projects',
-        color: 'neutral.600',
+        color: 'neutral1.11',
       }
     default:
       return {
         icon: ProjectNavIcon,
         text: 'Active Projects',
-        color: 'primary.500',
+        color: 'primary1.11',
       }
   }
 }

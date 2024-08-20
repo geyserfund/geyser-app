@@ -2,7 +2,7 @@ import { Box, VStack } from '@chakra-ui/react'
 import { Outlet } from 'react-router-dom'
 
 import { Head } from '@/config/Head'
-import { standardPadding } from '@/styles'
+import { standardPadding } from '@/shared/styles'
 
 import { dimensions } from '../../../../shared/constants'
 import { useProjectAtom } from '../../hooks/useProjectAtom'

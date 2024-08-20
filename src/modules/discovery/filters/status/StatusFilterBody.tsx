@@ -1,13 +1,13 @@
 import { Button, StackProps, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { Body1 } from '../../../../components/typography'
-import { useFilterContext } from '../../../../context'
+import { useFilterContext } from '@/context/filter'
+
 import { ProjectStatus, ProjectType } from '../../../../types'
 import { getStatusTypeButtonContent, StatusTypeButton } from '.'
 
 interface StatusFilterBodyProps extends StackProps {
-  onClose: () => void
+  onClose?: () => void
   button: StatusTypeButton
 }
 
@@ -27,7 +27,9 @@ export const StatusFilterBody = ({ onClose, button, ...rest }: StatusFilterBodyP
       updateFilter({ status, type: undefined })
     }
 
-    onClose()
+    if (onClose) {
+      onClose()
+    }
   }
 
   const options = [{ type: ProjectType.Reward }, { status: ProjectStatus.Active }, { status: ProjectStatus.Inactive }]
@@ -41,17 +43,16 @@ export const StatusFilterBody = ({ onClose, button, ...rest }: StatusFilterBodyP
         return (
           <Button
             key={index}
-            background={isActive ? 'neutral.100' : 'neutral.0'}
-            color="neutral.800"
+            size="lg"
+            variant={'surface'}
+            colorScheme={isActive ? 'primary1' : 'neutral1'}
             onClick={() => handleClick(option)}
             w="100%"
             display="flex"
             justifyContent="start"
+            leftIcon={<Icon color={color} />}
           >
-            <Icon color={color} />
-            <Body1 ml="10px" color={'neutral.900'}>
-              {t(text)}
-            </Body1>
+            {t(text)}
           </Button>
         )
       })}

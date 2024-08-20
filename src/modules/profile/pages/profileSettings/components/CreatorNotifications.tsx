@@ -134,8 +134,6 @@ export const CreatorNotifications = ({
     }
   }
 
-  console.log(settings)
-
   return (
     <VStack spacing={6} align="stretch" width="100%">
       <Body size="md" medium>

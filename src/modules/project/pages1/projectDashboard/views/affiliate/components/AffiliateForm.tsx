@@ -13,7 +13,7 @@ import { Body } from '@/shared/components/typography'
 
 import Loader from '../../../../../../../components/ui/Loader'
 import { useDebounce } from '../../../../../../../shared/hooks'
-import { lightModeColors } from '../../../../../../../styles'
+import { lightModeColors } from '../../../../../../../shared/styles'
 import { ProjectAffiliateLinkFragment, useLightningAddressVerifyLazyQuery } from '../../../../../../../types'
 import { useNotification } from '../../../../../../../utils'
 
@@ -169,8 +169,6 @@ export const AffiliateForm = ({ isEdit, affiliate, onCompleted }: AffiliateFormP
       return <BsFillXCircleFill fill={lightModeColors.secondary.red} size="24px" />
     }
   }
-
-  console.log('formstate errors', formState.errors.lightningAddress)
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

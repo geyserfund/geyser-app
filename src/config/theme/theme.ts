@@ -1,6 +1,6 @@
 import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
 
-import { fonts, lightModeColors } from '../../styles'
+import { fonts, lightModeColors } from '../../shared/styles'
 import {
   alertTheme,
   badgeTheme,
@@ -27,6 +27,9 @@ export const theme = {
     lg: '57em', // Desktop ~900px
     xl: '80em', // 1280px
     '2xl': '96em', // 1536px
+    '3xl': '100em', // 1600px
+    '4xl': '110em', // 1760px
+    '5xl': '120em', // 1920px
   },
   fonts: {
     heading: fonts.brand,
@@ -99,46 +102,53 @@ export const theme = {
     },
     Checkbox: {
       variants: {
-        primary: ({ colorScheme = 'primary' }: StyleFunctionProps) => ({
-          color: `${colorScheme}.400`,
+        primary: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
           control: {
             _checked: {
-              color: `${colorScheme}.400`,
+              color: `utils.blackContrast`,
+              backgroundColor: `${colorScheme}.9`,
+              borderColor: `${colorScheme}.9`,
+            },
+            _focus: {
+              ring: 1,
+              ringColor: `${colorScheme}.9`,
+              borderColor: `${colorScheme}.9`,
             },
           },
         }),
       },
       defaultProps: {
         variant: 'primary',
-        colorScheme: 'primary',
+        colorScheme: 'primary1',
       },
     },
     Radio: {
       variants: {
-        primary: ({ colorScheme = 'primary' }: StyleFunctionProps) => ({
-          color: `${colorScheme}.400`,
+        primary: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
           control: {
             _checked: {
-              color: `${colorScheme}.400`,
+              borderColor: `${colorScheme}.9`,
+              backgroundColor: `${colorScheme}.9`,
+              color: `utils.blackContrast`,
               _before: {
-                width: '90%',
-                height: '90%',
+                width: '50%',
+                height: '50%',
               },
             },
             _before: {
-              width: '90%',
-              height: '90%',
+              width: '50%',
+              height: '50%',
             },
             _focus: {
-              ring: 2,
-              ringColor: `${colorScheme}.500`,
+              ring: 1,
+              ringColor: `${colorScheme}.9`,
             },
           },
         }),
       },
       defaultProps: {
         variant: 'primary',
-        colorScheme: 'primary',
+        colorScheme: 'primary1',
       },
     },
     Alert: alertTheme,
