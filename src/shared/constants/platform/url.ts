@@ -247,6 +247,9 @@ export const Grant2AnnouncementImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/grant-2-announcement.png'
 export const Grant2AnnouncementTwitterUrl = 'https://twitter.com/geyserfund/status/1628842072802312193?s=20'
 
+export const GrantsPageBannerNoiseGifUrl =
+  'https://storage.googleapis.com/geyser-projects-media/gifs/GrantsPageBannerNoise.gif'
+
 // PLATFORMS
 
 export const VoltageUrl = 'https://storage.googleapis.com/geyser-projects-media/platform/voltage.png'

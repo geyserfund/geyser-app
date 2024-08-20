@@ -1,5 +1,7 @@
 import { useQuery } from '@apollo/client'
-import { Button, HStack, VStack } from '@chakra-ui/react'
+import { CloseIcon } from '@chakra-ui/icons'
+import { Box, Button, HStack, IconButton, Image, VStack } from '@chakra-ui/react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
@@ -7,7 +9,8 @@ import { DonateIcon } from '@/components/icons/svg/DonateIcon'
 import { TrophyIcon } from '@/components/icons/svg/TrophyIcon'
 import { QUERY_GRANT_STATISTICS } from '@/graphqlBase/queries/grant'
 import { Banner } from '@/shared/components/display/Banner'
-import { getPath } from '@/shared/constants'
+import { Body } from '@/shared/components/typography'
+import { getPath, GrantsPageBannerNoiseGifUrl } from '@/shared/constants'
 import { GrantStatistics } from '@/types'
 import { getShortAmountLabel, useMobileMode } from '@/utils'
 
@@ -20,6 +23,8 @@ const GrantsHeader = () => {
   const navigate = useNavigate()
 
   const isMobile = useMobileMode()
+
+  const [isCalloutOpen, setIsCalloutOpen] = useState(true)
 
   const { data, loading } = useQuery<{ grantStatistics: GrantStatistics }>(QUERY_GRANT_STATISTICS)
 
@@ -48,6 +53,7 @@ const GrantsHeader = () => {
 
   return (
     <VStack spacing={4} w="100%" alignItems="center">
+      {isCalloutOpen && <Callout onClose={() => setIsCalloutOpen(false)} />}
       <Banner title={t('Geyser Grants - empowering bitcoin creators!')} items={items} loading={loading} reverse />
       <Direction
         justifyContent="space-between"
@@ -76,3 +82,69 @@ const GrantsHeader = () => {
 }
 
 export default GrantsHeader
+
+const Callout = ({ onClose }: { onClose: () => void }) => {
+  const { t } = useTranslation()
+
+  return (
+    <Box position="relative" w="100%" borderRadius="6px">
+      <Image
+        src={GrantsPageBannerNoiseGifUrl}
+        position="absolute"
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
+        w="100%"
+        h="100%"
+        objectFit="cover"
+        opacity={0.2}
+        zIndex={1}
+        borderRadius="12px"
+      />
+      <VStack
+        w="100%"
+        spacing={0}
+        border="1px solid"
+        borderColor="neutralAlpha.6"
+        borderRadius="12px"
+        bg={'primaryAlpha.10'}
+        p={4}
+      >
+        <IconButton
+          borderRadius="md"
+          border="1px solid"
+          borderColor="primaryAlpha.8"
+          position="absolute"
+          top={3}
+          right={3}
+          variant="ghost"
+          aria-label="close"
+          zIndex={2}
+          icon={<CloseIcon width={'12px'} height={'12px'} />}
+          color="primaryAlpha.11"
+          _hover={{
+            bg: 'transparent',
+            borderColor: 'primaryAlpha.12',
+            color: 'primaryAlpha.12',
+          }}
+          onClick={onClose}
+        />
+        <Body fontSize={{ base: '28px', lg: '36px' }} bold zIndex={2}>
+          {t('Geyser Grants')}
+        </Body>
+        <Body fontSize={{ base: '20px', lg: '28px' }} medium zIndex={2}>
+          {t('Empowering bitcoin creators!')}
+        </Body>
+        <VStack spacing={0}>
+          <Body fontSize={{ base: '16px', lg: '20px' }} regular zIndex={2}>
+            {t('Funding educators, creatives and builders doing Bitcoin-only projects on Geyser.')}
+          </Body>
+          <Body fontSize={{ base: '16px', lg: '20px' }} regular zIndex={2}>
+            {t('Funded by bitcoiners who want to change the world.')}
+          </Body>
+        </VStack>
+      </VStack>
+    </Box>
+  )
+}
