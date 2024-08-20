@@ -41,7 +41,9 @@ export const useProjectGoalsAPI = (load?: boolean) => {
   const [queryInProgressGoals, queryInProgressGoalsOptions] = useProjectInProgressGoalsLazyQuery({
     fetchPolicy: 'network-only',
     variables: {
-      projectId: project.id,
+      input: {
+        projectId: project.id,
+      },
     },
     onCompleted(data) {
       const inProgressGoals = data?.projectGoals.inProgress || []
@@ -53,7 +55,9 @@ export const useProjectGoalsAPI = (load?: boolean) => {
   const [queryCompletedGoals, queryCompletedGoalsOptions] = useProjectCompletedGoalsLazyQuery({
     fetchPolicy: 'cache-first',
     variables: {
-      projectId: project.id,
+      input: {
+        projectId: project.id,
+      },
     },
     onCompleted(data) {
       const completedGoals = data?.projectGoals.completed || []

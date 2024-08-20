@@ -30,7 +30,7 @@ import {
   VoltageExplainerPageForGeyserURL,
   VoltageUrl,
 } from '../../../shared/constants'
-import { lightModeColors } from '../../../styles'
+import { lightModeColors } from '../../../shared/styles'
 import { LndNodeType } from '../../../types'
 import { ProjectFeeSelection } from '../components/ProjectFeeSelection'
 import { WalletConnectionDetails } from '../components/WalletConnectionDetails'

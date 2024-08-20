@@ -14,7 +14,7 @@ import {
 import { ReactNode } from 'react'
 import { PiX } from 'react-icons/pi'
 
-import { standardPadding } from '@/styles'
+import { standardPadding } from '@/shared/styles'
 
 export interface CustomModalProps extends ModalProps {
   title?: ReactNode

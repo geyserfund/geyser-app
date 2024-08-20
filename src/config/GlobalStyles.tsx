@@ -1,6 +1,6 @@
 import { Global } from '@emotion/react'
 
-import { darkModeColors, lightModeColors } from '../styles'
+import { darkModeColors, lightModeColors } from '../shared/styles'
 
 const GlobalStyles = () => (
   <Global
@@ -20,6 +20,7 @@ const GlobalStyles = () => (
 
         ::-webkit-scrollbar {
           width: 4px;
+          height: 4px;
         }
 
         .chakra-ui-light ::-webkit-scrollbar-track {

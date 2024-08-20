@@ -4,7 +4,7 @@ import { QRCode } from 'react-qrcode-logo'
 
 import { Body } from '@/shared/components/typography'
 
-import { lightModeColors } from '../../../../../../../../../../styles'
+import { lightModeColors } from '../../../../../../../../../../shared/styles'
 
 interface Props {
   bannerImage: string

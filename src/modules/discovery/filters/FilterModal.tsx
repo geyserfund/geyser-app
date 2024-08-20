@@ -5,7 +5,7 @@ import { useFilterContext } from '@/context/filter'
 import { Modal } from '@/shared/components/layouts'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
-import { standardPadding } from '@/styles'
+import { standardPadding } from '@/shared/styles'
 
 import { FilterByRegion } from './region'
 import { FilterByStatus } from './status'

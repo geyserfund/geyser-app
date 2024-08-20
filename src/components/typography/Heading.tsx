@@ -1,6 +1,6 @@
 import { Heading, HeadingProps } from '@chakra-ui/react'
 
-import { fonts } from '../../styles'
+import { fonts } from '../../shared/styles'
 
 export const H1 = ({ children, ...rest }: HeadingProps) => {
   return (

@@ -1,11 +1,6 @@
 import { gql } from '@apollo/client'
 
-import {
-  FRAGMENT_PROJECT,
-  FRAGMENT_PROJECT_FOR_LANDING_PAGE,
-  FRAGMENT_PROJECT_FOR_SUBSCRIPTION,
-  FRAGMENT_PROJECT_NOSTR_KEYS,
-} from '../fragments/project'
+import { FRAGMENT_PROJECT, FRAGMENT_PROJECT_FOR_SUBSCRIPTION, FRAGMENT_PROJECT_NOSTR_KEYS } from '../fragments/project'
 import { FRAGMENT_FUNDER_WITH_USER } from '../fragments/user'
 
 export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
@@ -104,36 +99,6 @@ export const QUERY_PROJECT_FUNDERS = gql`
   query ProjectFunders($input: GetFundersInput!) {
     fundersGet(input: $input) {
       ...FunderWithUser
-    }
-  }
-`
-
-export const QUERY_PROJECTS_MOST_FUNDED_OF_THE_WEEK = gql`
-  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
-  query ProjectsMostFundedOfTheWeekGet($input: GetProjectsMostFundedOfTheWeekInput) {
-    projectsMostFundedOfTheWeekGet(input: $input) {
-      project {
-        ...ProjectForLandingPage
-      }
-    }
-  }
-`
-
-export const QUERY_PROJECTS_FOR_LANDING_PAGE = gql`
-  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
-  query ProjectsForLandingPage($input: ProjectsGetQueryInput) {
-    projectsGet(input: $input) {
-      projects {
-        ...ProjectForLandingPage
-      }
-    }
-  }
-`
-export const QUERY_FEATURED_PROJECT_FOR_LANDING_PAGE = gql`
-  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
-  query FeaturedProjectForLandingPage($where: UniqueProjectQueryInput!) {
-    projectGet(where: $where) {
-      ...ProjectForLandingPage
     }
   }
 `

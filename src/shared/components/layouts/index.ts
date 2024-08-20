@@ -1,8 +1,11 @@
+export type { LandingCardBaseProps } from '../../../modules/discovery/pages/landing/components/LandingCardBase'
+export {
+  LandingCardBase,
+  LandingCardBaseSkeleton,
+} from '../../../modules/discovery/pages/landing/components/LandingCardBase'
 export type { CardLayoutProps } from './CardLayout'
 export { CardLayout } from './CardLayout'
 export { CardsStackLayout } from './CardsStackLayout'
-export type { LandingCardBaseProps } from './LandingCardBase'
-export { LandingCardBase, LandingCardBaseSkeleton } from './LandingCardBase'
 export type { CustomModalProps } from './Modal'
 export { Modal } from './Modal'
 export { PageLayout } from './PageLayout'

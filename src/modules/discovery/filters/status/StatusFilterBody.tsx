@@ -34,8 +34,6 @@ export const StatusFilterBody = ({ onClose, button, ...rest }: StatusFilterBodyP
 
   const options = [{ type: ProjectType.Reward }, { status: ProjectStatus.Active }, { status: ProjectStatus.Inactive }]
 
-  console.log('checking filters', filters)
-
   return (
     <VStack width="100%" alignItems="start" spacing="20px" paddingX="30px" {...rest}>
       {options.map((option, index) => {

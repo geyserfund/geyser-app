@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
 
 import { dimensions } from '@/shared/constants'
-import { standardPadding } from '@/styles'
+import { standardPadding } from '@/shared/styles'
 
 import { CardLayout } from '../../../../shared/components/layouts'
 import { toInt, useMobileMode } from '../../../../utils'

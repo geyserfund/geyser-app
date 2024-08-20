@@ -2,7 +2,7 @@ import { Box, Checkbox, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 
 import { useFilterContext } from '@/context/filter'
-import { standardPadding } from '@/styles'
+import { standardPadding } from '@/shared/styles'
 
 import { TagsGetResult } from '../../../../types'
 
@@ -28,14 +28,12 @@ export const TagsFilterBody = ({ allTags, handleTagsClick, searchCode }: TagsFil
     return usedTags
   }, [allTags, searchCode, tagIds])
 
-  console.log('checkign tags Ids', tagIds)
-
   return (
     <Box width="100%" overflowY="auto">
       <VStack width="100%" paddingX={standardPadding} alignItems="start">
         {tagsToRender.map((tag) => {
           const isChecked = tagIds.includes(tag.id)
-          console.log('checkign tags Ids', tagIds, isChecked)
+
           return (
             <Checkbox value={tag.id} key={tag.id} isChecked={isChecked} onChange={() => handleTagsClick(tag)}>
               {tag.label}

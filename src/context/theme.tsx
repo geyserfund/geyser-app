@@ -4,7 +4,7 @@ import { ThemeProvider as ReactJSSThemeProvider } from 'react-jss'
 
 import { theme } from '@/config/theme'
 
-import { darkModeColors, lightModeColors } from '../styles'
+import { darkModeColors, lightModeColors } from '../shared/styles'
 import { UserSetColorMode } from '../utils'
 import { useThemeDetector } from '../utils/hooks'
 

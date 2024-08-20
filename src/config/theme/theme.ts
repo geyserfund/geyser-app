@@ -1,6 +1,6 @@
 import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
 
-import { fonts, lightModeColors } from '../../styles'
+import { fonts, lightModeColors } from '../../shared/styles'
 import {
   alertTheme,
   badgeTheme,
@@ -27,6 +27,9 @@ export const theme = {
     lg: '57em', // Desktop ~900px
     xl: '80em', // 1280px
     '2xl': '96em', // 1536px
+    '3xl': '100em', // 1600px
+    '4xl': '110em', // 1760px
+    '5xl': '120em', // 1920px
   },
   fonts: {
     heading: fonts.brand,

@@ -6,7 +6,7 @@ import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigati
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { H1 } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants'
-import { standardPadding } from '@/styles'
+import { standardPadding } from '@/shared/styles'
 import { useMobileMode } from '@/utils'
 
 import { Contributions, Leaderboard } from './views'

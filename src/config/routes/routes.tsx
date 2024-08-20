@@ -546,7 +546,7 @@ export const platformRoutes: RouteObject[] = [
   {
     path: getPath('discoveryLanding'),
     async lazy() {
-      const Platform = await Discovery().then((m) => m.Platform)
+      const Platform = await Discovery().then((m) => m.Discovery)
       return { Component: Platform }
     },
     children: [

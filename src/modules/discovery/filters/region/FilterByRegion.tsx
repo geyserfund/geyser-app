@@ -1,14 +1,17 @@
-import { useQuery } from '@apollo/client'
 import { Skeleton } from '@chakra-ui/react'
 import { Box, IconButton, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
 import { PiX } from 'react-icons/pi'
 
-import { standardPadding } from '@/styles'
+import { standardPadding } from '@/shared/styles'
 
-import { QUERY_COUNTRIES, QUERY_REGION } from '../../../../graphqlBase/queries'
-import { ProjectCountriesGetResult, ProjectRegionsGetResult } from '../../../../types'
+import {
+  ProjectCountriesGetResult,
+  ProjectRegionsGetResult,
+  useProjectCountriesGetQuery,
+  useProjectRegionsGetQuery,
+} from '../../../../types'
 import { RegionFilterBody } from './RegionFilterBody'
 
 interface FilterByRegionProps {
@@ -21,9 +24,7 @@ export const FilterByRegion = ({ onClose }: FilterByRegionProps) => {
   const [countries, setCountries] = useState<ProjectCountriesGetResult[]>([])
   const [regions, setRegions] = useState<ProjectRegionsGetResult[]>([])
 
-  const { loading: countriesLoading } = useQuery<{
-    projectCountriesGet: ProjectCountriesGetResult[]
-  }>(QUERY_COUNTRIES, {
+  const { loading: countriesLoading } = useProjectCountriesGetQuery({
     onCompleted(data) {
       if (data.projectCountriesGet) {
         const sortedCountries = [...data.projectCountriesGet].sort((a, b) => b.count - a.count)
@@ -32,9 +33,7 @@ export const FilterByRegion = ({ onClose }: FilterByRegionProps) => {
     },
   })
 
-  const { loading: regionsLoading } = useQuery<{
-    projectRegionsGet: ProjectRegionsGetResult[]
-  }>(QUERY_REGION, {
+  const { loading: regionsLoading } = useProjectRegionsGetQuery({
     onCompleted(data) {
       if (data.projectRegionsGet) {
         const sortedRegions = [...data.projectRegionsGet].sort((a, b) => b.count - a.count)

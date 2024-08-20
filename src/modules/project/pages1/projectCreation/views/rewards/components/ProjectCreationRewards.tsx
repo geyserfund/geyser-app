@@ -10,7 +10,6 @@ import { RewardCard } from '../../../../projectView/views/rewards/shared'
 export const ProjectCreationRewards = () => {
   const { project } = useProjectAtom()
   const { rewards } = useRewardsAtom()
-  console.log('did if get till here', rewards)
 
   if (!project || !isActive || !rewards || rewards.length === 0) {
     return null

@@ -1,10 +1,10 @@
 import { Box, Divider, Radio, RadioGroup, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
 import { useFilterContext } from '@/context/filter'
 import { Body } from '@/shared/components/typography'
-import { standardPadding } from '@/styles'
+import { standardPadding } from '@/shared/styles'
 
 import { ProjectCountriesGetResult, ProjectRegionsGetResult } from '../../../../types'
 

@@ -8,7 +8,7 @@ import { Body1, Caption, H2, H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { CardLayout } from '../../../../shared/components/layouts'
 import { getPath } from '../../../../shared/constants'
-import { neutralColorsLight } from '../../../../styles'
+import { neutralColorsLight } from '../../../../shared/styles'
 import { GrantApplicant } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 

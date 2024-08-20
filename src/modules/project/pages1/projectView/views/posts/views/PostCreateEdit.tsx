@@ -159,8 +159,6 @@ export const PostCreateEdit = () => {
   const postUrl = postId ? getPath('projectPostView', project.name, postId) : ''
 
   const handleBackClick = () => {
-    console.log('checking if isDirty', isDirty)
-
     const pathToGo = isEntryPublished
       ? postUrl
       : hasEntries

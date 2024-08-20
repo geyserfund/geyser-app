@@ -8,7 +8,6 @@ const FUNDING_COMMENT = 'This was the test comment'
 
 describe('When fund mutation fails', () => {
   beforeEach(() => {
-    console.log('chekcing geyser url', GEYSER_URL)
     cy.log('chekcing geyser url', GEYSER_URL)
     cy.visit(`${GEYSER_URL}/project/${LND_TEST_PROJECT_NAME}`)
   })

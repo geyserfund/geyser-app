@@ -1,14 +1,12 @@
-import { useQuery } from '@apollo/client'
 import { Box, IconButton, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
 import { PiX } from 'react-icons/pi'
 
 import { useFilterContext } from '@/context/filter'
-import { standardPadding } from '@/styles'
+import { standardPadding } from '@/shared/styles'
 
-import { QUERY_TAGS } from '../../../../graphqlBase/queries'
-import { TagsGetResult } from '../../../../types'
+import { TagsGetResult, useTagsGetQuery } from '../../../../types'
 import { useNotification } from '../../../../utils'
 import { TagsFilterBody } from './TagsFilterBody'
 
@@ -27,7 +25,7 @@ export const FilterByTags = ({ mobile }: FilterByTagsProps) => {
 
   const [allTags, setAllTags] = useState<TagsGetResult[]>([])
 
-  const { loading } = useQuery<{ tagsGet: TagsGetResult[] }>(QUERY_TAGS, {
+  const { loading } = useTagsGetQuery({
     onCompleted(data) {
       if (data.tagsGet) {
         const sortedTags = [...data.tagsGet].sort((a, b) => b.count - a.count)

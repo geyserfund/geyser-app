@@ -8,7 +8,7 @@ import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigati
 import { AnimatedTabBar } from '@/shared/components/navigation/AnimatedTabBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { dimensions } from '@/shared/constants'
-import { standardPadding } from '@/styles'
+import { standardPadding } from '@/shared/styles'
 import { ProjectLeaderboardPeriod } from '@/types'
 import { useCustomTheme, useMobileMode } from '@/utils'
 

@@ -1,6 +1,6 @@
 import { ComponentStyleConfig, StyleFunctionProps } from '@chakra-ui/react'
 
-import { darkModeColors, fonts, lightModeColors } from '../../../styles'
+import { darkModeColors, fonts, lightModeColors } from '../../../shared/styles'
 
 export const buttonTheme: ComponentStyleConfig = {
   // style object for base or default style
