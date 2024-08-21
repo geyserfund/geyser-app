@@ -8,6 +8,7 @@ import {
   useCreateProjectMutation,
   useProjectPageBodyLazyQuery,
   useProjectPublishMutation,
+  useProjectStatusUpdateMutation,
   useUpdateProjectMutation,
 } from '../../../types'
 import { partialUpdateProjectAtom, projectAtom, projectLoadingAtom, ProjectState } from '../state/projectAtom'
@@ -94,6 +95,14 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
     },
   })
 
+  const [updateProjectStatus, updateProjectStatusOptions] = useCustomMutation(useProjectStatusUpdateMutation, {
+    onCompleted(data) {
+      if (data.projectStatusUpdate) {
+        partialUpdateProject(data.projectStatusUpdate)
+      }
+    },
+  })
+
   const [publishProject, publishProjectOptions] = useCustomMutation(useProjectPublishMutation, {
     onCompleted(data) {
       if (data.projectPublish) {
@@ -126,6 +135,10 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
     publishProject: {
       execute: publishProject,
       ...publishProjectOptions,
+    },
+    updateProjectStatus: {
+      execute: updateProjectStatus,
+      ...updateProjectStatusOptions,
     },
   }
 }
