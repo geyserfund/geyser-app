@@ -1,20 +1,19 @@
-import { HStack,  VStack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconType } from 'react-icons'
-import {  PiLightning, PiMedal, PiRocketLaunch } from 'react-icons/pi'
+import { PiLightning, PiMedal, PiRocketLaunch } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography'
 
-
-import {  SkeletonLayout } from '../../../../../../../shared/components/layouts'
+import { SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { UserProjectContributionsFragment } from '../../../../../../../types'
 import { commaFormatted, getShortAmountLabel } from '../../../../../../../utils'
 import { useUserProfileAtom } from '../../../../../state'
 import { useProfileContributionQuery } from '../../profileTabs/hooks/useProfileContributionQuery'
 
 export const Summary = () => {
-  const {userProfile, isLoading: userProfileLoading} = useUserProfileAtom()
+  const { userProfile, isLoading: userProfileLoading } = useUserProfileAtom()
 
   const { contributions, isLoading } = useProfileContributionQuery(userProfile.id)
 
