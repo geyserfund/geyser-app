@@ -8,7 +8,7 @@ export { getCroppedImg, ImageCropAspectRatio as ImageCrop, ImageCropperModal } f
 export { LinkableAvatar } from './LinkableAvatar'
 export {} from './MobileDivider'
 export {
-  ProjectStatusColors,
+  ProjectStatusColorScheme,
   ProjectStatusIcons,
   ProjectStatusLabel,
   ProjectStatusLabels,

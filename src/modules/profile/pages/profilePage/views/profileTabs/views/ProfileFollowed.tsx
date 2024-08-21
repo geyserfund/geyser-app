@@ -1,25 +1,48 @@
-import { useTranslation } from 'react-i18next'
+import { useUserProfileAtom } from '@/modules/profile/state'
+import { useNotification } from '@/utils'
 
-import { ProjectForProfilePageFragment } from '../../../../../../../types'
-import { ProfileTabLayout } from '../../../components'
-import { ProfileProjectList } from '../components/ProfileProjectList'
+import { ProjectForProfilePageFragment, useUserFollowedProjectsQuery } from '../../../../../../../types'
+import { ProfileProjectCard } from '../components/ProfileProjectCard'
 import { TabPanelSkeleton } from '../components/TabPanelSkeleton'
 
-interface ProfileFollowedProps {
-  projects: ProjectForProfilePageFragment[]
-  isLoading: boolean
-}
+export const ProfileFollowed = () => {
+  const toast = useNotification()
+  const { userProfile } = useUserProfileAtom()
 
-export const ProfileFollowed = ({ projects, isLoading }: ProfileFollowedProps) => {
-  const { t } = useTranslation()
+  const { data, loading } = useUserFollowedProjectsQuery({
+    variables: {
+      where: {
+        id: userProfile.id,
+      },
+    },
+    skip: !userProfile.id,
 
-  if (isLoading) {
+    onError(error) {
+      toast.error({
+        title: 'Failed to fetch projects',
+        description: `${error.message}`,
+      })
+    },
+  })
+
+  const projects = (data?.user.projectFollows || []) as ProjectForProfilePageFragment[]
+
+  if (loading) {
     return <TabPanelSkeleton />
   }
 
   return (
-    <ProfileTabLayout heading={t('Followed projects')}>
-      <ProfileProjectList projects={projects} showFollow />
-    </ProfileTabLayout>
+    <>
+      {projects.map((project, index) => {
+        return (
+          <ProfileProjectCard
+            showFollow
+            key={project.id}
+            project={project}
+            _hover={{ backgroundColor: 'neutral.50', cursor: 'pointer', transition: 'background-color 0.2s' }}
+          />
+        )
+      })}
+    </>
   )
 }

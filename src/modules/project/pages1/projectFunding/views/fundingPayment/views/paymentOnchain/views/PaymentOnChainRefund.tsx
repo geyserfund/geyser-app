@@ -1,8 +1,7 @@
 import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
-import { BsExclamationTriangle } from 'react-icons/bs'
-import { PiHandCoins } from 'react-icons/pi'
+import { PiHandCoins, PiWarning } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
@@ -74,7 +73,7 @@ export const PaymentOnChainRefund = () => {
         </VStack>
       </Feedback>
 
-      <Feedback variant={FeedBackVariant.WARNING} icon={<BsExclamationTriangle fontSize="24px" />}>
+      <Feedback variant={FeedBackVariant.WARNING} icon={<PiWarning fontSize="24px" />}>
         <VStack alignItems="start">
           <Body size="lg" medium>
             {t('Do not close this window')}

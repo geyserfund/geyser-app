@@ -1,7 +1,7 @@
 import { Button, Link, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
-import { BsExclamationTriangle } from 'react-icons/bs'
+import { PiWarning } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
@@ -37,7 +37,7 @@ export const PaymentOnchainPrompt = () => {
 
   return (
     <VStack spacing={6}>
-      <Feedback variant={FeedBackVariant.WARNING} icon={<BsExclamationTriangle fontSize={'24px'} />}>
+      <Feedback variant={FeedBackVariant.WARNING} icon={<PiWarning fontSize={'24px'} />}>
         <VStack w="full" alignItems="start">
           <Body size="lg" medium>
             {t('Download refund file before proceeding')}

@@ -55,10 +55,11 @@ export const Leaderboard = () => {
           backgroundColor={'utils.pbg'}
           zIndex={1}
           paddingTop={2}
+          paddingBottom={2}
         >
           <AnimatedTabBar {...animatedNavBarProps} activeTabColor={colors.utils.text} />
         </HStack>
-        <VStack w="full" h="full" pt={dimensions.animatedNavBar.height}>
+        <VStack w="full" h="full" pt={`${dimensions.animatedNavBar.height.base + 8}px`}>
           {render && render()}
         </VStack>
       </VStack>
@@ -67,10 +68,10 @@ export const Leaderboard = () => {
 
   return (
     <CardLayout dense w="full" paddingTop={standardPadding} flex={1}>
-      <HStack w="full" paddingX={standardPadding} position="absolute" top={standardPadding}>
+      <HStack w="full" paddingX={standardPadding} position="absolute" top={standardPadding} paddingBottom={2}>
         <AnimatedNavBar {...animatedNavBarProps} showLabel />
       </HStack>
-      <VStack w="full" h="full" pt={dimensions.animatedNavBar.height}>
+      <VStack w="full" h="full" pt={`${dimensions.animatedNavBar.height.base + 8}px`}>
         {render && render()}
       </VStack>
     </CardLayout>

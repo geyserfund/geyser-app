@@ -2,9 +2,9 @@ import { VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Body2 } from '../../../../../../components/typography'
-import { useNostrBadges } from '../../../../../../shared/hooks/useNostrBadges'
-import { UserBadge } from '../../../../../../types'
+import { Body2 } from '../../../../../../../../components/typography'
+import { useNostrBadges } from '../../../../../../../../shared/hooks/useNostrBadges'
+import { UserBadge } from '../../../../../../../../types'
 import { BadgeItem } from './BadgeItem'
 import { BadgesBodySkeleton } from './BadgesBody'
 
@@ -42,9 +42,7 @@ export const NostrBadges = ({
 
   const numberOfBadges = nostrBadgeIds?.length || 0
 
-  const getTitleToDisplay = () => {
-    return numberOfBadges ? `${numberOfBadges} ${t('Geyser badges')}` : t('No Geyser badges')
-  }
+  const isEmpty = numberOfBadges === 0
 
   if (nostrBadgesLoading) {
     return <BadgesBodySkeleton noTop={isEdit} />
@@ -52,15 +50,15 @@ export const NostrBadges = ({
 
   return (
     <>
-      {!isEdit && (
+      {!isEdit && isEmpty && (
         <VStack background="neutral.100" borderRadius="8px" padding="5px 15px" width="fit-content" alignSelf="center">
           <Body2 color="neutral.900" semiBold>
-            {getTitleToDisplay()}
+            {t('No Geyser badges')}
           </Body2>
         </VStack>
       )}
 
-      <Wrap w="full" spacingX="10px" spacingY="40px" justify="center" overflowY="auto" paddingBottom="20px">
+      <Wrap w="full" spacing={2} justify="start" paddingBottom="20px">
         {claimedBadges.map((userBadge) => {
           return (
             <WrapItem key={userBadge.id}>

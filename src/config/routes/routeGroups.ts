@@ -125,4 +125,11 @@ export const discoveryRoutes = [
   getPath('discoveryGrants'),
 ]
 
+export const profileRoutes = [
+  getPath('userProfile', PathName.userId),
+  getPath('userProfileSettings', PathName.userId),
+  getPath('userProfileSettingsGeneral', PathName.userId),
+  getPath('userProfileSettingsNotifications', PathName.userId),
+]
+
 export const fallBackRoutes = [getPath('notFound'), getPath('notAuthorized')]

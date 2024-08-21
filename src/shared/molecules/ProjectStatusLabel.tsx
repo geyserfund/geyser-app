@@ -1,17 +1,17 @@
-import { HStack, Icon, SkeletonText, Stack, StackDirection, StackProps, Text, Tooltip } from '@chakra-ui/react'
+import { HStack, Icon, SkeletonText, Stack, StackDirection, StackProps, Tooltip } from '@chakra-ui/react'
 import { HTMLChakraProps } from '@chakra-ui/system'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BsExclamationTriangle, BsFillCheckCircleFill } from 'react-icons/bs'
-import { PiEyeglasses, PiMinusCircle, PiNoteBlank, PiXCircle } from 'react-icons/pi'
+import { PiCheckCircle, PiEyeglasses, PiMinusCircle, PiNoteBlank, PiWarning, PiXCircle } from 'react-icons/pi'
 
 import { projectStatusAtom } from '@/modules/project/state/projectAtom'
 
 import { ProjectStatus, Wallet, WalletStatus } from '../../types/generated/graphql'
 import { isActive, isDraft, isInactive, isInReview } from '../../utils'
 import { Body } from '../components/typography'
+import { lightModeColors } from '../styles'
 
 interface IProjectStatusLabel extends HTMLChakraProps<'div'> {
   project: { status?: ProjectStatus | null }
@@ -38,13 +38,15 @@ export enum ProjectStatusTooltipRoles {
   CREATOR = 'creator',
 }
 
-export const ProjectStatusColors = {
-  [ProjectStatusLabels.UNSTABLE_WALLET]: 'secondary.red',
-  [ProjectStatusLabels.INACTIVE_WALLET]: 'secondary.yellow',
-  [ProjectStatusLabels.RUNNING]: 'primary.500',
-  [ProjectStatusLabels.DRAFT]: 'neutral.500',
-  [ProjectStatusLabels.INACTIVE]: 'neutral.500',
-  [ProjectStatusLabels.IN_REVIEW]: 'neutral.500',
+export const ProjectStatusColorScheme = {
+  [ProjectStatusLabels.UNSTABLE_WALLET]: 'warning',
+  [ProjectStatusLabels.INACTIVE_WALLET]: 'error',
+  [ProjectStatusLabels.RUNNING]: 'primary1',
+  [ProjectStatusLabels.DRAFT]: 'neutral1',
+  [ProjectStatusLabels.INACTIVE]: 'neutral1',
+  [ProjectStatusLabels.IN_REVIEW]: 'neutral1',
+} as {
+  [key in ProjectStatusLabels]: keyof typeof lightModeColors
 }
 
 export const ProjectStatusBackgroundColors = {
@@ -66,9 +68,9 @@ export const ProjectStatusTextColors = {
 }
 
 export const ProjectStatusIcons = {
-  [ProjectStatusLabels.UNSTABLE_WALLET]: BsExclamationTriangle,
+  [ProjectStatusLabels.UNSTABLE_WALLET]: PiWarning,
   [ProjectStatusLabels.INACTIVE_WALLET]: PiMinusCircle,
-  [ProjectStatusLabels.RUNNING]: BsFillCheckCircleFill,
+  [ProjectStatusLabels.RUNNING]: PiCheckCircle,
   [ProjectStatusLabels.DRAFT]: PiNoteBlank,
   [ProjectStatusLabels.INACTIVE]: PiXCircle,
   [ProjectStatusLabels.IN_REVIEW]: PiEyeglasses,
@@ -131,12 +133,6 @@ export const ProjectStatusLabel = ({
 }: IProjectStatusLabel) => {
   const { t } = useTranslation()
 
-  const commonStyles = {
-    fontWeight: 'semibold',
-    fontFamily,
-    fontSize: fontSize || '12px',
-  }
-
   const [status, setStatus] = useState<ProjectStatusLabels | null>(null)
 
   useEffect(() => {
@@ -189,19 +185,21 @@ export const ProjectStatusLabel = ({
   }
 
   const CurrentIcon = ProjectStatusIcons[status]
-  const color = ProjectStatusColors[status]
-  const tooltip = ProjectStatusLabels.IN_REVIEW
+  const colorScheme = ProjectStatusColorScheme[status]
+  const tooltip = ProjectStatusTooltip[status]
 
   return (
     <Tooltip label={t(tooltip)} placement="top" size="sm">
-      <Stack direction={direction} alignItems="center">
-        <Icon as={CurrentIcon} fontSize={iconSize} color={color} />
-        {!iconOnly && (
-          <Text color={color} {...commonStyles}>
-            {t(status)}
-          </Text>
-        )}
-      </Stack>
+      <HStack
+        h={8}
+        w={8}
+        alignItems="center"
+        justifyContent="center"
+        backgroundColor={`${colorScheme}.3`}
+        borderRadius={'8px'}
+      >
+        <Icon as={CurrentIcon} fontSize={iconSize} color={`${colorScheme}.11`} />
+      </HStack>
     </Tooltip>
   )
 }

@@ -1,16 +1,21 @@
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 
+import { useNotification } from '@/utils'
+
 import { useAuthContext } from '../../../context'
 import { useUserForProfilePageQuery } from '../../../types'
-import { userProfileAtom, useViewingOwnProfileAtomValue } from '../state'
+import { userProfileAtom, userProfileLoadingAtom, useViewingOwnProfileAtomValue } from '../state'
 
 export const useUserProfile = (userId: number) => {
+  const toast = useNotification()
+
   const isViewingOwnProfile = useViewingOwnProfileAtomValue()
   const [userProfile, setUserProfile] = useAtom(userProfileAtom)
+  const [isLoading, setIsLoading] = useAtom(userProfileLoadingAtom)
   const { user: currentAppUser } = useAuthContext()
 
-  const { loading, error } = useUserForProfilePageQuery({
+  const { error } = useUserForProfilePageQuery({
     variables: {
       where: {
         id: userId,
@@ -20,7 +25,15 @@ export const useUserProfile = (userId: number) => {
     onCompleted(data) {
       if (data.user) {
         setUserProfile(data.user)
+        setIsLoading(false)
       }
+    },
+    onError() {
+      setIsLoading(false)
+      toast.error({
+        title: 'Error fetching user profile',
+        description: 'Please refresh the page and try again.',
+      })
     },
   })
 
@@ -33,5 +46,5 @@ export const useUserProfile = (userId: number) => {
     }
   }, [isViewingOwnProfile, currentAppUser, setUserProfile])
 
-  return { isLoading: loading, error, userProfile }
+  return { isLoading, error, userProfile }
 }

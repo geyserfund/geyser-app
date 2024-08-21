@@ -18,14 +18,14 @@ import { BrandLogo } from './components/BrandLogo'
 import { LoggedOutModal } from './components/LoggedOutModal'
 import { ProjectLogo } from './components/ProjectLogo'
 import { ProjectSelectMenu } from './components/ProjectSelectMenu'
-import { isDiscoveryRoutesAtom, isProjectRoutesAtom, shouldShowProjectLogoAtom } from './topNavBarAtom'
+import { isDiscoveryRoutesAtom, shouldShowGeyserLogoAtom, shouldShowProjectLogoAtom } from './topNavBarAtom'
 
 export const TopNavBar = () => {
   const { isLoggedIn, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose } = useAuthModal()
 
   const shouldShowProjectLogo = useAtomValue(shouldShowProjectLogoAtom)
-  const isProjectPage = useAtomValue(isProjectRoutesAtom)
+  const shouldShowGeyserLogo = useAtomValue(shouldShowGeyserLogoAtom)
   const isPlatformRoutes = useAtomValue(isDiscoveryRoutesAtom)
 
   const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose } = useEmailPromptModal()
@@ -71,7 +71,7 @@ export const TopNavBar = () => {
       return <ProjectLogo />
     }
 
-    if (isProjectPage) {
+    if (shouldShowGeyserLogo) {
       return <BrandLogo />
     }
 
@@ -83,7 +83,7 @@ export const TopNavBar = () => {
       w="full"
       position="fixed"
       top={0}
-      {...(!isProjectPage && discoveryPageCommonLayoutStyles)}
+      {...(isPlatformRoutes && discoveryPageCommonLayoutStyles)}
       justifyContent={'center'}
       zIndex={9}
     >

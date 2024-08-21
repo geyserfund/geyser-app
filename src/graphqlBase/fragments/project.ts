@@ -44,28 +44,6 @@ export const FRAGMENT_PROJECT_NOSTR_KEYS = gql`
   }
 `
 
-export const FRAGMENT_PROJECT_FOR_PROFILE_PAGE = gql`
-  fragment ProjectForProfilePage on Project {
-    id
-    name
-    balance
-    fundersCount
-    thumbnailImage
-    title
-    shortDescription
-    createdAt
-    status
-    wallets {
-      id
-      name
-      state {
-        status
-        statusCode
-      }
-    }
-  }
-`
-
 export const FRAGMENT_PROJECT_REWARD_FOR_LANDING_PAGE = gql`
   fragment ProjectRewardForLandingPage on ProjectReward {
     cost

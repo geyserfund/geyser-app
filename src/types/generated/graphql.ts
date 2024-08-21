@@ -4824,16 +4824,6 @@ export type FundingTxOrderFragment = { __typename?: 'FundingTx', id: any, invoic
       & OrderItemFragment
     )> } | null };
 
-export type ProfileOrderItemFragment = { __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', id: any, name: string, cost: number, rewardCurrency: RewardCurrency, description?: string | null, image?: string | null, category?: string | null } };
-
-export type ProfileOrderFragment = { __typename?: 'Order', id: any, referenceCode: string, totalInSats: number, status: string, confirmedAt?: any | null, updatedAt: any, items: Array<(
-    { __typename?: 'OrderItem' }
-    & ProfileOrderItemFragment
-  )>, fundingTx: { __typename?: 'FundingTx', id: any, amountPaid: number, amount: number, status: FundingStatus, onChain: boolean, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, sourceResource?: { __typename?: 'Entry' } | (
-      { __typename?: 'Project' }
-      & ProjectAvatarFragment
-    ) | null } };
-
 export type PaginationFragment = { __typename?: 'CursorPaginationResponse', take?: number | null, count?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: any | null } | null };
 
 export type ProjectCommunityVoteGrantFragment = { __typename?: 'CommunityVoteGrant', id: any, status: GrantStatusEnum, title: string };
@@ -4844,8 +4834,6 @@ export type ProjectGrantApplicationsFragment = { __typename?: 'Project', grantAp
     ) }> };
 
 export type ProjectNostrKeysFragment = { __typename?: 'Project', id: any, name: string, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', privateKey?: { __typename?: 'NostrPrivateKey', nsec: string } | null, publicKey: { __typename?: 'NostrPublicKey', npub: string } } } };
-
-export type ProjectForProfilePageFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: string, status?: ProjectStatus | null, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }> };
 
 export type ProjectRewardForLandingPageFragment = { __typename?: 'ProjectReward', cost: number, description?: string | null, id: any, image?: string | null, sold: number, stock?: number | null, maxClaimable?: number | null, rewardName: string, rewardProject: { __typename?: 'Project', id: any, name: string, title: string, rewardCurrency?: RewardCurrency | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } }> } };
 
@@ -4896,19 +4884,9 @@ export type UserMeFragment = { __typename?: 'User', id: any, username: string, i
     & ExternalAccountFragment
   )>, ownerOf: Array<{ __typename?: 'OwnerOf', project?: { __typename?: 'Project', id: any, name: string, image?: string | null, thumbnailImage?: string | null, title: string, status?: ProjectStatus | null, createdAt: string } | null }> };
 
-export type UserForProfilePageFragment = { __typename?: 'User', id: any, bio?: string | null, username: string, imageUrl?: string | null, ranking?: any | null, isEmailVerified: boolean, externalAccounts: Array<(
-    { __typename?: 'ExternalAccount' }
-    & ExternalAccountFragment
-  )> };
-
 export type UserForAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, email?: string | null, username: string };
 
 export type FunderWithUserFragment = { __typename?: 'Funder', amountFunded?: number | null, confirmed: boolean, id: any, confirmedAt?: any | null, timesFunded?: number | null, user?: { __typename?: 'User', id: any, username: string, hasSocialAccount: boolean, imageUrl?: string | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', externalId: string, externalUsername: string, id: any, accountType: string }> } | null };
-
-export type UserProjectContributionsFragment = { __typename?: 'UserProjectContribution', project: (
-    { __typename?: 'Project' }
-    & ProjectAvatarFragment
-  ), funder?: { __typename?: 'Funder', amountFunded?: number | null, confirmedAt?: any | null, confirmed: boolean, id: any, fundingTxs: Array<{ __typename?: 'FundingTx', amountPaid: number, comment?: string | null, media?: string | null, paidAt?: any | null, onChain: boolean }> } | null };
 
 export type ProjectWalletFragment = { __typename?: 'Wallet', id: any, name?: string | null, feePercentage?: number | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode }, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'LndConnectionDetailsPrivate', macaroon: string, tlsCertificate?: string | null, hostname: string, grpcPort: number, lndNodeType: LndNodeType, pubkey?: string | null } | { __typename?: 'LndConnectionDetailsPublic', pubkey?: string | null } };
 
@@ -5245,56 +5223,6 @@ export type MeProjectFollowsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeProjectFollowsQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: any, projectFollows: Array<{ __typename?: 'Project', id: any, title: string, name: string }> } | null };
 
-export type UserForProfilePageQueryVariables = Exact<{
-  where: UserGetInput;
-}>;
-
-
-export type UserForProfilePageQuery = { __typename?: 'Query', user: (
-    { __typename?: 'User' }
-    & UserForProfilePageFragment
-  ) };
-
-export type UserProfileProjectsQueryVariables = Exact<{
-  where: UserGetInput;
-}>;
-
-
-export type UserProfileProjectsQuery = { __typename?: 'Query', user: { __typename?: 'User', ownerOf: Array<{ __typename?: 'OwnerOf', project?: (
-        { __typename?: 'Project' }
-        & ProjectForProfilePageFragment
-      ) | null }> } };
-
-export type UserFollowedProjectsQueryVariables = Exact<{
-  where: UserGetInput;
-}>;
-
-
-export type UserFollowedProjectsQuery = { __typename?: 'Query', user: { __typename?: 'User', projectFollows: Array<(
-      { __typename?: 'Project' }
-      & ProjectForProfilePageFragment
-    )> } };
-
-export type UserProfileContributionsQueryVariables = Exact<{
-  where: UserGetInput;
-}>;
-
-
-export type UserProfileContributionsQuery = { __typename?: 'Query', user: { __typename?: 'User', contributions: Array<(
-      { __typename?: 'UserProjectContribution' }
-      & UserProjectContributionsFragment
-    )> } };
-
-export type UserProfileOrdersQueryVariables = Exact<{
-  where: UserGetInput;
-}>;
-
-
-export type UserProfileOrdersQuery = { __typename?: 'Query', user: { __typename?: 'User', orders?: Array<(
-      { __typename?: 'Order' }
-      & ProfileOrderFragment
-    )> | null } };
-
 export type LightningAddressVerifyQueryVariables = Exact<{
   lightningAddress?: InputMaybe<Scalars['String']['input']>;
 }>;
@@ -5390,6 +5318,26 @@ export type TagsMostFundedGetQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type TagsMostFundedGetQuery = { __typename?: 'Query', tagsMostFundedGet: Array<{ __typename?: 'TagsMostFundedGetResult', id: number, label: string }> };
 
+export type UserProjectFunderFragment = { __typename?: 'Funder', amountFunded?: number | null, confirmedAt?: any | null, confirmed: boolean, id: any, fundingTxs: Array<{ __typename?: 'FundingTx', amountPaid: number, comment?: string | null, media?: string | null, paidAt?: any | null, onChain: boolean }> };
+
+export type UserProjectContributionsFragment = { __typename?: 'UserProjectContribution', project: (
+    { __typename?: 'Project' }
+    & ProjectAvatarFragment
+  ), funder?: (
+    { __typename?: 'Funder' }
+    & UserProjectFunderFragment
+  ) | null };
+
+export type ProfileOrderItemFragment = { __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', id: any, name: string, cost: number, rewardCurrency: RewardCurrency, description?: string | null, image?: string | null, category?: string | null } };
+
+export type ProfileOrderFragment = { __typename?: 'Order', id: any, referenceCode: string, totalInSats: number, status: string, confirmedAt?: any | null, updatedAt: any, items: Array<(
+    { __typename?: 'OrderItem' }
+    & ProfileOrderItemFragment
+  )>, fundingTx: { __typename?: 'FundingTx', id: any, amountPaid: number, amount: number, status: FundingStatus, onChain: boolean, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, sourceResource?: { __typename?: 'Entry' } | (
+      { __typename?: 'Project' }
+      & ProjectAvatarFragment
+    ) | null } };
+
 export type NotificationConfigurationFragment = { __typename?: 'NotificationConfiguration', id: any, name: string, description?: string | null, value: string, type?: SettingValueType | null, options: Array<string> };
 
 export type NotificationSettingsFragment = { __typename?: 'NotificationSettings', notificationType: string, isEnabled: boolean, configurations: Array<(
@@ -5410,7 +5358,14 @@ export type UserNotificationsSettingsFragment = { __typename?: 'ProfileNotificat
       & NotificationSettingsFragment
     )> } };
 
+export type ProjectForProfilePageFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: string, status?: ProjectStatus | null, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }> };
+
 export type ProjectNotificationSettingsFragment = { __typename?: 'CreatorNotificationSettings', userId: any, project: { __typename?: 'CreatorNotificationSettingsProject', id: any, title: string, image?: string | null }, notificationSettings: Array<{ __typename?: 'NotificationSettings', notificationType: string, isEnabled: boolean, configurations: Array<{ __typename?: 'NotificationConfiguration', id: any, name: string, description?: string | null, value: string, type?: SettingValueType | null, options: Array<string> }> }> };
+
+export type UserForProfilePageFragment = { __typename?: 'User', id: any, bio?: string | null, username: string, imageUrl?: string | null, ranking?: any | null, isEmailVerified: boolean, externalAccounts: Array<(
+    { __typename?: 'ExternalAccount' }
+    & ExternalAccountFragment
+  )> };
 
 export type CreatorNotificationsSettingsUpdateMutationVariables = Exact<{
   creatorNotificationConfigurationId: Scalars['BigInt']['input'];
@@ -5457,6 +5412,56 @@ export type ProjectNotificationSettingsQuery = { __typename?: 'Query', projectNo
     { __typename?: 'CreatorNotificationSettings' }
     & ProjectNotificationSettingsFragment
   ) };
+
+export type UserForProfilePageQueryVariables = Exact<{
+  where: UserGetInput;
+}>;
+
+
+export type UserForProfilePageQuery = { __typename?: 'Query', user: (
+    { __typename?: 'User' }
+    & UserForProfilePageFragment
+  ) };
+
+export type UserProfileProjectsQueryVariables = Exact<{
+  where: UserGetInput;
+}>;
+
+
+export type UserProfileProjectsQuery = { __typename?: 'Query', user: { __typename?: 'User', ownerOf: Array<{ __typename?: 'OwnerOf', project?: (
+        { __typename?: 'Project' }
+        & ProjectForProfilePageFragment
+      ) | null }> } };
+
+export type UserFollowedProjectsQueryVariables = Exact<{
+  where: UserGetInput;
+}>;
+
+
+export type UserFollowedProjectsQuery = { __typename?: 'Query', user: { __typename?: 'User', projectFollows: Array<(
+      { __typename?: 'Project' }
+      & ProjectForProfilePageFragment
+    )> } };
+
+export type UserProfileContributionsQueryVariables = Exact<{
+  where: UserGetInput;
+}>;
+
+
+export type UserProfileContributionsQuery = { __typename?: 'Query', user: { __typename?: 'User', contributions: Array<(
+      { __typename?: 'UserProjectContribution' }
+      & UserProjectContributionsFragment
+    )> } };
+
+export type UserProfileOrdersQueryVariables = Exact<{
+  where: UserGetInput;
+}>;
+
+
+export type UserProfileOrdersQuery = { __typename?: 'Query', user: { __typename?: 'User', orders?: Array<(
+      { __typename?: 'Order' }
+      & ProfileOrderFragment
+    )> | null } };
 
 export type ProjectAffiliateLinkFragment = { __typename?: 'AffiliateLink', projectId: any, label?: string | null, id: any, email: string, disabledAt?: any | null, createdAt: any, disabled?: boolean | null, affiliateId?: string | null, lightningAddress: string, affiliateFeePercentage: number, stats?: { __typename?: 'AffiliateStats', sales: { __typename?: 'AffiliateSalesStats', total: number, count: number } } | null };
 
@@ -6371,59 +6376,6 @@ export const FundingTxOrderFragmentDoc = gql`
   }
 }
     ${OrderItemFragmentDoc}`;
-export const ProfileOrderItemFragmentDoc = gql`
-    fragment ProfileOrderItem on OrderItem {
-  item {
-    id
-    name
-    cost
-    rewardCurrency
-    description
-    image
-    category
-  }
-  quantity
-  unitPriceInSats
-}
-    `;
-export const ProjectAvatarFragmentDoc = gql`
-    fragment ProjectAvatar on Project {
-  id
-  name
-  thumbnailImage
-  title
-}
-    `;
-export const ProfileOrderFragmentDoc = gql`
-    fragment ProfileOrder on Order {
-  id
-  referenceCode
-  totalInSats
-  status
-  confirmedAt
-  updatedAt
-  items {
-    ...ProfileOrderItem
-  }
-  fundingTx {
-    id
-    bitcoinQuote {
-      quote
-      quoteCurrency
-    }
-    amountPaid
-    amount
-    status
-    onChain
-    sourceResource {
-      ... on Project {
-        ...ProjectAvatar
-      }
-    }
-  }
-}
-    ${ProfileOrderItemFragmentDoc}
-${ProjectAvatarFragmentDoc}`;
 export const PaginationFragmentDoc = gql`
     fragment Pagination on CursorPaginationResponse {
   take
@@ -6445,27 +6397,6 @@ export const ProjectNostrKeysFragmentDoc = gql`
       publicKey {
         npub
       }
-    }
-  }
-}
-    `;
-export const ProjectForProfilePageFragmentDoc = gql`
-    fragment ProjectForProfilePage on Project {
-  id
-  name
-  balance
-  fundersCount
-  thumbnailImage
-  title
-  shortDescription
-  createdAt
-  status
-  wallets {
-    id
-    name
-    state {
-      status
-      statusCode
     }
   }
 }
@@ -6708,19 +6639,6 @@ export const ProjectForSubscriptionFragmentDoc = gql`
   }
 }
     ${UserMeFragmentDoc}`;
-export const UserForProfilePageFragmentDoc = gql`
-    fragment UserForProfilePage on User {
-  id
-  bio
-  username
-  imageUrl
-  ranking
-  isEmailVerified
-  externalAccounts {
-    ...ExternalAccount
-  }
-}
-    ${ExternalAccountFragmentDoc}`;
 export const FunderWithUserFragmentDoc = gql`
     fragment FunderWithUser on Funder {
   amountFunded
@@ -6742,26 +6660,6 @@ export const FunderWithUserFragmentDoc = gql`
   }
 }
     `;
-export const UserProjectContributionsFragmentDoc = gql`
-    fragment UserProjectContributions on UserProjectContribution {
-  project {
-    ...ProjectAvatar
-  }
-  funder {
-    amountFunded
-    confirmedAt
-    confirmed
-    id
-    fundingTxs {
-      amountPaid
-      comment
-      media
-      paidAt
-      onChain
-    }
-  }
-}
-    ${ProjectAvatarFragmentDoc}`;
 export const WalletLimitsFragmentDoc = gql`
     fragment WalletLimits on WalletLimits {
   contribution {
@@ -6962,6 +6860,85 @@ export const RewardForLandingPageFragmentDoc = gql`
   }
 }
     `;
+export const ProjectAvatarFragmentDoc = gql`
+    fragment ProjectAvatar on Project {
+  id
+  name
+  thumbnailImage
+  title
+}
+    `;
+export const UserProjectFunderFragmentDoc = gql`
+    fragment UserProjectFunder on Funder {
+  amountFunded
+  confirmedAt
+  confirmed
+  id
+  fundingTxs {
+    amountPaid
+    comment
+    media
+    paidAt
+    onChain
+  }
+}
+    `;
+export const UserProjectContributionsFragmentDoc = gql`
+    fragment UserProjectContributions on UserProjectContribution {
+  project {
+    ...ProjectAvatar
+  }
+  funder {
+    ...UserProjectFunder
+  }
+}
+    ${ProjectAvatarFragmentDoc}
+${UserProjectFunderFragmentDoc}`;
+export const ProfileOrderItemFragmentDoc = gql`
+    fragment ProfileOrderItem on OrderItem {
+  item {
+    id
+    name
+    cost
+    rewardCurrency
+    description
+    image
+    category
+  }
+  quantity
+  unitPriceInSats
+}
+    `;
+export const ProfileOrderFragmentDoc = gql`
+    fragment ProfileOrder on Order {
+  id
+  referenceCode
+  totalInSats
+  status
+  confirmedAt
+  updatedAt
+  items {
+    ...ProfileOrderItem
+  }
+  fundingTx {
+    id
+    bitcoinQuote {
+      quote
+      quoteCurrency
+    }
+    amountPaid
+    amount
+    status
+    onChain
+    sourceResource {
+      ... on Project {
+        ...ProjectAvatar
+      }
+    }
+  }
+}
+    ${ProfileOrderItemFragmentDoc}
+${ProjectAvatarFragmentDoc}`;
 export const NotificationConfigurationFragmentDoc = gql`
     fragment NotificationConfiguration on NotificationConfiguration {
   id
@@ -7012,6 +6989,27 @@ export const UserNotificationsSettingsFragmentDoc = gql`
   }
 }
     ${NotificationSettingsFragmentDoc}`;
+export const ProjectForProfilePageFragmentDoc = gql`
+    fragment ProjectForProfilePage on Project {
+  id
+  name
+  balance
+  fundersCount
+  thumbnailImage
+  title
+  shortDescription
+  createdAt
+  status
+  wallets {
+    id
+    name
+    state {
+      status
+      statusCode
+    }
+  }
+}
+    `;
 export const ProjectNotificationSettingsFragmentDoc = gql`
     fragment ProjectNotificationSettings on CreatorNotificationSettings {
   userId
@@ -7034,6 +7032,19 @@ export const ProjectNotificationSettingsFragmentDoc = gql`
   }
 }
     `;
+export const UserForProfilePageFragmentDoc = gql`
+    fragment UserForProfilePage on User {
+  id
+  bio
+  username
+  imageUrl
+  ranking
+  isEmailVerified
+  externalAccounts {
+    ...ExternalAccount
+  }
+}
+    ${ExternalAccountFragmentDoc}`;
 export const ProjectAffiliateLinkFragmentDoc = gql`
     fragment ProjectAffiliateLink on AffiliateLink {
   projectId
@@ -9085,216 +9096,6 @@ export type MeProjectFollowsQueryHookResult = ReturnType<typeof useMeProjectFoll
 export type MeProjectFollowsLazyQueryHookResult = ReturnType<typeof useMeProjectFollowsLazyQuery>;
 export type MeProjectFollowsSuspenseQueryHookResult = ReturnType<typeof useMeProjectFollowsSuspenseQuery>;
 export type MeProjectFollowsQueryResult = Apollo.QueryResult<MeProjectFollowsQuery, MeProjectFollowsQueryVariables>;
-export const UserForProfilePageDocument = gql`
-    query UserForProfilePage($where: UserGetInput!) {
-  user(where: $where) {
-    ...UserForProfilePage
-  }
-}
-    ${UserForProfilePageFragmentDoc}`;
-
-/**
- * __useUserForProfilePageQuery__
- *
- * To run a query within a React component, call `useUserForProfilePageQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserForProfilePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUserForProfilePageQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
-export function useUserForProfilePageQuery(baseOptions: Apollo.QueryHookOptions<UserForProfilePageQuery, UserForProfilePageQueryVariables> & ({ variables: UserForProfilePageQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserForProfilePageQuery, UserForProfilePageQueryVariables>(UserForProfilePageDocument, options);
-      }
-export function useUserForProfilePageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserForProfilePageQuery, UserForProfilePageQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserForProfilePageQuery, UserForProfilePageQueryVariables>(UserForProfilePageDocument, options);
-        }
-export function useUserForProfilePageSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UserForProfilePageQuery, UserForProfilePageQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<UserForProfilePageQuery, UserForProfilePageQueryVariables>(UserForProfilePageDocument, options);
-        }
-export type UserForProfilePageQueryHookResult = ReturnType<typeof useUserForProfilePageQuery>;
-export type UserForProfilePageLazyQueryHookResult = ReturnType<typeof useUserForProfilePageLazyQuery>;
-export type UserForProfilePageSuspenseQueryHookResult = ReturnType<typeof useUserForProfilePageSuspenseQuery>;
-export type UserForProfilePageQueryResult = Apollo.QueryResult<UserForProfilePageQuery, UserForProfilePageQueryVariables>;
-export const UserProfileProjectsDocument = gql`
-    query UserProfileProjects($where: UserGetInput!) {
-  user(where: $where) {
-    ownerOf {
-      project {
-        ...ProjectForProfilePage
-      }
-    }
-  }
-}
-    ${ProjectForProfilePageFragmentDoc}`;
-
-/**
- * __useUserProfileProjectsQuery__
- *
- * To run a query within a React component, call `useUserProfileProjectsQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserProfileProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUserProfileProjectsQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
-export function useUserProfileProjectsQuery(baseOptions: Apollo.QueryHookOptions<UserProfileProjectsQuery, UserProfileProjectsQueryVariables> & ({ variables: UserProfileProjectsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserProfileProjectsQuery, UserProfileProjectsQueryVariables>(UserProfileProjectsDocument, options);
-      }
-export function useUserProfileProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserProfileProjectsQuery, UserProfileProjectsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserProfileProjectsQuery, UserProfileProjectsQueryVariables>(UserProfileProjectsDocument, options);
-        }
-export function useUserProfileProjectsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UserProfileProjectsQuery, UserProfileProjectsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<UserProfileProjectsQuery, UserProfileProjectsQueryVariables>(UserProfileProjectsDocument, options);
-        }
-export type UserProfileProjectsQueryHookResult = ReturnType<typeof useUserProfileProjectsQuery>;
-export type UserProfileProjectsLazyQueryHookResult = ReturnType<typeof useUserProfileProjectsLazyQuery>;
-export type UserProfileProjectsSuspenseQueryHookResult = ReturnType<typeof useUserProfileProjectsSuspenseQuery>;
-export type UserProfileProjectsQueryResult = Apollo.QueryResult<UserProfileProjectsQuery, UserProfileProjectsQueryVariables>;
-export const UserFollowedProjectsDocument = gql`
-    query UserFollowedProjects($where: UserGetInput!) {
-  user(where: $where) {
-    projectFollows {
-      ...ProjectForProfilePage
-    }
-  }
-}
-    ${ProjectForProfilePageFragmentDoc}`;
-
-/**
- * __useUserFollowedProjectsQuery__
- *
- * To run a query within a React component, call `useUserFollowedProjectsQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserFollowedProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUserFollowedProjectsQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
-export function useUserFollowedProjectsQuery(baseOptions: Apollo.QueryHookOptions<UserFollowedProjectsQuery, UserFollowedProjectsQueryVariables> & ({ variables: UserFollowedProjectsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserFollowedProjectsQuery, UserFollowedProjectsQueryVariables>(UserFollowedProjectsDocument, options);
-      }
-export function useUserFollowedProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserFollowedProjectsQuery, UserFollowedProjectsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserFollowedProjectsQuery, UserFollowedProjectsQueryVariables>(UserFollowedProjectsDocument, options);
-        }
-export function useUserFollowedProjectsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UserFollowedProjectsQuery, UserFollowedProjectsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<UserFollowedProjectsQuery, UserFollowedProjectsQueryVariables>(UserFollowedProjectsDocument, options);
-        }
-export type UserFollowedProjectsQueryHookResult = ReturnType<typeof useUserFollowedProjectsQuery>;
-export type UserFollowedProjectsLazyQueryHookResult = ReturnType<typeof useUserFollowedProjectsLazyQuery>;
-export type UserFollowedProjectsSuspenseQueryHookResult = ReturnType<typeof useUserFollowedProjectsSuspenseQuery>;
-export type UserFollowedProjectsQueryResult = Apollo.QueryResult<UserFollowedProjectsQuery, UserFollowedProjectsQueryVariables>;
-export const UserProfileContributionsDocument = gql`
-    query UserProfileContributions($where: UserGetInput!) {
-  user(where: $where) {
-    contributions {
-      ...UserProjectContributions
-    }
-  }
-}
-    ${UserProjectContributionsFragmentDoc}`;
-
-/**
- * __useUserProfileContributionsQuery__
- *
- * To run a query within a React component, call `useUserProfileContributionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserProfileContributionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUserProfileContributionsQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
-export function useUserProfileContributionsQuery(baseOptions: Apollo.QueryHookOptions<UserProfileContributionsQuery, UserProfileContributionsQueryVariables> & ({ variables: UserProfileContributionsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>(UserProfileContributionsDocument, options);
-      }
-export function useUserProfileContributionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>(UserProfileContributionsDocument, options);
-        }
-export function useUserProfileContributionsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>(UserProfileContributionsDocument, options);
-        }
-export type UserProfileContributionsQueryHookResult = ReturnType<typeof useUserProfileContributionsQuery>;
-export type UserProfileContributionsLazyQueryHookResult = ReturnType<typeof useUserProfileContributionsLazyQuery>;
-export type UserProfileContributionsSuspenseQueryHookResult = ReturnType<typeof useUserProfileContributionsSuspenseQuery>;
-export type UserProfileContributionsQueryResult = Apollo.QueryResult<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>;
-export const UserProfileOrdersDocument = gql`
-    query UserProfileOrders($where: UserGetInput!) {
-  user(where: $where) {
-    orders {
-      ...ProfileOrder
-    }
-  }
-}
-    ${ProfileOrderFragmentDoc}`;
-
-/**
- * __useUserProfileOrdersQuery__
- *
- * To run a query within a React component, call `useUserProfileOrdersQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserProfileOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUserProfileOrdersQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
-export function useUserProfileOrdersQuery(baseOptions: Apollo.QueryHookOptions<UserProfileOrdersQuery, UserProfileOrdersQueryVariables> & ({ variables: UserProfileOrdersQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>(UserProfileOrdersDocument, options);
-      }
-export function useUserProfileOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>(UserProfileOrdersDocument, options);
-        }
-export function useUserProfileOrdersSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>(UserProfileOrdersDocument, options);
-        }
-export type UserProfileOrdersQueryHookResult = ReturnType<typeof useUserProfileOrdersQuery>;
-export type UserProfileOrdersLazyQueryHookResult = ReturnType<typeof useUserProfileOrdersLazyQuery>;
-export type UserProfileOrdersSuspenseQueryHookResult = ReturnType<typeof useUserProfileOrdersSuspenseQuery>;
-export type UserProfileOrdersQueryResult = Apollo.QueryResult<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>;
 export const LightningAddressVerifyDocument = gql`
     query LightningAddressVerify($lightningAddress: String) {
   lightningAddressVerify(lightningAddress: $lightningAddress) {
@@ -9949,6 +9750,216 @@ export type ProjectNotificationSettingsQueryHookResult = ReturnType<typeof usePr
 export type ProjectNotificationSettingsLazyQueryHookResult = ReturnType<typeof useProjectNotificationSettingsLazyQuery>;
 export type ProjectNotificationSettingsSuspenseQueryHookResult = ReturnType<typeof useProjectNotificationSettingsSuspenseQuery>;
 export type ProjectNotificationSettingsQueryResult = Apollo.QueryResult<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables>;
+export const UserForProfilePageDocument = gql`
+    query UserForProfilePage($where: UserGetInput!) {
+  user(where: $where) {
+    ...UserForProfilePage
+  }
+}
+    ${UserForProfilePageFragmentDoc}`;
+
+/**
+ * __useUserForProfilePageQuery__
+ *
+ * To run a query within a React component, call `useUserForProfilePageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserForProfilePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserForProfilePageQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUserForProfilePageQuery(baseOptions: Apollo.QueryHookOptions<UserForProfilePageQuery, UserForProfilePageQueryVariables> & ({ variables: UserForProfilePageQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserForProfilePageQuery, UserForProfilePageQueryVariables>(UserForProfilePageDocument, options);
+      }
+export function useUserForProfilePageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserForProfilePageQuery, UserForProfilePageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserForProfilePageQuery, UserForProfilePageQueryVariables>(UserForProfilePageDocument, options);
+        }
+export function useUserForProfilePageSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UserForProfilePageQuery, UserForProfilePageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserForProfilePageQuery, UserForProfilePageQueryVariables>(UserForProfilePageDocument, options);
+        }
+export type UserForProfilePageQueryHookResult = ReturnType<typeof useUserForProfilePageQuery>;
+export type UserForProfilePageLazyQueryHookResult = ReturnType<typeof useUserForProfilePageLazyQuery>;
+export type UserForProfilePageSuspenseQueryHookResult = ReturnType<typeof useUserForProfilePageSuspenseQuery>;
+export type UserForProfilePageQueryResult = Apollo.QueryResult<UserForProfilePageQuery, UserForProfilePageQueryVariables>;
+export const UserProfileProjectsDocument = gql`
+    query UserProfileProjects($where: UserGetInput!) {
+  user(where: $where) {
+    ownerOf {
+      project {
+        ...ProjectForProfilePage
+      }
+    }
+  }
+}
+    ${ProjectForProfilePageFragmentDoc}`;
+
+/**
+ * __useUserProfileProjectsQuery__
+ *
+ * To run a query within a React component, call `useUserProfileProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserProfileProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserProfileProjectsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUserProfileProjectsQuery(baseOptions: Apollo.QueryHookOptions<UserProfileProjectsQuery, UserProfileProjectsQueryVariables> & ({ variables: UserProfileProjectsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserProfileProjectsQuery, UserProfileProjectsQueryVariables>(UserProfileProjectsDocument, options);
+      }
+export function useUserProfileProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserProfileProjectsQuery, UserProfileProjectsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserProfileProjectsQuery, UserProfileProjectsQueryVariables>(UserProfileProjectsDocument, options);
+        }
+export function useUserProfileProjectsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UserProfileProjectsQuery, UserProfileProjectsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserProfileProjectsQuery, UserProfileProjectsQueryVariables>(UserProfileProjectsDocument, options);
+        }
+export type UserProfileProjectsQueryHookResult = ReturnType<typeof useUserProfileProjectsQuery>;
+export type UserProfileProjectsLazyQueryHookResult = ReturnType<typeof useUserProfileProjectsLazyQuery>;
+export type UserProfileProjectsSuspenseQueryHookResult = ReturnType<typeof useUserProfileProjectsSuspenseQuery>;
+export type UserProfileProjectsQueryResult = Apollo.QueryResult<UserProfileProjectsQuery, UserProfileProjectsQueryVariables>;
+export const UserFollowedProjectsDocument = gql`
+    query UserFollowedProjects($where: UserGetInput!) {
+  user(where: $where) {
+    projectFollows {
+      ...ProjectForProfilePage
+    }
+  }
+}
+    ${ProjectForProfilePageFragmentDoc}`;
+
+/**
+ * __useUserFollowedProjectsQuery__
+ *
+ * To run a query within a React component, call `useUserFollowedProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserFollowedProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserFollowedProjectsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUserFollowedProjectsQuery(baseOptions: Apollo.QueryHookOptions<UserFollowedProjectsQuery, UserFollowedProjectsQueryVariables> & ({ variables: UserFollowedProjectsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserFollowedProjectsQuery, UserFollowedProjectsQueryVariables>(UserFollowedProjectsDocument, options);
+      }
+export function useUserFollowedProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserFollowedProjectsQuery, UserFollowedProjectsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserFollowedProjectsQuery, UserFollowedProjectsQueryVariables>(UserFollowedProjectsDocument, options);
+        }
+export function useUserFollowedProjectsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UserFollowedProjectsQuery, UserFollowedProjectsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserFollowedProjectsQuery, UserFollowedProjectsQueryVariables>(UserFollowedProjectsDocument, options);
+        }
+export type UserFollowedProjectsQueryHookResult = ReturnType<typeof useUserFollowedProjectsQuery>;
+export type UserFollowedProjectsLazyQueryHookResult = ReturnType<typeof useUserFollowedProjectsLazyQuery>;
+export type UserFollowedProjectsSuspenseQueryHookResult = ReturnType<typeof useUserFollowedProjectsSuspenseQuery>;
+export type UserFollowedProjectsQueryResult = Apollo.QueryResult<UserFollowedProjectsQuery, UserFollowedProjectsQueryVariables>;
+export const UserProfileContributionsDocument = gql`
+    query UserProfileContributions($where: UserGetInput!) {
+  user(where: $where) {
+    contributions {
+      ...UserProjectContributions
+    }
+  }
+}
+    ${UserProjectContributionsFragmentDoc}`;
+
+/**
+ * __useUserProfileContributionsQuery__
+ *
+ * To run a query within a React component, call `useUserProfileContributionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserProfileContributionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserProfileContributionsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUserProfileContributionsQuery(baseOptions: Apollo.QueryHookOptions<UserProfileContributionsQuery, UserProfileContributionsQueryVariables> & ({ variables: UserProfileContributionsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>(UserProfileContributionsDocument, options);
+      }
+export function useUserProfileContributionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>(UserProfileContributionsDocument, options);
+        }
+export function useUserProfileContributionsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>(UserProfileContributionsDocument, options);
+        }
+export type UserProfileContributionsQueryHookResult = ReturnType<typeof useUserProfileContributionsQuery>;
+export type UserProfileContributionsLazyQueryHookResult = ReturnType<typeof useUserProfileContributionsLazyQuery>;
+export type UserProfileContributionsSuspenseQueryHookResult = ReturnType<typeof useUserProfileContributionsSuspenseQuery>;
+export type UserProfileContributionsQueryResult = Apollo.QueryResult<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>;
+export const UserProfileOrdersDocument = gql`
+    query UserProfileOrders($where: UserGetInput!) {
+  user(where: $where) {
+    orders {
+      ...ProfileOrder
+    }
+  }
+}
+    ${ProfileOrderFragmentDoc}`;
+
+/**
+ * __useUserProfileOrdersQuery__
+ *
+ * To run a query within a React component, call `useUserProfileOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserProfileOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserProfileOrdersQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUserProfileOrdersQuery(baseOptions: Apollo.QueryHookOptions<UserProfileOrdersQuery, UserProfileOrdersQueryVariables> & ({ variables: UserProfileOrdersQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>(UserProfileOrdersDocument, options);
+      }
+export function useUserProfileOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>(UserProfileOrdersDocument, options);
+        }
+export function useUserProfileOrdersSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>(UserProfileOrdersDocument, options);
+        }
+export type UserProfileOrdersQueryHookResult = ReturnType<typeof useUserProfileOrdersQuery>;
+export type UserProfileOrdersLazyQueryHookResult = ReturnType<typeof useUserProfileOrdersLazyQuery>;
+export type UserProfileOrdersSuspenseQueryHookResult = ReturnType<typeof useUserProfileOrdersSuspenseQuery>;
+export type UserProfileOrdersQueryResult = Apollo.QueryResult<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>;
 export const AffiliateLinkCreateDocument = gql`
     mutation AffiliateLinkCreate($input: AffiliateLinkCreateInput!) {
   affiliateLinkCreate(input: $input) {

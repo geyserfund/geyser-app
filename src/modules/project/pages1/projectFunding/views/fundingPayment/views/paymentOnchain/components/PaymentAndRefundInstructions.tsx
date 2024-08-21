@@ -1,7 +1,6 @@
 import { Button, Divider, VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
-import { BsExclamationTriangle } from 'react-icons/bs'
-import { PiDownloadSimple } from 'react-icons/pi'
+import { PiDownloadSimple, PiWarning } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
@@ -25,7 +24,7 @@ export const PaymentAndRefundInstructions = () => {
 
   return (
     <>
-      <Feedback variant={FeedBackVariant.WARNING} icon={<BsExclamationTriangle fontSize={'24px'} />}>
+      <Feedback variant={FeedBackVariant.WARNING} icon={<PiWarning fontSize={'24px'} />}>
         <VStack w="full" alignItems="start">
           <Body size="lg" medium>
             {t('Payment & refund instructions')}

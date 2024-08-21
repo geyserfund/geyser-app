@@ -2,9 +2,9 @@ import { Link } from '@chakra-ui/react'
 import { nip19 } from 'nostr-tools'
 import { PiGithubLogo, PiXLogo } from 'react-icons/pi'
 
-import { ExternalAccountType } from '../../../../../../../../../pages/auth'
-import { NostrIcon } from '../../../../../../../../../shared/components/icons'
-import { ExternalAccount } from '../../../../../../../../../types'
+import { ExternalAccountType } from '../../../pages/auth'
+import { ExternalAccount } from '../../../types'
+import { NostrIcon } from '../../components/icons'
 
 interface GetExternalAccountsProps {
   accounts?: ExternalAccount[]

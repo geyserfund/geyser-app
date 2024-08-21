@@ -1,27 +1,67 @@
+import { Divider, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { ProfileOrderFragment } from '../../../../../../../types'
-import { ProfileTabLayout } from '../../../components'
+import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '@/modules/profile/state'
+import { Body } from '@/shared/components/typography'
+import { NoContributionImageUrl } from '@/shared/constants'
+import { useNotification } from '@/utils'
+
+import { ProfileOrderFragment, useUserProfileOrdersQuery } from '../../../../../../../types'
 import { ProfileOrderCard } from '../components/ProfileOrderCard'
 import { TabPanelSkeleton } from '../components/TabPanelSkeleton'
 
-interface ProfileFollowedProps {
-  orders: ProfileOrderFragment[]
-  isLoading: boolean
-}
-
-export const ProfilePurchases = ({ orders, isLoading }: ProfileFollowedProps) => {
+export const ProfilePurchases = () => {
   const { t } = useTranslation()
 
-  if (isLoading) {
+  const toast = useNotification()
+  const isViewingOwnProfile = useViewingOwnProfileAtomValue()
+
+  const { userProfile } = useUserProfileAtom()
+
+  const { loading, data } = useUserProfileOrdersQuery({
+    variables: {
+      where: {
+        id: userProfile.id,
+      },
+    },
+    skip: !userProfile.id || !isViewingOwnProfile,
+
+    onError(error) {
+      toast.error({
+        title: 'Failed to fetch purchases',
+        description: `${error.message}`,
+      })
+    },
+  })
+
+  const orders = (data?.user.orders || []) as ProfileOrderFragment[]
+
+  if (loading) {
     return <TabPanelSkeleton />
   }
 
   return (
-    <ProfileTabLayout heading={t('Purchases')}>
-      {orders.map((order) => {
-        return <ProfileOrderCard key={order.id} order={order} />
-      })}
-    </ProfileTabLayout>
+    <>
+      <VStack w="full" spacing={4}>
+        {orders.map((order, index) => {
+          return (
+            <>
+              <ProfileOrderCard key={order.id} order={order} />
+
+              {index < orders.length - 1 && <Divider />}
+            </>
+          )
+        })}
+      </VStack>
+
+      {orders.length === 0 && (
+        <VStack w="full" p="20px" spacing="20px">
+          <Image height="200px" src={NoContributionImageUrl} />
+          <Body medium light>
+            {t('No Purchases made yet')}
+          </Body>
+        </VStack>
+      )}
+    </>
   )
 }

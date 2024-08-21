@@ -2,9 +2,9 @@ import { Image, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ButtonComponent } from '../../../../../../components/ui'
-import { ClaimABadgeProps } from '../../../../../../shared/hooks/useNostrBadges'
-import { UserBadge } from '../../../../../../types'
+import { ButtonComponent } from '../../../../../../../../components/ui'
+import { ClaimABadgeProps } from '../../../../../../../../shared/hooks/useNostrBadges'
+import { UserBadge } from '../../../../../../../../types'
 
 interface BadgeItemProps {
   userBadge: UserBadge
@@ -27,8 +27,8 @@ export const BadgeItem = ({ userBadge, isClaimed, claimABadge }: BadgeItemProps)
   }
 
   return (
-    <VStack key={userBadge.id} overflow="hidden" spacing="0px">
-      <Image width="175px" maxWidth="175px" src={badge.image} />
+    <VStack key={userBadge.id} overflow="hidden" spacing="0px" w="full">
+      <Image width="auto" maxWidth="110px" src={badge.image} />
       {!isClaimed && (
         <ButtonComponent size="sm" primary onClick={handleClick} isLoading={claiming}>
           {t('Claim')}
