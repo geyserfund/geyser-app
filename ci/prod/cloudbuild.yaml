@@ -74,6 +74,6 @@ availableSecrets:
       env: 'GIPHY_API_KEY'
     - versionName: projects/$PROJECT_ID/secrets/geyser-nostr-pubkey/versions/1
       env: 'GEYSER_NOSTR_PUBKEY'
-    - versionName: projects/$PROJECT_ID/secrets/airtable-api-key/versions/3
+    - versionName: projects/$PROJECT_ID/secrets/airtable-api-key/versions/5
       env: 'AIR_TABLE_KEY'
 timeout: 1800s
