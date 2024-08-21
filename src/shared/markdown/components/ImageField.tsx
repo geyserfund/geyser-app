@@ -1,7 +1,8 @@
 import { FormControl } from '@chakra-ui/react'
 import { Control, Controller, FieldValue } from 'react-hook-form'
 
-import { FileUpload } from '../../../components/molecules'
+import { FileUpload } from '@/shared/molecules'
+
 import { UploadBox } from '../../../components/ui'
 import { FieldContainer } from '../../components/form/FieldContainer'
 

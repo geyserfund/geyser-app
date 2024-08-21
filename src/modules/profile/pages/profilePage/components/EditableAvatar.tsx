@@ -1,8 +1,9 @@
 import { Box } from '@chakra-ui/react'
 import { useState } from 'react'
 
+import { FileUpload } from '@/shared/molecules'
+
 import { AddPictureIcon } from '../../../../../components/icons/svg/AddPictureIcon'
-import { FileUpload } from '../../../../../components/molecules'
 import { ImageWithReload } from '../../../../../components/ui'
 import Loader from '../../../../../components/ui/Loader'
 import { getRandomOrb } from '../../../../../utils'

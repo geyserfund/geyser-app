@@ -1,5 +1,3 @@
-// api.airtable.com/v0/appyM7XlNIWVypuP5/Featured%20Project?maxRecords=3&view=Grid%20view
-
 import { VITE_APP_AIR_TABLE_KEY } from '@/shared/constants/config/env'
 
 const AIRTABLE_API = 'https://api.airtable.com/v0/appyM7XlNIWVypuP5'

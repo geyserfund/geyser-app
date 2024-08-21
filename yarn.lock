@@ -11242,13 +11242,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/file-saver@npm:^2":
-  version: 2.0.7
-  resolution: "@types/file-saver@npm:2.0.7"
-  checksum: 10c0/c6b88a1aea8eec58469da2a90828fef6e9d5d590c7094fb959783d7c32878af80d39439734f3d41b78355dadb507f606e3d04a29a160c85411c65251e58df847
-  languageName: node
-  linkType: hard
-
 "@types/filesystem@npm:*":
   version: 0.0.32
   resolution: "@types/filesystem@npm:0.0.32"
@@ -17269,13 +17262,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"file-saver@npm:^2.0.5":
-  version: 2.0.5
-  resolution: "file-saver@npm:2.0.5"
-  checksum: 10c0/0a361f683786c34b2574aea53744cb70d0a6feb0fa5e3af00f2fcb6c9d40d3049cc1470e38c6c75df24219f247f6fb3076f86943958f580e62ee2ffe897af8b1
-  languageName: node
-  linkType: hard
-
 "file-selector@npm:^0.6.0":
   version: 0.6.0
   resolution: "file-selector@npm:0.6.0"
@@ -17900,7 +17886,6 @@ __metadata:
     "@testing-library/react-hooks": "npm:^8.0.1"
     "@testing-library/user-event": "npm:^14.4.3"
     "@types/dompurify": "npm:^3.0.2"
-    "@types/file-saver": "npm:^2"
     "@types/loadable__component": "npm:^5.13.4"
     "@types/luxon": "npm:^3.2.0"
     "@types/node": "npm:^18.11.18"
@@ -17944,7 +17929,6 @@ __metadata:
     eslint-plugin-testing-library: "npm:^5.10.0"
     express: "npm:^4.19.2"
     fast-deep-equal: "npm:^3.1.3"
-    file-saver: "npm:^2.0.5"
     framer-motion: "npm:^11.2.6"
     get-video-id: "npm:^4.1.5"
     graphql: "npm:^16.9.0"
