@@ -13,11 +13,14 @@ export const QUERY_FEATURED_PROJECT_FOR_LANDING_PAGE = gql`
 
 export const QUERY_PROJECTS_MOST_FUNDED_OF_THE_WEEK = gql`
   ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
-  query ProjectsMostFundedOfTheWeekGet($input: GetProjectsMostFundedOfTheWeekInput) {
-    projectsMostFundedOfTheWeekGet(input: $input) {
-      project {
-        ...ProjectForLandingPage
+  query ProjectsMostFundedByTag($input: ProjectsMostFundedByTagInput!) {
+    projectsMostFundedByTag(input: $input) {
+      projects {
+        project {
+          ...ProjectForLandingPage
+        }
       }
+      tagId
     }
   }
 `

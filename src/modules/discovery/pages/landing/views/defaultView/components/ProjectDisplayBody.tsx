@@ -28,7 +28,13 @@ export const ProjectDisplayBody = ({
     >
       <Stack width="100%" direction={{ base: 'column', lg: 'row' }} spacing={4}>
         {projects.map((project) => {
-          return <LandingProjectCard key={project.id} project={project} />
+          return (
+            <LandingProjectCard
+              key={project.id}
+              project={project}
+              maxWidth={{ base: 'unset', lg: 'calc((100% - 48px) / 4 )' }}
+            />
+          )
         })}
       </Stack>
     </ProjectRowLayout>

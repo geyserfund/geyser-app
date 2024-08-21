@@ -25,10 +25,11 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
       flex={{ base: 'unset', lg: 1 }}
       {...rest}
     >
-      <Box width={{ base: '96px', lg: 'auto' }} height={{ base: '96px', lg: 'auto' }} aspectRatio={1}>
+      <Box width={{ base: '96px', lg: 'auto' }} height={{ base: '96px', lg: 'auto' }}>
         <ImageWithReload
           width="100%"
           height="100%"
+          aspectRatio={1}
           objectFit="cover"
           src={project.thumbnailImage}
           alt={`${project.title}-header-image`}

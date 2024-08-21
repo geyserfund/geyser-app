@@ -454,6 +454,8 @@ export type Funder = {
   fundingTxs: Array<FundingTx>;
   id: Scalars['BigInt']['output'];
   orders: Array<Order>;
+  /** Contributor's rank in the project. */
+  rank?: Maybe<Scalars['Int']['output']>;
   /** Number of (confirmed) times a Funder funded a particular project. */
   timesFunded?: Maybe<Scalars['Int']['output']>;
   user?: Maybe<User>;
@@ -756,6 +758,11 @@ export type GetAffiliateLinksWhereInput = {
   projectId: Scalars['BigInt']['input'];
 };
 
+export type GetContributorInput = {
+  projectId: Scalars['BigInt']['input'];
+  userId: Scalars['BigInt']['input'];
+};
+
 export type GetDashboardFundersWhereInput = {
   confirmed?: InputMaybe<Scalars['Boolean']['input']>;
   projectId?: InputMaybe<Scalars['BigInt']['input']>;
@@ -857,11 +864,6 @@ export type GetProjectStatsWhereInput = {
   dateRange?: InputMaybe<DateRangeInput>;
   groupBy?: InputMaybe<AnalyticsGroupByInterval>;
   projectId: Scalars['BigInt']['input'];
-};
-
-export type GetProjectsMostFundedOfTheWeekInput = {
-  tagIds?: InputMaybe<Array<Scalars['Int']['input']>>;
-  take?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type GlobalContributorLeaderboardRow = {
@@ -1982,6 +1984,18 @@ export type ProjectLinkMutationInput = {
   projectId: Scalars['BigInt']['input'];
 };
 
+export type ProjectMostFunded = {
+  __typename?: 'ProjectMostFunded';
+  /** The project details */
+  project: Project;
+};
+
+export type ProjectMostFundedByTag = {
+  __typename?: 'ProjectMostFundedByTag';
+  projects: Array<ProjectMostFunded>;
+  tagId: Scalars['Int']['output'];
+};
+
 export type ProjectPublishMutationInput = {
   projectId: Scalars['BigInt']['input'];
 };
@@ -2169,6 +2183,16 @@ export type ProjectsGetWhereInput = {
   type?: InputMaybe<ProjectType>;
 };
 
+export type ProjectsMostFundedByTagInput = {
+  range: ProjectsMostFundedByTagRange;
+  tagIds: Array<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export enum ProjectsMostFundedByTagRange {
+  Week = 'WEEK'
+}
+
 export enum ProjectsOrderByField {
   Balance = 'balance'
 }
@@ -2203,6 +2227,7 @@ export type Query = {
   /** Returns all affiliate links of a project. */
   affiliateLinksGet: Array<AffiliateLink>;
   badges: Array<Badge>;
+  contributor: Funder;
   currencyQuoteGet: CurrencyQuoteGetResponse;
   entry?: Maybe<Entry>;
   fundersGet: Array<Funder>;
@@ -2239,7 +2264,7 @@ export type Query = {
   projectStatsGet: ProjectStats;
   /** By default, returns a list of all active projects. */
   projectsGet: ProjectsResponse;
-  projectsMostFundedOfTheWeekGet: Array<ProjectsMostFundedOfTheWeekGet>;
+  projectsMostFundedByTag: Array<ProjectMostFundedByTag>;
   /** Returns summary statistics of all projects, both current and past. */
   projectsSummary: ProjectsSummary;
   statusCheck: Scalars['Boolean']['output'];
@@ -2264,6 +2289,11 @@ export type QueryActivitiesGetArgs = {
 
 export type QueryAffiliateLinksGetArgs = {
   input: GetAffiliateLinksInput;
+};
+
+
+export type QueryContributorArgs = {
+  input: GetContributorInput;
 };
 
 
@@ -2398,8 +2428,8 @@ export type QueryProjectsGetArgs = {
 };
 
 
-export type QueryProjectsMostFundedOfTheWeekGetArgs = {
-  input?: InputMaybe<GetProjectsMostFundedOfTheWeekInput>;
+export type QueryProjectsMostFundedByTagArgs = {
+  input: ProjectsMostFundedByTagInput;
 };
 
 
@@ -2844,14 +2874,6 @@ export type DashboardFundersGetInput = {
   where?: InputMaybe<GetDashboardFundersWhereInput>;
 };
 
-export type ProjectsMostFundedOfTheWeekGet = {
-  __typename?: 'projectsMostFundedOfTheWeekGet';
-  fundersCount: Scalars['Int']['output'];
-  fundingAmount: Scalars['BigInt']['output'];
-  project: Project;
-  tagId?: Maybe<Scalars['Int']['output']>;
-};
-
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -3039,6 +3061,7 @@ export type ResolversTypes = {
   GetActivityWhereInput: GetActivityWhereInput;
   GetAffiliateLinksInput: GetAffiliateLinksInput;
   GetAffiliateLinksWhereInput: GetAffiliateLinksWhereInput;
+  GetContributorInput: GetContributorInput;
   GetDashboardFundersWhereInput: GetDashboardFundersWhereInput;
   GetEntriesInput: GetEntriesInput;
   GetEntriesOrderByInput: GetEntriesOrderByInput;
@@ -3058,7 +3081,6 @@ export type ResolversTypes = {
   GetProjectRewardWhereInput: GetProjectRewardWhereInput;
   GetProjectStatsInput: GetProjectStatsInput;
   GetProjectStatsWhereInput: GetProjectStatsWhereInput;
-  GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput;
   GlobalContributorLeaderboardRow: ResolverTypeWrapper<GlobalContributorLeaderboardRow>;
   GlobalProjectLeaderboardRow: ResolverTypeWrapper<GlobalProjectLeaderboardRow>;
   Grant: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['Grant']>;
@@ -3170,6 +3192,8 @@ export type ResolversTypes = {
   ProjectLeaderboardContributorsRow: ResolverTypeWrapper<ProjectLeaderboardContributorsRow>;
   ProjectLeaderboardPeriod: ProjectLeaderboardPeriod;
   ProjectLinkMutationInput: ProjectLinkMutationInput;
+  ProjectMostFunded: ResolverTypeWrapper<ProjectMostFunded>;
+  ProjectMostFundedByTag: ResolverTypeWrapper<ProjectMostFundedByTag>;
   ProjectPublishMutationInput: ProjectPublishMutationInput;
   ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>;
   ProjectReward: ResolverTypeWrapper<ProjectReward>;
@@ -3188,6 +3212,8 @@ export type ResolversTypes = {
   ProjectViewStats: ResolverTypeWrapper<ProjectViewStats>;
   ProjectsGetQueryInput: ProjectsGetQueryInput;
   ProjectsGetWhereInput: ProjectsGetWhereInput;
+  ProjectsMostFundedByTagInput: ProjectsMostFundedByTagInput;
+  ProjectsMostFundedByTagRange: ProjectsMostFundedByTagRange;
   ProjectsOrderByField: ProjectsOrderByField;
   ProjectsOrderByInput: ProjectsOrderByInput;
   ProjectsResponse: ResolverTypeWrapper<ProjectsResponse>;
@@ -3245,7 +3271,6 @@ export type ResolversTypes = {
   WalletStatus: WalletStatus;
   WalletStatusCode: WalletStatusCode;
   dashboardFundersGetInput: DashboardFundersGetInput;
-  projectsMostFundedOfTheWeekGet: ResolverTypeWrapper<ProjectsMostFundedOfTheWeekGet>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -3337,6 +3362,7 @@ export type ResolversParentTypes = {
   GetActivityWhereInput: GetActivityWhereInput;
   GetAffiliateLinksInput: GetAffiliateLinksInput;
   GetAffiliateLinksWhereInput: GetAffiliateLinksWhereInput;
+  GetContributorInput: GetContributorInput;
   GetDashboardFundersWhereInput: GetDashboardFundersWhereInput;
   GetEntriesInput: GetEntriesInput;
   GetEntriesOrderByInput: GetEntriesOrderByInput;
@@ -3356,7 +3382,6 @@ export type ResolversParentTypes = {
   GetProjectRewardWhereInput: GetProjectRewardWhereInput;
   GetProjectStatsInput: GetProjectStatsInput;
   GetProjectStatsWhereInput: GetProjectStatsWhereInput;
-  GetProjectsMostFundedOfTheWeekInput: GetProjectsMostFundedOfTheWeekInput;
   GlobalContributorLeaderboardRow: GlobalContributorLeaderboardRow;
   GlobalProjectLeaderboardRow: GlobalProjectLeaderboardRow;
   Grant: ResolversUnionTypes<ResolversParentTypes>['Grant'];
@@ -3448,6 +3473,8 @@ export type ResolversParentTypes = {
   ProjectLeaderboardContributorsGetInput: ProjectLeaderboardContributorsGetInput;
   ProjectLeaderboardContributorsRow: ProjectLeaderboardContributorsRow;
   ProjectLinkMutationInput: ProjectLinkMutationInput;
+  ProjectMostFunded: ProjectMostFunded;
+  ProjectMostFundedByTag: ProjectMostFundedByTag;
   ProjectPublishMutationInput: ProjectPublishMutationInput;
   ProjectRegionsGetResult: ProjectRegionsGetResult;
   ProjectReward: ProjectReward;
@@ -3464,6 +3491,7 @@ export type ResolversParentTypes = {
   ProjectViewStats: ProjectViewStats;
   ProjectsGetQueryInput: ProjectsGetQueryInput;
   ProjectsGetWhereInput: ProjectsGetWhereInput;
+  ProjectsMostFundedByTagInput: ProjectsMostFundedByTagInput;
   ProjectsOrderByInput: ProjectsOrderByInput;
   ProjectsResponse: ProjectsResponse;
   ProjectsSummary: ProjectsSummary;
@@ -3509,7 +3537,6 @@ export type ResolversParentTypes = {
   WalletResourceInput: WalletResourceInput;
   WalletState: WalletState;
   dashboardFundersGetInput: DashboardFundersGetInput;
-  projectsMostFundedOfTheWeekGet: ProjectsMostFundedOfTheWeekGet;
 };
 
 export type ActivitiesGetResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ActivitiesGetResponse'] = ResolversParentTypes['ActivitiesGetResponse']> = {
@@ -3743,6 +3770,7 @@ export type FunderResolvers<ContextType = any, ParentType extends ResolversParen
   fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType, Partial<FunderFundingTxsArgs>>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   orders?: Resolver<Array<ResolversTypes['Order']>, ParentType, ContextType>;
+  rank?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   timesFunded?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -4337,6 +4365,17 @@ export type ProjectLeaderboardContributorsRowResolvers<ContextType = any, Parent
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ProjectMostFundedResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectMostFunded'] = ResolversParentTypes['ProjectMostFunded']> = {
+  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProjectMostFundedByTagResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectMostFundedByTag'] = ResolversParentTypes['ProjectMostFundedByTag']> = {
+  projects?: Resolver<Array<ResolversTypes['ProjectMostFunded']>, ParentType, ContextType>;
+  tagId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ProjectRegionsGetResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRegionsGetResult'] = ResolversParentTypes['ProjectRegionsGetResult']> = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   region?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -4442,6 +4481,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   activitiesGet?: Resolver<ResolversTypes['ActivitiesGetResponse'], ParentType, ContextType, Partial<QueryActivitiesGetArgs>>;
   affiliateLinksGet?: Resolver<Array<ResolversTypes['AffiliateLink']>, ParentType, ContextType, RequireFields<QueryAffiliateLinksGetArgs, 'input'>>;
   badges?: Resolver<Array<ResolversTypes['Badge']>, ParentType, ContextType>;
+  contributor?: Resolver<ResolversTypes['Funder'], ParentType, ContextType, RequireFields<QueryContributorArgs, 'input'>>;
   currencyQuoteGet?: Resolver<ResolversTypes['CurrencyQuoteGetResponse'], ParentType, ContextType, RequireFields<QueryCurrencyQuoteGetArgs, 'input'>>;
   entry?: Resolver<Maybe<ResolversTypes['Entry']>, ParentType, ContextType, RequireFields<QueryEntryArgs, 'id'>>;
   fundersGet?: Resolver<Array<ResolversTypes['Funder']>, ParentType, ContextType, RequireFields<QueryFundersGetArgs, 'input'>>;
@@ -4475,7 +4515,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   projectRewardsTrendingWeeklyGet?: Resolver<Array<ResolversTypes['ProjectRewardsGroupedByRewardIdStats']>, ParentType, ContextType>;
   projectStatsGet?: Resolver<ResolversTypes['ProjectStats'], ParentType, ContextType, RequireFields<QueryProjectStatsGetArgs, 'input'>>;
   projectsGet?: Resolver<ResolversTypes['ProjectsResponse'], ParentType, ContextType, Partial<QueryProjectsGetArgs>>;
-  projectsMostFundedOfTheWeekGet?: Resolver<Array<ResolversTypes['projectsMostFundedOfTheWeekGet']>, ParentType, ContextType, Partial<QueryProjectsMostFundedOfTheWeekGetArgs>>;
+  projectsMostFundedByTag?: Resolver<Array<ResolversTypes['ProjectMostFundedByTag']>, ParentType, ContextType, RequireFields<QueryProjectsMostFundedByTagArgs, 'input'>>;
   projectsSummary?: Resolver<ResolversTypes['ProjectsSummary'], ParentType, ContextType>;
   statusCheck?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   tagsGet?: Resolver<Array<ResolversTypes['TagsGetResult']>, ParentType, ContextType>;
@@ -4637,14 +4677,6 @@ export type WalletStateResolvers<ContextType = any, ParentType extends Resolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProjectsMostFundedOfTheWeekGetResolvers<ContextType = any, ParentType extends ResolversParentTypes['projectsMostFundedOfTheWeekGet'] = ResolversParentTypes['projectsMostFundedOfTheWeekGet']> = {
-  fundersCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  fundingAmount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
-  tagId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type Resolvers<ContextType = any> = {
   ActivitiesGetResponse?: ActivitiesGetResponseResolvers<ContextType>;
   Activity?: ActivityResolvers<ContextType>;
@@ -4744,6 +4776,8 @@ export type Resolvers<ContextType = any> = {
   ProjectGoals?: ProjectGoalsResolvers<ContextType>;
   ProjectKeys?: ProjectKeysResolvers<ContextType>;
   ProjectLeaderboardContributorsRow?: ProjectLeaderboardContributorsRowResolvers<ContextType>;
+  ProjectMostFunded?: ProjectMostFundedResolvers<ContextType>;
+  ProjectMostFundedByTag?: ProjectMostFundedByTagResolvers<ContextType>;
   ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>;
   ProjectReward?: ProjectRewardResolvers<ContextType>;
   ProjectRewardsGroupedByRewardIdStats?: ProjectRewardsGroupedByRewardIdStatsResolvers<ContextType>;
@@ -4775,7 +4809,6 @@ export type Resolvers<ContextType = any> = {
   WalletOffChainContributionLimits?: WalletOffChainContributionLimitsResolvers<ContextType>;
   WalletOnChainContributionLimits?: WalletOnChainContributionLimitsResolvers<ContextType>;
   WalletState?: WalletStateResolvers<ContextType>;
-  projectsMostFundedOfTheWeekGet?: ProjectsMostFundedOfTheWeekGetResolvers<ContextType>;
 };
 
 
@@ -5270,15 +5303,15 @@ export type FeaturedProjectForLandingPageQuery = { __typename?: 'Query', project
     & ProjectForLandingPageFragment
   ) | null };
 
-export type ProjectsMostFundedOfTheWeekGetQueryVariables = Exact<{
-  input?: InputMaybe<GetProjectsMostFundedOfTheWeekInput>;
+export type ProjectsMostFundedByTagQueryVariables = Exact<{
+  input: ProjectsMostFundedByTagInput;
 }>;
 
 
-export type ProjectsMostFundedOfTheWeekGetQuery = { __typename?: 'Query', projectsMostFundedOfTheWeekGet: Array<{ __typename?: 'projectsMostFundedOfTheWeekGet', project: (
-      { __typename?: 'Project' }
-      & ProjectForLandingPageFragment
-    ) }> };
+export type ProjectsMostFundedByTagQuery = { __typename?: 'Query', projectsMostFundedByTag: Array<{ __typename?: 'ProjectMostFundedByTag', tagId: number, projects: Array<{ __typename?: 'ProjectMostFunded', project: (
+        { __typename?: 'Project' }
+        & ProjectForLandingPageFragment
+      ) }> }> };
 
 export type ProjectsForLandingPageQueryVariables = Exact<{
   input?: InputMaybe<ProjectsGetQueryInput>;
@@ -9270,48 +9303,51 @@ export type FeaturedProjectForLandingPageQueryHookResult = ReturnType<typeof use
 export type FeaturedProjectForLandingPageLazyQueryHookResult = ReturnType<typeof useFeaturedProjectForLandingPageLazyQuery>;
 export type FeaturedProjectForLandingPageSuspenseQueryHookResult = ReturnType<typeof useFeaturedProjectForLandingPageSuspenseQuery>;
 export type FeaturedProjectForLandingPageQueryResult = Apollo.QueryResult<FeaturedProjectForLandingPageQuery, FeaturedProjectForLandingPageQueryVariables>;
-export const ProjectsMostFundedOfTheWeekGetDocument = gql`
-    query ProjectsMostFundedOfTheWeekGet($input: GetProjectsMostFundedOfTheWeekInput) {
-  projectsMostFundedOfTheWeekGet(input: $input) {
-    project {
-      ...ProjectForLandingPage
+export const ProjectsMostFundedByTagDocument = gql`
+    query ProjectsMostFundedByTag($input: ProjectsMostFundedByTagInput!) {
+  projectsMostFundedByTag(input: $input) {
+    projects {
+      project {
+        ...ProjectForLandingPage
+      }
     }
+    tagId
   }
 }
     ${ProjectForLandingPageFragmentDoc}`;
 
 /**
- * __useProjectsMostFundedOfTheWeekGetQuery__
+ * __useProjectsMostFundedByTagQuery__
  *
- * To run a query within a React component, call `useProjectsMostFundedOfTheWeekGetQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectsMostFundedOfTheWeekGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useProjectsMostFundedByTagQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectsMostFundedByTagQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useProjectsMostFundedOfTheWeekGetQuery({
+ * const { data, loading, error } = useProjectsMostFundedByTagQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useProjectsMostFundedOfTheWeekGetQuery(baseOptions?: Apollo.QueryHookOptions<ProjectsMostFundedOfTheWeekGetQuery, ProjectsMostFundedOfTheWeekGetQueryVariables>) {
+export function useProjectsMostFundedByTagQuery(baseOptions: Apollo.QueryHookOptions<ProjectsMostFundedByTagQuery, ProjectsMostFundedByTagQueryVariables> & ({ variables: ProjectsMostFundedByTagQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProjectsMostFundedOfTheWeekGetQuery, ProjectsMostFundedOfTheWeekGetQueryVariables>(ProjectsMostFundedOfTheWeekGetDocument, options);
+        return Apollo.useQuery<ProjectsMostFundedByTagQuery, ProjectsMostFundedByTagQueryVariables>(ProjectsMostFundedByTagDocument, options);
       }
-export function useProjectsMostFundedOfTheWeekGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectsMostFundedOfTheWeekGetQuery, ProjectsMostFundedOfTheWeekGetQueryVariables>) {
+export function useProjectsMostFundedByTagLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectsMostFundedByTagQuery, ProjectsMostFundedByTagQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProjectsMostFundedOfTheWeekGetQuery, ProjectsMostFundedOfTheWeekGetQueryVariables>(ProjectsMostFundedOfTheWeekGetDocument, options);
+          return Apollo.useLazyQuery<ProjectsMostFundedByTagQuery, ProjectsMostFundedByTagQueryVariables>(ProjectsMostFundedByTagDocument, options);
         }
-export function useProjectsMostFundedOfTheWeekGetSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectsMostFundedOfTheWeekGetQuery, ProjectsMostFundedOfTheWeekGetQueryVariables>) {
+export function useProjectsMostFundedByTagSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectsMostFundedByTagQuery, ProjectsMostFundedByTagQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProjectsMostFundedOfTheWeekGetQuery, ProjectsMostFundedOfTheWeekGetQueryVariables>(ProjectsMostFundedOfTheWeekGetDocument, options);
+          return Apollo.useSuspenseQuery<ProjectsMostFundedByTagQuery, ProjectsMostFundedByTagQueryVariables>(ProjectsMostFundedByTagDocument, options);
         }
-export type ProjectsMostFundedOfTheWeekGetQueryHookResult = ReturnType<typeof useProjectsMostFundedOfTheWeekGetQuery>;
-export type ProjectsMostFundedOfTheWeekGetLazyQueryHookResult = ReturnType<typeof useProjectsMostFundedOfTheWeekGetLazyQuery>;
-export type ProjectsMostFundedOfTheWeekGetSuspenseQueryHookResult = ReturnType<typeof useProjectsMostFundedOfTheWeekGetSuspenseQuery>;
-export type ProjectsMostFundedOfTheWeekGetQueryResult = Apollo.QueryResult<ProjectsMostFundedOfTheWeekGetQuery, ProjectsMostFundedOfTheWeekGetQueryVariables>;
+export type ProjectsMostFundedByTagQueryHookResult = ReturnType<typeof useProjectsMostFundedByTagQuery>;
+export type ProjectsMostFundedByTagLazyQueryHookResult = ReturnType<typeof useProjectsMostFundedByTagLazyQuery>;
+export type ProjectsMostFundedByTagSuspenseQueryHookResult = ReturnType<typeof useProjectsMostFundedByTagSuspenseQuery>;
+export type ProjectsMostFundedByTagQueryResult = Apollo.QueryResult<ProjectsMostFundedByTagQuery, ProjectsMostFundedByTagQueryVariables>;
 export const ProjectsForLandingPageDocument = gql`
     query ProjectsForLandingPage($input: ProjectsGetQueryInput) {
   projectsGet(input: $input) {

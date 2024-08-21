@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next'
 
 import { useFilterContext } from '@/context/filter'
-import { useMostFundedOfTheWeekProjectsState } from '@/shared/hooks/graphqlState'
+import { getListOfTags } from '@/shared/constants'
 
-import { Tag } from '../../../../../../../types'
+import { ProjectsMostFundedByTagRange, Tag, useProjectsMostFundedByTagQuery } from '../../../../../../../types'
 import { ProjectDisplayBody, ProjectDisplayBodySkeleton } from '../components/ProjectDisplayBody'
 
 interface ProjectDisplayProps {
@@ -16,14 +16,21 @@ export const ProjectsDisplayMostFundedThisWeek = ({ tag }: ProjectDisplayProps) 
   const { t } = useTranslation()
   const { updateFilter } = useFilterContext()
 
-  const { projects, loading } = useMostFundedOfTheWeekProjectsState({
-    tagIds: tag ? [tag.id] : [],
-    take: NO_OF_PROJECT_TO_LOAD,
+  const allTags = getListOfTags()
+
+  const { loading, data } = useProjectsMostFundedByTagQuery({
+    variables: {
+      input: {
+        take: NO_OF_PROJECT_TO_LOAD,
+        range: ProjectsMostFundedByTagRange.Week,
+        tagIds: allTags.map((tag) => tag.id),
+      },
+    },
   })
 
-  const onSeeAllClick = () => {
-    if (tag) {
-      updateFilter({ tagIds: [tag.id] })
+  const onSeeAllClick = (tagId: number) => {
+    if (tagId) {
+      updateFilter({ tagIds: [tagId] })
     }
   }
 
@@ -31,18 +38,27 @@ export const ProjectsDisplayMostFundedThisWeek = ({ tag }: ProjectDisplayProps) 
     return <ProjectDisplayBodySkeleton />
   }
 
-  if (projects.length <= 2) {
-    return null
-  }
+  const ProjectByTagList = data?.projectsMostFundedByTag || []
 
   return (
     <>
-      <ProjectDisplayBody
-        title={tag?.label ? t('Trending in') : ''}
-        subtitle={tag?.label || t('Recent Projects')}
-        projects={projects}
-        onSeeAllClick={onSeeAllClick}
-      />
+      {ProjectByTagList.map((projectByTag) => {
+        if (projectByTag.projects.length === 0) return null
+
+        const currentTag = allTags.find((tag) => tag.id === projectByTag.tagId)
+
+        const projects = projectByTag.projects.map((project) => project.project)
+
+        return (
+          <ProjectDisplayBody
+            key={projectByTag.tagId}
+            title={currentTag?.label ? t('Trending in') : ''}
+            subtitle={currentTag?.label || t('Recent Projects')}
+            projects={projects}
+            onSeeAllClick={() => onSeeAllClick(projectByTag.tagId)}
+          />
+        )
+      })}
     </>
   )
 }

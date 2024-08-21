@@ -26,14 +26,11 @@ export const TrendingRewardCard = ({ reward, ...rest }: TrendingRewardCardProps)
       flex={{ base: 'unset', lg: 1 }}
       {...rest}
     >
-      <Box
-        width={{ base: '96px', lg: 'auto' }}
-        height={{ base: '96px', lg: 'auto' }}
-        aspectRatio={ImageCropAspectRatio.Reward}
-      >
+      <Box width={{ base: '96px', lg: 'auto' }} height={{ base: '96px', lg: 'auto' }}>
         <ImageWithReload
           width="100%"
           height="100%"
+          aspectRatio={{ base: 1, lg: ImageCropAspectRatio.Reward }}
           objectFit="cover"
           src={reward.image}
           alt={`${reward.name}-header-image`}
@@ -74,11 +71,11 @@ export const TrendingRewardCard = ({ reward, ...rest }: TrendingRewardCardProps)
                 <Body as="span" size="sm" light>
                   $
                 </Body>{' '}
-                {commaFormatted(Math.round(reward.cost / 100))}
+                {reward.cost < 100 ? (reward.cost / 100).toFixed(2) : commaFormatted(Math.round(reward.cost / 100))}
               </>
             ) : (
               <>
-                {commaFormatted(Math.round(reward.cost))}{' '}
+                {commaFormatted(reward.cost)}{' '}
                 <Body as="span" size="sm" light>
                   sats
                 </Body>

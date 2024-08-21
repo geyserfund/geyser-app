@@ -1,4 +1,4 @@
-import { Box, HStack, SkeletonText, VStack } from '@chakra-ui/react'
+import { Box, HStack, Skeleton, SkeletonText, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { PiLightning, PiUsers } from 'react-icons/pi'
@@ -69,7 +69,7 @@ export const FeaturedProjectCard = ({ projectName }: { projectName: string }) =>
           <HStack spacing={3} justifySelf={'end'} flexWrap={'wrap'}>
             <HStack spacing={1}>
               <PiUsers />
-              <Body size="sm" light medium>
+              <Body size="sm" light medium pt={1}>
                 {t('Contributions')}:
                 <Body as="span" dark medium>
                   {project.fundersCount}
@@ -78,7 +78,7 @@ export const FeaturedProjectCard = ({ projectName }: { projectName: string }) =>
             </HStack>
             <HStack spacing={1}>
               <PiLightning />
-              <Body size="sm" light medium>
+              <Body size="sm" light medium pt={1}>
                 {t('Contributed')}:
                 <Body as="span" dark medium>
                   {commaFormatted(project.balance)}
@@ -109,10 +109,10 @@ export const FeaturedCardSkeleton = () => {
         overflow="hidden"
       >
         <Box width={{ base: '100%', sm: '44%' }} height={{ base: '240px', sm: '100%' }} overflow="hidden">
-          <SkeletonLayout height="full" width="full" />
+          <Skeleton height="full" width="full" />
         </Box>
         <VStack
-          width={{ base: '100%', sm: '45%' }}
+          width={{ base: '100%', sm: '55%' }}
           height="100%"
           minWidth="200px"
           alignItems="start"
@@ -121,10 +121,10 @@ export const FeaturedCardSkeleton = () => {
           padding={standardPadding}
           justifyContent={{ base: 'start', sm: 'space-between' }}
         >
-          <VStack alignItems={'start'}>
+          <VStack alignItems={'start'} w="full">
             <SkeletonLayout height="29px" width="200px" />
 
-            <SkeletonText noOfLines={6} />
+            <SkeletonText noOfLines={6} w="full" />
           </VStack>
           <HStack spacing={3} justifySelf={'end'} flexWrap={'wrap'}>
             <SkeletonLayout height="22px" width="40px" />

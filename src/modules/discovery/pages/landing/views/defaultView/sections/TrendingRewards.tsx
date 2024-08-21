@@ -1,5 +1,6 @@
-import { GridItem, HStack, SimpleGrid, Stack } from '@chakra-ui/react'
+import { GridItem, HStack, Icon, SimpleGrid, Stack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { PiFire } from 'react-icons/pi'
 
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { H3 } from '@/shared/components/typography'
@@ -26,10 +27,11 @@ export const TrendingRewards = () => {
   return (
     <ProjectRowLayout
       title={
-        <HStack>
+        <HStack spacing={1}>
           <H3 size="2xl" dark bold>
-            {t('Trending in rewards')}
+            {t('Trending rewards')}
           </H3>
+          <Icon as={PiFire} fontSize={'24px'} color="orange.9" />
         </HStack>
       }
       width="100%"
