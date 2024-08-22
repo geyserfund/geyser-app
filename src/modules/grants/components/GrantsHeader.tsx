@@ -97,6 +97,9 @@ const GrantsHeader = () => {
           borderColor="neutralAlpha.6"
           p={6}
           borderBottomRadius="8px"
+          mt={-0.25}
+          borderTop={'none'}
+          zIndex={0}
         >
           <Box width="100%" justifyContent="center">
             {items && (
