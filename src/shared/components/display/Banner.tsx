@@ -33,26 +33,20 @@ export const Banner = ({ title, items, loading, reverse = false }: BannerProps) 
         opacity={0.25}
         zIndex={1}
         borderRadius="8px"
+        draggable={false}
       />
       <Direction
         width="full"
         border="1px solid"
         justifyContent="center"
         borderColor="primaryAlpha.6"
-        bgGradient={`linear(to-r, ${primaryColorsLight[200]}, ${primaryColorsLight[50]})`}
         p={4}
         borderRadius="8px"
         height="130px"
         maxHeight="130px"
+        bg={'primaryAlpha.10'}
+        zIndex={2}
       >
-        <Body
-          fontSize={{ base: '18px', lg: '20px' }}
-          textAlign={{ base: 'left', lg: 'center' }}
-          color="primary1.12"
-          width="100%"
-        >
-          {title}
-        </Body>
         <Box width="100%" justifyContent="center">
           {items && (
             <Column
@@ -74,6 +68,14 @@ export const Banner = ({ title, items, loading, reverse = false }: BannerProps) 
             </Column>
           )}
         </Box>
+        <Body
+          fontSize={{ base: '18px', lg: '20px' }}
+          textAlign={{ base: 'left', lg: 'center' }}
+          color="primary1.12"
+          width="100%"
+        >
+          {title}
+        </Body>
       </Direction>
     </Box>
   )
@@ -98,15 +100,15 @@ const BannerItem = ({
 
   if (reverse) {
     return (
-      <HStack>
-        <Body fontSize={{ base: '16px', lg: '24px' }} color="neutral1.12" bold>
+      <HStack zIndex={2}>
+        <Body fontSize={{ base: 'lg', lg: '3xl' }} dark bold>
           {label}:
         </Body>
-        <Body fontSize={{ base: '16px', lg: '24px' }} color="neutral1.12" bold>
+        <Body fontSize={{ base: 'lg', lg: '3xl' }} dark bold>
           {value}
         </Body>
         {suffix && (
-          <Body fontSize={{ base: '16px', lg: '24px' }} color="neutral1.12" bold>
+          <Body fontSize={{ base: 'lg', lg: '3xl' }} dark bold>
             {suffix}
           </Body>
         )}
@@ -116,10 +118,10 @@ const BannerItem = ({
 
   return (
     <HStack>
-      <Body fontSize={{ base: '16px', lg: '24px' }} color="neutral1.12" bold>
+      <Body fontSize={{ base: 'lg', lg: '3xl' }} dark bold>
         {value}
       </Body>
-      <Body fontSize={{ base: '16px', lg: '24px' }} color="neutral1.12" bold>
+      <Body fontSize={{ base: 'lg', lg: '3xl' }} dark bold>
         {label}
       </Body>
     </HStack>
