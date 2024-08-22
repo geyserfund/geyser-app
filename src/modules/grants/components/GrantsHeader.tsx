@@ -80,10 +80,10 @@ const GrantsHeader = () => {
             {t('Geyser Grants')}
           </Body>
           <VStack spacing={0}>
-            <Body fontSize={{ base: '16px', lg: '20px' }} regular zIndex={2}>
+            <Body fontSize={{ base: '16px', lg: '20px' }} regular zIndex={2} textAlign="center">
               {t('Funding educators, creatives and builders doing Bitcoin-only projects on Geyser.')}
             </Body>
-            <Body fontSize={{ base: '16px', lg: '20px' }} regular zIndex={2}>
+            <Body fontSize={{ base: '16px', lg: '20px' }} regular zIndex={2} textAlign="center">
               {t('Funded by bitcoiners who want to change the world.')}
             </Body>
           </VStack>
@@ -103,7 +103,7 @@ const GrantsHeader = () => {
               <Column
                 w={{ base: '100%', lg: 'auto' }}
                 spacing={{ base: 2, lg: 6 }}
-                alignItems={{ base: 'flex-end', lg: 'center' }}
+                alignItems="center"
                 justifyContent="center"
               >
                 {items.map((item, index) => (
