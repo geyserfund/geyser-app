@@ -5352,6 +5352,18 @@ export type TagsMostFundedGetQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type TagsMostFundedGetQuery = { __typename?: 'Query', tagsMostFundedGet: Array<{ __typename?: 'TagsMostFundedGetResult', id: number, label: string }> };
 
+export type ActivityFeedFragmentFragment = { __typename?: 'Activity', activityType: string, createdAt: any, id: string, projectId: any, resource: { __typename?: 'Entry', id: any, title: string, content?: string | null, entryDescription: string } | { __typename?: 'FundingTx', id: any, amount: number, projectId: any, isAnonymous: boolean, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } | null } } | { __typename?: 'Project', id: any, title: string, name: string, image?: string | null } | { __typename?: 'ProjectGoal', currency: ProjectGoalCurrency, title: string, targetAmount: number, status: ProjectGoalStatus, goalDescription?: string | null } | { __typename?: 'ProjectReward', category?: string | null, cost: number, rewardCurrency: RewardCurrency, rewardType?: string | null, sold: number, stock?: number | null, projectRewardDescription?: string | null } };
+
+export type ActivityFeedQueryVariables = Exact<{
+  input: GetActivitiesInput;
+}>;
+
+
+export type ActivityFeedQuery = { __typename?: 'Query', activitiesGet: { __typename?: 'ActivitiesGetResponse', activities: Array<(
+      { __typename?: 'Activity' }
+      & ActivityFeedFragmentFragment
+    )>, pagination?: { __typename?: 'CursorPaginationResponse', take?: number | null, count?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: any | null } | null } | null } };
+
 export type SummaryBannerFragmentFragment = { __typename?: 'ProjectsSummary', fundedTotal?: any | null, fundersCount?: number | null, projectsCount?: number | null };
 
 export type TopContributorsFragmentFragment = { __typename?: 'GlobalContributorLeaderboardRow', contributionsCount: number, contributionsTotal: number, contributionsTotalUsd: number, projectsContributedCount: number, userId: any, username: string, userImageUrl?: string | null };
@@ -6953,6 +6965,57 @@ export const RewardForLandingPageFragmentDoc = gql`
     name
     title
     thumbnailImage
+  }
+}
+    `;
+export const ActivityFeedFragmentFragmentDoc = gql`
+    fragment ActivityFeedFragment on Activity {
+  activityType
+  createdAt
+  id
+  projectId
+  resource {
+    ... on Project {
+      id
+      title
+      name
+      image
+    }
+    ... on Entry {
+      id
+      title
+      entryDescription: description
+      content
+    }
+    ... on FundingTx {
+      id
+      amount
+      projectId
+      isAnonymous
+      funder {
+        user {
+          id
+          username
+          imageUrl
+        }
+      }
+    }
+    ... on ProjectReward {
+      category
+      cost
+      projectRewardDescription: description
+      rewardCurrency
+      rewardType
+      sold
+      stock
+    }
+    ... on ProjectGoal {
+      currency
+      goalDescription: description
+      title
+      targetAmount
+      status
+    }
   }
 }
     `;
@@ -9721,6 +9784,55 @@ export type TagsMostFundedGetQueryHookResult = ReturnType<typeof useTagsMostFund
 export type TagsMostFundedGetLazyQueryHookResult = ReturnType<typeof useTagsMostFundedGetLazyQuery>;
 export type TagsMostFundedGetSuspenseQueryHookResult = ReturnType<typeof useTagsMostFundedGetSuspenseQuery>;
 export type TagsMostFundedGetQueryResult = Apollo.QueryResult<TagsMostFundedGetQuery, TagsMostFundedGetQueryVariables>;
+export const ActivityFeedDocument = gql`
+    query ActivityFeed($input: GetActivitiesInput!) {
+  activitiesGet(input: $input) {
+    activities {
+      ...ActivityFeedFragment
+    }
+    pagination {
+      take
+      cursor {
+        id
+      }
+      count
+    }
+  }
+}
+    ${ActivityFeedFragmentFragmentDoc}`;
+
+/**
+ * __useActivityFeedQuery__
+ *
+ * To run a query within a React component, call `useActivityFeedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useActivityFeedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useActivityFeedQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useActivityFeedQuery(baseOptions: Apollo.QueryHookOptions<ActivityFeedQuery, ActivityFeedQueryVariables> & ({ variables: ActivityFeedQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ActivityFeedQuery, ActivityFeedQueryVariables>(ActivityFeedDocument, options);
+      }
+export function useActivityFeedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ActivityFeedQuery, ActivityFeedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ActivityFeedQuery, ActivityFeedQueryVariables>(ActivityFeedDocument, options);
+        }
+export function useActivityFeedSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ActivityFeedQuery, ActivityFeedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ActivityFeedQuery, ActivityFeedQueryVariables>(ActivityFeedDocument, options);
+        }
+export type ActivityFeedQueryHookResult = ReturnType<typeof useActivityFeedQuery>;
+export type ActivityFeedLazyQueryHookResult = ReturnType<typeof useActivityFeedLazyQuery>;
+export type ActivityFeedSuspenseQueryHookResult = ReturnType<typeof useActivityFeedSuspenseQuery>;
+export type ActivityFeedQueryResult = Apollo.QueryResult<ActivityFeedQuery, ActivityFeedQueryVariables>;
 export const LeaderboardGlobalContributorsDocument = gql`
     query LeaderboardGlobalContributors($input: LeaderboardGlobalContributorsGetInput!) {
   leaderboardGlobalContributorsGet(input: $input) {
