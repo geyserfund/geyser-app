@@ -561,7 +561,9 @@ export const platformRoutes: RouteObject[] = [
         path: getPath('discoveryMyProjects'),
         async lazy() {
           const MyProjects = await Discovery().then((m) => m.MyProjects)
-          return { Component: MyProjects }
+          return {
+            element: renderPrivateRoute(MyProjects),
+          }
         },
       },
       {
