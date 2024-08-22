@@ -74,11 +74,13 @@ const ProjectItem = ({ project, rank }: { project: GlobalProjectLeaderboardRow; 
 
   return (
     <HStack
-      width="full"
+      width="95%"
       spacing={4}
       padding={'8px, 24px, 8px, 24px'}
       onClick={handleClick}
-      _hover={{ cursor: 'pointer' }}
+      _hover={{ backgroundColor: 'neutral1.3', cursor: 'pointer' }}
+      borderRadius={'lg'}
+      py={1}
     >
       <Box justifyContent="center" minWidth="30px">
         {rank <= 3 ? (

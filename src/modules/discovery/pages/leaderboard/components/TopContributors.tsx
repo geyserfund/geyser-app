@@ -8,7 +8,7 @@ import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { BronzeMedalUrl, GoldMedalUrl, SilverMedalUrl } from '@/shared/constants/platform/url'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
-import { GlobalContributorLeaderboardRow, LeaderboardPeriod } from '@/types'
+import { Currency, GlobalContributorLeaderboardRow, LeaderboardPeriod } from '@/types'
 
 import { useTopContributors } from '../hooks'
 import { ScrollableList } from './ScrollableList'
@@ -53,7 +53,7 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
 
   const { formatAmount } = useCurrencyFormatter()
 
-  const formattedAmountContributed = formatAmount(contributor.contributionsCount, 'BTCSAT')
+  const formattedAmountContributed = formatAmount(contributor.contributionsTotalUsd, Currency.Usdcent)
 
   const truncateText = (text: string, maxLength: number) => {
     return text.length > maxLength ? text.slice(0, maxLength) + '...' : text
@@ -65,11 +65,13 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
 
   return (
     <HStack
-      width="full"
+      width="95%"
       spacing={4}
-      padding={'8px, 16px, 8px, 16px'}
+      padding={'8px, 20px, 8px, 16px'}
       onClick={handleClick}
-      _hover={{ cursor: 'pointer' }}
+      borderRadius={'lg'}
+      _hover={{ backgroundColor: 'neutral1.3', cursor: 'pointer' }}
+      py={1}
     >
       <Box justifyContent="center" minWidth="30px">
         {rank <= 3 ? (
