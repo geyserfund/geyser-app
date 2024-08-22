@@ -2,7 +2,7 @@ import { Box, HStack, Image, Skeleton, VStack } from '@chakra-ui/react'
 
 import { Body } from '@/shared/components/typography'
 import { GrantsPageBannerNoiseGifUrl } from '@/shared/constants'
-import { primaryColorsLight } from '@/styles/colors'
+import { primaryColorsLight } from '@/shared/styles'
 import { useMobileMode } from '@/utils'
 
 type BannerProps = {

@@ -11,6 +11,7 @@ export const FRAGMENT_PROJECT_FOR_PROFILE_PAGE = gql`
     shortDescription
     createdAt
     status
+    rewardsCount
     wallets {
       id
       name
