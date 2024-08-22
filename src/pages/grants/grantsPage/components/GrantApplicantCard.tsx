@@ -22,7 +22,7 @@ import { H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { CardLayout, Modal } from '../../../../shared/components/layouts'
 import { getPath } from '../../../../shared/constants'
-import { fonts } from '../../../../styles'
+import { fonts } from '../../../../shared/styles'
 import {
   GrantApplicantContributor,
   GrantApplicantFunding,

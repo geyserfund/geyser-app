@@ -2,6 +2,7 @@ import { atom, useAtomValue } from 'jotai'
 
 import {
   discoveryRoutes,
+  profileRoutes,
   projectDashboardRoutes,
   projectFundingRoutes,
   projectPostCreatorRoutes,
@@ -48,6 +49,17 @@ export const shouldShowProjectLogoAtom = atom((get) => {
   }
 
   return false
+})
+
+/** True if current route is one of the profile routes */
+const isProfileRoutesAtom = atom(routeMatchForAtom(profileRoutes))
+
+/** True if shoudl show geyser logo on left of topNavBar */
+export const shouldShowGeyserLogoAtom = atom((get) => {
+  const isProjectMainPage = get(isProjectMainPageAtom)
+  const isProfileRoutes = get(isProfileRoutesAtom)
+
+  return isProjectMainPage || isProfileRoutes
 })
 
 /** True if current route is one of the platform routes */

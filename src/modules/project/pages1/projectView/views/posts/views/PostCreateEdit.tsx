@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from 'react'
 import { PiArrowLeft, PiImages } from 'react-icons/pi'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 
-import { FileUpload } from '@/components/molecules'
 import { AlertDialogue } from '@/components/molecules/AlertDialogue'
 import { ImageWithReload, TextArea } from '@/components/ui'
 import Loader from '@/components/ui/Loader'
@@ -14,6 +13,7 @@ import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H1 } from '@/shared/components/typography'
 import { dimensions, getPath, ProjectEntryValidations } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
+import { FileUpload } from '@/shared/molecules'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { Entry, EntryStatus } from '@/types'
 import { isActive, useCustomTheme, useNotification } from '@/utils'
@@ -159,8 +159,6 @@ export const PostCreateEdit = () => {
   const postUrl = postId ? getPath('projectPostView', project.name, postId) : ''
 
   const handleBackClick = () => {
-    console.log('checking if isDirty', isDirty)
-
     const pathToGo = isEntryPublished
       ? postUrl
       : hasEntries

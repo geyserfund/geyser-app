@@ -79,7 +79,6 @@ export const setFundFormTargetAtom = atom(null, (get, set, event: any) => {
  * @param {any} value - The value to set the field to
  */
 export const setFundFormStateAtom = atom(null, (get, set, name: string, value: any) => {
-  console.log('checking donaiton amount', name, value)
   if (name === 'donationAmount') {
     set(fundingFormStateAtom, (current) => ({
       ...current,

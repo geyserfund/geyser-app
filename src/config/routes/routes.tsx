@@ -29,8 +29,11 @@ const CreatorPost = () => import('../../modules/project/pages1/projectView/views
 const Discovery = () => import('../../modules/discovery')
 
 const Refund = () => import('../../modules/project/pages1/projectFunding/views/refund')
-const ProfilePage = () => import('../../modules/profile/pages/profilePage/Profile')
+
+const ProfilePage = () => import('../../modules/profile')
+
 const ProfileSettingsIndex = () => import('../../modules/profile/pages/profileSettings')
+
 const Badges = () => import('../../pages/badges/BadgesPage')
 
 export const platformRoutes: RouteObject[] = [
@@ -129,41 +132,52 @@ export const platformRoutes: RouteObject[] = [
   },
 
   {
-    path: getPath('userProfileSettings', PathName.userId),
+    path: getPath('userProfile', PathName.userId),
     async lazy() {
-      const ProfileSettings = await ProfileSettingsIndex().then((m) => m.ProfileSettings)
-      return { element: renderPrivateRoute(ProfileSettings) }
+      const ProfileMain = await ProfilePage().then((m) => m.ProfileMain)
+      return { Component: ProfileMain }
     },
     children: [
       {
         index: true,
         async lazy() {
-          const ProfileSettingsMain = await ProfileSettingsIndex().then((m) => m.ProfileSettingsMain)
-          return { Component: ProfileSettingsMain }
+          const Profile = await ProfilePage().then((m) => m.Profile)
+          return { Component: Profile }
         },
       },
       {
-        path: getPath('userProfileSettingsGeneral', PathName.userId),
+        path: getPath('userProfileSettings', PathName.userId),
         async lazy() {
-          const ProfileSettingsGeneral = await ProfileSettingsIndex().then((m) => m.ProfileSettingsGeneral)
-          return { Component: ProfileSettingsGeneral }
+          const ProfileSettings = await ProfileSettingsIndex().then((m) => m.ProfileSettings)
+          return { element: renderPrivateRoute(ProfileSettings) }
         },
-      },
-      {
-        path: getPath('userProfileSettingsNotifications', PathName.userId),
-        async lazy() {
-          const ProfileSettingsNotifications = await ProfileSettingsIndex().then((m) => m.ProfileSettingsNotifications)
-          return { Component: ProfileSettingsNotifications }
-        },
+        children: [
+          {
+            index: true,
+            async lazy() {
+              const ProfileSettingsMain = await ProfileSettingsIndex().then((m) => m.ProfileSettingsMain)
+              return { Component: ProfileSettingsMain }
+            },
+          },
+          {
+            path: getPath('userProfileSettingsGeneral', PathName.userId),
+            async lazy() {
+              const ProfileSettingsGeneral = await ProfileSettingsIndex().then((m) => m.ProfileSettingsGeneral)
+              return { Component: ProfileSettingsGeneral }
+            },
+          },
+          {
+            path: getPath('userProfileSettingsNotifications', PathName.userId),
+            async lazy() {
+              const ProfileSettingsNotifications = await ProfileSettingsIndex().then(
+                (m) => m.ProfileSettingsNotifications,
+              )
+              return { Component: ProfileSettingsNotifications }
+            },
+          },
+        ],
       },
     ],
-  },
-  {
-    path: getPath('userProfile', PathName.userId),
-    async lazy() {
-      const Profile = await ProfilePage().then((m) => m.Profile)
-      return { Component: Profile }
-    },
   },
 
   {
@@ -532,7 +546,7 @@ export const platformRoutes: RouteObject[] = [
   {
     path: getPath('discoveryLanding'),
     async lazy() {
-      const Platform = await Discovery().then((m) => m.Platform)
+      const Platform = await Discovery().then((m) => m.Discovery)
       return { Component: Platform }
     },
     children: [

@@ -8,7 +8,7 @@ import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { Body, H3 } from '@/shared/components/typography'
-import { lightModeColors } from '@/styles'
+import { lightModeColors } from '@/shared/styles'
 import { Badge } from '@/types'
 import { useNotification } from '@/utils'
 

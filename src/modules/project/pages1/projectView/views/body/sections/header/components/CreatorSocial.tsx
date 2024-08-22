@@ -1,9 +1,10 @@
 import { Avatar, Button, HStack } from '@chakra-ui/react'
 import { NavLink } from 'react-router-dom'
 
+import { getExternalAccountsButtons } from '@/shared/utils/user/getExternalAccountsButtons'
+
 import { getPath } from '../../../../../../../../../shared/constants'
 import { useProjectAtom } from '../../../../../../../hooks/useProjectAtom'
-import { getExternalAccountsButtons } from './getExternalAccountsButtons'
 
 export const CreatorSocial = () => {
   const { projectOwner } = useProjectAtom()

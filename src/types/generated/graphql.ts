@@ -757,6 +757,11 @@ export type GetAffiliateLinksWhereInput = {
   projectId: Scalars['BigInt']['input']
 }
 
+export type GetContributorInput = {
+  projectId: Scalars['BigInt']['input'];
+  userId: Scalars['BigInt']['input'];
+};
+
 export type GetDashboardFundersWhereInput = {
   confirmed?: InputMaybe<Scalars['Boolean']['input']>
   projectId?: InputMaybe<Scalars['BigInt']['input']>
@@ -1931,6 +1936,18 @@ export type ProjectLinkMutationInput = {
   projectId: Scalars['BigInt']['input']
 }
 
+export type ProjectMostFunded = {
+  __typename?: 'ProjectMostFunded';
+  /** The project details */
+  project: Project;
+};
+
+export type ProjectMostFundedByTag = {
+  __typename?: 'ProjectMostFundedByTag';
+  projects: Array<ProjectMostFunded>;
+  tagId: Scalars['Int']['output'];
+};
+
 export type ProjectPublishMutationInput = {
   projectId: Scalars['BigInt']['input']
 }
@@ -2118,6 +2135,16 @@ export type ProjectsGetWhereInput = {
   type?: InputMaybe<ProjectType>
 }
 
+export type ProjectsMostFundedByTagInput = {
+  range: ProjectsMostFundedByTagRange;
+  tagIds: Array<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export enum ProjectsMostFundedByTagRange {
+  Week = 'WEEK'
+}
+
 export enum ProjectsOrderByField {
   Balance = 'balance',
 }
@@ -2288,6 +2315,11 @@ export type QueryOrdersGetArgs = {
 export type QueryOrdersStatsGetArgs = {
   input: GetProjectOrdersStatsInput
 }
+
+export type QueryOrdersStatsGetArgs = {
+  input: GetProjectOrdersStatsInput;
+};
+
 
 export type QueryProjectGetArgs = {
   where: UniqueProjectQueryInput
@@ -11659,16 +11691,16 @@ export const TagsGetDocument = gql`
 `
 
 /**
- * __useTagsGetQuery__
+ * __useMeQuery__
  *
- * To run a query within a React component, call `useTagsGetQuery` and pass it any options that fit your needs.
- * When your component renders, `useTagsGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useTagsGetQuery({
+ * const { data, loading, error } = useMeQuery({
  *   variables: {
  *   },
  * });
@@ -11704,16 +11736,16 @@ export const ProjectCountriesGetDocument = gql`
 `
 
 /**
- * __useProjectCountriesGetQuery__
+ * __useMeProjectFollowsQuery__
  *
- * To run a query within a React component, call `useProjectCountriesGetQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectCountriesGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMeProjectFollowsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeProjectFollowsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useProjectCountriesGetQuery({
+ * const { data, loading, error } = useMeProjectFollowsQuery({
  *   variables: {
  *   },
  * });
@@ -11762,17 +11794,18 @@ export const ProjectRegionsGetDocument = gql`
 `
 
 /**
- * __useProjectRegionsGetQuery__
+ * __useLightningAddressVerifyQuery__
  *
- * To run a query within a React component, call `useProjectRegionsGetQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectRegionsGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useLightningAddressVerifyQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLightningAddressVerifyQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useProjectRegionsGetQuery({
+ * const { data, loading, error } = useLightningAddressVerifyQuery({
  *   variables: {
+ *      lightningAddress: // value for 'lightningAddress'
  *   },
  * });
  */
@@ -11814,17 +11847,18 @@ export const MeDocument = gql`
 `
 
 /**
- * __useMeQuery__
+ * __useWalletLimitQuery__
  *
- * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
- * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useWalletLimitQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWalletLimitQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useMeQuery({
+ * const { data, loading, error } = useWalletLimitQuery({
  *   variables: {
+ *      getWalletId: // value for 'getWalletId'
  *   },
  * });
  */
@@ -11854,21 +11888,31 @@ export const MeProjectFollowsDocument = gql`
         name
       }
     }
+    ... on Project {
+      ...ProjectForLandingPage
+    }
+    ... on FundingTx {
+      ...FundingTxForLandingPage
+    }
+    ... on ProjectReward {
+      ...ProjectRewardForLandingPage
+    }
   }
 `
 
 /**
- * __useMeProjectFollowsQuery__
+ * __useActivityCreatedSubscription__
  *
- * To run a query within a React component, call `useMeProjectFollowsQuery` and pass it any options that fit your needs.
- * When your component renders, `useMeProjectFollowsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useActivityCreatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useActivityCreatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useMeProjectFollowsQuery({
+ * const { data, loading, error } = useActivityCreatedSubscription({
  *   variables: {
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -11907,16 +11951,16 @@ export const UserForProfilePageDocument = gql`
 `
 
 /**
- * __useUserForProfilePageQuery__
+ * __useFeaturedProjectForLandingPageQuery__
  *
- * To run a query within a React component, call `useUserForProfilePageQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserForProfilePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFeaturedProjectForLandingPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFeaturedProjectForLandingPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUserForProfilePageQuery({
+ * const { data, loading, error } = useFeaturedProjectForLandingPageQuery({
  *   variables: {
  *      where: // value for 'where'
  *   },
@@ -11963,23 +12007,24 @@ export const UserProfileProjectsDocument = gql`
         }
       }
     }
+    tagId
   }
   ${ProjectForProfilePageFragmentDoc}
 `
 
 /**
- * __useUserProfileProjectsQuery__
+ * __useProjectsMostFundedByTagQuery__
  *
- * To run a query within a React component, call `useUserProfileProjectsQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserProfileProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useProjectsMostFundedByTagQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectsMostFundedByTagQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUserProfileProjectsQuery({
+ * const { data, loading, error } = useProjectsMostFundedByTagQuery({
  *   variables: {
- *      where: // value for 'where'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -12030,18 +12075,18 @@ export const UserFollowedProjectsDocument = gql`
 `
 
 /**
- * __useUserFollowedProjectsQuery__
+ * __useProjectsForLandingPageQuery__
  *
- * To run a query within a React component, call `useUserFollowedProjectsQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserFollowedProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useProjectsForLandingPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectsForLandingPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUserFollowedProjectsQuery({
+ * const { data, loading, error } = useProjectsForLandingPageQuery({
  *   variables: {
- *      where: // value for 'where'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -12092,18 +12137,17 @@ export const UserProfileContributionsDocument = gql`
 `
 
 /**
- * __useUserProfileContributionsQuery__
+ * __useProjectRewardsTrendingWeeklyGetQuery__
  *
- * To run a query within a React component, call `useUserProfileContributionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserProfileContributionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useProjectRewardsTrendingWeeklyGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectRewardsTrendingWeeklyGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUserProfileContributionsQuery({
+ * const { data, loading, error } = useProjectRewardsTrendingWeeklyGetQuery({
  *   variables: {
- *      where: // value for 'where'
  *   },
  * });
  */
@@ -12156,18 +12200,17 @@ export const UserProfileOrdersDocument = gql`
 `
 
 /**
- * __useUserProfileOrdersQuery__
+ * __useTagsGetQuery__
  *
- * To run a query within a React component, call `useUserProfileOrdersQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserProfileOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useTagsGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTagsGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUserProfileOrdersQuery({
+ * const { data, loading, error } = useTagsGetQuery({
  *   variables: {
- *      where: // value for 'where'
  *   },
  * });
  */
@@ -12214,18 +12257,17 @@ export const LightningAddressVerifyDocument = gql`
 `
 
 /**
- * __useLightningAddressVerifyQuery__
+ * __useProjectCountriesGetQuery__
  *
- * To run a query within a React component, call `useLightningAddressVerifyQuery` and pass it any options that fit your needs.
- * When your component renders, `useLightningAddressVerifyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useProjectCountriesGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectCountriesGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useLightningAddressVerifyQuery({
+ * const { data, loading, error } = useProjectCountriesGetQuery({
  *   variables: {
- *      lightningAddress: // value for 'lightningAddress'
  *   },
  * });
  */
@@ -12277,18 +12319,17 @@ export const WalletLimitDocument = gql`
 `
 
 /**
- * __useWalletLimitQuery__
+ * __useProjectRegionsGetQuery__
  *
- * To run a query within a React component, call `useWalletLimitQuery` and pass it any options that fit your needs.
- * When your component renders, `useWalletLimitQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useProjectRegionsGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectRegionsGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useWalletLimitQuery({
+ * const { data, loading, error } = useProjectRegionsGetQuery({
  *   variables: {
- *      getWalletId: // value for 'getWalletId'
  *   },
  * });
  */
@@ -12339,18 +12380,17 @@ export const ActivityCreatedDocument = gql`
 `
 
 /**
- * __useActivityCreatedSubscription__
+ * __useTagsMostFundedGetQuery__
  *
- * To run a query within a React component, call `useActivityCreatedSubscription` and pass it any options that fit your needs.
- * When your component renders, `useActivityCreatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useTagsMostFundedGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTagsMostFundedGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useActivityCreatedSubscription({
+ * const { data, loading, error } = useTagsMostFundedGetQuery({
  *   variables: {
- *      input: // value for 'input'
  *   },
  * });
  */

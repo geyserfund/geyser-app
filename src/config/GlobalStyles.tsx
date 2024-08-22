@@ -1,6 +1,6 @@
 import { Global } from '@emotion/react'
 
-import { darkModeColors, lightModeColors } from '../styles'
+import { darkModeColors, lightModeColors } from '../shared/styles'
 
 const GlobalStyles = () => (
   <Global
@@ -20,20 +20,35 @@ const GlobalStyles = () => (
 
         ::-webkit-scrollbar {
           width: 4px;
+          height: 4px;
         }
 
-        ::-webkit-scrollbar-track {
+        .chakra-ui-light ::-webkit-scrollbar-track {
           background: ${lightModeColors.neutral1[3]};
           border-radius: 4px;
         }
 
-        ::-webkit-scrollbar-thumb {
+        .chakra-ui-light ::-webkit-scrollbar-thumb {
           background: ${lightModeColors.neutral1[8]};
           border-radius: 4px;
         }
 
-         ::-webkit-scrollbar-thumb:hover {
+        .chakra-ui-light ::-webkit-scrollbar-thumb:hover {
           background: ${lightModeColors.neutral1[9]};
+        }
+
+        .chakra-ui-dark ::-webkit-scrollbar-track {
+          background: ${darkModeColors.neutral1[3]};
+          border-radius: 4px;
+        }
+
+        .chakra-ui-dark ::-webkit-scrollbar-thumb {
+          background: ${darkModeColors.neutral1[8]};
+          border-radius: 4px;
+        }
+
+        .chakra-ui-dark ::-webkit-scrollbar-thumb:hover {
+          background: ${darkModeColors.neutral1[9]};
         }
 
 

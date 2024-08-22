@@ -4,7 +4,7 @@ import { LiaVoteYeaSolid } from 'react-icons/lia'
 
 import { BadgeIcon, ContributionsIcon, TimerIcon } from '../../../components/icons'
 import { Countdown } from '../../../components/ui/Countdown'
-import { fonts, primaryColorsLight } from '../../../styles'
+import { fonts, primaryColorsLight } from '../../../shared/styles'
 import { DistributionSystem, Maybe, Sponsor, VotingSystem } from '../../../types'
 import { SponsorList } from './SponsorList'
 import { WidgetItem } from './WidgetItem'

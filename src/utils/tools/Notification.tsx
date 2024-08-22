@@ -1,7 +1,6 @@
 import { useToast, UseToastOptions } from '@chakra-ui/react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-// "subtle" | "solid" | "left-accent" | "top-accent"
 
 type IndividualToastProps = { title: string; description?: string }
 
@@ -38,33 +37,45 @@ export const useNotification = (options?: UseToastOptions | undefined) => {
     })
   }, [invokeToast])
 
-  const success = (props: IndividualToastProps) => {
-    invokeToast({
-      status: 'success',
-      ...props,
-    })
-  }
+  const success = useCallback(
+    (props: IndividualToastProps) => {
+      invokeToast({
+        status: 'success',
+        ...props,
+      })
+    },
+    [invokeToast],
+  )
 
-  const error = (props: IndividualToastProps) => {
-    invokeToast({
-      status: 'error',
-      ...props,
-    })
-  }
+  const error = useCallback(
+    (props: IndividualToastProps) => {
+      invokeToast({
+        status: 'error',
+        ...props,
+      })
+    },
+    [invokeToast],
+  )
 
-  const warning = (props: IndividualToastProps) => {
-    invokeToast({
-      status: 'warning',
-      ...props,
-    })
-  }
+  const warning = useCallback(
+    (props: IndividualToastProps) => {
+      invokeToast({
+        status: 'warning',
+        ...props,
+      })
+    },
+    [invokeToast],
+  )
 
-  const info = (props: IndividualToastProps) => {
-    invokeToast({
-      status: 'info',
-      ...props,
-    })
-  }
+  const info = useCallback(
+    (props: IndividualToastProps) => {
+      invokeToast({
+        status: 'info',
+        ...props,
+      })
+    },
+    [invokeToast],
+  )
 
   return { toast: invokeToast, unexpected, success, error, warning, info }
 }

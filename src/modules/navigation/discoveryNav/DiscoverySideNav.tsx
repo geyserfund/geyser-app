@@ -12,7 +12,7 @@ import { DiscoveryNavItem, discoveryNavItems } from './discoveryNavData'
 
 export const DiscoverySideNav = () => {
   const isMobile = useMobileMode()
-  const isTabletSize = useBreakpointValue({ '2xl': false, lg: true })
+  const isTabletSize = useBreakpointValue({ xl: false, lg: true })
 
   const imageUrl = useColorModeValue(LogoNameDark, LogoNameLight)
   const tabletImage = useColorModeValue(LogoDark, LogoLight)
@@ -24,14 +24,14 @@ export const DiscoverySideNav = () => {
   return (
     <VStack
       paddingY={8}
-      paddingX={{ lg: 4, '2xl': 8 }}
+      paddingX={{ lg: 4, xl: 8 }}
       spacing={8}
       position="fixed"
       left={0}
       top={0}
       height="100%"
       display={{ base: 'none', lg: 'flex' }}
-      width={{ lg: dimensions.discovery.sideNav.tablet.width, '2xl': dimensions.discovery.sideNav.desktop.width }}
+      width={{ lg: dimensions.discovery.sideNav.tablet.width, xl: dimensions.discovery.sideNav.desktop.width }}
       borderRight="1px solid"
       borderColor="neutral1.6"
       backgroundColor="utils.pbg"
@@ -55,7 +55,7 @@ type DiscoverySideNavButtonProps = {
 const DiscoverySideNavButton = ({ item, currentNavItem, ...rest }: DiscoverySideNavButtonProps) => {
   const isActive = currentNavItem?.path === item.path
 
-  const isTabletSize = useBreakpointValue({ '2xl': false, lg: true })
+  const isTabletSize = useBreakpointValue({ xl: false, lg: true })
 
   if (isTabletSize) {
     return (

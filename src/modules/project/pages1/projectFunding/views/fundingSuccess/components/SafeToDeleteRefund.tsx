@@ -9,7 +9,6 @@ import { Feedback, FeedBackVariant } from '@/shared/molecules'
 
 export const SafeToDeleteRefund = () => {
   const historyRoutes = useAtomValue(historyRouteAtom)
-  console.log('checkng historyRoutes', historyRoutes)
 
   const isComingFromOnChain = historyRoutes[historyRoutes.length - 1]?.includes(PathName.fundingPaymentOnchain)
 

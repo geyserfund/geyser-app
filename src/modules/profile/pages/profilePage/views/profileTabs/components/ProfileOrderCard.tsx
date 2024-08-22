@@ -1,10 +1,10 @@
-import { Box, HStack, Tooltip, VStack } from '@chakra-ui/react'
+import { Badge, Box, HStack, Tooltip, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
 
 import { getUSD } from '@/modules/project/pages1/projectDashboard/common'
+import { Body } from '@/shared/components/typography'
 
-import { Body1, Body2, Caption } from '../../../../../../../components/typography'
 import { ImageWithReload } from '../../../../../../../components/ui'
 import { getRewardShippingStatusBackgroundColor } from '../../../../../../../helpers/getProjectShippingStatusBackgroundColor'
 import { CardLayout } from '../../../../../../../shared/components/layouts'
@@ -26,80 +26,70 @@ export const ProfileOrderCard = ({ order }: { order: ProfileOrderFragment }) => 
   const usdPrice = getUSD(order.totalInSats, bitcoinPrice)
 
   return (
-    <CardLayout w="full" p={0} overflow="visible" borderColor="neutral.100" spacing="0">
-      <VStack w="full" p="10px" spacing="0px" backgroundColor="neutral.100">
-        <HStack w="full" justifyContent={'space-between'} alignItems={'start'}>
-          <VStack w="full" alignItems="start" spacing="0">
-            {order.confirmedAt && (
-              <KeyValueDisplay
-                label={t('Order placed')}
-                value={DateTime.fromMillis(order.confirmedAt).toFormat('LLL dd, yyyy')}
-              />
-            )}
+    <CardLayout noborder dense w="full" p={0} overflow="visible" spacing="0">
+      <HStack w="full" justifyContent={'space-between'} alignItems={'start'}>
+        <VStack w="full" alignItems="start" spacing="0">
+          {order.confirmedAt && (
             <KeyValueDisplay
-              label={t('Total')}
-              value={`${bitcoinPrice ? usdPrice : ''} ( ${commaFormatted(order.totalInSats)} sats )`}
+              label={t('Order placed')}
+              value={DateTime.fromMillis(order.confirmedAt).toFormat('LLL dd, yyyy')}
             />
-          </VStack>
-          <Tooltip label={t('Shipping status')}>
-            <HStack
-              bgColor={backgroundColor}
-              maxWidth="100px"
-              width="100%"
-              border="1px solid"
-              borderRadius="8px"
-              borderColor="neutral.900"
-              justifyContent="center"
-              justifySelf={'flex-end'}
-              py="4px"
-            >
-              <Body2 color={'neutral.900'}>{RewardStatusLabel[order.status as OrdersGetStatus]}</Body2>
-            </HStack>
-          </Tooltip>
-        </HStack>
-        <VStack w="full" alignItems={'start'} spacing="0">
-          <KeyValueDisplay label={t('Project')} value={project.title} />
-          <KeyValueDisplay label={t('Order number')} value={order.referenceCode} />
+          )}
+          <KeyValueDisplay
+            label={t('Total')}
+            value={`${bitcoinPrice ? usdPrice : ''} ( ${commaFormatted(order.totalInSats)} sats )`}
+          />
         </VStack>
-      </VStack>
-      {items.map((item, index) => {
-        return (
-          <HStack
-            key={`order-item-${index}`}
-            p="10px"
-            borderTop="2px solid"
-            borderColor="neutral.100"
-            alignItems={'start'}
+        <Tooltip label={t('Shipping status')}>
+          <Badge
+            bgColor={backgroundColor}
+            variant="soft"
+            colorScheme="neutral"
+            maxWidth="100px"
+            width="100%"
+            justifySelf={'flex-end'}
+            py="4px"
           >
-            <Box height="60px" width="80px">
-              <ImageWithReload
-                w="100%"
-                h="100%"
-                objectFit="cover"
-                src={toSmallImageUrl(item.item.image || '')}
-                alt={`${item.item.name}-header-image`}
-                borderRadius="8px"
-              />
-            </Box>
-            <VStack flex="1" alignItems="start" spacing="5px">
-              <Body1 semiBold color="neutral.900">
-                {item.item.name}
-              </Body1>
+            {RewardStatusLabel[order.status as OrdersGetStatus]}
+          </Badge>
+        </Tooltip>
+      </HStack>
+      <VStack w="full" alignItems={'start'} spacing="0">
+        <KeyValueDisplay label={t('Project')} value={project.title} />
+        <KeyValueDisplay label={t('Order number')} value={order.referenceCode} />
+        <KeyValueDisplay label={t('Rewards')} value={''} />
+      </VStack>
+      <VStack w="full" spacing={0.5}>
+        {items.map((item, index) => {
+          return (
+            <HStack w="full" key={`order-item-${index}`} alignItems={'start'}>
+              <Box height="60px" width="80px">
+                <ImageWithReload
+                  w="100%"
+                  h="100%"
+                  objectFit="cover"
+                  src={toSmallImageUrl(item.item.image || '')}
+                  alt={`${item.item.name}-header-image`}
+                  borderRadius="8px"
+                />
+              </Box>
+              <VStack flex="1" alignItems="start" spacing="5px">
+                <Body bold>{item.item.name}</Body>
 
-              <Body2 color="neutral.600">{item.item.description}</Body2>
-              <HStack flexWrap={'wrap'} spacing="10px">
-                <KeyValueDisplay label={t('Quantity')} value={`${item.quantity}x`} />
-                <KeyValueDisplay label={t('Unit price')} value={`${commaFormatted(item.unitPriceInSats)} sats`} />
-                {item.item.category && (
-                  <Caption px="10px" py="3px" bgColor="neutral.100">
-                    {item.item.category}
-                  </Caption>
-                )}
-              </HStack>
-            </VStack>
-          </HStack>
-        )
-      })}
+                <HStack flexWrap={'wrap'} spacing="10px">
+                  <KeyValueDisplay label={t('Quantity')} value={`${item.quantity}x`} />
+                  <KeyValueDisplay label={t('Unit price')} value={`${commaFormatted(item.unitPriceInSats)} sats`} />
+                  {item.item.category && (
+                    <Badge variant="soft" colorScheme="neutral1">
+                      {item.item.category}
+                    </Badge>
+                  )}
+                </HStack>
+              </VStack>
+            </HStack>
+          )
+        })}
+      </VStack>
     </CardLayout>
   )
 }
@@ -107,12 +97,12 @@ export const ProfileOrderCard = ({ order }: { order: ProfileOrderFragment }) => 
 export const KeyValueDisplay = ({ label, value }: { label: string; value: string }) => {
   return (
     <HStack flexWrap={'wrap'} spacing="5px">
-      <Body2 color="neutral.600" whiteSpace={'nowrap'}>
+      <Body size="sm" light whiteSpace={'nowrap'}>
         {label}:
-      </Body2>
-      <Body2 semiBold color="neutral.900" whiteSpace={'nowrap'}>
+      </Body>
+      <Body size="sm" medium dark whiteSpace={'nowrap'}>
         {value}
-      </Body2>
+      </Body>
     </HStack>
   )
 }

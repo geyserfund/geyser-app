@@ -30,6 +30,15 @@ export const MUTATION_UPDATE_PROJECT = gql`
   }
 `
 
+export const MUTATION_UPDATE_PROJECT_STATUS = gql`
+  mutation ProjectStatusUpdate($input: ProjectStatusUpdate!) {
+    projectStatusUpdate(input: $input) {
+      id
+      status
+    }
+  }
+`
+
 export const MUTATION_PROJECT_PUBLISH = gql`
   mutation ProjectPublish($input: ProjectPublishMutationInput!) {
     projectPublish(input: $input) {

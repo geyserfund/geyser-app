@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { FollowButton } from '@/modules/project/pages1/projectView/views/body/components'
+import { Body } from '@/shared/components/typography'
 
-import { Body1, Body2 } from '../../../../../../../components/typography'
 import { ImageWithReload, ProjectStatusLabel } from '../../../../../../../components/ui'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { getPath } from '../../../../../../../shared/constants'
@@ -33,9 +33,11 @@ export const ProfileProjectCard = ({
 
   return (
     <CardLayout
+      noborder
+      dense
       as={Link}
       to={getPath('project', project.name)}
-      padding="10px"
+      padding={2}
       direction={'row'}
       w="full"
       alignItems="start"
@@ -53,31 +55,35 @@ export const ProfileProjectCard = ({
         />
       </Box>
 
-      <VStack w={`calc(100% - 80px)`} alignItems="flex-start">
+      <VStack w={`calc(100% - 80px)`} alignItems="flex-start" spacing={0}>
         <HStack w="full" justifyContent={'space-between'}>
-          <Body1 xBold color="neutral.900" isTruncated>
+          <Body bold isTruncated>
             {project.title}
-          </Body1>
+          </Body>
           {showStatus && <ProjectStatusLabel iconOnly project={project} />}
           {showFollow && <FollowButton project={project} />}
         </HStack>
-        <Body1 color="neutral.600" lineHeight={1.2}>
+        <Body light lineHeight={1.2}>
           {project.shortDescription}
-        </Body1>
+        </Body>
         {showStats && (
           <HStack w="full" spacing="20px">
-            <Body2 color="neutral.600">
-              <Box as="span" color="neutral.900">
-                {project.fundersCount}{' '}
-              </Box>{' '}
+            <Body size="sm" light>
               {t('Contributors')}
-            </Body2>
-            <Body2 color="neutral.600">
-              <Box as="span" color="neutral.900">
-                {commaFormatted(project.balance)}{' '}
-              </Box>{' '}
-              {t('Sats funded')}
-            </Body2>
+              {': '}
+              <Body as="span" dark>
+                {commaFormatted(project.balance)}
+              </Body>
+              {' sats '}
+            </Body>
+
+            <Body size="sm" light>
+              {t('Funded')}
+              {': '}
+              <Body as="span" dark>
+                {project.fundersCount}
+              </Body>
+            </Body>
           </HStack>
         )}
       </VStack>
@@ -87,7 +93,16 @@ export const ProfileProjectCard = ({
 
 export const ProfileProjectCardSkeleton = (props: CardLayoutProps) => {
   return (
-    <CardLayout padding="10px" direction={'row'} w="full" alignItems="start" overflow="visible" {...props}>
+    <CardLayout
+      noborder
+      dense
+      padding="10px"
+      direction={'row'}
+      w="full"
+      alignItems="start"
+      overflow="visible"
+      {...props}
+    >
       <Box width="70px" height="70px">
         <SkeletonLayout w="100%" h="100%" />
       </Box>

@@ -1,6 +1,6 @@
 import { Text, TextProps } from '@chakra-ui/react'
 
-import { fonts } from '../../styles'
+import { fonts } from '../../shared/styles'
 
 interface MonoProps extends TextProps {
   semiBold?: boolean

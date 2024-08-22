@@ -3,7 +3,7 @@ import { DateTime } from 'luxon'
 
 import { ProjectState } from '@/modules/project/state/projectAtom'
 import { LIGHTNING_FEE_PERCENTAGE } from '@/shared/constants'
-import { lightModeColors, utilColors } from '@/styles'
+import { lightModeColors, utilColors } from '@/shared/styles'
 import { FundingTxForDownloadInvoiceFragment } from '@/types'
 
 const styles = StyleSheet.create({

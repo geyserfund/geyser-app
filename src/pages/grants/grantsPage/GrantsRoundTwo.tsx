@@ -12,7 +12,7 @@ import {
   GrantsRound2Url,
   WalletOfSatoshiUrl,
 } from '../../../shared/constants'
-import { fonts } from '../../../styles'
+import { fonts } from '../../../shared/styles'
 import { GrantApplicant, GrantStatusEnum } from '../../../types'
 import { useMobileMode } from '../../../utils'
 import { GrantWinnerAnnouncement } from '../components'

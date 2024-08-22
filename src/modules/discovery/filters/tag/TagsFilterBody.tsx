@@ -1,60 +1,46 @@
-import { Box, useDisclosure, VStack } from '@chakra-ui/react'
-import { MultiValue } from 'react-select'
+import { Box, Checkbox, VStack } from '@chakra-ui/react'
+import { useMemo } from 'react'
 
-import { SelectComponent } from '../../../../components/ui'
-import { useFilterContext } from '../../../../context'
+import { useFilterContext } from '@/context/filter'
+import { standardPadding } from '@/shared/styles'
+
 import { TagsGetResult } from '../../../../types'
-import { RenderTags } from '../components'
 
 interface TagsFilterBodyProps {
   allTags: TagsGetResult[]
   handleTagsClick: (tag: TagsGetResult) => void
+  searchCode?: string
 }
 
-export const TagsFilterBody = ({ allTags, handleTagsClick }: TagsFilterBodyProps) => {
-  const { filters, updateFilter } = useFilterContext()
+export const TagsFilterBody = ({ allTags, handleTagsClick, searchCode }: TagsFilterBodyProps) => {
+  const { filters } = useFilterContext()
 
   const { tagIds = [] } = filters
 
-  const { isOpen: selectMenuOpen, onOpen: onSelectMenuOpen, onClose: onSelectMenuClose } = useDisclosure()
-
-  const isDisabled = tagIds.length >= 3
-
-  const handleTagsSelection = (newValue: MultiValue<TagsGetResult>) => {
-    if (newValue[0]) {
-      updateFilter({ tagIds: [...tagIds, newValue[0].id] })
+  const tagsToRender = useMemo(() => {
+    const usedTags = allTags.filter((tag) => tag.count > 0)
+    if (searchCode) {
+      return usedTags.filter(
+        (tag) => tag.label.toLowerCase().includes(searchCode.toLowerCase()) || tagIds.includes(tag.id),
+      )
     }
-  }
 
-  const handleInputChange = (newValue: string) => {
-    if (newValue?.length >= 1) {
-      onSelectMenuOpen()
-    } else {
-      onSelectMenuClose()
-    }
-  }
+    return usedTags
+  }, [allTags, searchCode, tagIds])
 
   return (
-    <>
-      <Box width="100%" paddingX="24px">
-        <SelectComponent<TagsGetResult, true>
-          isMulti
-          isDisabled={isDisabled}
-          menuIsOpen={selectMenuOpen}
-          onBlur={onSelectMenuClose}
-          options={allTags}
-          value={[]}
-          getOptionLabel={(option) => option.label}
-          onChange={handleTagsSelection}
-          onInputChange={handleInputChange}
-        />
-      </Box>
+    <Box width="100%" overflowY="auto">
+      <VStack width="100%" paddingX={standardPadding} alignItems="start">
+        {tagsToRender.map((tag) => {
+          const isChecked = tagIds.includes(tag.id)
 
-      <Box width="100%" overflowY="auto">
-        <VStack width="100%" padding="0px 24px" alignItems="start" spacing="5px">
-          <RenderTags {...{ allTags, tagIds, handleClick: handleTagsClick }} />
-        </VStack>
-      </Box>
-    </>
+          return (
+            <Checkbox value={tag.id} key={tag.id} isChecked={isChecked} onChange={() => handleTagsClick(tag)}>
+              {tag.label}
+            </Checkbox>
+          )
+        })}
+      </VStack>
+    </Box>
   )
 }

@@ -41,8 +41,6 @@ export const Leaderboard = () => {
     return <NoContribution />
   }
 
-  console.log('checking funders', funders)
-
   return (
     <VStack spacing={0} w="full" flex={1} overflowY={'auto'} justifyContent={'space-between'}>
       <VStack spacing={0} w="full">

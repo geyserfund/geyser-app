@@ -21,7 +21,7 @@ export const ProjectStatusUpdate = () => {
 
   const { project } = useProjectAtom()
 
-  const { updateProject } = useProjectAPI()
+  const { updateProjectStatus } = useProjectAPI()
 
   const isProjectInReview = project?.status === ProjectStatus.InReview
   const isProjectInReviewTooltip = ProjectStatusTooltip[ProjectStatusLabels.IN_REVIEW]
@@ -34,7 +34,7 @@ export const ProjectStatusUpdate = () => {
 
   const onSubmit = () => {
     if (project) {
-      updateProject.execute({
+      updateProjectStatus.execute({
         variables: {
           input: {
             projectId: Number(project.id),

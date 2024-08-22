@@ -5,7 +5,7 @@ import { H3 } from '../../../../../components/typography'
 import { TextArea } from '../../../../../components/ui'
 import { SkeletonLayout } from '../../../../../shared/components/layouts'
 import { useNotification } from '../../../../../utils'
-import { useUserProfileAtomValue } from '../../../state'
+import { useUserProfileAtom } from '../../../state'
 import { EditableAvatar } from '../../profilePage/components'
 import { useEditProfile } from '../hooks/useEditProfile'
 import { DeleteUserProfile } from './DeleteUserProfile'
@@ -15,7 +15,7 @@ export const ProfileForm = ({ isLoading }: { isLoading?: boolean }) => {
   const { t } = useTranslation()
   const { unexpected, toast } = useNotification()
 
-  const user = useUserProfileAtomValue()
+  const { userProfile: user } = useUserProfileAtom()
   const {
     name,
     setName,

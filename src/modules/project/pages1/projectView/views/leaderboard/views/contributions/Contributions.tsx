@@ -7,7 +7,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { contributionListAtom } from '@/modules/project/state/contributionsAtom'
 import { CardLayout } from '@/shared/components/layouts'
 import { usePaginationAtomHook } from '@/shared/hooks'
-import { standardPadding } from '@/styles'
+import { standardPadding } from '@/shared/styles'
 import { OrderByOptions, ProjectFundingTxFragment, useProjectPageFundingTxQuery } from '@/types'
 import { useMobileMode } from '@/utils'
 

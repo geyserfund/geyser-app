@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { H2 } from '../../../../../../components/typography'
 import { CardLayout } from '../../../../../../shared/components/layouts'
 import { getPath } from '../../../../../../shared/constants'
-import { standardPadding } from '../../../../../../styles'
+import { standardPadding } from '../../../../../../shared/styles'
 import { useRefundedSwapData } from '../../../../funding/state'
 import { RefundProcessing, RefundSummary, SafeToDeleteNotice } from './components'
 

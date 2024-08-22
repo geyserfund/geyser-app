@@ -1,52 +1,62 @@
-import { useTranslation } from 'react-i18next'
+import { Body } from '@/shared/components/typography'
+import { useNotification } from '@/utils'
 
-import { ProjectForProfilePageFragment } from '../../../../../../../types'
-import { useViewingOwnProfileAtomValue } from '../../../../../state'
-import { CreateAProjectButton, ProfileTabLayout } from '../../../components'
+import { ProjectForProfilePageFragment, useUserProfileProjectsQuery } from '../../../../../../../types'
+import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
 import { CreateProject } from '../components/CreateProject'
-import { ProfileProjectList } from '../components/ProfileProjectList'
+import { ProfileProjectCard } from '../components/ProfileProjectCard'
 import { TabPanelSkeleton } from '../components/TabPanelSkeleton'
 
-const ProfileProjectsLayout = ({ children }: { children: React.ReactNode }) => {
-  const { t } = useTranslation()
+export const ProfileProjects = () => {
   const isViewingOwnProfile = useViewingOwnProfileAtomValue()
-  return (
-    <ProfileTabLayout
-      heading={t('Projects')}
-      headerContent={isViewingOwnProfile ? <CreateAProjectButton size="sm" marginTop={'0px'} /> : undefined}
-    >
-      {children}
-    </ProfileTabLayout>
-  )
-}
+  const toast = useNotification()
 
-export const ProfileProjects = ({
-  projects,
-  isLoading,
-}: {
-  projects: ProjectForProfilePageFragment[]
-  isLoading: boolean
-}) => {
-  const isViewingOwnProfile = useViewingOwnProfileAtomValue()
+  const { userProfile } = useUserProfileAtom()
 
-  if (isLoading) {
+  const { data, loading } = useUserProfileProjectsQuery({
+    variables: {
+      where: {
+        id: userProfile.id,
+      },
+    },
+    skip: !userProfile.id,
+    onError(error) {
+      toast.error({
+        title: 'Failed to fetch projects',
+        description: `${error.message}`,
+      })
+    },
+  })
+
+  if (loading) {
     return <TabPanelSkeleton />
   }
+
+  const projects = (data?.user?.ownerOf?.map((val) => val?.project) || []) as ProjectForProfilePageFragment[]
 
   if (projects.length === 0 && isViewingOwnProfile) {
     return <CreateProject marginTop="20px" />
   }
 
+  if (projects.length === 0) {
+    return <Body> No Projects</Body>
+  }
+
   const projectsToRender = projects.sort((a, b) => Number(b.createdAt) - Number(a.createdAt))
 
   return (
-    <ProfileProjectsLayout>
-      <ProfileProjectList
-        projects={projectsToRender}
-        showStatus={isViewingOwnProfile}
-        showFollow={!isViewingOwnProfile}
-        showStats
-      />
-    </ProfileProjectsLayout>
+    <>
+      {projectsToRender.map((project, index) => {
+        return (
+          <ProfileProjectCard
+            showStats
+            showStatus
+            key={project.id}
+            project={project}
+            _hover={{ backgroundColor: 'neutral.50', cursor: 'pointer', transition: 'background-color 0.2s' }}
+          />
+        )
+      })}
+    </>
   )
 }

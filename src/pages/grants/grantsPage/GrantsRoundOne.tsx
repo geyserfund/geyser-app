@@ -13,7 +13,7 @@ import {
   GrantsHero,
   WalletOfSatoshiUrl,
 } from '../../../shared/constants'
-import { fonts } from '../../../styles'
+import { fonts } from '../../../shared/styles'
 import { GrantApplicant, GrantStatusEnum } from '../../../types'
 import { useMediumScreen, useMobileMode } from '../../../utils'
 import { ApplyGrantCard } from '../components/ApplyGrantCard'

@@ -17,8 +17,8 @@ export const dimensions = {
   },
   animatedNavBar: {
     height: {
-      base: '60px',
-      lg: '60px',
+      base: 44,
+      lg: 44,
     },
   },
   project: {
@@ -43,6 +43,10 @@ export const dimensions = {
     },
   },
   profile: {
+    sideNav: {
+      width: '400px',
+      gap: '20px',
+    },
     settings: {
       menu: {
         width: 148,

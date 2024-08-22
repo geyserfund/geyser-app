@@ -13,9 +13,17 @@ export const defaultUser: UserForProfilePageFragment = {
   externalAccounts: [],
 }
 
+/** This atom is used to store the user profile data */
 export const userProfileAtom = atom<UserForProfilePageFragment>(defaultUser as UserForProfilePageFragment)
 
-export const useUserProfileAtomValue = () => useAtomValue(userProfileAtom)
+/** This atom is used to store the loading state of the user profile data, initially true */
+export const userProfileLoadingAtom = atom<boolean>(true)
+
+export const useUserProfileAtom = () => {
+  const userProfile = useAtomValue(userProfileAtom)
+  const isLoading = useAtomValue(userProfileLoadingAtom)
+  return { userProfile, isLoading }
+}
 
 const isViewingOwnProfileAtom = atom<boolean>((get) => {
   const authUser = get(authUserAtom)

@@ -6,6 +6,7 @@ import { Location, useLocation, useNavigate } from 'react-router-dom'
 import { FilterComponent } from '@/modules/discovery/filters/FilterComponent'
 import { EmailPromptModal } from '@/pages/auth/components/EmailPromptModal'
 import { useEmailPromptModal } from '@/pages/auth/hooks/useEmailPromptModal'
+import { discoveryPageCommonLayoutStyles } from '@/shared/styles/discoveryPageLayout'
 
 import { AuthModal } from '../../../components/molecules'
 import { useAuthContext } from '../../../context'
@@ -17,14 +18,14 @@ import { BrandLogo } from './components/BrandLogo'
 import { LoggedOutModal } from './components/LoggedOutModal'
 import { ProjectLogo } from './components/ProjectLogo'
 import { ProjectSelectMenu } from './components/ProjectSelectMenu'
-import { isDiscoveryRoutesAtom, isProjectRoutesAtom, shouldShowProjectLogoAtom } from './topNavBarAtom'
+import { isDiscoveryRoutesAtom, shouldShowGeyserLogoAtom, shouldShowProjectLogoAtom } from './topNavBarAtom'
 
 export const TopNavBar = () => {
   const { isLoggedIn, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose } = useAuthModal()
 
   const shouldShowProjectLogo = useAtomValue(shouldShowProjectLogoAtom)
-  const isProjectPage = useAtomValue(isProjectRoutesAtom)
+  const shouldShowGeyserLogo = useAtomValue(shouldShowGeyserLogoAtom)
   const isPlatformRoutes = useAtomValue(isDiscoveryRoutesAtom)
 
   const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose } = useEmailPromptModal()
@@ -70,7 +71,7 @@ export const TopNavBar = () => {
       return <ProjectLogo />
     }
 
-    if (isProjectPage) {
+    if (shouldShowGeyserLogo) {
       return <BrandLogo />
     }
 
@@ -82,13 +83,7 @@ export const TopNavBar = () => {
       w="full"
       position="fixed"
       top={0}
-      {...(!isProjectPage && {
-        paddingLeft: {
-          base: 0,
-          lg: dimensions.discovery.sideNav.tablet.width,
-          '2xl': dimensions.discovery.sideNav.desktop.width,
-        },
-      })}
+      {...(isPlatformRoutes && discoveryPageCommonLayoutStyles)}
       justifyContent={'center'}
       zIndex={9}
     >

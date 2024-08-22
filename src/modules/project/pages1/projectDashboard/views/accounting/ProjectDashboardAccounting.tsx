@@ -7,7 +7,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { SkeletonLayout } from '../../../../../../shared/components/layouts'
 import { ProjectNoTransactionImageUrl } from '../../../../../../shared/constants'
 import { usePaginationHook } from '../../../../../../shared/hooks/usePaginationHook'
-import { standardPadding } from '../../../../../../styles'
+import { standardPadding } from '../../../../../../shared/styles'
 import {
   FundingTxOrderFragment,
   FundingTxsWhereFundingStatus,
