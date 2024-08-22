@@ -1,16 +1,13 @@
 import { useQuery } from '@apollo/client'
-import { CloseIcon } from '@chakra-ui/icons'
-import { Box, Button, HStack, IconButton, Image, VStack } from '@chakra-ui/react'
-import { useState } from 'react'
+import { Box, Button, HStack, Image, Skeleton, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { PiCoins, PiTrophy } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
+import { Link } from 'react-router-dom'
 
-import { DonateIcon } from '@/components/icons/svg/DonateIcon'
-import { TrophyIcon } from '@/components/icons/svg/TrophyIcon'
 import { QUERY_GRANT_STATISTICS } from '@/graphqlBase/queries/grant'
-import { Banner } from '@/shared/components/display/Banner'
 import { Body } from '@/shared/components/typography'
-import { getPath, GrantsPageBannerNoiseGifUrl } from '@/shared/constants'
+import { getPath, GrantsFAQUrl, GrantsPageBannerNoiseGifUrl } from '@/shared/constants'
 import { GrantStatistics } from '@/types'
 import { getShortAmountLabel, useMobileMode } from '@/utils'
 
@@ -23,8 +20,6 @@ const GrantsHeader = () => {
   const navigate = useNavigate()
 
   const isMobile = useMobileMode()
-
-  const [isCalloutOpen, setIsCalloutOpen] = useState(true)
 
   const { data, loading } = useQuery<{ grantStatistics: GrantStatistics }>(QUERY_GRANT_STATISTICS)
 
@@ -50,101 +45,149 @@ const GrantsHeader = () => {
   }
 
   const Direction = isMobile ? VStack : HStack
+  const Column = isMobile ? VStack : HStack
 
   return (
-    <VStack spacing={4} w="100%" alignItems="center">
-      {isCalloutOpen && <Callout onClose={() => setIsCalloutOpen(false)} />}
-      <Banner title={t('Geyser Grants - empowering bitcoin creators!')} items={items} loading={loading} reverse />
-      <Direction
-        justifyContent="space-between"
-        w="100%"
-        border="1px solid"
-        borderColor="neutralAlpha.6"
-        borderRadius="md"
-        p={6}
-      >
-        <Button w="100%" size="lg" variant="primary" rightIcon={<DonateIcon />} onClick={handleDonateToGeyser}>
-          {t('Donate to Geyser Grant')}
-        </Button>
-        <Button
+    <>
+      <Box position="relative" w="100%">
+        <VStack
           w="100%"
-          size="lg"
-          variant="primary"
-          bg="yellow.9"
-          rightIcon={<TrophyIcon />}
-          onClick={handleCreateGrant}
+          spacing={0}
+          border="1px solid"
+          borderColor="neutralAlpha.6"
+          borderTopRightRadius="8px"
+          borderTopLeftRadius="8px"
+          bg={'primaryAlpha.10'}
+          p={4}
         >
-          {t('Create a grant')}
-        </Button>
-      </Direction>
-    </VStack>
+          <Image
+            src={GrantsPageBannerNoiseGifUrl}
+            position="absolute"
+            top={0}
+            left={0}
+            right={0}
+            bottom={0}
+            w="100%"
+            h="100%"
+            objectFit="cover"
+            opacity={0.25}
+            zIndex={1}
+            draggable={false}
+            borderTopRadius="8px"
+          />
+          <Body fontSize={{ base: '28px', lg: '36px' }} bold zIndex={2}>
+            {t('Geyser Grants')}
+          </Body>
+          <VStack spacing={0}>
+            <Body fontSize={{ base: '16px', lg: '20px' }} regular zIndex={2}>
+              {t('Funding educators, creatives and builders doing Bitcoin-only projects on Geyser.')}
+            </Body>
+            <Body fontSize={{ base: '16px', lg: '20px' }} regular zIndex={2}>
+              {t('Funded by bitcoiners who want to change the world.')}
+            </Body>
+          </VStack>
+        </VStack>
+      </Box>
+      <Box position="relative" w="100%">
+        <VStack
+          width="full"
+          border="1px solid"
+          justifyContent="center"
+          borderColor="neutralAlpha.6"
+          p={6}
+          borderBottomRadius="8px"
+        >
+          <Box width="100%" justifyContent="center">
+            {items && (
+              <Column
+                w={{ base: '100%', lg: 'auto' }}
+                spacing={{ base: 2, lg: 6 }}
+                alignItems={{ base: 'flex-end', lg: 'center' }}
+                justifyContent="center"
+              >
+                {items.map((item, index) => (
+                  <BannerItem
+                    key={index}
+                    label={item.label}
+                    value={item.value}
+                    suffix={item.suffix}
+                    loading={loading}
+                  />
+                ))}
+              </Column>
+            )}
+          </Box>
+          <HStack w="100%" justifyContent="center">
+            <Link to={GrantsFAQUrl}>
+              <Body
+                fontSize={{ base: 'md', lg: 'lg' }}
+                medium
+                color="primaryAlpha.11"
+                style={{ textDecoration: 'underline' }}
+              >
+                {t('Learn more about Geyser Grants')}
+              </Body>
+            </Link>
+          </HStack>
+          <Direction mt={3} justifyContent="space-between" w="100%">
+            <Button
+              w="100%"
+              size="lg"
+              variant="primary"
+              rightIcon={<PiCoins size={18} />}
+              onClick={handleDonateToGeyser}
+            >
+              {t('Donate to Geyser Grant')}
+            </Button>
+            <Button
+              w="100%"
+              size="lg"
+              variant="primary"
+              bg="yellow.9"
+              rightIcon={<PiTrophy size={18} />}
+              onClick={handleCreateGrant}
+            >
+              {t('Create a grant')}
+            </Button>
+          </Direction>
+        </VStack>
+      </Box>
+    </>
   )
 }
 
 export default GrantsHeader
 
-const Callout = ({ onClose }: { onClose: () => void }) => {
-  const { t } = useTranslation()
+const BannerItem = ({
+  label,
+  value,
+  loading,
+  reverse,
+  suffix,
+}: {
+  label: string
+  value: string
+  loading: boolean
+  reverse?: boolean
+  suffix?: string
+}) => {
+  if (loading) {
+    return <Skeleton height="20px" width="60px" />
+  }
 
   return (
-    <Box position="relative" w="100%">
-      <Image
-        src={GrantsPageBannerNoiseGifUrl}
-        position="absolute"
-        top={0}
-        left={0}
-        right={0}
-        bottom={0}
-        w="100%"
-        h="100%"
-        objectFit="cover"
-        opacity={0.25}
-        zIndex={1}
-        borderRadius="8px"
-      />
-      <VStack
-        w="100%"
-        spacing={0}
-        border="1px solid"
-        borderColor="neutralAlpha.6"
-        borderRadius="8px"
-        bg={'primaryAlpha.10'}
-        p={4}
-      >
-        <IconButton
-          borderRadius="md"
-          border="1px solid"
-          borderColor="primaryAlpha.8"
-          position="absolute"
-          top={3}
-          right={3}
-          variant="ghost"
-          aria-label="close"
-          zIndex={2}
-          icon={<CloseIcon width={'12px'} height={'12px'} />}
-          color="primaryAlpha.11"
-          _hover={{
-            bg: 'transparent',
-            borderColor: 'primaryAlpha.12',
-            color: 'primaryAlpha.12',
-          }}
-          onClick={onClose}
-        />
-        <Body fontSize={{ base: '28px', lg: '36px' }} bold zIndex={2}>
-          {t('Geyser Grants')}
+    <HStack>
+      <Body fontSize={{ base: 'xl', lg: '3xl' }} muted medium>
+        {label}:
+      </Body>
+      <Body fontSize={{ base: 'xl', lg: '3xl' }} color="neutral1.12" bold>
+        {value}
+      </Body>
+      {suffix && (
+        <Body fontSize={{ base: 'xl', lg: '3xl' }} muted medium>
+          {suffix}
         </Body>
-        <Body fontSize={{ base: '20px', lg: '28px' }} medium zIndex={2}>
-          {t('Empowering bitcoin creators!')}
-        </Body>
-        <VStack spacing={0}>
-          <Body fontSize={{ base: '16px', lg: '20px' }} regular zIndex={2}>
-            {t('Funding educators, creatives and builders doing Bitcoin-only projects on Geyser.')}
-          </Body>
-          <Body fontSize={{ base: '16px', lg: '20px' }} regular zIndex={2}>
-            {t('Funded by bitcoiners who want to change the world.')}
-          </Body>
-        </VStack>
-      </VStack>
-    </Box>
+      )}
+    </HStack>
   )
 }
