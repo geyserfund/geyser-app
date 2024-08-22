@@ -11,7 +11,8 @@ import { getPath, GrantsFAQUrl, GrantsPageBannerNoiseGifUrl } from '@/shared/con
 import { GrantStatistics } from '@/types'
 import { getShortAmountLabel, useMobileMode } from '@/utils'
 
-const GEYSER_PROJECT_NAME = 'geyser'
+// TODO: Change to geyser before pushing to production
+const GEYSER_PROJECT_NAME = 'geyser2'
 const AIRTABLE_CREATE_GRANT_URL = 'https://airtable.com/appyM7XlNIWVypuP5/pagLMhHSSQVlKe0Dw/form'
 
 const GrantsHeader = () => {
