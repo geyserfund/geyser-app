@@ -1,13 +1,15 @@
 import { useState } from 'react'
 
-import { ProjectForProfilePageFragment, useUserProfileProjectsQuery } from '@/types'
+import { ProjectForProfilePageFragment, ProjectStatus, useUserProfileProjectsQuery } from '@/types'
 import { useNotification } from '@/utils'
 
 export const useMyProjects = (userId: number) => {
   const { toast } = useNotification()
 
   const [isLoading, setLoading] = useState(true)
-  const [projects, setProjects] = useState<ProjectForProfilePageFragment[]>([])
+  const [activeProjects, setActiveProjects] = useState<ProjectForProfilePageFragment[]>([])
+  const [inDraftProjects, setInDraftProjects] = useState<ProjectForProfilePageFragment[]>([])
+  const [inReviewProjects, setInReviewProjects] = useState<ProjectForProfilePageFragment[]>([])
 
   useUserProfileProjectsQuery({
     variables: {
@@ -17,7 +19,24 @@ export const useMyProjects = (userId: number) => {
     },
     skip: !userId,
     onCompleted(data) {
-      setProjects(data.user.ownerOf?.map((val) => val?.project) as ProjectForProfilePageFragment[])
+      setActiveProjects(
+        data.user.ownerOf
+          ?.filter((val) => val?.project?.status === ProjectStatus.Active)
+          .map((val) => val.project)
+          .filter((project): project is ProjectForProfilePageFragment => project !== null) ?? [],
+      )
+      setInDraftProjects(
+        data.user.ownerOf
+          ?.filter((val) => val?.project?.status === ProjectStatus.Draft)
+          .map((val) => val.project)
+          .filter((project): project is ProjectForProfilePageFragment => project !== null) ?? [],
+      )
+      setInReviewProjects(
+        data.user.ownerOf
+          ?.filter((val) => val?.project?.status === ProjectStatus.InReview)
+          .map((val) => val.project)
+          .filter((project): project is ProjectForProfilePageFragment => project !== null) ?? [],
+      )
       setLoading(false)
     },
     onError(error) {
@@ -31,7 +50,9 @@ export const useMyProjects = (userId: number) => {
   })
 
   return {
-    projects,
+    activeProjects,
+    inDraftProjects,
+    inReviewProjects,
     isLoading,
   }
 }

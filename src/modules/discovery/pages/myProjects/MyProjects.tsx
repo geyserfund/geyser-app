@@ -21,9 +21,9 @@ export const MyProjects = () => {
   const [timePeriod, setTimePeriod] = useAtom(periodAtom)
 
   const { user } = useAuthContext()
-  const { projects, isLoading } = useMyProjects(user?.id)
+  const { activeProjects, inDraftProjects, inReviewProjects, isLoading } = useMyProjects(user?.id)
 
-  const hasNoProjects = projects.length === 0
+  const hasNoProjects = activeProjects.length === 0 && inDraftProjects.length === 0 && inReviewProjects.length === 0
 
   const timePeriodOptions: { value: TimePeriod; label: string }[] = [{ value: TimePeriod.Week, label: t('Past week') }]
 
@@ -51,7 +51,9 @@ export const MyProjects = () => {
         )}
       </Box>
       {hasNoProjects && !isLoading && <LaunchNewProjectBanner />}
-      {projects && projects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
+      {activeProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
+      {inReviewProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
+      {inDraftProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
     </VStack>
   )
 }
