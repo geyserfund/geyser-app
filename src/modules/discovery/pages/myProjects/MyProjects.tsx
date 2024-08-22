@@ -1,11 +1,8 @@
 import { Box, Button, HStack, Image, VStack } from '@chakra-ui/react'
-import { useAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
-import { PiCalendarDots } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { RocketLaunchIcon } from '@/components/icons/svg/RocketLaunch'
-import { CustomSelect } from '@/components/ui/CustomSelect'
 import { useAuthContext } from '@/context'
 import { Body } from '@/shared/components/typography'
 import { DiamondUrl, getPath } from '@/shared/constants'
@@ -13,25 +10,14 @@ import { useMobileMode } from '@/utils'
 
 import ProjectCard from './components/ProjectCard'
 import { useMyProjects } from './hooks/useMyProjects'
-import { periodAtom, TimePeriod } from './state/periodAtom'
 
 export const MyProjects = () => {
   const { t } = useTranslation()
-
-  const [timePeriod, setTimePeriod] = useAtom(periodAtom)
 
   const { user } = useAuthContext()
   const { activeProjects, inDraftProjects, inReviewProjects, isLoading } = useMyProjects(user?.id)
 
   const hasNoProjects = activeProjects.length === 0 && inDraftProjects.length === 0 && inReviewProjects.length === 0
-
-  const timePeriodOptions: { value: TimePeriod; label: string }[] = [{ value: TimePeriod.Week, label: t('Past week') }]
-
-  const handleTimePeriodChange = (selectedOption: { value: TimePeriod; label: string } | null) => {
-    if (selectedOption) {
-      setTimePeriod(selectedOption.value as TimePeriod)
-    }
-  }
 
   return (
     <VStack spacing={6} align="stretch">
@@ -39,16 +25,6 @@ export const MyProjects = () => {
         <Body fontSize="24px" bold width={{ base: '100%', lg: 'auto' }}>
           {t('My Projects')}
         </Body>
-        {!hasNoProjects && (
-          <CustomSelect
-            value={timePeriodOptions.find((option) => option.value === timePeriod)}
-            options={timePeriodOptions}
-            isSearchable={false}
-            onChange={handleTimePeriodChange}
-            dropdownIndicator={<PiCalendarDots />}
-            size="md"
-          />
-        )}
       </Box>
       {hasNoProjects && !isLoading && <LaunchNewProjectBanner />}
       {activeProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}

@@ -53,7 +53,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
   return (
     <Box width="100%" py={4}>
       <HStack spacing={4} alignItems="center" justifyContent="space-between">
-        <HStack>
+        <HStack as={RouterLink} to={getPath('project', project.name)}>
           {project.thumbnailImage && (
             <Image
               src={project.thumbnailImage}
@@ -71,7 +71,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
         <Button
           variant={'soft'}
           as={RouterLink}
-          to={getPath('project', project.name)}
+          to={getPath('dashboardAnalytics', project.name)}
           size="md"
           rightIcon={isMobile ? undefined : <BsArrowUpRight size={12} />}
         >

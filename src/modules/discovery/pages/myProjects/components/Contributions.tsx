@@ -1,10 +1,9 @@
 import { Box, BoxProps, Button, Divider, HStack, Image, Skeleton, Stack, VStack } from '@chakra-ui/react'
 import { Emoji, EmojiStyle } from 'emoji-picker-react'
 import { useTranslation } from 'react-i18next'
-import { PiFlagBannerFold } from 'react-icons/pi'
+import { PiCoins, PiFlagBannerFold } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
-import { DonateIcon } from '@/components/icons/svg/DonateIcon'
 import { useGoalsModal } from '@/modules/project/pages1/projectView/hooks'
 import { Body } from '@/shared/components/typography'
 import { getPath, NoContributionsReceivedUrl } from '@/shared/constants'
@@ -95,8 +94,8 @@ const Header = ({
   return (
     <VStack w="100%" align="stretch" spacing={0.5}>
       <HStack w="100%" justifyContent="center">
-        <DonateIcon />
-        <Body fontSize={'14px'} regular muted>
+        <PiCoins size={16} />
+        <Body fontSize={'14px'} regular light>
           {t('Contributions Received')}
         </Body>
       </HStack>
@@ -151,7 +150,7 @@ const GoalItem = ({ goal }: { goal: ProjectGoal }) => {
           justifyContent={{ base: 'space-between', lg: 'flex-start' }}
           width="100%"
         >
-          <HStack w="full" justifyContent={'start'} alignItems="start">
+          <HStack w="full" justifyContent={'start'} alignItems="center">
             {goal.emojiUnifiedCode && (
               <Box display="flex" justifyContent="center" width="24px" height="34px">
                 <Emoji size={24} unified={goal.emojiUnifiedCode} emojiStyle={EmojiStyle.NATIVE} />
