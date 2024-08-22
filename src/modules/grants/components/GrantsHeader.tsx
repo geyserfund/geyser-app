@@ -122,7 +122,7 @@ const GrantsHeader = () => {
             )}
           </Box>
           <HStack w="100%" justifyContent="center">
-            <Link to={GrantsFAQUrl}>
+            <Link to={GrantsFAQUrl} target="_blank">
               <Body
                 fontSize={{ base: 'md', lg: 'lg' }}
                 medium

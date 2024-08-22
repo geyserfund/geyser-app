@@ -46,7 +46,11 @@ export const Leaderboard = () => {
 
   return (
     <VStack spacing={4} width="full">
-      <Banner title={t('The leaders making world-changing ideas a reality')} items={bannerItems} loading={loading} />
+      <Banner
+        title={t('The projects and contributors making world-changing ideas a reality')}
+        items={bannerItems}
+        loading={loading}
+      />
       <HStack width="100%" justifyContent="space-between">
         {!isMobile && (
           <Body fontSize="24px" bold>
