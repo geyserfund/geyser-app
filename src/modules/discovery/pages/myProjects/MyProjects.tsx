@@ -9,6 +9,7 @@ import { DiamondUrl, getPath } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
 import ProjectCard from './components/ProjectCard'
+import { ProjectIFollowGrid } from './components/ProjectIFollowGrid'
 import { useMyProjects } from './hooks/useMyProjects'
 
 export const MyProjects = () => {
@@ -20,17 +21,22 @@ export const MyProjects = () => {
   const hasNoProjects = activeProjects.length === 0 && inDraftProjects.length === 0 && inReviewProjects.length === 0
 
   return (
-    <VStack spacing={6} align="stretch">
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Body fontSize="24px" bold width={{ base: '100%', lg: 'auto' }}>
-          {t('My Projects')}
-        </Body>
-      </Box>
-      {hasNoProjects && !isLoading && <LaunchNewProjectBanner />}
-      {activeProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
-      {inReviewProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
-      {inDraftProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
-    </VStack>
+    <>
+      <VStack spacing={6} align="stretch">
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Body fontSize="24px" bold width={{ base: '100%', lg: 'auto' }}>
+            {t('My Projects')}
+          </Body>
+        </Box>
+        {hasNoProjects && !isLoading && <LaunchNewProjectBanner />}
+        {activeProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
+        {inReviewProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
+        {inDraftProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
+      </VStack>
+      <VStack spacing={6} align="stretch">
+        <ProjectIFollowGrid />
+      </VStack>
+    </>
   )
 }
 

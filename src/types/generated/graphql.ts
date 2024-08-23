@@ -5378,6 +5378,8 @@ export type LeaderboardGlobalProjectsQuery = { __typename?: 'Query', leaderboard
     & TopProjectsFragmentFragment
   )> };
 
+export type FollowedProjectsActivitiesCountFragmentFragment = { __typename?: 'ProjectActivitiesCount', count: number, project: { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, title: string } };
+
 export type OrdersStatsFragmentFragment = { __typename?: 'OrdersStatsBase', projectRewards: { __typename?: 'ProjectRewardsStats', count: number }, projectRewardsGroupedByProjectRewardId: Array<{ __typename?: 'ProjectRewardsGroupedByRewardIdStats', count: number, projectReward: { __typename?: 'ProjectReward', id: any, name: string, image?: string | null } }> };
 
 export type ProjectContributionsStatsFragment = { __typename?: 'ProjectContributionsStatsBase', contributions: { __typename?: 'ProjectContributionsStats', total: number, totalUsd: number } };
@@ -5386,6 +5388,16 @@ export type ProjectStatsFragment = { __typename?: 'ProjectStats', current?: { __
       { __typename?: 'ProjectContributionsStatsBase' }
       & ProjectContributionsStatsFragment
     ) | null } | null };
+
+export type ActivitiesCountGroupedByProjectQueryVariables = Exact<{
+  input: ActivitiesCountGroupedByProjectInput;
+}>;
+
+
+export type ActivitiesCountGroupedByProjectQuery = { __typename?: 'Query', activitiesCountGroupedByProject: Array<(
+    { __typename?: 'ProjectActivitiesCount' }
+    & FollowedProjectsActivitiesCountFragmentFragment
+  )> };
 
 export type OrdersStatsGetQueryVariables = Exact<{
   input: GetProjectOrdersStatsInput;
@@ -6983,6 +6995,17 @@ export const TopProjectsFragmentFragmentDoc = gql`
   contributionsTotalUsd
   contributionsCount
   contributorsCount
+}
+    `;
+export const FollowedProjectsActivitiesCountFragmentFragmentDoc = gql`
+    fragment FollowedProjectsActivitiesCountFragment on ProjectActivitiesCount {
+  count
+  project {
+    id
+    name
+    thumbnailImage
+    title
+  }
 }
     `;
 export const OrdersStatsFragmentFragmentDoc = gql`
@@ -9801,6 +9824,46 @@ export type LeaderboardGlobalProjectsQueryHookResult = ReturnType<typeof useLead
 export type LeaderboardGlobalProjectsLazyQueryHookResult = ReturnType<typeof useLeaderboardGlobalProjectsLazyQuery>;
 export type LeaderboardGlobalProjectsSuspenseQueryHookResult = ReturnType<typeof useLeaderboardGlobalProjectsSuspenseQuery>;
 export type LeaderboardGlobalProjectsQueryResult = Apollo.QueryResult<LeaderboardGlobalProjectsQuery, LeaderboardGlobalProjectsQueryVariables>;
+export const ActivitiesCountGroupedByProjectDocument = gql`
+    query ActivitiesCountGroupedByProject($input: ActivitiesCountGroupedByProjectInput!) {
+  activitiesCountGroupedByProject(input: $input) {
+    ...FollowedProjectsActivitiesCountFragment
+  }
+}
+    ${FollowedProjectsActivitiesCountFragmentFragmentDoc}`;
+
+/**
+ * __useActivitiesCountGroupedByProjectQuery__
+ *
+ * To run a query within a React component, call `useActivitiesCountGroupedByProjectQuery` and pass it any options that fit your needs.
+ * When your component renders, `useActivitiesCountGroupedByProjectQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useActivitiesCountGroupedByProjectQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useActivitiesCountGroupedByProjectQuery(baseOptions: Apollo.QueryHookOptions<ActivitiesCountGroupedByProjectQuery, ActivitiesCountGroupedByProjectQueryVariables> & ({ variables: ActivitiesCountGroupedByProjectQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ActivitiesCountGroupedByProjectQuery, ActivitiesCountGroupedByProjectQueryVariables>(ActivitiesCountGroupedByProjectDocument, options);
+      }
+export function useActivitiesCountGroupedByProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ActivitiesCountGroupedByProjectQuery, ActivitiesCountGroupedByProjectQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ActivitiesCountGroupedByProjectQuery, ActivitiesCountGroupedByProjectQueryVariables>(ActivitiesCountGroupedByProjectDocument, options);
+        }
+export function useActivitiesCountGroupedByProjectSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ActivitiesCountGroupedByProjectQuery, ActivitiesCountGroupedByProjectQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ActivitiesCountGroupedByProjectQuery, ActivitiesCountGroupedByProjectQueryVariables>(ActivitiesCountGroupedByProjectDocument, options);
+        }
+export type ActivitiesCountGroupedByProjectQueryHookResult = ReturnType<typeof useActivitiesCountGroupedByProjectQuery>;
+export type ActivitiesCountGroupedByProjectLazyQueryHookResult = ReturnType<typeof useActivitiesCountGroupedByProjectLazyQuery>;
+export type ActivitiesCountGroupedByProjectSuspenseQueryHookResult = ReturnType<typeof useActivitiesCountGroupedByProjectSuspenseQuery>;
+export type ActivitiesCountGroupedByProjectQueryResult = Apollo.QueryResult<ActivitiesCountGroupedByProjectQuery, ActivitiesCountGroupedByProjectQueryVariables>;
 export const OrdersStatsGetDocument = gql`
     query OrdersStatsGet($input: GetProjectOrdersStatsInput!) {
   ordersStatsGet(input: $input) {
