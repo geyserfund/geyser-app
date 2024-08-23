@@ -197,12 +197,12 @@ export const VerifyEmailImageUrl = 'https://storage.googleapis.com/geyser-projec
 
 export const ProjectLaunchedImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/project-launched.svg'
 
-export const ProjectRewardsImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/no-rewards.svg'
+export const ProjectRewardsImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/gifts.png'
 
 export const ProjectNoTransactionImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/no-transaction.svg'
 
-export const NoContributionImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/no-contribution.svg'
+export const NoContributionImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/contributions.png'
 
 export const MegaphoneUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/megaphone.png'
 
@@ -214,9 +214,6 @@ export const NotAuthorizedImageUrl = 'https://storage.googleapis.com/geyser-proj
 
 export const TransactionFailedImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/emails/transactionFailed.png'
-
-export const NoLeaderboardDataImageUrl =
-  'https://storage.googleapis.com/geyser-projects-media/utils/no-leaderboard-item.png'
 
 // FUNDING FLOW ERRORS
 
