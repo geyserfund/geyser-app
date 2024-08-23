@@ -5,7 +5,12 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
     activityType
     createdAt
     id
-    projectId
+    project {
+      id
+      title
+      name
+      thumbnailImage
+    }
     resource {
       ... on Project {
         id

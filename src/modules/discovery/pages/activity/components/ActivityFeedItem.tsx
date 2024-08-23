@@ -1,8 +1,10 @@
 import { Badge, Box, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiBag, PiFlagBannerBold, PiLightning, PiNewspaper } from 'react-icons/pi'
+import { Link } from 'react-router-dom'
 
 import { Body } from '@/shared/components/typography'
+import { getPath } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import {
   Activity,
@@ -23,7 +25,7 @@ enum ActivityType {
   ContributionConfirmed = 'ContributionConfirmed',
 }
 
-const ActivityFeedItem = ({ activityType, createdAt, id, projectId, resource }: Activity) => {
+const ActivityFeedItem = ({ activityType, createdAt, project, resource }: Activity) => {
   const isMobile = useMobileMode()
 
   const isGoalActivity = activityType === ActivityType.ProjectGoalCreated
@@ -44,12 +46,20 @@ const ActivityFeedItem = ({ activityType, createdAt, id, projectId, resource }: 
             <ActivityTypeItem activityType={activityType as ActivityType} />
             <ActivityDate date={createdAt} />
           </HStack>
-          <ProjectTitle projectTitle={'Placeholder'} projectImage={''} />
+          <ProjectTitle
+            projectTitle={project.title}
+            projectImage={project.thumbnailImage || ''}
+            projectName={project.name}
+          />
         </VStack>
       ) : (
         <HStack width="full" justifyContent={'space-between'} alignItems="center">
           <HStack justifyContent="flex-start" spacing={3}>
-            <ProjectTitle projectTitle={'Placeholder'} projectImage={''} />
+            <ProjectTitle
+              projectTitle={project.title}
+              projectImage={project.thumbnailImage || ''}
+              projectName={project.name}
+            />
             <ActivityTypeItem activityType={activityType as ActivityType} />
           </HStack>
 
@@ -74,11 +84,21 @@ const ActivityFeedItem = ({ activityType, createdAt, id, projectId, resource }: 
 
 export default ActivityFeedItem
 
-const ProjectTitle = ({ projectTitle, projectImage }: { projectTitle: string; projectImage: string }) => {
+const ProjectTitle = ({
+  projectTitle,
+  projectImage,
+  projectName,
+}: {
+  projectTitle: string
+  projectImage: string
+  projectName: string
+}) => {
   return (
-    <HStack>
-      {projectImage && <Image width={'32px'} height={'32px'} borderRadius={'8px'} src={projectImage} />}
-      <Body size="lg" medium>
+    <HStack as={Link} to={getPath('project', projectName)}>
+      {projectImage && (
+        <Image width={'32px'} height={'32px'} borderRadius={'8px'} src={projectImage} objectFit="cover" />
+      )}
+      <Body size="lg" medium isTruncated maxW={{ base: '250px', lg: '200px' }}>
         {projectTitle}
       </Body>
     </HStack>
