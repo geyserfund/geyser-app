@@ -1,7 +1,6 @@
-import { VStack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
 import { PiBell, PiGlobe } from 'react-icons/pi'
 
-import { StickToTop } from '@/shared/components/layouts'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { dimensions } from '@/shared/constants'
@@ -28,19 +27,20 @@ export const Activity = () => {
   const { render, ...animatedNavBarProps } = useAnimatedNavBar({ items, defaultView: 'projectsIFollow' })
 
   return (
-    <VStack width="full" spacing={4}>
-      <VStack id="activity-mobile-wrapper" width="full" height="100%">
-        <StickToTop
-          width={'100%'}
-          id="activity-mobile"
-          wrapperId="activity-mobile-wrapper"
-          offset={dimensions.projectNavBar.mobile.height + 20}
-          _onStick={{ width: '100%', px: '4' }}
-        >
-          <AnimatedNavBar {...animatedNavBarProps} showIcon showLabel />
-        </StickToTop>
-        {render && render()}
-      </VStack>
+    <VStack paddingTop={{ base: `${dimensions.animatedNavBar.height.base}px`, lg: 0 }} width="full" spacing={4}>
+      <HStack
+        position={{ base: 'fixed', lg: 'sticky' }}
+        paddingX={{ base: 3, lg: 0 }}
+        top={{ base: `${dimensions.topNavBar.mobile.height}px`, lg: 0 }}
+        width="full"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <AnimatedNavBar {...animatedNavBarProps} showIcon showLabel />
+      </HStack>
+
+      <VStack width="full" height="100%"></VStack>
+      {render && render()}
     </VStack>
   )
 }
