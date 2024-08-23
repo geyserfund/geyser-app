@@ -1,14 +1,15 @@
-import { Button, ButtonProps, Image, useBreakpointValue, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, Button, ButtonProps, Image, useBreakpointValue, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { Link } from 'react-router-dom'
 
 import { LogoDark, LogoLight } from '@/assets'
+import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
 import { dimensions, getPath, LogoNameDark, LogoNameLight } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
 import { currentPlatformNavItemAtom } from './discoveryNavAtom'
-import { DiscoveryNavItem, discoveryNavItems } from './discoveryNavData'
+import { DiscoveryNavItem, DiscoveryNavItemKey, discoveryNavItems } from './discoveryNavData'
 
 export const DiscoverySideNav = () => {
   const isMobile = useMobileMode()
@@ -18,6 +19,9 @@ export const DiscoverySideNav = () => {
   const tabletImage = useColorModeValue(LogoDark, LogoLight)
 
   const currentNavItem = useAtomValue(currentPlatformNavItemAtom)
+
+  const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
+  const followedActivityDot = useAtomValue(followedActivityDotAtom)
 
   if (isMobile) return null
 
@@ -39,9 +43,23 @@ export const DiscoverySideNav = () => {
     >
       <Image src={isTabletSize ? tabletImage : imageUrl} height="48px" width="auto" />
       <VStack w="full" padding={0}>
-        {discoveryNavItems.map((item) => (
-          <DiscoverySideNavButton key={item.label} item={item} currentNavItem={currentNavItem} />
-        ))}
+        {discoveryNavItems.map((item) => {
+          const activityDot =
+            item.key === DiscoveryNavItemKey.MyProjects
+              ? myProjectActivityDot
+              : item.key === DiscoveryNavItemKey.Activity
+              ? followedActivityDot
+              : false
+
+          return (
+            <DiscoverySideNavButton
+              key={item.label}
+              item={item}
+              currentNavItem={currentNavItem}
+              activityDot={activityDot}
+            />
+          )
+        })}
       </VStack>
     </VStack>
   )
@@ -50,9 +68,10 @@ export const DiscoverySideNav = () => {
 type DiscoverySideNavButtonProps = {
   item: DiscoveryNavItem
   currentNavItem?: DiscoveryNavItem
+  activityDot?: boolean
 } & ButtonProps
 
-const DiscoverySideNavButton = ({ item, currentNavItem, ...rest }: DiscoverySideNavButtonProps) => {
+const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: DiscoverySideNavButtonProps) => {
   const isActive = currentNavItem?.path === item.path
 
   const isTabletSize = useBreakpointValue({ xl: false, lg: true })
@@ -73,7 +92,20 @@ const DiscoverySideNavButton = ({ item, currentNavItem, ...rest }: DiscoverySide
         isActive={isActive}
         {...rest}
       >
-        <item.icon fontSize="18px" />
+        <>
+          <item.icon fontSize="18px" />
+          {activityDot ? (
+            <Box
+              position="absolute"
+              top={4}
+              right={1}
+              borderRadius="50%"
+              backgroundColor="error.9"
+              height="6px"
+              width="6px"
+            />
+          ) : null}
+        </>
       </Button>
     )
   }
@@ -87,6 +119,19 @@ const DiscoverySideNavButton = ({ item, currentNavItem, ...rest }: DiscoverySide
       backgroundColor={'neutral1.1'}
       key={item.label}
       leftIcon={<item.icon fontSize="18px" />}
+      rightIcon={
+        activityDot ? (
+          <Box
+            position="absolute"
+            top={4}
+            right={2}
+            borderRadius="50%"
+            backgroundColor="error.9"
+            height="6px"
+            width="6px"
+          />
+        ) : undefined
+      }
       as={Link}
       to={getPath(item.path)}
       isActive={isActive}

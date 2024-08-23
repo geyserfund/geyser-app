@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   ButtonProps,
   ComponentWithAs,
@@ -9,45 +10,24 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiCompass, PiRanking, PiSparkle, PiTrophy, PiWaveform } from 'react-icons/pi'
+import { useAtomValue } from 'jotai'
 import { Link } from 'react-router-dom'
+
+import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
 
 import { useAuthContext } from '../../../context'
 import { Body } from '../../../shared/components/typography'
 import { dimensions, FeedbackUrl, getPath, GeyserAboutUrl, GeyserGithubUrl, GuideUrl } from '../../../shared/constants'
+import { DiscoveryNavItemKey, discoveryNavItems } from '../discoveryNav/discoveryNavData'
 import { ProfileNavUserInfo } from './components'
 import { ModeChange } from './components/ModeChange'
 
-const ProfileNavDiscoveryButtons = [
-  {
-    label: t('Discover'),
-    icon: PiCompass,
-    path: getPath('discoveryLanding'),
-  },
-  {
-    label: t('Leaderboard'),
-    icon: PiRanking,
-    path: getPath('discoveryLeaderboard'),
-  },
-  {
-    label: t('My Projects'),
-    icon: PiSparkle,
-    path: getPath('discoveryMyProjects'),
-  },
-  {
-    label: t('Activity'),
-    icon: PiWaveform,
-    path: getPath('discoveryActivity'),
-  },
-  {
-    label: t('Grants'),
-    icon: PiTrophy,
-    path: getPath('discoveryGrants'),
-  },
-]
-
 export const ProfileNavContent = () => {
   const { logout, user } = useAuthContext()
+
+  const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
+  const followedActivityDot = useAtomValue(followedActivityDotAtom)
+
   return (
     <VStack
       padding={4}
@@ -75,12 +55,29 @@ export const ProfileNavContent = () => {
           </>
         )}
         <VStack spacing={2} w="full">
-          {ProfileNavDiscoveryButtons.map((discoveryNav) => {
+          {discoveryNavItems.map((discoveryNav) => {
+            const activityDot =
+              discoveryNav.key === DiscoveryNavItemKey.MyProjects
+                ? myProjectActivityDot
+                : discoveryNav.key === DiscoveryNavItemKey.Activity
+                ? followedActivityDot
+                : false
             return (
-              <MenuItem key={discoveryNav.label} as={Link} to={discoveryNav.path}>
-                <HStack>
+              <MenuItem key={discoveryNav.label} as={Link} to={getPath(discoveryNav.path)}>
+                <HStack position="relative">
                   <discoveryNav.icon />
                   <Body>{discoveryNav.label}</Body>
+                  {activityDot ? (
+                    <Box
+                      position="absolute"
+                      top={2}
+                      right={'-4'}
+                      borderRadius="50%"
+                      backgroundColor="error.9"
+                      height="6px"
+                      width="6px"
+                    />
+                  ) : null}
                 </HStack>
               </MenuItem>
             )

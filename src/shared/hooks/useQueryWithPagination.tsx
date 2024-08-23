@@ -15,6 +15,7 @@ export type useQueryWithPaginationProps<TEntity, TTransformed = TEntity> = {
   skipPagination?: boolean
 }
 
+/** DEPRECATED:  use use Pagination with Atom Hook */
 export const useQueryWithPagination = <TEntity, TTransformed = TEntity>({
   itemLimit = 10,
   where,

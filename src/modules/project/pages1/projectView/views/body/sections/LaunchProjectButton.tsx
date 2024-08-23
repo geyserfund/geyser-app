@@ -1,11 +1,10 @@
-import { Button, Text } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
 
 import { useAuthContext } from '../../../../../../../context'
-import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { getPath } from '../../../../../../../shared/constants'
 import { useModal } from '../../../../../../../shared/hooks'
 import { ProjectStatus } from '../../../../../../../types'
@@ -13,7 +12,7 @@ import { useNotification } from '../../../../../../../utils'
 import { ProjectLaunchConfirmModal } from '../../../../../components/ProjectLaunchConfirmModal'
 import { useProjectAtom, useWalletAtom } from '../../../../../hooks/useProjectAtom'
 
-export const LaunchProjectNotice = () => {
+export const LaunchProjectButton = () => {
   const { t } = useTranslation()
 
   const { project, isProjectOwner } = useProjectAtom()
@@ -52,15 +51,10 @@ export const LaunchProjectNotice = () => {
 
   return (
     <>
-      <CardLayout mobileDense w="full">
-        <Text variant="h3">{t('Launch Project')}</Text>
+      <Button variant="primary" isLoading={publishProject.loading} onClick={confirmModal.onOpen}>
+        {t('Publish')}
+      </Button>
 
-        <Text variant="body1">{t('Your project is in draft mode. Click launch to get it out into the world!')}</Text>
-
-        <Button variant="primary" w="full" isLoading={publishProject.loading} onClick={confirmModal.onOpen}>
-          {t('Launch')}
-        </Button>
-      </CardLayout>
       <ProjectLaunchConfirmModal
         isLoading={publishProject.loading}
         onLaunchClick={handleLaunchClick}

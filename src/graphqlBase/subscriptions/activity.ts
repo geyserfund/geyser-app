@@ -13,17 +13,21 @@ export const ACTIVITY_CREATION_SUBSCRIPTION = gql`
   ${FRAGMENT_PROJECT_REWARD_FOR_LANDING_PAGE}
   subscription ActivityCreated($input: ActivityCreatedSubscriptionInput) {
     activityCreated(input: $input) {
-      ... on Entry {
-        ...EntryForLandingPage
-      }
-      ... on Project {
-        ...ProjectForLandingPage
-      }
-      ... on FundingTx {
-        ...FundingTxForLandingPage
-      }
-      ... on ProjectReward {
-        ...ProjectRewardForLandingPage
+      id
+      activityType
+      resource {
+        ... on Entry {
+          ...EntryForLandingPage
+        }
+        ... on Project {
+          ...ProjectForLandingPage
+        }
+        ... on FundingTx {
+          ...FundingTxForLandingPage
+        }
+        ... on ProjectReward {
+          ...ProjectRewardForLandingPage
+        }
       }
     }
   }

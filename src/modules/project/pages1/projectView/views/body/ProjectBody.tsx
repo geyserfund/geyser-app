@@ -15,7 +15,6 @@ import {
   FinalizeProjectNotice,
   Goals,
   Header,
-  LaunchProjectNotice,
   LeaderboardSummary,
   Posts,
   Rewards,
@@ -43,7 +42,6 @@ export const ProjectBody = () => {
     <Stack w="full" spacing={dimensions.project.rightSideNav.gap} direction={{ base: 'column', lg: 'row' }}>
       <VStack flex={1} w="full" spacing={6} paddingBottom={{ base: 24, lg: 10 }}>
         <FinalizeProjectNotice />
-        <LaunchProjectNotice />
         <Header />
         <CreatorTools />
         <Story />

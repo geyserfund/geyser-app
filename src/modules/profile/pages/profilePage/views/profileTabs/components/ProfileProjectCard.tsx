@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { FollowButton } from '@/modules/project/pages1/projectView/views/body/components'
 import { Body } from '@/shared/components/typography'
 
-import { ImageWithReload, ProjectStatusLabel } from '../../../../../../../components/ui'
+import { ImageWithReload, ProjectStatusIcon } from '../../../../../../../components/ui'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { getPath } from '../../../../../../../shared/constants'
 import { ProjectForProfilePageFragment } from '../../../../../../../types'
@@ -27,7 +27,9 @@ export const ProfileProjectCard = ({
 }: ProfileProjectCardProps) => {
   const { t } = useTranslation()
 
-  if (!project) {
+  const wallet = project?.wallets?.[0]
+
+  if (!project || !wallet) {
     return null
   }
 
@@ -60,7 +62,7 @@ export const ProfileProjectCard = ({
           <Body bold isTruncated>
             {project.title}
           </Body>
-          {showStatus && <ProjectStatusLabel iconOnly project={project} />}
+          {showStatus && <ProjectStatusIcon project={project} wallet={wallet} />}
           {showFollow && <FollowButton project={project} />}
         </HStack>
         <Body light lineHeight={1.2}>

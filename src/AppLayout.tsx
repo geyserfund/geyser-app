@@ -6,6 +6,7 @@ import { PullingDownContent } from './components/ui'
 import { useHistoryRoutes } from './config/routes/hooks/useHistoryRoutes'
 import { useMatchRoutes } from './config/routes/hooks/useMatchRoutes'
 import { useAuthContext } from './context'
+import { useActivityHook } from './modules/discovery/hooks/useActivityHook'
 import { TopNavBar } from './modules/navigation/topNavBar/TopNavBar'
 import { LoadingPage } from './pages/loading'
 import { dimensions, ID } from './shared/constants'
@@ -22,6 +23,7 @@ const AppLayout = () => {
 
   useMatchRoutes()
   useHistoryRoutes()
+  useActivityHook()
 
   const layoutAnimationClassName = useLayoutAnimation()
 
