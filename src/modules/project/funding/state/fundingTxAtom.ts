@@ -2,7 +2,7 @@ import { atom, useAtomValue, useSetAtom } from 'jotai'
 
 import { FundingStatus, FundingTxFragment, FundingTxWithInvoiceStatusFragment, InvoiceStatus } from '../../../../types'
 
-const initialFunding: Omit<FundingTxFragment, 'funder'> = {
+const initialFunding: Omit<FundingTxFragment, 'funder' | 'amountPaid'> = {
   id: 0,
   uuid: '',
   invoiceId: '',
