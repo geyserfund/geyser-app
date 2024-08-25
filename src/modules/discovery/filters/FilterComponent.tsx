@@ -42,7 +42,7 @@ export const FilterComponent = () => {
         }}
       >
         <InputGroup ref={inputRef}>
-          <InputLeftElement>
+          <InputLeftElement color="neutral1.11">
             <PiMagnifyingGlass />
           </InputLeftElement>
           <Input ref={inputRef} placeholder={t('Search')} onChange={handleSearchUpdate} />

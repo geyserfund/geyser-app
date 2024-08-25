@@ -16,7 +16,7 @@ export const DiscoveryBottomNav = () => {
   const followedActivityDot = useAtomValue(followedActivityDotAtom)
 
   return (
-    <BottomNavBarContainer spacing={0} w="full" marginX={0}>
+    <BottomNavBarContainer spacing={1} w="full" marginX={0}>
       {discoveryNavItems.map((item) => {
         const activityDot =
           item.key === DiscoveryNavItemKey.MyProjects
