@@ -8,7 +8,7 @@ export const GrantsUrl = 'https://geyser.fund/grants'
 export const FAQUrl = 'https://geyser.notion.site/Geyser-FAQs-310e7900fa904732b9b64043831edec3'
 export const GuideUrl = 'https://guide.geyser.fund/'
 export const FeedbackUrl = 'https://geyser.steelsync.io/feedback'
-export const GeyserAboutUrl = 'https://geyser.fund/about'
+export const GeyserAboutUrl = 'https://about.geyser.fund'
 
 // Geyser footer Links
 
@@ -148,6 +148,8 @@ export const LogoNameBrand = 'https://storage.googleapis.com/geyser-projects-med
 export const LogoNameDark = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-dark.svg'
 export const LogoNameNostr = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-nostr.svg'
 export const LogoNameLight = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-light.svg'
+
+export const DiscoveryHandWave = 'https://storage.googleapis.com/geyser-projects-media/utils/handwave.png'
 
 // Geyser Guide Links
 
