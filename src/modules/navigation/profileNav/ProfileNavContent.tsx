@@ -11,13 +11,23 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
+import { PiArrowUpRight } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
 
 import { useAuthContext } from '../../../context'
 import { Body } from '../../../shared/components/typography'
-import { dimensions, FeedbackUrl, getPath, GeyserAboutUrl, GeyserGithubUrl, GuideUrl } from '../../../shared/constants'
+import {
+  dimensions,
+  FeedbackUrl,
+  getPath,
+  GeyserAboutUrl,
+  GeyserGithubUrl,
+  GeyserSubscribeUrl,
+  GeyserUpdatesUrl,
+  GuideUrl,
+} from '../../../shared/constants'
 import { DiscoveryNavItemKey, discoveryNavItems } from '../discoveryNav/discoveryNavData'
 import { ProfileNavUserInfo } from './components'
 import { ModeChange } from './components/ModeChange'
@@ -97,6 +107,17 @@ export const ProfileNavContent = () => {
             </VStack>
           </>
         ) : null}
+
+        <Divider borderColor="neutral1.6" />
+
+        <MenuItem as={ChakraLink} isExternal href={GeyserUpdatesUrl} _focusVisible={{}} gap={2}>
+          <Body>{t('Geyser updates')}</Body>
+          <PiArrowUpRight fontSize="16px" />
+        </MenuItem>
+        <MenuItem as={ChakraLink} isExternal href={GeyserSubscribeUrl} _focusVisible={{}} gap={2}>
+          <Body>{t('Subscribe')}</Body>
+          <PiArrowUpRight fontSize="16px" />
+        </MenuItem>
       </VStack>
 
       <VStack w="full" spacing={4}>
@@ -116,6 +137,7 @@ export const ProfileNavContent = () => {
           </UserNavExternalButton>
         </HStack>
         <Divider borderColor="neutral1.6" />
+
         <ModeChange />
       </VStack>
     </VStack>
@@ -130,7 +152,7 @@ const UserNavExternalButton: ComponentWithAs<'button', ButtonProps> = (props) =>
       size="sm"
       textDecoration={'none'}
       paddingX={0}
-      _hover={{ backgroundColor: 'none' }}
+      _hover={{ backgroundColor: 'none', textDecoration: 'underline' }}
       {...props}
     />
   )

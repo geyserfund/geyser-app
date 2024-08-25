@@ -86,7 +86,13 @@ export const theme = {
     },
     Link: {
       baseStyle: {
-        textDecoration: 'underline',
+        textDecoration: 'none',
+        _hover: {
+          textDecoration: 'none',
+        },
+        _focusVisible: {
+          boxShadow: 'none',
+        },
       },
     },
     Divider: {

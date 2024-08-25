@@ -64,6 +64,10 @@ const GlobalStyles = () => (
             text-decoration: none;
           }
         
+        a:hover {
+            text-decoration: none;
+          }
+        
         .chakra-ui-dark {
             background: ${darkModeColors.utils.pbg}
           }
