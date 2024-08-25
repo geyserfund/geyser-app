@@ -67,10 +67,10 @@ export const FilterProvider = ({ children, isLoggedIn }: { children: React.React
         }
       }
 
-      navigate(location.pathname, { state: null })
+      navigate(getPath('discoveryLanding'), { state: null })
       setSearchParams(newParameters)
     },
-    [isLandingFeedPage, isLoggedIn, searchParams, navigate, location.pathname, setSearchParams],
+    [isLandingFeedPage, isLoggedIn, searchParams, navigate, setSearchParams],
   )
 
   useEffect(() => {
