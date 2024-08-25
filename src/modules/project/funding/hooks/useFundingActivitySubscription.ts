@@ -18,9 +18,9 @@ export const useProjectFundingActivitySubscription = () => {
     onData(options) {
       const fundingTx = options.data.data?.fundingTxStatusUpdated.fundingTx
       if (fundingTx) {
-        const usdCents = convertSatsToCents({ sats: fundingTx.amountPaid, bitcoinQuote: fundingTx.bitcoinQuote })
+        const usdCents = convertSatsToCents({ sats: fundingTx.amount, bitcoinQuote: fundingTx.bitcoinQuote })
         partialUpdateProject({
-          balance: project.balance + fundingTx.amountPaid,
+          balance: project.balance + fundingTx.amount,
           balanceUsdCent: project.balanceUsdCent + usdCents,
         })
       }

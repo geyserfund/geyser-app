@@ -30,7 +30,6 @@ export const FRAGMENT_FUNDING_TX = gql`
     invoiceId
     paymentRequest
     amount
-    amountPaid
     status
     invoiceStatus
     comment
