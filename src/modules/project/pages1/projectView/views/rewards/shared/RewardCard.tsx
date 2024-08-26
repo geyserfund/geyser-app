@@ -91,7 +91,7 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
             <Body size="sm" medium muted>
               {t('Available')}:{' '}
               <Box as="span" color="utils.text" fontWeight={700}>
-                {reward.maxClaimable - reward.sold - count}
+                {reward.maxClaimable - reward.sold - count > 0 ? reward.maxClaimable - reward.sold - count : 0}
               </Box>
             </Body>
           )}

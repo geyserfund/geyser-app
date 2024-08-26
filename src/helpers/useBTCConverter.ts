@@ -1,5 +1,7 @@
 import { useCallback } from 'react'
 
+import { toFloat } from '@/utils'
+
 import { useBtcContext } from '../context/btc'
 import { Satoshis, USDCents, USDollars } from '../types/types'
 
@@ -8,7 +10,7 @@ export const useBTCConverter = () => {
 
   const getUSDAmount = useCallback(
     (satoshis: Satoshis): USDollars => {
-      return (satoshis * btcRate) as USDollars
+      return toFloat((satoshis * btcRate).toFixed) as USDollars
     },
     [btcRate],
   )
