@@ -28,7 +28,7 @@ export const MyProjects = () => {
             {t('My Projects')}
           </Body>
         </Box>
-        {<LaunchNewProjectBanner />}
+        {hasNoProjects && !isLoading && <LaunchNewProjectBanner />}
         {activeProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
         {inReviewProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
         {inDraftProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
