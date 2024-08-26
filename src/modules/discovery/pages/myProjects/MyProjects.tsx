@@ -1,7 +1,6 @@
 import { Box, Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiRocket } from 'react-icons/pi'
-import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 
 import { useAuthContext } from '@/context'

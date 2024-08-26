@@ -1,5 +1,5 @@
 import { Box, HStack, Image, VStack } from '@chakra-ui/react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
