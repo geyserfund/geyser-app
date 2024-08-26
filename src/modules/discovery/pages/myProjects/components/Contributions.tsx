@@ -51,8 +51,7 @@ const Contributions = ({ projectId, projectName }: ContributionsProps) => {
         <Header total={total} totalUsd={totalUsd} noContributionsReceived={noContributionsReceived} noGoals={noGoals} />
         <Button
           variant="solid"
-          bg="primary1.9"
-          color="accent"
+          colorScheme="primary1"
           leftIcon={<PiFlagBannerFold />}
           onClick={() => {
             onGoalModalOpen()
