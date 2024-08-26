@@ -1,11 +1,16 @@
+import { useAtom } from 'jotai'
 import { useState } from 'react'
 
-import { ActivityFeedFragmentFragment, ActivityFeedName, useActivityFeedQuery } from '@/types'
+import { ActivityFeedName, useActivityFeedQuery } from '@/types'
+
+import { activityFeedFollowedProjectsAtom, activityFeedGlobalAtom } from '../state/activityFeedAtom'
 
 const MAXIMUM_ACTIVITY_ITEMS = 32
 
 export const useActivityFeed = (feed: ActivityFeedName) => {
-  const [activities, setActivities] = useState<ActivityFeedFragmentFragment[]>([])
+  const [followedProjectsActivities, setFollowedProjectsActivities] = useAtom(activityFeedFollowedProjectsAtom)
+  const [globalActivities, setGlobalActivities] = useAtom(activityFeedGlobalAtom)
+
   const [isLoading, setIsLoading] = useState(true)
 
   const { fetchMore } = useActivityFeedQuery({
@@ -22,7 +27,12 @@ export const useActivityFeed = (feed: ActivityFeedName) => {
       },
     },
     onCompleted(data) {
-      setActivities(data.activitiesGet?.activities || [])
+      if (feed === ActivityFeedName.FollowedProjects) {
+        setFollowedProjectsActivities(data.activitiesGet?.activities || [])
+      } else {
+        setGlobalActivities(data.activitiesGet?.activities || [])
+      }
+
       setIsLoading(false)
     },
     onError(error) {
@@ -31,7 +41,8 @@ export const useActivityFeed = (feed: ActivityFeedName) => {
   })
 
   return {
-    activities,
+    followedProjectsActivities,
+    globalActivities,
     isLoading,
     fetchMore,
   }
