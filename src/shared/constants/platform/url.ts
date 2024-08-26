@@ -8,7 +8,9 @@ export const GrantsUrl = 'https://geyser.fund/grants'
 export const FAQUrl = 'https://geyser.notion.site/Geyser-FAQs-310e7900fa904732b9b64043831edec3'
 export const GuideUrl = 'https://guide.geyser.fund/'
 export const FeedbackUrl = 'https://geyser.steelsync.io/feedback'
-export const GeyserAboutUrl = 'https://geyser.fund/about'
+export const GeyserAboutUrl = 'https://about.geyser.fund'
+export const GeyserUpdatesUrl = 'https://about.geyser.fund/updates'
+export const GeyserSubscribeUrl = 'https://about.geyser.fund/subscribe'
 
 // Geyser footer Links
 
@@ -149,6 +151,8 @@ export const LogoNameDark = 'https://storage.googleapis.com/geyser-projects-medi
 export const LogoNameNostr = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-nostr.svg'
 export const LogoNameLight = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-light.svg'
 
+export const DiscoveryHandWave = 'https://storage.googleapis.com/geyser-projects-media/utils/handwave.png'
+
 // Geyser Guide Links
 
 export const GrantsFAQUrl = 'https://guide.geyser.fund/geyser-docs/product-features/geyser-grants'
@@ -197,14 +201,16 @@ export const VerifyEmailImageUrl = 'https://storage.googleapis.com/geyser-projec
 
 export const ProjectLaunchedImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/project-launched.svg'
 
-export const ProjectRewardsImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/no-rewards.svg'
+export const ProjectRewardsImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/gifts.png'
 
 export const ProjectNoTransactionImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/no-transaction.svg'
 
-export const NoContributionImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/no-contribution.svg'
+export const NoContributionImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/contributions.png'
 
 export const MegaphoneUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/megaphone.png'
+
+export const MegaphoneStar = 'https://storage.googleapis.com/geyser-projects-media/utils/megaphoneStar.png'
 
 export const GoalsFlagUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/milestone.png'
 
@@ -214,9 +220,6 @@ export const NotAuthorizedImageUrl = 'https://storage.googleapis.com/geyser-proj
 
 export const TransactionFailedImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/emails/transactionFailed.png'
-
-export const NoLeaderboardDataImageUrl =
-  'https://storage.googleapis.com/geyser-projects-media/utils/no-leaderboard-item.png'
 
 // FUNDING FLOW ERRORS
 

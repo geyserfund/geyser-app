@@ -12,10 +12,7 @@ type QRCodeComponentProps = {
 
 export const QRCodeSizeMap = {
   base: 240,
-  xs: 300,
-  sm: 380,
-  lg: 280,
-  xl: 340,
+  xs: 280,
 }
 
 export const QRCodeComponent = ({ value, isColored, onClick }: QRCodeComponentProps) => {

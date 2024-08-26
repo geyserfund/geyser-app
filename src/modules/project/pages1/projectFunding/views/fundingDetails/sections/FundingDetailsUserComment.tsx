@@ -47,7 +47,7 @@ export const FundingDetailsUserComment = () => {
 
   return (
     <>
-      <CardLayout width="100%" position="relative">
+      <CardLayout mobileDense width="100%" position="relative">
         <H1 size="2xl" bold>
           {t('Public message')}
         </H1>

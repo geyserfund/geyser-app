@@ -7,14 +7,17 @@ import { PiMagnifyingGlass, PiSlidersHorizontal } from 'react-icons/pi'
 
 import { useFilterContext } from '@/context/filter'
 import { useModal } from '@/shared/hooks'
+import { useMobileMode } from '@/utils'
 
 import { FilterModal } from './FilterModal'
 
 export const FilterComponent = () => {
+  const isMobileMode = useMobileMode()
+
   const inputRef = useRef<HTMLInputElement>(null)
 
   const { t } = useTranslation()
-  const { updateFilter, filters } = useFilterContext()
+  const { updateFilter } = useFilterContext()
 
   const filterModal = useModal()
 
@@ -28,8 +31,6 @@ export const FilterComponent = () => {
     updateSearchFilterDebounced(event.target.value)
   }
 
-  console.log('checking filters', filters)
-
   return (
     <>
       <form
@@ -41,18 +42,14 @@ export const FilterComponent = () => {
         }}
       >
         <InputGroup ref={inputRef}>
-          <InputLeftElement>
+          <InputLeftElement color="neutral1.11">
             <PiMagnifyingGlass />
           </InputLeftElement>
-          <Input ref={inputRef} placeholder={t('Search')} type="search" onChange={handleSearchUpdate} />
-          <InputRightElement minWidth={'86px'}>
-            <Button
-              variant="ghost"
-              colorScheme="neutral1"
-              leftIcon={<PiSlidersHorizontal />}
-              onClick={filterModal.onOpen}
-            >
-              {t('Filter')}
+          <Input ref={inputRef} placeholder={t('Search')} onChange={handleSearchUpdate} />
+          <InputRightElement minWidth={{ base: '46px', lg: '86px' }}>
+            <Button variant="ghost" colorScheme="neutral1" onClick={filterModal.onOpen} gap={2}>
+              <PiSlidersHorizontal />
+              {!isMobileMode && t('Filter')}
             </Button>
           </InputRightElement>
         </InputGroup>

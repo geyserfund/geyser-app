@@ -26,7 +26,7 @@ export const FundingSuccess = () => {
         </Button>
       }
     >
-      <CardLayout w="full" padding={{ base: 3, lg: 12 }} alignItems="center">
+      <CardLayout mobileDense w="full" padding={{ base: 0, lg: 12 }} alignItems="center">
         <VStack w="full" maxWidth="800px" alignItems="start" spacing={6}>
           <VStack w="full" alignItems="start">
             <H1 size="2xl" bold>

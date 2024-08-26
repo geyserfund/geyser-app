@@ -1,188 +1,126 @@
-import { HStack, Icon, SkeletonText, Stack, StackDirection, StackProps, Tooltip } from '@chakra-ui/react'
-import { HTMLChakraProps } from '@chakra-ui/system'
+import { Button, HStack, Icon, Link as ChakraLink, StackProps, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtomValue } from 'jotai'
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiCheckCircle, PiEyeglasses, PiMinusCircle, PiNoteBlank, PiWarning, PiXCircle } from 'react-icons/pi'
+import { Link } from 'react-router-dom'
 
-import { projectStatusAtom } from '@/modules/project/state/projectAtom'
+import { LaunchProjectButton } from '@/modules/project/pages1/projectView/views/body/sections/LaunchProjectButton'
 
-import { ProjectStatus, Wallet, WalletStatus } from '../../types/generated/graphql'
-import { isActive, isDraft, isInactive, isInReview } from '../../utils'
 import { Body } from '../components/typography'
-import { lightModeColors } from '../styles'
+import { getPath, GeyserTelegramUrl } from '../constants'
+import {
+  getProjectStatus,
+  GetProjectStatusProps,
+  ProjectStatusColorScheme,
+  ProjectStatusCreatorText,
+  ProjectStatusIcons,
+  ProjectStatusLabels,
+  ProjectStatusTooltip,
+} from '../utils/project/getProjectStatus'
 
-interface IProjectStatusLabel extends HTMLChakraProps<'div'> {
-  project: { status?: ProjectStatus | null }
-  wallet?: Pick<Wallet, 'state'> | null
-  iconOnly?: boolean
-  fontSize?: string
-  iconSize?: string
-  fontFamily?: string
-  direction?: StackDirection
+type ProjectStatusBarProps = {
   isProjectOwner?: boolean
+} & Partial<GetProjectStatusProps> &
+  StackProps
+
+type ProjectStatusCTAType = {
+  [key in ProjectStatusLabels]: (() => React.ReactNode) | undefined
 }
 
-export enum ProjectStatusLabels {
-  UNSTABLE_WALLET = 'Unstable Wallet',
-  INACTIVE_WALLET = 'Inactive Wallet',
-  RUNNING = 'Running',
-  DRAFT = 'Draft',
-  INACTIVE = 'Inactive Project',
-  IN_REVIEW = 'In Review',
-}
+export const ProjectStatusBar = ({ isProjectOwner, project, wallet, ...props }: ProjectStatusBarProps) => {
+  const ProjectStatusCTA = useMemo(() => {
+    if (!project) return {} as ProjectStatusCTAType
 
-export enum ProjectStatusTooltipRoles {
-  CONTRIBUTOR = 'contributor',
-  CREATOR = 'creator',
-}
+    return {
+      [ProjectStatusLabels.UNSTABLE_WALLET]: () => (
+        <Button variant="solid" colorScheme="primary1" as={Link} to={getPath('dashboardWallet', project?.name)}>
+          {t('Connect wallet')}
+        </Button>
+      ),
+      [ProjectStatusLabels.INACTIVE_WALLET]: () => (
+        <Button variant="solid" colorScheme="primary1" as={Link} to={getPath('dashboardWallet', project?.name)}>
+          {t('Connect wallet')}
+        </Button>
+      ),
+      [ProjectStatusLabels.RUNNING]: undefined,
+      [ProjectStatusLabels.DRAFT]: () => <LaunchProjectButton />,
 
-export const ProjectStatusColorScheme = {
-  [ProjectStatusLabels.UNSTABLE_WALLET]: 'warning',
-  [ProjectStatusLabels.INACTIVE_WALLET]: 'error',
-  [ProjectStatusLabels.RUNNING]: 'primary1',
-  [ProjectStatusLabels.DRAFT]: 'neutral1',
-  [ProjectStatusLabels.INACTIVE]: 'neutral1',
-  [ProjectStatusLabels.IN_REVIEW]: 'neutral1',
-} as {
-  [key in ProjectStatusLabels]: keyof typeof lightModeColors
-}
+      [ProjectStatusLabels.INACTIVE]: () => (
+        <Button variant="solid" colorScheme="primary1" as={Link} to={getPath('dashboardSettings', project.name)}>
+          {t('Settings')}
+        </Button>
+      ),
 
-export const ProjectStatusBackgroundColors = {
-  [ProjectStatusLabels.UNSTABLE_WALLET]: 'warning.9',
-  [ProjectStatusLabels.INACTIVE_WALLET]: 'error.9',
-  [ProjectStatusLabels.RUNNING]: 'primary1.9',
-  [ProjectStatusLabels.DRAFT]: 'neutral1.12',
-  [ProjectStatusLabels.INACTIVE]: 'neutral1.9',
-  [ProjectStatusLabels.IN_REVIEW]: 'error.9',
-}
+      [ProjectStatusLabels.IN_REVIEW]: () => (
+        <Button variant="solid" colorScheme="primary1" as={ChakraLink} href={GeyserTelegramUrl} isExternal>
+          {t('React out for help')}
+        </Button>
+      ),
 
-export const ProjectStatusTextColors = {
-  [ProjectStatusLabels.UNSTABLE_WALLET]: 'utils.blackContrast',
-  [ProjectStatusLabels.INACTIVE_WALLET]: 'utils.whiteContrast',
-  [ProjectStatusLabels.RUNNING]: 'utils.blackContrast',
-  [ProjectStatusLabels.DRAFT]: 'utils.whiteContrast',
-  [ProjectStatusLabels.INACTIVE]: 'utils.whiteContrast',
-  [ProjectStatusLabels.IN_REVIEW]: 'utils.whiteContrast',
-}
+      [ProjectStatusLabels.CLOSED]: undefined,
+    } as ProjectStatusCTAType
+  }, [project])
 
-export const ProjectStatusIcons = {
-  [ProjectStatusLabels.UNSTABLE_WALLET]: PiWarning,
-  [ProjectStatusLabels.INACTIVE_WALLET]: PiMinusCircle,
-  [ProjectStatusLabels.RUNNING]: PiCheckCircle,
-  [ProjectStatusLabels.DRAFT]: PiNoteBlank,
-  [ProjectStatusLabels.INACTIVE]: PiXCircle,
-  [ProjectStatusLabels.IN_REVIEW]: PiEyeglasses,
-}
+  if (!project || !wallet) {
+    return null
+  }
 
-export const ProjectStatusTooltip = {
-  [ProjectStatusLabels.UNSTABLE_WALLET]: t(
-    'The last time someone tried to send funds to this wallet, there was a liquidity issue.',
-  ),
-  [ProjectStatusLabels.INACTIVE_WALLET]: t(
-    'The last time someone tried to make a transaction to this project, the invoice generation failed.',
-  ),
-  [ProjectStatusLabels.RUNNING]: t('This project is live and wallet running smoothly.'),
-  [ProjectStatusLabels.DRAFT]: t('This project has not been launched yet and is only visible to the project creator.'),
-  [ProjectStatusLabels.INACTIVE]: t('This project has been deactivated by the project creator.'),
-  [ProjectStatusLabels.IN_REVIEW]: t(
-    'You project has been flagged for violating our Terms & Conditions. You should have received an email with further detail on how to proceed. Your project is currently not visible to the public.',
-  ),
-}
+  const projectStatus = getProjectStatus({ project, wallet })
 
-export const ProjectStatusBar = (props: StackProps) => {
-  const projectStatus = useAtomValue(projectStatusAtom)
-
-  const backgroundColor = ProjectStatusBackgroundColors[projectStatus]
+  const colorScheme = ProjectStatusColorScheme[projectStatus]
 
   const statusIcon = ProjectStatusIcons[projectStatus]
 
   const tooltipLabel = ProjectStatusTooltip[projectStatus]
 
-  const textColor = ProjectStatusTextColors[projectStatus]
+  const creatorText = ProjectStatusCreatorText[projectStatus]
+
+  const cta = ProjectStatusCTA[projectStatus]
 
   if (projectStatus === ProjectStatusLabels.RUNNING) {
     return null
   }
 
   return (
-    <HStack w="full" spacing={2} paddingY={3} justifyContent="center" backgroundColor={backgroundColor} {...props}>
-      <Tooltip label={tooltipLabel} placement="top" size="sm">
-        <HStack alignItems="center">
-          <Icon as={statusIcon} fontSize={'18px '} color={textColor} />
+    <VStack
+      w="full"
+      spacing={3}
+      paddingY={4}
+      paddingX={{ base: 3, lg: 6 }}
+      justifyContent="center"
+      backgroundColor={`${colorScheme}.3`}
+      {...props}
+    >
+      <HStack w="full" justifyContent={'center'} spacing={6}>
+        <Tooltip label={isProjectOwner ? '' : tooltipLabel} placement="top" size="sm">
+          <HStack alignItems="center">
+            <Icon as={statusIcon} fontSize={'18px '} color="utils.text" />
 
-          <Body size="sm" color={textColor} medium>
-            {t(projectStatus)}
-          </Body>
-        </HStack>
-      </Tooltip>
-    </HStack>
+            <Body size="sm" color={'utils.text'} medium>
+              {t(projectStatus)}
+            </Body>
+          </HStack>
+        </Tooltip>
+        {cta && cta()}
+      </HStack>
+
+      {isProjectOwner && (
+        <Body maxWidth={'560px'} textAlign={'center'}>
+          {creatorText}
+        </Body>
+      )}
+    </VStack>
   )
 }
 
-export const ProjectStatusLabel = ({
-  project,
-  wallet,
-  fontSize,
-  fontFamily,
-  iconSize = '16px',
-  direction = 'row',
-  iconOnly,
-  isProjectOwner = false,
-}: IProjectStatusLabel) => {
+export const ProjectStatusIcon = ({ project, wallet, isProjectOwner }: ProjectStatusBarProps) => {
   const { t } = useTranslation()
 
-  const [status, setStatus] = useState<ProjectStatusLabels | null>(null)
-
-  useEffect(() => {
-    if (!project) {
-      return
-    }
-
-    const getStatus = () => {
-      if (isDraft(project.status)) {
-        return ProjectStatusLabels.DRAFT
-      }
-
-      if (isInactive(project.status)) {
-        return ProjectStatusLabels.INACTIVE
-      }
-
-      if (isInReview(project.status)) {
-        return ProjectStatusLabels.IN_REVIEW
-      }
-
-      if (wallet?.state.status === WalletStatus.Inactive) {
-        return ProjectStatusLabels.INACTIVE_WALLET
-      }
-
-      if (wallet?.state.status === WalletStatus.Unstable) {
-        return ProjectStatusLabels.UNSTABLE_WALLET
-      }
-
-      if (isActive(project.status)) {
-        return ProjectStatusLabels.RUNNING
-      }
-
-      return null
-    }
-
-    const currentStatus = getStatus()
-    setStatus(currentStatus)
-  }, [project, wallet])
-
-  if (!status) {
-    if (!iconOnly) {
-      return (
-        <Stack direction={direction} alignItems="center">
-          <SkeletonText width="80px" skeletonHeight={4} noOfLines={1} />
-        </Stack>
-      )
-    }
-
+  if (!project || !wallet) {
     return null
   }
+
+  const status = getProjectStatus({ project, wallet })
 
   const CurrentIcon = ProjectStatusIcons[status]
   const colorScheme = ProjectStatusColorScheme[status]
@@ -198,7 +136,7 @@ export const ProjectStatusLabel = ({
         backgroundColor={`${colorScheme}.3`}
         borderRadius={'8px'}
       >
-        <Icon as={CurrentIcon} fontSize={iconSize} color={`${colorScheme}.11`} />
+        <Icon as={CurrentIcon} fontSize={'18px'} color={`${colorScheme}.11`} />
       </HStack>
     </Tooltip>
   )

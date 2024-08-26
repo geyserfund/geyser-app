@@ -1,10 +1,11 @@
 import { Box, Stack, Text } from '@chakra-ui/layout'
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
 import { HStack, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
+
+import { Modal } from '@/shared/components/layouts'
 
 import { useAuthContext } from '../../context'
 import { SocialAccountType } from '../../pages/auth'
@@ -138,7 +139,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
     }
   }
 
-  const modalTitle = t(title || 'Connect')
+  const modalTitle = t(title || 'Login')
   const modalDescription = t(
     description ||
       'Connect your social account with the biggest social proof, allowing users to discover you and verify your reputation more easily',
@@ -147,43 +148,33 @@ export const AuthModal = (authModalProps: IAuthModal) => {
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={!privateRoute ? onClose : () => {}}
       size="sm"
       closeOnOverlayClick={!privateRoute}
       closeOnEsc={!privateRoute}
       onOverlayClick={handlePrivateRouteModalClose}
       onEsc={handlePrivateRouteModalClose}
+      title={modalTitle}
     >
-      <ModalOverlay />
-      <ModalContent display="flex" alignItems="center" padding="20px 15px">
-        <ModalHeader>
-          <Text fontSize="lg" fontWeight="bold">
-            {modalTitle}
-          </Text>
-        </ModalHeader>
-        {privateRoute || <ModalCloseButton />}
-        <ModalBody width="100%" padding={{ base: 0, lg: '8px' }}>
-          <Box justifyContent="center" alignItems="center" marginTop={2} marginLeft={2} marginRight={2}>
-            {modalDescription && <Text marginBottom={5}>{modalDescription}</Text>}
-            <ConnectAccounts
-              onClose={onClose}
-              showNostr={showNostr && !isMobile}
-              showTwitter={showTwitter}
-              showLightning={showLightning}
-              showFacebook={showFacebook}
-              showGoogle={showGoogle}
-              showGithub={showGithub}
-            />
-          </Box>
-          {privateRoute && (
-            <Box display="flex" justifyContent="center" alignItems="center" marginTop={5}>
-              <ButtonComponent onClick={handlePrivateRouteModalClose}>
-                {t(location.key ? 'Go back' : 'Go home')}
-              </ButtonComponent>
-            </Box>
-          )}
-        </ModalBody>
-      </ModalContent>
+      <Box justifyContent="center" alignItems="center" paddingTop={3}>
+        {modalDescription && <Text marginBottom={5}>{modalDescription}</Text>}
+        <ConnectAccounts
+          onClose={onClose}
+          showNostr={showNostr && !isMobile}
+          showTwitter={showTwitter}
+          showLightning={showLightning}
+          showFacebook={showFacebook}
+          showGoogle={showGoogle}
+          showGithub={showGithub}
+        />
+      </Box>
+      {privateRoute && (
+        <Box display="flex" justifyContent="center" alignItems="center" marginTop={5}>
+          <ButtonComponent onClick={handlePrivateRouteModalClose}>
+            {t(location.key ? 'Go back' : 'Go home')}
+          </ButtonComponent>
+        </Box>
+      )}
     </Modal>
   )
 }

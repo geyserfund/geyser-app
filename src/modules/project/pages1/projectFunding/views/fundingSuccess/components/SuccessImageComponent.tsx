@@ -1,6 +1,6 @@
 import { Avatar, Button, HStack, Image, Link, Tooltip, VStack } from '@chakra-ui/react'
 import * as htmlToImage from 'html-to-image'
-import { useRef, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCopy, PiShareFat } from 'react-icons/pi'
 
@@ -20,9 +20,13 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
   const [copied, setCopied] = useState(false)
   const { user } = useAuthContext()
 
+  const [successComponent, setSuccessComponent] = useState<HTMLDivElement | null>(null)
+
   const { project } = useProjectAtom()
 
-  const successComponent = useRef<HTMLDivElement>(null)
+  const ref = useCallback((node: HTMLDivElement | null) => {
+    setSuccessComponent(node)
+  }, [])
 
   if (!project) {
     return null
@@ -53,7 +57,7 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
   }
 
   const getDataUrl = async () => {
-    const element = successComponent.current
+    const element = successComponent
     if (element) {
       const dataUrl = await htmlToImage.toPng(element, {
         style: { backgroundColor: 'primary.400', borderStyle: 'double' },
@@ -70,7 +74,7 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
     <VStack w="full" spacing={6}>
       <HStack
         id="successful-contribution-banner"
-        ref={successComponent}
+        ref={ref}
         background={'linear-gradient(86deg, #00C7AD 0%, #00EED2 100%)'}
         padding="6%"
         w="full"
@@ -122,7 +126,7 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
             aria-label="copy-success-image"
             rightIcon={<PiCopy />}
             onClick={handleCopy}
-            isLoading={successComponent.current === null}
+            isLoading={successComponent === null}
           >
             {t('Copy Success image')}
           </Button>

@@ -1,13 +1,19 @@
 import { HStack, Switch, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { PiXCircle } from 'react-icons/pi'
 
 import { AlertDialogue } from '@/components/molecules/AlertDialogue'
-import { ProjectStatusLabels, ProjectStatusTooltip } from '@/components/ui'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks'
+import { Feedback, FeedBackVariant } from '@/shared/molecules'
+import {
+  ProjectStatusCreatorText,
+  ProjectStatusLabels,
+  ProjectStatusTooltip,
+} from '@/shared/utils/project/getProjectStatus'
 import { ProjectStatus } from '@/types'
 import { isActive, useNotification } from '@/utils'
 
@@ -23,7 +29,7 @@ export const ProjectStatusUpdate = () => {
 
   const { updateProjectStatus } = useProjectAPI()
 
-  const isProjectInReview = project?.status === ProjectStatus.InReview
+  const isProjectInReview = project?.status === ProjectStatus.InReview || project?.status === ProjectStatus.Closed
   const isProjectInReviewTooltip = ProjectStatusTooltip[ProjectStatusLabels.IN_REVIEW]
 
   const statusConfirmModal = useModal()
@@ -95,6 +101,13 @@ export const ProjectStatusUpdate = () => {
             </Text>
           </HStack>
         </CardLayout>
+      )}
+      {project && project.status === ProjectStatus.Closed && (
+        <Feedback
+          variant={FeedBackVariant.ERROR}
+          icon={<PiXCircle fontSize={'20px'} />}
+          text={ProjectStatusCreatorText[ProjectStatusLabels.CLOSED]}
+        />
       )}
       <AlertDialogue
         {...statusConfirmModal}

@@ -7,12 +7,23 @@ export function convertToBTC(satoshis: Satoshis): number {
   return satoshis / SATOSHIS_IN_BTC
 }
 
-/** Converts usd to sats based on BitcoinQuote of a fundingTx */
+/** Converts sats to usd based on BitcoinQuote of a fundingTx */
 export const convertSatsToUsd = ({ sats, bitcoinQuote }: { sats: number; bitcoinQuote?: BitcoinQuote | null }) => {
   if (bitcoinQuote && bitcoinQuote.quote) {
-    const dollars = sats / bitcoinQuote.quote
-    return `($${dollars.toFixed(1)})`
+    const dollars = convertToBTC(sats as Satoshis) / bitcoinQuote.quote
+    return dollars.toFixed(1)
   }
 
-  return ''
+  return 0
+}
+
+/** Converts sats to usdcents based on BitcoinQuote of a fundingTx */
+export const convertSatsToCents = ({ sats, bitcoinQuote }: { sats: number; bitcoinQuote?: BitcoinQuote | null }) => {
+  if (bitcoinQuote && bitcoinQuote.quote) {
+    const dollars = convertToBTC(sats as Satoshis) / bitcoinQuote.quote
+    const cents = Math.round(dollars * 100)
+    return cents
+  }
+
+  return 0
 }

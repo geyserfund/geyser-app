@@ -55,7 +55,7 @@ export const ProjectCreateStart = () => {
           {t('Transform your ideas into real world projects backed by your community')}
         </H3>
 
-        <Box display="flex" justifyContent="space-between" w="100%" flexWrap="wrap">
+        <Box display="flex" justifyContent={{ base: 'space-around', lg: 'space-between' }} w="100%" flexWrap="wrap">
           <ProjectInfoButton src={LaunchProjectWorldUrl} alt="create project world">
             {t('Raise funds from anywhere in the world')}
           </ProjectInfoButton>
