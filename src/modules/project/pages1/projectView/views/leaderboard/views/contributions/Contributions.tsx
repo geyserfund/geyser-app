@@ -1,4 +1,5 @@
-import { VStack } from '@chakra-ui/react'
+import { Button, HStack, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useAtom } from 'jotai'
 import { useState } from 'react'
 
@@ -71,7 +72,14 @@ export const Contributions = () => {
 
   return (
     <CardLayout w="full" h="full" dense noMobileBorder>
-      <VStack h="full" id={id} overflowY={{ base: undefined, lg: 'auto' }} paddingTop={standardPadding}>
+      {!isMobile && (
+        <HStack w="full" paddingX={standardPadding} paddingTop={standardPadding} paddingBottom={0}>
+          <Button w="full" variant="solid" colorScheme="primary1" size="lg" onClick={() => console.log('clicked')}>
+            {t('Contribute')}
+          </Button>
+        </HStack>
+      )}
+      <VStack h="full" id={id} overflowY={{ base: undefined, lg: 'auto' }}>
         {contributions.length === 0 ? (
           <NoContribution />
         ) : (

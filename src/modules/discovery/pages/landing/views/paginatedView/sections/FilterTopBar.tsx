@@ -117,7 +117,7 @@ export const FilterTopBar = ({ isLoading, ...rest }: FilterTopBarProps) => {
     return (
       <HStack width="100%" justifyContent="start" alignItems="center" {...rest}>
         {[1, 2].map((item) => {
-          return <SkeletonLayout key={item} height="24px" width="80px" />
+          return <SkeletonLayout key={item} height="32px" width="80px" />
         })}
       </HStack>
     )

@@ -1,4 +1,5 @@
-import { useMobileMode } from '../../../utils'
+import { useMobileMode } from '@/utils'
+
 import { ProfileNavMenu } from './ProfileNavMenu'
 import { ProfileNavSidebar } from './ProfileNavSidebar'
 

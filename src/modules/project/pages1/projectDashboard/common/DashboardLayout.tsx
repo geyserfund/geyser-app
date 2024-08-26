@@ -5,7 +5,7 @@ import { PropsWithChildren } from 'react'
 import { PiArrowLeft } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
-import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
+import { ProjectNavContainer } from '@/modules/navigation/components/topNav'
 import { H1 } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants'
 import { useMobileMode } from '@/utils'

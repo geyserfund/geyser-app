@@ -14,10 +14,9 @@ import { useAtomValue } from 'jotai'
 import { PiArrowUpRight } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
+import { useAuthContext } from '@/context'
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
-
-import { useAuthContext } from '../../../context'
-import { Body } from '../../../shared/components/typography'
+import { Body } from '@/shared/components/typography'
 import {
   dimensions,
   FeedbackUrl,
@@ -27,8 +26,9 @@ import {
   GeyserSubscribeUrl,
   GeyserUpdatesUrl,
   GuideUrl,
-} from '../../../shared/constants'
-import { DiscoveryNavItemKey, discoveryNavItems } from '../discoveryNav/discoveryNavData'
+} from '@/shared/constants'
+
+import { DiscoveryNavItemKey, discoveryNavItems } from '../../discoveryNav/discoveryNavData'
 import { ProfileNavUserInfo } from './components'
 import { ModeChange } from './components/ModeChange'
 
@@ -44,7 +44,7 @@ export const ProfileNavContent = () => {
       width={dimensions.mobileSideNav.width}
       spacing={4}
       alignItems={'start'}
-      justifyContent={{ base: 'space-between', lg: 'start' }}
+      justifyContent={'start'}
       height="100%"
     >
       <VStack w="full" spacing={4}>
@@ -75,8 +75,8 @@ export const ProfileNavContent = () => {
             return (
               <MenuItem key={discoveryNav.label} as={Link} to={getPath(discoveryNav.path)}>
                 <HStack position="relative">
-                  <discoveryNav.icon />
-                  <Body>{discoveryNav.label}</Body>
+                  <discoveryNav.icon fontSize="18px" />
+                  <Body size="md">{discoveryNav.label}</Body>
                   {activityDot ? (
                     <Box
                       position="absolute"
@@ -99,10 +99,10 @@ export const ProfileNavContent = () => {
 
             <VStack spacing={2} w="full">
               <MenuItem as={Link} to={getPath('userProfileSettings', user.id)}>
-                <Body>{t('Settings')}</Body>
+                <Body size="md">{t('Settings')}</Body>
               </MenuItem>
               <MenuItem onClick={logout}>
-                <Body>{t('Sign Out')}</Body>
+                <Body size="md">{t('Sign Out')}</Body>
               </MenuItem>
             </VStack>
           </>
@@ -111,18 +111,18 @@ export const ProfileNavContent = () => {
         <Divider borderColor="neutral1.6" />
 
         <MenuItem as={ChakraLink} isExternal href={GeyserUpdatesUrl} _focusVisible={{}} gap={2}>
-          <Body>{t('Geyser updates')}</Body>
-          <PiArrowUpRight fontSize="16px" />
+          <Body size="md">{t('Geyser updates')}</Body>
+          <PiArrowUpRight fontSize="18px" />
         </MenuItem>
         <MenuItem as={ChakraLink} isExternal href={GeyserSubscribeUrl} _focusVisible={{}} gap={2}>
-          <Body>{t('Subscribe')}</Body>
-          <PiArrowUpRight fontSize="16px" />
+          <Body size="md">{t('Subscribe')}</Body>
+          <PiArrowUpRight fontSize="18px" />
         </MenuItem>
       </VStack>
 
       <VStack w="full" spacing={4}>
         <Divider borderColor="neutral1.6" />
-        <HStack w="full" paddingX={4} spacing={0} justifyContent="space-between">
+        <HStack w="full" paddingX={2} spacing={0} justifyContent="space-between">
           <UserNavExternalButton as={ChakraLink} isExternal href={GuideUrl}>
             {t('Guide')}
           </UserNavExternalButton>

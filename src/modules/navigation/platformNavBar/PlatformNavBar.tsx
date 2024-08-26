@@ -13,20 +13,15 @@ import { AuthModal } from '../../../components/molecules'
 import { useAuthContext } from '../../../context'
 import { useAuthModal } from '../../../pages/auth/hooks'
 import { dimensions } from '../../../shared/constants'
-import { LoginButton } from '../components/LoginButton'
-import { ProfileNav } from '../profileNav/ProfileNav'
 import { BrandLogo, BrandLogoFull } from './components/BrandLogo'
 import { LoggedOutModal } from './components/LoggedOutModal'
+import { LoginButton } from './components/LoginButton'
 import { ProjectLogo } from './components/ProjectLogo'
 import { ProjectSelectMenu } from './components/ProjectSelectMenu'
-import {
-  isDiscoveryRoutesAtom,
-  isLandingPageRouteAtom,
-  shouldShowGeyserLogoAtom,
-  shouldShowProjectLogoAtom,
-} from './topNavBarAtom'
+import { isDiscoveryRoutesAtom, shouldShowGeyserLogoAtom, shouldShowProjectLogoAtom } from './platformNavBarAtom'
+import { ProfileNav } from './profileNav/ProfileNav'
 
-export const TopNavBar = () => {
+export const PlatformNavBar = () => {
   const { isLoggedIn, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose } = useAuthModal()
 
@@ -35,7 +30,6 @@ export const TopNavBar = () => {
   const shouldShowProjectLogo = useAtomValue(shouldShowProjectLogoAtom)
   const shouldShowGeyserLogo = useAtomValue(shouldShowGeyserLogoAtom)
   const isPlatformRoutes = useAtomValue(isDiscoveryRoutesAtom)
-  const isLandingPageRoute = useAtomValue(isLandingPageRouteAtom)
 
   const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose } = useEmailPromptModal()
 
@@ -117,7 +111,6 @@ export const TopNavBar = () => {
             <ProfileNav />
           </HStack>
         </HStack>
-        {isLandingPageRoute && isMobileMode && <FilterComponent />}
       </VStack>
 
       <LoggedOutModal isOpen={isLoginAlertModalOpen} onClose={onLoginAlertModalClose} />

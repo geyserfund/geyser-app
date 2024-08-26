@@ -95,6 +95,9 @@ export const StyleProvider = ({ children, flex, display, ...rest }: { flex?: boo
                 display: 'flex',
                 flexDirection: 'column',
                 flexGrow: 1,
+                '& :focus': {
+                  boxShadow: `${colors.primary1[8]} 0px 0px 0px 1px !important`,
+                },
               },
               '& div.tableWrapper': {
                 padding: '10px',

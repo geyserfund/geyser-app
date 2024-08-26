@@ -1,7 +1,8 @@
 import { HStack, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
-import { PiBell, PiLightning, PiRocket, PiShoppingBag, PiUser } from 'react-icons/pi'
+import { PiBell, PiLightning, PiLockOpen, PiRocket, PiUser } from 'react-icons/pi'
 
+import { useAuthContext } from '@/context'
 import { CardLayout } from '@/shared/components/layouts'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
@@ -25,6 +26,8 @@ enum ProfileTabsList {
 
 export const ProfileTabs = () => {
   const isMobile = useMobileMode()
+
+  const { loading } = useAuthContext()
 
   const { isLoading } = useUserProfileAtom()
 
@@ -59,9 +62,10 @@ export const ProfileTabs = () => {
     if (isViewingOwnProfile) {
       tabList.push({
         name: 'Purchases',
-        icon: PiShoppingBag,
+        icon: PiLockOpen,
         key: ProfileTabsList.PURCHASES,
         render: () => <ProfilePurchases />,
+        showIconAlways: true,
       })
     }
 
@@ -92,7 +96,12 @@ export const ProfileTabs = () => {
         backgroundColor={'utils.pbg'}
         zIndex={1}
       >
-        <AnimatedNavBar {...animatedNavBarProps} showLabel={!isMobile} showIcon={isMobile} loading={isLoading} />
+        <AnimatedNavBar
+          {...animatedNavBarProps}
+          showLabel={!isMobile}
+          showIcon={isMobile}
+          loading={isLoading || loading}
+        />
       </HStack>
       <VStack
         height="100%"

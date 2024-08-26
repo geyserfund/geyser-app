@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 
-import { useNavAnimationStyles } from '../../modules/navigation/sideNavBase'
-import { useTopNavBarAnimate } from '../../modules/navigation/topNavBar/topNavBarAtom'
+import { useNavAnimationStyles } from '@/modules/navigation/components/sideNavBase'
+
+import { usePlatformNavBarAnimate } from '../../modules/navigation/platformNavBar/platformNavBarAtom'
 import { useMobileMode } from '../../utils'
 
 export const useLayoutAnimation = () => {
-  const animate = useTopNavBarAnimate()
+  const animate = usePlatformNavBarAnimate()
   const classes = useNavAnimationStyles()
   const [className, setClassName] = useState('')
   const isMobile = useMobileMode()

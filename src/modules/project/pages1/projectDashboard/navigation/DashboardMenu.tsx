@@ -92,7 +92,7 @@ const DashboardMenuButton = ({ item, currentDashboardItem, isMobile, project, ..
       colorScheme="primary1"
       size="lg"
       width={`${dimensions.project.dashboard.menu.width}px`}
-      backgroundColor={'neutral1.1'}
+      backgroundColor={'utils.pbg'}
       key={item.label}
       leftIcon={<item.icon fontSize="18px" />}
       as={Link}

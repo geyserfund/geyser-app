@@ -1,7 +1,7 @@
 import { Avatar, forwardRef, HStack, StackProps } from '@chakra-ui/react'
 import { PiList } from 'react-icons/pi'
 
-import { useAuthContext } from '../../../../context'
+import { useAuthContext } from '@/context'
 
 export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) => {
   const { user } = useAuthContext()

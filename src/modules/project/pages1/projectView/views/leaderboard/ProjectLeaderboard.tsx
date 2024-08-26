@@ -1,6 +1,7 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { Button, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
+import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
 import { CardLayout } from '@/shared/components/layouts'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
@@ -72,6 +73,11 @@ const ProjectLeaderboardMobile = () => {
         <AnimatedNavBar {...animatedNavBarProps} showLabel />
       </HStack>
       <VStack paddingTop={`${dimensions.projectNavBar.mobile.height}px`}>{render && render()}</VStack>
+      <BottomNavBarContainer>
+        <Button variant="solid" colorScheme="primary1" size="lg" width="full">
+          {t('Contribute')}
+        </Button>
+      </BottomNavBarContainer>
     </CardLayout>
   )
 }

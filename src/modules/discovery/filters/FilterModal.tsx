@@ -49,8 +49,11 @@ export const FilterModal = (props: Omit<ModalProps, 'children'>) => {
         {render && render()}
       </VStack>
       <HStack w="full" paddingX={standardPadding} paddingTop={4}>
-        <Button variant="soft" w="full" colorScheme="neutral1" onClick={clearFilter}>
+        <Button flex={1} variant="soft" colorScheme="neutral1" onClick={clearFilter}>
           {t('Reset filters')}
+        </Button>
+        <Button flex={1} variant="solid" colorScheme="primary1" onClick={props.onClose}>
+          {t('View results')}
         </Button>
       </HStack>
     </Modal>

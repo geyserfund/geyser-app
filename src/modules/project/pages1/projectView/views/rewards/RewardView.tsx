@@ -5,9 +5,9 @@ import { Link, useParams } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
 import { useBTCConverter } from '@/helpers'
-import { BottomNavBarContainer } from '@/modules/navigation/bottomNav'
+import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
+import { ProjectNavContainer } from '@/modules/navigation/components/topNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
 import { dimensions, getPath } from '@/shared/constants'
@@ -106,17 +106,17 @@ export const RewardView = () => {
             </HStack>
             <HStack w="full" alignItems="end" justifyContent="space-between">
               <HStack spacing={{ base: 2, lg: 3 }} alignItems="end">
-                <Body size="xs" medium muted>
+                <Body size="sm" medium muted>
                   {t('Sold')}:{' '}
                   <Box as="span" color="utils.text" fontWeight={700}>
                     {reward.sold}
                   </Box>
                 </Body>
                 {reward.maxClaimable && (
-                  <Body size="xs" medium muted>
+                  <Body size="sm" medium muted>
                     {t('Available')}:{' '}
                     <Box as="span" color="utils.text" fontWeight={700}>
-                      {reward.maxClaimable - reward.sold - count}
+                      {reward.maxClaimable - reward.sold - count > 0 ? reward.maxClaimable - reward.sold - count : 0}
                     </Box>
                   </Body>
                 )}

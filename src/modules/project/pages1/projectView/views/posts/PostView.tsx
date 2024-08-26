@@ -8,9 +8,9 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { AlertDialogue } from '@/components/molecules/AlertDialogue'
 import { ImageWithReload } from '@/components/ui'
 import { Head } from '@/config/Head'
-import { BottomNavBarContainer } from '@/modules/navigation/bottomNav'
+import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
+import { ProjectNavContainer } from '@/modules/navigation/components/topNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
@@ -128,13 +128,14 @@ export const PostView = () => {
                     colorScheme="primary1"
                     width="160px"
                     display={{ base: 'none', lg: 'undefined' }}
+                    onClick={() => navigate(getPath('projectFunding', project?.name), { state: { entryId: entry.id } })}
                   >
                     {t('Contribute')}
                   </Button>
                 )}
               </HStack>
 
-              <Body size="xs" medium light>
+              <Body size="sm" medium light>
                 {entry.createdAt && DateTime.fromMillis(toInt(entry.createdAt)).toFormat(' dd LLLL, yyyy')}
               </Body>
             </VStack>

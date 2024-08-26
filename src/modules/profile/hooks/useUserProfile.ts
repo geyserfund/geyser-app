@@ -1,13 +1,13 @@
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 
-import { useNotification } from '@/utils'
+import { toInt, useNotification } from '@/utils'
 
 import { useAuthContext } from '../../../context'
 import { useUserForProfilePageQuery } from '../../../types'
 import { userProfileAtom, userProfileLoadingAtom, useViewingOwnProfileAtomValue } from '../state'
 
-export const useUserProfile = (userId: number) => {
+export const useUserProfile = (userId?: string) => {
   const toast = useNotification()
 
   const isViewingOwnProfile = useViewingOwnProfileAtomValue()
@@ -18,7 +18,7 @@ export const useUserProfile = (userId: number) => {
   const { error } = useUserForProfilePageQuery({
     variables: {
       where: {
-        id: userId,
+        id: toInt(userId),
       },
     },
     skip: !userId,

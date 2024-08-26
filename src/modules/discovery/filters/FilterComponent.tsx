@@ -1,7 +1,7 @@
 import { Button, InputGroup, InputLeftElement, InputRightElement } from '@chakra-ui/react'
 import { Input } from '@chakra-ui/react'
 import { useDebouncedCallback } from '@react-hookz/web'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiMagnifyingGlass, PiSlidersHorizontal } from 'react-icons/pi'
 
@@ -16,10 +16,18 @@ export const FilterComponent = () => {
 
   const inputRef = useRef<HTMLInputElement>(null)
 
+  const [search, setSearch] = useState('')
+
   const { t } = useTranslation()
-  const { updateFilter } = useFilterContext()
+  const { updateFilter, filters } = useFilterContext()
 
   const filterModal = useModal()
+
+  useEffect(() => {
+    if (!filters.search) {
+      setSearch('')
+    }
+  }, [filters])
 
   const updateSearchFilterDebounced = useDebouncedCallback(
     (value) => updateFilter({ search: value }),
@@ -28,6 +36,7 @@ export const FilterComponent = () => {
   )
 
   const handleSearchUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value)
     updateSearchFilterDebounced(event.target.value)
   }
 
@@ -41,11 +50,11 @@ export const FilterComponent = () => {
           inputRef.current?.blur()
         }}
       >
-        <InputGroup ref={inputRef}>
+        <InputGroup>
           <InputLeftElement color="neutral1.11">
             <PiMagnifyingGlass />
           </InputLeftElement>
-          <Input ref={inputRef} placeholder={t('Search')} onChange={handleSearchUpdate} />
+          <Input ref={inputRef} placeholder={t('Search')} value={search} onChange={handleSearchUpdate} />
           <InputRightElement minWidth={{ base: '46px', lg: '86px' }}>
             <Button variant="ghost" colorScheme="neutral1" onClick={filterModal.onOpen} gap={2}>
               <PiSlidersHorizontal />

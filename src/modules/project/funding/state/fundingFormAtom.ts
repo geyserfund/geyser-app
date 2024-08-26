@@ -94,6 +94,18 @@ export const setFundFormStateAtom = atom(null, (get, set, name: string, value: a
   }))
 })
 
+/** Set the resource for the funding form */
+export const setResourceAtom = atom(
+  null,
+  (_, set, { resourceId, resourceType }: { resourceId: number; resourceType: FundingResourceType }) => {
+    set(fundingFormStateAtom, (current) => ({
+      ...current,
+      resourceId,
+      resourceType,
+    }))
+  },
+)
+
 /* Boolean to check if the funding form has rewards */
 export const fundingFormHasRewardsAtom = atom((get) => {
   const fundingFormState = get(fundingFormStateAtom)
