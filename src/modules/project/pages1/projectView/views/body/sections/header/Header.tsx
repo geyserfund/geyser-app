@@ -196,7 +196,7 @@ export const HeaderSkeleton = () => {
   return (
     <CardLayout w="full" mobileDense padding={0} spacing={0}>
       <Box w="full">
-        <Skeleton borderRadius="8px 8px 0px 0px" width="100%" height="220px" />
+        <Skeleton borderRadius="8px 8px 0px 0px" width="100%" height={{ base: '150px', lg: '220px' }} />
       </Box>
       <HStack
         spacing={4}

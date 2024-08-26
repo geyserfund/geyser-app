@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/layout'
-import { Outlet, ScrollRestoration } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 
 import { PullingDownContent } from './components/ui'
@@ -13,6 +13,7 @@ import { dimensions, ID } from './shared/constants'
 import { useLayoutAnimation } from './shared/hooks'
 import { useInitBtcRate } from './shared/hooks/platform/useInitBtcRate'
 import { useMobileMode } from './utils'
+import { useScrollToTop } from './utils/tools/useScrollToTop'
 
 const AppLayout = () => {
   useInitBtcRate()
@@ -24,6 +25,7 @@ const AppLayout = () => {
   useMatchRoutes()
   useHistoryRoutes()
   useActivityHook()
+  useScrollToTop()
 
   const layoutAnimationClassName = useLayoutAnimation()
 
@@ -33,7 +35,6 @@ const AppLayout = () => {
 
   return (
     <>
-      <ScrollRestoration />
       {loading && <LoadingPage />}
       <PullToRefresh
         onRefresh={handleFunction}
