@@ -1,5 +1,5 @@
 import { Box, HStack, Skeleton, SkeletonText, VStack } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
+import { t } from 'i18next'
 import { PiLightning, PiUsers } from 'react-icons/pi'
 import { useNavigate } from 'react-router-dom'
 
@@ -11,23 +11,26 @@ import { commaFormatted } from '@/utils'
 import { ImageWithReload } from '../../../../../../../components/ui'
 import { getPath } from '../../../../../../../shared/constants'
 import { useFeaturedProjectForLandingPageQuery } from '../../../../../../../types'
+import { FeatureAirtableData } from '../sections/Featured'
 
-export const FeaturedProjectCard = ({ projectName }: { projectName: string }) => {
-  const { t } = useTranslation()
+export const FeaturedProjectCard = ({ projectName, data }: { projectName: string; data?: FeatureAirtableData }) => {
   const navigate = useNavigate()
-  const { data, loading } = useFeaturedProjectForLandingPageQuery({
+  const { data: response, loading } = useFeaturedProjectForLandingPageQuery({
     variables: {
       where: {
         name: projectName,
       },
     },
+    skip: !projectName,
   })
 
-  const project = data?.projectGet
+  const project = response?.projectGet
 
   if (loading || !project) {
     return <FeaturedCardSkeleton />
   }
+
+  const hadFeaturedData = data?.Featured_Author && data.Featured_Comment
 
   return (
     <CardLayout
@@ -55,6 +58,14 @@ export const FeaturedProjectCard = ({ projectName }: { projectName: string }) =>
         padding={standardPadding}
         justifyContent={{ base: 'start', sm: 'space-between' }}
       >
+        {hadFeaturedData && (
+          <VStack alignItems={'start'}>
+            <Body size="xl" fontStyle={'italic'} bold light>
+              {data.Featured_Comment}
+            </Body>
+            <Body>{data.Featured_Author}</Body>
+          </VStack>
+        )}
         <VStack alignItems={'start'}>
           <H2 size="2xl" bold>
             {project.title}
@@ -63,29 +74,31 @@ export const FeaturedProjectCard = ({ projectName }: { projectName: string }) =>
             {project.shortDescription}
           </Body>
         </VStack>
-        <HStack spacing={3} justifySelf={'end'} flexWrap={'wrap'}>
-          <HStack spacing={1}>
-            <PiUsers />
-            <Body size="sm" light medium pt={1}>
-              {t('Contributions')}:
-              <Body as="span" dark medium>
-                {project.fundersCount}
+        {!hadFeaturedData && (
+          <HStack spacing={3} justifySelf={'end'} flexWrap={'wrap'}>
+            <HStack spacing={1}>
+              <PiUsers />
+              <Body size="sm" light medium pt={1}>
+                {t('Contributions')}:
+                <Body as="span" dark medium>
+                  {project.fundersCount}
+                </Body>
               </Body>
-            </Body>
+            </HStack>
+            <HStack spacing={1}>
+              <PiLightning />
+              <Body size="sm" light medium pt={1}>
+                {t('Contributed')}:
+                <Body as="span" dark medium>
+                  {commaFormatted(project.balance)}
+                </Body>
+                <Body as="span" light medium>
+                  {` sats ($${commaFormatted(Math.round(project.balanceUsdCent / 100))})`}
+                </Body>
+              </Body>
+            </HStack>
           </HStack>
-          <HStack spacing={1}>
-            <PiLightning />
-            <Body size="sm" light medium pt={1}>
-              {t('Contributed')}:
-              <Body as="span" dark medium>
-                {commaFormatted(project.balance)}
-              </Body>
-              <Body as="span" light medium>
-                {` sats ($${commaFormatted(Math.round(project.balanceUsdCent / 100))})`}
-              </Body>
-            </Body>
-          </HStack>
-        </HStack>
+        )}
       </VStack>
     </CardLayout>
   )

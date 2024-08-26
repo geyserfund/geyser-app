@@ -17,12 +17,19 @@ import { ProjectRowLayout } from '../components/ProjectRowLayout'
 const MAIL_TO_HREF =
   "mailto:hello@geyser.fund?subject=Feature%20Project&body=Hi%2C%20%0AI'm%20interested%20in%20featuring%20a%20project%20in%20the%20discovery%20page.%0A%0AProject%20URL%3A%20the%20project%20URL%20of%20project%20you'd%20like%20to%20feature%0AFeatured%20comment%3A%20send%20us%20your%20comment%0AUser%3A%20tell%20us%20who%20is%20paying%20for%20this%20project%20to%20be%20featured%20%0A%20%0ALooking%20forward%20to%20hearing%20more%20of%20how%20this%20works%0A%0ABest%2C"
 
+export type FeatureAirtableData = {
+  Name: string
+  Type: 'project' | 'grant'
+  Featured_Comment: string
+  Featured_Author?: string
+}
+
 export const Featured = () => {
   const toast = useNotification()
 
   const [loading, setLoading] = useState(true)
 
-  const [data, setData] = useState<{ Name: string; Type: 'project' | 'grant' }>()
+  const [data, setData] = useState<FeatureAirtableData>()
 
   const featuredProjectModal = useModal()
 
@@ -51,7 +58,7 @@ export const Featured = () => {
     }
 
     if (data && data?.Type === 'project') {
-      return <FeaturedProjectCard projectName={data.Name} />
+      return <FeaturedProjectCard projectName={data.Name} data={data} />
     }
 
     if (data && data?.Type === 'grant') {
