@@ -6,9 +6,9 @@ import { PiX } from 'react-icons/pi'
 import { createUseStyles } from 'react-jss'
 import { components, MenuProps, MultiValue } from 'react-select'
 
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import { Body } from '@/shared/components/typography'
 
-import { SelectComponent } from '../../../components/ui'
 import { AppTheme } from '../../../context'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { Modal, SkeletonLayout } from '../../../shared/components/layouts'
@@ -174,7 +174,7 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
           {loading ? (
             <SkeletonLayout h="40px" />
           ) : (
-            <SelectComponent<TagsGetResult, true>
+            <CustomSelect<TagsGetResult, true>
               isMulti
               isDisabled={isDisabled}
               menuIsOpen={isOpen}
@@ -190,7 +190,6 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
               onInputChange={handleInputChange}
               onKeyDown={handleKeyDown}
               inputValue={inputValue}
-              components={{ Menu }}
               onMenuOpen={onOpen}
               onMenuClose={onClose}
             />

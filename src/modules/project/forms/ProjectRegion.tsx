@@ -6,9 +6,9 @@ import { PiX } from 'react-icons/pi'
 import { createUseStyles } from 'react-jss'
 import { SingleValue } from 'react-select'
 
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import { Body } from '@/shared/components/typography'
 
-import { SelectComponent } from '../../../components/ui'
 import { AppTheme } from '../../../context'
 import { QUERY_COUNTRIES, QUERY_REGION } from '../../../graphqlBase/queries'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
@@ -124,7 +124,7 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
         {isLoading ? (
           <SkeletonLayout h="40px" />
         ) : (
-          <SelectComponent<Country, false>
+          <CustomSelect<Country, false>
             menuIsOpen={isOpen}
             className={classes.select}
             onChange={handleChange}
