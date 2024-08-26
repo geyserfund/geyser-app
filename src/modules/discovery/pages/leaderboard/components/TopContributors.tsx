@@ -81,7 +81,13 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
           </Body>
         )}
       </Box>
-      <ImageWithReload src={contributor.userImageUrl} alt={contributor.username} boxSize="40px" borderRadius="16px" />
+      <ImageWithReload
+        src={contributor.userImageUrl}
+        alt={contributor.username}
+        boxSize="40px"
+        borderRadius="16px"
+        maxHeight="40px"
+      />
       <VStack maxHeight="38px" alignItems="flex-start" flex={1} spacing={0}>
         <Body fontSize={'14px'} bold isTruncated>
           {truncateText(contributor.username, 35)}
