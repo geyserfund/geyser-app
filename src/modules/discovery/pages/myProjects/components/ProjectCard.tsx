@@ -1,7 +1,6 @@
 import { Box, Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { BsArrowUpRight } from 'react-icons/bs'
-import { PiEyeglasses, PiNoteBlank } from 'react-icons/pi'
+import { PiEyeglasses, PiNoteBlank, PiProjectorScreenChart } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router-dom'
 
 import { Body } from '@/shared/components/typography'
@@ -73,9 +72,9 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
           as={RouterLink}
           to={getPath('dashboardAnalytics', project.name)}
           size="md"
-          rightIcon={isMobile ? undefined : <BsArrowUpRight size={12} />}
+          rightIcon={isMobile ? undefined : <PiProjectorScreenChart size={16} />}
         >
-          {isMobile ? <BsArrowUpRight size={12} /> : t('Dashboard')}
+          {isMobile ? <PiProjectorScreenChart size={16} /> : t('Analytics')}
         </Button>
       </HStack>
       {renderProjectCardContent()}
