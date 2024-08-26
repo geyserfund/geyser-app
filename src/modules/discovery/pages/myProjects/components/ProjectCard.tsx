@@ -45,7 +45,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
     return (
       <Direction minHeight="269px" mt={4} spacing={4} alignItems="stretch">
         <Contributions projectId={project.id} projectName={project.name} />
-        {hasRewards ? <Rewards projectId={project.id} /> : null}
+        {hasRewards ? <Rewards projectId={project.id} projectName={project.name} /> : null}
       </Direction>
     )
   }

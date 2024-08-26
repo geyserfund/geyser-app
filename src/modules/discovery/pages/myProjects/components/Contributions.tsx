@@ -55,7 +55,7 @@ const Contributions = ({ projectId, projectName }: ContributionsProps) => {
           leftIcon={<PiFlagBannerFold />}
           onClick={() => {
             onGoalModalOpen()
-            navigate(getPath('project', projectName))
+            navigate(getPath('projectGoals', projectName))
           }}
         >
           {t('Create Goal')}

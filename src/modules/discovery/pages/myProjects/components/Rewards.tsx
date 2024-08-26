@@ -1,23 +1,33 @@
 import { Box, Divider, HStack, Image, Skeleton, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiBag } from 'react-icons/pi'
+import { Link } from 'react-router-dom'
 
 import { Body } from '@/shared/components/typography'
-import { NoRewardsSoldUrl } from '@/shared/constants'
+import { getPath, NoRewardsSoldUrl } from '@/shared/constants'
 
 import { Reward, useRewards } from '../hooks/useRewards'
 
 interface RewardsProps {
   projectId: string
+  projectName: string
 }
 
-const Rewards = ({ projectId }: RewardsProps) => {
+const Rewards = ({ projectId, projectName }: RewardsProps) => {
   const { rewards, totalRewardsCount, isLoading } = useRewards(projectId)
 
   if (isLoading) return <RewardsSkeleton />
 
   return (
-    <Box minHeight="269px" borderWidth={1} borderRadius="lg" p={4} flex={1}>
+    <Box
+      as={Link}
+      to={getPath('projectRewards', projectName)}
+      minHeight="269px"
+      borderWidth={1}
+      borderRadius="lg"
+      p={4}
+      flex={1}
+    >
       <Header rewardsSold={totalRewardsCount} />
       <Divider my={4} />
       <RewardsList rewards={rewards} />
