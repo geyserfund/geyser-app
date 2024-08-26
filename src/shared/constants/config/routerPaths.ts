@@ -106,7 +106,8 @@ const pathsMap = {
   discoveryLeaderboard: () => `/${PathName.leaderboard}`,
   discoveryMyProjects: () => `/${PathName.myProjects}`,
   discoveryActivity: () => `/${PathName.activity}`,
-  discoveryGrants: (grantId?: string) => (grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`),
+  discoveryGrants: () => `/${PathName.grants}`,
+  discoveryGrant: (grantId: string) => `/${PathName.grants}/${grantId}`,
 
   grants: (grantId?: string) => (grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`),
   grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,

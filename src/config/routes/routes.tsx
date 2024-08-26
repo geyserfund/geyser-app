@@ -588,7 +588,7 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
-        path: getPath('discoveryGrants', PathName.grantId),
+        path: getPath('discoveryGrant', PathName.grantId),
         async lazy() {
           const GrantPage = await GrantsOld().then((m) => m.GrantPage)
           return { Component: GrantPage }
