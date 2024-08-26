@@ -18,12 +18,7 @@ import { LoggedOutModal } from './components/LoggedOutModal'
 import { LoginButton } from './components/LoginButton'
 import { ProjectLogo } from './components/ProjectLogo'
 import { ProjectSelectMenu } from './components/ProjectSelectMenu'
-import {
-  isDiscoveryRoutesAtom,
-  isLandingPageRouteAtom,
-  shouldShowGeyserLogoAtom,
-  shouldShowProjectLogoAtom,
-} from './platformNavBarAtom'
+import { isDiscoveryRoutesAtom, shouldShowGeyserLogoAtom, shouldShowProjectLogoAtom } from './platformNavBarAtom'
 import { ProfileNav } from './profileNav/ProfileNav'
 
 export const PlatformNavBar = () => {
@@ -35,7 +30,6 @@ export const PlatformNavBar = () => {
   const shouldShowProjectLogo = useAtomValue(shouldShowProjectLogoAtom)
   const shouldShowGeyserLogo = useAtomValue(shouldShowGeyserLogoAtom)
   const isPlatformRoutes = useAtomValue(isDiscoveryRoutesAtom)
-  const isLandingPageRoute = useAtomValue(isLandingPageRouteAtom)
 
   const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose } = useEmailPromptModal()
 
@@ -117,7 +111,6 @@ export const PlatformNavBar = () => {
             <ProfileNav />
           </HStack>
         </HStack>
-        {isLandingPageRoute && isMobileMode && <FilterComponent />}
       </VStack>
 
       <LoggedOutModal isOpen={isLoginAlertModalOpen} onClose={onLoginAlertModalClose} />

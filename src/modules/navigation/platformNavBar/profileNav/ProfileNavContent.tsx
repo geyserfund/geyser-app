@@ -44,7 +44,7 @@ export const ProfileNavContent = () => {
       width={dimensions.mobileSideNav.width}
       spacing={4}
       alignItems={'start'}
-      justifyContent={{ base: 'space-between', lg: 'start' }}
+      justifyContent={'start'}
       height="100%"
     >
       <VStack w="full" spacing={4}>

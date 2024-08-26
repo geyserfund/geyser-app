@@ -14,7 +14,6 @@ interface Props {
   userId: number
 }
 
-/** DEPRECATED DONT USE USE ONLY THE USERAVATAR */
 export const EditableAvatar = ({ onUploadImage, imageUrl, userId }: Props) => {
   const [isImageLoading, setImageLoading] = useState(false)
 
@@ -22,15 +21,17 @@ export const EditableAvatar = ({ onUploadImage, imageUrl, userId }: Props) => {
 
   return (
     <FileUpload onUploadComplete={onUploadImage} onLoading={setImageLoading}>
-      <Box borderRadius="50%" width="100px" position="relative" cursor="pointer">
-        <ImageWithReload
-          borderRadius="50%"
-          src={src}
-          h="100px"
-          w="100px"
-          border="2px solid"
-          borderColor="neutral.200 !important"
-        />
+      <Box
+        width="100px"
+        height="100px"
+        borderRadius="50%"
+        border="2px solid"
+        borderColor="neutral.200 !important"
+        overflow="hidden"
+        position="relative"
+        cursor="pointer"
+      >
+        <ImageWithReload src={src} height="100%" width="100%" />
         <Box
           position="absolute"
           top="0"
