@@ -1,6 +1,6 @@
 import { Box, HStack, Image, Skeleton, SkeletonCircle, VStack } from '@chakra-ui/react'
 import { PiLightning, PiRocketLaunch } from 'react-icons/pi'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
 import { Body } from '@/shared/components/typography'
@@ -70,7 +70,7 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
         {rank <= 3 ? (
           <RankMedal rank={rank} />
         ) : (
-          <Body align={'center'} fontSize="14px" bold color={'neutralAlpha.9'}>
+          <Body size={'sm'} align={'center'} bold muted>
             {rank}
           </Body>
         )}
@@ -83,7 +83,7 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
         maxHeight="40px"
       />
       <VStack maxHeight="38px" alignItems="flex-start" flex={1} spacing={0}>
-        <Body fontSize={'14px'} bold isTruncated>
+        <Body size={'sm'} bold isTruncated>
           {truncateText(contributor.username, 35)}
         </Body>
         <HStack spacing={1}>

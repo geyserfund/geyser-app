@@ -1,3 +1,3 @@
-export * from './ScrollableList'
-export * from './TopContributors'
-export * from './TopProjects'
+export { ScrollableList } from './ScrollableList'
+export { TopContributors } from './TopContributors'
+export { TopProjects } from './TopProjects'
