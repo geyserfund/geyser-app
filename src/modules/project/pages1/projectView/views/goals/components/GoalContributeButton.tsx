@@ -41,7 +41,7 @@ export const GoalContributeButton = ({ projectGoalId, isPriorityGoal, ...props }
     <Button
       variant={isPriorityGoal ? 'solid' : 'outline'}
       colorScheme={isPriorityGoal ? 'primary1' : 'neutral1'}
-      size={'sm'}
+      size={'md'}
       width={{ base: '100%', lg: '192px' }}
       onClick={handleContributeClick}
       isDisabled={isFundingDisabled}

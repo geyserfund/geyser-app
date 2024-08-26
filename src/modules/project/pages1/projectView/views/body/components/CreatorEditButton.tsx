@@ -1,6 +1,6 @@
 import { Button, ButtonProps, ComponentWithAs, forwardRef } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { PiDotsThree } from 'react-icons/pi'
+import { PiDotsThreeOutline } from 'react-icons/pi'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 
@@ -22,7 +22,7 @@ export const CreatorEditButton: ComponentWithAs<'button', CreatorEditButtonProps
         variant="outline"
         colorScheme="neutral1"
         justifySelf="end"
-        rightIcon={isMenu ? <PiDotsThree /> : undefined}
+        rightIcon={isMenu ? <PiDotsThreeOutline fontSize={'18px'} /> : undefined}
         {...props}
       >
         {t('Edit')}

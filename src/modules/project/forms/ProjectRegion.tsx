@@ -141,7 +141,7 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
             onMenuClose={onClose}
           />
         )}
-        <HStack width="100%" spacing="10px">
+        <HStack width="100%" spacing="10px" flexWrap={'wrap'}>
           {displayLocation && (
             <HStack borderRadius="4px" paddingLeft="8px" backgroundColor="neutral1.2">
               <Body medium>{displayLocation}</Body>

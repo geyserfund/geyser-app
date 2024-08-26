@@ -1,6 +1,6 @@
 import { HStack, StackProps, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { AiOutlineUpload } from 'react-icons/ai'
+import { PiUpload } from 'react-icons/pi'
 
 import Loader from './Loader'
 
@@ -19,6 +19,7 @@ export const UploadBox = ({ loading, title, ...rest }: UploadBoxProps) => {
       height="70px"
       justifyContent="center"
       alignItems="center"
+      paddingX={3}
       _hover={{ backgroundColor: 'neutral.300' }}
       {...rest}
     >
@@ -26,7 +27,7 @@ export const UploadBox = ({ loading, title, ...rest }: UploadBoxProps) => {
         <Loader size="md" />
       ) : (
         <>
-          <AiOutlineUpload />
+          <PiUpload />
           <Text>{title || t('Select an image')}</Text>
         </>
       )}

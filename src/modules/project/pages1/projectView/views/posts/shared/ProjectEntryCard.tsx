@@ -56,7 +56,7 @@ export const ProjectEntryCard = ({ entry }: Props) => {
               {entry.title}
             </Body>
             {entry.publishedAt && (
-              <Body size="xs" medium muted whiteSpace="nowrap">
+              <Body size="sm" medium muted whiteSpace="nowrap">
                 {DateTime.fromMillis(toInt(entry.publishedAt)).toFormat('dd LLL, yyyy')}
               </Body>
             )}

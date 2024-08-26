@@ -134,7 +134,7 @@ export const PostView = () => {
                 )}
               </HStack>
 
-              <Body size="xs" medium light>
+              <Body size="sm" medium light>
                 {entry.createdAt && DateTime.fromMillis(toInt(entry.createdAt)).toFormat(' dd LLLL, yyyy')}
               </Body>
             </VStack>

@@ -118,6 +118,7 @@ export const RewardEditMenu = ({ reward, isLaunch, ...props }: RewardEditMenuPro
               }}
               isDisabled={deleteReward.loading}
               color="error.11"
+              _hover={{ color: 'utils.whiteContrast', backgroundColor: 'error.9' }}
             >
               {t('Delete')}
             </MenuItem>

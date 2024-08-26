@@ -106,14 +106,14 @@ export const RewardView = () => {
             </HStack>
             <HStack w="full" alignItems="end" justifyContent="space-between">
               <HStack spacing={{ base: 2, lg: 3 }} alignItems="end">
-                <Body size="xs" medium muted>
+                <Body size="sm" medium muted>
                   {t('Sold')}:{' '}
                   <Box as="span" color="utils.text" fontWeight={700}>
                     {reward.sold}
                   </Box>
                 </Body>
                 {reward.maxClaimable && (
-                  <Body size="xs" medium muted>
+                  <Body size="sm" medium muted>
                     {t('Available')}:{' '}
                     <Box as="span" color="utils.text" fontWeight={700}>
                       {reward.maxClaimable - reward.sold - count}

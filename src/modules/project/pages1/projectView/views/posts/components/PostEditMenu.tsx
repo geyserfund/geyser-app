@@ -86,6 +86,7 @@ export const PostEditMenu = ({ entry, onDeleteComplete, ...props }: PostEditMenu
               }}
               isDisabled={deleteEntry.loading}
               color="error.11"
+              _hover={{ color: 'utils.whiteContrast', backgroundColor: 'error.9' }}
             >
               {t('Delete')}
             </MenuItem>

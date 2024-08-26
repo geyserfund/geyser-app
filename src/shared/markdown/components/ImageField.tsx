@@ -38,6 +38,7 @@ export const ImageField = ({ control, name, caption, required, label }: ImageFie
               onUploadComplete={field.onChange}
               onDeleteClick={() => field.onChange('')}
               childrenOnLoading={<UploadBox loading />}
+              containerProps={{ width: '100%' }}
             >
               <UploadBox h={10} title={field.value ? 'Change image' : undefined} />
             </FileUpload>
