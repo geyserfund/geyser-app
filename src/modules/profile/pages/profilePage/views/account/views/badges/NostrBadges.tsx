@@ -2,7 +2,8 @@ import { VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Body2 } from '../../../../../../../../components/typography'
+import { Body } from '@/shared/components/typography'
+
 import { useNostrBadges } from '../../../../../../../../shared/hooks/useNostrBadges'
 import { UserBadge } from '../../../../../../../../types'
 import { BadgeItem } from './BadgeItem'
@@ -45,16 +46,14 @@ export const NostrBadges = ({
   const isEmpty = numberOfBadges === 0
 
   if (nostrBadgesLoading) {
-    return <BadgesBodySkeleton noTop={isEdit} />
+    return <BadgesBodySkeleton />
   }
 
   return (
     <>
       {!isEdit && isEmpty && (
-        <VStack background="neutral.100" borderRadius="8px" padding="5px 15px" width="fit-content" alignSelf="center">
-          <Body2 color="neutral.900" semiBold>
-            {t('No Geyser badges')}
-          </Body2>
+        <VStack background="neutral1.3" borderRadius="8px" padding="5px 15px" width="fit-content" alignSelf="center">
+          <Body medium>{t('No Geyser badges')}</Body>
         </VStack>
       )}
 

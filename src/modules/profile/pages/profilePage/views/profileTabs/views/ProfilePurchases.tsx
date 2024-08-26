@@ -2,7 +2,7 @@ import { Divider, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '@/modules/profile/state'
-import { Body } from '@/shared/components/typography'
+import { Body, H1 } from '@/shared/components/typography'
 import { NoContributionImageUrl } from '@/shared/constants'
 import { useNotification } from '@/utils'
 
@@ -42,26 +42,29 @@ export const ProfilePurchases = () => {
 
   return (
     <>
-      <VStack w="full" spacing={4}>
-        {orders.map((order, index) => {
-          return (
-            <>
-              <ProfileOrderCard key={order.id} order={order} />
+      <VStack w="full" spacing={4} alignItems="start">
+        <H1 size="2xl" bold display={{ base: 'unset', lg: 'none' }}>
+          {t('Purchases')}
+        </H1>
+        {orders.length > 0 ? (
+          orders.map((order, index) => {
+            return (
+              <>
+                <ProfileOrderCard key={order.id} order={order} />
 
-              {index < orders.length - 1 && <Divider />}
-            </>
-          )
-        })}
+                {index < orders.length - 1 && <Divider />}
+              </>
+            )
+          })
+        ) : (
+          <>
+            <Image height="200px" src={NoContributionImageUrl} />
+            <Body medium light>
+              {t('No Purchases made yet')}
+            </Body>
+          </>
+        )}
       </VStack>
-
-      {orders.length === 0 && (
-        <VStack w="full" p="20px" spacing="20px">
-          <Image height="200px" src={NoContributionImageUrl} />
-          <Body medium light>
-            {t('No Purchases made yet')}
-          </Body>
-        </VStack>
-      )}
     </>
   )
 }

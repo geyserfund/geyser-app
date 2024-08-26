@@ -57,7 +57,7 @@ export const Badges = () => {
       <VStack w="full" alignItems={'start'}>
         <HStack w="full" justifyContent={'space-between'}>
           <Body size="xl" medium>
-            {t('Badges')}:
+            {t('Badges')}
           </Body>
           <Button
             as={ChakraLink}

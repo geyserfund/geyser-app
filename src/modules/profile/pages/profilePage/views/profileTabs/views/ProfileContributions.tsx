@@ -1,8 +1,8 @@
-import { Button, Image, Link, VStack } from '@chakra-ui/react'
+import { Button, HStack, Image, Link, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiDownloadSimple } from 'react-icons/pi'
 
-import { Body } from '@/shared/components/typography'
+import { Body, H1 } from '@/shared/components/typography'
 
 import { getAppEndPoint } from '../../../../../../../config/domain'
 import { NoContributionImageUrl } from '../../../../../../../shared/constants'
@@ -30,22 +30,27 @@ export const ProfileContributions = () => {
   const downloadUrl = `${appEndpoint}/export/payments/user`
 
   return (
-    <>
-      {isViewingOwnProfile ? (
-        <Button
-          as={Link}
-          href={downloadUrl}
-          isExternal
-          size="md"
-          variant="outline"
-          colorScheme="neutral1"
-          rightIcon={<PiDownloadSimple fontSize={'16px'} />}
-          alignSelf={'flex-end'}
-          padding={2}
-        >
-          {t('Export')}
-        </Button>
-      ) : null}
+    <VStack w="full" alignItems={'start'} spacing={4}>
+      <HStack w="full" justifyContent={{ base: 'space-between', lg: 'flex-end' }}>
+        <H1 size="2xl" bold display={{ base: 'unset', lg: 'none' }}>
+          {t('Contributions')}
+        </H1>
+        {isViewingOwnProfile ? (
+          <Button
+            as={Link}
+            href={downloadUrl}
+            isExternal
+            size="md"
+            variant="outline"
+            colorScheme="neutral1"
+            rightIcon={<PiDownloadSimple fontSize={'16px'} />}
+            padding={2}
+          >
+            {t('Export')}
+          </Button>
+        ) : null}
+      </HStack>
+
       {contributions.map((c: UserProjectContributionsFragment) => {
         if (!c.funder) {
           return null
@@ -61,6 +66,6 @@ export const ProfileContributions = () => {
           </Body>
         </VStack>
       )}
-    </>
+    </VStack>
   )
 }

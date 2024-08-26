@@ -1,4 +1,8 @@
+import { VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
+
 import { useUserProfileAtom } from '@/modules/profile/state'
+import { H1 } from '@/shared/components/typography'
 import { useNotification } from '@/utils'
 
 import { ProjectForProfilePageFragment, useUserFollowedProjectsQuery } from '../../../../../../../types'
@@ -32,7 +36,10 @@ export const ProfileFollowed = () => {
   }
 
   return (
-    <>
+    <VStack w="full" spacing={4} alignItems="start">
+      <H1 size="2xl" bold display={{ base: 'unset', lg: 'none' }}>
+        {t('Followed projects')}
+      </H1>
       {projects.map((project, index) => {
         return (
           <ProfileProjectCard
@@ -43,6 +50,6 @@ export const ProfileFollowed = () => {
           />
         )
       })}
-    </>
+    </VStack>
   )
 }

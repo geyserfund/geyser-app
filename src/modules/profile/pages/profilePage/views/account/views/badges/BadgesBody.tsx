@@ -43,15 +43,14 @@ export const BadgesBody = ({ userBadges, userProfile, isEdit }: BadgesBodyProps)
   )
 }
 
-export const BadgesBodySkeleton = ({ noTop }: { noTop?: boolean }) => {
+export const BadgesBodySkeleton = () => {
   return (
     <>
-      {!noTop && <SkeletonLayout height="30px" width="150px" alignSelf="center" />}
-      <Wrap spacingX="90px" spacingY="40px" w="full" paddingX="30px" justify="center">
-        {[1, 2].map((value) => {
+      <Wrap spacingX="50px" spacingY="40px" w="full" paddingX={3} justify="center">
+        {[1, 2, 3].map((value) => {
           return (
             <WrapItem key={value} display="flex" flexDirection="column" alignItems="center" paddingTop="20px">
-              <SkeletonLayout height="110px" width="110px" transform="rotate(-45deg)" />
+              <SkeletonLayout height="70px" width="70px" transform="rotate(-45deg)" />
               <SkeletonText borderRadius="8px" pt="30px" width="full" noOfLines={2} />
             </WrapItem>
           )

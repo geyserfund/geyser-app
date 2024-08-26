@@ -42,7 +42,7 @@ export const Summary = () => {
   return (
     <VStack w="full" alignItems={'start'}>
       <Body size="xl" medium>
-        {t('Stats')}:
+        {t('Stats')}
       </Body>
       {renderSkeleton(
         <StatBody
@@ -96,9 +96,9 @@ const StatBody = ({ title, Icon, value }: StatBodyProps) => {
       <Icon fontSize="32px" />
       <VStack flex="1" alignItems="start" spacing={0}>
         <Body size="sm" medium light>
-          {title}:
+          {title}
         </Body>
-        {value}
+        {value || 'N/A'}
       </VStack>
     </HStack>
   )
