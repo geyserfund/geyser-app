@@ -128,6 +128,7 @@ export const PostView = () => {
                     colorScheme="primary1"
                     width="160px"
                     display={{ base: 'none', lg: 'undefined' }}
+                    onClick={() => navigate(getPath('projectFunding', project?.name), { state: { entryId: entry.id } })}
                   >
                     {t('Contribute')}
                   </Button>

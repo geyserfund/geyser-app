@@ -307,7 +307,7 @@ export const PostCreateEdit = () => {
       </VStack>
       <AlertDialogue
         {...confirmViewPostModal}
-        title={t('Unsaved changed will be lost !')}
+        title={t('Unsaved changes will be lost!')}
         description={t('Are you sure you want to leave this screen?')}
         hasCancel
         positiveButtonProps={{
