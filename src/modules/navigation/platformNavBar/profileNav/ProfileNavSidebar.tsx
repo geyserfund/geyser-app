@@ -1,6 +1,6 @@
 import { Menu, MenuList } from '@chakra-ui/react'
 
-import { NavigationBase, NavigationDirection } from '../sideNavBase/NavigationBase'
+import { NavigationBase, NavigationDirection } from '../../components/sideNavBase'
 import { ProfileNavButton } from './components'
 import { ProfileNavContent } from './ProfileNavContent'
 import { useProfileSideNavAtom } from './profileSideNavAtom'

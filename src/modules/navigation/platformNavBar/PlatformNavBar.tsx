@@ -13,10 +13,9 @@ import { AuthModal } from '../../../components/molecules'
 import { useAuthContext } from '../../../context'
 import { useAuthModal } from '../../../pages/auth/hooks'
 import { dimensions } from '../../../shared/constants'
-import { LoginButton } from '../components/LoginButton'
-import { ProfileNav } from '../profileNav/ProfileNav'
 import { BrandLogo, BrandLogoFull } from './components/BrandLogo'
 import { LoggedOutModal } from './components/LoggedOutModal'
+import { LoginButton } from './components/LoginButton'
 import { ProjectLogo } from './components/ProjectLogo'
 import { ProjectSelectMenu } from './components/ProjectSelectMenu'
 import {
@@ -24,9 +23,10 @@ import {
   isLandingPageRouteAtom,
   shouldShowGeyserLogoAtom,
   shouldShowProjectLogoAtom,
-} from './topNavBarAtom'
+} from './platformNavBarAtom'
+import { ProfileNav } from './profileNav/ProfileNav'
 
-export const TopNavBar = () => {
+export const PlatformNavBar = () => {
   const { isLoggedIn, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose } = useAuthModal()
 

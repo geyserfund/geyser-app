@@ -9,7 +9,7 @@ import { toPx } from '@/utils'
 
 import { DiscoveryBottomNav } from '../navigation/discoveryNav/DiscoveryBottomNav'
 import { DiscoverySideNav } from '../navigation/discoveryNav/DiscoverySideNav'
-import { isLandingPageRouteAtom } from '../navigation/topNavBar/topNavBarAtom'
+import { isLandingPageRouteAtom } from '../navigation/platformNavBar/platformNavBarAtom'
 
 export const Discovery = () => {
   const isLandingPageRoute = useAtomValue(isLandingPageRouteAtom)

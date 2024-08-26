@@ -14,10 +14,9 @@ import { useAtomValue } from 'jotai'
 import { PiArrowUpRight } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
+import { useAuthContext } from '@/context'
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
-
-import { useAuthContext } from '../../../context'
-import { Body } from '../../../shared/components/typography'
+import { Body } from '@/shared/components/typography'
 import {
   dimensions,
   FeedbackUrl,
@@ -27,8 +26,9 @@ import {
   GeyserSubscribeUrl,
   GeyserUpdatesUrl,
   GuideUrl,
-} from '../../../shared/constants'
-import { DiscoveryNavItemKey, discoveryNavItems } from '../discoveryNav/discoveryNavData'
+} from '@/shared/constants'
+
+import { DiscoveryNavItemKey, discoveryNavItems } from '../../discoveryNav/discoveryNavData'
 import { ProfileNavUserInfo } from './components'
 import { ModeChange } from './components/ModeChange'
 

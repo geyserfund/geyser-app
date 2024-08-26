@@ -1,12 +1,14 @@
-import { Box, VStack } from '@chakra-ui/react'
+import { Button, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useMemo } from 'react'
-import { Outlet, useParams } from 'react-router-dom'
+import { PiArrowLeft } from 'react-icons/pi'
+import { Link, Outlet, useParams } from 'react-router-dom'
 
-import { dimensions } from '@/shared/constants'
-import { standardPadding } from '@/shared/styles'
+import { ProjectNavContainer } from '@/modules/navigation/components/topNav'
+import { dimensions, getPath } from '@/shared/constants'
 
 import { CardLayout } from '../../../../shared/components/layouts'
-import { toInt, useMobileMode } from '../../../../utils'
+import { useMobileMode } from '../../../../utils'
 import { ProfileError } from '../../components/ProfileError'
 import { useUserProfile } from '../../hooks/useUserProfile'
 import { ProfileSettingsMenuDesktop } from './navigation/ProfileSettingsMenu'
@@ -14,14 +16,14 @@ import { ProfileSettingsMenuDesktop } from './navigation/ProfileSettingsMenu'
 export const ProfileSettings = () => {
   const params = useParams<{ userId: string }>()
   const userId = useMemo(() => {
-    return toInt(params.userId)
+    return params.userId
   }, [params])
 
   const { error } = useUserProfile(userId)
 
   const isMobile = useMobileMode()
 
-  if (error) {
+  if (error || !userId) {
     return <ProfileError />
   }
 
@@ -33,16 +35,25 @@ export const ProfileSettings = () => {
         base: `${dimensions.projectNavBar.mobile.height}px`,
         lg: `${dimensions.projectNavBar.desktop.height}px`,
       }}
-      paddingX={standardPadding}
       paddingBottom={10}
       alignItems="center"
     >
-      <Box w="100%" height="100%" maxWidth={dimensions.maxWidth}>
-        <CardLayout dense noborder={isMobile} w="full" direction="row" spacing={0} height="100%">
-          {!isMobile && <ProfileSettingsMenuDesktop />}
-          <Outlet />
-        </CardLayout>
-      </Box>
+      <ProjectNavContainer>
+        <Button
+          as={Link}
+          to={getPath('userProfile', userId)}
+          size="lg"
+          variant="ghost"
+          colorScheme="neutral1"
+          leftIcon={<PiArrowLeft />}
+        >
+          {t('Back to profile')}
+        </Button>
+      </ProjectNavContainer>
+      <CardLayout dense noborder={isMobile} w="full" direction="row" spacing={0} height="100%">
+        {!isMobile && <ProfileSettingsMenuDesktop />}
+        <Outlet />
+      </CardLayout>
     </VStack>
   )
 }

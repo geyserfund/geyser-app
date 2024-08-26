@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { useEffect } from 'react'
 import { PiNotePencil, PiPlus } from 'react-icons/pi'
 
-import { BottomNavBarContainer } from '@/modules/navigation/bottomNav'
+import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
 

@@ -4,8 +4,8 @@ import { PropsWithChildren } from 'react'
 import { PiArrowLeft } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
+import { ProjectNavContainer } from '@/modules/navigation/components/topNav'
 import { RightSideStickyLayout } from '@/modules/project/components/RightSideStickyLayout'
-import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
 import { dimensions } from '@/shared/constants'
 
 type FundingLayoutProps = {
