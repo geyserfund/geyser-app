@@ -1,4 +1,5 @@
 import { Button, ButtonProps, HStack, Link, StackProps, VStack } from '@chakra-ui/react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Body, H3 } from '@/shared/components/typography'
@@ -10,6 +11,7 @@ export interface ProjectRowLayoutProps extends Omit<StackProps, 'title'> {
   onSeeAllClick?: () => void
   seeAllProps?: ButtonProps & { href: string; isExternal: boolean }
   seeAllText?: string
+  rightContent?: React.ReactNode
 }
 
 export const ProjectRowLayout = ({
@@ -19,6 +21,7 @@ export const ProjectRowLayout = ({
   onSeeAllClick,
   seeAllProps,
   seeAllText,
+  rightContent,
   ...rest
 }: ProjectRowLayoutProps) => {
   const { t } = useTranslation()
@@ -42,6 +45,7 @@ export const ProjectRowLayout = ({
             {seeAllText || t('See all')}
           </Button>
         )}
+        {rightContent}
       </HStack>
       {children}
     </VStack>

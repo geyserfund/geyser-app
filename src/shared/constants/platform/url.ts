@@ -210,6 +210,8 @@ export const NoContributionImageUrl = 'https://storage.googleapis.com/geyser-pro
 
 export const MegaphoneUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/megaphone.png'
 
+export const MegaphoneStar = 'https://storage.googleapis.com/geyser-projects-media/utils/megaphoneStar.png'
+
 export const GoalsFlagUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/milestone.png'
 
 export const NotFoundPageImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/404-page-not-found.png'
