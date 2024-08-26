@@ -1,6 +1,6 @@
 import { Box, HStack, Image, Skeleton, SkeletonCircle, VStack } from '@chakra-ui/react'
 import { PiLightning, PiRocketLaunch } from 'react-icons/pi'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
 import { Body } from '@/shared/components/typography'
@@ -48,8 +48,6 @@ export const TopContributors = ({ period }: TopContributorsProps) => {
 }
 
 const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributorLeaderboardRow; rank: number }) => {
-  const navigate = useNavigate()
-
   const { formatAmount } = useCurrencyFormatter()
 
   const formattedAmountContributed = formatAmount(contributor.contributionsTotalUsd, Currency.Usdcent)
@@ -58,15 +56,12 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
     return text.length > maxLength ? text.slice(0, maxLength) + '...' : text
   }
 
-  const handleClick = () => {
-    navigate(getPath('userProfile', contributor.username))
-  }
-
   return (
     <HStack
       width="100%"
       spacing={4}
-      onClick={handleClick}
+      as={Link}
+      to={getPath('userProfile', contributor.username)}
       _hover={{ backgroundColor: 'neutral1.3', cursor: 'pointer' }}
       py={1}
       px={4}
