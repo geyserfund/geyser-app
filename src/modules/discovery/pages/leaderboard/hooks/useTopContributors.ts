@@ -1,13 +1,10 @@
-import { useQuery } from '@apollo/client'
 import { useState } from 'react'
 
-import { GlobalContributorLeaderboardRow, LeaderboardPeriod } from '@/types'
-
-import { QUERY_LEADERBOARD_GLOBAL_CONTRIBUTORS } from '../graphql/queries/topContributorsQuery'
+import { GlobalContributorLeaderboardRow, LeaderboardPeriod, useLeaderboardGlobalContributorsQuery } from '@/types'
 
 export const useTopContributors = (period: LeaderboardPeriod, top: number) => {
   const [contributors, setContributors] = useState<GlobalContributorLeaderboardRow[]>([])
-  const { loading } = useQuery(QUERY_LEADERBOARD_GLOBAL_CONTRIBUTORS, {
+  const { loading } = useLeaderboardGlobalContributorsQuery({
     variables: { input: { period, top } },
     onCompleted(data) {
       setContributors(data.leaderboardGlobalContributorsGet)
