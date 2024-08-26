@@ -2,6 +2,7 @@ import { Button, HStack, Link, StackProps } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiLink, PiXLogo } from 'react-icons/pi'
 
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
 
 import { shareOnTwitterWithLink } from '../../../../../utils/twitterShareTemplate'
@@ -14,9 +15,13 @@ interface ShareBlockProps extends StackProps {
 export const ShareBlock = ({ projectName, ...rest }: ShareBlockProps) => {
   const { t } = useTranslation()
 
+  const { isProjectOwner } = useProjectAtom()
+
   const { getShareProjectUrl } = useProjectShare()
   const projectUrl = getShareProjectUrl({ clickedFrom: CampaignContent.projectShareModal })
   const { onCopy, hasCopied } = useCopyToClipboard(projectUrl)
+
+  const shareLink = shareOnTwitterWithLink(projectUrl, t, !isProjectOwner)
 
   return (
     <HStack w="full" {...rest}>
@@ -36,7 +41,7 @@ export const ShareBlock = ({ projectName, ...rest }: ShareBlockProps) => {
         rightIcon={<PiXLogo />}
         as={Link}
         isExternal
-        href={shareOnTwitterWithLink(projectUrl, t)}
+        href={shareLink}
         textDecoration="none"
       >
         {t('Post')}

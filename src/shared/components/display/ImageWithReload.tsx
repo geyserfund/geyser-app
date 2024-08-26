@@ -71,7 +71,7 @@ export const ImageWithReload = ({
   const renderSkeletonImage = () => {
     return (
       <>
-        <Skeleton height={'350px'} width={'500px'} maxHeight={'500px'} {...rest} />
+        <Skeleton height={{ base: '150px', lg: '350px' }} width={'500px'} maxHeight={'500px'} {...rest} />
       </>
     )
   }

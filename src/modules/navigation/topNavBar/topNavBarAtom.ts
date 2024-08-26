@@ -65,6 +65,9 @@ export const shouldShowGeyserLogoAtom = atom((get) => {
 /** True if current route is one of the platform routes */
 export const isDiscoveryRoutesAtom = atom(routeMatchForAtom(discoveryRoutes))
 
+/** True if current route is the landing page */
+export const isLandingPageRouteAtom = atom(routeMatchForAtom([getPath('discoveryLanding')]))
+
 const topNavBarAnimateAtom = atom((get) => {
   const profileSidebar = get(profileSideNavAtom)
   // const projectSidebar = get(projectSideNavAtom)

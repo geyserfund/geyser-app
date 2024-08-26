@@ -53,11 +53,11 @@ export const ProjectCreateLayout = ({
       {...props}
     >
       {isMobile ? (
-        <Box sx={contentSx} mt={4} mb="80px" mx="10px" h="full">
+        <Box sx={contentSx} mt={4} mb={28} mx="10px" h="full">
           {content}
         </Box>
       ) : (
-        <CardLayout sx={contentSx} mt={'20px'} mb={'20px'} overflowY={'auto'} h="full">
+        <CardLayout sx={contentSx} my={6} overflowY={'auto'} h="full">
           {content}
         </CardLayout>
       )}
@@ -65,11 +65,14 @@ export const ProjectCreateLayout = ({
         <HStack
           position={{ base: 'fixed', lg: 'absolute' }}
           w="full"
-          px={{ base: '10px', lg: '0px' }}
-          py="10px"
+          px={{ base: 3, lg: '0px' }}
           backgroundColor="utils.pbg"
           maxWidth={{ base: 600, lg: 'none' }}
-          bottom={{ base: '0px', lg: '-50px' }}
+          bottom={{ base: '0px', lg: '-55px' }}
+          borderTop={{ base: '1px solid', lg: 'none' }}
+          paddingTop={3}
+          paddingBottom={5}
+          borderColor="neutral1.6"
           alignSelf="center"
         >
           <Button

@@ -56,6 +56,7 @@ export function SelectComponent<T, S extends boolean>({
               }),
         }
       },
+
       placeholder(base, props) {
         return {
           ...base,

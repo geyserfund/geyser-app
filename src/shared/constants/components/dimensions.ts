@@ -7,6 +7,14 @@ export const dimensions = {
       height: 80, // 20 * 2 + 40
     },
   },
+  topNavBarFilterOffset: {
+    desktop: {
+      height: 0, // no filter component row for desktop
+    },
+    mobile: {
+      height: 60, // 40 (fitler component) + 20 ( spacing)
+    },
+  },
   projectNavBar: {
     desktop: {
       height: 44 + 16,

@@ -32,7 +32,7 @@ import {
 import { useProjectPageHeaderSummaryQuery } from '../../../../../../../../types'
 import { toInt, useMobileMode } from '../../../../../../../../utils'
 import { toLargeImageUrl } from '../../../../../../../../utils/tools/imageSizes'
-import { useProjectAtom } from '../../../../../../hooks/useProjectAtom'
+import { useProjectAtom, useWalletAtom } from '../../../../../../hooks/useProjectAtom'
 import { FollowButton } from '../../components'
 import { CreatorEditButton } from '../../components/CreatorEditButton'
 import { CreatorSocial } from './components/CreatorSocial'
@@ -43,8 +43,8 @@ import { VideoPlayer } from './components/VideoPlayer'
 
 export const Header = () => {
   const { t } = useTranslation()
-  const { project, loading, partialUpdateProject } = useProjectAtom()
-  // const { wallet } = useWalletAtom()
+  const { project, isProjectOwner, loading, partialUpdateProject } = useProjectAtom()
+  const { wallet } = useWalletAtom()
 
   const isMobile = useMobileMode()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -116,7 +116,7 @@ export const Header = () => {
       {/* {statusContent()} */}
 
       <CardLayout id={'HEADER_ITEM'} w="full" dense spacing={0} position="relative">
-        <ProjectStatusBar />
+        <ProjectStatusBar project={project} wallet={wallet} isProjectOwner={isProjectOwner} />
         <Box>{renderImageOrVideo()}</Box>
         <Stack
           direction={{ base: 'column', lg: 'row' }}
@@ -196,7 +196,7 @@ export const HeaderSkeleton = () => {
   return (
     <CardLayout w="full" mobileDense padding={0} spacing={0}>
       <Box w="full">
-        <Skeleton borderRadius="8px 8px 0px 0px" width="100%" height="220px" />
+        <Skeleton borderRadius="8px 8px 0px 0px" width="100%" height={{ base: '150px', lg: '220px' }} />
       </Box>
       <HStack
         spacing={4}

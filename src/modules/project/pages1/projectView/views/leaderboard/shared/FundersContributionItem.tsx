@@ -14,7 +14,8 @@ export const FundersContributionItem = ({ contribution }: { contribution: Projec
           <Body size="sm">
             {commaFormatted(contribution.amountPaid)}{' '}
             <Body as="span" size="sm" muted>
-              sats {convertSatsToUsd({ sats: contribution.amountPaid, bitcoinQuote: contribution.bitcoinQuote })}
+              sats{' '}
+              {`($${convertSatsToUsd({ sats: contribution.amountPaid, bitcoinQuote: contribution.bitcoinQuote })})`}
             </Body>
           </Body>
           <TimeAgo date={contribution.paidAt} />

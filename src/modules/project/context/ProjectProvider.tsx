@@ -17,7 +17,7 @@ export const ProjectProvider = ({ children, ...props }: PropsWithChildren<Projec
     return () => {
       resetProject()
     }
-  }, [props.projectId, props.projectName, resetProject])
+  }, [props.projectId, props.projectName])
 
   return <>{children}</>
 }

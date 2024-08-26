@@ -18,6 +18,12 @@ const projectTweetTemplates = [
   'Making a difference, one step at a time. Join our mission on @geyserfund and help us leave a lasting impact. Your support makes all the difference: {{projectLink}} #MakeADifference',
 ]
 
+const projectTweetTemplatesContributor = [
+  "Let's make this project happen! {{projectLink}} on @geyserfund",
+  'Cool project! {{projectLink}} on @geyserfund ',
+  'Help us make this project happen! {{projectLink}} on @geyserfund',
+]
+
 export const shareOnTwitter = (projectName: string, t: any) => {
   const projectLink = `${window.location.origin}/project/${projectName}`
 
@@ -26,7 +32,14 @@ export const shareOnTwitter = (projectName: string, t: any) => {
   return generateProjectTwitterShareUrl(tweetTemplate, projectLink)
 }
 
-export const shareOnTwitterWithLink = (projectLink: string, t: any) => {
+export const shareOnTwitterWithLink = (projectLink: string, t: any, contributor?: boolean) => {
+  if (contributor) {
+    const randomKey =
+      projectTweetTemplatesContributor[Math.floor(Math.random() * projectTweetTemplatesContributor.length)] || ''
+    const tweetTemplate = t(randomKey)
+    return generateProjectTwitterShareUrl(tweetTemplate, projectLink)
+  }
+
   const randomKey = projectTweetTemplates[Math.floor(Math.random() * projectTweetTemplates.length)] || ''
   const tweetTemplate = t(randomKey)
   return generateProjectTwitterShareUrl(tweetTemplate, projectLink)

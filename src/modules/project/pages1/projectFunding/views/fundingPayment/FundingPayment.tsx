@@ -33,7 +33,7 @@ export const FundingPayment = () => {
         minHeight: derivedDimensions.heightAfterTopNavBar,
       }}
     >
-      <CardLayout flex={6} h="full" justifyContent="space-between">
+      <CardLayout mobileDense flex={6} h="full" justifyContent="space-between">
         <VStack flex={1} w="full" alignItems="start">
           <H1 size="2xl" bold>
             {t('Invoice')}
