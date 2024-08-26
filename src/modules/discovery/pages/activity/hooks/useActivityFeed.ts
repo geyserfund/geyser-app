@@ -1,11 +1,12 @@
 import { useAtom } from 'jotai'
 import { useState } from 'react'
 
-import { ActivityFeedName, useActivityFeedQuery } from '@/types'
+import { usePaginationAtomHook } from '@/shared/hooks'
+import { ActivityFeedFragmentFragment, ActivityFeedName, useActivityFeedQuery } from '@/types'
 
 import { activityFeedFollowedProjectsAtom, activityFeedGlobalAtom } from '../state/activityFeedAtom'
 
-const MAXIMUM_ACTIVITY_ITEMS = 32
+const MAXIMUM_ACTIVITY_ITEMS = 20
 
 export const useActivityFeed = (feed: ActivityFeedName) => {
   const [followedProjectsActivities, setFollowedProjectsActivities] = useAtom(activityFeedFollowedProjectsAtom)
@@ -27,12 +28,7 @@ export const useActivityFeed = (feed: ActivityFeedName) => {
       },
     },
     onCompleted(data) {
-      if (feed === ActivityFeedName.FollowedProjects) {
-        setFollowedProjectsActivities(data.activitiesGet?.activities || [])
-      } else {
-        setGlobalActivities(data.activitiesGet?.activities || [])
-      }
-
+      handleDataUpdate(data.activitiesGet?.activities || [])
       setIsLoading(false)
     },
     onError(error) {
@@ -40,10 +36,29 @@ export const useActivityFeed = (feed: ActivityFeedName) => {
     },
   })
 
+  const { handleDataUpdate, isLoadingMore, noMoreItems, fetchNext } =
+    usePaginationAtomHook<ActivityFeedFragmentFragment>({
+      fetchMore,
+      queryName: ['activitiesGet', 'activities'],
+      itemLimit: MAXIMUM_ACTIVITY_ITEMS,
+      where: {
+        feed,
+      },
+      setData(data) {
+        if (feed === ActivityFeedName.FollowedProjects) {
+          setFollowedProjectsActivities(data)
+        } else {
+          setGlobalActivities(data)
+        }
+      },
+    })
+
   return {
     followedProjectsActivities,
     globalActivities,
     isLoading,
-    fetchMore,
+    isLoadingMore,
+    noMoreItems,
+    fetchNext,
   }
 }

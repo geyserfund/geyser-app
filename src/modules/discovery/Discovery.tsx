@@ -15,6 +15,7 @@ export const Discovery = () => {
       <VStack w="full" h="full" {...discoveryPageCommonLayoutStyles}>
         <Box
           w="100%"
+          h="100%"
           maxWidth={`${dimensions.maxWidth + 24 * 2}`}
           position="relative"
           paddingX={standardPadding}

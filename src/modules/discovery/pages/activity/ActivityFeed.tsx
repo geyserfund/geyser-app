@@ -27,7 +27,12 @@ export const Activity = () => {
   const { render, ...animatedNavBarProps } = useAnimatedNavBar({ items, defaultView: 'projectsIFollow' })
 
   return (
-    <VStack paddingTop={{ base: `${dimensions.animatedNavBar.height.base}px`, lg: 0 }} width="full" spacing={4}>
+    <VStack
+      h="full"
+      paddingTop={{ base: `${dimensions.animatedNavBar.height.base}px`, lg: 0 }}
+      width="full"
+      spacing={4}
+    >
       <HStack
         position={{ base: 'fixed', lg: 'sticky' }}
         paddingX={{ base: 3, lg: 0 }}
@@ -39,7 +44,6 @@ export const Activity = () => {
         <AnimatedNavBar {...animatedNavBarProps} showIcon showLabel />
       </HStack>
 
-      <VStack width="full" height="100%"></VStack>
       {render && render()}
     </VStack>
   )
