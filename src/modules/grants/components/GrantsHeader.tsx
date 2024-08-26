@@ -166,26 +166,20 @@ const BannerItem = ({
   label,
   value,
   loading,
-  reverse,
   suffix,
 }: {
   label: string
   value: string
   loading: boolean
-  reverse?: boolean
   suffix?: string
 }) => {
-  if (loading) {
-    return <Skeleton height="20px" width="60px" />
-  }
-
   return (
     <HStack>
       <Body fontSize={{ base: 'xl', lg: '3xl' }} muted medium>
         {label}:
       </Body>
       <Body fontSize={{ base: 'xl', lg: '3xl' }} color="neutral1.12" bold>
-        {value}
+        {loading ? <Skeleton height="20px" width="40px" /> : value}
       </Body>
       {suffix && (
         <Body fontSize={{ base: 'xl', lg: '3xl' }} muted medium>
