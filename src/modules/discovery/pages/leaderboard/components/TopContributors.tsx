@@ -31,7 +31,7 @@ export const TopContributors = ({ period }: TopContributorsProps) => {
       borderRadius={{ base: 'none', lg: '8px' }}
       border={{ base: 'none', lg: '1px solid' }}
       borderColor={{ base: 'transparent', lg: 'neutralAlpha.6' }}
-      p={{ base: 0, lg: 4 }}
+      py={{ base: 0, lg: 4 }}
       overflow="hidden"
     >
       {loading ? (
@@ -65,13 +65,12 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
 
   return (
     <HStack
-      width="95%"
+      width="100%"
       spacing={4}
-      padding={'8px, 20px, 8px, 16px'}
       onClick={handleClick}
-      borderRadius={'lg'}
       _hover={{ backgroundColor: 'neutral1.3', cursor: 'pointer' }}
       py={1}
+      px={4}
     >
       <Box justifyContent="center" minWidth="30px">
         {rank <= 3 ? (
