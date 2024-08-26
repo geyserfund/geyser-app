@@ -141,7 +141,7 @@ const GrantsHeader = () => {
               rightIcon={<PiCoins size={18} />}
               onClick={handleDonateToGeyser}
             >
-              {t('Donate to Geyser Grant')}
+              {t('Donate to Geyser Grants')}
             </Button>
             <Button
               w="100%"
