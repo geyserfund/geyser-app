@@ -23,7 +23,7 @@ interface PeriodOption {
 export const Leaderboard = () => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
-  const [period, setPeriod] = useState<LeaderboardPeriod>(LeaderboardPeriod.AllTime)
+  const [period, setPeriod] = useState<LeaderboardPeriod>(LeaderboardPeriod.Month)
 
   const { projectsCount, bitcoinsRaised, contributorsCount, loading } = useSummaryBannerStats()
 
