@@ -1,8 +1,7 @@
 import { Box, HStack, Image, Skeleton, SkeletonCircle, VStack } from '@chakra-ui/react'
+import { PiLightning, PiRocketLaunch } from 'react-icons/pi'
 import { useNavigate } from 'react-router-dom'
 
-import { ContributionsIcon1 } from '@/components/icons/svg/ContributionsIcon1'
-import { RocketLaunchIcon } from '@/components/icons/svg/RocketLaunch'
 import { ImageWithReload } from '@/components/ui'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
@@ -92,10 +91,21 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
         <Body fontSize={'14px'} bold isTruncated>
           {truncateText(contributor.username, 35)}
         </Body>
-        <Body size="xs" dark>
-          {formattedAmountContributed} <ContributionsIcon1 /> {contributor.projectsContributedCount}{' '}
-          <RocketLaunchIcon />
-        </Body>
+        <HStack spacing={1}>
+          <HStack spacing={0.5}>
+            <Body size="xs" dark>
+              {formattedAmountContributed}
+            </Body>
+            <PiLightning size="12px" />
+          </HStack>
+
+          <HStack spacing={0.5}>
+            <Body size="xs" dark>
+              {contributor.projectsContributedCount}{' '}
+            </Body>
+            <PiRocketLaunch size="12px" />
+          </HStack>
+        </HStack>
       </VStack>
     </HStack>
   )

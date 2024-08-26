@@ -1,9 +1,8 @@
 import { Box, HStack, StackProps } from '@chakra-ui/react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { PiLightning, PiTrophy } from 'react-icons/pi'
 
-import { ContributionsIcon1 } from '@/components/icons/svg/ContributionsIcon1'
-import { TrophyIcon } from '@/components/icons/svg/TrophyIcon'
 import { Body } from '@/shared/components/typography'
 import { GrantStatusEnum } from '@/types'
 
@@ -44,21 +43,22 @@ export const GrantStatus = ({ status, startDate }: { status: GrantStatusEnum; st
   const { t } = useTranslation()
 
   if (startDate > Date.now()) {
-    return <GrantStatusBadge icon={<ContributionsIcon1 />} bgColor="warning.9" label={t('Upcoming')} />
+    return <GrantStatusBadge icon={<PiLightning size="18px" />} bgColor="warning.9" label={t('Upcoming')} />
   }
 
   switch (status) {
     case GrantStatusEnum.Closed:
       return (
         <GrantStatusBadge
-          icon={<TrophyIcon viewBox="0 1 18 18" color="white" />}
+          icon={<PiTrophy size={'18px'} />}
           bgColor="neutral1.9"
+          color={'neutral1.1'}
           textColor={'neutral1.1'}
           label={t('Awarded')}
         />
       )
     case GrantStatusEnum.FundingOpen:
-      return <GrantStatusBadge icon={<ContributionsIcon1 />} bgColor="primary1.9" label={t('Open')} />
+      return <GrantStatusBadge icon={<PiLightning size="18px" />} bgColor="primary1.9" label={t('Open')} />
     default:
       return null
   }

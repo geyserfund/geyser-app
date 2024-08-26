@@ -1,8 +1,8 @@
 import { Box, Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { PiRocket } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
-import { RocketLaunchIcon } from '@/components/icons/svg/RocketLaunch'
 import { useAuthContext } from '@/context'
 import { Body } from '@/shared/components/typography'
 import { DiamondUrl, getPath } from '@/shared/constants'
@@ -81,7 +81,7 @@ const LaunchNewProjectBanner = () => {
         size="md"
         variant="solid"
         colorScheme="primary1"
-        rightIcon={<RocketLaunchIcon />}
+        rightIcon={<PiRocket size="12px" />}
         onClick={handleClick}
         width={{ base: '100%', lg: 'auto' }}
       >

@@ -1,9 +1,8 @@
 import { Box, HStack, Image, Skeleton, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { PiLightning, PiUsers } from 'react-icons/pi'
 import { useNavigate } from 'react-router-dom'
 
-import { ContributionsIcon1 } from '@/components/icons/svg/ContributionsIcon1'
-import { ContributorsIcon1 } from '@/components/icons/svg/ContributorsIcon1'
 import { ImageWithReload } from '@/components/ui'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
@@ -110,18 +109,26 @@ const ProjectItem = ({ project, rank }: { project: GlobalProjectLeaderboardRow; 
                 {`(${formattedUsdAmount})`}
               </Body>
             </Body>
-
-            <Body size="xs" muted>
-              {t('through')}{' '}
-              <Body as="span" size="xs" dark>
-                {project.contributionsCount}
-              </Body>{' '}
-              <ContributionsIcon1 /> {t('from')}{' '}
-              <Body as="span" size="xs" dark>
-                {project.contributorsCount}
-              </Body>{' '}
-              <ContributorsIcon1 />
-            </Body>
+            <HStack spacing={1}>
+              <HStack spacing={0.5}>
+                <Body size="xs" muted>
+                  {t('through')}{' '}
+                  <Body as="span" size="xs" dark>
+                    {project.contributionsCount}
+                  </Body>{' '}
+                </Body>
+                <PiLightning size="12px" /> {t('from')}{' '}
+              </HStack>
+              <HStack spacing={0.5}>
+                <Body size="xs" dark>
+                  <Body as="span" size="xs" muted>
+                    {t('from')}{' '}
+                  </Body>
+                  {project.contributorsCount}
+                </Body>{' '}
+                <PiUsers size="12px" />
+              </HStack>
+            </HStack>
           </VStack>
         </VStack>
       </HStack>
