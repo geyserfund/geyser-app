@@ -30,13 +30,7 @@ export const ProjectIFollowGrid = () => {
         width="100%"
       >
         {followedProjectsActivities.map((activity) => (
-          <>
-            <ProjectIFollowGridItem key={activity.project.id} project={activity.project} count={activity.count} />
-            <ProjectIFollowGridItem key={activity.project.id + 1} project={activity.project} count={activity.count} />
-            <ProjectIFollowGridItem key={activity.project.id + 2} project={activity.project} count={activity.count} />
-            <ProjectIFollowGridItem key={activity.project.id + 3} project={activity.project} count={activity.count} />
-            <ProjectIFollowGridItem key={activity.project.id + 4} project={activity.project} count={activity.count} />
-          </>
+          <ProjectIFollowGridItem key={activity.project.id} project={activity.project} count={activity.count} />
         ))}
       </Grid>
     </>
