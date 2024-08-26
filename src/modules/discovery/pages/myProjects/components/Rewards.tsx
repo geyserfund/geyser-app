@@ -46,20 +46,20 @@ const Header = ({ rewardsSold }: { rewardsSold: number | undefined }) => {
     <VStack w="100%" align="stretch" spacing={0.5}>
       <HStack w="100%" justifyContent="center">
         <PiBag />
-        <Body fontSize={'14px'} regular muted>
+        <Body size={'sm'} regular muted>
           {t('Rewards Sold')}
         </Body>
       </HStack>
 
       {noRewardsSold ? (
         <HStack w="100%" justifyContent="center">
-          <Body fontSize={'20px'} bold>
+          <Body size={'xl'} bold>
             {t('No rewards sold')}
           </Body>
         </HStack>
       ) : (
         <HStack w="100%" justifyContent="center">
-          <Body fontSize={'20px'} bold>
+          <Body size={'xl'} bold>
             {rewardsSold}
           </Body>
         </HStack>
@@ -93,14 +93,14 @@ const RewardItem = ({ reward }: { reward: Reward }) => {
   return (
     <HStack w="100%" justifyContent="flex-start">
       {reward.image && <Image src={reward.image} borderRadius="lg" width="20px" height="20px" alt={reward.name} />}
-      <Body fontSize={'16px'} medium>
+      <Body size="md" medium>
         {reward.name}
-        <Body as="span" color={'neutralAlpha.11'}>
+        <Body as="span" light>
           {' '}
           {t('sold')}{' '}
         </Body>
         {reward.count}
-        <Body as="span" color={'neutralAlpha.11'}>
+        <Body as="span" light>
           {' '}
           {reward.count > 1 ? t('times.') : t('time.')}
         </Body>

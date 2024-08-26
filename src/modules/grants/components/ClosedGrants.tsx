@@ -15,7 +15,7 @@ const ClosedGrants = ({ closedGrants }: { closedGrants: Grant[] }) => {
 
   return (
     <VStack mt={10} w="100%" alignItems="flex-start">
-      <Body fontSize={'24px'} bold>
+      <Body size="2xl" bold>
         {t('Past Grants')}
       </Body>
       {closedGrants.map((grant) => (

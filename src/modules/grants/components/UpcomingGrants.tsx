@@ -15,7 +15,7 @@ const UpcomingGrants = ({ upcomingGrants }: { upcomingGrants: Grant[] }) => {
 
   return (
     <VStack mt={10} w="100%" alignItems="flex-start">
-      <Body fontSize={'24px'} bold>
+      <Body size={'2xl'} bold>
         {t('Upcoming Grants')}
       </Body>
       {upcomingGrants.map((grant) => (

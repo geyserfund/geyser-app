@@ -47,7 +47,7 @@ export const Banner = ({ title, items, loading, reverse = false }: BannerProps) 
         {isMobile ? (
           <>
             <Body
-              fontSize={{ base: '18px', lg: '20px' }}
+              size={{ base: 'lg', lg: 'xl' }}
               textAlign={{ base: 'left', lg: 'center' }}
               width="100%"
               dark
@@ -62,7 +62,7 @@ export const Banner = ({ title, items, loading, reverse = false }: BannerProps) 
             <Items items={items} loading={loading} />
 
             <Body
-              fontSize={{ base: '18px', lg: '20px' }}
+              size={{ base: 'lg', lg: 'xl' }}
               textAlign={{ base: 'left', lg: 'center' }}
               width="100%"
               dark

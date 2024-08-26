@@ -57,10 +57,10 @@ const GrantInfo = ({
   if (compact) {
     return (
       <HStack alignItems="flex-start" spacing={1}>
-        <Body fontSize={'12px'} color="neutralAlpha.9" medium>
+        <Body size={'xs'} muted medium>
           {label}:
         </Body>
-        <Body fontSize={'12px'} bold>
+        <Body size={'xs'} bold>
           {value}
         </Body>
       </HStack>
@@ -69,13 +69,13 @@ const GrantInfo = ({
 
   return (
     <VStack alignItems="flex-start" spacing={0}>
-      <Body fontSize={{ base: '12px', lg: '14px' }} color="neutralAlpha.11" medium>
+      <Body size={{ base: 'xs', lg: 'sm' }} muted medium>
         {label}
       </Body>
       {endDate ? (
         <LargeGrantCountdown endDate={endDate} />
       ) : (
-        <Body fontSize={{ base: '18px', lg: '20px' }} medium>
+        <Body size={{ base: 'lg', lg: 'xl' }} medium>
           {value}
         </Body>
       )}
@@ -88,15 +88,15 @@ export const LargeGrantCountdown = ({ endDate = 0 }: { endDate: number }) => {
 
   return (
     <HStack spacing={1} alignItems="flex-start">
-      <Body fontSize={{ base: '18px', lg: '20px' }} medium>
+      <Body size={{ base: 'lg', lg: 'xl' }} medium>
         <span>{days}</span>
         <span>d</span>
       </Body>
-      <Body fontSize={{ base: '18px', lg: '20px' }} medium>
+      <Body size={{ base: 'lg', lg: 'xl' }} medium>
         <span>{hours}</span>
         <span>h</span>{' '}
       </Body>
-      <Body fontSize={{ base: '18px', lg: '20px' }} medium>
+      <Body size={{ base: 'lg', lg: 'xl' }} medium>
         <span>{minutes}</span>
         <span>m</span>
       </Body>

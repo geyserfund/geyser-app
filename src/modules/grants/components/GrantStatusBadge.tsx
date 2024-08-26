@@ -31,8 +31,8 @@ export const GrantStatusBadge: React.FC<GrantStatusBadgeProps> = ({
       justifyContent="center"
       {...stackProps}
     >
-      <Box fontSize={{ base: '14px', lg: '18px' }}>{icon}</Box>
-      <Body fontSize={{ base: '12px', lg: '14px' }} color={textColor} medium>
+      <Box fontSize={{ base: 'sm', lg: 'lg' }}>{icon}</Box>
+      <Body size={{ base: 'xs', lg: 'sm' }} color={textColor} medium>
         {label}
       </Body>
     </HStack>

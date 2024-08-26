@@ -1,9 +1,7 @@
-import { useQuery } from '@apollo/client'
 import { useMemo, useState } from 'react'
 
+import { useProjectStatsGetQuery } from '@/types'
 import { useNotification } from '@/utils'
-
-import { QUERY_PROJECT_STATS_GET } from '../graphql/queries/projectContributionsStatsQuery'
 
 interface ProjectStats {
   total: number
@@ -24,8 +22,7 @@ export const useProjectStats = (projectId: string) => {
     }
   }, [])
 
-  // TODO: replace with useProjectStatsQuery
-  const { loading, error } = useQuery(QUERY_PROJECT_STATS_GET, {
+  const { loading, error } = useProjectStatsGetQuery({
     variables: {
       input: {
         where: {
@@ -35,10 +32,10 @@ export const useProjectStats = (projectId: string) => {
       },
     },
     onCompleted(data) {
-      const { contributions } = data.projectStatsGet.current.projectContributionsStats
+      const contributions = data.projectStatsGet.current?.projectContributionsStats?.contributions
       setStats({
-        total: contributions.total,
-        totalUsd: contributions.totalUsd,
+        total: contributions?.total ?? 0,
+        totalUsd: contributions?.totalUsd ?? 0,
       })
     },
     onError(error) {

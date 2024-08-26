@@ -2,6 +2,7 @@ import { Box, Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiRocket } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
+import { Link } from 'react-router-dom'
 
 import { useAuthContext } from '@/context'
 import { Body } from '@/shared/components/typography'
@@ -24,7 +25,7 @@ export const MyProjects = () => {
     <>
       <VStack spacing={6} align="stretch">
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Body fontSize="24px" bold width={{ base: '100%', lg: 'auto' }}>
+          <Body size="2xl" bold width={{ base: '100%', lg: 'auto' }}>
             {t('My Projects')}
           </Body>
         </Box>
@@ -45,12 +46,6 @@ export const MyProjects = () => {
 const LaunchNewProjectBanner = () => {
   const { t } = useTranslation()
 
-  const navigate = useNavigate()
-
-  const handleClick = () => {
-    navigate(getPath('launchStart'))
-  }
-
   const isMobile = useMobileMode()
 
   const Direction = isMobile ? VStack : HStack
@@ -69,20 +64,19 @@ const LaunchNewProjectBanner = () => {
       <HStack justifyContent="flex-start" spacing={8}>
         <Image height="86px" src={DiamondUrl} alt="Launch new project" />
         <VStack alignItems="flex-start">
-          <Body fontSize="20px" medium>
+          <Body size="xl" medium>
             {t('Launch your new project')}
           </Body>
-          <Body fontSize="14px" regular>
-            {t('Transform your idea into real world projects backed by your community.')}
-          </Body>
+          <Body size="sm">{t('Transform your idea into real world projects backed by your community.')}</Body>
         </VStack>
       </HStack>
       <Button
+        as={Link}
+        to={getPath('launchStart')}
         size="md"
         variant="solid"
         colorScheme="primary1"
         rightIcon={<PiRocket size="12px" />}
-        onClick={handleClick}
         width={{ base: '100%', lg: 'auto' }}
       >
         {t('Create project')}

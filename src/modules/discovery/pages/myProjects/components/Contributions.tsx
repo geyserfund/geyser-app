@@ -88,28 +88,28 @@ const Header = ({
 }) => {
   const { t } = useTranslation()
 
-  const fontSize = noGoals ? '24px' : '20px'
+  const fontSize = noGoals ? '2xl' : 'xl'
 
   return (
     <VStack w="100%" align="stretch" spacing={0.5}>
       <HStack w="100%" justifyContent="center">
         <PiCoins size={16} />
-        <Body fontSize={'14px'} regular light>
+        <Body size="sm" light>
           {t('Contributions Received')}
         </Body>
       </HStack>
 
       {noContributionsReceived ? (
         <HStack w="100%" justifyContent="center">
-          <Body fontSize={fontSize} bold>
+          <Body size={fontSize} bold>
             {t('No contributions received')}
           </Body>
         </HStack>
       ) : (
         <HStack w="100%" justifyContent="center">
-          <Body fontSize={noGoals ? '24px' : '20px'} bold>
+          <Body size={fontSize} bold>
             {commaFormatted(total)}{' '}
-            <Body as="span" fontSize={fontSize} color={'neutralAlpha.11'} bold>
+            <Body as="span" size={fontSize} light bold>
               Sats (${commaFormatted(totalUsd)})
             </Body>
           </Body>

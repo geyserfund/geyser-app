@@ -62,13 +62,14 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
               objectFit="cover"
             />
           )}
-          <Body fontSize={'24px'} fontWeight={'bold'}>
+          <Body size="2xl" bold>
             {project.title}
           </Body>
         </HStack>
 
         <Button
           variant={'soft'}
+          colorScheme="neutral1"
           as={RouterLink}
           to={getPath('dashboardAnalytics', project.name)}
           size="md"

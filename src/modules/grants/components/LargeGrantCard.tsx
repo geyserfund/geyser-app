@@ -1,5 +1,5 @@
 import { Box, HStack, Image, VStack } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
@@ -31,14 +31,11 @@ export const GrantValues: {
 export const LargeGrantCard = ({ grant, showBanner }: Props) => {
   const isMobile = useMobileMode()
 
-  const to = getPath('grants', grant.id)
-
-  const navigate = useNavigate()
-
   return (
     <VStack
       mt={3}
-      onClick={() => navigate(to)}
+      as={Link}
+      to={getPath('grants', grant.id)}
       minWidth={'100%'}
       maxHeight={{ base: '296px', lg: '496px' }}
       cursor="pointer"
@@ -72,7 +69,7 @@ export const LargeGrantCard = ({ grant, showBanner }: Props) => {
       ) : null}
       <VStack maxHeight={{ base: '138px', lg: '179px' }} w="100%" p={{ base: 2, lg: 4 }} spacing={{ base: 2, lg: 3 }}>
         <HStack w="100%" justifyContent="space-between">
-          <Body fontSize={{ base: '16px', lg: '20px' }} medium>
+          <Body size={{ base: 'md', lg: 'lg' }} medium>
             {grant.title}
           </Body>
           {!isMobile && <GrantStatus status={grant.status} startDate={grant?.statuses[0]?.startAt || 0} />}

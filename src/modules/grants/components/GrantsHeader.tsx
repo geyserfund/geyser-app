@@ -1,14 +1,12 @@
-import { useQuery } from '@apollo/client'
 import { Box, Button, HStack, Image, Skeleton, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiCoins, PiTrophy } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 
-import { QUERY_GRANT_STATISTICS } from '@/graphqlBase/queries/grant'
 import { Body } from '@/shared/components/typography'
 import { getPath, GrantsFAQUrl, GrantsPageBannerNoiseGifUrl } from '@/shared/constants'
-import { GrantStatistics } from '@/types'
+import { useGrantStatisticsQuery } from '@/types'
 import { getShortAmountLabel, useMobileMode } from '@/utils'
 
 // TODO: Change to geyser before pushing to production
@@ -22,7 +20,7 @@ const GrantsHeader = () => {
 
   const isMobile = useMobileMode()
 
-  const { data, loading } = useQuery<{ grantStatistics: GrantStatistics }>(QUERY_GRANT_STATISTICS)
+  const { data, loading } = useGrantStatisticsQuery()
 
   const items = [
     {
@@ -76,14 +74,14 @@ const GrantsHeader = () => {
             draggable={false}
             borderTopRadius="8px"
           />
-          <Body fontSize={{ base: '28px', lg: '36px' }} bold zIndex={2}>
+          <Body size={{ base: '3xl', lg: '4xl' }} bold zIndex={2}>
             {t('Geyser Grants')}
           </Body>
           <VStack spacing={0}>
-            <Body fontSize={{ base: '16px', lg: '20px' }} regular zIndex={2} textAlign="center">
+            <Body size={{ base: 'md', lg: 'xl' }} regular zIndex={2} textAlign="center">
               {t('Funding educators, creatives and builders doing Bitcoin-only projects on Geyser.')}
             </Body>
-            <Body fontSize={{ base: '16px', lg: '20px' }} regular zIndex={2} textAlign="center">
+            <Body size={{ base: 'md', lg: 'xl' }} regular zIndex={2} textAlign="center">
               {t('Funded by bitcoiners who want to change the world.')}
             </Body>
           </VStack>
@@ -137,7 +135,8 @@ const GrantsHeader = () => {
             <Button
               w="100%"
               size="lg"
-              variant="primary"
+              variant="solid"
+              colorScheme="primary1"
               rightIcon={<PiCoins size={18} />}
               onClick={handleDonateToGeyser}
             >
@@ -146,8 +145,9 @@ const GrantsHeader = () => {
             <Button
               w="100%"
               size="lg"
-              variant="primary"
-              bg="yellow.9"
+              variant="solid"
+              colorScheme="yellow"
+              textColor="neutral1.12"
               rightIcon={<PiTrophy size={18} />}
               onClick={handleCreateGrant}
             >
