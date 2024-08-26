@@ -1,4 +1,4 @@
-import { Badge, Box, Grid, GridItem, HStack, Image } from '@chakra-ui/react'
+import { Badge, Box, Grid, GridItem, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -17,7 +17,7 @@ export const ProjectIFollowGrid = () => {
   }
 
   return (
-    <>
+    <VStack align="stretch" mt={4} spacing={4}>
       <HStack justifyContent="flex-start" alignItems="center">
         <Body size="lg" bold>
           {t('Updates on projects I follow')}
@@ -33,7 +33,7 @@ export const ProjectIFollowGrid = () => {
           <ProjectIFollowGridItem key={activity.project.id} project={activity.project} count={activity.count} />
         ))}
       </Grid>
-    </>
+    </VStack>
   )
 }
 
