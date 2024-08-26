@@ -33,9 +33,11 @@ export const MyProjects = () => {
         {inReviewProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
         {inDraftProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
       </VStack>
-      <VStack spacing={6} align="stretch">
-        <ProjectIFollowGrid />
-      </VStack>
+      {!isLoading && (
+        <VStack spacing={6} align="stretch">
+          <ProjectIFollowGrid />
+        </VStack>
+      )}
     </>
   )
 }
