@@ -28,7 +28,7 @@ export const MyProjects = () => {
             {t('My Projects')}
           </Body>
         </Box>
-        {hasNoProjects && !isLoading && <LaunchNewProjectBanner />}
+        {<LaunchNewProjectBanner />}
         {activeProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
         {inReviewProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
         {inDraftProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
@@ -78,10 +78,9 @@ const LaunchNewProjectBanner = () => {
         </VStack>
       </HStack>
       <Button
-        bg="primary1.9"
-        color="accent"
         size="md"
         variant="solid"
+        colorScheme="primary1"
         rightIcon={<RocketLaunchIcon />}
         onClick={handleClick}
         width={{ base: '100%', lg: 'auto' }}
