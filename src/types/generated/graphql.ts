@@ -637,6 +637,7 @@ export type FundingTx = {
   order?: Maybe<Order>
   paidAt?: Maybe<Scalars['Date']['output']>
   paymentRequest?: Maybe<Scalars['String']['output']>
+  projectGoalId?: Maybe<Scalars['BigInt']['output']>
   projectId: Scalars['BigInt']['output']
   source: Scalars['String']['output']
   sourceResource?: Maybe<SourceResource>
@@ -3882,6 +3883,7 @@ export type FundingTxResolvers<
   order?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType>
   paidAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
   paymentRequest?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  projectGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>
   projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   sourceResource?: Resolver<Maybe<ResolversTypes['SourceResource']>, ParentType, ContextType>
@@ -6935,7 +6937,14 @@ export type ActivityFeedFragmentFragment = {
   id: string
   project: { __typename?: 'Project'; id: any; title: string; name: string; thumbnailImage?: string | null }
   resource:
-    | { __typename?: 'Entry'; id: any; title: string; content?: string | null; entryDescription: string }
+    | {
+        __typename?: 'Entry'
+        id: any
+        title: string
+        content?: string | null
+        entryDescription: string
+        entryImage?: string | null
+      }
     | {
         __typename?: 'FundingTx'
         id: any
@@ -6958,6 +6967,7 @@ export type ActivityFeedFragmentFragment = {
       }
     | {
         __typename?: 'ProjectReward'
+        id: any
         category?: string | null
         cost: number
         rewardCurrency: RewardCurrency
@@ -6965,6 +6975,7 @@ export type ActivityFeedFragmentFragment = {
         sold: number
         stock?: number | null
         projectRewardDescription?: string | null
+        projectRewardImage?: string | null
       }
 }
 
@@ -7659,6 +7670,7 @@ export type ProjectRewardFragment = {
   sold: number
   hasShipping: boolean
   maxClaimable?: number | null
+  rewardCurrency: RewardCurrency
   isAddon: boolean
   isHidden: boolean
   category?: string | null
@@ -9098,6 +9110,7 @@ export const ActivityFeedFragmentFragmentDoc = gql`
         title
         entryDescription: description
         content
+        entryImage: image
       }
       ... on FundingTx {
         id
@@ -9113,6 +9126,7 @@ export const ActivityFeedFragmentFragmentDoc = gql`
         }
       }
       ... on ProjectReward {
+        id
         category
         cost
         projectRewardDescription: description
@@ -9120,6 +9134,7 @@ export const ActivityFeedFragmentFragmentDoc = gql`
         rewardType
         sold
         stock
+        projectRewardImage: image
       }
       ... on ProjectGoal {
         currency
@@ -9797,6 +9812,7 @@ export const ProjectRewardFragmentDoc = gql`
     sold
     hasShipping
     maxClaimable
+    rewardCurrency
     isAddon
     isHidden
     category
