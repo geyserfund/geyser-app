@@ -3,10 +3,11 @@ import { Emoji, EmojiStyle } from 'emoji-picker-react'
 import { useTranslation } from 'react-i18next'
 import { PiDotsSix, PiNotePencil, PiStarFill } from 'react-icons/pi'
 
+import { useCurrencyFormatter } from '@/shared/utils/hooks'
+
 import { Body } from '../../../../../../../shared/components/typography'
 import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../types'
 import { useMobileMode } from '../../../../../../../utils'
-import { useCurrencyFormatter } from '../../../hooks/useCurrencyFormatter'
 import { GoalContributeButton } from './GoalContributeButton'
 import { GoalTarget } from './GoalTarget'
 

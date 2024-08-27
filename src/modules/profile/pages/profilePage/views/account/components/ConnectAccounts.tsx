@@ -59,8 +59,8 @@ export const ConnectAccounts = ({ user }: { user: UserForProfilePageFragment }) 
   return (
     <>
       {canConnectAccount && (
-        <Button size="sm" onClick={onOpen} variant="surface" colorScheme="neutral1" rightIcon={<PiPlus />}>
-          {t('Connect social')}
+        <Button size="sm" onClick={onOpen} variant="surface" colorScheme="neutral1">
+          <PiPlus />
         </Button>
       )}
       <Modal isOpen={isOpen} onClose={onClose} title={t('Connect more accounts')}>
