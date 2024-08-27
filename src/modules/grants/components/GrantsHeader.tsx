@@ -146,8 +146,8 @@ const GrantsHeader = () => {
               w="100%"
               size="lg"
               variant="solid"
-              colorScheme="yellow"
-              textColor="neutral1.12"
+              colorScheme="primary1"
+              bg="yellow.9"
               rightIcon={<PiTrophy size={18} />}
               onClick={handleCreateGrant}
             >
