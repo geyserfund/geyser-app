@@ -57,12 +57,12 @@ export const ProfilePurchases = () => {
             )
           })
         ) : (
-          <>
+          <VStack w="full" pt={10}>
             <Image height="200px" src={NoContributionImageUrl} />
             <Body medium light>
               {t('No Purchases made yet')}
             </Body>
-          </>
+          </VStack>
         )}
       </VStack>
     </>
