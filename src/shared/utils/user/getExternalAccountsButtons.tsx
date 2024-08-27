@@ -1,6 +1,6 @@
 import { Link } from '@chakra-ui/react'
 import { nip19 } from 'nostr-tools'
-import { PiGithubLogo, PiXLogo } from 'react-icons/pi'
+import { PiFacebookLogo, PiGithubLogo, PiGoogleLogo, PiLightning, PiXLogo } from 'react-icons/pi'
 
 import { ExternalAccountType } from '../../../pages/auth'
 import { ExternalAccount } from '../../../types'
@@ -10,54 +10,102 @@ interface GetExternalAccountsProps {
   accounts?: ExternalAccount[]
 }
 
-export const getExternalAccountsButtons = ({ accounts }: GetExternalAccountsProps) => {
+export type ExternalAccountButtonReturnType = {
+  key: string
+  icon: React.ReactNode
+  username: string
+  account: ExternalAccount
+  props?: {
+    as: any
+    isExternal: boolean
+    href: string
+  }
+}
+
+export const getExternalAccountsButtons = ({
+  accounts,
+}: GetExternalAccountsProps): ExternalAccountButtonReturnType[] => {
   if (accounts) {
-    return accounts.map((account) => {
+    const returnAccounts = [] as ExternalAccountButtonReturnType[]
+
+    accounts.map((account) => {
       const isTwitter = account.accountType === ExternalAccountType.twitter
       if (isTwitter) {
-        return {
-          key: 'twitter',
+        returnAccounts.push({
+          key: ExternalAccountType.twitter,
           icon: <PiXLogo />,
           username: account.externalUsername,
+          account,
           props: {
             as: Link,
             isExternal: true,
             href: `https://twitter.com/${account.externalUsername}`,
           },
-        }
+        })
       }
 
       const isNostr = account.accountType === ExternalAccountType.nostr
       if (isNostr) {
         const npub = nip19.npubEncode(account.externalId)
-        return {
-          key: 'nostr',
+        returnAccounts.push({
+          key: ExternalAccountType.nostr,
           icon: <NostrIcon height="16px" width="16px" />,
           username: npub,
+          account,
           props: {
             as: Link,
             isExternal: true,
             href: `https://primal.net/p/${npub}`,
           },
-        }
+        })
       }
 
       const isGithub = account.accountType === ExternalAccountType.github
       if (isGithub) {
-        return {
-          key: 'facebook',
+        returnAccounts.push({
+          key: ExternalAccountType.github,
           icon: <PiGithubLogo />,
           username: account.externalUsername,
+          account,
           props: {
             as: Link,
             isExternal: true,
             href: `https://twitter.com/${account.externalUsername}`,
           },
-        }
+        })
       }
 
-      return {}
+      const isGoggle = account.accountType === ExternalAccountType.google
+      if (isGoggle) {
+        returnAccounts.push({
+          key: ExternalAccountType.google,
+          icon: <PiGoogleLogo />,
+          username: account.externalUsername,
+          account,
+        })
+      }
+
+      const isFacebook = account.accountType === ExternalAccountType.facebook
+      if (isFacebook) {
+        returnAccounts.push({
+          key: ExternalAccountType.facebook,
+          icon: <PiFacebookLogo />,
+          username: account.externalUsername,
+          account,
+        })
+      }
+
+      const isLightning = account.accountType === ExternalAccountType.lightning
+      if (isLightning) {
+        returnAccounts.push({
+          key: ExternalAccountType.lightning,
+          icon: <PiLightning />,
+          username: account.externalUsername,
+          account,
+        })
+      }
     })
+    return returnAccounts
   }
 
   return []
