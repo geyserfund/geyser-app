@@ -45,7 +45,15 @@ const ProjectsIFollowSkeleton = () => {
 }
 
 const ActivityItemSkeleton = () => {
-  return <Skeleton width={{ base: 'full', lg: '586px' }} height="150px" />
+  return (
+    <Skeleton
+      border={'1px solid'}
+      borderRadius={'md'}
+      borderColor={'neutralAlpha.6'}
+      width={{ base: 'full', lg: '586px' }}
+      height="150px"
+    />
+  )
 }
 
 export default ProjectsIFollow
