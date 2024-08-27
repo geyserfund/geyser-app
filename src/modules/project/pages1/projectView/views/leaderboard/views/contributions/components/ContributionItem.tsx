@@ -7,6 +7,7 @@ import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { TimeAgo } from '@/shared/molecules/TimeAgo'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
+import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter'
 import { ProjectFundingTxFragment } from '@/types'
 import { commaFormatted, convertSatsToUsd } from '@/utils'
 
@@ -19,7 +20,7 @@ type ContributionItemProps = {
 export const ContributionItem = ({ contribution, ...props }: ContributionItemProps) => {
   const { t } = useTranslation()
 
-  const { formatUsdAmount } = useCurrencyFormatter()
+  const { formatAmount } = useCurrencyFormatter()
 
   return (
     <HStack
@@ -52,8 +53,9 @@ export const ContributionItem = ({ contribution, ...props }: ContributionItemPro
             {commaFormatted(contribution.amountPaid)}{' '}
             <Body as="span" size="sm" muted>
               sats{' '}
-              {`($${formatUsdAmount(
+              {`(${formatAmount(
                 convertSatsToUsd({ sats: contribution.amountPaid, bitcoinQuote: contribution.bitcoinQuote }),
+                FormatCurrencyType.Usd,
               )})`}
             </Body>
           </Body>

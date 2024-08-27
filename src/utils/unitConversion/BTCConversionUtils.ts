@@ -13,7 +13,7 @@ export const convertSatsToUsd = ({ sats, bitcoinQuote }: { sats: number; bitcoin
   if (bitcoinQuote && bitcoinQuote.quote) {
     const dollars = convertToBTC(sats as Satoshis) * bitcoinQuote.quote
 
-    return dollars > 0 ? Math.round(dollars) : toFloat(dollars.toFixed(1))
+    return dollars > 0 ? Math.round(dollars) : toFloat(dollars.toFixed(2))
   }
 
   return 0
