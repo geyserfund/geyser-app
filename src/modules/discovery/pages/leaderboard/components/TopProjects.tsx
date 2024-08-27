@@ -57,15 +57,7 @@ const ProjectItem = ({ project, rank }: { project: GlobalProjectLeaderboardRow; 
   const formattedAmountContributed = formatAmount(project.contributionsTotal, 'BTCSAT')
   const formattedUsdAmount = formatUsdAmount(project.contributionsTotal)
 
-  const isMobile = useMobileMode()
-
-  const maxLength = isMobile ? 35 : 60
-
   const projectUrl = getPath('project', project.projectName)
-
-  const truncateText = (text: string, maxLength: number) => {
-    return text.length > maxLength ? text.slice(0, maxLength) + '...' : text
-  }
 
   const handleClick = () => {
     navigate(projectUrl)
@@ -99,7 +91,7 @@ const ProjectItem = ({ project, rank }: { project: GlobalProjectLeaderboardRow; 
       <HStack maxHeight="60px" alignItems="center" justifyContent="flex-start" flex={1}>
         <VStack alignItems="flex-start" flex={1} spacing={1}>
           <Body fontSize={'14px'} bold isTruncated>
-            {truncateText(project.projectTitle, maxLength)}
+            {project.projectTitle}
           </Body>
 
           <VStack alignItems="flex-start" spacing={0}>

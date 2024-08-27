@@ -52,10 +52,6 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
 
   const formattedAmountContributed = formatAmount(contributor.contributionsTotalUsd, Currency.Usdcent)
 
-  const truncateText = (text: string, maxLength: number) => {
-    return text.length > maxLength ? text.slice(0, maxLength) + '...' : text
-  }
-
   return (
     <HStack
       width="100%"
@@ -84,7 +80,7 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
       />
       <VStack maxHeight="38px" alignItems="flex-start" flex={1} spacing={0}>
         <Body size={'sm'} bold isTruncated>
-          {truncateText(contributor.username, 35)}
+          {contributor.username}
         </Body>
         <HStack spacing={1}>
           <HStack spacing={0.5}>
