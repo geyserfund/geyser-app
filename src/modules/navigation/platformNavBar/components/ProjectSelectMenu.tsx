@@ -30,7 +30,7 @@ export const ProjectSelectMenu = () => {
         {t('Select project')}
       </MenuButton>
       <Portal>
-        <MenuList minWidth="324px" maxHeight="500px" overflowY="auto">
+        <MenuList width="324px" maxHeight="500px" overflowY="auto">
           <VStack w="full" spacing={2}>
             {projectListByOrder.map((project) => {
               if (!project) return null
@@ -38,14 +38,22 @@ export const ProjectSelectMenu = () => {
                 <MenuItem
                   as={Link}
                   to={getPath('project', project.name)}
+                  overflow={'hidden'}
                   key={project.id}
                   paddingX={2}
                   paddingY={1}
                   icon={
                     <ImageWithReload src={project.thumbnailImage} height="32px" width="32px" borderRadius={'6px'} />
                   }
+                  sx={{
+                    '& span': {
+                      maxWidth: 'calc(100% - 40px)',
+                    },
+                  }}
                 >
-                  {project?.title}
+                  <Body medium isTruncated w="full">
+                    {project?.title}
+                  </Body>
                 </MenuItem>
               )
             })}

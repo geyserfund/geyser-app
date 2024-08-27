@@ -13,7 +13,7 @@ type ShareBannerProps = {
 export const ShareBanner = ({ aspectRatio, bannerImage, bannerText, ...rest }: ShareBannerProps) => {
   return (
     <VStack w="100%" position="relative" borderRadius="8px" overflow="hidden" {...rest}>
-      <Box aspectRatio={aspectRatio} w="100%">
+      <Box aspectRatio={aspectRatio} w="100%" overflow={'hidden'}>
         <ImageWithReload width="100%" height="100%" objectFit={'cover'} src={bannerImage} />
       </Box>
 
