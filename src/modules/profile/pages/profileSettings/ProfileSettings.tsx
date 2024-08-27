@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { PiArrowLeft } from 'react-icons/pi'
 import { Link, Outlet, useParams } from 'react-router-dom'
 
-import { ProjectNavContainer } from '@/modules/navigation/components/topNav'
+import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { dimensions, getPath } from '@/shared/constants'
 
 import { CardLayout } from '../../../../shared/components/layouts'
@@ -38,7 +38,7 @@ export const ProfileSettings = () => {
       paddingBottom={10}
       alignItems="center"
     >
-      <ProjectNavContainer>
+      <TopNavContainerBar>
         <Button
           as={Link}
           to={getPath('userProfile', userId)}
@@ -49,7 +49,7 @@ export const ProfileSettings = () => {
         >
           {t('Back to profile')}
         </Button>
-      </ProjectNavContainer>
+      </TopNavContainerBar>
       <CardLayout dense noborder={isMobile} w="full" direction="row" spacing={0} height="100%">
         {!isMobile && <ProfileSettingsMenuDesktop />}
         <Outlet />

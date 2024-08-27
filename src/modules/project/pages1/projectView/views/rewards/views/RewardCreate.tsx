@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import Loader from '@/components/ui/Loader'
 import { defaultProjectReward } from '@/defaults'
-import { ProjectNavContainer } from '@/modules/navigation/components/topNav'
+import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
 import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { getPath } from '@/shared/constants'
@@ -49,7 +49,7 @@ export const RewardCreate = () => {
 
   return (
     <VStack w="full" paddingBottom="120px">
-      <ProjectNavContainer>
+      <TopNavContainerBar>
         <Button
           as={Link}
           to={hasRewards ? getPath('projectRewards', project?.name) : getPath('project', project?.name)}
@@ -60,7 +60,7 @@ export const RewardCreate = () => {
         >
           {hasRewards ? t('Back to rewards') : t('Back to project')}
         </Button>
-      </ProjectNavContainer>
+      </TopNavContainerBar>
 
       <ProjectRewardForm
         hideBackbutton

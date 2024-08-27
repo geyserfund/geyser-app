@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
-import { ProjectNavContainer } from '@/modules/navigation/components/topNav'
+import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
@@ -69,7 +69,7 @@ export const RewardView = () => {
 
   return (
     <VStack w="full" paddingBottom="120px">
-      <ProjectNavContainer>
+      <TopNavContainerBar>
         <Button
           as={Link}
           to={getPath('projectRewards', project?.name)}
@@ -81,7 +81,7 @@ export const RewardView = () => {
           {t('All rewards')}
         </Button>
         <RewardShare reward={reward} />
-      </ProjectNavContainer>
+      </TopNavContainerBar>
 
       <CardLayout w="full" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }}>
         <VStack maxWidth={dimensions.project.rewards.view.maxWidth} w="full" spacing={6}>
@@ -178,10 +178,10 @@ export const RewardView = () => {
 export const RewardViewSkeleton = () => {
   return (
     <VStack w="full" paddingBottom="120px">
-      <ProjectNavContainer>
+      <TopNavContainerBar>
         <SkeletonLayout height="40px" width="135px" />
         <SkeletonLayout height="40px" width="100px" />
-      </ProjectNavContainer>
+      </TopNavContainerBar>
 
       <CardLayout
         w="full"

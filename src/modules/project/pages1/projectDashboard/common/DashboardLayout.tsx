@@ -5,7 +5,7 @@ import { PropsWithChildren } from 'react'
 import { PiArrowLeft } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
-import { ProjectNavContainer } from '@/modules/navigation/components/topNav'
+import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { H1 } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
@@ -45,7 +45,7 @@ export const DashboardLayout = ({
       {...props}
     >
       {showTopNavBar && (
-        <ProjectNavContainer>
+        <TopNavContainerBar>
           <Button
             as={Link}
             to={'..'}
@@ -58,7 +58,7 @@ export const DashboardLayout = ({
             {t('Dashboard')}
           </Button>
           {mobileTopNavRightComponent}
-        </ProjectNavContainer>
+        </TopNavContainerBar>
       )}
       <VStack
         w="full"
