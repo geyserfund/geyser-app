@@ -8,7 +8,7 @@ import { useMobileMode } from '@/utils'
 import { useActivityFeed } from '../hooks/useActivityFeed'
 import { ActivityFeedItem } from './ActivityFeedItem'
 
-const ProjectsIFollow = () => {
+export const ProjectsIFollow = () => {
   const isMobile = useMobileMode()
 
   const { followedProjectsActivities, isLoadingMore, noMoreItems, fetchNext, isLoading } = useActivityFeed(
@@ -55,5 +55,3 @@ const ActivityItemSkeleton = () => {
     />
   )
 }
-
-export default ProjectsIFollow

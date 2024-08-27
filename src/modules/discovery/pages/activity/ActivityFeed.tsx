@@ -5,8 +5,8 @@ import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigati
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { dimensions } from '@/shared/constants'
 
-import GlobalFeed from './components/GlobalFeed'
-import ProjectsIFollow from './components/ProjectsIFollowFeed'
+import { GlobalFeed } from './components/GlobalFeed'
+import { ProjectsIFollow } from './components/ProjectsIFollowFeed'
 
 export const Activity = () => {
   const items: AnimatedNavBarItem[] = [
