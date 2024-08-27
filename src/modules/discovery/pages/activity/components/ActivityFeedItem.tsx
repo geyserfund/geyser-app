@@ -26,7 +26,7 @@ enum ActivityType {
   ContributionConfirmed = 'ContributionConfirmed',
 }
 
-const ActivityFeedItem = ({ activityType, createdAt, project, resource }: Activity) => {
+export const ActivityFeedItem = ({ activityType, createdAt, project, resource }: Activity) => {
   const isMobile = useMobileMode()
 
   const isGoalActivity = activityType === ActivityType.ProjectGoalCreated
@@ -100,8 +100,6 @@ const ActivityFeedItem = ({ activityType, createdAt, project, resource }: Activi
     </VStack>
   )
 }
-
-export default ActivityFeedItem
 
 const ProjectTitle = ({
   projectTitle,

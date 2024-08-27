@@ -5,12 +5,13 @@ import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 
 import { Body } from '@/shared/components/typography'
+import { __production__, __staging__ } from '@/shared/constants'
 import { getPath, GrantsFAQUrl, GrantsPageBannerNoiseGifUrl } from '@/shared/constants'
 import { useGrantStatisticsQuery } from '@/types'
 import { getShortAmountLabel, useMobileMode } from '@/utils'
 
-// TODO: Change to geyser before pushing to production
-const GEYSER_PROJECT_NAME = 'geyser2'
+// TODO: Change to geyser grants project name before pushing to production
+const GEYSER_PROJECT_NAME = __staging__ ? 'geyser2' : __production__ ? 'geyser' : 'geyser-dev'
 const AIRTABLE_CREATE_GRANT_URL = 'https://airtable.com/appyM7XlNIWVypuP5/pagLMhHSSQVlKe0Dw/form'
 
 const GrantsHeader = () => {
