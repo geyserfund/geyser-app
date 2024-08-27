@@ -1,3 +1,3 @@
-export * from './useSummaryBanner'
-export * from './useTopContributors'
-export * from './useTopProjects'
+export { useSummaryBannerStats } from './useSummaryBanner'
+export { useTopContributors } from './useTopContributors'
+export { useTopProjects } from './useTopProjects'

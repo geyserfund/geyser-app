@@ -6,7 +6,7 @@ import { Activity, ActivityFeedName } from '@/types'
 import { useMobileMode } from '@/utils'
 
 import { useActivityFeed } from '../hooks/useActivityFeed'
-import ActivityItem from './ActivityFeedItem'
+import { ActivityFeedItem } from './ActivityFeedItem'
 
 const GlobalFeed = () => {
   const isMobile = useMobileMode()
@@ -22,7 +22,7 @@ const GlobalFeed = () => {
   return (
     <VStack h="full" py={2} width="full" spacing={4}>
       {globalActivities.map((item) => (
-        <ActivityItem key={item.id} {...(item as Activity)} />
+        <ActivityFeedItem key={item.id} {...(item as Activity)} />
       ))}
       <ScrollInvoke
         elementId={!isMobile ? ID.root : undefined}
