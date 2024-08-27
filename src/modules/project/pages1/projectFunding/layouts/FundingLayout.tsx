@@ -4,7 +4,7 @@ import { PropsWithChildren } from 'react'
 import { PiArrowLeft } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
-import { ProjectNavContainer } from '@/modules/navigation/components/topNav'
+import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { RightSideStickyLayout } from '@/modules/project/components/RightSideStickyLayout'
 import { dimensions } from '@/shared/constants'
 
@@ -33,7 +33,7 @@ export const FundingLayout = ({
 }: PropsWithChildren<FundingLayoutProps>) => {
   return (
     <VStack w="full">
-      <ProjectNavContainer>
+      <TopNavContainerBar>
         <HStack>
           {backPath !== undefined && (
             <Button as={Link} to={backPath} size="lg" variant="ghost" colorScheme="neutral1" leftIcon={<PiArrowLeft />}>
@@ -42,7 +42,7 @@ export const FundingLayout = ({
           )}
         </HStack>
         {topNavBarRightContent}
-      </ProjectNavContainer>
+      </TopNavContainerBar>
       <HStack h="full" w="full" alignItems="start" spacing={dimensions.project.rightSideNav.gap}>
         <VStack h="full" maxWidth="full" flex={1} paddingBottom={{ base: 40, lg: 10 }} {...containerProps}>
           {children}

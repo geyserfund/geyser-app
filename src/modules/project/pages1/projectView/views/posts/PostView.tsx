@@ -9,7 +9,7 @@ import { AlertDialogue } from '@/components/molecules/AlertDialogue'
 import { ImageWithReload } from '@/components/ui'
 import { Head } from '@/config/Head'
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
-import { ProjectNavContainer } from '@/modules/navigation/components/topNav'
+import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
@@ -80,7 +80,7 @@ export const PostView = () => {
       />
 
       <VStack w="full" paddingBottom="80px">
-        <ProjectNavContainer>
+        <TopNavContainerBar>
           <Button
             as={Link}
             to={getPath('projectPosts', project?.name)}
@@ -92,7 +92,7 @@ export const PostView = () => {
             {t('All posts')}
           </Button>
           <PostShare entry={entry} />
-        </ProjectNavContainer>
+        </TopNavContainerBar>
 
         <CardLayout w="full" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }} mobileDense>
           <VStack maxWidth={dimensions.project.posts.view.maxWidth} w="full" alignItems="start" spacing={6}>
@@ -184,10 +184,10 @@ export const PostView = () => {
 export const EntryViewSkeleton = () => {
   return (
     <VStack w="full" paddingBottom="120px">
-      <ProjectNavContainer>
+      <TopNavContainerBar>
         <SkeletonLayout height="40px" width="135px" />
         <SkeletonLayout height="40px" width="100px" />
-      </ProjectNavContainer>
+      </TopNavContainerBar>
 
       <CardLayout
         w="full"

@@ -1,6 +1,7 @@
 import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
+import { CreateProjectButton } from '@/modules/navigation/platformNavBar/components/CreateProjectButton'
 import { Body, H1 } from '@/shared/components/typography'
 import { useNotification } from '@/utils'
 
@@ -52,6 +53,7 @@ export const ProfileProjects = () => {
       <H1 size="2xl" bold display={{ base: 'unset', lg: 'none' }}>
         {t('Projects')}
       </H1>
+      <CreateProjectButton width="full" />
       {projectsToRender.map((project, index) => {
         return (
           <ProfileProjectCard

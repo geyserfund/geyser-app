@@ -1,8 +1,10 @@
-import { VStack } from '@chakra-ui/react'
+import { Button, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { Link } from 'react-router-dom'
 
-import { useUserProfileAtom } from '@/modules/profile/state'
-import { H1 } from '@/shared/components/typography'
+import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '@/modules/profile/state'
+import { Body, H1 } from '@/shared/components/typography'
+import { FollowAProjectUrl, getPath } from '@/shared/constants'
 import { useNotification } from '@/utils'
 
 import { ProjectForProfilePageFragment, useUserFollowedProjectsQuery } from '../../../../../../../types'
@@ -12,6 +14,7 @@ import { TabPanelSkeleton } from '../components/TabPanelSkeleton'
 export const ProfileFollowed = () => {
   const toast = useNotification()
   const { userProfile } = useUserProfileAtom()
+  const isVieweingOwnProfile = useViewingOwnProfileAtomValue()
 
   const { data, loading } = useUserFollowedProjectsQuery({
     variables: {
@@ -50,6 +53,22 @@ export const ProfileFollowed = () => {
           />
         )
       })}
+      {projects.length === 0 && (
+        <VStack w="full" p={6} spacing={6}>
+          <Image height="200px" src={FollowAProjectUrl} />
+          {isVieweingOwnProfile ? (
+            <Body medium>{t('You do not follow any project')}</Body>
+          ) : (
+            <Body medium>{t('User does not follow any project')}</Body>
+          )}
+          <Body medium>
+            {t('Check out some trending projects this week that you can follow in the discovery view!')}
+          </Body>
+          <Button size="lg" colorScheme="primary1" as={Link} to={getPath('discoveryLanding')}>
+            {t('Discover projects')}
+          </Button>
+        </VStack>
+      )}
     </VStack>
   )
 }
