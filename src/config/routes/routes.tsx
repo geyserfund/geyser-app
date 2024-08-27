@@ -9,7 +9,9 @@ import { __production__, getPath, PathName } from '../../shared/constants'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { renderPrivateRoute } from './components/PrivateRoute'
 
-// const Grants = () => import('../../pages/grants')
+const GrantsOld = () => import('../../pages/grants')
+const Grants = () => import('../../modules/grants/Grants')
+
 const ProjectLaunch = () => import('../../modules/project/pages1/projectCreation')
 // const Entry = () => import('../../pages/entry')
 // const ProjectDashboard = () => import('../../modules/project/pages/projectDashboard')
@@ -26,8 +28,6 @@ const CreatorPost = () => import('../../modules/project/pages1/projectView/views
 
 const Discovery = () => import('../../modules/discovery')
 
-const Grants = () => import('../../modules/grants/Grants')
-
 const Refund = () => import('../../modules/project/pages1/projectFunding/views/refund')
 
 const ProfilePage = () => import('../../modules/profile')
@@ -37,21 +37,6 @@ const ProfileSettingsIndex = () => import('../../modules/profile/pages/profileSe
 const Badges = () => import('../../pages/badges/BadgesPage')
 
 export const platformRoutes: RouteObject[] = [
-  // {
-  //   path: '/grants',
-  //   async lazy() {
-  //     const GrantsLandingPage = await Grants().then((m) => m.GrantsLandingPage)
-  //     return { Component: GrantsLandingPage }
-  //   },
-  // },
-  // {
-  //   path: '/grants/:grantId',
-  //   async lazy() {
-  //     const GrantPage = await Grants().then((m) => m.GrantPage)
-  //     return { Component: GrantPage }
-  //   },
-  // },
-
   {
     path: getPath('launchStart'),
     async lazy() {
@@ -549,6 +534,7 @@ export const platformRoutes: RouteObject[] = [
     path: getPath('projectNotFound'),
     Component: NotFoundProject,
   },
+
   {
     path: getPath('badges'),
     async lazy() {
@@ -575,14 +561,18 @@ export const platformRoutes: RouteObject[] = [
         path: getPath('discoveryMyProjects'),
         async lazy() {
           const MyProjects = await Discovery().then((m) => m.MyProjects)
-          return { Component: MyProjects }
+          return {
+            element: renderPrivateRoute(MyProjects),
+          }
         },
       },
       {
         path: getPath('discoveryActivity'),
         async lazy() {
           const Activity = await Discovery().then((m) => m.Activity)
-          return { Component: Activity }
+          return {
+            element: renderPrivateRoute(Activity),
+          }
         },
       },
       {
@@ -595,8 +585,15 @@ export const platformRoutes: RouteObject[] = [
       {
         path: getPath('discoveryGrants'),
         async lazy() {
-          const GrantsLanding = await Grants().then((m) => m.Grants)
-          return { Component: GrantsLanding }
+          const GrantsPage = await Grants().then((m) => m.Grants)
+          return { Component: GrantsPage }
+        },
+      },
+      {
+        path: getPath('discoveryGrant', PathName.grantId),
+        async lazy() {
+          const GrantPage = await GrantsOld().then((m) => m.GrantPage)
+          return { Component: GrantPage }
         },
       },
     ],

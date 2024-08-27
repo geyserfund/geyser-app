@@ -1,7 +1,6 @@
 export * from './BadgeIcon'
 export * from './BoltIcon'
 export * from './ContributionsIcon'
-export * from './ContributorsIcon'
 export * from './DollarIconCircled'
 export * from './GeyserLogoNameIcon'
 export * from './GoalIcon'

@@ -8,7 +8,7 @@ export const LoginButton = (props: ButtonProps) => {
   const { t } = useTranslation()
   return (
     <Button size={{ base: 'md', lg: 'lg' }} variant="outline" colorScheme="primary1" onClick={loginOnOpen} {...props}>
-      {t('Login')}
+      {t('Sign in')}
     </Button>
   )
 }

@@ -250,6 +250,9 @@ export const Grant2AnnouncementImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/grants/grant-2-announcement.png'
 export const Grant2AnnouncementTwitterUrl = 'https://twitter.com/geyserfund/status/1628842072802312193?s=20'
 
+export const GrantsPageBannerNoiseGifUrl =
+  'https://storage.googleapis.com/geyser-projects-media/gifs/GrantsPageBannerNoise.gif'
+
 // PLATFORMS
 
 export const VoltageUrl = 'https://storage.googleapis.com/geyser-projects-media/platform/voltage.png'
@@ -339,3 +342,10 @@ export const ExperienceImageUrl = 'https://storage.googleapis.com/geyser-project
 // Helpers
 export const EmailPromptModalUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/enter-email-illustration.png'
+
+// My Projects
+export const NoContributionsReceivedUrl =
+  'https://storage.googleapis.com/geyser-projects-media/images/NoContributionsReceived.png'
+
+export const NoRewardsSoldUrl = 'https://storage.googleapis.com/geyser-projects-media/images/no-reward-sold.png'
+export const DiamondUrl = 'https://storage.googleapis.com/geyser-projects-media/images/diamond.png'

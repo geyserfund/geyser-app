@@ -1,14 +1,13 @@
-import { AddIcon } from '@chakra-ui/icons'
 import { Button, HStack, IconButton, StackProps, useDisclosure, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { PiX } from 'react-icons/pi'
 import { createUseStyles } from 'react-jss'
-import { components, MenuProps, MultiValue } from 'react-select'
+import { MultiValue } from 'react-select'
 
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import { Body } from '@/shared/components/typography'
 
-import { SelectComponent } from '../../../components/ui'
 import { AppTheme } from '../../../context'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { Modal, SkeletonLayout } from '../../../shared/components/layouts'
@@ -63,7 +62,7 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
     },
   })
 
-  const [createTag, { loading: createLoading }] = useProjectTagCreateMutation({
+  const [createTag] = useProjectTagCreateMutation({
     onError() {
       toast({
         status: 'error',
@@ -130,24 +129,8 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
     }
   }
 
-  const Menu = (props: MenuProps<TagsGetResult, true, any>) => {
-    return (
-      <components.Menu<TagsGetResult, true, any> {...props}>
-        {props.children}
-        {showAddTag && (
-          <HStack padding="5px">
-            <Button variant="ghost" isDisabled={disableShowAddTag} leftIcon={<AddIcon />} onClick={handleCreateTag}>
-              {t('add tag')}
-            </Button>
-          </HStack>
-        )}
-      </components.Menu>
-    )
-  }
-
   const isDisabled = tags.length >= MAX_TAGS_ALLOWED
   const showAddTag = !tagOptions.some((tag) => tag.label.toLowerCase().includes(inputValue.toLowerCase()))
-  const disableShowAddTag = inputValue.length < MAX_TAGS_ALLOWED || createLoading
 
   const SubTitle = (
     <span>
@@ -174,7 +157,7 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
           {loading ? (
             <SkeletonLayout h="40px" />
           ) : (
-            <SelectComponent<TagsGetResult, true>
+            <CustomSelect<TagsGetResult, true>
               isMulti
               isDisabled={isDisabled}
               menuIsOpen={isOpen}
@@ -190,7 +173,6 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
               onInputChange={handleInputChange}
               onKeyDown={handleKeyDown}
               inputValue={inputValue}
-              components={{ Menu }}
               onMenuOpen={onOpen}
               onMenuClose={onClose}
             />

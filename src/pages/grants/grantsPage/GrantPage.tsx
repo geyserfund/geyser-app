@@ -1,24 +1,16 @@
 /* eslint-disable complexity */
-import { Button, Container, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack } from '@chakra-ui/react'
-import { PropsWithChildren, useEffect } from 'react'
+import { Button, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack } from '@chakra-ui/react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { FaArrowLeft } from 'react-icons/fa'
-import { useNavigate, useParams } from 'react-router-dom'
+import { PiArrowLeft } from 'react-icons/pi'
+import { Link, useParams } from 'react-router-dom'
 
-import { Head } from '@/config/Head'
+import { TopNavContainerBar } from '@/modules/navigation/components/topNav/TopNavContainerBar'
 
 import Loader from '../../../components/ui/Loader'
 import { useAuthContext } from '../../../context'
-import { getPath } from '../../../shared/constants'
-import {
-  BoardVoteGrant,
-  Grant,
-  GrantApplicant,
-  GrantApplicantStatus,
-  GrantStatusEnum,
-  GrantType,
-  Maybe,
-} from '../../../types'
+import { dimensions, getPath } from '../../../shared/constants'
+import { BoardVoteGrant, Grant, GrantApplicant, GrantApplicantStatus, GrantStatusEnum, GrantType } from '../../../types'
 import { useNotification } from '../../../utils'
 import { GrantWinnerAnnouncement, MobileDivider } from '../components'
 import { GrantAnnouncements, GrantHasVoting, GrantProjectNameMap, NoContributionInGrant } from '../constants'
@@ -30,20 +22,10 @@ import { CommunityVoting, DistributionChart, GrantApply, MoreInfo } from './sect
 import { CommonBoardMembers } from './sections/CommonBoardMembers'
 import { PendingApplications } from './sections/PendingApplications'
 
-const PageContainer = ({ children, image, title }: PropsWithChildren<{ image?: Maybe<string>; title?: string }>) => {
-  return (
-    <Container marginTop={{ base: 0, lg: '40px' }} maxWidth="879px" px={{ base: '0px', lg: '20px' }}>
-      <Head title={title} image={image || ''} />
-      {children}
-    </Container>
-  )
-}
-
 export const GrantPage = () => {
   const { t } = useTranslation()
   const { toast } = useNotification()
   const { grantId } = useParams<{ grantId: string }>()
-  const navigate = useNavigate()
 
   const { grant, loading, error } = useGrant(grantId)
 
@@ -60,11 +42,7 @@ export const GrantPage = () => {
   }, [error, toast])
 
   if (loading || !grant) {
-    return (
-      <PageContainer>
-        <Loader paddingTop="20px" />
-      </PageContainer>
-    )
+    return <Loader paddingTop="20px" />
   }
 
   const userProjectIds = new Set(user.ownerOf.map((ownership) => ownership.project?.id))
@@ -154,20 +132,29 @@ export const GrantPage = () => {
     (grant.status === GrantStatusEnum.ApplicationsOpen || grant.status === GrantStatusEnum.FundingOpen)
 
   return (
-    <PageContainer title={t(grant.title)} image={grant.image}>
-      <VStack w="full" spacing="15px" alignItems="start">
+    <>
+      <TopNavContainerBar>
         <Button
-          size="sm"
-          bg="neutral.0"
-          variant="outline"
-          gap={3}
-          onClick={() => navigate(getPath('grants'))}
-          fontSize="sm"
-          mx={'10px'}
-          mt={'10px'}
+          as={Link}
+          to={getPath('grants')}
+          size="lg"
+          variant="ghost"
+          colorScheme="neutral1"
+          leftIcon={<PiArrowLeft />}
         >
-          <FaArrowLeft /> {t('See all Grants')}
+          {t('All Grants')}
         </Button>
+      </TopNavContainerBar>
+
+      <VStack
+        paddingTop={{
+          base: `${dimensions.topNavBar.mobile.height - 24}px`,
+          lg: `${dimensions.topNavBar.desktop.height - 24}px`,
+        }}
+        w="full"
+        spacing="15px"
+        alignItems="center"
+      >
         <GrantSummary grant={grant} grantHasVoting={grantHasVoting} />
         <MobileDivider />
         <Tabs variant="secondary" w="full">
@@ -270,6 +257,6 @@ export const GrantPage = () => {
         )}
         <MoreInfo />
       </VStack>
-    </PageContainer>
+    </>
   )
 }
