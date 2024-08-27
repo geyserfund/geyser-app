@@ -19,7 +19,6 @@ export function CustomSelect<Option, IsMulti extends boolean = false>({
 
     menu: (provided) => ({
       ...provided,
-      zIndex: 9999,
     }),
 
     option: (_, state) => ({
@@ -80,6 +79,9 @@ export function CustomSelect<Option, IsMulti extends boolean = false>({
       {...props}
       components={components}
       menuPortalTarget={document.body}
+      styles={{
+        menuPortal: (base) => ({ ...base, zIndex: 12 }),
+      }}
     />
   )
 }
