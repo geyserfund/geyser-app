@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Image, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Image, Skeleton, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiRocket } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
@@ -28,10 +28,20 @@ export const MyProjects = () => {
             {t('My Projects')}
           </Body>
         </Box>
-        {hasNoProjects && !isLoading && <LaunchNewProjectBanner />}
-        {activeProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
-        {inReviewProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
-        {inDraftProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
+        {isLoading ? (
+          <>
+            <ProjectCardSkeleton />
+            <ProjectCardSkeleton />
+            <ProjectCardSkeleton />
+          </>
+        ) : (
+          <>
+            {hasNoProjects && <LaunchNewProjectBanner />}
+            {activeProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
+            {inReviewProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
+            {inDraftProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
+          </>
+        )}
       </VStack>
       {!isLoading && (
         <VStack spacing={6} align="stretch">
@@ -81,5 +91,20 @@ const LaunchNewProjectBanner = () => {
         {t('Create project')}
       </Button>
     </Direction>
+  )
+}
+
+export const ProjectCardSkeleton = () => {
+  return (
+    <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={4}>
+      <HStack spacing={4}>
+        <Skeleton width="100px" height="100px" />
+        <VStack align="stretch" flex={1}>
+          <Skeleton height="20px" width="60%" />
+          <Skeleton height="16px" width="40%" />
+          <Skeleton height="16px" width="80%" />
+        </VStack>
+      </HStack>
+    </Box>
   )
 }

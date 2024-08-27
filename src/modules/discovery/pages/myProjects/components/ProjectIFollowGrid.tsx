@@ -1,7 +1,8 @@
-import { Badge, Box, Grid, GridItem, HStack, Image, VStack } from '@chakra-ui/react'
+import { Badge, Box, Grid, GridItem, HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import { ImageWithReload } from '@/components/ui'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { Project } from '@/types'
@@ -19,7 +20,7 @@ export const ProjectIFollowGrid = () => {
   return (
     <VStack align="stretch" mt={4} spacing={4}>
       <HStack justifyContent="flex-start" alignItems="center">
-        <Body size="lg" bold>
+        <Body size="2xl" bold>
           {t('Updates on projects I follow')}
         </Body>
       </HStack>
@@ -30,7 +31,9 @@ export const ProjectIFollowGrid = () => {
         width="100%"
       >
         {followedProjectsActivities.map((activity) => (
-          <ProjectIFollowGridItem key={activity.project.id} project={activity.project} count={activity.count} />
+          <>
+            <ProjectIFollowGridItem key={activity.project.id} project={activity.project} count={activity.count} />
+          </>
         ))}
       </Grid>
     </VStack>
@@ -50,7 +53,7 @@ const ProjectIFollowGridItem = ({ project, count }: { project: Project; count: n
       as={Link}
       to={getPath('project', project.name)}
     >
-      <Image
+      <ImageWithReload
         src={project.thumbnailImage || ''}
         alt={project.name}
         height="100%"

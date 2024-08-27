@@ -3,6 +3,7 @@ import { Emoji, EmojiStyle } from 'emoji-picker-react'
 import { useTranslation } from 'react-i18next'
 import { PiCoins, PiFlagBannerFold } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
+import { Link } from 'react-router-dom'
 
 import { useGoalsModal } from '@/modules/project/pages1/projectView/hooks'
 import { Body } from '@/shared/components/typography'
@@ -65,7 +66,15 @@ const Contributions = ({ projectId, projectName }: ContributionsProps) => {
   }
 
   return (
-    <Box minHeight="269px" borderWidth={1} borderRadius="lg" p={4} flex={1}>
+    <Box
+      as={Link}
+      to={getPath('project', projectName)}
+      minHeight="269px"
+      borderWidth={1}
+      borderRadius="lg"
+      p={4}
+      flex={1}
+    >
       <Header total={total} totalUsd={totalUsd} noContributionsReceived={noContributionsReceived} noGoals={noGoals} />
       <Divider my={4} />
       <Goals goals={goals} noContributionsReceived={noContributionsReceived} />

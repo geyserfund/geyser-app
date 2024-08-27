@@ -147,7 +147,7 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
   }
 
   return (
-    <CardLayout noborder={isMobile} padding={{ base: '10px', lg: 0 }}>
+    <CardLayout noborder={isMobile} padding={{ base: 0, lg: 0 }}>
       {renderImageOrVideo()}
       <Box px={{ base: 0, lg: 5 }}>
         <Box pb={2}>

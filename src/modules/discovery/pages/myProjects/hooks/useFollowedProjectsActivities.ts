@@ -17,11 +17,11 @@ export const useFollowedProjectsActivities = () => {
       startDateTime: oneWeekAgo.getTime(),
     }
   }, [])
-
+  // TODO: change the feed to FollowedProjects once the backend fix is ready
   useActivitiesCountGroupedByProjectQuery({
     variables: {
       input: {
-        feed: ActivityFeedName.FollowedProjects,
+        feed: ActivityFeedName.MyProjects,
         createdAt: dateRange,
       },
     },
