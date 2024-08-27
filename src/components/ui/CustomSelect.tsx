@@ -36,20 +36,20 @@ export function CustomSelect<Option, IsMulti extends boolean = false>({
       cursor: 'pointer',
       ...(state.isSelected && {
         bg: 'neutral1.3',
-        color: 'utils.blackContrast',
+        color: 'utils.text',
       }),
       ...(state.isFocused &&
         !state.isSelected && {
           bg: 'primary1.9',
-          color: 'utils.blackContrast',
+          color: 'utils.text',
         }),
       _hover: {
         bg: 'primary1.9',
-        color: 'utils.blackContrast',
+        color: 'utils.text',
       },
       _active: {
         bg: 'primary1.10',
-        color: 'utils.blackContrast',
+        color: 'utils.text',
       },
       _disabled: {
         bg: 'panel.solid',
@@ -73,5 +73,13 @@ export function CustomSelect<Option, IsMulti extends boolean = false>({
     ),
   }
 
-  return <Select chakraStyles={chakraStyles} useBasicStyles {...props} components={components} />
+  return (
+    <Select
+      chakraStyles={chakraStyles}
+      useBasicStyles
+      {...props}
+      components={components}
+      menuPortalTarget={document.body}
+    />
+  )
 }
