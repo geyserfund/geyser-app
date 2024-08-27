@@ -110,7 +110,7 @@ const AccountInfoButton = ({ accountInfoProps }: { accountInfoProps: ExternalAcc
   if (isEdit) {
     return (
       <>
-        <Popover trigger="hover" onOpen={onOpen} onClose={onClose} openDelay={0} closeDelay={0}>
+        <Popover trigger="hover" onOpen={onOpen} onClose={onClose} openDelay={100} closeDelay={100}>
           <PopoverTrigger>
             <Button
               key={key}
