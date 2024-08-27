@@ -26,7 +26,7 @@ export const FundingDetailsSummary = () => {
   const navigate = useNavigate()
   const toast = useNotification()
 
-  const { isFundingUserInfoValid, project } = useFundingFormAtom()
+  const { isFundingUserInfoValid, project, setErrorstate } = useFundingFormAtom()
 
   const handleCheckoutButtonPressed = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -36,6 +36,7 @@ export const FundingDetailsSummary = () => {
     if (valid) {
       navigate(getPath('fundingPayment', project.name))
     } else {
+      setErrorstate({ key: 'email', value: 'Email is a required field' })
       toast.error({
         title,
         description,

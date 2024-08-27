@@ -8,13 +8,13 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
-import { ProjectRewardForCreateUpdateFragment, ProjectStatus, RewardCurrency } from '@/types'
+import { ProjectRewardFragment, ProjectStatus, RewardCurrency } from '@/types'
 
 import { ProjectRewardShippingEstimate } from '../components/ProjectRewardShippingEstimate'
 import { RewardEditMenu } from '../components/RewardEditMenu'
 
 export type RewardCardProps = {
-  reward: ProjectRewardForCreateUpdateFragment
+  reward: ProjectRewardFragment
   hidden?: boolean
   buyReward?: () => void
   count?: number

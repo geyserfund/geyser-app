@@ -99,7 +99,7 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
                   icon={<PiMinus />}
                   onClick={removeRewardFromBasket}
                 />
-                <Body size="xs" px={1} pt="2px" medium>
+                <Body size="sm" px={1} pt="2px" medium>
                   {count}
                 </Body>
                 <IconButton

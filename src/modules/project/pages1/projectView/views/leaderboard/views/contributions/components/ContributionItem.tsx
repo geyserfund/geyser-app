@@ -6,6 +6,7 @@ import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { TimeAgo } from '@/shared/molecules/TimeAgo'
+import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { ProjectFundingTxFragment } from '@/types'
 import { commaFormatted, convertSatsToUsd } from '@/utils'
 
@@ -17,6 +18,8 @@ type ContributionItemProps = {
 
 export const ContributionItem = ({ contribution, ...props }: ContributionItemProps) => {
   const { t } = useTranslation()
+
+  const { formatUsdAmount } = useCurrencyFormatter()
 
   return (
     <HStack
@@ -49,7 +52,9 @@ export const ContributionItem = ({ contribution, ...props }: ContributionItemPro
             {commaFormatted(contribution.amountPaid)}{' '}
             <Body as="span" size="sm" muted>
               sats{' '}
-              {`($${convertSatsToUsd({ sats: contribution.amountPaid, bitcoinQuote: contribution.bitcoinQuote })})`}
+              {`($${formatUsdAmount(
+                convertSatsToUsd({ sats: contribution.amountPaid, bitcoinQuote: contribution.bitcoinQuote }),
+              )})`}
             </Body>
           </Body>
         </HStack>

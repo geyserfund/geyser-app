@@ -1,6 +1,7 @@
 import { atom } from 'jotai'
 
 import { authUserAtom } from '@/pages/auth/state'
+import { SATOSHIS_IN_BTC } from '@/shared/constants'
 import { usdRateAtom } from '@/shared/state/btcRateAtom'
 import {
   FundingInput,
@@ -13,7 +14,7 @@ import {
   RewardCurrency,
   ShippingDestination,
 } from '@/types'
-import { commaFormatted, isProjectAnException, toInt, validateEmail } from '@/utils'
+import { centsToDollars, commaFormatted, isProjectAnException, toInt, validateEmail } from '@/utils'
 
 import { projectAffiliateAtom } from '../../pages1/projectView/state/affiliateAtom'
 import { ProjectState } from '../../state/projectAtom'
@@ -59,6 +60,16 @@ const initialState: FundFormType = {
 
 /** Main Funding Form state atom */
 export const fundingFormStateAtom = atom<FundFormType>(initialState)
+
+/** Funding Form Error */
+export const fundingFormErrorAtom = atom<{ [key in keyof FundFormType]: string }>(
+  {} as { [key in keyof FundFormType]: string },
+)
+
+/** Set the error state for the funding form */
+export const setErrorStateAtom = atom(null, (get, set, { key, value }: { key: keyof FundFormType; value: string }) => {
+  set(fundingFormErrorAtom, (current) => ({ ...current, [key]: value }))
+})
 
 /** Project that is to be funded via the current funding form */
 export const fundingProjectAtom = atom<FundingProjectState>({} as FundingProjectState)
@@ -126,6 +137,8 @@ export const resetFundingFormRewardsAtom = atom(null, (get, set) => {
 /** Update rewards in the funding flow */
 export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: { id: number; count: number }) => {
   const { rewards } = get(fundingProjectAtom)
+  const project = get(fundingProjectAtom)
+  const usdRate = get(usdRateAtom)
 
   set(fundingFormStateAtom, (current) => {
     const newRewardsCountInfo = { ...current.rewardsByIDAndCount }
@@ -137,6 +150,7 @@ export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: 
     }
 
     let rewardsCost = 0
+    let rewardsCostInSatoshi = 0
     let needsShipping = false
 
     if (rewards) {
@@ -156,7 +170,14 @@ export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: 
           }
 
           const { cost } = reward
+
           rewardsCost += cost * rewardMultiplier
+
+          if (project.rewardCurrency === RewardCurrency.Btcsat) {
+            rewardsCostInSatoshi += cost * rewardMultiplier
+          } else {
+            rewardsCostInSatoshi += Math.round(centsToDollars(cost) * usdRate * rewardMultiplier * SATOSHIS_IN_BTC)
+          }
         }
       })
     }
@@ -166,9 +187,16 @@ export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: 
       rewardsByIDAndCount: newRewardsCountInfo,
       rewardsCost,
       needsShipping,
-      totalAmount: rewardsCost + current.donationAmount + current.shippingCost,
+      totalAmount: rewardsCostInSatoshi + current.donationAmount + current.shippingCost,
     }
   })
+
+  if (project.rewardCurrency) {
+    set(fundingFormStateAtom, (current) => ({
+      ...current,
+      rewardCurrency: project.rewardCurrency ? project.rewardCurrency : current.rewardCurrency,
+    }))
+  }
 })
 
 /** Check if the  funding Amount is enough for onChain payments */
