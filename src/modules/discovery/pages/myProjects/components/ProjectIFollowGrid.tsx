@@ -20,7 +20,7 @@ export const ProjectIFollowGrid = () => {
   return (
     <VStack align="stretch" mt={4} spacing={4}>
       <HStack justifyContent="flex-start" alignItems="center">
-        <Body size="lg" bold>
+        <Body size="2xl" bold>
           {t('Updates on projects I follow')}
         </Body>
       </HStack>
