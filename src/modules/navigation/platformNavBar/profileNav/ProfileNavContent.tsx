@@ -54,9 +54,8 @@ export const ProfileNavContent = () => {
               as={Link}
               height="fit-content"
               to={getPath('userProfile', user.id)}
-              p={0}
-              _hover={{}}
-              _active={{}}
+              // _hover={{}}
+              // _active={{}}
             >
               <ProfileNavUserInfo user={user} />
             </MenuItem>

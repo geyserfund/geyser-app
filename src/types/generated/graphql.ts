@@ -635,6 +635,7 @@ export type FundingTx = {
   order?: Maybe<Order>;
   paidAt?: Maybe<Scalars['Date']['output']>;
   paymentRequest?: Maybe<Scalars['String']['output']>;
+  projectGoalId?: Maybe<Scalars['BigInt']['output']>;
   projectId: Scalars['BigInt']['output'];
   source: Scalars['String']['output'];
   sourceResource?: Maybe<SourceResource>;
@@ -3839,6 +3840,7 @@ export type FundingTxResolvers<ContextType = any, ParentType extends ResolversPa
   order?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType>;
   paidAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   paymentRequest?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  projectGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   sourceResource?: Resolver<Maybe<ResolversTypes['SourceResource']>, ParentType, ContextType>;

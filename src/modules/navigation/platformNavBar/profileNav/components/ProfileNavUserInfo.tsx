@@ -27,6 +27,8 @@ export const ProfileNavUserInfo = ({ user }: { user: UserMeFragment }) => {
             variant="outline"
             colorScheme="neutral1"
             rightIcon={loginMethod ? <Icon height="16px" width="16px" /> : undefined}
+            color="inherit"
+            _hover={{}}
           >
             {t('Logged in with')}
           </Button>
