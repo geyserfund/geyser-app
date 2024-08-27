@@ -17,6 +17,7 @@ export const TopNavContainer = ({ children, ...props }: PropsWithChildren<StackP
       w="full"
       position="fixed"
       top={{ base: `${dimensions.topNavBar.mobile.height}px`, lg: `${dimensions.topNavBar.desktop.height}px` }}
+      left={0}
       {...(isPlatformRoutes && discoveryPageCommonLayoutStyles)}
       justifyContent={'center'}
       zIndex={9}
