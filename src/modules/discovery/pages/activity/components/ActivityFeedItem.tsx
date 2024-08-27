@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PiBag, PiFlagBannerFold, PiLightning, PiNewspaper } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
+import { ImageWithReload } from '@/components/ui'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
@@ -31,9 +32,26 @@ const ActivityFeedItem = ({ activityType, createdAt, project, resource }: Activi
   const isGoalActivity = activityType === ActivityType.ProjectGoalCreated
   const isRewardActivity = activityType === ActivityType.ProjectRewardCreated
   const isFundingTxActivity = activityType === ActivityType.ContributionConfirmed
+  const isPostActivity = activityType === ActivityType.PostPublished
+
+  const activityPath = (activityType: string) => {
+    switch (activityType) {
+      case ActivityType.ProjectGoalCreated:
+      case ActivityType.ProjectGoalReached:
+        return getPath('projectGoals', project.name)
+      case ActivityType.ProjectRewardCreated:
+        return getPath('projectRewardView', project.name, resource.id)
+      case ActivityType.PostPublished:
+        return getPath('projectPostView', project.name, resource.id)
+      default:
+        return getPath('project', project.name)
+    }
+  }
 
   return (
     <VStack
+      as={Link}
+      to={activityPath(activityType)}
       width={{ base: 'full', lg: '586px' }}
       border={'1px solid'}
       borderRadius={'md'}
@@ -68,8 +86,9 @@ const ActivityFeedItem = ({ activityType, createdAt, project, resource }: Activi
       )}
       <VStack width="full" alignItems="flex-start" spacing={1}>
         {!isFundingTxActivity && <ActivityTitle resource={resource} />}
+        {(isRewardActivity || isPostActivity) && <ActivityImage resource={resource} />}
         {isRewardActivity && <RewardsInfo reward={resource as ProjectReward} />}
-        <ActivityDescription resource={resource} />
+        {isPostActivity && <ActivityDescription resource={resource} />}
         {isGoalActivity && (
           <>
             <GoalProgressBar goal={resource as ProjectGoal} />
@@ -193,6 +212,38 @@ const ActivityTitle = ({ resource }: { resource: ActivityResource }) => {
   return null
 }
 
+const ActivityImage = ({ resource }: { resource: ActivityResource }) => {
+  if ('entryImage' in resource && typeof resource.entryImage === 'string') {
+    console.log('resource', resource)
+    console.log('entryImage', resource.entryImage)
+    return (
+      <ImageWithReload
+        width={'full'}
+        height={{ base: '100px', lg: '175px' }}
+        borderRadius="md"
+        src={resource.entryImage}
+        objectFit="cover"
+        my={{ base: 2, lg: 1 }}
+      />
+    )
+  }
+
+  if ('projectRewardImage' in resource && typeof resource.projectRewardImage === 'string') {
+    return (
+      <ImageWithReload
+        width={'full'}
+        height={{ base: '100px', lg: '175px' }}
+        borderRadius="md"
+        src={resource.projectRewardImage}
+        objectFit="cover"
+        my={{ base: 2, lg: 1 }}
+      />
+    )
+  }
+
+  return null
+}
+
 const ActivityDescription = ({ resource }: { resource: ActivityResource }) => {
   const { t } = useTranslation()
 
@@ -281,33 +332,39 @@ const GoalTargetAmount = ({ goal }: { goal: ProjectGoal }) => {
 const RewardsInfo = ({ reward }: { reward: ProjectReward }) => {
   const { t } = useTranslation()
 
+  const { formatAmount } = useCurrencyFormatter()
+
   if (!reward) return null
 
   return (
     <HStack>
       <Body size="sm" bold>
-        {reward.cost}{' '}
+        {formatAmount(reward.cost, reward.rewardCurrency)}{' '}
         <Body as="span" size="sm" muted>
           {reward.rewardCurrency === RewardCurrency.Btcsat ? 'Sats' : 'USD'}
         </Body>
       </Body>
-      <Body size="sm" muted>
-        {t('Sold')} {': '}
-        <Body as="span" size="sm" dark bold>
-          {reward.sold}
-        </Body>
-      </Body>
-      {reward.stock && (
+      {reward.sold && (
         <Body size="sm" muted>
-          {t('Available')} {': '}
+          {t('Sold')} {': '}
           <Body as="span" size="sm" dark bold>
-            {reward.stock}
+            {reward.sold}
           </Body>
         </Body>
       )}
-      <Badge size="sm" variant="soft" colorScheme="neutral1">
-        {reward.category}
-      </Badge>
+      {reward.maxClaimable && (
+        <Body size="sm" muted>
+          {t('Available')} {': '}
+          <Body as="span" size="sm" dark bold>
+            {reward.maxClaimable}
+          </Body>
+        </Body>
+      )}
+      {reward.category && (
+        <Badge size="sm" variant="soft" colorScheme="neutral1">
+          {reward.category}
+        </Badge>
+      )}
     </HStack>
   )
 }

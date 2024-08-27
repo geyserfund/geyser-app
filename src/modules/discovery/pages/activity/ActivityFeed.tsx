@@ -32,6 +32,8 @@ export const Activity = () => {
       paddingTop={{ base: `${dimensions.animatedNavBar.height.base}px`, lg: 0 }}
       width="full"
       spacing={4}
+      borderTopRadius="xl"
+      bg="neutralAlpha.1"
     >
       <HStack
         position={{ base: 'fixed', lg: 'sticky' }}

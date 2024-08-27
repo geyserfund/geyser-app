@@ -621,25 +621,25 @@ export type FundingTx = {
   creatorEmail?: Maybe<Scalars['String']['output']>;
   donationAmount: Scalars['Int']['output'];
   /** Contributor's email address. Only visible to the project owner. */
-  email?: Maybe<Scalars['String']['output']>;
-  funder: Funder;
-  fundingType: FundingType;
-  id: Scalars['BigInt']['output'];
-  invoiceId?: Maybe<Scalars['String']['output']>;
-  invoiceStatus: InvoiceStatus;
-  isAnonymous: Scalars['Boolean']['output'];
-  media?: Maybe<Scalars['String']['output']>;
-  method?: Maybe<FundingMethod>;
-  onChain: Scalars['Boolean']['output'];
-  onChainTxId?: Maybe<Scalars['String']['output']>;
-  order?: Maybe<Order>;
-  paidAt?: Maybe<Scalars['Date']['output']>;
-  paymentRequest?: Maybe<Scalars['String']['output']>;
-  projectGoalId?: Maybe<Scalars['BigInt']['output']>;
-  projectId: Scalars['BigInt']['output'];
-  source: Scalars['String']['output'];
-  sourceResource?: Maybe<SourceResource>;
-  status: FundingStatus;
+  email?: Maybe<Scalars['String']['output']>
+  funder: Funder
+  fundingType: FundingType
+  id: Scalars['BigInt']['output']
+  invoiceId?: Maybe<Scalars['String']['output']>
+  invoiceStatus: InvoiceStatus
+  isAnonymous: Scalars['Boolean']['output']
+  media?: Maybe<Scalars['String']['output']>
+  method?: Maybe<FundingMethod>
+  onChain: Scalars['Boolean']['output']
+  onChainTxId?: Maybe<Scalars['String']['output']>
+  order?: Maybe<Order>
+  paidAt?: Maybe<Scalars['Date']['output']>
+  paymentRequest?: Maybe<Scalars['String']['output']>
+  projectGoalId?: Maybe<Scalars['BigInt']['output']>
+  projectId: Scalars['BigInt']['output']
+  source: Scalars['String']['output']
+  sourceResource?: Maybe<SourceResource>
+  status: FundingStatus
   /** Private reference code viewable only by the Funder and the ProjectOwner related to this FundingTx */
   uuid?: Maybe<Scalars['String']['output']>;
 };
@@ -3816,38 +3816,41 @@ export type FundingQueryResponseResolvers<ContextType = any, ParentType extends 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type FundingTxResolvers<ContextType = any, ParentType extends ResolversParentTypes['FundingTx'] = ResolversParentTypes['FundingTx']> = {
-  address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  affiliateFeeInSats?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  amountPaid?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  bitcoinQuote?: Resolver<Maybe<ResolversTypes['BitcoinQuote']>, ParentType, ContextType>;
-  comment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  creatorEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  donationAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  funder?: Resolver<ResolversTypes['Funder'], ParentType, ContextType>;
-  fundingType?: Resolver<ResolversTypes['FundingType'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  invoiceId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  invoiceStatus?: Resolver<ResolversTypes['InvoiceStatus'], ParentType, ContextType>;
-  isAnonymous?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  media?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  method?: Resolver<Maybe<ResolversTypes['FundingMethod']>, ParentType, ContextType>;
-  onChain?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  onChainTxId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  order?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType>;
-  paidAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  paymentRequest?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  projectGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  sourceResource?: Resolver<Maybe<ResolversTypes['SourceResource']>, ParentType, ContextType>;
-  status?: Resolver<ResolversTypes['FundingStatus'], ParentType, ContextType>;
-  uuid?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type FundingTxResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['FundingTx'] = ResolversParentTypes['FundingTx'],
+> = {
+  address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  affiliateFeeInSats?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  amountPaid?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  bitcoinQuote?: Resolver<Maybe<ResolversTypes['BitcoinQuote']>, ParentType, ContextType>
+  comment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
+  creatorEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  donationAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  funder?: Resolver<ResolversTypes['Funder'], ParentType, ContextType>
+  fundingType?: Resolver<ResolversTypes['FundingType'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  invoiceId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  invoiceStatus?: Resolver<ResolversTypes['InvoiceStatus'], ParentType, ContextType>
+  isAnonymous?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  media?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  method?: Resolver<Maybe<ResolversTypes['FundingMethod']>, ParentType, ContextType>
+  onChain?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  onChainTxId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  order?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType>
+  paidAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
+  paymentRequest?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  projectGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>
+  projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  source?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  sourceResource?: Resolver<Maybe<ResolversTypes['SourceResource']>, ParentType, ContextType>
+  status?: Resolver<ResolversTypes['FundingStatus'], ParentType, ContextType>
+  uuid?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type FundingTxAmountGraphResolvers<ContextType = any, ParentType extends ResolversParentTypes['FundingTxAmountGraph'] = ResolversParentTypes['FundingTxAmountGraph']> = {
   dateTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
@@ -5349,7 +5352,54 @@ export type ProjectCountriesGetQueryVariables = Exact<{ [key: string]: never; }>
 
 export type ProjectCountriesGetQuery = { __typename?: 'Query', projectCountriesGet: Array<{ __typename?: 'ProjectCountriesGetResult', count: number, country: { __typename?: 'Country', code: string, name: string } }> };
 
-export type ProjectRegionsGetQueryVariables = Exact<{ [key: string]: never; }>;
+export type ActivityFeedFragmentFragment = {
+  __typename?: 'Activity'
+  activityType: string
+  createdAt: any
+  id: string
+  project: { __typename?: 'Project'; id: any; title: string; name: string; thumbnailImage?: string | null }
+  resource:
+    | {
+        __typename?: 'Entry'
+        id: any
+        title: string
+        content?: string | null
+        entryDescription: string
+        entryImage?: string | null
+      }
+    | {
+        __typename?: 'FundingTx'
+        id: any
+        amount: number
+        projectId: any
+        isAnonymous: boolean
+        funder: {
+          __typename?: 'Funder'
+          user?: { __typename?: 'User'; id: any; username: string; imageUrl?: string | null } | null
+        }
+      }
+    | { __typename?: 'Project'; id: any; title: string; name: string; image?: string | null }
+    | {
+        __typename?: 'ProjectGoal'
+        currency: ProjectGoalCurrency
+        title: string
+        targetAmount: number
+        status: ProjectGoalStatus
+        goalDescription?: string | null
+      }
+    | {
+        __typename?: 'ProjectReward'
+        id: any
+        category?: string | null
+        cost: number
+        rewardCurrency: RewardCurrency
+        rewardType?: string | null
+        sold: number
+        stock?: number | null
+        projectRewardDescription?: string | null
+        projectRewardImage?: string | null
+      }
+}
 
 
 export type ProjectRegionsGetQuery = { __typename?: 'Query', projectRegionsGet: Array<{ __typename?: 'ProjectRegionsGetResult', count: number, region: string }> };
@@ -5633,7 +5683,26 @@ export type ProjectHistoryStatsFragment = { __typename?: 'ProjectStats', current
 
 export type ProjectRewardSoldGraphStatsFragment = { __typename?: 'ProjectStats', current?: { __typename?: 'ProjectStatsBase', projectFunderRewards?: { __typename?: 'ProjectFunderRewardStats', quantityGraph?: Array<{ __typename?: 'FunderRewardGraphSum', dateTime: any, rewardId: any, rewardName: string, sum: number } | null> | null } | null } | null };
 
-export type ProjectFundingMethodStatsFragment = { __typename?: 'ProjectStats', current?: { __typename?: 'ProjectStatsBase', projectFundingTxs?: { __typename?: 'ProjectFundingTxStats', methodSum?: Array<{ __typename?: 'FundingTxMethodSum', sum: number, method?: string | null } | null> | null } | null } | null };
+export type ProjectRewardFragment = {
+  __typename?: 'ProjectReward'
+  id: any
+  name: string
+  description?: string | null
+  cost: number
+  image?: string | null
+  deleted: boolean
+  stock?: number | null
+  sold: number
+  hasShipping: boolean
+  maxClaimable?: number | null
+  rewardCurrency: RewardCurrency
+  isAddon: boolean
+  isHidden: boolean
+  category?: string | null
+  preOrder: boolean
+  estimatedAvailabilityDate?: any | null
+  estimatedDeliveryInWeeks?: number | null
+}
 
 export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, cost: number, image?: string | null, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, rewardCurrency: RewardCurrency, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null };
 
@@ -7005,23 +7074,50 @@ export const ActivityFeedFragmentFragmentDoc = gql`
       name
       image
     }
-    ... on Entry {
-      id
-      title
-      entryDescription: description
-      content
-    }
-    ... on FundingTx {
-      id
-      amount
-      projectId
-      isAnonymous
-      funder {
-        user {
-          id
-          username
-          imageUrl
+    resource {
+      ... on Project {
+        id
+        title
+        name
+        image
+      }
+      ... on Entry {
+        id
+        title
+        entryDescription: description
+        content
+        entryImage: image
+      }
+      ... on FundingTx {
+        id
+        amount
+        projectId
+        isAnonymous
+        funder {
+          user {
+            id
+            username
+            imageUrl
+          }
         }
+      }
+      ... on ProjectReward {
+        id
+        category
+        cost
+        projectRewardDescription: description
+        rewardCurrency
+        rewardType
+        sold
+        stock
+        projectRewardImage: image
+      }
+      ... on ProjectGoal {
+        currency
+        goalDescription: description
+        title
+        targetAmount
+        status
       }
     }
     ... on ProjectReward {
@@ -7688,26 +7784,26 @@ export const ProjectFundingMethodStatsFragmentDoc = gql`
 }
     `;
 export const ProjectRewardFragmentDoc = gql`
-    fragment ProjectReward on ProjectReward {
-  id
-  name
-  description
-  cost
-  image
-  deleted
-  stock
-  sold
-  hasShipping
-  maxClaimable
-  rewardCurrency
-  isAddon
-  isHidden
-  category
-  preOrder
-  estimatedAvailabilityDate
-  estimatedDeliveryInWeeks
-}
-    `;
+  fragment ProjectReward on ProjectReward {
+    id
+    name
+    description
+    cost
+    image
+    deleted
+    stock
+    sold
+    hasShipping
+    maxClaimable
+    rewardCurrency
+    isAddon
+    isHidden
+    category
+    preOrder
+    estimatedAvailabilityDate
+    estimatedDeliveryInWeeks
+  }
+`
 export const WalletContributionLimitsFragmentDoc = gql`
     fragment WalletContributionLimits on WalletContributionLimits {
   min

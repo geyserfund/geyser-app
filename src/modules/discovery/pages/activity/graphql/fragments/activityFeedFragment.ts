@@ -23,6 +23,7 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
         title
         entryDescription: description
         content
+        entryImage: image
       }
       ... on FundingTx {
         id
@@ -38,6 +39,7 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
         }
       }
       ... on ProjectReward {
+        id
         category
         cost
         projectRewardDescription: description
@@ -45,6 +47,7 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
         rewardType
         sold
         stock
+        projectRewardImage: image
       }
       ... on ProjectGoal {
         currency

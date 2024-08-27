@@ -45,7 +45,15 @@ const GlobalFeedSkeleton = () => {
 }
 
 const ActivityItemSkeleton = () => {
-  return <Skeleton />
+  return (
+    <Skeleton
+      border={'1px solid'}
+      borderRadius={'md'}
+      borderColor={'neutralAlpha.6'}
+      width={{ base: 'full', lg: '586px' }}
+      height="150px"
+    />
+  )
 }
 
 export default GlobalFeed
