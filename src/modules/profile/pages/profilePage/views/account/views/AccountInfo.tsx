@@ -10,6 +10,7 @@ import {
   PopoverTrigger,
   Portal,
   SkeletonCircle,
+  useDisclosure,
   VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
@@ -84,6 +85,8 @@ export const AccountInfo = () => {
 const AccountInfoButton = ({ accountInfoProps }: { accountInfoProps: ExternalAccountButtonReturnType }) => {
   const { account, icon, key, props } = accountInfoProps
 
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   const removeAccountModal = useModal()
 
   const toast = useNotification()
@@ -107,14 +110,14 @@ const AccountInfoButton = ({ accountInfoProps }: { accountInfoProps: ExternalAcc
   if (isEdit) {
     return (
       <>
-        <Popover trigger="hover">
+        <Popover trigger="hover" onOpen={onOpen} onClose={onClose} openDelay={0} closeDelay={0}>
           <PopoverTrigger>
             <Button
               key={key}
               aria-label={`user-external-account-link-${key}`}
               size={'sm'}
-              variant="soft"
-              colorScheme="neutral1"
+              variant={isOpen ? 'solid' : 'soft'}
+              colorScheme={isOpen ? 'error' : 'neutral1'}
               p={'0'}
               fontSize="16px"
               {...props}

@@ -1,20 +1,15 @@
 import { HStack, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
 
 import { CardLayout, SkeletonLayout } from '../../../../../../../../shared/components/layouts'
-import { SubscribeButton } from '../../../../../../components/SubscribeButton'
-import { useProjectAtom } from '../../../../../../hooks/useProjectAtom'
 import { ContributeButton } from '../../components'
 import { ProjectBalanceDisplay } from './components/ProjectBalanceDisplay'
 
 export const ContributionSummary = (props: StackProps) => {
-  const { project } = useProjectAtom()
-
   return (
     <CardLayout w="100%" p={6} spacing={6} {...props}>
       <ProjectBalanceDisplay />
 
       <HStack w="full">
-        <SubscribeButton flex="1" projectName={project.name} projectTitle={project.title} />
         <ContributeButton flex="1" />
       </HStack>
     </CardLayout>
