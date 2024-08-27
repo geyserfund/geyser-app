@@ -44,9 +44,9 @@ const Header = ({ rewardsSold }: { rewardsSold: number | undefined }) => {
 
   return (
     <VStack w="100%" align="stretch" spacing={0.5}>
-      <HStack w="100%" justifyContent="center">
+      <HStack w="100%" justifyContent="center" color="neutralAlpha.11">
         <PiBag />
-        <Body size={'sm'} regular muted>
+        <Body size={'sm'} regular>
           {t('Rewards Sold')}
         </Body>
       </HStack>

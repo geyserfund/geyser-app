@@ -101,11 +101,9 @@ const Header = ({
 
   return (
     <VStack w="100%" align="stretch" spacing={0.5}>
-      <HStack w="100%" justifyContent="center">
+      <HStack w="100%" justifyContent="center" color="neutralAlpha.11">
         <PiCoins size={16} />
-        <Body size="sm" light>
-          {t('Contributions Received')}
-        </Body>
+        <Body size="sm">{t('Contributions Received')}</Body>
       </HStack>
 
       {noContributionsReceived ? (
