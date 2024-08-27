@@ -1,6 +1,6 @@
 import { Badge, Box, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { PiBag, PiFlagBannerBold, PiLightning, PiNewspaper } from 'react-icons/pi'
+import { PiBag, PiFlagBannerFold, PiLightning, PiNewspaper } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { Body } from '@/shared/components/typography'
@@ -119,51 +119,65 @@ const ActivityTypeItem = ({ activityType }: { activityType: ActivityType }) => {
   switch (activityType) {
     case ActivityType.ProjectGoalCreated:
       return (
-        <HStack spacing={1}>
+        <HStack color={'neutralAlpha.11'} spacing={1}>
           <Box mt={-1}>
-            <PiFlagBannerBold size={'20px'} />
+            <PiFlagBannerFold size={'20px'} />
           </Box>
-          <Body size="md">{t('Goal created')}</Body>
+          <Body size="lg" medium light>
+            {t('Goal created')}
+          </Body>
         </HStack>
       )
 
     case ActivityType.ProjectGoalReached:
       return (
-        <HStack spacing={1}>
+        <HStack color={'neutralAlpha.11'} spacing={1}>
           <Box mt={-1}>
-            <PiFlagBannerBold size={'20px'} />
+            <PiFlagBannerFold size={'20px'} />
           </Box>
-          <Body size="md">{t('Goal reached')}</Body>
+          <Body size="lg" medium light>
+            {t('Goal reached')}
+          </Body>
         </HStack>
       )
 
     case ActivityType.PostPublished:
       return (
-        <HStack spacing={1}>
+        <HStack color={'neutralAlpha.11'} spacing={1}>
           <PiNewspaper size={'20px'} />
-          <Body size="md">{t('Wrote post')}</Body>
+          <Body size="lg" medium light>
+            {t('New post')}
+          </Body>
         </HStack>
       )
     case ActivityType.ProjectRewardCreated:
       return (
-        <HStack>
+        <HStack color={'neutralAlpha.11'} spacing={1}>
           <Box mt={-0.5}>
             <PiBag size={'20px'} />
           </Box>
-          <Body size="md">{t('Created reward')}</Body>
+          <Body size="lg" medium light>
+            {t('Created reward')}
+          </Body>
         </HStack>
       )
     case ActivityType.ContributionConfirmed:
       return (
-        <HStack>
+        <HStack color={'neutralAlpha.11'} spacing={1}>
           <Box mt={-0.5}>
             <PiLightning size={'20px'} />
           </Box>
-          <Body size="md">{t('Top Contribution')}</Body>
+          <Body size="lg" medium light>
+            {t('Top Contribution')}
+          </Body>
         </HStack>
       )
     default:
-      return <Body size="md">{t('Unknown activity')}</Body>
+      return (
+        <Body size="lg" medium light>
+          {t('Unknown activity')}
+        </Body>
+      )
   }
 }
 
