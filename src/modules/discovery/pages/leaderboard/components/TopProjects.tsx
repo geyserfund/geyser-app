@@ -9,7 +9,6 @@ import { getPath } from '@/shared/constants'
 import { BronzeMedalUrl, GoldMedalUrl, SilverMedalUrl } from '@/shared/constants/platform/url'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { GlobalProjectLeaderboardRow, LeaderboardPeriod } from '@/types'
-import { useMobileMode } from '@/utils'
 
 import { useTopProjects } from '../hooks'
 import { ScrollableList } from './ScrollableList'
