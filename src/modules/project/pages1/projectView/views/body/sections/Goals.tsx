@@ -34,7 +34,7 @@ export const Goals = () => {
               </Button>
             )}
             <Button
-              size="sm"
+              size="md"
               variant="outline"
               colorScheme="neutral1"
               onClick={() => setGoalInEditMode(!isGoalinEditMode)}

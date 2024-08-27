@@ -21,8 +21,8 @@ import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigati
 import { PathName } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
+import { TopNavContainer } from '../../navigation/components/topNav/TopNavContainer'
 import { useProjectAtom } from '../hooks/useProjectAtom'
-import { TopNavContainer } from './components/TopNavContainer'
 import { showProjectNavBarForDesktopAtom, showProjectNavBarForMobileAtom } from './projectNavigationAtom'
 
 export const ProjectNavigation = () => {

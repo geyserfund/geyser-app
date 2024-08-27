@@ -12,7 +12,7 @@ type LinkButtonProps = {
 }
 
 type AlertDialogueProps = {
-  title: string
+  title: React.ReactNode
   description?: string
   hasCancel?: boolean
   neutralButtonProps?: ButtonProps & LinkButtonProps

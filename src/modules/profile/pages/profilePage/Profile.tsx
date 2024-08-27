@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 
 import { dimensions } from '@/shared/constants'
 
-import { toInt, useMobileMode } from '../../../../utils'
+import { useMobileMode } from '../../../../utils'
 import { ProfileError } from '../../components/ProfileError'
 import { useUserProfile } from '../../hooks/useUserProfile'
 import { Account } from './views/account/Account'
@@ -15,7 +15,7 @@ export const Profile = () => {
 
   const params = useParams<{ userId: string }>()
   const userId = useMemo(() => {
-    return toInt(params.userId)
+    return params.userId
   }, [params])
 
   const { error } = useUserProfile(userId)

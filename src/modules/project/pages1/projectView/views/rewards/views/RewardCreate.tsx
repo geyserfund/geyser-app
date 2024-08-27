@@ -5,9 +5,9 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import Loader from '@/components/ui/Loader'
 import { defaultProjectReward } from '@/defaults'
+import { ProjectNavContainer } from '@/modules/navigation/components/topNav'
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
 import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
-import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
 import { getPath } from '@/shared/constants'
 import { useNotification } from '@/utils'
 

@@ -4,14 +4,14 @@ import { PiArrowLeft } from 'react-icons/pi'
 import { Link, useParams } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
-import { useBTCConverter } from '@/helpers'
-import { BottomNavBarContainer } from '@/modules/navigation/bottomNav'
+import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
+import { ProjectNavContainer } from '@/modules/navigation/components/topNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
 import { dimensions, getPath } from '@/shared/constants'
 import { MarkdownField } from '@/shared/markdown/MarkdownField'
+import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { RewardCurrency, Satoshis, USDCents, useProjectRewardQuery } from '@/types'
 
 import { useRewardBuy } from '../../hooks'
@@ -22,7 +22,7 @@ export const RewardView = () => {
   const { project, isProjectOwner } = useProjectAtom()
   const { rewardId } = useParams<{ rewardId: string }>()
 
-  const { getSatoshisFromUSDCents, getUSDAmount } = useBTCConverter()
+  const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
 
   const { loading, data } = useProjectRewardQuery({
     skip: !rewardId,
@@ -50,7 +50,7 @@ export const RewardView = () => {
         <Body bold dark>
           {`$${reward.cost / 100} `}
           <Box as="span" color={'neutral1.9'}>
-            {`(${getSatoshisFromUSDCents(reward.cost as USDCents)}) sats`}
+            {`(${formatSatsAmount(reward.cost as USDCents)})`}
           </Box>
         </Body>
       )
@@ -61,7 +61,7 @@ export const RewardView = () => {
         <Box as="span" color={'neutral1.9'}>
           {' '}
           sats
-          {` $(${getUSDAmount(reward.cost as Satoshis)}) sats`}
+          {` (${formatUsdAmount(reward.cost as Satoshis)})`}
         </Box>
       </Body>
     )
@@ -106,17 +106,17 @@ export const RewardView = () => {
             </HStack>
             <HStack w="full" alignItems="end" justifyContent="space-between">
               <HStack spacing={{ base: 2, lg: 3 }} alignItems="end">
-                <Body size="xs" medium muted>
+                <Body size="sm" medium muted>
                   {t('Sold')}:{' '}
                   <Box as="span" color="utils.text" fontWeight={700}>
                     {reward.sold}
                   </Box>
                 </Body>
                 {reward.maxClaimable && (
-                  <Body size="xs" medium muted>
+                  <Body size="sm" medium muted>
                     {t('Available')}:{' '}
                     <Box as="span" color="utils.text" fontWeight={700}>
-                      {reward.maxClaimable - reward.sold - count}
+                      {reward.maxClaimable - reward.sold - count > 0 ? reward.maxClaimable - reward.sold - count : 0}
                     </Box>
                   </Body>
                 )}

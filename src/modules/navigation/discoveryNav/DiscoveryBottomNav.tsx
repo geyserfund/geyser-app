@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
 import { getPath } from '@/shared/constants'
 
-import { BottomNavBarContainer } from '../bottomNav'
+import { BottomNavBarContainer } from '../components/bottomNav'
 import { currentPlatformNavItemAtom } from './discoveryNavAtom'
 import { DiscoveryNavItem, DiscoveryNavItemKey, discoveryNavItems } from './discoveryNavData'
 

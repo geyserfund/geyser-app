@@ -15,7 +15,6 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { Body, H1 } from '@/shared/components/typography'
 
 import { CrownIcon, MedalIcon, StarIcon, TrophyIcon } from '../../../../../../../components/icons'
-import { MonoBody1 } from '../../../../../../../components/typography'
 import { useBtcContext } from '../../../../../../../context/btc'
 import { commaFormatted } from '../../../../../../../utils'
 
@@ -151,14 +150,12 @@ export const DonationInput = () => {
             <Button w="100%" variant="soft" colorScheme="neutral1" onClick={onToggle}>
               {isSatoshi ? (
                 <>
-                  <MonoBody1 isTruncated>
-                    {dollar > 0 ? `$${commaFormatted(dollar)}` : satoshi > 0 ? '< $1' : '$0'}
-                  </MonoBody1>
+                  <Body isTruncated>{dollar > 0 ? `$${commaFormatted(dollar)}` : satoshi > 0 ? '< $1' : '$0'}</Body>
                 </>
               ) : (
                 <>
-                  <MonoBody1 isTruncated>{commaFormatted(satoshi) || 0}</MonoBody1>
-                  <MonoBody1 pl={0.5}>{'sats'}</MonoBody1>
+                  <Body isTruncated>{commaFormatted(satoshi) || 0}</Body>
+                  <Body pl={0.5}>{'sats'}</Body>
                 </>
               )}
             </Button>

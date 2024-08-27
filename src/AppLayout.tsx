@@ -7,7 +7,7 @@ import { useHistoryRoutes } from './config/routes/hooks/useHistoryRoutes'
 import { useMatchRoutes } from './config/routes/hooks/useMatchRoutes'
 import { useAuthContext } from './context'
 import { useActivityHook } from './modules/discovery/hooks/useActivityHook'
-import { TopNavBar } from './modules/navigation/topNavBar/TopNavBar'
+import { PlatformNavBar } from './modules/navigation/platformNavBar/PlatformNavBar'
 import { LoadingPage } from './pages/loading'
 import { dimensions, ID } from './shared/constants'
 import { useLayoutAnimation } from './shared/hooks'
@@ -52,7 +52,7 @@ const AppLayout = () => {
             flexDir="column"
             backgroundColor="utils.pbg"
           >
-            <TopNavBar />
+            <PlatformNavBar />
             <Box
               id={ID.root}
               maxHeight="100%"

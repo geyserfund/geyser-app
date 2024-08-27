@@ -13,6 +13,8 @@ export const FundingDetailsUserEmail = () => {
     formState: { email, needsShipping },
     hasSelectedRewards,
     setTarget,
+    fundingFormError,
+    setErrorstate,
   } = useFundingFormAtom()
 
   if (!hasSelectedRewards) {
@@ -25,7 +27,15 @@ export const FundingDetailsUserEmail = () => {
         title={t('Your email')}
         subtitle={t('This email will be used by the seller to reach out to you.')}
       >
-        <Input type="email" name="email" placeholder="funderemail@gmail.com" value={email} onChange={setTarget} />
+        <Input
+          type="email"
+          name="email"
+          placeholder="funderemail@gmail.com"
+          value={email}
+          onChange={setTarget}
+          isInvalid={Boolean(fundingFormError.email)}
+          onFocus={() => setErrorstate({ key: 'email', value: '' })}
+        />
       </FieldContainer>
       {needsShipping && (
         <Feedback

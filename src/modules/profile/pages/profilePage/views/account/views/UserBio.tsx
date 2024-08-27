@@ -16,7 +16,7 @@ export const UserBio = () => {
   return (
     <VStack w="full" alignItems={'start'}>
       <Body size="xl" medium>
-        {t('Bio')}:
+        {t('Bio')}
       </Body>
       <Body>{userProfile.bio}</Body>
     </VStack>
@@ -27,7 +27,7 @@ export const UserBioSkeleton = () => {
   return (
     <VStack w="full" alignItems={'start'}>
       <Body size="xl" medium>
-        {t('Bio')}:
+        {t('Bio')}
       </Body>
       <Body>
         <SkeletonText noOfLines={3} spacing="4" />

@@ -38,7 +38,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({ tag }: ProjectDisplayProps) 
     return <ProjectDisplayBodySkeleton />
   }
 
-  const ProjectByTagList = data?.projectsMostFundedByTag || []
+  const ProjectByTagList = data?.projectsMostFundedByTag?.filter((tagMap) => tagMap.projects.length >= 4) || []
 
   return (
     <>

@@ -8,13 +8,13 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
-import { ProjectRewardForCreateUpdateFragment, ProjectStatus, RewardCurrency } from '@/types'
+import { ProjectRewardFragment, ProjectStatus, RewardCurrency } from '@/types'
 
 import { ProjectRewardShippingEstimate } from '../components/ProjectRewardShippingEstimate'
 import { RewardEditMenu } from '../components/RewardEditMenu'
 
 export type RewardCardProps = {
-  reward: ProjectRewardForCreateUpdateFragment
+  reward: ProjectRewardFragment
   hidden?: boolean
   buyReward?: () => void
   count?: number
@@ -81,17 +81,17 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
           {reward.name}
         </Body>
         <HStack w="full" justifyContent="start" spacing={3}>
-          <Body size="xs" medium muted>
+          <Body size="sm" medium muted>
             {t('Sold')}:{' '}
             <Box as="span" color="utils.text" fontWeight={700}>
               {reward.sold}
             </Box>
           </Body>
           {reward.maxClaimable && (
-            <Body size="xs" medium muted>
+            <Body size="sm" medium muted>
               {t('Available')}:{' '}
               <Box as="span" color="utils.text" fontWeight={700}>
-                {reward.maxClaimable - reward.sold - count}
+                {reward.maxClaimable - reward.sold - count > 0 ? reward.maxClaimable - reward.sold - count : 0}
               </Box>
             </Body>
           )}

@@ -69,10 +69,11 @@ const ProfileSettingsMenuButton = ({
     <Button
       variant="menu"
       colorScheme="primary1"
-      width={`${dimensions.profile.settings.menu.width}px`}
+      size="lg"
+      width={`${dimensions.project.dashboard.menu.width}px`}
       backgroundColor={'neutral1.1'}
       key={item.label}
-      leftIcon={<item.icon />}
+      leftIcon={<item.icon fontSize="18px" />}
       as={Link}
       to={getPath(item.path, userId)}
       isActive={isActive}

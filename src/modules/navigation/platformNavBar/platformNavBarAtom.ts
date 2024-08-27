@@ -11,7 +11,7 @@ import {
   routeMatchForAtom,
 } from '../../../config/routes/routeGroups'
 import { getPath, PathName } from '../../../shared/constants'
-import { profileSideNavAtom } from '../profileNav/profileSideNavAtom'
+import { profileSideNavAtom } from './profileNav/profileSideNavAtom'
 
 const routesForProjectPage = atom(routeMatchForAtom(projectRoutes))
 
@@ -68,7 +68,7 @@ export const isDiscoveryRoutesAtom = atom(routeMatchForAtom(discoveryRoutes))
 /** True if current route is the landing page */
 export const isLandingPageRouteAtom = atom(routeMatchForAtom([getPath('discoveryLanding')]))
 
-const topNavBarAnimateAtom = atom((get) => {
+const platformNavBarAnimateAtom = atom((get) => {
   const profileSidebar = get(profileSideNavAtom)
   // const projectSidebar = get(projectSideNavAtom)
   return {
@@ -77,6 +77,6 @@ const topNavBarAnimateAtom = atom((get) => {
     // left: projectSidebar.open,
   }
 })
-export const useTopNavBarAnimate = () => useAtomValue(topNavBarAnimateAtom)
+export const usePlatformNavBarAnimate = () => useAtomValue(platformNavBarAnimateAtom)
 
 export const useIsProjectPage = () => useAtomValue(routesForProjectPage)

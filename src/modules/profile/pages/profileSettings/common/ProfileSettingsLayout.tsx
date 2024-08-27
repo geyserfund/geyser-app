@@ -6,7 +6,7 @@ import { PiArrowLeft } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { useAuthContext } from '@/context'
-import { ProjectNavContainer } from '@/modules/project/navigation/ProjectNavContainer'
+import { ProjectNavContainer } from '@/modules/navigation/components/topNav'
 import { H1 } from '@/shared/components/typography'
 import { dimensions, getPath } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
@@ -52,7 +52,7 @@ export const ProfileSettingsLayout = ({
           <Button
             as={Link}
             to={getPath('userProfileSettings', user?.id)}
-            size={{ base: 'md', lg: 'lg' }}
+            size="lg"
             variant="ghost"
             colorScheme="neutral1"
             leftIcon={<PiArrowLeft />}

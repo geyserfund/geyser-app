@@ -1,7 +1,9 @@
 import { BsFacebook, BsGithub, BsGoogle } from 'react-icons/bs'
 import { RiTwitterXLine } from 'react-icons/ri'
 
-import { BoltSvgIcon, FountainIcon, NostrSvgIcon } from '../../../components/icons'
+import { NostrIcon } from '@/shared/components/icons'
+
+import { BoltSvgIcon, FountainIcon } from '../../../components/icons'
 import { ExternalAccountType } from '../../../pages/auth'
 
 export const externalAccountIconMap = {
@@ -10,6 +12,6 @@ export const externalAccountIconMap = {
   [ExternalAccountType.facebook]: BsFacebook,
   [ExternalAccountType.twitter]: RiTwitterXLine,
   [ExternalAccountType.lightning]: BoltSvgIcon,
-  [ExternalAccountType.nostr]: NostrSvgIcon,
+  [ExternalAccountType.nostr]: NostrIcon,
   [ExternalAccountType.fountain]: FountainIcon,
 } as { [key: string]: any }

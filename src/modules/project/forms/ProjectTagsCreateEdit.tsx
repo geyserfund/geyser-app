@@ -177,7 +177,7 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
               onMenuClose={onClose}
             />
           )}
-          <HStack width="100%" spacing="10px">
+          <HStack width="100%" spacing="10px" flexWrap={'wrap'}>
             {tags.map((tag) => {
               return (
                 <HStack key={tag.id} borderRadius="4px" paddingLeft="8px" backgroundColor="neutral1.2">

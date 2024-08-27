@@ -3,12 +3,11 @@ import { useTranslation } from 'react-i18next'
 import { PiTranslate } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
+import { Modal } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
-
-import { Modal } from '../../../../shared/components/layouts'
-import { languageFalgs, LanguageRequestUrl, languages } from '../../../../shared/constants'
-import { allTranslations } from '../../../../translations'
-import { ColorModeSwitcher } from '../../../../utils'
+import { languageFalgs, LanguageRequestUrl, languages } from '@/shared/constants'
+import { allTranslations } from '@/translations'
+import { ColorModeSwitcher } from '@/utils'
 
 export const ModeChange = () => {
   const { i18n, t } = useTranslation()
@@ -36,13 +35,7 @@ export const ModeChange = () => {
           <Text isTruncated>{t('Change language')}</Text>
         </Button>
       </HStack>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        size="xs"
-        contentProps={{ maxWidth: '250px' }}
-        title={t('Select language')}
-      >
+      <Modal isOpen={isOpen} onClose={onClose} size="xs" title={t('Select language')}>
         <VStack pb={5}>
           {renderLanguages.map((lng) => (
             <Tooltip key={lng.key} label={lng.disabled ? t('Coming soon') : ''}>

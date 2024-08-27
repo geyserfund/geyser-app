@@ -1,9 +1,21 @@
 import { Maybe } from 'yup'
 
 import { Satoshis, USDCents, USDollars } from '@/types'
+import { toFloat } from '@/utils'
 
-export const commaFormatted = (amount?: Maybe<number | USDollars | Satoshis | USDCents>) =>
-  amount ? amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''
+export const commaFormatted = (amount?: Maybe<number | USDollars | Satoshis | USDCents>) => {
+  if (!amount) {
+    return ''
+  }
+
+  let [wholePart, decimalPart] = amount.toString().split('.')
+
+  // Add commas to the whole part
+  wholePart = wholePart ? wholePart.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''
+
+  // Combine the whole part with the decimal part (if it exists)
+  return decimalPart ? `${wholePart}.${decimalPart}` : wholePart
+}
 
 export const getBitcoinAmount = (amount: number, decimal?: boolean) => {
   const divisor = 100000000
@@ -81,9 +93,9 @@ export const validateFundingAmount = (amount: number, btcRate: number) => {
 export const randomIntFromInterval = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min)
 
 export const dollarsToCents = (dollars: number): number => {
-  return Math.round(dollars * 100)
+  return dollars * 100 > 0 ? Math.round(dollars * 100) : toFloat((dollars * 100).toFixed(2))
 }
 
 export const centsToDollars = (cents: number): number => {
-  return Math.round(cents / 100)
+  return cents / 100 > 0 ? Math.round(cents / 100) : toFloat((cents / 100).toFixed(2))
 }

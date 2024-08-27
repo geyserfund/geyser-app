@@ -1,4 +1,7 @@
-import { Body } from '@/shared/components/typography'
+import { VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
+
+import { Body, H1 } from '@/shared/components/typography'
 import { useNotification } from '@/utils'
 
 import { ProjectForProfilePageFragment, useUserProfileProjectsQuery } from '../../../../../../../types'
@@ -45,7 +48,10 @@ export const ProfileProjects = () => {
   const projectsToRender = projects.sort((a, b) => Number(b.createdAt) - Number(a.createdAt))
 
   return (
-    <>
+    <VStack w="full" alignItems={'start'}>
+      <H1 size="2xl" bold display={{ base: 'unset', lg: 'none' }}>
+        {t('Projects')}
+      </H1>
       {projectsToRender.map((project, index) => {
         return (
           <ProfileProjectCard
@@ -57,6 +63,6 @@ export const ProfileProjects = () => {
           />
         )
       })}
-    </>
+    </VStack>
   )
 }

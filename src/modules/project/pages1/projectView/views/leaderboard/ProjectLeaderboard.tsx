@@ -1,11 +1,14 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { Button, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useNavigate } from 'react-router'
 
+import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { H1 } from '@/shared/components/typography'
-import { dimensions } from '@/shared/constants'
+import { dimensions, getPath } from '@/shared/constants'
 import { standardPadding } from '@/shared/styles'
 import { useMobileMode } from '@/utils'
 
@@ -42,6 +45,8 @@ export const ProjectLeaderboard = () => {
 }
 
 const ProjectLeaderboardMobile = () => {
+  const navigate = useNavigate()
+  const { project } = useProjectAtom()
   const items: AnimatedNavBarItem[] = [
     {
       name: t('Leaderboard'),
@@ -72,6 +77,17 @@ const ProjectLeaderboardMobile = () => {
         <AnimatedNavBar {...animatedNavBarProps} showLabel />
       </HStack>
       <VStack paddingTop={`${dimensions.projectNavBar.mobile.height}px`}>{render && render()}</VStack>
+      <BottomNavBarContainer>
+        <Button
+          variant="solid"
+          colorScheme="primary1"
+          size="lg"
+          width="full"
+          onClick={() => navigate(getPath('projectFunding', project.name))}
+        >
+          {t('Contribute')}
+        </Button>
+      </BottomNavBarContainer>
     </CardLayout>
   )
 }

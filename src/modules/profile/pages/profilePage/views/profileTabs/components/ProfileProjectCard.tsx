@@ -46,14 +46,13 @@ export const ProfileProjectCard = ({
       overflow="visible"
       {...rest}
     >
-      <Box width="70px" height="70px">
+      <Box width="70px" height="70px" overflow={'hidden'} borderRadius="8px">
         <ImageWithReload
           w="100%"
           h="100%"
           objectFit="cover"
           src={toSmallImageUrl(project.thumbnailImage || '')}
           alt={`${project.title}-header-image`}
-          borderRadius="8px"
         />
       </Box>
 

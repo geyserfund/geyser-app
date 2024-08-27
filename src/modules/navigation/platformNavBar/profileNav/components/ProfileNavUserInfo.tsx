@@ -2,11 +2,11 @@ import { Avatar, Button, HStack, VStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
-import { ExternalAccountType } from '../../../../pages/auth'
-import { loginMethodAtom } from '../../../../pages/auth/state'
-import { Body } from '../../../../shared/components/typography'
-import { externalAccountIconMap } from '../../../../shared/constants/platform/externalAccountIcons'
-import { UserMeFragment } from '../../../../types'
+import { ExternalAccountType } from '@/pages/auth'
+import { loginMethodAtom } from '@/pages/auth/state'
+import { Body } from '@/shared/components/typography'
+import { externalAccountIconMap } from '@/shared/constants/platform/externalAccountIcons'
+import { UserMeFragment } from '@/types'
 
 export const ProfileNavUserInfo = ({ user }: { user: UserMeFragment }) => {
   const { t } = useTranslation()
@@ -27,6 +27,8 @@ export const ProfileNavUserInfo = ({ user }: { user: UserMeFragment }) => {
             variant="outline"
             colorScheme="neutral1"
             rightIcon={loginMethod ? <Icon height="16px" width="16px" /> : undefined}
+            color="inherit"
+            _hover={{}}
           >
             {t('Logged in with')}
           </Button>
