@@ -33,7 +33,6 @@ export const ProjectIFollowGrid = () => {
         {followedProjectsActivities.map((activity) => (
           <>
             <ProjectIFollowGridItem key={activity.project.id} project={activity.project} count={activity.count} />
-            <ProjectIFollowGridItem key={activity.project.id} project={activity.project} count={activity.count} />
           </>
         ))}
       </Grid>
