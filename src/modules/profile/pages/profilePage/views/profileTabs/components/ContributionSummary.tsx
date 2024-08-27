@@ -16,6 +16,8 @@ interface ContributionSummaryProps {
 }
 
 export const ContributionSummary = ({ funder, project }: ContributionSummaryProps) => {
+  const fundingTxs = funder?.fundingTxs ? [...funder.fundingTxs] : []
+  const orderedFundingTxs = fundingTxs.length > 0 ? fundingTxs.sort((a, b) => b.paidAt - a.paidAt) : []
   return (
     <CardLayout
       as={Link}
@@ -47,7 +49,7 @@ export const ContributionSummary = ({ funder, project }: ContributionSummaryProp
           </Body>
         </Body>
       </HStack>
-      {funder?.fundingTxs.map((tx, i) => {
+      {orderedFundingTxs.map((tx, i) => {
         return (
           <CardLayout
             key={tx.paidAt}

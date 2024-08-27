@@ -7,7 +7,7 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { AlertDialogue } from '@/components/molecules/AlertDialogue'
 import { ImageWithReload, TextArea } from '@/components/ui'
 import Loader from '@/components/ui/Loader'
-import { ProjectNavContainer } from '@/modules/navigation/components/topNav'
+import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useEntriesAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H1 } from '@/shared/components/typography'
@@ -176,7 +176,7 @@ export const PostCreateEdit = () => {
   return (
     <>
       <VStack w="full" minHeight="full" paddingBottom={20}>
-        <ProjectNavContainer>
+        <TopNavContainerBar>
           <Button size="lg" variant="ghost" colorScheme="neutral1" onClick={handleBackClick} leftIcon={<PiArrowLeft />}>
             {isEntryPublished ? t('Back to post') : hasEntries ? t('Back to posts') : t('Back to project')}
           </Button>
@@ -199,7 +199,7 @@ export const PostCreateEdit = () => {
               </Tooltip>
             )}
           </HStack>
-        </ProjectNavContainer>
+        </TopNavContainerBar>
 
         <CardLayout noborder w="full" flex={1} spacing={3} dense alignItems="center" paddingTop={8}>
           <VStack width="full" flex={1} maxWidth={dimensions.project.posts.view.maxWidth} alignItems="start">

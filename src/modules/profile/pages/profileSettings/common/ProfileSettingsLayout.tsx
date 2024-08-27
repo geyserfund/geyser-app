@@ -6,7 +6,7 @@ import { PiArrowLeft } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { useAuthContext } from '@/context'
-import { ProjectNavContainer } from '@/modules/navigation/components/topNav'
+import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { H1 } from '@/shared/components/typography'
 import { dimensions, getPath } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
@@ -48,7 +48,7 @@ export const ProfileSettingsLayout = ({
       {...props}
     >
       {showTopNavBar && (
-        <ProjectNavContainer>
+        <TopNavContainerBar>
           <Button
             as={Link}
             to={getPath('userProfileSettings', user?.id)}
@@ -60,7 +60,7 @@ export const ProfileSettingsLayout = ({
           >
             {t('Profile Settings')}
           </Button>
-        </ProjectNavContainer>
+        </TopNavContainerBar>
       )}
       <VStack
         w="full"

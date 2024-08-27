@@ -4,7 +4,7 @@ import { PiArrowLeft } from 'react-icons/pi'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import Loader from '@/components/ui/Loader'
-import { ProjectNavContainer } from '@/modules/navigation/components/topNav'
+import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { getPath } from '@/shared/constants'
@@ -57,7 +57,7 @@ export const RewardEdit = () => {
 
   return (
     <VStack w="full" paddingBottom="120px">
-      <ProjectNavContainer>
+      <TopNavContainerBar>
         <Button
           as={Link}
           to={getPath('projectRewards', project?.name)}
@@ -71,7 +71,7 @@ export const RewardEdit = () => {
         {/* <Button size={{ base: 'md', lg: 'lg' }} variant="solid" colorScheme="primary1">
           {t('Publish')}
         </Button> */}
-      </ProjectNavContainer>
+      </TopNavContainerBar>
 
       <ProjectRewardForm
         hideBackbutton
