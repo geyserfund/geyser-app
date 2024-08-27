@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { Modal } from '@/shared/components/layouts'
+import { Body } from '@/shared/components/typography'
 
 import { useAuthContext } from '../../context'
 import { SocialAccountType } from '../../pages/auth'
@@ -25,7 +26,7 @@ import {
   hasTwitterAccount,
   useMobileMode,
 } from '../../utils'
-import { Body2, Caption } from '../typography'
+import { Caption } from '../typography'
 
 interface IAuthModal {
   isOpen: boolean
@@ -83,7 +84,7 @@ const ConnectAccounts = ({
         )}
         {/* <ConnectWithEmail onClose={onClose} /> */}
 
-        <Body2 color="neutral.900">{t('More connect options')}</Body2>
+        <Body size="sm">{t('More sign in options')}</Body>
         <HStack w="full" spacing="20px">
           {!hasGoogleAccount(user) && showGoogle && (
             <ConnectWithSocial accountType={SocialAccountType.google} onClose={onClose} isIconOnly flex={1} />
@@ -138,7 +139,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
     }
   }
 
-  const modalTitle = t(title || 'Login')
+  const modalTitle = t(title || 'Sign in to Geyser')
   const modalDescription = t(
     description ||
       'Connect your social account with the biggest social proof, allowing users to discover you and verify your reputation more easily',
