@@ -94,17 +94,19 @@ const LaunchNewProjectBanner = () => {
   )
 }
 
-export const ProjectCardSkeleton = () => {
+const ProjectCardSkeleton = () => {
   return (
-    <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={4}>
-      <HStack spacing={4}>
-        <Skeleton width="100px" height="100px" />
-        <VStack align="stretch" flex={1}>
-          <Skeleton height="20px" width="60%" />
-          <Skeleton height="16px" width="40%" />
-          <Skeleton height="16px" width="80%" />
-        </VStack>
+    <Box width="100%" py={4} minHeight="269px">
+      <HStack spacing={4} alignItems="center" justifyContent="space-between">
+        <HStack>
+          <Skeleton width="40px" height="40px" borderRadius="lg" />
+          <Skeleton height="24px" width="150px" />
+        </HStack>
+        <Skeleton height="30px" width="100px" />
       </HStack>
+      <VStack align="stretch" mt={4} spacing={2}>
+        <Skeleton height="200px" width="100%" />
+      </VStack>
     </Box>
   )
 }
