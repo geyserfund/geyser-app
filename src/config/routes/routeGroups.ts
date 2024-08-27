@@ -123,6 +123,7 @@ export const discoveryRoutes = [
   getPath('discoveryActivity'),
   getPath('discoveryLeaderboard'),
   getPath('discoveryGrants'),
+  getPath('discoveryGrant', PathName.grantId),
 ]
 
 export const profileRoutes = [
