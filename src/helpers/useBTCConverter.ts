@@ -10,7 +10,7 @@ export const useBTCConverter = () => {
 
   const getUSDAmount = useCallback(
     (satoshis: Satoshis): USDollars => {
-      return toFloat((satoshis * btcRate).toFixed) as USDollars
+      return toFloat(satoshis * btcRate > 0 ? satoshis * btcRate : (satoshis * btcRate).toFixed(2)) as USDollars
     },
     [btcRate],
   )

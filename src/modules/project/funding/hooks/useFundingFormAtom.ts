@@ -1,6 +1,7 @@
 import { useAtomValue, useSetAtom } from 'jotai'
 
 import {
+  fundingFormErrorAtom,
   fundingFormHasRewardsAtom,
   fundingFormStateAtom,
   fundingOnchainAmountWarningAtom,
@@ -8,6 +9,7 @@ import {
   isFundingInputAmountValidAtom,
   isFundingUserInfoValidAtom,
   resetFundingFormRewardsAtom,
+  setErrorStateAtom,
   setFundFormStateAtom,
   setFundFormTargetAtom,
   setResourceAtom,
@@ -26,6 +28,10 @@ export const useFundingFormAtom = () => {
   const isFundingInputAmountValid = useAtomValue(isFundingInputAmountValidAtom)
 
   const isFundingUserInfoValid = useAtomValue(isFundingUserInfoValidAtom)
+
+  const fundingFormError = useAtomValue(fundingFormErrorAtom)
+
+  const setErrorstate = useSetAtom(setErrorStateAtom)
 
   const setTarget = useSetAtom(setFundFormTargetAtom)
 
@@ -46,6 +52,8 @@ export const useFundingFormAtom = () => {
     onChainAmountWarning,
     isFundingInputAmountValid,
     isFundingUserInfoValid,
+    fundingFormError,
+    setErrorstate,
     setTarget,
     setState,
     setResource,

@@ -62,7 +62,7 @@ export const ProjectBalanceCircularProgress = ({ goal, rate, balance, loading }:
       return percent.toFixed(2)
     }
 
-    return percent.toFixed()
+    return percent.toFixed(0)
   }
 
   const handleClick = () => {

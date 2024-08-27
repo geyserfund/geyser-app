@@ -12,6 +12,7 @@ export const FRAGMENT_PROJECT_REWARD = gql`
     sold
     hasShipping
     maxClaimable
+    rewardCurrency
     isAddon
     isHidden
     category
