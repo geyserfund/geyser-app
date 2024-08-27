@@ -40,14 +40,14 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
     }
   }, [loading, onOpen, onClose, isAnonymous])
 
-  const modalTitle = 'The page you are trying to access required authorization.'
+  const modalTitle = 'Sign in to Geyser'
 
   const modalDescription = () => {
     if (isEntryCreationRoute) {
       return 'You must be logged in to create an entry.'
     }
 
-    return 'Login to continue'
+    return ' '
   }
 
   if (loading) {

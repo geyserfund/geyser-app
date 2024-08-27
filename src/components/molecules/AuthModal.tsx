@@ -26,7 +26,6 @@ import {
   useMobileMode,
 } from '../../utils'
 import { Body2, Caption } from '../typography'
-import { ButtonComponent } from '../ui'
 
 interface IAuthModal {
   isOpen: boolean
@@ -148,7 +147,7 @@ export const AuthModal = (authModalProps: IAuthModal) => {
   return (
     <Modal
       isOpen={isOpen}
-      onClose={!privateRoute ? onClose : () => {}}
+      onClose={privateRoute ? handlePrivateRouteModalClose : onClose}
       size="sm"
       closeOnOverlayClick={!privateRoute}
       closeOnEsc={!privateRoute}
@@ -168,13 +167,6 @@ export const AuthModal = (authModalProps: IAuthModal) => {
           showGithub={showGithub}
         />
       </Box>
-      {privateRoute && (
-        <Box display="flex" justifyContent="center" alignItems="center" marginTop={5}>
-          <ButtonComponent onClick={handlePrivateRouteModalClose}>
-            {t(location.key ? 'Go back' : 'Go home')}
-          </ButtonComponent>
-        </Box>
-      )}
     </Modal>
   )
 }
