@@ -32,8 +32,24 @@ const ActivityFeedItem = ({ activityType, createdAt, project, resource }: Activi
   const isRewardActivity = activityType === ActivityType.ProjectRewardCreated
   const isFundingTxActivity = activityType === ActivityType.ContributionConfirmed
 
+  const activityPath = (activityType: string) => {
+    switch (activityType) {
+      case ActivityType.ProjectGoalCreated:
+      case ActivityType.ProjectGoalReached:
+        return getPath('projectGoals', project.name)
+      case ActivityType.ProjectRewardCreated:
+        return getPath('projectRewardView', project.name, resource.id)
+      case ActivityType.PostPublished:
+        return getPath('projectPostView', project.name, resource.id)
+      default:
+        return getPath('project', project.name)
+    }
+  }
+
   return (
     <VStack
+      as={Link}
+      to={activityPath(activityType)}
       width={{ base: 'full', lg: '586px' }}
       border={'1px solid'}
       borderRadius={'md'}
@@ -281,33 +297,39 @@ const GoalTargetAmount = ({ goal }: { goal: ProjectGoal }) => {
 const RewardsInfo = ({ reward }: { reward: ProjectReward }) => {
   const { t } = useTranslation()
 
+  const { formatAmount } = useCurrencyFormatter()
+
   if (!reward) return null
 
   return (
     <HStack>
       <Body size="sm" bold>
-        {reward.cost}{' '}
+        {formatAmount(reward.cost, reward.rewardCurrency)}{' '}
         <Body as="span" size="sm" muted>
           {reward.rewardCurrency === RewardCurrency.Btcsat ? 'Sats' : 'USD'}
         </Body>
       </Body>
-      <Body size="sm" muted>
-        {t('Sold')} {': '}
-        <Body as="span" size="sm" dark bold>
-          {reward.sold}
-        </Body>
-      </Body>
-      {reward.stock && (
+      {reward.sold && (
         <Body size="sm" muted>
-          {t('Available')} {': '}
+          {t('Sold')} {': '}
           <Body as="span" size="sm" dark bold>
-            {reward.stock}
+            {reward.sold}
           </Body>
         </Body>
       )}
-      <Badge size="sm" variant="soft" colorScheme="neutral1">
-        {reward.category}
-      </Badge>
+      {reward.maxClaimable && (
+        <Body size="sm" muted>
+          {t('Available')} {': '}
+          <Body as="span" size="sm" dark bold>
+            {reward.maxClaimable}
+          </Body>
+        </Body>
+      )}
+      {reward.category && (
+        <Badge size="sm" variant="soft" colorScheme="neutral1">
+          {reward.category}
+        </Badge>
+      )}
     </HStack>
   )
 }
