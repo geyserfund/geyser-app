@@ -5,10 +5,13 @@ import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigati
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { dimensions } from '@/shared/constants'
 
+import { useLastVisistedFollowedProjects } from '../../hooks/useLastVisited'
 import { GlobalFeed } from './components/GlobalFeed'
 import { ProjectsIFollow } from './components/ProjectsIFollowFeed'
 
 export const Activity = () => {
+  useLastVisistedFollowedProjects()
+
   const items: AnimatedNavBarItem[] = [
     {
       name: 'Projects I Follow',

@@ -8,12 +8,15 @@ import { Body } from '@/shared/components/typography'
 import { DiamondUrl, getPath } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
+import { useLastVisitedMyProjects } from '../../hooks/useLastVisited'
 import { ProjectCard } from './components/ProjectCard'
 import { ProjectIFollowGrid } from './components/ProjectIFollowGrid'
 import { useMyProjects } from './hooks/useMyProjects'
 
 export const MyProjects = () => {
   const { t } = useTranslation()
+
+  useLastVisitedMyProjects()
 
   const { user } = useAuthContext()
   const { activeProjects, inDraftProjects, inReviewProjects, isLoading } = useMyProjects(user?.id)
