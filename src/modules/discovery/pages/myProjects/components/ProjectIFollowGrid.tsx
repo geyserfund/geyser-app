@@ -61,22 +61,24 @@ const ProjectIFollowGridItem = ({ project, count }: { project: Project; count: n
         objectFit="cover"
         zIndex={1}
       />
-      <Badge
-        width={'20px'}
-        height={'20px'}
-        zIndex={2}
-        position="absolute"
-        top={2}
-        left={2}
-        p={2}
-        bg={'primary1.9'}
-        borderRadius="md"
-        color="white"
-      >
-        <Body size="xs" dark medium>
-          {count}
-        </Body>
-      </Badge>
+      {count > 0 && (
+        <Badge
+          width={'20px'}
+          height={'20px'}
+          zIndex={2}
+          position="absolute"
+          top={2}
+          left={2}
+          p={2}
+          bg={'primary1.9'}
+          borderRadius="md"
+          color="white"
+        >
+          <Body size="xs" dark medium>
+            {count}
+          </Body>
+        </Badge>
+      )}
       <Box zIndex={2} position="absolute" bottom={0} left={0} right={0} p={2} height="52px" bg="rgba(0, 0, 0, 0.5)">
         <Body size="sm" color="white" medium>
           {project.title}

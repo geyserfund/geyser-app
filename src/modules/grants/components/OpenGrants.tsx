@@ -6,7 +6,7 @@ import { Grant } from '@/types'
 
 import { LargeGrantCard } from './LargeGrantCard'
 
-const OpenGrants = ({ openGrants }: { openGrants: Grant[] }) => {
+export const OpenGrants = ({ openGrants }: { openGrants: Grant[] }) => {
   const { t } = useTranslation()
 
   if (openGrants.length === 0) {
@@ -24,5 +24,3 @@ const OpenGrants = ({ openGrants }: { openGrants: Grant[] }) => {
     </VStack>
   )
 }
-
-export default OpenGrants

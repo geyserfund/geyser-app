@@ -82,7 +82,7 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
         <Body size={'sm'} bold isTruncated>
           {contributor.username}
         </Body>
-        <HStack spacing={1}>
+        <HStack spacing={2}>
           <HStack spacing={0.5}>
             <Body size="xs" dark>
               {formattedAmountContributed}
@@ -90,17 +90,19 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
           </HStack>
 
           <HStack spacing={0.5}>
+            <PiLightning size="12px" />
+
             <Body size="xs" dark>
               {contributor.contributionsCount}
             </Body>
-            <PiLightning size="12px" />
           </HStack>
 
           <HStack spacing={0.5}>
+            <PiRocketLaunch size="12px" />
+
             <Body size="xs" dark>
               {contributor.projectsContributedCount}{' '}
             </Body>
-            <PiRocketLaunch size="12px" />
           </HStack>
         </HStack>
       </VStack>

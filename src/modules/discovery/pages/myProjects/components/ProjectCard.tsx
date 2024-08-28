@@ -8,14 +8,14 @@ import { getPath } from '@/shared/constants'
 import { ProjectForProfilePageFragment, ProjectStatus } from '@/types'
 import { useMobileMode } from '@/utils'
 
-import Contributions from './Contributions'
-import Rewards from './Rewards'
+import { Contributions } from './Contributions'
+import { Rewards } from './Rewards'
 
 interface ProjectCardProps {
   project: ProjectForProfilePageFragment
 }
 
-const ProjectCard = ({ project }: ProjectCardProps) => {
+export const ProjectCard = ({ project }: ProjectCardProps) => {
   const { t } = useTranslation()
 
   const isMobile = useMobileMode()
@@ -82,8 +82,6 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
     </Box>
   )
 }
-
-export default ProjectCard
 
 const InDraftProjectCard = () => {
   const { t } = useTranslation()

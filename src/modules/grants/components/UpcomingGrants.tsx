@@ -6,7 +6,7 @@ import { Grant } from '@/types'
 
 import { LargeGrantCard } from './LargeGrantCard'
 
-const UpcomingGrants = ({ upcomingGrants }: { upcomingGrants: Grant[] }) => {
+export const UpcomingGrants = ({ upcomingGrants }: { upcomingGrants: Grant[] }) => {
   const { t } = useTranslation()
 
   if (upcomingGrants.length === 0) {
@@ -24,5 +24,3 @@ const UpcomingGrants = ({ upcomingGrants }: { upcomingGrants: Grant[] }) => {
     </VStack>
   )
 }
-
-export default UpcomingGrants

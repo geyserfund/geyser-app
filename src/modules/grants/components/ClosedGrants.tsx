@@ -6,7 +6,7 @@ import { Grant } from '@/types'
 
 import { SmallGrantCard } from './SmallGrantCard'
 
-const ClosedGrants = ({ closedGrants }: { closedGrants: Grant[] }) => {
+export const ClosedGrants = ({ closedGrants }: { closedGrants: Grant[] }) => {
   const { t } = useTranslation()
 
   if (closedGrants.length === 0) {
@@ -24,5 +24,3 @@ const ClosedGrants = ({ closedGrants }: { closedGrants: Grant[] }) => {
     </VStack>
   )
 }
-
-export default ClosedGrants

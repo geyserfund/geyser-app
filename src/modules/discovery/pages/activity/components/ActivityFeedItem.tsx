@@ -4,6 +4,7 @@ import { PiBag, PiFlagBannerFold, PiLightning, PiNewspaper } from 'react-icons/p
 import { Link } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
+import { CardLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
@@ -29,7 +30,8 @@ enum ActivityType {
 export const ActivityFeedItem = ({ activityType, createdAt, project, resource }: Activity) => {
   const isMobile = useMobileMode()
 
-  const isGoalActivity = activityType === ActivityType.ProjectGoalCreated
+  const isGoalActivity =
+    activityType === ActivityType.ProjectGoalCreated || activityType === ActivityType.ProjectGoalReached
   const isRewardActivity = activityType === ActivityType.ProjectRewardCreated
   const isFundingTxActivity = activityType === ActivityType.ContributionConfirmed
   const isPostActivity = activityType === ActivityType.PostPublished
@@ -49,13 +51,13 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
   }
 
   return (
-    <VStack
+    <CardLayout
       as={Link}
       to={activityPath(activityType)}
       width={{ base: 'full', lg: '586px' }}
-      border={'1px solid'}
-      borderRadius={'md'}
-      borderColor={'neutralAlpha.6'}
+      _hover={{
+        borderColor: 'neutralAlpha.8',
+      }}
       p={4}
     >
       {isMobile ? (
@@ -85,10 +87,11 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
         </HStack>
       )}
       <VStack width="full" alignItems="flex-start" spacing={1}>
+        {isPostActivity && <ActivityImage resource={resource} />}
         {!isFundingTxActivity && <ActivityTitle resource={resource} />}
-        {(isRewardActivity || isPostActivity) && <ActivityImage resource={resource} />}
+        {isRewardActivity && <ActivityImage resource={resource} />}
         {isRewardActivity && <RewardsInfo reward={resource as ProjectReward} />}
-        {isPostActivity && <ActivityDescription resource={resource} />}
+        <ActivityDescription resource={resource} />
         {isGoalActivity && (
           <>
             <GoalProgressBar goal={resource as ProjectGoal} />
@@ -97,7 +100,7 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
         )}
         {isFundingTxActivity && <ContributorInfo resource={resource} />}
       </VStack>
-    </VStack>
+    </CardLayout>
   )
 }
 
@@ -212,8 +215,7 @@ const ActivityTitle = ({ resource }: { resource: ActivityResource }) => {
 
 const ActivityImage = ({ resource }: { resource: ActivityResource }) => {
   if ('entryImage' in resource && typeof resource.entryImage === 'string') {
-    console.log('resource', resource)
-    console.log('entryImage', resource.entryImage)
+    if (!resource.entryImage) return null
     return (
       <ImageWithReload
         width={'full'}
@@ -227,6 +229,7 @@ const ActivityImage = ({ resource }: { resource: ActivityResource }) => {
   }
 
   if ('projectRewardImage' in resource && typeof resource.projectRewardImage === 'string') {
+    if (!resource.projectRewardImage) return null
     return (
       <ImageWithReload
         width={'full'}
