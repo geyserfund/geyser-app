@@ -9,7 +9,8 @@ export const CreateAProjectButton = (props: ButtonProps) => {
   const { t } = useTranslation()
   return (
     <Button
-      variant="primary"
+      variant="solid"
+      colorScheme="primary1"
       marginTop="20px"
       px="10px"
       as={Link}

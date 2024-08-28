@@ -1,6 +1,7 @@
-import { HStack, Image, Text, VStack } from '@chakra-ui/react'
+import { HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { Body, H3 } from '@/shared/components/typography'
 import { AvatarCircle, AvatarElement } from '@/shared/molecules/AvatarElement'
 
 import { User } from '../../types'
@@ -25,8 +26,8 @@ const BadgeItem = ({ image, name, description, winners }: BadgeItemProps) => {
   return (
     <VStack justify="center" maxWidth="272px">
       <Image alt="badge" objectFit="contain" src={image} width="190px" />
-      <Text variant="h3">{name}</Text>
-      <Text>{t(description)}</Text>
+      <H3>{name}</H3>
+      <Body>{t(description)}</Body>
       <HStack>
         {topWinners.map((user) => (
           <AvatarElement

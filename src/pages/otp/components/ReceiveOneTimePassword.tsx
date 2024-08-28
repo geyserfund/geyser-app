@@ -83,7 +83,7 @@ export const ReceiveOneTimePassword = ({
           label={canEditEmail ? t('Email input') : t('Your email')}
           isDisabled={!canEditEmail}
         />
-        <Button w="full" variant="primary" type="submit">
+        <Button w="full" variant="solid" colorScheme="primary1" type="submit">
           {t('Receive One Time Password')}
         </Button>
       </VStack>

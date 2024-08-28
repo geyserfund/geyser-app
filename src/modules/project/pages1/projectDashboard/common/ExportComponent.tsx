@@ -1,9 +1,9 @@
 import { Box, Link } from '@chakra-ui/react'
+import { chakraComponents, OptionProps } from 'chakra-react-select'
 import { DateTime } from 'luxon'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiDownloadSimple } from 'react-icons/pi'
-import { components, OptionProps } from 'react-select'
 
 import { CustomSelect } from '@/components/ui/CustomSelect'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
@@ -68,10 +68,6 @@ export function ExportComponent() {
     [project?.id],
   )
 
-  const DropdownIndicator = ({ innerRef, innerProps }: any) => {
-    return <PiDownloadSimple ref={innerRef} {...innerProps} fontSize={'16px'} />
-  }
-
   const Option = useCallback(
     ({
       children,
@@ -88,9 +84,9 @@ export function ExportComponent() {
       if (data.value === ExportOptions.customRange) {
         return (
           <Box onClick={dateModal.onOpen}>
-            <components.Option data={data} {...rest}>
+            <chakraComponents.Option data={data} {...rest}>
               {children}
-            </components.Option>
+            </chakraComponents.Option>
           </Box>
         )
       }
@@ -103,9 +99,9 @@ export function ExportComponent() {
           isExternal
           href={getValuesForUrl(data.value)}
         >
-          <components.Option data={data} {...rest}>
+          <chakraComponents.Option data={data} {...rest}>
             {children}
-          </components.Option>
+          </chakraComponents.Option>
         </Link>
       )
     },
@@ -117,11 +113,13 @@ export function ExportComponent() {
       <CustomSelect
         placeholder={t('Export CSV')}
         components={{
-          DropdownIndicator,
           Option: Option as any,
         }}
+        dropdownIndicator={<PiDownloadSimple />}
         options={options}
         value={{ label: t('Export CSV'), value: '' }}
+        size="sm"
+        width={'150px'}
       />
 
       <DateSelectModal projectId={project?.id} {...dateModal} />

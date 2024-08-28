@@ -47,7 +47,7 @@ export const DateSelectModal = ({ projectId, ...rest }: DateSelectModalProps) =>
               minDate={to ? DateTime.fromMillis(to).toJSDate() : undefined}
               enableTabLoop={false}
               customInput={
-                <Button w="full" variant="secondary" size="sm">
+                <Button w="full" variant="outline" colorScheme="neutral1" size="sm">
                   {from ? DateTime.fromMillis(from).toFormat('yyyy/MM/dd') : ' '}
                 </Button>
               }
@@ -61,7 +61,7 @@ export const DateSelectModal = ({ projectId, ...rest }: DateSelectModalProps) =>
               minDate={from ? DateTime.fromMillis(from).toJSDate() : undefined}
               enableTabLoop={false}
               customInput={
-                <Button w="full" variant="secondary" size="sm">
+                <Button w="full" variant="outline" colorScheme="neutral1" size="sm">
                   {to ? DateTime.fromMillis(to).toFormat('yyyy/MM/dd') : ' '}
                 </Button>
               }

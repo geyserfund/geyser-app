@@ -42,7 +42,7 @@ export const InsertImageModal = ({
         <VStack spacing={4}>
           <ImageField control={form.control} name="url" label="Image" required />
           <TextField control={form.control} name="label" label="Label" />
-          <Button w="100%" variant="primary" type="submit">
+          <Button w="100%" variant="solid" colorScheme="primary1" type="submit">
             Insert
           </Button>
         </VStack>

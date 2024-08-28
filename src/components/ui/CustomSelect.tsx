@@ -1,3 +1,4 @@
+import { ResponsiveValue } from '@chakra-ui/react'
 import { chakraComponents, ChakraStylesConfig, Props, Select } from 'chakra-react-select'
 import { useMemo } from 'react'
 
@@ -5,17 +6,19 @@ export interface CustomSelectProps<Option, IsMulti extends boolean = false>
   extends Omit<Props<Option, IsMulti>, 'chakraStyles'> {
   customChakraStyles?: ChakraStylesConfig<Option, IsMulti>
   dropdownIndicator?: React.ReactNode
+  width?: ResponsiveValue<number | string>
 }
 
 export function CustomSelect<Option, IsMulti extends boolean = false>({
   customChakraStyles,
   dropdownIndicator,
+  width,
   ...props
 }: CustomSelectProps<Option, IsMulti>) {
   const chakraStyles: ChakraStylesConfig<Option, IsMulti> = {
     container: (provided) => ({
       ...provided,
-      width: { base: '100%', lg: '200px' },
+      width: width || { base: '100%', lg: '200px' },
     }),
 
     menu: (provided) => ({

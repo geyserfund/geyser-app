@@ -1,6 +1,6 @@
 /* eslint-disable complexity */
 import { gql, useQuery } from '@apollo/client'
-import { Button, Checkbox, HStack, IconButton, Select, Stack, Switch, Text, Tooltip, VStack } from '@chakra-ui/react'
+import { Button, Checkbox, HStack, IconButton, Select, Stack, Switch, Tooltip, VStack } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
 import { DateTime } from 'luxon'
 import { useState } from 'react'
@@ -346,9 +346,9 @@ export const ProjectRewardForm = ({
               }}
             />
           )}
-          <Text fontSize="18px" fontWeight={600}>
+          <Body size="lg" fontWeight={600}>
             {t(titleText)}
-          </Text>
+          </Body>
         </Stack>
 
         <Stack direction={{ base: 'column', lg: 'row' }}>
@@ -363,9 +363,9 @@ export const ProjectRewardForm = ({
           </FieldContainer>
           <VStack spacing={1} alignItems="start" w="100%">
             <HStack>
-              <Text variant="body1" wordBreak="keep-all" fontWeight={'normal'}>
+              <Body wordBreak="keep-all" fontWeight={'normal'}>
                 {t('Limited Edition (skip if no limit)')}
-              </Text>
+              </Body>
               <Tooltip
                 label={t(
                   'Limited Edition rewards cannot be edited after rewards have been purchased to ensure fairness for the first buyers. To change the amounts of Limited Edition rewards create a new reward.',
@@ -465,9 +465,9 @@ export const ProjectRewardForm = ({
         <Stack direction={{ base: 'column', lg: 'row' }} my={4} gap={1}>
           <VStack flex={1} alignItems={'start'}>
             <HStack w={'100%'}>
-              <Text variant="body1" wordBreak="keep-all" fontWeight={500}>
+              <Body wordBreak="keep-all" fontWeight={500}>
                 {t('Pre-Order')}
-              </Text>
+              </Body>
               <Switch
                 isChecked={reward.preOrder}
                 size={'md'}
@@ -477,11 +477,11 @@ export const ProjectRewardForm = ({
                 }}
               />
             </HStack>
-            <Text variant="body1" fontWeight={400} pr={{ base: 0, lg: 2 }} maxWidth={'450px'}>
+            <Body fontWeight={400} pr={{ base: 0, lg: 2 }} maxWidth={'450px'}>
               {t(
                 "For rewards that are still in development and not ready to ship, set them to 'Pre-order' to enable advance purchases by users.",
               )}
-            </Text>
+            </Body>
           </VStack>
           {reward.preOrder ? (
             <FieldContainer title={t('Expected Availability Date')} boldTitle={true} flex={1}>
@@ -521,9 +521,9 @@ export const ProjectRewardForm = ({
                   />
                 </CalendarButton>
               </div>
-              <Text variant="body1" fontWeight={400}>
+              <Body fontWeight={400}>
                 {t("Use “Expected Availability Date' to set when your reward will be developed and available.")}
-              </Text>
+              </Body>
             </FieldContainer>
           ) : (
             <FieldContainer title={t('Delivery Time (Weeks)')} boldTitle={true}>
@@ -546,9 +546,9 @@ export const ProjectRewardForm = ({
                 }}
                 error={formError.estimatedDeliveryInWeeks}
               />
-              <Text variant="body1" fontWeight={400}>
+              <Body fontWeight={400}>
                 {t('Specify estimated delivery time for the reward from the moment it is ordered.')}
-              </Text>
+              </Body>
             </FieldContainer>
           )}
         </Stack>

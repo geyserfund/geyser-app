@@ -1,6 +1,8 @@
-import { Button, Text } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+
+import { Body, H3 } from '@/shared/components/typography'
 
 import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { getPath } from '../../../../../../../shared/constants'
@@ -24,15 +26,15 @@ export const FinalizeProjectNotice = () => {
 
   return (
     <CardLayout mobileDense w="full">
-      <Text variant="h3">{t('Finalize project')}</Text>
+      <H3 size="lg">{t('Finalize project')}</H3>
 
-      <Text variant="body1">
+      <Body>
         {t(
           'Your project is not live yet. Head back to the creation flow to finalize your project information and launch it!',
         )}
-      </Text>
+      </Body>
 
-      <Button variant="primary" w="full" onClick={handleConnectNodeClick}>
+      <Button variant="solid" colorScheme="primary1" w="full" onClick={handleConnectNodeClick}>
         {t('Finalize project')}
       </Button>
     </CardLayout>

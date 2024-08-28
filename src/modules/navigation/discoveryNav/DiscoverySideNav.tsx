@@ -41,7 +41,9 @@ export const DiscoverySideNav = () => {
       backgroundColor="utils.pbg"
       zIndex={10}
     >
-      <Image src={isTabletSize ? tabletImage : imageUrl} height="48px" width="auto" />
+      <Link to={getPath('discoveryLanding')}>
+        <Image src={isTabletSize ? tabletImage : imageUrl} height="48px" width="auto" />
+      </Link>
       <VStack w="full" padding={0}>
         {discoveryNavItems.map((item) => {
           const activityDot =

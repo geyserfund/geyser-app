@@ -30,10 +30,10 @@ export const LoggedOutModal = ({ isOpen, onClose }: UseModalProps) => {
         <ModalBody>
           <Text>{t('Please log back in with your profile, or press continue if want to stay anonymous.')}</Text>
           <Box display="flex" justifyContent="space-between" paddingTop="20px">
-            <Button variant="primary" width="50%" mx={1} onClick={loginOnOpen}>
+            <Button variant="solid" colorScheme="primary1" width="50%" mx={1} onClick={loginOnOpen}>
               {t('Login')}
             </Button>
-            <Button variant="primaryNeutral" width="50%" mx={1} onClick={onClose}>
+            <Button variant="soft" colorScheme="neutral1" width="50%" mx={1} onClick={onClose}>
               {t('Continue')}
             </Button>
           </Box>

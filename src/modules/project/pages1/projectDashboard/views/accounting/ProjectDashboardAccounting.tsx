@@ -93,7 +93,13 @@ export const ProjectDashboardAccounting = () => {
         )}
         {!noMoreItems.current && (
           <HStack w="full" px={standardPadding}>
-            <Button width="100%" variant="secondary" isLoading={isLoadingMore.current} onClick={() => fetchNext()}>
+            <Button
+              width="100%"
+              variant="outline"
+              colorScheme="neutral1"
+              isLoading={isLoadingMore.current}
+              onClick={() => fetchNext()}
+            >
               {t('Show more')}...
             </Button>
           </HStack>
@@ -106,8 +112,8 @@ export const ProjectDashboardAccounting = () => {
 export const ProjectDashboardAccountingSkeleton = () => {
   return (
     <DashboardLayout>
-      <VStack width="100%" flexGrow={1} spacing="10px" paddingX={6}>
-        <HStack w="full" justifyContent={'end'} px={{ base: 3, lg: 6 }}>
+      <VStack width="100%" flexGrow={1} spacing="10px" paddingX={standardPadding} marginTop={{ base: '-48px', lg: 0 }}>
+        <HStack w="full" justifyContent={'end'}>
           <SkeletonLayout width="140px" height="30px" />
         </HStack>
         <VStack w="full" spacing="10px">
