@@ -16,6 +16,7 @@ const GrantWidget = ({ grant, compact = false }: { grant: Grant; compact?: boole
     return <GrantInfo label="Starts on" value={getFormattedDate(votingStartDate || 0)} />
   }
 
+  console.log('grant', grant)
   if (isClosedGrant) {
     return (
       <>
