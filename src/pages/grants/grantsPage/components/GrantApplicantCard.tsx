@@ -243,6 +243,21 @@ export const GrantApplicantCard = ({
   }
 
   const renderButton = (project: Project) => {
+    if (grantStatus === GrantStatusEnum.Closed || grantStatus === GrantStatusEnum.ApplicationsOpen) {
+      return (
+        <Button
+          as={Link}
+          to={getPath('project', project.name)}
+          size={'md'}
+          variant={'primary'}
+          zIndex={2}
+          pointerEvents="auto"
+        >
+          {t('View project')}
+        </Button>
+      )
+    }
+
     if ((!isLoggedIn || !currentUser?.hasSocialAccount) && votingSystem !== VotingSystem.OneToOne && grantHasVoting) {
       return (
         <Button
@@ -283,21 +298,6 @@ export const GrantApplicantCard = ({
           pointerEvents="auto"
         >
           {t('Vote')}
-        </Button>
-      )
-    }
-
-    if (grantStatus !== GrantStatusEnum.Closed) {
-      return (
-        <Button
-          as={Link}
-          to={getPath('project', project.name)}
-          size={'md'}
-          variant={'primary'}
-          zIndex={2}
-          pointerEvents="auto"
-        >
-          {t('View project')}
         </Button>
       )
     }
