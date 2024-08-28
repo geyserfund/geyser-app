@@ -1,4 +1,4 @@
-import { Box, HStack, useDisclosure, VStack } from '@chakra-ui/react'
+import { HStack, useDisclosure, VStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect } from 'react'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
@@ -82,7 +82,7 @@ export const PlatformNavBar = () => {
       return <BrandLogo />
     }
 
-    return <Box />
+    return <BrandLogo />
   }, [shouldShowGeyserLogo, shouldShowProjectLogo, isPlatformRoutes, isMobileMode])
 
   return (
