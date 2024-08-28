@@ -90,17 +90,19 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
           </HStack>
 
           <HStack spacing={0.5}>
+            <PiLightning size="12px" />
+
             <Body size="xs" dark>
               {contributor.contributionsCount}
             </Body>
-            <PiLightning size="12px" />
           </HStack>
 
           <HStack spacing={0.5}>
+            <PiRocketLaunch size="12px" />
+
             <Body size="xs" dark>
               {contributor.projectsContributedCount}{' '}
             </Body>
-            <PiRocketLaunch size="12px" />
           </HStack>
         </HStack>
       </VStack>
