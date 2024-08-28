@@ -3,6 +3,7 @@ import { atom, useAtomValue } from 'jotai'
 import { getPath, PathName } from '../../../shared/constants'
 import {
   creatorProjectCreationRoutes as routesForPrivateProjectLaunch,
+  profileSettingsRoutes,
   projectCreatorRoutes as routesForProjectCreator,
   projectPostCreatorRoutes,
   routeMatchForAtom,
@@ -16,13 +17,17 @@ export const routeMatchForProjectPageAtom = atom(routeMatchForAtom([getPath('pro
 
 const routesForEntryCreationAtom = atom(routeMatchForAtom(projectPostCreatorRoutes))
 
+const routesForProfileEditAtom = atom(routeMatchForAtom(profileSettingsRoutes))
+
 export const useRouteMatchesForPrivateRoute = () => {
   const isProjectCreatorRoute = useAtomValue(routesForProjectCreatorAtom)
   const isEntryCreationRoute = useAtomValue(routesForEntryCreationAtom)
   const isPrivateProjectLaunchRoute = useAtomValue(routesForPrivateProjectLaunchAtom)
+  const isProfileSettingsRoute = useAtomValue(routesForProfileEditAtom)
   return {
     isProjectCreatorRoute,
     isEntryCreationRoute,
     isPrivateProjectLaunchRoute,
+    isProfileSettingsRoute,
   }
 }
