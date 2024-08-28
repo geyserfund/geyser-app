@@ -87,8 +87,9 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
         </HStack>
       )}
       <VStack width="full" alignItems="flex-start" spacing={1}>
+        {isPostActivity && <ActivityImage resource={resource} />}
         {!isFundingTxActivity && <ActivityTitle resource={resource} />}
-        {(isRewardActivity || isPostActivity) && <ActivityImage resource={resource} />}
+        {isRewardActivity && <ActivityImage resource={resource} />}
         {isRewardActivity && <RewardsInfo reward={resource as ProjectReward} />}
         <ActivityDescription resource={resource} />
         {isGoalActivity && (
