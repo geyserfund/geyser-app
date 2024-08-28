@@ -10,11 +10,10 @@ import { getPath, GrantsFAQUrl, GrantsPageBannerNoiseGifUrl } from '@/shared/con
 import { useGrantStatisticsQuery } from '@/types'
 import { getShortAmountLabel, useMobileMode } from '@/utils'
 
-// TODO: Change to geyser grants project name before pushing to production
-const GEYSER_PROJECT_NAME = __staging__ ? 'geyser2' : __production__ ? 'geyser' : 'geyser-dev'
+const GEYSER_PROJECT_NAME = __staging__ ? 'geyser2' : __production__ ? 'grants' : 'geyser-dev'
 const AIRTABLE_CREATE_GRANT_URL = 'https://airtable.com/appyM7XlNIWVypuP5/pagLMhHSSQVlKe0Dw/form'
 
-const GrantsHeader = () => {
+export const GrantsHeader = () => {
   const { t } = useTranslation()
 
   const navigate = useNavigate()
@@ -158,8 +157,6 @@ const GrantsHeader = () => {
     </>
   )
 }
-
-export default GrantsHeader
 
 const BannerItem = ({
   label,

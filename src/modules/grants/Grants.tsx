@@ -1,7 +1,7 @@
-import ClosedGrants from './components/ClosedGrants'
-import GrantsHeader from './components/GrantsHeader'
-import OpenGrants from './components/OpenGrants'
-import UpcomingGrants from './components/UpcomingGrants'
+import { ClosedGrants } from './components/ClosedGrants'
+import { GrantsHeader } from './components/GrantsHeader'
+import { OpenGrants } from './components/OpenGrants'
+import { UpcomingGrants } from './components/UpcomingGrants'
 import { useGrants } from './hooks/useGrants'
 
 export const Grants = () => {
