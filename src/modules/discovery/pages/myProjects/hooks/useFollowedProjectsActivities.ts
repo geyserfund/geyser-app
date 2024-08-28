@@ -1,8 +1,19 @@
 import { useMemo, useState } from 'react'
 
-import { ActivityFeedName, ProjectActivitiesCount, useActivitiesCountGroupedByProjectQuery } from '@/types'
+import {
+  ActivityFeedName,
+  Project,
+  ProjectActivitiesCount,
+  useActivitiesCountGroupedByProjectQuery,
+  useMeProjectFollowsQuery,
+} from '@/types'
+
+const sortByCount = (a: ProjectActivitiesCount, b: ProjectActivitiesCount) => {
+  return b.count - a.count
+}
 
 export const useFollowedProjectsActivities = () => {
+  const [followedProjects, setFollowedProjects] = useState<Project[]>([])
   const [followedProjectsActivities, setFollowedProjectsActivities] = useState<ProjectActivitiesCount[]>([])
 
   const dateRange = useMemo(() => {
@@ -17,6 +28,13 @@ export const useFollowedProjectsActivities = () => {
       startDateTime: oneWeekAgo.getTime(),
     }
   }, [])
+
+  useMeProjectFollowsQuery({
+    onCompleted(data) {
+      setFollowedProjects(data.me?.projectFollows as Project[])
+    },
+  })
+
   // TODO: change the feed to FollowedProjects once the backend fix is ready
   useActivitiesCountGroupedByProjectQuery({
     variables: {
@@ -30,7 +48,19 @@ export const useFollowedProjectsActivities = () => {
     },
   })
 
+  const filteredProjectsActivities = useMemo(() => {
+    return followedProjects
+      .map((project) => {
+        const activityCount = followedProjectsActivities.find((activity) => activity.project.id === project.id)
+        return {
+          project,
+          count: activityCount ? activityCount.count : 0,
+        }
+      })
+      .sort(sortByCount)
+  }, [followedProjects, followedProjectsActivities])
+
   return {
-    followedProjectsActivities,
+    followedProjectsActivities: filteredProjectsActivities,
   }
 }
