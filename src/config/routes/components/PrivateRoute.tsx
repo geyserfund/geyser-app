@@ -29,7 +29,7 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
     )
   }, [params.projectId, params.projectName, user.ownerOf])
 
-  const isVieweingOwnProfile = useMemo(() => {
+  const isViewingOwnProfile = useMemo(() => {
     return user.id === params.userId
   }, [params.userId, user.id])
 
@@ -69,7 +69,7 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
     return <Navigate to={getPath('project', params?.projectName)} />
   }
 
-  if (isProfileSettingsRoute && !isVieweingOwnProfile && params?.userId) {
+  if (isProfileSettingsRoute && !isViewingOwnProfile && params?.userId) {
     return <Navigate to={getPath('userProfile', params?.userId)} />
   }
 
