@@ -13,7 +13,7 @@ interface RewardsProps {
   projectName: string
 }
 
-const Rewards = ({ projectId, projectName }: RewardsProps) => {
+export const Rewards = ({ projectId, projectName }: RewardsProps) => {
   const { rewards, totalRewardsCount, isLoading } = useRewards(projectId)
 
   if (isLoading) return <RewardsSkeleton />
@@ -34,8 +34,6 @@ const Rewards = ({ projectId, projectName }: RewardsProps) => {
     </Box>
   )
 }
-
-export default Rewards
 
 const Header = ({ rewardsSold }: { rewardsSold: number | undefined }) => {
   const { t } = useTranslation()

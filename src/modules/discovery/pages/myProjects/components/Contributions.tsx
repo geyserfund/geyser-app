@@ -20,7 +20,7 @@ interface ContributionsProps {
   projectName: string
 }
 
-const Contributions = ({ projectId, projectName }: ContributionsProps) => {
+export const Contributions = ({ projectId, projectName }: ContributionsProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { stats, isLoading, error } = useProjectStats(projectId)
@@ -81,8 +81,6 @@ const Contributions = ({ projectId, projectName }: ContributionsProps) => {
     </Box>
   )
 }
-
-export default Contributions
 
 const Header = ({
   total,

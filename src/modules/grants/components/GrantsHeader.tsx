@@ -14,7 +14,7 @@ import { getShortAmountLabel, useMobileMode } from '@/utils'
 const GEYSER_PROJECT_NAME = __staging__ ? 'geyser2' : __production__ ? 'geyser' : 'geyser-dev'
 const AIRTABLE_CREATE_GRANT_URL = 'https://airtable.com/appyM7XlNIWVypuP5/pagLMhHSSQVlKe0Dw/form'
 
-const GrantsHeader = () => {
+export const GrantsHeader = () => {
   const { t } = useTranslation()
 
   const navigate = useNavigate()
@@ -158,8 +158,6 @@ const GrantsHeader = () => {
     </>
   )
 }
-
-export default GrantsHeader
 
 const BannerItem = ({
   label,
