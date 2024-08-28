@@ -40,11 +40,11 @@ export const TrendingRewardCard = ({ reward, ...rest }: TrendingRewardCardProps)
         flex={1}
         width={{ base: 'auto', lg: '100%' }}
         minWidth={{ base: '170px', lg: 'auto' }}
-        padding={4}
+        padding={{ base: 3, lg: 4 }}
         alignItems="start"
         justifyContent="space-between"
         overflow="hidden"
-        spacing={1}
+        spacing={0}
       >
         <H3 size="lg" medium flex={1} isTruncated width="100%">
           {reward.name}

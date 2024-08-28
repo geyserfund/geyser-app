@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom'
 
 import { getPath } from '@/shared/constants'
 
-// import { useNavigate } from 'react-router-dom'
 import { isActive } from '../../../../../../../utils'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
 
