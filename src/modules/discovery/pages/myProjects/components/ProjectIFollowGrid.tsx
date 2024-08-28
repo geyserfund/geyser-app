@@ -72,9 +72,8 @@ const ProjectIFollowGridItem = ({ project, count }: { project: Project; count: n
           p={2}
           bg={'primary1.9'}
           borderRadius="md"
-          color="white"
         >
-          <Body size="xs" dark medium>
+          <Body size="xs" color="utils.blackContrast" dark medium>
             {count}
           </Body>
         </Badge>
