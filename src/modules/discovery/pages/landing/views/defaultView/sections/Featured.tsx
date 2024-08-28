@@ -71,7 +71,7 @@ export const Featured = () => {
   const rightContent = () => {
     return (
       <Button variant="surface" colorScheme="primary1" rightIcon={<PiStarFour />} onClick={featuredProjectModal.onOpen}>
-        {t('Featured project')}
+        {t('Feature project')}
       </Button>
     )
   }
