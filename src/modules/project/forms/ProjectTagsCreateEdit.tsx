@@ -1,9 +1,9 @@
 import { Button, HStack, IconButton, StackProps, useDisclosure, VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { chakraComponents, MenuListProps, MultiValue } from 'chakra-react-select'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { PiX } from 'react-icons/pi'
+import { PiPlus, PiX } from 'react-icons/pi'
 import { createUseStyles } from 'react-jss'
-import { MultiValue } from 'react-select'
 
 import { CustomSelect } from '@/components/ui/CustomSelect'
 import { Body } from '@/shared/components/typography'
@@ -62,7 +62,7 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
     },
   })
 
-  const [createTag] = useProjectTagCreateMutation({
+  const [createTag, { loading: createLoading }] = useProjectTagCreateMutation({
     onError() {
       toast({
         status: 'error',
@@ -129,8 +129,29 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
     }
   }
 
+  const MenuList = (props: MenuListProps<TagsGetResult, true, any>) => {
+    return (
+      <chakraComponents.MenuList {...props}>
+        {props.children}
+        {showAddTag && (
+          <Button
+            w="full"
+            variant="select"
+            colorScheme="primary1"
+            isDisabled={disableShowAddTag}
+            leftIcon={<PiPlus />}
+            onClick={handleCreateTag}
+          >
+            {t('add tag')}
+          </Button>
+        )}
+      </chakraComponents.MenuList>
+    )
+  }
+
   const isDisabled = tags.length >= MAX_TAGS_ALLOWED
   const showAddTag = !tagOptions.some((tag) => tag.label.toLowerCase().includes(inputValue.toLowerCase()))
+  const disableShowAddTag = inputValue.length < MAX_TAGS_ALLOWED || createLoading
 
   const SubTitle = (
     <span>
@@ -173,6 +194,7 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
               onInputChange={handleInputChange}
               onKeyDown={handleKeyDown}
               inputValue={inputValue}
+              components={{ MenuList }}
               onMenuOpen={onOpen}
               onMenuClose={onClose}
             />
