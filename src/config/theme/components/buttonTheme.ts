@@ -164,7 +164,7 @@ export const buttonTheme: ComponentStyleConfig = {
     }),
 
     menu: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
-      bg: 'transparent',
+      bg: 'utils.pbg',
       color: 'utils.text',
       borderRadius: '8px',
       justifyContent: 'flex-start',

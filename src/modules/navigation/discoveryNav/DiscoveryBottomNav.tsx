@@ -53,7 +53,6 @@ const DiscoveryBottomNavButton = ({ item, currentNavItem, activityDot, ...rest }
       colorScheme="primary1"
       size="lg"
       flex={1}
-      backgroundColor={'neutral1.1'}
       key={item.label}
       as={Link}
       paddingX={4}

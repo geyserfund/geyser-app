@@ -47,14 +47,14 @@ export const FundersContributionItemSkeleton = () => {
   return (
     <>
       <HStack w="full" alignItems={'start'} spacing={1} paddingX={6} paddingY={2}>
-        <VStack flex={1} alignItems={'start'} justifyContent={'center'} spacing={0}>
+        <VStack flex={1} alignItems={'start'} justifyContent={'center'} spacing={2}>
           <HStack w="full" justifyContent={'space-between'}>
-            <SkeletonLayout height="16px" width="200px" />
+            <SkeletonLayout height="16px" width="60px" />
 
-            <SkeletonLayout height="16px" width="150px" />
+            <SkeletonLayout height="16px" width="40px" />
           </HStack>
 
-          <SkeletonText noOfLines={1} width="100%" />
+          <SkeletonText noOfLines={2} width="100%" />
         </VStack>
       </HStack>
     </>

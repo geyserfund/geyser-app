@@ -84,7 +84,6 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
         variant="menu"
         colorScheme="primary1"
         size="lg"
-        backgroundColor={'neutral1.1'}
         key={item.label}
         width="50px"
         height="50px"
@@ -118,7 +117,6 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
       colorScheme="primary1"
       size="lg"
       width={'full'}
-      backgroundColor={'neutral1.1'}
       key={item.label}
       leftIcon={<item.icon fontSize="18px" />}
       rightIcon={
