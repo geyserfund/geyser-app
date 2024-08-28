@@ -1,6 +1,6 @@
 import { Alert, AlertIcon, Text } from '@chakra-ui/react'
 
-import { AlertDialogue } from '@/components/molecules/AlertDialogue'
+import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
 
 interface IUpdateCurrencyModal {
   isOpen: boolean

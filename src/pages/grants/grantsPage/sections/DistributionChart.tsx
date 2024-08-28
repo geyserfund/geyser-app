@@ -2,7 +2,8 @@ import { Box, BoxProps, HStack, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { Caption, H3 } from '../../../../components/typography'
+import { Body, H3 } from '@/shared/components/typography'
+
 import { CardLayout } from '../../../../shared/components/layouts'
 import { getPath } from '../../../../shared/constants'
 import { standardPadding } from '../../../../shared/styles'
@@ -64,7 +65,7 @@ export const DistributionChart = ({
 
   return (
     <CardLayout noMobileBorder p={standardPadding} w="full">
-      <H3 fontSize={'18px'}>{t('Leaderboard')}</H3>
+      <H3 size="lg">{t('Leaderboard')}</H3>
       {percentages.length > 0 && (
         <Box py={2}>
           {displayedPercentages.map(
@@ -154,11 +155,11 @@ const ChartBar = ({
 
   const renderSats = ({ withParentheses }: { withParentheses: boolean }) => {
     return (
-      <Caption fontSize={'12px'} bold color="neutral.9000">
+      <Body size="xs" bold>
         {withParentheses ? '(' : ''}
         {`${getShortAmountLabel(communityFundingAmount, true)} sats`}
         {withParentheses ? ')' : ''}
-      </Caption>
+      </Body>
     )
   }
 
@@ -166,12 +167,12 @@ const ChartBar = ({
 
   const renderVotesOrVoters = ({ withParentheses }: { withParentheses: boolean }) => {
     return (
-      <Caption fontSize={'12px'} bold color="neutral.600" isTruncated>
+      <Body size="xs" bold light isTruncated>
         {withParentheses ? '(' : ''}
         {votesOrVoters}{' '}
         {isCompetitionVote ? (votingSystem === VotingSystem.OneToOne ? t('voters') : t('votes')) : t('contributors')}
         {withParentheses ? ')' : ''}
-      </Caption>
+      </Body>
     )
   }
 
@@ -187,13 +188,9 @@ const ChartBar = ({
         justifyContent={'end'}
         alignItems="center"
       >
-        <Caption
-          fontSize={'12px'}
-          bold
-          color={['primary.100', 'primary.400'].includes(`${bg}`) ? 'neutral.1000' : 'neutral.0'}
-        >
+        <Body size="xs" bold color={['primary.100', 'primary.400'].includes(`${bg}`) ? 'neutral.1000' : 'neutral.0'}>
           {isMobile ? Math.round(percentage) : percentage.toFixed(1)}%
-        </Caption>
+        </Body>
       </HStack>
       <HStack minWidth="150px">
         {votingSystem === VotingSystem.OneToOne

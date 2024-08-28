@@ -3,7 +3,8 @@ import { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { H2 } from '../../../../../../components/typography'
+import { H2 } from '@/shared/components/typography'
+
 import { CardLayout } from '../../../../../../shared/components/layouts'
 import { getPath } from '../../../../../../shared/constants'
 import { standardPadding } from '../../../../../../shared/styles'
@@ -30,7 +31,9 @@ export const RefundInitiatedPage = () => {
   return (
     <HStack w="full" h="full" justifyContent="center" alignItems="center">
       <CardLayout maxWidth="700px" padding={standardPadding} spacing={6}>
-        <H2>{t('Refund')}</H2>
+        <H2 size="2xl" bold>
+          {t('Refund')}
+        </H2>
         <RefundProcessing noborder />
         <Divider />
         <RefundSummary />

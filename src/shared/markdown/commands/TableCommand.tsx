@@ -13,7 +13,8 @@ import { useCommands } from '@remirror/react'
 import { useState } from 'react'
 import { BsTable } from 'react-icons/bs'
 
-import { MonoBody2 } from '../../../components/typography'
+import { Body } from '@/shared/components/typography'
+
 import { useDebounce } from '../../../shared/hooks'
 import { ToolbarCommandButton } from './ToolbarCommandButton'
 
@@ -88,7 +89,7 @@ export const TableCommand = ({ isDisabled }: TableCommandProps) => {
                   </HStack>
                 ))}
               </VStack>
-              <MonoBody2 semiBold>{`${currentPosition.i + 1}X${currentPosition.j + 1}`}</MonoBody2>
+              <Body size="sm" medium>{`${currentPosition.i + 1}X${currentPosition.j + 1}`}</Body>
             </VStack>
           </PopoverBody>
         </PopoverContent>

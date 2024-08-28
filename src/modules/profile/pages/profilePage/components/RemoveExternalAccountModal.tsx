@@ -1,9 +1,8 @@
 import { useTranslation } from 'react-i18next'
 
-import { AlertDialogue } from '@/components/molecules/AlertDialogue'
 import { ExternalAccountType } from '@/pages/auth'
-
-import { Body2 } from '../../../../../components/typography'
+import { Body } from '@/shared/components/typography'
+import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
 
 interface IDeleteConfirmModal {
   isOpen: boolean
@@ -36,11 +35,11 @@ export const RemoveExternalAccountModal = ({ isOpen, onClose, confirm, type, isL
       }}
     >
       {isNostr && (
-        <Body2 semiBold wordBreak="break-word">
+        <Body size="sm" medium wordBreak="break-word">
           {t(
             'By disconnecting this Nostr account from your Geyser profile you will be able to connect a different Nostr account. However, you will be unable to create a new Geyser profile with this existing Nostr account.',
           )}
-        </Body2>
+        </Body>
       )}
     </AlertDialogue>
   )

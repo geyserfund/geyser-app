@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { Body2, H3 } from '../../../../../components/typography'
+import { Body, H3 } from '@/shared/components/typography'
+
 import { useAuthContext } from '../../../../../context'
 import { getPath } from '../../../../../shared/constants'
 import { useModal } from '../../../../../shared/hooks/useModal'
@@ -61,12 +62,12 @@ export const DeleteUserProfile = () => {
     <>
       <VStack w="full" spacing="10px" alignItems="start">
         <HStack w="full" justifyContent={'space-between'}>
-          <H3>{t('Delete profile')}</H3>
+          <H3 size="lg">{t('Delete profile')}</H3>
 
           <Tooltip label={isUserAProjectCreator ? t('As a project creator, you cannot delete your profile') : ''}>
             <Button
-              variant="secondary"
-              color="secondary.red"
+              variant="outline"
+              colorScheme="error"
               onClick={deleteProfile.onOpen}
               isDisabled={isUserAProjectCreator}
             >
@@ -74,7 +75,7 @@ export const DeleteUserProfile = () => {
             </Button>
           </Tooltip>
         </HStack>
-        <Body2>{t('Delete your profile permanently from Geyser.')}</Body2>
+        <Body size="sm">{t('Delete your profile permanently from Geyser.')}</Body>
       </VStack>
 
       <DeleteTextConfirm isOpen={deleteProfile.isOpen} onClose={deleteProfile.onClose} {...deleteTextProps} />

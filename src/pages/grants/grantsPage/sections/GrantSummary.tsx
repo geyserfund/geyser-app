@@ -1,11 +1,10 @@
 import { Box, Image, ListItem, Tag, UnorderedList, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { Body } from '@/shared/components/typography'
+import { Body, H1, H3 } from '@/shared/components/typography'
 import { MarkdownField } from '@/shared/markdown/MarkdownField'
 import { validateImageUrl } from '@/shared/markdown/validations/image'
 
-import { H1, H3 } from '../../../../components/typography'
 import { StatusLabel } from '../../../../components/ui/StatusLabel'
 import { Tooltip } from '../../../../components/ui/Tooltip'
 import { VideoPlayer } from '../../../../modules/project/pages1/projectView/views/body/sections/header/components/VideoPlayer'
@@ -156,11 +155,15 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
 
         <Box display="flex" flexDir={{ base: 'column', lg: 'row' }} width="100%" pt={2} justifyContent="space-between">
           <Box pt={2}>
-            <H1>{t(grant.title)}</H1>
+            <H1 size="4xl" bold>
+              {t(grant.title)}
+            </H1>
           </Box>
         </Box>
         <Box pt={4}>
-          <H3 fontSize="18px">{t(grant.shortDescription)}</H3>
+          <H3 size="lg" medium>
+            {t(grant.shortDescription)}
+          </H3>
           <Box pt={4}>
             <MarkdownField preview content={grant.description || ''} />
           </Box>

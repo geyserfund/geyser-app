@@ -1,8 +1,9 @@
 import { useDisclosure } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { H3 } from '@/shared/components/typography'
+
 import { AuthModal } from '../../../../components/molecules'
-import { H3 } from '../../../../components/typography'
 import { useAuthContext } from '../../../../context'
 import { CardLayout } from '../../../../shared/components/layouts'
 import { Grant, GrantApplicant, GrantStatusEnum, VotingSystem } from '../../../../types'
@@ -67,7 +68,7 @@ export const CommunityVoting = ({
   return (
     <>
       <CardLayout noMobileBorder p={{ base: '10px', lg: '20px' }} spacing={{ base: '10px', lg: '20px' }} w="full">
-        <H3 fontSize="18px">{t(title)}</H3>
+        <H3 size="lg">{t(title)}</H3>
         {sortedApplicants.map(({ project, funding, contributors, contributorsCount, voteCount }) => {
           return (
             <GrantApplicantCard
