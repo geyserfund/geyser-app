@@ -6,8 +6,8 @@ import { ImageWithReload } from '@/components/ui'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { BronzeMedalUrl, GoldMedalUrl, SilverMedalUrl } from '@/shared/constants/platform/url'
-import { useCurrencyFormatter } from '@/shared/utils/hooks'
-import { Currency, GlobalContributorLeaderboardRow, LeaderboardPeriod } from '@/types'
+import { GlobalContributorLeaderboardRow, LeaderboardPeriod } from '@/types'
+import { commaFormatted } from '@/utils'
 
 import { useTopContributors } from '../hooks'
 import { ScrollableList } from './ScrollableList'
@@ -48,16 +48,12 @@ export const TopContributors = ({ period }: TopContributorsProps) => {
 }
 
 const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributorLeaderboardRow; rank: number }) => {
-  const { formatAmount } = useCurrencyFormatter()
-
-  const formattedAmountContributed = formatAmount(contributor.contributionsTotalUsd, Currency.Usdcent)
-
   return (
     <HStack
       width="100%"
       spacing={4}
       as={Link}
-      to={getPath('userProfile', contributor.username)}
+      to={getPath('userProfile', contributor.userId)}
       _hover={{ backgroundColor: 'neutral1.3', cursor: 'pointer' }}
       py={1}
       px={4}
@@ -85,7 +81,7 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
         <HStack spacing={2}>
           <HStack spacing={0.5}>
             <Body size="xs" dark>
-              {formattedAmountContributed}
+              ${commaFormatted(contributor.contributionsTotalUsd)}
             </Body>
           </HStack>
 
