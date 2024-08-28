@@ -1,8 +1,7 @@
 import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
 
-import App from '../../App'
-import AppLayout from '../../AppLayout'
-// import { ProjectView } from '../../modules/project/pages1/projectView'
+import { App } from '../../App'
+import { AppLayout } from '../../AppLayout'
 import { ExternalAuthSuccess, FailedAuth } from '../../pages/auth'
 import { NotAuthorized, NotFoundPage, NotFoundProject } from '../../pages/fallback'
 import { __production__, getPath, PathName } from '../../shared/constants'
@@ -13,8 +12,6 @@ const GrantsOld = () => import('../../pages/grants')
 const Grants = () => import('../../modules/grants/Grants')
 
 const ProjectLaunch = () => import('../../modules/project/pages1/projectCreation')
-// const Entry = () => import('../../pages/entry')
-// const ProjectDashboard = () => import('../../modules/project/pages/projectDashboard')
 
 const Project = () => import('../../modules/project/pages1/projectView')
 
@@ -497,31 +494,6 @@ export const platformRoutes: RouteObject[] = [
       return { Component: RefundPage }
     },
   },
-  // {
-  //   path: getPath('entry', PathName.entryId),
-  //   async lazy() {
-  //     const EntryPage = await Entry().then((m) => m.EntryPage)
-  //     return { Component: EntryPage }
-  //   },
-  //   children: [
-  //     {
-  //       index: true,
-  //       path: getPath('entry', PathName.entryId),
-  //       async lazy() {
-  //         const EntryContainer = await Entry().then((m) => m.EntryContainer)
-  //         return { Component: EntryContainer }
-  //       },
-  //     },
-  //     {
-  //       path: getPath('entryRewards', PathName.entryId),
-  //       async lazy() {
-  //         const EntryRewards = await Entry().then((m) => m.EntryRewards)
-  //         return { Component: EntryRewards }
-  //       },
-  //     },
-  //   ],
-  // },
-
   {
     path: getPath('notFound'),
     Component: NotFoundPage,

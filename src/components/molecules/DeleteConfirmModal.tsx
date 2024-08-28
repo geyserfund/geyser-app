@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { AlertDialogue } from './AlertDialogue'
+import { AlertDialogue } from '../../shared/molecules/AlertDialogue'
 
 interface IDeleteConfirmModal {
   isOpen: boolean

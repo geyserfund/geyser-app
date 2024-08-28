@@ -2,13 +2,13 @@ import { HStack, Switch, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiXCircle } from 'react-icons/pi'
 
-import { AlertDialogue } from '@/components/molecules/AlertDialogue'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
+import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
 import {
   ProjectStatusCreatorText,
   ProjectStatusLabels,

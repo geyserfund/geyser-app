@@ -5,10 +5,10 @@ import { useTranslation } from 'react-i18next'
 import { PiDownloadSimple } from 'react-icons/pi'
 import { components, OptionProps } from 'react-select'
 
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 
 import { useModal } from '../../../../../shared/hooks'
-import { SelectComponent } from '../components/SelectComponent'
 import { DateSelectModal } from './DateSelectModal'
 import { getDownloadUrl } from './helpers'
 
@@ -114,11 +114,11 @@ export function ExportComponent() {
 
   return (
     <>
-      <SelectComponent
+      <CustomSelect
         placeholder={t('Export CSV')}
         components={{
           DropdownIndicator,
-          Option,
+          Option: Option as any,
         }}
         options={options}
         value={{ label: t('Export CSV'), value: '' }}

@@ -189,6 +189,32 @@ export const buttonTheme: ComponentStyleConfig = {
         color: 'neutral1.8',
       },
     }),
+    select: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
+      bg: 'transparent',
+      color: 'utils.text',
+      borderRadius: '8px',
+      justifyContent: 'flex-start',
+      _hover: {
+        bg: `${colorScheme}.9`,
+        color: 'utils.blackContrast',
+      },
+      _active: {
+        bg: `neutral1.3`,
+        color: 'utils.text',
+      },
+      _selected: {
+        bg: `neutral1.3`,
+        color: 'utils.text',
+      },
+      _loading: {
+        backgroundColor: `${colorScheme}.6`,
+        color: 'utils.blackContrast',
+      },
+      _disabled: {
+        bg: 'panel.solid',
+        color: 'neutral1.8',
+      },
+    }),
 
     primary: ({ theme }: StyleFunctionProps) => ({
       backgroundColor: theme.colors.primary[400],

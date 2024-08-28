@@ -8,7 +8,7 @@ import { useMobileMode } from '@/utils'
 import { useActivityFeed } from '../hooks/useActivityFeed'
 import { ActivityFeedItem } from './ActivityFeedItem'
 
-const GlobalFeed = () => {
+export const GlobalFeed = () => {
   const isMobile = useMobileMode()
 
   const { globalActivities, isLoading, isLoadingMore, noMoreItems, fetchNext } = useActivityFeed(
@@ -55,5 +55,3 @@ const ActivityItemSkeleton = () => {
     />
   )
 }
-
-export default GlobalFeed

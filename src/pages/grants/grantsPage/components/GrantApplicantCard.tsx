@@ -16,9 +16,9 @@ import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 import { Link, useNavigate } from 'react-router-dom'
 
+import { H3 } from '@/shared/components/typography'
 import { AvatarElement } from '@/shared/molecules/AvatarElement'
 
-import { H3 } from '../../../../components/typography'
 import { ImageWithReload } from '../../../../components/ui'
 import { CardLayout, Modal } from '../../../../shared/components/layouts'
 import { getPath } from '../../../../shared/constants'
@@ -322,7 +322,7 @@ export const GrantApplicantCard = ({
             </Box>
           </Box>
           <Box pr={2} flexGrow={1}>
-            <H3 fontSize="18px">{project.title}</H3>
+            <H3 size="lg">{project.title}</H3>
             <Text noOfLines={4} wordBreak="break-word">
               {project.shortDescription}
             </Text>

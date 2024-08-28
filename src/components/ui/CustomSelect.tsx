@@ -1,4 +1,5 @@
 import { chakraComponents, ChakraStylesConfig, Props, Select } from 'chakra-react-select'
+import { useMemo } from 'react'
 
 export interface CustomSelectProps<Option, IsMulti extends boolean = false>
   extends Omit<Props<Option, IsMulti>, 'chakraStyles'> {
@@ -40,15 +41,15 @@ export function CustomSelect<Option, IsMulti extends boolean = false>({
       ...(state.isFocused &&
         !state.isSelected && {
           bg: 'primary1.9',
-          color: 'utils.text',
+          color: 'utils.blackContrast',
         }),
       _hover: {
         bg: 'primary1.9',
-        color: 'utils.text',
+        color: 'utils.blackContrast',
       },
       _active: {
         bg: 'primary1.10',
-        color: 'utils.text',
+        color: 'utils.blackContrast',
       },
       _disabled: {
         bg: 'panel.solid',
@@ -66,18 +67,21 @@ export function CustomSelect<Option, IsMulti extends boolean = false>({
     ...customChakraStyles,
   }
 
-  const components = {
-    DropdownIndicator: (props: any) => (
-      <chakraComponents.DropdownIndicator {...props}>{dropdownIndicator}</chakraComponents.DropdownIndicator>
-    ),
-  }
+  const components = useMemo(
+    () => ({
+      DropdownIndicator: (props: any) => (
+        <chakraComponents.DropdownIndicator {...props}>{dropdownIndicator}</chakraComponents.DropdownIndicator>
+      ),
+    }),
+    [dropdownIndicator],
+  )
 
   return (
     <Select
       chakraStyles={chakraStyles}
       useBasicStyles
       {...props}
-      components={components}
+      components={{ ...components, ...props.components }}
       menuPortalTarget={document.body}
       styles={{
         menuPortal: (base) => ({ ...base, zIndex: 12 }),

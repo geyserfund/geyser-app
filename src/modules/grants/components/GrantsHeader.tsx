@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Image, Skeleton, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Image, Link as ChakraLink, Skeleton, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiCoins, PiTrophy } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
@@ -38,10 +38,6 @@ const GrantsHeader = () => {
 
   const handleDonateToGeyser = () => {
     navigate(getPath('projectFunding', GEYSER_PROJECT_NAME))
-  }
-
-  const handleCreateGrant = () => {
-    window.open(AIRTABLE_CREATE_GRANT_URL, '_blank')
   }
 
   const Direction = isMobile ? VStack : HStack
@@ -144,13 +140,15 @@ const GrantsHeader = () => {
               {t('Donate to Geyser Grants')}
             </Button>
             <Button
+              as={ChakraLink}
+              href={AIRTABLE_CREATE_GRANT_URL}
+              isExternal
               w="100%"
               size="lg"
               variant="solid"
               colorScheme="primary1"
               bg="yellow.9"
               rightIcon={<PiTrophy size={18} />}
-              onClick={handleCreateGrant}
             >
               {t('Create a grant')}
             </Button>
