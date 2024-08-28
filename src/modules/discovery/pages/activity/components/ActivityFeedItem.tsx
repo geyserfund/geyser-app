@@ -29,7 +29,8 @@ enum ActivityType {
 export const ActivityFeedItem = ({ activityType, createdAt, project, resource }: Activity) => {
   const isMobile = useMobileMode()
 
-  const isGoalActivity = activityType === ActivityType.ProjectGoalCreated
+  const isGoalActivity =
+    activityType === ActivityType.ProjectGoalCreated || activityType === ActivityType.ProjectGoalReached
   const isRewardActivity = activityType === ActivityType.ProjectRewardCreated
   const isFundingTxActivity = activityType === ActivityType.ContributionConfirmed
   const isPostActivity = activityType === ActivityType.PostPublished
@@ -88,7 +89,7 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
         {!isFundingTxActivity && <ActivityTitle resource={resource} />}
         {(isRewardActivity || isPostActivity) && <ActivityImage resource={resource} />}
         {isRewardActivity && <RewardsInfo reward={resource as ProjectReward} />}
-        {isPostActivity && <ActivityDescription resource={resource} />}
+        <ActivityDescription resource={resource} />
         {isGoalActivity && (
           <>
             <GoalProgressBar goal={resource as ProjectGoal} />
