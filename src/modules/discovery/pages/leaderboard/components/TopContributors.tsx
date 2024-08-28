@@ -82,7 +82,7 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
         <Body size={'sm'} bold isTruncated>
           {contributor.username}
         </Body>
-        <HStack spacing={1}>
+        <HStack spacing={2}>
           <HStack spacing={0.5}>
             <Body size="xs" dark>
               {formattedAmountContributed}
