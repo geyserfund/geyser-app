@@ -160,7 +160,6 @@ export const ProjectCreationWalletConnectionForm = ({
                     />
                     <InputRightElement>{renderRightElementContent()}</InputRightElement>
                   </InputGroup>
-
                   {lightningAddress.value && lightningAddress.state === LNAddressEvaluationState.SUCCEEDED ? (
                     <WalletLimitComponent limit={limits} />
                   ) : null}
@@ -267,7 +266,7 @@ export const ProjectCreationWalletConnectionForm = ({
               }
             >
               <>
-                <RenderSponsorImage url={VoltageExplainerPageForGeyserURL} imageUrl={VoltageUrl} />
+                <RenderSponsorImage url={VoltageExplainerPageForGeyserURL} imageUrl={VoltageUrl} height="24px" />
                 <ProjectFeeSelection readOnly={readOnly} value={fee.value} onChange={fee.setValue} />
               </>
             </WalletConnectionOptionInfoBox>

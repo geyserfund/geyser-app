@@ -42,6 +42,7 @@ export const Activity = () => {
         width="full"
         justifyContent="center"
         alignItems="center"
+        zIndex={2}
       >
         <AnimatedNavBar {...animatedNavBarProps} showIcon showLabel />
       </HStack>

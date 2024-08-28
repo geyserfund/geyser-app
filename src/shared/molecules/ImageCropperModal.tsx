@@ -91,7 +91,7 @@ export const ImageCropperModal = ({ isOpen, onClose, onCompleted, fileSrc, aspec
         </HStack>
 
         <HStack width="full">
-          <Button flex="1" variant="primary" onClick={uploadCroppedImage}>
+          <Button flex="1" variant="solid" colorScheme="primary1" onClick={uploadCroppedImage}>
             {t('Save')}
           </Button>
         </HStack>

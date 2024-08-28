@@ -63,7 +63,15 @@ export const ConnectWithEmail = ({ onClose, ...rest }: ConnectWithEmailProps) =>
 
   return (
     <>
-      <Button variant="primary" w="100%" leftIcon={<MdEmail />} onClick={handleClick} textDecoration={'none'} {...rest}>
+      <Button
+        variant="solid"
+        colorScheme="primary1"
+        w="100%"
+        leftIcon={<MdEmail />}
+        onClick={handleClick}
+        textDecoration={'none'}
+        {...rest}
+      >
         Email
       </Button>
       <VerifyYourEmail isOpen={isOpen} onClose={onModalClose} action={MfaAction.Login} handleVerify={handleLogin} />

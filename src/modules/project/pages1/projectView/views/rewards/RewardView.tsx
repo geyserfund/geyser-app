@@ -13,6 +13,7 @@ import { dimensions, getPath } from '@/shared/constants'
 import { MarkdownField } from '@/shared/markdown/MarkdownField'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { RewardCurrency, Satoshis, USDCents, useProjectRewardQuery } from '@/types'
+import { useMobileMode } from '@/utils'
 
 import { useRewardBuy } from '../../hooks'
 import { ProjectRewardShippingEstimate, RewardEditMenu } from './components'
@@ -21,6 +22,7 @@ import { RewardShare } from './components/RewardShare'
 export const RewardView = () => {
   const { project, isProjectOwner } = useProjectAtom()
   const { rewardId } = useParams<{ rewardId: string }>()
+  const isMobileMode = useMobileMode()
 
   const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
 
@@ -90,19 +92,14 @@ export const RewardView = () => {
               <H2 flex={1} size="2xl" bold>
                 {reward.name}
               </H2>
-              {isProjectOwner ? (
-                <RewardEditMenu size="md" display={{ base: 'none', lg: 'undefined' }} reward={reward} />
-              ) : (
-                <Button
-                  variant="solid"
-                  colorScheme="primary1"
-                  width="160px"
-                  display={{ base: 'none', lg: 'undefined' }}
-                  onClick={buyReward}
-                >
-                  {t('Buy')}
-                </Button>
-              )}
+              {!isMobileMode &&
+                (isProjectOwner ? (
+                  <RewardEditMenu size="md" reward={reward} />
+                ) : (
+                  <Button variant="solid" colorScheme="primary1" width="160px" onClick={buyReward}>
+                    {t('Buy')}
+                  </Button>
+                ))}
             </HStack>
             <HStack w="full" alignItems="end" justifyContent="space-between">
               <HStack spacing={{ base: 2, lg: 3 }} alignItems="end">

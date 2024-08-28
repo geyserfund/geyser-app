@@ -12,7 +12,7 @@ export const ProjectDashboardAnalytics = () => {
       <VStack
         direction={{ base: 'column', lg: 'row' }}
         w="full"
-        pb={{ base: '80px', lg: '60px' }}
+        pb={{ base: 28, lg: 10 }}
         px={{ base: 0, lg: 6 }}
         spacing={6}
         marginTop="-48px"

@@ -72,7 +72,8 @@ export const ProfileForm = ({ isLoading }: { isLoading?: boolean }) => {
           <Button
             isLoading={isLoading || editLoading}
             isDisabled={isLoading}
-            variant="primary"
+            variant="solid"
+            colorScheme="primary1"
             width="100%"
             type="submit"
           >

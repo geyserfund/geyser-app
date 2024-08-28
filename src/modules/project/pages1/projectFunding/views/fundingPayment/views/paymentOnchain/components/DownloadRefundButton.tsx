@@ -20,7 +20,7 @@ export const DownloadRefundButton = (props: ButtonProps) => {
   }
 
   return (
-    <Button variant="secondary" onClick={handleClick} {...props}>
+    <Button variant="outline" colorScheme="neutral1" onClick={handleClick} {...props}>
       {t('Download refund file')}
     </Button>
   )

@@ -1,9 +1,10 @@
 import { CloseIcon } from '@chakra-ui/icons'
-import { Box, HStack, IconButton, StackProps, Text, VStack } from '@chakra-ui/react'
+import { Box, HStack, IconButton, StackProps, VStack } from '@chakra-ui/react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
 import { ImageWithReload } from '../../components/ui'
+import { Body } from '../components/typography'
 import { useModal, useSignedUpload } from '../hooks'
 import { ImageCropAspectRatio, ImageCropperModal } from './ImageCropperModal'
 
@@ -101,7 +102,13 @@ export const FileUpload = ({
             <HStack>
               <ImageWithReload alt="uploaded image" h={showcaseH} w={showcaseW} objectFit="cover" src={uploadedImage} />
               {onDeleteClick ? (
-                <IconButton size="sm" variant="ghost" aria-label="remove image" onClick={onDeleteClick}>
+                <IconButton
+                  size="sm"
+                  variant="ghost"
+                  colorScheme="neutral1"
+                  aria-label="remove image"
+                  onClick={onDeleteClick}
+                >
                   <CloseIcon fontSize="xs" />
                 </IconButton>
               ) : null}
@@ -114,9 +121,9 @@ export const FileUpload = ({
         </HStack>
 
         {caption && (
-          <Text w="100%" textAlign="right" variant="caption" color="neutral.600">
+          <Body size="xs" w="100%" textAlign="right" light>
             {caption}
-          </Text>
+          </Body>
         )}
       </VStack>
       {imageCrop && (
