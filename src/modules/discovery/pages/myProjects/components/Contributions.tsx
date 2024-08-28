@@ -95,8 +95,6 @@ const Header = ({
 }) => {
   const { t } = useTranslation()
 
-  const fontSize = noGoals ? '2xl' : 'xl'
-
   return (
     <VStack w="100%" align="stretch" spacing={0.5}>
       <HStack w="100%" justifyContent="center" color="neutralAlpha.11">
@@ -106,15 +104,15 @@ const Header = ({
 
       {noContributionsReceived ? (
         <HStack w="100%" justifyContent="center">
-          <Body size={fontSize} bold>
+          <Body size={'xl'} bold>
             {t('No contributions received')}
           </Body>
         </HStack>
       ) : (
         <HStack w="100%" justifyContent="center">
-          <Body size={fontSize} bold>
+          <Body size={'xl'} bold>
             {commaFormatted(total)}{' '}
-            <Body as="span" size={fontSize} light bold>
+            <Body as="span" size={'xl'} light bold>
               Sats (${commaFormatted(totalUsd)})
             </Body>
           </Body>

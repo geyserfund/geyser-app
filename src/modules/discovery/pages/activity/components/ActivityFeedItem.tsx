@@ -214,8 +214,7 @@ const ActivityTitle = ({ resource }: { resource: ActivityResource }) => {
 
 const ActivityImage = ({ resource }: { resource: ActivityResource }) => {
   if ('entryImage' in resource && typeof resource.entryImage === 'string') {
-    console.log('resource', resource)
-    console.log('entryImage', resource.entryImage)
+    if (!resource.entryImage) return null
     return (
       <ImageWithReload
         width={'full'}
@@ -229,6 +228,7 @@ const ActivityImage = ({ resource }: { resource: ActivityResource }) => {
   }
 
   if ('projectRewardImage' in resource && typeof resource.projectRewardImage === 'string') {
+    if (!resource.projectRewardImage) return null
     return (
       <ImageWithReload
         width={'full'}
