@@ -15,7 +15,7 @@ import { useInitBtcRate } from './shared/hooks/platform/useInitBtcRate'
 import { useMobileMode } from './utils'
 import { useScrollToTop } from './utils/tools/useScrollToTop'
 
-const AppLayout = () => {
+export const AppLayout = () => {
   useInitBtcRate()
 
   const { loading } = useAuthContext()
@@ -72,5 +72,3 @@ const AppLayout = () => {
     </>
   )
 }
-
-export default AppLayout
