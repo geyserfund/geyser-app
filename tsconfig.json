@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"],
+    },
 	  "noUnusedLocals": true,
     "target": "ESNext",
     "useDefineForClassFields": true,
@@ -18,6 +22,7 @@
     "jsx": "react-jsx",
     "noUncheckedIndexedAccess": true,
     "types": [
+      "node",
       "vite-plugin-pwa/client"
     ]
   },

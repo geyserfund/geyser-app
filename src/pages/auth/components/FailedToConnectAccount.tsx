@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Image,
   Link as ChakraLink,
   Modal,
@@ -8,16 +9,16 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Text,
   VStack,
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { BsArrowLeft } from 'react-icons/bs'
+import { PiArrowLeft } from 'react-icons/pi'
+
+import { H2 } from '@/shared/components/typography'
 
 import { Body1 } from '../../../components/typography'
-import { ButtonComponent } from '../../../components/ui'
-import { CannotConnectAccountUrl, GeyserTelegramUrl } from '../../../constants'
-import { useModal } from '../../../hooks/useModal'
+import { CannotConnectAccountUrl, GeyserTelegramUrl } from '../../../shared/constants'
+import { useModal } from '../../../shared/hooks/useModal'
 
 interface FailedToConnectAccountProps extends ReturnType<typeof useModal> {
   title?: string
@@ -46,7 +47,7 @@ export const FailedToConnectAccount = (props: FailedToConnectAccountProps) => {
       <ModalOverlay />
       <ModalContent display="flex" alignItems="center" padding="20px 15px">
         <ModalHeader>
-          <Text variant="h2">{title}</Text>
+          <H2 size="2xl">{title}</H2>
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody width="100%">
@@ -55,9 +56,15 @@ export const FailedToConnectAccount = (props: FailedToConnectAccountProps) => {
               <Image w="full" h="auto" alt="feed-logged-out" src={CannotConnectAccountUrl} />
             </Box>
             <Box pb={6}>{children}</Box>
-            <ButtonComponent width="100%" leftIcon={<BsArrowLeft fontSize="25px" />} onClick={onClose}>
+            <Button
+              variant="outline"
+              colorScheme="neutral1"
+              width="100%"
+              leftIcon={<PiArrowLeft fontSize="25px" />}
+              onClick={onClose}
+            >
               {t('Back')}
-            </ButtonComponent>
+            </Button>
           </VStack>
         </ModalBody>
       </ModalContent>

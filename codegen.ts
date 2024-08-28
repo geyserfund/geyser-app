@@ -3,7 +3,7 @@ import type { CodegenConfig } from '@graphql-codegen/cli'
 const config: CodegenConfig = {
   overwrite: true,
   schema: process.env.APOLLO_GRAPH_VARIANT === 'development' ? 'http://geyser-server:4000/graphql' : './schema.graphql',
-  documents: 'src/graphql/**/*',
+  documents: ['src/graphqlBase/**/*', 'src/modules/**/graphql/**/*', 'src/modules/**/pages/**/graphql/**/*'],
   config: {
     maybe: 'T | null | undefined',
     inputMaybe: 'T | null | undefined',

@@ -1,6 +1,6 @@
 import { IconButton, IconButtonProps, useColorMode, useColorModeValue } from '@chakra-ui/react'
 import * as React from 'react'
-import { BsFillBrightnessLowFill, BsFillMoonStarsFill } from 'react-icons/bs'
+import { PiCloudMoon, PiSun } from 'react-icons/pi'
 import { useTheme } from 'react-jss'
 
 import { AppTheme } from '../../context'
@@ -12,7 +12,7 @@ export const UserSetColorMode = 'userSetColorMode'
 export const ColorModeSwitcher: React.FC<ColorModeSwitcherProps> = (props) => {
   const { toggleColorMode } = useColorMode()
   const text = useColorModeValue('dark', 'light')
-  const SwitchIcon = useColorModeValue(BsFillMoonStarsFill, BsFillBrightnessLowFill)
+  const SwitchIcon = useColorModeValue(PiCloudMoon, PiSun)
 
   const handleToggleColorMode = () => {
     toggleColorMode()
@@ -21,12 +21,11 @@ export const ColorModeSwitcher: React.FC<ColorModeSwitcherProps> = (props) => {
 
   return (
     <IconButton
-      size={{ base: 'sm', lg: 'md' }}
+      variant="soft"
+      colorScheme="neutral1"
       fontSize="lg"
-      bg="neutral.0"
-      color="neutral.600"
       onClick={handleToggleColorMode}
-      icon={<SwitchIcon fontSize={'20px'} />}
+      icon={<SwitchIcon />}
       aria-label={`Switch to ${text} mode`}
       {...props}
     />

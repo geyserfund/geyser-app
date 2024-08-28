@@ -8,7 +8,9 @@ export const useBTCConverter = () => {
 
   const getUSDAmount = useCallback(
     (satoshis: Satoshis): USDollars => {
-      return (satoshis * btcRate) as USDollars
+      return satoshis * btcRate > 0
+        ? (Math.round(satoshis * btcRate) as USDollars)
+        : ((satoshis * btcRate) as USDollars)
     },
     [btcRate],
   )

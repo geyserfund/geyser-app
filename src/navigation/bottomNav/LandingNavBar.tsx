@@ -3,9 +3,9 @@ import { useMemo } from 'react'
 import { Link, matchPath, matchRoutes, useLocation } from 'react-router-dom'
 
 import { FeedNavIcon, GrantsNavIcon, HomeNavIcon2, LeaderboardNavIcon } from '../../components/icons'
-import { getPath } from '../../constants'
-import { BottomNavContainerCommonStyles } from '../../constants/styles'
-import { useLayoutAnimation } from '../../hooks'
+import { getPath } from '../../shared/constants'
+import { BottomNavContainerCommonStyles } from '../../shared/constants/styles'
+import { useLayoutAnimation } from '../../shared/hooks'
 
 const routesForShowingLandingMenu = [
   getPath('landingPage'),

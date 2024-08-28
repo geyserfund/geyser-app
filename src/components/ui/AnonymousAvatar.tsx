@@ -10,6 +10,7 @@ type Props = {
   textColor?: string
 }
 
+/** DEPRECATED DONT USE, USE ONLY THE USER-AVATAR */
 export const AnonymousAvatar = ({ seed, image, textColor, imageSize = '30px' }: Props) => (
   <Stack
     width={imageSize}

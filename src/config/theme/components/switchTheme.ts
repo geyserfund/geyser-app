@@ -6,23 +6,25 @@ const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpe
 const baseStyle = definePartsStyle({
   container: {
     borderWidth: 1,
-    borderColor: 'neutral.300',
+    borderColor: 'neutral1.7',
     borderRadius: 'full',
+    padding: 0,
     _checked: {
-      borderColor: 'primary.400',
+      borderColor: 'primary1.7',
     },
   },
   thumb: {
-    bg: 'neutral.300',
+    bg: 'utils.pbg',
+    borderColor: 'neutral1.8',
     _checked: {
-      bg: 'primary.400',
+      borderColor: 'primary1.7',
     },
   },
   track: {
-    p: 1,
-    bg: 'neutral.00',
+    padding: 0,
+    bg: 'neutral1.4',
     _checked: {
-      bg: 'neutral.00',
+      bg: 'primary1.10',
     },
   },
 })

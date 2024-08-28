@@ -1,13 +1,14 @@
-import { Box, Image, ListItem, Tag, Text, UnorderedList, VStack } from '@chakra-ui/react'
+import { Box, Image, ListItem, Tag, UnorderedList, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout } from '../../../../components/layouts'
-import { H1, H3 } from '../../../../components/typography'
+import { Body, H1, H3 } from '@/shared/components/typography'
+import { MarkdownField } from '@/shared/markdown/MarkdownField'
+import { validateImageUrl } from '@/shared/markdown/validations/image'
+
 import { StatusLabel } from '../../../../components/ui/StatusLabel'
 import { Tooltip } from '../../../../components/ui/Tooltip'
-import { VideoPlayer } from '../../../../components/ui/VideoPlayer'
-import { MarkdownField } from '../../../../forms/markdown/MarkdownField'
-import { validateImageUrl } from '../../../../forms/validations/image'
+import { VideoPlayer } from '../../../../modules/project/pages1/projectView/views/body/sections/header/components/VideoPlayer'
+import { CardLayout } from '../../../../shared/components/layouts'
 import { DistributionSystem, Grant, GrantType, VotingSystem } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
 import { ContributionsWidget } from '../../components/ContributionsWidget'
@@ -74,20 +75,20 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
     if (grant?.__typename === 'CommunityVoteGrant' && grant.votingSystem === VotingSystem.OneToOne) {
       return (
         <VStack px={2} py={4} alignItems="flex-start" gap={2}>
-          <Text>
+          <Body>
             {t('This grant uses ')}
-            <Text as="i">{t('Proportional Voting')}</Text>
+            <Body as="i">{t('Proportional Voting')}</Body>
             {t(' to enable more funding to go towards projects. This means:')}
-          </Text>
+          </Body>
           <UnorderedList mt={4} spacing={2}>
             <ListItem>
-              <Text>{t('1 Sat = 1 Vote. Each Sat is one Vote.')}</Text>
+              <Body>{t('1 Sat = 1 Vote. Each Sat is one Vote.')}</Body>
             </ListItem>
             <ListItem>
-              <Text>{t('You can send Sats to projects to multiple projects and multiple times')}</Text>
+              <Body>{t('You can send Sats to projects to multiple projects and multiple times')}</Body>
             </ListItem>
             <ListItem>
-              <Text>{t('You can send Sats anonymously')}</Text>
+              <Body>{t('You can send Sats anonymously')}</Body>
             </ListItem>
           </UnorderedList>
         </VStack>
@@ -97,31 +98,31 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
     if (grant?.__typename === 'CommunityVoteGrant' && grant.votingSystem === VotingSystem.StepLog_10) {
       return (
         <VStack px={2} py={4} alignItems="flex-start" gap={2}>
-          <Text>
+          <Body>
             {t('This grant uses ')}
-            <Text as="i">{t('Incremental Voting')}</Text>
+            <Body as="i">{t('Incremental Voting')}</Body>
             {t(', to ensure that all votes can have an impact. It works like this:')}
-          </Text>
+          </Body>
           <UnorderedList mt={4} spacing={2}>
             <ListItem>
-              <Text>{t('You can vote by sending Sats')}</Text>
+              <Body>{t('You can vote by sending Sats')}</Body>
             </ListItem>
             <ListItem>
-              <Text>{t('You can vote multiple times and towards multiple projects')}</Text>
+              <Body>{t('You can vote multiple times and towards multiple projects')}</Body>
             </ListItem>
             <ListItem>
-              <Text>
+              <Body>
                 {t('You can cast up to 3 votes per project based on the cumulative amounts sent to each project:')}
-              </Text>
+              </Body>
               <UnorderedList>
                 <ListItem>
-                  <Text> {t('From 1,000 to 9,999 sats = 1 vote')}</Text>
+                  <Body> {t('From 1,000 to 9,999 sats = 1 vote')}</Body>
                 </ListItem>
                 <ListItem>
-                  <Text> {t('From 10,000 to 99,999 sats = 2 votes')}</Text>
+                  <Body> {t('From 10,000 to 99,999 sats = 2 votes')}</Body>
                 </ListItem>
                 <ListItem>
-                  <Text> {t('Above 100k sats = 3 votes')}</Text>
+                  <Body> {t('Above 100k sats = 3 votes')}</Body>
                 </ListItem>
               </UnorderedList>
             </ListItem>
@@ -145,7 +146,7 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
   }
 
   return (
-    <CardLayout noborder={isMobile} padding={{ base: '10px', lg: 0 }}>
+    <CardLayout noborder={isMobile} padding={{ base: 0, lg: 0 }}>
       {renderImageOrVideo()}
       <Box px={{ base: 0, lg: 5 }}>
         <Box pb={2}>
@@ -154,11 +155,15 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
 
         <Box display="flex" flexDir={{ base: 'column', lg: 'row' }} width="100%" pt={2} justifyContent="space-between">
           <Box pt={2}>
-            <H1>{t(grant.title)}</H1>
+            <H1 size="4xl" bold>
+              {t(grant.title)}
+            </H1>
           </Box>
         </Box>
         <Box pt={4}>
-          <H3 fontSize="18px">{t(grant.shortDescription)}</H3>
+          <H3 size="lg" medium>
+            {t(grant.shortDescription)}
+          </H3>
           <Box pt={4}>
             <MarkdownField preview content={grant.description || ''} />
           </Box>

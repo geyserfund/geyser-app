@@ -1,6 +1,7 @@
 import { BellIcon } from '@chakra-ui/icons'
 import { IconButton as ChakraButton } from '@chakra-ui/react'
 import type { Meta, StoryObj } from '@storybook/react'
+import React from 'react'
 
 const meta = {
   title: 'Components/Input/IconButton',
@@ -14,6 +15,14 @@ const meta = {
       options: ['sm', 'md', 'lg'],
       control: { type: 'radio' },
     },
+    variant: {
+      options: ['solid', 'soft', 'surface', 'outline', 'ghost'],
+      control: { type: 'select' },
+    },
+    colorScheme: {
+      options: ['primary1', 'neutral1', 'error'],
+      control: { type: 'select' },
+    },
   },
 } satisfies Meta<typeof ChakraButton>
 
@@ -24,19 +33,5 @@ export const IconButton: Story = {
   args: {
     variant: 'primary',
     'aria-label': 'Notification',
-  },
-  argTypes: {
-    variant: {
-      options: [
-        'primary',
-        'primaryNeutral',
-        'primaryLink',
-        'primaryGradient',
-        'secondary',
-        'secondaryNeutral',
-        'transparent',
-      ],
-      control: { type: 'select' },
-    },
   },
 }

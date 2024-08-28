@@ -2,7 +2,7 @@ import i18next from 'i18next'
 import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
 
-import { lng } from '../constants'
+import { lng } from '../shared/constants'
 import {
   ArabicTranslations,
   ChineseTranslations,
@@ -29,7 +29,7 @@ i18next
   // init i18next
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
-    debug: true,
+    debug: false,
     fallbackLng: 'en',
     resources: {
       [lng.en]: {

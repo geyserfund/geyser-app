@@ -5,7 +5,7 @@ const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpe
 
 const baseStyle = definePartsStyle({
   body: {
-    bg: 'neutral.0',
+    bg: 'utils.pbg',
     borderRadius: '8px',
   },
   content: {
@@ -15,7 +15,16 @@ const baseStyle = definePartsStyle({
   popper: {
     maxWidth: 'unset',
     width: 'unset',
+    zIndex: 11,
   },
 })
 
-export const popOverTheme = defineMultiStyleConfig({ baseStyle })
+const variants = {
+  dropDown: {
+    body: {},
+    content: {},
+    popper: {},
+  },
+}
+
+export const popOverTheme = defineMultiStyleConfig({ baseStyle, variants })

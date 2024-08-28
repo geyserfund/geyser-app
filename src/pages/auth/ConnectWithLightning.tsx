@@ -14,6 +14,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
+import { useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { QRCode } from 'react-qrcode-logo'
@@ -26,10 +27,11 @@ import Loader from '../../components/ui/Loader'
 import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { defaultUser } from '../../defaults'
-import { lightModeColors } from '../../styles'
+import { lightModeColors } from '../../shared/styles'
 import { User } from '../../types'
 import { copyTextToClipboard, useMobileMode, useNotification } from '../../utils'
-import { ConnectWithButtonProps } from './type'
+import { loginMethodAtom } from './state'
+import { ConnectWithButtonProps, ExternalAccountType } from './type'
 
 type LNURLResponse =
   | {
@@ -102,17 +104,15 @@ export const ConnectWithLightning = ({ onClose, isIconOnly, ...rest }: Omit<Conn
     <>
       <ButtonComponent
         aria-label="Connect with Lightning"
-        variant="login"
+        size="lg"
+        variant="outline"
+        colorScheme="neutral1"
         color={'social.lightning'}
         onClick={onModalOpen}
         {...buttonProps}
         {...rest}
       >
-        {!isIconOnly && (
-          <Box as="span" color="neutral.900">
-            {t('Continue with Lightning')}
-          </Box>
-        )}
+        {!isIconOnly && t('Continue with Lightning')}
       </ButtonComponent>
       {/* To make sure the polling gets stopped, the component is demounted. */}
       {isModalOpen && <ConnectWithLightningModal isOpen={isModalOpen} onClose={handleClose} />}
@@ -127,6 +127,7 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
   const { login } = useAuthContext()
 
   const authServiceEndPoint = getAuthEndPoint()
+  const setLoginMethod = useSetAtom(loginMethodAtom)
 
   const [qrContent, setQrContent] = useState('')
   const [copy, setcopy] = useState(false)
@@ -222,6 +223,7 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
 
           if (userData) {
             login({ ...defaultUser, ...userData.user })
+            setLoginMethod(ExternalAccountType.lightning)
             onClose()
           }
         })

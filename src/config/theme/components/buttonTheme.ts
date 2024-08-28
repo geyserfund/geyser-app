@@ -1,37 +1,221 @@
 import { ComponentStyleConfig, StyleFunctionProps } from '@chakra-ui/react'
 
-import { darkModeColors, fonts, lightModeColors } from '../../../styles'
+import { darkModeColors, fonts, lightModeColors } from '../../../shared/styles'
 
 export const buttonTheme: ComponentStyleConfig = {
   // style object for base or default style
   baseStyle: {
     fontWeight: 500,
-    fontFamily: fonts.inter,
+    fontFamily: fonts.brand,
     boxShadow: 'none',
     outline: 'none',
-    borderRadius: '8px',
-    fontSize: '16px',
+    minWidth: '20px',
+    textDecoration: 'none',
+    _hover: {
+      textDecoration: 'none',
+    },
   },
   // styles for different sizes ("sm", "md", "lg")
   sizes: {
-    xl: {
-      padding: '10px 30px',
-      fontSize: '22px',
-      fontWeight: 700,
+    xs: {
+      height: '20px',
+      minWidth: '20px',
+      paddingX: '4px',
+      borderRadius: '5px',
+      fontSize: '12px',
     },
     sm: {
-      padding: '6px',
-      fontSize: '14px',
-      fontWeight: 500,
+      height: '24px',
+      minWidth: '24px',
+      minW: '24px',
+      paddingX: '8px',
+      borderRadius: '6px',
+      fontSize: '12px',
     },
     md: {
-      padding: 2,
+      height: '32px',
+      minWidth: '32px',
+      minW: '32px',
+      paddingX: '12px',
+      borderRadius: '8px',
+      fontSize: '14px',
+    },
+    lg: {
+      height: '40px',
+      minWidth: '40px',
+      minW: '40px',
+      paddingX: '16px',
+      borderRadius: '10px',
       fontSize: '16px',
-      fontWeight: 500,
+    },
+    xl: {
+      height: '48px',
+      minWidth: '48px',
+      minW: '48px',
+      paddingX: '24px',
+      borderRadius: '12px',
+      fontSize: '18px',
     },
   },
   // styles for different visual variants ("outline", "solid")
   variants: {
+    solid: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
+      backgroundColor: `${colorScheme}.9`,
+      color: colorScheme === 'primary1' ? 'utils.blackContrast' : 'utils.whiteContrast',
+      _hover: {
+        backgroundColor: `${colorScheme}.10`,
+      },
+      _active: {
+        opacity: 0.92,
+        backgroundColor: `${colorScheme}.10`,
+      },
+      _disabled: {
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.8',
+      },
+      _loading: {
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.11',
+      },
+    }),
+    soft: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
+      backgroundColor: `${colorScheme}.3`,
+      color: `${colorScheme}.11`,
+      _hover: {
+        backgroundColor: `${colorScheme}.4`,
+      },
+      _active: {
+        backgroundColor: `${colorScheme}.5`,
+      },
+      _disabled: {
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.8',
+      },
+      _loading: {
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.11',
+      },
+    }),
+    surface: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
+      backgroundColor: colorScheme === 'primary1' ? 'utils.primarySurface' : 'transparent',
+      color: `${colorScheme}.11`,
+      border: '1px solid',
+      borderColor: `${colorScheme}.7`,
+      _hover: {
+        backgroundColor: colorScheme === 'primary1' ? 'utils.primarySurface' : 'transparent',
+        borderColor: `${colorScheme}.8`,
+      },
+      _active: {
+        backgroundColor: `${colorScheme}.3`,
+        borderColor: `${colorScheme}.8`,
+      },
+      _disabled: {
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.8',
+        borderColor: 'neutral1.8',
+      },
+      _loading: {
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.11',
+        borderColor: 'neutral1.8',
+      },
+    }),
+    outline: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
+      backgroundColor: 'transparent',
+      color: `${colorScheme}.11`,
+      border: '1px solid',
+      borderColor: `${colorScheme}.8`,
+      _hover: {
+        backgroundColor: `${colorScheme}.2`,
+        borderColor: `${colorScheme}.8`,
+      },
+      _active: {
+        backgroundColor: `${colorScheme}.3`,
+        borderColor: `${colorScheme}.8`,
+      },
+      _disabled: {
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.8',
+        borderColor: 'neutral1.8',
+      },
+      _loading: {
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.11',
+        borderColor: 'neutral1.8',
+      },
+    }),
+    ghost: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
+      backgroundColor: 'transparent',
+      color: `${colorScheme}.11`,
+      _hover: {
+        backgroundColor: `${colorScheme}.3`,
+      },
+      _active: {
+        backgroundColor: `${colorScheme}.4`,
+      },
+      _disabled: {
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.8',
+      },
+      _loading: {
+        backgroundColor: 'neutral1.3',
+        color: 'neutral1.11',
+      },
+    }),
+
+    menu: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
+      bg: 'transparent',
+      color: 'utils.text',
+      borderRadius: '8px',
+      justifyContent: 'flex-start',
+      _hover: {
+        bg: `${colorScheme}.3`,
+        color: 'utils.text',
+      },
+      _active: {
+        bg: `${colorScheme}.10`,
+        color: 'utils.blackContrast',
+      },
+      _selected: {
+        bg: `${colorScheme}.9`,
+        color: 'utils.blackContrast',
+      },
+      _loading: {
+        backgroundColor: `${colorScheme}.6`,
+        color: 'utils.blackContrast',
+      },
+      _disabled: {
+        bg: 'panel.solid',
+        color: 'neutral1.8',
+      },
+    }),
+    select: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
+      bg: 'transparent',
+      color: 'utils.text',
+      borderRadius: '8px',
+      justifyContent: 'flex-start',
+      _hover: {
+        bg: `${colorScheme}.9`,
+        color: 'utils.blackContrast',
+      },
+      _active: {
+        bg: `neutral1.3`,
+        color: 'utils.text',
+      },
+      _selected: {
+        bg: `neutral1.3`,
+        color: 'utils.text',
+      },
+      _loading: {
+        backgroundColor: `${colorScheme}.6`,
+        color: 'utils.blackContrast',
+      },
+      _disabled: {
+        bg: 'panel.solid',
+        color: 'neutral1.8',
+      },
+    }),
+
     primary: ({ theme }: StyleFunctionProps) => ({
       backgroundColor: theme.colors.primary[400],
       border: 'none',

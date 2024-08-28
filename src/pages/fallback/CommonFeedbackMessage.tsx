@@ -1,11 +1,13 @@
-import { Link, Text } from '@chakra-ui/react'
+import { Link } from '@chakra-ui/react'
 import { Trans } from 'react-i18next'
 
-import { FeedbackUrl } from '../../constants'
+import { Body } from '@/shared/components/typography'
+
+import { FeedbackUrl } from '../../shared/constants'
 
 export const CommonFeedbackMessage = ({ prefix }: { prefix?: string }) => {
   return (
-    <Text variant="body1" textAlign="center">
+    <Body textAlign="center">
       {prefix}
       <Trans
         i18nKey={'If the issue persists let us know through our <1>feedback form</1> or reach out on <3>Telegram</3>'}
@@ -26,6 +28,6 @@ export const CommonFeedbackMessage = ({ prefix }: { prefix?: string }) => {
           Telegram.
         </Link>
       </Trans>
-    </Text>
+    </Body>
   )
 }

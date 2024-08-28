@@ -1,8 +1,9 @@
 import { Divider, HStack } from '@chakra-ui/react'
 import React from 'react'
 
-import { CardLayout, CardLayoutProps } from '../../../../../components/layouts'
-import { H3 } from '../../../../../components/typography'
+import { H3 } from '@/shared/components/typography'
+
+import { CardLayout, CardLayoutProps } from '../../../../../shared/components/layouts'
 import { useMobileMode } from '../../../../../utils'
 
 interface ProfileTabLayoutProps extends CardLayoutProps {
@@ -30,7 +31,7 @@ export const ProfileTabLayout = ({ heading, headerContent, children, ...rest }: 
         <>
           <HStack w="full" justifyContent="space-between" alignItems={'center'}>
             {!isMobile && (
-              <H3 color="neutral.900" py="5px">
+              <H3 size="lg" py="5px">
                 {heading}
               </H3>
             )}

@@ -1,4 +1,4 @@
-import { SATOSHIS_IN_BTC } from '../../constants'
+import { SATOSHIS_IN_BTC } from '../../shared/constants'
 
 export const getBip21Invoice = (amountInSats: number, onChainAddress?: string | null, lnAddress?: string | null) => {
   if (!onChainAddress) {

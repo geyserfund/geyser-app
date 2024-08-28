@@ -12,8 +12,8 @@ import {
   GrantsBitcoinEducation,
   GrantsHero,
   WalletOfSatoshiUrl,
-} from '../../../constants'
-import { fonts } from '../../../styles'
+} from '../../../shared/constants'
+import { fonts } from '../../../shared/styles'
 import { GrantApplicant, GrantStatusEnum } from '../../../types'
 import { useMediumScreen, useMobileMode } from '../../../utils'
 import { ApplyGrantCard } from '../components/ApplyGrantCard'
@@ -73,14 +73,14 @@ export const GrantsRoundOne = ({
     <>
       <Box
         paddingTop={isMobile ? '10px' : '20px'}
-        bg={'neutral.0'}
+        bg={'utils.pbg'}
         minHeight="100vh"
         display="flex"
         alignItems={'center'}
         flexDirection="column"
       >
         <Box my={5} width={isMobile ? '100%' : '909px'} px={isMobile ? '1rem' : ''}>
-          <Button size={'sm'} bg="neutral.0" variant={'outline'} gap={2} onClick={() => navigate(-1)} fontSize="sm">
+          <Button size={'sm'} bg="utils.pbg" variant={'outline'} gap={2} onClick={() => navigate(-1)} fontSize="sm">
             <FaArrowLeft /> {t('See all Grants')}
           </Button>
           <Text fontSize={isMobile ? '4xl' : '47px'} fontWeight="medium" textAlign="center">
@@ -97,13 +97,7 @@ export const GrantsRoundOne = ({
             {t('Geyser Grants')}
           </Text>
           <Box display="flex" alignItems={'center'} justifyContent="center" gap={4}>
-            <Text
-              fontFamily={fonts.interBlack}
-              fontSize={isMobile ? '30' : '35px'}
-              fontWeight="700"
-              textAlign="center"
-              justifyContent="center"
-            >
+            <Text fontSize={isMobile ? '30' : '35px'} fontWeight="700" textAlign="center" justifyContent="center">
               {t('Round 1')}
             </Text>
           </Box>
@@ -154,7 +148,7 @@ export const GrantsRoundOne = ({
             margin="0 auto"
           >
             <VStack>
-              <Text fontFamily={fonts.interBlack} fontSize="24px" fontWeight={'bold'} textAlign="center" mt={8}>
+              <Text fontSize="24px" fontWeight={'bold'} textAlign="center" mt={8}>
                 {t('Round 1 Announcement')}
               </Text>
               <Text textAlign="justify" fontSize="sm">
@@ -206,7 +200,7 @@ export const GrantsRoundOne = ({
           ) : null}
 
           <Box my={8}>
-            <Text fontFamily={fonts.interBlack} fontSize="24px" fontWeight={'bold'}>
+            <Text fontSize="24px" fontWeight={'bold'}>
               {t('Principled Bitcoiners Board')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">
@@ -217,7 +211,7 @@ export const GrantsRoundOne = ({
             <Board />
           </Box>
           <Box my={8}>
-            <Text fontFamily={fonts.interBlack} fontSize="24px" fontWeight={'bold'}>
+            <Text fontSize="24px" fontWeight={'bold'}>
               {t('Made possible by sponsors')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">
@@ -230,7 +224,7 @@ export const GrantsRoundOne = ({
             borderRadius="12px"
             pb={4}
             pt={6}
-            bg="neutral.0"
+            bg="utils.pbg"
             mt={8}
             mb={3}
             px={4}

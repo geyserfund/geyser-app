@@ -1,8 +1,21 @@
-import { StyleFunctionProps } from '@chakra-ui/react'
+import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
 
-import { fonts } from '../../styles'
-import { alertTheme, drawerTheme, menuTheme, modalTheme, popOverTheme, selectTheme, switchTheme } from './components'
-import { buttonTheme } from './components/buttonTheme'
+import { fonts, lightModeColors } from '../../shared/styles'
+import {
+  alertTheme,
+  badgeTheme,
+  buttonTheme,
+  drawerTheme,
+  inputTheme,
+  menuTheme,
+  modalTheme,
+  popOverTheme,
+  selectTheme,
+  switchTheme,
+  tabTheme,
+  textareaTheme,
+  tooltipTheme,
+} from './components'
 
 export const theme = {
   initialColorMode: 'system',
@@ -14,6 +27,9 @@ export const theme = {
     lg: '57em', // Desktop ~900px
     xl: '80em', // 1280px
     '2xl': '96em', // 1536px
+    '3xl': '100em', // 1600px
+    '4xl': '110em', // 1760px
+    '5xl': '120em', // 1920px
   },
   fonts: {
     heading: fonts.brand,
@@ -22,11 +38,17 @@ export const theme = {
   },
   components: {
     Button: buttonTheme,
+    Heading: {
+      baseStyle: {
+        color: 'utils.text',
+      },
+    },
     Text: {
       baseStyle: {
         fontSize: '14px',
         lineHeight: 1.6,
         fontWeight: 400,
+        color: 'utils.text',
       },
       variants: {
         caption: () => ({
@@ -64,7 +86,13 @@ export const theme = {
     },
     Link: {
       baseStyle: {
-        textDecoration: 'underline',
+        textDecoration: 'none',
+        _hover: {
+          textDecoration: 'none',
+        },
+        _focusVisible: {
+          boxShadow: 'none',
+        },
       },
     },
     Divider: {
@@ -80,46 +108,53 @@ export const theme = {
     },
     Checkbox: {
       variants: {
-        primary: ({ colorScheme = 'primary' }: StyleFunctionProps) => ({
-          color: `${colorScheme}.400`,
+        primary: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
           control: {
             _checked: {
-              color: `${colorScheme}.400`,
+              color: `utils.blackContrast`,
+              backgroundColor: `${colorScheme}.9`,
+              borderColor: `${colorScheme}.9`,
+            },
+            _focus: {
+              ring: 1,
+              ringColor: `${colorScheme}.9`,
+              borderColor: `${colorScheme}.9`,
             },
           },
         }),
       },
       defaultProps: {
         variant: 'primary',
-        colorScheme: 'primary',
+        colorScheme: 'primary1',
       },
     },
     Radio: {
       variants: {
-        primary: ({ colorScheme = 'primary' }: StyleFunctionProps) => ({
-          color: `${colorScheme}.400`,
+        primary: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
           control: {
             _checked: {
-              color: `${colorScheme}.400`,
+              borderColor: `${colorScheme}.9`,
+              backgroundColor: `${colorScheme}.9`,
+              color: `utils.blackContrast`,
               _before: {
-                width: '90%',
-                height: '90%',
+                width: '50%',
+                height: '50%',
               },
             },
             _before: {
-              width: '90%',
-              height: '90%',
+              width: '50%',
+              height: '50%',
             },
             _focus: {
-              ring: 2,
-              ringColor: `${colorScheme}.500`,
+              ring: 1,
+              ringColor: `${colorScheme}.9`,
             },
           },
         }),
       },
       defaultProps: {
         variant: 'primary',
-        colorScheme: 'primary',
+        colorScheme: 'primary1',
       },
     },
     Alert: alertTheme,
@@ -129,44 +164,25 @@ export const theme = {
     Popover: popOverTheme,
     Select: selectTheme,
     Switch: switchTheme,
-    Tabs: {
-      variants: {
-        secondary: {
-          tab: {
-            bg: 'neutral.0',
-            variant: 'outline',
-            borderRadius: '8px',
-            border: '2px solid',
-            borderColor: 'neutral.200',
-            p: '10px 20px',
-            _selected: {
-              bg: 'neutral.0',
-              borderColor: 'neutral.400',
-            },
-            _hover: {
-              bg: 'neutral.50',
-              borderColor: 'neutral.400',
-            },
-          },
-        },
-      },
-    },
-    Input: {
-      defaultProps: {
-        focusBorderColor: 'primary.500',
-      },
-    },
-    Textarea: {
-      defaultProps: {
-        focusBorderColor: 'primary.500',
-      },
-    },
+    Badge: badgeTheme,
+    Tooltip: tooltipTheme,
+    Tabs: tabTheme,
+    Input: inputTheme,
+    Textarea: textareaTheme,
   },
   styles: {
     global: ({ theme }: StyleFunctionProps) => ({
       body: {
         bg: theme.colors.neutral[50],
+        color: theme.colors.utils.text,
       },
     }),
   },
 }
+
+const finalTheme = {
+  ...theme,
+  colors: lightModeColors,
+}
+/** This is only used for chakra types generation process */
+export default extendTheme(finalTheme)

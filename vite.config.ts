@@ -6,6 +6,7 @@ import loadVersion from 'vite-plugin-package-version'
 import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
 import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 const pwaOptions: Partial<VitePWAOptions> = {
   base: '/',
@@ -14,12 +15,12 @@ const pwaOptions: Partial<VitePWAOptions> = {
   manifest: {
     start_url: '.',
     display: 'standalone',
-    background_color: '#141A19',
+    background_color: '#111110',
     name: 'Geyser',
     short_name: 'Geyser',
     description:
       'Geyser is a bitcoin crowdfunding platform that enables campaign creators to launch their projects with rewards and engage their communities with posts and content.',
-    theme_color: '#20ECC7',
+    theme_color: '#111110',
     icons: [
       {
         src: 'logo-brand.svg',
@@ -114,13 +115,25 @@ export default defineConfig(({ command, mode }) => {
   }
 
   pwaOptions.mode = env.APP_ENV === 'development' ? 'development' : 'production'
-  const plugins: PluginOption[] = [VitePWA(pwaOptions), react(), loadVersion(), wasm(), topLevelAwait()]
+  const plugins: PluginOption[] = [
+    VitePWA(pwaOptions),
+    react(),
+    tsconfigPaths(),
+    loadVersion(),
+    wasm(),
+    topLevelAwait(),
+  ]
   if (mode !== 'production') {
     plugins.push(mkcert())
   }
 
   return {
     plugins,
+    resolve: {
+      alias: {
+        '@': '/src',
+      },
+    },
     server,
     define: {
       'process.env': env,

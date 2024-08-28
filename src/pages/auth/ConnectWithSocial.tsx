@@ -1,4 +1,5 @@
-import { Box, Button, IconButton, Link, Tooltip } from '@chakra-ui/react'
+import { Button, IconButton, Link, Tooltip } from '@chakra-ui/react'
+import { useSetAtom } from 'jotai'
 import { DateTime } from 'luxon'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -6,8 +7,9 @@ import { useTranslation } from 'react-i18next'
 import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { useMeLazyQuery } from '../../types'
-import { useNotification } from '../../utils'
+import { useCustomTheme, useNotification } from '../../utils'
 import { SocialConfig } from './SocialConfig'
+import { loginMethodAtom } from './state'
 import { ConnectWithButtonProps } from './type'
 import { useAuthToken, useCanLogin } from './useAuthToken'
 
@@ -21,10 +23,13 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
 
   useAuthToken()
 
+  const { colors } = useCustomTheme()
+
   const canLogin = useCanLogin()
+  const setLoginMethod = useSetAtom(loginMethodAtom)
   const authServiceEndpoint = getAuthEndPoint()
 
-  const { hasSocialAccount, icon, label } = SocialConfig[accountType]
+  const { hasSocialAccount, icon: Icon, label } = SocialConfig[accountType]
 
   const [getMe, { stopPolling, startPolling }] = useMeLazyQuery({
     fetchPolicy: 'network-only',
@@ -39,6 +44,7 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
 
           stopPolling()
           login(data.me)
+          setLoginMethod(accountType)
         }
       }
     },
@@ -105,10 +111,10 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
 
   const buttonProps = isIconOnly
     ? {
-        icon,
+        icon: <Icon color={colors.social[accountType]} fontSize="20px" boxSize="20px" />,
       }
     : {
-        leftIcon: icon,
+        leftIcon: <Icon color={colors.social[accountType]} fontSize="20px" boxSize="20px" />,
       }
 
   const isDisabled = !canLogin
@@ -118,21 +124,18 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
       <ButtonComponent
         aria-label={`Connect with ${accountType}`}
         as={Link}
-        variant="login"
+        size="lg"
+        variant="outline"
+        colorScheme="neutral1"
         href={`${authServiceEndpoint}/${accountType}?nextPath=/auth/${accountType}`}
         isExternal
-        color={`social.${accountType}`}
         onClick={handleClick}
         isDisabled={isDisabled}
         pointerEvents={isDisabled ? 'none' : undefined}
         {...buttonProps}
         {...rest}
       >
-        {!isIconOnly && (
-          <Box as="span" color="neutral.900">
-            {t(label)}
-          </Box>
-        )}
+        {!isIconOnly && t(label)}
       </ButtonComponent>
     </Tooltip>
   )

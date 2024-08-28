@@ -4,11 +4,12 @@ import { Provider } from 'jotai'
 import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 
-import { client } from './config'
+import { client } from './config/apollo-client'
 import { Head } from './config/Head'
 import { configMatomo } from './config/matomo'
-import { AuthProvider, ChakraThemeProvider, NavProvider, ServiceWorkerProvider } from './context'
+import { AuthProvider, ChakraThemeProvider, ServiceWorkerProvider } from './context'
 import { BtcProvider } from './context/btc'
+import { FilterProvider } from './context/filter'
 
 export const App = () => {
   useEffect(() => {
@@ -22,12 +23,12 @@ export const App = () => {
           <ServiceWorkerProvider>
             <ApolloProvider client={client}>
               <AuthProvider>
-                <NavProvider>
-                  <BtcProvider>
+                <BtcProvider>
+                  <FilterProvider>
                     <Head />
                     <Outlet />
-                  </BtcProvider>
-                </NavProvider>
+                  </FilterProvider>
+                </BtcProvider>
               </AuthProvider>
             </ApolloProvider>
           </ServiceWorkerProvider>

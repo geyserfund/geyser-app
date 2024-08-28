@@ -2,12 +2,11 @@ import { useQuery } from '@apollo/client'
 import { Box, Link, Stack, Text, Tooltip } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../components/layouts'
-import { QUERY_GRANT_STATISTICS } from '../../../graphql/queries/grant'
-import { useAnimatedClipboard } from '../../../hooks/useAnimatedClipboard'
+import { QUERY_GRANT_STATISTICS } from '../../../graphqlBase/queries/grant'
+import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../shared/components/layouts'
+import { useAnimatedClipboard } from '../../../shared/hooks/useAnimatedClipboard'
 import { GrantStatistics } from '../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../utils'
-import { GrantsContributeModal } from '../components/GrantsContributeModal'
 import { ListText } from '../components/ListText'
 import { CONTRIBUTION_ADDRESS } from '../constants'
 
@@ -49,7 +48,6 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
         </ListText>
       </Box>
       <Stack display="flex" mt="6" direction={{ base: 'column', lg: 'row' }} justify="center">
-        <GrantsContributeModal />
         {isMobile ? (
           <Text fontSize={'14px'} fontWeight="500" mt={3} color="neutral.600">
             {t(

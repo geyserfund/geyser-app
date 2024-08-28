@@ -8,7 +8,7 @@ export const checkMacaroonPermissions = (macaroon: string): string => {
 
     const chunks = utf8Encoded
       .split('\n')
-      .map((line) => line.replace(/[^\x0-\x7F]/g, ' ').split('   ')) // Remove ASCII control characters and split on triple space
+      .map((line) => line.replace(/[^\u0020-\u007F]/g, ' ').split('   ')) // Remove ASCII control characters and split on triple space
       .flat()
       .map((chunk) => chunk.replace(/[^a-z ]/gi, '').trim())
       .filter((chunk) => chunk.includes('read') || chunk.includes('write'))

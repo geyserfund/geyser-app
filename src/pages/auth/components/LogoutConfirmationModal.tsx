@@ -1,8 +1,10 @@
-import { Button, Text, UseModalProps, VStack } from '@chakra-ui/react'
+import { Button, UseModalProps, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { Modal } from '../../../components/layouts'
+import { Body, H3 } from '@/shared/components/typography'
+
 import { useAuthContext } from '../../../context'
+import { Modal } from '../../../shared/components/layouts'
 
 export const LogoutConfirmationModal = ({ ...modalProps }: UseModalProps) => {
   const { t } = useTranslation()
@@ -13,13 +15,13 @@ export const LogoutConfirmationModal = ({ ...modalProps }: UseModalProps) => {
   }
 
   return (
-    <Modal {...modalProps} title={<Text variant="h3">{t('About to logout')}</Text>} isOpen={modalProps.isOpen}>
+    <Modal {...modalProps} title={<H3 size="lg">{t('About to logout')}</H3>} isOpen={modalProps.isOpen}>
       <VStack w="100%" spacing={6} pt={1}>
-        <Text>{t('You are about to logout of your account')}</Text>
+        <Body>{t('You are about to logout of your account')}</Body>
         <Button
           w="100%"
-          variant="secondary"
-          color="secondary.red"
+          variant="outline"
+          colorScheme="error"
           onClick={() => {
             logout()
             modalProps.onClose()

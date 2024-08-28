@@ -1,7 +1,9 @@
-import { Stack, Text, VStack } from '@chakra-ui/react'
+import { Stack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CustomModalProps, Modal } from '../../components/layouts'
+import { H3 } from '@/shared/components/typography'
+
+import { CustomModalProps, Modal } from '../../shared/components/layouts'
 import { MfaAction } from '../../types'
 import { VerifyYourEmailContent, VerifyYourEmailContentProps } from './VerifyYourEmailContent'
 
@@ -24,7 +26,7 @@ export const VerifyYourEmail = ({ action, handleVerify, otpSent, otpData, ...res
 
   return (
     <VStack w="100%" h="100%" justifyContent="center" alignItems="center">
-      <Modal title={<Text variant="h3">{t('Verify your email')}</Text>} size="lg" {...rest}>
+      <Modal title={<H3>{t('Verify your email')}</H3>} size="lg" {...rest}>
         <Stack w="100%" padding="10px" spacing="20px" maxWidth="500px">
           <VerifyYourEmailContent
             action={getAction()}

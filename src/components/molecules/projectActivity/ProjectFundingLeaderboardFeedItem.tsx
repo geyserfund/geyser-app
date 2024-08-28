@@ -1,15 +1,17 @@
 import { Box, HStack, Text } from '@chakra-ui/layout'
 import { HTMLChakraProps } from '@chakra-ui/system'
 
+import { ProjectState } from '@/modules/project/state/projectAtom'
+
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers'
-import { FunderWithUserFragment, ProjectFragment } from '../../../types/generated/graphql'
+import { FunderWithUserFragment } from '../../../types/generated/graphql'
 import { commaFormatted } from '../../../utils'
 import { SatoshiIconTilted } from '../../icons'
 import { AnonymousAvatar, LinkableAvatar } from '../../ui'
 import { renderFunderBadges } from './renderFunderBadges'
 
 type Props = HTMLChakraProps<'div'> & {
-  project: ProjectFragment
+  project: ProjectState
   funder: FunderWithUserFragment
   leaderboardPosition: number
 }

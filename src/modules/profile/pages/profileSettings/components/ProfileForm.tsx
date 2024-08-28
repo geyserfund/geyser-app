@@ -1,11 +1,12 @@
 import { Button, HStack, Input, SkeletonCircle, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { SkeletonLayout } from '../../../../../components/layouts'
-import { H3 } from '../../../../../components/typography'
+import { H3 } from '@/shared/components/typography'
+
 import { TextArea } from '../../../../../components/ui'
+import { SkeletonLayout } from '../../../../../shared/components/layouts'
 import { useNotification } from '../../../../../utils'
-import { useUserProfileAtomValue } from '../../../state'
+import { useUserProfileAtom } from '../../../state'
 import { EditableAvatar } from '../../profilePage/components'
 import { useEditProfile } from '../hooks/useEditProfile'
 import { DeleteUserProfile } from './DeleteUserProfile'
@@ -15,7 +16,7 @@ export const ProfileForm = ({ isLoading }: { isLoading?: boolean }) => {
   const { t } = useTranslation()
   const { unexpected, toast } = useNotification()
 
-  const user = useUserProfileAtomValue()
+  const { userProfile: user } = useUserProfileAtom()
   const {
     name,
     setName,
@@ -49,10 +50,10 @@ export const ProfileForm = ({ isLoading }: { isLoading?: boolean }) => {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
+      <form style={{ width: '100%' }} onSubmit={onSubmit}>
         <VStack spacing="30px" w="full">
           <VStack w="full" align="start" gap={3}>
-            <H3>{t('Profile information')}</H3>
+            <H3 size="lg">{t('Profile information')}</H3>
             <HStack w="full" alignItems={'start'} spacing="20px">
               <EditableAvatar onUploadImage={onUploadImage} userId={user.id} imageUrl={imageUrl} />
 
@@ -71,7 +72,8 @@ export const ProfileForm = ({ isLoading }: { isLoading?: boolean }) => {
           <Button
             isLoading={isLoading || editLoading}
             isDisabled={isLoading}
-            variant="primary"
+            variant="solid"
+            colorScheme="primary1"
             width="100%"
             type="submit"
           >

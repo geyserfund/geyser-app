@@ -14,19 +14,15 @@ import {
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
-import { CardLayout } from '../../../../components/layouts'
-import { Modal } from '../../../../components/layouts'
-import { H3 } from '../../../../components/typography'
+import { H3 } from '@/shared/components/typography'
+import { AvatarElement } from '@/shared/molecules/AvatarElement'
+
 import { ImageWithReload } from '../../../../components/ui'
-import { getPath } from '../../../../constants'
-import {
-  ProjectGrantApplicantContributorsModal,
-  useProjectGrantApplicantContributorsModal,
-} from '../../../../modules/project/pages/projectView/views/projectActivityPanel/screens/info/components/ProjectGrantApplicantContributorsModal'
-import { AvatarElement } from '../../../../modules/project/pages/projectView/views/projectMainBody/components'
-import { fonts } from '../../../../styles'
+import { CardLayout, Modal } from '../../../../shared/components/layouts'
+import { getPath } from '../../../../shared/constants'
+import { fonts } from '../../../../shared/styles'
 import {
   GrantApplicantContributor,
   GrantApplicantFunding,
@@ -127,8 +123,6 @@ const ContributorsAvatarDisplay = ({
   contributors: GrantApplicantContributor[]
   currentContributor: GrantApplicantContributor | null | false
 }) => {
-  const grantApplicantContributorsModal = useProjectGrantApplicantContributorsModal()
-
   const { colors } = useTheme()
 
   const isMobile = useMobileMode()
@@ -148,7 +142,6 @@ const ContributorsAvatarDisplay = ({
         zIndex={2}
         onClick={(e) => {
           e.stopPropagation()
-          grantApplicantContributorsModal.onOpen()
         }}
       >
         <AvatarGroup size="sm">
@@ -192,10 +185,6 @@ const ContributorsAvatarDisplay = ({
           )}
         </AvatarGroup>
       </Box>
-      <ProjectGrantApplicantContributorsModal
-        grantApplicantContributors={contributors}
-        {...grantApplicantContributorsModal}
-      />
     </>
   )
 }
@@ -280,7 +269,8 @@ export const GrantApplicantCard = ({
           width="100%"
           size="md"
           fontSize="16px"
-          variant="primary"
+          variant="solid"
+          colorScheme="primary1"
           zIndex={2}
           pointerEvents="auto"
         >
@@ -302,7 +292,8 @@ export const GrantApplicantCard = ({
           height="40px"
           width="100%"
           size="md"
-          variant="primary"
+          variant="solid"
+          colorScheme="primary1"
           zIndex={2}
           pointerEvents="auto"
         >
@@ -333,7 +324,7 @@ export const GrantApplicantCard = ({
             </Box>
           </Box>
           <Box pr={2} flexGrow={1}>
-            <H3 fontSize="18px">{project.title}</H3>
+            <H3 size="lg">{project.title}</H3>
             <Text noOfLines={4} wordBreak="break-word">
               {project.shortDescription}
             </Text>
@@ -392,6 +383,7 @@ const HowVotingWorksModal = ({
   project: Project
 }) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   if (votingSystem === VotingSystem.StepLog_10) {
     return (
@@ -447,10 +439,10 @@ const HowVotingWorksModal = ({
           <HStack w="full" justifyContent="center">
             <Button
               w="full"
-              variant="primary"
+              variant="solid"
+              colorScheme="primary1"
               onClick={() => {
-                fundingModalProps.onOpen({ project })
-                onClose()
+                navigate(getPath('projectFunding', project.name))
               }}
             >
               {t("Let's vote!")}
@@ -486,10 +478,10 @@ const HowVotingWorksModal = ({
         <HStack w="full" justifyContent="center">
           <Button
             w="full"
-            variant="primary"
+            variant="solid"
+            colorScheme="primary1"
             onClick={() => {
-              fundingModalProps.onOpen({ project })
-              onClose()
+              navigate(getPath('projectFunding', project.name))
             }}
           >
             {t("Let's vote!")}
