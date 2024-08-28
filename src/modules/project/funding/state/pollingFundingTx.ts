@@ -9,7 +9,7 @@ export const pollingFundingTxAtom = atom(0)
 
 export const subscriptionActiveAtom = atom(false)
 
-const startPollingAndSubscriptionAtom = atom(null, (get, set) => {
+export const startPollingAndSubscriptionAtom = atom(null, (get, set) => {
   set(pollingFundingTxAtom, POLLING_INTERVAL_FIRST)
   set(subscriptionActiveAtom, true)
 
@@ -25,7 +25,7 @@ const clearPollingAndSubscriptionAtom = atom(null, (get, set) => {
   set(subscriptionActiveAtom, false)
 })
 
-export const useFundPollingAndSubscription = () => {
+export const useFundPollingAndSubscriptionAtom = () => {
   const pollingFundingTx = useAtomValue(pollingFundingTxAtom)
   const subscriptionActive = useAtomValue(subscriptionActiveAtom)
 

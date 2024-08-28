@@ -1,70 +1,60 @@
-import { Button, Stack, VStack } from '@chakra-ui/react'
+import { Button, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
-import { FaArrowLeftLong } from 'react-icons/fa6'
-import { useNavigate, useParams } from 'react-router-dom'
+import { PiArrowLeft } from 'react-icons/pi'
+import { Link, Outlet, useParams } from 'react-router-dom'
 
-import { CardLayout } from '../../../../components/layouts'
-import { H2 } from '../../../../components/typography'
-import { standardPadding } from '../../../../styles'
-import { toInt } from '../../../../utils'
+import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
+import { dimensions, getPath } from '@/shared/constants'
+
+import { CardLayout } from '../../../../shared/components/layouts'
+import { useMobileMode } from '../../../../utils'
 import { ProfileError } from '../../components/ProfileError'
 import { useUserProfile } from '../../hooks/useUserProfile'
-import { ProfileForm } from './components/ProfileForm'
+import { ProfileSettingsMenuDesktop } from './navigation/ProfileSettingsMenu'
 
 export const ProfileSettings = () => {
-  const { t } = useTranslation()
-
-  const navigate = useNavigate()
-
   const params = useParams<{ userId: string }>()
   const userId = useMemo(() => {
-    return toInt(params.userId)
+    return params.userId
   }, [params])
 
-  const { isLoading, error } = useUserProfile(userId)
+  const { error } = useUserProfile(userId)
 
-  if (error) {
+  const isMobile = useMobileMode()
+
+  if (error || !userId) {
     return <ProfileError />
   }
 
   return (
-    <>
-      <VStack
-        position="relative"
-        width="100%"
-        height="100%"
-        backgroundColor="neutral.0"
-        paddingY={{ base: '20px', lg: '40px' }}
-        paddingX={{ base: '0px', lg: '20px', xl: '40px' }}
-        justifyContent={'center'}
-      >
-        <Stack
-          direction={{ base: 'column', lg: 'row' }}
-          align="center"
-          spacing={{ lg: '30px', xl: '40px' }}
-          width="100%"
-          height="100%"
-          maxWidth="900px"
-          justifyContent={'start'}
-          alignItems="start"
+    <VStack
+      width="100%"
+      height="100%"
+      paddingTop={{
+        base: `${dimensions.projectNavBar.mobile.height}px`,
+        lg: `${dimensions.projectNavBar.desktop.height}px`,
+      }}
+      paddingBottom={10}
+      alignItems="center"
+    >
+      <TopNavContainerBar>
+        <Button
+          as={Link}
+          to={getPath('userProfile', userId)}
+          size="lg"
+          variant="ghost"
+          colorScheme="neutral1"
+          leftIcon={<PiArrowLeft />}
         >
-          <Button
-            maxWidth="200px"
-            width="100%"
-            variant="secondary"
-            leftIcon={<FaArrowLeftLong />}
-            onClick={() => navigate(-1)}
-          >
-            {t('Back to profile')}
-          </Button>
-          <CardLayout mobileDense padding={standardPadding} maxWidth="650px" spacing="30px">
-            <H2>{t('Profile Settings')}</H2>
-            <ProfileForm isLoading={isLoading} />
-          </CardLayout>
-        </Stack>
-      </VStack>
-    </>
+          {t('Back to profile')}
+        </Button>
+      </TopNavContainerBar>
+      <CardLayout dense noborder={isMobile} w="full" direction="row" spacing={0} height="100%">
+        {!isMobile && <ProfileSettingsMenuDesktop />}
+        <Outlet />
+      </CardLayout>
+    </VStack>
   )
 }
 

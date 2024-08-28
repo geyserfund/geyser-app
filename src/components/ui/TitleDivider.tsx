@@ -1,7 +1,7 @@
 import { Badge, Box, Divider, HStack, StackProps, Text, VStack } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 
-import { dimensions } from '../../constants'
+import { dimensions } from '../../shared/constants'
 
 type Props = StackProps & {
   rightAction?: ReactNode

@@ -3,7 +3,7 @@ export const clickContribute = () => {
 }
 
 export const selectRewardAndHitCheckout = () => {
-  cy.get('button').contains('Select item').click()
+  cy.get('button').contains('Add').click()
   cy.get('button').contains('Checkout').click()
 }
 
@@ -29,6 +29,7 @@ export const clickOnchainQrTab = () => {
 }
 
 export const clickCopyOnChainButton = () => {
+  cy.get('#copy-onchain-address-button').realClick()
   cy.get('#copy-onchain-address-button').realClick()
 }
 

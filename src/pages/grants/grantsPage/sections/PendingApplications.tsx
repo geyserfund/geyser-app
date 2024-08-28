@@ -4,11 +4,12 @@ import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
 
-import { CardLayout } from '../../../../components/layouts'
-import { Body1, Caption, H2, H3 } from '../../../../components/typography'
+import { Body, H2, H3 } from '@/shared/components/typography'
+
 import { ImageWithReload } from '../../../../components/ui'
-import { getPath } from '../../../../constants'
-import { neutralColorsLight } from '../../../../styles'
+import { CardLayout } from '../../../../shared/components/layouts'
+import { getPath } from '../../../../shared/constants'
+import { lightModeColors } from '../../../../shared/styles'
 import { GrantApplicant } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
 
@@ -40,7 +41,7 @@ export const PendingApplications = ({ applicants }: Props) => {
 
   return (
     <CardLayout noMobileBorder p={{ base: '10px', lg: '20px' }} spacing={{ base: '10px', lg: '20px' }} w="full">
-      <H3 fontSize="18px">{t('Pending Applications')}</H3>
+      <H3 size="lg">{t('Pending Applications')}</H3>
       {applicants.map(({ project }) => {
         const projectLink = getPath('project', project.name)
 
@@ -73,15 +74,17 @@ export const PendingApplications = ({ applicants }: Props) => {
 
                 <Box display="flex" flexDirection="column" pt={1} flexGrow={1} gap={5}>
                   <HStack gap={2}>
-                    <H2 fontSize="24px">{project.title}</H2>
-                    <Tag bg="secondary.yellow">
-                      <Caption color={neutralColorsLight[900]}>{t('APPLICATION PENDING')}</Caption>
+                    <H2 size="2xl">{project.title}</H2>
+                    <Tag bg="warning.3">
+                      <Body size="xs" color={lightModeColors.utils.text}>
+                        {t('APPLICATION PENDING')}
+                      </Body>
                     </Tag>
                   </HStack>
                   <HStack display="flex" justifyContent="flex-start" alignItems="flex-start" height="100%">
-                    <Body1 fontSize="16px" color="neutral.800" noOfLines={4} wordBreak="break-word" semiBold>
+                    <Body light noOfLines={4} wordBreak="break-word" medium>
                       {project.shortDescription}
-                    </Body1>
+                    </Body>
                   </HStack>
                 </Box>
               </Box>

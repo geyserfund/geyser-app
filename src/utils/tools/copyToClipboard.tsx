@@ -19,10 +19,10 @@ export const fallbackCopyTextToClipboard = (text: string) => {
 }
 
 export const copyTextToClipboard = (text: string) => {
-  if (!navigator || !navigator.clipboard) {
+  if (!window || !window.navigator || !window.navigator.clipboard) {
     fallbackCopyTextToClipboard(text)
     return
   }
 
-  navigator.clipboard.writeText(text)
+  window.navigator.clipboard.writeText(text)
 }

@@ -1,21 +1,22 @@
-import { Box, FormErrorIcon, HStack, Input, Stack, Text, Tooltip, VStack } from '@chakra-ui/react'
+import { Box, FormErrorIcon, HStack, Input, Stack, Tooltip, VStack } from '@chakra-ui/react'
 import { ChangeEventHandler, useCallback, useEffect } from 'react'
 import { Controller, UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { MdInfo } from 'react-icons/md'
+import { PiInfo } from 'react-icons/pi'
 
-import { FileUpload } from '../../../components/molecules'
-import { ImageCrop } from '../../../components/molecules/ImageCropperModal'
-import { Body1 } from '../../../components/typography'
+import { Body } from '@/shared/components/typography'
+import { validateImageUrl } from '@/shared/markdown/validations/image'
+import { FileUpload } from '@/shared/molecules'
+
 import { TextArea, TextInputBox, UploadBox } from '../../../components/ui'
-import { ProjectValidations } from '../../../constants'
 import { useAuthContext } from '../../../context'
-import { FieldContainer } from '../../../forms/components/FieldContainer'
-import { validateImageUrl } from '../../../forms/validations/image'
-import { useDebounce } from '../../../hooks'
+import { FieldContainer } from '../../../shared/components/form/FieldContainer'
+import { ProjectValidations } from '../../../shared/constants'
+import { useDebounce } from '../../../shared/hooks'
+import { ImageCropAspectRatio } from '../../../shared/molecules/ImageCropperModal'
 import { useProjectByNameOrIdLazyQuery } from '../../../types'
 import { toMediumImageUrl, validLightningAddress } from '../../../utils'
-import { ProjectCreationVariables } from '../pages/projectCreate/types'
+import { ProjectCreationVariables } from '../pages1/projectCreation/types'
 
 const MIN_LENGTH_TO_QUERY_PROJECT = 3
 
@@ -161,32 +162,32 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
             p="10px"
             spacing={2}
           >
-            <Body1 color="neutral.600">
+            <Body color="neutral1.9">
               {`${t('Project URL')}: `}
-              <Box as="span" color="neutral.900">
+              <Box as="span" color="neutral1.11">
                 geyser.fund/project/
               </Box>
-              <Box as="span" color="primary.600">
+              <Box as="span" color="primary1.11">
                 {watch('name')}
               </Box>
-            </Body1>
+            </Body>
             <HStack w="full" justifyContent="space-between">
-              <Body1 color="neutral.600">
+              <Body color="neutral1.9">
                 {`${t('Lightning Address')}: `}
-                <Box as="span" color="primary.600">
+                <Box as="span" color="primary1.11">
                   {watch('name')}
                 </Box>
-                <Box as="span" color="neutral.900">
+                <Box as="span" color="neutral1.11">
                   {'@geyser.fund'}
                 </Box>
-              </Body1>
+              </Body>
               <Tooltip
                 label={t(
                   `Lightning address is a simple way for others to send you funds. When someone sends money to this address, it's instantly routed to your private wallet. This ensures you have full custody and immediate access to your funds.`,
                 )}
               >
                 <span>
-                  <MdInfo color="neutral.900" fontSize="20px" />
+                  <PiInfo color="neutral1.11" fontSize="20px" />
                 </span>
               </Tooltip>
             </HStack>
@@ -218,10 +219,10 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
         />
         {!formState.errors.shortDescription && (
           <HStack width="100%" justifyContent="space-between">
-            <Text fontSize="12px" color="neutral.700" />
-            <Text fontSize="12px" color="neutral.700">{`${
-              watch('shortDescription') ? watch('shortDescription').length : 0
-            }/${ProjectValidations.shortDescription.maxLength}`}</Text>
+            <Body size="xs" muted />
+            <Body size="xs" muted>{`${watch('shortDescription') ? watch('shortDescription').length : 0}/${
+              ProjectValidations.shortDescription.maxLength
+            }`}</Body>
           </HStack>
         )}
       </FieldContainer>
@@ -238,7 +239,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           onUploadComplete={handleImageUpload}
           onDeleteClick={handleDeleteThumbnail}
           childrenOnLoading={<UploadBox loading h={10} />}
-          imageCrop={ImageCrop.Square}
+          imageCrop={ImageCropAspectRatio.Square}
         >
           <UploadBox h={10} title={watch('thumbnailImage') ? t('Change image') : undefined} />
         </FileUpload>
@@ -271,7 +272,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
                   onUploadComplete={handleHeaderImageUpload}
                   onDeleteClick={handleDeleteImage}
                   childrenOnLoading={<UploadBox loading h={10} />}
-                  imageCrop={ImageCrop.Rectangle}
+                  imageCrop={ImageCropAspectRatio.Rectangle}
                 >
                   <UploadBox h={10} flex={1} title={field.value ? t('Change header') : undefined} />
                 </FileUpload>
@@ -281,22 +282,24 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
         />
       </FieldContainer>
 
-      <FieldContainer
-        title={t('Email')}
-        subtitle={t(
-          'Project notifications will be sent to your profile email, which you can edit in Profile Settings. Make sure to verify your email to keep your wallet secure.',
-        )}
-      >
-        <TextInputBox
-          name="email"
-          value={watch('email')}
-          onChange={handleEmail}
-          placeholder="creator@gmail.com"
-          error={formState.errors.email?.message}
-          onBlur={() => form.trigger('email')}
-          isDisabled={Boolean(user.email)}
-        />
-      </FieldContainer>
+      {!isEdit && (
+        <FieldContainer
+          title={t('Email')}
+          subtitle={t(
+            'Project notifications will be sent to your profile email, which you can edit in Profile Settings. Make sure to verify your email to keep your wallet secure.',
+          )}
+        >
+          <TextInputBox
+            name="email"
+            value={watch('email')}
+            onChange={handleEmail}
+            placeholder="creator@gmail.com"
+            error={formState.errors.email?.message}
+            onBlur={() => form.trigger('email')}
+            isDisabled={Boolean(user.email)}
+          />
+        </FieldContainer>
+      )}
     </VStack>
   )
 }

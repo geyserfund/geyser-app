@@ -36,6 +36,7 @@ steps:
         --build-arg VITE_APP_BOLTZ_SWAP_DOMAIN=${_BOLTZ_SWAP_DOMAIN} \
         --build-arg VITE_APP_AUTH_SERVICE_ENDPOINT=${_AUTH_SERVICE_ENDPOINT} \
         --build-arg VITE_APP_FLODESK_API_KEY=$$FLODESK_API_KEY \
+        --build-arg VITE_APP_AIR_TABLE_KEY=$$AIR_TABLE_KEY \
         --build-arg VITE_APP_GIPHY_API_KEY=$$GIPHY_API_KEY \
         --build-arg VITE_APP_GEYSER_NOSTR_PUBKEY=$$GEYSER_NOSTR_PUBKEY \
         --build-arg VITE_APP_ENV=${_VITE_APP_ENV} \
@@ -45,7 +46,7 @@ steps:
         docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest \
         && \
         docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA
-    secretEnv: ['FLODESK_API_KEY', 'GIPHY_API_KEY', 'GEYSER_NOSTR_PUBKEY']
+    secretEnv: ['FLODESK_API_KEY', 'GIPHY_API_KEY', 'GEYSER_NOSTR_PUBKEY', 'AIR_TABLE_KEY']
   # Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
@@ -73,4 +74,6 @@ availableSecrets:
       env: 'GIPHY_API_KEY'
     - versionName: projects/$PROJECT_ID/secrets/geyser-nostr-pubkey/versions/1
       env: 'GEYSER_NOSTR_PUBKEY'
+    - versionName: projects/$PROJECT_ID/secrets/airtable-api-key/versions/5
+      env: 'AIR_TABLE_KEY'
 timeout: 1800s

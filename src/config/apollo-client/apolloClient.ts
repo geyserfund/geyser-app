@@ -4,10 +4,10 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { createClient } from 'graphql-ws'
 
-import { __development__ } from '../../constants'
+import { __development__ } from '../../shared/constants'
 import { toInt } from '../../utils'
 import { getAppEndPoint } from '../domain'
-import { cache } from './apollo-client-cache'
+import { cache } from './apolloClientCache'
 
 const retryLink = new RetryLink({
   attempts(count, _, error) {

@@ -74,12 +74,19 @@ export const DeleteTextConfirm = ({
               />
             )}
             {confirm && (
-              <Button w="full" variant="danger" onClick={confirm} isLoading={isLoading} isDisabled={!textValid}>
+              <Button
+                w="full"
+                variant="solid"
+                colorScheme="error"
+                onClick={confirm}
+                isLoading={isLoading}
+                isDisabled={!textValid}
+              >
                 {t('Confirm')}
               </Button>
             )}
             {close && (
-              <Button w="full" variant="primary" onClick={close} isLoading={isLoading}>
+              <Button w="full" variant="solid" colorScheme="primary1" onClick={close} isLoading={isLoading}>
                 {t('Close')}
               </Button>
             )}

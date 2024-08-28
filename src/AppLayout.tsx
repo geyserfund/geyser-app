@@ -1,30 +1,31 @@
 import { Box } from '@chakra-ui/layout'
-import { Fade } from '@chakra-ui/react'
-import { useEffect } from 'react'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 
 import { PullingDownContent } from './components/ui'
-import { useSetHistoryRoute } from './config'
-import { dimensions, ID } from './constants'
+import { useHistoryRoutes } from './config/routes/hooks/useHistoryRoutes'
+import { useMatchRoutes } from './config/routes/hooks/useMatchRoutes'
 import { useAuthContext } from './context'
-import { useLayoutAnimation } from './hooks'
-import { LandingNavBar } from './navigation/bottomNav/LandingNavBar'
-import { ProfileSideNavigation } from './navigation/profileRightSideNav'
-import { TopNavBar } from './navigation/topNavBar/TopNavBar'
+import { useActivityHook } from './modules/discovery/hooks/useActivityHook'
+import { PlatformNavBar } from './modules/navigation/platformNavBar/PlatformNavBar'
 import { LoadingPage } from './pages/loading'
+import { dimensions, ID } from './shared/constants'
+import { useLayoutAnimation } from './shared/hooks'
+import { useInitBtcRate } from './shared/hooks/platform/useInitBtcRate'
 import { useMobileMode } from './utils'
+import { useScrollToTop } from './utils/tools/useScrollToTop'
 
 export const AppLayout = () => {
+  useInitBtcRate()
+
   const { loading } = useAuthContext()
 
   const isMobile = useMobileMode()
 
-  const location = useLocation()
-  const setHistoryRoute = useSetHistoryRoute()
-  useEffect(() => {
-    setHistoryRoute(location.pathname)
-  }, [location.pathname, setHistoryRoute])
+  useMatchRoutes()
+  useHistoryRoutes()
+  useActivityHook()
+  useScrollToTop()
 
   const layoutAnimationClassName = useLayoutAnimation()
 
@@ -41,25 +42,32 @@ export const AppLayout = () => {
         pullDownThreshold={dimensions.pullDownThreshold}
         isPullable={isMobile}
       >
-        <Fade in={true}>
-          <Box w="full" h={'100%'} position="relative" className={layoutAnimationClassName}>
-            <Box minHeight="100vh" height={isMobile ? '100%' : '100vh'} display="flex" flexDir="column">
-              <TopNavBar />
-              <ProfileSideNavigation />
-              <Box
-                id={ID.root}
-                maxHeight="100%"
-                flex="1"
-                paddingTop={`${dimensions.topNavBar.desktop.height}px`}
-                backgroundColor="neutral.0"
-                overflowY={isMobile ? 'initial' : 'auto'}
-              >
-                <Outlet />
-              </Box>
-              {isMobile && <LandingNavBar />}
+        <Box w="full" h={'100%'} position="relative" className={layoutAnimationClassName}>
+          <Box
+            w="full"
+            minHeight="100vh"
+            height={{ base: '100%', lg: '100vh' }}
+            display="flex"
+            alignItems="center"
+            flexDir="column"
+            backgroundColor="utils.pbg"
+          >
+            <PlatformNavBar />
+            <Box
+              id={ID.root}
+              maxHeight="100%"
+              width="100%"
+              flex="1"
+              paddingTop={{
+                base: `${dimensions.topNavBar.mobile.height}px`,
+                lg: `${dimensions.topNavBar.desktop.height}px`,
+              }}
+              overflowY={{ base: 'initial', lg: 'auto' }}
+            >
+              <Outlet />
             </Box>
           </Box>
-        </Fade>
+        </Box>
       </PullToRefresh>
     </>
   )

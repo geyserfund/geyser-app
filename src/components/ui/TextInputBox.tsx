@@ -26,31 +26,16 @@ export const TextInputBox = forwardRef<HTMLInputElement, TextInputBoxProps>(
       <Box width="100%" {...wrapperProps}>
         <InputGroup>
           {leftIcon && <InputLeftElement pointerEvents="none">{leftIcon}</InputLeftElement>}
-          <Input
-            ref={ref}
-            isInvalid={Boolean(error)}
-            borderRadius="8px"
-            borderWidth="2px"
-            borderColor="neutral.200"
-            backgroundColor="neutral.0"
-            _hover={{
-              borderColor: 'neutral.400',
-            }}
-            _focus={{ borderColor: `primary.500`, boxShadow: 'none' }}
-            _placeholder={{
-              color: 'neutral.400',
-            }}
-            {...rest}
-          >
+          <Input ref={ref} isInvalid={Boolean(error)} {...rest}>
             {children}
           </Input>
-          {rightIcon && <InputRightElement pointerEvents="none">{rightIcon}</InputRightElement>}
+          {rightIcon && <InputRightElement>{rightIcon}</InputRightElement>}
         </InputGroup>
         {error ? (
           typeof error === 'object' ? (
             error
           ) : typeof error === 'boolean' ? null : (
-            <Text color="secondary.red" fontSize="12px">
+            <Text color="error.9" fontSize="12px">
               {t(`${error}`)}
             </Text>
           )
@@ -59,7 +44,7 @@ export const TextInputBox = forwardRef<HTMLInputElement, TextInputBoxProps>(
           typeof warn === 'object' ? (
             warn
           ) : typeof warn === 'boolean' ? null : (
-            <Text color="secondary.yellow" fontSize="12px">
+            <Text color="warning.9" fontSize="12px">
               {t(`${warn}`)}
             </Text>
           )

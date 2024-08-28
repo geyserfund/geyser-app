@@ -1,7 +1,8 @@
 import { useToast, UseToastOptions } from '@chakra-ui/react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-// "subtle" | "solid" | "left-accent" | "top-accent"
+
+type IndividualToastProps = { title: string; description?: string }
 
 export const useNotification = (options?: UseToastOptions | undefined) => {
   const { t } = useTranslation()
@@ -13,26 +14,68 @@ export const useNotification = (options?: UseToastOptions | undefined) => {
     variant: 'solid',
     containerStyle: {
       marginTop: 65,
-      marginRight: 10,
+      marginRight: { base: 3, lg: 10 },
     },
     ...options,
   })
 
+  const invokeToast = useCallback(
+    (input: UseToastOptions & { description?: string; title: string }) => {
+      toast({
+        ...input,
+        description: t(input.description || ''),
+        title: t(input.title),
+      })
+    },
+    [toast, t],
+  )
   const unexpected = useCallback(() => {
     invokeToast({
       status: 'error',
       title: 'Something went wrong.',
       description: 'Please try again',
     })
-  }, [toast])
+  }, [invokeToast])
 
-  const invokeToast = (input: UseToastOptions & { description?: string; title: string }) => {
-    toast({
-      ...input,
-      description: t(input.description || ''),
-      title: t(input.title),
-    })
-  }
+  const success = useCallback(
+    (props: IndividualToastProps) => {
+      invokeToast({
+        status: 'success',
+        ...props,
+      })
+    },
+    [invokeToast],
+  )
 
-  return { toast: invokeToast, unexpected }
+  const error = useCallback(
+    (props: IndividualToastProps) => {
+      invokeToast({
+        status: 'error',
+        ...props,
+      })
+    },
+    [invokeToast],
+  )
+
+  const warning = useCallback(
+    (props: IndividualToastProps) => {
+      invokeToast({
+        status: 'warning',
+        ...props,
+      })
+    },
+    [invokeToast],
+  )
+
+  const info = useCallback(
+    (props: IndividualToastProps) => {
+      invokeToast({
+        status: 'info',
+        ...props,
+      })
+    },
+    [invokeToast],
+  )
+
+  return { toast: invokeToast, unexpected, success, error, warning, info }
 }

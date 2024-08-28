@@ -1,23 +1,24 @@
-import { Button, Image, Link, VStack } from '@chakra-ui/react'
+import { Button, HStack, Image, Link, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { BsArrowDownSquare } from 'react-icons/bs'
+import { PiDownloadSimple } from 'react-icons/pi'
 
-import { Body2 } from '../../../../../../../components/typography'
+import { Body, H1 } from '@/shared/components/typography'
+
 import { getAppEndPoint } from '../../../../../../../config/domain'
-import { NoContributionImageUrl } from '../../../../../../../constants'
+import { NoContributionImageUrl } from '../../../../../../../shared/constants'
 import { UserProjectContributionsFragment } from '../../../../../../../types'
-import { useViewingOwnProfileAtomValue } from '../../../../../state'
-import { ProfileTabLayout } from '../../../components'
+import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
 import { ContributionSummary } from '../components/ContributionSummary'
 import { TabPanelSkeleton } from '../components/TabPanelSkeleton'
+import { useProfileContributionQuery } from '../hooks/useProfileContributionQuery'
 
-interface ProfileContributionsProps {
-  contributions: UserProjectContributionsFragment[]
-  isLoading: boolean
-}
-
-export const ProfileContributions = ({ contributions, isLoading }: ProfileContributionsProps) => {
+export const ProfileContributions = () => {
   const { t } = useTranslation()
+
+  const { userProfile } = useUserProfileAtom()
+
+  const { isLoading, contributions } = useProfileContributionQuery(userProfile.id)
+
   const isViewingOwnProfile = useViewingOwnProfileAtomValue()
 
   if (isLoading) {
@@ -29,36 +30,42 @@ export const ProfileContributions = ({ contributions, isLoading }: ProfileContri
   const downloadUrl = `${appEndpoint}/export/payments/user`
 
   return (
-    <ProfileTabLayout
-      heading={t('Contributions')}
-      headerContent={
-        isViewingOwnProfile ? (
+    <VStack w="full" alignItems={'start'} spacing={4}>
+      <HStack w="full" justifyContent={{ base: 'space-between', lg: 'flex-end' }}>
+        <H1 size="2xl" bold display={{ base: 'unset', lg: 'none' }}>
+          {t('Contributions')}
+        </H1>
+        {isViewingOwnProfile ? (
           <Button
             as={Link}
             href={downloadUrl}
             isExternal
-            size="sm"
-            textDecoration={'none'}
-            variant="secondary"
-            rightIcon={<BsArrowDownSquare fontSize={'16px'} />}
+            size="md"
+            variant="outline"
+            colorScheme="neutral1"
+            rightIcon={<PiDownloadSimple fontSize={'16px'} />}
+            padding={2}
           >
             {t('Export')}
           </Button>
-        ) : undefined
-      }
-    >
-      {contributions.map((c: UserProjectContributionsFragment) => (
-        <ContributionSummary key={c.funder?.id} funder={c.funder} project={c.project} />
-      ))}
+        ) : null}
+      </HStack>
+
+      {contributions.map((c: UserProjectContributionsFragment) => {
+        if (!c.funder) {
+          return null
+        }
+
+        return <ContributionSummary key={c.funder?.id} funder={c.funder} project={c.project} />
+      })}
       {contributions.length === 0 && (
         <VStack w="full" p="20px" spacing="20px">
           <Image height="200px" src={NoContributionImageUrl} />
-          <Body2 semiBold color={'neutral.600'}>
-            {' '}
+          <Body medium light>
             {t('No contributions made yet')}
-          </Body2>
+          </Body>
         </VStack>
       )}
-    </ProfileTabLayout>
+    </VStack>
   )
 }

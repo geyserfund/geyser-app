@@ -1,4 +1,4 @@
-import { VITE_APP_FLODESK_API_KEY } from '../constants'
+import { VITE_APP_FLODESK_API_KEY } from '../shared/constants'
 
 export const FLODESK_BASE_API_ENDPOINT = 'https://api.flodesk.com/v1'
 

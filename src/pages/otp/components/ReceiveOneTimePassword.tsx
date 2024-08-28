@@ -4,8 +4,9 @@ import { Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { ControlledTextInput } from '@/shared/components/controlledInput'
+
 import { useAuthContext } from '../../../context'
-import { TextField } from '../../../forms/components/TextField'
 import { MfaAction, useUserEmailUpdateMutation } from '../../../types'
 import { emailValidationSchema, useNotification } from '../../../utils'
 
@@ -75,14 +76,14 @@ export const ReceiveOneTimePassword = ({
       }}
     >
       <VStack spacing="10px">
-        <TextField
+        <ControlledTextInput
           required
           control={form.control}
           name="email"
           label={canEditEmail ? t('Email input') : t('Your email')}
           isDisabled={!canEditEmail}
         />
-        <Button w="full" variant="primary" type="submit">
+        <Button w="full" variant="solid" colorScheme="primary1" type="submit">
           {t('Receive One Time Password')}
         </Button>
       </VStack>

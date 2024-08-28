@@ -6,8 +6,8 @@ import { IconBaseProps } from 'react-icons'
 import { BsCurrencyBitcoin } from 'react-icons/bs'
 import { createUseStyles } from 'react-jss'
 
+import { commaFormatted } from '../../../shared/utils/formatData/helperFunctions'
 import { useDarkMode } from '../../../utils'
-import { commaFormatted } from '../../../utils/formatData/helperFunctions'
 import { SatoshiIconTilted } from '../../icons'
 
 interface IProjectBalanceCircularProgress {
@@ -62,7 +62,7 @@ export const ProjectBalanceCircularProgress = ({ goal, rate, balance, loading }:
       return percent.toFixed(2)
     }
 
-    return percent.toFixed()
+    return percent.toFixed(0)
   }
 
   const handleClick = () => {

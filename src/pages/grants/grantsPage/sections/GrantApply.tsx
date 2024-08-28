@@ -18,13 +18,14 @@ import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { BsCheckLg } from 'react-icons/bs'
 
-import { CardLayout } from '../../../../components/layouts'
-import { Body1, Body2, Caption, H3 } from '../../../../components/typography'
-import { LockedConnectAccountUrl } from '../../../../constants'
+import { Body, H3 } from '@/shared/components/typography'
+
 import { useAuthContext } from '../../../../context'
-import { MUTATION_APPLY_GRANT } from '../../../../graphql/mutations'
+import { MUTATION_APPLY_GRANT } from '../../../../graphqlBase/mutations'
 import { CreateAProjectButton } from '../../../../modules/profile/pages/profilePage/components'
-import { neutralColorsLight } from '../../../../styles'
+import { CardLayout } from '../../../../shared/components/layouts'
+import { LockedConnectAccountUrl } from '../../../../shared/constants'
+import { lightModeColors } from '../../../../shared/styles'
 import { Grant, GrantApplicant, GrantApplicantStatus, GrantApplyInput, Project } from '../../../../types'
 import { toInt, useCustomTheme, useNotification } from '../../../../utils'
 import { SocialAccountType } from '../../../auth'
@@ -40,8 +41,10 @@ export const GrantApply = ({ grant, pendingApplicants }: GrantProps) => {
   const { t } = useTranslation()
   return (
     <CardLayout noMobileBorder w="full" p={{ base: '10px', lg: '20px' }} alignItems="center">
-      <H3 alignSelf="start">{t('Apply')}</H3>
-      <Body1 alignSelf="start">
+      <H3 size="lg" alignSelf="start">
+        {t('Apply')}
+      </H3>
+      <Body alignSelf="start">
         <Trans
           values={{ title: grant.title }}
           i18nKey={
@@ -52,7 +55,7 @@ export const GrantApply = ({ grant, pendingApplicants }: GrantProps) => {
             'Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow'
           }
         </Trans>
-      </Body1>
+      </Body>
       <ApplyGrant grant={grant} pendingApplicants={pendingApplicants} />
     </CardLayout>
   )
@@ -63,7 +66,7 @@ export const ApplyGrant = ({ grant, pendingApplicants }: GrantProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
-      <Button variant="primary" onClick={onOpen} textTransform="uppercase">
+      <Button variant="solid" colorScheme="primary1" onClick={onOpen} textTransform="uppercase">
         {t('Apply')}
       </Button>
       <ApplyGrantModal {...{ isOpen, onOpen, onClose, grant, pendingApplicants }} />
@@ -147,7 +150,7 @@ export const LoginForGrant = () => {
   return (
     <>
       <Image src={LockedConnectAccountUrl} maxWidth="200px" />
-      <Body1>{t('To apply to a grant you need to first login into Geyser.')}</Body1>
+      <Body>{t('To apply to a grant you need to first login into Geyser.')}</Body>
       <VStack w="full">
         <ConnectWithSocial accountType={SocialAccountType.facebook} />
         <ConnectWithSocial accountType={SocialAccountType.github} />
@@ -163,11 +166,13 @@ export const CreateAProject = () => {
   const { t } = useTranslation()
   return (
     <>
-      <Body2 alignSelf="start">{t('Select your Geyser project from the list')}</Body2>
+      <Body size={'sm'} alignSelf="start">
+        {t('Select your Geyser project from the list')}
+      </Body>
       <Box w="full" paddingY="10px" backgroundColor="neutral.100" borderRadius="8px" textAlign="center">
         {t('You have not created any projects')}
       </Box>
-      <Body1>{t('To apply for a grant you need to create a project on Geyser.')}</Body1>
+      <Body size={'sm'}>{t('To apply for a grant you need to create a project on Geyser.')}</Body>
       <CreateAProjectButton />
     </>
   )
@@ -187,10 +192,8 @@ export const ApplicationSuccessful = ({ onClose }: { onClose: () => void }) => {
       >
         <BsCheckLg fontSize="35px" color={colors.neutral[1000]} />
       </HStack>
-      <Body1>
-        You successfully applied to be part of the Geyser Grant. You should be receiving a notification soon.
-      </Body1>
-      <Button w="full" variant="primary" onClick={onClose}>
+      <Body>You successfully applied to be part of the Geyser Grant. You should be receiving a notification soon.</Body>
+      <Button w="full" variant="solid" colorScheme="primary1" onClick={onClose}>
         Close
       </Button>
     </>
@@ -253,7 +256,9 @@ export const SelectAProject = ({ grantId, projects, onSuccess, pendingApplicants
 
   return (
     <>
-      <Body2 alignSelf="start">{t('Select your Geyser project from the list')}</Body2>
+      <Body size="sm" alignSelf="start">
+        {t('Select your Geyser project from the list')}
+      </Body>
       <VStack w="full">
         {projects.map((project) => {
           const isSelected = selectedProjectId === project.id
@@ -277,17 +282,26 @@ export const SelectAProject = ({ grantId, projects, onSuccess, pendingApplicants
               }}
             >
               <Image h="100%" width="135px" src={project.thumbnailImage || ''} objectFit="cover" />
-              <Body1 bold>{project.title}</Body1>
+              <Body bold>{project.title}</Body>
               {isPending && (
-                <Tag bg="secondary.yellow">
-                  <Caption color={neutralColorsLight[900]}>{t('APPLICATION PENDING')}</Caption>
+                <Tag bg="warning.3">
+                  <Body size="xs" color={lightModeColors.utils.text}>
+                    {t('APPLICATION PENDING')}
+                  </Body>
                 </Tag>
               )}
             </CardLayout>
           )
         })}
       </VStack>
-      <Button w="full" variant="primary" isDisabled={!selectedProjectId} onClick={handleApply} isLoading={loading}>
+      <Button
+        w="full"
+        variant="solid"
+        colorScheme="primary1"
+        isDisabled={!selectedProjectId}
+        onClick={handleApply}
+        isLoading={loading}
+      >
         {t('Apply')}
       </Button>
     </>

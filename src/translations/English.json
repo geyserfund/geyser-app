@@ -1005,6 +1005,7 @@
    "For more, checkout our":"For more, checkout our",
    "Terms and Conditions":"Terms and Conditions",
    "Bitcoin Beach Grant Application Template":"Bitcoin Beach Grant Application Template",
+   "Confirm Delete":"Confirm Delete",
    "Leaderboard (All)":"Leaderboard (All)",
    "Error creating project goal":"Error creating project goal",
    "Email sent to :":"Email sent to :",
@@ -1047,7 +1048,6 @@
    "Deleting this goal will result in losing all of its progress":"Deleting this goal will result in losing all of its progress",
    "Are you sure you want to delete goal titled":"Are you sure you want to delete goal titled",
    "Delete Goal":"Delete Goal",
-   "Confirm Delete":"Confirm Delete",
    "Denominate your goal in Bitcoin or USD":"Denominate your goal in Bitcoin or USD",
    "Inspire your followers to contribute to specific objectives":"Inspire your followers to contribute to specific objectives",
    "Affiliate fee":"Affiliate fee",
@@ -1073,8 +1073,40 @@
    "Nostr":"Nostr",
    "Currency Denominations":"Currency Denominations",
    "No affiliates link yet, please create one.":"No affiliates link yet, please create one.",
-  "This also breaks all Affiliate refferal links.":"This also breaks all Affiliate refferal links."
+  "This also breaks all Affiliate refferal links.":"This also breaks all Affiliate refferal links.",  
+   "Sold":"Sold",
+   "Buy":"Buy",
+   "Followers":"Followers",
+   "Ready for delivery":"Ready for delivery",
+   "Available on":"Available on",
+   "Preorder":"Preorder",
+   "Goals":"Goals",
+   "weeks":"weeks",
+   "Change language":"Change language",
+   "Discover":"Discover",
+   "Completed":"Completed",
+   "This is the default goal. Contributions will be directed here unless contributors decide to fund another goal. Once this goal is completed, the next goal in line will automatically become the default goal.":"This is the default goal. Contributions will be directed here unless contributors decide to fund another goal. Once this goal is completed, the next goal in line will automatically become the default goal.",
+   "This goal is denominated in US Dollars":"This goal is denominated in US Dollars",
+   "contributed towards goal":"contributed towards goal",
+   "Location":"Location",
+   "of":"of",
+   "Posts":"Posts",
+   "Delivery in":"Delivery in",
+   "contributed in total":"contributed in total",
+   "Title must match exactly":"Title must match exactly",
+   "Github":"Github",
+   "No contributions have been made to this project":"No contributions have been made to this project",
+   "Project details":"Project details",
+   "Anonymous":"Anonymous",
+   "Select project":"Select project",
+   "Logged in with":"Logged in with"
+
 
 
 
   }
+   
+   
+
+
+

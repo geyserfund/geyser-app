@@ -1,20 +1,18 @@
-import { useMutation, useQuery } from '@apollo/client'
-import { AddIcon, CloseIcon } from '@chakra-ui/icons'
-import { Button, HStack, StackProps, useDisclosure, VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { Button, HStack, IconButton, StackProps, useDisclosure, VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { chakraComponents, MenuListProps, MultiValue } from 'chakra-react-select'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
+import { PiPlus, PiX } from 'react-icons/pi'
 import { createUseStyles } from 'react-jss'
-import { components, MenuProps, MultiValue } from 'react-select'
 
-import { Modal, SkeletonLayout } from '../../../components/layouts'
-import { Body1 } from '../../../components/typography'
-import { ButtonComponent, IconButtonComponent, SelectComponent } from '../../../components/ui'
-import { getListOfTags } from '../../../constants'
+import { CustomSelect } from '@/components/ui/CustomSelect'
+import { Body } from '@/shared/components/typography'
+
 import { AppTheme } from '../../../context'
-import { FieldContainer } from '../../../forms/components/FieldContainer'
-import { MUTATION_TAG_CREATE } from '../../../graphql/mutations'
-import { QUERY_TAGS } from '../../../graphql/queries/tags'
-import { Tag, TagCreateInput, TagsGetResult } from '../../../types'
+import { FieldContainer } from '../../../shared/components/form/FieldContainer'
+import { Modal, SkeletonLayout } from '../../../shared/components/layouts'
+import { getListOfTags } from '../../../shared/constants'
+import { Tag, TagsGetResult, useProjectTagCreateMutation, useTagsGetQuery } from '../../../types'
 import { useNotification } from '../../../utils'
 
 const MAX_TAGS_ALLOWED = 4
@@ -22,9 +20,9 @@ const MAX_TAGS_ALLOWED = 4
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   tagContainer: {
     width: '100%',
-    backgroundColor: colors.neutral[0],
+    backgroundColor: colors.utils.pbg,
     border: '1px solid',
-    borderColor: colors.neutral[400],
+    borderColor: colors.neutral1[6],
     borderRadius: '8px',
     padding: '12px',
   },
@@ -58,30 +56,27 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isOpen: infoIsOpen, onOpen: infoOnOpen, onClose: infoOnClose } = useDisclosure()
 
-  const { loading } = useQuery<{ tagsGet: TagsGetResult[] }>(QUERY_TAGS, {
+  const { loading } = useTagsGetQuery({
     onCompleted(data) {
       setTagOptions(data.tagsGet)
     },
   })
 
-  const [createTag, { loading: createLoading }] = useMutation<{ tagCreate: Tag }, { input: TagCreateInput }>(
-    MUTATION_TAG_CREATE,
-    {
-      onError() {
-        toast({
-          status: 'error',
-          title: 'failed to create new tag',
-        })
-      },
-      onCompleted(data) {
-        if (data.tagCreate) {
-          updateTags((current) => [...current, data.tagCreate])
-          setInputValue('')
-          onClose()
-        }
-      },
+  const [createTag, { loading: createLoading }] = useProjectTagCreateMutation({
+    onError() {
+      toast({
+        status: 'error',
+        title: 'failed to create new tag',
+      })
     },
-  )
+    onCompleted(data) {
+      if (data.tagCreate) {
+        updateTags((current) => [...current, data.tagCreate])
+        setInputValue('')
+        onClose()
+      }
+    },
+  })
 
   const handleChange = (value: MultiValue<TagsGetResult>) => {
     if (!value[0]) {
@@ -134,23 +129,23 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
     }
   }
 
-  const Menu = (props: MenuProps<TagsGetResult, true, any>) => {
+  const MenuList = (props: MenuListProps<TagsGetResult, true, any>) => {
     return (
-      <components.Menu<TagsGetResult, true, any> {...props}>
+      <chakraComponents.MenuList {...props}>
         {props.children}
         {showAddTag && (
-          <HStack padding="5px">
-            <ButtonComponent
-              variant="ghost"
-              isDisabled={disableShowAddTag}
-              leftIcon={<AddIcon />}
-              onClick={handleCreateTag}
-            >
-              {t('add tag')}
-            </ButtonComponent>
-          </HStack>
+          <Button
+            w="full"
+            variant="select"
+            colorScheme="primary1"
+            isDisabled={disableShowAddTag}
+            leftIcon={<PiPlus />}
+            onClick={handleCreateTag}
+          >
+            {t('add tag')}
+          </Button>
         )}
-      </components.Menu>
+      </chakraComponents.MenuList>
     )
   }
 
@@ -183,7 +178,7 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
           {loading ? (
             <SkeletonLayout h="40px" />
           ) : (
-            <SelectComponent<TagsGetResult, true>
+            <CustomSelect<TagsGetResult, true>
               isMulti
               isDisabled={isDisabled}
               menuIsOpen={isOpen}
@@ -199,23 +194,26 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
               onInputChange={handleInputChange}
               onKeyDown={handleKeyDown}
               inputValue={inputValue}
-              components={{ Menu }}
+              components={{ MenuList }}
               onMenuOpen={onOpen}
               onMenuClose={onClose}
             />
           )}
-          <HStack width="100%" spacing="10px">
+          <HStack width="100%" spacing="10px" flexWrap={'wrap'}>
             {tags.map((tag) => {
               return (
-                <HStack key={tag.id} borderRadius="4px" paddingLeft="8px" backgroundColor="neutral.100">
-                  <Body1 semiBold>{tag.label}</Body1>
-                  <IconButtonComponent
-                    noBorder
+                <HStack key={tag.id} borderRadius="4px" paddingLeft="8px" backgroundColor="neutral1.2">
+                  <Body medium>{tag.label}</Body>
+                  <IconButton
+                    variant="ghost"
+                    _hover={{}}
+                    _pressed={{}}
+                    _active={{}}
                     size="xs"
                     borderRadius="8px"
                     aria-label="remove-tag-close-icon"
                     onClick={() => removeTag(tag.id)}
-                    icon={<CloseIcon />}
+                    icon={<PiX />}
                   />
                 </HStack>
               )
@@ -232,16 +230,16 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
         title={t('Trending page tags')}
       >
         <VStack w="full">
-          <Body1 color="neutral.600" semiBold>
+          <Body light medium>
             {t('The trending page showcases the following list of general tags')}
-          </Body1>
+          </Body>
           <Wrap>
             {getListOfTags().map((tag) => {
               return (
-                <WrapItem key={tag.label} background="neutral.100" borderRadius={'8px'} px="8px" py="3px">
-                  <Body1 color="neutral.900" semiBold>
+                <WrapItem key={tag.label} backgroundColor="neutral1.2" borderRadius={'8px'} px="8px" py="3px">
+                  <Body medium dark>
                     {tag.label}
-                  </Body1>
+                  </Body>
                 </WrapItem>
               )
             })}

@@ -1,18 +1,12 @@
-import { useQuery } from '@apollo/client'
 import { useMemo } from 'react'
 
-import { QUERY_GRANTS } from '../../../graphql/queries/grant'
-import { Grant, GrantStatusEnum } from '../../../types'
+import { Grant, GrantStatusEnum, useGrantsQuery } from '../../../types'
 import { toInt } from '../../../utils'
-
-type ResponseData = {
-  grants: Grant[]
-}
 
 const CurrentFeaturedGrant = 'grant-round-009'
 
 export const useGrants = () => {
-  const { data, error, loading, refetch } = useQuery<ResponseData>(QUERY_GRANTS)
+  const { data, error, loading, refetch } = useGrantsQuery()
 
   const activeGrants = useMemo(
     () => (data ? (data.grants.filter((grant) => grant.status !== GrantStatusEnum.Closed) as Grant[]) : []),

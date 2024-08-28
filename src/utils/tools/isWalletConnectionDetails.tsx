@@ -1,4 +1,4 @@
-import { WalletConnectDetails } from '../../constants'
+import { WalletConnectDetails } from '../../shared/constants'
 import { Wallet } from '../../types'
 
 export const isWalletLightning = (projectWallet: Wallet) => {

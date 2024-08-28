@@ -1,15 +1,16 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { TiPlus } from 'react-icons/ti'
+import { PiPlus } from 'react-icons/pi'
 
-import { Modal } from '../../../../../../../components/layouts/Modal'
-import { Body2 } from '../../../../../../../components/typography'
-import { useModal } from '../../../../../../../hooks/useModal'
+import { Body } from '@/shared/components/typography'
+
 import { ConnectWithLightning } from '../../../../../../../pages/auth/ConnectWithLightning'
 import { ConnectWithNostr } from '../../../../../../../pages/auth/ConnectWithNostr'
 import { ConnectWithSocial } from '../../../../../../../pages/auth/ConnectWithSocial'
 import { SocialAccountType } from '../../../../../../../pages/auth/type'
 import { useRefreshAuthToken } from '../../../../../../../pages/auth/useAuthToken'
+import { Modal } from '../../../../../../../shared/components/layouts/Modal'
+import { useModal } from '../../../../../../../shared/hooks/useModal'
 import { UserForProfilePageFragment } from '../../../../../../../types'
 import {
   hasFacebookAccount,
@@ -58,15 +59,13 @@ export const ConnectAccounts = ({ user }: { user: UserForProfilePageFragment }) 
   return (
     <>
       {canConnectAccount && (
-        <Button size="sm" onClick={onOpen} width="100%" variant="secondary" leftIcon={<TiPlus />}>
-          {t('Connect more accounts')}
+        <Button size="sm" onClick={onOpen} variant="surface" colorScheme="neutral1">
+          <PiPlus />
         </Button>
       )}
       <Modal isOpen={isOpen} onClose={onClose} title={t('Connect more accounts')}>
-        <VStack w="full" alignItems="center">
-          <Body2 color="neutral.600" mb={4}>
-            {t('Connect more social profiles to your Geyser account.')}
-          </Body2>
+        <VStack w="full" alignItems="center" spacing={4}>
+          <Body light>{t('Connect more social profiles to your Geyser account.')}</Body>
           <VStack>
             {displayTwitterButton && <ConnectWithSocial accountType={SocialAccountType.twitter} w="full" />}
             {displayNostrButton && <ConnectWithNostr w="full" />}

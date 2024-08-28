@@ -1,6 +1,7 @@
 import type { Preview } from '@storybook/react'
 import {theme} from '../src/config/theme/theme'
-import { lightModeColors } from '../src/styles'
+import { lightModeColors } from '../src/shared/styles'
+
 
 const preview: Preview = {
   parameters: {

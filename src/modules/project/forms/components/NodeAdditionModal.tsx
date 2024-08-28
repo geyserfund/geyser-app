@@ -1,29 +1,22 @@
-import {
-  Avatar,
-  Checkbox,
-  Link,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Avatar, Button, Checkbox, Link, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BsExclamation, BsQuestion } from 'react-icons/bs'
+import { PiQuestion } from 'react-icons/pi'
+
+import { Modal } from '@/shared/components/layouts'
+import { Body } from '@/shared/components/typography'
+import { Feedback, FeedBackVariant } from '@/shared/molecules'
+import { standardPadding } from '@/shared/styles'
 
 import { DescriptionLinkWithIconComponent } from '../../../../components/molecules'
-import { ButtonComponent, TextArea, TextInputBox } from '../../../../components/ui'
-import { VoltageNodeConnectionDemoURL, WalletCreationFindOutMoreUrl } from '../../../../constants'
-import { ProjectNodeValidations } from '../../../../constants/validations'
+import { TextArea, TextInputBox } from '../../../../components/ui'
+import { VoltageNodeConnectionDemoURL, WalletCreationFindOutMoreUrl } from '../../../../shared/constants'
+import { ProjectNodeValidations } from '../../../../shared/constants/validations'
 import { useMobileMode } from '../../../../utils'
 import { checkMacaroonPermissions } from '../../../../utils/validations/checkMacaroonPermissions'
 import { isSecp256k1Compressed } from '../../../../utils/validations/isSecp256k1Compressed'
 import { isTorV3Address } from '../../../../utils/validations/isTorV3Address'
-import { TNodeInput } from '../../pages/projectCreate/types'
+import { TNodeInput } from '../../pages1/projectCreation/types'
 
 type Props = {
   isOpen: boolean
@@ -164,28 +157,39 @@ export const NodeAdditionModal = ({ isOpen, onClose, nodeInput, onSubmit }: Prop
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={isMobile ? 'sm' : 'md'} isCentered>
-      <ModalOverlay />
-
-      <ModalContent
-        bg="neutral.0"
-        display="flex"
-        alignItems="flex-start"
-        paddingY="20px"
-        paddingX="0px"
-        maxHeight="100%"
+    <>
+      <Modal
+        title={t('Add a Node')}
+        isOpen={isOpen}
+        onClose={onClose}
+        size={isMobile ? 'sm' : 'md'}
+        contentProps={{
+          marginTop: '20px',
+          maxHeight: '100%',
+        }}
+        bodyProps={{
+          as: VStack,
+          gap: 4,
+          paddingX: 0,
+        }}
       >
-        <ModalHeader paddingX="20px">
+        <VStack
+          width="100%"
+          paddingBottom="20px"
+          marginBottom="20px"
+          maxHeight="600px"
+          spacing={4}
+          paddingX={standardPadding}
+          overflowY="auto"
+        >
           <VStack spacing={2} alignItems="flex-start">
-            <Text fontSize="18px" fontWeight={600}>
-              {t('Add a Node')}
-            </Text>
-
-            <Text fontSize={'14px'} fontWeight="medium" color="neutral.600">
+            <Body size="sm" medium light>
               {t('We currently support LND and clearnet nodes. So Tor nodes will not work at this time.')}
-            </Text>
-            <DescriptionLinkWithIconComponent
-              title={
+            </Body>
+
+            <Feedback
+              variant={FeedBackVariant.WARNING}
+              text={
                 <>
                   {t('Keep in mind that you are responsible for managing the liquidity of your node.')}{' '}
                   <Link href={WalletCreationFindOutMoreUrl} target="_blank">
@@ -194,113 +198,96 @@ export const NodeAdditionModal = ({ isOpen, onClose, nodeInput, onSubmit }: Prop
                   .
                 </>
               }
-              icon={<Avatar bgColor="neutral.300" color="neutral.900" icon={<BsExclamation fontSize="36px" />} />}
-            />
+            ></Feedback>
           </VStack>
-        </ModalHeader>
+          <VStack width="100%" alignItems="flex-start">
+            <Body size="sm">{t('Node Name')}</Body>
+            <TextInputBox name="name" onChange={handleTextChange} value={form.name} error={formError.name} />
+          </VStack>
 
-        <ModalCloseButton />
+          <VStack width="100%" alignItems="flex-start">
+            <Checkbox size="lg" colorScheme="green" isChecked={isVoltage} onChange={handleVoltageNodeToggled}>
+              <Body size="sm">{t('This is a Voltage Node')}</Body>
+            </Checkbox>
 
-        <ModalBody width="100%" paddingX="0px">
-          <VStack
-            width="100%"
-            paddingBottom="20px"
-            marginBottom="20px"
-            maxHeight="600px"
-            overflowY="auto"
-            spacing="15px"
-            paddingX="20px"
-          >
-            <VStack width="100%" alignItems="flex-start">
-              <Text>{t('Node Name')}</Text>
-              <TextInputBox name="name" onChange={handleTextChange} value={form.name} error={formError.name} />
-            </VStack>
-
-            <VStack width="100%" alignItems="flex-start">
-              <Checkbox size="lg" colorScheme="green" isChecked={isVoltage} onChange={handleVoltageNodeToggled}>
-                <Text>{t('This is a Voltage Node')}</Text>
-              </Checkbox>
-
-              {isVoltage ? (
-                <DescriptionLinkWithIconComponent
-                  title={t('Find our demo here on how to load a Voltage node.')}
-                  link={VoltageNodeConnectionDemoURL}
-                  icon={<Avatar bgColor="neutral.300" color="neutral.900" icon={<BsQuestion fontSize="36px" />} />}
-                />
-              ) : null}
-            </VStack>
-
-            <VStack width="100%" alignItems="flex-start">
-              <Text>{`${t('Hostname or IP address')} (${t('API endpoint')})`}</Text>
-
-              <TextInputBox
-                name="hostname"
-                onChange={handleTextChange}
-                placeholder={isVoltage ? 'nodename.m.voltageapp.io' : ''}
-                value={form.hostname}
-                error={formError.hostname}
+            {isVoltage ? (
+              <DescriptionLinkWithIconComponent
+                title={t('Find our demo here on how to load a Voltage node.')}
+                link={VoltageNodeConnectionDemoURL}
+                icon={<Avatar bgColor="neutral1.3" color="neutral1.9" icon={<PiQuestion fontSize="36px" />} />}
               />
-            </VStack>
-
-            <VStack width="100%" alignItems="flex-start">
-              <Text>{`${t('Public key')} (${t('Identity Pubkey')})`}</Text>
-              <TextArea
-                minHeight={'6em'}
-                name="publicKey"
-                placeholder="0330ba2ac70aa1566d3d07524248ee8a7861aaebdc6d46c8ccd016bfe20b76c995"
-                onChange={handleTextChange}
-                value={form.publicKey}
-                error={formError.publicKey}
-              />
-            </VStack>
-
-            <VStack width="100%" alignItems="flex-start">
-              <Text>{`${t('Invoice Macaroon')} (base64)`}</Text>
-              <TextArea
-                minHeight={'10em'}
-                name="invoiceMacaroon"
-                placeholder="AgEDbG5kAlgDChB/+6M8TzkN5U73JwYSTJTZEgEwGhYKB2FkZHJlc3MSBHJlYWQSBXdyaXRlGhcKCGludm9pY2VzEgRyZWFkEgV3cml0ZRoPCgdvbmNoYWluEgRyZWFkAAAGIHCi3WwLBhVswgO+Yiqbwn41AkMmi42RAflN3EOpDCjc"
-                onChange={handleTextChange}
-                value={form.invoiceMacaroon}
-                error={formError.invoiceMacaroon}
-              />
-            </VStack>
-
-            {isVoltage === false ? (
-              <>
-                <VStack width="100%" alignItems="flex-start">
-                  <Text>{`${t('TLS certificate')} (base64)`}</Text>
-                  <TextArea
-                    minHeight={'6em'}
-                    name="tlsCert"
-                    placeholder="LS0tLS1CRUdJTiBDRVJU.....zeUZrYWFNTzdCWU51SVRxSRVJUSUZJQ0FURS0tLS0tCg=="
-                    onChange={handleTextChange}
-                    value={form.tlsCert}
-                    error={formError.tlsCert}
-                  />
-                </VStack>
-                <VStack width="100%" alignItems="flex-start">
-                  <Text>{t('gRPC port')}</Text>
-                  <TextInputBox
-                    name="grpc"
-                    type="number"
-                    placeholder="10009"
-                    onChange={handleTextChange}
-                    value={form.grpc}
-                    error={formError.grpc}
-                  />
-                </VStack>
-              </>
             ) : null}
           </VStack>
 
-          <VStack spacing="10px" paddingX="20px">
-            <ButtonComponent w="full" primary onClick={handleSubmit}>
-              {t('Confirm')}
-            </ButtonComponent>
+          <VStack width="100%" alignItems="flex-start">
+            <Body size="sm">{`${t('Hostname or IP address')} (${t('API endpoint')})`}</Body>
+
+            <TextInputBox
+              name="hostname"
+              onChange={handleTextChange}
+              placeholder={isVoltage ? 'nodename.m.voltageapp.io' : ''}
+              value={form.hostname}
+              error={formError.hostname}
+            />
           </VStack>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+
+          <VStack width="100%" alignItems="flex-start">
+            <Body size="sm">{`${t('Public key')} (${t('Identity Pubkey')})`}</Body>
+            <TextArea
+              minHeight={'6em'}
+              name="publicKey"
+              placeholder="0330ba2ac70aa1566d3d07524248ee8a7861aaebdc6d46c8ccd016bfe20b76c995"
+              onChange={handleTextChange}
+              value={form.publicKey}
+              error={formError.publicKey}
+            />
+          </VStack>
+
+          <VStack width="100%" alignItems="flex-start">
+            <Body size="sm">{`${t('Invoice Macaroon')} (base64)`}</Body>
+            <TextArea
+              minHeight={'10em'}
+              name="invoiceMacaroon"
+              placeholder="AgEDbG5kAlgDChB/+6M8TzkN5U73JwYSTJTZEgEwGhYKB2FkZHJlc3MSBHJlYWQSBXdyaXRlGhcKCGludm9pY2VzEgRyZWFkEgV3cml0ZRoPCgdvbmNoYWluEgRyZWFkAAAGIHCi3WwLBhVswgO+Yiqbwn41AkMmi42RAflN3EOpDCjc"
+              onChange={handleTextChange}
+              value={form.invoiceMacaroon}
+              error={formError.invoiceMacaroon}
+            />
+          </VStack>
+
+          {isVoltage === false ? (
+            <>
+              <VStack width="100%" alignItems="flex-start">
+                <Body size="sm">{`${t('TLS certificate')} (base64)`}</Body>
+                <TextArea
+                  minHeight={'6em'}
+                  name="tlsCert"
+                  placeholder="LS0tLS1CRUdJTiBDRVJU.....zeUZrYWFNTzdCWU51SVRxSRVJUSUZJQ0FURS0tLS0tCg=="
+                  onChange={handleTextChange}
+                  value={form.tlsCert}
+                  error={formError.tlsCert}
+                />
+              </VStack>
+              <VStack width="100%" alignItems="flex-start">
+                <Body size="sm">{t('gRPC port')}</Body>
+                <TextInputBox
+                  name="grpc"
+                  type="number"
+                  placeholder="10009"
+                  onChange={handleTextChange}
+                  value={form.grpc}
+                  error={formError.grpc}
+                />
+              </VStack>
+            </>
+          ) : null}
+        </VStack>
+        <VStack spacing="10px" paddingX="20px" w="full">
+          <Button variant="solid" colorScheme="primary1" w="full" onClick={handleSubmit}>
+            {t('Confirm')}
+          </Button>
+        </VStack>
+      </Modal>
+    </>
   )
 }

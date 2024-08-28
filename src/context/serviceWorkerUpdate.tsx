@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 
 import { Body1 } from '../components/typography'
-import { __production__ } from '../constants'
-import { lightModeColors } from '../styles'
+import { __production__ } from '../shared/constants'
+import { lightModeColors } from '../shared/styles'
 
 const defaultContext: ServiceWorkerUpdateProps = {
   needRefresh: false,
@@ -129,7 +129,13 @@ export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode 
             >
               {t('Not now')}
             </Button>
-            <Button size="sm" variant="primary" onClick={handleConfirm} color={lightModeColors.neutral[700]}>
+            <Button
+              size="sm"
+              variant="solid"
+              colorScheme="primary1"
+              onClick={handleConfirm}
+              color={lightModeColors.neutral[700]}
+            >
               {t('Restart app')}
             </Button>
           </HStack>

@@ -5,7 +5,7 @@ const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpe
 
 const baseStyle = definePartsStyle({
   dialog: {
-    bg: 'neutral.0',
+    bg: 'utils.pbg',
   },
   overlay: {
     bg: 'blackAlpha.300',

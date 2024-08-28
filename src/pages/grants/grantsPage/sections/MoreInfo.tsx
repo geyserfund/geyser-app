@@ -2,8 +2,7 @@ import { Box, Link, Text, TextProps } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { ShareIcon } from '../../../../assets'
-import { GrantsFAQUrl } from '../../../../constants'
-import { fonts } from '../../../../styles'
+import { GrantsFAQUrl } from '../../../../shared/constants'
 
 interface MoreInfoProps {
   titleProps?: TextProps
@@ -13,7 +12,7 @@ export const MoreInfo = ({ titleProps }: MoreInfoProps) => {
   const { t } = useTranslation()
   return (
     <Box paddingX={'10px'}>
-      <Text fontWeight={'bold'} fontSize="19px" fontFamily={fonts.interBlack} {...titleProps}>
+      <Text fontWeight={'bold'} fontSize="19px" {...titleProps}>
         {t('More Information')}
       </Text>
       <Text mt="5px" color="neutral.600" fontSize={'14px'} textAlign="justify">

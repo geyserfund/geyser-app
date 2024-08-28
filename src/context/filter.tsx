@@ -1,11 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { useLocation, useMatch, useNavigate, useSearchParams } from 'react-router-dom'
 
-import { getPath } from '../constants'
-import { disableSortByTrending } from '../pages/landing/filters/sort'
-import { ActivityResourceType, ProjectStatus, ProjectType } from '../types'
-import { toInt } from '../utils'
-import { checkIfRenderFilter } from '../utils/helpers'
+import { getPath } from '@/shared/constants'
+import { ActivityResourceType, ProjectStatus, ProjectType } from '@/types'
+import { toInt } from '@/utils'
 
 export type FilterType = {
   countryCode?: string
@@ -14,14 +12,6 @@ export type FilterType = {
   status?: ProjectStatus
   type?: ProjectType
   tagIds?: number[]
-  recent?: boolean
-  activity?: ActivityResourceType
-  sort?: SortType
-}
-
-export enum SortType {
-  recent = 'recent',
-  balance = 'balance',
 }
 
 export interface FilterState {
@@ -57,27 +47,9 @@ export const FilterProvider = ({ children, isLoggedIn }: { children: React.React
 
       const currentFilters = getFiltersFromUrlParams(searchParams)
 
-      let newFilters = {} as FilterType
-
-      if (checkIfRenderFilter(value)) {
-        if (!currentFilters.sort && !isLandingFeedPage) {
-          newFilters = {
-            ...currentFilters,
-            recent: undefined,
-            ...value,
-          }
-        } else {
-          newFilters = {
-            ...currentFilters,
-            recent: undefined,
-            ...value,
-          }
-        }
-      } else {
-        newFilters = {
-          ...currentFilters,
-          ...value,
-        }
+      const newFilters = {
+        ...currentFilters,
+        ...value,
       }
 
       const newParameters = [] as [string, string][]
@@ -89,22 +61,16 @@ export const FilterProvider = ({ children, isLoggedIn }: { children: React.React
             if (tagIds.length > 0) {
               newParameters.push([key, tagIds.join(',')])
             }
-          } else if (
-            key === 'sort' &&
-            newFilters[key as keyof FilterType] === SortType.recent &&
-            disableSortByTrending(newFilters)
-          ) {
-            newParameters.push([key, SortType.balance])
           } else {
             newParameters.push([key, `${newFilters[key as keyof FilterType]}`])
           }
         }
       }
 
-      navigate(location.pathname, { state: null })
+      navigate(getPath('discoveryLanding'), { state: null })
       setSearchParams(newParameters)
     },
-    [isLandingFeedPage, isLoggedIn, searchParams, navigate, location.pathname, setSearchParams],
+    [isLandingFeedPage, isLoggedIn, searchParams, navigate, setSearchParams],
   )
 
   useEffect(() => {
@@ -145,9 +111,7 @@ const getFiltersFromUrlParams = (searchParams: URLSearchParams) => {
       .get('tagIds')
       ?.split(',')
       ?.map((val) => toInt(val)) || undefined
-  const recent = Boolean(searchParams.get('recent')) || undefined
   const activity = (searchParams.get('activity') as ActivityResourceType) || undefined
-  const sort = (searchParams.get('sort') as SortType) || undefined
 
   return {
     countryCode,
@@ -156,8 +120,6 @@ const getFiltersFromUrlParams = (searchParams: URLSearchParams) => {
     status,
     type,
     tagIds,
-    recent,
     activity,
-    sort,
   }
 }

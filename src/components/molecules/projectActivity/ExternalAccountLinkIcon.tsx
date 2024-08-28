@@ -9,7 +9,7 @@ import {
   CuriocasterLogoUrl,
   FountainLogoUrl,
   PodverseLogoUrl,
-} from '../../../constants'
+} from '../../../shared/constants'
 import {
   FundingTxForLandingPageFragment,
   FundingTxForUserContributionFragment,

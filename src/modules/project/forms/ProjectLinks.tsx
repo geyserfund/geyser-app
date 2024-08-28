@@ -2,8 +2,8 @@ import { Button, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FieldContainer } from '../../../forms/components/FieldContainer'
 import { getIconForLink } from '../../../helpers/getIconForLinks'
+import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { Maybe } from '../../../types'
 import { ProjectLinkInput } from './components/ProjectLinkInput'
 
@@ -63,7 +63,14 @@ export const ProjectLinks = ({ links = [], setLinks, linkError = [] }: ProjectLi
               />
             )
           })}
-        <Button size="sm" variant="secondary" w="full" onClick={addNewLink} isDisabled={links.length >= 7}>
+        <Button
+          size="lg"
+          variant="outline"
+          colorScheme="neutral1"
+          w="full"
+          onClick={addNewLink}
+          isDisabled={links.length >= 7}
+        >
           {t('Add Project Link')}
         </Button>
       </VStack>

@@ -11,8 +11,8 @@ import {
   Grant2AnnouncementTwitterUrl,
   GrantsRound2Url,
   WalletOfSatoshiUrl,
-} from '../../../constants'
-import { fonts } from '../../../styles'
+} from '../../../shared/constants'
+import { fonts } from '../../../shared/styles'
 import { GrantApplicant, GrantStatusEnum } from '../../../types'
 import { useMobileMode } from '../../../utils'
 import { GrantWinnerAnnouncement } from '../components'
@@ -101,7 +101,7 @@ export const GrantsRoundTwo = ({
                   <small>($20K)</small>
                 </Text>
               </Box>
-              <Text fontWeight={'400'} fontFamily={fonts.inter} fontSize="17px">
+              <Text fontWeight={'400'} fontFamily={fonts.brand} fontSize="17px">
                 {t('GRANT TO DISTRIBUTE')}
               </Text>
             </Box>
@@ -144,7 +144,7 @@ export const GrantsRoundTwo = ({
             </Text>
           </Box>
           <Box my={8}>
-            <Text fontFamily={fonts.interBlack} fontSize="24px" fontWeight={'bold'}>
+            <Text fontSize="24px" fontWeight={'bold'}>
               {t('Principled Bitcoiners Board')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">
@@ -155,7 +155,7 @@ export const GrantsRoundTwo = ({
 
           <MoreInfo titleProps={{ fontSize: '24px' }} />
           <Box my={8}>
-            <Text fontFamily={fonts.interBlack} fontSize="24px" fontWeight={'bold'}>
+            <Text fontFamily={fonts.brand} fontSize="24px" fontWeight={'bold'}>
               {t('Made possible by sponsors')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">
