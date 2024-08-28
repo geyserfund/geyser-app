@@ -8,7 +8,7 @@ import { Body } from '@/shared/components/typography'
 import { DiamondUrl, getPath } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
-import ProjectCard from './components/ProjectCard'
+import { ProjectCard } from './components/ProjectCard'
 import { ProjectIFollowGrid } from './components/ProjectIFollowGrid'
 import { useMyProjects } from './hooks/useMyProjects'
 
