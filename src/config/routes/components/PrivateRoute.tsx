@@ -16,17 +16,22 @@ interface IPrivateRoute {
 export const PrivateRoute = ({ children }: IPrivateRoute) => {
   const { loading, user, isAnonymous } = useAuthContext()
 
-  const params = useParams<{ projectId: string; projectName: string }>()
+  const params = useParams<{ projectId: string; projectName: string; userId: string }>()
 
   const { onOpen, onClose, isOpen } = useDisclosure()
 
-  const { isProjectCreatorRoute, isEntryCreationRoute, isPrivateProjectLaunchRoute } = useRouteMatchesForPrivateRoute()
+  const { isProjectCreatorRoute, isEntryCreationRoute, isPrivateProjectLaunchRoute, isProfileSettingsRoute } =
+    useRouteMatchesForPrivateRoute()
 
   const isUserViewingTheirOwnProject: boolean = useMemo(() => {
     return user?.ownerOf?.some(
       ({ project }) => project?.id === params.projectId || project?.name === params.projectName,
     )
   }, [params.projectId, params.projectName, user.ownerOf])
+
+  const isVieweingOwnProfile = useMemo(() => {
+    return user.id === params.userId
+  }, [params.userId, user.id])
 
   const isUserCreatorEnabled: boolean = useMemo(() => {
     return Boolean(user?.externalAccounts.find((account) => account.accountType !== ExternalAccountType.lightning))
@@ -62,6 +67,10 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
 
   if (isProjectCreatorRoute && Boolean(isUserViewingTheirOwnProject) === false && params?.projectName) {
     return <Navigate to={getPath('project', params?.projectName)} />
+  }
+
+  if (isProfileSettingsRoute && !isVieweingOwnProfile && params?.userId) {
+    return <Navigate to={getPath('userProfile', params?.userId)} />
   }
 
   if (isAnonymous) {
