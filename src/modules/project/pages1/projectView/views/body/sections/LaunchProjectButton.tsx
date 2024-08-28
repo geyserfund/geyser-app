@@ -51,7 +51,7 @@ export const LaunchProjectButton = () => {
 
   return (
     <>
-      <Button variant="primary" isLoading={publishProject.loading} onClick={confirmModal.onOpen}>
+      <Button variant="solid" colorScheme="primary1" isLoading={publishProject.loading} onClick={confirmModal.onOpen}>
         {t('Publish')}
       </Button>
 

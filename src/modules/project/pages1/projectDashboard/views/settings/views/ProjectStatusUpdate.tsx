@@ -1,4 +1,4 @@
-import { HStack, Switch, Text, Tooltip, VStack } from '@chakra-ui/react'
+import { HStack, Switch, Tooltip, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiXCircle } from 'react-icons/pi'
 
@@ -96,9 +96,9 @@ export const ProjectStatusUpdate = () => {
                 isDisabled={isProjectInReview}
               />
             </Tooltip>
-            <Text variant="body2" flexGrow={1}>
+            <Body size="sm" flexGrow={1}>
               {t('Active')}
-            </Text>
+            </Body>
           </HStack>
         </CardLayout>
       )}

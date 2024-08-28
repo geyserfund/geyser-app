@@ -93,7 +93,13 @@ export const ProjectDashboardAccounting = () => {
         )}
         {!noMoreItems.current && (
           <HStack w="full" px={standardPadding}>
-            <Button width="100%" variant="secondary" isLoading={isLoadingMore.current} onClick={() => fetchNext()}>
+            <Button
+              width="100%"
+              variant="outline"
+              colorScheme="neutral1"
+              isLoading={isLoadingMore.current}
+              onClick={() => fetchNext()}
+            >
               {t('Show more')}...
             </Button>
           </HStack>

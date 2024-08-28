@@ -87,7 +87,7 @@ export const UpdateFundingTxEmailAddress = () => {
               </Trans>
             </Body>
 
-            <Button variant="secondary" w="full" onClick={() => setUpdatedEmail('')}>
+            <Button variant="outline" colorScheme="neutral1" w="full" onClick={() => setUpdatedEmail('')}>
               {t('Send to new email')}
             </Button>
           </VStack>

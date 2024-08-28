@@ -254,7 +254,8 @@ export const GrantApplicantCard = ({
           width="100%"
           size="md"
           fontSize="16px"
-          variant="primary"
+          variant="solid"
+          colorScheme="primary1"
           zIndex={2}
           pointerEvents="auto"
         >
@@ -276,7 +277,8 @@ export const GrantApplicantCard = ({
           height="40px"
           width="100%"
           size="md"
-          variant="primary"
+          variant="solid"
+          colorScheme="primary1"
           zIndex={2}
           pointerEvents="auto"
         >
@@ -437,7 +439,8 @@ const HowVotingWorksModal = ({
           <HStack w="full" justifyContent="center">
             <Button
               w="full"
-              variant="primary"
+              variant="solid"
+              colorScheme="primary1"
               onClick={() => {
                 navigate(getPath('projectFunding', project.name))
               }}
@@ -475,7 +478,8 @@ const HowVotingWorksModal = ({
         <HStack w="full" justifyContent="center">
           <Button
             w="full"
-            variant="primary"
+            variant="solid"
+            colorScheme="primary1"
             onClick={() => {
               navigate(getPath('projectFunding', project.name))
             }}

@@ -42,7 +42,7 @@ export const InsertVideoModal = ({
       >
         <VStack spacing={4}>
           <TextField control={form.control} name="url" label="Youtube URL" required />
-          <Button w="100%" variant="primary" type="submit">
+          <Button w="100%" variant="solid" colorScheme="primary1" type="submit">
             {t('Insert')}
           </Button>
         </VStack>

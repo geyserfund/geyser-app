@@ -129,7 +129,13 @@ export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode 
             >
               {t('Not now')}
             </Button>
-            <Button size="sm" variant="primary" onClick={handleConfirm} color={lightModeColors.neutral[700]}>
+            <Button
+              size="sm"
+              variant="solid"
+              colorScheme="primary1"
+              onClick={handleConfirm}
+              color={lightModeColors.neutral[700]}
+            >
               {t('Restart app')}
             </Button>
           </HStack>

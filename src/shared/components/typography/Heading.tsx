@@ -4,16 +4,19 @@ import { getFontColor, getFontWeight, TextColorProps, TextWeightProps } from './
 
 interface HeaderProps extends HeadingProps, TextWeightProps, TextColorProps {}
 
+/** H1 heading, default size: 4xl / 36px */
 export const H1 = (props: HeaderProps) => {
-  return <BaseHeading as="h1" {...props} />
+  return <BaseHeading as="h1" size="4xl" {...props} />
 }
 
+/** H2 heading, default size: 2xl / 24px */
 export const H2 = (props: HeaderProps) => {
-  return <BaseHeading as="h2" {...props} />
+  return <BaseHeading as="h2" size="2xl" {...props} />
 }
 
+/** H3 heading, default size: lg / 18px */
 export const H3 = (props: HeaderProps) => {
-  return <BaseHeading as="h3" {...props} />
+  return <BaseHeading as="h3" size="lg" {...props} />
 }
 
 export const H4 = (props: HeaderProps) => {

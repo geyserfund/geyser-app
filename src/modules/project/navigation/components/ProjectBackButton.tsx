@@ -20,7 +20,8 @@ export const ProjectBackButton = (props: ButtonProps) => {
 
   return (
     <Button
-      variant="secondary"
+      variant="outline"
+      colorScheme="neutral1"
       size={{ base: 'sm', lg: 'md' }}
       leftIcon={<BsArrowLeft fontSize="20px" />}
       {...props}

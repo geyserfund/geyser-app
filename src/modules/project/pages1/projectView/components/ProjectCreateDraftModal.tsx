@@ -24,7 +24,7 @@ export const ProjectCreateDraftModal = (props: Omit<ModalProps, 'children'>) => 
       <VStack w="100%" spacing={6} pt={2}>
         <CheckCircleIcon fontSize="3.4em" color="primary1.9" />
         <Body>{t("By keeping your project in 'draft', it will remain hidden until you decide to launch it")}</Body>
-        <Button w="100%" variant="secondary" onClick={props.onClose}>
+        <Button w="100%" variant="outline" colorScheme="neutral1" onClick={props.onClose}>
           {t('Go to project')}
         </Button>
       </VStack>

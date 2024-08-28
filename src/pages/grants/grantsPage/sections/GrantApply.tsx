@@ -66,7 +66,7 @@ export const ApplyGrant = ({ grant, pendingApplicants }: GrantProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
-      <Button variant="primary" onClick={onOpen} textTransform="uppercase">
+      <Button variant="solid" colorScheme="primary1" onClick={onOpen} textTransform="uppercase">
         {t('Apply')}
       </Button>
       <ApplyGrantModal {...{ isOpen, onOpen, onClose, grant, pendingApplicants }} />
@@ -193,7 +193,7 @@ export const ApplicationSuccessful = ({ onClose }: { onClose: () => void }) => {
         <BsCheckLg fontSize="35px" color={colors.neutral[1000]} />
       </HStack>
       <Body>You successfully applied to be part of the Geyser Grant. You should be receiving a notification soon.</Body>
-      <Button w="full" variant="primary" onClick={onClose}>
+      <Button w="full" variant="solid" colorScheme="primary1" onClick={onClose}>
         Close
       </Button>
     </>
@@ -294,7 +294,14 @@ export const SelectAProject = ({ grantId, projects, onSuccess, pendingApplicants
           )
         })}
       </VStack>
-      <Button w="full" variant="primary" isDisabled={!selectedProjectId} onClick={handleApply} isLoading={loading}>
+      <Button
+        w="full"
+        variant="solid"
+        colorScheme="primary1"
+        isDisabled={!selectedProjectId}
+        onClick={handleApply}
+        isLoading={loading}
+      >
         {t('Apply')}
       </Button>
     </>
