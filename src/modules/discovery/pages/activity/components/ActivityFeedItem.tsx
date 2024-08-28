@@ -4,6 +4,7 @@ import { PiBag, PiFlagBannerFold, PiLightning, PiNewspaper } from 'react-icons/p
 import { Link } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
+import { CardLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
@@ -50,13 +51,13 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
   }
 
   return (
-    <VStack
+    <CardLayout
       as={Link}
       to={activityPath(activityType)}
       width={{ base: 'full', lg: '586px' }}
-      border={'1px solid'}
-      borderRadius={'md'}
-      borderColor={'neutralAlpha.6'}
+      _hover={{
+        borderColor: 'neutralAlpha.8',
+      }}
       p={4}
     >
       {isMobile ? (
@@ -98,7 +99,7 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
         )}
         {isFundingTxActivity && <ContributorInfo resource={resource} />}
       </VStack>
-    </VStack>
+    </CardLayout>
   )
 }
 
