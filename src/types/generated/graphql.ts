@@ -5438,7 +5438,12 @@ export type ProjectStatsGetQuery = { __typename?: 'Query', projectStatsGet: (
     & ProjectStatsFragment
   ) };
 
-export type UserProjectFunderFragment = { __typename?: 'Funder', amountFunded?: number | null, confirmedAt?: any | null, confirmed: boolean, id: any, fundingTxs: Array<{ __typename?: 'FundingTx', amountPaid: number, comment?: string | null, media?: string | null, paidAt?: any | null, onChain: boolean }> };
+export type BitcoinQuoteFragment = { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency };
+
+export type UserProjectFunderFragment = { __typename?: 'Funder', amountFunded?: number | null, confirmedAt?: any | null, confirmed: boolean, id: any, fundingTxs: Array<{ __typename?: 'FundingTx', amountPaid: number, comment?: string | null, media?: string | null, paidAt?: any | null, onChain: boolean, bitcoinQuote?: (
+      { __typename?: 'BitcoinQuote' }
+      & BitcoinQuoteFragment
+    ) | null }> };
 
 export type UserProjectContributionsFragment = { __typename?: 'UserProjectContribution', project: (
     { __typename?: 'Project' }
@@ -7126,6 +7131,12 @@ export const ProjectAvatarFragmentDoc = gql`
   title
 }
     `;
+export const BitcoinQuoteFragmentDoc = gql`
+    fragment BitcoinQuote on BitcoinQuote {
+  quote
+  quoteCurrency
+}
+    `;
 export const UserProjectFunderFragmentDoc = gql`
     fragment UserProjectFunder on Funder {
   amountFunded
@@ -7138,9 +7149,12 @@ export const UserProjectFunderFragmentDoc = gql`
     media
     paidAt
     onChain
+    bitcoinQuote {
+      ...BitcoinQuote
+    }
   }
 }
-    `;
+    ${BitcoinQuoteFragmentDoc}`;
 export const UserProjectContributionsFragmentDoc = gql`
     fragment UserProjectContributions on UserProjectContribution {
   project {

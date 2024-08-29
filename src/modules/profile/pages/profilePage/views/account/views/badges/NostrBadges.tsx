@@ -1,8 +1,5 @@
-import { VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { Wrap, WrapItem } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-
-import { Body } from '@/shared/components/typography'
 
 import { useNostrBadges } from '../../../../../../../../shared/hooks/useNostrBadges'
 import { UserBadge } from '../../../../../../../../types'
@@ -18,7 +15,6 @@ export const NostrBadges = ({
   userBadges: UserBadge[]
   isEdit: boolean
 }) => {
-  const { t } = useTranslation()
   const [claimedBadges, setClaimedBadges] = useState<UserBadge[]>([])
   const [unClaimedBadges, setUnClaimedBadges] = useState<UserBadge[]>([])
 
@@ -41,22 +37,12 @@ export const NostrBadges = ({
     }
   }, [nostrBadgeIds, userBadges])
 
-  const numberOfBadges = nostrBadgeIds?.length || 0
-
-  const isEmpty = numberOfBadges === 0
-
   if (nostrBadgesLoading) {
     return <BadgesBodySkeleton />
   }
 
   return (
     <>
-      {!isEdit && isEmpty && (
-        <VStack background="neutral1.3" borderRadius="8px" padding="5px 15px" width="fit-content" alignSelf="center">
-          <Body medium>{t('No Geyser badges')}</Body>
-        </VStack>
-      )}
-
       <Wrap w="full" spacing={2} justify="start" paddingBottom="20px">
         {claimedBadges.map((userBadge) => {
           return (

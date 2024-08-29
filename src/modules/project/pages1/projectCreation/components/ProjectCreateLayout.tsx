@@ -71,7 +71,7 @@ export const ProjectCreateLayout = ({
           bottom={{ base: '0px', lg: '-55px' }}
           borderTop={{ base: '1px solid', lg: 'none' }}
           paddingTop={3}
-          paddingBottom={5}
+          paddingBottom={6}
           borderColor="neutral1.6"
           alignSelf="center"
         >

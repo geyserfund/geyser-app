@@ -70,7 +70,7 @@ export const getExternalAccountsButtons = ({
           props: {
             as: Link,
             isExternal: true,
-            href: `https://twitter.com/${account.externalUsername}`,
+            href: `https://github.com/${account.externalUsername}`,
           },
         })
       }
