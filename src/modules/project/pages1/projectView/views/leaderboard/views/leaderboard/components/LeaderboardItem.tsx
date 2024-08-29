@@ -43,7 +43,7 @@ export const LeaderboardItem = ({ funder, rank, ...props }: LeaderboardItemProps
             <Body size="sm">
               {commaFormatted(funder.contributionsTotal)}{' '}
               <Body as="span" size="sm" muted>
-                Sats
+                {`sats ($${commaFormatted(funder.contributionsTotalUsd)})`}
               </Body>
             </Body>
 

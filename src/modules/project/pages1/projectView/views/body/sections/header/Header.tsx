@@ -18,6 +18,7 @@ import { Link } from 'react-router-dom'
 
 import { ProjectStatusBar } from '@/components/ui'
 import { validateImageUrl } from '@/shared/markdown/validations/image'
+import { useCurrencyFormatter } from '@/shared/utils/hooks'
 
 import { ImageWithReload } from '../../../../../../../../shared/components/display/ImageWithReload'
 import { CardLayout, SkeletonLayout } from '../../../../../../../../shared/components/layouts'
@@ -45,6 +46,8 @@ export const Header = () => {
   const { t } = useTranslation()
   const { project, isProjectOwner, loading, partialUpdateProject } = useProjectAtom()
   const { wallet } = useWalletAtom()
+
+  const { formatAmount } = useCurrencyFormatter()
 
   const isMobile = useMobileMode()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -165,6 +168,12 @@ export const Header = () => {
                 <Body size="md" medium light>
                   {`${t('Followers')}: ${project.followersCount}`}
                 </Body>
+                {isMobile && (
+                  <Body size="md" medium light>
+                    {`${t('Contributions')}: ${project.balance} sats`}
+                    <Body as="span">{` (${formatAmount(project.balanceUsdCent, 'USDCENT')})`}</Body>
+                  </Body>
+                )}
 
                 {subscribers && <Body size="md" medium light>{`${subscribers || 0} ${t('subscribers')}`}</Body>}
               </HStack>

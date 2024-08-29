@@ -61,7 +61,7 @@ export const ProjectEntryCard = ({ entry }: Props) => {
               </Body>
             )}
           </VStack>
-          <Body medium dark>
+          <Body medium dark wordBreak={'break-all'}>
             {entry.description}
           </Body>
           <HStack w="full" justifyContent={'end'}>
