@@ -2,7 +2,6 @@ import { Button, HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
@@ -17,7 +16,6 @@ import { NoContribution } from './NoContribution'
 export const Leaderboard = () => {
   const { t } = useTranslation()
 
-  const { isLoggedIn } = useAuthContext()
   const { project, loading: projectLoading } = useProjectAtom()
 
   const { data, loading } = useProjectLeaderboardContributorsGetQuery({
@@ -26,7 +24,7 @@ export const Leaderboard = () => {
       input: {
         period: ProjectLeaderboardPeriod.AllTime,
         projectId: project.id,
-        top: isLoggedIn ? 9 : 10,
+        top: 10,
       },
     },
   })

@@ -3,7 +3,6 @@ import { useAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { contributionsAtom } from '@/modules/project/state/contributionsAtom'
 import { SkeletonLayout } from '@/shared/components/layouts'
@@ -19,7 +18,6 @@ import { NoContribution } from './NoContribution'
 export const Contributions = () => {
   const { t } = useTranslation()
 
-  const { isLoggedIn } = useAuthContext()
   const { project, loading: projectLoading } = useProjectAtom()
 
   const [contributions, setContributions] = useAtom(contributionsAtom)
@@ -34,7 +32,7 @@ export const Contributions = () => {
           createdAt: OrderByOptions.Desc,
         },
         pagination: {
-          take: isLoggedIn ? 5 : 6,
+          take: 10,
         },
       },
     },
