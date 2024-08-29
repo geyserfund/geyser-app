@@ -70,6 +70,7 @@ const useStyles = createUseStyles<Rules, StyleProps, AppTheme>(({ colors, colorM
       paddingLeft: noPadding ? '0px !important' : undefined,
       paddingRight: noPadding ? '0px !important' : undefined,
       paddingTop: '0px !important',
+      color: colors.utils.text,
       overflow: 'hidden',
       '&.ql-blank': {
         '&:before': {
