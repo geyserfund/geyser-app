@@ -150,6 +150,7 @@ export const PostView = () => {
               <Box
                 fontSize="16px"
                 color="utils.text"
+                width="full"
                 sx={{
                   p: {
                     marginTop: '0px',
