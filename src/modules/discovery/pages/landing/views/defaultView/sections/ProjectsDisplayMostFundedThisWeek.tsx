@@ -40,9 +40,13 @@ export const ProjectsDisplayMostFundedThisWeek = ({ tag }: ProjectDisplayProps) 
 
   const ProjectByTagList = data?.projectsMostFundedByTag?.filter((tagMap) => tagMap.projects.length >= 4) || []
 
+  const projectByTagOrdered = ProjectByTagList.sort(
+    (a, b) => allTags.findIndex((tag) => tag.id === a.tagId) - allTags.findIndex((tag) => tag.id === b.tagId),
+  )
+
   return (
     <>
-      {ProjectByTagList.map((projectByTag) => {
+      {projectByTagOrdered.map((projectByTag) => {
         if (projectByTag.projects.length === 0) return null
 
         const currentTag = allTags.find((tag) => tag.id === projectByTag.tagId)

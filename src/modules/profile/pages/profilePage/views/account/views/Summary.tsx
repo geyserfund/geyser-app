@@ -75,7 +75,7 @@ export const Summary = () => {
           Icon={PiMedal}
           value={
             <Body size="xl" medium>
-              {commaFormatted(ranking)}
+              {ranking ? commaFormatted(ranking) : 'N/A'}
             </Body>
           }
         />,
@@ -98,7 +98,7 @@ const StatBody = ({ title, Icon, value }: StatBodyProps) => {
         <Body size="sm" medium light>
           {title}
         </Body>
-        {value || 'N/A'}
+        {value}
       </VStack>
     </HStack>
   )

@@ -8,7 +8,7 @@ import { TransactionTime } from '../../../../../../../components/molecules'
 import { ImageWithReload } from '../../../../../../../components/ui'
 import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { getPath } from '../../../../../../../shared/constants'
-import { toSmallImageUrl } from '../../../../../../../utils'
+import { commaFormatted, convertSatsToUsdFormatted, toSmallImageUrl } from '../../../../../../../utils'
 
 interface ContributionSummaryProps {
   funder: UserProjectFunderFragment
@@ -42,8 +42,8 @@ export const ContributionSummary = ({ funder, project }: ContributionSummaryProp
             {project.title}
           </H3>
         </HStack>
-        <Body size="sm" dark medium>
-          {funder?.amountFunded ?? 0}{' '}
+        <Body size="sm" dark medium wordBreak="keep-all">
+          {commaFormatted(funder?.amountFunded) ?? 0}{' '}
           <Body as="span" light>
             sats
           </Body>
@@ -81,9 +81,9 @@ export const ContributionSummary = ({ funder, project }: ContributionSummaryProp
             </VStack>
 
             <Body size="sm" dark medium>
-              {tx?.amountPaid ?? 0}{' '}
+              {commaFormatted(tx?.amountPaid) ?? 0}{' '}
               <Body as="span" light>
-                sats
+                {`sats (${convertSatsToUsdFormatted({ sats: tx?.amountPaid, bitcoinQuote: tx.bitcoinQuote })})`}
               </Body>
             </Body>
           </CardLayout>

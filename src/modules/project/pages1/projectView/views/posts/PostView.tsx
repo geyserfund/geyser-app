@@ -70,6 +70,8 @@ export const PostView = () => {
     return null
   }
 
+  const onContributeClick = () => navigate(getPath('projectFunding', project?.name), { state: { entryId: entry.id } })
+
   return (
     <>
       <Head
@@ -128,7 +130,7 @@ export const PostView = () => {
                     colorScheme="primary1"
                     width="160px"
                     display={{ base: 'none', lg: 'undefined' }}
-                    onClick={() => navigate(getPath('projectFunding', project?.name), { state: { entryId: entry.id } })}
+                    onClick={onContributeClick}
                   >
                     {t('Contribute')}
                   </Button>
@@ -170,7 +172,7 @@ export const PostView = () => {
           {isProjectOwner ? (
             <PostEditMenu size="lg" w="full" entry={entry} />
           ) : (
-            <Button size="lg" variant="solid" colorScheme="primary1" width="full">
+            <Button size="lg" variant="solid" colorScheme="primary1" width="full" onClick={onContributeClick}>
               {t('Contribute')}
             </Button>
           )}

@@ -4,7 +4,7 @@ import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { TimeAgo } from '@/shared/molecules/TimeAgo'
 import { ProjectFundingTxFragment } from '@/types'
-import { commaFormatted, convertSatsToUsd } from '@/utils'
+import { commaFormatted, convertSatsToUsdFormatted } from '@/utils'
 
 export const FundersContributionItem = ({ contribution }: { contribution: ProjectFundingTxFragment }) => {
   return (
@@ -15,7 +15,10 @@ export const FundersContributionItem = ({ contribution }: { contribution: Projec
             {commaFormatted(contribution.amountPaid)}{' '}
             <Body as="span" size="sm" muted>
               sats{' '}
-              {`($${convertSatsToUsd({ sats: contribution.amountPaid, bitcoinQuote: contribution.bitcoinQuote })})`}
+              {`(${convertSatsToUsdFormatted({
+                sats: contribution.amountPaid,
+                bitcoinQuote: contribution.bitcoinQuote,
+              })})`}
             </Body>
           </Body>
           <TimeAgo date={contribution.paidAt} />

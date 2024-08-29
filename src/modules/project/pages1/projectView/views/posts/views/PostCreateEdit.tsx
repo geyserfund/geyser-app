@@ -262,7 +262,7 @@ export const PostCreateEdit = () => {
                     _focus={{ border: 'none' }}
                     _focusVisible={{}}
                     placeholder={t('Post Title')}
-                    color="neutral.700"
+                    color="utils.text"
                     fontSize={'20px'}
                     fontWeight={700}
                     paddingX={'15px'}
@@ -278,7 +278,7 @@ export const PostCreateEdit = () => {
                     _focus={{ border: 'none' }}
                     _focusVisible={{}}
                     placeholder={t('The summary of the post')}
-                    color="neutral.700"
+                    color="utils.text"
                     fontSize={'18px'}
                     fontWeight={600}
                     paddingX={'15px'}

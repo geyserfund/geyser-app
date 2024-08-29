@@ -1,12 +1,14 @@
 import { Button, Divider, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { useFundingTxAtom } from '@/modules/project/funding/state'
 import { CardLayout } from '@/shared/components/layouts'
 import { H1 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import { FundingStatus } from '@/types'
 
 import { ProjectFundingSummary } from '../../components/ProjectFundingSummary'
 import { FundingLayout } from '../../layouts/FundingLayout'
@@ -18,6 +20,15 @@ import { SendEmailToCreator } from './components/SendEmailToCreator'
 export const FundingSuccess = () => {
   const { project } = useFundingFormAtom()
   const { fundingTx } = useFundingTxAtom()
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (fundingTx.status !== FundingStatus.Paid) {
+      navigate(getPath('projectFunding', project.name))
+    }
+  }, [fundingTx, navigate, project.name])
+
   return (
     <FundingLayout
       topNavBarRightContent={
