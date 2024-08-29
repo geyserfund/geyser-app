@@ -145,8 +145,8 @@ export const GrantsHeader = () => {
               w="100%"
               size="lg"
               variant="solid"
-              colorScheme="primary1"
-              bg="yellow.9"
+              colorScheme="yellow"
+              textColor="utils.blackContrast"
               rightIcon={<PiTrophy size={18} />}
             >
               {t('Create a grant')}
