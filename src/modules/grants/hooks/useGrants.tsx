@@ -49,10 +49,10 @@ export const useGrants = () => {
         ? data.grants
             .filter((grant) => grant.status === GrantStatusEnum.Closed)
             .sort((a, b) => {
-              const statusA = a.statuses.find((s) => s.status === GrantStatusEnum.Closed) || { endAt: 0 }
-              const statusB = b.statuses.find((s) => s.status === GrantStatusEnum.Closed) || { endAt: 0 }
+              const statusA = a.statuses.find((s) => s.status === GrantStatusEnum.Closed) || { startAt: 0 }
+              const statusB = b.statuses.find((s) => s.status === GrantStatusEnum.Closed) || { startAt: 0 }
 
-              return statusB.endAt - statusA.endAt
+              return statusB.startAt - statusA.startAt
             })
         : [],
     [data],
