@@ -6,11 +6,11 @@ import { Grant, GrantStatusEnum } from '@/types'
 import { getFormattedDate, getShortAmountLabel } from '@/utils'
 
 const GrantWidget = ({ grant, compact = false }: { grant: Grant; compact?: boolean }) => {
-  const votingStartDate = grant.statuses.find((s) => s.status === grant.status)?.startAt
+  const votingStartDate = grant.statuses.find((s) => s.status === GrantStatusEnum.FundingOpen)?.startAt
   const isUpcomingGrant = votingStartDate > Date.now()
   const isClosedGrant = grant.status === GrantStatusEnum.Closed
 
-  const votingEndDate = grant.statuses.find((s) => s.status === grant.status)?.endAt
+  const votingEndDate = grant.statuses.find((s) => s.status === GrantStatusEnum.Closed)?.startAt
 
   if (isUpcomingGrant) {
     return <GrantInfo label="Starts on" value={getFormattedDate(votingStartDate || 0)} />
