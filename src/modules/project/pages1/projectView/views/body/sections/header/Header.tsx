@@ -31,7 +31,7 @@ import {
   projectsWithSubscription,
 } from '../../../../../../../../shared/constants'
 import { useProjectPageHeaderSummaryQuery } from '../../../../../../../../types'
-import { toInt, useMobileMode } from '../../../../../../../../utils'
+import { commaFormatted, toInt, useMobileMode } from '../../../../../../../../utils'
 import { toLargeImageUrl } from '../../../../../../../../utils/tools/imageSizes'
 import { useProjectAtom, useWalletAtom } from '../../../../../../hooks/useProjectAtom'
 import { FollowButton } from '../../components'
@@ -170,7 +170,7 @@ export const Header = () => {
                 </Body>
                 {isMobile && (
                   <Body size="md" medium light>
-                    {`${t('Contributions')}: ${project.balance} sats`}
+                    {`${t('Contributions')}: ${commaFormatted(project.balance)} sats`}
                     <Body as="span">{` (${formatAmount(project.balanceUsdCent, 'USDCENT')})`}</Body>
                   </Body>
                 )}
