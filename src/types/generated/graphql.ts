@@ -2024,10 +2024,23 @@ export type ProjectRewardCurrencyUpdateRewardsInput = {
   rewardId: Scalars['BigInt']['input']
 }
 
+export type ProjectRewardTrendingWeeklyGetRow = {
+  __typename?: 'ProjectRewardTrendingWeeklyGetRow'
+  count: Scalars['Int']['output']
+  projectReward: ProjectReward
+}
+
 export type ProjectRewardsGroupedByRewardIdStats = {
   __typename?: 'ProjectRewardsGroupedByRewardIdStats'
   count: Scalars['Int']['output']
-  projectReward: ProjectReward
+  projectReward: ProjectRewardsGroupedByRewardIdStatsProjectReward
+}
+
+export type ProjectRewardsGroupedByRewardIdStatsProjectReward = {
+  __typename?: 'ProjectRewardsGroupedByRewardIdStatsProjectReward'
+  id: Scalars['BigInt']['output']
+  image?: Maybe<Scalars['String']['output']>
+  name: Scalars['String']['output']
 }
 
 export type ProjectRewardsStats = {
@@ -2212,7 +2225,7 @@ export type Query = {
   projectRegionsGet: Array<ProjectRegionsGetResult>
   projectRewardCategoriesGet: Array<Scalars['String']['output']>
   projectRewardsGet: Array<ProjectReward>
-  projectRewardsTrendingWeeklyGet: Array<ProjectRewardsGroupedByRewardIdStats>
+  projectRewardsTrendingWeeklyGet: Array<ProjectRewardTrendingWeeklyGetRow>
   projectStatsGet: ProjectStats
   /** By default, returns a list of all active projects. */
   projectsGet: ProjectsResponse
@@ -3120,7 +3133,9 @@ export type ResolversTypes = {
   ProjectReward: ResolverTypeWrapper<ProjectReward>
   ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate
   ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput
+  ProjectRewardTrendingWeeklyGetRow: ResolverTypeWrapper<ProjectRewardTrendingWeeklyGetRow>
   ProjectRewardsGroupedByRewardIdStats: ResolverTypeWrapper<ProjectRewardsGroupedByRewardIdStats>
+  ProjectRewardsGroupedByRewardIdStatsProjectReward: ResolverTypeWrapper<ProjectRewardsGroupedByRewardIdStatsProjectReward>
   ProjectRewardsStats: ResolverTypeWrapper<ProjectRewardsStats>
   ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>
   ProjectStats: ResolverTypeWrapper<ProjectStats>
@@ -3403,7 +3418,9 @@ export type ResolversParentTypes = {
   ProjectReward: ProjectReward
   ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate
   ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput
+  ProjectRewardTrendingWeeklyGetRow: ProjectRewardTrendingWeeklyGetRow
   ProjectRewardsGroupedByRewardIdStats: ProjectRewardsGroupedByRewardIdStats
+  ProjectRewardsGroupedByRewardIdStatsProjectReward: ProjectRewardsGroupedByRewardIdStatsProjectReward
   ProjectRewardsStats: ProjectRewardsStats
   ProjectStatistics: ProjectStatistics
   ProjectStats: ProjectStats
@@ -4913,12 +4930,31 @@ export type ProjectRewardResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
+export type ProjectRewardTrendingWeeklyGetRowResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectRewardTrendingWeeklyGetRow'] = ResolversParentTypes['ProjectRewardTrendingWeeklyGetRow'],
+> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  projectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type ProjectRewardsGroupedByRewardIdStatsResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ProjectRewardsGroupedByRewardIdStats'] = ResolversParentTypes['ProjectRewardsGroupedByRewardIdStats'],
 > = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  projectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType>
+  projectReward?: Resolver<ResolversTypes['ProjectRewardsGroupedByRewardIdStatsProjectReward'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type ProjectRewardsGroupedByRewardIdStatsProjectRewardResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectRewardsGroupedByRewardIdStatsProjectReward'] = ResolversParentTypes['ProjectRewardsGroupedByRewardIdStatsProjectReward'],
+> = {
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -5160,7 +5196,7 @@ export type QueryResolvers<
     RequireFields<QueryProjectRewardsGetArgs, 'input'>
   >
   projectRewardsTrendingWeeklyGet?: Resolver<
-    Array<ResolversTypes['ProjectRewardsGroupedByRewardIdStats']>,
+    Array<ResolversTypes['ProjectRewardTrendingWeeklyGetRow']>,
     ParentType,
     ContextType
   >
@@ -5539,7 +5575,9 @@ export type Resolvers<ContextType = any> = {
   ProjectMostFundedByTag?: ProjectMostFundedByTagResolvers<ContextType>
   ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>
   ProjectReward?: ProjectRewardResolvers<ContextType>
+  ProjectRewardTrendingWeeklyGetRow?: ProjectRewardTrendingWeeklyGetRowResolvers<ContextType>
   ProjectRewardsGroupedByRewardIdStats?: ProjectRewardsGroupedByRewardIdStatsResolvers<ContextType>
+  ProjectRewardsGroupedByRewardIdStatsProjectReward?: ProjectRewardsGroupedByRewardIdStatsProjectRewardResolvers<ContextType>
   ProjectRewardsStats?: ProjectRewardsStatsResolvers<ContextType>
   ProjectStatistics?: ProjectStatisticsResolvers<ContextType>
   ProjectStats?: ProjectStatsResolvers<ContextType>
@@ -6900,7 +6938,7 @@ export type ProjectRewardsTrendingWeeklyGetQueryVariables = Exact<{ [key: string
 export type ProjectRewardsTrendingWeeklyGetQuery = {
   __typename?: 'Query'
   projectRewardsTrendingWeeklyGet: Array<{
-    __typename?: 'ProjectRewardsGroupedByRewardIdStats'
+    __typename?: 'ProjectRewardTrendingWeeklyGetRow'
     count: number
     projectReward: { __typename?: 'ProjectReward' } & RewardForLandingPageFragment
   }>
@@ -7066,7 +7104,12 @@ export type OrdersStatsFragmentFragment = {
   projectRewardsGroupedByProjectRewardId: Array<{
     __typename?: 'ProjectRewardsGroupedByRewardIdStats'
     count: number
-    projectReward: { __typename?: 'ProjectReward'; id: any; name: string; image?: string | null }
+    projectReward: {
+      __typename?: 'ProjectRewardsGroupedByRewardIdStatsProjectReward'
+      id: any
+      name: string
+      image?: string | null
+    }
   }>
 }
 
@@ -7114,6 +7157,8 @@ export type ProjectStatsGetQuery = {
   projectStatsGet: { __typename?: 'ProjectStats' } & ProjectStatsFragment
 }
 
+export type BitcoinQuoteFragment = { __typename?: 'BitcoinQuote'; quote: number; quoteCurrency: QuoteCurrency }
+
 export type UserProjectFunderFragment = {
   __typename?: 'Funder'
   amountFunded?: number | null
@@ -7127,23 +7172,31 @@ export type UserProjectFunderFragment = {
     media?: string | null
     paidAt?: any | null
     onChain: boolean
+    bitcoinQuote?: ({ __typename?: 'BitcoinQuote' } & BitcoinQuoteFragment) | null
   }>
 }
 
-export type BitcoinQuoteFragment = { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency };
+export type UserProjectContributionsFragment = {
+  __typename?: 'UserProjectContribution'
+  project: { __typename?: 'Project' } & ProjectAvatarFragment
+  funder?: ({ __typename?: 'Funder' } & UserProjectFunderFragment) | null
+}
 
-export type UserProjectFunderFragment = { __typename?: 'Funder', amountFunded?: number | null, confirmedAt?: any | null, confirmed: boolean, id: any, fundingTxs: Array<{ __typename?: 'FundingTx', amountPaid: number, comment?: string | null, media?: string | null, paidAt?: any | null, onChain: boolean, bitcoinQuote?: (
-      { __typename?: 'BitcoinQuote' }
-      & BitcoinQuoteFragment
-    ) | null }> };
-
-export type UserProjectContributionsFragment = { __typename?: 'UserProjectContribution', project: (
-    { __typename?: 'Project' }
-    & ProjectAvatarFragment
-  ), funder?: (
-    { __typename?: 'Funder' }
-    & UserProjectFunderFragment
-  ) | null };
+export type ProfileOrderItemFragment = {
+  __typename?: 'OrderItem'
+  quantity: number
+  unitPriceInSats: number
+  item: {
+    __typename?: 'ProjectReward'
+    id: any
+    name: string
+    cost: number
+    rewardCurrency: RewardCurrency
+    description?: string | null
+    image?: string | null
+    category?: string | null
+  }
+}
 
 export type ProfileOrderFragment = {
   __typename?: 'Order'
@@ -9227,37 +9280,38 @@ export const ProjectStatsFragmentDoc = gql`
   ${ProjectContributionsStatsFragmentDoc}
 `
 export const ProjectAvatarFragmentDoc = gql`
-    fragment ProjectAvatar on Project {
-  id
-  name
-  thumbnailImage
-  title
-}
-    `;
+  fragment ProjectAvatar on Project {
+    id
+    name
+    thumbnailImage
+    title
+  }
+`
 export const BitcoinQuoteFragmentDoc = gql`
-    fragment BitcoinQuote on BitcoinQuote {
-  quote
-  quoteCurrency
-}
-    `;
+  fragment BitcoinQuote on BitcoinQuote {
+    quote
+    quoteCurrency
+  }
+`
 export const UserProjectFunderFragmentDoc = gql`
-    fragment UserProjectFunder on Funder {
-  amountFunded
-  confirmedAt
-  confirmed
-  id
-  fundingTxs {
-    amountPaid
-    comment
-    media
-    paidAt
-    onChain
-    bitcoinQuote {
-      ...BitcoinQuote
+  fragment UserProjectFunder on Funder {
+    amountFunded
+    confirmedAt
+    confirmed
+    id
+    fundingTxs {
+      amountPaid
+      comment
+      media
+      paidAt
+      onChain
+      bitcoinQuote {
+        ...BitcoinQuote
+      }
     }
   }
-}
-    ${BitcoinQuoteFragmentDoc}`;
+  ${BitcoinQuoteFragmentDoc}
+`
 export const UserProjectContributionsFragmentDoc = gql`
   fragment UserProjectContributions on UserProjectContribution {
     project {
