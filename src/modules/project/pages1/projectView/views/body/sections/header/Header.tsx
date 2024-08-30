@@ -145,13 +145,13 @@ export const Header = () => {
               cursor={'pointer'}
             />
           </Box>
-          <VStack flex={1} spacing={2} alignItems="start">
+          <VStack maxWidth="full" flex={1} spacing={2} alignItems="start">
             <H1 size={'2xl'} width="100%" medium>
               {project.title}
             </H1>
 
             <HStack w="full" flexWrap={'wrap'}>
-              <HStack spacing={0.5}>
+              <HStack spacing={0.5} maxWidth="full">
                 <LightningAddress name={`${project.name}`} isGeyser />
                 <NpubDisplay npub={project?.keys?.nostrKeys.publicKey.npub} />
               </HStack>
