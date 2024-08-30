@@ -1,6 +1,7 @@
 import { Button, ButtonProps, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { useProjectDetailsAPI } from '@/modules/project/API/useProjectDetailsAPI'
 import { ProjectLinks } from '@/modules/project/forms/ProjectLinks'
 import { ProjectRegion } from '@/modules/project/forms/ProjectRegion'
 import { ProjectTagsCreateEdit } from '@/modules/project/forms/ProjectTagsCreateEdit'
@@ -13,6 +14,8 @@ import { ProjectUnsavedModal, useProjectUnsavedModal } from '../common/ProjectUn
 export const ProjectDashboardDetails = () => {
   const { t } = useTranslation()
   const toast = useNotification()
+
+  useProjectDetailsAPI(true)
 
   const { project, isDirty, linkError, saveProject, saving, saveTags, setLinks, setTags, tags, updateProject } =
     useProjectDetailsForm()

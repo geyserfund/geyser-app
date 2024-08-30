@@ -69,7 +69,7 @@ export const LargeGrantCard = ({ grant, showBanner }: Props) => {
       ) : null}
       <VStack maxHeight={{ base: '138px', lg: '179px' }} w="100%" p={{ base: 2, lg: 4 }} spacing={{ base: 2, lg: 3 }}>
         <HStack w="100%" justifyContent="space-between">
-          <Body size={{ base: 'md', lg: 'lg' }} medium>
+          <Body size={{ base: 'lg', lg: 'xl' }} medium>
             {grant.title}
           </Body>
           {!isMobile && <GrantStatus status={grant.status} startDate={grant?.statuses[0]?.startAt || 0} />}

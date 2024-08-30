@@ -93,7 +93,29 @@ export const PostView = () => {
           >
             {t('All posts')}
           </Button>
-          <PostShare entry={entry} />
+          <HStack>
+            <PostShare entry={entry} />
+
+            {isProjectOwner ? (
+              <PostEditMenu
+                size="lg"
+                display={{ base: 'none', lg: 'flex' }}
+                entry={entry}
+                onDeleteComplete={() => navigate(getPath('projectPosts', project?.name))}
+              />
+            ) : (
+              <Button
+                variant="solid"
+                colorScheme="primary1"
+                size="lg"
+                width="160px"
+                display={{ base: 'none', lg: 'flex' }}
+                onClick={onContributeClick}
+              >
+                {t('Contribute')}
+              </Button>
+            )}
+          </HStack>
         </TopNavContainerBar>
 
         <CardLayout w="full" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }} mobileDense>
@@ -113,29 +135,9 @@ export const PostView = () => {
               </Box>
             )}
             <VStack w="full" spacing={3} alignItems="start">
-              <HStack w="full" alignItems="start" justifyContent="space-between">
-                <H2 flex={1} size="2xl" bold>
-                  {entry.title}
-                </H2>
-                {isProjectOwner ? (
-                  <PostEditMenu
-                    size="md"
-                    display={{ base: 'none', lg: 'undefined' }}
-                    entry={entry}
-                    onDeleteComplete={() => navigate(getPath('projectPosts', project?.name))}
-                  />
-                ) : (
-                  <Button
-                    variant="solid"
-                    colorScheme="primary1"
-                    width="160px"
-                    display={{ base: 'none', lg: 'undefined' }}
-                    onClick={onContributeClick}
-                  >
-                    {t('Contribute')}
-                  </Button>
-                )}
-              </HStack>
+              <H2 flex={1} size="2xl" bold>
+                {entry.title}
+              </H2>
 
               <Body size="sm" medium light>
                 {entry.createdAt && DateTime.fromMillis(toInt(entry.createdAt)).toFormat(' dd LLLL, yyyy')}

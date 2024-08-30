@@ -31,7 +31,7 @@ import {
   projectsWithSubscription,
 } from '../../../../../../../../shared/constants'
 import { useProjectPageHeaderSummaryQuery } from '../../../../../../../../types'
-import { toInt, useMobileMode } from '../../../../../../../../utils'
+import { commaFormatted, toInt, useMobileMode } from '../../../../../../../../utils'
 import { toLargeImageUrl } from '../../../../../../../../utils/tools/imageSizes'
 import { useProjectAtom, useWalletAtom } from '../../../../../../hooks/useProjectAtom'
 import { FollowButton } from '../../components'
@@ -145,13 +145,13 @@ export const Header = () => {
               cursor={'pointer'}
             />
           </Box>
-          <VStack flex={1} spacing={2} alignItems="start">
+          <VStack maxWidth="full" flex={1} spacing={2} alignItems="start">
             <H1 size={'2xl'} width="100%" medium>
               {project.title}
             </H1>
 
             <HStack w="full" flexWrap={'wrap'}>
-              <HStack spacing={0.5}>
+              <HStack spacing={0.5} maxWidth="full">
                 <LightningAddress name={`${project.name}`} isGeyser />
                 <NpubDisplay npub={project?.keys?.nostrKeys.publicKey.npub} />
               </HStack>
@@ -170,7 +170,7 @@ export const Header = () => {
                 </Body>
                 {isMobile && (
                   <Body size="md" medium light>
-                    {`${t('Contributions')}: ${project.balance} sats`}
+                    {`${t('Contributions')}: ${commaFormatted(project.balance)} sats`}
                     <Body as="span">{` (${formatAmount(project.balanceUsdCent, 'USDCENT')})`}</Body>
                   </Body>
                 )}

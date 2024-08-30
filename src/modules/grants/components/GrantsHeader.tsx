@@ -10,7 +10,7 @@ import { getPath, GrantsFAQUrl, GrantsPageBannerNoiseGifUrl } from '@/shared/con
 import { useGrantStatisticsQuery } from '@/types'
 import { getShortAmountLabel, useMobileMode } from '@/utils'
 
-const GEYSER_PROJECT_NAME = __staging__ ? 'geyser2' : __production__ ? 'grants' : 'geyser-dev'
+const GEYSER_PROJECT_NAME = __staging__ ? 'geyser2' : __production__ ? 'grants' : 'geyser2'
 const AIRTABLE_CREATE_GRANT_URL = 'https://airtable.com/appyM7XlNIWVypuP5/pagLMhHSSQVlKe0Dw/form'
 
 export const GrantsHeader = () => {
@@ -145,8 +145,8 @@ export const GrantsHeader = () => {
               w="100%"
               size="lg"
               variant="solid"
-              colorScheme="primary1"
-              bg="yellow.9"
+              colorScheme="yellow"
+              textColor="utils.blackContrast"
               rightIcon={<PiTrophy size={18} />}
             >
               {t('Create a grant')}

@@ -11,6 +11,9 @@ export const FRAGMENT_BOARD_VOTE_GRANTS = gql`
     balance
     status
     type
+    applicants {
+      id
+    }
     statuses {
       status
       endAt
@@ -38,6 +41,9 @@ export const FRAGMENT_COMMUNITY_VOTE_GRANTS = gql`
     balance
     status
     type
+    applicants {
+      id
+    }
     statuses {
       status
       endAt

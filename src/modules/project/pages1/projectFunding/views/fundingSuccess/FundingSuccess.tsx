@@ -1,6 +1,7 @@
 import { Button, Divider, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect } from 'react'
+import Confetti from 'react-confetti'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
@@ -38,6 +39,7 @@ export const FundingSuccess = () => {
       }
     >
       <CardLayout mobileDense w="full" padding={{ base: 0, lg: 12 }} alignItems="center">
+        <Confetti gravity={0.07} numberOfPieces={250} />
         <VStack w="full" maxWidth="800px" alignItems="start" spacing={6}>
           <VStack w="full" alignItems="start">
             <H1 size="2xl" bold>
