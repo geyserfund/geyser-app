@@ -176,7 +176,7 @@ export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: 
           if (project.rewardCurrency === RewardCurrency.Btcsat) {
             rewardsCostInSatoshi += cost * rewardMultiplier
           } else {
-            rewardsCostInSatoshi += Math.round(centsToDollars(cost) * usdRate * rewardMultiplier * SATOSHIS_IN_BTC)
+            rewardsCostInSatoshi += Math.round((centsToDollars(cost) / usdRate) * rewardMultiplier * SATOSHIS_IN_BTC)
           }
         }
       })
@@ -253,6 +253,7 @@ export const isFundingInputAmountValidAtom = atom((get) => {
     }
   }
 
+  console.log('checking totalAmount', totalAmount)
   if (!isException && walletLimits?.max && totalAmount >= walletLimits.max) {
     return {
       title: `Amount above the project wallet limit: ${commaFormatted(walletLimits.max)} sats.`,
