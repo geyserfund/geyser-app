@@ -4,11 +4,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSwipeable } from 'react-swipeable'
 
+import { useCurrencyFormatter } from '@/shared/utils/hooks'
+
 import { SkeletonLayout } from '../../../../../../../../../shared/components/layouts'
 import { Body } from '../../../../../../../../../shared/components/typography'
 import { ProjectGoalCurrency } from '../../../../../../../../../types'
 import { commaFormatted, removeProjectAmountException } from '../../../../../../../../../utils'
-import { centsToDollars } from '../../../../../../../../../utils'
 import { useGoalsAtom, useProjectAtom } from '../../../../../../../hooks/useProjectAtom'
 import { useProjectDefaultGoal } from '../../../hooks/useProjectDefaultGoal'
 
@@ -24,6 +25,8 @@ export function ProjectBalanceDisplay() {
   const { inProgressGoals } = useGoalsAtom()
 
   const { defaultGoalId, balanceUsdCent, balance } = project
+
+  const { formatAmount } = useCurrencyFormatter()
 
   const { priorityGoal, formattedUsdAmount, formattedTotalUsdAmount, formattedSatsAmount } = useProjectDefaultGoal({
     defaultGoalId,
@@ -109,7 +112,7 @@ export function ProjectBalanceDisplay() {
               <Body as="span" muted medium>
                 {'$'}
               </Body>
-              {priorityGoal.amountContributed ? commaFormatted(centsToDollars(priorityGoal.amountContributed)) : 0}
+              {priorityGoal.amountContributed ? formatAmount(priorityGoal.amountContributed, 'USDCENT') : 0}
             </Body>
           ) : (
             <Body size="2xl" bold dark>

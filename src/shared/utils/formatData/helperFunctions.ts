@@ -1,7 +1,6 @@
 import { Maybe } from 'yup'
 
 import { Satoshis, USDCents, USDollars } from '@/types'
-import { toFloat } from '@/utils'
 
 export const commaFormatted = (amount?: Maybe<number | USDollars | Satoshis | USDCents>) => {
   if (!amount) {
@@ -92,10 +91,12 @@ export const validateFundingAmount = (amount: number, btcRate: number) => {
 
 export const randomIntFromInterval = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min)
 
+/** Used for amount calculation, precision needed */
 export const dollarsToCents = (dollars: number): number => {
-  return dollars * 100 > 0 ? Math.round(dollars * 100) : toFloat((dollars * 100).toFixed(2))
+  return dollars * 100
 }
 
+/** Used for amount calculation, precision needed */
 export const centsToDollars = (cents: number): number => {
-  return cents / 100 > 0 ? Math.round(cents / 100) : toFloat((cents / 100).toFixed(2))
+  return cents / 100
 }
