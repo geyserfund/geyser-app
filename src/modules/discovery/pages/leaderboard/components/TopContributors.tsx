@@ -2,10 +2,10 @@ import { Box, HStack, Image, Skeleton, SkeletonCircle, VStack } from '@chakra-ui
 import { PiLightning, PiRocketLaunch } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
-import { ImageWithReload } from '@/components/ui'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { BronzeMedalUrl, GoldMedalUrl, SilverMedalUrl } from '@/shared/constants/platform/url'
+import { UserAvatar } from '@/shared/molecules/UserAvatar'
 import { GlobalContributorLeaderboardRow, LeaderboardPeriod } from '@/types'
 import { commaFormatted } from '@/utils'
 
@@ -67,12 +67,12 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
           </Body>
         )}
       </Box>
-      <ImageWithReload
-        src={contributor.userImageUrl}
-        alt={contributor.username}
-        boxSize="40px"
-        borderRadius="16px"
-        maxHeight="40px"
+      <UserAvatar
+        user={{
+          id: contributor.userId,
+          username: contributor.username,
+          imageUrl: contributor.userImageUrl,
+        }}
       />
       <VStack maxHeight="38px" alignItems="flex-start" flex={1} spacing={0} overflow="hidden">
         <Body size={'sm'} bold isTruncated>
