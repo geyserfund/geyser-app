@@ -74,7 +74,7 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
         borderRadius="16px"
         maxHeight="40px"
       />
-      <VStack maxHeight="38px" alignItems="flex-start" flex={1} spacing={0}>
+      <VStack maxHeight="38px" alignItems="flex-start" flex={1} spacing={0} overflow="hidden">
         <Body size={'sm'} bold isTruncated>
           {contributor.username}
         </Body>
