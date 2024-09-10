@@ -7,7 +7,7 @@ import { useNotification } from '@/utils'
 
 import { useCustomMutation } from '../../API/custom/useCustomMutation'
 import { fundingFlowErrorAtom, fundingRequestErrorAtom, useParseResponseToSwapAtom, useSetKeyPairAtom } from '../state'
-import { formattedFundingInputAtom, fundingInputWithSwapKeysAtom } from '../state/fundingFormAtom'
+import { formattedFundingInputAtom, setFundingInputAfterRequestAtom } from '../state/fundingFormAtom'
 import { useFundingTxAtom } from '../state/fundingTxAtom'
 import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/helpers'
 import { webln } from '../utils/requestWebLNPayment'
@@ -27,7 +27,7 @@ export const useFundingAPI = () => {
 
   const formattedFundingInput = useAtomValue(formattedFundingInputAtom)
 
-  const setFundingInputWithSwapKeys = useSetAtom(fundingInputWithSwapKeysAtom)
+  const setFundingInputAfterRequest = useSetAtom(setFundingInputAfterRequestAtom)
 
   const setError = useSetAtom(fundingFlowErrorAtom)
   const setFundingRequestErrored = useSetAtom(fundingRequestErrorAtom)
@@ -107,11 +107,11 @@ export const useFundingAPI = () => {
 
       input.swapPublicKey = keyPair.publicKey.toString('hex')
 
-      setFundingInputWithSwapKeys(input)
+      setFundingInputAfterRequest(input)
 
       await fundProject({ variables: { input }, onCompleted })
     },
-    [fundProject, toast, setKeyPair, setFundingInputWithSwapKeys],
+    [fundProject, toast, setKeyPair, setFundingInputAfterRequest],
   )
 
   const requestFundingFromContext = useCallback(

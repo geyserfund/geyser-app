@@ -32,7 +32,7 @@ export const PaymentOnchainPrompt = () => {
     }
 
     setOnchainRefundDownloadAtom(true)
-    navigate(getPath('fundingPaymentOnchainQR', project.name))
+    navigate(getPath('fundingPaymentOnchainQR', project.name), { replace: true })
   }
 
   return (

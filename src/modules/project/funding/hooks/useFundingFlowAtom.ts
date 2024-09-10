@@ -1,16 +1,16 @@
 import { useAtomValue } from 'jotai'
 
 import { fundingFlowErrorAtom, fundingRequestErrorAtom, weblnErrorAtom } from '../state'
-import { fundingInputWithSwapKeysAtom } from '../state/fundingFormAtom'
+import { fundingInputAfterRequestAtom } from '../state/fundingFormAtom'
 
 export const useFundingFlowAtom = () => {
-  const fundingInputWithSwapKeys = useAtomValue(fundingInputWithSwapKeysAtom)
+  const fundingInputAfterRequest = useAtomValue(fundingInputAfterRequestAtom)
   const error = useAtomValue(fundingFlowErrorAtom)
   const fundingRequestErrored = useAtomValue(fundingRequestErrorAtom)
   const weblnErrored = useAtomValue(weblnErrorAtom)
 
   return {
-    fundingInputWithSwapKeys,
+    fundingInputAfterRequest,
     error,
     weblnErrored,
     fundingRequestErrored,
