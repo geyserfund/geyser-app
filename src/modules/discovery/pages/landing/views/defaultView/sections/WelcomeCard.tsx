@@ -31,9 +31,9 @@ export const WelcomeCard = () => {
         top={2}
         right={2}
       />
-      <HStack>
+      <HStack paddingRight={4}>
         <Image src={DiscoveryHandWave} height="40px" width="40px" />
-        <H1 size="3xl" bold>
+        <H1 size={{ base: 'xl', xs: '2xl', sm: '3xl' }} bold>
           {t('Welcome to Geyser!')}
         </H1>
       </HStack>

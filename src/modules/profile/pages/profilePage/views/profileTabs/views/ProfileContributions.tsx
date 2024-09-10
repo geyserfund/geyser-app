@@ -33,8 +33,8 @@ export const ProfileContributions = () => {
     const aFundingTxs = a?.funder?.fundingTxs && a?.funder?.fundingTxs?.length > 0 ? a?.funder?.fundingTxs : []
     const bFundingTxs = b?.funder?.fundingTxs && b?.funder?.fundingTxs?.length > 0 ? b?.funder?.fundingTxs : []
 
-    const aDate = aFundingTxs[0]?.paidAt
-    const bDate = bFundingTxs[0]?.paidAt
+    const aDate = Number(aFundingTxs[0]?.paidAt || 0)
+    const bDate = Number(bFundingTxs[0]?.paidAt || 0)
     return bDate - aDate
   })
 
