@@ -12,10 +12,10 @@ export const lastVistedMyProjectActivityDateAtom = atom((get) => {
   const aWeekAgo = DateTime.now().minus({ days: 7 })
 
   if (lastVistedMyProjectActivity === null || lastVistedMyProjectActivity < aWeekAgo.toMillis()) {
-    return aWeekAgo.toJSDate()
+    return aWeekAgo.toMillis()
   }
 
-  return DateTime.fromMillis(lastVistedMyProjectActivity).toJSDate()
+  return lastVistedMyProjectActivity
 })
 
 /** Set the last visited date to now */
@@ -40,8 +40,8 @@ export const lastVisitedFollowedActivityDateAtom = atom((get) => {
   const aWeekAgo = DateTime.now().minus({ days: 7 })
 
   if (lastVisitedFollowedActivity === null || lastVisitedFollowedActivity < aWeekAgo.toMillis()) {
-    return aWeekAgo.toJSDate()
+    return aWeekAgo.toMillis()
   }
 
-  return DateTime.fromMillis(lastVisitedFollowedActivity).toJSDate()
+  return lastVisitedFollowedActivity
 })
