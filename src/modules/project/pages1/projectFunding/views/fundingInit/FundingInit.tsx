@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { CardLayout } from '@/shared/components/layouts'
+import { getPath } from '@/shared/constants'
 import { FundingResourceType } from '@/types'
 
 import { FundingLayout } from '../../layouts/FundingLayout'
@@ -11,7 +12,7 @@ import { FundingInitRewards } from './sections/FundingInitRewards'
 import { FundingInitBottomContent, FundingInitSideContent } from './sections/FundingInitSideContent'
 
 export const FundingInit = () => {
-  const { setResource } = useFundingFormAtom()
+  const { project, setResource } = useFundingFormAtom()
 
   const location = useLocation()
   const navigate = useNavigate()
@@ -25,6 +26,7 @@ export const FundingInit = () => {
 
   return (
     <FundingLayout
+      backPath={getPath('project', project.name)}
       sideContent={<FundingInitSideContent />}
       bottomContent={<FundingInitBottomContent />}
       containerProps={{ spacing: 6 }}

@@ -22,6 +22,7 @@ export const FundingDetails = () => {
 
   return (
     <FundingLayout
+      backPath={getPath('projectFunding', project.name)}
       sideContent={<FundingDetailsSideContent />}
       bottomContent={<FundingDetailsBottomContent />}
       containerProps={{ spacing: 6 }}

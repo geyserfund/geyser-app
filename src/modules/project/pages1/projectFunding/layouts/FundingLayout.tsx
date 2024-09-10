@@ -2,13 +2,14 @@ import { Button, HStack, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PropsWithChildren } from 'react'
 import { PiArrowLeft } from 'react-icons/pi'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { RightSideStickyLayout } from '@/modules/project/components/RightSideStickyLayout'
 import { dimensions } from '@/shared/constants'
 
 type FundingLayoutProps = {
+  backPath?: string
   containerProps?: StackProps
   /** render component on the right side of the top nav bar */
   topNavBarRightContent?: React.ReactNode
@@ -21,6 +22,7 @@ type FundingLayoutProps = {
 }
 
 export const FundingLayout = ({
+  backPath,
   topNavBarRightContent,
   sideContent,
   containerProps,
@@ -29,20 +31,15 @@ export const FundingLayout = ({
   bottomContainerProps,
   children,
 }: PropsWithChildren<FundingLayoutProps>) => {
-  const navigate = useNavigate()
   return (
     <VStack w="full">
       <TopNavContainerBar>
         <HStack>
-          <Button
-            onClick={() => navigate(-1)}
-            size="lg"
-            variant="ghost"
-            colorScheme="neutral1"
-            leftIcon={<PiArrowLeft />}
-          >
-            {t('Go back')}
-          </Button>
+          {backPath !== undefined && (
+            <Button as={Link} to={backPath} size="lg" variant="ghost" colorScheme="neutral1" leftIcon={<PiArrowLeft />}>
+              {t('Go back')}
+            </Button>
+          )}
         </HStack>
         {topNavBarRightContent}
       </TopNavContainerBar>
