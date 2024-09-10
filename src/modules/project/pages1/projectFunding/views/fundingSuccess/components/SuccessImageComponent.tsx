@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCopy, PiShareFat } from 'react-icons/pi'
 
-import { useAuthContext } from '@/context'
+import { useFundingFlowAtom } from '@/modules/project/funding/hooks/useFundingFlowAtom'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { Body, H3 } from '@/shared/components/typography'
@@ -18,11 +18,14 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
   const { t } = useTranslation()
   const toast = useNotification()
   const [copied, setCopied] = useState(false)
-  const { user } = useAuthContext()
 
   const [successComponent, setSuccessComponent] = useState<HTMLDivElement | null>(null)
 
   const { project } = useProjectAtom()
+
+  const { fundingInputAfterRequest } = useFundingFlowAtom()
+
+  const user = fundingInputAfterRequest?.user
 
   const ref = useCallback((node: HTMLDivElement | null) => {
     setSuccessComponent(node)
@@ -87,7 +90,7 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
       >
         <Image src={ContributionIcon} height="100%"></Image>
         <VStack alignItems={'flex-start'} gap={1}>
-          {user.id && (
+          {user && user.id && (
             <HStack>
               <Avatar
                 src={user.imageUrl || ''}
