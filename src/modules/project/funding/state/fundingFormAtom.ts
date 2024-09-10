@@ -13,6 +13,7 @@ import {
   QuoteCurrency,
   RewardCurrency,
   ShippingDestination,
+  UserMeFragment,
 } from '@/types'
 import { centsToDollars, commaFormatted, isProjectAnException, toInt, validateEmail } from '@/utils'
 
@@ -355,11 +356,16 @@ export const formattedFundingInputAtom = atom((get) => {
 })
 
 /** Funding Input after request */
-export const fundingInputWithSwapKeysAtom = atom<FundingInput | null>(null)
+export const fundingInputAfterRequestAtom = atom<(FundingInput & { user: UserMeFragment }) | null>(null)
+
+export const setFundingInputAfterRequestAtom = atom(null, (get, set, input: FundingInput) => {
+  const user = get(authUserAtom)
+  set(fundingInputAfterRequestAtom, { ...input, user })
+})
 
 /** Reset Funding Form */
 export const resetFundingFormAtom = atom(null, (get, set) => {
   set(fundingFormStateAtom, initialState)
   set(fundingProjectAtom, {} as FundingProjectState)
-  set(fundingInputWithSwapKeysAtom, null)
+  set(fundingInputAfterRequestAtom, null)
 })

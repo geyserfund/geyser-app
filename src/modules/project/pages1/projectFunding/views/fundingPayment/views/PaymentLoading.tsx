@@ -21,7 +21,7 @@ export const PaymentLoading = () => {
   useEffect(() => {
     if (isFundingInputAmountValid.valid && isFundingUserInfoValid.valid) {
       requestFundingFromContext(() => {
-        navigate(getPath('fundingPaymentLightning', project.name))
+        navigate(getPath('fundingPaymentLightning', project.name), { replace: true })
       })
     }
   }, [isFundingInputAmountValid, isFundingUserInfoValid, navigate, project.name])

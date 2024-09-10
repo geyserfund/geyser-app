@@ -58,7 +58,7 @@ export const PaymentOnChainRefund = () => {
   }, [onChainError])
 
   const handleRefundSuccess = () => {
-    navigate(getPath('fundingPaymentOnchainRefundInitiated', project.name))
+    navigate(getPath('fundingPaymentOnchainRefundInitiated', project.name), { replace: true })
   }
 
   return (
