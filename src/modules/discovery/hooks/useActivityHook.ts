@@ -24,7 +24,7 @@ export const useActivityHook = () => {
       return
     }
 
-    const dateNow = DateTime.now().toJSDate()
+    const dateNow = DateTime.now().toMillis()
 
     getActivitesGetQuery({
       variables: {
@@ -54,7 +54,7 @@ export const useActivityHook = () => {
       return
     }
 
-    const dateNow = DateTime.now().toJSDate()
+    const dateNow = DateTime.now().toMillis()
     getActivitesGetQuery({
       variables: {
         input: {

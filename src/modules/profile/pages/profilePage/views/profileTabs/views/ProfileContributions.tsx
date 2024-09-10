@@ -29,6 +29,15 @@ export const ProfileContributions = () => {
 
   const downloadUrl = `${appEndpoint}/export/payments/user`
 
+  const contributionsSorted = [...contributions].sort((a, b) => {
+    const aFundingTxs = a?.funder?.fundingTxs && a?.funder?.fundingTxs?.length > 0 ? a?.funder?.fundingTxs : []
+    const bFundingTxs = b?.funder?.fundingTxs && b?.funder?.fundingTxs?.length > 0 ? b?.funder?.fundingTxs : []
+
+    const aDate = Number(aFundingTxs[0]?.paidAt || 0)
+    const bDate = Number(bFundingTxs[0]?.paidAt || 0)
+    return bDate - aDate
+  })
+
   return (
     <VStack w="full" alignItems={'start'} spacing={4}>
       <HStack w="full" justifyContent={{ base: 'space-between', lg: 'flex-end' }}>
@@ -51,7 +60,7 @@ export const ProfileContributions = () => {
         ) : null}
       </HStack>
 
-      {contributions.map((c: UserProjectContributionsFragment) => {
+      {contributionsSorted.map((c: UserProjectContributionsFragment) => {
         if (!c.funder) {
           return null
         }

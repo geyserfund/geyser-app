@@ -2,11 +2,13 @@ import { Button, ButtonProps, HStack, Link, StackProps, VStack } from '@chakra-u
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { BodyProps } from '@/components/typography'
 import { Body, H3 } from '@/shared/components/typography'
 
 export interface ProjectRowLayoutProps extends Omit<StackProps, 'title'> {
   title: string | React.ReactNode
   subtitle?: string
+  subtitleProps?: BodyProps
   children: React.ReactNode
   onSeeAllClick?: () => void
   seeAllProps?: ButtonProps & { href: string; isExternal: boolean }
@@ -17,6 +19,7 @@ export interface ProjectRowLayoutProps extends Omit<StackProps, 'title'> {
 export const ProjectRowLayout = ({
   title,
   subtitle,
+  subtitleProps,
   children,
   onSeeAllClick,
   seeAllProps,
@@ -32,7 +35,7 @@ export const ProjectRowLayout = ({
           <H3 size="2xl" dark bold>
             {title}{' '}
             {subtitle && (
-              <Body as="span" color="primary1.11" paddingRight="4px" bold>
+              <Body as="span" color="primary1.11" paddingRight="4px" bold {...subtitleProps}>
                 {subtitle}
               </Body>
             )}

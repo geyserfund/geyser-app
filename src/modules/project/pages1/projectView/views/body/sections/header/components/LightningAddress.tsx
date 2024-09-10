@@ -55,7 +55,7 @@ export const LightningAddress = ({ name, isGeyser, ...rest }: ILightningQR) => {
             {name}
           </Body>
           {isGeyser && (
-            <Body size="xs" medium>
+            <Body size="sm" medium>
               {GEYSER_DOMAIN_POSTFIX}
             </Body>
           )}

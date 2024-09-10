@@ -14,7 +14,7 @@ import { TabPanelSkeleton } from '../components/TabPanelSkeleton'
 export const ProfileFollowed = () => {
   const toast = useNotification()
   const { userProfile } = useUserProfileAtom()
-  const isVieweingOwnProfile = useViewingOwnProfileAtomValue()
+  const isViewingOwnProfile = useViewingOwnProfileAtomValue()
 
   const { data, loading } = useUserFollowedProjectsQuery({
     variables: {
@@ -55,18 +55,20 @@ export const ProfileFollowed = () => {
       })}
       {projects.length === 0 && (
         <VStack w="full" p={6} spacing={6}>
-          <Image height="200px" src={FollowAProjectUrl} />
-          {isVieweingOwnProfile ? (
-            <Body medium>{t('You do not follow any project')}</Body>
+          {isViewingOwnProfile ? (
+            <>
+              <Image height="200px" src={FollowAProjectUrl} />
+              <Body medium>{t('You do not follow any project')}</Body>
+              <Body medium>
+                {t('Check out some trending projects this week that you can follow in the discovery view!')}
+              </Body>
+              <Button size="lg" colorScheme="primary1" as={Link} to={getPath('discoveryLanding')}>
+                {t('Discover projects')}
+              </Button>
+            </>
           ) : (
             <Body medium>{t('User does not follow any project')}</Body>
           )}
-          <Body medium>
-            {t('Check out some trending projects this week that you can follow in the discovery view!')}
-          </Body>
-          <Button size="lg" colorScheme="primary1" as={Link} to={getPath('discoveryLanding')}>
-            {t('Discover projects')}
-          </Button>
         </VStack>
       )}
     </VStack>
