@@ -25,7 +25,6 @@ export const FundingInit = () => {
 
   return (
     <FundingLayout
-      backPath={'-1'}
       sideContent={<FundingInitSideContent />}
       bottomContent={<FundingInitBottomContent />}
       containerProps={{ spacing: 6 }}
