@@ -25,6 +25,10 @@ export const ProjectDisplayBody = ({
       width="100%"
       onSeeAllClick={onSeeAllClick}
       seeAllText={seeAllText}
+      subtitleProps={{
+        onClick: onSeeAllClick,
+        _hover: { cursor: 'pointer' },
+      }}
     >
       <Stack width="100%" direction={{ base: 'column', lg: 'row' }} spacing={4}>
         {projects.map((project) => {
