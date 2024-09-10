@@ -68,7 +68,7 @@ export const Contributions = ({ projectId, projectName }: ContributionsProps) =>
   return (
     <Box
       as={Link}
-      to={getPath('project', projectName)}
+      to={getPath('projectGoals', projectName)}
       minHeight="269px"
       borderWidth={1}
       borderRadius="lg"
