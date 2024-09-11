@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { useRefundFileAdd, useRefundFileValue } from '@/modules/project/funding/state'
@@ -12,6 +12,7 @@ import { SwapStatusUpdate, useTransactionStatusUpdate } from './useTransactionSt
 
 export const useListenOnchainTransactionUpdate = () => {
   const navigate = useNavigate()
+  const location = useLocation()
 
   const { project } = useFundingFormAtom()
 
@@ -30,7 +31,7 @@ export const useListenOnchainTransactionUpdate = () => {
       setSwapTransaction(transaction)
     }
 
-    navigate(getPath('fundingPaymentOnchainProcessing', project.name))
+    navigate({ pathname: getPath('fundingPaymentOnchainProcessing', project.name), search: location.search })
   }
 
   const handleFailed = (value: SwapStatusUpdate) => {
@@ -48,7 +49,7 @@ export const useListenOnchainTransactionUpdate = () => {
       }
     }
 
-    navigate(getPath('fundingPaymentOnchainRefund', project.name))
+    navigate({ pathname: getPath('fundingPaymentOnchainRefund', project.name), search: location.search })
   }
 
   useTransactionStatusUpdate({

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 
 import { getPath } from '@/shared/constants'
 import { FundingStatus } from '@/types'
@@ -12,6 +12,7 @@ import { useFundSubscription } from './useFundSubscription'
 
 export const useListenFundingSuccess = () => {
   const navigate = useNavigate()
+  const location = useLocation()
 
   const { startPollingAndSubscription, clearPollingAndSubscription } = useFundPollingAndSubscriptionAtom()
 
@@ -24,9 +25,9 @@ export const useListenFundingSuccess = () => {
 
   useEffect(() => {
     if (fundingTx && fundingTx.status === FundingStatus.Paid) {
-      navigate(getPath('fundingSuccess', project.name))
+      navigate({ pathname: getPath('fundingSuccess', project.name), search: location.search })
     }
-  }, [fundingTx, navigate, project.name])
+  }, [fundingTx, navigate, project.name, location.search])
 
   useEffect(() => {
     startPollingAndSubscription()
