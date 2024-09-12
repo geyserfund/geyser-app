@@ -4,7 +4,12 @@ import { useCallback } from 'react'
 import { toInt } from '@/utils'
 
 import { authUserAtom } from '../../../pages/auth/state'
-import { ProjectHeaderSummaryFragment, ProjectPageBodyFragment, ProjectPageDetailsFragment } from '../../../types'
+import {
+  ProjectGrantApplicantFragment,
+  ProjectHeaderSummaryFragment,
+  ProjectPageBodyFragment,
+  ProjectPageDetailsFragment,
+} from '../../../types'
 import { resetRewardsAtom } from '../pages1/projectDashboard/views/sales/state/rewardsAtom'
 import { affiliateAtomReset } from './affiliateAtom'
 import { contributionAtomReset } from './contributionsAtom'
@@ -14,7 +19,9 @@ import { projectFormAtomReset } from './projectFormAtom'
 import { rewardsAtomReset } from './rewardsAtom'
 import { walletAtomReset } from './walletAtom'
 
-export type ProjectState = ProjectPageBodyFragment & ProjectHeaderSummaryFragment & ProjectPageDetailsFragment
+export type ProjectState = ProjectPageBodyFragment &
+  ProjectHeaderSummaryFragment &
+  ProjectPageDetailsFragment & { grantApplications?: ProjectGrantApplicantFragment[] }
 
 /** Project atom is the root project store */
 export const projectAtom = atom<ProjectState>({} as ProjectState)
@@ -81,11 +88,15 @@ export const projectOwnerAtom = atom((get) => {
 /** Initial load for project details, set to true after loaded */
 export const initialProjectDetailsLoadAtom = atom(false)
 
+/** Initial load for project grant applications, set to true after loaded */
+export const initialProjectGrantApplicationsLoadAtom = atom(false)
+
 /** Reset all real-atoms in this file to it's initial State */
 export const projectAtomReset = atom(null, (get, set) => {
   set(projectAtom, {} as ProjectState)
   set(projectLoadingAtom, true)
   set(initialProjectDetailsLoadAtom, false)
+  set(initialProjectGrantApplicationsLoadAtom, false)
 })
 
 export const useProjectReset = () => {
