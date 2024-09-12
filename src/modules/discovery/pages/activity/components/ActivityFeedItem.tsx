@@ -1,6 +1,6 @@
 import { Badge, Box, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { PiBag, PiFlagBannerFold, PiLightning, PiNewspaper } from 'react-icons/pi'
+import { PiBag, PiFlagBannerFold, PiLightning, PiNewspaper, PiSparkle } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
@@ -21,6 +21,7 @@ import { commaFormatted, getFormattedDate, useMobileMode } from '@/utils'
 
 enum ActivityType {
   PostPublished = 'PostPublished',
+  ProjectLaunched = 'ProjectLaunched',
   ProjectRewardCreated = 'ProjectRewardCreated',
   ProjectGoalCreated = 'ProjectGoalCreated',
   ProjectGoalReached = 'ProjectGoalReached',
@@ -30,6 +31,7 @@ enum ActivityType {
 export const ActivityFeedItem = ({ activityType, createdAt, project, resource }: Activity) => {
   const isMobile = useMobileMode()
 
+  const isProjectLaunchedActivity = activityType === ActivityType.ProjectLaunched
   const isGoalActivity =
     activityType === ActivityType.ProjectGoalCreated || activityType === ActivityType.ProjectGoalReached
   const isRewardActivity = activityType === ActivityType.ProjectRewardCreated
@@ -55,8 +57,10 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
       as={Link}
       to={activityPath(activityType)}
       width={{ base: 'full', lg: '586px' }}
+      borderColor={isProjectLaunchedActivity ? 'primaryAlpha.6' : 'neutralAlpha.6'}
+      backgroundColor={isProjectLaunchedActivity ? 'primaryAlpha.2' : 'none'}
       _hover={{
-        borderColor: 'neutralAlpha.8',
+        borderColor: isProjectLaunchedActivity ? 'primaryAlpha.8' : 'neutralAlpha.8',
       }}
       p={4}
     >
@@ -88,7 +92,7 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
       )}
       <VStack width="full" alignItems="flex-start" spacing={1}>
         {isPostActivity && <ActivityImage resource={resource} />}
-        {!isFundingTxActivity && <ActivityTitle resource={resource} />}
+        {!isFundingTxActivity && !isProjectLaunchedActivity && <ActivityTitle resource={resource} />}
         {isRewardActivity && <ActivityImage resource={resource} />}
         {isRewardActivity && <RewardsInfo reward={resource as ProjectReward} />}
         <ActivityDescription resource={resource} />
@@ -189,6 +193,17 @@ const ActivityTypeItem = ({ activityType }: { activityType: ActivityType }) => {
           </Box>
           <Body size="lg" medium light>
             {t('Top Contribution')}
+          </Body>
+        </HStack>
+      )
+    case ActivityType.ProjectLaunched:
+      return (
+        <HStack color={'primaryAlpha.11'} spacing={1}>
+          <Box mt={-0.5}>
+            <PiSparkle size={'20px'} color="primaryAlpha.11" />
+          </Box>
+          <Body size="lg" medium light color="primaryAlpha.11">
+            {t('New Project')}
           </Body>
         </HStack>
       )
