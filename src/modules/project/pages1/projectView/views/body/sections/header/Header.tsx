@@ -94,7 +94,7 @@ export const Header = () => {
     const isImage = validateImageUrl(project.image)
 
     if (isImage) {
-      return <ImageWithReload width="100%" maxHeight="330px" objectFit="cover" src={project.image || undefined} />
+      return <ImageWithReload width="100%" maxHeight="220px" objectFit="cover" src={project.image || undefined} />
     }
 
     if (project.image && !isImage) {
@@ -190,7 +190,7 @@ export const Header = () => {
                   colorScheme="neutral1"
                   onClick={handleClickDetails}
                 />
-                <FollowButton project={project} />
+                <FollowButton project={project} withLabel />
                 <ShareProjectButton />
               </HStack>
 
