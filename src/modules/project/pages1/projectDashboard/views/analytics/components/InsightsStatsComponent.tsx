@@ -85,16 +85,6 @@ export const InsightsStatsComponent = () => {
     }
   }, [project?.id, getProjectStatsInsight, selectionOption])
 
-  const contribViewRatio =
-    projectStats.viewCount && projectStats.contributionCount
-      ? Math.round(projectStats.contributionCount / projectStats.viewCount) * 100
-      : 0
-
-  const prevContribViewRatio =
-    projectStats.prevViewCount && projectStats.prevContributionCount
-      ? Math.round(projectStats.prevContributionCount / projectStats.prevViewCount) * 100
-      : 0
-
   if (loading) {
     return <InsightsStatsComponentSkeleton />
   }
@@ -126,10 +116,9 @@ export const InsightsStatsComponent = () => {
           flex={1}
         />
         <StatsBlock
-          title={t('Contributions per visit')}
-          prevValue={prevContribViewRatio}
-          value={contribViewRatio}
-          isPercent
+          title={t('Views')}
+          prevValue={projectStats.viewCount}
+          value={projectStats.prevViewCount}
           width={{ base: 'full', lg: 'auto' }}
           flex={1}
         />
