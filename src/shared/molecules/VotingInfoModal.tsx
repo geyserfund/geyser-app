@@ -44,13 +44,13 @@ export const VotingInfoModal = ({
             <Feedback variant={FeedBackVariant.SUCCESS} noIcon>
               <Body size="sm">
                 <Trans
-                  i18nKey="This project is part of a community voting grant {{grantName}}. To have your contribution count as a vote toward the grant, you must be logged in with a linked social account (Lightning accounts don’t count for voting). You can still contribute without logging in, though it won’t count as a vote."
+                  i18nKey="This project is seeking funding through the {{grantName}}To support the project with your vote, please log in with a linked social media account (Lightning accounts are not eligible for voting). You're welcome to contribute even without logging in, but it won't count as a vote."
                   values={{ grantName }}
                 >
-                  {'This project is part of a community voting grant '}
+                  {'This project is seeking funding through the '}
                   <strong>{'{{grantName}}'}</strong>
                   {
-                    '. To have your contribution count as a vote toward the grant, you must be logged in with a linked social account (Lightning accounts don’t count for voting). You can still contribute without logging in, though it won’t count as a vote.'
+                    "To support the project with your vote, please log in with a linked social media account (Lightning accounts are not eligible for voting). You're welcome to contribute even without logging in, but it won't count as a vote."
                   }
                 </Trans>
               </Body>
@@ -59,9 +59,7 @@ export const VotingInfoModal = ({
 
           <VStack alignItems="flex-start">
             <Body size="sm">
-              {t(
-                'This Grant uses Incremental Voting, to ensure that all votes can have an impact. It works like this:',
-              )}
+              {t('This Grant uses Incremental Voting to ensure that all votes can have an impact. It works like this:')}
             </Body>
             <UnorderedList>
               <ListItem>
@@ -113,7 +111,7 @@ export const VotingInfoModal = ({
     return (
       <VStack alignItems="flex-start">
         <Body size="sm">
-          {t('This Grant uses Proportional Voting, to enable more funding to go towards projects. This means:')}
+          {t('This Grant uses Proportional Voting to enable more funding to go towards projects. This means:')}
         </Body>
         <UnorderedList>
           <ListItem>
