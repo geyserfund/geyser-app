@@ -101,7 +101,7 @@ export const GoalModal = () => {
 
   return (
     <>
-      <Modal isCentered isOpen={isGoalModalOpen} onClose={onGoalModalClose}>
+      <Modal isCentered isOpen={isGoalModalOpen} onClose={onGoalModalClose} blockScrollOnMount={false}>
         <ModalOverlay />
         <ModalContent bg="transparent" boxShadow={0}>
           <Box borderRadius="8px" bg="utils.pbg" pb={3}>
