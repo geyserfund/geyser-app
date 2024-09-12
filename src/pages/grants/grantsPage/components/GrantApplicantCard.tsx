@@ -5,14 +5,13 @@ import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
 
 import { useAuthModal } from '@/pages/auth/hooks'
-import { H3 } from '@/shared/components/typography'
+import { Body, H3 } from '@/shared/components/typography'
 import { AvatarElement } from '@/shared/molecules/AvatarElement'
 import { VotingInfoModal } from '@/shared/molecules/VotingInfoModal'
 
 import { ImageWithReload } from '../../../../components/ui'
 import { CardLayout } from '../../../../shared/components/layouts'
 import { getPath } from '../../../../shared/constants'
-import { fonts } from '../../../../shared/styles'
 import {
   GrantApplicantContributor,
   GrantApplicantFunding,
@@ -211,14 +210,12 @@ export const GrantApplicantCard = ({
         {isCompetitionVote && (
           <Box display={'flex'} alignItems="center" flexDirection={'column'}>
             <Box display={'flex'} alignItems="center">
-              <Text fontWeight={'700'} fontSize={'26px'} fontFamily={fonts.livvic} color="primary.500">
+              <Body bold size="2xl" color="primary1.11">
                 {grantHasVoting ? voteCount : contributorsCount || 0}
-              </Text>
+              </Body>
             </Box>
 
-            <Text fontWeight={'400'} fontSize="10px" fontStyle="normal" color="neutral.900">
-              {votingSystem === VotingSystem.OneToOne ? t('voters') : t('votes')}
-            </Text>
+            <Body size="sm">{votingSystem === VotingSystem.OneToOne ? t('voters') : t('votes')}</Body>
           </Box>
         )}
         <WidgetItem subtitle={!isClosed ? t('sats sent') : t('distributed')}>
