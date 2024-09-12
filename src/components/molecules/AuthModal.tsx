@@ -28,9 +28,7 @@ import {
 } from '../../utils'
 import { Caption } from '../typography'
 
-interface IAuthModal {
-  isOpen: boolean
-  onClose: () => void
+export type AuthModalAdditionalprops = {
   title?: string
   description?: string
   showTwitter?: boolean
@@ -41,6 +39,10 @@ interface IAuthModal {
   showGithub?: boolean
   privateRoute?: boolean
 }
+type AuthModalProps = {
+  isOpen: boolean
+  onClose: () => void
+} & AuthModalAdditionalprops
 
 const ConnectAccounts = ({
   onClose,
@@ -107,7 +109,7 @@ const ConnectAccounts = ({
   )
 }
 
-export const AuthModal = (authModalProps: IAuthModal) => {
+export const AuthModal = (authModalProps: AuthModalProps) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
   const {

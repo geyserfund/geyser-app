@@ -23,7 +23,7 @@ import { ProfileNav } from './profileNav/ProfileNav'
 
 export const PlatformNavBar = () => {
   const { isLoggedIn, logout, queryCurrentUser } = useAuthContext()
-  const { loginIsOpen, loginOnClose } = useAuthModal()
+  const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
 
   const isMobileMode = useMobileMode()
 
@@ -122,6 +122,7 @@ export const PlatformNavBar = () => {
           onLoginAlertModalClose()
           emailPromptOnOpen()
         }}
+        {...loginModalAdditionalProps}
       />
       <EmailPromptModal isOpen={emailPromptIsOpen} onClose={emailPromptOnClose} />
     </HStack>
