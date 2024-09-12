@@ -1,13 +1,25 @@
-import { useAtom } from 'jotai'
+import { useAtom, useSetAtom } from 'jotai'
 
-import { isLoginModalOpenAtom } from '../state'
+import { AuthModalAdditionalprops } from '@/components/molecules'
+
+import { isLoginModalOpenAtom, loginModalAdditionalPropsAtom, resetLoginModalAdditionalPropsAtom } from '../state'
 
 export const useAuthModal = () => {
   const [loginIsOpen, setLoginIsOpen] = useAtom(isLoginModalOpenAtom)
+  const [loginModalAdditionalProps, setLoginModalAdditionalProps] = useAtom(loginModalAdditionalPropsAtom)
+  const resetLoginModalAdditionalProps = useSetAtom(resetLoginModalAdditionalPropsAtom)
 
-  const loginOnOpen = () => setLoginIsOpen(true)
+  const loginOnOpen = (props?: AuthModalAdditionalprops) => {
+    setLoginIsOpen(true)
+    if (props) {
+      setLoginModalAdditionalProps(props)
+    }
+  }
 
-  const loginOnClose = () => setLoginIsOpen(false)
+  const loginOnClose = () => {
+    setLoginIsOpen(false)
+    resetLoginModalAdditionalProps()
+  }
 
-  return { loginIsOpen, loginOnOpen, loginOnClose }
+  return { loginIsOpen, loginOnOpen, loginOnClose, loginModalAdditionalProps }
 }

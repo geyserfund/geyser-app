@@ -58,6 +58,9 @@ export const FeaturedProjectCard = ({ projectName, data }: { projectName: string
         padding={standardPadding}
         justifyContent={{ base: 'start', sm: 'space-between' }}
       >
+        <H2 size="2xl" bold>
+          {project.title}
+        </H2>
         {hadFeaturedData && (
           <VStack alignItems={'start'}>
             <Body size="xl" fontStyle={'italic'} bold light>
@@ -66,14 +69,7 @@ export const FeaturedProjectCard = ({ projectName, data }: { projectName: string
             <Body>{data.Featured_Author}</Body>
           </VStack>
         )}
-        <VStack alignItems={'start'}>
-          <H2 size="2xl" bold>
-            {project.title}
-          </H2>
-          <Body light medium noOfLines={5} isTruncated whiteSpace="normal">
-            {project.shortDescription}
-          </Body>
-        </VStack>
+
         {!hadFeaturedData && (
           <HStack spacing={3} justifySelf={'end'} flexWrap={'wrap'}>
             <HStack spacing={1}>

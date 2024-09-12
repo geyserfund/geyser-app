@@ -1,26 +1,16 @@
-import {
-  Avatar,
-  AvatarGroup,
-  Box,
-  Button,
-  HStack,
-  ListItem,
-  Text,
-  UnorderedList,
-  useDisclosure,
-  useTheme,
-  VStack,
-} from '@chakra-ui/react'
+import { Avatar, AvatarGroup, Box, Button, HStack, Text, useDisclosure, useTheme, VStack } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
+import { useAuthModal } from '@/pages/auth/hooks'
 import { H3 } from '@/shared/components/typography'
 import { AvatarElement } from '@/shared/molecules/AvatarElement'
+import { VotingInfoModal } from '@/shared/molecules/VotingInfoModal'
 
 import { ImageWithReload } from '../../../../components/ui'
-import { CardLayout, Modal } from '../../../../shared/components/layouts'
+import { CardLayout } from '../../../../shared/components/layouts'
 import { getPath } from '../../../../shared/constants'
 import { fonts } from '../../../../shared/styles'
 import {
@@ -44,10 +34,8 @@ interface GrantApplicantCardProps {
   isClosed: boolean
   isCompetitionVote: boolean
   canVote: boolean
-  fundingModalProps: any
   grantStatus: GrantStatusEnum
   isLoggedIn: boolean
-  onOpenLoginModal: () => void
   currentUser: UserMeFragment | null
   votingSystem?: VotingSystem
 }
@@ -199,15 +187,15 @@ export const GrantApplicantCard = ({
   isClosed,
   isCompetitionVote,
   canVote,
-  fundingModalProps,
   grantStatus,
   isLoggedIn,
-  onOpenLoginModal,
   currentUser,
   votingSystem,
 }: GrantApplicantCardProps) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
+  const { loginOnOpen } = useAuthModal()
+
   const classes = useStyles()
   const projectLink = getPath('project', project.name)
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -263,7 +251,11 @@ export const GrantApplicantCard = ({
         <Button
           onClick={(e) => {
             e.stopPropagation()
-            onOpenLoginModal()
+            loginOnOpen({
+              title: t('Login to vote'),
+              description: t('You need to login to vote for this community voting grant. '),
+              showLightning: false,
+            })
           }}
           height="40px"
           width="100%"
@@ -357,137 +349,8 @@ export const GrantApplicantCard = ({
           </VStack>
         )}
         {currentUserContribution && grantHasVoting && <UserContributionDetails {...currentUserContribution} />}
-        <HowVotingWorksModal
-          isOpen={isOpen}
-          onClose={onClose}
-          votingSystem={votingSystem}
-          fundingModalProps={fundingModalProps}
-          project={project}
-        />
+        <VotingInfoModal isOpen={isOpen} onClose={onClose} votingSystem={votingSystem} project={project} />
       </CardLayout>
     </Box>
-  )
-}
-
-const HowVotingWorksModal = ({
-  isOpen,
-  onClose,
-  votingSystem,
-  fundingModalProps,
-  project,
-}: {
-  isOpen: boolean
-  onClose: () => void
-  votingSystem?: VotingSystem
-  fundingModalProps: { onOpen: ({ project }: { project: Project }) => void }
-  project: Project
-}) => {
-  const { t } = useTranslation()
-  const navigate = useNavigate()
-
-  if (votingSystem === VotingSystem.StepLog_10) {
-    return (
-      <Modal isOpen={isOpen} onClose={onClose} title={t('How voting works')} size="md">
-        <VStack py={2} px={2} gap={4} w="full">
-          <VStack alignItems="flex-start" gap={2}>
-            <Text>
-              {t('This grant uses ')}
-              <Text as="i">{t('Incremental Voting')}</Text>
-              {t(', to ensure that all votes can have an impact. It works like this:')}
-            </Text>
-            <UnorderedList mt={4} spacing={2}>
-              <ListItem>
-                <Text>{t('You can vote by sending Sats')}</Text>
-              </ListItem>
-              <ListItem>
-                <Text>{t('You can vote multiple times and towards multiple projects')}</Text>
-              </ListItem>
-              <ListItem>
-                <Text>
-                  {t('You can cast up to 3 votes per project based on the cumulative amounts sent to each project:')}
-                </Text>
-              </ListItem>
-            </UnorderedList>
-            <VStack w="full" borderRadius={'4px'} bg={'neutral.800'} p={3}>
-              <HStack w="full" justifyContent="flex-start" gap={5}>
-                <Text width="60px" fontWeight="bold" color={'neutral.0'}>
-                  {t('1 vote')}
-                </Text>
-                <Text fontWeight="bold" color={'neutral.0'}>
-                  {t('From 1,000 to 9,999 sats')}
-                </Text>
-              </HStack>
-              <HStack w="full" justifyContent="flex-start" gap={5}>
-                <Text width="60px" fontWeight="bold" color={'neutral.0'}>
-                  {t('2 votes')}
-                </Text>
-                <Text fontWeight="bold" color={'neutral.0'}>
-                  {t('From 10,000 to 99,999 sats')}
-                </Text>
-              </HStack>
-              <HStack w="full" justifyContent="flex-start" gap={5}>
-                <Text width="60px" fontWeight="bold" color={'neutral.0'}>
-                  {t('3 votes')}
-                </Text>
-                <Text fontWeight="bold" color={'neutral.0'}>
-                  {t('Above 100k sats')}
-                </Text>
-              </HStack>
-            </VStack>
-          </VStack>
-
-          <HStack w="full" justifyContent="center">
-            <Button
-              w="full"
-              variant="solid"
-              colorScheme="primary1"
-              onClick={() => {
-                navigate(getPath('projectFunding', project.name))
-              }}
-            >
-              {t("Let's vote!")}
-            </Button>
-          </HStack>
-        </VStack>
-      </Modal>
-    )
-  }
-
-  return (
-    <Modal isOpen={isOpen} onClose={onClose} title={t('How voting works')} size="md">
-      <VStack py={2} px={2} gap={4} w="full">
-        <VStack alignItems="flex-start" gap={2}>
-          <Text>
-            {t('This grant uses ')}
-            <Text as="i">{t('Proportional Voting')}</Text>
-            {t(' to enable more funding to go towards projects. This means:')}
-          </Text>
-          <UnorderedList mt={4} spacing={2}>
-            <ListItem>
-              <Text>{t('1 Sat = 1 Vote. Each Sat is one Vote.')}</Text>
-            </ListItem>
-            <ListItem>
-              <Text>{t('You can send Sats to multiple projects and multiple times')}</Text>
-            </ListItem>
-            <ListItem>
-              <Text>{t('You can send Sats anonymously')}</Text>
-            </ListItem>
-          </UnorderedList>
-        </VStack>
-
-        <HStack w="full" justifyContent="center">
-          <Button
-            w="full"
-            variant="solid"
-            colorScheme="primary1"
-            onClick={() => {
-              navigate(getPath('projectFunding', project.name))
-            }}
-          >
-            {t("Let's vote!")}
-          </Button>
-        </HStack>
-      </VStack>
-    </Modal>
   )
 }

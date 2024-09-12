@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client'
 
+import { FRAGMENT_PROJECT_GRANT_APPLICANT } from '../fragments/grantFragment'
 import {
   FRAGMENT_PROJECT_HEADER_SUMMARY,
   FRAGMENT_PROJECT_PAGE_BODY,
@@ -21,6 +22,17 @@ export const QUERY_PROJECT_PAGE_DETAILS = gql`
   query ProjectPageDetails($where: UniqueProjectQueryInput!) {
     projectGet(where: $where) {
       ...ProjectPageDetails
+    }
+  }
+`
+
+export const QUERY_PROJECT_GRANT_APPLICATION = gql`
+  ${FRAGMENT_PROJECT_GRANT_APPLICANT}
+  query ProjectGrantApplications($where: UniqueProjectQueryInput!, $input: ProjectGrantApplicationsInput) {
+    projectGet(where: $where) {
+      grantApplications(input: $input) {
+        ...ProjectGrantApplicant
+      }
     }
   }
 `

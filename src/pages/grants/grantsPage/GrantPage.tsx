@@ -71,28 +71,12 @@ export const GrantPage = () => {
           .sort((a, b) => Number(userProjectIds.has(b.project.id)) - Number(userProjectIds.has(a.project.id)))
       : []
 
-  const fundingOpenStatus = grant.statuses.find((s) => s.status === GrantStatusEnum.FundingOpen)
-
   if (grant.name === 'grant-round-001') {
-    return (
-      <GrantsRoundOne
-        fundingOpenEndDate={fundingOpenStatus?.endAt}
-        fundingOpenStartDate={fundingOpenStatus?.startAt}
-        applicants={applicants}
-        isCompetitionVote={grant.type === GrantType.CommunityVote}
-      />
-    )
+    return <GrantsRoundOne applicants={applicants} isCompetitionVote={grant.type === GrantType.CommunityVote} />
   }
 
   if (grant.name === 'grant-round-002') {
-    return (
-      <GrantsRoundTwo
-        fundingOpenEndDate={fundingOpenStatus?.endAt}
-        fundingOpenStartDate={fundingOpenStatus?.startAt}
-        applicants={applicants}
-        isCompetitionVote={grant.type === GrantType.CommunityVote}
-      />
-    )
+    return <GrantsRoundTwo applicants={applicants} isCompetitionVote={grant.type === GrantType.CommunityVote} />
   }
 
   const winnerAnnouncement = GrantAnnouncements[grant.name]
@@ -199,12 +183,9 @@ export const GrantPage = () => {
                       applicants={applicants}
                       grantHasVoting={grantHasVoting}
                       grantStatus={grant.status}
-                      fundingOpenEndDate={fundingOpenStatus?.endAt}
-                      fundingOpenStartDate={fundingOpenStatus?.startAt}
                       isClosed={grant.status === GrantStatusEnum.Closed}
                       isCompetitionVote={isCompetitionVote}
                       votingSystem={grant.__typename === 'CommunityVoteGrant' ? grant.votingSystem : undefined}
-                      grant={grant}
                     />
                     <MobileDivider />
                   </>
