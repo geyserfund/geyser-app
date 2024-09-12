@@ -36,10 +36,9 @@ export const LeaderboardList = ({ period, dateTime, ...props }: LeaderboardListP
 
   useEffect(() => {
     setTimeout(() => {
-      const element = document.getElementById(firstElementId)
-      if (element) {
-        element.scrollIntoView()
-      }
+      const element = document.getElementById(id)
+      element?.scrollTo(0, 0)
+      window.scrollTo(0, 0)
     }, 50)
   }, [period])
 
