@@ -1,10 +1,16 @@
-import { Avatar, forwardRef, HStack, StackProps } from '@chakra-ui/react'
+import { Avatar, AvatarBadge, forwardRef, HStack, StackProps } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 import { PiList } from 'react-icons/pi'
 
 import { useAuthContext } from '@/context'
+import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
 
 export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) => {
   const { user } = useAuthContext()
+
+  const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
+  const followedActivityDot = useAtomValue(followedActivityDotAtom)
+
   return (
     <HStack
       ref={ref}
@@ -25,7 +31,17 @@ export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) =>
       {...props}
     >
       {user.id ? (
-        <Avatar src={user.imageUrl || ''} height={{ base: '40px', lg: '48px' }} width={{ base: '40px', lg: '48px' }} />
+        <Avatar src={user.imageUrl || ''} height={{ base: '40px', lg: '48px' }} width={{ base: '40px', lg: '48px' }}>
+          {(myProjectActivityDot || followedActivityDot) && (
+            <AvatarBadge
+              placement="bottom-start"
+              borderWidth="3px"
+              borderColor="utils.pbg"
+              bg="error.9"
+              boxSize="16px"
+            />
+          )}
+        </Avatar>
       ) : (
         <PiList fontSize={'24px'} />
       )}
