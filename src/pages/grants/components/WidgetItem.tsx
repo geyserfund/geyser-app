@@ -16,18 +16,18 @@ export const WidgetItem = ({
       isSatLogo={isSatLogo}
       subtitle={subtitle}
       titleProps={{
-        color: 'primary.500',
+        color: 'primary1.11',
         fontSize: '26px',
         fontWeight: 700,
         fontFamily: fonts.livvic,
       }}
       subtitleProps={{
         fontStyle: 'normal',
-        fontSize: '10px',
+        fontSize: '14px',
         fontWeight: 400,
-        color: 'neutral.900',
+        color: 'utils.text',
       }}
-      satLogoProps={{ color: 'primary.500', height: '17px' }}
+      satLogoProps={{ color: 'primary1.11', height: '17px' }}
     >
       {children}
     </ListText>
