@@ -55,13 +55,9 @@ const grants = [
 
 export const GrantsRoundOne = ({
   applicants,
-  fundingOpenStartDate,
-  fundingOpenEndDate,
   isCompetitionVote,
 }: {
   applicants?: GrantApplicant[]
-  fundingOpenStartDate: number
-  fundingOpenEndDate: number
   isCompetitionVote: boolean
 }) => {
   const { t } = useTranslation()
@@ -192,8 +188,6 @@ export const GrantsRoundOne = ({
                 grantHasVoting={false}
                 grantStatus={GrantStatusEnum.Closed}
                 isClosed={true}
-                fundingOpenEndDate={fundingOpenEndDate}
-                fundingOpenStartDate={fundingOpenStartDate}
                 isCompetitionVote={isCompetitionVote}
               />
             </Box>

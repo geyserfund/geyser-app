@@ -27,13 +27,9 @@ export type GrantSponsor = {
 }
 
 export const GrantsRoundTwo = ({
-  fundingOpenStartDate,
-  fundingOpenEndDate,
   applicants,
   isCompetitionVote,
 }: {
-  fundingOpenStartDate: number
-  fundingOpenEndDate: number
   applicants?: GrantApplicant[]
   isCompetitionVote: boolean
 }) => {
@@ -127,8 +123,6 @@ export const GrantsRoundTwo = ({
                   grantHasVoting={false}
                   grantStatus={GrantStatusEnum.Closed}
                   isClosed={true}
-                  fundingOpenEndDate={fundingOpenEndDate}
-                  fundingOpenStartDate={fundingOpenStartDate}
                   isCompetitionVote={isCompetitionVote}
                 />
               </Box>

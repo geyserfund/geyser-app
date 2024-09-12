@@ -1,14 +1,11 @@
-import { useDisclosure } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { H3 } from '@/shared/components/typography'
 
-import { AuthModal } from '../../../../components/molecules'
 import { useAuthContext } from '../../../../context'
 import { CardLayout } from '../../../../shared/components/layouts'
-import { Grant, GrantApplicant, GrantStatusEnum, VotingSystem } from '../../../../types'
+import { GrantApplicant, GrantStatusEnum, VotingSystem } from '../../../../types'
 import { GrantApplicantCard } from '../components/GrantApplicantCard'
-import { useProjectFundingModal } from '../components/useProjectFundingModal'
 
 interface Props {
   applicants: Array<GrantApplicant>
@@ -16,16 +13,11 @@ interface Props {
   grantStatus: string
   title: string
   isClosed?: boolean
-  fundingOpenStartDate: number
-  fundingOpenEndDate: number
   isCompetitionVote: boolean
   votingSystem?: VotingSystem
-  grant?: Grant
 }
 
 export const CommunityVoting = ({
-  fundingOpenStartDate,
-  fundingOpenEndDate,
   applicants,
   grantHasVoting,
   grantStatus,
@@ -33,11 +25,8 @@ export const CommunityVoting = ({
   isClosed,
   isCompetitionVote,
   votingSystem,
-  grant,
 }: Props) => {
   const { t } = useTranslation()
-  const fundingModalProps = useProjectFundingModal()
-  const { onOpen, onClose, isOpen } = useDisclosure()
   const { user, isLoggedIn } = useAuthContext()
 
   if (!applicants) {
@@ -83,22 +72,12 @@ export const CommunityVoting = ({
               isLoggedIn={isLoggedIn}
               isClosed={isClosed || false}
               isCompetitionVote={isCompetitionVote || false}
-              fundingModalProps={fundingModalProps}
               canVote={canVote || false}
-              onOpenLoginModal={onOpen}
               currentUser={user}
               votingSystem={votingSystem}
             />
           )
         })}
-
-        <AuthModal
-          title={t('Login to vote')}
-          description={t('You need to login to vote for this community voting grant. ')}
-          isOpen={isOpen}
-          onClose={onClose}
-          showLightning={false}
-        />
       </CardLayout>
     </>
   )

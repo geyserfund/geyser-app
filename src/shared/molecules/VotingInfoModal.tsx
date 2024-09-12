@@ -1,4 +1,4 @@
-import { Button, Divider, HStack, ListItem, Text, UnorderedList, VStack } from '@chakra-ui/react'
+import { Button, Divider, HStack, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
