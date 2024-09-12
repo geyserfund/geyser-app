@@ -19,6 +19,7 @@ type FeedbackProps = {
   text?: string | React.ReactNode
   children?: React.ReactNode
   icon?: React.ReactNode
+  noIcon?: boolean
 } & StackProps
 
 const icons = {
@@ -29,7 +30,7 @@ const icons = {
   [FeedBackVariant.NEUTRAL]: PiInfo,
 }
 
-export const Feedback = ({ variant, text, children, icon, ...props }: FeedbackProps) => {
+export const Feedback = ({ variant, text, children, icon, noIcon, ...props }: FeedbackProps) => {
   const { colors } = useCustomTheme()
 
   const feedbackColors = useMemo(
@@ -81,7 +82,7 @@ export const Feedback = ({ variant, text, children, icon, ...props }: FeedbackPr
       color={feedbackColor.color}
       {...props}
     >
-      {icon ? icon : <Icon color={feedbackColor.color} fontSize="30px" />}
+      {noIcon ? null : icon ? icon : <Icon color={feedbackColor.color} fontSize="30px" />}
       {children ? (
         children
       ) : (

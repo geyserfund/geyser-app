@@ -73,7 +73,7 @@ export const FundingDetailsUserComment = () => {
                 {'Funding anonymously. '}
                 <Box
                   as="span"
-                  onClick={loginOnOpen}
+                  onClick={() => loginOnOpen()}
                   color="primary.600"
                   fontWeight="bold"
                   _hover={{ cursor: 'pointer' }}
@@ -93,7 +93,7 @@ export const FundingDetailsUserComment = () => {
           <Box zIndex="10" position="absolute" left={2} top={2}>
             {isAnonymous || !user ? (
               <Tooltip shouldWrapChildren label={t('Funding anonymously. Click to login')}>
-                <AvatarElement borderRadius="50%" noLink onClick={loginOnOpen} avatarOnly />
+                <AvatarElement borderRadius="50%" noLink onClick={() => loginOnOpen()} avatarOnly />
               </Tooltip>
             ) : (
               <Tooltip shouldWrapChildren label={`${t('Funding as')} ${user.username}. ${t('Click to logout')}`}>
