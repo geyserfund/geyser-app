@@ -1,4 +1,5 @@
 import { Box, BoxProps } from '@chakra-ui/react'
+import { throttle } from 'lodash'
 import { useEffect, useRef } from 'react'
 
 import { dimensions } from '../../constants'
@@ -32,6 +33,7 @@ export const StickToTop = ({
   const [stick, setStick] = useListenerState(false)
   const containerRef = useRef<any>(null)
   const [wrapperElement, setWrapperElement] = useListenerState<HTMLElement | null>(null)
+  const palceholderId = `${id}-placeholder`
 
   useEffect(() => {
     if (disable) {
@@ -44,56 +46,33 @@ export const StickToTop = ({
       setWrapperElement(wrapperElement)
     }
 
-    if (scrollContainerId) {
-      const element = document.getElementById(scrollContainerId)
-      if (element) {
-        element.addEventListener('scroll', handleScroll)
-      }
-
-      return () => {
-        if (element) {
-          element.removeEventListener('scroll', handleScroll)
-        }
-      }
-    }
-
-    document.addEventListener('scroll', handleScroll)
+    const scrollElement = scrollContainerId ? document.getElementById(scrollContainerId) : window
+    scrollElement?.addEventListener('scroll', handleScroll)
 
     return () => {
-      document.removeEventListener('scroll', handleScroll)
+      scrollElement?.removeEventListener('scroll', handleScroll)
     }
-  }, [scrollContainerId, disable])
+  }, [scrollContainerId, disable, id, palceholderId])
 
-  async function handleScroll(this: HTMLElement) {
-    let scrollTop = 0
+  const handleScroll = useRef(
+    throttle(function (this: HTMLElement) {
+      const currentElement = document.getElementById(stick.current ? palceholderId : id)
 
-    if (scrollContainerId) {
-      scrollTop = this.scrollTop
-    } else {
-      scrollTop = document.scrollingElement?.scrollTop || 0
-    }
+      if (currentElement) {
+        const rect = currentElement.getBoundingClientRect()
+        const scrollValue = rect.top - offset
 
-    let currentElement
-
-    if (stick.current) {
-      currentElement = document.getElementById(palceholderId)
-    } else {
-      currentElement = document.getElementById(id)
-    }
-
-    if (currentElement) {
-      const scrollValue = currentElement.offsetTop - currentElement.scrollTop + currentElement.clientTop - scrollTop
-      if (scrollValue > 0 && scrollValue <= offset + bias) {
-        setStick(true)
-      } else if (scrollValue > offset + bias + buffer) {
-        setStick(false)
+        if (scrollValue <= bias) {
+          setStick(true)
+        } else if (scrollValue > bias + buffer) {
+          setStick(false)
+        }
       }
-    }
-  }
+    }, 16),
+  ).current // 60fps throttle
 
   const onStick = stick.current ? _onStick || { width: wrapperElement.current?.clientWidth } : {}
 
-  const palceholderId = `${id}-placeholder`
   return (
     <>
       <Box

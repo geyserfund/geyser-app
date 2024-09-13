@@ -86,8 +86,9 @@ const ProjectItem = ({ project, rank }: { project: GlobalProjectLeaderboardRow; 
         boxSize="64px"
         borderRadius="16px"
         maxHeight="64px"
+        minWidth="64px"
       />
-      <HStack maxHeight="60px" alignItems="center" justifyContent="flex-start" flex={1}>
+      <HStack maxHeight="60px" alignItems="center" justifyContent="flex-start" flex={1} overflow="hidden">
         <VStack alignItems="flex-start" flex={1} spacing={1}>
           <Body fontSize={'14px'} bold isTruncated>
             {project.projectTitle}
