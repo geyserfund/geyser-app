@@ -71,7 +71,7 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
         src={contributor.userImageUrl}
         alt={contributor.username}
         boxSize="42px"
-        borderRadius="16px"
+        borderRadius="50%"
         maxHeight="42px"
       />
       <VStack maxHeight="42px" alignItems="flex-start" flex={1} spacing={0}>
