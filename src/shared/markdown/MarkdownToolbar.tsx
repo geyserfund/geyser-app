@@ -8,7 +8,7 @@ import { ToolbarTable } from './toolbar/ToolbarTable'
 
 export const MarkdownToolbar = ({ isDisabled }: { isDisabled?: boolean }) => {
   return (
-    <HStack justifyContent="center" flexWrap="wrap" mt={1}>
+    <HStack justifyContent="center" flexWrap={{ base: 'unset', lg: 'wrap' }} mt={1}>
       <ToolbarCommon isDisabled={isDisabled} />
       <ToolbarBlocks isDisabled={isDisabled} />
       <ToolbarHeading isDisabled={isDisabled} />
