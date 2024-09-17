@@ -51,10 +51,10 @@ const ProjectItem = ({ project, rank }: { project: GlobalProjectLeaderboardRow; 
 
   const navigate = useNavigate()
 
-  const { formatAmount, formatUsdAmount } = useCurrencyFormatter()
+  const { formatAmount } = useCurrencyFormatter()
 
   const formattedAmountContributed = formatAmount(project.contributionsTotal, 'BTCSAT')
-  const formattedUsdAmount = formatUsdAmount(project.contributionsTotal)
+  const formattedUsdAmount = formatAmount(project.contributionsTotalUsd, 'USD')
 
   const projectUrl = getPath('project', project.projectName)
 

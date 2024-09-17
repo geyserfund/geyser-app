@@ -2,7 +2,7 @@ import { ApolloError } from '@apollo/client'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
-import { FundingInput, useFundMutation } from '@/types'
+import { FundingInput, FundMutation, useFundMutation } from '@/types'
 import { useNotification } from '@/utils'
 
 import { useCustomMutation } from '../../API/custom/useCustomMutation'
@@ -91,7 +91,7 @@ export const useFundingAPI = () => {
   })
 
   const requestFunding = useCallback(
-    async (input: FundingInput, onCompleted?: () => void) => {
+    async (input: FundingInput, onCompleted?: (data: FundMutation) => void) => {
       const { isValid, error } = validateFundingInput(input)
 
       if (!isValid) {
@@ -115,7 +115,7 @@ export const useFundingAPI = () => {
   )
 
   const requestFundingFromContext = useCallback(
-    (onCompleted?: () => void) => requestFunding(formattedFundingInput, onCompleted),
+    (onCompleted?: (data: FundMutation) => void) => requestFunding(formattedFundingInput, onCompleted),
     [requestFunding, formattedFundingInput],
   )
 

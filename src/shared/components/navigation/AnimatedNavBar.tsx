@@ -12,7 +12,7 @@ import { motion } from 'framer-motion'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconType } from 'react-icons'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { toInt, useCustomTheme } from '../../../utils'
 import { SkeletonLayout } from '../layouts'
@@ -44,6 +44,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
   const { t } = useTranslation()
 
   const navigate = useNavigate()
+  const location = useLocation()
 
   const { colors } = useCustomTheme()
 
@@ -74,7 +75,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
       return
     }
 
-    navigate(item.path || '')
+    navigate({ pathname: item.path || '', search: location.search })
   }
 
   const measuredRef = useCallback((node: HTMLButtonElement | null, index: number) => {

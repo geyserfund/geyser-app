@@ -2,7 +2,7 @@ import { Button, Link, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
 import { PiWarning } from 'react-icons/pi'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { Body } from '@/shared/components/typography'
@@ -23,6 +23,7 @@ export const PaymentOnchainPrompt = () => {
   const { downloadRefundJson, downloadRefundQr } = useDownloadRefund()
 
   const navigate = useNavigate()
+  const location = useLocation()
 
   const handleClick = () => {
     if (isMobile) {
@@ -32,7 +33,7 @@ export const PaymentOnchainPrompt = () => {
     }
 
     setOnchainRefundDownloadAtom(true)
-    navigate(getPath('fundingPaymentOnchainQR', project.name), { replace: true })
+    navigate({ pathname: getPath('fundingPaymentOnchainQR', project.name), search: location.search }, { replace: true })
   }
 
   return (

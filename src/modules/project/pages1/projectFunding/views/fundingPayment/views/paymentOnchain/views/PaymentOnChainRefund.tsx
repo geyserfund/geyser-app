@@ -2,7 +2,7 @@ import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
 import { PiHandCoins, PiWarning } from 'react-icons/pi'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { useRefundFileValue } from '@/modules/project/funding/state'
@@ -20,6 +20,7 @@ import { extractValuesFromError } from '../utils/parseError'
 
 export const PaymentOnChainRefund = () => {
   const navigate = useNavigate()
+  const location = useLocation()
 
   const { project } = useFundingFormAtom()
 
@@ -58,7 +59,10 @@ export const PaymentOnChainRefund = () => {
   }, [onChainError])
 
   const handleRefundSuccess = () => {
-    navigate(getPath('fundingPaymentOnchainRefundInitiated', project.name), { replace: true })
+    navigate(
+      { pathname: getPath('fundingPaymentOnchainRefundInitiated', project.name), search: location.search },
+      { replace: true },
+    )
   }
 
   return (
