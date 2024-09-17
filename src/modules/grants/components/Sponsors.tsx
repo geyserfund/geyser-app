@@ -1,4 +1,5 @@
 import { BoxProps, HStack, Image, Link, Wrap, WrapItem } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { PropsWithChildren } from 'react'
 
 import { Body } from '@/shared/components/typography'
@@ -15,8 +16,8 @@ export const Sponsors = ({ sponsors = [], titleProps, children, ...props }: Prop
 
   return (
     <HStack alignItems="center" justifyContent="flex-start" {...props}>
-      <Body color="neutralAlpha.11" fontSize="12px" medium>
-        Sponsors:
+      <Body size="sm" light>
+        {t('Sponsors')}:
       </Body>
       <Wrap justify={'center'} spacing={4}>
         {sponsors.map((item) =>

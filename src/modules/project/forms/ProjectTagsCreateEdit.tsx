@@ -165,7 +165,7 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
           'Get discovered more easily by selecting up to {{MAX_TAGS_ALLOWED}} project tags. Make sure to select some of the tags that appear in the trending view.'
         }
       </Trans>{' '}
-      <Button variant="ghost" size="sm" onClick={infoOnOpen}>
+      <Button variant="ghost" size="md" onClick={infoOnOpen}>
         {t('See trending tags')}
       </Button>
     </span>

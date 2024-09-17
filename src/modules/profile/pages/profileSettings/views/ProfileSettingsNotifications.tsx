@@ -1,4 +1,5 @@
 import { Divider, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 
@@ -31,10 +32,10 @@ export const ProfileSettingsNotifications = () => {
       <VStack w="100%" spacing={6} flexGrow={1} px={{ base: 0, lg: 6 }}>
         <VStack w="100%" alignItems="flex-start">
           <Body fontSize={'24px'} medium>
-            Notifications
+            {t('Notifications')}
           </Body>
-          <Body size="xs" color="neutralAlpha.11" regular>
-            Customize your profile and project notifications.
+          <Body size="sm" color="neutralAlpha.11" regular>
+            {t('Customize your profile and project notifications.')}
           </Body>
         </VStack>
         <CreatorNotifications creatorNotificationSettings={creatorNotificationSettings} />

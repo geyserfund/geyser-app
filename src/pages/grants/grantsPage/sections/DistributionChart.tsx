@@ -155,7 +155,7 @@ const ChartBar = ({
 
   const renderSats = ({ withParentheses }: { withParentheses: boolean }) => {
     return (
-      <Body size="xs" bold>
+      <Body size="sm" bold>
         {withParentheses ? '(' : ''}
         {`${getShortAmountLabel(communityFundingAmount, true)} sats`}
         {withParentheses ? ')' : ''}
@@ -167,7 +167,7 @@ const ChartBar = ({
 
   const renderVotesOrVoters = ({ withParentheses }: { withParentheses: boolean }) => {
     return (
-      <Body size="xs" bold light isTruncated>
+      <Body size="sm" bold light isTruncated>
         {withParentheses ? '(' : ''}
         {votesOrVoters}{' '}
         {isCompetitionVote ? (votingSystem === VotingSystem.OneToOne ? t('voters') : t('votes')) : t('contributors')}

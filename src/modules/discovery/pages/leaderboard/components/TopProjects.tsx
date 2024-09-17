@@ -95,28 +95,28 @@ const ProjectItem = ({ project, rank }: { project: GlobalProjectLeaderboardRow; 
           </Body>
 
           <VStack alignItems="flex-start" spacing={0}>
-            <Body size="xs" dark>
+            <Body size="sm" dark>
               {formattedAmountContributed}{' '}
-              <Body as="span" size="xs" muted>
+              <Body as="span" size="sm" muted>
                 {`(${formattedUsdAmount})`}
               </Body>
             </Body>
             <HStack spacing={1}>
               <HStack spacing={0.5}>
-                <Body size="xs" muted>
+                <Body size="sm" muted>
                   {t('through')}{' '}
                 </Body>
                 <PiLightning size="12px" /> {t('from')}{' '}
-                <Body as="span" size="xs" dark>
+                <Body as="span" size="sm" dark>
                   {project.contributionsCount}
                 </Body>{' '}
               </HStack>
               <HStack spacing={0.5}>
-                <Body as="span" size="xs" muted>
+                <Body as="span" size="sm" muted>
                   {t('from')}{' '}
                 </Body>
                 <PiUsers size="12px" />
-                <Body size="xs" dark>
+                <Body size="sm" dark>
                   {project.contributorsCount}
                 </Body>{' '}
               </HStack>

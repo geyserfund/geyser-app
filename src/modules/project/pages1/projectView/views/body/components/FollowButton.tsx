@@ -1,4 +1,5 @@
-import { ButtonProps, IconButton } from '@chakra-ui/react'
+import { Button, ButtonProps, IconButton } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { MouseEvent } from 'react'
 import { PiBell } from 'react-icons/pi'
@@ -13,9 +14,10 @@ import { Project } from '../../../../../../../types'
 
 interface FollowButtonProps extends ButtonProps {
   project: Pick<Project, 'id' | 'name' | 'title'>
+  withLabel?: boolean
 }
 
-export const FollowButton = ({ project, ...rest }: FollowButtonProps) => {
+export const FollowButton = ({ project, withLabel, ...rest }: FollowButtonProps) => {
   const { isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
 
@@ -49,6 +51,22 @@ export const FollowButton = ({ project, ...rest }: FollowButtonProps) => {
     } else {
       handleFollow()
     }
+  }
+
+  if (withLabel) {
+    return (
+      <Button
+        aria-label="follow-button"
+        variant="soft"
+        colorScheme={isFollowed ? 'primary1' : 'neutral1'}
+        onClick={handleClick}
+        isLoading={followLoading || unfollowLoading}
+        rightIcon={<PiBell />}
+        {...rest}
+      >
+        {isFollowed ? t('Followed') : t('Follow')}
+      </Button>
+    )
   }
 
   return (
