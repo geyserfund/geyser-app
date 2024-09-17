@@ -17,7 +17,8 @@ export const CreatorButtons = () => {
 
   const { onGoalModalOpen } = useGoalsModal()
 
-  if (!isProjectOwner || project.status !== ProjectStatus.Active) return null
+  if (!isProjectOwner || (project.status && [ProjectStatus.Closed, ProjectStatus.Deleted].includes(project.status)))
+    return null
 
   return (
     <>

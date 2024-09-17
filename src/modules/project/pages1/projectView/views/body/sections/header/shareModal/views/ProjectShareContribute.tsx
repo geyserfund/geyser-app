@@ -8,6 +8,7 @@ import { getAppEndPoint } from '@/config/domain'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { useCreateAndCopyImage } from '@/modules/project/pages1/projectView/hooks'
 import { GeyserShareImageUrl } from '@/shared/constants'
+import { validateImageUrl } from '@/shared/markdown/validations/image'
 import { encodeLNURL, useNotification } from '@/utils'
 
 import { ProjectShareBanner } from '../components/ProjectShareBanner'
@@ -53,6 +54,8 @@ export const ProjectShareContribute = () => {
 
   const lnurlPayUrl = encodeLNURL(`${endPoint}/lnurl/pay?projectId=${project.id}`)
 
+  const isImage = validateImageUrl(project.image)
+
   return (
     <VStack
       w="100%"
@@ -65,7 +68,7 @@ export const ProjectShareContribute = () => {
     >
       <ProjectShareBanner
         ref={ref}
-        bannerImage={project.image || project.thumbnailImage || GeyserShareImageUrl}
+        bannerImage={isImage && project.image ? project.image : project.thumbnailImage || GeyserShareImageUrl}
         qrCodeValue={lnurlPayUrl}
         qrCodeText={t('Contribute with lightning')}
         centerLogo={LightningIcon}
