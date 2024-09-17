@@ -94,7 +94,7 @@ export function ProjectBalanceDisplay() {
       >
         <CircularProgress
           capIsRound
-          value={circularPercentage}
+          value={circularPercentage && circularPercentage > 10 ? circularPercentage : 10}
           size="96px"
           thickness="10px"
           color={'primary1.9'}
