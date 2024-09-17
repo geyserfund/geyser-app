@@ -7,6 +7,7 @@ import { LogoDark } from '@/assets'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CampaignContent, useCreateAndCopyImage, useProjectShare } from '@/modules/project/pages1/projectView/hooks'
 import { GeyserShareImageUrl } from '@/shared/constants'
+import { validateImageUrl } from '@/shared/markdown/validations/image'
 import { useNotification } from '@/utils'
 
 import { ProjectShareBanner } from '../components/ProjectShareBanner'
@@ -52,6 +53,8 @@ export const ProjectShareView = () => {
 
   const projectUrl = getShareProjectUrl({ clickedFrom: CampaignContent.projectShareQrBanner })
 
+  const isImage = validateImageUrl(project.image)
+
   return (
     <VStack
       w="100%"
@@ -64,7 +67,7 @@ export const ProjectShareView = () => {
     >
       <ProjectShareBanner
         ref={ref}
-        bannerImage={project.image || project.thumbnailImage || GeyserShareImageUrl}
+        bannerImage={isImage && project.image ? project.image : project.thumbnailImage || GeyserShareImageUrl}
         qrCodeValue={projectUrl}
         qrCodeText={t('View project')}
         centerLogo={LogoDark}
