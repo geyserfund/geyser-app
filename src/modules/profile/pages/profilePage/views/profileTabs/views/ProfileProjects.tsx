@@ -53,7 +53,7 @@ export const ProfileProjects = () => {
       <H1 size="2xl" bold display={{ base: 'unset', lg: 'none' }}>
         {t('Projects')}
       </H1>
-      <CreateProjectButton width="full" />
+      {isViewingOwnProfile && <CreateProjectButton width="full" />}
       {projectsToRender.map((project, index) => {
         return (
           <ProfileProjectCard
