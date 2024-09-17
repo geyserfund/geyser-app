@@ -101,7 +101,7 @@ export const ProjectStatusBar = ({ isProjectOwner, project, wallet, ...props }: 
             </Body>
           </HStack>
         </Tooltip>
-        {cta && cta()}
+        {isProjectOwner && cta && cta()}
       </HStack>
 
       {isProjectOwner && (
