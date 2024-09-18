@@ -1,9 +1,9 @@
 import { useAtomValue, useSetAtom } from 'jotai'
 import { DateTime } from 'luxon'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useAuthContext } from '@/context'
-import { ActivityFeedName, useActivitiesGetLazyQuery } from '@/types'
+import { ActivityFeedName, useActivitiesGetQuery } from '@/types'
 
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '../state/activityDotAtom'
 import { lastVisitedFollowedActivityDateAtom, lastVistedMyProjectActivityDateAtom } from '../state/lastVisitedAtom'
@@ -17,64 +17,69 @@ export const useActivityHook = () => {
   const lastVisitedFollowedActivityDate = useAtomValue(lastVisitedFollowedActivityDateAtom)
   const setFollowedActivityDot = useSetAtom(followedActivityDotAtom)
 
-  const [getActivitesGetQuery] = useActivitiesGetLazyQuery({})
+  const [currentDateTime] = useState(DateTime.now().toMillis())
+
+  useActivitiesGetQuery({
+    fetchPolicy: 'network-only',
+    skip: !user.id || !currentDateTime,
+    variables: {
+      input: {
+        where: {
+          feed: ActivityFeedName.MyProjects,
+          createdAt: {
+            endDateTime: currentDateTime,
+            startDateTime: lastVistedMyProjectActivityDate,
+          },
+        },
+        pagination: {
+          take: 1,
+        },
+      },
+    },
+    onCompleted(data) {
+      console.log('checking myprojeect acitvity', data)
+
+      const myProjectsActivity = data?.activitiesGet.activities || []
+
+      if (myProjectsActivity.length > 0) {
+        setMyProjectActivityDot(true)
+      } else {
+        setMyProjectActivityDot(false)
+      }
+    },
+  })
+
+  useActivitiesGetQuery({
+    fetchPolicy: 'network-only',
+    skip: !user.id || !currentDateTime,
+    variables: {
+      input: {
+        where: {
+          feed: ActivityFeedName.FollowedProjects,
+          createdAt: {
+            endDateTime: currentDateTime,
+            startDateTime: lastVisitedFollowedActivityDate,
+          },
+        },
+        pagination: {
+          take: 1,
+        },
+      },
+    },
+    onCompleted(data) {
+      const myProjectsActivity = data?.activitiesGet.activities || []
+      if (myProjectsActivity.length > 0) {
+        setFollowedActivityDot(true)
+      } else {
+        setFollowedActivityDot(false)
+      }
+    },
+  })
 
   useEffect(() => {
     if (!user.id) {
-      return
+      setMyProjectActivityDot(false)
+      setFollowedActivityDot(false)
     }
-
-    const dateNow = DateTime.now().toMillis()
-
-    getActivitesGetQuery({
-      variables: {
-        input: {
-          where: {
-            feed: ActivityFeedName.MyProjects,
-            createdAt: {
-              endDateTime: dateNow,
-              startDateTime: lastVistedMyProjectActivityDate,
-            },
-          },
-        },
-      },
-      onCompleted(data) {
-        const myProjectsActivity = data?.activitiesGet.activities || []
-        if (myProjectsActivity.length > 0) {
-          setMyProjectActivityDot(true)
-        } else {
-          setMyProjectActivityDot(false)
-        }
-      },
-    })
-  }, [lastVistedMyProjectActivityDate, user, setMyProjectActivityDot])
-
-  useEffect(() => {
-    if (!user.id) {
-      return
-    }
-
-    const dateNow = DateTime.now().toMillis()
-    getActivitesGetQuery({
-      variables: {
-        input: {
-          where: {
-            feed: ActivityFeedName.FollowedProjects,
-            createdAt: {
-              endDateTime: dateNow,
-              startDateTime: lastVisitedFollowedActivityDate,
-            },
-          },
-        },
-      },
-      onCompleted(data) {
-        const myProjectsActivity = data?.activitiesGet.activities || []
-        if (myProjectsActivity.length > 0) {
-          setFollowedActivityDot(true)
-        } else {
-          setFollowedActivityDot(false)
-        }
-      },
-    })
-  }, [lastVisitedFollowedActivityDate, user, setFollowedActivityDot])
+  }, [user, setMyProjectActivityDot, setFollowedActivityDot])
 }

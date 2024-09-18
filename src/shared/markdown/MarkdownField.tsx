@@ -218,6 +218,7 @@ export const MarkdownField = ({
           justifyContent="space-between"
           alignItems="start"
           mb={2}
+          gap={2}
           {...(isMobile && {
             borderTop: '1px solid',
             position: 'fixed',
@@ -227,7 +228,9 @@ export const MarkdownField = ({
             borderBottom: stickyToolbar ? '1px solid' : undefined,
             borderColor: 'neutral1.6',
             mb: 0,
-            padding: 3,
+            padding: { base: '5px 12px 20px 12px', lg: 3 },
+            overflowX: 'auto',
+            overflowY: 'hidden',
           })}
         >
           <MarkdownToolbar isDisabled={isEditorMode} />
