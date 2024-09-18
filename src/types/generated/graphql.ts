@@ -4905,38 +4905,11 @@ export type ProjectRewardForLandingPageFragment = { __typename?: 'ProjectReward'
 
 export type ProjectRewardForCreateUpdateFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, cost: number, image?: string | null, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null };
 
-export type ProjectFragment = (
-  { __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, defaultGoalId?: any | null, balance: number, balanceUsdCent: number, createdAt: string, updatedAt: string, image?: string | null, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, fundingTxsCount?: number | null, keys: (
-    { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', npub: string } } }
-    & ProjectKeysFragment
-  ), location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, owners: Array<{ __typename?: 'Owner', id: any, user: (
-      { __typename?: 'User' }
-      & ProjectOwnerUserFragment
-    ) }>, rewards: Array<(
-    { __typename?: 'ProjectReward' }
-    & ProjectRewardForCreateUpdateFragment
-  )>, ambassadors: Array<{ __typename?: 'Ambassador', id: any, confirmed: boolean, user: (
-      { __typename?: 'User' }
-      & UserForAvatarFragment
-    ) }>, sponsors: Array<{ __typename?: 'Sponsor', id: any, url?: string | null, image?: string | null, user?: (
-      { __typename?: 'User' }
-      & UserForAvatarFragment
-    ) | null }>, entries: Array<(
-    { __typename?: 'Entry' }
-    & EntryForProjectFragment
-  )>, wallets: Array<(
-    { __typename?: 'Wallet' }
-    & ProjectWalletFragment
-  )>, followers: Array<{ __typename?: 'User', id: any, username: string }> }
-  & ProjectGrantApplicationsFragment
-);
-
-export type ProjectForSubscriptionFragment = { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: (
-      { __typename?: 'User' }
-      & UserMeFragment
-    ) }> };
+export type ProjectFragment = { __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, defaultGoalId?: any | null, balance: number, balanceUsdCent: number, createdAt: string, updatedAt: string, image?: string | null, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, fundingTxsCount?: number | null };
 
 export type ProjectAvatarFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, title: string };
+
+export type ProjectForOwnerFragment = { __typename?: 'Project', id: any, name: string, image?: string | null, thumbnailImage?: string | null, title: string, status?: ProjectStatus | null, createdAt: string };
 
 export type ExternalAccountFragment = { __typename?: 'ExternalAccount', id: any, accountType: string, externalUsername: string, externalId: string, public: boolean };
 
@@ -4948,7 +4921,10 @@ export type ProjectOwnerUserFragment = { __typename?: 'User', id: any, username:
 export type UserMeFragment = { __typename?: 'User', id: any, username: string, imageUrl?: string | null, email?: string | null, ranking?: any | null, isEmailVerified: boolean, hasSocialAccount: boolean, externalAccounts: Array<(
     { __typename?: 'ExternalAccount' }
     & ExternalAccountFragment
-  )>, ownerOf: Array<{ __typename?: 'OwnerOf', project?: { __typename?: 'Project', id: any, name: string, image?: string | null, thumbnailImage?: string | null, title: string, status?: ProjectStatus | null, createdAt: string } | null }> };
+  )>, ownerOf: Array<{ __typename?: 'OwnerOf', project?: (
+      { __typename?: 'Project' }
+      & ProjectForOwnerFragment
+    ) | null }> };
 
 export type UserForAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, email?: string | null, username: string };
 
@@ -5226,16 +5202,6 @@ export type ProjectByNameOrIdQuery = { __typename?: 'Query', projectGet?: (
     { __typename?: 'Project' }
     & ProjectFragment
   ) | null };
-
-export type ProjectsForSubscriptionQueryVariables = Exact<{
-  input: ProjectsGetQueryInput;
-}>;
-
-
-export type ProjectsForSubscriptionQuery = { __typename?: 'Query', projectsGet: { __typename?: 'ProjectsResponse', projects: Array<(
-      { __typename?: 'Project' }
-      & ProjectForSubscriptionFragment
-    )> } };
 
 export type ProjectsQueryVariables = Exact<{
   input?: InputMaybe<ProjectsGetQueryInput>;
@@ -6247,6 +6213,23 @@ export const EntryFragmentDoc = gql`
   }
 }
     ${UserForAvatarFragmentDoc}`;
+export const EntryForProjectFragmentDoc = gql`
+    fragment EntryForProject on Entry {
+  id
+  title
+  description
+  image
+  type
+  fundersCount
+  amountFunded
+  status
+  createdAt
+  publishedAt
+  creator {
+    ...UserForAvatar
+  }
+}
+    ${UserForAvatarFragmentDoc}`;
 export const ProjectDefaultGoalFragmentDoc = gql`
     fragment ProjectDefaultGoal on ProjectGoal {
   id
@@ -6568,6 +6551,24 @@ export const PaginationFragmentDoc = gql`
   count
 }
     `;
+export const ProjectCommunityVoteGrantFragmentDoc = gql`
+    fragment ProjectCommunityVoteGrant on CommunityVoteGrant {
+  id
+  status
+  title
+}
+    `;
+export const ProjectGrantApplicationsFragmentDoc = gql`
+    fragment ProjectGrantApplications on Project {
+  grantApplications {
+    id
+    status
+    grant {
+      ...ProjectCommunityVoteGrant
+    }
+  }
+}
+    ${ProjectCommunityVoteGrantFragmentDoc}`;
 export const ProjectNostrKeysFragmentDoc = gql`
     fragment ProjectNostrKeys on Project {
   id
@@ -6584,14 +6585,46 @@ export const ProjectNostrKeysFragmentDoc = gql`
   }
 }
     `;
-export const ProjectKeysFragmentDoc = gql`
-    fragment ProjectKeys on ProjectKeys {
-  nostrKeys {
-    publicKey {
-      hex
-      npub
-    }
-  }
+export const ProjectRewardForCreateUpdateFragmentDoc = gql`
+    fragment ProjectRewardForCreateUpdate on ProjectReward {
+  id
+  name
+  description
+  cost
+  image
+  deleted
+  stock
+  sold
+  hasShipping
+  maxClaimable
+  isAddon
+  isHidden
+  category
+  preOrder
+  estimatedAvailabilityDate
+  estimatedDeliveryInWeeks
+}
+    `;
+export const ProjectFragmentDoc = gql`
+    fragment Project on Project {
+  id
+  title
+  name
+  type
+  shortDescription
+  description
+  defaultGoalId
+  balance
+  balanceUsdCent
+  createdAt
+  updatedAt
+  image
+  thumbnailImage
+  links
+  status
+  rewardCurrency
+  fundersCount
+  fundingTxsCount
 }
     `;
 export const ExternalAccountFragmentDoc = gql`
@@ -6617,43 +6650,58 @@ export const ProjectOwnerUserFragmentDoc = gql`
   hasSocialAccount
 }
     ${ExternalAccountFragmentDoc}`;
-export const ProjectRewardForCreateUpdateFragmentDoc = gql`
-    fragment ProjectRewardForCreateUpdate on ProjectReward {
+export const ProjectForOwnerFragmentDoc = gql`
+    fragment ProjectForOwner on Project {
   id
   name
-  description
-  cost
   image
-  deleted
-  stock
-  sold
-  hasShipping
-  maxClaimable
-  isAddon
-  isHidden
-  category
-  preOrder
-  estimatedAvailabilityDate
-  estimatedDeliveryInWeeks
-}
-    `;
-export const EntryForProjectFragmentDoc = gql`
-    fragment EntryForProject on Entry {
-  id
+  thumbnailImage
   title
-  description
-  image
-  type
-  fundersCount
-  amountFunded
   status
   createdAt
-  publishedAt
-  creator {
-    ...UserForAvatar
+}
+    `;
+export const UserMeFragmentDoc = gql`
+    fragment UserMe on User {
+  id
+  username
+  imageUrl
+  email
+  ranking
+  isEmailVerified
+  hasSocialAccount
+  externalAccounts {
+    ...ExternalAccount
+  }
+  ownerOf {
+    project {
+      ...ProjectForOwner
+    }
   }
 }
-    ${UserForAvatarFragmentDoc}`;
+    ${ExternalAccountFragmentDoc}
+${ProjectForOwnerFragmentDoc}`;
+export const FunderWithUserFragmentDoc = gql`
+    fragment FunderWithUser on Funder {
+  amountFunded
+  confirmed
+  id
+  confirmedAt
+  timesFunded
+  user {
+    id
+    username
+    hasSocialAccount
+    externalAccounts {
+      externalId
+      externalUsername
+      id
+      accountType
+    }
+    imageUrl
+  }
+}
+    `;
 export const ProjectWalletFragmentDoc = gql`
     fragment ProjectWallet on Wallet {
   id
@@ -6678,168 +6726,6 @@ export const ProjectWalletFragmentDoc = gql`
     ... on LndConnectionDetailsPublic {
       pubkey
     }
-  }
-}
-    `;
-export const ProjectCommunityVoteGrantFragmentDoc = gql`
-    fragment ProjectCommunityVoteGrant on CommunityVoteGrant {
-  id
-  status
-  title
-}
-    `;
-export const ProjectGrantApplicationsFragmentDoc = gql`
-    fragment ProjectGrantApplications on Project {
-  grantApplications {
-    id
-    status
-    grant {
-      ...ProjectCommunityVoteGrant
-    }
-  }
-}
-    ${ProjectCommunityVoteGrantFragmentDoc}`;
-export const ProjectFragmentDoc = gql`
-    fragment Project on Project {
-  id
-  title
-  name
-  type
-  shortDescription
-  description
-  defaultGoalId
-  balance
-  balanceUsdCent
-  createdAt
-  updatedAt
-  image
-  thumbnailImage
-  links
-  status
-  rewardCurrency
-  fundersCount
-  fundingTxsCount
-  keys {
-    ...ProjectKeys
-  }
-  location {
-    country {
-      name
-      code
-    }
-    region
-  }
-  tags {
-    id
-    label
-  }
-  owners {
-    id
-    user {
-      ...ProjectOwnerUser
-    }
-  }
-  rewards {
-    ...ProjectRewardForCreateUpdate
-  }
-  ambassadors {
-    id
-    confirmed
-    user {
-      ...UserForAvatar
-    }
-  }
-  sponsors {
-    id
-    url
-    image
-    user {
-      ...UserForAvatar
-    }
-  }
-  entries(input: $input) {
-    ...EntryForProject
-  }
-  wallets {
-    ...ProjectWallet
-  }
-  followers {
-    id
-    username
-  }
-  keys {
-    nostrKeys {
-      publicKey {
-        npub
-      }
-    }
-  }
-  ...ProjectGrantApplications
-}
-    ${ProjectKeysFragmentDoc}
-${ProjectOwnerUserFragmentDoc}
-${ProjectRewardForCreateUpdateFragmentDoc}
-${UserForAvatarFragmentDoc}
-${EntryForProjectFragmentDoc}
-${ProjectWalletFragmentDoc}
-${ProjectGrantApplicationsFragmentDoc}`;
-export const UserMeFragmentDoc = gql`
-    fragment UserMe on User {
-  id
-  username
-  imageUrl
-  email
-  ranking
-  isEmailVerified
-  hasSocialAccount
-  externalAccounts {
-    ...ExternalAccount
-  }
-  ownerOf {
-    project {
-      id
-      name
-      image
-      thumbnailImage
-      title
-      status
-      createdAt
-    }
-  }
-}
-    ${ExternalAccountFragmentDoc}`;
-export const ProjectForSubscriptionFragmentDoc = gql`
-    fragment ProjectForSubscription on Project {
-  id
-  title
-  name
-  thumbnailImage
-  owners {
-    id
-    user {
-      ...UserMe
-    }
-  }
-}
-    ${UserMeFragmentDoc}`;
-export const FunderWithUserFragmentDoc = gql`
-    fragment FunderWithUser on Funder {
-  amountFunded
-  confirmed
-  id
-  confirmedAt
-  timesFunded
-  user {
-    id
-    username
-    hasSocialAccount
-    externalAccounts {
-      externalId
-      externalUsername
-      id
-      accountType
-    }
-    imageUrl
   }
 }
     `;
@@ -7579,6 +7465,16 @@ export const ProjectGrantApplicantFragmentDoc = gql`
       name
       title
       status
+    }
+  }
+}
+    `;
+export const ProjectKeysFragmentDoc = gql`
+    fragment ProjectKeys on ProjectKeys {
+  nostrKeys {
+    publicKey {
+      hex
+      npub
     }
   }
 }
@@ -9066,48 +8962,6 @@ export type ProjectByNameOrIdQueryHookResult = ReturnType<typeof useProjectByNam
 export type ProjectByNameOrIdLazyQueryHookResult = ReturnType<typeof useProjectByNameOrIdLazyQuery>;
 export type ProjectByNameOrIdSuspenseQueryHookResult = ReturnType<typeof useProjectByNameOrIdSuspenseQuery>;
 export type ProjectByNameOrIdQueryResult = Apollo.QueryResult<ProjectByNameOrIdQuery, ProjectByNameOrIdQueryVariables>;
-export const ProjectsForSubscriptionDocument = gql`
-    query ProjectsForSubscription($input: ProjectsGetQueryInput!) {
-  projectsGet(input: $input) {
-    projects {
-      ...ProjectForSubscription
-    }
-  }
-}
-    ${ProjectForSubscriptionFragmentDoc}`;
-
-/**
- * __useProjectsForSubscriptionQuery__
- *
- * To run a query within a React component, call `useProjectsForSubscriptionQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectsForSubscriptionQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProjectsForSubscriptionQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectsForSubscriptionQuery(baseOptions: Apollo.QueryHookOptions<ProjectsForSubscriptionQuery, ProjectsForSubscriptionQueryVariables> & ({ variables: ProjectsForSubscriptionQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProjectsForSubscriptionQuery, ProjectsForSubscriptionQueryVariables>(ProjectsForSubscriptionDocument, options);
-      }
-export function useProjectsForSubscriptionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectsForSubscriptionQuery, ProjectsForSubscriptionQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProjectsForSubscriptionQuery, ProjectsForSubscriptionQueryVariables>(ProjectsForSubscriptionDocument, options);
-        }
-export function useProjectsForSubscriptionSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectsForSubscriptionQuery, ProjectsForSubscriptionQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProjectsForSubscriptionQuery, ProjectsForSubscriptionQueryVariables>(ProjectsForSubscriptionDocument, options);
-        }
-export type ProjectsForSubscriptionQueryHookResult = ReturnType<typeof useProjectsForSubscriptionQuery>;
-export type ProjectsForSubscriptionLazyQueryHookResult = ReturnType<typeof useProjectsForSubscriptionLazyQuery>;
-export type ProjectsForSubscriptionSuspenseQueryHookResult = ReturnType<typeof useProjectsForSubscriptionSuspenseQuery>;
-export type ProjectsForSubscriptionQueryResult = Apollo.QueryResult<ProjectsForSubscriptionQuery, ProjectsForSubscriptionQueryVariables>;
 export const ProjectsDocument = gql`
     query Projects($input: ProjectsGetQueryInput) {
   projectsGet(input: $input) {
