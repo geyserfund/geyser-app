@@ -328,4 +328,4 @@ export const tagToRewardCategoryMapping: { [key: string]: RewardCategory[] } = {
   minecraft: [RewardCategory.Game],
 }
 
-export const ProjectCountryCodesThatAreRestricted = ['UA', 'PSE', 'YE', 'IL']
+export const ProjectCountryCodesThatAreRestricted = ['UA', 'PSE', 'YE', 'RU']
