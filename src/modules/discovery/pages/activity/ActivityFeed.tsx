@@ -1,6 +1,7 @@
 import { HStack, VStack } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 import { PiBell, PiGlobe } from 'react-icons/pi'
-import { Outlet, useNavigate } from 'react-router'
+import { Outlet, useLocation, useNavigate } from 'react-router'
 
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
@@ -10,6 +11,18 @@ import { useLastVisistedFollowedProjects } from '../../hooks/useLastVisited'
 
 export const Activity = () => {
   const navigate = useNavigate()
+
+  const location = useLocation()
+
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  useEffect(() => {
+    if (location.pathname === getPath('discoveryActivityFollowed')) {
+      setActiveIndex(0)
+    } else if (location.pathname === getPath('discoveryActivityGlobal')) {
+      setActiveIndex(1)
+    }
+  }, [location.pathname])
 
   useLastVisistedFollowedProjects()
 
@@ -55,7 +68,7 @@ export const Activity = () => {
         alignItems="center"
         zIndex={2}
       >
-        <AnimatedNavBar {...animatedNavBarProps} showIcon showLabel />
+        <AnimatedNavBar {...animatedNavBarProps} activeIndex={activeIndex} showIcon showLabel />
       </HStack>
       <Outlet />
     </VStack>
