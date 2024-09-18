@@ -1,33 +1,41 @@
 import { HStack, VStack } from '@chakra-ui/react'
 import { PiBell, PiGlobe } from 'react-icons/pi'
+import { Outlet, useNavigate } from 'react-router'
 
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
-import { dimensions } from '@/shared/constants'
+import { dimensions, getPath } from '@/shared/constants'
 
 import { useLastVisistedFollowedProjects } from '../../hooks/useLastVisited'
-import { GlobalFeed } from './components/GlobalFeed'
-import { ProjectsIFollow } from './components/ProjectsIFollowFeed'
 
 export const Activity = () => {
+  const navigate = useNavigate()
+
   useLastVisistedFollowedProjects()
 
   const items: AnimatedNavBarItem[] = [
     {
       name: 'Projects I Follow',
       key: 'projectsIFollow',
-      render: () => <ProjectsIFollow />,
       icon: PiBell,
+      onClick() {
+        navigate(getPath('discoveryActivityFollowed'))
+      },
     },
     {
       name: 'Global Feed',
       key: 'globalFeed',
-      render: () => <GlobalFeed />,
       icon: PiGlobe,
+      onClick() {
+        navigate(getPath('discoveryActivityGlobal'))
+      },
     },
   ]
 
-  const { render, ...animatedNavBarProps } = useAnimatedNavBar({ items, defaultView: 'projectsIFollow' })
+  const { ...animatedNavBarProps } = useAnimatedNavBar({
+    items,
+    defaultView: 'projectsIFollow',
+  })
 
   return (
     <VStack
@@ -49,8 +57,7 @@ export const Activity = () => {
       >
         <AnimatedNavBar {...animatedNavBarProps} showIcon showLabel />
       </HStack>
-
-      {render && render()}
+      <Outlet />
     </VStack>
   )
 }

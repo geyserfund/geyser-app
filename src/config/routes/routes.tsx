@@ -542,10 +542,28 @@ export const platformRoutes: RouteObject[] = [
         path: getPath('discoveryActivity'),
         async lazy() {
           const Activity = await Discovery().then((m) => m.Activity)
-          return {
-            element: renderPrivateRoute(Activity),
-          }
+          return { Component: Activity }
         },
+        children: [
+          {
+            index: true,
+            element: <Navigate to={getPath('discoveryActivityGlobal')} replace />,
+          },
+          {
+            path: getPath('discoveryActivityFollowed'),
+            async lazy() {
+              const ProjectsIFollow = await Discovery().then((m) => m.ProjectsIFollow)
+              return { element: renderPrivateRoute(ProjectsIFollow) }
+            },
+          },
+          {
+            path: getPath('discoveryActivityGlobal'),
+            async lazy() {
+              const GlobalFeed = await Discovery().then((m) => m.GlobalFeed)
+              return { element: renderPrivateRoute(GlobalFeed) }
+            },
+          },
+        ],
       },
       {
         path: getPath('discoveryLeaderboard'),
