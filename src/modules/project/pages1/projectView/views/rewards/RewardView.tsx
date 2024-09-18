@@ -1,6 +1,6 @@
 import { Badge, Box, Button, HStack, SkeletonText, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiArrowLeft } from 'react-icons/pi'
+import { PiArrowLeft, PiEyeSlash } from 'react-icons/pi'
 import { Link, useParams } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
@@ -94,7 +94,10 @@ export const RewardView = () => {
               </H2>
               {!isMobileMode &&
                 (isProjectOwner ? (
-                  <RewardEditMenu size="md" reward={reward} />
+                  <HStack>
+                    <HiddenRewardBadge />
+                    <RewardEditMenu size="md" reward={reward} />
+                  </HStack>
                 ) : (
                   <Button variant="solid" colorScheme="primary1" width="160px" onClick={buyReward}>
                     {t('Buy')}
@@ -159,7 +162,10 @@ export const RewardView = () => {
         </VStack>
       </CardLayout>
       <BottomNavBarContainer direction="column">
-        {renderAmountComponent()}
+        <HStack justifyContent={'space-between'} flexWrap="wrap">
+          {renderAmountComponent()}
+          <HiddenRewardBadge />
+        </HStack>
         {isProjectOwner ? (
           <RewardEditMenu size="lg" w="full" reward={reward} />
         ) : (
@@ -169,6 +175,17 @@ export const RewardView = () => {
         )}
       </BottomNavBarContainer>
     </VStack>
+  )
+}
+
+const HiddenRewardBadge = () => {
+  return (
+    <Badge size={'xl'} variant="soft" colorScheme="neutral1">
+      <PiEyeSlash />
+      <Body size="sm" light pl={2}>
+        {t('Hidden')}
+      </Body>
+    </Badge>
   )
 }
 
