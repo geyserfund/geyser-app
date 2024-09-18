@@ -1,8 +1,10 @@
 import { VStack } from '@chakra-ui/react'
+import { useSetAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { useProjectDetailsAPI } from '@/modules/project/API/useProjectDetailsAPI'
+import { projectFormErrorAtom } from '@/modules/project/state/projectFormAtom'
 
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
 import { getPath } from '../../../../../shared/constants'
@@ -12,27 +14,47 @@ import { ProjectRegion } from '../../../forms/ProjectRegion'
 import { ProjectTagsCreateEdit } from '../../../forms/ProjectTagsCreateEdit'
 import { FormContinueButton } from '../components/FormContinueButton'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout'
+import { ProjectCountryCodesThatAreRestricted } from '../constants'
 import { useProjectDetailsForm } from '../hooks/useProjectDetailsForm'
 
 export const ProjectDetails = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
-  const { toast, unexpected } = useNotification()
+  const toast = useNotification()
 
   const { queryProjectDetails } = useProjectDetailsAPI(true)
 
-  const { updateProject, saveProject, saveTags, setLinks, setTags, project, tags, linkError, tagsLoading, isDirty } =
+  const { updateProject, saveProject, saveTags, setLinks, setTags, project, tags, linkError, tagsLoading } =
     useProjectDetailsForm()
+
+  const setProjectFormError = useSetAtom(projectFormErrorAtom)
 
   const onSubmit = async () => {
     if (!project) {
       return
     }
 
+    if (!project.location || !project.location.country || !project.location.country.code) {
+      toast.error({
+        title: 'Please select a region',
+        description: 'Project region is required to proceed',
+      })
+      setProjectFormError((prev) => ({ ...prev, location: 'Project region is required' }))
+      return
+    }
+
+    if (ProjectCountryCodesThatAreRestricted.includes(project.location.country.code)) {
+      toast.error({
+        title: 'Country not supported',
+        description: 'We are not able to support projects from this country',
+      })
+      setProjectFormError((prev) => ({ ...prev, location: 'Country not supported' }))
+      return
+    }
+
     if (linkError.includes(true)) {
-      toast({
-        status: 'warning',
+      toast.warning({
         title: 'failed to update project',
         description: 'please enter a valid url for project links',
       })
@@ -45,7 +67,7 @@ export const ProjectDetails = () => {
 
       navigate(getPath('launchProjectStory', project.id))
     } catch (e) {
-      unexpected()
+      toast.unexpected()
     }
   }
 
@@ -66,7 +88,7 @@ export const ProjectDetails = () => {
   return (
     <>
       <ProjectCreateLayout
-        continueButton={<FormContinueButton isSkip={!isDirty} flexGrow={1} {...nextProps} />}
+        continueButton={<FormContinueButton flexGrow={1} {...nextProps} />}
         onBackClick={onBackClick}
         title={<TitleWithProgressBar title={t('Links & tags')} subtitle={t('Create a project')} index={2} length={5} />}
       >

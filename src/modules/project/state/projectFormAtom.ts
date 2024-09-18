@@ -38,7 +38,12 @@ export const diffProjectAtom = atom((get) => {
   ])
 })
 
+type ProjectFormError = { [key in keyof ProjectState]: string }
+/** Project form error state */
+export const projectFormErrorAtom = atom<ProjectFormError>({} as ProjectFormError)
+
 /** Reset all real-atoms in this file to it's initial State */
 export const projectFormAtomReset = atom(null, (get, set) => {
   set(formProjectAtom, {} as ProjectState)
+  set(projectFormErrorAtom, {} as ProjectFormError)
 })
