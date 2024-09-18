@@ -327,3 +327,5 @@ export const tagToRewardCategoryMapping: { [key: string]: RewardCategory[] } = {
   homeschooling: [RewardCategory.Shoutout, RewardCategory.Course, RewardCategory.Experience],
   minecraft: [RewardCategory.Game],
 }
+
+export const ProjectCountryCodesThatAreRestricted = ['UA', 'PSE', 'YE', 'RU']

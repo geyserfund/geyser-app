@@ -1,12 +1,15 @@
 import { Button, ButtonProps, VStack } from '@chakra-ui/react'
+import { useSetAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
 import { useProjectDetailsAPI } from '@/modules/project/API/useProjectDetailsAPI'
 import { ProjectLinks } from '@/modules/project/forms/ProjectLinks'
 import { ProjectRegion } from '@/modules/project/forms/ProjectRegion'
 import { ProjectTagsCreateEdit } from '@/modules/project/forms/ProjectTagsCreateEdit'
+import { projectFormErrorAtom } from '@/modules/project/state/projectFormAtom'
 import { useNotification } from '@/utils'
 
+import { ProjectCountryCodesThatAreRestricted } from '../../projectCreation/constants'
 import { useProjectDetailsForm } from '../../projectCreation/hooks/useProjectDetailsForm'
 import { DashboardLayout } from '../common'
 import { ProjectUnsavedModal, useProjectUnsavedModal } from '../common/ProjectUnsavedModal'
@@ -19,12 +22,31 @@ export const ProjectDashboardDetails = () => {
 
   const { project, isDirty, linkError, saveProject, saving, saveTags, setLinks, setTags, tags, updateProject } =
     useProjectDetailsForm()
+  const setProjectFormError = useSetAtom(projectFormErrorAtom)
 
   const unsavedModal = useProjectUnsavedModal({
     hasUnsaved: isDirty,
   })
 
   const onSubmit = async () => {
+    if (!project.location || !project.location.country || !project.location.country.code) {
+      toast.error({
+        title: 'Please select a region',
+        description: 'Project region is required to proceed',
+      })
+      setProjectFormError((prev) => ({ ...prev, location: 'Project region is required' }))
+      return
+    }
+
+    if (ProjectCountryCodesThatAreRestricted.includes(project.location.country.code)) {
+      toast.error({
+        title: 'Country not supported',
+        description: 'We are not able to support projects from this country',
+      })
+      setProjectFormError((prev) => ({ ...prev, location: 'Country not supported' }))
+      return
+    }
+
     if (linkError.includes(true)) {
       toast.warning({
         title: 'failed to update project',

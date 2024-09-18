@@ -10,6 +10,7 @@ import { dimensions, getPath } from '../../../../../shared/constants'
 import { ProjectStoryForm } from '../../../forms/ProjectStoryForm'
 import { FormContinueButton } from '../components/FormContinueButton'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout'
+import { useLocationMandatoryRedirect } from '../hooks/useLocationMandatoryRedirect'
 import { useProjectStoryForm } from '../hooks/useProjectStoryForm'
 
 export const ProjectCreateStory = () => {
@@ -24,6 +25,8 @@ export const ProjectCreateStory = () => {
   const { updateProject } = useProjectAPI()
 
   const form = useProjectStoryForm({ project })
+
+  useLocationMandatoryRedirect()
 
   const onLeave = () => {
     if (!project) {

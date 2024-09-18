@@ -14,6 +14,7 @@ import { useNotification } from '../../../../../utils'
 import { ProjectCreationWalletConnectionForm } from '..'
 import { FormContinueButton } from '../components/FormContinueButton'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout'
+import { useLocationMandatoryRedirect } from '../hooks/useLocationMandatoryRedirect'
 import { ConnectionOption, useWalletForm } from '../hooks/useWalletForm'
 import { ProjectCreateCompletionPage } from './ProjectCreateCompletionPage'
 
@@ -26,6 +27,8 @@ export const ProjectCreationWalletConnectionPage = () => {
 
   const { project, loading } = useProjectAtom()
   const { createWallet } = useProjectWalletAPI()
+
+  useLocationMandatoryRedirect()
 
   const [isReadyForLaunch, setReadyForLaunch] = useState(false)
 

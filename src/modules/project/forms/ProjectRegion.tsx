@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { HStack, IconButton, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
+import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiX } from 'react-icons/pi'
@@ -15,6 +16,7 @@ import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { SkeletonLayout } from '../../../shared/components/layouts'
 import { Country, Location, Maybe, Project, ProjectCountriesGetResult, ProjectRegionsGetResult } from '../../../types'
 import { ProjectState } from '../state/projectAtom'
+import { projectFormErrorAtom } from '../state/projectFormAtom'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   container: {
@@ -50,6 +52,8 @@ interface ProjectRegionProps extends StackProps {
 export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegionProps) => {
   const { t } = useTranslation()
   const classes = useStyles()
+
+  const [projectFormError, setProjectFormError] = useAtom(projectFormErrorAtom)
 
   const [inputValue, setInputValue] = useState('')
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -98,7 +102,12 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
     }
   }
 
+  const clearLocationError = () => {
+    setProjectFormError((prev) => ({ ...prev, location: undefined }))
+  }
+
   const removeRegion = () => {
+    clearLocationError()
     updateProject({
       location: { region: '', country: { code: '', name: '' } },
     })
@@ -114,7 +123,7 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
 
   return (
     <FieldContainer
-      title={t('Region')}
+      title={`${t('Region')}*`}
       subtitle={
         <span>{t('Get found more easily by putting your project on the map. Select a country or region')}</span>
       }
@@ -139,8 +148,11 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
             inputValue={inputValue}
             onMenuOpen={onOpen}
             onMenuClose={onClose}
+            isInvalid={Boolean(projectFormError.location)}
+            onFocus={clearLocationError}
           />
         )}
+
         <HStack width="100%" spacing="10px" flexWrap={'wrap'}>
           {displayLocation && (
             <HStack borderRadius="4px" paddingLeft="8px" backgroundColor="neutral1.2">
@@ -160,6 +172,11 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
           )}
         </HStack>
       </VStack>
+      {projectFormError.location && (
+        <Body size="xs" color="error.9" w="full" textAlign={'start'}>
+          {projectFormError.location}
+        </Body>
+      )}
     </FieldContainer>
   )
 }
