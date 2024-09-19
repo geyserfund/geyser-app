@@ -262,6 +262,7 @@ const ActivityImage = ({ resource }: { resource: ActivityResource }) => {
 
 const ActivityDescription = ({ resource }: { resource: ActivityResource }) => {
   const { t } = useTranslation()
+  const { formatUsdAmount } = useCurrencyFormatter()
 
   if ('entryDescription' in resource && typeof resource.entryDescription === 'string') {
     return (
@@ -293,6 +294,10 @@ const ActivityDescription = ({ resource }: { resource: ActivityResource }) => {
         {t('Received contribution of ')}
         <Body as="span" size="md" dark>
           {commaFormatted(resource.amount)} {' Sats.'}
+        </Body>
+        <Body as="span" size="md" medium>
+          {' '}
+          ({formatUsdAmount(resource.amount)})
         </Body>
       </Body>
     )
