@@ -8,7 +8,7 @@ import { CreatorNotificationSettings, useProfileNotificationsSettingsQuery, User
 import { useMobileMode } from '@/utils'
 
 import { ProfileSettingsLayout } from '../common/ProfileSettingsLayout'
-import { CreatorNotifications } from '../components/CreatorNotifications'
+import { CreatorNotifications, CreatorNotificationsSkeleton } from '../components/CreatorNotifications'
 import { FollowedProjectsList } from '../components/FollowedProjectsList'
 import { UserNotifications } from '../components/UserNotifications'
 
@@ -18,7 +18,7 @@ export const ProfileSettingsNotifications = () => {
   const [creatorNotificationSettings, setCreatorNotificationSettings] = useState<CreatorNotificationSettings[]>([])
   const [userNotificationSettings, setUserNotificationSettings] = useState<UserNotificationSettings>()
 
-  const { refetch } = useProfileNotificationsSettingsQuery({
+  const { refetch, loading } = useProfileNotificationsSettingsQuery({
     variables: { userId },
     onCompleted(data) {
       setCreatorNotificationSettings(data?.userNotificationSettingsGet.creatorSettings || [])
@@ -43,10 +43,14 @@ export const ProfileSettingsNotifications = () => {
             {t('Customize your profile and project notifications.')}
           </Body>
         </VStack>
-        <CreatorNotifications creatorNotificationSettings={creatorNotificationSettings} />
+        {loading ? (
+          <CreatorNotificationsSkeleton />
+        ) : (
+          <CreatorNotifications creatorNotificationSettings={creatorNotificationSettings} />
+        )}
         <Divider />
         {userNotificationSettings && <UserNotifications userNotificationSettings={userNotificationSettings} />}
-        <FollowedProjectsList />
+        {!loading && <FollowedProjectsList />}
       </VStack>
     </ProfileSettingsLayout>
   )
