@@ -6,6 +6,7 @@ import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H3 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
+import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { RewardCurrency, RewardForLandingPageFragment } from '@/types'
 import { commaFormatted } from '@/utils'
 
@@ -14,6 +15,9 @@ type TrendingRewardCardProps = {
 } & StackProps
 
 export const TrendingRewardCard = ({ reward, ...rest }: TrendingRewardCardProps) => {
+  const { formatSatsAmount, formatUsdAmount } = useCurrencyFormatter()
+
+  console.log('currency', reward.project.rewardCurrency)
   return (
     <CardLayout
       hover
@@ -72,12 +76,20 @@ export const TrendingRewardCard = ({ reward, ...rest }: TrendingRewardCardProps)
                   $
                 </Body>{' '}
                 {reward.cost < 100 ? (reward.cost / 100).toFixed(2) : commaFormatted(Math.round(reward.cost / 100))}
+                <Body as="span" size="sm" light>
+                  {' '}
+                  ({formatSatsAmount(reward.cost)})
+                </Body>
               </>
             ) : (
               <>
                 {commaFormatted(reward.cost)}{' '}
                 <Body as="span" size="sm" light>
                   sats
+                </Body>
+                <Body as="span" size="sm" light>
+                  {' '}
+                  (${formatUsdAmount(reward.cost)})
                 </Body>
               </>
             )}
