@@ -7,6 +7,7 @@ import { useRewardBuy } from '@/modules/project/pages1/projectView/hooks'
 import { ProjectRewardShippingEstimate } from '@/modules/project/pages1/projectView/views/rewards/components'
 import { CardLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
+import { useMobileMode } from '@/utils'
 
 import { ImageWithReload } from '../../../../../../../components/ui'
 import { ProjectRewardFragment, RewardCurrency } from '../../../../../../../types'
@@ -22,6 +23,8 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
   const { count, isAvailable, addRewardToBasket, removeRewardFromBasket } = useRewardBuy(reward)
 
   const { project } = useFundingFormAtom()
+
+  const isMobile = useMobileMode()
 
   if ((count > 0 && showOnSelected) || (showOnEmpty && count === 0)) {
     return (
@@ -59,18 +62,40 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
               <ProjectRewardShippingEstimate reward={reward} />
             </HStack>
           </VStack>
-          <HStack w="full" justifyContent={'space-between'}>
-            {project && project.rewardCurrency === RewardCurrency.Usdcent ? (
-              <Body bold dark>{`$${reward.cost / 100}`}</Body>
-            ) : (
-              <Body bold dark>
-                {`${reward.cost.toLocaleString()}`}
-                <Box as="span" color={'neutral1.9'}>
-                  {' '}
-                  sats
-                </Box>
-              </Body>
-            )}
+          <HStack w="full" justifyContent={'space-between'} alignItems={'end'}>
+            <Box
+              display={'flex'}
+              flexDirection={{ base: 'column', sm: 'row', lg: 'row' }}
+              alignItems={'start'}
+              justifyContent={'end'}
+              gap={1}
+            >
+              {project && project.rewardCurrency === RewardCurrency.Usdcent ? (
+                <>
+                  <Body bold dark>{`$${reward.cost / 100}`}</Body>
+                  <Body medium muted>
+                    {`(${reward.cost.toLocaleString()}`}
+                    <Box as="span" color={'neutral1.9'}>
+                      {' '}
+                      sats{')'}
+                    </Box>
+                  </Body>
+                </>
+              ) : (
+                <>
+                  <Body bold dark>
+                    {`${reward.cost.toLocaleString()}`}
+                    <Box as="span" color={'neutral1.9'}>
+                      {' '}
+                      sats
+                    </Box>
+                  </Body>
+                  <Body medium muted>
+                    {`($${reward.cost / 100})`}
+                  </Body>
+                </>
+              )}
+            </Box>
 
             {count === 0 ? (
               <Button
