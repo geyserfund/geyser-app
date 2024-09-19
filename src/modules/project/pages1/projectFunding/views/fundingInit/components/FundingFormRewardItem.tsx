@@ -7,7 +7,6 @@ import { useRewardBuy } from '@/modules/project/pages1/projectView/hooks'
 import { ProjectRewardShippingEstimate } from '@/modules/project/pages1/projectView/views/rewards/components'
 import { CardLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
-import { useMobileMode } from '@/utils'
 
 import { ImageWithReload } from '../../../../../../../components/ui'
 import { ProjectRewardFragment, RewardCurrency } from '../../../../../../../types'
@@ -23,8 +22,6 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
   const { count, isAvailable, addRewardToBasket, removeRewardFromBasket } = useRewardBuy(reward)
 
   const { project } = useFundingFormAtom()
-
-  const isMobile = useMobileMode()
 
   if ((count > 0 && showOnSelected) || (showOnEmpty && count === 0)) {
     return (
