@@ -353,7 +353,7 @@ const GoalTargetAmount = ({ goal }: { goal: ProjectGoal }) => {
 const RewardsInfo = ({ reward }: { reward: ProjectReward }) => {
   const { t } = useTranslation()
 
-  const { formatAmount } = useCurrencyFormatter()
+  const { formatAmount, formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
 
   if (!reward) return null
 
@@ -362,7 +362,12 @@ const RewardsInfo = ({ reward }: { reward: ProjectReward }) => {
       <Body size="sm" bold>
         {formatAmount(reward.cost, reward.rewardCurrency)}{' '}
         <Body as="span" size="sm" muted>
-          {reward.rewardCurrency === RewardCurrency.Btcsat ? 'Sats' : 'USD'}
+          {reward.rewardCurrency === RewardCurrency.Btcsat ? 'Sats' : 'USD'}{' '}
+        </Body>
+        <Body as="span" size="sm" medium muted>
+          {reward.rewardCurrency === RewardCurrency.Btcsat
+            ? `(${formatUsdAmount(reward.cost)})`
+            : `(${formatSatsAmount(reward.cost)})`}
         </Body>
       </Body>
       {reward.sold && (
