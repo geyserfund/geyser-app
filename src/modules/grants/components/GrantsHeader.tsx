@@ -23,7 +23,7 @@ export const GrantsHeader = () => {
 
   const { data, loading } = useGrantStatisticsQuery()
 
-  const { formatUsdAmount } = useCurrencyFormatter({ shortUsdAmount: true })
+  const { formatUsdAmount } = useCurrencyFormatter(true)
 
   const grantedAmount = data?.grantStatistics.grants?.amountFunded || 0
   const grantedAmountUsd = formatUsdAmount(grantedAmount)

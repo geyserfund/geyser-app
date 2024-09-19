@@ -12,7 +12,7 @@ export enum FormatCurrencyType {
 
 type TCurrency = 'BTCSAT' | 'USDCENT' | 'USD'
 
-export const useCurrencyFormatter = ({ shortUsdAmount = false }: { shortUsdAmount?: boolean }) => {
+export const useCurrencyFormatter = (shortUsdAmount?: boolean) => {
   const { getUSDCentsAmount, getSatoshisFromUSDCents } = useBTCConverter()
 
   const formatAmount = useCallback(
