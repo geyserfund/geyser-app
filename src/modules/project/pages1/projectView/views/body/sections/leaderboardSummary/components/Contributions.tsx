@@ -52,14 +52,14 @@ export const Contributions = () => {
   }
 
   return (
-    <VStack spacing={0} w="full" flex={1} overflowY={'auto'} justifyContent={'space-between'}>
-      <VStack spacing={0} w="full">
+    <VStack spacing={0} w="full" flex={1} overflowY={'hidden'} justifyContent={'space-between'}>
+      <VStack spacing={0} w="full" flex={1} overflowY={'auto'}>
         {contributions.map((contribution) => {
           return <ContributionItem contribution={contribution} key={contribution.id} />
         })}
       </VStack>
 
-      <HStack w="full" justifyContent={'center'} spacing={1} paddingX={6} paddingY={2}>
+      <HStack w="full" justifyContent={'center'} spacing={1} paddingX={6} paddingTop={2}>
         <Button
           as={Link}
           to={getPath('projectLeaderboard', project.name)}

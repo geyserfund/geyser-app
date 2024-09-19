@@ -1959,6 +1959,7 @@ export type ProjectKeys = {
 };
 
 export type ProjectLeaderboardContributorsGetInput = {
+  funderId?: InputMaybe<Scalars['BigInt']['input']>;
   period: ProjectLeaderboardPeriod;
   projectId: Scalars['BigInt']['input'];
   top: Scalars['Int']['input'];
@@ -5626,9 +5627,17 @@ export type ProjectEntryFragment = { __typename?: 'Entry', id: any, title: strin
 
 export type ProjectEntryViewFragment = { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, type: EntryType, fundersCount: number, amountFunded: number, status: EntryStatus, createdAt: string, publishedAt?: string | null, content?: string | null };
 
-export type ProjectFunderFragment = { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string } | null };
+export type ProjectFunderFragment = { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, user?: (
+    { __typename?: 'User' }
+    & UserAvatarFragment
+  ) | null };
 
-export type ProjectLeaderboardContributorsFragment = { __typename?: 'ProjectLeaderboardContributorsRow', funderId: any, contributionsTotalUsd: number, contributionsTotal: number, contributionsCount: number, commentsCount: number, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string } | null };
+export type ProjectLeaderboardContributorsFragment = { __typename?: 'ProjectLeaderboardContributorsRow', funderId: any, contributionsTotalUsd: number, contributionsTotal: number, contributionsCount: number, commentsCount: number, user?: (
+    { __typename?: 'User' }
+    & UserAvatarFragment
+  ) | null };
+
+export type UserContributorFragment = { __typename?: 'Funder', id: any, rank?: number | null };
 
 export type ProjectFundingTxFragment = { __typename?: 'FundingTx', id: any, amountPaid: number, media?: string | null, comment?: string | null, paidAt?: any | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, funder: { __typename?: 'Funder', id: any, user?: (
       { __typename?: 'User' }
@@ -6018,6 +6027,16 @@ export type ProjectLeaderboardContributorsGetQuery = { __typename?: 'Query', pro
     { __typename?: 'ProjectLeaderboardContributorsRow' }
     & ProjectLeaderboardContributorsFragment
   )> };
+
+export type ProjectUserContributorQueryVariables = Exact<{
+  input: GetContributorInput;
+}>;
+
+
+export type ProjectUserContributorQuery = { __typename?: 'Query', contributor: (
+    { __typename?: 'Funder' }
+    & UserContributorFragment
+  ) };
 
 export type ProjectPageFundingTxQueryVariables = Exact<{
   input?: InputMaybe<GetFundingTxsInput>;
@@ -7418,18 +7437,23 @@ export const ProjectEntryViewFragmentDoc = gql`
   content
 }
     `;
+export const UserAvatarFragmentDoc = gql`
+    fragment UserAvatar on User {
+  id
+  imageUrl
+  username
+}
+    `;
 export const ProjectFunderFragmentDoc = gql`
     fragment ProjectFunder on Funder {
   id
   amountFunded
   timesFunded
   user {
-    id
-    imageUrl
-    username
+    ...UserAvatar
   }
 }
-    `;
+    ${UserAvatarFragmentDoc}`;
 export const ProjectLeaderboardContributorsFragmentDoc = gql`
     fragment ProjectLeaderboardContributors on ProjectLeaderboardContributorsRow {
   funderId
@@ -7438,17 +7462,14 @@ export const ProjectLeaderboardContributorsFragmentDoc = gql`
   contributionsCount
   commentsCount
   user {
-    id
-    imageUrl
-    username
+    ...UserAvatar
   }
 }
-    `;
-export const UserAvatarFragmentDoc = gql`
-    fragment UserAvatar on User {
+    ${UserAvatarFragmentDoc}`;
+export const UserContributorFragmentDoc = gql`
+    fragment UserContributor on Funder {
   id
-  imageUrl
-  username
+  rank
 }
     `;
 export const ProjectFundingTxFragmentDoc = gql`
@@ -11881,6 +11902,46 @@ export type ProjectLeaderboardContributorsGetQueryHookResult = ReturnType<typeof
 export type ProjectLeaderboardContributorsGetLazyQueryHookResult = ReturnType<typeof useProjectLeaderboardContributorsGetLazyQuery>;
 export type ProjectLeaderboardContributorsGetSuspenseQueryHookResult = ReturnType<typeof useProjectLeaderboardContributorsGetSuspenseQuery>;
 export type ProjectLeaderboardContributorsGetQueryResult = Apollo.QueryResult<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>;
+export const ProjectUserContributorDocument = gql`
+    query ProjectUserContributor($input: GetContributorInput!) {
+  contributor(input: $input) {
+    ...UserContributor
+  }
+}
+    ${UserContributorFragmentDoc}`;
+
+/**
+ * __useProjectUserContributorQuery__
+ *
+ * To run a query within a React component, call `useProjectUserContributorQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectUserContributorQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectUserContributorQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectUserContributorQuery(baseOptions: Apollo.QueryHookOptions<ProjectUserContributorQuery, ProjectUserContributorQueryVariables> & ({ variables: ProjectUserContributorQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>(ProjectUserContributorDocument, options);
+      }
+export function useProjectUserContributorLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>(ProjectUserContributorDocument, options);
+        }
+export function useProjectUserContributorSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>(ProjectUserContributorDocument, options);
+        }
+export type ProjectUserContributorQueryHookResult = ReturnType<typeof useProjectUserContributorQuery>;
+export type ProjectUserContributorLazyQueryHookResult = ReturnType<typeof useProjectUserContributorLazyQuery>;
+export type ProjectUserContributorSuspenseQueryHookResult = ReturnType<typeof useProjectUserContributorSuspenseQuery>;
+export type ProjectUserContributorQueryResult = Apollo.QueryResult<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>;
 export const ProjectPageFundingTxDocument = gql`
     query ProjectPageFundingTx($input: GetFundingTxsInput) {
   fundingTxsGet(input: $input) {
