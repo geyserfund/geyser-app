@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { useBTCConverter } from '../../../helpers'
 import { Satoshis, USDCents } from '../../../types'
-import { centsToDollars, commaFormatted } from '../../../utils'
+import { centsToDollars, commaFormatted, getShortAmountLabel } from '../../../utils'
 
 export enum FormatCurrencyType {
   Btcsat = 'BTCSAT',
@@ -12,25 +12,34 @@ export enum FormatCurrencyType {
 
 type TCurrency = 'BTCSAT' | 'USDCENT' | 'USD'
 
-export const useCurrencyFormatter = () => {
+export const useCurrencyFormatter = ({ shortUsdAmount = false }: { shortUsdAmount?: boolean }) => {
   const { getUSDCentsAmount, getSatoshisFromUSDCents } = useBTCConverter()
 
-  const formatAmount = useCallback((amount: number, currency: TCurrency) => {
-    if (currency === FormatCurrencyType.Btcsat) {
-      if (amount === 0) return '0 sats'
-      return `${commaFormatted(amount)} sats`
-    }
+  const formatAmount = useCallback(
+    (amount: number, currency: TCurrency) => {
+      if (currency === FormatCurrencyType.Btcsat) {
+        if (amount === 0) return '0 sats'
+        return `${commaFormatted(amount)} sats`
+      }
 
-    let usdAmount = amount
+      let usdAmount = amount
 
-    if (currency === FormatCurrencyType.Usdcent) {
-      usdAmount = centsToDollars(amount)
-    }
+      if (currency === FormatCurrencyType.Usdcent) {
+        usdAmount = centsToDollars(amount)
+      }
 
-    if (amount === 0) return '$0'
-    if (usdAmount < 1) return '< $1'
-    return `$${commaFormatted(Math.round(usdAmount))}`
-  }, [])
+      if (amount === 0) return '$0'
+      if (usdAmount < 1) return '< $1'
+      if (shortUsdAmount) {
+        const roundedUsdAmount = Math.round(usdAmount)
+        const shortUsdAmount = getShortAmountLabel(roundedUsdAmount)
+        return `$${shortUsdAmount}`
+      }
+
+      return `$${commaFormatted(Math.round(usdAmount))}`
+    },
+    [shortUsdAmount],
+  )
 
   const formatUsdAmount = useCallback(
     (amount: number) => {
