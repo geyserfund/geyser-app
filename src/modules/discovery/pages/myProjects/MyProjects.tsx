@@ -76,7 +76,7 @@ const LaunchNewProjectBanner = () => {
       spacing={8}
       p={8}
     >
-      <HStack justifyContent="flex-start" spacing={8}>
+      <HStack width="100%" justifyContent="flex-start" spacing={8}>
         <Image height="86px" src={DiamondUrl} alt="Launch new project" />
         <VStack alignItems="flex-start">
           <Body size="xl" medium>
