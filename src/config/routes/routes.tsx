@@ -547,7 +547,7 @@ export const platformRoutes: RouteObject[] = [
         children: [
           {
             index: true,
-            element: <Navigate to={getPath('discoveryActivityGlobal')} replace />,
+            element: <Navigate to={getPath('discoveryActivityFollowed')} replace />,
           },
           {
             path: getPath('discoveryActivityFollowed'),
