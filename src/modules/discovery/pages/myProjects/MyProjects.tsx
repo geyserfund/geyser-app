@@ -26,11 +26,14 @@ export const MyProjects = () => {
   return (
     <>
       <VStack spacing={6} align="stretch">
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Body size="2xl" bold width={{ base: '100%', lg: 'auto' }}>
+        <HStack justifyContent="flex-start" alignItems="center">
+          <Body size="2xl" bold>
             {t('My Projects')}
           </Body>
-        </Box>
+          <Body size="2xl" muted>
+            {t('(Past week)')}
+          </Body>
+        </HStack>
         {isLoading ? (
           <>
             <ProjectCardSkeleton />
