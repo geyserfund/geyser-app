@@ -1,32 +1,21 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
+import { useFollowedProjectsValue } from '@/pages/auth/state'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import { useFollowProject } from '@/shared/hooks/graphqlState'
 import { Project } from '@/types'
-
-import { useFollowedProjects } from '../hooks/useFollowedProjects'
 
 export const FollowedProjectsList = () => {
   const { t } = useTranslation()
 
-  const { followedProjects: initialProjects } = useFollowedProjects()
+  const followedProjects = useFollowedProjectsValue()
 
-  const [projects, setProjects] = useState(initialProjects)
-
-  useEffect(() => {
-    setProjects(initialProjects)
-  }, [initialProjects])
-
-  const handleUnfollow = useCallback((projectId: string) => {
-    setProjects((prevProjects) => prevProjects.filter((p) => p.id !== projectId))
-  }, [])
-
-  if (projects.length === 0) {
+  if (followedProjects.length === 0) {
     return null
   }
 
@@ -41,7 +30,7 @@ export const FollowedProjectsList = () => {
         </Body>
         <VStack w="full" alignItems="flex-start" spacing={4}>
           <AnimatePresence>
-            {projects.map((project) => (
+            {followedProjects.map((project) => (
               <motion.div
                 key={project.id}
                 initial={{ opacity: 1, height: 'auto' }}
@@ -49,7 +38,7 @@ export const FollowedProjectsList = () => {
                 transition={{ duration: 0.3 }}
                 style={{ width: '100%' }}
               >
-                <FollowedProjectItem project={project} onUnfollow={handleUnfollow} />
+                <FollowedProjectItem project={project as Project} />
               </motion.div>
             ))}
           </AnimatePresence>
@@ -59,20 +48,9 @@ export const FollowedProjectsList = () => {
   )
 }
 
-const FollowedProjectItem = ({
-  project,
-  onUnfollow,
-}: {
-  project: Project
-  onUnfollow: (projectId: string) => void
-}) => {
+const FollowedProjectItem = ({ project }: { project: Project }) => {
   const { t } = useTranslation()
-  const { unfollowProject } = useFollowedProjects()
-
-  const handleUnfollow = () => {
-    unfollowProject(project.id)
-    onUnfollow(project.id)
-  }
+  const { handleUnFollow, unfollowLoading } = useFollowProject(project)
 
   return (
     <HStack w="full" justifyContent="space-between" alignItems="center">
@@ -82,7 +60,7 @@ const FollowedProjectItem = ({
           {project.name}
         </Body>
       </HStack>
-      <Button colorScheme="primary1" size="md" onClick={handleUnfollow}>
+      <Button colorScheme="primary1" size="md" onClick={handleUnFollow} isLoading={unfollowLoading}>
         {t('Unfollow')}
       </Button>
     </HStack>
