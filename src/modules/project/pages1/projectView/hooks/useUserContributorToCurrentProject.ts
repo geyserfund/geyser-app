@@ -3,9 +3,8 @@ import { useEffect, useState } from 'react'
 import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import {
+  ContributionSummaryPeriod,
   ProjectLeaderboardContributorsFragment,
-  ProjectLeaderboardPeriod,
-  useProjectLeaderboardContributorsGetQuery,
   useProjectUserContributorQuery,
 } from '@/types'
 
@@ -14,7 +13,7 @@ export const useUserContributorToCurrentProject = ({
   period,
 }: {
   funders?: ProjectLeaderboardContributorsFragment[]
-  period?: ProjectLeaderboardPeriod
+  period?: ContributionSummaryPeriod
 } = {}) => {
   const { user } = useAuthContext()
   const { project } = useProjectAtom()
@@ -30,7 +29,7 @@ export const useUserContributorToCurrentProject = ({
   }, [funders, user.id])
 
   const {
-    data: userContributorData,
+    data,
     loading: userContributorLoading,
     refetch,
   } = useProjectUserContributorQuery({
@@ -40,28 +39,25 @@ export const useUserContributorToCurrentProject = ({
         projectId: project.id,
         userId: user.id,
       },
+      period,
     },
   })
 
-  const funderId = userContributorData?.contributor?.id
-
-  const { data, loading: projectLeaderboardContributorLoading } = useProjectLeaderboardContributorsGetQuery({
-    skip: !user.id || !project.id || !funderId || skipIndividualUser,
-    variables: {
-      input: {
-        period: period || ProjectLeaderboardPeriod.AllTime,
-        projectId: project.id,
-        top: 1,
-        funderId,
-      },
-    },
-  })
-  const userContributor = data?.projectLeaderboardContributorsGet?.[0]
+  const contributor = data?.contributor
 
   return {
-    userContributor,
-    userAllTimeRank: userContributorData?.contributor.rank,
-    loading: userContributorLoading || projectLeaderboardContributorLoading,
+    userContributor: contributor
+      ? {
+          user: contributor.user,
+          funderId: contributor.id,
+          contributionsTotal: contributor.contributionSummary?.contributionsTotal || 0,
+          contributionsTotalUsd: contributor.contributionSummary?.contributionsTotalUsd || 0,
+          contributionsCount: contributor.contributionSummary?.contributionsCount || 0,
+          commentsCount: contributor.contributionSummary?.commentsCount || 0,
+        }
+      : undefined,
+    userAllTimeRank: contributor?.rank,
+    loading: userContributorLoading,
     refetch,
   }
 }

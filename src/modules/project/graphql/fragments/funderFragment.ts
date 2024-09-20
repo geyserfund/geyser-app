@@ -34,5 +34,17 @@ export const FRAGMENT_PROJECT_USER_CONTRIBUTOR = gql`
   fragment UserContributor on Funder {
     id
     rank
+    user {
+      ...UserAvatar
+    }
+  }
+`
+
+export const FRAGMENT_PROJECT_FUNDER_CONTRIBUTION_SUMMARY = gql`
+  fragment FunderContributionSummary on FunderContributionSummary {
+    contributionsTotalUsd
+    contributionsTotal
+    contributionsCount
+    commentsCount
   }
 `
