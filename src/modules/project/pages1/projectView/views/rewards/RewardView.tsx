@@ -101,8 +101,8 @@ export const RewardView = () => {
                   </Button>
                 ))}
             </HStack>
-            <HStack w="full" alignItems="end" justifyContent="space-between">
-              <HStack spacing={{ base: 2, lg: 3 }} alignItems="end">
+            <HStack w="full" alignItems="center" justifyContent="space-between">
+              <HStack spacing={{ base: 2, lg: 3 }} alignItems="center">
                 <Body size="sm" medium muted>
                   {t('Sold')}:{' '}
                   <Box as="span" color="utils.text" fontWeight={700}>

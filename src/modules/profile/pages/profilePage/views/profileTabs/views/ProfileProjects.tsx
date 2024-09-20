@@ -5,7 +5,7 @@ import { CreateProjectButton } from '@/modules/navigation/platformNavBar/compone
 import { Body, H1 } from '@/shared/components/typography'
 import { useNotification } from '@/utils'
 
-import { ProjectForProfilePageFragment, useUserProfileProjectsQuery } from '../../../../../../../types'
+import { ProjectForProfilePageFragment, ProjectStatus, useUserProfileProjectsQuery } from '../../../../../../../types'
 import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
 import { CreateProject } from '../components/CreateProject'
 import { ProfileProjectCard } from '../components/ProfileProjectCard'
@@ -53,8 +53,12 @@ export const ProfileProjects = () => {
       <H1 size="2xl" bold display={{ base: 'unset', lg: 'none' }}>
         {t('Projects')}
       </H1>
-      <CreateProjectButton width="full" />
-      {projectsToRender.map((project, index) => {
+      {isViewingOwnProfile && <CreateProjectButton width="full" />}
+      {projectsToRender.map((project) => {
+        if (!isViewingOwnProfile && project.status !== ProjectStatus.Active) {
+          return null
+        }
+
         return (
           <ProfileProjectCard
             showStats
