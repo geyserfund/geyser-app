@@ -31,7 +31,7 @@ export const MyProjects = () => {
             {t('My Projects')}
           </Body>
           <Body size="2xl" muted>
-            {t('(Past week)')}
+            ({t('Past week')})
           </Body>
         </HStack>
         {isLoading ? (
