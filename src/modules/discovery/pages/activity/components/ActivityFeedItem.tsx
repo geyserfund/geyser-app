@@ -293,7 +293,7 @@ const ActivityDescription = ({ resource }: { resource: ActivityResource }) => {
       <Body size="md" medium muted>
         {t('Received contribution of ')}
         <Body as="span" size="md" dark>
-          {commaFormatted(resource.amount)} {' Sats.'}
+          {commaFormatted(resource.amount)} {' sats.'}
         </Body>
         <Body as="span" size="md" medium>
           {' '}
@@ -362,7 +362,7 @@ const RewardsInfo = ({ reward }: { reward: ProjectReward }) => {
       <Body size="sm" bold>
         {formatAmount(reward.cost, reward.rewardCurrency)}{' '}
         <Body as="span" size="sm" muted>
-          {reward.rewardCurrency === RewardCurrency.Btcsat ? 'Sats' : 'USD'}{' '}
+          {reward.rewardCurrency === RewardCurrency.Btcsat ? 'sats' : 'USD'}{' '}
         </Body>
         <Body as="span" size="sm" medium muted>
           {reward.rewardCurrency === RewardCurrency.Btcsat

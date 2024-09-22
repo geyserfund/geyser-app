@@ -17,7 +17,6 @@ type TrendingRewardCardProps = {
 export const TrendingRewardCard = ({ reward, ...rest }: TrendingRewardCardProps) => {
   const { formatSatsAmount, formatUsdAmount } = useCurrencyFormatter()
 
-  console.log('currency', reward.project.rewardCurrency)
   return (
     <CardLayout
       hover
