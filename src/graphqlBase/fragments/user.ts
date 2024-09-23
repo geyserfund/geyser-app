@@ -43,7 +43,7 @@ export const FRAGMENT_USER_ME = gql`
       project {
         id
         name
-        image
+        images
         thumbnailImage
         title
         status

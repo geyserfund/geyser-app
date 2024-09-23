@@ -65,7 +65,7 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
 
       <Box borderColor={'neutral.700'} overflow={'hidden'} width="100%" position="relative" paddingTop="75%">
         <ImageWithReload
-          src={reward.image || ''}
+          src={reward.images[0] || ''}
           alt={reward.name}
           width="100%"
           height="100%"

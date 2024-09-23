@@ -128,10 +128,10 @@ export const RewardView = () => {
               <HStack display={{ base: 'none', lg: 'flex' }}>{renderAmountComponent()}</HStack>
             </HStack>
           </VStack>
-          {reward.image && (
+          {reward.images[0] && (
             <Box overflow={'hidden'} width="100%" position="relative" paddingTop="75%" borderRadius={'8px'}>
               <ImageWithReload
-                src={reward.image || ''}
+                src={reward.images[0] || ''}
                 alt={reward.name}
                 width="100%"
                 height="100%"

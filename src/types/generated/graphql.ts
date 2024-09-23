@@ -235,6 +235,12 @@ export type CompetitionVoteGrantVoteSummary = {
 
 export type ConnectionDetails = LightningAddressConnectionDetails | LndConnectionDetailsPrivate | LndConnectionDetailsPublic;
 
+export enum ContributionSummaryPeriod {
+  AllTime = 'ALL_TIME',
+  Month = 'MONTH',
+  Week = 'WEEK'
+}
+
 export type Country = {
   __typename?: 'Country';
   code: Scalars['String']['output'];
@@ -259,8 +265,8 @@ export type CreateProjectInput = {
   /** A short description of the project. */
   description: Scalars['String']['input'];
   email: Scalars['String']['input'];
-  /** Main project image. */
-  image?: InputMaybe<Scalars['String']['input']>;
+  /** Project header images */
+  images: Array<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   /** Project region */
   region?: InputMaybe<Scalars['String']['input']>;
@@ -281,7 +287,7 @@ export type CreateProjectRewardInput = {
   estimatedAvailabilityDate?: InputMaybe<Scalars['Date']['input']>;
   estimatedDeliveryInWeeks?: InputMaybe<Scalars['Int']['input']>;
   hasShipping: Scalars['Boolean']['input'];
-  image?: InputMaybe<Scalars['String']['input']>;
+  images: Array<Scalars['String']['input']>;
   isAddon?: InputMaybe<Scalars['Boolean']['input']>;
   isHidden?: InputMaybe<Scalars['Boolean']['input']>;
   maxClaimable?: InputMaybe<Scalars['Int']['input']>;
@@ -450,6 +456,8 @@ export type Funder = {
   confirmed: Scalars['Boolean']['output'];
   /** Time at which the first confirmed funding transactions of the Funder was confirmed. */
   confirmedAt?: Maybe<Scalars['Date']['output']>;
+  /** Contribution's funding summary, possibly in different time ranges. */
+  contributionSummary?: Maybe<FunderContributionSummary>;
   /** Funder's funding txs. */
   fundingTxs: Array<FundingTx>;
   id: Scalars['BigInt']['output'];
@@ -463,8 +471,22 @@ export type Funder = {
 
 
 /** The Funder type contains a User's funding details over a particular project. */
+export type FunderContributionSummaryArgs = {
+  period?: InputMaybe<ContributionSummaryPeriod>;
+};
+
+
+/** The Funder type contains a User's funding details over a particular project. */
 export type FunderFundingTxsArgs = {
   input?: InputMaybe<GetFunderFundingTxsInput>;
+};
+
+export type FunderContributionSummary = {
+  __typename?: 'FunderContributionSummary';
+  commentsCount: Scalars['Int']['output'];
+  contributionsCount: Scalars['Int']['output'];
+  contributionsTotal: Scalars['Int']['output'];
+  contributionsTotalUsd: Scalars['Float']['output'];
 };
 
 export type FunderRewardGraphSum = GraphSumData & {
@@ -1743,7 +1765,8 @@ export type Project = {
   /** Returns the project's grant applications. */
   grantApplications: Array<GrantApplicant>;
   id: Scalars['BigInt']['output'];
-  image?: Maybe<Scalars['String']['output']>;
+  /** Project header images. */
+  images: Array<Scalars['String']['output']>;
   keys: ProjectKeys;
   links: Array<Scalars['String']['output']>;
   location?: Maybe<Location>;
@@ -1763,7 +1786,6 @@ export type Project = {
   statistics?: Maybe<ProjectStatistics>;
   status?: Maybe<ProjectStatus>;
   tags: Array<Tag>;
-  /** Main project image. */
   thumbnailImage?: Maybe<Scalars['String']['output']>;
   /** Public title of the project. */
   title: Scalars['String']['output'];
@@ -2009,11 +2031,6 @@ export type ProjectRegionsGetResult = {
 
 export type ProjectReward = {
   __typename?: 'ProjectReward';
-  /**
-   * Number of people that purchased the Project Reward.
-   * @deprecated Use sold instead
-   */
-  backersCount: Scalars['Int']['output'];
   /** Category of ProjectReward */
   category?: Maybe<Scalars['String']['output']>;
   /** Cost of the reward, priced in USD cents. */
@@ -2031,14 +2048,13 @@ export type ProjectReward = {
   description?: Maybe<Scalars['String']['output']>;
   /** Estimated availability date of a reward that is in development */
   estimatedAvailabilityDate?: Maybe<Scalars['Date']['output']>;
-  estimatedDeliveryDate?: Maybe<Scalars['Date']['output']>;
   /** Estimated delivery time from the time of purchase */
   estimatedDeliveryInWeeks?: Maybe<Scalars['Int']['output']>;
   /** Boolean value to indicate whether this reward requires shipping */
   hasShipping: Scalars['Boolean']['output'];
   id: Scalars['BigInt']['output'];
-  /** Image of the reward. */
-  image?: Maybe<Scalars['String']['output']>;
+  /** Project reward images. */
+  images: Array<Scalars['String']['output']>;
   /** Boolean value to indicate whether this reward is an addon */
   isAddon: Scalars['Boolean']['output'];
   /** Boolean value to indicate whether this reward is hidden */
@@ -2053,7 +2069,6 @@ export type ProjectReward = {
   project: Project;
   /** Currency in which the reward cost is stored. */
   rewardCurrency: RewardCurrency;
-  rewardType?: Maybe<Scalars['String']['output']>;
   /** Number of times this Project Reward was sold. */
   sold: Scalars['Int']['output'];
   /** Tracks the stock of the reward */
@@ -2622,8 +2637,8 @@ export type UpdateProjectInput = {
   countryCode?: InputMaybe<Scalars['String']['input']>;
   /** Description of the project. */
   description?: InputMaybe<Scalars['String']['input']>;
-  /** Main project image. */
-  image?: InputMaybe<Scalars['String']['input']>;
+  /** Project header images. */
+  images?: InputMaybe<Array<Scalars['String']['input']>>;
   /** Project links */
   links?: InputMaybe<Array<Scalars['String']['input']>>;
   /** Project name, used both for the project URL, project lightning address and NIP05. */
@@ -2635,7 +2650,7 @@ export type UpdateProjectInput = {
   rewardCurrency?: InputMaybe<RewardCurrency>;
   /** A short description of the project. */
   shortDescription?: InputMaybe<Scalars['String']['input']>;
-  /** Project header image. */
+  /** Project thumbnail image. */
   thumbnailImage?: InputMaybe<Scalars['String']['input']>;
   /** Public title of the project. */
   title?: InputMaybe<Scalars['String']['input']>;
@@ -2650,7 +2665,7 @@ export type UpdateProjectRewardInput = {
   estimatedAvailabilityDate?: InputMaybe<Scalars['Date']['input']>;
   estimatedDeliveryInWeeks?: InputMaybe<Scalars['Int']['input']>;
   hasShipping?: InputMaybe<Scalars['Boolean']['input']>;
-  image?: InputMaybe<Scalars['String']['input']>;
+  images?: InputMaybe<Array<Scalars['String']['input']>>;
   isAddon?: InputMaybe<Scalars['Boolean']['input']>;
   isHidden?: InputMaybe<Scalars['Boolean']['input']>;
   maxClaimable?: InputMaybe<Scalars['Int']['input']>;
@@ -3002,6 +3017,7 @@ export type ResolversTypes = {
   CommunityVoteGrant: ResolverTypeWrapper<CommunityVoteGrant>;
   CompetitionVoteGrantVoteSummary: ResolverTypeWrapper<CompetitionVoteGrantVoteSummary>;
   ConnectionDetails: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['ConnectionDetails']>;
+  ContributionSummaryPeriod: ContributionSummaryPeriod;
   Country: ResolverTypeWrapper<Country>;
   CreateEntryInput: CreateEntryInput;
   CreateProjectInput: CreateProjectInput;
@@ -3031,6 +3047,7 @@ export type ResolversTypes = {
   FileUploadInput: FileUploadInput;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   Funder: ResolverTypeWrapper<Funder>;
+  FunderContributionSummary: ResolverTypeWrapper<FunderContributionSummary>;
   FunderRewardGraphSum: ResolverTypeWrapper<FunderRewardGraphSum>;
   FundingCancelInput: FundingCancelInput;
   FundingCancelResponse: ResolverTypeWrapper<FundingCancelResponse>;
@@ -3340,6 +3357,7 @@ export type ResolversParentTypes = {
   FileUploadInput: FileUploadInput;
   Float: Scalars['Float']['output'];
   Funder: Funder;
+  FunderContributionSummary: FunderContributionSummary;
   FunderRewardGraphSum: FunderRewardGraphSum;
   FundingCancelInput: FundingCancelInput;
   FundingCancelResponse: FundingCancelResponse;
@@ -3784,12 +3802,21 @@ export type FunderResolvers<ContextType = any, ParentType extends ResolversParen
   amountFunded?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   confirmed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   confirmedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  contributionSummary?: Resolver<Maybe<ResolversTypes['FunderContributionSummary']>, ParentType, ContextType, Partial<FunderContributionSummaryArgs>>;
   fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType, Partial<FunderFundingTxsArgs>>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   orders?: Resolver<Array<ResolversTypes['Order']>, ParentType, ContextType>;
   rank?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   timesFunded?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FunderContributionSummaryResolvers<ContextType = any, ParentType extends ResolversParentTypes['FunderContributionSummary'] = ResolversParentTypes['FunderContributionSummary']> = {
+  commentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4246,7 +4273,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   goalsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   grantApplications?: Resolver<Array<ResolversTypes['GrantApplicant']>, ParentType, ContextType, Partial<ProjectGrantApplicationsArgs>>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   keys?: Resolver<ResolversTypes['ProjectKeys'], ParentType, ContextType>;
   links?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
@@ -4401,7 +4428,6 @@ export type ProjectRegionsGetResultResolvers<ContextType = any, ParentType exten
 };
 
 export type ProjectRewardResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectReward'] = ResolversParentTypes['ProjectReward']> = {
-  backersCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   category?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
@@ -4409,11 +4435,10 @@ export type ProjectRewardResolvers<ContextType = any, ParentType extends Resolve
   deletedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   estimatedAvailabilityDate?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  estimatedDeliveryDate?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   estimatedDeliveryInWeeks?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   hasShipping?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   isAddon?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isHidden?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   maxClaimable?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -4421,7 +4446,6 @@ export type ProjectRewardResolvers<ContextType = any, ParentType extends Resolve
   preOrder?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
   rewardCurrency?: Resolver<ResolversTypes['RewardCurrency'], ParentType, ContextType>;
-  rewardType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   stock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
@@ -4738,6 +4762,7 @@ export type Resolvers<ContextType = any> = {
   EntryPublishedSubscriptionResponse?: EntryPublishedSubscriptionResponseResolvers<ContextType>;
   ExternalAccount?: ExternalAccountResolvers<ContextType>;
   Funder?: FunderResolvers<ContextType>;
+  FunderContributionSummary?: FunderContributionSummaryResolvers<ContextType>;
   FunderRewardGraphSum?: FunderRewardGraphSumResolvers<ContextType>;
   FundingCancelResponse?: FundingCancelResponseResolvers<ContextType>;
   FundingConfirmResponse?: FundingConfirmResponseResolvers<ContextType>;
@@ -4852,7 +4877,7 @@ export type OtpResponseFragment = { __typename?: 'OTPResponse', otpVerificationT
 export type EntryFragment = { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, status: EntryStatus, content?: string | null, createdAt: string, updatedAt: string, publishedAt?: string | null, fundersCount: number, amountFunded: number, type: EntryType, creator: (
     { __typename?: 'User' }
     & UserForAvatarFragment
-  ), project?: { __typename?: 'Project', id: any, title: string, name: string, image?: string | null } | null };
+  ), project?: { __typename?: 'Project', id: any, title: string, name: string, images: Array<string>, thumbnailImage?: string | null } | null };
 
 export type EntryForLandingPageFragment = { __typename?: 'Entry', amountFunded: number, id: any, image?: string | null, title: string, entryFundersCount: number, entryDescription: string, project?: { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, title: string } | null, creator: (
     { __typename?: 'User' }
@@ -4864,7 +4889,7 @@ export type EntryForProjectFragment = { __typename?: 'Entry', id: any, title: st
     & UserForAvatarFragment
   ) };
 
-export type FundingTxForLandingPageFragment = { __typename?: 'FundingTx', id: any, comment?: string | null, amount: number, paidAt?: any | null, onChain: boolean, media?: string | null, source: string, method?: FundingMethod | null, projectId: any, funder: { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, confirmedAt?: any | null, user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', externalUsername: string, public: boolean, accountType: string }> } | null }, sourceResource?: { __typename?: 'Entry', createdAt: string, id: any, image?: string | null, title: string } | { __typename?: 'Project', id: any, name: string, title: string, image?: string | null, createdAt: string, thumbnailImage?: string | null } | null };
+export type FundingTxForLandingPageFragment = { __typename?: 'FundingTx', id: any, comment?: string | null, amount: number, paidAt?: any | null, onChain: boolean, media?: string | null, source: string, method?: FundingMethod | null, projectId: any, funder: { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, confirmedAt?: any | null, user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', externalUsername: string, public: boolean, accountType: string }> } | null }, sourceResource?: { __typename?: 'Entry', createdAt: string, id: any, image?: string | null, title: string } | { __typename?: 'Project', id: any, name: string, title: string, images: Array<string>, createdAt: string, thumbnailImage?: string | null } | null };
 
 export type ProjectDefaultGoalFragment = { __typename?: 'ProjectGoal', id: any, title: string, targetAmount: number, currency: ProjectGoalCurrency, amountContributed: number };
 
@@ -4901,12 +4926,12 @@ export type ProjectGrantApplicationsFragment = { __typename?: 'Project', grantAp
 
 export type ProjectNostrKeysFragment = { __typename?: 'Project', id: any, name: string, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', privateKey?: { __typename?: 'NostrPrivateKey', nsec: string } | null, publicKey: { __typename?: 'NostrPublicKey', npub: string } } } };
 
-export type ProjectRewardForLandingPageFragment = { __typename?: 'ProjectReward', cost: number, description?: string | null, id: any, image?: string | null, sold: number, stock?: number | null, maxClaimable?: number | null, rewardName: string, rewardProject: { __typename?: 'Project', id: any, name: string, title: string, rewardCurrency?: RewardCurrency | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } }> } };
+export type ProjectRewardForLandingPageFragment = { __typename?: 'ProjectReward', cost: number, description?: string | null, id: any, images: Array<string>, sold: number, stock?: number | null, maxClaimable?: number | null, rewardName: string, rewardProject: { __typename?: 'Project', id: any, name: string, title: string, rewardCurrency?: RewardCurrency | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } }> } };
 
-export type ProjectRewardForCreateUpdateFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, cost: number, image?: string | null, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null };
+export type ProjectRewardForCreateUpdateFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, cost: number, images: Array<string>, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null };
 
 export type ProjectFragment = (
-  { __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, defaultGoalId?: any | null, balance: number, balanceUsdCent: number, createdAt: string, updatedAt: string, image?: string | null, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, fundingTxsCount?: number | null, keys: (
+  { __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, defaultGoalId?: any | null, balance: number, balanceUsdCent: number, createdAt: string, updatedAt: string, images: Array<string>, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, fundingTxsCount?: number | null, keys: (
     { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', npub: string } } }
     & ProjectKeysFragment
   ), location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, owners: Array<{ __typename?: 'Owner', id: any, user: (
@@ -4948,7 +4973,7 @@ export type ProjectOwnerUserFragment = { __typename?: 'User', id: any, username:
 export type UserMeFragment = { __typename?: 'User', id: any, username: string, imageUrl?: string | null, email?: string | null, ranking?: any | null, isEmailVerified: boolean, hasSocialAccount: boolean, externalAccounts: Array<(
     { __typename?: 'ExternalAccount' }
     & ExternalAccountFragment
-  )>, ownerOf: Array<{ __typename?: 'OwnerOf', project?: { __typename?: 'Project', id: any, name: string, image?: string | null, thumbnailImage?: string | null, title: string, status?: ProjectStatus | null, createdAt: string } | null }> };
+  )>, ownerOf: Array<{ __typename?: 'OwnerOf', project?: { __typename?: 'Project', id: any, name: string, images: Array<string>, thumbnailImage?: string | null, title: string, status?: ProjectStatus | null, createdAt: string } | null }> };
 
 export type UserForAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, email?: string | null, username: string };
 
@@ -5085,13 +5110,6 @@ export type EntryWithOwnersQueryVariables = Exact<{
 
 export type EntryWithOwnersQuery = { __typename?: 'Query', entry?: { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, status: EntryStatus, content?: string | null, createdAt: string, updatedAt: string, publishedAt?: string | null, fundersCount: number, type: EntryType, creator: { __typename?: 'User', id: any, username: string, imageUrl?: string | null }, project?: { __typename?: 'Project', id: any, title: string, name: string, owners: Array<{ __typename?: 'Owner', user: { __typename?: 'User', id: any } }> } | null } | null };
 
-export type EntriesQueryVariables = Exact<{
-  input: GetEntriesInput;
-}>;
-
-
-export type EntriesQuery = { __typename?: 'Query', getEntries: Array<{ __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, fundersCount: number, amountFunded: number, type: EntryType, status: EntryStatus, project?: { __typename?: 'Project', title: string, name: string, image?: string | null } | null }> };
-
 export type SignedUploadUrlQueryVariables = Exact<{
   input: FileUploadInput;
 }>;
@@ -5099,7 +5117,7 @@ export type SignedUploadUrlQueryVariables = Exact<{
 
 export type SignedUploadUrlQuery = { __typename?: 'Query', getSignedUploadUrl: { __typename?: 'SignedUploadUrl', uploadUrl: string, distributionUrl: string } };
 
-export type FundingTxForUserContributionFragment = { __typename?: 'FundingTx', id: any, comment?: string | null, amount: number, paidAt?: any | null, onChain: boolean, media?: string | null, source: string, method?: FundingMethod | null, projectId: any, funder: { __typename?: 'Funder', id: any, user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', id: any, externalUsername: string, public: boolean, accountType: string }> } | null }, sourceResource?: { __typename?: 'Entry', id: any, createdAt: string, image?: string | null } | { __typename?: 'Project', id: any, createdAt: string, name: string, title: string, thumbnailImage?: string | null, image?: string | null } | null };
+export type FundingTxForUserContributionFragment = { __typename?: 'FundingTx', id: any, comment?: string | null, amount: number, paidAt?: any | null, onChain: boolean, media?: string | null, source: string, method?: FundingMethod | null, projectId: any, funder: { __typename?: 'Funder', id: any, user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', id: any, externalUsername: string, public: boolean, accountType: string }> } | null }, sourceResource?: { __typename?: 'Entry', id: any, createdAt: string, image?: string | null } | { __typename?: 'Project', id: any, createdAt: string, name: string, title: string, thumbnailImage?: string | null, images: Array<string> } | null };
 
 export type FundingTxsForLandingPageQueryVariables = Exact<{
   input?: InputMaybe<GetFundingTxsInput>;
@@ -5237,20 +5255,6 @@ export type ProjectsForSubscriptionQuery = { __typename?: 'Query', projectsGet: 
       & ProjectForSubscriptionFragment
     )> } };
 
-export type ProjectsQueryVariables = Exact<{
-  input?: InputMaybe<ProjectsGetQueryInput>;
-}>;
-
-
-export type ProjectsQuery = { __typename?: 'Query', projectsGet: { __typename?: 'ProjectsResponse', projects: Array<{ __typename?: 'Project', id: any, title: string, name: string, description?: string | null, balance: number, createdAt: string, status?: ProjectStatus | null, image?: string | null }> } };
-
-export type ProjectsFullQueryVariables = Exact<{
-  input?: InputMaybe<ProjectsGetQueryInput>;
-}>;
-
-
-export type ProjectsFullQuery = { __typename?: 'Query', projectsGet: { __typename?: 'ProjectsResponse', projects: Array<{ __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, balance: number, createdAt: string, updatedAt: string, thumbnailImage?: string | null, image?: string | null, status?: ProjectStatus | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } }>, funders: Array<{ __typename?: 'Funder', id: any, confirmed: boolean, user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } | null }>, wallets: Array<{ __typename?: 'Wallet', state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }> }> } };
-
 export type ProjectsSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -5324,7 +5328,7 @@ export type ActivityCreatedSubscription = { __typename?: 'Subscription', activit
 
 export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null };
 
-export type RewardForLandingPageFragment = { __typename?: 'ProjectReward', id: any, image?: string | null, cost: number, name: string, description?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null } };
+export type RewardForLandingPageFragment = { __typename?: 'ProjectReward', id: any, images: Array<string>, cost: number, name: string, description?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null } };
 
 export type ActivitiesGetQueryVariables = Exact<{
   input?: InputMaybe<GetActivitiesInput>;
@@ -5391,7 +5395,7 @@ export type TagsMostFundedGetQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type TagsMostFundedGetQuery = { __typename?: 'Query', tagsMostFundedGet: Array<{ __typename?: 'TagsMostFundedGetResult', id: number, label: string }> };
 
-export type ActivityFeedFragmentFragment = { __typename?: 'Activity', activityType: string, createdAt: any, id: string, project: { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null }, resource: { __typename?: 'Entry', id: any, title: string, content?: string | null, entryDescription: string, entryImage?: string | null } | { __typename?: 'FundingTx', id: any, amount: number, projectId: any, isAnonymous: boolean, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } | null } } | { __typename?: 'Project', id: any, title: string, name: string, image?: string | null } | { __typename?: 'ProjectGoal', currency: ProjectGoalCurrency, title: string, targetAmount: number, status: ProjectGoalStatus, goalDescription?: string | null } | { __typename?: 'ProjectReward', id: any, category?: string | null, cost: number, rewardCurrency: RewardCurrency, rewardType?: string | null, sold: number, stock?: number | null, projectRewardDescription?: string | null, projectRewardImage?: string | null } };
+export type ActivityFeedFragmentFragment = { __typename?: 'Activity', activityType: string, createdAt: any, id: string, project: { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null }, resource: { __typename?: 'Entry', id: any, title: string, content?: string | null, entryDescription: string, entryImage?: string | null } | { __typename?: 'FundingTx', id: any, amount: number, projectId: any, isAnonymous: boolean, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } | null } } | { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null } | { __typename?: 'ProjectGoal', currency: ProjectGoalCurrency, title: string, targetAmount: number, status: ProjectGoalStatus, goalDescription?: string | null } | { __typename?: 'ProjectReward', id: any, category?: string | null, cost: number, rewardCurrency: RewardCurrency, sold: number, stock?: number | null, projectRewardDescription?: string | null, projectRewardImage: Array<string> } };
 
 export type ActivityFeedQueryVariables = Exact<{
   input: GetActivitiesInput;
@@ -5485,7 +5489,7 @@ export type UserProjectContributionsFragment = { __typename?: 'UserProjectContri
     & UserProjectFunderFragment
   ) | null };
 
-export type ProfileOrderItemFragment = { __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', id: any, name: string, cost: number, rewardCurrency: RewardCurrency, description?: string | null, image?: string | null, category?: string | null } };
+export type ProfileOrderItemFragment = { __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', id: any, name: string, cost: number, rewardCurrency: RewardCurrency, description?: string | null, images: Array<string>, category?: string | null } };
 
 export type ProfileOrderFragment = { __typename?: 'Order', id: any, referenceCode: string, totalInSats: number, status: string, confirmedAt?: any | null, updatedAt: any, items: Array<(
     { __typename?: 'OrderItem' }
@@ -5649,7 +5653,7 @@ export type ProjectLocationFragment = { __typename?: 'Location', region?: string
 
 export type ProjectKeysFragment = { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, image?: string | null, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: string, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, keys: (
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: string, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, keys: (
     { __typename?: 'ProjectKeys' }
     & ProjectKeysFragment
   ), owners: Array<{ __typename?: 'Owner', id: any, user: (
@@ -5664,7 +5668,7 @@ export type ProjectPageDetailsFragment = { __typename?: 'Project', id: any, name
 
 export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null, fundingTxsCount?: number | null };
 
-export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, image?: string | null, thumbnailImage?: string | null, status?: ProjectStatus | null, links: Array<string>, rewardCurrency?: RewardCurrency | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null };
+export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, status?: ProjectStatus | null, links: Array<string>, rewardCurrency?: RewardCurrency | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null };
 
 export type ProjectStatsForInsightsPageFragment = { __typename?: 'ProjectStats', current?: { __typename?: 'ProjectStatsBase', projectViews?: { __typename?: 'ProjectViewStats', viewCount: number, visitorCount: number, referrers: Array<{ __typename?: 'ProjectViewBaseStats', value: string, viewCount: number, visitorCount: number }>, regions: Array<{ __typename?: 'ProjectViewBaseStats', value: string, viewCount: number, visitorCount: number }> } | null, projectFunderRewards?: { __typename?: 'ProjectFunderRewardStats', quantitySum: number } | null, projectFunders?: { __typename?: 'ProjectFunderStats', count: number } | null, projectFundingTxs?: { __typename?: 'ProjectFundingTxStats', amountSum?: number | null, count: number } | null } | null, prevTimeRange?: { __typename?: 'ProjectStatsBase', projectViews?: { __typename?: 'ProjectViewStats', viewCount: number, visitorCount: number } | null, projectFunderRewards?: { __typename?: 'ProjectFunderRewardStats', quantitySum: number } | null, projectFunders?: { __typename?: 'ProjectFunderStats', count: number } | null, projectFundingTxs?: { __typename?: 'ProjectFundingTxStats', amountSum?: number | null, count: number } | null } | null };
 
@@ -5674,7 +5678,7 @@ export type ProjectRewardSoldGraphStatsFragment = { __typename?: 'ProjectStats',
 
 export type ProjectFundingMethodStatsFragment = { __typename?: 'ProjectStats', current?: { __typename?: 'ProjectStatsBase', projectFundingTxs?: { __typename?: 'ProjectFundingTxStats', methodSum?: Array<{ __typename?: 'FundingTxMethodSum', sum: number, method?: string | null } | null> | null } | null } | null };
 
-export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, cost: number, image?: string | null, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, rewardCurrency: RewardCurrency, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null };
+export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, cost: number, images: Array<string>, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, rewardCurrency: RewardCurrency, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null };
 
 export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }> };
 
@@ -6243,7 +6247,8 @@ export const EntryFragmentDoc = gql`
     id
     title
     name
-    image
+    images
+    thumbnailImage
   }
 }
     ${UserForAvatarFragmentDoc}`;
@@ -6623,7 +6628,7 @@ export const ProjectRewardForCreateUpdateFragmentDoc = gql`
   name
   description
   cost
-  image
+  images
   deleted
   stock
   sold
@@ -6712,7 +6717,7 @@ export const ProjectFragmentDoc = gql`
   balanceUsdCent
   createdAt
   updatedAt
-  image
+  images
   thumbnailImage
   links
   status
@@ -6799,7 +6804,7 @@ export const UserMeFragmentDoc = gql`
     project {
       id
       name
-      image
+      images
       thumbnailImage
       title
       status
@@ -6923,7 +6928,7 @@ export const FundingTxForLandingPageFragmentDoc = gql`
       id
       name
       title
-      image
+      images
       createdAt
       thumbnailImage
     }
@@ -6941,7 +6946,7 @@ export const ProjectRewardForLandingPageFragmentDoc = gql`
   cost
   description
   id
-  image
+  images
   rewardName: name
   sold
   stock
@@ -7017,7 +7022,7 @@ export const FundingTxForUserContributionFragmentDoc = gql`
       name
       title
       thumbnailImage
-      image
+      images
     }
     ... on Entry {
       id
@@ -7030,7 +7035,7 @@ export const FundingTxForUserContributionFragmentDoc = gql`
 export const RewardForLandingPageFragmentDoc = gql`
     fragment RewardForLandingPage on ProjectReward {
   id
-  image
+  images
   cost
   name
   description
@@ -7059,7 +7064,7 @@ export const ActivityFeedFragmentFragmentDoc = gql`
       id
       title
       name
-      image
+      thumbnailImage
     }
     ... on Entry {
       id
@@ -7087,10 +7092,9 @@ export const ActivityFeedFragmentFragmentDoc = gql`
       cost
       projectRewardDescription: description
       rewardCurrency
-      rewardType
       sold
       stock
-      projectRewardImage: image
+      projectRewardImage: images
     }
     ... on ProjectGoal {
       currency
@@ -7225,7 +7229,7 @@ export const ProfileOrderItemFragmentDoc = gql`
     cost
     rewardCurrency
     description
-    image
+    images
     category
   }
   quantity
@@ -7605,7 +7609,7 @@ export const ProjectPageBodyFragmentDoc = gql`
   title
   type
   thumbnailImage
-  image
+  images
   shortDescription
   description
   balance
@@ -7666,7 +7670,7 @@ export const ProjectUpdateFragmentDoc = gql`
   name
   shortDescription
   description
-  image
+  images
   thumbnailImage
   location {
     country {
@@ -7777,7 +7781,7 @@ export const ProjectRewardFragmentDoc = gql`
   name
   description
   cost
-  image
+  images
   deleted
   stock
   sold
@@ -8444,58 +8448,6 @@ export type EntryWithOwnersQueryHookResult = ReturnType<typeof useEntryWithOwner
 export type EntryWithOwnersLazyQueryHookResult = ReturnType<typeof useEntryWithOwnersLazyQuery>;
 export type EntryWithOwnersSuspenseQueryHookResult = ReturnType<typeof useEntryWithOwnersSuspenseQuery>;
 export type EntryWithOwnersQueryResult = Apollo.QueryResult<EntryWithOwnersQuery, EntryWithOwnersQueryVariables>;
-export const EntriesDocument = gql`
-    query Entries($input: GetEntriesInput!) {
-  getEntries(input: $input) {
-    id
-    title
-    description
-    image
-    fundersCount
-    amountFunded
-    type
-    status
-    project {
-      title
-      name
-      image
-    }
-  }
-}
-    `;
-
-/**
- * __useEntriesQuery__
- *
- * To run a query within a React component, call `useEntriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useEntriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useEntriesQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useEntriesQuery(baseOptions: Apollo.QueryHookOptions<EntriesQuery, EntriesQueryVariables> & ({ variables: EntriesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<EntriesQuery, EntriesQueryVariables>(EntriesDocument, options);
-      }
-export function useEntriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EntriesQuery, EntriesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<EntriesQuery, EntriesQueryVariables>(EntriesDocument, options);
-        }
-export function useEntriesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EntriesQuery, EntriesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<EntriesQuery, EntriesQueryVariables>(EntriesDocument, options);
-        }
-export type EntriesQueryHookResult = ReturnType<typeof useEntriesQuery>;
-export type EntriesLazyQueryHookResult = ReturnType<typeof useEntriesLazyQuery>;
-export type EntriesSuspenseQueryHookResult = ReturnType<typeof useEntriesSuspenseQuery>;
-export type EntriesQueryResult = Apollo.QueryResult<EntriesQuery, EntriesQueryVariables>;
 export const SignedUploadUrlDocument = gql`
     query SignedUploadUrl($input: FileUploadInput!) {
   getSignedUploadUrl(input: $input) {
@@ -9108,131 +9060,6 @@ export type ProjectsForSubscriptionQueryHookResult = ReturnType<typeof useProjec
 export type ProjectsForSubscriptionLazyQueryHookResult = ReturnType<typeof useProjectsForSubscriptionLazyQuery>;
 export type ProjectsForSubscriptionSuspenseQueryHookResult = ReturnType<typeof useProjectsForSubscriptionSuspenseQuery>;
 export type ProjectsForSubscriptionQueryResult = Apollo.QueryResult<ProjectsForSubscriptionQuery, ProjectsForSubscriptionQueryVariables>;
-export const ProjectsDocument = gql`
-    query Projects($input: ProjectsGetQueryInput) {
-  projectsGet(input: $input) {
-    projects {
-      id
-      title
-      name
-      description
-      balance
-      createdAt
-      status
-      image
-    }
-  }
-}
-    `;
-
-/**
- * __useProjectsQuery__
- *
- * To run a query within a React component, call `useProjectsQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProjectsQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectsQuery(baseOptions?: Apollo.QueryHookOptions<ProjectsQuery, ProjectsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProjectsQuery, ProjectsQueryVariables>(ProjectsDocument, options);
-      }
-export function useProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectsQuery, ProjectsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProjectsQuery, ProjectsQueryVariables>(ProjectsDocument, options);
-        }
-export function useProjectsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectsQuery, ProjectsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProjectsQuery, ProjectsQueryVariables>(ProjectsDocument, options);
-        }
-export type ProjectsQueryHookResult = ReturnType<typeof useProjectsQuery>;
-export type ProjectsLazyQueryHookResult = ReturnType<typeof useProjectsLazyQuery>;
-export type ProjectsSuspenseQueryHookResult = ReturnType<typeof useProjectsSuspenseQuery>;
-export type ProjectsQueryResult = Apollo.QueryResult<ProjectsQuery, ProjectsQueryVariables>;
-export const ProjectsFullDocument = gql`
-    query ProjectsFull($input: ProjectsGetQueryInput) {
-  projectsGet(input: $input) {
-    projects {
-      id
-      title
-      name
-      type
-      shortDescription
-      description
-      balance
-      createdAt
-      updatedAt
-      thumbnailImage
-      image
-      status
-      owners {
-        id
-        user {
-          id
-          username
-          imageUrl
-        }
-      }
-      funders {
-        id
-        user {
-          id
-          username
-          imageUrl
-        }
-        confirmed
-      }
-      wallets {
-        state {
-          status
-          statusCode
-        }
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useProjectsFullQuery__
- *
- * To run a query within a React component, call `useProjectsFullQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectsFullQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProjectsFullQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectsFullQuery(baseOptions?: Apollo.QueryHookOptions<ProjectsFullQuery, ProjectsFullQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProjectsFullQuery, ProjectsFullQueryVariables>(ProjectsFullDocument, options);
-      }
-export function useProjectsFullLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectsFullQuery, ProjectsFullQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProjectsFullQuery, ProjectsFullQueryVariables>(ProjectsFullDocument, options);
-        }
-export function useProjectsFullSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectsFullQuery, ProjectsFullQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProjectsFullQuery, ProjectsFullQueryVariables>(ProjectsFullDocument, options);
-        }
-export type ProjectsFullQueryHookResult = ReturnType<typeof useProjectsFullQuery>;
-export type ProjectsFullLazyQueryHookResult = ReturnType<typeof useProjectsFullLazyQuery>;
-export type ProjectsFullSuspenseQueryHookResult = ReturnType<typeof useProjectsFullSuspenseQuery>;
-export type ProjectsFullQueryResult = Apollo.QueryResult<ProjectsFullQuery, ProjectsFullQueryVariables>;
 export const ProjectsSummaryDocument = gql`
     query ProjectsSummary {
   projectsSummary {

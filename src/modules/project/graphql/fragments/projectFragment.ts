@@ -33,7 +33,7 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     title
     type
     thumbnailImage
-    image
+    images
     shortDescription
     description
     balance
@@ -87,7 +87,7 @@ export const FRAGMENT_PROJECT_UPDATE = gql`
     name
     shortDescription
     description
-    image
+    images
     thumbnailImage
     location {
       country {

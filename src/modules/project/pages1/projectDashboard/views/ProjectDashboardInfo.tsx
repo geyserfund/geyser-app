@@ -92,19 +92,20 @@ export const ProjectDashboardInfo = () => {
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
-      <DashboardLayout
-        mobileTopNavRightComponent={<SaveButton />}
-        deskTopBottomComponent={<SaveButton w="full" />}
-        desktopTitle={t('Project info')}
-        width="full"
-      >
-        <VStack width="100%" alignItems="flex-start" spacing="24px" px={{ base: 0, lg: 6 }}>
-          <ProjectForm form={form} isEdit />
-        </VStack>
-        <ProjectUnsavedModal {...unsavedModal} />
-        <ProjectNameChangeConfirmModal {...nameChangeModal} onSave={() => handleUpdateProject(form.getValues())} />
-      </DashboardLayout>
-    </form>
+    <DashboardLayout
+      as={'form'}
+      onSubmit={form.handleSubmit(onSubmit)}
+      mobileTopNavRightComponent={<SaveButton />}
+      deskTopBottomComponent={<SaveButton w="full" />}
+      desktopTitle={t('Project info')}
+      width="full"
+      overflowX="hidden"
+    >
+      <VStack width="100%" alignItems="flex-start" spacing="24px" px={{ base: 0, lg: 6 }}>
+        <ProjectForm form={form} isEdit />
+      </VStack>
+      <ProjectUnsavedModal {...unsavedModal} />
+      <ProjectNameChangeConfirmModal {...nameChangeModal} onSave={() => handleUpdateProject(form.getValues())} />
+    </DashboardLayout>
   )
 }

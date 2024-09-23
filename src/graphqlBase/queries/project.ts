@@ -23,67 +23,6 @@ export const QUERY_PROJECT_FOR_SUBSCRIPTION = gql`
   }
 `
 
-export const QUERY_PROJECTS = gql`
-  query Projects($input: ProjectsGetQueryInput) {
-    projectsGet(input: $input) {
-      projects {
-        id
-        title
-        name
-        description
-        balance
-        createdAt
-        status
-        image
-      }
-    }
-  }
-`
-
-export const QUERY_PROJECTS_FULL = gql`
-  query ProjectsFull($input: ProjectsGetQueryInput) {
-    projectsGet(input: $input) {
-      projects {
-        id
-        title
-        name
-        type
-        shortDescription
-        description
-        balance
-        createdAt
-        updatedAt
-        thumbnailImage
-        image
-        status
-        owners {
-          id
-          user {
-            id
-            username
-            imageUrl
-          }
-        }
-        funders {
-          id
-          user {
-            id
-            username
-            imageUrl
-          }
-          confirmed
-        }
-        wallets {
-          state {
-            status
-            statusCode
-          }
-        }
-      }
-    }
-  }
-`
-
 export const QUERY_PROJECTS_SUMMARY = gql`
   query ProjectsSummary {
     projectsSummary {

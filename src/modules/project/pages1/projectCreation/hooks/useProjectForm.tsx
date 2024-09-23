@@ -12,7 +12,7 @@ const DEFAULT_VALUES: ProjectCreationVariables = {
   title: '',
   shortDescription: '',
   description: '',
-  image: '',
+  images: [],
   thumbnailImage: '',
   email: '',
   name: '',
@@ -65,7 +65,7 @@ export const useProjectForm = ({ isEdit, project }: UseProjectFormProps) => {
         return {
           title: project.title,
           name: project.name,
-          image: project.image || '',
+          images: project.images || '',
           thumbnailImage: project.thumbnailImage || '',
           shortDescription: project.shortDescription || '',
           description: project.description || '',

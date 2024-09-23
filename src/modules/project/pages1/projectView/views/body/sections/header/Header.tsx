@@ -91,17 +91,13 @@ export const Header = () => {
   }
 
   const renderImageOrVideo = () => {
-    const isImage = validateImageUrl(project.image)
+    const isImage = validateImageUrl(project.images[0])
 
     if (isImage) {
-      return <ImageWithReload width="100%" maxHeight="220px" objectFit="cover" src={project.image || undefined} />
+      return <ImageWithReload width="100%" height="100%" objectFit="contain" src={project.images[0] || undefined} />
     }
 
-    if (project.image && !isImage) {
-      return <VideoPlayer url={project.image} />
-    }
-
-    return null
+    return <VideoPlayer url={project.images[0]} />
   }
 
   if (loading) {
@@ -122,7 +118,11 @@ export const Header = () => {
 
       <CardLayout id={'HEADER_ITEM'} w="full" dense spacing={0} position="relative">
         <ProjectStatusBar project={project} wallet={wallet} isProjectOwner={isProjectOwner} />
-        <Box>{renderImageOrVideo()}</Box>
+        {project.images[0] && (
+          <Box aspectRatio={16 / 9} backgroundColor={'neutralAlpha.3'}>
+            {renderImageOrVideo()}
+          </Box>
+        )}
         <Stack
           direction={{ base: 'column', lg: 'row' }}
           spacing={4}
@@ -132,7 +132,7 @@ export const Header = () => {
           position="relative"
           alignItems="start"
         >
-          <Box position={{ base: project.image ? 'absolute' : 'unset', lg: 'unset' }} top={'-48px'} left={'16px'}>
+          <Box position={{ base: project.images[0] ? 'absolute' : 'unset', lg: 'unset' }} top={'-48px'} left={'16px'}>
             <ImageWithReload
               border="2px solid"
               borderColor="neutral1.1"
