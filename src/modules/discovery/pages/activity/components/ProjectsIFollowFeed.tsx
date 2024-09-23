@@ -1,7 +1,10 @@
-import { Skeleton, VStack } from '@chakra-ui/react'
+import { Box, Image, Skeleton, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 import { ScrollInvoke } from '@/helpers'
-import { ID } from '@/shared/constants'
+import { Body } from '@/shared/components/typography'
+import { getPath, ID, TelescopeUrl } from '@/shared/constants'
 import { Activity, ActivityFeedName } from '@/types'
 import { useMobileMode } from '@/utils'
 
@@ -17,6 +20,10 @@ export const ProjectsIFollow = () => {
 
   if (isLoading) {
     return <ProjectsIFollowSkeleton />
+  }
+
+  if (followedProjectsActivities.length === 0) {
+    return <EmptyFeed />
   }
 
   return (
@@ -53,5 +60,34 @@ const ActivityItemSkeleton = () => {
       width={{ base: 'full', lg: '586px' }}
       height="150px"
     />
+  )
+}
+
+const EmptyFeed = () => {
+  const { t } = useTranslation()
+  return (
+    <VStack height={'full'} minH={'500px'} justifyContent={'center'} alignItems={'center'} spacing={6}>
+      <Image height={'225px'} src={TelescopeUrl} alt="telescope" />
+      <Box textAlign={'center'}>
+        <Body size={'xl'} bold>
+          {t('You are not following any projects yet.')}
+        </Body>
+        <Body size={'md'}>
+          <Link to={getPath('projectDiscovery')}>
+            <Body
+              as={'span'}
+              size={'md'}
+              color={'primaryAlpha.11'}
+              textDecoration={'underline'}
+              lineHeight={'24px'}
+              regular
+            >
+              {t('Explore projects')}
+            </Body>
+          </Link>{' '}
+          {t('that match your interests!')}
+        </Body>
+      </Box>
+    </VStack>
   )
 }
