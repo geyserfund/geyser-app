@@ -75,20 +75,21 @@ export const SmallGrantCard = ({ grant, showBanner }: Props) => {
         height={{ base: '98px', lg: '228px' }}
         p={{ base: 2, lg: 6 }}
         spacing={{ base: 2, lg: 3 }}
-        justifyContent="flex-start"
+        justifyContent="space-between"
       >
-        <HStack w="100%" justifyContent="space-between">
-          <Body size={{ base: 'md', lg: 'lg' }} medium>
-            {grant.title}
-          </Body>
-          {!isMobile && <GrantStatus status={grant.status} startDate={grant?.statuses[0]?.startAt || 0} />}
-        </HStack>
-        <Direction w="100%" justifyContent="flex-start" alignItems="flex-start" spacing={{ base: 0, lg: 6 }}>
-          <GrantWidget grant={grant} compact={isMobile} />
-        </Direction>
-        {!isMobile && (
-          <Sponsors w="100%" height={'100%'} justifyContent="start" alignItems="flex-end" sponsors={grant.sponsors} />
-        )}
+        <VStack w="100%" flex={1} justifyContent="flex-start">
+          <HStack w="100%" justifyContent="space-between">
+            <Body size={{ base: 'md', lg: 'lg' }} medium>
+              {grant.title}
+            </Body>
+            {!isMobile && <GrantStatus status={grant.status} startDate={grant?.statuses[0]?.startAt || 0} />}
+          </HStack>
+
+          <Direction w="100%" justifyContent="flex-start" alignItems="flex-start" spacing={{ base: 0, lg: 6 }}>
+            <GrantWidget grant={grant} compact={isMobile} />
+          </Direction>
+        </VStack>
+        {!isMobile && <Sponsors w="100%" justifyContent="start" sponsors={grant.sponsors} />}
       </VStack>
     </HStack>
   )
