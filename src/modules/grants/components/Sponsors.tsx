@@ -1,5 +1,4 @@
 import { BoxProps, HStack, Image, Link, Wrap, WrapItem } from '@chakra-ui/react'
-import { t } from 'i18next'
 import { PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 
