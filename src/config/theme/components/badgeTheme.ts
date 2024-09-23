@@ -29,6 +29,12 @@ export const badgeTheme: ComponentStyleConfig = {
       height: '28px',
       padding: '4px 10px',
     },
+    xl: {
+      borderRadius: '8px',
+      fontSize: '14px',
+      height: '32px',
+      padding: '4px 10px',
+    },
   },
   variants: {
     solid: ({ colorScheme }: StyleFunctionProps) => ({
