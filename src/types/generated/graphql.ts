@@ -235,6 +235,12 @@ export type CompetitionVoteGrantVoteSummary = {
 
 export type ConnectionDetails = LightningAddressConnectionDetails | LndConnectionDetailsPrivate | LndConnectionDetailsPublic;
 
+export enum ContributionSummaryPeriod {
+  AllTime = 'ALL_TIME',
+  Month = 'MONTH',
+  Week = 'WEEK'
+}
+
 export type Country = {
   __typename?: 'Country';
   code: Scalars['String']['output'];
@@ -450,6 +456,8 @@ export type Funder = {
   confirmed: Scalars['Boolean']['output'];
   /** Time at which the first confirmed funding transactions of the Funder was confirmed. */
   confirmedAt?: Maybe<Scalars['Date']['output']>;
+  /** Contribution's funding summary, possibly in different time ranges. */
+  contributionSummary?: Maybe<FunderContributionSummary>;
   /** Funder's funding txs. */
   fundingTxs: Array<FundingTx>;
   id: Scalars['BigInt']['output'];
@@ -463,8 +471,22 @@ export type Funder = {
 
 
 /** The Funder type contains a User's funding details over a particular project. */
+export type FunderContributionSummaryArgs = {
+  period?: InputMaybe<ContributionSummaryPeriod>;
+};
+
+
+/** The Funder type contains a User's funding details over a particular project. */
 export type FunderFundingTxsArgs = {
   input?: InputMaybe<GetFunderFundingTxsInput>;
+};
+
+export type FunderContributionSummary = {
+  __typename?: 'FunderContributionSummary';
+  commentsCount: Scalars['Int']['output'];
+  contributionsCount: Scalars['Int']['output'];
+  contributionsTotal: Scalars['Int']['output'];
+  contributionsTotalUsd: Scalars['Float']['output'];
 };
 
 export type FunderRewardGraphSum = GraphSumData & {
@@ -3002,6 +3024,7 @@ export type ResolversTypes = {
   CommunityVoteGrant: ResolverTypeWrapper<CommunityVoteGrant>;
   CompetitionVoteGrantVoteSummary: ResolverTypeWrapper<CompetitionVoteGrantVoteSummary>;
   ConnectionDetails: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['ConnectionDetails']>;
+  ContributionSummaryPeriod: ContributionSummaryPeriod;
   Country: ResolverTypeWrapper<Country>;
   CreateEntryInput: CreateEntryInput;
   CreateProjectInput: CreateProjectInput;
@@ -3031,6 +3054,7 @@ export type ResolversTypes = {
   FileUploadInput: FileUploadInput;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   Funder: ResolverTypeWrapper<Funder>;
+  FunderContributionSummary: ResolverTypeWrapper<FunderContributionSummary>;
   FunderRewardGraphSum: ResolverTypeWrapper<FunderRewardGraphSum>;
   FundingCancelInput: FundingCancelInput;
   FundingCancelResponse: ResolverTypeWrapper<FundingCancelResponse>;
@@ -3340,6 +3364,7 @@ export type ResolversParentTypes = {
   FileUploadInput: FileUploadInput;
   Float: Scalars['Float']['output'];
   Funder: Funder;
+  FunderContributionSummary: FunderContributionSummary;
   FunderRewardGraphSum: FunderRewardGraphSum;
   FundingCancelInput: FundingCancelInput;
   FundingCancelResponse: FundingCancelResponse;
@@ -3784,12 +3809,21 @@ export type FunderResolvers<ContextType = any, ParentType extends ResolversParen
   amountFunded?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   confirmed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   confirmedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  contributionSummary?: Resolver<Maybe<ResolversTypes['FunderContributionSummary']>, ParentType, ContextType, Partial<FunderContributionSummaryArgs>>;
   fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType, Partial<FunderFundingTxsArgs>>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   orders?: Resolver<Array<ResolversTypes['Order']>, ParentType, ContextType>;
   rank?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   timesFunded?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FunderContributionSummaryResolvers<ContextType = any, ParentType extends ResolversParentTypes['FunderContributionSummary'] = ResolversParentTypes['FunderContributionSummary']> = {
+  commentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4738,6 +4772,7 @@ export type Resolvers<ContextType = any> = {
   EntryPublishedSubscriptionResponse?: EntryPublishedSubscriptionResponseResolvers<ContextType>;
   ExternalAccount?: ExternalAccountResolvers<ContextType>;
   Funder?: FunderResolvers<ContextType>;
+  FunderContributionSummary?: FunderContributionSummaryResolvers<ContextType>;
   FunderRewardGraphSum?: FunderRewardGraphSumResolvers<ContextType>;
   FundingCancelResponse?: FundingCancelResponseResolvers<ContextType>;
   FundingConfirmResponse?: FundingConfirmResponseResolvers<ContextType>;
@@ -5592,9 +5627,22 @@ export type ProjectEntryFragment = { __typename?: 'Entry', id: any, title: strin
 
 export type ProjectEntryViewFragment = { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, type: EntryType, fundersCount: number, amountFunded: number, status: EntryStatus, createdAt: string, publishedAt?: string | null, content?: string | null };
 
-export type ProjectFunderFragment = { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string } | null };
+export type ProjectFunderFragment = { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, user?: (
+    { __typename?: 'User' }
+    & UserAvatarFragment
+  ) | null };
 
-export type ProjectLeaderboardContributorsFragment = { __typename?: 'ProjectLeaderboardContributorsRow', funderId: any, contributionsTotalUsd: number, contributionsTotal: number, contributionsCount: number, commentsCount: number, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string } | null };
+export type ProjectLeaderboardContributorsFragment = { __typename?: 'ProjectLeaderboardContributorsRow', funderId: any, contributionsTotalUsd: number, contributionsTotal: number, contributionsCount: number, commentsCount: number, user?: (
+    { __typename?: 'User' }
+    & UserAvatarFragment
+  ) | null };
+
+export type UserContributorFragment = { __typename?: 'Funder', id: any, rank?: number | null, user?: (
+    { __typename?: 'User' }
+    & UserAvatarFragment
+  ) | null };
+
+export type FunderContributionSummaryFragment = { __typename?: 'FunderContributionSummary', contributionsTotalUsd: number, contributionsTotal: number, contributionsCount: number, commentsCount: number };
 
 export type ProjectFundingTxFragment = { __typename?: 'FundingTx', id: any, amountPaid: number, media?: string | null, comment?: string | null, paidAt?: any | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, funder: { __typename?: 'Funder', id: any, user?: (
       { __typename?: 'User' }
@@ -5984,6 +6032,20 @@ export type ProjectLeaderboardContributorsGetQuery = { __typename?: 'Query', pro
     { __typename?: 'ProjectLeaderboardContributorsRow' }
     & ProjectLeaderboardContributorsFragment
   )> };
+
+export type ProjectUserContributorQueryVariables = Exact<{
+  input: GetContributorInput;
+  period?: InputMaybe<ContributionSummaryPeriod>;
+}>;
+
+
+export type ProjectUserContributorQuery = { __typename?: 'Query', contributor: (
+    { __typename?: 'Funder', contributionSummary?: (
+      { __typename?: 'FunderContributionSummary' }
+      & FunderContributionSummaryFragment
+    ) | null }
+    & UserContributorFragment
+  ) };
 
 export type ProjectPageFundingTxQueryVariables = Exact<{
   input?: InputMaybe<GetFundingTxsInput>;
@@ -7304,18 +7366,23 @@ export const ProjectEntryViewFragmentDoc = gql`
   content
 }
     `;
+export const UserAvatarFragmentDoc = gql`
+    fragment UserAvatar on User {
+  id
+  imageUrl
+  username
+}
+    `;
 export const ProjectFunderFragmentDoc = gql`
     fragment ProjectFunder on Funder {
   id
   amountFunded
   timesFunded
   user {
-    id
-    imageUrl
-    username
+    ...UserAvatar
   }
 }
-    `;
+    ${UserAvatarFragmentDoc}`;
 export const ProjectLeaderboardContributorsFragmentDoc = gql`
     fragment ProjectLeaderboardContributors on ProjectLeaderboardContributorsRow {
   funderId
@@ -7324,17 +7391,25 @@ export const ProjectLeaderboardContributorsFragmentDoc = gql`
   contributionsCount
   commentsCount
   user {
-    id
-    imageUrl
-    username
+    ...UserAvatar
   }
 }
-    `;
-export const UserAvatarFragmentDoc = gql`
-    fragment UserAvatar on User {
+    ${UserAvatarFragmentDoc}`;
+export const UserContributorFragmentDoc = gql`
+    fragment UserContributor on Funder {
   id
-  imageUrl
-  username
+  rank
+  user {
+    ...UserAvatar
+  }
+}
+    ${UserAvatarFragmentDoc}`;
+export const FunderContributionSummaryFragmentDoc = gql`
+    fragment FunderContributionSummary on FunderContributionSummary {
+  contributionsTotalUsd
+  contributionsTotal
+  contributionsCount
+  commentsCount
 }
     `;
 export const ProjectFundingTxFragmentDoc = gql`
@@ -11735,6 +11810,51 @@ export type ProjectLeaderboardContributorsGetQueryHookResult = ReturnType<typeof
 export type ProjectLeaderboardContributorsGetLazyQueryHookResult = ReturnType<typeof useProjectLeaderboardContributorsGetLazyQuery>;
 export type ProjectLeaderboardContributorsGetSuspenseQueryHookResult = ReturnType<typeof useProjectLeaderboardContributorsGetSuspenseQuery>;
 export type ProjectLeaderboardContributorsGetQueryResult = Apollo.QueryResult<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>;
+export const ProjectUserContributorDocument = gql`
+    query ProjectUserContributor($input: GetContributorInput!, $period: ContributionSummaryPeriod) {
+  contributor(input: $input) {
+    ...UserContributor
+    contributionSummary(period: $period) {
+      ...FunderContributionSummary
+    }
+  }
+}
+    ${UserContributorFragmentDoc}
+${FunderContributionSummaryFragmentDoc}`;
+
+/**
+ * __useProjectUserContributorQuery__
+ *
+ * To run a query within a React component, call `useProjectUserContributorQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectUserContributorQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectUserContributorQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *      period: // value for 'period'
+ *   },
+ * });
+ */
+export function useProjectUserContributorQuery(baseOptions: Apollo.QueryHookOptions<ProjectUserContributorQuery, ProjectUserContributorQueryVariables> & ({ variables: ProjectUserContributorQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>(ProjectUserContributorDocument, options);
+      }
+export function useProjectUserContributorLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>(ProjectUserContributorDocument, options);
+        }
+export function useProjectUserContributorSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>(ProjectUserContributorDocument, options);
+        }
+export type ProjectUserContributorQueryHookResult = ReturnType<typeof useProjectUserContributorQuery>;
+export type ProjectUserContributorLazyQueryHookResult = ReturnType<typeof useProjectUserContributorLazyQuery>;
+export type ProjectUserContributorSuspenseQueryHookResult = ReturnType<typeof useProjectUserContributorSuspenseQuery>;
+export type ProjectUserContributorQueryResult = Apollo.QueryResult<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>;
 export const ProjectPageFundingTxDocument = gql`
     query ProjectPageFundingTx($input: GetFundingTxsInput) {
   fundingTxsGet(input: $input) {
