@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import { Body } from '@/shared/components/typography'
 import { __production__, __staging__ } from '@/shared/constants'
 import { getPath, GrantsFAQUrl, GrantsPageBannerNoiseGifUrl } from '@/shared/constants'
+import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { useGrantStatisticsQuery } from '@/types'
 import { getShortAmountLabel, useMobileMode } from '@/utils'
 
@@ -22,16 +23,26 @@ export const GrantsHeader = () => {
 
   const { data, loading } = useGrantStatisticsQuery()
 
+  const { formatUsdAmount } = useCurrencyFormatter(true)
+
+  const grantedAmount = data?.grantStatistics.grants?.amountFunded || 0
+  const grantedAmountUsd = formatUsdAmount(grantedAmount)
+
+  const distributedAmount = data?.grantStatistics.grants?.amountGranted || 0
+  const distributedAmountUsd = formatUsdAmount(distributedAmount)
+
   const items = [
     {
       label: t('Granted'),
-      value: getShortAmountLabel(data?.grantStatistics.grants?.amountFunded || 0),
+      value: getShortAmountLabel(grantedAmount),
       suffix: 'Sats',
+      usdValue: grantedAmountUsd,
     },
     {
       label: t('Distributed'),
-      value: getShortAmountLabel(data?.grantStatistics.grants?.amountGranted || 0),
+      value: getShortAmountLabel(distributedAmount),
       suffix: 'Sats',
+      usdValue: distributedAmountUsd,
     },
   ]
 
@@ -109,6 +120,7 @@ export const GrantsHeader = () => {
                     label={item.label}
                     value={item.value}
                     suffix={item.suffix}
+                    usdValue={item.usdValue}
                     loading={loading}
                   />
                 ))}
@@ -163,11 +175,13 @@ const BannerItem = ({
   value,
   loading,
   suffix,
+  usdValue,
 }: {
   label: string
   value: string
   loading: boolean
   suffix?: string
+  usdValue?: string
 }) => {
   return (
     <HStack>
@@ -182,6 +196,9 @@ const BannerItem = ({
           {suffix}
         </Body>
       )}
+      <Body fontSize={{ base: 'xl', lg: '3xl' }} muted medium>
+        ({usdValue})
+      </Body>
     </HStack>
   )
 }

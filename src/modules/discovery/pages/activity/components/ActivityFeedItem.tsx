@@ -262,6 +262,7 @@ const ActivityImage = ({ resource }: { resource: ActivityResource }) => {
 
 const ActivityDescription = ({ resource }: { resource: ActivityResource }) => {
   const { t } = useTranslation()
+  const { formatUsdAmount } = useCurrencyFormatter()
 
   if ('entryDescription' in resource && typeof resource.entryDescription === 'string') {
     return (
@@ -292,7 +293,11 @@ const ActivityDescription = ({ resource }: { resource: ActivityResource }) => {
       <Body size="md" medium muted>
         {t('Received contribution of ')}
         <Body as="span" size="md" dark>
-          {commaFormatted(resource.amount)} {' Sats.'}
+          {commaFormatted(resource.amount)} {' sats.'}
+        </Body>
+        <Body as="span" size="md" medium>
+          {' '}
+          ({formatUsdAmount(resource.amount)})
         </Body>
       </Body>
     )
@@ -348,7 +353,7 @@ const GoalTargetAmount = ({ goal }: { goal: ProjectGoal }) => {
 const RewardsInfo = ({ reward }: { reward: ProjectReward }) => {
   const { t } = useTranslation()
 
-  const { formatAmount } = useCurrencyFormatter()
+  const { formatAmount, formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
 
   if (!reward) return null
 
@@ -357,7 +362,12 @@ const RewardsInfo = ({ reward }: { reward: ProjectReward }) => {
       <Body size="sm" bold>
         {formatAmount(reward.cost, reward.rewardCurrency)}{' '}
         <Body as="span" size="sm" muted>
-          {reward.rewardCurrency === RewardCurrency.Btcsat ? 'Sats' : 'USD'}
+          {reward.rewardCurrency === RewardCurrency.Btcsat ? 'sats' : 'USD'}{' '}
+        </Body>
+        <Body as="span" size="sm" medium muted>
+          {reward.rewardCurrency === RewardCurrency.Btcsat
+            ? `(${formatUsdAmount(reward.cost)})`
+            : `(${formatSatsAmount(reward.cost)})`}
         </Body>
       </Body>
       {reward.sold && (
