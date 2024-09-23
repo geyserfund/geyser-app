@@ -30,6 +30,7 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
         amount
         projectId
         isAnonymous
+        comment
         funder {
           user {
             id

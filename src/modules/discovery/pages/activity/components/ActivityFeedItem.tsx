@@ -102,7 +102,7 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
             <GoalTargetAmount goal={resource as ProjectGoal} />
           </>
         )}
-        {isFundingTxActivity && <ContributorInfo resource={resource} />}
+        {isFundingTxActivity && <ContributionInfo resource={resource} />}
       </VStack>
     </CardLayout>
   )
@@ -261,8 +261,6 @@ const ActivityImage = ({ resource }: { resource: ActivityResource }) => {
 }
 
 const ActivityDescription = ({ resource }: { resource: ActivityResource }) => {
-  const { t } = useTranslation()
-
   if ('entryDescription' in resource && typeof resource.entryDescription === 'string') {
     return (
       <Body size="md" medium muted>
@@ -287,15 +285,8 @@ const ActivityDescription = ({ resource }: { resource: ActivityResource }) => {
     )
   }
 
-  if ('amount' in resource && typeof resource.amount === 'number') {
-    return (
-      <Body size="md" medium muted>
-        {t('Received contribution of ')}
-        <Body as="span" size="md" dark>
-          {commaFormatted(resource.amount)} {' Sats.'}
-        </Body>
-      </Body>
-    )
+  if ('comment' in resource && typeof resource.comment === 'string') {
+    return <Body size="sm">{resource.comment}</Body>
   }
 
   return null
@@ -385,8 +376,10 @@ const RewardsInfo = ({ reward }: { reward: ProjectReward }) => {
   )
 }
 
-const ContributorInfo = ({ resource }: { resource: ActivityResource }) => {
+const ContributionInfo = ({ resource }: { resource: ActivityResource }) => {
   const { t } = useTranslation()
+
+  const { formatUsdAmount } = useCurrencyFormatter()
 
   if ('funder' in resource && typeof resource.funder === 'object') {
     if (resource.isAnonymous) {
@@ -394,6 +387,12 @@ const ContributorInfo = ({ resource }: { resource: ActivityResource }) => {
         <HStack width="full" spacing={2} justifyContent="flex-start">
           <Body size="md" muted>
             {t('Anonymous contributor')}
+          </Body>
+          <Body size="md" medium dark>
+            {commaFormatted(resource.amount)} {' sats '}
+            <Body as="span" size="md" muted>
+              ({formatUsdAmount(resource.amount)})
+            </Body>
           </Body>
         </HStack>
       )
@@ -403,15 +402,19 @@ const ContributorInfo = ({ resource }: { resource: ActivityResource }) => {
 
     return (
       <HStack width="full" spacing={2} justifyContent="flex-start">
-        <Body size="md" muted>
-          {t('Contributor')}:
-        </Body>
-        <HStack spacing={1}>
-          {user && user.imageUrl && <Image width={'24px'} height={'24px'} borderRadius={'full'} src={user.imageUrl} />}
+        {user && user.imageUrl && <Image width={'40px'} height={'40px'} borderRadius={'full'} src={user.imageUrl} />}
+        <VStack alignItems="flex-start" justifyContent="center" spacing={0}>
           <Body size="md" dark>
             {user?.username}
           </Body>
-        </HStack>
+          <Body size="md" medium dark>
+            {commaFormatted(resource.amount)} {' sats '}
+            <Body as="span" size="md" muted>
+              {' '}
+              ({formatUsdAmount(resource.amount)})
+            </Body>
+          </Body>
+        </VStack>
       </HStack>
     )
   }
