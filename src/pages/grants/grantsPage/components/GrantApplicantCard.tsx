@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
 
+import { ContributorsModal, useContributorsModal } from '@/modules/grants/components/ContributorsModal'
 import { useAuthModal } from '@/pages/auth/hooks'
 import { Body, H3 } from '@/shared/components/typography'
 import { AvatarElement } from '@/shared/molecules/AvatarElement'
@@ -114,6 +115,8 @@ const ContributorsAvatarDisplay = ({
 
   const isMobile = useMobileMode()
 
+  const contributorsModal = useContributorsModal()
+
   const maxAvatars = isMobile ? MAX_AVATARS.mobile : MAX_AVATARS.desktop
 
   if (!contributors) {
@@ -129,6 +132,7 @@ const ContributorsAvatarDisplay = ({
         zIndex={2}
         onClick={(e) => {
           e.stopPropagation()
+          contributorsModal.onOpen()
         }}
       >
         <AvatarGroup size="sm">
@@ -172,6 +176,7 @@ const ContributorsAvatarDisplay = ({
           )}
         </AvatarGroup>
       </Box>
+      <ContributorsModal grantApplicantContributors={contributors} {...contributorsModal} />
     </>
   )
 }
