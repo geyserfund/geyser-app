@@ -9451,6 +9451,12 @@ export const UserContributorFragmentDoc = gql`
     user {
       ...UserAvatar
     }
+    funder {
+      id
+      user {
+        ...UserAvatar
+      }
+    }
   }
   ${UserAvatarFragmentDoc}
 `
