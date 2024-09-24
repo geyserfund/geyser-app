@@ -87,8 +87,6 @@ export const MediaCarousel = ({ links }: { links: string[] }) => {
         modules={[Pagination, Navigation]}
         spaceBetween={10}
         slidesPerView={1}
-        onSlideChange={() => console.log('slide change')}
-        onSwiper={(swiper) => console.log(swiper)}
       >
         {links.map((link) => {
           return (
