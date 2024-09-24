@@ -301,7 +301,7 @@ const GoalProgressBar = ({ goal }: { goal: ProjectGoal }) => {
     <HStack width="100%" height="8px" justifyContent="flex-start" borderRadius="44px" bg="neutral1.3">
       <HStack
         p={'5px'}
-        width={reached ? '100%' : '10%'}
+        width={reached ? '100%' : '4%'}
         height="8px"
         bgColor={'primary1.9'}
         borderRadius="44px"
