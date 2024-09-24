@@ -225,6 +225,8 @@ export const NoRewardsSoldUrl = 'https://storage.googleapis.com/geyser-projects-
 
 export const DiamondUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/diamond.png'
 
+export const TelescopeUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/telescope.png'
+
 // FUNDING FLOW ERRORS
 
 export const FundingErrorUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/errors/error.png'
