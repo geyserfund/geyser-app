@@ -66,9 +66,9 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
     },
 
     '& .swiper-pagination-bullet': {
-      background: colors.neutral1[1],
+      background: colors.utils.whiteContrast,
     },
-    '&. swiper-pagination-bullet-active': {
+    '& .swiper-pagination-bullet-active': {
       background: colors.utils.whiteContrast,
     },
   },
