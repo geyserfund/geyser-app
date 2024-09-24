@@ -249,7 +249,6 @@ export const ProjectCreationWalletConnectionForm = ({
                   )}
                 </>
               }
-              promoText={t('No set fee per transaction')}
               secondaryText={
                 <span>
                   <Trans
