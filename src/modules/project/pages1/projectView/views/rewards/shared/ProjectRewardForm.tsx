@@ -447,7 +447,7 @@ export const ProjectRewardForm = ({
             />
           </FieldContainer>
         </Stack>
-        <Stack direction={{ base: 'column', lg: 'row' }}>
+        <Stack direction={{ base: 'column' }}>
           <FieldContainer title={t('Image')}>
             <FileUpload
               showcase
@@ -461,6 +461,11 @@ export const ProjectRewardForm = ({
               <UploadBox h={10} title="Select an Image" />
             </FileUpload>
           </FieldContainer>
+          <HStack w={'100%'} justifyContent={'center'}>
+            <Body fontSize={'sm'} muted>
+              {t('Ideal reward image ratio is 1592x2096')}
+            </Body>
+          </HStack>
         </Stack>
         <Stack direction={{ base: 'column', lg: 'row' }} my={4} gap={1}>
           <VStack flex={1} alignItems={'start'}>
