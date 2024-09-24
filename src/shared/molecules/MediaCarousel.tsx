@@ -83,7 +83,7 @@ export const MediaCarousel = ({ links }: { links: string[] }) => {
         pagination={{
           dynamicBullets: true,
         }}
-        navigation={{ enabled: true, hideOnClick: true }}
+        navigation={{ enabled: true }}
         modules={[Pagination, Navigation]}
         spaceBetween={10}
         slidesPerView={1}
