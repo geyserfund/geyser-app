@@ -7,7 +7,7 @@ import { FieldContainer } from '@/shared/components/form'
 import { Modal } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks'
-import { imageUrlRegex, vimeoUrlRegex, youtubeUrlRegex } from '@/utils'
+import { isValidMediaUrl } from '@/utils/validations/checkValidMediaUrl'
 
 type AdditionalUrlModalProps = {
   onAdd: (url: string) => void
@@ -84,14 +84,4 @@ export const AdditionalUrlModal = ({ onAdd, ...rest }: AdditionalUrlModalProps) 
       </Modal>
     </HStack>
   )
-}
-
-const isValidMediaUrl = (url: string) => {
-  try {
-    new URL(url)
-  } catch (error) {
-    return false
-  }
-
-  return imageUrlRegex.test(url) || youtubeUrlRegex.test(url) || vimeoUrlRegex.test(url)
 }
