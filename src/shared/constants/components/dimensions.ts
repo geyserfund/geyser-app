@@ -72,7 +72,7 @@ export const dimensions = {
   },
 
   bottomNavBar: {
-    desktopHeight: 60,
+    desktopHeight: 77,
   },
   discovery: {
     sideNav: {

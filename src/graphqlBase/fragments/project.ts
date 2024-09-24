@@ -1,11 +1,5 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_PROJECT_KEYS } from '@/modules/project/graphql/fragments/projectFragment'
-
-import { FRAGMENT_ENTRY_FOR_PROJECT } from './entries'
-import { FRAGMENT_PROJECT_OWNER_USER, FRAGMENT_USER_FOR_AVATAR, FRAGMENT_USER_ME } from './user'
-import { FRAGMENT_PROJECT_WALLET } from './wallet'
-
 export const FRAGMENT_PROJECT_FOR_COMMUNITY_VOTE_GRANT = gql`
   fragment ProjectCommunityVoteGrant on CommunityVoteGrant {
     id
@@ -93,13 +87,6 @@ export const FRAGMENT_PROJECT_REWARD_FOR_CREATE_UPDATE = gql`
 `
 
 export const FRAGMENT_PROJECT = gql`
-  ${FRAGMENT_PROJECT_REWARD_FOR_CREATE_UPDATE}
-  ${FRAGMENT_ENTRY_FOR_PROJECT}
-  ${FRAGMENT_PROJECT_OWNER_USER}
-  ${FRAGMENT_USER_FOR_AVATAR}
-  ${FRAGMENT_PROJECT_WALLET}
-  ${FRAGMENT_PROJECT_GRANT_APPLICATIONS}
-  ${FRAGMENT_PROJECT_KEYS}
   fragment Project on Project {
     id
     title
@@ -119,79 +106,6 @@ export const FRAGMENT_PROJECT = gql`
     rewardCurrency
     fundersCount
     fundingTxsCount
-    keys {
-      ...ProjectKeys
-    }
-    location {
-      country {
-        name
-        code
-      }
-      region
-    }
-    tags {
-      id
-      label
-    }
-    owners {
-      id
-      user {
-        ...ProjectOwnerUser
-      }
-    }
-    rewards {
-      ...ProjectRewardForCreateUpdate
-    }
-    ambassadors {
-      id
-      confirmed
-      user {
-        ...UserForAvatar
-      }
-    }
-    sponsors {
-      id
-      url
-      image
-      user {
-        ...UserForAvatar
-      }
-    }
-
-    entries(input: $input) {
-      ...EntryForProject
-    }
-    wallets {
-      ...ProjectWallet
-    }
-    followers {
-      id
-      username
-    }
-    keys {
-      nostrKeys {
-        publicKey {
-          npub
-        }
-      }
-    }
-    ...ProjectGrantApplications
-  }
-`
-
-export const FRAGMENT_PROJECT_FOR_SUBSCRIPTION = gql`
-  ${FRAGMENT_USER_ME}
-  fragment ProjectForSubscription on Project {
-    id
-    title
-    name
-    thumbnailImage
-    owners {
-      id
-      user {
-        ...UserMe
-      }
-    }
   }
 `
 
@@ -201,5 +115,17 @@ export const FRAGMENT_PROJECT_AVATAR = gql`
     name
     thumbnailImage
     title
+  }
+`
+
+export const FRAGMENT_PROJECT_FOR_OWNER = gql`
+  fragment ProjectForOwner on Project {
+    id
+    name
+    images
+    thumbnailImage
+    title
+    status
+    createdAt
   }
 `

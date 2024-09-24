@@ -2,6 +2,7 @@ import { HStack, Image, SkeletonCircle, StackProps, VStack } from '@chakra-ui/re
 import { useTranslation } from 'react-i18next'
 import { PiChatCircle, PiLightning } from 'react-icons/pi'
 
+import { useAuthContext } from '@/context'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { BronzeMedalUrl, GoldMedalUrl, SilverMedalUrl } from '@/shared/constants'
@@ -20,7 +21,11 @@ type LeaderboardItemProps = {
 export const LeaderboardItem = ({ funder, rank, ...props }: LeaderboardItemProps) => {
   const { t } = useTranslation()
 
+  const { user } = useAuthContext()
+
   const funderContributionModal = useModal()
+
+  const isViewer = user.id ? user.id === funder.user?.id : false
 
   return (
     <>
@@ -30,6 +35,7 @@ export const LeaderboardItem = ({ funder, rank, ...props }: LeaderboardItemProps
         paddingX={6}
         paddingY={2}
         _hover={{ backgroundColor: 'neutral1.3', cursor: 'pointer' }}
+        backgroundColor={isViewer ? 'indigo.3' : 'unset'}
         onClick={funderContributionModal.onOpen}
         {...props}
       >

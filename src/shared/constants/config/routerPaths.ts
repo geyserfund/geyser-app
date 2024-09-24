@@ -7,6 +7,8 @@ export enum PathName {
   grantsRoundTwo = 'roundtwo',
   myProjects = 'my-projects',
   activity = 'activity',
+  activityGlobal = 'global',
+  activityFollowed = 'followed',
 
   entry = 'entry',
 
@@ -106,6 +108,8 @@ const pathsMap = {
   discoveryLeaderboard: () => `/${PathName.leaderboard}`,
   discoveryMyProjects: () => `/${PathName.myProjects}`,
   discoveryActivity: () => `/${PathName.activity}`,
+  discoveryActivityGlobal: () => `/${PathName.activity}/${PathName.activityGlobal}`,
+  discoveryActivityFollowed: () => `/${PathName.activity}/${PathName.activityFollowed}`,
   discoveryGrants: () => `/${PathName.grants}`,
   discoveryGrant: (grantId: string) => `/${PathName.grants}/${grantId}`,
 

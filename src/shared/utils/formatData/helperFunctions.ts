@@ -32,7 +32,7 @@ export const getBitcoinAmount = (amount: number, decimal?: boolean) => {
   return `${result}`
 }
 
-export const getShortAmountLabel = (amount: number, decimal?: boolean) => {
+export const getShortAmountLabel = (amount: number, decimal?: boolean, lowerCase?: boolean) => {
   let result = 0
   let divisor = 1
   let symbol = ''
@@ -44,28 +44,28 @@ export const getShortAmountLabel = (amount: number, decimal?: boolean) => {
 
   if (amount >= 1000 && amount < 1000000) {
     divisor = 1000
-    symbol = 'K'
+    symbol = lowerCase ? 'k' : 'K'
     rest = ((amount % divisor) / divisor) * 10
     result = Math.floor(amount / divisor)
   }
 
   if (amount >= 1000000 && amount < 1000000000) {
     divisor = 1000000
-    symbol = 'M'
+    symbol = lowerCase ? 'm' : 'M'
     rest = ((amount % divisor) / divisor) * 10
     result = Math.floor(amount / divisor)
   }
 
   if (amount >= 1000000000 && amount < 1000000000000) {
     divisor = 1000000000
-    symbol = 'B'
+    symbol = lowerCase ? 'b' : 'B'
     rest = ((amount % divisor) / divisor) * 10
     result = Math.floor(amount / divisor)
   }
 
   if (amount >= 1000000000000) {
     divisor = 1000000000000
-    symbol = 'T'
+    symbol = lowerCase ? 't' : 'T'
     rest = ((amount % divisor) / divisor) * 10
     result = Math.floor(amount / divisor)
   }

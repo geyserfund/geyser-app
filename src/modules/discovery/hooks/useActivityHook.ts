@@ -37,8 +37,6 @@ export const useActivityHook = () => {
       },
     },
     onCompleted(data) {
-      console.log('checking myprojeect acitvity', data)
-
       const myProjectsActivity = data?.activitiesGet.activities || []
 
       if (myProjectsActivity.length > 0) {

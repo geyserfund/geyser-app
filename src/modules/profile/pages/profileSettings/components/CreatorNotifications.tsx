@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client'
-import { HStack, Select, Switch, VStack } from '@chakra-ui/react'
+import { HStack, Select, Skeleton, Switch, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { PiStar } from 'react-icons/pi'
 
 import { ImageWithReload } from '@/components/ui'
@@ -30,6 +31,7 @@ export const CreatorNotifications = ({
 }: {
   creatorNotificationSettings: CreatorNotificationSettings[]
 }) => {
+  const { t } = useTranslation()
   const [settings, setSettings] = useState<CreatorNotificationSettings[]>(creatorNotificationSettings)
 
   useEffect(() => {
@@ -137,7 +139,7 @@ export const CreatorNotifications = ({
   return (
     <VStack spacing={6} align="stretch" width="100%">
       <Body size="md" medium>
-        Creator notifications
+        {t('Creator notifications')}
       </Body>
       {settings.map((setting, index) => (
         <CardLayout key={index} spacing={5}>
@@ -186,7 +188,7 @@ export const CreatorNotifications = ({
               />
             </HorizontalFormField>
             <Body size="sm" regular color="neutral1.10">
-              Receive a monthly email about your project summary: stats, goal progress and, hot rewards.
+              {t('Receive a monthly email about your project summary: stats, goal progress and, hot rewards.')}
             </Body>
 
             <HorizontalFormField label="Goal Reached Email" htmlFor="goal-reached">
@@ -254,6 +256,37 @@ export const CreatorNotifications = ({
                 }
               />
             </HorizontalFormField>
+          </VStack>
+        </CardLayout>
+      ))}
+    </VStack>
+  )
+}
+
+export const CreatorNotificationsSkeleton = () => {
+  return (
+    <VStack spacing={6} align="stretch" width="100%">
+      <Skeleton height="24px" width="200px" />
+
+      {[1, 2, 3].map((index) => (
+        <CardLayout key={index} spacing={5}>
+          <VStack align="stretch">
+            <HStack>
+              <Skeleton width="28px" height="28px" borderRadius="6px" />
+              <Skeleton height="20px" width="100%" />
+            </HStack>
+
+            {[1, 2, 3, 4].map((fieldIndex) => (
+              <HStack key={fieldIndex} justify="space-between">
+                <Skeleton height="20px" width="350px" />
+                <HStack>
+                  <Skeleton height="32px" width="100px" />
+                  <Skeleton height="32px" width="40px" />
+                </HStack>
+              </HStack>
+            ))}
+
+            <Skeleton height="16px" width="100%" />
           </VStack>
         </CardLayout>
       ))}
