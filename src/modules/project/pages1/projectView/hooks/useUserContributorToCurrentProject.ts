@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import {
-  ContributionSummaryPeriod,
+  ContributionsSummaryPeriod,
   ProjectLeaderboardContributorsFragment,
   useProjectUserContributorQuery,
 } from '@/types'
@@ -13,7 +13,7 @@ export const useUserContributorToCurrentProject = ({
   period,
 }: {
   funders?: ProjectLeaderboardContributorsFragment[]
-  period?: ContributionSummaryPeriod
+  period?: ContributionsSummaryPeriod
 } = {}) => {
   const { user } = useAuthContext()
   const { project } = useProjectAtom()
@@ -50,10 +50,10 @@ export const useUserContributorToCurrentProject = ({
       ? {
           user: contributor.user,
           funderId: contributor.id,
-          contributionsTotal: contributor.contributionSummary?.contributionsTotal || 0,
-          contributionsTotalUsd: contributor.contributionSummary?.contributionsTotalUsd || 0,
-          contributionsCount: contributor.contributionSummary?.contributionsCount || 0,
-          commentsCount: contributor.contributionSummary?.commentsCount || 0,
+          contributionsTotal: contributor.contributionsSummary?.contributionsTotal || 0,
+          contributionsTotalUsd: contributor.contributionsSummary?.contributionsTotalUsd || 0,
+          contributionsCount: contributor.contributionsSummary?.contributionsCount || 0,
+          commentsCount: contributor.contributionsSummary?.commentsCount || 0,
         }
       : undefined,
     userAllTimeRank: contributor?.rank,
