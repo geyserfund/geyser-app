@@ -40,8 +40,8 @@ export const FRAGMENT_PROJECT_USER_CONTRIBUTOR = gql`
   }
 `
 
-export const FRAGMENT_PROJECT_FUNDER_CONTRIBUTION_SUMMARY = gql`
-  fragment FunderContributionSummary on FunderContributionSummary {
+export const FRAGMENT_PROJECT_CONTRIBUTOR_CONTRIBUTION_SUMMARY = gql`
+  fragment ContributorContributionsSummary on ContributorContributionsSummary {
     contributionsTotalUsd
     contributionsTotal
     contributionsCount
