@@ -47,13 +47,13 @@ export const AdditionalUrlModal = ({ onAdd, ...rest }: AdditionalUrlModalProps) 
         {...rest}
       >
         <Body size="lg" light>
-          {t('Paste additional URL')}
+          {t('Add external media')}
         </Body>
       </Button>
 
       <Modal
         {...additionalUrlModal}
-        title={t('Add additional media')}
+        title={t('Add external media')}
         bodyProps={{
           as: VStack,
           gap: 4,
