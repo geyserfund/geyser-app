@@ -241,7 +241,7 @@ export type ConnectionDetails =
 export enum ContributionSummaryPeriod {
   AllTime = 'ALL_TIME',
   Month = 'MONTH',
-  Week = 'WEEK'
+  Week = 'WEEK',
 }
 
 export type Country = {
@@ -266,11 +266,11 @@ export type CreateProjectInput = {
   /** Project ISO3166 country code */
   countryCode?: InputMaybe<Scalars['String']['input']>
   /** A short description of the project. */
-  description: Scalars['String']['input'];
-  email: Scalars['String']['input'];
+  description: Scalars['String']['input']
+  email: Scalars['String']['input']
   /** Project header images */
-  images: Array<Scalars['String']['input']>;
-  name: Scalars['String']['input'];
+  images: Array<Scalars['String']['input']>
+  name: Scalars['String']['input']
   /** Project region */
   region?: InputMaybe<Scalars['String']['input']>
   /** The currency used to price rewards for the project. Currently only USDCENT supported. */
@@ -285,19 +285,19 @@ export type CreateProjectInput = {
 export type CreateProjectRewardInput = {
   category?: InputMaybe<Scalars['String']['input']>
   /** Cost of the reward, currently only in USD cents */
-  cost: Scalars['Int']['input'];
-  description?: InputMaybe<Scalars['String']['input']>;
-  estimatedAvailabilityDate?: InputMaybe<Scalars['Date']['input']>;
-  estimatedDeliveryInWeeks?: InputMaybe<Scalars['Int']['input']>;
-  hasShipping: Scalars['Boolean']['input'];
-  images: Array<Scalars['String']['input']>;
-  isAddon?: InputMaybe<Scalars['Boolean']['input']>;
-  isHidden?: InputMaybe<Scalars['Boolean']['input']>;
-  maxClaimable?: InputMaybe<Scalars['Int']['input']>;
-  name: Scalars['String']['input'];
-  preOrder?: InputMaybe<Scalars['Boolean']['input']>;
-  projectId: Scalars['BigInt']['input'];
-};
+  cost: Scalars['Int']['input']
+  description?: InputMaybe<Scalars['String']['input']>
+  estimatedAvailabilityDate?: InputMaybe<Scalars['Date']['input']>
+  estimatedDeliveryInWeeks?: InputMaybe<Scalars['Int']['input']>
+  hasShipping: Scalars['Boolean']['input']
+  images: Array<Scalars['String']['input']>
+  isAddon?: InputMaybe<Scalars['Boolean']['input']>
+  isHidden?: InputMaybe<Scalars['Boolean']['input']>
+  maxClaimable?: InputMaybe<Scalars['Int']['input']>
+  name: Scalars['String']['input']
+  preOrder?: InputMaybe<Scalars['Boolean']['input']>
+  projectId: Scalars['BigInt']['input']
+}
 
 export type CreateWalletInput = {
   feePercentage: Scalars['Float']['input']
@@ -458,9 +458,9 @@ export type Funder = {
   /** Boolean value indicating whether at least one of the funding transactions of the Funder were confirmed. */
   confirmed: Scalars['Boolean']['output']
   /** Time at which the first confirmed funding transactions of the Funder was confirmed. */
-  confirmedAt?: Maybe<Scalars['Date']['output']>;
+  confirmedAt?: Maybe<Scalars['Date']['output']>
   /** Contribution's funding summary, possibly in different time ranges. */
-  contributionSummary?: Maybe<FunderContributionSummary>;
+  contributionSummary?: Maybe<FunderContributionSummary>
   /** Funder's funding txs. */
   fundingTxs: Array<FundingTx>
   id: Scalars['BigInt']['output']
@@ -474,9 +474,8 @@ export type Funder = {
 
 /** The Funder type contains a User's funding details over a particular project. */
 export type FunderContributionSummaryArgs = {
-  period?: InputMaybe<ContributionSummaryPeriod>;
-};
-
+  period?: InputMaybe<ContributionSummaryPeriod>
+}
 
 /** The Funder type contains a User's funding details over a particular project. */
 export type FunderFundingTxsArgs = {
@@ -484,12 +483,12 @@ export type FunderFundingTxsArgs = {
 }
 
 export type FunderContributionSummary = {
-  __typename?: 'FunderContributionSummary';
-  commentsCount: Scalars['Int']['output'];
-  contributionsCount: Scalars['Int']['output'];
-  contributionsTotal: Scalars['Int']['output'];
-  contributionsTotalUsd: Scalars['Float']['output'];
-};
+  __typename?: 'FunderContributionSummary'
+  commentsCount: Scalars['Int']['output']
+  contributionsCount: Scalars['Int']['output']
+  contributionsTotal: Scalars['Int']['output']
+  contributionsTotalUsd: Scalars['Float']['output']
+}
 
 export type FunderRewardGraphSum = GraphSumData & {
   __typename?: 'FunderRewardGraphSum'
@@ -1715,13 +1714,13 @@ export type Project = {
   fundingTxsCount?: Maybe<Scalars['Int']['output']>
   goalsCount?: Maybe<Scalars['Int']['output']>
   /** Returns the project's grant applications. */
-  grantApplications: Array<GrantApplicant>;
-  id: Scalars['BigInt']['output'];
+  grantApplications: Array<GrantApplicant>
+  id: Scalars['BigInt']['output']
   /** Project header images. */
-  images: Array<Scalars['String']['output']>;
-  keys: ProjectKeys;
-  links: Array<Scalars['String']['output']>;
-  location?: Maybe<Location>;
+  images: Array<Scalars['String']['output']>
+  keys: ProjectKeys
+  links: Array<Scalars['String']['output']>
+  location?: Maybe<Location>
   /** @deprecated milestones are deprecated, use the goals instead */
   milestones: Array<Milestone>
   /** Unique name for the project. Used for the project URL and lightning address. */
@@ -1735,10 +1734,10 @@ export type Project = {
   /** @deprecated Field no longer supported */
   sponsors: Array<Sponsor>
   /** Returns summary statistics on the Project views and visitors. */
-  statistics?: Maybe<ProjectStatistics>;
-  status?: Maybe<ProjectStatus>;
-  tags: Array<Tag>;
-  thumbnailImage?: Maybe<Scalars['String']['output']>;
+  statistics?: Maybe<ProjectStatistics>
+  status?: Maybe<ProjectStatus>
+  tags: Array<Tag>
+  thumbnailImage?: Maybe<Scalars['String']['output']>
   /** Public title of the project. */
   title: Scalars['String']['output']
   type: ProjectType
@@ -1980,7 +1979,7 @@ export type ProjectRegionsGetResult = {
 }
 
 export type ProjectReward = {
-  __typename?: 'ProjectReward';
+  __typename?: 'ProjectReward'
   /** Category of ProjectReward */
   category?: Maybe<Scalars['String']['output']>
   /** Cost of the reward, priced in USD cents. */
@@ -1997,14 +1996,14 @@ export type ProjectReward = {
   /** Short description of the reward. */
   description?: Maybe<Scalars['String']['output']>
   /** Estimated availability date of a reward that is in development */
-  estimatedAvailabilityDate?: Maybe<Scalars['Date']['output']>;
+  estimatedAvailabilityDate?: Maybe<Scalars['Date']['output']>
   /** Estimated delivery time from the time of purchase */
   estimatedDeliveryInWeeks?: Maybe<Scalars['Int']['output']>
   /** Boolean value to indicate whether this reward requires shipping */
-  hasShipping: Scalars['Boolean']['output'];
-  id: Scalars['BigInt']['output'];
+  hasShipping: Scalars['Boolean']['output']
+  id: Scalars['BigInt']['output']
   /** Project reward images. */
-  images: Array<Scalars['String']['output']>;
+  images: Array<Scalars['String']['output']>
   /** Boolean value to indicate whether this reward is an addon */
   isAddon: Scalars['Boolean']['output']
   /** Boolean value to indicate whether this reward is hidden */
@@ -2018,7 +2017,7 @@ export type ProjectReward = {
   /** Boolean value to indicate whether this reward requires shipping */
   project: Project
   /** Currency in which the reward cost is stored. */
-  rewardCurrency: RewardCurrency;
+  rewardCurrency: RewardCurrency
   /** Number of times this Project Reward was sold. */
   sold: Scalars['Int']['output']
   /** Tracks the stock of the reward */
@@ -2549,9 +2548,9 @@ export type UpdateProjectInput = {
   /** Project ISO3166 country code */
   countryCode?: InputMaybe<Scalars['String']['input']>
   /** Description of the project. */
-  description?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>
   /** Project header images. */
-  images?: InputMaybe<Array<Scalars['String']['input']>>;
+  images?: InputMaybe<Array<Scalars['String']['input']>>
   /** Project links */
   links?: InputMaybe<Array<Scalars['String']['input']>>
   /** Project name, used both for the project URL, project lightning address and NIP05. */
@@ -2562,9 +2561,9 @@ export type UpdateProjectInput = {
   /** The currency used to price rewards for the project. Currently only USDCENT supported. Should become an Enum. */
   rewardCurrency?: InputMaybe<RewardCurrency>
   /** A short description of the project. */
-  shortDescription?: InputMaybe<Scalars['String']['input']>;
+  shortDescription?: InputMaybe<Scalars['String']['input']>
   /** Project thumbnail image. */
-  thumbnailImage?: InputMaybe<Scalars['String']['input']>;
+  thumbnailImage?: InputMaybe<Scalars['String']['input']>
   /** Public title of the project. */
   title?: InputMaybe<Scalars['String']['input']>
   type?: InputMaybe<ProjectType>
@@ -2573,19 +2572,19 @@ export type UpdateProjectInput = {
 export type UpdateProjectRewardInput = {
   category?: InputMaybe<Scalars['String']['input']>
   /** Cost of the reward, priced in USD cents */
-  cost?: InputMaybe<Scalars['Int']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  estimatedAvailabilityDate?: InputMaybe<Scalars['Date']['input']>;
-  estimatedDeliveryInWeeks?: InputMaybe<Scalars['Int']['input']>;
-  hasShipping?: InputMaybe<Scalars['Boolean']['input']>;
-  images?: InputMaybe<Array<Scalars['String']['input']>>;
-  isAddon?: InputMaybe<Scalars['Boolean']['input']>;
-  isHidden?: InputMaybe<Scalars['Boolean']['input']>;
-  maxClaimable?: InputMaybe<Scalars['Int']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  preOrder?: InputMaybe<Scalars['Boolean']['input']>;
-  projectRewardId: Scalars['BigInt']['input'];
-};
+  cost?: InputMaybe<Scalars['Int']['input']>
+  description?: InputMaybe<Scalars['String']['input']>
+  estimatedAvailabilityDate?: InputMaybe<Scalars['Date']['input']>
+  estimatedDeliveryInWeeks?: InputMaybe<Scalars['Int']['input']>
+  hasShipping?: InputMaybe<Scalars['Boolean']['input']>
+  images?: InputMaybe<Array<Scalars['String']['input']>>
+  isAddon?: InputMaybe<Scalars['Boolean']['input']>
+  isHidden?: InputMaybe<Scalars['Boolean']['input']>
+  maxClaimable?: InputMaybe<Scalars['Int']['input']>
+  name?: InputMaybe<Scalars['String']['input']>
+  preOrder?: InputMaybe<Scalars['Boolean']['input']>
+  projectRewardId: Scalars['BigInt']['input']
+}
 
 export type UpdateUserInput = {
   bio?: InputMaybe<Scalars['String']['input']>
@@ -2906,592 +2905,596 @@ export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  ActivitiesCountGroupedByProjectInput: ActivitiesCountGroupedByProjectInput;
-  ActivitiesGetResponse: ResolverTypeWrapper<ActivitiesGetResponse>;
-  Activity: ResolverTypeWrapper<Omit<Activity, 'resource'> & { resource: ResolversTypes['ActivityResource'] }>;
-  ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput;
-  ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
-  ActivityFeedName: ActivityFeedName;
-  ActivityResource: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['ActivityResource']>;
-  ActivityResourceType: ActivityResourceType;
-  AffiliateLink: ResolverTypeWrapper<AffiliateLink>;
-  AffiliateLinkCreateInput: AffiliateLinkCreateInput;
-  AffiliatePaymentConfirmResponse: ResolverTypeWrapper<AffiliatePaymentConfirmResponse>;
-  AffiliatePayoutsStats: ResolverTypeWrapper<AffiliatePayoutsStats>;
-  AffiliateSalesStats: ResolverTypeWrapper<AffiliateSalesStats>;
-  AffiliateStats: ResolverTypeWrapper<AffiliateStats>;
-  AffiliateStatus: AffiliateStatus;
-  Ambassador: ResolverTypeWrapper<Ambassador>;
-  AmountSummary: ResolverTypeWrapper<AmountSummary>;
-  AnalyticsGroupByInterval: AnalyticsGroupByInterval;
-  Badge: ResolverTypeWrapper<Badge>;
-  BadgeClaimInput: BadgeClaimInput;
-  BadgesGetInput: BadgesGetInput;
-  BadgesGetWhereInput: BadgesGetWhereInput;
-  BaseCurrency: BaseCurrency;
-  BigInt: ResolverTypeWrapper<Scalars['BigInt']['output']>;
-  BitcoinQuote: ResolverTypeWrapper<BitcoinQuote>;
-  BoardVoteGrant: ResolverTypeWrapper<BoardVoteGrant>;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
-  CommunityVoteGrant: ResolverTypeWrapper<CommunityVoteGrant>;
-  CompetitionVoteGrantVoteSummary: ResolverTypeWrapper<CompetitionVoteGrantVoteSummary>;
-  ConnectionDetails: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['ConnectionDetails']>;
-  ContributionSummaryPeriod: ContributionSummaryPeriod;
-  Country: ResolverTypeWrapper<Country>;
-  CreateEntryInput: CreateEntryInput;
-  CreateProjectInput: CreateProjectInput;
-  CreateProjectRewardInput: CreateProjectRewardInput;
-  CreateWalletInput: CreateWalletInput;
-  CreatorNotificationSettings: ResolverTypeWrapper<CreatorNotificationSettings>;
-  CreatorNotificationSettingsProject: ResolverTypeWrapper<CreatorNotificationSettingsProject>;
-  Currency: Currency;
-  CurrencyQuoteGetInput: CurrencyQuoteGetInput;
-  CurrencyQuoteGetResponse: ResolverTypeWrapper<CurrencyQuoteGetResponse>;
-  CursorInput: CursorInput;
-  CursorInputString: CursorInputString;
-  CursorPaginationResponse: ResolverTypeWrapper<CursorPaginationResponse>;
-  Date: ResolverTypeWrapper<Scalars['Date']['output']>;
-  DateRangeInput: DateRangeInput;
-  DatetimeRange: ResolverTypeWrapper<DatetimeRange>;
-  DeleteProjectInput: DeleteProjectInput;
-  DeleteProjectRewardInput: DeleteProjectRewardInput;
-  DeleteUserResponse: ResolverTypeWrapper<DeleteUserResponse>;
-  DistributionSystem: DistributionSystem;
-  EmailVerifyInput: EmailVerifyInput;
-  Entry: ResolverTypeWrapper<Entry>;
-  EntryPublishedSubscriptionResponse: ResolverTypeWrapper<EntryPublishedSubscriptionResponse>;
-  EntryStatus: EntryStatus;
-  EntryType: EntryType;
-  ExternalAccount: ResolverTypeWrapper<ExternalAccount>;
-  FileUploadInput: FileUploadInput;
-  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
-  Funder: ResolverTypeWrapper<Funder>;
-  FunderContributionSummary: ResolverTypeWrapper<FunderContributionSummary>;
-  FunderRewardGraphSum: ResolverTypeWrapper<FunderRewardGraphSum>;
-  FundingCancelInput: FundingCancelInput;
-  FundingCancelResponse: ResolverTypeWrapper<FundingCancelResponse>;
-  FundingConfirmInput: FundingConfirmInput;
-  FundingConfirmOffChainBolt11Input: FundingConfirmOffChainBolt11Input;
-  FundingConfirmOffChainInput: FundingConfirmOffChainInput;
-  FundingConfirmOnChainInput: FundingConfirmOnChainInput;
-  FundingConfirmResponse: ResolverTypeWrapper<FundingConfirmResponse>;
-  FundingCreateFromPodcastKeysendInput: FundingCreateFromPodcastKeysendInput;
-  FundingInput: FundingInput;
-  FundingMetadataInput: FundingMetadataInput;
-  FundingMethod: FundingMethod;
-  FundingMutationResponse: ResolverTypeWrapper<FundingMutationResponse>;
-  FundingPendingInput: FundingPendingInput;
-  FundingPendingOffChainBolt11Input: FundingPendingOffChainBolt11Input;
-  FundingPendingOffChainInput: FundingPendingOffChainInput;
-  FundingPendingOnChainInput: FundingPendingOnChainInput;
-  FundingPendingResponse: ResolverTypeWrapper<FundingPendingResponse>;
-  FundingQueryResponse: ResolverTypeWrapper<FundingQueryResponse>;
-  FundingResourceType: FundingResourceType;
-  FundingStatus: FundingStatus;
-  FundingTx: ResolverTypeWrapper<Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversTypes['SourceResource']> }>;
-  FundingTxAmountGraph: ResolverTypeWrapper<FundingTxAmountGraph>;
-  FundingTxEmailUpdateInput: FundingTxEmailUpdateInput;
-  FundingTxInvoiceSanctionCheckStatus: FundingTxInvoiceSanctionCheckStatus;
-  FundingTxInvoiceSanctionCheckStatusGetInput: FundingTxInvoiceSanctionCheckStatusGetInput;
-  FundingTxInvoiceSanctionCheckStatusResponse: ResolverTypeWrapper<FundingTxInvoiceSanctionCheckStatusResponse>;
-  FundingTxMethodCount: ResolverTypeWrapper<FundingTxMethodCount>;
-  FundingTxMethodSum: ResolverTypeWrapper<FundingTxMethodSum>;
-  FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput;
-  FundingTxStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<FundingTxStatusUpdatedSubscriptionResponse>;
-  FundingTxsGetResponse: ResolverTypeWrapper<FundingTxsGetResponse>;
-  FundingTxsWhereFundingStatus: FundingTxsWhereFundingStatus;
-  FundingType: FundingType;
-  FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>;
-  GenerateAffiliatePaymentRequestResponse: ResolverTypeWrapper<GenerateAffiliatePaymentRequestResponse>;
-  GenerateAffiliatePaymentRequestsInput: GenerateAffiliatePaymentRequestsInput;
-  GetActivitiesInput: GetActivitiesInput;
-  GetActivityOrderByInput: GetActivityOrderByInput;
-  GetActivityPaginationInput: GetActivityPaginationInput;
-  GetActivityWhereInput: GetActivityWhereInput;
-  GetAffiliateLinksInput: GetAffiliateLinksInput;
-  GetAffiliateLinksWhereInput: GetAffiliateLinksWhereInput;
-  GetContributorInput: GetContributorInput;
-  GetDashboardFundersWhereInput: GetDashboardFundersWhereInput;
-  GetEntriesInput: GetEntriesInput;
-  GetEntriesOrderByInput: GetEntriesOrderByInput;
-  GetEntriesWhereInput: GetEntriesWhereInput;
-  GetFunderFundingTxsInput: GetFunderFundingTxsInput;
-  GetFunderFundingTxsWhereInput: GetFunderFundingTxsWhereInput;
-  GetFunderWhereInput: GetFunderWhereInput;
-  GetFundersInput: GetFundersInput;
-  GetFundersOrderByInput: GetFundersOrderByInput;
-  GetFundingTxsInput: GetFundingTxsInput;
-  GetFundingTxsOrderByInput: GetFundingTxsOrderByInput;
-  GetFundingTxsWhereInput: GetFundingTxsWhereInput;
-  GetProjectGoalsInput: GetProjectGoalsInput;
-  GetProjectOrdersStatsInput: GetProjectOrdersStatsInput;
-  GetProjectOrdersStatsWhereInput: GetProjectOrdersStatsWhereInput;
-  GetProjectRewardInput: GetProjectRewardInput;
-  GetProjectRewardWhereInput: GetProjectRewardWhereInput;
-  GetProjectStatsInput: GetProjectStatsInput;
-  GetProjectStatsWhereInput: GetProjectStatsWhereInput;
-  GlobalContributorLeaderboardRow: ResolverTypeWrapper<GlobalContributorLeaderboardRow>;
-  GlobalProjectLeaderboardRow: ResolverTypeWrapper<GlobalProjectLeaderboardRow>;
-  Grant: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['Grant']>;
-  GrantApplicant: ResolverTypeWrapper<Omit<GrantApplicant, 'grant'> & { grant: ResolversTypes['Grant'] }>;
-  GrantApplicantContributor: ResolverTypeWrapper<GrantApplicantContributor>;
-  GrantApplicantContributorInput: GrantApplicantContributorInput;
-  GrantApplicantContributorWhereInput: GrantApplicantContributorWhereInput;
-  GrantApplicantFunding: ResolverTypeWrapper<GrantApplicantFunding>;
-  GrantApplicantStatus: GrantApplicantStatus;
-  GrantApplicantStatusFilter: GrantApplicantStatusFilter;
-  GrantApplicantsGetInput: GrantApplicantsGetInput;
-  GrantApplicantsGetOrderByInput: GrantApplicantsGetOrderByInput;
-  GrantApplicantsGetWhereInput: GrantApplicantsGetWhereInput;
-  GrantApplicantsOrderByField: GrantApplicantsOrderByField;
-  GrantApplyInput: GrantApplyInput;
-  GrantBoardMember: ResolverTypeWrapper<GrantBoardMember>;
-  GrantGetInput: GrantGetInput;
-  GrantGetWhereInput: GrantGetWhereInput;
-  GrantStatistics: ResolverTypeWrapper<GrantStatistics>;
-  GrantStatisticsApplicant: ResolverTypeWrapper<GrantStatisticsApplicant>;
-  GrantStatisticsGrant: ResolverTypeWrapper<GrantStatisticsGrant>;
-  GrantStatus: ResolverTypeWrapper<GrantStatus>;
-  GrantStatusEnum: GrantStatusEnum;
-  GrantType: GrantType;
-  GraphSumData: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['GraphSumData']>;
-  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
-  InvoiceStatus: InvoiceStatus;
-  LeaderboardGlobalContributorsGetInput: LeaderboardGlobalContributorsGetInput;
-  LeaderboardGlobalProjectsGetInput: LeaderboardGlobalProjectsGetInput;
-  LeaderboardPeriod: LeaderboardPeriod;
-  LightningAddressConnectionDetails: ResolverTypeWrapper<LightningAddressConnectionDetails>;
-  LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput;
-  LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput;
-  LightningAddressContributionLimits: ResolverTypeWrapper<LightningAddressContributionLimits>;
-  LightningAddressVerifyResponse: ResolverTypeWrapper<LightningAddressVerifyResponse>;
-  LndConnectionDetails: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['LndConnectionDetails']>;
-  LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput;
-  LndConnectionDetailsPrivate: ResolverTypeWrapper<LndConnectionDetailsPrivate>;
-  LndConnectionDetailsPublic: ResolverTypeWrapper<LndConnectionDetailsPublic>;
-  LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput;
-  LndNodeType: LndNodeType;
-  Location: ResolverTypeWrapper<Location>;
-  MFAAction: MfaAction;
-  Milestone: ResolverTypeWrapper<Milestone>;
-  Mutation: ResolverTypeWrapper<{}>;
-  MutationResponse: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['MutationResponse']>;
-  NostrKeys: ResolverTypeWrapper<NostrKeys>;
-  NostrPrivateKey: ResolverTypeWrapper<NostrPrivateKey>;
-  NostrPublicKey: ResolverTypeWrapper<NostrPublicKey>;
-  NotificationChannel: NotificationChannel;
-  NotificationConfiguration: ResolverTypeWrapper<NotificationConfiguration>;
-  NotificationSettings: ResolverTypeWrapper<NotificationSettings>;
-  OTPInput: OtpInput;
-  OTPLoginInput: OtpLoginInput;
-  OTPResponse: ResolverTypeWrapper<OtpResponse>;
-  OffsetBasedPaginationInput: OffsetBasedPaginationInput;
-  OnChainTxInput: OnChainTxInput;
-  Order: ResolverTypeWrapper<Order>;
-  OrderBitcoinQuoteInput: OrderBitcoinQuoteInput;
-  OrderByDirection: OrderByDirection;
-  OrderByOptions: OrderByOptions;
-  OrderFundingInput: OrderFundingInput;
-  OrderItem: ResolverTypeWrapper<OrderItem>;
-  OrderItemInput: OrderItemInput;
-  OrderItemType: OrderItemType;
-  OrderStatusUpdateInput: OrderStatusUpdateInput;
-  OrdersGetInput: OrdersGetInput;
-  OrdersGetOrderByField: OrdersGetOrderByField;
-  OrdersGetOrderByInput: OrdersGetOrderByInput;
-  OrdersGetResponse: ResolverTypeWrapper<OrdersGetResponse>;
-  OrdersGetStatus: OrdersGetStatus;
-  OrdersGetWhereInput: OrdersGetWhereInput;
-  OrdersStatsBase: ResolverTypeWrapper<OrdersStatsBase>;
-  Owner: ResolverTypeWrapper<Owner>;
-  OwnerOf: ResolverTypeWrapper<OwnerOf>;
-  PageViewCountGraph: ResolverTypeWrapper<PageViewCountGraph>;
-  PaginationCursor: ResolverTypeWrapper<PaginationCursor>;
-  PaginationInput: PaginationInput;
-  ProfileNotificationSettings: ResolverTypeWrapper<ProfileNotificationSettings>;
-  Project: ResolverTypeWrapper<Project>;
-  ProjectActivatedSubscriptionResponse: ResolverTypeWrapper<ProjectActivatedSubscriptionResponse>;
-  ProjectActivitiesCount: ResolverTypeWrapper<ProjectActivitiesCount>;
-  ProjectContributionsGroupedByMethodStats: ResolverTypeWrapper<ProjectContributionsGroupedByMethodStats>;
-  ProjectContributionsStats: ResolverTypeWrapper<ProjectContributionsStats>;
-  ProjectContributionsStatsBase: ResolverTypeWrapper<ProjectContributionsStatsBase>;
-  ProjectCountriesGetResult: ResolverTypeWrapper<ProjectCountriesGetResult>;
-  ProjectDeleteResponse: ResolverTypeWrapper<ProjectDeleteResponse>;
-  ProjectEntriesGetInput: ProjectEntriesGetInput;
-  ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput;
-  ProjectFollowMutationInput: ProjectFollowMutationInput;
-  ProjectFollowerStats: ResolverTypeWrapper<ProjectFollowerStats>;
-  ProjectFunderRewardStats: ResolverTypeWrapper<ProjectFunderRewardStats>;
-  ProjectFunderStats: ResolverTypeWrapper<ProjectFunderStats>;
-  ProjectFundingTxStats: ResolverTypeWrapper<ProjectFundingTxStats>;
-  ProjectGoal: ResolverTypeWrapper<ProjectGoal>;
-  ProjectGoalCreateInput: ProjectGoalCreateInput;
-  ProjectGoalCurrency: ProjectGoalCurrency;
-  ProjectGoalDeleteResponse: ResolverTypeWrapper<ProjectGoalDeleteResponse>;
-  ProjectGoalOrderingUpdateInput: ProjectGoalOrderingUpdateInput;
-  ProjectGoalStatus: ProjectGoalStatus;
-  ProjectGoalStatusInCreate: ProjectGoalStatusInCreate;
-  ProjectGoalUpdateInput: ProjectGoalUpdateInput;
-  ProjectGoals: ResolverTypeWrapper<ProjectGoals>;
-  ProjectGrantApplicationsInput: ProjectGrantApplicationsInput;
-  ProjectGrantApplicationsWhereInput: ProjectGrantApplicationsWhereInput;
-  ProjectGrantApplicationsWhereInputEnum: ProjectGrantApplicationsWhereInputEnum;
-  ProjectKeys: ResolverTypeWrapper<ProjectKeys>;
-  ProjectLeaderboardContributorsGetInput: ProjectLeaderboardContributorsGetInput;
-  ProjectLeaderboardContributorsRow: ResolverTypeWrapper<ProjectLeaderboardContributorsRow>;
-  ProjectLeaderboardPeriod: ProjectLeaderboardPeriod;
-  ProjectLinkMutationInput: ProjectLinkMutationInput;
-  ProjectMostFunded: ResolverTypeWrapper<ProjectMostFunded>;
-  ProjectMostFundedByTag: ResolverTypeWrapper<ProjectMostFundedByTag>;
-  ProjectPublishMutationInput: ProjectPublishMutationInput;
-  ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>;
-  ProjectReward: ResolverTypeWrapper<ProjectReward>;
-  ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate;
-  ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput;
-  ProjectRewardTrendingWeeklyGetRow: ResolverTypeWrapper<ProjectRewardTrendingWeeklyGetRow>;
-  ProjectRewardsGroupedByRewardIdStats: ResolverTypeWrapper<ProjectRewardsGroupedByRewardIdStats>;
-  ProjectRewardsGroupedByRewardIdStatsProjectReward: ResolverTypeWrapper<ProjectRewardsGroupedByRewardIdStatsProjectReward>;
-  ProjectRewardsStats: ResolverTypeWrapper<ProjectRewardsStats>;
-  ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>;
-  ProjectStats: ResolverTypeWrapper<ProjectStats>;
-  ProjectStatsBase: ResolverTypeWrapper<ProjectStatsBase>;
-  ProjectStatus: ProjectStatus;
-  ProjectStatusUpdate: ProjectStatusUpdate;
-  ProjectTagMutationInput: ProjectTagMutationInput;
-  ProjectType: ProjectType;
-  ProjectViewBaseStats: ResolverTypeWrapper<ProjectViewBaseStats>;
-  ProjectViewStats: ResolverTypeWrapper<ProjectViewStats>;
-  ProjectsGetQueryInput: ProjectsGetQueryInput;
-  ProjectsGetWhereInput: ProjectsGetWhereInput;
-  ProjectsMostFundedByTagInput: ProjectsMostFundedByTagInput;
-  ProjectsMostFundedByTagRange: ProjectsMostFundedByTagRange;
-  ProjectsOrderByField: ProjectsOrderByField;
-  ProjectsOrderByInput: ProjectsOrderByInput;
-  ProjectsResponse: ResolverTypeWrapper<ProjectsResponse>;
-  ProjectsSummary: ResolverTypeWrapper<ProjectsSummary>;
-  Query: ResolverTypeWrapper<{}>;
-  QuoteCurrency: QuoteCurrency;
-  ResourceInput: ResourceInput;
-  RewardCurrency: RewardCurrency;
-  SendOtpByEmailInput: SendOtpByEmailInput;
-  SettingValueType: SettingValueType;
-  ShippingDestination: ShippingDestination;
-  SignedUploadUrl: ResolverTypeWrapper<SignedUploadUrl>;
-  SourceResource: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['SourceResource']>;
-  Sponsor: ResolverTypeWrapper<Sponsor>;
-  SponsorStatus: SponsorStatus;
-  StatsInterface: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['StatsInterface']>;
-  String: ResolverTypeWrapper<Scalars['String']['output']>;
-  Subscription: ResolverTypeWrapper<{}>;
-  Swap: ResolverTypeWrapper<Swap>;
-  TOTPInput: TotpInput;
-  Tag: ResolverTypeWrapper<Tag>;
-  TagCreateInput: TagCreateInput;
-  TagsGetResult: ResolverTypeWrapper<TagsGetResult>;
-  TagsMostFundedGetResult: ResolverTypeWrapper<TagsMostFundedGetResult>;
-  TwoFAInput: TwoFaInput;
-  UniqueOrderInput: UniqueOrderInput;
-  UniqueProjectQueryInput: UniqueProjectQueryInput;
-  UpdatableOrderStatus: UpdatableOrderStatus;
-  UpdateEntryInput: UpdateEntryInput;
-  UpdateProjectInput: UpdateProjectInput;
-  UpdateProjectRewardInput: UpdateProjectRewardInput;
-  UpdateUserInput: UpdateUserInput;
-  UpdateWalletInput: UpdateWalletInput;
-  UpdateWalletStateInput: UpdateWalletStateInput;
-  User: ResolverTypeWrapper<User>;
-  UserBadge: ResolverTypeWrapper<UserBadge>;
-  UserBadgeStatus: UserBadgeStatus;
-  UserEmailUpdateInput: UserEmailUpdateInput;
-  UserEntriesGetInput: UserEntriesGetInput;
-  UserEntriesGetWhereInput: UserEntriesGetWhereInput;
-  UserGetInput: UserGetInput;
-  UserNotificationSettings: ResolverTypeWrapper<UserNotificationSettings>;
-  UserProjectContribution: ResolverTypeWrapper<UserProjectContribution>;
-  UserProjectsGetInput: UserProjectsGetInput;
-  UserProjectsGetWhereInput: UserProjectsGetWhereInput;
-  VotingSystem: VotingSystem;
-  Wallet: ResolverTypeWrapper<Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversTypes['ConnectionDetails'] }>;
-  WalletContributionLimits: ResolverTypeWrapper<WalletContributionLimits>;
-  WalletLimits: ResolverTypeWrapper<WalletLimits>;
-  WalletOffChainContributionLimits: ResolverTypeWrapper<WalletOffChainContributionLimits>;
-  WalletOnChainContributionLimits: ResolverTypeWrapper<WalletOnChainContributionLimits>;
-  WalletResourceInput: WalletResourceInput;
-  WalletResourceType: WalletResourceType;
-  WalletState: ResolverTypeWrapper<WalletState>;
-  WalletStatus: WalletStatus;
-  WalletStatusCode: WalletStatusCode;
-  dashboardFundersGetInput: DashboardFundersGetInput;
-};
+  ActivitiesCountGroupedByProjectInput: ActivitiesCountGroupedByProjectInput
+  ActivitiesGetResponse: ResolverTypeWrapper<ActivitiesGetResponse>
+  Activity: ResolverTypeWrapper<Omit<Activity, 'resource'> & { resource: ResolversTypes['ActivityResource'] }>
+  ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput
+  ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput
+  ActivityFeedName: ActivityFeedName
+  ActivityResource: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['ActivityResource']>
+  ActivityResourceType: ActivityResourceType
+  AffiliateLink: ResolverTypeWrapper<AffiliateLink>
+  AffiliateLinkCreateInput: AffiliateLinkCreateInput
+  AffiliatePaymentConfirmResponse: ResolverTypeWrapper<AffiliatePaymentConfirmResponse>
+  AffiliatePayoutsStats: ResolverTypeWrapper<AffiliatePayoutsStats>
+  AffiliateSalesStats: ResolverTypeWrapper<AffiliateSalesStats>
+  AffiliateStats: ResolverTypeWrapper<AffiliateStats>
+  AffiliateStatus: AffiliateStatus
+  Ambassador: ResolverTypeWrapper<Ambassador>
+  AmountSummary: ResolverTypeWrapper<AmountSummary>
+  AnalyticsGroupByInterval: AnalyticsGroupByInterval
+  Badge: ResolverTypeWrapper<Badge>
+  BadgeClaimInput: BadgeClaimInput
+  BadgesGetInput: BadgesGetInput
+  BadgesGetWhereInput: BadgesGetWhereInput
+  BaseCurrency: BaseCurrency
+  BigInt: ResolverTypeWrapper<Scalars['BigInt']['output']>
+  BitcoinQuote: ResolverTypeWrapper<BitcoinQuote>
+  BoardVoteGrant: ResolverTypeWrapper<BoardVoteGrant>
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>
+  CommunityVoteGrant: ResolverTypeWrapper<CommunityVoteGrant>
+  CompetitionVoteGrantVoteSummary: ResolverTypeWrapper<CompetitionVoteGrantVoteSummary>
+  ConnectionDetails: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['ConnectionDetails']>
+  ContributionSummaryPeriod: ContributionSummaryPeriod
+  Country: ResolverTypeWrapper<Country>
+  CreateEntryInput: CreateEntryInput
+  CreateProjectInput: CreateProjectInput
+  CreateProjectRewardInput: CreateProjectRewardInput
+  CreateWalletInput: CreateWalletInput
+  CreatorNotificationSettings: ResolverTypeWrapper<CreatorNotificationSettings>
+  CreatorNotificationSettingsProject: ResolverTypeWrapper<CreatorNotificationSettingsProject>
+  Currency: Currency
+  CurrencyQuoteGetInput: CurrencyQuoteGetInput
+  CurrencyQuoteGetResponse: ResolverTypeWrapper<CurrencyQuoteGetResponse>
+  CursorInput: CursorInput
+  CursorInputString: CursorInputString
+  CursorPaginationResponse: ResolverTypeWrapper<CursorPaginationResponse>
+  Date: ResolverTypeWrapper<Scalars['Date']['output']>
+  DateRangeInput: DateRangeInput
+  DatetimeRange: ResolverTypeWrapper<DatetimeRange>
+  DeleteProjectInput: DeleteProjectInput
+  DeleteProjectRewardInput: DeleteProjectRewardInput
+  DeleteUserResponse: ResolverTypeWrapper<DeleteUserResponse>
+  DistributionSystem: DistributionSystem
+  EmailVerifyInput: EmailVerifyInput
+  Entry: ResolverTypeWrapper<Entry>
+  EntryPublishedSubscriptionResponse: ResolverTypeWrapper<EntryPublishedSubscriptionResponse>
+  EntryStatus: EntryStatus
+  EntryType: EntryType
+  ExternalAccount: ResolverTypeWrapper<ExternalAccount>
+  FileUploadInput: FileUploadInput
+  Float: ResolverTypeWrapper<Scalars['Float']['output']>
+  Funder: ResolverTypeWrapper<Funder>
+  FunderContributionSummary: ResolverTypeWrapper<FunderContributionSummary>
+  FunderRewardGraphSum: ResolverTypeWrapper<FunderRewardGraphSum>
+  FundingCancelInput: FundingCancelInput
+  FundingCancelResponse: ResolverTypeWrapper<FundingCancelResponse>
+  FundingConfirmInput: FundingConfirmInput
+  FundingConfirmOffChainBolt11Input: FundingConfirmOffChainBolt11Input
+  FundingConfirmOffChainInput: FundingConfirmOffChainInput
+  FundingConfirmOnChainInput: FundingConfirmOnChainInput
+  FundingConfirmResponse: ResolverTypeWrapper<FundingConfirmResponse>
+  FundingCreateFromPodcastKeysendInput: FundingCreateFromPodcastKeysendInput
+  FundingInput: FundingInput
+  FundingMetadataInput: FundingMetadataInput
+  FundingMethod: FundingMethod
+  FundingMutationResponse: ResolverTypeWrapper<FundingMutationResponse>
+  FundingPendingInput: FundingPendingInput
+  FundingPendingOffChainBolt11Input: FundingPendingOffChainBolt11Input
+  FundingPendingOffChainInput: FundingPendingOffChainInput
+  FundingPendingOnChainInput: FundingPendingOnChainInput
+  FundingPendingResponse: ResolverTypeWrapper<FundingPendingResponse>
+  FundingQueryResponse: ResolverTypeWrapper<FundingQueryResponse>
+  FundingResourceType: FundingResourceType
+  FundingStatus: FundingStatus
+  FundingTx: ResolverTypeWrapper<
+    Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversTypes['SourceResource']> }
+  >
+  FundingTxAmountGraph: ResolverTypeWrapper<FundingTxAmountGraph>
+  FundingTxEmailUpdateInput: FundingTxEmailUpdateInput
+  FundingTxInvoiceSanctionCheckStatus: FundingTxInvoiceSanctionCheckStatus
+  FundingTxInvoiceSanctionCheckStatusGetInput: FundingTxInvoiceSanctionCheckStatusGetInput
+  FundingTxInvoiceSanctionCheckStatusResponse: ResolverTypeWrapper<FundingTxInvoiceSanctionCheckStatusResponse>
+  FundingTxMethodCount: ResolverTypeWrapper<FundingTxMethodCount>
+  FundingTxMethodSum: ResolverTypeWrapper<FundingTxMethodSum>
+  FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
+  FundingTxStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<FundingTxStatusUpdatedSubscriptionResponse>
+  FundingTxsGetResponse: ResolverTypeWrapper<FundingTxsGetResponse>
+  FundingTxsWhereFundingStatus: FundingTxsWhereFundingStatus
+  FundingType: FundingType
+  FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>
+  GenerateAffiliatePaymentRequestResponse: ResolverTypeWrapper<GenerateAffiliatePaymentRequestResponse>
+  GenerateAffiliatePaymentRequestsInput: GenerateAffiliatePaymentRequestsInput
+  GetActivitiesInput: GetActivitiesInput
+  GetActivityOrderByInput: GetActivityOrderByInput
+  GetActivityPaginationInput: GetActivityPaginationInput
+  GetActivityWhereInput: GetActivityWhereInput
+  GetAffiliateLinksInput: GetAffiliateLinksInput
+  GetAffiliateLinksWhereInput: GetAffiliateLinksWhereInput
+  GetContributorInput: GetContributorInput
+  GetDashboardFundersWhereInput: GetDashboardFundersWhereInput
+  GetEntriesInput: GetEntriesInput
+  GetEntriesOrderByInput: GetEntriesOrderByInput
+  GetEntriesWhereInput: GetEntriesWhereInput
+  GetFunderFundingTxsInput: GetFunderFundingTxsInput
+  GetFunderFundingTxsWhereInput: GetFunderFundingTxsWhereInput
+  GetFunderWhereInput: GetFunderWhereInput
+  GetFundersInput: GetFundersInput
+  GetFundersOrderByInput: GetFundersOrderByInput
+  GetFundingTxsInput: GetFundingTxsInput
+  GetFundingTxsOrderByInput: GetFundingTxsOrderByInput
+  GetFundingTxsWhereInput: GetFundingTxsWhereInput
+  GetProjectGoalsInput: GetProjectGoalsInput
+  GetProjectOrdersStatsInput: GetProjectOrdersStatsInput
+  GetProjectOrdersStatsWhereInput: GetProjectOrdersStatsWhereInput
+  GetProjectRewardInput: GetProjectRewardInput
+  GetProjectRewardWhereInput: GetProjectRewardWhereInput
+  GetProjectStatsInput: GetProjectStatsInput
+  GetProjectStatsWhereInput: GetProjectStatsWhereInput
+  GlobalContributorLeaderboardRow: ResolverTypeWrapper<GlobalContributorLeaderboardRow>
+  GlobalProjectLeaderboardRow: ResolverTypeWrapper<GlobalProjectLeaderboardRow>
+  Grant: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['Grant']>
+  GrantApplicant: ResolverTypeWrapper<Omit<GrantApplicant, 'grant'> & { grant: ResolversTypes['Grant'] }>
+  GrantApplicantContributor: ResolverTypeWrapper<GrantApplicantContributor>
+  GrantApplicantContributorInput: GrantApplicantContributorInput
+  GrantApplicantContributorWhereInput: GrantApplicantContributorWhereInput
+  GrantApplicantFunding: ResolverTypeWrapper<GrantApplicantFunding>
+  GrantApplicantStatus: GrantApplicantStatus
+  GrantApplicantStatusFilter: GrantApplicantStatusFilter
+  GrantApplicantsGetInput: GrantApplicantsGetInput
+  GrantApplicantsGetOrderByInput: GrantApplicantsGetOrderByInput
+  GrantApplicantsGetWhereInput: GrantApplicantsGetWhereInput
+  GrantApplicantsOrderByField: GrantApplicantsOrderByField
+  GrantApplyInput: GrantApplyInput
+  GrantBoardMember: ResolverTypeWrapper<GrantBoardMember>
+  GrantGetInput: GrantGetInput
+  GrantGetWhereInput: GrantGetWhereInput
+  GrantStatistics: ResolverTypeWrapper<GrantStatistics>
+  GrantStatisticsApplicant: ResolverTypeWrapper<GrantStatisticsApplicant>
+  GrantStatisticsGrant: ResolverTypeWrapper<GrantStatisticsGrant>
+  GrantStatus: ResolverTypeWrapper<GrantStatus>
+  GrantStatusEnum: GrantStatusEnum
+  GrantType: GrantType
+  GraphSumData: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['GraphSumData']>
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>
+  InvoiceStatus: InvoiceStatus
+  LeaderboardGlobalContributorsGetInput: LeaderboardGlobalContributorsGetInput
+  LeaderboardGlobalProjectsGetInput: LeaderboardGlobalProjectsGetInput
+  LeaderboardPeriod: LeaderboardPeriod
+  LightningAddressConnectionDetails: ResolverTypeWrapper<LightningAddressConnectionDetails>
+  LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput
+  LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput
+  LightningAddressContributionLimits: ResolverTypeWrapper<LightningAddressContributionLimits>
+  LightningAddressVerifyResponse: ResolverTypeWrapper<LightningAddressVerifyResponse>
+  LndConnectionDetails: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['LndConnectionDetails']>
+  LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput
+  LndConnectionDetailsPrivate: ResolverTypeWrapper<LndConnectionDetailsPrivate>
+  LndConnectionDetailsPublic: ResolverTypeWrapper<LndConnectionDetailsPublic>
+  LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput
+  LndNodeType: LndNodeType
+  Location: ResolverTypeWrapper<Location>
+  MFAAction: MfaAction
+  Milestone: ResolverTypeWrapper<Milestone>
+  Mutation: ResolverTypeWrapper<{}>
+  MutationResponse: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['MutationResponse']>
+  NostrKeys: ResolverTypeWrapper<NostrKeys>
+  NostrPrivateKey: ResolverTypeWrapper<NostrPrivateKey>
+  NostrPublicKey: ResolverTypeWrapper<NostrPublicKey>
+  NotificationChannel: NotificationChannel
+  NotificationConfiguration: ResolverTypeWrapper<NotificationConfiguration>
+  NotificationSettings: ResolverTypeWrapper<NotificationSettings>
+  OTPInput: OtpInput
+  OTPLoginInput: OtpLoginInput
+  OTPResponse: ResolverTypeWrapper<OtpResponse>
+  OffsetBasedPaginationInput: OffsetBasedPaginationInput
+  OnChainTxInput: OnChainTxInput
+  Order: ResolverTypeWrapper<Order>
+  OrderBitcoinQuoteInput: OrderBitcoinQuoteInput
+  OrderByDirection: OrderByDirection
+  OrderByOptions: OrderByOptions
+  OrderFundingInput: OrderFundingInput
+  OrderItem: ResolverTypeWrapper<OrderItem>
+  OrderItemInput: OrderItemInput
+  OrderItemType: OrderItemType
+  OrderStatusUpdateInput: OrderStatusUpdateInput
+  OrdersGetInput: OrdersGetInput
+  OrdersGetOrderByField: OrdersGetOrderByField
+  OrdersGetOrderByInput: OrdersGetOrderByInput
+  OrdersGetResponse: ResolverTypeWrapper<OrdersGetResponse>
+  OrdersGetStatus: OrdersGetStatus
+  OrdersGetWhereInput: OrdersGetWhereInput
+  OrdersStatsBase: ResolverTypeWrapper<OrdersStatsBase>
+  Owner: ResolverTypeWrapper<Owner>
+  OwnerOf: ResolverTypeWrapper<OwnerOf>
+  PageViewCountGraph: ResolverTypeWrapper<PageViewCountGraph>
+  PaginationCursor: ResolverTypeWrapper<PaginationCursor>
+  PaginationInput: PaginationInput
+  ProfileNotificationSettings: ResolverTypeWrapper<ProfileNotificationSettings>
+  Project: ResolverTypeWrapper<Project>
+  ProjectActivatedSubscriptionResponse: ResolverTypeWrapper<ProjectActivatedSubscriptionResponse>
+  ProjectActivitiesCount: ResolverTypeWrapper<ProjectActivitiesCount>
+  ProjectContributionsGroupedByMethodStats: ResolverTypeWrapper<ProjectContributionsGroupedByMethodStats>
+  ProjectContributionsStats: ResolverTypeWrapper<ProjectContributionsStats>
+  ProjectContributionsStatsBase: ResolverTypeWrapper<ProjectContributionsStatsBase>
+  ProjectCountriesGetResult: ResolverTypeWrapper<ProjectCountriesGetResult>
+  ProjectDeleteResponse: ResolverTypeWrapper<ProjectDeleteResponse>
+  ProjectEntriesGetInput: ProjectEntriesGetInput
+  ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput
+  ProjectFollowMutationInput: ProjectFollowMutationInput
+  ProjectFollowerStats: ResolverTypeWrapper<ProjectFollowerStats>
+  ProjectFunderRewardStats: ResolverTypeWrapper<ProjectFunderRewardStats>
+  ProjectFunderStats: ResolverTypeWrapper<ProjectFunderStats>
+  ProjectFundingTxStats: ResolverTypeWrapper<ProjectFundingTxStats>
+  ProjectGoal: ResolverTypeWrapper<ProjectGoal>
+  ProjectGoalCreateInput: ProjectGoalCreateInput
+  ProjectGoalCurrency: ProjectGoalCurrency
+  ProjectGoalDeleteResponse: ResolverTypeWrapper<ProjectGoalDeleteResponse>
+  ProjectGoalOrderingUpdateInput: ProjectGoalOrderingUpdateInput
+  ProjectGoalStatus: ProjectGoalStatus
+  ProjectGoalStatusInCreate: ProjectGoalStatusInCreate
+  ProjectGoalUpdateInput: ProjectGoalUpdateInput
+  ProjectGoals: ResolverTypeWrapper<ProjectGoals>
+  ProjectGrantApplicationsInput: ProjectGrantApplicationsInput
+  ProjectGrantApplicationsWhereInput: ProjectGrantApplicationsWhereInput
+  ProjectGrantApplicationsWhereInputEnum: ProjectGrantApplicationsWhereInputEnum
+  ProjectKeys: ResolverTypeWrapper<ProjectKeys>
+  ProjectLeaderboardContributorsGetInput: ProjectLeaderboardContributorsGetInput
+  ProjectLeaderboardContributorsRow: ResolverTypeWrapper<ProjectLeaderboardContributorsRow>
+  ProjectLeaderboardPeriod: ProjectLeaderboardPeriod
+  ProjectLinkMutationInput: ProjectLinkMutationInput
+  ProjectMostFunded: ResolverTypeWrapper<ProjectMostFunded>
+  ProjectMostFundedByTag: ResolverTypeWrapper<ProjectMostFundedByTag>
+  ProjectPublishMutationInput: ProjectPublishMutationInput
+  ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>
+  ProjectReward: ResolverTypeWrapper<ProjectReward>
+  ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate
+  ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput
+  ProjectRewardTrendingWeeklyGetRow: ResolverTypeWrapper<ProjectRewardTrendingWeeklyGetRow>
+  ProjectRewardsGroupedByRewardIdStats: ResolverTypeWrapper<ProjectRewardsGroupedByRewardIdStats>
+  ProjectRewardsGroupedByRewardIdStatsProjectReward: ResolverTypeWrapper<ProjectRewardsGroupedByRewardIdStatsProjectReward>
+  ProjectRewardsStats: ResolverTypeWrapper<ProjectRewardsStats>
+  ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>
+  ProjectStats: ResolverTypeWrapper<ProjectStats>
+  ProjectStatsBase: ResolverTypeWrapper<ProjectStatsBase>
+  ProjectStatus: ProjectStatus
+  ProjectStatusUpdate: ProjectStatusUpdate
+  ProjectTagMutationInput: ProjectTagMutationInput
+  ProjectType: ProjectType
+  ProjectViewBaseStats: ResolverTypeWrapper<ProjectViewBaseStats>
+  ProjectViewStats: ResolverTypeWrapper<ProjectViewStats>
+  ProjectsGetQueryInput: ProjectsGetQueryInput
+  ProjectsGetWhereInput: ProjectsGetWhereInput
+  ProjectsMostFundedByTagInput: ProjectsMostFundedByTagInput
+  ProjectsMostFundedByTagRange: ProjectsMostFundedByTagRange
+  ProjectsOrderByField: ProjectsOrderByField
+  ProjectsOrderByInput: ProjectsOrderByInput
+  ProjectsResponse: ResolverTypeWrapper<ProjectsResponse>
+  ProjectsSummary: ResolverTypeWrapper<ProjectsSummary>
+  Query: ResolverTypeWrapper<{}>
+  QuoteCurrency: QuoteCurrency
+  ResourceInput: ResourceInput
+  RewardCurrency: RewardCurrency
+  SendOtpByEmailInput: SendOtpByEmailInput
+  SettingValueType: SettingValueType
+  ShippingDestination: ShippingDestination
+  SignedUploadUrl: ResolverTypeWrapper<SignedUploadUrl>
+  SourceResource: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['SourceResource']>
+  Sponsor: ResolverTypeWrapper<Sponsor>
+  SponsorStatus: SponsorStatus
+  StatsInterface: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['StatsInterface']>
+  String: ResolverTypeWrapper<Scalars['String']['output']>
+  Subscription: ResolverTypeWrapper<{}>
+  Swap: ResolverTypeWrapper<Swap>
+  TOTPInput: TotpInput
+  Tag: ResolverTypeWrapper<Tag>
+  TagCreateInput: TagCreateInput
+  TagsGetResult: ResolverTypeWrapper<TagsGetResult>
+  TagsMostFundedGetResult: ResolverTypeWrapper<TagsMostFundedGetResult>
+  TwoFAInput: TwoFaInput
+  UniqueOrderInput: UniqueOrderInput
+  UniqueProjectQueryInput: UniqueProjectQueryInput
+  UpdatableOrderStatus: UpdatableOrderStatus
+  UpdateEntryInput: UpdateEntryInput
+  UpdateProjectInput: UpdateProjectInput
+  UpdateProjectRewardInput: UpdateProjectRewardInput
+  UpdateUserInput: UpdateUserInput
+  UpdateWalletInput: UpdateWalletInput
+  UpdateWalletStateInput: UpdateWalletStateInput
+  User: ResolverTypeWrapper<User>
+  UserBadge: ResolverTypeWrapper<UserBadge>
+  UserBadgeStatus: UserBadgeStatus
+  UserEmailUpdateInput: UserEmailUpdateInput
+  UserEntriesGetInput: UserEntriesGetInput
+  UserEntriesGetWhereInput: UserEntriesGetWhereInput
+  UserGetInput: UserGetInput
+  UserNotificationSettings: ResolverTypeWrapper<UserNotificationSettings>
+  UserProjectContribution: ResolverTypeWrapper<UserProjectContribution>
+  UserProjectsGetInput: UserProjectsGetInput
+  UserProjectsGetWhereInput: UserProjectsGetWhereInput
+  VotingSystem: VotingSystem
+  Wallet: ResolverTypeWrapper<
+    Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversTypes['ConnectionDetails'] }
+  >
+  WalletContributionLimits: ResolverTypeWrapper<WalletContributionLimits>
+  WalletLimits: ResolverTypeWrapper<WalletLimits>
+  WalletOffChainContributionLimits: ResolverTypeWrapper<WalletOffChainContributionLimits>
+  WalletOnChainContributionLimits: ResolverTypeWrapper<WalletOnChainContributionLimits>
+  WalletResourceInput: WalletResourceInput
+  WalletResourceType: WalletResourceType
+  WalletState: ResolverTypeWrapper<WalletState>
+  WalletStatus: WalletStatus
+  WalletStatusCode: WalletStatusCode
+  dashboardFundersGetInput: DashboardFundersGetInput
+}
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  ActivitiesCountGroupedByProjectInput: ActivitiesCountGroupedByProjectInput;
-  ActivitiesGetResponse: ActivitiesGetResponse;
-  Activity: Omit<Activity, 'resource'> & { resource: ResolversParentTypes['ActivityResource'] };
-  ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput;
-  ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
-  ActivityResource: ResolversUnionTypes<ResolversParentTypes>['ActivityResource'];
-  AffiliateLink: AffiliateLink;
-  AffiliateLinkCreateInput: AffiliateLinkCreateInput;
-  AffiliatePaymentConfirmResponse: AffiliatePaymentConfirmResponse;
-  AffiliatePayoutsStats: AffiliatePayoutsStats;
-  AffiliateSalesStats: AffiliateSalesStats;
-  AffiliateStats: AffiliateStats;
-  Ambassador: Ambassador;
-  AmountSummary: AmountSummary;
-  Badge: Badge;
-  BadgeClaimInput: BadgeClaimInput;
-  BadgesGetInput: BadgesGetInput;
-  BadgesGetWhereInput: BadgesGetWhereInput;
-  BigInt: Scalars['BigInt']['output'];
-  BitcoinQuote: BitcoinQuote;
-  BoardVoteGrant: BoardVoteGrant;
-  Boolean: Scalars['Boolean']['output'];
-  CommunityVoteGrant: CommunityVoteGrant;
-  CompetitionVoteGrantVoteSummary: CompetitionVoteGrantVoteSummary;
-  ConnectionDetails: ResolversUnionTypes<ResolversParentTypes>['ConnectionDetails'];
-  Country: Country;
-  CreateEntryInput: CreateEntryInput;
-  CreateProjectInput: CreateProjectInput;
-  CreateProjectRewardInput: CreateProjectRewardInput;
-  CreateWalletInput: CreateWalletInput;
-  CreatorNotificationSettings: CreatorNotificationSettings;
-  CreatorNotificationSettingsProject: CreatorNotificationSettingsProject;
-  CurrencyQuoteGetInput: CurrencyQuoteGetInput;
-  CurrencyQuoteGetResponse: CurrencyQuoteGetResponse;
-  CursorInput: CursorInput;
-  CursorInputString: CursorInputString;
-  CursorPaginationResponse: CursorPaginationResponse;
-  Date: Scalars['Date']['output'];
-  DateRangeInput: DateRangeInput;
-  DatetimeRange: DatetimeRange;
-  DeleteProjectInput: DeleteProjectInput;
-  DeleteProjectRewardInput: DeleteProjectRewardInput;
-  DeleteUserResponse: DeleteUserResponse;
-  EmailVerifyInput: EmailVerifyInput;
-  Entry: Entry;
-  EntryPublishedSubscriptionResponse: EntryPublishedSubscriptionResponse;
-  ExternalAccount: ExternalAccount;
-  FileUploadInput: FileUploadInput;
-  Float: Scalars['Float']['output'];
-  Funder: Funder;
-  FunderContributionSummary: FunderContributionSummary;
-  FunderRewardGraphSum: FunderRewardGraphSum;
-  FundingCancelInput: FundingCancelInput;
-  FundingCancelResponse: FundingCancelResponse;
-  FundingConfirmInput: FundingConfirmInput;
-  FundingConfirmOffChainBolt11Input: FundingConfirmOffChainBolt11Input;
-  FundingConfirmOffChainInput: FundingConfirmOffChainInput;
-  FundingConfirmOnChainInput: FundingConfirmOnChainInput;
-  FundingConfirmResponse: FundingConfirmResponse;
-  FundingCreateFromPodcastKeysendInput: FundingCreateFromPodcastKeysendInput;
-  FundingInput: FundingInput;
-  FundingMetadataInput: FundingMetadataInput;
-  FundingMutationResponse: FundingMutationResponse;
-  FundingPendingInput: FundingPendingInput;
-  FundingPendingOffChainBolt11Input: FundingPendingOffChainBolt11Input;
-  FundingPendingOffChainInput: FundingPendingOffChainInput;
-  FundingPendingOnChainInput: FundingPendingOnChainInput;
-  FundingPendingResponse: FundingPendingResponse;
-  FundingQueryResponse: FundingQueryResponse;
-  FundingTx: Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversParentTypes['SourceResource']> };
-  FundingTxAmountGraph: FundingTxAmountGraph;
-  FundingTxEmailUpdateInput: FundingTxEmailUpdateInput;
-  FundingTxInvoiceSanctionCheckStatusGetInput: FundingTxInvoiceSanctionCheckStatusGetInput;
-  FundingTxInvoiceSanctionCheckStatusResponse: FundingTxInvoiceSanctionCheckStatusResponse;
-  FundingTxMethodCount: FundingTxMethodCount;
-  FundingTxMethodSum: FundingTxMethodSum;
-  FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput;
-  FundingTxStatusUpdatedSubscriptionResponse: FundingTxStatusUpdatedSubscriptionResponse;
-  FundingTxsGetResponse: FundingTxsGetResponse;
-  FundinginvoiceCancel: FundinginvoiceCancel;
-  GenerateAffiliatePaymentRequestResponse: GenerateAffiliatePaymentRequestResponse;
-  GenerateAffiliatePaymentRequestsInput: GenerateAffiliatePaymentRequestsInput;
-  GetActivitiesInput: GetActivitiesInput;
-  GetActivityOrderByInput: GetActivityOrderByInput;
-  GetActivityPaginationInput: GetActivityPaginationInput;
-  GetActivityWhereInput: GetActivityWhereInput;
-  GetAffiliateLinksInput: GetAffiliateLinksInput;
-  GetAffiliateLinksWhereInput: GetAffiliateLinksWhereInput;
-  GetContributorInput: GetContributorInput;
-  GetDashboardFundersWhereInput: GetDashboardFundersWhereInput;
-  GetEntriesInput: GetEntriesInput;
-  GetEntriesOrderByInput: GetEntriesOrderByInput;
-  GetEntriesWhereInput: GetEntriesWhereInput;
-  GetFunderFundingTxsInput: GetFunderFundingTxsInput;
-  GetFunderFundingTxsWhereInput: GetFunderFundingTxsWhereInput;
-  GetFunderWhereInput: GetFunderWhereInput;
-  GetFundersInput: GetFundersInput;
-  GetFundersOrderByInput: GetFundersOrderByInput;
-  GetFundingTxsInput: GetFundingTxsInput;
-  GetFundingTxsOrderByInput: GetFundingTxsOrderByInput;
-  GetFundingTxsWhereInput: GetFundingTxsWhereInput;
-  GetProjectGoalsInput: GetProjectGoalsInput;
-  GetProjectOrdersStatsInput: GetProjectOrdersStatsInput;
-  GetProjectOrdersStatsWhereInput: GetProjectOrdersStatsWhereInput;
-  GetProjectRewardInput: GetProjectRewardInput;
-  GetProjectRewardWhereInput: GetProjectRewardWhereInput;
-  GetProjectStatsInput: GetProjectStatsInput;
-  GetProjectStatsWhereInput: GetProjectStatsWhereInput;
-  GlobalContributorLeaderboardRow: GlobalContributorLeaderboardRow;
-  GlobalProjectLeaderboardRow: GlobalProjectLeaderboardRow;
-  Grant: ResolversUnionTypes<ResolversParentTypes>['Grant'];
-  GrantApplicant: Omit<GrantApplicant, 'grant'> & { grant: ResolversParentTypes['Grant'] };
-  GrantApplicantContributor: GrantApplicantContributor;
-  GrantApplicantContributorInput: GrantApplicantContributorInput;
-  GrantApplicantContributorWhereInput: GrantApplicantContributorWhereInput;
-  GrantApplicantFunding: GrantApplicantFunding;
-  GrantApplicantsGetInput: GrantApplicantsGetInput;
-  GrantApplicantsGetOrderByInput: GrantApplicantsGetOrderByInput;
-  GrantApplicantsGetWhereInput: GrantApplicantsGetWhereInput;
-  GrantApplyInput: GrantApplyInput;
-  GrantBoardMember: GrantBoardMember;
-  GrantGetInput: GrantGetInput;
-  GrantGetWhereInput: GrantGetWhereInput;
-  GrantStatistics: GrantStatistics;
-  GrantStatisticsApplicant: GrantStatisticsApplicant;
-  GrantStatisticsGrant: GrantStatisticsGrant;
-  GrantStatus: GrantStatus;
-  GraphSumData: ResolversInterfaceTypes<ResolversParentTypes>['GraphSumData'];
-  Int: Scalars['Int']['output'];
-  LeaderboardGlobalContributorsGetInput: LeaderboardGlobalContributorsGetInput;
-  LeaderboardGlobalProjectsGetInput: LeaderboardGlobalProjectsGetInput;
-  LightningAddressConnectionDetails: LightningAddressConnectionDetails;
-  LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput;
-  LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput;
-  LightningAddressContributionLimits: LightningAddressContributionLimits;
-  LightningAddressVerifyResponse: LightningAddressVerifyResponse;
-  LndConnectionDetails: ResolversInterfaceTypes<ResolversParentTypes>['LndConnectionDetails'];
-  LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput;
-  LndConnectionDetailsPrivate: LndConnectionDetailsPrivate;
-  LndConnectionDetailsPublic: LndConnectionDetailsPublic;
-  LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput;
-  Location: Location;
-  Milestone: Milestone;
-  Mutation: {};
-  MutationResponse: ResolversInterfaceTypes<ResolversParentTypes>['MutationResponse'];
-  NostrKeys: NostrKeys;
-  NostrPrivateKey: NostrPrivateKey;
-  NostrPublicKey: NostrPublicKey;
-  NotificationConfiguration: NotificationConfiguration;
-  NotificationSettings: NotificationSettings;
-  OTPInput: OtpInput;
-  OTPLoginInput: OtpLoginInput;
-  OTPResponse: OtpResponse;
-  OffsetBasedPaginationInput: OffsetBasedPaginationInput;
-  OnChainTxInput: OnChainTxInput;
-  Order: Order;
-  OrderBitcoinQuoteInput: OrderBitcoinQuoteInput;
-  OrderFundingInput: OrderFundingInput;
-  OrderItem: OrderItem;
-  OrderItemInput: OrderItemInput;
-  OrderStatusUpdateInput: OrderStatusUpdateInput;
-  OrdersGetInput: OrdersGetInput;
-  OrdersGetOrderByInput: OrdersGetOrderByInput;
-  OrdersGetResponse: OrdersGetResponse;
-  OrdersGetWhereInput: OrdersGetWhereInput;
-  OrdersStatsBase: OrdersStatsBase;
-  Owner: Owner;
-  OwnerOf: OwnerOf;
-  PageViewCountGraph: PageViewCountGraph;
-  PaginationCursor: PaginationCursor;
-  PaginationInput: PaginationInput;
-  ProfileNotificationSettings: ProfileNotificationSettings;
-  Project: Project;
-  ProjectActivatedSubscriptionResponse: ProjectActivatedSubscriptionResponse;
-  ProjectActivitiesCount: ProjectActivitiesCount;
-  ProjectContributionsGroupedByMethodStats: ProjectContributionsGroupedByMethodStats;
-  ProjectContributionsStats: ProjectContributionsStats;
-  ProjectContributionsStatsBase: ProjectContributionsStatsBase;
-  ProjectCountriesGetResult: ProjectCountriesGetResult;
-  ProjectDeleteResponse: ProjectDeleteResponse;
-  ProjectEntriesGetInput: ProjectEntriesGetInput;
-  ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput;
-  ProjectFollowMutationInput: ProjectFollowMutationInput;
-  ProjectFollowerStats: ProjectFollowerStats;
-  ProjectFunderRewardStats: ProjectFunderRewardStats;
-  ProjectFunderStats: ProjectFunderStats;
-  ProjectFundingTxStats: ProjectFundingTxStats;
-  ProjectGoal: ProjectGoal;
-  ProjectGoalCreateInput: ProjectGoalCreateInput;
-  ProjectGoalDeleteResponse: ProjectGoalDeleteResponse;
-  ProjectGoalOrderingUpdateInput: ProjectGoalOrderingUpdateInput;
-  ProjectGoalUpdateInput: ProjectGoalUpdateInput;
-  ProjectGoals: ProjectGoals;
-  ProjectGrantApplicationsInput: ProjectGrantApplicationsInput;
-  ProjectGrantApplicationsWhereInput: ProjectGrantApplicationsWhereInput;
-  ProjectKeys: ProjectKeys;
-  ProjectLeaderboardContributorsGetInput: ProjectLeaderboardContributorsGetInput;
-  ProjectLeaderboardContributorsRow: ProjectLeaderboardContributorsRow;
-  ProjectLinkMutationInput: ProjectLinkMutationInput;
-  ProjectMostFunded: ProjectMostFunded;
-  ProjectMostFundedByTag: ProjectMostFundedByTag;
-  ProjectPublishMutationInput: ProjectPublishMutationInput;
-  ProjectRegionsGetResult: ProjectRegionsGetResult;
-  ProjectReward: ProjectReward;
-  ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate;
-  ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput;
-  ProjectRewardTrendingWeeklyGetRow: ProjectRewardTrendingWeeklyGetRow;
-  ProjectRewardsGroupedByRewardIdStats: ProjectRewardsGroupedByRewardIdStats;
-  ProjectRewardsGroupedByRewardIdStatsProjectReward: ProjectRewardsGroupedByRewardIdStatsProjectReward;
-  ProjectRewardsStats: ProjectRewardsStats;
-  ProjectStatistics: ProjectStatistics;
-  ProjectStats: ProjectStats;
-  ProjectStatsBase: ProjectStatsBase;
-  ProjectStatusUpdate: ProjectStatusUpdate;
-  ProjectTagMutationInput: ProjectTagMutationInput;
-  ProjectViewBaseStats: ProjectViewBaseStats;
-  ProjectViewStats: ProjectViewStats;
-  ProjectsGetQueryInput: ProjectsGetQueryInput;
-  ProjectsGetWhereInput: ProjectsGetWhereInput;
-  ProjectsMostFundedByTagInput: ProjectsMostFundedByTagInput;
-  ProjectsOrderByInput: ProjectsOrderByInput;
-  ProjectsResponse: ProjectsResponse;
-  ProjectsSummary: ProjectsSummary;
-  Query: {};
-  ResourceInput: ResourceInput;
-  SendOtpByEmailInput: SendOtpByEmailInput;
-  SignedUploadUrl: SignedUploadUrl;
-  SourceResource: ResolversUnionTypes<ResolversParentTypes>['SourceResource'];
-  Sponsor: Sponsor;
-  StatsInterface: ResolversInterfaceTypes<ResolversParentTypes>['StatsInterface'];
-  String: Scalars['String']['output'];
-  Subscription: {};
-  Swap: Swap;
-  TOTPInput: TotpInput;
-  Tag: Tag;
-  TagCreateInput: TagCreateInput;
-  TagsGetResult: TagsGetResult;
-  TagsMostFundedGetResult: TagsMostFundedGetResult;
-  TwoFAInput: TwoFaInput;
-  UniqueOrderInput: UniqueOrderInput;
-  UniqueProjectQueryInput: UniqueProjectQueryInput;
-  UpdateEntryInput: UpdateEntryInput;
-  UpdateProjectInput: UpdateProjectInput;
-  UpdateProjectRewardInput: UpdateProjectRewardInput;
-  UpdateUserInput: UpdateUserInput;
-  UpdateWalletInput: UpdateWalletInput;
-  UpdateWalletStateInput: UpdateWalletStateInput;
-  User: User;
-  UserBadge: UserBadge;
-  UserEmailUpdateInput: UserEmailUpdateInput;
-  UserEntriesGetInput: UserEntriesGetInput;
-  UserEntriesGetWhereInput: UserEntriesGetWhereInput;
-  UserGetInput: UserGetInput;
-  UserNotificationSettings: UserNotificationSettings;
-  UserProjectContribution: UserProjectContribution;
-  UserProjectsGetInput: UserProjectsGetInput;
-  UserProjectsGetWhereInput: UserProjectsGetWhereInput;
-  Wallet: Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversParentTypes['ConnectionDetails'] };
-  WalletContributionLimits: WalletContributionLimits;
-  WalletLimits: WalletLimits;
-  WalletOffChainContributionLimits: WalletOffChainContributionLimits;
-  WalletOnChainContributionLimits: WalletOnChainContributionLimits;
-  WalletResourceInput: WalletResourceInput;
-  WalletState: WalletState;
-  dashboardFundersGetInput: DashboardFundersGetInput;
-};
+  ActivitiesCountGroupedByProjectInput: ActivitiesCountGroupedByProjectInput
+  ActivitiesGetResponse: ActivitiesGetResponse
+  Activity: Omit<Activity, 'resource'> & { resource: ResolversParentTypes['ActivityResource'] }
+  ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput
+  ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput
+  ActivityResource: ResolversUnionTypes<ResolversParentTypes>['ActivityResource']
+  AffiliateLink: AffiliateLink
+  AffiliateLinkCreateInput: AffiliateLinkCreateInput
+  AffiliatePaymentConfirmResponse: AffiliatePaymentConfirmResponse
+  AffiliatePayoutsStats: AffiliatePayoutsStats
+  AffiliateSalesStats: AffiliateSalesStats
+  AffiliateStats: AffiliateStats
+  Ambassador: Ambassador
+  AmountSummary: AmountSummary
+  Badge: Badge
+  BadgeClaimInput: BadgeClaimInput
+  BadgesGetInput: BadgesGetInput
+  BadgesGetWhereInput: BadgesGetWhereInput
+  BigInt: Scalars['BigInt']['output']
+  BitcoinQuote: BitcoinQuote
+  BoardVoteGrant: BoardVoteGrant
+  Boolean: Scalars['Boolean']['output']
+  CommunityVoteGrant: CommunityVoteGrant
+  CompetitionVoteGrantVoteSummary: CompetitionVoteGrantVoteSummary
+  ConnectionDetails: ResolversUnionTypes<ResolversParentTypes>['ConnectionDetails']
+  Country: Country
+  CreateEntryInput: CreateEntryInput
+  CreateProjectInput: CreateProjectInput
+  CreateProjectRewardInput: CreateProjectRewardInput
+  CreateWalletInput: CreateWalletInput
+  CreatorNotificationSettings: CreatorNotificationSettings
+  CreatorNotificationSettingsProject: CreatorNotificationSettingsProject
+  CurrencyQuoteGetInput: CurrencyQuoteGetInput
+  CurrencyQuoteGetResponse: CurrencyQuoteGetResponse
+  CursorInput: CursorInput
+  CursorInputString: CursorInputString
+  CursorPaginationResponse: CursorPaginationResponse
+  Date: Scalars['Date']['output']
+  DateRangeInput: DateRangeInput
+  DatetimeRange: DatetimeRange
+  DeleteProjectInput: DeleteProjectInput
+  DeleteProjectRewardInput: DeleteProjectRewardInput
+  DeleteUserResponse: DeleteUserResponse
+  EmailVerifyInput: EmailVerifyInput
+  Entry: Entry
+  EntryPublishedSubscriptionResponse: EntryPublishedSubscriptionResponse
+  ExternalAccount: ExternalAccount
+  FileUploadInput: FileUploadInput
+  Float: Scalars['Float']['output']
+  Funder: Funder
+  FunderContributionSummary: FunderContributionSummary
+  FunderRewardGraphSum: FunderRewardGraphSum
+  FundingCancelInput: FundingCancelInput
+  FundingCancelResponse: FundingCancelResponse
+  FundingConfirmInput: FundingConfirmInput
+  FundingConfirmOffChainBolt11Input: FundingConfirmOffChainBolt11Input
+  FundingConfirmOffChainInput: FundingConfirmOffChainInput
+  FundingConfirmOnChainInput: FundingConfirmOnChainInput
+  FundingConfirmResponse: FundingConfirmResponse
+  FundingCreateFromPodcastKeysendInput: FundingCreateFromPodcastKeysendInput
+  FundingInput: FundingInput
+  FundingMetadataInput: FundingMetadataInput
+  FundingMutationResponse: FundingMutationResponse
+  FundingPendingInput: FundingPendingInput
+  FundingPendingOffChainBolt11Input: FundingPendingOffChainBolt11Input
+  FundingPendingOffChainInput: FundingPendingOffChainInput
+  FundingPendingOnChainInput: FundingPendingOnChainInput
+  FundingPendingResponse: FundingPendingResponse
+  FundingQueryResponse: FundingQueryResponse
+  FundingTx: Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversParentTypes['SourceResource']> }
+  FundingTxAmountGraph: FundingTxAmountGraph
+  FundingTxEmailUpdateInput: FundingTxEmailUpdateInput
+  FundingTxInvoiceSanctionCheckStatusGetInput: FundingTxInvoiceSanctionCheckStatusGetInput
+  FundingTxInvoiceSanctionCheckStatusResponse: FundingTxInvoiceSanctionCheckStatusResponse
+  FundingTxMethodCount: FundingTxMethodCount
+  FundingTxMethodSum: FundingTxMethodSum
+  FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
+  FundingTxStatusUpdatedSubscriptionResponse: FundingTxStatusUpdatedSubscriptionResponse
+  FundingTxsGetResponse: FundingTxsGetResponse
+  FundinginvoiceCancel: FundinginvoiceCancel
+  GenerateAffiliatePaymentRequestResponse: GenerateAffiliatePaymentRequestResponse
+  GenerateAffiliatePaymentRequestsInput: GenerateAffiliatePaymentRequestsInput
+  GetActivitiesInput: GetActivitiesInput
+  GetActivityOrderByInput: GetActivityOrderByInput
+  GetActivityPaginationInput: GetActivityPaginationInput
+  GetActivityWhereInput: GetActivityWhereInput
+  GetAffiliateLinksInput: GetAffiliateLinksInput
+  GetAffiliateLinksWhereInput: GetAffiliateLinksWhereInput
+  GetContributorInput: GetContributorInput
+  GetDashboardFundersWhereInput: GetDashboardFundersWhereInput
+  GetEntriesInput: GetEntriesInput
+  GetEntriesOrderByInput: GetEntriesOrderByInput
+  GetEntriesWhereInput: GetEntriesWhereInput
+  GetFunderFundingTxsInput: GetFunderFundingTxsInput
+  GetFunderFundingTxsWhereInput: GetFunderFundingTxsWhereInput
+  GetFunderWhereInput: GetFunderWhereInput
+  GetFundersInput: GetFundersInput
+  GetFundersOrderByInput: GetFundersOrderByInput
+  GetFundingTxsInput: GetFundingTxsInput
+  GetFundingTxsOrderByInput: GetFundingTxsOrderByInput
+  GetFundingTxsWhereInput: GetFundingTxsWhereInput
+  GetProjectGoalsInput: GetProjectGoalsInput
+  GetProjectOrdersStatsInput: GetProjectOrdersStatsInput
+  GetProjectOrdersStatsWhereInput: GetProjectOrdersStatsWhereInput
+  GetProjectRewardInput: GetProjectRewardInput
+  GetProjectRewardWhereInput: GetProjectRewardWhereInput
+  GetProjectStatsInput: GetProjectStatsInput
+  GetProjectStatsWhereInput: GetProjectStatsWhereInput
+  GlobalContributorLeaderboardRow: GlobalContributorLeaderboardRow
+  GlobalProjectLeaderboardRow: GlobalProjectLeaderboardRow
+  Grant: ResolversUnionTypes<ResolversParentTypes>['Grant']
+  GrantApplicant: Omit<GrantApplicant, 'grant'> & { grant: ResolversParentTypes['Grant'] }
+  GrantApplicantContributor: GrantApplicantContributor
+  GrantApplicantContributorInput: GrantApplicantContributorInput
+  GrantApplicantContributorWhereInput: GrantApplicantContributorWhereInput
+  GrantApplicantFunding: GrantApplicantFunding
+  GrantApplicantsGetInput: GrantApplicantsGetInput
+  GrantApplicantsGetOrderByInput: GrantApplicantsGetOrderByInput
+  GrantApplicantsGetWhereInput: GrantApplicantsGetWhereInput
+  GrantApplyInput: GrantApplyInput
+  GrantBoardMember: GrantBoardMember
+  GrantGetInput: GrantGetInput
+  GrantGetWhereInput: GrantGetWhereInput
+  GrantStatistics: GrantStatistics
+  GrantStatisticsApplicant: GrantStatisticsApplicant
+  GrantStatisticsGrant: GrantStatisticsGrant
+  GrantStatus: GrantStatus
+  GraphSumData: ResolversInterfaceTypes<ResolversParentTypes>['GraphSumData']
+  Int: Scalars['Int']['output']
+  LeaderboardGlobalContributorsGetInput: LeaderboardGlobalContributorsGetInput
+  LeaderboardGlobalProjectsGetInput: LeaderboardGlobalProjectsGetInput
+  LightningAddressConnectionDetails: LightningAddressConnectionDetails
+  LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput
+  LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput
+  LightningAddressContributionLimits: LightningAddressContributionLimits
+  LightningAddressVerifyResponse: LightningAddressVerifyResponse
+  LndConnectionDetails: ResolversInterfaceTypes<ResolversParentTypes>['LndConnectionDetails']
+  LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput
+  LndConnectionDetailsPrivate: LndConnectionDetailsPrivate
+  LndConnectionDetailsPublic: LndConnectionDetailsPublic
+  LndConnectionDetailsUpdateInput: LndConnectionDetailsUpdateInput
+  Location: Location
+  Milestone: Milestone
+  Mutation: {}
+  MutationResponse: ResolversInterfaceTypes<ResolversParentTypes>['MutationResponse']
+  NostrKeys: NostrKeys
+  NostrPrivateKey: NostrPrivateKey
+  NostrPublicKey: NostrPublicKey
+  NotificationConfiguration: NotificationConfiguration
+  NotificationSettings: NotificationSettings
+  OTPInput: OtpInput
+  OTPLoginInput: OtpLoginInput
+  OTPResponse: OtpResponse
+  OffsetBasedPaginationInput: OffsetBasedPaginationInput
+  OnChainTxInput: OnChainTxInput
+  Order: Order
+  OrderBitcoinQuoteInput: OrderBitcoinQuoteInput
+  OrderFundingInput: OrderFundingInput
+  OrderItem: OrderItem
+  OrderItemInput: OrderItemInput
+  OrderStatusUpdateInput: OrderStatusUpdateInput
+  OrdersGetInput: OrdersGetInput
+  OrdersGetOrderByInput: OrdersGetOrderByInput
+  OrdersGetResponse: OrdersGetResponse
+  OrdersGetWhereInput: OrdersGetWhereInput
+  OrdersStatsBase: OrdersStatsBase
+  Owner: Owner
+  OwnerOf: OwnerOf
+  PageViewCountGraph: PageViewCountGraph
+  PaginationCursor: PaginationCursor
+  PaginationInput: PaginationInput
+  ProfileNotificationSettings: ProfileNotificationSettings
+  Project: Project
+  ProjectActivatedSubscriptionResponse: ProjectActivatedSubscriptionResponse
+  ProjectActivitiesCount: ProjectActivitiesCount
+  ProjectContributionsGroupedByMethodStats: ProjectContributionsGroupedByMethodStats
+  ProjectContributionsStats: ProjectContributionsStats
+  ProjectContributionsStatsBase: ProjectContributionsStatsBase
+  ProjectCountriesGetResult: ProjectCountriesGetResult
+  ProjectDeleteResponse: ProjectDeleteResponse
+  ProjectEntriesGetInput: ProjectEntriesGetInput
+  ProjectEntriesGetWhereInput: ProjectEntriesGetWhereInput
+  ProjectFollowMutationInput: ProjectFollowMutationInput
+  ProjectFollowerStats: ProjectFollowerStats
+  ProjectFunderRewardStats: ProjectFunderRewardStats
+  ProjectFunderStats: ProjectFunderStats
+  ProjectFundingTxStats: ProjectFundingTxStats
+  ProjectGoal: ProjectGoal
+  ProjectGoalCreateInput: ProjectGoalCreateInput
+  ProjectGoalDeleteResponse: ProjectGoalDeleteResponse
+  ProjectGoalOrderingUpdateInput: ProjectGoalOrderingUpdateInput
+  ProjectGoalUpdateInput: ProjectGoalUpdateInput
+  ProjectGoals: ProjectGoals
+  ProjectGrantApplicationsInput: ProjectGrantApplicationsInput
+  ProjectGrantApplicationsWhereInput: ProjectGrantApplicationsWhereInput
+  ProjectKeys: ProjectKeys
+  ProjectLeaderboardContributorsGetInput: ProjectLeaderboardContributorsGetInput
+  ProjectLeaderboardContributorsRow: ProjectLeaderboardContributorsRow
+  ProjectLinkMutationInput: ProjectLinkMutationInput
+  ProjectMostFunded: ProjectMostFunded
+  ProjectMostFundedByTag: ProjectMostFundedByTag
+  ProjectPublishMutationInput: ProjectPublishMutationInput
+  ProjectRegionsGetResult: ProjectRegionsGetResult
+  ProjectReward: ProjectReward
+  ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate
+  ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput
+  ProjectRewardTrendingWeeklyGetRow: ProjectRewardTrendingWeeklyGetRow
+  ProjectRewardsGroupedByRewardIdStats: ProjectRewardsGroupedByRewardIdStats
+  ProjectRewardsGroupedByRewardIdStatsProjectReward: ProjectRewardsGroupedByRewardIdStatsProjectReward
+  ProjectRewardsStats: ProjectRewardsStats
+  ProjectStatistics: ProjectStatistics
+  ProjectStats: ProjectStats
+  ProjectStatsBase: ProjectStatsBase
+  ProjectStatusUpdate: ProjectStatusUpdate
+  ProjectTagMutationInput: ProjectTagMutationInput
+  ProjectViewBaseStats: ProjectViewBaseStats
+  ProjectViewStats: ProjectViewStats
+  ProjectsGetQueryInput: ProjectsGetQueryInput
+  ProjectsGetWhereInput: ProjectsGetWhereInput
+  ProjectsMostFundedByTagInput: ProjectsMostFundedByTagInput
+  ProjectsOrderByInput: ProjectsOrderByInput
+  ProjectsResponse: ProjectsResponse
+  ProjectsSummary: ProjectsSummary
+  Query: {}
+  ResourceInput: ResourceInput
+  SendOtpByEmailInput: SendOtpByEmailInput
+  SignedUploadUrl: SignedUploadUrl
+  SourceResource: ResolversUnionTypes<ResolversParentTypes>['SourceResource']
+  Sponsor: Sponsor
+  StatsInterface: ResolversInterfaceTypes<ResolversParentTypes>['StatsInterface']
+  String: Scalars['String']['output']
+  Subscription: {}
+  Swap: Swap
+  TOTPInput: TotpInput
+  Tag: Tag
+  TagCreateInput: TagCreateInput
+  TagsGetResult: TagsGetResult
+  TagsMostFundedGetResult: TagsMostFundedGetResult
+  TwoFAInput: TwoFaInput
+  UniqueOrderInput: UniqueOrderInput
+  UniqueProjectQueryInput: UniqueProjectQueryInput
+  UpdateEntryInput: UpdateEntryInput
+  UpdateProjectInput: UpdateProjectInput
+  UpdateProjectRewardInput: UpdateProjectRewardInput
+  UpdateUserInput: UpdateUserInput
+  UpdateWalletInput: UpdateWalletInput
+  UpdateWalletStateInput: UpdateWalletStateInput
+  User: User
+  UserBadge: UserBadge
+  UserEmailUpdateInput: UserEmailUpdateInput
+  UserEntriesGetInput: UserEntriesGetInput
+  UserEntriesGetWhereInput: UserEntriesGetWhereInput
+  UserGetInput: UserGetInput
+  UserNotificationSettings: UserNotificationSettings
+  UserProjectContribution: UserProjectContribution
+  UserProjectsGetInput: UserProjectsGetInput
+  UserProjectsGetWhereInput: UserProjectsGetWhereInput
+  Wallet: Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversParentTypes['ConnectionDetails'] }
+  WalletContributionLimits: WalletContributionLimits
+  WalletLimits: WalletLimits
+  WalletOffChainContributionLimits: WalletOffChainContributionLimits
+  WalletOnChainContributionLimits: WalletOnChainContributionLimits
+  WalletResourceInput: WalletResourceInput
+  WalletState: WalletState
+  dashboardFundersGetInput: DashboardFundersGetInput
+}
 
 export type ActivitiesGetResponseResolvers<
   ContextType = any,
@@ -3813,35 +3816,49 @@ export type ExternalAccountResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
-export type FunderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Funder'] = ResolversParentTypes['Funder']> = {
-  amountFunded?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  confirmed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  confirmedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  contributionSummary?: Resolver<Maybe<ResolversTypes['FunderContributionSummary']>, ParentType, ContextType, Partial<FunderContributionSummaryArgs>>;
-  fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType, Partial<FunderFundingTxsArgs>>;
-  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  orders?: Resolver<Array<ResolversTypes['Order']>, ParentType, ContextType>;
-  rank?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  timesFunded?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type FunderResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Funder'] = ResolversParentTypes['Funder'],
+> = {
+  amountFunded?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  confirmed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  confirmedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
+  contributionSummary?: Resolver<
+    Maybe<ResolversTypes['FunderContributionSummary']>,
+    ParentType,
+    ContextType,
+    Partial<FunderContributionSummaryArgs>
+  >
+  fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType, Partial<FunderFundingTxsArgs>>
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  orders?: Resolver<Array<ResolversTypes['Order']>, ParentType, ContextType>
+  rank?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  timesFunded?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
-export type FunderContributionSummaryResolvers<ContextType = any, ParentType extends ResolversParentTypes['FunderContributionSummary'] = ResolversParentTypes['FunderContributionSummary']> = {
-  commentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type FunderContributionSummaryResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['FunderContributionSummary'] = ResolversParentTypes['FunderContributionSummary'],
+> = {
+  commentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
-export type FunderRewardGraphSumResolvers<ContextType = any, ParentType extends ResolversParentTypes['FunderRewardGraphSum'] = ResolversParentTypes['FunderRewardGraphSum']> = {
-  dateTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  rewardId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  rewardName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  sum?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type FunderRewardGraphSumResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['FunderRewardGraphSum'] = ResolversParentTypes['FunderRewardGraphSum'],
+> = {
+  dateTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  rewardId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  rewardName?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  sum?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type FundingCancelResponseResolvers<
   ContextType = any,
@@ -4673,47 +4690,55 @@ export type ProfileNotificationSettingsResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
-export type ProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
-  ambassadors?: Resolver<Array<ResolversTypes['Ambassador']>, ParentType, ContextType>;
-  balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  balanceUsdCent?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  defaultGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  entries?: Resolver<Array<ResolversTypes['Entry']>, ParentType, ContextType, Partial<ProjectEntriesArgs>>;
-  entriesCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  followers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
-  followersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  funders?: Resolver<Array<ResolversTypes['Funder']>, ParentType, ContextType>;
-  fundersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType>;
-  fundingTxsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  goalsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  grantApplications?: Resolver<Array<ResolversTypes['GrantApplicant']>, ParentType, ContextType, Partial<ProjectGrantApplicationsArgs>>;
-  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  keys?: Resolver<ResolversTypes['ProjectKeys'], ParentType, ContextType>;
-  links?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
-  milestones?: Resolver<Array<ResolversTypes['Milestone']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  owners?: Resolver<Array<ResolversTypes['Owner']>, ParentType, ContextType>;
-  rewardCurrency?: Resolver<Maybe<ResolversTypes['RewardCurrency']>, ParentType, ContextType>;
-  rewards?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType>;
-  rewardsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  shortDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  sponsors?: Resolver<Array<ResolversTypes['Sponsor']>, ParentType, ContextType>;
-  statistics?: Resolver<Maybe<ResolversTypes['ProjectStatistics']>, ParentType, ContextType>;
-  status?: Resolver<Maybe<ResolversTypes['ProjectStatus']>, ParentType, ContextType>;
-  tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>;
-  thumbnailImage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  wallets?: Resolver<Array<ResolversTypes['Wallet']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type ProjectResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project'],
+> = {
+  ambassadors?: Resolver<Array<ResolversTypes['Ambassador']>, ParentType, ContextType>
+  balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  balanceUsdCent?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  defaultGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  entries?: Resolver<Array<ResolversTypes['Entry']>, ParentType, ContextType, Partial<ProjectEntriesArgs>>
+  entriesCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  followers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>
+  followersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  funders?: Resolver<Array<ResolversTypes['Funder']>, ParentType, ContextType>
+  fundersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType>
+  fundingTxsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  goalsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  grantApplications?: Resolver<
+    Array<ResolversTypes['GrantApplicant']>,
+    ParentType,
+    ContextType,
+    Partial<ProjectGrantApplicationsArgs>
+  >
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>
+  keys?: Resolver<ResolversTypes['ProjectKeys'], ParentType, ContextType>
+  links?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>
+  location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>
+  milestones?: Resolver<Array<ResolversTypes['Milestone']>, ParentType, ContextType>
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  owners?: Resolver<Array<ResolversTypes['Owner']>, ParentType, ContextType>
+  rewardCurrency?: Resolver<Maybe<ResolversTypes['RewardCurrency']>, ParentType, ContextType>
+  rewards?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType>
+  rewardsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  shortDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  sponsors?: Resolver<Array<ResolversTypes['Sponsor']>, ParentType, ContextType>
+  statistics?: Resolver<Maybe<ResolversTypes['ProjectStatistics']>, ParentType, ContextType>
+  status?: Resolver<Maybe<ResolversTypes['ProjectStatus']>, ParentType, ContextType>
+  tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>
+  thumbnailImage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  wallets?: Resolver<Array<ResolversTypes['Wallet']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type ProjectActivatedSubscriptionResponseResolvers<
   ContextType = any,
@@ -4907,31 +4932,34 @@ export type ProjectRegionsGetResultResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
-export type ProjectRewardResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectReward'] = ResolversParentTypes['ProjectReward']> = {
-  category?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  deletedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  estimatedAvailabilityDate?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  estimatedDeliveryInWeeks?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  hasShipping?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  isAddon?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  isHidden?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  maxClaimable?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  preOrder?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
-  rewardCurrency?: Resolver<ResolversTypes['RewardCurrency'], ParentType, ContextType>;
-  sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  stock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type ProjectRewardResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectReward'] = ResolversParentTypes['ProjectReward'],
+> = {
+  category?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  deletedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  estimatedAvailabilityDate?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
+  estimatedDeliveryInWeeks?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  hasShipping?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>
+  isAddon?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  isHidden?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  maxClaimable?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  preOrder?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>
+  rewardCurrency?: Resolver<ResolversTypes['RewardCurrency'], ParentType, ContextType>
+  sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  stock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type ProjectRewardTrendingWeeklyGetRowResolvers<
   ContextType = any,
@@ -5476,141 +5504,141 @@ export type WalletStateResolvers<
 }
 
 export type Resolvers<ContextType = any> = {
-  ActivitiesGetResponse?: ActivitiesGetResponseResolvers<ContextType>;
-  Activity?: ActivityResolvers<ContextType>;
-  ActivityResource?: ActivityResourceResolvers<ContextType>;
-  AffiliateLink?: AffiliateLinkResolvers<ContextType>;
-  AffiliatePaymentConfirmResponse?: AffiliatePaymentConfirmResponseResolvers<ContextType>;
-  AffiliatePayoutsStats?: AffiliatePayoutsStatsResolvers<ContextType>;
-  AffiliateSalesStats?: AffiliateSalesStatsResolvers<ContextType>;
-  AffiliateStats?: AffiliateStatsResolvers<ContextType>;
-  Ambassador?: AmbassadorResolvers<ContextType>;
-  AmountSummary?: AmountSummaryResolvers<ContextType>;
-  Badge?: BadgeResolvers<ContextType>;
-  BigInt?: GraphQLScalarType;
-  BitcoinQuote?: BitcoinQuoteResolvers<ContextType>;
-  BoardVoteGrant?: BoardVoteGrantResolvers<ContextType>;
-  CommunityVoteGrant?: CommunityVoteGrantResolvers<ContextType>;
-  CompetitionVoteGrantVoteSummary?: CompetitionVoteGrantVoteSummaryResolvers<ContextType>;
-  ConnectionDetails?: ConnectionDetailsResolvers<ContextType>;
-  Country?: CountryResolvers<ContextType>;
-  CreatorNotificationSettings?: CreatorNotificationSettingsResolvers<ContextType>;
-  CreatorNotificationSettingsProject?: CreatorNotificationSettingsProjectResolvers<ContextType>;
-  CurrencyQuoteGetResponse?: CurrencyQuoteGetResponseResolvers<ContextType>;
-  CursorPaginationResponse?: CursorPaginationResponseResolvers<ContextType>;
-  Date?: GraphQLScalarType;
-  DatetimeRange?: DatetimeRangeResolvers<ContextType>;
-  DeleteUserResponse?: DeleteUserResponseResolvers<ContextType>;
-  Entry?: EntryResolvers<ContextType>;
-  EntryPublishedSubscriptionResponse?: EntryPublishedSubscriptionResponseResolvers<ContextType>;
-  ExternalAccount?: ExternalAccountResolvers<ContextType>;
-  Funder?: FunderResolvers<ContextType>;
-  FunderContributionSummary?: FunderContributionSummaryResolvers<ContextType>;
-  FunderRewardGraphSum?: FunderRewardGraphSumResolvers<ContextType>;
-  FundingCancelResponse?: FundingCancelResponseResolvers<ContextType>;
-  FundingConfirmResponse?: FundingConfirmResponseResolvers<ContextType>;
-  FundingMutationResponse?: FundingMutationResponseResolvers<ContextType>;
-  FundingPendingResponse?: FundingPendingResponseResolvers<ContextType>;
-  FundingQueryResponse?: FundingQueryResponseResolvers<ContextType>;
-  FundingTx?: FundingTxResolvers<ContextType>;
-  FundingTxAmountGraph?: FundingTxAmountGraphResolvers<ContextType>;
-  FundingTxInvoiceSanctionCheckStatusResponse?: FundingTxInvoiceSanctionCheckStatusResponseResolvers<ContextType>;
-  FundingTxMethodCount?: FundingTxMethodCountResolvers<ContextType>;
-  FundingTxMethodSum?: FundingTxMethodSumResolvers<ContextType>;
-  FundingTxStatusUpdatedSubscriptionResponse?: FundingTxStatusUpdatedSubscriptionResponseResolvers<ContextType>;
-  FundingTxsGetResponse?: FundingTxsGetResponseResolvers<ContextType>;
-  FundinginvoiceCancel?: FundinginvoiceCancelResolvers<ContextType>;
-  GenerateAffiliatePaymentRequestResponse?: GenerateAffiliatePaymentRequestResponseResolvers<ContextType>;
-  GlobalContributorLeaderboardRow?: GlobalContributorLeaderboardRowResolvers<ContextType>;
-  GlobalProjectLeaderboardRow?: GlobalProjectLeaderboardRowResolvers<ContextType>;
-  Grant?: GrantResolvers<ContextType>;
-  GrantApplicant?: GrantApplicantResolvers<ContextType>;
-  GrantApplicantContributor?: GrantApplicantContributorResolvers<ContextType>;
-  GrantApplicantFunding?: GrantApplicantFundingResolvers<ContextType>;
-  GrantBoardMember?: GrantBoardMemberResolvers<ContextType>;
-  GrantStatistics?: GrantStatisticsResolvers<ContextType>;
-  GrantStatisticsApplicant?: GrantStatisticsApplicantResolvers<ContextType>;
-  GrantStatisticsGrant?: GrantStatisticsGrantResolvers<ContextType>;
-  GrantStatus?: GrantStatusResolvers<ContextType>;
-  GraphSumData?: GraphSumDataResolvers<ContextType>;
-  LightningAddressConnectionDetails?: LightningAddressConnectionDetailsResolvers<ContextType>;
-  LightningAddressContributionLimits?: LightningAddressContributionLimitsResolvers<ContextType>;
-  LightningAddressVerifyResponse?: LightningAddressVerifyResponseResolvers<ContextType>;
-  LndConnectionDetails?: LndConnectionDetailsResolvers<ContextType>;
-  LndConnectionDetailsPrivate?: LndConnectionDetailsPrivateResolvers<ContextType>;
-  LndConnectionDetailsPublic?: LndConnectionDetailsPublicResolvers<ContextType>;
-  Location?: LocationResolvers<ContextType>;
-  Milestone?: MilestoneResolvers<ContextType>;
-  Mutation?: MutationResolvers<ContextType>;
-  MutationResponse?: MutationResponseResolvers<ContextType>;
-  NostrKeys?: NostrKeysResolvers<ContextType>;
-  NostrPrivateKey?: NostrPrivateKeyResolvers<ContextType>;
-  NostrPublicKey?: NostrPublicKeyResolvers<ContextType>;
-  NotificationConfiguration?: NotificationConfigurationResolvers<ContextType>;
-  NotificationSettings?: NotificationSettingsResolvers<ContextType>;
-  OTPResponse?: OtpResponseResolvers<ContextType>;
-  Order?: OrderResolvers<ContextType>;
-  OrderItem?: OrderItemResolvers<ContextType>;
-  OrdersGetResponse?: OrdersGetResponseResolvers<ContextType>;
-  OrdersStatsBase?: OrdersStatsBaseResolvers<ContextType>;
-  Owner?: OwnerResolvers<ContextType>;
-  OwnerOf?: OwnerOfResolvers<ContextType>;
-  PageViewCountGraph?: PageViewCountGraphResolvers<ContextType>;
-  PaginationCursor?: PaginationCursorResolvers<ContextType>;
-  ProfileNotificationSettings?: ProfileNotificationSettingsResolvers<ContextType>;
-  Project?: ProjectResolvers<ContextType>;
-  ProjectActivatedSubscriptionResponse?: ProjectActivatedSubscriptionResponseResolvers<ContextType>;
-  ProjectActivitiesCount?: ProjectActivitiesCountResolvers<ContextType>;
-  ProjectContributionsGroupedByMethodStats?: ProjectContributionsGroupedByMethodStatsResolvers<ContextType>;
-  ProjectContributionsStats?: ProjectContributionsStatsResolvers<ContextType>;
-  ProjectContributionsStatsBase?: ProjectContributionsStatsBaseResolvers<ContextType>;
-  ProjectCountriesGetResult?: ProjectCountriesGetResultResolvers<ContextType>;
-  ProjectDeleteResponse?: ProjectDeleteResponseResolvers<ContextType>;
-  ProjectFollowerStats?: ProjectFollowerStatsResolvers<ContextType>;
-  ProjectFunderRewardStats?: ProjectFunderRewardStatsResolvers<ContextType>;
-  ProjectFunderStats?: ProjectFunderStatsResolvers<ContextType>;
-  ProjectFundingTxStats?: ProjectFundingTxStatsResolvers<ContextType>;
-  ProjectGoal?: ProjectGoalResolvers<ContextType>;
-  ProjectGoalDeleteResponse?: ProjectGoalDeleteResponseResolvers<ContextType>;
-  ProjectGoals?: ProjectGoalsResolvers<ContextType>;
-  ProjectKeys?: ProjectKeysResolvers<ContextType>;
-  ProjectLeaderboardContributorsRow?: ProjectLeaderboardContributorsRowResolvers<ContextType>;
-  ProjectMostFunded?: ProjectMostFundedResolvers<ContextType>;
-  ProjectMostFundedByTag?: ProjectMostFundedByTagResolvers<ContextType>;
-  ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>;
-  ProjectReward?: ProjectRewardResolvers<ContextType>;
-  ProjectRewardTrendingWeeklyGetRow?: ProjectRewardTrendingWeeklyGetRowResolvers<ContextType>;
-  ProjectRewardsGroupedByRewardIdStats?: ProjectRewardsGroupedByRewardIdStatsResolvers<ContextType>;
-  ProjectRewardsGroupedByRewardIdStatsProjectReward?: ProjectRewardsGroupedByRewardIdStatsProjectRewardResolvers<ContextType>;
-  ProjectRewardsStats?: ProjectRewardsStatsResolvers<ContextType>;
-  ProjectStatistics?: ProjectStatisticsResolvers<ContextType>;
-  ProjectStats?: ProjectStatsResolvers<ContextType>;
-  ProjectStatsBase?: ProjectStatsBaseResolvers<ContextType>;
-  ProjectViewBaseStats?: ProjectViewBaseStatsResolvers<ContextType>;
-  ProjectViewStats?: ProjectViewStatsResolvers<ContextType>;
-  ProjectsResponse?: ProjectsResponseResolvers<ContextType>;
-  ProjectsSummary?: ProjectsSummaryResolvers<ContextType>;
-  Query?: QueryResolvers<ContextType>;
-  SignedUploadUrl?: SignedUploadUrlResolvers<ContextType>;
-  SourceResource?: SourceResourceResolvers<ContextType>;
-  Sponsor?: SponsorResolvers<ContextType>;
-  StatsInterface?: StatsInterfaceResolvers<ContextType>;
-  Subscription?: SubscriptionResolvers<ContextType>;
-  Swap?: SwapResolvers<ContextType>;
-  Tag?: TagResolvers<ContextType>;
-  TagsGetResult?: TagsGetResultResolvers<ContextType>;
-  TagsMostFundedGetResult?: TagsMostFundedGetResultResolvers<ContextType>;
-  User?: UserResolvers<ContextType>;
-  UserBadge?: UserBadgeResolvers<ContextType>;
-  UserNotificationSettings?: UserNotificationSettingsResolvers<ContextType>;
-  UserProjectContribution?: UserProjectContributionResolvers<ContextType>;
-  Wallet?: WalletResolvers<ContextType>;
-  WalletContributionLimits?: WalletContributionLimitsResolvers<ContextType>;
-  WalletLimits?: WalletLimitsResolvers<ContextType>;
-  WalletOffChainContributionLimits?: WalletOffChainContributionLimitsResolvers<ContextType>;
-  WalletOnChainContributionLimits?: WalletOnChainContributionLimitsResolvers<ContextType>;
-  WalletState?: WalletStateResolvers<ContextType>;
-};
+  ActivitiesGetResponse?: ActivitiesGetResponseResolvers<ContextType>
+  Activity?: ActivityResolvers<ContextType>
+  ActivityResource?: ActivityResourceResolvers<ContextType>
+  AffiliateLink?: AffiliateLinkResolvers<ContextType>
+  AffiliatePaymentConfirmResponse?: AffiliatePaymentConfirmResponseResolvers<ContextType>
+  AffiliatePayoutsStats?: AffiliatePayoutsStatsResolvers<ContextType>
+  AffiliateSalesStats?: AffiliateSalesStatsResolvers<ContextType>
+  AffiliateStats?: AffiliateStatsResolvers<ContextType>
+  Ambassador?: AmbassadorResolvers<ContextType>
+  AmountSummary?: AmountSummaryResolvers<ContextType>
+  Badge?: BadgeResolvers<ContextType>
+  BigInt?: GraphQLScalarType
+  BitcoinQuote?: BitcoinQuoteResolvers<ContextType>
+  BoardVoteGrant?: BoardVoteGrantResolvers<ContextType>
+  CommunityVoteGrant?: CommunityVoteGrantResolvers<ContextType>
+  CompetitionVoteGrantVoteSummary?: CompetitionVoteGrantVoteSummaryResolvers<ContextType>
+  ConnectionDetails?: ConnectionDetailsResolvers<ContextType>
+  Country?: CountryResolvers<ContextType>
+  CreatorNotificationSettings?: CreatorNotificationSettingsResolvers<ContextType>
+  CreatorNotificationSettingsProject?: CreatorNotificationSettingsProjectResolvers<ContextType>
+  CurrencyQuoteGetResponse?: CurrencyQuoteGetResponseResolvers<ContextType>
+  CursorPaginationResponse?: CursorPaginationResponseResolvers<ContextType>
+  Date?: GraphQLScalarType
+  DatetimeRange?: DatetimeRangeResolvers<ContextType>
+  DeleteUserResponse?: DeleteUserResponseResolvers<ContextType>
+  Entry?: EntryResolvers<ContextType>
+  EntryPublishedSubscriptionResponse?: EntryPublishedSubscriptionResponseResolvers<ContextType>
+  ExternalAccount?: ExternalAccountResolvers<ContextType>
+  Funder?: FunderResolvers<ContextType>
+  FunderContributionSummary?: FunderContributionSummaryResolvers<ContextType>
+  FunderRewardGraphSum?: FunderRewardGraphSumResolvers<ContextType>
+  FundingCancelResponse?: FundingCancelResponseResolvers<ContextType>
+  FundingConfirmResponse?: FundingConfirmResponseResolvers<ContextType>
+  FundingMutationResponse?: FundingMutationResponseResolvers<ContextType>
+  FundingPendingResponse?: FundingPendingResponseResolvers<ContextType>
+  FundingQueryResponse?: FundingQueryResponseResolvers<ContextType>
+  FundingTx?: FundingTxResolvers<ContextType>
+  FundingTxAmountGraph?: FundingTxAmountGraphResolvers<ContextType>
+  FundingTxInvoiceSanctionCheckStatusResponse?: FundingTxInvoiceSanctionCheckStatusResponseResolvers<ContextType>
+  FundingTxMethodCount?: FundingTxMethodCountResolvers<ContextType>
+  FundingTxMethodSum?: FundingTxMethodSumResolvers<ContextType>
+  FundingTxStatusUpdatedSubscriptionResponse?: FundingTxStatusUpdatedSubscriptionResponseResolvers<ContextType>
+  FundingTxsGetResponse?: FundingTxsGetResponseResolvers<ContextType>
+  FundinginvoiceCancel?: FundinginvoiceCancelResolvers<ContextType>
+  GenerateAffiliatePaymentRequestResponse?: GenerateAffiliatePaymentRequestResponseResolvers<ContextType>
+  GlobalContributorLeaderboardRow?: GlobalContributorLeaderboardRowResolvers<ContextType>
+  GlobalProjectLeaderboardRow?: GlobalProjectLeaderboardRowResolvers<ContextType>
+  Grant?: GrantResolvers<ContextType>
+  GrantApplicant?: GrantApplicantResolvers<ContextType>
+  GrantApplicantContributor?: GrantApplicantContributorResolvers<ContextType>
+  GrantApplicantFunding?: GrantApplicantFundingResolvers<ContextType>
+  GrantBoardMember?: GrantBoardMemberResolvers<ContextType>
+  GrantStatistics?: GrantStatisticsResolvers<ContextType>
+  GrantStatisticsApplicant?: GrantStatisticsApplicantResolvers<ContextType>
+  GrantStatisticsGrant?: GrantStatisticsGrantResolvers<ContextType>
+  GrantStatus?: GrantStatusResolvers<ContextType>
+  GraphSumData?: GraphSumDataResolvers<ContextType>
+  LightningAddressConnectionDetails?: LightningAddressConnectionDetailsResolvers<ContextType>
+  LightningAddressContributionLimits?: LightningAddressContributionLimitsResolvers<ContextType>
+  LightningAddressVerifyResponse?: LightningAddressVerifyResponseResolvers<ContextType>
+  LndConnectionDetails?: LndConnectionDetailsResolvers<ContextType>
+  LndConnectionDetailsPrivate?: LndConnectionDetailsPrivateResolvers<ContextType>
+  LndConnectionDetailsPublic?: LndConnectionDetailsPublicResolvers<ContextType>
+  Location?: LocationResolvers<ContextType>
+  Milestone?: MilestoneResolvers<ContextType>
+  Mutation?: MutationResolvers<ContextType>
+  MutationResponse?: MutationResponseResolvers<ContextType>
+  NostrKeys?: NostrKeysResolvers<ContextType>
+  NostrPrivateKey?: NostrPrivateKeyResolvers<ContextType>
+  NostrPublicKey?: NostrPublicKeyResolvers<ContextType>
+  NotificationConfiguration?: NotificationConfigurationResolvers<ContextType>
+  NotificationSettings?: NotificationSettingsResolvers<ContextType>
+  OTPResponse?: OtpResponseResolvers<ContextType>
+  Order?: OrderResolvers<ContextType>
+  OrderItem?: OrderItemResolvers<ContextType>
+  OrdersGetResponse?: OrdersGetResponseResolvers<ContextType>
+  OrdersStatsBase?: OrdersStatsBaseResolvers<ContextType>
+  Owner?: OwnerResolvers<ContextType>
+  OwnerOf?: OwnerOfResolvers<ContextType>
+  PageViewCountGraph?: PageViewCountGraphResolvers<ContextType>
+  PaginationCursor?: PaginationCursorResolvers<ContextType>
+  ProfileNotificationSettings?: ProfileNotificationSettingsResolvers<ContextType>
+  Project?: ProjectResolvers<ContextType>
+  ProjectActivatedSubscriptionResponse?: ProjectActivatedSubscriptionResponseResolvers<ContextType>
+  ProjectActivitiesCount?: ProjectActivitiesCountResolvers<ContextType>
+  ProjectContributionsGroupedByMethodStats?: ProjectContributionsGroupedByMethodStatsResolvers<ContextType>
+  ProjectContributionsStats?: ProjectContributionsStatsResolvers<ContextType>
+  ProjectContributionsStatsBase?: ProjectContributionsStatsBaseResolvers<ContextType>
+  ProjectCountriesGetResult?: ProjectCountriesGetResultResolvers<ContextType>
+  ProjectDeleteResponse?: ProjectDeleteResponseResolvers<ContextType>
+  ProjectFollowerStats?: ProjectFollowerStatsResolvers<ContextType>
+  ProjectFunderRewardStats?: ProjectFunderRewardStatsResolvers<ContextType>
+  ProjectFunderStats?: ProjectFunderStatsResolvers<ContextType>
+  ProjectFundingTxStats?: ProjectFundingTxStatsResolvers<ContextType>
+  ProjectGoal?: ProjectGoalResolvers<ContextType>
+  ProjectGoalDeleteResponse?: ProjectGoalDeleteResponseResolvers<ContextType>
+  ProjectGoals?: ProjectGoalsResolvers<ContextType>
+  ProjectKeys?: ProjectKeysResolvers<ContextType>
+  ProjectLeaderboardContributorsRow?: ProjectLeaderboardContributorsRowResolvers<ContextType>
+  ProjectMostFunded?: ProjectMostFundedResolvers<ContextType>
+  ProjectMostFundedByTag?: ProjectMostFundedByTagResolvers<ContextType>
+  ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>
+  ProjectReward?: ProjectRewardResolvers<ContextType>
+  ProjectRewardTrendingWeeklyGetRow?: ProjectRewardTrendingWeeklyGetRowResolvers<ContextType>
+  ProjectRewardsGroupedByRewardIdStats?: ProjectRewardsGroupedByRewardIdStatsResolvers<ContextType>
+  ProjectRewardsGroupedByRewardIdStatsProjectReward?: ProjectRewardsGroupedByRewardIdStatsProjectRewardResolvers<ContextType>
+  ProjectRewardsStats?: ProjectRewardsStatsResolvers<ContextType>
+  ProjectStatistics?: ProjectStatisticsResolvers<ContextType>
+  ProjectStats?: ProjectStatsResolvers<ContextType>
+  ProjectStatsBase?: ProjectStatsBaseResolvers<ContextType>
+  ProjectViewBaseStats?: ProjectViewBaseStatsResolvers<ContextType>
+  ProjectViewStats?: ProjectViewStatsResolvers<ContextType>
+  ProjectsResponse?: ProjectsResponseResolvers<ContextType>
+  ProjectsSummary?: ProjectsSummaryResolvers<ContextType>
+  Query?: QueryResolvers<ContextType>
+  SignedUploadUrl?: SignedUploadUrlResolvers<ContextType>
+  SourceResource?: SourceResourceResolvers<ContextType>
+  Sponsor?: SponsorResolvers<ContextType>
+  StatsInterface?: StatsInterfaceResolvers<ContextType>
+  Subscription?: SubscriptionResolvers<ContextType>
+  Swap?: SwapResolvers<ContextType>
+  Tag?: TagResolvers<ContextType>
+  TagsGetResult?: TagsGetResultResolvers<ContextType>
+  TagsMostFundedGetResult?: TagsMostFundedGetResultResolvers<ContextType>
+  User?: UserResolvers<ContextType>
+  UserBadge?: UserBadgeResolvers<ContextType>
+  UserNotificationSettings?: UserNotificationSettingsResolvers<ContextType>
+  UserProjectContribution?: UserProjectContributionResolvers<ContextType>
+  Wallet?: WalletResolvers<ContextType>
+  WalletContributionLimits?: WalletContributionLimitsResolvers<ContextType>
+  WalletLimits?: WalletLimitsResolvers<ContextType>
+  WalletOffChainContributionLimits?: WalletOffChainContributionLimitsResolvers<ContextType>
+  WalletOnChainContributionLimits?: WalletOnChainContributionLimitsResolvers<ContextType>
+  WalletState?: WalletStateResolvers<ContextType>
+}
 
 export type EmailUpdateUserFragment = { __typename?: 'User'; email?: string | null; isEmailVerified: boolean; id: any }
 
@@ -5631,13 +5659,27 @@ export type EntryFragment = {
   amountFunded: number
   type: EntryType
   creator: { __typename?: 'User' } & UserForAvatarFragment
-  project?: { __typename?: 'Project'; id: any; title: string; name: string; image?: string | null } | null
+  project?: {
+    __typename?: 'Project'
+    id: any
+    title: string
+    name: string
+    images: Array<string>
+    thumbnailImage?: string | null
+  } | null
 }
 
-export type EntryFragment = { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, status: EntryStatus, content?: string | null, createdAt: string, updatedAt: string, publishedAt?: string | null, fundersCount: number, amountFunded: number, type: EntryType, creator: (
-    { __typename?: 'User' }
-    & UserForAvatarFragment
-  ), project?: { __typename?: 'Project', id: any, title: string, name: string, images: Array<string>, thumbnailImage?: string | null } | null };
+export type EntryForLandingPageFragment = {
+  __typename?: 'Entry'
+  amountFunded: number
+  id: any
+  image?: string | null
+  title: string
+  entryFundersCount: number
+  entryDescription: string
+  project?: { __typename?: 'Project'; id: any; name: string; thumbnailImage?: string | null; title: string } | null
+  creator: { __typename?: 'User' } & UserForAvatarFragment
+}
 
 export type EntryForProjectFragment = {
   __typename?: 'Entry'
@@ -5691,14 +5733,21 @@ export type FundingTxForLandingPageFragment = {
         id: any
         name: string
         title: string
-        image?: string | null
+        images: Array<string>
         createdAt: string
         thumbnailImage?: string | null
       }
     | null
 }
 
-export type FundingTxForLandingPageFragment = { __typename?: 'FundingTx', id: any, comment?: string | null, amount: number, paidAt?: any | null, onChain: boolean, media?: string | null, source: string, method?: FundingMethod | null, projectId: any, funder: { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, confirmedAt?: any | null, user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', externalUsername: string, public: boolean, accountType: string }> } | null }, sourceResource?: { __typename?: 'Entry', createdAt: string, id: any, image?: string | null, title: string } | { __typename?: 'Project', id: any, name: string, title: string, images: Array<string>, createdAt: string, thumbnailImage?: string | null } | null };
+export type ProjectDefaultGoalFragment = {
+  __typename?: 'ProjectGoal'
+  id: any
+  title: string
+  targetAmount: number
+  currency: ProjectGoalCurrency
+  amountContributed: number
+}
 
 export type ProjectGoalFragment = {
   __typename?: 'ProjectGoal'
@@ -6017,7 +6066,7 @@ export type ProjectRewardForLandingPageFragment = {
   cost: number
   description?: string | null
   id: any
-  image?: string | null
+  images: Array<string>
   sold: number
   stock?: number | null
   maxClaimable?: number | null
@@ -6036,17 +6085,87 @@ export type ProjectRewardForLandingPageFragment = {
   }
 }
 
-export type ProjectRewardForLandingPageFragment = { __typename?: 'ProjectReward', cost: number, description?: string | null, id: any, images: Array<string>, sold: number, stock?: number | null, maxClaimable?: number | null, rewardName: string, rewardProject: { __typename?: 'Project', id: any, name: string, title: string, rewardCurrency?: RewardCurrency | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } }> } };
+export type ProjectRewardForCreateUpdateFragment = {
+  __typename?: 'ProjectReward'
+  id: any
+  name: string
+  description?: string | null
+  cost: number
+  images: Array<string>
+  deleted: boolean
+  stock?: number | null
+  sold: number
+  hasShipping: boolean
+  maxClaimable?: number | null
+  isAddon: boolean
+  isHidden: boolean
+  category?: string | null
+  preOrder: boolean
+  estimatedAvailabilityDate?: any | null
+  estimatedDeliveryInWeeks?: number | null
+}
 
-export type ProjectRewardForCreateUpdateFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, cost: number, images: Array<string>, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null };
+export type ProjectFragment = {
+  __typename?: 'Project'
+  id: any
+  title: string
+  name: string
+  type: ProjectType
+  shortDescription?: string | null
+  description?: string | null
+  defaultGoalId?: any | null
+  balance: number
+  balanceUsdCent: number
+  createdAt: string
+  updatedAt: string
+  images: Array<string>
+  thumbnailImage?: string | null
+  links: Array<string>
+  status?: ProjectStatus | null
+  rewardCurrency?: RewardCurrency | null
+  fundersCount?: number | null
+  fundingTxsCount?: number | null
+}
 
-export type ProjectFragment = { __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, defaultGoalId?: any | null, balance: number, balanceUsdCent: number, createdAt: string, updatedAt: string, images: Array<string>, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, fundingTxsCount?: number | null };
+export type ProjectAvatarFragment = {
+  __typename?: 'Project'
+  id: any
+  name: string
+  thumbnailImage?: string | null
+  title: string
+}
 
-export type ProjectAvatarFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, title: string };
+export type ProjectForOwnerFragment = {
+  __typename?: 'Project'
+  id: any
+  name: string
+  images: Array<string>
+  thumbnailImage?: string | null
+  title: string
+  status?: ProjectStatus | null
+  createdAt: string
+}
 
-export type ProjectForOwnerFragment = { __typename?: 'Project', id: any, name: string, images: Array<string>, thumbnailImage?: string | null, title: string, status?: ProjectStatus | null, createdAt: string };
+export type ExternalAccountFragment = {
+  __typename?: 'ExternalAccount'
+  id: any
+  accountType: string
+  externalUsername: string
+  externalId: string
+  public: boolean
+}
 
-export type ExternalAccountFragment = { __typename?: 'ExternalAccount', id: any, accountType: string, externalUsername: string, externalId: string, public: boolean };
+export type ProjectOwnerUserFragment = {
+  __typename?: 'User'
+  id: any
+  username: string
+  imageUrl?: string | null
+  email?: string | null
+  ranking?: any | null
+  isEmailVerified: boolean
+  hasSocialAccount: boolean
+  externalAccounts: Array<{ __typename?: 'ExternalAccount' } & ExternalAccountFragment>
+}
 
 export type UserMeFragment = {
   __typename?: 'User'
@@ -6058,28 +6177,16 @@ export type UserMeFragment = {
   isEmailVerified: boolean
   hasSocialAccount: boolean
   externalAccounts: Array<{ __typename?: 'ExternalAccount' } & ExternalAccountFragment>
-  ownerOf: Array<{
-    __typename?: 'OwnerOf'
-    project?: {
-      __typename?: 'Project'
-      id: any
-      name: string
-      image?: string | null
-      thumbnailImage?: string | null
-      title: string
-      status?: ProjectStatus | null
-      createdAt: string
-    } | null
-  }>
+  ownerOf: Array<{ __typename?: 'OwnerOf'; project?: ({ __typename?: 'Project' } & ProjectForOwnerFragment) | null }>
 }
 
-export type UserMeFragment = { __typename?: 'User', id: any, username: string, imageUrl?: string | null, email?: string | null, ranking?: any | null, isEmailVerified: boolean, hasSocialAccount: boolean, externalAccounts: Array<(
-    { __typename?: 'ExternalAccount' }
-    & ExternalAccountFragment
-  )>, ownerOf: Array<{ __typename?: 'OwnerOf', project?: (
-      { __typename?: 'Project' }
-      & ProjectForOwnerFragment
-    ) | null }> };
+export type UserForAvatarFragment = {
+  __typename?: 'User'
+  id: any
+  imageUrl?: string | null
+  email?: string | null
+  username: string
+}
 
 export type FunderWithUserFragment = {
   __typename?: 'Funder'
@@ -6360,8 +6467,6 @@ export type EntryWithOwnersQuery = {
   } | null
 }
 
-export type EntryWithOwnersQuery = { __typename?: 'Query', entry?: { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, status: EntryStatus, content?: string | null, createdAt: string, updatedAt: string, publishedAt?: string | null, fundersCount: number, type: EntryType, creator: { __typename?: 'User', id: any, username: string, imageUrl?: string | null }, project?: { __typename?: 'Project', id: any, title: string, name: string, owners: Array<{ __typename?: 'Owner', user: { __typename?: 'User', id: any } }> } | null } | null };
-
 export type SignedUploadUrlQueryVariables = Exact<{
   input: FileUploadInput
 }>
@@ -6408,12 +6513,10 @@ export type FundingTxForUserContributionFragment = {
         name: string
         title: string
         thumbnailImage?: string | null
-        image?: string | null
+        images: Array<string>
       }
     | null
 }
-
-export type FundingTxForUserContributionFragment = { __typename?: 'FundingTx', id: any, comment?: string | null, amount: number, paidAt?: any | null, onChain: boolean, media?: string | null, source: string, method?: FundingMethod | null, projectId: any, funder: { __typename?: 'Funder', id: any, user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', id: any, externalUsername: string, public: boolean, accountType: string }> } | null }, sourceResource?: { __typename?: 'Entry', id: any, createdAt: string, image?: string | null } | { __typename?: 'Project', id: any, createdAt: string, name: string, title: string, thumbnailImage?: string | null, images: Array<string> } | null };
 
 export type FundingTxsForLandingPageQueryVariables = Exact<{
   input?: InputMaybe<GetFundingTxsInput>
@@ -6558,12 +6661,17 @@ export type ProjectByNameOrIdQuery = {
   projectGet?: ({ __typename?: 'Project' } & ProjectFragment) | null
 }
 
-export type ProjectByNameOrIdQuery = { __typename?: 'Query', projectGet?: (
-    { __typename?: 'Project' }
-    & ProjectFragment
-  ) | null };
+export type ProjectsSummaryQueryVariables = Exact<{ [key: string]: never }>
 
-export type ProjectsSummaryQueryVariables = Exact<{ [key: string]: never; }>;
+export type ProjectsSummaryQuery = {
+  __typename?: 'Query'
+  projectsSummary: {
+    __typename?: 'ProjectsSummary'
+    fundedTotal?: any | null
+    fundersCount?: number | null
+    projectsCount?: number | null
+  }
+}
 
 export type ProjectFundersQueryVariables = Exact<{
   input: GetFundersInput
@@ -6668,7 +6776,7 @@ export type ProjectForLandingPageFragment = {
 export type RewardForLandingPageFragment = {
   __typename?: 'ProjectReward'
   id: any
-  image?: string | null
+  images: Array<string>
   cost: number
   name: string
   description?: string | null
@@ -6681,8 +6789,6 @@ export type RewardForLandingPageFragment = {
     thumbnailImage?: string | null
   }
 }
-
-export type RewardForLandingPageFragment = { __typename?: 'ProjectReward', id: any, images: Array<string>, cost: number, name: string, description?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null } };
 
 export type ActivitiesGetQueryVariables = Exact<{
   input?: InputMaybe<GetActivitiesInput>
@@ -6803,7 +6909,7 @@ export type ActivityFeedFragmentFragment = {
           user?: { __typename?: 'User'; id: any; username: string; imageUrl?: string | null } | null
         }
       }
-    | { __typename?: 'Project'; id: any; title: string; name: string; image?: string | null }
+    | { __typename?: 'Project'; id: any; title: string; name: string; thumbnailImage?: string | null }
     | {
         __typename?: 'ProjectGoal'
         currency: ProjectGoalCurrency
@@ -6818,23 +6924,12 @@ export type ActivityFeedFragmentFragment = {
         category?: string | null
         cost: number
         rewardCurrency: RewardCurrency
-        rewardType?: string | null
         sold: number
         stock?: number | null
         projectRewardDescription?: string | null
-        projectRewardImage?: string | null
+        projectRewardImage: Array<string>
       }
 }
-
-
-export type ProjectRegionsGetQuery = { __typename?: 'Query', projectRegionsGet: Array<{ __typename?: 'ProjectRegionsGetResult', count: number, region: string }> };
-
-export type TagsMostFundedGetQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type TagsMostFundedGetQuery = { __typename?: 'Query', tagsMostFundedGet: Array<{ __typename?: 'TagsMostFundedGetResult', id: number, label: string }> };
-
-export type ActivityFeedFragmentFragment = { __typename?: 'Activity', activityType: string, createdAt: any, id: string, project: { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null }, resource: { __typename?: 'Entry', id: any, title: string, content?: string | null, entryDescription: string, entryImage?: string | null } | { __typename?: 'FundingTx', id: any, amount: number, projectId: any, isAnonymous: boolean, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } | null } } | { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null } | { __typename?: 'ProjectGoal', currency: ProjectGoalCurrency, title: string, targetAmount: number, status: ProjectGoalStatus, goalDescription?: string | null } | { __typename?: 'ProjectReward', id: any, category?: string | null, cost: number, rewardCurrency: RewardCurrency, sold: number, stock?: number | null, projectRewardDescription?: string | null, projectRewardImage: Array<string> } };
 
 export type ActivityFeedQueryVariables = Exact<{
   input: GetActivitiesInput
@@ -7004,12 +7099,31 @@ export type ProfileOrderItemFragment = {
     cost: number
     rewardCurrency: RewardCurrency
     description?: string | null
-    image?: string | null
+    images: Array<string>
     category?: string | null
   }
 }
 
-export type ProfileOrderItemFragment = { __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', id: any, name: string, cost: number, rewardCurrency: RewardCurrency, description?: string | null, images: Array<string>, category?: string | null } };
+export type ProfileOrderFragment = {
+  __typename?: 'Order'
+  id: any
+  referenceCode: string
+  totalInSats: number
+  status: string
+  confirmedAt?: any | null
+  updatedAt: any
+  items: Array<{ __typename?: 'OrderItem' } & ProfileOrderItemFragment>
+  fundingTx: {
+    __typename?: 'FundingTx'
+    id: any
+    amountPaid: number
+    amount: number
+    status: FundingStatus
+    onChain: boolean
+    bitcoinQuote?: { __typename?: 'BitcoinQuote'; quote: number; quoteCurrency: QuoteCurrency } | null
+    sourceResource?: { __typename?: 'Entry' } | ({ __typename?: 'Project' } & ProjectAvatarFragment) | null
+  }
+}
 
 export type NotificationConfigurationFragment = {
   __typename?: 'NotificationConfiguration'
@@ -7256,30 +7370,74 @@ export type ProjectFunderFragment = {
   id: any
   amountFunded?: number | null
   timesFunded?: number | null
-  user?: { __typename?: 'User'; id: any; imageUrl?: string | null; username: string } | null
+  user?: ({ __typename?: 'User' } & UserAvatarFragment) | null
 }
 
-export type ProjectFunderFragment = { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, user?: (
-    { __typename?: 'User' }
-    & UserAvatarFragment
-  ) | null };
+export type ProjectLeaderboardContributorsFragment = {
+  __typename?: 'ProjectLeaderboardContributorsRow'
+  funderId: any
+  contributionsTotalUsd: number
+  contributionsTotal: number
+  contributionsCount: number
+  commentsCount: number
+  user?: ({ __typename?: 'User' } & UserAvatarFragment) | null
+}
 
-export type ProjectLeaderboardContributorsFragment = { __typename?: 'ProjectLeaderboardContributorsRow', funderId: any, contributionsTotalUsd: number, contributionsTotal: number, contributionsCount: number, commentsCount: number, user?: (
-    { __typename?: 'User' }
-    & UserAvatarFragment
-  ) | null };
+export type UserContributorFragment = {
+  __typename?: 'Funder'
+  id: any
+  rank?: number | null
+  user?: ({ __typename?: 'User' } & UserAvatarFragment) | null
+}
 
-export type UserContributorFragment = { __typename?: 'Funder', id: any, rank?: number | null, user?: (
-    { __typename?: 'User' }
-    & UserAvatarFragment
-  ) | null };
+export type FunderContributionSummaryFragment = {
+  __typename?: 'FunderContributionSummary'
+  contributionsTotalUsd: number
+  contributionsTotal: number
+  contributionsCount: number
+  commentsCount: number
+}
 
-export type FunderContributionSummaryFragment = { __typename?: 'FunderContributionSummary', contributionsTotalUsd: number, contributionsTotal: number, contributionsCount: number, commentsCount: number };
+export type ProjectFundingTxFragment = {
+  __typename?: 'FundingTx'
+  id: any
+  amountPaid: number
+  media?: string | null
+  comment?: string | null
+  paidAt?: any | null
+  bitcoinQuote?: { __typename?: 'BitcoinQuote'; quote: number; quoteCurrency: QuoteCurrency } | null
+  funder: { __typename?: 'Funder'; id: any; user?: ({ __typename?: 'User' } & UserAvatarFragment) | null }
+}
 
-export type ProjectFundingTxFragment = { __typename?: 'FundingTx', id: any, amountPaid: number, media?: string | null, comment?: string | null, paidAt?: any | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, funder: { __typename?: 'Funder', id: any, user?: (
-      { __typename?: 'User' }
-      & UserAvatarFragment
-    ) | null } };
+export type FundingTxFragment = {
+  __typename?: 'FundingTx'
+  id: any
+  uuid?: string | null
+  invoiceId?: string | null
+  paymentRequest?: string | null
+  amount: number
+  status: FundingStatus
+  invoiceStatus: InvoiceStatus
+  comment?: string | null
+  media?: string | null
+  paidAt?: any | null
+  onChain: boolean
+  address?: string | null
+  source: string
+  method?: FundingMethod | null
+  projectId: any
+  creatorEmail?: string | null
+  createdAt?: any | null
+  bitcoinQuote?: { __typename?: 'BitcoinQuote'; quote: number; quoteCurrency: QuoteCurrency } | null
+  funder: {
+    __typename?: 'Funder'
+    id: any
+    amountFunded?: number | null
+    timesFunded?: number | null
+    confirmedAt?: any | null
+    user?: { __typename?: 'User'; id: any; username: string; imageUrl?: string | null } | null
+  }
+}
 
 export type FundingTxWithInvoiceStatusFragment = {
   __typename?: 'FundingTx'
@@ -7369,7 +7527,7 @@ export type ProjectPageBodyFragment = {
   title: string
   type: ProjectType
   thumbnailImage?: string | null
-  image?: string | null
+  images: Array<string>
   shortDescription?: string | null
   description?: string | null
   balance: number
@@ -7385,13 +7543,14 @@ export type ProjectPageBodyFragment = {
   owners: Array<{ __typename?: 'Owner'; id: any; user: { __typename?: 'User' } & ProjectPageCreatorFragment }>
 }
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: string, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, keys: (
-    { __typename?: 'ProjectKeys' }
-    & ProjectKeysFragment
-  ), owners: Array<{ __typename?: 'Owner', id: any, user: (
-      { __typename?: 'User' }
-      & ProjectPageCreatorFragment
-    ) }> };
+export type ProjectPageDetailsFragment = {
+  __typename?: 'Project'
+  id: any
+  name: string
+  links: Array<string>
+  location?: ({ __typename?: 'Location' } & ProjectLocationFragment) | null
+  tags: Array<{ __typename?: 'Tag'; id: number; label: string }>
+}
 
 export type ProjectHeaderSummaryFragment = {
   __typename?: 'Project'
@@ -7407,7 +7566,7 @@ export type ProjectUpdateFragment = {
   name: string
   shortDescription?: string | null
   description?: string | null
-  image?: string | null
+  images: Array<string>
   thumbnailImage?: string | null
   status?: ProjectStatus | null
   links: Array<string>
@@ -7419,7 +7578,29 @@ export type ProjectUpdateFragment = {
   } | null
 }
 
-export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, status?: ProjectStatus | null, links: Array<string>, rewardCurrency?: RewardCurrency | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null };
+export type ProjectStatsForInsightsPageFragment = {
+  __typename?: 'ProjectStats'
+  current?: {
+    __typename?: 'ProjectStatsBase'
+    projectViews?: {
+      __typename?: 'ProjectViewStats'
+      viewCount: number
+      visitorCount: number
+      referrers: Array<{ __typename?: 'ProjectViewBaseStats'; value: string; viewCount: number; visitorCount: number }>
+      regions: Array<{ __typename?: 'ProjectViewBaseStats'; value: string; viewCount: number; visitorCount: number }>
+    } | null
+    projectFunderRewards?: { __typename?: 'ProjectFunderRewardStats'; quantitySum: number } | null
+    projectFunders?: { __typename?: 'ProjectFunderStats'; count: number } | null
+    projectFundingTxs?: { __typename?: 'ProjectFundingTxStats'; amountSum?: number | null; count: number } | null
+  } | null
+  prevTimeRange?: {
+    __typename?: 'ProjectStatsBase'
+    projectViews?: { __typename?: 'ProjectViewStats'; viewCount: number; visitorCount: number } | null
+    projectFunderRewards?: { __typename?: 'ProjectFunderRewardStats'; quantitySum: number } | null
+    projectFunders?: { __typename?: 'ProjectFunderStats'; count: number } | null
+    projectFundingTxs?: { __typename?: 'ProjectFundingTxStats'; amountSum?: number | null; count: number } | null
+  } | null
+}
 
 export type ProjectHistoryStatsFragment = {
   __typename?: 'ProjectStats'
@@ -7475,7 +7656,7 @@ export type ProjectRewardFragment = {
   name: string
   description?: string | null
   cost: number
-  image?: string | null
+  images: Array<string>
   deleted: boolean
   stock?: number | null
   sold: number
@@ -7490,7 +7671,21 @@ export type ProjectRewardFragment = {
   estimatedDeliveryInWeeks?: number | null
 }
 
-export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, cost: number, images: Array<string>, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, rewardCurrency: RewardCurrency, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null };
+export type ProjectPageCreatorFragment = {
+  __typename?: 'User'
+  id: any
+  imageUrl?: string | null
+  username: string
+  email?: string | null
+  externalAccounts: Array<{
+    __typename?: 'ExternalAccount'
+    accountType: string
+    externalUsername: string
+    externalId: string
+    id: any
+    public: boolean
+  }>
+}
 
 export type UserAvatarFragment = { __typename?: 'User'; id: any; imageUrl?: string | null; username: string }
 
@@ -7871,24 +8066,18 @@ export type ProjectLeaderboardContributorsGetQuery = {
   >
 }
 
-export type ProjectLeaderboardContributorsGetQuery = { __typename?: 'Query', projectLeaderboardContributorsGet: Array<(
-    { __typename?: 'ProjectLeaderboardContributorsRow' }
-    & ProjectLeaderboardContributorsFragment
-  )> };
-
 export type ProjectUserContributorQueryVariables = Exact<{
-  input: GetContributorInput;
-  period?: InputMaybe<ContributionSummaryPeriod>;
-}>;
+  input: GetContributorInput
+  period?: InputMaybe<ContributionSummaryPeriod>
+}>
 
-
-export type ProjectUserContributorQuery = { __typename?: 'Query', contributor: (
-    { __typename?: 'Funder', contributionSummary?: (
-      { __typename?: 'FunderContributionSummary' }
-      & FunderContributionSummaryFragment
-    ) | null }
-    & UserContributorFragment
-  ) };
+export type ProjectUserContributorQuery = {
+  __typename?: 'Query'
+  contributor: {
+    __typename?: 'Funder'
+    contributionSummary?: ({ __typename?: 'FunderContributionSummary' } & FunderContributionSummaryFragment) | null
+  } & UserContributorFragment
+}
 
 export type ProjectPageFundingTxQueryVariables = Exact<{
   input?: InputMaybe<GetFundingTxsInput>
@@ -8093,29 +8282,48 @@ export const EntryFragmentDoc = gql`
   fragment Entry on Entry {
     id
     title
-    name
-    images
-    thumbnailImage
+    description
+    image
+    status
+    content
+    createdAt
+    updatedAt
+    publishedAt
+    status
+    fundersCount
+    amountFunded
+    type
+    creator {
+      ...UserForAvatar
+    }
+    project {
+      id
+      title
+      name
+      images
+      thumbnailImage
+    }
   }
-}
-    ${UserForAvatarFragmentDoc}`;
+  ${UserForAvatarFragmentDoc}
+`
 export const EntryForProjectFragmentDoc = gql`
-    fragment EntryForProject on Entry {
-  id
-  title
-  description
-  image
-  type
-  fundersCount
-  amountFunded
-  status
-  createdAt
-  publishedAt
-  creator {
-    ...UserForAvatar
+  fragment EntryForProject on Entry {
+    id
+    title
+    description
+    image
+    type
+    fundersCount
+    amountFunded
+    status
+    createdAt
+    publishedAt
+    creator {
+      ...UserForAvatar
+    }
   }
-}
-    ${UserForAvatarFragmentDoc}`;
+  ${UserForAvatarFragmentDoc}
+`
 export const ProjectDefaultGoalFragmentDoc = gql`
   fragment ProjectDefaultGoal on ProjectGoal {
     id
@@ -8439,6 +8647,25 @@ export const PaginationFragmentDoc = gql`
     count
   }
 `
+export const ProjectCommunityVoteGrantFragmentDoc = gql`
+  fragment ProjectCommunityVoteGrant on CommunityVoteGrant {
+    id
+    status
+    title
+  }
+`
+export const ProjectGrantApplicationsFragmentDoc = gql`
+  fragment ProjectGrantApplications on Project {
+    grantApplications {
+      id
+      status
+      grant {
+        ...ProjectCommunityVoteGrant
+      }
+    }
+  }
+  ${ProjectCommunityVoteGrantFragmentDoc}
+`
 export const ProjectNostrKeysFragmentDoc = gql`
   fragment ProjectNostrKeys on Project {
     id
@@ -8454,145 +8681,86 @@ export const ProjectNostrKeysFragmentDoc = gql`
       }
     }
   }
-  count
-}
-    `;
-export const ProjectCommunityVoteGrantFragmentDoc = gql`
-    fragment ProjectCommunityVoteGrant on CommunityVoteGrant {
-  id
-  status
-  title
-}
-    `;
-export const ProjectGrantApplicationsFragmentDoc = gql`
-    fragment ProjectGrantApplications on Project {
-  grantApplications {
-    id
-    status
-    grant {
-      ...ProjectCommunityVoteGrant
-    }
-  }
-}
-    ${ProjectCommunityVoteGrantFragmentDoc}`;
-export const ProjectNostrKeysFragmentDoc = gql`
-    fragment ProjectNostrKeys on Project {
-  id
-  name
-  keys {
-    nostrKeys {
-      publicKey {
-        hex
-        npub
-      }
-    }
-  }
-}
-    `;
+`
 export const ProjectRewardForCreateUpdateFragmentDoc = gql`
-    fragment ProjectRewardForCreateUpdate on ProjectReward {
-  id
-  name
-  description
-  cost
-  images
-  deleted
-  stock
-  sold
-  hasShipping
-  maxClaimable
-  isAddon
-  isHidden
-  category
-  preOrder
-  estimatedAvailabilityDate
-  estimatedDeliveryInWeeks
-}
-    `;
+  fragment ProjectRewardForCreateUpdate on ProjectReward {
+    id
+    name
+    description
+    cost
+    images
+    deleted
+    stock
+    sold
+    hasShipping
+    maxClaimable
+    isAddon
+    isHidden
+    category
+    preOrder
+    estimatedAvailabilityDate
+    estimatedDeliveryInWeeks
+  }
+`
 export const ProjectFragmentDoc = gql`
-    fragment Project on Project {
-  id
-  title
-  name
-  type
-  shortDescription
-  description
-  defaultGoalId
-  balance
-  balanceUsdCent
-  createdAt
-  updatedAt
-  images
-  thumbnailImage
-  links
-  status
-  rewardCurrency
-  fundersCount
-  fundingTxsCount
-}
-    `;
+  fragment Project on Project {
+    id
+    title
+    name
+    type
+    shortDescription
+    description
+    defaultGoalId
+    balance
+    balanceUsdCent
+    createdAt
+    updatedAt
+    images
+    thumbnailImage
+    links
+    status
+    rewardCurrency
+    fundersCount
+    fundingTxsCount
+  }
+`
 export const ExternalAccountFragmentDoc = gql`
-    fragment ExternalAccount on ExternalAccount {
-  id
-  accountType
-  externalUsername
-  externalId
-  public
-}
-    `;
+  fragment ExternalAccount on ExternalAccount {
+    id
+    accountType
+    externalUsername
+    externalId
+    public
+  }
+`
 export const ProjectOwnerUserFragmentDoc = gql`
-    fragment ProjectOwnerUser on User {
-  id
-  username
-  imageUrl
-  email
-  ranking
-  isEmailVerified
-  externalAccounts {
-    ...ExternalAccount
-  }
-  hasSocialAccount
-}
-    ${ExternalAccountFragmentDoc}`;
-export const ProjectForOwnerFragmentDoc = gql`
-    fragment ProjectForOwner on Project {
-  id
-  name
-  images
-  thumbnailImage
-  title
-  status
-  createdAt
-}
-    `;
-export const UserMeFragmentDoc = gql`
-    fragment UserMe on User {
-  id
-  username
-  imageUrl
-  email
-  ranking
-  isEmailVerified
-  hasSocialAccount
-  externalAccounts {
-    ...ExternalAccount
-  }
-  ownerOf {
-    project {
-      ...ProjectForOwner
+  fragment ProjectOwnerUser on User {
+    id
+    username
+    imageUrl
+    email
+    ranking
+    isEmailVerified
+    externalAccounts {
+      ...ExternalAccount
     }
+    hasSocialAccount
   }
-}
-    ${ExternalAccountFragmentDoc}
-${ProjectForOwnerFragmentDoc}`;
-export const FunderWithUserFragmentDoc = gql`
-    fragment FunderWithUser on Funder {
-  amountFunded
-  confirmed
-  id
-  confirmedAt
-  timesFunded
-  user {
+  ${ExternalAccountFragmentDoc}
+`
+export const ProjectForOwnerFragmentDoc = gql`
+  fragment ProjectForOwner on Project {
+    id
+    name
+    images
+    thumbnailImage
+    title
+    status
+    createdAt
+  }
+`
+export const UserMeFragmentDoc = gql`
+  fragment UserMe on User {
     id
     username
     imageUrl
@@ -8603,63 +8771,14 @@ export const FunderWithUserFragmentDoc = gql`
     externalAccounts {
       ...ExternalAccount
     }
-    imageUrl
-  }
-}
-    `;
-export const ProjectWalletFragmentDoc = gql`
-    fragment ProjectWallet on Wallet {
-  id
-  name
-  feePercentage
-  state {
-    status
-    statusCode
-  }
-  connectionDetails {
-    ... on LightningAddressConnectionDetails {
-      lightningAddress
-    }
-    ... on LndConnectionDetailsPrivate {
-      macaroon
-      tlsCertificate
-      hostname
-      grpcPort
-      lndNodeType
-      pubkey
-    }
-    ... on LndConnectionDetailsPublic {
-      pubkey
-    }
-  }
-}
-    `;
-export const WalletLimitsFragmentDoc = gql`
-    fragment WalletLimits on WalletLimits {
-  contribution {
-    min
-    max
-    offChain {
-      min
-      max
-    }
-  }
-  ${ExternalAccountFragmentDoc}
-`
-export const ProjectForSubscriptionFragmentDoc = gql`
-  fragment ProjectForSubscription on Project {
-    id
-    title
-    name
-    thumbnailImage
-    owners {
-      id
-      user {
-        ...UserMe
+    ownerOf {
+      project {
+        ...ProjectForOwner
       }
     }
   }
-  ${UserMeFragmentDoc}
+  ${ExternalAccountFragmentDoc}
+  ${ProjectForOwnerFragmentDoc}
 `
 export const FunderWithUserFragmentDoc = gql`
   fragment FunderWithUser on Funder {
@@ -8679,6 +8798,33 @@ export const FunderWithUserFragmentDoc = gql`
         accountType
       }
       imageUrl
+    }
+  }
+`
+export const ProjectWalletFragmentDoc = gql`
+  fragment ProjectWallet on Wallet {
+    id
+    name
+    feePercentage
+    state {
+      status
+      statusCode
+    }
+    connectionDetails {
+      ... on LightningAddressConnectionDetails {
+        lightningAddress
+      }
+      ... on LndConnectionDetailsPrivate {
+        macaroon
+        tlsCertificate
+        hostname
+        grpcPort
+        lndNodeType
+        pubkey
+      }
+      ... on LndConnectionDetailsPublic {
+        pubkey
+      }
     }
   }
 `
@@ -8709,9 +8855,6 @@ export const EntryForLandingPageFragmentDoc = gql`
     project {
       id
       name
-      title
-      images
-      createdAt
       thumbnailImage
       title
     }
@@ -8719,19 +8862,10 @@ export const EntryForLandingPageFragmentDoc = gql`
       ...UserForAvatar
     }
   }
-}
-    `;
-export const ProjectRewardForLandingPageFragmentDoc = gql`
-    fragment ProjectRewardForLandingPage on ProjectReward {
-  cost
-  description
-  id
-  images
-  rewardName: name
-  sold
-  stock
-  maxClaimable
-  rewardProject: project {
+  ${UserForAvatarFragmentDoc}
+`
+export const ProjectForLandingPageFragmentDoc = gql`
+  fragment ProjectForLandingPage on Project {
     id
     name
     balance
@@ -8775,7 +8909,7 @@ export const FundingTxForLandingPageFragmentDoc = gql`
         id
         name
         title
-        image
+        images
         createdAt
         thumbnailImage
       }
@@ -8793,7 +8927,7 @@ export const ProjectRewardForLandingPageFragmentDoc = gql`
     cost
     description
     id
-    image
+    images
     rewardName: name
     sold
     stock
@@ -8870,7 +9004,7 @@ export const FundingTxForUserContributionFragmentDoc = gql`
         name
         title
         thumbnailImage
-        image
+        images
       }
       ... on Entry {
         id
@@ -8883,7 +9017,7 @@ export const FundingTxForUserContributionFragmentDoc = gql`
 export const RewardForLandingPageFragmentDoc = gql`
   fragment RewardForLandingPage on ProjectReward {
     id
-    image
+    images
     cost
     name
     description
@@ -8893,27 +9027,9 @@ export const RewardForLandingPageFragmentDoc = gql`
       name
       title
       thumbnailImage
-      images
     }
   }
-}
-    `;
-export const RewardForLandingPageFragmentDoc = gql`
-    fragment RewardForLandingPage on ProjectReward {
-  id
-  images
-  cost
-  name
-  description
-  project {
-    rewardCurrency
-    id
-    name
-    title
-    thumbnailImage
-  }
-}
-    `;
+`
 export const ActivityFeedFragmentFragmentDoc = gql`
   fragment ActivityFeedFragment on Activity {
     activityType
@@ -8930,7 +9046,7 @@ export const ActivityFeedFragmentFragmentDoc = gql`
         id
         title
         name
-        image
+        thumbnailImage
       }
       ... on Entry {
         id
@@ -8959,10 +9075,9 @@ export const ActivityFeedFragmentFragmentDoc = gql`
         cost
         projectRewardDescription: description
         rewardCurrency
-        rewardType
         sold
         stock
-        projectRewardImage: image
+        projectRewardImage: images
       }
       ... on ProjectGoal {
         currency
@@ -8971,23 +9086,6 @@ export const ActivityFeedFragmentFragmentDoc = gql`
         targetAmount
         status
       }
-    }
-    ... on ProjectReward {
-      id
-      category
-      cost
-      projectRewardDescription: description
-      rewardCurrency
-      sold
-      stock
-      projectRewardImage: images
-    }
-    ... on ProjectGoal {
-      currency
-      goalDescription: description
-      title
-      targetAmount
-      status
     }
   }
 `
@@ -9110,15 +9208,18 @@ export const UserProjectContributionsFragmentDoc = gql`
   ${UserProjectFunderFragmentDoc}
 `
 export const ProfileOrderItemFragmentDoc = gql`
-    fragment ProfileOrderItem on OrderItem {
-  item {
-    id
-    name
-    cost
-    rewardCurrency
-    description
-    images
-    category
+  fragment ProfileOrderItem on OrderItem {
+    item {
+      id
+      name
+      cost
+      rewardCurrency
+      description
+      images
+      category
+    }
+    quantity
+    unitPriceInSats
   }
 `
 export const ProfileOrderFragmentDoc = gql`
@@ -9298,66 +9399,69 @@ export const ProjectEntryFragmentDoc = gql`
   }
 `
 export const ProjectEntryViewFragmentDoc = gql`
-    fragment ProjectEntryView on Entry {
-  id
-  title
-  description
-  image
-  type
-  fundersCount
-  amountFunded
-  status
-  createdAt
-  publishedAt
-  content
-}
-    `;
+  fragment ProjectEntryView on Entry {
+    id
+    title
+    description
+    image
+    type
+    fundersCount
+    amountFunded
+    status
+    createdAt
+    publishedAt
+    content
+  }
+`
 export const UserAvatarFragmentDoc = gql`
-    fragment UserAvatar on User {
-  id
-  imageUrl
-  username
-}
-    `;
+  fragment UserAvatar on User {
+    id
+    imageUrl
+    username
+  }
+`
 export const ProjectFunderFragmentDoc = gql`
-    fragment ProjectFunder on Funder {
-  id
-  amountFunded
-  timesFunded
-  user {
-    ...UserAvatar
+  fragment ProjectFunder on Funder {
+    id
+    amountFunded
+    timesFunded
+    user {
+      ...UserAvatar
+    }
   }
-}
-    ${UserAvatarFragmentDoc}`;
+  ${UserAvatarFragmentDoc}
+`
 export const ProjectLeaderboardContributorsFragmentDoc = gql`
-    fragment ProjectLeaderboardContributors on ProjectLeaderboardContributorsRow {
-  funderId
-  contributionsTotalUsd
-  contributionsTotal
-  contributionsCount
-  commentsCount
-  user {
-    ...UserAvatar
+  fragment ProjectLeaderboardContributors on ProjectLeaderboardContributorsRow {
+    funderId
+    contributionsTotalUsd
+    contributionsTotal
+    contributionsCount
+    commentsCount
+    user {
+      ...UserAvatar
+    }
   }
-}
-    ${UserAvatarFragmentDoc}`;
+  ${UserAvatarFragmentDoc}
+`
 export const UserContributorFragmentDoc = gql`
-    fragment UserContributor on Funder {
-  id
-  rank
-  user {
-    ...UserAvatar
+  fragment UserContributor on Funder {
+    id
+    rank
+    user {
+      ...UserAvatar
+    }
   }
-}
-    ${UserAvatarFragmentDoc}`;
+  ${UserAvatarFragmentDoc}
+`
 export const FunderContributionSummaryFragmentDoc = gql`
-    fragment FunderContributionSummary on FunderContributionSummary {
-  contributionsTotalUsd
-  contributionsTotal
-  contributionsCount
-  commentsCount
-}
-    `;
+  fragment FunderContributionSummary on FunderContributionSummary {
+    contributionsTotalUsd
+    contributionsTotal
+    contributionsCount
+    commentsCount
+  }
+`
 export const ProjectFundingTxFragmentDoc = gql`
   fragment ProjectFundingTx on FundingTx {
     id
@@ -9490,18 +9594,17 @@ export const ProjectGrantApplicantFragmentDoc = gql`
       }
     }
   }
-}
-    `;
+`
 export const ProjectKeysFragmentDoc = gql`
-    fragment ProjectKeys on ProjectKeys {
-  nostrKeys {
-    publicKey {
-      hex
-      npub
+  fragment ProjectKeys on ProjectKeys {
+    nostrKeys {
+      publicKey {
+        hex
+        npub
+      }
     }
   }
-}
-    `;
+`
 export const ProjectPageCreatorFragmentDoc = gql`
   fragment ProjectPageCreator on User {
     id
@@ -9518,34 +9621,13 @@ export const ProjectPageCreatorFragmentDoc = gql`
   }
 `
 export const ProjectPageBodyFragmentDoc = gql`
-    fragment ProjectPageBody on Project {
-  id
-  name
-  title
-  type
-  thumbnailImage
-  images
-  shortDescription
-  description
-  balance
-  balanceUsdCent
-  defaultGoalId
-  status
-  rewardCurrency
-  createdAt
-  goalsCount
-  rewardsCount
-  entriesCount
-  keys {
-    ...ProjectKeys
-  }
-  owners {
+  fragment ProjectPageBody on Project {
     id
     name
     title
     type
     thumbnailImage
-    image
+    images
     shortDescription
     description
     balance
@@ -9602,18 +9684,20 @@ export const ProjectHeaderSummaryFragmentDoc = gql`
   }
 `
 export const ProjectUpdateFragmentDoc = gql`
-    fragment ProjectUpdate on Project {
-  id
-  title
-  name
-  shortDescription
-  description
-  images
-  thumbnailImage
-  location {
-    country {
-      name
-      code
+  fragment ProjectUpdate on Project {
+    id
+    title
+    name
+    shortDescription
+    description
+    images
+    thumbnailImage
+    location {
+      country {
+        name
+        code
+      }
+      region
     }
     status
     links
@@ -9712,26 +9796,26 @@ export const ProjectFundingMethodStatsFragmentDoc = gql`
   }
 `
 export const ProjectRewardFragmentDoc = gql`
-    fragment ProjectReward on ProjectReward {
-  id
-  name
-  description
-  cost
-  images
-  deleted
-  stock
-  sold
-  hasShipping
-  maxClaimable
-  rewardCurrency
-  isAddon
-  isHidden
-  category
-  preOrder
-  estimatedAvailabilityDate
-  estimatedDeliveryInWeeks
-}
-    `;
+  fragment ProjectReward on ProjectReward {
+    id
+    name
+    description
+    cost
+    images
+    deleted
+    stock
+    sold
+    hasShipping
+    maxClaimable
+    rewardCurrency
+    isAddon
+    isHidden
+    category
+    preOrder
+    estimatedAvailabilityDate
+    estimatedDeliveryInWeeks
+  }
+`
 export const WalletContributionLimitsFragmentDoc = gql`
   fragment WalletContributionLimits on WalletContributionLimits {
     min
@@ -10480,22 +10564,29 @@ export const EntryWithOwnersDocument = gql`
  *   },
  * });
  */
-export function useEntryWithOwnersQuery(baseOptions: Apollo.QueryHookOptions<EntryWithOwnersQuery, EntryWithOwnersQueryVariables> & ({ variables: EntryWithOwnersQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<EntryWithOwnersQuery, EntryWithOwnersQueryVariables>(EntryWithOwnersDocument, options);
-      }
-export function useEntryWithOwnersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EntryWithOwnersQuery, EntryWithOwnersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<EntryWithOwnersQuery, EntryWithOwnersQueryVariables>(EntryWithOwnersDocument, options);
-        }
-export function useEntryWithOwnersSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<EntryWithOwnersQuery, EntryWithOwnersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<EntryWithOwnersQuery, EntryWithOwnersQueryVariables>(EntryWithOwnersDocument, options);
-        }
-export type EntryWithOwnersQueryHookResult = ReturnType<typeof useEntryWithOwnersQuery>;
-export type EntryWithOwnersLazyQueryHookResult = ReturnType<typeof useEntryWithOwnersLazyQuery>;
-export type EntryWithOwnersSuspenseQueryHookResult = ReturnType<typeof useEntryWithOwnersSuspenseQuery>;
-export type EntryWithOwnersQueryResult = Apollo.QueryResult<EntryWithOwnersQuery, EntryWithOwnersQueryVariables>;
+export function useEntryWithOwnersQuery(
+  baseOptions: Apollo.QueryHookOptions<EntryWithOwnersQuery, EntryWithOwnersQueryVariables> &
+    ({ variables: EntryWithOwnersQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<EntryWithOwnersQuery, EntryWithOwnersQueryVariables>(EntryWithOwnersDocument, options)
+}
+export function useEntryWithOwnersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<EntryWithOwnersQuery, EntryWithOwnersQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<EntryWithOwnersQuery, EntryWithOwnersQueryVariables>(EntryWithOwnersDocument, options)
+}
+export function useEntryWithOwnersSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<EntryWithOwnersQuery, EntryWithOwnersQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<EntryWithOwnersQuery, EntryWithOwnersQueryVariables>(EntryWithOwnersDocument, options)
+}
+export type EntryWithOwnersQueryHookResult = ReturnType<typeof useEntryWithOwnersQuery>
+export type EntryWithOwnersLazyQueryHookResult = ReturnType<typeof useEntryWithOwnersLazyQuery>
+export type EntryWithOwnersSuspenseQueryHookResult = ReturnType<typeof useEntryWithOwnersSuspenseQuery>
+export type EntryWithOwnersQueryResult = Apollo.QueryResult<EntryWithOwnersQuery, EntryWithOwnersQueryVariables>
 export const SignedUploadUrlDocument = gql`
   query SignedUploadUrl($input: FileUploadInput!) {
     getSignedUploadUrl(input: $input) {
@@ -11224,24 +11315,6 @@ export type ProjectByNameOrIdQueryHookResult = ReturnType<typeof useProjectByNam
 export type ProjectByNameOrIdLazyQueryHookResult = ReturnType<typeof useProjectByNameOrIdLazyQuery>
 export type ProjectByNameOrIdSuspenseQueryHookResult = ReturnType<typeof useProjectByNameOrIdSuspenseQuery>
 export type ProjectByNameOrIdQueryResult = Apollo.QueryResult<ProjectByNameOrIdQuery, ProjectByNameOrIdQueryVariables>
-export const ProjectsForSubscriptionDocument = gql`
-  query ProjectsForSubscription($input: ProjectsGetQueryInput!) {
-    projectsGet(input: $input) {
-      projects {
-        ...ProjectForSubscription
-      }
-export function useProjectByNameOrIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectByNameOrIdQuery, ProjectByNameOrIdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProjectByNameOrIdQuery, ProjectByNameOrIdQueryVariables>(ProjectByNameOrIdDocument, options);
-        }
-export function useProjectByNameOrIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectByNameOrIdQuery, ProjectByNameOrIdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProjectByNameOrIdQuery, ProjectByNameOrIdQueryVariables>(ProjectByNameOrIdDocument, options);
-        }
-export type ProjectByNameOrIdQueryHookResult = ReturnType<typeof useProjectByNameOrIdQuery>;
-export type ProjectByNameOrIdLazyQueryHookResult = ReturnType<typeof useProjectByNameOrIdLazyQuery>;
-export type ProjectByNameOrIdSuspenseQueryHookResult = ReturnType<typeof useProjectByNameOrIdSuspenseQuery>;
-export type ProjectByNameOrIdQueryResult = Apollo.QueryResult<ProjectByNameOrIdQuery, ProjectByNameOrIdQueryVariables>;
 export const ProjectsSummaryDocument = gql`
   query ProjectsSummary {
     projectsSummary {
@@ -14799,35 +14872,18 @@ export type ProjectLeaderboardContributorsGetQueryResult = Apollo.QueryResult<
   ProjectLeaderboardContributorsGetQuery,
   ProjectLeaderboardContributorsGetQueryVariables
 >
-export const ProjectPageFundingTxDocument = gql`
-  query ProjectPageFundingTx($input: GetFundingTxsInput) {
-    fundingTxsGet(input: $input) {
-      fundingTxs {
-        ...ProjectFundingTx
-      }
-export function useProjectLeaderboardContributorsGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>(ProjectLeaderboardContributorsGetDocument, options);
-        }
-export function useProjectLeaderboardContributorsGetSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>(ProjectLeaderboardContributorsGetDocument, options);
-        }
-export type ProjectLeaderboardContributorsGetQueryHookResult = ReturnType<typeof useProjectLeaderboardContributorsGetQuery>;
-export type ProjectLeaderboardContributorsGetLazyQueryHookResult = ReturnType<typeof useProjectLeaderboardContributorsGetLazyQuery>;
-export type ProjectLeaderboardContributorsGetSuspenseQueryHookResult = ReturnType<typeof useProjectLeaderboardContributorsGetSuspenseQuery>;
-export type ProjectLeaderboardContributorsGetQueryResult = Apollo.QueryResult<ProjectLeaderboardContributorsGetQuery, ProjectLeaderboardContributorsGetQueryVariables>;
 export const ProjectUserContributorDocument = gql`
-    query ProjectUserContributor($input: GetContributorInput!, $period: ContributionSummaryPeriod) {
-  contributor(input: $input) {
-    ...UserContributor
-    contributionSummary(period: $period) {
-      ...FunderContributionSummary
+  query ProjectUserContributor($input: GetContributorInput!, $period: ContributionSummaryPeriod) {
+    contributor(input: $input) {
+      ...UserContributor
+      contributionSummary(period: $period) {
+        ...FunderContributionSummary
+      }
     }
   }
-}
-    ${UserContributorFragmentDoc}
-${FunderContributionSummaryFragmentDoc}`;
+  ${UserContributorFragmentDoc}
+  ${FunderContributionSummaryFragmentDoc}
+`
 
 /**
  * __useProjectUserContributorQuery__
@@ -14846,27 +14902,47 @@ ${FunderContributionSummaryFragmentDoc}`;
  *   },
  * });
  */
-export function useProjectUserContributorQuery(baseOptions: Apollo.QueryHookOptions<ProjectUserContributorQuery, ProjectUserContributorQueryVariables> & ({ variables: ProjectUserContributorQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>(ProjectUserContributorDocument, options);
-      }
-export function useProjectUserContributorLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>(ProjectUserContributorDocument, options);
-        }
-export function useProjectUserContributorSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>(ProjectUserContributorDocument, options);
-        }
-export type ProjectUserContributorQueryHookResult = ReturnType<typeof useProjectUserContributorQuery>;
-export type ProjectUserContributorLazyQueryHookResult = ReturnType<typeof useProjectUserContributorLazyQuery>;
-export type ProjectUserContributorSuspenseQueryHookResult = ReturnType<typeof useProjectUserContributorSuspenseQuery>;
-export type ProjectUserContributorQueryResult = Apollo.QueryResult<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>;
+export function useProjectUserContributorQuery(
+  baseOptions: Apollo.QueryHookOptions<ProjectUserContributorQuery, ProjectUserContributorQueryVariables> &
+    ({ variables: ProjectUserContributorQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>(
+    ProjectUserContributorDocument,
+    options,
+  )
+}
+export function useProjectUserContributorLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>(
+    ProjectUserContributorDocument,
+    options,
+  )
+}
+export function useProjectUserContributorSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>(
+    ProjectUserContributorDocument,
+    options,
+  )
+}
+export type ProjectUserContributorQueryHookResult = ReturnType<typeof useProjectUserContributorQuery>
+export type ProjectUserContributorLazyQueryHookResult = ReturnType<typeof useProjectUserContributorLazyQuery>
+export type ProjectUserContributorSuspenseQueryHookResult = ReturnType<typeof useProjectUserContributorSuspenseQuery>
+export type ProjectUserContributorQueryResult = Apollo.QueryResult<
+  ProjectUserContributorQuery,
+  ProjectUserContributorQueryVariables
+>
 export const ProjectPageFundingTxDocument = gql`
-    query ProjectPageFundingTx($input: GetFundingTxsInput) {
-  fundingTxsGet(input: $input) {
-    fundingTxs {
-      ...ProjectFundingTx
+  query ProjectPageFundingTx($input: GetFundingTxsInput) {
+    fundingTxsGet(input: $input) {
+      fundingTxs {
+        ...ProjectFundingTx
+      }
     }
   }
   ${ProjectFundingTxFragmentDoc}
