@@ -463,7 +463,7 @@ export const ProjectRewardForm = ({
           </FieldContainer>
           <HStack w={'100%'} justifyContent={'center'}>
             <Body fontSize={'sm'} muted>
-              {t('Ideal reward image ratio is 1592x2096')}
+              {t('Ideal reward image ratio is 1592 x 2096')}
             </Body>
           </HStack>
         </Stack>
