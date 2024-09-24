@@ -1,4 +1,3 @@
-export { useAllGeyserProjectEntries } from './useAllGeyserProjectEntries'
 export { useDebounce } from './useDebounce'
 export { useFormState } from './useFormState'
 export { useLayoutAnimation } from './useLayoutAnimation'

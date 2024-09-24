@@ -45,9 +45,15 @@ export const dimensions = {
         width: 165,
       },
     },
+    leftMainContainer: {
+      width: '658px',
+    },
     rightSideNav: {
       width: '400px',
       gap: '20px',
+    },
+    header: {
+      maxHeight: '369px',
     },
   },
   profile: {

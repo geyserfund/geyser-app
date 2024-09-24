@@ -54,7 +54,7 @@ export const ProjectShareContribute = () => {
 
   const lnurlPayUrl = encodeLNURL(`${endPoint}/lnurl/pay?projectId=${project.id}`)
 
-  const isImage = validateImageUrl(project.image)
+  const isImage = validateImageUrl(project.images[0])
 
   return (
     <VStack
@@ -68,7 +68,7 @@ export const ProjectShareContribute = () => {
     >
       <ProjectShareBanner
         ref={ref}
-        bannerImage={isImage && project.image ? project.image : project.thumbnailImage || GeyserShareImageUrl}
+        bannerImage={isImage && project.images[0] ? project.images[0] : project.thumbnailImage || GeyserShareImageUrl}
         qrCodeValue={lnurlPayUrl}
         qrCodeText={t('Contribute with lightning')}
         centerLogo={LightningIcon}

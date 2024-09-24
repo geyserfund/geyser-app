@@ -1,11 +1,10 @@
-import { Box, FormErrorIcon, HStack, Input, Stack, Tooltip, VStack } from '@chakra-ui/react'
+import { Box, FormErrorIcon, HStack, Stack, Tooltip, VStack } from '@chakra-ui/react'
 import { ChangeEventHandler, useCallback, useEffect } from 'react'
 import { Controller, UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { PiInfo } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography'
-import { validateImageUrl } from '@/shared/markdown/validations/image'
 import { FileUpload } from '@/shared/molecules'
 
 import { TextArea, TextInputBox, UploadBox } from '../../../components/ui'
@@ -14,9 +13,11 @@ import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { ProjectValidations } from '../../../shared/constants'
 import { useDebounce } from '../../../shared/hooks'
 import { ImageCropAspectRatio } from '../../../shared/molecules/ImageCropperModal'
+import { MediaControlWithReorder } from '../../../shared/molecules/MediaControlWithReorder'
 import { useProjectByNameOrIdLazyQuery } from '../../../types'
 import { toMediumImageUrl, validLightningAddress } from '../../../utils'
 import { ProjectCreationVariables } from '../pages1/projectCreation/types'
+import { AdditionalUrlModal } from './components/AdditionalUrlModal'
 
 const MIN_LENGTH_TO_QUERY_PROJECT = 3
 
@@ -70,7 +71,9 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
   }
 
   const handleHeaderImageUpload = (url: string) => {
-    setValue('image', url, { shouldDirty: true })
+    const currentImages = watch('images')
+    if (currentImages.includes(url)) return
+    setValue('images', [...currentImages, url], { shouldDirty: true })
   }
 
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +85,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
   }
 
   const handleDeleteImage = () => {
-    setValue('image', '', { shouldDirty: true })
+    setValue('images', [], { shouldDirty: true })
   }
 
   const handleChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (event) => {
@@ -233,15 +236,21 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
       >
         <FileUpload
           showcase
+          showcaseW="64px"
+          showcaseH="64px"
           containerProps={{ w: '100%' }}
           caption={t('For best fit, pick a square image. Image size limit: 10MB.')}
           src={watch('thumbnailImage')}
           onUploadComplete={handleImageUpload}
           onDeleteClick={handleDeleteThumbnail}
-          childrenOnLoading={<UploadBox loading h={10} />}
+          childrenOnLoading={<UploadBox loading h={{ base: '40px', lg: '64px' }} />}
           imageCrop={ImageCropAspectRatio.Square}
         >
-          <UploadBox h={10} title={watch('thumbnailImage') ? t('Change image') : undefined} />
+          <UploadBox
+            h={{ base: '40px', lg: '64px' }}
+            title={watch('thumbnailImage') ? t('Change image') : t('Upload image')}
+            titleProps={{ fontSize: 'lg', light: true }}
+          />
         </FileUpload>
       </FieldContainer>
 
@@ -249,32 +258,33 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
         title={t('Header')}
         subtitle={t('Add a header with a video link or by uploading an image to help bring your project to life')}
       >
+        <MediaControlWithReorder
+          links={watch('images')}
+          updateLinks={(links) => setValue('images', links, { shouldDirty: true })}
+          aspectRatio={ImageCropAspectRatio.Header}
+        />
         <Controller
-          name="image"
+          name="images"
           control={control}
           render={({ field }) => {
-            const isImage = validateImageUrl(field.value)
             return (
-              <Stack alignItems="start" direction={{ base: 'column', lg: 'row' }} w={'full'}>
-                <Input
-                  width={{ base: 'full', lg: 'initial' }}
-                  minWidth={{ lg: '250px' }}
-                  type="text"
-                  placeholder="www.youtube.com/2ms0j2n93c"
-                  {...field}
-                />
+              <Stack alignItems="start" direction={{ base: 'column', md: 'row' }} w={'full'} pt={4}>
+                <AdditionalUrlModal w="full" onAdd={(url) => field.onChange([...field.value, url])} />
                 <FileUpload
-                  containerProps={{ flexGrow: 1, w: 'full' }}
-                  showcase={isImage}
-                  showcaseW="80px"
-                  caption={t('For best fit, select horizontal 1:3 image. Image size limit: 10MB.')}
-                  src={isImage ? field.value : undefined}
+                  containerProps={{ flex: 1, w: { base: 'full', md: 'unset' } }}
+                  caption={t('For best fit, select horizontal 16:9 image. Image size limit: 10MB.')}
                   onUploadComplete={handleHeaderImageUpload}
                   onDeleteClick={handleDeleteImage}
-                  childrenOnLoading={<UploadBox loading h={10} />}
-                  imageCrop={ImageCropAspectRatio.Rectangle}
+                  childrenOnLoading={<UploadBox loading h={{ base: '40px', lg: '64px' }} borderRadius="12px" />}
+                  imageCrop={ImageCropAspectRatio.Header}
                 >
-                  <UploadBox h={10} flex={1} title={field.value ? t('Change header') : undefined} />
+                  <UploadBox
+                    h={{ base: '40px', lg: '64px' }}
+                    borderRadius="12px"
+                    flex={1}
+                    title={field.value.length > 0 ? t('Upload additional image') : t('Upload image')}
+                    titleProps={{ fontSize: 'lg', light: true }}
+                  />
                 </FileUpload>
               </Stack>
             )

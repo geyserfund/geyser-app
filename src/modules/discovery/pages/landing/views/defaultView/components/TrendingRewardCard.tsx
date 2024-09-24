@@ -35,7 +35,7 @@ export const TrendingRewardCard = ({ reward, ...rest }: TrendingRewardCardProps)
           height="100%"
           aspectRatio={{ base: 1, lg: ImageCropAspectRatio.Reward }}
           objectFit="cover"
-          src={reward.image}
+          src={reward.images[0]}
           alt={`${reward.name}-header-image`}
         />
       </Box>

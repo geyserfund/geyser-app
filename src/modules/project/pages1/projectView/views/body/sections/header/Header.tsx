@@ -18,18 +18,21 @@ import { Link } from 'react-router-dom'
 
 import { ProjectStatusBar } from '@/components/ui'
 import { validateImageUrl } from '@/shared/markdown/validations/image'
+import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 
 import { ImageWithReload } from '../../../../../../../../shared/components/display/ImageWithReload'
 import { CardLayout, SkeletonLayout } from '../../../../../../../../shared/components/layouts'
 import { Body, H1 } from '../../../../../../../../shared/components/typography'
 import {
+  dimensions,
   FlashMembershipCountUrl,
   getPath,
   ID,
   projectFlashIds,
   projectsWithSubscription,
 } from '../../../../../../../../shared/constants'
+import { VideoPlayer } from '../../../../../../../../shared/molecules/VideoPlayer'
 import { useProjectPageHeaderSummaryQuery } from '../../../../../../../../types'
 import { commaFormatted, removeProjectAmountException, toInt, useMobileMode } from '../../../../../../../../utils'
 import { toLargeImageUrl } from '../../../../../../../../utils/tools/imageSizes'
@@ -40,7 +43,6 @@ import { CreatorSocial } from './components/CreatorSocial'
 import { LightningAddress } from './components/LightningAddress'
 import { NpubDisplay } from './components/NpubDisplay'
 import { ShareProjectButton } from './components/ShareProjectButton'
-import { VideoPlayer } from './components/VideoPlayer'
 
 export const Header = () => {
   const { t } = useTranslation()
@@ -91,17 +93,21 @@ export const Header = () => {
   }
 
   const renderImageOrVideo = () => {
-    const isImage = validateImageUrl(project.image)
+    const isImage = validateImageUrl(project.images[0])
 
     if (isImage) {
-      return <ImageWithReload width="100%" maxHeight="220px" objectFit="cover" src={project.image || undefined} />
+      return (
+        <ImageWithReload
+          width="100%"
+          height="100%"
+          maxHeight={dimensions.project.header.maxHeight}
+          objectFit="contain"
+          src={project.images[0] || undefined}
+        />
+      )
     }
 
-    if (project.image && !isImage) {
-      return <VideoPlayer url={project.image} />
-    }
-
-    return null
+    return <VideoPlayer url={project.images[0]} />
   }
 
   if (loading) {
@@ -118,11 +124,12 @@ export const Header = () => {
           <img src={toLargeImageUrl(project.thumbnailImage || '')} alt={project.title} />
         </ModalContent>
       </Modal>
-      {/* {statusContent()} */}
 
       <CardLayout id={'HEADER_ITEM'} w="full" dense spacing={0} position="relative">
         <ProjectStatusBar project={project} wallet={wallet} isProjectOwner={isProjectOwner} />
-        <Box>{renderImageOrVideo()}</Box>
+        {project.images.length === 1 && <Box>{renderImageOrVideo()}</Box>}
+
+        {project.images.length > 1 && <MediaCarousel links={project.images} />}
         <Stack
           direction={{ base: 'column', lg: 'row' }}
           spacing={4}
@@ -132,7 +139,7 @@ export const Header = () => {
           position="relative"
           alignItems="start"
         >
-          <Box position={{ base: project.image ? 'absolute' : 'unset', lg: 'unset' }} top={'-48px'} left={'16px'}>
+          <Box position={{ base: project.images[0] ? 'absolute' : 'unset', lg: 'unset' }} top={'-48px'} left={'16px'}>
             <ImageWithReload
               border="2px solid"
               borderColor="neutral1.1"
@@ -207,7 +214,11 @@ export const HeaderSkeleton = () => {
   return (
     <CardLayout w="full" mobileDense padding={0} spacing={0}>
       <Box w="full">
-        <Skeleton borderRadius="8px 8px 0px 0px" width="100%" height={{ base: '150px', lg: '220px' }} />
+        <Skeleton
+          borderRadius="8px 8px 0px 0px"
+          width="100%"
+          height={{ base: '150px', lg: dimensions.project.header.maxHeight }}
+        />
       </Box>
       <HStack
         spacing={4}

@@ -43,7 +43,7 @@ export const FRAGMENT_PROJECT_REWARD_FOR_LANDING_PAGE = gql`
     cost
     description
     id
-    image
+    images
     rewardName: name
     sold
     stock
@@ -71,7 +71,7 @@ export const FRAGMENT_PROJECT_REWARD_FOR_CREATE_UPDATE = gql`
     name
     description
     cost
-    image
+    images
     deleted
     stock
     sold
@@ -99,7 +99,7 @@ export const FRAGMENT_PROJECT = gql`
     balanceUsdCent
     createdAt
     updatedAt
-    image
+    images
     thumbnailImage
     links
     status
@@ -122,7 +122,7 @@ export const FRAGMENT_PROJECT_FOR_OWNER = gql`
   fragment ProjectForOwner on Project {
     id
     name
-    image
+    images
     thumbnailImage
     title
     status

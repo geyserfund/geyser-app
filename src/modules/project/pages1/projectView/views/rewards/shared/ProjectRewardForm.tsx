@@ -94,7 +94,7 @@ export const ProjectRewardForm = ({
       projectId: project?.id,
       cost: reward.cost,
       description: reward.description,
-      image: reward.image || undefined,
+      images: reward.images || [],
       name: reward.name,
       maxClaimable: reward.maxClaimable || undefined,
       hasShipping: reward.hasShipping,
@@ -116,7 +116,7 @@ export const ProjectRewardForm = ({
       projectRewardId: reward.id,
       cost: reward.cost,
       description: reward.description,
-      image: reward.image || undefined,
+      images: reward.images || [],
       name: reward.name,
       maxClaimable: reward.maxClaimable || undefined,
       hasShipping: reward.hasShipping,
@@ -187,11 +187,11 @@ export const ProjectRewardForm = ({
   }
 
   const handleUpload = (url: string) => {
-    setReward((current) => ({ ...current, image: url }))
+    setReward((current) => ({ ...current, images: [url] }))
   }
 
   const handleDeleteThumbnail = () => {
-    setReward((current) => ({ ...current, image: null }))
+    setReward((current) => ({ ...current, images: [] }))
   }
 
   const handleFormShippingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -452,7 +452,7 @@ export const ProjectRewardForm = ({
             <FileUpload
               showcase
               containerProps={{ w: '100%' }}
-              src={reward.image}
+              src={reward.images[0]}
               onUploadComplete={handleUpload}
               onDeleteClick={handleDeleteThumbnail}
               childrenOnLoading={<UploadBox loading h={10} />}

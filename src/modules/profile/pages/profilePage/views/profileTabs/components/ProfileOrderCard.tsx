@@ -68,7 +68,7 @@ export const ProfileOrderCard = ({ order }: { order: ProfileOrderFragment }) => 
                   w="100%"
                   h="100%"
                   objectFit="cover"
-                  src={toSmallImageUrl(item.item.image || '')}
+                  src={toSmallImageUrl(item.item.images[0] || '')}
                   alt={`${item.item.name}-header-image`}
                   borderRadius="8px"
                 />

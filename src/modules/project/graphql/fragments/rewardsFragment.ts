@@ -6,7 +6,7 @@ export const FRAGMENT_PROJECT_REWARD = gql`
     name
     description
     cost
-    image
+    images
     deleted
     stock
     sold

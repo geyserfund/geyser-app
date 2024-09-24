@@ -53,7 +53,7 @@ export const ProjectShareView = () => {
 
   const projectUrl = getShareProjectUrl({ clickedFrom: CampaignContent.projectShareQrBanner })
 
-  const isImage = validateImageUrl(project.image)
+  const isImage = validateImageUrl(project.images[0])
 
   return (
     <VStack
@@ -67,7 +67,7 @@ export const ProjectShareView = () => {
     >
       <ProjectShareBanner
         ref={ref}
-        bannerImage={isImage && project.image ? project.image : project.thumbnailImage || GeyserShareImageUrl}
+        bannerImage={isImage && project.images[0] ? project.images[0] : project.thumbnailImage || GeyserShareImageUrl}
         qrCodeValue={projectUrl}
         qrCodeText={t('View project')}
         centerLogo={LogoDark}

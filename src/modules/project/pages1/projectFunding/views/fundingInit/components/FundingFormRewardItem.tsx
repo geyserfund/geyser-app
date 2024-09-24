@@ -27,7 +27,13 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
     return (
       <CardLayout dense w="full" direction="row" spacing={0} overflowX={'hidden'}>
         <Box width="full" maxWidth={{ base: '148px', lg: '198px' }} overflow={'hidden'}>
-          <ImageWithReload src={reward.image || ''} alt={reward.name} width="100%" height="100%" objectFit="cover" />
+          <ImageWithReload
+            src={reward.images[0] || ''}
+            alt={reward.name}
+            width="100%"
+            height="100%"
+            objectFit="cover"
+          />
         </Box>
         <VStack flex={1} padding={4} justifyContent="space-between" overflowX={'hidden'}>
           <VStack width="full" alignItems={'start'}>

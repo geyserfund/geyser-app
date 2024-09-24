@@ -16,7 +16,7 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
         id
         title
         name
-        image
+        thumbnailImage
       }
       ... on Entry {
         id
@@ -44,10 +44,9 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
         cost
         projectRewardDescription: description
         rewardCurrency
-        rewardType
         sold
         stock
-        projectRewardImage: image
+        projectRewardImage: images
       }
       ... on ProjectGoal {
         currency

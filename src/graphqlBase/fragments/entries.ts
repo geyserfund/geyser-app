@@ -25,7 +25,8 @@ export const FRAGMENT_ENTRY = gql`
       id
       title
       name
-      image
+      images
+      thumbnailImage
     }
   }
 `

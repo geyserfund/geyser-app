@@ -3,7 +3,7 @@ import { Project, ProjectType, RewardCurrency, Satoshis } from '../../../../type
 export type ProjectCreationVariables = {
   title: string
   name: string
-  image?: string
+  images: string[]
   thumbnailImage?: string
   shortDescription: string
   description: string
@@ -17,7 +17,7 @@ export type ProjectUpdateVariables = Partial<
     Project,
     | 'title'
     | 'name'
-    | 'image'
+    | 'images'
     | 'thumbnailImage'
     | 'shortDescription'
     | 'description'
