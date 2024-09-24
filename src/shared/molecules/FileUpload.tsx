@@ -100,7 +100,14 @@ export const FileUpload = ({
         <HStack w="100%">
           {showcase && uploadedImage ? (
             <HStack>
-              <ImageWithReload alt="uploaded image" h={showcaseH} w={showcaseW} objectFit="cover" src={uploadedImage} />
+              <ImageWithReload
+                alt="uploaded image"
+                h={showcaseH}
+                w={showcaseW}
+                objectFit="cover"
+                src={uploadedImage}
+                borderRadius={'6px'}
+              />
               {onDeleteClick ? (
                 <IconButton
                   size="sm"

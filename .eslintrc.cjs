@@ -69,6 +69,7 @@ module.exports = {
         message: "Don't declare enums",
       },
     ],
+    'no-new': 0,
   },
   settings: {
     react: {
