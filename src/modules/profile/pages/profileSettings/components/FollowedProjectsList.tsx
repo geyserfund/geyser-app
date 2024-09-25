@@ -28,7 +28,7 @@ export const FollowedProjectsList = () => {
         <Body size="sm" light>
           {t('You will receive project updates regarding the projects that you follow. ')}
         </Body>
-        <VStack w="full" alignItems="flex-start" spacing={4}>
+        <VStack w="full" alignItems="flex-start" spacing={0}>
           <AnimatePresence>
             {followedProjects.map((project) => (
               <motion.div
@@ -53,7 +53,7 @@ const FollowedProjectItem = ({ project }: { project: Project }) => {
   const { handleUnFollow, unfollowLoading } = useFollowProject(project)
 
   return (
-    <HStack w="full" justifyContent="space-between" alignItems="center">
+    <HStack w="full" justifyContent="space-between" alignItems="center" pt={2} pb={2}>
       <HStack justifyContent="flex-start" alignItems="center" as={Link} to={getPath('project', project.name)}>
         <ImageWithReload src={project.thumbnailImage} w="40px" h="40px" borderRadius="md" />
         <Body size="md" medium>
