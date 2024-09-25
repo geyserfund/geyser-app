@@ -4,7 +4,7 @@ import { PiLightning, PiUsers } from 'react-icons/pi'
 import { Body, H3 } from '@/shared/components/typography'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter'
-import { getShortAmountLabel } from '@/utils'
+import { getShortAmountLabel, removeProjectAmountException } from '@/utils'
 
 import { ImageWithReload } from '../../../../../components/ui'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../shared/components/layouts'
@@ -18,6 +18,9 @@ export interface LandingCardBaseProps extends CardLayoutProps {
 
 export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: LandingCardBaseProps) => {
   const { formatAmount } = useCurrencyFormatter()
+
+  const dontShowAmount = removeProjectAmountException(project.name)
+
   return (
     <CardLayout
       hover
@@ -59,15 +62,17 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
               {project.fundersCount}
             </Body>
           </HStack>
-          <HStack>
-            <PiLightning />
-            <Body size="sm" dark>
-              {getShortAmountLabel(project.balance, true)}
-            </Body>
-            <Body size="sm" dark>
-              ({formatAmount(project.balanceUsdCent, FormatCurrencyType.Usdcent)})
-            </Body>
-          </HStack>
+          {!dontShowAmount && (
+            <HStack>
+              <PiLightning />
+              <Body size="sm" dark>
+                {getShortAmountLabel(project.balance, true)}
+              </Body>
+              <Body size="sm" dark>
+                ({formatAmount(project.balanceUsdCent, FormatCurrencyType.Usdcent)})
+              </Body>
+            </HStack>
+          )}
         </HStack>
       </VStack>
     </CardLayout>

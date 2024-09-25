@@ -88,7 +88,7 @@ export const TrendingRewardCard = ({ reward, ...rest }: TrendingRewardCardProps)
                 </Body>
                 <Body as="span" size="sm" light>
                   {' '}
-                  (${formatUsdAmount(reward.cost)})
+                  ({formatUsdAmount(reward.cost)})
                 </Body>
               </>
             )}
