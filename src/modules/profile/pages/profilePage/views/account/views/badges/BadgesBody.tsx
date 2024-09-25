@@ -15,7 +15,7 @@ export const BadgesBody = () => {
   const { t } = useTranslation()
 
   const isEdit = useViewingOwnProfileAtomValue()
-  console.log('checking own profile', isEdit)
+
   const { toast } = useNotification()
 
   const { userProfile } = useUserProfileAtom()
