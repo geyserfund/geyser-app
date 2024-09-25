@@ -41,9 +41,7 @@ export const BadgesBody = () => {
 
   const showTopSection = hasBadgeNoNostrForOwn || userBadges.length === 0
 
-  const hasBadge = isEdit
-    ? userBadges.length > 0
-    : userBadges.filter((badge) => badge.status === UserBadgeStatus.Accepted).length > 0
+  const hasBadge = userBadges.length > 0
 
   if (userBadgeLoading) {
     return <BadgesBodySkeleton />
