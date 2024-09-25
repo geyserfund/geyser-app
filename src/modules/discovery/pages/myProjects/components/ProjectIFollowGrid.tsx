@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { ImageWithReload } from '@/components/ui'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
-import { Project } from '@/types'
+import { Project, ProjectStatus } from '@/types'
 
 import { useFollowedProjectsActivities } from '../hooks/useFollowedProjectsActivities'
 
@@ -60,7 +60,7 @@ const ProjectIFollowGridItem = ({ project, count }: { project: Project; count: n
         width="100%"
         objectFit="cover"
         zIndex={1}
-        opacity={count === 0 ? 0.5 : 1}
+        opacity={project.status !== ProjectStatus.Active ? 0.5 : 1}
       />
       {count > 0 && (
         <Badge

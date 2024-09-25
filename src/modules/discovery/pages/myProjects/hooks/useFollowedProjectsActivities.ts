@@ -4,11 +4,17 @@ import {
   ActivityFeedName,
   Project,
   ProjectActivitiesCount,
+  ProjectStatus,
   useActivitiesCountGroupedByProjectQuery,
   useMeProjectFollowsQuery,
 } from '@/types'
 
-const sortByCount = (a: ProjectActivitiesCount, b: ProjectActivitiesCount) => {
+const sortByActiveAndCount = (a: ProjectActivitiesCount, b: ProjectActivitiesCount) => {
+  // First, sort by active status
+  if (a.project.status === ProjectStatus.Active && b.project.status !== ProjectStatus.Active) return -1
+  if (a.project.status !== ProjectStatus.Active && b.project.status === ProjectStatus.Active) return 1
+
+  // If both have the same active status, sort by count
   return b.count - a.count
 }
 
@@ -31,6 +37,7 @@ export const useFollowedProjectsActivities = () => {
 
   useMeProjectFollowsQuery({
     onCompleted(data) {
+      console.log('data', data)
       setFollowedProjects(data.me?.projectFollows as Project[])
     },
   })
@@ -56,7 +63,7 @@ export const useFollowedProjectsActivities = () => {
           count: activityCount ? activityCount.count : 0,
         }
       })
-      .sort(sortByCount)
+      .sort(sortByActiveAndCount)
   }, [followedProjects, followedProjectsActivities])
 
   return {

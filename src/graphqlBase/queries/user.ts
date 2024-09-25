@@ -18,6 +18,7 @@ export const QUERY_ME_PROJECT_FOLLOWS = gql`
       projectFollows {
         id
         title
+        status
         thumbnailImage
         name
       }

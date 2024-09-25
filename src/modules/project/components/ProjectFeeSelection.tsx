@@ -30,7 +30,7 @@ export const ProjectFeeSelection: React.FC<ProjectFeeSelectionProps> = ({ readOn
   const { t } = useTranslation()
 
   return (
-    <VStack alignItems="flex-start" paddingTop={6}>
+    <VStack alignItems="flex-start" paddingTop={2}>
       <Body size="md" medium>
         {t('Support Geyser')}
       </Body>
