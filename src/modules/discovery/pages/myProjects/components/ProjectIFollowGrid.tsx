@@ -41,7 +41,6 @@ export const ProjectIFollowGrid = () => {
 }
 
 const ProjectIFollowGridItem = ({ project, count }: { project: Project; count: number }) => {
-  console.log('project', project)
   return (
     <GridItem
       width={{ base: '110px', lg: '145px' }}
