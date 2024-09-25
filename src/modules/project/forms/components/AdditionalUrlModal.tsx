@@ -61,7 +61,7 @@ export const AdditionalUrlModal = ({ onAdd, ...rest }: AdditionalUrlModalProps) 
       >
         <FieldContainer
           title={t('Media url')}
-          subtitle={t('Image, youtube and vimeo links are supported for project headers.')}
+          subtitle={t('Youtube and Vimeo video links are supported for project headers.')}
           error={error}
         >
           <Input
