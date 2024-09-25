@@ -10,7 +10,7 @@ export const FRAGMENT_PROFILE_ORDER_ITEM = gql`
       cost
       rewardCurrency
       description
-      image
+      images
       category
     }
     quantity

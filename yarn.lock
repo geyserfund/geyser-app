@@ -17987,7 +17987,7 @@ __metadata:
     react-i18next: "npm:^13.0.0"
     react-icons: "npm:^5.2.1"
     react-jss: "npm:^10.9.2"
-    react-player: "npm:^2.12.0"
+    react-player: "npm:^2.16.0"
     react-qr-code: "npm:^2.0.11"
     react-qrcode-logo: "npm:^3.0.0"
     react-quill: "npm:^2.0.0"
@@ -18004,6 +18004,7 @@ __metadata:
     sitemap: "npm:^7.1.1"
     sort-by: "npm:^1.2.0"
     storybook: "npm:^8.0.4"
+    swiper: "npm:^11.1.14"
     tiny-secp256k1: "npm:^2.2.3"
     turndown: "npm:^7.1.2"
     typescript: "npm:^5.5.2"
@@ -23431,9 +23432,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-player@npm:^2.12.0":
-  version: 2.12.0
-  resolution: "react-player@npm:2.12.0"
+"react-player@npm:^2.16.0":
+  version: 2.16.0
+  resolution: "react-player@npm:2.16.0"
   dependencies:
     deepmerge: "npm:^4.0.0"
     load-script: "npm:^1.0.0"
@@ -23442,7 +23443,7 @@ __metadata:
     react-fast-compare: "npm:^3.0.1"
   peerDependencies:
     react: ">=16.6.0"
-  checksum: 10c0/ef0c89cc5de17a149dc10c2ca36880679534980bc6fd9814b93636019af0132ebb516f282ceee249a991eef844f011fd91cb56126f5ab6c8ff0be29370c193bc
+  checksum: 10c0/ee0f4cd3bd468b28af38dbbb65cae1659218153956f43c0bdd15cd8b38aaaf151deec43b93b7dd887c0ac28242a4ba7e9d01823351e78ba60ae04d5fb51defb4
   languageName: node
   linkType: hard
 
@@ -25610,6 +25611,13 @@ __metadata:
   dependencies:
     tslib: "npm:^2.0.3"
   checksum: 10c0/6a47c1926e06395ead750905e103be388aeec8c9697f20b14bc3e1e86fcb4fc78e5033197afe6cc8bbed80f0a4ee1f184b0fa22eec7f4a767bdfd278683d52eb
+  languageName: node
+  linkType: hard
+
+"swiper@npm:^11.1.14":
+  version: 11.1.14
+  resolution: "swiper@npm:11.1.14"
+  checksum: 10c0/a1075cbd2254aedd22b411ea03cbd7a91ba1cc79d7c2dc41f215e987811e449a2915a26b39fdfc1d7c08250fa2cfbe51d28476f834e75033c73ea357a4ac9f8d
   languageName: node
   linkType: hard
 

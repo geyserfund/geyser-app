@@ -9,7 +9,7 @@ import { Modal } from '../components/layouts'
 
 export enum ImageCropAspectRatio {
   Square = 1,
-  Rectangle = 3,
+  Header = 16 / 9,
   Reward = 4 / 3,
   Post = 16 / 9,
 }

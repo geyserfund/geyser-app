@@ -17,27 +17,16 @@ const MAX_RETRIES = 5
 const BACKOFF = 1.2
 const MILLISECONDS = 1_000
 
-export const ImageWithReload = ({
-  src = '',
-  showError,
-  defaultImage,
-  empty,
-  noCacheId, // noCacheId allows us to prevent not retrying an image upload due to caching
-  ...rest
-}: IImageWithReload) => {
+export const ImageWithReload = ({ src = '', showError, defaultImage, empty, ...rest }: IImageWithReload) => {
   const { toast } = useNotification()
   const componentRef = useRef<number>(0)
 
-  const [hasValidSource, setHasValidSource] = useState(Boolean(src))
+  const hasValidSource = Boolean(src)
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
     componentRef.current = 0
   }, [])
-
-  useEffect(() => {
-    setHasValidSource(Boolean(src))
-  }, [noCacheId, src])
 
   const handleError = ({ currentTarget }: any) => {
     setLoading(true)
@@ -50,7 +39,6 @@ export const ImageWithReload = ({
       }, BACKOFF ** componentRef.current * MILLISECONDS)
     } else {
       setLoading(false)
-      setHasValidSource(false)
       componentRef.current = 0
       if (showError) {
         toast({
@@ -65,7 +53,6 @@ export const ImageWithReload = ({
   const handleLoad = () => {
     componentRef.current = 0
     setLoading(false)
-    setHasValidSource(true)
   }
 
   const renderSkeletonImage = () => {

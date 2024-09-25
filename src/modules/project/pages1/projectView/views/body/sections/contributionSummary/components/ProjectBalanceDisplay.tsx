@@ -94,7 +94,7 @@ export function ProjectBalanceDisplay() {
       >
         <CircularProgress
           capIsRound
-          value={circularPercentage}
+          value={circularPercentage && circularPercentage > 10 ? circularPercentage : 10}
           size="96px"
           thickness="10px"
           color={'primary1.9'}
@@ -109,9 +109,6 @@ export function ProjectBalanceDisplay() {
         >
           {priorityGoal.currency === ProjectGoalCurrency.Usdcent ? (
             <Body size="2xl" bold dark>
-              <Body as="span" muted medium>
-                {'$'}
-              </Body>
               {priorityGoal.amountContributed ? formatAmount(priorityGoal.amountContributed, 'USDCENT') : 0}
             </Body>
           ) : (

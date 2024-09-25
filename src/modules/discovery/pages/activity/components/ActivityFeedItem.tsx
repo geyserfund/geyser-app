@@ -1,6 +1,6 @@
 import { Badge, Box, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { PiBag, PiFlagBannerFold, PiLightning, PiNewspaper } from 'react-icons/pi'
+import { PiBag, PiFlagBannerFold, PiLightning, PiNewspaper, PiSparkle } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
@@ -21,6 +21,7 @@ import { commaFormatted, getFormattedDate, useMobileMode } from '@/utils'
 
 enum ActivityType {
   PostPublished = 'PostPublished',
+  ProjectLaunched = 'ProjectLaunched',
   ProjectRewardCreated = 'ProjectRewardCreated',
   ProjectGoalCreated = 'ProjectGoalCreated',
   ProjectGoalReached = 'ProjectGoalReached',
@@ -30,6 +31,7 @@ enum ActivityType {
 export const ActivityFeedItem = ({ activityType, createdAt, project, resource }: Activity) => {
   const isMobile = useMobileMode()
 
+  const isProjectLaunchedActivity = activityType === ActivityType.ProjectLaunched
   const isGoalActivity =
     activityType === ActivityType.ProjectGoalCreated || activityType === ActivityType.ProjectGoalReached
   const isRewardActivity = activityType === ActivityType.ProjectRewardCreated
@@ -55,8 +57,10 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
       as={Link}
       to={activityPath(activityType)}
       width={{ base: 'full', lg: '586px' }}
+      borderColor={isProjectLaunchedActivity ? 'primaryAlpha.6' : 'neutralAlpha.6'}
+      backgroundColor={isProjectLaunchedActivity ? 'primaryAlpha.2' : 'none'}
       _hover={{
-        borderColor: 'neutralAlpha.8',
+        borderColor: isProjectLaunchedActivity ? 'primaryAlpha.8' : 'neutralAlpha.8',
       }}
       p={4}
     >
@@ -88,7 +92,7 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
       )}
       <VStack width="full" alignItems="flex-start" spacing={1}>
         {isPostActivity && <ActivityImage resource={resource} />}
-        {!isFundingTxActivity && <ActivityTitle resource={resource} />}
+        {!isFundingTxActivity && !isProjectLaunchedActivity && <ActivityTitle resource={resource} />}
         {isRewardActivity && <ActivityImage resource={resource} />}
         {isRewardActivity && <RewardsInfo reward={resource as ProjectReward} />}
         <ActivityDescription resource={resource} />
@@ -98,7 +102,7 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
             <GoalTargetAmount goal={resource as ProjectGoal} />
           </>
         )}
-        {isFundingTxActivity && <ContributorInfo resource={resource} />}
+        {isFundingTxActivity && <ContributionInfo resource={resource} />}
       </VStack>
     </CardLayout>
   )
@@ -192,6 +196,17 @@ const ActivityTypeItem = ({ activityType }: { activityType: ActivityType }) => {
           </Body>
         </HStack>
       )
+    case ActivityType.ProjectLaunched:
+      return (
+        <HStack color={'primaryAlpha.11'} spacing={1}>
+          <Box mt={-0.5}>
+            <PiSparkle size={'20px'} color="primaryAlpha.11" />
+          </Box>
+          <Body size="lg" medium light color="primaryAlpha.11">
+            {t('New Project')}
+          </Body>
+        </HStack>
+      )
     default:
       return (
         <Body size="lg" medium light>
@@ -246,8 +261,6 @@ const ActivityImage = ({ resource }: { resource: ActivityResource }) => {
 }
 
 const ActivityDescription = ({ resource }: { resource: ActivityResource }) => {
-  const { t } = useTranslation()
-
   if ('entryDescription' in resource && typeof resource.entryDescription === 'string') {
     return (
       <Body size="md" medium muted>
@@ -272,15 +285,8 @@ const ActivityDescription = ({ resource }: { resource: ActivityResource }) => {
     )
   }
 
-  if ('amount' in resource && typeof resource.amount === 'number') {
-    return (
-      <Body size="md" medium muted>
-        {t('Received contribution of ')}
-        <Body as="span" size="md" dark>
-          {commaFormatted(resource.amount)} {' Sats.'}
-        </Body>
-      </Body>
-    )
+  if ('comment' in resource && typeof resource.comment === 'string') {
+    return <Body size="sm">{resource.comment}</Body>
   }
 
   return null
@@ -293,17 +299,15 @@ const GoalProgressBar = ({ goal }: { goal: ProjectGoal }) => {
 
   return (
     <HStack width="100%" height="8px" justifyContent="flex-start" borderRadius="44px" bg="neutral1.3">
-      {reached && (
-        <HStack
-          p={'5px'}
-          width={'100%'}
-          height="8px"
-          bgColor={'primary1.9'}
-          borderRadius="44px"
-          justifyContent={'flex-end'}
-          alignItems="center"
-        />
-      )}
+      <HStack
+        p={'5px'}
+        width={reached ? '100%' : '4%'}
+        height="8px"
+        bgColor={'primary1.9'}
+        borderRadius="44px"
+        justifyContent={'flex-end'}
+        alignItems="center"
+      />
     </HStack>
   )
 }
@@ -333,7 +337,7 @@ const GoalTargetAmount = ({ goal }: { goal: ProjectGoal }) => {
 const RewardsInfo = ({ reward }: { reward: ProjectReward }) => {
   const { t } = useTranslation()
 
-  const { formatAmount } = useCurrencyFormatter()
+  const { formatAmount, formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
 
   if (!reward) return null
 
@@ -342,7 +346,12 @@ const RewardsInfo = ({ reward }: { reward: ProjectReward }) => {
       <Body size="sm" bold>
         {formatAmount(reward.cost, reward.rewardCurrency)}{' '}
         <Body as="span" size="sm" muted>
-          {reward.rewardCurrency === RewardCurrency.Btcsat ? 'Sats' : 'USD'}
+          {reward.rewardCurrency === RewardCurrency.Btcsat ? 'sats' : 'USD'}{' '}
+        </Body>
+        <Body as="span" size="sm" medium muted>
+          {reward.rewardCurrency === RewardCurrency.Btcsat
+            ? `(${formatUsdAmount(reward.cost)})`
+            : `(${formatSatsAmount(reward.cost)})`}
         </Body>
       </Body>
       {reward.sold && (
@@ -370,8 +379,10 @@ const RewardsInfo = ({ reward }: { reward: ProjectReward }) => {
   )
 }
 
-const ContributorInfo = ({ resource }: { resource: ActivityResource }) => {
+const ContributionInfo = ({ resource }: { resource: ActivityResource }) => {
   const { t } = useTranslation()
+
+  const { formatUsdAmount } = useCurrencyFormatter()
 
   if ('funder' in resource && typeof resource.funder === 'object') {
     if (resource.isAnonymous) {
@@ -379,6 +390,12 @@ const ContributorInfo = ({ resource }: { resource: ActivityResource }) => {
         <HStack width="full" spacing={2} justifyContent="flex-start">
           <Body size="md" muted>
             {t('Anonymous contributor')}
+          </Body>
+          <Body size="md" medium dark>
+            {commaFormatted(resource.amount)} {' sats '}
+            <Body as="span" size="md" muted>
+              ({formatUsdAmount(resource.amount)})
+            </Body>
           </Body>
         </HStack>
       )
@@ -388,15 +405,19 @@ const ContributorInfo = ({ resource }: { resource: ActivityResource }) => {
 
     return (
       <HStack width="full" spacing={2} justifyContent="flex-start">
-        <Body size="md" muted>
-          {t('Contributor')}:
-        </Body>
-        <HStack spacing={1}>
-          {user && user.imageUrl && <Image width={'24px'} height={'24px'} borderRadius={'full'} src={user.imageUrl} />}
+        {user && user.imageUrl && <Image width={'40px'} height={'40px'} borderRadius={'full'} src={user.imageUrl} />}
+        <VStack alignItems="flex-start" justifyContent="center" spacing={0}>
           <Body size="md" dark>
             {user?.username}
           </Body>
-        </HStack>
+          <Body size="md" medium dark>
+            {commaFormatted(resource.amount)} {' sats '}
+            <Body as="span" size="md" muted>
+              {' '}
+              ({formatUsdAmount(resource.amount)})
+            </Body>
+          </Body>
+        </VStack>
       </HStack>
     )
   }

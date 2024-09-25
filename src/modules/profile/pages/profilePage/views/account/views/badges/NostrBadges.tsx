@@ -51,14 +51,13 @@ export const NostrBadges = ({
             </WrapItem>
           )
         })}
-        {isEdit &&
-          unClaimedBadges.map((userBadge) => {
-            return (
-              <WrapItem key={userBadge.id}>
-                <BadgeItem userBadge={userBadge} claimABadge={claimABadge} />
-              </WrapItem>
-            )
-          })}
+        {unClaimedBadges.map((userBadge) => {
+          return (
+            <WrapItem key={userBadge.id}>
+              <BadgeItem userBadge={userBadge} claimABadge={claimABadge} isEdit={isEdit} />
+            </WrapItem>
+          )
+        })}
       </Wrap>
     </>
   )

@@ -24,12 +24,7 @@ import { useCustomTheme } from '@/utils'
 import { BoltIcon, NodeIcon } from '../../../components/icons'
 import { TextInputBox } from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
-import {
-  GeyserLightningWalletGuideLink,
-  LIGHTNING_FEE_PERCENTAGE,
-  VoltageExplainerPageForGeyserURL,
-  VoltageUrl,
-} from '../../../shared/constants'
+import { GeyserLightningWalletGuideLink, LIGHTNING_FEE_PERCENTAGE } from '../../../shared/constants'
 import { lightModeColors } from '../../../shared/styles'
 import { LndNodeType } from '../../../types'
 import { ProjectFeeSelection } from '../components/ProjectFeeSelection'
@@ -249,24 +244,9 @@ export const ProjectCreationWalletConnectionForm = ({
                   )}
                 </>
               }
-              promoText={t('No set fee per transaction')}
-              secondaryText={
-                <span>
-                  <Trans
-                    i18nKey={
-                      "Connect your lightning node to receive incoming transactions directly. Don't have a node? You can <1>create a cloud node</1> with the recommended app."
-                    }
-                  >
-                    {
-                      'Connect your lightning node to receive incoming transactions directly. Dont have a node? You can '
-                    }
-                    <Link href={VoltageExplainerPageForGeyserURL}>create a cloud node</Link> with the recommended app.
-                  </Trans>
-                </span>
-              }
+              secondaryText={'Connect your lightning node to receive incoming transactions directly.'}
             >
               <>
-                <RenderSponsorImage url={VoltageExplainerPageForGeyserURL} imageUrl={VoltageUrl} height="24px" />
                 <ProjectFeeSelection readOnly={readOnly} value={fee.value} onChange={fee.setValue} />
               </>
             </WalletConnectionOptionInfoBox>

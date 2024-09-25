@@ -1,6 +1,6 @@
 import { Badge, Box, Button, HStack, SkeletonText, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiArrowLeft } from 'react-icons/pi'
+import { PiArrowLeft, PiEyeSlash } from 'react-icons/pi'
 import { Link, useParams } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
@@ -94,15 +94,18 @@ export const RewardView = () => {
               </H2>
               {!isMobileMode &&
                 (isProjectOwner ? (
-                  <RewardEditMenu size="md" reward={reward} />
+                  <HStack>
+                    {reward.isHidden && <HiddenRewardBadge />}
+                    <RewardEditMenu size="md" reward={reward} />
+                  </HStack>
                 ) : (
                   <Button variant="solid" colorScheme="primary1" width="160px" onClick={buyReward}>
                     {t('Buy')}
                   </Button>
                 ))}
             </HStack>
-            <HStack w="full" alignItems="end" justifyContent="space-between">
-              <HStack spacing={{ base: 2, lg: 3 }} alignItems="end">
+            <HStack w="full" alignItems="center" justifyContent="space-between">
+              <HStack spacing={{ base: 2, lg: 3 }} alignItems="center">
                 <Body size="sm" medium muted>
                   {t('Sold')}:{' '}
                   <Box as="span" color="utils.text" fontWeight={700}>
@@ -128,10 +131,10 @@ export const RewardView = () => {
               <HStack display={{ base: 'none', lg: 'flex' }}>{renderAmountComponent()}</HStack>
             </HStack>
           </VStack>
-          {reward.image && (
+          {reward.images[0] && (
             <Box overflow={'hidden'} width="100%" position="relative" paddingTop="75%" borderRadius={'8px'}>
               <ImageWithReload
-                src={reward.image || ''}
+                src={reward.images[0] || ''}
                 alt={reward.name}
                 width="100%"
                 height="100%"
@@ -159,7 +162,10 @@ export const RewardView = () => {
         </VStack>
       </CardLayout>
       <BottomNavBarContainer direction="column">
-        {renderAmountComponent()}
+        <HStack justifyContent={'space-between'} flexWrap="wrap">
+          {renderAmountComponent()}
+          {reward.isHidden && <HiddenRewardBadge />}
+        </HStack>
         {isProjectOwner ? (
           <RewardEditMenu size="lg" w="full" reward={reward} />
         ) : (
@@ -169,6 +175,17 @@ export const RewardView = () => {
         )}
       </BottomNavBarContainer>
     </VStack>
+  )
+}
+
+const HiddenRewardBadge = () => {
+  return (
+    <Badge size={'xl'} variant="soft" colorScheme="neutral1">
+      <PiEyeSlash />
+      <Body size="sm" light pl={2}>
+        {t('Hidden')}
+      </Body>
+    </Badge>
   )
 }
 

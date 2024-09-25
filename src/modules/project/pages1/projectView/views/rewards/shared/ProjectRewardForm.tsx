@@ -94,7 +94,7 @@ export const ProjectRewardForm = ({
       projectId: project?.id,
       cost: reward.cost,
       description: reward.description,
-      image: reward.image || undefined,
+      images: reward.images || [],
       name: reward.name,
       maxClaimable: reward.maxClaimable || undefined,
       hasShipping: reward.hasShipping,
@@ -116,7 +116,7 @@ export const ProjectRewardForm = ({
       projectRewardId: reward.id,
       cost: reward.cost,
       description: reward.description,
-      image: reward.image || undefined,
+      images: reward.images || [],
       name: reward.name,
       maxClaimable: reward.maxClaimable || undefined,
       hasShipping: reward.hasShipping,
@@ -187,11 +187,11 @@ export const ProjectRewardForm = ({
   }
 
   const handleUpload = (url: string) => {
-    setReward((current) => ({ ...current, image: url }))
+    setReward((current) => ({ ...current, images: [url] }))
   }
 
   const handleDeleteThumbnail = () => {
-    setReward((current) => ({ ...current, image: null }))
+    setReward((current) => ({ ...current, images: [] }))
   }
 
   const handleFormShippingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -447,12 +447,12 @@ export const ProjectRewardForm = ({
             />
           </FieldContainer>
         </Stack>
-        <Stack direction={{ base: 'column', lg: 'row' }}>
+        <Stack direction={{ base: 'column' }}>
           <FieldContainer title={t('Image')}>
             <FileUpload
               showcase
               containerProps={{ w: '100%' }}
-              src={reward.image}
+              src={reward.images[0]}
               onUploadComplete={handleUpload}
               onDeleteClick={handleDeleteThumbnail}
               childrenOnLoading={<UploadBox loading h={10} />}
@@ -461,6 +461,11 @@ export const ProjectRewardForm = ({
               <UploadBox h={10} title="Select an Image" />
             </FileUpload>
           </FieldContainer>
+          <HStack w={'100%'} justifyContent={'center'}>
+            <Body fontSize={'sm'} muted>
+              {t('The ideal image ratio is 16:9, such as 1600x900 pixels.')}
+            </Body>
+          </HStack>
         </Stack>
         <Stack direction={{ base: 'column', lg: 'row' }} my={4} gap={1}>
           <VStack flex={1} alignItems={'start'}>

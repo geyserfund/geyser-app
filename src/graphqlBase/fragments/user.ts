@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client'
 
+import { FRAGMENT_PROJECT_FOR_OWNER } from './project'
+
 export const FRAGMENT_EXTERNAL_ACCOUNT = gql`
   fragment ExternalAccount on ExternalAccount {
     id
@@ -28,6 +30,7 @@ export const FRAGMENT_PROJECT_OWNER_USER = gql`
 
 export const FRAGMENT_USER_ME = gql`
   ${FRAGMENT_EXTERNAL_ACCOUNT}
+  ${FRAGMENT_PROJECT_FOR_OWNER}
   fragment UserMe on User {
     id
     username
@@ -41,13 +44,7 @@ export const FRAGMENT_USER_ME = gql`
     }
     ownerOf {
       project {
-        id
-        name
-        image
-        thumbnailImage
-        title
-        status
-        createdAt
+        ...ProjectForOwner
       }
     }
   }

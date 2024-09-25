@@ -1,6 +1,6 @@
 import { ApolloError } from '@apollo/client'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
+import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from 'react'
 
 import { getAuthEndPoint } from '../config/domain'
 import { defaultUser } from '../defaults'
@@ -42,6 +42,8 @@ type AuthContextProps = {
   setUser: Dispatch<SetStateAction<UserMeFragment>>
 }
 
+const authServiceEndPoint = getAuthEndPoint()
+
 export const AuthContext = createContext<AuthContextProps>(defaultContext)
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -52,8 +54,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useAtom(authUserAtom)
   const setFollowedProjects = useSetAtom(followedProjectsAtom)
   const isUserAProjectCreator = useAtomValue(isUserAProjectCreatorAtom)
-
-  const authServiceEndPoint = getAuthEndPoint()
 
   const [queryCurrentUser, { loading: loadingUser, error }] = useMeLazyQuery({
     fetchPolicy: 'network-only',
@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setInitialLoad(false)
   }
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setUser({ ...defaultUser })
     setFollowedProjects([])
     try {
@@ -89,7 +89,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch {
       alert('Failed to log out properly. Please clear your cookies.')
     }
-  }
+  }, [setFollowedProjects, setUser])
 
   useEffect(() => {
     try {

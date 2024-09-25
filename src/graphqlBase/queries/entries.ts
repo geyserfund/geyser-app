@@ -45,29 +45,6 @@ export const QUERY_ENTRY_WITH_OWNERS = gql`
   }
 `
 
-/**
- * @returns `Entry`
- */
-export const QUERY_ALL_GEYSER_PROJECT_ENTRIES = gql`
-  query Entries($input: GetEntriesInput!) {
-    getEntries(input: $input) {
-      id
-      title
-      description
-      image
-      fundersCount
-      amountFunded
-      type
-      status
-      project {
-        title
-        name
-        image
-      }
-    }
-  }
-`
-
 export const QUERY_SIGNED_UPLOAD_URL = gql`
   query SignedUploadUrl($input: FileUploadInput!) {
     getSignedUploadUrl(input: $input) {

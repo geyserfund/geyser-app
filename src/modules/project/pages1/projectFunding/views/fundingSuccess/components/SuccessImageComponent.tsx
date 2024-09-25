@@ -71,7 +71,7 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
     return ''
   }
 
-  const twitterShareText = `I just contributed to ${project.title} on Geyser! Check it out: ${window.origin}/projects/${project.name}`
+  const twitterShareText = `I just contributed to ${project.title} on Geyser! Check it out: ${window.origin}/project/${project.name}`
 
   return (
     <VStack w="full" spacing={6}>

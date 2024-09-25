@@ -14,6 +14,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useSetAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { PiGear } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
@@ -29,7 +30,7 @@ import { toInt, useNotification } from '@/utils'
 import { ConnectAccounts, ExternalAccountType } from '../../../../../../../pages/auth'
 import { SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { getPath } from '../../../../../../../shared/constants'
-import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
+import { userProfileAtom, useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
 import { RemoveExternalAccountModal } from '../../../components/RemoveExternalAccountModal'
 import { useAccountUnlink } from '../hooks/useAccountUnlink'
 
@@ -89,6 +90,8 @@ const AccountInfoButton = ({ accountInfoProps }: { accountInfoProps: ExternalAcc
 
   const removeAccountModal = useModal()
 
+  const setUserProfile = useSetAtom(userProfileAtom)
+
   const toast = useNotification()
 
   const { isLoading, handleAccountUnlink, isEdit } = useAccountUnlink({
@@ -103,6 +106,14 @@ const AccountInfoButton = ({ accountInfoProps }: { accountInfoProps: ExternalAcc
       },
       onCompleted() {
         removeAccountModal.onClose()
+        toast.success({
+          title: 'Account unlinked',
+          description: 'Account has been successfully unlinked',
+        })
+        setUserProfile((current) => ({
+          ...current,
+          externalAccounts: current.externalAccounts.filter((acc) => acc.id !== account.id),
+        }))
       },
     },
   })

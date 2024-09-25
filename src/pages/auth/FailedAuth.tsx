@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next'
 import { BsArrowLeft } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 
+import { useAuthContext } from '@/context'
+
 import { Body1 } from '../../components/typography'
 import { ButtonComponent } from '../../components/ui'
 import { useMobileMode } from '../../utils'
@@ -23,6 +25,8 @@ export const FailedAuthComponent = () => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
 
+  const { logout } = useAuthContext()
+
   const [cookie, _, removeCookie] = useCookies()
 
   useEffect(() => {
@@ -34,6 +38,11 @@ export const FailedAuthComponent = () => {
       removeCookie('refreshToken')
     }
   }, [cookie, removeCookie])
+
+  useEffect(() => {
+    logout()
+  }, [logout])
+
   return (
     <VStack
       height="100vh"

@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 
 import { useGoalsModal } from '@/modules/project/pages1/projectView/hooks'
 import { Body } from '@/shared/components/typography'
-import { getPath, NoContributionsReceivedUrl } from '@/shared/constants'
+import { getPath, NoContributionImageUrl } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { ProjectGoal, ProjectGoalCurrency } from '@/types'
 import { commaFormatted } from '@/utils'
@@ -68,7 +68,7 @@ export const Contributions = ({ projectId, projectName }: ContributionsProps) =>
   return (
     <Box
       as={Link}
-      to={getPath('project', projectName)}
+      to={getPath('projectGoals', projectName)}
       minHeight="269px"
       borderWidth={1}
       borderRadius="lg"
@@ -126,7 +126,7 @@ const Goals = ({ goals, noContributionsReceived }: { goals: ProjectGoal[]; noCon
   if (noContributionsReceived) {
     return (
       <VStack w="100%" align="center" spacing={0.5} px={4} py={8}>
-        <Image maxHeight="150px" src={NoContributionsReceivedUrl} alt="No contributions received" />
+        <Image maxHeight="150px" src={NoContributionImageUrl} alt="No contributions received" />
       </VStack>
     )
   }

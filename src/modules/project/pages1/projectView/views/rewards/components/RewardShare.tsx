@@ -55,7 +55,11 @@ export const RewardShare = ({ reward, ...props }: RewardShareProps) => {
         <Body size="sm" dark>
           {t('Share the reward page to spread the word across the internet and social media.')}
         </Body>
-        <ShareBanner aspectRatio={ImageCropAspectRatio.Reward} bannerImage={reward.image} bannerText={reward.name} />
+        <ShareBanner
+          aspectRatio={ImageCropAspectRatio.Reward}
+          bannerImage={reward.images[0]}
+          bannerText={reward.name}
+        />
         <HStack w="full" spacing={3}>
           <Button
             flex={1}

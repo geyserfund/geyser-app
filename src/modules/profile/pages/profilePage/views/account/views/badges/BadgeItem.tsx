@@ -9,10 +9,11 @@ import { UserBadge } from '../../../../../../../../types'
 interface BadgeItemProps {
   userBadge: UserBadge
   isClaimed?: boolean
+  isEdit?: boolean
   claimABadge: (_: ClaimABadgeProps) => void
 }
 
-export const BadgeItem = ({ userBadge, isClaimed, claimABadge }: BadgeItemProps) => {
+export const BadgeItem = ({ userBadge, isClaimed, isEdit, claimABadge }: BadgeItemProps) => {
   const { t } = useTranslation()
   const { badge } = userBadge
 
@@ -29,7 +30,7 @@ export const BadgeItem = ({ userBadge, isClaimed, claimABadge }: BadgeItemProps)
   return (
     <VStack key={userBadge.id} overflow="hidden" spacing="0px" w="full">
       <Image width="auto" maxWidth="110px" src={badge.image} />
-      {!isClaimed && (
+      {!isClaimed && isEdit && (
         <ButtonComponent size="sm" primary onClick={handleClick} isLoading={claiming}>
           {t('Claim')}
         </ButtonComponent>

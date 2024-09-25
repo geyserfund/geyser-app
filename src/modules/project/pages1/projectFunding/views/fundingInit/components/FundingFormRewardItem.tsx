@@ -27,7 +27,13 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
     return (
       <CardLayout dense w="full" direction="row" spacing={0} overflowX={'hidden'}>
         <Box width="full" maxWidth={{ base: '148px', lg: '198px' }} overflow={'hidden'}>
-          <ImageWithReload src={reward.image || ''} alt={reward.name} width="100%" height="100%" objectFit="cover" />
+          <ImageWithReload
+            src={reward.images[0] || ''}
+            alt={reward.name}
+            width="100%"
+            height="100%"
+            objectFit="cover"
+          />
         </Box>
         <VStack flex={1} padding={4} justifyContent="space-between" overflowX={'hidden'}>
           <VStack width="full" alignItems={'start'}>
@@ -59,18 +65,40 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
               <ProjectRewardShippingEstimate reward={reward} />
             </HStack>
           </VStack>
-          <HStack w="full" justifyContent={'space-between'}>
-            {project && project.rewardCurrency === RewardCurrency.Usdcent ? (
-              <Body bold dark>{`$${reward.cost / 100}`}</Body>
-            ) : (
-              <Body bold dark>
-                {`${reward.cost.toLocaleString()}`}
-                <Box as="span" color={'neutral1.9'}>
-                  {' '}
-                  sats
-                </Box>
-              </Body>
-            )}
+          <HStack w="full" justifyContent={'space-between'} alignItems={'end'}>
+            <Box
+              display={'flex'}
+              flexDirection={{ base: 'column', sm: 'row', lg: 'row' }}
+              alignItems={'start'}
+              justifyContent={'end'}
+              gap={1}
+            >
+              {project && project.rewardCurrency === RewardCurrency.Usdcent ? (
+                <>
+                  <Body bold dark>{`$${reward.cost / 100}`}</Body>
+                  <Body medium muted>
+                    {`(${reward.cost.toLocaleString()}`}
+                    <Box as="span" color={'neutral1.9'}>
+                      {' '}
+                      sats{')'}
+                    </Box>
+                  </Body>
+                </>
+              ) : (
+                <>
+                  <Body bold dark>
+                    {`${reward.cost.toLocaleString()}`}
+                    <Box as="span" color={'neutral1.9'}>
+                      {' '}
+                      sats
+                    </Box>
+                  </Body>
+                  <Body medium muted>
+                    {`($${reward.cost / 100})`}
+                  </Body>
+                </>
+              )}
+            </Box>
 
             {count === 0 ? (
               <Button

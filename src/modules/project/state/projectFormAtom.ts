@@ -28,7 +28,7 @@ export const diffProjectAtom = atom((get) => {
   return getDiff(project, formProject, [
     'location',
     'description',
-    'image',
+    'images',
     'rewardCurrency',
     'shortDescription',
     'status',

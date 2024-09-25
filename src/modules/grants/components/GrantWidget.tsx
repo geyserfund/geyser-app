@@ -2,21 +2,26 @@ import { HStack, VStack } from '@chakra-ui/react'
 
 import { Body } from '@/shared/components/typography'
 import { useCountdown } from '@/shared/hooks/useCountdown'
+import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { Grant, GrantStatusEnum } from '@/types'
 import { getFormattedDate, getShortAmountLabel } from '@/utils'
 
 const GrantWidget = ({ grant, compact = false }: { grant: Grant; compact?: boolean }) => {
+  const { formatUsdAmount } = useCurrencyFormatter(true)
+
   const votingStartDate = grant.statuses.find((s) => s.status === GrantStatusEnum.FundingOpen)?.startAt
   const isUpcomingGrant = votingStartDate > Date.now()
   const isClosedGrant = grant.status === GrantStatusEnum.Closed
 
   const votingEndDate = grant.statuses.find((s) => s.status === GrantStatusEnum.Closed)?.startAt
 
+  const grantPool = `${getShortAmountLabel(grant.balance, false, true)} Sats`
+  const grantPoolUsd = `(${formatUsdAmount(grant.balance)})`
+
   if (isUpcomingGrant) {
     return <GrantInfo label="Starts on" value={getFormattedDate(votingStartDate || 0)} />
   }
 
-  console.log('grant', grant)
   if (isClosedGrant) {
     return (
       <>
@@ -27,7 +32,7 @@ const GrantWidget = ({ grant, compact = false }: { grant: Grant; compact?: boole
         />
         {!compact && <GrantInfo label={'Applicants'} value={grant?.applicants?.length || 0} compact={compact} />}
         {grant.balance > 0 && (
-          <GrantInfo label={'Grant pool'} value={`${getShortAmountLabel(grant.balance)} Sats`} compact={compact} />
+          <GrantInfo label={'Grant pool'} value={`${grantPool}`} suffix={grantPoolUsd} compact={compact} />
         )}
       </>
     )
@@ -37,7 +42,7 @@ const GrantWidget = ({ grant, compact = false }: { grant: Grant; compact?: boole
     <>
       <GrantInfo label={'Time left to vote'} endDate={votingEndDate || 0} />
       {grant.__typename === 'CommunityVoteGrant' && <GrantInfo label={'Votes'} value={grant.votes.voteCount} />}
-      <GrantInfo label={'Grant pool'} value={`${getShortAmountLabel(grant.balance)} Sats`} />
+      {grant.balance > 0 && <GrantInfo label={'Grant pool'} value={`${grantPool}`} suffix={grantPoolUsd} />}
     </>
   )
 }
@@ -47,6 +52,7 @@ export default GrantWidget
 const GrantInfo = ({
   label,
   value,
+  suffix = '',
   endDate = 0,
   compact = false,
 }: {
@@ -54,6 +60,7 @@ const GrantInfo = ({
   value?: string | number
   endDate?: number
   compact?: boolean
+  suffix?: string
 }) => {
   if (compact) {
     return (
@@ -64,6 +71,11 @@ const GrantInfo = ({
         <Body size={'xs'} bold>
           {value}
         </Body>
+        {suffix && (
+          <Body as="span" size={'xs'} muted medium>
+            {suffix}
+          </Body>
+        )}
       </HStack>
     )
   }
@@ -76,9 +88,16 @@ const GrantInfo = ({
       {endDate ? (
         <LargeGrantCountdown endDate={endDate} />
       ) : (
-        <Body size={{ base: 'lg', lg: 'xl' }} medium>
-          {value}
-        </Body>
+        <HStack>
+          <Body size={{ base: 'lg', lg: 'xl' }} medium>
+            {value}
+          </Body>
+          {suffix && (
+            <Body as="span" size={{ base: 'lg', lg: 'xl' }} muted medium>
+              {suffix}
+            </Body>
+          )}
+        </HStack>
       )}
     </VStack>
   )

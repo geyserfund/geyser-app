@@ -70,17 +70,17 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
       <ImageWithReload
         src={contributor.userImageUrl}
         alt={contributor.username}
-        boxSize="40px"
-        borderRadius="16px"
-        maxHeight="40px"
+        boxSize="42px"
+        borderRadius="50%"
+        maxHeight="42px"
       />
-      <VStack maxHeight="38px" alignItems="flex-start" flex={1} spacing={0}>
+      <VStack maxHeight="42px" alignItems="flex-start" flex={1} spacing={0}>
         <Body size={'sm'} bold isTruncated>
           {contributor.username}
         </Body>
         <HStack spacing={2}>
           <HStack spacing={0.5}>
-            <Body size="xs" dark>
+            <Body size="sm" dark>
               ${commaFormatted(contributor.contributionsTotalUsd)}
             </Body>
           </HStack>
@@ -88,7 +88,7 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
           <HStack spacing={0.5}>
             <PiLightning size="12px" />
 
-            <Body size="xs" dark>
+            <Body size="sm" dark>
               {contributor.contributionsCount}
             </Body>
           </HStack>
@@ -96,7 +96,7 @@ const ContributorItem = ({ contributor, rank }: { contributor: GlobalContributor
           <HStack spacing={0.5}>
             <PiRocketLaunch size="12px" />
 
-            <Body size="xs" dark>
+            <Body size="sm" dark>
               {contributor.projectsContributedCount}{' '}
             </Body>
           </HStack>

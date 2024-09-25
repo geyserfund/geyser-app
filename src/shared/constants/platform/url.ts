@@ -221,6 +221,12 @@ export const NotAuthorizedImageUrl = 'https://storage.googleapis.com/geyser-proj
 export const TransactionFailedImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/emails/transactionFailed.png'
 
+export const NoRewardsSoldUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/no-rewards-sold.png'
+
+export const DiamondUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/diamond.png'
+
+export const TelescopeUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/telescope.png'
+
 // FUNDING FLOW ERRORS
 
 export const FundingErrorUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/errors/error.png'
@@ -342,10 +348,3 @@ export const ExperienceImageUrl = 'https://storage.googleapis.com/geyser-project
 // Helpers
 export const EmailPromptModalUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/enter-email-illustration.png'
-
-// My Projects
-export const NoContributionsReceivedUrl =
-  'https://storage.googleapis.com/geyser-projects-media/images/NoContributionsReceived.png'
-
-export const NoRewardsSoldUrl = 'https://storage.googleapis.com/geyser-projects-media/images/no-reward-sold.png'
-export const DiamondUrl = 'https://storage.googleapis.com/geyser-projects-media/images/diamond.png'

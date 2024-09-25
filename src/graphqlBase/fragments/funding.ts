@@ -32,7 +32,7 @@ export const FRAGMENT_FUNDING_TX_FOR_LANDING_PAGE = gql`
         id
         name
         title
-        image
+        images
         createdAt
         thumbnailImage
       }

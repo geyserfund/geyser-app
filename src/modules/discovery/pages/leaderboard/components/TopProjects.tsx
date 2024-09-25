@@ -86,36 +86,37 @@ const ProjectItem = ({ project, rank }: { project: GlobalProjectLeaderboardRow; 
         boxSize="64px"
         borderRadius="16px"
         maxHeight="64px"
+        minWidth="64px"
       />
-      <HStack maxHeight="60px" alignItems="center" justifyContent="flex-start" flex={1}>
+      <HStack maxHeight="64px" alignItems="center" justifyContent="flex-start" flex={1} overflow="hidden">
         <VStack alignItems="flex-start" flex={1} spacing={1}>
           <Body fontSize={'14px'} bold isTruncated>
             {project.projectTitle}
           </Body>
 
           <VStack alignItems="flex-start" spacing={0}>
-            <Body size="xs" dark>
+            <Body size="sm" dark>
               {formattedAmountContributed}{' '}
-              <Body as="span" size="xs" muted>
+              <Body as="span" size="sm" muted>
                 {`(${formattedUsdAmount})`}
               </Body>
             </Body>
             <HStack spacing={1}>
               <HStack spacing={0.5}>
-                <Body size="xs" muted>
+                <Body size="sm" muted>
                   {t('through')}{' '}
                 </Body>
                 <PiLightning size="12px" /> {t('from')}{' '}
-                <Body as="span" size="xs" dark>
+                <Body as="span" size="sm" dark>
                   {project.contributionsCount}
                 </Body>{' '}
               </HStack>
               <HStack spacing={0.5}>
-                <Body as="span" size="xs" muted>
+                <Body as="span" size="sm" muted>
                   {t('from')}{' '}
                 </Body>
                 <PiUsers size="12px" />
-                <Body size="xs" dark>
+                <Body size="sm" dark>
                   {project.contributorsCount}
                 </Body>{' '}
               </HStack>

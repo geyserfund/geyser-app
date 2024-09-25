@@ -1,8 +1,10 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useUserContributorToCurrentProject } from '@/modules/project/pages1/projectView/hooks/useUserContributorToCurrentProject'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
 import { ProjectLeaderboardPeriod, useProjectLeaderboardContributorsGetQuery } from '@/types'
@@ -28,8 +30,12 @@ export const Leaderboard = () => {
       },
     },
   })
+  const funders = useMemo(
+    () => data?.projectLeaderboardContributorsGet || [],
+    [data?.projectLeaderboardContributorsGet],
+  )
 
-  const funders = data?.projectLeaderboardContributorsGet
+  const { userContributor, userAllTimeRank } = useUserContributorToCurrentProject({ funders })
 
   if (projectLoading || loading) {
     return <LeaderboardSkeleton />
@@ -40,14 +46,15 @@ export const Leaderboard = () => {
   }
 
   return (
-    <VStack spacing={0} w="full" flex={1} overflowY={'auto'} justifyContent={'space-between'}>
-      <VStack spacing={0} w="full">
+    <VStack spacing={0} w="full" flex={1} justifyContent={'space-between'} overflow={'hidden'}>
+      <VStack spacing={0} w="full" flex={1} overflowY={'auto'}>
         {funders.map((funder, index) => {
           return <LeaderboardItem funder={funder} rank={index + 1} key={funder.funderId} />
         })}
       </VStack>
+      {userContributor && <LeaderboardItem funder={userContributor} rank={userAllTimeRank || 0} />}
 
-      <HStack w="full" justifyContent={'center'} spacing={1} paddingX={6} paddingY={2}>
+      <HStack w="full" justifyContent={'center'} spacing={1} paddingX={6} paddingTop={2}>
         <Button
           as={Link}
           to={getPath('projectLeaderboard', project.name)}

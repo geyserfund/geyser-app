@@ -34,7 +34,7 @@ export const FRAGMENT_FUNDING_TX_FOR_USER_CONTRIBUTION = gql`
         name
         title
         thumbnailImage
-        image
+        images
       }
       ... on Entry {
         id

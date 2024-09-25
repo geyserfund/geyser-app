@@ -65,7 +65,7 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
 
       <Box borderColor={'neutral.700'} overflow={'hidden'} width="100%" position="relative" paddingTop="75%">
         <ImageWithReload
-          src={reward.image || ''}
+          src={reward.images[0] || ''}
           alt={reward.name}
           width="100%"
           height="100%"
@@ -120,17 +120,33 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
           {/* <MarkdownField preview content={description} /> */}
         </Box>
         <HStack w="full" justifyContent={'space-between'} alignItems="center">
-          {project && project.rewardCurrency === RewardCurrency.Usdcent ? (
-            <Body bold dark>{`$${reward.cost / 100}`}</Body>
-          ) : (
-            <Body bold dark>
-              {`${reward.cost.toLocaleString()}`}
-              <Box as="span" color={'neutral1.9'}>
-                {' '}
-                sats
-              </Box>
-            </Body>
-          )}
+          <HStack alignItems={'start'} justifyContent={'end'} gap={1}>
+            {project && project.rewardCurrency === RewardCurrency.Usdcent ? (
+              <>
+                <Body bold dark>{`$${reward.cost / 100}`}</Body>
+                <Body medium muted>
+                  {`(${reward.cost.toLocaleString()}`}
+                  <Box as="span" color={'neutral1.9'}>
+                    {' '}
+                    sats{')'}
+                  </Box>
+                </Body>
+              </>
+            ) : (
+              <>
+                <Body bold dark>
+                  {`${reward.cost.toLocaleString()}`}
+                  <Box as="span" color={'neutral1.9'}>
+                    {' '}
+                    sats
+                  </Box>
+                </Body>
+                <Body medium muted>
+                  {`($${reward.cost / 100})`}
+                </Body>
+              </>
+            )}
+          </HStack>
 
           {!isProjectOwner ? (
             buyReward && (

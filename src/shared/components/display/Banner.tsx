@@ -23,7 +23,7 @@ export const Banner = ({ title, items, loading, reverse = false }: BannerProps) 
         border="1px solid"
         justifyContent="center"
         borderColor="primaryAlpha.6"
-        p={4}
+        p={{ base: 2, lg: 4 }}
         borderRadius="8px"
         height="130px"
         maxHeight="130px"
@@ -47,7 +47,7 @@ export const Banner = ({ title, items, loading, reverse = false }: BannerProps) 
         {isMobile ? (
           <>
             <Body
-              size={{ base: 'lg', lg: 'xl' }}
+              size={{ base: 'md', lg: 'xl' }}
               textAlign={{ base: 'left', lg: 'center' }}
               width="100%"
               dark

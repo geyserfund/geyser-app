@@ -129,9 +129,9 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
           <VStack width="100%">
             <GoalProgressBar width="100%" percentage={percentage} />
             <HStack w="full" justifyContent={'space-between'}>
-              <Body size="xs" dark>
+              <Body size="sm" dark>
                 {formattedAmountContributed}{' '}
-                <Body as="span" size="xs" muted>
+                <Body as="span" size="sm" muted>
                   {goal.currency === ProjectGoalCurrency.Btcsat ? `(${usdAmount})` : `(${satsAmount})`}
                 </Body>
               </Body>
