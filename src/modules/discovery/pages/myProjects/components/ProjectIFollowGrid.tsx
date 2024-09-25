@@ -60,6 +60,7 @@ const ProjectIFollowGridItem = ({ project, count }: { project: Project; count: n
         width="100%"
         objectFit="cover"
         zIndex={1}
+        opacity={count === 0 ? 0.5 : 1}
       />
       {count > 0 && (
         <Badge
