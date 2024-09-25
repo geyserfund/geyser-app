@@ -24,12 +24,7 @@ import { useCustomTheme } from '@/utils'
 import { BoltIcon, NodeIcon } from '../../../components/icons'
 import { TextInputBox } from '../../../components/ui'
 import Loader from '../../../components/ui/Loader'
-import {
-  GeyserLightningWalletGuideLink,
-  LIGHTNING_FEE_PERCENTAGE,
-  VoltageExplainerPageForGeyserURL,
-  VoltageUrl,
-} from '../../../shared/constants'
+import { GeyserLightningWalletGuideLink, LIGHTNING_FEE_PERCENTAGE } from '../../../shared/constants'
 import { lightModeColors } from '../../../shared/styles'
 import { LndNodeType } from '../../../types'
 import { ProjectFeeSelection } from '../components/ProjectFeeSelection'
