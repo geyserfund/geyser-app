@@ -1,8 +1,9 @@
-import { VStack } from '@chakra-ui/react'
+import { Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
 import { CreateProjectButton } from '@/modules/navigation/platformNavBar/components/CreateProjectButton'
 import { Body, H1 } from '@/shared/components/typography'
+import { TelescopeUrl } from '@/shared/constants'
 import { useNotification } from '@/utils'
 
 import { ProjectForProfilePageFragment, ProjectStatus, useUserProfileProjectsQuery } from '../../../../../../../types'
@@ -43,11 +44,17 @@ export const ProfileProjects = () => {
   }
 
   if (projects.length === 0) {
-    return <Body> No Projects</Body>
+    return (
+      <VStack w="full" p="20px" spacing="20px">
+        <Image height="200px" src={TelescopeUrl} />
+        <Body medium light>
+          {t('No projects')}
+        </Body>
+      </VStack>
+    )
   }
 
   const projectsToRender = projects.sort((a, b) => Number(b.createdAt) - Number(a.createdAt))
-
   return (
     <VStack w="full" alignItems={'start'}>
       <H1 size="2xl" bold display={{ base: 'unset', lg: 'none' }}>
