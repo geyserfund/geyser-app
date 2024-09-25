@@ -8,7 +8,7 @@ import { toInt, useNotification } from '@/utils'
 import { ExternalAccountType } from '../../../../../../../../pages/auth'
 import { SkeletonLayout } from '../../../../../../../../shared/components/layouts'
 import { BadgesGroupUrl } from '../../../../../../../../shared/constants'
-import { UserBadgeStatus, useUserBadgesQuery } from '../../../../../../../../types'
+import { useUserBadgesQuery } from '../../../../../../../../types'
 import { NostrBadges } from './NostrBadges'
 
 export const BadgesBody = () => {
