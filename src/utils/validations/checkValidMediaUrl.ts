@@ -1,4 +1,4 @@
-import { imageUrlRegex, vimeoUrlRegex, youtubeUrlRegex } from './regex'
+import { vimeoUrlRegex, youtubeUrlRegex } from './regex'
 
 export const isValidMediaUrl = (url: string) => {
   try {
@@ -7,5 +7,5 @@ export const isValidMediaUrl = (url: string) => {
     return false
   }
 
-  return imageUrlRegex.test(url) || youtubeUrlRegex.test(url) || vimeoUrlRegex.test(url)
+  return youtubeUrlRegex.test(url) || vimeoUrlRegex.test(url)
 }

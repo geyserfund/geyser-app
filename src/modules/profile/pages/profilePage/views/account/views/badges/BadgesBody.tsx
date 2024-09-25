@@ -8,7 +8,7 @@ import { toInt, useNotification } from '@/utils'
 import { ExternalAccountType } from '../../../../../../../../pages/auth'
 import { SkeletonLayout } from '../../../../../../../../shared/components/layouts'
 import { BadgesGroupUrl } from '../../../../../../../../shared/constants'
-import { UserBadgeStatus, useUserBadgesQuery } from '../../../../../../../../types'
+import { useUserBadgesQuery } from '../../../../../../../../types'
 import { NostrBadges } from './NostrBadges'
 
 export const BadgesBody = () => {
@@ -41,9 +41,7 @@ export const BadgesBody = () => {
 
   const showTopSection = hasBadgeNoNostrForOwn || userBadges.length === 0
 
-  const hasBadge = isEdit
-    ? userBadges.length > 0
-    : userBadges.filter((badge) => badge.status === UserBadgeStatus.Accepted).length > 0
+  const hasBadge = userBadges.length > 0
 
   if (userBadgeLoading) {
     return <BadgesBodySkeleton />
