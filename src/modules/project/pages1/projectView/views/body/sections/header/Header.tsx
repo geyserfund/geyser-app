@@ -40,8 +40,7 @@ import { useProjectAtom, useWalletAtom } from '../../../../../../hooks/useProjec
 import { FollowButton } from '../../components'
 import { CreatorEditButton } from '../../components/CreatorEditButton'
 import { CreatorSocial } from './components/CreatorSocial'
-import { LightningAddress } from './components/LightningAddress'
-import { NpubDisplay } from './components/NpubDisplay'
+import { LightningAddressModal } from './components/LightningAddressModal'
 import { ShareProjectButton } from './components/ShareProjectButton'
 
 export const Header = () => {
@@ -160,10 +159,7 @@ export const Header = () => {
             </H1>
 
             <HStack w="full" flexWrap={'wrap'}>
-              <HStack spacing={0.5} maxWidth="full">
-                <LightningAddress name={`${project.name}`} isGeyser />
-                <NpubDisplay npub={project?.keys?.nostrKeys.publicKey.npub} />
-              </HStack>
+              <LightningAddressModal name={`${project.name}`} npub={project?.keys?.nostrKeys.publicKey.npub} />
               <CreatorSocial />
             </HStack>
 

@@ -1,7 +1,7 @@
-import { Button, ButtonProps, Tooltip, useDisclosure } from '@chakra-ui/react'
+import { Button, ButtonProps, HStack, Icon } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiLightning } from 'react-icons/pi'
+import { PiCopy, PiLightning } from 'react-icons/pi'
 
 import { Body } from '../../../../../../../../../shared/components/typography'
 import { copyTextToClipboard } from '../../../../../../../../../utils'
@@ -13,10 +13,9 @@ interface ILightningQR extends ButtonProps {
 
 export const GEYSER_DOMAIN_POSTFIX = '@geyser.fund'
 
-export const LightningAddress = ({ name, isGeyser, ...rest }: ILightningQR) => {
+export const LightningAddress = ({ name, isGeyser = true, ...rest }: ILightningQR) => {
   const { t } = useTranslation()
   const [copy, setCopy] = useState(false)
-  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const handleAddressCopy = () => {
     let toCopy = name
@@ -28,39 +27,39 @@ export const LightningAddress = ({ name, isGeyser, ...rest }: ILightningQR) => {
     setCopy(true)
     setTimeout(() => {
       setCopy(false)
-      onClose()
     }, 2000)
   }
 
   return (
-    <>
-      <Tooltip
-        label={copy ? t('Copied!') : t('Copy Lightning Address / Nostr identifier (NIP-05)')}
-        placement="top"
-        closeOnClick={false}
-        isOpen={isOpen}
+    <HStack w="full">
+      <Button
+        id="lightning-address"
+        size="md"
+        variant={copy ? 'solid' : 'soft'}
+        colorScheme="primary1"
+        leftIcon={<Icon as={PiLightning} fontSize={'18px'} />}
+        onClick={handleAddressCopy}
+        {...rest}
       >
-        <Button
-          id="lightning-address"
-          size="sm"
-          variant="soft"
-          colorScheme="primary1"
-          leftIcon={<PiLightning />}
-          onClick={handleAddressCopy}
-          onMouseEnter={onOpen}
-          onMouseLeave={onClose}
-          {...rest}
-        >
-          <Body size="sm" medium isTruncated flex={1}>
-            {name}
+        <Body size="md" medium isTruncated>
+          {name}
+        </Body>
+        {isGeyser && (
+          <Body size="md" medium>
+            {GEYSER_DOMAIN_POSTFIX}
           </Body>
-          {isGeyser && (
-            <Body size="sm" medium>
-              {GEYSER_DOMAIN_POSTFIX}
-            </Body>
-          )}
-        </Button>
-      </Tooltip>
-    </>
+        )}
+      </Button>
+      <Button
+        minWidth={24}
+        size="md"
+        variant="solid"
+        colorScheme="primary1"
+        rightIcon={<PiCopy />}
+        onClick={handleAddressCopy}
+      >
+        {copy ? t('Copied') : t('Copy')}
+      </Button>
+    </HStack>
   )
 }
