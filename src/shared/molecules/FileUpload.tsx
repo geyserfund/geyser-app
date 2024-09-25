@@ -23,6 +23,7 @@ interface IFileUpload {
   onLoading?: (isLoading: boolean) => void
   onUploadComplete: (_: URL) => void
   imageCrop?: ImageCropAspectRatio
+  isDisabled?: boolean
 }
 
 const noop = () => {}
@@ -40,6 +41,7 @@ export const FileUpload = ({
   onDeleteClick,
   onLoading = noop,
   imageCrop,
+  isDisabled,
 }: IFileUpload) => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(src)
 
@@ -92,6 +94,7 @@ export const FileUpload = ({
     onDrop,
     maxFiles: 1,
     accept: { 'image/*': [] },
+    disabled: isDisabled,
   })
 
   return (
@@ -121,8 +124,9 @@ export const FileUpload = ({
               ) : null}
             </HStack>
           ) : null}
-          <Box flexGrow={1} {...getRootProps()} _hover={{ cursor: 'pointer' }}>
-            <input multiple={false} {...getInputProps()} />
+
+          <Box flexGrow={1} {...getRootProps()} _hover={{ cursor: isDisabled ? 'not-allowed' : 'pointer' }}>
+            <input multiple={false} disabled={isDisabled} {...getInputProps()} />
             {isLoading && childrenOnLoading ? childrenOnLoading : children}
           </Box>
         </HStack>

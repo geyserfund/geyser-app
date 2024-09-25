@@ -95,7 +95,7 @@ export const RewardView = () => {
               {!isMobileMode &&
                 (isProjectOwner ? (
                   <HStack>
-                    <HiddenRewardBadge />
+                    {reward.isHidden && <HiddenRewardBadge />}
                     <RewardEditMenu size="md" reward={reward} />
                   </HStack>
                 ) : (
@@ -164,7 +164,7 @@ export const RewardView = () => {
       <BottomNavBarContainer direction="column">
         <HStack justifyContent={'space-between'} flexWrap="wrap">
           {renderAmountComponent()}
-          <HiddenRewardBadge />
+          {reward.isHidden && <HiddenRewardBadge />}
         </HStack>
         {isProjectOwner ? (
           <RewardEditMenu size="lg" w="full" reward={reward} />

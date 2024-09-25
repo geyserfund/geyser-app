@@ -21,6 +21,8 @@ import { AdditionalUrlModal } from './components/AdditionalUrlModal'
 
 const MIN_LENGTH_TO_QUERY_PROJECT = 3
 
+const MAX_PROJECT_HEADERS = 7
+
 type ProjectFormProps = {
   form: UseFormReturn<ProjectCreationVariables>
   isEdit: boolean
@@ -256,7 +258,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
       <FieldContainer
         title={t('Header')}
-        subtitle={t('Add a header with a video link or by uploading an image to help bring your project to life')}
+        subtitle={t('Add one or multiple images or video links to help bring your project to life')}
       >
         <MediaControlWithReorder
           links={watch('images')}
@@ -267,9 +269,15 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
           name="images"
           control={control}
           render={({ field }) => {
+            const maxReached = field.value.length >= MAX_PROJECT_HEADERS
+
             return (
               <Stack alignItems="start" direction={{ base: 'column', md: 'row' }} w={'full'} pt={4}>
-                <AdditionalUrlModal w="full" onAdd={(url) => field.onChange([...field.value, url])} />
+                <AdditionalUrlModal
+                  w="full"
+                  onAdd={(url) => field.onChange([...field.value, url])}
+                  isDisabled={maxReached}
+                />
                 <FileUpload
                   containerProps={{ flex: 1, w: { base: 'full', md: 'unset' } }}
                   caption={t('For best fit, select horizontal 16:9 image. Image size limit: 10MB.')}
@@ -277,12 +285,20 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
                   onDeleteClick={handleDeleteImage}
                   childrenOnLoading={<UploadBox loading h={{ base: '40px', lg: '64px' }} borderRadius="12px" />}
                   imageCrop={ImageCropAspectRatio.Header}
+                  isDisabled={maxReached}
                 >
                   <UploadBox
                     h={{ base: '40px', lg: '64px' }}
                     borderRadius="12px"
                     flex={1}
-                    title={field.value.length > 0 ? t('Upload additional image') : t('Upload image')}
+                    title={
+                      maxReached
+                        ? t('Max items reached')
+                        : field.value.length > 0
+                        ? t('Upload additional image')
+                        : t('Upload image')
+                    }
+                    opacity={maxReached ? 0.5 : 1}
                     titleProps={{ fontSize: 'lg', light: true }}
                   />
                 </FileUpload>

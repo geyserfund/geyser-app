@@ -28,7 +28,7 @@ export const StatsBlock = ({ title, value, prevValue, isPercent, ...rest }: Stat
         <HStack spacing="0">
           {isHigher > 0 && (
             <>
-              <BsArrowUp color={colors.primary[600]} fontSize="14px" />
+              <BsArrowUp color={colors.primary1[10]} fontSize="14px" />
               <Body size="sm" color="primary1.10" bold>
                 {isHigher}%
               </Body>
@@ -36,7 +36,7 @@ export const StatsBlock = ({ title, value, prevValue, isPercent, ...rest }: Stat
           )}
           {isLower > 0 && (
             <>
-              <BsArrowDown color={colors.secondary.red} fontSize="14px" />
+              <BsArrowDown color={colors.warning[9]} fontSize="14px" />
               <Body size="sm" color="warning.9" bold isTruncated>
                 {isLower}%
               </Body>

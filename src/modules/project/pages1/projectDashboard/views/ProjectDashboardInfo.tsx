@@ -43,7 +43,9 @@ export const ProjectDashboardInfo = () => {
       onCompleted(data) {
         toast.success({
           title: 'Project updated successfully!',
-          description: 'Please wait while we redirect you to the new Project URL.',
+          description: form.formState.dirtyFields.name
+            ? 'Please wait while we redirect you to the new Project URL.'
+            : '',
         })
 
         if (form.formState.dirtyFields.name) {
