@@ -1,31 +1,53 @@
 import { HStack, Image, SkeletonText, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '@/modules/profile/state'
 import { Body } from '@/shared/components/typography'
+import { toInt, useNotification } from '@/utils'
 
 import { ExternalAccountType } from '../../../../../../../../pages/auth'
 import { SkeletonLayout } from '../../../../../../../../shared/components/layouts'
 import { BadgesGroupUrl } from '../../../../../../../../shared/constants'
-import { UserBadge, UserBadgeStatus, UserForProfilePageFragment } from '../../../../../../../../types'
+import { UserBadgeStatus, useUserBadgesQuery } from '../../../../../../../../types'
 import { NostrBadges } from './NostrBadges'
 
-interface BadgesBodyProps {
-  userBadges: UserBadge[]
-  isEdit: boolean
-  userProfile: UserForProfilePageFragment
-}
-
-export const BadgesBody = ({ userBadges, userProfile, isEdit }: BadgesBodyProps) => {
+export const BadgesBody = () => {
   const { t } = useTranslation()
+
+  const isEdit = useViewingOwnProfileAtomValue()
+  console.log('checking own profile', isEdit)
+  const { toast } = useNotification()
+
+  const { userProfile } = useUserProfileAtom()
+
+  const { data: userBadgesData, loading: userBadgeLoading } = useUserBadgesQuery({
+    skip: !userProfile.id,
+    variables: { input: { where: { userId: toInt(userProfile.id) } } },
+    onError() {
+      toast({
+        title: 'Error fetching badges',
+        description: 'Please refresh the page and try again.',
+        status: 'error',
+      })
+    },
+  })
+
+  const userBadges = userBadgesData?.userBadges || []
+
   const nostrId =
     userProfile.externalAccounts.find((account) => account?.accountType === ExternalAccountType.nostr)?.externalId || ''
+
   const hasBadgeNoNostrForOwn = userBadges.length > 0 && !nostrId && isEdit
 
   const showTopSection = hasBadgeNoNostrForOwn || userBadges.length === 0
 
-  const isEmpty = isEdit
-    ? userBadges.length === 0
-    : userBadges.filter((badge) => badge.status === UserBadgeStatus.Accepted).length === 0
+  const hasBadge = isEdit
+    ? userBadges.length > 0
+    : userBadges.filter((badge) => badge.status === UserBadgeStatus.Accepted).length > 0
+
+  if (userBadgeLoading) {
+    return <BadgesBodySkeleton />
+  }
 
   return (
     <>
@@ -34,7 +56,7 @@ export const BadgesBody = ({ userBadges, userProfile, isEdit }: BadgesBodyProps)
           {hasBadgeNoNostrForOwn && <Body light>{t('Login with Nostr to claim the badges you earned!')}</Body>}
         </VStack>
       )}
-      {isEmpty && (
+      {!hasBadge && (
         <VStack
           background="neutral1.3"
           borderRadius="8px"
