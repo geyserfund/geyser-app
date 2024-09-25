@@ -121,6 +121,8 @@ export const discoveryRoutes = [
   getPath('discoveryLanding'),
   getPath('discoveryMyProjects'),
   getPath('discoveryActivity'),
+  getPath('discoveryActivityFollowed'),
+  getPath('discoveryActivityGlobal'),
   getPath('discoveryLeaderboard'),
   getPath('discoveryGrants'),
   getPath('discoveryGrant', PathName.grantId),
