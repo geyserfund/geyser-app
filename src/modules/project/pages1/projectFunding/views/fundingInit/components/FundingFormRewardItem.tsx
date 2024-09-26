@@ -7,6 +7,7 @@ import { useRewardBuy } from '@/modules/project/pages1/projectView/hooks'
 import { ProjectRewardShippingEstimate } from '@/modules/project/pages1/projectView/views/rewards/components'
 import { CardLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
+import { useCurrencyFormatter } from '@/shared/utils/hooks'
 
 import { ImageWithReload } from '../../../../../../../components/ui'
 import { ProjectRewardFragment, RewardCurrency } from '../../../../../../../types'
@@ -22,6 +23,8 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
   const { count, isAvailable, addRewardToBasket, removeRewardFromBasket } = useRewardBuy(reward)
 
   const { project } = useFundingFormAtom()
+
+  const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
 
   if ((count > 0 && showOnSelected) || (showOnEmpty && count === 0)) {
     return (
@@ -77,7 +80,7 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
                 <>
                   <Body bold dark>{`$${reward.cost / 100}`}</Body>
                   <Body medium muted>
-                    {`(${reward.cost.toLocaleString()}`}
+                    {`(${formatSatsAmount(reward.cost)}`}
                     <Box as="span" color={'neutral1.9'}>
                       {' '}
                       sats{')'}
@@ -94,7 +97,7 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
                     </Box>
                   </Body>
                   <Body medium muted>
-                    {`($${reward.cost / 100})`}
+                    {`(${formatUsdAmount(reward.cost)})`}
                   </Body>
                 </>
               )}

@@ -8,6 +8,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { ProjectRewardFragment, ProjectStatus, RewardCurrency } from '@/types'
 
 import { ProjectRewardShippingEstimate } from '../components/ProjectRewardShippingEstimate'
@@ -29,6 +30,8 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
   const { project, isProjectOwner } = useProjectAtom()
 
   const isRewardAvailable = reward.maxClaimable ? reward.maxClaimable - reward.sold > count : true
+
+  const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
 
   const onBuyClick = (e: MouseEvent<HTMLButtonElement>) => {
     e?.stopPropagation()
@@ -125,11 +128,7 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
               <>
                 <Body bold dark>{`$${reward.cost / 100}`}</Body>
                 <Body medium muted>
-                  {`(${reward.cost.toLocaleString()}`}
-                  <Box as="span" color={'neutral1.9'}>
-                    {' '}
-                    sats{')'}
-                  </Box>
+                  {`(${formatSatsAmount(reward.cost)})`}
                 </Body>
               </>
             ) : (
@@ -142,7 +141,7 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
                   </Box>
                 </Body>
                 <Body medium muted>
-                  {`($${reward.cost / 100})`}
+                  {`(${formatUsdAmount(reward.cost)})`}
                 </Body>
               </>
             )}
