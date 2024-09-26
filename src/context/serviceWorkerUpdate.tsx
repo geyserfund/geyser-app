@@ -43,11 +43,7 @@ export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode 
   } = useRegisterSW({
     onRegisteredSW(swUrl, r) {
       if (r) {
-        setInterval(async () => {
-          if (!(!r.installing && navigator)) return
-
-          if ('connection' in navigator && !navigator.onLine) return
-
+        const refetch = async () => {
           const resp = await fetch(swUrl, {
             cache: 'no-store',
             headers: {
@@ -56,6 +52,15 @@ export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode 
             },
           }).catch((error) => console.log('error', error))
           if (resp?.status === 200) await r.update()
+        }
+
+        refetch()
+        setInterval(async () => {
+          if (!(!r.installing && navigator)) return
+
+          if ('connection' in navigator && !navigator.onLine) return
+
+          refetch()
         }, REFETCH_SW_INTERVAL_MS)
       }
     },
