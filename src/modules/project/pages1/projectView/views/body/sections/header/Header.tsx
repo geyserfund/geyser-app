@@ -139,7 +139,12 @@ export const Header = () => {
           position="relative"
           alignItems="start"
         >
-          <Box position={{ base: project.images[0] ? 'absolute' : 'unset', lg: 'unset' }} top={'-48px'} left={'16px'}>
+          <Box
+            position={{ base: project.images[0] ? 'absolute' : 'unset', lg: 'unset' }}
+            top={'-48px'}
+            left={'16px'}
+            zIndex={1}
+          >
             <ImageWithReload
               border="2px solid"
               borderColor="neutral1.1"
