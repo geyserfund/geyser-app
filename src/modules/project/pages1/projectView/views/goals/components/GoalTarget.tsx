@@ -26,7 +26,7 @@ export const GoalTarget = ({ goal, of }: GoalTargetProps) => {
   return (
     <HStack spacing={1}>
       <Body size="sm" muted>
-        {of ? ` ${t('of')}: ` : ''}
+        {of ? ` ${t('of')}  ` : ''}
         <Body as="span" size="sm" dark>
           {formattedTargetAmount}{' '}
         </Body>
