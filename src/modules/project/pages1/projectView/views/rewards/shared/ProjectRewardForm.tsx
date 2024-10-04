@@ -490,7 +490,7 @@ export const ProjectRewardForm = ({
           </VStack>
           {reward.preOrder ? (
             <FieldContainer title={t('Expected Availability Date')} boldTitle={true} flex={1}>
-              <div style={{ position: 'relative', width: '100%' }}>
+              <div style={{ position: 'relative', width: '100%', zIndex: 1000 }}>
                 <CalendarButton
                   onChange={handleFormCalendarChange}
                   value={reward.estimatedAvailabilityDate}
