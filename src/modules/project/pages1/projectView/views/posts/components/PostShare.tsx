@@ -7,12 +7,13 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { Modal } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
-import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import { CopyButton } from '@/shared/molecules'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { ProjectEntryFragment } from '@/types'
 
+import { CampaignContent } from '../../../hooks'
+import { usePostShare } from '../../../hooks/useProjectShare'
 import { ShareBanner } from '../../body/components'
 
 type PostShareProps = {
@@ -24,7 +25,9 @@ export const PostShare = ({ entry, ...props }: PostShareProps) => {
 
   const postShareModal = useModal()
 
-  const postRewardUrl = `${window.location.origin}${getPath('projectPostView', project.name, entry.id)}`
+  const { getSharePostUrl } = usePostShare({ id: entry.id })
+
+  const postRewardUrl = getSharePostUrl({ clickedFrom: CampaignContent.postShareButton })
 
   const twitterPostUrl = generateTwitterShareUrl(postRewardUrl)
 

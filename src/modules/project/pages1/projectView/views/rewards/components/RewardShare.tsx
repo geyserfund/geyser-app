@@ -3,16 +3,15 @@ import { t } from 'i18next'
 import { MouseEvent } from 'react'
 import { PiCopy, PiShareFat, PiXLogo } from 'react-icons/pi'
 
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { Modal } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
-import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import { CopyButton } from '@/shared/molecules'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { ProjectRewardFragment } from '@/types'
 
+import { CampaignContent, useRewardShare } from '../../../hooks/useProjectShare'
 import { ShareBanner } from '../../body/components'
 
 type RewardShareProps = {
@@ -20,11 +19,11 @@ type RewardShareProps = {
 } & ButtonProps
 
 export const RewardShare = ({ reward, ...props }: RewardShareProps) => {
-  const { project } = useProjectAtom()
-
   const rewardShareModal = useModal()
 
-  const projectRewardUrl = `${window.location.origin}${getPath('projectRewardView', project.name, reward.id)}`
+  const { getShareRewardUrl } = useRewardShare({ id: reward.id, name: reward.name })
+
+  const projectRewardUrl = getShareRewardUrl({ clickedFrom: CampaignContent.rewardShareButton })
 
   const twitterPostUrl = generateTwitterShareUrl(projectRewardUrl)
 
