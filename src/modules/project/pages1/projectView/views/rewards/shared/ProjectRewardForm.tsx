@@ -566,7 +566,7 @@ export const ProjectRewardForm = ({
               <VStack pl={2} spacing={2} borderLeft="2px solid" borderColor="primary.400" align={'flex-start'}>
                 <Body medium>
                   {t(
-                    'To maintain their privacy, we ask reward buyers to email you their shipping details directly to your email. Make sure your email is up to date):',
+                    'To maintain their privacy, we ask reward buyers to email you their shipping details directly to your email. Make sure your email is up to date:',
                   )}
                 </Body>
 
