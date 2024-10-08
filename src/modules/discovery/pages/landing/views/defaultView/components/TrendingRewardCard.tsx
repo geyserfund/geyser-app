@@ -73,7 +73,7 @@ export const TrendingRewardCard = ({ reward, ...rest }: TrendingRewardCardProps)
               <>
                 <Body as="span" size="sm" light>
                   $
-                </Body>{' '}
+                </Body>
                 {reward.cost < 100 ? (reward.cost / 100).toFixed(2) : commaFormatted(Math.round(reward.cost / 100))}
                 <Body as="span" size="sm" light>
                   {' '}
