@@ -3,6 +3,7 @@ import React from 'react'
 import { useController, UseControllerProps } from 'react-hook-form'
 
 import { FieldContainer } from '../form'
+import { Body } from '../typography'
 
 type Props = UseControllerProps<any, any> &
   Omit<InputProps, 'size'> & {
@@ -13,6 +14,9 @@ type Props = UseControllerProps<any, any> &
     error?: React.ReactNode
     rightAddon?: React.ReactNode
     required?: boolean
+    infoTooltip?: React.ReactNode
+    size?: 'sm' | 'md' | 'lg'
+    displayValue?: string
   }
 
 export function ControlledTextInput(props: Props) {
@@ -43,24 +47,35 @@ export function ControlledTextInput(props: Props) {
     ? props.error
     : ''
 
+  const title =
+    props.label || props.infoTooltip ? (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+        <Body size="sm" medium>
+          {props.label}
+        </Body>
+        {props.infoTooltip && props.infoTooltip}
+      </div>
+    ) : null
+
   return (
-    <FieldContainer required={props.required} title={props.label} subtitle={props.description} error={error}>
+    <FieldContainer required={props.required} title={title} subtitle={props.description} error={error}>
       <InputGroup>
         <Input
           {...field}
           {...props}
           variant="outline"
-          colorScheme="primary.400"
-          borderColor="neutral.200"
+          colorScheme="primary1.1"
+          borderColor="neutral1.6"
           borderRadius="8px"
-          borderWidth="2px"
+          borderWidth="1px"
           ref={props.inputRef}
           isDisabled={props.isDisabled}
           onBlur={handleBlur}
           onChange={handleChange}
           width={props.width || '100%'}
-          value={field?.value || props.value || ''}
+          value={props.displayValue || field?.value || props.value || ''}
           isInvalid={Boolean(error)}
+          size={props.size || 'md'}
         />
         {props.rightAddon && <InputRightAddon>{props.rightAddon}</InputRightAddon>}
       </InputGroup>

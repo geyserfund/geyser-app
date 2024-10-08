@@ -11,6 +11,7 @@ type Props = UseControllerProps<any, any> &
     label: string
     description?: string
     error?: React.ReactNode
+    resize?: 'none' | 'vertical' | 'horizontal'
   }
 
 export function ControlledTextArea(props: Props) {
@@ -44,13 +45,13 @@ export function ControlledTextArea(props: Props) {
         ref={props.inputRef}
         borderColor="neutral.200"
         borderRadius="8px"
-        borderWidth="2px"
+        borderWidth="1px"
         onBlur={handleBlur}
         onChange={handleChange}
         width={props.width || '100%'}
         value={field.value || ''}
         rows={props.rows || 3}
-        resize="none"
+        resize={props.resize || 'none'}
       />
     </FieldContainer>
   )
