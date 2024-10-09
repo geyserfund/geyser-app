@@ -106,8 +106,10 @@ export const useProjectRewardForm = ({
 
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
 
+  const soldAmount = data?.getProjectReward?.sold || 0
+
   const { control, handleSubmit, reset, watch, formState, setValue, trigger } = useForm<FormValues>({
-    resolver: yupResolver(rewardFormSchema(data?.getProjectReward?.sold || 0)),
+    resolver: yupResolver(rewardFormSchema(soldAmount)),
     defaultValues: {
       name: data?.getProjectReward?.name || '',
       description: data?.getProjectReward?.description || '',
@@ -373,6 +375,7 @@ export const useProjectRewardForm = ({
       formatEstimatedAvailabilityDate,
       handlePromptToggle,
       isPromptChecked,
+      maxClaimableDisabled: soldAmount > 0,
     },
   }
 }

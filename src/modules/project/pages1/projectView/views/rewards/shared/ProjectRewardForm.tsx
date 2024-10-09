@@ -187,6 +187,7 @@ export const ProjectRewardForm = ({
                 control={control}
                 placeholder={'100'}
                 error={errors.maxClaimable?.message}
+                isDisabled={utils.maxClaimableDisabled}
                 infoTooltip={
                   <Tooltip
                     label={t(
