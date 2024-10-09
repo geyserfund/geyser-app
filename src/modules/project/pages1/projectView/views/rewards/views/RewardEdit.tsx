@@ -12,6 +12,7 @@ import { useProjectRewardQuery } from '@/types'
 import { useNotification } from '@/utils'
 
 import { ProjectRewardForm } from '../shared/ProjectRewardForm'
+import { ProjectRewardFormFinal } from '../shared/ProjectRewardFormFinal'
 
 export const RewardEdit = () => {
   const navigate = useNavigate()
@@ -72,6 +73,14 @@ export const RewardEdit = () => {
           {t('Publish')}
         </Button> */}
       </TopNavContainerBar>
+
+      <ProjectRewardFormFinal
+        buttonText={t('Update Reward')}
+        titleText={t('Edit Reward')}
+        createOrUpdate="update"
+        isLaunch={false}
+        rewardId={rewardId}
+      />
 
       <ProjectRewardForm
         hideBackbutton

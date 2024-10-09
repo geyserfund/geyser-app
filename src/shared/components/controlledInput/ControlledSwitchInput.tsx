@@ -35,7 +35,7 @@ export function ControlledSwitchInput(props: Props) {
           onChange={handleChange}
           sx={{ '--switch-track-width': '2.4rem' }}
           value={field?.value || props.value || false}
-          defaultChecked={props.defaultChecked || false}
+          defaultChecked={field?.value || props.value || false}
         />
       </HStack>
       {props.error && (

@@ -36,7 +36,7 @@ export function ControlledSelect(props: Props) {
           {...field}
           size={props.size}
           onChange={(e) => {
-            field.onChange(e.target.value)
+            field.onChange(e)
             if (props.onChange) {
               props.onChange(e)
             }
