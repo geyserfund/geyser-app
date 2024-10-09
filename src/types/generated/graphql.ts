@@ -1763,18 +1763,18 @@ export type Project = {
   fundingTxsCount?: Maybe<Scalars['Int']['output']>;
   goalsCount?: Maybe<Scalars['Int']['output']>;
   /** Returns the project's grant applications. */
-  grantApplications: Array<GrantApplicant>;
-  id: Scalars['BigInt']['output'];
+  grantApplications: Array<GrantApplicant>
+  id: Scalars['BigInt']['output']
   /**
    * Project header images.
    * @deprecated Use images instead.
    */
-  image?: Maybe<Scalars['String']['output']>;
-  images: Array<Scalars['String']['output']>;
-  keys: ProjectKeys;
-  launchedAt?: Maybe<Scalars['Date']['output']>;
-  links: Array<Scalars['String']['output']>;
-  location?: Maybe<Location>;
+  image?: Maybe<Scalars['String']['output']>
+  images: Array<Scalars['String']['output']>
+  keys: ProjectKeys
+  launchedAt?: Maybe<Scalars['Date']['output']>
+  links: Array<Scalars['String']['output']>
+  location?: Maybe<Location>
   /** @deprecated milestones are deprecated, use the goals instead */
   milestones: Array<Milestone>;
   /** Unique name for the project. Used for the project URL and lightning address. */
@@ -2056,14 +2056,14 @@ export type ProjectReward = {
   /** Estimated delivery time from the time of purchase */
   estimatedDeliveryInWeeks?: Maybe<Scalars['Int']['output']>;
   /** Boolean value to indicate whether this reward requires shipping */
-  hasShipping: Scalars['Boolean']['output'];
-  id: Scalars['BigInt']['output'];
+  hasShipping: Scalars['Boolean']['output']
+  id: Scalars['BigInt']['output']
   /**
    * Project reward images.
    * @deprecated Use images instead.
    */
-  image?: Maybe<Scalars['String']['output']>;
-  images: Array<Scalars['String']['output']>;
+  image?: Maybe<Scalars['String']['output']>
+  images: Array<Scalars['String']['output']>
   /** Boolean value to indicate whether this reward is an addon */
   isAddon: Scalars['Boolean']['output'];
   /** Boolean value to indicate whether this reward is hidden */
@@ -2111,12 +2111,12 @@ export type ProjectRewardsGroupedByRewardIdStats = {
 };
 
 export type ProjectRewardsGroupedByRewardIdStatsProjectReward = {
-  __typename?: 'ProjectRewardsGroupedByRewardIdStatsProjectReward';
-  id: Scalars['BigInt']['output'];
-  image?: Maybe<Scalars['String']['output']>;
-  images?: Maybe<Scalars['String']['output']>;
-  name: Scalars['String']['output'];
-};
+  __typename?: 'ProjectRewardsGroupedByRewardIdStatsProjectReward'
+  id: Scalars['BigInt']['output']
+  image?: Maybe<Scalars['String']['output']>
+  images?: Maybe<Scalars['String']['output']>
+  name: Scalars['String']['output']
+}
 
 export type ProjectRewardsStats = {
   __typename?: 'ProjectRewardsStats';
@@ -4264,49 +4264,57 @@ export type ProfileNotificationSettingsResolvers<ContextType = any, ParentType e
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
-  ambassadors?: Resolver<Array<ResolversTypes['Ambassador']>, ParentType, ContextType>;
-  balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  balanceUsdCent?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  defaultGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  entries?: Resolver<Array<ResolversTypes['Entry']>, ParentType, ContextType, Partial<ProjectEntriesArgs>>;
-  entriesCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  followers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
-  followersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  funders?: Resolver<Array<ResolversTypes['Funder']>, ParentType, ContextType>;
-  fundersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType>;
-  fundingTxsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  goalsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  grantApplications?: Resolver<Array<ResolversTypes['GrantApplicant']>, ParentType, ContextType, Partial<ProjectGrantApplicationsArgs>>;
-  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  keys?: Resolver<ResolversTypes['ProjectKeys'], ParentType, ContextType>;
-  launchedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  links?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
-  milestones?: Resolver<Array<ResolversTypes['Milestone']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  owners?: Resolver<Array<ResolversTypes['Owner']>, ParentType, ContextType>;
-  rewardCurrency?: Resolver<Maybe<ResolversTypes['RewardCurrency']>, ParentType, ContextType>;
-  rewards?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType>;
-  rewardsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  shortDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  sponsors?: Resolver<Array<ResolversTypes['Sponsor']>, ParentType, ContextType>;
-  statistics?: Resolver<Maybe<ResolversTypes['ProjectStatistics']>, ParentType, ContextType>;
-  status?: Resolver<Maybe<ResolversTypes['ProjectStatus']>, ParentType, ContextType>;
-  tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>;
-  thumbnailImage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  wallets?: Resolver<Array<ResolversTypes['Wallet']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type ProjectResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project'],
+> = {
+  ambassadors?: Resolver<Array<ResolversTypes['Ambassador']>, ParentType, ContextType>
+  balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  balanceUsdCent?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  defaultGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  entries?: Resolver<Array<ResolversTypes['Entry']>, ParentType, ContextType, Partial<ProjectEntriesArgs>>
+  entriesCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  followers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>
+  followersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  funders?: Resolver<Array<ResolversTypes['Funder']>, ParentType, ContextType>
+  fundersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType>
+  fundingTxsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  goalsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  grantApplications?: Resolver<
+    Array<ResolversTypes['GrantApplicant']>,
+    ParentType,
+    ContextType,
+    Partial<ProjectGrantApplicationsArgs>
+  >
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>
+  keys?: Resolver<ResolversTypes['ProjectKeys'], ParentType, ContextType>
+  launchedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
+  links?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>
+  location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>
+  milestones?: Resolver<Array<ResolversTypes['Milestone']>, ParentType, ContextType>
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  owners?: Resolver<Array<ResolversTypes['Owner']>, ParentType, ContextType>
+  rewardCurrency?: Resolver<Maybe<ResolversTypes['RewardCurrency']>, ParentType, ContextType>
+  rewards?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType>
+  rewardsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  shortDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  sponsors?: Resolver<Array<ResolversTypes['Sponsor']>, ParentType, ContextType>
+  statistics?: Resolver<Maybe<ResolversTypes['ProjectStatistics']>, ParentType, ContextType>
+  status?: Resolver<Maybe<ResolversTypes['ProjectStatus']>, ParentType, ContextType>
+  tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>
+  thumbnailImage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  wallets?: Resolver<Array<ResolversTypes['Wallet']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type ProjectActivatedSubscriptionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectActivatedSubscriptionResponse'] = ResolversParentTypes['ProjectActivatedSubscriptionResponse']> = {
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
@@ -4439,32 +4447,35 @@ export type ProjectRegionsGetResultResolvers<ContextType = any, ParentType exten
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProjectRewardResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectReward'] = ResolversParentTypes['ProjectReward']> = {
-  category?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  deletedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  estimatedAvailabilityDate?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  estimatedDeliveryInWeeks?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  hasShipping?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  isAddon?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  isHidden?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  maxClaimable?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  preOrder?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
-  rewardCurrency?: Resolver<ResolversTypes['RewardCurrency'], ParentType, ContextType>;
-  sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  stock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type ProjectRewardResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectReward'] = ResolversParentTypes['ProjectReward'],
+> = {
+  category?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  deletedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  estimatedAvailabilityDate?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
+  estimatedDeliveryInWeeks?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  hasShipping?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>
+  isAddon?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  isHidden?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  maxClaimable?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  preOrder?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>
+  rewardCurrency?: Resolver<ResolversTypes['RewardCurrency'], ParentType, ContextType>
+  sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  stock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type ProjectRewardTrendingWeeklyGetRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRewardTrendingWeeklyGetRow'] = ResolversParentTypes['ProjectRewardTrendingWeeklyGetRow']> = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -4478,13 +4489,16 @@ export type ProjectRewardsGroupedByRewardIdStatsResolvers<ContextType = any, Par
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProjectRewardsGroupedByRewardIdStatsProjectRewardResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRewardsGroupedByRewardIdStatsProjectReward'] = ResolversParentTypes['ProjectRewardsGroupedByRewardIdStatsProjectReward']> = {
-  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  images?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export type ProjectRewardsGroupedByRewardIdStatsProjectRewardResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectRewardsGroupedByRewardIdStatsProjectReward'] = ResolversParentTypes['ProjectRewardsGroupedByRewardIdStatsProjectReward'],
+> = {
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  images?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
 
 export type ProjectRewardsStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRewardsStats'] = ResolversParentTypes['ProjectRewardsStats']> = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
