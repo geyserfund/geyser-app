@@ -26,7 +26,9 @@ export const Story = () => {
   return (
     <BodySectionLayout title={t('Story')}>
       <CardLayout w="full" direction="column" spacing={5} paddingX={{ base: 3, lg: 6 }} paddingY={{ base: 6, lg: 8 }}>
-        <Body bold>{project.shortDescription}</Body>
+        <Body bold size="2xl">
+          {project.shortDescription}
+        </Body>
         <article>
           <MarkdownField preview content={project?.description} />
         </article>
