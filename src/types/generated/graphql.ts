@@ -289,6 +289,7 @@ export type CreateProjectInput = {
 
 export type CreateProjectRewardInput = {
   category?: InputMaybe<Scalars['String']['input']>;
+  confirmationMessage?: InputMaybe<Scalars['String']['input']>;
   /** Cost of the reward, currently only in USD cents */
   cost: Scalars['Int']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
@@ -301,7 +302,9 @@ export type CreateProjectRewardInput = {
   maxClaimable?: InputMaybe<Scalars['Int']['input']>;
   name: Scalars['String']['input'];
   preOrder?: InputMaybe<Scalars['Boolean']['input']>;
+  privateCommentPrompts: Array<PrivateCommentPrompt>;
   projectId: Scalars['BigInt']['input'];
+  shortDescription?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateWalletInput = {
@@ -545,6 +548,7 @@ export type FundingCreateFromPodcastKeysendInput = {
   externalId?: InputMaybe<Scalars['String']['input']>;
   externalUsername?: InputMaybe<Scalars['String']['input']>;
   paidAt: Scalars['Date']['input'];
+  privateComment?: InputMaybe<Scalars['String']['input']>;
   projectId: Scalars['BigInt']['input'];
 };
 
@@ -568,6 +572,7 @@ export type FundingMetadataInput = {
   comment?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   media?: InputMaybe<Scalars['String']['input']>;
+  privateComment?: InputMaybe<Scalars['String']['input']>;
 };
 
 export enum FundingMethod {
@@ -657,6 +662,7 @@ export type FundingTx = {
   order?: Maybe<Order>;
   paidAt?: Maybe<Scalars['Date']['output']>;
   paymentRequest?: Maybe<Scalars['String']['output']>;
+  privateComment?: Maybe<Scalars['String']['output']>;
   projectGoalId?: Maybe<Scalars['BigInt']['output']>;
   projectId: Scalars['BigInt']['output'];
   source: Scalars['String']['output'];
@@ -1729,6 +1735,11 @@ export type PaginationInput = {
   take?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export enum PrivateCommentPrompt {
+  NostrNpub = 'NOSTR_NPUB',
+  ProjectRewardSpecs = 'PROJECT_REWARD_SPECS'
+}
+
 export type ProfileNotificationSettings = {
   __typename?: 'ProfileNotificationSettings';
   creatorSettings: Array<CreatorNotificationSettings>;
@@ -1763,18 +1774,18 @@ export type Project = {
   fundingTxsCount?: Maybe<Scalars['Int']['output']>;
   goalsCount?: Maybe<Scalars['Int']['output']>;
   /** Returns the project's grant applications. */
-  grantApplications: Array<GrantApplicant>
-  id: Scalars['BigInt']['output']
+  grantApplications: Array<GrantApplicant>;
+  id: Scalars['BigInt']['output'];
   /**
    * Project header images.
    * @deprecated Use images instead.
    */
-  image?: Maybe<Scalars['String']['output']>
-  images: Array<Scalars['String']['output']>
-  keys: ProjectKeys
-  launchedAt?: Maybe<Scalars['Date']['output']>
-  links: Array<Scalars['String']['output']>
-  location?: Maybe<Location>
+  image?: Maybe<Scalars['String']['output']>;
+  images: Array<Scalars['String']['output']>;
+  keys: ProjectKeys;
+  launchedAt?: Maybe<Scalars['Date']['output']>;
+  links: Array<Scalars['String']['output']>;
+  location?: Maybe<Location>;
   /** @deprecated milestones are deprecated, use the goals instead */
   milestones: Array<Milestone>;
   /** Unique name for the project. Used for the project URL and lightning address. */
@@ -2038,6 +2049,8 @@ export type ProjectReward = {
   __typename?: 'ProjectReward';
   /** Category of ProjectReward */
   category?: Maybe<Scalars['String']['output']>;
+  /** Confirmation message for the reward */
+  confirmationMessage?: Maybe<Scalars['String']['output']>;
   /** Cost of the reward, priced in USD cents. */
   cost: Scalars['Int']['output'];
   /** The date the creator created the reward */
@@ -2056,14 +2069,14 @@ export type ProjectReward = {
   /** Estimated delivery time from the time of purchase */
   estimatedDeliveryInWeeks?: Maybe<Scalars['Int']['output']>;
   /** Boolean value to indicate whether this reward requires shipping */
-  hasShipping: Scalars['Boolean']['output']
-  id: Scalars['BigInt']['output']
+  hasShipping: Scalars['Boolean']['output'];
+  id: Scalars['BigInt']['output'];
   /**
    * Project reward images.
    * @deprecated Use images instead.
    */
-  image?: Maybe<Scalars['String']['output']>
-  images: Array<Scalars['String']['output']>
+  image?: Maybe<Scalars['String']['output']>;
+  images: Array<Scalars['String']['output']>;
   /** Boolean value to indicate whether this reward is an addon */
   isAddon: Scalars['Boolean']['output'];
   /** Boolean value to indicate whether this reward is hidden */
@@ -2074,10 +2087,14 @@ export type ProjectReward = {
   name: Scalars['String']['output'];
   /** Boolean value to indicate whether this reward is in development or ready to ship */
   preOrder: Scalars['Boolean']['output'];
+  /** Private comment prompts for the reward */
+  privateCommentPrompts: Array<PrivateCommentPrompt>;
   /** Boolean value to indicate whether this reward requires shipping */
   project: Project;
   /** Currency in which the reward cost is stored. */
   rewardCurrency: RewardCurrency;
+  /** Short description of the reward. */
+  shortDescription?: Maybe<Scalars['String']['output']>;
   /** Number of times this Project Reward was sold. */
   sold: Scalars['Int']['output'];
   /** Tracks the stock of the reward */
@@ -2111,12 +2128,12 @@ export type ProjectRewardsGroupedByRewardIdStats = {
 };
 
 export type ProjectRewardsGroupedByRewardIdStatsProjectReward = {
-  __typename?: 'ProjectRewardsGroupedByRewardIdStatsProjectReward'
-  id: Scalars['BigInt']['output']
-  image?: Maybe<Scalars['String']['output']>
-  images?: Maybe<Scalars['String']['output']>
-  name: Scalars['String']['output']
-}
+  __typename?: 'ProjectRewardsGroupedByRewardIdStatsProjectReward';
+  id: Scalars['BigInt']['output'];
+  image?: Maybe<Scalars['String']['output']>;
+  images?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+};
 
 export type ProjectRewardsStats = {
   __typename?: 'ProjectRewardsStats';
@@ -2669,6 +2686,7 @@ export type UpdateProjectInput = {
 
 export type UpdateProjectRewardInput = {
   category?: InputMaybe<Scalars['String']['input']>;
+  confirmationMessage?: InputMaybe<Scalars['String']['input']>;
   /** Cost of the reward, priced in USD cents */
   cost?: InputMaybe<Scalars['Int']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
@@ -2681,7 +2699,9 @@ export type UpdateProjectRewardInput = {
   maxClaimable?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   preOrder?: InputMaybe<Scalars['Boolean']['input']>;
+  privateCommentPrompts?: InputMaybe<Array<PrivateCommentPrompt>>;
   projectRewardId: Scalars['BigInt']['input'];
+  shortDescription?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserInput = {
@@ -3199,6 +3219,7 @@ export type ResolversTypes = {
   PageViewCountGraph: ResolverTypeWrapper<PageViewCountGraph>;
   PaginationCursor: ResolverTypeWrapper<PaginationCursor>;
   PaginationInput: PaginationInput;
+  PrivateCommentPrompt: PrivateCommentPrompt;
   ProfileNotificationSettings: ResolverTypeWrapper<ProfileNotificationSettings>;
   Project: ResolverTypeWrapper<Project>;
   ProjectActivatedSubscriptionResponse: ResolverTypeWrapper<ProjectActivatedSubscriptionResponse>;
@@ -3894,6 +3915,7 @@ export type FundingTxResolvers<ContextType = any, ParentType extends ResolversPa
   order?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType>;
   paidAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   paymentRequest?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  privateComment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   projectGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -4264,57 +4286,49 @@ export type ProfileNotificationSettingsResolvers<ContextType = any, ParentType e
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProjectResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project'],
-> = {
-  ambassadors?: Resolver<Array<ResolversTypes['Ambassador']>, ParentType, ContextType>
-  balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  balanceUsdCent?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  defaultGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  entries?: Resolver<Array<ResolversTypes['Entry']>, ParentType, ContextType, Partial<ProjectEntriesArgs>>
-  entriesCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
-  followers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>
-  followersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
-  funders?: Resolver<Array<ResolversTypes['Funder']>, ParentType, ContextType>
-  fundersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
-  fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType>
-  fundingTxsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
-  goalsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
-  grantApplications?: Resolver<
-    Array<ResolversTypes['GrantApplicant']>,
-    ParentType,
-    ContextType,
-    Partial<ProjectGrantApplicationsArgs>
-  >
-  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
-  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>
-  keys?: Resolver<ResolversTypes['ProjectKeys'], ParentType, ContextType>
-  launchedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
-  links?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>
-  location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>
-  milestones?: Resolver<Array<ResolversTypes['Milestone']>, ParentType, ContextType>
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  owners?: Resolver<Array<ResolversTypes['Owner']>, ParentType, ContextType>
-  rewardCurrency?: Resolver<Maybe<ResolversTypes['RewardCurrency']>, ParentType, ContextType>
-  rewards?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType>
-  rewardsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
-  shortDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  sponsors?: Resolver<Array<ResolversTypes['Sponsor']>, ParentType, ContextType>
-  statistics?: Resolver<Maybe<ResolversTypes['ProjectStatistics']>, ParentType, ContextType>
-  status?: Resolver<Maybe<ResolversTypes['ProjectStatus']>, ParentType, ContextType>
-  tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>
-  thumbnailImage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>
-  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  wallets?: Resolver<Array<ResolversTypes['Wallet']>, ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
-}
+export type ProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
+  ambassadors?: Resolver<Array<ResolversTypes['Ambassador']>, ParentType, ContextType>;
+  balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  balanceUsdCent?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  defaultGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  entries?: Resolver<Array<ResolversTypes['Entry']>, ParentType, ContextType, Partial<ProjectEntriesArgs>>;
+  entriesCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  followers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
+  followersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  funders?: Resolver<Array<ResolversTypes['Funder']>, ParentType, ContextType>;
+  fundersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType>;
+  fundingTxsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  goalsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  grantApplications?: Resolver<Array<ResolversTypes['GrantApplicant']>, ParentType, ContextType, Partial<ProjectGrantApplicationsArgs>>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  keys?: Resolver<ResolversTypes['ProjectKeys'], ParentType, ContextType>;
+  launchedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  links?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
+  milestones?: Resolver<Array<ResolversTypes['Milestone']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  owners?: Resolver<Array<ResolversTypes['Owner']>, ParentType, ContextType>;
+  rewardCurrency?: Resolver<Maybe<ResolversTypes['RewardCurrency']>, ParentType, ContextType>;
+  rewards?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType>;
+  rewardsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  shortDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  sponsors?: Resolver<Array<ResolversTypes['Sponsor']>, ParentType, ContextType>;
+  statistics?: Resolver<Maybe<ResolversTypes['ProjectStatistics']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['ProjectStatus']>, ParentType, ContextType>;
+  tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>;
+  thumbnailImage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  wallets?: Resolver<Array<ResolversTypes['Wallet']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type ProjectActivatedSubscriptionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectActivatedSubscriptionResponse'] = ResolversParentTypes['ProjectActivatedSubscriptionResponse']> = {
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
@@ -4447,35 +4461,35 @@ export type ProjectRegionsGetResultResolvers<ContextType = any, ParentType exten
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProjectRewardResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['ProjectReward'] = ResolversParentTypes['ProjectReward'],
-> = {
-  category?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
-  deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
-  deletedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  estimatedAvailabilityDate?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>
-  estimatedDeliveryInWeeks?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
-  hasShipping?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
-  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
-  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>
-  isAddon?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
-  isHidden?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
-  maxClaimable?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  preOrder?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
-  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>
-  rewardCurrency?: Resolver<ResolversTypes['RewardCurrency'], ParentType, ContextType>
-  sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  stock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
-  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
-  uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
-}
+export type ProjectRewardResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectReward'] = ResolversParentTypes['ProjectReward']> = {
+  category?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  confirmationMessage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  deletedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  estimatedAvailabilityDate?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  estimatedDeliveryInWeeks?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  hasShipping?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  isAddon?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isHidden?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  maxClaimable?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  preOrder?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  privateCommentPrompts?: Resolver<Array<ResolversTypes['PrivateCommentPrompt']>, ParentType, ContextType>;
+  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
+  rewardCurrency?: Resolver<ResolversTypes['RewardCurrency'], ParentType, ContextType>;
+  shortDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  stock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type ProjectRewardTrendingWeeklyGetRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRewardTrendingWeeklyGetRow'] = ResolversParentTypes['ProjectRewardTrendingWeeklyGetRow']> = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -4489,16 +4503,13 @@ export type ProjectRewardsGroupedByRewardIdStatsResolvers<ContextType = any, Par
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProjectRewardsGroupedByRewardIdStatsProjectRewardResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['ProjectRewardsGroupedByRewardIdStatsProjectReward'] = ResolversParentTypes['ProjectRewardsGroupedByRewardIdStatsProjectReward'],
-> = {
-  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
-  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  images?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
-}
+export type ProjectRewardsGroupedByRewardIdStatsProjectRewardResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRewardsGroupedByRewardIdStatsProjectReward'] = ResolversParentTypes['ProjectRewardsGroupedByRewardIdStatsProjectReward']> = {
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  images?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type ProjectRewardsStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRewardsStats'] = ResolversParentTypes['ProjectRewardsStats']> = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -5685,7 +5696,7 @@ export type ProjectRewardSoldGraphStatsFragment = { __typename?: 'ProjectStats',
 
 export type ProjectFundingMethodStatsFragment = { __typename?: 'ProjectStats', current?: { __typename?: 'ProjectStatsBase', projectFundingTxs?: { __typename?: 'ProjectFundingTxStats', methodSum?: Array<{ __typename?: 'FundingTxMethodSum', sum: number, method?: string | null } | null> | null } | null } | null };
 
-export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, cost: number, images: Array<string>, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, rewardCurrency: RewardCurrency, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null };
+export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, shortDescription?: string | null, cost: number, images: Array<string>, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, rewardCurrency: RewardCurrency, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null, confirmationMessage?: string | null, privateCommentPrompts: Array<PrivateCommentPrompt> };
 
 export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }> };
 
@@ -7746,6 +7757,7 @@ export const ProjectRewardFragmentDoc = gql`
   id
   name
   description
+  shortDescription
   cost
   images
   deleted
@@ -7760,6 +7772,8 @@ export const ProjectRewardFragmentDoc = gql`
   preOrder
   estimatedAvailabilityDate
   estimatedDeliveryInWeeks
+  confirmationMessage
+  privateCommentPrompts
 }
     `;
 export const WalletContributionLimitsFragmentDoc = gql`

@@ -3,6 +3,7 @@ import React from 'react'
 import { useController, UseControllerProps } from 'react-hook-form'
 
 import { FieldContainer } from '../form'
+import { Body } from '../typography'
 
 type Props = UseControllerProps<any, any> &
   Omit<TextareaProps, 'size'> & {
@@ -37,8 +38,20 @@ export function ControlledTextArea(props: Props) {
     }
   }
 
+  const label = props.label ? (
+    <Body size={'sm'} medium>
+      {props.label}
+    </Body>
+  ) : null
+
+  const description = props.description ? (
+    <Body size={'md'} light pr={{ base: 0, lg: 2 }} mb={2}>
+      {props.description}
+    </Body>
+  ) : null
+
   return (
-    <FieldContainer title={props.label} subtitle={props.description} error={props.error}>
+    <FieldContainer title={label} subtitle={description} error={props.error}>
       <Textarea
         {...field}
         {...props}

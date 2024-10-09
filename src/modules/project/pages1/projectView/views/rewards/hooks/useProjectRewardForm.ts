@@ -1,7 +1,9 @@
+/* eslint-disable complexity */
+
 import { gql, useQuery } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { format } from 'date-fns'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 import * as yup from 'yup'
@@ -9,10 +11,11 @@ import * as yup from 'yup'
 import { useBTCConverter } from '@/helpers'
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { PathName } from '@/shared/constants'
+import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import {
   CreateProjectRewardInput,
+  PrivateCommentPrompt,
   ProjectRewardFragment,
   RewardCurrency,
   Satoshis,
@@ -35,7 +38,8 @@ const REWARD_CATEGORIES_QUERY = gql`
 
 const rewardFormSchema = yup.object().shape({
   name: yup.string().required('Name is required').max(50, 'Name must be at most 50 characters long'),
-  description: yup.string().max(400, 'Description must be at most 400 characters long'),
+  description: yup.string().max(1200, 'Description must be at most 1200 characters long'),
+  shortDescription: yup.string().max(250, 'Short Description must be at most 250 characters long'),
   cost: yup
     .number()
     .typeError('Price is required')
@@ -55,6 +59,8 @@ const rewardFormSchema = yup.object().shape({
   rewardCurrency: yup.string(),
   estimatedAvailabilityDate: yup.date().nullable(),
   estimatedDeliveryInWeeks: yup.number().nullable().min(0, 'Delivery time must be greater than or equal to 0'),
+  confirmationMessage: yup.string().max(500, 'Confirmation message must be at most 500 characters long'),
+  privateCommentPrompts: yup.array().of(yup.string()),
 })
 
 type UseProjectRewardFormProps = {
@@ -65,8 +71,6 @@ type UseProjectRewardFormProps = {
 export const useProjectRewardForm = ({ rewardId, createOrUpdate }: UseProjectRewardFormProps) => {
   const navigate = useNavigate()
   const toast = useNotification()
-
-  console.log('rewardId', rewardId)
 
   const { loading: rewardLoading, data } = useProjectRewardQuery({
     skip: !rewardId,
@@ -90,13 +94,12 @@ export const useProjectRewardForm = ({ rewardId, createOrUpdate }: UseProjectRew
 
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
 
-  console.log('reward', data)
-
   const { control, handleSubmit, reset, watch, formState, setValue, trigger } = useForm<FormValues>({
     resolver: yupResolver(rewardFormSchema),
     defaultValues: {
       name: data?.getProjectReward?.name || '',
       description: data?.getProjectReward?.description || '',
+      shortDescription: data?.getProjectReward?.shortDescription || '',
       cost: data?.getProjectReward?.cost || 0,
       maxClaimable: data?.getProjectReward?.maxClaimable || null,
       images: data?.getProjectReward?.images || [],
@@ -107,6 +110,8 @@ export const useProjectRewardForm = ({ rewardId, createOrUpdate }: UseProjectRew
       preOrder: data?.getProjectReward?.preOrder || false,
       estimatedAvailabilityDate: data?.getProjectReward?.estimatedAvailabilityDate || null,
       estimatedDeliveryInWeeks: data?.getProjectReward?.estimatedDeliveryInWeeks || null,
+      privateCommentPrompts: data?.getProjectReward?.privateCommentPrompts || [],
+      confirmationMessage: data?.getProjectReward?.confirmationMessage || '',
       rewardCurrency: projectCurrency,
     },
     mode: 'onBlur',
@@ -130,6 +135,7 @@ export const useProjectRewardForm = ({ rewardId, createOrUpdate }: UseProjectRew
       reset({
         name: data?.getProjectReward?.name || '',
         description: data?.getProjectReward?.description || '',
+        shortDescription: data?.getProjectReward?.shortDescription || '',
         cost: data?.getProjectReward?.cost || 0,
         maxClaimable: data?.getProjectReward?.maxClaimable || null,
         images: data?.getProjectReward?.images || [],
@@ -140,6 +146,8 @@ export const useProjectRewardForm = ({ rewardId, createOrUpdate }: UseProjectRew
         preOrder: data?.getProjectReward?.preOrder || false,
         estimatedAvailabilityDate: data?.getProjectReward?.estimatedAvailabilityDate || null,
         estimatedDeliveryInWeeks: data?.getProjectReward?.estimatedDeliveryInWeeks || null,
+        privateCommentPrompts: data?.getProjectReward?.privateCommentPrompts || [],
+        confirmationMessage: data?.getProjectReward?.confirmationMessage || '',
         rewardCurrency: projectCurrency,
       })
     }
@@ -149,6 +157,7 @@ export const useProjectRewardForm = ({ rewardId, createOrUpdate }: UseProjectRew
     const commonData = {
       name: formData.name.trim(),
       description: formData.description,
+      shortDescription: formData.shortDescription,
       cost: formData.cost,
       maxClaimable: formData.maxClaimable,
       images: formData.images,
@@ -159,6 +168,8 @@ export const useProjectRewardForm = ({ rewardId, createOrUpdate }: UseProjectRew
       preOrder: formData.preOrder,
       estimatedAvailabilityDate: formData.estimatedAvailabilityDate,
       estimatedDeliveryInWeeks: formData.estimatedDeliveryInWeeks,
+      privateCommentPrompts: formData.privateCommentPrompts,
+      confirmationMessage: formData.confirmationMessage,
     }
 
     if (data?.getProjectReward && createOrUpdate === 'update') {
@@ -169,9 +180,19 @@ export const useProjectRewardForm = ({ rewardId, createOrUpdate }: UseProjectRew
 
       updateReward.execute({
         variables: { input: updateInput },
-        onCompleted() {
+        onCompleted(data) {
           reset()
-          toast.success({ title: 'Successfully updated project reward!' })
+          toast.success({
+            title: 'Successfully updated!',
+            description: `Reward ${data.projectRewardUpdate.name} was successfully updated`,
+          })
+          navigate(getPath('projectRewardView', project.name, data.projectRewardUpdate.id))
+        },
+        onError(error) {
+          toast.error({
+            title: 'Failed to update reward',
+            description: `${error}`,
+          })
         },
       })
     } else {
@@ -182,10 +203,10 @@ export const useProjectRewardForm = ({ rewardId, createOrUpdate }: UseProjectRew
 
       createReward.execute({
         variables: { input: createInput },
-        onCompleted() {
+        onCompleted(data) {
           reset()
           toast.success({ title: 'Successfully created project reward!' })
-          navigate(PathName.projectRewards)
+          navigate(getPath('projectRewardView', project.name, data.projectRewardCreate.id))
         },
         onError(error) {
           toast.error({
@@ -280,6 +301,28 @@ export const useProjectRewardForm = ({ rewardId, createOrUpdate }: UseProjectRew
     return date ? format(date, 'MMM yyyy') : ''
   }
 
+  const privateCommentPrompts = watch('privateCommentPrompts') || []
+
+  const handlePromptToggle = useCallback(
+    (prompt: PrivateCommentPrompt) => {
+      setValue(
+        'privateCommentPrompts',
+        privateCommentPrompts.includes(prompt)
+          ? privateCommentPrompts.filter((p) => p !== prompt)
+          : [...privateCommentPrompts, prompt],
+        { shouldDirty: true },
+      )
+    },
+    [privateCommentPrompts, setValue],
+  )
+
+  const isPromptChecked = useCallback(
+    (prompt: PrivateCommentPrompt) => {
+      return privateCommentPrompts.includes(prompt)
+    },
+    [privateCommentPrompts],
+  )
+
   return {
     control,
     handleSubmit: handleSubmit(onSubmit),
@@ -308,6 +351,8 @@ export const useProjectRewardForm = ({ rewardId, createOrUpdate }: UseProjectRew
       handleImageUpload,
       handleDeleteImage,
       formatEstimatedAvailabilityDate,
+      handlePromptToggle,
+      isPromptChecked,
     },
   }
 }

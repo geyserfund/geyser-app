@@ -18,7 +18,7 @@ import { getPath } from '@/shared/constants'
 import { CalendarButton, CreatorEmailButton, FileUpload } from '@/shared/molecules'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { MediaControlWithReorder } from '@/shared/molecules/MediaControlWithReorder'
-import { RewardCurrency } from '@/types'
+import { PrivateCommentPrompt, RewardCurrency } from '@/types'
 
 import { UpdateCurrencyModal } from '../components/UpdateCurrencyModal'
 import { useProjectRewardForm } from '../hooks/useProjectRewardForm'
@@ -222,6 +222,16 @@ export const ProjectRewardFormFinal = ({
               />
             </Stack>
             <Stack direction={{ base: 'column', lg: 'row' }}>
+              <ControlledTextInput
+                label={t('Short Description')}
+                name="shortDescription"
+                control={control}
+                placeholder={t('Describe the item you would like to sell')}
+                error={errors.shortDescription?.message}
+                size="sm"
+              />
+            </Stack>
+            <Stack direction={{ base: 'column', lg: 'row' }}>
               <ControlledTextArea
                 label={t('Description')}
                 name="description"
@@ -235,13 +245,17 @@ export const ProjectRewardFormFinal = ({
             <CardLayout padding={4} overflow="none">
               <VStack alignItems={'flex-start'}>
                 <ControlledSwitchInput
-                  label={t('Pre-Order')}
+                  labelComponent={
+                    <Body size="md" medium>
+                      {t('Pre-Order')}
+                    </Body>
+                  }
                   name="preOrder"
                   control={control}
                   defaultChecked={watch('preOrder')}
                 />
 
-                <Body size={'md'} light pr={{ base: 0, lg: 2 }} maxWidth={'450px'}>
+                <Body size={'md'} light pr={{ base: 0, lg: 2 }}>
                   {t(
                     "For rewards that are still in development and not ready to ship, set them to 'Pre-order' to enable advance purchases by users.",
                   )}
@@ -305,11 +319,58 @@ export const ProjectRewardFormFinal = ({
                 </VStack>
               )}
             </CardLayout>
+
+            <CardLayout padding={4} overflow="none">
+              <VStack alignItems={'flex-start'}>
+                <ControlledTextArea
+                  label={t('Confirmation Message')}
+                  name="confirmationMessage"
+                  description={t(
+                    'Set a custom message to thank contributors, provide important details, or share any additional information you’d like them to know after they claim the reward.',
+                  )}
+                  control={control}
+                  placeholder={t('Enter your message here...')}
+                />
+              </VStack>
+            </CardLayout>
+
+            <CardLayout>
+              <VStack alignItems={'flex-start'}>
+                <Body size={'md'} medium>
+                  {t('Private comment')}
+                </Body>
+
+                <Body size={'md'} light>
+                  {t(
+                    'Contributors can always send you a private message with additional information. You can also select predefined options below to request specific details from them in the private message. If selected, the private comment becomes mandatory for the contributor.',
+                  )}
+                </Body>
+                <ControlledSwitchInput
+                  label={t('Ask contributors for Nostr public address (npub)')}
+                  name="privateCommentPrompts"
+                  control={control}
+                  switchPosition="left"
+                  isChecked={utils.isPromptChecked(PrivateCommentPrompt.NostrNpub)}
+                  onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.NostrNpub)}
+                />
+                <ControlledSwitchInput
+                  label={t(
+                    'Ask contributors to specify reward preferences or options based on your reward description',
+                  )}
+                  name="privateCommentPrompts"
+                  control={control}
+                  switchPosition="left"
+                  isChecked={utils.isPromptChecked(PrivateCommentPrompt.ProjectRewardSpecs)}
+                  onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.ProjectRewardSpecs)}
+                />
+              </VStack>
+            </CardLayout>
+
             <CardLayout spacing={4} w="100%" align={'flex-start'}>
               <VStack alignItems={'flex-start'}>
                 <ControlledSwitchInput label={t('Ask for shipping address')} name="hasShipping" control={control} />
 
-                <Body size={'md'} light pr={{ base: 0, lg: 2 }} maxWidth={'450px'}>
+                <Body size={'md'} light pr={{ base: 0, lg: 2 }}>
                   {t(
                     "Enable this option to request the user's shipping address. This is necessary for delivering physical products directly to your supporters.",
                   )}
