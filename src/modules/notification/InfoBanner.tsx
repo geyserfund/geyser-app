@@ -48,8 +48,6 @@ export const InfoBanner = () => {
     fetchFeatured()
   }, [])
 
-  console.log('chceking data', data)
-
   const available = data && !infoBannerHistoryData.includes(data.id)
 
   if (loading || !available) {
