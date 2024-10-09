@@ -66,9 +66,16 @@ const rewardFormSchema = yup.object().shape({
 type UseProjectRewardFormProps = {
   rewardId?: string
   createOrUpdate: 'create' | 'update'
+  isLaunch?: boolean
+  defaultCategory?: string
 }
 
-export const useProjectRewardForm = ({ rewardId, createOrUpdate }: UseProjectRewardFormProps) => {
+export const useProjectRewardForm = ({
+  rewardId,
+  createOrUpdate,
+  isLaunch,
+  defaultCategory,
+}: UseProjectRewardFormProps) => {
   const navigate = useNavigate()
   const toast = useNotification()
 
@@ -106,7 +113,7 @@ export const useProjectRewardForm = ({ rewardId, createOrUpdate }: UseProjectRew
       hasShipping: data?.getProjectReward?.hasShipping || false,
       isAddon: data?.getProjectReward?.isAddon || false,
       isHidden: data?.getProjectReward?.isHidden || false,
-      category: data?.getProjectReward?.category || null,
+      category: data?.getProjectReward?.category || defaultCategory || null,
       preOrder: data?.getProjectReward?.preOrder || false,
       estimatedAvailabilityDate: data?.getProjectReward?.estimatedAvailabilityDate || null,
       estimatedDeliveryInWeeks: data?.getProjectReward?.estimatedDeliveryInWeeks || null,
@@ -118,6 +125,10 @@ export const useProjectRewardForm = ({ rewardId, createOrUpdate }: UseProjectRew
   })
 
   const { errors, isDirty, isValid } = formState
+
+  console.log('errors', errors)
+  console.log('isDirty', isDirty)
+  console.log('isValid', isValid)
 
   const enableSubmit = isDirty && isValid
 
@@ -186,7 +197,11 @@ export const useProjectRewardForm = ({ rewardId, createOrUpdate }: UseProjectRew
             title: 'Successfully updated!',
             description: `Reward ${data.projectRewardUpdate.name} was successfully updated`,
           })
-          navigate(getPath('projectRewardView', project.name, data.projectRewardUpdate.id))
+          if (isLaunch) {
+            navigate(-1)
+          } else {
+            navigate(getPath('projectRewardView', project.name, data.projectRewardUpdate.id))
+          }
         },
         onError(error) {
           toast.error({
@@ -206,7 +221,11 @@ export const useProjectRewardForm = ({ rewardId, createOrUpdate }: UseProjectRew
         onCompleted(data) {
           reset()
           toast.success({ title: 'Successfully created project reward!' })
-          navigate(getPath('projectRewardView', project.name, data.projectRewardCreate.id))
+          if (isLaunch) {
+            navigate(-1)
+          } else {
+            navigate(getPath('projectRewardView', project.name, data.projectRewardCreate.id))
+          }
         },
         onError(error) {
           toast.error({
@@ -310,7 +329,7 @@ export const useProjectRewardForm = ({ rewardId, createOrUpdate }: UseProjectRew
         privateCommentPrompts.includes(prompt)
           ? privateCommentPrompts.filter((p) => p !== prompt)
           : [...privateCommentPrompts, prompt],
-        { shouldDirty: true },
+        { shouldDirty: true, shouldValidate: true },
       )
     },
     [privateCommentPrompts, setValue],

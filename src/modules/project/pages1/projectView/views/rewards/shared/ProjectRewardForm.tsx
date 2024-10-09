@@ -28,13 +28,21 @@ type Props = {
   titleText: string
   createOrUpdate?: 'create' | 'update'
   isLaunch?: boolean
+  defaultCategory?: string
   hideBackbutton?: boolean
   rewardId?: string
 }
 
 const MAX_REWARD_IMAGES = 5
 
-export const ProjectRewardForm = ({ buttonText, titleText, createOrUpdate, isLaunch = false, rewardId }: Props) => {
+export const ProjectRewardForm = ({
+  buttonText,
+  titleText,
+  createOrUpdate,
+  isLaunch = false,
+  rewardId,
+  defaultCategory,
+}: Props) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
@@ -56,6 +64,8 @@ export const ProjectRewardForm = ({ buttonText, titleText, createOrUpdate, isLau
   } = useProjectRewardForm({
     rewardId,
     createOrUpdate: createOrUpdate || 'create',
+    isLaunch,
+    defaultCategory,
   })
 
   const ownerEmail = projectOwner?.user?.email || ''
@@ -108,8 +118,15 @@ export const ProjectRewardForm = ({ buttonText, titleText, createOrUpdate, isLau
           </Button>
         </TopNavContainerBar>
       )}
-      <CardLayout minWidth="100%" justifyContent="center" alignItems="center" bg="neutralAlpha.1" mobileDense>
-        <VStack w={{ base: '100%', lg: '75%' }} alignItems="center" justifyContent="center">
+      <CardLayout
+        minWidth="100%"
+        justifyContent="center"
+        alignItems="center"
+        bg={isLaunch ? 'transparent' : 'neutralAlpha.1'}
+        border={isLaunch ? 'none' : '1px solid'}
+        mobileDense
+      >
+        <VStack w={{ base: '100%', lg: isLaunch ? '100%' : '75%' }} alignItems="center" justifyContent="center">
           <HStack w="100%">
             <Body size="lg" fontWeight={600}>
               {t(titleText)}
