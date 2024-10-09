@@ -58,6 +58,7 @@ export const ConnectWithEmail = ({ onClose, ...rest }: ConnectWithEmailProps) =>
           headers: {
             'Content-Type': 'application/json',
           },
+          credentials: 'include',
         }).then((response) => response.json())
 
         if (response?.status === 'ok') {
