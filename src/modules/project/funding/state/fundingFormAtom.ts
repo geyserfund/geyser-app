@@ -126,6 +126,17 @@ export const fundingFormHasRewardsAtom = atom((get) => {
   return fundingFormState.rewardsByIDAndCount && Object.keys(fundingFormState.rewardsByIDAndCount).length > 0
 })
 
+/* Boolean to check if the funding form has rewards that require a private comment */
+export const fundingFormHasRewardsThatRequirePrivateCommentAtom = atom((get) => {
+  const fundingFormState = get(fundingFormStateAtom)
+  const { rewards } = get(fundingProjectAtom)
+  const selectedRewards = rewards.filter(
+    (reward) => fundingFormState.rewardsByIDAndCount && fundingFormState.rewardsByIDAndCount[reward.id],
+  )
+
+  return selectedRewards.some((reward) => reward.privateCommentPrompts && reward.privateCommentPrompts.length > 0)
+})
+
 /** Reset funing form rewards to it's initial value */
 export const resetFundingFormRewardsAtom = atom(null, (get, set) => {
   set(fundingFormStateAtom, (current) => ({
@@ -281,6 +292,8 @@ export const isFundingUserInfoValidAtom = atom((get) => {
 
   const hasSelectedRewards = get(fundingFormHasRewardsAtom)
 
+  const hasRewardsThatRequirePrivateComment = get(fundingFormHasRewardsThatRequirePrivateCommentAtom)
+
   if (hasSelectedRewards && !formState.email) {
     return {
       title: 'Email is required when purchasing a reward.',
@@ -293,6 +306,14 @@ export const isFundingUserInfoValidAtom = atom((get) => {
     return {
       title: 'A valid email is required.',
       description: 'Please enter a valid email.',
+      valid: false,
+    }
+  }
+
+  if (hasRewardsThatRequirePrivateComment && !formState.privateComment) {
+    return {
+      title: 'Private message is required.',
+      description: 'Please enter a private message.',
       valid: false,
     }
   }
