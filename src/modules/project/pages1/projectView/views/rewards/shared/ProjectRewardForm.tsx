@@ -10,6 +10,7 @@ import { UploadBox } from '@/components/ui'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ControlledSelect, ControlledTextArea, ControlledTextInput } from '@/shared/components/controlledInput'
+import { ControlledAmountInput } from '@/shared/components/controlledInput/ControlledAmountInput'
 import { ControlledSwitchInput } from '@/shared/components/controlledInput/ControlledSwitchInput'
 import { FieldContainer } from '@/shared/components/form'
 import { CardLayout } from '@/shared/components/layouts'
@@ -212,14 +213,14 @@ export const ProjectRewardForm = ({
                 onChange={handleCurrencySelectChange}
                 size="sm"
               />
-
-              <ControlledTextInput
+              <ControlledAmountInput
                 label={`${t('Price')} (${watch('rewardCurrency') === RewardCurrency.Usdcent ? 'USD' : 'SATS'})`}
                 name="cost"
                 control={control}
                 placeholder={'0'}
                 error={errors.cost?.message}
                 size="sm"
+                currency={watch('rewardCurrency')}
               />
             </Stack>
             <Stack direction={{ base: 'column', lg: 'row' }}>

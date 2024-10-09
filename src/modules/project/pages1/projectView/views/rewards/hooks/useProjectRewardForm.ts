@@ -126,10 +126,6 @@ export const useProjectRewardForm = ({
 
   const { errors, isDirty, isValid } = formState
 
-  console.log('errors', errors)
-  console.log('isDirty', isDirty)
-  console.log('isValid', isValid)
-
   const enableSubmit = isDirty && isValid
 
   // Fetch reward categories
