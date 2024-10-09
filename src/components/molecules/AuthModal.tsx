@@ -19,14 +19,7 @@ import {
   TWITTER_AUTH_ATTEMPT_MESSAGE_TIME_MILLIS,
 } from '../../pages/auth/ConnectWithSocial'
 import { useRefreshAuthToken } from '../../pages/auth/useAuthToken'
-import {
-  hasFacebookAccount,
-  hasGithubAccount,
-  hasGoogleAccount,
-  hasNostrAccount,
-  hasTwitterAccount,
-  useMobileMode,
-} from '../../utils'
+import { hasFacebookAccount, hasGithubAccount, hasGoogleAccount, hasNostrAccount, hasTwitterAccount } from '../../utils'
 import { Caption } from '../typography'
 
 export type AuthModalAdditionalprops = {
@@ -112,7 +105,7 @@ const ConnectAccounts = ({
 
 export const AuthModal = (authModalProps: AuthModalProps) => {
   const { t } = useTranslation()
-  const isMobile = useMobileMode()
+
   const {
     isOpen,
     onClose,
@@ -169,7 +162,7 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
 
         <ConnectAccounts
           onClose={onClose}
-          showNostr={showNostr && !isMobile}
+          showNostr={showNostr && window.nostr}
           showTwitter={showTwitter}
           showLightning={showLightning}
           showFacebook={showFacebook}
