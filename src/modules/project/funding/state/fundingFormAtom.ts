@@ -37,6 +37,7 @@ export type FundFormType = {
   email: string
   media: string
   comment: string
+  privateComment: string
   rewardsByIDAndCount?: { [key: string]: number } | undefined
   rewardCurrency: RewardCurrency
   needsShipping: boolean
@@ -51,6 +52,7 @@ const initialState: FundFormType = {
   shippingCost: 0,
   totalAmount: 0,
   comment: '',
+  privateComment: '',
   email: '',
   media: '',
   rewardsByIDAndCount: undefined,
@@ -254,7 +256,6 @@ export const isFundingInputAmountValidAtom = atom((get) => {
     }
   }
 
-  console.log('checking totalAmount', totalAmount)
   if (!isException && walletLimits?.max && totalAmount >= walletLimits.max) {
     return {
       title: `Amount above the project wallet limit: ${commaFormatted(walletLimits.max)} sats.`,
