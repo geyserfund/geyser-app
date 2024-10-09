@@ -112,7 +112,7 @@ export const ConnectWithLightning = ({ onClose, isIconOnly, ...rest }: Omit<Conn
         {...buttonProps}
         {...rest}
       >
-        {!isIconOnly && t('Continue with Lightning')}
+        {!isIconOnly && t('Lightning')}
       </ButtonComponent>
       {/* To make sure the polling gets stopped, the component is demounted. */}
       {isModalOpen && <ConnectWithLightningModal isOpen={isModalOpen} onClose={handleClose} />}

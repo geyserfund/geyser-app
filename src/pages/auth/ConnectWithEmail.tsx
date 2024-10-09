@@ -1,11 +1,15 @@
-import { Button, ButtonProps, useDisclosure } from '@chakra-ui/react'
-import { useEffect } from 'react'
-import { MdEmail } from 'react-icons/md'
+import { Button, ButtonProps, useDisclosure, VStack } from '@chakra-ui/react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { t } from 'i18next'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+
+import { ControlledTextInput } from '@/shared/components/controlledInput'
 
 import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { MfaAction, OtpResponseFragment } from '../../types'
-import { useNotification } from '../../utils'
+import { emailValidationSchema, useNotification } from '../../utils'
 import { VerifyYourEmail } from '../otp'
 
 interface ConnectWithEmailProps extends ButtonProps {
@@ -19,7 +23,16 @@ export const ConnectWithEmail = ({ onClose, ...rest }: ConnectWithEmailProps) =>
 
   const authServiceEndPoint = getAuthEndPoint()
 
-  const handleClick = async () => {
+  const [initEmail, setInitEmail] = useState<string | undefined>()
+
+  const { control, handleSubmit } = useForm<{
+    email: string
+  }>({
+    resolver: yupResolver(emailValidationSchema),
+  })
+
+  const handleClick = async (values: any) => {
+    setInitEmail(values.email)
     onOpen()
   }
 
@@ -31,50 +44,62 @@ export const ConnectWithEmail = ({ onClose, ...rest }: ConnectWithEmailProps) =>
 
   const handleLogin = async (otpCode: Number, otpData: OtpResponseFragment, email?: string) => {
     if (email) {
-      fetch(`${authServiceEndPoint}/email`, {
-        method: 'POST',
-        body: JSON.stringify({
-          otp: otpCode,
-          otpVerificationToken: otpData.otpVerificationToken,
-          email,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((response) => response.json())
-        .then(() => {
-          queryCurrentUser()
-          if (onClose) {
-            onClose()
-          }
+      try {
+        const response = await fetch(`${authServiceEndPoint}/email`, {
+          method: 'POST',
+          body: JSON.stringify({
+            otp: otpCode,
+            otpVerificationToken: otpData.otpVerificationToken,
+            email,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }).then((response) => response.json())
 
-          onModalClose()
-        })
-        .catch((error) => {
+        if (response?.status === 'ok') {
+          queryCurrentUser()
+        } else {
           toast({
             status: 'error',
             title: 'Failed to login with email',
             description: 'Please try again',
           })
+        }
+
+        if (onClose) {
+          onClose()
+        }
+
+        onModalClose()
+      } catch (error) {
+        console.log('checking error', error)
+        toast({
+          status: 'error',
+          title: 'Failed to login with email',
+          description: 'Please try again',
         })
+      }
     }
   }
 
   return (
     <>
-      <Button
-        variant="solid"
-        colorScheme="primary1"
-        w="100%"
-        leftIcon={<MdEmail />}
-        onClick={handleClick}
-        textDecoration={'none'}
-        {...rest}
-      >
-        Email
-      </Button>
-      <VerifyYourEmail isOpen={isOpen} onClose={onModalClose} action={MfaAction.Login} handleVerify={handleLogin} />
+      <VStack as={'form'} onSubmit={handleSubmit(handleClick)} w="full">
+        <ControlledTextInput label={t('Email')} name="email" placeholder="example@email.com" control={control} />
+        <Button type="submit" variant="solid" colorScheme="primary1" w="100%" textDecoration={'none'} {...rest}>
+          {t('Continue with email')}
+        </Button>
+      </VStack>
+      {initEmail && (
+        <VerifyYourEmail
+          isOpen={isOpen}
+          onClose={onModalClose}
+          action={MfaAction.Login}
+          handleVerify={handleLogin}
+          initEmail={initEmail}
+        />
+      )}
     </>
   )
 }
