@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PiLightning } from 'react-icons/pi'
 
 import { Modal } from '@/shared/components/layouts'
+import { GEYSER_DOMAIN_POSTFIX } from '@/shared/constants/platform/domain'
 import { useModal } from '@/shared/hooks'
 
 import { Body } from '../../../../../../../../../shared/components/typography'
@@ -13,8 +14,6 @@ interface LightningAddressModalProps extends ButtonProps {
   name: string
   npub?: string
 }
-
-export const GEYSER_DOMAIN_POSTFIX = '@geyser.fund'
 
 export const LightningAddressModal = ({ name, npub, ...rest }: LightningAddressModalProps) => {
   const { t } = useTranslation()

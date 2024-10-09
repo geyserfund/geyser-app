@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCopy, PiLightning } from 'react-icons/pi'
 
+import { GEYSER_DOMAIN_POSTFIX } from '@/shared/constants/platform/domain'
+
 import { Body } from '../../../../../../../../../shared/components/typography'
 import { copyTextToClipboard } from '../../../../../../../../../utils'
 
@@ -10,8 +12,6 @@ interface ILightningQR extends ButtonProps {
   name: string
   isGeyser?: boolean
 }
-
-export const GEYSER_DOMAIN_POSTFIX = '@geyser.fund'
 
 export const LightningAddress = ({ name, isGeyser = true, ...rest }: ILightningQR) => {
   const { t } = useTranslation()
